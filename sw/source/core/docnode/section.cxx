@@ -1205,15 +1205,13 @@ void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
 {
     if ( !rSectNd.GetDoc() )
     {
-        OSL_ENSURE( false,
-                "method <lcl_RemoveSectionLinksInSect(..)> - no Doc at SectionNode" );
+        OSL_FAIL( "method <lcl_RemoveSectionLinksInSect(..)> - no Doc at SectionNode" );
         return;
     }
 
     if ( !rSectNd.GetSection().IsConnected() )
     {
-        OSL_ENSURE( false,
-                "method <lcl_RemoveSectionLinksInSect(..)> - no Link at Section of SectionNode" );
+        OSL_FAIL( "method <lcl_RemoveSectionLinksInSect(..)> - no Link at Section of SectionNode" );
         return;
     }
     const ::sfx2::SvBaseLink* pOwnLink( &(rSectNd.GetSection().GetBaseLink() ) );

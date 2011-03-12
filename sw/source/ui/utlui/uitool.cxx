@@ -689,7 +689,7 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,
             }
             else
             {
-                OSL_ENSURE(false, "where to get the actual width from?");
+                OSL_FAIL("where to get the actual width from?");
             }
             const SvxLRSpaceItem& rLRSpace = pFmt->GetLRSpace();
             nWidth -= (rLRSpace.GetRight() + rLRSpace.GetLeft());

@@ -3166,8 +3166,7 @@ void SwDrawFrmFmt::SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir )
         break;
         default:
         {
-            OSL_ENSURE( false,
-                    "<SwDrawFrmFmt::SetPositionLayoutDir(..)> - invalid attribute value." );
+            OSL_FAIL( "<SwDrawFrmFmt::SetPositionLayoutDir(..)> - invalid attribute value." );
         }
     }
 }

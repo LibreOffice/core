@@ -224,8 +224,7 @@ uno::Reference< uno::XInterface > SwDrawDocument::createUnoModel()
     }
     catch( uno::RuntimeException& )
     {
-        OSL_ENSURE( false,
-                "<SwDrawDocument::createUnoModel()> - could *not* retrieve model at <SwDocShell>" );
+        OSL_FAIL( "<SwDrawDocument::createUnoModel()> - could *not* retrieve model at <SwDocShell>" );
     }
 
     return xModel;

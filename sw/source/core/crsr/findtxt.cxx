@@ -161,7 +161,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                        }
                        break;
                    default:
-                    OSL_ENSURE( false, "unknown case in lcl_CleanStr" );
+                    OSL_FAIL( "unknown case in lcl_CleanStr" );
                     break;
                 }
             }

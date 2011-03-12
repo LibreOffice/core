@@ -219,7 +219,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
             break;
 
         default:
-            OSL_ENSURE(false, "what a format?");
+            OSL_FAIL("what a format?");
             break;
         }
 

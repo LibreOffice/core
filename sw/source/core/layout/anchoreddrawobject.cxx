@@ -304,8 +304,7 @@ void SwAnchoredDrawObject::MakeObjPos()
     // to anchor frame
     if ( mbNotYetAttachedToAnchorFrame )
     {
-        OSL_ENSURE( false,
-                "<SwAnchoredDrawObject::MakeObjPos() - drawing object not yet attached to anchor frame -> no positioning" );
+        OSL_FAIL( "<SwAnchoredDrawObject::MakeObjPos() - drawing object not yet attached to anchor frame -> no positioning" );
         return;
     }
 
@@ -376,7 +375,7 @@ void SwAnchoredDrawObject::MakeObjPos()
             break;
             default:
             {
-                OSL_ENSURE( false, "<SwAnchoredDrawObject::MakeObjPos()> - unknown anchor type - please inform OD." );
+                OSL_FAIL( "<SwAnchoredDrawObject::MakeObjPos()> - unknown anchor type - please inform OD." );
             }
         }
 
@@ -837,8 +836,7 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
                 break;
                 default:
                 {
-                    OSL_ENSURE( false,
-                            "<SwAnchoredDrawObject::_SetPositioningAttr()> - unsupported layout direction" );
+                    OSL_FAIL( "<SwAnchoredDrawObject::_SetPositioningAttr()> - unsupported layout direction" );
                 }
             }
         }

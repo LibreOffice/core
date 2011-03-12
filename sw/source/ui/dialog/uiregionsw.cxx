@@ -571,7 +571,7 @@ USHORT SwEditRegionDlg::FindArrPos(const SwSectionFmt* pFmt )
         if (pFmt==&rSh.GetSectionFmt(i))
             return i;
 
-    OSL_ENSURE(false,  "SectionFormat not on the list" );
+    OSL_FAIL("SectionFormat not on the list" );
     return USHRT_MAX;
 }
 

@@ -127,7 +127,7 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
         }
         catch(Exception& )
         {
-            OSL_ENSURE(false, "Exception in getColumns()");
+            OSL_FAIL("Exception in getColumns()");
         }
         if(xCols.is() && xCols->hasByName(rFldName))
         {

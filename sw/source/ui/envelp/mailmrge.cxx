@@ -143,7 +143,7 @@ void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  ) throw (Runtime
 
 void SwXSelChgLstnr_Impl::disposing( const EventObject&  ) throw (RuntimeException)
 {
-    OSL_ENSURE(false, "disposing");
+    OSL_FAIL("disposing");
 }
 
 SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,

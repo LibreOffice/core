@@ -191,8 +191,7 @@ SwObjectFormatter* SwObjectFormatter::CreateObjFormatter(
     }
     else
     {
-        OSL_ENSURE( false,
-                "<SwObjectFormatter::CreateObjFormatter(..)> - unexcepted type of anchor frame" );
+        OSL_FAIL( "<SwObjectFormatter::CreateObjFormatter(..)> - unexcepted type of anchor frame" );
     }
 
     return pObjFormatter;
@@ -409,7 +408,7 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
             if ( ++nLoopControlRuns >= nLoopControlMax )
             {
 #if OSL_DEBUG_LEVEL > 1
-                OSL_ENSURE( false, "LoopControl in SwObjectFormatter::_FormatObj: Stage 3!!!" );
+                OSL_FAIL( "LoopControl in SwObjectFormatter::_FormatObj: Stage 3!!!" );
 #endif
                 rFlyFrm.ValidateThisAndAllLowers( 2 );
                 nLoopControlRuns = 0;

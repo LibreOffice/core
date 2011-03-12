@@ -469,7 +469,7 @@ void SwHHCWrapper::ReplaceUnit(
         }
         break;
         default:
-            OSL_ENSURE(false, "unexpected case" );
+            OSL_FAIL("unexpected case" );
     }
     nUnitOffset += nUnitStart + aNewTxt.getLength();
 

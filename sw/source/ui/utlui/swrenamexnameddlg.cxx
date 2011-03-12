@@ -104,7 +104,7 @@ IMPL_LINK(SwRenameXNamedDlg, OkHdl, OKButton*, EMPTYARG)
     }
     catch(uno::RuntimeException&)
     {
-        OSL_ENSURE(false, "name wasn't changed");
+        OSL_FAIL("name wasn't changed");
     }
     EndDialog(RET_OK);
     return 0;

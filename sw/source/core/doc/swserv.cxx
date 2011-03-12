@@ -301,8 +301,7 @@ void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)
         pDdeBookmark->SetRefObject(this);
     }
     else
-        OSL_ENSURE(false,
-            "SwServerObject::SetNoServer(..)"
+        OSL_FAIL("SwServerObject::SetNoServer(..)"
             " - setting an bookmark that is not DDE-capable");
 }
 

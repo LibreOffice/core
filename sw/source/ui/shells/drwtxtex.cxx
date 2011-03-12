@@ -853,7 +853,7 @@ void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
             break;
 
         default:
-            OSL_ENSURE(false, "wrong dispatcher");
+            OSL_FAIL("wrong dispatcher");
             return;
     }
 }

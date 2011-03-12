@@ -395,7 +395,7 @@ void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
             }
         }
         else {
-            OSL_ENSURE( false, "Rounding error" );
+            OSL_FAIL( "Rounding error" );
         }
         nSum += nBox;
     }

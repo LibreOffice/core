@@ -88,7 +88,7 @@ bool SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, BYTE nMemberId ) const
         }
         break;
         default:
-            OSL_ENSURE( false, "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
+            OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
             bRet = false;
     }
 
@@ -116,13 +116,13 @@ bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, BYTE nMemberId )
             }
             else
             {
-                OSL_ENSURE( false, "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - invalid attribute value" );
+                OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - invalid attribute value" );
                 bRet = false;
             }
         }
         break;
         default:
-            OSL_ENSURE( false, "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
+            OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
             bRet = false;
     }
 
@@ -141,7 +141,7 @@ void SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInflu
     }
     else
     {
-        OSL_ENSURE( false, "<SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos(..)> - invalid attribute value" );
+        OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos(..)> - invalid attribute value" );
     }
 }
 

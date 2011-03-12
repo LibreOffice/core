@@ -1748,7 +1748,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                     *pS >> nTabType;
                     *pS >> nTabOffset;
                 }
-                OSL_ENSURE(false,"Not seen in the wild Equation Ruler Field");
+                OSL_FAIL("Not seen in the wild Equation Ruler Field");
                 break;
             case FONT:
                 {

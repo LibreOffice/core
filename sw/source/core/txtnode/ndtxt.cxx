@@ -1840,8 +1840,7 @@ void SwTxtNode::CutText( SwTxtNode * const pDest,
     }
     else
     {
-        OSL_ENSURE(false,
-            "mst: entering dead and bitrotted code; fasten your seatbelts!");
+        OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
         EraseText( rStart, nLen );
     }
 }
@@ -1852,8 +1851,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
 {
     if(!pDest)
     {
-        OSL_ENSURE(false,
-            "mst: entering dead and bitrotted code; fasten your seatbelts!");
+        OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
         EraseText( rStart, nLen );
         return;
     }
@@ -1861,8 +1859,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
     // nicht im Dokument verschieben ?
     if( GetDoc() != pDest->GetDoc() )
     {
-        OSL_ENSURE(false,
-            "mst: entering dead and bitrotted code; fasten your seatbelts!");
+        OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
         CopyText( pDest, rDestStart, rStart, nLen);
         EraseText(rStart, nLen);
         return;
@@ -1883,8 +1880,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
     // wird in sich selbst verschoben, muss es gesondert behandelt werden !!
     if( pDest == this )
     {
-        OSL_ENSURE(false,
-            "mst: entering dead and bitrotted code; fasten your seatbelts!");
+        OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
         m_Text.Insert( m_Text, nTxtStartIdx, nLen, nDestStart );
         m_Text.Erase( nTxtStartIdx + (nDestStart<nTxtStartIdx ? nLen : 0), nLen );
 
@@ -3642,8 +3638,7 @@ void SwTxtNode::SetAttrListLevel( int nLevel )
 {
     if ( nLevel < 0 || nLevel >= MAXLEVEL )
     {
-        OSL_ENSURE( false,
-                "<SwTxtNode::SetAttrListLevel()> - value of parameter <nLevel> is out of valid range" );
+        OSL_FAIL( "<SwTxtNode::SetAttrListLevel()> - value of parameter <nLevel> is out of valid range" );
         return;
     }
 
@@ -3832,8 +3827,7 @@ void SwTxtNode::AddToList()
 {
     if ( IsInList() )
     {
-        OSL_ENSURE( false,
-                "<SwTxtNode::AddToList()> - the text node is already added to a list. Serious defect -> please inform OD" );
+        OSL_FAIL( "<SwTxtNode::AddToList()> - the text node is already added to a list. Serious defect -> please inform OD" );
         return;
     }
 
@@ -4079,8 +4073,7 @@ XubString SwTxtNode::GetLabelFollowedBy() const
                 break;
                 default:
                 {
-                    OSL_ENSURE( false,
-                            "<SwTxtNode::GetLabelFollowedBy()> - unknown SvxNumberFormat::GetLabelFollowedBy() return value" );
+                    OSL_FAIL( "<SwTxtNode::GetLabelFollowedBy()> - unknown SvxNumberFormat::GetLabelFollowedBy() return value" );
                 }
             }
         }

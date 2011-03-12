@@ -1222,7 +1222,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                     pInStream->SetStreamCharSet( eEncoding );
                 else
                 {
-                    OSL_ENSURE(false, "no output file created?");
+                    OSL_FAIL("no output file created?");
                     continue;
                 }
                 ByteString sLine;

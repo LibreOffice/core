@@ -321,7 +321,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
     }
     catch(Exception& )
     {
-        OSL_ENSURE(false, "control acces failed");
+        OSL_FAIL("control acces failed");
     }
 
     SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC , sal_False );
@@ -363,7 +363,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
                 }
                 catch(Exception& )
                 {
-                    OSL_ENSURE(false, "control access failed");
+                    OSL_FAIL("control access failed");
                 }
             }
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
@@ -1488,8 +1488,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     rSh.GotoMark( ppBookmark->get() );
                 }
                 else
-                    OSL_ENSURE(false,
-                        "SwView::ExecuteStatusLine(..)"
+                    OSL_FAIL("SwView::ExecuteStatusLine(..)"
                         " - Ignoring out of range bookmark index");
             }
         }

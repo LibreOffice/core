@@ -242,7 +242,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
             rSh.DelLeft();
             break;
         default:
-            OSL_ENSURE(false, "wrong Dispatcher");
+            OSL_FAIL("wrong Dispatcher");
             return;
     }
     rReq.Done();
@@ -406,7 +406,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             }
             break;
         default:
-            OSL_ENSURE(false, "wrong Dispatcher");
+            OSL_FAIL("wrong Dispatcher");
             return;
     }
     if(!bIgnore)
@@ -503,7 +503,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
             rSh.Do( SwWrtShell::REPEAT );
             break;
         default:
-            OSL_ENSURE(false, "wrong Dispatcher");
+            OSL_FAIL("wrong Dispatcher");
     }
 
     if (pViewFrame) { pViewFrame->GetBindings().InvalidateAll(sal_False); }
@@ -1193,7 +1193,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_PAGE_STYLE_SET_PAPER_SIZE:
         case FN_PAGE_STYLE_SET_PAPER_BIN:
         {
-            OSL_ENSURE(false, "not implemented");
+            OSL_FAIL("not implemented");
         }
         break;
 
@@ -1220,7 +1220,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         }
         break;
         default:
-                OSL_ENSURE(false, "wrong Dispatcher");
+                OSL_FAIL("wrong Dispatcher");
         }
 
     }
@@ -2281,7 +2281,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         break;
         default:
             rReq.Ignore();
-            OSL_ENSURE(false, "unknown message in ExecuteAttr!" );
+            OSL_FAIL("unknown message in ExecuteAttr!" );
             return;
     }
 
@@ -2834,7 +2834,7 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
         }
         break;
         default:
-            OSL_ENSURE(false, "wrong dispatcher");
+            OSL_FAIL("wrong dispatcher");
     }
 }
 

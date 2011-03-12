@@ -53,8 +53,7 @@ namespace {
 
         if ( !rTxtFrm.GetTxtNode() )
         {
-            OSL_ENSURE( false,
-                    "<initChangeTrackTextMarkupLists(..) - missing <SwTxtNode> instance!" );
+            OSL_FAIL( "<initChangeTrackTextMarkupLists(..) - missing <SwTxtNode> instance!" );
             return;
         }
         const SwTxtNode& rTxtNode( *(rTxtFrm.GetTxtNode()) );
@@ -62,8 +61,7 @@ namespace {
         const IDocumentRedlineAccess* pIDocChangeTrack( rTxtNode.getIDocumentRedlineAccess() );
         if ( !pIDocChangeTrack )
         {
-            OSL_ENSURE( false,
-                    "<initChangeTrackTextMarkupLists(..) - missing <IDocumentRedlineAccess> instance!" );
+            OSL_FAIL( "<initChangeTrackTextMarkupLists(..) - missing <IDocumentRedlineAccess> instance!" );
             return;
         }
 
@@ -219,8 +217,7 @@ const SwWrongList* SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList( co
         break;
         default:
         {
-            OSL_ENSURE( false,
-                    "<SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList(..)> - misusage - unexpected text markup type for change tracking." );
+            OSL_FAIL( "<SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList(..)> - misusage - unexpected text markup type for change tracking." );
         }
     }
 

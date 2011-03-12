@@ -958,7 +958,7 @@ void SAL_CALL SwXTextView::setPropertyValue(
             }
             break;
             default :
-                OSL_ENSURE(false, "unknown WID");
+                OSL_FAIL("unknown WID");
         }
     }
 }
@@ -1008,7 +1008,7 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
             }
             break;
             default :
-                OSL_ENSURE(false, "unknown WID");
+                OSL_FAIL("unknown WID");
         }
     }
 
@@ -1020,7 +1020,7 @@ void SAL_CALL SwXTextView::addPropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SwXTextView::removePropertyChangeListener(
@@ -1028,7 +1028,7 @@ void SAL_CALL SwXTextView::removePropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SwXTextView::addVetoableChangeListener(
@@ -1036,7 +1036,7 @@ void SAL_CALL SwXTextView::addVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SwXTextView::removeVetoableChangeListener(
@@ -1044,7 +1044,7 @@ void SAL_CALL SwXTextView::removeVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 OUString SwXTextView::getImplementationName(void) throw( RuntimeException )
@@ -1108,14 +1108,14 @@ sal_Bool SwXTextViewCursor::IsTextSelection( sal_Bool bAllowTables ) const
 sal_Bool SwXTextViewCursor::isVisible(void) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
     return sal_True;
 }
 
 void SwXTextViewCursor::setVisible(sal_Bool /*bVisible*/) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 awt::Point SwXTextViewCursor::getPosition(void) throw( uno::RuntimeException )

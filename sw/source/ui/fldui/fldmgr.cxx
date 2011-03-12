@@ -253,7 +253,7 @@ static SwWrtShell* lcl_GetShell()
     SwView* pView;
     if ( 0 != (pView = ::GetActiveView()) )
         return pView->GetWrtShellPtr();
-    OSL_ENSURE(false, "no current shell found!");
+    OSL_FAIL("no current shell found!");
     return 0;
 }
 

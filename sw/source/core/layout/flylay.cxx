@@ -869,8 +869,7 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
 {
     if ( !_rNewObj.ISA(SwAnchoredDrawObject) )
     {
-        OSL_ENSURE( false,
-                "SwPageFrm::AppendDrawObjToPage(..) - anchored object of unexcepted type -> object not appended" );
+        OSL_FAIL( "SwPageFrm::AppendDrawObjToPage(..) - anchored object of unexcepted type -> object not appended" );
         return;
     }
 
@@ -921,8 +920,7 @@ void SwPageFrm::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
 {
     if ( !_rToRemoveObj.ISA(SwAnchoredDrawObject) )
     {
-        OSL_ENSURE( false,
-                "SwPageFrm::RemoveDrawObjFromPage(..) - anchored object of unexcepted type -> object not removed" );
+        OSL_FAIL( "SwPageFrm::RemoveDrawObjFromPage(..) - anchored object of unexcepted type -> object not removed" );
         return;
     }
 
@@ -1046,8 +1044,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             const SwFrm* pVertPosOrientFrm = pFly->GetVertPosOrientFrm();
             if ( !pVertPosOrientFrm )
             {
-                OSL_ENSURE( false,
-                        "::CalcClipRect(..) - frame, vertical position is oriented at, is missing .");
+                OSL_FAIL( "::CalcClipRect(..) - frame, vertical position is oriented at, is missing .");
                 pVertPosOrientFrm = pFly->GetAnchorFrm();
             }
 
@@ -1264,7 +1261,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             const SwFrm* pAnchorFrm = pC->GetAnchorFrm( pSdrObj );
             if( !pAnchorFrm )
             {
-                OSL_ENSURE( false, "<::CalcClipRect(..)> - missing anchor frame." );
+                OSL_FAIL( "<::CalcClipRect(..)> - missing anchor frame." );
                 ((SwDrawContact*)pC)->ConnectToLayout();
                 pAnchorFrm = pC->GetAnchorFrm();
             }

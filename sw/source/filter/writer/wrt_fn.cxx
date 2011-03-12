@@ -119,7 +119,7 @@ Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
             nId = RES_OLENODE;
             break;
         default:
-            OSL_ENSURE(false, "was fuer ein Node ist es denn nun?");
+            OSL_FAIL("was fuer ein Node ist es denn nun?");
             break;
     }
     FnNodeOut pOut;

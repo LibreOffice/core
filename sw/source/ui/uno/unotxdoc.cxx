@@ -2165,28 +2165,28 @@ void SwXTextDocument::addPropertyChangeListener(const OUString& /*PropertyName*/
     const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextDocument::removePropertyChangeListener(const OUString& /*PropertyName*/,
     const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextDocument::addVetoableChangeListener(const OUString& /*PropertyName*/,
     const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextDocument::removeVetoableChangeListener(const OUString& /*PropertyName*/,
                         const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 Reference< XNameAccess >  SwXTextDocument::getLinks(void) throw( RuntimeException )
@@ -2434,7 +2434,7 @@ SwDoc * SwXTextDocument::GetRenderDoc(
             }
             else
             {
-                OSL_ENSURE(false, "unexpected ViewShell" );
+                OSL_FAIL("unexpected ViewShell" );
             }
         }
     }
@@ -3511,7 +3511,7 @@ sal_Bool SwXLinkNameAccessWrapper::hasElements(void) throw( RuntimeException )
     sal_Bool bRet = sal_False;
     if(pxDoc)
     {
-        OSL_ENSURE(false, "not implemented");
+        OSL_FAIL("not implemented");
     }
     else
     {
@@ -3768,7 +3768,7 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
                 xRet = xDrawDefaults;
             break;
 #if OSL_DEBUG_LEVEL > 1
-            default: OSL_ENSURE(false, "which table?");
+            default: OSL_FAIL("which table?");
 #endif
         }
     }

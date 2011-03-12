@@ -54,7 +54,7 @@ sal_Bool SwCntntFrm::WouldFit( SwTwips &, sal_Bool&, sal_Bool )
 
 bool SwFrm::FillSelection( SwSelectionList& , const SwRect& ) const
 {
-    OSL_ENSURE( false, "Don't call this function at the base class!" );
+    OSL_FAIL( "Don't call this function at the base class!" );
     return false;
 }
 

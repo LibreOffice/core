@@ -2526,8 +2526,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
         {
             pNewUpper = 0L;
 #if OSL_DEBUG_LEVEL > 1
-            OSL_ENSURE( false,
-                    "<SwFlowFrm::MoveBwd(..)> - layout loop control for layout action <Move Backward> applied!" );
+            OSL_FAIL( "<SwFlowFrm::MoveBwd(..)> - layout loop control for layout action <Move Backward> applied!" );
 #endif
         }
     }

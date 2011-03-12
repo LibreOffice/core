@@ -693,7 +693,7 @@ void SwLayAction::InternalAction()
                             if ( ++nLoopControlRuns_1 > nLoopControlMax )
                             {
 #if OSL_DEBUG_LEVEL > 1
-                                OSL_ENSURE( false, "LoopControl_1 in SwLayAction::InternalAction" );
+                                OSL_FAIL( "LoopControl_1 in SwLayAction::InternalAction" );
 
 #endif
                                 break;
@@ -888,7 +888,7 @@ void SwLayAction::InternalAction()
                     if ( ++nLoopControlRuns_3 > nLoopControlMax )
                     {
 #if OSL_DEBUG_LEVEL > 1
-                        OSL_ENSURE( false, "LoopControl_3 in Interrupt formatting in SwLayAction::InternalAction" );
+                        OSL_FAIL( "LoopControl_3 in Interrupt formatting in SwLayAction::InternalAction" );
 #endif
                         break;
                     }
@@ -913,7 +913,7 @@ void SwLayAction::InternalAction()
                     if ( ++nLoopControlRuns_2 > nLoopControlMax )
                     {
 #if OSL_DEBUG_LEVEL > 1
-                        OSL_ENSURE( false, "LoopControl_2 in Interrupt formatting in SwLayAction::InternalAction" );
+                        OSL_FAIL( "LoopControl_2 in Interrupt formatting in SwLayAction::InternalAction" );
 #endif
                         break;
                     }
@@ -2232,7 +2232,7 @@ BOOL SwLayIdle::DoIdleJob( IdleJobType eJob, BOOL bVisAreaOnly )
                 !SwSmartTagMgr::Get().IsSmartTagsEnabled() )
                 return FALSE;
             break;
-        default: OSL_ENSURE( false, "Unknown idle job type" );
+        default: OSL_FAIL( "Unknown idle job type" );
     }
 
     SwPageFrm *pPage;

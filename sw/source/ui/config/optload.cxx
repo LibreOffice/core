@@ -576,7 +576,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
         aAny = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
         if ( !( aAny >>= sTemp ) )
         {
-            OSL_ENSURE(false, "Couldn't get PRODUCTVERSION variable" );
+            OSL_FAIL("Couldn't get PRODUCTVERSION variable" );
         }
         else
         {
@@ -586,7 +586,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     }
     else
     {
-        OSL_ENSURE(false, "Couldn't get PRODUCTNAME variable" );
+        OSL_FAIL("Couldn't get PRODUCTNAME variable" );
     }
 
     SvObjectServerList aObjS;

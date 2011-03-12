@@ -1071,7 +1071,7 @@ CurTOXType lcl_UserData2TOXTypes(sal_uInt16 nData)
         case TO_OBJECT      : eRet.eType = TOX_OBJECTS;     break;
         case TO_TABLE       : eRet.eType = TOX_TABLES;      break;
         case TO_AUTHORITIES : eRet.eType = TOX_AUTHORITIES; break;
-        default: OSL_ENSURE(false, "what a type?");
+        default: OSL_FAIL("what a type?");
     }
     return eRet;
 }
@@ -1542,7 +1542,7 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
 
 IMPL_LINK(SwTOXSelectTabPage, TOXAreaHdl,   ListBox*, pBox)
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
     switch((long)pBox->GetEntryData( pBox->GetSelectEntryPos() ))
     {
         case AREA_DOCUMENT  : break;

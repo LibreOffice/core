@@ -514,16 +514,14 @@ void SAL_CALL SwXParagraph::addPropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
 throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXParagraph::addPropertiesChangeListener(): not implemented");
+    OSL_FAIL("SwXParagraph::addPropertiesChangeListener(): not implemented");
 }
 
 void SAL_CALL SwXParagraph::removePropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
 throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXParagraph::removePropertiesChangeListener(): not implemented");
+    OSL_FAIL("SwXParagraph::removePropertiesChangeListener(): not implemented");
 }
 
 void SAL_CALL SwXParagraph::firePropertiesChangeEvent(
@@ -531,8 +529,7 @@ void SAL_CALL SwXParagraph::firePropertiesChangeEvent(
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
         throw(uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXParagraph::firePropertiesChangeEvent(): not implemented");
+    OSL_FAIL("SwXParagraph::firePropertiesChangeEvent(): not implemented");
 }
 
 /* disabled for #i46921# */
@@ -821,8 +818,7 @@ SwXParagraph::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXParagraph::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXParagraph::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -832,8 +828,7 @@ SwXParagraph::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXParagraph::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXParagraph::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -843,8 +838,7 @@ SwXParagraph::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXParagraph::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXParagraph::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -854,8 +848,7 @@ SwXParagraph::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXParagraph::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXParagraph::removeVetoableChangeListener(): not implemented");
 }
 
 beans::PropertyState lcl_SwXParagraph_getPropertyState(

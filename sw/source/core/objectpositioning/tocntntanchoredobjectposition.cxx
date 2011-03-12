@@ -305,8 +305,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     }
                     else
                     {
-                        OSL_ENSURE( false,
-                                "<SwToCntntAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
+                        OSL_FAIL( "<SwToCntntAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
                     }
                 }
                 break;
@@ -325,8 +324,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     }
                     else
                     {
-                        OSL_ENSURE( false,
-                                "<SwToCntntAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
+                        OSL_FAIL( "<SwToCntntAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
                     }
                 }
                 break;
@@ -366,8 +364,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     }
                     else
                     {
-                        OSL_ENSURE( false,
-                                "<SwToCntntAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
+                        OSL_FAIL( "<SwToCntntAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
                     }
                 }
                 break;
@@ -686,7 +683,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                     else
                                     {
 #if OSL_DEBUG_LEVEL > 1
-                                        OSL_ENSURE( false, "<SwToCntntAnchoredObjectPosition::CalcPosition()> - code under investigation by OD, please inform OD about this assertion!" );
+                                        OSL_FAIL( "<SwToCntntAnchoredObjectPosition::CalcPosition()> - code under investigation by OD, please inform OD about this assertion!" );
 #endif
                                         nRelDiff = nRelPosY;
                                         nRelPosY = 0;

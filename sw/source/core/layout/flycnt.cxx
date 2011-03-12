@@ -497,8 +497,7 @@ void SwFlyAtCntFrm::MakeAll()
                                 pFmt->UnlockModify();
                                 bOsz = false;
 #if OSL_DEBUG_LEVEL > 1
-                                OSL_ENSURE( false,
-                                        "<SwFlyAtCntFrm::MakeAll()> - special loop prevention for dedicated document of b6403541 applied" );
+                                OSL_FAIL( "<SwFlyAtCntFrm::MakeAll()> - special loop prevention for dedicated document of b6403541 applied" );
 #endif
                             }
                         }

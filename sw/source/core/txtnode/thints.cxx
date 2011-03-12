@@ -251,7 +251,7 @@ MakeTxtAttrNesting(SwTxtNode & rNode, SwTxtAttrNesting & rNesting,
             break;
         }
         default:
-            OSL_ENSURE(false, "MakeTxtAttrNesting: what the hell is that?");
+            OSL_FAIL("MakeTxtAttrNesting: what the hell is that?");
             break;
     }
     return static_cast<SwTxtAttrNesting*>(pNew);
@@ -408,7 +408,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                             static_cast<SwTxtAttrNesting*>(pOther));
                         break;
                     default:
-                        OSL_ENSURE(false, "bad code monkey");
+                        OSL_FAIL("bad code monkey");
                         break;
                 }
             }
@@ -424,8 +424,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                 {
                     if (rNewHint.HasDummyChar())
                     {
-                        OSL_ENSURE(false,
-                                "ERROR: inserting duplicate CH_TXTATR hint");
+                        OSL_FAIL("ERROR: inserting duplicate CH_TXTATR hint");
                         return false;
                     } else if (nNewEnd < nOtherEnd) {
                         // other has dummy char, new is inside other, but
@@ -480,7 +479,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                 case POS_OUTSIDE:
                 case POS_EQUAL:
                     {
-                        OSL_ENSURE(false, "existing hint inside new hint: why?");
+                        OSL_FAIL("existing hint inside new hint: why?");
                     }
                     break;
                 case POS_OVERLAP_BEFORE:
@@ -492,7 +491,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                         {
                             if ( USHRT_MAX == Count() )
                             {
-                                OSL_ENSURE(false, "hints array full :-(");
+                                OSL_FAIL("hints array full :-(");
                                 return false;
                             }
                             SwTxtAttrNesting * const pOtherLeft(
@@ -511,7 +510,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                         {
                             if ( USHRT_MAX == Count() )
                             {
-                                OSL_ENSURE(false, "hints array full :-(");
+                                OSL_FAIL("hints array full :-(");
                                 return false;
                             }
                             SwTxtAttrNesting * const pOtherRight(
@@ -529,7 +528,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
 
     if ( USHRT_MAX - SplitNew.size() <= Count() )
     {
-        OSL_ENSURE(false, "hints array full :-(");
+        OSL_FAIL("hints array full :-(");
         return false;
     }
 
@@ -981,7 +980,7 @@ SwTxtAttr* MakeRedlineTxtAttr( SwDoc & rDoc, SfxPoolItem & rAttr )
         case RES_CHRATR_BACKGROUND:
             break;
         default:
-            OSL_ENSURE(false, "unsupported redline attribute");
+            OSL_FAIL("unsupported redline attribute");
             break;
     }
 
@@ -1501,7 +1500,7 @@ void SwTxtNode::DeleteAttribute( SwTxtAttr * const pAttr )
 {
     if ( !HasHints() )
     {
-        OSL_ENSURE(false, "DeleteAttribute called, but text node without hints?");
+        OSL_FAIL("DeleteAttribute called, but text node without hints?");
         return;
     }
 
@@ -1548,7 +1547,7 @@ void SwTxtNode::DeleteAttributes( const USHORT nWhich,
         {
             if ( nWhich == RES_CHRATR_HIDDEN  )
             {
-                OSL_ENSURE(false, "hey, that's a CHRATR! how did that get in?");
+                OSL_FAIL("hey, that's a CHRATR! how did that get in?");
                 SetCalcHiddenCharFlags();
             }
             else if ( nWhich == RES_TXTATR_CHARFMT )
@@ -1711,8 +1710,7 @@ BOOL SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,
                         {
                             if ( nEnd != nStt && !pNew->GetEnd() )
                             {
-                                OSL_ENSURE(false,
-                                    "Attribut without end, but area marked");
+                                OSL_FAIL("Attribut without end, but area marked");
                                 DestroyAttr( pNew ); // do not insert
                             }
                             else if ( InsertHint( pNew, nMode ) )
@@ -2587,7 +2585,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
 {
     if ( USHRT_MAX == Count() ) // we're sorry, this flight is overbooked...
     {
-        OSL_ENSURE(false, "hints array full :-(");
+        OSL_FAIL("hints array full :-(");
         return false;
     }
 
@@ -3049,7 +3047,7 @@ sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr )
             break;
 
         default:
-            OSL_ENSURE(false, "GetCharOfTxtAttr: unknown attr");
+            OSL_FAIL("GetCharOfTxtAttr: unknown attr");
             break;
     }
     return cRet;

@@ -347,7 +347,7 @@ IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, EMPTYARG)
             }
             catch(Exception& )
             {
-                OSL_ENSURE(false, "exception caught in SwAddressListDialog::FilterHdl_Impl");
+                OSL_FAIL("exception caught in SwAddressListDialog::FilterHdl_Impl");
             }
         }
     }
@@ -647,7 +647,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
     }
     catch(Exception& )
     {
-        OSL_ENSURE(false, "exception caught in SwAddressListDialog::DetectTablesAndQueries");
+        OSL_FAIL("exception caught in SwAddressListDialog::DetectTablesAndQueries");
         m_aOK.Enable( sal_False );
     }
 }

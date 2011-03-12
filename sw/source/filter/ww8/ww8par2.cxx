@@ -2849,7 +2849,7 @@ bool WW8TabDesc::InFirstParaInCell() const
     //e.g. #i19718#
     if (!pTabBox || !pTabBox->GetSttNd())
     {
-        OSL_ENSURE(false, "Problem with table");
+        OSL_FAIL("Problem with table");
         return false;
     }
 

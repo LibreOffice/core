@@ -251,7 +251,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 break;
 
             default:
-                OSL_ENSURE(false, "Invalid SlotId");
+                OSL_FAIL("Invalid SlotId");
         }
         nWhich = aIter.NextWhich();
     }
@@ -479,7 +479,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     break;
 
                     default:
-                        OSL_ENSURE(false, "Invalid SlotId");
+                        OSL_FAIL("Invalid SlotId");
                 }
 
                 rReq.Done();
@@ -878,7 +878,7 @@ USHORT SwDocShell::ApplyStyles(const String &rName, USHORT nFamily,
             break;
         }
         default:
-            OSL_ENSURE(false, "Unknown family");
+            OSL_FAIL("Unknown family");
     }
     pSh->EndAllAction();
 
@@ -933,7 +933,7 @@ USHORT SwDocShell::DoWaterCan(const String &rName, USHORT nFamily)
                 break;
 
             default:
-                OSL_ENSURE(false, "Unknown family");
+                OSL_FAIL("Unknown family");
         }
     }
     else

@@ -74,7 +74,7 @@ void ViewShell::AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions 
 {
     if ( !IsPreView() )
     {
-        OSL_ENSURE( false, "view shell doesn't belongs to a page preview - no adjustment of its view options");
+        OSL_FAIL( "view shell doesn't belongs to a page preview - no adjustment of its view options");
         return;
     }
 

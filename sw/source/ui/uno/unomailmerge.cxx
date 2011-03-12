@@ -259,12 +259,12 @@ namespace
                 acquire();
             }
             else {
-                OSL_ENSURE(false, "DelayedFileDeletion::DelayedFileDeletion: model is no component!" );
+                OSL_FAIL("DelayedFileDeletion::DelayedFileDeletion: model is no component!" );
             }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE(false, "DelayedFileDeletion::DelayedFileDeletion: could not register as event listener at the model!" );
+            OSL_FAIL("DelayedFileDeletion::DelayedFileDeletion: could not register as event listener at the model!" );
         }
         osl_decrementInterlockedCount( &m_refCount );
     }
@@ -297,7 +297,7 @@ namespace
         }
         catch( const Exception& )
         {
-            OSL_ENSURE(false, "DelayedFileDeletion::OnTryDeleteFile: caught a strange exception!" );
+            OSL_FAIL("DelayedFileDeletion::OnTryDeleteFile: caught a strange exception!" );
             bSuccess = sal_True;
                 // can't do anything here ...
         }
@@ -321,7 +321,7 @@ namespace
         }
         catch( const Exception & )
         {
-            OSL_ENSURE(false, "DelayedFileDeletion::implTakeOwnership: could not revoke the listener!" );
+            OSL_FAIL("DelayedFileDeletion::implTakeOwnership: could not revoke the listener!" );
         }
 
         m_aDeleteTimer.SetTimeout( 3000 );  // 3 seconds
@@ -345,7 +345,7 @@ namespace
     //--------------------------------------------------------------------
     void SAL_CALL DelayedFileDeletion::notifyClosing( const EventObject&  ) throw (RuntimeException)
     {
-        OSL_ENSURE(false, "DelayedFileDeletion::notifyClosing: how this?" );
+        OSL_FAIL("DelayedFileDeletion::notifyClosing: how this?" );
         // this should not happen:
         // Either, a foreign instance closes the document, then we should veto this, and take the ownership
         // Or, we ourself close the document, then we should not be a listener anymore
@@ -354,7 +354,7 @@ namespace
     //------------------------------------------------------
     void SAL_CALL DelayedFileDeletion::disposing( const EventObject&  ) throw (RuntimeException)
     {
-        OSL_ENSURE(false, "DelayedFileDeletion::disposing: how this?" );
+        OSL_FAIL("DelayedFileDeletion::disposing: how this?" );
         // this should not happen:
         // Either, a foreign instance closes the document, then we should veto this, and take the ownership
         // Or, we ourself close the document, then we should not be a listener anymore
@@ -447,7 +447,7 @@ SwXMailMerge::~SwXMailMerge()
         //! because there is no automatism that will do that later.
         //! #120086#
         if ( eVetoed == CloseModelAndDocSh( xModel, xDocSh ) )
-            OSL_ENSURE(false, "owner ship transfered to vetoing object!" );
+            OSL_FAIL("owner ship transfered to vetoing object!" );
 
         xModel = 0;
         xDocSh = 0; // destroy doc shell
@@ -638,7 +638,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     {
         if (!aCurDataSourceName.getLength() || !aCurDataCommand.getLength() )
         {
-            OSL_ENSURE(false, "PropertyValues missing or unset");
+            OSL_FAIL("PropertyValues missing or unset");
             throw IllegalArgumentException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Either the ResultSet or DataSourceName and DataCommand must be set." ) ), static_cast < cppu::OWeakObject * > ( this ), 0 );
         }
 
@@ -933,7 +933,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
             case WID_IN_SERVER_PASSWORD:        pData = &sInServerPassword; break;
             case WID_OUT_SERVER_PASSWORD:       pData = &sOutServerPassword; break;
             default :
-                OSL_ENSURE(false, "unknown WID");
+                OSL_FAIL("unknown WID");
         }
         Any aOld( pData, *pType );
 
@@ -1022,7 +1022,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
             else if(pData == &sOutServerPassword)
                 bOK = rValue >>= sInServerPassword;
             else {
-                OSL_ENSURE(false, "invalid pointer" );
+                OSL_FAIL("invalid pointer" );
             }
             OSL_ENSURE( bOK, "set value failed" );
             bChanged = sal_True;
@@ -1086,7 +1086,7 @@ uno::Any SAL_CALL SwXMailMerge::getPropertyValue(
             case WID_IN_SERVER_PASSWORD:        aRet <<= sInServerPassword; break;
             case WID_OUT_SERVER_PASSWORD:       aRet <<= sOutServerPassword; break;
             default :
-                OSL_ENSURE(false, "unknown WID");
+                OSL_FAIL("unknown WID");
         }
     }
 
@@ -1131,7 +1131,7 @@ void SAL_CALL SwXMailMerge::addVetoableChangeListener(
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // no vetoable property, thus no support for vetoable change listeners
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SwXMailMerge::removeVetoableChangeListener(
@@ -1140,7 +1140,7 @@ void SAL_CALL SwXMailMerge::removeVetoableChangeListener(
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // no vetoable property, thus no support for vetoable change listeners
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 
 

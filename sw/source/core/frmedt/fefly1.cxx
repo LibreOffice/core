@@ -1014,8 +1014,7 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
         SwFrm* pCurrFrm( GetCurrFrm() );
         if ( !pCurrFrm )
         {
-            OSL_ENSURE( false,
-                    "<SwFEShell::GetFlyFrmAttr(..)> - missing current frame. This is a serious defect, please inform OD." );
+            OSL_FAIL( "<SwFEShell::GetFlyFrmAttr(..)> - missing current frame. This is a serious defect, please inform OD." );
             return sal_False;
         }
         pFly = GetCurrFrm()->FindFlyFrm();
@@ -1739,8 +1738,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
         SwDrawContact* pDrawContact( dynamic_cast<SwDrawContact*>(GetUserCall( pInvestigatedObj ) ) );
         if ( !pDrawContact )
         {
-            OSL_ENSURE( false,
-                    "<SwFEShell::GetObjCntType(..)> - missing draw contact object" );
+            OSL_FAIL( "<SwFEShell::GetObjCntType(..)> - missing draw contact object" );
             eType = OBJCNT_NONE;
         }
         else
@@ -1748,8 +1746,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
             SwFrmFmt* pFrmFmt( pDrawContact->GetFmt() );
             if ( !pFrmFmt )
             {
-                OSL_ENSURE( false,
-                        "<SwFEShell::GetObjCntType(..)> - missing frame format" );
+                OSL_FAIL( "<SwFEShell::GetObjCntType(..)> - missing frame format" );
                 eType = OBJCNT_NONE;
             }
             else if ( FLY_AS_CHAR != pFrmFmt->GetAnchor().GetAnchorId() )

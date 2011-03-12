@@ -653,8 +653,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             // make code robust:
             if ( !pNumRule )
             {
-                OSL_ENSURE( false,
-                        "<InsAttr(..)> - PaM in front of label, but text node has no numbering rule set. This is a serious defect, please inform OD." );
+                OSL_FAIL( "<InsAttr(..)> - PaM in front of label, but text node has no numbering rule set. This is a serious defect, please inform OD." );
                 DELETECHARSETS
                 return false;
             }

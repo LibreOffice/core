@@ -351,8 +351,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                     default:
                     {
                         nFollow = 0;
-                        OSL_ENSURE( false,
-                                "unknown GetLabelFollowedBy() return value" );
+                        OSL_FAIL( "unknown GetLabelFollowedBy() return value" );
                     }
                 }
             }

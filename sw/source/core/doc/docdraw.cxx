@@ -131,8 +131,7 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
                     // vertical from left-to-right - not supported yet
                     bVert = true;
                     bR2L = true;
-                    OSL_ENSURE( false,
-                            "<lcl_AdjustPositioningAttr(..)> - vertical from left-to-right not supported." );
+                    OSL_FAIL( "<lcl_AdjustPositioningAttr(..)> - vertical from left-to-right not supported." );
                 }
                 break;
                 case FRMDIR_VERT_TOP_RIGHT:
@@ -460,8 +459,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                         // <SwDrawVirt>-object is found in the mark list.
                         if ( pObj->ISA(SwDrawVirtObj) )
                         {
-                            OSL_ENSURE( false,
-                                    "<SwDrawVirtObj> is still marked for delete. application will crash!" );
+                            OSL_FAIL( "<SwDrawVirtObj> is still marked for delete. application will crash!" );
                         }
                         //loescht sich selbst!
                         pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
@@ -670,7 +668,7 @@ bool SwDoc::IsVisibleLayerId( const SdrLayerID& _nLayerId ) const
     }
     else
     {
-        OSL_ENSURE( false, "<SwDoc::IsVisibleLayerId(..)> - unknown layer ID." );
+        OSL_FAIL( "<SwDoc::IsVisibleLayerId(..)> - unknown layer ID." );
         bRetVal = false;
     }
 
@@ -702,12 +700,12 @@ SdrLayerID SwDoc::GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisible
               _nInvisibleLayerId == GetHellId() ||
               _nInvisibleLayerId == GetControlsId() )
     {
-        OSL_ENSURE( false, "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID already an invisible one." );
+        OSL_FAIL( "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID already an invisible one." );
         nVisibleLayerId = _nInvisibleLayerId;
     }
     else
     {
-        OSL_ENSURE( false, "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID is unknown." );
+        OSL_FAIL( "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID is unknown." );
         nVisibleLayerId = _nInvisibleLayerId;
     }
 
@@ -739,12 +737,12 @@ SdrLayerID SwDoc::GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLa
               _nVisibleLayerId == GetInvisibleHellId() ||
               _nVisibleLayerId == GetInvisibleControlsId() )
     {
-        OSL_ENSURE( false, "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID already an invisible one." );
+        OSL_FAIL( "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID already an invisible one." );
         nInvisibleLayerId = _nVisibleLayerId;
     }
     else
     {
-        OSL_ENSURE( false, "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID is unknown." );
+        OSL_FAIL( "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID is unknown." );
         nInvisibleLayerId = _nVisibleLayerId;
     }
 
@@ -973,8 +971,7 @@ namespace docfunc
                         {
                             if ( !pAnchoredDrawObj )
                             {
-                                OSL_ENSURE( false,
-                                        "<docfunc::AllDrawObjsOnPage() - missing anchored draw object" );
+                                OSL_FAIL( "<docfunc::AllDrawObjsOnPage() - missing anchored draw object" );
                                 bAllDrawObjsOnPage = false;
                                 break;
                             }

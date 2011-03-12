@@ -243,8 +243,7 @@ public:
             break;
             default:
             {
-                OSL_ENSURE( false,
-                        "<SwShapeDescriptor_Impl::SetPositionLayoutDir(..)> - invalid attribute value." );
+                OSL_FAIL( "<SwShapeDescriptor_Impl::SetPositionLayoutDir(..)> - invalid attribute value." );
             }
         }
     }
@@ -362,8 +361,7 @@ uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj )
             }
             else
             {
-                OSL_ENSURE( false,
-                        "<SwFmDrawPage::_CreateShape(..)> - could not retrieve type. Thus, no shape created." );
+                OSL_FAIL( "<SwFmDrawPage::_CreateShape(..)> - could not retrieve type. Thus, no shape created." );
                 return xRet;
             }
             DBG_ASSERT( eType != FLYCNTTYPE_ALL, "unexpected FlyCntType value for eType" );
@@ -2436,8 +2434,7 @@ awt::Point SwXShape::_ConvertPositionToHoriL2R( const awt::Point _aObjPos,
             break;
             default:
             {
-                OSL_ENSURE( false,
-                        "<SwXShape::_ConvertPositionToHoriL2R(..)> - unsupported layout direction" );
+                OSL_FAIL( "<SwXShape::_ConvertPositionToHoriL2R(..)> - unsupported layout direction" );
             }
         }
     }

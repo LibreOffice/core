@@ -1296,7 +1296,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         }
                         catch(Exception& )
                         {
-                            OSL_ENSURE(false, "control acces failed");
+                            OSL_FAIL("control acces failed");
                         }
 
                         xFP->setTitle( SW_RESSTR( nStrId ));
@@ -1417,7 +1417,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
         break;
 
-        default: OSL_ENSURE(false, "wrong Dispatcher");
+        default: OSL_FAIL("wrong Dispatcher");
     }
 }
 

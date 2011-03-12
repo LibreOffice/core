@@ -883,8 +883,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                 }
                 else
                 {
-                    OSL_ENSURE( false,
-                            "<OutHTML_NumBulListStart(..) - text node has no number." );
+                    OSL_FAIL( "<OutHTML_NumBulListStart(..) - text node has no number." );
                 }
             }
             if( nStartVal != 1 )

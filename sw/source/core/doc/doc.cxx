@@ -200,7 +200,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case KERN_ASIAN_PUNCTUATION: return mbKernAsianPunctuation;
         case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT: return mbDoNotResetParaAttrsForNumFont;
         default:
-            OSL_ENSURE(false, "Invalid setting id");
+            OSL_FAIL("Invalid setting id");
     }
     return false;
 }
@@ -354,7 +354,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             break;
 
         default:
-            OSL_ENSURE(false, "Invalid setting id");
+            OSL_FAIL("Invalid setting id");
     }
 }
 

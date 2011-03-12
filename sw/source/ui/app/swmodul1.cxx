@@ -408,7 +408,7 @@ void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, BOOL /*bOnlyIfAva
             xControllerSelection->select(makeAny(aSelection.createPropertyValueSequence()));
         }
         else {
-            OSL_ENSURE(false, "no selection supplier in the beamer!");
+            OSL_FAIL("no selection supplier in the beamer!");
         }
     }
 }

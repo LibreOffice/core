@@ -884,7 +884,7 @@ void SwCustomizeAddressBlockDialog::MoveFocus( Window* pMember, bool bNext )
     }
     if( aMemberIter == aControls.end() )
     {
-        OSL_ENSURE(false, "Window not found?" );
+        OSL_FAIL("Window not found?" );
         return;
     }
 

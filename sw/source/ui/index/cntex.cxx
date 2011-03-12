@@ -178,7 +178,7 @@ IMPL_LINK( SwMultiTOXTabDialog, CreateExample_Hdl, void*, EMPTYARG )
     }
     catch(Exception&)
     {
-        OSL_ENSURE(false, "::CreateExample() - exception caught");
+        OSL_FAIL("::CreateExample() - exception caught");
     }
     return 0;
 }
@@ -472,7 +472,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
     }
     catch(Exception&)
     {
-        OSL_ENSURE(false, "::CreateExample() - exception caught");
+        OSL_FAIL("::CreateExample() - exception caught");
     }
 }
 

@@ -436,7 +436,7 @@ IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
                         case COPT_EXPAND_WORDSPACE:  pItem->m_bExpandWordSpace = bChecked; break;
                         default:
                         {
-                            OSL_ENSURE(false, "SwCompatibilityOptPage::UseAsDefaultHdl(): wrong option" );
+                            OSL_FAIL("SwCompatibilityOptPage::UseAsDefaultHdl(): wrong option" );
                         }
                     }
                 }

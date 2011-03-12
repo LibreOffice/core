@@ -349,7 +349,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                        + GetItalicLeftSpace();
             break;
         default :
-            OSL_ENSURE(false, "Sm: unknown case");
+            OSL_FAIL("Sm: unknown case");
     }
 
     // check if horizontal position is already set
@@ -386,7 +386,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                 aPos.Y() += rRect.GetLoAttrFence() - GetTop();
                 break;
         default :
-                OSL_ENSURE(false, "Sm: unknown case");
+                OSL_FAIL("Sm: unknown case");
         }
 
     // check if vertical position is already set
@@ -403,7 +403,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                 aPos.X() += rRect.GetItalicRight() - GetItalicRight();
                 break;
             default :
-                OSL_ENSURE(false, "Sm: unknown case");
+                OSL_FAIL("Sm: unknown case");
         }
 
     return aPos;
@@ -494,7 +494,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
                     CopyMBL(rRect);
                 break;
             default :
-                OSL_ENSURE(false, "Sm: unknown case");
+                OSL_FAIL("Sm: unknown case");
         }
     }
 

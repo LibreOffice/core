@@ -281,7 +281,7 @@ BOOL lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
         }
         else
         {
-            OSL_ENSURE(false, "no absolute positioning available");
+            OSL_FAIL("no absolute positioning available");
         }
     }
     catch(Exception aExcept)
@@ -409,7 +409,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
     {
         pImpl->pMergeData->bEndOfDB = TRUE;
         pImpl->pMergeData->CheckEndOfDB();
-        OSL_ENSURE(false, "exception in MergeNew()");
+        OSL_FAIL("exception in MergeNew()");
     }
 
     uno::Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,aData.sDataSource);
@@ -1150,7 +1150,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     String sMailAddress = GetDBField( xColumnProp, aDBFormat);
                                     if(!SwMailMergeHelper::CheckMailAddress( sMailAddress ))
                                     {
-                                        OSL_ENSURE(false, "invalid e-Mail address in database column");
+                                        OSL_FAIL("invalid e-Mail address in database column");
                                     }
                                     else
                                     {
@@ -1404,7 +1404,7 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
             }
             catch(Exception&)
             {
-                OSL_ENSURE(false, "Exception in getColumns()");
+                OSL_FAIL("Exception in getColumns()");
             }
             if(!xCols.is() || !xCols->hasByName(rColNm))
                 return nRet;
@@ -1493,14 +1493,14 @@ ULONG SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
                     }
                     catch(const Exception&)
                     {
-                        OSL_ENSURE(false, "illegal number format key");
+                        OSL_FAIL("illegal number format key");
                     }
                 }
             }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE(false, "no FormatKey property found");
+            OSL_FAIL("no FormatKey property found");
         }
         if(bUseDefault)
             nRet = SwNewDBMgr::GetDbtoolsClient().getDefaultNumberFormat(xColumn, xDocNumberFormatTypes,  aLocale);
@@ -1617,7 +1617,7 @@ uno::Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(uno::Refe
     }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE(false, "Exception in SwDBMgr::GetColumnSupplier");
+        OSL_FAIL("Exception in SwDBMgr::GetColumnSupplier");
     }
 
     return xRet;
@@ -1684,7 +1684,7 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
             }
             catch(Exception& )
             {
-                OSL_ENSURE(false, "exception caught");
+                OSL_FAIL("exception caught");
             }
 
         }
@@ -2384,7 +2384,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
 
     if(!sDataSource.getLength() || !sDataTableOrQuery.getLength())
     {
-        OSL_ENSURE(false, "PropertyValues missing or unset");
+        OSL_FAIL("PropertyValues missing or unset");
         return;
     }
 
@@ -2539,7 +2539,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     }
     if(!sDataSource.getLength() || !sDataTableOrQuery.getLength() || !xResSet.is())
     {
-        OSL_ENSURE(false, "PropertyValues missing or unset");
+        OSL_FAIL("PropertyValues missing or unset");
         return;
     }
     uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
@@ -2575,7 +2575,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
         }
         catch(Exception& )
         {
-            OSL_ENSURE(false, "exception caught");
+            OSL_FAIL("exception caught");
         }
     }
     delete pDlg;
@@ -2610,7 +2610,7 @@ uno::Reference<XDataSource> SwNewDBMgr::getDataSourceAsParent(const uno::Referen
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(false, "exception in getDataSourceAsParent caught");
+        OSL_FAIL("exception in getDataSourceAsParent caught");
     }
     return xSource;
 }
@@ -2650,7 +2650,7 @@ uno::Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDat
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(false,"Caught exception while creating a new RowSet!");
+        OSL_FAIL("Caught exception while creating a new RowSet!");
     }
     return xResultSet;
 }
@@ -2690,7 +2690,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     {
         pImpl->pMergeData->bEndOfDB = TRUE;
         pImpl->pMergeData->CheckEndOfDB();
-        OSL_ENSURE(false, "exception in MergeNew()");
+        OSL_FAIL("exception in MergeNew()");
     }
 
     //bCancel is set from the PrintMonitor
@@ -2903,7 +2903,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     catch( Exception& rEx)
     {
         (void)rEx;
-        OSL_ENSURE(false, "exception caught in SwNewDBMgr::MergeDocuments");
+        OSL_FAIL("exception caught in SwNewDBMgr::MergeDocuments");
     }
     DELETEZ(pImpl->pMergeData);
     bInMerge = FALSE;

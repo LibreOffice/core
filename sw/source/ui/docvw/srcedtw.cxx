@@ -161,8 +161,8 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     {
                         // what was that?
 #if OSL_DEBUG_LEVEL > 1
-                        OSL_ENSURE(false, "Token not recognised!");
-                        OSL_ENSURE(false, ByteString(sToken, gsl_getSystemTextEncoding()).GetBuffer());
+                        OSL_FAIL("Token not recognised!");
+                        OSL_FAIL(ByteString(sToken, gsl_getSystemTextEncoding()).GetBuffer());
 #endif
                     }
 

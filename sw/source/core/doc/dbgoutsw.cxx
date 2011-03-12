@@ -1043,7 +1043,7 @@ String lcl_TokenType2Str(FormTokenType nType)
         return String("??", RTL_TEXTENCODING_ASCII_US);
     }
 
-    OSL_ENSURE(false, "should not be reached");
+    OSL_FAIL("should not be reached");
 
     return  String("??", RTL_TEXTENCODING_ASCII_US);
 }

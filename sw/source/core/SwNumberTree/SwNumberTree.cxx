@@ -69,7 +69,7 @@ SwNumberTreeNode::~SwNumberTreeNode()
         }
         else
         {
-            OSL_ENSURE(false, "lost children!");
+            OSL_FAIL("lost children!");
         }
     }
 
@@ -91,7 +91,7 @@ SwNumberTreeNode * SwNumberTreeNode::CreatePhantom()
     if (! mChildren.empty() &&
         (*mChildren.begin())->IsPhantom())
     {
-        OSL_ENSURE(false, "phantom already present");
+        OSL_FAIL("phantom already present");
     }
     else
     {
@@ -104,7 +104,7 @@ SwNumberTreeNode * SwNumberTreeNode::CreatePhantom()
 
         if (! aInsert.second)
         {
-            OSL_ENSURE(false, "insert of phantom failed!");
+            OSL_FAIL("insert of phantom failed!");
 
             delete pNew;
             pNew = NULL;
@@ -503,14 +503,13 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
 
     if ( nDepth < 0 )
     {
-        OSL_ENSURE( false,
-                "<SwNumberTreeNode::AddChild(..)> - parameter <nDepth> out of valid range. Serious defect -> please inform OD." );
+        OSL_FAIL( "<SwNumberTreeNode::AddChild(..)> - parameter <nDepth> out of valid range. Serious defect -> please inform OD." );
         return;
     }
 
     if ( pChild->GetParent() != NULL || pChild->GetChildCount() > 0 )
     {
-        OSL_ENSURE(false, "only orphans allowed.");
+        OSL_FAIL("only orphans allowed.");
         return;
     }
 
@@ -644,7 +643,7 @@ void SwNumberTreeNode::RemoveChild(SwNumberTreeNode * pChild)
 
     if (pChild->IsPhantom())
     {
-        OSL_ENSURE(false, "not applicable to phantoms!");
+        OSL_FAIL("not applicable to phantoms!");
 
         return;
     }
@@ -697,7 +696,7 @@ void SwNumberTreeNode::RemoveChild(SwNumberTreeNode * pChild)
     }
     else
     {
-        OSL_ENSURE(false, "RemoveChild: failed!");
+        OSL_FAIL("RemoveChild: failed!");
     }
 
     pChild->PostRemove();
@@ -878,8 +877,7 @@ void SwNumberTreeNode::SetLevelInListTree( const int nLevel )
 {
     if ( nLevel < 0 )
     {
-        OSL_ENSURE( false,
-                "<SwNumberTreeNode::SetLevelInListTree(..)> - parameter <nLevel> out of valid range. Serious defect -> please inform OD." );
+        OSL_FAIL( "<SwNumberTreeNode::SetLevelInListTree(..)> - parameter <nLevel> out of valid range. Serious defect -> please inform OD." );
         return;
     }
 
@@ -931,14 +929,14 @@ bool SwNumberTreeNode::IsSane(bool bRecursive,
 
     if (find(rParents.begin(), rParents.end(), this) != rParents.end())
     {
-        OSL_ENSURE(false, " I'm my own ancestor!");
+        OSL_FAIL(" I'm my own ancestor!");
 
         bResult = false;
     }
 
     if (! rParents.empty() && rParents.back() != mpParent)
     {
-        OSL_ENSURE(false, " I'm a bastard!");
+        OSL_FAIL(" I'm a bastard!");
 
         bResult = false;
     }
@@ -959,7 +957,7 @@ bool SwNumberTreeNode::IsSane(bool bRecursive,
 
                 if (! bFirst)
                 {
-                    OSL_ENSURE(false, " found phantom not at first position.");
+                    OSL_FAIL(" found phantom not at first position.");
 
                     bResult = false;
                 }
@@ -967,7 +965,7 @@ bool SwNumberTreeNode::IsSane(bool bRecursive,
 
             if ((*aIt)->mpParent != (SwNumberTreeNode *) this)
             {
-                OSL_ENSURE(false, "found a bastard");
+                OSL_FAIL("found a bastard");
 
                 bResult = false;
             }
@@ -976,7 +974,7 @@ bool SwNumberTreeNode::IsSane(bool bRecursive,
             {
                 if  (!(*aIt)->IsPhantom() && (*aIt)->LessThan(*this))
                 {
-                    OSL_ENSURE(false, " found child less than me");
+                    OSL_FAIL(" found child less than me");
 
                     bResult = false;
                 }
@@ -984,7 +982,7 @@ bool SwNumberTreeNode::IsSane(bool bRecursive,
         }
         else
         {
-            OSL_ENSURE(false, "found child that is NULL");
+            OSL_FAIL("found child that is NULL");
             bResult = false;
         }
 
@@ -1289,8 +1287,7 @@ void SwNumberTreeNode::NotifyNodesOnListLevel( const int nListLevel )
 {
     if ( nListLevel < 0 )
     {
-        OSL_ENSURE( false,
-                "<SwNumberTreeNode::NotifyNodesOnListLevel(..)> - invalid list level provided" );
+        OSL_FAIL( "<SwNumberTreeNode::NotifyNodesOnListLevel(..)> - invalid list level provided" );
         return;
     }
 

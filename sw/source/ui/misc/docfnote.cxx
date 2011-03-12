@@ -299,7 +299,7 @@ void SwEndNoteOptionPage::SelectNumbering(int eNum)
         break;
 #if OSL_DEBUG_LEVEL > 1
         default:
-            OSL_ENSURE(false, "Which numbering type?");
+            OSL_FAIL("Which numbering type?");
 #endif
     }
     aNumCountBox.SelectEntry(sSelect);

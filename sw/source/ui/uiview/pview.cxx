@@ -1773,7 +1773,7 @@ PrintDialog*  SwPagePreView::CreatePrintDialog( Window *pParent )
 // no longer needed ??
 Size  SwPagePreView::GetOptimalSizePixel() const
 {
-    OSL_ENSURE( false, "overloaded virtual method <SwPagePreView::GetOptimalSizePixel()> needed ??" );
+    OSL_FAIL( "overloaded virtual method <SwPagePreView::GetOptimalSizePixel()> needed ??" );
     return Size( -1, -1 );
 }
 

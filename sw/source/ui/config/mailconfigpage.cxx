@@ -414,7 +414,7 @@ void SwTestAccountSettingsDialog::Test()
         }
         catch(uno::Exception&)
         {
-            OSL_ENSURE(false, "exception caught");
+            OSL_FAIL("exception caught");
         }
     }
 

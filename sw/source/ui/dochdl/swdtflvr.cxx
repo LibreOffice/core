@@ -1428,7 +1428,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
                                                 nActionFlags, bMsg );
                 break;
             default:
-                OSL_ENSURE( false, "unknown format" );
+                OSL_FAIL( "unknown format" );
             }
 
             break;
@@ -1467,7 +1467,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
             break;
 
         default:
-            OSL_ENSURE(false, "unknown action" );
+            OSL_FAIL("unknown action" );
         }
     }
 

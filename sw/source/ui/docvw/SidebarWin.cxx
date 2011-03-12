@@ -493,8 +493,7 @@ void SwSidebarWin::SetPosAndSize()
             }
             break;
             default:
-                OSL_ENSURE( false,
-                        "<SwSidebarWin::SetPosAndSize()> - unexpected position of sidebar" );
+                OSL_FAIL( "<SwSidebarWin::SetPosAndSize()> - unexpected position of sidebar" );
             break;
         }
 

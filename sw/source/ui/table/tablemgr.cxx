@@ -313,7 +313,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
             else if (nColLen > 1)
                 eDataRowSource = chart::ChartDataRowSource_COLUMNS;
             else {
-                OSL_ENSURE(false, "unexpected state" );
+                OSL_FAIL("unexpected state" );
             }
         }
 

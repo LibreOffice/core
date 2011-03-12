@@ -2683,7 +2683,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                     }
                     break;
                 default:
-                    OSL_ENSURE(false, "sweet god, what have you done!");
+                    OSL_FAIL("sweet god, what have you done!");
                     break;
             }
         }

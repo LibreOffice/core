@@ -238,7 +238,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if( SFX_ITEM_SET == pArgs->GetItemState(
                                         FN_PARAM_FIELD_FORMAT, FALSE, &pItem ))
                         nFormat = ((SfxUInt32Item *)pItem)->GetValue();
-                    OSL_ENSURE(false, "Command is not yet used");
+                    OSL_FAIL("Command is not yet used");
                     sal_Unicode cSeparator = ' ';
                     SwInsertFld_Data aData(nType, 0, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
                     bRes = aFldMgr.InsertFld(aData);
@@ -601,7 +601,7 @@ FIELD_INSERT:
             }
             break;
             default:
-                OSL_ENSURE(false, "wrong dispatcher");
+                OSL_FAIL("wrong dispatcher");
                 return;
         }
     }

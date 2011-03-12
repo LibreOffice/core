@@ -364,7 +364,7 @@ bool lcl_FindNextCell( SwNodeIndex& rIdx, BOOL bInReadOnly )
 
     if ( !pTblNd )
     {
-        OSL_ENSURE( false, "lcl_FindNextCell not celled with table start node!" );
+        OSL_FAIL( "lcl_FindNextCell not celled with table start node!" );
         return false;
     }
 
@@ -442,7 +442,7 @@ bool lcl_FindPrevCell( SwNodeIndex& rIdx, BOOL bInReadOnly  )
 
     if ( !pTblNd )
     {
-        OSL_ENSURE( false, "lcl_FindPrevCell not celled with table start node!" );
+        OSL_FAIL( "lcl_FindPrevCell not celled with table start node!" );
         return false;
     }
 

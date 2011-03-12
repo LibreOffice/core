@@ -161,8 +161,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
         }
         else
         {
-            OSL_ENSURE( false,
-                    "<SwTextMarkupHelper::getTextMarkup(..)> - missing <SwWrongArea> instance" );
+            OSL_FAIL( "<SwTextMarkupHelper::getTextMarkup(..)> - missing <SwWrongArea> instance" );
         }
     }
 

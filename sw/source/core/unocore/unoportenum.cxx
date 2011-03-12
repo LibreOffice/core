@@ -335,7 +335,7 @@ lcl_ExportFieldMark(
     pUnoCrsr->Right(1, CRSR_SKIP_CHARS, FALSE, FALSE);
     if ( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
     {
-        OSL_ENSURE(false, "cannot move cursor?");
+        OSL_FAIL("cannot move cursor?");
         return 0;
     }
 
@@ -384,7 +384,7 @@ lcl_ExportFieldMark(
     }
     else
     {
-        OSL_ENSURE(false, "no fieldmark found?");
+        OSL_FAIL("no fieldmark found?");
     }
     return xRef;
 }
@@ -676,7 +676,7 @@ lcl_ExportHints(
                         PortionList_t Top = rPortionStack.top();
                         if (Top.second != pAttr)
                         {
-                            OSL_ENSURE(false, "ExportHints: stack error" );
+                            OSL_FAIL("ExportHints: stack error" );
                         }
                         else
                         {
@@ -1114,7 +1114,7 @@ lcl_CreatePortions(
                         bCursorMoved, nNextAttrIndex);
             if (PortionStack.empty())
             {
-                OSL_ENSURE(false, "CreatePortions: stack underflow");
+                OSL_FAIL("CreatePortions: stack underflow");
                 return;
             }
         }

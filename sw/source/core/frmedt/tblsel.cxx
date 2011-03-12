@@ -306,7 +306,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
     const SwTabFrm* pStartTab = pStart->FindTabFrm();
     if ( !pStartTab )
     {
-        OSL_ENSURE( false, "GetTblSel without start table" );
+        OSL_FAIL( "GetTblSel without start table" );
         return;
     }
 
@@ -466,7 +466,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
         // been deleted due to the formatting of the table:
         if ( aDelCheck.HasBeenDeleted() )
         {
-            OSL_ENSURE( false, "Current box has been deleted during GetTblSel()" );
+            OSL_FAIL( "Current box has been deleted during GetTblSel()" );
             break;
         }
         // <--
@@ -1841,7 +1841,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
 
     if ( !pStart || !pEnd )
     {
-        OSL_ENSURE( false, "MakeSelUnions with pStart or pEnd not in CellFrm" );
+        OSL_FAIL( "MakeSelUnions with pStart or pEnd not in CellFrm" );
         return;
     }
 

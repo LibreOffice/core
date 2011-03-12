@@ -396,8 +396,7 @@ SwFrmNotify::~SwFrmNotify()
                     }
                     else
                     {
-                        OSL_ENSURE( false,
-                                "<SwCntntNotify::~SwCntntNotify()> - unknown anchored object type. Please inform OD." );
+                        OSL_FAIL( "<SwCntntNotify::~SwCntntNotify()> - unknown anchored object type. Please inform OD." );
                     }
                 }
             }
@@ -1023,7 +1022,7 @@ SwCntntNotify::~SwCntntNotify()
                     {
                         if (FLY_AT_PAGE == rAnch.GetAnchorId())
                         {
-                            OSL_ENSURE( false, "<SwCntntNotify::~SwCntntNotify()> - to page anchored object with content position. Please inform OD." );
+                            OSL_FAIL( "<SwCntntNotify::~SwCntntNotify()> - to page anchored object with content position. Please inform OD." );
                             SwFmtAnchor aAnch( rAnch );
                             aAnch.SetAnchor( 0 );
                             aAnch.SetPageNum( pPage->GetPhyPageNum() );

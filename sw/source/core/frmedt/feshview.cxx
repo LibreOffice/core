@@ -2248,8 +2248,7 @@ bool SwFEShell::IsGroupAllowed() const
                 SwFrmFmt* pFrmFmt( ::FindFrmFmt( const_cast<SdrObject*>(pObj) ) );
                 if ( !pFrmFmt )
                 {
-                    OSL_ENSURE( false,
-                            "<SwFEShell::IsGroupAllowed()> - missing frame format" );
+                    OSL_FAIL( "<SwFEShell::IsGroupAllowed()> - missing frame format" );
                     bIsGroupAllowed = false;
                 }
                 else if ( FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )

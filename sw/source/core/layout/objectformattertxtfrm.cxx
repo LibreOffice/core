@@ -232,8 +232,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                     }
                     else
                     {
-                        OSL_ENSURE( false,
-                                "<SwObjectFormatterTxtFrm::DoFormatObj(..)> - anchor frame not marked to move forward" );
+                        OSL_FAIL( "<SwObjectFormatterTxtFrm::DoFormatObj(..)> - anchor frame not marked to move forward" );
                     }
                 }
             }
@@ -289,8 +288,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                     }
                     else
                     {
-                        OSL_ENSURE( false,
-                                "<SwObjectFormatterTxtFrm::DoFormatObj(..)> - anchor frame not marked to move forward" );
+                        OSL_FAIL( "<SwObjectFormatterTxtFrm::DoFormatObj(..)> - anchor frame not marked to move forward" );
                     }
                 }
             }
@@ -327,8 +325,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
         else
         {
             // the anchor text frame has to be valid, thus assert.
-            OSL_ENSURE( false,
-                    "<SwObjectFormatterTxtFrm::DoFormatObjs()> called for invalidate anchor text frame." );
+            OSL_FAIL( "<SwObjectFormatterTxtFrm::DoFormatObjs()> called for invalidate anchor text frame." );
         }
 
         return false;
@@ -422,8 +419,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
                 }
                 else
                 {
-                    OSL_ENSURE( false,
-                            "<SwObjectFormatterTxtFrm::DoFormatObjs(..)> - anchor frame not marked to move forward" );
+                    OSL_FAIL( "<SwObjectFormatterTxtFrm::DoFormatObjs(..)> - anchor frame not marked to move forward" );
                 }
             }
         }
@@ -464,8 +460,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
             }
             else
             {
-                OSL_ENSURE( false,
-                        "<SwObjectFormatterTxtFrm::DoFormatObjs(..)> - anchor frame not marked to move forward" );
+                OSL_FAIL( "<SwObjectFormatterTxtFrm::DoFormatObjs(..)> - anchor frame not marked to move forward" );
             }
         }
         // #i40155# - mark anchor frame not to wrap around

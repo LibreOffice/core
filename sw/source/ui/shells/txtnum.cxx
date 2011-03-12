@@ -226,7 +226,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     }
     break;
     default:
-        OSL_ENSURE(false, "wrong dispatcher");
+        OSL_FAIL("wrong dispatcher");
         return;
     }
 }

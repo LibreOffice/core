@@ -1486,7 +1486,7 @@ void SwXMLImport::SetDocumentSpecificSettings(
         if ( xLateInitSettings->hasByName( _rSettingsGroupName ) )
         {
             xLateInitSettings->replaceByName( _rSettingsGroupName, makeAny( _rSettings ) );
-            OSL_ENSURE( false, "SwXMLImport::SetDocumentSpecificSettings: already have settings for this model!" );
+            OSL_FAIL( "SwXMLImport::SetDocumentSpecificSettings: already have settings for this model!" );
         }
         else
             xLateInitSettings->insertByName( _rSettingsGroupName, makeAny( _rSettings ) );

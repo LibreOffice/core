@@ -127,7 +127,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
     }
     else
     {
-        OSL_ENSURE( false, "Unknown mark-up type" );
+        OSL_FAIL( "Unknown mark-up type" );
         return;
     }
 

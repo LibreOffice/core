@@ -180,7 +180,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                 rSh.DontExpandFmt();
         break;
         default:
-            OSL_ENSURE(false, "wrong  dispatcher");
+            OSL_FAIL("wrong  dispatcher");
             return;
     }
 }
@@ -280,7 +280,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
         break;
 
         default:
-            OSL_ENSURE(false, "wrong  dispatcher");
+            OSL_FAIL("wrong  dispatcher");
             return;
     }
 }
@@ -417,7 +417,7 @@ SET_LINESPACE:
         break;
 
         default:
-            OSL_ENSURE(false, "wrong  dispatcher");
+            OSL_FAIL("wrong  dispatcher");
             return;
     }
     SwWrtShell& rWrtSh = GetShell();
@@ -516,7 +516,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
         break;
 
         default:
-            OSL_ENSURE(false, "wrong  dispatcher");
+            OSL_FAIL("wrong  dispatcher");
             return;
     }
 }

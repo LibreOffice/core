@@ -815,7 +815,7 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
     {
         if ( _nHoriMove != 0 && _nVertMove != 0 )
         {
-            OSL_ENSURE( false, "missing implementation for moving preview selected page horizontal AND vertical");
+            OSL_FAIL( "missing implementation for moving preview selected page horizontal AND vertical");
             return false;
         }
 

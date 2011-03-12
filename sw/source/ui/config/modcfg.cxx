@@ -82,7 +82,7 @@ const InsCaptionOpt* SwModuleOptions::GetCapOption(
 {
     if(bHTML)
     {
-        OSL_ENSURE(false, "no caption option in sw/web!");
+        OSL_FAIL("no caption option in sw/web!");
         return 0;
     }
     else
@@ -105,7 +105,7 @@ BOOL SwModuleOptions::SetCapOption(BOOL bHTML, const InsCaptionOpt* pOpt)
 
     if(bHTML)
     {
-        OSL_ENSURE(false, "no caption option in sw/web!");
+        OSL_FAIL("no caption option in sw/web!");
     }
     else if (pOpt)
     {
@@ -188,7 +188,7 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, BOOL bFromUI)
                                 nVal -= 'a' - 10;
                             else
                             {
-                                OSL_ENSURE(false,  "wrong hex value" );
+                                OSL_FAIL("wrong hex value" );
                                 bValidData = FALSE;
                                 break;
                             }

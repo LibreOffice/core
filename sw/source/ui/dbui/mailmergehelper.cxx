@@ -175,7 +175,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
         }
         catch(uno::Exception& )
         {
-            OSL_ENSURE(false, "exception caught");
+            OSL_FAIL("exception caught");
         }
     return xSmtpServer;
 }
@@ -541,7 +541,7 @@ String SwAddressPreview::FillData(
                     }
                     catch( sdbc::SQLException& )
                     {
-                        OSL_ENSURE(false, "SQLException caught");
+                        OSL_FAIL("SQLException caught");
                     }
                 }
             }

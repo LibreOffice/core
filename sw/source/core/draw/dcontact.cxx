@@ -291,20 +291,20 @@ void SwContact::_MoveObjToLayer( const bool _bToVisible,
 {
     if ( !_pDrawObj )
     {
-        OSL_ENSURE( false, "SwDrawContact::_MoveObjToLayer(..) - no drawing object!" );
+        OSL_FAIL( "SwDrawContact::_MoveObjToLayer(..) - no drawing object!" );
         return;
     }
 
     if ( !pRegisteredIn )
     {
-        OSL_ENSURE( false, "SwDrawContact::_MoveObjToLayer(..) - no drawing frame format!" );
+        OSL_FAIL( "SwDrawContact::_MoveObjToLayer(..) - no drawing frame format!" );
         return;
     }
 
     const IDocumentDrawModelAccess* pIDDMA = static_cast<SwFrmFmt*>(pRegisteredIn)->getIDocumentDrawModelAccess();
     if ( !pIDDMA )
     {
-        OSL_ENSURE( false, "SwDrawContact::_MoveObjToLayer(..) - no writer document!" );
+        OSL_FAIL( "SwDrawContact::_MoveObjToLayer(..) - no writer document!" );
         return;
     }
 
@@ -874,7 +874,7 @@ void SwDrawContact::SetMaster( SdrObject* _pNewMaster )
     if ( _pNewMaster )
     {
 #if OSL_DEBUG_LEVEL > 1
-        OSL_ENSURE( false, "debug notification - master replaced!" );
+        OSL_FAIL( "debug notification - master replaced!" );
 #endif
         maAnchoredDrawObj.SetDrawObj( *_pNewMaster );
     }
@@ -900,8 +900,7 @@ const SwFrm* SwDrawContact::GetAnchorFrm( const SdrObject* _pDrawObj ) const
     }
     else
     {
-        OSL_ENSURE( false,
-                "<SwDrawContact::GetAnchorFrm(..)> - unknown drawing object." );
+        OSL_FAIL( "<SwDrawContact::GetAnchorFrm(..)> - unknown drawing object." );
     }
 
     return pAnchorFrm;
@@ -1269,8 +1268,7 @@ class NestedUserCallHdl
 
                 if ( bTmpAssert )
                 {
-                    OSL_ENSURE( false,
-                            "<SwDrawContact::_Changed(..)> - unknown nested <UserCall> event. This is serious, please inform OD." );
+                    OSL_FAIL( "<SwDrawContact::_Changed(..)> - unknown nested <UserCall> event. This is serious, please inform OD." );
                 }
             }
         }
@@ -1325,8 +1323,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
             {
                 if ( mbDisconnectInProgress )
                 {
-                    OSL_ENSURE( false,
-                            "<SwDrawContact::_Changed(..)> - Insert event during disconnection from layout is invalid." );
+                    OSL_FAIL( "<SwDrawContact::_Changed(..)> - Insert event during disconnection from layout is invalid." );
                 }
                 else
                 {
@@ -1462,8 +1459,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                     break;
                     default:
                     {
-                        OSL_ENSURE( false,
-                                "<SwDrawContact::_Changed(..)> - unsupported layout direction" );
+                        OSL_FAIL( "<SwDrawContact::_Changed(..)> - unsupported layout direction" );
                     }
                 }
                 SfxItemSet aSet( GetFmt()->GetDoc()->GetAttrPool(),
@@ -1663,8 +1659,7 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 #if OSL_DEBUG_LEVEL > 1
         else
         {
-            OSL_ENSURE( false,
-                    "<SwDrawContact::Modify(..)> - unhandled attribute? - please inform od@openoffice.org" );
+            OSL_FAIL( "<SwDrawContact::Modify(..)> - unhandled attribute? - please inform od@openoffice.org" );
         }
 #endif
     }
@@ -1851,8 +1846,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
     // *no* connect to layout during disconnection from layout.
     if ( mbDisconnectInProgress )
     {
-        OSL_ENSURE( false,
-                "<SwDrawContact::ConnectToLayout(..)> called during disconnection.");
+        OSL_FAIL( "<SwDrawContact::ConnectToLayout(..)> called during disconnection.");
         return;
     }
 
@@ -1860,7 +1854,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
     // object isn't inserted in the drawing page
     if ( !GetMaster()->IsInserted() )
     {
-        OSL_ENSURE( false, "<SwDrawContact::ConnectToLayout(..)> - master drawing object not inserted -> no connect to layout. Please inform od@openoffice.org" );
+        OSL_FAIL( "<SwDrawContact::ConnectToLayout(..)> - master drawing object not inserted -> no connect to layout. Please inform od@openoffice.org" );
         return;
     }
     // <--
@@ -2063,8 +2057,7 @@ void SwDrawContact::ChkPage()
 {
     if ( mbDisconnectInProgress )
     {
-        OSL_ENSURE( false,
-                "<SwDrawContact::ChkPage()> called during disconnection." );
+        OSL_FAIL( "<SwDrawContact::ChkPage()> called during disconnection." );
         return;
     }
 

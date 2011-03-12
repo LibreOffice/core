@@ -293,8 +293,7 @@ IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const IMark& rBkmk)
         return NAVIGATOR_REMINDER;
     else
     {
-        OSL_ENSURE(false,
-            "IDocumentMarkAccess::GetType(..)"
+        OSL_FAIL("IDocumentMarkAccess::GetType(..)"
             " - unknown MarkType. This needs to be fixed!");
         return UNO_BOOKMARK;
     }

@@ -472,7 +472,7 @@ short SwGrfNode::SwapIn( BOOL bWaitForData )
             catch ( uno::Exception& )
             {
                 // --> OD 2005-04-25 #i48434#
-                OSL_ENSURE( false, "<SwGrfNode::SwapIn(..)> - unhandled exception!" );
+                OSL_FAIL( "<SwGrfNode::SwapIn(..)> - unhandled exception!" );
                 // <--
             }
             // <--
@@ -745,7 +745,7 @@ void SwGrfNode::DelStreamName()
             catch ( uno::Exception& )
             {
                 // --> OD 2005-04-25 #i48434#
-                OSL_ENSURE( false, "<SwGrfNode::DelStreamName()> - unhandled exception!" );
+                OSL_FAIL( "<SwGrfNode::DelStreamName()> - unhandled exception!" );
                 // <--
             }
         }
@@ -824,7 +824,7 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
         }
         else
         {
-            OSL_ENSURE( false, "<SwGrfNode::_GetStreamForEmbedGrf(..)> - embedded graphic file not found!" );
+            OSL_FAIL( "<SwGrfNode::_GetStreamForEmbedGrf(..)> - embedded graphic file not found!" );
         }
     }
 
@@ -868,8 +868,7 @@ void SwGrfNode::_GetStreamStorageNames( String& rStrmName,
     }
     else
     {
-        OSL_ENSURE( false,
-                "<SwGrfNode::_GetStreamStorageNames(..)> - unknown graphic URL type. Code for handling 3.1 - 5.2 storages has been deleted by issue i53025." );
+        OSL_FAIL( "<SwGrfNode::_GetStreamStorageNames(..)> - unknown graphic URL type. Code for handling 3.1 - 5.2 storages has been deleted by issue i53025." );
     }
     OSL_ENSURE( STRING_NOTFOUND == rStrmName.Search( '/' ),
             "invalid graphic stream name" );
@@ -903,7 +902,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         catch ( uno::Exception& )
         {
             // --> OD 2005-04-25 #i48434#
-            OSL_ENSURE( false, "<SwGrfNode::MakeCopy(..)> - unhandled exception!" );
+            OSL_FAIL( "<SwGrfNode::MakeCopy(..)> - unhandled exception!" );
             // <--
         }
         // <--
@@ -995,7 +994,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
             catch ( uno::Exception& )
             {
                 // --> OD 2005-04-25 #i48434#
-                OSL_ENSURE( false, "<SwapGraphic> - unhandled exception!" );
+                OSL_FAIL( "<SwapGraphic> - unhandled exception!" );
                 // <--
             }
             // <--
@@ -1127,8 +1126,7 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
 {
     if ( !IsLinkedFile() )
     {
-        OSL_ENSURE( false,
-                "<SwGrfNode::TriggerAsyncLoad()> - Method is misused. Method call is only valid for graphic nodes, which refer a linked graphic file" );
+        OSL_FAIL( "<SwGrfNode::TriggerAsyncLoad()> - Method is misused. Method call is only valid for graphic nodes, which refer a linked graphic file" );
         return;
     }
 

@@ -329,7 +329,7 @@ bool SwEnvItem::QueryValue( Any& rVal, BYTE nMemberId ) const
         case MID_ENV_SHIFT_RIGHT      : rVal <<= lShiftRight; break;
         case MID_ENV_SHIFT_DOWN       : rVal <<= lShiftDown; break;
         default:
-            OSL_ENSURE(false, "Wrong memberId");
+            OSL_FAIL("Wrong memberId");
             bRet = false;
     }
     return bRet;
@@ -361,7 +361,7 @@ bool SwEnvItem::PutValue(const Any& rVal, BYTE nMemberId)
         case MID_ENV_SHIFT_RIGHT      : bRet = (rVal >>= lShiftRight); break;
         case MID_ENV_SHIFT_DOWN       : bRet = (rVal >>= lShiftDown); break;
         default:
-            OSL_ENSURE(false,"Wrong memberId");
+            OSL_FAIL("Wrong memberId");
     }
     return bRet;
 }

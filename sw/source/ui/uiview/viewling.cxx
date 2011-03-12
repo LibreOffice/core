@@ -715,7 +715,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                     aParaText = pNode->GetTxt();    // this may include hidden text but that should be Ok
                 else
                 {
-                    OSL_ENSURE(false, "text node expected but not found" );
+                    OSL_FAIL("text node expected but not found" );
                 }
 
                 bRet = sal_True;

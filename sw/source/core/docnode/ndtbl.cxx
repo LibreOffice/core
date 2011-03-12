@@ -2556,7 +2556,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     // Make code robust:
     if ( aDelCheck.HasBeenDeleted() )
     {
-        OSL_ENSURE( false, "Current box has been deleted during GetTabRows()" );
+        OSL_FAIL( "Current box has been deleted during GetTabRows()" );
         return;
     }
 

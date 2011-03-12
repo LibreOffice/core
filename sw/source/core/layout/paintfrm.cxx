@@ -3412,7 +3412,7 @@ BOOL SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
                 // OD 02.07.2003 #108784# - debug assert
                 if ( !pObj->ISA(SdrObjGroup) )
                 {
-                    OSL_ENSURE( false, "<SwFlyFrm::IsPaint(..)> - paint of drawing object without anchor frame!?" );
+                    OSL_FAIL( "<SwFlyFrm::IsPaint(..)> - paint of drawing object without anchor frame!?" );
                 }
             }
         }

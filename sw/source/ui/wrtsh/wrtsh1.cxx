@@ -731,13 +731,13 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     }
     catch( embed::NoVisualAreaSizeException& )
     {
-        OSL_ENSURE(false, "Can't get visual area size!\n" );
+        OSL_FAIL("Can't get visual area size!\n" );
         // the scaling will not be done
     }
     catch( uno::Exception& )
     {
         // TODO/LATER: handle the error
-        OSL_ENSURE(false, "Can't get visual area size!\n" );
+        OSL_FAIL("Can't get visual area size!\n" );
         return;
     }
 

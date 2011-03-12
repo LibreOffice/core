@@ -417,7 +417,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                 ByteString sStr( "nSlot: " );
                 sStr += ByteString::CreateFromInt32( nSlot );
                 sStr += " wrong Dispatcher (viewsrch.cxx)";
-                OSL_ENSURE(false, sStr.GetBuffer() );
+                OSL_FAIL(sStr.GetBuffer() );
             }
 #endif
             return;

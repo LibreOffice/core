@@ -129,7 +129,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
         }
         break;
         default:
-            OSL_ENSURE(false, "wrong dispatcher");
+            OSL_FAIL("wrong dispatcher");
             return;
     }
     if(bUpdateList)

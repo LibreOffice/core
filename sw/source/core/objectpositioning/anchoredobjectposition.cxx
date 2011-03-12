@@ -300,8 +300,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             }
             else
             {
-                OSL_ENSURE( false,
-                        "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
+                OSL_FAIL( "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
             }
         }
         break;
@@ -315,16 +314,14 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             }
             else
             {
-                OSL_ENSURE( false,
-                        "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
+                OSL_FAIL( "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
             }
         }
         break;
         // no break here, because text::RelOrientation::CHAR is invalid, if !mbAnchorToChar
         default:
         {
-            OSL_ENSURE( false,
-                    "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
+            OSL_FAIL( "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
         }
     }
 
@@ -381,8 +378,7 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
         break;
         default:
         {
-            OSL_ENSURE( false,
-                    "<SwAnchoredObjectPosition::_GetVertRelPos(..) - invalid vertical positioning" );
+            OSL_FAIL( "<SwAnchoredObjectPosition::_GetVertRelPos(..) - invalid vertical positioning" );
         }
     }
 
@@ -869,8 +865,7 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
     if ( !GetAnchorFrm().ISA(SwTxtFrm) ||
          !GetAnchoredObj().ISA(SwFlyAtCntFrm) )
     {
-        OSL_ENSURE( false,
-                "<SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(..) - usage for wrong anchor type" );
+        OSL_FAIL( "<SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(..) - usage for wrong anchor type" );
         return _nProposedRelPosX;
     }
 

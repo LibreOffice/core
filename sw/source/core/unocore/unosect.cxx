@@ -1315,16 +1315,14 @@ void SAL_CALL SwXTextSection::addPropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
 throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextSection::addPropertiesChangeListener(): not implemented");
+    OSL_FAIL("SwXTextSection::addPropertiesChangeListener(): not implemented");
 }
 
 void SAL_CALL SwXTextSection::removePropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
 throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextSection::removePropertiesChangeListener(): not implemented");
+    OSL_FAIL("SwXTextSection::removePropertiesChangeListener(): not implemented");
 }
 
 void SAL_CALL SwXTextSection::firePropertiesChangeEvent(
@@ -1332,8 +1330,7 @@ void SAL_CALL SwXTextSection::firePropertiesChangeEvent(
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
         throw(uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextSection::firePropertiesChangeEvent(): not implemented");
+    OSL_FAIL("SwXTextSection::firePropertiesChangeEvent(): not implemented");
 }
 
 void SAL_CALL
@@ -1343,8 +1340,7 @@ SwXTextSection::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextSection::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXTextSection::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1354,8 +1350,7 @@ SwXTextSection::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextSection::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXTextSection::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1365,8 +1360,7 @@ SwXTextSection::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextSection::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXTextSection::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1376,8 +1370,7 @@ SwXTextSection::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextSection::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXTextSection::removeVetoableChangeListener(): not implemented");
 }
 
 beans::PropertyState SAL_CALL

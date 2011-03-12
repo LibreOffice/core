@@ -1237,8 +1237,7 @@ SwXDocumentIndex::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndex::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndex::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1248,8 +1247,7 @@ SwXDocumentIndex::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndex::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndex::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1259,8 +1257,7 @@ SwXDocumentIndex::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndex::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndex::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1270,8 +1267,7 @@ SwXDocumentIndex::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndex::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndex::removeVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1577,7 +1573,7 @@ public:
         try {
             InsertTOXMark(rTOXType, rMark, rPam, 0);
         } catch (...) {
-            OSL_ENSURE(false, "ReplaceTOXMark() failed!");
+            OSL_FAIL("ReplaceTOXMark() failed!");
             m_ListenerContainer.Disposing();
             throw;
         }
@@ -2333,8 +2329,7 @@ SwXDocumentIndexMark::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndexMark::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndexMark::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -2344,8 +2339,7 @@ SwXDocumentIndexMark::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-    "SwXDocumentIndexMark::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndexMark::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -2355,8 +2349,7 @@ SwXDocumentIndexMark::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndexMark::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndexMark::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -2366,8 +2359,7 @@ SwXDocumentIndexMark::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-    "SwXDocumentIndexMark::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndexMark::removeVetoableChangeListener(): not implemented");
 }
 
 /******************************************************************

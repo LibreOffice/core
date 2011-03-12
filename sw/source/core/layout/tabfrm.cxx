@@ -1576,7 +1576,7 @@ bool MA_FASTCALL lcl_CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeav
                     }
 
 #if OSL_DEBUG_LEVEL > 1
-                    OSL_ENSURE( false, "LoopControl in lcl_CalcLowers" );
+                    OSL_FAIL( "LoopControl in lcl_CalcLowers" );
 #endif
                 }
             }
@@ -2665,7 +2665,7 @@ void SwTabFrm::MakeAll()
 #if OSL_DEBUG_LEVEL > 1
             else
             {
-                OSL_ENSURE( false, "debug assertion: <SwTabFrm::MakeAll()> - format of table lowers suppressed by fix i44910" );
+                OSL_FAIL( "debug assertion: <SwTabFrm::MakeAll()> - format of table lowers suppressed by fix i44910" );
             }
 #endif
             // <--
@@ -4997,8 +4997,7 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                     }
                     else
                     {
-                        OSL_ENSURE( false,
-                                "<lcl_ArrangeLowers(..)> - unknown type of anchored object!" );
+                        OSL_FAIL( "<lcl_ArrangeLowers(..)> - unknown type of anchored object!" );
                     }
                 }
             }

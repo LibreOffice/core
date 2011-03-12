@@ -2513,8 +2513,7 @@ bool SwWW8ImplReader::IsObjectLayoutInTableCell( const UINT32 nLayoutInTableCell
             break;
             default:
             {
-                OSL_ENSURE( false,
-                        "unknown version." );
+                OSL_FAIL( "unknown version." );
             }
         }
     }

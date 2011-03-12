@@ -684,7 +684,7 @@ bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
         case SHELL_MODE_TABLE_TEXT:
         case SHELL_MODE_TABLE_LIST_TEXT:
         case SHELL_MODE_DRAWTEXT:
-            OSL_ENSURE(false, "text already active in SwSpellDialogChildWindow::MakeTextSelection_Impl()");
+            OSL_FAIL("text already active in SwSpellDialogChildWindow::MakeTextSelection_Impl()");
         break;
 
         case SHELL_MODE_FRAME:

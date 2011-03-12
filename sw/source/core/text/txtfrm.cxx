@@ -389,7 +389,7 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
     if( !Frm().Width() && IsValid() && GetUpper()->IsValid() )
                                        //bei Stackueberlauf (StackHack) invalid!
     {
-//        OSL_ENSURE( false, "SwTxtFrm::IsHiddenNow: thin frame" );
+//        OSL_FAIL( "SwTxtFrm::IsHiddenNow: thin frame" );
         return sal_True;
     }
 
@@ -601,8 +601,7 @@ void SwTxtFrm::HideAndShowObjects()
                 }
                 else
                 {
-                    OSL_ENSURE( false,
-                            "<SwTxtFrm::HideAndShowObjects()> - object not anchored at/inside paragraph!?" );
+                    OSL_FAIL( "<SwTxtFrm::HideAndShowObjects()> - object not anchored at/inside paragraph!?" );
                 }
             }
         }

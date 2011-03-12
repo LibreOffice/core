@@ -823,7 +823,7 @@ sal_Bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xS
         {
             if ( !pOLEChildList->MoveEmbeddedObject( aNames[n-1], GetEmbeddedObjectContainer() ) )
             {
-                OSL_ENSURE(false, "Copying of objects didn't work!" );
+                OSL_FAIL("Copying of objects didn't work!" );
             }
         }
 

@@ -365,7 +365,7 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
         pSdrObj = GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm );
         if ( !pSdrObj )
         {
-            OSL_ENSURE( false, "SwFlyCntPortion::SetBase(..) - No drawing object found by <GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm )>" );
+            OSL_FAIL( "SwFlyCntPortion::SetBase(..) - No drawing object found by <GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm )>" );
             pSdrObj = GetDrawContact()->GetMaster();
         }
         // --> OD 2007-11-29 #i65798#

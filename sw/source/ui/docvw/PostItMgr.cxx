@@ -284,7 +284,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 if ( mpView->GetDocShell() != &rBC )
                 {
                     // field to be removed is the broadcaster
-                    OSL_ENSURE(false, "Notification for removed SwFmtFld was not sent!");
+                    OSL_FAIL("Notification for removed SwFmtFld was not sent!");
                     RemoveItem(&rBC);
                 }
                 break;
@@ -314,7 +314,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
                 else
                 {
-                    OSL_ENSURE(false, "Inserted field not in document!" );
+                    OSL_FAIL("Inserted field not in document!" );
                         }
                 break;
             }
@@ -430,7 +430,7 @@ bool SwPostItMgr::CalcRects()
             SwSidebarItem* pItem = (*i);
             if ( !pItem->UseElement() )
             {
-                OSL_ENSURE(false, "PostIt is not in doc or other wrong use");
+                OSL_FAIL("PostIt is not in doc or other wrong use");
                 bRepair = true;
                 continue;
             }
@@ -743,7 +743,7 @@ void SwPostItMgr::LayoutPostIts()
                     SwSidebarItem* pItem = (*i);
                     if ( !pItem->UseElement() )
                     {
-                        OSL_ENSURE(false, "PostIt is not in doc!");
+                        OSL_FAIL("PostIt is not in doc!");
                         bRepair = true;
                         continue;
                     }
@@ -776,7 +776,7 @@ bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage) const
 {
     if ( mPages[aPage-1]->mList->empty() )
     {
-        OSL_ENSURE(false, "Notes SidePane painted but no rects and page lists calculated!");
+        OSL_FAIL("Notes SidePane painted but no rects and page lists calculated!");
         return false;
     }
 
@@ -1073,7 +1073,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
             // security check so we don't loop forever
             if (loop>MAX_LOOP_COUNT)
             {
-                OSL_ENSURE(false, "PostItMgr::Layout(): We are looping forever");
+                OSL_FAIL("PostItMgr::Layout(): We are looping forever");
                 break;
             }
         }
@@ -1331,7 +1331,7 @@ long SwPostItMgr::GetNextBorder()
         }
     }
 
-    OSL_ENSURE(false, "SwPostItMgr::GetNextBorder(): We have to find a next border here");
+    OSL_FAIL("SwPostItMgr::GetNextBorder(): We have to find a next border here");
     return -1;
 }
 
@@ -1649,7 +1649,7 @@ IMPL_LINK( SwPostItMgr, CalcHdl, void*, /* pVoid*/  )
     mnEventId = 0;
     if ( mbLayouting )
     {
-        OSL_ENSURE(false, "Reentrance problem in Layout Manager!");
+        OSL_FAIL("Reentrance problem in Layout Manager!");
         mbWaitingForCalcRects = false;
         return 0;
     }

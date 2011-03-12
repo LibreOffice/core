@@ -525,7 +525,7 @@ void  SwSendMailDialog::SendMails()
 {
     if(!m_pConfigItem)
     {
-        OSL_ENSURE(false, "config item not set");
+        OSL_FAIL("config item not set");
         return;
     }
     String sErrorMessage;
@@ -540,7 +540,7 @@ void  SwSendMailDialog::SendMails()
     LeaveWait();
     if(!bIsLoggedIn)
     {
-        OSL_ENSURE(false, "create error message");
+        OSL_FAIL("create error message");
         return;
     }
     m_pImpl->xMailDispatcher.set( new MailDispatcher(xSmtpServer));

@@ -987,7 +987,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             // #i95726# - Some fault tolerance, if table is somehow corrupted.
             if ( nCol < nOldCol )
             {
-                OSL_ENSURE( false, "table and/or table information seems to be corrupted." );
+                OSL_FAIL( "table and/or table information seems to be corrupted." );
                 if ( nBox == nBoxes - 1 )
                 {
                     nCol = rLines.GetColumns().Count() - 1;

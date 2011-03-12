@@ -1562,7 +1562,7 @@ void SmSubSupNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
                 aPos.Y() -= nDist;
                 break;
             default :
-                OSL_ENSURE(false, "Sm: unknown case");
+                OSL_FAIL("Sm: unknown case");
                 break;
         }
 
@@ -2172,7 +2172,7 @@ void SmFontNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         case TYELLOW :  SetColor(Color(COL_YELLOW));    break;
 
         default:
-            OSL_ENSURE(false, "Sm: unknown case");
+            OSL_FAIL("Sm: unknown case");
     }
 
     pNode->Arrange(rDev, rFormat);

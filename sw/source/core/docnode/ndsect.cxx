@@ -93,7 +93,7 @@ bool lcl_IsInSameTblBox( SwNodes& _rNds,
                  ? !_rNds.GoPrevSection( &aChkIdx, FALSE, FALSE )
                  : !_rNds.GoNextSection( &aChkIdx, FALSE, FALSE ) )
             {
-                OSL_ENSURE( false, "<lcl_IsInSameTblBox(..)> - no previous/next!" );
+                OSL_FAIL( "<lcl_IsInSameTblBox(..)> - no previous/next!" );
                 return false;
             }
             else

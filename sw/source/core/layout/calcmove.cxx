@@ -1447,7 +1447,7 @@ void SwCntntFrm::MakeAll()
 #if OSL_DEBUG_LEVEL > 1
             else
             {
-                OSL_ENSURE( false, "debug assertion: <SwCntntFrm::MakeAll()> - format of text frame suppressed by fix b6448963" );
+                OSL_FAIL( "debug assertion: <SwCntntFrm::MakeAll()> - format of text frame suppressed by fix b6448963" );
             }
 #endif
             // <--
@@ -1751,7 +1751,7 @@ void SwCntntFrm::MakeAll()
             }
 
 #if OSL_DEBUG_LEVEL > 1
-            OSL_ENSURE( false, "LoopControl in SwCntntFrm::MakeAll" );
+            OSL_FAIL( "LoopControl in SwCntntFrm::MakeAll" );
 #endif
         }
         if ( bMovedBwd && GetUpper() )
@@ -2055,7 +2055,7 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace,
                 // doesn't makes sense. Thus, return TRUE.
                 if ( IsAnFollow( pFrm ) && !pFrm->IsValid() )
                 {
-                    OSL_ENSURE( false, "Only a warning for task 108824:/n<SwCntntFrm::_WouldFit(..) - follow not valid!" );
+                    OSL_FAIL( "Only a warning for task 108824:/n<SwCntntFrm::_WouldFit(..) - follow not valid!" );
                     return TRUE;
                 }
             }

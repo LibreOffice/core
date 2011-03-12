@@ -84,7 +84,7 @@ void SwView::ExecColl(SfxRequest &rReq)
         }
         break;
         default:
-            OSL_ENSURE(false, "wrong CommandProcessor for Dispatch");
+            OSL_FAIL("wrong CommandProcessor for Dispatch");
             return;
     }
 }

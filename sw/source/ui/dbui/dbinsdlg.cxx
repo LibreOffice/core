@@ -354,7 +354,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                             }
                             catch(const Exception& )
                             {
-                                OSL_ENSURE(false, "illegal number format key");
+                                OSL_FAIL("illegal number format key");
                             }
                         }
                     }
@@ -1184,7 +1184,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 )
                 {
 #if OSL_DEBUG_LEVEL > 1
-                    OSL_ENSURE(false, ByteString(String(aExcept.Message), gsl_getSystemTextEncoding()).GetBuffer());
+                    OSL_FAIL(ByteString(String(aExcept.Message), gsl_getSystemTextEncoding()).GetBuffer());
 #endif
                 }
             }

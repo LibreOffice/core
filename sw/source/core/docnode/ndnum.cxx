@@ -105,8 +105,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
                 }
                 else
                 {
-                    OSL_ENSURE( false,
-                            "<SwNodes::UpdateOutlineNode(..)> - given text node isn't in the correct nodes array. This is a serious defect -> inform OD" );
+                    OSL_FAIL( "<SwNodes::UpdateOutlineNode(..)> - given text node isn't in the correct nodes array. This is a serious defect -> inform OD" );
                 }
             }
         }

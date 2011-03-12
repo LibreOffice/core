@@ -1296,7 +1296,7 @@ void SmParser::SubSup(ULONG nActiveGroup)
             case TLSUB :    nIndex = (int) LSUB;    break;
             case TLSUP :    nIndex = (int) LSUP;    break;
             default :
-                OSL_ENSURE(false, "Sm: unknown case");
+                OSL_FAIL("Sm: unknown case");
         }
         nIndex++;
         OSL_ENSURE(1 <= nIndex  &&  nIndex <= 1 + SUBSUP_NUM_ENTRIES,

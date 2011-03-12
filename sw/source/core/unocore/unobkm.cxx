@@ -263,8 +263,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     // if the PaM isn't a valid one for cross-reference bookmarks.
     if (!m_pImpl->m_pRegisteredBookmark)
     {
-        OSL_ENSURE(false,
-            "<SwXBookmark::attachToRange(..)>"
+        OSL_FAIL("<SwXBookmark::attachToRange(..)>"
             " - could not create Mark.");
         throw lang::IllegalArgumentException();
     }
@@ -479,8 +478,7 @@ SwXBookmark::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXBookmark::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXBookmark::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -490,8 +488,7 @@ SwXBookmark::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXBookmark::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXBookmark::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -501,8 +498,7 @@ SwXBookmark::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXBookmark::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXBookmark::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -512,8 +508,7 @@ SwXBookmark::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXBookmark::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXBookmark::removeVetoableChangeListener(): not implemented");
 }
 
 /******************************************************************

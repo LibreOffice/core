@@ -268,7 +268,7 @@ namespace SwLangHelper
                 case SCRIPTTYPE_COMPLEX :  nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CTL : RES_CHRATR_CTL_LANGUAGE; break;
                 default:
                     bIsSingleScriptType = false;
-                    OSL_ENSURE(false, "unexpected case" );
+                    OSL_FAIL("unexpected case" );
             }
             if (bIsSingleScriptType)
             {

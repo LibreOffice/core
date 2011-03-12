@@ -130,7 +130,7 @@ void lcl_CheckMinMax( long& rMin, long& rMax, const SwTableLine& rLine, USHORT n
     ++nCheck;
     if( rLine.GetTabBoxes().Count() < nCheck )
     {   // robust
-        OSL_ENSURE( false, "Box out of table line" );
+        OSL_FAIL( "Box out of table line" );
         nCheck = rLine.GetTabBoxes().Count();
     }
 
@@ -178,7 +178,7 @@ long lcl_Box2LeftBorder( const SwTableBox& rBox )
             return nLeft;
         nLeft += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
     }
-    OSL_ENSURE( false, "Box not found in own upper?" );
+    OSL_FAIL( "Box not found in own upper?" );
     return nLeft;
 }
 
@@ -215,7 +215,7 @@ SwTableBox* lcl_LeftBorder2Box( long nLeft, const SwTableLine* pLine )
         }
         nCurrLeft += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
     }
-    OSL_ENSURE( false, "Didn't found wished box" );
+    OSL_FAIL( "Didn't found wished box" );
     return 0;
 }
 

@@ -210,7 +210,7 @@ void SwMailMergeGreetingsPage::UpdatePreview()
                 }
                 catch( sdbc::SQLException& )
                 {
-                    OSL_ENSURE(false, "SQLException caught");
+                    OSL_FAIL("SQLException caught");
                 }
             }
         }

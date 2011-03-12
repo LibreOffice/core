@@ -66,8 +66,7 @@ namespace TxtFmtCollFunc
         if ( !pTxtFmtColl )
         {
     #if OSL_DEBUG_LEVEL > 1
-            OSL_ENSURE( false,
-                    "<TxtFmtCollFunc::CheckTxtFmtCollFuncForDeletionOfAssignmentToOutlineStyle> - misuse of method - it's only for instances of <SwTxtFmtColl>" );
+            OSL_FAIL( "<TxtFmtCollFunc::CheckTxtFmtCollFuncForDeletionOfAssignmentToOutlineStyle> - misuse of method - it's only for instances of <SwTxtFmtColl>" );
     #endif
             return;
         }

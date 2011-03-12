@@ -203,7 +203,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
     case FLY_AT_FLY:
     case FLY_AT_PARA:
     case FLY_AS_CHAR:
-        OSL_ENSURE( false, "use new interface instead: SwDoc::MakeFlySection!" );
+        OSL_FAIL( "use new interface instead: SwDoc::MakeFlySection!" );
         break;
 #endif
 

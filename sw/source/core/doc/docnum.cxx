@@ -452,7 +452,7 @@ BOOL SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
         nAktPos = nTmpPos;
     if( aEndRg == aSttRg )
     {
-        OSL_ENSURE( false, "Moving outlines: Surprising selection" );
+        OSL_FAIL( "Moving outlines: Surprising selection" );
         aEndRg++;
     }
 
@@ -998,8 +998,7 @@ BOOL SwDoc::DelNumRule( const String& rName, BOOL bBroadcast )
 
     if ( (*pNumRuleTbl)[ nPos ] == GetOutlineNumRule() )
     {
-        OSL_ENSURE( false,
-                "<SwDoc::DelNumRule(..)> - No deletion of outline list style. This is serious defect - please inform OD" );
+        OSL_FAIL( "<SwDoc::DelNumRule(..)> - No deletion of outline list style. This is serious defect - please inform OD" );
         return FALSE;
     }
 
@@ -2355,8 +2354,7 @@ void SwDoc::removeListItem( const SwNodeNum& rNodeNum )
     const tImplSortedNodeNumList::size_type nDeleted = mpListItemsList->erase( &rNodeNum );
     if ( nDeleted > 1 )
     {
-        OSL_ENSURE( false,
-                "<SwDoc::RemoveListItem(..)> - <SwNodeNum> was registered more than once as numbered item!" );
+        OSL_FAIL( "<SwDoc::RemoveListItem(..)> - <SwNodeNum> was registered more than once as numbered item!" );
     }
 }
 
@@ -2452,16 +2450,14 @@ SwList* SwDoc::createList( String sListId,
 
     if ( getListByName( sListId ) )
     {
-        OSL_ENSURE( false,
-                "<SwDoc::createList(..)> - provided list id already used. Serious defect -> please inform OD." );
+        OSL_FAIL( "<SwDoc::createList(..)> - provided list id already used. Serious defect -> please inform OD." );
         return 0;
     }
 
     SwNumRule* pDefaultNumRuleForNewList = FindNumRulePtr( sDefaultListStyleName );
     if ( !pDefaultNumRuleForNewList )
     {
-        OSL_ENSURE( false,
-                "<SwDoc::createList(..)> - for provided default list style name no list style is found. Serious defect -> please inform OD." );
+        OSL_FAIL( "<SwDoc::createList(..)> - for provided default list style name no list style is found. Serious defect -> please inform OD." );
         return 0;
     }
 
@@ -2499,23 +2495,20 @@ SwList* SwDoc::createListForListStyle( const String sListStyleName )
 {
     if ( sListStyleName.Len() == 0 )
     {
-        OSL_ENSURE( false,
-                "<SwDoc::createListForListStyle(..)> - no list style name provided. Serious defect -> please inform OD." );
+        OSL_FAIL( "<SwDoc::createListForListStyle(..)> - no list style name provided. Serious defect -> please inform OD." );
         return 0;
     }
 
     if ( getListForListStyle( sListStyleName ) )
     {
-        OSL_ENSURE( false,
-                "<SwDoc::createListForListStyle(..)> - a list for the provided list style name already exists. Serious defect -> please inform OD." );
+        OSL_FAIL( "<SwDoc::createListForListStyle(..)> - a list for the provided list style name already exists. Serious defect -> please inform OD." );
         return 0;
     }
 
     SwNumRule* pNumRule = FindNumRulePtr( sListStyleName );
     if ( !pNumRule )
     {
-        OSL_ENSURE( false,
-                "<SwDoc::createListForListStyle(..)> - for provided list style name no list style is found. Serious defect -> please inform OD." );
+        OSL_FAIL( "<SwDoc::createListForListStyle(..)> - for provided list style name no list style is found. Serious defect -> please inform OD." );
         return 0;
     }
 

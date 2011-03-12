@@ -1220,23 +1220,20 @@ BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
         SdrObject* pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         if ( !pObj )
         {
-            OSL_ENSURE( false,
-                    "<SwFEShell::IsFrmVertical(..)> - missing SdrObject instance in marked object list -> This is a serious situation, please inform OD" );
+            OSL_FAIL( "<SwFEShell::IsFrmVertical(..)> - missing SdrObject instance in marked object list -> This is a serious situation, please inform OD" );
             return bVert;
         }
         // #i26791#
         SwContact* pContact = static_cast<SwContact*>(GetUserCall( pObj ));
         if ( !pContact )
         {
-            OSL_ENSURE( false,
-                    "<SwFEShell::IsFrmVertical(..)> - missing SwContact instance at marked object -> This is a serious situation, please inform OD" );
+            OSL_FAIL( "<SwFEShell::IsFrmVertical(..)> - missing SwContact instance at marked object -> This is a serious situation, please inform OD" );
             return bVert;
         }
         const SwFrm* pRef = pContact->GetAnchoredObj( pObj )->GetAnchorFrm();
         if ( !pRef )
         {
-            OSL_ENSURE( false,
-                    "<SwFEShell::IsFrmVertical(..)> - missing anchor frame at marked object -> This is a serious situation, please inform OD" );
+            OSL_FAIL( "<SwFEShell::IsFrmVertical(..)> - missing anchor frame at marked object -> This is a serious situation, please inform OD" );
             return bVert;
         }
 

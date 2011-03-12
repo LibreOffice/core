@@ -246,7 +246,7 @@ Reference< XPropertySet >  SwXModule::getViewSettings(void) throw( uno::RuntimeE
     if(!pxViewSettings)
     {
         ((SwXModule*)this)->pxViewSettings = new Reference< XPropertySet > ;
-        OSL_ENSURE(false, "Web or Text?");
+        OSL_FAIL("Web or Text?");
         *pxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( sal_False, 0 ) );
     }
     return *pxViewSettings;
@@ -258,7 +258,7 @@ Reference< XPropertySet >  SwXModule::getPrintSettings(void) throw( uno::Runtime
     if(!pxPrintSettings)
     {
         ((SwXModule*)this)->pxPrintSettings = new Reference< XPropertySet > ;
-        OSL_ENSURE(false, "Web or Text?");
+        OSL_FAIL("Web or Text?");
         *pxPrintSettings = static_cast < HelperBaseNoState * > ( new SwXPrintSettings ( PRINT_SETTINGS_MODULE ) );
     }
     return *pxPrintSettings;
@@ -936,7 +936,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
                     nRet = view::DocumentZoomType::PAGE_WIDTH_EXACT;
                 break;
                 default:
-                    OSL_ENSURE(false, "SwXViewSettings: invalid zoom type");
+                    OSL_FAIL("SwXViewSettings: invalid zoom type");
                 break;
             }
             rValue <<= nRet;
@@ -993,7 +993,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             bBool = sal_False;
         }
         break;
-        default: OSL_ENSURE(false, "there is no such ID!");
+        default: OSL_FAIL("there is no such ID!");
     }
     if( bBool )
         rValue.setValue(&bBoolVal, ::getBooleanCppuType());

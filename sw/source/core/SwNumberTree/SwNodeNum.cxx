@@ -182,7 +182,7 @@ bool SwNodeNum::IsContinuous() const
     }
     else
     {
-        OSL_ENSURE( false, "<SwNodeNum::IsContinuous()> - OD debug" );
+        OSL_FAIL( "<SwNodeNum::IsContinuous()> - OD debug" );
     }
     // <--
 
@@ -294,8 +294,7 @@ bool SwNodeNum::IsCountPhantoms() const
                   mpNumRule->IsCountPhantoms();
     else
     {
-        OSL_ENSURE( false,
-                "<SwNodeNum::IsCountPhantoms(): missing numbering rule - please inform OD" );
+        OSL_FAIL( "<SwNodeNum::IsCountPhantoms(): missing numbering rule - please inform OD" );
     }
     // <--
 
@@ -358,8 +357,7 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
         SwNodeNum* pChildNode( dynamic_cast<SwNodeNum*>((*rNodeNum.mChildren.begin())) );
         if ( !pChildNode )
         {
-            OSL_ENSURE( false,
-                    "<SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete(..)> - unknown number tree node child" );
+            OSL_FAIL( "<SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete(..)> - unknown number tree node child" );
             ++nAllowedChildCount;
             continue;
         }

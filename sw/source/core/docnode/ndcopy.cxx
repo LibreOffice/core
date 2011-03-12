@@ -718,7 +718,7 @@ SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
     else
     {
         OSL_ENSURE( this == pDoc, " falscher Copy-Zweig!" );
-        OSL_ENSURE(false, "mst: i thought this could be dead code;"
+        OSL_FAIL("mst: i thought this could be dead code;"
                 "please tell me what you did to get here!");
         pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
@@ -1508,8 +1508,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
             {
                 // This case can *not* happen, but to be robust take the first
                 // text node in the destination document.
-                OSL_ENSURE( false,
-                        "<SwDoc::_CopyFlyInFly(..)> - anchor text node in copied range not found" );
+                OSL_FAIL( "<SwDoc::_CopyFlyInFly(..)> - anchor text node in copied range not found" );
                 nAnchorTxtNdNumInRange = 1;
             }
             // Second, search corresponding text node in destination document
@@ -1534,8 +1533,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
             {
                 // This case can *not* happen, but to be robust take the first
                 // text node in the destination document.
-                OSL_ENSURE( false,
-                        "<SwDoc::_CopyFlyInFly(..)> - found anchor node index isn't a text node" );
+                OSL_FAIL( "<SwDoc::_CopyFlyInFly(..)> - found anchor node index isn't a text node" );
                 aAnchorNdIdx = rStartIdx;
                 while ( !aAnchorNdIdx.GetNode().IsTxtNode() )
                 {

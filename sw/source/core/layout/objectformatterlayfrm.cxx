@@ -61,8 +61,7 @@ SwObjectFormatterLayFrm* SwObjectFormatterLayFrm::CreateObjFormatter(
     if ( !_rAnchorLayFrm.IsPageFrm() &&
          !_rAnchorLayFrm.IsFlyFrm() )
     {
-        OSL_ENSURE( false,
-                "<SwObjectFormatterLayFrm::CreateObjFormatter(..)> - unexcepted type of anchor frame " );
+        OSL_FAIL( "<SwObjectFormatterLayFrm::CreateObjFormatter(..)> - unexcepted type of anchor frame " );
         return 0L;
     }
 
@@ -130,8 +129,7 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
 {
     if ( !GetAnchorFrm().IsPageFrm() )
     {
-        OSL_ENSURE( false,
-                "<SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()> - mis-usage of method, call only for anchor frames of type page frame" );
+        OSL_FAIL( "<SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()> - mis-usage of method, call only for anchor frames of type page frame" );
         return true;
     }
 

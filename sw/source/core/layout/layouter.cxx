@@ -286,7 +286,7 @@ void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTxtFrm& rFrm )
     if ( pLooping && pLooping->IsLoopingLouieLight() )
     {
 #if OSL_DEBUG_LEVEL > 1
-        OSL_ENSURE( false, "Looping Louie (Light): Fixating fractious frame" );
+        OSL_FAIL( "Looping Louie (Light): Fixating fractious frame" );
 #endif
         SwLayouter::InsertMovedFwdFrm( rDoc, rFrm, rFrm.FindPageFrm()->GetPhyPageNum() );
     }

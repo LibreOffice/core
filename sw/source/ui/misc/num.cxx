@@ -474,8 +474,7 @@ void SwNumPositionTabPage::InitPosAndSpaceMode()
 {
     if ( pActNum == 0 )
     {
-        OSL_ENSURE( false,
-                "<SwNumPositionTabPage::InitPosAndSpaceMode()> - misusage of method -> <pAktNum> has to be already set!" );
+        OSL_FAIL( "<SwNumPositionTabPage::InitPosAndSpaceMode()> - misusage of method -> <pAktNum> has to be already set!" );
         return;
     }
 

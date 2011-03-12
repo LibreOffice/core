@@ -812,7 +812,7 @@ void MetaField::GetPrefixAndSuffix(
             getPrefixAndSuffix(xModel, xMetaField, o_pPrefix, o_pSuffix);
         }
     } catch (uno::Exception) {
-        OSL_ENSURE(false, "exception?");
+        OSL_FAIL("exception?");
     }
 }
 

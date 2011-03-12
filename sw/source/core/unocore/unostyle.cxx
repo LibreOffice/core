@@ -3659,11 +3659,11 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         }
         catch (beans::UnknownPropertyException &)
         {
-            OSL_ENSURE( false, "Unknown property" );
+            OSL_FAIL( "Unknown property" );
         }
         catch (lang::IllegalArgumentException &)
         {
-            OSL_ENSURE( false, "Illegal argument" );
+            OSL_FAIL( "Illegal argument" );
         }
     }
 

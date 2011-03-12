@@ -2174,8 +2174,7 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                 }
                 break;
                 default:
-                    OSL_ENSURE( false,
-                            "<WinwordAnchoring::ConvertPosition(..)> - unknown horizontal relation" );
+                    OSL_FAIL( "<WinwordAnchoring::ConvertPosition(..)> - unknown horizontal relation" );
             }
         }
         // <--
@@ -2287,8 +2286,7 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                 case text::RelOrientation::FRAME_LEFT:
                 case text::RelOrientation::FRAME_RIGHT:
                 default:
-                    OSL_ENSURE( false,
-                            "<WinwordAnchoring::ConvertPosition(..)> - unknown vertical relation" );
+                    OSL_FAIL( "<WinwordAnchoring::ConvertPosition(..)> - unknown vertical relation" );
             }
         }
 

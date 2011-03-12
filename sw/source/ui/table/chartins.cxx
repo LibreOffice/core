@@ -242,7 +242,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                     }
                     catch( uno::Exception& )
                     {
-                        OSL_ENSURE(false, "Chart wizard couldn't be positioned automatically\n" );
+                        OSL_FAIL("Chart wizard couldn't be positioned automatically\n" );
                     }
                 }
 

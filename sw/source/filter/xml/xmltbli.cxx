@@ -2290,7 +2290,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                 // #i95726# - some fault tolerance
                 if ( pCell == 0 )
                 {
-                    OSL_ENSURE( false, "table seems to be corrupt." );
+                    OSL_FAIL( "table seems to be corrupt." );
                     break;
                 }
                 // <--
@@ -2668,7 +2668,7 @@ void SwXMLTableContext::MakeTable()
     // #i97274# handle invalid tables
     if (!pRows || !pRows->Count() || !GetColumnCount())
     {
-        OSL_ENSURE(false, "invalid table: no cells; deleting...");
+        OSL_FAIL("invalid table: no cells; deleting...");
         pTableNode->GetDoc()->DeleteSection( pTableNode );
         pTableNode = 0;
         pBox1 = 0;

@@ -499,8 +499,7 @@ void SAL_CALL SwXReferenceMark::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXReferenceMark::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXReferenceMark::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL SwXReferenceMark::removePropertyChangeListener(
@@ -509,8 +508,7 @@ void SAL_CALL SwXReferenceMark::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXReferenceMark::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXReferenceMark::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL SwXReferenceMark::addVetoableChangeListener(
@@ -519,8 +517,7 @@ void SAL_CALL SwXReferenceMark::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXReferenceMark::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXReferenceMark::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL SwXReferenceMark::removeVetoableChangeListener(
@@ -529,8 +526,7 @@ void SAL_CALL SwXReferenceMark::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXReferenceMark::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXReferenceMark::removeVetoableChangeListener(): not implemented");
 }
 
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -569,9 +565,9 @@ public:
 
     // XInterface
     virtual void SAL_CALL acquire() throw()
-        { OSL_ENSURE(false, "ERROR: SwXMetaText::acquire"); }
+        { OSL_FAIL("ERROR: SwXMetaText::acquire"); }
     virtual void SAL_CALL release() throw()
-        { OSL_ENSURE(false, "ERROR: SwXMetaText::release"); }
+        { OSL_FAIL("ERROR: SwXMetaText::release"); }
 
     // XTypeProvider
     virtual uno::Sequence< sal_Int8 > SAL_CALL
@@ -769,7 +765,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
             // ??? is this necessary?
             if (pXMeta->m_pImpl->m_xParentText.get() != i_xParent.get())
             {
-                OSL_ENSURE(false, "SwXMeta with different parent?");
+                OSL_FAIL("SwXMeta with different parent?");
                 pXMeta->m_pImpl->m_xParentText.set(i_xParent);
             }
         }
@@ -1064,7 +1060,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
     if (!pTxtAttr)
     {
-        OSL_ENSURE(false, "meta inserted, but has no text attribute?");
+        OSL_FAIL("meta inserted, but has no text attribute?");
         throw uno::RuntimeException(
             C2S("SwXMeta::attach(): cannot create meta"),
                 static_cast< ::cppu::OWeakObject* >(this));
@@ -1491,8 +1487,7 @@ SwXMetaField::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXMetaField::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXMetaField::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1502,8 +1497,7 @@ SwXMetaField::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXMetaField::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXMetaField::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1513,8 +1507,7 @@ SwXMetaField::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXMetaField::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXMetaField::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1524,8 +1517,7 @@ SwXMetaField::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXMetaField::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXMetaField::removeVetoableChangeListener(): not implemented");
 }
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>

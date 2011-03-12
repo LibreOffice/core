@@ -3308,7 +3308,7 @@ void RtfAttributeOutput::FlyFrameOLEData( SwOLENode& rOLENode )
         pStream = new SvMemoryStream;
         Graphic* pGraphic = rOLENode.GetGraphic();
         if (GraphicConverter::Export(*pStream, *pGraphic, CVT_WMF) != ERRCODE_NONE)
-            OSL_ENSURE(false, "failed to export the presentation data");
+            OSL_FAIL("failed to export the presentation data");
         pStream->Seek(STREAM_SEEK_TO_END);
         sal_uInt32 nPresentationDataSize = pStream->Tell();
         const sal_uInt8* pPresentationData = (sal_uInt8*)pStream->GetData();
@@ -3334,7 +3334,7 @@ void RtfAttributeOutput::FlyFrameOLE( const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& 
     const sal_Char* pBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
 
     if (GraphicConverter::Export(aStream, *pGraphic, CVT_WMF) != ERRCODE_NONE)
-        OSL_ENSURE(false, "failed to export the graphic");
+        OSL_FAIL("failed to export the graphic");
     aStream.Seek(STREAM_SEEK_TO_END);
     nSize = aStream.Tell();
     pGraphicAry = (sal_uInt8*)aStream.GetData();

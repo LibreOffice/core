@@ -1598,8 +1598,7 @@ void CalcCntnt( SwLayoutFrm *pLay,
                             bAgain = true;
                             if ( pAgainObj2 == pAnchoredObj )
                             {
-                                OSL_ENSURE( false,
-                                        "::CalcCntnt(..) - loop detected, perform attribute changes to avoid the loop" );
+                                OSL_FAIL( "::CalcCntnt(..) - loop detected, perform attribute changes to avoid the loop" );
                                 //Oszillation unterbinden.
                                 SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
                                 SwFmtSurround aAttr( rFmt.GetSurround() );
@@ -1683,7 +1682,7 @@ void CalcCntnt( SwLayoutFrm *pLay,
                         continue;
 
 #if OSL_DEBUG_LEVEL > 1
-                    OSL_ENSURE( false, "LoopControl in CalcCntnt" );
+                    OSL_FAIL( "LoopControl in CalcCntnt" );
 #endif
                 }
             }
@@ -2174,8 +2173,7 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
 {
     if ( !_rNewObj.ISA(SwAnchoredDrawObject) )
     {
-        OSL_ENSURE( false,
-                "SwFrm::AppendDrawObj(..) - anchored object of unexcepted type -> object not appended" );
+        OSL_FAIL( "SwFrm::AppendDrawObj(..) - anchored object of unexcepted type -> object not appended" );
         return;
     }
 
@@ -2601,7 +2599,7 @@ BOOL SwFlyFrm::GetContour( PolyPolygon&   rContour,
                 // during paint. Thus, return (value of <bRet> should be <FALSE>).
                 if ( pGrfNd && _bForPaint )
                 {
-                    OSL_ENSURE( false, "SwFlyFrm::GetContour() - No Contour found at <SwNoTxtNode> during paint." );
+                    OSL_FAIL( "SwFlyFrm::GetContour() - No Contour found at <SwNoTxtNode> during paint." );
                     return bRet;
                 }
                 pNd->CreateContour();

@@ -224,14 +224,14 @@ void TerminateOfficeThread::PerformOfficeTermination()
         css::uno::UNO_QUERY );
     if ( !xTasksSupplier.is() )
     {
-        OSL_ENSURE( false, "<TerminateOfficeThread::PerformOfficeTermination()> - no XFramesSupplier!" );
+        OSL_FAIL( "<TerminateOfficeThread::PerformOfficeTermination()> - no XFramesSupplier!" );
         return;
     }
 
     css::uno::Reference< css::container::XElementAccess > xList( xTasksSupplier->getFrames(), css::uno::UNO_QUERY );
     if ( !xList.is() )
     {
-        OSL_ENSURE( false, "<TerminateOfficeThread::PerformOfficeTermination()> - no XElementAccess!" );
+        OSL_FAIL( "<TerminateOfficeThread::PerformOfficeTermination()> - no XElementAccess!" );
         return;
     }
 
@@ -294,14 +294,14 @@ FinalThreadManager::~FinalThreadManager()
 
     if ( !maThreads.empty() )
     {
-        OSL_ENSURE( false, "<FinalThreadManager::~FinalThreadManager()> - still registered jobs are existing -> perform cancellation" );
+        OSL_FAIL( "<FinalThreadManager::~FinalThreadManager()> - still registered jobs are existing -> perform cancellation" );
         cancelAllJobs();
     }
 
     if ( mpCancelJobsThread != 0 )
     {
         if ( !mpCancelJobsThread->allJobsCancelled() )
-            OSL_ENSURE( false, "<FinalThreadManager::~FinalThreadManager()> - cancellation of registered jobs not yet finished -> wait for its finish" );
+            OSL_FAIL( "<FinalThreadManager::~FinalThreadManager()> - cancellation of registered jobs not yet finished -> wait for its finish" );
 
         mpCancelJobsThread->stopWhenAllJobsCancelled();
         mpCancelJobsThread->join();

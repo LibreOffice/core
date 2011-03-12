@@ -445,7 +445,7 @@ void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHeaders)
             }
             else
             {
-                OSL_ENSURE(false, "parse error in address block or greeting line");
+                OSL_FAIL("parse error in address block or greeting line");
             }
         }
         else
@@ -930,7 +930,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
                 }
                 catch(Exception&)
                 {
-                    OSL_ENSURE(false, "exception caught in xResultSet->SetFilter()");
+                    OSL_FAIL("exception caught in xResultSet->SetFilter()");
                 }
                 xRowSet->execute();
                 m_pImpl->xResultSet = xRowSet.get();
@@ -940,7 +940,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
         }
         catch(Exception& )
         {
-            OSL_ENSURE(false, "exception caught in: SwMailMergeConfigItem::GetResultSet() ");
+            OSL_FAIL("exception caught in: SwMailMergeConfigItem::GetResultSet() ");
         }
     }
     return m_pImpl->xResultSet;
@@ -978,7 +978,7 @@ void  SwMailMergeConfigItem::SetFilter(::rtl::OUString& rFilter)
             }
             catch(Exception&)
             {
-                OSL_ENSURE(false, "exception caught in SwMailMergeConfigItem::SetFilter()");
+                OSL_FAIL("exception caught in SwMailMergeConfigItem::SetFilter()");
             }
         }
     }

@@ -1406,8 +1406,7 @@ namespace numfunc
                         break;
                         default:
                         {
-                            OSL_ENSURE( false,
-                                    "<SwNumberingUIBehaviorConfig::LoadConfig()> - unknown configuration property");
+                            OSL_FAIL( "<SwNumberingUIBehaviorConfig::LoadConfig()> - unknown configuration property");
                         }
                     }
                 }

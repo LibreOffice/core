@@ -332,7 +332,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
         // and delete the incomplete ones. Finally, delete it.
         if( IsReady(pInfo) )
         {
-            OSL_ENSURE(false, "forgotten RedlineInfo; now inserted");
+            OSL_FAIL("forgotten RedlineInfo; now inserted");
             InsertIntoDocument( pInfo );
         }
         else
@@ -341,7 +341,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
             pInfo->bNeedsAdjustment = sal_False;
             if( IsReady(pInfo) )
             {
-                OSL_ENSURE(false, "RedlineInfo without adjustment; now inserted");
+                OSL_FAIL("RedlineInfo without adjustment; now inserted");
                 InsertIntoDocument( pInfo );
             }
             else
@@ -350,7 +350,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
                 // (i.e. end without start, or start without
                 // end). This may well be a problem in the file,
                 // rather than the code.
-                OSL_ENSURE(false, "incomplete redline (maybe file was corrupt); "
+                OSL_FAIL("incomplete redline (maybe file was corrupt); "
                           "now deleted");
             }
         }
@@ -687,7 +687,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
                 pRedline->SetContentIdx(pRedlineInfo->pContentIndex);
 #if OSL_DEBUG_LEVEL > 1
             else
-                OSL_ENSURE( false, "Recursive change tracking" );
+                OSL_FAIL( "Recursive change tracking" );
 #endif
         }
 

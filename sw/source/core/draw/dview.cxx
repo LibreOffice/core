@@ -239,7 +239,7 @@ void SwDrawView::AddCustomHdl()
     SwFrmFmt* pFrmFmt( ::FindFrmFmt( pObj ) );
     if ( !pFrmFmt )
     {
-        OSL_ENSURE( false, "<SwDrawView::AddCustomHdl()> - missing frame format!" );
+        OSL_FAIL( "<SwDrawView::AddCustomHdl()> - missing frame format!" );
         return;
     }
     const SwFmtAnchor &rAnchor = pFrmFmt->GetAnchor();
@@ -967,8 +967,7 @@ void SwDrawView::CheckPossibilities()
             SwFrmFmt* pFrmFmt( ::FindFrmFmt( const_cast<SdrObject*>(pObj) ) );
             if ( !pFrmFmt )
             {
-                OSL_ENSURE( false,
-                        "<SwDrawView::CheckPossibilities()> - missing frame format" );
+                OSL_FAIL( "<SwDrawView::CheckPossibilities()> - missing frame format" );
                 bProtect = TRUE;
             }
             else if ((FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId()) &&

@@ -117,7 +117,7 @@ void  SwTbxAnchor::Click()
     }
     if(!pActiveView)
     {
-        OSL_ENSURE(false, "No active view found");
+        OSL_FAIL("No active view found");
         return;
     }
     SwWrtShell* pWrtShell = pActiveView->GetWrtShellPtr();

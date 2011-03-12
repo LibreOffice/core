@@ -3060,7 +3060,7 @@ void WW8AttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign )
             break;
         default:
             nVal = 4;
-            OSL_ENSURE( false, "Unknown vert alignment" );
+            OSL_FAIL( "Unknown vert alignment" );
             break;
     }
     m_rWW8Export.InsUInt16( nVal );
@@ -3648,7 +3648,7 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
         switch ( rGrid.GetGridType() )
         {
             default:
-                OSL_ENSURE(false, "Unknown grid type");
+                OSL_FAIL("Unknown grid type");
             case GRID_NONE:
                 nGridType = 0;
                 break;
@@ -4607,7 +4607,7 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
     {
         default:
             //Can't get an unknown type here
-            OSL_ENSURE(false, "Unknown frame direction");
+            OSL_FAIL("Unknown frame direction");
         case FRMDIR_HORI_LEFT_TOP:
             nTextFlow = 0;
             break;

@@ -1253,8 +1253,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
                 }
                 else
                 {
-                    OSL_ENSURE( false ,
-                            "<SwAccessibleContext::InvalidateChildPosOrSize(..)> - no accessible shape found." );
+                    OSL_FAIL( "<SwAccessibleContext::InvalidateChildPosOrSize(..)> - no accessible shape found." );
                 }
                 // <--
             }
@@ -1294,8 +1293,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
             }
             else if ( rChildFrmOrObj.GetWindow() )
             {
-                OSL_ENSURE( false,
-                        "<SwAccessibleContext::InvalidateChildPosOrSize(..)> - not expected to handle dispose of child of type <Window>." );
+                OSL_FAIL( "<SwAccessibleContext::InvalidateChildPosOrSize(..)> - not expected to handle dispose of child of type <Window>." );
             }
         }
     }

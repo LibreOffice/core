@@ -229,7 +229,7 @@ void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
     {
         if(!AddNode(OUString(), rManufacturer))
         {
-            OSL_ENSURE(false, "New configuration node could not be created");
+            OSL_FAIL("New configuration node could not be created");
             return ;
         }
         else
