@@ -77,7 +77,7 @@ sub get_globals
 
     # set global variables according to environnment
     $platform      = $ENV{INPATH};
-    $srcrootdir    = "$ENV{SOURCE_ROOT_DIR}/clone";
+    $srcrootdir    = "$ENV{SRC_ROOT}/clone";
     $solverdir     = $ENV{SOLARVERSION};
     $milestoneext  = $ENV{UPDMINOREXT};
 
