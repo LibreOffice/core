@@ -565,7 +565,7 @@ sal_Int32 mapEnumToToken(IParseContext::InternationalKeyCode _eKeyCode )
         case IParseContext::KEY_FUSION:     nTokenID = SQL_TOKEN_FUSION;    break;
         case IParseContext::KEY_INTERSECTION: nTokenID = SQL_TOKEN_INTERSECTION; break;
                 default:
-            OSL_ENSURE( false, "mapEnumToToken: unsupported key!" );
+            OSL_FAIL( "mapEnumToToken: unsupported key!" );
 	}
 	return nTokenID;
 }

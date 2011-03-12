@@ -3949,7 +3949,7 @@ OParseContext::~OParseContext()
 		case ERROR_INVALID_TABLE_EXIST:		aMsg = ERROR_STR_INVALID_TABLE_EXIST; break;
 		case ERROR_INVALID_QUERY_EXIST:		aMsg = ERROR_STR_INVALID_QUERY_EXIST; break;
         default:
-            OSL_ENSURE( false, "OParseContext::getErrorMessage: unknown error code!" );
+            OSL_FAIL( "OParseContext::getErrorMessage: unknown error code!" );
             break;
 	}
 	return aMsg;
@@ -3987,7 +3987,7 @@ OParseContext::~OParseContext()
         case KEY_INTERSECTION:aKeyword = KEY_STR_INTERSECTION; break;
         case KEY_NONE:      break;
         default:
-            OSL_ENSURE( false, "OParseContext::getIntlKeywordAscii: unknown key!" );
+            OSL_FAIL( "OParseContext::getIntlKeywordAscii: unknown key!" );
             break;
 	}
 	return aKeyword;
