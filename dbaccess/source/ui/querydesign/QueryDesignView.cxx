@@ -333,7 +333,7 @@ namespace
             }
             catch(SQLException&)
             {
-                OSL_FAIL(!"Failure while building Join criteria!");
+                OSL_FAIL("Failure while building Join criteria!");
             }
         }
 
@@ -703,7 +703,7 @@ namespace
         }
         catch(SQLException&)
         {
-            OSL_FAIL(!"Failure while building select list!");
+            OSL_FAIL("Failure while building select list!");
         }
         return aFieldListStr.makeStringAndClear();
     }
@@ -878,7 +878,7 @@ namespace
         }
         catch(SQLException&)
         {
-            OSL_FAIL(!"Failure while building where clause!");
+            OSL_FAIL("Failure while building where clause!");
         }
         return sal_True;
     }
@@ -979,7 +979,7 @@ namespace
         }
         catch(SQLException&)
         {
-            OSL_FAIL(!"Failure while building group by!");
+            OSL_FAIL("Failure while building group by!");
         }
 
         return eErrorCode;
@@ -1214,7 +1214,7 @@ namespace
         }
         catch(SQLException&)
         {
-            OSL_FAIL(!"Failure while building group by!");
+            OSL_FAIL("Failure while building group by!");
         }
         return aGroupByStr;
     }
