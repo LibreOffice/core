@@ -1705,7 +1705,7 @@ bool OJoinTableView::allowQueries() const
 // -----------------------------------------------------------------------------
 void OJoinTableView::onNoColumns_throw()
 {
-    OSL_ENSURE( false, "OTableWindow::onNoColumns_throw: cannot really handle this!" );
+    OSL_FAIL( "OTableWindow::onNoColumns_throw: cannot really handle this!" );
     throw SQLException();
 }
 //------------------------------------------------------------------------------

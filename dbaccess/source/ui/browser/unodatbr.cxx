@@ -3324,7 +3324,7 @@ IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortDa
         if ( ( eLeft == etQueryContainer ) && ( eRight == etTableContainer ) )
             return COMPARE_LESS;
 
-        OSL_ENSURE( false, "SbaTableQueryBrowser::OnTreeEntryCompare: unexpected case!" );
+        OSL_FAIL( "SbaTableQueryBrowser::OnTreeEntryCompare: unexpected case!" );
         return COMPARE_EQUAL;
     }
 
@@ -3480,7 +3480,7 @@ Any SbaTableQueryBrowser::getCurrentSelection( Control& _rControl ) const
         break;
 
     default:
-        OSL_ENSURE( false, "SbaTableQueryBrowser::getCurrentSelection: invalid (unexpected) object type!" );
+        OSL_FAIL( "SbaTableQueryBrowser::getCurrentSelection: invalid (unexpected) object type!" );
         break;
     }
 

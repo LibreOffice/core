@@ -118,7 +118,7 @@ namespace dbaccess
                 break;
             }
 
-            OSL_ENSURE( false, "lcl_getComponentStorageBaseName: unimplemented case!" );
+            OSL_FAIL( "lcl_getComponentStorageBaseName: unimplemented case!" );
             static const ::rtl::OUString s_sFallback;
             return s_sFallback;
         }
@@ -341,7 +341,7 @@ namespace dbaccess
             }
             else
             {
-                OSL_ENSURE( false, "SettingsDocumentHandler::startElement: invalid settings file!" );
+                OSL_FAIL( "SettingsDocumentHandler::startElement: invalid settings file!" );
                 // Yes, that's not correct. Somebody could, in theory, give us a document which starts with "foo:settings",
                 // where "foo" is mapped to the proper namespace URL.
                 // However, there's no need to bother with this. The "recovery" sub storage we're recovering from is
@@ -390,7 +390,7 @@ namespace dbaccess
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::processingInstruction( const ::rtl::OUString& i_Target, const ::rtl::OUString& i_Data ) throw (SAXException, RuntimeException)
     {
-        OSL_ENSURE( false, "SettingsDocumentHandler::processingInstruction: unexpected ..." );
+        OSL_FAIL( "SettingsDocumentHandler::processingInstruction: unexpected ..." );
         (void)i_Target;
         (void)i_Data;
     }
@@ -429,7 +429,7 @@ namespace dbaccess
             break;
         }
 
-        OSL_ENSURE( false, "SubComponentRecovery::getComponentsStorageName: unimplemented case!" );
+        OSL_FAIL( "SubComponentRecovery::getComponentsStorageName: unimplemented case!" );
         static const ::rtl::OUString s_sFallback;
         return s_sFallback;
     }
@@ -466,7 +466,7 @@ namespace dbaccess
 
         default:
             // TODO
-            OSL_ENSURE( false, "SubComponentRecoverys::saveToRecoveryStorage: unimplemented case!" );
+            OSL_FAIL( "SubComponentRecoverys::saveToRecoveryStorage: unimplemented case!" );
             break;
         }
 
@@ -524,7 +524,7 @@ namespace dbaccess
             }
             else
             {
-                OSL_ENSURE( false, "SubComponentRecovery::impl_identifyComponent_throw: couldn't classify the given sub component!" );
+                OSL_FAIL( "SubComponentRecovery::impl_identifyComponent_throw: couldn't classify the given sub component!" );
             }
             break;
         }
@@ -692,7 +692,7 @@ namespace dbaccess
             xSubComponent = impl_recoverQueryDesign_throw( i_rRecoveryStorage, i_rComponentName, i_bForEditing );
             break;
         default:
-            OSL_ENSURE( false, "SubComponentRecovery::recoverFromStorage: unimplemented case!" );
+            OSL_FAIL( "SubComponentRecovery::recoverFromStorage: unimplemented case!" );
             break;
         }
         return xSubComponent;

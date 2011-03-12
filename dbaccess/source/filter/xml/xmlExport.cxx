@@ -179,7 +179,7 @@ namespace dbaxml
                 return s_sTypeInteger;
 
             default:
-                OSL_ENSURE( false, "lcl_implGetPropertyXMLType: unsupported value type!" );
+                OSL_FAIL( "lcl_implGetPropertyXMLType: unsupported value type!" );
                 return s_sTypeDouble;
         }
     }

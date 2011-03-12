@@ -110,7 +110,7 @@ namespace dbaccess
             const sal_Int32 nEqualSignPos = i_rIniLine.indexOf( sal_Unicode( '=' ) );
             if ( nEqualSignPos < 1 )
             {
-                OSL_ENSURE( false, "lcl_extractCompDesc: invalid map file entry - unexpected pos of '='" );
+                OSL_FAIL( "lcl_extractCompDesc: invalid map file entry - unexpected pos of '='" );
                 return false;
             }
             o_rStorName = i_rIniLine.copy( 0, nEqualSignPos );
@@ -118,7 +118,7 @@ namespace dbaccess
             const sal_Int32 nCommaPos = i_rIniLine.lastIndexOf( sal_Unicode( ',' ) );
             if ( nCommaPos != i_rIniLine.getLength() - 2 )
             {
-                OSL_ENSURE( false, "lcl_extractCompDesc: invalid map file entry - unexpected pos of ','" );
+                OSL_FAIL( "lcl_extractCompDesc: invalid map file entry - unexpected pos of ','" );
                 return false;
             }
             o_rCompDesc.sName = i_rIniLine.copy( nEqualSignPos + 1, nCommaPos - nEqualSignPos - 1 );
@@ -199,7 +199,7 @@ namespace dbaccess
             ENSURE_OR_THROW( i_rStorage.is(), "invalid storage" );
             if ( !i_rStorage->hasByName( lcl_getObjectMapStreamName() ) )
             {   // nothing to do, though suspicious
-                OSL_ENSURE( false, "lcl_readObjectMap_throw: if there's no map file, then there's expected to be no storage, too!" );
+                OSL_FAIL( "lcl_readObjectMap_throw: if there's no map file, then there's expected to be no storage, too!" );
                 return;
             }
 
@@ -252,7 +252,7 @@ namespace dbaccess
             const Reference< XModifiable > xModify( i_rSubComponent, UNO_QUERY );
             if ( !xModify.is() )
             {
-                OSL_ENSURE( false, "lcl_markModified: unhandled case!" );
+                OSL_FAIL( "lcl_markModified: unhandled case!" );
                 return;
             }
 
@@ -398,7 +398,7 @@ namespace dbaccess
                     message.append( "' not found in '" );
                     message.append( ::rtl::OUStringToOString( SubComponentRecovery::getComponentsStorageName( eComponentType ), RTL_TEXTENCODING_ASCII_US ) );
                     message.append( "', but required per map file!" );
-                    OSL_ENSURE( false, message.makeStringAndClear() );
+                    OSL_FAIL( message.makeStringAndClear() );
                 #endif
                     continue;
                 }

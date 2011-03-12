@@ -111,7 +111,7 @@ void OTableCopyHelper::insertTable( const ::rtl::OUString& i_rSourceDataSource, 
 
         if ( !xSrcConnection.is() || !i_rDestConnection.is() )
         {
-            OSL_ENSURE( false, "OTableCopyHelper::insertTable: no connection/s!" );
+            OSL_FAIL( "OTableCopyHelper::insertTable: no connection/s!" );
             return;
         }
 

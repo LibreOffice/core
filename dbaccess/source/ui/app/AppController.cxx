@@ -1931,7 +1931,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     break;
 
     default:
-        OSL_ENSURE( false, "OApplicationController::openElement: illegal object type!" );
+        OSL_FAIL( "OApplicationController::openElement: illegal object type!" );
         break;
     }
     return xRet;
@@ -2039,7 +2039,7 @@ Reference< XComponent > OApplicationController::newElement( ElementType _eType, 
         break;
 
         default:
-            OSL_ENSURE( false, "OApplicationController::newElement: illegal type!" );
+            OSL_FAIL( "OApplicationController::newElement: illegal type!" );
             break;
     }
 
@@ -2278,7 +2278,7 @@ void OApplicationController::showPreviewFor(const ElementType _eType,const ::rtl
                 return;
 
             default:
-                OSL_ENSURE( false, "OApplicationController::showPreviewFor: unexpected element type!" );
+                OSL_FAIL( "OApplicationController::showPreviewFor: unexpected element type!" );
                 break;
         }
     }
@@ -2651,7 +2651,7 @@ IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
 
     if ( !m_xModel.is() )
     {
-        OSL_ENSURE( false, "OApplicationController::OnFirstControllerConnected: too late!" );
+        OSL_FAIL( "OApplicationController::OnFirstControllerConnected: too late!" );
     }
 
     // if we have forms or reports which contain macros/scripts, then show a warning
@@ -2974,7 +2974,7 @@ Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException)
             case E_FORM:    aCurrentSelection[0].Type = DatabaseObjectContainer::FORMS;    break;
             case E_REPORT:  aCurrentSelection[0].Type = DatabaseObjectContainer::REPORTS;  break;
             default:
-                OSL_ENSURE( false, "OApplicationController::getSelection: unexpected current element type!" );
+                OSL_FAIL( "OApplicationController::getSelection: unexpected current element type!" );
                 break;
             }
         }

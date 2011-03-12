@@ -309,7 +309,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
             break;
 
         default:
-            OSL_ENSURE( false, "OSaveAsDlg::OSaveAsDlg: Type not supported yet!" );
+            OSL_FAIL( "OSaveAsDlg::OSaveAsDlg: Type not supported yet!" );
     }
 
     implInit();

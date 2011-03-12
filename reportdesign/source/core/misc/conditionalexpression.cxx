@@ -67,7 +67,7 @@ namespace rptui
 
             if ( pReplace == NULL )
             {
-                OSL_ENSURE( false, "ConditionalExpression::assembleExpression: illegal pattern!" );
+                OSL_FAIL( "ConditionalExpression::assembleExpression: illegal pattern!" );
                 break;
             }
 

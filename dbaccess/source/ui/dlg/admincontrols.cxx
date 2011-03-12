@@ -108,7 +108,7 @@ namespace dbaui
             break;
 
         default:
-            OSL_ENSURE( false, "TextResetOperator::operateOn: unexpected event ID!" );
+            OSL_FAIL( "TextResetOperator::operateOn: unexpected event ID!" );
             // all those IDs should have been filtered out by payAttentionTo
             break;
         }

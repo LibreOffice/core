@@ -101,7 +101,7 @@ namespace dbaccess
                 xDispProv.set( xController->getFrame(), UNO_QUERY );
             if ( !xDispProv.is() )
             {
-                OSL_ENSURE( false, "lcl_dispatchScriptURL_throw: no controller/frame? How should I dispatch?" );
+                OSL_FAIL( "lcl_dispatchScriptURL_throw: no controller/frame? How should I dispatch?" );
                 return;
             }
 
@@ -118,7 +118,7 @@ namespace dbaccess
             Reference< XDispatch > xDispatch( xDispProv->queryDispatch( aScriptURL, ::rtl::OUString(), 0 ) );
             if ( !xDispatch.is() )
             {
-                OSL_ENSURE( false, "lcl_dispatchScriptURL_throw: no dispatcher for the script URL!" );
+                OSL_FAIL( "lcl_dispatchScriptURL_throw: no dispatcher for the script URL!" );
                 return;
             }
 
@@ -163,7 +163,7 @@ namespace dbaccess
         Reference< XEventsSupplier > xEventsSupplier( m_pData->xDocument.get(), UNO_QUERY );
         if ( !xEventsSupplier.is() )
         {
-            OSL_ENSURE( false, "DocumentEventExecutor::documentEventOccurred: no document anymore, but still being notified?" );
+            OSL_FAIL( "DocumentEventExecutor::documentEventOccurred: no document anymore, but still being notified?" );
             return;
         }
 
@@ -176,7 +176,7 @@ namespace dbaccess
             {
                 // this is worth an assertion: We are listener at the very same document which we just asked
                 // for its events. So when EventName is fired, why isn't it supported by xDocEvents?
-                OSL_ENSURE( false, "DocumentEventExecutor::documentEventOccurred: an unsupported event is notified!" );
+                OSL_FAIL( "DocumentEventExecutor::documentEventOccurred: an unsupported event is notified!" );
                 return;
             }
 

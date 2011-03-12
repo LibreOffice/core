@@ -200,7 +200,7 @@ sal_Int32 SbaTableQueryBrowser::getDatabaseObjectType( EntryType _eType )
     default:
         break;
     }
-    OSL_ENSURE( false, "SbaTableQueryBrowser::getDatabaseObjectType: folder types and 'Unknown' not allowed here!" );
+    OSL_FAIL( "SbaTableQueryBrowser::getDatabaseObjectType: folder types and 'Unknown' not allowed here!" );
     return DatabaseObject::TABLE;
 }
 

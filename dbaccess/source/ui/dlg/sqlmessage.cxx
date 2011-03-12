@@ -274,7 +274,7 @@ namespace
                 &&  !lcl_hasDetails( aDisplayInfo )
                 )
             {
-                OSL_ENSURE( false, "lcl_buildExceptionChain: useles exception: no state, no error code, no message!" );
+                OSL_FAIL( "lcl_buildExceptionChain: useles exception: no state, no error code, no message!" );
                 continue;
             }
 
@@ -480,7 +480,7 @@ namespace
         case BUTTON_RETRY:  nButtonID = BUTTONID_RETRY; break;
         case BUTTON_HELP:   nButtonID = BUTTONID_HELP; break;
         default:
-            OSL_ENSURE( false, "lcl_addButton: invalid button id!" );
+            OSL_FAIL( "lcl_addButton: invalid button id!" );
             break;
         }
         _rDialog.AddButton( _eType, nButtonID, _bDefault ? BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON : 0 );
@@ -705,7 +705,7 @@ void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
         case SQLExceptionInfo::SQL_EXCEPTION: eType = Error;    break;
         case SQLExceptionInfo::SQL_WARNING:   eType = Warning;  break;
         case SQLExceptionInfo::SQL_CONTEXT:   eType = Info;     break;
-        default: OSL_ENSURE( false, "OSQLMessageBox::Construct: invalid type!" );
+        default: OSL_FAIL( "OSQLMessageBox::Construct: invalid type!" );
         }
     }
     impl_initImage( eType );

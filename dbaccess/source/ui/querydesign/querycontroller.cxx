@@ -863,7 +863,7 @@ void OQueryController::impl_initialize()
     ::rtl::OUString sIndependentSQLCommand;
     if ( rArguments.get_ensureType( "IndependentSQLCommand", sIndependentSQLCommand ) )
     {
-        OSL_ENSURE( false, "OQueryController::impl_initialize: IndependentSQLCommand is regognized for compatibility only!" );
+        OSL_FAIL( "OQueryController::impl_initialize: IndependentSQLCommand is regognized for compatibility only!" );
         sCommand = sIndependentSQLCommand;
         m_nCommandType = CommandType::COMMAND;
     }
@@ -871,7 +871,7 @@ void OQueryController::impl_initialize()
     ::rtl::OUString sCurrentQuery;
     if ( rArguments.get_ensureType( "CurrentQuery", sCurrentQuery ) )
     {
-        OSL_ENSURE( false, "OQueryController::impl_initialize: CurrentQuery is regognized for compatibility only!" );
+        OSL_FAIL( "OQueryController::impl_initialize: CurrentQuery is regognized for compatibility only!" );
         sCommand = sCurrentQuery;
         m_nCommandType = CommandType::QUERY;
     }
@@ -879,7 +879,7 @@ void OQueryController::impl_initialize()
     sal_Bool bCreateView( sal_False );
     if ( rArguments.get_ensureType( "CreateView", bCreateView ) && bCreateView )
     {
-        OSL_ENSURE( false, "OQueryController::impl_initialize: CurrentQuery is regognized for compatibility only!" );
+        OSL_FAIL( "OQueryController::impl_initialize: CurrentQuery is regognized for compatibility only!" );
         m_nCommandType = CommandType::TABLE;
     }
 
@@ -903,7 +903,7 @@ void OQueryController::impl_initialize()
         m_sName = ::rtl::OUString();
         break;
     default:
-        OSL_ENSURE( false, "OQueryController::impl_initialize: logic error in code!" );
+        OSL_FAIL( "OQueryController::impl_initialize: logic error in code!" );
         throw RuntimeException();
     }
 
@@ -911,7 +911,7 @@ void OQueryController::impl_initialize()
     sal_Bool bGraphicalDesign( sal_True );
     if ( rArguments.get_ensureType( (::rtl::OUString)PROPERTY_QUERYDESIGNVIEW, bGraphicalDesign ) )
     {
-        OSL_ENSURE( false, "OQueryController::impl_initialize: QueryDesignView is regognized for compatibility only!" );
+        OSL_FAIL( "OQueryController::impl_initialize: QueryDesignView is regognized for compatibility only!" );
         m_bGraphicalDesign = bGraphicalDesign;
     }
 

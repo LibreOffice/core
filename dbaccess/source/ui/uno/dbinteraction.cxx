@@ -223,7 +223,7 @@ namespace dbaui
                     if ( nDisapprovePos != -1 )
                         _rContinuations[ nDisapprovePos ]->select();
                     else
-                        OSL_ENSURE( false, "BasicInteractionHandler::implHandle: no handler for NO!" );
+                        OSL_FAIL( "BasicInteractionHandler::implHandle: no handler for NO!" );
                     break;
 
                 case RET_CANCEL:
@@ -232,13 +232,13 @@ namespace dbaui
                     else if ( nDisapprovePos != -1 )
                         _rContinuations[ nDisapprovePos ]->select();
                     else
-                        OSL_ENSURE( false, "BasicInteractionHandler::implHandle: no handler for CANCEL!" );
+                        OSL_FAIL( "BasicInteractionHandler::implHandle: no handler for CANCEL!" );
                     break;
                 case RET_RETRY:
                     if ( nRetryPos != -1 )
                         _rContinuations[ nRetryPos ]->select();
                     else
-                        OSL_ENSURE( false, "BasicInteractionHandler::implHandle: where does the RETRY come from?" );
+                        OSL_FAIL( "BasicInteractionHandler::implHandle: where does the RETRY come from?" );
                     break;
             }
         }

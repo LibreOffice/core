@@ -257,7 +257,7 @@ void OQueryDescriptor_Base::columnDropped(const ::rtl::OUString& /*_sName*/)
 
 Reference< XPropertySet > OQueryDescriptor_Base::createColumnDescriptor()
 {
-    OSL_ENSURE( false, "OQueryDescriptor_Base::createColumnDescriptor: called why?" );
+    OSL_FAIL( "OQueryDescriptor_Base::createColumnDescriptor: called why?" );
     return NULL;
 }
 

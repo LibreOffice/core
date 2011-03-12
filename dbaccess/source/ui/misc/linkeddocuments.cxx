@@ -172,7 +172,7 @@ namespace dbaui
                 break;
 
             default:
-                OSL_ENSURE( false, "OLinkedDocumentsAccess::implOpen: invalid open mode!" );
+                OSL_FAIL( "OLinkedDocumentsAccess::implOpen: invalid open mode!" );
                 break;
         }
         aArguments.put( "OpenMode", sOpenMode );

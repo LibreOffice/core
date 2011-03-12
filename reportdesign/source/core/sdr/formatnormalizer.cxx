@@ -247,7 +247,7 @@ namespace rptui
             if ( sDataField.getStr()[ sDataField.getLength() - 1 ] != ']' )
             {
                 // last character is not the closing brace
-                OSL_ENSURE( false, "FormatNormalizer::impl_adjustFormatToDataFieldType_nothrow: suspicious data field value!" );
+                OSL_FAIL( "FormatNormalizer::impl_adjustFormatToDataFieldType_nothrow: suspicious data field value!" );
                 return;
             }
             sDataField = sDataField.copy( sFieldPrefix.getLength(), sDataField.getLength() - sFieldPrefix.getLength() - 1 );

@@ -1068,15 +1068,15 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
             }
             else if (SQL_ISRULE(pCondition,in_predicate))
             {
-                OSL_ENSURE( false, "OSingleSelectQueryComposer::setANDCriteria: in_predicate not implemented!" );
+                OSL_FAIL( "OSingleSelectQueryComposer::setANDCriteria: in_predicate not implemented!" );
             }
             else if (SQL_ISRULE(pCondition,all_or_any_predicate))
             {
-                OSL_ENSURE( false, "OSingleSelectQueryComposer::setANDCriteria: all_or_any_predicate not implemented!" );
+                OSL_FAIL( "OSingleSelectQueryComposer::setANDCriteria: all_or_any_predicate not implemented!" );
             }
             else if (SQL_ISRULE(pCondition,between_predicate))
             {
-                OSL_ENSURE( false, "OSingleSelectQueryComposer::setANDCriteria: between_predicate not implemented!" );
+                OSL_FAIL( "OSingleSelectQueryComposer::setANDCriteria: between_predicate not implemented!" );
             }
 
             rFilter.push_back(aItem);

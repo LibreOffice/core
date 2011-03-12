@@ -738,7 +738,7 @@ void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPane
         break;
 
     default:
-        OSL_ENSURE( false, "OApplicationDetailView::impl_fillTaskPaneData: illegal element type!" );
+        OSL_FAIL( "OApplicationDetailView::impl_fillTaskPaneData: illegal element type!" );
     }
 
     MnemonicGenerator aAllMnemonics( m_aExternalMnemonics );

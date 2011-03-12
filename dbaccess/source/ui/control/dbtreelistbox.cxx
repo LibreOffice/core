@@ -598,14 +598,14 @@ namespace
     //--------------------------------------------------------------------
     void SAL_CALL SelectionSupplier::addSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
     {
-        OSL_ENSURE( false, "SelectionSupplier::removeSelectionChangeListener: no support!" );
+        OSL_FAIL( "SelectionSupplier::removeSelectionChangeListener: no support!" );
         // API bug: this should be a NoSupportException
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL SelectionSupplier::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
     {
-        OSL_ENSURE( false, "SelectionSupplier::removeSelectionChangeListener: no support!" );
+        OSL_FAIL( "SelectionSupplier::removeSelectionChangeListener: no support!" );
         // API bug: this should be a NoSupportException
     }
 }

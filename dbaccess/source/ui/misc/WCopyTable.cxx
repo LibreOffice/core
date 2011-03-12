@@ -480,14 +480,14 @@ const DummyCopySource& DummyCopySource::Instance()
 //------------------------------------------------------------------------
 ::rtl::OUString DummyCopySource::getQualifiedObjectName() const
 {
-    OSL_ENSURE( false, "DummyCopySource::getQualifiedObjectName: not to be called!" );
+    OSL_FAIL( "DummyCopySource::getQualifiedObjectName: not to be called!" );
     return ::rtl::OUString();
 }
 
 //------------------------------------------------------------------------
 bool DummyCopySource::isView() const
 {
-    OSL_ENSURE( false, "DummyCopySource::isView: not to be called!" );
+    OSL_FAIL( "DummyCopySource::isView: not to be called!" );
     return false;
 }
 
@@ -509,27 +509,27 @@ Sequence< ::rtl::OUString > DummyCopySource::getColumnNames() const
 //------------------------------------------------------------------------
 Sequence< ::rtl::OUString > DummyCopySource::getPrimaryKeyColumnNames() const
 {
-    OSL_ENSURE( false, "DummyCopySource::getPrimaryKeyColumnNames: not to be called!" );
+    OSL_FAIL( "DummyCopySource::getPrimaryKeyColumnNames: not to be called!" );
     return Sequence< ::rtl::OUString >();
 }
 
 //------------------------------------------------------------------------
 OFieldDescription* DummyCopySource::createFieldDescription( const ::rtl::OUString& /*_rColumnName*/ ) const
 {
-    OSL_ENSURE( false, "DummyCopySource::createFieldDescription: not to be called!" );
+    OSL_FAIL( "DummyCopySource::createFieldDescription: not to be called!" );
     return NULL;
 }
 //------------------------------------------------------------------------
 ::rtl::OUString DummyCopySource::getSelectStatement() const
 {
-    OSL_ENSURE( false, "DummyCopySource::getSelectStatement: not to be called!" );
+    OSL_FAIL( "DummyCopySource::getSelectStatement: not to be called!" );
     return ::rtl::OUString();
 }
 
 //------------------------------------------------------------------------
 ::utl::SharedUNOComponent< XPreparedStatement > DummyCopySource::getPreparedSelectStatement() const
 {
-    OSL_ENSURE( false, "DummyCopySource::getPreparedSelectStatement: not to be called!" );
+    OSL_FAIL( "DummyCopySource::getPreparedSelectStatement: not to be called!" );
     return ::utl::SharedUNOComponent< XPreparedStatement >();
 }
 

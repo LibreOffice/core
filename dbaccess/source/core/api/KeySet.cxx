@@ -176,7 +176,7 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
     ::rtl::OUString sUpdateTableName( i_rUpdateTableName );
     if ( sUpdateTableName.getLength() == 0 )
     {
-        OSL_ENSURE( false, "OKeySet::findTableColumnsMatching_throw: This is a fallback only - it won't work when the table has an alias name." );
+        OSL_FAIL( "OKeySet::findTableColumnsMatching_throw: This is a fallback only - it won't work when the table has an alias name." );
         // If i_aTable originates from a query composer, and is a table which appears with an alias in the SELECT statement,
         // then the below code will not produce correct results.
         // For instance, imagine a "SELECT alias.col FROM table AS alias". Now i_aTable would be the table named

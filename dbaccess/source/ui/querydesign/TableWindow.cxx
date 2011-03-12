@@ -278,7 +278,7 @@ void OTableWindow::impl_updateImage()
 
     if ( !aImage )
     {
-        OSL_ENSURE( false, "OTableWindow::impl_updateImage: no images!" );
+        OSL_FAIL( "OTableWindow::impl_updateImage: no images!" );
         return;
     }
 

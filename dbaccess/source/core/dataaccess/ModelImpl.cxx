@@ -681,7 +681,7 @@ void SAL_CALL ODatabaseModelImpl::disposing( const ::com::sun::star::lang::Event
     }
     else
     {
-        OSL_ENSURE( false, "ODatabaseModelImpl::disposing: where does this come from?" );
+        OSL_FAIL( "ODatabaseModelImpl::disposing: where does this come from?" );
     }
 }
 
@@ -1414,7 +1414,7 @@ sal_Bool ODatabaseModelImpl::hasTrustedScriptingSignature( sal_Bool /*bAllowUITo
 
 void ODatabaseModelImpl::showBrokenSignatureWarning( const Reference< XInteractionHandler >& /*_rxInteraction*/ ) const
 {
-    OSL_ENSURE( false, "ODatabaseModelImpl::showBrokenSignatureWarning: signatures can't be broken - we do not support them!" );
+    OSL_FAIL( "ODatabaseModelImpl::showBrokenSignatureWarning: signatures can't be broken - we do not support them!" );
 }
 
 void ODatabaseModelImpl::storageIsModified()

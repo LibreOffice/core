@@ -497,7 +497,7 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
     }
     else if ( m_aDatabaseObjects.find( _rModelImpl.m_sName ) != m_aDatabaseObjects.end() )
     {
-        OSL_ENSURE( false, "ODatabaseContext::storeTransientProperties: a database document register by name? This shouldn't happen anymore!" );
+        OSL_FAIL( "ODatabaseContext::storeTransientProperties: a database document register by name? This shouldn't happen anymore!" );
             // all the code should have been changed so that registration is by URL only
         m_aDatasourceProperties[ _rModelImpl.m_sName ] = aRememberProps.getPropertyValues();
     }
@@ -698,7 +698,7 @@ void ODatabaseContext::registerDatabaseDocument( ODatabaseModelImpl& _rModelImpl
         setTransientProperties( sURL, _rModelImpl );
     }
     else
-        OSL_ENSURE( false, "ODatabaseContext::registerDatabaseDocument: already have an object registered for this URL!" );
+        OSL_FAIL( "ODatabaseContext::registerDatabaseDocument: already have an object registered for this URL!" );
 }
 
 void ODatabaseContext::revokeDatabaseDocument( const ODatabaseModelImpl& _rModelImpl )

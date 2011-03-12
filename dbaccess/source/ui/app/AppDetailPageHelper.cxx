@@ -374,7 +374,7 @@ void OAppDetailPageHelper::describeCurrentSelectionForControl( const Control& _r
             return;
         }
     }
-    OSL_ENSURE( false, "OAppDetailPageHelper::describeCurrentSelectionForControl: invalid control!" );
+    OSL_FAIL( "OAppDetailPageHelper::describeCurrentSelectionForControl: invalid control!" );
 }
 
 // -----------------------------------------------------------------------------
@@ -430,7 +430,7 @@ void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _e
         }
         break;
         default:
-            OSL_ENSURE( false, "OAppDetailPageHelper::describeCurrentSelectionForType: unexpected type!" );
+            OSL_FAIL( "OAppDetailPageHelper::describeCurrentSelectionForType: unexpected type!" );
             break;
         }
 

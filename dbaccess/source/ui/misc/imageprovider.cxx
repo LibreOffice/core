@@ -203,7 +203,7 @@ namespace dbaui
             nImageResourceID = TABLE_TREE_ICON;
             break;
         default:
-            OSL_ENSURE( false, "ImageProvider::getDefaultImage: invalid database object type!" );
+            OSL_FAIL( "ImageProvider::getDefaultImage: invalid database object type!" );
             break;
         }
         return nImageResourceID;
@@ -228,7 +228,7 @@ namespace dbaui
             nImageResourceID = TABLEFOLDER_TREE_ICON;
             break;
         default:
-            OSL_ENSURE( false, "ImageProvider::getDefaultImage: invalid database object type!" );
+            OSL_FAIL( "ImageProvider::getDefaultImage: invalid database object type!" );
             break;
         }
 

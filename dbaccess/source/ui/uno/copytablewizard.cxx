@@ -1095,7 +1095,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
             case CopyTableContinuation::AskUser:            break;          // stop asking the listeners, ask the user
 
             default:
-                OSL_ENSURE( false, "CopyTableWizard::impl_processCopyError_nothrow: invalid listener response!" );
+                OSL_FAIL( "CopyTableWizard::impl_processCopyError_nothrow: invalid listener response!" );
                 // ask next listener
                 continue;
             }
@@ -1384,7 +1384,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
 
                 if( !xTable.is() )
                 {
-                    OSL_ENSURE( false, "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
+                    OSL_FAIL( "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
                     break;
                 }
 
@@ -1401,7 +1401,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
                     xTable = rWizard.createTable();
                     if ( !xTable.is() )
                     {
-                        OSL_ENSURE( false, "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
+                        OSL_FAIL( "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
                         break;
                     }
                 }
@@ -1449,7 +1449,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
                 break;
 
             default:
-                OSL_ENSURE( false, "CopyTableWizard::impl_doCopy_nothrow: What operation, please?" );
+                OSL_FAIL( "CopyTableWizard::impl_doCopy_nothrow: What operation, please?" );
                 break;
         }
     }

@@ -1024,7 +1024,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         bool bActivateObject = true;
         if ( bOpenForMail )
         {
-            OSL_ENSURE( false, "ODocumentDefinition::execute: 'openForMail' should not be used anymore - use the 'Hidden' parameter instead!" );
+            OSL_FAIL( "ODocumentDefinition::execute: 'openForMail' should not be used anymore - use the 'Hidden' parameter instead!" );
             bActivateObject = false;
         }
 

@@ -452,7 +452,7 @@ namespace
         case DatabaseObject::FORM:   eType = E_FORM;    break;
         case DatabaseObject::REPORT: eType = E_REPORT;  break;
         default:
-            OSL_ENSURE( false, "lcl_objectType2ElementType: unsupported object type!" );
+            OSL_FAIL( "lcl_objectType2ElementType: unsupported object type!" );
                 // this should have been caught earlier
         }
         return eType;

@@ -215,7 +215,7 @@ namespace dbmm
         DocumentLogs::const_iterator docPos = m_pData->aDocumentLogs.find( _nDocID );
         if ( docPos == m_pData->aDocumentLogs.end() )
         {
-            OSL_ENSURE( false, "MigrationLog::getNewLibraryName: document is not known!" );
+            OSL_FAIL( "MigrationLog::getNewLibraryName: document is not known!" );
             return s_sEmptyString;
         }
 
@@ -231,7 +231,7 @@ namespace dbmm
                 return lib->sNewName;
         }
 
-        OSL_ENSURE( false, "MigrationLog::getNewLibraryName: doc is known, but library isn't!" );
+        OSL_FAIL( "MigrationLog::getNewLibraryName: doc is known, but library isn't!" );
         return s_sEmptyString;
     }
 
@@ -433,7 +433,7 @@ namespace dbmm
         DocumentLogs::const_iterator docPos = m_pData->aDocumentLogs.find( _nDocID );
         if ( docPos == m_pData->aDocumentLogs.end() )
         {
-            OSL_ENSURE( false, "MigrationLog::movedAnyLibrary: document is not known!" );
+            OSL_FAIL( "MigrationLog::movedAnyLibrary: document is not known!" );
             return false;
         }
         return !docPos->second.aMovedLibraries.empty();

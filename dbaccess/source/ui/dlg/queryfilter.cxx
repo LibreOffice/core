@@ -268,7 +268,7 @@ sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const String& _rSelectedPredicate
         nPredicateType = SQLFilterOperator::NOT_SQLNULL;
         break;
     default:
-        OSL_ENSURE( false, "DlgFilterCrit::GetOSQLPredicateType: unknown predicate string!" );
+        OSL_FAIL( "DlgFilterCrit::GetOSQLPredicateType: unknown predicate string!" );
         break;
     }
 

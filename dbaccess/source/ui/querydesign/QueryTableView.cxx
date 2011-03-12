@@ -198,7 +198,7 @@ namespace
             Reference<XPropertySet> xColumn;
             if ( !( _rxSourceForeignKeyColumns->getByName(*pIter) >>= xColumn ) )
             {
-                OSL_ENSURE( false, "addConnections: invalid foreign key column!" );
+                OSL_FAIL( "addConnections: invalid foreign key column!" );
                 continue;
             }
 

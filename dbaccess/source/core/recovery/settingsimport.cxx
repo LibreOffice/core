@@ -162,7 +162,7 @@ namespace dbaccess
         ::rtl::OString sMessage( "unknown (or unsupported at this place) element name '" );
         sMessage += ::rtl::OUStringToOString( i_rElementName, RTL_TEXTENCODING_UTF8 );
         sMessage += "', ignoring";
-        OSL_ENSURE( false, sMessage.getStr() );
+        OSL_FAIL( sMessage.getStr() );
 #endif
         return new IgnoringSettingsImport;
     }
@@ -184,7 +184,7 @@ namespace dbaccess
     //--------------------------------------------------------------------
     ::rtl::Reference< SettingsImport > ConfigItemImport::nextState( const ::rtl::OUString& i_rElementName )
     {
-        OSL_ENSURE( false, "ConfigItemImport::nextState: unexpected: this class is responsible for child-less items only!" );
+        OSL_FAIL( "ConfigItemImport::nextState: unexpected: this class is responsible for child-less items only!" );
         (void)i_rElementName;
         return new IgnoringSettingsImport;
     }
@@ -220,7 +220,7 @@ namespace dbaccess
                 o_rValue <<= nValue;
             else
             {
-                OSL_ENSURE( false, "ConfigItemImport::getItemValue: could not convert an int value!" );
+                OSL_FAIL( "ConfigItemImport::getItemValue: could not convert an int value!" );
             }
         }
         else if ( ::xmloff::token::IsXMLToken( rItemType, ::xmloff::token::XML_BOOLEAN ) )
@@ -230,7 +230,7 @@ namespace dbaccess
                 o_rValue <<= nValue;
             else
             {
-                OSL_ENSURE( false, "ConfigItemImport::getItemValue: could not convert a boolean value!" );
+                OSL_FAIL( "ConfigItemImport::getItemValue: could not convert a boolean value!" );
             }
         }
         else if ( ::xmloff::token::IsXMLToken( rItemType, ::xmloff::token::XML_STRING ) )
@@ -243,7 +243,7 @@ namespace dbaccess
             ::rtl::OString sMessage( "ConfigItemImport::getItemValue: unsupported item type '" );
             sMessage += ::rtl::OUStringToOString( rItemType, RTL_TEXTENCODING_UTF8 );
             sMessage += "', ignoring";
-            OSL_ENSURE( false, sMessage.getStr() );
+            OSL_FAIL( sMessage.getStr() );
         }
 #endif
     }
@@ -279,7 +279,7 @@ namespace dbaccess
         ::rtl::OString sMessage( "unknown element name '" );
         sMessage += ::rtl::OUStringToOString( i_rElementName, RTL_TEXTENCODING_UTF8 );
         sMessage += "', ignoring";
-        OSL_ENSURE( false, sMessage.getStr() );
+        OSL_FAIL( sMessage.getStr() );
 #endif
         return new IgnoringSettingsImport;
     }

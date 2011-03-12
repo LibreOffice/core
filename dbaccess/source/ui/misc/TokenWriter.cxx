@@ -248,7 +248,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
         {
             if ( !m_xResultSet.is() )
             {
-                OSL_ENSURE( false, "ODatabaseImportExport::impl_initFromDescriptor: selection without result set is nonsense!" );
+                OSL_FAIL( "ODatabaseImportExport::impl_initFromDescriptor: selection without result set is nonsense!" );
                 m_aSelection.realloc( 0 );
             }
         }
@@ -257,7 +257,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
         {
             if ( m_bBookmarkSelection && !m_xRowLocate.is() )
             {
-                OSL_ENSURE( false, "ODatabaseImportExport::impl_initFromDescriptor: no XRowLocate -> no bookmars!" );
+                OSL_FAIL( "ODatabaseImportExport::impl_initFromDescriptor: no XRowLocate -> no bookmars!" );
                 m_aSelection.realloc( 0 );
             }
         }

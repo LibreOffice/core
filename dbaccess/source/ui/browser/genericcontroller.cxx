@@ -152,7 +152,7 @@ void UserDefinedFeatures::execute( const URL& _rFeatureURL, const Sequence< Prop
 
         if ( xDispatch == xController )
         {
-            OSL_ENSURE( false, "UserDefinedFeatures::execute: the controller shouldn't be the dispatcher here!" );
+            OSL_FAIL( "UserDefinedFeatures::execute: the controller shouldn't be the dispatcher here!" );
             xDispatch.clear();
         }
 
@@ -233,7 +233,7 @@ OGenericUnoController::OGenericUnoController()
     ,m_bReadOnly(sal_False)
     ,m_bCurrentlyModified(sal_False)
 {
-    OSL_ENSURE( false, "OGenericUnoController::OGenericUnoController: illegal call!" );
+    OSL_FAIL( "OGenericUnoController::OGenericUnoController: illegal call!" );
     // This ctor only exists because the MSVC compiler complained about an unresolved external
     // symbol. It should not be used at all. Since using it yields strange runtime problems,
     // we simply abort here.
@@ -612,7 +612,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
                 ::rtl::OString sMessage( "OGenericUnoController::InvalidateFeature_Impl: feature id " );
                 sMessage += ::rtl::OString::valueOf( aNextFeature.nId );
                 sMessage += ::rtl::OString( " has been invalidated, but is not supported!" );
-                OSL_ENSURE( false, sMessage.getStr() );
+                OSL_FAIL( sMessage.getStr() );
             }
 #endif
             if ( m_aSupportedFeatures.end() != aFeaturePos )
@@ -1155,7 +1155,7 @@ Reference< XFrame > SAL_CALL OGenericUnoController::getFrame(void) throw( Runtim
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > & /*xModel*/) throw( RuntimeException )
 {
-    OSL_ENSURE( false, "OGenericUnoController::attachModel: not supported!" );
+    OSL_FAIL( "OGenericUnoController::attachModel: not supported!" );
     return sal_False;
 }
 
@@ -1487,7 +1487,7 @@ sal_uInt16 OGenericUnoController::registerCommandURL( const ::rtl::OUString& _rC
         ++nFeatureId;
     if ( nFeatureId == LAST_USER_DEFINED_FEATURE )
     {
-        OSL_ENSURE( false, "OGenericUnoController::registerCommandURL: no more space for user defined features!" );
+        OSL_FAIL( "OGenericUnoController::registerCommandURL: no more space for user defined features!" );
         return 0L;
     }
 

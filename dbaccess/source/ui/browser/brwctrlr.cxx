@@ -283,7 +283,7 @@ SbaXDataBrowserController::FormControllerImpl::~FormControllerImpl()
 //------------------------------------------------------------------
 Reference< runtime::XFormOperations > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getFormOperations() throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::getFormOperations: not supported!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::getFormOperations: not supported!" );
     return NULL;
 }
 
@@ -315,27 +315,27 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addChildController(
 //------------------------------------------------------------------
 Reference< runtime::XFormControllerContext > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getContext() throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::getContext: no support!!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::getContext: no support!!" );
     return NULL;
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContext( const Reference< runtime::XFormControllerContext >& /*_context*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::setContext: no support!!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::setContext: no support!!" );
 }
 
 //------------------------------------------------------------------
 Reference< XInteractionHandler > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getInteractionHandler() throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::getInteractionHandler: no support!!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::getInteractionHandler: no support!!" );
     return NULL;
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setInteractionHandler( const Reference< XInteractionHandler >& /*_interactionHandler*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::setInteractionHandler: no support!!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::setInteractionHandler: no support!!" );
 }
 
 //------------------------------------------------------------------
@@ -354,19 +354,19 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setParent( const Re
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::dispose(  ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::dispose: no, you do *not* want to do this!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::dispose: no, you do *not* want to do this!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addEventListener( const Reference< XEventListener >& /*xListener*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addEventListener: no support!!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::addEventListener: no support!!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeEventListener( const Reference< XEventListener >& /*aListener*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeEventListener: no support!!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::removeEventListener: no support!!" );
 }
 
 //------------------------------------------------------------------
@@ -405,73 +405,73 @@ Reference< XEnumeration > SAL_CALL SbaXDataBrowserController::FormControllerImpl
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addModifyListener( const Reference< XModifyListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addModifyListener: no support!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::addModifyListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeModifyListener( const Reference< XModifyListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeModifyListener: no support!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::removeModifyListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addConfirmDeleteListener( const Reference< XConfirmDeleteListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addConfirmDeleteListener: no support!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::addConfirmDeleteListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeConfirmDeleteListener( const Reference< XConfirmDeleteListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeConfirmDeleteListener: no support!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::removeConfirmDeleteListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addSQLErrorListener( const Reference< XSQLErrorListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addSQLErrorListener: no support!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::addSQLErrorListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeSQLErrorListener( const Reference< XSQLErrorListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeSQLErrorListener: no support!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::removeSQLErrorListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addRowSetApproveListener( const Reference< XRowSetApproveListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addRowSetApproveListener: no support!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::addRowSetApproveListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeRowSetApproveListener( const Reference< XRowSetApproveListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeRowSetApproveListener: no support!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::removeRowSetApproveListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addDatabaseParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addDatabaseParameterListener: no support!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::addDatabaseParameterListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeDatabaseParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeDatabaseParameterListener: no support!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::removeDatabaseParameterListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addParameterListener: no support!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::addParameterListener: no support!" );
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeParameterListener: no support!" );
+    OSL_FAIL( "SbaXDataBrowserController::FormControllerImpl::removeParameterListener: no support!" );
 }
 
 //------------------------------------------------------------------

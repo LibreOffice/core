@@ -215,7 +215,7 @@ namespace dbmm
                 break;
             }
 
-            OSL_ENSURE( false, "lcl_getScriptsSubStorageName: illegal type!" );
+            OSL_FAIL( "lcl_getScriptsSubStorageName: illegal type!" );
             static ::rtl::OUString s_sEmpty;
             return s_sEmpty;
         }
@@ -250,7 +250,7 @@ namespace dbmm
                     return true;
                 }
             }
-            OSL_ENSURE( false, "lcl_getScriptTypeFromLanguage: unknown language!" );
+            OSL_FAIL( "lcl_getScriptTypeFromLanguage: unknown language!" );
             return false;
         }
 
@@ -1020,7 +1020,7 @@ namespace dbmm
     {
         if  ( m_aSubDocs.empty() )
         {
-            OSL_ENSURE( false, "MigrationEngine_Impl::migrateAll: no forms/reports found!" );
+            OSL_FAIL( "MigrationEngine_Impl::migrateAll: no forms/reports found!" );
             // The whole migration wizard is not expected to be called when there are no forms/reports
             // with macros, not to mention when there are no forms/reports at all.
             return false;
@@ -1639,7 +1639,7 @@ namespace dbmm
                 ||  !_rScriptType.getLength()
                 )
             {
-                OSL_ENSURE( false,
+                OSL_FAIL(
                     "MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow: no or unknown script type!" );
                 m_rLogger.logRecoverable( MigrationError(
                     ERR_UNKNOWN_SCRIPT_TYPE,
@@ -1657,7 +1657,7 @@ namespace dbmm
             ScriptType eScriptType = eBasic;
             if ( !lcl_getScriptTypeFromLanguage( sScriptLanguage, eScriptType ) )
             {
-                OSL_ENSURE( false,
+                OSL_FAIL(
                     "MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow: unknown script language!" );
                 m_rLogger.logRecoverable( MigrationError(
                     ERR_UNKNOWN_SCRIPT_LANGUAGE,
@@ -1678,7 +1678,7 @@ namespace dbmm
             sal_Int32 nLibModuleSeparator = sScriptName.indexOf( '.' );
             if ( nLibModuleSeparator < 0 )
             {
-                OSL_ENSURE( false,
+                OSL_FAIL(
                     "MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow: invalid/unknown location format!" );
                 m_rLogger.logRecoverable( MigrationError(
                     ERR_UNKNOWN_SCRIPT_NAME_FORMAT,
