@@ -2182,7 +2182,7 @@ void SfxViewFrame::SaveCurrentViewData_Impl( const USHORT i_nNewViewId )
     {
         // can't say anything about the view, the respective application did not yet migrate its code to
         // named view factories => bail out
-        OSL_ENSURE( false, "SfxViewFrame::SaveCurrentViewData_Impl: views without API names? Shouldn't happen anymore?" );
+        OSL_FAIL( "SfxViewFrame::SaveCurrentViewData_Impl: views without API names? Shouldn't happen anymore?" );
         return;
     }
     OSL_ENSURE( !sNewViewName.Equals( sCurrentViewName ), "SfxViewFrame::SaveCurrentViewData_Impl: suspicious: new and old view name are identical!" );
@@ -2397,7 +2397,7 @@ void SfxViewFrame::ExecView_Impl
             // Hack. at the moment a virtual Function
             if ( !GetViewShell()->NewWindowAllowed() )
             {
-                OSL_ENSURE( false, "You should have disabled the 'Window/New Window' slot!" );
+                OSL_FAIL( "You should have disabled the 'Window/New Window' slot!" );
                 return;
             }
 
@@ -3363,7 +3363,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
         {
             if  ( !KnowsChildWindow( nSID ) )
             {
-                OSL_ENSURE( false, "SID_TASKPANE state requested, but no task pane child window exists for this ID!" );
+                OSL_FAIL( "SID_TASKPANE state requested, but no task pane child window exists for this ID!" );
                 rState.DisableItem( nSID );
             }
             else if ( !moduleHasToolPanels( *pImp ) )
