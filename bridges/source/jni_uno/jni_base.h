@@ -127,7 +127,7 @@ inline bool JNI_context::assert_no_exception() const
     if (JNI_FALSE != m_env->ExceptionCheck())
     {
         m_env->ExceptionClear();
-        OSL_ENSURE( 0, "unexpected java exception occurred!" );
+        OSL_FAIL( "unexpected java exception occurred!" );
         return false;
     }
     return true;

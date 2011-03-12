@@ -1656,7 +1656,7 @@ void SAL_CALL osl_releaseSocket( oslSocket pSocket )
 #if defined(LINUX)
     if ( pSocket->m_bIsAccepting == sal_True )
     {
-        OSL_ENSURE(0, "osl_destroySocket : attempt to destroy socket while accepting\n");
+        OSL_FAIL("osl_destroySocket : attempt to destroy socket while accepting\n");
         return;
     }
 #endif /* LINUX */
