@@ -63,7 +63,7 @@ TextLogger::TextLogger (void)
 
 void TextLogger::AppendText (const char* sText)
 {
-    OSL_TRACE (sText);
+    OSL_TRACE("%s", sText);
     if (mpEditWindow != NULL)
         mpEditWindow->InsertText (UniString::CreateFromAscii(sText));
 }
@@ -74,7 +74,7 @@ void TextLogger::AppendText (const char* sText)
 void TextLogger::AppendText (const String& sText)
 {
     ByteString s(sText, RTL_TEXTENCODING_ISO_8859_1);
-    OSL_TRACE (s.GetBuffer());
+    OSL_TRACE("%s", s.GetBuffer());
     if (mpEditWindow != NULL)
         mpEditWindow->InsertText (sText);
 }
