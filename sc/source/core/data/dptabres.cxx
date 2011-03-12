@@ -2985,7 +2985,7 @@ bool ScDPResultDimension::IsValidEntry( const vector< SCROW >& aMembers ) const
 #if OSL_DEBUG_LEVEL > 1
     ByteString strTemp ("IsValidEntry: Member not found, DimName = " );
     strTemp += ByteString( GetName(), RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( strTemp.GetBuffer() );
+    OSL_TRACE( "%s", strTemp.GetBuffer() );
 #endif
     return false;
 }
