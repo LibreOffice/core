@@ -162,16 +162,24 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ en-US ] = "Repeat ~column" ;
         TabStop = TRUE ;
     };
+
     String STR_ADD
     {
         Text [ en-US ] = "~Add" ;
     };
+
     String STR_MODIFY
     {
         Text [ en-US ] = "Mod~ify" ;
     };
+
     String STR_INVALIDSYMBOL
     {
         Text [ en-US ] = "Invalid expression" ;
+    };
+
+    String STR_GLOBAL_SCOPE
+    {
+        Text [ en-US ] = "Document (Global)";
     };
 };

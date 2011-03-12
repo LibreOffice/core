@@ -458,6 +458,11 @@ public:
     ScFieldEditEngine*  CreateFieldEditEngine();
     void                DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine);
 
+    /**
+     * Get all range names that are local to each table.  It only returns
+     * non-empty range name set.
+     */
+    void GetAllTabRangeNames(::std::map<SCTAB, const ScRangeName*>& rRangeNames) const;
     SC_DLLPUBLIC ScRangeName*   GetRangeName(SCTAB nTab) const;
     SC_DLLPUBLIC ScRangeName*   GetRangeName() const;
     void            SetRangeName( ScRangeName* pNewRangeName );

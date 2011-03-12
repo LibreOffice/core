@@ -45,6 +45,7 @@
 #define STR_ADD         21
 #define STR_MODIFY      22
 #define STR_INVALIDSYMBOL 23
+#define STR_GLOBAL_SCOPE 24
 
 #define BTN_CRITERIA    31
 #define BTN_PRINTAREA   32

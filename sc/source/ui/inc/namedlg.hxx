@@ -37,6 +37,8 @@
 #include "rangenam.hxx"
 #include "anyrefdg.hxx"
 
+#include <boost/ptr_container/ptr_map.hpp>
+
 class ScViewData;
 class ScDocument;
 struct ScNameDlgImpl;
@@ -46,6 +48,7 @@ struct ScNameDlgImpl;
 class ScNameDlg : public ScAnyRefDlg
 {
 private:
+    typedef ::boost::ptr_map<SCTAB, ScRangeName> TabNameMapType;
     FixedText       maFtScope;
     ListBox         maLbScope;
     FixedLine       aFlName;
@@ -72,10 +75,13 @@ private:
     const String    aStrAdd;    // "Hinzufuegen"
     const String    aStrModify; // "Aendern"
     const String    errMsgInvalidSym;
+    const ::rtl::OUString maGlobalNameStr;
 
     ScViewData*     pViewData;
     ScDocument*     pDoc;
-    ScRangeName     aLocalRangeName;
+    ScRangeName     maGlobalRangeName;
+    TabNameMapType  maTabRangeNames;
+    ScRangeName*    mpCurRangeName;    //! range name set currently selected
     const ScAddress theCursorPos;
     Selection       theCurSel;
 
@@ -87,8 +93,13 @@ private:
     void UpdateNames();
     void CalcCurTableAssign( String& aAssign, ScRangeData* pRangeData );
 
-    void SaveData();
-    void RestoreData();
+    void SaveControlStates();
+    void RestoreControlStates();
+
+    bool AddPushed();
+    void RemovePushed();
+    void NameSelected();
+    void ScopeChanged();
 
     // Handler:
     DECL_LINK( OkBtnHdl, void * );
@@ -98,6 +109,7 @@ private:
     DECL_LINK( EdModifyHdl, Edit * );
     DECL_LINK( NameSelectHdl, void * );
     DECL_LINK( AssignGetFocusHdl, void * );
+    DECL_LINK( ScopeChangedHdl, ListBox* );
 
 protected:
     virtual void    RefInputDone( BOOL bForced = FALSE );
