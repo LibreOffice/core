@@ -311,7 +311,7 @@ SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
                                                xAttrList, *this, nFamily );
             break;
         default:
-            OSL_ENSURE(0,"OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. PLease check.");
+            OSL_FAIL("OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. PLease check.");
             break;
         }
     }
@@ -368,7 +368,7 @@ Reference < XNameContainer >
                 xStyles = ((SvXMLImport *)&GetImport())->GetTextImport()->GetFrameStyles();
                 break;
             default:
-                OSL_ENSURE(0,"OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. PLease check.");
+                OSL_FAIL("OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. PLease check.");
                 break;
         }
         if( !xStyles.is() && sName.getLength() && GetOwnImport().GetModel().is() )

@@ -361,7 +361,7 @@ OQueryController::~OQueryController()
     DBG_DTOR(OQueryController,NULL);
     if ( !getBroadcastHelper().bDisposed && !getBroadcastHelper().bInDispose )
     {
-        OSL_ENSURE(0,"Please check who doesn't dispose this component!");
+        OSL_FAIL("Please check who doesn't dispose this component!");
         // increment ref count to prevent double call of Dtor
         osl_incrementInterlockedCount( &m_refCount );
         dispose();
@@ -1350,12 +1350,12 @@ void OQueryController::executeQuery()
             }
             else
             {
-                OSL_ENSURE(0,"Couldn't create a beamer window!");
+                OSL_FAIL("Couldn't create a beamer window!");
             }
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Couldn't create a beamer window!");
+            OSL_FAIL("Couldn't create a beamer window!");
         }
     }
 }

@@ -212,7 +212,7 @@ namespace
                 if(aFind.getLength())
                     pNewConnData->SetFieldIndex(JTCS_FROM,aFind[0]+1);
                 else
-                    OSL_ENSURE(0,"Column not found!");
+                    OSL_FAIL("Column not found!");
             }
             // get the position inside the tabe
             Reference<XNameAccess> xRefColumns = _rDest.GetOriginalColumns();
@@ -222,7 +222,7 @@ namespace
                 if(aFind.getLength())
                     pNewConnData->SetFieldIndex(JTCS_TO,aFind[0]+1);
                 else
-                    OSL_ENSURE(0,"Column not found!");
+                    OSL_FAIL("Column not found!");
             }
             pNewConnData->AppendConnLine(*pIter,sRelatedColumn);
 

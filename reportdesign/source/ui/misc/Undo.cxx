@@ -91,7 +91,7 @@ namespace
                 }
                 catch(const uno::Exception&)
                 {
-                    OSL_ENSURE(0,"lcl_insertElements:Exception caught!");
+                    OSL_FAIL("lcl_insertElements:Exception caught!");
                 }
             }
         }
@@ -111,7 +111,7 @@ namespace
                 }
                 catch(const uno::Exception&)
                 {
-                    OSL_ENSURE(0,"lcl_setValues:Exception caught!");
+                    OSL_FAIL("lcl_setValues:Exception caught!");
                 }
             }
         }
@@ -156,7 +156,7 @@ OSectionUndo::~OSectionUndo()
             }
             catch(uno::Exception)
             {
-                OSL_ENSURE(0,"Exception caught!");
+                OSL_FAIL("Exception caught!");
             }
         }
     }
@@ -359,7 +359,7 @@ void OGroupUndo::implReInsert( )
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception catched while undoing remove group");
+        OSL_FAIL("Exception catched while undoing remove group");
     }
 }
 //----------------------------------------------------------------------------
@@ -371,7 +371,7 @@ void OGroupUndo::implReRemove( )
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception catched while redoing remove group");
+        OSL_FAIL("Exception catched while redoing remove group");
     }
 }
 //----------------------------------------------------------------------------

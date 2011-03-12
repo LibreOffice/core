@@ -108,7 +108,7 @@ void OXMLReportElementBase::EndElement()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception caught while inserting a new control!");
+        OSL_FAIL("Exception caught while inserting a new control!");
     }
 }
 //----------------------------------------------------------------------------

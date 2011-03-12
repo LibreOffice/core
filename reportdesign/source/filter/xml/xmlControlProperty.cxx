@@ -165,7 +165,7 @@ void OXMLControlProperty::EndElement()
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Unknown property found!");
+            OSL_FAIL("Unknown property found!");
         }
     }
 }

@@ -102,13 +102,13 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
                     break;
 
                 default:
-                    OSL_ENSURE(0,"OXMLSection: Unknown attribute!");
+                    OSL_FAIL("OXMLSection: Unknown attribute!");
             }
         }
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception catched while filling the section props");
+        OSL_FAIL("Exception catched while filling the section props");
     }
 }
 // -----------------------------------------------------------------------------

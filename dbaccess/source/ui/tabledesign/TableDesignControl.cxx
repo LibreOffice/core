@@ -201,7 +201,7 @@ void OTableRowView::copy()
 //------------------------------------------------------------------------------
 void OTableRowView::paste()
 {
-    OSL_ENSURE(0,"OTableRowView::Paste : (pseudo-) abstract method called !");
+    OSL_FAIL("OTableRowView::Paste : (pseudo-) abstract method called !");
 }
 
 //------------------------------------------------------------------------------

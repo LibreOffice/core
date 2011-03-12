@@ -1345,7 +1345,7 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
+        OSL_FAIL("ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
     }
     return sal_True;
 }
@@ -1454,7 +1454,7 @@ sal_Bool ODocumentDefinition::saveAs()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
+        OSL_FAIL("ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
     }
     return sal_True;
 }

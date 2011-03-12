@@ -137,11 +137,11 @@ OCacheSet::~OCacheSet()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception occurred");
+        OSL_FAIL("Exception occurred");
     }
     catch(...)
     {
-        OSL_ENSURE(0,"Unknown Exception occurred");
+        OSL_FAIL("Unknown Exception occurred");
     }
 
     DBG_DTOR(OCacheSet,NULL);
@@ -676,7 +676,7 @@ bool OCacheSet::isResultSetChanged() const
 
 void OCacheSet::reset(const Reference< XResultSet>& /*_xDriverSet*/)
 {
-    OSL_ENSURE(0,"Illegal call!");
+    OSL_FAIL("Illegal call!");
 }
 
 void OCacheSet::mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& /*io_aInsertRow*/,ORowSetValueVector::Vector& /*io_aRow*/,::std::vector<sal_Int32>& o_aChangedColumns)

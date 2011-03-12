@@ -769,7 +769,7 @@ void OReportDefinition::init()
     }
     catch(uno::Exception)
     {
-        OSL_ENSURE(0,"Error!");
+        OSL_FAIL("Error!");
     }
 }
 // -----------------------------------------------------------------------------
@@ -1183,7 +1183,7 @@ void SAL_CALL OReportDefinition::setParent( const uno::Reference< uno::XInterfac
 // XCloneable
 uno::Reference< util::XCloneable > SAL_CALL OReportDefinition::createClone(  ) throw (uno::RuntimeException)
 {
-    OSL_ENSURE(0,"Not yet implemented correctly");
+    OSL_FAIL("Not yet implemented correctly");
     uno::Reference< report::XReportComponent> xSource = this;
     uno::Reference< report::XReportDefinition> xSet(cloneObject(xSource,m_aProps->m_xFactory,SERVICE_REPORTDEFINITION),uno::UNO_QUERY_THROW);
     return xSet.get();
@@ -1600,7 +1600,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         }
         catch(uno::Exception)
         {
-            OSL_ENSURE(0,"Exception Caught: Could not commit report storage!");
+            OSL_FAIL("Exception Caught: Could not commit report storage!");
             throw io::IOException();
         }
 

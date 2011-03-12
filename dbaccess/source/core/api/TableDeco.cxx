@@ -187,7 +187,7 @@ void ODBTableDecorator::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, con
     switch(_nHandle)
     {
         case PROPERTY_ID_PRIVILEGES:
-            OSL_ENSURE(0,"Property is readonly!");
+            OSL_FAIL("Property is readonly!");
         case PROPERTY_ID_FILTER:
         case PROPERTY_ID_ORDER:
         case PROPERTY_ID_APPLYFILTER:
@@ -326,7 +326,7 @@ void ODBTableDecorator::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) c
             }
             break;
         default:
-            OSL_ENSURE(0,"Invalid Handle for table");
+            OSL_FAIL("Invalid Handle for table");
     }
 }
 

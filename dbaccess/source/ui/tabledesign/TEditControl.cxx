@@ -1305,7 +1305,7 @@ OFieldDescription* OTableEditorCtrl::GetFieldDescr( long nRow )
         m_pRowList->size());
     if( (nRow<0) || (sal::static_int_cast< unsigned long >(nRow)>=nListCount) )
     {
-        OSL_ENSURE(0,"(nRow<0) || (nRow>=nListCount)");
+        OSL_FAIL("(nRow<0) || (nRow>=nListCount)");
         return NULL;
     }
      ::boost::shared_ptr<OTableRow>  pRow = (*m_pRowList)[ nRow ];

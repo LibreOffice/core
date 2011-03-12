@@ -489,7 +489,7 @@ sal_Bool isDocumentReport(const Reference< XMultiServiceFactory >& _xORB,const :
     }
     catch(Exception)
     {
-        OSL_ENSURE(0,"isDocumentReport: catched exception!");
+        OSL_FAIL("isDocumentReport: catched exception!");
     }
     return bReport;
 }
@@ -549,7 +549,7 @@ void OCfgImport::createDataSource(const ::rtl::OUString& _sName)
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception: convert");
+        OSL_FAIL("Exception: convert");
         UCBContentHelper::Kill(sFileName);
     }
 }
@@ -848,7 +848,7 @@ void SAL_CALL  OCfgImport::endNode()
                 }
                 catch(Exception&)
                 {
-                    OSL_ENSURE(0,"convertLinks: Exception catched!");
+                    OSL_FAIL("convertLinks: Exception catched!");
                 }
                 m_sBookmarkName = ::rtl::OUString();
                 m_sDocumentLocation = ::rtl::OUString();

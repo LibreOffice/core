@@ -250,7 +250,7 @@ SbaTableQueryBrowser::~SbaTableQueryBrowser()
     DBG_DTOR(SbaTableQueryBrowser,NULL);
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
-        OSL_ENSURE(0,"Please check who doesn't dispose this component!");
+        OSL_FAIL("Please check who doesn't dispose this component!");
         // increment ref count to prevent double call of Dtor
         osl_incrementInterlockedCount( &m_refCount );
         dispose();
@@ -1895,7 +1895,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                     }
                     catch(DisposedException&)
                     {
-                        OSL_ENSURE(0,"Object already disposed!");
+                        OSL_FAIL("Object already disposed!");
                     }
                     catch(Exception&)
                     {

@@ -560,7 +560,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
                     }
                     break;
                 default:
-                    OSL_ENSURE(0,"ODatabaseExport: Unbekanntes Format");
+                    OSL_FAIL("ODatabaseExport: Unbekanntes Format");
             }
         }
     }

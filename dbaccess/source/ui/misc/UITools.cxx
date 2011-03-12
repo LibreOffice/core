@@ -178,7 +178,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     SQLExceptionInfo aInfo;
     if ( !_xDataSource.is() )
     {
-        OSL_ENSURE(0,"createConnection: coult not retrieve the data source!");
+        OSL_FAIL("createConnection: coult not retrieve the data source!");
         return aInfo;
     }
 
@@ -192,7 +192,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"createConnection: error while retrieving data source properties!");
+        OSL_FAIL("createConnection: error while retrieving data source properties!");
     }
 
 
@@ -203,7 +203,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
             Reference<XCompletedConnection> xConnectionCompletion(_xDataSource, UNO_QUERY);
             if (!xConnectionCompletion.is())
             {
-                OSL_ENSURE(0,"createConnection: missing an interface ... need an error message here!");
+                OSL_FAIL("createConnection: missing an interface ... need an error message here!");
             }
             else
             {   // instantiate the default SDB interaction handler
@@ -230,7 +230,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     catch(SQLContext& e) { aInfo = SQLExceptionInfo(e); }
     catch(SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
     catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
-    catch(Exception&) { OSL_ENSURE(0,"SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
+    catch(Exception&) { OSL_FAIL("SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
 
     return aInfo;
 }
@@ -796,7 +796,7 @@ sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
         case SVX_HOR_JUSTIFY_CENTER:    nAlignment = ::com::sun::star::awt::TextAlign::CENTER;  break;
         case SVX_HOR_JUSTIFY_RIGHT:     nAlignment = ::com::sun::star::awt::TextAlign::RIGHT;   break;
         default:
-            OSL_ENSURE(0,"Invalid TextAlign!");
+            OSL_FAIL("Invalid TextAlign!");
     }
     return nAlignment;
 }
@@ -810,7 +810,7 @@ SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment)
         case ::com::sun::star::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
         case ::com::sun::star::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
         default:
-            OSL_ENSURE(0,"Invalid TextAlign!");
+            OSL_FAIL("Invalid TextAlign!");
     }
     return eJustify;
 }
@@ -838,7 +838,7 @@ float ConvertFontWeight( ::FontWeight eWeight )
     else if( eWeight == WEIGHT_BLACK )
         return ::com::sun::star::awt::FontWeight::BLACK;
 
-    OSL_ENSURE(0, "Unknown FontWeigth" );
+    OSL_FAIL("Unknown FontWeigth" );
     return ::com::sun::star::awt::FontWeight::DONTKNOW;
 }
 // -----------------------------------------------------------------------------
@@ -865,7 +865,7 @@ float ConvertFontWidth( ::FontWidth eWidth )
     else if( eWidth == WIDTH_ULTRA_EXPANDED )
         return ::com::sun::star::awt::FontWidth::ULTRAEXPANDED;
 
-    OSL_ENSURE(0, "Unknown FontWidth" );
+    OSL_FAIL("Unknown FontWidth" );
     return ::com::sun::star::awt::FontWidth::DONTKNOW;
 }
 // -----------------------------------------------------------------------------

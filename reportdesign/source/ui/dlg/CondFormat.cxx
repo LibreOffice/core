@@ -394,7 +394,7 @@ namespace rptui
         }
         catch(Exception&)
         {
-            OSL_ENSURE(0,"Can not access format condition!");
+            OSL_FAIL("Can not access format condition!");
         }
 
         impl_conditionCountChanged();

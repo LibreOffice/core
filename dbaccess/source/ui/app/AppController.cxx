@@ -336,7 +336,7 @@ OApplicationController::~OApplicationController()
 {
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
-        OSL_ENSURE(0,"Please check who doesn't dispose this component!");
+        OSL_FAIL("Please check who doesn't dispose this component!");
         // increment ref count to prevent double call of Dtor
         osl_incrementInterlockedCount( &m_refCount );
         dispose();
@@ -1276,7 +1276,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         case ID_NEW_TABLE_DESIGN:
                             break;
                         default:
-                            OSL_ENSURE(0,"illegal switch call!");
+                            OSL_FAIL("illegal switch call!");
                     }
                     if ( bAutoPilot )
                         getContainer()->PostUserEvent( LINK( this, OApplicationController, OnCreateWithPilot ), reinterpret_cast< void* >( eType ) );
@@ -1697,7 +1697,7 @@ namespace
             case E_NONE:
                 break;
             default:
-                OSL_ENSURE(0,"Invalid ElementType!");
+                OSL_FAIL("Invalid ElementType!");
                 break;
         }
         return sToolbar;
@@ -2340,7 +2340,7 @@ void OApplicationController::onDeleteEntry()
             nId = SID_DB_APP_REPORT_DELETE;
             break;
         default:
-            OSL_ENSURE(0,"Invalid ElementType!");
+            OSL_FAIL("Invalid ElementType!");
             break;
     }
     executeChecked(nId,Sequence<PropertyValue>());

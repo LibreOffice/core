@@ -336,7 +336,7 @@ void OSelectionBrowseBox::ColumnMoved( USHORT nColId,BOOL _bCreateUndo )
         }
     }
     else
-        OSL_ENSURE(0,"Invalid column id!");
+        OSL_FAIL("Invalid column id!");
 }
 //------------------------------------------------------------------------------
 void OSelectionBrowseBox::Init()
@@ -387,7 +387,7 @@ void OSelectionBrowseBox::Init()
     }
     catch(const SQLException&)
     {
-        OSL_ENSURE(0,"Catched Exception when asking for database metadata options!");
+        OSL_FAIL("Catched Exception when asking for database metadata options!");
         m_nMaxColumns = 0;
     }
 }
@@ -846,7 +846,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                         notifyFunctionFieldChanged(sOldLocalizedFunctionName,sLocalizedFunctionName,_bListAction, nColumnId);
                     }
                     else
-                        OSL_ENSURE(0,"Unsupported function inserted!");
+                        OSL_FAIL("Unsupported function inserted!");
 
                 }
                 else

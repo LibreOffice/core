@@ -847,7 +847,7 @@ sal_Bool ORowSetCache::moveWindow()
             }
             else
             { // normally this should never happen
-                OSL_ENSURE(0,"What the hell is happen here!");
+                OSL_FAIL("What the hell is happen here!");
                 return sal_False;
             }
         }
@@ -1228,7 +1228,7 @@ sal_Bool ORowSetCache::insertRow(::std::vector< Any >& o_aBookmarks)
         }
         else
         {
-            OSL_ENSURE(0,"There must be a bookmark after the row was inserted!");
+            OSL_FAIL("There must be a bookmark after the row was inserted!");
         }
     }
     return bRet;
@@ -1317,7 +1317,7 @@ void ORowSetCache::cancelRowUpdates(  )
     m_bNew = m_bModified = sal_False;
     if(!m_nPosition)
     {
-        OSL_ENSURE(0,"cancelRowUpdates:Invalid positions pos == 0");
+        OSL_FAIL("cancelRowUpdates:Invalid positions pos == 0");
         ::dbtools::throwFunctionSequenceException(NULL);
     }
 
@@ -1325,7 +1325,7 @@ void ORowSetCache::cancelRowUpdates(  )
         m_pCacheSet->fillValueRow(*m_aMatrixIter,m_nPosition);
     else
     {
-        OSL_ENSURE(0,"cancelRowUpdates couldn't position right with absolute");
+        OSL_FAIL("cancelRowUpdates couldn't position right with absolute");
         ::dbtools::throwFunctionSequenceException(NULL);
     }
 }

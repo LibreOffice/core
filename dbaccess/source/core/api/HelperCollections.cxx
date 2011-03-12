@@ -97,7 +97,7 @@ namespace dbaccess
             if(aIter != m_aColumns->get().end())
                 return connectivity::sdbcx::ObjectType(*aIter,UNO_QUERY);
 
-            OSL_ENSURE(0,"Column not found in collection!");
+            OSL_FAIL("Column not found in collection!");
         }
         return NULL;
     }

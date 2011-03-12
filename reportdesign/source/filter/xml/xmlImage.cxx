@@ -114,7 +114,7 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception catched while filling the image props");
+        OSL_FAIL("Exception catched while filling the image props");
     }
 }
 // -----------------------------------------------------------------------------

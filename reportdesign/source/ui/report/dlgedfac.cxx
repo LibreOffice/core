@@ -101,7 +101,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                 pObjFactory->pNewObj = new OOle2Obj(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.ChartDocument")),OBJ_OLE2);
                 break;
             default:
-                OSL_ENSURE(0,"Unknown object id");
+                OSL_FAIL("Unknown object id");
                 break;
         }
     }

@@ -205,7 +205,7 @@ BOOL OTableWindow::FillListBox()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception occurred!");
+        OSL_FAIL("Exception occurred!");
     }
     try
     {
@@ -234,7 +234,7 @@ BOOL OTableWindow::FillListBox()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception occurred!");
+        OSL_FAIL("Exception occurred!");
     }
 
     return TRUE;

@@ -98,7 +98,7 @@ namespace
                 }
                 catch(Exception)
                 {
-                    OSL_ENSURE( 0, "lcl_isPropertySetDefaulted: Exception caught!" );
+                    OSL_FAIL( "lcl_isPropertySetDefaulted: Exception caught!" );
                 }
             }
             return ( pIter == pEnd );

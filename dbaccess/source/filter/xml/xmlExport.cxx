@@ -1325,7 +1325,7 @@ void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
             }
             catch(Exception)
             {
-                OSL_ENSURE(0,"ODBExport::GetViewSettings: Exception catched!");
+                OSL_FAIL("ODBExport::GetViewSettings: Exception catched!");
             }
         }
     }
@@ -1352,7 +1352,7 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
         }
         catch(Exception)
         {
-            OSL_ENSURE(0,"Could not access layout information from the data source!");
+            OSL_FAIL("Could not access layout information from the data source!");
         }
     }
 }
@@ -1383,7 +1383,7 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
             GetMM100UnitConverter().convertNumber(aBuffer, getINT32(_rValue));
             break;
         default:
-            OSL_ENSURE(0,"ODBExport::implConvertAny: Invalid type");
+            OSL_FAIL("ODBExport::implConvertAny: Invalid type");
     }
 
     return aBuffer.makeStringAndClear();

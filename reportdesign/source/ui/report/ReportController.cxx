@@ -221,7 +221,7 @@ namespace
                         aFontDescriptor.Underline = awt::FontUnderline::SINGLE - aFontDescriptor.Underline;
                         break;
                     default:
-                        OSL_ENSURE(0,"Illegal value in default!");
+                        OSL_FAIL("Illegal value in default!");
                         break;
                 }
 
@@ -358,7 +358,7 @@ void OReportController::disposing()
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception caught while disposing row sets.");
+        OSL_FAIL("Exception caught while disposing row sets.");
     }
     m_xRowSet.clear();
     m_xRowSetMediator.clear();
@@ -2209,7 +2209,7 @@ void SAL_CALL OReportController::elementReplaced( const ContainerEvent& /*_rEven
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
-    OSL_ENSURE(0,"Not yet implemented!");
+    OSL_FAIL("Not yet implemented!");
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEvent& evt ) throw (RuntimeException)

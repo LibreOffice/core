@@ -627,7 +627,7 @@ void ORTFImportExport::appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCou
             }
             catch (Exception&)
             {
-                OSL_ENSURE(0,"RTF WRITE!");
+                OSL_FAIL("RTF WRITE!");
             }
 
             (*m_pStream) << OOO_STRING_SVTOOLS_RTF_CELL;

@@ -1424,7 +1424,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
                 break;
             default:
-                OSL_ENSURE(0,"Unknown type");
+                OSL_FAIL("Unknown type");
         }
         m_pPreviousType = pFieldType;
     }

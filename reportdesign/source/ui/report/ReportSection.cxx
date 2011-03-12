@@ -111,7 +111,7 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception catched!");
+        OSL_FAIL("Exception catched!");
     }
 
     m_pFunc.reset(new DlgEdFuncSelect( this ));
@@ -315,7 +315,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                 }
                 catch(uno::Exception&)
                 {
-                    OSL_ENSURE(0,"Exception caught while pasting a new object!");
+                    OSL_FAIL("Exception caught while pasting a new object!");
                 }
                 if ( !_bForce )
                     break;
@@ -391,7 +391,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
             }
             catch(uno::Exception&)
             {
-                OSL_ENSURE(0,"Can't copy report elements!");
+                OSL_FAIL("Can't copy report elements!");
             }
         }
     }
@@ -604,7 +604,7 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
             }
             catch(uno::Exception)
             {
-                OSL_ENSURE(0,"Exception caught: OReportSection::_propertyChanged(");
+                OSL_FAIL("Exception caught: OReportSection::_propertyChanged(");
             }
 
             Resize();

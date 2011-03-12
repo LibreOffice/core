@@ -254,7 +254,7 @@ OAppDetailPageHelper::~OAppDetailPageHelper()
     }
     catch(Exception)
     {
-        OSL_ENSURE(0,"Exception thrown while disposing preview frame!");
+        OSL_FAIL("Exception thrown while disposing preview frame!");
     }
 
     for (int i=0; i < E_ELEMENT_TYPE_COUNT; ++i)
@@ -682,7 +682,7 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
             aFolderImage = aImageProvider.getFolderImage( DatabaseObject::QUERY );
             break;
         default:
-            OSL_ENSURE(0,"Illegal call!");
+            OSL_FAIL("Illegal call!");
     }
     getElementIcons( _eType, nImageId );
 
@@ -859,7 +859,7 @@ void OAppDetailPageHelper::elementReplaced(ElementType _eType
                 pEntry = lcl_findEntry(*pTreeView,_rOldName,pTreeView->First());
                 break;
             default:
-                OSL_ENSURE(0,"Invalid element type");
+                OSL_FAIL("Invalid element type");
         }
         OSL_ENSURE(pEntry,"Do you know that the name isn't existence!");
         if ( pEntry )
@@ -944,7 +944,7 @@ void OAppDetailPageHelper::elementRemoved( ElementType _eType,const ::rtl::OUStr
                 }
                 break;
             default:
-                OSL_ENSURE(0,"Invalid element type");
+                OSL_FAIL("Invalid element type");
         }
         if ( !pTreeView->GetEntryCount() )
             showPreview(NULL);

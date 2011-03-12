@@ -1706,7 +1706,7 @@ void GeometryHandler::impl_fillMimeTypes_nothrow(::std::vector< ::rtl::OUString 
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception caught!");
+        OSL_FAIL("Exception caught!");
     }
 }
 // -----------------------------------------------------------------------------
@@ -1738,7 +1738,7 @@ void GeometryHandler::impl_fillScopeList_nothrow(::std::vector< ::rtl::OUString 
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception caught!");
+        OSL_FAIL("Exception caught!");
     }
 }
 // -----------------------------------------------------------------------------
@@ -1856,7 +1856,7 @@ sal_Bool GeometryHandler::isDefaultFunction( const ::rtl::OUString& _sQuotedFunc
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception caught!");
+        OSL_FAIL("Exception caught!");
     }
     return bDefaultFunction;
 }
@@ -1896,7 +1896,7 @@ sal_Bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< 
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception caught!");
+        OSL_FAIL("Exception caught!");
     }
     return bDefaultFunction;
 }
@@ -1987,7 +1987,7 @@ void GeometryHandler::createDefaultFunction(::osl::ResettableMutexGuard& _aGuard
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception caught!");
+        OSL_FAIL("Exception caught!");
     }
 }
 // -----------------------------------------------------------------------------

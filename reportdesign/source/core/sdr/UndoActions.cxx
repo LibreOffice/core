@@ -224,7 +224,7 @@ void OUndoContainerAction::Undo()
                 implReInsert();
                 break;
             default:
-                OSL_ENSURE(0,"Illegal case value");
+                OSL_FAIL("Illegal case value");
                 break;
             }
         }
@@ -252,7 +252,7 @@ void OUndoContainerAction::Redo()
                 implReRemove();
                 break;
             default:
-                OSL_ENSURE(0,"Illegal case value");
+                OSL_FAIL("Illegal case value");
                 break;
             }
         }

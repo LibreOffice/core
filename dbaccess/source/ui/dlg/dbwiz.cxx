@@ -310,7 +310,7 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
             pPage = ODriversSettings::CreateUser(this,*m_pOutSet);
             break;
         default:
-            OSL_ENSURE(0,"Wrong state!");
+            OSL_FAIL("Wrong state!");
             break;
     }
 

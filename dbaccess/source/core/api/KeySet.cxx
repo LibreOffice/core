@@ -133,7 +133,7 @@ OKeySet::~OKeySet()
     }
     catch(...)
     {
-        OSL_ENSURE(0,"Unknown Exception occurred");
+        OSL_FAIL("Unknown Exception occurred");
     }
     m_xComposer = NULL;
 
@@ -764,7 +764,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString
         }
         catch(Exception&)
         {
-            OSL_ENSURE(0,"Could not execute GeneratedKeys() stmt");
+            OSL_FAIL("Could not execute GeneratedKeys() stmt");
         }
     }
 
@@ -823,7 +823,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString
             }
             catch(SQLException&)
             {
-                OSL_ENSURE(0,"Could not fetch with MAX() ");
+                OSL_FAIL("Could not fetch with MAX() ");
             }
         }
     }
@@ -975,7 +975,7 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
             aSql.append(::dbtools::quoteName( aQuote,aIter->second.sRealName));
             if((_rDeleteRow->get())[aIter->second.nPosition].isNull())
             {
-                OSL_ENSURE(0,"can a primary key be null");
+                OSL_FAIL("can a primary key be null");
                 aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NULL")));
             }
             else

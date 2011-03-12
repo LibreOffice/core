@@ -473,7 +473,7 @@ void ORptExport::exportFormatConditions(const Reference<XReportControlModel>& _x
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Can not access format condition!");
+        OSL_FAIL("Can not access format condition!");
     }
 }
 // -----------------------------------------------------------------------------
@@ -720,7 +720,7 @@ void ORptExport::exportReportComponentAutoStyles(const Reference<XSection>& _xPr
                 }
                 catch(uno::Exception&)
                 {
-                    OSL_ENSURE(0,"Can not access format condition!");
+                    OSL_FAIL("Can not access format condition!");
                 }
             }
         }

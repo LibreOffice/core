@@ -1122,7 +1122,7 @@ sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode * _pPredica
             nPredicate = SQLFilterOperator::GREATER_EQUAL;
             break;
         default:
-            OSL_ENSURE(0,"Wrong NodeType!");
+            OSL_FAIL("Wrong NodeType!");
     }
     return nPredicate;
 }
@@ -1793,7 +1793,7 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
     switch(_ePart)
     {
         default:
-            OSL_ENSURE( 0, "OSingleSelectQueryComposer::getKeyWord: Invalid enum value!" );
+            OSL_FAIL( "OSingleSelectQueryComposer::getKeyWord: Invalid enum value!" );
             // no break, fallback to WHERE
         case Where:
             sKeyword = STR_WHERE;
@@ -1831,7 +1831,7 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
             F_tmp = TGetParseNode(&OSQLParseTreeIterator::getSimpleOrderTree);
             break;
         default:
-            OSL_ENSURE(0,"Invalid enum value!");
+            OSL_FAIL("Invalid enum value!");
     }
 
     ::rtl::OUString sRet = getStatementPart( F_tmp, _rIterator );

@@ -292,7 +292,7 @@ void OApplicationController::refreshTables()
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Could not refresh tables!");
+            OSL_FAIL("Could not refresh tables!");
         }
 
         getContainer()->getDetailView()->clearPages(sal_False);

@@ -2023,7 +2023,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             }
             catch(Exception&)
             {
-                OSL_ENSURE(0,"Exception caught!");
+                OSL_FAIL("Exception caught!");
             }
             break;
         case SID_FM_DELETEROWS:

@@ -234,7 +234,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"ORelationTableView::AddConnection: Exception oocured!");
+            OSL_FAIL("ORelationTableView::AddConnection: Exception oocured!");
         }
     }
 }
@@ -301,7 +301,7 @@ bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"ORelationTableView::RemoveConnection: Something other than SQLException occurred!");
+        OSL_FAIL("ORelationTableView::RemoveConnection: Something other than SQLException occurred!");
     }
     return false;
 }

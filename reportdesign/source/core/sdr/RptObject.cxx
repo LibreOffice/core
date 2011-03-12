@@ -172,7 +172,7 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
             pNewObj = OOle2Obj::Create( _xComponent,nType );
             break;
         default:
-            OSL_ENSURE(0,"Unknown object id");
+            OSL_FAIL("Unknown object id");
             break;
     }
 
@@ -205,7 +205,7 @@ namespace
                         nTextAlign = style::ParagraphAdjust_RIGHT;
                         break;
                     default:
-                        OSL_ENSURE(0,"Illegal text alignment value!");
+                        OSL_FAIL("Illegal text alignment value!");
                         break;
                 }
                 aRet <<= (style::ParagraphAdjust)nTextAlign;
@@ -228,7 +228,7 @@ namespace
                         nTextAlign = awt::TextAlign::RIGHT;
                         break;
                     default:
-                        OSL_ENSURE(0,"Illegal text alignment value!");
+                        OSL_FAIL("Illegal text alignment value!");
                         break;
                 }
                 aRet <<= nTextAlign;
@@ -396,7 +396,7 @@ void OObjectBase::EndListening(sal_Bool /*bRemoveListener*/)
             }
             catch(uno::Exception)
             {
-                OSL_ENSURE(0,"OObjectBase::EndListening: Exception caught!");
+                OSL_FAIL("OObjectBase::EndListening: Exception caught!");
             }
         }
         m_xPropertyChangeListener.clear();
@@ -532,7 +532,7 @@ sal_Int32 OCustomShape::GetStep() const
 {
     // get step property
     sal_Int32 nStep = 0;
-    OSL_ENSURE(0,"Who called me!");
+    OSL_FAIL("Who called me!");
     return nStep;
 }
 //----------------------------------------------------------------------------
@@ -718,7 +718,7 @@ sal_Int32 OUnoObject::GetStep() const
     DBG_CHKTHIS( rpt_OUnoObject,NULL);
     // get step property
     sal_Int32 nStep = 0;
-    OSL_ENSURE(0,"Who called me!");
+    OSL_FAIL("Who called me!");
     return nStep;
 }
 
@@ -1013,7 +1013,7 @@ sal_Int32 OOle2Obj::GetStep() const
     DBG_CHKTHIS( rpt_OOle2Obj,NULL);
     // get step property
     sal_Int32 nStep = 0;
-    OSL_ENSURE(0,"Who called me!");
+    OSL_FAIL("Who called me!");
     return nStep;
 }
 

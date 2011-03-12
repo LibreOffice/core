@@ -99,7 +99,7 @@ SvXMLImportContext* OXMLConnectionData::CreateChildContext(
             if ( !m_bFoundOne )
             {
                 m_bFoundOne = true;
-                OSL_ENSURE(0,"Not supported yet!");
+                OSL_FAIL("Not supported yet!");
             }
             break;
     }

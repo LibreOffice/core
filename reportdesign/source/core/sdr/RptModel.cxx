@@ -93,7 +93,7 @@ void OReportModel::detachController()
 SdrPage* OReportModel::AllocPage(bool /*bMasterPage*/)
 {
     DBG_CHKTHIS( rpt_OReportModel, 0);
-    OSL_ENSURE(0,"Who called me!");
+    OSL_FAIL("Who called me!");
     return NULL;
 }
 

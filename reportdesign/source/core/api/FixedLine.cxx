@@ -188,7 +188,7 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"OFixedLine::OFixedLine: Exception caught!");
+        OSL_FAIL("OFixedLine::OFixedLine: Exception caught!");
     }
     osl_decrementInterlockedCount( &m_refCount );
 }

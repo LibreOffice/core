@@ -330,7 +330,7 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const ::rtl::OUString& _sSty
            }
         catch(uno::Exception&)
         {
-            OSL_ENSURE(0,"OXMLHelper::copyStyleElements -> exception catched");
+            OSL_FAIL("OXMLHelper::copyStyleElements -> exception catched");
         }
     }
 }

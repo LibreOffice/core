@@ -951,7 +951,7 @@ void SbaGridControl::SetRowHeight()
         }
         catch(Exception&)
         {
-            OSL_ENSURE(0,"setPropertyValue: PROPERTY_ROW_HEIGHT throws a exception");
+            OSL_FAIL("setPropertyValue: PROPERTY_ROW_HEIGHT throws a exception");
         }
     }
 }
@@ -1109,11 +1109,11 @@ Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
                 xEmptyReturn.set(xCol->getPropertyValue(PROPERTY_BOUNDFIELD),UNO_QUERY);
         }
         else
-            OSL_ENSURE(0,"SbaGridControl::getField getColumns returns NULL or ModelPos is > than count!");
+            OSL_FAIL("SbaGridControl::getField getColumns returns NULL or ModelPos is > than count!");
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"SbaGridControl::getField Exception occurred!");
+        OSL_FAIL("SbaGridControl::getField Exception occurred!");
     }
 
     return xEmptyReturn;

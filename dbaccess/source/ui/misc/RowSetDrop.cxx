@@ -242,7 +242,7 @@ sal_Bool ORowSetImportExport::insertNewRow()
                         aValue <<= m_xRow->getClob(*aIter);
                         break;
                     default:
-                        OSL_ENSURE(0,"Unknown type");
+                        OSL_FAIL("Unknown type");
                 }
                 if(m_xRow->wasNull())
                     m_xTargetRowUpdate->updateNull(i);

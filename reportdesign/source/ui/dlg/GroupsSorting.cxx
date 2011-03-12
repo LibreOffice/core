@@ -243,7 +243,7 @@ uno::Sequence<uno::Any> OFieldExpressionControl::fillSelectedGroups()
             }
             catch(uno::Exception&)
             {
-                OSL_ENSURE(0,"Can not access group!");
+                OSL_FAIL("Can not access group!");
             }
         }
         if ( !vClipboardList.empty() )
@@ -514,7 +514,7 @@ BOOL OFieldExpressionControl::SaveModified(bool _bAppendRow)
         }
         catch(uno::Exception&)
         {
-            OSL_ENSURE(0,"OFieldExpressionControl::SaveModified: Exception caught!");
+            OSL_FAIL("OFieldExpressionControl::SaveModified: Exception caught!");
         }
     }
 
@@ -545,7 +545,7 @@ String OFieldExpressionControl::GetCellText( long nRow, USHORT /*nColId*/ ) cons
         }
         catch(uno::Exception&)
         {
-            OSL_ENSURE(0,"Exception caught while getting expression value from the group");
+            OSL_FAIL("Exception caught while getting expression value from the group");
         }
     }
     return sText;
@@ -626,7 +626,7 @@ EditBrowseBox::RowStatus OFieldExpressionControl::GetRowStatus(long nRow) const
         }
         catch(uno::Exception&)
         {
-            OSL_ENSURE(0,"Exception cathced while try to get a group!");
+            OSL_FAIL("Exception cathced while try to get a group!");
         }
     }
     return EditBrowseBox::CLEAN;
@@ -1163,7 +1163,7 @@ sal_Int32 OGroupsSortingDialog::getColumnDataType(const ::rtl::OUString& _sColum
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Eception caught while getting the type of a column");
+        OSL_FAIL("Eception caught while getting the type of a column");
     }
 
     return nDataType;

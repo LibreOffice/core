@@ -702,7 +702,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"IsReadOnly throws an exception!");
+        OSL_FAIL("IsReadOnly throws an exception!");
     }
 }
 

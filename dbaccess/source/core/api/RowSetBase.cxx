@@ -240,7 +240,7 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::impl_getValue" );
     if ( m_bBeforeFirst || m_bAfterLast )
     {
-        OSL_ENSURE(0,"ORowSetBase::getValue: Illegal call here (we're before first or after last)!");
+        OSL_FAIL("ORowSetBase::getValue: Illegal call here (we're before first or after last)!");
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_CURSOR_BEFORE_OR_AFTER ), SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
     }
 
@@ -382,7 +382,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
 
     if ( m_bBeforeFirst || m_bAfterLast )
     {
-        OSL_ENSURE(0,"ORowSetBase::getBinaryStream: Illegal call here (we're before first or after last)!");
+        OSL_FAIL("ORowSetBase::getBinaryStream: Illegal call here (we're before first or after last)!");
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_CURSOR_BEFORE_OR_AFTER ), SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
     }
 
@@ -478,9 +478,9 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
     if(!bookmark.hasValue() || m_nResultSetType == ResultSetType::FORWARD_ONLY)
     {
         if(bookmark.hasValue())
-            OSL_ENSURE(0,"MoveToBookmark is not possible when we are only forward");
+            OSL_FAIL("MoveToBookmark is not possible when we are only forward");
         else
-            OSL_ENSURE(0,"Bookmark is not valid");
+            OSL_FAIL("Bookmark is not valid");
         throwFunctionSequenceException(*m_pMySelf);
     }
 
@@ -1285,7 +1285,7 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"firePropertyChange: Exception");
+        OSL_FAIL("firePropertyChange: Exception");
     }
     OSL_TRACE("DBACCESS ORowSetBase::firePropertyChange() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
 }

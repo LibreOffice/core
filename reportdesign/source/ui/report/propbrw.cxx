@@ -408,7 +408,7 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
             }
             else
             {
-                OSL_ENSURE(0,"Unknown service name!");
+                OSL_FAIL("Unknown service name!");
                 nResId = RID_STR_CLASS_FORMATTEDFIELD;
             }
 

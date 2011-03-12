@@ -464,7 +464,7 @@ TTableWindowData::value_type OJoinController::createTableWindowData(const ::rtl:
     OJoinDesignView* pView = getJoinView();
     if( pView )
         return pView->getTableView()->createTableWindowData(_sComposedName,_sTableName,_sWindowName);
-    OSL_ENSURE(0,"We should never ever reach this point!");
+    OSL_FAIL("We should never ever reach this point!");
 
     return TTableWindowData::value_type();
 }

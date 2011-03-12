@@ -122,7 +122,7 @@ OXMLTable::OXMLTable( ORptFilter& rImport
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception catched while filling the section props");
+        OSL_FAIL("Exception catched while filling the section props");
     }
 }
 // -----------------------------------------------------------------------------
@@ -269,7 +269,7 @@ void OXMLTable::EndElement()
                                 }
                                 catch(beans::PropertyVetoException)
                                 {
-                                    OSL_ENSURE(0,"Could not set the correct position or size!");
+                                    OSL_FAIL("Could not set the correct position or size!");
                                 }
                             }
                         }
@@ -282,7 +282,7 @@ void OXMLTable::EndElement()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"OXMLTable::EndElement -> exception catched");
+        OSL_FAIL("OXMLTable::EndElement -> exception catched");
     }
 }
 // -----------------------------------------------------------------------------

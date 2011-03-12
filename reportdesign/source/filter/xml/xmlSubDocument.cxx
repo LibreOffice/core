@@ -144,7 +144,7 @@ void OXMLSubDocument::EndElement()
                 }
                 catch(uno::Exception&)
                 {
-                    OSL_ENSURE(0,"Can not access format condition!");
+                    OSL_FAIL("Can not access format condition!");
                 }
 
             }

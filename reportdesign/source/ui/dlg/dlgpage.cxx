@@ -76,7 +76,7 @@ SfxTabDialog ( pParent, ModuleRes( _nPageId ), pAttr ),
             AddTabPage( RID_SVXPAGE_LINE,pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINE ), 0 );
             break;
         default:
-            OSL_ENSURE(0,"Unknown page id");
+            OSL_FAIL("Unknown page id");
     }
 
     SvtCJKOptions aCJKOptions;
