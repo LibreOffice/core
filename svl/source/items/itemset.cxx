@@ -50,7 +50,7 @@
 // STATIC DATA -----------------------------------------------------------
 
 static const USHORT nInitCount = 10; // einzelne USHORTs => 5 Paare ohne '0'
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 static ULONG nRangesCopyCount = 0;   // wie oft wurden Ranges kopiert
 #endif
 
@@ -234,7 +234,9 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool,
 void SfxItemSet::InitRanges_Impl(const USHORT *pWhichPairTable)
 {
     DBG_CHKTHIS(SfxItemSet, 0);
+    #if OSL_DEBUG_LEVEL > 1
     OSL_TRACE("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
+    #endif
 
     USHORT nCnt = 0;
     const USHORT* pPtr = pWhichPairTable;
@@ -314,7 +316,9 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet ):
             *ppDst = &_pPool->Put( **ppSrc );
 
     // dann noch die Which Ranges kopieren
+    #if OSL_DEBUG_LEVEL > 1
     OSL_TRACE("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
+    #endif
     std::ptrdiff_t cnt = pPtr - rASet._pWhichRanges+1;
     _pWhichRanges = new USHORT[ cnt ];
     memcpy( _pWhichRanges, rASet._pWhichRanges, sizeof( USHORT ) * cnt);
