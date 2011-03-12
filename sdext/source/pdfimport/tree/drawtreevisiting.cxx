@@ -671,7 +671,7 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
 {
     if( rParent.Children.empty() ) // this should not happen
     {
-        OSL_ENSURE( 0, "empty paragraph optimized" );
+        OSL_FAIL( "empty paragraph optimized" );
         return;
     }
 
