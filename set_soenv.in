@@ -74,7 +74,7 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
-     $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR ,
+     $UPD, $WORK_STAMP, 
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, $SOLARDEFIMG,
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI,
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
@@ -1010,10 +1010,6 @@ if ( $platform =~ m/darwin/ )
 $WORK_STAMP            = "@SOURCEVERSION@";
 # Location of the source.
 $SOLARSRC             = '$SRC_ROOT';
-# Location of the repository.
-my @splitlist = split( /\//, $SRC_ROOT );
-pop @splitlist;
-$SOURCE_ROOT_DIR      = join("/", @splitlist);
 
 # default TARFILE_LOCATION
 if ('@TARFILE_LOCATION@' eq "DEFAULT")
@@ -1981,7 +1977,6 @@ if ($platform !~ m/cygwin|os2/) {
    }
 }
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
-ToFile( "SOURCE_ROOT_DIR",    $SOURCE_ROOT_DIR,    "e" );
 if ( $platform =~ m/cygwin/ )
 {
    ToFile( "ILIB",              $ILIB,              "e" );
