@@ -4485,6 +4485,10 @@ bool ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges )
     return SetNewRangeNames( new ScRangeName(rNewRanges) );
 }
 
+void ScDocFunc::ModifyAllRangeNames( const ScRangeName* pGlobal, const ::std::map<SCTAB, const ScRangeName*>& rTabs )
+{
+}
+
 bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc )     // takes ownership of pNewRanges
 {
     ScDocShellModificator aModificator( rDocShell );

@@ -36,6 +36,7 @@
 #include "token.hxx"
 
 #include <vector>
+#include <map>
 
 class ScEditEngineDefaulter;
 class SdrUndoAction;
@@ -182,6 +183,7 @@ public:
 
     bool            SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc = true );     // takes ownership of pNewRanges
     bool            ModifyRangeNames( const ScRangeName& rNewRanges );
+    void            ModifyAllRangeNames( const ScRangeName* pGlobal, const ::std::map<SCTAB, const ScRangeName*>& rTabs );
 
     BOOL            CreateNames( const ScRange& rRange, USHORT nFlags, BOOL bApi );
     BOOL            InsertNameList( const ScAddress& rStartPos, BOOL bApi );

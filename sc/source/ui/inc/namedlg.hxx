@@ -98,6 +98,7 @@ private:
 
     bool AddPushed();
     void RemovePushed();
+    void OKPushed();
     void NameSelected();
     void ScopeChanged();
 

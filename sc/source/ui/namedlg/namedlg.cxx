@@ -51,7 +51,8 @@
 #include <memory>
 
 using ::std::auto_ptr;
-using ::std::map;
+
+typedef ::std::map<SCTAB, const ScRangeName*> TabNameCopyMapType;
 
 // defines -------------------------------------------------------------------
 
@@ -128,10 +129,9 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         mpImpl(new ScNameDlgImpl)
 {
     // Copy sheet-local range names.
-    typedef map<SCTAB, const ScRangeName*> TabMapType;
-    TabMapType aOldNames;
+    TabNameCopyMapType aOldNames;
     pDoc->GetAllTabRangeNames(aOldNames);
-    TabMapType::const_iterator itr = aOldNames.begin(), itrEnd = aOldNames.end();
+    TabNameCopyMapType::const_iterator itr = aOldNames.begin(), itrEnd = aOldNames.end();
     for (; itr != itrEnd; ++itr)
     {
         auto_ptr<ScRangeName> p(new ScRangeName(*itr->second));
@@ -461,6 +461,30 @@ void ScNameDlg::RemovePushed()
     }
 }
 
+void ScNameDlg::OKPushed()
+{
+    if ( aBtnAdd.IsEnabled() )
+        AddPushed();
+
+    if ( !aBtnAdd.IsEnabled() && !aBtnRemove.IsEnabled() )
+    {
+        ScDocShell* pDocSh = pViewData->GetDocShell();
+        ScDocFunc aFunc(*pDocSh);
+
+        // Store pointers to sheet local names instances.
+        TabNameCopyMapType aTabNames;
+        TabNameMapType::const_iterator itr = maTabRangeNames.begin(), itrEnd = maTabRangeNames.end();
+        for (; itr != itrEnd; ++itr)
+        {
+            const ScRangeName* p = itr->second;
+            aTabNames.insert(
+                TabNameCopyMapType::value_type(itr->first, p));
+        }
+        aFunc.ModifyAllRangeNames(&maGlobalRangeName, aTabNames);
+        Close();
+    }
+}
+
 void ScNameDlg::NameSelected()
 {
     ScRangeData* pData = mpCurRangeName->findByName(aEdName.GetText());
@@ -502,16 +526,7 @@ void ScNameDlg::ScopeChanged()
 
 IMPL_LINK( ScNameDlg, OkBtnHdl, void *, EMPTYARG )
 {
-    if ( aBtnAdd.IsEnabled() )
-        AddBtnHdl( 0 );
-
-    if ( !aBtnAdd.IsEnabled() && !aBtnRemove.IsEnabled() )
-    {
-        ScDocShell* pDocSh = pViewData->GetDocShell();
-        ScDocFunc aFunc(*pDocSh);
-        aFunc.ModifyRangeNames( maGlobalRangeName );
-        Close();
-    }
+    OKPushed();
     return 0;
 }
 
