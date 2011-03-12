@@ -407,7 +407,7 @@ SfxDispatcher::~SfxDispatcher()
 #ifdef DBG_UTIL
     ByteString sTemp( "Delete Dispatcher " );
     sTemp += ByteString::CreateFromInt64( (sal_uIntPtr)this );
-    OSL_TRACE( sTemp.GetBuffer() );
+    OSL_TRACE( "%s", sTemp.GetBuffer() );
     DBG_ASSERT( !pImp->bActive, "deleting active Dispatcher" );
 #endif
 
@@ -744,7 +744,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
         #ifdef DBG_UTIL
         ByteString sTemp("Activate Dispatcher ");
         sTemp += ByteString::CreateFromInt64( (sal_uIntPtr) this );
-        OSL_TRACE(sTemp.GetBuffer());
+        OSL_TRACE( "%s", sTemp.GetBuffer());
         DBG_ASSERT( !pImp->bActive, "Activation error" );
         #endif
         pImp->bActive = sal_True;
@@ -761,7 +761,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
         #ifdef DBG_UTIL
         ByteString sTemp("Non-MDI-Activate Dispatcher");
         sTemp += ByteString::CreateFromInt64( (sal_uIntPtr) this );
-        OSL_TRACE( sTemp.GetBuffer() );
+        OSL_TRACE( "%s", sTemp.GetBuffer() );
         #endif
     }
 
@@ -2697,7 +2697,7 @@ void SfxDispatcher::DebugOutput_Impl() const
     {
         SfxShell *pShell = GetShell(nShell-1);
         const SfxInterface *pIFace = pShell->GetInterface();
-        OSL_TRACE(pIFace->GetClassName());
+        OSL_TRACE("%s", pIFace->GetClassName().GetBuffer());
     }
 
     DbgGetData()->nTraceOut = nOld;
