@@ -57,11 +57,6 @@
 #define ABS_SREF3D      ABS_SREF | SCA_TAB_3D
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
-
-//============================================================================
-// Hilfsklasse: Merken der aktuellen Bereichsoptionen,
-// wenn ein Name in der ComboBox gefunden wird.
-
 struct ScNameDlgImpl
 {
     ScNameDlgImpl() :
@@ -85,12 +80,6 @@ struct ScNameDlgImpl
 };
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute();
-
-
-//============================================================================
-//  class ScNameDlg
-
-//----------------------------------------------------------------------------
 
 ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                       ScViewData*       ptrViewData,
@@ -188,9 +177,6 @@ void ScNameDlg::Init()
 
     bSaved=TRUE;
     SaveData();
-
-    //@BugID 54702
-    //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
 }
 
 BOOL ScNameDlg::IsRefInputMode() const
@@ -203,10 +189,6 @@ void ScNameDlg::RefInputDone( BOOL bForced)
     ScAnyRefDlg::RefInputDone(bForced);
     EdModifyHdl(&aEdAssign);
 }
-//----------------------------------------------------------------------------
-// Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
-// neue Selektion im Referenz-Edit angezeigt wird.
-
 
 void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
@@ -242,8 +224,6 @@ void ScNameDlg::UpdateChecks()
         aBtnColHeader.Check( pData->HasType( RT_COLHEADER ) );
         aBtnRowHeader.Check( pData->HasType( RT_ROWHEADER ) );
     }
-
-    // Falls Edit-Feld leer ist: Typ-CheckBoxen deaktivieren:
 
     if ( aEdName.GetText().Len() != 0 )
     {
@@ -421,12 +401,9 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
                     aBtnAdd.Disable();
                     aBtnRemove.Disable();
 
-                    //@BugID 54702 raus mit dem Sch.
-                    //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
-
                     bAdded = TRUE;
                 }
-                else // theSymbol ungueltig
+                else
                 {
                     delete pNewEntry;
                     ERRORBOX( errMsgInvalidSym );
@@ -510,8 +487,6 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
             aFlAssign.Disable();
             aEdAssign.Disable();
             aRbAssign.Disable();
-            //@BugID 54702 raus mit dem Sch.
-            //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
         }
         else
         {
@@ -548,8 +523,6 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
             aFlAssign.Enable();
             aEdAssign.Enable();
             aRbAssign.Enable();
-            //@BugID 54702 raus mit dem Sch.
-            //SFX_APPWINDOW->Enable();
         }
         UpdateChecks();
         theCurSel = Selection( 0, SELECTION_MAX );
