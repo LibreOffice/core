@@ -768,7 +768,7 @@ class PackageBrowseNode( unohelper.Base, XBrowseNode ):
         return tuple( browseNodeList )
 
     def hasChildNodes( self ):
-        return len( self.mapPackageName2Path ) > 0
+        return len( self.provCtx.mapPackageName2Path ) > 0
 
     def getType( self ):
         return CONTAINER
