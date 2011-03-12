@@ -229,7 +229,7 @@ void SAL_CALL DragSource::startDrag(
         }
         catch(RuntimeException&)
         {
-            OSL_ENSURE(false, "Runtime exception during event dispatching");
+            OSL_FAIL("Runtime exception during event dispatching");
         }
     }
 }

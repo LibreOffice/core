@@ -271,7 +271,7 @@ bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !!
     }
     else
     {
-        OSL_ENSURE(false, "Could not get absolute file URL for URL");
+        OSL_FAIL("Could not get absolute file URL for URL");
         return false;
     }
 }
@@ -359,7 +359,7 @@ PathStatus checkStatusAndNormalizeURL(OUString & _sURL)
         if (eStatus == Bootstrap::PATH_EXISTS)
         {
             if (!implNormalizeURL(_sURL,aDirItem))
-                OSL_ENSURE(false,"Unexpected failure getting actual URL for existing object");
+                OSL_FAIL("Unexpected failure getting actual URL for existing object");
         }
     }
     return eStatus;

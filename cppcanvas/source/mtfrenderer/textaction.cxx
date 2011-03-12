@@ -728,8 +728,7 @@ namespace cppcanvas
             bool TextAction::render( const ::basegfx::B2DHomMatrix& rTransformation,
                                      const Subset&                  /*rSubset*/ ) const
             {
-                OSL_ENSURE( false,
-                            "TextAction::render(): Subset not supported by this object" );
+                OSL_FAIL( "TextAction::render(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -760,8 +759,7 @@ namespace cppcanvas
             ::basegfx::B2DRange TextAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
                                                        const Subset&                    /*rSubset*/ ) const
             {
-                OSL_ENSURE( false,
-                            "TextAction::getBounds(): Subset not supported by this object" );
+                OSL_FAIL( "TextAction::getBounds(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -966,8 +964,7 @@ namespace cppcanvas
             bool EffectTextAction::render( const ::basegfx::B2DHomMatrix&   rTransformation,
                                            const Subset&                    /*rSubset*/ ) const
             {
-                OSL_ENSURE( false,
-                            "EffectTextAction::render(): Subset not supported by this object" );
+                OSL_FAIL( "EffectTextAction::render(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -1003,8 +1000,7 @@ namespace cppcanvas
             ::basegfx::B2DRange EffectTextAction::getBounds( const ::basegfx::B2DHomMatrix& rTransformation,
                                                              const Subset&                  /*rSubset*/ ) const
             {
-                OSL_ENSURE( false,
-                            "EffectTextAction::getBounds(): Subset not supported by this object" );
+                OSL_FAIL( "EffectTextAction::getBounds(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -1923,8 +1919,7 @@ namespace cppcanvas
             ::basegfx::B2DRange OutlineAction::getBounds( const ::basegfx::B2DHomMatrix&    rTransformation,
                                                           const Subset&                     /*rSubset*/ ) const
             {
-                OSL_ENSURE( false,
-                            "OutlineAction::getBounds(): Subset not yet supported by this object" );
+                OSL_FAIL( "OutlineAction::getBounds(): Subset not yet supported by this object" );
 
                 return getBounds( rTransformation );
             }

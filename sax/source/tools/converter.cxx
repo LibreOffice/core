@@ -270,7 +270,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
                                 sal_Int16 nSourceUnit /* = MeasureUnit::MM_100TH */,
                                 sal_Int16 nTargetUnit /* = MeasureUnit::INCH */  )
 {
-    OSL_ENSURE( false, "Converter::convertMeasure - not implemented, tools/BigInt needs replacement" );
+    OSL_FAIL( "Converter::convertMeasure - not implemented, tools/BigInt needs replacement" );
     (void)rBuffer;
     (void)nMeasure;
     (void)nSourceUnit;
@@ -661,7 +661,7 @@ bool Converter::convertDuration(double& rfTime,
             {
                 //! how many days is a year or month?
 
-                OSL_ENSURE( false, "years or months in duration: not implemented");
+                OSL_FAIL( "years or months in duration: not implemented");
                 bSuccess = false;
             }
             else

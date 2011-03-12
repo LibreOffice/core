@@ -390,14 +390,14 @@ void SAL_CALL Os2Clipboard::notifyAllClipboardListener( )
                         }
                         catch(RuntimeException&)
                         {
-                            OSL_ENSURE( false, "RuntimeException caught" );
+                            OSL_FAIL( "RuntimeException caught" );
                             debug_printf( "RuntimeException caught" );
                         }
                     }
                 }
                 catch(const ::com::sun::star::lang::DisposedException&)
                 {
-                    OSL_ENSURE(false, "Service Manager disposed");
+                    OSL_FAIL("Service Manager disposed");
                     debug_printf( "Service Manager disposed");
 
                     // no further clipboard changed notifications

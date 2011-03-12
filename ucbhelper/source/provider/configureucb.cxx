@@ -174,14 +174,14 @@ configureUcb(
     if (rArguments.getLength() < 2
         || !(rArguments[0] >>= aKey1) || !(rArguments[1] >>= aKey2))
     {
-        OSL_ENSURE(false, "ucb::configureUcb(): Bad arguments");
+        OSL_FAIL("ucb::configureUcb(): Bad arguments");
         return false;
     }
 
     ContentProviderDataList aData;
     if (!getContentProviderData(rServiceFactory, aKey1, aKey2, aData))
     {
-        OSL_ENSURE(false, "ucb::configureUcb(): No configuration");
+        OSL_FAIL("ucb::configureUcb(): No configuration");
         return false;
     }
 
@@ -207,8 +207,7 @@ configureUcb(
                 pInfos->push_back(aInfo);
         }
         else
-            OSL_ENSURE(false,
-                       "ucb::configureUcb(): Bad argument placeholders");
+            OSL_FAIL("ucb::configureUcb(): Bad argument placeholders");
     }
 
     return true;

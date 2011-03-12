@@ -256,13 +256,13 @@ void SAL_CALL CWinClipboard::notifyAllClipboardListener( )
                         }
                         catch(RuntimeException&)
                         {
-                            OSL_ENSURE( false, "RuntimeException caught" );
+                            OSL_FAIL( "RuntimeException caught" );
                         }
                     }
                 }
                 catch(const ::com::sun::star::lang::DisposedException&)
                 {
-                    OSL_ENSURE(false, "Service Manager disposed");
+                    OSL_FAIL("Service Manager disposed");
 
                     // no further clipboard changed notifications
                     m_pImpl->unregisterClipboardViewer();

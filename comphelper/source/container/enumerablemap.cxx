@@ -319,7 +319,7 @@ namespace comphelper
                 return;
             }
         }
-        OSL_ENSURE( false, "lcl_revokeMapModificationListener: the listener is not registered!" );
+        OSL_FAIL( "lcl_revokeMapModificationListener: the listener is not registered!" );
     }
 
     //--------------------------------------------------------------------

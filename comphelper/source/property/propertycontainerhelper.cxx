@@ -256,7 +256,7 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
     PropertiesIterator aPos = searchHandle(_nHandle);
     if (aPos == m_aProperties.end())
     {
-        OSL_ENSURE( false, "OPropertyContainerHelper::convertFastPropertyValue: unknown handle!" );
+        OSL_FAIL( "OPropertyContainerHelper::convertFastPropertyValue: unknown handle!" );
         // should not happen if the derived class has built a correct property set info helper to be used by
         // our base class OPropertySetHelper
         return bModified;
@@ -399,7 +399,7 @@ void OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const An
     PropertiesIterator aPos = searchHandle(_nHandle);
     if (aPos == m_aProperties.end())
     {
-        OSL_ENSURE( false, "OPropertyContainerHelper::setFastPropertyValue: unknown handle!" );
+        OSL_FAIL( "OPropertyContainerHelper::setFastPropertyValue: unknown handle!" );
         // should not happen if the derived class has built a correct property set info helper to be used by
         // our base class OPropertySetHelper
         return;
@@ -441,7 +441,7 @@ void OPropertyContainerHelper::getFastPropertyValue(Any& _rValue, sal_Int32 _nHa
     PropertiesIterator aPos = const_cast<OPropertyContainerHelper*>(this)->searchHandle(_nHandle);
     if (aPos == m_aProperties.end())
     {
-        OSL_ENSURE( false, "OPropertyContainerHelper::getFastPropertyValue: unknown handle!" );
+        OSL_FAIL( "OPropertyContainerHelper::getFastPropertyValue: unknown handle!" );
         // should not happen if the derived class has built a correct property set info helper to be used by
         // our base class OPropertySetHelper
         return;
@@ -501,7 +501,7 @@ void OPropertyContainerHelper::modifyAttributes(sal_Int32 _nHandle, sal_Int32 _n
     PropertiesIterator aPos = searchHandle(_nHandle);
     if (aPos == m_aProperties.end())
     {
-        OSL_ENSURE( false, "OPropertyContainerHelper::modifyAttributes: unknown handle!" );
+        OSL_FAIL( "OPropertyContainerHelper::modifyAttributes: unknown handle!" );
         // should not happen if the derived class has built a correct property set info helper to be used by
         // our base class OPropertySetHelper
         return;

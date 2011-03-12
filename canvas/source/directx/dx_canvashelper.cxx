@@ -91,8 +91,7 @@ namespace dxcanvas
             switch( nJoinType )
             {
                 case rendering::PathJoinType::NONE:
-                    OSL_ENSURE( false,
-                                "gdiJoinFromJoin(): Join NONE not possible, mapping to MITER" );
+                    OSL_FAIL( "gdiJoinFromJoin(): Join NONE not possible, mapping to MITER" );
                     // FALLTHROUGH intended
                 case rendering::PathJoinType::MITER:
                     return Gdiplus::LineJoinMiter;

@@ -349,7 +349,7 @@ namespace svt
         {
             if ( m_pImpl->getFirstDifferentIndex( aActivePathPos->second, aNewPathPos->second ) <= nCurrentStatePathIndex )
             {
-                OSL_ENSURE( false, "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" );
+                OSL_FAIL( "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" );
                 return;
             }
         }

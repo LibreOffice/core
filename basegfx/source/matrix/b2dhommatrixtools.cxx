@@ -95,7 +95,7 @@ namespace basegfx
                         break;
 
                     default:
-                        OSL_ENSURE( false, "createSinCos: Impossible case reached" );
+                        OSL_FAIL( "createSinCos: Impossible case reached" );
                 }
             }
             else

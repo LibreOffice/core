@@ -658,7 +658,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
     // success?
     if ( !xResultStream.is() )
     {
-        OSL_ENSURE( false, "no valid reply to the HTTP-Post" );
+        OSL_FAIL( "no valid reply to the HTTP-Post" );
         return sal_False;
     }
 

@@ -114,7 +114,7 @@ void FileList::Assign( const SvDataCopyStream& rCopyStream )
 
 SvStream& operator<<( SvStream& rOStm, const FileList& /*rFileList*/ )
 {
-    OSL_ENSURE(false, "Not implemented!");
+    OSL_FAIL("Not implemented!");
     return rOStm;
 }
 

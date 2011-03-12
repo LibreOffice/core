@@ -591,8 +591,7 @@ namespace basegfx
                 switch( eFillRule )
                 {
                     default:
-                        OSL_ENSURE(false,
-                                   "B2DPolyPolygonRasterConverter::rasterConvert(): Unexpected fill rule");
+                        OSL_FAIL("B2DPolyPolygonRasterConverter::rasterConvert(): Unexpected fill rule");
                         return;
 
                     case FillRule_EVEN_ODD:

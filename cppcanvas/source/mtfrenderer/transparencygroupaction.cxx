@@ -299,8 +299,7 @@ namespace cppcanvas
                                                     nRotate,
                                                     nShearX ) )
                     {
-                        OSL_ENSURE( false,
-                                    "TransparencyGroupAction::render(): non-decomposable transformation" );
+                        OSL_FAIL( "TransparencyGroupAction::render(): non-decomposable transformation" );
                         return false;
                     }
 
@@ -403,8 +402,7 @@ namespace cppcanvas
                                     break;
 
                                 default:
-                                    OSL_ENSURE( false,
-                                                "Unknown meta action type encountered" );
+                                    OSL_FAIL( "Unknown meta action type encountered" );
                                     break;
                             }
                         }

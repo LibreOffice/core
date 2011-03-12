@@ -195,7 +195,7 @@ namespace comphelper
                 ::rtl::OStringBuffer message;
                 message.append( "NamedValueCollection::impl_assign: encountered a value type which I cannot handle:\n" );
                 message.append( ::rtl::OUStringToOString( pArgument->getValueTypeName(), RTL_TEXTENCODING_ASCII_US ) );
-                OSL_ENSURE( false, message.makeStringAndClear() );
+                OSL_FAIL( message.makeStringAndClear() );
             }
 #endif
         }

@@ -64,8 +64,7 @@ namespace canvas
 
             if ( 0 == SetThreadPriority( aCurrThread, mpImpl->mnOldPriority + nDelta ) )
             {
-                OSL_ENSURE( false,
-                            "PriorityBooster::PriorityBooster(): Was not able to modify thread priority" );
+                OSL_FAIL( "PriorityBooster::PriorityBooster(): Was not able to modify thread priority" );
             }
 #else
             (void)nDelta;

@@ -470,7 +470,7 @@ std::wstring getShellLinkTarget(const std::wstring& aLnkFile)
     }
     catch(sal::systools::ComError& ex)
     {
-        OSL_ENSURE(false, ex.what());
+        OSL_FAIL(ex.what());
         ex = ex;
     }
     return target;

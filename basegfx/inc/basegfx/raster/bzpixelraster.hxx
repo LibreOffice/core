@@ -72,7 +72,7 @@ namespace basegfx
 #ifdef DBG_UTIL
             if(nIndex >= mnCount)
             {
-                OSL_ENSURE(false, "getZ: Access out of range (!)");
+                OSL_FAIL("getZ: Access out of range (!)");
                 return mpZBuffer[0L];
             }
 #endif
@@ -85,7 +85,7 @@ namespace basegfx
 #ifdef DBG_UTIL
             if(nIndex >= mnCount)
             {
-                OSL_ENSURE(false, "getZ: Access out of range (!)");
+                OSL_FAIL("getZ: Access out of range (!)");
                 return mpZBuffer[0L];
             }
 #endif

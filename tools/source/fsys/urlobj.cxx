@@ -3475,8 +3475,8 @@ bool INetURLObject::setPath(rtl::OUString const & rThePath, bool bOctets,
 //============================================================================
 bool INetURLObject::checkHierarchical() const {
     if (m_eScheme == INET_PROT_VND_SUN_STAR_EXPAND) {
-        OSL_ENSURE(
-            false, "INetURLObject::checkHierarchical vnd.sun.star.expand");
+        OSL_FAIL(
+            "INetURLObject::checkHierarchical vnd.sun.star.expand");
         return true;
     } else {
         return getSchemeInfo().m_bHierarchical;

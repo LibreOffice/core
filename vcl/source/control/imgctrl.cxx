@@ -144,7 +144,7 @@ void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
             break;
 
             default:
-                OSL_ENSURE( false, "ImageControl::UserDraw: unhandled scale mode!" );
+                OSL_FAIL( "ImageControl::UserDraw: unhandled scale mode!" );
                 break;
 
             }   // switch ( mnScaleMode )
@@ -178,7 +178,7 @@ void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
         break;
 
         default:
-            OSL_ENSURE( false, "ImageControl::UserDraw: unhandled scale mode!" );
+            OSL_FAIL( "ImageControl::UserDraw: unhandled scale mode!" );
             break;
 
         }   // switch ( mnScaleMode )

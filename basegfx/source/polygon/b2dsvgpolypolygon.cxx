@@ -826,7 +826,7 @@ namespace basegfx
 
                     default:
                     {
-                        OSL_ENSURE(false, "importFromSvgD(): skipping tags in svg:d element (unknown)!");
+                        OSL_FAIL("importFromSvgD(): skipping tags in svg:d element (unknown)!");
                         OSL_TRACE("importFromSvgD(): skipping tags in svg:d element (unknown: \"%c\")!", aCurrChar);
                         ++nPos;
                         break;

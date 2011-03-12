@@ -142,7 +142,7 @@ bool ServiceDecl::writeInfo( registry::XRegistryKey * xKey ) const
             bRet = true;
         }
         catch (registry::InvalidRegistryException const&) {
-            OSL_ENSURE( false, "### InvalidRegistryException!" );
+            OSL_FAIL( "### InvalidRegistryException!" );
         }
     }
     return bRet;

@@ -356,23 +356,19 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
     switch(eProp)
     {
         case INSTALLPATH:
-            OSL_ENSURE( false,
-                        "ConfigManager::GetDirectConfigProperty: "
+            OSL_FAIL( "ConfigManager::GetDirectConfigProperty: "
                         "INSTALLPATH no longer supported." );
             return Any();
         case USERINSTALLURL:
-            OSL_ENSURE( false,
-                        "ConfigManager::GetDirectConfigProperty: "
+            OSL_FAIL( "ConfigManager::GetDirectConfigProperty: "
                         "USERINSTALLURL no longer supported." );
             return Any();
         case OFFICEINSTALL:
-            OSL_ENSURE( false,
-                        "ConfigManager::GetDirectConfigProperty: "
+            OSL_FAIL( "ConfigManager::GetDirectConfigProperty: "
                         "OFFICEINSTALL no longer supported." );
             return Any();
         case OFFICEINSTALLURL:
-            OSL_ENSURE( false,
-                        "ConfigManager::GetDirectConfigProperty: "
+            OSL_FAIL( "ConfigManager::GetDirectConfigProperty: "
                         "OFFICEINSTALLURL no longer supported." );
             return Any();
         default:

@@ -161,8 +161,7 @@ namespace comphelper
                 if (!m_aChildrenMap.insert(
                         AccessibleMap::value_type( _rxKey, xValue ) ).second)
                 {
-                    OSL_ENSURE(
-                        false,
+                    OSL_FAIL(
                         "OWrappedAccessibleChildrenManager::"
                             "getAccessibleWrapperFor: element was already"
                             " inserted!" );

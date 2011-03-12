@@ -99,8 +99,7 @@ bool getContentProviderData(
 {
     if ( !rServiceMgr.is() || !rKey1.getLength() || !rKey2.getLength() )
     {
-        OSL_ENSURE( false,
-                    "getContentProviderData - Invalid argument!" );
+        OSL_FAIL( "getContentProviderData - Invalid argument!" );
         return false;
     }
 
@@ -114,8 +113,7 @@ bool getContentProviderData(
 
         if ( !xConfigProv.is() )
         {
-            OSL_ENSURE( false,
-                        "getContentProviderData - No config provider!" );
+            OSL_FAIL( "getContentProviderData - No config provider!" );
             return false;
         }
 
@@ -141,8 +139,7 @@ bool getContentProviderData(
 
         if ( !xInterface.is() )
         {
-            OSL_ENSURE( false,
-                        "getContentProviderData - No config access!" );
+            OSL_FAIL( "getContentProviderData - No config access!" );
             return false;
         }
 
@@ -151,8 +148,7 @@ bool getContentProviderData(
 
         if ( !xNameAccess.is() )
         {
-            OSL_ENSURE( false,
-                        "getContentProviderData - No XNameAccess!" );
+            OSL_FAIL( "getContentProviderData - No XNameAccess!" );
             return false;
         }
 
@@ -167,8 +163,7 @@ bool getContentProviderData(
 
             if ( !xHierNameAccess.is() )
             {
-                OSL_ENSURE( false,
-                            "getContentProviderData - "
+                OSL_FAIL( "getContentProviderData - "
                             "No XHierarchicalNameAccess!" );
                 return false;
             }
@@ -192,8 +187,7 @@ bool getContentProviderData(
                     if ( !( xHierNameAccess->getByHierarchicalName(
                                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
                     {
-                        OSL_ENSURE( false,
-                                    "getContentProviderData - "
+                        OSL_FAIL( "getContentProviderData - "
                                     "Error getting item value!" );
                         continue;
                     }
@@ -207,8 +201,7 @@ bool getContentProviderData(
                     if ( !( xHierNameAccess->getByHierarchicalName(
                                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
                     {
-                        OSL_ENSURE( false,
-                                    "getContentProviderData - "
+                        OSL_FAIL( "getContentProviderData - "
                                     "Error getting item value!" );
                         continue;
                     }
@@ -222,8 +215,7 @@ bool getContentProviderData(
                     if ( !( xHierNameAccess->getByHierarchicalName(
                                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
                     {
-                        OSL_ENSURE( false,
-                                    "getContentProviderData - "
+                        OSL_FAIL( "getContentProviderData - "
                                     "Error getting item value!" );
                         continue;
                     }
@@ -237,8 +229,7 @@ bool getContentProviderData(
                 {
                     // getByHierarchicalName
 
-                    OSL_ENSURE( false,
-                                "getContentProviderData - "
+                    OSL_FAIL( "getContentProviderData - "
                                 "caught NoSuchElementException!" );
                 }
             }
@@ -246,16 +237,14 @@ bool getContentProviderData(
     }
     catch ( uno::RuntimeException& )
     {
-        OSL_ENSURE( false,
-                    "getContentProviderData - caught RuntimeException!" );
+        OSL_FAIL( "getContentProviderData - caught RuntimeException!" );
         return false;
     }
     catch ( uno::Exception& )
     {
         // createInstance, createInstanceWithArguments
 
-        OSL_ENSURE( false,
-                    "getContentProviderData - caught Exception!" );
+        OSL_FAIL( "getContentProviderData - caught Exception!" );
         return false;
     }
 

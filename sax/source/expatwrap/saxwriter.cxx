@@ -457,7 +457,7 @@ inline sal_Bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
             }
             else
             {
-                OSL_ENSURE( false, "illegal Unicode character" );
+                OSL_FAIL( "illegal Unicode character" );
                 bRet = sal_False;
             }
 

@@ -78,7 +78,7 @@ namespace svt
         {
             if ( !i_rData.pTabBar.get() )
             {
-                OSL_ENSURE( false, "lcl_checkDisposed: already disposed!" );
+                OSL_FAIL( "lcl_checkDisposed: already disposed!" );
                 return true;
             }
             return false;

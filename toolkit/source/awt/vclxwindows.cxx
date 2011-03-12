@@ -1575,7 +1575,7 @@ void VCLXListBox::addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUStri
         {
             if ( (sal_uInt16)nP == 0xFFFF )
             {
-                OSL_ENSURE( false, "VCLXListBox::addItems: too many entries!" );
+                OSL_FAIL( "VCLXListBox::addItems: too many entries!" );
                 // skip remaining entries, list cannot hold them, anyway
                 break;
             }
@@ -4310,7 +4310,7 @@ void VCLXComboBox::addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUStr
             pBox->InsertEntry( aItems.getConstArray()[n], nP );
             if ( nP == 0xFFFF )
             {
-                OSL_ENSURE( false, "VCLXComboBox::addItems: too many entries!" );
+                OSL_FAIL( "VCLXComboBox::addItems: too many entries!" );
                 // skip remaining entries, list cannot hold them, anyway
                 break;
             }

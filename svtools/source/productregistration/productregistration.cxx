@@ -216,7 +216,7 @@ namespace svt
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( false, "lcl_isEvalVersion: caught an exception!" );
+            OSL_FAIL( "lcl_isEvalVersion: caught an exception!" );
         }
 
         return bIsEvaluationVersion;
@@ -266,7 +266,7 @@ namespace svt
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( false, "lcl_getOnlineRegistrationDispatch: caught an exception!" );
+            OSL_FAIL( "lcl_getOnlineRegistrationDispatch: caught an exception!" );
             return false;
         }
     }

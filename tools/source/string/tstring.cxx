@@ -165,7 +165,7 @@ float ByteString::ToFloat() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
-    OSL_ENSURE(false, "ByteString::ToFloat unusable");
+    OSL_FAIL("ByteString::ToFloat unusable");
     return 0;
 }
 
@@ -175,7 +175,7 @@ double ByteString::ToDouble() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
-    OSL_ENSURE(false, "ByteString::ToDouble unusable");
+    OSL_FAIL("ByteString::ToDouble unusable");
     return 0;
 }
 

@@ -727,7 +727,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
             aMessage.append( "\n(implementation " );
             aMessage.append( typeid( *this ).name() );
             aMessage.append( ")" );
-            OSL_ENSURE( false, aMessage.getStr() );
+            OSL_FAIL( aMessage.getStr() );
         #endif
         }
     }

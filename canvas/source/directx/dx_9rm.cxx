@@ -1183,8 +1183,7 @@ namespace dxcanvas
                 }
 
                 default:
-                    OSL_ENSURE(false,
-                               "DXRenderModule::pushVertex(): unexpected primitive type");
+                    OSL_FAIL("DXRenderModule::pushVertex(): unexpected primitive type");
                     break;
             }
         }

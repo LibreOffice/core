@@ -1449,7 +1449,7 @@ namespace
         }
         break;
         default:
-            OSL_ENSURE( false, "lcl_updateWritingMode: unsupported WritingMode!" );
+            OSL_FAIL( "lcl_updateWritingMode: unsupported WritingMode!" );
         }   // switch ( nWritingMode )
 
         _rWindow.EnableRTL( bEnableRTL );
@@ -1514,7 +1514,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case MouseWheelBehavior::SCROLL_FOCUS_ONLY: nVclBehavior = MOUSE_WHEEL_FOCUS_ONLY;  break;
             case MouseWheelBehavior::SCROLL_ALWAYS:     nVclBehavior = MOUSE_WHEEL_ALWAYS;      break;
             default:
-                OSL_ENSURE( false, "VCLXWindow::setProperty( 'MouseWheelBehavior' ): illegal property value!" );
+                OSL_FAIL( "VCLXWindow::setProperty( 'MouseWheelBehavior' ): illegal property value!" );
             }
 
             aMouseSettings.SetWheelBehavior( nVclBehavior );
@@ -2031,7 +2031,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 case MOUSE_WHEEL_FOCUS_ONLY:    nBehavior = MouseWheelBehavior::SCROLL_FOCUS_ONLY;  break;
                 case MOUSE_WHEEL_ALWAYS:        nBehavior = MouseWheelBehavior::SCROLL_ALWAYS;      break;
                 default:
-                    OSL_ENSURE( false, "VCLXWindow::getProperty( 'MouseWheelBehavior' ): illegal VCL value!" );
+                    OSL_FAIL( "VCLXWindow::getProperty( 'MouseWheelBehavior' ): illegal VCL value!" );
                 }
                 aProp <<= nBehavior;
             }

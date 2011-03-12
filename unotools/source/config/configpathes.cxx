@@ -98,7 +98,7 @@ sal_Bool splitLastFromConfigurationPath(OUString const& _sInPath,
     // strip trailing slash
     if (nPos > 0 && _sInPath[ nPos ] == sal_Unicode('/'))
     {
-        OSL_ENSURE(false, "Invalid config path: trailing '/' is not allowed");
+        OSL_FAIL("Invalid config path: trailing '/' is not allowed");
         --nPos;
     }
 

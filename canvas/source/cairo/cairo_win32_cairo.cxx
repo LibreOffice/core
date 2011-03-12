@@ -172,7 +172,7 @@ namespace cairo
      **/
     void Win32Surface::Resize( int /*width*/, int /*height*/ )
     {
-        OSL_ENSURE(false,"not supposed to be called!");
+        OSL_FAIL("not supposed to be called!");
     }
 
     void Win32Surface::flush() const

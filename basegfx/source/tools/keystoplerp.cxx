@@ -45,8 +45,7 @@ static void validateInput(const std::vector<double>& rKeyStops)
     for( ::std::size_t i=1, len=rKeyStops.size(); i<len; ++i )
     {
         if( rKeyStops[i-1] > rKeyStops[i] )
-            OSL_ENSURE( false,
-                        "KeyStopLerp::KeyStopLerp(): time vector is not sorted in ascending order!" );
+            OSL_FAIL( "KeyStopLerp::KeyStopLerp(): time vector is not sorted in ascending order!" );
     }
 #endif
 }

@@ -91,7 +91,7 @@ namespace svt { namespace uno
             case WizardButton::CANCEL:      return WZB_CANCEL;
             case WizardButton::HELP:        return WZB_HELP;
             }
-            OSL_ENSURE( false, "lcl_convertWizardButtonToWZB: invalid WizardButton constant!" );
+            OSL_FAIL( "lcl_convertWizardButtonToWZB: invalid WizardButton constant!" );
             return WZB_NONE;
         }
     }

@@ -188,7 +188,7 @@ namespace cairo
      **/
     void QuartzSurface::Resize( int width, int height )
     {
-        OSL_ENSURE(false,"not supposed to be called!");
+        OSL_FAIL("not supposed to be called!");
     }
 
 

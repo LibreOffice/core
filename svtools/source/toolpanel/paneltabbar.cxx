@@ -444,14 +444,14 @@ namespace svt
             {
                 if ( i_rImpl.m_rPanelDeck.GetPanelCount() != i_rImpl.m_aItems.size() )
                 {
-                    OSL_ENSURE( false, "lcl_checkConsistency: inconsistent array sizes!" );
+                    OSL_FAIL( "lcl_checkConsistency: inconsistent array sizes!" );
                     return;
                 }
                 for ( size_t i = 0; i < i_rImpl.m_rPanelDeck.GetPanelCount(); ++i )
                 {
                     if ( i_rImpl.m_rPanelDeck.GetPanel( i ).get() != i_rImpl.m_aItems[i].pPanel.get() )
                     {
-                        OSL_ENSURE( false, "lcl_checkConsistency: array elements are inconsistent!" );
+                        OSL_FAIL( "lcl_checkConsistency: array elements are inconsistent!" );
                         return;
                     }
                 }

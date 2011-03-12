@@ -504,7 +504,7 @@ void ImageAryData::Load(const rtl::OUString &rPrefix)
         aMessage.append( "ImageAryData::Load: failed to load image '" );
         aMessage.append( ::rtl::OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
         aMessage.append( "'" );
-        OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+        OSL_FAIL( aMessage.makeStringAndClear().getStr() );
     }
 #endif
 }

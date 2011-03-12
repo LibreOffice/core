@@ -2684,8 +2684,7 @@ namespace cppcanvas
                     break;
 
                     default:
-                        OSL_ENSURE( false,
-                                    "Unknown meta action type encountered" );
+                        OSL_FAIL( "Unknown meta action type encountered" );
                         break;
                 }
 
@@ -3136,8 +3135,7 @@ namespace cppcanvas
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( false,
-                            rtl::OUStringToOString(
+                OSL_FAIL( rtl::OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
@@ -3198,8 +3196,7 @@ namespace cppcanvas
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( false,
-                            rtl::OUStringToOString(
+                OSL_FAIL( rtl::OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 

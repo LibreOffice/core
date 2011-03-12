@@ -187,7 +187,7 @@ namespace comphelper {
             sMessage += "\nin function:\n";
             sMessage += BOOST_CURRENT_FUNCTION;
             sMessage += "\n";
-            OSL_ENSURE( false, sMessage );
+            OSL_FAIL( sMessage );
         }
 
         return sTitle;
