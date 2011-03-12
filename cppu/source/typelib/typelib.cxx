@@ -1309,7 +1309,7 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
     sal_Int32 nOffset = rtl_ustr_lastIndexOfChar_WithLength(
         pTypeName->buffer, pTypeName->length, ':');
     if (nOffset <= 0 || pTypeName->buffer[nOffset - 1] != ':') {
-        OSL_ENSURE(false, "Bad interface method type name");
+        OSL_FAIL("Bad interface method type name");
         return;
     }
     rtl::OUString aInterfaceTypeName(pTypeName->buffer, nOffset - 1);
@@ -1322,7 +1322,7 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
         || !complete(
             reinterpret_cast< typelib_TypeDescription ** >(&pInterface), false))
     {
-        OSL_ENSURE(false, "No interface corresponding to interface method");
+        OSL_FAIL("No interface corresponding to interface method");
         return;
     }
 
@@ -1402,7 +1402,7 @@ extern "C" void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
     sal_Int32 nOffset = rtl_ustr_lastIndexOfChar_WithLength(
         pTypeName->buffer, pTypeName->length, ':');
     if (nOffset <= 0 || pTypeName->buffer[nOffset - 1] != ':') {
-        OSL_ENSURE(false, "Bad interface attribute type name");
+        OSL_FAIL("Bad interface attribute type name");
         return;
     }
     rtl::OUString aInterfaceTypeName(pTypeName->buffer, nOffset - 1);
@@ -1415,7 +1415,7 @@ extern "C" void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
         || !complete(
             reinterpret_cast< typelib_TypeDescription ** >(&pInterface), false))
     {
-        OSL_ENSURE(false, "No interface corresponding to interface attribute");
+        OSL_FAIL("No interface corresponding to interface attribute");
         return;
     }
 

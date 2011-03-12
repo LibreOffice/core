@@ -643,7 +643,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(void * pServiceManager,
         }
         catch (css::uno::Exception &)
         {
-            OSL_ENSURE(false, "com.sun.star.uno.Exception caught");
+            OSL_FAIL("com.sun.star.uno.Exception caught");
         }
     }
     return false;
@@ -1421,7 +1421,7 @@ JavaVirtualMachine::~JavaVirtualMachine()
         }
         catch (css::uno::Exception &)
         {
-            OSL_ENSURE(false, "com.sun.star.uno.Exception caught");
+            OSL_FAIL("com.sun.star.uno.Exception caught");
         }
     if (m_xJavaConfiguration.is())
         // We should never get here, but just in case...
@@ -1431,7 +1431,7 @@ JavaVirtualMachine::~JavaVirtualMachine()
         }
         catch (css::uno::Exception &)
         {
-            OSL_ENSURE(false, "com.sun.star.uno.Exception caught");
+            OSL_FAIL("com.sun.star.uno.Exception caught");
         }
 }
 
@@ -1658,12 +1658,11 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
     }
     catch (css::uno::RuntimeException &)
     {
-        OSL_ENSURE(false, "RuntimeException");
+        OSL_FAIL("RuntimeException");
     }
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
-        OSL_ENSURE(false,
-                   "jvmaccess::VirtualMachine::AttachGuard::CreationException");
+        OSL_FAIL("jvmaccess::VirtualMachine::AttachGuard::CreationException");
     }
 }
 

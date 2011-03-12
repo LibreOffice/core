@@ -1016,7 +1016,7 @@ void OPropertyArrayHelper::init( sal_Bool bSorted ) SAL_THROW( () )
         {
 #ifndef OS2 // YD disabled, too many troubles with debug builds!
             if (bSorted) {
-                OSL_ENSURE( false, "Property array is not sorted" );
+                OSL_FAIL( "Property array is not sorted" );
             }
 #endif
             // not sorted

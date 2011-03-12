@@ -107,7 +107,7 @@ void printUString( const ::rtl::OUString & str, const char* msg)
 #else
     char hostname[255];
     if (gethostname(hostname, 255) != 0) {
-        OSL_ENSURE( false, "#Error: gethostname failed."  );
+        OSL_FAIL( "#Error: gethostname failed."  );
     }
 
     struct hostent *hptr;

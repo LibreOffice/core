@@ -565,8 +565,7 @@ void OReaderThread::run()
                     TYPELIB_DANGER_RELEASE( pType );
                     if ( !ok )
                     {
-                        OSL_ENSURE(
-                            false,
+                        OSL_FAIL(
                             ("urp_bridge: error while unpacking current"
                              " context") );
                         disposeEnvironment();

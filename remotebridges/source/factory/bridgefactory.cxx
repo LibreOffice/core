@@ -230,7 +230,7 @@ namespace remotebridges_factory
         }
         catch (rtl::MalformedUriException &)
         {
-            OSL_ENSURE(false, "MalformedUriException");
+            OSL_FAIL("MalformedUriException");
         }
         ServiceHashMap::iterator ii = m_mapProtocolToService.find( sProtocolName );
         if( ii != m_mapProtocolToService.end() )

@@ -100,7 +100,7 @@ JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
     JNIEnv * pEnv;
     jint n = m_pVm->GetEnv(reinterpret_cast< void ** >(&pEnv), m_nVersion);
     if (n != JNI_OK && n != JNI_EDETACHED) {
-        OSL_ENSURE(false, "JNI: GetEnv failed");
+        OSL_FAIL("JNI: GetEnv failed");
     }
     if (pEnv == 0)
     {
@@ -119,7 +119,7 @@ void VirtualMachine::detachThread() const
 {
 #ifdef SOLAR_JAVA
     if (m_pVm->DetachCurrentThread() != JNI_OK) {
-        OSL_ENSURE(false, "JNI: DetachCurrentThread failed");
+        OSL_FAIL("JNI: DetachCurrentThread failed");
     }
 #endif
 }

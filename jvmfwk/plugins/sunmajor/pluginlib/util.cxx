@@ -203,7 +203,7 @@ inline FileHandleGuard::~FileHandleGuard() SAL_THROW(())
     {
         if (osl_closeFile(m_rHandle) != osl_File_E_None)
         {
-            OSL_ENSURE(false, "unexpected situation");
+            OSL_FAIL("unexpected situation");
         }
     }
 }
