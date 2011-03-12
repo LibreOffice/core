@@ -78,7 +78,7 @@ namespace {
             switch(nIndex)
             {
             default:
-                OSL_ENSURE(false,"Unexpected case!");
+                OSL_FAIL("Unexpected case!");
                 break;
             case DRAW_INDEX:
                 bDrawState=sal_True;
@@ -520,7 +520,7 @@ rtl::OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue 
                     break;
 
                 default:
-                    OSL_ENSURE(false,"Unexpected case");
+                    OSL_FAIL("Unexpected case");
             }
 
             aOutTypeName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("pdf_Portable_Document_Format") );

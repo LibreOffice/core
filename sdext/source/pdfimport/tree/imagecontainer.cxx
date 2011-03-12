@@ -146,7 +146,7 @@ void ImageContainer::writeBase64EncodedStream( ImageId nId, EmitContext& rContex
 
     uno::Sequence<sal_Int8> aData;
     if( !(pValue->Value >>= aData) )
-        OSL_ENSURE(false,"Wrong data type");
+        OSL_FAIL("Wrong data type");
 
     rContext.rEmitter.write( encodeBase64( aData.getConstArray(), aData.getLength() ));
 }

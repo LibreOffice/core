@@ -154,7 +154,7 @@ int mysqlToOOOType(int cppConnType)
             return com::sun::star::sdbc::DataType::VARCHAR;
     }
 
-    OSL_ENSURE( false, "mysqlToOOOType: unhandled case, falling back to VARCHAR" );
+    OSL_FAIL( "mysqlToOOOType: unhandled case, falling back to VARCHAR" );
     return com::sun::star::sdbc::DataType::VARCHAR;
 }
 

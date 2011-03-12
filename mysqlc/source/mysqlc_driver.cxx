@@ -154,7 +154,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
     // attempted to load - was it successful?
     if ( !m_hCppConnModule )
     {
-        OSL_ENSURE( false, "MysqlCDriver::impl_initCppConn_lck_throw: could not load the " CPPCONN_LIB " library!");
+        OSL_FAIL( "MysqlCDriver::impl_initCppConn_lck_throw: could not load the " CPPCONN_LIB " library!");
         throw SQLException(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unable to load the " CPPCONN_LIB " library." ) ),
             *this,
@@ -171,7 +171,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
     const FGetMySQLDriver pFactoryFunction = (FGetMySQLDriver)( osl_getFunctionSymbol( m_hCppConnModule, sSymbolName.pData ) );
     if ( !pFactoryFunction )
     {
-        OSL_ENSURE( false, "MysqlCDriver::impl_initCppConn_lck_throw: could not find the factory symbol in " CPPCONN_LIB "!");
+        OSL_FAIL( "MysqlCDriver::impl_initCppConn_lck_throw: could not find the factory symbol in " CPPCONN_LIB "!");
         throw SQLException(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CPPCONN_LIB " is invalid: missing the driver factory function." ) ),
             *this,

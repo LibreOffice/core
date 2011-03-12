@@ -217,7 +217,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
             #if OSL_DEBUG_LEVEL > 0
                 ::rtl::OString sMessage( "OConnection::construct: malformed URI: " );
                 sMessage += ::rtl::OUStringToOString( e.getMessage(), osl_getThreadTextEncoding() );
-                OSL_ENSURE( false, sMessage.getStr() );
+                OSL_FAIL( sMessage.getStr() );
             #endif
             }
 
