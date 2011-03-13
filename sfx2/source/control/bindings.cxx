@@ -98,7 +98,7 @@ static sal_uInt16 nTimeOut = 300;
 static sal_uInt32 nCache1 = 0;
 static sal_uInt32 nCache2 = 0;
 
-typedef boost::unordered_map< USHORT, bool > InvalidateSlotMap;
+typedef boost::unordered_map< sal_uInt16, bool > InvalidateSlotMap;
 
 //====================================================================
 

@@ -922,7 +922,7 @@ Font Outliner::ImpCalcBulletFont( sal_uInt16 nPara ) const
     }
 
     // Use original scale...
-    USHORT nStretchX, nStretchY;
+    sal_uInt16 nStretchX, nStretchY;
     const_cast<Outliner*>(this)->GetGlobalCharStretching(nStretchX, nStretchY);
 
     sal_uInt16 nScale = pFmt->GetBulletRelSize() * nStretchY / 100;
@@ -1144,7 +1144,7 @@ void Outliner::InvalidateBullet( Paragraph* /*pPara*/, sal_uLong nPara )
     for ( size_t i = 0, n = aViewList.size(); i < n; ++i )
     {
         OutlinerView* pView = aViewList[ i ];
-        Point aPos( pView->pEditView->GetWindowPosTopLeft((USHORT)nPara ) );
+        Point aPos( pView->pEditView->GetWindowPosTopLeft((sal_uInt16)nPara ) );
         Rectangle aRect( pView->GetOutputArea() );
         aRect.Right() = aPos.X();
         aRect.Top() = aPos.Y();
@@ -1815,7 +1815,7 @@ void Outliner::DrawingText( const Point& rStartPos, const XubString& rText, sal_
 }
 
 void Outliner::DrawingTab( const Point& rStartPos, long nWidth, const String& rChar, const SvxFont& rFont,
-    USHORT nPara, xub_StrLen nIndex, BYTE nRightToLeft, bool bEndOfLine, bool bEndOfParagraph,
+    sal_uInt16 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft, bool bEndOfLine, bool bEndOfParagraph,
     const Color& rOverlineColor, const Color& rTextLineColor)
 {
     if(aDrawPortionHdl.IsSet())

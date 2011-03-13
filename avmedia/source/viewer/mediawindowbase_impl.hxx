@@ -62,8 +62,7 @@ namespace avmedia
             virtual void    cleanUp();
             virtual void    onURLChanged();
 
-            static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const ::rtl::OUString& rURL,
-                                                                                                      sal_Bool& rbJavaBased );
+            static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const ::rtl::OUString& rURL);
 
         public:
 

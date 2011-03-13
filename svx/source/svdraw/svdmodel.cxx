@@ -477,7 +477,7 @@ bool SdrModel::Undo()
 
 bool SdrModel::Redo()
 {
-    bool bRet=FALSE;
+    bool bRet = false;
     if( mpImpl->mpUndoManager )
     {
         OSL_FAIL("svx::SdrModel::Redo(), method not supported with application undo manager!");

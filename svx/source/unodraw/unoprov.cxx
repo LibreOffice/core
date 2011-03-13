@@ -916,7 +916,7 @@ uno::Sequence< OUString > UHashMap::getServiceNames()
     return aSeq;
 }
 
-UINT32 UHashMap::getId( const OUString& rCompareString )
+sal_uInt32 UHashMap::getId( const OUString& rCompareString )
 {
     const UHashMapImpl &rMap = GetUHashImpl();
     UHashMapImpl::const_iterator it = rMap.find( rCompareString );

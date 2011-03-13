@@ -269,11 +269,8 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
         }
     }
 
-<<<<<<< HEAD
-    return bKeyProcessed ? TRUE : pEditView->PostKeyEvent( rKEvt, pFrameWin );
-=======
-    return bKeyProcessed ? sal_True : pEditView->PostKeyEvent( rKEvt );
->>>>>>> ooo/DEV300_m101
+    return bKeyProcessed ? sal_True : pEditView->PostKeyEvent( rKEvt, pFrameWin );
+
 }
 
 
@@ -321,11 +318,7 @@ sal_uLong OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTa
     return nPara;
 }
 
-<<<<<<< HEAD
-BOOL OutlinerView::MouseMove( const MouseEvent& rMEvt )
-=======
-sal_Bool __EXPORT OutlinerView::MouseMove( const MouseEvent& rMEvt )
->>>>>>> ooo/DEV300_m101
+sal_Bool OutlinerView::MouseMove( const MouseEvent& rMEvt )
 {
     DBG_CHKTHIS(OutlinerView,0);
 
@@ -342,11 +335,7 @@ sal_Bool __EXPORT OutlinerView::MouseMove( const MouseEvent& rMEvt )
 }
 
 
-<<<<<<< HEAD
-BOOL OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
-=======
-sal_Bool __EXPORT OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
->>>>>>> ooo/DEV300_m101
+sal_Bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     DBG_CHKTHIS(OutlinerView,0);
     if ( ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) || pEditView->GetEditEngine()->IsInSelectionMode() )
@@ -370,13 +359,8 @@ sal_Bool __EXPORT OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
             sal_uLong nEndPara = nPara;
             if ( bHasChilds && pOwner->pParaList->HasVisibleChilds(pPara) )
                 nEndPara += pOwner->pParaList->GetChildCount( pPara );
-<<<<<<< HEAD
             // The selection is inverted, so that EditEngine does not scroll
-            ESelection aSel((USHORT)nEndPara, 0xffff,(USHORT)nPara, 0 );
-=======
-            // umgekehrt rum selektieren, damit EditEngine nicht scrollt
             ESelection aSel((sal_uInt16)nEndPara, 0xffff,(sal_uInt16)nPara, 0 );
->>>>>>> ooo/DEV300_m101
             pEditView->SetSelection( aSel );
         }
         else if( rMEvt.GetClicks() == 2 && bHasChilds )
@@ -402,11 +386,7 @@ sal_Bool __EXPORT OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 
-<<<<<<< HEAD
-BOOL OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
-=======
-sal_Bool __EXPORT OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
->>>>>>> ooo/DEV300_m101
+sal_Bool OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
 {
     DBG_CHKTHIS(OutlinerView,0);
     if ( ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) || pEditView->GetEditEngine()->IsInSelectionMode() )
@@ -570,21 +550,11 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
 
     pEditView->SetAttribs( rAttrs );
 
-<<<<<<< HEAD
     // Update Bullet text
-    for( USHORT nPara= aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
-    {
-        pOwner->ImplCheckNumBulletItem( nPara );
-        // update following paras as well, numbering depends on
-        // previous paras
-        pOwner->ImplCalcBulletText( nPara, TRUE, FALSE );
-=======
-    // Bullet-Texte aktualisieren
     for( sal_uInt16 nPara= aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
         pOwner->ImplCheckNumBulletItem( nPara );
         pOwner->ImplCalcBulletText( nPara, sal_False, sal_False );
->>>>>>> ooo/DEV300_m101
 
         if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
             pOwner->InsertUndo( new OutlinerUndoCheckPara( pOwner, nPara ) );
@@ -739,19 +709,8 @@ void OutlinerView::Indent( short nDiff )
         }
     }
 
-<<<<<<< HEAD
-    USHORT nParas = (USHORT)pOwner->pParaList->GetParagraphCount();
-    for ( USHORT n = aSel.nEndPara+1; n < nParas; n++ )
-=======
-    // MT 19.08.99: War mal fuer Optimierung (outliner.cxx#1.193),
-    // hat aber zu zuviel Wartungsaufwand / doppelten Funktionen gefuehrt
-    // und zu wenig gebracht:
-    // pOwner->ImpSetBulletTextsFrom( aSel.nStartPara+1, nMinDepth );
-    // Wird jetzt direkt in Schleife mit ImplCalcBulletText() erledigt.
-    // Jetzt fehlen nur noch die folgenden Ansaetze, die davon betroffen sind.
     sal_uInt16 nParas = (sal_uInt16)pOwner->pParaList->GetParagraphCount();
     for ( sal_uInt16 n = aSel.nEndPara+1; n < nParas; n++ )
->>>>>>> ooo/DEV300_m101
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( n );
         if ( pPara->GetDepth() < nMinDepth )
@@ -1194,13 +1153,8 @@ sal_uInt16 OutlinerView::ImpCalcSelectedPages( sal_Bool bIncludeFirstSelected )
     sal_uInt16 nFirstPage = 0xFFFF;
     sal_uInt16 nStartPara = aSel.nStartPara;
     if ( !bIncludeFirstSelected )
-<<<<<<< HEAD
         nStartPara++;   // All paragraphs after StartPara will be deleted
-    for ( USHORT nPara = nStartPara; nPara <= aSel.nEndPara; nPara++ )
-=======
-        nStartPara++;   // alle nach StartPara kommenden Absaetze werden geloescht
     for ( sal_uInt16 nPara = nStartPara; nPara <= aSel.nEndPara; nPara++ )
->>>>>>> ooo/DEV300_m101
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
         DBG_ASSERT(pPara, "ImpCalcSelectedPages: invalid Selection? ");
@@ -1262,14 +1216,8 @@ void OutlinerView::ToggleBullets()
 
     // #i100014#
     // It is not a good idea to substract 1 from a count and cast the result
-<<<<<<< HEAD
-    // to USHORT without check, if the count is 0.
-    USHORT nParaCount = (USHORT) (pOwner->pParaList->GetParagraphCount());
-=======
     // to sal_uInt16 without check, if the count is 0.
     sal_uInt16 nParaCount = (sal_uInt16) (pOwner->pParaList->GetParagraphCount());
-    // <--
->>>>>>> ooo/DEV300_m101
     pOwner->ImplCheckParagraphs( aSel.nStartPara, nParaCount );
     pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nParaCount, 0 ) );
 
@@ -1301,14 +1249,9 @@ void OutlinerView::EnableBullets()
 
     // #i100014#
     // It is not a good idea to substract 1 from a count and cast the result
-<<<<<<< HEAD
-    // to USHORT without check, if the count is 0.
-    USHORT nParaCount = (USHORT) (pOwner->pParaList->GetParagraphCount());
-=======
     // to sal_uInt16 without check, if the count is 0.
     sal_uInt16 nParaCount = (sal_uInt16) (pOwner->pParaList->GetParagraphCount());
-    // <--
->>>>>>> ooo/DEV300_m101
+
     pOwner->ImplCheckParagraphs( aSel.nStartPara, nParaCount );
     pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nParaCount, 0 ) );
 

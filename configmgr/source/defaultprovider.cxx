@@ -43,14 +43,12 @@
 
 namespace configmgr { namespace default_provider {
 
-namespace {
-
 namespace css = com::sun::star;
 
 css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    osl::MutexGuard guard(*lock_);
+    osl::MutexGuard guard(*lock());
     static css::uno::Reference< css::uno::XInterface > singleton(
         configuration_provider::createDefault(context));
     return singleton;

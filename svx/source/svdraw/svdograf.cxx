@@ -72,7 +72,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <osl/thread.hxx>
-#include <vos/mutex.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -201,7 +200,7 @@ void SAL_CALL SdrGraphicUpdater::run(void)
 {
     Graphic aGraphic( ImpLoadLinkedGraphic( mrFileName, mrFilterName ) );
     ::osl::MutexGuard aGuard(maMutex);
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     if ( !mbIsTerminated )
     {
         mrGraphicLink.DataChanged( aGraphic );

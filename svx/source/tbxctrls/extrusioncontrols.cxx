@@ -677,7 +677,7 @@ void ExtrusionLightingWindow::implSetDirection( int nDirection, bool bEnabled )
         {
             mpLightingSet->SetItemImage(
                 nItemId + 1,
-                (USHORT)nDirection == nItemId ? maImgLightingOn[nItemId] : maImgLightingOff[nItemId]
+                (sal_uInt16)nDirection == nItemId ? maImgLightingOn[nItemId] : maImgLightingOff[nItemId]
             );
         }
     }

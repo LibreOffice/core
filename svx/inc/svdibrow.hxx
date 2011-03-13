@@ -81,7 +81,7 @@ public:
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL);
     sal_uIntPtr GetCurrentPos() const;
     sal_uInt16 GetCurrentWhich() const;
-    virtual bool BegChangeEntry(ULONG nPos);
+    virtual bool BegChangeEntry(sal_uIntPtr nPos);
     virtual bool EndChangeEntry();
     virtual void     BrkChangeEntry();
 

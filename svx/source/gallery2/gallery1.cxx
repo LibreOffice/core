@@ -526,7 +526,7 @@ void Gallery::ImplWriteImportList()
         const sal_uInt32 nInventor = (sal_uInt32) COMPAT_FORMAT( 'S', 'G', 'A', '3' );
         const sal_uInt16 nId = 0x0004;
 
-        *pOStm << nInventor << nId << (sal_uInt32) aImportList.Count() << (sal_uInt16) gsl_getSystemTextEncoding();
+        *pOStm << nInventor << nId << (sal_uInt32) aImportList.size() << (sal_uInt16) gsl_getSystemTextEncoding();
 
         for ( size_t i = 0, n = aImportList.size(); i < n; ++i )
             *pOStm << *aImportList[ i ];

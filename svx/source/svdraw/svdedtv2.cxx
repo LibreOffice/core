@@ -828,7 +828,7 @@ void SdrEditView::DistributeMarkedObjects()
                 SvxDistributeVertical eVer = pDlg->GetDistributeVer();
                 ImpDistributeEntryList aEntryList;
                 ImpDistributeEntryList::iterator itEntryList;
-                UINT32 nFullLength;
+                sal_uInt32 nFullLength;
 
                 const bool bUndo = IsUndoEnabled();
                 if( bUndo )
@@ -875,7 +875,8 @@ void SdrEditView::DistributeMarkedObjects()
 
                         for ( itEntryList = aEntryList.begin();
                               itEntryList < aEntryList.end() && (*itEntryList)->mnPos < pNew->mnPos;
-                              ++itEntryList );
+                              ++itEntryList )
+                        {};
                         if ( itEntryList < aEntryList.end() )
                             aEntryList.insert( itEntryList, pNew );
                         else
@@ -969,7 +970,8 @@ void SdrEditView::DistributeMarkedObjects()
 
                         for ( itEntryList = aEntryList.begin();
                               itEntryList < aEntryList.end() && (*itEntryList)->mnPos < pNew->mnPos;
-                              ++itEntryList );
+                              ++itEntryList )
+                        {};
                         if ( itEntryList < aEntryList.end() )
                             aEntryList.insert( itEntryList, pNew );
                         else

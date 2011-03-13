@@ -426,7 +426,7 @@ void GalleryTheme::UnlockBroadcaster( sal_uIntPtr nUpdatePos )
 
 // ------------------------------------------------------------------------
 
-sal_Bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
+bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
 {
     sal_Bool bRet = sal_False;
 
@@ -565,7 +565,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
 
         // LoeschFlag zuruecksetzen
         for (size_t i = 0; i < nCount; i++)
-            aObjectList[ i ]->bDummy = sal_False
+            aObjectList[ i ]->bDummy = sal_False;
 
         for(size_t i = 0; ( i < nCount ) && !bAbortActualize; i++)
         {
@@ -647,7 +647,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                 ::std::advance( it, i );
                 aObjectList.erase( it );
                 delete pEntry;
-                Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< ULONG >( pEntry ) ) );
+                Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uLong >( pEntry ) ) );
             }
             else ++i;
         }

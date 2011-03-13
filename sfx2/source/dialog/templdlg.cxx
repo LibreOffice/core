@@ -692,9 +692,10 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
                 if(pCmp->aName == pEntry->aParent)
                 {
                     // initial sortiert einfuegen
-                    sal_uInt16 ii;
+                    sal_uInt16 nPos;
                     for( nPos = 0 ; nPos < pCmp->Count() &&
-                        aSorter.compare((*pCmp->pChilds)[nPos]->aName, pEntry->aName) < 0 ; nPos++);
+                             aSorter.compare((*pCmp->pChilds)[nPos]->aName, pEntry->aName) < 0 ; nPos++)
+                    {};
                     pCmp->Put(pEntry,nPos);
                     break;
                 }
@@ -865,8 +866,8 @@ sal_uInt16 SfxCommonTemplateDialog_Impl::InfoOffsetToStyleNr(sal_uInt16 nId)
 void SfxCommonTemplateDialog_Impl::ReadResource()
 {
     // globale Benutzer-Resource auslesen
-    sal_uInt16 i;
-    for(i = 0; i < MAX_FAMILIES; ++i)
+
+    for(sal_uInt16 i = 0; i < MAX_FAMILIES; ++i)
         pFamilyState[i] = 0;
 
     SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
@@ -895,7 +896,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     for(i = 0; i < nCount; ++i)
     {
         sal_uInt16 nSlot = 0;
-        switch( (USHORT)pStyleFamilies->at( i )->GetFamily() )
+        switch( (sal_uInt16)pStyleFamilies->at( i )->GetFamily() )
         {
             case SFX_STYLE_FAMILY_CHAR: nSlot = SID_STYLE_FAMILY1; break;
             case SFX_STYLE_FAMILY_PARA: nSlot = SID_STYLE_FAMILY2; break;
@@ -1332,7 +1333,8 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
                 //Bubblesort
                 sal_uInt16 nPos;
                 for( nPos = aStrings.Count() ; nPos &&
-                    aSorter.compare(*(aStrings[nPos-1]), pStyle->GetName()) > 0 ; nPos--);
+                    aSorter.compare(*(aStrings[nPos-1]), pStyle->GetName()) > 0 ; nPos--)
+                {};
                 aStrings.Insert( new String( pStyle->GetName() ), nPos );
                 pStyle = pStyleSheetPool->Next();
             }
@@ -1356,7 +1358,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
                 nPos = 0;
                 for(nPos = 0 ;  nPos < nCount ; ++nPos )
                 {
-                    aFmtLb.InsertEntry( *aStrings.GetObject( nPos ), 0, FALSE, nPos);
+                    aFmtLb.InsertEntry( *aStrings.GetObject( nPos ), 0, sal_False, nPos);
                 }
                 aFmtLb.SetUpdateMode(true);
             }
@@ -2288,7 +2290,7 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     pDlgWindow->FreeResource();
     SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
     pCurObjShell = pViewFrame->GetObjectShell();
-    USHORT nSavedFilter = static_cast< USHORT >( LoadFactoryStyleFilter( pCurObjShell ) );
+    sal_uInt16 nSavedFilter = static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pCurObjShell ) );
     Initialize();
 
     m_aActionTbL.SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxLSelect));
@@ -2302,7 +2304,7 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     m_aActionTbL.SetHelpId( HID_TEMPLDLG_TOOLBOX_LEFT );
     if( nSavedFilter == HIERARCHICAL_FILTER_INDEX )
     {
-        bHierarchical = FALSE; // Force content refresh
+        bHierarchical = sal_False; // Force content refresh
         aFilterLb.SelectEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)));
         FilterSelectHdl(&aFilterLb);
     }

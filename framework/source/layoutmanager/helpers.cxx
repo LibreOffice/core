@@ -48,7 +48,6 @@
 // other includes
 #include <comphelper/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
 #include <toolkit/unohlp.hxx>
 
 // namespace
@@ -132,7 +131,7 @@ ToolBox* getToolboxPtr( Window* pWindow )
 
 Window* getWindowFromXUIElement( const uno::Reference< ui::XUIElement >& xUIElement )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     uno::Reference< awt::XWindow > xWindow;
     if ( xUIElement.is() )
         xWindow = uno::Reference< awt::XWindow >( xUIElement->getRealInterface(), uno::UNO_QUERY );
@@ -169,7 +168,7 @@ bool lcl_checkUIElement(const uno::Reference< ui::XUIElement >& xUIElement, awt:
     bool bRet = xUIElement.is();
     if ( bRet )
     {
-        vos::OGuard     aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         _xWindow.set( xUIElement->getRealInterface(), uno::UNO_QUERY );
         _rPosSize = _xWindow->getPosSize();
 
@@ -341,7 +340,7 @@ sal_Bool implts_isFrameOrWindowTop( const uno::Reference< frame::XFrame >& xFram
     if (xWindowCheck.is())
     {
         // --> PB 2007-06-18 #i76867# top and system window is required.
-        ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         uno::Reference< awt::XWindow > xWindow( xWindowCheck, uno::UNO_QUERY );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         return ( pWindow && pWindow->IsSystemWindow() );

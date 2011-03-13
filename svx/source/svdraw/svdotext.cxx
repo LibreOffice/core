@@ -1436,8 +1436,8 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, 
     // line-breaking text that we need some more samples
 
     // loop early-exits if we detect an already attained value
-    USHORT nMinStretchX=0, nMinStretchY=0;
-    USHORT aOldStretchXVals[]={0,0,0,0,0,0,0,0,0,0};
+    sal_uInt16 nMinStretchX=0, nMinStretchY=0;
+    sal_uInt16 aOldStretchXVals[]={0,0,0,0,0,0,0,0,0,0};
     const size_t aStretchArySize=sizeof(aOldStretchXVals)/sizeof(*aOldStretchXVals);
     for(unsigned int i=0; i<aStretchArySize; ++i)
     {
@@ -1448,7 +1448,7 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, 
         else
             fFactor = double(rTextSize.Height())/aCurrTextSize.Height();
 
-        USHORT nCurrStretchX, nCurrStretchY;
+        sal_uInt16 nCurrStretchX, nCurrStretchY;
         rOutliner.GetGlobalCharStretching(nCurrStretchX, nCurrStretchY);
 
         if (fFactor >= 1.0 )
@@ -1465,17 +1465,17 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, 
 
         if (fFactor < 1.0 || (fFactor >= 1.0 && nCurrStretchX != 100))
         {
-            nCurrStretchX = sal::static_int_cast<USHORT>(nCurrStretchX*fFactor);
-            nCurrStretchY = sal::static_int_cast<USHORT>(nCurrStretchY*fFactor);
-            rOutliner.SetGlobalCharStretching(std::min(USHORT(100),nCurrStretchX),
-                                              std::min(USHORT(100),nCurrStretchY));
+            nCurrStretchX = sal::static_int_cast<sal_uInt16>(nCurrStretchX*fFactor);
+            nCurrStretchY = sal::static_int_cast<sal_uInt16>(nCurrStretchY*fFactor);
+            rOutliner.SetGlobalCharStretching(std::min(sal_uInt16(100),nCurrStretchX),
+                                              std::min(sal_uInt16(100),nCurrStretchY));
             OSL_TRACE("SdrTextObj::onEditOutlinerStatusEvent(): zoom is %d", nCurrStretchX);
         }
     }
 
     OSL_TRACE("---- SdrTextObj::onEditOutlinerStatusEvent(): final zoom is %d ----", nMinStretchX);
-    rOutliner.SetGlobalCharStretching(std::min(USHORT(100),nMinStretchX),
-                                      std::min(USHORT(100),nMinStretchY));
+    rOutliner.SetGlobalCharStretching(std::min(sal_uInt16(100),nMinStretchX),
+                                      std::min(sal_uInt16(100),nMinStretchY));
 }
 
 void SdrTextObj::SetupOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaintRect ) const

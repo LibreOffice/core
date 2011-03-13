@@ -139,14 +139,14 @@ void ParagraphList::Append( Paragraph* pPara)
     maEntries.push_back(pPara);
 }
 
-void ParagraphList::Insert( Paragraph* pPara, ULONG nAbsPos)
+void ParagraphList::Insert( Paragraph* pPara, sal_uLong nAbsPos)
 {
     OSL_ASSERT(nAbsPos != ULONG_MAX && nAbsPos <= maEntries.size());
 
     maEntries.insert(maEntries.begin()+nAbsPos,pPara);
 }
 
-void ParagraphList::Remove( ULONG nPara )
+void ParagraphList::Remove( sal_uLong nPara )
 {
     OSL_ASSERT(nPara < maEntries.size());
 

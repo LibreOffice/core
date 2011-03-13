@@ -45,7 +45,7 @@ public:
         return maEntries.size();
     }
 
-    Paragraph*      GetParagraph( ULONG nPos ) const
+    Paragraph*      GetParagraph( sal_uLong nPos ) const
     {
         return nPos < maEntries.size() ? maEntries[nPos] : NULL;
     }
@@ -54,9 +54,9 @@ public:
     sal_uLong           GetVisPos( Paragraph* pParagraph ) const;
 
     void            Append( Paragraph *pPara);
-    void            Insert( Paragraph* pPara, ULONG nAbsPos);
-    void            Remove( ULONG nPara );
-    void            MoveParagraphs( ULONG nStart, ULONG nDest, ULONG nCount );
+    void            Insert( Paragraph* pPara, sal_uLong nAbsPos);
+    void            Remove( sal_uLong nPara );
+    void            MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong nCount );
 
     Paragraph*      NextVisible( Paragraph* ) const;
     Paragraph*      PrevVisible( Paragraph* ) const;

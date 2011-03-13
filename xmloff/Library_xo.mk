@@ -54,11 +54,10 @@ $(eval $(call gb_Library_add_linked_libs,xo,\
     cppuhelper \
     i18nisolang1 \
     sal \
-    stl \
+    salhelper \
     svl \
     tl \
     utl \
-    vos3 \
     $(gb_STDLIBS) \
 ))
 

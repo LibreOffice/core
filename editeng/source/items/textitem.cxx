@@ -614,7 +614,7 @@ int SvxPostureItem::HasBoolValue() const
 
 // -----------------------------------------------------------------------
 
-BOOL SvxPostureItem::GetBoolValue() const
+sal_Bool SvxPostureItem::GetBoolValue() const
 {
     return ( (FontItalic)GetValue() >= ITALIC_OBLIQUE );
 }

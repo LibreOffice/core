@@ -43,9 +43,7 @@ $(eval $(call gb_Library_add_linked_libs,xof,\
     cppuhelper \
     sal \
     salhelper \
-    stl \
     xo \
-    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,xof,\

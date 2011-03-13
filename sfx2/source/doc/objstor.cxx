@@ -614,7 +614,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             SetError( nError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
         if (pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_STARTPRESENTATION)
-            pSet->Put( SfxBoolItem( SID_DOC_STARTPRESENTATION, TRUE) );
+            pSet->Put( SfxBoolItem( SID_DOC_STARTPRESENTATION, sal_True) );
     }
 
     EnableSetModified( sal_False );

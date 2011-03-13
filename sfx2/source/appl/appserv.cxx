@@ -941,7 +941,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                         if (pObjSh)
                             pObjSh->SetConfigOptionsChecked(false);
                     }
-                    pView->GetBindings().InvalidateAll(FALSE);
+                    pView->GetBindings().InvalidateAll(sal_False);
                     pView = SfxViewFrame::GetNext( *pView );
                 }
             }

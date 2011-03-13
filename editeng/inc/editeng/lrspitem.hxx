@@ -66,7 +66,7 @@ namespace rtl
 class EDITENG_DLLPUBLIC SvxLRSpaceItem : public SfxPoolItem
 {
     short   nFirstLineOfst;     // First-line indent _always_ relative to nTxtLeft
-    long    nTxtLeft;           // We spend a USHORT
+    long    nTxtLeft;           // We spend a sal_uInt16
     long    nLeftMargin;        // nLeft or the negative first-line indent
     long    nRightMargin;       // The unproblematic right edge
 

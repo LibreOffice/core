@@ -74,7 +74,6 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     ucbhelper \
     utl \
     vcl \
-    vos3 \
     xml2 \
     $(gb_STDLIBS) \
 ))

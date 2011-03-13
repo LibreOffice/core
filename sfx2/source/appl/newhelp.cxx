@@ -2640,8 +2640,8 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu.InsertItem( TBI_COPY,
                               String( SfxResId( STR_HELP_MENU_TEXT_COPY ) ),
                               Image(  SfxResId( IMG_HELP_TOOLBOX_COPY   ) )
+                );
             aMenu.SetHelpId( TBI_COPY, ".uno:Copy" );
-            );
             aMenu.EnableItem( TBI_COPY, HasSelection() );
 
             if ( bIsDebug )
@@ -3083,7 +3083,7 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
 
     ::rtl::OUString sHelpURL;
 
-    BOOL bComplete = rtl::OUString(aEntry).toAsciiLowerCase().match(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.help")),0);
+    bool bComplete = rtl::OUString(aEntry).toAsciiLowerCase().match(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.help")),0);
 
     if (bComplete)
         sHelpURL = ::rtl::OUString(aEntry);

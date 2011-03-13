@@ -228,7 +228,6 @@ void MediaWindowImpl::cleanUp()
 
 void MediaWindowImpl::onURLChanged()
 {
-{
     if( getPlayer().is() )
     {
         uno::Sequence< uno::Any >              aArgs( 3 );

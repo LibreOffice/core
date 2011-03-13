@@ -217,15 +217,9 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
 
 void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 {
-<<<<<<< HEAD
     DBG_ASSERT( pSet, "A SfxItemSet has to be provided as argument!" );
-    int bFirstToken = TRUE, bWeiter = TRUE;
-    USHORT nStyleNo = 0;        // default
-=======
-    DBG_ASSERT( pSet, "Es muss ein SfxItemSet uebergeben werden!" );
     int bFirstToken = sal_True, bWeiter = sal_True;
     sal_uInt16 nStyleNo = 0;        // default
->>>>>>> ooo/DEV300_m101
     FontUnderline eUnderline;
     FontUnderline eOverline;
     FontEmphasisMark eEmphasis;
@@ -307,53 +301,15 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 }
                 else
                 {
-<<<<<<< HEAD
-                    nStyleNo = -1 == nTokenValue ? 0 : USHORT(nTokenValue);
-                    // Set the StyleNumber for the current style on
-                    // the attribute stack
-                    SvxRTFItemStackType* pAkt = aAttrStack.Top();
-=======
                     nStyleNo = -1 == nTokenValue ? 0 : sal_uInt16(nTokenValue);
                     // setze am akt. auf dem AttrStack stehenden Style die
                     // StyleNummer
                     SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
->>>>>>> ooo/DEV300_m101
                     if( !pAkt )
                         break;
 
                     pAkt->nStyleNo = sal_uInt16( nStyleNo );
 
-<<<<<<< HEAD
-=======
-#if 0
-// JP 05.09.95: zuruecksetzen der Style-Attribute fuehrt nur zu Problemen.
-//              Es muss reichen, wenn das ueber pard/plain erfolgt
-//  ansonsten Bugdoc 15304.rtf - nach nur "\pard" falscher Font !!
-
-                    SvxRTFStyleType* pStyle = aStyleTbl.Get( pAkt->nStyleNo );
-                    if( pStyle && pStyle->aAttrSet.Count() )
-                    {
-                        //JP 07.07.95:
-                        // alle Attribute, die in der Vorlage gesetzt werden
-                        // auf defaults setzen. In RTF werden die Attribute
-                        // der Vorlage danach ja wiederholt.
-                        // WICHTIG: Attribute die in der Vorlage definiert
-                        //          sind, werden zurueckgesetzt !!!!
-                        // pAkt->aAttrSet.Put( pStyle->aAttrSet );
-
-                        SfxItemIter aIter( pStyle->aAttrSet );
-                        SfxItemPool* pPool = pStyle->aAttrSet.GetPool();
-                        sal_uInt16 nWh = aIter.GetCurItem()->Which();
-                        while( sal_True )
-                        {
-                            pAkt->aAttrSet.Put( pPool->GetDefaultItem( nWh ));
-                            if( aIter.IsAtEnd() )
-                                break;
-                            nWh = aIter.NextItem()->Which();
-                        }
-                    }
-#endif
->>>>>>> ooo/DEV300_m101
                 }
                 break;
 
@@ -505,13 +461,8 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     nTokenValue = short( 100L * aLSpace.GetLineHeight()
                                             / long( nTokenValue ) );
 
-<<<<<<< HEAD
                     if( nTokenValue > 200 )     // Data value for PropLnSp
                         nTokenValue = 200;      // is one BYTE !!!
-=======
-                    if( nTokenValue > 200 )     // Datenwert fuer PropLnSp
-                        nTokenValue = 200;      // ist ein sal_uInt8 !!!
->>>>>>> ooo/DEV300_m101
 
                     aLSpace.SetPropLineSpace( (const sal_uInt8)nTokenValue );
                     aLSpace.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
@@ -1011,9 +962,7 @@ ATTR_SETOVERLINE:
                 break;
             //#i12501# While cb is clearly documented in the rtf spec, word
             //doesn't accept it at all
-<<<<<<< HEAD
-
-=======
+#if 0
             case RTF_CB:
                 if( PLAINID->nBgColor )
                 {
@@ -1022,7 +971,7 @@ ATTR_SETOVERLINE:
                 }
                 break;
 #endif
->>>>>>> ooo/DEV300_m101
+
             case RTF_LANG:
                 if( PLAINID->nLanguage )
                 {
@@ -1187,13 +1136,8 @@ ATTR_SETEMPHASIS:
 
                         case RTF_SWG_ESCPROP:
                             {
-<<<<<<< HEAD
                                 // Store percentage change!
-                                BYTE nProp = BYTE( nTokenValue / 100 );
-=======
-                                // prozentuale Veraenderung speichern !
                                 sal_uInt8 nProp = sal_uInt8( nTokenValue / 100 );
->>>>>>> ooo/DEV300_m101
                                 short nEsc = 0;
                                 if( 1 == ( nTokenValue % 100 ))
                                     // Recognize own auto-flags!
@@ -1250,10 +1194,6 @@ ATTR_SETEMPHASIS:
 
                                     if( RTF_SHDW_FCOL != GetNextToken() )
                                         break;
-<<<<<<< HEAD
-=======
-//                                  sal_uInt16 nFillCol = sal_uInt16( nTokenValue );
->>>>>>> ooo/DEV300_m101
 
                                     Color aColor = GetColor( nCol );
 
@@ -1351,35 +1291,6 @@ ATTR_SETEMPHASIS:
         }
         bFirstToken = sal_False;
     }
-<<<<<<< HEAD
-=======
-
-/*
-    // teste Attribute gegen ihre Styles
-    if( IsChkStyleAttr() && pSet->Count() && !pInsPos->GetCntIdx() )
-    {
-        SvxRTFStyleType* pStyle = aStyleTbl.Get( nStyleNo );
-        if( pStyle && pStyle->aAttrSet.Count() )
-        {
-            // alle Attribute, die schon vom Style definiert sind, aus dem
-            // akt. Set entfernen
-            const SfxPoolItem* pItem;
-            SfxItemIter aIter( *pSet );
-            sal_uInt16 nWhich = aIter.GetCurItem()->Which();
-            while( sal_True )
-            {
-                if( SFX_ITEM_SET == pStyle->aAttrSet.GetItemState(
-                    nWhich, sal_False, &pItem ) && *pItem == *aIter.GetCurItem())
-                    pSet->ClearItem( nWhich );      // loeschen
-
-                if( aIter.IsAtEnd() )
-                    break;
-                nWhich = aIter.NextItem()->Which();
-            }
-        }
-    }
-*/
->>>>>>> ooo/DEV300_m101
 }
 
 void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
@@ -1432,27 +1343,16 @@ void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
                     nSkip = -2;
                 else
                 {
-<<<<<<< HEAD
-                    aTabStop.GetDecimal() = BYTE(nTokenValue & 0xff);
-                    aTabStop.GetFill() = BYTE((nTokenValue >> 8) & 0xff);
-                    // overwrite the closing parenthesis
-=======
                     aTabStop.GetDecimal() = sal_uInt8(nTokenValue & 0xff);
                     aTabStop.GetFill() = sal_uInt8((nTokenValue >> 8) & 0xff);
-                    // ueberlese noch die schliessende Klammer
->>>>>>> ooo/DEV300_m101
+                    // overwrite the closing parenthesis
                     if (bMethodOwnsToken)
                         GetNextToken();
                 }
                 if( nSkip )
                 {
-<<<<<<< HEAD
                     SkipToken( nSkip );     // Ignore back again
-                    bWeiter = FALSE;
-=======
-                    SkipToken( nSkip );     // Ignore wieder zurueck
                     bWeiter = sal_False;
->>>>>>> ooo/DEV300_m101
                 }
             }
             break;
@@ -1510,13 +1410,8 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
     if( SFX_ITEM_SET == rSet.GetItemState( PARDID->nBox, sal_False, &pItem ) )
         aAttr = *(SvxBoxItem*)pItem;
 
-<<<<<<< HEAD
     SvxBorderLine aBrd( 0, DEF_LINE_WIDTH_0, 0, 0 );    // simple lines
-    int bWeiter = TRUE, nBorderTyp = 0;
-=======
-    SvxBorderLine aBrd( 0, DEF_LINE_WIDTH_0, 0, 0 );    // einfache Linien
     int bWeiter = sal_True, nBorderTyp = 0;
->>>>>>> ooo/DEV300_m101
 
     do {
         switch( nToken )
@@ -1765,13 +1660,8 @@ SETBORDERLINE:
 
                 if( nSkip )
                 {
-<<<<<<< HEAD
                     SkipToken( nSkip );     // Ignore back again
-                    bWeiter = FALSE;
-=======
-                    SkipToken( nSkip );     // Ignore wieder zurueck
                     bWeiter = sal_False;
->>>>>>> ooo/DEV300_m101
                 }
             }
             break;
@@ -1796,17 +1686,10 @@ inline sal_uInt32 CalcShading( sal_uInt32 nColor, sal_uInt32 nFillColor, sal_uIn
 void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
                                         int bTableDef )
 {
-<<<<<<< HEAD
     // then read the border attribute
-    int bWeiter = TRUE;
-    USHORT nColor = USHRT_MAX, nFillColor = USHRT_MAX;
-    BYTE nFillValue = 0;
-=======
-    // dann lese doch mal das BoderAttribut ein
     int bWeiter = sal_True;
     sal_uInt16 nColor = USHRT_MAX, nFillColor = USHRT_MAX;
     sal_uInt8 nFillValue = 0;
->>>>>>> ooo/DEV300_m101
 
     sal_uInt16 nWh = ( nToken & ~0xff ) == RTF_CHRFMT
                     ? PLAINID->nBgColor
@@ -1929,11 +1812,7 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
 // pard / plain abarbeiten
 void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
 {
-<<<<<<< HEAD
-    if( !bNewGroup && aAttrStack.Top() )    // not at the beginning of a new group
-=======
     if( !bNewGroup && !aAttrStack.empty() ) // not at the beginning of a new group
->>>>>>> ooo/DEV300_m101
     {
         SvxRTFItemStackType* pAkt = aAttrStack.back();
 
@@ -1945,13 +1824,8 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
         {
             if( pAkt->aAttrSet.Count() || pAkt->pChildList || pAkt->nStyleNo )
             {
-<<<<<<< HEAD
                 // open a new group
-                SvxRTFItemStackType* pNew = new SvxRTFItemStackType( *pAkt, *pInsPos, TRUE );
-=======
-                // eine neue Gruppe aufmachen
                 SvxRTFItemStackType* pNew = new SvxRTFItemStackType( *pAkt, *pInsPos, sal_True );
->>>>>>> ooo/DEV300_m101
                 pNew->SetRTFDefaults( GetRTFDefaults() );
 
                 // Set all until here valid attributes
@@ -2079,13 +1953,8 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
     case RTF_DEFTAB:
         if( PARDID->nTabStop )
         {
-<<<<<<< HEAD
             // RTF defines 720 twips as default
-            bIsSetDfltTab = TRUE;
-=======
-            // RTF definiert 720 twips als default
             bIsSetDfltTab = sal_True;
->>>>>>> ooo/DEV300_m101
             if( -1 == nValue || !nValue )
                 nValue = 720;
 
@@ -2096,44 +1965,11 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
                 CalcValue();
                 nValue = nTokenValue;
             }
-<<<<<<< HEAD
 
             // Calculate the ratio of default TabWidth / Tabs and
             // calculate the corresponding new number.
             // ?? how did one come up with 13 ??
-            USHORT nAnzTabs = (SVX_TAB_DEFDIST * 13 ) / USHORT(nValue);
-=======
-#if 1
-            /*
-            cmc:
-             This stuff looks a little hairy indeed, this should be totally
-             unnecessary where default tabstops are understood. Just make one
-             tabstop and stick the value in there, the first one is all that
-             matters.
-
-             e.g.
-
-            SvxTabStopItem aNewTab(1, sal_uInt16(nValue), SVX_TAB_ADJUST_DEFAULT,
-                PARDID->nTabStop);
-            ((SvxTabStop&)aNewTab[0]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
-
-
-             It must exist as a foul hack to support somebody that does not
-             have a true concept of default tabstops by making a tabsetting
-             result from the default tabstop, creating a lot of them all at
-             the default locations to give the effect of the first real
-             default tabstop being in use just in case the receiving
-             application doesn't do that for itself.
-             */
-#endif
-
-            // Verhaeltnis der def. TabWidth / Tabs errechnen und
-            // enstsprechend die neue Anzahl errechnen.
-/*-----------------14.12.94 19:32-------------------
- ?? wie kommt man auf die 13 ??
---------------------------------------------------*/
             sal_uInt16 nAnzTabs = (SVX_TAB_DEFDIST * 13 ) / sal_uInt16(nValue);
->>>>>>> ooo/DEV300_m101
             /*
              cmc, make sure we have at least one, or all hell breaks loose in
              everybodies exporters, #i8247#
@@ -2141,13 +1977,8 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
             if (nAnzTabs < 1)
                 nAnzTabs = 1;
 
-<<<<<<< HEAD
             // we want Defaulttabs
-            SvxTabStopItem aNewTab( nAnzTabs, USHORT(nValue),
-=======
-            // wir wollen Defaulttabs
             SvxTabStopItem aNewTab( nAnzTabs, sal_uInt16(nValue),
->>>>>>> ooo/DEV300_m101
                                 SVX_TAB_ADJUST_DEFAULT, PARDID->nTabStop );
             while( nAnzTabs )
                 ((SvxTabStop&)aNewTab[ --nAnzTabs ]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;

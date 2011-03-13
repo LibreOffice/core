@@ -669,7 +669,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
                 ;
 
             if(INetURLObject::CompareProtocolScheme(rTxt.Copy(nSttWdPos + (bWasWordDelim ? 1 : 0), nEndPos - nSttWdPos + 1)) != INET_PROT_NOT_VALID) {
-                return FALSE;
+                return sal_False;
             }
 
 

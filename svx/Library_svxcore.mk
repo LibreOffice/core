@@ -81,7 +81,6 @@ $(eval $(call gb_Library_add_linked_libs,svxcore,\
     ucbhelper \
     utl \
     vcl \
-    vos3 \
     xo \
     $(gb_STDLIBS) \
 ))

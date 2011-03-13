@@ -990,7 +990,7 @@ public:
     sal_Int32               GetSpaceBeforeAndMinLabelWidth( const ContentNode *pNode, sal_Int32 *pnSpaceBefore = 0, sal_Int32 *pnMinLabelWidth = 0 ) const;
 
     const SvxLRSpaceItem&   GetLRSpaceItem( ContentNode* pNode );
-    SvxAdjust               GetJustification( USHORT nPara ) const;
+    SvxAdjust               GetJustification( sal_uInt16 nPara ) const;
     SvxCellJustifyMethod    GetJustifyMethod( sal_uInt16 nPara ) const;
     SvxCellVerJustify       GetVerJustification( sal_uInt16 nPara ) const;
 

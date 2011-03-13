@@ -338,7 +338,7 @@ ImageList* SfxModule::GetImageList_Impl( sal_Bool bBig )
     return pImpl->GetImageList( pResMgr, bBig );
 }
 
-SfxTabPage*     SfxModule::CreateTabPage( sal_uInt16 Window*, const SfxItemSet& )
+SfxTabPage*     SfxModule::CreateTabPage( sal_uInt16, Window*, const SfxItemSet& )
 {
     return NULL;
 }

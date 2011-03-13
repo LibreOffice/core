@@ -3674,7 +3674,7 @@ void SAL_CALL SfxBaseModel::switchToStorage( const uno::Reference< XSTORAGE >& x
                 xUICfgMgrStorage->setStorage( xStorage );
         }
     }
-    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = FALSE;
+    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = sal_False;
 }
 
 uno::Reference< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentStorage()

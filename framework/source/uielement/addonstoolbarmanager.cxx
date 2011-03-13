@@ -142,7 +142,7 @@ static sal_Bool IsCorrectContext( const ::rtl::OUString& rModuleIdentifier, cons
 static Image RetrieveImage( Reference< com::sun::star::frame::XFrame >& rFrame,
                             const rtl::OUString& aImageId,
                             const rtl::OUString& aURL,
-                            BOOL bBigImage
+                            sal_Bool bBigImage
 )
 {
     Image aImage;

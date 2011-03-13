@@ -1675,7 +1675,7 @@ void ImpEditEngine::InitScriptTypes( sal_uInt16 nPara )
 {
     ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
     ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
-    rTypes.Remove( 0, rTypes.Count() );
+    rTypes.clear();
 
     ContentNode* pNode = pParaPortion->GetNode();
     if ( pNode->Len() )
@@ -2088,14 +2088,14 @@ SvxAdjust ImpEditEngine::GetJustification( sal_uInt16 nPara ) const
     return eJustification;
 }
 
-SvxCellJustifyMethod ImpEditEngine::GetJustifyMethod( USHORT nPara ) const
+SvxCellJustifyMethod ImpEditEngine::GetJustifyMethod( sal_uInt16 nPara ) const
 {
     const SvxJustifyMethodItem& rItem = static_cast<const SvxJustifyMethodItem&>(
         GetParaAttrib(nPara, EE_PARA_JUST_METHOD));
     return static_cast<SvxCellJustifyMethod>(rItem.GetEnumValue());
 }
 
-SvxCellVerJustify ImpEditEngine::GetVerJustification( USHORT nPara ) const
+SvxCellVerJustify ImpEditEngine::GetVerJustification( sal_uInt16 nPara ) const
 {
     const SvxVerJustifyItem& rItem = static_cast<const SvxVerJustifyItem&>(
         GetParaAttrib(nPara, EE_PARA_VER_JUST));
@@ -2540,7 +2540,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_uInt16 nPara )
 }
 
 EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, xub_Unicode c,
-                                    bool bOverwrite, Window* pFrameWin )
+                                    sal_Bool bOverwrite, Window* pFrameWin )
 {
     EditSelection aSel( rCurSel );
 #ifndef SVX_LIGHT

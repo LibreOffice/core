@@ -2013,7 +2013,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     {
         EditPaM aPaM( pNode, nChar+1 );
         LanguageType eLang = GetLanguage(aPaM);
-        USHORT nScript = GetScriptType(aPaM);
+        sal_uInt16 nScript = GetScriptType(aPaM);
         if ( MsLangId::getPrimaryLanguage( eLang) == LANGUAGE_ARABIC_PRIMARY_ONLY )
             // Arabic script is handled later.
             continue;
@@ -2083,13 +2083,12 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     // Letztes Zeichen wird schon nicht mehr beachtet...
     for ( sal_uInt16 n = 0; n < aPositions.Count(); n++ )
     {
-        USHORT nChar = aPositions[n];
+        sal_uInt16 nChar = aPositions[n];
         if ( nChar < nLastChar )
         {
             sal_uInt16 nPortionStart, nPortion;
             nPortion = pParaPortion->GetTextPortions().FindPortion( nChar, nPortionStart, true );
             TextPortion* pLastPortion = pParaPortion->GetTextPortions()[ nPortion ];
-            USHORT nPortionEnd = nPortionStart + pLastPortion->GetLen();
 
             // Die Breite der Portion:
             pLastPortion->GetSize().Width() += nMore4Everyone;

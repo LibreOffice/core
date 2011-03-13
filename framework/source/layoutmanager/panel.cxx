@@ -42,7 +42,6 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/unohlp.hxx>
 
@@ -64,7 +63,7 @@ Panel::Panel(
     uno::Reference< awt::XWindowPeer > xWindowPeer( rParent, uno::UNO_QUERY );
     m_xPanelWindow = uno::Reference< awt::XWindow >( createToolkitWindow( rSMGR, xWindowPeer, "splitwindow" ), uno::UNO_QUERY );
 
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SplitWindow* pSplitWindow = dynamic_cast< SplitWindow* >( VCLUnoHelper::GetWindow( m_xPanelWindow ));
 
     if ( pSplitWindow )

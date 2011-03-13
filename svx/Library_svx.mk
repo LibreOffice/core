@@ -65,7 +65,6 @@ $(eval $(call gb_Library_add_linked_libs,svx,\
     ucbhelper \
     utl \
     vcl \
-    vos3 \
     xo \
     xcr \
     $(gb_STDLIBS) \
@@ -117,7 +116,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/grfflt \
     svx/source/dialog/hdft \
     svx/source/dialog/hyperdlg \
-    svx/source/dialog/hyprlink \
     svx/source/dialog/imapdlg \
     svx/source/dialog/imapwnd \
     svx/source/dialog/measctrl \

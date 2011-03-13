@@ -31,15 +31,13 @@
 
 // include ---------------------------------------------------------------
 
-#include "modctrl.hxx"
-
 #include <vcl/status.hxx>
 #include <vcl/image.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 
 #include <svx/dialogs.hrc>
-#include "svx/modctrl.hxx"
+#include <svx/modctrl.hxx>
 #include <svx/dialmgr.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

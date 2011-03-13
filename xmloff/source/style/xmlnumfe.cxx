@@ -963,7 +963,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     NfIndexTableOffset eBuiltIn = pFormatter->GetIndexTableOffset( nKey );
 
     short nFmtType = 0;
-    BOOL bThousand = sal_False;
+    sal_Bool bThousand = sal_False;
     sal_uInt16 nPrecision = 0;
     sal_uInt16 nLeading = 0;
     rFormat.GetNumForInfo( nPart, nFmtType, bThousand, nPrecision, nLeading);

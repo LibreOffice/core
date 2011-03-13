@@ -353,7 +353,7 @@ void LinkManager::UpdateAllLinks(
             int nRet = QueryBox( pParentWin, WB_YES_NO | WB_DEF_YES, SfxResId( STR_QUERY_UPDATE_LINKS ) ).Execute();
             if( RET_YES != nRet )
                 return ;         // nothing should be updated
-            bAskUpdate = sal_False  // once is enough
+            bAskUpdate = sal_False;  // once is enough
         }
 
         pLink->Update();
@@ -467,7 +467,7 @@ void LinkManager::LinkServerShell(const OUString& rPath, SfxObjectShell& rServer
     }
 }
 
-bool LinkManager::InsertFileLink( sfx2::SvBaseLink& rLink,
+sal_Bool LinkManager::InsertFileLink( sfx2::SvBaseLink& rLink,
                                     sal_uInt16 nFileType,
                                     const String& rFileNm,
                                     const String* pFilterNm,

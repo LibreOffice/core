@@ -2150,16 +2150,6 @@ SFX2_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
-
-
-    // writer compatable document properties
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += comp_CompatWriterDocProps::_getImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.writer.DocumentProperties")) );
 SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
     const sal_Char* pImplementationName ,
     void*           pServiceManager     ,

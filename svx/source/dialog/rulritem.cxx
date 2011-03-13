@@ -728,7 +728,7 @@ bool SvxObjectItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
 bool SvxObjectItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    BOOL bRet = false;
+    bool bRet = false;
     switch ( nMemberId )
     {
         case MID_START_X : bRet = (rVal >>= nStartX); break;

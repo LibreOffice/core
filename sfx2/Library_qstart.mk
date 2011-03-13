@@ -72,9 +72,7 @@ $(eval $(call gb_Library_add_linked_libs,qstart_gtk,\
     ucbhelper \
     utl \
     vcl \
-    vos3 \
     xml2 \
-    eggtray \
     sfx \
 ))
 

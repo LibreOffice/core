@@ -216,6 +216,15 @@ private:
             com::sun::star::task::XInteractionRequest > const & rRequest)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
+    void
+    handleNameClashResolveRequest(
+        com::sun::star::ucb::NameClashResolveRequest const & rRequest,
+        com::sun::star::uno::Sequence<
+            com::sun::star::uno::Reference<
+                com::sun::star::task::XInteractionContinuation > > const &
+                    rContinuations)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
     bool
     handleMasterPasswordRequest(
         com::sun::star::uno::Reference<

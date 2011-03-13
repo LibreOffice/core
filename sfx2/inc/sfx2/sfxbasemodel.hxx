@@ -1626,7 +1626,7 @@ public:
         i_rModel.MethodEntryCheck( i_eState != E_INITIALIZING );
     }
     SfxModelGuard( SfxModelSubComponent& i_rSubComponent )
-        :m_aGuard( Application::GetSolarMutex() )
+        :m_aGuard()
     {
         i_rSubComponent.MethodEntryCheck();
     }
@@ -1645,7 +1645,7 @@ public:
     }
 
 private:
-    SolarMutexClearableGuard  m_aGuard;
+    SolarMutexResettableGuard  m_aGuard;
 };
 
 #undef css

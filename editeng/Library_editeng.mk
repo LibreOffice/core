@@ -155,8 +155,8 @@ $(eval $(call gb_Library_add_linked_libs,editeng,\
     ucbhelper \
     cppuhelper \
     cppu \
-    vos3 \
     sal \
+    salhelper \
     icuuc \
     i18nisolang1 \
     i18npaper \

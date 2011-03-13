@@ -185,7 +185,7 @@ namespace sfx2
                         aCommandName.append( sImageURL.copy( nCommandImagePrefixLen ) );
                         const ::rtl::OUString sCommandName( aCommandName.makeStringAndClear() );
 
-                        const Image aPanelImage( GetImage( i_rDocFrame, sCommandName, FALSE ) );
+                        const Image aPanelImage( GetImage( i_rDocFrame, sCommandName, sal_False ) );
                         return aPanelImage.GetXGraphic();
                     }
 

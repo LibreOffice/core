@@ -770,7 +770,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                         bSuccess = aReq.IsDone() || pItem != NULL;
                         if ( bVBARequest )
                         {
-                            SFX_REQUEST_ARG( aReq, pDlgRet, SfxBoolItem, SID_DIALOG_RETURN, FALSE );
+                            SFX_REQUEST_ARG( aReq, pDlgRet, SfxBoolItem, SID_DIALOG_RETURN, sal_False );
                             if ( pDlgRet )
                             {
                                 bSuccess = pDlgRet->GetValue();

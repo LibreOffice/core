@@ -606,7 +606,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
     // Das Fenster mu\s vor dem ersten Fenster eingef"ugt werden, das die
     // gleiche oder eine gr"o\sere Position hat als pDockWin.
     sal_uInt16 nCount = pDockArr->Count();
-    USHORT nLastWindowIdx(0);
+    sal_uInt16 nLastWindowIdx(0);
 
     // Wenn gar kein Fenster gefunden wird, wird als erstes eingef"ugt
     sal_uInt16 nInsertPos = 0;

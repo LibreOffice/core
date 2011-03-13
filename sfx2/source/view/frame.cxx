@@ -582,7 +582,7 @@ SfxPoolItem* SfxFrameItem::Clone( SfxItemPool *) const
     return pNew;
 }
 
-bool SfxFrameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
+bool SfxFrameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
     if ( wFrame )
     {
@@ -593,7 +593,7 @@ bool SfxFrameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
     return sal_False;
 }
 
-bool SfxFrameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
+bool SfxFrameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     Reference < XFrame > xFrame;
     if ( (rVal >>= xFrame) && xFrame.is() )

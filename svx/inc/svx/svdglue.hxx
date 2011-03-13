@@ -75,7 +75,7 @@ class SVX_DLLPUBLIC SdrGluePoint {
     sal_uInt8 bUserDefined:1; // #i38892#
 public:
     SdrGluePoint(): nEscDir(SDRESC_SMART),nId(0),nAlign(0) { bNoPercent=sal_False; bReallyAbsolute=sal_False; bUserDefined=sal_True; }
-    SdrGluePoint(const Point& rNewPos, bool bNewPercent=TRUE, sal_uInt16 nNewAlign=0): aPos(rNewPos),nEscDir(SDRESC_SMART),nId(0),nAlign(nNewAlign) { bNoPercent=!bNewPercent; bReallyAbsolute=FALSE; bUserDefined=TRUE; }
+    SdrGluePoint(const Point& rNewPos, bool bNewPercent= sal_True, sal_uInt16 nNewAlign=0): aPos(rNewPos),nEscDir(SDRESC_SMART),nId(0),nAlign(nNewAlign) { bNoPercent=!bNewPercent; bReallyAbsolute = sal_False; bUserDefined = sal_True; }
     bool operator==(const SdrGluePoint& rCmpGP) const   { return aPos==rCmpGP.aPos && nEscDir==rCmpGP.nEscDir && nId==rCmpGP.nId && nAlign==rCmpGP.nAlign && bNoPercent==rCmpGP.bNoPercent && bReallyAbsolute==rCmpGP.bReallyAbsolute && bUserDefined==rCmpGP.bUserDefined; }
     bool operator!=(const SdrGluePoint& rCmpGP) const   { return !operator==(rCmpGP); }
     const Point& GetPos() const                             { return aPos; }

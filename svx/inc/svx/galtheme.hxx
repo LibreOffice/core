@@ -114,7 +114,7 @@ private:
 
     void                        ImplCreateSvDrawStorage();
     SVX_DLLPUBLIC SgaObject*                    ImplReadSgaObject( GalleryObject* pEntry );
-    BOOL                        ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry );
+    sal_Bool                    ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry );
     void                        ImplRead();
     void                        ImplWrite();
     const GalleryObject*        ImplGetGalleryObject( size_t nPos ) const
@@ -144,11 +144,11 @@ public:
     size_t                      GetObjectCount() const { return aObjectList.size(); }
 
     SVX_DLLPUBLIC SgaObject*    AcquireObject( size_t nPos );
-    SVX_DLLPUBLIC void                      ReleaseObject( SgaObject* pObj );
+    SVX_DLLPUBLIC void          ReleaseObject( SgaObject* pObj );
 
-    SVX_DLLPUBLIC sal_Bool                      InsertObject( const SgaObject& rObj, sal_uIntPtr nPos = LIST_APPEND );
-    SVX_DLLPUBLIC BOOL          RemoveObject( size_t nPos );
-    BOOL                        ChangeObjectPos( size_t nOldPos, size_t nNewPos );
+    SVX_DLLPUBLIC bool          InsertObject( const SgaObject& rObj, sal_uIntPtr nPos = LIST_APPEND );
+    SVX_DLLPUBLIC bool          RemoveObject( size_t nPos );
+    bool                        ChangeObjectPos( size_t nOldPos, size_t nNewPos );
 
     SVX_DLLPUBLIC const String& GetName() const;
     const String&               GetRealName() const;

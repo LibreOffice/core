@@ -57,7 +57,6 @@ $(eval $(call gb_Library_add_linked_libs,fwi,\
     tl \
     utl \
     vcl \
-    vos3 \
     $(gb_STDLIBS) \
 ))
 

@@ -2440,8 +2440,8 @@ void EditEngine::DrawingText( const Point&, const XubString&, sal_uInt16, sal_uI
 
 void EditEngine::DrawingTab( const Point& /*rStartPos*/, long /*nWidth*/,
                                       const String& /*rChar*/, const SvxFont& /*rFont*/,
-                                      USHORT /*nPara*/, xub_StrLen /*nIndex*/,
-                                      BYTE /*nRightToLeft*/, bool /*bEndOfLine*/,
+                                      sal_uInt16 /*nPara*/, xub_StrLen /*nIndex*/,
+                                      sal_uInt8 /*nRightToLeft*/, bool /*bEndOfLine*/,
                                       bool /*bEndOfParagraph*/, const Color& /*rOverlineColor*/,
                                       const Color& /*rTextLineColor*/)
 {

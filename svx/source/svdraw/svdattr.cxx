@@ -2215,7 +2215,7 @@ SfxPoolItem* SdrGrafInvertItem::Clone( SfxItemPool* /*pPool*/) const
     return new SdrGrafInvertItem( *this );
 }
 
-SfxPoolItem* SdrGrafInvertItem::Create( SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* SdrGrafInvertItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new SdrGrafInvertItem( rIn );
 }

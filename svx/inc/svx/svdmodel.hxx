@@ -708,7 +708,7 @@ public:
 
     void ReformatAllTextObjects();
 
-    bool HasTransparentObjects( sal_bool bCheckForAlphaChannel = sal_False ) const;
+    bool HasTransparentObjects( bool bCheckForAlphaChannel = false ) const;
 
     SdrOutliner* createOutliner( sal_uInt16 nOutlinerMode );
     void disposeOutliner( SdrOutliner* pOutliner );

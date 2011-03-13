@@ -1563,10 +1563,10 @@ void SvxShadowItem::SetEnumValue( sal_uInt16 nVal )
 
 SvxBorderLine::SvxBorderLine( const Color *pCol, sal_uInt16 nOut, sal_uInt16 nIn, sal_uInt16 nDist,
        SvxBorderStyle nStyle )
-: nOutWidth( nOut )
+: m_nStyle( nStyle )
+, nOutWidth( nOut )
 , nInWidth ( nIn )
 , nDistance( nDist )
-, m_nStyle( nStyle )
 {
     if ( pCol )
         aColor = *pCol;
@@ -1935,7 +1935,8 @@ sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rL
     return lcl_lineToSvxLine(rLine, rSvxLine, bConvert);
 }
 
-bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+sal_Bool
+SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
     const bool bRet(lcl_lineToSvxLine(rLine, rSvxLine, bConvert));
 
@@ -1983,7 +1984,7 @@ lcl_extractBorderLine(const uno::Any& rAny, table::BorderLine2& rLine)
 
 template<typename Item>
 bool
-lcl_setLine(const uno::Any& rAny, Item& rItem, USHORT nLine, const bool bConvert)
+lcl_setLine(const uno::Any& rAny, Item& rItem, sal_uInt16 nLine, const bool bConvert)
 {
     bool bDone = false;
     table::BorderLine2 aBorderLine;
@@ -1999,7 +2000,7 @@ lcl_setLine(const uno::Any& rAny, Item& rItem, USHORT nLine, const bool bConvert
 
 }
 
-bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     sal_uInt16 nLine = BOX_LINE_TOP;

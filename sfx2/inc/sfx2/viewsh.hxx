@@ -302,7 +302,7 @@ public:
     SAL_DLLPRIVATE bool GlobalKeyInput_Impl( const KeyEvent &rKeyEvent );
 
     SAL_DLLPRIVATE void NewIPClient_Impl( SfxInPlaceClient *pIPClient )
-                                { GetIPClientList_Impl(TRUE)->push_back(pIPClient); }
+                                { GetIPClientList_Impl(sal_True)->push_back(pIPClient); }
     SAL_DLLPRIVATE void IPClientGone_Impl( SfxInPlaceClient *pIPClient );
     SAL_DLLPRIVATE SfxInPlaceClientList* GetIPClientList_Impl( sal_Bool bCreate = sal_True ) const;
     SAL_DLLPRIVATE void ResetAllClients_Impl( SfxInPlaceClient *pIP );

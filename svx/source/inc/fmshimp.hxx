@@ -178,9 +178,9 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
     FmFormArray         m_aSearchForms;
 
     struct InvalidSlotInfo {
-        USHORT id;
-        BYTE   flags;
-        inline InvalidSlotInfo(USHORT slotId, BYTE flgs) : id(slotId), flags(flgs) {};
+        sal_uInt16 id;
+        sal_uInt8   flags;
+        inline InvalidSlotInfo(sal_uInt16 slotId, sal_uInt8 flgs) : id(slotId), flags(flgs) {};
     };
     std::vector<InvalidSlotInfo> m_arrInvalidSlots;
         // we explicitly switch off the propbrw before leaving the design mode

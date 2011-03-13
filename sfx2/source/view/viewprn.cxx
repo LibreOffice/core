@@ -792,7 +792,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     }
                     if ( nId == SID_SETUPPRINTER )
                     {
-                        rReq.AppendItem( SfxBoolItem( SID_DIALOG_RETURN, TRUE ) );
+                        rReq.AppendItem( SfxBoolItem( SID_DIALOG_RETURN, sal_True ) );
                     }
 
                     // take the changes made in the dialog
@@ -812,7 +812,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                         rReq.SetReturnValue(SfxBoolItem(0,sal_False));
                     if ( nId == SID_SETUPPRINTER )
                     {
-                        rReq.AppendItem( SfxBoolItem( SID_DIALOG_RETURN, FALSE ) );
+                        rReq.AppendItem( SfxBoolItem( SID_DIALOG_RETURN, sal_False ) );
             }
                 }
             }

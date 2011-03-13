@@ -251,7 +251,7 @@ public:
     // Execute an AutoCorrect.
     // Returns what has been executed, according to the above flags
     sal_uLong AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
-                        xub_StrLen nPos, sal_Unicode cInsChar, sal_Bool bInsert );
+                           xub_StrLen nPos, sal_Unicode cInsChar, sal_Bool bInsert, Window* pFrameWin = NULL );
 
     // Return for the autotext expansion the previous word,
     // AutoCorrect - corresponding algorithm

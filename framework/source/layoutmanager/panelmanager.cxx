@@ -92,7 +92,7 @@ bool PanelManager::createPanels()
 {
     if ( m_xFrame.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         uno::Reference< awt::XWindow > xWindow( m_xFrame->getContainerWindow(), uno::UNO_QUERY );
         if ( xWindow.is() )
         {

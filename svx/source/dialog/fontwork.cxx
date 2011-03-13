@@ -1090,7 +1090,7 @@ void SvxFontWorkDialog::ApplyImageList()
 {
     ResMgr* _pMgr = &DIALOG_MGR();
 
-    USHORT nBitmapResId = RID_SVXBMP_FONTWORK_FORM1;
+    sal_uInt16 nBitmapResId = RID_SVXBMP_FONTWORK_FORM1;
     sal_uInt16 nTextResId = RID_SVXSTR_FONTWORK_FORM1;
 
     bool bInit = aFormSet.GetItemCount() == 0;

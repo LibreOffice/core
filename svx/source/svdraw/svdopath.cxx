@@ -1425,7 +1425,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
         if (rStat.GetPointAnz()>=2) eCmd=SDRCREATE_FORCEEND;
         bRet = eCmd==SDRCREATE_FORCEEND;
         if (bRet) {
-            mbCreating = FALSE;
+            mbCreating = sal_False;
             delete pU;
             rStat.SetUser(NULL);
         }

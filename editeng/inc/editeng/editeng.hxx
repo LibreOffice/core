@@ -124,7 +124,7 @@ private:
 
                     EDITENG_DLLPRIVATE EditEngine( const EditEngine& );
     EDITENG_DLLPRIVATE EditEngine&      operator=( const EditEngine& );
-    EDITENG_DLLPRIVATE sal_Bool PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView );
+    EDITENG_DLLPRIVATE sal_uInt8        PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, Window* pFrameWin = NULL );
 
 protected:
 

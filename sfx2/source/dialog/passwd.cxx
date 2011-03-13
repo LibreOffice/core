@@ -254,7 +254,7 @@ short SfxPasswordDialog::Execute()
         Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
         long nMinHeight = maHelpBtn.GetPosPixel().Y() +
                           maHelpBtn.GetSizePixel().Height() + a6Size.Height();
-        USHORT nRowHided = 1;
+        sal_uInt16 nRowHided = 1;
 
         if ( SHOWEXTRAS_NONE == mnExtras )
         {

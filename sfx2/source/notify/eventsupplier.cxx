@@ -101,7 +101,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
 
             ::rtl::OUString sType;
             if  (   ( aNormalizedDescriptor.size() == 1 )
-                &&  ( aProperties[0].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_EVENT_TYPE)) )
+                &&  ( aNormalizedDescriptor.has( PROP_EVENT_TYPE) == 0 )
                 &&  ( aNormalizedDescriptor.get( PROP_EVENT_TYPE ) >>= sType )
                 &&  ( sType.getLength() == 0 )
                 )

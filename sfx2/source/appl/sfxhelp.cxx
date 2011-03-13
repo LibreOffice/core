@@ -254,7 +254,6 @@ static Sequence< ::rtl::OUString > GetPropertyNames()
 
 SfxHelpOptions_Impl::SfxHelpOptions_Impl()
     : ConfigItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.SFX/Help")) )
-    , m_pIds( NULL )
 {
     Sequence< ::rtl::OUString > aNames = GetPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );
@@ -705,7 +704,7 @@ XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow
 static bool impl_hasHelpInstalled( const rtl::OUString &rLang = rtl::OUString() )
 {
     String aHelpRootURL( DEFINE_CONST_OUSTRING("vnd.sun.star.help://") );
-    AppendConfigToken_Impl( aHelpRootURL, sal_True );
+    AppendConfigToken( aHelpRootURL, sal_True );
     Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpRootURL );
 
     return ( aFactories.getLength() != 0 );
@@ -752,7 +751,7 @@ static bool impl_showOnlineHelp( const String& rURL )
 sal_Bool SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const String& rKeyword )
 {
     String aHelpRootURL( DEFINE_CONST_OUSTRING("vnd.sun.star.help://") );
-    AppendConfigToken( aHelpRootURL, sal_True, rLang );
+    AppendConfigToken( aHelpRootURL, sal_True);
     Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpRootURL );
 
     /* rURL may be
@@ -815,12 +814,12 @@ sal_Bool SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const S
     if ( !impl_hasHelpInstalled() )
     {
         if ( impl_showOnlineHelp( aHelpURL ) )
-            return TRUE;
+            return sal_True;
         else
         {
             NoHelpErrorBox aErrBox( const_cast< Window* >( pWindow ) );
             aErrBox.Execute();
-            return FALSE;
+            return sal_False;
         }
     }
 

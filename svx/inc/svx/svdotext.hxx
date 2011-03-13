@@ -257,7 +257,7 @@ protected:
     sal_Bool                        mbTextAnimationAllowed : 1;
 
     // flag for preventing recursive onEditOutlinerStatusEvent calls
-    BOOL                        mbInDownScale : 1;
+    sal_Bool                        mbInDownScale : 1;
 
     SdrOutliner& ImpGetDrawOutliner() const;
 

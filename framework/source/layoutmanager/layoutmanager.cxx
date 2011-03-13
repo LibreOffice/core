@@ -1417,7 +1417,7 @@ void LayoutManager::implts_reparentChildWindows()
 
     if ( xStatusBarWindow.is() )
     {
-        vos::OGuard     aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
         Window* pWindow          = VCLUnoHelper::GetWindow( xStatusBarWindow );
         if ( pWindow && pContainerWindow )
@@ -1504,7 +1504,7 @@ throw (RuntimeException)
                 m_xMenuBar = implts_createElement( aName );
                 if ( m_xMenuBar.is() )
                 {
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard;
 
                     SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
                     if ( pSysWindow )
@@ -1893,7 +1893,7 @@ throw (RuntimeException)
         {
             m_bMenuVisible = sal_False;
 
-            vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
             if ( pSysWindow )
             {

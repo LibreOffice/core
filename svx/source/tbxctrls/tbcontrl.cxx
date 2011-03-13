@@ -2010,7 +2010,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
         }
         else
         {
-            USHORT i= 0;
+            sal_uInt16 i= 0;
             while ( pStyle && !bDoFill )
             {
                 bDoFill = ( pBox->GetEntry(i) != pStyle->GetName() );
