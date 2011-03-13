@@ -203,7 +203,7 @@ public:
     virtual sal_Bool                HasRowHeader() const; //GetColumnId
     /** @return  <TRUE/>, if the object can focus a cell. */
     virtual sal_Bool                IsCellFocusable() const;
-    virtual BOOL                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
+    virtual sal_Bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
 
     virtual void                    SetNoSelection();
     using SvListView::SelectAll;

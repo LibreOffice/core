@@ -403,7 +403,7 @@ private:
     SVT_DLLPRIVATE void         ImplActivatePage();
     SVT_DLLPRIVATE long         ImplDeactivatePage();
     SVT_DLLPRIVATE void            ImplPrePaint();
-    SVT_DLLPRIVATE ImplTabBarItem* ImplGetLastTabBarItem( USHORT nItemCount );
+    SVT_DLLPRIVATE ImplTabBarItem* ImplGetLastTabBarItem( sal_uInt16 nItemCount );
     SVT_DLLPRIVATE Rectangle       ImplGetInsertTabRect(ImplTabBarItem* pItem) const;
                     DECL_DLLPRIVATE_LINK( ImplClickHdl, ImplTabButton* );
 
