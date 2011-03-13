@@ -37,6 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 # --- Files --------------------------------------------------------
+.IF "$(DISABLE_PYTHON)" != "TRUE"
 .IF "$(L10N_framework)"==""
 PYEXC=$(DLLDEST)$/python$(EXECPOST)
 REGEXC=$(DLLDEST)$/regcomp$(EXECPOST)
@@ -79,8 +80,11 @@ ALL : 	\
     doc					\
     ALLTAR
 .ENDIF # L10N_framework
+.ENDIF # DISABLE_PYTHON
 
 .INCLUDE :  target.mk
+
+.IF "$(DISABLE_PYTHON)" != "TRUE"
 .IF "$(L10N_framework)"==""
 $(DLLDEST)$/%.py: %.py
     cp $? $@
@@ -105,4 +109,5 @@ runtest : ALL
     cd $(DLLDEST) && $(TEST_ENV) && $(WRAPCMD) $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy2.rdb \
             -l com.sun.star.loader.Python -c vnd.sun.star.expand:$$FOO/samplecomponent.py
 .ENDIF # L10N_framework
+.ENDIF # DISABLE_PYTHON
 
