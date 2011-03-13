@@ -687,8 +687,7 @@ static void writeLine(
                     }
                     else
                     {
-                        OSL_TRACE( pLine );
-                        OSL_TRACE( "\n" );
+                        OSL_TRACE( "%s\n", pLine );
                     }
                 }
             }
