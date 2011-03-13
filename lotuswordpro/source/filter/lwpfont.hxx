@@ -118,8 +118,8 @@ public:
     inline sal_uInt16 GetFaceID(){return m_nFaceName;}
     inline sal_uInt16 GetAltFaceID(){return m_nAltFaceName;}
     void Override(XFFont* pFont);
-    inline BOOL IsFaceNameOverridden();
-    inline BOOL IsAltFaceNameOverridden();
+    inline sal_Bool IsFaceNameOverridden();
+    inline sal_Bool IsAltFaceNameOverridden();
 private:
     //Data of CFontDescriptionOverrideBase
     sal_uInt8 m_nOverrideBits;
@@ -146,12 +146,12 @@ private:
                             | TIGHTNESS | FACENAME | BKCOLOR)
     };
 
-    inline BOOL IsPointSizeOverridden();
-    inline BOOL IsColorOverridden();
-    inline BOOL IsBackgroundColorOverridden();
+    inline sal_Bool IsPointSizeOverridden();
+    inline sal_Bool IsColorOverridden();
+    inline sal_Bool IsBackgroundColorOverridden();
 //TODO
-//    inline BOOL IsTightnessOverridden();
-//    inline BOOL IsAnythingOverridden();
+//    inline sal_Bool IsTightnessOverridden();
+//    inline sal_Bool IsAnythingOverridden();
 };
 
 class LwpFontNameManager
@@ -220,16 +220,16 @@ private:
         UNDER   = 0x02,
         ALL_ATTRS2          = CASE | UNDER
     };
-    BOOL Is(sal_uInt16 Attr);
-    BOOL IsBoldOverridden();
-    BOOL IsItalicOverridden();
-    BOOL IsStrikeThruOverridden();
-    BOOL IsSmallCapsOverridden();
-    BOOL IsSuperOverridden();
-    BOOL IsSubOverridden();
-    BOOL IsSuperSubOverridden();
-    BOOL IsUnderlineOverridden();
-    BOOL IsCaseOverridden();
+    sal_Bool Is(sal_uInt16 Attr);
+    sal_Bool IsBoldOverridden();
+    sal_Bool IsItalicOverridden();
+    sal_Bool IsStrikeThruOverridden();
+    sal_Bool IsSmallCapsOverridden();
+    sal_Bool IsSuperOverridden();
+    sal_Bool IsSubOverridden();
+    sal_Bool IsSuperSubOverridden();
+    sal_Bool IsUnderlineOverridden();
+    sal_Bool IsCaseOverridden();
 
 };
 

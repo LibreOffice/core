@@ -281,7 +281,7 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
 Rectangle LwpGraphicObject::GetRectIn100thMM()
 {
 #define To100thMM(num) (long)(2540* (double(num)/(72 * 65536L)))
-    INT32 nLeft,nTop,nRight,nBottom;
+    sal_Int32 nLeft,nTop,nRight,nBottom;
     GetRect(nLeft,nTop,nRight,nBottom);
     return Rectangle( To100thMM(nLeft),To100thMM(nTop),To100thMM(nRight),To100thMM(nBottom) );
 }
@@ -294,7 +294,7 @@ Rectangle LwpGraphicObject::GetRectIn100thMM()
 XFRect LwpGraphicObject::GetRectInCM()
 {
 #define ToCM(num) (2.54*(double(num)/(72 * 65536L)))
-    INT32 nLeft,nTop,nRight,nBottom;
+    sal_Int32 nLeft,nTop,nRight,nBottom;
     GetRect(nLeft,nTop,nRight,nBottom);
     return XFRect( ToCM(nLeft),ToCM(nTop),ToCM(nRight-nLeft),ToCM(nBottom-nTop) );
 }
@@ -308,7 +308,7 @@ XFRect LwpGraphicObject::GetRectInCM()
 * @param   nBottom
 */
 #include "lwpframelayout.hxx"
-void LwpGraphicObject::GetRect(INT32& nLeft, INT32& nTop, INT32& nRight, INT32& nBottom)
+void LwpGraphicObject::GetRect(sal_Int32& nLeft, sal_Int32& nTop, sal_Int32& nRight, sal_Int32& nBottom)
 {
     nLeft = nTop = nRight = nBottom = 0;
 
@@ -523,7 +523,7 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
     if (pMemGrafStream)
     {
         // read image data
-        UINT32 nPos = pGrafStream->Tell();
+        sal_uInt32 nPos = pGrafStream->Tell();
         pGrafStream->Seek(STREAM_SEEK_TO_END);
         sal_uInt32 nDataLen = pGrafStream->Tell();
         pGrafStream->Seek(nPos);

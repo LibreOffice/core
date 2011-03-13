@@ -215,7 +215,7 @@ void LwpNumericFormat::Read()
 *   @return sal_Bool.
 */
 sal_Bool
-LwpNumericFormat::IsCurrencyFormat(USHORT Format)
+LwpNumericFormat::IsCurrencyFormat(sal_uInt16 Format)
 {
     switch (Format)
     {
@@ -277,7 +277,7 @@ LwpNumericFormat::IsCurrencyFormat(USHORT Format)
 *   @param
 *   @return.
 */
-USHORT
+sal_uInt16
 LwpNumericFormat::GetDecimalPlaces(void)
 {
     if (IsDecimalPlacesOverridden())
@@ -503,8 +503,8 @@ OUString    LwpNumericFormat::reencode(OUString sCode)
 *   @param
 *   @return
 */
-USHORT
-LwpNumericFormat::GetDefaultDecimalPlaces(USHORT Format)
+sal_uInt16
+LwpNumericFormat::GetDefaultDecimalPlaces(sal_uInt16 Format)
 {
     switch (Format)
     {

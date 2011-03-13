@@ -689,7 +689,7 @@ double LwpMiddleLayout::GetGeometryWidth()
 * @descr:   Whether the margins is same as parent layout
 *
 */
-BOOL LwpMiddleLayout::MarginsSameAsParent()
+sal_Bool LwpMiddleLayout::MarginsSameAsParent()
 {
     if(m_nOverrideFlag & OVER_MARGINS)
     {

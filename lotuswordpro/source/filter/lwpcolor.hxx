@@ -81,7 +81,7 @@ public:
     sal_uInt16 GetRed();
     sal_uInt16 GetGreen();
     sal_uInt16 GetBlue();
-    BOOL IsValidColor();
+    sal_Bool IsValidColor();
     sal_uInt32 To24Color();
     LwpColor& operator = (const LwpColor& rOther);
     sal_Bool IsTransparent();
@@ -118,7 +118,7 @@ inline sal_uInt16 LwpColor::GetBlue()
 {
     return m_nBlue;
 }
-inline BOOL LwpColor::IsValidColor()
+inline sal_Bool LwpColor::IsValidColor()
 {
     return ((m_nExtra!=AGLRGB_INVALID) && (m_nExtra!=AGLRGB_TRANSPARENT));
 }

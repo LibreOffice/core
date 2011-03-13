@@ -311,10 +311,10 @@ public:
     ~LwpRowSpecifier(){}
 
     void QuickRead(LwpObjectStream *pStrm);
-    String ToString(USHORT nFormulaRow);
+    String ToString(sal_uInt16 nFormulaRow);
 
-    USHORT RowID(USHORT FormulaRow);
-    USHORT &Row(void);
+    sal_uInt16 RowID(sal_uInt16 FormulaRow);
+    sal_uInt16 &Row(void);
 
     void SetAbsolute(void);
     void ClearAbsolute(void);
@@ -326,15 +326,15 @@ public:
 
     void SetBad(sal_Bool Bad);
     sal_Bool IsBad(void);
-    void SetRowDelta(USHORT ReferenceRowID, USHORT FormulaRowID);
+    void SetRowDelta(sal_uInt16 ReferenceRowID, sal_uInt16 FormulaRowID);
 
 private:
     sal_uInt16 cRow;
     LwpRowColumnQualifier cQualifier;
 };
 
-inline USHORT
-LwpRowSpecifier::RowID(USHORT FormulaRow)
+inline sal_uInt16
+LwpRowSpecifier::RowID(sal_uInt16 FormulaRow)
 {
     if (cQualifier.IsBad())
     {
@@ -348,7 +348,7 @@ LwpRowSpecifier::RowID(USHORT FormulaRow)
     return FormulaRow - cRow;
 }
 
-inline USHORT &
+inline sal_uInt16 &
 LwpRowSpecifier::Row()
 {
     return cRow;

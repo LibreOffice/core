@@ -59,7 +59,7 @@ namespace OpenStormBento
 {
 /*
  * useless in SODC
-void    LtcUtBenValueStream::GetAmountLeft(ULONG * pAmtLeft)
+void    LtcUtBenValueStream::GetAmountLeft(sal_uLong * pAmtLeft)
 {
     if (cCurrentPosition >= m_ulValueLength)
     {
@@ -78,7 +78,7 @@ void    LtcUtBenValueStream::GetAmountLeft(ULONG * pAmtLeft)
 *   @param  number of bytes to be read
 *   @return number of bytes read
 */
-ULONG   LtcUtBenValueStream::GetData( void* pData, ULONG nSize )
+sal_uLong   LtcUtBenValueStream::GetData( void* pData, sal_uLong nSize )
 {
     //unsigned long AmtLeft;
     unsigned long AmtRead;
@@ -98,7 +98,7 @@ ULONG   LtcUtBenValueStream::GetData( void* pData, ULONG nSize )
 *   @param  size of buffer to be written
 *   @return number of bytes written into value stream
 */
-ULONG   LtcUtBenValueStream::PutData( const void* /*pData*/, ULONG nSize )
+sal_uLong   LtcUtBenValueStream::PutData( const void* /*pData*/, sal_uLong nSize )
 {
     /* Because we only support IMPORT filter, PutData implementation is ignored
         It won't bring negative influence to read-only stream object */
@@ -111,7 +111,7 @@ ULONG   LtcUtBenValueStream::PutData( const void* /*pData*/, ULONG nSize )
 *   @param  position in value stream
 *   @return current position in value stream
 */
- ULONG  LtcUtBenValueStream::SeekPos( ULONG nPos )
+ sal_uLong  LtcUtBenValueStream::SeekPos( sal_uLong nPos )
 {
     if (nPos <= m_ulValueLength)
         cCurrentPosition = nPos;
@@ -125,7 +125,7 @@ ULONG   LtcUtBenValueStream::PutData( const void* /*pData*/, ULONG nSize )
 *   @param  size of buffer
 *   @return
 */
- void   LtcUtBenValueStream::SetSize( ULONG /*nSize*/ )
+ void   LtcUtBenValueStream::SetSize( sal_uLong /*nSize*/ )
 {
     //pLtcBenContainer pContainer = cpValue->GetContainer();
     //pContainer->GetStream()->SetStreamSize(nSize);

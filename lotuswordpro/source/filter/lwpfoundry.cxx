@@ -358,7 +358,7 @@ void LwpVersionManager::Skip(LwpObjectStream *pStrm)
     while(Count--)
     {
         pStrm->QuickRead(&tag, sizeof(tag));
-        USHORT len;
+        sal_uInt16 len;
         switch(tag)
         {
             case TAG_USER_VERSION:
@@ -369,7 +369,7 @@ void LwpVersionManager::Skip(LwpObjectStream *pStrm)
                 break;
 
             default:
-                pStrm->QuickRead(&len, sizeof(USHORT));
+                pStrm->QuickRead(&len, sizeof(sal_uInt16));
                 pStrm->SeekRel(len);
                 pStrm->SkipExtra();
                 break;
