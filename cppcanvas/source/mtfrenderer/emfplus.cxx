@@ -144,12 +144,12 @@ namespace cppcanvas
             }
 
             // TODO: remove rR argument when debug code is not longer needed
-            void Read (SvStream& s, UINT32 pathFlags, ImplRenderer& rR)
+            void Read (SvStream& s, sal_uInt32 pathFlags, ImplRenderer& rR)
             {
                 for (int i = 0; i < nPoints; i ++) {
                     if (pathFlags & 0x4000) {
                         // points are stored in short 16bit integer format
-                        UINT16 x, y;
+                        sal_uInt16 x, y;
 
                         s >> x >> y;
                         EMFP_DEBUG (printf ("EMF+\tpoint [x,y]: %hd,%hd\n", x, y));
@@ -341,12 +341,12 @@ namespace cppcanvas
                 }
             }
 
-            UINT32 GetType() const { return type; }
+            sal_uInt32 GetType() const { return type; }
             const ::Color& GetColor() const { return solidColor; }
 
             void Read (SvStream& s, ImplRenderer& rR)
             {
-                UINT32 header;
+                sal_uInt32 header;
 
                 s >> header >> type;
 
@@ -355,7 +355,7 @@ namespace cppcanvas
                 switch (type) {
                 case 0:
                     {
-                        UINT32 color;
+                        sal_uInt32 color;
 
                         s >> color;
                         solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
@@ -370,7 +370,7 @@ namespace cppcanvas
 
                         EMFP_DEBUG (printf ("EMF+\tpath gradient, additional flags: 0x%02x\n", additionalFlags));
 
-                        UINT32 color;
+                        sal_uInt32 color;
 
                         s >> color;
                         solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
@@ -483,7 +483,7 @@ namespace cppcanvas
 
                         EMFP_DEBUG (printf ("EMF+\tarea: %f,%f - %fx%f\n", areaX, areaY, areaWidth, areaHeight));
 
-                        UINT32 color;
+                        sal_uInt32 color;
 
                         s >> color;
                         solidColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
@@ -584,7 +584,7 @@ namespace cppcanvas
 
             void Read (SvStream& s, ImplRenderer& rR, sal_Int32, sal_Int32 )
             {
-                UINT32 header, unknown, penFlags, unknown2;
+                sal_uInt32 header, unknown, penFlags, unknown2;
                 int i;
 
                 s >> header >> unknown >> penFlags >> unknown2 >> width;
@@ -1086,9 +1086,9 @@ namespace cppcanvas
             }
         }
 
-        void ImplRenderer::processObjectRecord(SvMemoryStream& rObjectStream, UINT16 flags)
+        void ImplRenderer::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags)
         {
-            EMFP_DEBUG (UINT32 objectLen);
+            EMFP_DEBUG (sal_uInt32 objectLen);
             sal_uInt32 index;
 
             EMFP_DEBUG (printf ("EMF+ Object slot: %hd flags: %hx\n", flags & 0xff, flags & 0xff00));
@@ -1169,8 +1169,8 @@ namespace cppcanvas
             length -= 4;
 
             while (length > 0) {
-                UINT16 type, flags;
-                UINT32 size, dataSize;
+                sal_uInt16 type, flags;
+                sal_uInt32 size, dataSize;
                 sal_uInt32 next;
 
                 rMF >> type >> flags >> size >> dataSize;
@@ -1201,7 +1201,7 @@ namespace cppcanvas
                 if (type != EmfPlusRecordTypeObject || !(flags & 0x8000))
                 switch (type) {
                 case EmfPlusRecordTypeHeader:
-                    UINT32 header, version;
+                    sal_uInt32 header, version;
 
                     rMF >> header >> version >> nHDPI >> nVDPI;
 
@@ -1282,7 +1282,7 @@ namespace cppcanvas
                         sal_uInt32 brushIndexOrColor;
                         EMFP_DEBUG (sal_Int32 brushIndex);
                         sal_Int32 points;
-                        EMFP_DEBUG (UINT32 color);
+                        EMFP_DEBUG (sal_uInt32 color);
                         EMFP_DEBUG (USHORT transparency = 0);
 
                         rMF >> brushIndexOrColor;
@@ -1343,7 +1343,7 @@ namespace cppcanvas
                     }
                 case EmfPlusRecordTypeDrawPath:
                     {
-                        UINT32 penIndex;
+                        sal_uInt32 penIndex;
 
                         rMF >> penIndex;
 
