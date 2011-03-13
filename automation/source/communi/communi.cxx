@@ -567,16 +567,6 @@ IMPL_LINK( CommunicationManagerServerAcceptThread, AddConnection, void*, EMPTYAR
     return 1;
 }
 
-
-#define GETSET(aVar, KeyName, Dafault)                 \
-    aVar = aConf.ReadKey(KeyName,"No Entry");          \
-    if ( aVar == "No Entry" )                          \
-    {                                                  \
-        aVar = Dafault;                                \
-        aConf.WriteKey(KeyName, aVar);                 \
-    }
-
-
 CommunicationManagerClientViaSocket::CommunicationManagerClientViaSocket( ByteString aHost, ULONG nPort, BOOL bUseMultiChannel )
 : CommunicationManagerClient( bUseMultiChannel )
 , aHostToTalk( aHost )
