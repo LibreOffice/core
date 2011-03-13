@@ -118,6 +118,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/hyperdlg \
     svx/source/dialog/imapdlg \
     svx/source/dialog/imapwnd \
+    svx/source/dialog/linkwarn \
     svx/source/dialog/measctrl \
     svx/source/dialog/optgrid \
     svx/source/dialog/orienthelper \
