@@ -166,7 +166,7 @@ VbaDocumentBase::Protect( const uno::Any &aPassword ) throw (uno::RuntimeExcepti
 {
     rtl::OUString rPassword;
     uno::Reference< util::XProtectable > xProt( getModel(), uno::UNO_QUERY_THROW );
-    SC_VBA_FIXME(("Workbook::Protect stub"));
+    OSL_TRACE("Workbook::Protect stub");
     if(  aPassword >>= rPassword )
         xProt->protect( rPassword );
     else
