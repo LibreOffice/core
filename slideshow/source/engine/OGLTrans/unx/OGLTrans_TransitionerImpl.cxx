@@ -487,13 +487,13 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
               glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i],
                                     GLX_BIND_TO_TEXTURE_RGB_EXT,
                                     &value);
-              if (value == FALSE)
+              if (value == sal_False)
                   continue;
 
               glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i],
                                     GLX_BIND_TO_MIPMAP_TEXTURE_EXT,
                                     &value);
-              if (value == FALSE)
+              if (value == sal_False)
                   continue;
 
               /* TODO: handle non Y inverted cases */
@@ -517,7 +517,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
               winData.nSize = sizeof(winData);
           OSL_TRACE("using VisualID %08X", vi->visualid);
               winData.pVisual = (void*)(vi->visual);
-              pWindow=new SystemChildWindow(pPWindow, 0, &winData, FALSE);
+              pWindow=new SystemChildWindow(pPWindow, 0, &winData, sal_False);
               pChildSysData = pWindow->GetSystemData();
               if( pChildSysData ) {
                   break;
@@ -537,18 +537,18 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
       const SystemEnvData* pChildSysData = NULL;
       SystemWindowData winData;
       winData.nSize = sizeof(winData);
-      pWindow=new SystemChildWindow(pPWindow, 0, &winData, FALSE);
+      pWindow=new SystemChildWindow(pPWindow, 0, &winData, sal_False);
       pChildSysData = pWindow->GetSystemData();
 #endif
 
       if( pWindow )
       {
-      pWindow->SetMouseTransparent( TRUE );
+      pWindow->SetMouseTransparent( sal_True );
       pWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-      pWindow->EnableEraseBackground( FALSE );
+      pWindow->EnableEraseBackground( sal_False );
       pWindow->SetControlForeground();
       pWindow->SetControlBackground();
-      pWindow->EnablePaint(FALSE);
+      pWindow->EnablePaint(sal_False);
 #if defined( WNT )
         GLWin.hWnd = sysData->hWnd;
 #elif defined( UNX )

@@ -450,10 +450,10 @@ namespace slideshow
                             mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
                             mpMediaWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-                            mpMediaWindow->EnableEraseBackground( FALSE );
-                            mpMediaWindow->EnablePaint( FALSE );
-                            mpMediaWindow->SetForwardKey( TRUE );
-                            mpMediaWindow->SetMouseTransparent( TRUE );
+                            mpMediaWindow->EnableEraseBackground( sal_False );
+                            mpMediaWindow->EnablePaint( sal_False );
+                            mpMediaWindow->SetForwardKey( sal_True );
+                            mpMediaWindow->SetMouseTransparent( sal_True );
                             mpMediaWindow->Show();
 
                             if( mxPlayer.is() )

@@ -372,12 +372,12 @@ bool OGLTransitionerImpl::initialize( const Reference< presentation::XSlideShowV
 //
     if( pWindow )
     {
-        pWindow->SetMouseTransparent( TRUE );
+        pWindow->SetMouseTransparent( sal_True );
         pWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        pWindow->EnableEraseBackground( FALSE );
+        pWindow->EnableEraseBackground( sal_False );
         pWindow->SetControlForeground();
         pWindow->SetControlBackground();
-        pWindow->EnablePaint(FALSE);
+        pWindow->EnablePaint(sal_False);
         pWindow->SetPosSizePixel(pPWindow->GetPosPixel(),pPWindow->GetSizePixel());
  //       GLWin.dpy = reinterpret_cast<unx::Display*>(pChildSysData->pDisplay);
 //        GLWin.win = pChildSysData->aWindow;
@@ -455,12 +455,12 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
 
     if( pWindow )
     {
-        pWindow->SetMouseTransparent( TRUE );
+        pWindow->SetMouseTransparent( sal_True );
         pWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-        pWindow->EnableEraseBackground( FALSE );
+        pWindow->EnableEraseBackground( sal_False );
         pWindow->SetControlForeground();
         pWindow->SetControlBackground();
-        pWindow->EnablePaint(FALSE);
+        pWindow->EnablePaint(sal_False);
         pWindow->SetPosSizePixel(pPWindow->GetPosPixel(),pPWindow->GetSizePixel());
 
     }
