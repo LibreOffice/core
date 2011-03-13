@@ -49,11 +49,11 @@ namespace PictReaderShapePrivate {
       when we draw a frame in wide length*/
   Rectangle contractRectangle(bool drawFrame, Rectangle const &rect, Size const &pSize) {
     if (!drawFrame) return rect;
-    int penSize=(pSize.Width()+pSize.Height())/2;
+    long penSize=(pSize.Width()+pSize.Height())/2;
     if (2*penSize > rect.Right()-rect.Left()) penSize = (rect.Right()-rect.Left()+1)/2;
     if (2*penSize > rect.Bottom()-rect.Top()) penSize = (rect.Bottom()-rect.Top()+1)/2;
-    int const X[2] = { rect.Left()+penSize/2, rect.Right()-(penSize+1)/2 };
-    int const Y[2] = { rect.Top()+penSize/2, rect.Bottom()-(penSize+1)/2 };
+    long const X[2] = { rect.Left()+penSize/2, rect.Right()-(penSize+1)/2 };
+    long const Y[2] = { rect.Top()+penSize/2, rect.Bottom()-(penSize+1)/2 };
     return Rectangle(Point(X[0],Y[0]), Point(X[1], Y[1]));
   }
 }
@@ -61,12 +61,12 @@ namespace PictReaderShapePrivate {
 namespace PictReaderShape {
   //--------- draws a horizontal/vertical/small line (by creating a "rectangle/polygon")  ---------
   bool drawLineHQ(VirtualDevice *dev, Point const &orig, Point const &dest, Size const &pSize) {
-    int dir[2] = { dest.X()-orig.X(), dest.Y()-orig.Y() };
+    long dir[2] = { dest.X()-orig.X(), dest.Y()-orig.Y() };
     bool vertic = dir[0] == 0;
     bool horiz = dir[1] == 0;
     if (!horiz && !vertic && dir[0]*dir[0]+dir[1]*dir[1] > 25) return false;
 
-    int X[2]={ orig.X(), dest.X() }, Y[2] = { orig.Y(), dest.Y() };
+    long X[2]={ orig.X(), dest.X() }, Y[2] = { orig.Y(), dest.Y() };
     using namespace basegfx;
     B2DPolygon poly;
     if (horiz || vertic) {
@@ -85,11 +85,11 @@ namespace PictReaderShape {
       poly.append(B2DPoint(X[0], Y[0]));
     }
     else {
-      int origPt[4][2] = { { orig.X(), orig.Y() }, { orig.X()+pSize.Width(), orig.Y() },
+      long origPt[4][2] = { { orig.X(), orig.Y() }, { orig.X()+pSize.Width(), orig.Y() },
                { orig.X()+pSize.Width(), orig.Y()+pSize.Height() },
                { orig.X(), orig.Y()+pSize.Height() }};
-      int origAvoid = dir[0] > 0 ? (dir[1] > 0 ? 2 : 1) : (dir[1] > 0 ? 3 : 0);
-      int destPt[4][2] = { { dest.X(), dest.Y() }, { dest.X()+pSize.Width(), dest.Y() },
+      long origAvoid = dir[0] > 0 ? (dir[1] > 0 ? 2 : 1) : (dir[1] > 0 ? 3 : 0);
+      long destPt[4][2] = { { dest.X(), dest.Y() }, { dest.X()+pSize.Width(), dest.Y() },
                { dest.X()+pSize.Width(), dest.Y()+pSize.Height() },
                { dest.X(), dest.Y()+pSize.Height() }};
       for (int w = origAvoid+1; w < origAvoid+4; w++) {
@@ -120,8 +120,8 @@ namespace PictReaderShape {
   void drawLine(VirtualDevice *dev, Point const &orig, Point const &dest, Size const &pSize) {
     if (drawLineHQ(dev,orig,dest,pSize)) return;
 
-    int penSize=(pSize.Width()+pSize.Height())/2;
-    int decal[2] = { pSize.Width()/2, pSize.Height()/2};
+    long penSize=(pSize.Width()+pSize.Height())/2;
+    long decal[2] = { pSize.Width()/2, pSize.Height()/2};
 
     using namespace basegfx;
     B2DPolygon poly;
@@ -137,8 +137,8 @@ namespace PictReaderShape {
   void drawRectangle(VirtualDevice *dev, bool drawFrame, Rectangle const &orig, Size const &pSize) {
     int penSize=(pSize.Width()+pSize.Height())/2;
     Rectangle rect = PictReaderShapePrivate::contractRectangle(drawFrame, orig, pSize);
-    double const X[2] = { rect.Left(), rect.Right() };
-    double const Y[2] = { rect.Top(), rect.Bottom() };
+    long const X[2] = { rect.Left(), rect.Right() };
+    long const Y[2] = { rect.Top(), rect.Bottom() };
 
     using namespace basegfx;
     B2DPolygon poly;
@@ -157,8 +157,8 @@ namespace PictReaderShape {
     int penSize=(pSize.Width()+pSize.Height())/2;
     Rectangle oval = PictReaderShapePrivate::contractRectangle(drawFrame, orig, pSize);
     using namespace basegfx;
-    double const X[2] = { oval.Left(), oval.Right() };
-    double const Y[2] = { oval.Top(), oval.Bottom() };
+    long const X[2] = { oval.Left(), oval.Right() };
+    long const Y[2] = { oval.Top(), oval.Bottom() };
     B2DPoint center(0.5*(X[1]+X[0]), 0.5*(Y[1]+Y[0]));
     B2DPolygon poly = tools::createPolygonFromEllipse(center, 0.5*(X[1]-X[0]), 0.5*(Y[1]-Y[0]));
     if (drawFrame)
@@ -177,8 +177,8 @@ namespace PictReaderShape {
     // pict angle are CW with 0 at twelve oclock ( with Y-axis inverted)...
     double angl1 = angle1-PI2;
     double angl2 = angle2-PI2;
-    double const X[2] = { arc.Left(), arc.Right() };
-    double const Y[2] = { arc.Top(), arc.Bottom() };
+    long const X[2] = { arc.Left(), arc.Right() };
+    long const Y[2] = { arc.Top(), arc.Bottom() };
     B2DPoint center(0.5*(X[1]+X[0]), 0.5*(Y[1]+Y[0]));
 
     // We must have angl1 between 0 and F_2PI
@@ -208,10 +208,10 @@ namespace PictReaderShape {
     Rectangle oval = PictReaderShapePrivate::contractRectangle(drawFrame, orig, pSize);
     int ovalW=ovalSize.Width(), ovalH=ovalSize.Height();
     using namespace basegfx;
-    double const X[2] = { oval.Left(), oval.Right() };
-    double const Y[2] = { oval.Top(), oval.Bottom() };
-    double width = X[1] - X[0];
-    double height = Y[1] - Y[0];
+    long const X[2] = { oval.Left(), oval.Right() };
+    long const Y[2] = { oval.Top(), oval.Bottom() };
+    long width = X[1] - X[0];
+    long height = Y[1] - Y[0];
     if (ovalW > width) ovalW = static_cast< int >( width );
     if (ovalH > height) ovalH = static_cast< int >( height );
 
@@ -227,7 +227,7 @@ namespace PictReaderShape {
   //--------------------  draws a polygon --------------------
   void drawPolygon(VirtualDevice *dev, bool drawFrame, Polygon const &orig, Size const &pSize) {
     int penSize=(pSize.Width()+pSize.Height())/2;
-    int decalTL[2] = {0, 0}, decalBR[2] = { pSize.Width(), pSize.Height()};
+    long decalTL[2] = {0, 0}, decalBR[2] = { pSize.Width(), pSize.Height()};
     if (drawFrame) {
       decalTL[0] += penSize/2; decalTL[1] += penSize/2;
       decalBR[0] -= (penSize+1)/2; decalBR[1] -= (penSize+1)/2;
