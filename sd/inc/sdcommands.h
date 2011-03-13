@@ -213,6 +213,7 @@
 #define CMD_SID_ORIGINAL_SIZE                       ".uno:OriginalSize"
 #define CMD_SID_SAVEGRAPHIC                         ".uno:SaveGraphic"
 #define CMD_SID_OUTLINEMODE                         ".uno:OutlineMode"
+#define CMD_SID_OUTLINE_TEXT_AUTOFIT                ".uno.OutlineTextAutofit"
 #define CMD_SID_OUTPUT_QUALITY_BLACKWHITE           ".uno:OutputQualityBlackWhite"
 #define CMD_SID_OUTPUT_QUALITY_COLOR                ".uno:OutputQualityColor"
 #define CMD_SID_OUTPUT_QUALITY_CONTRAST             ".uno:OutputQualityContrast"

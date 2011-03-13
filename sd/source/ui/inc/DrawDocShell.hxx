@@ -90,6 +90,7 @@ public:
     virtual void            Activate( sal_Bool bMDI );
     virtual void            Deactivate( sal_Bool bMDI );
     virtual sal_Bool            InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual sal_Bool        ImportFrom( SfxMedium &rMedium );
     virtual sal_Bool            ConvertFrom( SfxMedium &rMedium );
     virtual sal_Bool            Save();
     virtual sal_Bool            SaveAsOwnFormat( SfxMedium& rMedium );

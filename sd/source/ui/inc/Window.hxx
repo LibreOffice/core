@@ -171,10 +171,10 @@ protected:
     Point maWinPos;
     Point maViewOrigin;
     Size maViewSize;
+    Size maPrevSize; // contains previous window size in logical coords
     sal_uInt16 mnMinZoom;
     sal_uInt16 mnMaxZoom;
 
-    sal_uInt16 mnMaxZoom;
     /** This flag tells whether to re-calculate the minimal zoom factor
         depening on the current zoom factor.  Its default value is now sal_False.
     */

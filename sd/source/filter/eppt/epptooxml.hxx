@@ -74,7 +74,8 @@ class PowerPointExport : public XmlFilterBase, public PPTWriterBase
     friend class PowerPointShapeExport;
 public:
 
-    PowerPointExport( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & rSMgr  );
+    PowerPointExport( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & rxCtxt  );
+
     ~PowerPointExport();
 
     // from FilterBase
@@ -105,7 +106,7 @@ protected:
 
     virtual sal_Bool ImplCreateDocument();
     virtual sal_Bool ImplCreateMainNotes();
-
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
     sal_Bool WriteNotesMaster();
 
     void WriteAnimateTo( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Any aValue, const ::rtl::OUString& rAttributeName );

@@ -299,7 +299,7 @@
     MenuItem\
     {\
         Identifier = SID_OUTLINE_TEXT_AUTOFIT ; \
-        HelpID = SID_OUTLINE_TEXT_AUTOFIT ; \
+        HelpID = CMD_SID_OUTLINE_TEXT_AUTOFIT ; \
         Text [ en-US ] = "~Autofit Text" ; \
     };
 

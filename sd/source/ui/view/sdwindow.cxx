@@ -683,7 +683,7 @@ void Window::UpdateMapOrigin(sal_Bool bInvalidate)
             // resizes
             maWinPos.X() -= (aWinSize.Width() - maPrevSize.Width()) / 2;
             maWinPos.Y() -= (aWinSize.Height() - maPrevSize.Height()) / 2;
-            bChanged = TRUE;
+            bChanged = sal_True;
         }
 
         if ( maWinPos.X() > maViewSize.Width() - aWinSize.Width() )

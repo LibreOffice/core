@@ -449,7 +449,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
     Image aImgDocClosed=Image( BitmapEx( SdResId( BMP_DOC_CLOSED ) ) );
 
     // Dokumentnamen einfuegen
-    InsertEntry( maDocName, aImgDocOpen, aImgDocClosed, NULL, TRUE, LIST_APPEND,
+    InsertEntry( maDocName, aImgDocOpen, aImgDocClosed, NULL, sal_True, LIST_APPEND,
                  reinterpret_cast< void* >( 1 )
     );
 }

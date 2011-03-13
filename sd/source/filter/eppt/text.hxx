@@ -71,12 +71,12 @@ struct SOParagraph
     SOParagraph()
     {
         nDepth = 0;
-        bExtendedParameters = FALSE;
+        bExtendedParameters = sal_False;
         nParaFlags = 0;
         nBulletFlags = 0;
         nBulletOfs = 0;
         nTextOfs = 0;
-        bExtendedBulletsUsed = FALSE;
+        bExtendedBulletsUsed = sal_False;
         nBulletId = 0xffff;
         bNumberingIsNumber = sal_True;
     };
@@ -90,7 +90,7 @@ class PropStateValue : public PropValue
         ::com::sun::star::uno::Reference
             < ::com::sun::star::beans::XPropertyState >         mXPropState;
 
-        sal_Bool    ImplGetPropertyValue( const String& rString, sal_Bool bGetPropertyState = TRUE );
+        sal_Bool    ImplGetPropertyValue( const String& rString, sal_Bool bGetPropertyState = sal_True );
 
 };
 
@@ -122,7 +122,7 @@ class PortionObj : public PropStateValue
         sal_uInt32      ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef, String& rURL );
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
-        void            ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool bGetPropStateValue = FALSE );
+        void            ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool bGetPropStateValue = sal_False );
 
     public :
 
@@ -165,7 +165,7 @@ struct ParaFlags
     sal_Bool    bFirstParagraph : 1;
     sal_Bool    bLastParagraph  : 1;
 
-                    ParaFlags() { bFirstParagraph = TRUE; bLastParagraph = FALSE; };
+                    ParaFlags() { bFirstParagraph = sal_True; bLastParagraph = sal_False; };
 };
 
 class ParagraphObj : public List, public PropStateValue, public SOParagraph
@@ -182,8 +182,8 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
         void            ImplClear();
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
         ::com::sun::star::awt::Size         ImplMapSize( const ::com::sun::star::awt::Size& rSize );
-        void            ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Bool bGetPropStateValue = FALSE );
-        void            ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nDepth, sal_Bool bIsBullet, sal_Bool bGetPropStateValue = FALSE );
+        void            ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Bool bGetPropStateValue = sal_False );
+        void            ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nDepth, sal_Bool bIsBullet, sal_Bool bGetPropStateValue = sal_False );
 
     public :
 

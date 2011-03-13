@@ -682,7 +682,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 const SvxLRSpaceItem& rItem = (const SvxLRSpaceItem&)
                             pArgs->Get( nId );
 
-                static const USHORT aWhichTable[]=
+                static const sal_uInt16 aWhichTable[]=
                 {
                     EE_PARA_OUTLLEVEL, EE_PARA_OUTLLEVEL,
                     EE_PARA_LRSPACE, EE_PARA_LRSPACE,
@@ -699,7 +699,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                         rItem.GetRight(), rItem.GetTxtLeft(),
                         rItem.GetTxtFirstLineOfst(), nId );
 
-                const INT16 nOutlineLevel = ((const SfxInt16Item&)aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
+                const sal_Int16 nOutlineLevel = ((const SfxInt16Item&)aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
                 const SvxLRSpaceItem& rOrigLRSpaceItem = (const SvxLRSpaceItem&) aEditAttr.Get( EE_PARA_LRSPACE );
                 const SvxNumBulletItem& rNumBulletItem = (const SvxNumBulletItem&) aEditAttr.Get( EE_PARA_NUMBULLET );
                 if( nOutlineLevel != -1 &&
@@ -832,7 +832,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                             rLRSpaceItem.GetRight(), rLRSpaceItem.GetTxtLeft(),
                             rLRSpaceItem.GetTxtFirstLineOfst(), nId );
 
-                    const INT16 nOutlineLevel = ((const SfxInt16Item&)aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
+                    const sal_Int16 nOutlineLevel = ((const SfxInt16Item&)aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
                     const SvxNumBulletItem& rNumBulletItem = (const SvxNumBulletItem&) aEditAttr.Get( EE_PARA_NUMBULLET );
                     if( nOutlineLevel != -1 &&
                         rNumBulletItem.GetNumRule() &&

@@ -185,7 +185,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         aAny >>= bVisible;
     if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Change" ) ) ) )
     {
-        switch ( *(INT32*)aAny.getValue() )
+        switch ( *(sal_Int32*)aAny.getValue() )
         {
             case 1 :        // automatisch
                 mnDiaMode++;
@@ -218,7 +218,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LoopSound" ) ) ) )
         aAny >>= bLoopSound;
 
-    sal_Bool bNeedsSSSlideInfoAtom = ( bVisible == FALSE )
+    sal_Bool bNeedsSSSlideInfoAtom = ( bVisible == sal_False )
                                     || ( mnDiaMode == 2 )
                                     || ( bIsSound )
                                     || ( bStopSound )
@@ -228,7 +228,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         sal_uInt8   nDirection = 0;
         sal_uInt8   nTransitionType = 0;
         sal_uInt16  nBuildFlags = 1;        // advange by mouseclick
-        INT32       nSlideTime = 0;         // muss noch !!!
+        sal_Int32       nSlideTime = 0;         // muss noch !!!
         sal_uInt8   nSpeed = 1;
 
         if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) ) ) )
@@ -251,7 +251,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
             nTransitionType = GetTransition( eFe, nDirection );
         if ( mnDiaMode == 2 )                                   // automatic ?
             nBuildFlags |= 0x400;
-        if ( bVisible == FALSE )
+        if ( bVisible == sal_False )
             nBuildFlags |= 4;
         if ( bIsSound )
             nBuildFlags |= 16;
@@ -261,7 +261,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
             nBuildFlags |= 256;
 
         if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Duration" ) ) ) )// duration of this slide
-            nSlideTime = *(INT32*)aAny.getValue() << 10;        // in ticks
+            nSlideTime = *(sal_Int32*)aAny.getValue() << 10;        // in ticks
 
         mpPptEscherEx->AddAtom( 16, EPP_SSSlideInfoAtom );
         *mpStrm << nSlideTime       // standtime in ticks
@@ -279,7 +279,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup(0,0);
-    ImplWritePage( rLayout, aSolverContainer, NORMAL, FALSE, nPageNum );    // Die Shapes der Seite werden im PPT Dok. erzeugt
+    ImplWritePage( rLayout, aSolverContainer, NORMAL, sal_False, nPageNum );    // Die Shapes der Seite werden im PPT Dok. erzeugt
     mpPptEscherEx->LeaveGroup();
 
     if ( bHasBackground )
@@ -358,7 +358,7 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainMaster | nPageNum, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_MainMaster );
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
-    *mpStrm << (INT32)EPP_LAYOUT_TITLEANDBODYSLIDE  // slide layout -> title and body slide
+    *mpStrm << (sal_Int32)EPP_LAYOUT_TITLEANDBODYSLIDE  // slide layout -> title and body slide
             << (sal_uInt8)1 << (sal_uInt8)2 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0     // placeholderID
             << (sal_uInt32)0        // master ID ( ist gleich null bei einer masterpage )
             << (sal_uInt32)0        // notes ID ( ist gleich null wenn keine notizen vorhanden )
@@ -393,8 +393,8 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
 
         mpPptEscherEx->BeginAtom();
 
-        sal_Bool bFirst = TRUE;
-        sal_Bool bSimpleText = FALSE;
+        sal_Bool bFirst = sal_True;
+        sal_Bool bSimpleText = sal_False;
 
         *mpStrm << (sal_uInt16)5;                           // paragraph count
 
@@ -402,13 +402,13 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
         {
             if ( nInstance >= EPP_TEXTTYPE_CenterBody )
             {
-                bFirst = FALSE;
-                bSimpleText = TRUE;
+                bFirst = sal_False;
+                bSimpleText = sal_True;
                 *mpStrm << nLev;
             }
             mpStyleSheet->mpParaSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
             mpStyleSheet->mpCharSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
-            bFirst = FALSE;
+            bFirst = sal_False;
         }
         mpPptEscherEx->EndAtom( EPP_TxMasterStyleAtom, 0, nInstance );
     }
@@ -420,7 +420,7 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
 
     mpPptEscherEx->EnterGroup(0,0);
-    ImplWritePage( GetLayout( 0 ), aSolverContainer, MASTER, TRUE );    // Die Shapes der Seite werden im PPT Dok. erzeugt
+    ImplWritePage( GetLayout( 0 ), aSolverContainer, MASTER, sal_True );    // Die Shapes der Seite werden im PPT Dok. erzeugt
     mpPptEscherEx->LeaveGroup();
 
     ImplWriteBackground( aXBackgroundPropSet );

@@ -124,7 +124,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
     {
         case SID_OUTLINE_TEXT_AUTOFIT:
         {
-            SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+            ::svl::IUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
             SdrObject* pObj = NULL;
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
