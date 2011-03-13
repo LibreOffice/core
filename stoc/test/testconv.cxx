@@ -84,7 +84,7 @@ static void printValue( const Any & rVal )
         char ar[2];
         ar[0] = (char)*(sal_Unicode *)rVal.getValue();
         ar[1] = 0;
-        printf( ar );
+        printf( "%s", ar );
         break;
     }
     case TypeClass_BYTE:
