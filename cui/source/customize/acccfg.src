@@ -251,7 +251,6 @@ Resource RID_SVXPAGE_CONFIGGROUPBOX
         ImageBitmap = Bitmap { File = "im30826.png"; };
         MASKCOLOR
     };
-    };
     Image BMP_COLLAPSED
     {
         ImageBitmap = Bitmap

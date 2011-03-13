@@ -928,7 +928,6 @@ void SpellDialog::InitUserDicts()
     }
 
     SvtLinguConfig aCfg;
-    const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     // list suitable dictionaries
     bool bEnable = false;
@@ -958,7 +957,7 @@ void SpellDialog::InitUserDicts()
             if (xSvcInfo.is())
             {
                 OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
-                        xSvcInfo->getImplementationName(), bHC) );
+                        xSvcInfo->getImplementationName()) );
                 if (aDictionaryImageUrl.getLength() > 0)
                 {
                     Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );

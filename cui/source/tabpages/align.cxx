@@ -124,10 +124,10 @@ namespace {
 
 template<typename _JustContainerType, typename _JustEnumType>
 void lcl_MaybeResetAlignToDistro(
-    ListBox& rLB, USHORT nListPos, const SfxItemSet& rCoreAttrs, USHORT nWhichAlign, USHORT nWhichJM, _JustEnumType eBlock)
+    ListBox& rLB, sal_uInt16 nListPos, const SfxItemSet& rCoreAttrs, sal_uInt16 nWhichAlign, sal_uInt16 nWhichJM, _JustEnumType eBlock)
 {
     const SfxPoolItem* pItem;
-    if (rCoreAttrs.GetItemState(nWhichAlign, TRUE, &pItem) != SFX_ITEM_SET)
+    if (rCoreAttrs.GetItemState(nWhichAlign, sal_True, &pItem) != SFX_ITEM_SET)
         // alignment not set.
         return;
 
@@ -137,7 +137,7 @@ void lcl_MaybeResetAlignToDistro(
         // alignment is not 'justify'.  No need to go further.
         return;
 
-    if (rCoreAttrs.GetItemState(nWhichJM, TRUE, &pItem) != SFX_ITEM_SET)
+    if (rCoreAttrs.GetItemState(nWhichJM, sal_True, &pItem) != SFX_ITEM_SET)
         // justification method is not set.
         return;
 
@@ -148,7 +148,7 @@ void lcl_MaybeResetAlignToDistro(
         rLB.SelectEntryPos(nListPos);
 }
 
-void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, USHORT nWhichJM, const ListBox& rLB, USHORT nListPos)
+void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, sal_uInt16 nWhichJM, const ListBox& rLB, sal_uInt16 nListPos)
 {
     SvxCellJustifyMethod eJM = SVX_JUSTIFY_METHOD_AUTO;
     if (rLB.GetSelectEntryPos() == nListPos)
@@ -261,19 +261,19 @@ sal_uInt16* AlignmentTabPage::GetRanges()
     return s_pRanges;
 }
 
-BOOL AlignmentTabPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool AlignmentTabPage::FillItemSet( SfxItemSet& rSet )
 {
     bool bChanged = SfxTabPage::FillItemSet(rSet);
 
     // Special treatment for distributed alignment; we need to set the justify
     // method to 'distribute' to distinguish from the normal justification.
 
-    USHORT nWhichHorJM = GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD);
+    sal_uInt16 nWhichHorJM = GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD);
     lcl_SetJustifyMethodToItemSet(rSet, nWhichHorJM, maLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED);
     if (!bChanged)
         bChanged = HasAlignmentChanged(rSet, nWhichHorJM);
 
-    USHORT nWhichVerJM = GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY_METHOD);
+    sal_uInt16 nWhichVerJM = GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY_METHOD);
     lcl_SetJustifyMethodToItemSet(rSet, nWhichVerJM, maLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED);
     if (!bChanged)
         bChanged = HasAlignmentChanged(rSet, nWhichVerJM);
@@ -367,19 +367,19 @@ void AlignmentTabPage::UpdateEnableControls()
     maFlProperties.Show( maBtnWrap.IsVisible() || maBtnHyphen.IsVisible() || maBtnShrink.IsVisible() || maLbFrameDir.IsVisible() );
 }
 
-bool AlignmentTabPage::HasAlignmentChanged( const SfxItemSet& rNew, USHORT nWhich ) const
+bool AlignmentTabPage::HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 nWhich ) const
 {
     const SfxItemSet& rOld = GetItemSet();
     const SfxPoolItem* pItem;
     SvxCellJustifyMethod eMethodOld = SVX_JUSTIFY_METHOD_AUTO;
     SvxCellJustifyMethod eMethodNew = SVX_JUSTIFY_METHOD_AUTO;
-    if (rOld.GetItemState(nWhich, TRUE, &pItem) == SFX_ITEM_SET)
+    if (rOld.GetItemState(nWhich, sal_True, &pItem) == SFX_ITEM_SET)
     {
         const SfxEnumItem* p = static_cast<const SfxEnumItem*>(pItem);
         eMethodOld = static_cast<SvxCellJustifyMethod>(p->GetEnumValue());
     }
 
-    if (rNew.GetItemState(nWhich, TRUE, &pItem) == SFX_ITEM_SET)
+    if (rNew.GetItemState(nWhich, sal_True, &pItem) == SFX_ITEM_SET)
     {
         const SfxEnumItem* p = static_cast<const SfxEnumItem*>(pItem);
         eMethodNew = static_cast<SvxCellJustifyMethod>(p->GetEnumValue());

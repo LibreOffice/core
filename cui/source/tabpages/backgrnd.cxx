@@ -1135,14 +1135,14 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     const SfxPoolItem* pItem = NULL;
     XColorTable* pColorTable = NULL;
     const Size aSize15x15 = Size( 15, 15 );
-    bool bOwn = FALSE;
+    bool bOwn = false;
 
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
         pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
 
     if ( !pColorTable )
     {
-        bOwn = sal_True;
+        bOwn = true;
         pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
     }
 

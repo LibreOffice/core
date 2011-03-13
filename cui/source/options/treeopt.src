@@ -335,10 +335,5 @@ ImageList RID_IMGLIST_TREEOPT
     IMGLST_IDLST
 };
 
-ImageList RID_IMGLIST_TREEOPT_HC
-{
-    Prefix = "trh";
-    MASK_COL
-    IMGLST_IDLST
-};
+
 

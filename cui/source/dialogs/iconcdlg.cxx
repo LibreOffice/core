@@ -305,7 +305,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
     }
 
     // remove Userdata from Icons
-    for ( ULONG i=0; i < maIconCtrl.GetEntryCount(); i++)
+    for ( sal_uLong i=0; i < maIconCtrl.GetEntryCount(); i++)
     {
         SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.GetEntry ( i );
         sal_uInt16* pUserData = (sal_uInt16*) pEntry->GetUserData();
@@ -392,8 +392,8 @@ void IconChoiceDialog::RemoveTabPage( sal_uInt16 nId )
     }
 
     // remove Icon
-    bool bFound = FALSE;
-    for ( ULONG i=0; i<maIconCtrl.GetEntryCount() && !bFound; i++)
+    bool bFound = false;
+    for ( sal_uLong i=0; i<maIconCtrl.GetEntryCount() && !bFound; i++)
     {
         SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.GetEntry ( i );
         sal_uInt16* pUserData = (sal_uInt16*) pEntry->GetUserData();
@@ -499,7 +499,7 @@ void IconChoiceDialog::HidePageImpl ( IconChoicePageData* pData )
 void IconChoiceDialog::RemoveResetButton()
 {
     aResetBtn.Hide();
-    bHideResetBtn = TRUE;
+    bHideResetBtn = true;
 }
 
 // -----------------------------------------------------------------------
@@ -817,7 +817,7 @@ void IconChoiceDialog::ActivatePageImpl ()
     DBG_ASSERT( !maPageList.empty(), "keine Pages angemeldet" );
     IconChoicePageData* pData = GetPageData ( mnCurrentPageId );
     DBG_ASSERT( pData, "Id nicht bekannt" );
-    BOOL bReadOnly = FALSE;
+    bool bReadOnly = false;
     if ( pData )
     {
         if ( !pData->pPage )

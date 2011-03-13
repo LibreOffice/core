@@ -415,7 +415,7 @@ sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetTryODMADialog( aODMADlgCB.IsChecked() );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if ( aDocStatusCB.IsChecked() != aDocStatusCB.GetSavedValue() )
@@ -429,14 +429,14 @@ sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetSaveAlwaysAllowed( aSaveAlwaysCB.IsChecked() );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if ( aExperimentalCB.IsChecked() != aExperimentalCB.GetSavedValue() )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetExperimentalMode( aExperimentalCB.IsChecked() );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     const SfxUInt16Item* pUInt16Item =

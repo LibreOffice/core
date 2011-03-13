@@ -550,8 +550,8 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
 
     if (aWordsLB.GetEntryCount())
     {
-        aWordED   .SetText( aWordsLB.GetEntryText((ULONG)0, 0) );
-        aReplaceED.SetText( aWordsLB.GetEntryText((ULONG)0, 1) );
+        aWordED   .SetText( aWordsLB.GetEntryText((sal_uLong)0, 0) );
+        aReplaceED.SetText( aWordsLB.GetEntryText((sal_uLong)0, 1) );
     }
 
     LeaveWait();

@@ -55,7 +55,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
     static sal_uInt16*      GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool    FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
@@ -66,7 +66,7 @@ private:
     void                InitVsRefEgde();
     void                UpdateEnableControls();
 
-    bool                HasAlignmentChanged( const SfxItemSet& rNew, USHORT nWhich ) const;
+    bool                HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 nWhich ) const;
 
     DECL_LINK( UpdateEnableHdl, void* );
 

@@ -807,7 +807,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 
         if( pColorTab )
         {
-            USHORT _nPos = 0;
+            sal_uInt16 _nPos = 0;
             // Bitmapliste
             if( *pnBitmapListState )
             {

@@ -164,7 +164,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
     if ( pResMgr )
     {
         aCopyrightTextStr = String( ResId( ABOUT_STR_COPYRIGHT, *pResMgr ) );
-        pDeveloperAry = new ResStringArray( ResId( ABOUT_STR_DEVELOPER_ARY, *pResMgr ) );
+//        pDeveloperAry = new ResStringArray( ResId( ABOUT_STR_DEVELOPER_ARY, *pResMgr ) );
         delete pResMgr;
     }
 
@@ -375,7 +375,8 @@ void AboutDialog::Paint( const Rectangle& rRect )
     const int nFullWidth = GetOutputSizePixel().Width();
 
     int nY = nOff;
-    const int nDevCnt = static_cast<int>( pDeveloperAry->Count() );
+//    const int nDevCnt = static_cast<int>( pDeveloperAry->Count() );
+    const int nDevCnt = 0;
     for( int i = 0; i < nDevCnt; ++i )
     {
         if( nY >= rRect.Bottom() )

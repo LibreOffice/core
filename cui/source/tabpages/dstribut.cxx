@@ -172,7 +172,7 @@ void SvxDistributePage::Reset(const SfxItemSet& )
         case SvxDistributeHorizontalLeft : maBtnHorLeft.SetState(sal_True); break;
         case SvxDistributeHorizontalCenter : maBtnHorCenter.SetState(sal_True); break;
         case SvxDistributeHorizontalDistance : maBtnHorDistance.SetState(sal_True); break;
-        case SvxDistributeHorizontalRight    : maBtnHorRight.SetState(TRUE);    break;
+        case SvxDistributeHorizontalRight    : maBtnHorRight.SetState(sal_True);    break;
     }
 
     maBtnVerNone.SetState(sal_False);

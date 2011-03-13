@@ -233,7 +233,7 @@ public :
     //
 
     SvxIconChoiceCtrlEntry* AddTabPage(
-        sal_uInt16 nId, const String& rIconText, const Image& rChoiceIcon, const Image& rChoiceIconHC,
+        sal_uInt16 nId, const String& rIconText, const Image& rChoiceIcon,
         CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = NULL /* NULL allowed*/,
         sal_Bool bItemsOnDemand = sal_False, sal_uLong nPos = LIST_APPEND );
 
@@ -241,6 +241,7 @@ public :
     sal_uInt16              GetCurPageId() const       { return mnCurrentPageId; }
     void                ShowPage( sal_uInt16 nId );
     void                RemoveTabPage( sal_uInt16 nId );
+    void                RemoveResetButton();
 
                         // liefert ggf. per Map konvertierte lokale Slots
     const sal_uInt16*       GetInputRanges( const SfxItemPool& );

@@ -375,7 +375,7 @@ void BasicStopped( sal_Bool* pbAppWindowDisabled,
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     if( pIDEShell )
     {
-        USHORT nWait = 0;
+        sal_uInt16 nWait = 0;
         while ( pIDEShell->GetViewFrame()->GetWindow().IsWait() )
         {
             pIDEShell->GetViewFrame()->GetWindow().LeaveWait();

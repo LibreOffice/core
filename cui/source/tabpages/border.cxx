@@ -917,7 +917,7 @@ IMPL_LINK( SvxBorderTabPage, SelColHdl_Impl, ListBox *, pLb )
 
 // -----------------------------------------------------------------------
 
-SvxBorderStyle lcl_getBorderStyle( USHORT nStyle )
+SvxBorderStyle lcl_getBorderStyle( sal_uInt16 nStyle )
 {
     SvxBorderStyle nResult = SOLID;
     switch ( nStyle )
