@@ -31,14 +31,12 @@
 
 #include <sal/types.h>
 
-#include "preextstl.h"
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #undef CPPUNIT_PLUGIN_EXPORT
 #define CPPUNIT_PLUGIN_EXPORT extern "C" SAL_DLLPUBLIC_EXPORT
-#include "postextstl.h"
 
 #endif
 
