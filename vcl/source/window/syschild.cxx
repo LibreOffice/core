@@ -235,6 +235,12 @@ void SystemChildWindow::ImplTestJavaException( void* pEnv )
 #endif // SOLAR_JAVA
 }
 
+void SystemChildWindow::SetForwardKey( sal_Bool bEnable )
+{
+    if ( mpWindowImpl->mpSysObj )
+        mpWindowImpl->mpSysObj->SetForwardKey( bEnable );
+}
+
 // -----------------------------------------------------------------------
 
 sal_IntPtr SystemChildWindow::GetParentWindowHandle( sal_Bool bUseJava )
