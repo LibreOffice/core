@@ -87,8 +87,6 @@ private:
     bool        mbDoRefresh;
 };
 
-// ============================================================================
-
 /**
  * Cache table for external reference data.
  */
@@ -357,8 +355,6 @@ private:
 private:
     mutable DocDataType maDocs;
 };
-
-// ============================================================================
 
 class SC_DLLPUBLIC ScExternalRefManager : public formula::ExternalReferenceHelper
 {

@@ -83,7 +83,7 @@ public:
 
 
 //==================================================================
-// CfgItem fuer Eingabe-Optionen
+// CfgItem for input options
 //==================================================================
 
 class ScInputCfg : public ScInputOptions,

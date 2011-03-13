@@ -39,7 +39,7 @@
 
 #define RID_HANDLEBITMAP        10005
 
-// Bereiche ------------------------------------------------------------------
+// areas
 
 #define SC_VIEW_START           (SID_SC_START)
 #define SC_VIEW_END             (SID_SC_START + 99)
@@ -50,14 +50,13 @@
 #define SC_PARAM_START          (SID_SC_START + 300)
 #define SC_PARAM_END            (SID_SC_START + 399)
 
-//  kompatibel zu frueher bleiben:
+//  stay compatible to the past
 #define SC_RESOURCE_START       (RID_APP_START+5000)
 #define SC_RESOURCE_END         (RID_APP_END)
 
-// ---------------------------------------------------------------------------
-// Hilfe IDs -----------------------------------------------------------------
-//  Calc hat einen Bereich von 2000 IDs
-//  Die Funktionen brauchen 11*90 = 990 IDs
+// help IDs -
+//  calc has a range of 2000 IDs
+//  the functions need 11*90 = 990 IDs
 
 #define HID_SC_FUNC_START       (HID_SC_START + 0)
 #define HID_INSWIN_START        (HID_SC_START + 1000)
@@ -69,10 +68,8 @@
 #define HID_SC_TOOLBOX_START    (HID_SC_START + 1170)
 #define HID_SC_MENU_START       (HID_SC_START + 1180)
 #define HID_SC_OTHER_START      (HID_SC_START + 1230)
-#define HID_SC_AAI_FUNCS_START  (HID_SC_START + 1300)       // Analysis Addin Functions
-#define HID_SC_DAI_FUNCS_START  (HID_SC_START + 1420)       // DateFunc Addin Functions
-
-// ---------------------------------------------------------------------------
+#define HID_SC_AAI_FUNCS_START  (HID_SC_START + 1300)       // analysis addin functions
+#define HID_SC_DAI_FUNCS_START  (HID_SC_START + 1420)       // DateFunc addin functions
 
 #define HID_INSWIN_POS          (HID_INSWIN_START + 0 )
 #define HID_INSWIN_CALC         (HID_INSWIN_START + 1 )
@@ -82,7 +79,7 @@
 #define HID_INSWIN_FUNC         (HID_INSWIN_START + 5 )
 #define HID_INSWIN_INPUT        (HID_INSWIN_START + 6 )
 
-// Hilfe IDs fuer Vorlagen ---------------------------------------------------
+// help IDs for templates
 #define HID_SC_SHEET_CELL_STD   (HID_SC_SHEET_START +0 )
 #define HID_SC_SHEET_CELL_ERG   (HID_SC_SHEET_START +1 )
 #define HID_SC_SHEET_CELL_ERG1  (HID_SC_SHEET_START +2 )
@@ -91,7 +88,7 @@
 #define HID_SC_SHEET_PAGE_STD   (HID_SC_SHEET_START +10 )
 #define HID_SC_SHEET_PAGE_REP   (HID_SC_SHEET_START +11 )
 
-// Hilfe IDs fuer Shells (Helferlein) (max.20) -------------------------------
+// help IDs for shells (helper) (max. 20)
 #define HID_SCSHELL_APP         (HID_SC_SHELL_START +0 )
 #define HID_SCSHELL_DOCSH       (HID_SC_SHELL_START +1 )
 #define HID_SCSHELL_DRAWSH      (HID_SC_SHELL_START +2 )
@@ -109,12 +106,12 @@
 #define HID_SCSHELL_PAGEBREAK   (HID_SC_SHELL_START +14)
 #define HID_SCSHELL_MEDIA       (HID_SC_SHELL_START +15)
 
-// Hilfe IDs fuer Dokumentfenster --------------------------------------------
+// help IDs for document window
 #define HID_SC_WIN_GRIDWIN      ( HID_SC_WIN_START )
 #define HID_SC_WIN_PREVIEW      ( HID_SC_WIN_START + 1 )
 
-// Hilfe IDs fuer einzelne Controls (max.30) ---------------------------------
-//  Kopf/Fusszeilen Editfenster: Header/Footer links/rechts links/mitte/rechts
+// help IDs for single controls (max.30)
+//  header/footer edit window: header/footer left/right left/middle/right
 #define HID_SC_HF_HLL           ( HID_SC_CONTROL_START + 0 )
 #define HID_SC_HF_HLC           ( HID_SC_CONTROL_START + 1 )
 #define HID_SC_HF_HLR           ( HID_SC_CONTROL_START + 2 )
@@ -139,15 +136,15 @@
 #define HID_SC_NAVIPI_SCEN      ( HID_SC_CONTROL_START + 24 )
 #define HID_SC_NAVIPI_DROP      ( HID_SC_CONTROL_START + 25 )
 
-//  Teilergebnisse
+//   partial results
 #define HID_SC_SUBT_GROUP       ( HID_SC_CONTROL_START + 26 )
 #define HID_SC_SUBT_COLS        ( HID_SC_CONTROL_START + 27 )
 #define HID_SC_SUBT_FUNC        ( HID_SC_CONTROL_START + 28 )
 
 #define HID_SC_NAVIPI_TOOLBOX   ( HID_SC_CONTROL_START + 29 )
-//  Bereich ist voll!
+//  range is full!
 
-// Hilfe IDs fuer Dialoge / Pages (max.70) -----------------------------------
+// help IDs for dialogs / pages (max.70)
 #define HID_SC_AUTOFORMAT       (HID_SC_DLG_START )
 #define HID_SC_PIVOTFILTER      (HID_SC_DLG_START +1 )
 #define HID_SC_INPORTOPT        (HID_SC_DLG_START +2 )
@@ -206,7 +203,7 @@
 #define HID_SC_RENAME_NAME      (HID_SC_DLG_START +45 )
 #define HID_SC_APPEND_NAME      (HID_SC_DLG_START +46 )
 
-//  Funktionsautopilot: nur als Unique-IDs
+//  function autopilots: only as unique-IDs
 #define HID_SC_FAP_PAGE         (HID_SC_DLG_START +47 )
 #define HID_SC_FAP_EDIT1        (HID_SC_DLG_START +48 )
 #define HID_SC_FAP_EDIT2        (HID_SC_DLG_START +49 )
@@ -234,13 +231,13 @@
 #define HID_SCPAGE_OPREDLINE    (HID_SC_DLG_START +65 )
 #define HID_SC_REDLIN_CTR       (HID_SC_DLG_START +66 )
 
-//Kopf/FusszeilenDlg: Contextmenue fuer Dateiname
+// header/footerDlg: context menu for filename
 #define HID_FCOMMAND_TITEL      (HID_SC_DLG_START +67 )
 #define HID_FCOMMAND_FILENAME   (HID_SC_DLG_START +68 )
 #define HID_FCOMMAND_PATH       (HID_SC_DLG_START +69 )
 
 
-// Hilfe IDs fuer Objekt- und Werkzeugleisten (max.10) -----------------------
+// help IDs for object- and toolbars (max.10)
 
 #define HID_SC_TOOLBOX_TOOLS    ( HID_SC_TOOLBOX_START )
 #define HID_SC_TOOLBOX_TABLE    ( HID_SC_TOOLBOX_START + 1 )
@@ -260,7 +257,7 @@
 
 #define HID_SC_REN_AFMT_DLG     ( HID_SC_TOOLBOX_START + 10 )
 
-// Hilfe IDs fuer Submenus (max.50) ------------------------------------------
+// help IDs for submenus (max.50)
 #define HID_SCMENU_EDIT         ( HID_SC_MENU_START )
 #define HID_SCMENU_FILL         ( HID_SC_MENU_START + 1 )
 #define HID_SCMENU_DELBREAK     ( HID_SC_MENU_START + 2 )
@@ -315,7 +312,7 @@
 #define HID_DATAPILOT_DATABASE  ( HID_SC_MENU_START + 48 )
 #define HID_DATAPILOT_SERVICE   ( HID_SC_MENU_START + 49 )
 
-// Other help IDs (max.70) ---------------------------------------------------
+// other help IDs (max.70)
 #define HID_SCDLG_LINKAREAURL   ( HID_SC_OTHER_START )
 #define HID_SCMENU_EDIT_TABLE   ( HID_SC_OTHER_START + 1 )
 
@@ -357,7 +354,7 @@
 #define HID_SC_HF_FL_DEFINED    ( HID_SC_OTHER_START + 28 )
 #define HID_SC_HF_FR_DEFINED    ( HID_SC_OTHER_START + 29 )
 
-// Analysis Addin Functions (max.120) ----------------------------------------
+// analysis addin functions (max.120)
 #define HID_AAI_FUNC_WORKDAY        ( HID_SC_AAI_FUNCS_START )
 #define HID_AAI_FUNC_YEARFRAC       ( HID_SC_AAI_FUNCS_START + 1 )
 #define HID_AAI_FUNC_EDATE          ( HID_SC_AAI_FUNCS_START + 2 )
@@ -452,7 +449,7 @@
 #define HID_AAI_FUNC_CONVERT        ( HID_SC_AAI_FUNCS_START + 91 )
 #define HID_AAI_FUNC_FACTDOUBLE     ( HID_SC_AAI_FUNCS_START + 92 )
 
-// DateFunc Addin Functions (max.20) -----------------------------------------
+// DateFunc Addin Functions (max.20)
 #define HID_DAI_FUNC_DAYSINMONTH    ( HID_SC_DAI_FUNCS_START )
 #define HID_DAI_FUNC_DAYSINYEAR     ( HID_SC_DAI_FUNCS_START + 1 )
 #define HID_DAI_FUNC_WEEKSINYEAR    ( HID_SC_DAI_FUNCS_START + 2 )
@@ -461,10 +458,10 @@
 #define HID_DAI_FUNC_DIFFYEARS      ( HID_SC_DAI_FUNCS_START + 5 )
 #define HID_DAI_FUNC_ROT13          ( HID_SC_DAI_FUNCS_START + 6 )
 
-// Ende Hilfe IDs ------------------------------------------------------------
-// ---------------------------------------------------------------------------
+// end help IDs
 
-// View-Funktionen (max. 100) ------------------------------------------------
+
+// view-functions (max. 100)
 
 #define FID_TESTFUNC0           (SC_VIEW_START)
 #define FID_TESTFUNC1           (SC_VIEW_START + 1)
@@ -486,35 +483,35 @@
 #define FID_MARKPAGEUP          (SC_VIEW_START + 18)
 #define FID_MARKPAGEDOWN        (SC_VIEW_START + 19)
 
-// Slot-IDs fuer Attribute:
+// slot-IDs for attributes
 
-#define SID_SCATTR_HOR_JUSTIFY  (SC_VIEW_START + 30)    // Alignment-Page
+#define SID_SCATTR_HOR_JUSTIFY  (SC_VIEW_START + 30)    // alignment-page
 #define SID_SCATTR_VER_JUSTIFY  (SC_VIEW_START + 31)
 #define SID_SCATTR_MARGIN       (SC_VIEW_START + 32)
 #define SID_SCATTR_STACKED      (SC_VIEW_START + 33)
 #define SID_SCATTR_LINEBREAK    (SC_VIEW_START + 35)
-#define SID_SCATTR_PROTECTION   (SC_VIEW_START + 36)    // Protection-Page
+#define SID_SCATTR_PROTECTION   (SC_VIEW_START + 36)    // protection-page
 
-// sonstige Slot-IDs:
+// other slot-IDs:
 
-#define SID_SCUSERLISTS         (SC_VIEW_START + 37)    // Benutzerdef.Listen
-#define RES_TBX_DUMMY           (SC_VIEW_START + 38)    // Dummy-Item
+#define SID_SCUSERLISTS         (SC_VIEW_START + 37)    // user defined lists
+#define RES_TBX_DUMMY           (SC_VIEW_START + 38)    // dummy-item
 #define SID_SCVIEWOPTIONS       (SC_VIEW_START + 39)
 #define SID_SCDOCOPTIONS        (SC_VIEW_START + 40)
 
-// Cursorbewegungen als Properties:
+// cursor movements as properties:
 
 #define SID_CURRENTCELL         (SC_VIEW_START + 41)
 #define SID_CURRENTTAB          (SC_VIEW_START + 42)
 #define SID_CURRENTDOC          (SC_VIEW_START + 43)
 #define SID_CURRENTOBJECT       (SC_VIEW_START + 44)
 
-// Slot-IDs fuer spez. ToolBox-Funktionen:
+// slot-IDs for special toolbox functions:
 
 #define SID_NUMBER_CURRENCY     (SC_VIEW_START + 45)
 #define SID_NUMBER_PERCENT      (SC_VIEW_START + 46)
 
-// "Slot" Ids fuer Eingabezeilen Images:
+// "slot" IDs for input images:
 #define SID_INPUT_FUNCTION      (SC_VIEW_START + 47)
 #define SID_INPUT_SUM           (SC_VIEW_START + 48)
 #define SID_INPUT_EQUAL         (SC_VIEW_START + 49)
@@ -529,7 +526,7 @@
 #define SID_NUMBER_INCDEC       (SC_VIEW_START + 57)
 #define SID_NUMBER_DECDEC       (SC_VIEW_START + 58)
 
-// Sonstiges:
+// misc:
 #define SID_LINKS               (SC_VIEW_START + 60)
 #define SID_INSERT_SIMAGE       (SC_VIEW_START + 61)
 #define SID_INSERT_SCHART       (SC_VIEW_START + 62)
@@ -547,7 +544,7 @@
 #define SID_DRAW_CHART          (SC_VIEW_START + 71)
 #define SID_UPDATETABLINKS      (SC_VIEW_START + 72)
 
-//TabPage Eingabe
+// TabPage entry
 #define SID_SC_INPUT_SELECTION          (SC_VIEW_START + 73)
 #define SID_SC_INPUT_SELECTIONPOS       (SC_VIEW_START + 74)
 #define SID_SC_INPUT_EDITMODE           (SC_VIEW_START + 75)
@@ -574,13 +571,13 @@
 // new entry "Filter..." in DP popup menu
 #define SID_DP_FILTER                   (SC_VIEW_START + 91)
 
-// Replace cell contents warning
+// replace cell contents warning
 #define SID_SC_INPUT_REPLCELLSWARN      (SC_VIEW_START + 92)
 
 // additional IDs for list/range validity
 #define FID_VALID_LISTTYPE              (SC_VIEW_START + 93)
 
-// #i68101# ID for changing Title & Descriptopn of an Object
+// #i68101# ID for changing title & description of an object
 #define SID_TITLE_DESCRIPTION_OBJECT    (SC_VIEW_START + 94)
 
 // #i59082# assign macro to shape
@@ -595,7 +592,7 @@
 
 // NOTE: last valid ID is (SC_VIEW_START + 99)
 
-// Nachrichten -------------------------------------------------------------
+// messages
 
 #define FID_INPUTLINE_STATUS    (SC_MESSAGE_START)
 #define FID_INPUTLINE_ENTER     (SC_MESSAGE_START + 1)
@@ -641,7 +638,7 @@
 #define SC_HINT_DOC_SAVED       (SC_MESSAGE_START + 35)
 #define SC_HINT_FORCESETTAB     (SC_MESSAGE_START + 36)
 
-// Nachricht zum Oeffnen von Dialogen:
+// messages for opening dialogs:
 #define SID_OPENDLG_CONSOLIDATE     (SC_MESSAGE_START + 50)
 #define SID_OPENDLG_PIVOTTABLE      (SC_MESSAGE_START + 51)
 #define SID_OPENDLG_FUNCTION        (SC_MESSAGE_START + 52)
@@ -654,7 +651,7 @@
 #define SID_VALIDITY_REFERENCE      (SC_MESSAGE_START + 61)
 #define SC_HINT_NAVIGATOR_UPDATEALL  (SC_MESSAGE_START + 65)
 
-// Funktionen ------------------------------------------------------------
+// functions
 
 
 #define FID_DOC_MANAGER         (SC_FUNCTION_START + 1)
@@ -719,7 +716,7 @@
 #define FID_USE_NAME            (INSERT_MENU_START + 13)
 #define FID_APPLY_NAME          (INSERT_MENU_START + 14)
 #define FID_INS_TABLE_EXT       (INSERT_MENU_START + 15)
-#define SID_INSERT_CLIPART      (INSERT_MENU_START + 17) //!!! sollte vom Svx kommen
+#define SID_INSERT_CLIPART      (INSERT_MENU_START + 17) //!!! should come from Svx
 #define FID_INS_CELLSDOWN       (INSERT_MENU_START + 18)
 #define FID_INS_CELLSRIGHT      (INSERT_MENU_START + 19)
 #define INSERT_MENU_END         (INSERT_MENU_START + 20)
@@ -764,7 +761,7 @@
 #define SID_PIVOT_RECALC        (EXTRA_MENU_START + 14)
 #define SID_PIVOT_KILL          (EXTRA_MENU_START + 15)
 
-// hier falsch, aber erstmal
+// wrong here, but better than nothing
 #define SID_SC_HELP_PI          (EXTRA_MENU_START + 16)
 #define SID_SC_SHOW_KEYBOARD_HELP (EXTRA_MENU_START + 17)
 
@@ -898,7 +895,7 @@
 #define SID_PREVIEW_SCALINGFACTOR   (SID_PREVIEW_START+9)
 #define SID_PREVIEW_END         (SID_PREVIEW_START+20)
 
-//aus sfx: #define SID_KEYFUNC_START        (SID_PREVIEW_END+5)
+//from sfx: #define SID_KEYFUNC_START       (SID_PREVIEW_END+5)
 #define SID_CURSORDOWN_SEL      (SID_KEYFUNC_START + 0)
 #define SID_CURSORUP_SEL        (SID_KEYFUNC_START + 1)
 #define SID_CURSORLEFT_SEL      (SID_KEYFUNC_START + 2)
@@ -1003,7 +1000,7 @@
 #define SID_TOGGLE_REL          (SID_NEW_SLOTS+38)
 #define SID_DATA_SELECT         (SID_NEW_SLOTS+39)
 
-//  Suchen & Ersetzen
+//  search & replace
 #define FID_SEARCH              (SID_NEW_SLOTS+40)
 #define FID_REPEAT_SEARCH       (SID_NEW_SLOTS+41)
 #define FID_REPLACE             (SID_NEW_SLOTS+42)
@@ -1024,7 +1021,7 @@
 
 #define FID_VALIDATION          (SID_NEW_SLOTS+54)
 
-//  Slots fuer Toolbox Controller in der Werkzeugleiste
+//  slots for toolbox controller in toolbar
 #define SID_TBXCTL_INSERT       (SID_NEW_SLOTS+55)
 #define SID_TBXCTL_INSCELLS     (SID_NEW_SLOTS+56)
 #define SID_TBXCTL_INSOBJ       (SID_NEW_SLOTS+57)
@@ -1033,7 +1030,7 @@
 
 #define FID_NOTE_VISIBLE        (SID_NEW_SLOTS+59)
 
-//  Items fuer Gueltigkeit
+//  items for validation
 #define FID_VALID_MODE          (SID_NEW_SLOTS+60)
 #define FID_VALID_CONDMODE      (SID_NEW_SLOTS+61)
 #define FID_VALID_VALUE1        (SID_NEW_SLOTS+62)
@@ -1052,7 +1049,7 @@
 
 #define FID_FOCUS_POSWND        (SID_NEW_SLOTS+74)
 
-//  einzelne Slots fuer verschiedene Unterstreich-Arten (Popup-Menu)
+//  single slots for different underline kinds (popup menu)
 #define SID_ULINE_VAL_NONE      (SID_NEW_SLOTS+75)
 #define SID_ULINE_VAL_SINGLE    (SID_NEW_SLOTS+76)
 #define SID_ULINE_VAL_DOUBLE    (SID_NEW_SLOTS+77)
@@ -1080,7 +1077,7 @@
 #define SID_DELETE_SCENARIO     (SID_NEW_SLOTS+95)
 #define SID_EDIT_SCENARIO       (SID_NEW_SLOTS+96)
 
-// idl Parameter ---------------------------------------------------------
+// idl parameter
 
 #define SID_SORT_BYROW          (SC_PARAM_START)
 #define SID_SORT_HASHEADER      (SC_PARAM_START+1)
@@ -1089,7 +1086,7 @@
 #define SID_SORT_USERDEF        (SC_PARAM_START+4)
 #define SID_SORT_NATURALSORT    (SC_PARAM_START+5)
 
-// Resourcen -------------------------------------------------------------
+// ressources
 
 #define RID_OBJECTBAR_APP       (SC_RESOURCE_START)
 #define RID_OBJECTBAR_FORMAT    (SC_RESOURCE_START+1)
@@ -1192,7 +1189,7 @@
 #define SCSTR_ALL               (STR_START + 51)
 #define SCSTR_STDFILTER         (STR_START + 52)
 
-// Cfg-Item-Namen
+// Cfg-Item-names
 #define SCSTR_CFG_APP           (STR_START + 53)
 #define SCSTR_CFG_DOC           (STR_START + 54)
 #define SCSTR_CFG_VIEW          (STR_START + 55)
@@ -1241,11 +1238,11 @@
 
 #define STR_CAPTION_DEFAULT_TEXT    (STR_START + 88)
 
-// dialog: Select Sheets
+// dialog: select sheets
 #define STR_DLG_SELECTTABLES_TITLE  (STR_START + 89)
 #define STR_DLG_SELECTTABLES_LBNAME (STR_START + 90)
 
-// Replace cell contents warning
+// replace cell contents warning
 #define STR_REPLCELLSWARN           (STR_START + 91)
 
 #define SCSTR_DPFUNCLISTBOX         (STR_START + 92)
@@ -1254,7 +1251,7 @@
 #define SCSTR_MOREBTN_MOREOPTIONS   (STR_START + 95)
 #define SCSTR_MOREBTN_FEWEROPTIONS  (STR_START + 96)
 
-// Items
+// items
 
 #define SCSTR_HOR_JUSTIFY_LEFT      (STR_START + 100)
 #define SCSTR_HOR_JUSTIFY_CENTER    (STR_START + 101)
@@ -1270,7 +1267,7 @@
 #define SCSTR_ORIENTATION_BOTTOMTOP (STR_START + 111)
 #define SCSTR_ORIENTATION_STANDARD  (STR_START + 112)
 
-// Accessibility ------------------------------------
+// accessibility
 
 // CSV import
 #define STR_ACC_CSVRULER_NAME       (STR_START + 150)
@@ -1278,7 +1275,7 @@
 #define STR_ACC_CSVGRID_NAME        (STR_START + 152)
 #define STR_ACC_CSVGRID_DESCR       (STR_START + 153)
 
-// Document
+// document
 #define STR_ACC_DOC_NAME            (STR_START + 154)
 #define STR_ACC_DOC_DESCR           (STR_START + 155)
 #define STR_ACC_TABLE_NAME          (STR_START + 156)
@@ -1286,7 +1283,7 @@
 #define STR_ACC_CELL_NAME           (STR_START + 158)
 #define STR_ACC_CELL_DESCR          (STR_START + 159)
 
-// Preview
+// preview
 #define STR_ACC_PREVIEWDOC_NAME     (STR_START + 160)
 #define STR_ACC_PREVIEWDOC_DESCR    (STR_START + 161)
 #define STR_ACC_HEADERCELL_NAME     (STR_START + 162)
@@ -1317,8 +1314,6 @@
 #define STR_ACC_DATAPILOT_SEL_DESCR (STR_START + 181)
 #define STR_ACC_DATAPILOT_PAGE_DESCR (STR_START + 182)
 
-// --------------------------------------------------
-
 #define SCSTR_HUMAN_SCDOC_NAME          (STR_START + 210)
 #define SCSTR_SHORT_SCDOC_NAME          (STR_START + 211)
 #define SCSTR_LONG_SCDOC_NAME           (STR_START + 212)
@@ -1331,7 +1326,7 @@
 #define SCSTR_PRINT_OPTIONS             (STR_START + 216)
 #define SCSTR_WARN_ME_IN_FUTURE_CHECK   (STR_START + 217)
 
-// Navigator - in der Reihenfolge wie SC_CONTENT_...
+// navigator - in the same order as SC_CONTENT_...
 #define SCSTR_CONTENT_ROOT      (STR_START + 250)
 #define SCSTR_CONTENT_TABLE     (STR_START + 251)
 #define SCSTR_CONTENT_RANGENAME (STR_START + 252)
@@ -1341,9 +1336,9 @@
 #define SCSTR_CONTENT_NOTE      (STR_START + 256)
 #define SCSTR_CONTENT_AREALINK  (STR_START + 257)
 #define SCSTR_CONTENT_DRAWING   (STR_START + 258)
-//  hier ein wenig Platz fuer Erweiterungen
+//  some space for extensions
 
-// Eingabezeile, Quickhelp-Strings (HelpText jetzt per HelpId aus Hilfe)
+// input, quickhelp strings (HelpText now using HelpId from help)
 #define SCSTR_QHELP_INPUTWND    (STR_START + 307)
 #define SCSTR_QHELP_POSWND      (STR_START + 308)
 #define SCSTR_QHELP_BTNCALC     (STR_START + 309)
@@ -1352,14 +1347,14 @@
 #define SCSTR_QHELP_BTNSUM      (STR_START + 312)
 #define SCSTR_QHELP_BTNEQUAL    (STR_START + 313)
 
-// Validator
+// validator
 #define SCSTR_VALID_MINIMUM     (STR_START + 314)
 #define SCSTR_VALID_MAXIMUM     (STR_START + 315)
 #define SCSTR_VALID_VALUE       (STR_START + 316)
 #define SCSTR_VALID_RANGE       (STR_START + 317)
 #define SCSTR_VALID_LIST        (STR_START + 318)
 
-// Formulator
+// formulator
 #define SCSTR_FUDB              (STR_START + 389)
 #define SCSTR_FUDATE            (STR_START + 390)
 #define SCSTR_FUFIN             (STR_START + 391)
@@ -1374,7 +1369,7 @@
 #define SCSTR_FILTER_STRINGS    (STR_START + 399)
 #define SCSTR_COMPILER_INTL_STR (STR_START + 400)
 
-// Media shell
+// media shell
 #define SCSTR_MEDIASHELL        (STR_START + 401)
 
 #define RID_SCSTR_ONCLICK       (STR_START + 402)
@@ -1386,7 +1381,7 @@
 
 #define BMP_START               (STR_END)
 
-// Navigator
+// navigator
 #define RID_IMG_DROP_URL        (BMP_START + 2)
 #define RID_IMG_DROP_LINK       (BMP_START + 3)
 #define RID_IMG_DROP_COPY       (BMP_START + 4)
@@ -1490,7 +1485,7 @@
 
 #define RID_SCDLG_EDITCHAR              (SC_DIALOGS_START + 82)
 
-// Popup fuer Statusbar-Controller
+// popup for statusbar controller
 #define RID_POPUP_SUMCTL                (SC_DIALOGS_START + 83)
 #define RID_SUMCTL_SUM                  (SC_DIALOGS_START + 84)
 #define RID_SUMCTL_MIN                  (SC_DIALOGS_START + 85)
@@ -1502,7 +1497,7 @@
 
 #define RID_SCDLG_ASCII                 (SC_DIALOGS_START + 91)
 
-// Popup fuer Drop-Modus im Navigator
+// popup for drop-mode in navigator
 #define RID_POPUP_DROPMODE              (SC_DIALOGS_START + 92)
 #define RID_DROPMODE_URL                (SC_DIALOGS_START + 93)
 #define RID_DROPMODE_LINK               (SC_DIALOGS_START + 94)
@@ -1518,17 +1513,17 @@
 #define RID_SCPAGE_HFED_FL              (SC_DIALOGS_START + 102)
 #define RID_SCPAGE_HFED_FR              (SC_DIALOGS_START + 103)
 
-// Ableitungen von RID_SCDLG_MTRINPUT
+// derivations from RID_SCDLG_MTRINPUT
 #define RID_SCDLG_COL_MAN               (SC_DIALOGS_START + 104)
 #define RID_SCDLG_COL_OPT               (SC_DIALOGS_START + 105)
 #define RID_SCDLG_ROW_MAN               (SC_DIALOGS_START + 106)
 #define RID_SCDLG_ROW_OPT               (SC_DIALOGS_START + 107)
 
-// Ableitungen von RID_SCDLG_SELENTRY
+// derivations from RID_SCDLG_SELENTRY
 #define RID_SCDLG_SELECTDB              (SC_DIALOGS_START + 108)
 #define RID_SCDLG_SHOW_TAB              (SC_DIALOGS_START + 109)
 
-// Ableitungen von RID_SCDLG_GROUP
+// derivations from RID_SCDLG_GROUP
 #define RID_SCDLG_GRP_MAKE              (SC_DIALOGS_START + 110)
 #define RID_SCDLG_GRP_KILL              (SC_DIALOGS_START + 111)
 
@@ -1596,28 +1591,27 @@
 #define MID_3   3
 #define MID_4   4
 
-// ----------------------------------------------------------------------------
 // ooo-build specific resources
 
 #define SC_OOO_BUILD_START          (SC_DIALOGS_END)
 
-// Toggle sheet grid
+// toggle sheet grid
 #define FID_TAB_TOGGLE_GRID         (SC_OOO_BUILD_START + 1)
 
-// Formula options page
+// formula options page
 #define RID_SCPAGE_FORMULA          (SC_OOO_BUILD_START + 2)
 #define HID_SCPAGE_FORMULA          (SC_OOO_BUILD_START + 3)
 
-// Insert current date and time to cell via command
+// insert current date and time to cell via command
 #define SID_INSERT_CURRENT_DATE     (SC_OOO_BUILD_START + 4)
 #define SID_INSERT_CURRENT_TIME     (SC_OOO_BUILD_START + 5)
 
-// Data Form
+// data Form
 #define SID_DATAFORM_NEW            (SC_OOO_BUILD_START + 6) // message
 #define SID_DATA_FORM               (SC_OOO_BUILD_START + 7) // menu (in Data menu)
 #define RID_SCDLG_DATAFORM          (SC_OOO_BUILD_START + 8) // dialog
 
-// Compatibility options page
+// compatibility options page
 #define RID_SCPAGE_COMPATIBILITY    (SC_OOO_BUILD_START + 9)
 #define HID_SCPAGE_COMPATIBILITY    (SC_OOO_BUILD_START + 10)
 

@@ -100,17 +100,17 @@
 #define SC_COLROWNAME_RANGEPAIR 0x0012      // ColRowNameRanges as ScRangePair
 //--------------------------------
 #define SC_31_EXPORT_VER    0x0012          // version for 3.1-export
-//-------------------------------- ab 4.0
+//-------------------------------- since 4.0
 #define SC_32K_ROWS         0x0100          // 32000 rows - incompatibel
 #define SC_FONTCHARSET      0x0101          // Font-CharSets have to be right
 //--------------------------------
 #define SC_40_EXPORT_VER    0x0101          // version for 4.0-Export
-//-------------------------------- ab 5.0
+//-------------------------------- since 5.0
 #define SC_RECALC_MODE_BITS 0x0201          // TokenArray RecalcMode
 #define SC_MATRIX_DOUBLEREF 0x0202          // DoubleRef implicit intersection
 #define SC_VERSION_EDITPOOL 0x0203          // EditCells with EditPool
 #define SC_SUBTOTAL_BUGFIX  0x0204          // bSubTotal of formula cell (true)
-//-------------------------------- ab 5.2
+//-------------------------------- since 5.2
 #define SC_CONVERT_RECALC_ON_LOAD 0x0205    // CONVERT function recalculated on each load
 //--------------------------------
 #define SC_CURRENT_VERSION  0x0205

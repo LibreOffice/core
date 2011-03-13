@@ -41,8 +41,8 @@ class ScPrintSaverTab
     typedef ::std::vector< ScRange > ScRangeVec;
 
     ScRangeVec  maPrintRanges;      // Array
-    ScRange*    mpRepeatCol;        // einzeln
-    ScRange*    mpRepeatRow;        // einzeln
+    ScRange*    mpRepeatCol;        // single
+    ScRange*    mpRepeatRow;        // single
     BOOL        mbEntireSheet;
 
 public:

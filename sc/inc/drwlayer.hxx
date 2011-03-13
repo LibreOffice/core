@@ -46,8 +46,6 @@ class SdrOle2Obj;
 class ScRange;
 class ScAddress;
 
-// -----------------------------------------------------------------------
-
 class ScTabDeletedHint : public SfxHint
 {
 private:
@@ -72,8 +70,6 @@ public:
     SCTAB   GetTab()    { return nTab; }
 };
 
-// -----------------------------------------------------------------------
-//
 //  Adjusting of detective UserData and draw undo's both have to be in SdrUndoGroup;
 //  therefore derived from SdrUndoAction
 
@@ -93,8 +89,6 @@ public:
     virtual void     Undo();
     virtual void     Redo();
 };
-
-// -----------------------------------------------------------------------
 
 class SC_DLLPUBLIC ScDrawLayer : public FmFormModel
 {

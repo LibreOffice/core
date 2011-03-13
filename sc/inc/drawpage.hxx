@@ -34,8 +34,6 @@
 
 class ScDrawLayer;
 
-// -----------------------------------------------------------------------
-
 class ScDrawPage: public FmFormPage
 {
 public:

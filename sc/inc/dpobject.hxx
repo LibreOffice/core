@@ -41,8 +41,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/shared_ptr.hpp>
 
-//------------------------------------------------------------------
-
 namespace com { namespace sun { namespace star { namespace sheet {
 
     struct DataPilotTablePositionData;
@@ -256,8 +254,6 @@ public:
     static bool         IsOrientationAllowed( USHORT nOrient, sal_Int32 nDimFlags );
 };
 
-
-// ============================================================================
 
 class ScDPCollection
 {

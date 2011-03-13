@@ -34,8 +34,6 @@
 #include "global.hxx"
 #include "rangelst.hxx"
 
-// ============================================================================
-
 /** Extended settings for the document, used in import/export filters. */
 struct ScExtDocSettings
 {
@@ -47,8 +45,6 @@ struct ScExtDocSettings
     explicit            ScExtDocSettings();
 };
 
-// ============================================================================
-
 /** Enumerates possible positions of panes in split sheets. */
 enum ScExtPanePos
 {
@@ -57,8 +53,6 @@ enum ScExtPanePos
     SCEXT_PANE_BOTTOMLEFT,      /// Bottom, or bottom-left pane.
     SCEXT_PANE_BOTTOMRIGHT      /// Bottom-right pane.
 };
-
-// ----------------------------------------------------------------------------
 
 /** Extended settings for a sheet, used in import/export filters. */
 struct ScExtTabSettings
@@ -81,8 +75,6 @@ struct ScExtTabSettings
 
     explicit            ScExtTabSettings();
 };
-
-// ============================================================================
 
 struct ScExtDocOptionsImpl;
 
@@ -126,8 +118,6 @@ public:
 private:
     ::std::auto_ptr< ScExtDocOptionsImpl > mxImpl;
 };
-
-// ============================================================================
 
 #endif
 

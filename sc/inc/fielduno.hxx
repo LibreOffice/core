@@ -55,9 +55,6 @@ class ScHeaderFooterContentObj;
 class ScDocShell;
 
 
-//------------------------------------------------------------------
-
-
 class ScCellFieldsObj : public cppu::WeakImplHelper5<
                             com::sun::star::container::XEnumerationAccess,
                             com::sun::star::container::XIndexAccess,

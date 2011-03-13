@@ -60,12 +60,12 @@ enum ScValidErrorStyle
 };
 
 //
-//  Eintrag fuer Gueltigkeit (es gibt nur eine Bedingung)
+// Entry for validation (only one condition exists)
 //
 
 class SC_DLLPUBLIC ScValidationData : public ScConditionEntry
 {
-    sal_uInt32          nKey;               // Index in Attributen
+    sal_uInt32          nKey;               // index in attributes
 
     ScValidationMode    eDataMode;
     BOOL                bShowInput;
@@ -77,7 +77,7 @@ class SC_DLLPUBLIC ScValidationData : public ScConditionEntry
     String              aErrorTitle;
     String              aErrorMessage;
 
-    BOOL                bIsUsed;            // temporaer beim Speichern
+    BOOL                bIsUsed;            // temporary during saving
 
     BOOL            DoMacro( const ScAddress& rPos, const String& rInput,
                                 ScFormulaCell* pCell, Window* pParent ) const;
@@ -101,7 +101,7 @@ public:
             ScValidationData( ScDocument* pDocument, const ScValidationData& r );
     virtual ~ScValidationData();
 
-    ScValidationData* Clone() const     // echte Kopie
+    ScValidationData* Clone() const     // real copy
                     { return new ScValidationData( GetDocument(), *this ); }
     ScValidationData* Clone(ScDocument* pNew) const
                     { return new ScValidationData( pNew, *this ); }
@@ -133,26 +133,26 @@ public:
         @return  true = rStrings has been filled with at least one entry. */
     bool            FillSelectionList( TypedScStrCollection& rStrings, const ScAddress& rPos ) const;
 
-                    //  mit String: bei Eingabe, mit Zelle: fuer Detektiv / RC_FORCED
+                    //  with string: during input, with cell: for detective / RC_FORCED
     BOOL            IsDataValid( const String& rTest, const ScPatternAttr& rPattern,
                                     const ScAddress& rPos ) const;
     BOOL            IsDataValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
 
-                    // TRUE -> Abbruch
+                    // TRUE -> break
     BOOL            DoError( Window* pParent, const String& rInput, const ScAddress& rPos ) const;
     void            DoCalcError( ScFormulaCell* pCell ) const;
 
     BOOL            IsEmpty() const;
     sal_uInt32      GetKey() const          { return nKey; }
-    void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // nur wenn nicht eingefuegt!
+    void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
 
     void            SetUsed(BOOL bSet)      { bIsUsed = bSet; }
     BOOL            IsUsed() const          { return bIsUsed; }
 
-    BOOL            EqualEntries( const ScValidationData& r ) const;    // fuer Undo
+    BOOL            EqualEntries( const ScValidationData& r ) const;    // for undo
 
-    //  sortiert (per PTRARR) nach Index
-    //  operator== nur fuer die Sortierung
+    //  sort (using PTRARR) by index
+    //  operator== only for sorting
     BOOL operator ==( const ScValidationData& r ) const { return nKey == r.nKey; }
     BOOL operator < ( const ScValidationData& r ) const { return nKey <  r.nKey; }
 
@@ -177,7 +177,7 @@ private:
 };
 
 //
-//  Liste der Bedingungen:
+//  list of contitions:
 //
 
 typedef ScValidationData* ScValidationDataPtr;
@@ -203,7 +203,7 @@ public:
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
-    BOOL    operator==( const ScValidationDataList& r ) const;      // fuer Ref-Undo
+    BOOL    operator==( const ScValidationDataList& r ) const;      // for ref-undo
 };
 
 #endif

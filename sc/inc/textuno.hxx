@@ -61,8 +61,8 @@ struct ScHeaderFieldData;
 #define SC_HDFT_RIGHT   2
 
 
-//  ScHeaderFooterContentObj ist ein dummer Container, der per setPropertyValue
-//  wieder in die Seitenvorlage geschrieben werden muss
+//  ScHeaderFooterContentObj is a dumb container which must be re-written into
+//  the page template using setPropertyValue
 
 class ScHeaderFooterContentObj : public cppu::WeakImplHelper3<
                             com::sun::star::sheet::XHeaderFooterContent,
@@ -83,7 +83,7 @@ public:
                                                       const EditTextObject* pRight );
     virtual                 ~ScHeaderFooterContentObj();
 
-                            // fuer ScPageHFItem (per getImplementation)
+                            // for ScPageHFItem (using getImplementation)
     const EditTextObject*   GetLeftEditObject() const   { return pLeftText; }
     const EditTextObject*   GetCenterEditObject() const { return pCenterText; }
     const EditTextObject*   GetRightEditObject() const  { return pRightText; }
@@ -148,7 +148,7 @@ public:
     ScHeaderFooterContentObj& GetContentObj() const { return rContentObj; }
 };
 
-//  ScHeaderFooterTextObj veraendert den Text in einem ScHeaderFooterContentObj
+//  ScHeaderFooterTextObj changes the text in a ScHeaderFooterContentObj
 
 class ScHeaderFooterTextObj : public cppu::WeakImplHelper5<
                             com::sun::star::text::XText,

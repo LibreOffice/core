@@ -39,8 +39,6 @@
 class ScDocument;
 class SvNumberFormatter;
 
-// --------------------------------------------------------------------
-
 //! API struct?
 struct ScDPNumGroupInfo
 {
@@ -55,8 +53,6 @@ struct ScDPNumGroupInfo
     ScDPNumGroupInfo() : Enable(sal_False), DateValues(sal_False), AutoStart(sal_False), AutoEnd(sal_False),
                          Start(0.0), End(0.0), Step(0.0) {}
 };
-
-// --------------------------------------------------------------------
 
 //  ScDPDateGroupHelper is used as part of ScDPGroupDimension (additional dim.)
 //  or ScDPNumGroupDimension (innermost, replaces the original dim.).
@@ -78,8 +74,6 @@ public:
         SCCOL nSourceDim, const ScDPCache* pCahe , std::vector<SCROW>& rEntries,
         const std::vector<SCROW>& rOriginal) const;
 };
-
-// --------------------------------------------------------------------
 
 typedef ::std::vector<ScDPItemData> ScDPItemDataVec;
 
@@ -141,8 +135,6 @@ public:
 
 typedef ::std::vector<ScDPGroupDimension> ScDPGroupDimensionVec;
 
-// --------------------------------------------------------------------
-
 class SC_DLLPUBLIC ScDPNumGroupDimension
 {
     ScDPNumGroupInfo            aGroupInfo;         // settings
@@ -174,7 +166,6 @@ public:
     void        DisposeData();
 };
 
-// --------------------------------------------------------------------
 //
 //  proxy implementation of ScDPTableData to add grouped items
 //

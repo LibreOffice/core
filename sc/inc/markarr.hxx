@@ -47,7 +47,7 @@ class ScMarkArray
     ScMarkEntry*    pData;
 
 friend class ScMarkArrayIter;
-friend class ScDocument;                // fuer FillInfo
+friend class ScDocument;                // for FillInfo
 
 public:
             ScMarkArray();
@@ -70,7 +70,7 @@ public:
 };
 
 
-class ScMarkArrayIter                   // selektierte Bereiche durchgehen
+class ScMarkArrayIter                   // iterate over selected range
 {
     const ScMarkArray*  pArray;
     SCSIZE              nPos;

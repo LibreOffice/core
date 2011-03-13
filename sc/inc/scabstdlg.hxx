@@ -399,7 +399,7 @@ public:
     virtual AbstractScLinkedAreaDlg * CreateScLinkedAreaDlg (  Window* pParent, int nId) = 0; //add for ScLinkedAreaDlg
 
     virtual AbstractScMetricInputDlg * CreateScMetricInputDlg (  Window*        pParent, //add for ScMetricInputDlg
-                                                                USHORT      nResId,     // Ableitung fuer jeden Dialog!
+                                                                USHORT      nResId,     // derivative for every dialog!
                                                                 long            nCurrent,
                                                                 long            nDefault,
                                                                 int nId ,

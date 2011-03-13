@@ -240,7 +240,7 @@
 
 #define STR_INVALID_AFAREA          193
 
-#define STR_CASCADE                 194 // Funktionsautopilot
+#define STR_CASCADE                 194 // function auto pilot
 #define STR_OPTIONAL                195
 #define STR_REQUIRED                196
 #define STR_EDITFUNCTION            197
@@ -276,7 +276,7 @@
 #define STR_SPELLING_STOP_OK        219
 #define STR_THESAURUS_NO_STRING     220
 #define STR_SPELLING_BEGIN_TAB      221
-#define STR_SPELLING_NO_LANG        222                         // kann spaeter wieder raus
+#define STR_SPELLING_NO_LANG        222                         // can be removed later
 
 #define STR_UNDO_GRAFEDIT           223
 

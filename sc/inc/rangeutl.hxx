@@ -297,8 +297,6 @@ public:
     SCROW nRowEnd;
 };
 
-//------------------------------------------------------------------------
-
 //
 //  returns areas with reference and all db-areas
 //

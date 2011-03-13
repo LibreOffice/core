@@ -41,7 +41,7 @@ public:
 };
 
 
-struct ScFunctionData                   // zum Berechnen von einzelnen Funktionen
+struct ScFunctionData                   // to calculate single functions
 {
     ScSubTotalFunc  eFunc;
     double          nVal;

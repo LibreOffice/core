@@ -41,8 +41,6 @@ class SvxShadowItem;
 class ScBaseCell;
 class ScPatternAttr;
 
-// ============================================================================
-
 const BYTE SC_ROTDIR_NONE       = 0;
 const BYTE SC_ROTDIR_STANDARD   = 1;
 const BYTE SC_ROTDIR_LEFT       = 2;
@@ -63,8 +61,6 @@ enum ScShadowPart
     SC_SHADOW_CORNER
 };
 
-// ============================================================================
-
 struct CellInfo
 {
     ScBaseCell*                 pCell;
@@ -74,16 +70,16 @@ struct CellInfo
 
     const SvxBrushItem*         pBackground;
 
-    const SvxBoxItem*           pLinesAttr;         /// Original item from document.
-    const SvxLineItem*          mpTLBRLine;         /// Original item from document.
-    const SvxLineItem*          mpBLTRLine;         /// Original item from document.
+    const SvxBoxItem*           pLinesAttr;         /// original item from document.
+    const SvxLineItem*          mpTLBRLine;         /// original item from document.
+    const SvxLineItem*          mpBLTRLine;         /// original item from document.
 
-    const SvxShadowItem*        pShadowAttr;            // Original-Item (intern)
+    const SvxShadowItem*        pShadowAttr;            // original item (internal)
 
     const SvxShadowItem*        pHShadowOrigin;
     const SvxShadowItem*        pVShadowOrigin;
 
-    ScShadowPart                eHShadowPart : 4;           // Schatten effektiv zum Zeichnen
+    ScShadowPart                eHShadowPart : 4;           // shadow effective for drawing
     ScShadowPart                eVShadowPart : 4;
     BYTE                        nClipMark;
     USHORT                      nWidth;
@@ -100,15 +96,13 @@ struct CellInfo
     bool                        bPopupButton: 1;
     bool                        bFilterActive:1;
 
-    BOOL                        bPrinted : 1;               // bei Bedarf (Pagebreak-Modus)
+    BOOL                        bPrinted : 1;               // when required (pagebreak mode)
 
-    BOOL                        bHideGrid : 1;              // output-intern
-    BOOL                        bEditEngine : 1;            // output-intern
+    BOOL                        bHideGrid : 1;              // output-internal
+    BOOL                        bEditEngine : 1;            // output-internal
 };
 
 const SCCOL SC_ROTMAX_NONE = SCCOL_MAX;
-
-// ============================================================================
 
 struct RowInfo
 {
@@ -116,13 +110,13 @@ struct RowInfo
 
     USHORT              nHeight;
     SCROW               nRowNo;
-    SCCOL               nRotMaxCol;         // SC_ROTMAX_NONE, wenn nichts
+    SCCOL               nRotMaxCol;         // SC_ROTMAX_NONE, if nothing
 
     BOOL                bEmptyBack;
     BOOL                bEmptyText;
     BOOL                bAutoFilter;
     BOOL                bPushButton;
-    BOOL                bChanged;           // TRUE, wenn nicht getestet
+    BOOL                bChanged;           // TRUE, if not tested
 
     inline explicit     RowInfo() : pCellInfo( 0 ) {}
 
@@ -130,8 +124,6 @@ private:
                     RowInfo( const RowInfo& );
     RowInfo&        operator=( const RowInfo& );
 };
-
-// ============================================================================
 
 struct ScTableInfo
 {
@@ -147,8 +139,6 @@ private:
                         ScTableInfo( const ScTableInfo& );
     ScTableInfo&        operator=( const ScTableInfo& );
 };
-
-// ============================================================================
 
 #endif
 

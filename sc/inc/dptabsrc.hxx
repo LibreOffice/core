@@ -77,14 +77,10 @@ class ScDPResultData;
 class ScDPItemData;
 class ScDPTableData;
 
-// ------------------------------------------------------------------------
-
-
 //  should be dynamic!
 #define SC_DAPI_MAXFIELDS   256
 
 
-// --------------------------------------------------------------------
 //
 //  implementation of DataPilotSource using ScDPTableData
 //

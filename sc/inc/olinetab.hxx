@@ -56,8 +56,8 @@ public:
     SCCOLROW                GetStart() const    { return nStart; }
     SCSIZE                  GetSize() const     { return nSize; }
     SCCOLROW                GetEnd() const      { return nStart+nSize-1; }
-    bool                    IsHidden() const    { return bHidden; }             // Gruppe versteckt
-    bool                    IsVisible() const   { return bVisible; }            // Control sichtbar?
+    bool                    IsHidden() const    { return bHidden; }             // group hidden
+    bool                    IsVisible() const   { return bVisible; }            // control visible?
 
     void                    Move( SCsCOLROW nDelta );
     void                    SetSize( SCSIZE nNewSize );
@@ -147,7 +147,7 @@ public:
 
     BOOL                    TestInsertCol( SCSIZE nSize );
     void                    InsertCol( SCCOL nStartCol, SCSIZE nSize );
-    BOOL                    DeleteCol( SCCOL nStartCol, SCSIZE nSize ); // TRUE: Undo nur ueber Original
+    BOOL                    DeleteCol( SCCOL nStartCol, SCSIZE nSize ); // TRUE: Undo only using original
     BOOL                    TestInsertRow( SCSIZE nSize );
     void                    InsertRow( SCROW nStartRow, SCSIZE nSize );
     BOOL                    DeleteRow( SCROW nStartRow, SCSIZE nSize );

@@ -46,8 +46,8 @@ public:
     ScNumFormatAbbrev();
     ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat);
     ScNumFormatAbbrev(ULONG nFormat, SvNumberFormatter& rFormatter);
-    void Load( SvStream& rStream, CharSet eByteStrSet );            // Laden der Zahlenformate
-    void Save( SvStream& rStream, CharSet eByteStrSet ) const;   // Speichern der Zahlenformate
+    void Load( SvStream& rStream, CharSet eByteStrSet );            // loading of the numberformats
+    void Save( SvStream& rStream, CharSet eByteStrSet ) const;   // saving of the numberformats
     void PutFormatIndex(ULONG nFormat, SvNumberFormatter& rFormatter);
     ULONG GetFormatIndex( SvNumberFormatter& rFormatter);
     inline int operator==(const ScNumFormatAbbrev& rNumFormat) const

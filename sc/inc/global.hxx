@@ -65,8 +65,6 @@ extern "C" {
     ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE )
 #define SC_TRANSLITERATION_CASESENSE 0
 
-//------------------------------------------------------------------------
-
 //  Calc has lots of names...
 //  Clipboard names are in so3/soapp.hxx now
 //  STRING_SCAPP was "scalc3", "scalc4", now just "scalc"
@@ -76,7 +74,7 @@ extern "C" {
 
 #define STRING_STANDARD "Standard"
 
-// characters -----------------------------------------------------------------
+// characters
 
 //  '\r' does not work on a Mac...
 #define CHAR_CR     char(13)
@@ -413,12 +411,6 @@ enum ScLkUpdMode    // modes for updating links
 };
 
 
-// -----------------------------------------------------------------------
-
-//==================================================================
-
-// -----------------------------------------------------------------------
-
 // enum with values equal to old DBObject enum from sdb
 enum ScDBObject
 {
@@ -454,8 +446,6 @@ struct ScStringHashCode
         return rtl_ustr_hashCode_WithLength( rStr.GetBuffer(), rStr.Len() );
     }
 };
-
-// -----------------------------------------------------------------------
 
 class ScDocument;
 class ScDocShell;
@@ -689,7 +679,6 @@ SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pStri
 };
 #endif
 
-//==================================================================
 // maybe move to dbdata.hxx (?):
 
 enum ScQueryOp
@@ -712,15 +701,11 @@ enum ScQueryOp
         SC_DOES_NOT_END_WITH
     };
 
-// -----------------------------------------------------------------------
-
 enum ScQueryConnect
     {
         SC_AND,
         SC_OR
     };
-
-// -----------------------------------------------------------------------
 
 enum ScSubTotalFunc
     {
@@ -737,9 +722,6 @@ enum ScSubTotalFunc
         SUBTOTAL_FUNC_VAR   = 10,
         SUBTOTAL_FUNC_VARP  = 11
     };
-
-
-// -----------------------------------------------------------------------
 
 /*
  * dialog returns the special field values "empty"/"not empty"
@@ -781,8 +763,6 @@ struct ScQueryEntry
     BOOL            operator==( const ScQueryEntry& r ) const;
 };
 
-// -----------------------------------------------------------------------
-
 struct SC_DLLPUBLIC ScSubTotalParam
 {
     SCCOL           nCol1;          // selected area
@@ -816,7 +796,6 @@ struct SC_DLLPUBLIC ScSubTotalParam
                                           USHORT                nCount );
 };
 
-// -----------------------------------------------------------------------
 class ScArea;
 
 struct ScConsolidateParam

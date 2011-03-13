@@ -82,7 +82,7 @@ struct ScQueryParamTable
 
 struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamTable
 {
-    BOOL            bDestPers;          // nicht gespeichert
+    BOOL            bDestPers;          // not saved
     SCTAB           nDestTab;
     SCCOL           nDestCol;
     SCROW           nDestRow;

@@ -45,8 +45,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
 }}}}
 
 
-// -----------------------------------------------------------------------
-
 #define SC_DAPI_DATE_HIERARCHIES    3
 
 #define SC_DAPI_HIERARCHY_FLAT      0
@@ -65,7 +63,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
 #define SC_DAPI_LEVEL_WEEKDAY   2
 
 
-// --------------------------------------------------------------------
 //
 //  base class ScDPTableData to allow implementation with tabular data
 //  by deriving only of this

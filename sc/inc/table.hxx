@@ -101,7 +101,7 @@ private:
     typedef ::std::vector< ScAddress2D > ScAddress2DVec;
     typedef ::std::auto_ptr< ScAddress2DVec > ScAddress2DVecPtr;
 
-                                            //  Daten pro Tabelle   ------------------
+                                            //  data per table
     ScColumn        aCol[MAXCOLCOUNT];
 
     String          aName;
@@ -118,12 +118,12 @@ private:
     ULONG           nLinkRefreshDelay;
     BYTE            nLinkMode;
 
-    // Seitenformatvorlage
+    // page style template
     String          aPageStyle;
     BOOL            bPageSizeValid;
-    Size            aPageSizeTwips;                 // Groesse der Druck-Seite
-    SCCOL           nRepeatStartX;                  // Wiederholungszeilen/Spalten
-    SCCOL           nRepeatEndX;                    // REPEAT_NONE, wenn nicht benutzt
+    Size            aPageSizeTwips;                 // size of the print-page
+    SCCOL           nRepeatStartX;                  // repeating rows/columns
+    SCCOL           nRepeatEndX;                    // REPEAT_NONE, if not used
     SCROW           nRepeatStartY;
     SCROW           nRepeatEndY;
 
@@ -152,14 +152,14 @@ private:
     SCROW           nTableAreaY;
     BOOL            bTableAreaValid;
 
-                                            //  interne Verwaltung  ------------------
+                                            //  internal management
     BOOL            bVisible;
     BOOL            bStreamValid;
     BOOL            bPendingRowHeights;
     BOOL            bCalcNotification;
 
     SCTAB           nTab;
-    USHORT          nRecalcLvl;             // Rekursionslevel Size-Recalc
+    USHORT          nRecalcLvl;             // recursion level Size-Recalc
     ScDocument*     pDocument;
     utl::SearchParam*   pSearchParam;
     utl::TextSearch*    pSearchText;
@@ -168,7 +168,7 @@ private:
 
     ScAddress2DVecPtr mxUninitNotes;
 
-    // SortierParameter um den Stackbedarf von Quicksort zu Minimieren
+    // sort parameter to minimize stack size of quicksort
     ScSortParam     aSortParam;
     CollatorWrapper*    pSortCollator;
     BOOL            bGlobalKeepQuery;
@@ -191,7 +191,7 @@ private:
     mutable ScRangeName* mpRangeName;
     bool            mbPageBreaksValid;
 
-friend class ScDocument;                    // fuer FillInfo
+friend class ScDocument;                    // for FillInfo
 friend class ScDocumentIterator;
 friend class ScValueIterator;
 friend class ScDBQueryDataIterator;
@@ -213,7 +213,7 @@ public:
     SCSIZE      GetCellCount(SCCOL nCol) const;
     ULONG       GetCellCount() const;
     ULONG       GetWeightedCount() const;
-    ULONG       GetCodeCount() const;       // RPN-Code in Formeln
+    ULONG       GetCodeCount() const;       // RPN code in formula
 
     BOOL        SetOutlineTable( const ScOutlineTable* pNewOutline );
     void        StartOutlineTable();
@@ -306,7 +306,7 @@ public:
     void        PutCell( const ScAddress&, ScBaseCell* pCell );
     void        PutCell( SCCOL nCol, SCROW nRow, ScBaseCell* pCell );
     void        PutCell(SCCOL nCol, SCROW nRow, ULONG nFormatIndex, ScBaseCell* pCell);
-                //  TRUE = Zahlformat gesetzt
+                //  TRUE = numberformat set
     BOOL        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
                            ScSetStringParam* pParam = NULL );
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
@@ -386,7 +386,7 @@ public:
     void        TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 ScTable* pTransClip, USHORT nFlags, BOOL bAsLink );
 
-                //  Markierung von diesem Dokument
+                // mark of this document
     void        MixMarked( const ScMarkData& rMark, USHORT nFunction,
                             BOOL bSkipEmpty, ScTable* pSrcTab );
     void        MixData( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -408,7 +408,7 @@ public:
     void        InvalidateTableArea();
     void        InvalidatePageBreaks();
 
-    BOOL        GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const;            // FALSE = leer
+    BOOL        GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const;            // FALSE = empty
     BOOL        GetTableArea( SCCOL& rEndCol, SCROW& rEndRow ) const;
     BOOL        GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, BOOL bNotes ) const;
     BOOL        GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
@@ -498,7 +498,7 @@ public:
     void        AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     USHORT nFormatNo );
     void        GetAutoFormatData(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, ScAutoFormatData& rData);
-    void        ScReplaceTabsStr( String& rStr, const String& rSrch, const String& rRepl ); // aus sw
+    void        ScReplaceTabsStr( String& rStr, const String& rSrch, const String& rRepl ); // from sw
     BOOL        SearchAndReplace(const SvxSearchItem& rSearchItem,
                                 SCCOL& rCol, SCROW& rRow, ScMarkData& rMark,
                                 String& rUndoStr, ScDocument* pUndoDoc);
@@ -640,7 +640,7 @@ public:
      */
     void        SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeight );
 
-                        // nPPT fuer Test auf Veraenderung
+                        // nPPT to test for modification
     void        SetManualHeight( SCROW nStartRow, SCROW nEndRow, BOOL bManual );
 
     USHORT      GetColWidth( SCCOL nCol ) const;
@@ -845,7 +845,7 @@ private:
                     const SvxSearchItem& rSearchItem, ScMarkData& rMark,
                     String& rUndoStr, ScDocument* pUndoDoc);
 
-                                // benutzen globalen SortParam:
+                                // use the global sort parameter:
     BOOL        IsSorted(SCCOLROW nStart, SCCOLROW nEnd);
     void        DecoladeRow( ScSortInfoArray*, SCROW nRow1, SCROW nRow2 );
     void        SwapCol(SCCOL nCol1, SCCOL nCol2);

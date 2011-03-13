@@ -89,8 +89,6 @@ private:
     ::std::auto_ptr<ScFlatBoolSegmentsImpl> mpImpl;
 };
 
-// ============================================================================
-
 class ScFlatBoolColSegments
 {
 public:
@@ -113,8 +111,6 @@ public:
 private:
     ::std::auto_ptr<ScFlatBoolSegmentsImpl> mpImpl;
 };
-
-// ============================================================================
 
 class ScFlatUInt16SegmentsImpl;
 

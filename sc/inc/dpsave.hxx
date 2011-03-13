@@ -53,7 +53,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
 class ScDPDimensionSaveData;
 class ScDPTableData;
 
-// --------------------------------------------------------------------
 //
 // classes to save Data Pilot settings
 //
