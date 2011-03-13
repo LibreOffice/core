@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#ifndef DISABLE_PYUNO
+
 Module gid_Module_Optional_Pyuno
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_OPTIONAL_PYTHON );
@@ -37,3 +39,5 @@ Module gid_Module_Optional_Pyuno
     Default = YES;
     Styles = ( );
 End
+
+#endif

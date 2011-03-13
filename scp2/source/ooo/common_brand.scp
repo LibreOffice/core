@@ -1479,7 +1479,7 @@ End
 #endif
 
 //TODO: This actually belongs into a module of its own:
-#if !defined SYSTEM_PYTHON
+#if !defined DISABLE_PYUNO && !defined SYSTEM_PYTHON
 File gid_Brand_File_Bin_Python
     BIN_FILE_BODY;
     Name = EXENAME(pyuno/python);

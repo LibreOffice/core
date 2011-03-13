@@ -28,6 +28,7 @@
 #include "macros.inc"
 
 #ifndef AIX
+#ifndef DISABLE_PYUNO
 File gid_File_Pymailmerge
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
@@ -35,4 +36,5 @@ File gid_File_Pymailmerge
     RegistryID = gid_Starregistry_Services_Rdb;
     Styles = (PACKED,UNO_COMPONENT);
 End
+#endif
 #endif

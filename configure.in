@@ -265,6 +265,9 @@ AC_ARG_ENABLE(crashdump,
     AS_HELP_STRING([--enable-crashdump],
         [Enable the crashdump feature.]))
 
+AC_ARG_ENABLE(python,
+    AS_HELP_STRING([--disable-python],
+        [Disable build of Python 2.x UNO API.]))
 AC_ARG_ENABLE(gtk,
     AS_HELP_STRING([--disable-gtk],
         [Determines whether to use Gtk+ vclplug on platforms where Gtk+ is available.]),
@@ -1015,6 +1018,16 @@ AC_ARG_WITH(java_target_version,
     ],
 ,)
 
+AC_ARG_WITH(jvm-path,
+    AS_HELP_STRING([--with-jvm-path],
+        [Use a specific JVM search path at runtime.])
+    [
+                          Usage: --with-jvm-path=<absolute path to parent of jvm home>
+
+                          e. g.: --with-jvm-path=/usr/lib/
+                                 to find JRE/JDK in /usr/lib/jvm/
+    ],
+,)
 AC_ARG_WITH(ant-home,
     AS_HELP_STRING([--with-ant-home],
         [If you have installed Jakarta Ant on your system, please supply the path here.
@@ -4137,8 +4150,13 @@ AC_SUBST(LIBXML_CFLAGS)
 AC_SUBST(LIBXML_LIBS)
 
 dnl ===================================================================
-dnl Check for system python
+dnl Check for python
 dnl ===================================================================
+AC_MSG_CHECKING([whether to enable Python 2.x UNO API])
+if test "$enable_python" != "no"; then
+   AC_MSG_RESULT([yes])
+   BUILD_TYPE="$BUILD_TYPE PYUNO"
+
 AC_MSG_CHECKING([which python to use])
 if test "$_os" = "WINNT"; then
    with_system_python=no
@@ -4189,6 +4207,12 @@ AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
 HOME=`echo $HOME | $SED 's:\\\\:/:g'`
 AC_SUBST(HOME)
+dnl disable python
+else
+   AC_MSG_RESULT([no])
+   DISABLE_PYTHON=TRUE
+   AC_SUBST(DISABLE_PYTHON)
+fi
 
 dnl ===================================================================
 dnl Check for system berkley db
@@ -7469,6 +7493,26 @@ else
 fi
 AC_SUBST(USE_XINERAMA)
 AC_SUBST(XINERAMA_LINK)
+
+dnl ===================================================================
+dnl Check for runtime JVM search path
+dnl ===================================================================
+if test "$SOLAR_JAVA" != ""; then
+  AC_MSG_CHECKING([whether to use specific JVM search path at runtime])
+  if test -n "$with_jvm_path" && test "$with_jvm_path" != "no"; then
+     AC_MSG_RESULT([yes])
+     if ! test -d "$with_jvm_path"; then
+        AC_MSG_ERROR(["$with_jvm_path" not a directory])
+     fi
+     if ! test -d "$with_jvm_path"jvm; then
+        AC_MSG_ERROR(["$with_jvm_path"jvm not found, point with_jvm_path to \[/path/to/\]jvm])
+     fi
+     JVM_ONE_PATH_CHECK="$with_jvm_path"
+     AC_SUBST(JVM_ONE_PATH_CHECK)
+  else
+     AC_MSG_RESULT([no])
+  fi
+fi
 
 dnl ===================================================================
 dnl Test for the presence of Ant and that it works

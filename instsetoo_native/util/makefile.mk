@@ -68,12 +68,14 @@ INSTALLDIR=$(OUT)
 
 .INCLUDE: target.mk
 
+.IF "$(DISABLE_PYTHON)" != "TRUE"
 LOCALPYFILES= \
     $(BIN)$/uno.py \
     $(BIN)$/unohelper.py \
     $(BIN)$/pythonloader.py \
     $(BIN)$/officehelper.py \
     $(BIN)$/mailmerge.py
+.ENDIF
 
 xxxx:
     echo $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product LibreOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml
@@ -292,12 +294,14 @@ openoffice:
 
 .ENDIF			# "$(alllangiso)"!=""
 
+.IF "$(DISABLE_PYTHON)" != "TRUE"
 .IF "$(LOCALPYFILES)"!=""
 $(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} broffice_$i{$(PKGFORMAT:^".")} brofficewithjre_$i{$(PKGFORMAT:^".")} brofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
 $(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
     @$(COPY) $< $@
+.ENDIF			# "$(DISABLE_PYTHON)" != "TRUE"
 
 $(BIN)$/intro.zip : $(SOLARCOMMONPCKDIR)$/brand$/intro.zip
     $(COPY) $< $@

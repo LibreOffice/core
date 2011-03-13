@@ -1456,7 +1456,9 @@ if ($platform =~ m/solaris/)
 	}
     #The tail, if needed
     if ($platform =~ m/linux|freebsd|netbsd|aix|openbsd|dragonfly/)
-    {  $SOLARINC  .= $I.$XINC;
+    {  if ( $XINC ne "/usr/include" ) {
+            $SOLARINC  .= $I.$XINC;
+       }
     }
 }
 elsif ($platform =~ m/cygwin/)
@@ -1769,6 +1771,7 @@ if ( '@JDK@' ne '' )
    ToFile( "JAVAIFLAGS",      "@JAVAIFLAGS@",    "e" );
    ToFile( "JAVACOMPILER",    PathFormat("@JAVACOMPILER@"), "e" );
    ToFile( "JAVADOC",         PathFormat("@JAVADOC@"), "e" );
+   ToFile( "JVM_ONE_PATH_CHECK", "@JVM_ONE_PATH_CHECK@", "e" );
 }
 ToFile( "SCPDEFS",           '@SCPDEFS@',        "e" );
 ToFile( "SOLAREXTRAINC",     $SOLAREXTRAINC,     "e" );
@@ -1852,6 +1855,7 @@ ToFile( "SYSTEM_ZLIB",       "@SYSTEM_ZLIB@",      "e" );
 ToFile( "SYSTEM_OPENSSL",    "@SYSTEM_OPENSSL@",   "e" );
 ToFile( "OPENSSL_CFLAGS",    "@OPENSSL_CFLAGS@",   "e" );
 ToFile( "OPENSSL_LIBS",      "@OPENSSL_LIBS@",     "e" );
+ToFile( "DISABLE_PYTHON",    "@DISABLE_PYTHON@",   "e" );
 ToFile( "SYSTEM_PYTHON",     "@SYSTEM_PYTHON@",    "e" );
 ToFile( "PYTHON",            "@PYTHON@",           "e" );
 ToFile( "PYTHON_CFLAGS",     "@PYTHON_CFLAGS@",    "e" );

@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#ifndef DISABLE_PYUNO
+
 File gid_File_Lib_Pyuno
     TXT_FILE_BODY;
   #ifdef UNX
@@ -310,3 +312,5 @@ End
 
 #endif
 
+// DISABLE_PYUNO
+#endif
