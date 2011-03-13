@@ -368,7 +368,7 @@ bool SendHTTPRequest(
                 if ( g_bDebugMode )
                 {
                     printf( "*** Sending HTTP request ***\n\n" );
-                    printf( buffer );
+                    printf( "%s", buffer );
                 }
 
                 if ( SOCKET_ERROR != send( s, buffer, strlen(buffer), 0 ) )
@@ -405,7 +405,7 @@ bool SendHTTPRequest(
                         if ( g_bDebugMode )
                             do
                             {
-                                printf( buffer );
+                                printf( "%s", buffer );
                                 memset( buffer, 0, sizeof(buffer) );
                             } while ( 0 < recv( s, buffer, sizeof(buffer), 0 ) );
                     }
