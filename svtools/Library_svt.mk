@@ -218,6 +218,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/ehdl \
     svtools/source/misc/embedhlp \
     svtools/source/misc/embedtransfer \
+    svtools/source/misc/filterutils \
     svtools/source/misc/helpagentwindow \
     svtools/source/misc/imagemgr \
     svtools/source/misc/imageresourceaccess \

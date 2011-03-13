@@ -69,6 +69,7 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/filedlg2.hrc,svtools/f
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fileurlbox.hxx,svtools/fileurlbox.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fileview.hxx,svtools/fileview.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/filter.hxx,svtools/filter.hxx))
+$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/filterutils.hxx,svtools/filterutils.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fixedhyper.hxx,svtools/fixedhyper.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fltcall.hxx,svtools/fltcall.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/fltdefs.hxx,svtools/fltdefs.hxx))
