@@ -38,10 +38,8 @@ gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salh
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
 
-ifeq ($(USE_SYSTEM_STL),YES)
 gb_Library_FILENAMES := $(patsubst stl:%,stl:libstdc++.so,$(gb_Library_FILENAMES))
 gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
-endif
 
 endif
 
@@ -53,10 +51,8 @@ gb_Library_FILENAMES := $(patsubst jvmfwk:libuno_jvmfwk%,jvmfwk:libjvmfwk%,$(gb_
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
 
-ifeq ($(USE_SYSTEM_STL),YES)
 gb_Library_FILENAMES := $(patsubst stl:%,stl:libstdc++.dylib,$(gb_Library_FILENAMES))
 gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
-endif
 
 endif
 
@@ -101,10 +97,8 @@ gb_Library_DLLFILENAMES := $(patsubst icuuc:icuuc%,icuuc:icuuc40%,$(gb_Library_D
 gb_Library_DLLFILENAMES := $(patsubst ucbhelper:ucbhelper%,ucbhelper:ucbhelper4%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
-ifeq ($(USE_SYSTEM_STL),YES)
 gb_Library_FILENAMES := $(patsubst stl:%,stl:$(gb_Library_IARCSYSPRE)stdc++_s$(gb_Library_IARCSYSPRE),$(gb_Library_FILENAMES))
 gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
-endif
 
 else
 gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
@@ -169,9 +163,7 @@ endif
 
 # we do not require a known rule for these, when using system libs
 
-ifeq ($(USE_SYSTEM_STL),YES)
 gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
-endif
 
 ifeq ($(SYSTEM_LIBXML),YES)
 gb_Library_TARGETS := $(filter-out xml2,$(gb_Library_TARGETS))
