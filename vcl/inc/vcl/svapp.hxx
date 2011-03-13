@@ -557,6 +557,52 @@ protected:
     osl::SolarMutex& m_solarMutex;
 };
 
+class VCL_DLLPUBLIC SolarMutexResettableGuard
+{
+    SolarMutexResettableGuard( const SolarMutexResettableGuard& );
+    const SolarMutexResettableGuard& operator = ( const SolarMutexResettableGuard& );
+    bool m_bCleared;
+public:
+    /** Acquires mutex
+        @param pMutex pointer to mutex which is to be acquired  */
+    SolarMutexResettableGuard()
+        : m_bCleared(false)
+        , m_solarMutex( Application::GetSolarMutex() )
+        {
+            m_solarMutex.acquire();
+        }
+
+    /** Releases mutex. */
+    virtual ~SolarMutexResettableGuard()
+        {
+            if( !m_bCleared )
+            {
+                m_solarMutex.release();
+            }
+        }
+
+    /** Releases mutex. */
+    void SAL_CALL clear()
+        {
+            if( !m_bCleared)
+            {
+                m_solarMutex.release();
+                m_bCleared = true;
+            }
+        }
+    /** Releases mutex. */
+    void SAL_CALL reset()
+        {
+            if( m_bCleared)
+            {
+                m_solarMutex.acquire();
+                m_bCleared = false;
+            }
+        }
+protected:
+    osl::SolarMutex& m_solarMutex;
+};
+
 
 /**
  A helper class that calls Application::ReleaseSolarMutex() in its constructor
