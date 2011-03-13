@@ -46,6 +46,9 @@
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
 
+namespace oox {
+namespace xls {
+
 using ::rtl::OUString;
 
 // ============================================================================

@@ -46,22 +46,6 @@ namespace com { namespace sun { namespace star {
 
 namespace oox {
 
-// ============================================================================
-
-    /** Calls the passed member function of ObjType on every contained object,
-        automatically skips all elements that are empty references. */
-    template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3, typename ParamType4 >
-    inline void         forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3, ParamType4 aParam4 ) const
-                        {
-                            forEach( ::boost::bind( pFunc, _1, aParam1, aParam2, aParam3, aParam4 ) );
-                        }
-    /** Calls the passed member function of ObjType on every contained object,
-        automatically skips all elements that are empty references. */
-    template< typename FuncType, typename ParamType1, typename ParamType2, typename ParamType3, typename ParamType4 >
-    inline void         forEachMem( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2, ParamType3 aParam3, ParamType4 aParam4 ) const
-                        {
-                            forEach( ::boost::bind( pFunc, _1, aParam1, aParam2, aParam3, aParam4 ) );
-                        }
 /** Template for a 2-dimensional array of objects.
 
     This class template provides a similar interface to the ::std::vector

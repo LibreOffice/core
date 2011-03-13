@@ -45,13 +45,13 @@
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/core/xmlfilterbase.hxx"
 #include "oox/ole/axcontrol.hxx"
 #include "oox/ole/axcontrolfragment.hxx"
 #include "oox/ole/oleobjecthelper.hxx"
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
 #include "oox/vml/vmltextbox.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/containerhelper.hxx"
 
 using ::com::sun::star::beans::XPropertySet;
@@ -161,6 +161,8 @@ void lclSetXShapeRect( const Reference< XShape >& rxShape, const Rectangle& rSha
             }
         }
     }
+}
+
 } // namespace
 
 // ============================================================================

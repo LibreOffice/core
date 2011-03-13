@@ -112,7 +112,7 @@ void ContextHandler2Helper::implCharacters( const OUString& rChars )
 {
     // #i76091# collect characters until new element starts or this element ends
     if( !mxContextStack->empty() )
-        mxContextStack->back().maChars += rChars;
+        mxContextStack->back().maChars.append(rChars);
 }
 
 void ContextHandler2Helper::implEndElement( sal_Int32 nElement )
@@ -152,9 +152,10 @@ void ContextHandler2Helper::implEndRecord( sal_Int32 nRecId )
 
 ElementInfo& ContextHandler2Helper::pushElementInfo( sal_Int32 nElement )
 {
-    ContextInfo aInfo( nElement );
+    mxContextStack->resize( mxContextStack->size() + 1 );
     ElementInfo& rInfo = mxContextStack->back();
-    return mxContextStack->back();
+    rInfo.mnElement = nElement;
+    return rInfo;
 }
 
 void ContextHandler2Helper::popElementInfo()

@@ -804,8 +804,10 @@ VbaUserForm::VbaUserForm( const Reference< XComponentContext >& rxContext,
     OSL_ENSURE( mxDocModel.is(), "VbaUserForm::VbaUserForm - missing document model" );
 }
 
-void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
-        StorageBase& rVbaFormStrg, const OUString& rModuleName, rtl_TextEncoding eTextEnc )
+void VbaUserForm::importForm(
+                           const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
+                           const Reference< XNameContainer >& rxDialogLib,
+                           StorageBase& rVbaFormStrg, const OUString& rModuleName, rtl_TextEncoding eTextEnc )
 {
     OSL_ENSURE( rxDialogLib.is(), "VbaUserForm::importForm - missing dialog library" );
     if( !mxCompContext.is() || !mxDocModel.is() || !rxDialogLib.is() )
@@ -874,7 +876,7 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
         if( convertProperties( xDialogModel, maConverter, 0 ) )
         {
             // export the dialog to XML and insert it into the dialog library
-            Reference< XInputStreamProvider > xDialogSource( ::xmlscript::exportDialogModel( xDialogNC, xCompContext, rxDocModel ), UNO_SET_THROW );
+            Reference< XInputStreamProvider > xDialogSource( ::xmlscript::exportDialogModel( xDialogNC, mxCompContext, rxDocModel ), UNO_SET_THROW );
             OSL_ENSURE( !rxDialogLib->hasByName( aFormName ), "VbaUserForm::importForm - multiple dialogs with equal name" );
             ContainerHelper::insertByName( rxDialogLib, aFormName, Any( xDialogSource ) );
         }

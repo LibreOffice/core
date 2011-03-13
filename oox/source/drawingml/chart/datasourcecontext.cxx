@@ -108,8 +108,8 @@ void DoubleSequenceContext::onCharacters( const OUString& rChars )
                  * be values.
                  * TODO: NumberFormat conversion, remove the check then.
                  */
-                if( isPreviousElement( C_TOKEN( cat ), 4 ) ||
-                    isPreviousElement( C_TOKEN( xVal ), 4 ) )
+                if( isParentElement( C_TOKEN( cat ), 4 ) ||
+                    isParentElement( C_TOKEN( xVal ), 4 ) )
                     mrModel.maData[ mnPtIndex ] <<= rChars;
                 else
                     mrModel.maData[ mnPtIndex ] <<= rChars.toDouble();

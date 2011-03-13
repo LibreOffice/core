@@ -583,7 +583,7 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
     OUString sFilterName = mxImpl->maMediaDesc.getUnpackedValueOrDefault( CREATE_OUSTRING( "FilterName" ), OUString() );
     try
     {
-        Reference< XNameAccess > xFilters( getGlobalFactory()->createInstance(
+        Reference< XNameAccess > xFilters( getServiceFactory()->createInstance(
                     CREATE_OUSTRING( "com.sun.star.document.FilterFactory" ) ), UNO_QUERY_THROW );
         Any aValues = xFilters->getByName( sFilterName );
         Sequence<PropertyValue > aPropSeq;

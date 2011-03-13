@@ -366,7 +366,7 @@ ShapeContext::ShapeContext( ContextHandler2Helper& rParent, ShapeBase& rShape, c
 ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     // Custom shape in Writer with a textbox are transformed into a frame
-    if ( nElement == ( NMSP_VML + XML_textbox ) )
+    if ( nElement == ( NMSP_vml + XML_textbox ) )
         dynamic_cast<SimpleShape&>( mrShape ).setService(
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")) );
 
@@ -413,13 +413,13 @@ ContextHandlerRef GroupShapeContext::onCreateContext( sal_Int32 nElement, const 
 // ============================================================================
 
 RectangleShapeContext::RectangleShapeContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, RectangleShape& rShape ) :
-    ShapeContext( rParent, rAttribs, rShape )
+    ShapeContext( rParent, rShape, rAttribs )
 {
 }
 
 ContextHandlerRef RectangleShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if ( nElement == ( NMSP_VML + XML_textbox ) )
+    if ( nElement == ( NMSP_vml + XML_textbox ) )
         dynamic_cast< SimpleShape &>( mrShape ).setService(
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")) );
 

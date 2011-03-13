@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+#include <oox/token/properties.hxx>
+#include <oox/token/tokens.hxx>
+
 #include "oox/xls/commentsbuffer.hxx"
 
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
@@ -36,7 +39,6 @@
 #include "oox/vml/vmlshape.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/drawingfragment.hxx"
-#include "properties.hxx"
 #include "svx/sdtaitm.hxx"
 #include "oox/xls/unitconverter.hxx"
 
@@ -48,6 +50,17 @@ using ::com::sun::star::text::XTextRange;
 using ::com::sun::star::awt::Size;
 using ::com::sun::star::awt::Point;
 
+namespace oox {
+namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 static sal_Int32 lcl_ToHorizAlign( sal_Int32 nAlign )
 {
@@ -80,18 +93,6 @@ static sal_Int32 lcl_ToVertAlign( sal_Int32 nAlign )
     }
     return SDRTEXTVERTADJUST_TOP;
 }
-
-namespace oox {
-namespace xls {
-
-// ============================================================================
-
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::table;
-using namespace ::com::sun::star::uno;
-
-using ::rtl::OUString;
 
 // ============================================================================
 

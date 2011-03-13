@@ -46,6 +46,18 @@
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/zipstorage.hxx"
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/mediadescriptor.hxx>
+#include <oox/core/filterdetect.hxx>
+#include <comphelper/storagehelper.hxx>
+using ::com::sun::star::uno::XComponentContext;
+using ::com::sun::star::document::XOOXMLDocumentPropertiesImporter;
+using ::com::sun::star::document::XDocumentPropertiesSupplier;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::lang::XComponent;
 
 namespace oox {
 namespace core {
@@ -69,19 +81,7 @@ using ::rtl::OUStringBuffer;
 using ::sax_fastparser::FSHelperPtr;
 using ::sax_fastparser::FastSerializerHelper;
 
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/mediadescriptor.hxx>
-#include <oox/core/filterdetect.hxx>
-#include <comphelper/storagehelper.hxx>
 
-using ::com::sun::star::uno::XComponentContext;
-using ::com::sun::star::document::XOOXMLDocumentPropertiesImporter;
-using ::com::sun::star::document::XDocumentPropertiesSupplier;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::lang::XComponent;
 
 
 
@@ -119,22 +119,6 @@ XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxCo
     maBinSuffix( CREATE_OUSTRING( ".bin" ) ),
     maVmlSuffix( CREATE_OUSTRING( ".vml" ) )
 {
-static Reference< XComponentContext > lcl_getComponentContext(Reference< XMultiServiceFactory > aFactory)
-{
-    Reference< XComponentContext > xContext;
-    try
-    {
-        Reference< XPropertySet > xFactProp( aFactory, UNO_QUERY );
-        if( xFactProp.is() )
-            xFactProp->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext;
-    }
-    catch( Exception& )
-    {}
-
-    return xContext;
-}
-
-// ============================================================================
     // register XML namespaces
     maFastParser.registerNamespace( NMSP_xml );
     maFastParser.registerNamespace( NMSP_packageRel );
@@ -159,6 +143,24 @@ static Reference< XComponentContext > lcl_getComponentContext(Reference< XMultiS
     maFastParser.registerNamespace( NMSP_xm );
 }
 
+
+static Reference< XComponentContext > lcl_getComponentContext(Reference< XMultiServiceFactory > aFactory)
+{
+    Reference< XComponentContext > xContext;
+    try
+    {
+        Reference< XPropertySet > xFactProp( aFactory, UNO_QUERY );
+        if( xFactProp.is() )
+            xFactProp->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext;
+    }
+    catch( Exception& )
+    {}
+
+    return xContext;
+}
+
+// ============================================================================
+
 // ============================================================================
 
 XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
@@ -177,13 +179,13 @@ XmlFilterBase::~XmlFilterBase()
 
 void XmlFilterBase::importDocumentProperties() throw()
 {
-    Reference< XMultiServiceFactory > xFactory( getGlobalFactory(), UNO_QUERY );
+    Reference< XMultiServiceFactory > xFactory( getServiceFactory(), UNO_QUERY );
     MediaDescriptor aMediaDesc( getMediaDescriptor() );
     Reference< XInputStream > xInputStream;
-    ::oox::core::FilterDetect aDetector( xFactory );
+    Reference< XComponentContext > xContext = lcl_getComponentContext(getServiceFactory());
+    ::oox::core::FilterDetect aDetector( xContext );
     xInputStream = aDetector.extractUnencryptedPackage( aMediaDesc );
     Reference< XComponent > xModel( getModel(), UNO_QUERY );
-    Reference< XComponentContext > xContext = lcl_getComponentContext(getGlobalFactory());
     Reference< XStorage > xDocumentStorage (
             ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream( OFOPXML_STORAGE_FORMAT_STRING, xInputStream ) );
     Reference< XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(

@@ -91,25 +91,6 @@ void CommentsFragment::onCharacters( const OUString& rChars )
 
 void CommentsFragment::onEndElement()
 {
-    bool bFrom = false;
-    if( getPreviousElement() == XDR_TOKEN( from ) )
-        bFrom = true;
-    switch( getCurrentElement() )
-    {
-        case XDR_TOKEN( col ):
-        case XDR_TOKEN( colOff ):
-        case XDR_TOKEN( row ):
-        case XDR_TOKEN( rowOff ):
-            mxComment->importAnchor( bFrom, getCurrentElement(), rChars );
-            break;
-        case XLS_TOKEN( comment ):
-            mxComment.reset();
-        break;
-    }
-}
-
-void CommentsFragment::onEndElement()
-{
     if( isCurrentElement( XLS_TOKEN( comment ) ) )
         mxComment.reset();
 }

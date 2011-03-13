@@ -213,13 +213,6 @@ void VbaModule::createEmptyModule( const Reference< XNameContainer >& rxBasicLib
     createModule( OUString(), rxBasicLib, rxDocObjectNA );
 }
 
-// private --------------------------------------------------------------------
-{
-    createModule( OUString(), rxBasicLib, rxDocObjectNA );
-}
-
-void VbaModule::createEmptyModule( const Reference< XNameContainer >& rxBasicLib, const Reference< XNameAccess >& rxDocObjectNA ) const
-
 OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< XNameContainer >& rxOleNameOverrides ) const
 {
     OUStringBuffer aSourceCode;

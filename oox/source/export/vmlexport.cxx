@@ -28,7 +28,7 @@
 
 #include <oox/export/vmlexport.hxx>
 
-#include <tokens.hxx>
+#include <oox/token/tokens.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -83,7 +83,7 @@ VMLExport::~VMLExport()
     delete[] m_pShapeTypeWritten, m_pShapeTypeWritten = NULL;
 }
 
-void VMLExport::OpenContainer( UINT16 nEscherContainer, int nRecInstance )
+void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
 {
     EscherEx::OpenContainer( nEscherContainer, nRecInstance );
 
@@ -127,7 +127,7 @@ void VMLExport::CloseContainer()
     EscherEx::CloseContainer();
 }
 
-UINT32 VMLExport::EnterGroup( const String& rShapeName, const Rectangle* pRect )
+sal_uInt32 VMLExport::EnterGroup( const String& rShapeName, const Rectangle* pRect )
 {
     sal_uInt32 nShapeId = GenerateShapeId();
 
@@ -172,7 +172,7 @@ void VMLExport::LeaveGroup()
     m_pSerializer->endElementNS( XML_v, XML_group );
 }
 
-void VMLExport::AddShape( UINT32 nShapeType, UINT32 nShapeFlags, UINT32 nShapeId )
+void VMLExport::AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId )
 {
     m_nShapeType = nShapeType;
     m_nShapeFlags = nShapeFlags;

@@ -45,6 +45,7 @@ NamespaceMap::NamespaceMap()
         operator[]( pNamespaceUrl->mnId ) = ::rtl::OUString::createFromAscii( pNamespaceUrl->mpcUrl );
 }
 
+}
 // ============================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

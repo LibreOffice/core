@@ -29,6 +29,7 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/export/shapes.hxx"
 #include "oox/export/utils.hxx"
+#include <oox/token/tokens.hxx>
 
 #include <cstdio>
 #include <com/sun/star/awt/CharSet.hpp>
@@ -476,12 +477,12 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool
 
 ShapeExport& ShapeExport::WriteClosedBezierShape( Reference< XShape > xShape )
 {
-    return WriteBezierShape( xShape, TRUE );
+    return WriteBezierShape( xShape, sal_True );
 }
 
 ShapeExport& ShapeExport::WriteOpenBezierShape( Reference< XShape > xShape )
 {
-    return WriteBezierShape( xShape, FALSE );
+    return WriteBezierShape( xShape, sal_False );
 }
 
 ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
@@ -491,7 +492,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     Reference< XPropertySet > rXPropSet( xShape, UNO_QUERY );
     SdrObjCustomShape* pShape = (SdrObjCustomShape*) GetSdrObjectFromXShape( xShape );
     sal_Bool bIsDefaultObject = EscherPropertyContainer::IsDefaultObject( pShape );
-    sal_Bool bPredefinedHandlesUsed = TRUE;
+    sal_Bool bPredefinedHandlesUsed = sal_True;
     OUString sShapeType;
     sal_uInt32 nMirrorFlags = 0;
     MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, nMirrorFlags, sShapeType );
@@ -514,7 +515,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
                     nAdjustmentValuesIndex = i;
                 else if( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Handles" ) )) {
                     if( !bIsDefaultObject )
-                        bPredefinedHandlesUsed = FALSE;
+                        bPredefinedHandlesUsed = sal_False;
                     // TODO: update nAdjustmentsWhichNeedsToBeConverted here
                 }
             }
@@ -717,13 +718,13 @@ ShapeExport& ShapeExport::WriteConnectorShape( Reference< XShape > xShape )
 
     Rectangle aRect( Point( aStartPoint.X, aStartPoint.Y ), Point( aEndPoint.X, aEndPoint.Y ) );
     if( aRect.getWidth() < 0 ) {
-        bFlipH = TRUE;
+        bFlipH = sal_True;
         aRect.setX( aEndPoint.X );
         aRect.setWidth( aStartPoint.X - aEndPoint.X );
     }
 
     if( aRect.getHeight() < 0 ) {
-        bFlipV = TRUE;
+        bFlipV = sal_True;
         aRect.setY( aEndPoint.Y );
         aRect.setHeight( aStartPoint.Y - aEndPoint.Y );
     }

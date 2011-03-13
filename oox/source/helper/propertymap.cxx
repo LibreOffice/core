@@ -32,6 +32,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <osl/mutex.hxx>
 #include "oox/token/propertynames.hxx"
@@ -43,8 +45,6 @@ using ::com::sun::star::container::XIndexReplace;
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
-#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 using ::com::sun::star::drawing::TextHorizontalAdjust;

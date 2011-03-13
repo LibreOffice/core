@@ -203,7 +203,6 @@ private:
     ::rtl::OUString     maPrjName;          /// Name of the VBA project.
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                         mxOleOverridesSink;
-    ::rtl::OUString     maPrjName;          /// Name of the VBA project.
 };
 
 // ============================================================================

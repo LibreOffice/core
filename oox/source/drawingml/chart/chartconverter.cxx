@@ -31,6 +31,8 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "oox/drawingml/chart/chartspaceconverter.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
+#include "oox/helper/containerhelper.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 
 using ::oox::drawingml::chart::DataSequenceModel;
 using ::com::sun::star::uno::Any;
@@ -67,7 +69,7 @@ static OUString lclGenerateApiString( const OUString& rString )
     return OUStringBuffer().append( sal_Unicode( '"' ) ).append( aRetString ).append( sal_Unicode( '"' ) ).makeStringAndClear();
 }
 
-static OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )
+    static ::rtl::OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )
 {
     OSL_ENSURE( !rMatrix.empty(), "ChartConverter::lclGenerateApiArray - missing matrix values" );
     OUStringBuffer aBuffer;
@@ -79,7 +81,7 @@ static OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )
         for( Matrix< Any >::const_iterator aBeg = rMatrix.row_begin( nRow ), aIt = aBeg, aEnd = rMatrix.row_end( nRow ); aIt != aEnd; ++aIt )
         {
             double fValue = 0.0;
-            OUString aString;
+            ::rtl::OUString aString;
             if( aIt != aBeg )
                 aBuffer.append( API_TOKEN_ARRAY_COLSEP );
             if( *aIt >>= fValue )
@@ -134,7 +136,7 @@ Reference< XDataSequence > ChartConverter::createDataSequence( const Reference< 
     Reference< XDataSequence > xDataSeq;
     if( rxDataProvider.is() )
     {
-        OUString aRangeRep;
+        ::rtl::OUString aRangeRep;
         if( !rDataSeq.maData.empty() )
         {
             // create a single-row array from constant source data
