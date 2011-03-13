@@ -39,12 +39,13 @@
 #include "cell.hxx"
 #include "xcl97rec.hxx"
 
-#include <oox/core/tokens.hxx>
+#include <oox/token/tokens.hxx>
 #include <rtl/strbuf.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OString;
 using ::rtl::OStringBuffer;
+using namespace oox;
 
 static OString lcl_GuidToOString( sal_uInt8 aGuid[ 16 ] )
 {
@@ -1379,7 +1380,7 @@ class ExcXmlRecord : public ExcRecord
 {
 public:
     virtual sal_Size    GetLen() const;
-    virtual UINT16      GetNum() const;
+    virtual sal_uInt16  GetNum() const;
     virtual void        Save( XclExpStream& rStrm );
     virtual void        SaveXml( XclExpXmlStream& rStrm ) = 0;
 };
@@ -1389,7 +1390,7 @@ sal_Size ExcXmlRecord::GetLen() const
     return 0;
 }
 
-UINT16 ExcXmlRecord::GetNum() const
+sal_uInt16 ExcXmlRecord::GetNum() const
 {
     return 0;
 }

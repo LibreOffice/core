@@ -1212,7 +1212,7 @@ void Sc10Import::LoadPatternCollection()
                 else if( ( OJustify & ojTopBottom ) == ojTopBottom )
                     rItemSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
 
-                INT16 Margin = Max( ( sal_uInt16 ) 20, ( sal_uInt16 ) ( EJustify * 20 ) );
+                sal_Int16 Margin = Max( ( sal_uInt16 ) 20, ( sal_uInt16 ) ( EJustify * 20 ) );
                 if( ( ( OJustify & ojBottomTop ) == ojBottomTop ) )
                     rItemSet.Put( SvxMarginItem( 20, Margin, 20, Margin, ATTR_MARGIN ) );
                 else

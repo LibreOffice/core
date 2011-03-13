@@ -1131,7 +1131,7 @@ ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
 
     // request and verify a password (decrypter implements IDocPasswordVerifier)
     if( xDecr )
-        rStrm.GetRoot().RequestPassword( *xDecr );
+        rStrm.GetRoot().RequestEncryptionData( *xDecr );
 
     // return error code (success, wrong password, etc.)
     return xDecr ? xDecr->GetError() : EXC_ENCR_ERROR_UNSUPP_CRYPT;

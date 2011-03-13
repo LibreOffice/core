@@ -68,6 +68,7 @@ class ScDocument;
 class ScUserListData;
 class ScProgress;
 
+struct ScDPLabelData;
 typedef ::boost::shared_ptr<ScDPLabelData> ScDPLabelDataRef;
 
 // -----------------------------------------------------------------------
@@ -189,28 +190,6 @@ struct ScPivotField
 };
 
 typedef ::std::vector< ScPivotField > ScPivotFieldVector;
-
-// ============================================================================
-
-struct ScPivotParam
-{
-    SCCOL           nCol;           // Cursor Position /
-    SCROW           nRow;           // bzw. Anfang des Zielbereiches
-    SCTAB           nTab;
-    ScDPLabelDataVector maLabelArray;
-    ScPivotFieldVector maPageArr;
-    ScPivotFieldVector maColArr;
-    ScPivotFieldVector maRowArr;
-    ScPivotFieldVector maDataArr;
-    bool            bIgnoreEmptyRows;
-    bool            bDetectCategories;
-    bool            bMakeTotalCol;
-    bool            bMakeTotalRow;
-
-    ScPivotParam();
-
-    bool            operator==( const ScPivotParam& r ) const;
-};
 
 // ============================================================================
 

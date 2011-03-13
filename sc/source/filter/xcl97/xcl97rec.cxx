@@ -80,7 +80,7 @@
 
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <oox/core/tokens.hxx>
+#include <oox/token/tokens.hxx>
 #include <oox/export/shapes.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
@@ -95,6 +95,7 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
 using ::oox::drawingml::ShapeExport;
 using ::oox::vml::VMLExport;
+using namespace oox;
 
 // ============================================================================
 

@@ -85,7 +85,7 @@
 #include "svx/xlnstit.hxx"
 #include "svx/sxmspitm.hxx"
 
-#include <oox/core/tokens.hxx>
+#include <oox/token/tokens.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/chartexport.hxx>
 #include <oox/export/utils.hxx>
@@ -115,6 +115,7 @@ using ::com::sun::star::chart2::XChartDocument;
 using ::com::sun::star::container::XNamed;
 using ::oox::drawingml::DrawingML;
 using ::oox::drawingml::ChartExport;
+using namespace oox;
 
 #define  HMM2XL(x)        ((x)/26.5)+0.5
 
@@ -172,11 +173,11 @@ static void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr rComments, Rectan
 }
 #endif
 
-static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, INT32 nTab, Rectangle &aFrom, Rectangle &aTo )
+static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_Int32 nTab, Rectangle &aFrom, Rectangle &aTo )
 {
     bool bTo = false;
-    INT32 nCol = 0, nRow = 0;
-    INT32 nColOff = 0, nRowOff= 0;
+    sal_Int32 nCol = 0, nRow = 0;
+    sal_Int32 nColOff = 0, nRowOff= 0;
 
     while(1)
     {

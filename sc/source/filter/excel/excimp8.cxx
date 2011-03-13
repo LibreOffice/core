@@ -325,6 +325,7 @@ void ImportExcel8::ReadBasic( void )
 {
     SfxObjectShell* pShell = GetDocShell();
     SotStorageRef xRootStrg = GetRootStorage();
+    SvtFilterOptions* pFilterOpt = SvtFilterOptions::Get();
     if( pShell && xRootStrg.Is() ) try
     {
         bool bLoadCode = pFilterOpt->IsLoadExcelBasicCode();
@@ -392,12 +393,6 @@ void ImportExcel8::ReadBasic( void )
         catch( uno::Exception& )
         {
         }
-        aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] <<= rMedium.GetInputStream();
-        aMediaDesc[ MediaDescriptor::PROP_INTERACTIONHANDLER() ] <<= rMedium.GetInteractionHandler();
-
-        // call the filter
-        uno::Reference< document::XFilter > xFilter( xImporter, uno::UNO_QUERY_THROW );
-        xFilter->filter( aMediaDesc.getAsConstPropertyValueList() );
     }
     catch( uno::Exception& )
     {

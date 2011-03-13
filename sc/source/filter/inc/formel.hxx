@@ -72,7 +72,7 @@ class _ScRangeListTabs
     sal_Bool                        bHasRanges;
     _ScRangeList**              ppTabLists;
     _ScRangeList*               pAct;
-    UINT16                      nAct;
+    sal_uInt16                      nAct;
 
 public:
 
@@ -83,7 +83,7 @@ public:
     void Append( ScSingleRefData aSRD, SCsTAB nTab, const sal_Bool bLimit = true );
     void Append( ScComplexRefData aCRD, SCsTAB nTab, const sal_Bool bLimit = true );
 
-    const ScRange* First ( const UINT16 nTab = 0 );
+    const ScRange* First ( const sal_uInt16 nTab = 0 );
     const ScRange* Next ();
 
     inline bool HasRanges () const { return bHasRanges; }

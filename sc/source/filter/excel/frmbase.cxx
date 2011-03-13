@@ -160,7 +160,7 @@ void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const sal_Bool b
     }
 }
 
-const ScRange* _ScRangeListTabs::First( const UINT16 n )
+const ScRange* _ScRangeListTabs::First( const sal_uInt16 n )
 {
     DBG_ASSERT( ValidTab(n), "-_ScRangeListTabs::First(): Und tschuessssssss!" );
 

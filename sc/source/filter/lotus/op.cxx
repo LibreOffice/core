@@ -168,7 +168,7 @@ void OP_Label( SvStream& r, sal_uInt16 n )
     delete [] pText;
 }
 
-void OP_Formula( SvStream& r, UINT16 /*n*/ )
+void OP_Formula( SvStream& r, sal_uInt16 /*n*/ )
 {
     sal_uInt8               nFormat;
     sal_uInt16              nCol, nRow, nFormulaSize;
@@ -254,7 +254,7 @@ void OP_NamedRange( SvStream& r, sal_uInt16 /*n*/ )
 void OP_SymphNamedRange( SvStream& r, sal_uInt16 /*n*/ )
 {
     // POST:    waren Koordinaten ungueltig, wird nicht gespeichert
-    UINT16              nColSt, nRowSt, nColEnd, nRowEnd;
+    sal_uInt16              nColSt, nRowSt, nColEnd, nRowEnd;
     sal_uInt8               nType;
     sal_Char            cPuffer[ 32 ];
 

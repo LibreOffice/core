@@ -185,7 +185,7 @@ void XclImpOutlineBuffer::SetButtonMode( bool bRightOrUnder )
     mbButtonAfter = bRightOrUnder;
 }
 
-ExcScenarioCell::ExcScenarioCell( const UINT16 nC, const UINT16 nR )
+ExcScenarioCell::ExcScenarioCell( const sal_uInt16 nC, const sal_uInt16 nR )
     : nCol( nC ), nRow( nR )
 {
 }
@@ -261,8 +261,8 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const sal_Bool bLast )
     boost::ptr_vector<ExcScenarioCell>::const_iterator iter;
     for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
     {
-        UINT16 nCol = iter->nCol;
-        UINT16 nRow = iter->nRow;
+        sal_uInt16 nCol = iter->nCol;
+        sal_uInt16 nRow = iter->nRow;
         String aVal = iter->GetValue();
 
         r.ApplyFlagsTab( nCol, nRow, nCol, nRow, nNewTab, SC_MF_SCENARIO );

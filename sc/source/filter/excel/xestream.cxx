@@ -53,13 +53,15 @@
 #include <../../ui/inc/viewdata.hxx>
 #include <excdoc.hxx>
 
-#include <oox/core/tokens.hxx>
+#include <oox/token/tokens.hxx>
 #include <formula/grammar.hxx>
 #include <oox/export/drawingml.hxx>
+#include <oox/xls/excelvbaproject.hxx>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
+#include <cppuhelper/implementationentry.hxx>
 
 #define DEBUG_XL_ENCRYPTION 0
 
@@ -985,8 +987,8 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
 
 // ============================================================================
 
-XclExpXmlStream::XclExpXmlStream( const Reference< XMultiServiceFactory >& rSMgr )
-    : XmlFilterBase( rSMgr ),
+XclExpXmlStream::XclExpXmlStream( const Reference< XComponentContext >& rCC )
+    : XmlFilterBase( rCC ),
       mpRoot( NULL )
 {
 }
@@ -1173,9 +1175,9 @@ Sequence< OUString > SAL_CALL XlsxExport_getSupportedServiceNames() throw()
     return aSeq;
 }
 
-Reference< XInterface > SAL_CALL XlsxExport_createInstance(const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception )
+Reference< XInterface > SAL_CALL XlsxExport_createInstance(const Reference< XComponentContext > & rCC ) throw( Exception )
 {
-    return (cppu::OWeakObject*) new XclExpXmlStream( rSMgr );
+    return (cppu::OWeakObject*) new XclExpXmlStream( rCC );
 }
 
 #ifdef __cplusplus
@@ -1215,30 +1217,20 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /* pServiceMan
 // ------------------------
 // - component_getFactory -
 // ------------------------
-
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
+::cppu::ImplementationEntry entries [] =
 {
-    Reference< XSingleServiceFactory > xFactory;
-    void* pRet = 0;
-
-    if ( rtl_str_compare( pImplName, IMPL_NAME ) == 0 )
     {
-        const OUString aServiceName(RTL_CONSTASCII_USTRINGPARAM(IMPL_NAME));
+        XlsxExport_createInstance, XlsxExport_getImplementationName,
+        XlsxExport_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
+        0, 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
-        xFactory = Reference< XSingleServiceFactory >( ::cppu::createSingleFactory(
-                    reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
-                    XlsxExport_getImplementationName(),
-                    XlsxExport_createInstance,
-                    XlsxExport_getSupportedServiceNames() ) );
-    }
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, XMultiServiceFactory* pServiceManager, XRegistryKey*  pRegistryKey )
+{
+    return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, entries );
 
-    if ( xFactory.is() )
-    {
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-
-    return pRet;
 }
 
 #ifdef __cplusplus

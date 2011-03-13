@@ -89,7 +89,7 @@ LotAttrCache::LotAttrCache ()
 
 LotAttrCache::~LotAttrCache()
 {
-    for( UINT16 nCnt = 0 ; nCnt < 6 ; nCnt++ )
+    for( sal_uInt16 nCnt = 0 ; nCnt < 6 ; nCnt++ )
         delete ppColorItems[ nCnt ];
 
     delete pBlack;
@@ -168,9 +168,9 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
 }
 
 
-void LotAttrCache::LotusToScBorderLine( UINT8 nLine, SvxBorderLine& aBL )
+void LotAttrCache::LotusToScBorderLine( sal_uInt8 nLine, SvxBorderLine& aBL )
 {
-    static const UINT16 pPara[ 4 ][ 3 ] =
+    static const sal_uInt16 pPara[ 4 ][ 3 ] =
     {
         { 0,0,0 },
         { DEF_LINE_WIDTH_1, 0, 0 },
@@ -188,7 +188,7 @@ void LotAttrCache::LotusToScBorderLine( UINT8 nLine, SvxBorderLine& aBL )
     }
 }
 
-const SvxColorItem& LotAttrCache::GetColorItem( const UINT8 nLotIndex ) const
+const SvxColorItem& LotAttrCache::GetColorItem( const sal_uInt8 nLotIndex ) const
 {
     DBG_ASSERT( nLotIndex > 0 && nLotIndex < 7,
         "-LotAttrCache::GetColorItem(): so nicht!" );
@@ -196,7 +196,7 @@ const SvxColorItem& LotAttrCache::GetColorItem( const UINT8 nLotIndex ) const
     return *ppColorItems[ nLotIndex - 1 ];
 }
 
-const Color& LotAttrCache::GetColor( const UINT8 nLotIndex ) const
+const Color& LotAttrCache::GetColor( const sal_uInt8 nLotIndex ) const
 {
     // Farbe <-> Index passt fuer Background, nicht aber fuer Fonts (0 <-> 7)!
     DBG_ASSERT( nLotIndex < 8, "*LotAttrCache::GetColor(): Index > 7!" );

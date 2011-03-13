@@ -85,8 +85,8 @@ protected:
         XclExpMsoDrawing*   pClientTextbox;
         XclTxo*             pTxo;
         sal_uInt16          mnObjType;
-        UINT16              nObjId;
-        UINT16              nGrbit;
+        sal_uInt16              nObjId;
+        sal_uInt16              nGrbit;
         SCTAB               mnScTab;
         sal_Bool                bFirstOnSheet;
 
@@ -108,7 +108,7 @@ public:
 
     inline sal_uInt16           GetObjType() const { return mnObjType; }
 
-    inline  void                SetId( UINT16 nId ) { nObjId = nId; }
+    inline  void                SetId( sal_uInt16 nId ) { nObjId = nId; }
     inline  sal_uInt16          GetId() const       { return nObjId; }
 
     inline  void                SetTab( SCTAB nScTab )  { mnScTab = nScTab; }

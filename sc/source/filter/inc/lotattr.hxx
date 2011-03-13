@@ -46,10 +46,10 @@ class LotAttrTable;
 
 struct LotAttrWK3
 {
-    UINT8 nFont;
-    UINT8 nLineStyle;
-    UINT8 nFontCol;
-    UINT8 nBack;
+    sal_uInt8 nFont;
+    sal_uInt8 nLineStyle;
+    sal_uInt8 nFontCol;
+    sal_uInt8 nBack;
 
     inline bool HasStyles () const
     {
@@ -95,17 +95,17 @@ private:
 
     inline static void  MakeHash( const LotAttrWK3& rAttr, sal_uInt32& rOut )
     {
-        ( ( UINT8* ) &rOut )[ 0 ] = rAttr.nFont & 0x7F;
-        ( ( UINT8* ) &rOut )[ 1 ] = rAttr.nLineStyle;
-        ( ( UINT8* ) &rOut )[ 2 ] = rAttr.nFontCol;
-        ( ( UINT8* ) &rOut )[ 3 ] = rAttr.nBack;
+        ( ( sal_uInt8* ) &rOut )[ 0 ] = rAttr.nFont & 0x7F;
+        ( ( sal_uInt8* ) &rOut )[ 1 ] = rAttr.nLineStyle;
+        ( ( sal_uInt8* ) &rOut )[ 2 ] = rAttr.nFontCol;
+        ( ( sal_uInt8* ) &rOut )[ 3 ] = rAttr.nBack;
     }
 
-    static void LotusToScBorderLine( UINT8 nLine, SvxBorderLine& );
+    static void LotusToScBorderLine( sal_uInt8 nLine, SvxBorderLine& );
 
-    const SvxColorItem& GetColorItem( const UINT8 nLotIndex ) const;
+    const SvxColorItem& GetColorItem( const sal_uInt8 nLotIndex ) const;
 
-    const Color& GetColor( const UINT8 nLotIndex ) const;
+    const Color& GetColor( const sal_uInt8 nLotIndex ) const;
 
     ScDocumentPool*     pDocPool;
     SvxColorItem*       ppColorItems[6];        // 0 und 7 fehlen!

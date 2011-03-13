@@ -57,11 +57,12 @@
 #include "globstr.hrc"
 #include "xestring.hxx"
 
-#include <oox/core/tokens.hxx>
+#include <oox/token/tokens.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 using ::rtl::OString;
 using ::rtl::OUString;
+using namespace oox;
 
 // PALETTE record - color information =========================================
 

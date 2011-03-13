@@ -183,7 +183,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             // [Parameter{;Parameter}]
             aPool << eParam[ nLast ];
 
-            INT16 nNull = -1;   // gibt einen auszulassenden Parameter an
+            sal_Int16 nNull = -1;   // gibt einen auszulassenden Parameter an
             for( nLauf = nLast - 1 ; nLauf >= 0 ; nLauf-- )
             {
                 if( nLauf != nNull )

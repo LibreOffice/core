@@ -89,9 +89,9 @@ FltError ImportExcel::Read( void )
 
     Zustand             eAkt = Z_BiffNull, ePrev = Z_BiffNull;
 
-    FltError            eLastErr = eERR_OK;
-    UINT16              nOpcode;
-    UINT16              nBofLevel = 0;
+    FltError        eLastErr = eERR_OK;
+    sal_uInt16      nOpcode;
+    sal_uInt16      nBofLevel = 0;
 
     DBG_ASSERT( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
 

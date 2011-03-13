@@ -87,10 +87,11 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <oox/core/tokens.hxx>
+#include <oox/token/tokens.hxx>
 #include <boost/shared_ptr.hpp>
 
 using ::rtl::OString;
+using namespace oox;
 
 static String lcl_GetVbaTabName( SCTAB n )
 {
