@@ -110,8 +110,8 @@ public:
 
     inline  void                Delete()                { delete this; }
     inline  StackVar            GetType() const         { return eType; }
-            sal_Bool                IsFunction() const; // pure functions, no operators
-            sal_Bool                IsMatrixFunction() const;   // if a function _always_ returns a Matrix
+            bool                IsFunction() const; // pure functions, no operators
+            bool                IsMatrixFunction() const;   // if a function _always_ returns a Matrix
             bool                IsExternalRef() const;
             sal_uInt8                GetParamCount() const;
     inline  void                IncRef() const          { nRefCnt++; }
@@ -155,9 +155,9 @@ public:
 
     virtual FormulaToken*       Clone() const { return new FormulaToken(*this); }
 
-    virtual sal_Bool                Is3DRef() const;    // reference with 3D flag set
-    virtual sal_Bool                TextEqual( const formula::FormulaToken& rToken ) const;
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                Is3DRef() const;    // reference with 3D flag set
+    virtual bool                TextEqual( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 
     virtual bool isFunction() const
     {
@@ -217,7 +217,7 @@ public:
     virtual void                SetByte( sal_uInt8 n );
     virtual bool                HasForceArray() const;
     virtual void                SetForceArray( bool b );
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaByteToken )
 };
@@ -238,7 +238,7 @@ public:
 
     virtual FormulaToken*       Clone() const { return new FormulaFAPToken(*this); }
     virtual FormulaToken*       GetFAPOrigToken() const;
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
 class FORMULA_DLLPUBLIC FormulaDoubleToken : public FormulaToken
@@ -254,7 +254,7 @@ public:
     virtual FormulaToken*       Clone() const { return new FormulaDoubleToken(*this); }
     virtual double              GetDouble() const;
     virtual double&             GetDoubleAsReference();
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken )
 };
@@ -272,7 +272,7 @@ public:
 
     virtual FormulaToken*       Clone() const { return new FormulaStringToken(*this); }
     virtual const String&       GetString() const;
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaStringToken )
 };
@@ -292,7 +292,7 @@ public:
 
     virtual FormulaToken*       Clone() const { return new FormulaStringOpToken(*this); }
     virtual const String&       GetString() const;
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
 class FORMULA_DLLPUBLIC FormulaIndexToken : public FormulaToken
@@ -308,7 +308,7 @@ public:
     virtual FormulaToken*       Clone() const { return new FormulaIndexToken(*this); }
     virtual sal_uInt16              GetIndex() const;
     virtual void                SetIndex( sal_uInt16 n );
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
 
@@ -332,7 +332,7 @@ public:
     virtual const String&       GetExternal() const;
     virtual sal_uInt8                GetByte() const;
     virtual void                SetByte( sal_uInt8 n );
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
 
@@ -347,7 +347,7 @@ public:
     virtual FormulaToken*       Clone() const { return new FormulaMissingToken(*this); }
     virtual double              GetDouble() const;
     virtual const String&       GetString() const;
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
 class FORMULA_DLLPUBLIC FormulaJumpToken : public FormulaToken
@@ -369,7 +369,7 @@ public:
                                 }
     virtual                     ~FormulaJumpToken();
     virtual short*              GetJump() const;
-    virtual sal_Bool                operator==( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new FormulaJumpToken(*this); }
 };
 
@@ -383,7 +383,7 @@ public:
                                     FormulaToken( r ) {}
 
     virtual FormulaToken*       Clone() const { return new FormulaUnknownToken(*this); }
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
 
@@ -399,7 +399,7 @@ public:
     virtual FormulaToken*       Clone() const { return new FormulaErrorToken(*this); }
     virtual sal_uInt16              GetError() const;
     virtual void                SetError( sal_uInt16 nErr );
-    virtual sal_Bool                operator==( const FormulaToken& rToken ) const;
+    virtual bool                operator==( const FormulaToken& rToken ) const;
 };
 
 // =============================================================================

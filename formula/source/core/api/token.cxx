@@ -79,12 +79,12 @@ FormulaToken::~FormulaToken()
 {
 }
 
-sal_Bool FormulaToken::Is3DRef() const
+bool FormulaToken::Is3DRef() const
 {
     return sal_False;
 }
 
-sal_Bool FormulaToken::IsFunction() const
+bool FormulaToken::IsFunction() const
 {
 //    OpCode eOp = GetOpCode();
     return (eOp != ocPush && eOp != ocBad && eOp != ocColRowName &&
@@ -130,7 +130,7 @@ sal_uInt8 FormulaToken::GetParamCount() const
 }
 
 
-sal_Bool FormulaToken::IsMatrixFunction() const
+bool FormulaToken::IsMatrixFunction() const
 {
     return formula::FormulaCompiler::IsMatrixFunction(GetOpCode());
 }
@@ -239,7 +239,8 @@ void FormulaToken::SetError( sal_uInt16 )
 {
     DBG_ERRORFILE( "FormulaToken::SetError: virtual dummy called" );
 }
-sal_Bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
+
+bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 {
     return *this == rToken;
 }
@@ -252,7 +253,7 @@ sal_uInt8 FormulaByteToken::GetByte() const                       { return nByte
 void FormulaByteToken::SetByte( sal_uInt8 n )                     { nByte = n; }
 bool FormulaByteToken::HasForceArray() const                 { return bHasForceArray; }
 void FormulaByteToken::SetForceArray( bool b )               { bHasForceArray = b; }
-sal_Bool FormulaByteToken::operator==( const FormulaToken& r ) const
+bool FormulaByteToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && nByte == r.GetByte() &&
         bHasForceArray == r.HasForceArray();
@@ -260,12 +261,12 @@ sal_Bool FormulaByteToken::operator==( const FormulaToken& r ) const
 
 
 FormulaToken* FormulaFAPToken::GetFAPOrigToken() const { return pOrigToken.get(); }
-sal_Bool FormulaFAPToken::operator==( const FormulaToken& r ) const
+bool FormulaFAPToken::operator==( const FormulaToken& r ) const
 {
     return FormulaByteToken::operator==( r ) && pOrigToken == r.GetFAPOrigToken();
 }
 short* FormulaJumpToken::GetJump() const                     { return pJump; }
-sal_Bool FormulaJumpToken::operator==( const FormulaToken& r ) const
+bool FormulaJumpToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && pJump[0] == r.GetJump()[0] &&
         memcmp( pJump+1, r.GetJump()+1, pJump[0] * sizeof(short) ) == 0;
@@ -554,7 +555,7 @@ FormulaToken* FormulaTokenArray::PeekPrevNoSpaces()
 
 bool FormulaTokenArray::HasExternalRef() const
 {
-    for ( USHORT j=0; j < nLen; j++ )
+    for ( sal_uInt16 j=0; j < nLen; j++ )
     {
         if (pCode[j]->IsExternalRef())
             return true;
@@ -572,7 +573,7 @@ bool FormulaTokenArray::HasOpCode( OpCode eOp ) const
     return sal_False;
 }
 
-sal_Bool FormulaTokenArray::HasOpCodeRPN( OpCode eOp ) const
+bool FormulaTokenArray::HasOpCodeRPN( OpCode eOp ) const
 {
     for ( sal_uInt16 j=0; j < nRPN; j++ )
     {
@@ -582,7 +583,7 @@ sal_Bool FormulaTokenArray::HasOpCodeRPN( OpCode eOp ) const
     return sal_False;
 }
 
-sal_Bool FormulaTokenArray::HasNameOrColRowName() const
+bool FormulaTokenArray::HasNameOrColRowName() const
 {
     for ( sal_uInt16 j=0; j < nLen; j++ )
     {
@@ -814,7 +815,7 @@ void FormulaTokenArray::AddRecalcMode( ScRecalcMode nBits )
 }
 
 
-sal_Bool FormulaTokenArray::HasMatrixDoubleRefOps()
+bool FormulaTokenArray::HasMatrixDoubleRefOps()
 {
     if ( pRPN && nRPN )
     {
@@ -1312,35 +1313,35 @@ bool FormulaTokenIterator::IsEndOfPath() const
 
 double      FormulaDoubleToken::GetDouble() const            { return fDouble; }
 double &    FormulaDoubleToken::GetDoubleAsReference()       { return fDouble; }
-sal_Bool FormulaDoubleToken::operator==( const FormulaToken& r ) const
+bool FormulaDoubleToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && fDouble == r.GetDouble();
 }
 
 
 const String& FormulaStringToken::GetString() const          { return aString; }
-sal_Bool FormulaStringToken::operator==( const FormulaToken& r ) const
+bool FormulaStringToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && aString == r.GetString();
 }
 
 
 const String& FormulaStringOpToken::GetString() const             { return aString; }
-sal_Bool FormulaStringOpToken::operator==( const FormulaToken& r ) const
+bool FormulaStringOpToken::operator==( const FormulaToken& r ) const
 {
     return FormulaByteToken::operator==( r ) && aString == r.GetString();
 }
 
 sal_uInt16  FormulaIndexToken::GetIndex() const                  { return nIndex; }
 void    FormulaIndexToken::SetIndex( sal_uInt16 n )              { nIndex = n; }
-sal_Bool FormulaIndexToken::operator==( const FormulaToken& r ) const
+bool FormulaIndexToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && nIndex == r.GetIndex();
 }
 const String&   FormulaExternalToken::GetExternal() const    { return aExternal; }
 sal_uInt8            FormulaExternalToken::GetByte() const        { return nByte; }
 void            FormulaExternalToken::SetByte( sal_uInt8 n )      { nByte = n; }
-sal_Bool FormulaExternalToken::operator==( const FormulaToken& r ) const
+bool FormulaExternalToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && nByte == r.GetByte() &&
         aExternal == r.GetExternal();
@@ -1349,7 +1350,7 @@ sal_Bool FormulaExternalToken::operator==( const FormulaToken& r ) const
 
 sal_uInt16          FormulaErrorToken::GetError() const          { return nError; }
 void            FormulaErrorToken::SetError( sal_uInt16 nErr )   { nError = nErr; }
-sal_Bool FormulaErrorToken::operator==( const FormulaToken& r ) const
+bool FormulaErrorToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&
         nError == static_cast< const FormulaErrorToken & >(r).GetError();
@@ -1360,13 +1361,13 @@ const String&   FormulaMissingToken::GetString() const
     static  String              aDummyString;
     return aDummyString;
 }
-sal_Bool FormulaMissingToken::operator==( const FormulaToken& r ) const
+bool FormulaMissingToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r );
 }
 
 
-sal_Bool FormulaUnknownToken::operator==( const FormulaToken& r ) const
+bool FormulaUnknownToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r );
 }

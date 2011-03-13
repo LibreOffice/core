@@ -81,7 +81,7 @@ protected:
     sal_uInt16          nError;                 // Error code
     short           nRefs;                  // Count of cell references
     ScRecalcMode    nMode;                  // Flags to indicate when to recalc this code
-    sal_Bool            bHyperLink;             // If HYPERLINK() occurs in the formula.
+    bool            bHyperLink;             // If HYPERLINK() occurs in the formula.
 
 protected:
     void                    Assign( const FormulaTokenArray& );
@@ -128,10 +128,10 @@ public:
     FormulaToken* PrevRPN();
 
     bool    HasExternalRef() const;
-    sal_Bool    HasOpCode( OpCode ) const;
-    sal_Bool    HasOpCodeRPN( OpCode ) const;
+    bool    HasOpCode( OpCode ) const;
+    bool    HasOpCodeRPN( OpCode ) const;
     /// Token of type svIndex or opcode ocColRowName
-    sal_Bool    HasNameOrColRowName() const;
+    bool    HasNameOrColRowName() const;
 
     FormulaToken** GetArray() const  { return pCode; }
     FormulaToken** GetCode()  const  { return pRPN; }
@@ -142,8 +142,8 @@ public:
     void      SetCodeError( sal_uInt16 n )  { nError = n; }
     short     GetRefs()  const { return nRefs;  }
     void      IncrementRefs() { ++nRefs; }
-    void      SetHyperLink( sal_Bool bVal ) { bHyperLink = bVal; }
-    sal_Bool      IsHyperLink() const       { return bHyperLink; }
+    void      SetHyperLink( bool bVal ) { bHyperLink = bVal; }
+    bool      IsHyperLink() const       { return bHyperLink; }
 
     inline  ScRecalcMode    GetRecalcMode() const { return nMode; }
                             /** Bits aren't set directly but validated and
@@ -168,17 +168,17 @@ public:
                                 { nMode |= RECALCMODE_ONREFMOVE; }
     inline  void            ClearRecalcModeOnRefMove()
                                 { nMode &= ~RECALCMODE_ONREFMOVE; }
-    inline  sal_Bool            IsRecalcModeNormal() const
+    inline  bool            IsRecalcModeNormal() const
                                 { return (nMode & RECALCMODE_NORMAL) != 0; }
-    inline  sal_Bool            IsRecalcModeAlways() const
+    inline  bool            IsRecalcModeAlways() const
                                 { return (nMode & RECALCMODE_ALWAYS) != 0; }
-    inline  sal_Bool            IsRecalcModeOnLoad() const
+    inline  bool            IsRecalcModeOnLoad() const
                                 { return (nMode & RECALCMODE_ONLOAD) != 0; }
-    inline  sal_Bool            IsRecalcModeOnLoadOnce() const
+    inline  bool            IsRecalcModeOnLoadOnce() const
                                 { return (nMode & RECALCMODE_ONLOAD_ONCE) != 0; }
-    inline  sal_Bool            IsRecalcModeForced() const
+    inline  bool            IsRecalcModeForced() const
                                 { return (nMode & RECALCMODE_FORCED) != 0; }
-    inline  sal_Bool            IsRecalcModeOnRefMove() const
+    inline  bool            IsRecalcModeOnRefMove() const
                                 { return (nMode & RECALCMODE_ONREFMOVE) != 0; }
 
                             /** Get OpCode of the most outer function */
@@ -186,7 +186,7 @@ public:
 
                             /** Operators +,-,*,/,^,&,=,<>,<,>,<=,>=
                                 with DoubleRef in Formula? */
-    sal_Bool                    HasMatrixDoubleRefOps();
+    bool                    HasMatrixDoubleRefOps();
 
     virtual FormulaToken* AddOpCode(OpCode e);
 

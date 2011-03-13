@@ -810,8 +810,8 @@ void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r )
     delete mpHashMap;
     mpHashMap = new OpCodeHashMap(mnSymbols);
 
-    USHORT n = r.getSymbolCount();
-    for (USHORT i = 0; i < n; ++i)
+    sal_uInt16 n = r.getSymbolCount();
+    for (sal_uInt16 i = 0; i < n; ++i)
     {
         OpCode eOp = OpCode(i);
         const String& rSymbol = r.getSymbol(eOp);
