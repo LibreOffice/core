@@ -92,12 +92,14 @@ char const *g_arJavaNames[] = {
  */
 char const *g_arCollectDirs[] = {
     "",
+#ifndef JVM_ONE_PATH_CHECK
     "j2re/",
     "j2se/",
     "j2sdk/",
     "jdk/",
     "jre/",
     "java/",
+#endif
     "jvm/"
 };
 
@@ -109,6 +111,7 @@ char const *g_arSearchPaths[] = {
     "",
     "System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/"
 #else
+#ifndef JVM_ONE_PATH_CHECK
     "",
     "usr/",
     "usr/local/",
@@ -119,6 +122,9 @@ char const *g_arSearchPaths[] = {
 #endif
     "usr/lib/",
     "usr/bin/"
+#else
+    JVM_ONE_PATH_CHECK
+#endif
 #endif
 };
 }
@@ -368,6 +374,9 @@ void AsynchReader::run()
 
 
 bool getJavaProps(const OUString & exePath,
+#ifdef JVM_ONE_PATH_CHECK
+                  const OUString & homePath,
+#endif
                   std::vector<std::pair<rtl::OUString, rtl::OUString> >& props,
                   bool * bProcessRun)
 {
@@ -468,6 +477,15 @@ bool getJavaProps(const OUString & exePath,
         OSL_ASSERT(index != -1);
         OUString sKey = sLine.copy(0, index);
         OUString sVal = sLine.copy(index + 1);
+
+#ifdef JVM_ONE_PATH_CHECK
+        //replace absolute path by linux distro link
+        OUString sHomeProperty(RTL_CONSTASCII_USTRINGPARAM("java.home"));
+        if(sHomeProperty.equals(sKey))
+        {
+            sVal = homePath + OUString::createFromAscii("/jre");
+        }
+#endif
 
         props.push_back(std::make_pair(sKey, sVal));
     }
@@ -751,10 +769,12 @@ vector<Reference<VendorBase> > getAllJREInfos()
     createJavaInfoFromWinReg(vecInfos);
 #endif // WNT
 
+#ifndef JVM_ONE_PATH_CHECK
     createJavaInfoFromJavaHome(vecInfos);
     //this function should be called after createJavaInfoDirScan.
     //Otherwise in SDKs Java may be started twice
      createJavaInfoFromPath(vecInfos);
+#endif
 
 #ifdef UNX
     createJavaInfoDirScan(vecInfos);
@@ -818,7 +838,11 @@ OUString resolveDirPath(const OUString & path)
         if (item.getFileStatus(status) == File::E_None
             && status.getFileType() == FileStatus::Directory)
         {
+#ifndef JVM_ONE_PATH_CHECK
             ret = sResolved;
+#else
+            ret = path;
+#endif
         }
     }
     else
@@ -847,7 +871,11 @@ OUString resolveFilePath(const OUString & path)
         if (item.getFileStatus(status) == File::E_None
             && status.getFileType() == FileStatus::Regular)
         {
+#ifndef JVM_ONE_PATH_CHECK
             ret = sResolved;
+#else
+            ret = path;
+#endif
         }
     }
     else
@@ -942,7 +970,11 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             }
 
             bool bProcessRun= false;
-            if (getJavaProps(sFilePath, props, & bProcessRun) == false)
+            if (getJavaProps(sFilePath,
+#ifdef JVM_ONE_PATH_CHECK
+                             sResolvedDir,
+#endif
+                             props, & bProcessRun) == false)
             {
                 //The java executable could not be run or the system properties
                 //could not be retrieved. We can assume that this java is corrupt.
@@ -961,7 +993,11 @@ rtl::Reference<VendorBase> getJREInfoByPath(
                     //invoked to build the path to the executable. It we start the script directy as .java_wrapper
                     //then it tries to start a jdk/.../native_threads/.java_wrapper. Therefore the link, which
                     //is named java, must be used to start the script.
-                    getJavaProps(sFullPath, props, & bProcessRun);
+                    getJavaProps(sFullPath,
+#ifdef JVM_ONE_PATH_CHECK
+                                 sResolvedDir,
+#endif
+                                 props, & bProcessRun);
                     // Either we found a working 1.3.1
                     //Or the java is broken. In both cases we stop searchin under this "root" directory
                     bBreak = true;

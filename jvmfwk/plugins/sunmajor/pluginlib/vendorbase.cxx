@@ -131,6 +131,7 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
         }
         else if (!bHome && sHomeProperty.equals(i->first))
         {
+#ifndef JVM_ONE_PATH_CHECK
            OUString fileURL;
            if (osl_getFileURLFromSystemPath(i->second.pData,& fileURL.pData) ==
                osl_File_E_None)
@@ -144,6 +145,10 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
                    bHome = true;
                }
            }
+#else
+           m_sHome = i->second;
+           bHome = true;
+#endif
         }
         else if (!bAccess && sAccessProperty.equals(i->first))
         {

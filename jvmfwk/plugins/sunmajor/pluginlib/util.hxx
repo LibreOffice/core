@@ -118,6 +118,9 @@ std::vector<rtl::Reference<VendorBase> > getAllJREInfos();
 
 bool getJavaProps(
     const rtl::OUString & exePath,
+#ifdef JVM_ONE_PATH_CHECK
+    const rtl::OUString & homePath,
+#endif
     std::vector<std::pair<rtl::OUString, rtl::OUString> >& props,
     bool * bProcessRun);
 
