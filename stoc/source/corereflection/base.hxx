@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 //  #define TEST_LIST_CLASSES
-//  #define TRACE(x) OSL_TRACE(x)
-#define TRACE(x)
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
