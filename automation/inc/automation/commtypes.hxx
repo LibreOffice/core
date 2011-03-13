@@ -70,7 +70,6 @@ typedef sal_uInt32 comm_UINT32;
 typedef sal_uInt16      comm_WORD;
 typedef sal_uInt32      comm_DWORD;
 
-class rtl::OString;
 class String;
 #define comm_String String
 

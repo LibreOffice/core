@@ -435,7 +435,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
     // Metrik einstellen
     FieldUnit eFUnit = GetModuleFieldUnit( rSet );
 
-    sal_Bool bApplyCharUnit = GetApplyCharUnit( rSet );
+    bool bApplyCharUnit = GetApplyCharUnit( rSet );
 
     SvtCJKOptions aCJKOptions;
     if(aCJKOptions.IsAsianTypographyEnabled() && bApplyCharUnit )

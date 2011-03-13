@@ -2452,7 +2452,7 @@ sal_Bool StatementCommand::Execute()
                                     nNr1 = 1;       // Zum durchprobieren der Buttons beim Schlie�en
                                 nLNr1 = (sal_uLong)pControl;
 
-                                return FALSE;
+                                return sal_False;
                             }
                         }
                     }
