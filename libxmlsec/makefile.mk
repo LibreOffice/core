@@ -67,7 +67,8 @@ PATCH_FILES=\
    xmlsec1-noverify.patch \
    xmlsec1-mingw32.patch \
    xmlsec1-mingw-keymgr-mscrypto.patch \
-   xmlsec1-vc10.patch
+   xmlsec1-vc10.patch \
+   xmlsec1-1.2.14_fix_extern_c.patch
 
 ADDITIONAL_FILES= \
     include$/xmlsec$/mscrypto$/akmngr.h \
