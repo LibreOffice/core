@@ -88,7 +88,7 @@ struct PropertyInfo
     }
 };
 
-typedef ::std::hash_map< ::rtl::OUString, PropertyInfo, ::rtl::OUStringHash >    PropertiesInfo;
+typedef ::boost::unordered_map< ::rtl::OUString, PropertyInfo, ::rtl::OUStringHash >    PropertiesInfo;
 
 struct ObjectInfo
 {

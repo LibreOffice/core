@@ -123,7 +123,6 @@
 #include <unotools/streamwrap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <vos/mutex.hxx>
 
 #include <boost/bind.hpp>
 #include <boost/mem_fn.hpp>
