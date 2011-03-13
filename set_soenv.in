@@ -1521,7 +1521,6 @@ $gb_REPOS = $SRC_ROOT;
 
 if ('@WITH_LANG@' ne "")
 {
-    $gb_REPOS .= " ".$SOURCE_ROOT_DIR."/l10n";
     $BUILD_TYPE = "@BUILD_TYPE@ L10N";
 }
 else
