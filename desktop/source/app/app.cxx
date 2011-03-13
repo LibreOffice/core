@@ -654,7 +654,7 @@ throw()
                         //Also do not copy *.tmp files and *.tmp_ folders. This affects the files/folders
                         //from the help and configuration backend
                         if ( IsDoc && (aFileName.equalsAscii( pLastSyncFileName )
-                                       || bExcludeFiles && isExcludedFileOrFolder(aFileName)))
+                                       || (bExcludeFiles && isExcludedFileOrFolder(aFileName))))
                             bFilter = true;
                         else if (!IsDoc && bExcludeFiles && isExcludedFileOrFolder(aFileName))
                             bFilter = true;
@@ -1539,7 +1539,7 @@ struct ExecuteGlobals
 
 static ExecuteGlobals* pExecGlobals = NULL;
 
-void Desktop::Main()
+int Desktop::Main()
 {
     pExecGlobals = new ExecuteGlobals();
 
@@ -1917,13 +1917,13 @@ void Desktop::Main()
     }
     // CAUTION: you do not necessarily get here e.g. on the Mac.
     // please put all deinitialization code into doShutdown
-    doShutdown();
+    return doShutdown();
 }
 
-void Desktop::doShutdown()
+int Desktop::doShutdown()
 {
     if( ! pExecGlobals )
-        return;
+        return EXIT_SUCCESS;
 
     if ( pExecGlobals->bRestartRequested )
         SetRestartState();
@@ -2071,7 +2071,7 @@ sal_Bool Desktop::shouldLaunchQuickstart()
         const SfxPoolItem* pItem=0;
         SfxItemSet aQLSet(SFX_APP()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER);
         SFX_APP()->GetOptions(aQLSet);
-        SfxItemState eState = aQLSet.GetItemState(SID_ATTR_QUICKLAUNCHER, FALSE, &pItem);
+        SfxItemState eState = aQLSet.GetItemState(SID_ATTR_QUICKLAUNCHER, sal_False, &pItem);
         if (SFX_ITEM_SET == eState)
             bQuickstart = ((SfxBoolItem*)pItem)->GetValue();
     }

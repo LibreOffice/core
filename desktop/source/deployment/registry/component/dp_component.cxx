@@ -1885,7 +1885,7 @@ BackendImpl::OtherPlatformPackageImpl::processPackage_(
     if (xServicesRDB.is())
         xServicesRDB->close();
 
-    getMyBackend()->deleteDataFromDb(aURL);
+    getMyBackend()->revokeEntryFromDb(aURL);
 }
 
 BackendImpl * BackendImpl::ComponentsPackageImpl::getMyBackend() const
@@ -1978,7 +1978,6 @@ BackendImpl::ComponentsPackageImpl::ComponentsPackageImpl(
     : Package( myBackend, url, name, name /* display-name */,
                xPackageType, bRemoved, identifier)
 {}
->>>>>>> ooo/DEV300_m101
 
 } // anon namespace
 
