@@ -54,8 +54,8 @@ SLOFILES= \
     $(SLO)$/services.obj	\
     $(SLO)$/svdfppt.obj		\
     $(SLO)$/svxmsbas.obj	\
-    $(SLO)$/svxmsbas2.obj
-	$(SLO)$/mstoolbar.obj\
+    $(SLO)$/svxmsbas2.obj       \
+    $(SLO)$/mstoolbar.obj
 
 SHL1TARGET= msfilter$(DLLPOSTFIX)
 SHL1IMPLIB=	i$(TARGET)

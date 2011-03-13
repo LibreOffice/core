@@ -454,7 +454,7 @@ public:
 
                         SdrEscherImport( PowerPointImportParam&, const String& rBaseURL );
     virtual             ~SdrEscherImport();
-    virtual bool    GetColorFromPalette( sal_uint16 nNum, Color& rColor ) const;
+    virtual bool    GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) const;
     virtual sal_Bool        SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const;
     PptFontEntityAtom*  GetFontEnityAtom( sal_uInt32 nNum ) const;
     CharSet             GetCharSet( sal_uInt32 nNum ) const;

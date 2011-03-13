@@ -311,7 +311,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
             nBitsPerSample = ReadIntData();
             OOODEBUG("BitsPerSample",nBitsPerSample);
             if ( nBitsPerSample >= 32 ) // 32 bit and larger samples are not supported
-                bStatus = FALSE;
+                bStatus = sal_False;
             break;
 
         case 0x0103:   // Compression
@@ -493,9 +493,9 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
         }
 
         case 0x0153: { // SampleFormat
-            ULONG nSampleFormat = ReadIntData();
+            sal_uLong nSampleFormat = ReadIntData();
             if ( nSampleFormat == 3 ) // IEEE floating point samples are not supported yet
-                bStatus = FALSE;
+                bStatus = sal_False;
             break;
         }
     }
@@ -760,7 +760,7 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                 sal_uInt8  nLRed = 0;
                 sal_uInt8  nLGreen = 0;
                 sal_uInt8  nLBlue = 0;
-                BYTE  nLAlpha = 0;
+                sal_uInt8  nLAlpha = 0;
                 for ( nx = 0; nx < nImageWidth; nx++, pt += nSamplesPerPixel )
                 {
                     nLRed = nLRed + pt[ 0 ];
@@ -781,7 +781,7 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                     pAcc->SetPixel( nY, nx, Color( pt[0], pt[1], pt[2] ) );
                     if (nSamplesPerPixel >= 4 && pMaskAcc)
                     {
-                        BYTE nAlpha = pt[3];
+                        sal_uInt8 nAlpha = pt[3];
                         pMaskAcc->SetPixel( nY, nx, ~nAlpha );
                     }
                 }

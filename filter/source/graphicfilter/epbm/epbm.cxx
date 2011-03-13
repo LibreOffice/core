@@ -135,7 +135,7 @@ sal_Bool PBMWriter::ImplWriteHeader()
             m_rOStm << "P1\x0a";
 
         ImplWriteNumber( mnWidth );
-        m_rOStm << (sal_uint8)32;
+        m_rOStm << (sal_uInt8)32;
         ImplWriteNumber( mnHeight );
         m_rOStm << (sal_uInt8)10;
     }

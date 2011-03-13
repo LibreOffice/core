@@ -2314,8 +2314,8 @@ struct ShapeRenderingVisitor
                     SvMemoryStream aSrc(aData.getArray(),
                                         aData.getLength(),
                                         STREAM_READ);
-                    USHORT nFormat = GRFILTER_FORMAT_DONTKNOW;
-                    USHORT pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
+                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
+                    sal_uInt16 pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
                     GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), aSrc ,nFormat,&pDeterminedFormat );
 
                     if (pDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
@@ -2323,17 +2323,17 @@ struct ShapeRenderingVisitor
                         //Read the first two byte to check whether it is a gzipped stream, is so it may be in wmz or emz format
                         //unzip them and try again
 
-                        BYTE    sFirstBytes[ 2 ];
+                        sal_uInt8    sFirstBytes[ 2 ];
 
                         aSrc.Seek( STREAM_SEEK_TO_END );
-                        ULONG nStreamLen = aSrc.Tell();
+                        sal_uLong nStreamLen = aSrc.Tell();
                         aSrc.Seek( 0 );
 
                         if ( !nStreamLen )
                         {
                             SvLockBytes* pLockBytes = aSrc.GetLockBytes();
                             if ( pLockBytes  )
-                                pLockBytes->SetSynchronMode( TRUE );
+                                pLockBytes->SetSynchronMode( sal_True );
 
                             aSrc.Seek( STREAM_SEEK_TO_END );
                             nStreamLen = aSrc.Tell();
@@ -2355,7 +2355,7 @@ struct ShapeRenderingVisitor
                                 if (aZCodec.EndCompression() && pDest )
                                 {
                                     pDest->Seek( STREAM_SEEK_TO_END );
-                                    ULONG nStreamLen_ = pDest->Tell();
+                                    sal_uLong nStreamLen_ = pDest->Tell();
                                     if (nStreamLen_)
                                     {
                                         pDest->Seek(0L);
@@ -2571,13 +2571,13 @@ struct ShapeRenderingVisitor
             {
                 ::Gradient aTransparencyGradient=aGradient;
 
-                const BYTE  cTransStart( 255-
+                const sal_uInt8 cTransStart( 255-
                     basegfx::fround(mrGradientStopVector[
                                         aState.maFillGradient.maStops[1]].maStopColor.a*
                                     aState.mnFillOpacity*maCurrState.mnOpacity*255.0));
                 const Color aTransStart( cTransStart, cTransStart, cTransStart );
 
-                const BYTE  cTransEnd( 255-
+                const sal_uInt8 cTransEnd( 255-
                     basegfx::fround(mrGradientStopVector[
                                         aState.maFillGradient.maStops[0]].maStopColor.a*
                                     aState.mnFillOpacity*maCurrState.mnOpacity*255.0));
@@ -2590,7 +2590,7 @@ struct ShapeRenderingVisitor
                 VirtualDevice   aVDev;
                 GDIMetaFile     aMtf;
 
-                aVDev.EnableOutput( FALSE );
+                aVDev.EnableOutput( sal_False );
                 aVDev.SetMapMode( mrOutDev.GetMapMode() );
                 aMtf.Record( &aVDev );
 
@@ -2751,7 +2751,7 @@ bool importSvg(SvStream & rStream, Graphic & rGraphic )
     VirtualDevice   aVDev;
     GDIMetaFile     aMtf;
 
-    aVDev.EnableOutput( FALSE );
+    aVDev.EnableOutput( sal_False );
     aMtf.Record( &aVDev );
     aVDev.SetTextAlign(ALIGN_BASELINE);
 

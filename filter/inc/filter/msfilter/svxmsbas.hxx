@@ -103,12 +103,12 @@ private:
                           const std::vector< String >& codeNames,
                           sal_Bool bAsComment, sal_Bool bStripped);
     MSFILTER_DLLPRIVATE bool ImportForms_Impl(const String& rStorageName,
-        const String &rSubStorageName, BOOL bVBAMode);
+                                              const String &rSubStorageName, sal_Bool bVBAMode);
     MSFILTER_DLLPRIVATE sal_Bool CopyStorage_Impl( const String& rStorageName,
                            const String &rSubStorageName);
         rtl::OUString msProjectName;
-    MSFILTER_DLLPRIVATE BOOL ImportCode_Impl( VBA_Impl&, const std::vector< String >&, BOOL, BOOL );
-    MSFILTER_DLLPRIVATE bool ImportForms_Impl( VBA_Impl&, const String&, const String&, BOOL);
+    MSFILTER_DLLPRIVATE sal_Bool ImportCode_Impl( VBA_Impl&, const std::vector< String >&, sal_Bool, sal_Bool );
+    MSFILTER_DLLPRIVATE bool ImportForms_Impl( VBA_Impl&, const String&, const String&, sal_Bool);
 };
 
 #endif

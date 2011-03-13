@@ -1187,7 +1187,7 @@ public:
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         nBorderColor = 0x80000006L;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
     }
 
     using OCX_ModernControl::Import; // to not hide the other two import methods

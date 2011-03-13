@@ -167,7 +167,7 @@ sal_Bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilt
         }
     }
 
-    const UINT16    nOldFormat = m_rOStm.GetNumberFormatInt();
+    const sal_uInt16    nOldFormat = m_rOStm.GetNumberFormatInt();
     mnStreamOfs = m_rOStm.Tell();
 
     // we will use the BIG Endian Mode
@@ -270,7 +270,7 @@ sal_Bool TIFFWriter::ImplWriteHeader( sal_Bool bMultiPage )
     {
         sal_uInt32 nCurrentPos = m_rOStm.Tell();
         m_rOStm.Seek( mnLatestIfdPos );
-        m_rOStm << (sl_uInt32)( nCurrentPos - mnStreamOfs );    // offset to the IFD
+        m_rOStm << (sal_uInt32)( nCurrentPos - mnStreamOfs );   // offset to the IFD
         m_rOStm.Seek( nCurrentPos );
 
         // (OFS8) TIFF image file directory (IFD)

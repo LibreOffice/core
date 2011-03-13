@@ -376,15 +376,15 @@ void GIFWriter::WriteLogSizeExtension( const Size& rSize100 )
     // PrefSize in 100th-mm als ApplicationExtension schreiben
     if( rSize100.Width() && rSize100.Height() )
     {
-        m_rGIF << (sal_uint8) 0x21;
+        m_rGIF << (sal_uInt8) 0x21;
         m_rGIF << (sal_uInt8) 0xff;
-        m_rGIF << (BYTE) 0x0b;
+        m_rGIF << (sal_uInt8) 0x0b;
         m_rGIF.Write( "STARDIV 5.0", 11 );
         m_rGIF << (sal_uInt8) 0x09;
         m_rGIF << (sal_uInt8) 0x01;
         m_rGIF << (sal_uInt32) rSize100.Width();
         m_rGIF << (sal_uInt32) rSize100.Height();
-        m_rGIF << (sal_uint8) 0x00;
+        m_rGIF << (sal_uInt8) 0x00;
     }
 }
 

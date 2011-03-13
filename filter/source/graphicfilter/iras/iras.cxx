@@ -80,7 +80,7 @@ RASReader::RASReader(SvStream &rRAS)
     , mbStatus(sal_True)
     , mpAcc(NULL)
     , mnRepCount(0)
-    , mbPalette(FALSE)
+    , mbPalette(sal_False)
 {
 }
 

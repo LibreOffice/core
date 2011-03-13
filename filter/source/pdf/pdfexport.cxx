@@ -439,14 +439,13 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             }
             // getting the string for the producer
             String aProducer;
-            ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
-            if ( pMgr )
             {
-                Any aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+                ::utl::ConfigManager& cMgr = ::utl::ConfigManager::GetConfigManager();
+                Any aProductName = cMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
                 ::rtl::OUString sProductName;
                 aProductName >>= sProductName;
                 aProducer = sProductName;
-                aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+                aProductName = cMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
                 aProductName >>= sProductName;
                 aProducer.AppendAscii(" ");
                 aProducer += String( sProductName );

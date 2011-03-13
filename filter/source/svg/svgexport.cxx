@@ -526,7 +526,7 @@ sal_Bool SVGFilter::implExportPages( const Reference< XDrawPages >& rxPages,
                         }
                     }
 
-                    SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
+                    SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
                     const Point        aNullPt;
 
                     if( bMaster )

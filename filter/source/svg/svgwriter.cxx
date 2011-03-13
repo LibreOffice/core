@@ -680,14 +680,14 @@ void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
 {
     if( rPolyPoly.Count() )
     {
-        SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+        SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
 
         FastString aPatternId;
         aPatternId += B2UCONST( "pattern" );
         aPatternId += GetValueString( ImplGetNextPatternId() );
 
         {
-            SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, TRUE, TRUE );
+            SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, sal_True, sal_True );
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aPatternId.GetString() );
 
@@ -700,7 +700,7 @@ void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrPatternUnits, NMSP_RTL::OUString( RTL_CONSTASCII_USTRINGPARAM( "userSpaceOnUse") ) );
 
             {
-                SvXMLElementExport aElemPattern( mrExport, XML_NAMESPACE_NONE, aXMLElemPattern, TRUE, TRUE );
+                SvXMLElementExport aElemPattern( mrExport, XML_NAMESPACE_NONE, aXMLElemPattern, sal_True, sal_True );
 
                 // The origin of a pattern is positioned at (aRect.Left(), aRect.Top()).
                 // So we need to adjust the pattern coordinate.
@@ -714,7 +714,7 @@ void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform.GetString() );
 
                 {
-                    SvXMLElementExport aElemG2( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+                    SvXMLElementExport aElemG2( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
 
                     GDIMetaFile aTmpMtf;
                     if( pHatch )
@@ -876,7 +876,7 @@ void SVGActionWriter::ImplWriteGradientStop( const Color& rColor, double fOffset
 
     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aStyle.GetString() );
     {
-        SvXMLElementExport aElemStartStop( mrExport, XML_NAMESPACE_NONE, aXMLElemStop, TRUE, TRUE );
+        SvXMLElementExport aElemStartStop( mrExport, XML_NAMESPACE_NONE, aXMLElemStop, sal_True, sal_True );
     }
 }
 
@@ -939,11 +939,11 @@ void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
     aMaskId += GetValueString( ImplGetNextMaskId() );
 
     {
-        SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, TRUE, TRUE );
+        SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, sal_True, sal_True );
 
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aMaskId.GetString() );
         {
-            SvXMLElementExport aElemMask( mrExport, XML_NAMESPACE_NONE, aXMLElemMask, TRUE, TRUE );
+            SvXMLElementExport aElemMask( mrExport, XML_NAMESPACE_NONE, aXMLElemMask, sal_True, sal_True );
 
             const PolyPolygon aPolyPolygon( PolyPolygon( Rectangle( rDestPt, rDestSize ) ) );
             Gradient aGradient( rGradient );
@@ -967,7 +967,7 @@ void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aMaskStyle.GetString() );
 
     {
-        SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+        SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
 
         mpVDev->Push();
         ImplWriteActions( rMtf, pStyle, nWriteFlags );
@@ -1292,7 +1292,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, aBuffer.makeStringAndClear() );
 
                 {
-                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemImage, TRUE, TRUE );
+                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemImage, sal_True, sal_True );
                 }
             }
         }

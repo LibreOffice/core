@@ -232,7 +232,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             const std::auto_ptr< SvMemoryStream >& pMemStrm = pInteraction->getHyperlinkRecord();
             if ( pMemStrm.get() )
             {
-                pMemStrm->ObjectOwnsMemory( FALSE );
+                pMemStrm->ObjectOwnsMemory( sal_False );
                 sal_uInt8* pBuf = (sal_uInt8*) pMemStrm->GetData();
                 sal_uInt32 nSize = pMemStrm->Seek( STREAM_SEEK_TO_END );
                 aPropOpt.AddOpt( ESCHER_Prop_pihlShape, sal_False, nSize, pBuf, nSize );;

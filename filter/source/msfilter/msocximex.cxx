@@ -1166,7 +1166,7 @@ class ContainerRecReader
             {
                 // Skip ActiveX Controls we can't import
                 SotStorageStreamRef oStream = pContainerControl->getContainedControlsStream();
-                ULONG nStrmPos = oStream->Tell();
+                sal_uLong nStrmPos = oStream->Tell();
                 oStream->Seek( nStrmPos + rec.nSubStreamLen );
             }
             else
@@ -6061,11 +6061,11 @@ sal_Bool OCX_ProgressBar::Import(uno::Reference< beans::XPropertySet > &rPropSet
 }
 
 // ============================================================================
-OCX_ParentControl::OCX_ParentControl( SotStorageRef& parent, const OUString& storageName, const OUString& sN, const ::uno::Reference< container::XNameContainer >  &rParent, OCX_Control* pParent ) : OCX_Control(sN, pParent),  mxParent(rParent), nNextAvailableID(0), nBooleanProperties(0), nGroupCnt(0), nZoom(0), fEnabled(1), fLocked(0), fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0), nVertPos(1), nHorzPos(7), nBorderColor(0x80000012), nShapeCookie(0), nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nMousePointer(0), nSpecialEffect(0), nPicture(0), nPictureAlignment(2), nPictureSizeMode(0), bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0), nScrollWidth(0), nScrollHeight(0), nScrollLeft(0), nScrollTop(0), nIconLen(0), pIcon(0), nPictureLen(0)
+OCX_ParentControl::OCX_ParentControl( SotStorageRef& parent, const OUString& storageName, const OUString& sN, const ::uno::Reference< container::XNameContainer >  &rParent, OCX_Control* pParent ) : OCX_Control(sN, pParent),  mxParent(rParent), nNextAvailableID(0), nBooleanProperties(0), nGroupCnt(0), nZoom(0), fEnabled(1), fLocked(0), fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0), nVertPos(1), nHorzPos(7), nBorderColor(0x80000012), nShapeCookie(0), nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nMousePointer(0), nSpecialEffect(0), nPicture(0), nPictureAlignment(2), nPictureSizeMode(0), bPictureTiling(sal_False), nAccelerator(0), nIcon(0), pCaption(0), nScrollWidth(0), nScrollHeight(0), nScrollLeft(0), nScrollTop(0), nIconLen(0), pIcon(0), nPictureLen(0)
 {
     mnForeColor = 0x80000012;
     mnBackColor = 0x8000000F;
-    aFontData.SetHasAlign(TRUE);
+    aFontData.SetHasAlign(sal_True);
     mContainerStorage = parent->OpenSotStorage(storageName,
         STREAM_READWRITE |
         STREAM_NOCREATE |
@@ -6227,7 +6227,7 @@ void OCX_ParentControl::ProcessControl(OCX_Control* pControl,SvStorageStream* /*
         // #117490# DR: container records provide size of substream, use it here...
 
         // remember initial position to set correct stream position
-        ULONG nStrmPos = oStream->Tell();
+        sal_uLong nStrmPos = oStream->Tell();
         // import control, may return with invalid stream position
         pControl->FullRead(oStream);
         // set stream to position behind substream of this control

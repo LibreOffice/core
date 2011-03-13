@@ -3576,7 +3576,7 @@ sal_Bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, s
 
 bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount ) const
 {
-    bool bRet = FALSE;
+    bool bRet = sal_False;
     sal_uLong nFPosMerk = rSt.Tell(); // FilePos merken fuer ggf. spaetere Restauration
     DffRecordHeader aHd;
     do
@@ -3606,7 +3606,7 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
 
 bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount ) const
 {
-    bool bRet = FALSE;
+    bool bRet = sal_False;
     sal_uLong nFPosMerk = rStCtrl.Tell();   // FilePos merken fuer ggf. spaetere Restauration
     DffRecordHeader aHd;
     do
@@ -3894,7 +3894,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
 
 bool SvxMSDffManager::ReadDffString(SvStream& rSt, String& rTxt) const
 {
-    bool bRet=FALSE;
+    bool bRet=sal_False;
     DffRecordHeader aStrHd;
     if( !ReadCommonRecordHeader(aStrHd, rSt) )
         rSt.Seek( aStrHd.nFilePos );
@@ -3985,7 +3985,7 @@ void SvxMSDffManager::ReadObjText( const String& rText, SdrObject* pObj ) const
 
 bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
 {
-    bool bRet=FALSE;
+    bool bRet=sal_False;
     SdrTextObj* pText = PTR_CAST(SdrTextObj, pObj);
     if( pText )
     {
@@ -5486,14 +5486,14 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     case 0x0390:
                         if (pImpRec->pXRelTo)
                             delete pImpRec->pXRelTo;
-                        pImpRec->pXRelTo = new UINT32;
+                        pImpRec->pXRelTo = new sal_uInt32;
                         *(pImpRec->pXRelTo) = nUDData;
                         break;
                     case 0x0391: pImpRec->nYAlign = nUDData; break;
                     case 0x0392:
                         if (pImpRec->pYRelTo)
                             delete pImpRec->pYRelTo;
-                        pImpRec->pYRelTo = new UINT32;
+                        pImpRec->pYRelTo = new sal_uInt32;
                         *(pImpRec->pYRelTo) = nUDData;
                         break;
                     case 0x03BF: pImpRec->nLayoutInTableCell = nUDData; break;
@@ -7883,12 +7883,12 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
 {
     if (rCopy.pXRelTo)
     {
-       pXRelTo = new UINT32;
+       pXRelTo = new sal_uInt32;
        *pXRelTo = *(rCopy.pXRelTo);
     }
     if (rCopy.pYRelTo)
     {
-       pYRelTo = new UINT32;
+       pYRelTo = new sal_uInt32;
        *pYRelTo = *(rCopy.pYRelTo);
     }
     eLineStyle       = rCopy.eLineStyle; // GPF-Bug #66227#

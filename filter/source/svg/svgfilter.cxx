@@ -207,9 +207,9 @@ rtl::OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescrip
 // -----------------------------------------------------------------------------
 
 class FilterConfigItem;
-extern "C" SAL_DLLPUBLIC_EXPORT BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     try
     {
         bRet = importSvg( rStream, rGraphic );

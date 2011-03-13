@@ -62,11 +62,11 @@ public:
     ~ImplEESdrObject();
 
     sal_Bool ImplGetPropertyValue( const sal_Unicode* pString );
-    BOOL ImplGetPropertyValue( const rtl::OUString& rString ) { return ImplGetPropertyValue(rString.getStr()); }
+    sal_Bool ImplGetPropertyValue( const rtl::OUString& rString ) { return ImplGetPropertyValue(rString.getStr()); }
 
     sal_Int32 ImplGetInt32PropertyValue( const sal_Unicode* pStr, sal_uInt32 nDef = 0 )
     { return ImplGetPropertyValue( pStr ) ? *(sal_Int32*)mAny.getValue() : nDef; }
-    INT32 ImplGetInt32PropertyValue( const rtl::OUString& rStr, UINT32 nDef = 0 )
+    sal_Int32 ImplGetInt32PropertyValue( const rtl::OUString& rStr, sal_uInt32 nDef = 0 )
     { return ImplGetInt32PropertyValue(rStr.getStr(), nDef); }
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >&    GetShapeRef() const     { return mXShape; }

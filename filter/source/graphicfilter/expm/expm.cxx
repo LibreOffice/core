@@ -69,7 +69,7 @@ public:
 
 XPMWriter::XPMWriter(SvStream& rOStm)
     : m_rOStm(rOStm)
-    , mbStatus(TRUE)
+    , mbStatus(sal_True)
     , mbTrans(sal_False)
     , mpAcc(NULL)
 {

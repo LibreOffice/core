@@ -519,9 +519,9 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
         if ( extraInfo.getOnAction().getLength() )
         {
             aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CommandURL") );
-            ooo::vba::VBAMacroResolvedInfo aMacroInf = ooo::vba::resolveVBAMacro( &helper.GetDocShell(), extraInfo.getOnAction(), true );
-            if ( aMacroInf.IsResolved() )
-                aProp.Value = helper.createCommandFromMacro( aMacroInf.ResolvedMacro() );
+            ooo::vba::MacroResolvedInfo aMacroInf = ooo::vba::resolveVBAMacro( &helper.GetDocShell(), extraInfo.getOnAction(), true );
+            if ( aMacroInf.mbFound )
+                aProp.Value = helper.createCommandFromMacro( aMacroInf.msResolvedMacro );
             else
                 aProp.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UnResolvedMacro[" )).concat( extraInfo.getOnAction() ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "]" )) );
             sControlData.push_back( aProp );
@@ -757,7 +757,7 @@ bool TBCBitMap::Read( SvStream* pS)
     nOffSet = pS->Tell();
     *pS >> cbDIB;
     // cbDIB = sizeOf(biHeader) + sizeOf(colors) + sizeOf(bitmapData) + 10
-    return mBitMap.Read( *pS, FALSE, TRUE );
+    return mBitMap.Read( *pS, sal_False, sal_True );
 }
 
 void TBCBitMap::Print( FILE* fp )
