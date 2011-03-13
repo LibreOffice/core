@@ -453,7 +453,7 @@ namespace
         else if ( nNewThumbPos == _pView->GetScrollOffset().Y() )
             return sal_False;
 
-        return TRUE;
+        return sal_True;
     }
     // -----------------------------------------------------------------------------
     sal_Bool getMovementImpl(OJoinTableView* _pView,const Point& _rPoint,const Size& _rSize,long& _nScrollX,long& _nScrollY)

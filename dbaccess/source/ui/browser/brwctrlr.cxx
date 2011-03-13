@@ -2723,6 +2723,7 @@ void SbaXDataBrowserController::initializeParser() const
             {   // (only if the statement isn't native)
                 // (it is allowed to use the PROPERTY_ISPASSTHROUGH : _after_ loading a form it is valid)
                 xFormSet->getPropertyValue(PROPERTY_SINGLESELECTQUERYCOMPOSER) >>= m_xParser;
+            }
         }
         catch(Exception&)
         {
