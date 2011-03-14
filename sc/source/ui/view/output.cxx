@@ -1296,98 +1296,17 @@ const SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
         return pNextTop;
 }
 
-// lcl_HorizLine muss genau zu normal ausgegebenen Linien passen!
 
-void lcl_HorizLine( OutputDevice& rDev, const Point& rLeft, const Point& rRight,
-                    const svx::frame::Style& rLine, const Color* pForceColor )
+long lcl_getRotate( ScDocument* pDoc, SCTAB nTab, SCCOL nX, SCROW nY )
 {
-    svx::frame::DrawHorFrameBorder( rDev, rLeft, rRight, rLine, pForceColor );
-}
+    long nRotate = 0;
 
-void lcl_VertLineEnds( OutputDevice& rDev, const Point& rTop, const Point& rBottom,
-        const Color& rColor, long nXOffs, long nWidth,
-        const svx::frame::Style& rTopLine, const svx::frame::Style& rBottomLine )
-{
-    rDev.SetLineColor(rColor);              // PEN_NULL ???
-    rDev.SetFillColor(rColor);
+    const ScPatternAttr* pPattern = pDoc->GetPattern( nX, nY, nTab );
+    const SfxItemSet* pCondSet = pDoc->GetCondResult( nX, nY, nTab );
 
-    //  Position oben/unten muss unabhaengig von der Liniendicke sein,
-    //  damit der Winkel stimmt (oder X-Position auch anpassen)
-    long nTopPos = rTop.Y();
-    long nBotPos = rBottom.Y();
+    nRotate = pPattern->GetRotateVal( pCondSet );
 
-    long nTopLeft = rTop.X() + nXOffs;
-    long nTopRight = nTopLeft + nWidth - 1;
-
-    long nBotLeft = rBottom.X() + nXOffs;
-    long nBotRight = nBotLeft + nWidth - 1;
-
-    //  oben abschliessen
-
-    if ( rTopLine.Prim() )
-    {
-        long nLineW = rTopLine.GetWidth();
-        if (nLineW >= 2)
-        {
-            Point aTriangle[3];
-            aTriangle[0] = Point( nTopLeft, nTopPos );      // wie aPoints[0]
-            aTriangle[1] = Point( nTopRight, nTopPos );     // wie aPoints[1]
-            aTriangle[2] = Point( rTop.X(), nTopPos - (nLineW - 1) / 2 );
-            Polygon aTriPoly( 3, aTriangle );
-            rDev.DrawPolygon( aTriPoly );
-        }
-    }
-
-    //  unten abschliessen
-
-    if ( rBottomLine.Prim() )
-    {
-        long nLineW = rBottomLine.GetWidth();
-        if (nLineW >= 2)
-        {
-            Point aTriangle[3];
-            aTriangle[0] = Point( nBotLeft, nBotPos );      // wie aPoints[3]
-            aTriangle[1] = Point( nBotRight, nBotPos );     // wie aPoints[2]
-            aTriangle[2] = Point( rBottom.X(), nBotPos - (nLineW - 1) / 2 + nLineW - 1 );
-            Polygon aTriPoly( 3, aTriangle );
-            rDev.DrawPolygon( aTriPoly );
-        }
-    }
-}
-
-void lcl_VertLine( OutputDevice& rDev, const Point& rTop, const Point& rBottom,
-                    const svx::frame::Style& rLine,
-                    const svx::frame::Style& rTopLine, const svx::frame::Style& rBottomLine,
-                    const Color* pForceColor )
-{
-    if( rLine.Prim() )
-    {
-        svx::frame::DrawVerFrameBorderSlanted( rDev, rTop, rBottom, rLine, pForceColor );
-
-        svx::frame::Style aScaled( rLine );
-        aScaled.ScaleSelf( 1.0 / cos( svx::frame::GetVerDiagAngle( rTop, rBottom ) ) );
-        if( pForceColor )
-        {
-            aScaled.SetColorPrim( *pForceColor );
-            aScaled.SetColorSecn( *pForceColor );
-        }
-
-        long nXOffs = (aScaled.GetWidth() - 1) / -2L;
-
-        lcl_VertLineEnds( rDev, rTop, rBottom, aScaled.GetColorPrim(),
-            nXOffs, aScaled.Prim(), rTopLine, rBottomLine );
-
-        if( aScaled.Secn() )
-        {
-            if ( aScaled.UseGapColor() )
-            {
-                lcl_VertLineEnds( rDev, rTop, rBottom, aScaled.GetColorGap(),
-                    nXOffs + aScaled.Prim(), aScaled.Dist(), rTopLine, rBottomLine );
-            }
-            lcl_VertLineEnds( rDev, rTop, rBottom, aScaled.GetColorSecn(),
-                nXOffs + aScaled.Prim() + aScaled.Dist(), aScaled.Secn(), rTopLine, rBottomLine );
-        }
-    }
+    return nRotate;
 }
 
 void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
@@ -1426,6 +1345,7 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
         pDev->SetClipRegion( Region( aClipRect ) );
 
     svx::frame::Array& rArray = mrTabInfo.maArray;
+    drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D( );
 
     long nPosY = nScrY;
     for (SCSIZE nArrY=1; nArrY<nArrCount; nArrY++)
@@ -1594,13 +1514,52 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
                                 std::swap( aLeftLine, aRightLine );
                         }
 
-                        drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D( );
-                        pProcessor->process( svx::frame::CreateBorderPrimitives( aPoints[bLayoutRTL?1:0], aPoints[bLayoutRTL?0:1], aTopLine, pForceColor ) );
-                        pProcessor->process( svx::frame::CreateBorderPrimitives( aPoints[bLayoutRTL?2:3], aPoints[bLayoutRTL?3:2], aBottomLine, pForceColor ) );
+                        const svx::frame::Style noStyle;
+                        // Horizontal lines
+                        long nUpperRotate = lcl_getRotate( pDoc, nTab, nX, nY - 1 );
+                        pProcessor->process( svx::frame::CreateBorderPrimitives(
+                                    aPoints[bLayoutRTL?1:0], aPoints[bLayoutRTL?0:1], aTopLine,
+                                    svx::frame::Style(),
+                                    svx::frame::Style(),
+                                    aLeftLine,
+                                    svx::frame::Style(),
+                                    svx::frame::Style(),
+                                    aRightLine,
+                                    pForceColor, nUpperRotate, nAttrRotate ) );
 
-                        lcl_VertLine( *pDev, aPoints[0], aPoints[3], aLeftLine, aTopLine, aBottomLine, pForceColor );
-                        lcl_VertLine( *pDev, aPoints[1], aPoints[2], aRightLine, aTopLine, aBottomLine, pForceColor );
-                        if ( pProcessor ) delete pProcessor;
+                        long nLowerRotate = lcl_getRotate( pDoc, nTab, nX, nY + 1 );
+                        pProcessor->process( svx::frame::CreateBorderPrimitives(
+                                    aPoints[bLayoutRTL?2:3], aPoints[bLayoutRTL?3:2], aBottomLine,
+                                    aLeftLine,
+                                    svx::frame::Style(),
+                                    svx::frame::Style(),
+                                    aRightLine,
+                                    svx::frame::Style(),
+                                    svx::frame::Style(),
+                                    pForceColor, 18000 - nAttrRotate, 18000 - nLowerRotate ) );
+
+                        // Vertical slanted lines
+                        long nLeftRotate = lcl_getRotate( pDoc, nTab, nX - 1, nY );
+                        pProcessor->process( svx::frame::CreateBorderPrimitives(
+                                    aPoints[0], aPoints[3], aLeftLine,
+                                    aTopLine,
+                                    svx::frame::Style(),
+                                    svx::frame::Style(),
+                                    aBottomLine,
+                                    svx::frame::Style(),
+                                    svx::frame::Style(),
+                                    pForceColor, nAttrRotate, nLeftRotate ) );
+
+                        long nRightRotate = lcl_getRotate( pDoc, nTab, nX + 1, nY );
+                        pProcessor->process( svx::frame::CreateBorderPrimitives(
+                                    aPoints[1], aPoints[2], aRightLine,
+                                    svx::frame::Style(),
+                                    svx::frame::Style(),
+                                    aTopLine,
+                                    svx::frame::Style(),
+                                    svx::frame::Style(),
+                                    aBottomLine,
+                                    pForceColor, 18000 - nRightRotate, 18000 - nAttrRotate ) );
                     }
                 }
                 nPosX += nColWidth * nLayoutSign;
@@ -1663,6 +1622,8 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
         }
         nPosY += nRowHeight;
     }
+
+    if ( pProcessor ) delete pProcessor;
 
     if (bMetaFile)
         pDev->Pop();
