@@ -715,7 +715,7 @@ void StyleSheetTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Po
     dmapper_logger->endElement();
 #endif
 }
-/*-- 21.06.2006 15:34:49---------------------------------------------------
+/*-------------------------------------------------------------------------
     sorting helper
   -----------------------------------------------------------------------*/
 typedef std::vector< beans::PropertyValue > _PropValVector;

@@ -506,7 +506,7 @@ uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
     return aRet;
 }
 
-/*-- 17.07.2006 09:08:26---------------------------------------------------
+/*-------------------------------------------------------------------------
     returns a the value from the current paragraph style - if available
     TODO: What about parent styles?
   -----------------------------------------------------------------------*/
@@ -1521,7 +1521,7 @@ OUString lcl_ParseFormat( const ::rtl::OUString& rCommand )
     //  The command looks like: " DATE \@ "dd MMMM yyyy"
     return lcl_FindQuotedText(rCommand, "\\@ \"", '\"');
 }
-/*-- 19.09.2006 10:01:20---------------------------------------------------
+/*-------------------------------------------------------------------------
 extract a parameter (with or without quotes) between the command and the following backslash
   -----------------------------------------------------------------------*/
 ::rtl::OUString lcl_ExtractParameter(const ::rtl::OUString& rCommand, sal_Int32 nCommandLength )
@@ -1622,7 +1622,7 @@ void DomainMapper_Impl::GetCurrentLocale(lang::Locale& rLocale)
     }
 }
 
-/*-- 14.09.2006 12:52:58---------------------------------------------------
+/*-------------------------------------------------------------------------
     extract the number format from the command and apply the resulting number
     format to the XPropertySet
   -----------------------------------------------------------------------*/
@@ -1698,7 +1698,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::FindOrCreateFieldMaster
     return xMaster;
 }
 
-/*-- 29.01.2007 11:33:10---------------------------------------------------
+/*-------------------------------------------------------------------------
 //field context starts with a 0x13
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PushFieldContext()
@@ -1714,14 +1714,14 @@ void DomainMapper_Impl::PushFieldContext()
     xCrsr->goLeft( 1, false );
     m_aFieldStack.push( FieldContextPtr( new FieldContext( xCrsr->getStart() ) ) );
 }
-/*-- 29.01.2007 11:33:13---------------------------------------------------
+/*-------------------------------------------------------------------------
 //the current field context waits for the completion of the command
   -----------------------------------------------------------------------*/
 bool DomainMapper_Impl::IsOpenFieldCommand() const
 {
     return !m_aFieldStack.empty() && !m_aFieldStack.top()->IsCommandCompleted();
 }
-/*-- 29.01.2007 11:33:13---------------------------------------------------
+/*-------------------------------------------------------------------------
 //the current field context waits for the completion of the command
   -----------------------------------------------------------------------*/
 bool DomainMapper_Impl::IsOpenField() const
@@ -1803,7 +1803,7 @@ void FieldContext::AppendCommand(const ::rtl::OUString& rPart)
     return aResult;
 }
 
-/*-- 29.01.2007 11:33:15---------------------------------------------------
+/*-------------------------------------------------------------------------
 //collect the pieces of the command
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::AppendFieldCommand(::rtl::OUString& rPartOfCommand)
@@ -2330,7 +2330,7 @@ void DomainMapper_Impl::handleToc
 }
 
 
-/*-- 29.01.2007 11:33:16---------------------------------------------------
+/*-------------------------------------------------------------------------
 //the field command has to be closed (0x14 appeared)
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::CloseFieldCommand()
@@ -2766,7 +2766,7 @@ void DomainMapper_Impl::CloseFieldCommand()
         pContext->SetCommandCompleted();
     }
 }
-/*-- 29.01.2007 11:33:16---------------------------------------------------
+/*-------------------------------------------------------------------------
 //the _current_ fields require a string type result while TOCs accept richt results
   -----------------------------------------------------------------------*/
 bool DomainMapper_Impl::IsFieldResultAsString()
@@ -2852,7 +2852,7 @@ void DomainMapper_Impl::SetFieldFFData(FFDataHandler::Pointer_t pFFDataHandler)
 #endif
 }
 
-/*-- 29.01.2007 11:33:17---------------------------------------------------
+/*-------------------------------------------------------------------------
 //the end of field is reached (0x15 appeared) - the command might still be open
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PopFieldContext()
@@ -2993,7 +2993,7 @@ GraphicImportPtr DomainMapper_Impl::GetGraphicImport(GraphicImportType eGraphicI
         m_pGraphicImport.reset( new GraphicImport( m_xComponentContext, m_xTextFactory, m_rDMapper, eGraphicImportType ) );
     return m_pGraphicImport;
 }
-/*-- 09.08.2007 10:19:45---------------------------------------------------
+/*-------------------------------------------------------------------------
     reset graphic import if the last import resulted in a shape, not a graphic
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::ResetGraphicImport()

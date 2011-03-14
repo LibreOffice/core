@@ -1249,7 +1249,7 @@ void GraphicImport::sprm(Sprm & rSprm)
 void GraphicImport::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
-/*-- 16.11.2006 16:14:32---------------------------------------------------
+/*-------------------------------------------------------------------------
     crop is stored as "fixed float" as 16.16 fraction value
     related to width/or height
   -----------------------------------------------------------------------*/
