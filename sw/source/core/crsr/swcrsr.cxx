@@ -1701,7 +1701,7 @@ BOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
         if ( pTableBoxStartNode )
         {
             const SwTableBox* pTableBox = pTableBoxStartNode->GetTblBox();
-            if ( pTableBox->getRowSpan() < 1 )
+            if ( pTableBox && pTableBox->getRowSpan() < 1 )
             {
                 // Store the row span offset:
                 mnRowSpanOffset = pTableBox->getRowSpan();
