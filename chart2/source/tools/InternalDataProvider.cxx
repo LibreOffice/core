@@ -516,7 +516,7 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSeq
     if( aRangeRepresentation.indexOf('{') >= 0 )
     {
         ::std::vector< double > aNewData;
-        ::std::vector< OUString > aNewLabels;
+        ::std::vector< uno::Any > aNewLabels;
         OUString    aToken;
         sal_Int32   nCategories     = 0;
         sal_Int32   nIndex          = 0;
@@ -542,12 +542,12 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSeq
             }
             else
             {
-                aNewLabels.push_back( aToken.replace('"', ' ').trim() );
+                aNewLabels.push_back( uno::makeAny(aToken.replace('"', ' ').trim()) );
                 if( !nCategories &&
                    ( !m_aInternalData.getComplexColumnLabel(n).size() ||
-                     !m_aInternalData.getComplexColumnLabel(n).front().getLength() ) )
+                     !m_aInternalData.getComplexColumnLabel(n).front().hasValue() ) )
                 {
-                    m_aInternalData.setComplexColumnLabel( n, aNewLabels );
+                    m_aInternalData.setComplexColumnLabel( n,  aNewLabels );
                     bLabelSet = true;
                 }
                 else
@@ -555,7 +555,7 @@ Reference< chart2::data::XDataSequence > InternalDataProvider::lcl_createDataSeq
                     m_aInternalData.setComplexRowLabel(nCategories, aNewLabels);
                     if(nCategories==1 && bLabelSet)
                     {
-                        ::std::vector< OUString > aLabels;
+                        ::std::vector< uno::Any > aLabels;
                         m_aInternalData.setComplexRowLabel( 0, m_aInternalData.getComplexColumnLabel( n ) );
                         m_aInternalData.setComplexColumnLabel( n, aLabels );
                     }
