@@ -213,7 +213,7 @@ ICU_BUILD_LIBPOST=
 
 CONFIGURE_ACTION+= $(PERL) ..$/..$/..$/..$/..$/createmak.pl ..$/..$/..$/..$/..$/createmak.cfg .
 
-BUILD_ACTION=cd allinone && msbuild.exe allinone.sln && cd ..$/..
+BUILD_ACTION=cd allinone && msbuild.exe /p:Configuration=Release allinone.sln && cd ..$/..
 
 OUT2LIB= \
     $(BUILD_DIR)$/..$/lib$/icudata.lib \
