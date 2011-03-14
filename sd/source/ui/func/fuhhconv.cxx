@@ -203,11 +203,11 @@ void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const Fo
         {
             // set new font attribute
             SvxFontItem aFontItem( (SvxFontItem&) rSet.Get( EE_CHAR_FONTINFO_CJK ) );
-            aFontItem.GetFamilyName()   = pTargetFont->GetName();
-            aFontItem.GetFamily()       = pTargetFont->GetFamily();
-            aFontItem.GetStyleName()    = pTargetFont->GetStyleName();
-            aFontItem.GetPitch()        = pTargetFont->GetPitch();
-            aFontItem.GetCharSet()      = pTargetFont->GetCharSet();
+            aFontItem.SetFamilyName(   pTargetFont->GetName());
+            aFontItem.SetFamily(       pTargetFont->GetFamily());
+            aFontItem.SetStyleName(    pTargetFont->GetStyleName());
+            aFontItem.SetPitch(        pTargetFont->GetPitch());
+            aFontItem.SetCharSet(      pTargetFont->GetCharSet());
             rSet.Put( aFontItem );
         }
 
