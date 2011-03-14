@@ -150,21 +150,23 @@ sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
         // Der Frm besitzt eine Hoehe, mit der er auf die Seite passt.
         SwTwips nHeight =
             (*fnRect->fnYDiff)( (pFrm->GetUpper()->*fnRect->fnGetPrtBottom)(), nOrigin );
+        // Wenn sich alles innerhalb des bestehenden Frames abspielt,
+        // ist das Ergebnis sal_True;
+        bFit = nHeight >= nLineHeight;
+
         // --> OD #i103292#
-        // add additional space taken as lower space as last content in a table
-        // for all text lines expect the last one.
+        if ( !bFit )
         {
             if ( rLine.GetNext() &&
                  pFrm->IsInTab() && !pFrm->GetFollow() && !pFrm->GetIndNext() )
             {
+                // add additional space taken as lower space as last content in a table
+                // for all text lines except the last one.
                 nHeight += pFrm->CalcAddLowerSpaceAsLastInTableCell();
+                bFit = nHeight >= nLineHeight;
             }
         }
         // <--
-
-        // Wenn sich alles innerhalb des bestehenden Frames abspielt,
-        // ist das Ergebnis sal_True;
-        bFit = nHeight >= nLineHeight;
         if( !bFit )
         {
             // Die LineHeight sprengt die aktuelle Frm-Hoehe.
