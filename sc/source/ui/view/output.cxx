@@ -1577,22 +1577,20 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
                 {
                     pPattern = rInfo.pPatternAttr;
                     pCondSet = rInfo.pConditionSet;
-                    SvxRotateMode eRotMode = (SvxRotateMode)((const SvxRotateModeItem&)
-                                    pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue();
 
                     size_t nCol = lclGetArrayColFromCellInfoX( nArrX, nX1, nX2, bLayoutRTL );
 
                     //  horizontal: angrenzende Linie verlaengern
                     //  (nur, wenn die gedrehte Zelle eine Umrandung hat)
                     sal_uInt16 nDir = rInfo.nRotateDir;
-                    if ( rArray.GetCellStyleTop( nCol, nRow ).Prim() && eRotMode != SVX_ROTATE_MODE_TOP )
+                    if ( rArray.GetCellStyleTop( nCol, nRow ).Prim() )
                     {
                         svx::frame::Style aStyle( lcl_FindHorLine( pDoc, nX, nY, nTab, nDir, sal_True ), nPPTY );
                         rArray.SetCellStyleTop( nCol, nRow, aStyle );
                         if( nRow > 0 )
                             rArray.SetCellStyleBottom( nCol, nRow - 1, aStyle );
                     }
-                    if ( rArray.GetCellStyleBottom( nCol, nRow ).Prim() && eRotMode != SVX_ROTATE_MODE_BOTTOM )
+                    if ( rArray.GetCellStyleBottom( nCol, nRow ).Prim() )
                     {
                         svx::frame::Style aStyle( lcl_FindHorLine( pDoc, nX, nY, nTab, nDir, false ), nPPTY );
                         rArray.SetCellStyleBottom( nCol, nRow, aStyle );
