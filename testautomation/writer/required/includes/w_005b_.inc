@@ -1192,7 +1192,7 @@ testcase tFormatStyleEdit
         Kontext "Drawbar"
         Drawbar.Close
     else
-        Warnlog "#i33132#Toolbar 'Drawbar' is not opened!"
+        Warnlog "Toolbar 'Drawbar' is not opened!"
     end if
     printlog " Close active document"
     Call hCloseDocument

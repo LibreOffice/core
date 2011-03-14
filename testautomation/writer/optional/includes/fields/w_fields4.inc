@@ -261,7 +261,7 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tDocInformationUserDefined
-    QAErrorLog "#i112077#Tabpage 'Custom properties' has no declaration"
+    Warnlog "#i95523#Tabpage 'Custom properties' has no declaration"
     goto endsub
 	Dim sTestFile as String
 	Dim sVarResult() as String

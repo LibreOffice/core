@@ -80,7 +80,7 @@ testcase tExportAllReadableFormatsIntoODF
 		if GetExtention ( sExportFile ) = "psw" then
             QAErrorlog "#i102221#Pocket Word filter puts General I/O Error"
         elseif LCase( sExceptionFile ) = "swdos.txt" then
-            QAErrorlog "#i114062#General I/O error loading StarWriter DOS file"
+            Warnlog "General I/O error loading StarWriter DOS file"
 		else
 			Call hFileOpenLocally( ImportFileList(i) )
 			printlog "-  done"
