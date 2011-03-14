@@ -115,3 +115,14 @@
  
          if ((t & MASK_TRANSPARENT) != 0) {
              continue;
+--- icu/source/common/stringpiece.cpp	2010-10-29 20:01:01.000000000 +0200
++++ icu.new/source/common/stringpiece.cpp	2011-03-14 13:38:59.094036495 +0100
+@@ -75,7 +75,7 @@
+  * Visual Studios 9.0.
+  * Cygwin with MSVC 9.0 also complains here about redefinition.
+  */
+-#if (!defined(_MSC_VER) || (_MSC_VER > 1500)) && !defined(CYGWINMSVC)
++#if (!defined(_MSC_VER) && !defined(CYGWINMSVC))
+ const int32_t StringPiece::npos;
+ #endif
+ 
