@@ -136,7 +136,9 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     pTransferable->SetWorkDocument( (SdDrawDocument*) GetAllMarkedModel() );
     mpDoc->CreatingDataObj( NULL );
 
-    const Rectangle                 aMarkRect( GetAllMarkedRect() );
+    // #112978# need to use GetAllMarkedBoundRect instead of GetAllMarkedRect to get
+    // fat lines correctly
+    const Rectangle                 aMarkRect( GetAllMarkedBoundRect() );
     TransferableObjectDescriptor    aObjDesc;
     String                          aDisplayName;
     SdrOle2Obj*                     pSdrOleObj = NULL;

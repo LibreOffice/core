@@ -345,7 +345,9 @@ void SdTransferable::CreateData()
 
         if( 1 == mpSdDrawDocumentIntern->GetPageCount() )
         {
-            Point   aOrigin( ( maVisArea = mpSdViewIntern->GetAllMarkedRect() ).TopLeft() );
+            // #112978# need to use GetAllMarkedBoundRect instead of GetAllMarkedRect to get
+            // fat lines correctly
+            Point   aOrigin( ( maVisArea = mpSdViewIntern->GetAllMarkedBoundRect() ).TopLeft() );
             Size    aVector( -aOrigin.X(), -aOrigin.Y() );
 
             for( sal_uLong nObj = 0, nObjCount = pPage->GetObjCount(); nObj < nObjCount; nObj++ )
