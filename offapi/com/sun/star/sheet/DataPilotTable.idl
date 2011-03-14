@@ -66,7 +66,7 @@ published service DataPilotTable
 
     /** allows notification of modifications to the data pilot table.
 
-    @since OOo 3.3.0
+    @since OOo 3.3
 
     */
     [optional] interface com::sun::star::util::XModifyBroadcaster;

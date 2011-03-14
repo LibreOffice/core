@@ -32,7 +32,9 @@
 #include <hash_map>
 #include <list>
 #include <vector>
+#include <string>
 #include <set>
+
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 

@@ -25,30 +25,19 @@
  *
  ************************************************************************/
 
+#ifndef INCLUDED_REGISTRY_TOOLS_FILEURL_HXX
+#define INCLUDED_REGISTRY_TOOLS_FILEURL_HXX
 
-/*
-  Issue http://udk.openoffice.org/issues/show_bug.cgi?id=92388
+#include "rtl/ustring.hxx"
 
-  Mac OS X does not seem to support "__cxa__atexit", thus leading
-  to the situation that "__attribute__((destructor))__" functions
-  (in particular "rtl_memory_fini") become called _before_ global
-  C++ object d'tors.
+namespace registry
+{
+namespace tools
+{
 
-  Using a C++ dummy object instead.
-*/
+rtl::OUString convertToFileUrl(char const * filename, size_t length);
 
-#include <stdio.h>
+} // namespace tools
+} // namespace registry
 
-extern "C" void rtl_memory_fini (void);
-
-
-struct RTL_Memory_Fini {
-  ~RTL_Memory_Fini() ;
-};
-
-RTL_Memory_Fini::~RTL_Memory_Fini() {
-  rtl_memory_fini();
-}
-
-
-static RTL_Memory_Fini rtl_Memory_Fini;
+#endif /* INCLUDED_REGISTRY_TOOLS_FILEURL_HXX */

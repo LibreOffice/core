@@ -66,12 +66,12 @@ published service DatabaseNextSet
     [property] string Condition;
 
     /** indicates the URL of a database file.
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] string DataBaseURL;
 
     /** indicates a connection URL, which locates a database driver.
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] string DataBaseResource;
 

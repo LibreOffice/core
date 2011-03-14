@@ -40,7 +40,7 @@
 
     @see ::com::sun::star::frame::LayoutManager
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 
 interface XLayoutManagerEventBroadcaster : com::sun::star::uno::XInterface

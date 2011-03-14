@@ -42,7 +42,7 @@ module com { module sun { module star { module rendering {
     This interface provides methods to enable and control
     double/multi-buffering facilities on screen devices.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XBufferController : ::com::sun::star::uno::XInterface
 {

@@ -67,7 +67,7 @@ module com { module sun { module star { module configuration { module backend {
         <LI>Approve, Disapprove, Abort</LI>
     </UL></P>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 
     @see com::sun::star::task::InteractionHandler
  */
