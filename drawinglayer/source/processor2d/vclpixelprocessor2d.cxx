@@ -401,7 +401,9 @@ namespace drawinglayer
                     }
                     catch(const uno::Exception&)
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        // #i116763# removing since there is a good alternative when the xControlView
+                        // is not found and it is allowed to happen
+                        // DBG_UNHANDLED_EXCEPTION();
 
                         // process recursively and use the decomposition as Bitmap
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
