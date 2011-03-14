@@ -60,4 +60,3 @@
 #define LB_HELP_TIME_UNIT   3
 #define LB_TIME_RESOLUTION  4
 
-#define STR_LIST_TIME_UNIT  1

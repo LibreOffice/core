@@ -257,7 +257,7 @@ void ChartController::executeDispatch_ScaleText()
 
 void ChartController::executeDispatch_Paste()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if( m_pChartWindow )
     {
         Graphic aGraphic;

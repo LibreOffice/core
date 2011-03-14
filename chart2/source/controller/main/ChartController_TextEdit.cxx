@@ -77,7 +77,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
 {
     //the first marked object will be edited
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SdrObject* pTextObj = m_pDrawViewWrapper->getTextEditObject();
     if(!pTextObj)
         return;

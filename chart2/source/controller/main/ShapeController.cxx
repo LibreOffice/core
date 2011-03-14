@@ -263,7 +263,7 @@ IMPL_LINK( ShapeController, CheckNameHdl, AbstractSvxNameDialog*, pDialog )
 
 void ShapeController::executeDispatch_FormatLine()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -303,7 +303,7 @@ void ShapeController::executeDispatch_FormatLine()
 
 void ShapeController::executeDispatch_FormatArea()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -352,7 +352,7 @@ void ShapeController::executeDispatch_FormatArea()
 
 void ShapeController::executeDispatch_TextAttributes()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -389,7 +389,7 @@ void ShapeController::executeDispatch_TextAttributes()
 
 void ShapeController::executeDispatch_TransformDialog()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -446,7 +446,7 @@ void ShapeController::executeDispatch_TransformDialog()
 
 void ShapeController::executeDispatch_ObjectTitleDescription()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
@@ -477,7 +477,7 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
 
 void ShapeController::executeDispatch_RenameObject()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
@@ -509,7 +509,7 @@ void ShapeController::executeDispatch_RenameObject()
 
 void ShapeController::executeDispatch_ChangeZOrder( sal_uInt16 nId )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
     if ( pDrawViewWrapper )
     {
@@ -558,7 +558,7 @@ void ShapeController::executeDispatch_ChangeZOrder( sal_uInt16 nId )
 
 void ShapeController::executeDispatch_FontDialog()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -581,7 +581,7 @@ void ShapeController::executeDispatch_FontDialog()
 
 void ShapeController::executeDispatch_ParagraphDialog()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -701,7 +701,7 @@ bool ShapeController::isBackwardPossible()
 {
     if ( m_pChartController && m_pChartController->m_aSelection.isAdditionalShapeSelected() )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pDrawViewWrapper )
         {
@@ -720,7 +720,7 @@ bool ShapeController::isForwardPossible()
 {
     if ( m_pChartController && m_pChartController->m_aSelection.isAdditionalShapeSelected() )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pDrawViewWrapper )
         {

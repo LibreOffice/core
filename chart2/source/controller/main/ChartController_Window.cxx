@@ -244,7 +244,7 @@ const short HITPIX=2; //hit-tolerance in pixel
             , sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
             throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
 
     if(xWindow.is() && m_pChartWindow)
@@ -562,7 +562,7 @@ bool isDoubleClick( const MouseEvent& rMEvt )
 
 void ChartController::startDoubleClickWaiting()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     m_bWaitingForDoubleClick = true;
 
@@ -589,7 +589,7 @@ IMPL_LINK( ChartController, DoubleClickWaitingHdl, void*, EMPTYARG )
     if( !m_bWaitingForMouseUp && m_aSelection.maybeSwitchSelectionAfterSingleClickWasEnsured() )
     {
         this->impl_selectObjectAndNotiy();
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if( m_pChartWindow )
         {
             Window::PointerState aPointerState( m_pChartWindow->GetPointerState() );
@@ -977,7 +977,7 @@ void ChartController::execute_DoubleClick( const Point* pMousePixel )
 
 void ChartController::execute_Resize()
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if(m_pChartWindow)
         m_pChartWindow->Invalidate();
 }
@@ -1015,7 +1015,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
     if(rCEvt.GetCommand() == COMMAND_CONTEXTMENU && !bIsAction)
     {
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             if(m_pChartWindow)
                 m_pChartWindow->ReleaseMouse();
         }
@@ -1032,7 +1032,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             Point aPos( rCEvt.GetMousePosPixel() );
             if( !rCEvt.IsMouseEvent() )
             {
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SolarMutexGuard aGuard;
                 if(m_pChartWindow)
                     aPos = m_pChartWindow->GetPointerState().maPos;
             }
@@ -1296,7 +1296,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 Point aPos( rCEvt.GetMousePosPixel() );
                 if( !rCEvt.IsMouseEvent() )
                 {
-                    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                    SolarMutexGuard aGuard;
                     if(m_pChartWindow)
                         aPos = m_pChartWindow->GetPointerState().maPos;
                 }
@@ -1310,7 +1310,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
              ( rCEvt.GetCommand() == COMMAND_INPUTCONTEXTCHANGE ) )
     {
         //#i84417# enable editing with IME
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if( m_pDrawViewWrapper )
             m_pDrawViewWrapper->Command( rCEvt, m_pChartWindow );
     }
@@ -1344,7 +1344,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         return bReturn;
 
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if( pDrawViewWrapper->IsTextEdit() )
         {
             if( pDrawViewWrapper->KeyInput(rKEvt,m_pChartWindow) )
@@ -1446,7 +1446,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                     if( bAlternate && m_pChartWindow )
                     {
                         // together with Alt-key: 1 px in each direction
-                        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         if( m_pChartWindow )
                         {
                             Size aPixelSize = m_pChartWindow->PixelToLogic( Size( 2, 2 ));
@@ -1477,7 +1477,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                     if( bAlternate && m_pChartWindow )
                     {
                         // together with Alt-key: 1 px
-                        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                        SolarMutexGuard aGuard;
                         if(m_pChartWindow)
                         {
                             Size aPixelSize = m_pChartWindow->PixelToLogic( Size( 1, 1 ));
@@ -1574,7 +1574,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         bReturn = executeDispatch_Delete();
         if( ! bReturn )
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             InfoBox( m_pChartWindow, String(SchResId( STR_ACTION_NOTPOSSIBLE ))).Execute();
         }
     }
@@ -1733,7 +1733,7 @@ bool ChartController::requestQuickHelp(
 void ChartController::impl_selectObjectAndNotiy()
 {
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
         if( pDrawViewWrapper )
         {

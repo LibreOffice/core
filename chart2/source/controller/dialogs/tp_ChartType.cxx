@@ -1080,8 +1080,7 @@ void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, bo
     m_nChangingCalls++;
     if( m_pCurrentMainType && bAlsoResetSubTypeList )
     {
-        bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
-        m_pCurrentMainType->fillSubTypeList( m_aSubTypeList, bIsHighContrast, rParameter );
+        m_pCurrentMainType->fillSubTypeList( m_aSubTypeList, rParameter );
     }
     m_aSubTypeList.SelectItem( static_cast<sal_uInt16>( rParameter.nSubTypeIndex) );
     m_pAxisTypeResourceGroup->fillControls( rParameter );
