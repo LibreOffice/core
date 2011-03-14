@@ -362,9 +362,7 @@ inline SvxNodeNum& SvxNodeNum::operator=( const SvxNodeNum& rCpy )
     return *this;
 }
 
-/* --------------------------------------------------
- *
- * --------------------------------------------------*/
+
 SvxNumRule* SvxConvertNumRule( const SvxNumRule* pRule, USHORT nLevel, SvxNumRuleType eType );
 
 #endif
