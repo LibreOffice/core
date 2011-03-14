@@ -67,7 +67,7 @@ $(eval $(call gb_Library_set_defs,expwrap,\
 	$$(DEFS) \
 	-DXML_UNICODE \
 ))
-$(eval $(call gb_Library_add_linked_libs,expwrap,\
+$(eval $(call gb_Library_add_linked_static_libs,expwrap,\
 	expat_xmlparse \
 	expat_xmltok \
 ))

@@ -64,7 +64,7 @@ $(eval $(call gb_Library_add_linked_libs,fastsax,\
 	expat \
 ))
 else
-$(eval $(call gb_Library_add_linked_libs,fastsax,\
+$(eval $(call gb_Library_add_linked_static_libs,fastsax,\
 	expat_xmlparse \
 	expat_xmltok \
 ))
