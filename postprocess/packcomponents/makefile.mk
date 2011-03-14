@@ -140,7 +140,6 @@ my_components = \
     rpt \
     rptui \
     rptxml \
-    sax \
     sb \
     sc \
     scd \
