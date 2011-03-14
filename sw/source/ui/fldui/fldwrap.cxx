@@ -159,7 +159,7 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, USHORT nId,
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 }
 
-/* -----------------04.02.2003 14:17-----------------
+/* --------------------------------------------------
  * re-init after doc activation
  * --------------------------------------------------*/
 BOOL SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)

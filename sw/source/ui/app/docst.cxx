@@ -1185,7 +1185,7 @@ void  SwDocShell::LoadStyles( SfxObjectShell& rSource )
 {
     _LoadStyles(rSource, FALSE);
 }
-/* -----------------16.05.2003 15:45-----------------
+/* --------------------------------------------------
     bPreserveCurrentDocument determines whether SetFixFields() is called
     This call modifies the source document. This mustn't happen when the source
     is a document the user is working on.

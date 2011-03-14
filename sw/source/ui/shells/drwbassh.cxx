@@ -617,7 +617,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     }
 }
 
-/* -----------------------------27.02.2002 15:27------------------------------
+/* ---------------------------------------------------------------------------
     Checks whether a given name is allowed for a group shape
  ---------------------------------------------------------------------------*/
 IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNameDialog )
