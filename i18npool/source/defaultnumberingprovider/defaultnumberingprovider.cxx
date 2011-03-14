@@ -44,6 +44,13 @@
 #define S_CYR_A "\xD0\xB0"
 #define S_CYR_B "\xD0\xB1"
 
+//Greek upper case
+#define C_GR_A "\xCE\x91"
+#define C_GR_B "\xCE\x92"
+//Greek lower case
+#define S_GR_A "\xCE\xB1"
+#define S_GR_B "\xCE\xB2"
+
 #include <math.h>
 #include <sal/macros.h>
 #include <rtl/ustring.hxx>
@@ -168,6 +175,18 @@ static sal_Unicode table_CyrillicLowerLetter_sr[] = {
     0x0437, 0x0438, 0x0458, 0x043A, 0x043B, 0x0459, 0x043C, 0x043D,
     0x045A, 0x043E, 0x043F, 0x0440, 0x0441, 0x0442, 0x045B, 0x0443,
     0x0444, 0x0445, 0x0446, 0x0447, 0x045F, 0x0448
+};
+
+static sal_Unicode table_GreekUpperLetter[] = {
+    0x0391, 0x0392, 0x0393, 0x0394, 0x0395, 0x03DB, 0x0396, 0x0397, 0x0398,
+    0x0399, 0x039A, 0x039B, 0x039C, 0x039D, 0x039E, 0x039F, 0x03A0, 0x03DF,
+    0x03A1, 0x03A3, 0x03A4, 0x03A5, 0x03A6, 0x03A7, 0x03A8, 0x03A9, 0x03E0
+};
+
+static sal_Unicode table_GreekLowerLetter[] = {
+    0x03B1, 0x03B2, 0x03B3, 0x03B4, 0x03B5, 0x03DB, 0x03B6, 0x03B7, 0x03B8,
+    0x03B9, 0x03BA, 0x03BB, 0x03BC, 0x03BD, 0x03BE, 0x03BF, 0x03C0, 0x03DF,
+    0x03C1, 0x03C3, 0x03C4, 0x03C5, 0x03C6, 0x03C7, 0x03C8, 0x03C9, 0x03E1
 };
 
 static sal_Unicode table_Alphabet_fa[] = {
@@ -312,6 +331,82 @@ void lcl_formatChars3( sal_Unicode table_capital[], sal_Unicode table_small[], i
 
      for( int i=1; i<repeat_count; i++ )
          s += OUString::valueOf( table_small[ n%tableSize ] );
+}
+
+// Greek Letter Numbering
+
+// KERAIA separates numerals from other text
+#define STIGMA        (sal_Unicode) 0x03DB
+#define LEFT_KERAIA   (sal_Unicode) 0x0375
+#define MYRIAD_SYM    (sal_Unicode) 0x039C
+#define DOT_SYM       (sal_Unicode) 0x002E
+#define SIGMA_OFFSET  19
+#define TAU_OFFSET    20
+#define MYRIAD        10000
+
+/*
+* Return the 1-999999 number's representation in the Greek numbering system.
+* Adding a "left keraia" to represent numbers in the range 10000 ... 999999 is
+* not orthodox, so it's better to use the myriad notation and call this method
+* only for numbers up to 9999.
+*/
+static
+OUStringBuffer gr_smallNum(sal_Unicode table[], int n)
+{
+    if (n > 9999)
+        throw IllegalArgumentException();
+
+    int i = 0;
+    OUStringBuffer sb;
+    for (int v = n; v > 0; v /= 10, i++) {
+        int digit = v % 10;
+        if (digit == 0)
+            continue;
+
+        sal_Unicode sign = table[(digit - 1) + 9 * (i % 3)];
+        if (sign == STIGMA) {
+            sb.insert(0, table[TAU_OFFSET]);
+            sb.insert(0, table[SIGMA_OFFSET]);
+        } else {
+            sb.insert(0, sign);
+        }
+
+        if (i > 2)
+            sb.insert(0, LEFT_KERAIA);
+    }
+
+    return sb;
+}
+
+static
+void lcl_formatCharsGR( sal_Unicode table[], int n, OUString& s )
+{
+    OUStringBuffer sb;
+    int myriadPower = 2;
+
+    for (int divisor = MYRIAD * MYRIAD; divisor > 1; divisor /= MYRIAD, myriadPower--) {
+        if (n > divisor - 1) {
+            /*
+             * Follow the Diophantus representation of:
+             *   A myriad sign, M(10000) as many times as the power
+             *   followed by the multiplier for the myriad
+             *   followed by a dot
+             *   followed by the rest
+             *   This is enough for 32-bit integers
+             */
+            for (int i = 0; i < myriadPower; i++)
+                sb.append(MYRIAD_SYM);
+
+                sb.append(gr_smallNum(table, n/divisor));
+                n %= divisor;
+
+                if (n > 0)
+                    sb.append(DOT_SYM);
+        }
+    }
+    sb.append(gr_smallNum(table,n));
+
+    s += sb.makeStringAndClear();
 }
 
 static
@@ -622,6 +717,15 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                       SAL_N_ELEMENTS(table_CyrillicLowerLetter_sr), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>bb, ...
               break;
+
+          case CHARS_GREEK_LOWER_LETTER:
+              lcl_formatCharsGR( table_GreekLowerLetter, number, result);
+              break;
+
+          case CHARS_GREEK_UPPER_LETTER:
+              lcl_formatCharsGR( table_GreekUpperLetter, number, result);
+              break;
+
           case CHARS_PERSIAN:
               lcl_formatChars(table_Alphabet_fa, sizeof(table_Alphabet_fa) / sizeof(sal_Unicode), number - 1, result);
               break;
@@ -710,6 +814,8 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_SR, C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_SR, S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_B S_CYR_B ", ... (sr)", LANG_ALL},
         {style::NumberingType::CHARS_PERSIAN,   NULL, LANG_CTL},
+        {style::NumberingType::CHARS_GREEK_LOWER_LETTER,   C_GR_A ", " C_GR_B ", ... (gr)", LANG_ALL},
+        {style::NumberingType::CHARS_GREEK_UPPER_LETTER,   S_GR_A ", " S_GR_B ", ... (gr)", LANG_ALL},
 };
 static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);
 
