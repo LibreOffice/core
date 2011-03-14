@@ -37,7 +37,7 @@ constants BorderLineStyle
 {
     /** No border line
      */
-    const short NONE = -1;
+    const short NONE = 0x7FFF;
 
     /** Solid border line.
      */
