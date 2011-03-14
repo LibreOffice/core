@@ -213,11 +213,7 @@ ICU_BUILD_LIBPOST=
 
 CONFIGURE_ACTION+= $(PERL) ..$/..$/..$/..$/..$/createmak.pl ..$/..$/..$/..$/..$/createmak.cfg .
 
-.IF "$(CCNUMVER)"<="001400000000"
-BUILD_ACTION=cd allinone && nmake /f all.mak EXFLAGS="-EHsc" && cd ..$/..
-.ELSE
-BUILD_ACTION=cd allinone && nmake /f all.mak EXFLAGS="-EHa -Zc:wchar_t-" && cd ..$/..
-.ENDIF
+BUILD_ACTION=cd allinone && msbuild.exe allinone.sln && cd ..$/..
 
 OUT2LIB= \
     $(BUILD_DIR)$/..$/lib$/icudata.lib \
