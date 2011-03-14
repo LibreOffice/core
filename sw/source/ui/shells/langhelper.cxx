@@ -34,6 +34,9 @@
 #include <vcl/window.hxx>
 
 #include <wrtsh.hxx>
+#include <doc.hxx>
+#include <docary.hxx>
+#include <charfmt.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -299,7 +302,25 @@ namespace SwLangHelper
                          case EE_CHAR_LANGUAGE_CJK :  nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
                          case EE_CHAR_LANGUAGE_CTL :  nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
                     }
+                    //Set the default document language
                     rWrtSh.SetDefault( SvxLanguageItem( nLang, nLangWhichId ) );
+
+                    //Resolves: fdo#35282 Clear the language from all Text Styles, and
+                    //fallback to default document language
+                    const SwTxtFmtColls *pColls = rWrtSh.GetDoc()->GetTxtFmtColls();
+                    for(sal_uInt16 i = 0, nCount = pColls->Count(); i < nCount; ++i)
+                    {
+                        SwTxtFmtColl &rTxtColl = *pColls->GetObject( i );
+                        rTxtColl.ResetFmtAttr(nLangWhichId);
+                    }
+                    //Resolves: fdo#35282 Clear the language from all Character Styles,
+                    //and fallback to default document language
+                    const SwCharFmts *pCharFmts = rWrtSh.GetDoc()->GetCharFmts();
+                    for(sal_uInt16 i = 0, nCount = pCharFmts->Count(); i < nCount; ++i)
+                    {
+                        SwCharFmt &rCharFmt = *pCharFmts->GetObject( i );
+                        rCharFmt.ResetFmtAttr(nLangWhichId);
+                    }
 
                     // set respective language attribute in text document to default
                     // (for all text in the document - which should be selected by now...)
