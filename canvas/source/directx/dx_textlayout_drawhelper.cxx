@@ -39,6 +39,7 @@
 #include <boost/scoped_array.hpp>
 #include <boost/bind.hpp>
 #include <com/sun/star/rendering/FontRequest.hpp>
+#include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -132,6 +133,9 @@ namespace dxcanvas
             aFont.SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? sal_True : sal_False );
             aFont.SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
             aFont.SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
+            aFont.SetPitch(
+                    rFontRequest.FontDescription.FontDescription.Proportion == rendering::PanoseProportion::MONO_SPACED
+                    ? PITCH_FIXED : PITCH_VARIABLE);
 
             aFont.SetLanguage(MsLangId::convertLocaleToLanguage(rFontRequest.Locale));
 
@@ -264,6 +268,9 @@ namespace dxcanvas
         aFont.SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? sal_True : sal_False );
         aFont.SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
         aFont.SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
+        aFont.SetPitch(
+                rFontRequest.FontDescription.FontDescription.Proportion == rendering::PanoseProportion::MONO_SPACED
+                ? PITCH_FIXED : PITCH_VARIABLE);
 
         // adjust to stretched font
         if(!::rtl::math::approxEqual(rFontMatrix.m00, rFontMatrix.m11))
