@@ -51,7 +51,7 @@ using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 
 
-#define API_LINE_NONE -1
+#define API_LINE_NONE 0x7FFF
 #define API_LINE_SOLID 0
 #define API_LINE_DOTTED 1
 #define API_LINE_DASHED 2
