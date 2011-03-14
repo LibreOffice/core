@@ -34,9 +34,7 @@
 
 namespace svx {
 
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SpellDialogChildWindow::SpellDialogChildWindow (
     Window* _pParent,
     USHORT nId,
@@ -55,39 +53,29 @@ SpellDialogChildWindow::SpellDialogChildWindow (
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
     SetHideNotDelete (TRUE);
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SpellDialogChildWindow::~SpellDialogChildWindow (void)
 {
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxBindings& SpellDialogChildWindow::GetBindings (void) const
 {
     OSL_ASSERT (m_pAbstractSpellDialog != NULL);
     return m_pAbstractSpellDialog->GetBindings();
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SpellDialogChildWindow::InvalidateSpellDialog()
 {
     OSL_ASSERT (m_pAbstractSpellDialog != NULL);
     if(m_pAbstractSpellDialog)
         m_pAbstractSpellDialog->Invalidate();
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool SpellDialogChildWindow::HasAutoCorrection()
 {
     return false;
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SpellDialogChildWindow::AddAutoCorrection(
         const String& /*rOld*/,
         const String& /*rNew*/,

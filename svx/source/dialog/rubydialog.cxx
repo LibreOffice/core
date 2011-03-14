@@ -202,9 +202,7 @@ void  SvxRubyData_Impl::AssertOneEntry()
         pValues[4].Name = C2U(cRubyCharStyleName);
     }
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
                                     Window* _pParent, const ResId& rResId ) :
     SfxModelessDialog( pBind, pCW, _pParent, rResId ),
