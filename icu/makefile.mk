@@ -48,6 +48,7 @@ PATCH_FILES=\
     icu4c-build.patch \
     icu4c.8320.freeserif.crash.patch \
     icu4c-aix.patch \
+    icu4c-4_6-wchar_t.patch \
     icu4c-warnings.patch
 
 .IF "$(GUI)"=="UNX"
@@ -211,12 +212,16 @@ ICU_BUILD_VERSION=Release
 ICU_BUILD_LIBPOST=
 .ENDIF
 
-CONFIGURE_ACTION+= $(PERL) ..$/..$/..$/..$/..$/createmak.pl ..$/..$/..$/..$/..$/createmak.cfg .
+.IF "$(CPU)" == "I"
+ICU_BUILD_ARCH=Win32
+.ELSE
+ICU_BUILD_ARCH=x64
+.ENDIF
 
-BUILD_ACTION=cd allinone && msbuild.exe /p:Configuration=Release allinone.sln && cd ..$/..
+BUILD_ACTION=cd allinone && msbuild.exe allinone.sln /p:Configuration=$(ICU_BUILD_VERSION) /p:Platform=$(ICU_BUILD_ARCH)
 
 OUT2LIB= \
-    $(BUILD_DIR)$/..$/lib$/icudata.lib \
+    $(BUILD_DIR)$/..$/lib$/icudt.lib \
     $(BUILD_DIR)$/..$/lib$/icuin$(ICU_BUILD_LIBPOST).lib \
     $(BUILD_DIR)$/..$/lib$/icuuc$(ICU_BUILD_LIBPOST).lib \
     $(BUILD_DIR)$/..$/lib$/icule$(ICU_BUILD_LIBPOST).lib \

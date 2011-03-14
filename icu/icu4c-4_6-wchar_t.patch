@@ -1,0 +1,2228 @@
+--- misc/icu/source/common/common.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/common/common.vcxproj	2011-03-14 13:14:22.991271967 +0100
+@@ -90,8 +90,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/common.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -129,8 +129,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/common.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -169,8 +169,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/common.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -206,8 +206,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/common.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/extra/uconv/uconv.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/extra/uconv/uconv.vcxproj	2011-03-14 13:14:23.003272786 +0100
+@@ -92,8 +92,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/uconv.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -134,8 +134,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/uconv.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -178,8 +178,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/uconv.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -219,8 +219,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/uconv.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/i18n/i18n.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/i18n/i18n.vcxproj	2011-03-14 13:14:22.988271760 +0100
+@@ -91,8 +91,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/i18n.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -133,8 +133,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/i18n.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -176,8 +176,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/i18n.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -216,8 +216,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/i18n.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/io/io.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/io/io.vcxproj	2011-03-14 13:14:22.985271555 +0100
+@@ -91,8 +91,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/icuio.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -133,8 +133,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/icuio.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -176,8 +176,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/icuio.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -216,8 +216,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/icuio.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/layout/layout.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/layout/layout.vcxproj	2011-03-14 13:14:23.000272579 +0100
+@@ -92,8 +92,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/layout.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -135,8 +135,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/layout.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -177,8 +177,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/layout.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+@@ -218,8 +218,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/layout.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+--- misc/icu/source/layoutex/layoutex.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/layoutex/layoutex.vcxproj	2011-03-14 13:14:23.000272579 +0100
+@@ -92,8 +92,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/layoutex.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -133,8 +133,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/layoutex.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -175,8 +175,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/layoutex.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -214,8 +214,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/layoutex.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/samples/break/break.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/break/break.vcxproj	2011-03-14 12:32:23.335497900 +0100
+@@ -92,7 +92,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/break.pch</PrecompiledHeaderOutputFile>
+@@ -134,7 +134,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/break.pch</PrecompiledHeaderOutputFile>
+@@ -176,7 +176,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/break.pch</PrecompiledHeaderOutputFile>
+@@ -219,7 +219,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/break.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/cal/cal.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/cal/cal.vcxproj	2011-03-14 12:32:23.337498038 +0100
+@@ -88,7 +88,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/cal.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/cal.pch</PrecompiledHeaderOutputFile>
+@@ -165,7 +165,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/cal.pch</PrecompiledHeaderOutputFile>
+@@ -206,7 +206,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/cal.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/case/case.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/case/case.vcxproj	2011-03-14 12:32:23.343498452 +0100
+@@ -87,7 +87,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/case.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/case.pch</PrecompiledHeaderOutputFile>
+@@ -168,7 +168,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/case.pch</PrecompiledHeaderOutputFile>
+@@ -207,7 +207,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/case.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/citer/citer.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/citer/citer.vcxproj	2011-03-14 12:32:23.335497900 +0100
+@@ -82,7 +82,7 @@
+       <MinimalRebuild>true</MinimalRebuild>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <WarningLevel>Level3</WarningLevel>
+@@ -112,7 +112,7 @@
+       <MinimalRebuild>true</MinimalRebuild>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <WarningLevel>Level3</WarningLevel>
+@@ -136,7 +136,7 @@
+       <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <WarningLevel>Level3</WarningLevel>
+@@ -164,7 +164,7 @@
+       <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN64;WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <WarningLevel>Level3</WarningLevel>
+--- misc/icu/source/samples/coll/coll.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/coll/coll.vcxproj	2011-03-14 12:32:23.340498245 +0100
+@@ -88,7 +88,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/coll.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/coll.pch</PrecompiledHeaderOutputFile>
+@@ -165,7 +165,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/coll.pch</PrecompiledHeaderOutputFile>
+@@ -206,7 +206,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/coll.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/csdet/csdet.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/csdet/csdet.vcxproj	2011-03-14 12:32:23.336497969 +0100
+@@ -82,7 +82,7 @@
+       <MinimalRebuild>true</MinimalRebuild>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <WarningLevel>Level3</WarningLevel>
+@@ -112,7 +112,7 @@
+       <MinimalRebuild>true</MinimalRebuild>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <WarningLevel>Level3</WarningLevel>
+@@ -136,7 +136,7 @@
+       <AdditionalIncludeDirectories>../../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <WarningLevel>Level3</WarningLevel>
+@@ -164,7 +164,7 @@
+       <AdditionalIncludeDirectories>../../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+       <PreprocessorDefinitions>WIN64;WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <WarningLevel>Level3</WarningLevel>
+--- misc/icu/source/samples/date/date.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/date/date.vcxproj	2011-03-14 12:32:23.339498176 +0100
+@@ -88,7 +88,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/date.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/date.pch</PrecompiledHeaderOutputFile>
+@@ -165,7 +165,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/date.pch</PrecompiledHeaderOutputFile>
+@@ -205,7 +205,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/date.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/datefmt/datefmt.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/datefmt/datefmt.vcxproj	2011-03-14 12:32:23.335497900 +0100
+@@ -87,7 +87,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/datefmt.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/datefmt.pch</PrecompiledHeaderOutputFile>
+@@ -168,7 +168,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/datefmt.pch</PrecompiledHeaderOutputFile>
+@@ -207,7 +207,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/datefmt.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/layout/layout.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/layout/layout.vcxproj	2011-03-14 12:32:23.338498107 +0100
+@@ -88,7 +88,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/layout.pch</PrecompiledHeaderOutputFile>
+@@ -126,7 +126,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/layout.pch</PrecompiledHeaderOutputFile>
+@@ -163,7 +163,7 @@
+       <PreprocessorDefinitions>_DEBUG;WIN32;UNICODE;LE_USE_CMEMORY;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/layout.pch</PrecompiledHeaderOutputFile>
+@@ -202,7 +202,7 @@
+       <PreprocessorDefinitions>_DEBUG;WIN64;WIN32;UNICODE;LE_USE_CMEMORY;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/layout.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/legacy/legacy.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/legacy/legacy.vcxproj	2011-03-14 12:32:23.342498383 +0100
+@@ -88,7 +88,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/legacy.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/legacy.pch</PrecompiledHeaderOutputFile>
+@@ -165,7 +165,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/legacy.pch</PrecompiledHeaderOutputFile>
+@@ -205,7 +205,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/legacy.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/msgfmt/msgfmt.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/msgfmt/msgfmt.vcxproj	2011-03-14 12:32:23.339498176 +0100
+@@ -88,7 +88,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/msgfmt.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/msgfmt.pch</PrecompiledHeaderOutputFile>
+@@ -165,7 +165,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/msgfmt.pch</PrecompiledHeaderOutputFile>
+@@ -205,7 +205,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/msgfmt.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/numfmt/numfmt.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/numfmt/numfmt.vcxproj	2011-03-14 12:32:23.340498245 +0100
+@@ -87,7 +87,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/numfmt.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/numfmt.pch</PrecompiledHeaderOutputFile>
+@@ -168,7 +168,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/numfmt.pch</PrecompiledHeaderOutputFile>
+@@ -207,7 +207,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/numfmt.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/props/props.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/props/props.vcxproj	2011-03-14 12:32:23.336497969 +0100
+@@ -88,7 +88,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/props.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/props.pch</PrecompiledHeaderOutputFile>
+@@ -165,7 +165,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/props.pch</PrecompiledHeaderOutputFile>
+@@ -205,7 +205,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/props.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/strsrch/strsrch.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/strsrch/strsrch.vcxproj	2011-03-14 12:32:23.344498521 +0100
+@@ -87,7 +87,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/strsrch.pch</PrecompiledHeaderOutputFile>
+@@ -128,7 +128,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/strsrch.pch</PrecompiledHeaderOutputFile>
+@@ -170,7 +170,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/strsrch.pch</PrecompiledHeaderOutputFile>
+@@ -209,7 +209,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/strsrch.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/translit/translit.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/translit/translit.vcxproj	2011-03-14 12:32:23.344498521 +0100
+@@ -87,7 +87,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/translit.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/translit.pch</PrecompiledHeaderOutputFile>
+@@ -168,7 +168,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/translit.pch</PrecompiledHeaderOutputFile>
+@@ -207,7 +207,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/translit.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/uciter8/uciter8.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/uciter8/uciter8.vcxproj	2011-03-14 12:32:23.341498314 +0100
+@@ -87,7 +87,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/uciter8.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/uciter8.pch</PrecompiledHeaderOutputFile>
+@@ -168,7 +168,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/uciter8.pch</PrecompiledHeaderOutputFile>
+@@ -207,7 +207,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/uciter8.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/ucnv/ucnv.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/ucnv/ucnv.vcxproj	2011-03-14 12:32:23.337498038 +0100
+@@ -87,7 +87,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/ucnv.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/ucnv.pch</PrecompiledHeaderOutputFile>
+@@ -168,7 +168,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/ucnv.pch</PrecompiledHeaderOutputFile>
+@@ -207,7 +207,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/ucnv.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/udata/reader.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/udata/reader.vcxproj	2011-03-14 12:32:23.338498107 +0100
+@@ -87,7 +87,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\reader_Win32_Debug/reader.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\reader_Win32_Debug/reader.pch</PrecompiledHeaderOutputFile>
+@@ -168,7 +168,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\reader_Win32_Release/reader.pch</PrecompiledHeaderOutputFile>
+@@ -207,7 +207,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\reader_Win32_Release/reader.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/udata/writer.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/udata/writer.vcxproj	2011-03-14 12:32:23.338498107 +0100
+@@ -87,7 +87,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/writer.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/writer.pch</PrecompiledHeaderOutputFile>
+@@ -168,7 +168,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/writer.pch</PrecompiledHeaderOutputFile>
+@@ -207,7 +207,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/writer.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/ufortune/ufortune.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/ufortune/ufortune.vcxproj	2011-03-14 12:32:23.342498383 +0100
+@@ -87,7 +87,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/ufortune.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -125,7 +125,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/ufortune.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+@@ -164,7 +164,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/ufortune.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -201,7 +201,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/ufortune.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+--- misc/icu/source/samples/ugrep/ugrep.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/ugrep/ugrep.vcxproj	2011-03-14 12:32:23.341498314 +0100
+@@ -89,7 +89,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/ugrep.pch</PrecompiledHeaderOutputFile>
+@@ -133,7 +133,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/ugrep.pch</PrecompiledHeaderOutputFile>
+@@ -174,7 +174,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/ugrep.pch</PrecompiledHeaderOutputFile>
+@@ -217,7 +217,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/ugrep.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/uresb/uresb.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/uresb/uresb.vcxproj	2011-03-14 12:32:23.342498383 +0100
+@@ -88,7 +88,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/uresb.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/uresb.pch</PrecompiledHeaderOutputFile>
+@@ -165,7 +165,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/uresb.pch</PrecompiledHeaderOutputFile>
+@@ -205,7 +205,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/uresb.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/samples/ustring/ustring.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/samples/ustring/ustring.vcxproj	2011-03-14 12:32:23.343498452 +0100
+@@ -88,7 +88,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/ustring.pch</PrecompiledHeaderOutputFile>
+@@ -127,7 +127,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/ustring.pch</PrecompiledHeaderOutputFile>
+@@ -165,7 +165,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/ustring.pch</PrecompiledHeaderOutputFile>
+@@ -205,7 +205,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/ustring.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/stubdata/stubdata.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/stubdata/stubdata.vcxproj	2011-03-14 13:14:23.003272786 +0100
+@@ -95,8 +95,8 @@
+       </ExceptionHandling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release\stubdata.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -142,8 +142,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/stubdata.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -189,8 +189,8 @@
+       </ExceptionHandling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release\stubdata.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -234,8 +234,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/stubdata.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/test/cintltst/cintltst.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/test/cintltst/cintltst.vcxproj	2011-03-14 13:14:23.002272717 +0100
+@@ -88,8 +88,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/cintltst.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -127,8 +127,8 @@
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/cintltst.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -164,8 +164,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/cintltst.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+@@ -202,8 +202,8 @@
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/cintltst.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+--- misc/icu/source/test/intltest/intltest.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/test/intltest/intltest.vcxproj	2011-03-14 13:14:23.001272648 +0100
+@@ -89,8 +89,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/intltest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -129,8 +129,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/intltest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+@@ -164,8 +164,8 @@
+       <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/intltest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -199,8 +199,8 @@
+       <PreprocessorDefinitions>WIN64;WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/intltest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+--- misc/icu/source/test/iotest/iotest.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/test/iotest/iotest.vcxproj	2011-03-14 13:14:23.001272648 +0100
+@@ -90,8 +90,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/iotest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -127,8 +127,8 @@
+       <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/iotest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -166,8 +166,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/iotest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+@@ -201,8 +201,8 @@
+       <PreprocessorDefinitions>WIN64;WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/iotest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+--- misc/icu/source/test/letest/gendata.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/test/letest/gendata.vcxproj	2011-03-14 12:32:23.346498659 +0100
+@@ -87,7 +87,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;LE_USE_CMEMORY;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/gendata.pch</PrecompiledHeaderOutputFile>
+@@ -126,7 +126,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CONSOLE;LE_USE_CMEMORY;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/gendata.pch</PrecompiledHeaderOutputFile>
+@@ -166,7 +166,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/gendata.pch</PrecompiledHeaderOutputFile>
+@@ -204,7 +204,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/gendata.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/test/letest/letest.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/test/letest/letest.vcxproj	2011-03-14 12:32:23.346498659 +0100
+@@ -88,7 +88,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Release/letest.pch</PrecompiledHeaderOutputFile>
+@@ -123,7 +123,7 @@
+       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/letest.pch</PrecompiledHeaderOutputFile>
+@@ -163,7 +163,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Release/letest.pch</PrecompiledHeaderOutputFile>
+@@ -197,7 +197,7 @@
+       <PreprocessorDefinitions>WIN64;WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/letest.pch</PrecompiledHeaderOutputFile>
+--- misc/icu/source/tools/ctestfw/ctestfw.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/ctestfw/ctestfw.vcxproj	2011-03-14 13:14:22.995272239 +0100
+@@ -92,8 +92,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/icutest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -133,8 +133,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/icutest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -175,8 +175,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/icutest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -214,8 +214,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/icutest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/tools/genbrk/genbrk.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/genbrk/genbrk.vcxproj	2011-03-14 13:14:22.996272307 +0100
+@@ -92,8 +92,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/genbrk.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -132,8 +132,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/genbrk.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -175,8 +175,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/genbrk.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -214,8 +214,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/genbrk.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/tools/genccode/genccode.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/genccode/genccode.vcxproj	2011-03-14 12:32:23.332497693 +0100
+@@ -92,7 +92,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/genccode.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -131,7 +131,7 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/genccode.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -173,7 +173,7 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/genccode.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -211,7 +211,7 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/genccode.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/tools/gencfu/gencfu.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/gencfu/gencfu.vcxproj	2011-03-14 13:14:22.993272104 +0100
+@@ -90,7 +90,7 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+@@ -120,8 +120,8 @@
+       <MinimalRebuild>false</MinimalRebuild>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeader>
+       </PrecompiledHeader>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+@@ -155,8 +155,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/gencfu.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -193,8 +193,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/gencfu.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/tools/gencmn/gencmn.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/gencmn/gencmn.vcxproj	2011-03-14 13:14:22.997272375 +0100
+@@ -92,8 +92,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/gencmn.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -132,8 +132,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/gencmn.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -175,8 +175,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/gencmn.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -214,8 +214,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/gencmn.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/tools/gencnval/gencnval.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/gencnval/gencnval.vcxproj	2011-03-14 13:14:22.999272511 +0100
+@@ -92,8 +92,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/gencnval.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -132,8 +132,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/gencnval.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -175,8 +175,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/gencnval.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -214,8 +214,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/gencnval.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/tools/genctd/genctd.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/genctd/genctd.vcxproj	2011-03-14 13:14:22.998272443 +0100
+@@ -92,8 +92,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/genctd.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -132,8 +132,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/genctd.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -175,8 +175,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/genctd.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -214,8 +214,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/genctd.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/tools/gennorm2/gennorm2.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/gennorm2/gennorm2.vcxproj	2011-03-14 13:14:22.995272239 +0100
+@@ -87,8 +87,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release\gennorm2.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release\</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release\</ObjectFileName>
+@@ -131,8 +131,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug\gennorm2.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug\</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug\</ObjectFileName>
+@@ -172,8 +172,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release\gennorm2.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release\</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release\</ObjectFileName>
+@@ -216,8 +216,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug\gennorm2.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug\</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug\</ObjectFileName>
+--- misc/icu/source/tools/genrb/derb.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/genrb/derb.vcxproj	2011-03-14 13:14:22.991271967 +0100
+@@ -96,8 +96,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release_derb/derb.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release_derb/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release_derb/</ObjectFileName>
+@@ -140,8 +140,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug_derb/derb.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug_derb/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug_derb/</ObjectFileName>
+@@ -185,8 +185,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release_derb/derb.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release_derb/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release_derb/</ObjectFileName>
+@@ -227,8 +227,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug_derb/derb.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug_derb/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug_derb/</ObjectFileName>
+--- misc/icu/source/tools/genrb/genrb.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/genrb/genrb.vcxproj	2011-03-14 13:14:22.992272036 +0100
+@@ -91,8 +91,8 @@
+       <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/genrb.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -131,8 +131,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/genrb.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -173,8 +173,8 @@
+       <PreprocessorDefinitions>WIN64;WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/genrb.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -212,8 +212,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/genrb.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/tools/gensprep/gensprep.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/gensprep/gensprep.vcxproj	2011-03-14 13:14:22.994272171 +0100
+@@ -92,8 +92,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/gensprep.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -132,8 +132,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/gensprep.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -174,8 +174,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/gensprep.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -213,8 +213,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/gensprep.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/tools/gentest/gentest.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/gentest/gentest.vcxproj	2011-03-14 13:14:22.994272171 +0100
+@@ -88,8 +88,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/gentest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -123,8 +123,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/gentest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -161,8 +161,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/gentest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -195,8 +195,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/gentest.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+--- misc/icu/source/tools/icuinfo/icuinfo.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/icuinfo/icuinfo.vcxproj	2011-03-14 13:14:22.992272036 +0100
+@@ -91,8 +91,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>x86\Release/icuinfo.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>x86\Release/</ObjectFileName>
+@@ -127,8 +127,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>Debug/icuinfo.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+       <ObjectFileName>Debug/</ObjectFileName>
+@@ -168,8 +168,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>x64\Release/icuinfo.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>x64\Release/</ObjectFileName>
+@@ -205,8 +205,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>Debug/icuinfo.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+       <ObjectFileName>Debug/</ObjectFileName>
+--- misc/icu/source/tools/icuinfo/testplug.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/icuinfo/testplug.vcxproj	2011-03-14 13:14:22.993272104 +0100
+@@ -92,8 +92,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release-testplug/testplug.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release-testplug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release-testplug/</ObjectFileName>
+@@ -133,8 +133,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug-testplug/testplug.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug-testplug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug-testplug/</ObjectFileName>
+@@ -175,8 +175,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release-testplug/testplug.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release-testplug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release-testplug/</ObjectFileName>
+@@ -214,8 +214,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug-testplug/testplug.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug-testplug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug-testplug/</ObjectFileName>
+--- misc/icu/source/tools/icupkg/icupkg.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/icupkg/icupkg.vcxproj	2011-03-14 13:14:22.996272307 +0100
+@@ -90,8 +90,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>x86\Release/icupkg.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>x86\Release/</ObjectFileName>
+@@ -126,8 +126,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>Debug/icupkg.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+       <ObjectFileName>Debug/</ObjectFileName>
+@@ -167,8 +167,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>x64\Release/icupkg.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>x64\Release/</ObjectFileName>
+@@ -204,8 +204,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>Debug/icupkg.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+       <ObjectFileName>Debug/</ObjectFileName>
+--- misc/icu/source/tools/makeconv/makeconv.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/makeconv/makeconv.vcxproj	2011-03-14 13:14:22.998272443 +0100
+@@ -93,8 +93,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/makeconv.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -134,8 +134,8 @@
+       <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/makeconv.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -175,8 +175,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/makeconv.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+@@ -215,8 +215,8 @@
+       <PreprocessorDefinitions>WIN64;WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/makeconv.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+--- misc/icu/source/tools/pkgdata/pkgdata.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/pkgdata/pkgdata.vcxproj	2011-03-14 13:14:22.991271967 +0100
+@@ -93,8 +93,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/pkgdata.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -135,8 +135,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/pkgdata.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -176,8 +176,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/pkgdata.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
+@@ -217,8 +217,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/pkgdata.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+--- icu/source/tools/toolutil/toolutil.vcxproj	2010-10-09 03:23:28.000000000 +0200
++++ misc/build/icu/source/tools/toolutil/toolutil.vcxproj	2011-03-14 13:14:22.997272375 +0100
+@@ -92,8 +92,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Release/toolutil.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Release/</ObjectFileName>
+@@ -135,8 +135,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x86\Debug/toolutil.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x86\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x86\Debug/</ObjectFileName>
+@@ -178,8 +178,8 @@
+       <StringPooling>true</StringPooling>
+       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+       <FunctionLevelLinking>true</FunctionLevelLinking>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Release/toolutil.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Release/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Release/</ObjectFileName>
+@@ -219,8 +219,8 @@
+       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+       <BufferSecurityCheck>true</BufferSecurityCheck>
+-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
++      <DisableLanguageExtensions>false</DisableLanguageExtensions>
++      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+       <PrecompiledHeaderOutputFile>.\x64\Debug/toolutil.pch</PrecompiledHeaderOutputFile>
+       <AssemblerListingLocation>.\x64\Debug/</AssemblerListingLocation>
+       <ObjectFileName>.\x64\Debug/</ObjectFileName>
