@@ -121,7 +121,7 @@ void GalleryTheme::ImplCreateSvDrawStorage()
 
 // ------------------------------------------------------------------------
 
-sal_Bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, sal_uIntPtr nPos, GalleryObject* pExistentEntry )
+sal_Bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry )
 {
     SvStream*   pOStm = ::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE );
     sal_Bool        bRet = sal_False;
