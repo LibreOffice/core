@@ -38,7 +38,7 @@ interface XParameter;
 /**
    Reflects a service constructor.
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 interface XServiceConstructorDescription {
     /**

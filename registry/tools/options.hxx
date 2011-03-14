@@ -24,34 +24,44 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __drafts_com_sun_star_form_IncompatibleTypesException_idl__
-#define __drafts_com_sun_star_form_IncompatibleTypesException_idl__
 
-#ifndef __com_sun_star_uno_Exception_idl__
-#include <com/sun/star/uno/Exception.idl>
-#endif
+#ifndef INCLUDED_REGISTRY_TOOLS_OPTIONS_HXX
+#define INCLUDED_REGISTRY_TOOLS_OPTIONS_HXX
 
+#include <string>
+#include <vector>
 
-//=============================================================================
-
-module drafts { module com {  module sun {  module star {  module form {
-
-//=============================================================================
-
-/** thrown to indicate that the types of an <type>XValueBinding</type> and
-    an <type>XBindableValue</type> are incompatible
-
-    @deprecated
-        This exception is superseeded by <type scope="com::sun::star::form::binding">IncompatibleTypesException</type>
-*/
-exception IncompatibleTypesException: com::sun::star::uno::Exception
+namespace registry
 {
+namespace tools
+{
+class Options
+{
+    std::string m_program;
+
+    Options (Options const &);
+    Options & operator= (Options const &);
+
+public:
+    explicit Options (char const * program);
+    virtual ~Options();
+
+    static bool checkArgument (std::vector< std::string > & rArgs, char const * arg, size_t len);
+
+    bool initOptions (std::vector< std::string > & rArgs);
+    bool badOption (char const * reason, char const * option) const;
+
+    std::string const & getProgramName() const { return m_program; }
+    bool printUsage() const;
+
+protected:
+    static  bool checkCommandFile(std::vector< std::string > & rArgs, char const * filename);
+
+    virtual bool initOptions_Impl(std::vector< std::string > & rArgs) = 0;
+    virtual void printUsage_Impl() const = 0;
 };
 
-//=============================================================================
+} // namespace tools
+} // namespace registry
 
-}; }; }; }; };
-
-//=============================================================================
-
-#endif
+#endif /* INCLUDED_REGISTRY_TOOLS_OPTIONS_HXX */

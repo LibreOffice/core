@@ -86,7 +86,7 @@ published service DataPilotSourceMember
     /** specifies the member's position in its hierarchy level if sorting
         is manual.
 
-        @since OOo 2.4.0
+        @since OOo 2.4
      */
     [optional, property] boolean Position;
 };
