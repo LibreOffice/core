@@ -238,14 +238,11 @@ void MediaWindowImpl::onURLChanged()
 
         aArgs[ 0 ] = uno::makeAny( nWndHandle );
         aArgs[ 1 ] = uno::makeAny( awt::Rectangle( aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height() ) );
-        const SystemEnvData *pSystemData = maChildWindow.GetSystemData();
-        OSL_TRACE( "MediaWindowImpl::onURLChanged xwindow id: %ld", pSystemData->aWindow );
-        aArgs[ 2 ] = uno::makeAny( pSystemData->aWindow );
+        aArgs[ 2 ] = uno::makeAny( reinterpret_cast< sal_IntPtr >( &maChildWindow ) );
 
         try
         {
-            if( pSystemData->aWindow != 0 )
-                xPlayerWindow = getPlayer()->createPlayerWindow( aArgs );
+            xPlayerWindow = getPlayer()->createPlayerWindow( aArgs );
         }
         catch( uno::RuntimeException )
         {
