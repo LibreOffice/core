@@ -299,12 +299,8 @@ void SdrCreateView::TakeActionRect(Rectangle& rRect) const
 
 BOOL SdrCreateView::CheckEdgeMode()
 {
-    UINT32 nInv=nAktInvent;
-    UINT16 nIdn=nAktIdent;
     if (pAktCreate!=NULL)
     {
-        nInv=pAktCreate->GetObjInventor();
-        nIdn=pAktCreate->GetObjIdentifier();
         // wird vom EdgeObj gemanaged
         if (nAktInvent==SdrInventor && nAktIdent==OBJ_EDGE) return FALSE;
     }
