@@ -206,7 +206,7 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                     // Presentation object outline
                     OutlinerView* pOV   = GetTextEditOutlinerView();
                     ::Outliner* pOutliner = pOV->GetOutliner();
-                    List*         pList = (List*)pOV->CreateSelectionList();
+
                     aTemplateName += String(SdResId(STR_LAYOUT_OUTLINE));
 
                     pOutliner->SetUpdateMode(FALSE);
@@ -219,7 +219,12 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                     aComment.Insert( String((SdResId(STR_PSEUDOSHEET_OUTLINE))), nPos);
                     mpDocSh->GetUndoManager()->EnterListAction( aComment, String() );
 
-                    Paragraph* pPara = (Paragraph*)pList->Last();
+                    std::vector<Paragraph*> aSelList;
+                    pOV->CreateSelectionList(aSelList);
+
+                    std::vector<Paragraph*>::reverse_iterator iter = aSelList.rbegin();
+                    Paragraph* pPara = iter != aSelList.rend() ? *iter : NULL;
+
                     while (pPara)
                     {
                         ULONG nParaPos = pOutliner->GetAbsPos( pPara );
@@ -260,10 +265,11 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                                 pOutlSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                         }
 
-                        pPara = (Paragraph*)pList->Prev();
+                        ++iter;
+                        pPara = iter != aSelList.rend() ? *iter : NULL;
 
                         if( !pPara && nDepth > 0 &&  rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON &&
-                            pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( (Paragraph*) pList->First() ) ) > 0 )
+                            pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos(*(aSelList.begin())) ) > 0 )
                             pPara = pOutliner->GetParagraph( 0 );  // Put NumBulletItem in outline level 1
                     }
 
@@ -272,7 +278,6 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
 
                     mpDocSh->GetUndoManager()->LeaveListAction();
 
-                    delete pList;
                     bOk = TRUE;
                 }
                 else

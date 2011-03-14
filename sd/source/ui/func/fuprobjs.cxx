@@ -99,13 +99,20 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     OutlineView* pOlView = static_cast<OutlineView*>(pOutlineViewShell->GetView());
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( (Window*) mpWindow );
     ::Outliner* pOutl = pOutlinerView->GetOutliner();
-    List* pList = pOutlinerView->CreateSelectionList();
-    Paragraph* pPara = (Paragraph*)pList->First();
+
+    std::vector<Paragraph*> aSelList;
+    pOutlinerView->CreateSelectionList(aSelList);
+
+    std::vector<Paragraph*>::const_iterator iter = aSelList.begin();
+    Paragraph* pPara = aSelList.empty() ? NULL : *iter;
+
     nDepth = pOutl->GetDepth((USHORT)pOutl->GetAbsPos( pPara ) );
     bool bPage = pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE );
 
-    while( pPara )
+    while( iter != aSelList.end() )
     {
+        pPara = *iter;
+
         nTmp = pOutl->GetDepth((USHORT) pOutl->GetAbsPos( pPara ) );
 
         if( nDepth != nTmp )
@@ -120,8 +127,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
             break;
         }
         bUnique = TRUE;
-
-        pPara = (Paragraph*) pList->Next();
+        ++iter;
     }
 
     if( bUnique )

@@ -262,8 +262,10 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 {
                     // Outliner im Gliederungsmodus
                     ::Outliner* pOutl = pOLV->GetOutliner();
-                    List* pList = pOLV->CreateSelectionList();
-                    Paragraph* pPara = (Paragraph*) pList->First();
+
+                    std::vector<Paragraph*> aSelList;
+                    pOLV->CreateSelectionList(aSelList);
+                    Paragraph* pPara = aSelList.empty() ? NULL : *(aSelList.begin());
 
                     // find out if we are a OutlineView
                     BOOL bIsOutlineView(OUTLINERMODE_OUTLINEVIEW == pOLV->GetOutliner()->GetMode());
@@ -289,8 +291,10 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         }
                     }
 
-                    while (pPara)
+                    for (std::vector<Paragraph*>::const_iterator iter = aSelList.begin(); iter != aSelList.end(); ++iter)
                     {
+                        pPara = *iter;
+
                         sal_Int16 nDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
 
                         if (nDepth > 0 || (bOutlineViewSh && (nDepth <= 0) && !pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE )) )
@@ -305,11 +309,9 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                             // Nicht maximale Tiefe und nicht ganz oben
                             bDisableRight = FALSE;
                         }
-
-                        pPara = static_cast<Paragraph*>( pList->Next() );
                     }
 
-                    if ( ( pOutl->GetAbsPos((Paragraph*) pList->Last()) < pOutl->GetParagraphCount() - 1 ) &&
+                    if ( ( pOutl->GetAbsPos(pPara) < pOutl->GetParagraphCount() - 1 ) &&
                          ( pOutl->GetParagraphCount() > 1 || !bOutlineViewSh) )
                     {
                         // Nicht letzter Absatz
@@ -317,7 +319,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     }
 
                     // disable when first para and 2nd is not a title
-                    pPara = static_cast< Paragraph* >( pList->First() );
+                    pPara = aSelList.empty() ? NULL : *(aSelList.begin());
+
                     if(!bDisableDown && bIsOutlineView
                         && pPara
                         && 0 == pOutl->GetAbsPos(pPara)
@@ -327,8 +330,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         // Needs to be disabled
                         bDisableDown = TRUE;
                     }
-
-                    delete pList;
                 }
 
                 if (bDisableLeft)

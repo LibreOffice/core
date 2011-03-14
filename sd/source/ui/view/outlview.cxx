@@ -113,8 +113,6 @@ OutlineView::OutlineView( DrawDocShell* pDocSh, ::Window* pWindow, OutlineViewSh
 : ::sd::View(pDocSh->GetDoc(), pWindow, pOutlineViewSh)
 , mpOutlineViewShell(pOutlineViewSh)
 , mpOutliner( mpDoc->GetOutliner(TRUE) )
-, mpOldParaOrder(NULL)
-, mpSelectedParas(NULL)
 , mnPagesToProcess(0)
 , mnPagesProcessed(0)
 , mbFirstPaint(TRUE)
@@ -669,14 +667,18 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
         {
             Window*       pActWin = mpOutlineViewShell->GetActiveWindow();
             OutlinerView* pOlView = GetViewByWindow(pActWin);
-            List*         pList   = pOlView->CreateSelectionList();
 
-            Paragraph*    pParagraph   = (Paragraph*)pList->First();
-            while (pParagraph)
+            std::vector<Paragraph*> aSelList;
+            pOlView->CreateSelectionList(aSelList);
+
+            Paragraph *pParagraph = NULL;
+            for (std::vector<Paragraph*>::const_iterator iter = aSelList.begin(); iter != aSelList.end(); ++iter)
             {
-                if( !pOutliner->HasParaFlag( pParagraph, PARAFLAG_ISPAGE ) && (pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pParagraph ) ) <= 0) )
+                pParagraph = *iter;
+
+                if( !pOutliner->HasParaFlag( pParagraph, PARAFLAG_ISPAGE ) &&
+                    (pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pParagraph ) ) <= 0) )
                     mnPagesToProcess++;
-                pParagraph = (Paragraph*)pList->Next();
             }
 
             mnPagesToProcess++; // the paragraph being in level 0 already
@@ -695,7 +697,6 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
             {
                 mpDocSh->SetWaitCursor( TRUE );
             }
-            delete pList;
         }
 
         ParagraphInsertedHdl(pOutliner);
@@ -923,41 +924,35 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner )
 
     OutlineViewPageChangesGuard aGuard(this);
 
-    mpOldParaOrder = new List;
-
     // list of selected title paragraphs
-    mpSelectedParas = mpOutlinerView[0]->CreateSelectionList();
-    Paragraph* pPara = static_cast<Paragraph*>(mpSelectedParas->First());
-    while (pPara)
+    mpOutlinerView[0]->CreateSelectionList(maSelectedParas);
+
+    for (std::vector<Paragraph*>::iterator it = maSelectedParas.begin(); it != maSelectedParas.end();)
     {
-        if( !pOutliner->HasParaFlag(pPara, PARAFLAG_ISPAGE) )
-        {
-            mpSelectedParas->Remove();
-            pPara = static_cast<Paragraph*>(mpSelectedParas->GetCurObject());
-        }
+        if (!pOutliner->HasParaFlag(*it, PARAFLAG_ISPAGE))
+            it = maSelectedParas.erase(it);
         else
-        {
-            pPara = static_cast<Paragraph*>(mpSelectedParas->Next());
-        }
+            ++it;
     }
 
     // select the pages belonging to the paragraphs on level 0 to select
     USHORT nPos = 0;
     ULONG nParaPos = 0;
-    pPara = pOutliner->GetParagraph( 0 );
+    Paragraph* pPara = pOutliner->GetParagraph( 0 );
+    std::vector<Paragraph*>::const_iterator fiter;
 
     while(pPara)
     {
         if( pOutliner->HasParaFlag(pPara, PARAFLAG_ISPAGE) )                     // one page?
         {
-            mpOldParaOrder->Insert(pPara, LIST_APPEND);
+            maOldParaOrder.push_back(pPara);
             SdPage* pPage = mpDoc->GetSdPage(nPos, PK_STANDARD);
-            pPage->SetSelected(FALSE);
-            if (mpSelectedParas->Seek(pPara))            // selected?
-            {
-                pPage->SetSelected(TRUE);
-            }
-            nPos++;
+
+            fiter = std::find(maSelectedParas.begin(),maSelectedParas.end(),pPara);
+
+            pPage->SetSelected(fiter != maSelectedParas.end());
+
+            ++nPos;
         }
         pPara = pOutliner->GetParagraph( ++nParaPos );
     }
@@ -975,12 +970,10 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
 {
     OutlineViewPageChangesGuard aGuard(this);
 
-    DBG_ASSERT(mpSelectedParas, "keine Absatzliste");
-    DBG_ASSERT(mpOldParaOrder, "keine Absatzliste");
     DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::EndMovingHdl(), model change without undo?!" );
 
     // look for insertion position via the first paragraph
-    Paragraph* pSearchIt = (Paragraph*)mpSelectedParas->First();
+    Paragraph* pSearchIt = maSelectedParas.empty() ? NULL : *(maSelectedParas.begin());
 
     // look for the first of the selected paragraphs in the new ordering
     USHORT nPosNewOrder = 0;
@@ -1005,14 +998,22 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
     else
     {
         // look for the predecessor in the old ordering
-        nPos = (USHORT)mpOldParaOrder->GetPos(pPrev);
+        std::vector<Paragraph*>::const_iterator it = std::find(maOldParaOrder.begin(),
+                                                               maOldParaOrder.end(),
+                                                               pPrev);
+
+        if (it != maOldParaOrder.end())
+            nPos = static_cast<USHORT>(it-maOldParaOrder.begin());
+        else
+            nPos = 0xffff;
+
         DBG_ASSERT(nPos != 0xffff, "Absatz nicht gefunden");
     }
 
     mpDoc->MovePages(nPos);
 
     // deselect the pages again
-    USHORT nPageCount = (USHORT)mpSelectedParas->Count();
+    USHORT nPageCount = (USHORT)maSelectedParas.size();
     while (nPageCount)
     {
         SdPage* pPage = mpDoc->GetSdPage(nPosNewOrder, PK_STANDARD);
@@ -1023,10 +1024,8 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
 
     pOutliner->UpdateFields();
 
-    delete mpSelectedParas;
-    mpSelectedParas = NULL;
-    delete mpOldParaOrder;
-    mpOldParaOrder = NULL;
+    maSelectedParas.clear();
+    maOldParaOrder.clear();
 
     InvalidateSlideNumberArea();
 
@@ -1350,17 +1349,22 @@ SdPage* OutlineView::GetActualPage()
 {
     ::sd::Window* pWin = mpOutlineViewShell->GetActiveWindow();
     OutlinerView* pActiveView = GetViewByWindow(pWin);
-    std::auto_ptr<List> pSelList( static_cast< List* >(pActiveView->CreateSelectionList()) );
 
-    SdPage* pCurrent = GetPageForParagraph(static_cast<Paragraph*>(pSelList->First()) );
+    std::vector<Paragraph*> aSelList;
+    pActiveView->CreateSelectionList(aSelList);
+
+    Paragraph *pPar = aSelList.empty() ? NULL : *(aSelList.begin());
+    SdPage* pCurrent = GetPageForParagraph(pPar);
+
     DBG_ASSERT( pCurrent ||
                 (mpDocSh->GetUndoManager() && static_cast< sd::UndoManager *>(mpDocSh->GetUndoManager())->isInUndo()) ||
                 maDragAndDropModelGuard.get(),
                 "sd::OutlineView::GetActualPage(), no current page?" );
+
     if( pCurrent )
         return pCurrent;
-    else
-        return mpDoc->GetSdPage( 0, PK_STANDARD );
+
+    return mpDoc->GetSdPage( 0, PK_STANDARD );
 }
 
 SdPage* OutlineView::GetPageForParagraph( Paragraph* pPara )
@@ -1378,8 +1382,8 @@ SdPage* OutlineView::GetPageForParagraph( Paragraph* pPara )
 
     if( nPageToSelect < (sal_uInt32)mpDoc->GetSdPageCount( PK_STANDARD ) )
         return static_cast< SdPage* >( mpDoc->GetSdPage( (USHORT)nPageToSelect, PK_STANDARD) );
-    else
-        return 0;
+
+    return 0;
 }
 
 Paragraph* OutlineView::GetParagraphForPage( ::Outliner* pOutl, SdPage* pPage )
@@ -1447,26 +1451,22 @@ SfxStyleSheet* OutlineView::GetStyleSheet() const
 void OutlineView::SetSelectedPages()
 {
     // list of selected title paragraphs
-    List* pSelParas = mpOutlinerView[0]->CreateSelectionList();
-    Paragraph* pPara = (Paragraph*) pSelParas->First();
+    std::vector<Paragraph*> aSelParas;
+    mpOutlinerView[0]->CreateSelectionList(aSelParas);
 
-    while(pPara)
+    for (std::vector<Paragraph*>::iterator it = aSelParas.begin(); it != aSelParas.end();)
     {
-        if( !mpOutliner->HasParaFlag(pPara, PARAFLAG_ISPAGE) )
-        {
-            pSelParas->Remove();
-            pPara = (Paragraph*) pSelParas->GetCurObject();
-        }
+        if (!mpOutliner->HasParaFlag(*it, PARAFLAG_ISPAGE))
+            it = aSelParas.erase(it);
         else
-        {
-            pPara = (Paragraph*) pSelParas->Next();
-        }
+            ++it;
     }
 
     // select the pages belonging to the paragraphs on level 0 to select
     USHORT nPos = 0;
     ULONG nParaPos = 0;
-    pPara = mpOutliner->GetParagraph( 0 );
+    Paragraph *pPara = mpOutliner->GetParagraph( 0 );
+    std::vector<Paragraph*>::const_iterator fiter;
 
     while(pPara)
     {
@@ -1475,12 +1475,11 @@ void OutlineView::SetSelectedPages()
             SdPage* pPage = mpDoc->GetSdPage(nPos, PK_STANDARD);
             DBG_ASSERT(pPage!=NULL,
                 "Trying to select non-existing page OutlineView::SetSelectedPages()");
-            if (pPage != NULL)
-            {
-                pPage->SetSelected(FALSE);
 
-                if (pSelParas->Seek(pPara))            // selected?
-                    pPage->SetSelected(TRUE);
+            if (pPage)
+            {
+                fiter = std::find(aSelParas.begin(),aSelParas.end(),pPara);
+                pPage->SetSelected(fiter != aSelParas.end());
             }
 
             nPos++;

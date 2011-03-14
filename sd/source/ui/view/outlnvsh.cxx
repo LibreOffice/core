@@ -862,29 +862,39 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     BOOL bDisableExpand   = TRUE;
     BOOL bUnique          = TRUE;
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow(GetActiveWindow());
-    List* pList = pOutlinerView->CreateSelectionList();
-    Paragraph* pPara = (Paragraph*)pList->First();
 
-    sal_Int16 nDepth;
-    sal_Int16 nTmpDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
-    bool bPage = pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE );
-    while (pPara)
+    std::vector<Paragraph*> aSelList;
+    pOutlinerView->CreateSelectionList(aSelList);
+
+    if (!aSelList.empty())
     {
-        nDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
+        std::vector<Paragraph*>::const_iterator iter = aSelList.begin();
+        Paragraph* pPara = *iter;
 
-        if( nDepth != nTmpDepth )
-            bUnique = FALSE;
-        if( bPage != pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
-            bUnique = FALSE;
-        if (!pOutl->IsExpanded(pPara) && pOutl->HasChilds(pPara))
-            bDisableExpand = FALSE;
-        if (pOutl->IsExpanded(pPara) && pOutl->HasChilds(pPara))
-            bDisableCollapse = FALSE;
+        sal_Int16 nDepth;
+        sal_Int16 nTmpDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
+        bool bPage = pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE );
 
-        pPara = (Paragraph*)pList->Next();
+        while (iter != aSelList.begin())
+        {
+            pPara = *iter;
+
+            nDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
+
+            if( nDepth != nTmpDepth || bPage != pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ))
+                bUnique = FALSE;
+
+            if (pOutl->HasChilds(pPara))
+            {
+                if (!pOutl->IsExpanded(pPara))
+                    bDisableExpand = FALSE;
+                else
+                    bDisableCollapse = FALSE;
+            }
+
+            ++iter;
+        }
     }
-
-    delete pList;
 
     if (bDisableExpand)
         rSet.DisableItem(SID_OUTLINE_EXPAND);
@@ -919,7 +929,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     if (bDisableCollapseAll || bDisableExpandAll)
     {
         ULONG nParaPos = 0;
-        pPara = pOutl->GetParagraph( nParaPos );
+        Paragraph* pPara = pOutl->GetParagraph( nParaPos );
         while (pPara && (bDisableCollapseAll || bDisableExpandAll))
         {
             if (!pOutl->IsExpanded(pPara) && pOutl->HasChilds(pPara))
@@ -1393,17 +1403,24 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     ::sd::Window*       pWin        = GetActiveWindow();
     OutlinerView*   pActiveView = pOlView->GetViewByWindow( pWin );
     ::Outliner*     pOutliner   = pOlView->GetOutliner();
-    List*           pSelList    = (List*)pActiveView->CreateSelectionList();
-    Paragraph*      pFirstPara  = (Paragraph*)pSelList->First();
-    Paragraph*      pLastPara   = (Paragraph*)pSelList->Last();
+
+    std::vector<Paragraph*> aSelList;
+    pActiveView->CreateSelectionList(aSelList);
+
+    Paragraph *pFirstPara = NULL;
+    Paragraph *pLastPara = NULL;
+
+    if (!aSelList.empty())
+    {
+        pFirstPara = *(aSelList.begin());
+        pLastPara = *(aSelList.rbegin());
+    }
 
     if( !pOutliner->HasParaFlag(pFirstPara,PARAFLAG_ISPAGE) )
         pFirstPara = pOlView->GetPrevTitle( pFirstPara );
 
     if( !pOutliner->HasParaFlag(pLastPara, PARAFLAG_ISPAGE) )
         pLastPara = pOlView->GetPrevTitle( pLastPara );
-
-    delete pSelList;                // has been created only for us
 
     // only one page selected?
     if( pFirstPara == pLastPara )
@@ -1759,12 +1776,6 @@ SdPage* OutlineViewShell::GetActualPage()
 
 String OutlineViewShell::GetPageRangeString()
 {
-    ::sd::Window*      pWin             = GetActiveWindow();
-    OutlinerView*  pActiveView      = pOlView->GetViewByWindow(pWin);
-    ::Outliner*      pOutl            = pActiveView->GetOutliner();
-    List*          pSelList         = (List*)pActiveView->CreateSelectionList();
-    Paragraph*     pPara            = (Paragraph*)pSelList->First();
-
     String aStrPageRange;
     BOOL bFirstPageNo = TRUE;
     BOOL bOpenRange = FALSE;
@@ -1776,8 +1787,18 @@ String OutlineViewShell::GetPageRangeString()
         if( ( (SdPage*)GetDoc()->GetPage( n ) )->GetPageKind() == PK_STANDARD )
             nPageCount++;
 
-    while ( pPara )
+    ::sd::Window *pWin = GetActiveWindow();
+    OutlinerView *pActiveView = pOlView->GetViewByWindow(pWin);
+    ::Outliner *pOutl = pActiveView->GetOutliner();
+
+    std::vector<Paragraph*> aSelList;
+    pActiveView->CreateSelectionList(aSelList);
+    Paragraph *pPara = NULL;
+
+    for (std::vector<Paragraph*>::const_iterator iter = aSelList.begin(); iter != aSelList.end(); ++iter)
     {
+        pPara = *iter;
+
         if ( !pOutl->HasParaFlag(pPara, PARAFLAG_ISPAGE) )
         {
             pPara = pOlView->GetPrevTitle(pPara);
@@ -1827,7 +1848,6 @@ String OutlineViewShell::GetPageRangeString()
         }
 
         nLastPage = nPageToSelect;
-        pPara = (Paragraph*)pSelList->Next();
     }
 
     if( bOpenRange )
@@ -1842,8 +1862,6 @@ String OutlineViewShell::GetPageRangeString()
 
     if( nPageCount == 0 )
         aStrPageRange.Erase();
-
-    delete pSelList;                // has been created only for us
 
     return aStrPageRange;
 }

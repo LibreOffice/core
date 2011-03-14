@@ -191,8 +191,8 @@ private:
     SdrOutliner*        mpOutliner;
     OutlinerView*       mpOutlinerView[MAX_OUTLINERVIEWS];
 
-    List*               mpOldParaOrder;
-    List*               mpSelectedParas;
+    std::vector<Paragraph*> maOldParaOrder;
+    std::vector<Paragraph*> maSelectedParas;
 
     USHORT              mnPagesToProcess;    // fuer die Fortschrittsanzeige
     USHORT              mnPagesProcessed;

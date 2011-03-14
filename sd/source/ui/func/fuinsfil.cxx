@@ -630,14 +630,16 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
         nFormat = EE_FORMAT_HTML;
 
     ::Outliner*    pDocliner = static_cast<OutlineView*>(mpView)->GetOutliner();
-    List*          pList     = pDocliner->GetView(0)->CreateSelectionList();
-    Paragraph*     pPara     = (Paragraph*)pList->First();
+
+    std::vector<Paragraph*> aSelList;
+    pDocliner->GetView(0)->CreateSelectionList(aSelList);
+
+    Paragraph* pPara = aSelList.empty() ? NULL : *(aSelList.begin());
 
     // wo soll eingefuegt werden?
     while( !pDocliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
-    {
         pPara = pDocliner->GetParent(pPara);
-    }
+
     ULONG nTargetPos = pDocliner->GetAbsPos(pPara) + 1;
 
     // Layout der Vorgaengerseite uebernehmen
