@@ -1636,7 +1636,6 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             if(pIdx)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
-                SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
                 // --> OD #i85105#
 //                SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
 //                Size aActSize = ((SwGrfNode*)pNoTxt)->GetTwipSize();
@@ -1649,7 +1648,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                         if ( aActSize.Width() == 0 && aActSize.Height() == 0 &&
                              pGrfNode->IsLinkedFile() )
                         {
-                            pGrfNode->SwapIn( TRUE );
+                            pGrfNode->SwapIn( sal_True );
                             aActSize = pGrfNode->GetTwipSize();
                         }
                     }
