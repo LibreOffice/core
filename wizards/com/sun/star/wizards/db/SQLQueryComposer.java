@@ -245,7 +245,7 @@ public class SQLQueryComposer
         {
             for (int m = 0; m < _filterconditions[n].length; m++)
             {
-                _filterconditions[n][m].Name = getComposedAliasFieldName(_filterconditions[n][m].Name);
+            //  _filterconditions[n][m].Name = getComposedAliasFieldName(_filterconditions[n][m].Name);
                 final String aliasName = getComposedAliasFieldName(_filterconditions[n][m].Name);
                 if ( columns.hasByName(aliasName))
                     _filterconditions[n][m].Name = aliasName;
