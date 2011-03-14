@@ -293,7 +293,7 @@ static float GetSwapFloat( SvStream& rSt )
             sal_Int32       nMmY;
             /* multipart object data */
             bool            mbMultipart;
-            sal_uInt16          mMFlags;
+            sal_uInt16      mMFlags;
             SvMemoryStream  mMStream;
         };
 

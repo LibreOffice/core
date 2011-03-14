@@ -1283,7 +1283,7 @@ namespace cppcanvas
                         EMFP_DEBUG (sal_Int32 brushIndex);
                         sal_Int32 points;
                         EMFP_DEBUG (sal_uInt32 color);
-                        EMFP_DEBUG (USHORT transparency = 0);
+                        EMFP_DEBUG (sal_uInt16 transparency = 0);
 
                         rMF >> brushIndexOrColor;
                         rMF >> points;
