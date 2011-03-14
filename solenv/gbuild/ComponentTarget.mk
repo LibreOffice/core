@@ -37,18 +37,26 @@ $(call gb_Helper_abbreviate_dirs_native,\
     $(gb_XSLTPROC) --nonet --stringparam uri \
         '$(subst \d,$$,$(COMPONENTPREFIX))$(LIBFILENAME)' -o $(1) \
         $(gb_ComponentTarget_XSLTCOMMANDFILE) $(2))
-
 endef
 
+# creates 2 componentfiles: the first is for the installation set,
+# the second is for using the component during the build.
+# bit of a hack, hopefully inbuild can be removed when solver layout is fixed.
 define gb_ComponentTarget__rules
-$$(call gb_ComponentTarget_get_target,%) : $$(call gb_ComponentTarget_get_source,$(1),%) | $(gb_XSLTPROCTARGET)
-    $$(call gb_ComponentTarget__command,$$@,$$<,$$*)
+$$(call gb_ComponentTarget_get_inbuild_target,%) : $$(call gb_ComponentTarget_get_source,$(1),%) | $(gb_XSLTPROCTARGET)
+	$$(call gb_ComponentTarget__command,$$@,$$<,$$*)
 
-$$(call gb_ComponentTarget_get_clean_target,%) :
-    $$(call gb_Output_announce,$$*,$(false),CMP,1)
-    rm -f $$(call gb_ComponentTarget_get_outdir_target,$$*) $$(call gb_ComponentTarget_get_target,$$*)
+$$(call gb_ComponentTarget_get_target,%) : $$(call gb_ComponentTarget_get_source,$(1),%) | $(gb_XSLTPROCTARGET)
+	$$(call gb_ComponentTarget__command,$$@,$$<,$$*)
 
 endef
+
+$(call gb_ComponentTarget_get_clean_target,%) :
+	$(call gb_Output_announce,$$*,$(false),CMP,1)
+	rm -f $(call gb_ComponentTarget_get_outdir_target,$*) \
+		$(call gb_ComponentTarget_get_target,$*) \
+		$(call gb_ComponentTarget_get_outdir_inbuild_target,$*) \
+		$(call gb_ComponentTarget_get_inbuild_target,$*) \
 
 $(foreach repo,$(gb_ComponentTarget_REPOS),$(eval $(call gb_ComponentTarget__rules,$(repo))))
 
@@ -60,9 +68,14 @@ $(call gb_ComponentTarget_get_external_target,%) :
 
 define gb_ComponentTarget_ComponentTarget
 $(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(3)
+$(call gb_ComponentTarget_get_inbuild_target,$(1)) : LIBFILENAME := $(3)
 $(call gb_ComponentTarget_get_target,$(1)) : COMPONENTPREFIX := $(2)
+$(call gb_ComponentTarget_get_inbuild_target,$(1)) : \
+	COMPONENTPREFIX := $(call gb_Library__get_layer_componentprefix,NONE)
 $(call gb_ComponentTarget_get_outdir_target,$(1)) : $(call gb_ComponentTarget_get_target,$(1))
+$(call gb_ComponentTarget_get_outdir_inbuild_target,$(1)) : $(call gb_ComponentTarget_get_inbuild_target,$(1))
 $(call gb_Deliver_add_deliverable,$(call gb_ComponentTarget_get_outdir_target,$(1)),$(call gb_ComponentTarget_get_target,$(1)))
+$(call gb_Deliver_add_deliverable,$(call gb_ComponentTarget_get_outdir_inbuild_target,$(1)),$(call gb_ComponentTarget_get_inbuild_target,$(1)))
 
 endef
 
