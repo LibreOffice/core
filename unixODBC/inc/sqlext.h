@@ -2108,7 +2108,7 @@ VOID    FireVSDebugEvent(PODBC_VS_ARGS);
  * connection pooling retry times
  */
 
-bool ODBCSetTryWaitValue ( DWORD dwValue );
+int ODBCSetTryWaitValue ( DWORD dwValue );
 #ifdef __cplusplus
 DWORD ODBCGetTryWaitValue ( );
 #else
