@@ -28,6 +28,7 @@
 #ifndef WRAP_POLYGON_HANDLER_HXX
 #define WRAP_POLYGON_HANDLER_HXX
 
+#include <deque>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <resourcemodel/LoggedResources.hxx>
 #include <resourcemodel/Fraction.hxx>

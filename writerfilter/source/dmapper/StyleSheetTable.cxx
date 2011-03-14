@@ -533,7 +533,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             }
             break;
         }
-        case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
         case NS_ooxml::LN_CT_PPrDefault_pPr:
         case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
             m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultParaProps );
@@ -541,7 +540,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             m_pImpl->m_rDMapper.PopStyleSheetProperties();
             applyDefaults( true );
         break;
-        case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
         case NS_ooxml::LN_CT_RPrDefault_rPr:
         case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
             m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultCharProps );

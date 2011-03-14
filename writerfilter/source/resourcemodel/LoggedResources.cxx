@@ -48,9 +48,9 @@ void LoggedResourcesHelper::startElement(const string & sElement)
     mpLogger->startElement(msPrefix + "." + sElement);
 }
 
-void LoggedResourcesHelper::endElement(const string & sElement)
+void LoggedResourcesHelper::endElement(const string & /*sElement*/)
 {
-    mpLogger->endElement(msPrefix + "." + sElement);
+    mpLogger->endElement();
 }
 
 void LoggedResourcesHelper::chars(const ::rtl::OUString & rChars)

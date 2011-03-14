@@ -62,9 +62,9 @@ SHL1STDLIBS=\
     $(SALLIB)			\
     $(OOXLIB)
 
-.IF "$(DBG_LEVEL)">="2"
+# .IF "$(DBG_LEVEL)">="2"
 SHL1STDLIBS+= $(LIBXML2LIB)
-.ENDIF
+# .ENDIF
 
 
 SHL1DEPN=

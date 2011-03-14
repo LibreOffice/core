@@ -29,7 +29,6 @@
 #ifndef INCLUDED_DMAPPER_LOGGERS_HXX
 #define INCLUDED_DMAPPER_LOGGERS_HXX
 
-#if OSL_DEBUG_LEVEL > 1
 #include <resourcemodel/TagLogger.hxx>
 
 namespace writerfilter {
@@ -38,7 +37,6 @@ namespace writerfilter {
     }
 }
 
-#endif // DEBUG
 #endif // INCLUDED_DMAPPER_LOGGERS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

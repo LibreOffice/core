@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#if OSL_DEBUG_LEVEL > 1
 #include <libxml/xmlstring.h>
 #include <string.h>
 #include <resourcemodel/TagLogger.hxx>

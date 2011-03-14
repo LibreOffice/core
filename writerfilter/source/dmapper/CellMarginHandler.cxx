@@ -38,7 +38,6 @@ namespace dmapper {
 using namespace ::com::sun::star;
 using namespace ::writerfilter;
 
-
 CellMarginHandler::CellMarginHandler() :
 LoggedProperties(dmapper_logger, "CellMarginHandler"),
 m_nValue( 0 ),

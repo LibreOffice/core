@@ -29,7 +29,6 @@
 #ifndef INCLUDED_TAG_LOGGER_HXX
 #define INCLUDED_TAG_LOGGER_HXX
 
-#if OSL_DEBUG_LEVEL > 1
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <WriterFilterDllApi.hxx>
@@ -84,7 +83,6 @@ namespace writerfilter
     };
 }
 
-#endif // DEBUG
 #endif // INCLUDED_TAG_LOGGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

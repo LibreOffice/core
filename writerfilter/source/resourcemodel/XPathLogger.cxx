@@ -88,4 +88,6 @@ void XPathLogger::endElement()
     updateCurrentPath();
 }
 
+} // namespace writerfilter
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

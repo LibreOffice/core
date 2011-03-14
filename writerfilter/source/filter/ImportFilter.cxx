@@ -130,7 +130,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         oox::StorageRef xVbaPrjStrg( new ::oox::ole::OleStorage( uno::Reference< lang::XMultiServiceFactory >( m_xContext->getServiceManager(), uno::UNO_QUERY_THROW ), pVBAProjectStream->getDocumentStream(), false ) );
         if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
         {
-            ::oox::ole::VbaProject aVbaProject( uno::Reference< lang::XMultiServiceFactory >( m_xContext->getServiceManager(), uno::UNO_QUERY_THROW ), xModel, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Writer" ) ) );
+            ::oox::ole::VbaProject aVbaProject( m_xContext, xModel, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Writer" ) ) );
             uno::Reference< frame::XFrame > xFrame = aMediaDesc.getUnpackedValueOrDefault(  MediaDescriptor::PROP_FRAME(), uno::Reference< frame::XFrame > () );
 
             // if no XFrame try fallback to what we can glean from the Model
@@ -140,7 +140,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
                 xFrame =  xController.is() ? xController->getFrame() : NULL;
             }
 
-            oox::GraphicHelper gHelper(  uno::Reference< lang::XMultiServiceFactory >( m_xContext->getServiceManager(), uno::UNO_QUERY_THROW ), xFrame, xVbaPrjStrg );
+            oox::GraphicHelper gHelper( m_xContext, xFrame, xVbaPrjStrg );
             aVbaProject.importVbaProject( *xVbaPrjStrg, gHelper );
         }
     }
