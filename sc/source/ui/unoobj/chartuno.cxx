@@ -336,7 +336,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScChartsObj::createEnumeration(
 sal_Int32 SAL_CALL ScChartsObj::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    INT32 nCount = 0;
+    sal_Int32 nCount = 0;
     if ( pDocShell )
     {
         ScDocument* pDoc = pDocShell->GetDocument();

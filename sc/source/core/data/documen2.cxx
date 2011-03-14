@@ -962,7 +962,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
         if ( !bResultsOnly )
         {
-            BOOL bNamesLost = false;
+            sal_Bool bNamesLost = false;
             // array containing range names which might need update of indices.
             // The instances inserted into this vector are managed by the
             // range name container of this document, so no need to delete
@@ -980,7 +980,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             ScRangeName::const_iterator itr = pSrcDoc->pRangeName->begin(), itrEnd = pSrcDoc->pRangeName->end();
             for (; itr != itrEnd; ++itr)        //! DB-Bereiche Pivot-Bereiche auch !!!
             {
-                USHORT nOldIndex = itr->GetIndex();
+                sal_uInt16 nOldIndex = itr->GetIndex();
                 bool bInUse = ( aUsedNames.find(nOldIndex) != aUsedNames.end() );
                 if (bInUse)
                 {
@@ -991,7 +991,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                         // -> use the existing name, but show a warning
                         // (when refreshing links, the existing name is used and the warning not shown)
 
-                        USHORT nExistingIndex = pExistingData->GetIndex();
+                        sal_uInt16 nExistingIndex = pExistingData->GetIndex();
 
                         // don't modify the named range
                         aSrcRangeMap.insert(
@@ -1014,7 +1014,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                         {
                             pData->TransferTabRef( nSrcPos, nDestPos );
                             aSrcRangeNames.push_back(pData);
-                            USHORT nNewIndex = pData->GetIndex();
+                            sal_uInt16 nNewIndex = pData->GetIndex();
                             aSrcRangeMap.insert(
                                 ScRangeData::IndexMap::value_type(nOldIndex, nNewIndex));
                             if ( !bRangeNameReplace )
@@ -1124,7 +1124,7 @@ void ScDocument::SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 
 
 namespace {
 
-bool eraseUnusedSharedName(ScRangeName* pRangeName, ScTable* pTab[], USHORT nLevel)
+bool eraseUnusedSharedName(ScRangeName* pRangeName, ScTable* pTab[], sal_uInt16 nLevel)
 {
     ScRangeName::iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
     for (; itr != itrEnd; ++itr)
@@ -1135,11 +1135,11 @@ bool eraseUnusedSharedName(ScRangeName* pRangeName, ScTable* pTab[], USHORT nLev
         String aName;
         itr->GetName(aName);
         aName.Erase(0, 6);                      // !!! vgl. Table4, FillFormula !!
-        USHORT nInd = static_cast<USHORT>(aName.ToInt32());
+        sal_uInt16 nInd = static_cast<sal_uInt16>(aName.ToInt32());
         if (nInd > nLevel)
             continue;
 
-        USHORT nIndex = itr->GetIndex();
+        sal_uInt16 nIndex = itr->GetIndex();
 
         bool bInUse = false;
         for (SCTAB j = 0; !bInUse && (j <= MAXTAB); ++j)
@@ -1158,7 +1158,7 @@ bool eraseUnusedSharedName(ScRangeName* pRangeName, ScTable* pTab[], USHORT nLev
 
 }
 
-void ScDocument::EraseNonUsedSharedNames(USHORT nLevel)
+void ScDocument::EraseNonUsedSharedNames(sal_uInt16 nLevel)
 {
     while (eraseUnusedSharedName(pRangeName, pTab, nLevel))
         ;

@@ -108,7 +108,7 @@ public:
 
       @return   help id of the function
     */
-    virtual long getHelpId() const ;
+    virtual ::rtl::OString getHelpId() const ;
 
     /**
       Returns number of arguments
@@ -215,7 +215,7 @@ public:
     sal_uInt16            nFIndex;                /**< Unique function index */
     sal_uInt16            nCategory;              /**< Function category */
     sal_uInt16            nArgCount;              /**< All parameter count, suppressed and unsuppressed */
-    sal_uInt16            nHelpId;                /**< HelpId of function */
+    rtl::OString          sHelpId;                /**< HelpId of function */
     bool                  bIncomplete         :1; /**< Incomplete argument info (set for add-in info from configuration) */
     bool                  bHasSuppressedArgs  :1; /**< Whether there is any suppressed parameter. */
 };

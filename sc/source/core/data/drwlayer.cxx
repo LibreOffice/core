@@ -1664,7 +1664,7 @@ void ScDrawLayer::EnsureGraphicNames()
 
 namespace
 {
-    SdrObjUserData* GetFirstUserDataOfType(const SdrObject *pObj, UINT16 nId)
+    SdrObjUserData* GetFirstUserDataOfType(const SdrObject *pObj, sal_uInt16 nId)
     {
         sal_uInt16 nCount = pObj ? pObj->GetUserDataCount() : 0;
         for( sal_uInt16 i = 0; i < nCount; i++ )
@@ -1676,7 +1676,7 @@ namespace
         return NULL;
     }
 
-    void DeleteFirstUserDataOfType(SdrObject *pObj, UINT16 nId)
+    void DeleteFirstUserDataOfType(SdrObject *pObj, sal_uInt16 nId)
     {
         sal_uInt16 nCount = pObj ? pObj->GetUserDataCount() : 0;
         for( sal_uInt16 i = nCount; i > 0; i-- )

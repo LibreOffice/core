@@ -391,9 +391,9 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                                     ::rtl::math::pow10Exp( nUnit[fraction],
                                         static_cast<int>( -ceil( log10( static_cast<double>( nUnit[fraction]))))));
                             fValue = (bDate ? GetDateSerial(
-                                        sal::static_int_cast<INT16>(nUnit[year]),
-                                        sal::static_int_cast<INT16>(nUnit[month]),
-                                        sal::static_int_cast<INT16>(nUnit[day]),
+                                        sal::static_int_cast<sal_Int16>(nUnit[year]),
+                                        sal::static_int_cast<sal_Int16>(nUnit[month]),
+                                        sal::static_int_cast<sal_Int16>(nUnit[day]),
                                         true) : 0.0);
                             fValue += ((nUnit[hour] * 3600) + (nUnit[minute] * 60) + nUnit[second] + fFraction) / 86400.0;
                         }
@@ -3151,7 +3151,7 @@ void ScInterpreter::ScMacro()
                         for( SCROW nRow = nRow1; bOk && nRow <= nRow2; nRow++ )
                         {
                             aAdr.SetRow( nRow );
-                            INT32 nIdx[ 2 ];
+                            sal_Int32 nIdx[ 2 ];
                             nIdx[ 0 ] = nRow-nRow1+1;
                             for( SCCOL nCol = nCol1; bOk && nCol <= nCol2; nCol++ )
                             {

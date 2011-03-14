@@ -3993,7 +3993,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    INT32 nReplaced = 0;
+    sal_Int32 nReplaced = 0;
     if ( pDocShell && xDesc.is() )
     {
         ScCellSearchObj* pSearch = ScCellSearchObj::getImplementation( xDesc );

@@ -109,7 +109,7 @@ struct ScPivotParam
     ~ScPivotParam();
 
     ScPivotParam&   operator=       ( const ScPivotParam& r );
-    sal_Bool            operator==      ( const ScPivotParam& r ) const;
+    bool            operator==      ( const ScPivotParam& r ) const;
     void            ClearPivotArrays();
     void            SetLabelData    (const ::std::vector<ScDPLabelDataRef>& r);
 };

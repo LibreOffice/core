@@ -34,9 +34,7 @@
 #include <svtools/stdctrl.hxx>
 
 #include <vcl/lstbox.hxx>
-
-#include <vcl/imagebtn.hxx>
-
+#include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include "anyrefdg.hxx"
 #include "global.hxx"       // ScAddress

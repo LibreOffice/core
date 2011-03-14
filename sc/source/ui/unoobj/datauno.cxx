@@ -417,8 +417,8 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
             uno::Sequence<table::TableSortField> aNewSeq;
             if ( rProp.Value >>= aSeq )
             {
-                INT32 nCount = aSeq.getLength();
-                INT32 i;
+                sal_Int32 nCount = aSeq.getLength();
+                sal_Int32 i;
                 if ( nCount > MAXSORT )
                 {
                     OSL_FAIL("Zu viele Sortierfelder");
@@ -438,8 +438,8 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
             }
             else if ( rProp.Value >>= aNewSeq )
             {
-                INT32 nCount = aNewSeq.getLength();
-                INT32 i;
+                sal_Int32 nCount = aNewSeq.getLength();
+                sal_Int32 i;
                 if ( nCount > MAXSORT )
                 {
                     OSL_FAIL("Zu viele Sortierfelder");

@@ -698,8 +698,8 @@ void SAL_CALL ScRecentFunctionsObj::setRecentFunctionIds(
                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = (sal_uInt16) Min( aRecentFunctionIds.getLength(), (INT32) LRU_MAX );
-    const INT32* pAry = aRecentFunctionIds.getConstArray();
+    sal_uInt16 nCount = (sal_uInt16) Min( aRecentFunctionIds.getLength(), (sal_Int32) LRU_MAX );
+    const sal_Int32* pAry = aRecentFunctionIds.getConstArray();
 
     sal_uInt16* pFuncs = nCount ? new sal_uInt16[nCount] : NULL;
     for (sal_uInt16 i=0; i<nCount; i++)

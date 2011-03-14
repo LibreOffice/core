@@ -566,7 +566,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
 
         if ( nUsedHierarchy >= 0 )
         {
-            aAny <<= (INT32)nUsedHierarchy;
+            aAny <<= (sal_Int32)nUsedHierarchy;
             xDimProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_USEDHIERARCHY)), aAny );
         }
 

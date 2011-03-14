@@ -455,7 +455,7 @@ ScToken::~ScToken()
 }
 
 //  TextEqual: if same formula entered (for optimization in sort)
-sal_Bool ScToken::TextEqual( const FormulaToken& _rToken ) const
+bool ScToken::TextEqual( const FormulaToken& _rToken ) const
 {
     if ( eType == svSingleRef || eType == svDoubleRef )
     {
@@ -503,7 +503,7 @@ sal_Bool ScToken::TextEqual( const FormulaToken& _rToken ) const
 }
 
 
-sal_Bool ScToken::Is3DRef() const
+bool ScToken::Is3DRef() const
 {
     switch ( eType )
     {
@@ -744,7 +744,7 @@ void                    ScSingleRefToken::CalcAbsIfRel( const ScAddress& rPos )
                             { aSingleRef.CalcAbsIfRel( rPos ); }
 void                    ScSingleRefToken::CalcRelFromAbs( const ScAddress& rPos )
                             { aSingleRef.CalcRelFromAbs( rPos ); }
-sal_Bool ScSingleRefToken::operator==( const FormulaToken& r ) const
+bool ScSingleRefToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && aSingleRef == static_cast<const ScToken&>(r).GetSingleRef();
 }
@@ -760,7 +760,7 @@ void                    ScDoubleRefToken::CalcAbsIfRel( const ScAddress& rPos )
                             { aDoubleRef.CalcAbsIfRel( rPos ); }
 void                    ScDoubleRefToken::CalcRelFromAbs( const ScAddress& rPos )
                             { aDoubleRef.CalcRelFromAbs( rPos ); }
-sal_Bool ScDoubleRefToken::operator==( const FormulaToken& r ) const
+bool ScDoubleRefToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && aDoubleRef == static_cast<const ScToken&>(r).GetDoubleRef();
 }
@@ -778,7 +778,7 @@ void                    ScRefListToken::CalcRelFromAbs( const ScAddress& rPos )
     for (ScRefList::iterator it( aRefList.begin()); it != aRefList.end(); ++it)
         (*it).CalcRelFromAbs( rPos);
 }
-sal_Bool ScRefListToken::operator==( const FormulaToken& r ) const
+bool ScRefListToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && &aRefList == static_cast<const ScToken&>(r).GetRefList();
 }
@@ -786,7 +786,7 @@ sal_Bool ScRefListToken::operator==( const FormulaToken& r ) const
 
 const ScMatrix* ScMatrixToken::GetMatrix() const        { return pMatrix.get(); }
 ScMatrix*       ScMatrixToken::GetMatrix()              { return pMatrix.get(); }
-sal_Bool ScMatrixToken::operator==( const FormulaToken& r ) const
+bool ScMatrixToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && pMatrix == static_cast<const ScToken&>(r).GetMatrix();
 }
@@ -843,7 +843,7 @@ void ScExternalSingleRefToken::CalcRelFromAbs( const ScAddress& rPos )
     maSingleRef.CalcRelFromAbs( rPos );
 }
 
-sal_Bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
+bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
 {
     if (!FormulaToken::operator==(r))
         return false;
@@ -929,7 +929,7 @@ void ScExternalDoubleRefToken::CalcRelFromAbs( const ScAddress& rPos )
     maDoubleRef.CalcRelFromAbs( rPos );
 }
 
-sal_Bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
+bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
 {
     if (!ScToken::operator==(r))
         return false;
@@ -1012,7 +1012,7 @@ const String &  ScEmptyCellToken::GetString() const
     static  String              aDummyString;
     return aDummyString;
 }
-sal_Bool ScEmptyCellToken::operator==( const FormulaToken& r ) const
+bool ScEmptyCellToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&
         bInherited == static_cast< const ScEmptyCellToken & >(r).IsInherited() &&
@@ -1029,7 +1029,7 @@ ScMatrix* ScMatrixCellResultToken::GetMatrix()
 {
     return const_cast<ScMatrix*>(xMatrix.operator->());
 }
-sal_Bool ScMatrixCellResultToken::operator==( const FormulaToken& r ) const
+bool ScMatrixCellResultToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&
         xUpperLeft == static_cast<const ScMatrixCellResultToken &>(r).xUpperLeft &&
@@ -1037,7 +1037,7 @@ sal_Bool ScMatrixCellResultToken::operator==( const FormulaToken& r ) const
 }
 
 
-sal_Bool ScMatrixFormulaCellToken::operator==( const FormulaToken& r ) const
+bool ScMatrixFormulaCellToken::operator==( const FormulaToken& r ) const
 {
     const ScMatrixFormulaCellToken* p = dynamic_cast<const ScMatrixFormulaCellToken*>(&r);
     return p && ScMatrixCellResultToken::operator==( r ) &&
@@ -1089,7 +1089,7 @@ void ScMatrixFormulaCellToken::SetUpperLeftDouble( double f )
 
 double          ScHybridCellToken::GetDouble() const    { return fDouble; }
 const String &  ScHybridCellToken::GetString() const    { return aString; }
-sal_Bool ScHybridCellToken::operator==( const FormulaToken& r ) const
+bool ScHybridCellToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&
         fDouble == r.GetDouble() && aString == r.GetString() &&

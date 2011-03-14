@@ -647,7 +647,7 @@ ScPivotParam& ScPivotParam::operator=( const ScPivotParam& r )
 
 //------------------------------------------------------------------------
 
-sal_Bool ScPivotParam::operator==( const ScPivotParam& r ) const
+bool ScPivotParam::operator==( const ScPivotParam& r ) const
 {
     sal_Bool bEqual =   (nCol       == r.nCol)
                  && (nRow       == r.nRow)

@@ -2027,7 +2027,7 @@ void ScTable::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, sal_Bool 
 
 
 bool ScTable::ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                    INT16 nFlags )
+                          sal_Int16 nFlags )
 {
     bool bChanged = false;
     if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
@@ -2038,7 +2038,7 @@ bool ScTable::ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
 
 
 bool ScTable::RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                    INT16 nFlags )
+                           sal_Int16 nFlags )
 {
     bool bChanged = false;
     if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
