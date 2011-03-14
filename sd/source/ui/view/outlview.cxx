@@ -226,9 +226,6 @@ OutlineView::~OutlineView()
         mpOutliner->ForceAutoColor( aOptions.GetIsAutomaticFontColor() );
         mpOutliner->Clear();
     }
-
-    DBG_ASSERT(!mpSelectedParas, "Absatzliste nicht geloescht");
-    DBG_ASSERT(!mpOldParaOrder, "Absatzliste nicht geloescht");
 }
 
 
@@ -919,9 +916,6 @@ IMPL_LINK( OutlineView, EndDropHdl, void *, EMPTYARG )
 
 IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner )
 {
-    DBG_ASSERT(!mpSelectedParas, "Absatzliste nicht geloescht");
-    DBG_ASSERT(!mpOldParaOrder, "Absatzliste nicht geloescht");
-
     OutlineViewPageChangesGuard aGuard(this);
 
     // list of selected title paragraphs
