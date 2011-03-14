@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,13 +25,14 @@
  *
  ************************************************************************/
 #ifndef INCLUDED_BASEGFXDLLAPI_H
-#define  INCLUDED_BASEGFXDLLAPI_H
+#define INCLUDED_BASEGFXDLLAPI_H
 
 #if defined BASEGFX_STATICLIBRARY
-#define BASEGFX_DLLPUBLIC 
-#define BASEGFX_DLLPRIVATE 
 
-#else
+#define BASEGFX_DLLPUBLIC
+#define BASEGFX_DLLPRIVATE
+
+#else /*BASEGFX_STATICLIBRARY*/
 
 #if defined BASEGFX_DLLIMPLEMENTATION
 #define BASEGFX_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
@@ -40,6 +41,7 @@
 #endif
 #define BASEGFX_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif
+#endif /*BASEGFX_STATICLIBRARY*/
 
 #endif
+

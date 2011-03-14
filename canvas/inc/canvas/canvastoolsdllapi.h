@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 #ifndef INCLUDED_CANVASTOOLSDLLAPI_H
-#define  INCLUDED_CANVASTOOLSDLLAPI_H
+#define INCLUDED_CANVASTOOLSDLLAPI_H
 
 #if defined CANVASTOOLS_DLLIMPLEMENTATION
 #define CANVASTOOLS_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
@@ -35,3 +35,4 @@
 #define CANVASTOOLS_DLLPRIVATE SAL_DLLPRIVATE
 
 #endif
+
