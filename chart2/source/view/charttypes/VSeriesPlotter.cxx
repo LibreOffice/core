@@ -1194,11 +1194,11 @@ long VSeriesPlotter::calculateTimeResolutionOnXAxis()
             aNullDate = m_apNumberFormatterWrapper->getNullDate();
         if( aIt!=aEnd )
         {
-            Date aPrevious(aNullDate); aPrevious+=rtl::math::approxFloor(aIt->fValue);
+            Date aPrevious(aNullDate); aPrevious+=static_cast<long>(rtl::math::approxFloor(aIt->fValue));
             ++aIt;
             for(;aIt!=aEnd;++aIt)
             {
-                Date aCurrent(aNullDate); aCurrent+=rtl::math::approxFloor(aIt->fValue);
+                Date aCurrent(aNullDate); aCurrent+=static_cast<long>(rtl::math::approxFloor(aIt->fValue));
                 if( ::com::sun::star::chart::TimeUnit::YEAR == nRet )
                 {
                     if( DateHelper::IsInSameYear( aPrevious, aCurrent ) )

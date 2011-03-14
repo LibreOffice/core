@@ -82,8 +82,8 @@ void DateTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& r
 
     Date aNull(m_aScale.NullDate);
 
-    Date aDate = aNull + ::rtl::math::approxFloor(m_aScale.Minimum);
-    Date aMaxDate = aNull + ::rtl::math::approxFloor(m_aScale.Maximum);
+    Date aDate = aNull + static_cast<long>(::rtl::math::approxFloor(m_aScale.Minimum));
+    Date aMaxDate = aNull + static_cast<long>(::rtl::math::approxFloor(m_aScale.Maximum));
 
     uno::Reference< chart2::XScaling > xScaling(m_aScale.Scaling);
     uno::Reference< chart2::XScaling > xInverseScaling(m_xInverseScaling);
@@ -125,7 +125,7 @@ void DateTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& r
     }
 
     //create minor date tickinfos
-    aDate = aNull + ::rtl::math::approxFloor(m_aScale.Minimum);
+    aDate = aNull + static_cast<long>(::rtl::math::approxFloor(m_aScale.Minimum));
     while( aDate<= aMaxDate )
     {
         if( bShifted && aDate==aMaxDate )
