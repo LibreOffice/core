@@ -424,11 +424,11 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
-                    AbstractScStringInputDlg* pDlg = pFact->CreateScStringInputDlg( GetDialogParent(),
-                                                                                    aDlgTitle,
-                                                                                    String(ScResId(SCSTR_NAME)),
-                                                                                    aName,
-                                                                                    nSlot,RID_SCDLG_STRINPUT);
+                    AbstractScStringInputDlg* pDlg = pFact->CreateScStringInputDlg(
+                        GetDialogParent(), aDlgTitle, String(ScResId(SCSTR_NAME)),
+                        aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
+                        pHelpId, RID_SCDLG_STRINPUT);
+
                     DBG_ASSERT(pDlg, "Dialog create fail!");
 
                     while ( !bDone && nRet == RET_OK )

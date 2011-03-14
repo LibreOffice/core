@@ -382,7 +382,7 @@ public:
 
     void            FindNextUnprot( sal_Bool bShift, sal_Bool bInSelection = sal_True );
 
-    SC_DLLPUBLIC void            SetTabNo( SCTAB nTab, sal_Bool bNew = false, sal_Bool bExtendSelection = false );
+    SC_DLLPUBLIC void SetTabNo( SCTAB nTab, bool bNew = false, bool bExtendSelection = false, bool bSameTabButMoved = false );
     void            SelectNextTab( short nDir, sal_Bool bExtendSelection = false );
 
     void            ActivateView( sal_Bool bActivate, sal_Bool bFirst );

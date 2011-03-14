@@ -1841,14 +1841,7 @@ sal_Bool ScDPObject::FillOldParam(ScPivotParam& rParam) const
     rParam.nTab = aOutRange.aStart.Tab();
     // ppLabelArr / nLabels is not changed
 
-    SCCOL nColAdd = 0;
-    if ( bForFile )
-    {
-        // in old file format, columns are within document, not within source range
-
-        DBG_ASSERT( pSheetDesc, "FillOldParam: bForFile, !pSheetDesc" );
-        nColAdd = pSheetDesc->GetSourceRange().aStart.Col();
-    }
+    SCCOL nColAdd = pSheetDesc->GetSourceRange().aStart.Col();
 
     bool bAddData = ( lcl_GetDataGetOrientation( xSource ) == sheet::DataPilotFieldOrientation_HIDDEN );
     lcl_FillOldFields(

@@ -1429,7 +1429,7 @@ void ScTabView::SelectNextTab( short nDir, sal_Bool bExtendSelection )
 
 //  SetTabNo    - angezeigte Tabelle
 
-void ScTabView::SetTabNo( SCTAB nTab, sal_Bool bNew, sal_Bool bExtendSelection, bool bSameTabButMoved )
+void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSameTabButMoved )
 {
     if ( !ValidTab(nTab) )
     {
@@ -1561,7 +1561,7 @@ void ScTabView::SetTabNo( SCTAB nTab, sal_Bool bNew, sal_Bool bExtendSelection, 
                     pGridWin[i]->UpdateEditViewPos();
         }
 
-        TabChanged();                                       // DrawView
+        TabChanged(bSameTabButMoved);                                       // DrawView
         UpdateVisibleRange();
 
         aViewData.GetViewShell()->WindowChanged();          // falls das aktive Fenster anders ist

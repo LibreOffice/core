@@ -223,7 +223,16 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         if ( pClient && pClient->IsObjectInPlaceActive() )
             nOptions |= SDRINSERT_DONTMARK;
 
-        // Set flag for ScDocument::UpdateChartListeners() which is
+        ::std::vector< ::rtl::OUString > aExcludedChartNames;
+        SCTAB nTab = GetViewData()->GetTabNo();
+        SdrPage* pPage = pScDrawView->GetModel()->GetPage( static_cast< sal_uInt16 >( nTab ) );
+        DBG_ASSERT( pPage, "Page?" );
+        if ( pPage )
+        {
+            ScChartHelper::GetChartNames( aExcludedChartNames, pPage );
+        }
+
+        // #89247# Set flag for ScDocument::UpdateChartListeners() which is
         // called during paste.
         if ( !bSameDocClipboard )
             GetViewData()->GetDocument()->SetPastingDrawFromOtherDoc( sal_True );

@@ -468,7 +468,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
         // out-of-bound dimension ID.  This should never happen!
         return;
 
-    const ScDPLabelData& rLabelData = pDPData->maDPParam.maLabelArray[pDPData->mnDim];
+    const ScDPLabelData& rLabelData = *pDPData->maDPParam.maLabelArray[pDPData->mnDim];
 
     mpDPFieldPopup.reset(new ScDPFieldPopupWindow(this, pViewData->GetDocument()));
     mpDPFieldPopup->setName(OUString(RTL_CONSTASCII_USTRINGPARAM("DataPilot field member popup")));
@@ -565,7 +565,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
         return;
 
     // Build a map of layout names to original names.
-    const ScDPLabelData& rLabelData = pDPData->maDPParam.maLabelArray[pDPData->mnDim];
+    const ScDPLabelData& rLabelData = *pDPData->maDPParam.maLabelArray[pDPData->mnDim];
     MemNameMapType aMemNameMap;
     for (vector<ScDPLabelData::Member>::const_iterator itr = rLabelData.maMembers.begin(), itrEnd = rLabelData.maMembers.end();
            itr != itrEnd; ++itr)

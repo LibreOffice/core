@@ -130,19 +130,20 @@ ScPivotParam::ScPivotParam()
 
 bool ScPivotParam::operator==( const ScPivotParam& r ) const
 {
-    return
-        (nCol == r.nCol)
-     && (nRow == r.nRow)
-     && (nTab == r.nTab)
-     && (bIgnoreEmptyRows  == r.bIgnoreEmptyRows)
-     && (bDetectCategories == r.bDetectCategories)
-     && (bMakeTotalCol == r.bMakeTotalCol)
-     && (bMakeTotalRow == r.bMakeTotalRow)
-     && (maLabelArray.size() == r.maLabelArray.size())  // ! only size??
-     && (maPageArr == r.maPageArr)
-     && (maColArr == r.maColArr)
-     && (maRowArr == r.maRowArr)
-     && (maDataArr == r.maDataArr);
+    bool bEqual = (nCol == r.nCol)
+                 && (nRow == r.nRow)
+                 && (nTab == r.nTab)
+                 && (bIgnoreEmptyRows  == r.bIgnoreEmptyRows)
+                 && (bDetectCategories == r.bDetectCategories)
+                 && (bMakeTotalCol == r.bMakeTotalCol)
+                 && (bMakeTotalRow == r.bMakeTotalRow)
+                 && (maLabelArray.size() == r.maLabelArray.size())
+                 && maPageFields == r.maPageFields
+                 && maColFields == r.maColFields
+                 && maRowFields == r.maRowFields
+                 && maDataFields == r.maDataFields;
+
+    return bEqual;
 }
 
 // ============================================================================

@@ -29,8 +29,9 @@
 #ifndef SC_PVLAYDLG_HXX
 #define SC_PVLAYDLG_HXX
 
-#include <memory>
 #include <vector>
+#include <memory>
+#include <boost/shared_ptr.hpp>
 
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
@@ -39,12 +40,35 @@
 #include "pivot.hxx"
 #include "anyrefdg.hxx"
 #include "fieldwnd.hxx"
+#include "formula/funcutl.hxx"
 
-// ============================================================================
+/*==========================================================================*\
+
+    Eine Instanz der Klasse ScPivotLayoutDlg ist ein (semi-)modaler
+    Dialog, in dem mit der Maus Felder mit Spaltenueberschriften den
+    drei Pivot-Kategorien "Spalte", "Zeile" und "Daten" zugeordnet
+    werden koennen.
+
+    Der Dialog erhaelt in der Struktur LabelData Informationen ueber
+    diese Ueberschriften (Name, Art (Zahl/String) und Funktionsmaske).
+    Weiterhin werden drei PivotFeld-Arrays uebergeben, mit denen die
+    drei Kategorie-Fenster initialisiert werden. Ein Kategorie-Fenster
+    wird durch eine Instanz der Klasse FieldWindow dargestellt. Ein
+    solches Fenster ist fuer die Darstellung der Datenstrukturen am
+    Schirm zustaendig. Es meldet Mausaktionen an den Dialog weiter und
+    bietet entsprechende Methoden zur Veraenderung der Darstellung.
+    Der Dialog sorgt fuer den Abgleich der interenen Datenstrukturen mit
+    der Bildschirmdarstellung. Ein weiteres FieldWindow (Select) bietet
+    alle Tabellenueberschriften zur Auswahl an, ist also "read-only".
+
+\*==========================================================================*/
+
+//============================================================================
 
 class ScViewData;
 class ScDocument;
 class ScRangeData;
+struct ScDPFuncData;
 class ScDPObject;
 
 //============================================================================
@@ -67,9 +91,9 @@ public:
     virtual                 ~ScDPLayoutDlg();
 
     virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual sal_Bool            IsRefInputMode() const { return bRefInputMode; }
+    virtual sal_Bool        IsRefInputMode() const { return bRefInputMode; }
     virtual void            SetActive();
-    virtual sal_Bool            Close();
+    virtual sal_Bool        Close();
     virtual void            StateChanged( StateChangedType nStateChange );
 
     void                    NotifyDoubleClick    ( ScDPFieldType eType, size_t nFieldIndex );
@@ -81,11 +105,7 @@ public:
     void                    NotifyRemoveField    ( ScDPFieldType eType, size_t nFieldIndex );
 
 protected:
-    virtual void        Tracking( const TrackingEvent& rTEvt );
-    virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual sal_Bool    IsRefInputMode() const;
-    virtual void        SetActive();
-    virtual sal_Bool    Close();
+    virtual void            Deactivate();
 
 private:
     typedef boost::shared_ptr< ScDPFuncData >   ScDPFuncDataRef;
@@ -179,7 +199,7 @@ private:
     String                  GetLabelString  ( SCsCOL nCol );
     bool                    IsOrientationAllowed( SCsCOL nCol, ScDPFieldType eType );
     String                  GetFuncString   ( sal_uInt16& rFuncMask, sal_Bool bIsValue = true );
-    sal_Bool                    Contains        ( ScDPFuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
+    sal_Bool                Contains        ( ScDPFuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
     void                    Remove          ( ScDPFuncDataVec* pArr, size_t nAt );
     void                    Insert          ( ScDPFuncDataVec* pArr, const ScDPFuncData& rFData, size_t nAt );
 

@@ -181,6 +181,7 @@
 #include "docuno.hxx"
 #include "clipparam.hxx"
 #include "undodat.hxx"
+#include "drawview.hxx"
 
 using namespace com::sun::star;
 
@@ -1882,7 +1883,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ScDocShellModificator aModificator( *pDocSh );
-    SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+    ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
     if ( pDoc )
     {
         const sal_Bool bRecord( pDoc->IsUndoEnabled());

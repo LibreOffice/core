@@ -292,7 +292,7 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
     ScAddress aCurPos = pViewData->GetCurPos();
     ScDocShell* pDocSh = pViewData->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
-    SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+    ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
     Date aActDate;
     double fDate = aActDate - *pFormatter->GetNullDate();
