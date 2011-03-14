@@ -303,7 +303,7 @@ namespace cppu_threadpool
 
             if( ii == m_mapQueue.end() )
             {
-                m_mapQueue[ aThreadId ] = pair < JobQueue * , JobQueue * > ( 0 , 0 );
+                m_mapQueue[ aThreadId ] = pair < JobQueue * , JobQueue * > ( (JobQueue *)0 , (JobQueue*)0 );
                 ii = m_mapQueue.find( aThreadId );
                 OSL_ASSERT( ii != m_mapQueue.end() );
             }
@@ -349,7 +349,7 @@ namespace cppu_threadpool
         if( ii == m_mapQueue.end() )
         {
             JobQueue *p = new JobQueue();
-            m_mapQueue[ aThreadId ] = pair< JobQueue * , JobQueue * > ( p , 0 );
+            m_mapQueue[ aThreadId ] = pair< JobQueue * , JobQueue * > ( p , (JobQueue*)0 );
         }
         else if( 0 == (*ii).second.first )
         {
