@@ -753,7 +753,7 @@ testcase tFormatPage_13
      if Not Navigator.Exists then ViewNavigator
      Kontext "NavigatorWriter"
      Sleep 1
-     if Seitennummer.GetText <> sPage2 then Warnlog "#i40333# 2nd pic isn't in page 3 !"
+     if Seitennummer.GetText <> sPage2 then Warnlog "2nd pic isn't in page 3 !"
      fCloseNavigator
      Wait 500
 
@@ -810,7 +810,7 @@ testcase tFormatPage_14
      if Not Navigator.Exists then ViewNavigator
      Kontext "NavigatorWriter"
      Sleep 1
-     if Seitennummer.GetText <> sPage2 then Warnlog "#i40333# 2nd pic isn't in page 4 !"
+     if Seitennummer.GetText <> sPage2 then Warnlog "2nd pic isn't in page 4 !"
      fCloseNavigator
      Wait 500
 

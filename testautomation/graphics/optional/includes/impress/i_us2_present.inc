@@ -172,8 +172,11 @@ testcase i_us2_pres1
     SlidesControl.TypeKeys "<DOWN>"
     kontext "DocumentImpress"
     printlog "Insert three lines with text, all with different formatting."
+    sleep (1)
     call hTextrahmenErstellen ("First line with text",20,50,70,50)
+    sleep (1)
     call hTextrahmenErstellen ("Second line with text",20,60,70,60)
+    sleep (1)
     call hTextrahmenErstellen ("Third line with text",20,70,70,70)
     printlog "Go down to the third slide."
     kontext "Slides"

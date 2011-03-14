@@ -805,7 +805,7 @@ testcase tShortcutPasteUnformattedText
 		printlog "- shortcut did work"
 	else
 		if gPlatgroup = "osx" then
-			Warnlog "#103102#It is not possible to customize the keyboard combination cmd+option on MAC OSX."
+			Warnlog "It is not possible to customize the keyboard combination cmd+option on MAC OSX."
 			Call hCloseDocument
 			goto endsub
 		else

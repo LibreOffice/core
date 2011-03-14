@@ -300,7 +300,7 @@ testcase tGroup_6
     PrintLog "- Set the focus to rectangle , check if it is moved (Should NOT)"
     Call gMouseClick(41,40)
     Call fPositionAndSize("TabPositionAndSizeWriter")
-    if Horizontalby.Gettext <> sPositionX1 then Warnlog "#i106719#Rectangle should NOT be moved: X Not -> "+sPositionX1+"  but -> "+ Horizontalby.Gettext
+    if Horizontalby.Gettext <> sPositionX1 then Warnlog "Rectangle should NOT be moved: X Not -> "+sPositionX1+"  but -> "+ Horizontalby.Gettext
     if Verticalby.Gettext   <> sPositionY1 then Warnlog "Rectangle should NOT be moved: Y Not -> "+sPositionY1+"  but -> "+ Verticalby.Gettext
     TabPositionAndSizeWriter.Cancel
 
@@ -371,7 +371,7 @@ testcase tGroup_7
       PrintLog "- Set the focus to rectangle , check if it is moved (Should NOT)."
     Call gMouseClick(40,40)
     Call fPositionAndSize("TabPositionAndSizeWriter")
-    if Horizontalby.Gettext <> sPositionX1 then Warnlog "#i106719#Rectangle should NOT be moved: X Not -> "+sPositionX1+"  but -> "+ Horizontalby.Gettext
+    if Horizontalby.Gettext <> sPositionX1 then Warnlog "Rectangle should NOT be moved: X Not -> "+sPositionX1+"  but -> "+ Horizontalby.Gettext
     if Verticalby.Gettext   <> sPositionY1 then Warnlog "Rectangle should NOT be moved: Y Not -> "+sPositionY1+"  but -> "+ Verticalby.Gettext
     TabPositionAndSizeWriter.Cancel
     
