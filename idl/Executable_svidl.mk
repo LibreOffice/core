@@ -41,8 +41,9 @@ $(eval $(call gb_Executable_set_cxxflags,svidl,\
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,svidl,\
-	sal \
 	tl \
+	sal \
+	stl \
     $(gb_STDLIBS) \
 ))
 
