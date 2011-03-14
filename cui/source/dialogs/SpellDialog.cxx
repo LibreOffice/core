@@ -900,9 +900,7 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
     sTitle.SearchAndReplaceAscii( "$LANGUAGE ($LOCATION)", SvtLanguageTable::GetLanguageString(nLang) );
     SetText( sTitle );
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SpellDialog::InitUserDicts()
 {
     sal_uInt16 nLang = aLanguageLB.GetSelectLanguage();

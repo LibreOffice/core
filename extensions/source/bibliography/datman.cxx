@@ -748,9 +748,7 @@ BibDataManager::BibDataManager()
 {
 }
 
-/* --------------------------------------------------
 
- --------------------------------------------------*/
 BibDataManager::~BibDataManager()
 {
     Reference< XLoadable >      xLoad( m_xForm, UNO_QUERY );
@@ -864,16 +862,12 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
         OSL_FAIL("Exception in BibDataManager::InsertFields");
     }
 }
-/* --------------------------------------------------
 
- --------------------------------------------------*/
 Reference< awt::XControlModel > BibDataManager::updateGridModel()
 {
     return updateGridModel( m_xForm );
 }
-/* --------------------------------------------------
 
- --------------------------------------------------*/
 Reference< awt::XControlModel > BibDataManager::updateGridModel(const Reference< XForm > & xDbForm)
 {
     try
@@ -903,9 +897,7 @@ Reference< awt::XControlModel > BibDataManager::updateGridModel(const Reference<
 
     return m_xGridModel;
 }
-/* --------------------------------------------------
 
- --------------------------------------------------*/
 Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
 {
     Reference< XForm >  xResult;
@@ -1185,9 +1177,7 @@ void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
     }
 }
 
-/* --------------------------------------------------
 
- --------------------------------------------------*/
 void BibDataManager::setActiveDataTable(const ::rtl::OUString& rTable)
 {
     ResetIdentifierMapping();
@@ -1649,9 +1639,7 @@ void BibDataManager::CreateMappingDialog(Window* pParent)
     }
     delete pDlg;
 }
-/* --------------------------------------------------
 
- --------------------------------------------------*/
 ::rtl::OUString BibDataManager::CreateDBChangeDialog(Window* pParent)
 {
     ::rtl::OUString uRet;
