@@ -577,6 +577,15 @@
 #define RID_SVXSTR_SEABLUE                  (RID_SVX_START + 546)
 #define RID_SVXSTR_COLOR_SUN                (RID_SVX_START + 547)
 
+// LibreOffice palette colors
+#define RID_SVXSTR_LIBRE_GREEN_1                        (RID_SVX_START + 548)
+#define RID_SVXSTR_LIBRE_GREEN_ACCENT                   (RID_SVX_START + 549)
+#define RID_SVXSTR_LIBRE_BLUE_ACCENT                    (RID_SVX_START + 550)
+#define RID_SVXSTR_LIBRE_ORANGE_ACCENT                  (RID_SVX_START + 551)
+#define RID_SVXSTR_LIBRE_PURPLE                         (RID_SVX_START + 552)
+#define RID_SVXSTR_LIBRE_PURPLE_ACCENT                  (RID_SVX_START + 553)
+#define RID_SVXSTR_LIBRE_YELLOW_ACCENT                  (RID_SVX_START + 554)
+
 // JP: string resource ids for table-autoformat-names, used in SW/SC
 // !!! Urgent: the order of Ids is persistent. New Ids have to append !!!
 #define RID_SVXSTR_TBLAFMT_BEGIN            (RID_SVX_START + 560)
@@ -634,6 +643,14 @@
 #define RID_SVXSTR_COLOR_SUN_DEF            (RID_SVX_START + 620)
 #define RID_SVXSTR_COLOR_CHART              (RID_SVX_START + 621)
 #define RID_SVXSTR_COLOR_CHART_DEF          (RID_SVX_START + 622)
+// LibreOffice palette colors
+#define RID_SVXSTR_LIBRE_GREEN_1_DEF                    (RID_SVX_START + 623)
+#define RID_SVXSTR_LIBRE_GREEN_ACCENT_DEF               (RID_SVX_START + 624)
+#define RID_SVXSTR_LIBRE_BLUE_ACCENT_DEF                (RID_SVX_START + 625)
+#define RID_SVXSTR_LIBRE_ORANGE_ACCENT_DEF              (RID_SVX_START + 626)
+#define RID_SVXSTR_LIBRE_PURPLE_DEF                     (RID_SVX_START + 627)
+#define RID_SVXSTR_LIBRE_PURPLE_ACCENT_DEF              (RID_SVX_START + 628)
+#define RID_SVXSTR_LIBRE_YELLOW_ACCENT_DEF              (RID_SVX_START + 629)
 
 // Default-Gradient-Names
 #define RID_SVXSTR_GRDT0_DEF                (RID_SVX_START + 631)

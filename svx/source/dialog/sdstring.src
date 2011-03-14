@@ -1182,103 +1182,73 @@ String RID_SVXSTR_COLOR_USER
     Text [ en-US ] = "User" ;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String RID_SVXSTR_LIBRE_GREEN_1
+{
+    Text [ en-US ] = "Green 1 (LibreOffice Main Color)" ;
+};
+
+String RID_SVXSTR_LIBRE_GREEN_ACCENT
+{
+    Text [ en-US ] = "Green Accent" ;
+};
+
+String RID_SVXSTR_LIBRE_BLUE_ACCENT
+{
+    Text [ en-US ] = "Blue Accent" ;
+};
+
+String RID_SVXSTR_LIBRE_ORANGE_ACCENT
+{
+    Text [ en-US ] = "Orange Accent" ;
+};
+
+String RID_SVXSTR_LIBRE_PURPLE
+{
+    Text [ en-US ] = "Purple" ;
+};
+
+String RID_SVXSTR_LIBRE_PURPLE_ACCENT
+{
+    Text [ en-US ] = "Purple Accent" ;
+};
+
+String RID_SVXSTR_LIBRE_YELLOW_ACCENT
+{
+    Text [ en-US ] = "Yellow Accent" ;
+};
+
+String RID_SVXSTR_LIBRE_GREEN_1_DEF
+{
+    Text = "Green 1 (LibreOffice Main Color)" ;
+};
+
+String RID_SVXSTR_LIBRE_GREEN_ACCENT_DEF
+{
+    Text = "Green Accent" ;
+};
+
+String RID_SVXSTR_LIBRE_BLUE_ACCENT_DEF
+{
+    Text = "Blue Accent" ;
+};
+
+String RID_SVXSTR_LIBRE_ORANGE_ACCENT_DEF
+{
+    Text = "Orange Accent" ;
+};
+
+String RID_SVXSTR_LIBRE_PURPLE_DEF
+{
+    Text = "Purple" ;
+};
+
+String RID_SVXSTR_LIBRE_PURPLE_ACCENT_DEF
+{
+    Text = "Purple Accent" ;
+};
+
+String RID_SVXSTR_LIBRE_YELLOW_ACCENT_DEF
+{
+    Text = "Yellow Accent" ;
+};
 
