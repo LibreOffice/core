@@ -169,7 +169,7 @@ static AquaSalFrame* getMouseContainerFrame()
 {
     if( GetSalData() && GetSalData()->mpFirstInstance )
     {
-        vos::IMutex* pMutex = GetSalData()->mpFirstInstance->GetYieldMutex();
+        osl::SolarMutex* pMutex = GetSalData()->mpFirstInstance->GetYieldMutex();
         if( pMutex )
         {
             pMutex->acquire();

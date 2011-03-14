@@ -573,8 +573,7 @@ bool AquaSalInstance::CheckYieldMutex()
     bool bRet = true;
 
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
-    if ( pYieldMutex->GetThreadId() !=
-         vos::OThread::getCurrentIdentifier() )
+    if ( pYieldMutex->GetThreadId() != osl::Thread::getCurrentIdentifier())
     {
         bRet = false;
     }
