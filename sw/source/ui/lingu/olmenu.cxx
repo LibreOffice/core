@@ -111,9 +111,7 @@ using ::rtl::OUString;
 extern void lcl_CharDialog( SwWrtShell &rWrtSh, BOOL bUseDialog, USHORT nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );
 
 
-/*--------------------------------------------------------------------------
 
----------------------------------------------------------------------------*/
 
 // tries to determine the language of 'rText'
 //
@@ -566,9 +564,7 @@ SwSpellPopup::SwSpellPopup(
     RemoveDisabledEntries( TRUE, TRUE );
 }
 
-/*--------------------------------------------------------------------------
 
----------------------------------------------------------------------------*/
 
 SwSpellPopup::SwSpellPopup(
     SwWrtShell *pWrtSh,
@@ -692,9 +688,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
     RemoveDisabledEntries( TRUE, TRUE );
 }
 
-/*--------------------------------------------------------------------------
 
----------------------------------------------------------------------------*/
 sal_uInt16  SwSpellPopup::Execute( const Rectangle& rWordPos, Window* pWin )
 {
     sal_uInt16 nRet = PopupMenu::Execute(pWin, pWin->LogicToPixel(rWordPos));

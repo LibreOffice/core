@@ -1373,9 +1373,7 @@ void SwWrtShell::BulletOn()
 }
 
 
-/*--------------------------------------------------
 
---------------------------------------------------*/
 SelectionType SwWrtShell::GetSelectionType() const
 {
     // ContentType kann nicht ermittelt werden innerhalb einer

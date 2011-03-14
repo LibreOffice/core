@@ -672,8 +672,7 @@ void SwEditWin::StopInsFrm()
     nInsFrmColCount = 1;
 }
 
-/*--------------------------------------------------------------------
- --------------------------------------------------------------------*/
+
 
 BOOL SwEditWin::IsInputSequenceCheckingRequired( const String &rText, const SwPaM& rCrsr ) const
 {

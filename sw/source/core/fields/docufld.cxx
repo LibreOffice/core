@@ -885,9 +885,7 @@ SwDocInfoFieldType::SwDocInfoFieldType(SwDoc* pDc)
 {
 }
 
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwFieldType* SwDocInfoFieldType::Copy() const
 {
     SwDocInfoFieldType* pTyp = new SwDocInfoFieldType(GetDoc());
@@ -907,9 +905,7 @@ void lcl_GetLocalDataWrapper( ULONG nLang,
                         SvxCreateLocale( static_cast<LanguageType>(nLang) ) );
 }
 
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                                     sal_uInt16 nLang, const String& rName ) const
 {
@@ -1057,9 +1053,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
     return aStr;
 }
 
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const String& rName, sal_uInt32 nFmt) :
     SwValueField(pTyp, nFmt), nSubType(nSub)
 {
@@ -1074,9 +1068,7 @@ SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const 
     aContent = rValue;
 }
 
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 template<class T>
 double lcl_TimeToDouble( const T& rTime )
 {
@@ -1168,9 +1160,7 @@ String SwDocInfoField::Expand() const
 
     return aContent;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwDocInfoField::GetCntnt(sal_Bool bName) const
 {
     if ( bName )
@@ -1196,9 +1186,7 @@ String SwDocInfoField::GetCntnt(sal_Bool bName) const
     }
     return Expand();
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwDocInfoField::Copy() const
 {
     SwDocInfoField* pFld = new SwDocInfoField((SwDocInfoFieldType*)GetTyp(), nSubType, aName, GetFormat());
@@ -1207,23 +1195,17 @@ SwField* SwDocInfoField::Copy() const
 
     return pFld;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_uInt16 SwDocInfoField::GetSubType() const
 {
     return nSubType;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwDocInfoField::SetSubType(sal_uInt16 nSub)
 {
     nSubType = nSub;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwDocInfoField::SetLanguage(sal_uInt16 nLng)
 {
     if (!GetFormat())
@@ -1231,9 +1213,7 @@ void SwDocInfoField::SetLanguage(sal_uInt16 nLng)
     else
         SwValueField::SetLanguage(nLng);
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 bool SwDocInfoField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -1281,9 +1261,7 @@ bool SwDocInfoField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 bool SwDocInfoField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     sal_Int32 nValue = 0;
@@ -1345,9 +1323,7 @@ SwFieldType* SwHiddenTxtFieldType::Copy() const
 {
     return new SwHiddenTxtFieldType( bHidden );
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwHiddenTxtFieldType::SetHiddenFlag( sal_Bool bSetHidden )
 {
     if( bHidden != bSetHidden )
@@ -1356,9 +1332,7 @@ void SwHiddenTxtFieldType::SetHiddenFlag( sal_Bool bSetHidden )
         UpdateFlds();       // alle HiddenText benachrichtigen
     }
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
                                     sal_Bool    bConditional,
                                     const   String& rCond,
@@ -1386,9 +1360,7 @@ SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
     else
         aTRUETxt = rStr;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
                                     const String& rCond,
                                     const String& rTrue,
@@ -1399,9 +1371,7 @@ SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
 {
     bCanToggle  = aCond.Len() > 0;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwHiddenTxtField::Expand() const
 {
     // Type: !Hidden  -> immer anzeigen
@@ -1487,9 +1457,7 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
         }
     }
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwHiddenTxtField::GetCntnt(sal_Bool bName) const
 {
     if ( bName )
@@ -1510,9 +1478,7 @@ static char const cTmp[] = " : ";
     }
     return Expand();
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwHiddenTxtField::Copy() const
 {
     SwHiddenTxtField* pFld =
@@ -1536,9 +1502,7 @@ void SwHiddenTxtField::SetPar1(const String& rStr)
     aCond = rStr;
     bCanToggle = aCond.Len() > 0;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 const String& SwHiddenTxtField::GetPar1() const
 {
     return aCond;
@@ -1561,9 +1525,7 @@ void SwHiddenTxtField::SetPar2(const String& rStr)
     else
         aTRUETxt = rStr;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwHiddenTxtField::GetPar2() const
 {
     String aRet(aTRUETxt);
@@ -1574,16 +1536,12 @@ String SwHiddenTxtField::GetPar2() const
     }
     return aRet;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_uInt16 SwHiddenTxtField::GetSubType() const
 {
     return nSubType;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 bool SwHiddenTxtField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     const String* pOut = 0;
@@ -1614,9 +1572,7 @@ bool SwHiddenTxtField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         rAny <<= OUString( *pOut );
     return true;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 bool SwHiddenTxtField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -1704,16 +1660,12 @@ SwHiddenParaField::SwHiddenParaField(SwHiddenParaFieldType* pTyp, const String& 
 {
     bIsHidden = sal_False;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwHiddenParaField::Expand() const
 {
     return aEmptyStr;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwHiddenParaField::Copy() const
 {
     SwHiddenParaField* pFld = new SwHiddenParaField((SwHiddenParaFieldType*)GetTyp(), aCond);
@@ -1767,9 +1719,7 @@ void SwHiddenParaField::SetPar1(const String& rStr)
 {
     aCond = rStr;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 const String& SwHiddenParaField::GetPar1() const
 {
     return aCond;
@@ -1782,9 +1732,7 @@ const String& SwHiddenParaField::GetPar1() const
 SwPostItFieldType::SwPostItFieldType(SwDoc *pDoc)
     : SwFieldType( RES_POSTITFLD ),mpDoc(pDoc)
 {}
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwFieldType* SwPostItFieldType::Copy() const
 {
     return new SwPostItFieldType(mpDoc);
@@ -1811,9 +1759,7 @@ SwPostItField::~SwPostItField()
     }
 }
 
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwPostItField::Expand() const
 {
     return aEmptyStr;
@@ -1825,9 +1771,7 @@ String SwPostItField::GetDescription() const
     return SW_RES(STR_NOTE);
 }
 
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwPostItField::Copy() const
 {
     SwPostItField* pRet = new SwPostItField( (SwPostItFieldType*)GetTyp(), sAuthor,
@@ -1858,9 +1802,7 @@ void SwPostItField::SetPar2(const String& rStr)
 {
     sTxt = rStr;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwPostItField::GetPar2() const
 {
         return sTxt;
@@ -1995,17 +1937,13 @@ SwExtUserFieldType::SwExtUserFieldType()
     : SwFieldType( RES_EXTUSERFLD )
 {
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwFieldType* SwExtUserFieldType::Copy() const
 {
     SwExtUserFieldType* pTyp = new SwExtUserFieldType;
     return pTyp;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 ) const
 {
     String aRet;
@@ -2039,17 +1977,13 @@ String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 ) const
     }
     return aRet;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, sal_uInt16 nSubTyp, sal_uInt32 nFmt) :
     SwField(pTyp, nFmt), nType(nSubTyp)
 {
     aContent = ((SwExtUserFieldType*)GetTyp())->Expand(nType, GetFormat());
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwExtUserField::Expand() const
 {
     if (!IsFixed())
@@ -2057,9 +1991,7 @@ String SwExtUserField::Expand() const
 
     return aContent;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwExtUserField::Copy() const
 {
     SwExtUserField* pFld = new SwExtUserField((SwExtUserFieldType*)GetTyp(), nType, GetFormat());
@@ -2067,16 +1999,12 @@ SwField* SwExtUserField::Copy() const
 
     return pFld;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_uInt16 SwExtUserField::GetSubType() const
 {
     return nType;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwExtUserField::SetSubType(sal_uInt16 nSub)
 {
     nType = nSub;
@@ -2144,16 +2072,12 @@ SwRefPageSetFieldType::SwRefPageSetFieldType()
     : SwFieldType( RES_REFPAGESETFLD )
 {
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwFieldType* SwRefPageSetFieldType::Copy() const
 {
     return new SwRefPageSetFieldType;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 // ueberlagert, weil es nichts zum Updaten gibt!
 void SwRefPageSetFieldType::Modify( SfxPoolItem *, SfxPoolItem * )
 {
@@ -2168,30 +2092,22 @@ SwRefPageSetField::SwRefPageSetField( SwRefPageSetFieldType* pTyp,
     : SwField( pTyp ), nOffset( nOff ), bOn( bFlag )
 {
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwRefPageSetField::Expand() const
 {
     return aEmptyStr;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwRefPageSetField::Copy() const
 {
     return new SwRefPageSetField( (SwRefPageSetFieldType*)GetTyp(), nOffset, bOn );
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwRefPageSetField::GetPar2() const
 {
     return String::CreateFromInt32( GetOffset() );
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwRefPageSetField::SetPar2(const String& rStr)
 {
     SetOffset( (short) rStr.ToInt32() );
@@ -2236,18 +2152,14 @@ SwRefPageGetFieldType::SwRefPageGetFieldType( SwDoc* pDc )
     : SwFieldType( RES_REFPAGEGETFLD ), pDoc( pDc ), nNumberingType( SVX_NUM_ARABIC )
 {
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwFieldType* SwRefPageGetFieldType::Copy() const
 {
     SwRefPageGetFieldType* pNew = new SwRefPageGetFieldType( pDoc );
     pNew->nNumberingType = nNumberingType;
     return pNew;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwRefPageGetFieldType::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     // Update auf alle GetReferenz-Felder
@@ -2271,9 +2183,7 @@ void SwRefPageGetFieldType::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     // weiter an die Text-Felder, diese "Expandieren" den Text
     SwModify::Modify( pOld, pNew );
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
 {
     SwClientIter aIter( *pDoc->GetSysFldType( RES_REFPAGESETFLD));
@@ -2324,9 +2234,7 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
 
     return rTmpLst.Count();
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
                                         _SetGetExpFlds& rSetList )
 {
@@ -2384,16 +2292,12 @@ SwRefPageGetField::SwRefPageGetField( SwRefPageGetFieldType* pTyp,
     : SwField( pTyp, nFmt )
 {
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwRefPageGetField::Expand() const
 {
     return sTxt;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwRefPageGetField::Copy() const
 {
     SwRefPageGetField* pCpy = new SwRefPageGetField(
@@ -2401,9 +2305,7 @@ SwField* SwRefPageGetField::Copy() const
     pCpy->SetText( sTxt );
     return pCpy;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
                                         const SwTxtFld* pFld )
 {
@@ -2515,16 +2417,12 @@ SwJumpEditFieldType::SwJumpEditFieldType( SwDoc* pD )
     : SwFieldType( RES_JUMPEDITFLD ), pDoc( pD ), aDep( this, 0 )
 {
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwFieldType* SwJumpEditFieldType::Copy() const
 {
     return new SwJumpEditFieldType( pDoc );
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwCharFmt* SwJumpEditFieldType::GetCharFmt()
 {
     SwCharFmt* pFmt = pDoc->GetCharFmtFromPool( RES_POOLCHR_JUMPEDIT );
@@ -2535,59 +2433,45 @@ SwCharFmt* SwJumpEditFieldType::GetCharFmt()
 
     return pFmt;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwJumpEditField::SwJumpEditField( SwJumpEditFieldType* pTyp, sal_uInt32 nForm,
                                 const String& rTxt, const String& rHelp )
     : SwField( pTyp, nForm ), sTxt( rTxt ), sHelp( rHelp )
 {
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwJumpEditField::Expand() const
 {
     String sTmp( '<' );
     sTmp += sTxt;
     return sTmp += '>';
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwJumpEditField::Copy() const
 {
     return new SwJumpEditField( (SwJumpEditFieldType*)GetTyp(), GetFormat(),
                                 sTxt, sHelp );
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 // Platzhalter-Text
 
 const String& SwJumpEditField::GetPar1() const
 {
     return sTxt;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwJumpEditField::SetPar1(const String& rStr)
 {
     sTxt = rStr;
 }
 
 // HinweisText
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwJumpEditField::GetPar2() const
 {
     return sHelp;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwJumpEditField::SetPar2(const String& rStr)
 {
     sHelp = rStr;

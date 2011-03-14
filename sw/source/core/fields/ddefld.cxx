@@ -385,9 +385,7 @@ bool SwDDEFieldType::PutValue( const uno::Any& rVal, USHORT nWhichId )
     }
     return true;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwDDEField::SwDDEField( SwDDEFieldType* pInitType )
     : SwField(pInitType)
 {

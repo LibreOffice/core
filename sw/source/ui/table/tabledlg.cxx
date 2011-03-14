@@ -132,8 +132,7 @@ SwFormatTablePage::SwFormatTablePage( Window* pParent, const SfxItemSet& rSet ) 
     Init();
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void  SwFormatTablePage::Init()
 {
     aLeftMF.MetricField::SetMin(-999999);
@@ -208,8 +207,7 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
     return 0;
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
 {
     BOOL bRestore = TRUE,
@@ -294,8 +292,7 @@ IMPL_LINK( SwFormatTablePage, RightModifyHdl, MetricField *, EMPTYARG )
     return 0;
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 IMPL_LINK_INLINE_START( SwFormatTablePage, UpDownLoseFocusHdl, MetricField *, pEdit )
 {
     if( &aRightMF == pEdit)
@@ -407,16 +404,14 @@ void  SwFormatTablePage::ModifyHdl( Edit* pEdit )
     bModified = TRUE;
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 SfxTabPage*  SwFormatTablePage::Create( Window* pParent,
                                    const SfxItemSet& rAttrSet)
 {
     return new SwFormatTablePage( pParent, rAttrSet );
 }
 
-/*------------------------------------------------------------------------
--------------------------------------------------------------------------*/
+
 BOOL  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
 {
     // Testen, ob eins der Control noch den Focus hat
@@ -464,8 +459,7 @@ BOOL  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
     return bModified;
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void  SwFormatTablePage::Reset( const SfxItemSet& )
 {
     const SfxItemSet& rSet = GetItemSet();
@@ -614,8 +608,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
 
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 {
     OSL_ENSURE(pTblData, "table data not available?");
@@ -641,8 +634,7 @@ void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
     }
 
 }
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 {
     // os: VCL sorgt nicht dafuer, dass das aktive Control im
@@ -822,16 +814,14 @@ SwTableColumnPage::SwTableColumnPage( Window* pParent,
 {
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 SfxTabPage*   SwTableColumnPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwTableColumnPage( pParent, rAttrSet );
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void  SwTableColumnPage::Reset( const SfxItemSet& )
 {
     const SfxItemSet& rSet = GetItemSet();
@@ -878,8 +868,7 @@ void  SwTableColumnPage::Reset( const SfxItemSet& )
 
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void  SwTableColumnPage::Init(BOOL bWeb)
 {
     FieldUnit aMetric = ::GetDfltMetric(bWeb);
@@ -906,8 +895,7 @@ void  SwTableColumnPage::Init(BOOL bWeb)
     aProportionalCB.SetClickHdl( aLk );
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
 {
     //Anzeigefenster verschieben
@@ -940,8 +928,7 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
     return 0;
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 IMPL_LINK_INLINE_START( SwTableColumnPage, UpHdl, PercentField *, pEdit )
 {
     bModified = TRUE;
@@ -950,8 +937,7 @@ IMPL_LINK_INLINE_START( SwTableColumnPage, UpHdl, PercentField *, pEdit )
 };
 IMPL_LINK_INLINE_END( SwTableColumnPage, UpHdl, PercentField *, pEdit )
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 IMPL_LINK_INLINE_START( SwTableColumnPage, DownHdl, PercentField *, pEdit )
 {
     bModified = TRUE;
@@ -960,8 +946,7 @@ IMPL_LINK_INLINE_START( SwTableColumnPage, DownHdl, PercentField *, pEdit )
 };
 IMPL_LINK_INLINE_END( SwTableColumnPage, DownHdl, PercentField *, pEdit )
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 IMPL_LINK_INLINE_START( SwTableColumnPage, LoseFocusHdl, PercentField *, pEdit )
 {
     if(pEdit->IsModified())
@@ -973,8 +958,7 @@ IMPL_LINK_INLINE_START( SwTableColumnPage, LoseFocusHdl, PercentField *, pEdit )
 };
 IMPL_LINK_INLINE_END( SwTableColumnPage, LoseFocusHdl, PercentField *, pEdit )
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
 {
     BOOL bCheck = pBox->IsChecked();
@@ -987,8 +971,7 @@ IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
     return 0;
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 BOOL  SwTableColumnPage::FillItemSet( SfxItemSet& )
 {
     for( USHORT i = 0; i < MET_FIELDS; i++ )
@@ -1007,8 +990,7 @@ BOOL  SwTableColumnPage::FillItemSet( SfxItemSet& )
     return bModified;
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void   SwTableColumnPage::ModifyHdl( PercentField* pEdit )
 {
         USHORT nAktPos;
@@ -1024,8 +1006,7 @@ void   SwTableColumnPage::ModifyHdl( PercentField* pEdit )
         UpdateCols( nAktPos );
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void   SwTableColumnPage::UpdateCols( USHORT nAktPos )
 {
     SwTwips nSum = 0;
@@ -1135,8 +1116,7 @@ void   SwTableColumnPage::UpdateCols( USHORT nAktPos )
 
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
 {
     bPercentMode = pTblData->GetWidthPercent() != 0;
@@ -1180,8 +1160,7 @@ void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
 
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 int  SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
@@ -1244,8 +1223,7 @@ int  SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
     return TRUE;
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 SwTwips  SwTableColumnPage::GetVisibleWidth(USHORT nPos)
 {
     USHORT i=0;
@@ -1264,8 +1242,7 @@ SwTwips  SwTableColumnPage::GetVisibleWidth(USHORT nPos)
     return nReturn;
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void SwTableColumnPage::SetVisibleWidth(USHORT nPos, SwTwips nNewWidth)
 {
     USHORT i=0;
@@ -1282,8 +1259,7 @@ void SwTableColumnPage::SetVisibleWidth(USHORT nPos, SwTwips nNewWidth)
 
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool& ,
                     const SfxItemSet* pItemSet, SwWrtShell* pSh ) :
         SfxTabDialog(pParent, SW_RES(DLG_FORMAT_TABLE), pItemSet,0),
@@ -1301,8 +1277,7 @@ SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool& ,
 }
 
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void  SwTableTabDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));

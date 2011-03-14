@@ -1095,9 +1095,7 @@ uno::Reference< XSpellAlternatives >
     return xSpellAlt;
 }
 
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 
 bool SwEditShell::GetGrammarCorrection(
     linguistic2::ProofreadingResult /*out*/ &rResult,    // the complete result
