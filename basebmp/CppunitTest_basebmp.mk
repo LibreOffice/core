@@ -39,16 +39,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,basebmp_test, \
 	basebmp/test/tools \
 ))
 
-# TODO
-# SunStudio 12 (-m64 and -m32 modes): three test cases of the unit tests fail
-# if compiled with default -xalias_level (and optimization level -xO3)
-#.IF "$(OS)"=="SOLARIS"
-# For Sun Studio 8 this switch does not work: compilation fails on bitmapdevice.cxx
-#.IF "$(CCNUMVER)"!="00050005"
-#CDEFS+=-xalias_level=compatible
-#.ENDIF
-#.ENDIF
-
 $(eval $(call gb_CppunitTest_add_linked_libs,basebmp_test, \
 	basebmp \
 	sal \

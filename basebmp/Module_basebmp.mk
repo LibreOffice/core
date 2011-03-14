@@ -36,5 +36,4 @@ $(eval $(call gb_Module_add_check_targets,basebmp,\
 	CppunitTest_basebmp \
 ))
 
-
 # vim: set noet sw=4 ts=4:

@@ -41,8 +41,6 @@ $(eval $(call gb_Library_set_defs,basebmp,\
 	-DBASEBMP_DLLIMPLEMENTATION \
 ))
 
-# add libraries to be linked to basebmp; again these names need to be given as
-# specified in Repository.mk
 $(eval $(call gb_Library_add_linked_libs,basebmp,\
     sal \
     basegfx \
@@ -50,12 +48,19 @@ $(eval $(call gb_Library_add_linked_libs,basebmp,\
     $(gb_STDLIBS) \
 ))
 
-# add all source files that shall be compiled with exceptions enabled
-# the name is relative to $(SRCROOT) and must not contain an extension
+ifeq ($(OS),SOLARIS)
+$(eval $(call gb_Library_add_cxxobjects,basebmp, \
+	basebmp/source/bitmapdevice \
+	basebmp/source/debug \
+	basebmp/source/polypolygonrenderer \
+    , $(gb_COMPILEROPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) -xalias_level=compatible \
+))
+else
 $(eval $(call gb_Library_add_exception_objects,basebmp,\
 	basebmp/source/bitmapdevice \
 	basebmp/source/debug \
 	basebmp/source/polypolygonrenderer \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:
