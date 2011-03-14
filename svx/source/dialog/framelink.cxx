@@ -1366,19 +1366,45 @@ bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
 // Drawing functions
 // ============================================================================
 
-double lcl_GetExtent( const Style& rSide, const Style& rOpposite )
+double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOpposite,
+                      long nAngleSide = 9000, long nAngleOpposite = 9000 )
 {
-    double nExtent = 0.0;
+    Style aOtherBorder = const_cast< Style& >( rSide );
+    long nOtherAngle = nAngleSide;
+    if ( rSide.GetWidth() == 0 && rOpposite.GetWidth() > 0 )
+    {
+        nOtherAngle = nAngleOpposite;
+        aOtherBorder = const_cast< Style& >( rOpposite );
+    }
+    else if ( rSide.GetWidth() == 0 && rOpposite.GetWidth() == 0 )
+    {
+        if ( ( nAngleOpposite % 18000 ) == 0 )
+            nOtherAngle = nAngleSide;
+        else if ( ( nAngleSide % 18000 ) == 0 )
+            nOtherAngle = nAngleOpposite;
+    }
 
-    if ( rSide.Prim() + rSide.Secn() > 0 )
-        nExtent = - rSide.GetWidth( ) / 2.0;
-    else
-        nExtent = rOpposite.GetWidth() / 2.0;
+    // Let's assume the border we are drawing is horizontal and compute all the angles / distances from this
+    basegfx::B2DVector aBaseVector( 1.0, 0.0 );
+    basegfx::B2DPoint aBasePoint( 0.0, static_cast<double>( rBorder.GetWidth() / 2 ) );
 
-    return nExtent;
+    basegfx::B2DHomMatrix aRotation;
+    aRotation.rotate( nOtherAngle * F_PI18000 );
+
+    basegfx::B2DVector aOtherVector = aRotation * aBaseVector;
+    // Compute a line shifted by half the width of the other border
+    basegfx::B2DVector aPerpendicular = basegfx::getNormalizedPerpendicular( aOtherVector );
+    basegfx::B2DPoint aOtherPoint = basegfx::B2DPoint() + aPerpendicular * aOtherBorder.GetWidth() / 2;
+
+    // Find the cut between the two lines
+    double nCut = 0.0;
+    basegfx::tools::findCut(
+            aBasePoint, aBaseVector, aOtherPoint, aOtherVector,
+            CUTFLAG_ALL, &nCut );
+    return nCut;
 }
 
-basegfx::B2DPoint lcl_PointToB2DPoint( Point aPoint )
+basegfx::B2DPoint lcl_PointToB2DPoint( const Point aPoint )
 {
     return basegfx::B2DPoint( aPoint.getX(), aPoint.getY() );
 }
@@ -1412,11 +1438,10 @@ drawinglayer::primitive2d::Primitive2DSequence CreateClippedBorderPrimitives (
 
 drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
         const Point& rLPos, const Point& rRPos, const Style& rBorder,
-        const DiagStyle& rLFromTR, const Style& rLFromT, const Style& rLFromL, const Style& rLFromB, const DiagStyle& rLFromBR,
-        const DiagStyle& rRFromTL, const Style& rRFromT, const Style& rRFromR, const Style& rRFromB, const DiagStyle& rRFromBL,
-        const Color* pForceColor )
+        const DiagStyle& /*rLFromTR*/, const Style& rLFromT, const Style& /*rLFromL*/, const Style& rLFromB, const DiagStyle& /*rLFromBR*/,
+        const DiagStyle& /*rRFromTL*/, const Style& rRFromT, const Style& /*rRFromR*/, const Style& rRFromB, const DiagStyle& /*rRFromBL*/,
+        const Color* /*pForceColor*/, const long& nRotateT, const long& nRotateB )
 {
-    const DiagStyle aNoStyle;
     drawinglayer::primitive2d::Primitive2DSequence aSequence( 1 );
 
     basegfx::B2DPoint aStart( rLPos.getX(), rLPos.getY() );
@@ -1427,10 +1452,10 @@ drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
         rBorder.Prim(),
         rBorder.Dist(),
         rBorder.Secn(),
-        lcl_GetExtent( rLFromT, rLFromB ),
-        lcl_GetExtent( rRFromT, rRFromB ),
-        lcl_GetExtent( rLFromB, rLFromT ),
-        lcl_GetExtent( rRFromB, rRFromT ),
+        lcl_GetExtent( rBorder, rLFromT, rLFromB, nRotateT, - nRotateB ),
+        lcl_GetExtent( rBorder, rRFromT, rRFromB, 18000 - nRotateT, nRotateB - 18000 ),
+        lcl_GetExtent( rBorder, rLFromB, rLFromT, nRotateB, - nRotateT ),
+        lcl_GetExtent( rBorder, rRFromB, rRFromT, 18000 - nRotateB, nRotateT - 18000 ),
         rBorder.GetColorSecn().getBColor(),
         rBorder.GetColorPrim().getBColor(),
         rBorder.GetColorGap().getBColor(),
@@ -1443,24 +1468,12 @@ drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
         const Point& rLPos, const Point& rRPos, const Style& rBorder,
         const Style& rLFromT, const Style& rLFromL, const Style& rLFromB,
         const Style& rRFromT, const Style& rRFromR, const Style& rRFromB,
-        const Color* pForceColor )
+        const Color* pForceColor, const long& nRotateT, const long& nRotateB )
 {
-    const DiagStyle noDiagStyle;
     return CreateBorderPrimitives( rLPos, rRPos, rBorder,
-            noDiagStyle, rLFromT, rLFromL, rLFromB, noDiagStyle,
-            noDiagStyle, rRFromT, rRFromR, rRFromB, noDiagStyle,
-            pForceColor );
-}
-
-drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
-        const Point& rLPos, const Point& rRPos,
-        const Style& rBorder, const Color* pForceColor )
-{
-    const Style noStyle;
-    return CreateBorderPrimitives( rLPos, rRPos, rBorder,
-            noStyle, noStyle, noStyle,
-            noStyle, noStyle, noStyle,
-            pForceColor );
+            DiagStyle(), rLFromT, rLFromL, rLFromB, DiagStyle(),
+            DiagStyle(), rRFromT, rRFromR, rRFromB, DiagStyle(),
+            pForceColor, nRotateT, nRotateB );
 }
 
 void DrawHorFrameBorder( OutputDevice& rDev,
@@ -1539,48 +1552,6 @@ void DrawVerFrameBorder( OutputDevice& rDev,
 {
     if( rBorder.Prim() )
         lclDrawVerFrameBorder( rDev, rTPos, rBPos, rBorder, BorderResult(), pForceColor );
-}
-
-// ----------------------------------------------------------------------------
-
-void DrawVerFrameBorderSlanted( OutputDevice& rDev,
-        const Point& rTPos, const Point& rBPos, const Style& rBorder, const Color* pForceColor )
-{
-    DBG_ASSERT( rTPos.Y() < rBPos.Y(), "svx::frame::DrawVerFrameBorderSlanted - wrong order of line ends" );
-    if( rBorder.Prim() && (rTPos.Y() < rBPos.Y()) )
-    {
-        if( rTPos.X() == rBPos.X() )
-        {
-            DrawVerFrameBorder( rDev, rTPos, rBPos, rBorder, pForceColor );
-        }
-        else
-        {
-            const LineEndResult aRes;
-
-            Style aScaled( rBorder );
-            aScaled.ScaleSelf( 1.0 / cos( GetVerDiagAngle( rTPos, rBPos ) ) );
-
-            lclSetColorToOutDev( rDev, aScaled.GetColorPrim(), pForceColor );
-            lclDrawVerLine( rDev, rTPos, aRes, rBPos, aRes,
-                lclGetBeg( aScaled ), lclGetPrimEnd( aScaled ), aScaled.Type() );
-            rDev.Pop(); // colors
-            if( aScaled.Secn() )
-            {
-                if ( aScaled.UseGapColor( ) )
-                {
-                    lclSetColorToOutDev( rDev, aScaled.GetColorGap(), pForceColor );
-                    lclDrawVerLine( rDev, rTPos, aRes, rBPos, aRes,
-                        lclGetDistBeg( aScaled ), lclGetDistEnd( aScaled ), aScaled.Type() );
-                    rDev.Pop(); // colors
-                }
-
-                lclSetColorToOutDev( rDev, aScaled.GetColorSecn(), pForceColor );
-                lclDrawVerLine( rDev, rTPos, aRes, rBPos, aRes,
-                    lclGetSecnBeg( aScaled ), lclGetEnd( aScaled ), aScaled.Type() );
-                rDev.Pop(); // colors
-            }
-        }
-    }
 }
 
 // ============================================================================

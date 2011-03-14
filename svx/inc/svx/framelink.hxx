@@ -513,14 +513,9 @@ SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimiti
     const Style&        rRFromB,        /// Vertical frame border from bottom to right end of rBorder.
     const DiagStyle&    rRFromBL,       /// Diagonal frame border from bottom-left to right end of rBorder.
 
-    const Color*        pForceColor = 0 /// If specified, overrides frame border color.
-);
-
-SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
-    const Point&        rLPos,          /// Reference point for left end of the processed frame border.
-    const Point&        rRPos,          /// Reference point for right end of the processed frame border.
-    const Style&        rBorder,        /// Style of the frame border to draw.
-    const Color*        pForceColor = 0 /// If specified, overrides frame border color.
+    const Color*        pForceColor = 0,/// If specified, overrides frame border color.
+    const long&         rRotationT = 9000, /// Angle of the top slanted frames in 100th of degree
+    const long&         rRotationB = 9000  /// Angle of the bottom slanted frames in 100th of degree
 );
 
 SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
@@ -536,7 +531,9 @@ SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimiti
     const Style&        rRFromR,        /// Horizontal frame border from right to right end of rBorder.
     const Style&        rRFromB,        /// Vertical frame border from bottom to right end of rBorder.
 
-    const Color*        pForceColor = 0 /// If specified, overrides frame border color.
+    const Color*        pForceColor = 0,/// If specified, overrides frame border color.
+    const long&         rRotationT = 9000, /// Angle of the top slanted frame in 100th of degrees
+    const long&         rRotationB = 9000  /// Angle of the bottom slanted frame in 100th of degrees
 );
 
 SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateClippedBorderPrimitives (
@@ -756,25 +753,6 @@ void SVX_DLLPUBLIC DrawVerFrameBorder(
     The function preserves all settings of the passed output device.
  */
 void SVX_DLLPUBLIC DrawVerFrameBorder(
-    OutputDevice&       rDev,           /// The output device used to draw the frame border.
-    const Point&        rTPos,          /// Reference point for top end of the processed frame border.
-    const Point&        rBPos,          /// Reference point for bottom end of the processed frame border.
-    const Style&        rBorder,        /// Style of the frame border to draw.
-    const Color*        pForceColor = 0 /// If specified, overrides frame border color.
-);
-
-// ----------------------------------------------------------------------------
-
-/** Draws a vertical slanted frame border without connected frame styles.
-
-    This is an extended version of the simple DrawVerFrameBorder() function
-    described above. It accepts start and end reference points with different
-    X coordinates. See description above for additional details about the
-    parameters (except the restriction on the reference points).
-
-    The function preserves all settings of the passed output device.
- */
-void SVX_DLLPUBLIC DrawVerFrameBorderSlanted(
     OutputDevice&       rDev,           /// The output device used to draw the frame border.
     const Point&        rTPos,          /// Reference point for top end of the processed frame border.
     const Point&        rBPos,          /// Reference point for bottom end of the processed frame border.

@@ -57,12 +57,22 @@ namespace drawinglayer
             // Get the points
             const basegfx::B2DVector aLeftOff(aPerpendicular * (-0.5 * (getWidth())));
             const basegfx::B2DVector aRightOff(aPerpendicular * (0.5 * (getWidth())));
-            clipPolygon.append( basegfx::B2DPoint(getStart() + aLeftOff - (getExtendLeftStart() * aVector)) );
+
+            const basegfx::B2DVector aSLVector( aLeftOff - ( getExtendLeftStart() * aVector ) );
+            clipPolygon.append( basegfx::B2DPoint( getStart() + aSLVector * 2.0 ) );
+
             clipPolygon.append( getStart( ) );
-            clipPolygon.append( basegfx::B2DPoint(getStart() + aRightOff - (getExtendRightStart() * aVector)) );
-            clipPolygon.append( basegfx::B2DPoint(getEnd() + aRightOff + (getExtendRightEnd() * aVector)) );
+
+            const basegfx::B2DVector aSRVector( aRightOff - ( getExtendRightStart() * aVector ) );
+            clipPolygon.append( basegfx::B2DPoint( getStart() + aSRVector * 2.0 ) );
+
+            const basegfx::B2DVector aERVector( aRightOff + ( getExtendRightEnd() * aVector ) );
+            clipPolygon.append( basegfx::B2DPoint( getEnd() + aERVector * 2.0 ) );
+
             clipPolygon.append( getEnd( ) );
-            clipPolygon.append( basegfx::B2DPoint(getEnd() + aLeftOff + (getExtendLeftEnd() * aVector)) );
+
+            const basegfx::B2DVector aELVector( aLeftOff + ( getExtendLeftEnd() * aVector ) );
+            clipPolygon.append( basegfx::B2DPoint( getEnd() + aELVector * 2.0 ) );
 
             clipPolygon.setClosed( true );
 
@@ -198,12 +208,9 @@ namespace drawinglayer
                 {
                     // single line, create geometry
                     basegfx::B2DPolygon aPolygon;
-                    const double fMaxExtStart = std::max( getExtendLeftStart(),
-                            std::max( getExtendRightStart(), 0.0 ) );
-                    const double fMaxExtEnd = std::max( getExtendLeftEnd(),
-                            std::max( getExtendRightEnd(), 0.0 ) );
-                    const basegfx::B2DPoint aTmpStart(getStart() - (fMaxExtStart * aVector));
-                    const basegfx::B2DPoint aTmpEnd(getEnd() + (fMaxExtEnd * aVector));
+                    const double fExt = getWidth( );  // Extend a lot: it'll be clipped after
+                    const basegfx::B2DPoint aTmpStart(getStart() - (fExt * aVector));
+                    const basegfx::B2DPoint aTmpEnd(getEnd() + (fExt * aVector));
                     xRetval.realloc(1);
 
                     // Get which is the line to show

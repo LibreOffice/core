@@ -1038,8 +1038,6 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
                 {
                     size_t _nFirstCol = mxImpl->GetMergedFirstCol( nCol, nRow );
                     size_t _nFirstRow = mxImpl->GetMergedFirstRow( nCol, nRow );
-                    size_t _nLastCol = mxImpl->GetMergedLastCol( nCol, nRow );
-                    size_t _nLastRow = mxImpl->GetMergedLastRow( nCol, nRow );
 
                     const Style aTlbrStyle = GetCellStyleTLBR( _nFirstCol, _nFirstRow, true );
                     if ( aTlbrStyle.GetWidth( ) )
@@ -1214,6 +1212,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
                 aStartTFromBL, *pStartTFromL, *pStartTFromT, *pStartTFromR, aStartTFromBR, pForceColor ) );
     }
 }
+
 void Array::DrawRange( OutputDevice& rDev,
         size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow,
         const Color* pForceColor ) const
