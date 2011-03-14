@@ -471,6 +471,20 @@ published constants NumberingType
       */
     const short CHARS_CYRILLIC_LOWER_LETTER_N_SR = 51;
 
+    //-------------------------------------------------------------------------
+    /** Numbering in Greek alphabet upper case letters
+
+        @since OOo 3.3
+     */
+    const short CHARS_GREEK_UPPER_LETTER = 52;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Greek alphabet lower case letters
+
+        @since OOo 3.3
+     */
+    const short CHARS_GREEK_LOWER_LETTER = 53;
+
 };
 
 //=============================================================================
