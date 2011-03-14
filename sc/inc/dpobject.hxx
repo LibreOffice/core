@@ -117,6 +117,7 @@ private:
     SC_DLLPRIVATE void              CreateOutput();
     sal_Bool                    bRefresh;
     long                        mnCacheId;
+    bool                        mbCreatingTableData;
 
 public:
     // Wang Xu Ming -- 2009-8-17
@@ -156,7 +157,7 @@ public:
     void                SetHeaderLayout(bool bUseGrid);
     bool                GetHeaderLayout() const;
 
-    void                SetSheetDesc(const ScSheetSourceDesc& rDesc);
+    void                SetSheetDesc(const ScSheetSourceDesc& rDesc, bool bFromRefUpdate = false);
     void                SetImportDesc(const ScImportSourceDesc& rDesc);
     void                SetServiceData(const ScDPServiceDesc& rDesc);
 
