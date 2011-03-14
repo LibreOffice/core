@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,42 +25,62 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-PRJNAME=desktop
-TARGET=guiloader
-LIBTARGET=NO
-TARGETTYPE=GUI
-UWINAPILIB=
+PRJ=../..
+PRJNAME=sfx2
+TARGET=qa_cppunit
+
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
-# --- Files --------------------------------------------------------
+#building with stlport, but cppunit was not built with stlport
+.IF "$(USE_SYSTEM_STL)"!="YES"
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CFLAGSCXX+=-DADAPT_EXT_STL
+.ENDIF
+.ENDIF
 
-APP1TARGET=guiloader
-APP1NOSAL=TRUE
-APP1ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
-APP1OBJS=\
-    $(OBJ)$/extendloaderenvironment.obj \
-    $(OBJ)$/genericloader.obj \
-    $(SOLARLIBDIR)$/pathutils-obj.obj
-STDLIB1=$(SHLWAPILIB)
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+DLLPRE = # no leading "lib" on .so files
 
-.IF "$(LINK_SO)"=="TRUE"
-APP2TARGET=so$/guiloader
-APP2NOSAL=TRUE
-APP2ICON=$(SOLARRESDIR)$/icons/so9_main_app.ico
-APP2OBJS=\
-    $(OBJ)$/extendloaderenvironment.obj \
-    $(OBJ)$/genericloader.obj \
-    $(SOLARLIBDIR)$/pathutils-obj.obj
-STDLIB2=$(SHLWAPILIB)
-.ENDIF # "$(LINK_SO)"=="TRUE"
+# --- Libs ---------------------------------------------------------
+
+SHL1OBJS=  \
+    $(SLO)/test_metadatable.obj \
+
+
+SHL1STDLIBS= \
+     $(CPPUNITLIB) \
+     $(SALLIB) \
+     $(CPPULIB) \
+     $(CPPUHELPERLIB) \
+     $(VCLLIB) \
+     $(SFXLIB) \
+
+
+SHL1TARGET= test_metadatable
+SHL1RPATH = NONE
+SHL1IMPLIB= i$(SHL1TARGET)
+# SHL1DEF= $(MISC)/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+# DEF1EXPORTFILE= export.exp
+SHL1VERSIONMAP= version.map
+
+# --- All object files ---------------------------------------------
+
+SLOFILES= \
+    $(SHL1OBJS) \
+
 
 # --- Targets ------------------------------------------------------
 
-
 .INCLUDE :  target.mk
+.INCLUDE : _cppunit.mk
 
+.END
