@@ -967,7 +967,7 @@ $XINC                 = PathFormat('@XINC@'); # X11 includes
 
 # Mac OS X/Darwin only variables.
 if ( $platform =~ m/darwin/ )
-{  $FRAMEWORKSHOME       = $ds."System".$ds."Library".$ds."Frameworks";
+{  $FRAMEWORKSHOME       = $ds."Developer".$ds."SDKs".$ds."MacOSX10.4u.sdk".$ds."System".$ds."Library".$ds."Frameworks";
    if ( $XLIB eq "no_x_libraries" ) {
       $GUIBASE  = "aqua";
    } else {
@@ -1612,6 +1612,7 @@ ToFile( "EXTERNAL_WARNINGS_NOT_ERRORS", "TRUE",  "e" );
 ToFile( "PRODUCT",           "@PRODUCT@",        "e" );
 ToFile( "PROFULLSWITCH",     "@PROFULLSWITCH@",  "e" );
 ToFile( "PROEXT",            $PROEXT,            "e" );
+ToFile( "VALGRIND_CFLAGS",   "@VALGRIND_CFLAGS@",  "e" );
 ToFile( "UNIXWRAPPERNAME",   "@UNIXWRAPPERNAME@","e" );
 ToFile( "BUILD_MOZAB",       "@BUILD_MOZAB@",    "e" );
 ToFile( "PREBUILD_MOZAB",    $PREBUILD_MOZAB,    "e" );
