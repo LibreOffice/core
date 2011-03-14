@@ -3229,9 +3229,7 @@ const RulerBorder*  Ruler::GetBorders() const { return mpData->pBorders; }
 USHORT              Ruler::GetIndentCount() const { return mpData->nIndents; }
 const RulerIndent*  Ruler::GetIndents() const { return mpData->pIndents; }
 
-/* ---------------------------------------------------
- *
- * ---------------------------------------------------*/
+
 void Ruler::DrawTicks()
 {
     mbFormat = TRUE;
