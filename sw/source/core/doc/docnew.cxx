@@ -1092,7 +1092,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     return xRetShell;
 }
 
-/*-- 08.05.2009 10:52:40---------------------------------------------------
+/*-------------------------------------------------------------------------
     copy document content - code from SwFEShell::Paste( SwDoc* , BOOL  )
   -----------------------------------------------------------------------*/
 void SwDoc::Paste( const SwDoc& rSource )

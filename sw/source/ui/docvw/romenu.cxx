@@ -275,7 +275,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
     Execute(pWin, nId);
 }
 
-/*-- 17.03.2004 13:06:18---------------------------------------------------
+/*-------------------------------------------------------------------------
     execute the resulting ID only - necessary to support XContextMenuInterception
   -----------------------------------------------------------------------*/
 void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )

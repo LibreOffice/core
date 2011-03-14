@@ -1367,7 +1367,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     return xRet;
 }
 
-/*-- 08.05.2006 13:28:26---------------------------------------------------
+/*-------------------------------------------------------------------------
     Append text portions at the end of the last paragraph of the text
     interface. Support of import filters.
   -----------------------------------------------------------------------*/
@@ -1473,7 +1473,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     return xRet;
 }
 
-/*-- 11.05.2006 15:46:26---------------------------------------------------
+/*-------------------------------------------------------------------------
     enable appending text contents like graphic objects, shapes and so on
     to support import filters
   -----------------------------------------------------------------------*/
@@ -1760,7 +1760,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     return xRet;
 }
 
-/*-- 11.05.2006 15:46:26---------------------------------------------------
+/*-------------------------------------------------------------------------
     Move previously imported paragraphs into a new text table.
   -----------------------------------------------------------------------*/
 struct VerticallyMergedCell

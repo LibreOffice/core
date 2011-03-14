@@ -1241,7 +1241,7 @@ bool SwEditShell::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
     EndAction();
     return bRet;
 }
-/*-- 08.09.2008 09:35:19---------------------------------------------------
+/*-------------------------------------------------------------------------
     make SpellIter start with the current sentence when called next time
   -----------------------------------------------------------------------*/
 void SwEditShell::PutSpellingToSentenceStart()
@@ -1428,7 +1428,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         EndAction();
     }
 }
-/*-- 02.02.2005 10:46:45---------------------------------------------------
+/*-------------------------------------------------------------------------
     collect all deleted redlines of the current text node beginning at the
     start of the cursor position
   -----------------------------------------------------------------------*/
@@ -1468,7 +1468,7 @@ SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell* pSh)
     }
     return aRedlines;
 }
-/*-- 02.02.2005 11:06:12---------------------------------------------------
+/*-------------------------------------------------------------------------
     remove the redline positions after the current selection
   -----------------------------------------------------------------------*/
 void lcl_CutRedlines( SpellContentPositions& aDeletedRedlines, SwEditShell* pSh )
@@ -1728,7 +1728,7 @@ LanguageType lcl_GetLanguage(SwEditShell& rSh)
     const SvxLanguageItem& rLang = static_cast<const SvxLanguageItem& >(aSet.Get(nLangWhichId));
     return rLang.GetLanguage();
 }
-/*-- 08.10.2003 08:53:27---------------------------------------------------
+/*-------------------------------------------------------------------------
     create a text portion at the given position
   -----------------------------------------------------------------------*/
 void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > xAlt,

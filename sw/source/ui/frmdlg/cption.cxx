@@ -598,7 +598,7 @@ long SwCaptionDialog::CategoryBox::PreNotify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-/*-- 01.11.2007 10:45:51---------------------------------------------------
+/*-------------------------------------------------------------------------
     //#i61007# order of captions
   -----------------------------------------------------------------------*/
 void lcl_MoveH( Window& rWin, sal_Int32 nMove )

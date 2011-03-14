@@ -767,7 +767,7 @@ BOOL SwDrawBaseShell::Disable(SfxItemSet& rSet, USHORT nWhich)
     return bDisable;
 }
 
-/*-- 09.03.2004 13:15:03---------------------------------------------------
+/*-------------------------------------------------------------------------
     Validate of drawing positions
   -----------------------------------------------------------------------*/
 IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation )

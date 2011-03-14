@@ -1111,7 +1111,7 @@ void SwFEShell::SetRowsToRepeat( USHORT nSet )
         EndAllActionAndCall();
     }
 }
-/*-- 30.06.2004 08:46:35---------------------------------------------------
+/*-------------------------------------------------------------------------
     returns the number of rows consecutively selected from top
   -----------------------------------------------------------------------*/
 USHORT lcl_GetRowNumber( const SwPosition& rPos )

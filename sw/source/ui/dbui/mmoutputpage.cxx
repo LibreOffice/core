@@ -991,7 +991,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendAsHdl_Impl, PushButton*, pButton)
     return 0;
 }
 
-/*-- 21.05.2004 12:03:25---------------------------------------------------
+/*-------------------------------------------------------------------------
     Send documents as e-mail
   -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
