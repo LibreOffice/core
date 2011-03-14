@@ -158,7 +158,7 @@ my %msvc_2010 = (
 
 sub find_msvs()
 {
-    my @ms_versions = ( \%msvs_2008, \%msvs_express_2008, \%msvs_2010 );
+    my @ms_versions = ( \%msvs_2010, \%msvs_2008, \%msvs_express_2008 );
 
     for $ver (@ms_versions)
     {
@@ -173,7 +173,7 @@ sub find_msvs()
 
 sub find_msvc()
 {
-    my @ms_versions = ( \%msvc_2008, \%msvc_express_2008, \%msvc_2010 );
+    my @ms_versions = ( \%msvc_2010, \%msvc_2008, \%msvc_express_2008 );
 
     for $ver (@ms_versions)
     {
