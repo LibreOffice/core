@@ -100,7 +100,8 @@ public:
 
                     // creates a new cell for use with PutCell
     ScBaseCell*     InterpretEnglishString( const ScAddress& rPos, const String& rText,
-                        const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar );
+                        const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar,
+                        short* pRetFormatType = NULL );
 
     bool            ShowNote( const ScAddress& rPos, bool bShow = true );
     inline bool     HideNote( const ScAddress& rPos ) { return ShowNote( rPos, false ); }

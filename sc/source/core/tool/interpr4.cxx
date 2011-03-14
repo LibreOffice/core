@@ -3287,8 +3287,6 @@ void ScInterpreter::ScMacro()
             PushString( refRes->GetString() );
     }
 
-    pSfxApp->LeaveBasicCall();
-
     if (bVolatileMacro && meVolaileType == NOT_VOLATILE)
         meVolaileType = VOLATILE_MACRO;
 }

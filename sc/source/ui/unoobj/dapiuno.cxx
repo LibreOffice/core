@@ -1400,9 +1400,9 @@ void ScDataPilotTableObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         const ScUpdateRefHint& rRef = static_cast< const ScUpdateRefHint& >( rHint );
         if ( aRanges.UpdateReference( rRef.GetMode(), GetDocShell()->GetDocument(), rRef.GetRange(),
                  rRef.GetDx(), rRef.GetDy(), rRef.GetDz() ) &&
-             aRanges.Count() == 1 )
+             aRanges.size() == 1 )
         {
-            const ScRange* pRange = aRanges.GetObject( 0 );
+            const ScRange* pRange = aRanges.front();
             if ( pRange )
             {
                 nTab = pRange->aStart.Tab();

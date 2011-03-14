@@ -184,21 +184,6 @@ SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettings, "ScSpreadsheetSettings", SCSPREAD
 
 //------------------------------------------------------------------------
 
-static void lcl_WriteInfo( registry::XRegistryKey* pRegistryKey,
-                        const rtl::OUString& rImplementationName,
-                        const uno::Sequence< rtl::OUString >& rServices )
-                    throw( registry::InvalidRegistryException )
-{
-    rtl::OUString aImpl(RTL_CONSTASCII_USTRINGPARAM( "/" ));
-    aImpl += rImplementationName;
-    aImpl += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ));
-    uno::Reference<registry::XRegistryKey> xNewKey(pRegistryKey->createKey(aImpl));
-
-    const rtl::OUString* pArray = rServices.getConstArray();
-    for( sal_Int32 i = 0; i < rServices.getLength(); i++ )
-        xNewKey->createKey( pArray[i]);
-}
-
 extern "C" {
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(

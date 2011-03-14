@@ -616,7 +616,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             pLotus2,
                             pQPro
                             };
-                        const UINT16 nFilterCount = SAL_N_ELEMENTS(ppFilterPatterns);
+                        const sal_uInt16 nFilterCount = SAL_N_ELEMENTS(ppFilterPatterns);
 
                         static const sal_Char* const pFilterName[] =     // zugehoerige Filter
                             {

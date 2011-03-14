@@ -481,7 +481,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScSheetLinksObj::createEnumerat
 sal_Int32 SAL_CALL ScSheetLinksObj::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    INT32 nCount = 0;
+    sal_Int32 nCount = 0;
     if (pDocShell)
     {
         ScStrCollection aNames; // um doppelte wegzulassen
@@ -1020,7 +1020,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAreaLinksObj::createEnumerati
 sal_Int32 SAL_CALL ScAreaLinksObj::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    INT32 nAreaCount = 0;
+    sal_Int32 nAreaCount = 0;
     if (pDocShell)
     {
         sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
@@ -1346,7 +1346,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScDDELinksObj::createEnumeratio
 sal_Int32 SAL_CALL ScDDELinksObj::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    INT32 nAreaCount = 0;
+    sal_Int32 nAreaCount = 0;
     if (pDocShell)
         nAreaCount = pDocShell->GetDocument()->GetDdeLinkCount();
     return nAreaCount;

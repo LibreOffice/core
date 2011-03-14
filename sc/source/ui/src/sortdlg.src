@@ -204,6 +204,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     CheckBox BTN_SORT_USER
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SORT_OPTIONS:BTN_SORT_USER";
         Pos = MAP_APPFONT ( 12 , 89 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "Custom sort ~order" ;
@@ -258,6 +259,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     RadioButton BTN_TOP_DOWN
     {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_OPTIONS:BTN_TOP_DOWN";
         Pos = MAP_APPFONT ( 12 , 158 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "~Top to bottom (sort rows)" ;
@@ -265,6 +267,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     RadioButton BTN_LEFT_RIGHT
     {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SORT_OPTIONS:BTN_LEFT_RIGHT";
         Pos = MAP_APPFONT ( 12 , 172 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "L~eft to right (sort columns)" ;

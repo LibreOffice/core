@@ -1552,7 +1552,7 @@ void SAL_CALL ScTabViewObj::removeActivationEventListener( const uno::Reference<
         EndActivationListening();
 }
 
-INT16 ScTabViewObj::GetZoom(void) const
+sal_Int16 ScTabViewObj::GetZoom(void) const
 {
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)

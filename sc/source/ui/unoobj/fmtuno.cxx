@@ -396,7 +396,6 @@ void SAL_CALL ScTableConditionalFormat::removeByIndex( sal_Int32 nIndex )
 
         (*iter)->release();
         aEntries.erase(iter);
-        DataChanged();
     }
 }
 
@@ -407,8 +406,6 @@ void SAL_CALL ScTableConditionalFormat::clear() throw(uno::RuntimeException)
                   boost::bind(&ScTableConditionalEntry::release,_1));
 
     aEntries.clear();
-
-    DataChanged();
 }
 
 // XEnumerationAccess
@@ -552,9 +549,7 @@ ScTableConditionalFormat* ScTableConditionalFormat::getImplementation(
 
 //------------------------------------------------------------------------
 
-ScTableConditionalEntry::ScTableConditionalEntry(ScTableConditionalFormat* pPar,
-                                                 const ScCondFormatEntryItem& aItem) :
-    pParent( pPar ),
+ScTableConditionalEntry::ScTableConditionalEntry(const ScCondFormatEntryItem& aItem) :
     aData( aItem )
 {
     // #i113668# only store the settings, keep no reference to parent object
@@ -597,8 +592,6 @@ void SAL_CALL ScTableConditionalEntry::setConditionOperator( sal_Int32 nOperator
 {
     SolarMutexGuard aGuard;
     aData.meMode = lcl_ConditionOperatorToModeNew( nOperator );
-    if (pParent)
-        pParent->DataChanged();
 }
 
 rtl::OUString SAL_CALL ScTableConditionalEntry::getFormula1() throw(uno::RuntimeException)
@@ -783,7 +776,6 @@ void SAL_CALL ScTableValidationObj::setOperator( sheet::ConditionOperator nOpera
 {
     SolarMutexGuard aGuard;
     nMode = sal::static_int_cast<sal_uInt16>( lcl_ConditionOperatorToMode( nOperator ) );
-    DataChanged();
 }
 
 sal_Int32 SAL_CALL ScTableValidationObj::getConditionOperator()
@@ -798,7 +790,6 @@ void SAL_CALL ScTableValidationObj::setConditionOperator( sal_Int32 nOperator )
 {
     SolarMutexGuard aGuard;
     nMode = sal::static_int_cast<sal_uInt16>( lcl_ConditionOperatorToModeNew( nOperator ) );
-    DataChanged();
 }
 
 rtl::OUString SAL_CALL ScTableValidationObj::getFormula1() throw(uno::RuntimeException)

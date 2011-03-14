@@ -53,7 +53,7 @@
     MenuItem\
     {\
         Identifier = SID_PASTE ; \
-        HelpId = SID_PASTE ; \
+        HelpId = CMD_SID_PASTE ; \
         Text [ en-US ] = "~Paste" ; \
     };
 
@@ -70,13 +70,13 @@ Menu RID_POPUP_ROWHEADER
         MenuItem
         {
             Identifier = FID_ROW_HEIGHT ;
-            HelpId = FID_ROW_HEIGHT ;
+            HelpId = CMD_FID_ROW_HEIGHT ;
             Text [ en-US ] = "Row Hei~ght..." ;
         };
         MenuItem
         {
             Identifier = FID_ROW_OPT_HEIGHT ;
-            HelpId = FID_ROW_OPT_HEIGHT ;
+            HelpId = CMD_FID_ROW_OPT_HEIGHT ;
             Text [ en-US ] = "Optimal ~Row Height..." ;
         };
          //------------------------------
@@ -85,19 +85,19 @@ Menu RID_POPUP_ROWHEADER
         MenuItem
         {
             Identifier = FID_INS_ROW ;
-            HelpId = FID_INS_ROW ;
+            HelpId = CMD_FID_INS_ROW ;
             Text [ en-US ] = "~Insert Rows" ;
         };
         MenuItem
         {
             Identifier = SID_DEL_ROWS ;
-            HelpId = SID_DEL_ROWS ;
+            HelpId = CMD_SID_DEL_ROWS ;
             Text [ en-US ] = "~Delete Rows" ;
         };
         MenuItem
         {
             Identifier = SID_DELETE ;
-            HelpId = SID_DELETE ;
+            HelpId = CMD_SID_DELETE ;
             Text [ en-US ] = "De~lete Contents..." ;
         };
          //------------------------------
@@ -156,19 +156,19 @@ Menu RID_POPUP_COLHEADER
         MenuItem
         {
             Identifier = FID_INS_COLUMN ;
-            HelpId = FID_INS_COLUMN ;
+            HelpId = CMD_FID_INS_COLUMN ;
             Text [ en-US ] = "~Insert Columns" ;
         };
         MenuItem
         {
             Identifier = SID_DEL_COLS ;
-            HelpId = SID_DEL_COLS ;
+            HelpId = CMD_SID_DEL_COLS ;
             Text [ en-US ] = "~Delete Columns" ;
         };
         MenuItem
         {
             Identifier = SID_DELETE ;
-            HelpId = SID_DELETE ;
+            HelpId = CMD_SID_DELETE ;
             Text [ en-US ] = "D~elete Contents..." ;
         };
          //------------------------------

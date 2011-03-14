@@ -971,7 +971,7 @@ const String& ScExternalNameToken::GetString() const
     return maName;
 }
 
-sal_Bool ScExternalNameToken::operator==( const FormulaToken& r ) const
+bool ScExternalNameToken::operator==( const FormulaToken& r ) const
 {
     if ( !FormulaToken::operator==(r) )
         return false;
@@ -997,7 +997,7 @@ sal_Bool ScExternalNameToken::operator==( const FormulaToken& r ) const
 // ============================================================================
 
 ScJumpMatrix* ScJumpMatrixToken::GetJumpMatrix() const  { return pJumpMatrix; }
-sal_Bool ScJumpMatrixToken::operator==( const FormulaToken& r ) const
+bool ScJumpMatrixToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && pJumpMatrix == static_cast<const ScToken&>(r).GetJumpMatrix();
 }

@@ -391,3 +391,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     Text [ en-US ] = "Conditional Formatting" ;
 };
+
+String LABEL_FORMARTTING_CONDITIONS
+{
+    Text [ en-US ] = "Formatting Conditions" ;
+};
+String LABEL_CONDITIONS
+{
+    Text [ en-US ] = "Conditions" ;
+};
+String LABEL_CONDITION_VALUE
+{
+    Text [ en-US ] = "Condition Value" ;
+};
+

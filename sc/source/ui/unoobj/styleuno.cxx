@@ -492,7 +492,7 @@ sal_Bool lcl_EndsWithUser( const String& rString )
            pChar[nLen-1] == ')';
 }
 
-String ScStyleNameConversion::DisplayToProgrammaticName( const String& rDispName, UINT16 nType )
+String ScStyleNameConversion::DisplayToProgrammaticName( const String& rDispName, sal_uInt16 nType )
 {
     sal_Bool bDisplayIsProgrammatic = false;
 
@@ -522,7 +522,7 @@ String ScStyleNameConversion::DisplayToProgrammaticName( const String& rDispName
     return rDispName;
 }
 
-String ScStyleNameConversion::ProgrammaticToDisplayName( const String& rProgName, UINT16 nType )
+String ScStyleNameConversion::ProgrammaticToDisplayName( const String& rProgName, sal_uInt16 nType )
 {
     if ( lcl_EndsWithUser( rProgName ) )
     {
