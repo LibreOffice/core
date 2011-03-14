@@ -431,8 +431,8 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
         sal_uInt16 nPageDescOffset = pDoc->GetPageDescCnt();
         maSegments.InsertSegments(IsNewDoc());
         UpdatePageDescs(*pDoc, nPageDescOffset);
-        //$flr folloing garbe collecting code has been moved from the previous procedure
-        //     UpdatePageDescs to here in order to fix a bug
+        // following garbage collecting code has been moved from the previous
+        // procedure UpdatePageDescs to here in order to fix a bug
         rtfSections::myrDummyIter aDEnd = maSegments.maDummyPageNos.rend();
         for (rtfSections::myrDummyIter aI = maSegments.maDummyPageNos.rbegin(); aI != aDEnd; ++aI)
             pDoc->DelPageDesc(*aI);
@@ -4073,7 +4073,7 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
                 NewTblLine();           // evt. Line copieren
             else
             {
-                static int _do=0; //$flr
+                static int _do=0;
                 // Crsr nicht mehr in der Tabelle ?
                 if( !pPam->GetNode()->FindTableNode() && _do )
                 {

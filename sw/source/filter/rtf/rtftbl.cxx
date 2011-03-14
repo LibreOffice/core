@@ -357,7 +357,7 @@ void SwRTFParser::ReadTable( int nToken )
             break;
 
         case RTF_TRGAPH:
-                //$flr bug: RTF: wrong internal table cell margin imported (A13)
+                //bug: RTF: wrong internal table cell margin imported (A13)
                 aRow.mnBrdDist = (nTokenValue>0?(USHORT)nTokenValue:0); // filter out negative values of \trgaph
             break;
 
