@@ -207,9 +207,8 @@ sub print_msvs_productdir()
 sub print_csc_compiler_dir()
 {
     my $dir = cygpath (reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/InstallRoot"), 'w', $output_format);
-    my $csc_exe = `/bin/find "$dir" -iname csc.exe | grep "v3\.5\." | head -n 1` ||
-                  `/bin/find "$dir" -iname csc.exe | grep "v4\." | head -n 1` ||
-                  `/bin/find "$dir" -iname csc.exe | grep "v2\." | head -n 1`;
+    my $csc_exe = `/bin/find "$dir" -iname csc.exe | grep "v4\." | head -n 1` ||
+                  `/bin/find "$dir" -iname csc.exe | grep "v3\.5\." | head -n 1`;
     print `dirname $csc_exe`;
 }
 
