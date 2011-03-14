@@ -248,7 +248,12 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         sal_uLong nFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
         // #i111387# #o11817313# disable automatic line breaks only for "General" number format
         if ( bBreak && pCell->HasValueData() && ( nFormat % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
-            bBreak = false;
+        {
+            // also take formula result type into account for number format
+            if ( pCell->GetCellType() != CELLTYPE_FORMULA ||
+                 ( static_cast<ScFormulaCell*>(pCell)->GetStandardFormat(*pFormatter, nFormat) % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
+                bBreak = false;
+        }
 
         //  get other attributes from pattern and conditional formatting
 
