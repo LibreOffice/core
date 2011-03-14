@@ -193,25 +193,21 @@ typedef ::std::vector< ScPivotField > ScPivotFieldVector;
 
 // ============================================================================
 
-struct ScPivotFuncData
+struct ScDPFuncData
 {
-    SCCOL               mnCol;
+    short               mnCol;
     sal_uInt16          mnFuncMask;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
-    explicit            ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask );
-    explicit            ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask,
+    explicit            ScDPFuncData( short nNewCol, sal_uInt16 nNewFuncMask );
+    explicit            ScDPFuncData( short nNewCol, sal_uInt16 nNewFuncMask,
                             const ::com::sun::star::sheet::DataPilotFieldReference& rFieldRef );
 };
-
-typedef ::std::vector< ScPivotFuncData > ScPivotFuncDataVector;
 
 // ============================================================================
 
 typedef std::vector< ScDPLabelData > ScDPLabelDataVec;
 typedef std::vector<ScDPName> ScDPNameVec;
-
-// ============================================================================
 
 #endif
 

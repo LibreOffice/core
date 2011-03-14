@@ -148,13 +148,13 @@ bool ScPivotParam::operator==( const ScPivotParam& r ) const
 
 // ============================================================================
 
-ScPivotFuncData::ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
+ScDPFuncData::ScDPFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
     mnCol( nCol ),
     mnFuncMask( nFuncMask )
 {
 }
 
-ScPivotFuncData::ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask, const DataPilotFieldReference& rFieldRef ) :
+ScDPFuncData::ScDPFuncData( SCCOL nCol, sal_uInt16 nFuncMask, const DataPilotFieldReference& rFieldRef ) :
     mnCol( nCol ),
     mnFuncMask( nFuncMask ),
     maFieldRef( rFieldRef )

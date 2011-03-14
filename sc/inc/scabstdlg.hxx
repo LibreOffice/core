@@ -54,7 +54,7 @@ class ScQueryItem;
 class ScImportOptions;
 class SfxStyleSheetBase;
 class ScDPObject;
-struct ScPivotFuncData;
+struct ScDPFuncData;
 struct ScDPNumGroupInfo;
 class ScTabViewShell;
 
@@ -425,12 +425,12 @@ public:
     virtual AbstractScDPFunctionDlg * CreateScDPFunctionDlg( Window* pParent, int nId,
                                                                 const ScDPLabelDataVector& rLabelVec,
                                                                 const ScDPLabelData& rLabelData,
-                                                                const ScPivotFuncData& rFuncData ) = 0;
+                                                                const ScDPFuncData& rFuncData ) = 0;
 
     virtual AbstractScDPSubtotalDlg * CreateScDPSubtotalDlg( Window* pParent, int nId,
                                                                 ScDPObject& rDPObj,
                                                                 const ScDPLabelData& rLabelData,
-                                                                const ScPivotFuncData& rFuncData,
+                                                                const ScDPFuncData& rFuncData,
                                                                 const ScDPNameVec& rDataFields,
                                                                 bool bEnableLayout ) = 0;
 

@@ -509,12 +509,12 @@ public:
     virtual AbstractScDPFunctionDlg * CreateScDPFunctionDlg( Window* pParent, int nId,
                                                                 const ScDPLabelDataVector& rLabelVec,
                                                                 const ScDPLabelData& rLabelData,
-                                                                const ScPivotFuncData& rFuncData );
+                                                                const ScDPFuncData& rFuncData );
 
     virtual AbstractScDPSubtotalDlg * CreateScDPSubtotalDlg( Window* pParent, int nId,
                                                                 ScDPObject& rDPObj,
                                                                 const ScDPLabelData& rLabelData,
-                                                                const ScPivotFuncData& rFuncData,
+                                                                const ScDPFuncData& rFuncData,
                                                                 const ScDPNameVec& rDataFields,
                                                                 bool bEnableLayout );
 

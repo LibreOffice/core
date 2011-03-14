@@ -56,6 +56,9 @@
 #undef _FILTDLG_CXX
 #include <vcl/msgbox.hxx>
 
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
 // DEFINE --------------------------------------------------------------------
 
 #define ERRORBOX(rid)   ErrorBox( this, WinBits( WB_OK|WB_DEF_OK), \
@@ -134,47 +137,48 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     pTimer->SetTimeout( 50 ); // 50ms warten
     pTimer->SetTimeoutHdl( LINK( this, ScFilterDlg, TimeOutHdl ) );
 
-    String sAccName (ScResId(RID_FILTER_OPERATOR));
-    String sIndexName(sAccName);
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 1"));
-    aLbConnect1.SetAccessibleName(sIndexName);
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 2"));
-    aLbConnect2.SetAccessibleName(sIndexName);
+    OUStringBuffer aBuf;
 
-    sAccName = String(ScResId(RID_FILTER_FIELDNAME));
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 1"));
-    aLbField1.SetAccessibleName(sIndexName);
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 2"));
-    aLbField2.SetAccessibleName(sIndexName);
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 3"));
-    aLbField3.SetAccessibleName(sIndexName);
+    OUString sAccName = ResId::toString(ScResId(RID_FILTER_OPERATOR));
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aLbConnect1.SetAccessibleName(aBuf.makeStringAndClear());
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aLbConnect2.SetAccessibleName(aBuf.makeStringAndClear());
 
+    sAccName = ResId::toString(ScResId(RID_FILTER_FIELDNAME));
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aLbField1.SetAccessibleName(aBuf.makeStringAndClear());
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aLbField2.SetAccessibleName(aBuf.makeStringAndClear());
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 3"));
+    aLbField3.SetAccessibleName(aBuf.makeStringAndClear());
 
-    sAccName = String(ScResId(RID_FILTER_CONDITION));
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 1"));
-    aLbCond1.SetAccessibleName(sIndexName);
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 2"));
-    aLbCond2.SetAccessibleName(sIndexName);
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 3"));
-    aLbCond3.SetAccessibleName(sIndexName);
+    sAccName = ResId::toString(ScResId(RID_FILTER_CONDITION));
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aLbCond1.SetAccessibleName(aBuf.makeStringAndClear());
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aLbCond2.SetAccessibleName(aBuf.makeStringAndClear());
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 3"));
+    aLbCond3.SetAccessibleName(aBuf.makeStringAndClear());
 
-    sAccName = String(ScResId(RID_FILTER_VALUE));
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 1"));
-    aEdVal1.SetAccessibleName(sIndexName);
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 2"));
-    aEdVal2.SetAccessibleName(sIndexName);
-    sIndexName = sAccName;
-    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 3"));
-    aEdVal3.SetAccessibleName(sIndexName);
+    sAccName = ResId::toString(ScResId(RID_FILTER_VALUE));
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aEdVal1.SetAccessibleName(aBuf.makeStringAndClear());
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aEdVal2.SetAccessibleName(aBuf.makeStringAndClear());
+    aBuf.append(sAccName);
+    aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM (" 3"));
+    aEdVal3.SetAccessibleName(aBuf.makeStringAndClear());
 
     aLbCopyArea.SetAccessibleName(ScResId(STR_COPY_AREA_TO));
     aEdCopyArea.SetAccessibleName(ScResId(STR_COPY_AREA_TO));

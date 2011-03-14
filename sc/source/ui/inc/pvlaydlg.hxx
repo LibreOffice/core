@@ -91,9 +91,9 @@ public:
     virtual                 ~ScDPLayoutDlg();
 
     virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual sal_Bool        IsRefInputMode() const { return bRefInputMode; }
+    virtual sal_Bool            IsRefInputMode() const { return bRefInputMode; }
     virtual void            SetActive();
-    virtual sal_Bool        Close();
+    virtual sal_Bool            Close();
     virtual void            StateChanged( StateChangedType nStateChange );
 
     void                    NotifyDoubleClick    ( ScDPFieldType eType, size_t nFieldIndex );
@@ -199,7 +199,7 @@ private:
     String                  GetLabelString  ( SCsCOL nCol );
     bool                    IsOrientationAllowed( SCsCOL nCol, ScDPFieldType eType );
     String                  GetFuncString   ( sal_uInt16& rFuncMask, sal_Bool bIsValue = true );
-    sal_Bool                Contains        ( ScDPFuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
+    sal_Bool                    Contains        ( ScDPFuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
     void                    Remove          ( ScDPFuncDataVec* pArr, size_t nAt );
     void                    Insert          ( ScDPFuncDataVec* pArr, const ScDPFuncData& rFData, size_t nAt );
 

@@ -1223,7 +1223,7 @@ AbstractScDPFunctionDlg * ScAbstractDialogFactory_Impl::CreateScDPFunctionDlg ( 
                                                                 int nId,
                                                                 const ScDPLabelDataVector& rLabelVec,
                                                                 const ScDPLabelData& rLabelData,
-                                                                const ScPivotFuncData& rFuncData )
+                                                                const ScDPFuncData& rFuncData )
 {
     ScDPFunctionDlg * pDlg=NULL;
     switch ( nId )
@@ -1246,7 +1246,7 @@ AbstractScDPSubtotalDlg * ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg ( 
                                                                 int nId,
                                                                 ScDPObject& rDPObj,
                                                                 const ScDPLabelData& rLabelData,
-                                                                const ScPivotFuncData& rFuncData,
+                                                                const ScDPFuncData& rFuncData,
                                                                 const ScDPNameVec& rDataFields,
                                                                 bool bEnableLayout )
 {

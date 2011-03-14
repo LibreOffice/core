@@ -72,13 +72,13 @@ class ScDPFunctionDlg : public ModalDialog
     typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
 public:
     explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVector& rLabelVec,
-                            const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
+                            const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
 
     sal_uInt16              GetFuncMask() const;
     ::com::sun::star::sheet::DataPilotFieldReference GetFieldRef() const;
 
 private:
-    void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
+    void                Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
 
     const ::rtl::OUString& GetBaseFieldName(const ::rtl::OUString& rLayoutName) const;
     const ::rtl::OUString& GetBaseItemName(const ::rtl::OUString& rLayoutName) const;
@@ -121,7 +121,7 @@ class ScDPSubtotalDlg : public ModalDialog
 {
 public:
     explicit            ScDPSubtotalDlg( Window* pParent, ScDPObject& rDPObj,
-                            const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
+                            const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData,
                             const ScDPNameVec& rDataFields, bool bEnableLayout );
 
     sal_uInt16              GetFuncMask() const;
@@ -129,7 +129,7 @@ public:
     void                FillLabelData( ScDPLabelData& rLabelData ) const;
 
 private:
-    void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
+    void                Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
 
     DECL_LINK( DblClickHdl, MultiListBox* );
     DECL_LINK( RadioClickHdl, RadioButton* );
