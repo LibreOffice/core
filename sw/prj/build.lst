@@ -1,3 +1,2 @@
 sw      sw      :    filter L10N:l10n connectivity writerperfect lotuswordpro vbahelper svx stoc writerfilter unoxml fileaccess package comphelper LIBXSLT:libxslt NULL
 sw sw\prj nmake - all sw_prj   NULL
-sw sw\qa\core	nmake - all sw_qa_cppunit sw_util NULL
