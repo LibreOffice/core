@@ -168,7 +168,7 @@ BOOL SwRect::IsInside( const Point& rPoint ) const
            && (Right() >= rPoint.X())
            && (Bottom()>= rPoint.Y());
 }
-/* -----------------------------11.04.00 15:46--------------------------------
+/* ---------------------------------------------------------------------------
     mouse moving of table borders
  ---------------------------------------------------------------------------*/
 BOOL SwRect::IsNear( const Point& rPoint, long nTolerance ) const

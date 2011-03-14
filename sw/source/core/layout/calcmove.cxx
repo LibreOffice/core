@@ -1680,7 +1680,7 @@ void SwCntntFrm::MakeAll()
                     bFitPromise = TRUE;
                     continue;
                 }
-                /* -----------------19.02.99 12:58-------------------
+                /* --------------------------------------------------
                  * Frueher wurde in Rahmen und Bereichen niemals versucht,
                  * durch bMoveOrFit den TxtFrm unter Verzicht auf seine
                  * Attribute (Widows,Keep) doch noch passend zu bekommen.

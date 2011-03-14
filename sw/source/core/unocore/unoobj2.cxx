@@ -1833,7 +1833,7 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
     return o_rNextObject.is();
 }
 
-/* -----------------------------03.04.00 10:15--------------------------------
+/* ---------------------------------------------------------------------------
     Description: Search for a FLYCNT text attribute at the cursor point
                 and fill the frame into the array
  ---------------------------------------------------------------------------*/
