@@ -2573,7 +2573,10 @@ void WW8TabDesc::CreateSwTable()
             else
             {
                 if (nPreferredWidth)
-                    nLeft = pIo->maSectionManager.GetTextAreaWidth() - nPreferredWidth  - nOrgDxaLeft;
+                {
+                    nLeft = pIo->maSectionManager.GetTextAreaWidth();
+                    nLeft = nLeft - nPreferredWidth  - nOrgDxaLeft;
+                }
                 else
                     nLeft = -GetMinLeft();
             }

@@ -209,7 +209,12 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
         return;
 
     // Weitergabe an die CORE
-    const sal_Bool bReadonly = pCurrView->GetDocShell()->IsReadOnly();
+    sal_Bool bReadonly;
+    const SwDocShell* pDocSh = pCurrView->GetDocShell();
+    if (pDocSh)
+        bReadonly = pDocSh->IsReadOnly();
+    else //Use existing option if DocShell missing
+        bReadonly = pSh->GetViewOptions()->IsReadonly();
     SwViewOption* pViewOpt;
     if(!bViewOnly)
         pViewOpt = new SwViewOption( *pPref );

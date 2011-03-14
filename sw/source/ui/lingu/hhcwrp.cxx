@@ -560,11 +560,11 @@ void SwHHCWrapper::ReplaceUnit(
             if (pTargetFont && pNewUnitLanguage)
             {
                 SvxFontItem aFontItem = (SvxFontItem&) aSet.Get( RES_CHRATR_CJK_FONT );
-                aFontItem.GetFamilyName()   = pTargetFont->GetName();
-                aFontItem.GetFamily()       = pTargetFont->GetFamily();
-                aFontItem.GetStyleName()    = pTargetFont->GetStyleName();
-                aFontItem.GetPitch()        = pTargetFont->GetPitch();
-                aFontItem.GetCharSet()      = pTargetFont->GetCharSet();
+                aFontItem.SetFamilyName(    pTargetFont->GetName());
+                aFontItem.SetFamily(        pTargetFont->GetFamily());
+                aFontItem.SetStyleName(     pTargetFont->GetStyleName());
+                aFontItem.SetPitch(         pTargetFont->GetPitch());
+                aFontItem.SetCharSet( pTargetFont->GetCharSet() );
                 aSet.Put( aFontItem );
             }
 
