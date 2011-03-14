@@ -169,7 +169,17 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSea
     *pContourItem  = 0,
     *pCharColorItem  = 0,
     *pCasemapItem  = 0,
-    *pBrushItem  = 0;
+    *pBrushItem  = 0,
+    *pFontCJKItem = 0,
+    *pFontSizeCJKItem = 0,
+    *pCJKLangItem = 0,
+    *pCJKPostureItem = 0,
+    *pCJKWeightItem = 0,
+    *pFontCTLItem = 0,
+    *pFontSizeCTLItem = 0,
+    *pCTLLangItem = 0,
+    *pCTLPostureItem = 0,
+    *pCTLWeightItem = 0;
 
     PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
     for(sal_uInt32 i = 0; i < nArrLen; i++, ++aIt)
@@ -354,6 +364,56 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSea
                         pWLineItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
                     pTempItem = pWLineItem;
                 break;
+                case RES_CHRATR_CJK_FONT:
+                    if(!pFontCJKItem )
+                        pFontCJKItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
+                    pTempItem = pFontCJKItem;
+                break;
+                case RES_CHRATR_CJK_FONTSIZE:
+                    if(!pFontSizeCJKItem )
+                        pFontSizeCJKItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
+                    pTempItem = pFontSizeCJKItem;
+                break;
+                case RES_CHRATR_CJK_LANGUAGE:
+                    if(!pCJKLangItem )
+                        pCJKLangItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
+                    pTempItem = pCJKLangItem;
+                break;
+                case RES_CHRATR_CJK_POSTURE:
+                    if(!pCJKPostureItem )
+                        pCJKPostureItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
+                    pTempItem = pCJKPostureItem;
+                break;
+                case RES_CHRATR_CJK_WEIGHT:
+                    if(!pCJKWeightItem )
+                        pCJKWeightItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
+                    pTempItem = pCJKWeightItem;
+                break;
+                case RES_CHRATR_CTL_FONT:
+                    if(!pFontCTLItem )
+                        pFontCTLItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
+                    pTempItem = pFontCTLItem;
+                break;
+                case RES_CHRATR_CTL_FONTSIZE:
+                    if(!pFontSizeCTLItem )
+                        pFontSizeCTLItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
+                    pTempItem = pFontSizeCTLItem;
+                break;
+                case RES_CHRATR_CTL_LANGUAGE:
+                    if(!pCTLLangItem )
+                        pCTLLangItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
+                    pTempItem = pCTLLangItem;
+                break;
+                case RES_CHRATR_CTL_POSTURE:
+                    if(!pCTLPostureItem )
+                        pCTLPostureItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
+                    pTempItem = pCTLPostureItem;
+                break;
+                case RES_CHRATR_CTL_WEIGHT:
+                    if(!pCTLWeightItem )
+                        pCTLWeightItem = rSet.GetPool()->GetDefaultItem(aIt->nWID).Clone();
+                    pTempItem = pCTLWeightItem;
+                break;
             }
             if(pTempItem)
             {
@@ -497,7 +557,7 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
     {
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
             throw beans::PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-        sal_Bool bVal = FALSE;
+        sal_Bool bVal = sal_False;
         if(aValue.getValueType() == ::getBooleanCppuType())
             bVal = *(sal_Bool*)aValue.getValue();
         switch(pEntry->nWID)

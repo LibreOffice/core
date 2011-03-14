@@ -32,136 +32,9 @@
 #include <svx/globlmn.hrc>
 #endif
 #include "workctrl.hrc"
-#include "workctrl.hrc"
 #include "helpid.h"
 #include "cmdid.h"
-FloatingWindow RID_INSERT_CTRL
-{
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    HelpID = HID_INSERT_CTRL ;
-    ToolBox TBX_INSERT
-    {
-        MenuStrings = TRUE ;
-        SVLook = TRUE ;
-        HelpID = 1 ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = FN_INSERT_FRAME_INTERACT_NOCOL ;
-                HelpID = FN_INSERT_FRAME_INTERACT_NOCOL ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_INSERT_FRAME_INTERACT ;
-                HelpID = FN_INSERT_FRAME_INTERACT ;
-                DropDown = TRUE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = SID_INSERT_GRAPHIC ;
-                HelpID = SID_INSERT_GRAPHIC ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_INSERT_TABLE ;
-                HelpID = FN_INSERT_TABLE ;
-                DropDown = TRUE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = SID_INSERTDOC ;
-                HelpID = SID_INSERTDOC ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_INSERT_FOOTNOTE ;
-                HelpID = FN_INSERT_FOOTNOTE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_INSERT_ENDNOTE ;
-                HelpID = FN_INSERT_ENDNOTE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_INSERT_SYMBOL ;
-                HelpID = FN_INSERT_SYMBOL ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_INSERT_REGION ;
-                HelpID = FN_INSERT_REGION;
-                DropDown = TRUE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_INSERT_IDX_ENTRY_DLG ;
-                HelpID = FN_INSERT_IDX_ENTRY_DLG ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_INSERT_BOOKMARK ;
-                HelpID = FN_INSERT_BOOKMARK ;
-                RadioCheck = TRUE ;
-            };
-        };
-    };
-    Text [ en-US ] = "Insert" ;
-};
-FloatingWindow RID_INSERT_OBJ_CTRL
-{
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    HelpID = HID_INSERT_OBJ_CTRL ;
-    ToolBox TBX_OBJ_INSERT
-    {
-        MenuStrings = TRUE ;
-        SVLook = TRUE ;
-        HelpID = 1 ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = SID_INSERT_DIAGRAM ;
-                HelpID = SID_INSERT_DIAGRAM ;
-            };
-            ToolBoxItem
-            {
-                Identifier = FN_INSERT_SMA ;
-                HelpID = FN_INSERT_SMA ;
-            };
-            ToolBoxItem
-            {
-                Identifier = SID_INSERT_FLOATINGFRAME ;
-                HelpID = SID_INSERT_FLOATINGFRAME ;
-            };
-            ToolBoxItem
-            {
-                Identifier = SID_INSERT_OBJECT ;
-                HelpID = SID_INSERT_OBJECT ;
-            };
-            ToolBoxItem
-            {
-                Identifier = SID_INSERT_PLUGIN ;
-                HelpID = SID_INSERT_PLUGIN ;
-            };
-#ifdef SOLAR_JAVA
-            ToolBoxItem
-            {
-                Identifier = SID_INSERT_APPLET ;
-                HelpID = SID_INSERT_APPLET ;
-            };
-#endif
-        };
-    };
-    Text [ en-US ] = "Insert Object" ;
-};
+
 Menu RID_INSERT_FIELD_CTRL
 {
     ItemList =
@@ -169,43 +42,43 @@ Menu RID_INSERT_FIELD_CTRL
         MenuItem
         {
             Identifier = FN_INSERT_FLD_DATE ;
-            HelpID = FN_INSERT_FLD_DATE ;
+            HelpId = CMD_FN_INSERT_FLD_DATE ;
             Text [ en-US ] = "Date" ;
         };
         MenuItem
         {
             Identifier = FN_INSERT_FLD_TIME ;
-            HelpID = FN_INSERT_FLD_TIME ;
+            HelpId = CMD_FN_INSERT_FLD_TIME ;
             Text [ en-US ] = "Time" ;
         };
         MenuItem
         {
             Identifier = FN_INSERT_FLD_PGNUMBER ;
-            HelpID = FN_INSERT_FLD_PGNUMBER ;
+            HelpId = CMD_FN_INSERT_FLD_PGNUMBER ;
             Text [ en-US ] = "Page Number" ;
         };
         MenuItem
         {
             Identifier = FN_INSERT_FLD_PGCOUNT ;
-            HelpID = FN_INSERT_FLD_PGCOUNT ;
+            HelpId = CMD_FN_INSERT_FLD_PGCOUNT ;
             Text [ en-US ] = "Page Count" ;
         };
         MenuItem
         {
             Identifier = FN_INSERT_FLD_TOPIC ;
-            HelpID = FN_INSERT_FLD_TOPIC ;
+            HelpId = CMD_FN_INSERT_FLD_TOPIC ;
             Text [ en-US ] = "Subject" ;
         };
         MenuItem
         {
             Identifier = FN_INSERT_FLD_TITLE ;
-            HelpID = FN_INSERT_FLD_TITLE ;
+            HelpId = CMD_FN_INSERT_FLD_TITLE ;
             Text [ en-US ] = "Title" ;
         };
         MenuItem
         {
             Identifier = FN_INSERT_FLD_AUTHOR ;
-            HelpID = FN_INSERT_FLD_AUTHOR ;
+            HelpId = CMD_FN_INSERT_FLD_AUTHOR ;
             Text [ en-US ] = "Author" ;
         };
         MenuItem
@@ -215,7 +88,7 @@ Menu RID_INSERT_FIELD_CTRL
         MenuItem
         {
             Identifier = FN_INSERT_FIELD ;
-            HelpID = FN_INSERT_FIELD ;
+            HelpId = CMD_FN_INSERT_FIELD ;
             Text [ en-US ] = "Other..." ;
         };
     };

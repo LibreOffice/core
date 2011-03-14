@@ -44,6 +44,7 @@ TabPage TP_CONDCOLL
     };
     CheckBox CB_CONDITION
     {
+        HelpID = "sw:CheckBox:TP_CONDCOLL:CB_CONDITION";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -83,6 +84,7 @@ TabPage TP_CONDCOLL
     };
     ListBox LB_STYLE
     {
+        HelpID = "sw:ListBox:TP_CONDCOLL:LB_STYLE";
         Pos = MAP_APPFONT ( 188 , 39 ) ;
         Size = MAP_APPFONT ( 60 , 108 ) ;
         TabStop = TRUE ;
@@ -93,6 +95,7 @@ TabPage TP_CONDCOLL
     };
     ListBox LB_FILTER
     {
+        HelpID = "sw:ListBox:TP_CONDCOLL:LB_FILTER";
         Pos = MAP_APPFONT ( 188 , 150 ) ;
         Size = MAP_APPFONT ( 60 , 50 ) ;
         DropDown = TRUE ;
@@ -103,6 +106,7 @@ TabPage TP_CONDCOLL
     };
     PushButton PB_REMOVE
     {
+        HelpID = "sw:PushButton:TP_CONDCOLL:PB_REMOVE";
         Pos = MAP_APPFONT ( 129 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
@@ -111,6 +115,7 @@ TabPage TP_CONDCOLL
     };
     PushButton PB_ASSIGN
     {
+        HelpID = "sw:PushButton:TP_CONDCOLL:PB_ASSIGN";
         Pos = MAP_APPFONT ( 185 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;

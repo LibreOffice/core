@@ -32,7 +32,7 @@
  // #define DLG_BREAK 256
 ModalDialog DLG_BREAK
 {
-    HelpID = FN_INSERT_BREAK_DLG ;
+    HelpID = CMD_FN_INSERT_BREAK_DLG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 161 , 114 ) ;
@@ -62,6 +62,7 @@ ModalDialog DLG_BREAK
     };
     RadioButton RB_LINE
     {
+        HelpID = "sw:RadioButton:DLG_BREAK:RB_LINE";
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
         Text [ en-US ] = "~Line break" ;
@@ -70,6 +71,7 @@ ModalDialog DLG_BREAK
     };
     RadioButton RB_PAGE
     {
+        HelpID = "sw:RadioButton:DLG_BREAK:RB_PAGE";
         Pos = MAP_APPFONT ( 12 , 39 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
         Text [ en-US ] = "~Page break" ;
@@ -78,6 +80,7 @@ ModalDialog DLG_BREAK
     };
     RadioButton RB_COL
     {
+        HelpID = "sw:RadioButton:DLG_BREAK:RB_COL";
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
         Text [ en-US ] = "~Column break" ;
@@ -99,6 +102,7 @@ ModalDialog DLG_BREAK
     };
     ListBox LB_COLL
     {
+        HelpID = "sw:ListBox:DLG_BREAK:LB_COLL";
         Pos = MAP_APPFONT ( 12 , 62 ) ;
         Size = MAP_APPFONT ( 75 , 50 ) ;
         TabStop = TRUE ;
@@ -111,6 +115,7 @@ ModalDialog DLG_BREAK
     };
     CheckBox CB_PAGENUM
     {
+        HelpID = "sw:CheckBox:DLG_BREAK:CB_PAGENUM";
         Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         Text [ en-US ] = "Change page ~number" ;
@@ -118,6 +123,7 @@ ModalDialog DLG_BREAK
     };
     NumericField ED_PAGENUM
     {
+        HelpID = "sw:NumericField:DLG_BREAK:ED_PAGENUM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 94 ) ;
         Size = MAP_APPFONT ( 31 , 12 ) ;

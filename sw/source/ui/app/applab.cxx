@@ -197,7 +197,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
         aLabCfg.Commit();
 
         // Create new document
-        SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD));
+        SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD));
         xDocSh->DoInitNew( 0 );
 
         // Printer

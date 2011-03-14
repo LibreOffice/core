@@ -186,7 +186,7 @@ public:
     String          GetAddress();
 
     void            InsertNewEntry( const String& rStr );
-    void            InsertNewEntryAtPosition( const String& rStr, ULONG nPara, USHORT nIndex );
+    void            InsertNewEntryAtPosition( const String& rStr, sal_uLong nPara, sal_uInt16 nIndex );
     void            RemoveCurrentEntry();
 
     void            MoveCurrentItem(sal_uInt16 nMove);

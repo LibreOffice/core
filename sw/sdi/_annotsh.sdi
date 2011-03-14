@@ -34,12 +34,6 @@ interface _Annotation
         StateMethod = GetNoteState ;
     ]
 
-    FN_DELETE_NOTE
-    [
-        ExecMethod = NoteExec ;
-        StateMethod = GetNoteState ;
-    ]
-
     FN_DELETE_NOTE_AUTHOR
     [
         ExecMethod = NoteExec ;

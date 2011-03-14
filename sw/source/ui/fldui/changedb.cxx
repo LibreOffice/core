@@ -99,7 +99,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aAddDBPB.SetClickHdl(LINK(this, SwChangeDBDlg, AddDBHdl));
 
     aUsedDBTLB.SetSelectionMode(MULTIPLE_SELECTION);
-    aUsedDBTLB.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
+    aUsedDBTLB.SetStyle(aUsedDBTLB.GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     aUsedDBTLB.SetSpaceBetweenEntries(0);
     aUsedDBTLB.SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE), aImageList.GetImage(IMG_EXPAND));
 
@@ -144,12 +144,12 @@ void SwChangeDBDlg::FillDBPopup()
     SvStringsDtor aDBNameList(5, 1);
     pSh->GetAllUsedDB( aDBNameList, &aAllDBNames );
 
-    USHORT nCount = aDBNameList.Count();
+    sal_uInt16 nCount = aDBNameList.Count();
     aUsedDBTLB.Clear();
     SvLBoxEntry *pFirst = 0;
     SvLBoxEntry *pLast = 0;
 
-    for (USHORT k = 0; k < nCount; k++)
+    for (sal_uInt16 k = 0; k < nCount; k++)
     {
         sDBName = *aDBNameList.GetObject(k);
         sDBName = sDBName.GetToken(0);
@@ -174,8 +174,8 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
     SvLBoxEntry* pParent;
     SvLBoxEntry* pChild;
 
-    USHORT nParent = 0;
-    USHORT nChild = 0;
+    sal_uInt16 nParent = 0;
+    sal_uInt16 nChild = 0;
 
     Image aTableImg = aImageList.GetImage(IMG_DBTABLE);
     Image aDBImg = aImageList.GetImage(IMG_DB);
@@ -220,7 +220,7 @@ void SwChangeDBDlg::Apply()
 
 void SwChangeDBDlg::UpdateFlds()
 {
-    SvStringsDtor aDBNames( (BYTE)aUsedDBTLB.GetSelectionCount(), 1 );
+    SvStringsDtor aDBNames( (sal_uInt8)aUsedDBTLB.GetSelectionCount(), 1 );
     SvLBoxEntry* pEntry = aUsedDBTLB.FirstSelected();
 
     while( pEntry )
@@ -232,7 +232,7 @@ void SwChangeDBDlg::UpdateFlds()
             *pTmp += DB_DELIM;
             *pTmp += aUsedDBTLB.GetEntryText( pEntry );
             *pTmp += DB_DELIM;
-            int nCommandType = (int)(ULONG)pEntry->GetUserData();
+            int nCommandType = (int)(sal_uLong)pEntry->GetUserData();
             *pTmp += String::CreateFromInt32(nCommandType);
             aDBNames.Insert(pTmp, aDBNames.Count() );
         }
@@ -268,14 +268,14 @@ IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, EMPTYARG )
 
 IMPL_LINK( SwChangeDBDlg, TreeSelectHdl, SvTreeListBox *, EMPTYARG )
 {
-    BOOL bEnable = FALSE;
+    sal_Bool bEnable = sal_False;
 
     SvLBoxEntry* pEntry = aAvailDBTLB.GetCurEntry();
 
     if (pEntry)
     {
         if (aAvailDBTLB.GetParent(pEntry))
-            bEnable = TRUE;
+            bEnable = sal_True;
         aOKBT.Enable( bEnable );
     }
     return 0;
@@ -291,7 +291,7 @@ void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
     sTmp += '.';
     sTmp += (String)rDBData.sCommand;
 
-    for (USHORT i = 0; i < sTmp.Len(); i++)
+    for (sal_uInt16 i = 0; i < sTmp.Len(); i++)
     {
         sName += sTmp.GetChar(i);
         if (sTmp.GetChar(i) == '~')

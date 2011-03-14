@@ -42,7 +42,7 @@ class SW_DLLPUBLIC SwFmtFtn: public SfxPoolItem
     friend class SwTxtFtn;
     SwTxtFtn* pTxtAttr;     // My TextAttribute.
     String  aNumber;        // User-defined 'Number'.
-    USHORT  nNumber;        // Automatic numbering.
+    sal_uInt16  nNumber;        //Automatische Nummerierung
     bool    m_bEndNote;     // Is it an End note?
 
     // Protected CopyCtor.
@@ -58,11 +58,11 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
     const String &GetNumStr() const { return aNumber; }
-    const USHORT &GetNumber() const { return nNumber; }
+    const sal_uInt16 &GetNumber() const { return nNumber; }
           bool    IsEndNote() const { return m_bEndNote;}
 
     void SetNumStr( const String& rStr )    { aNumber = rStr; }
-    void SetNumber( USHORT nNo )            { nNumber = nNo; }
+    void SetNumber( sal_uInt16 nNo )            { nNumber = nNo; }
     void SetEndNote( bool b );
 
     void SetNumber( const SwFmtFtn& rFtn )
@@ -74,7 +74,7 @@ public:
     void GetFtnText( String& rStr ) const;
 
     // Returns string to be displayed of footnote / endnote.
-    String GetViewNumStr( const SwDoc& rDoc, BOOL bInclStrs = FALSE ) const;
+    String GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrs = sal_False ) const;
 };
 
 

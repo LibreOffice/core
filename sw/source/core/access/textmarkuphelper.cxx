@@ -147,7 +147,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
     if ( pTextMarkupList )
     {
         const SwWrongArea* pTextMarkup =
-                pTextMarkupList->GetElement( static_cast<USHORT>(nTextMarkupIndex) );
+                pTextMarkupList->GetElement( static_cast<sal_uInt16>(nTextMarkupIndex) );
         if ( pTextMarkup )
         {
             const ::rtl::OUString rText = mrPortionData.GetAccessibleString();
@@ -179,7 +179,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
     // assumption:
     // value of <nCharIndex> is in range [0..length of accessible text)
 
-    const USHORT nCoreCharIndex = mrPortionData.GetModelPosition( nCharIndex );
+    const sal_uInt16 nCoreCharIndex = mrPortionData.GetModelPosition( nCharIndex );
     // Handling of portions with core length == 0 at the beginning of the
     // paragraph - e.g. numbering portion.
     if ( mrPortionData.GetAccessiblePosition( nCoreCharIndex ) > nCharIndex )
@@ -198,11 +198,11 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
     {
         const ::rtl::OUString rText = mrPortionData.GetAccessibleString();
 
-        const USHORT nTextMarkupCount = pTextMarkupList->Count();
-        for ( USHORT nTextMarkupIdx = 0; nTextMarkupIdx < nTextMarkupCount; ++nTextMarkupIdx )
+        const sal_uInt16 nTextMarkupCount = pTextMarkupList->Count();
+        for ( sal_uInt16 nTextMarkupIdx = 0; nTextMarkupIdx < nTextMarkupCount; ++nTextMarkupIdx )
         {
             const SwWrongArea* pTextMarkup =
-                    pTextMarkupList->GetElement( static_cast<USHORT>(nTextMarkupIdx) );
+                    pTextMarkupList->GetElement( static_cast<sal_uInt16>(nTextMarkupIdx) );
             OSL_ENSURE( pTextMarkup,
                     "<SwTextMarkupHelper::getTextMarkup(..)> - missing <SwWrongArea> instance" );
             if ( pTextMarkup &&

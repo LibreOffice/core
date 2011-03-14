@@ -57,27 +57,27 @@ using namespace ::com::sun::star;
 
 // no include "dbgoutsw.hxx" here!!!!!!
 
-extern BOOL bNoInterrupt;
-extern BOOL bFrmDrag;
-extern BOOL bDDTimerStarted;
+extern sal_Bool bNoInterrupt;
+extern sal_Bool bFrmDrag;
+extern sal_Bool bDDTimerStarted;
 
-BOOL bExecuteDrag = FALSE;
+sal_Bool bExecuteDrag = sal_False;
 
 void SwEditWin::StartDDTimer()
 {
     aTimer.SetTimeoutHdl(LINK(this, SwEditWin, DDHandler));
     aTimer.SetTimeout(480);
     aTimer.Start();
-    bDDTimerStarted = TRUE;
+    bDDTimerStarted = sal_True;
 }
 
 
 void SwEditWin::StopDDTimer(SwWrtShell *pSh, const Point &rPt)
 {
     aTimer.Stop();
-    bDDTimerStarted = FALSE;
+    bDDTimerStarted = sal_False;
     if(!pSh->IsSelFrmMode())
-        (pSh->*pSh->fnSetCrsr)(&rPt,FALSE);
+        (pSh->*pSh->fnSetCrsr)(&rPt,sal_False);
     aTimer.SetTimeoutHdl(LINK(this,SwEditWin, TimerHandler));
 }
 
@@ -86,36 +86,36 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
     SwWrtShell &rSh = rView.GetWrtShell();
     if( rSh.GetDrawView() )
     {
-        CommandEvent aDragEvent( rPosPixel, COMMAND_STARTDRAG, TRUE );
+        CommandEvent aDragEvent( rPosPixel, COMMAND_STARTDRAG, sal_True );
         if( rSh.GetDrawView()->Command( aDragEvent, this ) )
         {
-            rView.GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+            rView.GetViewFrame()->GetBindings().InvalidateAll(sal_False);
             return; // Event von der SdrView ausgewertet
         }
     }
 
     if ( !pApplyTempl && !rSh.IsDrawCreate() && !IsDrawAction())
     {
-        BOOL bStart = FALSE, bDelSelect = FALSE;
+        sal_Bool bStart = sal_False, bDelSelect = sal_False;
         SdrObject *pObj = NULL;
         Point aDocPos( PixelToLogic( rPosPixel ) );
-        if ( !rSh.IsInSelect() && rSh.ChgCurrPam( aDocPos, TRUE, TRUE))
+        if ( !rSh.IsInSelect() && rSh.ChgCurrPam( aDocPos, sal_True, sal_True))
             //We are not selecting and aren't at a selection
-            bStart = TRUE;
+            bStart = sal_True;
         else if ( !bFrmDrag && rSh.IsSelFrmMode() &&
                     rSh.IsInsideSelectedObj( aDocPos ) )
         {
             //We are not dragging internally and are not at an
             //object (frame, draw object)
 
-            bStart = TRUE;
+            bStart = sal_True;
         }
         else if( !bFrmDrag && rView.GetDocShell()->IsReadOnly() &&
                 OBJCNT_NONE != rSh.GetObjCntType( aDocPos, pObj ))
         {
             rSh.LockPaint();
             if( rSh.SelectObj( aDocPos, 0, pObj ))
-                bStart = bDelSelect = TRUE;
+                bStart = bDelSelect = sal_True;
             else
                 rSh.UnlockPaint();
         }
@@ -124,15 +124,15 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
             SwContentAtPos aSwContentAtPos( SwContentAtPos::SW_INETATTR );
             bStart = rSh.GetContentAtPos( aDocPos,
                         aSwContentAtPos,
-                        FALSE );
+                        sal_False );
         }
 
         if ( bStart && !bIsInDrag )
         {
-            bMBPressed = FALSE;
+            bMBPressed = sal_False;
             ReleaseMouse();
-            bFrmDrag = FALSE;
-            bExecuteDrag = TRUE;
+            bFrmDrag = sal_False;
+            bExecuteDrag = sal_True;
             SwEditWin::nDDStartPosY = aDocPos.Y();
             SwEditWin::nDDStartPosX = aDocPos.X();
             aMovePos = aDocPos;
@@ -151,7 +151,7 @@ void SwEditWin::StartExecuteDrag()
     if( !bExecuteDrag || bIsInDrag )
         return;
 
-    bIsInDrag = TRUE;
+    bIsInDrag = sal_True;
 
     SwTransferable* pTransfer = new SwTransferable( rView.GetWrtShell() );
     uno::Reference<
@@ -164,7 +164,7 @@ void SwEditWin::DragFinished()
 {
     DropCleanup();
     aTimer.SetTimeoutHdl( LINK(this,SwEditWin, TimerHandler) );
-    bIsInDrag = FALSE;
+    bIsInDrag = sal_False;
 }
 
 
@@ -173,11 +173,11 @@ void SwEditWin::DropCleanup()
     SwWrtShell &rSh =  rView.GetWrtShell();
 
     // reset statuses
-    bNoInterrupt = FALSE;
+    bNoInterrupt = sal_False;
     if ( bOldIdleSet )
     {
         ((SwViewOption*)rSh.GetViewOptions())->SetIdle( bOldIdle );
-        bOldIdleSet = FALSE;
+        bOldIdleSet = sal_False;
     }
     if ( pUserMarker )
         CleanupDropUserMarker();
@@ -238,7 +238,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     //                          (according to KA due to Java D&D), we'll have to
     //                          reevaluate the drop action once more _with_ the
     //                          Transferable.
-    USHORT nEventAction;
+    sal_uInt16 nEventAction;
     sal_Int8 nUserOpt = rEvt.mbDefault ? EXCHG_IN_ACTION_DEFAULT
                                        : rEvt.mnAction;
     m_nDropAction = SotExchange::GetExchangeAction(
@@ -252,17 +252,17 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
     nRet = rEvt.mnAction;
     if( !SwTransferable::PasteData( aData, rSh, m_nDropAction, m_nDropFormat,
-                                m_nDropDestination, FALSE, rEvt.mbDefault, &aDocPt, nRet))
+                                m_nDropDestination, sal_False, rEvt.mbDefault, &aDocPt, nRet))
         nRet = DND_ACTION_NONE;
     else if ( SW_MOD()->pDragDrop )
         //Don't clean up anymore at internal D&D!
-        SW_MOD()->pDragDrop->SetCleanUp( FALSE );
+        SW_MOD()->pDragDrop->SetCleanUp( sal_False );
 
     return nRet;
 }
 
 
-USHORT SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppObj )
+sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppObj )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     const Point aDocPt( PixelToLogic( rPixPnt ) );
@@ -287,7 +287,7 @@ USHORT SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppObj )
     }
 
     //What do we want to drop on now?
-    USHORT nDropDestination = 0;
+    sal_uInt16 nDropDestination = 0;
 
     //Did anything else arrive from the DrawingEngine?
     if( OBJCNT_NONE != eType )
@@ -296,7 +296,7 @@ USHORT SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppObj )
         {
         case OBJCNT_GRF:
             {
-                BOOL bLink,
+                sal_Bool bLink,
                     bIMap = 0 != rSh.GetFmtFromObj( aDocPt )->GetURL().GetMap();
                 String aDummy;
                 rSh.GetGrfAtPos( aDocPt, aDummy, bLink );
@@ -362,14 +362,14 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
     aWin.Right() -= nMargin;
     aWin.Bottom() -= nMargin;
     if(!aWin.IsInside(aPixPt)) {
-        static ULONG last_tick = 0;
-        ULONG current_tick = Time::GetSystemTicks();
+        static sal_uLong last_tick = 0;
+        sal_uLong current_tick = Time::GetSystemTicks();
         if((current_tick-last_tick) > 500) {
             last_tick = current_tick;
             if(!bOldIdleSet) {
                 bOldIdle = rSh.GetViewOptions()->IsIdle();
-                ((SwViewOption *)rSh.GetViewOptions())->SetIdle(FALSE);
-                bOldIdleSet = TRUE;
+                ((SwViewOption *)rSh.GetViewOptions())->SetIdle(sal_False);
+                bOldIdleSet = sal_True;
             }
             CleanupDropUserMarker();
             if(aPixPt.X() > aWin.Right()) aPixPt.X() += nMargin;
@@ -384,7 +384,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
     if(bOldIdleSet) {
         ((SwViewOption *)rSh.GetViewOptions())->SetIdle( bOldIdle );
-        bOldIdleSet = FALSE;
+        bOldIdleSet = sal_False;
     }
 
     SdrObject *pObj = NULL;
@@ -392,7 +392,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
     if( !m_nDropDestination )
         return DND_ACTION_NONE;
 
-    USHORT nEventAction;
+    sal_uInt16 nEventAction;
     sal_Int8 nUserOpt = rEvt.mbDefault ? EXCHG_IN_ACTION_DEFAULT
                                        : rEvt.mnAction;
 
@@ -410,21 +410,21 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
         SwModule *pMod = SW_MOD();
         if( pMod->pDragDrop )
         {
-            BOOL bCleanup = FALSE;
+            sal_Bool bCleanup = sal_False;
             //Drawing objects in Headers/Footers are not allowed
 
             SwWrtShell *pSrcSh = pMod->pDragDrop->GetShell();
             if( (pSrcSh->GetSelFrmType() == FRMTYPE_DRAWOBJ) &&
                 pSrcSh->IsSelContainsControl() &&
-                 (rSh.GetFrmType( &aDocPt, FALSE ) & (FRMTYPE_HEADER|FRMTYPE_FOOTER)) )
+                 (rSh.GetFrmType( &aDocPt, sal_False ) & (FRMTYPE_HEADER|FRMTYPE_FOOTER)) )
             {
-                bCleanup = TRUE;
+                bCleanup = sal_True;
             }
             // don't more position protected objects!
             else if( DND_ACTION_MOVE == rEvt.mnAction &&
                      pSrcSh->IsSelObjProtected( FLYPROTECT_POS ) )
             {
-                bCleanup = TRUE;
+                bCleanup = sal_True;
             }
             else if( rEvt.mbDefault )
             {
@@ -496,16 +496,16 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
 IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
 {
-    bDDTimerStarted = FALSE;
+    bDDTimerStarted = sal_False;
     aTimer.Stop();
     aTimer.SetTimeout(240);
-    bMBPressed = FALSE;
+    bMBPressed = sal_False;
     ReleaseMouse();
-    bFrmDrag = FALSE;
+    bFrmDrag = sal_False;
 
     if ( rView.GetViewFrame() )
     {
-        bExecuteDrag = TRUE;
+        bExecuteDrag = sal_True;
         StartExecuteDrag();
     }
     return 0;

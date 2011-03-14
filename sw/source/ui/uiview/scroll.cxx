@@ -36,18 +36,18 @@
 #define SCROLL_LINE_SIZE 250
 
 
-SwScrollbar::SwScrollbar( Window *pWin, BOOL bHoriz ) :
+SwScrollbar::SwScrollbar( Window *pWin, sal_Bool bHoriz ) :
     ScrollBar( pWin,
     WinBits( WB_3DLOOK | WB_HIDE | ( bHoriz ? WB_HSCROLL : WB_VSCROLL)  ) ),
     bHori( bHoriz ),
-    bAuto( FALSE ),
-    bThumbEnabled( TRUE ),
-    bVisible(FALSE),
-    bSizeSet(FALSE)
+    bAuto( sal_False ),
+    bThumbEnabled( sal_True ),
+    bVisible(sal_False),
+    bSizeSet(sal_False)
 {
     // SSA: --- RTL --- no mirroring for horizontal scrollbars
     if( bHoriz )
-        EnableRTL( FALSE );
+        EnableRTL( sal_False );
 }
 
 
@@ -62,7 +62,7 @@ void SwScrollbar::DocSzChgd( const Size &rSize )
 {
     aDocSz = rSize;
     SetRange( Range( 0, bHori ? rSize.Width() : rSize.Height()) );
-    const ULONG nVisSize = GetVisibleSize();
+    const sal_uLong nVisSize = GetVisibleSize();
     SetLineSize( SCROLL_LINE_SIZE );
     SetPageSize( nVisSize * 77 / 100 );
 }
@@ -95,7 +95,7 @@ void SwScrollbar::ViewPortChgd( const Rectangle &rRect )
         AutoShow();
 }
 
-void SwScrollbar::ExtendedShow( BOOL bSet )
+void SwScrollbar::ExtendedShow( sal_Bool bSet )
 {
     bVisible = bSet;
     if( (!bSet ||  !bAuto) && IsUpdateMode() && bSizeSet)
@@ -105,13 +105,13 @@ void SwScrollbar::ExtendedShow( BOOL bSet )
 void SwScrollbar::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 {
     ScrollBar::SetPosSizePixel(rNewPos, rNewSize);
-    bSizeSet = TRUE;
+    bSizeSet = sal_True;
     if(bVisible)
         ExtendedShow();
 
 }
 
-void SwScrollbar::SetAuto(BOOL bSet)
+void SwScrollbar::SetAuto(sal_Bool bSet)
 {
     if(bAuto != bSet)
     {
@@ -119,7 +119,7 @@ void SwScrollbar::SetAuto(BOOL bSet)
 
         // automatisch versteckt - dann anzeigen
         if(!bAuto && bVisible && !ScrollBar::IsVisible())
-            ExtendedShow(TRUE);
+            ExtendedShow(sal_True);
         else if(bAuto)
             AutoShow(); // oder automatisch verstecken
     }
@@ -132,14 +132,14 @@ void SwScrollbar::AutoShow()
         if( nVis >= nLen - 1)
         {
             if(ScrollBar::IsVisible())
-                ScrollBar::Show(FALSE);
+                ScrollBar::Show(sal_False);
         }
         else if ( !ScrollBar::IsVisible() &&
                   (!bHori || nVis) )        //Optimierung fuer Browser.
                                             //Horizontaler Scrollbar per
                                             //default aus.
         {
-            ScrollBar::Show(TRUE);
+            ScrollBar::Show(sal_True);
         }
 }
 

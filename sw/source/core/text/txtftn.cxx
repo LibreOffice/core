@@ -113,7 +113,7 @@ void SwTxtFrm::CalcFtnFlag()
     if( !pHints )
         return;
 
-    const USHORT nSize = pHints->Count();
+    const sal_uInt16 nSize = pHints->Count();
 
 #if OSL_DEBUG_LEVEL > 1
     const xub_StrLen nEnd = nStop != STRING_LEN ? nStop
@@ -122,7 +122,7 @@ void SwTxtFrm::CalcFtnFlag()
     const xub_StrLen nEnd = GetFollow() ? GetFollow()->GetOfst() : STRING_LEN;
 #endif
 
-    for ( USHORT i = 0; i < nSize; ++i )
+    for ( sal_uInt16 i = 0; i < nSize; ++i )
     {
         const SwTxtAttr *pHt = (*pHints)[i];
         if ( pHt->Which() == RES_TXTATR_FTN )
@@ -223,7 +223,7 @@ SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
         OSL_ENSURE( pTabFrm && pRow &&
                 pRow->GetUpper()->IsTabFrm(), "Upper of row should be tab" );
 
-        const BOOL bDontSplit = !pTabFrm->IsFollow() &&
+        const sal_Bool bDontSplit = !pTabFrm->IsFollow() &&
                                 !pTabFrm->IsLayoutSplitAllowed();
 
         SwTwips nMin = 0;
@@ -259,7 +259,7 @@ SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
         if ( pStartFrm->GetDrawObjs() )
         {
             const SwSortedObjs &rObjs = *pStartFrm->GetDrawObjs();
-            for ( USHORT i = 0; i < rObjs.Count(); ++i )
+            for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 SwRect aRect( pAnchoredObj->GetObjRect() );
@@ -447,7 +447,7 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
         return;
 
     sal_Bool bRollBack = nLen != STRING_LEN;
-    USHORT nSize = pHints->Count();
+    sal_uInt16 nSize = pHints->Count();
     xub_StrLen nEnd;
     SwTxtFrm* pSource;
     if( bRollBack )
@@ -471,7 +471,7 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
         SwFtnBossFrm *pEndBoss = 0;
         sal_Bool bFtnEndDoc
             = FTNPOS_CHAPTER == GetNode()->GetDoc()->GetFtnInfo().ePos;
-        for ( USHORT i = nSize; i; )
+        for ( sal_uInt16 i = nSize; i; )
         {
             SwTxtAttr *pHt = pHints->GetTextHint(--i);
             if ( RES_TXTATR_FTN != pHt->Which() )
@@ -1157,7 +1157,7 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
     pQuo->SetAscent( rInf.GetAscent()  );
     pQuo->Height( rInf.GetTxtHeight() );
     pQuo->Format( rInf );
-    USHORT nQuoWidth = pQuo->Width();
+    sal_uInt16 nQuoWidth = pQuo->Width();
     SwLinePortion* pCurrPor = pQuo;
 
     while ( rInf.GetRest() )
@@ -1236,12 +1236,12 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
                     if( nDiff < 0 )
                     {
                         nLastLeft = pQuo->GetAscent();
-                        nQuoWidth = (USHORT)(-nDiff + nLastLeft);
+                        nQuoWidth = (sal_uInt16)(-nDiff + nLastLeft);
                     }
                     else
                     {
                         nQuoWidth = 0;
-                        nLastLeft = USHORT(( pQuo->GetAscent() + nDiff ) / 2);
+                        nLastLeft = sal_uInt16(( pQuo->GetAscent() + nDiff ) / 2);
                     }
                     break;
                 }
@@ -1328,7 +1328,7 @@ public:
     SwFtnSave( const SwTxtSizeInfo &rInf,
                const SwTxtFtn *pTxtFtn,
                const bool bApplyGivenScriptType,
-               const BYTE nGivenScriptType );
+               const sal_uInt8 nGivenScriptType );
    ~SwFtnSave();
 };
 
@@ -1339,7 +1339,7 @@ public:
 SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
                       const SwTxtFtn* pTxtFtn,
                       const bool bApplyGivenScriptType,
-                      const BYTE nGivenScriptType )
+                      const sal_uInt8 nGivenScriptType )
     : pInf( &((SwTxtSizeInfo&)rInf) )
     , pFnt( 0 )
     , pOld( 0 )
@@ -1497,7 +1497,7 @@ SwPosSize SwFtnPortion::GetTxtSize( const SwTxtSizeInfo &rInfo ) const
 }
 
 // --> OD 2009-01-29 #i98418#
-void SwFtnPortion::SetPreferredScriptType( BYTE nPreferredScriptType )
+void SwFtnPortion::SetPreferredScriptType( sal_uInt8 nPreferredScriptType )
 {
     mbPreferredScriptTypeSet = true;
     mnPreferredScriptType = nPreferredScriptType;
@@ -1537,7 +1537,7 @@ sal_Bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
         SetLen( 0 );
         if( bFull  )
             // dritter Versuch, es langt: jetzt wird gestaucht:
-            Width( USHORT(rInf.Width() - rInf.X()) );
+            Width( sal_uInt16(rInf.Width() - rInf.X()) );
 
         // 8317: keine mehrzeiligen Felder bei QuoVadis und ErgoSum
         if( rInf.GetRest() )

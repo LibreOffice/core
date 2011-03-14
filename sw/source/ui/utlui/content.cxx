@@ -83,7 +83,9 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/scrbar.hxx>
-#include <undobj.hxx>
+#include <SwRewriter.hxx>
+#include <hints.hxx>
+#include <numrule.hxx>
 #include <swundo.hxx>
 #include <ndtxt.hxx>
 #include <PostItMgr.hxx>
@@ -274,7 +276,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
         case CONTENT_TYPE_BOOKMARK:
         {
             IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
-            nMemberCount = static_cast<USHORT>(count_if(
+            nMemberCount = static_cast<sal_uInt16>(count_if(
                 pMarkAccess->getBookmarksBegin(),
                 pMarkAccess->getBookmarksEnd(),
                 &lcl_IsUiVisibleBookmark));
@@ -307,7 +309,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 {
                     const String& rSectionName =
                         pFmt->GetSection()->GetSectionName();
-                    BYTE nLevel = 0;
+                    sal_uInt8 nLevel = 0;
                     SwSectionFmt* pParentFmt = pFmt->GetParent();
                     while(pParentFmt)
                     {
@@ -634,7 +636,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                 {
                     String sSectionName = pFmt->GetSection()->GetSectionName();
 
-                    BYTE nLevel = 0;
+                    sal_uInt8 nLevel = 0;
                     SwSectionFmt* pParentFmt = pFmt->GetParent();
                     while(pParentFmt)
                     {
@@ -787,7 +789,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                         pMember->Insert(pCnt);
                         nMemberCount++;
                         if(nOldMemberCount > (int)i &&
-                            (pOldMember->GetObject((USHORT)i))->IsInvisible() != pCnt->IsInvisible())
+                            (pOldMember->GetObject((sal_uInt16)i))->IsInvisible() != pCnt->IsInvisible())
                                 *pbLevelOrVisibiblityChanged = sal_True;
                     }
                 }
@@ -865,6 +867,7 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
     aUpdTimer.SetTimeout(1000);
     Clear();
     EnableContextMenuHandling();
+    SetStyle( GetStyle() | WB_QUICK_SEARCH );
 }
 
 SwContentTree::~SwContentTree()
@@ -2292,7 +2295,7 @@ DragDropMode SwContentTree::NotifyStartDrag(
                     Childs verschoben
 ***************************************************************************/
 sal_Bool  SwContentTree::NotifyMoving( SvLBoxEntry*  pTarget,
-        SvLBoxEntry*  pEntry, SvLBoxEntry*& , ULONG& )
+        SvLBoxEntry*  pEntry, SvLBoxEntry*& , sal_uLong& )
 {
     if(!bDocChgdInDragging)
     {
@@ -2331,7 +2334,7 @@ sal_Bool  SwContentTree::NotifyMoving( SvLBoxEntry*  pTarget,
                     Childs verschoben
 ***************************************************************************/
 sal_Bool  SwContentTree::NotifyCopying( SvLBoxEntry*  pTarget,
-        SvLBoxEntry*  pEntry, SvLBoxEntry*& , ULONG& )
+        SvLBoxEntry*  pEntry, SvLBoxEntry*& , sal_uLong& )
 {
     if(!bDocChgdInDragging)
     {
@@ -2453,7 +2456,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                     !pActiveShell->GetView().GetDocShell()->IsReadOnly())
         {
             EditEntry(pEntry, EDIT_MODE_DELETE);
-            bViewHasChanged = TRUE;
+            bViewHasChanged = sal_True;
             GetParentWindow()->UpdateListBox();
             TimerUpdate(&aUpdTimer);
             GrabFocus();
@@ -2466,7 +2469,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
 
 void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
 {
-    BOOL bCallBase = TRUE;
+    sal_Bool bCallBase = sal_True;
     if( rHEvt.GetMode() & HELPMODE_QUICK )
     {
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
@@ -2565,13 +2568,13 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                     else
                         Help::ShowQuickHelp( this, aItemRect, sEntry,
                             QUICKHELP_LEFT|QUICKHELP_VCENTER );
-                    bCallBase = FALSE;
+                    bCallBase = sal_False;
                 }
             }
             else
             {
                 Help::ShowQuickHelp( this, Rectangle(), aEmptyStr, 0 );
-                bCallBase = FALSE;
+                bCallBase = sal_False;
             }
         }
     }
@@ -2579,7 +2582,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
         Window::RequestHelp( rHEvt );
 }
 
-void    SwContentTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
+void    SwContentTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 {
     SvLBoxEntry* pFirst = FirstSelected();
     switch( nSelectedPopupEntry )
@@ -2783,7 +2786,7 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
                 pActiveShell->StartUndo(UNDO_DELETE, &aRewriter);
                 pActiveShell->GetView().GetViewFrame()->GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
                 pActiveShell->DeleteRow();
-                pActiveShell->EndUndo(UNDO_DELETE);
+                pActiveShell->EndUndo();
                 pActiveShell->EndAction();
             }
             else if(nMode == EDIT_MODE_RENAME)
@@ -3123,7 +3126,7 @@ sal_Bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
         xub_StrLen nPos = 0;
         aUrl    = sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos );
         aDescr  = sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos );
-        nDefDrag= (USHORT)sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos ).ToInt32();
+        nDefDrag= (sal_uInt16)sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos ).ToInt32();
         nDocSh  = sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos ).ToInt32();
     }
     return bRet;

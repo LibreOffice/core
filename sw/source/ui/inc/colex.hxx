@@ -55,8 +55,8 @@ class SW_DLLPUBLIC SwPageGridExample : public SwPageExample
     sal_Bool            m_bVertical;
 protected:
     virtual void DrawPage( const Point& rPoint,
-                           const BOOL bSecond,
-                           const BOOL bEnabled );
+                           const sal_Bool bSecond,
+                           const sal_Bool bEnabled );
 public:
     SwPageGridExample(Window* pPar, const ResId& rResId ) :
                                 SwPageExample(pPar, rResId ),
@@ -74,8 +74,8 @@ class SW_DLLPUBLIC SwColExample : public SwPageExample
 
 protected:
     virtual void DrawPage( const Point& rPoint,
-                           const BOOL bSecond,
-                           const BOOL bEnabled );
+                           const sal_Bool bSecond,
+                           const sal_Bool bEnabled );
 
 public:
         SwColExample(Window* pPar, const ResId& rResId ) :

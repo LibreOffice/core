@@ -275,7 +275,7 @@ ModalDialog DLG_EDIT_IDXMARK
     Moveable = TRUE ;
     Closeable = TRUE;
     Sizeable = FALSE ;
-    HelpID = FN_EDIT_IDX_ENTRY_DLG;
+    HelpId = CMD_FN_EDIT_IDX_ENTRY_DLG;
     SVLook = TRUE ;
     #define IDX_WIN_WIDTH IDX_WIN_WIDTH_NORMAL
     Size = MAP_APPFONT ( IDX_WIN_WIDTH , 118 ) ;
@@ -294,7 +294,7 @@ ModalDialog DLG_EDIT_IDXMARK_CJK
     Moveable = TRUE ;
     Closeable = TRUE;
     Sizeable = FALSE ;
-    HelpID = FN_EDIT_IDX_ENTRY_DLG;
+    HelpId = CMD_FN_EDIT_IDX_ENTRY_DLG;
     SVLook = TRUE ;
     #define IDX_WIN_WIDTH IDX_WIN_WIDTH_CJK
     Size = MAP_APPFONT ( IDX_WIN_WIDTH , 118 ) ;
@@ -315,7 +315,7 @@ ModelessDialog DLG_INSIDXMARK
     Sizeable = FALSE ;
     Hide = TRUE ;
 //  Zoomable = TRUE ;
-    HelpID = FN_INSERT_IDX_ENTRY_DLG;
+    HelpId = CMD_FN_INSERT_IDX_ENTRY_DLG;
     SVLook = TRUE ;
     #define IDX_WIN_WIDTH IDX_WIN_WIDTH_NORMAL
     Size = MAP_APPFONT ( IDX_WIN_WIDTH , 138) ;
@@ -336,7 +336,7 @@ ModelessDialog DLG_INSIDXMARK_CJK
     Closeable = TRUE;
     Sizeable = FALSE ;
 //  Zoomable = TRUE ;
-    HelpID = FN_INSERT_IDX_ENTRY_DLG;
+    HelpId = CMD_FN_INSERT_IDX_ENTRY_DLG;
     SVLook = TRUE ;
     #define IDX_WIN_WIDTH IDX_WIN_WIDTH_CJK
     Size = MAP_APPFONT ( IDX_WIN_WIDTH , 138) ;
@@ -392,6 +392,7 @@ ModalDialog DLG_NEW_USER_IDX
     };
     Edit ED_NAME
     {
+        HelpID = "sw:Edit:DLG_NEW_USER_IDX:ED_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55 , 15 ) ;
         Size = MAP_APPFONT ( 78 , 12 ) ;
@@ -522,7 +523,7 @@ ModalDialog DLG_EDIT_AUTHMARK
     Moveable = TRUE ;
     Closeable = TRUE ;
     Sizeable = FALSE ;
-    HelpID = FN_EDIT_AUTH_ENTRY_DLG;
+    HelpId = CMD_FN_EDIT_AUTH_ENTRY_DLG;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 218 , 118 ) ;
     #define RADIO_BUTTON_HEIGHT 0
@@ -535,7 +536,7 @@ ModelessDialog DLG_INSAUTHMARK
     Closeable = TRUE ;
     Sizeable = FALSE ;
 //  Zoomable = TRUE ;
-    HelpID = FN_INSERT_AUTH_ENTRY_DLG;
+    HelpId = CMD_FN_INSERT_AUTH_ENTRY_DLG;
     SVLook = TRUE ;
     #define RADIO_BUTTON_HEIGHT 30
     Size = MAP_APPFONT ( 218 , 118 + RADIO_BUTTON_HEIGHT) ;

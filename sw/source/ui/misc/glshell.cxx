@@ -49,6 +49,7 @@
 #include <view.hxx>
 #include <glshell.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
 #include <initui.hxx>                   // fuer ::GetGlossaries()
@@ -96,7 +97,7 @@ void lcl_Execute( SwDocShell& rSh, SfxRequest& rReq )
 
 void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
 {
-    if( SFX_ITEM_AVAILABLE >= rSet.GetItemState( SID_SAVEDOC, FALSE ))
+    if( SFX_ITEM_AVAILABLE >= rSet.GetItemState( SID_SAVEDOC, sal_False ))
     {
         if( !rSh.GetDoc()->IsModified() )
             rSet.DisableItem( SID_SAVEDOC );
@@ -105,7 +106,7 @@ void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
     }
 }
 
-BOOL lcl_Save( SwWrtShell& rSh, const String& rGroupName,
+sal_Bool lcl_Save( SwWrtShell& rSh, const String& rGroupName,
                 const String& rShortNm, const String& rLongNm )
 {
     const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
@@ -118,7 +119,7 @@ BOOL lcl_Save( SwWrtShell& rSh, const String& rGroupName,
     pGlosHdl = rSh.GetView().GetGlosHdl();
     pGlosHdl->GetMacros( rShortNm, aStart, aEnd, pBlock );
 
-    USHORT nRet = rSh.SaveGlossaryDoc( *pBlock, rLongNm, rShortNm,
+    sal_uInt16 nRet = rSh.SaveGlossaryDoc( *pBlock, rLongNm, rShortNm,
                                 pCfg->IsSaveRelFile(),
                                 pBlock->IsOnlyTextBlock( rShortNm ) );
 
@@ -158,7 +159,7 @@ void SwGlosDocShell::GetState( SfxItemSet& rSet )
     ::lcl_GetState( *this, rSet );
 }
 
-BOOL SwGlosDocShell::Save()
+sal_Bool SwGlosDocShell::Save()
 {
     // In case of an API object which holds this document, it is possible that the WrtShell is already
     // dead. For instance, if the doc is modified via this API object, and then, upon office shutdown,
@@ -169,8 +170,8 @@ BOOL SwGlosDocShell::Save()
         return ::lcl_Save( *GetWrtShell(), aGroupName, aShortName, aLongName );
     else
     {
-        SetModified( FALSE );
-        return FALSE;
+        SetModified( sal_False );
+        return sal_False;
     }
 }
 
@@ -194,21 +195,21 @@ void SwWebGlosDocShell::GetState( SfxItemSet& rSet )
     ::lcl_GetState( *this, rSet );
 }
 
-BOOL SwWebGlosDocShell::Save()
+sal_Bool SwWebGlosDocShell::Save()
 {
     // same comment as in SwGlosDocShell::Save - see there
     if ( GetWrtShell() )
         return ::lcl_Save( *GetWrtShell(), aGroupName, aShortName, aLongName );
     else
     {
-        SetModified( FALSE );
-        return FALSE;
+        SetModified( sal_False );
+        return sal_False;
     }
 }
 
 SV_IMPL_REF ( SwDocShell )
 
-SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rShortName, BOOL bShow )
+SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rShortName, sal_Bool bShow )
 {
     SwDocShellRef xDocSh;
 
@@ -217,7 +218,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
     {
         // erfrage welche View registriert ist. Im WebWriter gibts es keine
         // normale View
-        USHORT nViewId = 0 != &SwView::Factory() ? 2 : 6;
+        sal_uInt16 nViewId = 0 != &SwView::Factory() ? 2 : 6;
         String sLongName = pGroup->GetLongName(pGroup->GetIndex( rShortName ));
 
         if( 6 == nViewId )
@@ -245,8 +246,9 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
         aDocTitle += ' ';
         aDocTitle += sLongName;
 
-        BOOL bDoesUndo = xDocSh->GetDoc()->DoesUndo();
-        xDocSh->GetDoc()->DoUndo( FALSE );
+        bool const bDoesUndo =
+            xDocSh->GetDoc()->GetIDocumentUndoRedo().DoesUndo();
+        xDocSh->GetDoc()->GetIDocumentUndoRedo().DoUndo( false );
 
         xDocSh->GetWrtShell()->InsertGlossary( *pGroup, rShortName );
         if( !xDocSh->GetDoc()->getPrinter( false ) )
@@ -274,7 +276,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
         catch( uno::Exception& )
         {}
 
-        xDocSh->GetDoc()->DoUndo( bDoesUndo );
+        xDocSh->GetDoc()->GetIDocumentUndoRedo().DoUndo( bDoesUndo );
         xDocSh->GetDoc()->ResetModified();
         if ( bShow )
             pFrame->GetFrame().Appear();

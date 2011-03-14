@@ -779,17 +779,19 @@ const SwPropNameTab aPropNameTab = {
 /* 0736 UNO_NAME_OUTLINE_LEVEL */       {MAP_CHAR_LEN("OutlineLevel")},//#outline level,add<-zhaojianwei Outlinelevel
 /* 0737 UNO_NAME_DESCRIPTION */         {MAP_CHAR_LEN("Description")},
 /* 0738 UNO_NAME_META */        {MAP_CHAR_LEN("InContentMetadata")},
+// FIXME: these numbers are not correct post merge ...
 /* 0739 UNO_NAME_IS_TEMPLATE */       {MAP_CHAR_LEN("IsTemplate")},
+/* 0740 UNO_NAME_EMBEDDED_OBJECT */ {MAP_CHAR_LEN("EmbeddedObject")},
 /* 0740 UNO_NAME_VBA_DOCOBJ */       {MAP_CHAR_LEN("ThisVBADocObj")},
 
 /* 0741 UNO_NAME_NESTED_TEXT_CONTENT */ {MAP_CHAR_LEN("NestedTextContent")},
 };
 
-const SwPropNameLen& SwGetPropName( USHORT nId )
+const SwPropNameLen& SwGetPropName( sal_uInt16 nId )
 {
     return GetPropName( nId );
 }
-const SwPropNameLen& GetPropName( USHORT nId )
+const SwPropNameLen& GetPropName( sal_uInt16 nId )
 {
     DBG_ASSERT( SW_PROPNAME_BEGIN <= nId && nId < SW_PROPNAME_END,
                 "GetPropName(): Wrong index" );

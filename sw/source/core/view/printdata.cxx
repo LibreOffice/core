@@ -38,7 +38,6 @@
 #include <wdocsh.hxx>
 #include <viewsh.hxx>
 #include <docfld.hxx>
-#include <swprtopt.hxx>
 
 #include <svl/languageoptions.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
@@ -90,7 +89,7 @@ void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, 
     //!! Otherwise the grammar checker might process it and crash if we later on
     //!! simply delete this document while he is still at it.
     SwViewOption  aViewOpt( *pViewOpt );
-    aViewOpt.SetOnlineSpell( FALSE );
+    aViewOpt.SetOnlineSpell( sal_False );
 
     m_pPostItShell  = new ViewShell( *m_pPostItDoc, 0, &aViewOpt, pOutDev );
 }
@@ -125,7 +124,7 @@ void SwRenderData::ViewOptionAdjustStart( SwWrtShell &rSh, const SwViewOption &r
 }
 
 
-void SwRenderData::ViewOptionAdjust( const SwPrtOptions *pPrtOptions )
+void SwRenderData::ViewOptionAdjust(SwPrintData const*const pPrtOptions)
 {
     m_pViewOptionAdjust->AdjustViewOptions( pPrtOptions );
 }
@@ -142,7 +141,7 @@ void SwRenderData::ViewOptionAdjustStop()
 
 
 void SwRenderData::MakeSwPrtOptions(
-    SwPrtOptions &rOptions,
+    SwPrintData & rOptions,
     const SwDocShell *pDocShell,
     const SwPrintUIOptions *pOpt,
     const SwRenderData *pData,
@@ -153,8 +152,8 @@ void SwRenderData::MakeSwPrtOptions(
 
     // get default print options
     const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
-    BOOL bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
-    rOptions.MakeOptions( bWeb );
+    sal_Bool bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
+    ::sw::InitPrintOptionsFromApplication(rOptions, bWeb);
 
     // get print options to use from provided properties
     rOptions.bPrintGraphic          = pOpt->IsPrintGraphics();
@@ -181,17 +180,6 @@ void SwRenderData::MakeSwPrtOptions(
     //! function will destroy the pointers
     rOptions.SetPrintUIOptions( pOpt );
     rOptions.SetRenderData( pData );
-
-    // rOptions.aMulti is not used anymore in the XRenderable API
-    // Thus we set it to a dummy value here.
-    rOptions.aMulti = MultiSelection( Range( 1, 1 ) );
-
-    //! Note: Since for PDF export of (multi-)selection a temporary
-    //! document is created that contains only the selects parts,
-    //! and thus that document is to printed in whole the,
-    //! rOptions.bPrintSelection parameter will be false.
-    if (bIsPDFExport)
-        rOptions.bPrintSelection = FALSE;
 }
 
 
@@ -208,8 +196,8 @@ SwPrintUIOptions::SwPrintUIOptions(
 {
     ResStringArray aLocalizedStrings( SW_RES( STR_PRINTOPTUI ) );
 
-    DBG_ASSERT( aLocalizedStrings.Count() >= 44, "resource incomplete" );
-    if( aLocalizedStrings.Count() < 44 ) // bad resource ?
+    DBG_ASSERT( aLocalizedStrings.Count() >= 30, "resource incomplete" );
+    if( aLocalizedStrings.Count() < 30 ) // bad resource ?
         return;
 
     // printing HTML sources does not have any valid UI options.
@@ -236,7 +224,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     String aAppGroupname( aLocalizedStrings.GetString( 0 ) );
     aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
                                     aModOpt.GetModuleName( SvtModuleOptions::E_SWRITER ) );
-    m_aUIProperties[ nIdx++ ].Value = getGroupControlOpt( aAppGroupname, rtl::OUString() );
+    m_aUIProperties[ nIdx++ ].Value = getGroupControlOpt( aAppGroupname, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:TabPage:AppPage" ) ) );
 
     // create sub section for Contents
     m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 1 ), rtl::OUString() );
@@ -244,105 +232,109 @@ SwPrintUIOptions::SwPrintUIOptions(
     // create a bool option for background
     bool bDefaultVal = rDefaultPrintData.IsPrintPageBackground();
     m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 2 ),
-                                                  aLocalizedStrings.GetString( 3 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPageBackground" ) ),
-                                                  bDefaultVal );
+                                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintPageBackground:CheckBox" ) ),
+                                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPageBackground" ) ),
+                                                         bDefaultVal );
 
     // create a bool option for pictures/graphics AND OLE and drawing objects as well
     bDefaultVal = rDefaultPrintData.IsPrintGraphic() || rDefaultPrintData.IsPrintDraw();
-    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 4 ),
-                                                  aLocalizedStrings.GetString( 5 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPicturesAndObjects" ) ),
-                                                  bDefaultVal );
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 3 ),
+                                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintPicturesAndObjects:CheckBox" ) ),
+                                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPicturesAndObjects" ) ),
+                                                         bDefaultVal );
     if (!bWeb)
     {
         // create a bool option for hidden text
         bDefaultVal = rDefaultPrintData.IsPrintHiddenText();
-        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 6 ),
-                                                  aLocalizedStrings.GetString( 7 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintHiddenText" ) ),
-                                                  bDefaultVal );
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 4 ),
+                                                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintHiddenText:CheckBox" ) ),
+                                                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintHiddenText" ) ),
+                                                             bDefaultVal );
 
         // create a bool option for place holder
         bDefaultVal = rDefaultPrintData.IsPrintTextPlaceholder();
-        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 8 ),
-                                                  aLocalizedStrings.GetString( 9 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintTextPlaceholder" ) ),
-                                                  bDefaultVal );
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 5 ),
+                                                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintTextPlaceholder:CheckBox" ) ),
+                                                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintTextPlaceholder" ) ),
+                                                             bDefaultVal );
     }
 
     // create a bool option for controls
     bDefaultVal = rDefaultPrintData.IsPrintControl();
-    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 10 ),
-                                                  aLocalizedStrings.GetString( 11 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintControls" ) ),
-                                                  bDefaultVal );
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 6 ),
+                                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintControls:CheckBox" ) ),
+                                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintControls" ) ),
+                                                         bDefaultVal );
 
     // create sub section for Color
-    m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 12 ), rtl::OUString() );
+    m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 7 ), rtl::OUString() );
 
     // create a bool option for printing text with black font color
     bDefaultVal = rDefaultPrintData.IsPrintBlackFont();
-    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 13 ),
-                                                  aLocalizedStrings.GetString( 14 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBlackFonts" ) ),
-                                                  bDefaultVal );
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 8 ),
+                                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintBlackFonts:CheckBox" ) ),
+                                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBlackFonts" ) ),
+                                                         bDefaultVal );
 
     if (!bWeb)
     {
         // create subgroup for misc options
-        m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 15 ) ), rtl::OUString() );
+        m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 9 ) ), rtl::OUString() );
 
         // create a bool option for printing automatically inserted blank pages
         bDefaultVal = rDefaultPrintData.IsPrintEmptyPages();
-        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 16 ),
-                                                       aLocalizedStrings.GetString( 17 ),
-                                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintEmptyPages" ) ),
-                                                       bDefaultVal );
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 10 ),
+                                                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintEmptyPages:CheckBox" ) ),
+                                                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintEmptyPages" ) ),
+                                                             bDefaultVal );
     }
 
     // create a bool option for paper tray
     bDefaultVal = rDefaultPrintData.IsPaperFromSetup();
     vcl::PrinterOptionsHelper::UIControlOptions aPaperTrayOpt;
     aPaperTrayOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OptionsPageOptGroup" ) );
-    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 18 ),
-                                                   aLocalizedStrings.GetString( 19 ),
-                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPaperFromSetup" ) ),
-                                                   bDefaultVal,
-                                                   aPaperTrayOpt
-                                                   );
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 11 ),
+                                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintPaperFromSetup:CheckBox" ) ),
+                                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPaperFromSetup" ) ),
+                                                         bDefaultVal,
+                                                         aPaperTrayOpt
+                                                         );
 
     // print range selection
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
     aPrintRangeOpt.mbInternalOnly = sal_True;
-    m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 37 ) ),
+    m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 26 ) ),
                                                            rtl::OUString(),
                                                            aPrintRangeOpt
                                                            );
 
     // create a choice for the content to create
     rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
-    uno::Sequence< rtl::OUString > aChoices( bHasSelection ? 3 : 2 );
-    uno::Sequence< rtl::OUString > aHelpText( bHasSelection ? 3 : 2 );
-    aChoices[0] = aLocalizedStrings.GetString( 38 );
-    aHelpText[0] = aLocalizedStrings.GetString( 39 );
-    aChoices[1] = aLocalizedStrings.GetString( 40 );
-    aHelpText[1] = aLocalizedStrings.GetString( 41 );
-    if (bHasSelection)
-    {
-        aChoices[2] = aLocalizedStrings.GetString( 42 );
-        aHelpText[2] = aLocalizedStrings.GetString( 43 );
-    }
+    uno::Sequence< rtl::OUString > aChoices( 3 );
+    uno::Sequence< sal_Bool > aChoicesDisabled( 3 );
+    uno::Sequence< rtl::OUString > aHelpIds( 3 );
+    aChoices[0] = aLocalizedStrings.GetString( 27 );
+    aChoicesDisabled[0] = sal_False;
+    aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ) );
+    aChoices[1] = aLocalizedStrings.GetString( 28 );
+    aChoicesDisabled[1] = sal_False;
+    aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ) );
+    aChoices[2] = aLocalizedStrings.GetString( 29 );
+    aChoicesDisabled[2] = sal_Bool(! bHasSelection);
+    aHelpIds[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2" ) );
     m_aUIProperties[nIdx++].Value = getChoiceControlOpt( rtl::OUString(),
-                                                         aHelpText,
+                                                         aHelpIds,
                                                          aPrintRangeName,
                                                          aChoices,
-                                                         bHasSelection ? 2 /*enable 'Selection' radio button*/ : 0 /* enable 'All pages' */);
+                                                         bHasSelection ? 2 /*enable 'Selection' radio button*/ : 0 /* enable 'All pages' */,
+                                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
+                                                         aChoicesDisabled
+                                                         );
     // create a an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, sal_True );
     m_aUIProperties[nIdx++].Value = getEditControlOpt( rtl::OUString(),
-                                                       rtl::OUString(),
+                                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PageRange:Edit" ) ),
                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
                                                        rtl::OUString(),
                                                        aPageRangeOpt
@@ -350,30 +342,31 @@ SwPrintUIOptions::SwPrintUIOptions(
     // print content selection
     vcl::PrinterOptionsHelper::UIControlOptions aContentsOpt;
     aContentsOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobPage" ) );
-    m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 20 ) ),
+    m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 12 ) ),
                                                            rtl::OUString(),
                                                            aContentsOpt
                                                            );
     // create a list box for notes content
     const sal_Int16 nPrintPostIts = rDefaultPrintData.GetPrintPostIts();
     aChoices.realloc( 4 );
-    aChoices[0] = aLocalizedStrings.GetString( 21 );
-    aChoices[1] = aLocalizedStrings.GetString( 22 );
-    aChoices[2] = aLocalizedStrings.GetString( 23 );
-    aChoices[3] = aLocalizedStrings.GetString( 24 );
-    aHelpText.realloc( 2 );
-    aHelpText[0] = aLocalizedStrings.GetString( 25 );
-    aHelpText[1] = aLocalizedStrings.GetString( 25 );
+    aChoices[0] = aLocalizedStrings.GetString( 13 );
+    aChoices[1] = aLocalizedStrings.GetString( 14 );
+    aChoices[2] = aLocalizedStrings.GetString( 15 );
+    aChoices[3] = aLocalizedStrings.GetString( 16 );
+    aHelpIds.realloc( 2 );
+    aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintAnnotationMode:FixedText" ) );
+    aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintAnnotationMode:ListBox" ) );
     vcl::PrinterOptionsHelper::UIControlOptions aAnnotOpt( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspect" ) ), 0, sal_False );
     aAnnotOpt.mbEnabled = bHasPostIts;
-    m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( aLocalizedStrings.GetString( 26 ),
-                                                    aHelpText,
-                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintAnnotationMode" ) ),
-                                                    aChoices,
-                                                    nPrintPostIts,
-                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
-                                                    aAnnotOpt
-                                                    );
+    m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( aLocalizedStrings.GetString( 17 ),
+                                                           aHelpIds,
+                                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintAnnotationMode" ) ),
+                                                           aChoices,
+                                                           nPrintPostIts,
+                                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                                           uno::Sequence< sal_Bool >(),
+                                                           aAnnotOpt
+                                                           );
 
     // create subsection for Page settings
     vcl::PrinterOptionsHelper::UIControlOptions aPageSetOpt;
@@ -381,16 +374,16 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     if (!bWeb)
     {
-        m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 27 ) ),
+        m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 18 ) ),
                                                                rtl::OUString(),
                                                                aPageSetOpt
                                                                );
         uno::Sequence< rtl::OUString > aRLChoices( 3 );
-        aRLChoices[0] = aLocalizedStrings.GetString( 28 );
-        aRLChoices[1] = aLocalizedStrings.GetString( 29 );
-        aRLChoices[2] = aLocalizedStrings.GetString( 30 );
+        aRLChoices[0] = aLocalizedStrings.GetString( 19 );
+        aRLChoices[1] = aLocalizedStrings.GetString( 20 );
+        aRLChoices[2] = aLocalizedStrings.GetString( 21 );
         uno::Sequence< rtl::OUString > aRLHelp( 1 );
-        aRLHelp[0] = aLocalizedStrings.GetString( 31 );
+        aRLHelp[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintLeftRightPages:ListBox" ) );
         // create a choice option for all/left/right pages
         // 0 : all pages (left & right)
         // 1 : left pages
@@ -402,7 +395,7 @@ SwPrintUIOptions::SwPrintUIOptions(
             nPagesChoice = 1;
         else if (!rDefaultPrintData.IsPrintLeftPage() && rDefaultPrintData.IsPrintRightPage())
             nPagesChoice = 2;
-        m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( aLocalizedStrings.GetString( 32 ),
+        m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( aLocalizedStrings.GetString( 22 ),
                                                    aRLHelp,
                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintLeftRightPages" ) ),
                                                    aRLChoices,
@@ -414,31 +407,34 @@ SwPrintUIOptions::SwPrintUIOptions(
     // create a bool option for brochure
     bDefaultVal = rDefaultPrintData.IsPrintProspect();
     rtl::OUString aBrochurePropertyName( RTL_CONSTASCII_USTRINGPARAM( "PrintProspect" ) );
-    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 33 ),
-                                                   aLocalizedStrings.GetString( 34 ),
-                                                   aBrochurePropertyName,
-                                                   bDefaultVal,
-                                                   aPageSetOpt
-                                                   );
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 23 ),
+                                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintProspect:CheckBox" ) ),
+                                                         aBrochurePropertyName,
+                                                         bDefaultVal,
+                                                         aPageSetOpt
+                                                         );
 
     if (bCTL)
     {
         // create a bool option for brochure RTL dependent on brochure
         uno::Sequence< rtl::OUString > aBRTLChoices( 2 );
-        aBRTLChoices[0] = aLocalizedStrings.GetString( 35 );
-        aBRTLChoices[1] = aLocalizedStrings.GetString( 36 );
+        aBRTLChoices[0] = aLocalizedStrings.GetString( 24 );
+        aBRTLChoices[1] = aLocalizedStrings.GetString( 25 );
         vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, sal_True );
+        uno::Sequence< rtl::OUString > aBRTLHelpIds( 1 );
+        aBRTLHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox" ) );
         aBrochureRTLOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutPage" ) );
         // RTL brochure choices
         //      0 : left-to-right
         //      1 : right-to-left
         const sal_Int16 nBRTLChoice = rDefaultPrintData.IsPrintProspectRTL() ? 1 : 0;
         m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( rtl::OUString(),
-                                                               uno::Sequence< rtl::OUString >(),
+                                                               aBRTLHelpIds,
                                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintProspectRTL" ) ),
                                                                aBRTLChoices,
                                                                nBRTLChoice,
                                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                                               uno::Sequence< sal_Bool >(),
                                                                aBrochureRTLOpt
                                                                );
     }

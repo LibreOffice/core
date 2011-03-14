@@ -25,7 +25,349 @@
  *
  ************************************************************************/
 
-#include "swmn.hrc"
+#include <svx/dialogs.hrc>
+#include <svx/globlmn.hrc>
+#include "cmdid.h"
+#include "app.hrc"
+#include "globals.hrc"
+#include "helpid.h"
+#include "popup.hrc"
+
+/* --------------------- F O R M A T --------------------------------- */
+#define SEPARATOR       MenuItem { Separator = TRUE; }
+//define for ITEM_FORMAT_NUMBERING
+#define DEFINE_SLOTID_FOR_NUMBER_BULLETS FN_NUMBER_BULLETS
+#define MN_NUMBERING ITEM_FORMAT_NUMBERING
+
+#define MN_TXT\
+    MenuItem\
+    {\
+        ITEM_FORMAT_CHAR_DLG\
+    };\
+    MenuItem\
+    {\
+        ITEM_FORMAT_PARA_DLG\
+    };\
+    MenuItem\
+    {\
+        Identifier = FN_FORMAT_PAGE_DLG ; \
+        HelpId = CMD_FN_FORMAT_PAGE_DLG ; \
+        Text [ en-US ] = "Pa~ge..." ; \
+    };
+
+
+#define MN_TEXT_ATTR\
+    MenuItem\
+    {\
+        ITEM_FORMAT_ATTR_CHAR_FONT\
+    };\
+    MenuItem\
+    {\
+        ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT\
+    };\
+    MenuItem\
+    {\
+        Identifier = MN_FORMAT_STYLE ; \
+        Command = ".uno:StyleMenu" ; \
+        Text [ en-US ] = "St~yle" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_WEIGHT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_POSTURE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_OVERLINE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_UNDERLINE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_STRIKEOUT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_SHADOWED\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_CONTOUR\
+                };\
+                SEPARATOR ; \
+                MenuItem\
+                {\
+                    Identifier = FN_SET_SUPER_SCRIPT ; \
+                    HelpId = CMD_FN_SET_SUPER_SCRIPT ; \
+                    Text [ en-US ] = "Superscript" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_SET_SUB_SCRIPT ; \
+                    HelpId = CMD_FN_SET_SUB_SCRIPT ; \
+                    Text [ en-US ] = "Subscript" ; \
+                };\
+            };\
+        };\
+    };\
+    MenuItem\
+    {\
+        Identifier = MN_FORMAT_ALGN ; \
+        Command = ".uno:AlignTextMenu" ; \
+        Text [ en-US ] = "A~lignment" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    ITEM_FORMAT_ATTR_PARA_ADJUST_LEFT\
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    ITEM_FORMAT_ATTR_PARA_ADJUST_RIGHT\
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    ITEM_FORMAT_ATTR_PARA_ADJUST_CENTER\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    HelpId = CMD_SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "Justified" ; \
+                };\
+            };\
+        };\
+    };\
+    MenuItem\
+    {\
+        Identifier = MN_FORMAT_LINESPACE ; \
+        Command = ".uno:LineSpacingMenu" ; \
+        Text [ en-US ] = "Line Spacing" ; \
+        _MenuItemFlags = MIB_RADIOCHECK ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    ITEM_FORMAT_PARA_LINESPACE_10\
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    ITEM_FORMAT_PARA_LINESPACE_15\
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    ITEM_FORMAT_PARA_LINESPACE_20\
+                };\
+            };\
+        };\
+    };
+
+/* --------------------- M E N U  --------------------------------- */
+
+/*
+
+
+The application menu bar resource has become obsolete. You can now find the menu bar at the following
+location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
+
+
+*/
+
+/* --------------------- D O C U M E N T -------------------------- */
+
+
+#define _MN_EDIT_FIELD                                                      \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_EDIT_FIELD ;                                    \
+            HelpId = CMD_FN_EDIT_FIELD ;                                        \
+            Text [ en-US ] = "Fields..." ;                             \
+    };
+#define _MN_EDIT_FOOTNOTE                                                    \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_EDIT_FOOTNOTE ;                                 \
+            HelpId = CMD_FN_EDIT_FOOTNOTE ;                                     \
+            Text [ en-US ] = "Footnote/Endnote~..." ;                          \
+        };
+    #define _MN_EDIT_IDX_ENTRY_DLG                                          \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_EDIT_IDX_ENTRY_DLG ;                            \
+            HelpId = CMD_FN_EDIT_IDX_ENTRY_DLG ;                                \
+            Text [ en-US ] = "Inde~x Entry..." ;                       \
+    };
+
+#define _MN_EDIT_REDLINE                                          \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_REDLINE_ACCEPT_DIRECT;                            \
+            HelpId = CMD_FN_REDLINE_ACCEPT_DIRECT ;                                \
+            Text [ en-US ] = "Accept Change" ;                       \
+        };\
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_REDLINE_REJECT_DIRECT ;                            \
+            HelpId = CMD_FN_REDLINE_REJECT_DIRECT ;                                \
+            Text [ en-US ] = "Reject Change" ;                       \
+        };                              \
+    SEPARATOR ;
+#define _MN_EDIT_BIB_ENTRY_DLG                                              \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_EDIT_AUTH_ENTRY_DLG ;                           \
+            HelpId = CMD_FN_EDIT_AUTH_ENTRY_DLG ;                               \
+            Text [ en-US ] = "~Bibliography Entry...";                  \
+    };                                                                  \
+        SEPARATOR ;
+
+#define _MN_EDIT_OPEN_HYPERLINK                                             \
+    MenuItem                                                                \
+    {                                                                       \
+        ITEM_OPEN_HYPERLINK                                                 \
+    };\
+    MenuItem                                                            \
+    {                                                                   \
+        Identifier = FN_EDIT_HYPERLINK ;                           \
+        HelpId = CMD_FN_EDIT_HYPERLINK ;                               \
+        Text [ en-US ] = "Edit Hyperlink...";                  \
+    };                                                                  \
+    MenuItem                                                            \
+    {                                                                   \
+        Identifier =  FN_COPY_HYPERLINK_LOCATION;                           \
+        HelpId = CMD_FN_COPY_HYPERLINK_LOCATION;                               \
+        Text [ en-US ] = "Copy Hyperlink ~Location";                  \
+    };                                                                  \
+    MenuItem                                                            \
+    {                                                                   \
+        Identifier = FN_REMOVE_HYPERLINK ;                           \
+        HelpId = CMD_FN_REMOVE_HYPERLINK ;                               \
+        Text [ en-US ] = "Remo~ve Hyperlink";                  \
+    };
+
+#define _MN_EDIT_OPEN_SMARTTAGMENU                                          \
+    MenuItem                                                                \
+    {                                                                       \
+        ITEM_OPEN_SMARTTAGMENU                                              \
+    };
+
+#define _MN_EDIT__HYPERLINK \
+    MenuItem\
+    {\
+        Identifier = FN_EDIT_HYPERLINK ; \
+        HelpId = CMD_FN_EDIT_HYPERLINK ; \
+        Text [ en-US ] = "~Edit Hyperlink" ; \
+    };
+
+#define _DEFAULT_TEXT_EDIT_ELEMENTS                                         \
+    _MN_EDIT_FIELD                                                              \
+    _MN_EDIT_FOOTNOTE                                                           \
+    _MN_EDIT_IDX_ENTRY_DLG                                                      \
+    _MN_EDIT_BIB_ENTRY_DLG                                                      \
+    _MN_EDIT_REDLINE                                                            \
+    MenuItem                                                            \
+    {                                                                   \
+        ITEM_POPUP_TEMPLATE_EDIT                                        \
+    };                                                                  \
+    SEPARATOR ;                                                         \
+    _MN_EDIT_OPEN_HYPERLINK                                             \
+    _MN_EDIT_OPEN_SMARTTAGMENU
+
+
+#define MN_RESET\
+    MenuItem\
+    {\
+        Identifier = FN_FORMAT_RESET ; \
+        HelpId = CMD_FN_FORMAT_RESET ; \
+        Text [ en-US ] = "~Default Formatting" ; \
+    };
+
+#define _NUMBERING_RELATED_MENU \
+        SEPARATOR ;                                                         \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_NUMBER_NEWSTART;                                \
+            HelpId = CMD_FN_NUMBER_NEWSTART;                                    \
+            Text[ en-US ] = "Restart Numbering";                            \
+        };                                                                  \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_NUM_CONTINUE;                                   \
+            HelpId = CMD_FN_NUM_CONTINUE;                                       \
+            Text[ en-US ] = "Continue previous numbering";                  \
+        };                                                                  \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_NUM_BULLET_UP;                              \
+            HelpId = CMD_FN_NUM_BULLET_UP;                                  \
+            Text[ en-US ] = "Up One Level";                              \
+        };                                                                  \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_NUM_BULLET_DOWN;                              \
+            HelpId = CMD_FN_NUM_BULLET_DOWN;                                  \
+            Text[ en-US ] = "Down One Level";                              \
+        };
+
+#define BASE_TEXT_POPUPMENU_BEGIN \
+{                                                                           \
+    ItemList =                                                              \
+    {                                                                       \
+        MN_RESET                                                            \
+        _NUMBERING_RELATED_MENU                                             \
+        SEPARATOR ;                                                         \
+        MN_TEXT_ATTR                                                        \
+        SEPARATOR ;                                                         \
+        MN_TXT                                                              \
+        MN_NUMBERING                                                        \
+        ITEM_TRANSLITERATE_MENU                                             \
+        SEPARATOR ;
+
+// not in Writer/Web
+#define BASE_TEXT_POPUPMENU_NOWEB \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_UPDATE_CUR_TOX ;                                \
+            HelpId = CMD_FN_UPDATE_CUR_TOX ;                                    \
+            Text [ en-US ] = "~Update Index/Table";                         \
+        };                                                                  \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_EDIT_CURRENT_TOX;                               \
+            HelpId = CMD_FN_EDIT_CURRENT_TOX;                                   \
+            Text [ en-US ] = "~Edit Index/Table";                           \
+        };                                                                  \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_REMOVE_CUR_TOX;                                 \
+            HelpId = CMD_FN_REMOVE_CUR_TOX;                                     \
+            Text [ en-US ] = "Delete Index/Table";                          \
+        };                                                                  \
+        SEPARATOR ;
+
+#define BASE_TEXT_POPUPMENU_END \
+        _DEFAULT_TEXT_EDIT_ELEMENTS                                         \
+    };                                                                      \
+};
 
 /*------------------------------------------------------------------------
    Description: Menu Window
@@ -35,7 +377,7 @@
         MenuItem\
         {\
             Identifier = FN_INSERT_CAPTION ;\
-            HelpID = FN_INSERT_CAPTION ;\
+            HelpId = CMD_FN_INSERT_CAPTION ;\
             Text [ en-US ] = "~Caption..." ;\
     };
 
@@ -43,31 +385,30 @@
     MenuItem\
     {\
         Identifier = FN_FORMAT_TABLE_DLG ; \
-        HelpID = FN_FORMAT_TABLE_DLG ; \
+        HelpId = CMD_FN_FORMAT_TABLE_DLG ; \
         Text [ en-US ] = "~Table..." ; \
     };\
     MenuItem\
     {\
         Identifier = FN_TABLE_MERGE_TABLE ; \
-        HelpID = FN_TABLE_MERGE_TABLE ; \
+        HelpId = CMD_FN_TABLE_MERGE_TABLE ; \
         Text [ en-US ] = "Merge Tables";\
     };\
     MenuItem\
     {\
         Identifier = FN_TABLE_SPLIT_TABLE ; \
-        HelpID = FN_TABLE_SPLIT_TABLE ; \
+        HelpId = CMD_FN_TABLE_SPLIT_TABLE ; \
         Text [ en-US ] = "~Split Table" ; \
     };\
     MenuItem\
     {\
         Identifier = FN_NUM_FORMAT_TABLE_DLG ; \
-        HelpID = FN_NUM_FORMAT_TABLE_DLG ; \
+        HelpId = CMD_FN_NUM_FORMAT_TABLE_DLG ; \
         Text [ en-US ] = "N~umber Format..." ; \
     };\
     MenuItem\
     {\
         Identifier = MN_CELL ; \
-        HelpID = MN_CELL ; \
         Command = ".uno:CellMenu" ; \
         Text [ en-US ] = "~Cell" ; \
         SubMenu = Menu\
@@ -77,45 +418,45 @@
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_MERGE_CELLS ; \
-                    HelpID = FN_TABLE_MERGE_CELLS ; \
+                    HelpId = CMD_FN_TABLE_MERGE_CELLS ; \
                     Text [ en-US ] = "~Merge" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_SPLIT_CELLS ; \
-                    HelpID = FN_TABLE_SPLIT_CELLS ; \
+                    HelpId = CMD_FN_TABLE_SPLIT_CELLS ; \
                     Text [ en-US ] = "~Split..." ; \
                 };\
                 SEPARATOR ; \
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_VERT_NONE ; \
-                    HelpID = FN_TABLE_VERT_NONE ; \
+                    HelpId = CMD_FN_TABLE_VERT_NONE ; \
                     Text [ en-US ] = "~Top" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_VERT_CENTER ; \
-                    HelpID = FN_TABLE_VERT_CENTER ; \
+                    HelpId = CMD_FN_TABLE_VERT_CENTER ; \
                     Text [ en-US ] = "C~enter" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_VERT_BOTTOM ; \
-                    HelpID = FN_TABLE_VERT_BOTTOM ; \
+                    HelpId = CMD_FN_TABLE_VERT_BOTTOM ; \
                     Text [ en-US ] = "~Bottom" ; \
                 };\
                 SEPARATOR ; \
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_SET_READ_ONLY_CELLS ; \
-                    HelpID = FN_TABLE_SET_READ_ONLY_CELLS ; \
+                    HelpId = CMD_FN_TABLE_SET_READ_ONLY_CELLS ; \
                     Text [ en-US ] = "~Protect" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_UNSET_READ_ONLY_CELLS ; \
-                    HelpID = FN_TABLE_UNSET_READ_ONLY_CELLS ; \
+                    HelpId = CMD_FN_TABLE_UNSET_READ_ONLY_CELLS ; \
                     Text [ en-US ] = "~Unprotect" ; \
                 };\
             };\
@@ -136,44 +477,44 @@
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_SET_ROW_HEIGHT ; \
-                    HelpID = FN_TABLE_SET_ROW_HEIGHT ; \
+                    HelpId = CMD_FN_TABLE_SET_ROW_HEIGHT ; \
                     Text [ en-US ] = "~Height..." ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_ROW_SPLIT;\
-                    HelpID = FN_TABLE_ROW_SPLIT ; \
+                    HelpId = CMD_FN_TABLE_ROW_SPLIT ; \
                     Text [ en-US ] = "Allow Row to Break A~cross Pages and Columns" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_OPTIMAL_HEIGHT ; \
-                    HelpID = FN_TABLE_OPTIMAL_HEIGHT ; \
+                    HelpId = CMD_FN_TABLE_OPTIMAL_HEIGHT ; \
                     Text [ en-US ] = "~Optimal Height" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_BALANCE_ROWS ; \
-                    HelpID = FN_TABLE_BALANCE_ROWS ; \
+                    HelpId = CMD_FN_TABLE_BALANCE_ROWS ; \
                     Text [ en-US ] = "Space ~Equally" ; \
                 };\
                 SEPARATOR ; \
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_SELECT_ROW ; \
-                    HelpID = FN_TABLE_SELECT_ROW ; \
+                    HelpId = CMD_FN_TABLE_SELECT_ROW ; \
                     Text [ en-US ] = "~Select" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_INSERT_ROW_DLG ; \
-                    HelpID = FN_TABLE_INSERT_ROW_DLG ; \
+                    HelpId = CMD_FN_TABLE_INSERT_ROW_DLG ; \
                     Text [ en-US ] = "~Insert..." ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_DELETE_ROW ; \
-                    HelpID = FN_TABLE_DELETE_ROW ; \
+                    HelpId = CMD_FN_TABLE_DELETE_ROW ; \
                     Text [ en-US ] = "~Delete" ; \
                 };\
             };\
@@ -192,38 +533,38 @@
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_SET_COL_WIDTH ; \
-                    HelpID = FN_TABLE_SET_COL_WIDTH ; \
+                    HelpId = CMD_FN_TABLE_SET_COL_WIDTH ; \
                     Text [ en-US ] = "~Width..." ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_ADJUST_CELLS ; \
-                    HelpID = FN_TABLE_ADJUST_CELLS ; \
+                    HelpId = CMD_FN_TABLE_ADJUST_CELLS ; \
                     Text [ en-US ] = "~Optimal Width " ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_BALANCE_CELLS ; \
-                    HelpID = FN_TABLE_BALANCE_CELLS ; \
+                    HelpId = CMD_FN_TABLE_BALANCE_CELLS ; \
                     Text [ en-US ] = "Space ~Equally" ; \
                 };\
                 SEPARATOR ; \
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_SELECT_COL ; \
-                    HelpID = FN_TABLE_SELECT_COL ; \
+                    HelpId = CMD_FN_TABLE_SELECT_COL ; \
                     Text [ en-US ] = "~Select" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_INSERT_COL_DLG ; \
-                    HelpID = FN_TABLE_INSERT_COL_DLG ; \
+                    HelpId = CMD_FN_TABLE_INSERT_COL_DLG ; \
                     Text [ en-US ] = "~Insert..." ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_DELETE_COL ; \
-                    HelpID = FN_TABLE_DELETE_COL ; \
+                    HelpId = CMD_FN_TABLE_DELETE_COL ; \
                     Text [ en-US ] = "~Delete" ; \
                 };\
             };\
@@ -244,7 +585,7 @@
     MenuItem\
     {\
         Identifier = FN_DRAWTEXT_ATTR_DLG ; \
-        HelpID = FN_DRAWTEXT_ATTR_DLG ; \
+        HelpId = CMD_FN_DRAWTEXT_ATTR_DLG ; \
         Text [ en-US ] = "Te~xt..." ; \
     };
 
@@ -252,7 +593,7 @@
     MenuItem\
     {\
         Identifier = FN_NAME_SHAPE ; \
-        HelpID = FN_NAME_SHAPE ; \
+        HelpId = CMD_FN_NAME_SHAPE ; \
         Text [ en-US ] = "Name..." ; \
     };
 
@@ -260,7 +601,7 @@
     MenuItem\
     {\
         Identifier = FN_TITLE_DESCRIPTION_SHAPE; \
-        HelpID = FN_TITLE_DESCRIPTION_SHAPE; \
+        HelpId = CMD_FN_TITLE_DESCRIPTION_SHAPE; \
         Text [ en-US ] = "Description..." ; \
     };
 
@@ -268,7 +609,7 @@
     MenuItem\
     {\
         Identifier = FN_FORMAT_FRAME_DLG ; \
-        HelpID = FN_FORMAT_FRAME_DLG ; \
+        HelpId = CMD_FN_FORMAT_FRAME_DLG ; \
         Text [ en-US ] = "~Frame..." ; \
     };
 
@@ -323,13 +664,13 @@
     MenuItem\
     {\
         Identifier = FN_FRAME_UP ; \
-        HelpID = FN_FRAME_UP ; \
+        HelpId = CMD_FN_FRAME_UP ; \
         Text [ en-US ] = "Bring ~Forward" ; \
     };\
     MenuItem\
     {\
         Identifier = FN_FRAME_DOWN ; \
-        HelpID = FN_FRAME_DOWN ; \
+        HelpId = CMD_FN_FRAME_DOWN ; \
         Text [ en-US ] = "Send Back~ward" ; \
     };
 
@@ -409,45 +750,45 @@
     MenuItem\
     {\
         Identifier = FN_REPLY ;\
-        HelpID = FN_DELETE_NOTE ;\
+        HelpID = CMD_FN_REPLY ;\
         Text [ en-US ] = "Reply" ;\
     };\
     SEPARATOR ; \
     MenuItem\
     {\
-        Identifier = FN_DELETE_NOTE ;\
-        HelpID = FN_DELETE_NOTE ;\
+        Identifier = FN_DELETE_COMMENT ;\
+        HelpID = CMD_FN_DELETE_COMMENT ;\
         Text [ en-US ] = "Delete ~Comment" ;\
     };\
     MenuItem\
     {\
         Identifier = FN_DELETE_NOTE_AUTHOR ;\
-        HelpID = FN_DELETE_NOTE_AUTHOR ;\
+        HelpId = CMD_FN_DELETE_NOTE_AUTHOR ;\
         Text [ en-US ] = "Delete ~All Comments by $1" ;\
     };\
     MenuItem\
     {\
         Identifier = FN_DELETE_ALL_NOTES ;\
-        HelpID = FN_DELETE_ALL_NOTES ;\
+        HelpId = CMD_FN_DELETE_ALL_NOTES ;\
         Text [ en-US ] = "~Delete All Comments" ;\
     };\
     /*
     MenuItem\
     {\
         Identifier = FN_HIDE_NOTE ;\
-        HelpID = FN_HIDE_NOTE ;\
+        HelpId = CMD_FN_HIDE_NOTE ;\
         Text [ en-US ] = "~Hide comment" ;\
     };\
     MenuItem\
     {\
         Identifier = FN_HIDE_NOTE_AUTHOR     ;\
-        HelpID = FN_HIDE_NOTE_AUTHOR ;\
+        HelpId = CMD_FN_HIDE_NOTE_AUTHOR ;\
         Text [ en-US ] = "Hide ~author" ;\
     };\
     MenuItem\
     {\
         Identifier = FN_HIDE_ALL_NOTES ;\
-        HelpID = FN_HIDE_ALL_NOTES ;\
+        HelpId = CMD_FN_HIDE_ALL_NOTES ;\
         Text [ en-US ] = "Hide all ~comments" ;\
     };
     */
@@ -490,13 +831,13 @@ Menu MN_TAB_POPUPMENU
         MenuItem
         {
             Identifier = FN_VIEW_TABLEGRID ;
-            HelpID = FN_VIEW_TABLEGRID ;
+            HelpId = CMD_FN_VIEW_TABLEGRID ;
             Text [ en-US ] = "Table Boundaries" ;
         };
         MenuItem
         {
             Identifier = FN_SET_MODOPT_TBLNUMFMT ;
-            HelpID = FN_SET_MODOPT_TBLNUMFMT ;
+            HelpId = CMD_FN_SET_MODOPT_TBLNUMFMT ;
             Text [ en-US ] = "~Number Recognition";
         };
         SEPARATOR ;
@@ -508,7 +849,7 @@ Menu MN_TAB_POPUPMENU
     MenuItem\
     {\
         Identifier = FN_FRAME_WRAP_CONTOUR ; \
-        HelpID = FN_FRAME_WRAP_CONTOUR ; \
+        HelpId = CMD_FN_FRAME_WRAP_CONTOUR ; \
         Text [ en-US ] = "~Contour" ; \
     };
 
@@ -516,7 +857,7 @@ Menu MN_TAB_POPUPMENU
     MenuItem\
     {\
         Identifier = SID_CONTOUR_DLG ; \
-        HelpID = SID_CONTOUR_DLG ; \
+        HelpId = CMD_SID_CONTOUR_DLG ; \
         Text [ en-US ] = "~Edit Contour..." ; \
     };
 
@@ -527,7 +868,6 @@ Menu MN_TAB_POPUPMENU
     MenuItem\
     {\
         Identifier = MN_WRAP ; \
-        HelpID = MN_WRAP ; \
         Command = ".uno:WrapMenu" ; \
         Text [ en-US ] = "~Wrap" ; \
         SubMenu = Menu\
@@ -538,35 +878,35 @@ Menu MN_TAB_POPUPMENU
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_NOWRAP ; \
-                    HelpID = FN_FRAME_NOWRAP ; \
+                    HelpId = CMD_FN_FRAME_NOWRAP ; \
                     Text [ en-US ] = "~No Wrap" ; \
                 };\
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAP ; \
-                    HelpID = FN_FRAME_WRAP ; \
+                    HelpId = CMD_FN_FRAME_WRAP ; \
                     Text [ en-US ] = "~Page Wrap" ; \
                 };\
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAP_IDEAL ; \
-                    HelpID = FN_FRAME_WRAP_IDEAL ; \
+                    HelpId = CMD_FN_FRAME_WRAP_IDEAL ; \
                     Text [ en-US ] = "~Optimal Page Wrap" ; \
                 };\
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAPTHRU ; \
-                    HelpID = FN_FRAME_WRAPTHRU ; \
+                    HelpId = CMD_FN_FRAME_WRAPTHRU ; \
                     Text [ en-US ] = "~Wrap Through" ; \
                 };\
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAPTHRU_TRANSP ; \
-                    HelpID = FN_FRAME_WRAPTHRU_TRANSP ; \
+                    HelpId = CMD_FN_FRAME_WRAPTHRU_TRANSP ; \
                     Text [ en-US ] = "In ~Background" ; \
                 };\
                 SEPARATOR ; \
@@ -576,7 +916,7 @@ Menu MN_TAB_POPUPMENU
                 {\
                     Checkable = TRUE ; \
                     Identifier = FN_WRAP_ANCHOR_ONLY ; \
-                    HelpID = FN_WRAP_ANCHOR_ONLY ; \
+                    HelpId = CMD_FN_WRAP_ANCHOR_ONLY ; \
                     Text [ en-US ] = "~First Paragraph" ; \
                     };\
             };\
@@ -594,7 +934,6 @@ String MN_DRAW_POPUPMENU
     MenuItem\
     {\
         Identifier = MN_WRAP ; \
-        HelpID = MN_WRAP ; \
         Command = ".uno:WrapMenu" ; \
         SubMenu = Menu\
         {\
@@ -604,35 +943,35 @@ String MN_DRAW_POPUPMENU
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_NOWRAP ; \
-                    HelpID = FN_FRAME_NOWRAP ; \
+                    HelpId = CMD_FN_FRAME_NOWRAP ; \
                     Text [ en-US ] = "~No Wrap" ; \
                 };\
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAP ; \
-                    HelpID = FN_FRAME_WRAP ; \
+                    HelpId = CMD_FN_FRAME_WRAP ; \
                     Text [ en-US ] = "~Page Wrap" ; \
                 };\
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAP_IDEAL ; \
-                    HelpID = FN_FRAME_WRAP_IDEAL ; \
+                    HelpId = CMD_FN_FRAME_WRAP_IDEAL ; \
                     Text [ en-US ] = "~Optimal Page Wrap" ; \
                 };\
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAPTHRU ; \
-                    HelpID = FN_FRAME_WRAPTHRU ; \
+                    HelpId = CMD_FN_FRAME_WRAPTHRU ; \
                     Text [ en-US ] = "~Wrap Through" ; \
                 };\
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAPTHRU_TRANSP ; \
-                    HelpID = FN_FRAME_WRAPTHRU_TRANSP ; \
+                    HelpId = CMD_FN_FRAME_WRAPTHRU_TRANSP ; \
                     Text [ en-US ] = "In ~Background" ; \
                 };\
                 SEPARATOR ; \
@@ -641,14 +980,14 @@ String MN_DRAW_POPUPMENU
                 {\
                     Checkable = TRUE ; \
                     Identifier = FN_WRAP_ANCHOR_ONLY ; \
-                    HelpID = FN_WRAP_ANCHOR_ONLY ; \
+                    HelpId = CMD_FN_WRAP_ANCHOR_ONLY ; \
                     Text [ en-US ] = "~First Paragraph" ; \
                 };\
                 SEPARATOR ; \
                 MenuItem\
                 {\
                     Identifier = FN_DRAW_WRAP_DLG ; \
-                    HelpID = FN_DRAW_WRAP_DLG ; \
+                    HelpId = CMD_FN_DRAW_WRAP_DLG ; \
                     Text [ en-US ] = "~Edit..." ; \
                 };\
             };\
@@ -667,7 +1006,7 @@ String MN_DRAW_POPUPMENU
     {\
         RadioCheck = TRUE ; \
         Identifier = FN_TOOL_ANKER_FRAME ; \
-        HelpID = FN_TOOL_ANKER_FRAME ; \
+        HelpId = CMD_FN_TOOL_ANKER_FRAME ; \
         Text [ en-US ] = "To ~Frame" ; \
     };
 
@@ -675,7 +1014,7 @@ String MN_DRAW_POPUPMENU
     MenuItem\
     {\
         Identifier = FN_TOOL_ANKER ; \
-        HelpID = FN_TOOL_ANKER ; \
+        HelpId = CMD_FN_TOOL_ANKER ; \
         Command = ".uno:AnchorMenu" ; \
         Text [ en-US ] = "An~chor" ; \
         SubMenu = Menu\
@@ -686,28 +1025,28 @@ String MN_DRAW_POPUPMENU
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = FN_TOOL_ANKER_PAGE ; \
-                    HelpID = FN_TOOL_ANKER_PAGE ; \
+                    HelpId = CMD_FN_TOOL_ANKER_PAGE ; \
                     Text [ en-US ] = "To P~age" ; \
                 };\
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = FN_TOOL_ANKER_PARAGRAPH ; \
-                    HelpID = FN_TOOL_ANKER_PARAGRAPH ; \
+                    HelpId = CMD_FN_TOOL_ANKER_PARAGRAPH ; \
                     Text [ en-US ] = "To ~Paragraph" ; \
                 };\
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = FN_TOOL_ANKER_AT_CHAR ; \
-                    HelpID = FN_TOOL_ANKER_AT_CHAR ; \
+                    HelpId = CMD_FN_TOOL_ANKER_AT_CHAR ; \
                     Text [ en-US ] = "To ~Character" ; \
                 };\
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = FN_TOOL_ANKER_CHAR ; \
-                    HelpID = FN_TOOL_ANKER_CHAR ; \
+                    HelpId = CMD_FN_TOOL_ANKER_CHAR ; \
                     Text [ en-US ] = "As C~haracter" ; \
                 };\
                 MN_AT_FRAME\
@@ -793,7 +1132,7 @@ Menu MN_DRWTXT_POPUPMENU
     MenuItem\
     {\
         Identifier = FN_DELETE_COMMENT ;\
-        HelpID = FN_DELETE_COMMENT ;\
+        HelpId = CMD_FN_DELETE_COMMENT ;\
         Text [ en-US ] = "Delete ~Changes Note" ;\
     };\
 
@@ -870,7 +1209,6 @@ String MN_GRF_POPUPMENU
     MenuItem\
     {\
         Identifier = MN_FORMAT_FRM_HORZ ; \
-        HelpID = MN_FORMAT_FRM_HORZ ; \
         Command = ".uno:AlignFrameMenu" ; \
         SubMenu = Menu\
         {\
@@ -879,38 +1217,38 @@ String MN_GRF_POPUPMENU
                 MenuItem\
                 {\
                     Identifier = FN_FRAME_ALIGN_HORZ_LEFT ; \
-                    HelpID = FN_FRAME_ALIGN_HORZ_LEFT ; \
+                    HelpId = CMD_FN_FRAME_ALIGN_HORZ_LEFT ; \
                     Text [ en-US ] = "~Left" ; \
                     };\
                 MenuItem\
                 {\
                     Identifier = FN_FRAME_ALIGN_HORZ_CENTER ; \
-                    HelpID = FN_FRAME_ALIGN_HORZ_CENTER ; \
+                    HelpId = CMD_FN_FRAME_ALIGN_HORZ_CENTER ; \
                     Text [ en-US ] = "~Centered" ; \
                     };\
                 MenuItem\
                 {\
                     Identifier = FN_FRAME_ALIGN_HORZ_RIGHT ; \
-                    HelpID = FN_FRAME_ALIGN_HORZ_RIGHT ; \
+                    HelpId = CMD_FN_FRAME_ALIGN_HORZ_RIGHT ; \
                     Text [ en-US ] = "~Right" ; \
                     };\
                 SEPARATOR ; \
                 MenuItem\
                 {\
                     Identifier = FN_FRAME_ALIGN_VERT_TOP ; \
-                    HelpID = FN_FRAME_ALIGN_VERT_TOP ; \
+                    HelpId = CMD_FN_FRAME_ALIGN_VERT_TOP ; \
                     Text [ en-US ] = "Base at ~Top" ; \
                     };\
                 MenuItem\
                 {\
                     Identifier = FN_FRAME_ALIGN_VERT_CENTER ; \
-                    HelpID = FN_FRAME_ALIGN_VERT_CENTER ; \
+                    HelpId = CMD_FN_FRAME_ALIGN_VERT_CENTER ; \
                     Text [ en-US ] = "Base in ~Middle" ; \
                     };\
                 MenuItem\
                 {\
                     Identifier = FN_FRAME_ALIGN_VERT_BOTTOM ; \
-                    HelpID = FN_FRAME_ALIGN_VERT_BOTTOM ; \
+                    HelpId = CMD_FN_FRAME_ALIGN_VERT_BOTTOM ; \
                     Text [ en-US ] = "Base at ~Bottom" ; \
                     };\
             };\
@@ -931,13 +1269,13 @@ Menu MN_GRF_POPUPMENU
         MenuItem
         {
             Identifier = FN_FORMAT_GRAFIC_DLG ;
-            HelpID = FN_FORMAT_GRAFIC_DLG ;
+            HelpId = CMD_FN_FORMAT_GRAFIC_DLG ;
             Text [ en-US ] = "~Picture..." ;
         };
         MenuItem
         {
             Identifier = FN_SAVE_GRAPHIC;
-            HelpID = FN_SAVE_GRAPHIC;
+            HelpId = CMD_FN_SAVE_GRAPHIC;
             Text [ en-US ] = "Save Graphics..." ;
         };
         MN_FRM_CAPTION_ITEM
@@ -945,7 +1283,7 @@ Menu MN_GRF_POPUPMENU
         MenuItem
         {
             Identifier = FN_EXTERNAL_EDIT ;
-            HelpID = FN_EXTERNAL_EDIT ;
+            HelpID = CMD_FN_EXTERNAL_EDIT ;
             Text [ en-US ] = "Edit with External Tool...";
         };
         SEPARATOR;
@@ -972,13 +1310,13 @@ String MN_OLE_POPUPMENU
                 MenuItem\
                 {\
                     Identifier = FN_EXPORT_OLE_AS_PDF ;\
-                    HelpID = FN_EXPORT_OLE_AS_PDF ; \
+                    HelpID = CMD_FN_EXPORT_OLE_AS_PDF ; \
                     Text [ en-US ] = "Export as P~DF..." ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_EXPORT_OLE_AS_GRAPHIC ;\
-                    HelpID = FN_EXPORT_OLE_AS_GRAPHIC ; \
+                    HelpID = CMD_FN_EXPORT_OLE_AS_GRAPHIC ; \
                     Text [ en-US ] = "Export as JPG..." ; \
                 };\
             };\
@@ -997,7 +1335,7 @@ Menu MN_OLE_POPUPMENU
         MenuItem
         {
             Identifier = FN_FORMAT_FRAME_DLG ;
-            HelpID = FN_FORMAT_FRAME_DLG ;
+            HelpId = CMD_FN_FORMAT_FRAME_DLG ;
             Text [ en-US ] = "Object..." ;
         };
         SEPARATOR ;
@@ -1040,13 +1378,13 @@ Menu MN_PPREVIEW_POPUPMENU
         MenuItem
         {
             Identifier = FN_PAGEUP ;
-            HelpID = FN_PAGEUP ;
+            HelpId = CMD_FN_PAGEUP ;
             Text [ en-US ] = "Previous Page" ;
         };
         MenuItem
         {
             Identifier = FN_PAGEDOWN ;
-            HelpID = FN_PAGEDOWN ;
+            HelpId = CMD_FN_PAGEDOWN ;
             Text [ en-US ] = "Next Page" ;
         };
         MenuItem
@@ -1057,14 +1395,14 @@ Menu MN_PPREVIEW_POPUPMENU
         MenuItem
         {
             Identifier = FN_PRINT_PAGEPREVIEW ;
-            HelpID = FN_PRINT_PAGEPREVIEW ;
+            HelpId = CMD_FN_PRINT_PAGEPREVIEW ;
             Text [ en-US ] = "Print" ;
         };
         SEPARATOR ;
         MenuItem
         {
             Identifier = SID_PRINTPREVIEW;
-            HelpID =  SID_PRINTPREVIEW;
+            HelpId = CMD_SID_PRINTPREVIEW;
             Text [ en-US ] = "Close Preview" ;
         };
     };

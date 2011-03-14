@@ -96,20 +96,20 @@ class SW_DLLPUBLIC SwNode : private /* public*/ BigPtrEntry
     long nMySerial;
 #endif
 
-    BYTE nNodeType;
+    sal_uInt8 nNodeType;
 
     // For text nodes: level of auto format. Was put here because we had still free bits.
-    BYTE nAFmtNumLvl : 3;
-    BOOL bSetNumLSpace : 1;         // For numbering: TRUE: set indent.
-    BOOL bIgnoreDontExpand : 1;     // for Text Attributes - ignore the flag
+    sal_uInt8 nAFmtNumLvl : 3;
+    sal_Bool bSetNumLSpace : 1;         // For numbering: TRUE: set indent.
+    sal_Bool bIgnoreDontExpand : 1;     // for Text Attributes - ignore the flag
 
 protected:
     SwStartNode* pStartOfSection;
 
-    SwNode( const SwNodeIndex &rWhere, const BYTE nNodeId );
+    SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNodeId );
 
     // for the initial StartNode
-    SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNodeId );
+    SwNode( SwNodes& rNodes, sal_uLong nPos, const sal_uInt8 nNodeId );
 
 public:
     virtual ~SwNode();
@@ -118,26 +118,26 @@ public:
     long int GetSerial() const { return nMySerial; }
 #endif
 
-    USHORT GetSectionLevel() const;
+    sal_uInt16 GetSectionLevel() const;
 
-    inline ULONG StartOfSectionIndex() const;
+    inline sal_uLong StartOfSectionIndex() const;
     inline const SwStartNode* StartOfSectionNode() const { return pStartOfSection; }
     inline       SwStartNode* StartOfSectionNode() { return pStartOfSection; }
 
-    inline ULONG EndOfSectionIndex() const;
+    inline sal_uLong EndOfSectionIndex() const;
     inline const SwEndNode* EndOfSectionNode() const;
     inline         SwEndNode* EndOfSectionNode();
 
-    inline BYTE GetAutoFmtLvl() const     { return nAFmtNumLvl; }
-    inline void SetAutoFmtLvl( BYTE nVal )      { nAFmtNumLvl = nVal; }
+    inline sal_uInt8 GetAutoFmtLvl() const     { return nAFmtNumLvl; }
+    inline void SetAutoFmtLvl( sal_uInt8 nVal )      { nAFmtNumLvl = nVal; }
 
-    inline BOOL IsSetNumLSpace() const  { return bSetNumLSpace; }
-    inline void SetNumLSpace( BOOL bFlag )        { bSetNumLSpace = bFlag; }
+    inline sal_Bool IsSetNumLSpace() const  { return bSetNumLSpace; }
+    inline void SetNumLSpace( sal_Bool bFlag )        { bSetNumLSpace = bFlag; }
 
-    inline BOOL IsIgnoreDontExpand() const  { return bIgnoreDontExpand; }
-    inline void SetIgnoreDontExpand( BOOL bNew )  { bIgnoreDontExpand = bNew; }
+    inline sal_Bool IsIgnoreDontExpand() const  { return bIgnoreDontExpand; }
+    inline void SetIgnoreDontExpand( sal_Bool bNew )  { bIgnoreDontExpand = bNew; }
 
-    BYTE    GetNodeType() const { return nNodeType; }
+    sal_uInt8   GetNodeType() const { return nNodeType; }
 
     inline       SwStartNode *GetStartNode();
     inline const SwStartNode *GetStartNode() const;
@@ -165,23 +165,23 @@ public:
     inline       SwSectionNode *GetSectionNode();
     inline const SwSectionNode *GetSectionNode() const;
 
-    inline BOOL IsStartNode() const;
-    inline BOOL IsCntntNode() const;
-    inline BOOL IsEndNode() const;
-    inline BOOL IsTxtNode() const;
-    inline BOOL IsTableNode() const;
-    inline BOOL IsSectionNode() const;
-    inline BOOL IsOLENode() const;
-    inline BOOL IsNoTxtNode() const;
-    inline BOOL IsGrfNode() const;
+    inline sal_Bool IsStartNode() const;
+    inline sal_Bool IsCntntNode() const;
+    inline sal_Bool IsEndNode() const;
+    inline sal_Bool IsTxtNode() const;
+    inline sal_Bool IsTableNode() const;
+    inline sal_Bool IsSectionNode() const;
+    inline sal_Bool IsOLENode() const;
+    inline sal_Bool IsNoTxtNode() const;
+    inline sal_Bool IsGrfNode() const;
 
     /**
        Checks if this node is in redlines.
 
-       @retval TRUE       this node is in redlines
-       @retval FALSE      else
+       @retval sal_True       this node is in redlines
+       @retval sal_False      else
      */
-    BOOL IsInRedlines() const;
+    sal_Bool IsInRedlines() const;
 
     // Search table node, in which it is. If it is in no table
     // return 0.
@@ -271,18 +271,17 @@ public:
     IDocumentListItems& getIDocumentListItems();
 
     // Is node in the visible area of the Shell?
-    BOOL IsInVisibleArea( ViewShell* pSh = 0 ) const;
+    sal_Bool IsInVisibleArea( ViewShell* pSh = 0 ) const;
     // Is node in an protected area?
-    BOOL IsInProtectSect() const;
+    sal_Bool IsInProtectSect() const;
     //  Is node in something that is protected (range, frame,
     //  table cells ... including anchor in case of frames or footnotes)?
-    BOOL IsProtect() const;
+    sal_Bool IsProtect() const;
 
     // Search PageDesc with which this node is formated. If layout is existent
     // search over layout, else only the hard way is left: search over the nodes
     // to the front!!
-
-    const SwPageDesc* FindPageDesc( BOOL bCalcLay, sal_uInt32* pPgDescNdIdx = 0 ) const;
+    const SwPageDesc* FindPageDesc( sal_Bool bCalcLay, sal_uInt32* pPgDescNdIdx = 0 ) const;
 
     // If node is in a fly return the respective format.
     SwFrmFmt* GetFlyFmt() const;
@@ -290,11 +289,11 @@ public:
     // If node is in a table return the respective table box.
     SwTableBox* GetTblBox() const;
 
-    inline ULONG GetIndex() const { return GetPos(); }
+    inline sal_uLong GetIndex() const { return GetPos(); }
 
-    const SwTxtNode* FindOutlineNodeOfLevel( BYTE nLvl ) const;
+    const SwTxtNode* FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const;
 
-    BYTE HasPrevNextLayNode() const;
+    sal_uInt8 HasPrevNextLayNode() const;
 
 private:
     // Private constructor because copying is never allowed!!
@@ -315,11 +314,11 @@ class SwStartNode: public SwNode
     SwStartNodeType eSttNdTyp;
 
     // for the initial StartNode
-    SwStartNode( SwNodes& rNodes, ULONG nPos );
+    SwStartNode( SwNodes& rNodes, sal_uLong nPos );
 
 protected:
     SwStartNode( const SwNodeIndex &rWhere,
-                 const BYTE nNodeType = ND_STARTNODE,
+                 const sal_uInt8 nNodeType = ND_STARTNODE,
                  SwStartNodeType = SwNormalStartNode );
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwStartNode)
@@ -346,7 +345,7 @@ class SwEndNode : public SwNode
     friend class SwSectionNode;     // To enable creation of its EndNote.
 
     // for the initial StartNode
-    SwEndNode( SwNodes& rNodes, ULONG nPos, SwStartNode& rSttNd );
+    SwEndNode( SwNodes& rNodes, sal_uLong nPos, SwStartNode& rSttNd );
 
 protected:
     SwEndNode( const SwNodeIndex &rWhere, SwStartNode& rSttNd );
@@ -372,7 +371,7 @@ class SW_DLLPUBLIC SwCntntNode: public SwModify, public SwNode, public SwIndexRe
     mutable bool mbSetModifyAtAttr;
 
 protected:
-    SwCntntNode( const SwNodeIndex &rWhere, const BYTE nNodeType,
+    SwCntntNode( const SwNodeIndex &rWhere, const sal_uInt8 nNodeType,
                 SwFmtColl *pFmtColl );
     virtual ~SwCntntNode();
 
@@ -385,7 +384,7 @@ protected:
 
     // There some functions that like to remove items from the internal
     // SwAttrSet (handle):
-    USHORT ClearItemsFromAttrSet( const std::vector<USHORT>& rWhichIds );
+    sal_uInt16 ClearItemsFromAttrSet( const std::vector<sal_uInt16>& rWhichIds );
 
 public:
     TYPEINFO();     //Already contained in base class Client.
@@ -404,20 +403,20 @@ public:
     void MakeStartIndex( SwIndex * pIdx )   { pIdx->Assign( this, 0 ); }
     void MakeEndIndex( SwIndex * pIdx )     { pIdx->Assign( this, Len() ); }
 
-    BOOL GoNext(SwIndex *, USHORT nMode ) const;
-    BOOL GoPrevious(SwIndex *, USHORT nMode ) const;
+    sal_Bool GoNext(SwIndex *, sal_uInt16 nMode ) const;
+    sal_Bool GoPrevious(SwIndex *, sal_uInt16 nMode ) const;
 
     SwCntntFrm *GetFrm( const Point* pDocPos = 0,
                         const SwPosition *pPos = 0,
-                        const BOOL bCalcFrm = TRUE ) const;
+                        const sal_Bool bCalcFrm = sal_True ) const;
     // Returns the real size of the frame or an empty rectangle if
     // no layout exists. Needed for export filters.
-    SwRect FindLayoutRect( const BOOL bPrtArea = FALSE,
+    SwRect FindLayoutRect( const sal_Bool bPrtArea = sal_False,
                             const Point* pPoint = 0,
-                            const BOOL bCalcFrm = FALSE  ) const;
-    SwRect FindPageFrmRect( const BOOL bPrtArea = FALSE,
+                            const sal_Bool bCalcFrm = sal_False  ) const;
+    SwRect FindPageFrmRect( const sal_Bool bPrtArea = sal_False,
                             const Point* pPoint = 0,
-                            const BOOL bCalcFrm = FALSE  ) const;
+                            const sal_Bool bCalcFrm = sal_False  ) const;
 
     // Method creates all views of document for given node. The content
     // frames that are created are put in the respective layout.
@@ -434,28 +433,28 @@ public:
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const = 0;
 
     // Get information from Client.
-    virtual BOOL GetInfo( SfxPoolItem& ) const;
+    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 
     // SS for PoolItems: hard attributation.
 
     // If bInParent is FALSE search for attribute only in this node.
-    const SfxPoolItem& GetAttr( USHORT nWhich, BOOL bInParent=TRUE ) const;
-    BOOL GetAttr( SfxItemSet& rSet, BOOL bInParent=TRUE ) const;
+    const SfxPoolItem& GetAttr( sal_uInt16 nWhich, sal_Bool bInParent=sal_True ) const;
+    sal_Bool GetAttr( SfxItemSet& rSet, sal_Bool bInParent=sal_True ) const;
     // made virtual
-    virtual BOOL SetAttr( const SfxPoolItem& );
-    virtual BOOL SetAttr( const SfxItemSet& rSet );
-    virtual BOOL ResetAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
-    virtual BOOL ResetAttr( const SvUShorts& rWhichArr );
-    virtual USHORT ResetAllAttr();
+    virtual sal_Bool SetAttr( const SfxPoolItem& );
+    virtual sal_Bool SetAttr( const SfxItemSet& rSet );
+    virtual sal_Bool ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
+    virtual sal_Bool ResetAttr( const SvUShorts& rWhichArr );
+    virtual sal_uInt16 ResetAllAttr();
 
     // Obtains attribute that is not delivered via conditional style!
-    const SfxPoolItem* GetNoCondAttr( USHORT nWhich, BOOL bInParents ) const;
+    const SfxPoolItem* GetNoCondAttr( sal_uInt16 nWhich, sal_Bool bInParents ) const;
 
     // Does node has already its own auto-attributes?
     // Access to SwAttrSet.
     inline const SwAttrSet &GetSwAttrSet() const;
     inline const SwAttrSet *GetpSwAttrSet() const { return static_cast<const SwAttrSet*>(mpAttrSet.get()); }
-    inline BOOL  HasSwAttrSet() const { return mpAttrSet ? TRUE : FALSE; }
+    inline sal_Bool  HasSwAttrSet() const { return mpAttrSet ? sal_True : sal_False; }
 
     virtual SwFmtColl* ChgFmtColl( SwFmtColl* );
     SwFmtColl* GetFmtColl() const { return (SwFmtColl*)GetRegisteredIn(); }
@@ -465,13 +464,13 @@ public:
     void SetCondFmtColl( SwFmtColl* );
     inline SwFmtColl* GetCondFmtColl() const;
 
-    BOOL IsAnyCondition( SwCollCondition& rTmp ) const;
+    sal_Bool IsAnyCondition( SwCollCondition& rTmp ) const;
     void ChkCondColl();
 //FEATURE::CONDCOLL
 
     // Invalidates NumRule at the node. NumRule is updated
     // on EndAction of a Shell at the latest.
-    BOOL InvalidateNumRule();
+    sal_Bool InvalidateNumRule();
 
     // determines the text direction for a certain
     // position. Return -1, if text direction could *not* be determined.
@@ -519,7 +518,7 @@ public:
     void MakeFrms( const SwNodeIndex & rIdx );
 
     SwTableNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
-    void SetNewTable( SwTable* , BOOL bNewFrames=TRUE );
+    void SetNewTable( SwTable* , sal_Bool bNewFrames=sal_True );
 
 private:
     // Private constructor because copying is never allowed!!
@@ -575,7 +574,8 @@ public:
     // _nicht_ in einem versteckten (Unter-)Bereich liegt
     // Check for not hidden areas whether there is content that is not in
     // a hidden sub-area.
-    BOOL IsCntntHidden() const;
+    sal_Bool IsCntntHidden() const;
+
 
 };
 
@@ -623,41 +623,41 @@ inline const SwCntntNode *SwNode::GetCntntNode() const
 }
 
 
-inline BOOL SwNode::IsStartNode() const
+inline sal_Bool SwNode::IsStartNode() const
 {
-    return ND_STARTNODE & nNodeType  ? TRUE : FALSE;
+    return ND_STARTNODE & nNodeType  ? sal_True : sal_False;
 }
-inline BOOL SwNode::IsCntntNode() const
+inline sal_Bool SwNode::IsCntntNode() const
 {
-    return ND_CONTENTNODE & nNodeType  ? TRUE : FALSE;
+    return ND_CONTENTNODE & nNodeType  ? sal_True : sal_False;
 }
-inline BOOL SwNode::IsEndNode() const
+inline sal_Bool SwNode::IsEndNode() const
 {
-    return ND_ENDNODE == nNodeType  ? TRUE : FALSE;
+    return ND_ENDNODE == nNodeType  ? sal_True : sal_False;
 }
-inline BOOL SwNode::IsTxtNode() const
+inline sal_Bool SwNode::IsTxtNode() const
 {
-    return ND_TEXTNODE == nNodeType  ? TRUE : FALSE;
+    return ND_TEXTNODE == nNodeType  ? sal_True : sal_False;
 }
-inline BOOL SwNode::IsTableNode() const
+inline sal_Bool SwNode::IsTableNode() const
 {
-    return ND_TABLENODE == nNodeType  ? TRUE : FALSE;
+    return ND_TABLENODE == nNodeType  ? sal_True : sal_False;
 }
-inline BOOL SwNode::IsSectionNode() const
+inline sal_Bool SwNode::IsSectionNode() const
 {
-    return ND_SECTIONNODE == nNodeType  ? TRUE : FALSE;
+    return ND_SECTIONNODE == nNodeType  ? sal_True : sal_False;
 }
-inline BOOL SwNode::IsNoTxtNode() const
+inline sal_Bool SwNode::IsNoTxtNode() const
 {
-    return ND_NOTXTNODE & nNodeType  ? TRUE : FALSE;
+    return ND_NOTXTNODE & nNodeType  ? sal_True : sal_False;
 }
-inline BOOL SwNode::IsOLENode() const
+inline sal_Bool SwNode::IsOLENode() const
 {
-    return ND_OLENODE == nNodeType  ? TRUE : FALSE;
+    return ND_OLENODE == nNodeType  ? sal_True : sal_False;
 }
-inline BOOL SwNode::IsGrfNode() const
+inline sal_Bool SwNode::IsGrfNode() const
 {
-    return ND_GRFNODE == nNodeType  ? TRUE : FALSE;
+    return ND_GRFNODE == nNodeType  ? sal_True : sal_False;
 }
 
 inline const SwStartNode* SwNode::FindSttNodeByType( SwStartNodeType eTyp ) const
@@ -672,11 +672,11 @@ inline const SwSectionNode* SwNode::FindSectionNode() const
 {
     return ((SwNode*)this)->FindSectionNode();
 }
-inline ULONG SwNode::StartOfSectionIndex() const
+inline sal_uLong SwNode::StartOfSectionIndex() const
 {
     return pStartOfSection->GetIndex();
 }
-inline ULONG SwNode::EndOfSectionIndex() const
+inline sal_uLong SwNode::EndOfSectionIndex() const
 {
     const SwStartNode* pStNd = IsStartNode() ? (SwStartNode*)this : pStartOfSection;
     return pStNd->pEndOfSection->GetIndex();
@@ -730,8 +730,8 @@ inline const SwAttrSet& SwCntntNode::GetSwAttrSet() const
 
 //FEATURE::CONDCOLL
 
-inline const SfxPoolItem& SwCntntNode::GetAttr( USHORT nWhich,
-                                                BOOL bInParents ) const
+inline const SfxPoolItem& SwCntntNode::GetAttr( sal_uInt16 nWhich,
+                                                sal_Bool bInParents ) const
 {
     return GetSwAttrSet().Get( nWhich, bInParents );
 }

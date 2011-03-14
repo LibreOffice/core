@@ -50,7 +50,7 @@ class SW_DLLPUBLIC SwNumRulesWithName
     {
         SwNumFmt aFmt;
         String sCharFmtName;
-        USHORT nCharPoolId;
+        sal_uInt16 nCharPoolId;
         _SwNumFmtsAttrs aItems;
 
         _SwNumFmtGlobal& operator=( const _SwNumFmtGlobal& );
@@ -58,7 +58,7 @@ class SW_DLLPUBLIC SwNumRulesWithName
     public:
         _SwNumFmtGlobal( const SwNumFmt& rFmt );
         _SwNumFmtGlobal( const _SwNumFmtGlobal& );
-        _SwNumFmtGlobal( SvStream&, USHORT nVersion );
+        _SwNumFmtGlobal( SvStream&, sal_uInt16 nVersion );
         ~_SwNumFmtGlobal();
 
         void Store( SvStream& );
@@ -73,7 +73,7 @@ protected:
 public:
     SwNumRulesWithName(const SwNumRule &, const String &);
     SwNumRulesWithName( const SwNumRulesWithName & );
-    SwNumRulesWithName(SvStream &, USHORT nVersion);
+    SwNumRulesWithName(SvStream &, sal_uInt16 nVersion);
     ~SwNumRulesWithName();
 
     const SwNumRulesWithName &operator=(const SwNumRulesWithName &);
@@ -91,11 +91,11 @@ public:
 protected:
     SwNumRulesWithName  *pNumRules[ MAX_NUM_RULES ];
     String              sFileName;
-    USHORT              nVersion;
-     BOOL               bModified;
+    sal_uInt16              nVersion;
+     sal_Bool               bModified;
 
     virtual int         Load(SvStream&);
-    virtual BOOL        Store(SvStream&);
+    virtual sal_Bool        Store(SvStream&);
 
     void                Init();
 
@@ -103,10 +103,10 @@ public:
     SwBaseNumRules(const String& rFileName);
     virtual ~SwBaseNumRules();
 
-    inline const SwNumRulesWithName*    GetRules(USHORT nIdx) const;
+    inline const SwNumRulesWithName*    GetRules(sal_uInt16 nIdx) const;
     virtual void                        ApplyNumRules(
                                                 const SwNumRulesWithName &rCopy,
-                                                USHORT nIdx);
+                                                sal_uInt16 nIdx);
 
 };
 
@@ -118,11 +118,11 @@ public:
     virtual ~SwChapterNumRules();
 
     virtual void        ApplyNumRules(  const SwNumRulesWithName &rCopy,
-                                            USHORT nIdx);
+                                            sal_uInt16 nIdx);
 };
 
 // INLINE METHODE --------------------------------------------------------
-inline const SwNumRulesWithName *SwBaseNumRules::GetRules(USHORT nIdx) const
+inline const SwNumRulesWithName *SwBaseNumRules::GetRules(sal_uInt16 nIdx) const
 {
     OSL_ENSURE(nIdx < nMaxRules, "Array der NumRules ueberindiziert.");
     return pNumRules[nIdx];

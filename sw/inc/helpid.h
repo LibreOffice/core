@@ -25,962 +25,971 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SOLAR_HRC
-#include <svl/solar.hrc>
-#endif
+#include "swcommands.h"
+#include <svx/svxcommands.h>
+#include <sfx2/sfxcommands.h>
 
-#define HID_BASE                    HID_APP_START
+#define HID_BIB_BASE                                            "SW_HID_BIB_BASE"
+#define HID_DBSEL                                               "SW_HID_DBSEL"
+#define HID_DBEDIT                                              "SW_HID_DBEDIT"
+#define HID_PRINT_OPTION                                        "SW_HID_PRINT_OPTION"
+#define HID_MERGE_PRINTMONITOR                                  "SW_HID_MERGE_PRINTMONITOR"
+#define HID_FLD_INPUT                                           "SW_HID_FLD_INPUT"
+#define HID_CONFIG_MISC                                         "SW_HID_CONFIG_MISC"
+#define HID_CONFIG_PATH                                         "SW_HID_CONFIG_PATH"
+#define HID_CONFIG_TB                                           "SW_HID_CONFIG_TB"
+#define HID_PG_FOOTNOTE                                         "SW_HID_PG_FOOTNOTE"
+#define HID_FORMAT_GRAPHIC                                      "SW_HID_FORMAT_GRAPHIC"
+#define HID_FILTERSTATUS                                        "SW_HID_FILTERSTATUS"
+#define HID_DOCINFO_EDT                                         "SW_HID_DOCINFO_EDT"
+#define HID_DBLOGON                                             "SW_HID_DBLOGON"
+#define HID_MAC_ASSIGN                                          "SW_HID_MAC_ASSIGN"
+#define HID_CONFIG_MN                                           "SW_HID_CONFIG_MN"
+#define HID_PAPERSIZE                                           "SW_HID_PAPERSIZE"
+#define HID_PASSWD                                              "SW_HID_PASSWD"
+#define HID_SPELLING_OPTIONS                                    "SW_HID_SPELLING_OPTIONS"
+#define HID_HYPHENATE_OPTIONS                                   "SW_HID_HYPHENATE_OPTIONS"
+#define HID_FORMAT_COLUMN                                       "SW_HID_FORMAT_COLUMN"
+#define HID_CONFIG_SAVE                                         "SW_HID_CONFIG_SAVE"
+#define HID_NUM_NAMES                                           "SW_HID_NUM_NAMES"
+#define HID_SYMBOL_SELECT                                       "SW_HID_SYMBOL_SELECT"
+#define HID_CONFIG_KY                                           "SW_HID_CONFIG_KY"
+#define HID_LINKEDIT                                            "SW_HID_LINKEDIT"
+#define HID_GRAPHIC_PREVIEW                                     "SW_HID_GRAPHIC_PREVIEW"
+#define HID_DICTIONARY                                          "SW_HID_DICTIONARY"
+#define HID_SET_STYLE                                           "SW_HID_SET_STYLE"
+#define HID_RIBBONBAR                                           "SW_HID_RIBBONBAR"
+#define HID_STATUSLINE                                          "SW_HID_STATUSLINE"
+#define HID_DOCBAR                                              "SW_HID_DOCBAR"
+#define HID_VRULER                                              "SW_HID_VRULER"
+#define HID_MAKRO_WINDOW                                        "SW_HID_MAKRO_WINDOW"
+#define HID_ENVELOP_FORMAT                                      "SW_HID_ENVELOP_FORMAT"
+#define HID_ENVELOP_PRINTER                                     "SW_HID_ENVELOP_PRINTER"
 
-#define HID_BIB_BASE                (HID_BASE +  1)
-#define HID_DBSEL                   (HID_BASE +  2)
-#define HID_DBEDIT                  (HID_BASE +  3)
-#define HID_PRINT_OPTION            (HID_BASE +  4)
-#define HID_MERGE_PRINTMONITOR      (HID_BASE +  5)
-#define HID_FLD_INPUT               (HID_BASE +  6)
-#define HID_CONFIG_MISC             (HID_BASE +  7)
-#define HID_CONFIG_PATH             (HID_BASE +  8)
-#define HID_CONFIG_TB               (HID_BASE +  9)
-#define HID_PG_FOOTNOTE             (HID_BASE + 10)
-#define HID_FORMAT_GRAPHIC          (HID_BASE + 11)
-#define HID_FILTERSTATUS            (HID_BASE + 12)
-#define HID_DOCINFO_EDT             (HID_BASE + 13)
-#define HID_DBLOGON                 (HID_BASE + 14)
-#define HID_MAC_ASSIGN              (HID_BASE + 15)
-#define HID_CONFIG_MN               (HID_BASE + 16)
-#define HID_PAPERSIZE               (HID_BASE + 17)
-#define HID_PASSWD                  (HID_BASE + 18)
-#define HID_SPELLING_OPTIONS        (HID_BASE + 19)
-#define HID_HYPHENATE_OPTIONS       (HID_BASE + 20)
-#define HID_FORMAT_COLUMN           (HID_BASE + 21)
-#define HID_CONFIG_SAVE             (HID_BASE + 22)
-#define HID_NUM_NAMES               (HID_BASE + 23)
-#define HID_SYMBOL_SELECT           (HID_BASE + 24)
-#define HID_CONFIG_KY               (HID_BASE + 25)
-#define HID_LINKEDIT                (HID_BASE + 26)
-#define HID_GRAPHIC_PREVIEW         (HID_BASE + 28)
-#define HID_DICTIONARY              (HID_BASE + 29)
-#define HID_SET_STYLE               (HID_BASE + 30)
-#define HID_RIBBONBAR               (HID_BASE + 31)
-#define HID_STATUSLINE              (HID_BASE + 32)
-#define HID_DOCBAR                  (HID_BASE + 33)
-#define HID_VRULER                  (HID_BASE + 34)
-#define HID_MAKRO_WINDOW            (HID_BASE + 35)
-#define HID_ENVELOP_FORMAT          (HID_BASE + 37)
-#define HID_ENVELOP_PRINTER         (HID_BASE + 38)
+#define HID_HEADER_FOOTER_DLG                                   "SW_HID_HEADER_FOOTER_DLG"
+#define HID_GRID_DLG                                            "SW_HID_GRID_DLG"
+#define HID_USER_ADDRESS_DLG                                    "SW_HID_USER_ADDRESS_DLG"
+#define HID_SELECT_FAX_DLG                                      "SW_HID_SELECT_FAX_DLG"
 
-#define HID_HEADER_FOOTER_DLG       (HID_BASE + 39)
-#define HID_GRID_DLG                (HID_BASE + 40)
-#define HID_USER_ADDRESS_DLG        (HID_BASE + 41)
-#define HID_SELECT_FAX_DLG          (HID_BASE + 42)
+#define HID_LABEL_FORMAT                                        "SW_HID_LABEL_FORMAT"
+#define HID_BRSORT                                              "SW_HID_BRSORT"
+#define HID_BRSEEK                                              "SW_HID_BRSEEK"
+#define HID_BRCFG                                               "SW_HID_BRCFG"
 
-#define HID_LABEL_FORMAT            (HID_BASE + 43)
-#define HID_BRSORT                  (HID_BASE + 44)
-#define HID_BRSEEK                  (HID_BASE + 45)
-#define HID_BRCFG                   (HID_BASE + 46)
+#define HID_FORMEDT_CONTENT                                     "SW_HID_FORMEDT_CONTENT"
+#define HID_FORMEDT_USER                                        "SW_HID_FORMEDT_USER"
+#define HID_FORMEDT_INDEX                                       "SW_HID_FORMEDT_INDEX"
 
-#define HID_FORMEDT_CONTENT         (HID_BASE + 47)
-#define HID_FORMEDT_USER            (HID_BASE + 48)
-#define HID_FORMEDT_INDEX           (HID_BASE + 49)
+#define HID_SCRL_PAGEUP                                         "SW_HID_SCRL_PAGEUP"
+#define HID_SCRL_PAGEDOWN                                       "SW_HID_SCRL_PAGEDOWN"
 
-#define HID_SCRL_PAGEUP             (HID_BASE + 50)
-#define HID_SCRL_PAGEDOWN           (HID_BASE + 51)
+#define HID_DRAW_WIN                                            "SW_HID_DRAW_WIN"
+#define HID_EDIT_WIN                                            "SW_HID_EDIT_WIN"
 
-#define HID_DRAW_WIN                (HID_BASE + 52)
-#define HID_EDIT_WIN                (HID_BASE + 53)
+#define HID_INSERT_CTRL                                         "SW_HID_INSERT_CTRL" // TbxControl Einfuegen
+#define HID_INSERT_OBJ_CTRL                                     "SW_HID_INSERT_OBJ_CTRL"
+#define HID_INSERT_FIELD_CTRL                                   "SW_HID_INSERT_FIELD_CTRL"
 
-#define HID_INSERT_CTRL             (HID_BASE + 54) // Insert TbxControl.
-#define HID_INSERT_OBJ_CTRL         (HID_BASE + 55)
-#define HID_INSERT_FIELD_CTRL       (HID_BASE + 56)
+#define HID_SOURCEVIEW                                          "SW_HID_SOURCEVIEW"
+#define HID_TBL_OPT_CTRL                                        "SW_HID_TBL_OPT_CTRL"
+#define HID_AUTOFORMAT_CLB                                      "SW_HID_AUTOFORMAT_CLB"
 
-#define HID_SOURCEVIEW              (HID_BASE + 57)
-#define HID_TBL_OPT_CTRL            (HID_BASE + 58)
-#define HID_AUTOFORMAT_CLB          (HID_BASE + 59)
+#define HID_SCRL_NAVI                                           "SW_HID_SCRL_NAVI"
+#define HID_NAVI_DRAG_HYP                                       "SW_HID_NAVI_DRAG_HYP"
+#define HID_NAVI_DRAG_LINK                                      "SW_HID_NAVI_DRAG_LINK"
+#define HID_NAVI_DRAG_COPY                                      "SW_HID_NAVI_DRAG_COPY"
+#define HID_NAVI_OUTLINES                                       "SW_HID_NAVI_OUTLINES"
 
-#define HID_SCRL_NAVI               (HID_BASE + 60)
-#define HID_NAVI_DRAG_HYP           (HID_BASE + 61)
-#define HID_NAVI_DRAG_LINK          (HID_BASE + 62)
-#define HID_NAVI_DRAG_COPY          (HID_BASE + 63)
-#define HID_NAVI_OUTLINES           (HID_BASE + 64)
+#define HID_AUTOFORMAT_EXEC                                     "SW_HID_AUTOFORMAT_EXEC"
+#define HID_AUTOFORMAT_CLOSE                                    "SW_HID_AUTOFORMAT_CLOSE"
 
-#define HID_AUTOFORMAT_EXEC         (HID_BASE + 65)
-#define HID_AUTOFORMAT_CLOSE        (HID_BASE + 66)
-
-#define HID_PAGEPREVIEW             (HID_BASE + 67)
-#define HID_SOURCE_EDITWIN          (HID_BASE + 68)
+#define HID_PAGEPREVIEW                                         "SW_HID_PAGEPREVIEW"
+#define HID_SOURCE_EDITWIN                                      "SW_HID_SOURCE_EDITWIN"
 
 // Dialog Help-IDs
 
-#define HID_CONVERT_FROM            (HID_BASE + 200)
-#define HID_CONVERT_TO              (HID_BASE + 201)
-#define HID_EDIT_POSTIT             (HID_BASE + 202)
-#define HID_INSERT_CHART            (HID_BASE + 203)
-#define HID_PAGE_PREVIEW            (HID_BASE + 204)
-#define HID_INSERT_HYPERLINK        (HID_BASE + 205)
-#define HID_NAVIGATOR_TREELIST      (HID_BASE + 206)
-#define HID_DLG_CAPTION             (HID_BASE + 207)
-#define HID_DLG_GLOSS_DECIDE        (HID_BASE + 208)
-#define HID_NAVIGATOR_TOOLBOX       (HID_BASE + 209)
-#define HID_NAVIGATOR_LISTBOX       (HID_BASE + 210)
-#define HID_NUM_BULLET_DLG          (HID_BASE + 211)
-#define HID_VS_SINGLENUM            (HID_BASE + 212)
-#define HID_VS_NUM                  (HID_BASE + 213)
-#define HID_VS_BULLET               (HID_BASE + 214)
-#define HID_VS_NUMBMP               (HID_BASE + 215)
-#define HID_VS_RULER                (HID_BASE + 216)
-#define HID_RULER_DIALOG            (HID_BASE + 217)
-#define HID_INSERT_ABSTRACT         (HID_BASE + 218)
-#define HID_NAVI_TBX1               (HID_BASE + 219)
-#define HID_NAVI_TBX2               (HID_BASE + 220)
-#define HID_NAVI_TBX3               (HID_BASE + 221)
-#define HID_NAVI_TBX4               (HID_BASE + 222)
-#define HID_NAVI_TBX5               (HID_BASE + 223)
-#define HID_NAVI_TBX6               (HID_BASE + 224)
-#define HID_NAVI_TBX7               (HID_BASE + 225)
-#define HID_NAVI_TBX8               (HID_BASE + 226)
-#define HID_NAVI_TBX9               (HID_BASE + 227)
-#define HID_NAVI_TBX10              (HID_BASE + 228)
-#define HID_NAVI_TBX11              (HID_BASE + 229)
-#define HID_NAVI_TBX12              (HID_BASE + 230)
-#define HID_NAVI_TBX13              (HID_BASE + 231)
-#define HID_NAVI_TBX14              (HID_BASE + 232)
-#define HID_NAVI_TBX15              (HID_BASE + 233)
-#define HID_NAVI_VS                 (HID_BASE + 234)
-#define HID_NUM_FORMAT_BTN          (HID_BASE + 235)
-#define HID_PPREV_ZOOM              (HID_BASE + 236)
-#define HID_NAVI_TBX16              (HID_BASE + 237)
-#define HID_LTEMPL_TEXT             (HID_BASE + 238)
-#define HID_LTEMPL_FRAME            (HID_BASE + 239)
-#define HID_LTEMPL_PAGE             (HID_BASE + 240)
-#define HID_LTEMPL_OVERRIDE         (HID_BASE + 241)
-#define HID_LTEMPL_TEMPLATES        (HID_BASE + 242)
-#define HID_NAVI_TBX17              (HID_BASE + 243)
-#define HID_NAVI_TBX18              (HID_BASE + 244)
-#define HID_NAVI_TBX19              (HID_BASE + 245)
-#define HID_NAVI_TBX20              (HID_BASE + 246)
-#define HID_NAVI_TBX21              (HID_BASE + 247)
-#define HID_NAVI_TBX22              (HID_BASE + 248)
-#define HID_NAVI_TBX23              (HID_BASE + 249)
-#define HID_NAVI_TBX24              (HID_BASE + 250)
-#define HID_NAVIGATOR_GLOBAL_TOOLBOX (HID_BASE + 251)
-#define HID_NAVIGATOR_GLOB_TREELIST (HID_BASE + 252)
-#define HID_GLOS_GROUP_TREE         (HID_BASE + 253)
-#define HID_GLBLTREE_UPDATE         (HID_BASE + 254)
-#define HID_GLBLTREE_INSERT         (HID_BASE + 255)
-#define HID_GLBLTREE_EDIT           (HID_BASE + 256)
-#define HID_GLBLTREE_DEL            (HID_BASE + 257)
-#define HID_GLBLTREE_INS_IDX        (HID_BASE + 258)
-#define HID_GLBLTREE_INS_CNTIDX     (HID_BASE + 259)
-#define HID_GLBLTREE_INS_USRIDX     (HID_BASE + 260)
-#define HID_GLBLTREE_INS_FILE       (HID_BASE + 261)
-#define HID_GLBLTREE_INS_NEW_FILE   (HID_BASE + 262)
-#define HID_GLBLTREE_INS_TEXT       (HID_BASE + 263)
-#define HID_GLBLTREE_UPD_SEL        (HID_BASE + 264)
-#define HID_GLBLTREE_UPD_IDX        (HID_BASE + 265)
-#define HID_GLBLTREE_UPD_LINK       (HID_BASE + 266)
-#define HID_GLBLTREEUPD_ALL         (HID_BASE + 267)
-#define HID_NUM_OUTL_NAMED_NUMS     (HID_BASE + 268)
-#define HID_NUM_OUTL_NUM_SAVEAS     (HID_BASE + 269)
-#define HID_NUM_NAMED_NUMS          (HID_BASE + 270)
-#define HID_NUM_NUM_SAVEAS          (HID_BASE + 271)
-#define HID_NUM_STD_NUMBER          (HID_BASE + 272)
-#define HID_NUM_DEL_NUMBER          (HID_BASE + 273)
-#define HID_NUM_STD_BULLET          (HID_BASE + 274)
-#define HID_NUM_DEL_BULLET          (HID_BASE + 275)
-#define HID_NAVI_CONTENT            (HID_BASE + 276)
-#define HID_NAVI_GLOBAL             (HID_BASE + 277)
-#define HID_LTEMPL_NUMBERING        (HID_BASE + 278)
-#define HID_FLDVAR_APPLY            (HID_BASE + 279)
-#define HID_FLDVAR_DELETE           (HID_BASE + 280)
-#define HID_FLDEDT_ADDRESS          (HID_BASE + 281)
-#define HID_SORT_ACTION             (HID_BASE + 282)
-#define HID_SORT_AUTHOR             (HID_BASE + 283)
-#define HID_SORT_DATE               (HID_BASE + 284)
-#define HID_SORT_COMMENT            (HID_BASE + 285)
-#define HID_SW_SORT_POSITION        (HID_BASE + 286)
-#define HID_SYNC_BTN                (HID_BASE + 287)
-#define HID_EDIT_COMMENT            (HID_BASE + 288)
-#define HID_SEL_TEMPLATE            (HID_BASE + 289)
-#define HID_DLG_SEQUENCE_OPTION     (HID_BASE + 290)
-#define HID_DLG_FLDEDT_NEXT         (HID_BASE + 291)
-#define HID_DLG_FLDEDT_PREV         (HID_BASE + 292)
-#define HID_DLG_FLDEDT_ADDRESS      (HID_BASE + 293)
-#define HID_DLG_PRV_PRT_OPTIONS     (HID_BASE + 294)
+#define HID_CONVERT_FROM                                        "SW_HID_CONVERT_FROM"
+#define HID_CONVERT_TO                                          "SW_HID_CONVERT_TO"
+#define HID_EDIT_POSTIT                                         "SW_HID_EDIT_POSTIT"
+#define HID_INSERT_CHART                                        "SW_HID_INSERT_CHART"
+#define HID_PAGE_PREVIEW                                        "SW_HID_PAGE_PREVIEW"
+#define HID_INSERT_HYPERLINK                                    "SW_HID_INSERT_HYPERLINK"
+#define HID_NAVIGATOR_TREELIST                                  "SW_HID_NAVIGATOR_TREELIST"
+#define HID_DLG_CAPTION                                         "SW_HID_DLG_CAPTION"
+#define HID_DLG_GLOSS_DECIDE                                    "SW_HID_DLG_GLOSS_DECIDE"
+#define HID_NAVIGATOR_TOOLBOX                                   "SW_HID_NAVIGATOR_TOOLBOX"
+#define HID_NAVIGATOR_LISTBOX                                   "SW_HID_NAVIGATOR_LISTBOX"
+#define HID_NUM_BULLET_DLG                                      "SW_HID_NUM_BULLET_DLG"
+#define HID_VS_SINGLENUM                                        "SW_HID_VS_SINGLENUM"
+#define HID_VS_NUM                                              "SW_HID_VS_NUM"
+#define HID_VS_BULLET                                           "SW_HID_VS_BULLET"
+#define HID_VS_NUMBMP                                           "SW_HID_VS_NUMBMP"
+#define HID_VS_RULER                                            "SW_HID_VS_RULER"
+#define HID_RULER_DIALOG                                        "SW_HID_RULER_DIALOG"
+#define HID_INSERT_ABSTRACT                                     "SW_HID_INSERT_ABSTRACT"
+#define HID_NAVI_TBX1                                           "SW_HID_NAVI_TBX1"
+#define HID_NAVI_TBX2                                           "SW_HID_NAVI_TBX2"
+#define HID_NAVI_TBX3                                           "SW_HID_NAVI_TBX3"
+#define HID_NAVI_TBX4                                           "SW_HID_NAVI_TBX4"
+#define HID_NAVI_TBX5                                           "SW_HID_NAVI_TBX5"
+#define HID_NAVI_TBX6                                           "SW_HID_NAVI_TBX6"
+#define HID_NAVI_TBX7                                           "SW_HID_NAVI_TBX7"
+#define HID_NAVI_TBX8                                           "SW_HID_NAVI_TBX8"
+#define HID_NAVI_TBX9                                           "SW_HID_NAVI_TBX9"
+#define HID_NAVI_TBX10                                          "SW_HID_NAVI_TBX10"
+#define HID_NAVI_TBX11                                          "SW_HID_NAVI_TBX11"
+#define HID_NAVI_TBX12                                          "SW_HID_NAVI_TBX12"
+#define HID_NAVI_TBX13                                          "SW_HID_NAVI_TBX13"
+#define HID_NAVI_TBX14                                          "SW_HID_NAVI_TBX14"
+#define HID_NAVI_TBX15                                          "SW_HID_NAVI_TBX15"
+#define HID_NAVI_VS                                             "SW_HID_NAVI_VS"
+#define HID_NUM_FORMAT_BTN                                      "SW_HID_NUM_FORMAT_BTN"
+#define HID_PPREV_ZOOM                                          "SW_HID_PPREV_ZOOM"
+#define HID_NAVI_TBX16                                          "SW_HID_NAVI_TBX16"
+#define HID_LTEMPL_TEXT                                         "SW_HID_LTEMPL_TEXT"
+#define HID_LTEMPL_FRAME                                        "SW_HID_LTEMPL_FRAME"
+#define HID_LTEMPL_PAGE                                         "SW_HID_LTEMPL_PAGE"
+#define HID_LTEMPL_OVERRIDE                                     "SW_HID_LTEMPL_OVERRIDE"
+#define HID_LTEMPL_TEMPLATES                                    "SW_HID_LTEMPL_TEMPLATES"
+#define HID_NAVI_TBX17                                          "SW_HID_NAVI_TBX17"
+#define HID_NAVI_TBX18                                          "SW_HID_NAVI_TBX18"
+#define HID_NAVI_TBX19                                          "SW_HID_NAVI_TBX19"
+#define HID_NAVI_TBX20                                          "SW_HID_NAVI_TBX20"
+#define HID_NAVI_TBX21                                          "SW_HID_NAVI_TBX21"
+#define HID_NAVI_TBX22                                          "SW_HID_NAVI_TBX22"
+#define HID_NAVI_TBX23                                          "SW_HID_NAVI_TBX23"
+#define HID_NAVI_TBX24                                          "SW_HID_NAVI_TBX24"
+#define HID_NAVIGATOR_GLOBAL_TOOLBOX                            "SW_HID_NAVIGATOR_GLOBAL_TOOLBOX"
+#define HID_NAVIGATOR_GLOB_TREELIST                             "SW_HID_NAVIGATOR_GLOB_TREELIST"
+#define HID_GLOS_GROUP_TREE                                     "SW_HID_GLOS_GROUP_TREE"
+#define HID_GLBLTREE_UPDATE                                     "SW_HID_GLBLTREE_UPDATE"
+#define HID_GLBLTREE_INSERT                                     "SW_HID_GLBLTREE_INSERT"
+#define HID_GLBLTREE_EDIT                                       "SW_HID_GLBLTREE_EDIT"
+#define HID_GLBLTREE_DEL                                        "SW_HID_GLBLTREE_DEL"
+#define HID_GLBLTREE_INS_IDX                                    "SW_HID_GLBLTREE_INS_IDX"
+#define HID_GLBLTREE_INS_CNTIDX                                 "SW_HID_GLBLTREE_INS_CNTIDX"
+#define HID_GLBLTREE_INS_USRIDX                                 "SW_HID_GLBLTREE_INS_USRIDX"
+#define HID_GLBLTREE_INS_FILE                                   "SW_HID_GLBLTREE_INS_FILE"
+#define HID_GLBLTREE_INS_NEW_FILE                               "SW_HID_GLBLTREE_INS_NEW_FILE"
+#define HID_GLBLTREE_INS_TEXT                                   "SW_HID_GLBLTREE_INS_TEXT"
+#define HID_GLBLTREE_UPD_SEL                                    "SW_HID_GLBLTREE_UPD_SEL"
+#define HID_GLBLTREE_UPD_IDX                                    "SW_HID_GLBLTREE_UPD_IDX"
+#define HID_GLBLTREE_UPD_LINK                                   "SW_HID_GLBLTREE_UPD_LINK"
+#define HID_GLBLTREEUPD_ALL                                     "SW_HID_GLBLTREEUPD_ALL"
+#define HID_NUM_OUTL_NAMED_NUMS                                 "SW_HID_NUM_OUTL_NAMED_NUMS"
+#define HID_NUM_OUTL_NUM_SAVEAS                                 "SW_HID_NUM_OUTL_NUM_SAVEAS"
+#define HID_NUM_NAMED_NUMS                                      "SW_HID_NUM_NAMED_NUMS"
+#define HID_NUM_NUM_SAVEAS                                      "SW_HID_NUM_NUM_SAVEAS"
+#define HID_NUM_STD_NUMBER                                      "SW_HID_NUM_STD_NUMBER"
+#define HID_NUM_DEL_NUMBER                                      "SW_HID_NUM_DEL_NUMBER"
+#define HID_NUM_STD_BULLET                                      "SW_HID_NUM_STD_BULLET"
+#define HID_NUM_DEL_BULLET                                      "SW_HID_NUM_DEL_BULLET"
+#define HID_NAVI_CONTENT                                        "SW_HID_NAVI_CONTENT"
+#define HID_NAVI_GLOBAL                                         "SW_HID_NAVI_GLOBAL"
+#define HID_LTEMPL_NUMBERING                                    "SW_HID_LTEMPL_NUMBERING"
+#define HID_FLDVAR_APPLY                                        "SW_HID_FLDVAR_APPLY"
+#define HID_FLDVAR_DELETE                                       "SW_HID_FLDVAR_DELETE"
+#define HID_FLDEDT_ADDRESS                                      "SW_HID_FLDEDT_ADDRESS"
+#define HID_SORT_ACTION                                         "SW_HID_SORT_ACTION"
+#define HID_SORT_AUTHOR                                         "SW_HID_SORT_AUTHOR"
+#define HID_SORT_DATE                                           "SW_HID_SORT_DATE"
+#define HID_SORT_COMMENT                                        "SW_HID_SORT_COMMENT"
+#define HID_SW_SORT_POSITION                                    "SW_HID_SW_SORT_POSITION"
+#define HID_SYNC_BTN                                            "SW_HID_SYNC_BTN"
+#define HID_EDIT_COMMENT                                        "SW_HID_EDIT_COMMENT"
+#define HID_SEL_TEMPLATE                                        "SW_HID_SEL_TEMPLATE"
+#define HID_DLG_SEQUENCE_OPTION                                 "SW_HID_DLG_SEQUENCE_OPTION"
+#define HID_DLG_FLDEDT_NEXT                                     "SW_HID_DLG_FLDEDT_NEXT"
+#define HID_DLG_FLDEDT_PREV                                     "SW_HID_DLG_FLDEDT_PREV"
+#define HID_DLG_FLDEDT_ADDRESS                                  "SW_HID_DLG_FLDEDT_ADDRESS"
+#define HID_DLG_PRV_PRT_OPTIONS                                 "SW_HID_DLG_PRV_PRT_OPTIONS"
 
-#define HID_FILEDLG_CHARDLG         (HID_BASE + 295)
-#define HID_FILEDLG_LOADTEMPLATE    (HID_BASE + 296)
-#define HID_FILEDLG_ROMENU          (HID_BASE + 297)
-#define HID_FILEDLG_MAILMRGE1       (HID_BASE + 298)
-#define HID_FILEDLG_MAILMRGE2       (HID_BASE + 299)
-#define HID_FILEDLG_FRMPAGE         (HID_BASE + 300)
-#define HID_FILEDLG_SRCVIEW         (HID_BASE + 301)
-#define HID_FILEDLG_WIZDOKU         (HID_BASE + 302)
-#define HID_PREVIEW_ZOOM            (HID_BASE + 303)
+#define HID_FILEDLG_CHARDLG                                     "SW_HID_FILEDLG_CHARDLG"
+#define HID_FILEDLG_LOADTEMPLATE                                "SW_HID_FILEDLG_LOADTEMPLATE"
+#define HID_FILEDLG_ROMENU                                      "SW_HID_FILEDLG_ROMENU"
+#define HID_FILEDLG_MAILMRGE1                                   "SW_HID_FILEDLG_MAILMRGE1"
+#define HID_FILEDLG_MAILMRGE2                                   "SW_HID_FILEDLG_MAILMRGE2"
+#define HID_FILEDLG_FRMPAGE                                     "SW_HID_FILEDLG_FRMPAGE"
+#define HID_FILEDLG_SRCVIEW                                     "SW_HID_FILEDLG_SRCVIEW"
+#define HID_FILEDLG_WIZDOKU                                     "SW_HID_FILEDLG_WIZDOKU"
+#define HID_PREVIEW_ZOOM                                        "SW_HID_PREVIEW_ZOOM"
 
-#define HID_REDLINE_AUTOFMT_ACCEPT  (HID_BASE + 304)
-#define HID_MULTI_TOX_DLG           (HID_BASE + 305)
-#define HID_ASCII_FILTER            (HID_BASE + 306)
-#define HID_GLBLTREE_EDIT_LINK      (HID_BASE + 307)
-#define HID_FORMAT_NAME_OBJECT_NAME (HID_BASE + 308)
-#define HID_REFSELECTION_TOOLTIP    (HID_BASE + 309)    // #i83479#
+#define HID_REDLINE_AUTOFMT_ACCEPT                              "SW_HID_REDLINE_AUTOFMT_ACCEPT"
+#define HID_MULTI_TOX_DLG                                       "SW_HID_MULTI_TOX_DLG"
+#define HID_ASCII_FILTER                                        "SW_HID_ASCII_FILTER"
+#define HID_GLBLTREE_EDIT_LINK                                  "SW_HID_GLBLTREE_EDIT_LINK"
+#define HID_FORMAT_NAME_OBJECT_NAME                             "SW_HID_FORMAT_NAME_OBJECT_NAME"
+#define HID_REFSELECTION_TOOLTIP                                "SW_HID_REFSELECTION_TOOLTIP"    // #i83479#
 
 
 // TabPage Help-IDs
 
-#define HID_DROPCAPS                (HID_BASE + 400)
-#define HID_FRM_EXT                 (HID_BASE + 401)
-#define HID_FRM_STD                 (HID_BASE + 402)
-#define HID_GRF_EXT                 (HID_BASE + 403)
-#define HID_COLUMN                  (HID_BASE + 404)
-#define HID_DOC_STAT                (HID_BASE + 405)
-#define HID_MACROASSIGN             (HID_BASE + 406)
-#define HID_FOOTNOTE_PAGE           (HID_BASE + 407)
-#define HID_OPTDOCDISP_PAGE         (HID_BASE + 408)
-#define HID_OPTGRID_PAGE            (HID_BASE + 409)
-#define HID_OPTTEST_PAGE            (HID_BASE + 410)
-#define HID_OPTPRINT_PAGE           (HID_BASE + 411)
-#define HID_FORMAT_TABLE            (HID_BASE + 412)
-#define HID_TABLE_COLUMN            (HID_BASE + 413)
-#define HID_LAB_LAB                 (HID_BASE + 414)
-#define HID_LAB_PRT                 (HID_BASE + 415)
-#define HID_ENV_PRT                 (HID_BASE + 416)
-#define HID_LAB_FMT                 (HID_BASE + 417)
-#define HID_ENV_ENV                 (HID_BASE + 418)
-#define HID_ENV_FMT                 (HID_BASE + 419)
-#define HID_FRM_URL                 (HID_BASE + 421)
-#define HID_CHAR_URL                (HID_BASE + 422)
-#define HID_CONTENT_OPT             (HID_BASE + 423)
-#define HID_LAYOUT_OPT              (HID_BASE + 424)
-#define HID_STD_FONT                (HID_BASE + 425)
-#define HID_COND_COLL               (HID_BASE + 426)
-#define HID_FRM_ADD                 (HID_BASE + 427)
-#define HID_TABLE_TEXTFLOW          (HID_BASE + 428)
-#define HID_AUTOFMT_BY_INPUT        (HID_BASE + 429)
-#define HID_AUTOFMT_APPLY           (HID_BASE + 430)
-#define HID_OPTTABLE_PAGE           (HID_BASE + 431)
-#define HID_PICK_SINGLE_NUM         (HID_BASE + 432)
-#define HID_PICK_BULLET             (HID_BASE + 433)
-#define HID_PICK_NUM                (HID_BASE + 434)
-#define HID_PICK_BMP                (HID_BASE + 435)
+#define HID_DROPCAPS                                            "SW_HID_DROPCAPS"
+#define HID_FRM_EXT                                             "SW_HID_FRM_EXT"
+#define HID_FRM_STD                                             "SW_HID_FRM_STD"
+#define HID_GRF_EXT                                             "SW_HID_GRF_EXT"
+#define HID_COLUMN                                              "SW_HID_COLUMN"
+#define HID_DOC_STAT                                            "SW_HID_DOC_STAT"
+#define HID_MACROASSIGN                                         "SW_HID_MACROASSIGN"
+#define HID_FOOTNOTE_PAGE                                       "SW_HID_FOOTNOTE_PAGE"
+#define HID_OPTDOCDISP_PAGE                                     "SW_HID_OPTDOCDISP_PAGE"
+#define HID_OPTGRID_PAGE                                        "SW_HID_OPTGRID_PAGE"
+#define HID_OPTTEST_PAGE                                        "SW_HID_OPTTEST_PAGE"
+#define HID_OPTPRINT_PAGE                                       "SW_HID_OPTPRINT_PAGE"
+#define HID_FORMAT_TABLE                                        "SW_HID_FORMAT_TABLE"
+#define HID_TABLE_COLUMN                                        "SW_HID_TABLE_COLUMN"
+#define HID_LAB_LAB                                             "SW_HID_LAB_LAB"
+#define HID_LAB_PRT                                             "SW_HID_LAB_PRT"
+#define HID_ENV_PRT                                             "SW_HID_ENV_PRT"
+#define HID_LAB_FMT                                             "SW_HID_LAB_FMT"
+#define HID_ENV_ENV                                             "SW_HID_ENV_ENV"
+#define HID_ENV_FMT                                             "SW_HID_ENV_FMT"
+#define HID_FRM_URL                                             "SW_HID_FRM_URL"
+#define HID_CHAR_URL                                            "SW_HID_CHAR_URL"
+#define HID_CONTENT_OPT                                         "SW_HID_CONTENT_OPT"
+#define HID_LAYOUT_OPT                                          "SW_HID_LAYOUT_OPT"
+#define HID_STD_FONT                                            "SW_HID_STD_FONT"
+#define HID_COND_COLL                                           "SW_HID_COND_COLL"
+#define HID_FRM_ADD                                             "SW_HID_FRM_ADD"
+#define HID_TABLE_TEXTFLOW                                      "SW_HID_TABLE_TEXTFLOW"
+#define HID_AUTOFMT_BY_INPUT                                    "SW_HID_AUTOFMT_BY_INPUT"
+#define HID_AUTOFMT_APPLY                                       "SW_HID_AUTOFMT_APPLY"
+#define HID_OPTTABLE_PAGE                                       "SW_HID_OPTTABLE_PAGE"
+#define HID_PICK_SINGLE_NUM                                     "SW_HID_PICK_SINGLE_NUM"
+#define HID_PICK_BULLET                                         "SW_HID_PICK_BULLET"
+#define HID_PICK_NUM                                            "SW_HID_PICK_NUM"
+#define HID_PICK_BMP                                            "SW_HID_PICK_BMP"
 
-#define HID_FLD_DB                  (HID_BASE + 437)
-#define HID_FLD_DOKINF              (HID_BASE + 438)
-#define HID_FLD_VAR                 (HID_BASE + 439)
-#define HID_FLD_DOK                 (HID_BASE + 440)
-#define HID_FLD_FUNC                (HID_BASE + 441)
-#define HID_FLD_REF                 (HID_BASE + 442)
-#define HID_OPTSHDWCRSR             (HID_BASE + 443)
-#define HID_NUM_OPTIONS             (HID_BASE + 444)
-#define HID_NUM_POSITION            (HID_BASE + 445)
-#define HID_NUMPARA                 (HID_BASE + 446)
-#define HID_FOOTNOTE_OPTIONS        (HID_BASE + 447)
-#define HID_ENDNOTE_OPTIONS         (HID_BASE + 448)
-#define HID_REDLINE_OPT             (HID_BASE + 449)
-#define HID_LINENUMBERING           (HID_BASE + 450)
-#define HID_REDLINE_ACCEPT          (HID_BASE + 451)
-#define HID_EDIT_FLD_DB             (HID_BASE + 452)
-#define HID_EDIT_FLD_DOKINF         (HID_BASE + 453)
-#define HID_EDIT_FLD_VAR            (HID_BASE + 454)
-#define HID_EDIT_FLD_DOK            (HID_BASE + 455)
-#define HID_EDIT_FLD_FUNC           (HID_BASE + 456)
-#define HID_EDIT_FLD_REF            (HID_BASE + 457)
-#define HID_REDLINE_CTRL            (HID_BASE + 458)
-#define HID_TP_OUTLINE_NUM          (HID_BASE + 459)
-#define HID_OPTINSERT_PAGE          (HID_BASE + 460)
-#define HID_OPTCAPTION_PAGE         (HID_BASE + 461)
-#define HID_OPTLOAD_PAGE            (HID_BASE + 462)
-#define HID_INSERT_TOX_PAGE         (HID_BASE + 463)
-#define HID_TOX_FORM_ENTRY_PAGE     (HID_BASE + 464)
-#define HID_TOX_FORM_STYLES_PAGE    (HID_BASE + 465)
-#define HID_INSERT_TOX_TABDLG       (HID_BASE + 466)
-#define HID_INSERT_SECTION_PAGE     (HID_BASE + 467)
-#define HID_INSERT_SECTION_DLG      (HID_BASE + 468)
-#define HID_SECTION_PROPERTIES_DLG  (HID_BASE + 469)
-#define HID_RENAME_XNAMED           (HID_BASE + 470)
-#define HID_TP_TOX_SELECT           (HID_BASE + 471)
-#define HID_TP_TOX_ENTRY            (HID_BASE + 472)
-#define HID_TOX_STYLES_PAGE         (HID_BASE + 473)
-#define HID_TP_VISITING_CARDS       (HID_BASE + 474)
-#define HID_DLG_ADD_IDX_STYLES      (HID_BASE + 475)
-#define HID_ADD_STYLES_TLB          (HID_BASE + 476)
-#define HID_OLE_CHECKLB             (HID_BASE + 477)
-#define HID_DLG_CREATE_AUTH_ENTRY   (HID_BASE + 478)
-#define HID_TP_PRIVATE_DATA         (HID_BASE + 479)
+#define HID_FLD_DB                                              "SW_HID_FLD_DB"
+#define HID_FLD_DOKINF                                          "SW_HID_FLD_DOKINF"
+#define HID_FLD_VAR                                             "SW_HID_FLD_VAR"
+#define HID_FLD_DOK                                             "SW_HID_FLD_DOK"
+#define HID_FLD_FUNC                                            "SW_HID_FLD_FUNC"
+#define HID_FLD_REF                                             "SW_HID_FLD_REF"
+#define HID_OPTSHDWCRSR                                         "SW_HID_OPTSHDWCRSR"
+#define HID_NUM_OPTIONS                                         "SW_HID_NUM_OPTIONS"
+#define HID_NUM_POSITION                                        "SW_HID_NUM_POSITION"
+#define HID_NUMPARA                                             "SW_HID_NUMPARA"
+#define HID_FOOTNOTE_OPTIONS                                    "SW_HID_FOOTNOTE_OPTIONS"
+#define HID_ENDNOTE_OPTIONS                                     "SW_HID_ENDNOTE_OPTIONS"
+#define HID_REDLINE_OPT                                         "SW_HID_REDLINE_OPT"
+#define HID_LINENUMBERING                                       "SW_HID_LINENUMBERING"
+#define HID_REDLINE_ACCEPT                                      "SW_HID_REDLINE_ACCEPT"
+#define HID_EDIT_FLD_DB                                         "SW_HID_EDIT_FLD_DB"
+#define HID_EDIT_FLD_DOKINF                                     "SW_HID_EDIT_FLD_DOKINF"
+#define HID_EDIT_FLD_VAR                                        "SW_HID_EDIT_FLD_VAR"
+#define HID_EDIT_FLD_DOK                                        "SW_HID_EDIT_FLD_DOK"
+#define HID_EDIT_FLD_FUNC                                       "SW_HID_EDIT_FLD_FUNC"
+#define HID_EDIT_FLD_REF                                        "SW_HID_EDIT_FLD_REF"
+#define HID_REDLINE_CTRL                                        "SW_HID_REDLINE_CTRL"
+#define HID_TP_OUTLINE_NUM                                      "SW_HID_TP_OUTLINE_NUM"
+#define HID_OPTINSERT_PAGE                                      "SW_HID_OPTINSERT_PAGE"
+#define HID_OPTCAPTION_PAGE                                     "SW_HID_OPTCAPTION_PAGE"
+#define HID_OPTLOAD_PAGE                                        "SW_HID_OPTLOAD_PAGE"
+#define HID_INSERT_TOX_PAGE                                     "SW_HID_INSERT_TOX_PAGE"
+#define HID_TOX_FORM_ENTRY_PAGE                                 "SW_HID_TOX_FORM_ENTRY_PAGE"
+#define HID_TOX_FORM_STYLES_PAGE                                "SW_HID_TOX_FORM_STYLES_PAGE"
+#define HID_INSERT_TOX_TABDLG                                   "SW_HID_INSERT_TOX_TABDLG"
+#define HID_INSERT_SECTION_PAGE                                 "SW_HID_INSERT_SECTION_PAGE"
+#define HID_INSERT_SECTION_DLG                                  "SW_HID_INSERT_SECTION_DLG"
+#define HID_SECTION_PROPERTIES_DLG                              "SW_HID_SECTION_PROPERTIES_DLG"
+#define HID_RENAME_XNAMED                                       "SW_HID_RENAME_XNAMED"
+#define HID_TP_TOX_SELECT                                       "SW_HID_TP_TOX_SELECT"
+#define HID_TP_TOX_ENTRY                                        "SW_HID_TP_TOX_ENTRY"
+#define HID_TOX_STYLES_PAGE                                     "SW_HID_TOX_STYLES_PAGE"
+#define HID_TP_VISITING_CARDS                                   "SW_HID_TP_VISITING_CARDS"
+#define HID_DLG_ADD_IDX_STYLES                                  "SW_HID_DLG_ADD_IDX_STYLES"
+#define HID_ADD_STYLES_TLB                                      "SW_HID_ADD_STYLES_TLB"
+#define HID_OLE_CHECKLB                                         "SW_HID_OLE_CHECKLB"
+#define HID_DLG_CREATE_AUTH_ENTRY                               "SW_HID_DLG_CREATE_AUTH_ENTRY"
+#define HID_TP_PRIVATE_DATA                                     "SW_HID_TP_PRIVATE_DATA"
 
-#define HID_TP_BUSINESS_DATA            (HID_BASE + 480)
-#define HID_SECTION_FTNENDNOTES_PAGE    (HID_BASE + 481)
-#define HID_TEXTGRID_PAGE               (HID_BASE + 482)
-#define HID_OPTCOMPATIBILITY_PAGE       (HID_BASE + 483)
-#define HID_COMPATIBILITY_OPTIONS_BOX   (HID_BASE + 484)
+#define HID_TP_BUSINESS_DATA                                    "SW_HID_TP_BUSINESS_DATA"
+#define HID_SECTION_FTNENDNOTES_PAGE                            "SW_HID_SECTION_FTNENDNOTES_PAGE"
+#define HID_TEXTGRID_PAGE                                       "SW_HID_TEXTGRID_PAGE"
+#define HID_OPTCOMPATIBILITY_PAGE                               "SW_HID_OPTCOMPATIBILITY_PAGE"
+#define HID_COMPATIBILITY_OPTIONS_BOX                           "SW_HID_COMPATIBILITY_OPTIONS_BOX"
 
 // AutoPilot Help-IDs
 
-#define HID_LETTER_PAGE1            (HID_BASE + 501)
-#define HID_LETTER_PAGE2            (HID_BASE + 502)
-#define HID_LETTER_PAGE3            (HID_BASE + 503)
-#define HID_LETTER_PAGE4            (HID_BASE + 504)
-#define HID_LETTER_PAGE5            (HID_BASE + 505)
-#define HID_LETTER_PAGE6            (HID_BASE + 506)
-#define HID_LETTER_PAGE7            (HID_BASE + 507)
-#define HID_LETTER_PAGE8            (HID_BASE + 508)
-#define HID_LETTER_PAGE9            (HID_BASE + 509)
+#define HID_LETTER_PAGE1                                        "SW_HID_LETTER_PAGE1"
+#define HID_LETTER_PAGE2                                        "SW_HID_LETTER_PAGE2"
+#define HID_LETTER_PAGE3                                        "SW_HID_LETTER_PAGE3"
+#define HID_LETTER_PAGE4                                        "SW_HID_LETTER_PAGE4"
+#define HID_LETTER_PAGE5                                        "SW_HID_LETTER_PAGE5"
+#define HID_LETTER_PAGE6                                        "SW_HID_LETTER_PAGE6"
+#define HID_LETTER_PAGE7                                        "SW_HID_LETTER_PAGE7"
+#define HID_LETTER_PAGE8                                        "SW_HID_LETTER_PAGE8"
+#define HID_LETTER_PAGE9                                        "SW_HID_LETTER_PAGE9"
 
-#define HID_FAX_PAGE1               (HID_BASE + 511)
-#define HID_FAX_PAGE2               (HID_BASE + 512)
-#define HID_FAX_PAGE3               (HID_BASE + 513)
-#define HID_FAX_PAGE4               (HID_BASE + 514)
-#define HID_FAX_PAGE5               (HID_BASE + 515)
-#define HID_FAX_PAGE6               (HID_BASE + 516)
-#define HID_FAX_PAGE7               (HID_BASE + 517)
-#define HID_FAX_PAGE8               (HID_BASE + 518)
+#define HID_FAX_PAGE1                                           "SW_HID_FAX_PAGE1"
+#define HID_FAX_PAGE2                                           "SW_HID_FAX_PAGE2"
+#define HID_FAX_PAGE3                                           "SW_HID_FAX_PAGE3"
+#define HID_FAX_PAGE4                                           "SW_HID_FAX_PAGE4"
+#define HID_FAX_PAGE5                                           "SW_HID_FAX_PAGE5"
+#define HID_FAX_PAGE6                                           "SW_HID_FAX_PAGE6"
+#define HID_FAX_PAGE7                                           "SW_HID_FAX_PAGE7"
+#define HID_FAX_PAGE8                                           "SW_HID_FAX_PAGE8"
 
-#define HID_MEMO_PAGE1              (HID_BASE + 521)
-#define HID_MEMO_PAGE2              (HID_BASE + 522)
-#define HID_MEMO_PAGE3              (HID_BASE + 523)
-#define HID_MEMO_PAGE4              (HID_BASE + 524)
-#define HID_MEMO_PAGE5              (HID_BASE + 525)
+#define HID_MEMO_PAGE1                                          "SW_HID_MEMO_PAGE1"
+#define HID_MEMO_PAGE2                                          "SW_HID_MEMO_PAGE2"
+#define HID_MEMO_PAGE3                                          "SW_HID_MEMO_PAGE3"
+#define HID_MEMO_PAGE4                                          "SW_HID_MEMO_PAGE4"
+#define HID_MEMO_PAGE5                                          "SW_HID_MEMO_PAGE5"
 
-#define HID_AGENDA_PAGE1            (HID_BASE + 531)
-#define HID_AGENDA_PAGE2            (HID_BASE + 532)
-#define HID_AGENDA_PAGE3            (HID_BASE + 533)
-#define HID_AGENDA_PAGE4            (HID_BASE + 534)
-#define HID_AGENDA_PAGE5            (HID_BASE + 535)
-#define HID_AGENDA_PAGE6            (HID_BASE + 536)
+#define HID_AGENDA_PAGE1                                        "SW_HID_AGENDA_PAGE1"
+#define HID_AGENDA_PAGE2                                        "SW_HID_AGENDA_PAGE2"
+#define HID_AGENDA_PAGE3                                        "SW_HID_AGENDA_PAGE3"
+#define HID_AGENDA_PAGE4                                        "SW_HID_AGENDA_PAGE4"
+#define HID_AGENDA_PAGE5                                        "SW_HID_AGENDA_PAGE5"
+#define HID_AGENDA_PAGE6                                        "SW_HID_AGENDA_PAGE6"
 
-#define HID_AUTOPILOT_NEXT          (HID_BASE + 537)
-#define HID_AUTOPILOT_PREV          (HID_BASE + 538)
-#define HID_AUTOPILOT_OK            (HID_BASE + 539)
+#define HID_AUTOPILOT_NEXT                                      "SW_HID_AUTOPILOT_NEXT"
+#define HID_AUTOPILOT_PREV                                      "SW_HID_AUTOPILOT_PREV"
+#define HID_AUTOPILOT_OK                                        "SW_HID_AUTOPILOT_OK"
 
 // HelpIds for Menu
 
-#define HID_MN_SUB_TBLROW           (HID_BASE + 600)
-#define HID_MN_SUB_TBLCOL           (HID_BASE + 601)
-#define HID_MN_SUB_AUTOFORMAT       (HID_BASE + 602)
-#define HID_MN_SUB_TOOLBAR          (HID_BASE + 603)
-#define HID_MN_SUB_FIELD            (HID_BASE + 604)
-#define HID_MN_SUB_GRAPHIC          (HID_BASE + 605)
-#define HID_MN_SUB_TEMPLATES        (HID_BASE + 606)
-#define HID_MN_SUB_ARRANGE          (HID_BASE + 607)
-#define HID_MN_SUB_SPELLING         (HID_BASE + 608)
-#define HID_MN_SUB_UPDATE           (HID_BASE + 609)
-#define HID_MN_SUB_MIRROR           (HID_BASE + 610)
-#define HID_MN_SUB_ALIGN            (HID_BASE + 611)
-#define HID_MN_SUB_OPTIONS          (HID_BASE + 612)
+#define HID_MN_SUB_TBLROW                                       "SW_HID_MN_SUB_TBLROW"
+#define HID_MN_SUB_TBLCOL                                       "SW_HID_MN_SUB_TBLCOL"
+#define HID_MN_SUB_AUTOFORMAT                                   "SW_HID_MN_SUB_AUTOFORMAT"
+#define HID_MN_SUB_TOOLBAR                                      "SW_HID_MN_SUB_TOOLBAR"
+#define HID_MN_SUB_FIELD                                        "SW_HID_MN_SUB_FIELD"
+#define HID_MN_SUB_GRAPHIC                                      "SW_HID_MN_SUB_GRAPHIC"
+#define HID_MN_SUB_TEMPLATES                                    "SW_HID_MN_SUB_TEMPLATES"
+#define HID_MN_SUB_ARRANGE                                      "SW_HID_MN_SUB_ARRANGE"
+#define HID_MN_SUB_SPELLING                                     "SW_HID_MN_SUB_SPELLING"
+#define HID_MN_SUB_UPDATE                                       "SW_HID_MN_SUB_UPDATE"
+#define HID_MN_SUB_MIRROR                                       "SW_HID_MN_SUB_MIRROR"
+#define HID_MN_SUB_ALIGN                                        "SW_HID_MN_SUB_ALIGN"
+#define HID_MN_SUB_OPTIONS                                      "SW_HID_MN_SUB_OPTIONS"
 
-#define HID_MN_CALC_PHD             (HID_BASE + 613)
-#define HID_MN_CALC_SQRT            (HID_BASE + 614)
-#define HID_MN_CALC_OR              (HID_BASE + 615)
-#define HID_MN_CALC_XOR             (HID_BASE + 616)
-#define HID_MN_CALC_AND             (HID_BASE + 617)
-#define HID_MN_CALC_NOT             (HID_BASE + 618)
-#define HID_MN_CALC_EQ              (HID_BASE + 619)
-#define HID_MN_CALC_NEQ             (HID_BASE + 620)
-#define HID_MN_CALC_LEQ             (HID_BASE + 621)
-#define HID_MN_CALC_GEQ             (HID_BASE + 622)
-#define HID_MN_CALC_LES             (HID_BASE + 623)
-#define HID_MN_CALC_GRE             (HID_BASE + 624)
-#define HID_MN_CALC_SUM             (HID_BASE + 625)
-#define HID_MN_CALC_MEAN            (HID_BASE + 626)
-#define HID_MN_CALC_MIN             (HID_BASE + 627)
-#define HID_MN_CALC_MAX             (HID_BASE + 628)
-#define HID_MN_CALC_SIN             (HID_BASE + 629)
-#define HID_MN_CALC_COS             (HID_BASE + 630)
-#define HID_MN_CALC_TAN             (HID_BASE + 631)
-#define HID_MN_CALC_ASIN            (HID_BASE + 632)
-#define HID_MN_CALC_ACOS            (HID_BASE + 633)
-#define HID_MN_CALC_ATAN            (HID_BASE + 634)
-#define HID_MN_CALC_POW             (HID_BASE + 635)
-#define HID_MN_CALC_LISTSEP         (HID_BASE + 636)
-#define HID_MN_POP_OPS              (HID_BASE + 637)
-#define HID_MN_POP_STATISTICS       (HID_BASE + 638)
-#define HID_MN_POP_FUNC             (HID_BASE + 639)
-#define HID_MN_RSC_END              (HID_BASE + 640)
-#define HID_MN_CALC_ROUND           (HID_BASE + 641)
-#define HID_MN_SUB_MACRO            (HID_BASE + 642)
+#define HID_MN_CALC_PHD                                         "SW_HID_MN_CALC_PHD"
+#define HID_MN_CALC_SQRT                                        "SW_HID_MN_CALC_SQRT"
+#define HID_MN_CALC_OR                                          "SW_HID_MN_CALC_OR"
+#define HID_MN_CALC_XOR                                         "SW_HID_MN_CALC_XOR"
+#define HID_MN_CALC_AND                                         "SW_HID_MN_CALC_AND"
+#define HID_MN_CALC_NOT                                         "SW_HID_MN_CALC_NOT"
+#define HID_MN_CALC_EQ                                          "SW_HID_MN_CALC_EQ"
+#define HID_MN_CALC_NEQ                                         "SW_HID_MN_CALC_NEQ"
+#define HID_MN_CALC_LEQ                                         "SW_HID_MN_CALC_LEQ"
+#define HID_MN_CALC_GEQ                                         "SW_HID_MN_CALC_GEQ"
+#define HID_MN_CALC_LES                                         "SW_HID_MN_CALC_LES"
+#define HID_MN_CALC_GRE                                         "SW_HID_MN_CALC_GRE"
+#define HID_MN_CALC_SUM                                         "SW_HID_MN_CALC_SUM"
+#define HID_MN_CALC_MEAN                                        "SW_HID_MN_CALC_MEAN"
+#define HID_MN_CALC_MIN                                         "SW_HID_MN_CALC_MIN"
+#define HID_MN_CALC_MAX                                         "SW_HID_MN_CALC_MAX"
+#define HID_MN_CALC_SIN                                         "SW_HID_MN_CALC_SIN"
+#define HID_MN_CALC_COS                                         "SW_HID_MN_CALC_COS"
+#define HID_MN_CALC_TAN                                         "SW_HID_MN_CALC_TAN"
+#define HID_MN_CALC_ASIN                                        "SW_HID_MN_CALC_ASIN"
+#define HID_MN_CALC_ACOS                                        "SW_HID_MN_CALC_ACOS"
+#define HID_MN_CALC_ATAN                                        "SW_HID_MN_CALC_ATAN"
+#define HID_MN_CALC_POW                                         "SW_HID_MN_CALC_POW"
+#define HID_MN_CALC_LISTSEP                                     "SW_HID_MN_CALC_LISTSEP"
+#define HID_MN_POP_OPS                                          "SW_HID_MN_POP_OPS"
+#define HID_MN_POP_STATISTICS                                   "SW_HID_MN_POP_STATISTICS"
+#define HID_MN_POP_FUNC                                         "SW_HID_MN_POP_FUNC"
+#define HID_MN_RSC_END                                          "SW_HID_MN_RSC_END"
+#define HID_MN_CALC_ROUND                                       "SW_HID_MN_CALC_ROUND"
+#define HID_MN_SUB_MACRO                                        "SW_HID_MN_SUB_MACRO"
 
-#define HID_MN_READONLY_SAVEGRAPHIC             (HID_BASE + 645)
-#define HID_MN_READONLY_GRAPHICTOGALLERY        (HID_BASE + 646)
-#define HID_MN_READONLY_TOGALLERYLINK           (HID_BASE + 647)
-#define HID_MN_READONLY_TOGALLERYCOPY           (HID_BASE + 648)
-#define HID_MN_READONLY_SAVEBACKGROUND          (HID_BASE + 649)
-#define HID_MN_READONLY_BACKGROUNDTOGALLERY     (HID_BASE + 650)
-#define HID_MN_READONLY_COPYLINK                (HID_BASE + 651)
-#define HID_MN_READONLY_COPYGRAPHIC             (HID_BASE + 652)
-#define HID_MN_READONLY_LOADGRAPHIC             (HID_BASE + 653)
-#define HID_MN_READONLY_GRAPHICOFF              (HID_BASE + 654)
-#define HID_MN_READONLY_PLUGINOFF               (HID_BASE + 655)
+#define HID_MN_READONLY_SAVEGRAPHIC                             "SW_HID_MN_READONLY_SAVEGRAPHIC"
+#define HID_MN_READONLY_GRAPHICTOGALLERY                        "SW_HID_MN_READONLY_GRAPHICTOGALLERY"
+#define HID_MN_READONLY_TOGALLERYLINK                           "SW_HID_MN_READONLY_TOGALLERYLINK"
+#define HID_MN_READONLY_TOGALLERYCOPY                           "SW_HID_MN_READONLY_TOGALLERYCOPY"
+#define HID_MN_READONLY_SAVEBACKGROUND                          "SW_HID_MN_READONLY_SAVEBACKGROUND"
+#define HID_MN_READONLY_BACKGROUNDTOGALLERY                     "SW_HID_MN_READONLY_BACKGROUNDTOGALLERY"
+#define HID_MN_READONLY_COPYLINK                                "SW_HID_MN_READONLY_COPYLINK"
+#define HID_MN_READONLY_COPYGRAPHIC                             "SW_HID_MN_READONLY_COPYGRAPHIC"
+#define HID_MN_READONLY_LOADGRAPHIC                             "SW_HID_MN_READONLY_LOADGRAPHIC"
+#define HID_MN_READONLY_GRAPHICOFF                              "SW_HID_MN_READONLY_GRAPHICOFF"
+#define HID_MN_READONLY_PLUGINOFF                               "SW_HID_MN_READONLY_PLUGINOFF"
 
-#define HID_MD_GLOS_DEFINE          (HID_BASE + 656)
-#define HID_MD_GLOS_REPLACE         (HID_BASE + 657)
-#define HID_MD_GLOS_RENAME          (HID_BASE + 658)
-#define HID_MD_GLOS_DELETE          (HID_BASE + 659)
-#define HID_MD_GLOS_EDIT            (HID_BASE + 660)
-#define HID_MD_GLOS_MACRO           (HID_BASE + 661)
-#define HID_LINGU_ADD_WORD          (HID_BASE + 662)
-#define HID_LINGU_IGNORE_WORD       (HID_BASE + 663)
-#define HID_LINGU_SPELLING_DLG      (HID_BASE + 664)
-#define HID_LINGU_AUTOCORR          (HID_BASE + 665)
-#define HID_LINGU_REPLACE           (HID_BASE + 666)
-#define HID_MD_GLOS_CATEGORY        (HID_BASE + 667)
-#define HID_REGION_TREE             (HID_BASE + 668)
-#define HID_LINGU_WORD_LANGUAGE     (HID_BASE + 669)
-#define HID_LINGU_PARA_LANGUAGE     (HID_BASE + 670)
-#define HID_MD_GLOS_DEFINE_TEXT     (HID_BASE + 671)
-#define HID_DLG_PASSWD_SECTION      (HID_BASE + 672)
-#define HID_MD_COPY_TO_CLIPBOARD    (HID_BASE + 673)
-#define HID_MD_GLOS_IMPORT          (HID_BASE + 674)
-#define HID_SMARTTAG_MAIN           (HID_BASE + 675)    // SMARTTAGS
-#define HID_LINGU_IGNORE_SELECTION  (HID_BASE + 676)    // grammar check context menu
+#define HID_MD_GLOS_DEFINE                                      "SW_HID_MD_GLOS_DEFINE"
+#define HID_MD_GLOS_REPLACE                                     "SW_HID_MD_GLOS_REPLACE"
+#define HID_MD_GLOS_RENAME                                      "SW_HID_MD_GLOS_RENAME"
+#define HID_MD_GLOS_DELETE                                      "SW_HID_MD_GLOS_DELETE"
+#define HID_MD_GLOS_EDIT                                        "SW_HID_MD_GLOS_EDIT"
+#define HID_MD_GLOS_MACRO                                       "SW_HID_MD_GLOS_MACRO"
+#define HID_LINGU_ADD_WORD                                      "SW_HID_LINGU_ADD_WORD"
+#define HID_LINGU_IGNORE_WORD                                   "SW_HID_LINGU_IGNORE_WORD"
+#define HID_LINGU_SPELLING_DLG                                  "SW_HID_LINGU_SPELLING_DLG"
+#define HID_LINGU_AUTOCORR                                      "SW_HID_LINGU_AUTOCORR"
+#define HID_LINGU_REPLACE                                       "SW_HID_LINGU_REPLACE"
+#define HID_MD_GLOS_CATEGORY                                    "SW_HID_MD_GLOS_CATEGORY"
+#define HID_REGION_TREE                                         "SW_HID_REGION_TREE"
+#define HID_LINGU_WORD_LANGUAGE                                 "SW_HID_LINGU_WORD_LANGUAGE"
+#define HID_LINGU_PARA_LANGUAGE                                 "SW_HID_LINGU_PARA_LANGUAGE"
+#define HID_MD_GLOS_DEFINE_TEXT                                 "SW_HID_MD_GLOS_DEFINE_TEXT"
+#define HID_DLG_PASSWD_SECTION                                  "SW_HID_DLG_PASSWD_SECTION"
+#define HID_MD_COPY_TO_CLIPBOARD                                "SW_HID_MD_COPY_TO_CLIPBOARD"
+#define HID_MD_GLOS_IMPORT                                      "SW_HID_MD_GLOS_IMPORT"
+#define HID_SMARTTAG_MAIN                                       "SW_HID_SMARTTAG_MAIN"    // SMARTTAGS
+#define HID_LINGU_IGNORE_SELECTION                              "SW_HID_LINGU_IGNORE_SELECTION"    // grammar check context menu
 
 // More Help-IDs
 
-#define HID_CLOSE_FILE              (HID_BASE + 1001)
-#define HID_LAUNCH_REGISTRY         (HID_BASE + 1002)
-#define HID_MERGE_FILE              (HID_BASE + 1003)
-#define HID_MERGE_FILE_DLG          (HID_BASE + 1004)
-#define HID_NEW_FILE                (HID_BASE + 1005)
-#define HID_OPEN_FILE               (HID_BASE + 1007)
-#define HID_OPEN_LASTVERSION        (HID_BASE + 1009)
-#define HID_PRINT_FILE              (HID_BASE + 1010)
-#define HID_PRINT_FILE_OPTIONS      (HID_BASE + 1011)
-#define HID_SAVE_FILE_AS            (HID_BASE + 1012)
-#define HID_SAVE_FILE               (HID_BASE + 1013)
-#define HID_SETUP_PRINTER_DLG       (HID_BASE + 1015)
-#define HID_EXIT                    (HID_BASE + 1017)
-#define HID_CREATE_DOCUMENT         (HID_BASE + 1019)
-#define HID_DOCSTAT_DLG             (HID_BASE + 1020)
-#define HID_LOAD_TEMPLATE_DLG       (HID_BASE + 1021)
-#define HID_SAVE_ALL                (HID_BASE + 1023)
-#define HID_NEW_FILE_DEFAULT        (HID_BASE + 1024)
-#define HID_PRINT_FILE_DEFAULT      (HID_BASE + 1025)
-#define HID_FAX                     (HID_BASE + 1028)
-#define HID_SELECT_DATABASE         (HID_BASE + 1030)
-#define HID_DOC_INFO_DLG            (HID_BASE + 1031)
-#define HID_DOC_MGR_DLG             (HID_BASE + 1032)
-#define HID_OPTCAPTION_CLB          (HID_BASE + 1033)
+#define HID_CLOSE_FILE                                          "SW_HID_CLOSE_FILE"
+#define HID_LAUNCH_REGISTRY                                     "SW_HID_LAUNCH_REGISTRY"
+#define HID_MERGE_FILE                                          "SW_HID_MERGE_FILE"
+#define HID_MERGE_FILE_DLG                                      "SW_HID_MERGE_FILE_DLG"
+#define HID_NEW_FILE                                            "SW_HID_NEW_FILE"
+#define HID_OPEN_FILE                                           "SW_HID_OPEN_FILE"
+#define HID_OPEN_LASTVERSION                                    "SW_HID_OPEN_LASTVERSION"
+#define HID_PRINT_FILE                                          "SW_HID_PRINT_FILE"
+#define HID_PRINT_FILE_OPTIONS                                  "SW_HID_PRINT_FILE_OPTIONS"
+#define HID_SAVE_FILE_AS                                        "SW_HID_SAVE_FILE_AS"
+#define HID_SAVE_FILE                                           "SW_HID_SAVE_FILE"
+#define HID_SETUP_PRINTER_DLG                                   "SW_HID_SETUP_PRINTER_DLG"
+#define HID_EXIT                                                "SW_HID_EXIT"
+#define HID_CREATE_DOCUMENT                                     "SW_HID_CREATE_DOCUMENT"
+#define HID_DOCSTAT_DLG                                         "SW_HID_DOCSTAT_DLG"
+#define HID_LOAD_TEMPLATE_DLG                                   "SW_HID_LOAD_TEMPLATE_DLG"
+#define HID_SAVE_ALL                                            "SW_HID_SAVE_ALL"
+#define HID_NEW_FILE_DEFAULT                                    "SW_HID_NEW_FILE_DEFAULT"
+#define HID_PRINT_FILE_DEFAULT                                  "SW_HID_PRINT_FILE_DEFAULT"
+#define HID_FAX                                                 "SW_HID_FAX"
+#define HID_SELECT_DATABASE                                     "SW_HID_SELECT_DATABASE"
+#define HID_DOC_INFO_DLG                                        "SW_HID_DOC_INFO_DLG"
+#define HID_DOC_MGR_DLG                                         "SW_HID_DOC_MGR_DLG"
+#define HID_OPTCAPTION_CLB                                      "SW_HID_OPTCAPTION_CLB"
 
-#define HID_COPY                    (HID_BASE + 1102)
-#define HID_CUT                     (HID_BASE + 1103)
-#define HID_EDIT_FIELD              (HID_BASE + 1104)
-#define HID_EDIT_FILE_INFO_DLG      (HID_BASE + 1107)
-#define HID_EDIT_LINK_DLG           (HID_BASE + 1109)
-#define HID_EDIT_OBJECT             (HID_BASE + 1110)
-#define HID_GOTO                    (HID_BASE + 1111)
-#define HID_SET_FIELD_VALUE         (HID_BASE + 1112)
-#define HID_PASTE                   (HID_BASE + 1113)
-#define HID_REDO                    (HID_BASE + 1116)
-#define HID_SEARCH                  (HID_BASE + 1117)
-#define HID_REPLACE                 (HID_BASE + 1118)
-#define HID_SELECT_ALL              (HID_BASE + 1119)
-#define HID_UNDO                    (HID_BASE + 1120)
-#define HID_REPEAT                  (HID_BASE + 1122)
-#define HID_BUFFER_UPDATE           (HID_BASE + 1124)
-#define HID_UPDATE_FIELDS           (HID_BASE + 1126)
-#define HID_EXECUTE_MACROFIELD      (HID_BASE + 1127)
-#define HID_EDIT_FORMULA            (HID_BASE + 1128)
-#define HID_CALC_TABLE              (HID_BASE + 1129)
-#define HID_NUM_BULLET_DOWN         (HID_BASE + 1130)
-#define HID_NUM_BULLET_UP           (HID_BASE + 1131)
-#define HID_NUM_BULLET_PREV         (HID_BASE + 1132)
-#define HID_NUM_BULLET_NEXT         (HID_BASE + 1133)
-#define HID_NUM_BULLET_MOVEUP       (HID_BASE + 1134)
-#define HID_NUM_BULLET_MOVEDOWN     (HID_BASE + 1135)
-#define HID_NUM_BULLET_NONUM        (HID_BASE + 1136)
-#define HID_NUM_BULLET_OFF          (HID_BASE + 1137)
-#define HID_NUM_BULLET_ON           (HID_BASE + 1138)
-#define HID_NUM_BULLET_OUTLINE_DOWN (HID_BASE + 1139)
-#define HID_NUM_BULLET_OUTLINE_UP   (HID_BASE + 1140)
-#define HID_NUM_BULLET_OUTLINE_MOVEUP   (HID_BASE + 1141)
-#define HID_NUM_BULLET_OUTLINE_MOVEDOWN (HID_BASE + 1142)
-#define HID_UPDATE_INPUTFIELDS      (HID_BASE + 1143)
-#define HID_NUM_NUMBERING_ON        (HID_BASE + 1144)
-#define HID_REPEAT_SEARCH           (HID_BASE + 1150)
-#define HID_REPAGINATE              (HID_BASE + 1161)
+#define HID_COPY                                                "SW_HID_COPY"
+#define HID_CUT                                                 "SW_HID_CUT"
+#define HID_EDIT_FIELD                                          "SW_HID_EDIT_FIELD"
+#define HID_EDIT_FILE_INFO_DLG                                  "SW_HID_EDIT_FILE_INFO_DLG"
+#define HID_EDIT_LINK_DLG                                       "SW_HID_EDIT_LINK_DLG"
+#define HID_EDIT_OBJECT                                         "SW_HID_EDIT_OBJECT"
+#define HID_GOTO                                                "SW_HID_GOTO"
+#define HID_SET_FIELD_VALUE                                     "SW_HID_SET_FIELD_VALUE"
+#define HID_PASTE                                               "SW_HID_PASTE"
+#define HID_REDO                                                "SW_HID_REDO"
+#define HID_SEARCH                                              "SW_HID_SEARCH"
+#define HID_REPLACE                                             "SW_HID_REPLACE"
+#define HID_SELECT_ALL                                          "SW_HID_SELECT_ALL"
+#define HID_UNDO                                                "SW_HID_UNDO"
+#define HID_REPEAT                                              "SW_HID_REPEAT"
+#define HID_BUFFER_UPDATE                                       "SW_HID_BUFFER_UPDATE"
+#define HID_UPDATE_FIELDS                                       "SW_HID_UPDATE_FIELDS"
+#define HID_EXECUTE_MACROFIELD                                  "SW_HID_EXECUTE_MACROFIELD"
+#define HID_EDIT_FORMULA                                        "SW_HID_EDIT_FORMULA"
+#define HID_CALC_TABLE                                          "SW_HID_CALC_TABLE"
+#define HID_NUM_BULLET_DOWN                                     "SW_HID_NUM_BULLET_DOWN"
+#define HID_NUM_BULLET_UP                                       "SW_HID_NUM_BULLET_UP"
+#define HID_NUM_BULLET_PREV                                     "SW_HID_NUM_BULLET_PREV"
+#define HID_NUM_BULLET_NEXT                                     "SW_HID_NUM_BULLET_NEXT"
+#define HID_NUM_BULLET_MOVEUP                                   "SW_HID_NUM_BULLET_MOVEUP"
+#define HID_NUM_BULLET_MOVEDOWN                                 "SW_HID_NUM_BULLET_MOVEDOWN"
+#define HID_NUM_BULLET_NONUM                                    "SW_HID_NUM_BULLET_NONUM"
+#define HID_NUM_BULLET_OFF                                      "SW_HID_NUM_BULLET_OFF"
+#define HID_NUM_BULLET_ON                                       "SW_HID_NUM_BULLET_ON"
+#define HID_NUM_BULLET_OUTLINE_DOWN                             "SW_HID_NUM_BULLET_OUTLINE_DOWN"
+#define HID_NUM_BULLET_OUTLINE_UP                               "SW_HID_NUM_BULLET_OUTLINE_UP"
+#define HID_NUM_BULLET_OUTLINE_MOVEUP                           "SW_HID_NUM_BULLET_OUTLINE_MOVEUP"
+#define HID_NUM_BULLET_OUTLINE_MOVEDOWN                         "SW_HID_NUM_BULLET_OUTLINE_MOVEDOWN"
+#define HID_UPDATE_INPUTFIELDS                                  "SW_HID_UPDATE_INPUTFIELDS"
+#define HID_NUM_NUMBERING_ON                                    "SW_HID_NUM_NUMBERING_ON"
+#define HID_REPEAT_SEARCH                                       "SW_HID_REPEAT_SEARCH"
+#define HID_REPAGINATE                                          "SW_HID_REPAGINATE"
 
-#define HID_REFRESH_VIEW            (HID_BASE + 1201)
-#define HID_RIBBON                  (HID_BASE + 1210)
-#define HID_RULER                   (HID_BASE + 1211)
-#define HID_STATUSBAR               (HID_BASE + 1212)
-#define HID_TOOLBOX                 (HID_BASE + 1213)
-#define HID_VIEW_BOUNDS             (HID_BASE + 1214)
-#define HID_VIEW_FIELDS             (HID_BASE + 1215)
-#define HID_VLINEAL                 (HID_BASE + 1216)
-#define HID_VSCROLLBAR              (HID_BASE + 1217)
-#define HID_HSCROLLBAR              (HID_BASE + 1218)
-#define HID_VIEW_META_CHARS         (HID_BASE + 1224)
-#define HID_VIEW_MARKS              (HID_BASE + 1225)
-#define HID_VIEW_FIELDNAME          (HID_BASE + 1226)
-#define HID_VIEW_TABLEGRID          (HID_BASE + 1227)
-#define HID_ZOOM                    (HID_BASE + 1231)
+#define HID_REFRESH_VIEW                                        "SW_HID_REFRESH_VIEW"
+#define HID_RIBBON                                              "SW_HID_RIBBON"
+#define HID_RULER                                               "SW_HID_RULER"
+#define HID_STATUSBAR                                           "SW_HID_STATUSBAR"
+#define HID_TOOLBOX                                             "SW_HID_TOOLBOX"
+#define HID_VIEW_BOUNDS                                         "SW_HID_VIEW_BOUNDS"
+#define HID_VIEW_FIELDS                                         "SW_HID_VIEW_FIELDS"
+#define HID_VLINEAL                                             "SW_HID_VLINEAL"
+#define HID_VSCROLLBAR                                          "SW_HID_VSCROLLBAR"
+#define HID_HSCROLLBAR                                          "SW_HID_HSCROLLBAR"
+#define HID_VIEW_META_CHARS                                     "SW_HID_VIEW_META_CHARS"
+#define HID_VIEW_MARKS                                          "SW_HID_VIEW_MARKS"
+#define HID_VIEW_FIELDNAME                                      "SW_HID_VIEW_FIELDNAME"
+#define HID_VIEW_TABLEGRID                                      "SW_HID_VIEW_TABLEGRID"
+#define HID_ZOOM                                                "SW_HID_ZOOM"
 
-#define HID_DELETE_BOOKMARK         (HID_BASE + 1301)
-#define HID_INSERT_BREAK            (HID_BASE + 1303)
-#define HID_INSERT_COLUMN_BREAK     (HID_BASE + 1305)
-#define HID_INSERT_FILE             (HID_BASE + 1309)
-#define HID_INSERT_FOOTNOTE         (HID_BASE + 1311)
-#define HID_INSERT_GRAFIC           (HID_BASE + 1315)
-#define HID_INSERT_LINEBREAK        (HID_BASE + 1318)
-#define HID_INSERT_MERGEFIELD_DLG   (HID_BASE + 1320)
-#define HID_INSERT_OBJECT_DLG       (HID_BASE + 1322)
-#define HID_INSERT_PAGEBREAK        (HID_BASE + 1323)
-#define HID_INSERT_RECORD           (HID_BASE + 1326)
-#define HID_MERGE_RECORD            (HID_BASE + 1327)
-#define HID_INSERT_SYMBOL           (HID_BASE + 1328)
-#define HID_INSERT_STRING           (HID_BASE + 1331)
-#define HID_INSERT_COLS             (HID_BASE + 1332)
-#define HID_INSERT_FRAME_INTERACT   (HID_BASE + 1333)
-#define HID_INSERT_FRAME            (HID_BASE + 1334)
-#define HID_INSERT_IDX_ENTRY        (HID_BASE + 1340)
-#define HID_INSERT_USERIDX_ENTRY    (HID_BASE + 1341)
-#define HID_INSERT_CNTNTIDX_ENTRY   (HID_BASE + 1342)
-#define HID_INSERT_SOFT_HYPHEN      (HID_BASE + 1350)
-#define HID_INSERT_HARD_SPACE       (HID_BASE + 1351)
+#define HID_DELETE_BOOKMARK                                     "SW_HID_DELETE_BOOKMARK"
+#define HID_INSERT_BREAK                                        "SW_HID_INSERT_BREAK"
+#define HID_INSERT_COLUMN_BREAK                                 "SW_HID_INSERT_COLUMN_BREAK"
+#define HID_INSERT_FILE                                         "SW_HID_INSERT_FILE"
+#define HID_INSERT_FOOTNOTE                                     "SW_HID_INSERT_FOOTNOTE"
+#define HID_INSERT_GRAFIC                                       "SW_HID_INSERT_GRAFIC"
+#define HID_INSERT_LINEBREAK                                    "SW_HID_INSERT_LINEBREAK"
+#define HID_INSERT_MERGEFIELD_DLG                               "SW_HID_INSERT_MERGEFIELD_DLG"
+#define HID_INSERT_OBJECT_DLG                                   "SW_HID_INSERT_OBJECT_DLG"
+#define HID_INSERT_PAGEBREAK                                    "SW_HID_INSERT_PAGEBREAK"
+#define HID_INSERT_RECORD                                       "SW_HID_INSERT_RECORD"
+#define HID_MERGE_RECORD                                        "SW_HID_MERGE_RECORD"
+#define HID_INSERT_SYMBOL                                       "SW_HID_INSERT_SYMBOL"
+#define HID_INSERT_STRING                                       "SW_HID_INSERT_STRING"
+#define HID_INSERT_COLS                                         "SW_HID_INSERT_COLS"
+#define HID_INSERT_FRAME_INTERACT                               "SW_HID_INSERT_FRAME_INTERACT"
+#define HID_INSERT_FRAME                                        "SW_HID_INSERT_FRAME"
+#define HID_INSERT_IDX_ENTRY                                    "SW_HID_INSERT_IDX_ENTRY"
+#define HID_INSERT_USERIDX_ENTRY                                "SW_HID_INSERT_USERIDX_ENTRY"
+#define HID_INSERT_CNTNTIDX_ENTRY                               "SW_HID_INSERT_CNTNTIDX_ENTRY"
+#define HID_INSERT_SOFT_HYPHEN                                  "SW_HID_INSERT_SOFT_HYPHEN"
+#define HID_INSERT_HARD_SPACE                                   "SW_HID_INSERT_HARD_SPACE"
 
-#define HID_SET_FONT                (HID_BASE + 1401)
-#define HID_SET_FONT_SIZE           (HID_BASE + 1402)
-#define HID_GROW_FONT_SIZE          (HID_BASE + 1403)
-#define HID_SHRINK_FONT_SIZE        (HID_BASE + 1404)
-#define HID_SET_BOLD                (HID_BASE + 1405)
-#define HID_SET_ITALIC              (HID_BASE + 1406)
-#define HID_SET_SHADOW              (HID_BASE + 1407)
-#define HID_SET_OUTLINE             (HID_BASE + 1408)
-#define HID_SET_UNDERLINE           (HID_BASE + 1409)
-#define HID_SET_STRIKEOUT           (HID_BASE + 1410)
-#define HID_SET_SUPER_SCRIPT        (HID_BASE + 1411)
-#define HID_SET_SUB_SCRIPT          (HID_BASE + 1412)
-#define HID_SET_COLOR               (HID_BASE + 1413)
-#define HID_SET_CASEMAP             (HID_BASE + 1414)
-#define HID_SET_LANGUAGE            (HID_BASE + 1415)
-#define HID_SET_KERNING             (HID_BASE + 1416)
-#define HID_INDENT_TO_TABSTOP       (HID_BASE + 1417)
-#define HID_SET_LEFT_PARA           (HID_BASE + 1418)
-#define HID_SET_RIGHT_PARA          (HID_BASE + 1419)
-#define HID_SET_CENTER_PARA         (HID_BASE + 1420)
-#define HID_SET_JUSTIFY_PARA        (HID_BASE + 1421)
-#define HID_SET_LINE_SPACE_1        (HID_BASE + 1422)
-#define HID_SET_LINE_SPACE_15       (HID_BASE + 1423)
-#define HID_SET_LINE_SPACE_2        (HID_BASE + 1424)
-#define HID_FLIP_HORZ_GRAFIC        (HID_BASE + 1425)
-#define HID_FLIP_VERT_GRAFIC        (HID_BASE + 1426)
-#define HID_SET_ADJUST              (HID_BASE + 1428)
-#define HID_SET_LRMARGIN            (HID_BASE + 1429)
-#define HID_SET_ULMARGIN            (HID_BASE + 1430)
-#define HID_UNINDENT_TO_TABSTOP     (HID_BASE + 1431)
-#define HID_SET_HYPHEN_ZONE         (HID_BASE + 1432)
-#define HID_SET_PAGE_BREAK          (HID_BASE + 1433)
-#define HID_SET_KEEP_TOGETHER       (HID_BASE + 1434)
-#define HID_SET_WIDOW               (HID_BASE + 1436)
-#define HID_SET_ORPHAN              (HID_BASE + 1437)
-#define HID_FORMAT_SHADOW           (HID_BASE + 1438)
-#define HID_FORMAT_BORDER           (HID_BASE + 1439)
-#define HID_FORMAT_CHAR_DLG         (HID_BASE + 1441)
-#define HID_FORMAT_PARA_DLG         (HID_BASE + 1443)
-#define HID_FORMAT_TAB              (HID_BASE + 1444)
-#define HID_FORMAT_TAB_DLG          (HID_BASE + 1445)
-#define HID_FORMAT_BORDER_DLG       (HID_BASE + 1447)
-#define HID_FORMAT_BACKGROUND       (HID_BASE + 1448)
-#define HID_FORMAT_BACKGROUND_DLG   (HID_BASE + 1450)
-#define HID_FORMAT_PAGE             (HID_BASE + 1451)
-#define HID_FORMAT_PAGE_DLG         (HID_BASE + 1452)
-#define HID_FORMAT_DROPCAPS         (HID_BASE + 1454)
-#define HID_FORMAT_FRAME_DLG        (HID_BASE + 1456)
-#define HID_FORMAT_GRAFIC_DLG       (HID_BASE + 1458)
-#define HID_FORMAT_TABLE_DLG        (HID_BASE + 1460)
-#define HID_NEW_STYLE_BY_EXAMPLE    (HID_BASE + 1462)
-#define HID_UPDATE_STYLE_BY_EXAMPLE (HID_BASE + 1463)
-#define HID_STYLE_SHEET_FRAME_DLG   (HID_BASE + 1464)
-#define HID_STYLE_SHEET_DOC_DLG     (HID_BASE + 1465)
-#define HID_FORMAT_RESET            (HID_BASE + 1469)
-#define HID_FRAME_TO_TOP            (HID_BASE + 1470)
-#define HID_FRAME_TO_BOTTOM         (HID_BASE + 1471)
-#define HID_FRAME_NOWRAP            (HID_BASE + 1472)
-#define HID_FRAME_WRAP              (HID_BASE + 1473)
-#define HID_FRAME_WRAPTHRU          (HID_BASE + 1474)
-#define HID_FRAME_ALIGN_HORZ_LEFT   (HID_BASE + 1475)
-#define HID_FRAME_ALIGN_HORZ_RIGHT  (HID_BASE + 1476)
-#define HID_FRAME_ALIGN_HORZ_CENTER (HID_BASE + 1477)
-#define HID_FRAME_ALIGN_VERT_TOP    (HID_BASE + 1478)
-#define HID_FRAME_ALIGN_VERT_BOTTOM (HID_BASE + 1479)
-#define HID_FRAME_ALIGN_VERT_CENTER (HID_BASE + 1480)
-#define HID_SET_FRM_SIZE            (HID_BASE + 1481)
-#define HID_SET_FRM_POSITION        (HID_BASE + 1482)
-#define HID_SET_FRM_ANCHOR          (HID_BASE + 1483)
-#define HID_SET_FRM_WRAP            (HID_BASE + 1484)
-#define HID_SET_FRM_DIST            (HID_BASE + 1485)
-#define HID_SET_FRM_OPTIONS         (HID_BASE + 1486)
-#define HID_SET_GRF_MIRROR          (HID_BASE + 1488)
-#define HID_SET_TABLE_WIDTH         (HID_BASE + 1489)
-#define HID_SET_TABLE_ALIGN         (HID_BASE + 1490)
-#define HID_SET_CHAR_STYLE          (HID_BASE + 1491)
-#define HID_SET_PARA_STYLE          (HID_BASE + 1492)
-#define HID_SET_PAGE_STYLE          (HID_BASE + 1493)
-#define HID_SET_FRM_MACRO           (HID_BASE + 1494)
-#define HID_SET_FRM_COLUMNS         (HID_BASE + 1495)
-#define HID_SET_FRM_COLUMN_WIDTH    (HID_BASE + 1496)
-#define HID_UPDATE_STYLES_DIRECT    (HID_BASE + 1497)
+#define HID_SET_FONT                                            "SW_HID_SET_FONT"
+#define HID_SET_FONT_SIZE                                       "SW_HID_SET_FONT_SIZE"
+#define HID_GROW_FONT_SIZE                                      "SW_HID_GROW_FONT_SIZE"
+#define HID_SHRINK_FONT_SIZE                                    "SW_HID_SHRINK_FONT_SIZE"
+#define HID_SET_BOLD                                            "SW_HID_SET_BOLD"
+#define HID_SET_ITALIC                                          "SW_HID_SET_ITALIC"
+#define HID_SET_SHADOW                                          "SW_HID_SET_SHADOW"
+#define HID_SET_OUTLINE                                         "SW_HID_SET_OUTLINE"
+#define HID_SET_UNDERLINE                                       "SW_HID_SET_UNDERLINE"
+#define HID_SET_STRIKEOUT                                       "SW_HID_SET_STRIKEOUT"
+#define HID_SET_SUPER_SCRIPT                                    "SW_HID_SET_SUPER_SCRIPT"
+#define HID_SET_SUB_SCRIPT                                      "SW_HID_SET_SUB_SCRIPT"
+#define HID_SET_COLOR                                           "SW_HID_SET_COLOR"
+#define HID_SET_CASEMAP                                         "SW_HID_SET_CASEMAP"
+#define HID_SET_LANGUAGE                                        "SW_HID_SET_LANGUAGE"
+#define HID_SET_KERNING                                         "SW_HID_SET_KERNING"
+#define HID_INDENT_TO_TABSTOP                                   "SW_HID_INDENT_TO_TABSTOP"
+#define HID_SET_LEFT_PARA                                       "SW_HID_SET_LEFT_PARA"
+#define HID_SET_RIGHT_PARA                                      "SW_HID_SET_RIGHT_PARA"
+#define HID_SET_CENTER_PARA                                     "SW_HID_SET_CENTER_PARA"
+#define HID_SET_JUSTIFY_PARA                                    "SW_HID_SET_JUSTIFY_PARA"
+#define HID_SET_LINE_SPACE_1                                    "SW_HID_SET_LINE_SPACE_1"
+#define HID_SET_LINE_SPACE_15                                   "SW_HID_SET_LINE_SPACE_15"
+#define HID_SET_LINE_SPACE_2                                    "SW_HID_SET_LINE_SPACE_2"
+#define HID_FLIP_HORZ_GRAFIC                                    "SW_HID_FLIP_HORZ_GRAFIC"
+#define HID_FLIP_VERT_GRAFIC                                    "SW_HID_FLIP_VERT_GRAFIC"
+#define HID_SET_ADJUST                                          "SW_HID_SET_ADJUST"
+#define HID_SET_LRMARGIN                                        "SW_HID_SET_LRMARGIN"
+#define HID_SET_ULMARGIN                                        "SW_HID_SET_ULMARGIN"
+#define HID_UNINDENT_TO_TABSTOP                                 "SW_HID_UNINDENT_TO_TABSTOP"
+#define HID_SET_HYPHEN_ZONE                                     "SW_HID_SET_HYPHEN_ZONE"
+#define HID_SET_PAGE_BREAK                                      "SW_HID_SET_PAGE_BREAK"
+#define HID_SET_KEEP_TOGETHER                                   "SW_HID_SET_KEEP_TOGETHER"
+#define HID_SET_WIDOW                                           "SW_HID_SET_WIDOW"
+#define HID_SET_ORPHAN                                          "SW_HID_SET_ORPHAN"
+#define HID_FORMAT_SHADOW                                       "SW_HID_FORMAT_SHADOW"
+#define HID_FORMAT_BORDER                                       "SW_HID_FORMAT_BORDER"
+#define HID_FORMAT_CHAR_DLG                                     "SW_HID_FORMAT_CHAR_DLG"
+#define HID_FORMAT_PARA_DLG                                     "SW_HID_FORMAT_PARA_DLG"
+#define HID_FORMAT_TAB                                          "SW_HID_FORMAT_TAB"
+#define HID_FORMAT_TAB_DLG                                      "SW_HID_FORMAT_TAB_DLG"
+#define HID_FORMAT_BORDER_DLG                                   "SW_HID_FORMAT_BORDER_DLG"
+#define HID_FORMAT_BACKGROUND                                   "SW_HID_FORMAT_BACKGROUND"
+#define HID_FORMAT_BACKGROUND_DLG                               "SW_HID_FORMAT_BACKGROUND_DLG"
+#define HID_FORMAT_PAGE                                         "SW_HID_FORMAT_PAGE"
+#define HID_FORMAT_PAGE_DLG                                     "SW_HID_FORMAT_PAGE_DLG"
+#define HID_FORMAT_DROPCAPS                                     "SW_HID_FORMAT_DROPCAPS"
+#define HID_FORMAT_FRAME_DLG                                    "SW_HID_FORMAT_FRAME_DLG"
+#define HID_FORMAT_GRAFIC_DLG                                   "SW_HID_FORMAT_GRAFIC_DLG"
+#define HID_FORMAT_TABLE_DLG                                    "SW_HID_FORMAT_TABLE_DLG"
+#define HID_NEW_STYLE_BY_EXAMPLE                                "SW_HID_NEW_STYLE_BY_EXAMPLE"
+#define HID_UPDATE_STYLE_BY_EXAMPLE                             "SW_HID_UPDATE_STYLE_BY_EXAMPLE"
+#define HID_STYLE_SHEET_FRAME_DLG                               "SW_HID_STYLE_SHEET_FRAME_DLG"
+#define HID_STYLE_SHEET_DOC_DLG                                 "SW_HID_STYLE_SHEET_DOC_DLG"
+#define HID_FORMAT_RESET                                        "SW_HID_FORMAT_RESET"
+#define HID_FRAME_TO_TOP                                        "SW_HID_FRAME_TO_TOP"
+#define HID_FRAME_TO_BOTTOM                                     "SW_HID_FRAME_TO_BOTTOM"
+#define HID_FRAME_NOWRAP                                        "SW_HID_FRAME_NOWRAP"
+#define HID_FRAME_WRAP                                          "SW_HID_FRAME_WRAP"
+#define HID_FRAME_WRAPTHRU                                      "SW_HID_FRAME_WRAPTHRU"
+#define HID_FRAME_ALIGN_HORZ_LEFT                               "SW_HID_FRAME_ALIGN_HORZ_LEFT"
+#define HID_FRAME_ALIGN_HORZ_RIGHT                              "SW_HID_FRAME_ALIGN_HORZ_RIGHT"
+#define HID_FRAME_ALIGN_HORZ_CENTER                             "SW_HID_FRAME_ALIGN_HORZ_CENTER"
+#define HID_FRAME_ALIGN_VERT_TOP                                "SW_HID_FRAME_ALIGN_VERT_TOP"
+#define HID_FRAME_ALIGN_VERT_BOTTOM                             "SW_HID_FRAME_ALIGN_VERT_BOTTOM"
+#define HID_FRAME_ALIGN_VERT_CENTER                             "SW_HID_FRAME_ALIGN_VERT_CENTER"
+#define HID_SET_FRM_SIZE                                        "SW_HID_SET_FRM_SIZE"
+#define HID_SET_FRM_POSITION                                    "SW_HID_SET_FRM_POSITION"
+#define HID_SET_FRM_ANCHOR                                      "SW_HID_SET_FRM_ANCHOR"
+#define HID_SET_FRM_WRAP                                        "SW_HID_SET_FRM_WRAP"
+#define HID_SET_FRM_DIST                                        "SW_HID_SET_FRM_DIST"
+#define HID_SET_FRM_OPTIONS                                     "SW_HID_SET_FRM_OPTIONS"
+#define HID_SET_GRF_MIRROR                                      "SW_HID_SET_GRF_MIRROR"
+#define HID_SET_TABLE_WIDTH                                     "SW_HID_SET_TABLE_WIDTH"
+#define HID_SET_TABLE_ALIGN                                     "SW_HID_SET_TABLE_ALIGN"
+#define HID_SET_CHAR_STYLE                                      "SW_HID_SET_CHAR_STYLE"
+#define HID_SET_PARA_STYLE                                      "SW_HID_SET_PARA_STYLE"
+#define HID_SET_PAGE_STYLE                                      "SW_HID_SET_PAGE_STYLE"
+#define HID_SET_FRM_MACRO                                       "SW_HID_SET_FRM_MACRO"
+#define HID_SET_FRM_COLUMNS                                     "SW_HID_SET_FRM_COLUMNS"
+#define HID_SET_FRM_COLUMN_WIDTH                                "SW_HID_SET_FRM_COLUMN_WIDTH"
+#define HID_UPDATE_STYLES_DIRECT                                "SW_HID_UPDATE_STYLES_DIRECT"
 
-#define HID_TABLE_INSERT_ROW        (HID_BASE + 1501)
-#define HID_TABLE_DELETE_ROW        (HID_BASE + 1503)
-#define HID_TABLE_DELETE_COL        (HID_BASE + 1504)
-#define HID_TABLE_MERGE_CELLS       (HID_BASE + 1506)
-#define HID_AUTOFMT_TABLE           (HID_BASE + 1507)
-#define HID_SWDLG_STRINPUT          (HID_BASE + 1508)
-#define HID_TABLE_SET_ULSPACE       (HID_BASE + 1509)
-#define HID_TABLE_SET_GRID          (HID_BASE + 1510)
-#define HID_TABLE_SET_SHADOW        (HID_BASE + 1511)
-#define HID_TABLE_SELECT_ROW        (HID_BASE + 1513)
-#define HID_TABLE_SELECT_COL        (HID_BASE + 1514)
-#define HID_TABLE_SELECT_ALL        (HID_BASE + 1515)
-#define HID_TABLE_SET_READ_ONLY_CELLS   (HID_BASE + 1517)
-#define HID_TABLE_UNSET_READ_ONLY_CELLS (HID_BASE + 1519)
-#define HID_PAGE_STYLE_SET_COLS     (HID_BASE + 1538)
-#define HID_SET_PROP_LINE_SPACE     (HID_BASE + 1540)
-#define HID_SET_ABS_LINE_SPACE      (HID_BASE + 1541)
+#define HID_TABLE_INSERT_ROW                                    "SW_HID_TABLE_INSERT_ROW"
+#define HID_TABLE_DELETE_ROW                                    "SW_HID_TABLE_DELETE_ROW"
+#define HID_TABLE_DELETE_COL                                    "SW_HID_TABLE_DELETE_COL"
+#define HID_TABLE_MERGE_CELLS                                   "SW_HID_TABLE_MERGE_CELLS"
+#define HID_AUTOFMT_TABLE                                       "SW_HID_AUTOFMT_TABLE"
+#define HID_SWDLG_STRINPUT                                      "SW_HID_SWDLG_STRINPUT"
+#define HID_TABLE_SET_ULSPACE                                   "SW_HID_TABLE_SET_ULSPACE"
+#define HID_TABLE_SET_GRID                                      "SW_HID_TABLE_SET_GRID"
+#define HID_TABLE_SET_SHADOW                                    "SW_HID_TABLE_SET_SHADOW"
+#define HID_TABLE_SELECT_ROW                                    "SW_HID_TABLE_SELECT_ROW"
+#define HID_TABLE_SELECT_COL                                    "SW_HID_TABLE_SELECT_COL"
+#define HID_TABLE_SELECT_ALL                                    "SW_HID_TABLE_SELECT_ALL"
+#define HID_TABLE_SET_READ_ONLY_CELLS                           "SW_HID_TABLE_SET_READ_ONLY_CELLS"
+#define HID_TABLE_UNSET_READ_ONLY_CELLS                         "SW_HID_TABLE_UNSET_READ_ONLY_CELLS"
+#define HID_PAGE_STYLE_SET_COLS                                 "SW_HID_PAGE_STYLE_SET_COLS"
+#define HID_SET_PROP_LINE_SPACE                                 "SW_HID_SET_PROP_LINE_SPACE"
+#define HID_SET_ABS_LINE_SPACE                                  "SW_HID_SET_ABS_LINE_SPACE"
 
-#define HID_SPELLING_DLG            (HID_BASE + 1601)
-#define HID_THESAURUS_DLG           (HID_BASE + 1604)
-#define HID_HYPHENATE_OPT_DLG       (HID_BASE + 1607)
-#define HID_SORTING                 (HID_BASE + 1613)
-#define HID_SORTING_DLG             (HID_BASE + 1614)
-#define HID_CALCULATE               (HID_BASE + 1615)
-#define HID_RECORD_MACRO_DLG        (HID_BASE + 1622)
-#define HID_PLAY_MACRO_DLG          (HID_BASE + 1624)
-#define HID_CONFIG_DLG              (HID_BASE + 1627)
-#define HID_EXPAND_GLOSSARY         (HID_BASE + 1628)
-#define HID_RENAME_GLOSSARY         (HID_BASE + 1629)
-#define HID_CONFIG_MENU             (HID_BASE + 1630)
-#define HID_CONFIG_KEY              (HID_BASE + 1631)
-#define HID_ASSIGN_LOCAL_MACRO_DLG  (HID_BASE + 1632)
-#define HID_COMPILE_MACRO           (HID_BASE + 1633)
-#define HID_CONFIG_VIEWOPTIONS      (HID_BASE + 1635)
-#define HID_CONFIG_COLORS           (HID_BASE + 1636)
-#define HID_INSERT_GLOSSARY         (HID_BASE + 1640)
-#define HID_AUTO_CORRECT            (HID_BASE + 1649)
-#define HID_AUTO_CORRECT_DLG        (HID_BASE + 1650)
-#define HID_HELP_PI                 (HID_BASE + 1655)
-#define HID_NAVIGATION_PI           (HID_BASE + 1656)
-#define HID_TEMPLATE_PI             (HID_BASE + 1657)
-#define HID_ADDR_PI                 (HID_BASE + 1658)
-#define HID_NAVIGATION_PI_GOTO_PAGE (HID_BASE + 1659)
-#define HID_LETTER_WIZZARD          (HID_BASE + 1660)
-#define HID_FAX_WIZZARD             (HID_BASE + 1661)
-#define HID_MEMO_WIZZARD            (HID_BASE + 1662)
-#define HID_AGENDA_WIZZARD          (HID_BASE + 1663)
+#define HID_SPELLING_DLG                                        "SW_HID_SPELLING_DLG"
+#define HID_THESAURUS_DLG                                       "SW_HID_THESAURUS_DLG"
+#define HID_HYPHENATE_OPT_DLG                                   "SW_HID_HYPHENATE_OPT_DLG"
+#define HID_SORTING                                             "SW_HID_SORTING"
+#define HID_SORTING_DLG                                         "SW_HID_SORTING_DLG"
+#define HID_CALCULATE                                           "SW_HID_CALCULATE"
+#define HID_RECORD_MACRO_DLG                                    "SW_HID_RECORD_MACRO_DLG"
+#define HID_PLAY_MACRO_DLG                                      "SW_HID_PLAY_MACRO_DLG"
+#define HID_CONFIG_DLG                                          "SW_HID_CONFIG_DLG"
+#define HID_EXPAND_GLOSSARY                                     "SW_HID_EXPAND_GLOSSARY"
+#define HID_RENAME_GLOSSARY                                     "SW_HID_RENAME_GLOSSARY"
+#define HID_CONFIG_MENU                                         "SW_HID_CONFIG_MENU"
+#define HID_CONFIG_KEY                                          "SW_HID_CONFIG_KEY"
+#define HID_ASSIGN_LOCAL_MACRO_DLG                              "SW_HID_ASSIGN_LOCAL_MACRO_DLG"
+#define HID_COMPILE_MACRO                                       "SW_HID_COMPILE_MACRO"
+#define HID_CONFIG_VIEWOPTIONS                                  "SW_HID_CONFIG_VIEWOPTIONS"
+#define HID_CONFIG_COLORS                                       "SW_HID_CONFIG_COLORS"
+#define HID_INSERT_GLOSSARY                                     "SW_HID_INSERT_GLOSSARY"
+#define HID_AUTO_CORRECT                                        "SW_HID_AUTO_CORRECT"
+#define HID_AUTO_CORRECT_DLG                                    "SW_HID_AUTO_CORRECT_DLG"
+#define HID_HELP_PI                                             "SW_HID_HELP_PI"
+#define HID_NAVIGATION_PI                                       "SW_HID_NAVIGATION_PI"
+#define HID_TEMPLATE_PI                                         "SW_HID_TEMPLATE_PI"
+#define HID_ADDR_PI                                             "SW_HID_ADDR_PI"
+#define HID_NAVIGATION_PI_GOTO_PAGE                             "SW_HID_NAVIGATION_PI_GOTO_PAGE"
+#define HID_LETTER_WIZZARD                                      "SW_HID_LETTER_WIZZARD"
+#define HID_FAX_WIZZARD                                         "SW_HID_FAX_WIZZARD"
+#define HID_MEMO_WIZZARD                                        "SW_HID_MEMO_WIZZARD"
+#define HID_AGENDA_WIZZARD                                      "SW_HID_AGENDA_WIZZARD"
 
-#define HID_NEW_WINDOW              (HID_BASE + 1701)
-#define HID_ARRANGE_ALL_WIN         (HID_BASE + 1702)
-#define HID_ARRANGE_CASCADE_WIN     (HID_BASE + 1703)
-#define HID_ARRANGE_HORZ_WIN        (HID_BASE + 1704)
-#define HID_ARRANGE_VERT_WIN        (HID_BASE + 1705)
+#define HID_NEW_WINDOW                                          "SW_HID_NEW_WINDOW"
+#define HID_ARRANGE_ALL_WIN                                     "SW_HID_ARRANGE_ALL_WIN"
+#define HID_ARRANGE_CASCADE_WIN                                 "SW_HID_ARRANGE_CASCADE_WIN"
+#define HID_ARRANGE_HORZ_WIN                                    "SW_HID_ARRANGE_HORZ_WIN"
+#define HID_ARRANGE_VERT_WIN                                    "SW_HID_ARRANGE_VERT_WIN"
 
-#define HID_SHOW_HELP_INDEX         (HID_BASE + 1802)
-#define HID_SHOW_KEYBOARD_HELP      (HID_BASE + 1803)
-#define HID_SHOW_HELP_MANUAL        (HID_BASE + 1804)
-#define HID_SHOW_UPDATE_HELP        (HID_BASE + 1805)
+#define HID_SHOW_HELP_INDEX                                     "SW_HID_SHOW_HELP_INDEX"
+#define HID_SHOW_KEYBOARD_HELP                                  "SW_HID_SHOW_KEYBOARD_HELP"
+#define HID_SHOW_HELP_MANUAL                                    "SW_HID_SHOW_HELP_MANUAL"
+#define HID_SHOW_UPDATE_HELP                                    "SW_HID_SHOW_UPDATE_HELP"
 
-#define HID_CHAR_LEFT               (HID_BASE + 1901)
-#define HID_CHAR_RIGHT              (HID_BASE + 1902)
-#define HID_LINE_UP                 (HID_BASE + 1903)
-#define HID_LINE_DOWN               (HID_BASE + 1904)
-#define HID_START_OF_LINE           (HID_BASE + 1905)
-#define HID_END_OF_LINE             (HID_BASE + 1906)
-#define HID_START_OF_DOCUMENT       (HID_BASE + 1907)
-#define HID_END_OF_DOCUMENT         (HID_BASE + 1908)
-#define HID_START_OF_NEXT_PAGE      (HID_BASE + 1909)
-#define HID_END_OF_NEXT_PAGE        (HID_BASE + 1910)
-#define HID_START_OF_PREV_PAGE      (HID_BASE + 1911)
-#define HID_END_OF_PREV_PAGE        (HID_BASE + 1912)
-#define HID_START_OF_PAGE           (HID_BASE + 1913)
-#define HID_END_OF_PAGE             (HID_BASE + 1914)
-#define HID_START_OF_COLUMN         (HID_BASE + 1917)
-#define HID_END_OF_COLUMN           (HID_BASE + 1918)
-#define HID_START_OF_PARA           (HID_BASE + 1919)
-#define HID_END_OF_PARA             (HID_BASE + 1920)
-#define HID_NEXT_WORD               (HID_BASE + 1921)
-#define HID_PREV_WORD               (HID_BASE + 1922)
-#define HID_NEXT_SENT               (HID_BASE + 1923)
-#define HID_PREV_SENT               (HID_BASE + 1924)
-#define HID_DELETE                  (HID_BASE + 1925)
-#define HID_BACKSPACE               (HID_BASE + 1926)
-#define HID_DELETE_SENT             (HID_BASE + 1927)
-#define HID_DELETE_BACK_SENT        (HID_BASE + 1928)
-#define HID_DELETE_WORD             (HID_BASE + 1929)
-#define HID_DELETE_BACK_WORD        (HID_BASE + 1930)
-#define HID_DELETE_LINE             (HID_BASE + 1931)
-#define HID_DELETE_BACK_LINE        (HID_BASE + 1932)
-#define HID_DELETE_PARA             (HID_BASE + 1933)
-#define HID_DELETE_BACK_PARA        (HID_BASE + 1934)
-#define HID_DELETE_WHOLE_LINE       (HID_BASE + 1935)
-#define HID_SET_INS_MODE            (HID_BASE + 1936)
-#define HID_PAGEUP                  (HID_BASE + 1937)
-#define HID_PAGEDOWN                (HID_BASE + 1938)
-#define HID_SET_ADD_MODE            (HID_BASE + 1939)
-#define HID_SET_EXT_MODE            (HID_BASE + 1940)
-#define HID_ESCAPE                  (HID_BASE + 1941)
-#define HID_SELECT_WORD             (HID_BASE + 1943)
-#define HID_START_TABLE             (HID_BASE + 1947)
-#define HID_END_TABLE               (HID_BASE + 1948)
-#define HID_NEXT_TABLE              (HID_BASE + 1949)
-#define HID_PREV_TABLE              (HID_BASE + 1950)
-#define HID_START_OF_NEXT_COLUMN    (HID_BASE + 1951)
-#define HID_END_OF_NEXT_COLUMN      (HID_BASE + 1952)
-#define HID_START_OF_PREV_COLUMN    (HID_BASE + 1953)
-#define HID_END_OF_PREV_COLUMN      (HID_BASE + 1954)
-#define HID_FOOTNOTE_TO_ANCHOR      (HID_BASE + 1955)
-#define HID_NEXT_FOOTNOTE           (HID_BASE + 1956)
-#define HID_PREV_FOOTNOTE           (HID_BASE + 1957)
-#define HID_CNTNT_TO_NEXT_FRAME     (HID_BASE + 1958)
-#define HID_FRAME_TO_ANCHOR         (HID_BASE + 1959)
-#define HID_TO_HEADER               (HID_BASE + 1960)
-#define HID_TO_FOOTER               (HID_BASE + 1961)
-#define HID_IDX_MARK_TO_IDX         (HID_BASE + 1962)
+#define HID_CHAR_LEFT                                           "SW_HID_CHAR_LEFT"
+#define HID_CHAR_RIGHT                                          "SW_HID_CHAR_RIGHT"
+#define HID_LINE_UP                                             "SW_HID_LINE_UP"
+#define HID_LINE_DOWN                                           "SW_HID_LINE_DOWN"
+#define HID_START_OF_LINE                                       "SW_HID_START_OF_LINE"
+#define HID_END_OF_LINE                                         "SW_HID_END_OF_LINE"
+#define HID_START_OF_DOCUMENT                                   "SW_HID_START_OF_DOCUMENT"
+#define HID_END_OF_DOCUMENT                                     "SW_HID_END_OF_DOCUMENT"
+#define HID_START_OF_NEXT_PAGE                                  "SW_HID_START_OF_NEXT_PAGE"
+#define HID_END_OF_NEXT_PAGE                                    "SW_HID_END_OF_NEXT_PAGE"
+#define HID_START_OF_PREV_PAGE                                  "SW_HID_START_OF_PREV_PAGE"
+#define HID_END_OF_PREV_PAGE                                    "SW_HID_END_OF_PREV_PAGE"
+#define HID_START_OF_PAGE                                       "SW_HID_START_OF_PAGE"
+#define HID_END_OF_PAGE                                         "SW_HID_END_OF_PAGE"
+#define HID_START_OF_COLUMN                                     "SW_HID_START_OF_COLUMN"
+#define HID_END_OF_COLUMN                                       "SW_HID_END_OF_COLUMN"
+#define HID_START_OF_PARA                                       "SW_HID_START_OF_PARA"
+#define HID_END_OF_PARA                                         "SW_HID_END_OF_PARA"
+#define HID_NEXT_WORD                                           "SW_HID_NEXT_WORD"
+#define HID_PREV_WORD                                           "SW_HID_PREV_WORD"
+#define HID_NEXT_SENT                                           "SW_HID_NEXT_SENT"
+#define HID_PREV_SENT                                           "SW_HID_PREV_SENT"
+#define HID_DELETE                                              "SW_HID_DELETE"
+#define HID_BACKSPACE                                           "SW_HID_BACKSPACE"
+#define HID_DELETE_SENT                                         "SW_HID_DELETE_SENT"
+#define HID_DELETE_BACK_SENT                                    "SW_HID_DELETE_BACK_SENT"
+#define HID_DELETE_WORD                                         "SW_HID_DELETE_WORD"
+#define HID_DELETE_BACK_WORD                                    "SW_HID_DELETE_BACK_WORD"
+#define HID_DELETE_LINE                                         "SW_HID_DELETE_LINE"
+#define HID_DELETE_BACK_LINE                                    "SW_HID_DELETE_BACK_LINE"
+#define HID_DELETE_PARA                                         "SW_HID_DELETE_PARA"
+#define HID_DELETE_BACK_PARA                                    "SW_HID_DELETE_BACK_PARA"
+#define HID_DELETE_WHOLE_LINE                                   "SW_HID_DELETE_WHOLE_LINE"
+#define HID_SET_INS_MODE                                        "SW_HID_SET_INS_MODE"
+#define HID_PAGEUP                                              "SW_HID_PAGEUP"
+#define HID_PAGEDOWN                                            "SW_HID_PAGEDOWN"
+#define HID_SET_ADD_MODE                                        "SW_HID_SET_ADD_MODE"
+#define HID_SET_EXT_MODE                                        "SW_HID_SET_EXT_MODE"
+#define HID_ESCAPE                                              "SW_HID_ESCAPE"
+#define HID_SELECT_WORD                                         "SW_HID_SELECT_WORD"
+#define HID_START_TABLE                                         "SW_HID_START_TABLE"
+#define HID_END_TABLE                                           "SW_HID_END_TABLE"
+#define HID_NEXT_TABLE                                          "SW_HID_NEXT_TABLE"
+#define HID_PREV_TABLE                                          "SW_HID_PREV_TABLE"
+#define HID_START_OF_NEXT_COLUMN                                "SW_HID_START_OF_NEXT_COLUMN"
+#define HID_END_OF_NEXT_COLUMN                                  "SW_HID_END_OF_NEXT_COLUMN"
+#define HID_START_OF_PREV_COLUMN                                "SW_HID_START_OF_PREV_COLUMN"
+#define HID_END_OF_PREV_COLUMN                                  "SW_HID_END_OF_PREV_COLUMN"
+#define HID_FOOTNOTE_TO_ANCHOR                                  "SW_HID_FOOTNOTE_TO_ANCHOR"
+#define HID_NEXT_FOOTNOTE                                       "SW_HID_NEXT_FOOTNOTE"
+#define HID_PREV_FOOTNOTE                                       "SW_HID_PREV_FOOTNOTE"
+#define HID_CNTNT_TO_NEXT_FRAME                                 "SW_HID_CNTNT_TO_NEXT_FRAME"
+#define HID_FRAME_TO_ANCHOR                                     "SW_HID_FRAME_TO_ANCHOR"
+#define HID_TO_HEADER                                           "SW_HID_TO_HEADER"
+#define HID_TO_FOOTER                                           "SW_HID_TO_FOOTER"
+#define HID_IDX_MARK_TO_IDX                                     "SW_HID_IDX_MARK_TO_IDX"
 
-#define HID_ENVELOP                 (HID_BASE + 2050)
-#define HID_LABEL                   (HID_BASE + 2051)
-#define HID_ENVELOP_PRINT           (HID_BASE + 2052)
+#define HID_ENVELOP                                             "SW_HID_ENVELOP"
+#define HID_LABEL                                               "SW_HID_LABEL"
+#define HID_ENVELOP_PRINT                                       "SW_HID_ENVELOP_PRINT"
 
-#define HID_NAVIGATION_IMGBTN       (HID_BASE + 2054)
-#define HID_ENVELOP_INSERT          (HID_BASE + 2055)
+#define HID_NAVIGATION_IMGBTN                                   "SW_HID_NAVIGATION_IMGBTN"
+#define HID_ENVELOP_INSERT                                      "SW_HID_ENVELOP_INSERT"
 
-#define HID_WEBTOOLS_TOOLBOX        (HID_BASE + 2056)
-#define HID_WEBTEXT_TOOLBOX         (HID_BASE + 2057)
-#define HID_WEBFRAME_TOOLBOX        (HID_BASE + 2058)
-#define HID_TEXT_TOOLBOX            (HID_BASE + 2059)
-#define HID_TABLE_TOOLBOX           (HID_BASE + 2060)
-#define HID_FRAME_TOOLBOX           (HID_BASE + 2061)
-#define HID_GRAFIK_TOOLBOX          (HID_BASE + 2062)
-#define HID_OLE_TOOLBOX             (HID_BASE + 2063)
-#define HID_DRAW_TOOLBOX            (HID_BASE + 2064)
-#define HID_BEZIER_TOOLBOX          (HID_BASE + 2066)
-#define HID_DRAW_TEXT_TOOLBOX       (HID_BASE + 2067)
-#define HID_NUM_TOOLBOX             (HID_BASE + 2068)
-#define HID_TOOLS_TOOLBOX           (HID_BASE + 2069)
-#define HID_SRCVIEW_TOOLBOX         (HID_BASE + 2070)
+#define HID_WEBTOOLS_TOOLBOX                                    "SW_HID_WEBTOOLS_TOOLBOX"
+#define HID_WEBTEXT_TOOLBOX                                     "SW_HID_WEBTEXT_TOOLBOX"
+#define HID_WEBFRAME_TOOLBOX                                    "SW_HID_WEBFRAME_TOOLBOX"
+#define HID_TEXT_TOOLBOX                                        "SW_HID_TEXT_TOOLBOX"
+#define HID_TABLE_TOOLBOX                                       "SW_HID_TABLE_TOOLBOX"
+#define HID_FRAME_TOOLBOX                                       "SW_HID_FRAME_TOOLBOX"
+#define HID_GRAFIK_TOOLBOX                                      "SW_HID_GRAFIK_TOOLBOX"
+#define HID_OLE_TOOLBOX                                         "SW_HID_OLE_TOOLBOX"
+#define HID_DRAW_TOOLBOX                                        "SW_HID_DRAW_TOOLBOX"
+#define HID_BEZIER_TOOLBOX                                      "SW_HID_BEZIER_TOOLBOX"
+#define HID_DRAW_TEXT_TOOLBOX                                   "SW_HID_DRAW_TEXT_TOOLBOX"
+#define HID_NUM_TOOLBOX                                         "SW_HID_NUM_TOOLBOX"
+#define HID_TOOLS_TOOLBOX                                       "SW_HID_TOOLS_TOOLBOX"
+#define HID_SRCVIEW_TOOLBOX                                     "SW_HID_SRCVIEW_TOOLBOX"
 
-#define HID_LABEL_INSERT            (HID_BASE + 2071)
-#define HID_CALC_TOOLBOX            (HID_BASE + 2072)
-#define HID_PVIEW_TOOLBOX           (HID_BASE + 2073)
+#define HID_LABEL_INSERT                                        "SW_HID_LABEL_INSERT"
+#define HID_CALC_TOOLBOX                                        "SW_HID_CALC_TOOLBOX"
+#define HID_PVIEW_TOOLBOX                                       "SW_HID_PVIEW_TOOLBOX"
 
-#define HID_FIELD_INSERT            (HID_BASE + 2074)
-#define HID_FIELD_CLOSE             (HID_BASE + 2075)
+#define HID_FIELD_INSERT                                        "SW_HID_FIELD_INSERT"
+#define HID_FIELD_CLOSE                                         "SW_HID_FIELD_CLOSE"
 
-#define HID_COND_COLL_TABLIST       (HID_BASE + 2076)
+#define HID_COND_COLL_TABLIST                                   "SW_HID_COND_COLL_TABLIST"
 
-#define HID_DB_SELECTION_TLB        (HID_BASE + 2077)
-#define HID_FIELD_DINF_TYPE         (HID_BASE + 2078)
+#define HID_DB_SELECTION_TLB                                    "SW_HID_DB_SELECTION_TLB"
+#define HID_FIELD_DINF_TYPE                                     "SW_HID_FIELD_DINF_TYPE"
 
-#define HID_DRAWFORM_TOOLBOX        (HID_BASE + 2079)
-#define HID_SELECT_TEMPLATE         (HID_BASE + 2080)
+#define HID_DRAWFORM_TOOLBOX                                    "SW_HID_DRAWFORM_TOOLBOX"
+#define HID_SELECT_TEMPLATE                                     "SW_HID_SELECT_TEMPLATE"
 
-#define HID_AP_INSERT_DB_SEL        (HID_BASE + 2081)
-#define HID_WEBGRAPHIC_TOOLBOX      (HID_BASE + 2082)
-#define HID_OUTLINE_FORM            (HID_BASE + 2083)
-#define HID_NUM_RESET               (HID_BASE + 2084)
+#define HID_AP_INSERT_DB_SEL                                    "SW_HID_AP_INSERT_DB_SEL"
+#define HID_WEBGRAPHIC_TOOLBOX                                  "SW_HID_WEBGRAPHIC_TOOLBOX"
+#define HID_OUTLINE_FORM                                        "SW_HID_OUTLINE_FORM"
+#define HID_NUM_RESET                                           "SW_HID_NUM_RESET"
 
-#define HID_AUTOFORMAT_REJECT       (HID_BASE + 2085)
-#define HID_AUTOFORMAT_ACCEPT       (HID_BASE + 2086)
-#define HID_AUTOFORMAT_EDIT_CHG     (HID_BASE + 2087)
+#define HID_AUTOFORMAT_REJECT                                   "SW_HID_AUTOFORMAT_REJECT"
+#define HID_AUTOFORMAT_ACCEPT                                   "SW_HID_AUTOFORMAT_ACCEPT"
+#define HID_AUTOFORMAT_EDIT_CHG                                 "SW_HID_AUTOFORMAT_EDIT_CHG"
 
 //insert index/entries/Pattern buttons and edits
-#define HID_TOX_ENTRY_BUTTON        (HID_BASE + 2088)
-#define HID_TOX_ENTRY_EDIT          (HID_BASE + 2089)
+#define HID_TOX_ENTRY_BUTTON                                    "SW_HID_TOX_ENTRY_BUTTON"
+#define HID_TOX_ENTRY_EDIT                                      "SW_HID_TOX_ENTRY_EDIT"
 
-#define HID_DLG_NEW_USER_IDX        (HID_BASE + 2090)
-#define HID_INSERT_IDX_MRK_OK       (HID_BASE + 2091)
-#define HID_INSERT_IDX_MRK_CLOSE    (HID_BASE + 2092)
-#define HID_INSERT_AUTH_MRK_OK      (HID_BASE + 2093)
-#define HID_INSERT_AUTH_MRK_CLOSE   (HID_BASE + 2094)
-#define HID_INSERT_IDX_MRK_DELETE       (HID_BASE + 2095)
-#define HID_INSERT_IDX_MRK_NEW          (HID_BASE + 2096)
-#define HID_INSERT_IDX_MRK_PREV         (HID_BASE + 2097)
-#define HID_INSERT_IDX_MRK_PREV_SAME    (HID_BASE + 2098)
-#define HID_INSERT_IDX_MRK_NEXT         (HID_BASE + 2099)
-#define HID_INSERT_IDX_MRK_NEXT_SAME    (HID_BASE + 2100)
-#define HID_INSERT_IDX_MRK_TYPE         (HID_BASE + 2101)
-#define HID_INSERT_IDX_MRK_ENTRY        (HID_BASE + 2102)
-#define HID_INSERT_IDX_MRK_PRIM_KEY     (HID_BASE + 2103)
-#define HID_INSERT_IDX_MRK_SEC_KEY      (HID_BASE + 2104)
-#define HID_INSERT_IDX_MRK_LEVEL        (HID_BASE + 2105)
-#define HID_INSERT_IDX_MRK_MAIN_ENTRY   (HID_BASE + 2106)
-#define HID_INSERT_IDX_MRK_APPLY_ALL    (HID_BASE + 2107)
-#define HID_INSERT_AUTH_MRK_ENTRY           (HID_BASE + 2108)
-#define HID_INSERT_AUTH_MRK_CREATE_ENTRY    (HID_BASE + 2109)
-#define HID_INSERT_AUTH_MRK_EDIT_ENTRY      (HID_BASE + 2110)
-#define HID_TOKEN_WINDOW                    (HID_BASE + 2111)
+#define HID_DLG_NEW_USER_IDX                                    "SW_HID_DLG_NEW_USER_IDX"
+#define HID_INSERT_IDX_MRK_OK                                   "SW_HID_INSERT_IDX_MRK_OK"
+#define HID_INSERT_IDX_MRK_CLOSE                                "SW_HID_INSERT_IDX_MRK_CLOSE"
+#define HID_INSERT_AUTH_MRK_OK                                  "SW_HID_INSERT_AUTH_MRK_OK"
+#define HID_INSERT_AUTH_MRK_CLOSE                               "SW_HID_INSERT_AUTH_MRK_CLOSE"
+#define HID_INSERT_IDX_MRK_DELETE                               "SW_HID_INSERT_IDX_MRK_DELETE"
+#define HID_INSERT_IDX_MRK_NEW                                  "SW_HID_INSERT_IDX_MRK_NEW"
+#define HID_INSERT_IDX_MRK_PREV                                 "SW_HID_INSERT_IDX_MRK_PREV"
+#define HID_INSERT_IDX_MRK_PREV_SAME                            "SW_HID_INSERT_IDX_MRK_PREV_SAME"
+#define HID_INSERT_IDX_MRK_NEXT                                 "SW_HID_INSERT_IDX_MRK_NEXT"
+#define HID_INSERT_IDX_MRK_NEXT_SAME                            "SW_HID_INSERT_IDX_MRK_NEXT_SAME"
+#define HID_INSERT_IDX_MRK_TYPE                                 "SW_HID_INSERT_IDX_MRK_TYPE"
+#define HID_INSERT_IDX_MRK_ENTRY                                "SW_HID_INSERT_IDX_MRK_ENTRY"
+#define HID_INSERT_IDX_MRK_PRIM_KEY                             "SW_HID_INSERT_IDX_MRK_PRIM_KEY"
+#define HID_INSERT_IDX_MRK_SEC_KEY                              "SW_HID_INSERT_IDX_MRK_SEC_KEY"
+#define HID_INSERT_IDX_MRK_LEVEL                                "SW_HID_INSERT_IDX_MRK_LEVEL"
+#define HID_INSERT_IDX_MRK_MAIN_ENTRY                           "SW_HID_INSERT_IDX_MRK_MAIN_ENTRY"
+#define HID_INSERT_IDX_MRK_APPLY_ALL                            "SW_HID_INSERT_IDX_MRK_APPLY_ALL"
+#define HID_INSERT_AUTH_MRK_ENTRY                               "SW_HID_INSERT_AUTH_MRK_ENTRY"
+#define HID_INSERT_AUTH_MRK_CREATE_ENTRY                        "SW_HID_INSERT_AUTH_MRK_CREATE_ENTRY"
+#define HID_INSERT_AUTH_MRK_EDIT_ENTRY                          "SW_HID_INSERT_AUTH_MRK_EDIT_ENTRY"
+#define HID_TOKEN_WINDOW                                        "SW_HID_TOKEN_WINDOW"
 
-#define HID_AUTH_FIELD_IDENTIFIER        (HID_BASE + 2112  )
-#define HID_AUTH_FIELD_AUTHORITY_TYPE    (HID_BASE + 2113  )
-#define HID_AUTH_FIELD_ADDRESS           (HID_BASE + 2114  )
-#define HID_AUTH_FIELD_ANNOTE            (HID_BASE + 2115  )
-#define HID_AUTH_FIELD_AUTHOR            (HID_BASE + 2116  )
-#define HID_AUTH_FIELD_BOOKTITLE         (HID_BASE + 2117  )
-#define HID_AUTH_FIELD_CHAPTER           (HID_BASE + 2118  )
-#define HID_AUTH_FIELD_EDITION           (HID_BASE + 2119  )
-#define HID_AUTH_FIELD_EDITOR            (HID_BASE + 2120  )
-#define HID_AUTH_FIELD_HOWPUBLISHED      (HID_BASE + 2121  )
-#define HID_AUTH_FIELD_INSTITUTION       (HID_BASE + 2122  )
-#define HID_AUTH_FIELD_JOURNAL           (HID_BASE + 2123  )
-#define HID_AUTH_FIELD_MONTH             (HID_BASE + 2124  )
-#define HID_AUTH_FIELD_NOTE              (HID_BASE + 2125  )
-#define HID_AUTH_FIELD_NUMBER            (HID_BASE + 2126  )
-#define HID_AUTH_FIELD_ORGANIZATIONS     (HID_BASE + 2127  )
-#define HID_AUTH_FIELD_PAGES             (HID_BASE + 2128  )
-#define HID_AUTH_FIELD_PUBLISHER         (HID_BASE + 2129  )
-#define HID_AUTH_FIELD_SCHOOL            (HID_BASE + 2130  )
-#define HID_AUTH_FIELD_SERIES            (HID_BASE + 2131  )
-#define HID_AUTH_FIELD_TITLE             (HID_BASE + 2132  )
-#define HID_AUTH_FIELD_REPORT_TYPE       (HID_BASE + 2133  )
-#define HID_AUTH_FIELD_VOLUME            (HID_BASE + 2134  )
-#define HID_AUTH_FIELD_YEAR              (HID_BASE + 2135  )
-#define HID_AUTH_FIELD_URL               (HID_BASE + 2136  )
-#define HID_AUTH_FIELD_CUSTOM1           (HID_BASE + 2137  )
-#define HID_AUTH_FIELD_CUSTOM2           (HID_BASE + 2138  )
-#define HID_AUTH_FIELD_CUSTOM3           (HID_BASE + 2139  )
-#define HID_AUTH_FIELD_CUSTOM4           (HID_BASE + 2140  )
-#define HID_AUTH_FIELD_CUSTOM5           (HID_BASE + 2141  )
-#define HID_AUTH_FIELD_ISBN              (HID_BASE + 2142  )
+#define HID_AUTH_FIELD_IDENTIFIER                               "SW_HID_AUTH_FIELD_IDENTIFIER"
+#define HID_AUTH_FIELD_AUTHORITY_TYPE                           "SW_HID_AUTH_FIELD_AUTHORITY_TYPE"
+#define HID_AUTH_FIELD_ADDRESS                                  "SW_HID_AUTH_FIELD_ADDRESS"
+#define HID_AUTH_FIELD_ANNOTE                                   "SW_HID_AUTH_FIELD_ANNOTE"
+#define HID_AUTH_FIELD_AUTHOR                                   "SW_HID_AUTH_FIELD_AUTHOR"
+#define HID_AUTH_FIELD_BOOKTITLE                                "SW_HID_AUTH_FIELD_BOOKTITLE"
+#define HID_AUTH_FIELD_CHAPTER                                  "SW_HID_AUTH_FIELD_CHAPTER"
+#define HID_AUTH_FIELD_EDITION                                  "SW_HID_AUTH_FIELD_EDITION"
+#define HID_AUTH_FIELD_EDITOR                                   "SW_HID_AUTH_FIELD_EDITOR"
+#define HID_AUTH_FIELD_HOWPUBLISHED                             "SW_HID_AUTH_FIELD_HOWPUBLISHED"
+#define HID_AUTH_FIELD_INSTITUTION                              "SW_HID_AUTH_FIELD_INSTITUTION"
+#define HID_AUTH_FIELD_JOURNAL                                  "SW_HID_AUTH_FIELD_JOURNAL"
+#define HID_AUTH_FIELD_MONTH                                    "SW_HID_AUTH_FIELD_MONTH"
+#define HID_AUTH_FIELD_NOTE                                     "SW_HID_AUTH_FIELD_NOTE"
+#define HID_AUTH_FIELD_NUMBER                                   "SW_HID_AUTH_FIELD_NUMBER"
+#define HID_AUTH_FIELD_ORGANIZATIONS                            "SW_HID_AUTH_FIELD_ORGANIZATIONS"
+#define HID_AUTH_FIELD_PAGES                                    "SW_HID_AUTH_FIELD_PAGES"
+#define HID_AUTH_FIELD_PUBLISHER                                "SW_HID_AUTH_FIELD_PUBLISHER"
+#define HID_AUTH_FIELD_SCHOOL                                   "SW_HID_AUTH_FIELD_SCHOOL"
+#define HID_AUTH_FIELD_SERIES                                   "SW_HID_AUTH_FIELD_SERIES"
+#define HID_AUTH_FIELD_TITLE                                    "SW_HID_AUTH_FIELD_TITLE"
+#define HID_AUTH_FIELD_REPORT_TYPE                              "SW_HID_AUTH_FIELD_REPORT_TYPE"
+#define HID_AUTH_FIELD_VOLUME                                   "SW_HID_AUTH_FIELD_VOLUME"
+#define HID_AUTH_FIELD_YEAR                                     "SW_HID_AUTH_FIELD_YEAR"
+#define HID_AUTH_FIELD_URL                                      "SW_HID_AUTH_FIELD_URL"
+#define HID_AUTH_FIELD_CUSTOM1                                  "SW_HID_AUTH_FIELD_CUSTOM1"
+#define HID_AUTH_FIELD_CUSTOM2                                  "SW_HID_AUTH_FIELD_CUSTOM2"
+#define HID_AUTH_FIELD_CUSTOM3                                  "SW_HID_AUTH_FIELD_CUSTOM3"
+#define HID_AUTH_FIELD_CUSTOM4                                  "SW_HID_AUTH_FIELD_CUSTOM4"
+#define HID_AUTH_FIELD_CUSTOM5                                  "SW_HID_AUTH_FIELD_CUSTOM5"
+#define HID_AUTH_FIELD_ISBN                                     "SW_HID_AUTH_FIELD_ISBN"
 
-#define HID_AUTH_MARK_DLG_FROM_COMP_RB   (HID_BASE + 2143  )
-#define HID_AUTH_MARK_DLG_FROM_DOC_RB    (HID_BASE + 2144  )
-#define HID_AUTH_MARK_DLG_ID_LISTBOX     (HID_BASE + 2145  )
+#define HID_AUTH_MARK_DLG_FROM_COMP_RB                          "SW_HID_AUTH_MARK_DLG_FROM_COMP_RB"
+#define HID_AUTH_MARK_DLG_FROM_DOC_RB                           "SW_HID_AUTH_MARK_DLG_FROM_DOC_RB"
+#define HID_AUTH_MARK_DLG_ID_LISTBOX                            "SW_HID_AUTH_MARK_DLG_ID_LISTBOX"
 
-#define HID_INSERT_INDEX_ENTRY_LEVEL_LB  (HID_BASE + 2146  )
-#define HID_INSERT_IDX_MRK_SRCH_CASESENSITIVE   (HID_BASE + 2147 )
-#define HID_INSERT_IDX_MRK_SRCH_WORDONLY        (HID_BASE + 2148 )
-#define HID_DLG_CREATE_AUTOMARK                 (HID_BASE + 2149 )
-#define HID_BUSINESS_CARD_CONTENT               (HID_BASE + 2150 )
-#define HID_SAVE_LABEL_DLG                      (HID_BASE + 2151 )
-#define HID_BUSINESS_FMT_PAGE                   (HID_BASE + 2152 )
-#define HID_BUSINESS_FMT_PAGE_CONT              (HID_BASE + 2153 )
-#define HID_BUSINESS_FMT_PAGE_SHEET             (HID_BASE + 2154 )
-#define HID_BUSINESS_FMT_PAGE_BRAND             (HID_BASE + 2155 )
-#define HID_BUSINESS_FMT_PAGE_TYPE              (HID_BASE + 2156 )
-#define HID_SEND_MASTER_DIALOG                      (HID_BASE + 2157 )
-#define HID_SEND_MASTER_CTRL_PUSHBUTTON_OK          (HID_BASE + 2158 )
-#define HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL      (HID_BASE + 2159 )
-#define HID_SEND_MASTER_CTRL_LISTBOX_FILTER         (HID_BASE + 2160 )
-#define HID_SEND_MASTER_CTRL_CONTROL_FILEVIEW       (HID_BASE + 2161 )
-#define HID_SEND_MASTER_CTRL_EDIT_FILEURL           (HID_BASE + 2162 )
-#define HID_SEND_MASTER_CTRL_CHECKBOX_AUTOEXTENSION (HID_BASE + 2163 )
-#define HID_SEND_MASTER_CTRL_LISTBOX_TEMPLATE       (HID_BASE + 2164 )
-#define HID_SEND_MASTER_CTRL_DUMMY                  (HID_BASE + 2165 )
+#define HID_INSERT_INDEX_ENTRY_LEVEL_LB                         "SW_HID_INSERT_INDEX_ENTRY_LEVEL_LB"
+#define HID_INSERT_IDX_MRK_SRCH_CASESENSITIVE                   "SW_HID_INSERT_IDX_MRK_SRCH_CASESENSITIVE"
+#define HID_INSERT_IDX_MRK_SRCH_WORDONLY                        "SW_HID_INSERT_IDX_MRK_SRCH_WORDONLY"
+#define HID_DLG_CREATE_AUTOMARK                                 "SW_HID_DLG_CREATE_AUTOMARK"
+#define HID_BUSINESS_CARD_CONTENT                               "SW_HID_BUSINESS_CARD_CONTENT"
+#define HID_SAVE_LABEL_DLG                                      "SW_HID_SAVE_LABEL_DLG"
+#define HID_BUSINESS_FMT_PAGE                                   "SW_HID_BUSINESS_FMT_PAGE"
+#define HID_BUSINESS_FMT_PAGE_CONT                              "SW_HID_BUSINESS_FMT_PAGE_CONT"
+#define HID_BUSINESS_FMT_PAGE_SHEET                             "SW_HID_BUSINESS_FMT_PAGE_SHEET"
+#define HID_BUSINESS_FMT_PAGE_BRAND                             "SW_HID_BUSINESS_FMT_PAGE_BRAND"
+#define HID_BUSINESS_FMT_PAGE_TYPE                              "SW_HID_BUSINESS_FMT_PAGE_TYPE"
+#define HID_SEND_MASTER_DIALOG                                  "SW_HID_SEND_MASTER_DIALOG"
+#define HID_SEND_MASTER_CTRL_PUSHBUTTON_OK                      "SW_HID_SEND_MASTER_CTRL_PUSHBUTTON_OK"
+#define HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL                  "SW_HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL"
+#define HID_SEND_MASTER_CTRL_LISTBOX_FILTER                     "SW_HID_SEND_MASTER_CTRL_LISTBOX_FILTER"
+#define HID_SEND_MASTER_CTRL_CONTROL_FILEVIEW                   "SW_HID_SEND_MASTER_CTRL_CONTROL_FILEVIEW"
+#define HID_SEND_MASTER_CTRL_EDIT_FILEURL                       "SW_HID_SEND_MASTER_CTRL_EDIT_FILEURL"
+#define HID_SEND_MASTER_CTRL_CHECKBOX_AUTOEXTENSION             "SW_HID_SEND_MASTER_CTRL_CHECKBOX_AUTOEXTENSION"
+#define HID_SEND_MASTER_CTRL_LISTBOX_TEMPLATE                   "SW_HID_SEND_MASTER_CTRL_LISTBOX_TEMPLATE"
+#define HID_SEND_MASTER_CTRL_DUMMY                              "SW_HID_SEND_MASTER_CTRL_DUMMY"
 
-#define HID_SEND_HTML_DIALOG                        (HID_BASE + 2166 )
-#define HID_SEND_HTML_CTRL_PUSHBUTTON_OK            (HID_BASE + 2167 )
-#define HID_SEND_HTML_CTRL_PUSHBUTTON_CANCEL        (HID_BASE + 2168 )
-#define HID_SEND_HTML_CTRL_LISTBOX_FILTER           (HID_BASE + 2169 )
-#define HID_SEND_HTML_CTRL_CONTROL_FILEVIEW         (HID_BASE + 2170 )
-#define HID_SEND_HTML_CTRL_EDIT_FILEURL             (HID_BASE + 2171 )
-#define HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION   (HID_BASE + 2172 )
-#define HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE         (HID_BASE + 2173 )
-#define HID_SEND_HTML_CTRL_DUMMY                    (HID_BASE + 2174 )
+#define HID_SEND_HTML_DIALOG                                    "SW_HID_SEND_HTML_DIALOG"
+#define HID_SEND_HTML_CTRL_PUSHBUTTON_OK                        "SW_HID_SEND_HTML_CTRL_PUSHBUTTON_OK"
+#define HID_SEND_HTML_CTRL_PUSHBUTTON_CANCEL                    "SW_HID_SEND_HTML_CTRL_PUSHBUTTON_CANCEL"
+#define HID_SEND_HTML_CTRL_LISTBOX_FILTER                       "SW_HID_SEND_HTML_CTRL_LISTBOX_FILTER"
+#define HID_SEND_HTML_CTRL_CONTROL_FILEVIEW                     "SW_HID_SEND_HTML_CTRL_CONTROL_FILEVIEW"
+#define HID_SEND_HTML_CTRL_EDIT_FILEURL                         "SW_HID_SEND_HTML_CTRL_EDIT_FILEURL"
+#define HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION               "SW_HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION"
+#define HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE                     "SW_HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE"
+#define HID_SEND_HTML_CTRL_DUMMY                                "SW_HID_SEND_HTML_CTRL_DUMMY"
 
-#define HID_INSERT_IDX_MRK_PHONETIC_READING         (HID_BASE + 2175 )
-#define HID_COLUMN_VALUESET                         (HID_BASE + 2176 )
-#define HID_PVIEW_ZOOM_LB                           (HID_BASE + 2177 )
-#define HID_MAIL_MERGE_SELECT                       (HID_BASE + 2178 )
-#define HID_MAIL_MERGE_CREATE_FROM                  (HID_BASE + 2179 )
-#define HID_MAIL_MERGE_INSERT_FIELDS                (HID_BASE + 2180 )
-#define HID_PRINT_AS_MERGE                          (HID_BASE + 2181 )
-#define HID_MERGE_SOURCE_UNAVAILABLE                (HID_BASE + 2182 )
-#define HID_DATA_SOURCES_UNAVAILABLE                (HID_BASE + 2183 )
-#define HID_MODULE_TOOLBOX                          (HID_BASE + 2184 )
-#define HID_SECTION_INDENTS_PAGE                    (HID_BASE + 2185 )
+#define HID_INSERT_IDX_MRK_PHONETIC_READING                     "SW_HID_INSERT_IDX_MRK_PHONETIC_READING"
+#define HID_COLUMN_VALUESET                                     "SW_HID_COLUMN_VALUESET"
+#define HID_PVIEW_ZOOM_LB                                       "SW_HID_PVIEW_ZOOM_LB"
+#define HID_MAIL_MERGE_SELECT                                   "SW_HID_MAIL_MERGE_SELECT"
+#define HID_MAIL_MERGE_CREATE_FROM                              "SW_HID_MAIL_MERGE_CREATE_FROM"
+#define HID_MAIL_MERGE_INSERT_FIELDS                            "SW_HID_MAIL_MERGE_INSERT_FIELDS"
+#define HID_PRINT_AS_MERGE                                      "SW_HID_PRINT_AS_MERGE"
+#define HID_MERGE_SOURCE_UNAVAILABLE                            "SW_HID_MERGE_SOURCE_UNAVAILABLE"
+#define HID_DATA_SOURCES_UNAVAILABLE                            "SW_HID_DATA_SOURCES_UNAVAILABLE"
+#define HID_MODULE_TOOLBOX                                      "SW_HID_MODULE_TOOLBOX"
+#define HID_SECTION_INDENTS_PAGE                                "SW_HID_SECTION_INDENTS_PAGE"
 
-#define HID_FLD_DROPDOWN                            (HID_BASE + 2186 )
-#define HID_MM_DOCSELECTPAGE                        (HID_BASE + 2187 )
-#define HID_MM_OUTPUTTYPEPAGE                       (HID_BASE + 2188 )
-#define HID_MM_ADDRESSBLOCKPAGE                     (HID_BASE + 2189 )
-#define HID_MM_GREETINGSPAGE                        (HID_BASE + 2190 )
-#define HID_MM_PREPAREMERGEPAGE                     (HID_BASE + 2191 )
-#define HID_MM_MERGEPAGE                            (HID_BASE + 2192 )
-#define HID_MM_OUTPUTPAGE                           (HID_BASE + 2193 )
-#define HID_MM_ADDRESSLISTDIALOG                    (HID_BASE + 2194 )
-#define HID_MM_SELECTDBTABLEDDIALOG                 (HID_BASE + 2195 )
-#define HID_MM_SELECTDBTABLEDDIALOG_LISTBOX         (HID_BASE + 2196 )
-#define HID_MM_DBTABLEPREVIEWDIALOG                 (HID_BASE + 2197 )
-#define HID_MM_CREATEADDRESSLIST                    (HID_BASE + 2198 )
-#define HID_MM_FIND_ENTRY                           (HID_BASE + 2199 )
-#define HID_MM_ADD_RENAME_ENTRY                     (HID_BASE + 2200 )
-#define HID_MM_CUSTOMIZE_ADDRESS_LIST               (HID_BASE + 2201 )
-#define HID_MM_CUSTOMIZEADDRESSBLOCK                (HID_BASE + 2202 )
-#define HID_MM_SELECTADDRESSBLOCK                   (HID_BASE + 2203 )
-#define HID_MM_ASSIGNFIELDS                         (HID_BASE + 2204 )
-#define HID_MM_MAILNOTINSTALLED                     (HID_BASE + 2205 )
-#define HID_MM_LAYOUT_PAGE                          (HID_BASE + 2206 )
-#define HID_MM_COPYTO                               (HID_BASE + 2207 )
-#define HID_MM_ADDRESSLIST_HB                       (HID_BASE + 2208 )
-#define HID_MM_ADDRESSLIST_TLB                      (HID_BASE + 2209 )
-#define HID_TP_MAILCONFIG                           (HID_BASE + 2210 )
-#define HID_MM_TESTACCOUNTSETTINGS                  (HID_BASE + 2211 )
-#define HID_MM_TESTACCOUNTSETTINGS_TLB              (HID_BASE + 2212 )
-#define HID_MM_TESTACCOUNTSETTINGS_HB               (HID_BASE + 2213 )
-#define HID_MM_MAILBODY                             (HID_BASE + 2214 )
-#define HID_MM_SENDMAILS                            (HID_BASE + 2215 )
-#define HID_MM_SENDMAILS_STATUSLB                   (HID_BASE + 2216 )
-#define HID_MAILMERGECHILD                          (HID_BASE + 2217 )
-#define HID_MM_CUSTOMFIELDS                         (HID_BASE + 2218 )
-#define HID_DLG_WORDCOUNT                           (HID_BASE + 2219 )
-#define HID_MM_MAILSTATUS_TLB                       (HID_BASE + 2220 )
-#define HID_RETURN_TO_MAILMERGE                     (HID_BASE + 2221 )
-#define HID_MM_SAVEWARNING                          (HID_BASE + 2222 )
-#define HID_MM_QUERY                                (HID_BASE + 2223 )
-#define HID_MM_SENDWARNING                          (HID_BASE + 2224 )
-#define HID_MM_SERVERAUTHENTICATION                 (HID_BASE + 2225 )
+#define HID_FLD_DROPDOWN                                        "SW_HID_FLD_DROPDOWN"
+#define HID_MM_DOCSELECTPAGE                                    "SW_HID_MM_DOCSELECTPAGE"
+#define HID_MM_OUTPUTTYPEPAGE                                   "SW_HID_MM_OUTPUTTYPEPAGE"
+#define HID_MM_ADDRESSBLOCKPAGE                                 "SW_HID_MM_ADDRESSBLOCKPAGE"
+#define HID_MM_GREETINGSPAGE                                    "SW_HID_MM_GREETINGSPAGE"
+#define HID_MM_PREPAREMERGEPAGE                                 "SW_HID_MM_PREPAREMERGEPAGE"
+#define HID_MM_MERGEPAGE                                        "SW_HID_MM_MERGEPAGE"
+#define HID_MM_OUTPUTPAGE                                       "SW_HID_MM_OUTPUTPAGE"
+#define HID_MM_ADDRESSLISTDIALOG                                "SW_HID_MM_ADDRESSLISTDIALOG"
+#define HID_MM_SELECTDBTABLEDDIALOG                             "SW_HID_MM_SELECTDBTABLEDDIALOG"
+#define HID_MM_SELECTDBTABLEDDIALOG_LISTBOX                     "SW_HID_MM_SELECTDBTABLEDDIALOG_LISTBOX"
+#define HID_MM_DBTABLEPREVIEWDIALOG                             "SW_HID_MM_DBTABLEPREVIEWDIALOG"
+#define HID_MM_CREATEADDRESSLIST                                "SW_HID_MM_CREATEADDRESSLIST"
+#define HID_MM_FIND_ENTRY                                       "SW_HID_MM_FIND_ENTRY"
+#define HID_MM_ADD_RENAME_ENTRY                                 "SW_HID_MM_ADD_RENAME_ENTRY"
+#define HID_MM_CUSTOMIZE_ADDRESS_LIST                           "SW_HID_MM_CUSTOMIZE_ADDRESS_LIST"
+#define HID_MM_CUSTOMIZEADDRESSBLOCK                            "SW_HID_MM_CUSTOMIZEADDRESSBLOCK"
+#define HID_MM_SELECTADDRESSBLOCK                               "SW_HID_MM_SELECTADDRESSBLOCK"
+#define HID_MM_ASSIGNFIELDS                                     "SW_HID_MM_ASSIGNFIELDS"
+#define HID_MM_MAILNOTINSTALLED                                 "SW_HID_MM_MAILNOTINSTALLED"
+#define HID_MM_LAYOUT_PAGE                                      "SW_HID_MM_LAYOUT_PAGE"
+#define HID_MM_COPYTO                                           "SW_HID_MM_COPYTO"
+#define HID_MM_ADDRESSLIST_HB                                   "SW_HID_MM_ADDRESSLIST_HB"
+#define HID_MM_ADDRESSLIST_TLB                                  "SW_HID_MM_ADDRESSLIST_TLB"
+#define HID_TP_MAILCONFIG                                       "SW_HID_TP_MAILCONFIG"
+#define HID_MM_TESTACCOUNTSETTINGS                              "SW_HID_MM_TESTACCOUNTSETTINGS"
+#define HID_MM_TESTACCOUNTSETTINGS_TLB                          "SW_HID_MM_TESTACCOUNTSETTINGS_TLB"
+#define HID_MM_TESTACCOUNTSETTINGS_HB                           "SW_HID_MM_TESTACCOUNTSETTINGS_HB"
+#define HID_MM_MAILBODY                                         "SW_HID_MM_MAILBODY"
+#define HID_MM_SENDMAILS                                        "SW_HID_MM_SENDMAILS"
+#define HID_MM_SENDMAILS_STATUSLB                               "SW_HID_MM_SENDMAILS_STATUSLB"
+#define HID_MAILMERGECHILD                                      "SW_HID_MAILMERGECHILD"
+#define HID_MM_CUSTOMFIELDS                                     "SW_HID_MM_CUSTOMFIELDS"
+#define HID_DLG_WORDCOUNT                                       "SW_HID_DLG_WORDCOUNT"
+#define HID_MM_MAILSTATUS_TLB                                   "SW_HID_MM_MAILSTATUS_TLB"
+#define HID_RETURN_TO_MAILMERGE                                 "SW_HID_RETURN_TO_MAILMERGE"
+#define HID_MM_SAVEWARNING                                      "SW_HID_MM_SAVEWARNING"
+#define HID_MM_QUERY                                            "SW_HID_MM_QUERY"
+#define HID_MM_SENDWARNING                                      "SW_HID_MM_SENDWARNING"
+#define HID_MM_SERVERAUTHENTICATION                             "SW_HID_MM_SERVERAUTHENTICATION"
 
-#define HID_MEDIA_TOOLBOX                           (HID_BASE + 2227)
-#define HID_NID_TBL                                 (HID_BASE + 2228)
-#define HID_NID_FRM                                 (HID_BASE + 2229)
-#define HID_NID_GRF                                 (HID_BASE + 2230)
-#define HID_NID_OLE                                 (HID_BASE + 2231)
-#define HID_NID_PGE                                 (HID_BASE + 2232)
-#define HID_NID_OUTL                                (HID_BASE + 2233)
-#define HID_NID_MARK                                (HID_BASE + 2234)
-#define HID_NID_DRW                                 (HID_BASE + 2235)
-#define HID_NID_CTRL                                (HID_BASE + 2236)
-#define HID_NID_PREV                                (HID_BASE + 2237)
-#define HID_NID_REG                                 (HID_BASE + 2238)
-#define HID_NID_BKM                                 (HID_BASE + 2239)
-#define HID_NID_SEL                                 (HID_BASE + 2240)
-#define HID_NID_FTN                                 (HID_BASE + 2241)
-#define HID_NID_POSTIT                              (HID_BASE + 2242)
-#define HID_NID_SRCH_REP                            (HID_BASE + 2243)
-#define HID_NID_INDEX_ENTRY                         (HID_BASE + 2244)
-#define HID_NID_TABLE_FORMULA                       (HID_BASE + 2245)
-#define HID_NID_TABLE_FORMULA_ERROR                 (HID_BASE + 2246)
-#define HID_NID_NEXT                                (HID_BASE + 2247)
-#define HID_MM_NEXT_PAGE                            (HID_BASE + 2248)
-#define HID_MM_PREV_PAGE                            (HID_BASE + 2249)
-#define HID_MM_GREETINGS_CB_PERSONALIZED            (HID_BASE + 2250)
-#define HID_MM_GREETINGS_LB_FEMALE                  (HID_BASE + 2251)
-#define HID_MM_GREETINGS_PB_FEMALE                  (HID_BASE + 2252)
-#define HID_MM_GREETINGS_LB_MALE                    (HID_BASE + 2253)
-#define HID_MM_GREETINGS_PB_MALE                    (HID_BASE + 2254)
-#define HID_MM_GREETINGS_LB_FEMALECOLUMN            (HID_BASE + 2255)
-#define HID_MM_GREETINGS_CB_FEMALEFIELD             (HID_BASE + 2256)
-#define HID_MM_GREETINGS_CB_NEUTRAL                 (HID_BASE + 2257)
-#define HID_MM_BODY_CB_PERSONALIZED                 (HID_BASE + 2258)
-#define HID_MM_BODY_LB_FEMALE                       (HID_BASE + 2259)
-#define HID_MM_BODY_PB_FEMALE                       (HID_BASE + 2260)
-#define HID_MM_BODY_LB_MALE                         (HID_BASE + 2261)
-#define HID_MM_BODY_PB_MALE                         (HID_BASE + 2262)
-#define HID_MM_BODY_LB_FEMALECOLUMN                 (HID_BASE + 2263)
-#define HID_MM_BODY_CB_FEMALEFIELD                  (HID_BASE + 2264)
-#define HID_MM_BODY_CB_NEUTRAL                      (HID_BASE + 2265)
-#define HID_MM_ASSIGN_FIELDS                        (HID_BASE + 2266)
-#define HID_MM_HEADER_0                             (HID_BASE + 2267)
-#define HID_MM_HEADER_1                             (HID_BASE + 2268)
-#define HID_MM_HEADER_2                             (HID_BASE + 2269)
-#define HID_MM_HEADER_3                             (HID_BASE + 2270)
-#define HID_MM_HEADER_4                             (HID_BASE + 2271)
-#define HID_MM_HEADER_5                             (HID_BASE + 2272)
-#define HID_MM_HEADER_6                             (HID_BASE + 2273)
-#define HID_MM_HEADER_7                             (HID_BASE + 2274)
-#define HID_MM_HEADER_8                             (HID_BASE + 2275)
-#define HID_MM_HEADER_9                             (HID_BASE + 2276)
-#define HID_MM_HEADER_10                            (HID_BASE + 2277)
-#define HID_MM_HEADER_11                            (HID_BASE + 2278)
-#define HID_MM_HEADER_12                            (HID_BASE + 2279)
-#define HID_MM_HEADER_13                            (HID_BASE + 2280)
+#define HID_MEDIA_TOOLBOX                                       "SW_HID_MEDIA_TOOLBOX"
+#define HID_NID_TBL                                             "SW_HID_NID_TBL"
+#define HID_NID_FRM                                             "SW_HID_NID_FRM"
+#define HID_NID_GRF                                             "SW_HID_NID_GRF"
+#define HID_NID_OLE                                             "SW_HID_NID_OLE"
+#define HID_NID_PGE                                             "SW_HID_NID_PGE"
+#define HID_NID_OUTL                                            "SW_HID_NID_OUTL"
+#define HID_NID_MARK                                            "SW_HID_NID_MARK"
+#define HID_NID_DRW                                             "SW_HID_NID_DRW"
+#define HID_NID_CTRL                                            "SW_HID_NID_CTRL"
+#define HID_NID_PREV                                            "SW_HID_NID_PREV"
+#define HID_NID_REG                                             "SW_HID_NID_REG"
+#define HID_NID_BKM                                             "SW_HID_NID_BKM"
+#define HID_NID_SEL                                             "SW_HID_NID_SEL"
+#define HID_NID_FTN                                             "SW_HID_NID_FTN"
+#define HID_NID_POSTIT                                          "SW_HID_NID_POSTIT"
+#define HID_NID_SRCH_REP                                        "SW_HID_NID_SRCH_REP"
+#define HID_NID_INDEX_ENTRY                                     "SW_HID_NID_INDEX_ENTRY"
+#define HID_NID_TABLE_FORMULA                                   "SW_HID_NID_TABLE_FORMULA"
+#define HID_NID_TABLE_FORMULA_ERROR                             "SW_HID_NID_TABLE_FORMULA_ERROR"
+#define HID_NID_NEXT                                            "SW_HID_NID_NEXT"
+#define HID_MM_NEXT_PAGE                                        "SW_HID_MM_NEXT_PAGE"
+#define HID_MM_PREV_PAGE                                        "SW_HID_MM_PREV_PAGE"
+#define HID_MM_GREETINGS_CB_PERSONALIZED                        "SW_HID_MM_GREETINGS_CB_PERSONALIZED"
+#define HID_MM_GREETINGS_LB_FEMALE                              "SW_HID_MM_GREETINGS_LB_FEMALE"
+#define HID_MM_GREETINGS_PB_FEMALE                              "SW_HID_MM_GREETINGS_PB_FEMALE"
+#define HID_MM_GREETINGS_LB_MALE                                "SW_HID_MM_GREETINGS_LB_MALE"
+#define HID_MM_GREETINGS_PB_MALE                                "SW_HID_MM_GREETINGS_PB_MALE"
+#define HID_MM_GREETINGS_LB_FEMALECOLUMN                        "SW_HID_MM_GREETINGS_LB_FEMALECOLUMN"
+#define HID_MM_GREETINGS_CB_FEMALEFIELD                         "SW_HID_MM_GREETINGS_CB_FEMALEFIELD"
+#define HID_MM_GREETINGS_CB_NEUTRAL                             "SW_HID_MM_GREETINGS_CB_NEUTRAL"
+#define HID_MM_BODY_CB_PERSONALIZED                             "SW_HID_MM_BODY_CB_PERSONALIZED"
+#define HID_MM_BODY_LB_FEMALE                                   "SW_HID_MM_BODY_LB_FEMALE"
+#define HID_MM_BODY_PB_FEMALE                                   "SW_HID_MM_BODY_PB_FEMALE"
+#define HID_MM_BODY_LB_MALE                                     "SW_HID_MM_BODY_LB_MALE"
+#define HID_MM_BODY_PB_MALE                                     "SW_HID_MM_BODY_PB_MALE"
+#define HID_MM_BODY_LB_FEMALECOLUMN                             "SW_HID_MM_BODY_LB_FEMALECOLUMN"
+#define HID_MM_BODY_CB_FEMALEFIELD                              "SW_HID_MM_BODY_CB_FEMALEFIELD"
+#define HID_MM_BODY_CB_NEUTRAL                                  "SW_HID_MM_BODY_CB_NEUTRAL"
+#define HID_MM_ASSIGN_FIELDS                                    "SW_HID_MM_ASSIGN_FIELDS"
+#define HID_MM_HEADER_0                                         "SW_HID_MM_HEADER_0"
+#define HID_MM_HEADER_1                                         "SW_HID_MM_HEADER_1"
+#define HID_MM_HEADER_2                                         "SW_HID_MM_HEADER_2"
+#define HID_MM_HEADER_3                                         "SW_HID_MM_HEADER_3"
+#define HID_MM_HEADER_4                                         "SW_HID_MM_HEADER_4"
+#define HID_MM_HEADER_5                                         "SW_HID_MM_HEADER_5"
+#define HID_MM_HEADER_6                                         "SW_HID_MM_HEADER_6"
+#define HID_MM_HEADER_7                                         "SW_HID_MM_HEADER_7"
+#define HID_MM_HEADER_8                                         "SW_HID_MM_HEADER_8"
+#define HID_MM_HEADER_9                                         "SW_HID_MM_HEADER_9"
+#define HID_MM_HEADER_10                                        "SW_HID_MM_HEADER_10"
+#define HID_MM_HEADER_11                                        "SW_HID_MM_HEADER_11"
+#define HID_MM_HEADER_12                                        "SW_HID_MM_HEADER_12"
+#define HID_MM_HEADER_13                                        "SW_HID_MM_HEADER_13"
+
+#define HID_ITM_HOR_LEFT                                        "SW_HID_ITM_HOR_LEFT"
+#define HID_ITM_HOR_CNTR                                        "SW_HID_ITM_HOR_CNTR"
+#define HID_ITM_HOR_RGHT                                        "SW_HID_ITM_HOR_RGHT"
+#define HID_ITM_VER_LEFT                                        "SW_HID_ITM_VER_LEFT"
+#define HID_ITM_VER_CNTR                                        "SW_HID_ITM_VER_CNTR"
+#define HID_ITM_VER_RGHT                                        "SW_HID_ITM_VER_RGHT"
+
+#define HID_TBX_FORMULA_CALC                                    "SW_HID_TBX_FORMULA_CALC"
+#define HID_TBX_FORMULA_CANCEL                                  "SW_HID_TBX_FORMULA_CANCEL"
+#define HID_TBX_FORMULA_APPLY                                   "SW_HID_TBX_FORMULA_APPLY"
 
 #define HID_TITLEPAGE                               (HID_BASE + 2281)
 

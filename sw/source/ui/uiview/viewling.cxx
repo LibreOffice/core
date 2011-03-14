@@ -539,7 +539,7 @@ void SwView::InsertThesaurusSynonym( const String &rSynonmText, const String &rL
     if( !bSelection )
     {
         if(pWrtShell->IsEndWrd())
-            pWrtShell->Left(CRSR_SKIP_CELLS, FALSE, 1, FALSE );
+            pWrtShell->Left(CRSR_SKIP_CELLS, sal_False, 1, sal_False );
 
         pWrtShell->SelWrd();
 
@@ -747,7 +747,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                     if ( pMenu )
                     {
                         OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
-                        USHORT nId = ((PopupMenu*)pMenu)->Execute(pEditWin, aPixPos);
+                        sal_uInt16 nId = ((PopupMenu*)pMenu)->Execute(pEditWin, aPixPos);
                         OUString aCommand = ((PopupMenu*)pMenu)->GetItemCommand(nId);
                         if (aCommand.getLength() == 0 )
                         {
@@ -912,7 +912,7 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
             (*pFieldmark->GetParameters())[ sKey ] = makeAny(selection);
             pFieldmark->Invalidate();
             SwView& rView = ( ( SwEditWin* )GetParent() )->GetView();
-            rView.GetDocShell()->SetModified( TRUE );
+            rView.GetDocShell()->SetModified( sal_True );
         }
 
         EndPopupMode();

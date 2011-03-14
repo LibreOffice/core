@@ -53,6 +53,7 @@ TabPage TP_MAILCONFIG
     };
     Edit  ED_DISPLAYNAME
     {
+        HelpID = "sw:Edit:TP_MAILCONFIG:ED_DISPLAYNAME";
         Pos = MAP_APPFONT ( 88 , 14 ) ;
         Size = MAP_APPFONT ( 160 , 12 ) ;
         Border = TRUE;
@@ -65,12 +66,14 @@ TabPage TP_MAILCONFIG
     };
     Edit   ED_ADDRESS
     {
+        HelpID = "sw:Edit:TP_MAILCONFIG:ED_ADDRESS";
         Pos = MAP_APPFONT ( 88 , 29 ) ;
         Size = MAP_APPFONT ( 160 , 12 ) ;
         Border = TRUE;
     };
     CheckBox        CB_REPLYTO
     {
+        HelpID = "sw:CheckBox:TP_MAILCONFIG:CB_REPLYTO";
         Pos = MAP_APPFONT ( 12 , 45 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text[ en-US ] = "Send replies to ~different e-mail address";
@@ -83,6 +86,7 @@ TabPage TP_MAILCONFIG
     };
     Edit ED_REPLYTO
     {
+        HelpID = "sw:Edit:TP_MAILCONFIG:ED_REPLYTO";
         Pos = MAP_APPFONT ( 88 , 58 ) ;
         Size = MAP_APPFONT ( 160 , 12 ) ;
         Border = TRUE;
@@ -101,6 +105,7 @@ TabPage TP_MAILCONFIG
     };
     Edit ED_SERVER
     {
+        HelpID = "sw:Edit:TP_MAILCONFIG:ED_SERVER";
         Pos = MAP_APPFONT ( 88 , 87 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
         Border = TRUE;
@@ -114,6 +119,7 @@ TabPage TP_MAILCONFIG
     };
     NumericField    NF_PORT
     {
+        HelpID = "sw:NumericField:TP_MAILCONFIG:NF_PORT";
         Pos = MAP_APPFONT ( 223 , 87 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
         Border = TRUE;
@@ -127,12 +133,14 @@ TabPage TP_MAILCONFIG
     };
     CheckBox        CB_SECURE
     {
+        HelpID = "sw:CheckBox:TP_MAILCONFIG:CB_SECURE";
         Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text[ en-US ] = "~Use secure connection (SSL)";
     };
     PushButton PB_AUTHENTICATION
     {
+        HelpID = "sw:PushButton:TP_MAILCONFIG:PB_AUTHENTICATION";
         Pos = MAP_APPFONT ( 88 , 118 ) ;
         Size = MAP_APPFONT ( 105 , 14 ) ;
         Text[ en-US ] = "Server Au~thentication";
@@ -144,6 +152,7 @@ TabPage TP_MAILCONFIG
     };
     PushButton      PB_TEST
     {
+        HelpID = "sw:PushButton:TP_MAILCONFIG:PB_TEST";
         Pos = MAP_APPFONT ( 88 , 164 ) ;
         Size = MAP_APPFONT ( 105 , 14 ) ;
         Text[ en-US ] = "Test S~ettings...";
@@ -179,6 +188,7 @@ ModalDialog DLG_MM_TESTACCOUNTSETTINGS
     };
     MultiLineEdit       ED_ERROR
     {
+        HelpID = "sw:MultiLineEdit:DLG_MM_TESTACCOUNTSETTINGS:ED_ERROR";
         Pos = MAP_APPFONT ( 6 , 79 ) ;
         Size = MAP_APPFONT ( 238 , 60 ) ;
         Border = TRUE;
@@ -191,6 +201,7 @@ ModalDialog DLG_MM_TESTACCOUNTSETTINGS
     };
     PushButton          PB_STOP
     {
+        HelpID = "sw:PushButton:DLG_MM_TESTACCOUNTSETTINGS:PB_STOP";
         Pos = MAP_APPFONT ( 85 , 156 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text[ en-US ] = "~Stop";
@@ -261,12 +272,14 @@ ModalDialog DLG_MM_SERVERAUTHENTICATION
 
     CheckBox        CB_AUTHENTICATION
     {
+        HelpID = "sw:CheckBox:DLG_MM_SERVERAUTHENTICATION:CB_AUTHENTICATION";
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 238 , 10 ) ;
         Text[ en-US ] = "The outgoing mail server (SMTP) requires au~thentication";
     };
     RadioButton RB_SEP_AUTHENTICATION
     {
+        HelpID = "sw:RadioButton:DLG_MM_SERVERAUTHENTICATION:RB_SEP_AUTHENTICATION";
         Pos = MAP_APPFONT ( 12 , 17 ) ;
         Size = MAP_APPFONT ( 232 , 10 ) ;
         Text[ en-US ] = "The outgoing mail server (SMTP) requires ~separate authentication";
@@ -285,6 +298,7 @@ ModalDialog DLG_MM_SERVERAUTHENTICATION
     };
     Edit  ED_USERNAME
     {
+        HelpID = "sw:Edit:DLG_MM_SERVERAUTHENTICATION:ED_USERNAME";
         Pos = MAP_APPFONT ( 78 , 42 ) ;
         Size = MAP_APPFONT ( 115 , 12 ) ;
         Border = TRUE;
@@ -297,6 +311,7 @@ ModalDialog DLG_MM_SERVERAUTHENTICATION
     };
     Edit  ED_OUTPASSWORD
     {
+        HelpID = "sw:Edit:DLG_MM_SERVERAUTHENTICATION:ED_OUTPASSWORD";
         Pos = MAP_APPFONT ( 78 , 57 ) ;
         Size = MAP_APPFONT ( 115 , 12 ) ;
         Border = TRUE;
@@ -304,6 +319,7 @@ ModalDialog DLG_MM_SERVERAUTHENTICATION
     };
     RadioButton RB_SMPTAFTERPOP
     {
+        HelpID = "sw:RadioButton:DLG_MM_SERVERAUTHENTICATION:RB_SMPTAFTERPOP";
         Pos = MAP_APPFONT ( 12 , 73 ) ;
         Size = MAP_APPFONT ( 232 , 20 ) ;
         WordBreak = TRUE;
@@ -323,6 +339,7 @@ ModalDialog DLG_MM_SERVERAUTHENTICATION
     };
     Edit  ED_SERVER
     {
+        HelpID = "sw:Edit:DLG_MM_SERVERAUTHENTICATION:ED_SERVER";
         Pos = MAP_APPFONT ( 78 , 108 ) ;
         Size = MAP_APPFONT ( 115 , 12 ) ;
         Border = TRUE;
@@ -336,6 +353,7 @@ ModalDialog DLG_MM_SERVERAUTHENTICATION
     };
     NumericField NF_PORT
     {
+        HelpID = "sw:NumericField:DLG_MM_SERVERAUTHENTICATION:NF_PORT";
         Pos = MAP_APPFONT ( 219 , 108 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
         Border = TRUE;
@@ -355,12 +373,14 @@ ModalDialog DLG_MM_SERVERAUTHENTICATION
     };
     RadioButton RB_POP3
     {
+        HelpID = "sw:RadioButton:DLG_MM_SERVERAUTHENTICATION:RB_POP3";
         Pos = MAP_APPFONT ( 78 , 125 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text[ en-US ] = "~POP 3";
     };
     RadioButton RB_IMAP
     {
+        HelpID = "sw:RadioButton:DLG_MM_SERVERAUTHENTICATION:RB_IMAP";
         Pos = MAP_APPFONT ( 78 , 138 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text[ en-US ] = "~IMAP";
@@ -373,6 +393,7 @@ ModalDialog DLG_MM_SERVERAUTHENTICATION
     };
     Edit ED_INUSERNAME
     {
+        HelpID = "sw:Edit:DLG_MM_SERVERAUTHENTICATION:ED_INUSERNAME";
         Pos = MAP_APPFONT ( 78 , 150 ) ;
         Size = MAP_APPFONT ( 115 , 12 ) ;
         Border = TRUE;
@@ -385,6 +406,7 @@ ModalDialog DLG_MM_SERVERAUTHENTICATION
     };
     Edit ED_INPASSWORD
     {
+        HelpID = "sw:Edit:DLG_MM_SERVERAUTHENTICATION:ED_INPASSWORD";
         Pos = MAP_APPFONT ( 78 , 165 ) ;
         Size = MAP_APPFONT ( 115 , 12 ) ;
         Border = TRUE;

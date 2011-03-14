@@ -31,6 +31,7 @@
 #include "starmath.hrc"
 #include "dialog.hrc"
 #include "toolbox.hrc"
+#include "smcommands.h"
 
 #define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
 #define MN_SUB_TOOLBAR 32
@@ -40,6 +41,7 @@
 
 ModalDialog RID_FONTDIALOG
 {
+    HelpID = "starmath:ModalDialog:RID_FONTDIALOG";
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
@@ -54,6 +56,7 @@ ModalDialog RID_FONTDIALOG
     };
     ComboBox 1
     {
+        HelpID = "starmath:ComboBox:RID_FONTDIALOG:1";
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 111 , 60 ) ;
         TabStop = TRUE ;
@@ -62,6 +65,7 @@ ModalDialog RID_FONTDIALOG
     };
     CheckBox 1
     {
+        HelpID = "starmath:CheckBox:RID_FONTDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 60 , 84 ) ;
         Size = MAP_APPFONT ( 33 , 10 ) ;
@@ -69,6 +73,7 @@ ModalDialog RID_FONTDIALOG
     };
     CheckBox 2
     {
+        HelpID = "starmath:CheckBox:RID_FONTDIALOG:2";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 60 , 97 ) ;
         Size = MAP_APPFONT ( 33 , 10 ) ;
@@ -107,7 +112,7 @@ ModalDialog RID_FONTSIZEDIALOG
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    HelpID = SID_FONTSIZE ;
+    HelpId = CMD_SID_FONTSIZE ;
     Size = MAP_APPFONT ( 171 , 120 ) ;
     Text [ en-US ] = "Font Sizes" ;
     FixedText 1
@@ -119,6 +124,7 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     MetricField 1
     {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 57 , 6 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -139,6 +145,7 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     MetricField 4
     {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:4";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 57 , 36 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -160,6 +167,7 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     MetricField 5
     {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:5";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 57 , 51 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -181,6 +189,7 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     MetricField 6
     {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:6";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 57 , 66 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -202,6 +211,7 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     MetricField 7
     {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:7";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 57 , 81 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -223,6 +233,7 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     MetricField 8
     {
+        HelpID = "starmath:MetricField:RID_FONTSIZEDIALOG:8";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 57 , 96 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -256,6 +267,7 @@ ModalDialog RID_FONTSIZEDIALOG
     };
     PushButton 1
     {
+        HelpID = "starmath:PushButton:RID_FONTSIZEDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 114 , 45 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -267,7 +279,7 @@ ModalDialog RID_FONTTYPEDIALOG
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    HelpID = SID_FONT ;
+    HelpId = CMD_SID_FONT ;
     Size = MAP_APPFONT ( 282 , 153 ) ;
     Text [ en-US ] = "Fonts" ;
     Moveable = TRUE ;
@@ -292,6 +304,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     ListBox 1
     {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 18 ) ;
         Size = MAP_APPFONT ( 150 , 69 ) ;
@@ -307,6 +320,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     ListBox 2
     {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 33 ) ;
         Size = MAP_APPFONT ( 150 , 69 ) ;
@@ -322,6 +336,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     ListBox 3
     {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 48 ) ;
         Size = MAP_APPFONT ( 150 , 69 ) ;
@@ -337,6 +352,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     ListBox 4
     {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:4";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 63 ) ;
         Size = MAP_APPFONT ( 150 , 69 ) ;
@@ -352,6 +368,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     ListBox 5
     {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:5";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 96 ) ;
         Size = MAP_APPFONT ( 150 , 69 ) ;
@@ -367,6 +384,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     ListBox 6
     {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:6";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 111 ) ;
         Size = MAP_APPFONT ( 150 , 69 ) ;
@@ -382,6 +400,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     ListBox 7
     {
+        HelpID = "starmath:ListBox:RID_FONTTYPEDIALOG:7";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 54 , 126 ) ;
         Size = MAP_APPFONT ( 150 , 69 ) ;
@@ -403,6 +422,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     MenuButton 1
     {
+        HelpID = "starmath:MenuButton:RID_FONTTYPEDIALOG:1";
         TabStop = TRUE ;
         ButtonMenu = Menu , RID_FONTMENU ;
         Pos = MAP_APPFONT ( 225 , 48 ) ;
@@ -411,6 +431,7 @@ ModalDialog RID_FONTTYPEDIALOG
     };
     PushButton 2
     {
+        HelpID = "starmath:PushButton:RID_FONTTYPEDIALOG:2";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 225 , 66 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -423,7 +444,7 @@ ModalDialog RID_DISTANCEDIALOG
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    HelpID = SID_DISTANCE ;
+    HelpId = CMD_SID_DISTANCE ;
     Size = MAP_APPFONT ( 240 , 90 ) ;
     Text [ en-US ] = "Spacing" ;
     FixedText 1
@@ -434,6 +455,7 @@ ModalDialog RID_DISTANCEDIALOG
     };
     MetricField 1
     {
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:1";
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -454,6 +476,7 @@ ModalDialog RID_DISTANCEDIALOG
     };
     MetricField 2
     {
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:2";
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -466,6 +489,7 @@ ModalDialog RID_DISTANCEDIALOG
     };
     CheckBox 1
     {
+        HelpID = "starmath:CheckBox:RID_DISTANCEDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 55 ) ;
         Size = MAP_APPFONT ( 110 , 12 ) ;
@@ -481,6 +505,7 @@ ModalDialog RID_DISTANCEDIALOG
     };
     MetricField 3
     {
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:3";
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -501,6 +526,7 @@ ModalDialog RID_DISTANCEDIALOG
     };
     MetricField 4
     {
+        HelpID = "starmath:MetricField:RID_DISTANCEDIALOG:4";
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -526,6 +552,7 @@ ModalDialog RID_DISTANCEDIALOG
     };
     PushButton 1
     {
+        HelpID = "starmath:PushButton:RID_DISTANCEDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 184 , 69 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -533,6 +560,7 @@ ModalDialog RID_DISTANCEDIALOG
     };
     MenuButton 1
     {
+        HelpID = "starmath:MenuButton:RID_DISTANCEDIALOG:1";
         TabStop = TRUE ;
         ButtonMenu = Menu , RID_DISTANCEMENU ;
         Pos = MAP_APPFONT ( 184 , 51 ) ;
@@ -821,11 +849,12 @@ ModalDialog RID_ALIGNDIALOG
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    HelpID = SID_ALIGN ;
+    HelpId = CMD_SID_ALIGN ;
     Size = MAP_APPFONT ( 139 , 66 ) ;
     Text [ en-US ] = "Alignment" ;
     RadioButton 1
     {
+        HelpID = "starmath:RadioButton:RID_ALIGNDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 17 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
@@ -833,6 +862,7 @@ ModalDialog RID_ALIGNDIALOG
     };
     RadioButton 2
     {
+        HelpID = "starmath:RadioButton:RID_ALIGNDIALOG:2";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 31 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
@@ -840,6 +870,7 @@ ModalDialog RID_ALIGNDIALOG
     };
     RadioButton 3
     {
+        HelpID = "starmath:RadioButton:RID_ALIGNDIALOG:3";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
@@ -866,6 +897,7 @@ ModalDialog RID_ALIGNDIALOG
     };
     PushButton 1
     {
+        HelpID = "starmath:PushButton:RID_ALIGNDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 83 , 46 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -875,6 +907,7 @@ ModalDialog RID_ALIGNDIALOG
 
 TabPage RID_PRINTOPTIONPAGE
 {
+    HelpID = "starmath:TabPage:RID_PRINTOPTIONPAGE";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
@@ -887,6 +920,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     CheckBox CB_TITLEROW
     {
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_TITLEROW";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
@@ -894,6 +928,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     CheckBox CB_EQUATION_TEXT
     {
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_EQUATION_TEXT";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
@@ -901,6 +936,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     CheckBox CB_FRAME
     {
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_FRAME";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
@@ -914,6 +950,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     RadioButton RB_ORIGINAL_SIZE
     {
+        HelpID = "starmath:RadioButton:RID_PRINTOPTIONPAGE:RB_ORIGINAL_SIZE";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 69 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
@@ -921,6 +958,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     RadioButton RB_FIT_TO_PAGE
     {
+        HelpID = "starmath:RadioButton:RID_PRINTOPTIONPAGE:RB_FIT_TO_PAGE";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 83 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
@@ -928,6 +966,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     RadioButton RB_ZOOM
     {
+        HelpID = "starmath:RadioButton:RID_PRINTOPTIONPAGE:RB_ZOOM";
         Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text [ en-US ] = "~Scaling" ;
@@ -935,6 +974,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     MetricField MF_ZOOM
     {
+        HelpID = "starmath:MetricField:RID_PRINTOPTIONPAGE:MF_ZOOM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 18 , 111 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -955,15 +995,24 @@ TabPage RID_PRINTOPTIONPAGE
     };
     CheckBox CB_IGNORE_SPACING
     {
+        HelpID = "starmath:CheckBox:RID_PRINTOPTIONPAGE:CB_IGNORE_SPACING";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 140 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "Ig~nore ~~ and ` at the end of the line";
     };
+    CheckBox CB_SAVE_ONLY_USED_SYMBOLS
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 154 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text [ en-US ] = "Embed only used symbols (smaller file size)";
+    };
 };
 
 ModalDialog RID_SYMBOLDIALOG
 {
+    HelpID = "starmath:ModalDialog:RID_SYMBOLDIALOG";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Closeable = TRUE;   // Close Button in Window Leiste explizit einbauen
@@ -979,6 +1028,7 @@ ModalDialog RID_SYMBOLDIALOG
     };
     ListBox 1
     {
+        HelpID = "starmath:ListBox:RID_SYMBOLDIALOG:1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 92, 57 ) ;
@@ -1010,6 +1060,7 @@ ModalDialog RID_SYMBOLDIALOG
     };
     PushButton 2
     {
+        HelpID = "starmath:PushButton:RID_SYMBOLDIALOG:2";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 177 , 6 ) ;
         Size = MAP_APPFONT ( 56 , 14 ) ;
@@ -1018,6 +1069,7 @@ ModalDialog RID_SYMBOLDIALOG
     };
     PushButton 3
     {
+        HelpID = "starmath:PushButton:RID_SYMBOLDIALOG:3";
         Pos = MAP_APPFONT ( 177 , 24 ) ;
         Size = MAP_APPFONT ( 56 , 14 ) ;
         TabStop = TRUE ;
@@ -1025,6 +1077,7 @@ ModalDialog RID_SYMBOLDIALOG
     };
     PushButton 1
     {
+        HelpID = "starmath:PushButton:RID_SYMBOLDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 177 , 42 ) ;
         Size = MAP_APPFONT ( 56 , 14 ) ;
@@ -1034,6 +1087,7 @@ ModalDialog RID_SYMBOLDIALOG
 
 ModalDialog RID_SYMDEFINEDIALOG
 {
+    HelpID = "starmath:ModalDialog:RID_SYMDEFINEDIALOG";
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
@@ -1048,8 +1102,9 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ComboBox 1
     {
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:1";
         Pos = MAP_APPFONT ( 59 , 6 ) ;
-        Size = MAP_APPFONT ( 80 , 50 ) ;
+        Size = MAP_APPFONT ( 80 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -1063,8 +1118,9 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ComboBox 2
     {
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:2";
         Pos = MAP_APPFONT ( 210 , 6 ) ;
-        Size = MAP_APPFONT ( 80 , 50 ) ;
+        Size = MAP_APPFONT ( 80 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -1087,8 +1143,9 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ComboBox 4
     {
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:4";
         Pos = MAP_APPFONT ( 80 , 115 ) ;
-        Size = MAP_APPFONT ( 100 , 80 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -1102,8 +1159,9 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ComboBox 5
     {
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:5";
         Pos = MAP_APPFONT ( 80 , 130 ) ;
-        Size = MAP_APPFONT ( 100 , 50 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -1117,9 +1175,10 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ListBox 1
     {
+        HelpID = "starmath:ListBox:RID_SYMDEFINEDIALOG:1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 145 ) ;
-        Size = MAP_APPFONT ( 100 , 50 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
         TabStop = TRUE ;
         Sort = TRUE ;
         DropDown = TRUE ;
@@ -1133,9 +1192,10 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ListBox LB_FONTS_SUBSET
     {
+        HelpID = "starmath:ListBox:RID_SYMDEFINEDIALOG:LB_FONTS_SUBSET";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 160 ) ;
-        Size = MAP_APPFONT ( 100 , 50 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
         TabStop = TRUE ;
         Sort = FALSE ;
         DropDown = TRUE ;
@@ -1149,9 +1209,10 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     ComboBox 3
     {
+        HelpID = "starmath:ComboBox:RID_SYMDEFINEDIALOG:3";
         Border = TRUE;
         Pos = MAP_APPFONT ( 80 , 175 ) ;
-        Size = MAP_APPFONT ( 100 , 50 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = FALSE ;
@@ -1210,6 +1271,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     PushButton 1
     {
+        HelpID = "starmath:PushButton:RID_SYMDEFINEDIALOG:1";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 305 , 195 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -1217,6 +1279,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     PushButton 2
     {
+        HelpID = "starmath:PushButton:RID_SYMDEFINEDIALOG:2";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 245 , 195 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -1224,6 +1287,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     };
     PushButton 3
     {
+        HelpID = "starmath:PushButton:RID_SYMDEFINEDIALOG:3";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 185 , 195 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -1295,37 +1359,37 @@ Menu RID_VIEWMENU
         MenuItem
         {
             Identifier = SID_VIEW050 ;
-            HelpID = SID_VIEW050 ;
+            HelpId = CMD_SID_VIEW050 ;
             Text [ en-US ] = "~View 50%" ;
         };
         MenuItem
         {
             Identifier = SID_VIEW100 ;
-            HelpID = SID_VIEW100 ;
+            HelpId = CMD_SID_VIEW100 ;
             Text [ en-US ] = "View ~100%" ;
         };
         MenuItem
         {
             Identifier = SID_VIEW200 ;
-            HelpID = SID_VIEW200 ;
+            HelpId = CMD_SID_VIEW200 ;
             Text [ en-US ] = "View ~200%" ;
         };
         MenuItem
         {
             Identifier = SID_ZOOMIN ;
-            HelpID = SID_ZOOMIN ;
+            HelpId = CMD_SID_ZOOMIN ;
             Text [ en-US ] = "~Zoom In" ;
         };
         MenuItem
         {
             Identifier = SID_ZOOMOUT ;
-            HelpID = SID_ZOOMOUT ;
+            HelpId = CMD_SID_ZOOMOUT ;
             Text [ en-US ] = "Zoom ~Out" ;
         };
         MenuItem
         {
             Identifier = SID_ADJUST ;
-            HelpID = SID_ADJUST ;
+            HelpId = CMD_SID_ADJUST ;
             Text [ en-US ] = "~Display All" ;
         };
         MenuItem
@@ -1335,7 +1399,7 @@ Menu RID_VIEWMENU
         MenuItem
         {
             Identifier = SID_DRAW ;
-            HelpID = SID_DRAW ;
+            HelpId = CMD_SID_DRAW ;
             Text [ en-US ] = "U~pdate" ;
         };
     };
@@ -1439,1419 +1503,6 @@ Menu RID_FONTMENU
     };
 };
 
-FloatingWindow RID_TOOLBOXWINDOW
-{
-    HelpId = HID_SMA_OPERATOR_WIN ;
-    Border = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Hide = TRUE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 0 , 0 ) ;
-    Text [ en-US ] = "Elements" ;
-
-    ToolBox 1
-    {
-        // unary/binary operators
-        HelpId = HID_SMA_UNBINOPS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
-        SVLook = TRUE ;
-        Hide = TRUE ;
-        LineCount = 4 ;
-
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = RID_PLUSX ;
-                HelpId = HID_SMA_PLUSX ;
-                Text [ en-US ] = "+ Sign" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_MINUSX ;
-                HelpId = HID_SMA_MINUSX ;
-                Text [ en-US ] = "- Sign" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_PLUSMINUSX ;
-                HelpId = HID_SMA_PLUSMINUSX ;
-                Text [ en-US ] = "+- Sign" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_MINUSPLUSX ;
-                HelpId = HID_SMA_MINUSPLUSX ;
-                Text [ en-US ] = "-+ Sign" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_NEGX ;
-                HelpId = HID_SMA_NEGX ;
-                Text [ en-US ] = "Boolean NOT" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XPLUSY ;
-                HelpId = HID_SMA_XPLUSY ;
-                Text [ en-US ] = "Addition +" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XCDOTY ;
-                HelpId = HID_SMA_XCDOTY ;
-                Text [ en-US ] = "Multiplication (Dot )" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XTIMESY ;
-                HelpId = HID_SMA_XTIMESY ;
-                Text [ en-US ] = "Multiplication (x)" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XSYMTIMESY ;
-                HelpId = HID_SMA_XSYMTIMESY ;
-                Text [ en-US ] = "Multiplication (*)" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XANDY ;
-                HelpId = HID_SMA_XANDY ;
-                Text [ en-US ] = "Boolean AND" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XMINUSY ;
-                HelpId = HID_SMA_XMINUSY ;
-                Text [ en-US ] = "Subtraction -" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XOVERY ;
-                HelpId = HID_SMA_XOVERY ;
-                Text [ en-US ] = "Division (Fraction)" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XDIVY ;
-                HelpId = HID_SMA_XDIVY ;
-                Text [ en-US ] = "Division (÷)" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XSYMDIVIDEY ;
-                HelpId = HID_SMA_XSYMDIVIDEY ;
-                Text [ en-US ] = "Division (Slash)" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XORY ;
-                HelpId = HID_SMA_XORY ;
-                Text [ en-US ] = "Boolean OR" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XCIRCY ;
-                HelpId = HID_SMA_XCIRCY ;
-                Text [ en-US ] = "Concatenate";
-            };
-        };
-    };
-    ToolBox 2
-    {
-        // relations
-        HelpId = HID_SMA_RELATIONS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
-        SVLook = TRUE ;
-        Hide = TRUE ;
-        LineCount = 5 ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = RID_XEQY ;
-                HelpId = HID_SMA_XEQY ;
-                Text [ en-US ] = "Is Equal" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XNEQY ;
-                HelpId = HID_SMA_XNEQY ;
-                Text [ en-US ] = "Is Not Equal" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XAPPROXY ;
-                HelpId = HID_SMA_XAPPROXY ;
-                Text [ en-US ] = "Is Approximately Equal" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XDIVIDESY ;
-                HelpId = HID_SMA_XDIVIDESY ;
-                Text [ en-US ] = "Divides";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XNDIVIDESY ;
-                HelpId = HID_SMA_XNDIVIDESY ;
-                Text [ en-US ] = "Does Not Divide";
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XLTY ;
-                HelpId = HID_SMA_XLTY ;
-                Text [ en-US ] = "Is Less Than" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XGTY ;
-                HelpId = HID_SMA_XGTY ;
-                Text [ en-US ] = "Is Greater Than" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XSIMEQY ;
-                HelpId = HID_SMA_XSIMEQY ;
-                Text [ en-US ] = "Is Similar Or Equal" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XPARALLELY ;
-                HelpId = HID_SMA_XPARALLELY ;
-                Text [ en-US ] = "Is Parallel To" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XORTHOY ;
-                HelpId = HID_SMA_XORTHOY ;
-                Text [ en-US ] = "Is Orthogonal To" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XLESLANTY ;
-                HelpId = HID_SMA_XLESLANTY ;
-                Text [ en-US ] = "Is Less Than Or Equal To" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XGESLANTY ;
-                HelpId = HID_SMA_XGESLANTY ;
-                Text [ en-US ] = "Is Greater Than Or Equal To" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XSIMY ;
-                HelpId = HID_SMA_XSIMY ;
-                Text [ en-US ] = "Is Similar To" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XEQUIVY ;
-                HelpId = HID_SMA_XEQUIVY ;
-                Text [ en-US ] = "Is Congruent To" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SPACE ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XLEY ;
-                HelpId = HID_SMA_XLEY ;
-                Text [ en-US ] = "Is Less Than Or Equal To" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XGEY ;
-                HelpId = HID_SMA_XGEY ;
-                Text [ en-US ] = "Is Greater Than Or Equal To" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XPROPY ;
-                HelpId = HID_SMA_XPROPY ;
-                Text [ en-US ] = "Is Proportional To" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XTOWARDY ;
-                HelpId = HID_SMA_XTOWARDY ;
-                Text [ en-US ] = "Toward" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SPACE ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_DLARROW ;
-                HelpId = HID_SMA_DLARROW ;
-                Text [ en-US ] = "Double Arrow Left";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_DLRARROW ;
-                HelpId = HID_SMA_DLRARROW ;
-                Text [ en-US ] = "Double Arrow Left And Right";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_DRARROW ;
-                HelpId = HID_SMA_DRARROW ;
-                Text [ en-US ] = "Double Arrow Right";
-            };
-        };
-    };
-    ToolBox 3
-    {
-        // set operations
-        HelpId = HID_SMA_SETOPERATIONS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
-        SVLook = TRUE ;
-        Hide = TRUE ;
-        LineCount = 5 ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = RID_XINY ;
-                HelpId = HID_SMA_XINY ;
-                Text [ en-US ] = "Is In" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XNOTINY ;
-                HelpId = HID_SMA_XNOTINY ;
-                Text [ en-US ] = "Is Not In" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XOWNSY ;
-                HelpId = HID_SMA_XOWNSY ;
-                Text [ en-US ] = "Owns" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SPACE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_EMPTYSET ;
-                HelpId = HID_SMA_EMPTYSET ;
-                Text [ en-US ] = "Empty Set";
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XINTERSECTIONY ;
-                HelpId = HID_SMA_XINTERSECTIONY ;
-                Text [ en-US ] = "Intersection" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XUNIONY ;
-                HelpId = HID_SMA_XUNIONY ;
-                Text [ en-US ] = "Union" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XSETMINUSY ;
-                HelpId = HID_SMA_XSETMINUSY ;
-                Text [ en-US ] = "Difference" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XSLASHY ;
-                HelpId = HID_SMA_XSLASHY ;
-                Text [ en-US ] = "Quotient Set" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_ALEPH ;
-                HelpId = HID_SMA_ALEPH ;
-                Text [ en-US ] = "Aleph";
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XSUBSETY ;
-                HelpId = HID_SMA_XSUBSETY ;
-                Text [ en-US ] = "Subset" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XSUBSETEQY ;
-                HelpId = HID_SMA_XSUBSETEQY ;
-                Text [ en-US ] = "Subset Or Equal To" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XSUPSETY ;
-                HelpId = HID_SMA_XSUPSETY ;
-                Text [ en-US ] = "Superset" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XSUPSETEQY ;
-                HelpId = HID_SMA_XSUPSETEQY ;
-                Text [ en-US ] = "Superset Or Equal To" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SPACE ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XNSUBSETY ;
-                HelpId = HID_SMA_XNSUBSETY ;
-                Text [ en-US ] = "Not Subset" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XNSUBSETEQY ;
-                HelpId = HID_SMA_XNSUBSETEQY ;
-                Text [ en-US ] = "Not Subset Or Equal" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XNSUPSETY ;
-                HelpId = HID_SMA_XNSUPSETY ;
-                Text [ en-US ] = "Not Superset" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XNSUPSETEQY ;
-                HelpId = HID_SMA_XNSUPSETEQY ;
-                Text [ en-US ] = "Not Superset Or Equal" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SPACE ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SETN ;
-                HelpId = HID_SMA_SETN ;
-                Text [ en-US ] = "Natural Numbers Set";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SETZ ;
-                HelpId = HID_SMA_SETZ ;
-                Text [ en-US ] = "Integers Set";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SETQ ;
-                HelpId = HID_SMA_SETQ ;
-                Text [ en-US ] = "Set of Rational Numbers";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SETR ;
-                HelpId = HID_SMA_SETR ;
-                Text [ en-US ] = "Real Numbers Set";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SETC ;
-                HelpId = HID_SMA_SETC ;
-                Text [ en-US ] = "Complex Numbers Set";
-            };
-        };
-    };
-    ToolBox 4
-    {
-        // functions
-        HelpId = HID_SMA_FUNCTIONS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
-        SVLook = TRUE ;
-        Hide = TRUE ;
-        LineCount = 5 ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = RID_EX ;
-                HelpId = HID_SMA_EX ;
-                Text [ en-US ] = "Exponential Function" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LNX ;
-                HelpId = HID_SMA_LNX ;
-                Text [ en-US ] = "Natural Logarithm" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_EXPX ;
-                HelpId = HID_SMA_EXPX ;
-                Text [ en-US ] = "Exponential Function" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LOGX ;
-                HelpId = HID_SMA_LOGX ;
-                Text [ en-US ] = "Logarithm" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_RSUPX ;
-                HelpId = HID_SMA_RSUPX ;
-                Text [ en-US ] = "Power";
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SINX ;
-                HelpId = HID_SMA_SINX ;
-                Text [ en-US ] = "Sine" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_COSX ;
-                HelpId = HID_SMA_COSX ;
-                Text [ en-US ] = "Cosine" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_TANX ;
-                HelpId = HID_SMA_TANX ;
-                Text [ en-US ] = "Tangent" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_COTX ;
-                HelpId = HID_SMA_COTX ;
-                Text [ en-US ] = "Cotangent" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SQRTX ;
-                HelpId = HID_SMA_SQRTX ;
-                Text [ en-US ] = "Square Root" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_ARCSINX ;
-                HelpId = HID_SMA_ARCSINX ;
-                Text [ en-US ] = "Arcsine" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_ARCCOSX ;
-                HelpId = HID_SMA_ARCCOSX ;
-                Text [ en-US ] = "Arccosine" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_ARCTANX ;
-                HelpId = HID_SMA_ARCTANX ;
-                Text [ en-US ] = "Arctangent" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_ARCCOTX ;
-                HelpId = HID_SMA_ARCCOTX ;
-                Text [ en-US ] = "Arccotangent" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_NROOTXY ;
-                HelpId = HID_SMA_NROOTXY ;
-                Text [ en-US ] = "N-th Root" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SINHX ;
-                HelpId = HID_SMA_SINHX ;
-                Text [ en-US ] = "Hyperbolic Sine" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_COSHX ;
-                HelpId = HID_SMA_COSHX ;
-                Text [ en-US ] = "Hyperbolic Cosine" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_TANHX ;
-                HelpId = HID_SMA_TANHX ;
-                Text [ en-US ] = "Hyperbolic Tangent" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_COTHX ;
-                HelpId = HID_SMA_COTHX ;
-                Text [ en-US ] = "Hyperbolic Cotangent" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_ABSX ;
-                HelpId = HID_SMA_ABSX ;
-                Text [ en-US ] = "Absolute Value" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_ARSINHX ;
-                HelpId = HID_SMA_ARSINHX ;
-                Text [ en-US ] = "Area Hyperbolic Sine" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_ARCOSHX ;
-                HelpId = HID_SMA_ARCOSHX ;
-                Text [ en-US ] = "Area Hyperbolic Cosine" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_ARTANHX ;
-                HelpId = HID_SMA_ARTANHX ;
-                Text [ en-US ] = "Area Hyperbolic Tangent" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_ARCOTHX ;
-                HelpId = HID_SMA_ARCOTHX ;
-                Text [ en-US ] = "Area Hyperbolic Cotangent" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_FACTX ;
-                HelpId = HID_SMA_FACTX ;
-                Text [ en-US ] = "Factorial" ;
-            };
-        };
-    };
-    ToolBox 5
-    {
-        // operators
-        HelpId = HID_SMA_OPERATORS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
-        SVLook = TRUE ;
-        Hide = TRUE ;
-        LineCount = 3 ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = RID_LIMX ;
-                HelpId = HID_SMA_LIMX ;
-                Text [ en-US ] = "Limes" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SUMX ;
-                HelpId = HID_SMA_SUMX ;
-                Text [ en-US ] = "Sum" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_PRODX ;
-                HelpId = HID_SMA_PRODX ;
-                Text [ en-US ] = "Product" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_COPRODX ;
-                HelpId = HID_SMA_COPRODX ;
-                Text [ en-US ] = "Coproduct" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_FROMXTOY ;
-                HelpId = HID_SMA_FROMXTOY ;
-                Text [ en-US ] = "Upper And Lower Limit" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_INTX ;
-                HelpId = HID_SMA_INTX ;
-                Text [ en-US ] = "Integral" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_IINTX ;
-                HelpId = HID_SMA_IINTX ;
-                Text [ en-US ] = "Double Integral" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_IIINTX ;
-                HelpId = HID_SMA_IIINTX ;
-                Text [ en-US ] = "Triple Integral" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SPACE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_FROMX ;
-                HelpId = HID_SMA_FROMX ;
-                Text [ en-US ] = "Lower Limit" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LINTX ;
-                HelpId = HID_SMA_LINTX ;
-                Text [ en-US ] = "Curve Integral" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LLINTX ;
-                HelpId = HID_SMA_LLINTX ;
-                Text [ en-US ] = "Double Curve Integral" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LLLINTX ;
-                HelpId = HID_SMA_LLLINTX ;
-                Text [ en-US ] = "Triple Curve Integral" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SPACE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_TOX ;
-                HelpId = HID_SMA_TOX ;
-                Text [ en-US ] = "Upper Limit" ;
-            };
-        };
-    };
-    ToolBox 6
-    {
-        // attributs
-        HelpId = HID_SMA_ATTRIBUTES_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
-        SVLook = TRUE ;
-        Hide = TRUE ;
-        LineCount = 5 ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = RID_ACUTEX ;
-                HelpId = HID_SMA_ACUTEX ;
-                Text [ en-US ] = "Acute Accent";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_GRAVEX ;
-                HelpId = HID_SMA_GRAVEX ;
-                Text [ en-US ] = "Grave Accent";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_CHECKX ;
-                HelpId = HID_SMA_CHECKX ;
-                Text [ en-US ] = "Reverse Circumflex" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_BREVEX ;
-                HelpId = HID_SMA_BREVEX ;
-                Text [ en-US ] = "Breve" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_CIRCLEX ;
-                HelpId = HID_SMA_CIRCLEX ;
-                Text [ en-US ] = "Circle" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_VECX ;
-                HelpId = HID_SMA_VECX ;
-                Text [ en-US ] = "Vector Arrow" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_TILDEX ;
-                HelpId = HID_SMA_TILDEX ;
-                Text [ en-US ] = "Tilde" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_HATX ;
-                HelpId = HID_SMA_HATX ;
-                Text [ en-US ] = "Circumflex" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_BARX ;
-                HelpId = HID_SMA_BARX ;
-                Text [ en-US ] = "Line Above" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_DOTX ;
-                HelpId = HID_SMA_DOTX ;
-                Text [ en-US ] = "Dot" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_WIDEVECX ;
-                HelpId = HID_SMA_WIDEVECX ;
-                Text [ en-US ] = "Large Vector Arrow";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_WIDETILDEX ;
-                HelpId = HID_SMA_WIDETILDEX ;
-                Text [ en-US ] = "Large Tilde";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_WIDEHATX ;
-                HelpId = HID_SMA_WIDEHATX ;
-                Text [ en-US ] = "Large Circumflex";
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SPACE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_DDOTX ;
-                HelpId = HID_SMA_DDOTX ;
-                Text [ en-US ] = "Double Dot" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_OVERLINEX ;
-                HelpId = HID_SMA_OVERLINEX ;
-                Text [ en-US ] = "Line Over" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_UNDERLINEX ;
-                HelpId = HID_SMA_UNDERLINEX ;
-                Text [ en-US ] = "Line Below" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_OVERSTRIKEX ;
-                HelpId = HID_SMA_OVERSTRIKEX ;
-                Text [ en-US ] = "Line Through" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SPACE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_DDDOTX ;
-                HelpId = HID_SMA_DDDOTX ;
-                Text [ en-US ] = "Triple Dot" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_PHANTOMX ;
-                HelpId = HID_SMA_PHANTOMX ;
-                Text [ en-US ] = "Transparent" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_BOLDX ;
-                HelpId = HID_SMA_BOLDX ;
-                Text [ en-US ] = "Bold Font" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_ITALX ;
-                HelpId = HID_SMA_ITALX ;
-                Text [ en-US ] = "Italic Font" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SIZEXY ;
-                HelpId = HID_SMA_SIZEXY ;
-                Text [ en-US ] = "Resize" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_FONTXY ;
-                HelpId = HID_SMA_FONTXY ;
-                Text [ en-US ] = "Change Font" ;
-            };
-        };
-    };
-    ToolBox 7
-    {
-        // parentheses
-        HelpId = HID_SMA_BRACKETS_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
-        SVLook = TRUE ;
-        Hide = TRUE ;
-        LineCount = 5 ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = RID_LRPARENTX ;
-                HelpId = HID_SMA_LRPARENTX ;
-                Text [ en-US ] = "Round Brackets" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LRBRACKETX ;
-                HelpId = HID_SMA_LRBRACKETX ;
-                Text [ en-US ] = "Square Brackets" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LRDBRACKETX ;
-                HelpId = HID_SMA_LRDBRACKETX ;
-                Text [ en-US ] = "Double Square Brackets";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LRLINEX ;
-                HelpId = HID_SMA_LRLINEX ;
-                Text [ en-US ] = "Single Lines" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LRDLINEX ;
-                HelpId = HID_SMA_LRDLINEX ;
-                Text [ en-US ] = "Double Lines" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LRBRACEX ;
-                HelpId = HID_SMA_LRBRACEX ;
-                Text [ en-US ] = "Braces" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LRANGLEX ;
-                HelpId = HID_SMA_LRANGLEX ;
-                Text [ en-US ] = "Angle Brackets" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LMRANGLEXY ;
-                HelpId = HID_SMA_LMRANGLEXY ;
-                Text [ en-US ] = "Operator Brackets";
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SPACE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LRGROUPX ;
-                HelpId = HID_SMA_LRGROUPX ;
-                Text [ en-US ] = "Group Brackets" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SLRPARENTX ;
-                HelpId = HID_SMA_SLRPARENTX ;
-                Text [ en-US ] = "Round Brackets (Scalable)" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SLRBRACKETX ;
-                HelpId = HID_SMA_SLRBRACKETX ;
-                Text [ en-US ] = "Square Brackets (Scalable)" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SLRDBRACKETX ;
-                HelpId = HID_SMA_SLRDBRACKETX ;
-                Text [ en-US ] = "Double Square Brackets (Scalable)";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SLRLINEX ;
-                HelpId = HID_SMA_SLRLINEX ;
-                Text [ en-US ] = "Single Lines (Scalable)" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SLRDLINEX ;
-                HelpId = HID_SMA_SLRDLINEX ;
-                Text [ en-US ] = "Double Lines (Scalable)" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SLRBRACEX ;
-                HelpId = HID_SMA_SLRBRACEX ;
-                Text [ en-US ] = "Braces (Scalable)" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SLRANGLEX ;
-                HelpId = HID_SMA_SLRANGLEX ;
-                Text [ en-US ] = "Angle Brackets (Scalable)" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SLMRANGLEXY ;
-                HelpId = HID_SMA_SLMRANGLEXY ;
-                Text [ en-US ] = "Operator Brackets (Scalable)";
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XOVERBRACEY ;
-                HelpId = HID_SMA_XOVERBRACEY ;
-                Text [ en-US ] = "Braces Top (Scalable)";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_XUNDERBRACEY ;
-                HelpId = HID_SMA_XUNDERBRACEY ;
-                Text [ en-US ] = "Braces Bottom (Scalable)";
-            };
-        };
-    };
-    ToolBox 8
-    {
-        // format
-        HelpId = HID_SMA_FORMAT_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
-        SVLook = TRUE ;
-        Hide = TRUE ;
-        LineCount = 3 ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = RID_LSUPX ;
-                HelpId = HID_SMA_LSUPX ;
-                Text [ en-US ] = "Superscript Left" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_CSUPX ;
-                HelpId = HID_SMA_CSUPX ;
-                Text [ en-US ] = "Superscript Top";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_RSUPX ;
-                HelpId = HID_SMA_RSUPX ;
-                Text [ en-US ] = "Superscript Right" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_BINOMXY ;
-                HelpId = HID_SMA_BINOMXY ;
-                Text [ en-US ] = "Vertical Stack (2 Elements)" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_NEWLINE ;
-                HelpId = HID_SMA_NEWLINE ;
-                Text [ en-US ] = "New Line" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LSUBX ;
-                HelpId = HID_SMA_LSUBX ;
-                Text [ en-US ] = "Subscript Left" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_CSUBX ;
-                HelpId = HID_SMA_CSUBX ;
-                Text [ en-US ] = "Subscript Bottom";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_RSUBX ;
-                HelpId = HID_SMA_RSUBX ;
-                Text [ en-US ] = "Subscript Right" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_STACK ;
-                HelpId = HID_SMA_STACK ;
-                Text [ en-US ] = "Vertical Stack" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SBLANK ;
-                HelpId = HID_SMA_SBLANK ;
-                Text [ en-US ] = "Small Gap" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_ALIGNLX ;
-                HelpId = HID_SMA_ALIGNLX ;
-                Text [ en-US ] = "Align Left" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_ALIGNCX ;
-                HelpId = HID_SMA_ALIGNCX ;
-                Text [ en-US ] = "Align Center" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_ALIGNRX ;
-                HelpId = HID_SMA_ALIGNRX ;
-                Text [ en-US ] = "Align Right" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_MATRIX ;
-                HelpId = HID_SMA_MATRIX ;
-                Text [ en-US ] = "Matrix Stack" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_BLANK ;
-                HelpId = HID_SMA_BLANK ;
-                Text [ en-US ] = "Gap" ;
-            };
-        };
-    };
-    ToolBox 9
-    {
-        // misc
-        HelpId = HID_SMA_FORMAT_TBX ;
-        Pos = MAP_APPFONT ( 0 , 45 ) ;
-        Size = MAP_APPFONT ( 65 , 95 ) ;
-        SVLook = TRUE ;
-        Hide = TRUE ;
-        LineCount = 4 ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = RID_INFINITY ;
-                HelpId = HID_SMA_INFINITY ;
-                Text [ en-US ] = "infinite";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_PARTIAL ;
-                HelpId = HID_SMA_PARTIAL ;
-                Text [ en-US ] = "Partial";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_NABLA ;
-                HelpId = HID_SMA_NABLA ;
-                Text [ en-US ] = "Nabla";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_EXISTS ;
-                HelpId = HID_SMA_EXISTS ;
-                Text [ en-US ] = "There Exists";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_FORALL ;
-                HelpId = HID_SMA_FORALL ;
-                Text [ en-US ] = "For All";
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_HBAR ;
-                HelpId = HID_SMA_HBAR ;
-                Text [ en-US ] = "h Bar";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LAMBDABAR ;
-                HelpId = HID_SMA_LAMBDABAR ;
-                Text [ en-US ] = "Lambda Bar";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_RE ;
-                HelpId = HID_SMA_RE ;
-                Text [ en-US ] = "Real Part";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_IM ;
-                HelpId = HID_SMA_IM ;
-                Text [ en-US ] = "Imaginary Part";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_WP ;
-                HelpId = HID_SMA_WP ;
-                Text [ en-US ] = "Weierstrass p";
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_LEFTARROW ;
-                HelpId = HID_SMA_LEFTARROW ;
-                Text [ en-US ] = "Left Arrow";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_RIGHTARROW ;
-                HelpId = HID_SMA_RIGHTARROW ;
-                Text [ en-US ] = "Right Arrow";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_UPARROW ;
-                HelpId = HID_SMA_UPARROW ;
-                Text [ en-US ] = "Up Arrow";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_DOWNARROW ;
-                HelpId = HID_SMA_DOWNARROW ;
-                Text [ en-US ] = "Down Arrow";
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SPACE ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_DOTSLOW ;
-                HelpId = HID_SMA_DOTSLOW ;
-                Text [ en-US ] = "Dots At Bottom";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_DOTSAXIS ;
-                HelpId = HID_SMA_DOTSAXIS ;
-                Text [ en-US ] = "Dots In Middle";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_DOTSVERT ;
-                HelpId = HID_SMA_DOTSVERT ;
-                Text [ en-US ] = "Dots Vertically";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_DOTSUP ;
-                HelpId = HID_SMA_DOTSUP ;
-                Text [ en-US ] = "Dots To Top";
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_DOTSDOWN ;
-                HelpId = HID_SMA_DOTSDOWN ;
-                Text [ en-US ] = "Dots to Bottom";
-            };
-        };
-    };
-    ToolBox 10
-    {
-        // main menu of selection-window
-        HelpId = HID_SMA_SELECTION_TBX ;
-        Pos = MAP_APPFONT ( 0 , 0 ) ;
-        Size = MAP_APPFONT ( 65 , 38 ) ;
-        SVLook = TRUE ;
-        LineCount = 2 ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = RID_UNBINOPS_CAT ;
-                HelpId = HID_SMA_UNBINOPS_CAT ;
-                Text [ en-US ] = "Unary/Binary Operators" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_RELATIONS_CAT ;
-                HelpId = HID_SMA_RELATIONS_CAT ;
-                Text [ en-US ] = "Relations" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_SETOPERATIONS_CAT ;
-                HelpId = HID_SMA_SETOPERATIONS_CAT ;
-                Text [ en-US ] = "Set Operations" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_FUNCTIONS_CAT ;
-                HelpId = HID_SMA_FUNCTIONS_CAT ;
-                Text [ en-US ] = "Functions" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_OPERATORS_CAT ;
-                HelpId = HID_SMA_OPERATORS_CAT ;
-                Text [ en-US ] = "Operators" ;
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_BREAK ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_ATTRIBUTES_CAT ;
-                HelpId = HID_SMA_ATTRIBUTES_CAT ;
-                Text [ en-US ] = "Attributes" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_MISC_CAT ;
-                HelpId = HID_SMA_MISC_CAT ;
-                Text [ en-US ] = "Others";
-            };
-            ToolBoxItem
-            {
-                Type = TOOLBOXITEM_SPACE ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_BRACKETS_CAT ;
-                HelpId = HID_SMA_BRACKETS_CAT ;
-                Text [ en-US ] = "Brackets" ;
-            };
-            ToolBoxItem
-            {
-                Identifier = RID_FORMAT_CAT ;
-                HelpId = HID_SMA_FORMAT_CAT ;
-                Text [ en-US ] = "Formats" ;
-            };
-        };
-    };
-    FixedLine FL_TOOLBOX_CAT_DELIM
-    {
-        Pos = MAP_APPFONT ( 0 , 44 ) ;
-        Size = MAP_APPFONT ( 65 , 4 ) ;
-    };
-};
-
 #define CMDBOXWINDOW_TEXT           \
     Text [ en-US ] = "Commands" ;              \
 
@@ -2869,318 +1520,6 @@ DockingWindow RID_CMDBOXWINDOW\
     CMDBOXWINDOW_TEXT
 };
 
-
-#define UNBINOPS_IDLIST         \
-    IdList =                \
-    {                       \
-        RID_PLUSX ;         \
-        RID_MINUSX ;        \
-        RID_PLUSMINUSX ;    \
-        RID_MINUSPLUSX ;    \
-        RID_XPLUSY ;        \
-        RID_XCDOTY ;        \
-        RID_XTIMESY ;       \
-        RID_XSYMTIMESY ;    \
-        RID_XMINUSY ;       \
-        RID_XOVERY ;        \
-        RID_XDIVY ;         \
-        RID_XSYMDIVIDEY ;   \
-        RID_NEGX ;          \
-        RID_XANDY ;         \
-        RID_XORY ;          \
-        RID_XCIRCY ;        \
-    };                      \
-    IdCount = { 16 ; };
-
-    ImageList RID_IL_UNBINOPS
-    {
-        Prefix = "un";
-        MaskColor = IMAGE_STDBTN_COLOR ;
-        UNBINOPS_IDLIST
-    };
-
-#define RELATIONS_IDLIST         \
-    IdList =                \
-    {                       \
-        RID_XEQY ;          \
-        RID_XNEQY ;         \
-        RID_XEQUIVY ;       \
-        RID_XORTHOY ;       \
-        RID_XLTY ;          \
-        RID_XGTY ;          \
-        RID_XAPPROXY ;      \
-        RID_XPARALLELY ;    \
-        RID_XLESLANTY ;     \
-        RID_XGESLANTY ;     \
-        RID_XSIMEQY ;       \
-        RID_XPROPY ;        \
-        RID_XLEY ;          \
-        RID_XGEY ;          \
-        RID_XSIMY ;         \
-        RID_XTOWARDY ;      \
-        RID_XDIVIDESY ;     \
-        RID_XNDIVIDESY;     \
-        RID_DLARROW ;       \
-        RID_DLRARROW ;      \
-        RID_DRARROW ;       \
-    };                      \
-    IdCount ={ 21 ; };
-
-    ImageList RID_IL_RELATIONS
-    {
-        Prefix = "bi";
-        MaskColor = IMAGE_STDBTN_COLOR ;
-        RELATIONS_IDLIST
-    };
-
-#define SETOPERATIONS_IDLIST             \
-    IdList =                    \
-    {                           \
-        RID_XINY ;              \
-        RID_XNOTINY ;           \
-        RID_XOWNSY ;            \
-        RID_XINTERSECTIONY ;    \
-        RID_XUNIONY ;           \
-        RID_XSETMINUSY ;        \
-        RID_XSLASHY ;           \
-        RID_XSUBSETY ;          \
-        RID_XSUBSETEQY ;        \
-        RID_XSUPSETY ;          \
-        RID_XSUPSETEQY ;        \
-        RID_XNSUBSETY ;         \
-        RID_XNSUBSETEQY ;       \
-        RID_XNSUPSETY ;         \
-        RID_XNSUPSETEQY ;       \
-        RID_EMPTYSET ;          \
-        RID_ALEPH ;             \
-        RID_SETN ;              \
-        RID_SETZ ;              \
-        RID_SETQ ;              \
-        RID_SETR ;              \
-        RID_SETC ;              \
-    };                          \
-    IdCount = { 22 ; };
-
-    ImageList RID_IL_SETOPERATIONS
-    {
-        Prefix = "op";
-        MaskColor = IMAGE_STDBTN_COLOR ;
-        SETOPERATIONS_IDLIST
-    };
-
-#define FUNCTIONS_IDLIST         \
-    IdList =                \
-    {                       \
-        RID_ABSX ;          \
-        RID_FACTX ;         \
-        RID_SQRTX ;         \
-        RID_NROOTXY ;       \
-        RID_EX ;            \
-        RID_LNX ;           \
-        RID_EXPX ;          \
-        RID_LOGX ;          \
-        RID_SINX ;          \
-        RID_COSX ;          \
-        RID_TANX ;          \
-        RID_COTX ;          \
-        RID_SINHX ;         \
-        RID_COSHX ;         \
-        RID_TANHX ;         \
-        RID_COTHX ;         \
-        RID_ARCSINX ;       \
-        RID_ARCCOSX ;       \
-        RID_ARCTANX ;       \
-        RID_ARCCOTX ;       \
-        RID_ARSINHX ;       \
-        RID_ARCOSHX ;       \
-        RID_ARTANHX ;       \
-        RID_ARCOTHX ;       \
-        RID_RSUPX ;         \
-    };                      \
-    IdCount = { 25 ; };
-
-    ImageList RID_IL_FUNCTIONS
-    {
-        Prefix = "fu";
-        MaskColor = IMAGE_STDBTN_COLOR ;
-        FUNCTIONS_IDLIST
-    };
-
-#define OPERATORS_IDLIST         \
-    IdList =                \
-    {                       \
-        RID_LIMX ;          \
-        RID_SUMX ;          \
-        RID_PRODX ;         \
-        RID_COPRODX ;       \
-        RID_INTX ;          \
-        RID_IINTX ;         \
-        RID_IIINTX ;        \
-        RID_LINTX ;         \
-        RID_LLINTX ;        \
-        RID_LLLINTX ;       \
-        RID_FROMXTOY ;      \
-        RID_FROMX ;         \
-        RID_TOX ;           \
-    };                      \
-    IdCount = { 13 ; };
-
-    ImageList RID_IL_OPERATORS
-    {
-        Prefix = "fo";
-        MaskColor = IMAGE_STDBTN_COLOR ;
-        OPERATORS_IDLIST
-    };
-
-#define ATTRIBUTES_IDLIST             \
-    IdList =                    \
-    {                           \
-        RID_ACUTEX ;            \
-        RID_GRAVEX ;            \
-        RID_CHECKX ;            \
-        RID_BREVEX ;            \
-        RID_BARX ;              \
-        RID_VECX ;              \
-        RID_HATX ;              \
-        RID_TILDEX ;            \
-        RID_CIRCLEX ;           \
-        RID_DOTX ;              \
-        RID_DDOTX ;             \
-        RID_DDDOTX ;            \
-        RID_OVERLINEX ;         \
-        RID_UNDERLINEX ;        \
-        RID_OVERSTRIKEX ;       \
-        RID_PHANTOMX ;          \
-        RID_BOLDX ;             \
-        RID_ITALX ;             \
-        RID_SIZEXY ;            \
-        RID_FONTXY ;            \
-        RID_WIDEHATX ;          \
-        RID_WIDETILDEX ;        \
-        RID_WIDEVECX ;          \
-    };                          \
-    IdCount = { 23 ; };
-
-    ImageList RID_IL_ATTRIBUTES
-    {
-        Prefix = "at";
-        MaskColor = IMAGE_STDBTN_COLOR ;
-        ATTRIBUTES_IDLIST
-    };
-
-#define BRACKETS_IDLIST             \
-    IdList =                    \
-    {                           \
-        RID_LRPARENTX ;         \
-        RID_LRBRACKETX ;        \
-        RID_LRANGLEX ;          \
-        RID_LRBRACEX ;          \
-        RID_LRLINEX ;           \
-        RID_LRDLINEX ;          \
-        RID_LMRANGLEXY ;        \
-        RID_LRGROUPX ;          \
-        RID_SLRPARENTX ;        \
-        RID_SLRBRACKETX ;       \
-        RID_SLRANGLEX ;         \
-        RID_SLRBRACEX ;         \
-        RID_SLRLINEX ;          \
-        RID_SLRDLINEX ;         \
-        RID_SLMRANGLEXY ;       \
-        RID_LRDBRACKETX ;       \
-        RID_SLRDBRACKETX ;      \
-        RID_XOVERBRACEY ;       \
-        RID_XUNDERBRACEY ;      \
-    };                          \
-    IdCount = { 19 ; };
-
-    ImageList RID_IL_BRACKETS
-    {
-        Prefix = "al";
-        MaskColor = IMAGE_STDBTN_COLOR ;
-        BRACKETS_IDLIST
-    };
-
-#define FORMAT_IDLIST         \
-    IdList =                \
-    {                       \
-        RID_NEWLINE ;       \
-        RID_SBLANK ;        \
-        RID_BLANK ;         \
-        RID_BINOMXY ;       \
-        RID_STACK ;         \
-        RID_MATRIX ;        \
-        RID_ALIGNLX ;       \
-        RID_ALIGNCX ;       \
-        RID_ALIGNRX ;       \
-        RID_RSUBX ;         \
-        RID_RSUPX ;         \
-        RID_LSUBX ;         \
-        RID_LSUPX ;         \
-        RID_CSUBX ;         \
-        RID_CSUPX ;         \
-    };                      \
-    IdCount = { 15 ; };
-
-    ImageList RID_IL_FORMAT
-    {
-        Prefix = "co";
-        MaskColor = IMAGE_STDBTN_COLOR ;
-        FORMAT_IDLIST
-    };
-
-#define MISC_IDLIST         \
-    IdList =                \
-    {                       \
-        RID_INFINITY ;      \
-        RID_PARTIAL ;       \
-        RID_NABLA ;         \
-        RID_EXISTS ;        \
-        RID_FORALL ;        \
-        RID_HBAR;           \
-        RID_LAMBDABAR ;     \
-        RID_RE ;            \
-        RID_IM ;            \
-        RID_WP ;            \
-        RID_LEFTARROW ;     \
-        RID_RIGHTARROW ;    \
-        RID_UPARROW ;       \
-        RID_DOWNARROW ;     \
-        RID_DOTSLOW ;       \
-        RID_DOTSAXIS ;      \
-        RID_DOTSVERT ;      \
-        RID_DOTSUP ;        \
-        RID_DOTSDOWN ;      \
-    };                      \
-    IdCount = { 19 ; };
-
-    ImageList RID_IL_MISC
-    {
-        Prefix = "mi";
-        MaskColor = IMAGE_STDBTN_COLOR ;
-        MISC_IDLIST
-    };
-
-#define CATALOG_IDLIST                  \
-    IdList =                        \
-    {                               \
-        RID_UNBINOPS_CAT ;          \
-        RID_RELATIONS_CAT ;         \
-        RID_SETOPERATIONS_CAT ;     \
-        RID_FUNCTIONS_CAT ;         \
-        RID_OPERATORS_CAT ;         \
-        RID_ATTRIBUTES_CAT ;        \
-        RID_MISC_CAT ;              \
-        RID_BRACKETS_CAT ;          \
-        RID_FORMAT_CAT ;            \
-    };                              \
-    IdCount = { 9 ; };
-
-    ImageList RID_IL_CATALOG
-    {
-        Prefix = "im";
-        MaskColor = IMAGE_STDBTN_COLOR ;
-        CATALOG_IDLIST
-    };
 
 String STR_CMDBOXWINDOW
 {
@@ -3308,76 +1647,6 @@ String RID_ERR_RIGHTEXPECTED
     Text [ en-US ] = "'RIGHT' expected" ;
 };
 
-#include "menu.src"
-
-ToolBox RID_MATH_TOOLBOX
-{
-    HelpId = RID_MATH_TOOLBOX ;
-    Customize = TRUE ;
-    LineSpacing = TRUE ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Scroll = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Align = BOXALIGN_LEFT ;
-    Size = MAP_APPFONT ( 0 , 0 ) ;
-    MenuStrings = TRUE ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_ZOOMIN ;
-            HelpID = SID_ZOOMIN ;
-            Text [ en-US ] = "Zoom In" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ZOOMOUT ;
-            HelpID = SID_ZOOMOUT ;
-            Text [ en-US ] = "Zoom Out" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_VIEW100 ;
-            HelpID = SID_VIEW100 ;
-            Text [ en-US ] = "Zoom 100%" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ADJUST ;
-            HelpID = SID_ADJUST ;
-            Text [ en-US ] = "Entire Formula" ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_DRAW ;
-            HelpID = SID_DRAW ;
-            Text [ en-US ] = "Refresh" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_FORMULACURSOR ;
-            HelpID = SID_FORMULACURSOR ;
-            Text [ en-US ] = "Formula Cursor";
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_SYMBOLS_CATALOGUE ;
-            HelpID = SID_SYMBOLS_CATALOGUE ;
-            Text [ en-US ] = "Symbols" ;
-        };
-    };
-};
-
 String RID_MATH_TOOLBOX
 {
     Text [ en-US ] = "Main Toolbar" ;
@@ -3390,21 +1659,12 @@ StringArray RID_PRINTUIOPTIONS
         < "%PRODUCTNAME %s"; >;
         < "Contents"; >;
         < "~Title"; >;
-        < "Specifies whether you want the name of the document to be included in the printout"; >;
         < "~Formula text"; >;
-        < "Specifies whether to include the contents of the 'Commands' window at the bottom of the printout."; >;
         < "B~orders"; >;
-        < "Applies a thin border to the formula area in the printout."; >;
         < "Size"; >;
         < "O~riginal size"; >;
-        < "Prints the formula without adjusting the current font size."; >;
         < "Fit to ~page"; >;
-        < "Adjusts the formula to the page format used in the printout."; >;
         < "~Scaling"; >;
-        < "Reduces or enlarges the size of the printed formula by a specified enlargement factor."; >;
-        < "Miscellaneous options"; >;
-        < "Ig~nore ~~ and ` at the end of the line"; >;
-        < "Specfies that these space wildcards will be removed if they are at the end of a line."; >;
     };
 };
 

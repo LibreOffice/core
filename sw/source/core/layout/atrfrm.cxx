@@ -79,6 +79,7 @@
 #include <tgrditem.hxx>
 #include <hfspacingitem.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
@@ -217,7 +218,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                 // <--
                 //Wenn in einem der Nodes noch ein Crsr angemeldet ist, muss das
                 //ParkCrsr einer (beliebigen) Shell gerufen werden.
-                pNode = pDoc->GetNodes()[ aIdx ];
+                pNode = & aIdx.GetNode();
                 sal_uInt32 nEnd = pNode->EndOfSectionIndex();
                 while ( aIdx < nEnd )
                 {
@@ -236,21 +237,17 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                         } while ( aIter++ );
                     }
                     aIdx++;
-                    pNode = pDoc->GetNodes()[ aIdx ];
+                    pNode = & aIdx.GetNode();
                 }
             }
             rCnt.SetNewCntntIdx( (const SwNodeIndex*)0 );
 
             // beim Loeschen von Header/Footer-Formaten IMMER das Undo
             // abschalten! (Bug 31069)
-            sal_Bool bDoesUndo = pDoc->DoesUndo();
-            pDoc->DoUndo( sal_False );
+            ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
             OSL_ENSURE( pNode, "Ein grosses Problem." );
             pDoc->DeleteSection( pNode );
-
-            if( bDoesUndo )
-                pDoc->DoUndo( sal_True );
         }
         delete pFmt;
     }
@@ -293,7 +290,7 @@ SfxPoolItem*  SwFmtFrmSize::Clone( SfxItemPool* ) const
     return new SwFmtFrmSize( *this );
 }
 
-bool SwFmtFrmSize::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -315,13 +312,13 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         break;
         case MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH:
         {
-            BOOL bTmp = 0xFF == GetHeightPercent();
+            sal_Bool bTmp = 0xFF == GetHeightPercent();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
         case MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT:
         {
-            BOOL bTmp = 0xFF == GetWidthPercent();
+            sal_Bool bTmp = 0xFF == GetWidthPercent();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
@@ -340,7 +337,7 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         break;
         case MID_FRMSIZE_IS_AUTO_HEIGHT:
         {
-            BOOL bTmp = ATT_FIX_SIZE != GetHeightSizeType();
+            sal_Bool bTmp = ATT_FIX_SIZE != GetHeightSizeType();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
@@ -351,7 +348,7 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return true;
 }
 
-bool SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -383,7 +380,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
             sal_Int16 nSet = 0;
             rVal >>= nSet;
             if(nSet >= 0 && nSet <= 0xfe)
-                SetHeightPercent((BYTE)nSet);
+                SetHeightPercent((sal_uInt8)nSet);
             else
                 bRet = false;
         }
@@ -393,7 +390,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
             sal_Int16 nSet = 0;
             rVal >>= nSet;
             if(nSet >= 0 && nSet <= 0xfe)
-                SetWidthPercent((BYTE)nSet);
+                SetWidthPercent((sal_uInt8)nSet);
             else
                 bRet = false;
         }
@@ -696,7 +693,7 @@ void SwFmtPageDesc::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     }
 }
 
-bool SwFmtPageDesc::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SwFmtPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -727,7 +724,7 @@ bool SwFmtPageDesc::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return bRet;
 }
 
-bool SwFmtPageDesc::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SwFmtPageDesc::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1002,7 +999,7 @@ void SwFmtCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
     }
 }
 
-bool SwFmtCol::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SwFmtCol::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1018,7 +1015,7 @@ bool SwFmtCol::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return true;
 }
 
-bool SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1046,10 +1043,10 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 for(sal_uInt16 i = 0; i < nCount; i++)
                 {
                     SwColumn* pCol = new SwColumn;
-                    pCol->SetWishWidth( static_cast<USHORT>(pArray[i].Width) );
-                    nWidthSum = static_cast<USHORT>(nWidthSum + pArray[i].Width);
-                    pCol->SetLeft ( static_cast<USHORT>(MM100_TO_TWIP(pArray[i].LeftMargin)) );
-                    pCol->SetRight( static_cast<USHORT>(MM100_TO_TWIP(pArray[i].RightMargin)) );
+                    pCol->SetWishWidth( static_cast<sal_uInt16>(pArray[i].Width) );
+                    nWidthSum = static_cast<sal_uInt16>(nWidthSum + pArray[i].Width);
+                    pCol->SetLeft ( static_cast<sal_uInt16>(MM100_TO_TWIP(pArray[i].LeftMargin)) );
+                    pCol->SetRight( static_cast<sal_uInt16>(MM100_TO_TWIP(pArray[i].RightMargin)) );
                     aColumns.Insert(pCol, i);
                 }
             bRet = true;
@@ -1123,7 +1120,7 @@ sal_uInt16  SwFmtSurround::GetValueCount() const
 }
 
 
-bool SwFmtSurround::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SwFmtSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1135,19 +1132,19 @@ bool SwFmtSurround::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         break;
         case MID_SURROUND_ANCHORONLY:
         {
-            BOOL bTmp = IsAnchorOnly();
+            sal_Bool bTmp = IsAnchorOnly();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
                 break;
         case MID_SURROUND_CONTOUR:
         {
-            BOOL bTmp = IsContour();
+            sal_Bool bTmp = IsContour();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
                 break;
         case MID_SURROUND_CONTOUROUTSIDE:
         {
-            BOOL bTmp = IsOutside();
+            sal_Bool bTmp = IsOutside();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
                 break;
@@ -1158,7 +1155,7 @@ bool SwFmtSurround::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return bRet;
 }
 
-bool SwFmtSurround::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SwFmtSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1169,7 +1166,7 @@ bool SwFmtSurround::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
             if( eVal >= 0 && eVal < (sal_Int16)SURROUND_END )
-                SetValue( static_cast<USHORT>(eVal) );
+                SetValue( static_cast<sal_uInt16>(eVal) );
             else {
                 //exception
                 ;
@@ -1217,7 +1214,7 @@ SfxPoolItem*  SwFmtVertOrient::Clone( SfxItemPool* ) const
     return new SwFmtVertOrient( nYPos, eOrient, eRelation );
 }
 
-bool SwFmtVertOrient::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SwFmtVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1256,7 +1253,7 @@ bool SwFmtVertOrient::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return bRet;
 }
 
-bool SwFmtVertOrient::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SwFmtVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1331,7 +1328,7 @@ SfxPoolItem*  SwFmtHoriOrient::Clone( SfxItemPool* ) const
     return new SwFmtHoriOrient( nXPos, eOrient, eRelation, bPosToggle );
 }
 
-bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1367,7 +1364,7 @@ bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                 break;
         case MID_HORIORIENT_PAGETOGGLE:
         {
-            BOOL bTmp = IsPosToggle();
+            sal_Bool bTmp = IsPosToggle();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
                 break;
@@ -1378,7 +1375,7 @@ bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return bRet;
 }
 
-bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1513,7 +1510,7 @@ sal_uInt32 SwFmtAnchor::GetOrder() const
     return mnOrder;
 }
 
-bool SwFmtAnchor::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SwFmtAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1567,7 +1564,7 @@ bool SwFmtAnchor::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return bRet;
 }
 
-bool SwFmtAnchor::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SwFmtAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1700,7 +1697,7 @@ void SwFmtURL::SetMap( const ImageMap *pM )
 }
 extern const SvEventDescription* lcl_GetSupportedMacroItems();
 
-bool SwFmtURL::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SwFmtURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1740,7 +1737,7 @@ bool SwFmtURL::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         break;
         case MID_URL_SERVERMAP:
         {
-            BOOL bTmp = IsServerMap();
+            sal_Bool bTmp = IsServerMap();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
             break;
@@ -1751,7 +1748,7 @@ bool SwFmtURL::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return bRet;
 }
 
-bool SwFmtURL::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SwFmtURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -1862,7 +1859,7 @@ int SwFmtFtnEndAtTxtEnd::operator==( const SfxPoolItem& rItem ) const
             sSuffix == rAttr.sSuffix;
 }
 
-bool SwFmtFtnEndAtTxtEnd::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SwFmtFtnEndAtTxtEnd::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -1889,12 +1886,12 @@ bool SwFmtFtnEndAtTxtEnd::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_NUM_TYPE    : rVal <<= aFmt.GetNumberingType(); break;
         case MID_PREFIX      : rVal <<= OUString(sPrefix); break;
         case MID_SUFFIX      : rVal <<= OUString(sSuffix); break;
-        default: return FALSE;
+        default: return sal_False;
     }
     return true;
 }
 
-bool SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bRet = true;
     nMemberId &= ~CONVERT_TWIPS;
@@ -2028,7 +2025,7 @@ void SwFmtChain::SetNext( SwFlyFrmFmt *pFmt )
         ((SwModify*)aNext.GetRegisteredIn())->Remove( &aNext );
 }
 
-bool SwFmtChain::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SwFmtChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -2081,7 +2078,7 @@ SfxPoolItem* SwFmtLineNumber::Clone( SfxItemPool* ) const
     return new SwFmtLineNumber( *this );
 }
 
-bool SwFmtLineNumber::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SwFmtLineNumber::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -2090,7 +2087,7 @@ bool SwFmtLineNumber::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     {
         case MID_LINENUMBER_COUNT:
         {
-            BOOL bTmp = IsCount();
+            sal_Bool bTmp = IsCount();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
@@ -2104,7 +2101,7 @@ bool SwFmtLineNumber::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return bRet;
 }
 
-bool SwFmtLineNumber::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SwFmtLineNumber::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     // hier wird immer konvertiert!
     nMemberId &= ~CONVERT_TWIPS;
@@ -2184,7 +2181,7 @@ SwTextGridItem& SwTextGridItem::operator=( const SwTextGridItem& rCpy )
     return *this;
 }
 
-bool SwTextGridItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bRet = true;
 
@@ -2256,7 +2253,7 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return bRet;
 }
 
-bool SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bRet = true;
     switch( nMemberId & ~CONVERT_TWIPS )
@@ -2299,11 +2296,11 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             nTmp = MM100_TO_TWIP( nTmp );
             if( bRet && (nTmp >= 0) && ( nTmp <= USHRT_MAX) )
                 if( (nMemberId & ~CONVERT_TWIPS) == MID_GRID_BASEHEIGHT )
-                    SetBaseHeight( (USHORT)nTmp );
+                    SetBaseHeight( (sal_uInt16)nTmp );
                 else if( (nMemberId & ~CONVERT_TWIPS) == MID_GRID_BASEWIDTH )
-                    SetBaseWidth( (USHORT)nTmp );
+                    SetBaseWidth( (sal_uInt16)nTmp );
                 else
-                    SetRubyHeight( (USHORT)nTmp );
+                    SetRubyHeight( (sal_uInt16)nTmp );
             else
                 bRet = false;
         }
@@ -2349,7 +2346,7 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     return bRet;
 }
 
-void SwTextGridItem::SwitchPaperMode(BOOL bNew)
+void SwTextGridItem::SwitchPaperMode(sal_Bool bNew)
 {
     if( bNew == bSquaredMode )
     {
@@ -2800,7 +2797,7 @@ void SwFlyFrmFmt::MakeFrms()
              pFrm;
              pFrm = (SwFrm*)aIter.Next() )
         {
-            BOOL bAdd = !pFrm->IsCntntFrm() ||
+            sal_Bool bAdd = !pFrm->IsCntntFrm() ||
                             !((SwCntntFrm*)pFrm)->IsFollow();
 
             if ( FLY_AT_FLY == aAnchorAttr.GetAnchorId() && !pFrm->IsFlyFrm() )

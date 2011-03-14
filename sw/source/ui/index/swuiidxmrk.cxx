@@ -72,7 +72,6 @@
 #include <ndtxt.hxx>
 #include <breakit.hxx>
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 
 #include <unomid.h>
 
@@ -103,6 +102,7 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
                                const ResId& rResId,
                                sal_Int32 _nOptionsId, SwWrtShell& rWrtShell ) :
       Window(pParent, rResId),
+    aIndexFL(this,  SW_RES(FL_INDEX )),
     aTypeFT (this,  SW_RES(LBL_INDEX    )),
     aTypeDCB(this,  SW_RES(DCB_INDEX    )),
     aNewBT(this,    SW_RES(BT_NEW   )),
@@ -129,7 +129,6 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     aSearchCaseSensitiveCB(this,    SW_RES(CB_CASESENSITIVE )),
     aSearchCaseWordOnlyCB(this,     SW_RES(CB_WORDONLY      )),
 
-    aIndexFL(this,  SW_RES(FL_INDEX )),
 
     aOKBT(this,     SW_RES(BT_OK    )),
     aCancelBT(this, SW_RES(BT_CANCEL )),
@@ -146,15 +145,17 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     bNewMark(bNewDlg),
     bSelected(sal_False),
 
-    bPhoneticED0_ChangedByUser(FALSE),
-    bPhoneticED1_ChangedByUser(FALSE),
-    bPhoneticED2_ChangedByUser(FALSE),
+    bPhoneticED0_ChangedByUser(sal_False),
+    bPhoneticED1_ChangedByUser(sal_False),
+    bPhoneticED2_ChangedByUser(sal_False),
     nLangForPhoneticReading(2052),
-    bIsPhoneticReadingEnabled(FALSE),
+    bIsPhoneticReadingEnabled(sal_False),
     xExtendedIndexEntrySupplier(NULL),
     pTOXMgr(0),
     pSh(&rWrtShell)
 {
+    aNewBT.SetAccessibleRelationMemberOf(&aIndexFL);
+
     if( SvtCJKOptions().IsCJKFontEnabled() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
@@ -350,10 +351,10 @@ void    SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
     //no phonetic reading if no global cjk support
     if( !xExtendedIndexEntrySupplier.is() )
     {
-        bIsPhoneticReadingEnabled = FALSE;
+        bIsPhoneticReadingEnabled = sal_False;
         return;
     }
-    bIsPhoneticReadingEnabled = TRUE;
+    bIsPhoneticReadingEnabled = sal_True;
 
     //get the current language
     if(!bNewMark) //if dialog is opened to iterate existing marks
@@ -378,8 +379,8 @@ void    SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
     }
     else //if dialog is opened to create a new mark
     {
-        USHORT nScriptType = pSh->GetScriptType();
-        USHORT nWhich;
+        sal_uInt16 nScriptType = pSh->GetScriptType();
+        sal_uInt16 nWhich;
         switch(nScriptType)
         {
             case SCRIPTTYPE_ASIAN: nWhich = RES_CHRATR_CJK_LANGUAGE; break;
@@ -483,7 +484,7 @@ void SwIndexMarkDlg::InsertUpdate()
 /*--------------------------------------------------------------------
      Beschreibung:  Marke einfuegen
  --------------------------------------------------------------------*/
-static void lcl_SelectSameStrings(SwWrtShell& rSh, BOOL bWordOnly, BOOL bCaseSensitive)
+static void lcl_SelectSameStrings(SwWrtShell& rSh, sal_Bool bWordOnly, sal_Bool bCaseSensitive)
 {
     rSh.Push();
 
@@ -498,12 +499,12 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, BOOL bWordOnly, BOOL bCaseSen
                             : TransliterationModules_IGNORE_CASE) );
 
     rSh.ClearMark();
-    BOOL bCancel;
+    sal_Bool bCancel;
 
     //todo/mba: assuming that notes should not be searched
-    BOOL bSearchInNotes = FALSE;
+    sal_Bool bSearchInNotes = sal_False;
     rSh.Find( aSearchOpt,  bSearchInNotes, DOCPOS_START, DOCPOS_END, bCancel,
-                        (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), FALSE );
+                        (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), sal_False );
 }
 
 
@@ -540,9 +541,9 @@ void SwIndexMarkDlg::InsertMark()
     }
     if (aOrgStr != aEntryED.GetText())
         aDesc.SetAltStr(aEntryED.GetText());
-    BOOL bApplyAll = aApplyToAllCB.IsChecked();
-    BOOL bWordOnly = aSearchCaseWordOnlyCB.IsChecked();
-    BOOL bCaseSensitive = aSearchCaseSensitiveCB.IsChecked();
+    sal_Bool bApplyAll = aApplyToAllCB.IsChecked();
+    sal_Bool bWordOnly = aSearchCaseWordOnlyCB.IsChecked();
+    sal_Bool bCaseSensitive = aSearchCaseSensitiveCB.IsChecked();
 
     pSh->StartAllAction();
     // hier muessen alle gleichen Strings selektiert werden
@@ -555,7 +556,7 @@ void SwIndexMarkDlg::InsertMark()
     SwTOXMgr aMgr(pSh);
     aMgr.InsertTOXMark(aDesc);
     if(bApplyAll)
-        pSh->Pop(FALSE);
+        pSh->Pop(sal_False);
 
     pSh->EndAllAction();
 }
@@ -773,11 +774,11 @@ IMPL_LINK( SwIndexMarkDlg, ModifyHdl, ListBox *, pBox )
     }
     else //aEntryED  !!aEntryED is not a ListBox but a Edit
     {
-        BOOL bHasText = (aEntryED.GetText().Len()>0);
+        sal_Bool bHasText = (aEntryED.GetText().Len()>0);
         if(!bHasText)
         {
             aPhoneticED0.SetText(aEmptyStr);
-            bPhoneticED0_ChangedByUser = FALSE;
+            bPhoneticED0_ChangedByUser = sal_False;
         }
         else if(!bPhoneticED0_ChangedByUser)
             aPhoneticED0.SetText(GetDefaultPhoneticReading(aEntryED.GetText()));
@@ -980,15 +981,15 @@ IMPL_LINK( SwIndexMarkDlg, KeyDCBModifyHdl, ComboBox *, pBox )
             aKey2DCB.SetText(aEmptyStr);
             aPhoneticED1.SetText(aEmptyStr);
             aPhoneticED2.SetText(aEmptyStr);
-            bPhoneticED1_ChangedByUser = FALSE;
-            bPhoneticED2_ChangedByUser = FALSE;
+            bPhoneticED1_ChangedByUser = sal_False;
+            bPhoneticED2_ChangedByUser = sal_False;
         }
         else
         {
             if(pBox->IsInDropDown())
             {
                 //reset bPhoneticED1_ChangedByUser if a completly new string is selected
-                bPhoneticED1_ChangedByUser = FALSE;
+                bPhoneticED1_ChangedByUser = sal_False;
             }
             if(!bPhoneticED1_ChangedByUser)
                 aPhoneticED1.SetText(GetDefaultPhoneticReading(pBox->GetText()));
@@ -1001,14 +1002,14 @@ IMPL_LINK( SwIndexMarkDlg, KeyDCBModifyHdl, ComboBox *, pBox )
         if(!(pBox->GetText().Len()>0))
         {
             aPhoneticED2.SetText(aEmptyStr);
-            bPhoneticED2_ChangedByUser = FALSE;
+            bPhoneticED2_ChangedByUser = sal_False;
         }
         else
         {
             if(pBox->IsInDropDown())
             {
                 //reset bPhoneticED1_ChangedByUser if a completly new string is selected
-                bPhoneticED2_ChangedByUser = FALSE;
+                bPhoneticED2_ChangedByUser = sal_False;
             }
             if(!bPhoneticED2_ChangedByUser)
                 aPhoneticED2.SetText(GetDefaultPhoneticReading(pBox->GetText()));
@@ -1041,7 +1042,7 @@ void    SwIndexMarkDlg::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark)
     pTOXMgr = new SwTOXMgr(pSh);
     if(pCurTOXMark)
     {
-        for(USHORT i = 0; i < pTOXMgr->GetTOXMarkCount(); i++)
+        for(sal_uInt16 i = 0; i < pTOXMgr->GetTOXMarkCount(); i++)
             if(pTOXMgr->GetTOXMark(i) == pCurTOXMark)
             {
                 pTOXMgr->SetCurTOXMark(i);
@@ -1129,7 +1130,7 @@ public:
 struct TextInfo
 {
     sal_uInt16 nToxField;
-    sal_uInt16 nHelpId;
+    const char* pHelpId;
 };
 
 static const TextInfo aTextInfoArr[] =
@@ -1640,7 +1641,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             pTypeListBox->SetPosPixel(bLeft ? aTR1 : aTR2);
             pTypeListBox->Show();
             pTypeListBox->SetSelectHdl(LINK(this, SwCreateAuthEntryDlg_Impl, EnableHdl));
-            pTypeListBox->SetHelpId(aCurInfo.nHelpId);
+            pTypeListBox->SetHelpId(aCurInfo.pHelpId);
 
         }
         else if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField && !m_bNewEntryMode)
@@ -1668,7 +1669,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             pIdentifierBox->SetSizePixel(aTmp);
             pIdentifierBox->SetPosPixel(bLeft ? aTR1 : aTR2);
             pIdentifierBox->Show();
-            pIdentifierBox->SetHelpId(aCurInfo.nHelpId);
+            pIdentifierBox->SetHelpId(aCurInfo.pHelpId);
         }
         else
         {
@@ -1679,7 +1680,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             pEdits[nIndex]->SetPosPixel(bLeft ? aTR1 : aTR2);
             pEdits[nIndex]->SetText(pFields[aCurInfo.nToxField]);
             pEdits[nIndex]->Show();
-            pEdits[nIndex]->SetHelpId(aCurInfo.nHelpId);
+            pEdits[nIndex]->SetHelpId(aCurInfo.pHelpId);
             if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
             {
                 pEdits[nIndex]->SetModifyHdl(LINK(this, SwCreateAuthEntryDlg_Impl, ShortNameHdl));

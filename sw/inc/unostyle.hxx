@@ -202,7 +202,7 @@ protected:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL GetPropertyValues_Impl( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 public:
-    SwXStyle(SwDoc* pDoc, SfxStyleFamily eFam = SFX_STYLE_FAMILY_PARA, BOOL bConditional = FALSE);
+    SwXStyle(SwDoc* pDoc, SfxStyleFamily eFam = SFX_STYLE_FAMILY_PARA, sal_Bool bConditional = sal_False);
     SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
                                 SwDoc*  pDoc,
                                 const String& rStyleName);

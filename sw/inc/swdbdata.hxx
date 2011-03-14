@@ -40,9 +40,9 @@ struct SwDBData
     SwDBData() :
         nCommandType(0){}
 
-    BOOL operator !=(const SwDBData& rCmp) const
+    sal_Bool operator !=(const SwDBData& rCmp) const
         {return rCmp.sDataSource != sDataSource || rCmp.sCommand != sCommand || rCmp.nCommandType != nCommandType;}
-    BOOL operator ==(const SwDBData& rCmp) const
+    sal_Bool operator ==(const SwDBData& rCmp) const
         {return rCmp.sDataSource == sDataSource && rCmp.sCommand == sCommand && rCmp.nCommandType == nCommandType;}
 };
 

@@ -48,11 +48,11 @@ using namespace com::sun::star::uno;
 #define SEL_TYPE_BEZIER         3
 #define SEL_TYPE_GRAPHIC        4
 
-SwToolbarConfigItem::SwToolbarConfigItem( BOOL bWeb ) :
+SwToolbarConfigItem::SwToolbarConfigItem( sal_Bool bWeb ) :
     ConfigItem(bWeb ? C2U("Office.WriterWeb/ObjectBar") :  C2U("Office.Writer/ObjectBar"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
 {
-    for(USHORT i = 0; i <= SEL_TYPE_GRAPHIC; i++ )
+    for(sal_uInt16 i = 0; i <= SEL_TYPE_GRAPHIC; i++ )
         aTbxIdArray[i] = -1;
 
     Sequence<OUString> aNames = GetPropertyNames();

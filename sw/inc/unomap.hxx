@@ -130,8 +130,10 @@
 #define PROPERTY_MAP_PARA_AUTO_STYLE                    96
 #define PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM              97
 #define PROPERTY_MAP_METAFIELD                          98
-
-#define PROPERTY_MAP_END                                99
+//IAccessibility2 Implementation 2009-----
+#define PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE       99
+//-----IAccessibility2 Implementation 2009
+#define PROPERTY_MAP_END                                100
 
 //S&E
 #define WID_WORDS                0

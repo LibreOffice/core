@@ -56,7 +56,7 @@ void lcl_FillGreetingsBox(ListBox& rBox,
     const Sequence< ::rtl::OUString> rEntries = rConfig.GetGreetings(eType);
     for(sal_Int32 nEntry = 0; nEntry < rEntries.getLength(); ++nEntry)
         rBox.InsertEntry(rEntries[nEntry]);
-    rBox.SelectEntryPos((USHORT)rConfig.GetCurrentGreeting(eType));
+    rBox.SelectEntryPos((sal_uInt16)rConfig.GetCurrentGreeting(eType));
 }
 
 void lcl_FillGreetingsBox(ComboBox& rBox,
@@ -66,7 +66,7 @@ void lcl_FillGreetingsBox(ComboBox& rBox,
     const Sequence< ::rtl::OUString> rEntries = rConfig.GetGreetings(eType);
     for(sal_Int32 nEntry = 0; nEntry < rEntries.getLength(); ++nEntry)
         rBox.InsertEntry(rEntries[nEntry]);
-    rBox.SelectEntryPos((USHORT)rConfig.GetCurrentGreeting(eType));
+    rBox.SelectEntryPos((sal_uInt16)rConfig.GetCurrentGreeting(eType));
 }
 
 void lcl_StoreGreetingsBox(ListBox& rBox,
@@ -75,7 +75,7 @@ void lcl_StoreGreetingsBox(ListBox& rBox,
 {
     Sequence< ::rtl::OUString> aEntries(rBox.GetEntryCount());
     ::rtl::OUString* pEntries = aEntries.getArray();
-    for(USHORT nEntry = 0; nEntry < rBox.GetEntryCount(); ++nEntry)
+    for(sal_uInt16 nEntry = 0; nEntry < rBox.GetEntryCount(); ++nEntry)
         pEntries[nEntry] = rBox.GetEntry(nEntry);
     rConfig.SetGreetings(eType, aEntries);
     rConfig.SetCurrentGreeting(eType, rBox.GetSelectEntryPos());
@@ -87,7 +87,7 @@ void lcl_StoreGreetingsBox(ComboBox& rBox,
 {
     Sequence< ::rtl::OUString> aEntries(rBox.GetEntryCount());
     ::rtl::OUString* pEntries = aEntries.getArray();
-    for(USHORT nEntry = 0; nEntry < rBox.GetEntryCount(); ++nEntry)
+    for(sal_uInt16 nEntry = 0; nEntry < rBox.GetEntryCount(); ++nEntry)
         pEntries[nEntry] = rBox.GetEntry(nEntry);
     rConfig.SetGreetings(eType, aEntries);
     rConfig.SetCurrentGreeting(eType, rBox.GetSelectEntryPos());
@@ -95,7 +95,7 @@ void lcl_StoreGreetingsBox(ComboBox& rBox,
 
 IMPL_LINK(SwGreetingsHandler, IndividualHdl_Impl, CheckBox*, EMPTYARG)
 {
-    BOOL bIndividual = m_pPersonalizedCB->IsEnabled() && m_pPersonalizedCB->IsChecked();
+    sal_Bool bIndividual = m_pPersonalizedCB->IsEnabled() && m_pPersonalizedCB->IsChecked();
     m_pFemaleFT->Enable(bIndividual);
     m_pFemaleLB->Enable(bIndividual);
     m_pFemalePB->Enable(bIndividual);
@@ -388,10 +388,10 @@ sal_Bool    SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPage
     lcl_StoreGreetingsBox(m_aFemaleLB, rConfig, SwMailMergeConfigItem::FEMALE);
     lcl_StoreGreetingsBox(m_aMaleLB, rConfig, SwMailMergeConfigItem::MALE);
 
-    USHORT nCurrentTextPos = m_aNeutralCB.GetEntryPos( m_aNeutralCB.GetText() );
+    sal_uInt16 nCurrentTextPos = m_aNeutralCB.GetEntryPos( m_aNeutralCB.GetText() );
     if(LISTBOX_ENTRY_NOTFOUND == nCurrentTextPos)
     {
-        USHORT nCount = m_aNeutralCB.GetEntryCount();
+        sal_uInt16 nCount = m_aNeutralCB.GetEntryCount();
         m_aNeutralCB.InsertEntry( m_aNeutralCB.GetText(), nCount );
         m_aNeutralCB.SelectEntryPos(nCount);
     }
@@ -427,15 +427,15 @@ IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, ImageButton*, pButton)
     }
     else
     {
-        BOOL bNext = pButton == &m_aNextSetIB;
+        sal_Bool bNext = pButton == &m_aNextSetIB;
         sal_Int32 nPos = rConfig.GetResultSetPosition();
         rConfig.MoveResultSet( bNext ? ++nPos : --nPos);
     }
     sal_Int32 nPos = rConfig.GetResultSetPosition();
-    BOOL bEnable = TRUE;
+    sal_Bool bEnable = sal_True;
     if(nPos < 1)
     {
-        bEnable = FALSE;
+        bEnable = sal_False;
         nPos = 1;
     }
     else

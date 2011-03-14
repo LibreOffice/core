@@ -31,6 +31,7 @@
  // #define DLG_INS_FOOTNOTE 257
 ModalDialog DLG_INS_FOOTNOTE
 {
+    HelpID = "sw:ModalDialog:DLG_INS_FOOTNOTE";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 160 , 100 ) ;
@@ -38,6 +39,7 @@ ModalDialog DLG_INS_FOOTNOTE
     Moveable = TRUE ;
     Edit ED_NUMBER_CHAR
     {
+        HelpID = "sw:Edit:DLG_INS_FOOTNOTE:ED_NUMBER_CHAR";
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 69 , 27 ) ;
@@ -46,6 +48,12 @@ ModalDialog DLG_INS_FOOTNOTE
         Group = TRUE ;
         Left = TRUE ;
     };
+    //IAccessibility2 Implementation 2009-----
+    String STR_CHAR
+    {
+        Text [ en-US ] = "Character" ;
+    };
+    //-----IAccessibility2 Implementation 2009
     OKButton BT_OK
     {
         Pos = MAP_APPFONT ( 104 , 6 ) ;
@@ -70,6 +78,7 @@ ModalDialog DLG_INS_FOOTNOTE
     };
     ImageButton BT_PREV
     {
+        HelpID = "sw:ImageButton:DLG_INS_FOOTNOTE:BT_PREV";
         Pos = MAP_APPFONT ( 104 , 82 ) ;
         Size = MAP_APPFONT ( 24 , 14 ) ;
         TabStop = TRUE ;
@@ -78,6 +87,7 @@ ModalDialog DLG_INS_FOOTNOTE
     };
     ImageButton BT_NEXT
     {
+        HelpID = "sw:ImageButton:DLG_INS_FOOTNOTE:BT_NEXT";
         Pos = MAP_APPFONT ( 130 , 82 ) ;
         Size = MAP_APPFONT ( 24 , 14 ) ;
         TabStop = TRUE ;
@@ -86,6 +96,7 @@ ModalDialog DLG_INS_FOOTNOTE
     };
     RadioButton RB_NUMBER_AUTO
     {
+        HelpID = "sw:RadioButton:DLG_INS_FOOTNOTE:RB_NUMBER_AUTO";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
         Text [ en-US ] = "~Automatic" ;
@@ -95,6 +106,7 @@ ModalDialog DLG_INS_FOOTNOTE
     };
     RadioButton RB_NUMBER_CHAR
     {
+        HelpID = "sw:RadioButton:DLG_INS_FOOTNOTE:RB_NUMBER_CHAR";
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 54 , 10 ) ;
         Text [ en-US ] = "~Character" ;
@@ -107,12 +119,14 @@ ModalDialog DLG_INS_FOOTNOTE
     };
     PushButton BT_NUMBER_CHAR
     {
+        HelpID = "sw:PushButton:DLG_INS_FOOTNOTE:BT_NUMBER_CHAR";
         Pos = MAP_APPFONT ( 69 , 42 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "..." ;
     };
     RadioButton RB_TYPE_FTN
     {
+        HelpID = "sw:RadioButton:DLG_INS_FOOTNOTE:RB_TYPE_FTN";
         Pos = MAP_APPFONT ( 12 , 70 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
         TabStop = TRUE ;
@@ -122,6 +136,7 @@ ModalDialog DLG_INS_FOOTNOTE
     };
     RadioButton RB_TYPE_ENDNOTE
     {
+        HelpID = "sw:RadioButton:DLG_INS_FOOTNOTE:RB_TYPE_ENDNOTE";
         Pos = MAP_APPFONT ( 12 , 83 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
         Text [ en-US ] = "~Endnote" ;

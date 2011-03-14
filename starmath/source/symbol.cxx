@@ -78,7 +78,7 @@ SmSym::SmSym(const SmSym& rSymbol)
 }
 
 
-SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode cChar,
+SmSym::SmSym(const String& rName, const Font& rFont, sal_UCS4 cChar,
              const String& rSet, bool bIsPredefined)
 {
     m_aName     = m_aExportName   = rName;
@@ -207,14 +207,19 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
         }
         else if (pFound && !bForceChange && bSymbolConflict)
         {
-                // TODO: but what ...
+            // TODO: to solve this a document owned symbol manager would be required ...
                 OSL_ENSURE( 0, "symbol conflict, different symbol with same name found!" );
+            // symbols in all formulas. A copy of the global one would be needed here
+            // and then the new symbol has to be forcefully applied. This would keep
+            // the current formula intact but will leave the set of symbols in the
+            // global symbol manager somewhat to chance.
         }
-    }
 
     OSL_ENSURE( bAdded, "failed to add symbol" );
-    if (bAdded)
-        m_bModified = true;
+        if (bAdded)
+            m_bModified = true;
+        DBG_ASSERT( bAdded || (pFound && !bSymbolConflict), "AddOrReplaceSymbol: unresolved symbol conflict" );
+    }
 
     return bAdded;
 }

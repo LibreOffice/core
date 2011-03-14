@@ -369,48 +369,48 @@ RES_FLTRATTR_END
 #define RES_WHICHHINT_END HINT_END
 
 
-inline bool isATR(const USHORT nWhich)
+inline bool isATR(const sal_uInt16 nWhich)
 {
     return (RES_CHRATR_BEGIN <= nWhich) && (RES_UNKNOWNATR_END > nWhich);
 }
-inline bool isCHRATR(const USHORT nWhich)
+inline bool isCHRATR(const sal_uInt16 nWhich)
 {
     return (RES_CHRATR_BEGIN <= nWhich) && (RES_CHRATR_END > nWhich);
 }
-inline bool isTXTATR_WITHEND(const USHORT nWhich)
+inline bool isTXTATR_WITHEND(const sal_uInt16 nWhich)
 {
     return (RES_TXTATR_WITHEND_BEGIN <= nWhich)
         && (RES_TXTATR_WITHEND_END > nWhich);
 }
-inline bool isTXTATR_NOEND(const USHORT nWhich)
+inline bool isTXTATR_NOEND(const sal_uInt16 nWhich)
 {
     return (RES_TXTATR_NOEND_BEGIN <= nWhich)
         && (RES_TXTATR_NOEND_END > nWhich);
 }
-inline bool isTXTATR(const USHORT nWhich)
+inline bool isTXTATR(const sal_uInt16 nWhich)
 {
     return (RES_TXTATR_BEGIN <= nWhich) && (RES_TXTATR_END > nWhich);
 }
-inline bool isPARATR(const USHORT nWhich)
+inline bool isPARATR(const sal_uInt16 nWhich)
 {
     return (RES_PARATR_BEGIN <= nWhich) && (RES_PARATR_END > nWhich);
 }
-inline bool isPARATR_LIST(const USHORT nWhich)
+inline bool isPARATR_LIST(const sal_uInt16 nWhich)
 {
     return (RES_PARATR_LIST_BEGIN <= nWhich) && (RES_PARATR_LIST_END > nWhich); }
-inline bool isFRMATR(const USHORT nWhich)
+inline bool isFRMATR(const sal_uInt16 nWhich)
 {
     return (RES_FRMATR_BEGIN <= nWhich) && (RES_FRMATR_END > nWhich);
 }
-inline bool isGRFATR(const USHORT nWhich)
+inline bool isGRFATR(const sal_uInt16 nWhich)
 {
     return (RES_GRFATR_BEGIN <= nWhich) && (RES_GRFATR_END > nWhich);
 }
-inline bool isBOXATR(const USHORT nWhich)
+inline bool isBOXATR(const sal_uInt16 nWhich)
 {
     return (RES_BOXATR_BEGIN <= nWhich) && (RES_BOXATR_END > nWhich);
 }
-inline bool isUNKNOWNATR(const USHORT nWhich)
+inline bool isUNKNOWNATR(const sal_uInt16 nWhich)
 {
     return (RES_UNKNOWNATR_BEGIN <= nWhich) && (RES_UNKNOWNATR_END > nWhich);
 }
@@ -429,9 +429,9 @@ typedef SfxPoolItem* SwDfltAttrTab[ POOLATTR_END - POOLATTR_BEGIN  ];
 extern SwDfltAttrTab aAttrTab;
 extern SfxItemInfo   aSlotTab[];
 
-SW_DLLPUBLIC const SfxPoolItem* GetDfltAttr( USHORT nWhich );
+SW_DLLPUBLIC const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich );
 
-SW_DLLPUBLIC USHORT GetWhichOfScript( USHORT nWhich, USHORT nScript );
+SW_DLLPUBLIC sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript );
 
 // return for the given TextAttribute without an end the correct character.
 // This function returns
@@ -443,32 +443,32 @@ sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr );
 // all Sets defined in init.cxx
 
 // AttrSet-Range for the 3 Break-Attribute
-extern USHORT aBreakSetRange[];
+extern sal_uInt16 aBreakSetRange[];
 // AttrSet-Range for TxtFmtColl
-extern USHORT aTxtFmtCollSetRange[];
+extern sal_uInt16 aTxtFmtCollSetRange[];
 // AttrSet-Range for GrfFmtColl
-extern USHORT aGrfFmtCollSetRange[];
+extern sal_uInt16 aGrfFmtCollSetRange[];
 // AttrSet-Range for TextNode
-SW_DLLPUBLIC extern USHORT aTxtNodeSetRange[];
+SW_DLLPUBLIC extern sal_uInt16 aTxtNodeSetRange[];
 // AttrSet-Range for NoTxtNode
-extern USHORT aNoTxtNodeSetRange[];
+extern sal_uInt16 aNoTxtNodeSetRange[];
 // AttrSet-Range for SwTable
-extern USHORT aTableSetRange[];
+extern sal_uInt16 aTableSetRange[];
 // AttrSet-Range for SwTableLine
-extern USHORT aTableLineSetRange[];
+extern sal_uInt16 aTableLineSetRange[];
 // AttrSet-Range for SwTableBox
-extern USHORT aTableBoxSetRange[];
+extern sal_uInt16 aTableBoxSetRange[];
 // AttrSet-Range for SwFrmFmt
-SW_DLLPUBLIC extern USHORT aFrmFmtSetRange[];
+SW_DLLPUBLIC extern sal_uInt16 aFrmFmtSetRange[];
 // AttrSet-Range for SwCharFmt
-extern USHORT aCharFmtSetRange[];
+extern sal_uInt16 aCharFmtSetRange[];
 // AttrSet-Range for the autostyles
-extern USHORT aCharAutoFmtSetRange[];
+extern sal_uInt16 aCharAutoFmtSetRange[];
 // AttrSet-Range for SwPageDescFmt
-extern USHORT aPgFrmFmtSetRange[];
+extern sal_uInt16 aPgFrmFmtSetRange[];
 
 // check if ID is InRange of AttrSet-Ids
-BOOL IsInRange( const USHORT* pRange, const USHORT nId );
+sal_Bool IsInRange( const sal_uInt16* pRange, const sal_uInt16 nId );
 
 #endif
 

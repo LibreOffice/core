@@ -407,8 +407,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     _HTMLAttrs      aParaAttrs; // vorlauefige Absatz-Attribute
     _HTMLAttrTable  aAttrTab;   // "offene" Attribute
     _HTMLAttrContexts aContexts;// der aktuelle Attribut/Token-Kontext
-    SwHTMLFrmFmts   aMoveFlyFrms;// Fly-Frames, deren Anker verschoben wird
-    SvXub_StrLens   aMoveFlyCnts;// und deren Content-Positionen
+    SwHTMLFrmFmts   aMoveFlyFrms;// Fly-Frames, the anchor is moved
+    SvXub_StrLens   aMoveFlyCnts;// and the Content-Positions
 
     SwApplet_Impl *pAppletImpl; // das aktuelle Applet
 
@@ -434,7 +434,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     sal_uInt32  aFontHeights[7];    // die Font-Hoehen 1-7
     sal_uInt32  nScriptStartLineNr; // Zeilennummer eines Script-Blocks
-    ULONG       nEventId;
+    sal_uLong       nEventId;
 
     sal_uInt16  nBaseFontStMin;     //
     sal_uInt16  nFontStMin;         //
@@ -600,7 +600,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void GetULSpaceFromContext( sal_uInt16 &rUpper, sal_uInt16 &rLower ) const;
 
 
-    void MovePageDescAttrs( SwNode *pSrcNd, ULONG nDestIdx, sal_Bool bFmtBreak );
+    void MovePageDescAttrs( SwNode *pSrcNd, sal_uLong nDestIdx, sal_Bool bFmtBreak );
 
     // Behandlung von Tags auf Absatz-Ebene
 

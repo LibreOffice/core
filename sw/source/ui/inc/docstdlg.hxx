@@ -47,28 +47,27 @@ public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
 protected:
-    virtual BOOL    FillItemSet(      SfxItemSet &rSet);
+    virtual sal_Bool    FillItemSet(      SfxItemSet &rSet);
     virtual void    Reset      (const SfxItemSet &rSet);
 
     DECL_LINK( UpdateHdl, PushButton*);
 
 private:
-    FixedText       aTableLbl;
-    FixedText       aGrfLbl;
-    FixedText       aOLELbl;
     FixedText       aPageLbl;
-    FixedText       aParaLbl;
-    FixedText       aWordLbl;
-    FixedText       aCharLbl;
-    FixedText       aLineLbl;
-
-    FixedInfo       aTableNo;
-    FixedInfo       aGrfNo;
-    FixedInfo       aOLENo;
     FixedInfo       aPageNo;
+    FixedText       aTableLbl;
+    FixedInfo       aTableNo;
+    FixedText       aGrfLbl;
+    FixedInfo       aGrfNo;
+    FixedText       aOLELbl;
+    FixedInfo       aOLENo;
+    FixedText       aParaLbl;
     FixedInfo       aParaNo;
+    FixedText       aWordLbl;
     FixedInfo       aWordNo;
+    FixedText       aCharLbl;
     FixedInfo       aCharNo;
+    FixedText       aLineLbl;
     FixedInfo       aLineNo;
 
     PushButton      aUpdatePB;

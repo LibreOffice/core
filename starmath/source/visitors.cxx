@@ -718,7 +718,7 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     rDev.SetLineColor( );
     aTmpDev.SetFont( pNode->GetFont( ) );
 
-    ULONG  nTmpBorderWidth = pNode->GetFont( ).GetBorderWidth( );
+    sal_uLong  nTmpBorderWidth = pNode->GetFont( ).GetBorderWidth( );
 
     // get rectangle and remove borderspace
     Rectangle  aTmp ( pNode->AsRectangle( ) + Position - pNode->GetTopLeft( ) );
@@ -1288,9 +1288,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmMatrixNode* pNode )
     SmCaretPosGraphEntry *left  = pRightMost,
                          *right = pGraph->Add( SmCaretPos( pNode, 1 ) );
 
-    for ( USHORT i = 0;  i < pNode->GetNumRows( ); i++ ) {
+    for ( sal_uInt16 i = 0;  i < pNode->GetNumRows( ); i++ ) {
         SmCaretPosGraphEntry* r = left;
-        for ( USHORT j = 0;  j < pNode->GetNumCols( ); j++ ){
+        for ( sal_uInt16 j = 0;  j < pNode->GetNumCols( ); j++ ){
             SmNode* pSubNode = pNode->GetSubNode( i * pNode->GetNumCols( ) + j );
 
             pRightMost = pGraph->Add( SmCaretPos( pSubNode, 0 ), r );
@@ -1819,12 +1819,12 @@ void SmCloningVisitor::CloneKids( SmStructureNode* pSource, SmStructureNode* pTa
     SmNode* pCurrResult = pResult;
 
     //Create array for holding clones
-    USHORT nSize = pSource->GetNumSubNodes( );
+    sal_uInt16 nSize = pSource->GetNumSubNodes( );
     SmNodeArray aNodes( nSize );
 
     //Clone children
     SmNode* pKid;
-    for( USHORT i = 0; i < nSize; i++ ){
+    for( sal_uInt16 i = 0; i < nSize; i++ ){
         if( NULL != ( pKid = pSource->GetSubNode( i ) ) )
             pKid->Accept( this );
         else
@@ -2421,8 +2421,8 @@ void SmNodeToTextVisitor::Visit( SmSubSupNode* pNode )
 void SmNodeToTextVisitor::Visit( SmMatrixNode* pNode )
 {
     Append( "matrix{" );
-    for ( USHORT i = 0; i < pNode->GetNumRows( ); i++ ) {
-        for ( USHORT j = 0; j < pNode->GetNumCols( ); j++ ) {
+    for ( sal_uInt16 i = 0; i < pNode->GetNumRows( ); i++ ) {
+        for ( sal_uInt16 j = 0; j < pNode->GetNumCols( ); j++ ) {
             SmNode* pSubNode = pNode->GetSubNode( i * pNode->GetNumCols( ) + j );
             Separate( );
             pSubNode->Accept( this );

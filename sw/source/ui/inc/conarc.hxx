@@ -39,16 +39,16 @@
 class ConstArc : public SwDrawBase
 {
     Point aStartPnt;
-    UINT16 nAnzButUp;
+    sal_uInt16 nAnzButUp;
 
 public:
     ConstArc(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
 
                                        // Mouse- & Key-Events
-    virtual BOOL    MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL    MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool    MouseButtonUp(const MouseEvent& rMEvt);
+    virtual sal_Bool    MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void    Activate(const USHORT nSlotId); // Funktion aktivieren
+    virtual void    Activate(const sal_uInt16 nSlotId); // Funktion aktivieren
     virtual void    Deactivate();
 };
 

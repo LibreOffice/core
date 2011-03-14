@@ -83,7 +83,7 @@
   <menu:menu menu:id=".uno:ToolsMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:SymbolCatalogue"/>
-      <menu:menuitem menu:id=".uno:InsertFormula"/>
+      <menu:menuitem menu:id=".uno:ImportFormula"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:MacrosMenu">
         <menu:menupopup>

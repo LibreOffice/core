@@ -59,7 +59,7 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
 
     SwFlyFrmFmt* GetPrev() const { return (SwFlyFrmFmt*)aPrev.GetRegisteredIn(); }
     SwFlyFrmFmt* GetNext() const { return (SwFlyFrmFmt*)aNext.GetRegisteredIn(); }
@@ -77,10 +77,10 @@ SwFmtChain &SwFmtChain::operator=( const SwFmtChain &rCpy )
 }
 
 
-inline const SwFmtChain &SwAttrSet::GetChain(BOOL bInP) const
+inline const SwFmtChain &SwAttrSet::GetChain(sal_Bool bInP) const
     { return (const SwFmtChain&)Get( RES_CHAIN,bInP); }
 
-inline const SwFmtChain &SwFmt::GetChain(BOOL bInP) const
+inline const SwFmtChain &SwFmt::GetChain(sal_Bool bInP) const
     { return aSet.GetChain(bInP); }
 
 #endif

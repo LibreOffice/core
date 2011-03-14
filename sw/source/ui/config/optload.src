@@ -53,6 +53,7 @@ TabPage TP_OPTLOAD_PAGE
     };
     RadioButton RB_ALWAYS
     {
+        HelpID = "sw:RadioButton:TP_OPTLOAD_PAGE:RB_ALWAYS";
         Pos = MAP_APPFONT ( 18 , 26 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         TabStop = TRUE ;
@@ -60,6 +61,7 @@ TabPage TP_OPTLOAD_PAGE
     };
     RadioButton RB_REQUEST
     {
+        HelpID = "sw:RadioButton:TP_OPTLOAD_PAGE:RB_REQUEST";
         Pos = MAP_APPFONT ( 18 , 39 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         TabStop = TRUE ;
@@ -67,6 +69,7 @@ TabPage TP_OPTLOAD_PAGE
     };
     RadioButton RB_NEVER
     {
+        HelpID = "sw:RadioButton:TP_OPTLOAD_PAGE:RB_NEVER";
         Pos = MAP_APPFONT ( 18 , 52 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         TabStop = TRUE ;
@@ -80,12 +83,14 @@ TabPage TP_OPTLOAD_PAGE
     };
     CheckBox CB_AUTO_UPDATE_FIELDS
     {
+        HelpID = "sw:CheckBox:TP_OPTLOAD_PAGE:CB_AUTO_UPDATE_FIELDS";
         Pos = MAP_APPFONT ( 136 , 26) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text [ en-US ] = "~Fields";
     };
     CheckBox CB_AUTO_UPDATE_CHARTS
     {
+        HelpID = "sw:CheckBox:TP_OPTLOAD_PAGE:CB_AUTO_UPDATE_CHARTS";
         Pos = MAP_APPFONT ( 136 , 39) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text [ en-US ] = "~Charts";
@@ -104,6 +109,7 @@ TabPage TP_OPTLOAD_PAGE
     };
     ListBox LB_METRIC
     {
+        HelpID = "sw:ListBox:TP_OPTLOAD_PAGE:LB_METRIC";
         Pos = MAP_APPFONT ( 130, 77 ) ;
         Size = MAP_APPFONT ( 50 , 50 ) ;
         Border = TRUE ;
@@ -118,6 +124,7 @@ TabPage TP_OPTLOAD_PAGE
     };
     MetricField MF_TAB
     {
+        HelpID = "sw:MetricField:TP_OPTLOAD_PAGE:MF_TAB";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 130 , 93 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
@@ -134,6 +141,7 @@ TabPage TP_OPTLOAD_PAGE
     };
     CheckBox CB_USE_SQUARE_PAGE_MODE
     {
+        HelpID = "sw:CheckBox:TP_OPTLOAD_PAGE:CB_USE_SQUARE_PAGE_MODE";
         Pos = MAP_APPFONT ( 12 , 111) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         Text [ en-US ] = "Use square page mode for text grid";
@@ -182,6 +190,7 @@ TabPage TP_OPTCAPTION_PAGE
     };
     ListBox LB_ORDER
     {
+        HelpID = "sw:ListBox:TP_OPTCAPTION_PAGE:LB_ORDER";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 141 ) ;
         Size = MAP_APPFONT ( 106 , 60 ) ;
@@ -231,6 +240,7 @@ TabPage TP_OPTCAPTION_PAGE
     };
     ComboBox BOX_CATEGORY
     {
+        HelpID = "sw:ComboBox:TP_OPTCAPTION_PAGE:BOX_CATEGORY";
         Pos = MAP_APPFONT ( 189 , 14 ) ;
         Size = MAP_APPFONT ( 59 , 61 ) ;
         DropDown = TRUE ;
@@ -246,6 +256,7 @@ TabPage TP_OPTCAPTION_PAGE
     };
     ListBox BOX_FORMAT
     {
+        HelpID = "sw:ListBox:TP_OPTCAPTION_PAGE:BOX_FORMAT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 189 , 29 ) ;
         Size = MAP_APPFONT ( 59 , 61 ) ;
@@ -261,6 +272,7 @@ TabPage TP_OPTCAPTION_PAGE
     };
     Edit ED_NUM_SEP
     {
+        HelpID = "sw:Edit:TP_OPTCAPTION_PAGE:ED_NUM_SEP";
         Pos = MAP_APPFONT ( 189 , 44 ) ;
         Size = MAP_APPFONT ( 59 , 12 ) ;
         Border = TRUE ;
@@ -277,6 +289,7 @@ TabPage TP_OPTCAPTION_PAGE
     };
     Edit EDT_TEXT
     {
+        HelpID = "sw:Edit:TP_OPTCAPTION_PAGE:EDT_TEXT";
         Pos = MAP_APPFONT ( 189 , 59 ) ;
         Size = MAP_APPFONT ( 59 , 12 ) ;
         Border = TRUE ;
@@ -292,6 +305,7 @@ TabPage TP_OPTCAPTION_PAGE
     };
     ListBox BOX_POS
     {
+        HelpID = "sw:ListBox:TP_OPTCAPTION_PAGE:BOX_POS";
         Pos = MAP_APPFONT ( 189 , 74 ) ;
         Size = MAP_APPFONT ( 59 , 61 ) ;
         DropDown = TRUE ;
@@ -313,6 +327,7 @@ TabPage TP_OPTCAPTION_PAGE
     };
     ListBox LB_LEVEL
     {
+        HelpID = "sw:ListBox:TP_OPTCAPTION_PAGE:LB_LEVEL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 189 , 100 ) ;
         Size = MAP_APPFONT ( 59 , 60 ) ;
@@ -331,6 +346,7 @@ TabPage TP_OPTCAPTION_PAGE
     };
     Edit ED_SEPARATOR
     {
+        HelpID = "sw:Edit:TP_OPTCAPTION_PAGE:ED_SEPARATOR";
         Pos = MAP_APPFONT ( 189 , 115 ) ;
         Size = MAP_APPFONT ( 59 , 12 ) ;
         Border = TRUE ;
@@ -351,6 +367,7 @@ TabPage TP_OPTCAPTION_PAGE
     };
     ListBox LB_CHARSTYLE
     {
+        HelpID = "sw:ListBox:TP_OPTCAPTION_PAGE:LB_CHARSTYLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 189 , 141 ) ;
         Size = MAP_APPFONT ( 59 , 60 ) ;
@@ -363,6 +380,7 @@ TabPage TP_OPTCAPTION_PAGE
     };
     CheckBox CB_APPLYBORDER
     {
+        HelpID = "sw:CheckBox:TP_OPTCAPTION_PAGE:CB_APPLYBORDER";
         Pos = MAP_APPFONT ( 125 , 158 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         Text [ en-US ] = "Apply border and shadow" ;

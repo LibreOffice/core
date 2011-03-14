@@ -31,7 +31,7 @@
 #include "helpid.h"
 ModalDialog DLG_SPLIT_TABLE
 {
-    HelpID = FN_TABLE_SPLIT_TABLE ;
+    HelpID = CMD_FN_TABLE_SPLIT_TABLE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 207 , 76 ) ;
@@ -63,6 +63,7 @@ ModalDialog DLG_SPLIT_TABLE
     };
     RadioButton RB_CNTNT
     {
+        HelpID = "sw:RadioButton:DLG_SPLIT_TABLE:RB_CNTNT";
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
         Check = TRUE ;
@@ -71,18 +72,21 @@ ModalDialog DLG_SPLIT_TABLE
     };
     RadioButton RB_BOX_PARA
     {
+        HelpID = "sw:RadioButton:DLG_SPLIT_TABLE:RB_BOX_PARA";
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
         Text [ en-US ] = "C~ustom heading (apply Style)" ;
     };
     RadioButton RB_BOX_NOPARA
     {
+        HelpID = "sw:RadioButton:DLG_SPLIT_TABLE:RB_BOX_NOPARA";
         Pos = MAP_APPFONT ( 12 , 45 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
         Text [ en-US ] = "Cu~stom heading" ;
     };
     RadioButton RB_BORDER
     {
+        HelpID = "sw:RadioButton:DLG_SPLIT_TABLE:RB_BORDER";
         Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
         Text [ en-US ] = "~No heading" ;

@@ -107,8 +107,8 @@ void MathType::Init()
 
 
 /*ToDo replace with table rather than switch, returns
- TRUE in the case that the char is just a char, and
- FALSE if the character is an operator which must not be
+ sal_True in the case that the char is just a char, and
+ sal_False if the character is an operator which must not be
  placed inside the quote sequence designed to protect
  against being parsed as a keyword
 
@@ -615,7 +615,7 @@ int MathType::Parse(SotStorage *pStor)
 
     //sigh, theres no point! MathType (in some bizarre subvarient) pads
     //the end of the formula with ENDs (0)'s
-    ULONG nEnd = pS->Tell();
+    sal_uLong nEnd = pS->Tell();
     OSL_ENSURE(nEnd == pS->Seek(STREAM_SEEK_TO_END),
         "Possibly unfully parsed formula");
 #   endif
@@ -2026,8 +2026,8 @@ sal_uInt8 MathType::HandleNodes(SmNode *pNode,int nLevel)
             break;
         case NEXPRESSION:
             {
-            USHORT  nSize = pNode->GetNumSubNodes();
-            for (USHORT i = 0; i < nSize; i++)
+            sal_uInt16  nSize = pNode->GetNumSubNodes();
+            for (sal_uInt16 i = 0; i < nSize; i++)
                 if (SmNode *pTemp = pNode->GetSubNode(i))
                     HandleNodes(pTemp,nLevel+1);
             }
@@ -2043,8 +2043,8 @@ sal_uInt8 MathType::HandleNodes(SmNode *pNode,int nLevel)
             {
             *pS << sal_uInt8(0x0a);
             *pS << sal_uInt8(LINE);
-            USHORT  nSize = pNode->GetNumSubNodes();
-            for (USHORT i = 0; i < nSize; i++)
+            sal_uInt16  nSize = pNode->GetNumSubNodes();
+            for (sal_uInt16 i = 0; i < nSize; i++)
                 if (SmNode *pTemp = pNode->GetSubNode(i))
                     HandleNodes(pTemp,nLevel+1);
             *pS << sal_uInt8(END);
@@ -2063,8 +2063,8 @@ sal_uInt8 MathType::HandleNodes(SmNode *pNode,int nLevel)
             break;
         default:
             {
-            USHORT  nSize = pNode->GetNumSubNodes();
-            for (USHORT i = 0; i < nSize; i++)
+            sal_uInt16  nSize = pNode->GetNumSubNodes();
+            for (sal_uInt16 i = 0; i < nSize; i++)
                 if (SmNode *pTemp = pNode->GetSubNode(i))
                     HandleNodes(pTemp,nLevel+1);
             }
@@ -2110,15 +2110,15 @@ void MathType::HandleSmMatrix(SmMatrixNode *pMatrix,int nLevel)
     int nBytes=(pMatrix->GetNumRows()+1)*2/8;
     if (((pMatrix->GetNumRows()+1)*2)%8)
         nBytes++;
-    for (USHORT j = 0; j < nBytes; j++)
+    for (sal_uInt16 j = 0; j < nBytes; j++)
         *pS << sal_uInt8(0x00); //row_parts
     nBytes=(pMatrix->GetNumCols()+1)*2/8;
     if (((pMatrix->GetNumCols()+1)*2)%8)
         nBytes++;
-    for (USHORT k = 0; k < nBytes; k++)
+    for (sal_uInt16 k = 0; k < nBytes; k++)
         *pS << sal_uInt8(0x00); //col_parts
-    USHORT  nSize = pMatrix->GetNumSubNodes();
-    for (USHORT i = 0; i < nSize; i++)
+    sal_uInt16  nSize = pMatrix->GetNumSubNodes();
+    for (sal_uInt16 i = 0; i < nSize; i++)
         if (SmNode *pTemp = pMatrix->GetSubNode(i))
         {
             *pS << sal_uInt8(LINE); //line
@@ -2132,7 +2132,7 @@ void MathType::HandleSmMatrix(SmMatrixNode *pMatrix,int nLevel)
 //Root Node, PILE equivalent, i.e. vertical stack
 void MathType::HandleTable(SmNode *pNode,int nLevel)
 {
-    USHORT  nSize = pNode->GetNumSubNodes();
+    sal_uInt16  nSize = pNode->GetNumSubNodes();
     //The root of the starmath is a table, if
     //we convert this them each iteration of
     //conversion from starmath to mathtype will
@@ -2150,7 +2150,7 @@ void MathType::HandleTable(SmNode *pNode,int nLevel)
         *pS << sal_uInt8(0x01); //hAlign
     }
 
-    for (USHORT i = 0; i < nSize; i++)
+    for (sal_uInt16 i = 0; i < nSize; i++)
         if (SmNode *pTemp = pNode->GetSubNode(i))
         {
             *pS << sal_uInt8(LINE);
@@ -2195,7 +2195,7 @@ void MathType::HandleRoot(SmNode *pNode,int nLevel)
 }
 
 sal_uInt8 MathType::HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
-    ULONG *pPos,sal_Bool bTest)
+    sal_uLong *pPos,sal_Bool bTest)
 {
     sal_uInt8 nVariation2=0xff;
 
@@ -2385,7 +2385,7 @@ void MathType::HandleBrace(SmNode *pNode,int nLevel)
     *pS << sal_uInt8(TMPL); //Template
     bIsReInterpBrace=0;
     sal_uInt8 nBSpec=0x10;
-    ULONG nLoc = pS->Tell();
+    sal_uLong nLoc = pS->Tell();
     if (pLeft)
     {
         switch (pLeft->GetToken().eType)
@@ -2443,7 +2443,7 @@ void MathType::HandleBrace(SmNode *pNode,int nLevel)
         HandleNodes(pLeft,nLevel+1);
     if (bIsReInterpBrace)
     {
-        ULONG nLoc2 = pS->Tell();
+        sal_uLong nLoc2 = pS->Tell();
         pS->Seek(nLoc);
         *pS << sal_uInt8(0x2D);
         pS->Seek(nLoc2);
@@ -2491,7 +2491,7 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
     if (HandleLim(pNode,nLevel))
         return;
 
-    ULONG nPos;
+    sal_uLong nPos;
     sal_uInt8 nVariation;
 
     switch (pNode->GetToken().eType)
@@ -2513,7 +2513,7 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
     sal_uInt8 nOldVariation=nVariation;
     sal_uInt8 nIntVariation=nVariation;
 
-    ULONG nPos2=0;
+    sal_uLong nPos2=0;
     if (nVariation != 0xff)
     {
         nPos2 = pS->Tell();
@@ -3078,8 +3078,8 @@ void MathType::HandleMAlign(SmNode *pNode,int nLevel)
             nHAlign=1;
             break;
     }
-    USHORT  nSize = pNode->GetNumSubNodes();
-    for (USHORT i = 0; i < nSize; i++)
+    sal_uInt16  nSize = pNode->GetNumSubNodes();
+    for (sal_uInt16 i = 0; i < nSize; i++)
         if (SmNode *pTemp = pNode->GetSubNode(i))
             HandleNodes(pTemp,nLevel+1);
     nHAlign=nPushedHAlign;
@@ -3261,7 +3261,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
     {
         if ((nInsertion != 0) && NULL != (pTemp = pNode->GetSubNode(0)))
         {
-            ULONG nPos = pS->Tell();
+            sal_uLong nPos = pS->Tell();
             nInsertion--;
             pS->Seek(nInsertion);
             switch(pTemp->GetToken().eType)

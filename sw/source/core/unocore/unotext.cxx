@@ -29,6 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <stdlib.h>
+
+#include <memory>
+#include <iostream>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
@@ -58,12 +62,12 @@
 #include <unoredline.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
-#include <undobj.hxx>
 #include <unoparagraph.hxx>
 #include <unocrsrhelper.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <redline.hxx>
 #include <swundo.hxx>
 #include <section.hxx>
@@ -73,10 +77,7 @@
 #include <crsskip.hxx>
 #include <ndtxt.hxx>
 
-#include <memory>
-#include <stdlib.h>
 
-#include <iostream>
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
@@ -390,12 +391,9 @@ throw (uno::RuntimeException)
         // so the text is inserted before
         UnoActionContext aContext(GetDoc());
         SwPaM aInsertPam(*pPam->Start());
-        const sal_Bool bGroupUndo = GetDoc()->DoesGroupUndo();
-        GetDoc()->DoGroupUndo(sal_False);
-
+        ::sw::GroupUndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
         SwUnoCursorHelper::DocInsertStringSplitCR(
             *GetDoc(), aInsertPam, rString, bForceExpandHints );
-        GetDoc()->DoGroupUndo(bGroupUndo);
     }
 }
 
@@ -489,7 +487,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
         SwCursor aCrsr(*aTmp.GetPoint(),0,false);
         SwUnoCursorHelper::SelectPam(aCrsr, true);
-        aCrsr.Left(1, CRSR_SKIP_CHARS, FALSE, FALSE);
+        aCrsr.Left(1, CRSR_SKIP_CHARS, sal_False, sal_False);
         //hier muss der uebergebene PaM umgesetzt werden:
         if (pRange)
         {
@@ -943,7 +941,7 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
         throw uno::RuntimeException();
     }
 
-    GetDoc()->StartUndo(UNDO_START, NULL);
+    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_START, NULL);
     //insert an empty paragraph at the start and at the end to ensure that
     //all tables and sections can be removed by the selecting text::XTextCursor
     if (CURSOR_META != m_pImpl->m_eType)
@@ -955,7 +953,7 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
         //the inserting of nodes should only be done if really necessary
         //to prevent #97924# (removes paragraph attributes when setting the text
         //e.g. of a table cell
-        BOOL bInsertNodes = FALSE;
+        sal_Bool bInsertNodes = sal_False;
         SwNodeIndex aStartIdx(*pStartNode);
         do
         {
@@ -964,7 +962,7 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
             if(rCurrentNode.GetNodeType() == ND_SECTIONNODE
                 ||rCurrentNode.GetNodeType() == ND_TABLENODE)
             {
-                bInsertNodes = TRUE;
+                bInsertNodes = sal_True;
                 break;
             }
         }
@@ -981,14 +979,14 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
     const uno::Reference< text::XTextCursor > xRet = CreateCursor();
     if(!xRet.is())
     {
-        GetDoc()->EndUndo(UNDO_END, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
         uno::RuntimeException aRuntime;
         aRuntime.Message = C2U(cInvalidObject);
         throw aRuntime;
     }
     xRet->gotoEnd(sal_True);
     xRet->setString(rString);
-    GetDoc()->EndUndo(UNDO_END, NULL);
+    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
 }
 
 //FIXME why is CheckForOwnMember duplicated in some insert methods?
@@ -1168,12 +1166,12 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         case FN_UNO_REDLINE_NODE_END:
         {
             const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
-            const USHORT nRedTblCount = rRedTbl.Count();
+            const sal_uInt16 nRedTblCount = rRedTbl.Count();
             if (nRedTblCount > 0)
             {
                 SwStartNode const*const pStartNode = GetStartNode();
-                const ULONG nOwnIndex = pStartNode->EndOfSectionIndex();
-                for (USHORT nRed = 0; nRed < nRedTblCount; nRed++)
+                const sal_uLong nOwnIndex = pStartNode->EndOfSectionIndex();
+                for (sal_uInt16 nRed = 0; nRed < nRedTblCount; nRed++)
                 {
                     SwRedline const*const pRedline = rRedTbl[nRed];
                     SwPosition const*const pRedStart = pRedline->Start();
@@ -1181,7 +1179,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     if (nOwnIndex == nRedNode.GetIndex())
                     {
                         aRet <<= SwXRedlinePortion::CreateRedlineProperties(
-                                *pRedline, TRUE);
+                                *pRedline, sal_True);
                         break;
                     }
                 }
@@ -1290,7 +1288,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     bool bIllegalException = false;
     bool bRuntimeException = false;
     ::rtl::OUString sMessage;
-    m_pDoc->StartUndo(UNDO_START , NULL);
+    m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_START , NULL);
     // find end node, go backward - don't skip tables because the new
     // paragraph has to be the last node
     //aPam.Move( fnMoveBackward, fnGoNode );
@@ -1342,11 +1340,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             }
         }
     }
-    m_pDoc->EndUndo(UNDO_END, NULL);
+    m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
     if (bIllegalException || bRuntimeException)
     {
-        SwUndoIter aUndoIter( &aPam, UNDO_EMPTY );
-        m_pDoc->Undo(aUndoIter);
+        m_pDoc->GetIDocumentUndoRedo().Undo();
         if (bIllegalException)
         {
             lang::IllegalArgumentException aEx;
@@ -1400,7 +1397,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     bool bIllegalException = false;
     bool bRuntimeException = false;
     ::rtl::OUString sMessage;
-    m_pImpl->m_pDoc->StartUndo(UNDO_INSERT, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
 
 //        SwPaM aPam(*pStartNode->EndOfSectionNode());
     //aPam.Move( fnMoveBackward, fnGoNode );
@@ -1455,11 +1452,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             }
         }
     }
-    m_pImpl->m_pDoc->EndUndo(UNDO_INSERT, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
     if (bIllegalException || bRuntimeException)
     {
-        SwUndoIter aUndoIter( pCursor, UNDO_EMPTY );
-        m_pImpl->m_pDoc->Undo(aUndoIter);
+        m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();
         if (bIllegalException)
         {
             lang::IllegalArgumentException aEx;
@@ -1501,7 +1497,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     uno::Reference< text::XTextRange > xRet;
-    m_pImpl->m_pDoc->StartUndo(UNDO_INSERT, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
     // find end node, go backward - don't skip tables because the
     // new paragraph has to be the last node
     SwPaM aPam(*pStartNode->EndOfSectionNode());
@@ -1536,7 +1532,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             throw uno::RuntimeException();
         }
     }
-    m_pImpl->m_pDoc->EndUndo(UNDO_INSERT, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
     return xRet;
 }
 
@@ -1583,7 +1579,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         pEndRange->Invalidate();
     }
 
-    m_pImpl->m_pDoc->StartUndo( UNDO_START, NULL );
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
     bool bIllegalException = false;
     bool bRuntimeException = false;
     ::rtl::OUString sMessage;
@@ -1743,11 +1739,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         }
     }
 
-    m_pImpl->m_pDoc->EndUndo(UNDO_END, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
     if (bIllegalException || bRuntimeException)
     {
-        SwUndoIter aUndoIter( &aStartPam, UNDO_EMPTY );
-        m_pImpl->m_pDoc->Undo(aUndoIter);
+        m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();
         if (bIllegalException)
         {
             lang::IllegalArgumentException aEx;
@@ -1907,10 +1902,10 @@ void SwXText::Impl::ConvertCell(
     else
     {
         // check the predecessor
-        const ULONG nLastNodeIndex = rLastPaM.End()->nNode.GetIndex();
-        const ULONG nStartCellNodeIndex =
+        const sal_uLong nLastNodeIndex = rLastPaM.End()->nNode.GetIndex();
+        const sal_uLong nStartCellNodeIndex =
             aStartCellPam.Start()->nNode.GetIndex();
-        const ULONG nLastNodeEndIndex = rLastPaM.End()->nNode.GetIndex();
+        const sal_uLong nLastNodeEndIndex = rLastPaM.End()->nNode.GetIndex();
         if (nLastNodeIndex == nStartCellNodeIndex)
         {
             // same node as predecessor then equal nContent?
@@ -2224,8 +2219,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     if(bExcept)
     {
-        SwUndoIter aUndoIter( &aLastPaM, UNDO_EMPTY );
-        m_pImpl->m_pDoc->Undo(aUndoIter);
+        m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();
         throw lang::IllegalArgumentException();
     }
 

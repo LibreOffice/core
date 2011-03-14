@@ -53,7 +53,7 @@
 #include <editeng/acorrcfg.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
-BOOL   SwViewOption::bTest9 = FALSE;        //DrawingLayerNotLoading
+sal_Bool   SwViewOption::bTest9 = sal_False;        //DrawingLayerNotLoading
 #endif
 Color SwViewOption::aDocBoundColor(COL_LIGHTGRAY);
 Color SwViewOption::aObjectBoundColor(COL_LIGHTGRAY);
@@ -75,7 +75,7 @@ Color SwViewOption::aScriptIndicatorColor(COL_GREEN);
 Color SwViewOption::aShadowColor(COL_GRAY);
 
 sal_Int32 SwViewOption::nAppearanceFlags = VIEWOPT_DOC_BOUNDARIES|VIEWOPT_OBJECT_BOUNDARIES;
-USHORT SwViewOption::nPixelTwips = 0;   // one pixel on the screen
+sal_uInt16 SwViewOption::nPixelTwips = 0;   // one pixel on the screen
 
 
 #define LINEBREAK_SIZE 12, 8
@@ -88,7 +88,7 @@ USHORT SwViewOption::nPixelTwips = 0;   // one pixel on the screen
 
 static const char aPostItStr[] = "  ";
 
-BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
+sal_Bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
 {
     return  nCoreOptions == rOpt.nCoreOptions
             && nCore2Options == rOpt.nCore2Options
@@ -145,10 +145,10 @@ void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
     pOut->SetLineColor( aOldColor );
 }
 
-USHORT SwViewOption::GetPostItsWidth( const OutputDevice *pOut ) const
+sal_uInt16 SwViewOption::GetPostItsWidth( const OutputDevice *pOut ) const
 {
     OSL_ENSURE( pOut, "no Outdev" );
-    return USHORT(pOut->GetTextWidth( String::CreateFromAscii(aPostItStr )));
+    return sal_uInt16(pOut->GetTextWidth( String::CreateFromAscii(aPostItStr )));
 }
 
 void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bool bIsScript ) const
@@ -158,7 +158,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bo
             Color aOldLineColor( pOut->GetLineColor() );
         pOut->SetLineColor( Color(COL_GRAY ) );
         // to make it look nice, we subtract two pixels everywhere
-        USHORT nPix = GetPixelTwips() * 2;
+        sal_uInt16 nPix = GetPixelTwips() * 2;
         if( rRect.Width() <= 2 * nPix || rRect.Height() <= 2 * nPix )
             nPix = 0;
         const Point aTopLeft(  rRect.Left()  + nPix, rRect.Top()    + nPix );
@@ -176,14 +176,14 @@ SwViewOption::SwViewOption() :
     nPagePrevRow( 1 ),
     nPagePrevCol( 2 ),
     nShdwCrsrFillMode( FILL_TAB ),
-    bReadonly(FALSE),
-    bStarOneSetting(FALSE),
-    bIsPagePreview(FALSE),
-    bSelectionInReadonly(FALSE),
+    bReadonly(sal_False),
+    bStarOneSetting(sal_False),
+    bIsPagePreview(sal_False),
+    bSelectionInReadonly(sal_False),
     // #114856# Formular view
-    bFormView(FALSE),
-    bBookview(FALSE),
-    mbViewLayoutBookMode(FALSE),
+    bFormView(sal_False),
+    bBookview(sal_False),
+    mbViewLayoutBookMode(sal_False),
     bShowPlaceHolderFields( sal_True ),
     nZoom( 100 ),
     eZoom( SVX_ZOOM_PERCENT ),
@@ -213,14 +213,14 @@ SwViewOption::SwViewOption() :
 #if OSL_DEBUG_LEVEL > 1
     // correspond to the statements in ui/config/cfgvw.src
     bTest1 = bTest2 = bTest3 = bTest4 =
-             bTest5 = bTest6 = bTest7 = bTest8 = bTest10 = FALSE;
+             bTest5 = bTest6 = bTest7 = bTest8 = bTest10 = sal_False;
 #endif
 }
 
 SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 {
-    bReadonly = FALSE;
-    bSelectionInReadonly = FALSE;
+    bReadonly = sal_False;
+    bSelectionInReadonly = sal_False;
     // #114856# Formular view
     bFormView       = rVOpt.bFormView;
     nZoom           = rVOpt.nZoom       ;
@@ -308,11 +308,11 @@ void SwViewOption::Init( Window *pWin )
 {
     if( !nPixelTwips && pWin )
     {
-        nPixelTwips = (USHORT)pWin->PixelToLogic( Size(1,1) ).Height();
+        nPixelTwips = (sal_uInt16)pWin->PixelToLogic( Size(1,1) ).Height();
     }
 }
 
-BOOL SwViewOption::IsAutoCompleteWords() const
+sal_Bool SwViewOption::IsAutoCompleteWords() const
 {
     const SvxSwAutoFmtFlags& rFlags = SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags();
     return rFlags.bAutoCmpltCollectWords;
@@ -325,9 +325,9 @@ AuthorCharAttr::AuthorCharAttr() :
 {
 }
 
-USHORT      GetHtmlMode(const SwDocShell* pShell)
+sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
 {
-    USHORT nRet = 0;
+    sal_uInt16 nRet = 0;
     if(!pShell || PTR_CAST(SwWebDocShell, pShell))
     {
         nRet = HTMLMODE_ON;
@@ -512,7 +512,7 @@ void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
     aScriptIndicatorColor.SetColor(rConfig.GetColorValue(svtools::WRITERSCRIPTINDICATOR).nColor);
 }
 
-void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, BOOL bSet, BOOL bSaveInConfig )
+void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, sal_Bool bSet, sal_Bool bSaveInConfig )
 {
     if(bSet)
         nAppearanceFlags |= nFlag;
@@ -554,7 +554,7 @@ void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, BOOL bSet, BOOL bSaveInCon
     }
 }
 
-BOOL SwViewOption::IsAppearanceFlag(sal_Int32 nFlag)
+sal_Bool SwViewOption::IsAppearanceFlag(sal_Int32 nFlag)
 {
     return 0 != (nAppearanceFlags & nFlag);
 }

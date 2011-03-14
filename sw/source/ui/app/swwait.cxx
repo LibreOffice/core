@@ -37,31 +37,31 @@
 #include <swwait.hxx>
 
 
-void SwDocShell::EnterWait( BOOL bLockDispatcher )
+void SwDocShell::EnterWait( sal_Bool bLockDispatcher )
 {
-    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, FALSE );
+    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, sal_False );
     while ( pFrame )
     {
         pFrame->GetWindow().EnterWait();
         if ( bLockDispatcher )
-            pFrame->GetDispatcher()->Lock( TRUE );
-        pFrame = SfxViewFrame::GetNext( *pFrame, this, FALSE );
+            pFrame->GetDispatcher()->Lock( sal_True );
+        pFrame = SfxViewFrame::GetNext( *pFrame, this, sal_False );
     }
 }
 
-void SwDocShell::LeaveWait( BOOL bLockDispatcher )
+void SwDocShell::LeaveWait( sal_Bool bLockDispatcher )
 {
-    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, FALSE );
+    SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this, sal_False );
     while ( pFrame )
     {
         pFrame->GetWindow().LeaveWait();
         if ( bLockDispatcher )
-            pFrame->GetDispatcher()->Lock( FALSE );
-        pFrame = SfxViewFrame::GetNext( *pFrame, this, FALSE );
+            pFrame->GetDispatcher()->Lock( sal_False );
+        pFrame = SfxViewFrame::GetNext( *pFrame, this, sal_False );
     }
 }
 
-SwWait::SwWait( SwDocShell &rDocShell, BOOL bLockDispatcher ) :
+SwWait::SwWait( SwDocShell &rDocShell, sal_Bool bLockDispatcher ) :
     rDoc ( rDocShell ),
     bLock( bLockDispatcher )
 {

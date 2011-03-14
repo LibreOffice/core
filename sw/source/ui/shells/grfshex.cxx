@@ -65,7 +65,6 @@
 
 // -> #111827#
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 #include <comcore.hrc>
 // <- #111827#
 

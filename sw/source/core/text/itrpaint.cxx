@@ -171,8 +171,8 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                                  const sal_Bool bUnderSz )
 {
 #if OSL_DEBUG_LEVEL > 1
-//    USHORT nFntHeight = GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), GetInfo().GetOut() );
-//    USHORT nFntAscent = GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), GetInfo().GetOut() );
+//    sal_uInt16 nFntHeight = GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), GetInfo().GetOut() );
+//    sal_uInt16 nFntAscent = GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), GetInfo().GetOut() );
 #endif
 
     // Adjustierung ggf. nachholen
@@ -606,11 +606,11 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
                           rScriptInfo );
 
         xub_StrLen nTmpIdx = nIndx;
-        ULONG nSumWidth = 0;
-        ULONG nSumHeight = 0;
-        ULONG nBold = 0;
-        USHORT nMaxBaseLineOfst = 0;
-        USHORT nNumberOfPortions = 0;
+        sal_uLong nSumWidth = 0;
+        sal_uLong nSumHeight = 0;
+        sal_uLong nBold = 0;
+        sal_uInt16 nMaxBaseLineOfst = 0;
+        sal_uInt16 nNumberOfPortions = 0;
 
         while( nTmpIdx <= nUnderEnd && pPor )
         {
@@ -629,13 +629,13 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
             if ( !aIter.GetFnt()->GetEscapement() )
             {
                 nSumWidth += pPor->Width();
-                const ULONG nFontHeight = aIter.GetFnt()->GetHeight();
+                const sal_uLong nFontHeight = aIter.GetFnt()->GetHeight();
 
                 // If we do not have a common baseline we take the baseline
                 // and the font of the lowest portion.
                 if ( nAdjustBaseLine )
                 {
-                    USHORT nTmpBaseLineOfst = AdjustBaseLine( *pCurr, pPor );
+                    sal_uInt16 nTmpBaseLineOfst = AdjustBaseLine( *pCurr, pPor );
                     if ( nMaxBaseLineOfst < nTmpBaseLineOfst )
                     {
                         nMaxBaseLineOfst = nTmpBaseLineOfst;
@@ -659,14 +659,14 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         // resulting height
         if ( nNumberOfPortions > 1 && nSumWidth )
         {
-            const ULONG nNewFontHeight = nAdjustBaseLine ?
+            const sal_uLong nNewFontHeight = nAdjustBaseLine ?
                                          nSumHeight :
                                          nSumHeight / nSumWidth;
 
             pUnderlineFnt = new SwFont( *GetInfo().GetFont() );
 
             // font height
-            const BYTE nActual = pUnderlineFnt->GetActual();
+            const sal_uInt8 nActual = pUnderlineFnt->GetActual();
             pUnderlineFnt->SetSize( Size( pUnderlineFnt->GetSize( nActual ).Width(),
                                           nNewFontHeight ), nActual );
 

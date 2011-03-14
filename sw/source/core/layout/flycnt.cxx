@@ -28,13 +28,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <tools/bigint.hxx>
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
 #include "cntfrm.hxx"
 #include "flyfrm.hxx"
 #include "txtfrm.hxx"
-#include "doc.hxx"
+#include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include "viewsh.hxx"
 #include "viewimp.hxx"
 #include "pam.hxx"
@@ -75,7 +77,7 @@ using namespace ::com::sun::star;
 SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     SwFlyFreeFrm( pFmt, pAnch )
 {
-    bAtCnt = TRUE;
+    bAtCnt = sal_True;
     bAutoPosition = (FLY_AT_CHAR == pFmt->GetAnchor().GetAnchorId());
 }
 
@@ -89,11 +91,11 @@ TYPEINIT1(SwFlyAtCntFrm,SwFlyFreeFrm);
 
 void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
-    USHORT nWhich = pNew ? pNew->Which() : 0;
+    sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
     const SwFmtAnchor *pAnch = 0;
 
     if( RES_ATTRSET_CHG == nWhich && SFX_ITEM_SET ==
-        ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_ANCHOR, FALSE,
+        ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_ANCHOR, sal_False,
             (const SfxPoolItem**)&pAnch ))
         ;       // Beim GetItemState wird der AnkerPointer gesetzt !
 
@@ -117,7 +119,7 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         SwCntntFrm *pCntnt = (SwCntntFrm*)GetAnchorFrm();
         AnchorFrm()->RemoveFly( this );
 
-        const BOOL bBodyFtn = (pCntnt->IsInDocBody() || pCntnt->IsInFtn());
+        const sal_Bool bBodyFtn = (pCntnt->IsInDocBody() || pCntnt->IsInFtn());
 
         //Den neuen Anker anhand des NodeIdx suchen, am alten und
         //neuen NodeIdx kann auch erkannt werden, in welche Richtung
@@ -174,7 +176,7 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         if ( !pCntnt )
         {
             SwCntntNode *pNode = aNewIdx.GetNode().GetCntntNode();
-            pCntnt = pNode->GetFrm( &pOldAnchor->Frm().Pos(), 0, FALSE );
+            pCntnt = pNode->GetFrm( &pOldAnchor->Frm().Pos(), 0, sal_False );
             OSL_ENSURE( pCntnt, "Neuen Anker nicht gefunden" );
         }
         //Flys haengen niemals an einem Follow sondern immer am
@@ -245,7 +247,7 @@ public:
     SwOszControl( const SwFlyFrm *pFrm );
     ~SwOszControl();
     bool ChkOsz();
-    static BOOL IsInProgress( const SwFlyFrm *pFly );
+    static sal_Bool IsInProgress( const SwFlyFrm *pFly );
 };
 const SwFlyFrm *SwOszControl::pStk1 = 0;
 const SwFlyFrm *SwOszControl::pStk2 = 0;
@@ -292,19 +294,19 @@ SwOszControl::~SwOszControl()
     }
 }
 
-BOOL SwOszControl::IsInProgress( const SwFlyFrm *pFly )
+sal_Bool SwOszControl::IsInProgress( const SwFlyFrm *pFly )
 {
     if ( SwOszControl::pStk1 && !pFly->IsLowerOf( SwOszControl::pStk1 ) )
-        return TRUE;
+        return sal_True;
     if ( SwOszControl::pStk2 && !pFly->IsLowerOf( SwOszControl::pStk2 ) )
-        return TRUE;
+        return sal_True;
     if ( SwOszControl::pStk3 && !pFly->IsLowerOf( SwOszControl::pStk3 ) )
-        return TRUE;
+        return sal_True;
     if ( SwOszControl::pStk4 && !pFly->IsLowerOf( SwOszControl::pStk4 ) )
-        return TRUE;
+        return sal_True;
     if ( SwOszControl::pStk5 && !pFly->IsLowerOf( SwOszControl::pStk5 ) )
-        return TRUE;
-    return FALSE;
+        return sal_True;
+    return sal_False;
 }
 
 bool SwOszControl::ChkOsz()
@@ -360,7 +362,7 @@ void SwFlyAtCntFrm::MakeAll()
         // #i28701# - use new method <GetPageFrm()>
         if( GetPageFrm() )
         {
-            bSetCompletePaintOnInvalidate = TRUE;
+            bSetCompletePaintOnInvalidate = sal_True;
             {
                 SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
                 const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
@@ -393,7 +395,7 @@ void SwFlyAtCntFrm::MakeAll()
             if( pFooter && !pFooter->IsFooterFrm() )
                 pFooter = NULL;
             bool bOsz = false;
-            BOOL bExtra = Lower() && Lower()->IsColumnFrm();
+            sal_Bool bExtra = Lower() && Lower()->IsColumnFrm();
             // #i3317# - boolean, to apply temporarly the
             // 'straightforward positioning process' for the frame due to its
             // overlapping with a previous column.
@@ -511,7 +513,7 @@ void SwFlyAtCntFrm::MakeAll()
                     // Spalten hinterlaesst, so drehen wir lieber hier eine weitere
                     // Runde und formatieren unseren Inhalt via FormatWidthCols nochmal.
                         _InvalidateSize();
-                    bExtra = FALSE; // Sicherhaltshalber gibt es nur eine Ehrenrunde.
+                    bExtra = sal_False; // Sicherhaltshalber gibt es nur eine Ehrenrunde.
                 }
             } while ( !IsValid() && !bOsz &&
                       // #i3317#
@@ -551,7 +553,7 @@ void SwFlyAtCntFrm::MakeAll()
                 SetRestartLayoutProcess( true );
                 SetTmpConsiderWrapInfluenceOfOtherObjs( true );
             }
-            bSetCompletePaintOnInvalidate = FALSE;
+            bSetCompletePaintOnInvalidate = sal_False;
         }
     }
 }
@@ -584,10 +586,10 @@ public:
     SwDistance() { nMain = nSub = 0; }
     SwDistance& operator=( const SwDistance &rTwo )
         { nMain = rTwo.nMain; nSub = rTwo.nSub; return *this; }
-    BOOL operator<( const SwDistance& rTwo )
+    sal_Bool operator<( const SwDistance& rTwo )
         { return nMain < rTwo.nMain || ( nMain == rTwo.nMain && nSub &&
           rTwo.nSub && nSub < rTwo.nSub ); }
-    BOOL operator<=( const SwDistance& rTwo )
+    sal_Bool operator<=( const SwDistance& rTwo )
         { return nMain < rTwo.nMain || ( nMain == rTwo.nMain && ( !nSub ||
           !rTwo.nSub || nSub <= rTwo.nSub ) ); }
 };
@@ -611,13 +613,20 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
         while( pUp->IsSctFrm() )
             pUp = pUp->GetUpper();
         const bool bVert = pUp->IsVertical();
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        const bool bVertL2R = pUp->IsVertLR();
+
         //Dem Textflus folgen.
         // #i70582#
+        // --> OD 2009-03-05 - adopted for Support for Classical Mongolian Script
         const SwTwips nTopForObjPos =
             bVert
-            ? ( pCnt->Frm().Left() +
-                pCnt->Frm().Width() -
-                pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
+            ? ( bVertL2R
+                ? ( pCnt->Frm().Left() +
+                    pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
+                : ( pCnt->Frm().Left() +
+                    pCnt->Frm().Width() -
+                    pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() ) )
             : ( pCnt->Frm().Top() +
                 pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() );
         if ( pUp->Frm().IsInside( rPt ) )
@@ -625,7 +634,13 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
             // <rPt> point is inside environment of given content frame
             // #i70582#
             if( bVert )
-                rRet.nMain =  nTopForObjPos - rPt.X();
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            {
+                   if ( bVertL2R )
+                    rRet.nMain =  rPt.X() - nTopForObjPos;
+                else
+                    rRet.nMain =  nTopForObjPos - rPt.X();
+            }
             else
                 rRet.nMain =  rPt.Y() - nTopForObjPos;
             return pCnt;
@@ -641,7 +656,7 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
         {
             // <rPt> point is left of environment of given content frame
             // seems not to be correct for vertical layout!?
-            const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, FALSE, pCnt );
+            const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, sal_False, pCnt );
             if( !pLay ||
                 (bVert && (pLay->Frm().Top() + pLay->Prt().Bottom()) <rPt.Y())||
                 (!bVert && (pLay->Frm().Left() + pLay->Prt().Right())<rPt.X()) )
@@ -649,7 +664,13 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                 // <rPt> point is in left border of environment
                 // #i70582#
                 if( bVert )
-                    rRet.nMain =  nTopForObjPos - rPt.X();
+                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                {
+                       if ( bVertL2R )
+                        rRet.nMain = rPt.X() - nTopForObjPos;
+                    else
+                        rRet.nMain =  nTopForObjPos - rPt.X();
+                }
                 else
                     rRet.nMain = rPt.Y() - nTopForObjPos;
                 return pCnt;
@@ -659,16 +680,18 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
         }
         else
         {
-            // #i70582#
+            // Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
             rRet.nMain = bVert
-                ? nTopForObjPos - (pUp->Frm().Left() + pUp->Prt().Left())
-                : (pUp->Frm().Top() + pUp->Prt().Bottom()) - nTopForObjPos;
+                ? ( bVertL2R
+                    ? ( (pUp->Frm().Left() + pUp->Prt().Right()) - nTopForObjPos )
+                    : ( nTopForObjPos - (pUp->Frm().Left() + pUp->Prt().Left() ) ) )
+                : ( (pUp->Frm().Top() + pUp->Prt().Bottom()) - nTopForObjPos );
 
             const SwFrm *pPre = pCnt;
-            const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, TRUE, pCnt );
+            const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, sal_True, pCnt );
             SwTwips nFrmTop = 0;
             SwTwips nPrtHeight = 0;
-            BOOL bSct = FALSE;
+            sal_Bool bSct = sal_False;
             const SwSectionFrm *pSect = pUp->FindSctFrm();
             if( pSect )
             {
@@ -677,13 +700,17 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
             }
             if( pSect && !pSect->IsAnLower( pLay ) )
             {
-                bSct = FALSE;
+                bSct = sal_False;
                 const SwSectionFrm* pNxtSect = pLay ? pLay->FindSctFrm() : 0;
                 if( pSect->IsAnFollow( pNxtSect ) )
                 {
                     if( pLay->IsVertical() )
                     {
-                        nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                        if ( pLay->IsVertLR() )
+                            nFrmTop = pLay->Frm().Left();
+                        else
+                            nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
                         nPrtHeight = pLay->Prt().Width();
                     }
                     else
@@ -698,9 +725,20 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                     pLay = pSect->GetUpper();
                     if( pLay->IsVertical() )
                     {
-                        nFrmTop = pSect->Frm().Left();
-                        nPrtHeight = pSect->Frm().Left() - pLay->Frm().Left()
+                        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                        if ( pLay->IsVertLR() )
+                        {
+                            nFrmTop = pSect->Frm().Right();
+                            nPrtHeight = pLay->Frm().Left() + pLay->Prt().Left()
+                                         + pLay->Prt().Width() - pSect->Frm().Left()
+                                         - pSect->Frm().Width();
+                         }
+                         else
+                         {
+                             nFrmTop = pSect->Frm().Left();
+                             nPrtHeight = pSect->Frm().Left() - pLay->Frm().Left()
                                      - pLay->Prt().Left();
+                          }
                     }
                     else
                     {
@@ -716,8 +754,17 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
             {
                 if( pLay->IsVertical() )
                 {
-                    nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
-                    nPrtHeight = pLay->Prt().Width();
+                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                    if ( pLay->IsVertLR() )
+                    {
+                        nFrmTop = pLay->Frm().Left();
+                        nPrtHeight = pLay->Prt().Width();
+                    }
+                    else
+                    {
+                        nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                        nPrtHeight = pLay->Prt().Width();
+                    }
                 }
                 else
                 {
@@ -749,20 +796,29 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                     else
                         rRet.nMain += nPrtHeight;
                     pPre = pLay;
-                    pLay = pLay->GetLeaf( MAKEPAGE_NONE, TRUE, pCnt );
+                    pLay = pLay->GetLeaf( MAKEPAGE_NONE, sal_True, pCnt );
                     if( pSect && !pSect->IsAnLower( pLay ) )
                     {   // If we're leaving a SwSectionFrm, the next Leaf-Frm
                         // is the part of the upper below the SectionFrm.
                         const SwSectionFrm* pNxtSect = pLay ?
                             pLay->FindSctFrm() : NULL;
-                        bSct = FALSE;
+                        bSct = sal_False;
                         if( pSect->IsAnFollow( pNxtSect ) )
                         {
                             pSect = pNxtSect;
                             if( pLay->IsVertical() )
                             {
-                                nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
-                                nPrtHeight = pLay->Prt().Width();
+                                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                                if ( pLay->IsVertLR() )
+                                {
+                                    nFrmTop = pLay->Frm().Left();
+                                    nPrtHeight = pLay->Prt().Width();
+                                }
+                                else
+                                {
+                                    nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                                    nPrtHeight = pLay->Prt().Width();
+                                }
                             }
                             else
                             {
@@ -775,9 +831,20 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                             pLay = pSect->GetUpper();
                             if( pLay->IsVertical() )
                             {
-                                nFrmTop = pSect->Frm().Left();
-                                nPrtHeight = pSect->Frm().Left() -
-                                        pLay->Frm().Left() - pLay->Prt().Left();
+                                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                                if ( pLay->IsVertLR() )
+                                {
+                                    nFrmTop = pSect->Frm().Right();
+                                    nPrtHeight = pLay->Frm().Left()+pLay->Prt().Left()
+                                             + pLay->Prt().Width() - pSect->Frm().Left()
+                                             - pSect->Frm().Width();
+                                }
+                                else
+                                {
+                                    nFrmTop = pSect->Frm().Left();
+                                    nPrtHeight = pSect->Frm().Left() -
+                                            pLay->Frm().Left() - pLay->Prt().Left();
+                                }
                             }
                             else
                             {
@@ -793,8 +860,17 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                     {
                         if( pLay->IsVertical() )
                         {
-                             nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
-                             nPrtHeight = pLay->Prt().Width();
+                             //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                             if ( pLay->IsVertLR() )
+                              {
+                                 nFrmTop = pLay->Frm().Left();
+                                 nPrtHeight = pLay->Prt().Width();
+                             }
+                             else
+                             {
+                                 nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                                 nPrtHeight = pLay->Prt().Width();
+                             }
                         }
                         else
                         {
@@ -809,7 +885,8 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
             {
                 if ( pLay->Frm().IsInside( rPt ) )
                 {
-                    SwTwips nDiff = pLay->IsVertical() ? ( nFrmTop - rPt.X() )
+                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                    SwTwips nDiff = pLay->IsVertical() ? ( pLay->IsVertLR() ? ( rPt.X() - nFrmTop ) : ( nFrmTop - rPt.X() ) )
                                                        : ( rPt.Y() - nFrmTop );
                     if( bSct || pSect )
                         rRet.nSub += nDiff;
@@ -832,9 +909,9 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
     return 0;
 }
 
-ULONG MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
+sal_uLong MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
                           const SwCntntFrm *& rpCnt,
-                          const BOOL bBody, const BOOL bFtn )
+                          const sal_Bool bBody, const sal_Bool bFtn )
 {
     //Sucht unterhalb von pLay den dichtesten Cnt zum Point. Der Bezugspunkt
     //der Cntnts ist immer die linke obere Ecke.
@@ -845,8 +922,8 @@ ULONG MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
 #endif
 
     rpCnt = 0;
-    ULONG nDistance = ULONG_MAX;
-    ULONG nNearest  = ULONG_MAX;
+    sal_uLong nDistance = ULONG_MAX;
+    sal_uLong nNearest  = ULONG_MAX;
     const SwCntntFrm *pCnt = pLay->ContainsCntnt();
 
     while ( pCnt && (bBody != pCnt->IsInDocBody() || bFtn != pCnt->IsInFtn()))
@@ -868,7 +945,7 @@ ULONG MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
                        Min( pCnt->Frm().Top(), rPt.Y() );
             BigInt dX1( dX ), dY1( dY );
             dX1 *= dX1; dY1 *= dY1;
-            const ULONG nDiff = ::SqRt( dX1 + dY1 );
+            const sal_uLong nDiff = ::SqRt( dX1 + dY1 );
             if ( pCnt->Frm().Top() <= rPt.Y() )
             {
                 if ( nDiff < nDistance )
@@ -897,7 +974,7 @@ ULONG MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
 }
 
 const SwCntntFrm * MA_FASTCALL lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
-                                  const BOOL bBody, const BOOL bFtn )
+                                  const sal_Bool bBody, const sal_Bool bFtn )
 {
     //Sucht ausgehen von pCnt denjenigen CntntFrm, dessen linke obere
     //Ecke am dichtesten am Point liegt.
@@ -911,7 +988,7 @@ const SwCntntFrm * MA_FASTCALL lcl_FindCnt( const Point &rPt, const SwCntntFrm *
     //des Point sitzt.
     const SwCntntFrm  *pRet, *pNew;
     const SwLayoutFrm *pLay = pCnt->FindPageFrm();
-    ULONG nDist;
+    sal_uLong nDist;
 
     nDist = ::lcl_FindCntDiff( rPt, pLay, pNew, bBody, bFtn );
     if ( pNew )
@@ -921,16 +998,16 @@ const SwCntntFrm * MA_FASTCALL lcl_FindCnt( const Point &rPt, const SwCntntFrm *
         nDist = ULONG_MAX;
     }
     const SwCntntFrm *pNearest = pRet;
-    ULONG nNearest = nDist;
+    sal_uLong nNearest = nDist;
 
     if ( pLay )
     {
         const SwLayoutFrm *pPge = pLay;
-        ULONG nOldNew = ULONG_MAX;
-        for ( USHORT i = 0; pPge->GetPrev() && (i < 3); ++i )
+        sal_uLong nOldNew = ULONG_MAX;
+        for ( sal_uInt16 i = 0; pPge->GetPrev() && (i < 3); ++i )
         {
             pPge = (SwLayoutFrm*)pPge->GetPrev();
-            const ULONG nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
+            const sal_uLong nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
             if ( nNew < nDist )
             {
                 if ( pNew->Frm().Top() <= rPt.Y() )
@@ -952,10 +1029,10 @@ const SwCntntFrm * MA_FASTCALL lcl_FindCnt( const Point &rPt, const SwCntntFrm *
         }
         pPge = pLay;
         nOldNew = ULONG_MAX;
-        for ( USHORT j = 0; pPge->GetNext() && (j < 3); ++j )
+        for ( sal_uInt16 j = 0; pPge->GetNext() && (j < 3); ++j )
         {
             pPge = (SwLayoutFrm*)pPge->GetNext();
-            const ULONG nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
+            const sal_uLong nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
             if ( nNew < nDist )
             {
                 if ( pNew->Frm().Top() <= rPt.Y() )
@@ -997,7 +1074,7 @@ void lcl_PointToPrt( Point &rPoint, const SwFrm *pFrm )
 }
 
 const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
-                              const BOOL bBodyOnly )
+                              const sal_Bool bBodyOnly )
 {
     //Zu der angegebenen DokumentPosition wird der dichteste Cnt im
     //Textfluss gesucht. AusgangsFrm ist der uebergebene Anker.
@@ -1015,14 +1092,14 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
             SwRect aTmpRect( aTmp, Size(0,0) );
             pTmpLay = (SwLayoutFrm*)::FindPage( aTmpRect, pTmpLay->Lower() );
         }
-        pCnt = pTmpLay->GetCntntPos( aTmp, FALSE, bBodyOnly );
+        pCnt = pTmpLay->GetCntntPos( aTmp, sal_False, bBodyOnly );
     }
 
     //Beim Suchen darauf achten, dass die Bereiche sinnvoll erhalten
     //bleiben. D.h. in diesem Fall nicht in Header/Footer hinein und
     //nicht aus Header/Footer hinaus.
-    const BOOL bBody = pCnt->IsInDocBody() || bBodyOnly;
-    const BOOL bFtn  = !bBodyOnly && pCnt->IsInFtn();
+    const sal_Bool bBody = pCnt->IsInDocBody() || bBodyOnly;
+    const sal_Bool bFtn  = !bBodyOnly && pCnt->IsInFtn();
 
     Point aNew( rNew );
     if ( bBody )
@@ -1044,7 +1121,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
         //So gibt es kein Problem mit Spalten.
         Point aTmp( aNew );
         const SwCntntFrm *pTmp = pCnt->FindPageFrm()->
-                                        GetCntntPos( aTmp, FALSE, TRUE, FALSE );
+                                        GetCntntPos( aTmp, sal_False, sal_True, sal_False );
         if ( pTmp && pTmp->Frm().IsInside( aNew ) )
             return pTmp;
     }
@@ -1058,7 +1135,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
     SwDistance nUp, nUpLst;
     ::lcl_CalcDownDist( nUp, aNew, pUpFrm );
     SwDistance nDown = nUp;
-    BOOL bNegAllowed = TRUE;//Einmal aus dem negativen Bereich heraus lassen.
+    sal_Bool bNegAllowed = sal_True;//Einmal aus dem negativen Bereich heraus lassen.
     do
     {
         pUpLst = pUpFrm; nUpLst = nUp;
@@ -1086,7 +1163,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
             nUp.nMain = LONG_MAX;
         if ( nUp.nMain >= 0 && LONG_MAX != nUp.nMain )
         {
-            bNegAllowed = FALSE;
+            bNegAllowed = sal_False;
             if ( nUpLst.nMain < 0 ) //nicht den falschen erwischen, wenn der Wert
                                     //gerade von negativ auf positiv gekippt ist.
             {   pUpLst = pUpFrm;
@@ -1162,9 +1239,8 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     SwPageFrm *pOldPage = FindPageFrm();
     const SwRect aOld( GetObjRectWithSpaces() );
     Point aNew( rNew );
-
-    if( GetAnchorFrm()->IsVertical() || GetAnchorFrm()->IsRightToLeft() )
-
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+      if( ( GetAnchorFrm()->IsVertical() && !GetAnchorFrm()->IsVertLR() ) || GetAnchorFrm()->IsRightToLeft() )
         aNew.X() += Frm().Width();
     SwCntntFrm *pCnt = (SwCntntFrm*)::FindAnchor( GetAnchorFrm(), aNew );
     if( pCnt->IsProtected() )
@@ -1172,6 +1248,8 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     SwPageFrm *pTmpPage = 0;
     const bool bVert = pCnt->IsVertical();
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    const bool bVertL2R = pCnt->IsVertLR();
     const sal_Bool bRTL = pCnt->IsRightToLeft();
 
     if( ( !bVert != !GetAnchorFrm()->IsVertical() ) ||
@@ -1204,14 +1282,21 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         // #i70582#
         const SwTwips nTopForObjPos =
                 bVert
-                ? ( pCnt->Frm().Left() +
-                    pCnt->Frm().Width() -
-                    pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
+                ? ( bVertL2R
+                    ? ( pCnt->Frm().Left() +
+                        pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
+                    : ( pCnt->Frm().Left() +
+                        pCnt->Frm().Width() -
+                        pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() ) )
                 : ( pCnt->Frm().Top() +
                     pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() );
-        if ( bVert )
+        if( bVert )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         {
-            nY = nTopForObjPos - rNew.X() - Frm().Width();
+            if ( bVertL2R )
+                nY = rNew.X() - nTopForObjPos;
+            else
+                nY = nTopForObjPos - rNew.X() - Frm().Width();
         }
         else
         {
@@ -1244,8 +1329,14 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         do
         {   const SwFrm *pUp = pFollow->GetUpper();
             if( pUp->IsVertical() )
-                nDiff += pFollow->Frm().Left() + pFollow->Frm().Width()
-                         - pUp->Frm().Left() - pUp->Prt().Left();
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            {
+                if ( pUp->IsVertLR()  )
+                    nDiff += pUp->Prt().Width() - pFollow->GetRelPos().X();
+                else
+                       nDiff += pFollow->Frm().Left() + pFollow->Frm().Width()
+                             - pUp->Frm().Left() - pUp->Prt().Left();
+            }
             else
                 nDiff += pUp->Prt().Height() - pFollow->GetRelPos().Y();
             pFollow = pFollow->GetFollow();
@@ -1262,14 +1353,21 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         // #i70582#
         const SwTwips nTopForObjPos =
                 bVert
-                ? ( pCnt->Frm().Left() +
-                    pCnt->Frm().Width() -
-                    pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
+                ? ( bVertL2R
+                    ? ( pCnt->Frm().Left() +
+                        pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
+                    : ( pCnt->Frm().Left() +
+                        pCnt->Frm().Width() -
+                        pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() ) )
                 : ( pCnt->Frm().Top() +
                     pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() );
-        if ( bVert )
+        if( bVert )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         {
-            nY = nTopForObjPos - rNew.X();
+            if ( bVertL2R )
+                nY = rNew.X() - nTopForObjPos;
+            else
+                nY = nTopForObjPos - rNew.X();
         }
         else
         {
@@ -1279,7 +1377,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
     const SwFmtSurround& rSurround = pFmt->GetSurround();
-    const BOOL bWrapThrough =
+    const sal_Bool bWrapThrough =
         rSurround.GetSurround() == SURROUND_THROUGHT;
     SwTwips nBaseOfstForFly = 0;
     const SwFrm* pTmpFrm = pFrm ? pFrm : pCnt;
@@ -1313,7 +1411,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
                 nX = rNew.X() - pFrm->Frm().Left() - nBaseOfstForFly;
         }
     }
-    GetFmt()->GetDoc()->StartUndo( UNDO_START, NULL );
+    GetFmt()->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
     if( pCnt != GetAnchorFrm() || ( IsAutoPos() && pCnt->IsTxtFrm() &&
                                   GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE)) )
@@ -1360,13 +1458,14 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         GetPageFrm()->MoveFly( this, pTmpPage );
 
     const Point aRelPos = bVert ? Point( -nY, nX ) : Point( nX, nY );
+
     ChgRelPos( aRelPos );
 
-    GetFmt()->GetDoc()->EndUndo( UNDO_END, NULL );
+    GetFmt()->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
 
     if ( pOldPage != FindPageFrm() )
         ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE,
-                             FALSE );
+                             sal_False );
 }
 
 /** method to assure that anchored object is registered at the correct
@@ -1402,7 +1501,7 @@ void SwFlyAtCntFrm::MakeObjPos()
     }
 
     // #i26791# - validate position flag here.
-    bValidPos = TRUE;
+    bValidPos = sal_True;
 
     // #i35911# - no calculation of new position, if
     // anchored object is marked that it clears its environment and its

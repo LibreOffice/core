@@ -992,7 +992,7 @@ SwXMeta::dispose() throw (uno::RuntimeException)
 
 void SAL_CALL
 SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
-        const USHORT i_nWhich)
+        const sal_uInt16 i_nWhich)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     SolarMutexGuard g;

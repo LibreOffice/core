@@ -39,9 +39,9 @@ class SwDrawBaseShell: public SwBaseShell
 {
     SwDrawBase* pDrawActual;
 
-    UINT16      eDrawMode;
-    BOOL        bRotate : 1;
-    BOOL        bSelMove: 1;
+    sal_uInt16      eDrawMode;
+    sal_Bool        bRotate : 1;
+    sal_Bool        bSelMove: 1;
 
     DECL_LINK( CheckGroupShapeNameHdl, AbstractSvxNameDialog* );
     DECL_LINK(ValidatePosition, SvxSwFrameValidation* );
@@ -55,7 +55,7 @@ public:
     void        Execute(SfxRequest &);
     void        GetState(SfxItemSet &);
     void        DisableState(SfxItemSet &rSet)               { Disable(rSet);}
-    BOOL        Disable(SfxItemSet& rSet, USHORT nWhich = 0);
+    sal_Bool        Disable(SfxItemSet& rSet, sal_uInt16 nWhich = 0);
 
     void        StateStatusline(SfxItemSet &rSet);
 

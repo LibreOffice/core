@@ -44,7 +44,7 @@ class SwSortDlg : public SvxStandardDialog
     FixedText           aTypLbl;
     FixedText           aDirLbl;
 
-    FixedLine           aDirFL;
+    FixedLine           aSortFL;
 
     CheckBox            aKeyCB1;
     NumericField        aColEdt1;
@@ -64,7 +64,7 @@ class SwSortDlg : public SvxStandardDialog
     RadioButton         aSortUp3RB;
     RadioButton         aSortDn3RB;
 
-    FixedLine           aSortFL;
+    FixedLine           aDirFL;
     RadioButton         aColumnRB;
     RadioButton         aRowRB;
 
@@ -91,8 +91,8 @@ class SwSortDlg : public SvxStandardDialog
     SwWrtShell          &rSh;
     CollatorRessource* pColRes;
 
-    USHORT nX;
-    USHORT nY;
+    sal_uInt16 nX;
+    sal_uInt16 nY;
 
     virtual void        Apply();
     sal_Unicode         GetDelimChar() const;

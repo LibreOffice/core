@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <float.h>
 #include <sfx2/app.hxx>
 #include <svl/zforlist.hxx>
@@ -64,7 +63,7 @@ String lcl_DBTrennConv(const String& aContent)
 {
     String sTmp(aContent);
     sal_Unicode* pStr = sTmp.GetBufferAccess();
-    for( USHORT i = sTmp.Len(); i; --i, ++pStr )
+    for( sal_uInt16 i = sTmp.Len(); i; --i, ++pStr )
         if( DB_DELIM == *pStr )
             *pStr = '.';
     return sTmp;
@@ -115,7 +114,7 @@ void SwDBFieldType::ReleaseRef()
 
     if (--nRefCnt <= 0)
     {
-        USHORT nPos = GetDoc()->GetFldTypes()->GetPos(this);
+        sal_uInt16 nPos = GetDoc()->GetFldTypes()->GetPos(this);
 
         if (nPos != USHRT_MAX)
         {
@@ -125,7 +124,7 @@ void SwDBFieldType::ReleaseRef()
     }
 }
 
-bool SwDBFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDBFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -147,7 +146,7 @@ bool SwDBFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     return true;
 }
 
-bool SwDBFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -193,12 +192,12 @@ bool SwDBFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
     Beschreibung: SwDBField
  --------------------------------------------------------------------*/
 
-SwDBField::SwDBField(SwDBFieldType* pTyp, ULONG nFmt)
+SwDBField::SwDBField(SwDBFieldType* pTyp, sal_uLong nFmt)
     :   SwValueField(pTyp, nFmt),
         nSubType(0),
-        bIsInBodyTxt(TRUE),
-        bValidValue(FALSE),
-        bInitialized(FALSE)
+        bIsInBodyTxt(sal_True),
+        bValidValue(sal_False),
+        bInitialized(sal_False)
 {
     if (GetTyp())
         ((SwDBFieldType*)GetTyp())->AddRef();
@@ -273,29 +272,25 @@ SwField* SwDBField::Copy() const
     return pTmp;
 }
 
-String SwDBField::GetCntnt(BOOL bName) const
+String SwDBField::GetFieldName() const
 {
-    if(bName)
+    const String& rDBName = static_cast<SwDBFieldType*>(GetTyp())->GetName();
+
+    String sContent( rDBName.GetToken(0, DB_DELIM) );
+
+    if (sContent.Len() > 1)
     {
-        const String& rDBName = ((SwDBFieldType*)GetTyp())->GetName();
-
-        String sContent( rDBName.GetToken(0, DB_DELIM) );
-
-        if (sContent.Len() > 1)
-        {
-            sContent += DB_DELIM;
-            sContent += rDBName.GetToken(1, DB_DELIM);
-            sContent += DB_DELIM;
-            sContent += rDBName.GetToken(2, DB_DELIM);
-        }
-        return lcl_DBTrennConv(sContent);
+        sContent += DB_DELIM;
+        sContent += rDBName.GetToken(1, DB_DELIM);
+        sContent += DB_DELIM;
+        sContent += rDBName.GetToken(2, DB_DELIM);
     }
-    return Expand();
+    return lcl_DBTrennConv(sContent);
 }
 
 //------------------------------------------------------------------------------
 
-void SwDBField::ChgValue( double d, BOOL bVal )
+void SwDBField::ChgValue( double d, sal_Bool bVal )
 {
     bValidValue = bVal;
     SetValue(d);
@@ -323,7 +318,7 @@ void SwDBField::Evaluate()
     SwNewDBMgr* pMgr = GetDoc()->GetNewDBMgr();
 
     // erstmal loeschen
-    bValidValue = FALSE;
+    bValidValue = sal_False;
     double nValue = DBL_MAX;
     const SwDBData& aTmpData = GetDBData();
 
@@ -352,7 +347,7 @@ void SwDBField::Evaluate()
             if (*pDocFormatter->GetNullDate() != aStandard)
                 nValue += (aStandard - *pDocFormatter->GetNullDate());
         }
-        bValidValue = TRUE;
+        bValidValue = sal_True;
         SetValue(nValue);
         aContent = ((SwValueFieldType*)GetTyp())->ExpandValue(nValue, GetFormat(), GetLanguage());
     }
@@ -367,15 +362,15 @@ void SwDBField::Evaluate()
 
             SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
             if (nFmt && nFmt != SAL_MAX_UINT32 && !pFormatter->IsTextFormat(nFmt))
-                bValidValue = TRUE; // Wegen Bug #60339 nicht mehr bei allen Strings
+                bValidValue = sal_True; // Wegen Bug #60339 nicht mehr bei allen Strings
         }
         else
         {
-            // Bei Strings TRUE wenn Laenge > 0 sonst FALSE
+            // Bei Strings sal_True wenn Laenge > 0 sonst sal_False
             SetValue(aContent.Len() ? 1 : 0);
         }
     }
-    bInitialized = TRUE;
+    bInitialized = sal_True;
 }
 
 /*--------------------------------------------------------------------
@@ -387,23 +382,23 @@ const String& SwDBField::GetPar1() const
     return ((SwDBFieldType*)GetTyp())->GetName();
 }
 
-USHORT SwDBField::GetSubType() const
+sal_uInt16 SwDBField::GetSubType() const
 {
     return nSubType;
 }
 
-void SwDBField::SetSubType(USHORT nType)
+void SwDBField::SetSubType(sal_uInt16 nType)
 {
     nSubType = nType;
 }
 
-bool SwDBField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDBField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
         {
-            BOOL bTemp = 0 == (GetSubType()&nsSwExtendedSubType::SUB_OWN_FMT);
+            sal_Bool bTemp = 0 == (GetSubType()&nsSwExtendedSubType::SUB_OWN_FMT);
             rAny.setValue(&bTemp, ::getBooleanCppuType());
         }
         break;
@@ -429,7 +424,7 @@ bool SwDBField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 
 }
 
-bool SwDBField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -441,10 +436,10 @@ bool SwDBField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
     case FIELD_PROP_BOOL2:
     {
-        USHORT nSubTyp = GetSubType();
+        sal_uInt16 nSubTyp = GetSubType();
         sal_Bool bVisible = sal_False;
         if(!(rAny >>= bVisible))
-            return FALSE;
+            return sal_False;
         if(bVisible)
             nSubTyp &= ~nsSwExtendedSubType::SUB_INVISIBLE;
         else
@@ -492,7 +487,7 @@ bool SwDBField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     Beschreibung: Basisklasse fuer alle weiteren Datenbankfelder
  --------------------------------------------------------------------*/
 
-SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, ULONG nFmt) :
+SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFmt) :
     SwField(pTyp, nFmt),
     aDBData(rDBData),
     nSubType(0)
@@ -518,24 +513,20 @@ void SwDBNameInfField::SetDBData(const SwDBData & rDBData)
 
 //------------------------------------------------------------------------------
 
-String SwDBNameInfField::GetCntnt(BOOL bName) const
+String SwDBNameInfField::GetFieldName() const
 {
-    String sStr(SwField::GetCntnt(bName));
-
-    if(bName)
+    String sStr( SwField::GetFieldName() );
+    if (aDBData.sDataSource.getLength())
     {
-        if (aDBData.sDataSource.getLength())
-        {
-            sStr += ':';
-            sStr += String(aDBData.sDataSource);
-            sStr += DB_DELIM;
-            sStr += String(aDBData.sCommand);
-        }
+        sStr += ':';
+        sStr += String(aDBData.sDataSource);
+        sStr += DB_DELIM;
+        sStr += String(aDBData.sCommand);
     }
     return lcl_DBTrennConv(sStr);
 }
 
-bool SwDBNameInfField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDBNameInfField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -560,7 +551,7 @@ bool SwDBNameInfField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     return true;
 }
 
-bool SwDBNameInfField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDBNameInfField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -575,7 +566,7 @@ bool SwDBNameInfField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
     case FIELD_PROP_BOOL2:
     {
-        USHORT nSubTyp = GetSubType();
+        sal_uInt16 nSubTyp = GetSubType();
         sal_Bool bVisible = sal_False;
         if(!(rAny >>= bVisible))
             return false;
@@ -592,12 +583,12 @@ bool SwDBNameInfField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     return true;
 }
 
-USHORT SwDBNameInfField::GetSubType() const
+sal_uInt16 SwDBNameInfField::GetSubType() const
 {
     return nSubType;
 }
 
-void SwDBNameInfField::SetSubType(USHORT nType)
+void SwDBNameInfField::SetSubType(sal_uInt16 nType)
 {
     nSubType = nType;
 }
@@ -626,7 +617,7 @@ SwDBNextSetField::SwDBNextSetField(SwDBNextSetFieldType* pTyp,
                                    const String& rCond,
                                    const String& ,
                                    const SwDBData& rDBData) :
-    SwDBNameInfField(pTyp, rDBData), aCond(rCond), bCondValid(TRUE)
+    SwDBNameInfField(pTyp, rDBData), aCond(rCond), bCondValid(sal_True)
 {}
 
 //------------------------------------------------------------------------------
@@ -672,7 +663,7 @@ void SwDBNextSetField::SetPar1(const String& rStr)
     aCond = rStr;
 }
 
-bool SwDBNextSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDBNextSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     bool bRet = true;
     switch( nWhichId )
@@ -686,7 +677,7 @@ bool SwDBNextSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     return bRet;
 }
 
-bool SwDBNextSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDBNextSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     bool bRet = true;
     switch( nWhichId )
@@ -728,7 +719,7 @@ SwDBNumSetField::SwDBNumSetField(SwDBNumSetFieldType* pTyp,
     SwDBNameInfField(pTyp, rDBData),
     aCond(rCond),
     aPar2(rDBNum),
-    bCondValid(TRUE)
+    bCondValid(sal_True)
 {}
 
 //------------------------------------------------------------------------------
@@ -757,7 +748,7 @@ void SwDBNumSetField::Evaluate(SwDoc* pDoc)
     if( bCondValid && pMgr && pMgr->IsInMerge() &&
                         pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, sal_True))
     {   // Bedingug OK -> aktuellen Set einstellen
-        pMgr->ToRecordId(Max((USHORT)aPar2.ToInt32(), USHORT(1))-1);
+        pMgr->ToRecordId(Max((sal_uInt16)aPar2.ToInt32(), sal_uInt16(1))-1);
     }
 }
 
@@ -789,7 +780,7 @@ void SwDBNumSetField::SetPar2(const String& rStr)
     aPar2 = rStr;
 }
 
-bool SwDBNumSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDBNumSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     bool bRet = true;
     switch( nWhichId )
@@ -806,7 +797,7 @@ bool SwDBNumSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     return bRet;
 }
 
-bool    SwDBNumSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool    SwDBNumSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     bool bRet = true;
     switch( nWhichId )
@@ -838,7 +829,7 @@ SwDBNameFieldType::SwDBNameFieldType(SwDoc* pDocument)
 }
 //------------------------------------------------------------------------------
 
-String SwDBNameFieldType::Expand(ULONG ) const
+String SwDBNameFieldType::Expand(sal_uLong ) const
 {
     const SwDBData aData = pDoc->GetDBData();
     String sRet(aData.sDataSource);
@@ -860,7 +851,7 @@ SwFieldType* SwDBNameFieldType::Copy() const
     Beschreibung: Name der angedockten DB
  --------------------------------------------------------------------*/
 
-SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData, ULONG nFmt)
+SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFmt)
     : SwDBNameInfField(pTyp, rDBData, nFmt)
 {}
 
@@ -885,12 +876,12 @@ SwField* SwDBNameField::Copy() const
     return pTmp;
 }
 
-bool SwDBNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDBNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     return SwDBNameInfField::QueryValue(rAny, nWhichId );
 }
 
-bool SwDBNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDBNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     return SwDBNameInfField::PutValue(rAny, nWhichId );
 }
@@ -919,7 +910,7 @@ SwFieldType* SwDBSetNumberFieldType::Copy() const
 
 SwDBSetNumberField::SwDBSetNumberField(SwDBSetNumberFieldType* pTyp,
                                        const SwDBData& rDBData,
-                                       ULONG nFmt)
+                                       sal_uLong nFmt)
     : SwDBNameInfField(pTyp, rDBData, nFmt), nNumber(0)
 {}
 
@@ -930,7 +921,7 @@ String SwDBSetNumberField::Expand() const
     if(0 !=(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE) || nNumber == 0)
         return aEmptyStr;
     else
-        return FormatNumber((USHORT)nNumber, GetFormat());
+        return FormatNumber((sal_uInt16)nNumber, GetFormat());
     //return(nNumber == 0 ? aEmptyStr : FormatNumber(nNumber, GetFormat()));
 }
 
@@ -960,7 +951,7 @@ SwField* SwDBSetNumberField::Copy() const
     return pTmp;
 }
 
-bool SwDBSetNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDBSetNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     bool bRet = true;
     switch( nWhichId )
@@ -977,7 +968,7 @@ bool SwDBSetNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     return bRet;
 }
 
-bool SwDBSetNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDBSetNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     bool bRet = true;
     switch( nWhichId )
@@ -986,7 +977,7 @@ bool SwDBSetNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         {
             sal_Int16 nSet = 0;
             rAny >>= nSet;
-            if(nSet < (INT16) SVX_NUMBER_NONE )
+            if(nSet < (sal_Int16) SVX_NUMBER_NONE )
                 SetFormat(nSet);
             else {
             }

@@ -636,7 +636,7 @@ sal_Bool SwSoftHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTx
 void SwSoftHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     const String aString( '-' );
-    const USHORT nWhich = ! Width() ?
+    const sal_uInt16 nWhich = ! Width() ?
                           POR_SOFTHYPH_COMP :
                           GetWhichPor();
     rPH.Special( GetLen(), aString, nWhich );

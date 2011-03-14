@@ -30,6 +30,7 @@
 
 ModalDialog DLG_MAILMERGEWIZARD
 {
+    HelpID = "sw:ModalDialog:DLG_MAILMERGEWIZARD";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Text [ en-US ] = "Mail Merge Wizard" ;

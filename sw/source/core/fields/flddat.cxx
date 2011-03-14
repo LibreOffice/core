@@ -56,7 +56,7 @@ SwFieldType* SwDateTimeFieldType::Copy() const
     Beschreibung: Datum/Zeit-Feld
  --------------------------------------------------------------------*/
 
-SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, USHORT nSub, ULONG nFmt, USHORT nLng)
+SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub, sal_uLong nFmt, sal_uInt16 nLng)
     : SwValueField(pInitType, nFmt, nLng, 0.0),
     nSubType(nSub),
     nOffset(0)
@@ -107,12 +107,12 @@ SwField* SwDateTimeField::Copy() const
     return pTmp;
 }
 
-USHORT SwDateTimeField::GetSubType() const
+sal_uInt16 SwDateTimeField::GetSubType() const
 {
     return nSubType;
 }
 
-void SwDateTimeField::SetSubType(USHORT nType)
+void SwDateTimeField::SetSubType(sal_uInt16 nType)
 {
     nSubType = nType;
 }
@@ -153,7 +153,7 @@ double SwDateTimeField::GetValue() const
         return GetDateTime(GetDoc(), DateTime());
 }
 
-Date SwDateTimeField::GetDate(BOOL bUseOffset) const
+Date SwDateTimeField::GetDate(sal_Bool bUseOffset) const
 {
     SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
     Date* pNullDate = pFormatter->GetNullDate();
@@ -168,7 +168,7 @@ Date SwDateTimeField::GetDate(BOOL bUseOffset) const
     return aDate;
 }
 
-Time SwDateTimeField::GetTime(BOOL bUseOffset) const
+Time SwDateTimeField::GetTime(sal_Bool bUseOffset) const
 {
     double fDummy;
     double fFract = modf(GetValue(), &fDummy);
@@ -179,19 +179,19 @@ Time SwDateTimeField::GetTime(BOOL bUseOffset) const
     return (Time)aDT;
 }
 
-bool SwDateTimeField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
+bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
         {
-            BOOL bTmp = IsFixed();
+            sal_Bool bTmp = IsFixed();
             rVal.setValue(&bTmp, ::getCppuBooleanType());
         }
         break;
     case FIELD_PROP_BOOL2:
         {
-            BOOL bTmp = IsDate();
+            sal_Bool bTmp = IsDate();
             rVal.setValue(&bTmp, ::getCppuBooleanType());
         }
         break;
@@ -222,7 +222,7 @@ bool SwDateTimeField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
     return true;
 }
 
-bool SwDateTimeField::PutValue( const uno::Any& rVal, USHORT nWhichId )
+bool SwDateTimeField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
 {
     sal_Int32 nTmp = 0;
     switch( nWhichId )
@@ -249,7 +249,7 @@ bool SwDateTimeField::PutValue( const uno::Any& rVal, USHORT nWhichId )
         {
             util::DateTime aDateTimeValue;
             if(!(rVal >>= aDateTimeValue))
-                return FALSE;
+                return sal_False;
             DateTime aDateTime;
             aDateTime.Set100Sec(aDateTimeValue.HundredthSeconds);
             aDateTime.SetSec(aDateTimeValue.Seconds);

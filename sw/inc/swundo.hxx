@@ -25,10 +25,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SWUNDO_HXX
-#define _SWUNDO_HXX
+#ifndef SWUNDO_HXX
+#define SWUNDO_HXX
 
-#include <svl/svarray.hxx>
+#include <vector>
+
+#include <rtl/ustring.hxx>
+
+
+typedef ::std::vector< ::rtl::OUString > SwUndoComments_t;
+
 
 // die Ids fuer StdAktionen
 enum SwUndoId
@@ -175,26 +181,6 @@ enum SwUndoId
     UNDO_UI_REPLACE_STYLE
 };
 
-
-#define INIT_UNDOIDS 20
-#define GROW_UNDOIDS 32
-// Das Array der verwendeten Undo-Ids
-class String;
-class SwUndoIdAndName
-{
-    SwUndoId eUndoId;
-    String* pUndoStr;
-
-public:
-    SwUndoIdAndName() : eUndoId( UNDO_EMPTY ), pUndoStr( 0 ) {}
-    SwUndoIdAndName( SwUndoId nId, const String* pStr = 0 );
-    ~SwUndoIdAndName();
-
-    SwUndoId GetUndoId() const          { return eUndoId; }
-    const String* GetUndoStr() const    { return pUndoStr; }
-};
-typedef SwUndoIdAndName* SwUndoIdAndNamePtr;
-SV_DECL_PTRARR_DEL( SwUndoIds, SwUndoIdAndNamePtr, INIT_UNDOIDS, GROW_UNDOIDS )
 
 #endif
 

@@ -353,7 +353,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     };
     GetViewFrame()->GetBindings().Invalidate(aInval);
 
-    BOOL bEndTextEdit = TRUE;
+    sal_Bool bEndTextEdit = sal_True;
     if (pFuncPtr)
     {
         if (GetDrawFuncPtr())
@@ -371,7 +371,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         {
             if(SID_OBJECT_SELECT == nDrawSfxId )
             {
-                pWrtShell->GotoObj(TRUE);
+                pWrtShell->GotoObj(sal_True);
             }
             else
             {
@@ -388,7 +388,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
                 {
                     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                     BeginTextEdit(pObj);
-                    bEndTextEdit = FALSE;
+                    bEndTextEdit = sal_False;
                 }
             }
         }
@@ -416,7 +416,7 @@ void SwView::ExitDraw()
     {
         // the shell may be invalid at close/reload/SwitchToViewShell
         SfxDispatcher* pDispatch = GetViewFrame()->GetDispatcher();
-        USHORT nIdx = 0;
+        sal_uInt16 nIdx = 0;
         SfxShell* pTest = 0;
         do
         {

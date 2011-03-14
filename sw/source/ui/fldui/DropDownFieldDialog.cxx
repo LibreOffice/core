@@ -33,7 +33,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
 #include <fldmgr.hxx>
@@ -50,7 +49,7 @@ using namespace ::com::sun::star;
     Beschreibung: Feldeinfuegen bearbeiten
  --------------------------------------------------------------------*/
 sw::DropDownFieldDialog::DropDownFieldDialog( Window *pParent, SwWrtShell &rS,
-                              SwField* pField, BOOL bNextButton ) :
+                              SwField* pField, sal_Bool bNextButton ) :
 
     SvxStandardDialog(pParent,  SW_RES(DLG_FLD_DROPDOWN)),
     aItemsFL(       this, SW_RES( FL_ITEMS       )),
@@ -94,7 +93,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog( Window *pParent, SwWrtShell &rS,
         aListItemsLB.SelectEntry(pDropField->GetSelectedItem());
     }
 
-    BOOL bEnable = !rSh.IsCrsrReadonly();
+    sal_Bool bEnable = !rSh.IsCrsrReadonly();
     aOKPB.Enable( bEnable );
 
     aListItemsLB.GrabFocus();
@@ -114,12 +113,11 @@ void sw::DropDownFieldDialog::Apply()
         {
             rSh.StartAllAction();
 
-            SwDropDownField * pCopy = (SwDropDownField *) pDropField->Copy();
+            ::std::auto_ptr<SwDropDownField> const pCopy(
+                static_cast<SwDropDownField *>( pDropField->CopyField() ) );
 
             pCopy->SetPar1(sSelect);
             rSh.SwEditShell::UpdateFlds(*pCopy);
-
-            delete pCopy;
 
             rSh.SetUndoNoResetModified();
             rSh.EndAllAction();

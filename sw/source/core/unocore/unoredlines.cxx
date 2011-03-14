@@ -76,7 +76,7 @@ uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
     uno::Any aRet;
     if(rRedTbl.Count() > nIndex && nIndex >= 0)
     {
-        uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl.GetObject((USHORT)nIndex), *GetDoc() );
+        uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl.GetObject((sal_uInt16)nIndex), *GetDoc() );
         aRet <<= xRet;
     }
     else
@@ -153,7 +153,7 @@ SwXRedlineEnumeration::~SwXRedlineEnumeration()
 {
 }
 
-BOOL SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeException )
+sal_Bool SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeException )
 {
     if(!pDoc)
         throw uno::RuntimeException();

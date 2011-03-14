@@ -91,8 +91,8 @@ SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufactur
                     //except for the continuous flag ('C'/'S')
                     pValues[nProp] >>= sTmp;
                     String sMeasure(sTmp);
-                    USHORT nTokenCount = sMeasure.GetTokenCount(';');
-                    for(USHORT i = 0; i < nTokenCount; i++)
+                    sal_uInt16 nTokenCount = sMeasure.GetTokenCount(';');
+                    for(sal_uInt16 i = 0; i < nTokenCount; i++)
                     {
                         String sToken(sMeasure.GetToken(i, ';' ));
                         int nVal = sToken.ToInt32();

@@ -195,7 +195,7 @@ sal_Bool SwXRedlineText::hasElements(  ) throw(uno::RuntimeException)
 
 SwXRedlinePortion::SwXRedlinePortion(   const SwRedline* pRed,
                         const SwUnoCrsr* pPortionCrsr,
-                        uno::Reference< text::XText >  xParent, BOOL bStart) :
+                        uno::Reference< text::XText >  xParent, sal_Bool bStart) :
     SwXTextPortion(pPortionCrsr, xParent, bStart ? PORTION_REDLINE_START : PORTION_REDLINE_END),
     pRedline(pRed)
 {
@@ -295,8 +295,8 @@ void SwXRedlinePortion::Validate() throw( uno::RuntimeException )
     //search for the redline
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     const SwRedlineTbl& rRedTbl = pDoc->GetRedlineTbl();
-    sal_Bool bFound = FALSE;
-    for(USHORT nRed = 0; nRed < rRedTbl.Count() && !bFound; nRed++)
+    sal_Bool bFound = sal_False;
+    for(sal_uInt16 nRed = 0; nRed < rRedTbl.Count() && !bFound; nRed++)
         bFound = pRedline == rRedTbl[nRed];
     if(!bFound)
         throw uno::RuntimeException();
@@ -473,14 +473,14 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
     if(!pDoc)
         throw uno::RuntimeException();
     uno::Any aRet;
-    BOOL bStart = rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_START));
+    sal_Bool bStart = rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_START));
     if(bStart ||
         rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_END)))
     {
         uno::Reference<XInterface> xRet;
         SwNode* pNode = pRedline->GetNode();
         if(!bStart && pRedline->HasMark())
-            pNode = pRedline->GetNode(FALSE);
+            pNode = pRedline->GetNode(sal_False);
         switch(pNode->GetNodeType())
         {
             case ND_SECTIONNODE:

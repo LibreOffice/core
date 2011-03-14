@@ -93,7 +93,7 @@ Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, co
         Rectangle aDesktop = pParentWin->GetDesktopRectPixel();
         Size aSpace = pParentWin->LogicToPixel( Size( 8, 12 ), MAP_APPFONT );
 
-        BOOL bLayoutRTL = ::GetActiveView()->GetWrtShell().IsTableRightToLeft();
+        sal_Bool bLayoutRTL = ::GetActiveView()->GetWrtShell().IsTableRightToLeft();
         bool bCenterHor = false;
 
         if ( aDesktop.Bottom() - aObjAbs.Bottom() >= rDialogSize.Height() + aSpace.Height() )
@@ -183,7 +183,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
     }
 
     SwFlyFrmFmt *pFlyFrmFmt = 0;
-    xChartModel.set( SwTableFUNC( &rWrtShell, FALSE ).InsertChart( xDataProvider, (sal_True == xDataProvider.is()), aRangeString, &pFlyFrmFmt ));
+    xChartModel.set( SwTableFUNC( &rWrtShell, sal_False ).InsertChart( xDataProvider, (sal_True == xDataProvider.is()), aRangeString, &pFlyFrmFmt ));
 
     //open wizard
     //@todo get context from writer if that has one
@@ -250,7 +250,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                 if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
                 {
                     rWrtShell.Undo();
-                    rWrtShell.getIDocumentUndoRedoAccess()->ClearRedo();
+                    rWrtShell.GetIDocumentUndoRedo().ClearRedo();
                 }
                 else
                 {
@@ -268,7 +268,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
 
 void AutoEdit::KeyInput( const KeyEvent& rEvt )
 {
-    USHORT nCode = rEvt.GetKeyCode().GetCode();
+    sal_uInt16 nCode = rEvt.GetKeyCode().GetCode();
     if( nCode != KEY_SPACE )
         Edit::KeyInput( rEvt );
 }

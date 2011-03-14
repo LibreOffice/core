@@ -3,6 +3,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  * Copyright 2010 Miklos Vajna.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -203,7 +204,7 @@ static OString OutTBLBorderLine(RtfExport &rExport, const SvxBorderLine* pLine, 
 }
 
 static OString OutBorderLine(RtfExport &rExport, const SvxBorderLine* pLine,
-    const sal_Char* pStr, USHORT nDist)
+    const sal_Char* pStr, sal_uInt16 nDist)
 {
     OStringBuffer aRet;
     aRet.append(OutTBLBorderLine(rExport, pLine, pStr));
@@ -535,12 +536,12 @@ void RtfAttributeOutput::Redline( const SwRedlineData* pRedline )
     m_aRun.append(' ');
 }
 
-void RtfAttributeOutput::FormatDrop( const SwTxtNode& /*rNode*/, const SwFmtDrop& /*rSwFmtDrop*/, USHORT /*nStyle*/, ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/, ww8::WW8TableNodeInfoInner::Pointer_t /*pTextNodeInfoInner*/ )
+void RtfAttributeOutput::FormatDrop( const SwTxtNode& /*rNode*/, const SwFmtDrop& /*rSwFmtDrop*/, sal_uInt16 /*nStyle*/, ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/, ww8::WW8TableNodeInfoInner::Pointer_t /*pTextNodeInfoInner*/ )
 {
     OSL_TRACE("TODO: %s", OSL_THIS_FUNC);
 }
 
-void RtfAttributeOutput::ParagraphStyle( USHORT nStyle )
+void RtfAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -594,7 +595,7 @@ void RtfAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
 
     // Cell margins
     const SvxBoxItem& rBox = pFmt->GetBox( );
-    static const USHORT aBorders[] =
+    static const sal_uInt16 aBorders[] =
     {
         BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
     };
@@ -638,7 +639,7 @@ void RtfAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
                         rLR.GetLeft() - rLR.GetRight();
     }
     SwTwips nTblSz = pFmt->GetFrmSize().GetWidth();
-    for( USHORT i = 0; i < pRow->GetCells().Count(); i++ )
+    for( sal_uInt16 i = 0; i < pRow->GetCells().Count(); i++ )
     {
         SwWriteTableCell *pCell = pRow->GetCells( )[ i ];
         const SwFrmFmt *pCellFmt = pCell->GetBox()->GetFrmFmt();
@@ -676,10 +677,10 @@ void RtfAttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointe
     SwWriteTableCell *pCell = pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
     const SwFrmFmt *pCellFmt = pCell->GetBox()->GetFrmFmt();
     const SfxPoolItem* pItem;
-    if (SFX_ITEM_SET == pCellFmt->GetAttrSet().GetItemState(RES_BOX, TRUE, &pItem))
+    if (SFX_ITEM_SET == pCellFmt->GetAttrSet().GetItemState(RES_BOX, sal_True, &pItem))
     {
         const SvxBoxItem& rBox = (SvxBoxItem&)*pItem;
-        static const USHORT aBorders[] =
+        static const sal_uInt16 aBorders[] =
         {
             BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
         };
@@ -723,7 +724,7 @@ void RtfAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
     const SwFrmFmt *pCellFmt = pCell->GetBox()->GetFrmFmt();
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == pCellFmt->GetAttrSet().GetItemState(
-                RES_BACKGROUND, TRUE, &pItem ))
+                RES_BACKGROUND, sal_True, &pItem ))
     {
         const SvxBrushItem& rBack = (SvxBrushItem&)*pItem;
         if( !rBack.GetColor().GetTransparency() )
@@ -807,7 +808,7 @@ void RtfAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_
 
     // vertical alignment
     if( SFX_ITEM_SET == pCellFmt->GetAttrSet().GetItemState(
-                RES_VERT_ORIENT, TRUE, &pItem ) )
+                RES_VERT_ORIENT, sal_True, &pItem ) )
         switch( ((SwFmtVertOrient*)pItem)->GetVertOrient() )
         {
             case text::VertOrientation::CENTER: m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLVERTALC); break;
@@ -898,8 +899,8 @@ void RtfAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t 
     if( pLayout && pLayout->IsExportable() )
         m_pTableWrt = new SwWriteTable( pLayout );
     else
-        m_pTableWrt = new SwWriteTable( pTable->GetTabLines(), (USHORT)nPageSize,
-                (USHORT)nTblSz, false);
+        m_pTableWrt = new SwWriteTable( pTable->GetTabLines(), (sal_uInt16)nPageSize,
+                (sal_uInt16)nTblSz, false);
 }
 
 void RtfAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
@@ -1017,7 +1018,7 @@ void RtfAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer
 
         const SwTable *pTable = pInner->getTable( );
         const SwTableLines& rLines = pTable->GetTabLines( );
-        USHORT nLinesCount = rLines.Count( );
+        sal_uInt16 nLinesCount = rLines.Count( );
 
         if ( pInner->isEndOfCell() )
             EndTableCell();
@@ -1043,7 +1044,7 @@ void RtfAttributeOutput::StartStyles()
     m_aStylesheet.append(OOO_STRING_SVTOOLS_RTF_STYLESHEET);
 }
 
-void RtfAttributeOutput::EndStyles( USHORT /*nNumberOfStyles*/ )
+void RtfAttributeOutput::EndStyles( sal_uInt16 /*nNumberOfStyles*/ )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
     m_rExport.Strm() << '}';
@@ -1051,7 +1052,7 @@ void RtfAttributeOutput::EndStyles( USHORT /*nNumberOfStyles*/ )
     m_rExport.Strm() << '}';
 }
 
-void RtfAttributeOutput::DefaultStyle( USHORT /*nStyle*/ )
+void RtfAttributeOutput::DefaultStyle( sal_uInt16 /*nStyle*/ )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -1059,7 +1060,8 @@ void RtfAttributeOutput::DefaultStyle( USHORT /*nStyle*/ )
 }
 
 void RtfAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
-        USHORT nBase, USHORT nNext, USHORT /*nWwId*/, USHORT nId, bool /*bAutoUpdate*/ )
+        sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId,
+        bool /* bAutoUpdate */ )
 {
     OSL_TRACE("%s, rName = '%s'", OSL_THIS_FUNC,
             OUStringToOString( OUString( rName ), m_rExport.eCurrentEncoding ).getStr());
@@ -1097,7 +1099,7 @@ void RtfAttributeOutput::EndStyle()
     m_aStylesheet.append(m_rExport.sNewLine);
 }
 
-void RtfAttributeOutput::StartStyleProperties( bool /*bParProp*/, USHORT /*nStyle*/ )
+void RtfAttributeOutput::StartStyleProperties( bool /*bParProp*/, sal_uInt16 /*nStyle*/ )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
     /* noop */
@@ -1109,7 +1111,7 @@ void RtfAttributeOutput::EndStyleProperties( bool /*bParProp*/ )
     /* noop */
 }
 
-void RtfAttributeOutput::OutlineNumbering( BYTE nLvl, const SwNumFmt& /*rNFmt*/, const SwFmt& /*rFmt*/ )
+void RtfAttributeOutput::OutlineNumbering( sal_uInt8 nLvl, const SwNumFmt& /*rNFmt*/, const SwFmt& /*rFmt*/ )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -1132,7 +1134,7 @@ void RtfAttributeOutput::PageBreakBefore( bool bBreak )
     }
 }
 
-void RtfAttributeOutput::SectionBreak( BYTE nC, const WW8_SepInfo* pSectionInfo )
+void RtfAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectionInfo )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -1175,7 +1177,7 @@ void RtfAttributeOutput::SectionFormProtection( bool bProtected )
     m_aSectionBreaks.append((sal_Int32)!bProtected);
 }
 
-void RtfAttributeOutput::SectionLineNumbering( ULONG /*nRestartNo*/, const SwLineNumberInfo& rLnNumInfo )
+void RtfAttributeOutput::SectionLineNumbering( sal_uLong /*nRestartNo*/, const SwLineNumberInfo& rLnNumInfo )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -1230,7 +1232,7 @@ void RtfAttributeOutput::SectionBiDi( bool bBiDi )
     m_rExport.Strm() << (bBiDi ? OOO_STRING_SVTOOLS_RTF_RTLSECT : OOO_STRING_SVTOOLS_RTF_LTRSECT);
 }
 
-void RtfAttributeOutput::SectionPageNumbering( USHORT nNumType, USHORT nPageRestartNumber )
+void RtfAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 nPageRestartNumber )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -1257,7 +1259,7 @@ void RtfAttributeOutput::SectionPageNumbering( USHORT nNumType, USHORT nPageRest
         m_aSectionBreaks.append(pStr);
 }
 
-void RtfAttributeOutput::SectionType( BYTE nBreakCode )
+void RtfAttributeOutput::SectionType( sal_uInt8 nBreakCode )
 {
     OSL_TRACE("%s, nBreakCode = %d", OSL_THIS_FUNC, nBreakCode);
 
@@ -1279,7 +1281,7 @@ void RtfAttributeOutput::SectionType( BYTE nBreakCode )
         m_rExport.Strm() << m_aSectionBreaks.makeStringAndClear();
 }
 
-void RtfAttributeOutput::NumberingDefinition( USHORT nId, const SwNumRule &/*rRule*/ )
+void RtfAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &/*rRule*/ )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -1291,7 +1293,7 @@ void RtfAttributeOutput::NumberingDefinition( USHORT nId, const SwNumRule &/*rRu
     m_rExport.OutULong(nId) << '}';
 }
 
-void RtfAttributeOutput::StartAbstractNumbering( USHORT nId )
+void RtfAttributeOutput::StartAbstractNumbering( sal_uInt16 nId )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -1308,12 +1310,12 @@ void RtfAttributeOutput::EndAbstractNumbering()
     m_rExport.OutULong( m_nListId ) << '}' << m_rExport.sNewLine;
 }
 
-void RtfAttributeOutput::NumberingLevel( BYTE nLevel,
-        USHORT nStart,
-        USHORT nNumberingType,
+void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
+        sal_uInt16 nStart,
+        sal_uInt16 nNumberingType,
         SvxAdjust eAdjust,
-        const BYTE * pNumLvlPos,
-        BYTE /*nFollow*/,
+        const sal_uInt8 * pNumLvlPos,
+        sal_uInt8 /*nFollow*/,
         const wwFont * pFont,
         const SfxItemSet * pOutSet,
         sal_Int16 nIndentAt,
@@ -1329,7 +1331,7 @@ void RtfAttributeOutput::NumberingLevel( BYTE nLevel,
 
     m_rExport.Strm() << '{' << OOO_STRING_SVTOOLS_RTF_LISTLEVEL;
 
-    USHORT nVal = 0;
+    sal_uInt16 nVal = 0;
     switch( nNumberingType )
     {
         case SVX_NUM_ROMAN_UPPER:                   nVal = 1;       break;
@@ -1381,7 +1383,7 @@ void RtfAttributeOutput::NumberingLevel( BYTE nLevel,
 
     // write the levelnumbers
     m_rExport.Strm() << "{" << OOO_STRING_SVTOOLS_RTF_LEVELNUMBERS;
-    for( BYTE i = 0; i <= nLevel && pNumLvlPos[ i ]; ++i )
+    for( sal_uInt8 i = 0; i <= nLevel && pNumLvlPos[ i ]; ++i )
     {
         m_rExport.Strm() << "\\'" << m_rExport.OutHex(pNumLvlPos[ i ], 2).getStr();
     }
@@ -1407,7 +1409,7 @@ void RtfAttributeOutput::NumberingLevel( BYTE nLevel,
         m_rExport.Strm() << '}';
 }
 
-void RtfAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField /*eType*/, const String& rFldCmd, BYTE /*nMode*/ )
+void RtfAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField /*eType*/, const String& rFldCmd, sal_uInt8 /*nMode*/ )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -1417,7 +1419,7 @@ void RtfAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField /*eTyp
     m_aRunText.append(m_rExport.OutString(rFldCmd, m_rExport.eCurrentEncoding));
     m_aRunText.append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
     if (pFld)
-        m_aRunText.append(m_rExport.OutString(pFld->GetCntnt(), m_rExport.eDefaultEncoding));
+        m_aRunText.append(m_rExport.OutString(pFld->ExpandField(true), m_rExport.eDefaultEncoding));
     m_aRunText.append("}}");
 }
 
@@ -1494,8 +1496,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
 
                 const SwFrmFmt& rFrmFmt = rFrame.GetFrmFmt( );
                 const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
-                ULONG nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
-                ULONG nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+                sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
+                sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
                 m_rExport.SaveData( nStt, nEnd );
                 m_rExport.mpParentFrame = &rFrame;
                 m_rExport.WriteText( );
@@ -1524,7 +1526,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
             }
 
             if ( pGrfNode )
-                FlyFrameGraphic( dynamic_cast<const SwFlyFrmFmt*>( &rFrame.GetFrmFmt() ), *pGrfNode);
+                FlyFrameGraphic( dynamic_cast<const SwFlyFrmFmt*>( &rFrame.GetFrmFmt() ), *pGrfNode );
             break;
         case sw::Frame::eDrawing:
             {
@@ -2196,7 +2198,7 @@ void RtfAttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
         sal_Unicode cStart = rTwoLines.GetStartBracket();
         sal_Unicode cEnd =   rTwoLines.GetEndBracket();
 
-        USHORT nType;
+        sal_uInt16 nType;
         if( !cStart && !cEnd )
             nType = 0;
         else if( '{' == cStart || '}' == cEnd )
@@ -2264,7 +2266,7 @@ void RtfAttributeOutput::TextINetFormat( const SwFmtINetFmt& rURL )
         m_aStyles.append("{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
         if( pTxtAtr && 0 != ( pFmt = pTxtAtr->GetCharFmt() ))
         {
-            USHORT nStyle = m_rExport.GetId( *pFmt );
+            sal_uInt16 nStyle = m_rExport.GetId( *pFmt );
             OString* pString = m_rExport.GetStyle(nStyle);
             if (pString)
                 m_aStyles.append(*pString);
@@ -2276,7 +2278,7 @@ void RtfAttributeOutput::TextCharFormat( const SwFmtCharFmt& rCharFmt )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
-    USHORT nStyle = m_rExport.GetId( *rCharFmt.GetCharFmt() );
+    sal_uInt16 nStyle = m_rExport.GetId( *rCharFmt.GetCharFmt() );
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_CS);
     m_aStyles.append((sal_Int32)nStyle);
     OString* pString = m_rExport.GetStyle(nStyle);
@@ -2384,7 +2386,7 @@ void RtfAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
     long nOffset = ((SvxLRSpaceItem&)m_rExport.GetItem( RES_LR_SPACE )).GetTxtLeft();
-    for( USHORT n = 0; n < rTabStop.Count(); n++ )
+    for( sal_uInt16 n = 0; n < rTabStop.Count(); n++ )
     {
         const SvxTabStop & rTS = rTabStop[ n ];
         if( SVX_TAB_ADJUST_DEFAULT != rTS.GetAdjustment() )
@@ -2486,7 +2488,7 @@ void RtfAttributeOutput::ParaNumRule_Impl( const SwTxtNode* pTxtNd, sal_Int32 nL
         aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetIndentAt() );
         aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
 
-        USHORT nStyle = m_rExport.GetId( *pFmt->GetCharFmt() );
+        sal_uInt16 nStyle = m_rExport.GetId( *pFmt->GetCharFmt() );
         OString* pString = m_rExport.GetStyle(nStyle);
         if (pString)
             m_aStyles.append(*pString);
@@ -2713,10 +2715,10 @@ void RtfAttributeOutput::FormatSurround( const SwFmtSurround& rSurround )
     if ( m_rExport.bOutFlyFrmAttrs && !m_rExport.bRTFFlySyntax )
     {
         SwSurround eSurround = rSurround.GetSurround();
-        BOOL bGold = SURROUND_IDEAL == eSurround;
+        sal_Bool bGold = SURROUND_IDEAL == eSurround;
         if( bGold )
             eSurround = SURROUND_PARALLEL;
-        RTFSurround aMC( bGold, static_cast< BYTE >(eSurround) );
+        RTFSurround aMC( bGold, static_cast< sal_uInt8 >(eSurround) );
         m_aRunText.append(OOO_STRING_SVTOOLS_RTF_FLYMAINCNT);
         m_aRunText.append( (sal_Int32) aMC.GetValue() );
     }
@@ -2754,7 +2756,7 @@ void RtfAttributeOutput::FormatVertOrientation( const SwFmtVertOrient& rFlyVert 
     }
     else if ( !m_rExport.bRTFFlySyntax )
     {
-        RTFVertOrient aVO( static_cast< USHORT >(rFlyVert.GetVertOrient()), static_cast< USHORT >(rFlyVert.GetRelationOrient()) );
+        RTFVertOrient aVO( static_cast< sal_uInt16 >(rFlyVert.GetVertOrient()), static_cast< sal_uInt16 >(rFlyVert.GetRelationOrient()) );
         m_aRunText.append(OOO_STRING_SVTOOLS_RTF_FLYVERT);
         m_aRunText.append((sal_Int32)aVO.GetValue());
     }
@@ -2791,8 +2793,8 @@ void RtfAttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori
             m_aRunText.append(pS);
     } else if ( !m_rExport.bRTFFlySyntax )
     {
-        RTFHoriOrient aHO( static_cast< USHORT >(rFlyHori.GetHoriOrient()),
-                static_cast< USHORT >(rFlyHori.GetRelationOrient()) );
+        RTFHoriOrient aHO( static_cast< sal_uInt16 >(rFlyHori.GetHoriOrient()),
+                static_cast< sal_uInt16 >(rFlyHori.GetRelationOrient()) );
         m_aRunText.append(OOO_STRING_SVTOOLS_RTF_FLYHORZ);
         m_aRunText.append((sal_Int32)aHO.GetValue());
     }
@@ -2804,7 +2806,7 @@ void RtfAttributeOutput::FormatAnchor( const SwFmtAnchor& rAnchor )
 
     if ( !m_rExport.bRTFFlySyntax )
     {
-        USHORT nId = static_cast< USHORT >(rAnchor.GetAnchorId());
+        sal_uInt16 nId = static_cast< sal_uInt16 >(rAnchor.GetAnchorId());
         m_aRunText.append(OOO_STRING_SVTOOLS_RTF_FLYANCHOR);
         m_aRunText.append((sal_Int32)nId);
         switch( nId )
@@ -2836,12 +2838,12 @@ void RtfAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
-    static USHORT const aBorders[] = {
+    static sal_uInt16 aBorders[] = {
         BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
     static const sal_Char* aBorderNames[] = {
         OOO_STRING_SVTOOLS_RTF_BRDRT, OOO_STRING_SVTOOLS_RTF_BRDRL, OOO_STRING_SVTOOLS_RTF_BRDRB, OOO_STRING_SVTOOLS_RTF_BRDRR };
 
-    USHORT nDist = rBox.GetDistance();
+    sal_uInt16 nDist = rBox.GetDistance();
 
     if ( m_rExport.bRTFFlySyntax )
         return;
@@ -2858,7 +2860,7 @@ void RtfAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         m_aSectionBreaks.append(OutBorderLine( m_rExport, rBox.GetTop(), OOO_STRING_SVTOOLS_RTF_BOX, nDist ));
     else
     {
-        const USHORT* pBrd = aBorders;
+        const sal_uInt16* pBrd = aBorders;
         const sal_Char** pBrdNms = (const sal_Char**)aBorderNames;
         for(int i = 0; i < 4; ++i, ++pBrd, ++pBrdNms)
         {
@@ -2870,7 +2872,7 @@ void RtfAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         }
     }
 
-    const USHORT* pBrd = aBorders;
+    const sal_uInt16* pBrd = aBorders;
     const sal_Char** pBrdNms = (const sal_Char**)aBorderNames;
     for( int i = 0; i < 4; ++i, ++pBrd, ++pBrdNms )
     {
@@ -2888,7 +2890,7 @@ void RtfAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         m_aStyles.append(m_aSectionBreaks.makeStringAndClear());
 }
 
-void RtfAttributeOutput::FormatColumns_Impl( USHORT nCols, const SwFmtCol& rCol, bool bEven, SwTwips nPageSize )
+void RtfAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFmtCol& rCol, bool bEven, SwTwips nPageSize )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -2898,12 +2900,12 @@ void RtfAttributeOutput::FormatColumns_Impl( USHORT nCols, const SwFmtCol& rCol,
     if( bEven )
     {
         m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_COLSX;
-        m_rExport.OutLong( rCol.GetGutterWidth( TRUE ) );
+        m_rExport.OutLong( rCol.GetGutterWidth( sal_True ) );
     }
     else
     {
         const SwColumns & rColumns = rCol.GetColumns( );
-        for( USHORT n = 0; n < nCols; )
+        for( sal_uInt16 n = 0; n < nCols; )
         {
             m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_COLNO;
             m_rExport.OutLong( n+1 );
@@ -3024,7 +3026,7 @@ RtfAttributeOutput::~RtfAttributeOutput()
     OSL_TRACE("%s", OSL_THIS_FUNC);
 }
 
-RtfExport& RtfAttributeOutput::GetExport()
+MSWordExportBase& RtfAttributeOutput::GetExport()
 {
     return m_rExport;
 }
@@ -3104,7 +3106,7 @@ void RtfAttributeOutput::FontPitchType( FontPitch ePitch ) const
 
     m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_FPRQ;
 
-    USHORT nVal = 0;
+    sal_uInt16 nVal = 0;
     switch (ePitch)
     {
         case PITCH_FIXED:

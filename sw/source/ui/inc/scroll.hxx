@@ -32,11 +32,11 @@
 class SwScrollbar: public ScrollBar
 {
     Size    aDocSz;
-    BOOL    bHori       :1;     // Horizontal = TRUE, sonst Vertikal
-    BOOL    bAuto       :1;     // fuer Scrollingmode
-    BOOL    bThumbEnabled:1;
-    BOOL    bVisible    :1;     // Show/Hide sollen nur noch dieses Flag setzen
-    BOOL    bSizeSet    :1;     // wurde die Groesse bereits gesetzt?
+    sal_Bool    bHori       :1;     // Horizontal = sal_True, sonst Vertikal
+    sal_Bool    bAuto       :1;     // fuer Scrollingmode
+    sal_Bool    bThumbEnabled:1;
+    sal_Bool    bVisible    :1;     // Show/Hide sollen nur noch dieses Flag setzen
+    sal_Bool    bSizeSet    :1;     // wurde die Groesse bereits gesetzt?
 
     void    AutoShow();
 
@@ -46,22 +46,22 @@ class SwScrollbar: public ScrollBar
 
 public:
 
-    void    ExtendedShow( BOOL bVisible = TRUE );
-    void    Hide() { Show( FALSE ); }
+    void    ExtendedShow( sal_Bool bVisible = sal_True );
+    void    Hide() { Show( sal_False ); }
     void    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
-    BOOL    IsVisible(BOOL bReal) const { return bReal ? ScrollBar::IsVisible() : bVisible; }
+    sal_Bool    IsVisible(sal_Bool bReal) const { return bReal ? ScrollBar::IsVisible() : bVisible; }
 
         // Aenderung der Dokumentgroesse
     void    DocSzChgd(const Size &rNewSize);
         // Aenderung des sichtbaren Bereiches
     void    ViewPortChgd(const Rectangle &rRectangle);
         // was fuer einer ist es denn ??
-    BOOL    IsHoriScroll() const { return bHori; }
+    sal_Bool    IsHoriScroll() const { return bHori; }
 
-    void    SetAuto(BOOL bSet);
-    BOOL    IsAuto() { return bAuto;}
+    void    SetAuto(sal_Bool bSet);
+    sal_Bool    IsAuto() { return bAuto;}
 
-    SwScrollbar(Window *pParent, BOOL bHori = TRUE );
+    SwScrollbar(Window *pParent, sal_Bool bHori = sal_True );
     ~SwScrollbar();
 };
 

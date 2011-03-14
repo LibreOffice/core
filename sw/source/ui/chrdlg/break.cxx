@@ -63,11 +63,11 @@ void SwBreakDlg::Apply()
     else if(aPageBtn.IsChecked())
     {
         nKind = 3;
-        const USHORT nPos = aPageCollBox.GetSelectEntryPos();
+        const sal_uInt16 nPos = aPageCollBox.GetSelectEntryPos();
         if(0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos)
         {
             aTemplate = aPageCollBox.GetSelectEntry();
-            nPgNum = aPageNumBox.IsChecked() ? (USHORT)aPageNumEdit.GetValue() : 0;
+            nPgNum = aPageNumBox.IsChecked() ? (sal_uInt16)aPageNumEdit.GetValue() : 0;
         }
     }
 }
@@ -113,18 +113,18 @@ IMPL_LINK( SwBreakDlg, OkHdl, Button *, EMPTYARG )
 {
     if(aPageNumBox.IsChecked()) {
         // In case of differing page descriptions, test validity
-        const USHORT nPos = aPageCollBox.GetSelectEntryPos();
+        const sal_uInt16 nPos = aPageCollBox.GetSelectEntryPos();
         // position 0 says 'Without'.
         const SwPageDesc *pPageDesc;
         if ( 0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos )
             pPageDesc = rSh.FindPageDescByName( aPageCollBox.GetSelectEntry(),
-                                                TRUE );
+                                                sal_True );
         else
             pPageDesc = &rSh.GetPageDesc(rSh.GetCurPageDesc());
 
         OSL_ENSURE(pPageDesc, "Page description not found.");
-        const USHORT nUserPage = USHORT(aPageNumEdit.GetValue());
-        BOOL bOk = TRUE;
+        const sal_uInt16 nUserPage = sal_uInt16(aPageNumEdit.GetValue());
+        sal_Bool bOk = sal_True;
         switch(pPageDesc->GetUseOn())
         {
             case nsUseOnPage::PD_MIRROR:
@@ -148,6 +148,7 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     SvxStandardDialog( pParent,SW_RES(DLG_BREAK) ),
 
     rSh(rS),
+    aBreakFL(this,SW_RES(FL_BREAK)),
     aLineBtn(this,SW_RES(RB_LINE)),
     aColumnBtn(this,SW_RES(RB_COL)),
     aPageBtn(this,SW_RES(RB_PAGE)),
@@ -155,7 +156,6 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     aPageCollBox(this, SW_RES(LB_COLL)),
     aPageNumBox(this, SW_RES(CB_PAGENUM)),
     aPageNumEdit(this, SW_RES(ED_PAGENUM)),
-    aBreakFL(this,SW_RES(FL_BREAK)),
 
     aOkBtn(this,SW_RES(BT_OK)),
     aCancelBtn(this,SW_RES(BT_CANCEL)),
@@ -166,6 +166,9 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
 
     bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
 {
+    aPageNumEdit.SetAccessibleRelationLabeledBy(&aPageNumBox);
+    aPageNumEdit.SetAccessibleName(aPageNumBox.GetText());
+
     Link aLk = LINK(this,SwBreakDlg,ClickHdl);
     aPageBtn.SetClickHdl( aLk );
     aLineBtn.SetClickHdl( aLk );
@@ -178,8 +181,8 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
 
 
     // Insert page description to Listbox
-    const USHORT nCount = rSh.GetPageDescCnt();
-    USHORT i;
+    const sal_uInt16 nCount = rSh.GetPageDescCnt();
+    sal_uInt16 i;
 
     for( i = 0; i < nCount; ++i)
     {
@@ -188,7 +191,7 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     }
 
     String aFmtName;
-    for(i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_REGISTER; ++i)
+    for(i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
         if(LISTBOX_ENTRY_NOTFOUND == aPageCollBox.GetEntryPos( aFmtName =
                                     SwStyleNameMapper::GetUIName( i, aFmtName )))
             ::InsertStringSorted(aFmtName, aPageCollBox, 1 );
@@ -203,22 +206,22 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
 
 void SwBreakDlg::CheckEnable()
 {
-    BOOL bEnable = TRUE;
+    sal_Bool bEnable = sal_True;
     if ( bHtmlMode )
     {
-        aColumnBtn  .Enable(FALSE);
-        aPageCollBox.Enable(FALSE);
-        bEnable = FALSE;
+        aColumnBtn  .Enable(sal_False);
+        aPageCollBox.Enable(sal_False);
+        bEnable = sal_False;
     }
-    else if(rSh.GetFrmType(0,TRUE)
+    else if(rSh.GetFrmType(0,sal_True)
         & (FRMTYPE_FLY_ANY | FRMTYPE_HEADER | FRMTYPE_FOOTER  | FRMTYPE_FOOTNOTE))
     {
-        aPageBtn.Enable(FALSE);
+        aPageBtn.Enable(sal_False);
         if(aPageBtn.IsChecked())
-            aLineBtn.Check(TRUE);
-        bEnable = FALSE;
+            aLineBtn.Check(sal_True);
+        bEnable = sal_False;
     }
-    const BOOL bPage = aPageBtn.IsChecked();
+    const sal_Bool bPage = aPageBtn.IsChecked();
     aPageCollText.Enable( bPage );
     aPageCollBox.Enable ( bPage );
 
@@ -226,9 +229,9 @@ void SwBreakDlg::CheckEnable()
     if ( bEnable )
     {
         // position 0 says 'Without' page template.
-        const USHORT nPos = aPageCollBox.GetSelectEntryPos();
+        const sal_uInt16 nPos = aPageCollBox.GetSelectEntryPos();
         if ( 0 == nPos || LISTBOX_ENTRY_NOTFOUND == nPos )
-            bEnable = FALSE;
+            bEnable = sal_False;
     }
     aPageNumBox .Enable(bEnable);
     aPageNumEdit.Enable(bEnable);

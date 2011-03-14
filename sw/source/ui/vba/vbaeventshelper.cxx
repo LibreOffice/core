@@ -51,11 +51,6 @@ SwVbaEventsHelper::~SwVbaEventsHelper()
 {
 }
 
-bool SwVbaEventsHelper::implEventsEnabled() throw (uno::RuntimeException)
-{
-    return true;
-}
-
 bool SwVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
         const EventHandlerInfo& rInfo, const uno::Sequence< uno::Any >& /*rArgs*/ ) throw (uno::RuntimeException)
 {

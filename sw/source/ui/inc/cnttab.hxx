@@ -55,17 +55,17 @@
 struct CurTOXType
 {
     TOXTypes    eType;
-    USHORT      nIndex; //for TOX_USER only
+    sal_uInt16      nIndex; //for TOX_USER only
 
-    BOOL operator==(const CurTOXType aCmp)
+    sal_Bool operator==(const CurTOXType aCmp)
        {
         return eType == aCmp.eType && nIndex == aCmp.nIndex;
        }
-    USHORT GetFlatIndex() const;
+    sal_uInt16 GetFlatIndex() const;
 
     CurTOXType () : eType (TOX_INDEX), nIndex (0) {};
 
-    CurTOXType (TOXTypes t, USHORT i) : eType (t), nIndex (i) {};
+    CurTOXType (TOXTypes t, sal_uInt16 i) : eType (t), nIndex (i) {};
 };
 
 class SwOLENames : public Resource

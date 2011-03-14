@@ -48,15 +48,15 @@ class SW_DLLPUBLIC SwLineNumberInfo : public SwClient //purpose of derivation fr
 {
     SvxNumberType       aType;              //e.g. roman linenumbers
     String              aDivider;           //String for aditional interval (vert. lines user defined)
-    USHORT              nPosFromLeft;       //Position for paint
-    USHORT              nCountBy;           //Paint only for every n line
-    USHORT              nDividerCountBy;    //Interval for display of an user defined
+    sal_uInt16              nPosFromLeft;       //Position for paint
+    sal_uInt16              nCountBy;           //Paint only for every n line
+    sal_uInt16              nDividerCountBy;    //Interval for display of an user defined
                                             //string every n lines
     LineNumberPosition  ePos;               //Where should the display occur (number and divicer)
-    BOOL                bPaintLineNumbers;  //Should anything be displayed?
-    BOOL                bCountBlankLines;   //Count empty lines?
-    BOOL                bCountInFlys;       //Count also within FlyFrames?
-    BOOL                bRestartEachPage;   //Restart counting at the first paragraph of each page
+    sal_Bool                bPaintLineNumbers;  //Should anything be displayed?
+    sal_Bool                bCountBlankLines;   //Count empty lines?
+    sal_Bool                bCountInFlys;       //Count also within FlyFrames?
+    sal_Bool                bRestartEachPage;   //Restart counting at the first paragraph of each page
                                             //(even on follows when paragraphs are splitted)
 
 public:
@@ -64,7 +64,7 @@ public:
     SwLineNumberInfo(const SwLineNumberInfo&);
 
     SwLineNumberInfo& operator=(const SwLineNumberInfo&);
-    BOOL operator==( const SwLineNumberInfo& rInf ) const;
+    sal_Bool operator==( const SwLineNumberInfo& rInf ) const;
 
     SwCharFmt *GetCharFmt( IDocumentStylePoolAccess& rIDSPA ) const;
     void SetCharFmt( SwCharFmt* );
@@ -74,29 +74,29 @@ public:
 
     const String &GetDivider() const    { return aDivider; }
     void SetDivider( const String &r )  { aDivider = r; }
-    USHORT GetDividerCountBy() const    { return nDividerCountBy; }
-    void SetDividerCountBy( USHORT n )  { nDividerCountBy = n; }
+    sal_uInt16 GetDividerCountBy() const    { return nDividerCountBy; }
+    void SetDividerCountBy( sal_uInt16 n )  { nDividerCountBy = n; }
 
-    USHORT GetPosFromLeft() const       { return nPosFromLeft; }
-    void   SetPosFromLeft( USHORT n)    { nPosFromLeft = n;    }
+    sal_uInt16 GetPosFromLeft() const       { return nPosFromLeft; }
+    void   SetPosFromLeft( sal_uInt16 n)    { nPosFromLeft = n;    }
 
-    USHORT GetCountBy() const           { return nCountBy; }
-    void   SetCountBy( USHORT n)        { nCountBy = n;    }
+    sal_uInt16 GetCountBy() const           { return nCountBy; }
+    void   SetCountBy( sal_uInt16 n)        { nCountBy = n;    }
 
     LineNumberPosition GetPos() const   { return ePos; }
     void SetPos( LineNumberPosition eP ){ ePos = eP;   }
 
-    BOOL   IsPaintLineNumbers() const   { return bPaintLineNumbers; }
-    void   SetPaintLineNumbers( BOOL b ){ bPaintLineNumbers = b;    }
+    sal_Bool   IsPaintLineNumbers() const   { return bPaintLineNumbers; }
+    void   SetPaintLineNumbers( sal_Bool b ){ bPaintLineNumbers = b;    }
 
-    BOOL   IsCountBlankLines() const    { return bCountBlankLines;  }
-    void   SetCountBlankLines( BOOL b ) { bCountBlankLines = b;     }
+    sal_Bool   IsCountBlankLines() const    { return bCountBlankLines;  }
+    void   SetCountBlankLines( sal_Bool b ) { bCountBlankLines = b;     }
 
-    BOOL   IsCountInFlys() const        { return bCountInFlys;      }
-    void   SetCountInFlys( BOOL b )     { bCountInFlys = b;         }
+    sal_Bool   IsCountInFlys() const        { return bCountInFlys;      }
+    void   SetCountInFlys( sal_Bool b )     { bCountInFlys = b;         }
 
-    BOOL   IsRestartEachPage() const    { return bRestartEachPage;  }
-    void   SetRestartEachPage( BOOL b ) { bRestartEachPage = b;     }
+    sal_Bool   IsRestartEachPage() const    { return bRestartEachPage;  }
+    void   SetRestartEachPage( sal_Bool b ) { bRestartEachPage = b;     }
 
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 };

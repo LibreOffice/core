@@ -31,18 +31,20 @@
 
 #define SMDLL   1
 
-#include <sot/storage.hxx>
-#include <sot/sotref.hxx>
-#include <sfx2/objsh.hxx>
-#include <svl/lstner.hxx>
+#include <rtl/ustring.hxx>
 #include <sfx2/docfac.hxx>
+#include <sfx2/objsh.hxx>
+#include <sot/sotref.hxx>
+#include <sot/storage.hxx>
+#include <svl/lstner.hxx>
+#include <vcl/jobset.hxx>
 #include <vcl/virdev.hxx>
+
+#include <set>
 
 #include "format.hxx"
 #include "parse.hxx"
 #include "smmod.hxx"
-
-#include <vcl/jobset.hxx>
 
 class SmNode;
 class SfxMenuBarManager;
@@ -52,15 +54,15 @@ class SmCursor;
 
 #define HINT_DATACHANGED    1004
 
-#define SM30BIDENT   ((ULONG)0x534D3033L)
-#define SM30IDENT    ((ULONG)0x30334d53L)
-#define SM304AIDENT  ((ULONG)0x34303330L)
-#define SM30VERSION  ((ULONG)0x00010000L)
+#define SM30BIDENT   ((sal_uLong)0x534D3033L)
+#define SM30IDENT    ((sal_uLong)0x30334d53L)
+#define SM304AIDENT  ((sal_uLong)0x34303330L)
+#define SM30VERSION  ((sal_uLong)0x00010000L)
 #define SM50VERSION  ((ULONG)0x00010001L)   //Difference to SM30VERSION is
                                             //the new border in the format.
 
-#define FRMIDENT    ((ULONG)0x03031963L)
-#define FRMVERSION  ((ULONG)0x00010001L)
+#define FRMIDENT    ((sal_uLong)0x03031963L)
+#define FRMVERSION  ((sal_uLong)0x00010001L)
 
 #define STAROFFICE_XML  "StarOffice XML (Math)"
 #define MATHML_XML      "MathML XML (Math)"
@@ -124,9 +126,10 @@ class SmDocShell : public SfxObjectShell, public SfxListener
                         nRightBorder,
                         nTopBorder,
                         nBottomBorder;
-    USHORT              nModifyCount;
+    sal_uInt16          nModifyCount;
     bool                bIsFormulaArranged;
     SmCursor           *pCursor;
+    std::set< rtl::OUString >    aUsedSymbols;   // to export used symbols only when saving
 
 
 
@@ -137,7 +140,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
 
     virtual void        Draw(OutputDevice *pDevice,
                              const JobSetup & rSetup,
-                             USHORT nAspect = ASPECT_CONTENT);
+                             sal_uInt16 nAspect = ASPECT_CONTENT);
 
     virtual void        FillClass(SvGlobalName* pClassName,
                                   sal_uInt32*  pFormat,
@@ -147,16 +150,16 @@ class SmDocShell : public SfxObjectShell, public SfxListener
                                   sal_Int32 nFileFormat,
                                   sal_Bool bTemplate = sal_False ) const;
 
-    virtual BOOL        SetData( const String& rData );
-    virtual ULONG       GetMiscStatus() const;
+    virtual sal_Bool        SetData( const String& rData );
+    virtual sal_uLong       GetMiscStatus() const;
     virtual void        OnDocumentPrinterChanged( Printer * );
     virtual sal_Bool    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    virtual BOOL        Load( SfxMedium& rMedium );
+    virtual sal_Bool        Load( SfxMedium& rMedium );
             void        ImplSave(  SvStorageStreamRef xStrm  );
-    virtual BOOL        Save();
-    virtual BOOL        SaveAs( SfxMedium& rMedium );
-    virtual BOOL        ConvertTo( SfxMedium &rMedium );
-    virtual BOOL        SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual sal_Bool        Save();
+    virtual sal_Bool        SaveAs( SfxMedium& rMedium );
+    virtual sal_Bool        ConvertTo( SfxMedium &rMedium );
+    virtual sal_Bool        SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
     Printer             *GetPrt();
     OutputDevice*       GetRefDev();
@@ -164,7 +167,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     bool                IsFormulaArranged() const { return bIsFormulaArranged; }
     void                SetFormulaArranged(bool bVal) { bIsFormulaArranged = bVal; }
 
-    virtual BOOL        ConvertFrom(SfxMedium &rMedium);
+    virtual sal_Bool        ConvertFrom(SfxMedium &rMedium);
 
     /** Called whenever the formula is changed
      * Deletes the current cursor
@@ -208,6 +211,8 @@ public:
     const SmNode *  GetFormulaTree() const  { return pTree; }
     void            SetFormulaTree(SmNode *&rTree) { pTree = rTree; }
 
+    const std::set< rtl::OUString > &    GetUsedSymbols() const  { return aUsedSymbols; }
+
     String          GetAccessibleText();
 
     EditEngine &    GetEditEngine();
@@ -218,7 +223,7 @@ public:
 
     void        Repaint();
 
-    virtual     SfxUndoManager *GetUndoManager ();
+    virtual     ::svl::IUndoManager *GetUndoManager ();
 
     virtual     SfxItemPool& GetPool() const;
 
@@ -226,7 +231,7 @@ public:
     void        GetState(SfxItemSet &);
 
     virtual void SetVisArea (const Rectangle & rVisArea);
-    virtual void SetModified(BOOL bModified);
+    virtual void SetModified(sal_Bool bModified);
 
     /** Get a cursor for modifying this document
      * @remarks Don't store this reference, a new cursor may be made...

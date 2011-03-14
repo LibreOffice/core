@@ -31,7 +31,7 @@
 #include "helpid.h"
 ModalDialog DLG_MULTMRK
 {
-    HelpID = FN_EDIT_IDX_ENTRY_DLG ;
+    HelpID = CMD_FN_EDIT_IDX_ENTRY_DLG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 220 , 95 ) ;
@@ -65,6 +65,7 @@ ModalDialog DLG_MULTMRK
     };
     ListBox LB_TOX
     {
+        HelpID = "sw:ListBox:DLG_MULTMRK:LB_TOX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 37 ) ;
         Size = MAP_APPFONT ( 100 , 49 ) ;

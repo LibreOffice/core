@@ -148,7 +148,7 @@ public:
         return aStr;
     }
 
-    BOOL Ok();
+    sal_Bool Ok();
 };
 
 

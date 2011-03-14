@@ -57,7 +57,7 @@ class SwList
         void ValidateListTree();
 
         void MarkListLevel( const int nListLevel,
-                            const BOOL bValue );
+                            const sal_Bool bValue );
 
         bool IsListLevelMarked( const int nListLevel ) const;
 

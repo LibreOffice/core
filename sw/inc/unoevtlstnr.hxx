@@ -53,7 +53,7 @@ class SwEventListenerContainer
         ~SwEventListenerContainer();
 
         void    AddListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & rxListener);
-        BOOL    RemoveListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & rxListener);
+        sal_Bool    RemoveListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & rxListener);
         void    Disposing();
 };
 #endif

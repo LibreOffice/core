@@ -57,8 +57,8 @@ SwLabItem::SwLabItem() :
     nCol  (1),
     nRow  (1)
 {
-    bAddr = bCont = bSynchron = FALSE;
-    bPage = TRUE;
+    bAddr = bCont = bSynchron = sal_False;
+    bPage = sal_True;
     lHDist  =
     lVDist  =
     lWidth  =
@@ -387,7 +387,7 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
         aItem.aCompFax = aItem.aPrivFax = rUserOpt.GetFax();
         aItem.aCompMail = aItem.aPrivMail = rUserOpt.GetEmail();
         aItem.aCompState = aItem.aPrivState = rUserOpt.GetState();
-        aItem.bSynchron = TRUE;
+        aItem.bSynchron = sal_True;
         SetModified();
     }
 }

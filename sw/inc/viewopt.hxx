@@ -138,48 +138,48 @@ class SwViewOption
 
     static sal_Int32 nAppearanceFlags;  //
 protected:
-    static USHORT   nPixelTwips;// 1 Pixel == ? Twips
+    static sal_uInt16   nPixelTwips;// 1 Pixel == ? Twips
 
     String          sSymbolFont;        // Symbolzeichensatz
-    UINT32          nCoreOptions;       // Bits fuer die ViewShell
-    UINT32          nCore2Options;      // Bits fuer die ViewShell
-    UINT32          nUIOptions;         // UI-Bits
+    sal_uInt32          nCoreOptions;       // Bits fuer die ViewShell
+    sal_uInt32          nCore2Options;      // Bits fuer die ViewShell
+    sal_uInt32          nUIOptions;         // UI-Bits
     Color           aRetoucheColor;     // DefaultBackground fuer BrowseView
     Size            aSnapSize;          // Beschreibt hori. wie vert. Snap
-    USHORT          mnViewLayoutColumns;// # columns for edit view
+    sal_uInt16          mnViewLayoutColumns;// # columns for edit view
     short           nDivisionX;         // Rasterunterteilung
     short           nDivisionY;
-    BYTE            nPagePrevRow;       // Page Preview Row/Columns
-    BYTE            nPagePrevCol;       // Page Preview Row/Columns
-    BYTE            nShdwCrsrFillMode;  // FillMode fuer den ShadowCrsr
-    BOOL            bReadonly : 1;      // Readonly-Doc
-    BOOL            bStarOneSetting : 1;// prevent from UI automatics (no scrollbars in readonly documents)
-    BOOL            bIsPagePreview : 1; // the preview mustn't print field/footnote/... shadings
-    BOOL            bSelectionInReadonly : 1; //determines whether selection is switched on in readonly documents
-    BOOL            bFormView : 1;
-    BOOL            bBookview : 1;      // view mode for page preview
-    BOOL            mbViewLayoutBookMode : 1; // book view mode for edit view
+    sal_uInt8           nPagePrevRow;       // Page Preview Row/Columns
+    sal_uInt8           nPagePrevCol;       // Page Preview Row/Columns
+    sal_uInt8           nShdwCrsrFillMode;  // FillMode fuer den ShadowCrsr
+    sal_Bool            bReadonly : 1;      // Readonly-Doc
+    sal_Bool            bStarOneSetting : 1;// prevent from UI automatics (no scrollbars in readonly documents)
+    sal_Bool            bIsPagePreview : 1; // the preview mustn't print field/footnote/... shadings
+    sal_Bool            bSelectionInReadonly : 1; //determines whether selection is switched on in readonly documents
+    sal_Bool            bFormView : 1;
+    sal_Bool            bBookview : 1;      // view mode for page preview
+    sal_Bool            mbViewLayoutBookMode : 1; // book view mode for edit view
     sal_Bool        bShowPlaceHolderFields : 1; //only used in printing!
     mutable bool    bIdle;
 
     // Maszstab
-    USHORT          nZoom;              // Angaben in Prozent
+    sal_uInt16          nZoom;              // Angaben in Prozent
     SvxZoomType     eZoom;              // 'enum' fuer Zoom
 
-    BYTE            nTblDest;           // Ziel fuer Tabellenhintergrund
+    sal_uInt8            nTblDest;           // Ziel fuer Tabellenhintergrund
 
 #if OSL_DEBUG_LEVEL > 1
     // korrespondieren zu den Angaben in ui/config/cfgvw.src
-    BOOL  bTest1        :1;     // Test-Flag  "Layout not loading"
-    BOOL  bTest2        :1;     // Test-Flag  "WYSIWYG++"
-    BOOL  bTest3        :1;     // Test-Flag  ""
-    BOOL  bTest4        :1;     // Test-Flag  "WYSIWYG debug"
-    BOOL  bTest5        :1;     // Test-Flag  "No idle format"
-    BOOL  bTest6        :1;     // Test-Flag  "No screen adj"
-    BOOL  bTest7        :1;     // Test-Flag  "win format"
-    BOOL  bTest8        :1;     // Test-Flag  ""
-    static BOOL  bTest9;    // Test-Flag  "DrawingLayerNotLoading"
-    BOOL  bTest10       :1;     // Test-Flag  "Format by Input"
+    sal_Bool  bTest1        :1;     // Test-Flag  "Layout not loading"
+    sal_Bool  bTest2        :1;     // Test-Flag  "WYSIWYG++"
+    sal_Bool  bTest3        :1;     // Test-Flag  ""
+    sal_Bool  bTest4        :1;     // Test-Flag  "WYSIWYG debug"
+    sal_Bool  bTest5        :1;     // Test-Flag  "No idle format"
+    sal_Bool  bTest6        :1;     // Test-Flag  "No screen adj"
+    sal_Bool  bTest7        :1;     // Test-Flag  "win format"
+    sal_Bool  bTest8        :1;     // Test-Flag  ""
+    static sal_Bool  bTest9;    // Test-Flag  "DrawingLayerNotLoading"
+    sal_Bool  bTest10       :1;     // Test-Flag  "Format by Input"
 #endif
 
 public:
@@ -189,200 +189,200 @@ public:
 
     void   Init( Window *pWin );        // Initialisierung der statischen Daten
 
-    USHORT GetPixelTwips() const { return nPixelTwips; }
+    sal_uInt16 GetPixelTwips() const { return nPixelTwips; }
 
-    inline UINT32   GetCoreOptions() const {return nCoreOptions;}
+    inline sal_uInt32   GetCoreOptions() const {return nCoreOptions;}
     inline void     SetUIOptions( const SwViewOption& );
 
 /*---------------------------------------------------------------------------
     Optionen aus nCoreOptions
 ----------------------------------------------------------------------------*/
 
-    inline BOOL IsIdle() const
+    inline sal_Bool IsIdle() const
         { return bIdle; }
 
     // logically this is a const function since it does not modify the viewoptions
     // but only effects idle formatting. Of course that member is already implement
     // in the wrong place here... Also currently there are many const modifying casts in the code
     // just to call this function on otherwise const objects. Thus declaring it as const now.
-    inline void SetIdle( BOOL b ) const
+    inline void SetIdle( sal_Bool b ) const
         { bIdle = b; }
 
-    inline BOOL IsTab(BOOL bHard = FALSE) const
+    inline sal_Bool IsTab(sal_Bool bHard = sal_False) const
                     {   return !bReadonly && (nCoreOptions & VIEWOPT_1_TAB) &&
                             ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard)
-                                    ? TRUE : FALSE; }
-    inline void SetTab( BOOL b )        {
+                                    ? sal_True : sal_False; }
+    inline void SetTab( sal_Bool b )        {
         (b != 0) ? (nCoreOptions |= VIEWOPT_1_TAB ) : ( nCoreOptions &= ~VIEWOPT_1_TAB); }
 
-    inline BOOL IsBlank(BOOL bHard = FALSE) const
+    inline sal_Bool IsBlank(sal_Bool bHard = sal_False) const
                     { return !bReadonly && (nCoreOptions & VIEWOPT_1_BLANK) &&
                             ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard)
-                                    ? TRUE : FALSE; }
-    inline void SetBlank( BOOL b )
+                                    ? sal_True : sal_False; }
+    inline void SetBlank( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_BLANK ) : ( nCoreOptions &= ~VIEWOPT_1_BLANK); }
 
-    inline BOOL IsHardBlank() const
-                    { return !bReadonly && nCoreOptions & VIEWOPT_1_HARDBLANK ? TRUE : FALSE; }
-    inline void SetHardBlank( BOOL b )
+    inline sal_Bool IsHardBlank() const
+                    { return !bReadonly && nCoreOptions & VIEWOPT_1_HARDBLANK ? sal_True : sal_False; }
+    inline void SetHardBlank( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_HARDBLANK ) : ( nCoreOptions &= ~VIEWOPT_1_HARDBLANK); }
 
-    inline BOOL IsParagraph(BOOL bHard = FALSE) const
+    inline sal_Bool IsParagraph(sal_Bool bHard = sal_False) const
                     {   return !bReadonly && (nCoreOptions & VIEWOPT_1_PARAGRAPH) &&
                             ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard)
-                                    ? TRUE : FALSE; }
-    inline void SetParagraph( BOOL b )
+                                    ? sal_True : sal_False; }
+    inline void SetParagraph( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_PARAGRAPH ) : ( nCoreOptions &= ~VIEWOPT_1_PARAGRAPH); }
 
-    inline BOOL IsLineBreak(BOOL bHard = FALSE) const
+    inline sal_Bool IsLineBreak(sal_Bool bHard = sal_False) const
                     {   return !bReadonly && (nCoreOptions & VIEWOPT_1_LINEBREAK) &&
                             ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard)
-                                    ? TRUE : FALSE; }
-    inline void SetLineBreak( BOOL b )
+                                    ? sal_True : sal_False; }
+    inline void SetLineBreak( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_LINEBREAK ) : ( nCoreOptions &= ~VIEWOPT_1_LINEBREAK); }
 
-    inline void SetPageBreak( BOOL b )
+    inline void SetPageBreak( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_PAGEBREAK ) : ( nCoreOptions &= ~VIEWOPT_1_PAGEBREAK); }
 
-    inline void SetColumnBreak( BOOL b)
+    inline void SetColumnBreak( sal_Bool b)
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_COLUMNBREAK ) : ( nCoreOptions &= ~VIEWOPT_1_COLUMNBREAK); }
 
-    inline BOOL IsSoftHyph() const
-                    { return !bReadonly && (nCoreOptions & VIEWOPT_1_SOFTHYPH) ? TRUE : FALSE; }
-    inline void SetSoftHyph( BOOL b )
+    inline sal_Bool IsSoftHyph() const
+                    { return !bReadonly && (nCoreOptions & VIEWOPT_1_SOFTHYPH) ? sal_True : sal_False; }
+    inline void SetSoftHyph( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_SOFTHYPH ) : ( nCoreOptions &= ~VIEWOPT_1_SOFTHYPH); }
 
-    inline BOOL IsFldName() const       { return !bReadonly && (nCoreOptions & VIEWOPT_1_FLDNAME) ? TRUE : FALSE; }
-    inline void SetFldName( BOOL b )
+    inline sal_Bool IsFldName() const       { return !bReadonly && (nCoreOptions & VIEWOPT_1_FLDNAME) ? sal_True : sal_False; }
+    inline void SetFldName( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_FLDNAME ) : ( nCoreOptions &= ~VIEWOPT_1_FLDNAME); }
 
-    inline BOOL IsPostIts() const
-        { return (nCoreOptions & VIEWOPT_1_POSTITS) ? TRUE : FALSE; }
-    inline void SetPostIts( BOOL b )
+    inline sal_Bool IsPostIts() const
+        { return (nCoreOptions & VIEWOPT_1_POSTITS) ? sal_True : sal_False; }
+    inline void SetPostIts( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_POSTITS ) : ( nCoreOptions &= ~VIEWOPT_1_POSTITS); }
            void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
                               sal_Bool bIsScript ) const;
-           USHORT GetPostItsWidth( const OutputDevice *pOut = 0 ) const;
+           sal_uInt16 GetPostItsWidth( const OutputDevice *pOut = 0 ) const;
 
-    inline BOOL IsShowHiddenChar(sal_Bool bHard = sal_False) const
+    inline sal_Bool IsShowHiddenChar(sal_Bool bHard = sal_False) const
         { return !bReadonly && (nCoreOptions & VIEWOPT_1_CHAR_HIDDEN) &&
                             ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard)
-                                    ? TRUE : FALSE; }
+                                    ? sal_True : sal_False; }
 
-    inline void SetShowHiddenChar( BOOL b )
+    inline void SetShowHiddenChar( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_CHAR_HIDDEN ) : ( nCoreOptions &= ~VIEWOPT_1_CHAR_HIDDEN); }
 
 
-    inline BOOL IsShowHiddenField() const
-        { return !bReadonly && (nCoreOptions & VIEWOPT_1_FLD_HIDDEN) ? TRUE : FALSE; }
-    inline void SetShowHiddenField( BOOL b )
+    inline sal_Bool IsShowHiddenField() const
+        { return !bReadonly && (nCoreOptions & VIEWOPT_1_FLD_HIDDEN) ? sal_True : sal_False; }
+    inline void SetShowHiddenField( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_FLD_HIDDEN ) : ( nCoreOptions &= ~VIEWOPT_1_FLD_HIDDEN); }
 
-    inline BOOL IsGraphic() const
-        { return nCoreOptions & VIEWOPT_1_GRAPHIC ? TRUE : FALSE; }
-    inline void SetGraphic( BOOL b )
+    inline sal_Bool IsGraphic() const
+        { return nCoreOptions & VIEWOPT_1_GRAPHIC ? sal_True : sal_False; }
+    inline void SetGraphic( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_GRAPHIC ) : ( nCoreOptions &= ~VIEWOPT_1_GRAPHIC); }
 
-    inline BOOL IsPageBack() const
-        { return nCoreOptions & VIEWOPT_1_PAGEBACK ? TRUE : FALSE; }
-    inline void SetPageBack( BOOL b )
+    inline sal_Bool IsPageBack() const
+        { return nCoreOptions & VIEWOPT_1_PAGEBACK ? sal_True : sal_False; }
+    inline void SetPageBack( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_PAGEBACK) : ( nCoreOptions &= ~VIEWOPT_1_PAGEBACK); }
 
-    inline BOOL IsSolidMarkHdl() const
-        { return nCoreOptions & VIEWOPT_1_SOLIDMARKHDL ? TRUE : FALSE; }
-    inline void SetSolidMarkHdl( BOOL b )
+    inline sal_Bool IsSolidMarkHdl() const
+        { return nCoreOptions & VIEWOPT_1_SOLIDMARKHDL ? sal_True : sal_False; }
+    inline void SetSolidMarkHdl( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_SOLIDMARKHDL) : ( nCoreOptions &= ~VIEWOPT_1_SOLIDMARKHDL); }
 
-    inline BOOL IsBigMarkHdl() const
-        { return nCore2Options & VIEWOPT_CORE2_BIGMARKHDL ? TRUE : FALSE;}
-    inline void SetBigMarkHdl(BOOL b)
+    inline sal_Bool IsBigMarkHdl() const
+        { return nCore2Options & VIEWOPT_CORE2_BIGMARKHDL ? sal_True : sal_False;}
+    inline void SetBigMarkHdl(sal_Bool b)
         { (b != 0) ? (nCore2Options |=  VIEWOPT_CORE2_BIGMARKHDL ) : (nCore2Options &=  ~VIEWOPT_CORE2_BIGMARKHDL);}
 
-    inline BOOL IsTable() const
-        { return nCoreOptions & VIEWOPT_1_TABLE ? TRUE : FALSE; }
-    inline void SetTable( BOOL b )
+    inline sal_Bool IsTable() const
+        { return nCoreOptions & VIEWOPT_1_TABLE ? sal_True : sal_False; }
+    inline void SetTable( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_TABLE ) : ( nCoreOptions &= ~VIEWOPT_1_TABLE); }
 
-    inline BOOL IsDraw() const
-        { return nCoreOptions & VIEWOPT_1_DRAW ? TRUE : FALSE; }
-    inline void SetDraw( BOOL b )
+    inline sal_Bool IsDraw() const
+        { return nCoreOptions & VIEWOPT_1_DRAW ? sal_True : sal_False; }
+    inline void SetDraw( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_DRAW ) : ( nCoreOptions &= ~VIEWOPT_1_DRAW); }
 
-    inline BOOL IsControl() const
-        { return nCoreOptions & VIEWOPT_1_CONTROL ? TRUE : FALSE; }
-    inline void SetControl( BOOL b )
+    inline sal_Bool IsControl() const
+        { return nCoreOptions & VIEWOPT_1_CONTROL ? sal_True : sal_False; }
+    inline void SetControl( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_CONTROL ) : ( nCoreOptions &= ~VIEWOPT_1_CONTROL); }
 
-    inline BOOL IsSnap() const
-        { return nCoreOptions & VIEWOPT_1_SNAP ? TRUE : FALSE; }
-    inline void SetSnap( BOOL b )
+    inline sal_Bool IsSnap() const
+        { return nCoreOptions & VIEWOPT_1_SNAP ? sal_True : sal_False; }
+    inline void SetSnap( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_SNAP ) : ( nCoreOptions &= ~VIEWOPT_1_SNAP); }
 
     inline void SetSnapSize( Size &rSz ){ aSnapSize = rSz; }
     inline const Size &GetSnapSize() const { return aSnapSize; }
 
-    inline BOOL IsGridVisible() const
-        { return !bReadonly && (nCoreOptions & VIEWOPT_1_GRIDVISIBLE) ? TRUE : FALSE; }
-    inline void SetGridVisible( BOOL b )
+    inline sal_Bool IsGridVisible() const
+        { return !bReadonly && (nCoreOptions & VIEWOPT_1_GRIDVISIBLE) ? sal_True : sal_False; }
+    inline void SetGridVisible( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_GRIDVISIBLE ) : ( nCoreOptions &= ~VIEWOPT_1_GRIDVISIBLE); }
 
-    inline BOOL IsOnlineSpell() const
-        { return !bReadonly && (nCoreOptions & VIEWOPT_1_ONLINESPELL) ? TRUE : FALSE; }
-    inline void SetOnlineSpell( BOOL b )
+    inline sal_Bool IsOnlineSpell() const
+        { return !bReadonly && (nCoreOptions & VIEWOPT_1_ONLINESPELL) ? sal_True : sal_False; }
+    inline void SetOnlineSpell( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_ONLINESPELL ) : ( nCoreOptions &= ~VIEWOPT_1_ONLINESPELL); }
 
-    inline BOOL IsViewMetaChars() const
-        { return !bReadonly && (nCoreOptions & VIEWOPT_1_VIEWMETACHARS) ? TRUE : FALSE; }
-    inline void SetViewMetaChars( BOOL b)
+    inline sal_Bool IsViewMetaChars() const
+        { return !bReadonly && (nCoreOptions & VIEWOPT_1_VIEWMETACHARS) ? sal_True : sal_False; }
+    inline void SetViewMetaChars( sal_Bool b)
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_VIEWMETACHARS ) : ( nCoreOptions &= ~VIEWOPT_1_VIEWMETACHARS); }
 
-    inline BOOL IsSynchronize() const
-        {  return nCoreOptions & VIEWOPT_1_SYNCHRONIZE ? TRUE : FALSE;}
-    inline void SetSynchronize( BOOL b )
+    inline sal_Bool IsSynchronize() const
+        {  return nCoreOptions & VIEWOPT_1_SYNCHRONIZE ? sal_True : sal_False;}
+    inline void SetSynchronize( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_SYNCHRONIZE ) : ( nCoreOptions &= ~VIEWOPT_1_SYNCHRONIZE); }
 
-    inline BOOL IsCrossHair() const
-        { return nCoreOptions & VIEWOPT_1_CROSSHAIR ? TRUE : FALSE; }
-    inline void SetCrossHair( BOOL b )
+    inline sal_Bool IsCrossHair() const
+        { return nCoreOptions & VIEWOPT_1_CROSSHAIR ? sal_True : sal_False; }
+    inline void SetCrossHair( sal_Bool b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_CROSSHAIR ) : ( nCoreOptions &= ~VIEWOPT_1_CROSSHAIR); }
 
 /*---------------------------------------------------------------------------
     Optionen aus nCore2Options
 ----------------------------------------------------------------------------*/
-    inline BOOL IsBlackFont() const
-        {return nCore2Options & VIEWOPT_CORE2_BLACKFONT ? TRUE : FALSE;}
+    inline sal_Bool IsBlackFont() const
+        {return nCore2Options & VIEWOPT_CORE2_BLACKFONT ? sal_True : sal_False;}
 
-    inline void SetBlackFont(BOOL b)
+    inline void SetBlackFont(sal_Bool b)
         { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_BLACKFONT) : (nCore2Options &= ~VIEWOPT_CORE2_BLACKFONT);}
 
-    inline BOOL IsShowHiddenPara() const
-        {return nCore2Options & VIEWOPT_CORE2_HIDDENPARA ? TRUE : FALSE;}
+    inline sal_Bool IsShowHiddenPara() const
+        {return nCore2Options & VIEWOPT_CORE2_HIDDENPARA ? sal_True : sal_False;}
 
-    inline void SetShowHiddenPara(BOOL b)
+    inline void SetShowHiddenPara(sal_Bool b)
         { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_HIDDENPARA) : (nCore2Options &= ~VIEWOPT_CORE2_HIDDENPARA);}
 
-    inline BOOL IsSmoothScroll() const
-        {return nCore2Options & VIEWOPT_CORE2_SMOOTHSCROLL ? TRUE : FALSE;}
+    inline sal_Bool IsSmoothScroll() const
+        {return nCore2Options & VIEWOPT_CORE2_SMOOTHSCROLL ? sal_True : sal_False;}
 
-    inline void SetSmoothScroll(BOOL b)
+    inline void SetSmoothScroll(sal_Bool b)
         { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_SMOOTHSCROLL) : (nCore2Options &= ~VIEWOPT_CORE2_SMOOTHSCROLL);}
 
-    inline BOOL IsCursorInProtectedArea() const
-        {return nCore2Options & VIEWOPT_CORE2_CRSR_IN_PROT ? TRUE : FALSE;}
+    inline sal_Bool IsCursorInProtectedArea() const
+        {return nCore2Options & VIEWOPT_CORE2_CRSR_IN_PROT ? sal_True : sal_False;}
 
-    inline void SetCursorInProtectedArea(BOOL b)
+    inline void SetCursorInProtectedArea(sal_Bool b)
         { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_CRSR_IN_PROT) : (nCore2Options &= ~VIEWOPT_CORE2_CRSR_IN_PROT);}
 
-    inline BOOL IsPDFExport() const
-        {return nCore2Options & VIEWOPT_CORE2_PDF_EXPORT ? TRUE : FALSE;}
+    inline sal_Bool IsPDFExport() const
+        {return nCore2Options & VIEWOPT_CORE2_PDF_EXPORT ? sal_True : sal_False;}
 
-    inline void SetPDFExport(BOOL b)
+    inline void SetPDFExport(sal_Bool b)
         { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_PDF_EXPORT) : (nCore2Options &= ~VIEWOPT_CORE2_PDF_EXPORT);}
 
-    inline BOOL IsPrinting() const
-        {return nCore2Options & VIEWOPT_CORE2_PRINTING ? TRUE : FALSE;}
+    inline sal_Bool IsPrinting() const
+        {return nCore2Options & VIEWOPT_CORE2_PRINTING ? sal_True : sal_False;}
 
-    inline void SetPrinting(BOOL b)
+    inline void SetPrinting(sal_Bool b)
         { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_PRINTING) : (nCore2Options &= ~VIEWOPT_CORE2_PRINTING);}
 
     inline short GetDivisionX() const   { return nDivisionX; }
@@ -390,102 +390,102 @@ public:
     inline short GetDivisionY() const   { return nDivisionY; }
     inline void  SetDivisionY( short n ){ nDivisionY = n; }
 
-    inline BYTE  GetPagePrevRow() const   { return nPagePrevRow; }
-    inline void  SetPagePrevRow( BYTE n ) { nPagePrevRow = n; }
-    inline BYTE  GetPagePrevCol() const   { return nPagePrevCol; }
-    inline void  SetPagePrevCol( BYTE n ) { nPagePrevCol = n; }
-    BOOL         IsReadonly() const { return bReadonly; }
-    void         SetReadonly(BOOL bSet) { bReadonly = bSet; }
+    inline sal_uInt8  GetPagePrevRow() const      { return nPagePrevRow; }
+    inline void  SetPagePrevRow( sal_uInt8 n ) { nPagePrevRow = n; }
+    inline sal_uInt8  GetPagePrevCol() const      { return nPagePrevCol; }
+    inline void  SetPagePrevCol( sal_uInt8 n ) { nPagePrevCol = n; }
+    sal_Bool         IsReadonly() const { return bReadonly; }
+    void         SetReadonly(sal_Bool bSet) { bReadonly = bSet; }
 
-    BOOL         IsSelectionInReadonly() const {return bSelectionInReadonly;}
-    void         SetSelectionInReadonly(BOOL bSet) {bSelectionInReadonly = bSet;}
+    sal_Bool         IsSelectionInReadonly() const {return bSelectionInReadonly;}
+    void         SetSelectionInReadonly(sal_Bool bSet) {bSelectionInReadonly = bSet;}
 
-    BOOL         IsFormView() const { return bFormView; }
-    void         SetFormView( BOOL bSet ) { bFormView = bSet; }
+    sal_Bool         IsFormView() const { return bFormView; }
+    void         SetFormView( sal_Bool bSet ) { bFormView = bSet; }
 
-    inline BOOL  IsPagePrevBookview() const { return bBookview; }
-    inline void  SetPagePrevBookview(BOOL bSet) { bBookview = bSet; }
+    inline sal_Bool  IsPagePrevBookview() const { return bBookview; }
+    inline void  SetPagePrevBookview(sal_Bool bSet) { bBookview = bSet; }
 
-    BOOL IsAutoCompleteWords() const;
+    sal_Bool IsAutoCompleteWords() const;
 
     bool   IsViewLayoutBookMode() const { return mbViewLayoutBookMode; }
     void   SetViewLayoutBookMode( bool bNew ) { mbViewLayoutBookMode = bNew; }
-    USHORT GetViewLayoutColumns() const { return mnViewLayoutColumns; }
-    void   SetViewLayoutColumns( USHORT nNew ) { mnViewLayoutColumns = nNew; }
+    sal_uInt16 GetViewLayoutColumns() const { return mnViewLayoutColumns; }
+    void   SetViewLayoutColumns( sal_uInt16 nNew ) { mnViewLayoutColumns = nNew; }
 
 #if OSL_DEBUG_LEVEL > 1
     // korrespondieren zu den Angaben in ui/config/cfgvw.src
-    inline BOOL IsTest1() const     { return bTest1; }
-    inline void SetTest1( BOOL b )  { bTest1 = b; }
-    inline BOOL IsTest2() const     { return bTest2; }
-    inline void SetTest2( BOOL b )  { bTest2 = b; }
-    inline BOOL IsTest3() const     { return bTest3; }
-    inline void SetTest3( BOOL b )  { bTest3 = b; }
-    inline BOOL IsTest4() const     { return bTest4; }
-    inline void SetTest4( BOOL b )  { bTest4 = b; }
-    inline BOOL IsTest5() const     { return bTest5; }
-    inline void SetTest5( BOOL b )  { bTest5 = b; }
-    inline BOOL IsTest6() const     { return bTest6; }
-    inline void SetTest6( BOOL b )  { bTest6 = b; }
-    inline BOOL IsTest7() const     { return bTest7; }
-    inline void SetTest7( BOOL b )  { bTest7 = b; }
-    inline BOOL IsTest8() const     { return bTest8; }
-    inline void SetTest8( BOOL b )  { bTest8 = b; }
-    static inline BOOL IsTest9()            { return bTest9; }
-    static inline void SetTest9( BOOL b )   { bTest9 = b; }
-    inline BOOL IsTest10() const    { return bTest10; }
-    inline void SetTest10( BOOL b ) { bTest10 = b; }
+    inline sal_Bool IsTest1() const     { return bTest1; }
+    inline void SetTest1( sal_Bool b )  { bTest1 = b; }
+    inline sal_Bool IsTest2() const     { return bTest2; }
+    inline void SetTest2( sal_Bool b )  { bTest2 = b; }
+    inline sal_Bool IsTest3() const     { return bTest3; }
+    inline void SetTest3( sal_Bool b )  { bTest3 = b; }
+    inline sal_Bool IsTest4() const     { return bTest4; }
+    inline void SetTest4( sal_Bool b )  { bTest4 = b; }
+    inline sal_Bool IsTest5() const     { return bTest5; }
+    inline void SetTest5( sal_Bool b )  { bTest5 = b; }
+    inline sal_Bool IsTest6() const     { return bTest6; }
+    inline void SetTest6( sal_Bool b )  { bTest6 = b; }
+    inline sal_Bool IsTest7() const     { return bTest7; }
+    inline void SetTest7( sal_Bool b )  { bTest7 = b; }
+    inline sal_Bool IsTest8() const     { return bTest8; }
+    inline void SetTest8( sal_Bool b )  { bTest8 = b; }
+    static inline sal_Bool IsTest9()            { return bTest9; }
+    static inline void SetTest9( sal_Bool b )   { bTest9 = b; }
+    inline sal_Bool IsTest10() const    { return bTest10; }
+    inline void SetTest10( sal_Bool b ) { bTest10 = b; }
 #endif
 
-    inline USHORT GetZoom() const    { return nZoom; }
-    inline void   SetZoom( USHORT n ){ nZoom = n; }
+    inline sal_uInt16 GetZoom() const    { return nZoom; }
+    inline void   SetZoom( sal_uInt16 n ){ nZoom = n; }
 
     void DrawRect( OutputDevice* pOut, const SwRect &rRect, long nCol ) const;
     void DrawRectPrinter( OutputDevice* pOut, const SwRect& rRect ) const;
 
     SwViewOption& operator=( const SwViewOption &rOpt );
     // Vergleichsmethoden
-    BOOL IsEqualFlags ( const SwViewOption &rOpt ) const;
-    inline BOOL operator == ( const SwViewOption &rOpt ) const;
-    inline BOOL operator != ( const SwViewOption &rOpt ) const  { return !(*this == rOpt); }
+    sal_Bool IsEqualFlags ( const SwViewOption &rOpt ) const;
+    inline sal_Bool operator == ( const SwViewOption &rOpt ) const;
+    inline sal_Bool operator != ( const SwViewOption &rOpt ) const  { return !(*this == rOpt); }
 
 
 /*---------------------------------------------------------------------------
     Optionen aus nUIOptions
 ----------------------------------------------------------------------------*/
 
-    BOOL    IsViewVScrollBar() const
-        { return nUIOptions & VIEWOPT_2_VSCROLLBAR ? TRUE : FALSE;    }
-    BOOL    IsViewHScrollBar() const
-        { return nUIOptions & VIEWOPT_2_HSCROLLBAR ? TRUE : FALSE;    }
-    BOOL    IsKeepRatio()      const
-        { return nUIOptions & VIEWOPT_2_KEEPASPECTRATIO ? TRUE : FALSE;   }
-    BOOL    IsGrfKeepZoom()    const
-        { return nUIOptions & VIEWOPT_2_GRFKEEPZOOM ? TRUE : FALSE;   }
-    BOOL    IsPreventTips() const
-        { return nUIOptions & VIEWOPT_2_PREVENT_TIPS ? TRUE : FALSE; }
-    BOOL    IsPrtFormat() const
-        { return nUIOptions & VIEWOPT_2_PRTFORMAT ? TRUE : FALSE; }
+    sal_Bool    IsViewVScrollBar() const
+        { return nUIOptions & VIEWOPT_2_VSCROLLBAR ? sal_True : sal_False;    }
+    sal_Bool    IsViewHScrollBar() const
+        { return nUIOptions & VIEWOPT_2_HSCROLLBAR ? sal_True : sal_False;    }
+    sal_Bool    IsKeepRatio()      const
+        { return nUIOptions & VIEWOPT_2_KEEPASPECTRATIO ? sal_True : sal_False;   }
+    sal_Bool    IsGrfKeepZoom()    const
+        { return nUIOptions & VIEWOPT_2_GRFKEEPZOOM ? sal_True : sal_False;   }
+    sal_Bool    IsPreventTips() const
+        { return nUIOptions & VIEWOPT_2_PREVENT_TIPS ? sal_True : sal_False; }
+    sal_Bool    IsPrtFormat() const
+        { return nUIOptions & VIEWOPT_2_PRTFORMAT ? sal_True : sal_False; }
 
     SvxZoomType    GetZoomType()      const { return eZoom; }
 
-    BYTE    GetTblDest() const    { return nTblDest; }
+    sal_uInt8   GetTblDest() const    { return nTblDest; }
 
-    void   SetViewVScrollBar(BOOL b)
+    void   SetViewVScrollBar(sal_Bool b)
         { b ? (nUIOptions |= VIEWOPT_2_VSCROLLBAR ) : ( nUIOptions &= ~VIEWOPT_2_VSCROLLBAR); }
-    void   SetViewHScrollBar(BOOL b)
+    void   SetViewHScrollBar(sal_Bool b)
         { b ? (nUIOptions |= VIEWOPT_2_HSCROLLBAR ) : ( nUIOptions &= ~VIEWOPT_2_HSCROLLBAR); }
-    void   SetKeepRatio     (BOOL b)
+    void   SetKeepRatio     (sal_Bool b)
         { b ? (nUIOptions |= VIEWOPT_2_KEEPASPECTRATIO ) : ( nUIOptions &= ~VIEWOPT_2_KEEPASPECTRATIO); }
-    void   SetGrfKeepZoom   (BOOL b)
+    void   SetGrfKeepZoom   (sal_Bool b)
         { b ? (nUIOptions |= VIEWOPT_2_GRFKEEPZOOM ) : ( nUIOptions &= ~VIEWOPT_2_GRFKEEPZOOM); }
-    void SetPreventTips( BOOL b)
+    void SetPreventTips( sal_Bool b)
         { b ? (nUIOptions |= VIEWOPT_2_PREVENT_TIPS) : (nUIOptions &= ~VIEWOPT_2_PREVENT_TIPS); }
-    void SetPrtFormat( BOOL b)
+    void SetPrtFormat( sal_Bool b)
         { b ? (nUIOptions |= VIEWOPT_2_PRTFORMAT) : (nUIOptions &= ~VIEWOPT_2_PRTFORMAT); }
 
     void            SetZoomType     (SvxZoomType eZoom_){ eZoom = eZoom_;  }
-    void            SetTblDest( BYTE nNew )     { nTblDest = nNew;  }
+    void            SetTblDest( sal_uInt8 nNew )    { nTblDest = nNew;  }
 
     const String&   GetSymbolFont() const {return sSymbolFont;}
     void            SetSymbolFont(const String& sSet) {sSymbolFont = sSet;}
@@ -493,56 +493,56 @@ public:
     const Color&    GetRetoucheColor() const        { return aRetoucheColor;}
     void            SetRetoucheColor(const Color&r) { aRetoucheColor = r;   }
 
-    BOOL            IsViewAnyRuler() const {return 0 != (nUIOptions & VIEWOPT_2_ANY_RULER);}
-    void            SetViewAnyRuler(BOOL bSet)
+    sal_Bool            IsViewAnyRuler() const {return 0 != (nUIOptions & VIEWOPT_2_ANY_RULER);}
+    void            SetViewAnyRuler(sal_Bool bSet)
                         { bSet ? (nUIOptions |= VIEWOPT_2_ANY_RULER) : (nUIOptions &= ~VIEWOPT_2_ANY_RULER);}
 
-    BOOL            IsViewHRuler(BOOL bDirect = FALSE)     const
+    sal_Bool            IsViewHRuler(sal_Bool bDirect = sal_False)     const
                         {
-                            BOOL bRet = sal::static_int_cast< BOOL >( bDirect  ?
+                            sal_Bool bRet = sal::static_int_cast< sal_Bool >( bDirect  ?
                                     0 != (nUIOptions & VIEWOPT_2_H_RULER) :
                                     !bReadonly ?
                                         (nUIOptions & (VIEWOPT_2_ANY_RULER|VIEWOPT_2_H_RULER)) == (VIEWOPT_2_ANY_RULER|VIEWOPT_2_H_RULER)
-                                        : FALSE );
+                                        : sal_False );
                             return bRet;
 
                         }
-    void            SetViewHRuler   (BOOL b)
+    void            SetViewHRuler   (sal_Bool b)
                         {    b ? (nUIOptions |= VIEWOPT_2_H_RULER ) : ( nUIOptions &= ~VIEWOPT_2_H_RULER);}
 
-    BOOL            IsViewVRuler(BOOL bDirect = FALSE) const
+    sal_Bool            IsViewVRuler(sal_Bool bDirect = sal_False) const
                         {
-                            BOOL bRet = sal::static_int_cast< BOOL >( bDirect  ?
+                            sal_Bool bRet = sal::static_int_cast< sal_Bool >( bDirect  ?
                                     0 !=(nUIOptions & VIEWOPT_2_V_RULER) :
                                     !bReadonly ?
                                         (nUIOptions &
                                             (VIEWOPT_2_ANY_RULER|VIEWOPT_2_V_RULER)) == (VIEWOPT_2_ANY_RULER|VIEWOPT_2_V_RULER)
-                                        : FALSE );
+                                        : sal_False );
                             return bRet;
                         }
-    void            SetViewVRuler     (BOOL b)
+    void            SetViewVRuler     (sal_Bool b)
                         { b ? (nUIOptions |= VIEWOPT_2_V_RULER ) : ( nUIOptions &= ~VIEWOPT_2_V_RULER);}
 
     // ShadowCursor ein schalten/abfragen/Farbe setzen/Modus setzen
-    BOOL    IsShadowCursor()    const
-        { return nUIOptions & VIEWOPT_2_SHADOWCRSR ? TRUE : FALSE;   }
-    void   SetShadowCursor(BOOL b)
+    sal_Bool    IsShadowCursor()    const
+        { return nUIOptions & VIEWOPT_2_SHADOWCRSR ? sal_True : sal_False;   }
+    void   SetShadowCursor(sal_Bool b)
         { b ? (nUIOptions |= VIEWOPT_2_SHADOWCRSR ) : ( nUIOptions &= ~VIEWOPT_2_SHADOWCRSR); }
 
     //move vertical ruler to the right
-    BOOL    IsVRulerRight()    const
-        { return nUIOptions & VIEWOPT_2_V_RULER_RIGHT ? TRUE : FALSE;   }
-    void   SetVRulerRight(BOOL b)
+    sal_Bool    IsVRulerRight()    const
+        { return nUIOptions & VIEWOPT_2_V_RULER_RIGHT ? sal_True : sal_False;   }
+    void   SetVRulerRight(sal_Bool b)
         { b ? (nUIOptions |= VIEWOPT_2_V_RULER_RIGHT ) : ( nUIOptions &= ~VIEWOPT_2_V_RULER_RIGHT); }
 
-    BOOL            IsStarOneSetting() const {return bStarOneSetting; }
-    void            SetStarOneSetting(BOOL bSet) {bStarOneSetting = bSet; }
+    sal_Bool            IsStarOneSetting() const {return bStarOneSetting; }
+    void            SetStarOneSetting(sal_Bool bSet) {bStarOneSetting = bSet; }
 
-    BOOL            IsPagePreview() const {return bIsPagePreview; }
-    void            SetPagePreview(BOOL bSet) { bIsPagePreview= bSet; }
+    sal_Bool            IsPagePreview() const {return bIsPagePreview; }
+    void            SetPagePreview(sal_Bool bSet) { bIsPagePreview= bSet; }
 
-    BYTE            GetShdwCrsrFillMode() const { return nShdwCrsrFillMode; }
-    void            SetShdwCrsrFillMode( BYTE nMode ) { nShdwCrsrFillMode = nMode; };
+    sal_uInt8           GetShdwCrsrFillMode() const { return nShdwCrsrFillMode; }
+    void            SetShdwCrsrFillMode( sal_uInt8 nMode ) { nShdwCrsrFillMode = nMode; };
 
     sal_Bool        IsShowPlaceHolderFields() const { return bShowPlaceHolderFields; }
     void            SetShowPlaceHolderFields(sal_Bool bSet) { bShowPlaceHolderFields = bSet; }
@@ -565,27 +565,27 @@ public:
     static Color&   GetSectionBoundColor();
     static Color&   GetPageBreakColor();
 
-    static BOOL     IsAppearanceFlag(sal_Int32 nFlag);
+    static sal_Bool     IsAppearanceFlag(sal_Int32 nFlag);
 
-    static BOOL     IsDocBoundaries()   {return IsAppearanceFlag(VIEWOPT_DOC_BOUNDARIES);}
-    static BOOL     IsObjectBoundaries(){return IsAppearanceFlag(VIEWOPT_OBJECT_BOUNDARIES);}
-    static BOOL     IsTableBoundaries() {return IsAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES );}
-    static BOOL     IsIndexShadings()   {return IsAppearanceFlag(VIEWOPT_INDEX_SHADINGS   );}
-    static BOOL     IsLinks()           {return IsAppearanceFlag(VIEWOPT_LINKS            );}
-    static BOOL     IsVisitedLinks()    {return IsAppearanceFlag(VIEWOPT_VISITED_LINKS    );}
-    static BOOL     IsFieldShadings()   {return IsAppearanceFlag(VIEWOPT_FIELD_SHADINGS);}
-    static BOOL     IsSectionBoundaries() {return IsAppearanceFlag(VIEWOPT_SECTION_BOUNDARIES);}
-    static BOOL     IsShadow()          {return IsAppearanceFlag(VIEWOPT_SHADOW           );}
+    static sal_Bool     IsDocBoundaries()   {return IsAppearanceFlag(VIEWOPT_DOC_BOUNDARIES);}
+    static sal_Bool     IsObjectBoundaries(){return IsAppearanceFlag(VIEWOPT_OBJECT_BOUNDARIES);}
+    static sal_Bool     IsTableBoundaries() {return IsAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES );}
+    static sal_Bool     IsIndexShadings()   {return IsAppearanceFlag(VIEWOPT_INDEX_SHADINGS   );}
+    static sal_Bool     IsLinks()           {return IsAppearanceFlag(VIEWOPT_LINKS            );}
+    static sal_Bool     IsVisitedLinks()    {return IsAppearanceFlag(VIEWOPT_VISITED_LINKS    );}
+    static sal_Bool     IsFieldShadings()   {return IsAppearanceFlag(VIEWOPT_FIELD_SHADINGS);}
+    static sal_Bool     IsSectionBoundaries() {return IsAppearanceFlag(VIEWOPT_SECTION_BOUNDARIES);}
+    static sal_Bool     IsShadow()          {return IsAppearanceFlag(VIEWOPT_SHADOW           );}
 
-    static void     SetAppearanceFlag(sal_Int32 nFlag, BOOL bSet, BOOL bSaveInConfig = FALSE);
+    static void     SetAppearanceFlag(sal_Int32 nFlag, sal_Bool bSet, sal_Bool bSaveInConfig = sal_False);
 
-    void    SetDocBoundaries(BOOL bSet)   {SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bSet);}
+    void    SetDocBoundaries(sal_Bool bSet)   {SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bSet);}
 
     static void     ApplyColorConfigValues(const svtools::ColorConfig& rConfig);
 };
 
 
-inline BOOL SwViewOption::operator==( const SwViewOption &rOpt ) const
+inline sal_Bool SwViewOption::operator==( const SwViewOption &rOpt ) const
 {
     return IsEqualFlags( rOpt ) && nZoom == rOpt.GetZoom();
 }
@@ -599,7 +599,7 @@ inline void SwViewOption::SetUIOptions( const SwViewOption& rVOpt )
 
 
 // Hilfsfunktion zur Ermittlung der HTML-Faehigkeiten
-SW_DLLPUBLIC USHORT     GetHtmlMode(const SwDocShell*);
+SW_DLLPUBLIC sal_uInt16     GetHtmlMode(const SwDocShell*);
 
 
 #endif

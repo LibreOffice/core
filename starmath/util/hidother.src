@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "../inc/starmath.hrc"
+#include "../inc/helpids.h"
 
 hidspecial HID_SMA_OPTIONSDIALOG           { HelpId = HID_SMA_OPTIONSDIALOG; };
 hidspecial HID_SMA_FONTDIALOG              { HelpId = HID_SMA_FONTDIALOG; };
@@ -70,7 +70,6 @@ hidspecial HID_SMA_CREATORSTR              { HelpId = HID_SMA_CREATORSTR; };
 hidspecial HID_SMA_FILESMFTYP              { HelpId = HID_SMA_FILESMFTYP; };
 hidspecial HID_SMA_FILESYMTYP              { HelpId = HID_SMA_FILESYMTYP; };
 hidspecial HID_SMA_WIN_DOCUMENT            { HelpId = HID_SMA_WIN_DOCUMENT; };
-hidspecial HID_SMA_VIEWSHELL_DOCUMENT      { HelpId = HID_SMA_VIEWSHELL_DOCUMENT; };
 hidspecial HID_SMA_COMMAND_WIN_EDIT        { HelpId = HID_SMA_COMMAND_WIN_EDIT; };
 
 hidspecial HID_SMA_DEFAULT_DIST         { HelpId = HID_SMA_DEFAULT_DIST; };

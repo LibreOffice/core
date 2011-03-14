@@ -181,13 +181,13 @@ public:
     void SetValueFormat( const String& rFmt, LanguageType eLng, LanguageType eSys )
         { sNumFmtString = rFmt; eNumFmtLanguage = eLng; eSysLanguage = eSys; }
 
-    BOOL Load( SvStream& rStream, const SwAfVersions& rVersions, USHORT nVer );
-    BOOL Save( SvStream& rStream ) const;
-    BOOL SaveVerionNo( SvStream& rStream ) const;
+    sal_Bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
+    sal_Bool Save( SvStream& rStream ) const;
+    sal_Bool SaveVerionNo( SvStream& rStream ) const;
 
 #ifdef READ_OLDVERS
     // lade alte Version
-    BOOL LoadOld( SvStream& rStream, USHORT aLoadVer[] );
+    sal_Bool LoadOld( SvStream& rStream, sal_uInt16 aLoadVer[] );
 #endif
 };
 
@@ -197,17 +197,17 @@ class SW_DLLPUBLIC SwTableAutoFmt
     static SwBoxAutoFmt* pDfltBoxAutoFmt;
 
     String aName;
-    USHORT nStrResId;
+    sal_uInt16 nStrResId;
 
     // common flags of Calc and Writer
-    BOOL bInclFont : 1;
-    BOOL bInclJustify : 1;
-    BOOL bInclFrame : 1;
-    BOOL bInclBackground : 1;
-    BOOL bInclValueFormat : 1;
+    sal_Bool bInclFont : 1;
+    sal_Bool bInclJustify : 1;
+    sal_Bool bInclFrame : 1;
+    sal_Bool bInclBackground : 1;
+    sal_Bool bInclValueFormat : 1;
 
     // Calc specific flags
-    BOOL bInclWidthHeight : 1;
+    sal_Bool bInclWidthHeight : 1;
 
     SwBoxAutoFmt* aBoxAutoFmt[ 16 ];
 
@@ -218,37 +218,37 @@ public:
 
     SwTableAutoFmt& operator=( const SwTableAutoFmt& rNew );
 
-    void SetBoxFmt( const SwBoxAutoFmt& rNew, BYTE nPos );
-    const SwBoxAutoFmt& GetBoxFmt( BYTE nPos ) const;
+    void SetBoxFmt( const SwBoxAutoFmt& rNew, sal_uInt8 nPos );
+    const SwBoxAutoFmt& GetBoxFmt( sal_uInt8 nPos ) const;
 
     void SetName( const String& rNew ) { aName = rNew; nStrResId = USHRT_MAX; }
     const String& GetName() const { return aName; }
 
     enum UpdateFlags { UPDATE_CHAR = 1, UPDATE_BOX = 2, UPDATE_ALL = 3 };
-    SwBoxAutoFmt& UpdateFromSet( BYTE nPos, const SfxItemSet& rSet,
+    SwBoxAutoFmt& UpdateFromSet( sal_uInt8 nPos, const SfxItemSet& rSet,
                                 UpdateFlags eFlags, SvNumberFormatter* );
-    void UpdateToSet( BYTE nPos, SfxItemSet& rSet, UpdateFlags eFlags,
+    void UpdateToSet( sal_uInt8 nPos, SfxItemSet& rSet, UpdateFlags eFlags,
                         SvNumberFormatter* ) const ;
 
-    BOOL IsFont() const         { return bInclFont; }
-    BOOL IsJustify() const      { return bInclJustify; }
-    BOOL IsFrame() const        { return bInclFrame; }
-    BOOL IsBackground() const   { return bInclBackground; }
-    BOOL IsValueFormat() const  { return bInclValueFormat; }
+    sal_Bool IsFont() const         { return bInclFont; }
+    sal_Bool IsJustify() const      { return bInclJustify; }
+    sal_Bool IsFrame() const        { return bInclFrame; }
+    sal_Bool IsBackground() const   { return bInclBackground; }
+    sal_Bool IsValueFormat() const  { return bInclValueFormat; }
 
-    void SetFont( const BOOL bNew )         { bInclFont = bNew; }
-    void SetJustify( const  BOOL bNew )     { bInclJustify = bNew; }
-    void SetFrame( const BOOL bNew )        { bInclFrame = bNew; }
-    void SetBackground( const BOOL bNew )   { bInclBackground = bNew; }
-    void SetValueFormat( const BOOL bNew )  { bInclValueFormat = bNew; }
-    void SetWidthHeight( const BOOL bNew )  { bInclWidthHeight = bNew; }
+    void SetFont( const sal_Bool bNew )         { bInclFont = bNew; }
+    void SetJustify( const  sal_Bool bNew )     { bInclJustify = bNew; }
+    void SetFrame( const sal_Bool bNew )        { bInclFrame = bNew; }
+    void SetBackground( const sal_Bool bNew )   { bInclBackground = bNew; }
+    void SetValueFormat( const sal_Bool bNew )  { bInclValueFormat = bNew; }
+    void SetWidthHeight( const sal_Bool bNew )  { bInclWidthHeight = bNew; }
 
-    BOOL Load( SvStream& rStream, const SwAfVersions& );
-    BOOL Save( SvStream& rStream ) const;
+    sal_Bool Load( SvStream& rStream, const SwAfVersions& );
+    sal_Bool Save( SvStream& rStream ) const;
 
 #ifdef READ_OLDVERS
     // load old versions
-    BOOL LoadOld( SvStream& rStream, USHORT aLoadVer[] );
+    sal_Bool LoadOld( SvStream& rStream, sal_uInt16 aLoadVer[] );
 #endif
 };
 
@@ -257,14 +257,14 @@ SV_DECL_PTRARR_DEL( _SwTableAutoFmtTbl, SwTableAutoFmtPtr, 1, 5 )
 
 class SW_DLLPUBLIC SwTableAutoFmtTbl : public _SwTableAutoFmtTbl
 {
-    SW_DLLPRIVATE BOOL Load( SvStream& rStream );
-    SW_DLLPRIVATE BOOL Save( SvStream& rStream ) const;
+    SW_DLLPRIVATE sal_Bool Load( SvStream& rStream );
+    SW_DLLPRIVATE sal_Bool Save( SvStream& rStream ) const;
 
 public:
     SwTableAutoFmtTbl();
 
-    BOOL Load();
-    BOOL Save() const;
+    sal_Bool Load();
+    sal_Bool Save() const;
 };
 
 #endif

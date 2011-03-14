@@ -51,12 +51,14 @@
 #include <docsh.hxx>
 #include <srcview.hxx>
 #include <helpid.h>
+#include <deque>
+
 
 
 struct SwTextPortion
 {
-    USHORT nLine;
-    USHORT nStart, nEnd;
+    sal_uInt16 nLine;
+    sal_uInt16 nStart, nEnd;
     svtools::ColorConfigEntry eType;
 };
 
@@ -64,9 +66,7 @@ struct SwTextPortion
 #define MAX_HIGHLIGHTTIME 200
 #define SYNTAX_HIGHLIGHT_TIMEOUT 200
 
-SV_DECL_VARARR(SwTextPortions, SwTextPortion,16,16)
-
-SV_IMPL_VARARR(SwTextPortions, SwTextPortion)
+typedef std::deque<SwTextPortion> SwTextPortions;
 
 static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
 {
@@ -81,12 +81,12 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
     const sal_Unicode cCR          = 0x0d;
 
 
-    const USHORT nStrLen = rSource.Len();
-    USHORT nInsert = 0;         // number of inserted portions
-    USHORT nActPos = 0;         // position, where '<' was found
-    USHORT nOffset = 0;         // Offset of nActPos to '<'
-    USHORT nPortStart = USHRT_MAX;  // for the TextPortion
-    USHORT nPortEnd  =  0;  //
+    const sal_uInt16 nStrLen = rSource.Len();
+    sal_uInt16 nInsert = 0;         // number of inserted portions
+    sal_uInt16 nActPos = 0;         // position, where '<' was found
+    sal_uInt16 nOffset = 0;         // Offset of nActPos to '<'
+    sal_uInt16 nPortStart = USHRT_MAX;  // for the TextPortion
+    sal_uInt16 nPortEnd  =  0;          //
     SwTextPortion aText;
     while(nActPos < nStrLen)
     {
@@ -103,7 +103,8 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     aText.nStart += 1;
                 aText.nEnd = nActPos - 1;
                 aText.eType = svtools::HTMLUNKNOWN;
-                aPortionList.Insert(aText, nInsert++);
+                aPortionList.push_back( aText );
+                nInsert++;
             }
             sal_Unicode cFollowFirst = rSource.GetChar((xub_StrLen)(nActPos + 1));
             sal_Unicode cFollowNext = rSource.GetChar((xub_StrLen)(nActPos + 2));
@@ -130,7 +131,7 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
             if(svtools::HTMLUNKNOWN == eFoundType)
             {
                 // now here a keyword could follow
-                USHORT nSrchPos = nActPos;
+                sal_uInt16 nSrchPos = nActPos;
                 while(++nSrchPos < nStrLen - 1)
                 {
                     sal_Unicode cNext = rSource.GetChar(nSrchPos);
@@ -171,18 +172,18 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
             // now we still have to look for '>'
             if(svtools::HTMLUNKNOWN != eFoundType)
             {
-                BOOL bFound = FALSE;
-                for(USHORT i = nPortEnd; i < nStrLen; i++)
+                sal_Bool bFound = sal_False;
+                for(sal_uInt16 i = nPortEnd; i < nStrLen; i++)
                     if(cCloseBracket == rSource.GetChar(i))
                     {
-                        bFound = TRUE;
+                        bFound = sal_True;
                         nPortEnd = i;
                         break;
                     }
                 if(!bFound && (eFoundType == svtools::HTMLCOMMENT))
                 {
                     // comment without ending in this line
-                    bFound  = TRUE;
+                    bFound  = sal_True;
                     nPortEnd = nStrLen - 1;
                 }
 
@@ -193,7 +194,8 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     aTextPortion.nStart = nPortStart + 1;
                     aTextPortion.nEnd = nPortEnd;
                     aTextPortion.eType = eFoundType;
-                    aPortionList.Insert(aTextPortion, nInsert++);
+                    aPortionList.push_back( aTextPortion );
+                    nInsert++;
                     eFoundType = svtools::HTMLUNKNOWN;
                 }
 
@@ -207,7 +209,8 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
         aText.nStart = nPortEnd + 1;
         aText.nEnd = nActPos - 1;
         aText.eType = svtools::HTMLUNKNOWN;
-        aPortionList.Insert(aText, nInsert++);
+        aPortionList.push_back( aText );
+        nInsert++;
     }
 }
 
@@ -226,8 +229,8 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     nCurTextWidth(0),
     nStartLine(USHRT_MAX),
     eSourceEncoding(gsl_getSystemTextEncoding()),
-    bDoSyntaxHighlight(TRUE),
-    bHighlighting(FALSE)
+    bDoSyntaxHighlight(sal_True),
+    bHighlighting(sal_False)
 {
     SetHelpId(HID_SOURCE_EDITWIN);
     CreateTextEngine();
@@ -397,9 +400,9 @@ void  TextViewOutWin::Command( const CommandEvent& rCEvt )
 
 void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
 {
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
     SwSrcEditWindow* pSrcEditWin = (SwSrcEditWindow*)GetParent();
-    BOOL bChange = !pSrcEditWin->IsReadonly() || !TextEngine::DoesKeyChangeText( rKEvt );
+    sal_Bool bChange = !pSrcEditWin->IsReadonly() || !TextEngine::DoesKeyChangeText( rKEvt );
     if(bChange)
         bDone = pTextView->KeyInput( rKEvt );
 
@@ -460,14 +463,14 @@ void SwSrcEditWindow::CreateTextEngine()
 
     pTextEngine = new ExtTextEngine;
     pTextView = new ExtTextView( pTextEngine, pOutWin );
-    pTextView->SetAutoIndentMode(TRUE);
+    pTextView->SetAutoIndentMode(sal_True);
     pOutWin->SetTextView(pTextView);
 
-    pTextEngine->SetUpdateMode( FALSE );
+    pTextEngine->SetUpdateMode( sal_False );
     pTextEngine->InsertView( pTextView );
 
     Font aFont;
-    aFont.SetTransparent( FALSE );
+    aFont.SetTransparent( sal_False );
     aFont.SetFillColor( rCol );
     SetPointFont( aFont );
     aFont = GetFont();
@@ -478,10 +481,10 @@ void SwSrcEditWindow::CreateTextEngine()
     aSyntaxIdleTimer.SetTimeout( SYNTAX_HIGHLIGHT_TIMEOUT );
     aSyntaxIdleTimer.SetTimeoutHdl( LINK( this, SwSrcEditWindow, SyntaxTimerHdl ) );
 
-    pTextEngine->EnableUndo( TRUE );
-    pTextEngine->SetUpdateMode( TRUE );
+    pTextEngine->EnableUndo( sal_True );
+    pTextEngine->SetUpdateMode( sal_True );
 
-    pTextView->ShowCursor( TRUE, TRUE );
+    pTextView->ShowCursor( sal_True, sal_True );
     InitScrollBars();
     StartListening( *pTextEngine );
 
@@ -519,14 +522,14 @@ IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
     {
         long nDiff = pTextView->GetStartDocPos().Y() - pScroll->GetThumbPos();
         GetTextView()->Scroll( 0, nDiff );
-        pTextView->ShowCursor( FALSE, TRUE );
+        pTextView->ShowCursor( sal_False, sal_True );
         pScroll->SetThumbPos( pTextView->GetStartDocPos().Y() );
     }
     else
     {
         long nDiff = pTextView->GetStartDocPos().X() - pScroll->GetThumbPos();
         GetTextView()->Scroll( nDiff, 0 );
-        pTextView->ShowCursor( FALSE, TRUE );
+        pTextView->ShowCursor( sal_False, sal_True );
         pScroll->SetThumbPos( pTextView->GetStartDocPos().X() );
     }
     GetSrcView()->GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );
@@ -538,18 +541,18 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
     Time aSyntaxCheckStart;
     OSL_ENSURE( pTextView, "Noch keine View, aber Syntax-Highlight ?!" );
 
-    bHighlighting = TRUE;
-    USHORT nLine;
-    USHORT nCount  = 0;
+    bHighlighting = sal_True;
+    sal_uInt16 nLine;
+    sal_uInt16 nCount  = 0;
     // at first the region around the cursor is processed
     TextSelection aSel = pTextView->GetSelection();
-    USHORT nCur = (USHORT)aSel.GetStart().GetPara();
+    sal_uInt16 nCur = (sal_uInt16)aSel.GetStart().GetPara();
     if(nCur > 40)
         nCur -= 40;
     else
         nCur = 0;
     if(aSyntaxLineTable.Count())
-        for(USHORT i = 0; i < 80 && nCount < 40; i++, nCur++)
+        for(sal_uInt16 i = 0; i < 80 && nCount < 40; i++, nCur++)
         {
             void * p = aSyntaxLineTable.Get(nCur);
             if(p)
@@ -571,9 +574,9 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
     void* p = aSyntaxLineTable.First();
     while ( p && nCount < MAX_SYNTAX_HIGHLIGHT)
     {
-        nLine = (USHORT)aSyntaxLineTable.GetCurKey();
+        nLine = (sal_uInt16)aSyntaxLineTable.GetCurKey();
         DoSyntaxHighlight( nLine );
-        USHORT nCurKey = (USHORT)aSyntaxLineTable.GetCurKey();
+        sal_uInt16 nCurKey = (sal_uInt16)aSyntaxLineTable.GetCurKey();
         p = aSyntaxLineTable.Next();
         aSyntaxLineTable.Remove(nCurKey);
         nCount ++;
@@ -592,50 +595,50 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
     nCurTextWidth = pTextEngine->CalcTextWidth() + 25;  // kleine Toleranz
     if ( nCurTextWidth != nPrevTextWidth )
         SetScrollBarRanges();
-    bHighlighting = FALSE;
+    bHighlighting = sal_False;
 
     return 0;
 }
 
-void SwSrcEditWindow::DoSyntaxHighlight( USHORT nPara )
+void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )
 {
     // Because of DelayedSyntaxHighlight it could happen,
     // that the line doesn't exist anymore!
     if ( nPara < pTextEngine->GetParagraphCount() )
     {
-        BOOL bTempModified = IsModified();
-        pTextEngine->RemoveAttribs( nPara, (BOOL)TRUE );
+        sal_Bool bTempModified = IsModified();
+        pTextEngine->RemoveAttribs( nPara, (sal_Bool)sal_True );
         String aSource( pTextEngine->GetText( nPara ) );
-        pTextEngine->SetUpdateMode( FALSE );
+        pTextEngine->SetUpdateMode( sal_False );
         ImpDoHighlight( aSource, nPara );
         TextView* pTmp = pTextEngine->GetActiveView();
-        pTmp->SetAutoScroll(FALSE);
+        pTmp->SetAutoScroll(sal_False);
         pTextEngine->SetActiveView(0);
-        pTextEngine->SetUpdateMode( TRUE );
+        pTextEngine->SetUpdateMode( sal_True );
         pTextEngine->SetActiveView(pTmp);
-        pTmp->SetAutoScroll(TRUE);
-        pTmp->ShowCursor( FALSE/*pTmp->IsAutoScroll()*/ );
+        pTmp->SetAutoScroll(sal_True);
+        pTmp->ShowCursor( sal_False/*pTmp->IsAutoScroll()*/ );
 
         if(!bTempModified)
             ClearModifyFlag();
     }
 }
 
-void SwSrcEditWindow::DoDelayedSyntaxHighlight( USHORT nPara )
+void SwSrcEditWindow::DoDelayedSyntaxHighlight( sal_uInt16 nPara )
 {
     if ( !bHighlighting && bDoSyntaxHighlight )
     {
-        aSyntaxLineTable.Insert( nPara, (void*)(USHORT)1 );
+        aSyntaxLineTable.Insert( nPara, (void*)(sal_uInt16)1 );
         aSyntaxIdleTimer.Start();
     }
 }
 
-void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
+void SwSrcEditWindow::ImpDoHighlight( const String& rSource, sal_uInt16 nLineOff )
 {
     SwTextPortions aPortionList;
     lcl_Highlight(rSource, aPortionList);
 
-    USHORT nCount = aPortionList.Count();
+    size_t nCount = aPortionList.size();
     if ( !nCount )
         return;
 
@@ -643,7 +646,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
     if ( rLast.nStart > rLast.nEnd )    // Only until Bug from MD is resolved
     {
         nCount--;
-        aPortionList.Remove( nCount);
+        aPortionList.pop_back();
         if ( !nCount )
             return;
     }
@@ -651,19 +654,19 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
     // maybe optimize:
     // If frequently the same color, blank without color in between,
     // maybe summarize or at least the blank; for less attributes
-    BOOL bOptimizeHighlight = TRUE; // war in der BasicIDE static
+    sal_Bool bOptimizeHighlight = sal_True; // war in der BasicIDE static
     if ( bOptimizeHighlight )
     {
         // Only blanks and tabs have to be attributed along.
         // When two identical attributes are placed consecutively,
         // it optimises the TextEngine.
-        USHORT nLastEnd = 0;
+        sal_uInt16 nLastEnd = 0;
 
-        for ( USHORT i = 0; i < nCount; i++ )
+        for ( size_t i = 0; i < nCount; i++ )
         {
             SwTextPortion& r = aPortionList[i];
 #if OSL_DEBUG_LEVEL > 1
-            USHORT nLine = aPortionList[0].nLine;
+            sal_uInt16 nLine = aPortionList[0].nLine;
             OSL_ENSURE( r.nLine == nLine, "doch mehrere Zeilen ?" );
 #endif
             if ( r.nStart > r.nEnd )    // only until Bug from MD is resolved
@@ -681,7 +684,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         }
     }
 
-    for ( USHORT i = 0; i < aPortionList.Count(); i++ )
+    for ( size_t i = 0; i < aPortionList.size(); i++ )
     {
         SwTextPortion& r = aPortionList[i];
         if ( r.nStart > r.nEnd )    // only until Bug from MD is resolved
@@ -692,8 +695,8 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
             r.eType != svtools::HTMLUNKNOWN)
                 r.eType = svtools::HTMLUNKNOWN;
         Color aColor((ColorData)SW_MOD()->GetColorConfig().GetColorValue((svtools::ColorConfigEntry)r.eType).nColor);
-        USHORT nLine = nLineOff+r.nLine; //
-        pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1, TRUE );
+        sal_uInt16 nLine = nLineOff+r.nLine; //
+        pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1, sal_True );
     }
 }
 
@@ -717,7 +720,7 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         else if( ( rTextHint.GetId() == TEXT_HINT_PARAINSERTED ) ||
                  ( rTextHint.GetId() == TEXT_HINT_PARACONTENTCHANGED ) )
         {
-            DoDelayedSyntaxHighlight( (USHORT)rTextHint.GetValue() );
+            DoDelayedSyntaxHighlight( (sal_uInt16)rTextHint.GetValue() );
         }
     }
 }
@@ -728,7 +731,7 @@ void SwSrcEditWindow::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdC
         SetFont();
 }
 
-void    SwSrcEditWindow::Invalidate(USHORT )
+void    SwSrcEditWindow::Invalidate(sal_uInt16 )
 {
     pOutWin->Invalidate();
     Window::Invalidate();
@@ -764,7 +767,7 @@ void SwSrcEditWindow::GetFocus()
     pOutWin->GrabFocus();
 }
 
-BOOL  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages[])
+sal_Bool  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages[])
 {
     switch(eEnc)
     {

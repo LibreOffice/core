@@ -48,11 +48,11 @@ class SvXMLImportItemMapper
 {
 protected:
     SvXMLItemMapEntriesRef mrMapEntries;
-    USHORT nUnknownWhich;
+    sal_uInt16 nUnknownWhich;
 
 public:
     SvXMLImportItemMapper( SvXMLItemMapEntriesRef rMapEntries ,
-                           USHORT nUnknWhich=USHRT_MAX );
+                           sal_uInt16 nUnknWhich=USHRT_MAX );
     virtual ~SvXMLImportItemMapper();
 
     /** fills the given itemset with the attributes in the given list */
@@ -63,7 +63,7 @@ public:
 
     /** this method is called for every item that has the
         MID_SW_FLAG_SPECIAL_ITEM_IMPORT flag set */
-    virtual BOOL handleSpecialItem( const SvXMLItemMapEntry& rEntry,
+    virtual sal_Bool handleSpecialItem( const SvXMLItemMapEntry& rEntry,
                                     SfxPoolItem& rItem,
                                     SfxItemSet& rSet,
                                     const ::rtl::OUString& rValue,
@@ -72,7 +72,7 @@ public:
 
     /** this method is called for every item that has the
         MID_SW_FLAG_NO_ITEM_IMPORT flag set */
-    virtual BOOL handleNoItem( const SvXMLItemMapEntry& rEntry,
+    virtual sal_Bool handleNoItem( const SvXMLItemMapEntry& rEntry,
                                SfxItemSet& rSet,
                                const ::rtl::OUString& rValue,
                                const SvXMLUnitConverter& rUnitConverter,

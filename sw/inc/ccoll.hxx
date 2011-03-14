@@ -47,8 +47,8 @@
 //***********************************************************
 
 struct CollName {
-        ULONG nCnd;
-        ULONG nSubCond;
+        sal_uLong nCnd;
+        sal_uLong nSubCond;
     };
 
 //***********************************************************
@@ -57,8 +57,8 @@ struct CollName {
 
 struct CommandStruct
 {
-    ULONG nCnd;
-    ULONG nSubCond;
+    sal_uLong nCnd;
+    sal_uLong nSubCond;
 };
 
 //***********************************************************
@@ -75,7 +75,7 @@ class SW_DLLPUBLIC SwCondCollItem : public SfxPoolItem
     String                      sStyles[COND_COMMAND_COUNT];
 
 public:
-    SwCondCollItem(USHORT nWhich = FN_COND_COLL);
+    SwCondCollItem(sal_uInt16 nWhich = FN_COND_COLL);
     ~SwCondCollItem();
 
                                 TYPEINFO();
@@ -85,8 +85,8 @@ public:
 
     static const CommandStruct* GetCmds();
 
-    const String&               GetStyle(USHORT nPos) const;
-    void                        SetStyle( const String* pStyle, USHORT nPos);
+    const String&               GetStyle(sal_uInt16 nPos) const;
+    void                        SetStyle( const String* pStyle, sal_uInt16 nPos);
 
 };
 

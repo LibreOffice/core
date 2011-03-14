@@ -43,12 +43,12 @@
 /*------------------------------------------------------------------------
  Beschreibung:  Spaltenbreite auf aktuelle Breite einstellen
 ------------------------------------------------------------------------*/
-void FitToActualSize(SwFmtCol& rCol, USHORT nWidth)
+void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth)
 {
-    const USHORT nCount = rCol.GetColumns().Count();
-    for(USHORT i = 0; i < nCount; ++i)
+    const sal_uInt16 nCount = rCol.GetColumns().Count();
+    for(sal_uInt16 i = 0; i < nCount; ++i)
     {
-        const USHORT nTmp = rCol.CalcColWidth(i, nWidth);
+        const sal_uInt16 nTmp = rCol.CalcColWidth(i, nWidth);
         rCol.GetColumns()[i]->SetWishWidth(nTmp);
     }
     rCol.SetWishWidth(nWidth);
@@ -58,16 +58,16 @@ void FitToActualSize(SwFmtCol& rCol, USHORT nWidth)
 /*------------------------------------------------------------------------
  Beschreibung:  Setzen Spaltenanzahl und Gutterwidth
 ------------------------------------------------------------------------*/
-void SwColMgr::SetCount(USHORT nCount, USHORT  nGutterWidth)
+void SwColMgr::SetCount(sal_uInt16 nCount, sal_uInt16  nGutterWidth)
 {
     aFmtCol.Init(nCount, nGutterWidth, nWidth);
     aFmtCol.SetWishWidth(nWidth);
     aFmtCol.SetGutterWidth(nGutterWidth, nWidth);
 }
 
-USHORT SwColMgr::GetGutterWidth( USHORT nPos ) const
+sal_uInt16 SwColMgr::GetGutterWidth( sal_uInt16 nPos ) const
 {
-    USHORT nRet;
+    sal_uInt16 nRet;
     if(nPos == USHRT_MAX )
         nRet = GetCount() > 1 ? aFmtCol.GetGutterWidth() : DEF_GUTTER_WIDTH;
     else
@@ -79,7 +79,7 @@ USHORT SwColMgr::GetGutterWidth( USHORT nPos ) const
     return nRet;
 }
 
-void SwColMgr::SetGutterWidth(USHORT nGutterWidth, USHORT nPos )
+void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos )
 {
     if(nPos == USHRT_MAX)
         aFmtCol.SetGutterWidth(nGutterWidth, nWidth);
@@ -87,7 +87,7 @@ void SwColMgr::SetGutterWidth(USHORT nGutterWidth, USHORT nPos )
     {
         OSL_ENSURE(nPos < GetCount() - 1, "Spalte ueberindiziert" );
         SwColumns& rCols = aFmtCol.GetColumns();
-        USHORT nGutterWidth2 = nGutterWidth / 2;
+        sal_uInt16 nGutterWidth2 = nGutterWidth / 2;
         rCols.GetObject(nPos)->SetRight(nGutterWidth2);
         rCols.GetObject(nPos + 1)->SetLeft(nGutterWidth2);
     }
@@ -104,19 +104,19 @@ short SwColMgr::GetLineHeightPercent() const
 void SwColMgr::SetLineHeightPercent(short nPercent)
 {
     OSL_ENSURE(nPercent <= 100, "line height may only be 100 \%");
-    aFmtCol.SetLineHeight((BYTE)nPercent);
+    aFmtCol.SetLineHeight((sal_uInt8)nPercent);
 }
 
 /*------------------------------------------------------------------------
  Beschreibung:  Spaltenbreite
 ------------------------------------------------------------------------*/
-USHORT SwColMgr::GetColWidth(USHORT nIdx) const
+sal_uInt16 SwColMgr::GetColWidth(sal_uInt16 nIdx) const
 {
     OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
     return aFmtCol.CalcPrtColWidth(nIdx, nWidth);
 }
 
-void SwColMgr::SetColWidth(USHORT nIdx, USHORT nWd)
+void SwColMgr::SetColWidth(sal_uInt16 nIdx, sal_uInt16 nWd)
 {
     OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
     aFmtCol.GetColumns()[nIdx]->SetWishWidth(nWd);
@@ -126,7 +126,7 @@ void SwColMgr::SetColWidth(USHORT nIdx, USHORT nWd)
 /*--------------------------------------------------------------------
     Beschreibung:   Groesse neu setzen
  --------------------------------------------------------------------*/
-void SwColMgr::SetActualWidth(USHORT nW)
+void SwColMgr::SetActualWidth(sal_uInt16 nW)
 {
     nWidth = nW;
     ::FitToActualSize(aFmtCol, nW);
@@ -135,18 +135,18 @@ void SwColMgr::SetActualWidth(USHORT nW)
 /*--------------------------------------------------------------------
     Beschreibung: ctor
  --------------------------------------------------------------------*/
-SwColMgr::SwColMgr(const SfxItemSet& rSet, USHORT nActWidth) :
+SwColMgr::SwColMgr(const SfxItemSet& rSet, sal_uInt16 nActWidth) :
     aFmtCol((const SwFmtCol&)rSet.Get(RES_COL)),
     nWidth(nActWidth)
 {
     if(nWidth == USHRT_MAX)
     {
-        nWidth = (USHORT)((const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE)).GetWidth();
+        nWidth = (sal_uInt16)((const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE)).GetWidth();
         if (nWidth < MINLAY)
             nWidth = USHRT_MAX;
         const SvxLRSpaceItem &rLR = (const SvxLRSpaceItem&)rSet.Get(RES_LR_SPACE);
-        nWidth = nWidth - (USHORT)rLR.GetLeft();
-        nWidth = nWidth - (USHORT)rLR.GetRight();
+        nWidth = nWidth - (sal_uInt16)rLR.GetLeft();
+        nWidth = nWidth - (sal_uInt16)rLR.GetRight();
     }
     ::FitToActualSize(aFmtCol, nWidth);
 }

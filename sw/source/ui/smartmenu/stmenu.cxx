@@ -57,10 +57,10 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
     Reference <frame::XController> xController = mpSwView->GetController();
     const lang::Locale aLocale( SW_BREAKITER()->GetLocale( (LanguageType)GetAppLanguage() ) );
 
-    USHORT nMenuPos = 0;
-    USHORT nSubMenuPos = 0;
-    USHORT nMenuId = 1;
-    USHORT nSubMenuId = MN_ST_INSERT_START;
+    sal_uInt16 nMenuPos = 0;
+    sal_uInt16 nSubMenuPos = 0;
+    sal_uInt16 nMenuId = 1;
+    sal_uInt16 nSubMenuId = MN_ST_INSERT_START;
 
     const rtl::OUString aRangeText = mxTextRange->getString();
 
@@ -76,7 +76,7 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
 
     InsertSeparator(0);
 
-    for ( USHORT j = 0; j < aActionComponentsSequence.getLength(); ++j )
+    for ( sal_uInt16 j = 0; j < aActionComponentsSequence.getLength(); ++j )
     {
         Reference< container::XStringKeyMap > xSmartTagProperties = rStringKeyMaps[j];
 
@@ -113,7 +113,7 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
         pSbMenu->InsertSeparator( nSubMenuPos++ );
 
         // Add subitem for every action reference for the current smart tag type:
-        for ( USHORT i = 0; i < rActionComponents.getLength(); ++i )
+        for ( sal_uInt16 i = 0; i < rActionComponents.getLength(); ++i )
         {
             xAction = rActionComponents[i];
 
@@ -149,7 +149,7 @@ sal_uInt16 SwSmartTagPopup::Execute( const Rectangle& rWordPos, Window* pWin )
 
     if ( nId == MN_SMARTTAG_OPTIONS )
     {
-        SfxBoolItem aBool(SID_OPEN_SMARTTAGOPTIONS, TRUE);
+        SfxBoolItem aBool(SID_OPEN_SMARTTAGOPTIONS, sal_True);
         mpSwView->GetViewFrame()->GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SFX_CALLMODE_ASYNCHRON, &aBool, 0L );
     }
 

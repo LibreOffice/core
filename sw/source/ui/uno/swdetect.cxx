@@ -170,7 +170,7 @@ SwFilterDetect::~SwFilterDetect()
     SfxApplication* pApp = SFX_APP();
     SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
     TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
-    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
+    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
 
     bWasReadOnly = pItem && pItem->GetValue();
 
@@ -189,8 +189,8 @@ SwFilterDetect::~SwFilterDetect()
     else
     {
         // ctor of SfxMedium uses owner transition of ItemSet
-        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, FALSE, NULL, pSet );
-        aMedium.UseInteractionHandler( TRUE );
+        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, sal_False, NULL, pSet );
+        aMedium.UseInteractionHandler( sal_True );
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
             // remember input stream and content and put them into the descriptor later
@@ -199,7 +199,7 @@ SwFilterDetect::~SwFilterDetect()
             xContent = aMedium.GetContent();
             bReadOnly = aMedium.IsReadOnly();
 
-            BOOL bIsStorage = aMedium.IsStorage();
+            sal_Bool bIsStorage = aMedium.IsStorage();
             if ( bIsStorage )
             {
                 uno::Reference< embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
@@ -245,7 +245,7 @@ SwFilterDetect::~SwFilterDetect()
                             aTypeName = pPreFilter->GetTypeName();
                         }
 
-                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pPreFilter ? pPreFilter->IsOwnTemplateFormat() : FALSE, &aFilterName );
+                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pPreFilter ? pPreFilter->IsOwnTemplateFormat() : sal_False, &aFilterName );
                     }
                     catch( lang::WrappedTargetException& aWrap )
                     {
@@ -267,18 +267,17 @@ SwFilterDetect::~SwFilterDetect()
                                 if ( !bRepairPackage )
                                 {
                                     // ask the user whether he wants to try to repair
-                                    RequestPackageReparation* pRequest = new RequestPackageReparation( aDocumentTitle );
-                                    uno::Reference< task::XInteractionRequest > xRequest ( pRequest );
-                                    xInteraction->handle( xRequest );
-                                    bRepairAllowed = pRequest->isApproved();
+                                    RequestPackageReparation aRequest( aDocumentTitle );
+                                    xInteraction->handle( aRequest.GetRequest() );
+                                    bRepairAllowed = aRequest.isApproved();
                                 }
 
                                 if ( !bRepairAllowed )
                                 {
                                     // repair either not allowed or not successful
-                                    NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocumentTitle );
-                                    uno::Reference< task::XInteractionRequest > xRequest ( pNotifyRequest );
-                                    xInteraction->handle( xRequest );
+                                    // repair either not allowed or not successful
+                                    NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
+                                    xInteraction->handle( aNotifyRequest.GetRequest() );
 
                                     rtl::Reference< ::comphelper::OIHWrapNoFilterDialog > xHandler = new ::comphelper::OIHWrapNoFilterDialog( xInteraction );
                                     if ( nIndexOfInteractionHandler != -1 )
@@ -319,9 +318,9 @@ SwFilterDetect::~SwFilterDetect()
                     else
                         pFilter = SfxFilterMatcher().GetFilter4EA( aTypeName );
 
-                    BOOL bTestWriter = !pFilter || pFilter->GetServiceName().EqualsAscii("com.sun.star.text.TextDocument") ||
+                    sal_Bool bTestWriter = !pFilter || pFilter->GetServiceName().EqualsAscii("com.sun.star.text.TextDocument") ||
                         pFilter->GetServiceName().EqualsAscii("com.sun.star.text.WebDocument");
-                    BOOL bTestGlobal = !pFilter || pFilter->GetServiceName().EqualsAscii("com.sun.star.text.GlobalDocument");
+                    sal_Bool bTestGlobal = !pFilter || pFilter->GetServiceName().EqualsAscii("com.sun.star.text.GlobalDocument");
 
                     const SfxFilter* pOrigFilter = NULL;
                     if ( !bTestWriter && !bTestGlobal && pFilter )
@@ -331,10 +330,10 @@ SwFilterDetect::~SwFilterDetect()
                         // example: HTML filter for Calc
                         pOrigFilter = pFilter;
                         pFilter = SfxFilterMatcher().GetFilter4EA( pFilter->GetTypeName() );
-                        bTestWriter = TRUE;
+                        bTestWriter = sal_True;
                     }
 
-                    ULONG nErr = ERRCODE_NONE;
+                    sal_uLong nErr = ERRCODE_NONE;
                     if ( pFilter || bTestWriter )
                         nErr = DetectFilter( aMedium, &pFilter );
                     if ( nErr != ERRCODE_NONE )

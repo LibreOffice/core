@@ -97,9 +97,9 @@ rtl::OUString ConstCustomShape::GetShapeTypeFromRequest( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-BOOL ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    BOOL bReturn = SwDrawBase::MouseButtonDown(rMEvt);
+    sal_Bool bReturn = SwDrawBase::MouseButtonDown(rMEvt);
     if ( bReturn )
     {
         SdrView *pSdrView = m_pSh->GetDrawView();
@@ -129,7 +129,7 @@ BOOL ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL ConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool ConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
     return SwDrawBase::MouseButtonUp(rMEvt);
 }
@@ -140,7 +140,7 @@ BOOL ConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void ConstCustomShape::Activate(const USHORT nSlotId)
+void ConstCustomShape::Activate(const sal_uInt16 nSlotId)
 {
     m_pWin->SetSdrDrawMode( OBJ_CUSTOMSHAPE );
 

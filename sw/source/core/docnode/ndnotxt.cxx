@@ -49,14 +49,14 @@
 #include <frmfmt.hxx> // #i73249#
 
 SwNoTxtNode::SwNoTxtNode( const SwNodeIndex & rWhere,
-                  const BYTE nNdType,
+                  const sal_uInt8 nNdType,
                   SwGrfFmtColl *pGrfColl,
                   SwAttrSet* pAutoAttr ) :
     SwCntntNode( rWhere, nNdType, pGrfColl ),
     pContour( 0 ),
-    bAutomaticContour( FALSE ),
-    bContourMapModeValid( TRUE ),
-    bPixelContour( FALSE )
+    bAutomaticContour( sal_False ),
+    bContourMapModeValid( sal_True ),
+    bPixelContour( sal_False )
 {
     // soll eine Harte-Attributierung gesetzt werden?
     if( pAutoAttr )
@@ -92,19 +92,19 @@ void SwNoTxtNode::NewAttrSet( SwAttrPool& rPool )
 // bei Grafiken und OLE-Objekten
 
 
-BOOL SwNoTxtNode::RestorePersistentData()
+sal_Bool SwNoTxtNode::RestorePersistentData()
 {
-    return TRUE;
+    return sal_True;
 }
 
 
-BOOL SwNoTxtNode::SavePersistentData()
+sal_Bool SwNoTxtNode::SavePersistentData()
 {
-    return TRUE;
+    return sal_True;
 }
 
 
-void SwNoTxtNode::SetContour( const PolyPolygon *pPoly, BOOL bAutomatic )
+void SwNoTxtNode::SetContour( const PolyPolygon *pPoly, sal_Bool bAutomatic )
 {
     delete pContour;
     if ( pPoly )
@@ -112,8 +112,8 @@ void SwNoTxtNode::SetContour( const PolyPolygon *pPoly, BOOL bAutomatic )
     else
         pContour = 0;
     bAutomaticContour = bAutomatic;
-    bContourMapModeValid = TRUE;
-    bPixelContour = FALSE;
+    bContourMapModeValid = sal_True;
+    bPixelContour = sal_False;
 }
 
 
@@ -121,9 +121,9 @@ void SwNoTxtNode::CreateContour()
 {
     OSL_ENSURE( !pContour, "Contour available." );
     pContour = new PolyPolygon(SvxContourDlg::CreateAutoContour(GetGraphic()));
-    bAutomaticContour = TRUE;
-    bContourMapModeValid = TRUE;
-    bPixelContour = FALSE;
+    bAutomaticContour = sal_True;
+    bContourMapModeValid = sal_True;
+    bPixelContour = sal_False;
 }
 
 const PolyPolygon *SwNoTxtNode::HasContour() const
@@ -131,7 +131,7 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
     if( !bContourMapModeValid )
     {
         const MapMode aGrfMap( GetGraphic().GetPrefMapMode() );
-        BOOL bPixelGrf = aGrfMap.GetMapUnit() == MAP_PIXEL;
+        sal_Bool bPixelGrf = aGrfMap.GetMapUnit() == MAP_PIXEL;
         const MapMode aContourMap( bPixelGrf ? MAP_PIXEL : MAP_100TH_MM );
         if( bPixelGrf ? !bPixelContour : aGrfMap != aContourMap )
         {
@@ -140,13 +140,13 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
             OutputDevice* pOutDev =
                 (bPixelGrf || bPixelContour) ? Application::GetDefaultDevice()
                                              : 0;
-            USHORT nPolyCount = pContour->Count();
-            for( USHORT j=0; j<nPolyCount; j++ )
+            sal_uInt16 nPolyCount = pContour->Count();
+            for( sal_uInt16 j=0; j<nPolyCount; j++ )
             {
                 Polygon& rPoly = (*pContour)[j];
 
-                USHORT nCount = rPoly.GetSize();
-                for( USHORT i=0 ; i<nCount; i++ )
+                sal_uInt16 nCount = rPoly.GetSize();
+                for( sal_uInt16 i=0 ; i<nCount; i++ )
                 {
                     if( bPixelGrf )
                         rPoly[i] = pOutDev->LogicToPixel( rPoly[i],
@@ -160,8 +160,8 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
                 }
             }
         }
-        ((SwNoTxtNode *)this)->bContourMapModeValid = TRUE;
-        ((SwNoTxtNode *)this)->bPixelContour = FALSE;
+        ((SwNoTxtNode *)this)->bContourMapModeValid = sal_True;
+        ((SwNoTxtNode *)this)->bPixelContour = sal_False;
     }
 
     return pContour;
@@ -180,13 +180,13 @@ void SwNoTxtNode::SetContourAPI( const PolyPolygon *pPoly )
         pContour = new PolyPolygon( *pPoly );
     else
         pContour = 0;
-    bContourMapModeValid = FALSE;
+    bContourMapModeValid = sal_False;
 }
 
-BOOL SwNoTxtNode::GetContourAPI( PolyPolygon &rContour ) const
+sal_Bool SwNoTxtNode::GetContourAPI( PolyPolygon &rContour ) const
 {
     if( !pContour )
-        return FALSE;
+        return sal_False;
 
     rContour = *pContour;
     if( bContourMapModeValid )
@@ -199,13 +199,13 @@ BOOL SwNoTxtNode::GetContourAPI( PolyPolygon &rContour ) const
         if( aGrfMap.GetMapUnit() != MAP_PIXEL &&
             aGrfMap != aContourMap )
         {
-            USHORT nPolyCount = rContour.Count();
-            for( USHORT j=0; j<nPolyCount; j++ )
+            sal_uInt16 nPolyCount = rContour.Count();
+            for( sal_uInt16 j=0; j<nPolyCount; j++ )
             {
                 Polygon& rPoly = (*pContour)[j];
 
-                USHORT nCount = rPoly.GetSize();
-                for( USHORT i=0 ; i<nCount; i++ )
+                sal_uInt16 nCount = rPoly.GetSize();
+                for( sal_uInt16 i=0 ; i<nCount; i++ )
                 {
                     rPoly[i] = OutputDevice::LogicToLogic( rPoly[i], aGrfMap,
                                                            aContourMap );
@@ -214,12 +214,12 @@ BOOL SwNoTxtNode::GetContourAPI( PolyPolygon &rContour ) const
         }
     }
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SwNoTxtNode::IsPixelContour() const
+sal_Bool SwNoTxtNode::IsPixelContour() const
 {
-    BOOL bRet;
+    sal_Bool bRet;
     if( bContourMapModeValid )
     {
         const MapMode aGrfMap( GetGraphic().GetPrefMapMode() );
@@ -239,7 +239,7 @@ Graphic SwNoTxtNode::GetGraphic() const
     Graphic aRet;
     if ( GetGrfNode() )
     {
-        ((SwGrfNode*)this)->SwapIn( TRUE );
+        ((SwGrfNode*)this)->SwapIn( sal_True );
         aRet = ((SwGrfNode*)this)->GetGrf();
     }
     else

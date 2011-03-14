@@ -57,7 +57,7 @@
 
 
 void ScrollMDI( ViewShell* pVwSh, const SwRect &rRect,
-                USHORT nRangeX, USHORT nRangeY)
+                sal_uInt16 nRangeX, sal_uInt16 nRangeY)
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if (pSfxVwSh && pSfxVwSh->ISA(SwView))
@@ -70,12 +70,12 @@ void ScrollMDI( ViewShell* pVwSh, const SwRect &rRect,
 
 
 
-BOOL IsScrollMDI( ViewShell* pVwSh, const SwRect &rRect )
+sal_Bool IsScrollMDI( ViewShell* pVwSh, const SwRect &rRect )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if (pSfxVwSh && pSfxVwSh->ISA(SwView))
         return (((SwView *)pSfxVwSh)->IsScroll(rRect.SVRect()));
-    return FALSE;
+    return sal_False;
 }
 
 /*--------------------------------------------------------------------
@@ -102,7 +102,7 @@ void SizeNotify(ViewShell* pVwSh, const Size &rSize)
 
 
 
-void PageNumNotify( ViewShell* pVwSh, USHORT nPhyNum, USHORT nVirtNum,
+void PageNumNotify( ViewShell* pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
                                                     const String& rPgStr)
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
@@ -127,7 +127,7 @@ void FrameNotify( ViewShell* pVwSh, FlyMode eMode )
 /*--------------------------------------------------------------------
     Description:    Notify for page number update
  --------------------------------------------------------------------*/
-BOOL SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, BOOL bVerticalMode)
+sal_Bool SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, sal_Bool bVerticalMode)
 {
     SvxRuler& rRuler = bVerticalMode ?  rView.GetVLineal() : rView.GetHLineal();
     return (!rRuler.StartDocDrag( rMEvt, RULER_TYPE_BORDER ) &&
@@ -138,7 +138,7 @@ BOOL SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, BOOL bVerticalMode)
 // #i23726#
 // #i42921# - add 3rd parameter <bVerticalMode> in order
 // to consider vertical layout
-BOOL SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
+sal_Bool SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
                                  const bool bVerticalMode )
 {
     SvxRuler& rRuler = bVerticalMode ?  rView.GetVLineal() : rView.GetHLineal();
@@ -163,12 +163,12 @@ void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect )
         ((SwPagePreView *)pSfxVwSh)->RepaintCoreRect( rRect );
 }
 
-BOOL JumpToSwMark( ViewShell* pVwSh, const String& rMark )
+sal_Bool JumpToSwMark( ViewShell* pVwSh, const String& rMark )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if( pSfxVwSh && pSfxVwSh->ISA( SwView ) )
         return ((SwView *)pSfxVwSh)->JumpToSwMark( rMark );
-    return FALSE;
+    return sal_False;
 }
 
 void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
@@ -180,8 +180,8 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     // the SwWrtShell
     if(!pSh)
         return;
-    BOOL bViewWasLocked = pSh->IsViewLocked(), bUnlockPaint = FALSE;
-    pSh->LockView( TRUE );
+    sal_Bool bViewWasLocked = pSh->IsViewLocked(), bUnlockPaint = sal_False;
+    pSh->LockView( sal_True );
     switch( rDCEvt.GetType() )
     {
     case DATACHANGED_SETTINGS:
@@ -192,7 +192,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
         if( rDCEvt.GetFlags() & SETTINGS_STYLE )
         {
             pSh->LockPaint();
-            bUnlockPaint = TRUE;
+            bUnlockPaint = sal_True;
             ViewShell::DeleteReplacementBitmaps();
             GetView().InvalidateBorder();               //Scrollbar work
         }
@@ -203,7 +203,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     case DATACHANGED_FONTS:
     case DATACHANGED_FONTSUBSTITUTION:
         pSh->LockPaint();
-        bUnlockPaint = TRUE;
+        bUnlockPaint = sal_True;
         GetView().GetDocShell()->UpdateFontList();  //e.g. printer change
         break;
     }

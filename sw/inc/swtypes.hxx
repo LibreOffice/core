@@ -115,13 +115,13 @@ enum SwLabelType
 };
 
 
-const BYTE OLD_MAXLEVEL = 5;
-const BYTE MAXLEVEL = 10;       //Ehemals numrule.hxx
-const BYTE NO_NUM       = 200;  //Ehemals numrule.hxx
+const sal_uInt8 OLD_MAXLEVEL = 5;
+const sal_uInt8 MAXLEVEL = 10;      //Ehemals numrule.hxx
+const sal_uInt8 NO_NUM      = 200;  //Ehemals numrule.hxx
 
 // fuer Absaetze mit NO_NUM aber auf unterschiedlichen Leveln
 // DAMIT entfaellt das NO_NUM !!!!
-const BYTE NO_NUMLEVEL  = 0x20; // wird mit den Levels verodert
+const sal_uInt8 NO_NUMLEVEL  = 0x20;    // wird mit den Levels verodert
 
 
 /*
@@ -141,9 +141,9 @@ extern SwPathFinder *pPathFinder;
 // (fuer die weiteren Ebenen sind die Werte mit den Ebenen+1 zu
 //  multiplizieren; Ebenen 0..4 !!!)
 
-const USHORT lBullIndent = 1440/4;
+const sal_uInt16 lBullIndent = 1440/4;
 const short lBullFirstLineOffset = -lBullIndent;
-const USHORT lNumIndent = 1440/4;
+const sal_uInt16 lNumIndent = 1440/4;
 const short lNumFirstLineOffset = -lNumIndent;
 const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 
@@ -207,7 +207,7 @@ extern const sal_Char* pMarkToOLE;
 #endif
 
 
-typedef USHORT SetAttrMode;
+typedef sal_uInt16 SetAttrMode;
 
 namespace nsSetAttrMode
 {
@@ -295,7 +295,7 @@ enum PrepareHint
     PREP_FTN,               //Fussnoten-Invalidierung
     PREP_POS_CHGD,          //Position des Frm hat sich verandert
                             //(Zum Fly-Umbruch pruefen). Im void* des Prepare()
-                            //wird ein BOOL& uebergeben, dieser zeigt mit TRUE,
+                            //wird ein sal_Bool& uebergeben, dieser zeigt mit sal_True,
                             //dass ein Format ausgefuehrt wurde.
     PREP_UL_SPACE,          //UL-Space hat sich veraendert, TxtFrms muessen
                             //den Zeilenabstand neu kalkulieren.

@@ -50,8 +50,8 @@ class SW_DLLPUBLIC SwFmtINetFmt: public SfxPoolItem
     String aName;                   // Name of the link.
     SvxMacroTableDtor* pMacroTbl;
     SwTxtINetFmt* pTxtAttr;         // My TextAttribute.
-    USHORT nINetId;
-    USHORT nVisitedId;
+    sal_uInt16 nINetId;
+    sal_uInt16 nVisitedId;
 public:
     SwFmtINetFmt( const String& rURL, const String& rTarget );
     SwFmtINetFmt( const SwFmtINetFmt& rAttr );
@@ -70,9 +70,9 @@ public:
                                     const IntlWrapper* pIntl = 0 ) const;
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 ) const;
+                                        sal_uInt8 nMemberId = 0 ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 );
+                                        sal_uInt8 nMemberId = 0 );
 
 
     const SwTxtINetFmt* GetTxtINetFmt() const   { return pTxtAttr; }
@@ -91,19 +91,19 @@ public:
     const String& GetVisitedFmt() const     { return aVisitedFmt; }
     void SetVisitedFmt( const String& rNm ) { aVisitedFmt = rNm; }
 
-    USHORT GetINetFmtId() const             { return nINetId; }
-    void SetINetFmtId( USHORT nNew )        { nINetId = nNew; }
+    sal_uInt16 GetINetFmtId() const             { return nINetId; }
+    void SetINetFmtId( sal_uInt16 nNew )        { nINetId = nNew; }
 
-    USHORT GetVisitedFmtId() const          { return nVisitedId; }
-    void SetVisitedFmtId( USHORT nNew )     { nVisitedId = nNew; }
+    sal_uInt16 GetVisitedFmtId() const          { return nVisitedId; }
+    void SetVisitedFmtId( sal_uInt16 nNew )     { nVisitedId = nNew; }
 
     // Set a new MacroTable or clear the current one.
     void SetMacroTbl( const SvxMacroTableDtor* pTbl = 0 );
     const SvxMacroTableDtor* GetMacroTbl() const    { return pMacroTbl; }
 
     // Macro getter and setter.
-    void SetMacro( USHORT nEvent, const SvxMacro& rMacro );
-    const SvxMacro* GetMacro( USHORT nEvent ) const;
+    void SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro );
+    const SvxMacro* GetMacro( sal_uInt16 nEvent ) const;
 };
 
 

@@ -75,7 +75,7 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
     : SfxTabDialog( pParent, SW_RES( DLG_FLD_INSERT )),
     m_pChildWin(pCW),
     m_pBindings(pB),
-    m_bDataBaseMode(FALSE)
+    m_bDataBaseMode(sal_False)
 {
     SetStyle(GetStyle()|WB_STDMODELESS);
     m_bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
@@ -133,12 +133,12 @@ SwFldDlg::~SwFldDlg()
 {
 }
 
-BOOL SwFldDlg::Close()
+sal_Bool SwFldDlg::Close()
 {
     m_pBindings->GetDispatcher()->
         Execute(m_bDataBaseMode ? FN_INSERT_FIELD_DATA_ONLY : FN_INSERT_FIELD,
         SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
-    return TRUE;
+    return sal_True;
 }
 
 void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
@@ -187,7 +187,7 @@ void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
     SetPosPixel( aPos );
 }
 
-SfxItemSet* SwFldDlg::CreateInputItemSet( USHORT nID  )
+SfxItemSet* SwFldDlg::CreateInputItemSet( sal_uInt16 nID  )
 {
     if ( nID == TP_FLD_DOKINF )
     {
@@ -232,7 +232,7 @@ IMPL_LINK( SwFldDlg, OKHdl, Button *, EMPTYARG )
 void SwFldDlg::ReInitDlg()
 {
     SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
-    BOOL bNewMode = (::GetHtmlMode(pDocSh) & HTMLMODE_ON) != 0;
+    sal_Bool bNewMode = (::GetHtmlMode(pDocSh) & HTMLMODE_ON) != 0;
 
     if (bNewMode != m_bHtmlMode)
     {
@@ -266,7 +266,7 @@ void SwFldDlg::ReInitDlg()
     Beschreibung: Nach Dok-Wechsel TabPage neu initialisieren
  --------------------------------------------------------------------*/
 
-void SwFldDlg::ReInitTabPage( USHORT nPageId, BOOL bOnlyActivate )
+void SwFldDlg::ReInitTabPage( sal_uInt16 nPageId, sal_Bool bOnlyActivate )
 {
     SwFldPage* pPage = (SwFldPage* )GetTabPage(nPageId);
 
@@ -283,22 +283,22 @@ void SwFldDlg::Activate()
     SwView* pView = ::GetActiveView();
     if( pView )
     {
-        BOOL bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
+        sal_Bool bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
         const SwWrtShell& rSh = pView->GetWrtShell();
         GetOKButton().Enable( !rSh.IsReadOnlyAvailable() ||
                               !rSh.HasReadonlySel() );
 
-        ReInitTabPage( TP_FLD_VAR, TRUE );
+        ReInitTabPage( TP_FLD_VAR, sal_True );
 
         if( !bHtmlMode )
         {
-            ReInitTabPage( TP_FLD_REF, TRUE );
-            ReInitTabPage( TP_FLD_FUNC, TRUE );
+            ReInitTabPage( TP_FLD_REF, sal_True );
+            ReInitTabPage( TP_FLD_FUNC, sal_True );
         }
     }
 }
 
-void SwFldDlg::EnableInsert(BOOL bEnable)
+void SwFldDlg::EnableInsert(sal_Bool bEnable)
 {
     if( bEnable )
     {
@@ -307,7 +307,7 @@ void SwFldDlg::EnableInsert(BOOL bEnable)
         if( !pView ||
                 (pView->GetWrtShell().IsReadOnlyAvailable() &&
                     pView->GetWrtShell().HasReadonlySel()) )
-            bEnable = FALSE;
+            bEnable = sal_False;
     }
     GetOKButton().Enable(bEnable);
 }
@@ -319,7 +319,7 @@ void SwFldDlg::InsertHdl()
 
 void SwFldDlg::ActivateDatabasePage()
 {
-    m_bDataBaseMode = TRUE;
+    m_bDataBaseMode = sal_True;
     ShowPage( TP_FLD_DB );
     SfxTabPage* pDBPage =  GetTabPage( TP_FLD_DB );
     if( pDBPage )
@@ -334,7 +334,7 @@ void SwFldDlg::ActivateDatabasePage()
     RemoveTabPage(TP_FLD_FUNC);
 }
 
-void SwFldDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
+void SwFldDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 {
     if( TP_FLD_DB == nId)
     {

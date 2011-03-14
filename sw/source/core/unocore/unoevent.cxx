@@ -161,7 +161,7 @@ void SwHyperlinkEventDescriptor::copyMacrosFromINetFmt(
 {
     for(sal_Int16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; i++)
     {
-        USHORT nEvent = mpSupportedMacroItems[i].mnEvent;
+        sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
         const SvxMacro* aMacro = aFmt.GetMacro(nEvent);
         if (NULL != aMacro)
             replaceByName(nEvent, *aMacro);
@@ -173,7 +173,7 @@ void SwHyperlinkEventDescriptor::copyMacrosIntoINetFmt(
 {
     for(sal_Int16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; i++)
     {
-        USHORT nEvent = mpSupportedMacroItems[i].mnEvent;
+        sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
         if (hasByName(nEvent))
         {
             SvxMacro aMacro(sEmpty, sEmpty);

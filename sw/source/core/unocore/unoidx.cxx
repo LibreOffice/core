@@ -517,7 +517,7 @@ throw (uno::RuntimeException)
 {
     SolarMutexGuard g;
 
-    USHORT nObjectType = SW_SERVICE_TYPE_INDEX;
+    sal_uInt16 nObjectType = SW_SERVICE_TYPE_INDEX;
     switch (m_pImpl->m_eTOXType)
     {
 //      case TOX_INDEX:             break;
@@ -933,8 +933,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 {
                     SwSections aSectArr;
                     pSectionFmt->GetChildSections(aSectArr,
-                            SORTSECT_NOT, FALSE);
-                    for(USHORT i = 0; i < aSectArr.Count(); i++)
+                            SORTSECT_NOT, sal_False);
+                    for(sal_uInt16 i = 0; i < aSectArr.Count(); i++)
                     {
                         SwSection* pSect = aSectArr[i];
                         if(pSect->GetType() == TOX_HEADER_SECTION)
@@ -1206,7 +1206,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     aXMarks(aMarks.Count());
                 uno::Reference<text::XDocumentIndexMark>* pxMarks =
                     aXMarks.getArray();
-                for(USHORT i = 0; i < aMarks.Count(); i++)
+                for(sal_uInt16 i = 0; i < aMarks.Count(); i++)
                 {
                     pMark = aMarks.GetObject(i);
                     pxMarks[i] = SwXDocumentIndexMark::CreateXDocumentIndexMark(
@@ -1922,7 +1922,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     // n.b.: toxmarks must have either alternative text or an extent
     if (bMark && rMark.GetAlternativeText().Len())
     {
-        rPam.Normalize(TRUE);
+        rPam.Normalize(sal_True);
         rPam.DeleteMark();
         bMark = false;
     }
@@ -3091,7 +3091,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 if(SVX_TAB_ADJUST_END == aToken.eTabAlign)
                 {
                     pArr[1].Name = C2U("TabStopRightAligned");
-                    BOOL bTemp = sal_True;
+                    sal_Bool bTemp = sal_True;
                     pArr[1].Value.setValue(&bTemp, ::getCppuBooleanType());
                 }
                 else

@@ -120,7 +120,7 @@ struct SwCallMouseEvent
     void Clear()
         { eType = EVENT_OBJECT_NONE; PTR.pFmt = 0; PTR.IMAP.pIMapObj = 0; }
 
-    BOOL HasEvent() const { return EVENT_OBJECT_NONE != eType; }
+    sal_Bool HasEvent() const { return EVENT_OBJECT_NONE != eType; }
 };
 
 

@@ -39,15 +39,15 @@
 #define CAPTION_VERSION VERSION_01
 
 InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleId) :
-    bUseCaption(FALSE),
+    bUseCaption(sal_False),
     eObjType(eType),
     nNumType(SVX_NUM_ARABIC),
     sNumberSeparator(RTL_CONSTASCII_USTRINGPARAM((". "))),
     nPos(1),
     nLevel(0),
     sSeparator( String::CreateFromAscii( ": " ) ),
-    bIgnoreSeqOpts(FALSE),
-    bCopyAttributes(FALSE)
+    bIgnoreSeqOpts(sal_False),
+    bCopyAttributes(sal_False)
 {
     if (pOleId)
         aOleId = *pOleId;
@@ -81,7 +81,7 @@ InsCaptionOpt& InsCaptionOpt::operator=( const InsCaptionOpt& rOpt )
     return *this;
 }
 
-BOOL InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
+sal_Bool InsCaptionOpt::operator==( const InsCaptionOpt& rOpt ) const
 {
     return (eObjType == rOpt.eObjType &&
             aOleId == rOpt.aOleId); // So that identical Ole-IDs can't be added multiple

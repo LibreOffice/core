@@ -83,14 +83,14 @@ SwSectionFrm::SwSectionFrm( SwSection &rSect ) :
     CalcEndAtEndFlag();
 }
 
-SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, BOOL bMaster ) :
+SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, sal_Bool bMaster ) :
     SwLayoutFrm( rSect.GetFmt() ),
     SwFlowFrm( (SwFrm&)*this ),
     pSection( rSect.GetSection() )
 {
     bFtnAtEnd = rSect.IsFtnAtEnd();
     bEndnAtEnd = rSect.IsEndnAtEnd();
-    bLockJoin = FALSE;
+    bLockJoin = sal_False;
     nType = FRMC_SECTION;
 
     PROTOCOL( this, PROT_SECTION, bMaster ? ACT_CREATE_MASTER : ACT_CREATE_FOLLOW, &rSect )
@@ -101,15 +101,15 @@ SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, BOOL bMaster ) :
         {
             SwSectionFrm* pMaster = rSect.FindMaster();
             pMaster->SetFollow( this );
-            bIsFollow = TRUE;
+            bIsFollow = sal_True;
         }
         else
-            rSect.bIsFollow = TRUE;
+            rSect.bIsFollow = sal_True;
         SetFollow( &rSect );
     }
     else
     {
-        bIsFollow = TRUE;
+        bIsFollow = sal_True;
         SetFollow( rSect.GetFollow() );
         rSect.SetFollow( this );
         if( !GetFollow() )
@@ -170,7 +170,7 @@ SwSectionFrm::~SwSectionFrm()
         else if( HasFollow() )
         {
             PROTOCOL( this, PROT_SECTION, ACT_DEL_MASTER, GetFollow() )
-            GetFollow()->bIsFollow = FALSE;
+            GetFollow()->bIsFollow = sal_False;
         }
     }
 }
@@ -181,7 +181,7 @@ SwSectionFrm::~SwSectionFrm()
 |*  SwSectionFrm::DelEmpty()
 |*
 |*************************************************************************/
-void SwSectionFrm::DelEmpty( BOOL bRemove )
+void SwSectionFrm::DelEmpty( sal_Bool bRemove )
 {
     if( IsColLocked() )
     {
@@ -218,10 +218,10 @@ void SwSectionFrm::DelEmpty( BOOL bRemove )
         // freigeben, deshalb wird die Size des Masters invalidiert.
         if( !GetFollow() && !pMaster->IsColLocked() )
             pMaster->InvalidateSize();
-        bIsFollow = FALSE;
+        bIsFollow = sal_False;
     }
     else if( HasFollow() )
-        GetFollow()->bIsFollow = FALSE;
+        GetFollow()->bIsFollow = sal_False;
     pFollow = NULL;
     if( pUp )
     {
@@ -248,10 +248,10 @@ void SwSectionFrm::DelEmpty( BOOL bRemove )
 |*************************************************************************/
 void SwSectionFrm::Cut()
 {
-    _Cut( TRUE );
+    _Cut( sal_True );
 }
 
-void SwSectionFrm::_Cut( BOOL bRemove )
+void SwSectionFrm::_Cut( sal_Bool bRemove )
 {
     OSL_ENSURE( GetUpper(), "Cut ohne Upper()." );
 
@@ -397,10 +397,10 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 
         InsertGroupBefore( pParent, pSibling, pSect );
         pSect->Init();
-        (pSect->*fnRect->fnMakePos)( pSect->GetUpper(), pSect->GetPrev(), TRUE);
+        (pSect->*fnRect->fnMakePos)( pSect->GetUpper(), pSect->GetPrev(), sal_True);
         if( !((SwLayoutFrm*)pParent)->Lower() )
         {
-            SwSectionFrm::MoveCntntAndDelete( (SwSectionFrm*)pParent, FALSE );
+            SwSectionFrm::MoveCntntAndDelete( (SwSectionFrm*)pParent, sal_False );
             pParent = this;
         }
     }
@@ -446,24 +446,24 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 |*
 |*************************************************************************/
 
-BOOL SwSectionFrm::HasToBreak( const SwFrm* pFrm ) const
+sal_Bool SwSectionFrm::HasToBreak( const SwFrm* pFrm ) const
 {
     if( !pFrm->IsSctFrm() )
-        return FALSE;
+        return sal_False;
 
     SwSectionFmt *pTmp = (SwSectionFmt*)GetFmt();
 //  if( !pTmp->GetSect().GetValue() )
-//      return FALSE;
+//      return sal_False;
 
     const SwFrmFmt *pOtherFmt = ((SwSectionFrm*)pFrm)->GetFmt();
     do
     {
         pTmp = pTmp->GetParent();
         if( !pTmp )
-            return FALSE;
+            return sal_False;
         if( pTmp == pOtherFmt )
-            return TRUE;
-    } while( TRUE ); // ( pTmp->GetSect().GetValue() );
+            return sal_True;
+    } while( sal_True ); // ( pTmp->GetSect().GetValue() );
 }
 
 /*************************************************************************
@@ -505,7 +505,7 @@ void SwSectionFrm::MergeNext( SwSectionFrm* pNxt )
         }
         SetFollow( pNxt->GetFollow() );
         pNxt->SetFollow( NULL );
-        pNxt->bIsFollow = FALSE;
+        pNxt->bIsFollow = sal_False;
         pNxt->Cut();
         delete pNxt;
         InvalidateSize();
@@ -524,15 +524,15 @@ void SwSectionFrm::MergeNext( SwSectionFrm* pNxt )
 |*
 |*************************************************************************/
 
-BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
+sal_Bool SwSectionFrm::SplitSect( SwFrm* pFrm, sal_Bool bApres )
 {
     OSL_ENSURE( pFrm, "SplitSect: Why?" );
     SwFrm* pOther = bApres ? pFrm->FindNext() : pFrm->FindPrev();
     if( !pOther )
-        return FALSE;
+        return sal_False;
     SwSectionFrm* pSect = pOther->FindSctFrm();
     if( pSect != this )
-        return FALSE;
+        return sal_False;
     // Den Inhalt zur Seite stellen
     SwFrm* pSav = ::SaveCntnt( this, bApres ? pOther : pFrm );
     OSL_ENSURE( pSav, "SplitSect: What's on?" );
@@ -542,7 +542,7 @@ BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
         pNew->InsertBehind( pSect->GetUpper(), pSect );
         pNew->Init();
         SWRECTFN( this )
-        (pNew->*fnRect->fnMakePos)( NULL, pSect, TRUE );
+        (pNew->*fnRect->fnMakePos)( NULL, pSect, sal_True );
         // OD 25.03.2003 #108339# - restore content:
         // determine layout frame for restoring content after the initialization
         // of the section frame. In the section initialization the columns are
@@ -560,9 +560,9 @@ BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
             pNew->SetFollow( GetFollow() );
             SetFollow( NULL );
         }
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -579,7 +579,7 @@ BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
 // Wenn ein mehrspaltiger Bereich aufgehoben wird, muessen die ContentFrms
 // invalidiert werden
 
-void lcl_InvalidateInfFlags( SwFrm* pFrm, BOOL bInva )
+void lcl_InvalidateInfFlags( SwFrm* pFrm, sal_Bool bInva )
 {
     while ( pFrm )
     {
@@ -591,7 +591,7 @@ void lcl_InvalidateInfFlags( SwFrm* pFrm, BOOL bInva )
             pFrm->_InvalidatePrt();
         }
         if( pFrm->IsLayoutFrm() )
-            lcl_InvalidateInfFlags( ((SwLayoutFrm*)pFrm)->GetLower(), FALSE );
+            lcl_InvalidateInfFlags( ((SwLayoutFrm*)pFrm)->GetLower(), sal_False );
         pFrm = pFrm->GetNext();
     }
 }
@@ -616,10 +616,10 @@ SwCntntFrm* lcl_GetNextCntntFrm( const SwLayoutFrm* pLay, bool bFwd )
     // #100926#
     const SwFrm* pFrm = pLay;
     SwCntntFrm *pCntntFrm = 0;
-    BOOL bGoingUp = TRUE;
+    sal_Bool bGoingUp = sal_True;
     do {
         const SwFrm *p = 0;
-        BOOL bGoingFwdOrBwd = FALSE, bGoingDown = FALSE;
+        sal_Bool bGoingFwdOrBwd = sal_False, bGoingDown = sal_False;
 
         bGoingDown = !bGoingUp && ( 0 !=  ( p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0 ) );
         if ( !bGoingDown )
@@ -651,9 +651,9 @@ SwCntntFrm* lcl_GetNextCntntFrm( const SwLayoutFrm* pLay, bool bFwd )
                     ? pLayFrm->GetNextLayoutLeaf() \
                     : pLayFrm )
 
-void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, BOOL bSave )
+void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, sal_Bool bSave )
 {
-    BOOL bSize = pDel->Lower() && pDel->Lower()->IsColumnFrm();
+    sal_Bool bSize = pDel->Lower() && pDel->Lower()->IsColumnFrm();
     SwFrm* pPrv = pDel->GetPrev();
     SwLayoutFrm* pUp = pDel->GetUpper();
     // OD 27.03.2003 #i12711# - initialize local pointer variables.
@@ -690,13 +690,13 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, BOOL bSave )
 
     // Jetzt wird der Inhalt beseite gestellt und der Frame zerstoert
     SwFrm *pSave = bSave ? ::SaveCntnt( pDel ) : NULL;
-    BOOL bOldFtn = TRUE;
+    sal_Bool bOldFtn = sal_True;
     if( pSave && pUp->IsFtnFrm() )
     {
         bOldFtn = ((SwFtnFrm*)pUp)->IsColLocked();
         ((SwFtnFrm*)pUp)->ColLock();
     }
-    pDel->DelEmpty( TRUE );
+    pDel->DelEmpty( sal_True );
     delete pDel;
     if( pParent )
     {   // Hier wird die geeignete Einfuegeposition gesucht
@@ -733,7 +733,7 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, BOOL bSave )
                 pPrvSct->InsertBehind( pUp, pPrv );
                 pPrvSct->Init();
                 SWRECTFN( pUp )
-                (pPrvSct->*fnRect->fnMakePos)( pUp, pPrv, TRUE );
+                (pPrvSct->*fnRect->fnMakePos)( pUp, pPrv, sal_True );
                 pUp = FIRSTLEAF( pPrvSct );
                 pPrv = NULL;
             }
@@ -771,10 +771,10 @@ void SwSectionFrm::MakeAll()
             if( GetUpper() )
             {
                 SWRECTFN( GetUpper() )
-                (this->*fnRect->fnMakePos)( GetUpper(), GetPrev(), FALSE );
+                (this->*fnRect->fnMakePos)( GetUpper(), GetPrev(), sal_False );
             }
         }
-        bValidSize = bValidPos = bValidPrtArea = TRUE;
+        bValidSize = bValidPos = bValidPrtArea = sal_True;
         return;
     }
     LockJoin(); //Ich lass mich nicht unterwegs vernichten.
@@ -803,8 +803,8 @@ void SwSectionFrm::MakeAll()
 
     // Ein Bereich mit Follow nimmt allen Platz bis zur Unterkante des Uppers
     // in Anspruch. Bewegt er sich, so kann seine Groesse zu- oder abnehmen...
-    if( !bValidPos && ToMaximize( FALSE ) )
-        bValidSize = FALSE;
+    if( !bValidPos && ToMaximize( sal_False ) )
+        bValidSize = sal_False;
 
 #if OSL_DEBUG_LEVEL > 1
     const SwFmtCol &rCol = GetFmt()->GetCol();
@@ -813,13 +813,13 @@ void SwSectionFrm::MakeAll()
     SwLayoutFrm::MakeAll();
     UnlockJoin();
     if( pSection && IsSuperfluous() )
-        DelEmpty( FALSE );
+        DelEmpty( sal_False );
 }
 
-BOOL SwSectionFrm::ShouldBwdMoved( SwLayoutFrm *, BOOL , BOOL & )
+sal_Bool SwSectionFrm::ShouldBwdMoved( SwLayoutFrm *, sal_Bool , sal_Bool & )
 {
-    OSL_ENSURE( FALSE, "Hups, wo ist meine Tarnkappe?" );
-    return FALSE;
+    OSL_ENSURE( sal_False, "Hups, wo ist meine Tarnkappe?" );
+    return sal_False;
 }
 
 const SwSectionFmt* SwSectionFrm::_GetEndSectFmt() const
@@ -836,7 +836,7 @@ const SwSectionFmt* SwSectionFrm::_GetEndSectFmt() const
 }
 
 void lcl_FindCntntFrm( SwCntntFrm* &rpCntntFrm, SwFtnFrm* &rpFtnFrm,
-    SwFrm* pFrm, BOOL &rbChkFtn )
+    SwFrm* pFrm, sal_Bool &rbChkFtn )
 {
     if( pFrm )
     {
@@ -865,7 +865,7 @@ void lcl_FindCntntFrm( SwCntntFrm* &rpCntntFrm, SwFtnFrm* &rpFtnFrm,
     }
 }
 
-SwCntntFrm *SwSectionFrm::FindLastCntnt( BYTE nMode )
+SwCntntFrm *SwSectionFrm::FindLastCntnt( sal_uInt8 nMode )
 {
     SwCntntFrm *pRet = NULL;
     SwFtnFrm *pFtnFrm = NULL;
@@ -886,9 +886,9 @@ SwCntntFrm *SwSectionFrm::FindLastCntnt( BYTE nMode )
                 pSect = (SwSectionFrm*)pTmp;
             else
                 break;
-        } while( TRUE );
+        } while( sal_True );
     }
-    BOOL bFtnFound = nMode == FINDMODE_ENDNOTE;
+    sal_Bool bFtnFound = nMode == FINDMODE_ENDNOTE;
     do
     {
         lcl_FindCntntFrm( pRet, pFtnFrm, pSect->Lower(), bFtnFound );
@@ -902,16 +902,16 @@ SwCntntFrm *SwSectionFrm::FindLastCntnt( BYTE nMode )
     return pRet;
 }
 
-BOOL SwSectionFrm::CalcMinDiff( SwTwips& rMinDiff ) const
+sal_Bool SwSectionFrm::CalcMinDiff( SwTwips& rMinDiff ) const
 {
-    if( ToMaximize( TRUE ) )
+    if( ToMaximize( sal_True ) )
     {
         SWRECTFN( this )
         rMinDiff = (GetUpper()->*fnRect->fnGetPrtBottom)();
         rMinDiff = (Frm().*fnRect->fnBottomDist)( rMinDiff );
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -925,7 +925,7 @@ BOOL SwSectionFrm::CalcMinDiff( SwTwips& rMinDiff ) const
  *
  *************************************************************************/
 
-SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, BOOL &rbEmpty,
+SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, sal_Bool &rbEmpty,
     SwLayouter *pLayouter )
 {
     // if rEmpty is set, the rpSect is already searched
@@ -967,16 +967,16 @@ SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, BOOL &rbEmpty,
         }
         rpSect = pSect;
         pSect = pLayouter ? pSect->GetFollow() : NULL;
-        rbEmpty = TRUE;
+        rbEmpty = sal_True;
     }
     return NULL;
 }
 
-void lcl_ColumnRefresh( SwSectionFrm* pSect, BOOL bFollow )
+void lcl_ColumnRefresh( SwSectionFrm* pSect, sal_Bool bFollow )
 {
     while( pSect )
     {
-        BOOL bOldLock = pSect->IsColLocked();
+        sal_Bool bOldLock = pSect->IsColLocked();
         pSect->ColLock();
         if( pSect->Lower() && pSect->Lower()->IsColumnFrm() )
         {
@@ -1007,19 +1007,19 @@ void SwSectionFrm::CollectEndnotes( SwLayouter* pLayouter )
 
     SwSectionFrm* pSect = this;
     SwFtnFrm* pFtn;
-    BOOL bEmpty = FALSE;
+    sal_Bool bEmpty = sal_False;
     // pSect is the last sectionfrm without endnotes or the this-pointer
     // the first sectionfrm with endnotes may be destroyed, when the endnotes
     // is cutted
     while( 0 != (pFtn = lcl_FindEndnote( pSect, bEmpty, pLayouter )) )
         pLayouter->CollectEndnote( pFtn );
     if( pLayouter->HasEndnotes() )
-        lcl_ColumnRefresh( this, TRUE );
+        lcl_ColumnRefresh( this, sal_True );
 }
 
 /*************************************************************************
 |*
-|*  SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
+|*  SwSectionFrm::_CheckClipping( sal_Bool bGrow, sal_Bool bMaximize )
 |*
 |*  Beschreibung:       Passt die Groesse an die Umgebung an.
 |*      Wer einen Follow oder Fussnoten besitzt, soll bis zur Unterkante
@@ -1032,7 +1032,7 @@ void SwSectionFrm::CollectEndnotes( SwLayouter* pLayouter )
 
 /// OD 18.09.2002 #100522#
 /// perform calculation of content, only if height has changed.
-void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
+void SwSectionFrm::_CheckClipping( sal_Bool bGrow, sal_Bool bMaximize )
 {
     SWRECTFN( this )
     long nDiff;
@@ -1063,7 +1063,7 @@ void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
     if( !bCalc && !bGrow && IsAnyNoteAtEnd() && !IsInFtn() )
     {
         SwSectionFrm *pSect = this;
-        BOOL bEmpty = FALSE;
+        sal_Bool bEmpty = sal_False;
         SwLayoutFrm* pFtn = IsEndnAtEnd() ?
             lcl_FindEndnote( pSect, bEmpty, NULL ) : NULL;
         if( pFtn )
@@ -1111,7 +1111,7 @@ void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
         {
             if( Lower()->IsColumnFrm() )
             {
-                lcl_ColumnRefresh( this, FALSE );
+                lcl_ColumnRefresh( this, sal_False );
                 ::CalcCntnt( this );
             }
             else
@@ -1137,8 +1137,8 @@ void SwSectionFrm::SimpleFormat()
         // assure notifications on position changes.
         const SwLayNotify aNotify( this );
         // <--
-        (this->*fnRect->fnMakePos)( GetUpper(), GetPrev(), FALSE );
-        bValidPos = TRUE;
+        (this->*fnRect->fnMakePos)( GetUpper(), GetPrev(), sal_False );
+        bValidPos = sal_True;
     }
     SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
     // OD 22.10.2002 #97265# - call always method <lcl_ColumnRefresh(..)>, in
@@ -1152,7 +1152,7 @@ void SwSectionFrm::SimpleFormat()
             nTop = nHeight;
         (this->*fnRect->fnSetYMargins)( nTop, 0 );
     }
-    lcl_ColumnRefresh( this, FALSE );
+    lcl_ColumnRefresh( this, sal_False );
     UnlockJoin();
 }
 
@@ -1310,14 +1310,14 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         OSL_ENSURE( GetFmt()->GetDoc()->GetRootFrm()->IsInDelList( this ),
                  "SectionFrm without Section" );
 #endif
-        bValidSize = bValidPos = bValidPrtArea = TRUE;
+        bValidSize = bValidPos = bValidPrtArea = sal_True;
         return;
     }
     SWRECTFN( this )
     if ( !bValidPrtArea )
     {
         PROTOCOL( this, PROT_PRTAREA, 0, 0 )
-        bValidPrtArea = TRUE;
+        bValidPrtArea = sal_True;
         SwTwips nUpper = CalcUpperSpace();
 
         // #109700# LRSpace for sections
@@ -1326,7 +1326,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 
         if( nUpper != (this->*fnRect->fnGetTopMargin)() )
         {
-            bValidSize = FALSE;
+            bValidSize = sal_False;
             SwFrm* pOwn = ContainsAny();
             if( pOwn )
                 pOwn->_InvalidatePos();
@@ -1338,16 +1338,16 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
     {
         PROTOCOL_ENTER( this, PROT_SIZE, 0, 0 )
         const long nOldHeight = (Frm().*fnRect->fnGetHeight)();
-        BOOL bOldLock = IsColLocked();
+        sal_Bool bOldLock = IsColLocked();
         ColLock();
 
-        bValidSize = TRUE;
+        bValidSize = sal_True;
 
         //die Groesse wird nur dann vom Inhalt bestimmt, wenn der SectFrm
         //keinen Follow hat. Anderfalls fuellt er immer den Upper bis
         //zur Unterkante aus. Fuer den Textfluss ist nicht er, sondern sein
         //Inhalt selbst verantwortlich.
-        BOOL bMaximize = ToMaximize( FALSE );
+        sal_Bool bMaximize = ToMaximize( sal_False );
 
         // OD 2004-05-17 #i28701# - If the wrapping style has to be considered
         // on object positioning, an extra formatting has to be performed
@@ -1370,7 +1370,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         // which still have a width of 0.
         const sal_Bool bHasColumns = Lower() && Lower()->IsColumnFrm();
         if ( bHasColumns && Lower()->GetNext() )
-            AdjustColumns( 0, FALSE );
+            AdjustColumns( 0, sal_False );
 
         if( GetUpper() )
         {
@@ -1386,8 +1386,8 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             // Thus, set <..IsBrowseMode()> as parameter <bGrow> on calling
             // method <_CheckClipping(..)>.
             _CheckClipping( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE), bMaximize );
-            bMaximize = ToMaximize( FALSE );
-            bValidSize = TRUE;
+            bMaximize = ToMaximize( sal_False );
+            bValidSize = sal_True;
         }
 
         //Breite der Spalten pruefen und ggf. einstellen.
@@ -1416,11 +1416,11 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                     // <--
                     {
                         SwFrm* pOld = GetFollow();
-                        GetFollow()->DelEmpty( FALSE );
+                        GetFollow()->DelEmpty( sal_False );
                         if( pOld == GetFollow() )
                             break;
                     }
-                    bMaximize = ToMaximize( FALSE );
+                    bMaximize = ToMaximize( sal_False );
                     nRemaining += (pFrm->Frm().*fnRect->fnGetHeight)();
                 }
                 else
@@ -1454,7 +1454,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                     long nTmpDiff = (*fnRect->fnYDiff)( nBottom, nDeadLine );
                     if( nTmpDiff > 0 )
                     {
-                        nTmpDiff = GetUpper()->Grow( nTmpDiff, TRUE );
+                        nTmpDiff = GetUpper()->Grow( nTmpDiff, sal_True );
                         nDeadLine = (*fnRect->fnYInc)( nDeadLine, nTmpDiff );
                         nTmpDiff = (*fnRect->fnYDiff)( nBottom, nDeadLine );
                         if( nTmpDiff > 0 )
@@ -1488,13 +1488,13 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                         pFrm = ((SwLayoutFrm*)pFrm)->Lower();
                         CalcFtnCntnt();
                     }
-                    BOOL bUnderSz = FALSE;
+                    sal_Bool bUnderSz = sal_False;
                     while( pFrm )
                     {
                         if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsUndersized() )
                         {
                             pFrm->Prepare( PREP_ADJUST_FRM );
-                            bUnderSz = TRUE;
+                            bUnderSz = sal_True;
                         }
                         pFrm = pFrm->GetNext();
                     }
@@ -1507,7 +1507,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         //Unterkante des Uppers nicht ueberschreiten. Fuer Sections mit
         //Follows die Unterkante auch nicht unterschreiten.
         if ( GetUpper() )
-            _CheckClipping( TRUE, bMaximize );
+            _CheckClipping( sal_True, bMaximize );
         if( !bOldLock )
             ColUnlock();
         long nDiff = nOldHeight - (Frm().*fnRect->fnGetHeight)();
@@ -1519,7 +1519,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                 GetUpper()->Shrink( nDiff );
         }
         if( IsUndersized() )
-            bValidPrtArea = TRUE;
+            bValidPrtArea = sal_True;
     }
 }
 
@@ -1529,7 +1529,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 |*
 |*  Beschreibung        Liefert das naechste Layoutblatt in das der Frame
 |*      gemoved werden kann.
-|*      Neue Seiten werden nur dann erzeugt, wenn der Parameter TRUE ist.
+|*      Neue Seiten werden nur dann erzeugt, wenn der Parameter sal_True ist.
 |*
 |*************************************************************************/
 
@@ -1556,7 +1556,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
 //GetLeaf gerufen wird.
 //  SwSectionFrm *pSect = GetUpper()->FindSctFrm();
     SwSectionFrm *pSect = FindSctFrm();
-    BOOL bWrongPage = FALSE;
+    sal_Bool bWrongPage = sal_False;
     OSL_ENSURE( pSect, "GetNextSctLeaf: Missing SectionFrm" );
 
     // Hier eine Abkuerzung fuer Bereiche mit Follows,
@@ -1569,7 +1569,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
         {
             SwPageFrm *pPg = pSect->GetFollow()->FindPageFrm();
             if( WrongPageDesc( pPg ) )
-                bWrongPage = TRUE;
+                bWrongPage = sal_True;
             else
                 return FIRSTLEAF( pSect->GetFollow() );
         }
@@ -1597,7 +1597,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
                     SwPageFrm* pNxtPg = pUp->IsPageFrm() ?
                                         (SwPageFrm*)pUp : pUp->FindPageFrm();
                     if( WrongPageDesc( pNxtPg ) )
-                        bWrongPage = TRUE;
+                        bWrongPage = sal_True;
                     else
                         return FIRSTLEAF( pSect->GetFollow() );
                 }
@@ -1606,8 +1606,8 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
     }
 
     // Immer im gleichen Bereich landen: Body wieder in Body etc.
-    const BOOL bBody = IsInDocBody();
-    const BOOL bFtnPage = FindPageFrm()->IsFtnPage();
+    const sal_Bool bBody = IsInDocBody();
+    const sal_Bool bFtnPage = FindPageFrm()->IsFtnPage();
 
     SwLayoutFrm *pLayLeaf;
     // Eine Abkuerzung fuer TabFrms, damit nicht alle Zellen abgehuehnert werden
@@ -1632,7 +1632,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
                                             //nicht wieder vom Anfang gesucht
                                             //wird.
 
-    while( TRUE )
+    while( sal_True )
     {
         if( pLayLeaf )
         {
@@ -1663,7 +1663,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
                 if( bWrongPage )
                     break; // there's a column between me and my right page
                 pLayLeaf = 0;
-                bWrongPage = TRUE;
+                bWrongPage = sal_True;
                 pOldLayLeaf = 0;
                 continue;
             }
@@ -1675,7 +1675,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
             ( eMakePage == MAKEPAGE_APPEND || eMakePage == MAKEPAGE_INSERT ) )
         {
             InsertPage(pOldLayLeaf ? pOldLayLeaf->FindPageFrm() : FindPageFrm(),
-                       FALSE );
+                       sal_False );
             //und nochmal das ganze
             pLayLeaf = pOldLayLeaf ? pOldLayLeaf : GetNextLayoutLeaf();
             continue;
@@ -1701,11 +1701,11 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
             return pLayLeaf;
         else
         {
-            pNew = new SwSectionFrm( *pSect, FALSE );
+            pNew = new SwSectionFrm( *pSect, sal_False );
             pNew->InsertBefore( pLayLeaf, pLayLeaf->Lower() );
             pNew->Init();
             SWRECTFN( pNew )
-            (pNew->*fnRect->fnMakePos)( pLayLeaf, NULL, TRUE );
+            (pNew->*fnRect->fnMakePos)( pLayLeaf, NULL, sal_True );
 
             // Wenn unser Bereichsframe einen Nachfolger hat, so muss dieser
             // umgehaengt werden hinter den neuen Follow der Bereichsframes.
@@ -1739,13 +1739,13 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
                 }
                 if( pNxtCntnt )
                 {
-                    SwFtnBossFrm* pOldBoss = pSect->FindFtnBossFrm( TRUE );
-                    if( pOldBoss == pNxtCntnt->FindFtnBossFrm( TRUE ) )
+                    SwFtnBossFrm* pOldBoss = pSect->FindFtnBossFrm( sal_True );
+                    if( pOldBoss == pNxtCntnt->FindFtnBossFrm( sal_True ) )
                     {
                         SwSaveFtnHeight aHeight( pOldBoss,
                             pOldBoss->Frm().Top() + pOldBoss->Frm().Height() );
                         pSect->GetUpper()->MoveLowerFtns( pNxtCntnt, pOldBoss,
-                                    pLayLeaf->FindFtnBossFrm( TRUE ), FALSE );
+                                    pLayLeaf->FindFtnBossFrm( sal_True ), sal_False );
                     }
                 }
                 ((SwFlowFrm*)pNxt)->MoveSubTree( pLayLeaf, pNew->GetNext() );
@@ -1781,7 +1781,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
         pCol = GetUpper()->GetUpper();
     else
         pCol = NULL;
-    BOOL bJump = FALSE;
+    sal_Bool bJump = sal_False;
     if( pCol )
     {
         if( pCol->GetPrev() )
@@ -1793,10 +1793,10 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
                 if( ((SwLayoutFrm*)pCol->Lower())->Lower() )
                 {
                     if( bJump )     // Haben wir eine leere Spalte uebersprungen?
-                        SwFlowFrm::SetMoveBwdJump( TRUE );
+                        SwFlowFrm::SetMoveBwdJump( sal_True );
                     return (SwLayoutFrm*)pCol->Lower();  // Der Spaltenbody
                 }
-                bJump = TRUE;
+                bJump = sal_True;
             } while( pCol->GetPrev() );
 
             // Hier landen wir, wenn alle Spalten leer sind,
@@ -1808,7 +1808,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
     }
 
     if( bJump )     // Haben wir eine leere Spalte uebersprungen?
-        SwFlowFrm::SetMoveBwdJump( TRUE );
+        SwFlowFrm::SetMoveBwdJump( sal_True );
 
     // Innerhalb von Bereichen in Tabellen oder Bereichen in Kopf/Fusszeilen kann
     // nur ein Spaltenwechsel erfolgen, eine der oberen Abkuerzungen haette
@@ -1847,8 +1847,8 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
         }
     }
 
-    const BOOL bBody = IsInDocBody();
-    const BOOL bFly  = IsInFly();
+    const sal_Bool bBody = IsInDocBody();
+    const sal_Bool bFly  = IsInFly();
 
     SwLayoutFrm *pLayLeaf = GetPrevLayoutLeaf();
     SwLayoutFrm *pPrevLeaf = 0;
@@ -1886,7 +1886,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
             pPrevLeaf = pLayLeaf;
             pLayLeaf = pLayLeaf->GetPrevLayoutLeaf();
             if ( pLayLeaf )
-                SwFlowFrm::SetMoveBwdJump( TRUE );
+                SwFlowFrm::SetMoveBwdJump( sal_True );
         }
         else if ( bFly )
             break;  //Cntnts in Flys sollte jedes Layout-Blatt recht sein. Warum?
@@ -1919,11 +1919,11 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
     }
     if( !pNew )
     {
-        pNew = new SwSectionFrm( *pSect, TRUE );
+        pNew = new SwSectionFrm( *pSect, sal_True );
         pNew->InsertBefore( pLayLeaf, NULL );
         pNew->Init();
         SWRECTFN( pNew )
-        (pNew->*fnRect->fnMakePos)( pLayLeaf, pNew->GetPrev(), TRUE );
+        (pNew->*fnRect->fnMakePos)( pLayLeaf, pNew->GetPrev(), sal_True );
 
         pLayLeaf = FIRSTLEAF( pNew );
         if( !pNew->Lower() )    // einspaltige Bereiche formatieren
@@ -1952,7 +1952,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
             if( pLayLeaf != pTmpLay )
             {
                 pLayLeaf = pTmpLay;
-                SwFlowFrm::SetMoveBwdJump( TRUE );
+                SwFlowFrm::SetMoveBwdJump( sal_True );
             }
         }
     }
@@ -1980,14 +1980,14 @@ SwTwips lcl_DeadLine( const SwFrm* pFrm )
 // SwSectionFrm::Growable(..) prueft, ob der SectionFrm noch wachsen kann,
 // ggf. muss die Umgebung gefragt werden
 
-BOOL SwSectionFrm::Growable() const
+sal_Bool SwSectionFrm::Growable() const
 {
     SWRECTFN( this )
     if( (*fnRect->fnYDiff)( lcl_DeadLine( this ),
         (Frm().*fnRect->fnGetBottom)() ) > 0 )
-        return TRUE;
+        return sal_True;
 
-    return ( GetUpper() && ((SwFrm*)GetUpper())->Grow( LONG_MAX, TRUE ) );
+    return ( GetUpper() && ((SwFrm*)GetUpper())->Grow( LONG_MAX, sal_True ) );
 }
 
 /*************************************************************************
@@ -1996,7 +1996,7 @@ BOOL SwSectionFrm::Growable() const
 |*
 |*************************************************************************/
 
-SwTwips SwSectionFrm::_Grow( SwTwips nDist, BOOL bTst )
+SwTwips SwSectionFrm::_Grow( SwTwips nDist, sal_Bool bTst )
 {
     if ( !IsColLocked() && !HasFixSize() )
     {
@@ -2008,7 +2008,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, BOOL bTst )
         if ( nDist <= 0L )
             return 0L;
 
-        BOOL bInCalcCntnt = GetUpper() && IsInFly() && FindFlyFrm()->IsLocked();
+        sal_Bool bInCalcCntnt = GetUpper() && IsInFly() && FindFlyFrm()->IsLocked();
         // OD 2004-03-15 #116561# - allow grow in online layout
         if ( !Lower() || !Lower()->IsColumnFrm() || !Lower()->GetNext() ||
              GetSection()->GetFmt()->GetBalancedColumns().GetValue() ||
@@ -2025,7 +2025,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, BOOL bTst )
             }
             SwTwips nSpace = nGrow;
             if( !bInCalcCntnt && nGrow < nDist && GetUpper() )
-                nGrow += GetUpper()->Grow( LONG_MAX, TRUE );
+                nGrow += GetUpper()->Grow( LONG_MAX, sal_True );
 
             if( nGrow > nDist )
                 nGrow = nDist;
@@ -2045,7 +2045,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, BOOL bTst )
                 if( bInCalcCntnt )
                     _InvalidateSize();
                 else if( nSpace < nGrow &&  nDist != nSpace + GetUpper()->
-                         Grow( nGrow - nSpace, FALSE ) )
+                         Grow( nGrow - nSpace, sal_False ) )
                     InvalidateSize();
                 else
                 {
@@ -2110,11 +2110,11 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, BOOL bTst )
     return 0L;
 }
 
-SwTwips SwSectionFrm::_Shrink( SwTwips nDist, BOOL bTst )
+SwTwips SwSectionFrm::_Shrink( SwTwips nDist, sal_Bool bTst )
 {
     if ( Lower() && !IsColLocked() && !HasFixSize() )
     {
-        if( ToMaximize( FALSE ) )
+        if( ToMaximize( sal_False ) )
         {
             if( !bTst )
                 InvalidateSize();
@@ -2210,12 +2210,12 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, BOOL bTst )
 |*
 |*************************************************************************/
 
-BOOL SwSectionFrm::MoveAllowed( const SwFrm* pFrm) const
+sal_Bool SwSectionFrm::MoveAllowed( const SwFrm* pFrm) const
 {
     // Gibt es einen Follow oder ist der Frame nicht in der letzten Spalte?
     if( HasFollow() || ( pFrm->GetUpper()->IsColBodyFrm() &&
         pFrm->GetUpper()->GetUpper()->GetNext() ) )
-        return TRUE;
+        return sal_True;
     if( pFrm->IsInFtn() )
     {
         if( IsInFtn() )
@@ -2223,11 +2223,11 @@ BOOL SwSectionFrm::MoveAllowed( const SwFrm* pFrm) const
             if( GetUpper()->IsInSct() )
             {
                 if( Growable() )
-                    return FALSE;
+                    return sal_False;
                 return GetUpper()->FindSctFrm()->MoveAllowed( this );
             }
             else
-                return TRUE;
+                return sal_True;
         }
         // The content of footnote inside a columned sectionfrm is moveable
         // except in the last column
@@ -2237,30 +2237,30 @@ BOOL SwSectionFrm::MoveAllowed( const SwFrm* pFrm) const
             // The first paragraph in the first footnote in the first column
             // in the sectionfrm at the top of the page is not moveable,
             // if the columnbody is empty.
-            BOOL bRet = FALSE;
+            sal_Bool bRet = sal_False;
             if( pLay->GetIndPrev() || pFrm->GetIndPrev() ||
                 pFrm->FindFtnFrm()->GetPrev() )
-                bRet = TRUE;
+                bRet = sal_True;
             else
             {
                 SwLayoutFrm* pBody = ((SwColumnFrm*)pLay)->FindBodyCont();
                 if( pBody && pBody->Lower() )
-                    bRet = TRUE;
+                    bRet = sal_True;
             }
             if( bRet && ( IsFtnAtEnd() || !Growable() ) )
-                return TRUE;
+                return sal_True;
         }
     }
     // Oder kann der Bereich noch wachsen?
     if( !IsColLocked() && Growable() )
-        return FALSE;
+        return sal_False;
     // Jetzt muss untersucht werden, ob es ein Layoutblatt gibt, in dem
     // ein Bereichsfollow erzeugt werden kann.
     if( IsInTab() || ( !IsInDocBody() && FindFooterOrHeader() ) )
-        return FALSE; // In Tabellen/Kopf/Fusszeilen geht es nicht
+        return sal_False; // In Tabellen/Kopf/Fusszeilen geht es nicht
     if( IsInFly() ) // Bei spaltigen oder verketteten Rahmen
         return 0 != ((SwFrm*)GetUpper())->GetNextLeaf( MAKEPAGE_NONE );
-    return TRUE;
+    return sal_True;
 }
 
 /** Called for a frame inside a section with no direct previous frame (or only
@@ -2334,25 +2334,25 @@ SwFrm* SwFrm::_GetIndNext()
     return NULL;
 }
 
-BOOL SwSectionFrm::IsDescendantFrom( const SwSectionFmt* pFmt ) const
+sal_Bool SwSectionFrm::IsDescendantFrom( const SwSectionFmt* pFmt ) const
 {
     if( !pSection || !pFmt )
-        return FALSE;
+        return sal_False;
     const SwSectionFmt *pMyFmt = pSection->GetFmt();
     while( pFmt != pMyFmt )
     {
         if( pMyFmt->GetRegisteredIn()->ISA( SwSectionFmt ) )
             pMyFmt = (SwSectionFmt*)pMyFmt->GetRegisteredIn();
         else
-            return FALSE;
+            return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 void SwSectionFrm::CalcFtnAtEndFlag()
 {
     SwSectionFmt *pFmt = GetSection()->GetFmt();
-    USHORT nVal = pFmt->GetFtnAtTxtEnd( FALSE ).GetValue();
+    sal_uInt16 nVal = pFmt->GetFtnAtTxtEnd( sal_False ).GetValue();
     bFtnAtEnd = FTNEND_ATPGORDOCEND != nVal;
     bOwnFtnNum = FTNEND_ATTXTEND_OWNNUMSEQ == nVal ||
                  FTNEND_ATTXTEND_OWNNUMANDFMT == nVal;
@@ -2362,32 +2362,32 @@ void SwSectionFrm::CalcFtnAtEndFlag()
             pFmt = (SwSectionFmt*)pFmt->GetRegisteredIn();
         else
             break;
-        nVal = pFmt->GetFtnAtTxtEnd( FALSE ).GetValue();
+        nVal = pFmt->GetFtnAtTxtEnd( sal_False ).GetValue();
         if( FTNEND_ATPGORDOCEND != nVal )
         {
-            bFtnAtEnd = TRUE;
+            bFtnAtEnd = sal_True;
             bOwnFtnNum = bOwnFtnNum ||FTNEND_ATTXTEND_OWNNUMSEQ == nVal ||
                          FTNEND_ATTXTEND_OWNNUMANDFMT == nVal;
         }
     }
 }
 
-BOOL SwSectionFrm::IsEndnoteAtMyEnd() const
+sal_Bool SwSectionFrm::IsEndnoteAtMyEnd() const
 {
-    return pSection->GetFmt()->GetEndAtTxtEnd( FALSE ).IsAtEnd();
+    return pSection->GetFmt()->GetEndAtTxtEnd( sal_False ).IsAtEnd();
 }
 
 void SwSectionFrm::CalcEndAtEndFlag()
 {
     SwSectionFmt *pFmt = GetSection()->GetFmt();
-    bEndnAtEnd = pFmt->GetEndAtTxtEnd( FALSE ).IsAtEnd();
+    bEndnAtEnd = pFmt->GetEndAtTxtEnd( sal_False ).IsAtEnd();
     while( !bEndnAtEnd )
     {
         if( pFmt->GetRegisteredIn()->ISA( SwSectionFmt ) )
             pFmt = (SwSectionFmt*)pFmt->GetRegisteredIn();
         else
             break;
-        bEndnAtEnd = pFmt->GetEndAtTxtEnd( FALSE ).IsAtEnd();
+        bEndnAtEnd = pFmt->GetEndAtTxtEnd( sal_False ).IsAtEnd();
     }
 }
 
@@ -2399,7 +2399,7 @@ void SwSectionFrm::CalcEndAtEndFlag()
 
 void SwSectionFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
 {
-    BYTE nInvFlags = 0;
+    sal_uInt8 nInvFlags = 0;
 
     if( pNew && RES_ATTRSET_CHG == pNew->Which() )
     {
@@ -2407,7 +2407,7 @@ void SwSectionFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
         SfxItemIter aOIter( *((SwAttrSetChg*)pOld)->GetChgSet() );
         SwAttrSetChg aOldSet( *(SwAttrSetChg*)pOld );
         SwAttrSetChg aNewSet( *(SwAttrSetChg*)pNew );
-        while( TRUE )
+        while( sal_True )
         {
             _UpdateAttr( (SfxPoolItem*)aOIter.GetCurItem(),
                          (SfxPoolItem*)aNIter.GetCurItem(), nInvFlags,
@@ -2433,11 +2433,11 @@ void SwSectionFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
 }
 
 void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
-                            BYTE &rInvFlags,
+                            sal_uInt8 &rInvFlags,
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
-    BOOL bClear = TRUE;
-    const USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    sal_Bool bClear = sal_True;
+    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     switch( nWhich )
     {   // Mehrspaltigkeit in Fussnoten unterdruecken...
         case RES_FMT_CHG:
@@ -2452,7 +2452,7 @@ void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                 SwFmtCol aCol;
                 if ( Lower() && Lower()->IsColumnFrm() )
                 {
-                    USHORT nCol = 0;
+                    sal_uInt16 nCol = 0;
                     SwFrm *pTmp = Lower();
                     do
                     {   ++nCol;
@@ -2460,9 +2460,9 @@ void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                     } while ( pTmp );
                     aCol.Init( nCol, 0, 1000 );
                 }
-                BOOL bChgFtn = IsFtnAtEnd();
-                BOOL bChgEndn = IsEndnAtEnd();
-                BOOL bChgMyEndn = IsEndnoteAtMyEnd();
+                sal_Bool bChgFtn = IsFtnAtEnd();
+                sal_Bool bChgEndn = IsEndnAtEnd();
+                sal_Bool bChgMyEndn = IsEndnoteAtMyEnd();
                 CalcFtnAtEndFlag();
                 CalcEndAtEndFlag();
                 bChgFtn = ( bChgFtn != IsFtnAtEnd() ) ||
@@ -2472,7 +2472,7 @@ void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                 rInvFlags |= 0x10;
             }
             rInvFlags |= 0x01;
-            bClear = FALSE;
+            bClear = sal_False;
         }
             break;
 
@@ -2487,12 +2487,12 @@ void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
         case RES_FTN_AT_TXTEND:
             if( !IsInFtn() )
             {
-                BOOL bOld = IsFtnAtEnd();
+                sal_Bool bOld = IsFtnAtEnd();
                 CalcFtnAtEndFlag();
                 if( bOld != IsFtnAtEnd() )
                 {
                     const SwFmtCol& rNewCol = GetFmt()->GetCol();
-                    ChgColumns( rNewCol, rNewCol, TRUE );
+                    ChgColumns( rNewCol, rNewCol, sal_True );
                     rInvFlags |= 0x01;
                 }
             }
@@ -2501,13 +2501,13 @@ void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
         case RES_END_AT_TXTEND:
             if( !IsInFtn() )
             {
-                BOOL bOld = IsEndnAtEnd();
-                BOOL bMyOld = IsEndnoteAtMyEnd();
+                sal_Bool bOld = IsEndnAtEnd();
+                sal_Bool bMyOld = IsEndnoteAtMyEnd();
                 CalcEndAtEndFlag();
                 if( bOld != IsEndnAtEnd() || bMyOld != IsEndnoteAtMyEnd())
                 {
                     const SwFmtCol& rNewCol = GetFmt()->GetCol();
-                    ChgColumns( rNewCol, rNewCol, TRUE );
+                    ChgColumns( rNewCol, rNewCol, sal_True );
                     rInvFlags |= 0x01;
                 }
             }
@@ -2530,7 +2530,7 @@ void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             break;
 
         default:
-            bClear = FALSE;
+            bClear = sal_False;
     }
     if ( bClear )
     {
@@ -2551,28 +2551,28 @@ void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
  * page causes a maximal Size of the sectionframe.
  * --------------------------------------------------*/
 
-BOOL SwSectionFrm::ToMaximize( BOOL bCheckFollow ) const
+sal_Bool SwSectionFrm::ToMaximize( sal_Bool bCheckFollow ) const
 {
     if( HasFollow() )
     {
         if( !bCheckFollow ) // Don't check superfluous follows
-            return TRUE;
+            return sal_True;
         const SwSectionFrm* pFoll = GetFollow();
         while( pFoll && pFoll->IsSuperfluous() )
             pFoll = pFoll->GetFollow();
         if( pFoll )
-            return TRUE;
+            return sal_True;
     }
     if( IsFtnAtEnd() )
-        return FALSE;
+        return sal_False;
     const SwFtnContFrm* pCont = ContainsFtnCont();
     if( !IsEndnAtEnd() )
         return 0 != pCont;
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     while( pCont && !bRet )
     {
         if( pCont->FindFootNote() )
-            bRet = TRUE;
+            bRet = sal_True;
         else
             pCont = ContainsFtnCont( pCont );
     }
@@ -2580,7 +2580,7 @@ BOOL SwSectionFrm::ToMaximize( BOOL bCheckFollow ) const
 }
 
 /*--------------------------------------------------
- * BOOL SwSectionFrm::ContainsFtnCont()
+ * sal_Bool SwSectionFrm::ContainsFtnCont()
  * checks every Column for FtnContFrms.
  * --------------------------------------------------*/
 
@@ -2630,13 +2630,13 @@ void SwSectionFrm::InvalidateFtnPos()
  * Das Undersized-Flag wird ggf. korrigiert.
  * --------------------------------------------------*/
 
-long SwSectionFrm::Undersize( BOOL bOverSize )
+long SwSectionFrm::Undersize( sal_Bool bOverSize )
 {
-    bUndersized = FALSE;
+    bUndersized = sal_False;
     SWRECTFN( this )
     long nRet = InnerHeight() - (Prt().*fnRect->fnGetHeight)();
     if( nRet > 0 )
-        bUndersized = TRUE;
+        bUndersized = sal_True;
     else if( !bOverSize )
         nRet = 0;
     return nRet;
@@ -2695,7 +2695,7 @@ void SwRootFrm::InsertEmptySct( SwSectionFrm* pDel )
 {
     if( !pDestroy )
         pDestroy = new SwDestroyList;
-    USHORT nPos;
+    sal_uInt16 nPos;
     if( !pDestroy->Seek_Entry( pDel, &nPos ) )
         pDestroy->Insert( pDel );
 }
@@ -2706,7 +2706,7 @@ void SwRootFrm::_DeleteEmptySct()
     while( pDestroy->Count() )
     {
         SwSectionFrm* pSect = (*pDestroy)[0];
-        pDestroy->Remove( USHORT(0) );
+        pDestroy->Remove( sal_uInt16(0) );
         OSL_ENSURE( !pSect->IsColLocked() && !pSect->IsJoinLocked(),
                 "DeleteEmptySct: Locked SectionFrm" );
         if( !pSect->Frm().HasArea() && !pSect->ContainsCntnt() )
@@ -2735,16 +2735,16 @@ void SwRootFrm::_DeleteEmptySct()
 void SwRootFrm::_RemoveFromList( SwSectionFrm* pSct )
 {
     OSL_ENSURE( pDestroy, "Where's my list?" );
-    USHORT nPos;
+    sal_uInt16 nPos;
     if( pDestroy->Seek_Entry( pSct, &nPos ) )
         pDestroy->Remove( nPos );
 }
 
 #if OSL_DEBUG_LEVEL > 1
 
-BOOL SwRootFrm::IsInDelList( SwSectionFrm* pSct ) const
+sal_Bool SwRootFrm::IsInDelList( SwSectionFrm* pSct ) const
 {
-    USHORT nPos;
+    sal_uInt16 nPos;
     return ( pDestroy && pDestroy->Seek_Entry( pSct, &nPos ) );
 }
 

@@ -70,7 +70,7 @@ class SW_DLLPUBLIC SwStdFontConfig : public utl::ConfigItem
 
     SW_DLLPRIVATE com::sun::star::uno::Sequence<rtl::OUString>    GetPropertyNames();
 
-    void ChangeString(USHORT nFontType, const String& rSet)
+    void ChangeString(sal_uInt16 nFontType, const String& rSet)
         {
             if(sDefaultFonts[nFontType] != rSet)
             {
@@ -79,7 +79,7 @@ class SW_DLLPUBLIC SwStdFontConfig : public utl::ConfigItem
             }
         }
 
-    void ChangeInt( USHORT nFontType, sal_Int32 nHeight );
+    void ChangeInt( sal_uInt16 nFontType, sal_Int32 nHeight );
 
 public:
     SwStdFontConfig();
@@ -94,8 +94,8 @@ public:
     const String&   GetFontCaption(sal_uInt8 nFontGroup)  const {return sDefaultFonts[FONT_CAPTION + FONT_PER_GROUP * nFontGroup];}
     const String&   GetFontIndex  (sal_uInt8 nFontGroup)  const {return sDefaultFonts[FONT_INDEX + FONT_PER_GROUP * nFontGroup];}
 
-    const String&   GetFontFor(USHORT nFontType)  const {return sDefaultFonts[nFontType];}
-    BOOL            IsFontDefault(USHORT nFontType) const;
+    const String&   GetFontFor(sal_uInt16 nFontType)  const {return sDefaultFonts[nFontType];}
+    sal_Bool            IsFontDefault(sal_uInt16 nFontType) const;
 
     void     SetFontStandard(const String& rSet, sal_uInt8 nFontGroup)
                     {ChangeString(FONT_STANDARD + FONT_PER_GROUP * nFontGroup, rSet);}
@@ -114,8 +114,8 @@ public:
 
     sal_Int32 GetFontHeight( sal_uInt8 nFont, sal_uInt8 nScriptType, LanguageType eLang );
 
-    static String    GetDefaultFor(USHORT nFontType, LanguageType eLang);
-    static sal_Int32 GetDefaultHeightFor(USHORT nFontType, LanguageType eLang);
+    static String    GetDefaultFor(sal_uInt16 nFontType, LanguageType eLang);
+    static sal_Int32 GetDefaultHeightFor(sal_uInt16 nFontType, LanguageType eLang);
 };
 #endif
 

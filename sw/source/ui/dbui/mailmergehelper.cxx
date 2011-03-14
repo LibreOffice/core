@@ -247,7 +247,7 @@ void SwAddressPreview::SetAddress(const ::rtl::OUString& rAddress)
 {
     pImpl->aAdresses.clear();
     pImpl->aAdresses.push_back(rAddress);
-    aVScrollBar.Show(FALSE);
+    aVScrollBar.Show(sal_False);
     Invalidate();
 }
 
@@ -389,7 +389,7 @@ void  SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
 
 void  SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
 {
-    USHORT nKey = rKEvt.GetKeyCode().GetCode();
+    sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
     if(pImpl->nRows || pImpl->nColumns)
     {
         sal_uInt32 nSelectedRow =    (pImpl->nSelectedAddress + 1)/ pImpl->nColumns;
@@ -502,7 +502,7 @@ String SwAddressPreview::FillData(
 
             //find the appropriate assignment
             String sConvertedColumn = aItem.sText;
-            for(USHORT nColumn = 0;
+            for(sal_uInt16 nColumn = 0;
                     nColumn < rDefHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                 ++nColumn)
             {
@@ -717,7 +717,7 @@ uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavor& /*
     else
     {
         Sequence<sal_Int8> aData;
-        SfxMedium aMedium( m_aURL, STREAM_STD_READ, FALSE );
+        SfxMedium aMedium( m_aURL, STREAM_STD_READ, sal_False );
         SvStream* pStream = aMedium.GetInStream();
         if ( aMedium.GetErrorCode() == ERRCODE_NONE && pStream)
         {

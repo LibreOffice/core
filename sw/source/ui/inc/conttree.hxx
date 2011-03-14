@@ -80,24 +80,24 @@ class SwContentTree : public SvTreeListBox
     std::map< void*, sal_Bool > mOutLineNodeMap;
 
     sal_Int32           nActiveBlock;
-    USHORT              nHiddenBlock;
-    USHORT              nRootType;
-    USHORT              nLastSelType;
-    BYTE                nOutlineLevel;
+    sal_uInt16              nHiddenBlock;
+    sal_uInt16              nRootType;
+    sal_uInt16              nLastSelType;
+    sal_uInt8               nOutlineLevel;
 
-    BOOL                bIsActive           :1;
-    BOOL                bIsConstant         :1;
-    BOOL                bIsHidden           :1;
-    BOOL                bDocChgdInDragging  :1;
-    BOOL                bIsInternalDrag     :1;
-    BOOL                bIsRoot             :1;
-    BOOL                bIsIdleClear        :1;
-    BOOL                bIsLastReadOnly     :1;
-    BOOL                bIsOutlineMoveable  :1;
-    BOOL                bViewHasChanged     :1;
-    BOOL                bIsImageListInitialized : 1;
+    sal_Bool                bIsActive           :1;
+    sal_Bool                bIsConstant         :1;
+    sal_Bool                bIsHidden           :1;
+    sal_Bool                bDocChgdInDragging  :1;
+    sal_Bool                bIsInternalDrag     :1;
+    sal_Bool                bIsRoot             :1;
+    sal_Bool                bIsIdleClear        :1;
+    sal_Bool                bIsLastReadOnly     :1;
+    sal_Bool                bIsOutlineMoveable  :1;
+    sal_Bool                bViewHasChanged     :1;
+    sal_Bool                bIsImageListInitialized : 1;
 
-    static BOOL         bIsInDrag;
+    static sal_Bool         bIsInDrag;
 
     void                FindActiveTypeAndRemoveUserData();
 
@@ -123,41 +123,41 @@ protected:
 
     sal_Bool        FillTransferData( TransferDataContainer& rTransfer,
                                             sal_Int8& rDragMode );
-    BOOL            HasContentChanged();
+    sal_Bool            HasContentChanged();
 
     virtual DragDropMode NotifyStartDrag( TransferDataContainer& rData,
                                         SvLBoxEntry* );
-    virtual BOOL    NotifyAcceptDrop( SvLBoxEntry* );
+    virtual sal_Bool    NotifyAcceptDrop( SvLBoxEntry* );
 
-    virtual BOOL    NotifyMoving(   SvLBoxEntry*  pTarget,
+    virtual sal_Bool    NotifyMoving(   SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
                                     SvLBoxEntry*& rpNewParent,
-                                    ULONG&        rNewChildPos
+                                    sal_uLong&        rNewChildPos
                                 );
-    virtual BOOL    NotifyCopying(  SvLBoxEntry*  pTarget,
+    virtual sal_Bool    NotifyCopying(  SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
                                     SvLBoxEntry*& rpNewParent,
-                                    ULONG&        rNewChildPos
+                                    sal_uLong&        rNewChildPos
                                 );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
 
-    void            EditEntry( SvLBoxEntry* pEntry, BYTE nMode );
+    void            EditEntry( SvLBoxEntry* pEntry, sal_uInt8 nMode );
 
     void            GotoContent(SwContent* pCnt);
-    static void     SetInDrag(BOOL bSet) {bIsInDrag = bSet;}
+    static void     SetInDrag(sal_Bool bSet) {bIsInDrag = bSet;}
 
     virtual PopupMenu* CreateContextMenu( void );
-    virtual void    ExcecuteContextMenuAction( USHORT nSelectedPopupEntry );
+    virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );
 
 public:
     SwContentTree(Window* pParent, const ResId& rResId);
     ~SwContentTree();
 
-    BOOL            ToggleToRoot();
-    BOOL            IsRoot() const {return bIsRoot;}
-    USHORT          GetRootType() const {return nRootType;}
-    void            SetRootType(USHORT nType);
-    void            Display( BOOL bActiveView );
+    sal_Bool            ToggleToRoot();
+    sal_Bool            IsRoot() const {return bIsRoot;}
+    sal_uInt16          GetRootType() const {return nRootType;}
+    void            SetRootType(sal_uInt16 nType);
+    void            Display( sal_Bool bActiveView );
     void            Clear();
     void            SetHiddenShell(SwWrtShell* pSh);
     void            ShowHiddenShell();
@@ -170,26 +170,26 @@ public:
                                     pActiveShell :
                                         pHiddenShell;}
 
-    static BOOL     IsInDrag() {return bIsInDrag;}
-    BOOL            IsInternalDrag() const {return bIsInternalDrag != 0;}
+    static sal_Bool     IsInDrag() {return bIsInDrag;}
+    sal_Bool            IsInternalDrag() const {return bIsInternalDrag != 0;}
 
     sal_Int32       GetActiveBlock() const {return nActiveBlock;}
 
-    BYTE            GetOutlineLevel()const {return nOutlineLevel;}
-    void            SetOutlineLevel(BYTE nSet);
+    sal_uInt8           GetOutlineLevel()const {return nOutlineLevel;}
+    void            SetOutlineLevel(sal_uInt8 nSet);
 
-    BOOL            Expand( SvLBoxEntry* pParent );
+    sal_Bool            Expand( SvLBoxEntry* pParent );
 
-    BOOL            Collapse( SvLBoxEntry* pParent );
+    sal_Bool            Collapse( SvLBoxEntry* pParent );
 
-    void            ExecCommand(USHORT nCmd, BOOL bModifier);
+    void            ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier);
 
     void            ShowTree();
     void            HideTree();
 
-    BOOL            IsConstantView() {return bIsConstant;}
-    BOOL            IsActiveView()   {return bIsActive;}
-    BOOL            IsHiddenView()   {return bIsHidden;}
+    sal_Bool            IsConstantView() {return bIsConstant;}
+    sal_Bool            IsActiveView()   {return bIsActive;}
+    sal_Bool            IsHiddenView()   {return bIsHidden;}
 
     const SwWrtShell*   GetActiveWrtShell() {return pActiveShell;}
     SwWrtShell*         GetHiddenWrtShell() {return pHiddenShell;}
@@ -202,7 +202,7 @@ public:
     virtual void    GetFocus();
     virtual void    KeyInput(const KeyEvent& rKEvt);
 
-    virtual BOOL    Select( SvLBoxEntry* pEntry, BOOL bSelect=TRUE );
+    virtual sal_Bool    Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
 };
 
 
@@ -214,12 +214,12 @@ class SwLBoxString : public SvLBoxString
 {
 public:
 
-    SwLBoxString( SvLBoxEntry* pEntry, USHORT nFlags,
+    SwLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,
         const String& rStr ) : SvLBoxString(pEntry,nFlags,rStr)
     {
     }
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
+    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
         SvLBoxEntry* pEntry);
 };
 
@@ -243,9 +243,9 @@ private:
     SwGlblDocContent*       pDocContent;
     sfx2::DocumentInserter* pDocInserter;
 
-    BOOL                bIsInternalDrag     :1;
-    BOOL                bLastEntryEmphasis  :1; // Drag'n Drop
-    BOOL                bIsImageListInitialized : 1;
+    sal_Bool                bIsInternalDrag     :1;
+    sal_Bool                bLastEntryEmphasis  :1; // Drag'n Drop
+    sal_Bool                bIsImageListInitialized : 1;
 
     static const SfxObjectShell* pShowShell;
 
@@ -269,22 +269,22 @@ protected:
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
     virtual long    GetTabPos( SvLBoxEntry*, SvLBoxTab* );
-    virtual BOOL    NotifyMoving(   SvLBoxEntry*  pTarget,
+    virtual sal_Bool    NotifyMoving(   SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
                                     SvLBoxEntry*& rpNewParent,
-                                    ULONG&        rNewChildPos
+                                    sal_uLong&        rNewChildPos
                                 );
-    virtual BOOL    NotifyCopying(  SvLBoxEntry*  pTarget,
+    virtual sal_Bool    NotifyCopying(  SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
                                     SvLBoxEntry*& rpNewParent,
-                                    ULONG&        rNewChildPos
+                                    sal_uLong&        rNewChildPos
                                 );
 
     virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
     virtual void    DragFinished( sal_Int8 );
     virtual DragDropMode NotifyStartDrag( TransferDataContainer& rData,
                                         SvLBoxEntry* );
-    virtual BOOL    NotifyAcceptDrop( SvLBoxEntry* );
+    virtual sal_Bool    NotifyAcceptDrop( SvLBoxEntry* );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    KeyInput(const KeyEvent& rKEvt);
@@ -299,26 +299,26 @@ protected:
     DECL_LINK(      Timeout, Timer* );
     DECL_LINK(      DoubleClickHdl, SwGlobalTree * );
 
-    BOOL            IsInternalDrag() const {return bIsInternalDrag != 0;}
+    sal_Bool            IsInternalDrag() const {return bIsInternalDrag != 0;}
     SwNavigationPI* GetParentWindow()
                         { return (SwNavigationPI*)Window::GetParent(); }
 
     void            OpenDoc(const SwGlblDocContent*);
     void            GotoContent(const SwGlblDocContent*);
-    USHORT          GetEnableFlags() const;
+    sal_uInt16          GetEnableFlags() const;
 
     static const SfxObjectShell*    GetShowShell() {return pShowShell;}
     static void     SetShowShell(const SfxObjectShell*pSet) {pShowShell = pSet;}
     DECL_STATIC_LINK(SwGlobalTree, ShowFrameHdl, SwGlobalTree*);
 
     virtual PopupMenu* CreateContextMenu( void );
-    virtual void    ExcecuteContextMenuAction( USHORT nSelectedPopupEntry );
+    virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );
 
 public:
     SwGlobalTree(Window* pParent, const ResId& rResId);
     virtual ~SwGlobalTree();
 
-    void                TbxMenuHdl(USHORT nTbxId, ToolBox* pBox);
+    void                TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox);
     void                InsertRegion( const SwGlblDocContent* pCont,
                                         const String* pFileName = 0 );
     void                EditContent(const SwGlblDocContent* pCont );
@@ -326,11 +326,11 @@ public:
     void                ShowTree();
     void                HideTree();
 
-    void                ExecCommand(USHORT nCmd);
+    void                ExecCommand(sal_uInt16 nCmd);
 
-    void                Display(BOOL bOnlyUpdateUserData = FALSE);
+    void                Display(sal_Bool bOnlyUpdateUserData = sal_False);
 
-    BOOL                Update(BOOL bHard);
+    sal_Bool                Update(sal_Bool bHard);
 };
 
 #endif

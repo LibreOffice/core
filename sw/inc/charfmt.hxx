@@ -52,8 +52,8 @@ public:
 namespace CharFmt
 {
     extern const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr );
-    extern const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, USHORT nWhich );
-    extern BOOL IsItemIncluded( const USHORT nWhich, const SwTxtAttr *pAttr );
+    extern const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, sal_uInt16 nWhich );
+    extern sal_Bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr );
 }
 
 #endif

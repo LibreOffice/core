@@ -48,25 +48,25 @@ class SW_DLLPUBLIC SwFmt : public SwModify
     String aFmtName;
     SwAttrSet aSet;
 
-    USHORT nWhichId;
-    USHORT nFmtId;            // Format-ID for reading / writing.
-    USHORT nPoolFmtId;        // Id for "automatically" created formats.
+    sal_uInt16 nWhichId;
+    sal_uInt16 nFmtId;            // Format-ID for reading / writing.
+    sal_uInt16 nPoolFmtId;        // Id for "automatically" created formats.
                               // (is not hard attribution!!!)
-    USHORT nPoolHelpId;       // HelpId for this Pool-style.
-    BYTE nPoolHlpFileId;      // FilePos to Doc to these style helps.
-    BOOL   bWritten : 1;      // TRUE: already written.
-    BOOL   bAutoFmt : 1;      // FALSE: it is a template.
+    sal_uInt16 nPoolHelpId;       // HelpId for this Pool-style.
+    sal_uInt8 nPoolHlpFileId;      // FilePos to Doc to these style helps.
+    sal_Bool   bWritten : 1;      // TRUE: already written.
+    sal_Bool   bAutoFmt : 1;      // FALSE: it is a template.
                               // default is true!
-    BOOL   bFmtInDTOR : 1;    // TRUE: Format becomes deleted. In order to be able
+    sal_Bool   bFmtInDTOR : 1;    // TRUE: Format becomes deleted. In order to be able
                               // to recognize this in FmtChg-message!!
-    BOOL   bAutoUpdateFmt : 1;// TRUE: Set attributes of a whole paragraph
+    sal_Bool   bAutoUpdateFmt : 1;// TRUE: Set attributes of a whole paragraph
                               // at format (UI-side!).
 
 protected:
     SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-            const USHORT* pWhichRanges, SwFmt *pDrvdFrm, USHORT nFmtWhich );
-    SwFmt( SwAttrPool& rPool, const String &rFmtNm, const USHORT* pWhichRanges,
-            SwFmt *pDrvdFrm, USHORT nFmtWhich );
+            const sal_uInt16* pWhichRanges, SwFmt *pDrvdFrm, sal_uInt16 nFmtWhich );
+    SwFmt( SwAttrPool& rPool, const String &rFmtNm, const sal_uInt16* pWhichRanges,
+            SwFmt *pDrvdFrm, sal_uInt16 nFmtWhich );
     SwFmt( const SwFmt& rFmt );
 
 public:
@@ -76,38 +76,38 @@ public:
     SwFmt &operator=(const SwFmt&);
 
     // for Querying of Writer-functions.
-    USHORT Which() const { return nWhichId; }
+    sal_uInt16 Which() const { return nWhichId; }
 
     virtual void Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue );
 
     // Query format information.
-    virtual BOOL GetInfo( SfxPoolItem& ) const;
+    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 
     // Copy attributes even among documents.
-    void CopyAttrs( const SwFmt&, BOOL bReplace=TRUE );
+    void CopyAttrs( const SwFmt&, sal_Bool bReplace=sal_True );
 
     // Delete all attributes that are not in rFmt.
     void DelDiffs( const SfxItemSet& rSet );
     void DelDiffs( const SwFmt& rFmt ) { DelDiffs( rFmt.GetAttrSet() ); }
 
     // 0 is Default.
-    BOOL SetDerivedFrom(SwFmt *pDerivedFrom = 0);
+    sal_Bool SetDerivedFrom(SwFmt *pDerivedFrom = 0);
 
     // If bInParents is FALSE, search only in this format for attribute.
-    inline const SfxPoolItem& GetFmtAttr( USHORT nWhich,
-                                          BOOL bInParents = TRUE ) const;
-    inline SfxItemState GetItemState( USHORT nWhich, BOOL bSrchInParent = TRUE,
+    inline const SfxPoolItem& GetFmtAttr( sal_uInt16 nWhich,
+                                          sal_Bool bInParents = sal_True ) const;
+    inline SfxItemState GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent = sal_True,
                                     const SfxPoolItem **ppItem = 0 ) const;
-    virtual BOOL SetFmtAttr( const SfxPoolItem& rAttr );
-    virtual BOOL SetFmtAttr( const SfxItemSet& rSet );
-    virtual BOOL ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
+    virtual sal_Bool SetFmtAttr( const SfxPoolItem& rAttr );
+    virtual sal_Bool SetFmtAttr( const SfxItemSet& rSet );
+    virtual sal_Bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
 
     // Takes all hints from Delta-Array,
     // returns count of deleted hints.
-    virtual USHORT ResetAllFmtAttr();
+    virtual sal_uInt16 ResetAllFmtAttr();
 
     inline SwFmt* DerivedFrom() const { return (SwFmt*)pRegisteredIn; }
-    inline BOOL IsDefault() const { return DerivedFrom() == 0; }
+    inline sal_Bool IsDefault() const { return DerivedFrom() == 0; }
 
     inline const String& GetName() const        { return aFmtName; }
     void SetName( const String& rNewName, sal_Bool bBroadcast=sal_False );
@@ -143,14 +143,14 @@ public:
     IDocumentChartDataProviderAccess* getIDocumentChartDataProviderAccess();
 
     // Get and set Pool style IDs.
-    USHORT GetPoolFmtId() const { return nPoolFmtId; }
-    void SetPoolFmtId( USHORT nId ) { nPoolFmtId = nId; }
+    sal_uInt16 GetPoolFmtId() const { return nPoolFmtId; }
+    void SetPoolFmtId( sal_uInt16 nId ) { nPoolFmtId = nId; }
 
     // Get and set Help-IDs for document templates.
-    USHORT GetPoolHelpId() const { return nPoolHelpId; }
-    void SetPoolHelpId( USHORT nId ) { nPoolHelpId = nId; }
-    BYTE GetPoolHlpFileId() const { return nPoolHlpFileId; }
-    void SetPoolHlpFileId( BYTE nId ) { nPoolHlpFileId = nId; }
+    sal_uInt16 GetPoolHelpId() const { return nPoolHelpId; }
+    void SetPoolHelpId( sal_uInt16 nId ) { nPoolHelpId = nId; }
+    sal_uInt8 GetPoolHlpFileId() const { return nPoolHlpFileId; }
+    void SetPoolHlpFileId( sal_uInt8 nId ) { nPoolHlpFileId = nId; }
 
     // Get attribute-description. Returns passed string.
     void GetPresentation( SfxItemPresentation ePres,
@@ -158,140 +158,140 @@ public:
         { aSet.GetPresentation( ePres, eCoreMetric, ePresMetric, rText ); }
 
     // Format-ID for reading/writing:
-    void   ResetWritten()    { bWritten = FALSE; }
+    void   ResetWritten()    { bWritten = sal_False; }
 
     // Query / set AutoFmt-flag.
-    BOOL IsAuto() const                 { return bAutoFmt; }
-    void SetAuto( BOOL bNew = FALSE )   { bAutoFmt = bNew; }
+    sal_Bool IsAuto() const                 { return bAutoFmt; }
+    void SetAuto( sal_Bool bNew = sal_False )   { bAutoFmt = bNew; }
 
     // Query / set bAutoUpdateFmt-flag.
-    BOOL IsAutoUpdateFmt() const                { return bAutoUpdateFmt; }
-    void SetAutoUpdateFmt( BOOL bNew = TRUE )   { bAutoUpdateFmt = bNew; }
+    sal_Bool IsAutoUpdateFmt() const                { return bAutoUpdateFmt; }
+    void SetAutoUpdateFmt( sal_Bool bNew = sal_True )   { bAutoUpdateFmt = bNew; }
 
-    BOOL IsFmtInDTOR() const { return bFmtInDTOR; }
+    sal_Bool IsFmtInDTOR() const { return bFmtInDTOR; }
 
     // GetMethods: Bool indicates whether to search only in Set (FALSE)
     // or also in Parents.
     // If nothing is found the defaulted attribute is returned.
 
     // Character-attributes - implemented in charatr.hxx
-    inline const SvxPostureItem      &GetPosture( BOOL = TRUE ) const;
-    inline const SvxWeightItem       &GetWeight( BOOL = TRUE ) const;
-    inline const SvxShadowedItem     &GetShadowed( BOOL = TRUE ) const;
-    inline const SvxAutoKernItem     &GetAutoKern( BOOL = TRUE ) const;
-    inline const SvxWordLineModeItem &GetWordLineMode( BOOL = TRUE ) const;
-    inline const SvxContourItem      &GetContour( BOOL = TRUE ) const;
-    inline const SvxKerningItem      &GetKerning( BOOL = TRUE ) const;
-    inline const SvxUnderlineItem    &GetUnderline( BOOL = TRUE ) const;
-    inline const SvxOverlineItem     &GetOverline( BOOL = TRUE ) const;
-    inline const SvxCrossedOutItem   &GetCrossedOut( BOOL = TRUE ) const;
-    inline const SvxFontHeightItem   &GetSize( BOOL = TRUE ) const;
-    inline const SvxPropSizeItem     &GetPropSize( BOOL = TRUE ) const;
-    inline const SvxFontItem         &GetFont( BOOL = TRUE ) const;
-    inline const SvxColorItem        &GetColor( BOOL = TRUE ) const;
-    inline const SvxCharSetColorItem &GetCharSetColor( BOOL = TRUE ) const;
-    inline const SvxLanguageItem     &GetLanguage( BOOL = TRUE ) const;
-    inline const SvxEscapementItem   &GetEscapement( BOOL = TRUE ) const;
-    inline const SvxCaseMapItem      &GetCaseMap( BOOL = TRUE ) const;
-    inline const SvxNoHyphenItem     &GetNoHyphenHere( BOOL = TRUE ) const;
-    inline const SvxBlinkItem        &GetBlink( BOOL = TRUE ) const;
-    inline const SvxBrushItem        &GetChrBackground( BOOL = TRUE ) const;
+    inline const SvxPostureItem      &GetPosture( sal_Bool = sal_True ) const;
+    inline const SvxWeightItem       &GetWeight( sal_Bool = sal_True ) const;
+    inline const SvxShadowedItem     &GetShadowed( sal_Bool = sal_True ) const;
+    inline const SvxAutoKernItem     &GetAutoKern( sal_Bool = sal_True ) const;
+    inline const SvxWordLineModeItem &GetWordLineMode( sal_Bool = sal_True ) const;
+    inline const SvxContourItem      &GetContour( sal_Bool = sal_True ) const;
+    inline const SvxKerningItem      &GetKerning( sal_Bool = sal_True ) const;
+    inline const SvxUnderlineItem    &GetUnderline( sal_Bool = sal_True ) const;
+    inline const SvxOverlineItem     &GetOverline( sal_Bool = sal_True ) const;
+    inline const SvxCrossedOutItem   &GetCrossedOut( sal_Bool = sal_True ) const;
+    inline const SvxFontHeightItem   &GetSize( sal_Bool = sal_True ) const;
+    inline const SvxPropSizeItem     &GetPropSize( sal_Bool = sal_True ) const;
+    inline const SvxFontItem         &GetFont( sal_Bool = sal_True ) const;
+    inline const SvxColorItem        &GetColor( sal_Bool = sal_True ) const;
+    inline const SvxCharSetColorItem &GetCharSetColor( sal_Bool = sal_True ) const;
+    inline const SvxLanguageItem     &GetLanguage( sal_Bool = sal_True ) const;
+    inline const SvxEscapementItem   &GetEscapement( sal_Bool = sal_True ) const;
+    inline const SvxCaseMapItem      &GetCaseMap( sal_Bool = sal_True ) const;
+    inline const SvxNoHyphenItem     &GetNoHyphenHere( sal_Bool = sal_True ) const;
+    inline const SvxBlinkItem        &GetBlink( sal_Bool = sal_True ) const;
+    inline const SvxBrushItem        &GetChrBackground( sal_Bool = sal_True ) const;
 
-    inline const SvxFontItem         &GetCJKFont( BOOL = TRUE ) const;
-    inline const SvxFontHeightItem   &GetCJKSize( BOOL = TRUE ) const;
-    inline const SvxLanguageItem     &GetCJKLanguage( BOOL = TRUE ) const;
-    inline const SvxPostureItem      &GetCJKPosture( BOOL = TRUE ) const;
-    inline const SvxWeightItem       &GetCJKWeight( BOOL = TRUE ) const;
-    inline const SvxFontItem         &GetCTLFont( BOOL = TRUE ) const;
-    inline const SvxFontHeightItem   &GetCTLSize( BOOL = TRUE ) const;
-    inline const SvxLanguageItem     &GetCTLLanguage( BOOL = TRUE ) const;
-    inline const SvxPostureItem      &GetCTLPosture( BOOL = TRUE ) const;
-    inline const SvxWeightItem       &GetCTLWeight( BOOL = TRUE ) const;
-    inline const SfxBoolItem           &GetWritingDirection( BOOL = TRUE ) const;
-    inline const SvxEmphasisMarkItem &GetEmphasisMark( BOOL = TRUE ) const;
-    inline const SvxTwoLinesItem   &Get2Lines( BOOL = TRUE ) const;
-    inline const SvxCharScaleWidthItem &GetCharScaleW( BOOL = TRUE ) const;
-    inline const SvxCharRotateItem     &GetCharRotate( BOOL = TRUE ) const;
-    inline const SvxCharReliefItem     &GetCharRelief( BOOL = TRUE ) const;
-    inline const SvxCharHiddenItem   &GetCharHidden( BOOL = TRUE ) const;
+    inline const SvxFontItem         &GetCJKFont( sal_Bool = sal_True ) const;
+    inline const SvxFontHeightItem   &GetCJKSize( sal_Bool = sal_True ) const;
+    inline const SvxLanguageItem     &GetCJKLanguage( sal_Bool = sal_True ) const;
+    inline const SvxPostureItem      &GetCJKPosture( sal_Bool = sal_True ) const;
+    inline const SvxWeightItem       &GetCJKWeight( sal_Bool = sal_True ) const;
+    inline const SvxFontItem         &GetCTLFont( sal_Bool = sal_True ) const;
+    inline const SvxFontHeightItem   &GetCTLSize( sal_Bool = sal_True ) const;
+    inline const SvxLanguageItem     &GetCTLLanguage( sal_Bool = sal_True ) const;
+    inline const SvxPostureItem      &GetCTLPosture( sal_Bool = sal_True ) const;
+    inline const SvxWeightItem       &GetCTLWeight( sal_Bool = sal_True ) const;
+    inline const SfxBoolItem           &GetWritingDirection( sal_Bool = sal_True ) const;
+    inline const SvxEmphasisMarkItem &GetEmphasisMark( sal_Bool = sal_True ) const;
+    inline const SvxTwoLinesItem   &Get2Lines( sal_Bool = sal_True ) const;
+    inline const SvxCharScaleWidthItem &GetCharScaleW( sal_Bool = sal_True ) const;
+    inline const SvxCharRotateItem     &GetCharRotate( sal_Bool = sal_True ) const;
+    inline const SvxCharReliefItem     &GetCharRelief( sal_Bool = sal_True ) const;
+    inline const SvxCharHiddenItem   &GetCharHidden( sal_Bool = sal_True ) const;
 
     // Frame-attributes - implemented in frmatr.hxx.
-    inline const SwFmtFillOrder           &GetFillOrder( BOOL = TRUE ) const;
-    inline const SwFmtFrmSize             &GetFrmSize( BOOL = TRUE ) const;
-    inline const SwFmtHeader          &GetHeader( BOOL = TRUE ) const;
-    inline const SwFmtFooter          &GetFooter( BOOL = TRUE ) const;
-    inline const SwFmtSurround            &GetSurround( BOOL = TRUE ) const;
-    inline const SwFmtHoriOrient      &GetHoriOrient( BOOL = TRUE ) const;
-    inline const SwFmtAnchor          &GetAnchor( BOOL = TRUE ) const;
-    inline const SwFmtCol                 &GetCol( BOOL = TRUE ) const;
-    inline const SvxPaperBinItem      &GetPaperBin( BOOL = TRUE ) const;
-    inline const SvxLRSpaceItem           &GetLRSpace( BOOL = TRUE ) const;
-    inline const SvxULSpaceItem           &GetULSpace( BOOL = TRUE ) const;
-    inline const SwFmtCntnt           &GetCntnt( BOOL = TRUE ) const;
-    inline const SvxPrintItem             &GetPrint( BOOL = TRUE ) const;
-    inline const SvxOpaqueItem            &GetOpaque( BOOL = TRUE ) const;
-    inline const SvxProtectItem           &GetProtect( BOOL = TRUE ) const;
-    inline const SwFmtVertOrient      &GetVertOrient( BOOL = TRUE ) const;
-    inline const SvxBoxItem               &GetBox( BOOL = TRUE ) const;
-    inline const SvxFmtKeepItem         &GetKeep( BOOL = TRUE ) const;
-    inline const SvxBrushItem           &GetBackground( BOOL = TRUE ) const;
-    inline const SvxShadowItem            &GetShadow( BOOL = TRUE ) const;
-    inline const SwFmtPageDesc            &GetPageDesc( BOOL = TRUE ) const;
-    inline const SvxFmtBreakItem      &GetBreak( BOOL = TRUE ) const;
-    inline const SvxMacroItem             &GetMacro( BOOL = TRUE ) const;
-    inline const SwFmtURL             &GetURL( BOOL = TRUE ) const;
-    inline const SwFmtEditInReadonly  &GetEditInReadonly( BOOL = TRUE ) const;
-    inline const SwFmtLayoutSplit     &GetLayoutSplit( BOOL = TRUE ) const;
-    inline const SwFmtRowSplit          &GetRowSplit( BOOL = TRUE ) const;
-    inline const SwFmtChain               &GetChain( BOOL = TRUE ) const;
-    inline const SwFmtLineNumber      &GetLineNumber( BOOL = TRUE ) const;
-    inline const SwFmtFtnAtTxtEnd     &GetFtnAtTxtEnd( BOOL = TRUE ) const;
-    inline const SwFmtEndAtTxtEnd     &GetEndAtTxtEnd( BOOL = TRUE ) const;
-    inline const SwFmtNoBalancedColumns &GetBalancedColumns( BOOL = TRUE ) const;
-    inline const SvxFrameDirectionItem    &GetFrmDir( BOOL = TRUE ) const;
-    inline const SwTextGridItem         &GetTextGrid( BOOL = TRUE ) const;
-    inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( BOOL = TRUE ) const;
+    inline const SwFmtFillOrder           &GetFillOrder( sal_Bool = sal_True ) const;
+    inline const SwFmtFrmSize             &GetFrmSize( sal_Bool = sal_True ) const;
+    inline const SwFmtHeader          &GetHeader( sal_Bool = sal_True ) const;
+    inline const SwFmtFooter          &GetFooter( sal_Bool = sal_True ) const;
+    inline const SwFmtSurround            &GetSurround( sal_Bool = sal_True ) const;
+    inline const SwFmtHoriOrient      &GetHoriOrient( sal_Bool = sal_True ) const;
+    inline const SwFmtAnchor          &GetAnchor( sal_Bool = sal_True ) const;
+    inline const SwFmtCol                 &GetCol( sal_Bool = sal_True ) const;
+    inline const SvxPaperBinItem      &GetPaperBin( sal_Bool = sal_True ) const;
+    inline const SvxLRSpaceItem           &GetLRSpace( sal_Bool = sal_True ) const;
+    inline const SvxULSpaceItem           &GetULSpace( sal_Bool = sal_True ) const;
+    inline const SwFmtCntnt           &GetCntnt( sal_Bool = sal_True ) const;
+    inline const SvxPrintItem             &GetPrint( sal_Bool = sal_True ) const;
+    inline const SvxOpaqueItem            &GetOpaque( sal_Bool = sal_True ) const;
+    inline const SvxProtectItem           &GetProtect( sal_Bool = sal_True ) const;
+    inline const SwFmtVertOrient      &GetVertOrient( sal_Bool = sal_True ) const;
+    inline const SvxBoxItem               &GetBox( sal_Bool = sal_True ) const;
+    inline const SvxFmtKeepItem         &GetKeep( sal_Bool = sal_True ) const;
+    inline const SvxBrushItem           &GetBackground( sal_Bool = sal_True ) const;
+    inline const SvxShadowItem            &GetShadow( sal_Bool = sal_True ) const;
+    inline const SwFmtPageDesc            &GetPageDesc( sal_Bool = sal_True ) const;
+    inline const SvxFmtBreakItem      &GetBreak( sal_Bool = sal_True ) const;
+    inline const SvxMacroItem             &GetMacro( sal_Bool = sal_True ) const;
+    inline const SwFmtURL             &GetURL( sal_Bool = sal_True ) const;
+    inline const SwFmtEditInReadonly  &GetEditInReadonly( sal_Bool = sal_True ) const;
+    inline const SwFmtLayoutSplit     &GetLayoutSplit( sal_Bool = sal_True ) const;
+    inline const SwFmtRowSplit          &GetRowSplit( sal_Bool = sal_True ) const;
+    inline const SwFmtChain               &GetChain( sal_Bool = sal_True ) const;
+    inline const SwFmtLineNumber      &GetLineNumber( sal_Bool = sal_True ) const;
+    inline const SwFmtFtnAtTxtEnd     &GetFtnAtTxtEnd( sal_Bool = sal_True ) const;
+    inline const SwFmtEndAtTxtEnd     &GetEndAtTxtEnd( sal_Bool = sal_True ) const;
+    inline const SwFmtNoBalancedColumns &GetBalancedColumns( sal_Bool = sal_True ) const;
+    inline const SvxFrameDirectionItem    &GetFrmDir( sal_Bool = sal_True ) const;
+    inline const SwTextGridItem         &GetTextGrid( sal_Bool = sal_True ) const;
+    inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( sal_Bool = sal_True ) const;
     // #i18732#
-    inline const SwFmtFollowTextFlow    &GetFollowTextFlow(BOOL = TRUE) const;
+    inline const SwFmtFollowTextFlow    &GetFollowTextFlow(sal_Bool = sal_True) const;
     // #i28701#
-    inline const SwFmtWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(BOOL = TRUE) const;
+    inline const SwFmtWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(sal_Bool = sal_True) const;
 
     // Graphics-attributes - implemented in grfatr.hxx
-    inline const SwMirrorGrf          &GetMirrorGrf( BOOL = TRUE ) const;
-    inline const SwCropGrf            &GetCropGrf( BOOL = TRUE ) const;
-    inline const SwRotationGrf            &GetRotationGrf(BOOL = TRUE ) const;
-    inline const SwLuminanceGrf       &GetLuminanceGrf(BOOL = TRUE ) const;
-    inline const SwContrastGrf            &GetContrastGrf(BOOL = TRUE ) const;
-    inline const SwChannelRGrf            &GetChannelRGrf(BOOL = TRUE ) const;
-    inline const SwChannelGGrf            &GetChannelGGrf(BOOL = TRUE ) const;
-    inline const SwChannelBGrf            &GetChannelBGrf(BOOL = TRUE ) const;
-    inline const SwGammaGrf           &GetGammaGrf(BOOL = TRUE ) const;
-    inline const SwInvertGrf          &GetInvertGrf(BOOL = TRUE ) const;
-    inline const SwTransparencyGrf        &GetTransparencyGrf(BOOL = TRUE ) const;
-    inline const SwDrawModeGrf            &GetDrawModeGrf(BOOL = TRUE ) const;
+    inline const SwMirrorGrf          &GetMirrorGrf( sal_Bool = sal_True ) const;
+    inline const SwCropGrf            &GetCropGrf( sal_Bool = sal_True ) const;
+    inline const SwRotationGrf            &GetRotationGrf(sal_Bool = sal_True ) const;
+    inline const SwLuminanceGrf       &GetLuminanceGrf(sal_Bool = sal_True ) const;
+    inline const SwContrastGrf            &GetContrastGrf(sal_Bool = sal_True ) const;
+    inline const SwChannelRGrf            &GetChannelRGrf(sal_Bool = sal_True ) const;
+    inline const SwChannelGGrf            &GetChannelGGrf(sal_Bool = sal_True ) const;
+    inline const SwChannelBGrf            &GetChannelBGrf(sal_Bool = sal_True ) const;
+    inline const SwGammaGrf           &GetGammaGrf(sal_Bool = sal_True ) const;
+    inline const SwInvertGrf          &GetInvertGrf(sal_Bool = sal_True ) const;
+    inline const SwTransparencyGrf        &GetTransparencyGrf(sal_Bool = sal_True ) const;
+    inline const SwDrawModeGrf            &GetDrawModeGrf(sal_Bool = sal_True ) const;
 
     // Paragraph-attributes - implemented in paratr.hxx.
-    inline const SvxLineSpacingItem       &GetLineSpacing( BOOL = TRUE ) const;
-    inline const SvxAdjustItem            &GetAdjust( BOOL = TRUE ) const;
-    inline const SvxFmtSplitItem      &GetSplit( BOOL = TRUE ) const;
-    inline const SwRegisterItem           &GetRegister( BOOL = TRUE ) const;
-    inline const SwNumRuleItem            &GetNumRule( BOOL = TRUE ) const;
-    inline const SvxWidowsItem            &GetWidows( BOOL = TRUE ) const;
-    inline const SvxOrphansItem           &GetOrphans( BOOL = TRUE ) const;
-    inline const SvxTabStopItem           &GetTabStops( BOOL = TRUE ) const;
-    inline const SvxHyphenZoneItem        &GetHyphenZone( BOOL = TRUE ) const;
-    inline const SwFmtDrop                &GetDrop( BOOL = TRUE ) const;
-    inline const SvxScriptSpaceItem       &GetScriptSpace(BOOL = TRUE) const;
-    inline const SvxHangingPunctuationItem &GetHangingPunctuation(BOOL = TRUE) const;
-    inline const SvxForbiddenRuleItem     &GetForbiddenRule(BOOL = TRUE) const;
-    inline const SvxParaVertAlignItem &GetParaVertAlign(BOOL = TRUE) const;
-    inline const SvxParaGridItem        &GetParaGrid(BOOL = TRUE) const;
-    inline const SwParaConnectBorderItem &GetParaConnectBorder(BOOL = TRUE ) const;
+    inline const SvxLineSpacingItem       &GetLineSpacing( sal_Bool = sal_True ) const;
+    inline const SvxAdjustItem            &GetAdjust( sal_Bool = sal_True ) const;
+    inline const SvxFmtSplitItem      &GetSplit( sal_Bool = sal_True ) const;
+    inline const SwRegisterItem           &GetRegister( sal_Bool = sal_True ) const;
+    inline const SwNumRuleItem            &GetNumRule( sal_Bool = sal_True ) const;
+    inline const SvxWidowsItem            &GetWidows( sal_Bool = sal_True ) const;
+    inline const SvxOrphansItem           &GetOrphans( sal_Bool = sal_True ) const;
+    inline const SvxTabStopItem           &GetTabStops( sal_Bool = sal_True ) const;
+    inline const SvxHyphenZoneItem        &GetHyphenZone( sal_Bool = sal_True ) const;
+    inline const SwFmtDrop                &GetDrop( sal_Bool = sal_True ) const;
+    inline const SvxScriptSpaceItem       &GetScriptSpace(sal_Bool = sal_True) const;
+    inline const SvxHangingPunctuationItem &GetHangingPunctuation(sal_Bool = sal_True) const;
+    inline const SvxForbiddenRuleItem     &GetForbiddenRule(sal_Bool = sal_True) const;
+    inline const SvxParaVertAlignItem &GetParaVertAlign(sal_Bool = sal_True) const;
+    inline const SvxParaGridItem        &GetParaGrid(sal_Bool = sal_True) const;
+    inline const SwParaConnectBorderItem &GetParaConnectBorder(sal_Bool = sal_True ) const;
 
     // TableBox attributes - implemented in cellatr.hxx.
-    inline  const SwTblBoxNumFormat     &GetTblBoxNumFmt( BOOL = TRUE ) const;
-    inline  const SwTblBoxFormula       &GetTblBoxFormula( BOOL = TRUE ) const;
-    inline  const SwTblBoxValue         &GetTblBoxValue( BOOL = TRUE ) const;
+    inline  const SwTblBoxNumFormat     &GetTblBoxNumFmt( sal_Bool = sal_True ) const;
+    inline  const SwTblBoxFormula       &GetTblBoxFormula( sal_Bool = sal_True ) const;
+    inline  const SwTblBoxValue         &GetTblBoxValue( sal_Bool = sal_True ) const;
 
     /** SwFmt::IsBackgroundTransparent
 
@@ -320,8 +320,8 @@ public:
 
 // --------------- inline Implementations ------------------------
 
-inline const SfxPoolItem& SwFmt::GetFmtAttr( USHORT nWhich,
-                                             BOOL bInParents ) const
+inline const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich,
+                                             sal_Bool bInParents ) const
 {
     return aSet.Get( nWhich, bInParents );
 }
@@ -333,7 +333,7 @@ inline void SwFmt::SetName( const sal_Char* pNewName,
     SetName( aTmp, bBroadcast );
 }
 
-inline SfxItemState SwFmt::GetItemState( USHORT nWhich, BOOL bSrchInParent,
+inline SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent,
                                         const SfxPoolItem **ppItem ) const
 {
     return aSet.GetItemState( nWhich, bSrchInParent, ppItem );

@@ -3,6 +3,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  * Copyright 2010 Miklos Vajna.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,8 +44,8 @@ using namespace ::comphelper;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-RtfExportFilter::RtfExportFilter( const uno::Reference< lang::XMultiServiceFactory >& xMSF)  :
-    m_xMSF( xMSF )
+RtfExportFilter::RtfExportFilter( const uno::Reference< uno::XComponentContext >& xCtx) :
+    m_xCtx( xCtx )
 {
 }
 
@@ -129,9 +130,9 @@ uno::Sequence< OUString > SAL_CALL RtfExport_getSupportedServiceNames() throw()
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL RtfExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+uno::Reference< uno::XInterface > SAL_CALL RtfExport_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*) new RtfExportFilter( rSMgr );
+    return (cppu::OWeakObject*) new RtfExportFilter( xCtx );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

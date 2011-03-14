@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 #include "swwrtshitem.hxx"
 TYPEINIT1(SwWrtShellItem,SfxPoolItem);
-SwWrtShellItem::SwWrtShellItem( USHORT _nWhich, SwWrtShell* pSh )
+SwWrtShellItem::SwWrtShellItem( sal_uInt16 _nWhich, SwWrtShell* pSh )
     : SfxPoolItem( _nWhich ), pWrtSh( pSh )
 {
 

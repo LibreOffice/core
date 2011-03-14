@@ -105,14 +105,14 @@ void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
 
 void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
-                           USHORT nId, const String& rValue)
+                           sal_uInt16 nId, const String& rValue)
 {
     lcl_SetProp( xInfo, xProps, SW_PROP_NAME_STR(nId), rValue);
 }
 
 void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
-                           USHORT nId, sal_Int16 nValue )
+                           sal_uInt16 nId, sal_Int16 nValue )
 {
     OUString uPropName(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(nId)));
     if(xInfo->hasPropertyByName(uPropName))
@@ -126,7 +126,7 @@ void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
 void lcl_SetBOOLProp(
                 uno::Reference< beans::XPropertySetInfo > & xInfo,
                 uno::Reference< beans::XPropertySet > & xProps,
-                USHORT nId, sal_Bool bValue )
+                sal_uInt16 nId, sal_Bool bValue )
 {
     OUString uPropName(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(nId)));
     if(xInfo->hasPropertyByName(uPropName))
@@ -146,7 +146,7 @@ IMPL_LINK( SwMultiTOXTabDialog, CreateExample_Hdl, void*, EMPTYARG )
         SwXTextDocument* pDoc = reinterpret_cast<SwXTextDocument*>(xDocTunnel->getSomething(SwXTextDocument::getUnoTunnelId()));
 
         if( pDoc )
-            pDoc->GetDocShell()->_LoadStyles( *rSh.GetView().GetDocShell(), TRUE );
+            pDoc->GetDocShell()->_LoadStyles( *rSh.GetView().GetDocShell(), sal_True );
 
          uno::Reference< lang::XMultiServiceFactory >  xFact(
                                              xModel, uno::UNO_QUERY);
@@ -235,7 +235,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
             if(xSectPr.is())
             {
-                BOOL bTemp = i == nTOXIndex;
+                sal_Bool bTemp = i == nTOXIndex;
                 aVal.setValue(&bTemp, ::getBooleanCppuType());
                 xSectPr->setPropertyValue(uIsVisible, aVal);
             }
@@ -403,7 +403,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         if(TOKEN_TAB_STOP == aToken.eTokenType)
                         {
                             pPropValArr[2].Name = C2U("TabStopRightAligned");
-                            BOOL bTemp = SVX_TAB_ADJUST_END == aToken.eTabAlign;
+                            sal_Bool bTemp = SVX_TAB_ADJUST_END == aToken.eTabAlign;
                             pPropValArr[2].Value.setValue(&bTemp, ::getBooleanCppuType());
                             pPropValArr[3].Name = C2U("TabStopFillCharacter");
                             pPropValArr[3].Value <<= OUString(aToken.cTabFillChar);

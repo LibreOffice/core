@@ -69,17 +69,17 @@ public:
     }
     virtual ~SwServerObject();
 
-    virtual BOOL GetData( ::com::sun::star::uno::Any & rData,
+    virtual sal_Bool GetData( ::com::sun::star::uno::Any & rData,
                             const String & rMimeType,
-                            BOOL bSynchron = FALSE );
+                            sal_Bool bSynchron = sal_False );
 
-    BOOL SetData( const String & rMimeType,
+    sal_Bool SetData( const String & rMimeType,
                     const ::com::sun::star::uno::Any& rData );
 
     virtual void SendDataChanged( const SwPosition& rPos );
     virtual void SendDataChanged( const SwPaM& rRange );
 
-    BOOL IsLinkInServer( const SwBaseLink* ) const;
+    sal_Bool IsLinkInServer( const SwBaseLink* ) const;
 
     void SetNoServer();
     void SetDdeBookmark( ::sw::mark::IMark& rBookmark);

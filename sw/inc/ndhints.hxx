@@ -82,31 +82,31 @@ protected:
     //FIXME: why are the non-const methods public?
 public:
     void Insert( const SwTxtAttr *pHt );
-    void DeleteAtPos( const USHORT nPosInStart );
+    void DeleteAtPos( const sal_uInt16 nPosInStart );
     bool Resort();
-    SwTxtAttr * Cut( const USHORT nPosInStart );
+    SwTxtAttr * Cut( const sal_uInt16 nPosInStart );
 
-    inline const SwTxtAttr * GetStart( const USHORT nPos ) const
+    inline const SwTxtAttr * GetStart( const sal_uInt16 nPos ) const
         { return m_HintStarts[nPos]; }
-    inline const SwTxtAttr * GetEnd  ( const USHORT nPos ) const
+    inline const SwTxtAttr * GetEnd  ( const sal_uInt16 nPos ) const
         { return m_HintEnds  [nPos]; }
-    inline       SwTxtAttr * GetStart( const USHORT nPos )
+    inline       SwTxtAttr * GetStart( const sal_uInt16 nPos )
         { return m_HintStarts[nPos]; }
-    inline       SwTxtAttr * GetEnd  ( const USHORT nPos )
+    inline       SwTxtAttr * GetEnd  ( const sal_uInt16 nPos )
         { return m_HintEnds  [nPos]; }
 
-    inline USHORT GetEndCount()   const { return m_HintEnds  .Count(); }
-    inline USHORT GetStartCount() const { return m_HintStarts.Count(); }
+    inline sal_uInt16 GetEndCount()   const { return m_HintEnds  .Count(); }
+    inline sal_uInt16 GetStartCount() const { return m_HintStarts.Count(); }
 
-    inline USHORT GetStartOf( const SwTxtAttr *pHt ) const;
-    inline USHORT GetPos( const SwTxtAttr *pHt ) const
+    inline sal_uInt16 GetStartOf( const SwTxtAttr *pHt ) const;
+    inline sal_uInt16 GetPos( const SwTxtAttr *pHt ) const
         { return m_HintStarts.GetPos( pHt ); }
 
-    inline SwTxtAttr * GetTextHint( const USHORT nIdx )
+    inline SwTxtAttr * GetTextHint( const sal_uInt16 nIdx )
         { return GetStart(nIdx); }
-    inline const SwTxtAttr * operator[]( const USHORT nIdx ) const
+    inline const SwTxtAttr * operator[]( const sal_uInt16 nIdx ) const
         { return m_HintStarts[nIdx]; }
-    inline USHORT Count() const { return m_HintStarts.Count(); }
+    inline sal_uInt16 Count() const { return m_HintStarts.Count(); }
 
 #if OSL_DEBUG_LEVEL > 1
     bool Check() const;
@@ -141,7 +141,7 @@ private:
     // Because the TextNode also guarantees removal of the Character for
     // attributes without an end.
     friend class SwTxtNode;
-    void DeleteAtPos( const USHORT nPos );
+    void DeleteAtPos( const sal_uInt16 nPos );
     // Delete the given Hint. The Hint must actually be in the array!
     void Delete( SwTxtAttr* pTxtHt );
 
@@ -196,9 +196,9 @@ SvStream &operator<<(SvStream &aS, const SwpHints &rHints); //$ ostream
 // Inline Implementations
 
 
-inline USHORT SwpHintsArray::GetStartOf( const SwTxtAttr *pHt ) const
+inline sal_uInt16 SwpHintsArray::GetStartOf( const SwTxtAttr *pHt ) const
 {
-    USHORT nPos;
+    sal_uInt16 nPos;
     if ( !m_HintStarts.Seek_Entry( pHt, &nPos ) )
     {
         nPos = USHRT_MAX;
@@ -206,7 +206,7 @@ inline USHORT SwpHintsArray::GetStartOf( const SwTxtAttr *pHt ) const
     return nPos;
 }
 
-inline SwTxtAttr *SwpHintsArray::Cut( const USHORT nPosInStart )
+inline SwTxtAttr *SwpHintsArray::Cut( const sal_uInt16 nPosInStart )
 {
     SwTxtAttr *pHt = GetTextHint(nPosInStart);
     DeleteAtPos( nPosInStart );

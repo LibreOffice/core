@@ -109,13 +109,13 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
         pFnt->SetActual( SwScriptInfo::WhichFont( 0, 0, pScriptInfo ) );
 
         xub_StrLen nChg = 0;
-        USHORT nCnt = 0;
+        sal_uInt16 nCnt = 0;
 
         do
         {
             nChg = pScriptInfo->GetScriptChg( nCnt );
-            USHORT nScript = pScriptInfo->GetScriptType( nCnt++ );
-            BYTE nTmp = 4;
+            sal_uInt16 nScript = pScriptInfo->GetScriptType( nCnt++ );
+            sal_uInt8 nTmp = 4;
             switch ( nScript ) {
                 case i18n::ScriptType::ASIAN :
                     if( !aMagicNo[SW_CJK] ) nTmp = SW_CJK; break;

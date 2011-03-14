@@ -244,6 +244,7 @@ ModalDialog DLG_MM_SENDWARNING
     };
     MultiLineEdit ED_DETAILS
     {
+        HelpID = "sw:MultiLineEdit:DLG_MM_SENDWARNING:ED_DETAILS";
         Pos = MAP_APPFONT ( 40 , 50 ) ;
         Size = MAP_APPFONT ( 194 , 50 ) ;
         Border = TRUE;

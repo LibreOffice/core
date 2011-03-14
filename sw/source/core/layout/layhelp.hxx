@@ -69,18 +69,18 @@ class SwLayCacheImpl : public SvULongs
     SvUShorts aType;
     SwPageFlyCache aFlyCache;
     sal_Bool bUseFlyCache;
-    void Insert( USHORT nType, ULONG nIndex, xub_StrLen nOffset );
+    void Insert( sal_uInt16 nType, sal_uLong nIndex, xub_StrLen nOffset );
 
 public:
-    SwLayCacheImpl() : SvULongs( 20, 10 ), aOffset( 20, 10 ), aType( 20, 10 ) {}
-    BOOL Read( SvStream& rStream );
+    SwLayCacheImpl() : SvULongs( 20, 10 ), aType( 20, 10 ) {}
+    sal_Bool Read( SvStream& rStream );
 
-    ULONG GetBreakIndex( USHORT nIdx ) const { return GetObject( nIdx ); }
-    xub_StrLen GetBreakOfst( USHORT nIdx ) const { return aOffset[ nIdx ]; }
-    USHORT GetBreakType( USHORT nIdx ) const { return aType[ nIdx ]; }
+    sal_uLong GetBreakIndex( sal_uInt16 nIdx ) const { return GetObject( nIdx ); }
+    xub_StrLen GetBreakOfst( size_t nIdx ) const { return aOffset[ nIdx ]; }
+    sal_uInt16 GetBreakType( sal_uInt16 nIdx ) const { return aType[ nIdx ]; }
 
-    USHORT GetFlyCount() const { return aFlyCache.Count(); }
-    SwFlyCache *GetFlyCache( USHORT nIdx ) const { return aFlyCache[ nIdx ]; }
+    sal_uInt16 GetFlyCount() const { return aFlyCache.Count(); }
+    SwFlyCache *GetFlyCache( sal_uInt16 nIdx ) const { return aFlyCache[ nIdx ]; }
 
     sal_Bool IsUseFlyCache() const { return bUseFlyCache; }
 };
@@ -120,26 +120,26 @@ class SwLayHelper
     SwPageFrm* &rpPage;
     SwLayoutFrm* &rpLay;
     SwActualSection* &rpActualSection;
-    BOOL &rbBreakAfter;
+    sal_Bool &rbBreakAfter;
     SwDoc* pDoc;
     SwLayCacheImpl* pImpl;
-    ULONG nMaxParaPerPage;
-    ULONG nParagraphCnt;
-    ULONG nStartOfContent;
-    USHORT nIndex;                      // the index in the page break array
-    USHORT nFlyIdx;                     // the index in the fly cache array
-    BOOL bFirst : 1;
+    sal_uLong nMaxParaPerPage;
+    sal_uLong nParagraphCnt;
+    sal_uLong nStartOfContent;
+    sal_uInt16 nIndex;                      // the index in the page break array
+    sal_uInt16 nFlyIdx;                     // the index in the fly cache array
+    sal_Bool bFirst : 1;
     void _CheckFlyCache( SwPageFrm* pPage );
 public:
     SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
-            SwLayoutFrm* &rpL, SwActualSection* &rpA, BOOL &rBrk,
-            ULONG nNodeIndex, BOOL bCache );
+            SwLayoutFrm* &rpL, SwActualSection* &rpA, sal_Bool &rBrk,
+            sal_uLong nNodeIndex, sal_Bool bCache );
     ~SwLayHelper();
-    ULONG CalcPageCount();
-    BOOL CheckInsert( ULONG nNodeIndex );
+    sal_uLong CalcPageCount();
+    sal_Bool CheckInsert( sal_uLong nNodeIndex );
 
-    BOOL BreakPage( xub_StrLen& rOffs, ULONG nNodeIndex );
-    BOOL CheckInsertPage();
+    sal_Bool BreakPage( xub_StrLen& rOffs, sal_uLong nNodeIndex );
+    sal_Bool CheckInsertPage();
 
     // Look for fresh text frames at this (new) page and set them to the right
     // position, if they are in the fly cache.
@@ -148,7 +148,7 @@ public:
 
     // Look for this text frame and set it to the right position,
     // if it's in the fly cache.
-    static BOOL CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly );
+    static sal_Bool CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly );
 };
 
 /*************************************************************************
@@ -169,41 +169,41 @@ class SwLayCacheIoImpl
 {
 private:
     struct RecTypeSize {
-        BYTE  type;
-        ULONG size;
-        RecTypeSize(BYTE typ, ULONG siz) : type(typ), size(siz) {}
+        sal_uInt8 type;
+        sal_uLong size;
+        RecTypeSize(sal_uInt8 typ, sal_uLong siz) : type(typ), size(siz) {}
     };
     std::vector<RecTypeSize> aRecords;
 
     SvStream        *pStream;
 
-    ULONG           nFlagRecEnd;
+    sal_uLong           nFlagRecEnd;
 
-    USHORT          nMajorVersion;
-    USHORT          nMinorVersion;
+    sal_uInt16          nMajorVersion;
+    sal_uInt16          nMinorVersion;
 
-    BOOL            bWriteMode : 1;
-    BOOL            bError : 1;
+    sal_Bool            bWriteMode : 1;
+    sal_Bool            bError : 1;
 
 public:
-    SwLayCacheIoImpl( SvStream& rStrm, BOOL bWrtMd );
+    SwLayCacheIoImpl( SvStream& rStrm, sal_Bool bWrtMd );
 
     // Get input or output stream
     SvStream& GetStream() const { return *pStream; }
 
     // Open a record of type "nType"
-    BOOL OpenRec( BYTE nType );
+    sal_Bool OpenRec( sal_uInt8 nType );
 
     // Close a record of type "nType". This skips any unread data that
     // remains in the record.
-    BOOL CloseRec( BYTE nType );
+    sal_Bool CloseRec( sal_uInt8 nType );
 
     // Return the number of bytes contained in the current record that
     // haven't been read by now.
-    UINT32 BytesLeft();
+    sal_uInt32 BytesLeft();
 
     // Return the current record's type
-    BYTE Peek();
+    sal_uInt8 Peek();
 
     // Skip the current record
     void SkipRec();
@@ -211,27 +211,27 @@ public:
     // Open a flag record for reading. The uppermost four bits are flags,
     // while the lowermost are the flag record's size. Flag records cannot
     // be nested.
-    BYTE OpenFlagRec();
+    sal_uInt8 OpenFlagRec();
 
     // Open flag record for writing;
-    void OpenFlagRec( BYTE nFlags, BYTE nLen );
+    void OpenFlagRec( sal_uInt8 nFlags, sal_uInt8 nLen );
 
     // Close a flag record. Any bytes left are skipped.
     void CloseFlagRec();
 
-    BOOL HasError() const { return bError; }
+    sal_Bool HasError() const { return bError; }
 
-    USHORT GetMajorVersion() const { return nMajorVersion; }
-    USHORT GetMinorVersion() const { return nMinorVersion; }
+    sal_uInt16 GetMajorVersion() const { return nMajorVersion; }
+    sal_uInt16 GetMinorVersion() const { return nMinorVersion; }
 };
 
 // Stored information about text frames:
 class SwFlyCache : public SwRect // position and size
 {
 public:
-    ULONG nOrdNum;      // Id to recognize text frames
-    USHORT nPageNum;    // page number
-    SwFlyCache( USHORT nP, ULONG nO, long nXL, long nYL, long nWL, long nHL ) :
+    sal_uLong nOrdNum;      // Id to recognize text frames
+    sal_uInt16 nPageNum;    // page number
+    SwFlyCache( sal_uInt16 nP, sal_uLong nO, long nXL, long nYL, long nWL, long nHL ) :
         SwRect( nXL, nYL, nWL, nHL ), nOrdNum( nO ), nPageNum( nP ){}
 };
 

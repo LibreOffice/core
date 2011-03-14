@@ -78,6 +78,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     ListBox LB_NUMVIEW
     {
+        HelpID = "sw:ListBox:TP_FOOTNOTEOPTION:LB_NUMVIEW";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 65 , 14 ) ;
         Size = MAP_APPFONT ( 59 , 72 ) ;
@@ -94,6 +95,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     NumericField FLD_OFFSET
     {
+        HelpID = "sw:NumericField:TP_FOOTNOTEOPTION:FLD_OFFSET";
         Pos = MAP_APPFONT ( 189 , 14 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Spin = TRUE ;
@@ -112,6 +114,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     ListBox LB_NUMCOUNT
     {
+        HelpID = "sw:ListBox:TP_FOOTNOTEOPTION:LB_NUMCOUNT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 65 , 29 ) ;
         Size = MAP_APPFONT ( 59 , 50 ) ;
@@ -135,6 +138,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     Edit ED_PREFIX
     {
+        HelpID = "sw:Edit:TP_FOOTNOTEOPTION:ED_PREFIX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 65 , 44 ) ;
         Size = MAP_APPFONT ( 59 , 12 ) ;
@@ -151,6 +155,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     Edit ED_SUFFIX
     {
+        HelpID = "sw:Edit:TP_FOOTNOTEOPTION:ED_SUFFIX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 189 , 44 ) ;
         Size = MAP_APPFONT ( 59 , 12 ) ;
@@ -166,6 +171,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     RadioButton RB_POS_PAGE
     {
+        HelpID = "sw:RadioButton:TP_FOOTNOTEOPTION:RB_POS_PAGE";
         Pos = MAP_APPFONT ( 65 , 62 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text [ en-US ] = "~End of page" ;
@@ -174,6 +180,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     RadioButton RB_POS_CHAPTER
     {
+        HelpID = "sw:RadioButton:TP_FOOTNOTEOPTION:RB_POS_CHAPTER";
         Pos = MAP_APPFONT ( 65 , 75 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text [ en-US ] = "En~d of document" ;
@@ -193,6 +200,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     ListBox LB_PARA_TEMPL
     {
+        HelpID = "sw:ListBox:TP_FOOTNOTEOPTION:LB_PARA_TEMPL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 48 , 100 ) ;
         Size = MAP_APPFONT ( 58 , 80 ) ;
@@ -210,6 +218,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     ListBox LB_PAGE_TEMPL
     {
+        HelpID = "sw:ListBox:TP_FOOTNOTEOPTION:LB_PAGE_TEMPL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 48 , 116) ;
         Size = MAP_APPFONT ( 58 , 80 ) ;
@@ -232,6 +241,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     ListBox LB_ANCHR_CHARFMT
     {
+        HelpID = "sw:ListBox:TP_FOOTNOTEOPTION:LB_ANCHR_CHARFMT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 186 , 100 ) ;
         Size = MAP_APPFONT ( 65 , 72 ) ;
@@ -248,6 +258,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     ListBox LB_TEXT_CHARFMT
     {
+        HelpID = "sw:ListBox:TP_FOOTNOTEOPTION:LB_TEXT_CHARFMT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 186 , 116 ) ;
         Size = MAP_APPFONT ( 65 , 72 ) ;
@@ -270,6 +281,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     Edit ED_CONT
     {
+        HelpID = "sw:Edit:TP_FOOTNOTEOPTION:ED_CONT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88, 145 ) ;
         Size = MAP_APPFONT ( 160 , 12 ) ;
@@ -286,6 +298,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     Edit ED_CONT_FROM
     {
+        HelpID = "sw:Edit:TP_FOOTNOTEOPTION:ED_CONT_FROM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 161 ) ;
         Size = MAP_APPFONT ( 160 , 12 ) ;
@@ -316,6 +329,7 @@ TabPage TP_ENDNOTEOPTION
     };
     ListBox LB_NUMVIEW
     {
+        HelpID = "sw:ListBox:TP_ENDNOTEOPTION:LB_NUMVIEW";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 65 , 14 ) ;
         Size = MAP_APPFONT ( 59 , 72 ) ;
@@ -343,6 +357,7 @@ TabPage TP_ENDNOTEOPTION
     };
     NumericField FLD_OFFSET
     {
+        HelpID = "sw:NumericField:TP_ENDNOTEOPTION:FLD_OFFSET";
         Pos = MAP_APPFONT ( 189 , 14 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Spin = TRUE ;
@@ -361,6 +376,7 @@ TabPage TP_ENDNOTEOPTION
     };
     ListBox LB_NUMCOUNT
     {
+        HelpID = "sw:ListBox:TP_ENDNOTEOPTION:LB_NUMCOUNT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 62 , 72 ) ;
@@ -376,6 +392,7 @@ TabPage TP_ENDNOTEOPTION
     };
     Edit ED_PREFIX
     {
+        HelpID = "sw:Edit:TP_ENDNOTEOPTION:ED_PREFIX";
         Pos = MAP_APPFONT ( 65 , 30 ) ;
         Size = MAP_APPFONT ( 59 , 12 ) ;
         Border = TRUE ;
@@ -392,6 +409,7 @@ TabPage TP_ENDNOTEOPTION
     };
     Edit ED_SUFFIX
     {
+        HelpID = "sw:Edit:TP_ENDNOTEOPTION:ED_SUFFIX";
         Pos = MAP_APPFONT ( 189 , 30 ) ;
         Size = MAP_APPFONT ( 59 , 12 ) ;
         Border = TRUE ;
@@ -407,6 +425,7 @@ TabPage TP_ENDNOTEOPTION
     };
     RadioButton RB_POS_PAGE
     {
+        HelpID = "sw:RadioButton:TP_ENDNOTEOPTION:RB_POS_PAGE";
         Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ en-US ] = "End ~of page" ;
@@ -415,6 +434,7 @@ TabPage TP_ENDNOTEOPTION
     };
     RadioButton RB_POS_CHAPTER
     {
+        HelpID = "sw:RadioButton:TP_ENDNOTEOPTION:RB_POS_CHAPTER";
         Pos = MAP_APPFONT ( 12 , 118 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ en-US ] = "End of ~document" ;
@@ -434,6 +454,7 @@ TabPage TP_ENDNOTEOPTION
     };
     ListBox LB_PARA_TEMPL
     {
+        HelpID = "sw:ListBox:TP_ENDNOTEOPTION:LB_PARA_TEMPL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 51 , 56 ) ;
         Size = MAP_APPFONT ( 67 , 72 ) ;
@@ -451,6 +472,7 @@ TabPage TP_ENDNOTEOPTION
     };
     ListBox LB_PAGE_TEMPL
     {
+        HelpID = "sw:ListBox:TP_ENDNOTEOPTION:LB_PAGE_TEMPL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 51 , 72 ) ;
         Size = MAP_APPFONT ( 67 , 72 ) ;
@@ -472,6 +494,7 @@ TabPage TP_ENDNOTEOPTION
     };
     ListBox LB_ANCHR_CHARFMT
     {
+        HelpID = "sw:ListBox:TP_ENDNOTEOPTION:LB_ANCHR_CHARFMT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 186 , 56 ) ;
         Size = MAP_APPFONT ( 65 , 72 ) ;
@@ -488,6 +511,7 @@ TabPage TP_ENDNOTEOPTION
     };
     ListBox LB_TEXT_CHARFMT
     {
+        HelpID = "sw:ListBox:TP_ENDNOTEOPTION:LB_TEXT_CHARFMT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 186 , 72 ) ;
         Size = MAP_APPFONT ( 65 , 72 ) ;
@@ -510,6 +534,7 @@ TabPage TP_ENDNOTEOPTION
     };
     Edit ED_CONT
     {
+        HelpID = "sw:Edit:TP_ENDNOTEOPTION:ED_CONT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 137 , 101 ) ;
         Size = MAP_APPFONT ( 114 , 12 ) ;
@@ -526,6 +551,7 @@ TabPage TP_ENDNOTEOPTION
     };
     Edit ED_CONT_FROM
     {
+        HelpID = "sw:Edit:TP_ENDNOTEOPTION:ED_CONT_FROM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 137 , 116 ) ;
         Size = MAP_APPFONT ( 114 , 12 ) ;

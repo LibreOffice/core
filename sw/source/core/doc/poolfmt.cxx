@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -55,6 +56,7 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <viewopt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
@@ -75,27 +77,27 @@
 
 using namespace ::com::sun::star;
 
-const USHORT PT_3   =  3 * 20;      //  3 pt
-const USHORT PT_6   =  6 * 20;      //  6 pt
-const USHORT PT_7   =  7 * 20;      //  6 pt
-const USHORT PT_8   =  8 * 20;      //  8 pt
-const USHORT PT_9   =  9 * 20;      //  9 pt
-const USHORT PT_10  = 10 * 20;      // 10 pt
-const USHORT PT_11  = 11 * 20;      // 11 pt
-const USHORT PT_12  = 12 * 20;      // 12 pt
-const USHORT PT_14  = 14 * 20;      // 14 pt
-const USHORT PT_16  = 16 * 20;      // 16 pt
-const USHORT PT_18  = 18 * 20;      // 18 pt
-const USHORT PT_22  = 22 * 20;      // 22 pt
-const USHORT PT_24  = 24 * 20;      // 22 pt
+const sal_uInt16 PT_3   =  3 * 20;      //  3 pt
+const sal_uInt16 PT_6   =  6 * 20;      //  6 pt
+const sal_uInt16 PT_7   =  7 * 20;      //  6 pt
+const sal_uInt16 PT_8   =  8 * 20;      //  8 pt
+const sal_uInt16 PT_9   =  9 * 20;      //  9 pt
+const sal_uInt16 PT_10  = 10 * 20;      // 10 pt
+const sal_uInt16 PT_11  = 11 * 20;      // 11 pt
+const sal_uInt16 PT_12  = 12 * 20;      // 12 pt
+const sal_uInt16 PT_14  = 14 * 20;      // 14 pt
+const sal_uInt16 PT_16  = 16 * 20;      // 16 pt
+const sal_uInt16 PT_18  = 18 * 20;      // 18 pt
+const sal_uInt16 PT_22  = 22 * 20;      // 22 pt
+const sal_uInt16 PT_24  = 24 * 20;      // 22 pt
 
 
-//const USHORT HTML_PARSPACE = ((CM_05 * 7) / 10);
+//const sal_uInt16 HTML_PARSPACE = ((CM_05 * 7) / 10);
 #define HTML_PARSPACE   GetMetricVal( CM_05 )
 
 static const sal_Char sKomma[] = ", ";
 
-static const USHORT aHeadlineSizes[ 2 * MAXLEVEL ] = {
+static const sal_uInt16 aHeadlineSizes[ 2 * MAXLEVEL ] = {
 //  PT_16, PT_14, PT_14, PT_12, PT_12,          // normal
 //JP 10.12.96: jetzt soll alles prozentual sein:
     115, 100, 100, 85, 85,
@@ -121,7 +123,7 @@ long lcl_GetRightMargin( SwDoc& rDoc )
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem )
 {
     rSet.Put( rItem );
-    USHORT nWhCJK = 0, nWhCTL = 0;
+    sal_uInt16 nWhCJK = 0, nWhCTL = 0;
     switch( rItem.Which() )
     {
     case RES_CHRATR_FONTSIZE:
@@ -147,19 +149,19 @@ void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem )
         rSet.Put( rItem, nWhCTL );
 }
 
-void lcl_SetDfltFont( USHORT nFntType, SfxItemSet& rSet )
+void lcl_SetDfltFont( sal_uInt16 nFntType, SfxItemSet& rSet )
 {
     static struct {
-        USHORT nResLngId;
-        USHORT nResFntId;
+        sal_uInt16 nResLngId;
+        sal_uInt16 nResFntId;
     } aArr[ 3 ] = {
         { RES_CHRATR_LANGUAGE, RES_CHRATR_FONT },
         { RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_FONT },
         { RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_FONT }
     };
-    for( USHORT n = 0; n < 3; ++n )
+    for( sal_uInt16 n = 0; n < 3; ++n )
     {
-        USHORT nLng = ((SvxLanguageItem&)rSet.GetPool()->GetDefaultItem(
+        sal_uInt16 nLng = ((SvxLanguageItem&)rSet.GetPool()->GetDefaultItem(
                             aArr[n].nResLngId )).GetLanguage();
         Font aFnt( OutputDevice::GetDefaultFont( nFntType,
                                 nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
@@ -170,13 +172,13 @@ void lcl_SetDfltFont( USHORT nFntType, SfxItemSet& rSet )
     }
 }
 
-void lcl_SetDfltFont( USHORT nLatinFntType, USHORT nCJKFntType,
-                        USHORT nCTLFntType, SfxItemSet& rSet )
+void lcl_SetDfltFont( sal_uInt16 nLatinFntType, sal_uInt16 nCJKFntType,
+                        sal_uInt16 nCTLFntType, SfxItemSet& rSet )
 {
     static struct {
-        USHORT nResLngId;
-        USHORT nResFntId;
-        USHORT nFntType;
+        sal_uInt16 nResLngId;
+        sal_uInt16 nResFntId;
+        sal_uInt16 nFntType;
     } aArr[ 3 ] = {
         { RES_CHRATR_LANGUAGE, RES_CHRATR_FONT, 0 },
         { RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_FONT, 0 },
@@ -186,9 +188,9 @@ void lcl_SetDfltFont( USHORT nLatinFntType, USHORT nCJKFntType,
     aArr[1].nFntType = nCJKFntType;
     aArr[2].nFntType = nCTLFntType;
 
-    for( USHORT n = 0; n < 3; ++n )
+    for( sal_uInt16 n = 0; n < 3; ++n )
     {
-        USHORT nLng = ((SvxLanguageItem&)rSet.GetPool()->GetDefaultItem(
+        sal_uInt16 nLng = ((SvxLanguageItem&)rSet.GetPool()->GetDefaultItem(
                             aArr[n].nResLngId )).GetLanguage();
         Font aFnt( OutputDevice::GetDefaultFont( aArr[n].nFntType,
                                 nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
@@ -201,7 +203,7 @@ void lcl_SetDfltFont( USHORT nLatinFntType, USHORT nCJKFntType,
 
 void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
                         SfxItemSet& rSet,
-                        USHORT nOutLvlBits, BYTE nLevel, BOOL bItalic )
+                        sal_uInt16 nOutLvlBits, sal_uInt8 nLevel, sal_Bool bItalic )
 {
     SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
     SvxFontHeightItem aHItem(240, 100, RES_CHRATR_FONTSIZE);
@@ -260,11 +262,11 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
 
 
 
-void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, USHORT nFact,
-                        BOOL bHeader, BOOL bTab )
+void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, sal_uInt16 nFact,
+                        sal_Bool bHeader, sal_Bool bTab )
 {
     SvxLRSpaceItem aLR( RES_LR_SPACE );
-    USHORT nLeft = nFact ? GetMetricVal( CM_05 ) * nFact : 0;
+    sal_uInt16 nLeft = nFact ? GetMetricVal( CM_05 ) * nFact : 0;
     aLR.SetTxtLeft( nLeft );
 
     rSet.Put( aLR );
@@ -288,13 +290,13 @@ void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, USHORT nFact,
 
 void lcl_SetNumBul( SwDoc* pDoc, SwTxtFmtColl* pColl,
                         SfxItemSet& rSet,
-                        USHORT nNxt, SwTwips nEZ, SwTwips nLeft,
+                        sal_uInt16 nNxt, SwTwips nEZ, SwTwips nLeft,
                         SwTwips nUpper, SwTwips nLower )
 {
 
     SvxLRSpaceItem aLR( RES_LR_SPACE ); SvxULSpaceItem aUL( RES_UL_SPACE );
-    aLR.SetTxtFirstLineOfst( USHORT(nEZ) ); aLR.SetTxtLeft( USHORT(nLeft) );
-    aUL.SetUpper( USHORT(nUpper) ); aUL.SetLower( USHORT(nLower) );
+    aLR.SetTxtFirstLineOfst( sal_uInt16(nEZ) ); aLR.SetTxtLeft( sal_uInt16(nLeft) );
+    aUL.SetUpper( sal_uInt16(nUpper) ); aUL.SetLower( sal_uInt16(nLower) );
     rSet.Put( aLR );
     rSet.Put( aUL );
 
@@ -309,14 +311,14 @@ void lcl_SetNumBul( SwDoc* pDoc, SwTxtFmtColl* pColl,
 // Ist der String-Pointer definiert, dann erfrage nur die
 // Beschreibung der Attribute, !! es legt keine Vorlage an !!
 
-SvxFrameDirection GetDefaultFrameDirection(ULONG nLanguage)
+SvxFrameDirection GetDefaultFrameDirection(sal_uLong nLanguage)
 {
     SvxFrameDirection eResult = (MsLangId::isRightToLeft( static_cast<LanguageType>(nLanguage)) ?
             FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP);
     return eResult;
 }
 
-SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
+SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
 {
     OSL_ENSURE(
         (RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END) ||
@@ -328,8 +330,8 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
             "Falsche AutoFormat-Id" );
 
     SwTxtFmtColl* pNewColl;
-    USHORT nOutLvlBits = 0;
-    for( USHORT n = 0; n < pTxtFmtCollTbl->Count(); ++n )
+    sal_uInt16 nOutLvlBits = 0;
+    for( sal_uInt16 n = 0; n < pTxtFmtCollTbl->Count(); ++n )
     {
         if( nId == ( pNewColl = (*pTxtFmtCollTbl)[ n ] )->GetPoolFmtId() )
         {
@@ -341,7 +343,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
     }
 
     // bis hierher nicht gefunden -> neu anlegen
-    USHORT nResId = 0;
+    sal_uInt16 nResId = 0;
     if( RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END )
         nResId = RC_POOLCOLL_TEXT_BEGIN - RES_POOLCOLL_TEXT_BEGIN;
     else if (RES_POOLCOLL_LISTS_BEGIN <= nId && nId < RES_POOLCOLL_LISTS_END)
@@ -364,7 +366,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 
     // ein Set fuer alle zusetzenden Attribute
     SwAttrSet aSet( GetAttrPool(), aTxtFmtCollSetRange );
-    USHORT nParent = GetPoolParent( nId );
+    sal_uInt16 nParent = GetPoolParent( nId );
 
     {
 
@@ -389,7 +391,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
         /* koreans do not like SvxScriptItem(TRUE) */
         if (bRegardLanguage)
         {
-            ULONG nAppLanguage = GetAppLanguage();
+            sal_uLong nAppLanguage = GetAppLanguage();
             if (GetDefaultFrameDirection(nAppLanguage) ==
                 FRMDIR_HORI_RIGHT_TOP)
             {
@@ -398,7 +400,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
             }
             if (nAppLanguage == LANGUAGE_KOREAN)
             {
-                SvxScriptSpaceItem aScriptSpace(FALSE, RES_PARATR_SCRIPTSPACE);
+                SvxScriptSpaceItem aScriptSpace(sal_False, RES_PARATR_SCRIPTSPACE);
                 aSet.Put(aScriptSpace);
             }
         }
@@ -459,7 +461,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 
     case RES_POOLCOLL_HEADLINE_BASE:            // Basis Ueberschrift
         {
-            static const USHORT aFntInit[] = {
+            static const sal_uInt16 aFntInit[] = {
                 DEFAULTFONT_LATIN_HEADING,  RES_CHRATR_FONT,
                                 RES_CHRATR_LANGUAGE, LANGUAGE_ENGLISH_US,
                 DEFAULTFONT_CJK_HEADING,    RES_CHRATR_CJK_FONT,
@@ -469,9 +471,9 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
                 0
             };
 
-            for( const USHORT* pArr = aFntInit; *pArr; pArr += 4 )
+            for( const sal_uInt16* pArr = aFntInit; *pArr; pArr += 4 )
             {
-                USHORT nLng = ((SvxLanguageItem&)GetDefault( *(pArr+2) )).GetLanguage();
+                sal_uInt16 nLng = ((SvxLanguageItem&)GetDefault( *(pArr+2) )).GetLanguage();
                 if( LANGUAGE_DONTKNOW == nLng )
                     nLng = *(pArr+3);
 
@@ -487,7 +489,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
             SvxULSpaceItem aUL( PT_12, PT_6, RES_UL_SPACE );
             if( get(IDocumentSettingAccess::HTML_MODE) )
                 aUL.SetLower( HTML_PARSPACE );
-            aSet.Put( SvxFmtKeepItem( TRUE, RES_KEEP ));
+            aSet.Put( SvxFmtKeepItem( sal_True, RES_KEEP ));
 
             pNewColl->SetNextTxtFmtColl( *GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
 
@@ -504,40 +506,40 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
     case RES_POOLCOLL_SIGNATURE:            // Unterschrift
     case RES_POOLCOLL_TABLE:                // Tabelle-Inhalt
         {
-            SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
+            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
             aSet.Put( aLN );
         }
         break;
 
     case RES_POOLCOLL_HEADLINE1:        // Ueberschrift 1
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 0, FALSE );
+        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 0, sal_False );
         break;
     case RES_POOLCOLL_HEADLINE2:        // Ueberschrift 2
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 1, TRUE );
+        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 1, sal_True );
         break;
     case RES_POOLCOLL_HEADLINE3:        // Ueberschrift 3
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 2, FALSE );
+        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 2, sal_False );
         break;
     case RES_POOLCOLL_HEADLINE4:        // Ueberschrift 4
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 3, TRUE );
+        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 3, sal_True );
         break;
     case RES_POOLCOLL_HEADLINE5:        // Ueberschrift 5
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 4, FALSE );
+        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 4, sal_False );
         break;
     case RES_POOLCOLL_HEADLINE6:        // Ueberschrift 6
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 5, FALSE );
+        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 5, sal_False );
         break;
     case RES_POOLCOLL_HEADLINE7:        // Ueberschrift 7
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 6, FALSE );
+        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 6, sal_False );
         break;
     case RES_POOLCOLL_HEADLINE8:        // Ueberschrift 8
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 7, FALSE );
+        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 7, sal_False );
         break;
     case RES_POOLCOLL_HEADLINE9:        // Ueberschrift 9
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 8, FALSE );
+        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 8, sal_False );
         break;
     case RES_POOLCOLL_HEADLINE10:       // Ueberschrift 10
-        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 9, FALSE );
+        lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 9, sal_False );
         break;
 
 
@@ -551,7 +553,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
     case RES_POOLCOLL_FOOTERL:
     case RES_POOLCOLL_FOOTERR:
         {
-            SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
+            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
             aSet.Put( aLN );
 
             long nRightMargin = lcl_GetRightMargin( *this );
@@ -568,7 +570,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
         {
             SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
-            SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
+            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
             aSet.Put( aLN );
         }
         break;
@@ -581,7 +583,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
             aLR.SetTxtLeft( GetMetricVal( CM_05 ));
             SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
             aSet.Put( aLR );
-            SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
+            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
             aSet.Put( aLN );
         }
         break;
@@ -592,7 +594,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
             aSet.Put( aUL );
             SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE ) );
             SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
-            SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
+            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
             aSet.Put( aLN );
         }
         break;
@@ -608,7 +610,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
         {
             SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetLower( PT_3 );
             aSet.Put( aUL );
-            SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
+            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
             aSet.Put( aLN );
         }
         break;
@@ -622,117 +624,117 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
                 SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetLower( PT_3 );
                 aSet.Put( aUL );
             }
-            SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
+            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
             aSet.Put( aLN );
         }
         break;
 
     // Benutzer-Verzeichnisse:
     case RES_POOLCOLL_TOX_USERH:            // Header
-        lcl_SetRegister( this, aSet, 0, TRUE, FALSE );
+        lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
         {
-            SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
+            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
             aSet.Put( aLN );
         }
         break;
     case RES_POOLCOLL_TOX_USER1:            // 1. Ebene
-        lcl_SetRegister( this, aSet, 0, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 0, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_USER2:            // 2. Ebene
-        lcl_SetRegister( this, aSet, 1, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 1, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_USER3:            // 3. Ebene
-        lcl_SetRegister( this, aSet, 2, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 2, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_USER4:            // 4. Ebene
-        lcl_SetRegister( this, aSet, 3, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 3, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_USER5:            // 5. Ebene
-        lcl_SetRegister( this, aSet, 4, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 4, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_USER6:            // 6. Ebene
-        lcl_SetRegister( this, aSet, 5, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 5, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_USER7:            // 7. Ebene
-        lcl_SetRegister( this, aSet, 6, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 6, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_USER8:            // 8. Ebene
-        lcl_SetRegister( this, aSet, 7, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 7, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_USER9:            // 9. Ebene
-        lcl_SetRegister( this, aSet, 8, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 8, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_USER10:           // 10. Ebene
-        lcl_SetRegister( this, aSet, 9, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 9, sal_False, sal_True );
         break;
 
     // Index-Verzeichnisse
     case RES_POOLCOLL_TOX_IDXH:         // Header
-        lcl_SetRegister( this, aSet, 0, TRUE, FALSE );
+        lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
         {
-            SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
+            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
             aSet.Put( aLN );
         }
         break;
     case RES_POOLCOLL_TOX_IDX1:         // 1. Ebene
-        lcl_SetRegister( this, aSet, 0, FALSE, FALSE );
+        lcl_SetRegister( this, aSet, 0, sal_False, sal_False );
         break;
     case RES_POOLCOLL_TOX_IDX2:         // 2. Ebene
-        lcl_SetRegister( this, aSet, 1, FALSE, FALSE );
+        lcl_SetRegister( this, aSet, 1, sal_False, sal_False );
         break;
     case RES_POOLCOLL_TOX_IDX3:         // 3. Ebene
-        lcl_SetRegister( this, aSet, 2, FALSE, FALSE );
+        lcl_SetRegister( this, aSet, 2, sal_False, sal_False );
         break;
     case RES_POOLCOLL_TOX_IDXBREAK:     // Trenner
-        lcl_SetRegister( this, aSet, 0, FALSE, FALSE );
+        lcl_SetRegister( this, aSet, 0, sal_False, sal_False );
         break;
 
     // Inhalts-Verzeichnisse
     case RES_POOLCOLL_TOX_CNTNTH:       // Header
-        lcl_SetRegister( this, aSet, 0, TRUE, FALSE );
+        lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
         {
-            SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
+            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
             aSet.Put( aLN );
         }
         break;
     case RES_POOLCOLL_TOX_CNTNT1:       // 1. Ebene
-        lcl_SetRegister( this, aSet, 0, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 0, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_CNTNT2:       // 2. Ebene
-        lcl_SetRegister( this, aSet, 1, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 1, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_CNTNT3:       // 3. Ebene
-        lcl_SetRegister( this, aSet, 2, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 2, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_CNTNT4:       // 4. Ebene
-        lcl_SetRegister( this, aSet, 3, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 3, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_CNTNT5:       // 5. Ebene
-        lcl_SetRegister( this, aSet, 4, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 4, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_CNTNT6:       // 6. Ebene
-        lcl_SetRegister( this, aSet, 5, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 5, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_CNTNT7:       // 7. Ebene
-        lcl_SetRegister( this, aSet, 6, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 6, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_CNTNT8:       // 8. Ebene
-        lcl_SetRegister( this, aSet, 7, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 7, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_CNTNT9:       // 9. Ebene
-        lcl_SetRegister( this, aSet, 8, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 8, sal_False, sal_True );
         break;
     case RES_POOLCOLL_TOX_CNTNT10:      // 10. Ebene
-        lcl_SetRegister( this, aSet, 9, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 9, sal_False, sal_True );
         break;
 
     case RES_POOLCOLL_TOX_ILLUSH:
     case RES_POOLCOLL_TOX_OBJECTH:
     case RES_POOLCOLL_TOX_TABLESH:
     case RES_POOLCOLL_TOX_AUTHORITIESH:
-        lcl_SetRegister( this, aSet, 0, TRUE, FALSE );
+        lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
         {
-            SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
+            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
             aSet.Put( aLN );
         }
         break;
@@ -740,7 +742,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
     case RES_POOLCOLL_TOX_OBJECT1:
     case RES_POOLCOLL_TOX_TABLES1:
     case RES_POOLCOLL_TOX_AUTHORITIES1:
-        lcl_SetRegister( this, aSet, 0, FALSE, TRUE );
+        lcl_SetRegister( this, aSet, 0, sal_False, sal_True );
     break;
 
 
@@ -1001,7 +1003,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
             aBox.SetLine( &aNew, BOX_LINE_BOTTOM );
 
             aSet.Put( aBox );
-            aSet.Put( SwParaConnectBorderItem( FALSE ) );
+            aSet.Put( SwParaConnectBorderItem( sal_False ) );
             SetAllScriptItem( aSet, SvxFontHeightItem(120, 100, RES_CHRATR_FONTSIZE) );
 
             SvxULSpaceItem aUL( RES_UL_SPACE );
@@ -1012,7 +1014,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
             }
             aUL.SetLower( HTML_PARSPACE );
             aSet.Put( aUL);
-            SwFmtLineNumber aLN; aLN.SetCountLines( FALSE );
+            SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
             aSet.Put( aLN );
         }
         break;
@@ -1054,7 +1056,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 
     // pruefe, ob diese "Auto-Collection" in Dokument schon/noch
     // benutzt wird
-bool SwDoc::IsPoolTxtCollUsed( USHORT nId ) const
+bool SwDoc::IsPoolTxtCollUsed( sal_uInt16 nId ) const
 {
     OSL_ENSURE(
         (RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END) ||
@@ -1066,32 +1068,32 @@ bool SwDoc::IsPoolTxtCollUsed( USHORT nId ) const
             "Falsche AutoFormat-Id" );
 
     SwTxtFmtColl* pNewColl = 0;
-    BOOL bFnd = FALSE;
-    for( USHORT n = 0; !bFnd && n < pTxtFmtCollTbl->Count(); ++n )
+    sal_Bool bFnd = sal_False;
+    for( sal_uInt16 n = 0; !bFnd && n < pTxtFmtCollTbl->Count(); ++n )
     {
         pNewColl = (*pTxtFmtCollTbl)[ n ];
         if( nId == pNewColl->GetPoolFmtId() )
-            bFnd = TRUE;
+            bFnd = sal_True;
     }
 
     if( !bFnd || !pNewColl->GetDepends() )
-        return FALSE;
+        return sal_False;
 
-    SwAutoFmtGetDocNode aGetHt( &aNodes );
+    SwAutoFmtGetDocNode aGetHt( &GetNodes() );
     return !pNewColl->GetInfo( aGetHt );
 }
 
     // Gebe das "Auto[matische]-Format" mit der Id zurueck. Existiert
     // es noch nicht, dann erzeuge es
 
-SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
+SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
 {
     SwFmt *pNewFmt = 0;
     SwFmt *pDeriveFmt = 0;
 
     SvPtrarr* pArray[ 2 ];
-    USHORT nArrCnt = 1, nRCId = 0;
-    USHORT* pWhichRange = 0;
+    sal_uInt16 nArrCnt = 1, nRCId = 0;
+    sal_uInt16* pWhichRange = 0;
 
     switch( nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
     {
@@ -1142,7 +1144,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
     OSL_ENSURE( nRCId, "ungueltige Id" );
 
     while( nArrCnt-- )
-        for( USHORT n = 0; n < (*pArray[nArrCnt]).Count(); ++n )
+        for( sal_uInt16 n = 0; n < (*pArray[nArrCnt]).Count(); ++n )
             if( nId == ( pNewFmt = (SwFmt*)(*pArray[ nArrCnt ] )[ n ] )->
                     GetPoolFmtId() )
             {
@@ -1154,30 +1156,27 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
     SwAttrSet aSet( GetAttrPool(), pWhichRange );
 
     {
-        BOOL bIsModified = IsModified();
+        sal_Bool bIsModified = IsModified();
 
-        BOOL bDoesUndo = DoesUndo();
-        DoUndo(FALSE);
-        switch (nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
         {
-        case POOLGRP_CHARFMT:
-            pNewFmt = _MakeCharFmt( aNm, pDeriveFmt, FALSE, TRUE );
-
-            break;
-        case POOLGRP_FRAMEFMT:
-            pNewFmt = _MakeFrmFmt(aNm, pDeriveFmt, FALSE, TRUE );
-
-            break;
-        default:
-            break;
+            ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+            switch (nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
+            {
+                case POOLGRP_CHARFMT:
+                    pNewFmt = _MakeCharFmt(aNm, pDeriveFmt, sal_False, sal_True);
+                break;
+                case POOLGRP_FRAMEFMT:
+                    pNewFmt = _MakeFrmFmt(aNm, pDeriveFmt, sal_False, sal_True);
+                break;
+                default:
+                break;
+            }
         }
-
-        DoUndo(bDoesUndo);
 
         if( !bIsModified )
             ResetModified();
         pNewFmt->SetPoolFmtId( nId );
-        pNewFmt->SetAuto( FALSE );      // kein Auto-Format
+        pNewFmt->SetAuto( sal_False );      // kein Auto-Format
     }
 
     switch( nId )
@@ -1338,7 +1337,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
             aSet.Put( SwFmtAnchor( FLY_AT_PAGE ));
             aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ));
-            aSet.Put( SvxOpaqueItem( FALSE ));
+            aSet.Put( SvxOpaqueItem( sal_False ));
             aSet.Put( SwFmtSurround( SURROUND_THROUGHT ));
         }
         break;
@@ -1350,11 +1349,11 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
             aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
 
             SvxProtectItem aProtect( RES_PROTECT );
-            aProtect.SetSizeProtect( TRUE );
-            aProtect.SetPosProtect( TRUE );
+            aProtect.SetSizeProtect( sal_True );
+            aProtect.SetPosProtect( sal_True );
             aSet.Put( aProtect );
 
-            pNewFmt->SetAutoUpdateFmt( TRUE );
+            pNewFmt->SetAutoUpdateFmt( sal_True );
         }
         break;
     }
@@ -1379,12 +1378,12 @@ SwCharFmt* SwDoc::GetCharFmtFromPool( sal_uInt16 nId )
 
     // pruefe, ob diese "Auto-Collection" in Dokument schon/noch
     // benutzt wird
-bool SwDoc::IsPoolFmtUsed( USHORT nId ) const
+bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
 {
     SwFmt *pNewFmt = 0;
     const SvPtrarr* pArray[ 2 ];
-    USHORT nArrCnt = 1;
-    BOOL bFnd = TRUE;
+    sal_uInt16 nArrCnt = 1;
+    sal_Bool bFnd = sal_True;
 
     if( RES_POOLCHR_BEGIN <= nId && nId < RES_POOLCHR_END )
     {
@@ -1398,18 +1397,18 @@ bool SwDoc::IsPoolFmtUsed( USHORT nId ) const
     }
     else
     {
-        OSL_ENSURE( FALSE, "ungueltige Id" );
-        bFnd = FALSE;
+        OSL_ENSURE( sal_False, "ungueltige Id" );
+        bFnd = sal_False;
     }
 
     if( bFnd )
     {
-        bFnd = FALSE;
+        bFnd = sal_False;
         while( nArrCnt-- && !bFnd )
-            for( USHORT n = 0; !bFnd && n < (*pArray[nArrCnt]).Count(); ++n )
+            for( sal_uInt16 n = 0; !bFnd && n < (*pArray[nArrCnt]).Count(); ++n )
                 if( nId == ( pNewFmt = (SwFmt*)(*pArray[ nArrCnt ] )[ n ] )->
                         GetPoolFmtId() )
-                    bFnd = TRUE;
+                    bFnd = sal_True;
     }
 
     // nicht gefunden oder keine Abhaengigen ?
@@ -1417,11 +1416,11 @@ bool SwDoc::IsPoolFmtUsed( USHORT nId ) const
     {
         // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
         // (auch indirekte fuer Format-Ableitung! )
-        SwAutoFmtGetDocNode aGetHt( &aNodes );
+        SwAutoFmtGetDocNode aGetHt( &GetNodes() );
         bFnd = !pNewFmt->GetInfo( aGetHt );
     }
     else
-        bFnd = FALSE;
+        bFnd = sal_False;
 
     return bFnd;
 }
@@ -1447,7 +1446,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             "Falsche AutoFormat-Id" );
 
     SwPageDesc *pNewPgDsc;
-    USHORT n;
+    sal_uInt16 n;
 
     for( n = 0; n < aPageDescs.Count(); ++n )
         if( nId == ( pNewPgDsc = aPageDescs[ n ] )->GetPoolFmtId() )
@@ -1465,12 +1464,12 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     ResId aResId( sal_uInt32(RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN), *pSwResMgr );
     String aNm( aResId );
     {
-        BOOL bIsModified = IsModified();
+        sal_Bool bIsModified = IsModified();
 
-        BOOL bDoesUndo = DoesUndo();
-        DoUndo(FALSE);
-        n = MakePageDesc( aNm, 0, bRegardLanguage );
-        DoUndo(bDoesUndo);
+        {
+            ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+            n = MakePageDesc( aNm, 0, bRegardLanguage );
+        }
 
         pNewPgDsc = aPageDescs[ n ];
         pNewPgDsc->SetPoolFmtId( nId );
@@ -1483,11 +1482,11 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     aLR.SetLeft( GetMetricVal( CM_1 ) * 2 );
     aLR.SetRight( aLR.GetLeft() );
     SvxULSpaceItem aUL( RES_UL_SPACE );
-    aUL.SetUpper( (USHORT)aLR.GetLeft() );
-    aUL.SetLower( (USHORT)aLR.GetLeft() );
+    aUL.SetUpper( (sal_uInt16)aLR.GetLeft() );
+    aUL.SetLower( (sal_uInt16)aLR.GetLeft() );
 
     SwAttrSet aSet( GetAttrPool(), aPgFrmFmtSetRange );
-    BOOL bSetLeft = TRUE;
+    sal_Bool bSetLeft = sal_True;
 
     switch( nId )
     {
@@ -1520,7 +1519,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             lcl_GetStdPgSize( this, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
-            bSetLeft = FALSE;
+            bSetLeft = sal_False;
             if( pNewPgDsc )
                 pNewPgDsc->SetUseOn( nsUseOnPage::PD_LEFT );
         }
@@ -1530,7 +1529,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             lcl_GetStdPgSize( this, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
-            bSetLeft = FALSE;
+            bSetLeft = sal_False;
             if( pNewPgDsc )
                 pNewPgDsc->SetUseOn( nsUseOnPage::PD_RIGHT );
         }
@@ -1549,7 +1548,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             if( pNewPgDsc )
             {
                 pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
-                pNewPgDsc->SetLandscape( TRUE );
+                pNewPgDsc->SetLandscape( sal_True );
             }
         }
         break;
@@ -1558,8 +1557,8 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
         {
             lcl_GetStdPgSize( this, aSet );
             aLR.SetRight( GetMetricVal( CM_1 ));
-            aUL.SetUpper( (USHORT)aLR.GetRight() );
-            aUL.SetLower( (USHORT)aLR.GetRight() );
+            aUL.SetUpper( (sal_uInt16)aLR.GetRight() );
+            aUL.SetLower( (sal_uInt16)aLR.GetRight() );
             aSet.Put( aLR );
             aSet.Put( aUL );
 
@@ -1595,7 +1594,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             if( pNewPgDsc )
             {
                 pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
-                pNewPgDsc->SetLandscape( TRUE );
+                pNewPgDsc->SetLandscape( sal_True );
             }
        }
        break;
@@ -1613,13 +1612,13 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     return pNewPgDsc;
 }
 
-SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
+SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
 {
     OSL_ENSURE( RES_POOLNUMRULE_BEGIN <= nId && nId < RES_POOLNUMRULE_END,
             "Falsche AutoFormat-Id" );
 
     SwNumRule* pNewRule;
-    USHORT n;
+    sal_uInt16 n;
 
     for( n = 0; n < GetNumRuleTbl().Count(); ++n )
         if( nId == ( pNewRule = GetNumRuleTbl()[ n ] )->GetPoolFmtId() )
@@ -1643,13 +1642,13 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
                                   = numfunc::GetDefaultPositionAndSpaceMode(); //#i89178#
     // <--
     {
-        BOOL bIsModified = IsModified();
+        sal_Bool bIsModified = IsModified();
 
-        n = MakeNumRule( aNm, 0, FALSE, eNumberFormatPositionAndSpaceMode );
+        n = MakeNumRule( aNm, 0, sal_False, eNumberFormatPositionAndSpaceMode );
 
         pNewRule = GetNumRuleTbl()[ n ];
         pNewRule->SetPoolFmtId( nId );
-        pNewRule->SetAutoRule( FALSE );
+        pNewRule->SetAutoRule( sal_False );
 
         if( RES_POOLNUMRULE_NUM1 <= nId && nId <= RES_POOLNUMRULE_NUM5 )
             pNumCFmt = GetCharFmtFromPool( RES_POOLCHR_NUM_LEVEL );
@@ -1674,22 +1673,22 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
             aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetSuffix( aDotStr );
 
-            static const USHORT aAbsSpace[ MAXLEVEL ] =
+            static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
                 {
 //              cm: 0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
                     283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
                 };
 #ifdef USE_MEASUREMENT
-            static const USHORT aAbsSpaceInch[ MAXLEVEL ] =
+            static const sal_uInt16 aAbsSpaceInch[ MAXLEVEL ] =
                 {
                     283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
                 };
-            const USHORT* pArr = MEASURE_METRIC ==
+            const sal_uInt16* pArr = MEASURE_METRIC ==
                                 SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
-            const USHORT* pArr = aAbsSpace;
+            const sal_uInt16* pArr = aAbsSpace;
 #endif
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -1721,7 +1720,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
 
     case RES_POOLNUMRULE_NUM2:
         {
-            static const USHORT aAbsSpace[ MAXLEVEL ] =
+            static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
                 {
                     283,  283,  567,  709,      // 0.50, 0.50, 1.00, 1.25
                     850, 1021, 1304, 1474,      // 1.50, 1.80, 2.30, 2.60
@@ -1729,19 +1728,19 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
                 };
 
 #ifdef USE_MEASUREMENT
-            static const USHORT aAbsSpaceInch[ MAXLEVEL ] =
+            static const sal_uInt16 aAbsSpaceInch[ MAXLEVEL ] =
                 {
                     385,  385,  770,  963,
                    1155, 1386, 1771, 2002,
                    2156, 2387
                 };
 
-            const USHORT* pArr = MEASURE_METRIC ==
+            const sal_uInt16* pArr = MEASURE_METRIC ==
                                 SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
-            const USHORT* pArr = aAbsSpace;
+            const sal_uInt16* pArr = aAbsSpace;
 #endif
             SwNumFmt aFmt;
 
@@ -1755,7 +1754,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
                 aFmt.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
             }
 
-            USHORT nSpace = 0;
+            sal_uInt16 nSpace = 0;
             for( n = 0; n < MAXLEVEL; ++n )
             {
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -1784,7 +1783,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
             aFmt.SetCharFmt( pNumCFmt );
             aFmt.SetIncludeUpperLevels( 1 );
 
-            USHORT nOffs = GetMetricVal( CM_1 ) * 3;
+            sal_uInt16 nOffs = GetMetricVal( CM_1 ) * 3;
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -1823,22 +1822,22 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
             aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetSuffix( aDotStr );
 
-            static const USHORT aAbsSpace[ MAXLEVEL ] =
+            static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
                 {
 //              cm: 0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
                     283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
                 };
 #ifdef USE_MEASUREMENT
-            static const USHORT aAbsSpaceInch[ MAXLEVEL ] =
+            static const sal_uInt16 aAbsSpaceInch[ MAXLEVEL ] =
                 {
                     283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
                 };
-            const USHORT* pArr = MEASURE_METRIC ==
+            const sal_uInt16* pArr = MEASURE_METRIC ==
                                 SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
-            const USHORT* pArr = aAbsSpace;
+            const sal_uInt16* pArr = aAbsSpace;
 #endif
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -1872,7 +1871,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
     case RES_POOLNUMRULE_NUM5:
         {
             // [ First, LSpace ]
-            static const USHORT aAbsSpace0to2[] =
+            static const sal_uInt16 aAbsSpace0to2[] =
                 {
                     227,  227,      // 0.40, 0.40,
                     369,  624,      // 0.65, 1.10,
@@ -1880,18 +1879,18 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
                 };
 
 #ifdef USE_MEASUREMENT
-            static const USHORT aAbsSpaceInch0to2[] =
+            static const sal_uInt16 aAbsSpaceInch0to2[] =
                 {
                     308,  308,
                     501,  847,
                     347, 1194
                 };
-            const USHORT* pArr0to2 = MEASURE_METRIC ==
+            const sal_uInt16* pArr0to2 = MEASURE_METRIC ==
                             SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                 ? aAbsSpace0to2
                                 : aAbsSpaceInch0to2;
 #else
-            const USHORT* pArr0to2 = aAbsSpace0to2;
+            const sal_uInt16* pArr0to2 = aAbsSpace0to2;
 #endif
             SwNumFmt aFmt;
 
@@ -1962,7 +1961,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
             aFmt.SetBulletChar( cBulletChar );
-            USHORT nOffs = GetMetricVal( CM_01 ) * 4,
+            sal_uInt16 nOffs = GetMetricVal( CM_01 ) * 4,
                    nOffs2 = GetMetricVal( CM_1 ) * 2;
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -2006,22 +2005,22 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
             aFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
             aFmt.SetBulletChar( cBulletChar );
 
-            static const USHORT aAbsSpace[ MAXLEVEL ] =
+            static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
                 {
 //              cm: 0,4  0,8  1,2  1,6  2,0   2,4   2,8   3,2   3,6   4,0
                     227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
                 };
 #ifdef USE_MEASUREMENT
-            static const USHORT aAbsSpaceInch[ MAXLEVEL ] =
+            static const sal_uInt16 aAbsSpaceInch[ MAXLEVEL ] =
                 {
                     227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
                 };
-            const USHORT* pArr = MEASURE_METRIC ==
+            const sal_uInt16* pArr = MEASURE_METRIC ==
                                 SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
-            const USHORT* pArr = aAbsSpace;
+            const sal_uInt16* pArr = aAbsSpace;
 #endif
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -2062,22 +2061,22 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
             aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
             aFmt.SetBulletChar( 0x2013 );
 
-            static const USHORT aAbsSpace[ MAXLEVEL ] =
+            static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
                 {
 //              cm: 0,3  0,6  0,9  1,2  1,5  1,8   2,1   2,4   2,7   3,0
                     170, 340, 510, 680, 850, 1020, 1191, 1361, 1531, 1701
                 };
 #ifdef USE_MEASUREMENT
-            static const USHORT aAbsSpaceInch[ MAXLEVEL ] =
+            static const sal_uInt16 aAbsSpaceInch[ MAXLEVEL ] =
                 {
                     170, 340, 510, 680, 850, 1020, 1191, 1361, 1531, 1701
                 };
-            const USHORT* pArr = MEASURE_METRIC ==
+            const sal_uInt16* pArr = MEASURE_METRIC ==
                                 SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
-            const USHORT* pArr = aAbsSpace;
+            const sal_uInt16* pArr = aAbsSpace;
 #endif
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -2118,7 +2117,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
             aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
 
-            USHORT nOffs = GetMetricVal( CM_01 ) * 4;
+            sal_uInt16 nOffs = GetMetricVal( CM_01 ) * 4;
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2159,22 +2158,22 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
             aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
 
-            static const USHORT aAbsSpace[ MAXLEVEL ] =
+            static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
                 {
 //              cm: 0,4  0,8  1,2  1,6  2,0   2,4   2,8   3,2   3,6   4,0
                     227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
                 };
 #ifdef USE_MEASUREMENT
-            static const USHORT aAbsSpaceInch[ MAXLEVEL ] =
+            static const sal_uInt16 aAbsSpaceInch[ MAXLEVEL ] =
                 {
                     227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
                 };
-            const USHORT* pArr = MEASURE_METRIC ==
+            const sal_uInt16* pArr = MEASURE_METRIC ==
                                 SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
-            const USHORT* pArr = aAbsSpace;
+            const sal_uInt16* pArr = aAbsSpace;
 #endif
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -2222,22 +2221,22 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
             aFmt.SetBulletChar( 0x2717 );
             aFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
 
-            static const USHORT aAbsSpace[ MAXLEVEL ] =
+            static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
                 {
 //              cm: 0,4  0,8  1,2  1,6  2,0   2,4   2,8   3,2   3,6   4,0
                     227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
                 };
 #ifdef USE_MEASUREMENT
-            static const USHORT aAbsSpaceInch[ MAXLEVEL ] =
+            static const sal_uInt16 aAbsSpaceInch[ MAXLEVEL ] =
                 {
                     227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
                 };
-            const USHORT* pArr = MEASURE_METRIC ==
+            const sal_uInt16* pArr = MEASURE_METRIC ==
                                 SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
-            const USHORT* pArr = aAbsSpace;
+            const sal_uInt16* pArr = aAbsSpace;
 #endif
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -2275,26 +2274,26 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
 
     // pruefe, ob diese "Auto-Collection" in Dokument schon/noch
     // benutzt wird
-bool SwDoc::IsPoolPageDescUsed( USHORT nId ) const
+bool SwDoc::IsPoolPageDescUsed( sal_uInt16 nId ) const
 {
     OSL_ENSURE( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
             "Falsche AutoFormat-Id" );
     SwPageDesc *pNewPgDsc = 0;
-    BOOL bFnd = FALSE;
-    for( USHORT n = 0; !bFnd && n < aPageDescs.Count(); ++n )
+    sal_Bool bFnd = sal_False;
+    for( sal_uInt16 n = 0; !bFnd && n < aPageDescs.Count(); ++n )
     {
         pNewPgDsc = aPageDescs[ n ];
         if( nId == pNewPgDsc->GetPoolFmtId() )
-            bFnd = TRUE;
+            bFnd = sal_True;
     }
 
     // nicht gefunden oder keine Abhaengigen ?
     if( !bFnd || !pNewPgDsc->GetDepends() )     // ??????
-        return FALSE;
+        return sal_False;
 
     // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
     // (auch indirekte fuer Format-Ableitung! )
-    SwAutoFmtGetDocNode aGetHt( &aNodes );
+    SwAutoFmtGetDocNode aGetHt( &GetNodes() );
     return !pNewPgDsc->GetInfo( aGetHt );
 }
 
@@ -2303,7 +2302,7 @@ sal_Bool SwDoc::IsUsed( const SwModify& rModify ) const
 {
     // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
     // (auch indirekte fuer Format-Ableitung! )
-    SwAutoFmtGetDocNode aGetHt( &aNodes );
+    SwAutoFmtGetDocNode aGetHt( &GetNodes() );
     return !rModify.GetInfo( aGetHt );
 }
 
@@ -2319,12 +2318,12 @@ sal_Bool SwDoc::IsUsed( const SwNumRule& rRule ) const
 
     // Suche die Position vom Vorlagen-Namen. Ist nicht vorhanden
     // dann fuege neu ein
-USHORT SwDoc::SetDocPattern( const String& rPatternName )
+sal_uInt16 SwDoc::SetDocPattern( const String& rPatternName )
 {
     OSL_ENSURE( rPatternName.Len(), "kein Dokument-Vorlagenname" );
 
-    USHORT nNewPos = aPatternNms.Count();
-    for( USHORT n = 0; n < aPatternNms.Count(); ++n )
+    sal_uInt16 nNewPos = aPatternNms.Count();
+    for( sal_uInt16 n = 0; n < aPatternNms.Count(); ++n )
         if( !aPatternNms[n] )
         {
             if( nNewPos == aPatternNms.Count() )
@@ -2342,9 +2341,9 @@ USHORT SwDoc::SetDocPattern( const String& rPatternName )
     return nNewPos;
 }
 
-USHORT GetPoolParent( USHORT nId )
+sal_uInt16 GetPoolParent( sal_uInt16 nId )
 {
-    USHORT nRet = USHRT_MAX;
+    sal_uInt16 nRet = USHRT_MAX;
     if( POOLGRP_NOCOLLID & nId )        // 1 == Formate / 0 == Collections
     {
         switch( ( COLL_GET_RANGE_BITS | POOLGRP_NOCOLLID ) & nId )

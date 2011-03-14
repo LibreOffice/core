@@ -30,51 +30,87 @@
 #define IDOCUMENTUNDOREDO_HXX_INCLUDED
 
 #include <sal/types.h>
+
 #include <swundo.hxx>
 
 
-class SwUndoIter;
 class SwRewriter;
-class String;
-class SwUndoIds;
 class SwNodes;
 class SwUndo;
 
+namespace sw {
+    class RepeatContext;
+}
 
-typedef sal_uInt16 SwUndoNoModifiedPosition;
+
 
 /** IDocumentUndoRedo
 */
 class IDocumentUndoRedo
 {
 public:
-    virtual void SetUndoNoResetModified() = 0;
 
-    virtual bool IsUndoNoResetModified() const = 0;
-
-    /** Care for UndoHistory of document.
-        UndoHistory is reset at Save, SaveAs, Create ???
+    /** Enable/Disable Undo.
     */
-    virtual void DoUndo(bool bUn) = 0;
+    virtual void DoUndo(bool const bDoUndo) = 0;
 
+    /** Is Undo enabled?
+    */
     virtual bool DoesUndo() const = 0;
 
-    /** Concatenate continuous Insert/Delete/Overwrite of characters.
-        Default is ::com::sun::star::sdbcx::Group-Undo.
+    /** Enable/Disable Group Undo.
+        This determines whether successive Insert/Delete/Overwrite
+        actions are combined.
     */
-    virtual void DoGroupUndo(bool bUn) = 0;
+    virtual void DoGroupUndo(bool const bDoUndo) = 0;
 
+    /** Is Group Undo enabled?
+    */
     virtual bool DoesGroupUndo() const = 0;
 
-    /* Undo:
-       0 last action, else actions until start of parenthesis nUndoId.
-       Restored range is set in rUndoRange.
+    /** Enable/Disable Undo for Drawing objects.
+     */
+    virtual void DoDrawUndo(bool const bDoUndo) = 0;
+
+    /** Is Undo for Drawing objects enabled?
+        for Draw-Undo: writer wants to handle actions on Flys on its own.
+     */
+    virtual bool DoesDrawUndo() const = 0;
+
+    /** Set the position at which the document is in the "unmodified" state
+        to the current position in the Undo stack.
     */
-    virtual bool Undo( SwUndoIter& ) = 0;
+    virtual void SetUndoNoModifiedPosition() = 0;
+
+    /** Prevent updates to the "unmodified" state position
+        via SetUndoNoResetModified().
+    */
+    virtual void LockUndoNoModifiedPosition() = 0;
+
+    /** Allow updates to the "unmodified" state position
+        via SetUndoNoResetModified().
+    */
+    virtual void UnLockUndoNoModifiedPosition() = 0;
+
+    /** Disable (re)setting the document modified flag on Undo/Redo.
+    */
+    virtual void SetUndoNoResetModified() = 0;
+
+    /** Is setting the document modified flag on Undo/Redo disabled?
+    */
+    virtual bool IsUndoNoResetModified() const = 0;
+
+    /** Execute Undo.
+
+        @return     true if executing the last Undo action was successful.
+    */
+    virtual sal_Bool Undo() = 0;
 
     /** Opens undo block.
 
-        @param nUndoId        undo ID for the start object
+        @remark     StartUndo() and EndUndo() do nothing if !DoesUndo().
+
+        @param nUndoId        undo ID for the list action
         @param pRewriter      rewriter for comments @see SwUndo::GetComment
 
         If the given nUndoId is equal to zero an undo object with ID
@@ -82,94 +118,167 @@ public:
 
         @return the undo ID of the created object
     */
-    virtual SwUndoId StartUndo( SwUndoId eUndoId, const SwRewriter * pRewriter) = 0;
+    virtual SwUndoId StartUndo(SwUndoId const eUndoId,
+                SwRewriter const*const  pRewriter) = 0;
 
     /**
        Closes undo block.
 
-       @param nUndoId         undo ID for the closure object
+       @remark     StartUndo() and EndUndo() do nothing if !DoesUndo().
+
+       @param nUndoId         undo ID for the list action
        @param pRewriter       rewriter for comments @see SwUndo::GetComment
 
-       If the given nUndoId is equal to zero an undo object with ID
-       UNDO_START will be generated.
-
-       If pRewriter is not equal to zero the given rewriter will be
-       set for the generated closure object and the corresponding
-       start object. Otherwise an existent rewriter in theIDocumentRedlineAccess
-       corresponding start object will be propagated to the generated
-       closure object.
+       If the given nUndoId is not UNDO_EMPTY or UNDO_END, the comment of
+       the resulting list action will be set via the nUndoId, applying the
+       given pRewriter (if not 0).  Otherwise the comment of the resulting
+       list action is unchanged if it has an UndoId that is not UNDO_START
+       set by StartUndo, and in case the UndoId is UNDO_START the comment
+       of the list action defaults to the comment of the last action
+       contained in the list action.
     */
-    virtual SwUndoId EndUndo( SwUndoId eUndoId, const SwRewriter * pRewriter) = 0;
+    virtual SwUndoId EndUndo(SwUndoId const eUndoId,
+                SwRewriter const*const  pRewriter) = 0;
 
     /**
-        Deletes all UndoObjects (for methods that do something with the Nodes Array
-        without corresponding Undo!)
+        Delete all Undo actions.
+        Of course Undo will be disabled during deletion.
     */
     virtual void DelAllUndoObj() = 0;
 
-    /** Returns the ID of the last action that can be undone.
-        Alternatively USHRT_MAX is filling VARARR with ::com::sun::star::sdbcx::User-UndoIdDs
+    /** Get Id and comment of last Undo action.
+        @param o_pStr       if not 0, receives comment of last Undo action.
+        @param o_pId        if not 0, receives Id of last Undo action.
+        @return     true if there is a Undo action, false if none
     */
-    virtual SwUndoId GetUndoIds(String* pStr, SwUndoIds *pUndoIds) const = 0;
+    virtual bool GetLastUndoInfo(::rtl::OUString *const o_pStr,
+                SwUndoId *const o_pId) const = 0;
 
-    virtual String GetUndoIdsStr(String* pStr, SwUndoIds *pUndoIds) const = 0;
-
-    /** Are there parentheses with this ID?
+    /** Get comments of Undo actions.
+        @return     comments of all top-level Undo actions.
     */
-    virtual bool HasUndoId(SwUndoId eId) const = 0;
+    virtual SwUndoComments_t GetUndoComments() const = 0;
 
-    /* @@@MAINTAINABILITY-HORROR@@@
-       Implementation details made public.
-       The following three methods are required only for Undo.
-       They should not be called otherwise.
+    /** Execute Redo.
+
+        @return     true if executing the first Redo action was successful.
     */
-    virtual const SwNodes* GetUndoNds() const = 0;
+    virtual sal_Bool Redo() = 0;
 
-    virtual SwUndo* RemoveLastUndo(SwUndoId eUndoId) = 0;
-
-    /** To prevent an undo array overflow when
-        doing nested undos, undo may have to be disabled. Undo-intensive
-        actions (like auto-format) should check this manually.
+    /** Get comment of first Redo action.
+        @param o_pStr       if not 0, receives comment of first Redo action.
+        @return     true if there is a Redo action, false if none
     */
-    virtual bool HasTooManyUndos() const = 0;
+    virtual bool GetFirstRedoInfo(::rtl::OUString *const o_pStr) const = 0;
 
-    virtual bool Redo( SwUndoIter& ) = 0;
-
-    /** Return the ID of the last undoable action.
-        Fills VARARR with RedoIds if required.
+    /** Get comments of Redo actions.
+        @return     comments of all top-level Redo actions.
     */
-    virtual SwUndoId GetRedoIds( String* pStr, SwUndoIds *pRedoIds) const = 0;
+    virtual SwUndoComments_t GetRedoComments() const = 0;
 
-    virtual String GetRedoIdsStr( String* pStr, SwUndoIds *pRedoIds) const = 0;
-
-    virtual bool Repeat( SwUndoIter&, sal_uInt16 nRepeatCnt) = 0;
-
-    /** Return the ID of the last repeatable action.
-        Fills VARARR mit RedoIds if required.
+    /** Repeat the last Undo action.
+        @return     true if repeating the last Undo Redo action was attempted.
     */
-    virtual SwUndoId GetRepeatIds( String* pStr, SwUndoIds *pRedoIds) const = 0;
+    virtual bool Repeat(::sw::RepeatContext & rContext,
+                sal_uInt16 const nRepeatCnt) = 0;
 
-    virtual String GetRepeatIdsStr( String* pStr, SwUndoIds *pRedoIds) const = 0;
-
-    /** Internal shortcut for Insert at end.
+    /** Get Id and comment of last Undo action, if it is Repeat capable.
+        @param o_pStr       if not 0, receives comment of last Undo action
+                            if it is Repeat capable.
+        @return     Id of last Undo action if it is Repeat capable,
+                    or UNDO_EMPTY if there is none or it is not Repeat capable.
     */
-    virtual void AppendUndo(SwUndo*) = 0;
+    virtual SwUndoId GetRepeatInfo(::rtl::OUString *const o_pStr) const = 0;
 
-    /** Delete all UndoObjects of nUndoPos until the end of the Undo-Array.
+    /** Add new Undo action.
+        Takes over ownership of pUndo.
+        @remark     calls ClearRedo(), except for UNDO_START/UNDO_END.
+        @remark     does nothing if !DoesUndo().
+    */
+    virtual void AppendUndo(SwUndo *const pUndo) = 0;
+
+    /** Delete all Redo actions.
     */
     virtual void ClearRedo() = 0;
 
-    /** Manipulates the position of the undo stack which reset the modified flag
+    /* Is the given nodes array the Undo nodes array?
     */
-    virtual void setUndoNoModifiedPosition( SwUndoNoModifiedPosition ) = 0;
-
-    /** Gets the position of the undo stack which reset the modified flag
-    */
-    virtual SwUndoNoModifiedPosition getUndoNoModifiedPosition() const = 0;
+    virtual bool IsUndoNodes(SwNodes const& rNodes) const = 0;
 
 protected:
-     virtual ~IDocumentUndoRedo() {};
+    virtual ~IDocumentUndoRedo() {};
 };
+
+
+namespace sw {
+
+class UndoGuard
+{
+public:
+
+    UndoGuard(IDocumentUndoRedo & rUndoRedo)
+        :   m_rUndoRedo(rUndoRedo)
+        ,   m_bUndoWasEnabled(rUndoRedo.DoesUndo())
+    {
+        m_rUndoRedo.DoUndo(false);
+    }
+    ~UndoGuard()
+    {
+        m_rUndoRedo.DoUndo(m_bUndoWasEnabled);
+    }
+
+    bool UndoWasEnabled() const
+    {
+        return m_bUndoWasEnabled;
+    }
+
+private:
+    IDocumentUndoRedo & m_rUndoRedo;
+    bool const m_bUndoWasEnabled;
+};
+
+class GroupUndoGuard
+{
+public:
+
+    GroupUndoGuard(IDocumentUndoRedo & rUndoRedo)
+        :   m_rUndoRedo(rUndoRedo)
+        ,   m_bGroupUndoWasEnabled(rUndoRedo.DoesGroupUndo())
+    {
+        m_rUndoRedo.DoGroupUndo(false);
+    }
+    ~GroupUndoGuard()
+    {
+        m_rUndoRedo.DoGroupUndo(m_bGroupUndoWasEnabled);
+    }
+
+private:
+    IDocumentUndoRedo & m_rUndoRedo;
+    bool const m_bGroupUndoWasEnabled;
+};
+
+class DrawUndoGuard
+{
+public:
+
+    DrawUndoGuard(IDocumentUndoRedo & rUndoRedo)
+        :   m_rUndoRedo(rUndoRedo)
+        ,   m_bDrawUndoWasEnabled(rUndoRedo.DoesDrawUndo())
+    {
+        m_rUndoRedo.DoDrawUndo(false);
+    }
+    ~DrawUndoGuard()
+    {
+        m_rUndoRedo.DoDrawUndo(m_bDrawUndoWasEnabled);
+    }
+
+private:
+    IDocumentUndoRedo & m_rUndoRedo;
+    bool const m_bDrawUndoWasEnabled;
+};
+
+
+} // namespace sw
 
 #endif
 

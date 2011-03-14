@@ -81,8 +81,8 @@
  * Also adjust NUM_ATTRIBUTE_STACKS in atrhndl.hxx.
  *************************************************************************/
 
-const BYTE StackPos[ static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
-                     static_cast<USHORT>(RES_CHRATR_BEGIN) + 1 ] =
+const sal_uInt8 StackPos[ static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
+                     static_cast<sal_uInt16>(RES_CHRATR_BEGIN) + 1 ] =
 {
      0, //                                       //  0
      1, // RES_CHRATR_CASEMAP = RES_CHRATR_BEGIN //  1
@@ -173,7 +173,7 @@ const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr )
  * extracts pool item of type nWhich from rAttr
  *************************************************************************/
 
-const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, USHORT nWhich )
+const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, sal_uInt16 nWhich )
 {
     if ( RES_TXTATR_INETFMT == rAttr.Which() ||
          RES_TXTATR_CHARFMT == rAttr.Which() ||
@@ -184,7 +184,7 @@ const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, USHORT nWhich )
 
        bool bInParent = RES_TXTATR_AUTOFMT != rAttr.Which();
        const SfxPoolItem* pItem;
-       BOOL bRet = SFX_ITEM_SET == pSet->GetItemState( nWhich, bInParent, &pItem );
+       sal_Bool bRet = SFX_ITEM_SET == pSet->GetItemState( nWhich, bInParent, &pItem );
 
        return bRet ? pItem : 0;
     }
@@ -197,13 +197,13 @@ const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, USHORT nWhich )
  * checks if item is included in character/inet/auto style
  *************************************************************************/
 
-BOOL IsItemIncluded( const USHORT nWhich, const SwTxtAttr *pAttr )
+sal_Bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     const SfxItemSet* pItemSet = CharFmt::GetItemSet( pAttr->GetAttr() );
     if ( pItemSet )
-        bRet = SFX_ITEM_SET == pItemSet->GetItemState( nWhich, TRUE );
+        bRet = SFX_ITEM_SET == pItemSet->GetItemState( nWhich, sal_True );
 
     return bRet;
 }
@@ -248,7 +248,7 @@ bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
                 rInetAttr.SetVisited( false );
                 const SwCharFmt* pTmpFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
                 const SfxPoolItem* pItem;
-                pTmpFmt->GetItemState( RES_CHRATR_COLOR, TRUE, &pItem );
+                pTmpFmt->GetItemState( RES_CHRATR_COLOR, sal_True, &pItem );
                 *pColor = ((SvxColorItem*)pItem)->GetValue();
                 rInetAttr.SetVisited( true );
             }
@@ -304,7 +304,7 @@ inline SwAttrHandler::SwAttrStack::SwAttrStack()
  *                      SwAttrHandler::SwAttrStack::Insert()
  *************************************************************************/
 
-void SwAttrHandler::SwAttrStack::Insert( const SwTxtAttr& rAttr, const USHORT nPos )
+void SwAttrHandler::SwAttrStack::Insert( const SwTxtAttr& rAttr, const sal_uInt16 nPos )
 {
     // do we still have enough space?
     if ( nCount >= nSize )
@@ -349,7 +349,7 @@ void SwAttrHandler::SwAttrStack::Insert( const SwTxtAttr& rAttr, const USHORT nP
 
 void SwAttrHandler::SwAttrStack::Remove( const SwTxtAttr& rAttr )
 {
-    USHORT nPos = Pos( rAttr );
+    sal_uInt16 nPos = Pos( rAttr );
     if ( nPos < nCount )
     {
         memmove( pArray + nPos, pArray + nPos + 1,
@@ -372,13 +372,13 @@ const SwTxtAttr* SwAttrHandler::SwAttrStack::Top() const
  *                      SwAttrHandler::SwAttrStack::Pos()
  *************************************************************************/
 
-USHORT SwAttrHandler::SwAttrStack::Pos( const SwTxtAttr& rAttr ) const
+sal_uInt16 SwAttrHandler::SwAttrStack::Pos( const SwTxtAttr& rAttr ) const
 {
     if ( ! nCount )
         // empty stack
         return USHRT_MAX;
 
-    for ( USHORT nIdx = nCount; nIdx > 0; )
+    for ( sal_uInt16 nIdx = nCount; nIdx > 0; )
     {
         if ( &rAttr == pArray[ --nIdx ] )
             return nIdx;
@@ -414,8 +414,8 @@ void SwAttrHandler::Init( const SwAttrSet& rAttrSet,
     mpIDocumentSettingAccess = &rIDocumentSettingAcces;
     mpShell = pSh;
 
-    for ( USHORT i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++ )
-        pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i, TRUE );
+    for ( sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++ )
+        pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i, sal_True );
 }
 
 void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
@@ -436,9 +436,9 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
     if ( pAS && pAS->Count() )
     {
         SfxItemIter aIter( *pAS );
-        USHORT nWhich;
+        sal_uInt16 nWhich;
         const SfxPoolItem* pItem = aIter.GetCurItem();
-        while( TRUE )
+        while( sal_True )
         {
             nWhich = pItem->Which();
             if (isCHRATR(nWhich))
@@ -462,7 +462,7 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
 
 void SwAttrHandler::Reset( )
 {
-    for ( USHORT i = 0; i < NUM_ATTRIBUTE_STACKS; i++ )
+    for ( sal_uInt16 i = 0; i < NUM_ATTRIBUTE_STACKS; i++ )
         aAttrStack[ i ].Reset();
 }
 
@@ -481,10 +481,10 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
         const SfxItemSet* pSet = CharFmt::GetItemSet( rAttr.GetAttr() );
         if ( !pSet ) return;
 
-        for ( USHORT i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
+        for ( sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         {
             const SfxPoolItem* pItem;
-            BOOL bRet = SFX_ITEM_SET == pSet->GetItemState( i, rAttr.Which() != RES_TXTATR_AUTOFMT, &pItem );
+            sal_Bool bRet = SFX_ITEM_SET == pSet->GetItemState( i, rAttr.Which() != RES_TXTATR_AUTOFMT, &pItem );
 
             if ( bRet )
             {
@@ -527,7 +527,7 @@ sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
     if ( RES_TXTATR_WITHEND_END <= rItem.Which() )
         return sal_False;
 
-    USHORT nStack = StackPos[ rItem.Which() ];
+    sal_uInt16 nStack = StackPos[ rItem.Which() ];
 
     // attributes originating from redlining have highest priority
     // second priority are hyperlink attributes, which have a color replacement
@@ -540,7 +540,7 @@ sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
         return sal_True;
     }
 
-    USHORT nPos = aAttrStack[ nStack ].Count();
+    sal_uInt16 nPos = aAttrStack[ nStack ].Count();
     OSL_ENSURE( nPos, "empty stack?" );
     aAttrStack[ nStack ].Insert( rAttr, nPos - 1 );
     return sal_False;
@@ -564,14 +564,14 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
         const SfxItemSet* pSet = CharFmt::GetItemSet( rAttr.GetAttr() );
         if ( !pSet ) return;
 
-        for ( USHORT i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
+        for ( sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         {
             const SfxPoolItem* pItem;
-            BOOL bRet = SFX_ITEM_SET == pSet->GetItemState( i, RES_TXTATR_AUTOFMT != rAttr.Which(), &pItem );
+            sal_Bool bRet = SFX_ITEM_SET == pSet->GetItemState( i, RES_TXTATR_AUTOFMT != rAttr.Which(), &pItem );
             if ( bRet )
             {
                 // we remove rAttr from the appropriate stack
-                USHORT nStackPos = StackPos[ i ];
+                sal_uInt16 nStackPos = StackPos[ i ];
                 aAttrStack[ nStackPos ].Remove( rAttr );
                 // reset font according to attribute on top of stack
                 // or default value
@@ -610,12 +610,12 @@ void SwAttrHandler::Pop( const SwTxtAttr& rAttr )
 /*************************************************************************
  *                      SwAttrHandler::ActivateTop()
  *************************************************************************/
-void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
+void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
 {
     OSL_ENSURE( nAttr < RES_TXTATR_WITHEND_END,
             "I cannot activate this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
 
-    const USHORT nStackPos = StackPos[ nAttr ];
+    const sal_uInt16 nStackPos = StackPos[ nAttr ];
     const SwTxtAttr* pTopAt = aAttrStack[ nStackPos ].Top();
     if ( pTopAt )
     {
@@ -656,7 +656,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
     {
         // ruby stack has no more attributes
         // check, if an rotation attribute has to be applied
-        USHORT nTwoLineStack = StackPos[ RES_CHRATR_TWO_LINES ];
+        sal_uInt16 nTwoLineStack = StackPos[ RES_CHRATR_TWO_LINES ];
         sal_Bool bTwoLineAct = sal_False;
         const SfxPoolItem* pTwoLineItem = 0;
         const SwTxtAttr* pTwoLineAttr = aAttrStack[ nTwoLineStack ].Top();
@@ -674,7 +674,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
             return;
 
         // eventually, an rotate attribute has to be activated
-        USHORT nRotateStack = StackPos[ RES_CHRATR_ROTATE ];
+        sal_uInt16 nRotateStack = StackPos[ RES_CHRATR_ROTATE ];
         const SfxPoolItem* pRotateItem = 0;
         const SwTxtAttr* pRotateAttr = aAttrStack[ nRotateStack ].Top();
 
@@ -744,7 +744,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             break;
         case RES_CHRATR_UNDERLINE :
         {
-            const USHORT nStackPos = StackPos[ RES_CHRATR_HIDDEN ];
+            const sal_uInt16 nStackPos = StackPos[ RES_CHRATR_HIDDEN ];
             const SwTxtAttr* pTopAt = aAttrStack[ nStackPos ].Top();
 
             const SfxPoolItem* pTmpItem = pTopAt ?
@@ -856,7 +856,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             if ( bRuby )
                 break;
 
-            USHORT nTwoLineStack = StackPos[ RES_CHRATR_TWO_LINES ];
+            sal_uInt16 nTwoLineStack = StackPos[ RES_CHRATR_TWO_LINES ];
             sal_Bool bTwoLineAct = sal_False;
             const SfxPoolItem* pTwoLineItem = 0;
             const SwTxtAttr* pTwoLineAttr = aAttrStack[ nTwoLineStack ].Top();
@@ -898,7 +898,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             if ( bRuby )
                 break;
 
-            USHORT nRotateStack = StackPos[ RES_CHRATR_ROTATE ];
+            sal_uInt16 nRotateStack = StackPos[ RES_CHRATR_ROTATE ];
             const SfxPoolItem* pRotateItem = 0;
             const SwTxtAttr* pRotateAttr = aAttrStack[ nRotateStack ].Top();
 
@@ -942,7 +942,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
 
 // Takes the default font and calculated the ascent and height
 void SwAttrHandler::GetDefaultAscentAndHeight( ViewShell* pShell, OutputDevice& rOut,
-                                               USHORT& nAscent, USHORT& nHeight ) const
+                                               sal_uInt16& nAscent, sal_uInt16& nHeight ) const
 {
     OSL_ENSURE( pFnt, "No font available for GetDefaultAscentAndHeight" );
 

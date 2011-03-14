@@ -55,7 +55,7 @@ SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aTypeFT     (this, SW_RES(FT_DBTYPE)),
     aTypeLB     (this, SW_RES(LB_DBTYPE)),
     aSelectionFT(this, SW_RES(FT_DBSELECTION)),
-    aDatabaseTLB(this, SW_RES(TLB_DBLIST), 0, aEmptyStr, FALSE),
+    aDatabaseTLB(this, SW_RES(TLB_DBLIST), 0, aEmptyStr, sal_False),
     aAddDBFT(this,      SW_RES(FT_ADDDB)),
     aAddDBPB(this,      SW_RES(PB_ADDDB)),
     aConditionFT(this, SW_RES(FT_DBCONDITION)),
@@ -92,13 +92,13 @@ void SwFldDBPage::Reset(const SfxItemSet&)
 {
     Init(); // Allgemeine initialisierung
 
-    aTypeLB.SetUpdateMode(FALSE);
-    USHORT nOldPos = aTypeLB.GetSelectEntryPos();
+    aTypeLB.SetUpdateMode(sal_False);
+    sal_uInt16 nOldPos = aTypeLB.GetSelectEntryPos();
     sOldDBName = aDatabaseTLB.GetDBName(sOldTableName, sOldColumnName);
 
     aTypeLB.Clear();
 
-    USHORT nPos, nTypeId, i;
+    sal_uInt16 nPos, nTypeId, i;
 
     if (!IsFldEdit())
     {
@@ -125,11 +125,11 @@ void SwFldDBPage::Reset(const SfxItemSet&)
 
     aFormatLB.Clear();
 
-    USHORT nSize = GetFldMgr().GetFormatCount(TYP_DBSETNUMBERFLD, FALSE, IsFldDlgHtmlMode());
+    sal_uInt16 nSize = GetFldMgr().GetFormatCount(TYP_DBSETNUMBERFLD, sal_False, IsFldDlgHtmlMode());
     for( i = 0; i < nSize; ++i )
     {
-        USHORT nEntryPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr(TYP_DBSETNUMBERFLD, i));
-        USHORT nFmtId = GetFldMgr().GetFormatId( TYP_DBSETNUMBERFLD, i );
+        sal_uInt16 nEntryPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr(TYP_DBSETNUMBERFLD, i));
+        sal_uInt16 nFmtId = GetFldMgr().GetFormatId( TYP_DBSETNUMBERFLD, i );
         aFormatLB.SetEntryData( nEntryPos, reinterpret_cast<void*>(nFmtId) );
         if( SVX_NUM_ARABIC == nFmtId )
             aFormatLB.SelectEntryPos( nEntryPos );
@@ -163,11 +163,11 @@ void SwFldDBPage::Reset(const SfxItemSet&)
         if(sUserData.GetToken(0, ';').EqualsIgnoreCaseAscii(USER_DATA_VERSION_1))
         {
             String sVal = sUserData.GetToken(1, ';');
-            USHORT nVal = (USHORT)sVal.ToInt32();
+            sal_uInt16 nVal = (sal_uInt16)sVal.ToInt32();
             if(nVal != USHRT_MAX)
             {
                 for(i = 0; i < aTypeLB.GetEntryCount(); i++)
-                    if(nVal == (USHORT)(ULONG)aTypeLB.GetEntryData(i))
+                    if(nVal == (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(i))
                     {
                         aTypeLB.SelectEntryPos(i);
                         break;
@@ -177,7 +177,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
     }
     TypeHdl(0);
 
-    aTypeLB.SetUpdateMode(TRUE);
+    aTypeLB.SetUpdateMode(sal_True);
     aTypeLB.SetSelectHdl(LINK(this, SwFldDBPage, TypeHdl));
     aTypeLB.SetDoubleClickHdl(LINK(this, SwFldDBPage, InsertHdl));
 
@@ -191,7 +191,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
     }
 }
 
-BOOL SwFldDBPage::FillItemSet(SfxItemSet& )
+sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
 {
     String sTableName, sColumnName;
     SwDBData aData;
@@ -208,11 +208,11 @@ BOOL SwFldDBPage::FillItemSet(SfxItemSet& )
 
     if(aData.sDataSource.getLength())       // Ohne Datenbank kein neuer Feldbefehl
     {
-        USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
         String aVal(aValueED.GetText());
         String aName(aConditionED.GetText());
-        ULONG nFormat = 0;
-        USHORT nSubType = 0;
+        sal_uLong nFormat = 0;
+        sal_uInt16 nSubType = 0;
 
         String sDBName = aData.sDataSource;
         sDBName += DB_DELIM;
@@ -237,7 +237,7 @@ BOOL SwFldDBPage::FillItemSet(SfxItemSet& )
             break;
 
         case TYP_DBSETNUMBERFLD:
-            nFormat = (USHORT)(ULONG)aFormatLB.GetEntryData(
+            nFormat = (sal_uInt16)(sal_uLong)aFormatLB.GetEntryData(
                                 aFormatLB.GetSelectEntryPos() );
             break;
         }
@@ -245,7 +245,7 @@ BOOL SwFldDBPage::FillItemSet(SfxItemSet& )
 
         String sTempDBName, sTempTableName, sTempColumnName;
         sTempDBName = aDatabaseTLB.GetDBName(sTempTableName, sTempColumnName);
-        BOOL bDBListBoxChanged = sOldDBName != sTempDBName ||
+        sal_Bool bDBListBoxChanged = sOldDBName != sTempDBName ||
             sOldTableName != sTempTableName || sOldColumnName != sTempColumnName;
         if (!IsFldEdit() ||
             aConditionED.GetSavedValue() != aConditionED.GetText() ||
@@ -257,7 +257,7 @@ BOOL SwFldDBPage::FillItemSet(SfxItemSet& )
         }
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 SfxTabPage* SwFldDBPage::Create(    Window* pParent,
@@ -266,7 +266,7 @@ SfxTabPage* SwFldDBPage::Create(    Window* pParent,
     return ( new SwFldDBPage( pParent, rAttrSet ) );
 }
 
-USHORT SwFldDBPage::GetGroup()
+sal_uInt16 SwFldDBPage::GetGroup()
 {
     return GRP_DB;
 }
@@ -274,7 +274,7 @@ USHORT SwFldDBPage::GetGroup()
 IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 {
     // Alte ListBoxPos sichern
-    const USHORT nOld = GetTypeSel();
+    const sal_uInt16 nOld = GetTypeSel();
 
     // Aktuelle ListBoxPos
     SetTypeSel(aTypeLB.GetSelectEntryPos());
@@ -290,8 +290,8 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
         SwWrtShell *pSh = GetWrtShell();
         if(!pSh)
             pSh = ::GetActiveWrtShell();
-        BOOL bCond = FALSE, bSetNo = FALSE, bFormat = FALSE, bDBFormat = FALSE;
-        USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+        sal_Bool bCond = sal_False, bSetNo = sal_False, bFormat = sal_False, bDBFormat = sal_False;
+        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
         aDatabaseTLB.ShowColumns(nTypeId == TYP_DBFLD);
 
@@ -314,8 +314,8 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
         switch (nTypeId)
         {
             case TYP_DBFLD:
-                bFormat = TRUE;
-                bDBFormat = TRUE;
+                bFormat = sal_True;
+                bDBFormat = sal_True;
                 aNumFormatLB.Show();
                 aFormatLB.Hide();
 
@@ -335,10 +335,10 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
                 break;
 
             case TYP_DBNUMSETFLD:
-                bSetNo = TRUE;
+                bSetNo = sal_True;
                 // kein break!
             case TYP_DBNEXTSETFLD:
-                bCond = TRUE;
+                bCond = sal_True;
                 if (IsFldEdit())
                 {
                     aConditionED.SetText(GetCurField()->GetPar1());
@@ -350,14 +350,14 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
                 break;
 
             case TYP_DBSETNUMBERFLD:
-                bFormat = TRUE;
+                bFormat = sal_True;
                 aNewFormatRB.Check();
                 aNumFormatLB.Hide();
                 aFormatLB.Show();
                 if( IsFldEdit() )
                 {
-                    for( USHORT nI = aFormatLB.GetEntryCount(); nI; )
-                        if( GetCurField()->GetFormat() == (USHORT)(ULONG)
+                    for( sal_uInt16 nI = aFormatLB.GetEntryCount(); nI; )
+                        if( GetCurField()->GetFormat() == (sal_uInt16)(sal_uLong)
                             aFormatLB.GetEntryData( --nI ))
                         {
                             aFormatLB.SelectEntryPos( nI );
@@ -385,7 +385,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
             aValueED.SetText(aEmptyStr);
             if (bCond)
                 aConditionED.SetText( String::CreateFromAscii(
-                        RTL_CONSTASCII_STRINGPARAM( "TRUE" )));
+                        RTL_CONSTASCII_STRINGPARAM( "sal_True" )));
             else
                 aConditionED.SetText(aEmptyStr);
         }
@@ -406,8 +406,8 @@ IMPL_LINK( SwFldDBPage, NumSelectHdl, NumFormatListBox *, pLB )
 
 void SwFldDBPage::CheckInsert()
 {
-    BOOL bInsert = TRUE;
-    USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+    sal_Bool bInsert = sal_True;
+    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
     SvLBoxEntry* pEntry = aDatabaseTLB.GetCurEntry();
 
@@ -421,11 +421,11 @@ void SwFldDBPage::CheckInsert()
         bInsert &= pEntry != 0;
     }
     else
-        bInsert = FALSE;
+        bInsert = sal_False;
 
     if (nTypeId == TYP_DBNUMSETFLD)
     {
-        BOOL bHasValue = aValueED.GetText().Len() != 0;
+        sal_Bool bHasValue = aValueED.GetText().Len() != 0;
 
         bInsert &= bHasValue;
     }
@@ -439,7 +439,7 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
     SvLBoxEntry* pEntry = pColEntry = pBox->GetCurEntry();
     if (pEntry)
     {
-        USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
         pEntry = aDatabaseTLB.GetParent(pEntry);
 
@@ -450,13 +450,13 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
 
         if (nTypeId == TYP_DBFLD)
         {
-            BOOL bNumFormat = FALSE;
+            sal_Bool bNumFormat = sal_False;
 
             if (pEntry != 0)
             {
                 String sTableName;
                 String sColumnName;
-                BOOL bIsTable;
+                sal_Bool bIsTable;
                 String sDBName = aDatabaseTLB.GetDBName(sTableName, sColumnName, &bIsTable);
                 bNumFormat = GetFldMgr().IsDBNumeric(sDBName,
                             sTableName,
@@ -499,19 +499,19 @@ void    SwFldDBPage::FillUserData()
     String sData( String::CreateFromAscii(
                         RTL_CONSTASCII_STRINGPARAM( USER_DATA_VERSION )));
     sData += ';';
-    USHORT nTypeSel = aTypeLB.GetSelectEntryPos();
+    sal_uInt16 nTypeSel = aTypeLB.GetSelectEntryPos();
 
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;
     else
-        nTypeSel = (USHORT)(ULONG)aTypeLB.GetEntryData( nTypeSel );
+        nTypeSel = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData( nTypeSel );
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
 }
 
 void SwFldDBPage::ActivateMailMergeAddress()
 {
-    ULONG nData = TYP_DBFLD;
+    sal_uLong nData = TYP_DBFLD;
     aTypeLB.SelectEntryPos(aTypeLB.GetEntryPos( (const void*) nData ));
     aTypeLB.GetSelectHdl().Call(&aTypeLB);
     const SwDBData& rData = SW_MOD()->GetDBConfig()->GetAddressSource();

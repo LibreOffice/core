@@ -33,6 +33,7 @@
 #ifndef _MATH_CFGITEM_HXX_
 #define _MATH_CFGITEM_HXX_
 
+#include <deque>
 #include <vector>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -42,7 +43,6 @@
 #include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>
-#include <svl/svarray.hxx>
 #include <vcl/timer.hxx>
 
 #include <symbol.hxx>
@@ -61,11 +61,11 @@ struct SmCfgOther;
 struct SmFontFormat
 {
     String      aName;
-    INT16       nCharSet;
-    INT16       nFamily;
-    INT16       nPitch;
-    INT16       nWeight;
-    INT16       nItalic;
+    sal_Int16       nCharSet;
+    sal_Int16       nFamily;
+    sal_Int16       nPitch;
+    sal_Int16       nWeight;
+    sal_Int16       nItalic;
 
     SmFontFormat();
     SmFontFormat( const Font &rFont );
@@ -83,13 +83,9 @@ struct SmFntFmtListEntry
     SmFntFmtListEntry( const String &rId, const SmFontFormat &rFntFmt );
 };
 
-
-SV_DECL_OBJARR( SmFntFmtListEntryArr, SmFntFmtListEntry, 8, 8 )
-
-
 class SmFontFormatList
 {
-    SmFntFmtListEntryArr    aEntries;
+    std::deque<SmFntFmtListEntry> aEntries;
     bool                    bModified;
 
     // disallow copy-constructor and assignment-operator for now
@@ -104,12 +100,12 @@ public:
     void    RemoveFontFormat( const String &rFntFmtId );
 
     const SmFontFormat *    GetFontFormat( const String &rFntFmtId ) const;
-    const SmFontFormat *    GetFontFormat( USHORT nPos ) const;
+    const SmFontFormat *    GetFontFormat( size_t nPos ) const;
     const String            GetFontFormatId( const SmFontFormat &rFntFmt ) const;
     const String            GetFontFormatId( const SmFontFormat &rFntFmt, bool bAdd );
-    const String            GetFontFormatId( USHORT nPos ) const;
+    const String            GetFontFormatId( size_t nPos ) const;
     const String            GetNewFontFormatId() const;
-    USHORT                  GetCount() const    { return aEntries.Count(); }
+    size_t                  GetCount() const    { return aEntries.size(); }
 
     bool    IsModified() const          { return bModified; }
     void    SetModified( bool bVal )    { bModified = bVal; }
@@ -190,15 +186,18 @@ public:
     void            SetPrintFrame( bool bVal );
     SmPrintSize     GetPrintSize() const;
     void            SetPrintSize( SmPrintSize eSize );
-    USHORT          GetPrintZoomFactor() const;
-    void            SetPrintZoomFactor( USHORT nVal );
+    sal_uInt16          GetPrintZoomFactor() const;
+    void            SetPrintZoomFactor( sal_uInt16 nVal );
 
+    bool            IsSaveOnlyUsedSymbols() const;
+    void            SetSaveOnlyUsedSymbols( bool bVal );
     bool            IsIgnoreSpacesRight() const;
     void            SetIgnoreSpacesRight( bool bVal );
     bool            IsAutoRedraw() const;
     void            SetAutoRedraw( bool bVal );
     bool            IsShowFormulaCursor() const;
     void            SetShowFormulaCursor( bool bVal );
+    void            SetAutoRedraw( sal_Bool bVal );
 };
 
 /////////////////////////////////////////////////////////////////

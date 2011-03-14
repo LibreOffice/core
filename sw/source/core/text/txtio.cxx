@@ -29,10 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL == 0
-#error Who broke the makefiles?
-#endif
+#ifdef DBG_UTIL
 
 #include "viewsh.hxx"       // IsDbg()
 #include "viewopt.hxx"      // IsDbg()
@@ -735,5 +732,6 @@ SvStream &SwDropPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 #endif /* OSL_DEBUG_LEVEL */
 
+#endif // DBG_UTIL
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

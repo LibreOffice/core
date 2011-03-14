@@ -154,7 +154,7 @@ void    SwOneExampleFrame::CreateControl()
             uno::Sequence<beans::PropertyValue> aSeq(3);
             beans::PropertyValue* pValues = aSeq.getArray();
             pValues[0].Name = C2U("ReadOnly");
-            BOOL bTrue = sal_True;
+            sal_Bool bTrue = sal_True;
             pValues[0].Value.setValue(&bTrue, ::getBooleanCppuType());
             pValues[1].Name = C2U("OpenFlags");
             pValues[1].Value <<= C2U("-RB");
@@ -343,7 +343,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
     return 0;
 }
 
-void SwOneExampleFrame::ClearDocument( BOOL bStartUpdateTimer )
+void SwOneExampleFrame::ClearDocument( sal_Bool bStartUpdateTimer )
 {
     uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
     if( xTunnel.is() )
@@ -368,8 +368,8 @@ void SwOneExampleFrame::ClearDocument( BOOL bStartUpdateTimer )
         }
         else
         {
-            _xCursor->gotoStart(FALSE);
-            _xCursor->gotoEnd(TRUE);
+            _xCursor->gotoStart(sal_False);
+            _xCursor->gotoEnd(sal_True);
             _xCursor->setString(OUString());
         }
     }

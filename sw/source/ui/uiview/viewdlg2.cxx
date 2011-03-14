@@ -31,7 +31,7 @@
 
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-
+#include <sfx2/objface.hxx>
 #include <fldmgr.hxx>
 #include <expfld.hxx>
 #include <modcfg.hxx>
@@ -84,10 +84,10 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg( DLG_INS_FOOTNOTE,
-                                                        pMDI, *pWrtShell, TRUE );
+                                                        pMDI, *pWrtShell, sal_True );
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
-            pDlg->SetHelpId(FN_EDIT_FOOTNOTE);
+            pDlg->SetHelpId(GetStaticInterface()->GetSlot(FN_EDIT_FOOTNOTE)->GetCommand());
             pDlg->SetText( SW_RESSTR(STR_EDIT_FOOTNOTE) );
             pDlg->Execute();
             delete pDlg;
@@ -96,15 +96,15 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
     }
 }
 
-void SwView::AutoCaption(const USHORT nType, const SvGlobalName *pOleId)
+void SwView::AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId)
 {
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
+    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
     if (pModOpt->IsInsWithCaption(bWeb))
     {
         const InsCaptionOpt *pOpt = pModOpt->GetCapOption(bWeb, (SwCapObjType)nType, pOleId);
-        if (pOpt && pOpt->UseCaption() == TRUE)
+        if (pOpt && pOpt->UseCaption() == sal_True)
             InsertCaption(pOpt);
     }
 }
@@ -120,7 +120,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     SwWrtShell &rSh = GetWrtShell();
     if(rName.Len())
     {
-        USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
+        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
         if( USHRT_MAX != nPoolId )
             rSh.GetTxtCollFromPool(nPoolId);
             // Pool-Vorlage existiert nicht: Existiert sie am Dokument?
@@ -159,16 +159,16 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
         if (pFldType)
         {
             pFldType->SetDelimiter(pOpt->GetSeparator());
-            pFldType->SetOutlineLvl( static_cast< BYTE >(pOpt->GetLevel()) );
+            pFldType->SetOutlineLvl( static_cast< sal_uInt8 >(pOpt->GetLevel()) );
         }
     }
 
-    USHORT       nID    = USHRT_MAX;
+    sal_uInt16       nID    = USHRT_MAX;
     SwFieldType* pType  = 0;
-    const USHORT nCount = aMgr.GetFldTypeCount();
+    const sal_uInt16 nCount = aMgr.GetFldTypeCount();
     if( rName.Len() )
     {
-        for (USHORT i = 0; i < nCount; ++i)
+        for (sal_uInt16 i = 0; i < nCount; ++i)
         {
             pType = aMgr.GetFldType(USHRT_MAX, i);
             String aTmpName( pType->GetName() );
@@ -193,7 +193,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     if(pType)
         ((SwSetExpFieldType*)pType)->SetSeqFormat(pOpt->GetNumType());
 
-    rSh.UpdateExpFlds( TRUE );
+    rSh.UpdateExpFlds( sal_True );
 
     rSh.EndAllAction();
 

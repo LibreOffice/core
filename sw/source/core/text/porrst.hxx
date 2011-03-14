@@ -157,8 +157,8 @@ class SwControlCharPortion : public SwLinePortion
 {
 
 private:
-    mutable USHORT mnViewWidth;            // used to cache a calculated value
-    mutable USHORT mnHalfCharWidth;        // used to cache a calculated value
+    mutable sal_uInt16 mnViewWidth;            // used to cache a calculated value
+    mutable sal_uInt16 mnHalfCharWidth;        // used to cache a calculated value
     sal_Unicode mcChar;
 
 public:

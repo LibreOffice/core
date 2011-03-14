@@ -38,8 +38,8 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwHeaderAndFooterEatSpacingItem : public SfxBoolItem
 {
 public:
-    SwHeaderAndFooterEatSpacingItem( USHORT nId = RES_HEADER_FOOTER_EAT_SPACING,
-                                     BOOL bPrt = FALSE ) : SfxBoolItem( nId, bPrt ) {}
+    SwHeaderAndFooterEatSpacingItem( sal_uInt16 nId = RES_HEADER_FOOTER_EAT_SPACING,
+                                     sal_Bool bPrt = sal_False ) : SfxBoolItem( nId, bPrt ) {}
 
     // "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -50,10 +50,10 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const;
 };
 
-inline const SwHeaderAndFooterEatSpacingItem &SwAttrSet::GetHeaderAndFooterEatSpacing(BOOL bInP) const
+inline const SwHeaderAndFooterEatSpacingItem &SwAttrSet::GetHeaderAndFooterEatSpacing(sal_Bool bInP) const
     { return (const SwHeaderAndFooterEatSpacingItem&)Get( RES_HEADER_FOOTER_EAT_SPACING,bInP); }
 
-inline const SwHeaderAndFooterEatSpacingItem &SwFmt::GetHeaderAndFooterEatSpacing(BOOL bInP) const
+inline const SwHeaderAndFooterEatSpacingItem &SwFmt::GetHeaderAndFooterEatSpacing(sal_Bool bInP) const
     { return aSet.GetHeaderAndFooterEatSpacing(bInP); }
 
 #endif

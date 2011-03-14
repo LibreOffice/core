@@ -109,6 +109,7 @@ TabPage TP_LAB_LAB
     };
     CheckBox BOX_ADDR
     {
+        HelpID = "sw:CheckBox:TP_LAB_LAB:BOX_ADDR";
         Pos = MAP_APPFONT ( 67 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         TabStop = TRUE ;
@@ -116,6 +117,7 @@ TabPage TP_LAB_LAB
     };
     MultiLineEdit EDT_WRITING
     {
+        HelpID = "sw:MultiLineEdit:TP_LAB_LAB:EDT_WRITING";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 105 , 89 ) ;
@@ -133,6 +135,7 @@ TabPage TP_LAB_LAB
     };
     ListBox LB_DATABASE
     {
+        HelpID = "sw:ListBox:TP_LAB_LAB:LB_DATABASE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 149 , 27 ) ;
         Size = MAP_APPFONT ( 99 , 70 ) ;
@@ -147,6 +150,7 @@ TabPage TP_LAB_LAB
     };
     ListBox LB_TABLE
     {
+        HelpID = "sw:ListBox:TP_LAB_LAB:LB_TABLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 149 , 56 ) ;
         Size = MAP_APPFONT ( 99 , 70 ) ;
@@ -155,6 +159,7 @@ TabPage TP_LAB_LAB
     };
     ImageButton BTN_INSERT
     {
+        HelpID = "sw:ImageButton:TP_LAB_LAB:BTN_INSERT";
         Pos = MAP_APPFONT ( 124 , 92 ) ;
         Size = MAP_APPFONT ( 18 , 12 ) ;
         SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
@@ -168,6 +173,7 @@ TabPage TP_LAB_LAB
     };
     ListBox LB_DBFIELD
     {
+        HelpID = "sw:ListBox:TP_LAB_LAB:LB_DBFIELD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 149 , 92 ) ;
         Size = MAP_APPFONT ( 99 , 70 ) ;
@@ -183,6 +189,7 @@ TabPage TP_LAB_LAB
     };
     RadioButton BTN_CONT
     {
+        HelpID = "sw:RadioButton:TP_LAB_LAB:BTN_CONT";
         Pos = MAP_APPFONT ( 12 , 137 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
         TabStop = TRUE ;
@@ -191,6 +198,7 @@ TabPage TP_LAB_LAB
     };
     RadioButton BTN_SHEET
     {
+        HelpID = "sw:RadioButton:TP_LAB_LAB:BTN_SHEET";
         Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
         Text [ en-US ] = "~Sheet" ;
@@ -204,6 +212,7 @@ TabPage TP_LAB_LAB
     };
     ListBox BOX_MAKE
     {
+        HelpID = "sw:ListBox:TP_LAB_LAB:BOX_MAKE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 136 ) ;
         Size = MAP_APPFONT ( 124 , 90 ) ;
@@ -219,6 +228,7 @@ TabPage TP_LAB_LAB
     };
     ListBox BOX_TYPE
     {
+        HelpID = "sw:ListBox:TP_LAB_LAB:BOX_TYPE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 152 ) ;
         Size = MAP_APPFONT ( 124 , 90 ) ;
@@ -254,6 +264,7 @@ FloatingWindow DLG_SYNC_BTN
     Hide = TRUE ;
     PushButton BTN_SYNC
     {
+        HelpID = "sw:PushButton:DLG_SYNC_BTN:BTN_SYNC";
         Pos = MAP_APPFONT ( 1 , 1 ) ;
         Size = MAP_APPFONT ( WIDTH - 1 , HEIGHT - 1 ) ;
         Text [ en-US ] = "Synchronize Labels" ;
@@ -290,6 +301,7 @@ TabPage TP_VISITING_CARDS
     };
     ListBox LB_AUTO_TEXT_GROUP
     {
+        HelpID = "sw:ListBox:TP_VISITING_CARDS:LB_AUTO_TEXT_GROUP";
         Pos = MAP_APPFONT ( 12 , 164) ;
         Size = MAP_APPFONT ( 109 , 50 ) ;
         Border = TRUE ;
@@ -331,18 +343,21 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_FIRSTNAME
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_FIRSTNAME";
         Pos = MAP_APPFONT ( 105 , 14 ) ;
         Size = MAP_APPFONT ( 55 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_NAME
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_NAME";
         Pos = MAP_APPFONT ( 163 , 14 ) ;
         Size = MAP_APPFONT ( 55 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_SHORTCUT
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_SHORTCUT";
         Pos = MAP_APPFONT ( 221 , 14 ) ;
         Size = MAP_APPFONT ( 27 , 12 ) ;
         Border = TRUE ;
@@ -355,18 +370,21 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_FIRSTNAME_2
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_FIRSTNAME_2";
         Pos = MAP_APPFONT ( 105 , 30 ) ;
         Size = MAP_APPFONT ( 55 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_NAME_2
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_NAME_2";
         Pos = MAP_APPFONT ( 163 , 30 ) ;
         Size = MAP_APPFONT ( 55 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_SHORTCUT_2
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_SHORTCUT_2";
         Pos = MAP_APPFONT ( 221 , 30 ) ;
         Size = MAP_APPFONT ( 27 , 12 ) ;
         Border = TRUE ;
@@ -379,6 +397,7 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_STREET
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_STREET";
         Pos = MAP_APPFONT ( 105 , 46 ) ;
         Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
@@ -391,12 +410,14 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_ZIP
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_ZIP";
         Pos = MAP_APPFONT ( 105 , 62 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_CITY
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_CITY";
         Pos = MAP_APPFONT ( 158 , 62 ) ;
         Size = MAP_APPFONT ( 90 , 12 ) ;
         Border = TRUE ;
@@ -409,12 +430,14 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_COUNTRY
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_COUNTRY";
         Pos = MAP_APPFONT ( 105 , 78 ) ;
         Size = MAP_APPFONT ( 71 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_STATE
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_STATE";
         Pos = MAP_APPFONT ( 179 , 78 ) ;
         Size = MAP_APPFONT ( 69 , 12 ) ;
         Border = TRUE ;
@@ -427,12 +450,14 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_TITLE
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_TITLE";
         Pos = MAP_APPFONT ( 105 , 94 ) ;
         Size = MAP_APPFONT ( 71 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_PROFESSION
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_PROFESSION";
         Pos = MAP_APPFONT ( 179 , 94 ) ;
         Size = MAP_APPFONT ( 69 , 12 ) ;
         Border = TRUE ;
@@ -445,12 +470,14 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_PHONE
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_PHONE";
         Pos = MAP_APPFONT ( 105 , 110 ) ;
         Size = MAP_APPFONT ( 71 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_MOBILE
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_MOBILE";
         Pos = MAP_APPFONT ( 179 , 110 ) ;
         Size = MAP_APPFONT ( 69 , 12 ) ;
         Border = TRUE ;
@@ -463,6 +490,7 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_FAX
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_FAX";
         Pos = MAP_APPFONT ( 105 , 126 ) ;
         Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
@@ -475,12 +503,14 @@ TabPage TP_PRIVATE_DATA
     };
     Edit ED_WWW
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_WWW";
         Pos = MAP_APPFONT ( 105 , 142) ;
         Size = MAP_APPFONT ( 71 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_MAIL
     {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_MAIL";
         Pos = MAP_APPFONT ( 179 , 142) ;
         Size = MAP_APPFONT ( 69 , 12 ) ;
         Border = TRUE ;
@@ -505,6 +535,7 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_COMP
     {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_COMP";
         Pos = MAP_APPFONT ( 105 , 14) ;
         Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
@@ -517,6 +548,7 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_COMP_EXT
     {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_COMP_EXT";
         Pos = MAP_APPFONT ( 105 , 30) ;
         Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
@@ -529,6 +561,7 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_SLOGAN
     {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_SLOGAN";
         Pos = MAP_APPFONT ( 105 , 46) ;
         Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
@@ -541,6 +574,7 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_STREET
     {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_STREET";
         Pos = MAP_APPFONT ( 105 , 62) ;
         Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
@@ -553,12 +587,14 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_ZIP
     {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_ZIP";
         Pos = MAP_APPFONT ( 105 , 78) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_CITY
     {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_CITY";
         Pos = MAP_APPFONT ( 158 , 78) ;
         Size = MAP_APPFONT ( 90 , 12 ) ;
         Border = TRUE ;
@@ -571,12 +607,14 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_COUNTRY
     {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_COUNTRY";
         Pos = MAP_APPFONT ( 105 , 94) ;
         Size = MAP_APPFONT ( 71 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_STATE
     {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_STATE";
         Pos = MAP_APPFONT ( 179 , 94) ;
         Size = MAP_APPFONT ( 69 , 12 ) ;
         Border = TRUE ;
@@ -589,6 +627,7 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_POSITION
     {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_POSITION";
         Pos = MAP_APPFONT ( 105 , 110) ;
         Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
@@ -601,12 +640,14 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_PHONE
     {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_PHONE";
         Pos = MAP_APPFONT ( 105 , 126) ;
         Size = MAP_APPFONT ( 71 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_MOBILE
     {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_MOBILE";
         Pos = MAP_APPFONT ( 179 , 126) ;
         Size = MAP_APPFONT ( 69 , 12 ) ;
         Border = TRUE ;
@@ -619,6 +660,7 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_FAX
     {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_FAX";
         Pos = MAP_APPFONT ( 105 , 142) ;
         Size = MAP_APPFONT ( 143 , 12 ) ;
         Border = TRUE ;
@@ -631,12 +673,14 @@ TabPage TP_BUSINESS_DATA
     };
     Edit ED_WWW
     {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_WWW";
         Pos = MAP_APPFONT ( 105 , 158) ;
         Size = MAP_APPFONT ( 71 , 12 ) ;
         Border = TRUE ;
     };
     Edit ED_MAIL
     {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_MAIL";
         Pos = MAP_APPFONT ( 179 , 158) ;
         Size = MAP_APPFONT ( 69 , 12 ) ;
         Border = TRUE ;

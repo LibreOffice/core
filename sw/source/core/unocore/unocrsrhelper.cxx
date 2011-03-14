@@ -44,6 +44,7 @@
 #include <unoframe.hxx>
 #include <unocrsr.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <fmtftn.hxx>
 #include <fmtpdsc.hxx>
@@ -257,7 +258,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                         *pAny <<= (sal_Int16)(pTxtNd->GetActualListLevel());
                     else if(rEntry.nWID == FN_UNO_IS_NUMBER)
                     {
-                        BOOL bIsNumber = pTxtNd->IsCountedInList();
+                        sal_Bool bIsNumber = pTxtNd->IsCountedInList();
                         pAny->setValue(&bIsNumber, ::getBooleanCppuType());
                     }
                     // #i91601#
@@ -268,7 +269,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     }
                     else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
                     {
-                        BOOL bIsRestart = pTxtNd->IsListRestart();
+                        sal_Bool bIsRestart = pTxtNd->IsListRestart();
                         pAny->setValue(&bIsRestart, ::getBooleanCppuType());
                     }
                 }
@@ -496,26 +497,26 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         {
 
             SwTxtNode* pTxtNode;
-            if((pTxtNode = (SwTxtNode*)rPam.GetNode( TRUE )) == rPam.GetNode(FALSE) &&
+            if((pTxtNode = (SwTxtNode*)rPam.GetNode( sal_True )) == rPam.GetNode(sal_False) &&
                     pTxtNode->GetpSwpHints())
             {
-                USHORT nPaMStart = rPam.GetPoint()->nContent.GetIndex();
-                USHORT nPaMEnd = rPam.GetMark() ? rPam.GetMark()->nContent.GetIndex() : nPaMStart;
+                sal_uInt16 nPaMStart = rPam.GetPoint()->nContent.GetIndex();
+                sal_uInt16 nPaMEnd = rPam.GetMark() ? rPam.GetMark()->nContent.GetIndex() : nPaMStart;
                 if(nPaMStart > nPaMEnd)
                 {
-                    USHORT nTmp = nPaMStart;
+                    sal_uInt16 nTmp = nPaMStart;
                     nPaMStart = nPaMEnd;
                     nPaMEnd = nTmp;
                 }
                 Sequence< ::rtl::OUString> aCharStyles;
                 SwpHints* pHints = pTxtNode->GetpSwpHints();
-                for(USHORT nAttr = 0; nAttr < pHints->GetStartCount(); nAttr++ )
+                for(sal_uInt16 nAttr = 0; nAttr < pHints->GetStartCount(); nAttr++ )
                 {
                     SwTxtAttr* pAttr = pHints->GetStart( nAttr );
                     if(pAttr->Which() != RES_TXTATR_CHARFMT)
                         continue;
-                    USHORT nAttrStart = *pAttr->GetStart();
-                    USHORT nAttrEnd = *pAttr->GetEnd();
+                    sal_uInt16 nAttrStart = *pAttr->GetStart();
+                    sal_uInt16 nAttrEnd = *pAttr->GetEnd();
                     //check if the attribute touches the selection
                     if( ( nAttrEnd > nPaMStart && nAttrStart < nPaMEnd ) ||
                         ( !nAttrStart && !nAttrEnd && !nPaMStart && !nPaMEnd ) )
@@ -666,7 +667,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 
                 if( rPam.GetNext() != &rPam )           // Multiple selection?
                 {
-                    pDoc->StartUndo( UNDO_START, NULL );
+                    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
                     SwPamRanges aRangeArr( rPam );
                     SwPaM aPam( *rPam.GetPoint() );
                     for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
@@ -674,7 +675,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                         // no start of a new list
                         pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule, false );
                     }
-                    pDoc->EndUndo( UNDO_END, NULL );
+                    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
                 }
                 else
                 {
@@ -751,12 +752,12 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
 
             if( rPam.GetNext() != &rPam )           // Multiple selection?
             {
-                pDoc->StartUndo( UNDO_START, NULL );
+                pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
                 SwPamRanges aRangeArr( rPam );
                 SwPaM aPam( *rPam.GetPoint() );
                 for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
                     pDoc->SetNodeNumStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), 1 );
-                pDoc->EndUndo( UNDO_END, NULL );
+                pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
             }
             else
                 pDoc->SetNodeNumStart( *rPam.GetPoint(), 0 );
@@ -879,6 +880,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
     if( !pMed )
         return;
 
+    // this sourcecode is not responsible for the lifetime of the shell, SfxObjectShellLock should not be used
     SfxObjectShellRef aRef( pDocSh );
 
     pDocSh->RegisterTransfer( *pMed );
@@ -940,6 +942,8 @@ sal_Bool DocInsertStringSplitCR(
                     IDocumentContentOperations::INS_EMPTYEXPAND)
             : IDocumentContentOperations::INS_EMPTYEXPAND;
 
+    // grouping done in InsertString is intended for typing, not API calls
+    ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
     OUString aTxt;
     xub_StrLen nStartIdx = 0;
     SwTxtNode* const pTxtNd =
@@ -1003,7 +1007,7 @@ void makeRedline( SwPaM& rPaM,
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
     uno::Any aAuthorValue;
     aAuthorValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RedlineAuthor")), aAuthorValue);
-    USHORT nAuthor = 0;
+    sal_uInt16 nAuthor = 0;
     ::rtl::OUString sAuthor;
     if( aAuthorValue >>= sAuthor )
         nAuthor = pRedlineAccess->InsertRedlineAuthor(sAuthor);
@@ -1045,7 +1049,7 @@ SwAnyMapHelper::~SwAnyMapHelper()
     }
 }
 
-void SwAnyMapHelper::SetValue( USHORT nWhichId, USHORT nMemberId, const uno::Any& rAny )
+void SwAnyMapHelper::SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rAny )
 {
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;
     AnyMapHelper_t::iterator aIt = find( nKey );
@@ -1057,7 +1061,7 @@ void SwAnyMapHelper::SetValue( USHORT nWhichId, USHORT nMemberId, const uno::Any
         insert( value_type(nKey, new uno::Any( rAny )) );
 }
 
-bool    SwAnyMapHelper::FillValue( USHORT nWhichId, USHORT nMemberId, const uno::Any*& pAny )
+bool    SwAnyMapHelper::FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& pAny )
 {
     bool bRet = false;
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;

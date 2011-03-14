@@ -28,20 +28,23 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <wrtsh.hxx>
+#include <doc.hxx>
 #include <swtypes.hxx>
 #include <view.hxx>
 #include <edtwin.hxx>
 #include <swcli.hxx>
+#include <cmdid.h>
+#include <cfgitems.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 
 using namespace com::sun::star;
 
 SwOleClient::SwOleClient( SwView *pView, SwEditWin *pWin, const svt::EmbeddedObjectRef& xObj ) :
-    SfxInPlaceClient( pView, pWin, xObj.GetViewAspect() ), bInDoVerb( FALSE ),
+    SfxInPlaceClient( pView, pWin, xObj.GetViewAspect() ), bInDoVerb( sal_False ),
     bOldCheckForOLEInCaption( pView->GetWrtShell().IsCheckForOLEInCaption() )
 {
     SetObject( xObj.GetObject() );
@@ -155,17 +158,29 @@ void SwOleClient::ViewChanged()
     aVisSize.Height()= Fraction( aVisSize.Height() ) * GetScaleHeight();
 
     SwRect aRect( Point( LONG_MIN, LONG_MIN ), aVisSize );
-    rSh.LockView( TRUE );   //Scrollen im EndAction verhindern
+    rSh.LockView( sal_True );   //Scrollen im EndAction verhindern
     rSh.StartAllAction();
     rSh.RequestObjectResize( aRect, GetObject() );
     rSh.EndAllAction();
-    rSh.LockView( FALSE );
+    rSh.LockView( sal_False );
 }
 
 void SwOleClient::MakeVisible()
 {
     const SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
     rSh.MakeObjVisible( GetObject() );
+}
+
+void SwOleClient::FormatChanged()
+{
+    const uno::Reference < embed::XEmbeddedObject >& xObj( GetObject() );
+    SwView * pView = dynamic_cast< SwView * >( GetViewShell() );
+    if ( pView && xObj.is() && SotExchange::IsMath( xObj->getClassID() ) )
+    {
+        SwWrtShell & rWrtSh = pView->GetWrtShell();
+        if (rWrtSh.GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ))
+            rWrtSh.AlignFormulaToBaseline( xObj );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

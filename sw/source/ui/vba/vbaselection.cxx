@@ -127,7 +127,7 @@ SwVbaSelection::setText( const rtl::OUString& rText ) throw ( uno::RuntimeExcept
 void SAL_CALL
 SwVbaSelection::TypeText( const rtl::OUString& rText ) throw ( uno::RuntimeException )
 {
-    // FIXME: handle the property Options.ReplaceSelection, the default value is TRUE
+    // FIXME: handle the property Options.ReplaceSelection, the default value is sal_True
     setText( rText );
 }
 

@@ -53,10 +53,10 @@ class ConstCustomShape : public SwDrawBase
     ConstCustomShape( SwWrtShell* pSh, SwEditWin* pWin, SwView* pView, SfxRequest& rReq );
 
                                        // Mouse- & Key-Events
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate(const USHORT nSlotId);    // Function aktivieren
+    virtual void Activate(const sal_uInt16 nSlotId);    // Function aktivieren
 
     rtl::OUString GetShapeType() const;
     static rtl::OUString GetShapeTypeFromRequest( SfxRequest& rReq );

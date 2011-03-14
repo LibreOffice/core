@@ -75,7 +75,7 @@ using namespace nsSwDocInfoSubType;
 struct OldFormats
 {
     NfIndexTableOffset  eFormatIdx;
-    USHORT              nOldFormat;
+    sal_uInt16              nOldFormat;
 };
 
 static OldFormats aOldDateFmt40[] =
@@ -194,9 +194,9 @@ static OldFormats aOldGetSetExpFmt30[] =
     { NF_NUMERIC_START,                 0  }                // Tabellenende
 };
 
-SW_DLLPUBLIC void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
-                                USHORT& rSubType, ULONG &rFmt,
-                                USHORT nVersion )
+SW_DLLPUBLIC void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
+                                sal_uInt16& rSubType, sal_uLong &rFmt,
+                                sal_uInt16 nVersion )
 {
     const OldFormats *pOldFmt = 0L;
 
@@ -259,10 +259,10 @@ SW_DLLPUBLIC void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
                     // uns voruebergehend mal im Subtyp, sofern es
                     // ueberhaupt als entsprechendes Format in Frage kommt.
                     if( RES_SETEXPFLD==rWhich &&
-                        /*rFmt >= (USHORT)SVX_NUM_CHARS_UPPER_LETTER && always true*/
-                        rFmt <= (USHORT)SVX_NUM_BITMAP )
+                        /*rFmt >= (sal_uInt16)SVX_NUM_CHARS_UPPER_LETTER && always true*/
+                        rFmt <= (sal_uInt16)SVX_NUM_BITMAP )
                     {
-                        rSubType = (USHORT)rFmt;
+                        rSubType = (sal_uInt16)rFmt;
                     }
                     pOldFmt = nVersion<SWG_INETBROWSER ? aOldGetSetExpFmt30
                                                        : aOldGetSetExpFmt40;
@@ -287,7 +287,7 @@ SW_DLLPUBLIC void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
     if( pOldFmt )
     {
         SvNumberFormatter *pFormatter = rDoc.GetNumberFormatter();
-        USHORT i = 0;
+        sal_uInt16 i = 0;
 
         while( pOldFmt[i].eFormatIdx != NF_NUMERIC_START ||
                pOldFmt[i].nOldFormat)
@@ -301,11 +301,11 @@ SW_DLLPUBLIC void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
         }
     }
 }
-SW_DLLPUBLIC void sw3io_ConvertToOldField( const SwField* pFld, USHORT& rWhich,
-                              ULONG& rFmt, ULONG nFFVersion )
+SW_DLLPUBLIC void sw3io_ConvertToOldField( const SwField* pFld, sal_uInt16& rWhich,
+                              sal_uLong& rFmt, sal_uLong nFFVersion )
 {
     const OldFormats *pOldFmt = 0L;
-    ULONG nOldFmt = rFmt;
+    sal_uLong nOldFmt = rFmt;
 
     switch( rWhich )
     {
@@ -324,7 +324,7 @@ SW_DLLPUBLIC void sw3io_ConvertToOldField( const SwField* pFld, USHORT& rWhich,
         case RES_DATETIMEFLD:
             if( SOFFICE_FILEFORMAT_40 >= nFFVersion )
             {
-                USHORT nSubType = ((SwDateTimeField*) pFld)->GetSubType();
+                sal_uInt16 nSubType = ((SwDateTimeField*) pFld)->GetSubType();
                 switch( nSubType )
                 {
                 case DATEFLD:           rWhich = RES_DATEFLD;       break;
@@ -353,7 +353,7 @@ SW_DLLPUBLIC void sw3io_ConvertToOldField( const SwField* pFld, USHORT& rWhich,
         case RES_USERFLD:
             if( SOFFICE_FILEFORMAT_40 >= nFFVersion )
             {
-                USHORT nSubType = pFld->GetSubType();
+                sal_uInt16 nSubType = pFld->GetSubType();
 
                 if (nSubType & nsSwExtendedSubType::SUB_INVISIBLE)
                     rFmt = VVF_INVISIBLE;
@@ -392,11 +392,11 @@ SW_DLLPUBLIC void sw3io_ConvertToOldField( const SwField* pFld, USHORT& rWhich,
 
         if( pEntry )
         {
-            USHORT i = 0;
+            sal_uInt16 i = 0;
             while( pOldFmt[i].eFormatIdx != NF_NUMERIC_START ||
                    pOldFmt[i].nOldFormat )
             {
-                ULONG nKey = pFormatter->GetFormatIndex(
+                sal_uLong nKey = pFormatter->GetFormatIndex(
                             pOldFmt[i].eFormatIdx, pEntry->GetLanguage() );
 
                 if( nOldFmt == nKey )

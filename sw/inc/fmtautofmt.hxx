@@ -41,7 +41,7 @@ class SwFmtAutoFmt: public SfxPoolItem
     boost::shared_ptr<SfxItemSet> mpHandle;
 
 public:
-    SwFmtAutoFmt( USHORT nWhich = RES_TXTATR_AUTOFMT );
+    SwFmtAutoFmt( sal_uInt16 nWhich = RES_TXTATR_AUTOFMT );
 
     // single argument ctors shall be explicit.
     virtual ~SwFmtAutoFmt();
@@ -64,8 +64,8 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     void SetStyleHandle( boost::shared_ptr<SfxItemSet> pHandle ) { mpHandle = pHandle; }
     const boost::shared_ptr<SfxItemSet> GetStyleHandle() const { return mpHandle; }

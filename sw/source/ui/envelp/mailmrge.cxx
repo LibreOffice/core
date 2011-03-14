@@ -215,16 +215,16 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     FreeResource();
     aSingleJobsCB.Show(sal_False); // not supported in since cws printerpullpages anymore
     //task #97066# mailing of form letters is currently not supported
-    aMailingRB.Show(FALSE);
-    aSubjectFT.Show(FALSE);
-    aSubjectED.Show(FALSE);
-    aFormatFT.Show(FALSE);
-    aFormatSwCB.Show(FALSE);
-    aFormatHtmlCB.Show(FALSE);
-    aFormatRtfCB.Show(FALSE);
-    aAttachFT.Show(FALSE);
-    aAttachED.Show(FALSE);
-    aAttachPB.Show(FALSE);
+    aMailingRB.Show(sal_False);
+    aSubjectFT.Show(sal_False);
+    aSubjectED.Show(sal_False);
+    aFormatFT.Show(sal_False);
+    aFormatSwCB.Show(sal_False);
+    aFormatHtmlCB.Show(sal_False);
+    aFormatRtfCB.Show(sal_False);
+    aAttachFT.Show(sal_False);
+    aAttachED.Show(sal_False);
+    aAttachPB.Show(sal_False);
 
     Point aMailPos = aMailingRB.GetPosPixel();
     Point aFilePos = aFileRB.GetPosPixel();
@@ -236,7 +236,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         m_aSelection = *pSelection;
         //move all controls
         long nDiff = aRecordFL.GetPosPixel().Y() - pBeamerWin->GetPosPixel().Y();
-        pBeamerWin->Show(FALSE);
+        pBeamerWin->Show(sal_False);
         ::Size aSize = GetSizePixel();
         aSize.Height() -= nDiff;
         SetSizePixel(aSize);
@@ -339,7 +339,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aFormatHtmlCB.Check((nMailingMode & TXTFORMAT_HTML) != 0);
     aFormatRtfCB.Check((nMailingMode & TXTFORMAT_RTF) != 0);
 
-    aAllRB.Check(TRUE);
+    aAllRB.Check(sal_True);
 
     // Install handlers
     Link aLk = LINK(this, SwMailMergeDlg, ButtonHdl);
@@ -360,7 +360,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
     aLk = LINK(this, SwMailMergeDlg, FilenameHdl);
     aGenerateFromDataBaseCB.SetClickHdl( aLk );
-    BOOL bColumn = pModOpt->IsNameFromColumn();
+    sal_Bool bColumn = pModOpt->IsNameFromColumn();
     if(bColumn)
         aGenerateFromDataBaseCB.Check();
 
@@ -382,7 +382,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         pNewDBMgr->GetColumnNames(&aAddressFldLB, _xConnection, rTableName);
     else
         pNewDBMgr->GetColumnNames(&aAddressFldLB, rDBName, rTableName);
-    for(USHORT nEntry = 0; nEntry < aAddressFldLB.GetEntryCount(); nEntry++)
+    for(sal_uInt16 nEntry = 0; nEntry < aAddressFldLB.GetEntryCount(); nEntry++)
         aColumnLB.InsertEntry(aAddressFldLB.GetEntry(nEntry));
 
     aAddressFldLB.SelectEntry(C2S("EMAIL"));
@@ -411,14 +411,14 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     if (aColumnLB.GetSelectEntryCount() == 0)
         aColumnLB.SelectEntryPos(0);
 
-    const BOOL bEnable = m_aSelection.getLength() != 0;
+    const sal_Bool bEnable = m_aSelection.getLength() != 0;
     aMarkedRB.Enable(bEnable);
     if (bEnable)
         aMarkedRB.Check();
     else
     {
         aAllRB.Check();
-        aMarkedRB.Enable(FALSE);
+        aMarkedRB.Enable(sal_False);
     }
     SetMinOutputSizePixel(m_aDialogSize);
     try
@@ -435,7 +435,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         const ::rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("Name"));
         const ::rtl::OUString sFlags(RTL_CONSTASCII_USTRINGPARAM("Flags"));
         const ::rtl::OUString sUIName(RTL_CONSTASCII_USTRINGPARAM("UIName"));
-        USHORT nODT = USHRT_MAX;
+        sal_uInt16 nODT = USHRT_MAX;
         while(xList->hasMoreElements())
         {
             comphelper::SequenceAsHashMap aFilter(xList->nextElement());
@@ -456,7 +456,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
             }
             if( sUIName2.getLength() )
             {
-                USHORT nFilter = aFilterLB.InsertEntry( sUIName2 );
+                sal_uInt16 nFilter = aFilterLB.InsertEntry( sUIName2 );
                 if( 0 == sFilter.compareToAscii("writer8") )
                     nODT = nFilter;
                 aFilterLB.SetEntryData( nFilter, new ::rtl::OUString( sFilter ) );
@@ -479,7 +479,7 @@ SwMailMergeDlg::~SwMailMergeDlg()
     else
         delete pBeamerWin;
 
-    for( USHORT nFilter = 0; nFilter < aFilterLB.GetEntryCount(); ++nFilter )
+    for( sal_uInt16 nFilter = 0; nFilter < aFilterLB.GetEntryCount(); ++nFilter )
     {
         ::rtl::OUString* pData = reinterpret_cast< ::rtl::OUString* >( aFilterLB.GetEntryData(nFilter) );
         delete pData;
@@ -651,7 +651,7 @@ IMPL_LINK( SwMailMergeDlg, SaveTypeHdl, RadioButton*,  pBtn )
 
 IMPL_LINK( SwMailMergeDlg, FilenameHdl, CheckBox*, pBox )
 {
-    BOOL bEnable = pBox->IsChecked();
+    sal_Bool bEnable = pBox->IsChecked();
     aColumnFT.Enable( bEnable );
     aColumnLB.Enable(bEnable);
     aPathFT.Enable( bEnable );
@@ -687,7 +687,7 @@ bool SwMailMergeDlg::ExecQryShell()
     }
     else
     {
-        nMergeType = static_cast< USHORT >( aSaveSingleDocRB.IsChecked() ?
+        nMergeType = static_cast< sal_uInt16 >( aSaveSingleDocRB.IsChecked() ?
                     DBMGR_MERGE_SINGLE_FILE : DBMGR_MERGE_MAILFILES );
         SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
         INetURLObject aAbs;
@@ -738,7 +738,7 @@ bool SwMailMergeDlg::ExecQryShell()
 
         m_aSelection.realloc(nEnd - nStart + 1);
         Any* pSelection = m_aSelection.getArray();
-        for (sal_Int32 i = nStart; i != nEnd; ++i, ++pSelection)
+        for (sal_Int32 i = nStart; i <= nEnd; ++i, ++pSelection)
             *pSelection <<= i;
     }
     else if (aAllRB.IsChecked() )
@@ -763,17 +763,14 @@ bool SwMailMergeDlg::ExecQryShell()
             }
         }
     }
-    SwPrintData aPrtData = *SW_MOD()->GetPrtOptions(FALSE);
     IDocumentDeviceAccess* pIDDA = rSh.getIDocumentDeviceAccess();
-    SwPrintData* pShellPrintData = pIDDA->getPrintData();
-    if(pShellPrintData)
-        aPrtData = *pShellPrintData;
+    SwPrintData aPrtData( pIDDA->getPrintData() );
     aPrtData.SetPrintSingleJobs(aSingleJobsCB.IsChecked());
     pIDDA->setPrintData(aPrtData);
 
     pModOpt->SetSinglePrintJob(aSingleJobsCB.IsChecked());
 
-    BYTE nMailingMode = 0;
+    sal_uInt8 nMailingMode = 0;
 
     if (aFormatSwCB.IsChecked())
         nMailingMode |= TXTFORMAT_OFFICE;

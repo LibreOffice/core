@@ -179,9 +179,9 @@ SwStdFontConfig::~SwStdFontConfig()
 {
 }
 
-BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
+sal_Bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
 {
-    BOOL bSame = sal_False;
+    sal_Bool bSame = sal_False;
     SvtLinguOptions aLinguOpt;
 
     SvtLinguConfig().GetOptions( aLinguOpt );
@@ -221,7 +221,7 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
         case FONT_CAPTION_CJK :
         case FONT_INDEX_CJK   :
         {
-            BOOL b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCJK;
+            sal_Bool b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCJK;
             bSame = b1 && sDefaultFonts[nFontType] == sDefFontCJK;
         }
         break;
@@ -229,7 +229,7 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
         case FONT_CAPTION_CTL :
         case FONT_INDEX_CTL   :
         {
-            BOOL b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCTL;
+            sal_Bool b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFontCTL;
             bSame = b1 && sDefaultFonts[nFontType] == sDefFontCTL;
         }
         break;
@@ -237,10 +237,10 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
     return bSame;
 }
 
-String  SwStdFontConfig::GetDefaultFor(USHORT nFontType, LanguageType eLang)
+String  SwStdFontConfig::GetDefaultFor(sal_uInt16 nFontType, LanguageType eLang)
 {
     String sRet;
-    USHORT nFontId;
+    sal_uInt16 nFontId;
     switch( nFontType )
     {
         case FONT_OUTLINE :
@@ -271,7 +271,7 @@ String  SwStdFontConfig::GetDefaultFor(USHORT nFontType, LanguageType eLang)
     return  aFont.GetName();
 }
 
-sal_Int32 SwStdFontConfig::GetDefaultHeightFor(USHORT nFontType, LanguageType eLang)
+sal_Int32 SwStdFontConfig::GetDefaultHeightFor(sal_uInt16 nFontType, LanguageType eLang)
 {
     sal_Int32 nRet = FONTSIZE_DEFAULT;
     switch( nFontType )
@@ -292,7 +292,7 @@ sal_Int32 SwStdFontConfig::GetDefaultHeightFor(USHORT nFontType, LanguageType eL
     return nRet;
 }
 
-void SwStdFontConfig::ChangeInt( USHORT nFontType, sal_Int32 nHeight )
+void SwStdFontConfig::ChangeInt( sal_uInt16 nFontType, sal_Int32 nHeight )
 {
     OSL_ENSURE( nFontType < DEF_FONT_COUNT, "invalid index in SwStdFontConfig::ChangInt()");
     if( nFontType < DEF_FONT_COUNT && nDefaultFontHeight[nFontType] != nHeight)

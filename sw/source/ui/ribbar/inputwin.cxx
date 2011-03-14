@@ -37,6 +37,7 @@
 #include <svx/ruler.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
+#include <unotools/undoopt.hxx>
 
 #include "swtypes.hxx"
 #include "cmdid.h"
@@ -75,11 +76,17 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     pView(0),
     pBindings(pBind),
     aAktTableName(aEmptyStr)
+    , m_nActionCount(0)
+    , m_bDoesUndo(true)
+    , m_bResetUndo(false)
+    , m_bCallUndo(false)
 {
-    bFirst = bDoesUndo = TRUE;
-    bActive = bIsTable = bDelSel = bResetUndo = bCallUndo = FALSE;
+    bFirst = sal_True;
+    bActive = bIsTable = bDelSel = sal_False;
 
     FreeResource();
+
+    aEdit.SetSizePixel( aEdit.CalcMinimumSize() );
 
     SfxImageManager* pManager = SfxImageManager::GetImageManager( SW_MOD() );
     pManager->RegisterToolBox(this);
@@ -101,16 +108,23 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     SetDropdownClickHdl( LINK( this, SwInputWindow, DropdownClickHdl ));
 
     Size    aSizeTbx = CalcWindowSizePixel();
+    Size    aEditSize = aEdit.GetSizePixel();
+    Rectangle aItemRect( GetItemRect(FN_FORMULA_CALC) );
+    long nMaxHeight = (aEditSize.Height() > aItemRect.GetHeight()) ? aEditSize.Height() : aItemRect.GetHeight();
+    if( nMaxHeight+2 > aSizeTbx.Height() )
+        aSizeTbx.Height() = nMaxHeight+2;
     Size aSize = GetSizePixel();
     aSize.Height() = aSizeTbx.Height();
     SetSizePixel( aSize );
-    Size    aPosSize = aPos.GetSizePixel();
-    Size    aEditSize = aEdit.GetSizePixel();
-    aPosSize.Height() = aEditSize.Height() = GetItemRect(FN_FORMULA_CALC).GetHeight() - 2;
 
-    Point aPosPos = aPos.GetPosPixel();
-    Point aEditPos= aEdit.GetPosPixel();
-    aPosPos.Y() = aEditPos.Y() = GetItemRect( FN_FORMULA_CALC ).TopLeft().Y() + 1;
+    // align edit and item vcentered
+    Size    aPosSize = aPos.GetSizePixel();
+    aPosSize.Height()  = nMaxHeight;
+    aEditSize.Height() = nMaxHeight;
+    Point aPosPos  = aPos.GetPosPixel();
+    Point aEditPos = aEdit.GetPosPixel();
+    aPosPos.Y()    = (aSize.Height() - nMaxHeight)/2 + 1;
+    aEditPos.Y()   = (aSize.Height() - nMaxHeight)/2 + 1;
     aPos.SetPosSizePixel( aPosPos, aPosSize );
     aEdit.SetPosSizePixel( aEditPos, aEditSize );
 
@@ -126,23 +140,34 @@ SwInputWindow::~SwInputWindow()
     //Lineale aufwecken
     if(pView)
     {
-        pView->GetHLineal().SetActive( TRUE );
-        pView->GetVLineal().SetActive( TRUE );
+        pView->GetHLineal().SetActive( sal_True );
+        pView->GetVLineal().SetActive( sal_True );
     }
     if ( pMgr )
         delete pMgr;
     if(pWrtShell)
         pWrtShell->EndSelTblCells();
 
-    if( bResetUndo )
+    CleanupUglyHackWithUndo();
+}
+
+void SwInputWindow::CleanupUglyHackWithUndo()
+{
+    if (m_bResetUndo)
     {
         DelBoxCntnt();
-        pWrtShell->DoUndo( bDoesUndo );
-        if(bCallUndo)
+        pWrtShell->DoUndo(m_bDoesUndo);
+        if (m_bCallUndo)
+        {
             pWrtShell->Undo();
-        SwEditShell::SetUndoActionCount( nActionCnt );
+        }
+        if (0 == m_nActionCount)
+        {
+            SW_MOD()->GetUndoOptions().SetUndoCount(0);
+        }
     }
 }
+
 
 //==================================================================
 
@@ -180,16 +205,16 @@ void SwInputWindow::Resize()
 
 void SwInputWindow::ShowWin()
 {
-    bIsTable = FALSE;
+    bIsTable = sal_False;
     //Lineale anhalten
     if(pView)
     {
-        pView->GetHLineal().SetActive( FALSE );
-        pView->GetVLineal().SetActive( FALSE );
+        pView->GetHLineal().SetActive( sal_False );
+        pView->GetVLineal().SetActive( sal_False );
 
         OSL_ENSURE(pWrtShell, "no WrtShell!");
         // Cursor in Tabelle
-        bIsTable = pWrtShell->IsCrsrInTbl() ? TRUE : FALSE;
+        bIsTable = pWrtShell->IsCrsrInTbl() ? sal_True : sal_False;
 
         if( bFirst )
             pWrtShell->SelTblCells( LINK( this, SwInputWindow,
@@ -197,7 +222,7 @@ void SwInputWindow::ShowWin()
         if( bIsTable )
         {
             const String& rPos = pWrtShell->GetBoxNms();
-            USHORT nPos = 0;
+            sal_uInt16 nPos = 0;
             short nSrch = -1;
             while( (nPos = rPos.Search( ':',nPos + 1 ) ) != STRING_NOTFOUND )
                 nSrch = (short) nPos;
@@ -222,13 +247,17 @@ void SwInputWindow::ShowWin()
         {
             if( bIsTable )
             {
-                bResetUndo = TRUE;
-                nActionCnt = SwEditShell::GetUndoActionCount();
-                SwEditShell::SetUndoActionCount( nActionCnt + 1 );
+                m_bResetUndo = true;
+                m_nActionCount = SW_MOD()->GetUndoOptions().GetUndoCount();
+                if (0 == m_nActionCount) { // deactivated? turn it on...
+                    SW_MOD()->GetUndoOptions().SetUndoCount(1);
+                }
 
-                bDoesUndo = pWrtShell->DoesUndo();
-                if( !bDoesUndo )
-                    pWrtShell->DoUndo( TRUE );
+                m_bDoesUndo = pWrtShell->DoesUndo();
+                if( !m_bDoesUndo )
+                {
+                    pWrtShell->DoUndo( sal_True );
+                }
 
                 if( !pWrtShell->SwCrsrShell::HasSelection() )
                 {
@@ -241,9 +270,11 @@ void SwInputWindow::ShowWin()
                     pWrtShell->StartUndo( UNDO_DELETE );
                     pWrtShell->Delete();
                     if( 0 != pWrtShell->EndUndo( UNDO_DELETE ))
-                        bCallUndo = TRUE;
+                    {
+                        m_bCallUndo = true;
+                    }
                 }
-                pWrtShell->DoUndo( FALSE );
+                pWrtShell->DoUndo(false);
 
                 SfxItemSet aSet( pWrtShell->GetAttrPool(), RES_BOXATR_FORMULA, RES_BOXATR_FORMULA );
                 if( pWrtShell->GetTblBoxFormulaAttrs( aSet ))
@@ -258,7 +289,7 @@ void SwInputWindow::ShowWin()
             pWrtShell->EndSelect();
         }
 
-        bFirst = FALSE;
+        bFirst = sal_False;
 
         aEdit.SetModifyHdl( LINK( this, SwInputWindow, ModifyHdl ));
 
@@ -271,8 +302,8 @@ void SwInputWindow::ShowWin()
         aEdit.GrabFocus();
         // UserInterface fuer die Eingabe abklemmen
 
-        pView->GetEditWin().LockKeyInput(TRUE);
-        pView->GetViewFrame()->GetDispatcher()->Lock(TRUE);
+        pView->GetEditWin().LockKeyInput(sal_True);
+        pView->GetViewFrame()->GetDispatcher()->Lock(sal_True);
         pWrtShell->Push();
     }
     ToolBox::Show();
@@ -309,7 +340,7 @@ static const char * const aStrArr[] = {
     sCalc_Round
 };
 
-    USHORT nId = pMenu->GetCurItemId();
+    sal_uInt16 nId = pMenu->GetCurItemId();
     if ( nId <= MN_CALC_ROUND )
     {
         String aTmp( String::CreateFromAscii(aStrArr[nId - 1]) );
@@ -321,7 +352,7 @@ static const char * const aStrArr[] = {
 
 IMPL_LINK( SwInputWindow, DropdownClickHdl, ToolBox*, EMPTYARG )
 {
-    USHORT nCurID = GetCurItemId();
+    sal_uInt16 nCurID = GetCurItemId();
     EndSelection(); // setzt CurItemId zurueck !
     switch ( nCurID )
     {
@@ -334,7 +365,7 @@ IMPL_LINK( SwInputWindow, DropdownClickHdl, ToolBox*, EMPTYARG )
         }
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 //==================================================================
@@ -342,7 +373,7 @@ IMPL_LINK( SwInputWindow, DropdownClickHdl, ToolBox*, EMPTYARG )
 
 void SwInputWindow::Click( )
 {
-    USHORT nCurID = GetCurItemId();
+    sal_uInt16 nCurID = GetCurItemId();
     EndSelection(); // setzt CurItemId zurueck !
     switch ( nCurID )
     {
@@ -363,18 +394,10 @@ void SwInputWindow::Click( )
 
 void  SwInputWindow::ApplyFormula()
 {
-    pView->GetViewFrame()->GetDispatcher()->Lock(FALSE);
-    pView->GetEditWin().LockKeyInput(FALSE);
-    if( bResetUndo )
-    {
-        DelBoxCntnt();
-        pWrtShell->DoUndo( bDoesUndo );
-        SwEditShell::SetUndoActionCount( nActionCnt );
-        if( bCallUndo )
-            pWrtShell->Undo();
-        bResetUndo = FALSE;
-    }
-    pWrtShell->Pop( FALSE );
+    pView->GetViewFrame()->GetDispatcher()->Lock(sal_False);
+    pView->GetEditWin().LockKeyInput(sal_False);
+    CleanupUglyHackWithUndo();
+    pWrtShell->Pop( sal_False );
 
     // Formel soll immer mit einem "=" beginnen, hier
     // also wieder entfernen
@@ -398,18 +421,10 @@ void  SwInputWindow::CancelFormula()
 {
     if(pView)
     {
-        pView->GetViewFrame()->GetDispatcher()->Lock( FALSE );
-        pView->GetEditWin().LockKeyInput(FALSE);
-        if( bResetUndo )
-        {
-            DelBoxCntnt();
-            pWrtShell->DoUndo( bDoesUndo );
-            SwEditShell::SetUndoActionCount( nActionCnt );
-            if( bCallUndo )
-                pWrtShell->Undo();
-            bResetUndo = FALSE;
-        }
-        pWrtShell->Pop( FALSE );
+        pView->GetViewFrame()->GetDispatcher()->Lock( sal_False );
+        pView->GetEditWin().LockKeyInput(sal_False);
+        CleanupUglyHackWithUndo();
+        pWrtShell->Pop( sal_False );
 
         if( bDelSel )
             pWrtShell->EnterStdMode();
@@ -467,7 +482,7 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
 }
 
 
-void SwInputWindow::SetFormula( const String& rFormula, BOOL bDelFlag )
+void SwInputWindow::SetFormula( const String& rFormula, sal_Bool bDelFlag )
 {
     String sEdit( '=' );
     if( rFormula.Len() )
@@ -485,7 +500,7 @@ void SwInputWindow::SetFormula( const String& rFormula, BOOL bDelFlag )
 
 IMPL_LINK( SwInputWindow, ModifyHdl, InputEdit*, EMPTYARG )
 {
-    if( bIsTable && bResetUndo )
+    if (bIsTable && m_bResetUndo)
     {
         pWrtShell->StartAllAction();
         DelBoxCntnt();
@@ -507,7 +522,7 @@ void SwInputWindow::DelBoxCntnt()
     {
         pWrtShell->StartAllAction();
         pWrtShell->ClearMark();
-        pWrtShell->Pop( FALSE );
+        pWrtShell->Pop( sal_False );
         pWrtShell->Push();
         pWrtShell->MoveSection( fnSectionCurr, fnSectionStart );
         pWrtShell->SetMark();
@@ -548,32 +563,32 @@ void InputEdit::UpdateRange(const String& rBoxes,
     String aBoxes = aPrefix;
     aBoxes += rBoxes;
     Selection aSelection(GetSelection());
-    USHORT nSel = (USHORT) aSelection.Len();
+    sal_uInt16 nSel = (sal_uInt16) aSelection.Len();
     //OS: mit dem folgenden Ausdruck wird sichergestellt, dass im overwrite-Modus
     //die selektierte schliessende Klammer nicht geloescht wird
     if( nSel && ( nSel > 1 ||
-        GetText().GetChar( (USHORT)aSelection.Min() ) != cClose ) )
+        GetText().GetChar( (sal_uInt16)aSelection.Min() ) != cClose ) )
         Cut();
     else
         aSelection.Max() = aSelection.Min();
     String aActText(GetText());
-    const USHORT nLen = aActText.Len();
+    const sal_uInt16 nLen = aActText.Len();
     if( !nLen )
     {
         String aStr(cOpen);
         aStr += aBoxes;
         aStr += cClose;
         SetText(aStr);
-        USHORT nPos = aStr.Search( cClose );
+        sal_uInt16 nPos = aStr.Search( cClose );
         OSL_ENSURE(nPos < aStr.Len(), "delimiter not found");
         ++nPos;
         SetSelection( Selection( nPos, nPos ));
     }
     else
     {
-        BOOL bFound = FALSE;
+        sal_Bool bFound = sal_False;
         sal_Unicode cCh;
-        USHORT nPos, nEndPos = 0, nStartPos = (USHORT) aSelection.Min();
+        sal_uInt16 nPos, nEndPos = 0, nStartPos = (sal_uInt16) aSelection.Min();
         if( nStartPos-- )
         {
             do {
@@ -587,21 +602,21 @@ void InputEdit::UpdateRange(const String& rBoxes,
         }
         if( bFound )
         {
-            bFound = FALSE;
+            bFound = sal_False;
             nEndPos = nStartPos;
             while( nEndPos < nLen )
             {
                 if( cClose == (cCh = aActText.GetChar( nEndPos )))
                 {
-                    bFound = TRUE;
+                    bFound = sal_True;
                     break;
                 }
                 ++nEndPos;
             }
             // nur wenn akt. Pos im Breich oder direkt dahinter liegt
-            if( bFound && !( nStartPos < (USHORT)aSelection.Max() &&
-                             (USHORT)aSelection.Max() <= nEndPos + 1 ))
-                bFound = FALSE;
+            if( bFound && !( nStartPos < (sal_uInt16)aSelection.Max() &&
+                             (sal_uInt16)aSelection.Max() <= nEndPos + 1 ))
+                bFound = sal_False;
         }
         if( bFound )
         {
@@ -615,7 +630,7 @@ void InputEdit::UpdateRange(const String& rBoxes,
             String aTmp( (char)cOpen );
             aTmp += aBoxes;
             aTmp += (char)cClose;
-            nPos = (USHORT)aSelection.Min();
+            nPos = (sal_uInt16)aSelection.Min();
             aActText.Insert( aTmp, nPos );
             nPos = nPos + aTmp.Len();
         }
@@ -631,7 +646,7 @@ void InputEdit::UpdateRange(const String& rBoxes,
 //==================================================================
 
 SwInputChild::SwInputChild(Window* _pParent,
-                                USHORT nId,
+                                sal_uInt16 nId,
                                 SfxBindings* pBindings,
                                 SfxChildWinInfo* ) :
                                 SfxChildWindow( _pParent, nId )
@@ -646,7 +661,7 @@ SwInputChild::SwInputChild(Window* _pParent,
 SwInputChild::~SwInputChild()
 {
     if(pDispatch)
-        pDispatch->Lock(FALSE);
+        pDispatch->Lock(sal_False);
 }
 
 

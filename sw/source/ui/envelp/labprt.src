@@ -36,6 +36,7 @@ TabPage TP_LAB_PRT
     Hide = TRUE ;
     RadioButton BTN_PAGE
     {
+        HelpID = "sw:RadioButton:TP_LAB_PRT:BTN_PAGE";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         TabStop = TRUE ;
@@ -44,6 +45,7 @@ TabPage TP_LAB_PRT
     };
     RadioButton BTN_SINGLE
     {
+        HelpID = "sw:RadioButton:TP_LAB_PRT:BTN_SINGLE";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~Single label" ;
@@ -57,6 +59,7 @@ TabPage TP_LAB_PRT
     };
     NumericField FLD_COL
     {
+        HelpID = "sw:NumericField:TP_LAB_PRT:FLD_COL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 160 , 27 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
@@ -76,6 +79,7 @@ TabPage TP_LAB_PRT
     };
     NumericField FLD_ROW
     {
+        HelpID = "sw:NumericField:TP_LAB_PRT:FLD_ROW";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 224 , 27 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
@@ -88,6 +92,7 @@ TabPage TP_LAB_PRT
     };
     CheckBox CB_SYNCHRON
     {
+        HelpID = "sw:CheckBox:TP_LAB_PRT:CB_SYNCHRON";
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
@@ -108,6 +113,7 @@ TabPage TP_LAB_PRT
     };
     PushButton BTN_PRTSETUP
     {
+        HelpID = "sw:PushButton:TP_LAB_PRT:BTN_PRTSETUP";
         Pos = MAP_APPFONT ( 198 , 70 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;

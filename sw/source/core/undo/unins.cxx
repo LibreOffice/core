@@ -28,6 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
+#include <UndoInsert.hxx>
+
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
 #include <sot/storage.hxx>
@@ -39,10 +42,13 @@
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
+#include <UndoDelete.hxx>
+#include <UndoAttribute.hxx>
 #include <rolbck.hxx>
 #include <ndgrf.hxx>
 #include <ndole.hxx>
@@ -61,42 +67,6 @@
 
 using namespace ::com::sun::star;
 
-
-class _UnReplaceData : private SwUndoSaveCntnt
-{
-    String m_sOld, m_sIns;
-    ULONG m_nSttNd, m_nEndNd, m_nOffset;
-    xub_StrLen m_nSttCnt, m_nEndCnt, m_nSetPos, m_nSelEnd;
-    BOOL m_bSplitNext : 1;
-    BOOL m_bRegExp : 1;
-    // metadata references for paragraph and following para (if m_bSplitNext)
-    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
-    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
-
-public:
-    _UnReplaceData( const SwPaM& rPam, const String& rIns, BOOL bRegExp );
-    ~_UnReplaceData();
-
-    void Undo( SwUndoIter& rIter );
-    void Redo( SwUndoIter& rIter );
-    void SetEnd( const SwPaM& rPam );
-
-    const String & GetOld() const { return m_sOld; }
-    const String & GetIns() const { return m_sIns; }
-};
-
-
-SV_IMPL_PTRARR( _UnReplaceDatas, _UnReplaceData* )
-
-//------------------------------------------------------------------
-
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
-
-// zwei Zugriffs-Funktionen
-inline SwPosition* IterPt( SwUndoIter& rUIter )
-{   return rUIter.pAktPam->GetPoint();  }
-inline SwPosition* IterMk( SwUndoIter& rUIter )
-{   return rUIter.pAktPam->GetMark();   }
 
 //------------------------------------------------------------
 
@@ -142,10 +112,10 @@ void SwUndoInsert::Init(const SwNodeIndex & rNd)
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, xub_StrLen nCnt,
             xub_StrLen nL,
             const IDocumentContentOperations::InsertFlags nInsertFlags,
-            BOOL bWDelim )
+            sal_Bool bWDelim )
     : SwUndo(UNDO_TYPING), pPos( 0 ), pTxt( 0 ), pRedlData( 0 ),
         nNode( rNd.GetIndex() ), nCntnt(nCnt), nLen(nL),
-        bIsWordDelim( bWDelim ), bIsAppend( FALSE )
+        bIsWordDelim( bWDelim ), bIsAppend( sal_False )
     , m_nInsertFlags(nInsertFlags)
 {
     Init(rNd);
@@ -155,7 +125,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, xub_StrLen nCnt,
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
     : SwUndo(UNDO_SPLITNODE), pPos( 0 ), pTxt( 0 ),
         pRedlData( 0 ), nNode( rNd.GetIndex() ), nCntnt(0), nLen(1),
-        bIsWordDelim( FALSE ), bIsAppend( TRUE )
+        bIsWordDelim( sal_False ), bIsAppend( sal_True )
     , m_nInsertFlags(IDocumentContentOperations::INS_EMPTYEXPAND)
 {
     Init(rNd);
@@ -165,7 +135,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
 // werden kann. Wenn ja, dann aender die Laenge und die InsPos.
 // Dann wird von SwDoc::Insert kein neues Object in die Undoliste gestellt.
 
-BOOL SwUndoInsert::CanGrouping( sal_Unicode cIns )
+sal_Bool SwUndoInsert::CanGrouping( sal_Unicode cIns )
 {
     if( !bIsAppend && bIsWordDelim ==
         !GetAppCharClass().isLetterNumeric( String( cIns )) )
@@ -176,14 +146,14 @@ BOOL SwUndoInsert::CanGrouping( sal_Unicode cIns )
         if (pUndoTxt)
             pUndoTxt->Insert(cIns);
 
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SwUndoInsert::CanGrouping( const SwPosition& rPos )
+sal_Bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if( nNode == rPos.nNode.GetIndex() &&
         nCntnt == rPos.nContent.GetIndex() )
     {
@@ -192,7 +162,7 @@ BOOL SwUndoInsert::CanGrouping( const SwPosition& rPos )
         if( ( ~nsRedlineMode_t::REDLINE_SHOW_MASK & rDoc.GetRedlineMode() ) ==
             ( ~nsRedlineMode_t::REDLINE_SHOW_MASK & GetRedlineMode() ) )
         {
-            bRet = TRUE;
+            bRet = sal_True;
 
             // dann war oder ist noch Redline an:
             // pruefe, ob an der InsPosition ein anderer Redline
@@ -204,7 +174,7 @@ BOOL SwUndoInsert::CanGrouping( const SwPosition& rPos )
                 SwRedlineData aRData( nsRedlineType_t::REDLINE_INSERT, rDoc.GetRedlineAuthor() );
                 const SwIndexReg* pIReg = rPos.nContent.GetIdxReg();
                 SwIndex* pIdx;
-                for( USHORT i = 0; i < rTbl.Count(); ++i )
+                for( sal_uInt16 i = 0; i < rTbl.Count(); ++i )
                 {
                     SwRedline* pRedl = rTbl[ i ];
                     if( pIReg == (pIdx = &pRedl->End()->nContent)->GetIdxReg() &&
@@ -213,7 +183,7 @@ BOOL SwUndoInsert::CanGrouping( const SwPosition& rPos )
                         if( !pRedl->HasMark() || !pRedlData ||
                             *pRedl != *pRedlData || *pRedl != aRData )
                         {
-                            bRet = FALSE;
+                            bRet = sal_False;
                             break;
                         }
                     }
@@ -249,13 +219,13 @@ SwUndoInsert::~SwUndoInsert()
 
 
 
-void SwUndoInsert::Undo( SwUndoIter& rUndoIter )
+void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc* pTmpDoc = &rUndoIter.GetDoc();
+    SwDoc *const pTmpDoc = & rContext.GetDoc();
+    SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
 
     if( bIsAppend )
     {
-        SwPaM* pPam = rUndoIter.pAktPam;
         pPam->GetPoint()->nNode = nNode;
 
         if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
@@ -272,7 +242,7 @@ void SwUndoInsert::Undo( SwUndoIter& rUndoIter )
     }
     else
     {
-        ULONG nNd = nNode;
+        sal_uLong nNd = nNode;
         xub_StrLen nCnt = nCntnt;
         if( nLen )
         {
@@ -288,7 +258,7 @@ void SwUndoInsert::Undo( SwUndoIter& rUndoIter )
                 aPaM.GetPoint()->nContent -= nLen;
                 if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
                     pTmpDoc->DeleteRedline( aPaM, true, USHRT_MAX );
-                RemoveIdxFromRange( aPaM, FALSE );
+                RemoveIdxFromRange( aPaM, sal_False );
                 pTxt = new String( pTxtNode->GetTxt().Copy(nCntnt-nLen, nLen) );
                 pTxtNode->EraseText( aPaM.GetPoint()->nContent, nLen );
             }
@@ -297,7 +267,7 @@ void SwUndoInsert::Undo( SwUndoIter& rUndoIter )
                 aPaM.Move(fnMoveBackward);
                 if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
                     pTmpDoc->DeleteRedline( aPaM, true, USHRT_MAX );
-                RemoveIdxFromRange( aPaM, FALSE );
+                RemoveIdxFromRange( aPaM, sal_False );
             }
 
             nNd = aPaM.GetPoint()->nNode.GetIndex();
@@ -312,24 +282,22 @@ void SwUndoInsert::Undo( SwUndoIter& rUndoIter )
             nCntnt = aPaM.GetPoint()->nContent.GetIndex();
         }
 
-        // setze noch den Cursor auf den Undo-Bereich
-        rUndoIter.pAktPam->DeleteMark();
+        // set cursor to Undo range
+        pPam->DeleteMark();
 
-        IterPt(rUndoIter)->nNode = nNd;
-        IterPt(rUndoIter)->nContent.Assign( pTmpDoc->GetNodes()[
-                IterPt(rUndoIter)->nNode ]->GetCntntNode(), nCnt );
-        // SPoint und GetMark auf der gleichen Position
+        pPam->GetPoint()->nNode = nNd;
+        pPam->GetPoint()->nContent.Assign(
+                pPam->GetPoint()->nNode.GetNode().GetCntntNode(), nCnt );
     }
 
     DELETEZ(pUndoTxt);
 }
 
 
-void SwUndoInsert::Redo( SwUndoIter& rUndoIter )
+void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    // setze noch den Cursor auf den Redo-Bereich
-    SwPaM* pPam = rUndoIter.pAktPam;
-    SwDoc* pTmpDoc = pPam->GetDoc();
+    SwDoc *const pTmpDoc = & rContext.GetDoc();
+    SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
     pPam->DeleteMark();
 
     if( bIsAppend )
@@ -357,12 +325,13 @@ void SwUndoInsert::Redo( SwUndoIter& rUndoIter )
     else
     {
         pPam->GetPoint()->nNode = nNode;
-        SwCntntNode* pCNd = pTmpDoc->GetNodes()[ pPam->GetPoint()->nNode ]->GetCntntNode();
+        SwCntntNode *const pCNd =
+            pPam->GetPoint()->nNode.GetNode().GetCntntNode();
         pPam->GetPoint()->nContent.Assign( pCNd, nCntnt );
 
         if( nLen )
         {
-            BOOL bMvBkwrd = MovePtBackward( *pPam );
+            sal_Bool bMvBkwrd = MovePtBackward( *pPam );
 
             if( pTxt )
             {
@@ -375,7 +344,7 @@ void SwUndoInsert::Redo( SwUndoIter& rUndoIter )
             else
             {
                 // Inhalt wieder einfuegen. (erst pPos abmelden !!)
-                ULONG nMvNd = pPos->nNode.GetIndex();
+                sal_uLong nMvNd = pPos->nNode.GetIndex();
                 xub_StrLen nMvCnt = pPos->nContent.GetIndex();
                 DELETEZ( pPos );
                 MoveFromUndoNds( *pTmpDoc, nMvNd, nMvCnt, *pPam->GetMark() );
@@ -384,18 +353,18 @@ void SwUndoInsert::Redo( SwUndoIter& rUndoIter )
             nCntnt = pPam->GetMark()->nContent.GetIndex();
 
             MovePtForward( *pPam, bMvBkwrd );
-            rUndoIter.pAktPam->Exchange();
+            pPam->Exchange();
             if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
             {
                 RedlineMode_t eOld = pTmpDoc->GetRedlineMode();
                 pTmpDoc->SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
                 pTmpDoc->AppendRedline( new SwRedline( *pRedlData,
-                                            *rUndoIter.pAktPam ), true);
+                                            *pPam ), true);
                 pTmpDoc->SetRedlineMode_intern( eOld );
             }
             else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
                     pTmpDoc->GetRedlineTbl().Count() )
-                pTmpDoc->SplitRedline( *rUndoIter.pAktPam );
+                pTmpDoc->SplitRedline(*pPam);
         }
     }
 
@@ -403,13 +372,12 @@ void SwUndoInsert::Redo( SwUndoIter& rUndoIter )
 }
 
 
-void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
+void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    rUndoIter.pLastUndoObj = this;
     if( !nLen )
         return;
 
-    SwDoc& rDoc = rUndoIter.GetDoc();
+    SwDoc & rDoc = rContext.GetDoc();
     SwNodeIndex aNd( rDoc.GetNodes(), nNode );
     SwCntntNode* pCNd = aNd.GetNode().GetCntntNode();;
 
@@ -427,15 +395,15 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
     {
     case ND_TEXTNODE:
         if( bIsAppend )
-            rDoc.AppendTxtNode( *rUndoIter.pAktPam->GetPoint() );
+        {
+            rDoc.AppendTxtNode( *rContext.GetRepeatPaM().GetPoint() );
+        }
         else
         {
             String aTxt( ((SwTxtNode*)pCNd)->GetTxt() );
-            BOOL bGroupUndo = rDoc.DoesGroupUndo();
-            rDoc.DoGroupUndo( FALSE );
-            rDoc.InsertString( *rUndoIter.pAktPam,
+            ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
+            rDoc.InsertString( rContext.GetRepeatPaM(),
                 aTxt.Copy( nCntnt - nLen, nLen ) );
-            rDoc.DoGroupUndo( bGroupUndo );
         }
         break;
     case ND_GRFNODE:
@@ -445,7 +413,7 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
             if( pGrfNd->IsGrfLink() )
                 pGrfNd->GetFileFilterNms( &sFile, &sFilter );
 
-            rDoc.Insert( *rUndoIter.pAktPam, sFile, sFilter,
+            rDoc.Insert( rContext.GetRepeatPaM(), sFile, sFilter,
                                 &pGrfNd->GetGrf(),
                                 0/* Grafik-Collection*/, NULL, NULL );
         }
@@ -465,7 +433,10 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
             if ( aCnt.StoreEmbeddedObject( rSwOLE.GetOleRef(), aName, sal_True ) )
             {
                 uno::Reference < embed::XEmbeddedObject > aNew = aCnt.GetEmbeddedObject( aName );
-                rDoc.Insert( *rUndoIter.pAktPam, svt::EmbeddedObjectRef( aNew, ((SwOLENode*)pCNd)->GetAspect() ), NULL, NULL, NULL );
+                rDoc.Insert( rContext.GetRepeatPaM(),
+                    svt::EmbeddedObjectRef( aNew,
+                        static_cast<SwOLENode*>(pCNd)->GetAspect() ),
+                    NULL, NULL, NULL );
             }
 
             break;
@@ -505,82 +476,86 @@ SwRewriter SwUndoInsert::GetRewriter() const
 }
 
 
-/*  */
+// SwUndoReplace /////////////////////////////////////////////////////////
 
-SwUndoReplace::SwUndoReplace()
-    : SwUndo( UNDO_REPLACE ), nAktPos( USHRT_MAX )
+
+class SwUndoReplace::Impl
+    : private SwUndoSaveCntnt
 {
+    ::rtl::OUString m_sOld;
+    ::rtl::OUString m_sIns;
+    sal_uLong m_nSttNd, m_nEndNd, m_nOffset;
+    xub_StrLen m_nSttCnt, m_nEndCnt, m_nSetPos, m_nSelEnd;
+    bool m_bSplitNext : 1;
+    bool m_bRegExp : 1;
+    // metadata references for paragraph and following para (if m_bSplitNext)
+    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
+    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
+
+public:
+    Impl(SwPaM const& rPam, ::rtl::OUString const& rIns, bool const bRegExp);
+    virtual ~Impl()
+    {
+    }
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+
+    void SetEnd(SwPaM const& rPam);
+
+    ::rtl::OUString const& GetOld() const { return m_sOld; }
+    ::rtl::OUString const& GetIns() const { return m_sIns; }
+};
+
+
+SwUndoReplace::SwUndoReplace(SwPaM const& rPam,
+        ::rtl::OUString const& rIns, bool const bRegExp)
+    : SwUndo( UNDO_REPLACE )
+    , m_pImpl(new Impl(rPam, rIns, bRegExp))
+{
+        OSL_ENSURE( !nAktPos, "Redo ohne vorheriges Undo??" );
 }
 
 SwUndoReplace::~SwUndoReplace()
 {
 }
 
-void SwUndoReplace::Undo( SwUndoIter& rUndoIter )
+void SwUndoReplace::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    // war dieses nicht die letze Undo-Aktion, dann setze den
-    // Count neu
-    if( rUndoIter.pLastUndoObj != this )
-    {
-        nAktPos = aArr.Count();
-        rUndoIter.pLastUndoObj = this;
-        bOldIterFlag = rUndoIter.bWeiter;
-        rUndoIter.bWeiter = TRUE;
-    }
-
-    aArr[ --nAktPos ]->Undo( rUndoIter );
-
-    if( !nAktPos )      // alten Status wieder zurueck
-        rUndoIter.bWeiter = bOldIterFlag;
+    m_pImpl->UndoImpl(rContext);
 }
 
-
-void SwUndoReplace::Redo( SwUndoIter& rUndoIter )
+void SwUndoReplace::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    // war dieses nicht die letze Undo-Aktion, dann setze den
-    // Count neu
-    if( rUndoIter.pLastUndoObj != this )
-    {
-        OSL_ENSURE( !nAktPos, "Redo ohne vorheriges Undo??" );
-        rUndoIter.pLastUndoObj = this;
-        bOldIterFlag = rUndoIter.bWeiter;
-        rUndoIter.bWeiter = TRUE;
-    }
-
-    aArr[ nAktPos ]->Redo( rUndoIter );
-
-    if( ++nAktPos >= aArr.Count() ) // alten Status wieder zurueck
-    {
-        nAktPos = USHRT_MAX;
-        rUndoIter.bWeiter = bOldIterFlag;
-    }
+    m_pImpl->RedoImpl(rContext);
 }
 
-// #111827#
-SwRewriter SwUndoReplace::GetRewriter() const
+SwRewriter
+MakeUndoReplaceRewriter(sal_uLong const occurrences,
+        ::rtl::OUString const& sOld, ::rtl::OUString const& sNew)
 {
     SwRewriter aResult;
 
-    if (aArr.Count() > 1)
+    if (1 < occurrences)
     {
-        aResult.AddRule(UNDO_ARG1, String::CreateFromInt32(aArr.Count()));
+        aResult.AddRule(UNDO_ARG1, String::CreateFromInt32(occurrences));
         aResult.AddRule(UNDO_ARG2, String(SW_RES(STR_OCCURRENCES_OF)));
 
         String aTmpStr;
         aTmpStr += String(SW_RES(STR_START_QUOTE));
-        aTmpStr += ShortenString(aArr[0]->GetOld(), nUndoStringLength,
+        aTmpStr += ShortenString(sOld, nUndoStringLength,
                                  SW_RES(STR_LDOTS));
         aTmpStr += String(SW_RES(STR_END_QUOTE));
         aResult.AddRule(UNDO_ARG3, aTmpStr);
     }
-    else if (aArr.Count() == 1)
+    else if (1 == occurrences)
     {
         {
             String aTmpStr;
 
             aTmpStr += String(SW_RES(STR_START_QUOTE));
             // #i33488 #
-            aTmpStr += ShortenString(aArr[0]->GetOld(), nUndoStringLength,
+            aTmpStr += ShortenString(sOld, nUndoStringLength,
                                      SW_RES(STR_LDOTS));
             aTmpStr += String(SW_RES(STR_END_QUOTE));
             aResult.AddRule(UNDO_ARG1, aTmpStr);
@@ -593,7 +568,7 @@ SwRewriter SwUndoReplace::GetRewriter() const
 
             aTmpStr += String(SW_RES(STR_START_QUOTE));
             // #i33488 #
-            aTmpStr += ShortenString(aArr[0]->GetIns(), nUndoStringLength,
+            aTmpStr += ShortenString(sNew, nUndoStringLength,
                                      SW_RES(STR_LDOTS));
             aTmpStr += String(SW_RES(STR_END_QUOTE));
             aResult.AddRule(UNDO_ARG3, aTmpStr);
@@ -603,24 +578,23 @@ SwRewriter SwUndoReplace::GetRewriter() const
     return aResult;
 }
 
-void SwUndoReplace::AddEntry( const SwPaM& rPam, const String& rInsert,
-                                BOOL bRegExp )
+// #111827#
+SwRewriter SwUndoReplace::GetRewriter() const
 {
-    _UnReplaceData* pNew = new _UnReplaceData( rPam, rInsert, bRegExp );
-    aArr.C40_INSERT(_UnReplaceData, pNew, aArr.Count() );
+    return MakeUndoReplaceRewriter(1, m_pImpl->GetOld(), m_pImpl->GetIns());
 }
 
-void SwUndoReplace::SetEntryEnd( const SwPaM& rPam )
+void SwUndoReplace::SetEnd(SwPaM const& rPam)
 {
-    _UnReplaceData* pEntry = aArr[ aArr.Count()-1 ];
-    pEntry->SetEnd( rPam );
+    m_pImpl->SetEnd(rPam);
 }
 
-_UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
-                                BOOL bRgExp )
-    : m_sIns( rIns ), m_nOffset( 0 )
+SwUndoReplace::Impl::Impl(
+        SwPaM const& rPam, ::rtl::OUString const& rIns, bool const bRegExp)
+    : m_sIns( rIns )
+    , m_nOffset( 0 )
+    , m_bRegExp(bRegExp)
 {
-    m_bRegExp = bRgExp;
 
     const SwPosition * pStt( rPam.Start() );
     const SwPosition * pEnd( rPam.End() );
@@ -639,7 +613,7 @@ _UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
 
     m_nSetPos = pHistory->Count();
 
-    ULONG nNewPos = pStt->nNode.GetIndex();
+    sal_uLong nNewPos = pStt->nNode.GetIndex();
     m_nOffset = m_nSttNd - nNewPos;
 
     if ( pNd->GetpSwpHints() )
@@ -655,7 +629,7 @@ _UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
         pHistory->Add( pNd->GetTxtColl(), nNewPos, ND_TEXTNODE );
 
         SwTxtNode* pNext = pEnd->nNode.GetNode().GetTxtNode();
-        ULONG nTmp = pNext->GetIndex();
+        sal_uLong nTmp = pNext->GetIndex();
         pHistory->CopyAttr( pNext->GetpSwpHints(), nTmp, 0,
                             pNext->GetTxt().Len(), true );
         if( pNext->HasSwAttrSet() )
@@ -674,14 +648,10 @@ _UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
     m_sOld = pNd->GetTxt().Copy( m_nSttCnt, nECnt - m_nSttCnt );
 }
 
-_UnReplaceData::~_UnReplaceData()
+void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-}
-
-void _UnReplaceData::Undo( SwUndoIter& rIter )
-{
-    SwDoc* pDoc = &rIter.GetDoc();
-    SwPaM& rPam = *rIter.pAktPam;
+    SwDoc *const pDoc = & rContext.GetDoc();
+    SwPaM & rPam(rContext.GetCursorSupplier().CreateNewShellCursor());
     rPam.DeleteMark();
 
     SwTxtNode* pNd = pDoc->GetNodes()[ m_nSttNd - m_nOffset ]->GetTxtNode();
@@ -690,18 +660,18 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
     SwAutoCorrExceptWord* pACEWord = pDoc->GetAutoCorrExceptWord();
     if( pACEWord )
     {
-        if( 1 == m_sIns.Len() && 1 == m_sOld.Len() )
+        if ((1 == m_sIns.getLength()) && (1 == m_sOld.getLength()))
         {
             SwPosition aPos( *pNd ); aPos.nContent.Assign( pNd, m_nSttCnt );
-            pACEWord->CheckChar( aPos, m_sOld.GetChar( 0 ) );
+            pACEWord->CheckChar( aPos, m_sOld[ 0 ] );
         }
         pDoc->SetAutoCorrExceptWord( 0 );
     }
 
-    SwIndex aIdx( pNd, m_nSttCnt );
+    SwIndex aIdx( pNd, sal_uInt16( m_nSttCnt ) );
     if( m_nSttNd == m_nEndNd )
     {
-        pNd->EraseText( aIdx, m_sIns.Len() );
+        pNd->EraseText( aIdx, sal_uInt16( m_sIns.getLength() ) );
     }
     else
     {
@@ -729,7 +699,7 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
         pNd->RestoreMetadata(m_pMetadataUndoStart);
     }
 
-    if( m_sOld.Len() )
+    if (m_sOld.getLength())
     {
         pNd->InsertText( m_sOld, aIdx );
     }
@@ -763,13 +733,10 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
     rPam.GetPoint()->nContent = aIdx;
 }
 
-void _UnReplaceData::Redo( SwUndoIter& rIter )
+void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc& rDoc = rIter.GetDoc();
-    BOOL bUndo = rDoc.DoesUndo();
-    rDoc.DoUndo( FALSE );
-
-    SwPaM& rPam = *rIter.pAktPam;
+    SwDoc & rDoc = rContext.GetDoc();
+    SwPaM & rPam(rContext.GetCursorSupplier().CreateNewShellCursor());
     rPam.DeleteMark();
     rPam.GetPoint()->nNode = m_nSttNd;
 
@@ -806,21 +773,21 @@ void _UnReplaceData::Redo( SwUndoIter& rIter )
 
     rDoc.ReplaceRange( rPam, m_sIns, m_bRegExp );
     rPam.DeleteMark();
-    rDoc.DoUndo( bUndo );
 }
 
-void _UnReplaceData::SetEnd( const SwPaM& rPam )
+void SwUndoReplace::Impl::SetEnd(SwPaM const& rPam)
 {
     if( rPam.GetPoint()->nNode != rPam.GetMark()->nNode )
     {
-        // es wurden mehrere Absaetze eingefuegt
+        // multiple paragraphs were inserted
         const SwPosition* pEnd = rPam.End();
         m_nEndNd = m_nOffset + pEnd->nNode.GetIndex();
         m_nEndCnt = pEnd->nContent.GetIndex();
     }
 }
 
-/*  */
+
+// SwUndoReRead //////////////////////////////////////////////////////////
 
 
 SwUndoReRead::SwUndoReRead( const SwPaM& rPam, const SwGrfNode& rGrfNd )
@@ -838,9 +805,9 @@ SwUndoReRead::~SwUndoReRead()
 }
 
 
-void SwUndoReRead::SetAndSave( SwUndoIter& rIter )
+void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
 {
-    SwDoc& rDoc = rIter.GetDoc();
+    SwDoc & rDoc = rContext.GetDoc();
     SwGrfNode* pGrfNd = rDoc.GetNodes()[ nPos ]->GetGrfNode();
 
     if( !pGrfNd )
@@ -850,37 +817,37 @@ void SwUndoReRead::SetAndSave( SwUndoIter& rIter )
     Graphic* pOldGrf = pGrf;
     String* pOldNm = pNm;
     String* pOldFltr = pFltr;
-    USHORT nOldMirr = nMirr;
+    sal_uInt16 nOldMirr = nMirr;
 
     SaveGraphicData( *pGrfNd );
     if( pOldNm )
     {
-        pGrfNd->ReRead( *pOldNm, pFltr ? *pFltr : aEmptyStr, 0, 0, TRUE );
+        pGrfNd->ReRead( *pOldNm, pFltr ? *pFltr : aEmptyStr, 0, 0, sal_True );
         delete pOldNm;
         delete pOldFltr;
     }
     else
     {
-        pGrfNd->ReRead( aEmptyStr, aEmptyStr, pOldGrf, 0, TRUE );
+        pGrfNd->ReRead( aEmptyStr, aEmptyStr, pOldGrf, 0, sal_True );
         delete pOldGrf;
     }
 
     if( RES_MIRROR_GRAPH_DONT != nOldMirr )
         pGrfNd->SetAttr( SwMirrorGrf() );
 
-    rIter.pSelFmt = pGrfNd->GetFlyFmt();
+    rContext.SetSelections(pGrfNd->GetFlyFmt(), 0);
 }
 
 
-void SwUndoReRead::Undo( SwUndoIter& rIter )
+void SwUndoReRead::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SetAndSave( rIter );
+    SetAndSave(rContext);
 }
 
 
-void SwUndoReRead::Redo( SwUndoIter& rIter )
+void SwUndoReRead::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SetAndSave( rIter );
+    SetAndSave(rContext);
 }
 
 
@@ -895,7 +862,7 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
     }
     else
     {
-        ((SwGrfNode&)rGrfNd).SwapIn( TRUE );
+        ((SwGrfNode&)rGrfNd).SwapIn( sal_True );
         pGrf = new Graphic( rGrfNd.GetGrf() );
         pNm = pFltr = 0;
     }
@@ -908,10 +875,10 @@ SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
                                       const String &rTxt,
                                       const String& rSeparator,
                                       const String& rNumberSeparator,
-                                      const BOOL bBef,
-                                      const USHORT nInitId,
+                                      const sal_Bool bBef,
+                                      const sal_uInt16 nInitId,
                                       const String& rCharacterStyle,
-                                      const BOOL bCpyBorder )
+                                      const sal_Bool bCpyBorder )
     : SwUndo( UNDO_INSERTLABEL ),
       sText( rTxt ),
       sSeparator( rSeparator ),
@@ -923,7 +890,7 @@ SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
       bBefore( bBef ),
       bCpyBrd( bCpyBorder )
 {
-    bUndoKeep = FALSE;
+    bUndoKeep = sal_False;
     OBJECT.pUndoFly = 0;
     OBJECT.pUndoAttr = 0;
 }
@@ -939,9 +906,9 @@ SwUndoInsertLabel::~SwUndoInsertLabel()
         delete NODE.pUndoInsNd;
 }
 
-void SwUndoInsertLabel::Undo( SwUndoIter& rIter )
+void SwUndoInsertLabel::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc& rDoc = rIter.GetDoc();
+    SwDoc & rDoc = rContext.GetDoc();
 
     if( LTYPE_OBJECT == eType || LTYPE_DRAW == eType )
     {
@@ -953,8 +920,8 @@ void SwUndoInsertLabel::Undo( SwUndoIter& rIter )
             ( LTYPE_DRAW != eType ||
               0 != (pSdrObj = pFmt->FindSdrObject()) ) )
         {
-            OBJECT.pUndoAttr->Undo( rIter );
-            OBJECT.pUndoFly->Undo( rIter );
+            OBJECT.pUndoAttr->UndoImpl(rContext);
+            OBJECT.pUndoFly->UndoImpl(rContext);
             if( LTYPE_DRAW == eType )
             {
                 pSdrObj->SetLayer( nLayerId );
@@ -970,18 +937,18 @@ void SwUndoInsertLabel::Undo( SwUndoIter& rIter )
             if ( pNd )
                 pNd->GetTable().GetFrmFmt()->ResetFmtAttr( RES_KEEP );
         }
-        SwPaM aPam( *rIter.pAktPam->GetPoint() );
+        SwPaM aPam( rDoc.GetNodes().GetEndOfContent() );
         aPam.GetPoint()->nNode = NODE.nNode;
         aPam.SetMark();
         aPam.GetPoint()->nNode = NODE.nNode + 1;
-        NODE.pUndoInsNd = new SwUndoDelete( aPam, TRUE );
+        NODE.pUndoInsNd = new SwUndoDelete( aPam, sal_True );
     }
 }
 
 
-void SwUndoInsertLabel::Redo( SwUndoIter& rIter )
+void SwUndoInsertLabel::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc& rDoc = rIter.GetDoc();
+    SwDoc & rDoc = rContext.GetDoc();
 
     if( LTYPE_OBJECT == eType || LTYPE_DRAW == eType )
     {
@@ -993,8 +960,8 @@ void SwUndoInsertLabel::Redo( SwUndoIter& rIter )
             ( LTYPE_DRAW != eType ||
               0 != (pSdrObj = pFmt->FindSdrObject()) ) )
         {
-            OBJECT.pUndoFly->Redo( rIter );
-            OBJECT.pUndoAttr->Redo( rIter );
+            OBJECT.pUndoFly->RedoImpl(rContext);
+            OBJECT.pUndoAttr->RedoImpl(rContext);
             if( LTYPE_DRAW == eType )
             {
                 pSdrObj->SetLayer( nLayerId );
@@ -1013,19 +980,19 @@ void SwUndoInsertLabel::Redo( SwUndoIter& rIter )
             SwTableNode *pNd = rDoc.GetNodes()[
                         rDoc.GetNodes()[NODE.nNode-1]->StartOfSectionIndex()]->GetTableNode();
             if ( pNd )
-                pNd->GetTable().GetFrmFmt()->SetFmtAttr( SvxFmtKeepItem(TRUE, RES_KEEP) );
+                pNd->GetTable().GetFrmFmt()->SetFmtAttr( SvxFmtKeepItem(sal_True, RES_KEEP) );
         }
-        NODE.pUndoInsNd->Undo( rIter );
+        NODE.pUndoInsNd->UndoImpl(rContext);
         delete NODE.pUndoInsNd, NODE.pUndoInsNd = 0;
     }
 }
 
-void SwUndoInsertLabel::Repeat( SwUndoIter& rIter )
+void SwUndoInsertLabel::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    SwDoc& rDoc = rIter.GetDoc();
-    const SwPosition& rPos = *rIter.pAktPam->GetPoint();
+    SwDoc & rDoc = rContext.GetDoc();
+    const SwPosition& rPos = *rContext.GetRepeatPaM().GetPoint();
 
-    ULONG nIdx = 0;
+    sal_uLong nIdx = 0;
 
     SwCntntNode* pCNd = rPos.nNode.GetNode().GetCntntNode();
     if( pCNd )
@@ -1091,7 +1058,7 @@ void SwUndoInsertLabel::SetFlys( SwFrmFmt& rOldFly, SfxItemSet& rChgSet,
     }
 }
 
-void SwUndoInsertLabel::SetDrawObj( BYTE nLId )
+void SwUndoInsertLabel::SetDrawObj( sal_uInt8 nLId )
 {
     if( LTYPE_DRAW == eType )
     {

@@ -52,7 +52,7 @@ public:
     TYPEINFO();
 
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
-    virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
+    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
 
     // get and set TxtNode pointer
     const SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }
@@ -69,7 +69,7 @@ public:
     bool IsVisitedValid() const { return m_bVisitedValid; }
     void SetVisitedValid( bool bNew ) { m_bVisitedValid = bNew; }
 
-    BOOL IsProtect() const;
+    sal_Bool IsProtect() const;
 };
 
 inline const SwTxtNode& SwTxtINetFmt::GetTxtNode() const

@@ -38,6 +38,7 @@ ModalDialog DLG_BIB_BASE
     Text [ en-US ] = "Edit Categories" ;
     PushButton PB_NEW
     {
+        HelpID = "sw:PushButton:DLG_BIB_BASE:PB_NEW";
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 293 , 66 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -46,6 +47,7 @@ ModalDialog DLG_BIB_BASE
     };
     PushButton PB_DELETE
     {
+        HelpID = "sw:PushButton:DLG_BIB_BASE:PB_DELETE";
         Pos = MAP_APPFONT ( 293 , 83 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete" ;
@@ -54,6 +56,7 @@ ModalDialog DLG_BIB_BASE
     };
     PushButton PB_RENAME
     {
+        HelpID = "sw:PushButton:DLG_BIB_BASE:PB_RENAME";
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 293 , 100 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -87,6 +90,7 @@ ModalDialog DLG_BIB_BASE
     };
     Edit ED_NAME
     {
+        HelpID = "sw:Edit:DLG_BIB_BASE:ED_NAME";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 159 , 12 ) ;
         TabStop = TRUE ;
@@ -101,6 +105,7 @@ ModalDialog DLG_BIB_BASE
     };
     ListBox LB_PATH
     {
+        HelpID = "sw:ListBox:DLG_BIB_BASE:LB_PATH";
         Pos = MAP_APPFONT ( 174 , 14 ) ;
         Size = MAP_APPFONT ( 107 , 50 ) ;
         DropDown = TRUE ;

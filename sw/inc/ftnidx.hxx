@@ -53,7 +53,7 @@ public:
     void UpdateFtn( const SwNodeIndex& rStt ); // Update all from pos.
     void UpdateAllFtn();                       // Update all footnotes.
 
-    SwTxtFtn* SeekEntry( const SwNodeIndex& rIdx, USHORT* pPos = 0 ) const;
+    SwTxtFtn* SeekEntry( const SwNodeIndex& rIdx, sal_uInt16* pPos = 0 ) const;
 };
 
 
@@ -70,8 +70,8 @@ public:
     static const SwSectionNode* FindSectNdWithEndAttr(
                                             const SwTxtFtn& rTxtFtn );
 
-    USHORT GetNumber( const SwTxtFtn& rTxtFtn, const SwSectionNode& rNd );
-    USHORT ChkNumber( const SwTxtFtn& rTxtFtn );
+    sal_uInt16 GetNumber( const SwTxtFtn& rTxtFtn, const SwSectionNode& rNd );
+    sal_uInt16 ChkNumber( const SwTxtFtn& rTxtFtn );
 };
 
 

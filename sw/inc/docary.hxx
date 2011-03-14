@@ -70,14 +70,7 @@ SV_DECL_PTRARR_DEL( SwFldTypes, SwFldTypePtr, INIT_FLDTYPES, GROW_FLDTYPES )
 typedef SwTOXType* SwTOXTypePtr;
 SV_DECL_PTRARR_DEL( SwTOXTypes, SwTOXTypePtr, 0, 1 )
 
-// Undo
-#define INIT_UNDOS 5
-#define GROW_UNDOS 5
-
 // Array of Undo-history.
-typedef SwUndo* SwUndoPtr;
-SV_DECL_PTRARR_DEL( SwUndos, SwUndoPtr, INIT_UNDOS, GROW_UNDOS )
-
 typedef SwSectionFmt* SwSectionFmtPtr;
 SV_DECL_PTRARR_DEL(SwSectionFmts,SwSectionFmtPtr,0,4)
 
@@ -91,28 +84,28 @@ SV_DECL_PTRARR_SORT_DEL( _SwRedlineTbl, SwRedlinePtr, 0, 16 )
 class SwRedlineTbl : private _SwRedlineTbl
 {
 public:
-    SwRedlineTbl( BYTE nSize = 0, BYTE nG = 16 )
+    SwRedlineTbl( sal_uInt8 nSize = 0, sal_uInt8 nG = 16 )
         : _SwRedlineTbl( nSize, nG ) {}
     ~SwRedlineTbl() {}
 
-    BOOL SavePtrInArr( SwRedlinePtr p ) { return _SwRedlineTbl::Insert( p ); }
+    sal_Bool SavePtrInArr( SwRedlinePtr p ) { return _SwRedlineTbl::Insert( p ); }
 
-    BOOL Insert( SwRedlinePtr& p, BOOL bIns = TRUE );
-    BOOL Insert( SwRedlinePtr& p, USHORT& rInsPos, BOOL bIns = TRUE );
-    BOOL InsertWithValidRanges( SwRedlinePtr& p, USHORT* pInsPos = 0 );
+    sal_Bool Insert( SwRedlinePtr& p, sal_Bool bIns = sal_True );
+    sal_Bool Insert( SwRedlinePtr& p, sal_uInt16& rInsPos, sal_Bool bIns = sal_True );
+    sal_Bool InsertWithValidRanges( SwRedlinePtr& p, sal_uInt16* pInsPos = 0 );
 
-    void Remove( USHORT nP, USHORT nL = 1 );
-    void DeleteAndDestroy( USHORT nP, USHORT nL=1 );
+    void Remove( sal_uInt16 nP, sal_uInt16 nL = 1 );
+    void DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL=1 );
 
     // Search next or previous Redline with the same Seq. No.
     // Search can be restricted via Lookahaed.
     // Using 0 or USHRT_MAX makes search the whole array.
-    USHORT FindNextOfSeqNo( USHORT nSttPos, USHORT nLookahead = 20 ) const;
-    USHORT FindPrevOfSeqNo( USHORT nSttPos, USHORT nLookahead = 20 ) const;
-    USHORT FindNextSeqNo( USHORT nSeqNo, USHORT nSttPos,
-                            USHORT nLookahead = 20 ) const;
-    USHORT FindPrevSeqNo( USHORT nSeqNo, USHORT nSttPos,
-                            USHORT nLookahead = 20 ) const;
+    sal_uInt16 FindNextOfSeqNo( sal_uInt16 nSttPos, sal_uInt16 nLookahead = 20 ) const;
+    sal_uInt16 FindPrevOfSeqNo( sal_uInt16 nSttPos, sal_uInt16 nLookahead = 20 ) const;
+    sal_uInt16 FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
+                            sal_uInt16 nLookahead = 20 ) const;
+    sal_uInt16 FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
+                            sal_uInt16 nLookahead = 20 ) const;
 
     using _SwRedlineTbl::Count;
     using _SwRedlineTbl::operator[];

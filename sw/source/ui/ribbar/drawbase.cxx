@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
@@ -45,14 +46,14 @@
 #include "edtwin.hxx"
 #include "caption.hxx"
 #include "swundo.hxx"
-#include "undobj.hxx"
+#include <SwRewriter.hxx>
 #include "comcore.hrc"
 
 using namespace ::com::sun::star;
 
-extern BOOL bNoInterrupt;       // in mainwn.cxx
+extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
-#define MINMOVE ((USHORT)m_pSh->GetOut()->PixelToLogic(Size(m_pSh->GetDrawView()->GetMarkHdlSizePixel()/2,0)).Width())
+#define MINMOVE ((sal_uInt16)m_pSh->GetOut()->PixelToLogic(Size(m_pSh->GetDrawView()->GetMarkHdlSizePixel()/2,0)).Width())
 
 
 /*************************************************************************
@@ -67,8 +68,8 @@ SwDrawBase::SwDrawBase(SwWrtShell* pSwWrtShell, SwEditWin* pWindow, SwView* pSwV
     m_pSh(pSwWrtShell),
     m_pWin(pWindow),
     m_nSlotId(USHRT_MAX),
-    m_bCreateObj(TRUE),
-    m_bInsForm(FALSE)
+    m_bCreateObj(sal_True),
+    m_bInsForm(sal_False)
 {
     if ( !m_pSh->HasDrawView() )
         m_pSh->MakeDrawView();
@@ -83,7 +84,7 @@ SwDrawBase::SwDrawBase(SwWrtShell* pSwWrtShell, SwEditWin* pWindow, SwView* pSwV
 SwDrawBase::~SwDrawBase()
 {
     if (m_pView->GetWrtShellPtr()) // Im view-Dtor koennte die wrtsh bereits geloescht worden sein...
-        m_pSh->GetDrawView()->SetEditMode(TRUE);
+        m_pSh->GetDrawView()->SetEditMode(sal_True);
 }
 
 /*************************************************************************
@@ -93,9 +94,9 @@ SwDrawBase::~SwDrawBase()
 \************************************************************************/
 
 
-BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
 
     SdrView *pSdrView = m_pSh->GetDrawView();
 
@@ -105,13 +106,13 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (rMEvt.IsMod2())
     {
-        pSdrView->SetCreate1stPointAsCenter(TRUE);
-        pSdrView->SetResizeAtCenter(TRUE);
+        pSdrView->SetCreate1stPointAsCenter(sal_True);
+        pSdrView->SetResizeAtCenter(sal_True);
     }
     else
     {
-        pSdrView->SetCreate1stPointAsCenter(FALSE);
-        pSdrView->SetResizeAtCenter(FALSE);
+        pSdrView->SetCreate1stPointAsCenter(sal_False);
+        pSdrView->SetResizeAtCenter(sal_False);
     }
 
     SdrViewEvent aVEvt;
@@ -122,17 +123,17 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
     {
         if (IsCreateObj() && (eHit == SDRHIT_UNMARKEDOBJECT || eHit == SDRHIT_NONE || m_pSh->IsDrawCreate()))
         {
-            bNoInterrupt = TRUE;
+            bNoInterrupt = sal_True;
             m_pWin->CaptureMouse();
 
             m_aStartPos = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
 
-            bReturn = m_pSh->BeginCreate( static_cast< UINT16 >(m_pWin->GetSdrDrawMode()), m_aStartPos);
+            bReturn = m_pSh->BeginCreate( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), m_aStartPos);
 
             SetDrawPointer();
 
             if ( bReturn )
-                m_pWin->SetDrawAction(TRUE);
+                m_pWin->SetDrawAction(sal_True);
         }
         else if (!pSdrView->IsAction())
         {
@@ -141,25 +142,25 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
             **********************************************************************/
             m_pWin->CaptureMouse();
             m_aStartPos = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
-            UINT16 nEditMode = m_pWin->GetBezierMode();
+            sal_uInt16 nEditMode = m_pWin->GetBezierMode();
 
             if (eHit == SDRHIT_HANDLE && aVEvt.pHdl->GetKind() == HDL_BWGT)
             {
                 /******************************************************************
                 * Handle draggen
                 ******************************************************************/
-                bNoInterrupt = TRUE;
+                bNoInterrupt = sal_True;
                 bReturn = pSdrView->BegDragObj(m_aStartPos, (OutputDevice*) NULL, aVEvt.pHdl);
-                m_pWin->SetDrawAction(TRUE);
+                m_pWin->SetDrawAction(sal_True);
             }
             else if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)
             {
                 /******************************************************************
                 * Klebepunkt einfuegen
                 ******************************************************************/
-                bNoInterrupt = TRUE;
+                bNoInterrupt = sal_True;
                 bReturn = pSdrView->BegInsObjPoint(m_aStartPos, rMEvt.IsMod1());
-                m_pWin->SetDrawAction(TRUE);
+                m_pWin->SetDrawAction(sal_True);
             }
             else if (eHit == SDRHIT_MARKEDOBJECT && rMEvt.IsMod1())
             {
@@ -170,14 +171,14 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     pSdrView->UnmarkAllPoints();
 
                 bReturn = pSdrView->BegMarkPoints(m_aStartPos);
-                m_pWin->SetDrawAction(TRUE);
+                m_pWin->SetDrawAction(sal_True);
             }
             else if (eHit == SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() && !rMEvt.IsMod2())
             {
                 /******************************************************************
                 * Objekt verschieben
                 ******************************************************************/
-                return FALSE;
+                return sal_False;
             }
             else if (eHit == SDRHIT_HANDLE)
             {
@@ -208,7 +209,7 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
 
                     if (pHdl)
                     {
-                        bNoInterrupt = TRUE;
+                        bNoInterrupt = sal_True;
                         pSdrView->MarkPoint(*pHdl);
                     }
                 }
@@ -223,12 +224,12 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     if (pSdrView->HasMarkablePoints())
                         pSdrView->UnmarkAllPoints();
 
-                    bNoInterrupt = FALSE;
+                    bNoInterrupt = sal_False;
                     // Drag im edtwin verwenden
-                    return FALSE;
+                    return sal_False;
                 }
 
-                bNoInterrupt = TRUE;
+                bNoInterrupt = sal_True;
 
                 if (m_pSh->IsObjSelected())
                 {
@@ -236,11 +237,11 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         if (!pSdrView->HasMarkablePoints())
                         {
-                            BOOL bUnlockView = !m_pSh->IsViewLocked();
-                            m_pSh->LockView( TRUE ); //lock visible section
+                            sal_Bool bUnlockView = !m_pSh->IsViewLocked();
+                            m_pSh->LockView( sal_True ); //lock visible section
                             m_pSh->SelectObj(Point(LONG_MAX, LONG_MAX)); // deselect all
                             if( bUnlockView )
-                                m_pSh->LockView( FALSE );
+                                m_pSh->LockView( sal_False );
                         }
                         else
                             pSdrView->UnmarkAllPoints();
@@ -250,7 +251,7 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     m_pSh->EnterSelFrmMode(NULL);
 
                 if( 0 != (bReturn = m_pSh->BeginMark(m_aStartPos)) )
-                    m_pWin->SetDrawAction(TRUE);
+                    m_pWin->SetDrawAction(sal_True);
 
                 SetDrawPointer();
             }
@@ -266,11 +267,11 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
 \************************************************************************/
 
 
-BOOL SwDrawBase::MouseMove(const MouseEvent& rMEvt)
+sal_Bool SwDrawBase::MouseMove(const MouseEvent& rMEvt)
 {
     SdrView *pSdrView = m_pSh->GetDrawView();
     Point aPnt(m_pWin->PixelToLogic(rMEvt.GetPosPixel()));
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if (IsCreateObj() && !m_pWin->IsDrawSelMode() && pSdrView->IsCreateObj())
     {
@@ -279,12 +280,12 @@ BOOL SwDrawBase::MouseMove(const MouseEvent& rMEvt)
         pSdrView->SetAngleSnapEnabled(rMEvt.IsShift());
 
         m_pSh->MoveCreate(aPnt);
-        bRet = TRUE;
+        bRet = sal_True;
     }
     else if (pSdrView->IsAction() || pSdrView->IsInsObjPoint() || pSdrView->IsMarkPoints())
     {
         m_pSh->MoveMark(aPnt);
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     return (bRet);
@@ -297,11 +298,11 @@ BOOL SwDrawBase::MouseMove(const MouseEvent& rMEvt)
 \************************************************************************/
 
 
-BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    BOOL bReturn = FALSE;
-    BOOL bCheckShell = FALSE;
-    BOOL bAutoCap = FALSE;
+    sal_Bool bReturn = sal_False;
+    sal_Bool bCheckShell = sal_False;
+    sal_Bool bAutoCap = sal_False;
 
     Point aPnt(m_pWin->PixelToLogic(rMEvt.GetPosPixel()));
 
@@ -309,7 +310,7 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
     {
         const SdrObjKind nDrawMode = m_pWin->GetSdrDrawMode();
         //objects with multiple point may end at the start position
-        BOOL bMultiPoint = OBJ_PLIN == nDrawMode ||
+        sal_Bool bMultiPoint = OBJ_PLIN == nDrawMode ||
                                 OBJ_PATHLINE == nDrawMode ||
                                 OBJ_FREELINE == nDrawMode;
         if(rMEvt.IsRight() || (aPnt == m_aStartPos && !bMultiPoint))
@@ -336,12 +337,12 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     SfxRequest aReq(m_pSh->GetView().GetViewFrame(),FN_INSERT_FRAME);
                         aReq.AppendItem(SfxUInt16Item( FN_INSERT_FRAME,
-                                static_cast<USHORT>(FLY_AT_PARA) ));
+                                static_cast<sal_uInt16>(FLY_AT_PARA) ));
                         aReq.AppendItem(SfxPointItem( FN_PARAM_1, m_pSh->GetAnchorObjDiff()));
                         aReq.AppendItem(SvxSizeItem( FN_PARAM_2, m_pSh->GetObjSize()));
                     aReq.Done();
                 }
-                bAutoCap = TRUE;
+                bAutoCap = sal_True;
                 if(m_pWin->GetFrmColCount() > 1)
                 {
                     SfxItemSet aSet(m_pView->GetPool(),RES_COL,RES_COL);
@@ -357,10 +358,12 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 }
             }
             if (m_pWin->GetSdrDrawMode() == OBJ_NONE)
-                m_pSh->EndUndo(UNDO_INSERT);
+            {
+                m_pSh->EndUndo();
+            }
         }
 
-        bReturn = TRUE;
+        bReturn = sal_True;
 
         EnterSelectMode(rMEvt);
     }
@@ -378,7 +381,7 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 bReturn = m_pSh->EndMark();
 
-                m_pWin->SetDrawAction(FALSE);
+                m_pWin->SetDrawAction(sal_False);
 
                 if (aPnt == m_aStartPos && m_pSh->IsObjSelectable(aPnt))
                 {
@@ -396,7 +399,7 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                     }
                     m_pView->NoRotate();
 
-                    bCheckShell = TRUE; // ggf BezierShell anwerfen
+                    bCheckShell = sal_True; // ggf BezierShell anwerfen
                 }
                 else if (!m_pSh->IsObjSelected() && !m_pWin->IsDrawAction())
                 {
@@ -411,7 +414,7 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                     }
                     m_pView->NoRotate();
 
-                    bReturn = TRUE;
+                    bReturn = sal_True;
                 }
             }
         }
@@ -429,9 +432,9 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 else
                 {
                     pSdrView->EndAction();
-                    bReturn = TRUE;
+                    bReturn = sal_True;
                 }
-                m_pWin->SetDrawAction(FALSE);
+                m_pWin->SetDrawAction(sal_False);
 
                 if (aPnt == m_aStartPos)
                 {
@@ -456,7 +459,7 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                     }
                     m_pView->NoRotate();
 
-                    bCheckShell = TRUE; // ggf BezierShell anwerfen
+                    bCheckShell = sal_True; // ggf BezierShell anwerfen
                 }
             }
 
@@ -469,7 +472,7 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                     m_pSh->LeaveSelFrmMode();
 
                 m_pView->NoRotate();
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
     }
@@ -491,13 +494,13 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
 \************************************************************************/
 
 
-void SwDrawBase::Activate(const USHORT nSlot)
+void SwDrawBase::Activate(const sal_uInt16 nSlot)
 {
     SetSlotId(nSlot);
     SdrView *pSdrView = m_pSh->GetDrawView();
 
-    pSdrView->SetCurrentObj( static_cast< UINT16 >(m_pWin->GetSdrDrawMode()) );
-    pSdrView->SetEditMode(FALSE);
+    pSdrView->SetCurrentObj( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()) );
+    pSdrView->SetEditMode(sal_False);
 
     SetDrawPointer();
     m_pSh->NoEdit();
@@ -513,16 +516,16 @@ void SwDrawBase::Activate(const USHORT nSlot)
 void SwDrawBase::Deactivate()
 {
     SdrView *pSdrView = m_pSh->GetDrawView();
-    pSdrView->SetOrtho(FALSE);
-    pSdrView->SetAngleSnapEnabled(FALSE);
+    pSdrView->SetOrtho(sal_False);
+    pSdrView->SetAngleSnapEnabled(sal_False);
 
     if (m_pWin->IsDrawAction() && m_pSh->IsDrawCreate())
         m_pSh->BreakCreate();
 
-    m_pWin->SetDrawAction(FALSE);
+    m_pWin->SetDrawAction(sal_False);
 
     m_pWin->ReleaseMouse();
-    bNoInterrupt = FALSE;
+    bNoInterrupt = sal_False;
 
     if(m_pWin->GetApplyTemplate())
         m_pWin->SetApplyTemplate(SwApplyTemplate());
@@ -533,16 +536,16 @@ void SwDrawBase::Deactivate()
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
-|* FALSE.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
+|* sal_False.
 |*
 \************************************************************************/
 
 
-BOOL SwDrawBase::KeyInput(const KeyEvent& rKEvt)
+sal_Bool SwDrawBase::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FALSE;
-    USHORT nCode = rKEvt.GetKeyCode().GetCode();
+    sal_Bool bReturn = sal_False;
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
 
     switch (nCode)
     {
@@ -554,14 +557,14 @@ BOOL SwDrawBase::KeyInput(const KeyEvent& rKEvt)
                 m_pView->LeaveDrawCreate();
             }
 
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
         break;
 
         case KEY_DELETE:
         {
             m_pSh->DelSelectedObj();
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
         break;
 
@@ -610,7 +613,7 @@ BOOL SwDrawBase::KeyInput(const KeyEvent& rKEvt)
                     pSdrView->MoveAllMarked(Size(nX, nY));
                 }
 
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
         break;
@@ -624,8 +627,8 @@ BOOL SwDrawBase::KeyInput(const KeyEvent& rKEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
-|* FALSE.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
+|* sal_False.
 |*
 \************************************************************************/
 
@@ -633,7 +636,7 @@ BOOL SwDrawBase::KeyInput(const KeyEvent& rKEvt)
 void SwDrawBase::BreakCreate()
 {
     m_pSh->BreakCreate();
-    m_pWin->SetDrawAction(FALSE);
+    m_pWin->SetDrawAction(sal_False);
     m_pWin->ReleaseMouse();
 
     Deactivate();
@@ -664,7 +667,7 @@ void SwDrawBase::SetDrawPointer()
 
 void SwDrawBase::EnterSelectMode(const MouseEvent& rMEvt)
 {
-    m_pWin->SetDrawAction(FALSE);
+    m_pWin->SetDrawAction(sal_False);
 
     if (!m_pSh->IsObjSelected() && !m_pWin->IsDrawAction())
     {
@@ -699,7 +702,7 @@ void SwDrawBase::CreateDefaultObject()
     aEndPos.X() += 8 * MM50;
     aEndPos.Y() += 4 * MM50;
     Rectangle aRect(aStartPos, aEndPos);
-    m_pSh->CreateDefaultShape( static_cast< UINT16 >(m_pWin->GetSdrDrawMode()), aRect, m_nSlotId);
+    m_pSh->CreateDefaultShape( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), aRect, m_nSlotId);
 }
 
 Point  SwDrawBase::GetDefaultCenterPos()

@@ -59,7 +59,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::frame;
 
-SwDPage::SwDPage(SwDrawDocument& rNewModel, BOOL bMasterPage) :
+SwDPage::SwDPage(SwDrawDocument& rNewModel, sal_Bool bMasterPage) :
     FmFormPage(rNewModel, 0, bMasterPage),
     pGridLst( 0 ),
     rDoc(rNewModel.GetDoc())
@@ -78,7 +78,7 @@ SwDPage::~SwDPage()
 |*
 *************************************************************************/
 
-SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, ULONG nObjNum )
+SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, sal_uLong nObjNum )
 {
     SdrObject *pOld = GetObj( nObjNum );
     OSL_ENSURE( pOld, "Oups, Object not replaced" );
@@ -146,10 +146,10 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
     return pGridLst;
 }
 
-BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
+sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                            const HelpEvent& rEvt )
 {
-    BOOL bWeiter = TRUE;
+    sal_Bool bWeiter = sal_True;
 
     if( rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ))
     {
@@ -200,7 +200,7 @@ BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
             if ( sTxt.Len() )
             {
                 // --> OD 2007-07-26 #i80029#
-                BOOL bExecHyperlinks = rDoc.GetDocShell()->IsReadOnly();
+                sal_Bool bExecHyperlinks = rDoc.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
                     SvtSecurityOptions aSecOpts;
@@ -225,7 +225,7 @@ BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                     Rectangle aRect( rEvt.GetMousePosPixel(), Size(1,1) );
                     Help::ShowQuickHelp( pWindow, aRect, sTxt );
                 }
-                bWeiter = FALSE;
+                bWeiter = sal_False;
             }
         }
     }

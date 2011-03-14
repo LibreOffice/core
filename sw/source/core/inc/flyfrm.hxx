@@ -25,13 +25,13 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _FLYFRM_HXX
-#define _FLYFRM_HXX
+#ifndef SW_FLYFRM_HXX
+#define SW_FLYFRM_HXX
 
 #include "layfrm.hxx"
+#include "frmfmt.hxx"
 
 class SwPageFrm;
-class SwFlyFrmFmt;
 class SwFmtFrmSize;
 struct SwCrsrMoveState;
 class SwBorderAttrs;
@@ -48,25 +48,25 @@ class PolyPolygon;
 //fuer Ankerwechsel benoetigt.
 //implementiert in layout/flycnt.cxx
 const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
-                              const BOOL bBody = FALSE );
+                              const sal_Bool bBody = sal_False );
 
 // berechnet das Rechteck, in dem das Objekt bewegt bzw. resized werden darf
-BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove = TRUE );
+sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove = sal_True );
 
 //allg. Basisklasse fuer alle Freifliegenden Rahmen
 // #i26791# - inherit also from <SwAnchoredFlyFrm>
 class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
 {
     //darf Locken. Definiert in frmtool.cxx
-    friend void AppendObjs   ( const SwSpzFrmFmts *, ULONG, SwFrm *, SwPageFrm * );
+    friend void AppendObjs   ( const SwSpzFrmFmts *, sal_uLong, SwFrm *, SwPageFrm * );
     friend void AppendAllObjs( const SwSpzFrmFmts * );
     friend void Notify( SwFlyFrm *, SwPageFrm *pOld, const SwRect &rOld,
                         const SwRect* pOldPrt );
 
-    void InitDrawObj( BOOL bNotify );   //Wird von den CToren gerufen.
+    void InitDrawObj( sal_Bool bNotify );   //Wird von den CToren gerufen.
     void FinitDrawObj();                //Wird vom CTor gerufen.
 
-    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE &,
+    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
     using SwLayoutFrm::CalcRel;
@@ -80,7 +80,7 @@ protected:
 //    Point aRelPos;   //Die Relative Position zum Master
 
 private:
-    BOOL bLocked    :1; //Cntnt-gebundene Flys muessen derart blockiert werden
+    sal_Bool bLocked    :1; //Cntnt-gebundene Flys muessen derart blockiert werden
                         //koennen, dass sie nicht Formatiert werden; :MakeAll
                         //returnt dann sofort. Dies ist bei Seitenwechseln
                         //waehrend der Formatierung notwendig.
@@ -88,31 +88,31 @@ private:
                         //sonst der Anker formatiert wird obwohl die Root noch
                         //nicht korrekt an der Shell haengt und weil sonst
                         //initial zuviel Formatiert wuerde.
-    BOOL bNotifyBack:1; //TRUE wenn am Ende eines MakeAll() der Background
+    sal_Bool bNotifyBack:1; //sal_True wenn am Ende eines MakeAll() der Background
                         //vom NotifyDTor benachrichtigt werden muss.
 protected:
 
-    BOOL bInvalid :1;   //Pos, PrtArea od. SSize wurden Invalidiert, sie werden
+    sal_Bool bInvalid :1;   //Pos, PrtArea od. SSize wurden Invalidiert, sie werden
                         //gleich wieder Validiert, denn sie muessen _immer_
                         //gueltig sein. Damit in LayAction korrekt gearbeitet
                         //werden kann muss hier festgehalten werden, dass sie
                         //invalidiert wurden. Ausnahmen bestaetigen die Regelt!
-    BOOL bMinHeight:1;  //TRUE wenn die vom Attribut vorgegebene Hoehe eine
+    sal_Bool bMinHeight:1;  //sal_True wenn die vom Attribut vorgegebene Hoehe eine
                         //eine Minimalhoehe ist (der Frm also bei Bedarf
                         //darueberhinaus wachsen kann).
-    BOOL bHeightClipped :1; //TRUE wenn der Fly nicht die Pos/Size anhand der Attrs
-    BOOL bWidthClipped  :1; //formatieren konnte, weil z.B. nicht genug Raum vorh.
+    sal_Bool bHeightClipped :1; //sal_True wenn der Fly nicht die Pos/Size anhand der Attrs
+    sal_Bool bWidthClipped  :1; //formatieren konnte, weil z.B. nicht genug Raum vorh.
                             //war.
-    BOOL bFormatHeightOnly  :1; //Damit nach einer Anpassung der Breite
+    sal_Bool bFormatHeightOnly  :1; //Damit nach einer Anpassung der Breite
                                 //(CheckClip) nur das Format aufgerufen wird;
                                 //nicht aber die Breite anhand der Attribute
                                 //wieder bestimmt wird.
-    BOOL bInCnt         :1; // FLY_AS_CHAR, anchored as character
-    BOOL bAtCnt         :1; // FLY_AT_PARA, anchored at paragraph
-    BOOL bLayout        :1; // FLY_AT_PAGE, FLY_AT_FLY, at page or at frame
-    BOOL bAutoPosition  :1; // FLY_AT_CHAR, anchored at character
-    BOOL bNoShrink      :1; // temporary forbud of shrinking to avoid loops
-    BOOL bLockDeleteContent :1;           // If the flag is set, the content of the
+    sal_Bool bInCnt         :1; // FLY_AS_CHAR, anchored as character
+    sal_Bool bAtCnt         :1; // FLY_AT_PARA, anchored at paragraph
+    sal_Bool bLayout        :1; // FLY_AT_PAGE, FLY_AT_FLY, at page or at frame
+    sal_Bool bAutoPosition  :1; // FLY_AT_CHAR, anchored at character
+    sal_Bool bNoShrink      :1; // temporary forbud of shrinking to avoid loops
+    sal_Bool bLockDeleteContent :1;           // If the flag is set, the content of the
                                         // fly frame is not deleted if moved to
                                         // invisible layer.
 
@@ -121,11 +121,11 @@ protected:
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
     void MakePrtArea( const SwBorderAttrs &rAttrs );
 
-    void Lock()         { bLocked = TRUE; }
-    void Unlock()       { bLocked = FALSE; }
+    void Lock()         { bLocked = sal_True; }
+    void Unlock()       { bLocked = sal_False; }
 
-    void SetMinHeight()  { bMinHeight = TRUE; }
-    void ResetMinHeight(){ bMinHeight = FALSE; }
+    void SetMinHeight()  { bMinHeight = sal_True; }
+    void ResetMinHeight(){ bMinHeight = sal_False; }
 
     Size CalcRel( const SwFmtFrmSize &rSz ) const;
     SwTwips CalcAutoWidth() const;
@@ -153,23 +153,24 @@ public:
     virtual ~SwFlyFrm();
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
         // erfrage vom Client Informationen
-    virtual BOOL GetInfo( SfxPoolItem& ) const;
-    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+    virtual void Paint( SwRect const&,
+                        SwPrintData const*const pPrintData = NULL ) const;
     virtual Size ChgSize( const Size& aNewSize );
-    virtual BOOL GetCrsrOfst( SwPosition *, Point&,
+    virtual sal_Bool GetCrsrOfst( SwPosition *, Point&,
                               SwCrsrMoveState* = 0 ) const;
 
-    virtual void  CheckDirection( BOOL bVert );
+    virtual void  CheckDirection( sal_Bool bVert );
     virtual void Cut();
 #if OSL_DEBUG_LEVEL > 1
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 #endif
 
-    SwTwips _Shrink( SwTwips, BOOL bTst );
-    SwTwips _Grow  ( SwTwips, BOOL bTst );
+    SwTwips _Shrink( SwTwips, sal_Bool bTst );
+    SwTwips _Grow  ( SwTwips, sal_Bool bTst );
     void    _Invalidate( SwPageFrm *pPage = 0 );
 
-    BOOL FrmSizeChg( const SwFmtFrmSize & );
+    sal_Bool FrmSizeChg( const SwFmtFrmSize & );
 
     SwFlyFrm *GetPrevLink() const { return pPrevLink; }
     SwFlyFrm *GetNextLink() const { return pNextLink; }
@@ -185,33 +186,33 @@ public:
     void NotifyDrawObj();
 
     void ChgRelPos( const Point &rAbsPos );
-    BOOL IsInvalid() const { return bInvalid; }
-    void Invalidate() const { ((SwFlyFrm*)this)->bInvalid = TRUE; }
-    void Validate() const { ((SwFlyFrm*)this)->bInvalid = FALSE; }
+    sal_Bool IsInvalid() const { return bInvalid; }
+    void Invalidate() const { ((SwFlyFrm*)this)->bInvalid = sal_True; }
+    void Validate() const { ((SwFlyFrm*)this)->bInvalid = sal_False; }
 
-    BOOL IsMinHeight()  const { return bMinHeight; }
-    BOOL IsLocked()     const { return bLocked; }
-    BOOL IsAutoPos()    const { return bAutoPosition; }
-    BOOL IsFlyInCntFrm() const { return bInCnt; }
-    BOOL IsFlyFreeFrm() const { return bAtCnt || bLayout; }
-    BOOL IsFlyLayFrm() const { return bLayout; }
-    BOOL IsFlyAtCntFrm() const { return bAtCnt; }
+    sal_Bool IsMinHeight()  const { return bMinHeight; }
+    sal_Bool IsLocked()     const { return bLocked; }
+    sal_Bool IsAutoPos()    const { return bAutoPosition; }
+    sal_Bool IsFlyInCntFrm() const { return bInCnt; }
+    sal_Bool IsFlyFreeFrm() const { return bAtCnt || bLayout; }
+    sal_Bool IsFlyLayFrm() const { return bLayout; }
+    sal_Bool IsFlyAtCntFrm() const { return bAtCnt; }
 
-    BOOL IsNotifyBack() const { return bNotifyBack; }
-    void SetNotifyBack()      { bNotifyBack = TRUE; }
-    void ResetNotifyBack()    { bNotifyBack = FALSE; }
-    BOOL IsNoShrink()   const { return bNoShrink; }
-    void SetNoShrink( BOOL bNew ) { bNoShrink = bNew; }
-    BOOL IsLockDeleteContent()  const { return bLockDeleteContent; }
-    void SetLockDeleteContent( BOOL bNew ) { bLockDeleteContent = bNew; }
+    sal_Bool IsNotifyBack() const { return bNotifyBack; }
+    void SetNotifyBack()      { bNotifyBack = sal_True; }
+    void ResetNotifyBack()    { bNotifyBack = sal_False; }
+    sal_Bool IsNoShrink()   const { return bNoShrink; }
+    void SetNoShrink( sal_Bool bNew ) { bNoShrink = bNew; }
+    sal_Bool IsLockDeleteContent()  const { return bLockDeleteContent; }
+    void SetLockDeleteContent( sal_Bool bNew ) { bLockDeleteContent = bNew; }
 
 
-    BOOL IsClipped()        const   { return bHeightClipped || bWidthClipped; }
-    BOOL IsHeightClipped()  const   { return bHeightClipped; }
-    BOOL IsWidthClipped()   const   { return bWidthClipped;  }
+    sal_Bool IsClipped()        const   { return bHeightClipped || bWidthClipped; }
+    sal_Bool IsHeightClipped()  const   { return bHeightClipped; }
+    sal_Bool IsWidthClipped()   const   { return bWidthClipped;  }
 
-    BOOL IsLowerOf( const SwLayoutFrm* pUpper ) const;
-    inline BOOL IsUpperOf( const SwFlyFrm& _rLower ) const
+    sal_Bool IsLowerOf( const SwLayoutFrm* pUpper ) const;
+    inline sal_Bool IsUpperOf( const SwFlyFrm& _rLower ) const
     {
         return _rLower.IsLowerOf( this );
     }
@@ -220,12 +221,12 @@ public:
 
     // #i13147# - add parameter <_bForPaint> to avoid load of
     // the graphic during paint. Default value: sal_False
-    BOOL GetContour( PolyPolygon&   rContour,
+    sal_Bool GetContour( PolyPolygon&   rContour,
                      const sal_Bool _bForPaint = sal_False ) const;
 
 
     //Auf dieser Shell painten (PreView, Print-Flag usw. rekursiv beachten)?.
-    static BOOL IsPaint( SdrObject *pObj, const ViewShell *pSh );
+    static sal_Bool IsPaint( SdrObject *pObj, const ViewShell *pSh );
 
     /** SwFlyFrm::IsBackgroundTransparent
 
@@ -269,6 +270,12 @@ public:
         format isn't possible, if Writer fly frame is locked resp. col-locked.
     */
     virtual bool IsFormatPossible() const;
+
+    // overwriting "SwFrmFmt *SwLayoutFrm::GetFmt" to provide the correct derived return type.
+    // (This is in order to skip on the otherwise necessary casting of the result to
+    // 'SwFlyFrmFmt *' after calls to this function. The casting is now done in this function.)
+    virtual const SwFlyFrmFmt *GetFmt() const;
+    virtual       SwFlyFrmFmt *GetFmt();
 };
 #endif
 

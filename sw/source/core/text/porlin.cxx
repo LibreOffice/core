@@ -112,18 +112,18 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
         return;
 
     const KSHORT nHalfView = nViewWidth / 2;
-    USHORT nLastWidth = pLast->Width();
+    sal_uInt16 nLastWidth = pLast->Width();
 
     if ( pLast->InSpaceGrp() && rInf.GetSpaceAdd() )
-        nLastWidth = nLastWidth + (USHORT)pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
+        nLastWidth = nLastWidth + (sal_uInt16)pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
 
     KSHORT nPos;
     SwTxtPaintInfo aInf( rInf );
 
-    const BOOL bBidiPor = ( rInf.GetTxtFrm()->IsRightToLeft() ) !=
+    const sal_Bool bBidiPor = ( rInf.GetTxtFrm()->IsRightToLeft() ) !=
                           ( 0 != ( TEXT_LAYOUT_BIDI_RTL & rInf.GetOut()->GetLayoutMode() ) );
 
-    USHORT nDir = bBidiPor ?
+    sal_uInt16 nDir = bBidiPor ?
                   1800 :
                   rInf.GetFont()->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
 
@@ -325,7 +325,7 @@ sal_Bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
     const SwLinePortion *pLast = rInf.GetLast();
     Height( pLast->Height() );
     SetAscent( pLast->GetAscent() );
-    const KSHORT nNewWidth = static_cast<USHORT>(rInf.X() + PrtWidth());
+    const KSHORT nNewWidth = static_cast<sal_uInt16>(rInf.X() + PrtWidth());
     // Nur Portions mit echter Breite koennen ein sal_True zurueckliefern
     // Notizen beispielsweise setzen niemals bFull==sal_True
     if( rInf.Width() <= nNewWidth && PrtWidth() && ! IsKernPortion() )
@@ -354,9 +354,9 @@ void SwLinePortion::FormatEOL( SwTxtFormatInfo & )
 
 void SwLinePortion::Move( SwTxtPaintInfo &rInf )
 {
-    BOOL bB2T = rInf.GetDirection() == DIR_BOTTOM2TOP;
-    const BOOL bFrmDir = rInf.GetTxtFrm()->IsRightToLeft();
-    BOOL bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == rInf.GetDirection() ) ||
+    sal_Bool bB2T = rInf.GetDirection() == DIR_BOTTOM2TOP;
+    const sal_Bool bFrmDir = rInf.GetTxtFrm()->IsRightToLeft();
+    sal_Bool bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == rInf.GetDirection() ) ||
                        (   bFrmDir && DIR_LEFT2RIGHT == rInf.GetDirection() );
 
     if ( InSpaceGrp() && rInf.GetSpaceAdd() )

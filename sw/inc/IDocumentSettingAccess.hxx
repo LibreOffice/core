@@ -89,7 +89,8 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          GLOBAL_DOCUMENT_SAVE_LINKS,
          LABEL_DOCUMENT,
          PURGE_OLE,
-         KERN_ASIAN_PUNCTUATION
+         KERN_ASIAN_PUNCTUATION,
+         MATH_BASELINE_ALIGNMENT
      };
 
  public:
@@ -128,7 +129,7 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
        a list of forbidden characters.
     */
     virtual const com::sun::star::i18n::ForbiddenCharacters*
-        getForbiddenCharacters(/*[in]*/ USHORT nLang, /*[in]*/ bool bLocaleData ) const = 0;
+        getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const = 0;
 
     /** Set the forbidden characters.
 
@@ -138,7 +139,7 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
        @param rForbiddenCharacters
        [in] the new list of forbidden characters for language lang.
     */
-    virtual void setForbiddenCharacters(/*[in]*/ USHORT nLang,
+    virtual void setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
                                         /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rForbiddenCharacters ) = 0;
 
     /** Get the forbidden character table and creates one if necessary.
@@ -209,6 +210,6 @@ protected:
     virtual ~IDocumentSettingAccess() {};
  };
 
- #endif // IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+#endif // IDOCUMENTSETTINGACCESS_HXX_INCLUDED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

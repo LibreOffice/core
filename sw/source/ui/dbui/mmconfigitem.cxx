@@ -408,7 +408,7 @@ void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeaders )
     //convert the strings used for UI to numbers used for the configuration
     String sBlock(rBlock);
     sBlock.SearchAndReplaceAllAscii("\n", String::CreateFromAscii("\\n"));
-    for(USHORT i = 0; i < rHeaders.Count(); ++i)
+    for(sal_uInt16 i = 0; i < rHeaders.Count(); ++i)
     {
         String sHeader = rHeaders.GetString( i );
         sHeader.Insert('<', 0);
@@ -997,7 +997,7 @@ sal_Int32 SwMailMergeConfigItem::MoveResultSet(sal_Int32 nTarget)
             {
                 if(nTarget > 0)
                 {
-                    BOOL bMoved = m_pImpl->xResultSet->absolute(nTarget);
+                    sal_Bool bMoved = m_pImpl->xResultSet->absolute(nTarget);
                     if(!bMoved)
                     {
                         if(nTarget > 1)
@@ -1326,7 +1326,7 @@ bool SwMailMergeConfigItem::IsAddressFieldsAssigned() const
         if(aItem.bIsColumn)
         {
             String sConvertedColumn = aItem.sText;
-            for(USHORT nColumn = 0;
+            for(sal_uInt16 nColumn = 0;
                     nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                 ++nColumn)
             {
@@ -1385,7 +1385,7 @@ bool SwMailMergeConfigItem::IsGreetingFieldsAssigned() const
         if(aItem.bIsColumn)
         {
             String sConvertedColumn = aItem.sText;
-            for(USHORT nColumn = 0;
+            for(sal_uInt16 nColumn = 0;
                     nColumn < rHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                 ++nColumn)
             {
@@ -1666,13 +1666,13 @@ sal_uInt32 SwMailMergeConfigItem::GetMergedDocumentCount() const
 SwView* lcl_ExistsView(SwView* pView)
 {
     const TypeId aType(TYPE(SwView));
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst( &aType, FALSE );
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst( &aType, sal_False );
     while(pViewShell)
     {
         if(pViewShell == pView)
             return pView;
 
-        pViewShell = SfxViewShell::GetNext( *pViewShell, &aType, FALSE );
+        pViewShell = SfxViewShell::GetNext( *pViewShell, &aType, sal_False );
     }
     return 0;
 }

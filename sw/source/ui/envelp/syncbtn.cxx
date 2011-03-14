@@ -48,7 +48,7 @@
 SFX_IMPL_FLOATINGWINDOW( SwSyncChildWin, FN_SYNC_LABELS )
 
 SwSyncChildWin::SwSyncChildWin( Window* _pParent,
-                                USHORT nId,
+                                sal_uInt16 nId,
                                 SfxBindings* pBindings,
                                 SfxChildWinInfo* pInfo ) :
                                 SfxChildWindow( _pParent, nId )

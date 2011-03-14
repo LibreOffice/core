@@ -70,10 +70,11 @@ class SmPrintOptionsTabPage : public SfxTabPage
     MetricField     aZoom;
     FixedLine       aFixedLine3;
     CheckBox        aNoRightSpaces;
+    CheckBox        aSaveOnlyUsedSymbols;
 
     DECL_LINK(SizeButtonClickHdl, Button *);
 
-    virtual BOOL    FillItemSet(SfxItemSet& rSet);
+    virtual sal_Bool    FillItemSet(SfxItemSet& rSet);
     virtual void    Reset(const SfxItemSet& rSet);
 
 public:
@@ -201,22 +202,22 @@ class SmCategoryDesc : public Resource
     XubString       Name;
     XubString      *Strings[4];
     Bitmap         *Graphics[4];    /* regular bitmaps */
-    USHORT          Minimum[4];
-    USHORT          Maximum[4];
-    USHORT          Value[4];
+    sal_uInt16          Minimum[4];
+    sal_uInt16          Maximum[4];
+    sal_uInt16          Value[4];
 
 public:
-    SmCategoryDesc(const ResId &rResId, USHORT nCategoryIdx);
+    SmCategoryDesc(const ResId &rResId, sal_uInt16 nCategoryIdx);
     ~SmCategoryDesc();
 
     const XubString &   GetName() const                 { return Name; }
-    const XubString *   GetString(USHORT Index) const   { return Strings[Index];  }
-    USHORT          GetMinimum(USHORT Index)        { return Minimum[Index]; }
-    USHORT          GetMaximum(USHORT Index)        { return Maximum[Index]; }
-    USHORT          GetValue(USHORT Index) const    { return Value[Index]; }
-    void            SetValue(USHORT Index, USHORT nVal) { Value[Index] = nVal;}
+    const XubString *   GetString(sal_uInt16 Index) const   { return Strings[Index];  }
+    sal_uInt16          GetMinimum(sal_uInt16 Index)        { return Minimum[Index]; }
+    sal_uInt16          GetMaximum(sal_uInt16 Index)        { return Maximum[Index]; }
+    sal_uInt16          GetValue(sal_uInt16 Index) const    { return Value[Index]; }
+    void            SetValue(sal_uInt16 Index, sal_uInt16 nVal) { Value[Index] = nVal;}
 
-    const Bitmap *  GetGraphic(USHORT Index) const
+    const Bitmap *  GetGraphic(sal_uInt16 Index) const
     {
         return Graphics[Index];
     }
@@ -242,7 +243,7 @@ class SmDistanceDialog : public ModalDialog
     FixedLine       aFixedLine;
 
     SmCategoryDesc *Categories[NOCATEGORIES];
-    USHORT          nActiveCategory;
+    sal_uInt16          nActiveCategory;
     bool            bScaleAllBrackets;
 
     DECL_LINK(GetFocusHdl, Control *);
@@ -251,8 +252,8 @@ class SmDistanceDialog : public ModalDialog
     DECL_LINK(CheckBoxClickHdl, CheckBox *);
 
     using   Window::SetHelpId;
-    void    SetHelpId(MetricField &rField, ULONG nHelpId);
-    void    SetCategory(USHORT Category);
+    void    SetHelpId(MetricField &rField, const rtl::OString& sHelpId);
+    void    SetCategory(sal_uInt16 Category);
 
 public:
     SmDistanceDialog(Window *pParent, bool bFreeRes = true);
@@ -297,9 +298,9 @@ class SmShowSymbolSet : public Control
     Size        aOutputSize;
     Link        aSelectHdlLink;
     Link        aDblClickHdlLink;
-    USHORT      nLen;
-    USHORT      nRows, nColumns;
-    USHORT      nSelectSymbol;
+    sal_uInt16      nLen;
+    sal_uInt16      nRows, nColumns;
+    sal_uInt16      nSelectSymbol;
 
     virtual void    Paint(const Rectangle&);
     virtual void    MouseButtonDown(const MouseEvent& rMEvt);
@@ -312,8 +313,8 @@ public:
 
     void    SetSymbolSet(const SymbolPtrVec_t& rSymbolSet);
 
-    void    SelectSymbol(USHORT nSymbol);
-    USHORT  GetSelectSymbol() const { return nSelectSymbol; }
+    void    SelectSymbol(sal_uInt16 nSymbol);
+    sal_uInt16  GetSelectSymbol() const { return nSelectSymbol; }
 
     void SetSelectHdl(const Link& rLink)   { aSelectHdlLink = rLink; }
     void SetDblClickHdl(const Link& rLink) { aDblClickHdlLink = rLink; }
@@ -379,8 +380,8 @@ public:
     virtual ~SmSymbolDialog();
 
     bool    SelectSymbolSet(const XubString &rSymbolSetName);
-    void    SelectSymbol(USHORT nSymbolPos);
-    USHORT  GetSelectedSymbol() const   { return aSymbolSetDisplay.GetSelectSymbol(); }
+    void    SelectSymbol(sal_uInt16 nSymbolPos);
+    sal_uInt16  GetSelectedSymbol() const   { return aSymbolSetDisplay.GetSelectSymbol(); }
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -395,8 +396,8 @@ public:
     {
     }
 
-    void    SetChar(xub_Unicode aChar);
-    void    SetFont(const Font &rFont);
+    void    SetSymbol( const SmSym *pSym );
+    void    SetSymbol( sal_UCS4 cChar, const Font &rFont );
 };
 
 ////////////////////////////////////////////////////////////////////////////////

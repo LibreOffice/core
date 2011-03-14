@@ -87,7 +87,7 @@
 *************************************************************************/
 ModalDialog MD_EDIT_REGION
 {
-    HelpID = FN_EDIT_REGION ;
+    HelpID = CMD_FN_EDIT_REGION ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 316 , 185 ) ;
@@ -102,6 +102,7 @@ ModalDialog MD_EDIT_REGION
     };
     Edit ED_RANAME
     {
+        HelpID = "sw:Edit:MD_EDIT_REGION:ED_RANAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 71 , 12 ) ;
@@ -124,6 +125,7 @@ ModalDialog MD_EDIT_REGION
     };
     TriStateBox CB_FILE
     {
+        HelpID = "sw:TriStateBox:MD_EDIT_REGION:CB_FILE";
         Pos = MAP_APPFONT ( 98 , 14 ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
         TabStop = TRUE ;
@@ -131,6 +133,7 @@ ModalDialog MD_EDIT_REGION
     };
     CheckBox CB_DDE
     {
+        HelpID = "sw:CheckBox:MD_EDIT_REGION:CB_DDE";
         Pos = MAP_APPFONT ( 98 , 28 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
         Disable = TRUE ;
@@ -152,6 +155,7 @@ ModalDialog MD_EDIT_REGION
     };
     Edit ED_FILE
     {
+        HelpID = "sw:Edit:MD_EDIT_REGION:ED_FILE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 165 , 42 ) ;
         Size = MAP_APPFONT ( 68 , 12 ) ;
@@ -160,6 +164,7 @@ ModalDialog MD_EDIT_REGION
     };
     PushButton PB_FILE
     {
+        HelpID = "sw:PushButton:MD_EDIT_REGION:PB_FILE";
         Pos = MAP_APPFONT ( 239 , 42 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
@@ -175,6 +180,7 @@ ModalDialog MD_EDIT_REGION
     };
     ComboBox LB_SUBREG
     {
+        HelpID = "sw:ComboBox:MD_EDIT_REGION:LB_SUBREG";
         Pos = MAP_APPFONT ( 165 , 57 ) ;
         Size = MAP_APPFONT ( 68 , 50 ) ;
         Disable = TRUE ;
@@ -191,6 +197,7 @@ ModalDialog MD_EDIT_REGION
     };
     TriStateBox CB_PROTECT
     {
+        HelpID = "sw:TriStateBox:MD_EDIT_REGION:CB_PROTECT";
         Pos = MAP_APPFONT ( 98 , 86 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         TabStop = TRUE ;
@@ -200,6 +207,7 @@ ModalDialog MD_EDIT_REGION
     };
     CheckBox CB_PASSWD
     {
+        HelpID = "sw:CheckBox:MD_EDIT_REGION:CB_PASSWD";
         Pos = MAP_APPFONT ( 107 , 100 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -207,6 +215,7 @@ ModalDialog MD_EDIT_REGION
     };
     PushButton PB_PASSWD
     {
+        HelpID = "sw:PushButton:MD_EDIT_REGION:PB_PASSWD";
         Pos = MAP_APPFONT ( 239 , 98 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
@@ -221,6 +230,7 @@ ModalDialog MD_EDIT_REGION
     };
     TriStateBox CB_HIDE
     {
+        HelpID = "sw:TriStateBox:MD_EDIT_REGION:CB_HIDE";
         Pos = MAP_APPFONT ( 98 , 127 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         TabStop = TRUE ;
@@ -236,6 +246,7 @@ ModalDialog MD_EDIT_REGION
     };
     Edit ED_CONDITION
     {
+        HelpID = "sw:Edit:MD_EDIT_REGION:ED_CONDITION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 165 , 141) ;
         Size = MAP_APPFONT ( 86 , 12 ) ;
@@ -252,6 +263,7 @@ ModalDialog MD_EDIT_REGION
     };
     TriStateBox CB_EDIT_IN_READONLY
     {
+        HelpID = "sw:TriStateBox:MD_EDIT_REGION:CB_EDIT_IN_READONLY";
         Pos = MAP_APPFONT ( 98 , 170 ) ;
         Size = MAP_APPFONT ( 156 , 10 ) ;
         TabStop = TRUE ;
@@ -275,6 +287,7 @@ ModalDialog MD_EDIT_REGION
     };
     PushButton PB_OPTIONS
     {
+        HelpID = "sw:PushButton:MD_EDIT_REGION:PB_OPTIONS";
         Pos = MAP_APPFONT ( 263 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -283,6 +296,7 @@ ModalDialog MD_EDIT_REGION
     };
     PushButton CB_DISMISS
     {
+        HelpID = "sw:PushButton:MD_EDIT_REGION:CB_DISMISS";
         Pos = MAP_APPFONT ( 263 , 57 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
@@ -406,6 +420,7 @@ TabPage TP_INSERT_SECTION
     };
     ComboBox ED_RNAME
     {
+        HelpID = "sw:ComboBox:TP_INSERT_SECTION:ED_RNAME";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 69 , 140 ) ;
         TabStop = TRUE ;
@@ -421,6 +436,7 @@ TabPage TP_INSERT_SECTION
     };
     CheckBox CB_FILE
     {
+        HelpID = "sw:CheckBox:TP_INSERT_SECTION:CB_FILE";
         Pos = MAP_APPFONT ( 96 , 14 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         TabStop = TRUE ;
@@ -428,6 +444,7 @@ TabPage TP_INSERT_SECTION
     };
     CheckBox CB_DDE
     {
+        HelpID = "sw:CheckBox:TP_INSERT_SECTION:CB_DDE";
         Pos = MAP_APPFONT ( 96 , 28) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Disable = TRUE ;
@@ -449,6 +466,7 @@ TabPage TP_INSERT_SECTION
     };
     Edit ED_FILE
     {
+        HelpID = "sw:Edit:TP_INSERT_SECTION:ED_FILE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 160 , 42 ) ;
         Size = MAP_APPFONT ( 76 , 12 ) ;
@@ -457,6 +475,7 @@ TabPage TP_INSERT_SECTION
     };
     PushButton PB_FILE
     {
+        HelpID = "sw:PushButton:TP_INSERT_SECTION:PB_FILE";
         Pos = MAP_APPFONT ( 239 , 42 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Disable = TRUE ;
@@ -472,6 +491,7 @@ TabPage TP_INSERT_SECTION
     };
     ComboBox LB_SUBREG
     {
+        HelpID = "sw:ComboBox:TP_INSERT_SECTION:LB_SUBREG";
         Pos = MAP_APPFONT ( 160 , 58 ) ;
         Size = MAP_APPFONT ( 76 , 50 ) ;
         DropDown = TRUE ;
@@ -488,6 +508,7 @@ TabPage TP_INSERT_SECTION
     };
     CheckBox CB_PROTECT
     {
+        HelpID = "sw:CheckBox:TP_INSERT_SECTION:CB_PROTECT";
         Pos = MAP_APPFONT ( 96 , 87 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -495,6 +516,7 @@ TabPage TP_INSERT_SECTION
     };
     CheckBox CB_PASSWD
     {
+        HelpID = "sw:CheckBox:TP_INSERT_SECTION:CB_PASSWD";
         Pos = MAP_APPFONT ( 105 , 101 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -502,6 +524,7 @@ TabPage TP_INSERT_SECTION
     };
     PushButton PB_PASSWD
     {
+        HelpID = "sw:PushButton:TP_INSERT_SECTION:PB_PASSWD";
         Pos = MAP_APPFONT ( 239 , 99 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
@@ -516,6 +539,7 @@ TabPage TP_INSERT_SECTION
     };
     CheckBox CB_HIDE
     {
+        HelpID = "sw:CheckBox:TP_INSERT_SECTION:CB_HIDE";
         Pos = MAP_APPFONT ( 96 , 128 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         CB_HIDE_TEXT
@@ -529,6 +553,7 @@ TabPage TP_INSERT_SECTION
     };
     Edit ED_CONDITION
     {
+        HelpID = "sw:Edit:TP_INSERT_SECTION:ED_CONDITION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 160 , 142 ) ;
         Size = MAP_APPFONT ( 91 , 12 ) ;
@@ -545,6 +570,7 @@ TabPage TP_INSERT_SECTION
     };
     CheckBox CB_EDIT_IN_READONLY
     {
+        HelpID = "sw:CheckBox:TP_INSERT_SECTION:CB_EDIT_IN_READONLY";
         Pos = MAP_APPFONT ( 96 , 170 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         CB_EDIT_IN_READONLY_TEXT
@@ -609,6 +635,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     CheckBox CB_FTN_AT_TXTEND
     {
+        HelpID = "sw:CheckBox:TP_SECTION_FTNENDNOTES:CB_FTN_AT_TXTEND";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         TabStop = TRUE ;
@@ -617,6 +644,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     CheckBox CB_FTN_NUM
     {
+        HelpID = "sw:CheckBox:TP_SECTION_FTNENDNOTES:CB_FTN_NUM";
         Pos = MAP_APPFONT ( 18 , 29 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -631,6 +659,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     NumericField FLD_FTN_OFFSET
     {
+        HelpID = "sw:NumericField:TP_SECTION_FTNENDNOTES:FLD_FTN_OFFSET";
         Pos = MAP_APPFONT ( 90 , 44 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Spin = TRUE ;
@@ -643,6 +672,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     CheckBox CB_FTN_NUM_FMT
     {
+        HelpID = "sw:CheckBox:TP_SECTION_FTNENDNOTES:CB_FTN_NUM_FMT";
         Pos = MAP_APPFONT ( 24 , 61 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -657,6 +687,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     Edit ED_FTN_PREFIX
     {
+        HelpID = "sw:Edit:TP_SECTION_FTNENDNOTES:ED_FTN_PREFIX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 90 , 74 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -666,6 +697,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     ListBox LB_FTN_NUMVIEW
     {
+        HelpID = "sw:ListBox:TP_SECTION_FTNENDNOTES:LB_FTN_NUMVIEW";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 123 , 74 ) ;
         Size = MAP_APPFONT ( 62 , 50 ) ;
@@ -682,6 +714,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     Edit ED_FTN_SUFFIX
     {
+        HelpID = "sw:Edit:TP_SECTION_FTNENDNOTES:ED_FTN_SUFFIX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 219 , 74 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -700,6 +733,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     CheckBox CB_END_AT_TXTEND
     {
+        HelpID = "sw:CheckBox:TP_SECTION_FTNENDNOTES:CB_END_AT_TXTEND";
         Pos = MAP_APPFONT ( 12 , 103 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -707,6 +741,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     CheckBox CB_END_NUM
     {
+        HelpID = "sw:CheckBox:TP_SECTION_FTNENDNOTES:CB_END_NUM";
         Pos = MAP_APPFONT ( 16 , 118 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -721,6 +756,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     NumericField FLD_END_OFFSET
     {
+        HelpID = "sw:NumericField:TP_SECTION_FTNENDNOTES:FLD_END_OFFSET";
         Pos = MAP_APPFONT ( 90 , 133 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Spin = TRUE ;
@@ -733,6 +769,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     CheckBox CB_END_NUM_FMT
     {
+        HelpID = "sw:CheckBox:TP_SECTION_FTNENDNOTES:CB_END_NUM_FMT";
         Pos = MAP_APPFONT ( 24 , 150 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -748,6 +785,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     Edit ED_END_PREFIX
     {
+        HelpID = "sw:Edit:TP_SECTION_FTNENDNOTES:ED_END_PREFIX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 90 , 163 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -757,6 +795,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     ListBox LB_END_NUMVIEW
     {
+        HelpID = "sw:ListBox:TP_SECTION_FTNENDNOTES:LB_END_NUMVIEW";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 123 , 163 ) ;
         Size = MAP_APPFONT ( 62 , 50 ) ;
@@ -774,6 +813,7 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     Edit ED_END_SUFFIX
     {
+        HelpID = "sw:Edit:TP_SECTION_FTNENDNOTES:ED_END_SUFFIX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 219 , 163 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -805,6 +845,7 @@ TabPage TP_SECTION_INDENTS
     };
     MetricField MF_BEFORE
     {
+        HelpID = "sw:MetricField:TP_SECTION_INDENTS:MF_BEFORE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 135 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -828,6 +869,7 @@ TabPage TP_SECTION_INDENTS
     };
     MetricField MF_AFTER
     {
+        HelpID = "sw:MetricField:TP_SECTION_INDENTS:MF_AFTER";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 135 , 30 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;

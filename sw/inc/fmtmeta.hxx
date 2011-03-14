@@ -109,12 +109,12 @@ private:
     SwTxtMeta * GetTxtAttr() { return m_pTxtAttr; }
     void SetTxtAttr(SwTxtMeta * const i_pTxtAttr);
 
-    explicit SwFmtMeta( const USHORT i_nWhich );
+    explicit SwFmtMeta( const sal_uInt16 i_nWhich );
 
 public:
     // takes ownership
     explicit SwFmtMeta( ::boost::shared_ptr< ::sw::Meta > const & i_pMeta,
-                        const USHORT i_nWhich );
+                        const sal_uInt16 i_nWhich );
     virtual ~SwFmtMeta();
 
     // SfxPoolItem
@@ -123,7 +123,7 @@ public:
 
     /// notify clients registered at m_pMeta that this meta is being (re-)moved
     void NotifyChangeTxtNode(SwTxtNode *const pTxtNode);
-    static SwFmtMeta * CreatePoolDefault( const USHORT i_nWhich );
+    static SwFmtMeta * CreatePoolDefault( const sal_uInt16 i_nWhich );
     ::sw::Meta * GetMeta() { return m_pMeta.get(); }
     /// this method <em>must</em> be called when the hint is actually copied
     void DoCopy( SwFmtMeta & rOriginalMeta );

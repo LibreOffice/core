@@ -119,7 +119,11 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         if( bVert )
         {
             OSL_ENSURE( !bRev, "<SwToLayoutAnchoredObjectPosition::CalcPosition()> - reverse layout set." );
-            aRelPos.X() = -nRelPosY - aObjBoundRect.Width();
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            if ( bVertL2R )
+                   aRelPos.X() = nRelPosY;
+            else
+                   aRelPos.X() = -nRelPosY - aObjBoundRect.Width();
             maOffsetToFrmAnchorPos.X() = nVertOffsetToFrmAnchorPos;
         }
         else
@@ -203,8 +207,12 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         // determine absolute 'horizontal' position, depending on layout-direction
         // --> OD 2004-06-17 #i26791# - determine offset to 'horizontal' frame
         // anchor position, depending on layout-direction
-        if ( bVert )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        // --> OD 2009-09-04 #mongolianlayout#
+        if( bVert || bVertL2R )
+        // <--
         {
+
             aRelPos.Y() = nRelPosX;
             maOffsetToFrmAnchorPos.Y() = nOffset;
         }

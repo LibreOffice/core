@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SW_PRINTDATA_HXX
-#define _SW_PRINTDATA_HXX
+#ifndef SW_PRINTDATA_HXX
+#define SW_PRINTDATA_HXX
 
 
 #include <sal/types.h>
@@ -46,7 +46,6 @@ class _SetGetExpFlds;
 class SwViewOption;
 class OutputDevice;
 class SwViewOptionAdjust_Impl;
-class SwPrtOptions;
 class SwWrtShell;
 class SfxViewShell;
 
@@ -249,7 +248,7 @@ class SwRenderData
     // the view options to be applied for printing
     SwViewOptionAdjust_Impl *   m_pViewOptionAdjust;
 
-    SwPrtOptions *              m_pPrtOptions;
+    SwPrintData *               m_pPrtOptions;
 
 public:
 
@@ -270,14 +269,14 @@ public:
     bool IsViewOptionAdjust() const  { return m_pViewOptionAdjust != 0; }
     bool NeedNewViewOptionAdjust( const SwWrtShell& ) const;
     void ViewOptionAdjustStart( SwWrtShell &rSh, const SwViewOption &rViewOptions );
-    void ViewOptionAdjust( const SwPrtOptions *pPrtOptions );
+    void ViewOptionAdjust( SwPrintData const*const pPrtOptions );
     void ViewOptionAdjustStop();
 
     bool HasSwPrtOptions() const    { return m_pPrtOptions != 0; }
-    void SetSwPrtOptions( SwPrtOptions * pOpt )     { m_pPrtOptions = pOpt; }
-    const SwPrtOptions *    GetSwPrtOptions() const { return m_pPrtOptions; }
-    SwPrtOptions &          GetSwPrtOptionsRef()    { return *m_pPrtOptions; }
-    void MakeSwPrtOptions( SwPrtOptions &rOptions, const SwDocShell *pDocShell,
+    void SetSwPrtOptions(SwPrintData *const pOpt)   { m_pPrtOptions = pOpt; }
+    SwPrintData const*  GetSwPrtOptions() const     { return m_pPrtOptions; }
+    SwPrintData &       GetSwPrtOptionsRef()        { return *m_pPrtOptions; }
+    void MakeSwPrtOptions( SwPrintData & rOptions, const SwDocShell *pDocShell,
             const SwPrintUIOptions *pOpt, const SwRenderData *pData, bool bIsPDFExport );
 
 
@@ -321,6 +320,18 @@ public:
 
 ////////////////////////////////////////////////////////////
 
-#endif  //_SW_PRINTDATA_HXX
+// last remnants of swprtopt.hxx:
+#define POSTITS_NONE    0
+#define POSTITS_ONLY    1
+#define POSTITS_ENDDOC  2
+#define POSTITS_ENDPAGE 3
+
+namespace sw {
+
+void InitPrintOptionsFromApplication(SwPrintData & o_rData, bool const bWeb);
+
+} // namespace sw
+
+#endif  // SW_PRINTDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

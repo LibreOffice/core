@@ -1095,12 +1095,12 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
         return;
     // --> OD 2009-09-10 #i104937#
 //    const SwFrmFmt* const pFmtsEnd = (*pFmts)[pFmts->Count()];
-    const USHORT nSize = pFmts->Count();
+    const sal_uInt16 nSize = pFmts->Count();
     // <--
     ::std::insert_iterator<frmcontainer_t> pInserter = ::std::insert_iterator<frmcontainer_t>(m_aFrames, m_aFrames.begin());
     // --> OD 2009-09-10 #i104937#
     SwFrmFmt* pFmt( 0 );
-    for( USHORT i = 0; i < nSize; ++i )
+    for( sal_uInt16 i = 0; i < nSize; ++i )
 //    for(SwFrmFmt* pFmt = (*pFmts)[0]; pFmt < pFmtsEnd; ++pFmt)
     // <--
     {
@@ -1742,7 +1742,7 @@ uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
         uno::Reference< XIndexReplace >  xRef;
         if ( nIndex < GetDoc()->GetNumRuleTbl().Count() )
         {
-            xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTbl()[ static_cast< USHORT >(nIndex) ] );
+            xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTbl()[ static_cast< sal_uInt16 >(nIndex) ] );
             aRet.setValue(&xRef, ::getCppuType((uno::Reference<XIndexReplace>*)0));
         }
 

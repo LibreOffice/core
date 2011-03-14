@@ -43,7 +43,7 @@ using namespace ::com::sun::star::uno;
 ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId )
     : Edit( pParent, rResId ),
     DropTargetHelper( this ),
-    bBrackets( TRUE ), bEnableDrop( TRUE )
+    bBrackets( sal_True ), bEnableDrop( sal_True )
 {
 }
 

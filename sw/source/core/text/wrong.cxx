@@ -471,7 +471,7 @@ void SwWrongList::JoinList( SwWrongList* pNext, xub_StrLen nInsertPos )
     }
     if( pNext )
     {
-        USHORT nCnt = Count();
+        sal_uInt16 nCnt = Count();
         pNext->Move( 0, nInsertPos );
         Insert(nCnt, pNext->maList.begin(), pNext->maList.end());
 
@@ -499,7 +499,7 @@ void SwWrongList::JoinList( SwWrongList* pNext, xub_StrLen nInsertPos )
 }
 
 
-void SwWrongList::InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, USHORT nWhere, SwWrongList* pSubList )
+void SwWrongList::InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, sal_uInt16 nWhere, SwWrongList* pSubList )
 {
     if (pSubList)
     {
@@ -515,7 +515,7 @@ void SwWrongList::InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, USHORT 
 
 
 // New functions: Necessary because SwWrongList has been changed to use std::vector
-void SwWrongList::Insert(USHORT nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator endPos)
+void SwWrongList::Insert(sal_uInt16 nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator endPos)
 {
     std::vector<SwWrongArea>::iterator i = maList.begin();
     if ( nWhere >= maList.size() )
@@ -533,14 +533,14 @@ void SwWrongList::Insert(USHORT nWhere, std::vector<SwWrongArea>::iterator start
     }
 }
 
-void SwWrongList::Remove(USHORT nIdx, USHORT nLen )
+void SwWrongList::Remove(sal_uInt16 nIdx, sal_uInt16 nLen )
 {
     if ( nIdx >= maList.size() ) return;
     std::vector<SwWrongArea>::iterator i1 = maList.begin();
     i1 += nIdx;
 
     std::vector<SwWrongArea>::iterator i2 = i1;
-    if ( nIdx + nLen >= static_cast<USHORT>(maList.size()) )
+    if ( nIdx + nLen >= static_cast<sal_uInt16>(maList.size()) )
         i2 = maList.end(); // robust
     else
         i2 += nLen;
@@ -566,8 +566,8 @@ void SwWrongList::Remove(USHORT nIdx, USHORT nLen )
 }
 
 void SwWrongList::RemoveEntry( xub_StrLen nBegin, xub_StrLen nEnd ) {
-    USHORT nDelPos = 0;
-    USHORT nDel = 0;
+    sal_uInt16 nDelPos = 0;
+    sal_uInt16 nDel = 0;
     std::vector<SwWrongArea>::iterator aIter = maList.begin();
     while( aIter != maList.end() && (*aIter).mnPos < nBegin )
     {

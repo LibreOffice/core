@@ -140,7 +140,7 @@ void SmRect::CopyAlignInfo(const SmRect &rRect)
 
 
 void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
-                       const XubString &rText, USHORT nBorder)
+                       const XubString &rText, sal_uInt16 nBorder)
 {
     OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: Ooops...");
 
@@ -235,7 +235,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
 
 void SmRect::Init(const OutputDevice &rDev, const SmFormat *pFormat,
-                  const XubString &rText, USHORT nEBorderWidth)
+                  const XubString &rText, sal_uInt16 nEBorderWidth)
     // get rectangle fitting for drawing 'rText' on OutputDevice 'rDev'
 {
     BuildRect(rDev, pFormat, rText, nEBorderWidth);
@@ -248,7 +248,7 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
     OSL_ENSURE( nEBorderWidth >= 0, "BorderWidth is negative" );
     if (nEBorderWidth < 0)
         nEBorderWidth = 0;
-    Init(rDev, pFormat, rText, (USHORT) nEBorderWidth);
+    Init(rDev, pFormat, rText, (sal_uInt16) nEBorderWidth);
 }
 
 

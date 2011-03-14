@@ -40,24 +40,24 @@ class SfxRequest;
 
 class BookmarkCombo : public SwComboBox
 {
-    USHORT          GetFirstSelEntryPos() const;
-    USHORT          GetNextSelEntryPos(USHORT nPos) const;
-    USHORT          GetSelEntryPos(USHORT nPos) const;
+    sal_uInt16          GetFirstSelEntryPos() const;
+    sal_uInt16          GetNextSelEntryPos(sal_uInt16 nPos) const;
+    sal_uInt16          GetSelEntryPos(sal_uInt16 nPos) const;
 
     virtual long    PreNotify(NotifyEvent& rNEvt);
 public:
     BookmarkCombo( Window* pWin, const ResId& rResId );
 
-    USHORT          GetSelectEntryCount() const;
-    USHORT          GetSelectEntryPos( USHORT nSelIndex = 0 ) const;
+    sal_uInt16          GetSelectEntryCount() const;
+    sal_uInt16          GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const;
 
     static const String aForbiddenChars;
 };
 
 class SwInsertBookmarkDlg: public SvxStandardDialog
 {
-    BookmarkCombo   aBookmarkBox;
     FixedLine       aBookmarkFl;
+    BookmarkCombo   aBookmarkBox;
     OKButton        aOkBtn;
     CancelButton    aCancelBtn;
     PushButton      aDeleteBtn;

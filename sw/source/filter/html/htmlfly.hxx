@@ -85,31 +85,31 @@ enum SwHTMLFrmType
 #define HTML_CNTNR_MASK     0xc0
 
 
-const USHORT MAX_FRMTYPES = HTML_FRMTYPE_END;
-const USHORT MAX_BROWSERS = 4;
+const sal_uInt16 MAX_FRMTYPES = HTML_FRMTYPE_END;
+const sal_uInt16 MAX_BROWSERS = 4;
 
-extern BYTE aHTMLOutFrmPageFlyTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern BYTE aHTMLOutFrmParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern BYTE aHTMLOutFrmParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern BYTE aHTMLOutFrmParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS];
-extern BYTE aHTMLOutFrmAsCharTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern sal_uInt8 aHTMLOutFrmPageFlyTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern sal_uInt8 aHTMLOutFrmParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern sal_uInt8 aHTMLOutFrmParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern sal_uInt8 aHTMLOutFrmParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS];
+extern sal_uInt8 aHTMLOutFrmAsCharTable[MAX_FRMTYPES][MAX_BROWSERS];
 
 class SwHTMLPosFlyFrm
 {
     const SwFrmFmt      *pFrmFmt;       // der Rahmen
     const SdrObject     *pSdrObject;    // ggf. Sdr-Objekt
     SwNodeIndex         *pNdIdx;        // Node-Index
-    UINT32              nOrdNum;        // Aus SwPosFlyFrm
+    sal_uInt32              nOrdNum;        // Aus SwPosFlyFrm
     xub_StrLen          nCntntIdx;      // seine Position im Content
-    BYTE                nOutputMode;    // Ausgabe-Infos
+    sal_uInt8               nOutputMode;    // Ausgabe-Infos
 
 public:
 
     SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
-                     const SdrObject *pSdrObj, BYTE nOutMode );
+                     const SdrObject *pSdrObj, sal_uInt8 nOutMode );
 
-    BOOL operator==( const SwHTMLPosFlyFrm& ) const { return FALSE; }
-    BOOL operator<( const SwHTMLPosFlyFrm& ) const;
+    sal_Bool operator==( const SwHTMLPosFlyFrm& ) const { return sal_False; }
+    sal_Bool operator<( const SwHTMLPosFlyFrm& ) const;
 
     const SwFrmFmt& GetFmt() const { return *pFrmFmt; }
     const SdrObject *GetSdrObject() const { return pSdrObject; }
@@ -118,15 +118,15 @@ public:
 
     xub_StrLen GetCntntIndex() const    { return nCntntIdx; }
 
-    BYTE GetOutMode() const { return nOutputMode; }
+    sal_uInt8 GetOutMode() const { return nOutputMode; }
 
-    static BYTE GetOutFn( BYTE nMode ) { return nMode & HTML_OUT_MASK; }
-    static BYTE GetOutPos( BYTE nMode ) { return nMode & HTML_POS_MASK; }
-    static BYTE GetOutCntnr( BYTE nMode ) { return nMode & HTML_CNTNR_MASK; }
+    static sal_uInt8 GetOutFn( sal_uInt8 nMode ) { return nMode & HTML_OUT_MASK; }
+    static sal_uInt8 GetOutPos( sal_uInt8 nMode ) { return nMode & HTML_POS_MASK; }
+    static sal_uInt8 GetOutCntnr( sal_uInt8 nMode ) { return nMode & HTML_CNTNR_MASK; }
 
-    BYTE GetOutFn() const { return nOutputMode & HTML_OUT_MASK; }
-    BYTE GetOutPos() const { return nOutputMode & HTML_POS_MASK; }
-    BYTE GetOutCntnr() const { return nOutputMode & HTML_CNTNR_MASK; }
+    sal_uInt8 GetOutFn() const { return nOutputMode & HTML_OUT_MASK; }
+    sal_uInt8 GetOutPos() const { return nOutputMode & HTML_POS_MASK; }
+    sal_uInt8 GetOutCntnr() const { return nOutputMode & HTML_CNTNR_MASK; }
 };
 
 typedef SwHTMLPosFlyFrm *SwHTMLPosFlyFrmPtr;

@@ -170,7 +170,7 @@ Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
     Point aPos;
     rInf.SetPos( aPos );
     rInf.SetSpace( 0 );
-    rInf.SetDrawSpace( FALSE );
+    rInf.SetDrawSpace( sal_False );
     SwDoGetCapitalSize aDo( rInf );
     DoOnCapitals( aDo );
     Size aTxtSize( aDo.GetSize() );
@@ -261,13 +261,13 @@ xub_StrLen SwFont::GetCapitalBreak( ViewShell* pSh, const OutputDevice* pOut,
     // Start:
     Point aPos( 0, 0 );
     SwDrawTextInfo aInfo(pSh, *(OutputDevice*)pOut, pScript, rTxt, nIdx, nLen,
-        0, FALSE);
+        0, sal_False);
     aInfo.SetPos( aPos );
     aInfo.SetSpace( 0 );
     aInfo.SetWrong( NULL );
     aInfo.SetGrammarCheck( NULL );
     aInfo.SetSmartTags( NULL ); // SMARTTAGS
-    aInfo.SetDrawSpace( FALSE );
+    aInfo.SetDrawSpace( sal_False );
     aInfo.SetKern( CheckKerning() );
     aInfo.SetKanaComp( pScript ? 0 : 100 );
     aInfo.SetFont( this );
@@ -304,14 +304,14 @@ void SwDoDrawCapital::Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont )
 void SwDoDrawCapital::Do()
 {
     SV_STAT( nDrawText );
-    USHORT nOrgWidth = rInf.GetWidth();
-    rInf.SetWidth( USHORT(rInf.GetSize().Width()) );
+    sal_uInt16 nOrgWidth = rInf.GetWidth();
+    rInf.SetWidth( sal_uInt16(rInf.GetSize().Width()) );
     if ( rInf.GetUpper() )
         pUpperFnt->DrawText( rInf );
     else
     {
-        BOOL bOldBullet = rInf.GetBullet();
-        rInf.SetBullet( FALSE );
+        sal_Bool bOldBullet = rInf.GetBullet();
+        rInf.SetBullet( sal_False );
         pLowerFnt->DrawText( rInf );
         rInf.SetBullet( bOldBullet );
     }
@@ -332,15 +332,15 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
     long nDiff = rInf.GetPos().X() - rPos.X();
 
     Point aPos( rPos );
-    const BOOL bSwitchL2R = rInf.GetFrm()->IsRightToLeft() &&
+    const sal_Bool bSwitchL2R = rInf.GetFrm()->IsRightToLeft() &&
                           ! rInf.IsIgnoreFrmRTL();
 
 
     if ( bSwitchL2R )
        rInf.GetFrm()->SwitchLTRtoRTL( aPos );
 
-    const ULONG nMode = rInf.GetpOut()->GetLayoutMode();
-    const BOOL bBidiPor = ( bSwitchL2R !=
+    const sal_uLong nMode = rInf.GetpOut()->GetLayoutMode();
+    const sal_Bool bBidiPor = ( bSwitchL2R !=
                             ( 0 != ( TEXT_LAYOUT_BIDI_RTL & nMode ) ) );
 
     if ( bBidiPor )
@@ -383,9 +383,9 @@ protected:
     SwFntObj *pUpperFnt;
     SwFntObj *pLowerFnt;
     xub_StrLen nCrsr;
-    USHORT nOfst;
+    sal_uInt16 nOfst;
 public:
-    SwDoCapitalCrsrOfst( SwDrawTextInfo &rInfo, const USHORT nOfs ) :
+    SwDoCapitalCrsrOfst( SwDrawTextInfo &rInfo, const sal_uInt16 nOfs ) :
         SwDoCapitals( rInfo ), pUpperFnt(0), pLowerFnt(0), nCrsr( 0 ), nOfst( nOfs )
         { }
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
@@ -407,7 +407,7 @@ void SwDoCapitalCrsrOfst::Do()
     {
         if ( nOfst > rInf.GetSize().Width() )
         {
-            nOfst = nOfst - USHORT(rInf.GetSize().Width());
+            nOfst = nOfst - sal_uInt16(rInf.GetSize().Width());
             nCrsr = nCrsr + rInf.GetLen();
         }
         else
@@ -416,7 +416,7 @@ void SwDoCapitalCrsrOfst::Do()
                                      rInf.GetScriptInfo(),
                                      rInf.GetText(),
                                      rInf.GetIdx(),
-                                     rInf.GetLen(), 0, FALSE );
+                                     rInf.GetLen(), 0, sal_False );
             aDrawInf.SetOfst( nOfst );
             aDrawInf.SetKern( rInf.GetKern() );
             aDrawInf.SetKanaComp( rInf.GetKanaComp() );
@@ -449,7 +449,7 @@ xub_StrLen SwSubFont::GetCapitalCrsrOfst( SwDrawTextInfo& rInf )
     SwDoCapitalCrsrOfst aDo( rInf, rInf.GetOfst() );
     Point aPos;
     rInf.SetPos( aPos );
-    rInf.SetDrawSpace( FALSE );
+    rInf.SetDrawSpace( sal_False );
     DoOnCapitals( aDo );
     rInf.SetKern( nOldKern );
     return aDo.GetCrsr();
@@ -462,12 +462,12 @@ xub_StrLen SwSubFont::GetCapitalCrsrOfst( SwDrawTextInfo& rInf )
 class SwDoDrawStretchCapital : public SwDoDrawCapital
 {
     const xub_StrLen nStrLen;
-    const USHORT nCapWidth;
-    const USHORT nOrgWidth;
+    const sal_uInt16 nCapWidth;
+    const sal_uInt16 nOrgWidth;
 public:
     virtual void Do();
 
-    SwDoDrawStretchCapital( SwDrawTextInfo &rInfo, const USHORT nCapitalWidth )
+    SwDoDrawStretchCapital( SwDrawTextInfo &rInfo, const sal_uInt16 nCapitalWidth )
             : SwDoDrawCapital( rInfo ),
               nStrLen( rInfo.GetLen() ),
               nCapWidth( nCapitalWidth ),
@@ -482,7 +482,7 @@ public:
 void SwDoDrawStretchCapital::Do()
 {
     SV_STAT( nDrawStretchText );
-    USHORT nPartWidth = USHORT(rInf.GetSize().Width());
+    sal_uInt16 nPartWidth = sal_uInt16(rInf.GetSize().Width());
 
     if( rInf.GetLen() )
     {
@@ -494,13 +494,13 @@ void SwDoDrawStretchCapital::Do()
             nDiff /= (long) nStrLen;
             nDiff += nPartWidth;
             if( 0 < nDiff )
-                nPartWidth = USHORT(nDiff);
+                nPartWidth = sal_uInt16(nDiff);
         }
 
         rInf.ApplyAutoColor();
 
         Point aPos( rInf.GetPos() );
-        const BOOL bSwitchL2R = rInf.GetFrm()->IsRightToLeft() &&
+        const sal_Bool bSwitchL2R = rInf.GetFrm()->IsRightToLeft() &&
                               ! rInf.IsIgnoreFrmRTL();
 
         if ( bSwitchL2R )
@@ -533,7 +533,7 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
         rInf.SetLen( rInf.GetText().Len() );
 
     const Point& rOldPos = rInf.GetPos();
-    const USHORT nCapWidth = (USHORT)( GetCapitalSize( rInf ).Width() );
+    const sal_uInt16 nCapWidth = (sal_uInt16)( GetCapitalSize( rInf ).Width() );
     rInf.SetPos( rOldPos );
 
     rInf.SetDrawSpace( GetUnderline() != UNDERLINE_NONE ||
@@ -559,7 +559,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     Size aPartSize;
     long nKana = 0;
     const XubString aTxt( CalcCaseMap( rDo.GetInf().GetText() ) );
-    xub_StrLen nMaxPos = Min( USHORT(rDo.GetInf().GetText().Len()
+    xub_StrLen nMaxPos = Min( sal_uInt16(rDo.GetInf().GetText().Len()
                             - rDo.GetInf().GetIdx()), rDo.GetInf().GetLen() );
     rDo.GetInf().SetLen( nMaxPos );
 
@@ -586,14 +586,14 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     SwFntObj *pSpaceFont = NULL;
 
     const void *pMagic2 = NULL;
-    USHORT nIndex2 = 0;
+    sal_uInt16 nIndex2 = 0;
     SwSubFont aFont( *this );
     Point aStartPos( rDo.GetInf().GetPos() );
 
-    const BOOL bTextLines = aFont.GetUnderline() != UNDERLINE_NONE
+    const sal_Bool bTextLines = aFont.GetUnderline() != UNDERLINE_NONE
                          || aFont.GetOverline()  != UNDERLINE_NONE
                          || aFont.GetStrikeout() != STRIKEOUT_NONE;
-    const BOOL bWordWise = bTextLines && aFont.IsWordLineMode() &&
+    const sal_Bool bWordWise = bTextLines && aFont.IsWordLineMode() &&
                            rDo.GetInf().GetDrawSpace();
     const long nTmpKern = rDo.GetInf().GetKern();
 
@@ -601,7 +601,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     {
         if ( bWordWise )
         {
-            aFont.SetWordLineMode( FALSE );
+            aFont.SetWordLineMode( sal_False );
             pSpaceFontAccess = new SwFntAccess( pMagic2, nIndex2, &aFont,
                                                 rDo.GetInf().GetShell() );
             pSpaceFont = pSpaceFontAccess->Get();
@@ -623,7 +623,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         pBigFont = pLastFont;
 
     // Hier entsteht der Kleinbuchstabenfont:
-    aFont.SetProportion( BYTE( (aFont.GetPropr() * SMALL_CAPS_PERCENTAGE ) / 100L) );
+    aFont.SetProportion( sal_uInt8 (aFont.GetPropr() * SMALL_CAPS_PERCENTAGE ) / 100L);
     pMagic2 = NULL;
     nIndex2 = 0;
     SwFntAccess *pSmallFontAccess = new SwFntAccess( pMagic2, nIndex2, &aFont,
@@ -679,7 +679,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                 rDo.GetInf().SetLen( nPos - nOldPos );
             }
 
-            rDo.GetInf().SetUpper( FALSE );
+            rDo.GetInf().SetUpper( sal_False );
             rDo.GetInf().SetOut( *pOutSize );
             aPartSize = pSmallFont->GetTextSize( rDo.GetInf() );
             nKana += rDo.GetInf().GetKanaDiff();
@@ -705,7 +705,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 
             do
             {
-                rDo.GetInf().SetUpper( TRUE );
+                rDo.GetInf().SetUpper( sal_True );
                 pLastFont = pBigFont;
                 pLastFont->SetDevFont( rDo.GetInf().GetShell(), rDo.GetOut() );
                 xub_StrLen nTmp;

@@ -112,7 +112,7 @@ ImageMap *SwHTMLParser::FindImageMap( const String& rName ) const
 
     if( pImageMaps )
     {
-        for( USHORT i=0; i<pImageMaps->Count(); i++ )
+        for( sal_uInt16 i=0; i<pImageMaps->Count(); i++ )
         {
             ImageMap *pIMap = (*pImageMaps)[i];
             if( rName.EqualsIgnoreCaseAscii( pIMap->GetName() ) )
@@ -129,8 +129,8 @@ void SwHTMLParser::ConnectImageMaps()
 {
     SwNodes& rNds = pDoc->GetNodes();
     // auf den Start-Node der 1. Section
-    ULONG nIdx = rNds.GetEndOfAutotext().StartOfSectionIndex() + 1;
-    ULONG nEndIdx = rNds.GetEndOfAutotext().GetIndex();
+    sal_uLong nIdx = rNds.GetEndOfAutotext().StartOfSectionIndex() + 1;
+    sal_uLong nEndIdx = rNds.GetEndOfAutotext().GetIndex();
 
     SwGrfNode* pGrfNd;
     while( nMissingImgMaps > 0 && nIdx < nEndIdx )
@@ -164,7 +164,7 @@ void SwHTMLParser::ConnectImageMaps()
 }
 
 
-/*  */
+/*  */
 
 void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                            sal_Int16 eHoriOri,
@@ -173,7 +173,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                            SfxItemSet& rFrmItemSet )
 {
     const SfxItemSet *pCntnrItemSet = 0;
-    USHORT i = aContexts.Count();
+    sal_uInt16 i = aContexts.Count();
     while( !pCntnrItemSet && i > nContextStMin )
         pCntnrItemSet = aContexts[--i]->GetFrmItemSet();
 
@@ -183,7 +183,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
         // des Containers uebernommen.
         rFrmItemSet.Put( *pCntnrItemSet );
     }
-    else if( pCSS1Parser->MayBePositioned( rCSS1PropInfo, TRUE ) )
+    else if( pCSS1Parser->MayBePositioned( rCSS1PropInfo, sal_True ) )
     {
         // Wenn die Ausrichtung anhand der CSS1-Optionen gesetzt werden kann
         // werden die benutzt.
@@ -200,16 +200,16 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
 void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                            sal_Int16 eHoriOri,
                                            SfxItemSet& rFrmSet,
-                                           BOOL bDontAppend )
+                                           sal_Bool bDontAppend )
 {
-    BOOL bMoveBackward = FALSE;
+    sal_Bool bMoveBackward = sal_False;
     SwFmtAnchor aAnchor( FLY_AS_CHAR );
     sal_Int16 eVertRel = text::RelOrientation::FRAME;
 
     if( text::HoriOrientation::NONE != eHoriOri )
     {
         // den Absatz-Einzug bestimmen
-        USHORT nLeftSpace = 0, nRightSpace = 0;
+        sal_uInt16 nLeftSpace = 0, nRightSpace = 0;
         short nIndent = 0;
         GetMarginsFromContextWithNumBul( nLeftSpace, nRightSpace, nIndent );
 
@@ -238,15 +238,15 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
 
         // Einen neuen Absatz aufmachen, wenn der aktuelle
         // absatzgebundene Rahmen ohne Umlauf enthaelt.
-        if( !bDontAppend && HasCurrentParaFlys( TRUE ) )
+        if( !bDontAppend && HasCurrentParaFlys( sal_True ) )
         {
             // Wenn der Absatz nur Grafiken enthaelt, braucht er
             // auch keinen unteren Absatz-Abstand. Da hier auch bei
             // Verwendung von Styles kein Abstand enstehen soll, wird
             // hier auch geweohnlich attributiert !!!
-            USHORT nUpper=0, nLower=0;
+            sal_uInt16 nUpper=0, nLower=0;
             GetULSpaceFromContext( nUpper, nLower );
-            InsertAttr( SvxULSpaceItem( nUpper, 0, RES_UL_SPACE ), FALSE, TRUE );
+            InsertAttr( SvxULSpaceItem( nUpper, 0, RES_UL_SPACE ), sal_False, sal_True );
 
             AppendTxtNode( AM_NOSPACE );
 
@@ -254,7 +254,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
             {
                 NewAttr( &aAttrTab.pULSpace, SvxULSpaceItem( 0, nLower, RES_UL_SPACE ) );
                 aParaAttrs.Insert( aAttrTab.pULSpace, aParaAttrs.Count() );
-                EndAttr( aAttrTab.pULSpace, 0, FALSE );
+                EndAttr( aAttrTab.pULSpace, 0, sal_False );
             }
         }
 
@@ -263,7 +263,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
         if( nCntnt )
         {
             aAnchor.SetType( FLY_AT_CHAR );
-            bMoveBackward = TRUE;
+            bMoveBackward = sal_True;
             eVertOri = text::VertOrientation::CHAR_BOTTOM;
             eVertRel = text::RelOrientation::CHAR;
         }
@@ -300,12 +300,11 @@ void SwHTMLParser::RegisterFlyFrm( SwFrmFmt *pFlyFmt )
         SURROUND_THROUGHT == pFlyFmt->GetSurround().GetSurround() )
     {
         aMoveFlyFrms.Insert( pFlyFmt, aMoveFlyFrms.Count() );
-        aMoveFlyCnts.Insert( pPam->GetPoint()->nContent.GetIndex(),
-                             aMoveFlyCnts.Count() );
+        aMoveFlyCnts.push_back( pPam->GetPoint()->nContent.GetIndex() );
     }
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
                                          String& rTypeStr ) const
@@ -317,7 +316,7 @@ void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
     rTypeStr = GetScriptTypeString( pHeaderAttrs );
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::InsertImage()
 {
@@ -328,10 +327,10 @@ void SwHTMLParser::InsertImage()
     long nWidth=0, nHeight=0;
     long nVSpace=0, nHSpace=0;
 
-    USHORT nBorder = (aAttrTab.pINetFmt ? 1 : 0);
-    BOOL bIsMap = FALSE;
-    BOOL bPrcWidth = FALSE;
-    BOOL bPrcHeight = FALSE;
+    sal_uInt16 nBorder = (aAttrTab.pINetFmt ? 1 : 0);
+    sal_Bool bIsMap = sal_False;
+    sal_Bool bPrcWidth = sal_False;
+    sal_Bool bPrcHeight = sal_False;
     SvxMacroItem aMacroItem(RES_FRMMACRO);
 
     ScriptType eDfltScriptType;
@@ -339,9 +338,9 @@ void SwHTMLParser::InsertImage()
     GetDefaultScriptType( eDfltScriptType, sDfltScriptType );
 
     const HTMLOptions *pHTMLOptions = GetOptions();
-    for( USHORT i = pHTMLOptions->Count(); i; )
+    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
     {
-        USHORT nEvent = 0;
+        sal_uInt16 nEvent = 0;
         ScriptType eScriptType2 = eDfltScriptType;
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
@@ -392,10 +391,10 @@ void SwHTMLParser::InsertImage()
                 sAltNm = pOption->GetString();
                 break;
             case HTML_O_BORDER:
-                nBorder = (USHORT)pOption->GetNumber();
+                nBorder = (sal_uInt16)pOption->GetNumber();
                 break;
             case HTML_O_ISMAP:
-                bIsMap = TRUE;
+                bIsMap = sal_True;
                 break;
             case HTML_O_USEMAP:
                 aMap = pOption->GetString();
@@ -461,7 +460,7 @@ IMAGE_SETEVENT:
             // Rule invalisieren ist noetig, weil zwischem dem einlesen
             // des LI und der Grafik ein EndAction gerufen worden sein kann.
             if( GetNumInfo().GetNumRule() )
-                GetNumInfo().GetNumRule()->SetInvalidRule( TRUE );
+                GetNumInfo().GetNumRule()->SetInvalidRule( sal_True );
 
             // Die Vorlage novh mal setzen. Ist noetig, damit der
             // Erstzeilen-Einzug stimmt.
@@ -493,12 +492,12 @@ IMAGE_SETEVENT:
         SvxBorderLine aVBorderLine;
 
         SvxCSS1Parser::SetBorderWidth( aHBorderLine,
-                                       (USHORT)nHBorderWidth, FALSE );
+                                       (sal_uInt16)nHBorderWidth, sal_False );
         if( nHBorderWidth == nVBorderWidth )
             aVBorderLine.SetOutWidth( aHBorderLine.GetOutWidth() );
         else
             SvxCSS1Parser::SetBorderWidth( aVBorderLine,
-                                           (USHORT)nVBorderWidth, FALSE );
+                                           (sal_uInt16)nVBorderWidth, sal_False );
 
         // die tatsaechlich gesetzter Rahmenbreite benutzen und nicht die
         // Wunschbreite!
@@ -511,7 +510,7 @@ IMAGE_SETEVENT:
                 ((const SwFmtINetFmt&)aAttrTab.pINetFmt->GetItem()).GetValue();
 
             pCSS1Parser->SetATagStyles();
-            USHORT nPoolId =  static_cast< USHORT >(pDoc->IsVisitedURL( rURL )
+            sal_uInt16 nPoolId =  static_cast< sal_uInt16 >(pDoc->IsVisitedURL( rURL )
                                     ? RES_POOLCHR_INET_VISIT
                                     : RES_POOLCHR_INET_NORMAL);
             const SwCharFmt *pCharFmt = pCSS1Parser->GetCharFmtFromPool( nPoolId );
@@ -558,12 +557,12 @@ IMAGE_SETEVENT:
         case SVX_CSS1_LTYPE_TWIP:
             aTwipSz.Width() = aPropInfo.nWidth;
             nWidth = 1; // != 0
-            bPrcWidth = FALSE;
+            bPrcWidth = sal_False;
             break;
         case SVX_CSS1_LTYPE_PERCENTAGE:
             aTwipSz.Width() = 0;
             nWidth = aPropInfo.nWidth;
-            bPrcWidth = TRUE;
+            bPrcWidth = sal_True;
             break;
         default:
             ;
@@ -573,23 +572,23 @@ IMAGE_SETEVENT:
         case SVX_CSS1_LTYPE_TWIP:
             aTwipSz.Height() = aPropInfo.nHeight;
             nHeight = 1;    // != 0
-            bPrcHeight = FALSE;
+            bPrcHeight = sal_False;
             break;
         case SVX_CSS1_LTYPE_PERCENTAGE:
             aTwipSz.Height() = 0;
             nHeight = aPropInfo.nHeight;
-            bPrcHeight = TRUE;
+            bPrcHeight = sal_True;
             break;
         default:
             ;
     }
 
     Size aGrfSz( 0, 0 );
-    BOOL bSetTwipSize = TRUE;       // Twip-Size am Node setzen?
-    BOOL bChangeFrmSize = FALSE;    // Frame-Format nachtraeglich anpassen?
-    BOOL bRequestGrfNow = FALSE;
-    BOOL bSetScaleImageMap = FALSE;
-    BYTE nPrcWidth = 0, nPrcHeight = 0;
+    sal_Bool bSetTwipSize = sal_True;       // Twip-Size am Node setzen?
+    sal_Bool bChangeFrmSize = sal_False;    // Frame-Format nachtraeglich anpassen?
+    sal_Bool bRequestGrfNow = sal_False;
+    sal_Bool bSetScaleImageMap = sal_False;
+    sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
 
     if( !nWidth || !nHeight )
     {
@@ -599,12 +598,12 @@ IMAGE_SETEVENT:
         // Tabelle layoutet wird.
         if( pTable!=0 && !nWidth )
         {
-            bRequestGrfNow = TRUE;
+            bRequestGrfNow = sal_True;
             IncGrfsThatResizeTable();
         }
 
         // Die Groesse des Rahmens wird nachtraeglich gesetzt
-        bChangeFrmSize = TRUE;
+        bChangeFrmSize = sal_True;
         aGrfSz = aTwipSz;
         if( !nWidth && !nHeight )
         {
@@ -616,7 +615,7 @@ IMAGE_SETEVENT:
             // eine %-Angabe
             if( bPrcWidth )
             {
-                nPrcWidth = (BYTE)nWidth;
+                nPrcWidth = (sal_uInt8)nWidth;
                 nPrcHeight = 255;
             }
             else
@@ -628,7 +627,7 @@ IMAGE_SETEVENT:
         {
             if( bPrcHeight )
             {
-                nPrcHeight = (BYTE)nHeight;
+                nPrcHeight = (sal_uInt8)nHeight;
                 nPrcWidth = 255;
             }
             else
@@ -641,13 +640,13 @@ IMAGE_SETEVENT:
     {
         // Breite und Hoehe wurden angegeben und brauchen nicht gesetzt
         // zu werden
-        bSetTwipSize = FALSE;
+        bSetTwipSize = sal_False;
 
         if( bPrcWidth )
-            nPrcWidth = (BYTE)nWidth;
+            nPrcWidth = (sal_uInt8)nWidth;
 
         if( bPrcHeight )
-            nPrcHeight = (BYTE)nHeight;
+            nPrcHeight = (sal_uInt8)nHeight;
     }
 
     // Image-Map setzen
@@ -732,7 +731,7 @@ IMAGE_SETEVENT:
         // ggfs. eine Grafik anspringen
         if( JUMPTO_GRAPHIC == eJumpTo && sHTMLGrfName == sJmpMark )
         {
-            bChkJumpMark = TRUE;
+            bChkJumpMark = sal_True;
             eJumpTo = JUMPTO_NONE;
         }
     }
@@ -746,7 +745,7 @@ IMAGE_SETEVENT:
     pGrfNd->SetChgTwipSize( bChangeFrmSize, bChangeFrmSize );
 
     if( bSetScaleImageMap )
-        pGrfNd->SetScaleImageMap( TRUE );
+        pGrfNd->SetScaleImageMap( sal_True );
 
     if( aAttrTab.pINetFmt )
     {
@@ -762,13 +761,13 @@ IMAGE_SETEVENT:
 
         {
             const SvxMacro *pMacro;
-            static USHORT const aEvents[] = {
+            static sal_uInt16 aEvents[] = {
                 SFX_EVENT_MOUSEOVER_OBJECT,
                 SFX_EVENT_MOUSECLICK_OBJECT,
                 SFX_EVENT_MOUSEOUT_OBJECT,
                 0 };
 
-            for( USHORT n = 0; aEvents[ n ]; ++n )
+            for( sal_uInt16 n = 0; aEvents[ n ]; ++n )
                 if( 0 != ( pMacro = rINetFmt.GetMacro( aEvents[ n ] ) ))
                     aMacroItem.SetMacro( aEvents[ n ], *pMacro );
         }
@@ -814,7 +813,7 @@ IMAGE_SETEVENT:
         InsertBookmark( aId );
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::InsertBodyOptions()
 {
@@ -823,20 +822,20 @@ void SwHTMLParser::InsertBodyOptions()
 
     String aBackGround, aId, aStyle, aLang, aDir;
     Color aBGColor, aTextColor, aLinkColor, aVLinkColor;
-    BOOL bBGColor=FALSE, bTextColor=FALSE;
-    BOOL bLinkColor=FALSE, bVLinkColor=FALSE;
+    sal_Bool bBGColor=sal_False, bTextColor=sal_False;
+    sal_Bool bLinkColor=sal_False, bVLinkColor=sal_False;
 
     ScriptType eDfltScriptType;
     String sDfltScriptType;
     GetDefaultScriptType( eDfltScriptType, sDfltScriptType );
 
     const HTMLOptions *pHTMLOptions = GetOptions();
-    for( USHORT i = pHTMLOptions->Count(); i; )
+    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         rtl::OUString aEvent;
-        BOOL bSetEvent = FALSE;
+        sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )
         {
@@ -848,47 +847,47 @@ void SwHTMLParser::InsertBodyOptions()
                 break;
             case HTML_O_BGCOLOR:
                 pOption->GetColor( aBGColor );
-                bBGColor = TRUE;
+                bBGColor = sal_True;
                 break;
             case HTML_O_TEXT:
                 pOption->GetColor( aTextColor );
-                bTextColor = TRUE;
+                bTextColor = sal_True;
                 break;
             case HTML_O_LINK:
                 pOption->GetColor( aLinkColor );
-                bLinkColor = TRUE;
+                bLinkColor = sal_True;
                 break;
             case HTML_O_VLINK:
                 pOption->GetColor( aVLinkColor );
-                bVLinkColor = TRUE;
+                bVLinkColor = sal_True;
                 break;
 
             case HTML_O_SDONLOAD:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONLOAD:
                 aEvent = GlobalEventConfig::GetEventName( STR_EVENT_OPENDOC );
-                bSetEvent = TRUE;
+                bSetEvent = sal_True;
                 break;
 
             case HTML_O_SDONUNLOAD:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONUNLOAD:
                 aEvent = GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEDOC );
-                bSetEvent = TRUE;
+                bSetEvent = sal_True;
                 break;
 
             case HTML_O_SDONFOCUS:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONFOCUS:
                 aEvent = GlobalEventConfig::GetEventName( STR_EVENT_ACTIVATEDOC );
-                bSetEvent = TRUE;
+                bSetEvent = sal_True;
                 break;
 
             case HTML_O_SDONBLUR:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONBLUR:
                 aEvent = GlobalEventConfig::GetEventName( STR_EVENT_DEACTIVATEDOC );
-                bSetEvent = TRUE;
+                bSetEvent = sal_True;
                 break;
 
             case HTML_O_ONERROR:
@@ -896,7 +895,7 @@ void SwHTMLParser::InsertBodyOptions()
 
             case HTML_O_STYLE:
                 aStyle = pOption->GetString();
-                bTextColor = TRUE;
+                bTextColor = sal_True;
                 break;
             case HTML_O_LANG:
                 aLang = pOption->GetString();
@@ -927,7 +926,7 @@ void SwHTMLParser::InsertBodyOptions()
     // Die Item fuer die Seitenvorlage vorbereiten (Hintergrund, Umrandung)
     // Beim BrushItem muessen schon gesetzte werte erhalten bleiben!
     SvxBrushItem aBrushItem( pCSS1Parser->GetPageDescBackground() );
-    BOOL bSetBrush = FALSE;
+    sal_Bool bSetBrush = sal_False;
 
     if( bBGColor && !pCSS1Parser->IsBodyBGColorSet() )
     {
@@ -944,7 +943,7 @@ void SwHTMLParser::InsertBodyOptions()
             aBrushItem.SetGraphicLink( aLink );
             aBrushItem.SetGraphicPos( ePos );
         }
-        bSetBrush = TRUE;
+        bSetBrush = sal_True;
         pCSS1Parser->SetBodyBGColorSet();
     }
 
@@ -953,7 +952,7 @@ void SwHTMLParser::InsertBodyOptions()
         // Hintergrundgrafik aus "BACKGROUND"
         aBrushItem.SetGraphicLink( INetURLObject::GetAbsURL( sBaseURL, aBackGround ) );
         aBrushItem.SetGraphicPos( GPOS_TILED );
-        bSetBrush = TRUE;
+        bSetBrush = sal_True;
         pCSS1Parser->SetBodyBackgroundSet();
     }
 
@@ -970,12 +969,12 @@ void SwHTMLParser::InsertBodyOptions()
                                        &aItemSet );
 
         const SfxPoolItem *pItem;
-        static USHORT aWhichIds[3] = { RES_CHRATR_FONTSIZE,
+        static sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONTSIZE,
                                        RES_CHRATR_CJK_FONTSIZE,
                                        RES_CHRATR_CTL_FONTSIZE };
-        for( USHORT i=0; i<3; i++ )
+        for( sal_uInt16 i=0; i<3; i++ )
         {
-            if( SFX_ITEM_SET == aItemSet.GetItemState( aWhichIds[i], FALSE,
+            if( SFX_ITEM_SET == aItemSet.GetItemState( aWhichIds[i], sal_False,
                                                        &pItem ) &&
                 static_cast <const SvxFontHeightItem * >(pItem)->GetProp() != 100)
             {
@@ -1042,7 +1041,7 @@ void SwHTMLParser::InsertBodyOptions()
         InsertBookmark( aId );
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::NewAnchor()
 {
@@ -1058,16 +1057,16 @@ void SwHTMLParser::NewAnchor()
     SvxMacroTableDtor aMacroTbl;
     String sHRef, aName, sTarget;
     String aId, aStyle, aClass, aLang, aDir;
-    BOOL bHasHRef = FALSE, bFixed = FALSE;
+    sal_Bool bHasHRef = sal_False, bFixed = sal_False;
 
     ScriptType eDfltScriptType;
     String sDfltScriptType;
     GetDefaultScriptType( eDfltScriptType, sDfltScriptType );
 
     const HTMLOptions *pHTMLOptions = GetOptions();
-    for( USHORT i = pHTMLOptions->Count(); i; )
+    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
     {
-        USHORT nEvent = 0;
+        sal_uInt16 nEvent = 0;
         ScriptType eScriptType2 = eDfltScriptType;
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
@@ -1078,7 +1077,7 @@ void SwHTMLParser::NewAnchor()
 
             case HTML_O_HREF:
                 sHRef = pOption->GetString();
-                bHasHRef = TRUE;
+                bHasHRef = sal_True;
                 break;
             case HTML_O_TARGET:
                 sTarget = pOption->GetString();
@@ -1094,7 +1093,7 @@ void SwHTMLParser::NewAnchor()
                 aClass = pOption->GetString();
                 break;
             case HTML_O_SDFIXED:
-                bFixed = TRUE;
+                bFixed = sal_True;
                 break;
             case HTML_O_LANG:
                 aLang = pOption->GetString();
@@ -1170,7 +1169,7 @@ ANCHOR_SETEVENT:
     // einen neuen Kontext anlegen
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_ANCHOR_ON );
 
-    BOOL bEnAnchor = FALSE, bFtnAnchor = FALSE, bFtnEnSymbol = FALSE;
+    sal_Bool bEnAnchor = sal_False, bFtnAnchor = sal_False, bFtnEnSymbol = sal_False;
     String aFtnName;
     String aStrippedClass( aClass );
     SwCSS1Parser::GetScriptFromClass( aStrippedClass, sal_False );
@@ -1179,17 +1178,17 @@ ANCHOR_SETEVENT:
         ('d' == aStrippedClass.GetChar(1) || 'D' == aStrippedClass.GetChar(1)) )
     {
         if( aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_anc ) )
-            bEnAnchor = TRUE;
+            bEnAnchor = sal_True;
         else if( aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_anc ) )
-            bFtnAnchor = TRUE;
+            bFtnAnchor = sal_True;
         else if( aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_sym ) ||
                  aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_sym ) )
-            bFtnEnSymbol = TRUE;
+            bFtnEnSymbol = sal_True;
         if( bEnAnchor || bFtnAnchor || bFtnEnSymbol )
         {
             aFtnName = sHRef.Copy( 1 );
             aClass = aStrippedClass = aName = aEmptyStr;
-            bHasHRef = FALSE;
+            bHasHRef = sal_False;
         }
     }
 
@@ -1202,7 +1201,7 @@ ANCHOR_SETEVENT:
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             DoPositioning( aItemSet, aPropInfo, pCntxt );
-            InsertAttrs( aItemSet, aPropInfo, pCntxt, TRUE );
+            InsertAttrs( aItemSet, aPropInfo, pCntxt, sal_True );
         }
     }
 
@@ -1237,11 +1236,11 @@ ANCHOR_SETEVENT:
     if( bEnAnchor || bFtnAnchor )
     {
         InsertFootEndNote( aFtnName, bEnAnchor, bFixed );
-        bInFootEndNoteAnchor = bCallNextToken = TRUE;
+        bInFootEndNoteAnchor = bCallNextToken = sal_True;
     }
     else if( bFtnEnSymbol )
     {
-        bInFootEndNoteSymbol = bCallNextToken = TRUE;
+        bInFootEndNoteSymbol = bCallNextToken = sal_True;
     }
 
     // den Kontext merken
@@ -1253,17 +1252,17 @@ void SwHTMLParser::EndAnchor()
     if( bInFootEndNoteAnchor )
     {
         FinishFootEndNote();
-        bInFootEndNoteAnchor = FALSE;
+        bInFootEndNoteAnchor = sal_False;
     }
     else if( bInFootEndNoteSymbol )
     {
-        bInFootEndNoteSymbol = FALSE;
+        bInFootEndNoteSymbol = sal_False;
     }
 
     EndTag( HTML_ANCHOR_OFF );
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::InsertBookmark( const String& rName )
 {
@@ -1272,10 +1271,10 @@ void SwHTMLParser::InsertBookmark( const String& rName )
     aSetAttrTab.Insert( pTmp, aSetAttrTab.Count() );
 }
 
-BOOL SwHTMLParser::HasCurrentParaBookmarks( BOOL bIgnoreStack ) const
+sal_Bool SwHTMLParser::HasCurrentParaBookmarks( sal_Bool bIgnoreStack ) const
 {
-    BOOL bHasMarks = FALSE;
-    ULONG nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
+    sal_Bool bHasMarks = sal_False;
+    sal_uLong nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
 
     // first step: are there still bookmark in the attribute-stack?
     // bookmarks are added to the end of the stack - thus we only have
@@ -1283,13 +1282,13 @@ BOOL SwHTMLParser::HasCurrentParaBookmarks( BOOL bIgnoreStack ) const
     if( !bIgnoreStack )
     {
         _HTMLAttr* pAttr;
-        for( USHORT i = aSetAttrTab.Count(); i; )
+        for( sal_uInt16 i = aSetAttrTab.Count(); i; )
         {
             pAttr = aSetAttrTab[ --i ];
             if( RES_FLTR_BOOKMARK == pAttr->pItem->Which() )
             {
                 if( pAttr->GetSttParaIdx() == nNodeIdx )
-                    bHasMarks = TRUE;
+                    bHasMarks = sal_True;
                 break;
             }
         }
@@ -1305,10 +1304,10 @@ BOOL SwHTMLParser::HasCurrentParaBookmarks( BOOL bIgnoreStack ) const
             ppMark++)
         {
             const ::sw::mark::IMark* pBookmark = ppMark->get();
-            ULONG nBookNdIdx = pBookmark->GetMarkPos().nNode.GetIndex();
+            sal_uLong nBookNdIdx = pBookmark->GetMarkPos().nNode.GetIndex();
             if( nBookNdIdx==nNodeIdx )
             {
-                bHasMarks = TRUE;
+                bHasMarks = sal_True;
                 break;
             }
             else if( nBookNdIdx > nNodeIdx )
@@ -1319,11 +1318,11 @@ BOOL SwHTMLParser::HasCurrentParaBookmarks( BOOL bIgnoreStack ) const
     return bHasMarks;
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::StripTrailingPara()
 {
-    BOOL bSetSmallFont = FALSE;
+    sal_Bool bSetSmallFont = sal_False;
 
     SwCntntNode* pCNd = pPam->GetCntntNode();
     if( !pPam->GetPoint()->nContent.GetIndex() )
@@ -1331,11 +1330,11 @@ void SwHTMLParser::StripTrailingPara()
         if( pCNd && pCNd->StartOfSectionIndex()+2 <
             pCNd->EndOfSectionIndex() )
         {
-            ULONG nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
+            sal_uLong nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
 
             const SwSpzFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
 
-            for( USHORT i=0; i<rFrmFmtTbl.Count(); i++ )
+            for( sal_uInt16 i=0; i<rFrmFmtTbl.Count(); i++ )
             {
                 SwFrmFmt const*const pFmt = rFrmFmtTbl[i];
                 SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
@@ -1348,7 +1347,7 @@ void SwHTMLParser::StripTrailingPara()
                     return;     // den Knoten duerfen wir nicht loeschen
             }
 
-            SetAttr( FALSE );   // die noch offenen Attribute muessen
+            SetAttr( sal_False );   // die noch offenen Attribute muessen
                                 // beendet werden, bevor der Node
                                 // geloescht wird, weil sonst der
                                 // End-Index in die Botanik zeigt
@@ -1373,7 +1372,7 @@ void SwHTMLParser::StripTrailingPara()
                 ppMark++)
             {
                 ::sw::mark::IMark* pMark = ppMark->get();
-                ULONG nBookNdIdx = pMark->GetMarkPos().nNode.GetIndex();
+                sal_uLong nBookNdIdx = pMark->GetMarkPos().nNode.GetIndex();
                 if(nBookNdIdx==nNodeIdx)
                 {
                     SwNodeIndex nNewNdIdx(pPam->GetPoint()->nNode);
@@ -1408,7 +1407,7 @@ void SwHTMLParser::StripTrailingPara()
             // In leeren Zellen stellen wir einen kleinen Font ein, damit die
             // Zelle nicht hoeher wird als die Grafik bzw. so niedrig wie
             // moeglich bleibt.
-            bSetSmallFont = TRUE;
+            bSetSmallFont = sal_True;
         }
     }
     else if( pCNd && pCNd->IsTxtNode() && pTable &&
@@ -1417,7 +1416,7 @@ void SwHTMLParser::StripTrailingPara()
     {
         // Wenn die Zelle nur zeichengebundene Grafiken/Rahmen enthaelt
         // stellen wir ebenfalls einen kleinen Font ein.
-        bSetSmallFont = TRUE;
+        bSetSmallFont = sal_True;
         SwTxtNode* pTxtNd = pCNd->GetTxtNode();
 
         xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();

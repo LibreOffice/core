@@ -33,6 +33,7 @@
 #include <sfx2/printer.hxx>
 #include <rtl/logfile.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docsh.hxx>
 #include <viewsh.hxx>
 #include <rootfrm.hxx>
@@ -52,7 +53,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::Init" );
 
-    bDocSizeChgd = FALSE;
+    bDocSizeChgd = sal_False;
 
     pFntCache->Flush( );
 
@@ -78,7 +79,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     pDoc->set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode( pDShell ) );
 
     if( pDShell && pDShell->IsReadOnly() )
-        pOpt->SetReadonly( TRUE );
+        pOpt->SetReadonly( sal_True );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "View::Init - before InitPrt" );
 
@@ -157,8 +158,8 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     mbInConstructor = true;
 
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
-    bEndActionByVirDev = FALSE;
-    bPaintWorks = bEnableSmooth = TRUE;
+    bEndActionByVirDev = sal_False;
+    bPaintWorks = bEnableSmooth = sal_True;
     bPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
 
     // #i38810# Do not reset modified state of document, if it's already been modified.
@@ -181,7 +182,8 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
         SetHiddenFlag( !pOpt->IsShowHiddenField() );
 
     // #i38810#
-    if ( !pDoc->IsUndoNoResetModified() && !bIsDocModified )
+    if (   !pDoc->GetIDocumentUndoRedo().IsUndoNoResetModified()
+        && !bIsDocModified )
     {
         pDoc->ResetModified();
     }
@@ -223,9 +225,9 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     // <SwDrawContact::Changed> during contruction of <ViewShell> instance
     mbInConstructor = true;
 
-    bPaintWorks = bEnableSmooth = TRUE;
+    bPaintWorks = bEnableSmooth = sal_True;
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
-    bEndActionByVirDev = FALSE;
+    bEndActionByVirDev = sal_False;
     bPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
 
     if ( bPreView )
@@ -234,7 +236,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     SET_CURR_SHELL( this );
 
     pDoc->acquire();
-    BOOL bModified = pDoc->IsModified();
+    sal_Bool bModified = pDoc->IsModified();
 
     pOutput = pOut;
     Init( rShell.GetViewOptions() );
@@ -243,8 +245,10 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     ((SwHiddenTxtFieldType*)pDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
             SetHiddenFlag( !pOpt->IsShowHiddenField() );
 
-    if( !bModified && !pDoc->IsUndoNoResetModified() )
+    if( !bModified && !pDoc->GetIDocumentUndoRedo().IsUndoNoResetModified() )
+    {
         pDoc->ResetModified();
+    }
 
     if ( SwTxtFrm::GetTxtCache()->GetCurMax() < 2550 )
         SwTxtFrm::GetTxtCache()->IncreaseMax( 100 );
@@ -260,7 +264,7 @@ ViewShell::~ViewShell()
 {
     {
         SET_CURR_SHELL( this );
-        bPaintWorks = FALSE;
+        bPaintWorks = sal_False;
 
         // #i9684#Stopping the animated graphics is not
         // necessary during printing or pdf export, because the animation
@@ -322,7 +326,7 @@ ViewShell::~ViewShell()
     delete pAccOptions;
 }
 
-BOOL ViewShell::HasDrawView() const
+sal_Bool ViewShell::HasDrawView() const
 {
     return Imp()->HasDrawView();
 }

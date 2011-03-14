@@ -358,8 +358,8 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
         // <--
 
         // #i81146# new loop control
-        USHORT nLoopControlRuns = 0;
-        const USHORT nLoopControlMax = 15;
+        sal_uInt16 nLoopControlRuns = 0;
+        const sal_uInt16 nLoopControlMax = 15;
 
         do {
             if ( mpLayAction )

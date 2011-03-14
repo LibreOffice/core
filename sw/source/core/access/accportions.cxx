@@ -115,7 +115,7 @@ SwAccessiblePortionData::~SwAccessiblePortionData()
     delete pSentences;
 }
 
-void SwAccessiblePortionData::Text(USHORT nLength, USHORT nType)
+void SwAccessiblePortionData::Text(sal_uInt16 nLength, sal_uInt16 nType)
 {
     DBG_ASSERT( (nModelPosition + nLength) <= pTxtNode->GetTxt().Len(),
                 "portion exceeds model string!" );
@@ -137,7 +137,7 @@ void SwAccessiblePortionData::Text(USHORT nLength, USHORT nType)
     // update buffer + nModelPosition
     aBuffer.append( OUString(
         pTxtNode->GetTxt().Copy(
-            static_cast<USHORT>( nModelPosition ),
+            static_cast<sal_uInt16>( nModelPosition ),
             nLength ) ) );
     nModelPosition += nLength;
 
@@ -145,7 +145,7 @@ void SwAccessiblePortionData::Text(USHORT nLength, USHORT nType)
 }
 
 void SwAccessiblePortionData::Special(
-    USHORT nLength, const String& rText, USHORT nType)
+    sal_uInt16 nLength, const String& rText, sal_uInt16 nType)
 {
     DBG_ASSERT( nModelPosition >= 0, "illegal position" );
     DBG_ASSERT( (nModelPosition + nLength) <= pTxtNode->GetTxt().Len(),
@@ -225,7 +225,7 @@ void SwAccessiblePortionData::LineBreak()
     aLineBreaks.push_back( aBuffer.getLength() );
 }
 
-void SwAccessiblePortionData::Skip(USHORT nLength)
+void SwAccessiblePortionData::Skip(sal_uInt16 nLength)
 {
     DBG_ASSERT( !bFinished, "We are already done!" );
     DBG_ASSERT( aModelPositions.size() == 0, "Never Skip() after portions" );
@@ -269,7 +269,7 @@ sal_Bool SwAccessiblePortionData::IsReadOnlyPortion( size_t nPortionNo ) const
     return IsPortionAttrSet(nPortionNo, PORATTR_READONLY);
 }
 
-sal_Bool SwAccessiblePortionData::IsGrayPortionType( USHORT nType ) const
+sal_Bool SwAccessiblePortionData::IsGrayPortionType( sal_uInt16 nType ) const
 {
     // gray portions?
     // Compare with: inftxt.cxx, SwTxtPaintInfo::DrawViewOpt(...)
@@ -361,7 +361,7 @@ void SwAccessiblePortionData::GetLastLineBoundary(
     FillBoundary( rBound, aLineBreaks, nBreaks <= 3 ? 0 : nBreaks-4 );
 }
 
-USHORT SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos ) const
+sal_uInt16 SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos ) const
 {
     DBG_ASSERT( nPos >= 0, "illegal position" );
     DBG_ASSERT( nPos <= sAccessibleString.getLength(), "illegal position" );
@@ -389,7 +389,7 @@ USHORT SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos ) const
 
     DBG_ASSERT( (nStartPos >= 0) && (nStartPos < USHRT_MAX),
                 "How can the SwTxtNode have so many characters?" );
-    return static_cast<USHORT>(nStartPos);
+    return static_cast<sal_uInt16>(nStartPos);
 }
 
 void SwAccessiblePortionData::FillBoundary(
@@ -502,7 +502,7 @@ void SwAccessiblePortionData::GetSentenceBoundary(
              {
                  pSentences->push_back( nCurrent );
 
-                 USHORT nModelPos = GetModelPosition( nCurrent );
+                 sal_uInt16 nModelPos = GetModelPosition( nCurrent );
 
                  sal_Int32 nNew = pBreakIt->GetBreakIter()->endOfSentence(
                      sAccessibleString, nCurrent,
@@ -545,7 +545,7 @@ void SwAccessiblePortionData::GetAttributeBoundary(
 }
 
 
-sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( USHORT nPos ) const
+sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos <= pTxtNode->GetTxt().Len(), "illegal position" );
 
@@ -578,14 +578,14 @@ sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( USHORT nPos ) const
     return nRet;
 }
 
-USHORT SwAccessiblePortionData::FillSpecialPos(
+sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
     sal_Int32 nPos,
     SwSpecialPos& rPos,
     SwSpecialPos*& rpPos ) const
 {
     size_t nPortionNo = FindLastBreak( aAccessiblePositions, nPos );
 
-    BYTE nExtend(SP_EXTEND_RANGE_NONE);
+    sal_uInt8 nExtend(SP_EXTEND_RANGE_NONE);
     sal_Int32 nRefPos(0);
     sal_Int32 nModelPos(0);
 
@@ -617,7 +617,7 @@ USHORT SwAccessiblePortionData::FillSpecialPos(
 
         // if we have anything except plain text, compute nExtend + nRefPos
         if( (nModelEndPos - nModelPos == 1) &&
-            (pTxtNode->GetTxt().GetChar(static_cast<USHORT>(nModelPos)) !=
+            (pTxtNode->GetTxt().GetChar(static_cast<sal_uInt16>(nModelPos)) !=
              sAccessibleString.getStr()[nPos]) )
         {
             // case 1: a one-character, non-text portion
@@ -661,41 +661,41 @@ USHORT SwAccessiblePortionData::FillSpecialPos(
         // (if necessary)
         size_t nRefLine = FindBreak( aLineBreaks, nRefPos );
         size_t nMyLine  = FindBreak( aLineBreaks, nPos );
-        USHORT nLineOffset = static_cast<USHORT>( nMyLine - nRefLine );
+        sal_uInt16 nLineOffset = static_cast<sal_uInt16>( nMyLine - nRefLine );
         if( nLineOffset != 0 )
             nRefPos = aLineBreaks[ nMyLine ];
 
         // fill char offset and 'special position'
-        rPos.nCharOfst = static_cast<USHORT>( nPos - nRefPos );
+        rPos.nCharOfst = static_cast<sal_uInt16>( nPos - nRefPos );
         rPos.nExtendRange = nExtend;
         rPos.nLineOfst = nLineOffset;
     }
 
-    return static_cast<USHORT>( nModelPos );
+    return static_cast<sal_uInt16>( nModelPos );
 }
 
 void SwAccessiblePortionData::AdjustAndCheck(
     sal_Int32 nPos,
     size_t& nPortionNo,
-    USHORT& nCorePos,
+    sal_uInt16& nCorePos,
     sal_Bool& bEdit) const
 {
     // find portion and get mode position
     nPortionNo = FindBreak( aAccessiblePositions, nPos );
-    nCorePos = static_cast<USHORT>( aModelPositions[ nPortionNo ] );
+    nCorePos = static_cast<sal_uInt16>( aModelPositions[ nPortionNo ] );
 
     // for special portions, make sure we're on a portion boundary
     // for text portions, add the in-portion offset
     if( IsSpecialPortion( nPortionNo ) )
         bEdit &= nPos == aAccessiblePositions[nPortionNo];
     else
-        nCorePos = static_cast<USHORT>( nCorePos +
+        nCorePos = static_cast<sal_uInt16>( nCorePos +
             nPos - aAccessiblePositions[nPortionNo] );
 }
 
 sal_Bool SwAccessiblePortionData::GetEditableRange(
     sal_Int32 nStart, sal_Int32 nEnd,
-    USHORT& nCoreStart, USHORT& nCoreEnd ) const
+    sal_uInt16& nCoreStart, sal_uInt16& nCoreEnd ) const
 {
     sal_Bool bIsEditable = sal_True;
 
@@ -730,21 +730,21 @@ sal_Bool SwAccessiblePortionData::GetEditableRange(
     return bIsEditable;
 }
 
-sal_Bool SwAccessiblePortionData::IsValidCorePosition( USHORT nPos ) const
+sal_Bool SwAccessiblePortionData::IsValidCorePosition( sal_uInt16 nPos ) const
 {
     // a position is valid its within the model positions that we know
     return ( aModelPositions[0] <= nPos ) &&
            ( nPos <= aModelPositions[ aModelPositions.size()-1 ] );
 }
 
-USHORT SwAccessiblePortionData::GetFirstValidCorePosition() const
+sal_uInt16 SwAccessiblePortionData::GetFirstValidCorePosition() const
 {
-    return static_cast<USHORT>( aModelPositions[0] );
+    return static_cast<sal_uInt16>( aModelPositions[0] );
 }
 
-USHORT SwAccessiblePortionData::GetLastValidCorePosition() const
+sal_uInt16 SwAccessiblePortionData::GetLastValidCorePosition() const
 {
-    return static_cast<USHORT>( aModelPositions[ aModelPositions.size()-1 ] );
+    return static_cast<sal_uInt16>( aModelPositions[ aModelPositions.size()-1 ] );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

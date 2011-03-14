@@ -458,7 +458,7 @@ SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
                     len2 = start3 - start2,
                     len3 = aText.Len() - start3;
                 SmToken aToken = pText->GetToken();
-                USHORT eFontDesc = pText->GetFontDesc();
+                sal_uInt16 eFontDesc = pText->GetFontDesc();
                 //If we need make segment 1
                 if(len1 > 0) {
                     int start1 = 0;
@@ -507,9 +507,9 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(pTree);
         j_assert(pSNode != NULL, "There must be a selected node when HasSelection is true!");
-        pLine = FindTopMostNodeInLine(pSNode, TRUE);
+        pLine = FindTopMostNodeInLine(pSNode, sal_True);
     } else
-        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, FALSE);
+        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, sal_False);
 
     //Find Parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
@@ -610,7 +610,7 @@ bool SmCursor::InsertLimit(SmSubSup eSubSup, bool bMoveCaret) {
         pSubject = (SmOperNode*)position->CaretPos.pSelectedNode;
     else {
         //If not, check if parent of the current line is a SmOperNode
-        SmNode *pLineNode = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, FALSE);
+        SmNode *pLineNode = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, sal_False);
         if(pLineNode->GetParent() && pLineNode->GetParent()->GetType() == NOPER)
             pSubject = (SmOperNode*)pLineNode->GetParent();
     }
@@ -678,9 +678,9 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(pTree);
         j_assert(pSNode != NULL, "There must be a selected node if HasSelection()");
-        pLine = FindTopMostNodeInLine(pSNode, TRUE);
+        pLine = FindTopMostNodeInLine(pSNode, sal_True);
     } else
-        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, FALSE);
+        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, sal_False);
 
     //Find parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
@@ -814,9 +814,9 @@ bool SmCursor::InsertRow() {
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(pTree);
         j_assert(pSNode != NULL, "There must be a selected node if HasSelection()");
-        pLine = FindTopMostNodeInLine(pSNode, TRUE);
+        pLine = FindTopMostNodeInLine(pSNode, sal_True);
     } else
-        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, FALSE);
+        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, sal_False);
 
     //Find parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
@@ -841,7 +841,7 @@ bool SmCursor::InsertRow() {
     if(pLineParent->GetType() == NMATRIX)
         pMatrix = (SmMatrixNode*)pLineParent;
 
-    //If we're not in a context that supports InsertRow, return FALSE
+    //If we're not in a context that supports InsertRow, return sal_False
     if(!pTable && !pMatrix)
         return false;
 
@@ -903,8 +903,8 @@ bool SmCursor::InsertRow() {
         //Find position after insert and patch the list
         PosAfterInsert = PatchLineList(pLineList, it);
         //Move other children
-        USHORT rows = pMatrix->GetNumRows();
-        USHORT cols = pMatrix->GetNumCols();
+        sal_uInt16 rows = pMatrix->GetNumRows();
+        sal_uInt16 cols = pMatrix->GetNumCols();
         int nRowStart = (nParentIndex - nParentIndex % cols) + cols;
         for( int i = pMatrix->GetNumSubNodes() + cols - 1; i >= nRowStart + cols; i--)
             pMatrix->SetSubNode(i, pMatrix->GetSubNode(i - cols));
@@ -916,7 +916,7 @@ bool SmCursor::InsertRow() {
         }
         pMatrix->SetRowCol(rows + 1, cols);
     } else
-        j_assert(FALSE, "We must be either the context of a table or matrix!");
+        j_assert(sal_False, "We must be either the context of a table or matrix!");
 
     //Finish editing
     FinishEdit(pLineList, pLineParent, nParentIndex, PosAfterInsert);
@@ -934,9 +934,9 @@ void SmCursor::InsertFraction() {
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(pTree);
         j_assert(pSNode != NULL, "There must be a selected node when HasSelection is true!");
-        pLine = FindTopMostNodeInLine(pSNode, TRUE);
+        pLine = FindTopMostNodeInLine(pSNode, sal_True);
     } else
-        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, FALSE);
+        pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, sal_False);
 
     //Find Parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
@@ -1134,7 +1134,7 @@ void SmCursor::InsertSpecial(XubString aString) {
     EndEdit();
 }
 
-void SmCursor::InsertCommand(USHORT nCommand) {
+void SmCursor::InsertCommand(sal_uInt16 nCommand) {
     switch(nCommand){
         case RID_NEWLINE:
             InsertRow();
@@ -1429,13 +1429,13 @@ void SmCursor::BeginEdit(){
 
     bIsEnabledSetModifiedSmDocShell = pDocShell->IsEnableSetModified();
     if( bIsEnabledSetModifiedSmDocShell )
-        pDocShell->EnableSetModified( FALSE );
+        pDocShell->EnableSetModified( sal_False );
 }
 
 void SmCursor::EndEdit(){
     if(--nEditSections > 0) return;
 
-    pDocShell->SetFormulaArranged(FALSE);
+    pDocShell->SetFormulaArranged(sal_False);
     //Okay, I don't know what this does... :)
     //It's used in SmDocShell::SetText and with places where everything is modified.
     //I think it does some magic, with sfx, but everything is totally undocumented so
@@ -1443,7 +1443,7 @@ void SmCursor::EndEdit(){
     if ( bIsEnabledSetModifiedSmDocShell )
         pDocShell->EnableSetModified( bIsEnabledSetModifiedSmDocShell );
     //I think this notifies people around us that we've modified this document...
-    pDocShell->SetModified(TRUE);
+    pDocShell->SetModified(sal_True);
     //I think SmDocShell uses this value when it sends an update graphics event
     //Anyway comments elsewhere suggests it need to be updated...
     pDocShell->nModifyCount++;

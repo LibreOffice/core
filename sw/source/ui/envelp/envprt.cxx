@@ -66,7 +66,7 @@ SwEnvPrtPage::SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet) :
     SetExchangeSupport();
 
     // Metrics
-    FieldUnit eUnit = ::GetDfltMetric(FALSE);
+    FieldUnit eUnit = ::GetDfltMetric(sal_False);
     SetMetric(aRightField, eUnit);
     SetMetric(aDownField , eUnit);
 
@@ -136,15 +136,15 @@ IMPL_LINK( SwEnvPrtPage, AlignHdl, ToolBox *, EMPTYARG )
 {
     if (aAlignBox.GetCurItemId())
     {
-        for (USHORT i = ITM_HOR_LEFT; i <= ITM_VER_RGHT; i++)
-            aAlignBox.CheckItem(i, FALSE);
-        aAlignBox.CheckItem(aAlignBox.GetCurItemId(), TRUE);
+        for (sal_uInt16 i = ITM_HOR_LEFT; i <= ITM_VER_RGHT; i++)
+            aAlignBox.CheckItem(i, sal_False);
+        aAlignBox.CheckItem(aAlignBox.GetCurItemId(), sal_True);
     }
     else
     {
         // GetCurItemId() == 0 is possible!
         const SwEnvItem& rItem = (const SwEnvItem&) GetItemSet().Get(FN_ENVELOP);
-        aAlignBox.CheckItem((USHORT) rItem.eAlign + ITM_HOR_LEFT, TRUE);
+        aAlignBox.CheckItem((sal_uInt16) rItem.eAlign + ITM_HOR_LEFT, sal_True);
     }
     return 0;
 }
@@ -169,8 +169,8 @@ int SwEnvPrtPage::DeactivatePage(SfxItemSet* _pSet)
 
 void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
 {
-    USHORT nID = 0;
-    for (USHORT i = ITM_HOR_LEFT; i <= ITM_VER_RGHT && !nID; i++)
+    sal_uInt16 nID = 0;
+    for (sal_uInt16 i = ITM_HOR_LEFT; i <= ITM_VER_RGHT && !nID; i++)
         if (aAlignBox.IsItemChecked(i))
             nID = i;
 
@@ -180,18 +180,18 @@ void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
     rItem.lShiftDown      = static_cast< sal_Int32 >(GetFldVal(aDownField ));
 }
 
-BOOL SwEnvPrtPage::FillItemSet(SfxItemSet& rSet)
+sal_Bool SwEnvPrtPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(GetParent()->aEnvItem);
     rSet.Put(GetParent()->aEnvItem);
-    return TRUE;
+    return sal_True;
 }
 
 void SwEnvPrtPage::Reset(const SfxItemSet& rSet)
 {
     // Read item
     const SwEnvItem& rItem = (const SwEnvItem&) rSet.Get(FN_ENVELOP);
-    aAlignBox.CheckItem((USHORT) rItem.eAlign + ITM_HOR_LEFT);
+    aAlignBox.CheckItem((sal_uInt16) rItem.eAlign + ITM_HOR_LEFT);
 
     if (rItem.bPrintFromAbove)
         aTopButton   .Check();

@@ -31,6 +31,7 @@
 #include <com/sun/star/text/PositionLayoutDir.hpp>
 
 #include <cppuhelper/weakref.hxx>
+#include <tools/gen.hxx>
 
 #include <format.hxx>
 
@@ -56,15 +57,15 @@ class SW_DLLPUBLIC SwFrmFmt: public SwFmt
 
 protected:
     SwFrmFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-                SwFrmFmt *pDrvdFrm, USHORT nFmtWhich = RES_FRMFMT,
-                const USHORT* pWhichRange = 0 )
+                SwFrmFmt *pDrvdFrm, sal_uInt16 nFmtWhich = RES_FRMFMT,
+                const sal_uInt16* pWhichRange = 0 )
           : SwFmt( rPool, pFmtNm, (pWhichRange ? pWhichRange : aFrmFmtSetRange),
                 pDrvdFrm, nFmtWhich )
     {}
 
     SwFrmFmt( SwAttrPool& rPool, const String &rFmtNm,
-                SwFrmFmt *pDrvdFrm, USHORT nFmtWhich = RES_FRMFMT,
-                const USHORT* pWhichRange = 0 )
+                SwFrmFmt *pDrvdFrm, sal_uInt16 nFmtWhich = RES_FRMFMT,
+                const sal_uInt16* pWhichRange = 0 )
           : SwFmt( rPool, rFmtNm, (pWhichRange ? pWhichRange : aFrmFmtSetRange),
                 pDrvdFrm, nFmtWhich )
     {}
@@ -93,9 +94,9 @@ public:
     // Returns the real size of the frame - or an empty rectangle
     // if no layout exists.
     // If pPoint is given, look for the frame closest to it.
-    SwRect FindLayoutRect( const BOOL bPrtArea = FALSE,
+    SwRect FindLayoutRect( const sal_Bool bPrtArea = sal_False,
                             const Point* pPoint = 0,
-                            const BOOL bCalcFrm = FALSE ) const;
+                            const sal_Bool bCalcFrm = sal_False ) const;
 
     // Searches SdrObject. SdrObjUserCall is client of the format.
     // The UserCall knows its SdrObject.
@@ -115,7 +116,7 @@ public:
     const SdrObject *FindRealSdrObject() const
         { return ((SwFrmFmt*)this)->FindRealSdrObject(); }
 
-    BOOL IsLowerOf( const SwFrmFmt& rFmt ) const;
+    sal_Bool IsLowerOf( const SwFrmFmt& rFmt ) const;
 
     enum tLayoutDir
     {
@@ -150,6 +151,11 @@ class SW_DLLPUBLIC SwFlyFrmFmt: public SwFrmFmt
     friend class SwDoc;
 
     // Both not existent.
+    // it stores the previous position of Prt rectangle from RequestObjectResize
+    // so it can be used to move frames of non-resizable objects to align them correctly
+    // when they get borders (this is done in SwWrtShell::CalcAndGetScale)
+    Point   m_aLastFlyFrmPrtRectPos;
+
     SwFlyFrmFmt( const SwFlyFrmFmt &rCpy );
     SwFlyFrmFmt &operator=( const SwFlyFrmFmt &rCpy );
 
@@ -171,14 +177,14 @@ public:
     virtual void MakeFrms();
 
     SwFlyFrm* GetFrm( const Point* pDocPos = 0,
-                        const BOOL bCalcFrm = FALSE ) const;
+                        const sal_Bool bCalcFrm = sal_False ) const;
 
     SwAnchoredObject* GetAnchoredObj( const Point* pDocPos = 0,
-                                      const BOOL bCalcFrm = FALSE ) const;
+                                      const sal_Bool bCalcFrm = sal_False ) const;
 
     virtual Graphic MakeGraphic( ImageMap* pMap = NULL );
 
-    virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
+    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
 
     const String GetObjTitle() const;
     void SetObjTitle( const String& rTitle,
@@ -212,6 +218,9 @@ public:
         @return true, if background brush is "inherited" from parent/grandparent
     */
     sal_Bool IsBackgroundBrushInherited() const;
+
+    const Point & GetLastFlyFrmPrtRectPos() const       { return m_aLastFlyFrmPrtRectPos; }
+    void SetLastFlyFrmPrtRectPos( const Point &rPoint ) { m_aLastFlyFrmPrtRectPos = rPoint; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwFlyFrmFmt)
 };

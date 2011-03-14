@@ -57,8 +57,8 @@ SwClient::SwClient(SwModify *pToRegisterIn)
     bModifyLocked =
     bInModify =
     bInDocDTOR =
-    bInCache = FALSE;
-    bInSwFntCache = FALSE;
+    bInCache = sal_False;
+    bInSwFntCache = sal_False;
 
     if(pToRegisterIn)
         pToRegisterIn->Add(this);
@@ -106,9 +106,9 @@ SwClient::~SwClient()
 
 
     // erfrage vom Client Informationen
-BOOL SwClient::GetInfo( SfxPoolItem& ) const
+sal_Bool SwClient::GetInfo( SfxPoolItem& ) const
 {
-    return TRUE;        // und weiter
+    return sal_True;        // und weiter
 }
 
 /*************************************************************************
@@ -187,7 +187,7 @@ void SwModify::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 {
     if (IsInCache() || IsInSwFntCache())
     {
-        const USHORT nWhich = pOldValue ? pOldValue->Which() :
+        const sal_uInt16 nWhich = pOldValue ? pOldValue->Which() :
                                         pNewValue ? pNewValue->Which() : 0;
         CheckCaching( nWhich );
     }
@@ -199,7 +199,7 @@ void SwModify::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 
 #if OSL_DEBUG_LEVEL > 1
     if( !pOldValue )
-        bInModify = TRUE;
+        bInModify = sal_True;
     else
         // following Modifies don't calls an ASSRT
         switch( pOldValue->Which() )
@@ -213,13 +213,13 @@ void SwModify::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
         case RES_REFMARK_DELETED:
         case RES_TOXMARK_DELETED:
         case RES_FIELD_DELETED:
-            bInModify = FALSE;
+            bInModify = sal_False;
             break;
         default:
-            bInModify = TRUE;
+            bInModify = sal_True;
         }
 #else
-    bInModify = TRUE;
+    bInModify = sal_True;
 #endif
 
     SwClientIter aIter( *this );
@@ -232,15 +232,15 @@ void SwModify::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
                 break;
         } while( 0 != ( pLast = aIter++ ));
 
-    bInModify = FALSE;
+    bInModify = sal_False;
     UnlockModify();
 }
 
 // erfrage vom Modify Informationen
 
-BOOL SwModify::GetInfo( SfxPoolItem& rInfo ) const
+sal_Bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
 {
-    BOOL bRet = TRUE;       // bedeutet weiter zum naechsten
+    sal_Bool bRet = sal_True;       // bedeutet weiter zum naechsten
 
     if( pRoot )
     {
@@ -351,7 +351,7 @@ SwClient *SwModify::_Remove(SwClient * pDepend)
         pDepend->pRight = 0;
     }
     else {
-        OSL_ENSURE( FALSE, "SwModify::Remove(): pDepend nicht gefunden");
+        OSL_ENSURE( sal_False, "SwModify::Remove(): pDepend nicht gefunden");
     }
     pDepend->pRegisteredIn = 0;
     return pDepend;
@@ -359,16 +359,16 @@ SwClient *SwModify::_Remove(SwClient * pDepend)
 
 
 /*************************************************************************
-|*    SwModify::CheckCaching( const USHORT nWhich )
+|*    SwModify::CheckCaching( const sal_uInt16 nWhich )
 *************************************************************************/
 
 
 
-void SwModify::CheckCaching( const USHORT nWhich )
+void SwModify::CheckCaching( const sal_uInt16 nWhich )
 {
     if (isCHRATR(nWhich))
     {
-        SetInSwFntCache( FALSE );
+        SetInSwFntCache( sal_False );
     }
     else
         switch ( nWhich )
@@ -376,7 +376,7 @@ void SwModify::CheckCaching( const USHORT nWhich )
         case RES_OBJECTDYING:
         case RES_FMT_CHG:
         case RES_ATTRSET_CHG:
-            SetInSwFntCache( FALSE );
+            SetInSwFntCache( sal_False );
 
         case RES_UL_SPACE:
         case RES_LR_SPACE:
@@ -388,7 +388,7 @@ void SwModify::CheckCaching( const USHORT nWhich )
             if ( IsInCache() )
             {
                 SwFrm::GetCache().Delete( this );
-                SetInCache( FALSE );
+                SetInCache( sal_False );
             }
             break;
         }
@@ -431,9 +431,9 @@ void SwDepend::Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue )
 
 
     // erfrage vom Modify Informationen
-BOOL SwDepend::GetInfo( SfxPoolItem& rInfo ) const
+sal_Bool SwDepend::GetInfo( SfxPoolItem& rInfo ) const
 {
-    return pToTell ? pToTell->GetInfo( rInfo ) : TRUE;
+    return pToTell ? pToTell->GetInfo( rInfo ) : sal_True;
 }
 
 /********************************************************************/

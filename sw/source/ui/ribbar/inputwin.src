@@ -44,20 +44,20 @@ ToolBox RID_TBX_FORMULA
         ToolBoxItem
         {
             Identifier = FN_FORMULA_CALC ;
-            HelpID = FN_FORMULA_CALC ;
+            HelpId = HID_TBX_FORMULA_CALC ;
             DropDown = TRUE ;
             Text [ en-US ] = "Formula" ;
         };
         ToolBoxItem
         {
             Identifier = FN_FORMULA_CANCEL ;
-            HelpID = FN_FORMULA_CANCEL ;
+            HelpId = HID_TBX_FORMULA_CANCEL ;
             Text [ en-US ] = "Cancel" ;
         };
         ToolBoxItem
         {
             Identifier = FN_FORMULA_APPLY ;
-            HelpID = FN_FORMULA_APPLY ;
+            HelpId = HID_TBX_FORMULA_APPLY ;
             Text [ en-US ] = "Apply" ;
         };
     };
@@ -281,19 +281,19 @@ String STR_TBL_FORMULA
     ToolBoxItem\
     {\
         Identifier = FN_FORMULA_CALC ; \
-        HelpID = FN_FORMULA_CALC ; \
+        HelpID = HID_TBX_FORMULA_CALC ; \
         Text [ en-US ] = "Formula" ; \
     };\
     ToolBoxItem\
     {\
         Identifier = FN_FORMULA_CANCEL ; \
-        HelpID = FN_FORMULA_CANCEL ; \
+        HelpId = HID_TBX_FORMULA_CANCEL ; \
         Text [ en-US ] = "Cancel" ; \
     };\
     ToolBoxItem\
     {\
         Identifier = FN_FORMULA_APPLY ; \
-        HelpID = FN_FORMULA_APPLY ; \
+        HelpID = HID_TBX_FORMULA_APPLY ; \
         Text [ en-US ] = "Apply" ; \
     };
 

@@ -53,9 +53,9 @@ void SwView::ExecDlg(SfxRequest &rReq)
     const SfxPoolItem* pItem = 0;
     const SfxItemSet* pArgs = rReq.GetArgs();
 
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
-        pArgs->GetItemState( GetPool().GetWhich(nSlot), FALSE, &pItem );
+        pArgs->GetItemState( GetPool().GetWhich(nSlot), sal_False, &pItem );
 
     switch ( nSlot )
     {
@@ -63,11 +63,11 @@ void SwView::ExecDlg(SfxRequest &rReq)
         {
             if ( pItem )
             {
-                USHORT nValue = ((SfxUInt16Item *)pItem)->GetValue();
-                USHORT nOldValue = pWrtShell->GetPageOffset();
-                USHORT nPage, nLogPage;
+                sal_uInt16 nValue = ((SfxUInt16Item *)pItem)->GetValue();
+                sal_uInt16 nOldValue = pWrtShell->GetPageOffset();
+                sal_uInt16 nPage, nLogPage;
                 pWrtShell->GetPageNum( nPage, nLogPage,
-                   pWrtShell->IsCrsrVisible(), FALSE);
+                   pWrtShell->IsCrsrVisible(), sal_False);
 
                 if(nValue != nOldValue || nValue != nLogPage)
                 {

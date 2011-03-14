@@ -67,7 +67,7 @@ using uno::Any;
 
 SvXMLImportItemMapper::SvXMLImportItemMapper(
                                 SvXMLItemMapEntriesRef rMapEntries,
-                                USHORT nUnknWhich ) :
+                                sal_uInt16 nUnknWhich ) :
     mrMapEntries( rMapEntries ),
     nUnknownWhich( nUnknWhich )
 {
@@ -83,14 +83,14 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                                       const SvXMLUnitConverter& rUnitConverter,
                                        const SvXMLNamespaceMap& rNamespaceMap ) const
 {
-    INT16 nAttr = xAttrList->getLength();
+    sal_Int16 nAttr = xAttrList->getLength();
 
     SvXMLAttrContainerItem *pUnknownItem = 0;
-    for( INT16 i=0; i < nAttr; i++ )
+    for( sal_Int16 i=0; i < nAttr; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName, aPrefix, aNamespace;
-        USHORT nPrefix =
+        sal_uInt16 nPrefix =
             rNamespaceMap.GetKeyByAttrName( rAttrName, &aPrefix, &aLocalName,
                                             &aNamespace );
         if( XML_NAMESPACE_XMLNS == nPrefix )
@@ -109,7 +109,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
             {
                 // first get item from itemset
                 const SfxPoolItem* pItem = 0;
-                SfxItemState eState = rSet.GetItemState( pEntry->nWhichId, TRUE,
+                SfxItemState eState = rSet.GetItemState( pEntry->nWhichId, sal_True,
                                                          &pItem );
 
                 // if its not set, try the pool
@@ -120,7 +120,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                 if(eState >= SFX_ITEM_DEFAULT && pItem)
                 {
                     SfxPoolItem *pNewItem = pItem->Clone();
-                    BOOL bPut = FALSE;
+                    sal_Bool bPut = sal_False;
 
                     if( 0 == (pEntry->nMemberId&MID_SW_FLAG_SPECIAL_ITEM_IMPORT) )
                     {
@@ -157,7 +157,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
             if( !pUnknownItem )
             {
                 const SfxPoolItem* pItem = 0;
-                if( SFX_ITEM_SET == rSet.GetItemState( nUnknownWhich, TRUE,
+                if( SFX_ITEM_SET == rSet.GetItemState( nUnknownWhich, sal_True,
                                                        &pItem ) )
                 {
                     SfxPoolItem *pNew = pItem->Clone();
@@ -194,7 +194,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 
 /** this method is called for every item that has the
     MID_SW_FLAG_SPECIAL_ITEM_IMPORT flag set */
-BOOL
+sal_Bool
 SvXMLImportItemMapper::handleSpecialItem(  const SvXMLItemMapEntry& /*rEntry*/,
                                             SfxPoolItem& /*rItem*/,
                                             SfxItemSet& /*rSet*/,
@@ -203,19 +203,19 @@ SvXMLImportItemMapper::handleSpecialItem(  const SvXMLItemMapEntry& /*rEntry*/,
                                             const SvXMLNamespaceMap& /*rNamespaceMap*/ ) const
 {
     OSL_FAIL( "unsuported special item in xml import" );
-    return FALSE;
+    return sal_False;
 }
 
 /** this method is called for every item that has the
     MID_SW_FLAG_NO_ITEM_IMPORT flag set */
-BOOL SvXMLImportItemMapper::handleNoItem( const SvXMLItemMapEntry& /*rEntry*/,
+sal_Bool SvXMLImportItemMapper::handleNoItem( const SvXMLItemMapEntry& /*rEntry*/,
                                            SfxItemSet& /*rSet*/,
                                            const OUString& /*rValue*/,
                                            const SvXMLUnitConverter& /*rUnitConverter*/,
                                            const SvXMLNamespaceMap& /*rNamespaceMap*/ ) const
 {
     OSL_FAIL( "unsuported no item in xml import" );
-    return FALSE;
+    return sal_False;
 }
 
 void SvXMLImportItemMapper::finished( SfxItemSet& ) const
@@ -389,7 +389,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                         if( nX < 0 ) nX *= -1;
                         if( nY < 0 ) nY *= -1;
 
-                        pShadow->SetWidth( static_cast< USHORT >( (nX + nY) >> 1 ) );
+                        pShadow->SetWidth( static_cast< sal_uInt16 >( (nX + nY) >> 1 ) );
                     }
                 }
             }
@@ -594,12 +594,12 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                 switch( nMemberId )
                 {
                     case MID_BREAK_BEFORE:
-                        pFmtBreak->SetValue( static_cast< USHORT >((eEnum == 1) ?
+                        pFmtBreak->SetValue( static_cast< sal_uInt16 >((eEnum == 1) ?
                                              SVX_BREAK_COLUMN_BEFORE :
                                              SVX_BREAK_PAGE_BEFORE) );
                         break;
                     case MID_BREAK_AFTER:
-                        pFmtBreak->SetValue( static_cast< USHORT >((eEnum == 1) ?
+                        pFmtBreak->SetValue( static_cast< sal_uInt16 >((eEnum == 1) ?
                                              SVX_BREAK_COLUMN_AFTER :
                                              SVX_BREAK_PAGE_AFTER) );
                         break;
@@ -781,7 +781,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                 sal_Int32 nVal;
                 bOk = rUnitConverter.convertNumber( nVal, rValue, 0, USHRT_MAX );
                 if( bOk )
-                    pPageDesc->SetNumOffset( (USHORT)nVal );
+                    pPageDesc->SetNumOffset( (sal_uInt16)nVal );
             }
         }
         break;

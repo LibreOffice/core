@@ -33,6 +33,10 @@
 #include <tools/stack.hxx>
 #include <tools/string.hxx>
 
+#include <set>
+#include <stack>
+#include <list>
+
 #include "types.hxx"
 
 #include <vector>
@@ -40,6 +44,7 @@
 class SmNode;
 class SmDocShell;
 
+//////////////////////////////////////////////////////////////////////
 
 // TokenGroups
 #define TGOPER          0x00000001
@@ -115,24 +120,25 @@ enum SmTokenType
 
 struct SmToken
 {
-    // token text
-    String  aText;
-    // token info
-    SmTokenType eType;
+
+    String          aText;      // token text
+    SmTokenType     eType;      // token info
     sal_Unicode cMathChar;
+
     // parse-help info
-    ULONG       nGroup;
-    USHORT      nLevel;
+    sal_uLong       nGroup;
+    sal_uInt16      nLevel;
+
     // token position
-    USHORT      nRow;
-    xub_StrLen  nCol;
+    sal_uInt16      nRow;
+    xub_StrLen      nCol;
 
     SmToken();
     SmToken(SmTokenType eTokenType,
             sal_Unicode cMath,
             const sal_Char* pText,
-            ULONG nTokenGroup = 0,
-            USHORT nTokenLevel = 0);
+            sal_uLong nTokenGroup = 0,
+            sal_uInt16 nTokenLevel = 0);
 };
 
 
@@ -159,6 +165,7 @@ struct SmErrorDesc
     String        Text;
 };
 
+
 DECLARE_STACK(SmNodeStack,  SmNode *)
 typedef ::std::vector< SmErrorDesc* > SmErrDescList;
 
@@ -179,25 +186,28 @@ struct SmTokenTableEntry
     const sal_Char* pIdent;
     SmTokenType     eType;
     sal_Unicode     cMathChar;
-    ULONG           nGroup;
-    USHORT          nLevel;
+    sal_uLong       nGroup;
+    sal_uInt16      nLevel;
 };
 
 class SmParser
 {
-    String          BufferString;
-    SmToken         CurToken;
-    SmNodeStack     NodeStack;
-    SmErrDescList   ErrDescList;
-    int             CurError;
-    LanguageType    nLang;
-    xub_StrLen      BufferIndex,
-                    nTokenIndex;
-    USHORT          Row,
-                    ColOff;
-    SmConvert       eConversion;
+    String          m_aBufferString;
+    SmToken         m_aCurToken;
+    SmNodeStack     m_aNodeStack;
+    SmErrDescList   m_aErrDescList;
+    int             m_nCurError;
+    LanguageType    m_nLang;
+    xub_StrLen      m_nBufferIndex,
+                    m_nTokenIndex;
+    sal_uInt16          m_Row,
+                    m_nColOff;
+    SmConvert       m_eConversion;
     bool            bImportSymNames,
-                    bExportSymNames;
+                    m_bExportSymNames;
+
+    // map of used symbols (used to reduce file size by exporting only actually used symbols)
+    std::set< rtl::OUString >   m_aUsedSymbols;
 
     // declare copy-constructor and assignment-operator private
     SmParser(const SmParser &);
@@ -208,11 +218,11 @@ protected:
     bool            IsDelimiter( const String &rTxt, xub_StrLen nPos );
 #endif
     void            NextToken();
-    xub_StrLen      GetTokenIndex() const   { return nTokenIndex; }
-    void            Insert(const String &rText, USHORT nPos);
-    void            Replace( USHORT nPos, USHORT nLen, const String &rText );
+    xub_StrLen      GetTokenIndex() const   { return m_nTokenIndex; }
+    void            Insert(const String &rText, sal_uInt16 nPos);
+    void            Replace( sal_uInt16 nPos, sal_uInt16 nLen, const String &rText );
 
-    inline bool     TokenInGroup(ULONG nGroup);
+    inline bool     TokenInGroup( sal_uLong nGroup );
 
     // grammar
     void    Table();
@@ -221,7 +231,7 @@ protected:
     void    Relation();
     void    Sum();
     void    Product();
-    void    SubSup(ULONG nActiveGroup);
+    void    SubSup(sal_uLong nActiveGroup);
     void    OpSubSup();
     void    Power();
     void    Blank();
@@ -246,10 +256,13 @@ protected:
     void    GlyphSpecial();
     // end of grammar
 
-    LanguageType    GetLanguage() const { return nLang; }
-    void            SetLanguage( LanguageType nNewLang ) { nLang = nNewLang; }
+    LanguageType    GetLanguage() const { return m_nLang; }
+    void            SetLanguage( LanguageType nNewLang ) { m_nLang = nNewLang; }
 
     void    Error(SmParseError Error);
+
+    void    ClearUsedSymbols()                              { m_aUsedSymbols.clear(); }
+    void    AddToUsedSymbols( const String &rSymbolName )   { m_aUsedSymbols.insert( rSymbolName ); }
 
 public:
                  SmParser();
@@ -259,27 +272,29 @@ public:
     /** Parse rBuffer to formula subtree that constitutes an expression */
     SmNode      *ParseExpression(const String &rBuffer);
 
-    const String & GetText() const { return BufferString; };
+    const String & GetText() const { return m_aBufferString; };
 
-    SmConvert   GetConversion() const              { return eConversion; }
-    void        SetConversion(SmConvert eConv)     { eConversion = eConv; }
+    SmConvert   GetConversion() const              { return m_eConversion; }
+    void        SetConversion(SmConvert eConv)     { m_eConversion = eConv; }
 
     bool        IsImportSymbolNames() const        { return bImportSymNames; }
     void        SetImportSymbolNames(bool bVal)    { bImportSymNames = bVal; }
-    bool        IsExportSymbolNames() const        { return bExportSymNames; }
-    void        SetExportSymbolNames(bool bVal)    { bExportSymNames = bVal; }
+    bool        IsExportSymbolNames() const        { return m_bExportSymNames; }
+    void        SetExportSymbolNames(bool bVal)    { m_bExportSymNames = bVal; }
 
     size_t      AddError(SmParseError Type, SmNode *pNode);
     const SmErrorDesc*  NextError();
     const SmErrorDesc*  PrevError();
     const SmErrorDesc*  GetError(size_t i = size_t(-1) );
     static const SmTokenTableEntry* GetTokenTableEntry( const String &rName );
+    bool    IsUsedSymbol( const String &rSymbolName ) const { return m_aUsedSymbols.find( rSymbolName ) != m_aUsedSymbols.end(); }
+    std::set< rtl::OUString >   GetUsedSymbols() const      { return m_aUsedSymbols; }
 };
 
 
-inline bool SmParser::TokenInGroup(ULONG nGroup)
+inline bool SmParser::TokenInGroup( sal_uLong nGroup)
 {
-    return (CurToken.nGroup & nGroup) ? true : false;
+    return (m_aCurToken.nGroup & nGroup) ? true : false;
 }
 
 

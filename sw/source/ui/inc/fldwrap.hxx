@@ -35,13 +35,13 @@ class SwFldDlgWrapper : public SwChildWinWrapper
 {
 public:
     AbstractSwFldDlg * pDlgInterface;
-    SwFldDlgWrapper( Window* pParent, USHORT nId,
+    SwFldDlgWrapper( Window* pParent, sal_uInt16 nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
     SFX_DECL_CHILDWINDOW(SwFldDlgWrapper);
 
-    virtual BOOL    ReInitDlg(SwDocShell *pDocSh);
-    void            ShowPage(USHORT nPage = 0);
+    virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
+    void            ShowPage(sal_uInt16 nPage = 0);
 };
 
 /* -----------------04.02.2003 14:14-----------------
@@ -52,12 +52,12 @@ class SwFldDataOnlyDlgWrapper : public SwChildWinWrapper
 {
 public:
     AbstractSwFldDlg * pDlgInterface;
-    SwFldDataOnlyDlgWrapper( Window* pParent, USHORT nId,
+    SwFldDataOnlyDlgWrapper( Window* pParent, sal_uInt16 nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
     SFX_DECL_CHILDWINDOW(SwFldDataOnlyDlgWrapper);
 
-    virtual BOOL    ReInitDlg(SwDocShell *pDocSh);
+    virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
 };
 
 #endif

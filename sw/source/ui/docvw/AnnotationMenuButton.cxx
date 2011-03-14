@@ -47,13 +47,13 @@
 
 namespace sw { namespace annotation {
 
-Color ColorFromAlphaColor( const UINT8 aTransparency,
+Color ColorFromAlphaColor( const sal_uInt8 aTransparency,
                            const Color &aFront,
                            const Color &aBack )
 {
-    return Color((UINT8)(aFront.GetRed()    * aTransparency/(double)255 + aBack.GetRed()    * (1-aTransparency/(double)255)),
-                 (UINT8)(aFront.GetGreen()  * aTransparency/(double)255 + aBack.GetGreen()  * (1-aTransparency/(double)255)),
-                 (UINT8)(aFront.GetBlue()   * aTransparency/(double)255 + aBack.GetBlue()   * (1-aTransparency/(double)255)));
+    return Color((sal_uInt8)(aFront.GetRed()    * aTransparency/(double)255 + aBack.GetRed()    * (1-aTransparency/(double)255)),
+                 (sal_uInt8)(aFront.GetGreen()  * aTransparency/(double)255 + aBack.GetGreen()  * (1-aTransparency/(double)255)),
+                 (sal_uInt8)(aFront.GetBlue()   * aTransparency/(double)255 + aBack.GetBlue()   * (1-aTransparency/(double)255)));
 }
 
 AnnotationMenuButton::AnnotationMenuButton( sw::sidebarwindows::SwSidebarWin& rSidebarWin )
@@ -83,20 +83,13 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     if ( mrSidebarWin.IsReadOnly() )
     {
         pButtonPopup->EnableItem( FN_REPLY, false );
-        pButtonPopup->EnableItem( FN_DELETE_NOTE, false );
+        pButtonPopup->EnableItem( FN_DELETE_COMMENT, false );
         pButtonPopup->EnableItem( FN_DELETE_NOTE_AUTHOR, false );
         pButtonPopup->EnableItem( FN_DELETE_ALL_NOTES, false );
     }
     else
     {
-        if ( mrSidebarWin.IsProtected() )
-        {
-            pButtonPopup->EnableItem( FN_DELETE_NOTE, false );
-        }
-        else
-        {
-            pButtonPopup->EnableItem( FN_DELETE_NOTE, true );
-        }
+        pButtonPopup->EnableItem( FN_DELETE_COMMENT, !mrSidebarWin.IsProtected() );
         pButtonPopup->EnableItem( FN_DELETE_NOTE_AUTHOR, true );
         pButtonPopup->EnableItem( FN_DELETE_ALL_NOTES, true );
     }
@@ -204,7 +197,7 @@ void AnnotationMenuButton::Paint( const Rectangle& /*rRect*/ )
 void AnnotationMenuButton::KeyInput( const KeyEvent& rKeyEvt )
 {
     const KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
-    const USHORT nKey = rKeyCode.GetCode();
+    const sal_uInt16 nKey = rKeyCode.GetCode();
     if ( nKey == KEY_TAB )
     {
         mrSidebarWin.ActivatePostIt();

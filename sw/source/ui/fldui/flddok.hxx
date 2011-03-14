@@ -59,18 +59,18 @@ class SwFldDokPage : public SwFldPage
     Bitmap              aRootOpened;
     Bitmap              aRootClosed;
 
-    USHORT              nOldSel;
-    ULONG               nOldFormat;
+    sal_uInt16              nOldSel;
+    sal_uLong               nOldFormat;
 
     DECL_LINK( TypeHdl, ListBox* pLB = 0 );
     DECL_LINK( FormatHdl, ListBox* pLB = 0 );
     DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
 
-    void                AddSubType(USHORT nTypeId);
-    USHORT              FillFormatLB(USHORT nTypeId);
+    void                AddSubType(sal_uInt16 nTypeId);
+    sal_uInt16              FillFormatLB(sal_uInt16 nTypeId);
 
 protected:
-    virtual USHORT      GetGroup();
+    virtual sal_uInt16      GetGroup();
 
 public:
                         SwFldDokPage(Window* pWindow, const SfxItemSet& rSet);
@@ -79,7 +79,7 @@ public:
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     virtual void        FillUserData();

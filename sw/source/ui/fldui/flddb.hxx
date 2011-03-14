@@ -63,8 +63,8 @@ class SwFldDBPage : public SwFldPage
     String              sOldDBName;
     String              sOldTableName;
     String              sOldColumnName;
-    ULONG               nOldFormat;
-    USHORT              nOldSubType;
+    sal_uLong               nOldFormat;
+    sal_uInt16              nOldSubType;
     Link                aOldNumSelectHdl;
 
     DECL_LINK( TypeHdl, ListBox* );
@@ -78,7 +78,7 @@ class SwFldDBPage : public SwFldPage
     using SwFldPage::SetWrtShell;
 
 protected:
-    virtual USHORT      GetGroup();
+    virtual sal_uInt16      GetGroup();
 
 public:
                         SwFldDBPage(Window* pParent, const SfxItemSet& rSet);
@@ -87,7 +87,7 @@ public:
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     virtual void        FillUserData();

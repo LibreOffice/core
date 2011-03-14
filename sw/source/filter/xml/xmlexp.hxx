@@ -103,7 +103,7 @@ class SwXMLExport : public SvXMLExport
                           SwXMLTableInfo_Impl& rTblInfo );
     void ExportTableLines( const SwTableLines& rLines,
                            SwXMLTableInfo_Impl& rTblInfo,
-                           USHORT nHeaderRows = 0 );
+                           sal_uInt16 nHeaderRows = 0 );
 
     virtual void _ExportMeta();
     virtual void _ExportFontDecls();

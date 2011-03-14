@@ -25,8 +25,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _VIEWSH_HXX
-#define _VIEWSH_HXX
+#ifndef SW_VIEWSH_HXX
+#define SW_VIEWSH_HXX
+
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <tools/rtti.hxx>
@@ -65,7 +66,6 @@ class SfxItemPool;
 class SfxViewShell;
 class SwViewOption;
 class SwViewImp;
-class SwPrtOptions;
 class SwPrintData;
 class SwPagePreViewPrtData;
 class Window;
@@ -111,7 +111,7 @@ class SW_DLLPUBLIC ViewShell : public Ring
 
     //Umsetzen der SwVisArea, damit vor dem Drucken sauber formatiert
     //werden kann.
-    friend void SetSwVisArea( ViewShell *pSh, const SwRect &, BOOL bPDFExport = FALSE );
+    friend void SetSwVisArea( ViewShell *pSh, const SwRect &, sal_Bool bPDFExport = sal_False );
 
     static BitmapEx*    pReplaceBmp;    // replaced display of still loaded images
     static BitmapEx*    pErrorBmp;      // error display of missed images
@@ -266,7 +266,7 @@ public:
     Point GetPagePos( sal_uInt16 nPageNum ) const;
 
     sal_uInt16 GetNumPages();   //Anzahl der aktuellen Seiten Layout erfragen.
-    sal_Bool   IsDummyPage( USHORT nPageNum ) const;  // An empty page?
+    sal_Bool   IsDummyPage( sal_uInt16 nPageNum ) const;  // An empty page?
 
     //Invalidierung der ersten Sichtbaren Seite fuer alle Shells im Ring.
     void SetFirstVisPageInvalid();
@@ -329,7 +329,8 @@ public:
 
     /** Provides access to the document undo/redo interface
      */
-    IDocumentUndoRedo* getIDocumentUndoRedoAccess();
+    IDocumentUndoRedo const& GetIDocumentUndoRedo() const;
+    IDocumentUndoRedo      & GetIDocumentUndoRedo();
 
     const IDocumentListItems* getIDocumentListItemsAccess() const;
     const IDocumentOutlineNodes* getIDocumentOutlineNodesAccess() const;
@@ -350,7 +351,8 @@ public:
 
     // printing of one page.
     // bIsPDFExport == true is: do PDF Export (no printing!)
-    sal_Bool PrintOrPDFExport( OutputDevice *pOutDev, const SwPrtOptions &rPrintData,
+    sal_Bool PrintOrPDFExport( OutputDevice *pOutDev,
+            SwPrintData const& rPrintData,
             sal_Int32 nRenderer /* offset in vector of pages to print */ );
 
     // printing of one brochure page
@@ -361,8 +363,7 @@ public:
     static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect );
 
-    // creates temporary doc with selected text for PDF export
-    SwDoc * CreatePrtDoc( SfxObjectShellRef& );
+    /// fill temporary doc with selected text for Print or PDF export
     SwDoc * FillPrtDoc( SwDoc* pPrtDoc, const SfxPrinter* pPrt );
 
     //Wird intern fuer die Shell gerufen die Druckt. Formatiert die Seiten.
@@ -454,7 +455,7 @@ public:
         input parameter - constant reference to print options, to which the
         view option will be adjusted.
     */
-    void AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions );
+    void AdjustOptionsForPagePreview( SwPrintData const& rPrintOptions );
 
     sal_Bool IsViewLocked() const { return bViewLocked; }
     void LockView( sal_Bool b )   { bViewLocked = b;    }
@@ -490,7 +491,7 @@ public:
     //wenn sich der BrowdseModus aendert, bBrowseChgd == sal_True
     //oder, im BrowseModus, wenn sich die Groessenverhaeltnisse
     //aendern (bBrowseChgd == sal_False)
-    void CheckBrowseView( BOOL bBrowseChgd );
+    void CheckBrowseView( sal_Bool bBrowseChgd );
 
     const Size& GetBrowseBorder() const;
     sal_Int32 GetBrowseWidth() const;
@@ -609,6 +610,6 @@ inline const SfxItemPool& ViewShell::GetAttrPool() const
 
 
 
-#endif //_VIEWSH_HXX
+#endif // SW_VIEWSH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

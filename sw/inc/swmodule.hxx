@@ -29,7 +29,7 @@
 #define _SWMODULE_HXX
 #include <tools/link.hxx>
 #include <tools/string.hxx>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/options.hxx>
 #include <sfx2/module.hxx>
@@ -161,15 +161,15 @@ public:
     const SwViewOption* GetViewOption(sal_Bool bWeb);
     void                ApplyUsrPref(const SwViewOption &, SwView*,
                                      sal_uInt16 nDest = VIEWOPT_DEST_VIEW );
-    void ApplyUserMetric( FieldUnit eMetric, BOOL bWeb );
-    void ApplyRulerMetric( FieldUnit eMetric, BOOL bHorizontal, BOOL bWeb );
+    void ApplyUserMetric( FieldUnit eMetric, sal_Bool bWeb );
+    void ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, sal_Bool bWeb );
     void ApplyFldUpdateFlags(SwFldUpdateFlags eFldFlags);
     void ApplyLinkMode(sal_Int32 nNewLinkMode);
 
     //default page mode for text grid
     void ApplyDefaultPageMode(sal_Bool bIsSquaredPageMode);
 
-    void ApplyUserCharUnit(BOOL bApplyChar, BOOL bWeb);  // apply_char_unit
+    void ApplyUserCharUnit(sal_Bool bApplyChar, sal_Bool bWeb);  // apply_char_unit
 
     // ConfigItems erzeugen
     SwModuleOptions*    GetModuleConfig()       { return pModuleConfig;}
@@ -193,7 +193,7 @@ public:
     sal_Bool IsEmbeddedLoadSave() const         { return bEmbeddedLoadSave; }
     void SetEmbeddedLoadSave( sal_Bool bFlag )  { bEmbeddedLoadSave = bFlag; }
 
-    void ShowDBObj( SwView& rView, const SwDBData& rData, BOOL bOnlyIfAvailable = FALSE);
+    void ShowDBObj( SwView& rView, const SwDBData& rData, sal_Bool bOnlyIfAvailable = sal_False);
 
     // Tabellenmodi
     sal_Bool            IsInsTblFormatNum(sal_Bool bHTML) const;

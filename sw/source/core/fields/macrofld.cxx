@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <doc.hxx>
 #include <docufld.hxx>
@@ -39,8 +38,10 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
 
+
 using namespace ::com::sun::star;
 using ::rtl::OUString;
+
 /*--------------------------------------------------------------------
     Beschreibung: MacroFeldtypen
  --------------------------------------------------------------------*/
@@ -63,7 +64,7 @@ SwFieldType* SwMacroFieldType::Copy() const
 
 SwMacroField::SwMacroField(SwMacroFieldType* pInitType,
                            const String& rLibAndName, const String& rTxt) :
-    SwField(pInitType), aMacro(rLibAndName), aText(rTxt), bIsScriptURL(FALSE)
+    SwField(pInitType), aMacro(rLibAndName), aText(rTxt), bIsScriptURL(sal_False)
 {
     bIsScriptURL = isScriptURL(aMacro);
 }
@@ -78,16 +79,12 @@ SwField* SwMacroField::Copy() const
     return new SwMacroField((SwMacroFieldType*)GetTyp(), aMacro, aText);
 }
 
-String SwMacroField::GetCntnt(BOOL bName) const
+String SwMacroField::GetFieldName() const
 {
-    if(bName)
-    {
-        String aStr(GetTyp()->GetName());
-        aStr += ' ';
-        aStr += aMacro;
-        return aStr;
-    }
-    return Expand();
+    String aStr(GetTyp()->GetName());
+    aStr += ' ';
+    aStr += aMacro;
+    return aStr;
 }
 
 String SwMacroField::GetLibName() const
@@ -100,9 +97,9 @@ String SwMacroField::GetLibName() const
 
     if (aMacro.Len())
     {
-        USHORT nPos = aMacro.Len();
+        sal_uInt16 nPos = aMacro.Len();
 
-        for (USHORT i = 0; i < 3 && nPos > 0; i++)
+        for (sal_uInt16 i = 0; i < 3 && nPos > 0; i++)
             while (aMacro.GetChar(--nPos) != '.' && nPos > 0) ;
 
         return aMacro.Copy(0, nPos );
@@ -122,9 +119,9 @@ String SwMacroField::GetMacroName() const
         }
         else
         {
-            USHORT nPos = aMacro.Len();
+            sal_uInt16 nPos = aMacro.Len();
 
-            for (USHORT i = 0; i < 3 && nPos > 0; i++)
+            for (sal_uInt16 i = 0; i < 3 && nPos > 0; i++)
                 while (aMacro.GetChar(--nPos) != '.' && nPos > 0) ;
 
             return aMacro.Copy( ++nPos );
@@ -176,7 +173,7 @@ String SwMacroField::GetPar2() const
     return aText;
 }
 
-bool SwMacroField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwMacroField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -198,7 +195,7 @@ bool SwMacroField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     return true;
 }
 
-bool SwMacroField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     String sTmp;
     switch( nWhichId )
@@ -236,7 +233,7 @@ void SwMacroField::CreateMacroString(
     rMacro += rMacroName;
 }
 
-BOOL SwMacroField::isScriptURL( const String& str )
+sal_Bool SwMacroField::isScriptURL( const String& str )
 {
     uno::Reference< lang::XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
@@ -253,10 +250,10 @@ BOOL SwMacroField::isScriptURL( const String& str )
 
         if ( xUrl.is() )
         {
-            return TRUE;
+            return sal_True;
         }
     }
-    return FALSE;
+    return sal_False;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

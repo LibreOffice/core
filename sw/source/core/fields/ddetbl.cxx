@@ -47,13 +47,13 @@ TYPEINIT1( SwDDETable, SwTable );
     // Constructor movet alle Lines/Boxen aus der SwTable zu sich.
     // Die SwTable ist danach Leer und muss geloescht werden.
 SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
-                        BOOL bUpdate )
+                        sal_Bool bUpdate )
     : SwTable( rTable ), aDepend( this, pDDEType )
 {
     // Kopiere/move die Daten der Tabelle
     aSortCntBoxes.Insert( &rTable.GetTabSortBoxes(), 0,
                           rTable.GetTabSortBoxes().Count()  ); // move die Inh. Boxen
-    rTable.GetTabSortBoxes().Remove( (USHORT)0, rTable.GetTabSortBoxes().Count() );
+    rTable.GetTabSortBoxes().Remove( (sal_uInt16)0, rTable.GetTabSortBoxes().Count() );
 
     aLines.Insert( &rTable.GetTabLines(),0 );                       // move die Lines
     rTable.GetTabLines().Remove( 0, rTable.GetTabLines().Count() );
@@ -117,11 +117,11 @@ void SwDDETable::ChangeContent()
     String aExpand = pDDEType->GetExpansion();
     aExpand.EraseAllChars( '\r' );
 
-    for( USHORT n = 0; n < aLines.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aLines.Count(); ++n )
     {
         String aLine = aExpand.GetToken( n, '\n' );
         SwTableLine* pLine = aLines[ n ];
-        for( USHORT i = 0; i < pLine->GetTabBoxes().Count(); ++i )
+        for( sal_uInt16 i = 0; i < pLine->GetTabBoxes().Count(); ++i )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[ i ];
             OSL_ENSURE( pBox->GetSttIdx(), "keine InhaltsBox" );
@@ -150,7 +150,7 @@ SwDDEFieldType* SwDDETable::GetDDEFldType()
     return (SwDDEFieldType*)aDepend.GetRegisteredIn();
 }
 
-BOOL SwDDETable::NoDDETable()
+sal_Bool SwDDETable::NoDDETable()
 {
     // suche den TabellenNode
     OSL_ENSURE( GetFrmFmt(), "Kein FrameFormat" );
@@ -158,11 +158,11 @@ BOOL SwDDETable::NoDDETable()
 
     // Stehen wir im richtigen NodesArray (Wegen UNDO)
     if( !aLines.Count() )
-        return FALSE;
+        return sal_False;
     OSL_ENSURE( GetTabSortBoxes().Count(), "Tabelle ohne Inhalt?" );
     SwNode* pNd = (SwNode*)GetTabSortBoxes()[0]->GetSttNd();
     if( !pNd->GetNodes().IsDocNodes() )
-        return FALSE;
+        return sal_False;
 
     SwTableNode* pTblNd = pNd->FindTableNode();
     OSL_ENSURE( pTblNd, "wo steht denn die Tabelle ?");
@@ -172,7 +172,7 @@ BOOL SwDDETable::NoDDETable()
     // Kopiere/move die Daten der Tabelle
     pNewTbl->GetTabSortBoxes().Insert( &GetTabSortBoxes(), 0,
                           GetTabSortBoxes().Count()  ); // move die Inh. Boxen
-    GetTabSortBoxes().Remove( (USHORT)0, GetTabSortBoxes().Count() );
+    GetTabSortBoxes().Remove( (sal_uInt16)0, GetTabSortBoxes().Count() );
 
     pNewTbl->GetTabLines().Insert( &GetTabLines(),0 );                      // move die Lines
     GetTabLines().Remove( 0, GetTabLines().Count() );
@@ -182,7 +182,7 @@ BOOL SwDDETable::NoDDETable()
 
     pTblNd->SetNewTable( pNewTbl );       // setze die Tabelle
 
-    return TRUE;
+    return sal_True;
 }
 
 

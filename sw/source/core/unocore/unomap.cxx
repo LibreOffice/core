@@ -1117,6 +1117,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_URL), FN_UNO_REPLACEMENT_GRAPHIC_URL, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC), FN_UNO_REPLACEMENT_GRAPHIC, CPPU_E2T(CPPUTYPE_REFXGRAPHIC), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_COMPONENT),FN_UNO_COMPONENT, CPPU_E2T(CPPUTYPE_REFCOMPONENT), PropertyAttribute::READONLY, 0},
+                    { SW_PROP_NMID(UNO_NAME_EMBEDDED_OBJECT),FN_EMBEDDED_OBJECT, CPPU_E2T(CPPUTPYE_REFEMBEDDEDOBJECT), PropertyAttribute::READONLY, 0},
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aEmbeddedPropertyMap_Impl;
@@ -2443,7 +2444,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
         for( ; p->pName; ++p, ++i )
         {
             // set the name
-            const SwPropNameLen& rPropNm = GetPropName( (USHORT)(long)p->pName );
+            const SwPropNameLen& rPropNm = GetPropName( (sal_uInt16)(long)p->pName );
             p->pName = rPropNm.pName;
             p->nNameLen = rPropNm.nNameLen;
             // get the cppu type from the comphelper

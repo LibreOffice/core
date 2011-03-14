@@ -171,7 +171,7 @@ const String & SwDropDownField::GetToolTip() const
     return aToolTip;
 }
 
-BOOL SwDropDownField::SetSelectedItem(const String & rItem)
+sal_Bool SwDropDownField::SetSelectedItem(const String & rItem)
 {
     vector<String>::const_iterator aIt =
         std::find(aValues.begin(), aValues.end(), rItem);
@@ -199,7 +199,7 @@ void SwDropDownField::SetToolTip(const String & rToolTip)
     aToolTip = rToolTip;
 }
 
-bool SwDropDownField::QueryValue(::uno::Any &rVal, USHORT nWhich) const
+bool SwDropDownField::QueryValue(::uno::Any &rVal, sal_uInt16 nWhich) const
 {
     nWhich &= ~CONVERT_TWIPS;
     switch( nWhich )
@@ -228,7 +228,7 @@ bool SwDropDownField::QueryValue(::uno::Any &rVal, USHORT nWhich) const
 }
 
 bool SwDropDownField::PutValue(const uno::Any &rVal,
-                               USHORT nWhich)
+                               sal_uInt16 nWhich)
 {
     switch( nWhich )
     {

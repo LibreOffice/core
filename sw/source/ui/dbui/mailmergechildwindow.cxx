@@ -60,7 +60,7 @@ using namespace ::com::sun::star;
 SFX_IMPL_FLOATINGWINDOW( SwMailMergeChildWindow, FN_MAILMERGE_CHILDWINDOW )
 
 SwMailMergeChildWindow::SwMailMergeChildWindow( Window* _pParent,
-                                USHORT nId,
+                                sal_uInt16 nId,
                                 SfxBindings* pBindings,
                                 SfxChildWinInfo* pInfo ) :
                                 SfxChildWindow( _pParent, nId )
@@ -366,7 +366,7 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
 
     m_aStatusLB.SetHelpId(HID_MM_MAILSTATUS_TLB);
     static long nTabs[] = {3, 0, nPos1, aSz.Width() };
-    m_aStatusLB.SetWindowBits( WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
+    m_aStatusLB.SetStyle( m_aStatusLB.GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
     m_aStatusLB.SetSelectionMode( SINGLE_SELECTION );
     m_aStatusLB.SetTabs(&nTabs[0], MAP_PIXEL);
     m_aStatusLB.SetSpaceBetweenEntries(3);
@@ -692,7 +692,7 @@ void SwSendMailDialog::UpdateTransferStatus()
     m_aErrorStatusFT.SetText(sStatus);
 
     if(m_pImpl->aDescriptors.size())
-        m_aProgressBar.SetValue((USHORT)(m_nSendCount * 100 / m_pImpl->aDescriptors.size()));
+        m_aProgressBar.SetValue((sal_uInt16)(m_nSendCount * 100 / m_pImpl->aDescriptors.size()));
     else
         m_aProgressBar.SetValue(0);
 }

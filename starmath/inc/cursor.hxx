@@ -145,7 +145,7 @@ public:
     void InsertElement(SmFormulaElement element);
 
     /** Insert a command specified in commands.src*/
-    void InsertCommand(USHORT nCommand);
+    void InsertCommand(sal_uInt16 nCommand);
 
     /** Insert command text translated into line entries at position
      *

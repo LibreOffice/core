@@ -104,15 +104,15 @@ class SmRect
             nItalicRightSpace,
             nLoAttrFence,
             nHiAttrFence;
-    USHORT  nBorderWidth;
+    sal_uInt16  nBorderWidth;
     bool    bHasBaseline,
             bHasAlignInfo;
 
 protected:
             void BuildRect (const OutputDevice &rDev, const SmFormat *pFormat,
-                            const XubString &rText, USHORT nBorderWidth);
+                            const XubString &rText, sal_uInt16 nBorderWidth);
             void Init(const OutputDevice &rDev, const SmFormat *pFormat,
-                      const XubString &rText, USHORT nBorderWidth);
+                      const XubString &rText, sal_uInt16 nBorderWidth);
 
             void ClearBaseline()    { bHasBaseline = false; };
     inline  void CopyMBL(const SmRect& rRect);
@@ -128,12 +128,12 @@ public:
             SmRect(const SmRect &rRect);
 
 
-            USHORT  GetBorderWidth() const  { return nBorderWidth; }
+            sal_uInt16  GetBorderWidth() const  { return nBorderWidth; }
 
             void SetItalicSpaces(long nLeftSpace, long nRightSpace);
 
-            void SetWidth(ULONG nWidth)     { aSize.Width()  = nWidth; }
-            void SetHeight(ULONG nHeight)   { aSize.Height() = nHeight; }
+            void SetWidth(sal_uLong nWidth)     { aSize.Width()  = nWidth; }
+            void SetHeight(sal_uLong nHeight)   { aSize.Height() = nHeight; }
 
             void SetLeft(long nLeft);
             void SetRight(long nRight);

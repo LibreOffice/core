@@ -137,9 +137,9 @@ private:
     const sal_Int32 mnType;
     const sal_Bool mbAutomatic;
 
-    ULONG mnCurrentNode;    // used for non-automatic mode
-    ULONG mnStartNode;      // used for non-automatic mode
-    ULONG mnEndNode;        // used for non-automatic mode
+    sal_uLong mnCurrentNode;    // used for non-automatic mode
+    sal_uLong mnStartNode;      // used for non-automatic mode
+    sal_uLong mnEndNode;        // used for non-automatic mode
     sal_Bool mbWrapped;     // used for non-automatic mode
 };
 

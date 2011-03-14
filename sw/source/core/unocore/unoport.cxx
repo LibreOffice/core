@@ -340,7 +340,7 @@ void SwXTextPortion::GetPropertyValue(
             break;
             case FN_UNO_IS_START:
             {
-                BOOL bStart = TRUE, bPut = TRUE;
+                sal_Bool bStart = sal_True, bPut = sal_True;
                 switch (m_ePortionType)
                 {
                     case PORTION_REFMARK_START:
@@ -357,10 +357,10 @@ void SwXTextPortion::GetPropertyValue(
                     case PORTION_REDLINE_END:
                     case PORTION_RUBY_END:
                     case PORTION_FIELD_END:
-                        bStart = FALSE;
+                        bStart = sal_False;
                     break;
                     default:
-                        bPut = FALSE;
+                        bPut = sal_False;
                 }
                 if(bPut)
                     rVal.setValue(&bStart, ::getBooleanCppuType());
@@ -382,7 +382,7 @@ void SwXTextPortion::GetPropertyValue(
             break;
             default:
                 beans::PropertyState eTemp;
-                BOOL bDone = SwUnoCursorHelper::getCrsrPropertyValue(
+                sal_Bool bDone = SwUnoCursorHelper::getCrsrPropertyValue(
                                     rEntry, *pUnoCrsr, &(rVal), eTemp );
                 if(!bDone)
                 {

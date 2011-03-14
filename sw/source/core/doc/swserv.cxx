@@ -53,10 +53,10 @@ SwServerObject::~SwServerObject()
 }
 
 
-BOOL SwServerObject::GetData( uno::Any & rData,
-                                const String & rMimeType, BOOL )
+sal_Bool SwServerObject::GetData( uno::Any & rData,
+                                const String & rMimeType, sal_Bool )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     WriterRef xWrt;
     switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )
     {
@@ -103,14 +103,14 @@ BOOL SwServerObject::GetData( uno::Any & rData,
         {
             // Stream anlegen
             SvMemoryStream aMemStm( 65535, 65535 );
-            SwWriter aWrt( aMemStm, *pPam, FALSE );
+            SwWriter aWrt( aMemStm, *pPam, sal_False );
             if( !IsError( aWrt.Write( xWrt )) )
             {
                 aMemStm << '\0';        // append a zero char
                 rData <<= uno::Sequence< sal_Int8 >(
                                         (sal_Int8*)aMemStm.GetData(),
                                         aMemStm.Seek( STREAM_SEEK_TO_END ) );
-                bRet = TRUE;
+                bRet = sal_True;
             }
 
             delete pPam;
@@ -120,11 +120,11 @@ BOOL SwServerObject::GetData( uno::Any & rData,
 }
 
 
-BOOL SwServerObject::SetData( const String & ,
+sal_Bool SwServerObject::SetData( const String & ,
                     const uno::Any& )
 {
     // set new data into the "server" -> at first nothing to do
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -133,7 +133,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
     // ist an unseren Aenderungen jemand interessiert ?
     if( HasDataLinks() )
     {
-        int bCall = FALSE;
+        int bCall = sal_False;
         const SwStartNode* pNd = 0;
         switch( eType )
         {
@@ -151,7 +151,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
         }
         if( pNd )
         {
-            ULONG nNd = rPos.nNode.GetIndex();
+            sal_uLong nNd = rPos.nNode.GetIndex();
             bCall = pNd->GetIndex() < nNd && nNd < pNd->EndOfSectionIndex();
         }
 
@@ -170,7 +170,7 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
     // ist an unseren Aenderungen jemand interessiert ?
     if( HasDataLinks() )
     {
-        int bCall = FALSE;
+        int bCall = sal_False;
         const SwStartNode* pNd = 0;
         const SwPosition* pStt = rRange.Start(), *pEnd = rRange.End();
         switch( eType )
@@ -204,9 +204,9 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
 }
 
 
-BOOL SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
+sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 {
-    ULONG nSttNd = 0, nEndNd = 0;
+    sal_uLong nSttNd = 0, nEndNd = 0;
     xub_StrLen nStt = 0;
     xub_StrLen nEnd = 0;
     const SwNode* pNd = 0;
@@ -232,7 +232,7 @@ BOOL SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
     case SECTION_SERVER:    pNd = CNTNT_TYPE.pSectNd;   break;
 
     case SECTION_SERVER+1:
-        return TRUE;
+        return sal_True;
     }
 
     if( pNd )
@@ -252,7 +252,7 @@ BOOL SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 SwServerObject::ServerModes eSave = eType;
 if( !pChkLnk )
     ((SwServerObject*)this)->eType = NONE_SERVER;
-        for( USHORT n = rLnks.Count(); n; )
+        for( sal_uInt16 n = rLnks.Count(); n; )
         {
             const ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
             if( pLnk && OBJECT_CLIENT_GRF != pLnk->GetObjType() &&
@@ -264,7 +264,7 @@ if( !pChkLnk )
                 {
                     if( pLnk == pChkLnk ||
                         ((SwBaseLink*)pLnk)->IsRecursion( pChkLnk ) )
-                        return TRUE;
+                        return sal_True;
                 }
                 else if( ((SwBaseLink*)pLnk)->IsRecursion( (SwBaseLink*)pLnk ) )
                     ((SwBaseLink*)pLnk)->SetNoDataFlag();
@@ -275,7 +275,7 @@ if( !pChkLnk )
     ((SwServerObject*)this)->eType = eSave;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 void SwServerObject::SetNoServer()
@@ -309,7 +309,7 @@ void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)
 /*  */
 
 
-SwDataChanged::SwDataChanged( const SwPaM& rPam, USHORT nTyp )
+SwDataChanged::SwDataChanged( const SwPaM& rPam, sal_uInt16 nTyp )
     : pPam( &rPam ), pPos( 0 ), pDoc( rPam.GetDoc() ), nType( nTyp )
 {
     nNode = rPam.GetPoint()->nNode.GetIndex();
@@ -317,7 +317,7 @@ SwDataChanged::SwDataChanged( const SwPaM& rPam, USHORT nTyp )
 }
 
 
-SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos, USHORT nTyp )
+SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos, sal_uInt16 nTyp )
     : pPam( 0 ), pPos( &rPos ), pDoc( pDc ), nType( nTyp )
 {
     nNode = rPos.nNode.GetIndex();
@@ -332,7 +332,7 @@ SwDataChanged::~SwDataChanged()
     {
         const ::sfx2::SvLinkSources& rServers = pDoc->GetLinkManager().GetServers();
 
-        for( USHORT nCnt = rServers.Count(); nCnt; )
+        for( sal_uInt16 nCnt = rServers.Count(); nCnt; )
         {
             ::sfx2::SvLinkSourceRef refObj( rServers[ --nCnt ] );
             // noch jemand am Object interessiert ?

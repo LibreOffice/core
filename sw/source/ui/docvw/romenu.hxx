@@ -49,12 +49,12 @@ class SwReadOnlyPopup : public PopupMenu
                 sDescription,
                 sGrfName;
     std::vector<String> aThemeList;
-    BOOL        bGrfToGalleryAsLnk;
+    sal_Bool        bGrfToGalleryAsLnk;
     ImageMap*   pImageMap;
     INetImage*  pTargetURL;
 
-    void Check( USHORT nMID, USHORT nSID, SfxDispatcher &rDis );
-    String SaveGraphic( USHORT nId );
+    void Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rDis );
+    String SaveGraphic( sal_uInt16 nId );
 
     using PopupMenu::Execute;
 
@@ -63,7 +63,7 @@ public:
     ~SwReadOnlyPopup();
 
     void Execute( Window* pWin, const Point &rPPos );
-    void Execute( Window* pWin, USHORT nId );
+    void Execute( Window* pWin, sal_uInt16 nId );
 };
 
 void GetPreferedExtension( String &rExt, const Graphic &rGrf );

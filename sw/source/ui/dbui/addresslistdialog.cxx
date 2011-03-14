@@ -211,7 +211,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
 
     m_aListLB.SetHelpId(HID_MM_ADDRESSLIST_TLB);
     static long nTabs[] = {2, 0, aSz.Width()/2 };
-    m_aListLB.SetWindowBits( WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
+    m_aListLB.SetStyle( m_aListLB.GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
     m_aListLB.SetSelectionMode( SINGLE_SELECTION );
     m_aListLB.SetTabs(&nTabs[0], MAP_PIXEL);
     m_aOK.SetClickHdl( LINK( this, SwAddressListDialog, OKHdl_Impl));
@@ -228,7 +228,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     OSL_ENSURE(m_xDBContext.is(), "service 'com.sun.star.sdb.DatabaseContext' not found!");
     sal_Bool bEnableEdit = sal_False;
     sal_Bool bEnableOK = sal_True;
-    m_aListLB.SelectAll( FALSE );
+    m_aListLB.SelectAll( sal_False );
 
     if(m_xDBContext.is())
     {
@@ -445,7 +445,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             pUserData->sURL = sURL;
             m_pCreatedDataSource->SetUserData(pUserData);
             m_aListLB.Select(m_pCreatedDataSource);
-            m_aCreateListPB.Enable(FALSE);
+            m_aCreateListPB.Enable(sal_False);
 
         }
         catch(Exception& )
@@ -512,7 +512,7 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvLBoxEntry*,
             pThis->m_aListLB.SetEntryText(pThis->m_sConnecting, pSelect, ITEMID_TABLE - 1);
             // allow painting of the new entry
             pThis->m_aListLB.Window::Invalidate(INVALIDATE_UPDATE);
-            for (USHORT i = 0; i < 10; i++)
+            for (sal_uInt16 i = 0; i < 10; i++)
                 Application::Reschedule();
         }
 
@@ -674,7 +674,7 @@ IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
 
 IMPL_LINK(SwAddressListDialog, OKHdl_Impl, PushButton*, EMPTYARG)
 {
-    EndDialog(TRUE);
+    EndDialog(sal_True);
     return 0;
 }
 

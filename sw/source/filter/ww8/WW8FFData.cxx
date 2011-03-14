@@ -89,7 +89,7 @@ void WW8FFData::WriteOUString(SvStream * pDataStrm, const ::rtl::OUString & rStr
 
 void WW8FFData::Write(SvStream * pDataStrm)
 {
-    ULONG nDataStt = pDataStrm->Tell();
+    sal_uLong nDataStt = pDataStrm->Tell();
 
     static const sal_uInt8 aHeader[] =
     {

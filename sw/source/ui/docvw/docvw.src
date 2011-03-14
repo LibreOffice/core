@@ -36,56 +36,56 @@ Menu MN_READONLY_POPUP
         MenuItem
         {
             Identifier = MN_READONLY_OPENURL ;
-            HelpID = SID_OPENDOC ;
+            HelpId = CMD_SID_OPENDOC ;
             Text [ en-US ] = "~Open" ;
         };
         MenuItem
         {
             Identifier = MN_READONLY_OPENURLNEW ;
-            HelpID = SID_OPENDOC ;
+            HelpId = CMD_SID_OPENDOC ;
             Text [ en-US ] = "Open in New Window" ;
         };
         MenuItem
         {
             Identifier = MN_READONLY_EDITDOC ;
-            HelpID = SID_EDITDOC ;
+            HelpId = CMD_SID_EDITDOC ;
             Text [ en-US ] = "~Edit" ;
         };
         MenuItem
         {
             Identifier = MN_READONLY_SELECTION_MODE ;
-            HelpID = FN_READONLY_SELECTION_MODE ;
+            HelpId = CMD_FN_READONLY_SELECTION_MODE ;
             Text [ en-US ] = "Select Text";
         };
         MenuItem
         {
             Identifier = MN_READONLY_RELOAD;
-            HelpID = SID_RELOAD;
+            HelpId = CMD_SID_RELOAD;
             Text [ en-US ] = "Re~load";
         };
         MenuItem
         {
             Identifier = MN_READONLY_RELOAD_FRAME;
-            HelpID = SID_RELOAD;
+            HelpId = CMD_SID_RELOAD;
             Text [ en-US ] = "Reload Frame";
         };
         MenuItem
         {
             Identifier = MN_READONLY_SOURCEVIEW ;
-            HelpID = HID_SOURCEVIEW ;
+            HelpId = HID_SOURCEVIEW ;
             Text [ en-US ] = "HT~ML Source" ;
         };
         SEPARATOR
         MenuItem
         {
             Identifier = MN_READONLY_BROWSE_BACKWARD ;
-            HelpID = SID_BROWSE_BACKWARD ;
+            HelpId = CMD_SID_BROWSE_BACKWARD ;
             Text [ en-US ] = "Backwards" ;
         };
         MenuItem
         {
             Identifier = MN_READONLY_BROWSE_FORWARD ;
-            HelpID = SID_BROWSE_FORWARD ;
+            HelpId = CMD_SID_BROWSE_FORWARD ;
             Text [ en-US ] = "~Forward" ;
         };
         SEPARATOR
@@ -187,14 +187,14 @@ Menu MN_READONLY_POPUP
         MenuItem
         {
             Identifier = SID_WIN_FULLSCREEN;
-            HelpID =  SID_WIN_FULLSCREEN;
+            HelpId = CMD_SID_WIN_FULLSCREEN;
             Text [ en-US ] = "Leave Full-Screen Mode" ;
         };
         SEPARATOR
         MenuItem
         {
             Identifier = MN_READONLY_COPY ;
-            HelpID = SID_COPY;
+            HelpId = CMD_SID_COPY;
             Text [ en-US ] = "~Copy" ;
         };
     };

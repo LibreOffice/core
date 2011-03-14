@@ -94,7 +94,7 @@ class SwExtraPainter
     const SwLineNumberInfo &rLineInf;
     SwTwips nX;
     SwTwips nRedX;
-    ULONG nLineNr;
+    sal_uLong nLineNr;
     MSHORT nDivider;
     sal_Bool bGoLeft;
     sal_Bool bLineNum;
@@ -448,6 +448,10 @@ SwRect SwTxtFrm::Paint()
         //      d.h. als linken Rand den berechneten PaintOfst!
         SwRepaint *pRepaint = GetPara()->GetRepaint();
         long l;
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if ( IsVertLR() ) // mba: the following line was added, but we don't need it for the existing directions; kept for IsVertLR(), but should be checked
+            pRepaint->Chg( ( GetUpper()->Frm() ).Pos() + ( GetUpper()->Prt() ).Pos(), ( GetUpper()->Prt() ).SSize() );
+
         if( pRepaint->GetOfst() )
             pRepaint->Left( pRepaint->GetOfst() );
 
@@ -596,7 +600,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
  *                      SwTxtFrm::Paint()
  *************************************************************************/
 
-void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ ) const
+void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     ResetRepaint();
 
