@@ -33,7 +33,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.*;
 // import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XIndexAccess;
-// import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbcx.XColumnsSupplier;
 // import com.sun.star.sdb.XColumn;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
