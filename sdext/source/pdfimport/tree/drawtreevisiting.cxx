@@ -212,7 +212,9 @@ void DrawXmlEmitter::visit( ParagraphElement& elem, const std::list< Element* >:
 
 void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
                                      PropertyMap&       rProps,
-                                     const EmitContext& rEmitContext )
+                                     const EmitContext& rEmitContext,
+                                     bool               bWasTransformed
+                                     )
 {
     double rel_x = rElem.x, rel_y = rElem.y;
 
@@ -223,7 +225,7 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
 
     const GraphicsContext& rGC =
         rEmitContext.rProcessor.getGraphicsContext( rElem.GCId );
-    if( rGC.Transformation.isIdentity() )
+    if( rGC.Transformation.isIdentity() || bWasTransformed )
     {
         rProps[ USTR( "svg:x" ) ]       = convertPixelToUnitString( rel_x );
         rProps[ USTR( "svg:y" ) ]       = convertPixelToUnitString( rel_y );
@@ -350,7 +352,10 @@ void DrawXmlEmitter::visit( PolyPolyElement& elem, const std::list< Element* >::
     }
 
     PropertyMap aProps;
-    fillFrameProps( elem, aProps, m_rEmitContext );
+    // PDFIProcessor transforms geometrical objects, not images and text
+    // so we need to tell fillFrameProps here that the transformation for
+    // a PolyPolyElement was already applied (aside form translation)
+    fillFrameProps( elem, aProps, m_rEmitContext, true );
     rtl::OUStringBuffer aBuf( 64 );
     aBuf.appendAscii( "0 0 " );
     aBuf.append( convPx2mmPrec2(elem.w)*100.0 );
