@@ -648,7 +648,7 @@ bool SmGetGlyphBoundRect(const OutputDevice &rDev,
     // in significant incorrect bounding rectangles for some charcters.
     Size aFntSize = aFnt.GetSize();
 
-    // HDU: workaround to avoid HUGE font sizes and resulting problems
+    // Workaround to avoid HUGE font sizes and resulting problems
     long nScaleFactor = 1;
     while( aFntSize.Height() > 2000 * nScaleFactor )
         nScaleFactor *= 2;
