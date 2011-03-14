@@ -169,4 +169,15 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     vclmain \
 ))
 
+ifeq ($(SYSTEM_EXPAT),YES)
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
+	expat \
+))
+else
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	expat_xmlparse \
+	expat_xmltok \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

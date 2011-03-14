@@ -452,9 +452,6 @@ gb_Library_PLAINLIBS_NONE += \
 	d3d9 \
 	d3dx \
 	ddraw \
-	expat \
-	expat_xmltok \
-	expat_xmlparse \
     gdi32 \
     gdiplus \
     gnu_getopt \
