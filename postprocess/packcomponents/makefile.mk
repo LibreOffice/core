@@ -172,7 +172,6 @@ my_components = \
     uui \
     vbaevents \
     vbaobj \
-    vbaevents \
     vcl \
     vclcanvas \
     wpft \
