@@ -4,7 +4,6 @@ UDK_3_0_0 {
                 ImportPPT;
                 SaveVBA;
                 component_getImplementationEnvironment;
-                component_writeInfo;
                 component_getFactory;
         local:
                 *;
