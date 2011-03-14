@@ -33,7 +33,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.*;
 // import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XIndexAccess;
-// import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbcx.XColumnsSupplier;
 // import com.sun.star.sdb.XColumn;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
@@ -241,7 +241,7 @@ public class SQLQueryComposer
         {
             for (int m = 0; m < _filterconditions[n].length; m++)
             {
-                _filterconditions[n][m].Name = getComposedAliasFieldName(_filterconditions[n][m].Name);
+            //  _filterconditions[n][m].Name = getComposedAliasFieldName(_filterconditions[n][m].Name);
                 final String aliasName = getComposedAliasFieldName(_filterconditions[n][m].Name);
                 if ( columns.hasByName(aliasName))
                     _filterconditions[n][m].Name = aliasName;
