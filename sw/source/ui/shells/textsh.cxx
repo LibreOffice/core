@@ -1161,10 +1161,10 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         {
             bFontChanged = sal_True;
             SvxFontItem aNewFontItem( aFont );
-            aNewFontItem.GetFamilyName() = aNewFont.GetName();
-            aNewFontItem.GetFamily()     = aNewFont.GetFamily();
-            aNewFontItem.GetPitch()      = aNewFont.GetPitch();
-            aNewFontItem.GetCharSet()    = aNewFont.GetCharSet();
+            aNewFontItem.SetFamilyName( aNewFont.GetName());
+            aNewFontItem.SetFamily(  aNewFont.GetFamily());
+            aNewFontItem.SetPitch(   aNewFont.GetPitch());
+            aNewFontItem.SetCharSet( aNewFont.GetCharSet() );
 
             SfxItemSet aRestoreSet( GetPool(), RES_CHRATR_FONT, RES_CHRATR_FONT,
                                                RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,

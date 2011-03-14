@@ -3389,6 +3389,7 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     pStyles( NULL ),
     bHasHdr(false), bHasFtr(false), bSubstituteBullets(true),
     mbExportModeRTF( false ),
+    mbOutOutlineOnly( false ),
     pDoc( pDocument ),
     pCurPam( pCurrentPam ),
     pOrigPam( pOriginalPam )
