@@ -110,9 +110,6 @@ void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
     else if ( eArea == SVX_SPELL_BODY )
     {
         ;   // Is handled by the App through SpellNextDocument
-
-        // pSpellInfo->bSpellToEnd = sal_True;
-        // pSpellInfo->aSpellTo = pImpEE->CreateEPaM( pImpEE->GetEditDoc().GetEndPaM() );
     }
     else
     {

@@ -197,8 +197,6 @@ void EditHTMLParser::NextToken( int nToken )
             if ( !bInPara )
                 StartPara( FALSE );
 
-            // if ( bInPara || pCurAnchor )
-
             String aText = aToken;
             if ( aText.Len() && ( aText.GetChar( 0 ) == ' ' )
                     && ThrowAwayBlank() && !IsReadPRE() )
@@ -567,6 +565,7 @@ void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSe
     USHORT nEndNode = pImpEditEngine->GetEditDoc().GetPos( pEN );
     DBG_ASSERT( nStartNode == nEndNode, "ImpSetAttribs: Several paragraphs?" );
 #endif
+
     if ( ( aStartPaM.GetIndex() == 0 ) && ( aEndPaM.GetIndex() == aEndPaM.GetNode()->Len() ) )
     {
         // Has to be merged:
@@ -591,7 +590,6 @@ void EditHTMLParser::ImpSetStyleSheet( USHORT nHLevel )
     // in a different engine still are here ...
 
     USHORT nNode = pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
-
     SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
 
     aItems.ClearItem( EE_PARA_ULSPACE );
