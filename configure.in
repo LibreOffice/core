@@ -5242,7 +5242,7 @@ if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "z$enable_graphite" = "z" -
         test "$with_system_graphite" != "no"; then
         AC_MSG_RESULT([external])
         SYSTEM_GRAPHITE=YES
-        PKG_CHECK_MODULES( GRAPHITE, graphite2 )
+        PKG_CHECK_MODULES( GRAPHITE, graphite2 >= 0.9.3 )
     else
         AC_MSG_RESULT([internal])
         SYSTEM_GRAPHITE=NO
