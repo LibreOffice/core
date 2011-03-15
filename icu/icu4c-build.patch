@@ -1,16 +1,27 @@
---- misc/icu/source/common/putil.c	2008-07-01 03:41:12.000000000 +0200
-+++ misc/build/icu/source/common/putil.c	2008-09-02 07:01:29.335795765 +0200
+--- misc/icu/source/common/putil.c	2010-09-29 20:37:22.000000000 +0200
++++ misc/build/icu/source/common/putil.c	2011-03-15 10:58:44.054592942 +0100
 @@ -52,7 +52,7 @@
  Poorly upgraded Solaris machines can't have this defined.
  Cleanly installed Solaris can use this #define.
  */
--#if !defined(_XOPEN_SOURCE_EXTENDED) && ((!defined(__STDC_VERSION__) || __STDC_VERSION__ >= 199901L) || defined(__xlc__))
-+#if !defined(_XOPEN_SOURCE_EXTENDED) && ((!defined(__STDC_VERSION__) || __STDC_VERSION__ < 199901L) || defined(__xlc__))
+-#if !defined(_XOPEN_SOURCE_EXTENDED) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ >= 199901L)
++#if !defined(_XOPEN_SOURCE_EXTENDED) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ < 199901L)
  #define _XOPEN_SOURCE_EXTENDED 1
  #endif
  
---- misc/icu/source/config/mh-darwin	Tue Jul  1 03:41:24 2008
-+++ misc/build/icu/source/config/mh-darwin	Tue Jan 20 18:33:16 2009
+--- misc/icu/source/common/stringpiece.cpp	2010-09-29 20:37:20.000000000 +0200
++++ misc/build/icu/source/common/stringpiece.cpp	2011-03-15 10:57:24.722045561 +0100
+@@ -71,7 +71,7 @@
+  * Visual Studios 9.0.
+  * Cygwin with MSVC 9.0 also complains here about redefinition.
+  */
+-#if (!defined(_MSC_VER) || (_MSC_VER >= 1500)) && !defined(CYGWINMSVC)
++#if (!defined(_MSC_VER) && !defined(CYGWINMSVC))
+ const int32_t StringPiece::npos;
+ #endif
+ 
+--- misc/icu/source/config/mh-darwin	2010-09-29 20:37:36.000000000 +0200
++++ misc/build/icu/source/config/mh-darwin	2011-03-15 10:56:26.653056004 +0100
 @@ -25,7 +25,7 @@
  SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS) $(LD_SOOPTIONS)
  
@@ -51,10 +62,10 @@
  
  ## Remove shared library 's'
  STATIC_PREFIX_WHEN_USED = 
---- misc/icu/source/config/mh-linux	2007-12-12 19:57:36.000000000 +0100
-+++ misc/build/icu/source/config/mh-linux	2008-05-21 18:59:13.000000000 +0200
+--- misc/icu/source/config/mh-linux	2010-09-29 20:37:36.000000000 +0200
++++ misc/build/icu/source/config/mh-linux	2011-03-15 10:56:26.653056004 +0100
 @@ -20,6 +20,11 @@
- LD_RPATH= -Wl,-zorigin,-rpath,'$$'ORIGIN 
+ LD_RPATH= -Wl,-zorigin,-rpath,'$$'ORIGIN
  LD_RPATH_PRE = -Wl,-rpath,
  
 +## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
@@ -65,8 +76,8 @@
  ## These are the library specific LDFLAGS
  LDFLAGSICUDT=-nodefaultlibs -nostdlib
  
---- misc/icu/source/config/mh-solaris	2008-07-01 03:41:26.000000000 +0200
-+++ misc/build/icu/source/config/mh-solaris	2009-02-17 11:54:45.105890123 +0100
+--- misc/icu/source/config/mh-solaris	2010-09-29 20:37:36.000000000 +0200
++++ misc/build/icu/source/config/mh-solaris	2011-03-15 11:01:04.370475053 +0100
 @@ -36,17 +36,21 @@
  
  ## Commands to link
@@ -82,7 +93,7 @@
 +SHLIB.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -G -norunpath
  
  ## Compiler switch to embed a runtime search path
- LD_RPATH=       -R'$$'ORIGIN 
+ LD_RPATH=       -R'$$'ORIGIN
  LD_RPATH_PRE=   -R
  
 +## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
@@ -92,8 +103,8 @@
  #LIBRARY_PATH_PREFIX=/usr/lib/lwp:
  
  ## Compiler switch to embed a library name
---- misc/icu/source/layout/ArabicShaping.cpp	2008-07-01 03:42:04.000000000 +0200
-+++ misc/build/icu/source/layout/ArabicShaping.cpp	2009-02-17 12:04:34.264869737 +0100
+--- misc/icu/source/layout/ArabicShaping.cpp	2010-09-29 20:38:38.000000000 +0200
++++ misc/build/icu/source/layout/ArabicShaping.cpp	2011-03-15 10:56:26.655056238 +0100
 @@ -79,7 +79,6 @@
  #define markFeatureMask 0x00040000UL
  #define mkmkFeatureMask 0x00020000UL
@@ -109,20 +120,8 @@
 -        if (t == ST_NOSHAPE_NONE) {
 -            glyphStorage.setAuxData(out, NO_FEATURES, success);
 -        } else {
--            glyphStorage.setAuxData(out, ISOL_FEATURES, success);
+             glyphStorage.setAuxData(out, ISOL_FEATURES, success);
 -        }
-+        glyphStorage.setAuxData(out, ISOL_FEATURES, success);
  
          if ((t & MASK_TRANSPARENT) != 0) {
              continue;
---- misc/icu/source/common/stringpiece.cpp	2010-10-29 20:01:01.000000000 +0200
-+++ misc/build/icu/source/common/stringpiece.cpp	2011-03-14 13:38:59.094036495 +0100
-@@ -75,7 +75,7 @@
-  * Visual Studios 9.0.
-  * Cygwin with MSVC 9.0 also complains here about redefinition.
-  */
--#if (!defined(_MSC_VER) || (_MSC_VER > 1500)) && !defined(CYGWINMSVC)
-+#if (!defined(_MSC_VER) && !defined(CYGWINMSVC))
- const int32_t StringPiece::npos;
- #endif
- 

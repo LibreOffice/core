@@ -48,7 +48,7 @@ PATCH_FILES=\
     icu4c-build.patch \
     icu4c.8320.freeserif.crash.patch \
     icu4c-aix.patch \
-    icu4c-4_6-wchar_t.patch \
+    icu4c-4_4_2-wchar_t.patch \
     icu4c-warnings.patch
 
 .IF "$(GUI)"=="UNX"
