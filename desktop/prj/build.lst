@@ -37,8 +37,8 @@ dt	desktop\source\deployment\registry\configuration	nmake	-	all	dt_dp_registry_c
 dt	desktop\source\deployment\registry\help			nmake	-	all	dt_dp_registry_help dt_inc NULL
 dt	desktop\source\deployment\registry\executable		nmake	-	all	dt_dp_registry_executable dt_inc NULL
 dt	desktop\scripts 						nmake	-	u	dt_scripts dt_inc NULL
-dt	desktop\util							nmake	-	all	dt_util dt_app dt_pagein.u dt_so_comp dt_spl dt_uwrapper.u dt_usplash.u dt_wrapper.w dt_officeloader.w dt_officeloader_unx.u dt_migr dt_rebase.w NULL
 dt	desktop\zipintro							nmake	-	all	dt_zipintro NULL
+dt	desktop\util							nmake	-	all	dt_util dt_app dt_pagein.u dt_so_comp dt_spl dt_uwrapper.u dt_usplash.u dt_wrapper.w dt_officeloader.w dt_officeloader_unx.u dt_migr dt_rebase.w dt_zipintro NULL
 dt  desktop\registry\data\org\openoffice\Office                     nmake   -  all sn_regconfig NULL
 dt  desktop\source\registration\com\sun\star\servicetag\resources   get     -  all sn_svctagres NULL
 dt  desktop\source\registration\com\sun\star\servicetag             nmake   -  all sn_svctag NULL

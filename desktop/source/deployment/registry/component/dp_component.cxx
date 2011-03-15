@@ -645,7 +645,7 @@ BackendImpl::BackendImpl(
                                   OUSTR("*.jar"),
                                   getResourceString(RID_STR_JAVA_TYPELIB),
                                   RID_IMG_JAVA_TYPELIB ) ),
-      m_typeInfos( 5 )
+      m_typeInfos( 6 )
 {
     m_typeInfos[ 0 ] = m_xDynComponentTypeInfo;
     m_typeInfos[ 1 ] = m_xJavaComponentTypeInfo;

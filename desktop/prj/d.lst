@@ -109,6 +109,7 @@ mkdir: %_DEST%\bin%_EXT%\odf4ms
 mkdir: %COMMON_DEST%\pck%_EXT%\brand
 mkdir: %COMMON_DEST%\pck%_EXT%\brand_dev
 
+..\%__SRC%\bin\intro.zip %COMMON_DEST%\pck%_EXT%\intro.zip
 ..\%__SRC%\bin\brand\intro.zip %COMMON_DEST%\pck%_EXT%\brand\intro.zip
 ..\%__SRC%\bin\brand_dev\intro.zip %COMMON_DEST%\pck%_EXT%\brand_dev\intro.zip
 ..\%__SRC%\bin\shell\shell.zip %COMMON_DEST%\pck%_EXT%\shell.zip
