@@ -37,8 +37,8 @@ TARGET=so_icu
 
 .INCLUDE :	icuversion.mk
 
-TARFILE_NAME=icu4c-4_6-src
-TARFILE_MD5=43e56b71c407be5154de681eaa646a4a
+TARFILE_NAME=icu4c-4_4_2-src
+TARFILE_MD5=314e582264c36b3735466c522899aa07
 TARFILE_ROOTDIR=icu
 
 #icu4c.8320.freeserif.crash.patch, see
@@ -218,7 +218,11 @@ ICU_BUILD_ARCH=Win32
 ICU_BUILD_ARCH=x64
 .ENDIF
 
-BUILD_ACTION=cd allinone && msbuild.exe allinone.sln /p:Configuration=$(ICU_BUILD_VERSION) /p:Platform=$(ICU_BUILD_ARCH)
+.IF "$(CCNUMVER)" >= "001600000000"
+BUILD_ACTION=cd allinone && MSBuild.exe allinone.sln /p:Configuration=$(ICU_BUILD_VERSION) /p:Platform=$(ICU_BUILD_ARCH)
+.ELSE
+BUILD_ACTION=cd allinone && $(COMPATH)$/vcpackages$/vcbuild.exe allinone.sln "$(ICU_BUILD_VERSION)|$(ICU_BUILD_ARCH)"
+.ENDIF
 
 OUT2LIB= \
     $(BUILD_DIR)$/..$/lib$/icudt.lib \
