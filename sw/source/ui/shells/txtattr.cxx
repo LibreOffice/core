@@ -355,11 +355,6 @@ SET_LINESPACE:
         case SID_ATTR_PARA_LEFT_TO_RIGHT :
         case SID_ATTR_PARA_RIGHT_TO_LEFT :
         {
-            BOOL bSet = TRUE;
-            int eState = pArgs ? pArgs->GetItemState(nSlot) : SFX_ITEM_DISABLED;
-            if (pArgs && SFX_ITEM_SET == eState)
-                bSet = ((const SfxBoolItem&)pArgs->Get(nSlot)).GetValue();
-
             SfxItemSet aAdjustSet( GetPool(),
                     RES_PARATR_ADJUST, RES_PARATR_ADJUST );
             GetShell().GetCurAttr(aAdjustSet);
