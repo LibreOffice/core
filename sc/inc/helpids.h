@@ -92,9 +92,11 @@
 #define HID_SCPAGE_PROTECTION                                   "SC_HID_SCPAGE_PROTECTION"
 #define HID_SCPAGE_VIEW                                         "SC_HID_SCPAGE_VIEW"
 #define HID_SCPAGE_CALC                                         "SC_HID_SCPAGE_CALC"
+#define HID_SCPAGE_FORMULA                                      "SC_HID_SCPAGE_FORMULA"
 #define HID_SCPAGE_USERLISTS                                    "SC_HID_SCPAGE_USERLISTS"
 #define HID_SCPAGE_HFEDIT                                       "SC_HID_SCPAGE_HFEDIT"
 #define HID_SCPAGE_AREAS                                        "SC_HID_SCPAGE_AREAS"
+#define HID_SCPAGE_COMPATIBILITY                                "SC_HID_SCPAGE_COMPATIBILITY"
 #define HID_SCPAGE_TABLE                                        "SC_HID_SCPAGE_TABLE"
 #define HID_SCPAGE_PRINT                                        "SC_HID_SCPAGE_PRINT"
 
