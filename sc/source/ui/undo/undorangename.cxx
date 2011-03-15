@@ -72,44 +72,12 @@ ScUndoAllRangeNames::~ScUndoAllRangeNames()
 
 void ScUndoAllRangeNames::Undo()
 {
-    ScDocument& rDoc = *pDocShell->GetDocument();
-
-    rDoc.CompileNameFormula(true);
-
-    // Global names.
-    if (maOldGlobalNames.empty())
-        rDoc.SetRangeName(NULL);
-    else
-        rDoc.SetRangeName(new ScRangeName(maOldGlobalNames));
-
-    ScRangeName::TabNameCopyMap aCopy;
-    ScRangeName::copyLocalNames(maOldLocalNames, aCopy);
-    rDoc.SetAllTabRangeNames(aCopy);
-
-    rDoc.CompileNameFormula(true);
-
-    SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
+    DoChange(maOldGlobalNames, maOldLocalNames);
 }
 
 void ScUndoAllRangeNames::Redo()
 {
-    ScDocument& rDoc = *pDocShell->GetDocument();
-
-    rDoc.CompileNameFormula(true);
-
-    // Global names.
-    if (maOldGlobalNames.empty())
-        rDoc.SetRangeName(NULL);
-    else
-        rDoc.SetRangeName(new ScRangeName(maNewGlobalNames));
-
-    ScRangeName::TabNameCopyMap aCopy;
-    ScRangeName::copyLocalNames(maNewLocalNames, aCopy);
-    rDoc.SetAllTabRangeNames(aCopy);
-
-    rDoc.CompileNameFormula(true);
-
-    SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
+    DoChange(maNewGlobalNames, maNewLocalNames);
 }
 
 void ScUndoAllRangeNames::Repeat(SfxRepeatTarget& /*rTarget*/)
@@ -124,5 +92,26 @@ BOOL ScUndoAllRangeNames::CanRepeat(SfxRepeatTarget& /*rTarget*/) const
 String ScUndoAllRangeNames::GetComment() const
 {
     return ScGlobal::GetRscString(STR_UNDO_RANGENAMES);
+}
+
+void ScUndoAllRangeNames::DoChange(const ScRangeName& rGlobal, const ScRangeName::TabNameMap& rLocal)
+{
+    ScDocument& rDoc = *pDocShell->GetDocument();
+
+    rDoc.CompileNameFormula(true);
+
+    // Global names.
+    if (rGlobal.empty())
+        rDoc.SetRangeName(NULL);
+    else
+        rDoc.SetRangeName(new ScRangeName(rGlobal));
+
+    ScRangeName::TabNameCopyMap aCopy;
+    ScRangeName::copyLocalNames(rLocal, aCopy);
+    rDoc.SetAllTabRangeNames(aCopy);
+
+    rDoc.CompileNameFormula(true);
+
+    SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
 }
 
