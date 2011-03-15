@@ -38,6 +38,7 @@ $(eval $(call gb_SrsTarget_set_include,sw/res,\
     -I$(OUTDIR)/inc \
     -I$(WORKDIR)/inc/sw \
     -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/core/undo \
     -I$(SRCDIR)/sw/source/core/unocore \
     -I$(SRCDIR)/sw/source/ui/chrdlg \
@@ -65,6 +66,7 @@ $(eval $(call gb_SrsTarget_set_include,sw/res,\
 ))
 
 $(eval $(call gb_SrsTarget_add_files,sw/res,\
+    sw/source/core/layout/pagefrm.src \
     sw/source/core/undo/undo.src \
     sw/source/core/unocore/unocore.src \
     sw/source/ui/app/app.src \

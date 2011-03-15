@@ -362,14 +362,12 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                 SwUnoModule_createInstance,
                 SwUnoModule_getSupportedServiceNames() );
         }
-        // --> OD 2007-05-24 #i73788#
         else if( comp_FinalThreadManager::_getImplementationName().equalsAsciiL(
                                                     pImplName, nImplNameLen ) )
         {
             pRet = ::cppu::component_getFactoryHelper(
                         pImplName, pServiceManager, pRegistryKey, entries);
         }
-        // <--
 
         if( xFactory.is())
         {
