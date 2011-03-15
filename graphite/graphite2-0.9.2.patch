@@ -398,7 +398,7 @@ diff current src/List.h
  
  // Definitions for library publicly exported symbols
 -#if defined _WIN32 || defined __CYGWIN__
-+#if defined _WIN32 || defined __CYGWIN__ || !defined GR2_STATIC
++#if ( defined _WIN32 || defined __CYGWIN__ ) && !defined GR2_STATIC
    #ifdef GR2_EXPORTING
      #ifdef __GNUC__
        #define GR2_API    __attribute__((dllexport))
