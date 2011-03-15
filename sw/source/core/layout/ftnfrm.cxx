@@ -2365,7 +2365,7 @@ void SwFtnBossFrm::MoveFtns( const SwCntntFrm *pSrc, SwCntntFrm *pDest,
         || pAttr->GetFtn().IsEndNote() )
         return;
 
-    OSL_ENSURE( this == pSrc->FindFtnBossFrm( TRUE ),
+    OSL_ENSURE( this == pSrc->FindFtnBossFrm( sal_True ),
             "SwPageFrm::MoveFtns: source frame isn't on that FtnBoss" );
 
     SwFtnFrm *pFtn = FindFirstFtn();

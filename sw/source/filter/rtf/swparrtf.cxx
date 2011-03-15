@@ -379,7 +379,7 @@ void SwRTFParser::Continue( int nToken )
 
 #if OSL_DEBUG_LEVEL > 1
             // !!! sollte nicht moeglich sein, oder ??
-            OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( TRUE ).nNode.GetIndex(),
+            OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( sal_True ).nNode.GetIndex(),
                 "Pam.Bound1 steht noch im Node" );
             OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( sal_False ).nNode.GetIndex(),
                 "Pam.Bound2 steht noch im Node" );

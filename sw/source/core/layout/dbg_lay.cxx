@@ -29,8 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
+/*
  * Und hier die Beschreibung:
  *
  * Durch die PROTOCOL-Makros wird es ermoeglicht, Ereignisse im Frame-Methoden zu protokollieren.

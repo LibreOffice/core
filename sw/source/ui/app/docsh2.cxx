@@ -888,7 +888,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 #if OSL_DEBUG_LEVEL > 1
                 {
                     sal_Bool bWeb = 0 != dynamic_cast<SwWebDocShell*>(this);
-                    OSL_ENSURE(bWeb == TRUE, "SourceView only in WebDocShell");
+                    OSL_ENSURE(bWeb == sal_True, "SourceView only in WebDocShell");
                 }
 #endif
                 // the SourceView is not the 1 for SwWebDocShell

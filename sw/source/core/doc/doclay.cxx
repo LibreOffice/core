@@ -1517,8 +1517,6 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 {
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
     ::sw::DrawUndoGuard const drawUndoGuard(rDoc.GetIDocumentUndoRedo());
-    OSL_ENSURE( RES_DRAWFRMFMT == pContact->GetFmt()->Which(),
-            "Kein DrawFrmFmt" );
 
     // Erstmal das Feld bauen, weil ueber den Namen die TxtColl besorgt
     // werden muss

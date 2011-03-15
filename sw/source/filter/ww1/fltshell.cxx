@@ -1625,7 +1625,7 @@ sal_Bool SwFltOutDoc::SeekCell(short nRow, short nCol, sal_Bool bPam)
 
     if ((sal_uInt16)nRow >= pTableLines->Count())
     {
-       OSL_ENSURE((USHORT)nRow >= pTableLines->Count(), "SwFltOutDoc");
+       OSL_ENSURE((sal_uInt16)nRow >= pTableLines->Count(), "SwFltOutDoc");
         return sal_False;
     }
     pTableLine = (*pTableLines)[nRow];

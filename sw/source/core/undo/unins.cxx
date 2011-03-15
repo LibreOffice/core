@@ -513,7 +513,6 @@ SwUndoReplace::SwUndoReplace(SwPaM const& rPam,
     : SwUndo( UNDO_REPLACE )
     , m_pImpl(new Impl(rPam, rIns, bRegExp))
 {
-        OSL_ENSURE( !nAktPos, "Redo ohne vorheriges Undo??" );
 }
 
 SwUndoReplace::~SwUndoReplace()

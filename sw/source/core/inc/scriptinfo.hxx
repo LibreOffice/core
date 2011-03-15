@@ -401,7 +401,7 @@ inline sal_uInt8 SwScriptInfo::GetDirType( const size_t nCnt ) const
 inline size_t SwScriptInfo::CountKashida() const { return aKashida.size(); }
 inline xub_StrLen SwScriptInfo::GetKashida( const size_t nCnt ) const
 {
-    OSL_ENSURE( nCnt < aKashida.Count(),"No Kashidas today!");
+    OSL_ENSURE( nCnt < aKashida.size(),"No Kashidas today!");
     return aKashida[ nCnt ];
 }
 
@@ -426,7 +426,7 @@ inline sal_uInt8 SwScriptInfo::GetCompType( const size_t nCnt ) const
 inline size_t SwScriptInfo::CountHiddenChg() const { return aHiddenChg.size(); };
 inline xub_StrLen SwScriptInfo::GetHiddenChg( const size_t nCnt ) const
 {
-    OSL_ENSURE( nCnt < aHiddenChg.Count(),"No HiddenChg today!");
+    OSL_ENSURE( nCnt < aHiddenChg.size(),"No HiddenChg today!");
     return aHiddenChg[ nCnt ];
 }
 

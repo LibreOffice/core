@@ -248,7 +248,7 @@ SwAutoCompleteWord::~SwAutoCompleteWord()
 #if OSL_DEBUG_LEVEL > 1
     sal_uLong nStrings = SwAutoCompleteString::GetElementCount();
     sal_uLong nClients = SwAutoCompleteClient::GetElementCount();
-    DBG_ASSERT(!nStrings && !nClients, "AutoComplete: clients or string count mismatch");
+    OSL_ENSURE(!nStrings && !nClients, "AutoComplete: clients or string count mismatch");
 #endif
 }
 

@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 #include "viewsh.hxx"       // IsDbg()
 #include "viewopt.hxx"      // IsDbg()
@@ -730,8 +730,8 @@ SvStream &SwDropPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-#endif /* OSL_DEBUG_LEVEL */
+#endif
 
-#endif // DBG_UTIL
+#endif /* OSL_DEBUG_LEVEL */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

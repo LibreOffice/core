@@ -452,7 +452,7 @@ public:
 
 #if OSL_DEBUG_LEVEL > 1
     void SttCrsrMove();
-    void EndCrsrMove( const sal_Bool bIdleEnd = FALSE );
+    void EndCrsrMove( const sal_Bool bIdleEnd = sal_False );
 #else
     void SttCrsrMove() { ++nCrsrMove; StartAction(); }
     void EndCrsrMove( const sal_Bool bIdleEnd = sal_False )

@@ -940,8 +940,8 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
     {
         // ueberpruefe, ob der Inhalt an der alten Position steht
         SwNodeIndex aSttIdx( pDoc->GetNodes(), nStartPos );
-        OSL_ENSURE( !pDoc->GetNodes()[ aSttIdx ]->GetCntntNode(),
-                "RestoreSection(): Position on content node");
+//        OSL_ENSURE( !pDoc->GetNodes()[ aSttIdx ]->GetCntntNode(),
+//                "RestoreSection(): Position on content node");
 
         // move den Inhalt aus dem UndoNodes-Array in den Fly
         SwStartNode* pSttNd = pDoc->GetNodes().MakeEmptySection( aSttIdx,

@@ -688,7 +688,7 @@ Graphic SwEditShell::GetIMapGraphic() const
                                     GRAPHIC_DEFAULT == rGrf.GetType() ) )
             {
 #if OSL_DEBUG_LEVEL > 1
-                OSL_ENSURE( ((SwGrfNode*)pNd)->SwapIn( TRUE ) || !TRUE, "Grafik konnte nicht geladen werden" );
+                OSL_ENSURE( ((SwGrfNode*)pNd)->SwapIn( sal_True ), "Grafik konnte nicht geladen werden" );
 #else
                 ((SwGrfNode*)pNd)->SwapIn( sal_True );
 #endif

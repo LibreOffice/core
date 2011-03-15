@@ -309,7 +309,7 @@ sal_Bool SwCrsrShell::SelTblBox()
     // frame. This should yield the same result as searching for the
     // table box start node, right?
     SwFrm *pFrm = GetCurrFrm();
-    DBG_ASSERT( !pFrm->IsInTab() == !(pStartNode != NULL),
+    OSL_ENSURE( !pFrm->IsInTab() == !(pStartNode != NULL),
                 "Schroedinger's table: We're in a box, and also we aren't." );
 #endif
 

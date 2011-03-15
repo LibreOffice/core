@@ -429,8 +429,8 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     {
         // TODO/LATER: is EmbeddedObjectContainer not enough?
         // the created document will be closed by pDoc ( should use SfxObjectShellLock )
-        OSL_ENSURE( pDoc->GetRefForDocShell(),
-                        "wo ist die Ref-Klasse fuer die DocShell?");
+        pPersistShell = new SwDocShell( pDoc, SFX_CREATE_MODE_INTERNAL );
+        pDoc->SetTmpDocShell( pPersistShell );
         pPersistShell->DoInitNew( NULL );
     }
 

@@ -80,6 +80,7 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     vbahelper \
     vcl \
     xo \
+    xml2 \
     $(gb_STDLIBS) \
 ))
 
@@ -376,6 +377,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/text/txttab \
     sw/source/core/text/widorp \
     sw/source/core/text/wrong \
+    sw/source/core/text/xmldump \
     sw/source/core/tox/tox \
     sw/source/core/tox/toxhlp \
     sw/source/core/tox/txmsrt \

@@ -260,7 +260,7 @@ public:
     void DebugPortions( SvStream &rOs, const XubString &rTxt,
                         const xub_StrLen nStart ); //$ ostream
 
-    void dumpLineAsXml(xmlTextWriter* writer, USHORT& ofs, String& aText);
+    void dumpLineAsXml(xmlTextWriter* writer, sal_uInt16& ofs, String& aText);
 #endif
 
     OUTPUT_OPERATOR

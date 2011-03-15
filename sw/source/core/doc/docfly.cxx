@@ -406,7 +406,7 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
         case RES_PAGEDESC:
         case RES_CNTNT:
         case RES_FOOTER:
-            OSL_ENSURE( !this, ":-) Unbekanntes Attribut fuer Fly." );
+            OSL_ENSURE( sal_False, ":-) Unbekanntes Attribut fuer Fly." );
             // kein break;
         case RES_CHAIN:
             rSet.ClearItem( nWhich );
