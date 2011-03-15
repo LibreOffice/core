@@ -156,6 +156,12 @@ public:
     ~SwMailMergeDlg();
 
     inline sal_uInt16   GetMergeType() { return nMergeType; }
+
+    bool IsSaveIndividualDocs() const { return aSaveIndividualRB.IsChecked(); }
+    bool IsGenerateFromDataBase() const { return aGenerateFromDataBaseCB.IsChecked(); }
+    String GetColumnName() const { return aColumnLB.GetSelectEntry();}
+    String GetPath() const { return aPathED.GetText();}
+
     const ::rtl::OUString& GetSaveFilter() const {return m_sSaveFilter;}
     inline const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const { return m_aSelection; }
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const;
