@@ -1046,7 +1046,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
                                     aTlbrStyle, aRect ) );
 
                     const Style aBltrStyle = GetCellStyleBLTR( _nFirstCol, _nFirstRow, true );
-                    if ( aTlbrStyle.GetWidth( ) )
+                    if ( aBltrStyle.GetWidth( ) )
                         pProcessor->process( CreateClippedBorderPrimitives(
                                     aRect.BottomLeft(), aRect.TopRight(),
                                     aBltrStyle, aRect ) );
