@@ -709,6 +709,43 @@ public:
         CPPUNIT_ASSERT_MESSAGE("scale", maScale == mat);
     }
 
+    void rotate()
+    {
+        B2DHomMatrix mat;
+        mat.rotate(90*F_PI180);
+        CPPUNIT_ASSERT_MESSAGE("rotate pi/2 yields exact matrix",
+                               mat.get(0,0) == 0.0 &&
+                               mat.get(0,1) == -1.0 &&
+                               mat.get(0,2) == 0.0 &&
+                               mat.get(1,0) == 1.0 &&
+                               mat.get(1,1) == 0.0 &&
+                               mat.get(1,2) == 0.0);
+        mat.rotate(90*F_PI180);
+        CPPUNIT_ASSERT_MESSAGE("rotate pi yields exact matrix",
+                               mat.get(0,0) == -1.0 &&
+                               mat.get(0,1) == 0.0 &&
+                               mat.get(0,2) == 0.0 &&
+                               mat.get(1,0) == 0.0 &&
+                               mat.get(1,1) == -1.0 &&
+                               mat.get(1,2) == 0.0);
+        mat.rotate(90*F_PI180);
+        CPPUNIT_ASSERT_MESSAGE("rotate 3/2 pi yields exact matrix",
+                               mat.get(0,0) == 0.0 &&
+                               mat.get(0,1) == 1.0 &&
+                               mat.get(0,2) == 0.0 &&
+                               mat.get(1,0) == -1.0 &&
+                               mat.get(1,1) == 0.0 &&
+                               mat.get(1,2) == 0.0);
+        mat.rotate(90*F_PI180);
+        CPPUNIT_ASSERT_MESSAGE("rotate 2 pi yields exact matrix",
+                               mat.get(0,0) == 1.0 &&
+                               mat.get(0,1) == 0.0 &&
+                               mat.get(0,2) == 0.0 &&
+                               mat.get(1,0) == 0.0 &&
+                               mat.get(1,1) == 1.0 &&
+                               mat.get(1,2) == 0.0);
+    }
+
     void translate()
     {
         B2DHomMatrix mat;
@@ -895,6 +932,7 @@ public:
     CPPUNIT_TEST(identity);
     CPPUNIT_TEST(scale);
     CPPUNIT_TEST(translate);
+    CPPUNIT_TEST(rotate);
     CPPUNIT_TEST(shear);
     CPPUNIT_TEST(multiply);
     CPPUNIT_TEST(decompose);
