@@ -103,7 +103,7 @@ service FormulaParser
         that indices are 1-based, the sequence must start with an empty
         element.</p>
 
-        @since OOo3.1
+        @since OOo 3.1
      */
     [property] sequence< ExternalLinkInfo > ExternalLinks;
 

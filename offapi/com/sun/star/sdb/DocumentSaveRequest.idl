@@ -44,7 +44,7 @@
     <p>
     Usually thrown if someone tries to save a document which hasn't a name yet.
     </p>
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 exception DocumentSaveRequest: com::sun::star::task::ClassifiedInteractionRequest
 {

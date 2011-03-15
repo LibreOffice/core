@@ -91,6 +91,7 @@ void
                 maketokenrow(3, &tr);
                 gettokens(&tr, 1);
                 doadefine(&tr, c);
+                dofree(tr.bp); tr.bp = 0;
                 unsetsource();
                 break;
 

@@ -575,7 +575,7 @@ void DoIt::operator() (const OUString & url) throw()
 
             if ( ! _bSilent )
             {
-                fprintf(stderr, "register component '%s' in registry '%s' succesful!\n", sUrl.getStr(), _sRegName.getStr());
+                fprintf(stderr, "register component '%s' in registry '%s' successful!\n", sUrl.getStr(), _sRegName.getStr());
             }
 
         }
@@ -604,7 +604,7 @@ void DoIt::operator() (const OUString & url) throw()
             if (bRet)
             {
                 if ( ! _bSilent )
-                    fprintf(stderr, "revoke component '%s' from registry '%s' succesful!\n", sUrl.getStr(), _sRegName.getStr());
+                    fprintf(stderr, "revoke component '%s' from registry '%s' successful!\n", sUrl.getStr(), _sRegName.getStr());
             }
             else
             {
