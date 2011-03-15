@@ -340,7 +340,6 @@ sub link_soffice_bin_files()
     $dest = "$OOO_BUILD/desktop/$TARGET/bin";
     do_link ($src, $dest, 'soffice', 'soffice.bin', 1);
     do_link ($src, $dest, 'bootstraprc', 'bootstraprc', 1);
-    do_link ($src, $dest, 'intro.bmp', 'intro.bmp', 1);
     do_link ("$OOO_INSTALL", "$OOO_BUILD/desktop/$TARGET", 'share', 'share', 1);
 
     print "\n";
