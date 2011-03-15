@@ -62,7 +62,7 @@ ScUndoAllRangeNames::ScUndoAllRangeNames(
     for (itr = rNewLocal.begin(), itrEnd = rNewLocal.end(); itr != itrEnd; ++itr)
     {
         auto_ptr<ScRangeName> p(new ScRangeName(*itr->second));
-        maOldLocalNames.insert(itr->first, p);
+        maNewLocalNames.insert(itr->first, p);
     }
 }
 
