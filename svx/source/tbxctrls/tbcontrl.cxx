@@ -2247,7 +2247,7 @@ Window* SvxStyleToolBoxControl::CreateItemWindow( Window *pParent )
                                                    pImpl->aClearForm,
                                                    pImpl->aMore,
                                                    pImpl->bSpecModeWriter || pImpl->bSpecModeCalc );
-    if( pImpl->aDefaultStyles.size())
+    if( !pImpl->aDefaultStyles.empty())
         pBox->SetDefaultStyle( pImpl->aDefaultStyles[0] );
     // Set visibility listener to bind/unbind controller
     pBox->SetVisibilityListener( LINK( this, SvxStyleToolBoxControl, VisibilityNotification ));

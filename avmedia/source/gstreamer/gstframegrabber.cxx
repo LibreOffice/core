@@ -42,12 +42,18 @@ const gulong GRAB_TIMEOUT = 10000000;
 // ----------------
 
 FrameGrabber::FrameGrabber( GString* pURI ) :
-    Player( pURI  ),
     mpFrameMutex( g_mutex_new() ),
     mpFrameCond( g_cond_new() ),
     mpLastPixbuf( NULL ),
     mbIsInGrabMode( false )
 {
+    if( pURI )
+    {
+        OSL_TRACE( ">>> --------------------------------" );
+        OSL_TRACE( ">>> Creating Player object with URL: %s", pURI->str );
+
+        mpThread = g_thread_create( Player::implThreadFunc, this, true, NULL );
+    }
 }
 
 // ------------------------------------------------------------------------------

@@ -579,6 +579,10 @@ enum DFF_TextHeader {
 #define DFF_PBit_Hidden             0x00000002
 #define DFF_PBit_Print              0x00000001
 
+// properties of the second property set
+#define DFF_Prop_metroBlob                  937 // XML ZipPackage*
+
+
 //---------------------------------------------------------------------------
 //  Dreh- und Angelpunkt: der Shape-Typ
 //---------------------------------------------------------------------------

@@ -789,7 +789,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         case mso_sptCurvedLeftArrow :
         case mso_sptCurvedRightArrow :
         case mso_sptCurvedUpArrow :
-        case mso_sptCurvedDownArrow :           nColorData = 0x2d000000; break;
+        case mso_sptCurvedDownArrow :           nColorData = 0x20d00000; break;
         case mso_sptRibbon2 :                   nColorData = 0x30ee0000; break;
         case mso_sptRibbon :                    nColorData = 0x30ee0000; break;
 
@@ -2002,7 +2002,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
     SdrObject* pRet = NULL;
     sal_uInt32 i;
 
-    if ( vObjectList.size() )
+    if ( !vObjectList.empty() )
     {
         const SfxItemSet& rCustomShapeSet = pCustomShapeObj->GetMergedItemSet();
         Color           aFillColor;
@@ -2010,7 +2010,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
         sal_uInt32      nColorIndex = 0;
 
         // #i37011# remove invisible objects
-        if(vObjectList.size())
+        if(!vObjectList.empty())
         {
             std::vector< SdrPathObj* > vTempList;
 
@@ -2092,7 +2092,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
     }
 
     // #i37011#
-    if(vObjectList.size())
+    if(!vObjectList.empty())
     {
         // copy remaining objects to pRet
         if(vObjectList.size() > 1L)

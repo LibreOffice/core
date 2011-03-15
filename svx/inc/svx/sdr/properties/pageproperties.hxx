@@ -45,6 +45,9 @@ namespace sdr
             // Do the ItemChange, may do special handling
             virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0);
 
+            // Called after ItemChange() is done for all items.
+            virtual void PostItemChange(const sal_uInt16 nWhich);
+
         public:
             // basic constructor
             PageProperties(SdrObject& rObj);
