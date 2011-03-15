@@ -1914,7 +1914,7 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
     return bFound;
 }
 
-void ScHorizontalValueIterator::GetCurNumFmtInfo( short& nType, sal_uInt32& nIndex )
+void ScHorizontalValueIterator::GetCurNumFmtInfo( short& nType, sal_uLong& nIndex )
 {
     if (!bNumValid)
     {

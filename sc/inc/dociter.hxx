@@ -453,8 +453,8 @@ private:
     ScDocument               *pDoc;
     const ScAttrArray        *pAttrArray;
     ScHorizontalCellIterator *pCellIter;
-    sal_uInt32                nNumFormat;     // for CalcAsShown
-    sal_uInt32                nNumFmtIndex;
+    sal_uLong                 nNumFormat;     // for CalcAsShown
+    sal_uLong                 nNumFmtIndex;
     SCTAB                     nEndTab;
     SCCOL                     nCurCol;
     SCROW                     nCurRow;
@@ -473,7 +473,7 @@ public:
                                                bool bSTotal = false,
                                                bool bTextAsZero = false );
                     ~ScHorizontalValueIterator();
-    void            GetCurNumFmtInfo( short& nType, sal_uInt32& nIndex );
+    void            GetCurNumFmtInfo( short& nType, sal_uLong& nIndex );
     /// Does NOT reset rValue if no value found!
     bool            GetNext( double& rValue, sal_uInt16& rErr );
 };
