@@ -31,6 +31,7 @@
 #include <resourcemodel/TagLogger.hxx>
 #include <resourcemodel/util.hxx>
 #include <resourcemodel/QNameToString.hxx>
+#include <boost/unordered_map.hpp>
 
 namespace writerfilter
 {
@@ -42,7 +43,7 @@ struct eqstr
     }
 };
 
-    typedef boost::unordered_map<const char *, TagLogger::Pointer_t, hash<const char *>, eqstr> TagLoggerHashMap_t;
+typedef boost::unordered_map<const char *, TagLogger::Pointer_t> TagLoggerHashMap_t;
 static TagLoggerHashMap_t * tagLoggers = NULL;
 
     TagLogger::TagLogger(const char* name)
