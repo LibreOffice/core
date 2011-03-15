@@ -127,6 +127,8 @@ sal_Bool lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTa
 }//end anonymous namespace
 
 // === ScChartHelper ======================================
+
+//static
 sal_uInt16 ScChartHelper::DoUpdateAllCharts( ScDocument* pDoc )
 {
     return lcl_DoUpdateCharts( ScAddress(), pDoc, sal_True );
@@ -284,6 +286,158 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
 
     if( xModel.is() )
         xModel->unlockControllers();
+}
+
+void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector, ScDocument* pDocument, SdrObject* pObject )
+{
+    if ( pDocument && pObject && ( pObject->GetObjIdentifier() == OBJ_OLE2 ) )
+    {
+        SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >( pObject );
+        if ( pSdrOle2Obj && pSdrOle2Obj->IsChart() )
+        {
+            uno::Reference< embed::XEmbeddedObject > xEmbeddedObj = pSdrOle2Obj->GetObjRef();
+            if ( xEmbeddedObj.is() )
+            {
+                bool bDisableDataTableDialog = false;
+                svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
+                uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
+                if ( xProps.is() &&
+                     ( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ) ) >>= bDisableDataTableDialog ) &&
+                     bDisableDataTableDialog )
+                {
+                    ::rtl::OUString aChartName = pSdrOle2Obj->GetPersistName();
+                    ScRange aEmptyRange;
+                    ScChartListener aSearcher( aChartName, pDocument, aEmptyRange );
+                    sal_uInt16 nIndex = 0;
+                    ScChartListenerCollection* pCollection = pDocument->GetChartListenerCollection();
+                    if ( pCollection && pCollection->Search( &aSearcher, nIndex ) )
+                    {
+                        ScChartListener* pListener = static_cast< ScChartListener* >( pCollection->At( nIndex ) );
+                        if ( pListener )
+                        {
+                            const ScRangeListRef& rRangeList = pListener->GetRangeList();
+                            if ( rRangeList.Is() )
+                            {
+                                rRangesVector.push_back( *rRangeList );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void ScChartHelper::FillProtectedChartRangesVector( ScRangeListVector& rRangesVector, ScDocument* pDocument, SdrPage* pPage )
+{
+    if ( pDocument && pPage )
+    {
+        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+        SdrObject* pObject = aIter.Next();
+        while ( pObject )
+        {
+            AddRangesIfProtectedChart( rRangesVector, pDocument, pObject );
+            pObject = aIter.Next();
+        }
+    }
+}
+
+void ScChartHelper::GetChartNames( ::std::vector< ::rtl::OUString >& rChartNames, SdrPage* pPage )
+{
+    if ( pPage )
+    {
+        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+        SdrObject* pObject = aIter.Next();
+        while ( pObject )
+        {
+            if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
+            {
+                SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >( pObject );
+                if ( pSdrOle2Obj && pSdrOle2Obj->IsChart() )
+                {
+                    rChartNames.push_back( pSdrOle2Obj->GetPersistName() );
+                }
+            }
+            pObject = aIter.Next();
+        }
+    }
+}
+
+void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, SdrPage* pPage, ScModelObj* pModelObj, SCTAB nTab,
+    const ScRangeListVector& rRangesVector, const ::std::vector< ::rtl::OUString >& rExcludedChartNames, bool bSameDoc )
+{
+    if ( pDoc && pPage && pModelObj )
+    {
+        size_t nRangeListCount = rRangesVector.size();
+        size_t nRangeList = 0;
+        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+        SdrObject* pObject = aIter.Next();
+        while ( pObject )
+        {
+            if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
+            {
+                SdrOle2Obj* pSdrOle2Obj = dynamic_cast< SdrOle2Obj* >( pObject );
+                if ( pSdrOle2Obj && pSdrOle2Obj->IsChart() )
+                {
+                    ::rtl::OUString aChartName = pSdrOle2Obj->GetPersistName();
+                    ::std::vector< ::rtl::OUString >::const_iterator aEnd = rExcludedChartNames.end();
+                    ::std::vector< ::rtl::OUString >::const_iterator aFound = ::std::find( rExcludedChartNames.begin(), aEnd, aChartName );
+                    if ( aFound == aEnd )
+                    {
+                        uno::Reference< embed::XEmbeddedObject > xEmbeddedObj = pSdrOle2Obj->GetObjRef();
+                        if ( xEmbeddedObj.is() && ( nRangeList < nRangeListCount ) )
+                        {
+                            bool bDisableDataTableDialog = false;
+                            svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
+                            uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
+                            if ( xProps.is() &&
+                                 ( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ) ) >>= bDisableDataTableDialog ) &&
+                                 bDisableDataTableDialog )
+                            {
+                                if ( bSameDoc )
+                                {
+                                    ScRange aEmptyRange;
+                                    ScChartListener aSearcher( aChartName, pDoc, aEmptyRange );
+                                    sal_uInt16 nIndex = 0;
+                                    ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
+                                    if ( pCollection && !pCollection->Search( &aSearcher, nIndex ) )
+                                    {
+                                        ScRangeList aRangeList( rRangesVector[ nRangeList++ ] );
+                                        ScRangeListRef rRangeList( new ScRangeList( aRangeList ) );
+                                        ScChartListener* pChartListener = new ScChartListener( aChartName, pDoc, rRangeList );
+                                        pCollection->Insert( pChartListener );
+                                        pChartListener->StartListeningTo();
+                                    }
+                                }
+                                else
+                                {
+                                    xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ),
+                                        uno::makeAny( sal_False ) );
+                                    xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableComplexChartTypes" ) ),
+                                        uno::makeAny( sal_False ) );
+                                }
+                            }
+                        }
+
+                        if ( pModelObj && pModelObj->HasChangesListeners() )
+                        {
+                            Rectangle aRectangle = pSdrOle2Obj->GetSnapRect();
+                            ScRange aRange( pDoc->GetRange( nTab, aRectangle ) );
+                            ScRangeList aChangeRanges;
+                            aChangeRanges.Append( aRange );
+
+                            uno::Sequence< beans::PropertyValue > aProperties( 1 );
+                            aProperties[ 0 ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) );
+                            aProperties[ 0 ].Value <<= aChartName;
+
+                            pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert-chart" ) ), aChangeRanges, aProperties );
+                        }
+                    }
+                }
+            }
+            pObject = aIter.Next();
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

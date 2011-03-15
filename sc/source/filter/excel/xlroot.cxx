@@ -254,6 +254,13 @@ double XclRoot::GetPixelYFromHmm( sal_Int32 nY ) const
     return static_cast< double >( (nY - 0.5) / mrData.mfScreenPixelY );
 }
 
+uno::Sequence< beans::NamedValue > XclRoot::RequestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const
+{
+    ::std::vector< OUString > aDefaultPasswords;
+    aDefaultPasswords.push_back( mrData.maDefPassword );
+    return ScfApiHelper::QueryEncryptionDataForMedium( mrData.mrMedium, rVerifier, &aDefaultPasswords );
+}
+
 bool XclRoot::HasVbaStorage() const
 {
     SotStorageRef xRootStrg = GetRootStorage();
