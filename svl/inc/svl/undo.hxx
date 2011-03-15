@@ -310,9 +310,14 @@ namespace svl
         /** clears the redo stack and removes the top undo action */
         virtual void            RemoveLastUndoAction() = 0;
 
-        // enables (true) or disables (false) recording of undo actions
-        // If undo actions are added while undo is disabled, they are deleted.
-        // Disabling undo does not clear the current undo buffer!
+        /** enables (true) or disables (false) recording of undo actions
+
+            If undo actions are added while undo is disabled, they are deleted.
+            Disabling undo does not clear the current undo buffer!
+
+            Multiple calls to <code>EnableUndo</code> are not cumulative. That is, calling <code>EnableUndo( false )</code>
+            twice, and then calling <code>EnableUndo( true )</code> means that Undo is enable afterwards.
+        */
         virtual void            EnableUndo( bool bEnable ) = 0;
 
         // returns true if undo is currently enabled
