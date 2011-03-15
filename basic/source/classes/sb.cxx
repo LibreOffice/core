@@ -136,6 +136,7 @@ void DocBasicItem::startListening()
     Any aThisComp;
     mrDocBasic.GetUNOConstant( "ThisComponent", aThisComp );
     Reference< util::XCloseBroadcaster > xCloseBC( aThisComp, UNO_QUERY );
+    mbDisposed = !xCloseBC.is();
     if( xCloseBC.is() )
         try { xCloseBC->addCloseListener( this ); } catch( uno::Exception& ) {}
 }
