@@ -11,4 +11,4 @@ cu	cppu\source\AffineBridge	    nmake	-	all	cu_AffineBridge cu_inc NULL
 cu	cppu\source\LogBridge	        nmake	-	all	cu_LogBridge cu_inc NULL
 cu	cppu\util						nmake	-	all	cu_util cu_thpool cu_typelib cu_cppu cu_uno cu_helper_purpenv cu_UnsafeBridge cu_AffineBridge cu_LogBridge NULL
 cu	cppu\qa							nmake	-	all cu_qa_cppunit cu_util NULL
-cu	cppu\qa\cppumaker				nmake	-	all cu_qa_cppumaker cu_inc NULL
+cu	cppu\qa\cppumaker				nmake	-	all cu_qa_cppumaker cu_util NULL
