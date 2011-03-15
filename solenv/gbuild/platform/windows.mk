@@ -199,9 +199,12 @@ gb_CFLAGS+=-Zi
 gb_CXXFLAGS+=-Zi
 endif
 
-ifeq ($(gb_DEBUGLEVEL),2)
+ifeq ($(gb_SYMBOL),$(true))
 gb_CXXFLAGS +=-Zi
 gb_CFLAGS +=-Zi
+endif
+
+ifeq ($(gb_DEBUGLEVEL),2)
 gb_COMPILEROPTFLAGS :=
 gb_LinkTarget_LDFLAGS += -DEBUG
 else

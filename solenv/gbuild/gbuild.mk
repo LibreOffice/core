@@ -83,8 +83,16 @@ gb_PRODUCT := $(false)
 endif
 endif
 
+ifneq ($(strip $(SYMBOL)$(symbol)$(SYMBOLS)$(symbols)),)
+gb_SYMBOL := $(false)
+else
+gb_SYMBOL := $(true)
+endif
+
+
 ifneq ($(strip $(DEBUG)$(debug)),)
 gb_DEBUGLEVEL := 2
+gb_SYMBOL := $(true)
 else
 ifeq ($(gb_PRODUCT),$(true))
 gb_DEBUGLEVEL := 0

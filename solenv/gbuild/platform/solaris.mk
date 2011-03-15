@@ -181,7 +181,7 @@ gb_LinkTarget__RPATHS := \
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 
-ifeq ($(gb_DEBUGLEVEL),2)
+ifeq ($(gb_SYMBOL),$(true))
 gb_LinkTarget_CXXFLAGS += -g
 gb_LinkTarget_CFLAGS += -g
 endif
