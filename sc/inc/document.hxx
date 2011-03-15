@@ -465,6 +465,7 @@ public:
     void GetAllTabRangeNames(::std::map<SCTAB, const ScRangeName*>& rRangeNames) const;
     SC_DLLPUBLIC ScRangeName*   GetRangeName(SCTAB nTab) const;
     SC_DLLPUBLIC ScRangeName*   GetRangeName() const;
+    void            SetRangeName(SCTAB nTab, ScRangeName* pNew);
     void            SetRangeName( ScRangeName* pNewRangeName );
     SCTAB           GetMaxTableNumber() { return nMaxTableNumber; }
     void            SetMaxTableNumber(SCTAB nNumber) { nMaxTableNumber = nNumber; }

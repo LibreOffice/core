@@ -793,6 +793,7 @@ public:
     void        DestroySortCollator();
     void        SetDrawPageSize( bool bResetStreamValid = true, bool bUpdateNoteCaptionPos = true );
 
+    void SetRangeName(ScRangeName* pNew);
     ScRangeName* GetRangeName() const;
 
 private:

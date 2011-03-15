@@ -183,6 +183,16 @@ public:
 
     bool            SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc = true );     // takes ownership of pNewRanges
     bool            ModifyRangeNames( const ScRangeName& rNewRanges );
+
+    /**
+     * Modify all range names, global scope names as well as sheet local ones,
+     * in one go.  Note that this method will <b>not</b> destroy the instances
+     * passed as arguments (it creates copies); the caller is responsible for
+     * destroying them.
+     *
+     * @param pGlobal global scope range names.
+     * @param rTabs sheet local range names.
+     */
     void            ModifyAllRangeNames( const ScRangeName* pGlobal, const ::std::map<SCTAB, const ScRangeName*>& rTabs );
 
     BOOL            CreateNames( const ScRange& rRange, USHORT nFlags, BOOL bApi );

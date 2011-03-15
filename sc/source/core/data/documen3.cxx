@@ -121,6 +121,14 @@ ScRangeName* ScDocument::GetRangeName() const
     return pRangeName;
 }
 
+void ScDocument::SetRangeName(SCTAB nTab, ScRangeName* pNew)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return;
+
+    return pTab[nTab]->SetRangeName(pNew);
+}
+
 void ScDocument::SetRangeName( ScRangeName* pNewRangeName )
 {
     if (pRangeName)

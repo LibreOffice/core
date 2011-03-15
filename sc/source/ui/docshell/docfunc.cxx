@@ -4487,6 +4487,25 @@ bool ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges )
 
 void ScDocFunc::ModifyAllRangeNames( const ScRangeName* pGlobal, const ::std::map<SCTAB, const ScRangeName*>& rTabs )
 {
+    typedef ::std::map<SCTAB, const ScRangeName*> MapType;
+
+    ScDocShellModificator aModificator(rDocShell);
+    ScDocument* pDoc = rDocShell.GetDocument();
+
+    pDoc->CompileNameFormula(true);
+
+    // global names
+    pDoc->SetRangeName(new ScRangeName(*pGlobal));
+
+    // sheet-local names
+    MapType::const_iterator itr = rTabs.begin(), itrEnd = rTabs.end();
+    for (; itr != itrEnd; ++itr)
+        pDoc->SetRangeName(itr->first, new ScRangeName(*itr->second));
+
+    pDoc->CompileNameFormula(false);
+
+    aModificator.SetDocumentModified();
+    SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
 }
 
 bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc )     // takes ownership of pNewRanges
