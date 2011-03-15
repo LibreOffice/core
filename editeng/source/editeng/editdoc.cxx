@@ -529,7 +529,6 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
             }
             break;
             case PORTIONKIND_TAB:
-//          case PORTIONKIND_EXTRASPACE:
             {
                 aSz.Width() += pPortion->GetSize().Width();
             }

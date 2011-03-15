@@ -346,7 +346,6 @@ public:
 #define PORTIONKIND_LINEBREAK   2
 #define PORTIONKIND_FIELD       3
 #define PORTIONKIND_HYPHENATOR  4
-// #define PORTIONKIND_EXTRASPACE   5
 
 #define DELMODE_SIMPLE          0
 #define DELMODE_RESTOFWORD      1
