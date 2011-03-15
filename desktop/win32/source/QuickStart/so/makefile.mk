@@ -25,42 +25,53 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+PRJ=..$/..$/..$/..
 
-PRJNAME=desktop
-TARGET=guiloader
+PRJNAME=sysui
+TARGET=soquickstart
 LIBTARGET=NO
+ENABLE_EXCEPTIONS=TRUE
 TARGETTYPE=GUI
-UWINAPILIB=
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
-# --- Files --------------------------------------------------------
+UWINAPILIB =
 
-APP1TARGET=guiloader
-APP1NOSAL=TRUE
-APP1ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
-APP1OBJS=\
-    $(OBJ)$/extendloaderenvironment.obj \
-    $(OBJ)$/genericloader.obj \
-    $(SOLARLIBDIR)$/pathutils-obj.obj
-STDLIB1=$(SHLWAPILIB)
+# --- Resources ----------------------------------------------------
 
 .IF "$(LINK_SO)"=="TRUE"
-APP2TARGET=so$/guiloader
-APP2NOSAL=TRUE
-APP2ICON=$(SOLARRESDIR)$/icons/so9_main_app.ico
-APP2OBJS=\
-    $(OBJ)$/extendloaderenvironment.obj \
-    $(OBJ)$/genericloader.obj \
-    $(SOLARLIBDIR)$/pathutils-obj.obj
-STDLIB2=$(SHLWAPILIB)
+
+RCFILES=QuickStart.rc
+INCPRE=..
+
+# --- Files --------------------------------------------------------
+
+OBJFILES=$(OBJ)$/QuickStart.obj
+
+APP1OBJS=$(OBJFILES)
+APP1NOSAL=TRUE
+APP1TARGET=$(TARGET)
+APP1RPATH=BRAND
+.IF "$(COM)"=="GCC"
+APP1STDLIBS=-luuid
+.ELSE
+APP1STDLIBS=comsupp.lib
+.ENDIF
+
+APP1STDLIBS+=$(SHELL32LIB)\
+            $(OLE32LIB)\
+            $(GDI32LIB)\
+            $(OLEAUT32LIB)\
+            $(COMDLG32LIB)\
+            $(KERNEL32LIB)\
+            $(OLEAUT32LIB)
+
+APP1NOSVRES=$(RES)$/$(TARGET).res
+
 .ENDIF # "$(LINK_SO)"=="TRUE"
 
 # --- Targets ------------------------------------------------------
 
-
-.INCLUDE :  target.mk
-
+.INCLUDE :	target.mk

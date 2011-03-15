@@ -79,6 +79,7 @@ public:
     virtual sal_Bool Delete( xub_StrLen nStt, xub_StrLen nEnd ) = 0;
     virtual sal_Bool Insert( xub_StrLen nPos, const String& rTxt ) = 0;
     virtual sal_Bool Replace( xub_StrLen nPos, const String& rTxt ) = 0;
+    virtual sal_Bool ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const String& rTxt ) = 0;
 
     virtual sal_Bool SetAttr( xub_StrLen nStt, xub_StrLen nEnd, sal_uInt16 nSlotId,
                             SfxPoolItem& ) = 0;

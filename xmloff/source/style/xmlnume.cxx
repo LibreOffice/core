@@ -298,15 +298,25 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
     sTmp.append( nLevel + 1 );
     GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_LEVEL, sTmp.makeStringAndClear() );
     // #i110694#: no style-name on list-level-style-image
-    if ((sTextStyleName.getLength() > 0) && (NumberingType::BITMAP != eType))
+    // #i116149#: neither prefix/suffix
+    if (NumberingType::BITMAP != eType)
     {
-        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                                GetExport().EncodeStyleName( sTextStyleName ) );
+        if (sTextStyleName.getLength() > 0)
+        {
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                    GetExport().EncodeStyleName( sTextStyleName ) );
+        }
+        if (sPrefix.getLength() > 0)
+        {
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NUM_PREFIX,
+                    sPrefix );
+        }
+        if (sSuffix.getLength() > 0)
+        {
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NUM_SUFFIX,
+                    sSuffix );
+        }
     }
-    if( sPrefix.getLength() > 0 )
-        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NUM_PREFIX, sPrefix );
-    if( sSuffix.getLength() > 0 )
-        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NUM_SUFFIX, sSuffix );
 
     enum XMLTokenEnum eElem = XML_LIST_LEVEL_STYLE_NUMBER;
     if( NumberingType::CHAR_SPECIAL == eType )
