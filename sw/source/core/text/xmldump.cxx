@@ -128,6 +128,7 @@ class XmlPortionDumper:public SwPortionHandler
 
 };
 
+#if OSL_DEBUG_LEVEL > 1
 
 void SwTxtPortion::dumpPortionAsXml( xub_StrLen ofs, XubString & /*aText */,
                                      xmlTextWriterPtr writer )
@@ -311,5 +312,7 @@ void SwTxtFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
     if ( HasFollow() )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%p", GetFollow() );
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
