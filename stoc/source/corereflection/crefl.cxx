@@ -106,7 +106,6 @@ IdlReflectionServiceImpl::IdlReflectionServiceImpl(
 //__________________________________________________________________________________________________
 IdlReflectionServiceImpl::~IdlReflectionServiceImpl()
 {
-    TRACE( "> IdlReflectionServiceImpl dtor <\n" );
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
@@ -177,7 +176,6 @@ Sequence< sal_Int8 > IdlReflectionServiceImpl::getImplementationId()
 void IdlReflectionServiceImpl::dispose()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    TRACE( "> disposing corereflection... <" );
     OComponentHelper::dispose();
 
     MutexGuard aGuard( _aComponentMutex );
