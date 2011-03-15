@@ -50,7 +50,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/wrkwin.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <boost/bind.hpp>
 
@@ -154,20 +153,6 @@ BasicViewFactory::BasicViewFactory (
 
 BasicViewFactory::~BasicViewFactory (void)
 {
-    mpViewCache.reset();
-
-    Reference< awt::XWindow > xLocalPaneWindow( mxLocalPane->getWindow() );
-    try
-    {
-        const Reference< XComponent > xLocalPaneComponent( mxLocalPane, UNO_QUERY_THROW );
-        xLocalPaneComponent->dispose();
-        const Reference< XComponent > xWindowComponent( xLocalPaneWindow, UNO_QUERY_THROW );
-        xWindowComponent->dispose();
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
 }
 
 
