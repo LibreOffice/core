@@ -67,6 +67,10 @@ SLOFILES=\
         $(SLO)$/graphite_features.obj	\
         $(SLO)$/graphite_layout.obj
 
+.IF "$(SYSTEM_GRAPHITE)" != "YES"
+CDEFS+=-DGR2_STATIC
+.ENDIF
+
 .ENDIF
 .ENDIF
 
