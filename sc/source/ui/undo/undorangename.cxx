@@ -31,6 +31,7 @@
 #include "undorangename.hxx"
 #include "globstr.hrc"
 #include "global.hxx"
+#include "docfunc.hxx"
 
 #include <memory>
 
@@ -68,10 +69,18 @@ ScUndoAllRangeNames::~ScUndoAllRangeNames()
 
 void ScUndoAllRangeNames::Undo()
 {
+    ScDocFunc aFunc(*pDocShell);
+    ScRangeName::TabNameCopyMap aCopy;
+    ScRangeName::copyLocalNames(maOldLocalNames, aCopy);
+    aFunc.ModifyAllRangeNames(&maOldGlobalNames, aCopy);
 }
 
 void ScUndoAllRangeNames::Redo()
 {
+    ScDocFunc aFunc(*pDocShell);
+    ScRangeName::TabNameCopyMap aCopy;
+    ScRangeName::copyLocalNames(maNewLocalNames, aCopy);
+    aFunc.ModifyAllRangeNames(&maNewGlobalNames, aCopy);
 }
 
 void ScUndoAllRangeNames::Repeat(SfxRepeatTarget& /*rTarget*/)

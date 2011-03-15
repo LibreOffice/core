@@ -107,6 +107,23 @@ void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
     rNames.swap(aNames);
 }
 
+void ScDocument::SetAllTabRangeNames(const ScRangeName::TabNameCopyMap& rNames)
+{
+    // Remove all existing range names first.
+    for (SCTAB i = 0; i <= MAXTAB; ++i)
+    {
+        if (!pTab[i])
+            // no more tables to iterate through.
+            break;
+
+        pTab[i]->SetRangeName(NULL);
+    }
+
+    ScRangeName::TabNameCopyMap::const_iterator itr = rNames.begin(), itrEnd = rNames.end();
+    for (; itr != itrEnd; ++itr)
+        SetRangeName(itr->first, new ScRangeName(*itr->second));
+}
+
 ScRangeName* ScDocument::GetRangeName(SCTAB nTab) const
 {
     if (!ValidTab(nTab) || !pTab[nTab])

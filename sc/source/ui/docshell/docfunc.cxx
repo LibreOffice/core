@@ -4506,9 +4506,7 @@ void ScDocFunc::ModifyAllRangeNames( const ScRangeName* pGlobal, const ScRangeNa
     pDoc->SetRangeName(new ScRangeName(*pGlobal));
 
     // sheet-local names
-    ScRangeName::TabNameCopyMap::const_iterator itr = rTabs.begin(), itrEnd = rTabs.end();
-    for (; itr != itrEnd; ++itr)
-        pDoc->SetRangeName(itr->first, new ScRangeName(*itr->second));
+    pDoc->SetAllTabRangeNames(rTabs);
 
     pDoc->CompileNameFormula(false);
 

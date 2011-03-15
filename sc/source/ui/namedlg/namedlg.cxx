@@ -471,13 +471,7 @@ void ScNameDlg::OKPushed()
 
         // Store pointers to sheet local names instances.
         ScRangeName::TabNameCopyMap aTabNames;
-        ScRangeName::TabNameMap::const_iterator itr = maTabRangeNames.begin(), itrEnd = maTabRangeNames.end();
-        for (; itr != itrEnd; ++itr)
-        {
-            const ScRangeName* p = itr->second;
-            aTabNames.insert(
-                ScRangeName::TabNameCopyMap::value_type(itr->first, p));
-        }
+        ScRangeName::copyLocalNames(maTabRangeNames, aTabNames);
         aFunc.ModifyAllRangeNames(&maGlobalRangeName, aTabNames);
         Close();
     }

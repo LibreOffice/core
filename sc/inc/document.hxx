@@ -464,10 +464,11 @@ public:
      * non-empty range name set.
      */
     void GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rRangeNames) const;
-    SC_DLLPUBLIC ScRangeName*   GetRangeName(SCTAB nTab) const;
-    SC_DLLPUBLIC ScRangeName*   GetRangeName() const;
-    void            SetRangeName(SCTAB nTab, ScRangeName* pNew);
-    void            SetRangeName( ScRangeName* pNewRangeName );
+    void SetAllTabRangeNames(const ScRangeName::TabNameCopyMap& rRangeNames);
+    SC_DLLPUBLIC ScRangeName* GetRangeName(SCTAB nTab) const;
+    SC_DLLPUBLIC ScRangeName* GetRangeName() const;
+    void SetRangeName(SCTAB nTab, ScRangeName* pNew);
+    void SetRangeName( ScRangeName* pNewRangeName );
     SCTAB           GetMaxTableNumber() { return nMaxTableNumber; }
     void            SetMaxTableNumber(SCTAB nNumber) { nMaxTableNumber = nNumber; }
 

@@ -714,6 +714,21 @@ public:
 
 }
 
+void ScRangeName::copyLocalNames(const TabNameMap& rNames, TabNameCopyMap& rCopy)
+{
+    TabNameMap::const_iterator itr = rNames.begin(), itrEnd = rNames.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        const ScRangeName* p = itr->second;
+        if (!p || p->empty())
+            // Skip empty ones.
+            continue;
+
+        rCopy.insert(
+            TabNameCopyMap::value_type(itr->first, p));
+    }
+}
+
 ScRangeName::ScRangeName(ScDocument* pDoc) :
     mpDoc(pDoc) {}
 
