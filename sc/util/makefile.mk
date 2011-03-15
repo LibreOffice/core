@@ -323,9 +323,6 @@ SHL9LIBS=$(SLB)$/$(TARGET_VBA).lib
     LIBCOMPNAME=$(COMMONBIN)$/$(SHL9TARGET)$(DLLPOST)
 .ENDIF
 
-.ENDIF
-
-
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk

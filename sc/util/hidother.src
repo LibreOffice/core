@@ -470,7 +470,3 @@ hidspecial HID_DAI_FUNC_DIFFWEEKS   { HelpID = HID_DAI_FUNC_DIFFWEEKS; };
 hidspecial HID_DAI_FUNC_DIFFYEARS   { HelpID = HID_DAI_FUNC_DIFFYEARS; };
 hidspecial HID_DAI_FUNC_ROT13       { HelpID = HID_DAI_FUNC_ROT13; };
 
-//  These HelpIDs do appear in resources, but don't have hid list entries
-//  generated from there, because of the use of macros (#95943#):
-
-hidspecial SID_RENAME_OBJECT        { HelpID = SID_RENAME_OBJECT; };
