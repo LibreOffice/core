@@ -5,4 +5,4 @@ ch	cppuhelper\source						nmake	-	all	ch_source ch_unotypes ch_include NULL
 ch	cppuhelper\unotypes						nmake	-	all	ch_unotypes NULL
 ch cppuhelper\qa\propertysetmixin nmake - all ch_qa_propertysetmixin ch_source NULL
 ch  cppuhelper\qa\ifcontainer               nmake   -   all ch_qa_ifcontainer NULL
-ch  cppuhelper\qa\unourl                    nmake   -   all ch_qa_unourl NULL
+ch  cppuhelper\qa\unourl                    nmake   -   all ch_qa_unourl ch_source NULL
