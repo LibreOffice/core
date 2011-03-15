@@ -345,7 +345,7 @@ my_components += evoab
 .END
 
 .IF "$(OS)" != "WNT" && "$(ENABLE_GSTREAMER)" != ""
-my_components += avmediagst
+my_components += avmediagstreamer
 .END
 
 .IF "$(OS)" != "WNT" && "$(SOLAR_JAVA)" == "TRUE"
