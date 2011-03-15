@@ -391,3 +391,14 @@ diff current src/List.h
           1,1,1,1,1,1,1,1, 
           1,1,1,1,1,1,0,0, 
           0,0,0,0,0,0,0,0, 
+--- misc/graphite2-0.9.2/include/graphite2/Types.h	2011-02-12 16:54:16.000000000 +0100
++++ misc/build/graphite2-0.9.2/include/graphite2/Types.h	2011-03-15 21:38:06.264788098 +0100
+@@ -36,7 +36,7 @@
+ };
+ 
+ // Definitions for library publicly exported symbols
+-#if defined _WIN32 || defined __CYGWIN__
++#if defined _WIN32 || defined __CYGWIN__ || !defined GR2_STATIC
+   #ifdef GR2_EXPORTING
+     #ifdef __GNUC__
+       #define GR2_API    __attribute__((dllexport))
