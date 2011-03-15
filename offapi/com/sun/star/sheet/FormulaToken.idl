@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** contains a single token within a formula.
  */
-struct FormulaToken
+published struct FormulaToken
 {
     //-------------------------------------------------------------------------
 

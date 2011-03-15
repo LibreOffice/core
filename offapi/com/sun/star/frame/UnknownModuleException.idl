@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module frame {
 
     @since OOo 2.0
  */
-exception UnknownModuleException : ::com::sun::star::uno::Exception
+published exception UnknownModuleException : ::com::sun::star::uno::Exception
 {
 };
 

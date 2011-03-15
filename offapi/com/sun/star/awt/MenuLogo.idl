@@ -43,7 +43,7 @@
 
 /** specifies a logo to be displayed on a menu, with a background gradient.
  */
-struct MenuLogo
+published struct MenuLogo
 {
     /** specifies the logo image.
      */

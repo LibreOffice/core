@@ -40,17 +40,23 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-/** todo document me
+/** an interface representing an entity with a modifyable title.
  */
-interface XTitle : com::sun::star::uno::XInterface
+published interface XTitle : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** todo document me
+    /** Returns the title of the object.
+     *
+     *  @returns
+     *  The title.
      */
     string getTitle ();
 
     //-------------------------------------------------------------------------
-    /** todo document me
+    /** Sets the title of the object.
+     *
+     *  @param sTitle
+     *  The title.
      */
     void setTitle ( [in] string sTitle );
 };

@@ -48,7 +48,7 @@ module com { module sun { module star { module ui {
     @since OOo 2.0
 */
 
-interface XUIElementSettings : com::sun::star::uno::XInterface
+published interface XUIElementSettings : com::sun::star::uno::XInterface
 {
     /** forces the user interface element to retrieve new settings from its
         configuration source.

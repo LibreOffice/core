@@ -45,7 +45,7 @@ module com { module sun { module star { module awt {
 /** provides dialogs implementing the
     <type scope="com::sun::star::awt">XDialog</type> interface.
  */
-interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
+published interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
 
     //-------------------------------------------------------------------------
 
@@ -107,7 +107,7 @@ interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
         @see <type scope="com::sun::star::awt">XDialogEventHandler</type>
 
      */
-    com::sun::star::awt::XDialog createDialogWithHandler
+    XDialog createDialogWithHandler
         ( [in] string URL, [in] com::sun::star::uno::XInterface xHandler )
             raises ( com::sun::star::lang::IllegalArgumentException );
 
@@ -123,12 +123,10 @@ interface XDialogProvider2 : ::com::sun::star::awt::XDialogProvider {
         </p>
     */
 
-    XDialog createDialogWithArguments(
-        [in] string URL,
-        [in] sequence< ::com::sun::star::beans::NamedValue > Arguments
-    )
-    raises  (   com::sun::star::lang::IllegalArgumentException
-            );
+    XDialog createDialogWithArguments
+        ( [in] string URL,
+          [in] sequence< ::com::sun::star::beans::NamedValue > Arguments )
+        raises  ( com::sun::star::lang::IllegalArgumentException );
 };
 
 //=============================================================================

@@ -43,8 +43,10 @@
    <p>This interface extends the interface <type>XInteractionHandler</type>
       the way that a caller can determine whether an interaction request was
       actually handled by the interaction handler.</p>
+
+      @since OOo 3.2
  */
-/* published */ interface XInteractionHandler2 : com::sun::star::task::XInteractionHandler
+published interface XInteractionHandler2 : com::sun::star::task::XInteractionHandler
 {
     //-------------------------------------------------------------------------
     /** Handle an interaction request.
