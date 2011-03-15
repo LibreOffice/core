@@ -406,12 +406,9 @@ SwUndo * UndoManager::RemoveLastUndo()
 
 void UndoManager::EnableUndo(bool bEnable)
 {
-    // UGLY: SfxUndoManager has a counter to match enable/disable calls
-    //       but the writer code expects that a single call switches
-    while (IsUndoEnabled() != bEnable)
-    {
-        SfxUndoManager::EnableUndo(bEnable);
-    }
+    // SfxUndoManager does not have a counter anymore, but reverted to the old behavior of
+    // having a simple boolean flag for locking. So, simply forward.
+    SfxUndoManager::EnableUndo(bEnable);
 }
 
 void UndoManager::AddUndoAction(SfxUndoAction *pAction, sal_Bool bTryMerge)
