@@ -564,7 +564,6 @@ sal_Bool ScToken::Is3DRef() const
         case svExternalSingleRef:
         case svExternalDoubleRef:
             return sal_True;
-            break;
         default:
         {
             // added to avoid warnings
