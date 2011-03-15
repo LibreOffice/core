@@ -95,8 +95,7 @@ namespace drawinglayer
 
                 if(isOutsideUsed() && isInsideUsed())
                 {
-                    double startMax = std::max( getExtendLeftStart(), std::max( getExtendRightStart(), 0.0 ) );
-                    double endMax = std::max( getExtendLeftEnd(), std::max( getExtendRightEnd(), 0.0 ) );
+                    const double fExt = getWidth( );  // Extend a lot: it'll be clipped after
 
                     // both used, double line definition. Create left and right offset
                     xRetval.realloc(2);
@@ -107,8 +106,8 @@ namespace drawinglayer
                     {
                         // create geometry for left
                         const basegfx::B2DVector aLeftOff(aPerpendicular * (0.5 * (getCorrectedLeftWidth() - fWidth + 1)));
-                        const basegfx::B2DPoint aTmpStart(getStart() + aLeftOff - ( startMax * aVector));
-                        const basegfx::B2DPoint aTmpEnd(getEnd() + aLeftOff + ( endMax * aVector));
+                        const basegfx::B2DPoint aTmpStart(getStart() + aLeftOff - ( fExt * aVector));
+                        const basegfx::B2DPoint aTmpEnd(getEnd() + aLeftOff + ( fExt * aVector));
                         basegfx::B2DPolygon aLeft;
 
                         if(leftIsHairline())
@@ -152,8 +151,8 @@ namespace drawinglayer
                     {
                         // create geometry for right
                         const basegfx::B2DVector aRightOff(aPerpendicular * (0.5 * (fWidth - getCorrectedRightWidth() + 1)));
-                        const basegfx::B2DPoint aTmpStart(getStart() + aRightOff - ( startMax * aVector));
-                        const basegfx::B2DPoint aTmpEnd(getEnd() + aRightOff + ( endMax * aVector));
+                        const basegfx::B2DPoint aTmpStart(getStart() + aRightOff - ( fExt * aVector));
+                        const basegfx::B2DPoint aTmpEnd(getEnd() + aRightOff + ( fExt * aVector));
                         basegfx::B2DPolygon aRight;
 
                         if(rightIsHairline())
