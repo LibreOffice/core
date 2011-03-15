@@ -4,7 +4,7 @@ mkdir: %_DEST%\inc%_EXT%\graphite2
 ..\%__SRC%\lib\*.so.* %_DEST%\lib%_EXT%\*.so.*
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
-..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
+..\%__SRC%\slb\*.lib %_DEST%\lib%_EXT%\*.lib
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\bin\*.pdb %_DEST%\bin%_EXT%\*.pdb
 
