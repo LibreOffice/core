@@ -2805,7 +2805,6 @@ private:
 public:
     GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE);
 
-    ~GraphiteWinLayout() { gr_font_destroy(maImpl.getFont()); }
     // used by upper layers
     virtual bool  LayoutText( ImplLayoutArgs& );    // first step of layout
     virtual void  AdjustLayout( ImplLayoutArgs& );  // adjusting after fallback etc.
@@ -2825,7 +2824,11 @@ public:
     virtual void    MoveGlyph( int nStart, long nNewXPos );
     virtual void    DropGlyph( int nStart );
     virtual void    Simplify( bool bIsBase );
-    ~GraphiteWinLayout() { delete mpFeatures; mpFeatures = NULL; };
+    ~GraphiteWinLayout()
+    {
+        delete mpFeatures;
+        gr_font_destroy(maImpl.GetFont());
+    }
 };
 
 float gr_fontAdvance(const void* appFontHandle, gr_uint16 glyphId)

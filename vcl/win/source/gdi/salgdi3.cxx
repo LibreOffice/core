@@ -1274,6 +1274,8 @@ static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
 //static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
 static inline DWORD CalcTag( const char p[4]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
 
+// -----------------------------------------------------------------------
+
 void ImplWinFontData::UpdateFromHDC( HDC hDC ) const
 {
     // short circuit if already initialized
@@ -1362,37 +1364,6 @@ bool ImplWinFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabi
     return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
 }
 
-// -----------------------------------------------------------------------
-
-static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
-static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
-//static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
-static inline DWORD CalcTag( const char p[4]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
-
-void ImplWinFontData::ReadOs2Table( HDC hDC ) const
-{
-    const DWORD Os2Tag = CalcTag( "OS/2" );
-    DWORD nLength = ::GetFontData( hDC, Os2Tag, 0, NULL, 0 );
-    if( (nLength == GDI_ERROR) || !nLength )
-        return;
-    std::vector<unsigned char> aOS2map( nLength );
-    unsigned char* pOS2map = &aOS2map[0];
-    ::GetFontData( hDC, Os2Tag, 0, pOS2map, nLength );
-    sal_uInt32 nVersion = GetUShort( pOS2map );
-    if ( nVersion >= 0x0001 && nLength >= 58 )
-    {
-        // We need at least version 0x0001 (TrueType rev 1.66)
-        // to have access to the needed struct members.
-        sal_uInt32 ulUnicodeRange1 = GetUInt( pOS2map + 42 );
-        sal_uInt32 ulUnicodeRange2 = GetUInt( pOS2map + 46 );
-
-        // Check for CJK capabilities of the current font
-        mbHasCJKSupport = (ulUnicodeRange2 & 0x2DF00000);
-        mbHasKoreanRange= (ulUnicodeRange1 & 0x10000000)
-                        | (ulUnicodeRange2 & 0x01100000);
-        mbHasArabicSupport = (ulUnicodeRange1 & 0x00002000);
-   }
-}
 // -----------------------------------------------------------------------
 
 void ImplWinFontData::ReadGsubTable( HDC hDC ) const
