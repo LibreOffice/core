@@ -70,8 +70,14 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
-.ENDIF
-
-.ENDIF
+.ENDIF # UNX / WNT
 
 .INCLUDE :  	target.mk
+
+ALLTAR : $(MISC)/avmediagstreamer.component
+$(MISC)/avmediagstreamer.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt avmediagstreamer.component
+    $(XSLTPROC) --nonet \
+	--stringparam uri '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' \
+	-o $@ $(SOLARENV)/bin/createcomponent.xslt avmediagstreamer.component
+
+.ENDIF # ENABLE_GSTREAMER

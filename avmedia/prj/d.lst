@@ -19,5 +19,5 @@ mkdir: %_DEST%\inc%_EXT%\avmedia
 ..\%__SRC%\misc\avmedia.component %_DEST%\xml%_EXT%\avmedia.component
 ..\%__SRC%\misc\avmedia.jar.component %_DEST%\xml%_EXT%\avmedia.jar.component
 ..\%__SRC%\misc\avmediaQuickTime.component %_DEST%\xml%_EXT%\avmediaQuickTime.component
-..\%__SRC%\misc\avmediagst.component %_DEST%\xml%_EXT%\avmediagst.component
+..\%__SRC%\misc\avmediagstreamer.component %_DEST%\xml%_EXT%\avmediagstreamer.component
 ..\%__SRC%\misc\avmediawin.component %_DEST%\xml%_EXT%\avmediawin.component
