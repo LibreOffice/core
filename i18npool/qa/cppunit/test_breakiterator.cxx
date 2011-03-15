@@ -37,6 +37,9 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <com/sun/star/i18n/ScriptType.hdl>
+
+#include <rtl/strbuf.hxx>
 
 #include <string.h>
 
@@ -53,10 +56,12 @@ public:
 
     void testLineBreaking();
     void testGraphemeIteration();
+    void testWeak();
 
     CPPUNIT_TEST_SUITE(TestBreakIterator);
     CPPUNIT_TEST(testLineBreaking);
     CPPUNIT_TEST(testGraphemeIteration);
+    CPPUNIT_TEST(testWeak);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -138,6 +143,44 @@ void TestBreakIterator::testGraphemeIteration()
         nPos = m_xBreak->previousCharacters(aTest1, SAL_N_ELEMENTS(TA_HALANT_MA_HALANT_YA), aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
         CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == 0);
+    }
+}
+
+//A test to ensure that certain ranges and codepoints that are categorized as
+//weak remain as weak, so that existing docs that depend on this don't silently
+//change font for those weak chars
+void TestBreakIterator::testWeak()
+{
+    lang::Locale aLocale;
+    aLocale.Language = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
+    aLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+
+    {
+        sal_Unicode WEAKS[] =
+        {
+            0x0001, 0x0002,
+            0x0020, 0x00A0,
+            0x2200, 0x22FF, //Mathematical Operators
+            0x27C0, 0x27EF, //Miscellaneous Mathematical Symbols-A
+            0x2980, 0x29FF, //Miscellaneous Mathematical Symbols-B
+            0x2A00, 0x2AFF, //Supplemental Mathematical Operators
+            0x2100, 0x214F, //Letterlike Symbols
+            0x2308, 0x230B, //Miscellaneous technical
+            0x25A0, 0x25FF, //Geometric Shapes
+            0x2B30, 0x2B4C  //Miscellaneous Symbols and Arrows
+        };
+        ::rtl::OUString aWeaks(WEAKS, SAL_N_ELEMENTS(WEAKS));
+
+        for (sal_Int32 i = 0; i < aWeaks.getLength(); ++i)
+        {
+            sal_Int16 nScript = m_xBreak->getScriptType(aWeaks, i);
+            rtl::OStringBuffer aMsg;
+            aMsg.append(RTL_CONSTASCII_STRINGPARAM("Char 0x"));
+            aMsg.append(static_cast<sal_Int32>(aWeaks.getStr()[i]), 16);
+            aMsg.append(RTL_CONSTASCII_STRINGPARAM(" should have been weak"));
+            CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(),
+                nScript == i18n::ScriptType::WEAK);
+        }
     }
 }
 
