@@ -183,6 +183,11 @@ ScVbaApplication::~ScVbaApplication()
 {
 }
 
+/*static*/ bool ScVbaApplication::getDocumentEventsEnabled()
+{
+    return ScVbaStaticAppSettings::get().mbEnableEvents;
+}
+
 SfxObjectShell* ScVbaApplication::GetDocShell( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
 {
     return static_cast< SfxObjectShell* >( excel::getDocShell( xModel ) );

@@ -30,6 +30,7 @@
 #include <cppuhelper/queryinterface.hxx>
 
 #include "vbaworksheet.hxx"
+#include "vbanames.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
@@ -245,7 +246,7 @@ ScVbaWorksheet::getVisible() throw (uno::RuntimeException)
 }
 
 void
-ScVbaWorksheet::setVisible( ::sal_Int32 _Visible ) throw (uno::RuntimeException)
+ScVbaWorksheet::setVisible( ::sal_Int32 nVisible ) throw (uno::RuntimeException)
 {
     using namespace ::ooo::vba::excel::XlSheetVisibility;
     bool bVisible = true;
@@ -267,21 +268,9 @@ ScVbaWorksheet::setVisible( ::sal_Int32 _Visible ) throw (uno::RuntimeException)
             throw uno::RuntimeException();
     }
     uno::Reference< beans::XPropertySet > xProps( getSheet(), uno::UNO_QUERY_THROW );
-
-    sal_Bool bVisible = true;
-    switch( _Visible )
-    {
-        case excel::XlSheetVisibility::xlSheetHidden:
-        case excel::XlSheetVisibility::xlSheetVeryHidden:
-            bVisible = false;
-            break;
-        case excel::XlSheetVisibility::xlSheetVisible:
-            bVisible = true;
-            break;
-    }
-    uno::Any aValue( bVisible );
     xProps->setPropertyValue
-            (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ), aValue);
+            ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ),
+              uno::Any( bVisible ) );
 }
 
 sal_Int16

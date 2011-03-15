@@ -38,8 +38,6 @@
 #include "compiler.hxx"
 #include "token.hxx"
 #include "tokenarray.hxx"
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/sheet/XSheetCellRange.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -104,6 +102,14 @@ ScDocShell* GetDocShellFromRange( const uno::Reference< uno::XInterface >& xRang
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Failed to access underlying doc shell uno range object" ) ), uno::Reference< uno::XInterface >() );
     }
     return pScCellRangesBase->GetDocShell();
+}
+
+uno::Reference< XHelperInterface >
+getUnoSheetModuleObj( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException )
+{
+    uno::Reference< sheet::XSheetCellRange > xSheetRange( xRange, uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XSpreadsheet > xSheet( xSheetRange->getSpreadsheet(), uno::UNO_SET_THROW );
+    return getUnoSheetModuleObj( xSheet );
 }
 
 ScDocShell* GetDocShellFromRanges( const uno::Reference< sheet::XSheetCellRangeContainer >& xRanges ) throw ( uno::RuntimeException )
