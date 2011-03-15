@@ -10,11 +10,11 @@ symlink: %_DEST%\lib%_EXT%\libglib-2.0.0.dylib %_DEST%\lib%_EXT%\libglib-2.0.dyl
 ..\%__SRC%\lib\libgobject-2.0.0.dylib %_DEST%\lib%_EXT%\libgobject-2.0.0.dylib
 symlink: %_DEST%\lib%_EXT%\libgobject-2.0.0.dylib %_DEST%\lib%_EXT%\libgobject-2.0.dylib
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%
-..\%__SRC%\lib\libgio-2.0.lib %_DEST%\lib%_EXT%\libgio-2.0.lib
-..\%__SRC%\lib\libgmodule-2.0.lib %_DEST%\lib%_EXT%\libgmodule-2.0.lib
-..\%__SRC%\lib\libgthread-2.0.lib %_DEST%\lib%_EXT%\libgthread-2.0.lib
-..\%__SRC%\lib\libglib-2.0.lib %_DEST%\lib%_EXT%\libglib-2.0.lib
-..\%__SRC%\lib\libgobject-2.0.lib %_DEST%\lib%_EXT%\libgobject-2.0.lib
+..\%__SRC%\lib\gio-2.0.lib %_DEST%\lib%_EXT%\gio-2.0.lib
+..\%__SRC%\lib\gmodule-2.0.lib %_DEST%\lib%_EXT%\gmodule-2.0.lib
+..\%__SRC%\lib\gthread-2.0.lib %_DEST%\lib%_EXT%\gthread-2.0.lib
+..\%__SRC%\lib\glib-2.0.lib %_DEST%\lib%_EXT%\glib-2.0.lib
+..\%__SRC%\lib\gobject-2.0.lib %_DEST%\lib%_EXT%\gobject-2.0.lib
 
 mkdir: %_DEST%\inc%_EXT%\external\gio-unix-2.0
 mkdir: %_DEST%\inc%_EXT%\external\gio-unix-2.0\gio
