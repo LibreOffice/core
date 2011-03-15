@@ -77,13 +77,13 @@
                 MenuItem\
                 {\
                     Identifier = SID_FRAME_UP ; \
-                    HelpId = SID_FRAME_UP ; \
+                    HelpId = CMD_SID_FRAME_UP ; \
                     Text [ en-US ] = "Bring ~Forward" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_FRAME_DOWN ; \
-                    HelpId = SID_FRAME_DOWN ; \
+                    HelpId = CMD_SID_FRAME_DOWN ; \
                     Text [ en-US ] = "Send Back~ward" ; \
                 };\
                 MenuItem\

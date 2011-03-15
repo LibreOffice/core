@@ -190,7 +190,6 @@
     MenuItem\
     {\
         Identifier = SID_DRAW_HLINK_EDIT ; \
-        HelpID = CMD_SID_DRAW_HLINK_EDIT ; \
         Text [ en-US ] = "~Hyperlink..." ; \
     };
 
@@ -198,7 +197,6 @@
     MenuItem\
     {\
         Identifier = SID_DRAW_HLINK_DELETE ; \
-        HelpID = CMD_SID_DRAW_HLINK_DELETE ; \
         Text [ en-US ] = "~Remove Hyperlink" ; \
     };
 
@@ -224,7 +222,7 @@
     MenuItem\
     {\
         Identifier = SID_ORIGINALSIZE ; \
-        HelpId = SID_ORIGINALSIZE ; \
+        HelpId = CMD_SID_ORIGINALSIZE ; \
         Text [ en-US ] = "~Original Size" ; \
         Text [ x-comment ] = " ";\
     };
@@ -292,14 +290,14 @@
                 MenuItem\
                 {\
                     Identifier = SID_FRAME_UP ; \
-                    HelpId = SID_FRAME_UP ; \
+                    HelpId = CMD_SID_FRAME_UP ; \
                     Text [ en-US ] = "Bring ~Forward" ; \
                     Text [ x-comment ] = " ";\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_FRAME_DOWN ; \
-                    HelpId = SID_FRAME_DOWN ; \
+                    HelpId = CMD_SID_FRAME_DOWN ; \
                     Text [ en-US ] = "Send Back~ward" ; \
                     Text [ x-comment ] = " ";\
                 };\
