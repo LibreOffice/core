@@ -58,6 +58,7 @@
 
 using ::com::sun::star::sheet::DataPilotFieldReference;
 using ::rtl::OUString;
+using ::std::vector;
 
 // ============================================================================
 
@@ -99,16 +100,19 @@ OUString ScDPLabelData::getDisplayName() const
     return maName;
 }
 
-// ============================================================================
-
-ScPivotField::ScPivotField( SCCOL nNewCol, sal_uInt16 nNewFuncMask ) :
+PivotField::PivotField( SCsCOL nNewCol, sal_uInt16 nNewFuncMask ) :
     nCol( nNewCol ),
     nFuncMask( nNewFuncMask ),
     nFuncCount( 0 )
 {
 }
 
-bool ScPivotField::operator==( const ScPivotField& r ) const
+PivotField::PivotField( const PivotField& r ) :
+    nCol(r.nCol), nFuncMask(r.nFuncMask), nFuncCount(r.nFuncCount), maFieldRef(r.maFieldRef)
+{
+}
+
+bool PivotField::operator==( const PivotField& r ) const
 {
     return (nCol                            == r.nCol)
         && (nFuncMask                       == r.nFuncMask)
@@ -119,13 +123,68 @@ bool ScPivotField::operator==( const ScPivotField& r ) const
         && (maFieldRef.ReferenceItemName    == r.maFieldRef.ReferenceItemName);
 }
 
-// ============================================================================
-
 ScPivotParam::ScPivotParam()
-    :   nCol( 0 ), nRow( 0 ), nTab( 0 ),
-        bIgnoreEmptyRows( false ), bDetectCategories( false ),
-        bMakeTotalCol( true ), bMakeTotalRow( true )
+    :   nCol(0), nRow(0), nTab(0),
+        bIgnoreEmptyRows(false), bDetectCategories(false),
+        bMakeTotalCol(true), bMakeTotalRow(true)
 {
+}
+
+ScPivotParam::ScPivotParam( const ScPivotParam& r )
+    :   nCol( r.nCol ), nRow( r.nRow ), nTab( r.nTab ),
+        maPageFields(r.maPageFields),
+        maColFields(r.maColFields),
+        maRowFields(r.maRowFields),
+        maDataFields(r.maDataFields),
+        bIgnoreEmptyRows(r.bIgnoreEmptyRows),
+        bDetectCategories(r.bDetectCategories),
+        bMakeTotalCol(r.bMakeTotalCol),
+        bMakeTotalRow(r.bMakeTotalRow)
+{
+    SetLabelData(r.maLabelArray);
+}
+
+ScPivotParam::~ScPivotParam()
+{
+}
+
+void ScPivotParam::ClearPivotArrays()
+{
+    maPageFields.clear();
+    maColFields.clear();
+    maRowFields.clear();
+    maDataFields.clear();
+}
+
+void ScPivotParam::SetLabelData(const vector<ScDPLabelDataRef>& r)
+{
+    vector<ScDPLabelDataRef> aNewArray;
+    aNewArray.reserve(r.size());
+    for (vector<ScDPLabelDataRef>::const_iterator itr = r.begin(), itrEnd = r.end();
+          itr != itrEnd; ++itr)
+    {
+        ScDPLabelDataRef p(new ScDPLabelData(**itr));
+        aNewArray.push_back(p);
+    }
+    maLabelArray.swap(aNewArray);
+}
+
+ScPivotParam& ScPivotParam::operator=( const ScPivotParam& r )
+{
+    nCol              = r.nCol;
+    nRow              = r.nRow;
+    nTab              = r.nTab;
+    bIgnoreEmptyRows  = r.bIgnoreEmptyRows;
+    bDetectCategories = r.bDetectCategories;
+    bMakeTotalCol     = r.bMakeTotalCol;
+    bMakeTotalRow     = r.bMakeTotalRow;
+
+    maPageFields = r.maPageFields;
+    maColFields  = r.maColFields;
+    maRowFields  = r.maRowFields;
+    maDataFields = r.maDataFields;
+    SetLabelData(r.maLabelArray);
+    return *this;
 }
 
 bool ScPivotParam::operator==( const ScPivotParam& r ) const
