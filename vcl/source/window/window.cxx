@@ -2407,7 +2407,7 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
         {
             bool bRestoreCursor = false;
             if ( mpWindowImpl->mpCursor )
-                bRestoreCursor = mpWindowImpl->mpCursor->ImplHide();
+                bRestoreCursor = mpWindowImpl->mpCursor->ImplHide( false );
 
             mbInitClipRegion = sal_True;
             mpWindowImpl->mbInPaint = sal_True;
@@ -2896,7 +2896,7 @@ void Window::ImplScroll( const Rectangle& rRect,
         ImplInvalidateAllOverlapBackgrounds();
 
     if ( mpWindowImpl->mpCursor )
-        mpWindowImpl->mpCursor->ImplHide();
+        mpWindowImpl->mpCursor->ImplHide( false );
 
     sal_uInt16 nOrgFlags = nFlags;
     if ( !(nFlags & (SCROLL_CHILDREN | SCROLL_NOCHILDREN)) )
@@ -4073,7 +4073,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
         {
             // Cursor hiden
             if ( pOldFocusWindow->mpWindowImpl->mpCursor )
-                pOldFocusWindow->mpWindowImpl->mpCursor->ImplHide();
+                pOldFocusWindow->mpWindowImpl->mpCursor->ImplHide( true );
         }
 
         // !!!!! Wegen altem SV-Office Activate/Deavtivate Handling
@@ -8054,7 +8054,7 @@ void Window::SetCursor( Cursor* pCursor )
     if ( mpWindowImpl->mpCursor != pCursor )
     {
         if ( mpWindowImpl->mpCursor )
-            mpWindowImpl->mpCursor->ImplHide();
+            mpWindowImpl->mpCursor->ImplHide( true );
         mpWindowImpl->mpCursor = pCursor;
         if ( pCursor )
             pCursor->ImplShow();
