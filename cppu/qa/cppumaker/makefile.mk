@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -26,8 +26,8 @@
 #*************************************************************************
 
 PRJ := ..$/..
-PRJNAME := codemaker
-TARGET := test_codemaker_cppumaker
+PRJNAME := cppu
+TARGET := test_cppumaker
 
 ENABLE_EXCEPTIONS := TRUE
 
@@ -40,7 +40,7 @@ DLLPRE = # no leading "lib" on .so files
 INCPRE += $(MISC)$/$(TARGET)$/inc
 
 SHL1TARGET = $(TARGET)
-SHL1OBJS = $(SLO)$/test_codemaker_cppumaker.obj
+SHL1OBJS = $(SLO)$/test_cppumaker.obj
 SHL1STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
 SHL1VERSIONMAP = version.map
 SHL1IMPLIB = i$(SHL1TARGET)
@@ -54,10 +54,9 @@ ALLTAR: test
 
 $(SHL1OBJS): $(MISC)$/$(TARGET).cppumaker.flag
 
-$(MISC)$/$(TARGET).cppumaker.flag: $(BIN)$/cppumaker$(EXECPOST)
 $(MISC)$/$(TARGET).cppumaker.flag: $(MISC)$/$(TARGET).rdb
     - $(MKDIRHIER) $(MISC)$/$(TARGET)$/inc
-    $(AUGMENT_LIBRARY_PATH) $(BIN)$/cppumaker$(EXECPOST) \
+    $(CPPUMAKER) \
         -O$(MISC)$/$(TARGET)$/inc -BUCR -C $< $(SOLARBINDIR)$/udkapi.rdb
     $(TOUCH) $@
 

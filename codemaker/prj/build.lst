@@ -7,5 +7,3 @@ cm	codemaker\source\commoncpp				nmake	-	all	cm_cpp cm_inc NULL
 cm	codemaker\source\cppumaker				nmake	-	all	cm_cppumaker 	cm_codemaker cm_cpp cm_inc NULL
 cm	codemaker\source\commonjava				nmake	-	all	cm_java cm_inc NULL
 cm	codemaker\source\javamaker				nmake	-	all	cm_javamaker cm_codemaker cm_java cm_inc NULL
-cm  codemaker\test\cppumaker                nmake   -   all cm_test_cppumaker cm_cppumaker NULL
-
