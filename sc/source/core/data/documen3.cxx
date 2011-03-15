@@ -88,10 +88,9 @@
 
 using namespace com::sun::star;
 
-void ScDocument::GetAllTabRangeNames(::std::map<SCTAB, const ScRangeName*>& rNames) const
+void ScDocument::GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rNames) const
 {
-    typedef ::std::map<SCTAB, const ScRangeName*> MapType;
-    MapType aNames;
+    ScRangeName::TabNameCopyMap aNames;
     for (SCTAB i = 0; i <= MAXTAB; ++i)
     {
         if (!pTab[i])
@@ -103,7 +102,7 @@ void ScDocument::GetAllTabRangeNames(::std::map<SCTAB, const ScRangeName*>& rNam
             // ignore empty ones.
             continue;
 
-        aNames.insert(MapType::value_type(i, p));
+        aNames.insert(ScRangeName::TabNameCopyMap::value_type(i, p));
     }
     rNames.swap(aNames);
 }

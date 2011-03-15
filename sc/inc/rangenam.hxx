@@ -37,6 +37,7 @@
 
 #include <map>
 #include <boost/ptr_container/ptr_set.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 
 //------------------------------------------------------------------------
 
@@ -184,6 +185,11 @@ private:
     ScDocument* mpDoc;
     sal_uInt16  mnSharedMaxIndex;
 public:
+    /// Map that manages stored ScRangeName instances.
+    typedef ::boost::ptr_map<SCTAB, ScRangeName>  TabNameMap;
+    /// Map that stores non-managed pointers to ScRangeName instances.
+    typedef ::std::map<SCTAB, const ScRangeName*> TabNameCopyMap;
+
     typedef DataType::const_iterator const_iterator;
     typedef DataType::iterator iterator;
 

@@ -80,7 +80,7 @@ private:
     ScViewData*     pViewData;
     ScDocument*     pDoc;
     ScRangeName     maGlobalRangeName;
-    TabNameMapType  maTabRangeNames;
+    ScRangeName::TabNameMap maTabRangeNames;
     ScRangeName*    mpCurRangeName;    //! range name set currently selected
     const ScAddress theCursorPos;
     Selection       theCurSel;

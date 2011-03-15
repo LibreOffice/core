@@ -34,6 +34,7 @@
 #include "formula/grammar.hxx"
 #include "tabbgcolor.hxx"
 #include "token.hxx"
+#include "rangenam.hxx"
 
 #include <vector>
 #include <map>
@@ -46,7 +47,6 @@ class ScMarkData;
 class ScPatternAttr;
 class ScRange;
 class ScRangeList;
-class ScRangeName;
 class ScBaseCell;
 class ScTokenArray;
 struct ScTabOpParam;
@@ -193,7 +193,7 @@ public:
      * @param pGlobal global scope range names.
      * @param rTabs sheet local range names.
      */
-    void            ModifyAllRangeNames( const ScRangeName* pGlobal, const ::std::map<SCTAB, const ScRangeName*>& rTabs );
+    void            ModifyAllRangeNames( const ScRangeName* pGlobal, const ScRangeName::TabNameCopyMap& rTabs );
 
     BOOL            CreateNames( const ScRange& rRange, USHORT nFlags, BOOL bApi );
     BOOL            InsertNameList( const ScAddress& rStartPos, BOOL bApi );

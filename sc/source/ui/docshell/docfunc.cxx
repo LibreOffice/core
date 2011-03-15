@@ -100,6 +100,7 @@
 #include "tabprotection.hxx"
 #include "clipparam.hxx"
 #include "externalrefmgr.hxx"
+#include "undorangename.hxx"
 
 #include <memory>
 #include <basic/basmgr.hxx>
@@ -4485,12 +4486,19 @@ bool ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges )
     return SetNewRangeNames( new ScRangeName(rNewRanges) );
 }
 
-void ScDocFunc::ModifyAllRangeNames( const ScRangeName* pGlobal, const ::std::map<SCTAB, const ScRangeName*>& rTabs )
+void ScDocFunc::ModifyAllRangeNames( const ScRangeName* pGlobal, const ScRangeName::TabNameCopyMap& rTabs )
 {
-    typedef ::std::map<SCTAB, const ScRangeName*> MapType;
-
     ScDocShellModificator aModificator(rDocShell);
     ScDocument* pDoc = rDocShell.GetDocument();
+
+    if (pDoc->IsUndoEnabled())
+    {
+        ScRangeName* pOldGlobal = pDoc->GetRangeName();
+        ScRangeName::TabNameCopyMap aOldLocals;
+        pDoc->GetAllTabRangeNames(aOldLocals);
+        rDocShell.GetUndoManager()->AddUndoAction(
+            new ScUndoAllRangeNames(&rDocShell, pOldGlobal, pGlobal, aOldLocals, rTabs));
+    }
 
     pDoc->CompileNameFormula(true);
 
@@ -4498,7 +4506,7 @@ void ScDocFunc::ModifyAllRangeNames( const ScRangeName* pGlobal, const ::std::ma
     pDoc->SetRangeName(new ScRangeName(*pGlobal));
 
     // sheet-local names
-    MapType::const_iterator itr = rTabs.begin(), itrEnd = rTabs.end();
+    ScRangeName::TabNameCopyMap::const_iterator itr = rTabs.begin(), itrEnd = rTabs.end();
     for (; itr != itrEnd; ++itr)
         pDoc->SetRangeName(itr->first, new ScRangeName(*itr->second));
 

@@ -52,8 +52,6 @@
 
 using ::std::auto_ptr;
 
-typedef ::std::map<SCTAB, const ScRangeName*> TabNameCopyMapType;
-
 // defines -------------------------------------------------------------------
 
 #define ABS_SREF          SCA_VALID \
@@ -129,9 +127,9 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         mpImpl(new ScNameDlgImpl)
 {
     // Copy sheet-local range names.
-    TabNameCopyMapType aOldNames;
+    ScRangeName::TabNameCopyMap aOldNames;
     pDoc->GetAllTabRangeNames(aOldNames);
-    TabNameCopyMapType::const_iterator itr = aOldNames.begin(), itrEnd = aOldNames.end();
+    ScRangeName::TabNameCopyMap::const_iterator itr = aOldNames.begin(), itrEnd = aOldNames.end();
     for (; itr != itrEnd; ++itr)
     {
         auto_ptr<ScRangeName> p(new ScRangeName(*itr->second));
@@ -472,13 +470,13 @@ void ScNameDlg::OKPushed()
         ScDocFunc aFunc(*pDocSh);
 
         // Store pointers to sheet local names instances.
-        TabNameCopyMapType aTabNames;
-        TabNameMapType::const_iterator itr = maTabRangeNames.begin(), itrEnd = maTabRangeNames.end();
+        ScRangeName::TabNameCopyMap aTabNames;
+        ScRangeName::TabNameMap::const_iterator itr = maTabRangeNames.begin(), itrEnd = maTabRangeNames.end();
         for (; itr != itrEnd; ++itr)
         {
             const ScRangeName* p = itr->second;
             aTabNames.insert(
-                TabNameCopyMapType::value_type(itr->first, p));
+                ScRangeName::TabNameCopyMap::value_type(itr->first, p));
         }
         aFunc.ModifyAllRangeNames(&maGlobalRangeName, aTabNames);
         Close();
@@ -510,11 +508,11 @@ void ScNameDlg::ScopeChanged()
     {
         // Sheet scope
         SCTAB nTab = static_cast<SCTAB>(nPos-1);
-        TabNameMapType::iterator itr = maTabRangeNames.find(nTab);
+        ScRangeName::TabNameMap::iterator itr = maTabRangeNames.find(nTab);
         if (itr == maTabRangeNames.end())
         {
             auto_ptr<ScRangeName> p(new ScRangeName);
-            ::std::pair<TabNameMapType::iterator, bool> r =
+            ::std::pair<ScRangeName::TabNameMap::iterator, bool> r =
                 maTabRangeNames.insert(nTab, p);
             itr = r.first;
         }

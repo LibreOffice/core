@@ -51,6 +51,7 @@ CXXFILES = \
         undoblk3.cxx \
         undodat.cxx \
         undodraw.cxx \
+        undorangename.cxx \
         undotab.cxx
 
 
@@ -71,6 +72,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/undodraw.obj \
         $(SLO)$/undoolk.obj \
         $(SLO)$/undostyl.obj \
+        $(SLO)$/undorangename.obj \
         $(SLO)$/undotab.obj \
         $(SLO)$/undoutil.obj
 

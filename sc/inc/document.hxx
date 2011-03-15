@@ -36,6 +36,7 @@
 #include <rtl/ref.hxx>
 #include "scdllapi.h"
 #include "rangelst.hxx"
+#include "rangenam.hxx"
 #include "table.hxx"
 #include "brdcst.hxx"
 #include "tabopparams.hxx"
@@ -462,7 +463,7 @@ public:
      * Get all range names that are local to each table.  It only returns
      * non-empty range name set.
      */
-    void GetAllTabRangeNames(::std::map<SCTAB, const ScRangeName*>& rRangeNames) const;
+    void GetAllTabRangeNames(ScRangeName::TabNameCopyMap& rRangeNames) const;
     SC_DLLPUBLIC ScRangeName*   GetRangeName(SCTAB nTab) const;
     SC_DLLPUBLIC ScRangeName*   GetRangeName() const;
     void            SetRangeName(SCTAB nTab, ScRangeName* pNew);
