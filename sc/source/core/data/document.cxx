@@ -348,7 +348,8 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
                 ScRange aRange( 0,0,nPos, MAXCOL,MAXROW,MAXTAB );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,1 );
-                pRangeName->UpdateTabRef( nPos, 1 );
+                if (pRangeName)
+                    pRangeName->UpdateTabRef( nPos, 1 );
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
                 if (pDPCollection)
@@ -437,7 +438,8 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 aRange.aEnd.SetTab( MAXTAB );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1 );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1 );
-                pRangeName->UpdateTabRef( nTab, 2 );
+                if (pRangeName)
+                    pRangeName->UpdateTabRef( nTab, 2 );
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1 );
                 if (pDPCollection)
@@ -1698,16 +1700,19 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
 
         //  Bereiche uebernehmen
 
-    pTransClip->pRangeName->clear();
-    ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
-    for (; itr != itrEnd; ++itr)
+    if (pRangeName)
     {
-        USHORT nIndex = itr->GetIndex();
-        ScRangeData* pData = new ScRangeData(*itr);
-        if (!pTransClip->pRangeName->insert(pData))
-            delete pData;
-        else
-            pData->SetIndex(nIndex);
+        pTransClip->GetRangeName()->clear();
+        ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
+        for (; itr != itrEnd; ++itr)
+        {
+            USHORT nIndex = itr->GetIndex();
+            ScRangeData* pData = new ScRangeData(*itr);
+            if (!pTransClip->pRangeName->insert(pData))
+                delete pData;
+            else
+                pData->SetIndex(nIndex);
+        }
     }
 
     // The data
@@ -1779,6 +1784,9 @@ void copyUsedNamesToClip(ScRangeName* pClipRangeName, ScRangeName* pRangeName, c
 
 void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks, bool bAllTabs)
 {
+    if (!pRangeName || pRangeName->empty())
+        return;
+
     std::set<USHORT> aUsedNames;        // indexes of named ranges that are used in the copied cells
     for (SCTAB i = 0; i <= MAXTAB; ++i)
         if (pTab[i] && pClipDoc->pTab[i])
@@ -1787,11 +1795,14 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
                     rClipRange.aStart.Col(), rClipRange.aStart.Row(),
                     rClipRange.aEnd.Col(), rClipRange.aEnd.Row(), aUsedNames);
 
-    copyUsedNamesToClip(pClipDoc->pRangeName, pRangeName, aUsedNames);
+    copyUsedNamesToClip(pClipDoc->GetRangeName(), pRangeName, aUsedNames);
 }
 
 void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, SCTAB nTab)
 {
+    if (!pRangeName || pRangeName->empty())
+        return;
+
     // Indexes of named ranges that are used in the copied cells
     std::set<USHORT> aUsedNames;
     if ( pTab[nTab] && pClipDoc->pTab[nTab] )
@@ -1801,7 +1812,7 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
             rClipRange.aEnd.Col(), rClipRange.aEnd.Row(), aUsedNames );
     }
 
-    copyUsedNamesToClip(pClipDoc->pRangeName, pRangeName, aUsedNames);
+    copyUsedNamesToClip(pClipDoc->GetRangeName(), pRangeName, aUsedNames);
 }
 
 ScDocument::NumFmtMergeHandler::NumFmtMergeHandler(ScDocument* pDoc, ScDocument* pSrcDoc) :
@@ -1830,6 +1841,9 @@ void ScDocument::MergeNumberFormatter(ScDocument* pSrcDoc)
 
 void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameData& rRangeNames)
 {
+    if (!pClipDoc->pRangeName)
+        return;
+
     ScClipRangeNameData aClipRangeNames;
 
     ScRangeName::const_iterator itr = pClipDoc->pRangeName->begin();
@@ -1843,7 +1857,7 @@ void ScDocument::CopyRangeNamesFromClip(ScDocument* pClipDoc, ScClipRangeNameDat
             A proper solution would ask the user how to proceed.
             The adjustment of the indices in the formulas is done later.
         */
-        const ScRangeData* pExistingData = pRangeName->findByName(itr->GetName());
+        const ScRangeData* pExistingData = GetRangeName()->findByName(itr->GetName());
         if (pExistingData)
         {
             USHORT nOldIndex = itr->GetIndex();

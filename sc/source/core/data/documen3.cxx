@@ -134,6 +134,8 @@ ScRangeName* ScDocument::GetRangeName(SCTAB nTab) const
 
 ScRangeName* ScDocument::GetRangeName() const
 {
+    if (!pRangeName)
+        pRangeName = new ScRangeName(const_cast<ScDocument*>(this));
     return pRangeName;
 }
 
@@ -147,8 +149,7 @@ void ScDocument::SetRangeName(SCTAB nTab, ScRangeName* pNew)
 
 void ScDocument::SetRangeName( ScRangeName* pNewRangeName )
 {
-    if (pRangeName)
-        delete pRangeName;
+    delete pRangeName;
     pRangeName = pNewRangeName;
 }
 
@@ -906,7 +907,8 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
             xColNameRanges->UpdateReference( eUpdateRefMode, this, aRange, nDx, nDy, nDz );
             xRowNameRanges->UpdateReference( eUpdateRefMode, this, aRange, nDx, nDy, nDz );
             pDBCollection->UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
-            pRangeName->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
+            if (pRangeName)
+                pRangeName->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
             if ( pDPCollection )
                 pDPCollection->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
             UpdateChartRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
@@ -982,8 +984,8 @@ void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDo
             aDest.SetTab( nDestTab );
 
             //  wie UpdateReference
-
-            pRangeName->UpdateTranspose( aSource, aDest );      // vor den Zellen!
+            if (pRangeName)
+                pRangeName->UpdateTranspose( aSource, aDest );      // vor den Zellen!
             for (SCTAB i=0; i<=MAXTAB; i++)
                 if (pTab[i])
                     pTab[i]->UpdateTranspose( aSource, aDest, pUndoDoc );
@@ -998,7 +1000,8 @@ void ScDocument::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
     //! pPivotCollection
     //! UpdateChartRef
 
-    pRangeName->UpdateGrow( rArea, nGrowX, nGrowY );
+    if (pRangeName)
+        pRangeName->UpdateGrow( rArea, nGrowX, nGrowY );
 
     for (SCTAB i=0; i<=MAXTAB && pTab[i]; i++)
         pTab[i]->UpdateGrow( rArea, nGrowX, nGrowY );

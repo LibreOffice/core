@@ -239,7 +239,7 @@ private:
     ScValidationDataList* pValidationList;              // validity
     SvNumberFormatterIndexTable*    pFormatExchangeList;    // for application of number formats
     ScTable*            pTab[MAXTABCOUNT];
-    ScRangeName*        pRangeName;
+    mutable ScRangeName* pRangeName;
     ScDBCollection*     pDBCollection;
     ScDPCollection*     pDPCollection;
     ScChartCollection*  pChartCollection;

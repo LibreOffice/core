@@ -54,6 +54,8 @@ public:
     virtual String GetComment() const;
 
 private:
+
+private:
     ScRangeName maOldGlobalNames;
     ScRangeName maNewGlobalNames;
     ScRangeName::TabNameMap maOldLocalNames;

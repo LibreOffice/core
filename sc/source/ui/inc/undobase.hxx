@@ -32,6 +32,7 @@
 #include <svl/undo.hxx>
 #include "global.hxx"
 #include "address.hxx"
+#include "docsh.hxx"
 
 class ScDocument;
 class ScDocShell;

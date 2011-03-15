@@ -32,6 +32,9 @@
 #include "globstr.hrc"
 #include "global.hxx"
 #include "docfunc.hxx"
+#include "sc.hrc"
+
+#include "sfx2/app.hxx"
 
 #include <memory>
 
@@ -69,18 +72,29 @@ ScUndoAllRangeNames::~ScUndoAllRangeNames()
 
 void ScUndoAllRangeNames::Undo()
 {
-    ScDocFunc aFunc(*pDocShell);
+    ScDocument& rDoc = *pDocShell->GetDocument();
+
+    rDoc.CompileNameFormula(true);
+
+    // Global names.
+    if (maOldGlobalNames.empty())
+        rDoc.SetRangeName(NULL);
+    else
+        rDoc.SetRangeName(new ScRangeName(maOldGlobalNames));
+
     ScRangeName::TabNameCopyMap aCopy;
     ScRangeName::copyLocalNames(maOldLocalNames, aCopy);
-    aFunc.ModifyAllRangeNames(&maOldGlobalNames, aCopy);
+    rDoc.SetAllTabRangeNames(aCopy);
+
+    rDoc.CompileNameFormula(true);
+
+    SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
 }
 
 void ScUndoAllRangeNames::Redo()
 {
-    ScDocFunc aFunc(*pDocShell);
     ScRangeName::TabNameCopyMap aCopy;
     ScRangeName::copyLocalNames(maNewLocalNames, aCopy);
-    aFunc.ModifyAllRangeNames(&maNewGlobalNames, aCopy);
 }
 
 void ScUndoAllRangeNames::Repeat(SfxRepeatTarget& /*rTarget*/)
