@@ -93,8 +93,23 @@ void ScUndoAllRangeNames::Undo()
 
 void ScUndoAllRangeNames::Redo()
 {
+    ScDocument& rDoc = *pDocShell->GetDocument();
+
+    rDoc.CompileNameFormula(true);
+
+    // Global names.
+    if (maOldGlobalNames.empty())
+        rDoc.SetRangeName(NULL);
+    else
+        rDoc.SetRangeName(new ScRangeName(maNewGlobalNames));
+
     ScRangeName::TabNameCopyMap aCopy;
     ScRangeName::copyLocalNames(maNewLocalNames, aCopy);
+    rDoc.SetAllTabRangeNames(aCopy);
+
+    rDoc.CompileNameFormula(true);
+
+    SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
 }
 
 void ScUndoAllRangeNames::Repeat(SfxRepeatTarget& /*rTarget*/)
