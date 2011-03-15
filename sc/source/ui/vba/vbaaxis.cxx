@@ -572,7 +572,7 @@ ScVbaAxis::setScaleType( ::sal_Int32 _nScaleType ) throw (script::BasicErrorExce
             switch (_nScaleType)
             {
                 case xlScaleLinear:
-                    mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Logarithmic" ) ), uno::makeAny( false ) );
+                    mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Logarithmic" ) ), uno::makeAny( sal_False ) );
                     break;
                 case xlScaleLogarithmic:
                     mxPropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Logarithmic" ) ), uno::makeAny( sal_True ) );

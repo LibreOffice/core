@@ -241,6 +241,7 @@ void SAL_CALL ScVbaSheetObjectBase::setName( const OUString& rName ) throw (uno:
 sal_Int32 SAL_CALL ScVbaSheetObjectBase::getPlacement() throw (uno::RuntimeException)
 {
     sal_Int32 nRet = excel::XlPlacement::xlMoveAndSize;
+#if 0 // TODO: not working at the moment.
     SvxShape* pShape = SvxShape::getImplementation( mxShape );
     if(pShape)
     {
@@ -252,11 +253,13 @@ sal_Int32 SAL_CALL ScVbaSheetObjectBase::getPlacement() throw (uno::RuntimeExcep
                 nRet = excel::XlPlacement::xlFreeFloating;
         }
     }
+#endif
     return nRet;
 }
 
-void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 nPlacement ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 /*nPlacement*/ ) throw (uno::RuntimeException)
 {
+#if 0 // TODO: not working at the moment.
     SvxShape* pShape = SvxShape::getImplementation( mxShape );
     if(pShape)
     {
@@ -272,6 +275,7 @@ void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 nPlacement ) throw (
             ScDrawLayer::SetAnchor(pObj, eType);
         }
     }
+#endif
 }
 
 sal_Bool SAL_CALL ScVbaSheetObjectBase::getPrintObject() throw (uno::RuntimeException)

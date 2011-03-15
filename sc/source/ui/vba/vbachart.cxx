@@ -331,7 +331,7 @@ try
                 case xlXYScatter:
                 case xlBubble:                      // not possible
                 case xlBubble3DEffect:              // not possible
-                    mxDiagramPropertySet->setPropertyValue(LINES, uno::makeAny( false ));
+                    mxDiagramPropertySet->setPropertyValue(LINES, uno::makeAny( sal_False ));
                     break;
                 case xlXYScatterLines:
                 case xlXYScatterLinesNoMarkers:
@@ -385,7 +385,7 @@ try
         default:
                 if (mxDiagramPropertySet->getPropertySetInfo()->hasPropertyByName(DEEP))
                 {
-                    mxDiagramPropertySet->setPropertyValue(DEEP, uno::makeAny( false));
+                    mxDiagramPropertySet->setPropertyValue(DEEP, uno::makeAny( sal_False));
                 }
                 break;
         }
@@ -455,7 +455,7 @@ try
             default:
                 if (mxDiagramPropertySet->getPropertySetInfo()->hasPropertyByName(VERTICAL))
                 {
-                    mxDiagramPropertySet->setPropertyValue(VERTICAL, uno::makeAny(false));
+                    mxDiagramPropertySet->setPropertyValue(VERTICAL, uno::makeAny(sal_False));
                 }
                 break;
         }
@@ -476,7 +476,7 @@ try
             case xlConeBarStacked:
             case xlPyramidColStacked:
             case xlPyramidBarStacked:
-                mxDiagramPropertySet->setPropertyValue(PERCENT, uno::makeAny( false ));
+                mxDiagramPropertySet->setPropertyValue(PERCENT, uno::makeAny( sal_False ));
                 mxDiagramPropertySet->setPropertyValue(STACKED, uno::makeAny( sal_True ));
                 break;
             case xlPyramidColStacked100:
@@ -497,8 +497,8 @@ try
                 mxDiagramPropertySet->setPropertyValue(PERCENT, uno::makeAny( sal_True ));
                 break;
             default:
-                mxDiagramPropertySet->setPropertyValue(PERCENT, uno::makeAny( false));
-                mxDiagramPropertySet->setPropertyValue(STACKED, uno::makeAny( false));
+                mxDiagramPropertySet->setPropertyValue(PERCENT, uno::makeAny( sal_False));
+                mxDiagramPropertySet->setPropertyValue(STACKED, uno::makeAny( sal_False));
                 break;
         }
         switch (_nChartType)
@@ -542,7 +542,7 @@ try
             default:
                 if (mxDiagramPropertySet->getPropertySetInfo()->hasPropertyByName(DIM3D))
                 {
-                    mxDiagramPropertySet->setPropertyValue(DIM3D, uno::makeAny( false));
+                    mxDiagramPropertySet->setPropertyValue(DIM3D, uno::makeAny( sal_False));
                 }
                 break;
         }

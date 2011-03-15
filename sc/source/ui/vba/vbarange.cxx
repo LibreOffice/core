@@ -176,6 +176,7 @@
 #include "dbdocfun.hxx"
 #include "patattr.hxx"
 #include "olinetab.hxx"
+#include "transobj.hxx"
 #include <comphelper/anytostring.hxx>
 
 #include <global.hxx>
@@ -539,11 +540,9 @@ public:
 
     bool setNumberFormat( const rtl::OUString& rFormat )
     {
-        lang::Locale aLocale;
-        uno::Reference< beans::XPropertySet > xNumProps = getNumberProps();
-        xNumProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Locale" )) ) >>= aLocale;
-        sal_Int32 nNewIndex = mxFormats->queryKey(rFormat, aLocale, false );
-        if ( nNewIndex == -1 ) // format not defined
+        // #163288# treat "General" as "Standard" format
+        sal_Int32 nNewIndex = 0;
+        if( !rFormat.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "General" ) ) )
         {
             lang::Locale aLocale;
             uno::Reference< beans::XPropertySet > xNumProps = getNumberProps();
@@ -1607,7 +1606,7 @@ ScVbaRange::getValue() throw (uno::RuntimeException)
 
 
 void
-ScVbaRange::setValue(  const uno::Any  &aValue,  ValueSetter& valueSetter ) throw (uno::RuntimeException)
+ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter, bool bFireEvent ) throw (uno::RuntimeException)
 {
     uno::TypeClass aClass = aValue.getValueTypeClass();
     if ( aClass == uno::TypeClass_SEQUENCE )
@@ -1657,10 +1656,12 @@ ScVbaRange::setValue( const uno::Any  &aValue ) throw (uno::RuntimeException)
         return;
     }
     CellValueSetter valueSetter( aValue );
-    setValue( aValue, valueSetter );
+    setValue( aValue, valueSetter, true );
 
+#if 0 // TODO: Noel, do we still need this?
     // Fires the range change event.
     lcl_NotifyRangeChanges( getScDocShell()->GetModel(), getCellRangesBase() );
+#endif
 }
 
 void SAL_CALL
@@ -1668,10 +1669,12 @@ ScVbaRange::Clear() throw (uno::RuntimeException)
 {
     using namespace ::com::sun::star::sheet::CellFlags;
     sal_Int32 nFlags = VALUE | DATETIME | STRING | FORMULA | HARDATTR | EDITATTR | FORMATTED;
-    ClearContents( nFlags );
+    ClearContents( nFlags, true );
 
+#if 0 // TODO: do we still need this?
     // Fires the range change event.
     lcl_NotifyRangeChanges( getScDocShell()->GetModel(), getCellRangesBase() );
+#endif
 }
 
 //helper ClearContent
@@ -1690,7 +1693,7 @@ ScVbaRange::ClearContents( sal_Int32 nFlags, bool bFireEvent ) throw (uno::Runti
             uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::makeAny(index), uno::Any() ), uno::UNO_QUERY_THROW );
             ScVbaRange* pRange = getImplementation( xRange );
             if ( pRange )
-                pRange->ClearContents( nFlags );
+                pRange->ClearContents( nFlags, false ); // do not fire for single ranges
         }
         // fire change event for the entire range list
         if( bFireEvent ) fireChangeEvent();
@@ -1715,10 +1718,12 @@ ScVbaRange::ClearContents() throw (uno::RuntimeException)
     sal_Int32 nClearFlags = ( sheet::CellFlags::VALUE |
         sheet::CellFlags::STRING |  sheet::CellFlags::DATETIME |
         sheet::CellFlags::FORMULA );
-    ClearContents( nClearFlags );
+    ClearContents( nClearFlags, true );
 
+#if 0 // TODO: do we still need this?
     // Fires the range change event.
     lcl_NotifyRangeChanges( getScDocShell()->GetModel(), getCellRangesBase() );
+#endif
 }
 
 void SAL_CALL
@@ -1726,10 +1731,12 @@ ScVbaRange::ClearFormats() throw (uno::RuntimeException)
 {
     //FIXME: need to check if we need to combine sheet::CellFlags::FORMATTED
     sal_Int32 nClearFlags = sheet::CellFlags::HARDATTR | sheet::CellFlags::FORMATTED | sheet::CellFlags::EDITATTR;
-    ClearContents( nClearFlags );
+    ClearContents( nClearFlags, false );
 
+#if 0 // TODO: do we still need this?
     // Fires the range change event.
     lcl_NotifyRangeChanges( getScDocShell()->GetModel(), getCellRangesBase() );
+#endif
 }
 
 void
@@ -1744,10 +1751,12 @@ ScVbaRange::setFormulaValue( const uno::Any& rFormula, formula::FormulaGrammar::
         return;
     }
     CellFormulaValueSetter formulaValueSetter( rFormula, getScDocument(), eGram );
-    setValue( rFormula, formulaValueSetter );
+    setValue( rFormula, formulaValueSetter, bFireEvent );
 
+#if 0 // TODO: ditto
     // Fires the range change event.
     lcl_NotifyRangeChanges( getScDocShell()->GetModel(), getCellRangesBase() );
+#endif
 }
 
 uno::Any
@@ -1771,7 +1780,7 @@ void
 ScVbaRange::setFormula(const uno::Any &rFormula ) throw (uno::RuntimeException)
 {
     // #FIXME converting "=$a$1" e.g. CONV_XL_A1 -> CONV_OOO                            // results in "=$a$1:a1", temporalily disable conversion
-    setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );;
+    setFormulaValue( rFormula,formula::FormulaGrammar::GRAM_NATIVE_XL_A1, true );
 }
 
 uno::Any
@@ -1877,7 +1886,7 @@ ScVbaRange::HasFormula() throw (uno::RuntimeException)
         ScCellRangesBase* pFormulaRanges = dynamic_cast< ScCellRangesBase * > ( xRanges.get() );
         // check if there are no formula cell, return false
         if ( pFormulaRanges->GetRangeList().empty() )
-            return uno::makeAny(false);
+            return uno::makeAny(sal_False);
 
         // chech if there are holes (where some cells are not formulas)
         // or returned range is not equal to this range
@@ -2125,7 +2134,7 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
                                 // force external to be false
                                 // only first address should have the
                                 // document and sheet specifications
-                                aExternalCopy = uno::makeAny(false);
+                                aExternalCopy = uno::makeAny(sal_False);
             }
             sAddress += xRange->Address( RowAbsolute, ColumnAbsolute, ReferenceStyle, aExternalCopy, RelativeTo );
         }
@@ -2273,7 +2282,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
-            sal_uInt16 flags = tmpRange.ParseCols( sCol, excel::GetDocumentFromRange( mxRange ), dDetails );
+            sal_uInt16 flags = tmpRange.ParseCols( sCol, excel::GetDocumentFromRange( xRange ), dDetails );
             if ( ( flags & 0x200 ) != 0x200 )
                throw uno::RuntimeException();
             nColumn = tmpRange.aStart.Col() + 1;
@@ -2290,7 +2299,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
             }
             if ( !( aColumnAny >>= nColumn ) )
             {
-                uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( mxContext );
+                uno::Reference< script::XTypeConverter > xConverter = getTypeConverter( xContext );
                 uno::Any aConverted;
                 try
                 {
@@ -2301,7 +2310,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
             }
        }
     }
-    RangeHelper thisRange( mxRange );
+    RangeHelper thisRange( xRange );
     table::CellRangeAddress thisRangeAddress =  thisRange.getCellRangeAddressable()->getRangeAddress();
     uno::Reference< table::XCellRange > xSheetRange = thisRange.getCellRangeFromSheet();
     if( !bIsIndex && !bIsColumnIndex ) // .Cells
@@ -2324,7 +2333,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
         --nColumn;
     nRow = nRow + thisRangeAddress.StartRow;
     nColumn =  nColumn + thisRangeAddress.StartColumn;
-    return new ScVbaRange( mxParent, mxContext, xSheetRange->getCellRangeByPosition( nColumn, nRow,                                        nColumn, nRow ) );
+    return new ScVbaRange( xParent, xContext, xSheetRange->getCellRangeByPosition( nColumn, nRow, nColumn, nRow ) );
 }
 
 void
@@ -3850,6 +3859,18 @@ double getDefaultCharWidth( const uno::Reference< frame::XModel >& xModel ) thro
     return lcl_TwipsToPoints( (sal_uInt16)nCharWidth );
 }
 
+double getDefaultCharWidth( ScDocShell* pDocShell )
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+    OutputDevice* pRefDevice = pDoc->GetRefDevice();
+    ScPatternAttr* pAttr = pDoc->GetDefPattern();
+    ::Font aDefFont;
+    pAttr->GetFont( aDefFont, SC_AUTOCOL_BLACK, pRefDevice );
+    pRefDevice->SetFont( aDefFont );
+    long nCharWidth = pRefDevice->GetTextWidth( String( '0' ) );        // 1/100th mm
+    return lcl_hmmToPoints( nCharWidth );
+}
+
 uno::Any SAL_CALL
 ScVbaRange::getColumnWidth() throw (uno::RuntimeException)
 {
@@ -3865,7 +3886,7 @@ ScVbaRange::getColumnWidth() throw (uno::RuntimeException)
     if ( pShell )
     {
         uno::Reference< frame::XModel > xModel = pShell->GetModel();
-        double defaultCharWidth = getDefaultCharWidth( pShell );
+        double defaultCharWidth = getDefaultCharWidth( xModel );
         RangeHelper thisRange( mxRange );
         table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
         sal_Int32 nStartCol = thisAddress.StartColumn;
@@ -3904,26 +3925,24 @@ ScVbaRange::setColumnWidth( const uno::Any& _columnwidth ) throw (uno::RuntimeEx
     double nColWidth = 0;
     _columnwidth >>= nColWidth;
     nColWidth = lcl_Round2DecPlaces( nColWidth );
-        ScDocShell* pDocShell = getScDocShell();
-        if ( pDocShell )
-        {
-                uno::Reference< frame::XModel > xModel = pDocShell->GetModel();
-                if ( xModel.is() )
-                {
+    ScDocShell* pDocShell = getScDocShell();
+    if ( pDocShell )
+    {
+        if ( nColWidth != 0.0 )
+            nColWidth = ( nColWidth + fExtraWidth ) * getDefaultCharWidth( pDocShell );
+        RangeHelper thisRange( mxRange );
+        table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
+        sal_uInt16 nTwips = lcl_pointsToTwips( nColWidth );
 
-            nColWidth = ( nColWidth * getDefaultCharWidth( xModel ) );
-            RangeHelper thisRange( mxRange );
-            table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
-            sal_uInt16 nTwips = lcl_pointsToTwips( nColWidth );
+        ScDocFunc aFunc(*pDocShell);
+        SCCOLROW nColArr[2];
+        nColArr[0] = thisAddress.StartColumn;
+        nColArr[1] = thisAddress.EndColumn;
+        // #163561# use mode SC_SIZE_DIRECT: hide for width 0, show for other values
+        aFunc.SetWidthOrHeight( true, 1, nColArr, thisAddress.Sheet,
+                                SC_SIZE_DIRECT, nTwips, true, true );
 
-            ScDocFunc aFunc(*pDocShell);
-            SCCOLROW nColArr[2];
-            nColArr[0] = thisAddress.StartColumn;
-            nColArr[1] = thisAddress.EndColumn;
-            aFunc.SetWidthOrHeight( true, 1, nColArr, thisAddress.Sheet, SC_SIZE_ORIGINAL,
-                                                                                nTwips, true, true );
-
-        }
+    }
 }
 
 uno::Any SAL_CALL
@@ -4740,7 +4759,7 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
 }
 
 void SAL_CALL
-ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& CopyOrigin ) throw (uno::RuntimeException)
+ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& /*CopyOrigin*/ ) throw (uno::RuntimeException)
 {
     // It appears ( from the web ) that the undocumented CopyOrigin
     // param should contain member of enum XlInsertFormatOrigin

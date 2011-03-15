@@ -44,6 +44,10 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
+namespace ooo {
+namespace vba {
+namespace excel {
+
 // ============================================================================
 
 uno::Reference< sheet::XDatabaseRanges >
@@ -331,8 +335,8 @@ sal_Bool IsR1C1ReferFormat( ScDocument* pDoc, const rtl::OUString& sRangeStr )
     return false;
 }
 
-uno::Reference< XHelperInterface >
-getUnoSheetModuleObj( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException )
+uno::Reference< vba::XHelperInterface >
+getUnoSheetModuleObj( const uno::Reference< sheet::XSpreadsheet >& xSheet ) throw ( uno::RuntimeException )
 {
     uno::Reference< beans::XPropertySet > xProps( xSheet, uno::UNO_QUERY_THROW );
     rtl::OUString sCodeName;
@@ -458,8 +462,6 @@ ScVbaCellRangeAccess::GetDataSet( ScCellRangesBase* pRangeObj )
 
 // ============================================================================
 
-} //excel
-} //vba
-} //ooo
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+} // namespace excel
+} // namespace vba
+} // namespace ooo

@@ -137,6 +137,7 @@ private:
     uno::Reference< awt::XWindow > getContainerWindow();
     bool isMouseReleased();
     DECL_LINK( fireResizeMacro, void* );
+    void processWindowResizeMacro();
 
 private:
     ::osl::Mutex maMutex;
@@ -689,13 +690,13 @@ namespace {
 bool lclSelectionChanged( const ScRangeList& rLeft, const ScRangeList& rRight )
 {
     // one of the range lists empty? -> return false, if both lists empty
-    bool bLeftEmpty = rLeft.Count() == 0;
-    bool bRightEmpty = rRight.Count() == 0;
+    bool bLeftEmpty = rLeft.empty();
+    bool bRightEmpty = rRight.empty();
     if( bLeftEmpty || bRightEmpty )
         return !(bLeftEmpty && bRightEmpty);
 
     // check sheet indexes of the range lists (assuming that all ranges in a list are on the same sheet)
-    if( rLeft.GetObject( 0 )->aStart.Tab() != rRight.GetObject( 0 )->aStart.Tab() )
+    if( rLeft.front()->aStart.Tab() != rRight.front()->aStart.Tab() )
         return false;
 
     // compare all ranges
@@ -706,7 +707,6 @@ bool lclSelectionChanged( const ScRangeList& rLeft, const ScRangeList& rRight )
 
 bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    uno::Reference< uno::XInterface > xOldSelection( maOldSelection, uno::UNO_QUERY );
     uno::Reference< uno::XInterface > xNewSelection = getXSomethingFromArgs< uno::XInterface >( rArgs, nIndex, false );
     if( ScCellRangesBase* pNewCellRanges = ScCellRangesBase::getImplementation( xNewSelection ) )
     {

@@ -71,9 +71,9 @@ private:
 
 private:
     ::rtl::Reference< ScVbaEventsListener > mxListener;
-    css::uno::Any maOldSelection;
     ScDocShell* mpDocShell;
     ScDocument* mpDoc;
+    ScRangeList maOldSelection;
     bool mbOpened;
 };
 
