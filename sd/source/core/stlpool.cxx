@@ -1099,8 +1099,16 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                 switch(i)
                 {
                     case 0:
+                    {
+                        nFontSize = 32;
+                        nFirstLineOffset = -900;
+                    }
+                    break;
+
                     case 1:
                     {
+                        aNumberFormat.SetBulletChar( 0x2013 );  // StarBats: 0xF000 + 150
+                        aNumberFormat.SetBulletRelSize(75);
                         nFontSize = 32;
                         nFirstLineOffset = -900;
                     }
@@ -1110,21 +1118,14 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                     {
                         nFontSize = 28;
                         nFirstLineOffset = -800;
-                        aNumberFormat.SetBulletChar( 0x2013 );  // StarBats: 0xF000 + 150
-                        aNumberFormat.SetBulletRelSize(75);
                     }
                     break;
 
                     case 3:
                     {
-                        nFontSize = 24;
-                    }
-                    break;
-
-                    case 4:
-                    {
-                        aNumberFormat.SetBulletChar( 0x2013 ); // StarBats: 0xF000 + 150
+                        aNumberFormat.SetBulletChar( 0x2013 );  // StarBats: 0xF000 + 150
                         aNumberFormat.SetBulletRelSize(75);
+                        nFontSize = 24;
                     }
                     break;
                 }

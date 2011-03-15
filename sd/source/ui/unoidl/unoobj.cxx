@@ -658,36 +658,17 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 case WID_MASTERDEPEND:
                     SetMasterDepend( ::cppu::any2bool(aValue) );
                     break;
-/* todo
                 case WID_ANIMPATH:
                 {
-                    uno::Reference< drawing::XShape > xShape;
-                    aValue >>= xShape;
+                    uno::Reference< drawing::XShape > xShape( aValue, uno::UNO_QUERY );
+                    SdrPathObj* pObj = xShape.is() ? dynamic_cast< SdrPathObj* >( GetSdrObjectFromXShape( xShape ) ) : NULL;
 
-                    SdrObject* pObj = NULL;
-                    if(xShape.is())
-                        pObj = GetSdrObjectFromXShape( xShape );
-
-                    if( pObj == NULL || !pObj->ISA( SdrPathObj ) )
+                    if( pObj == NULL )
                         throw lang::IllegalArgumentException();
 
-                    pInfo->mpPathObj = (SdrPathObj*)pObj;
-
-                    SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
-                    if( pDoc )
-                    {
-                        pInfo = pDoc->GetAnimationInfo(pObj);
-                        if( pInfo == NULL )
-                        {
-                            pInfo = new SdAnimationInfo(pDoc);
-                            pObj->InsertUserData( pInfo );
-                        }
-                        pInfo->mbInvisibleInPresentation = sal_True;
-                    }
-
+                    EffectMigration::SetAnimationPath( mpShape, pObj );
                     break;
                 }
-*/
                 case WID_IMAGEMAP:
                 {
                     SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;

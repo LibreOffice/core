@@ -59,8 +59,6 @@
 #define PUB_HIGHRES_WIDTH   1024
 #define PUB_HIGHRES_HEIGHT  768
 
-#define HtmlButtonThemaStr = "private://gallery/hidden/HtmlExportButtons";
-
 class List;
 class SfxProgress;
 class SdrOutliner;
