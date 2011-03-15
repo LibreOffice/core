@@ -1027,8 +1027,8 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
 
             OSL_TRACE("*** trying to invoke %s ",
                 rtl::OUStringToOString( sToResolve, RTL_TEXTENCODING_UTF8 ).getStr() );
-            ooo::vba::VBAMacroResolvedInfo aMacroResolvedInfo = ooo::vba::resolveVBAMacro( mpShell, sToResolve );
-            if ( aMacroResolvedInfo.IsResolved() )
+            ooo::vba::MacroResolvedInfo aMacroResolvedInfo = ooo::vba::resolveVBAMacro( mpShell, sToResolve );
+            if ( aMacroResolvedInfo.mbFound )
             {
 
                 if (! txInfo->ApproveRule(evt, txInfo->pPara) )
@@ -1047,7 +1047,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
                     // call basic event handlers for event
 
                     // create script url
-                    rtl::OUString url = aMacroResolvedInfo.ResolvedMacro();
+                    rtl::OUString url = aMacroResolvedInfo.msResolvedMacro;
 
                     OSL_TRACE("resolved script = %s",
                         rtl::OUStringToOString( url,
