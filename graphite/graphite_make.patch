@@ -13,7 +13,7 @@
 +
 +.INCLUDE : settings.mk
 +
-+CFLAGS+=-DDISABLE_TRACING -I../include
++CFLAGS+=-DDISABLE_TRACING -I../include -DGR2_STATIC
 +.IF "$(debug)" == ""
 +CFLAGS+=-O3 -DNDEBUG
 +.ENDIF
