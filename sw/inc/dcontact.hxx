@@ -342,7 +342,7 @@ class SwDrawVirtObj : public SdrVirtObj
 
         // #108784#
         // All overloaded methods which need to use the offset
-        virtual void RecalcBoundRect();
+        virtual void RecalcBoundRect(bool bForce = false);
         virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const;
         virtual ::basegfx::B2DPolyPolygon TakeContour() const;
         virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
