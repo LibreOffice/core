@@ -333,7 +333,8 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
                 aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
                 aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance &&
                 aLeft.LineStyle == aRight.LineStyle && aLeft.LineStyle == aTop.LineStyle &&
-                aLeft.LineStyle == aBottom.LineStyle )
+                aLeft.LineStyle == aBottom.LineStyle && aLeft.LineWidth == aRight.LineWidth &&
+                aLeft.LineWidth == aTop.LineWidth && aLeft.LineWidth == aBottom.LineWidth )
             {
                 pBorder_Left->mnIndex = -1;
                 pBorder_Left->maValue.clear();
@@ -370,7 +371,8 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
                 aLeft.LineDistance == aRight.LineDistance && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
                 aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
                 aLeft.InnerLineWidth == aBottom.InnerLineWidth && aLeft.OuterLineWidth == aBottom.OuterLineWidth &&
-                aLeft.LineDistance == aBottom.LineDistance )
+                aLeft.LineDistance == aBottom.LineDistance && aLeft.LineWidth == aRight.LineWidth &&
+                aLeft.LineWidth == aTop.LineWidth && aLeft.LineWidth == aBottom.LineWidth )
             {
                 pLeftBorderWidthState->mnIndex = -1;
                 pLeftBorderWidthState->maValue.clear();
