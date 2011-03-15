@@ -138,6 +138,7 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
     }
     Reference< container::XNameContainer > lcl_createDialogModel( const Reference< XComponentContext >& i_xContext,
         const Reference< io::XInputStream >& xInput,
+        const Reference< frame::XModel >& xModel,
         const Reference< resource::XStringResourceManager >& xStringResourceManager,
         const Any &aDialogSourceURL) throw ( Exception )
     {
@@ -147,7 +148,15 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
         Reference< beans::XPropertySet > xDlgPropSet( xDialogModel, UNO_QUERY );
         xDlgPropSet->setPropertyValue( aDlgSrcUrlPropName, aDialogSourceURL );
 
-        ::xmlscript::importDialogModel( xInput, xDialogModel, i_xContext );
+        // #TODO we really need to detect the source of the Dialog, is it
+        // the dialog. E.g. if the dialog was created from basic ( then we just
+        // can't tell  where its from )
+        // If we are happy to always substitute the form model for the awt
+        // one then maybe the presence of a document model is enough to trigger
+        // swapping out the models ( or perhaps we only want to do this
+        // for vba mode ) there are a number of feasible and valid possibilities
+        ::xmlscript::importDialogModel( xInput, xDialogModel, i_xContext, xModel );
+
         // Set resource property
         if( xStringResourceManager.is() )
         {
@@ -266,17 +275,7 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
         const Reference< resource::XStringResourceManager >& xStringResourceManager,
         const Any &aDialogSourceURL) throw ( Exception )
     {
-
-
-        // #TODO we really need to detect the source of the Dialog, is it
-        // the dialog. E.g. if the dialog was created from basic ( then we just
-        // can't tell  where its from )
-        // If we are happy to always substitute the form model for the awt
-        // one then maybe the presence of a document model is enough to trigger
-        // swapping out the models ( or perhaps we only want to do this
-        // for vba mode ) there are a number of feasible and valid possibilities
-        ::xmlscript::importDialogModel( xInput, xDialogModel, m_xContext, m_xModel );
-        return lcl_createDialogModel(m_xContext,xInput,xStringResourceManager,aDialogSourceURL);
+        return lcl_createDialogModel(m_xContext,xInput,m_xModel,xStringResourceManager,aDialogSourceURL);
     }
 
     Reference< XControlModel > DialogProviderImpl::createDialogModelForBasic() throw ( Exception )

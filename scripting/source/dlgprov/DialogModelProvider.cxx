@@ -94,7 +94,8 @@ void SAL_CALL DialogModelProvider::initialize(const css::uno::Sequence< uno::Any
                 Any aDialogSourceURLAny;
                 aDialogSourceURLAny <<= sURL;
 
-                m_xDialogModel.set( dlgprov::lcl_createDialogModel( m_xContext,xInput , xStringResourceManager, aDialogSourceURLAny  ), UNO_QUERY_THROW);
+                Reference< frame::XModel > xModel;
+                m_xDialogModel.set( dlgprov::lcl_createDialogModel( m_xContext, xInput , xModel, xStringResourceManager, aDialogSourceURLAny  ), UNO_QUERY_THROW);
                 m_xDialogModelProp.set(m_xDialogModel, UNO_QUERY_THROW);
             }
         }

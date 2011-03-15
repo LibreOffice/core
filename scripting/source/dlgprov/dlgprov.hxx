@@ -67,6 +67,7 @@ namespace dlgprov
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > lcl_createDialogModel(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_xContext,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInput,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >& xStringResourceManager,
                 const ::com::sun::star::uno::Any &aDialogSourceURL) throw ( ::com::sun::star::uno::Exception );
 
