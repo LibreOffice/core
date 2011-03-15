@@ -441,15 +441,16 @@
 		<link rel="transformation" href="http://xml.openoffice.org/odf2xhtml/rdf-extract.xsl" />
 		-->
 
-		<!-- base URL of document for resolving relative links  -->
+		<!-- base URL of document for resolving relative links  
+		NOTE: CHROME has a problem, with relative references as from content table, referencing to root directory instead of document
 		<xsl:element name="base">
-			<xsl:attribute name="href">
+			<xsl:attribute name="href">-->
 				<!-- earlier 'targetURL' was used for an absoulte reference of base provided by the Office (file URL)
 					<xsl:value-of select="$targetURL" />
 					now '.' let relative links work, even if document has been moved -->
-				<xsl:text>.</xsl:text>
+				<!--<xsl:text>.</xsl:text>
 			</xsl:attribute>
-		</xsl:element>
+		</xsl:element>-->
 	</xsl:template>
 
 	<!-- generic template for adding common meta tags -->

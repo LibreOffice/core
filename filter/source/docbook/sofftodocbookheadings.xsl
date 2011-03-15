@@ -163,20 +163,20 @@
 			<!-- if the first heading is not of the section1 level -->
 			<xsl:if test="generate-id(.) != generate-id($firstHeading)">
 				<!-- create an anonymous section1 and embrace all headings preceding the first real existent section1 -->
-				<xsl:text disable-output-escaping="yes">&lt;sect1&gt;</xsl:text>
-				<title></title>
-				<!-- create sections for all the first section1 preluding headings -->
-                <xsl:for-each select="key('getHeadingsByOutline', $section1_OutlineLevel)[1]/preceding::text:h">
-					<xsl:call-template name="make-section">
-						<xsl:with-param name="previousSectionLevel" select="$section1_OutlineLevel"/>
-						<xsl:with-param name="currentSectionLevel">
-							<xsl:call-template name="getSectionLevel">
-								<xsl:with-param name="outlineLevel" select="@text:level"/>
-							</xsl:call-template>
-						</xsl:with-param>
-					</xsl:call-template>
-				</xsl:for-each>
-				<xsl:text disable-output-escaping="yes">&lt;/sect1&gt;</xsl:text>
+                <xsl:element name="sect1">
+                    <title></title>
+                    <!-- create sections for all the first section1 preluding headings -->
+                    <xsl:for-each select="key('getHeadingsByOutline', $section1_OutlineLevel)[1]/preceding::text:h">
+                        <xsl:call-template name="make-section">
+                            <xsl:with-param name="previousSectionLevel" select="$section1_OutlineLevel"/>
+                            <xsl:with-param name="currentSectionLevel">
+                                <xsl:call-template name="getSectionLevel">
+                                    <xsl:with-param name="outlineLevel" select="@text:level"/>
+                                </xsl:call-template>
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:for-each>
+                </xsl:element>
 			</xsl:if>
 		</xsl:for-each>
 		<!-- match all headings, which are mapped to section1 to create a nested section structure used in docbook (see first comment after copyright) -->
@@ -278,30 +278,22 @@
 		<xsl:choose>
 			<!-- empty title as it is an empty section between two headings with an outline level difference higher than 1 -->
 			<xsl:when test="$currentSectionLevel &gt; $previousSectionLevel+1">
-				<xsl:text disable-output-escaping="yes">&lt;sect</xsl:text>
-				<xsl:value-of select="$previousSectionLevel +1"/>
-				<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-				<title></title>
-				<xsl:call-template name="make-section">
-					<xsl:with-param name="currentSectionLevel" select="$currentSectionLevel"/>
-					<xsl:with-param name="previousSectionLevel" select="$previousSectionLevel +1"/>
-				</xsl:call-template>
-				<xsl:text disable-output-escaping="yes">&lt;/sect</xsl:text>
-				<xsl:value-of select="$previousSectionLevel +1"/>
-				<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+                <xsl:element name="{concat('sect', $previousSectionLevel + 1)}">
+                    <title></title>
+                    <xsl:call-template name="make-section">
+                        <xsl:with-param name="currentSectionLevel" select="$currentSectionLevel"/>
+                        <xsl:with-param name="previousSectionLevel" select="$previousSectionLevel +1"/>
+                    </xsl:call-template>
+                </xsl:element>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:text disable-output-escaping="yes">&lt;sect</xsl:text>
-				<xsl:value-of select="$currentSectionLevel"/>
-				<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-				<title>
-					<xsl:apply-templates/>
-				</title>
-				<xsl:apply-templates select="key('nestedContent', generate-id())"/>
-				<xsl:apply-templates select="key('nestedHeadings', generate-id())" mode="recreateStructure"/>
-				<xsl:text disable-output-escaping="yes">&lt;/sect</xsl:text>
-				<xsl:value-of select="$currentSectionLevel"/>
-				<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+                <xsl:element name="{concat('sect', $currentSectionLevel)}">
+                    <title>
+                        <xsl:apply-templates/>
+                    </title>
+                    <xsl:apply-templates select="key('nestedContent', generate-id())"/>
+                    <xsl:apply-templates select="key('nestedHeadings', generate-id())" mode="recreateStructure"/>
+                </xsl:element>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -370,23 +362,12 @@
 				</appendix>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:variable name="sectvar">
-					<xsl:text>sect</xsl:text>
-					<xsl:value-of select="count(ancestor::text:section)+1"/>
-				</xsl:variable>
-				<xsl:variable name="idvar">
-					<xsl:text> id="</xsl:text>
-					<xsl:value-of select="@text:name"/>
-					<xsl:text>"</xsl:text>
-				</xsl:variable>
-				<xsl:text disable-output-escaping="yes">&lt;</xsl:text>
-				<xsl:value-of select="$sectvar"/>
-				<xsl:value-of select="$idvar"/>
-				<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-				<xsl:apply-templates/>
-				<xsl:text disable-output-escaping="yes">&lt;/</xsl:text>
-				<xsl:value-of select="$sectvar"/>
-				<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+                <xsl:element name="{concat('sect', count(ancestor::text:section) + 1)}">
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="@text:name"/>
+                    </xsl:attribute>
+                    <xsl:apply-templates/>
+                </xsl:element>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

@@ -163,10 +163,10 @@
 			<xsl:choose>
 				<xsl:when test="office:document-content">
 					<xsl:element name="styles-file" namespace="">
-						<xsl:copy-of select="document(concat($sourceBaseURL, 'styles.xml'))" />
+						<xsl:copy-of select="document(concat($sourceBaseURL, 'styles.xml'), .)" />
 					</xsl:element>
 					<xsl:element name="meta-file" namespace="">
-						<xsl:copy-of select="document(concat($sourceBaseURL, 'meta.xml'))" />
+						<xsl:copy-of select="document(concat($sourceBaseURL, 'meta.xml'), .)" />
 					</xsl:element>
 				</xsl:when>
 				<xsl:otherwise>
@@ -656,7 +656,7 @@
 		</xsl:element>
 	</xsl:template>
 
-	<xsl:key name="elementUsingStyle" match="/*/office:body//*" use="@text:style-name | @draw:style-name | @draw:text-style-name | @table:style-name | @table:default-cell-style-name"/>
+	<xsl:key name="elementUsingStyle" match="*" use="@text:style-name | @draw:style-name | @draw:text-style-name | @table:style-name | @table:default-cell-style-name"/>
 	<xsl:key name="listLabelStyleInStyles" match="/*/office:styles/text:list-style/*  |
 									  /*/office:styles/style:graphic-properties/text:list-style/*" use="@text:style-name"/>
 

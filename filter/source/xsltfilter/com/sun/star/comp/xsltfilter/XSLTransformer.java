@@ -1,3 +1,5 @@
+package com.sun.star.comp.xsltfilter;
+
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,6 +79,7 @@ import com.sun.star.uno.UnoRuntime;
 //Uno to java Adaptor
 import com.sun.star.lib.uno.adapter.XInputStreamToInputStreamAdapter;
 import com.sun.star.lib.uno.adapter.XOutputStreamToOutputStreamAdapter;
+import javax.xml.transform.Templates;
 
 import net.sf.saxon.FeatureKeys;
 
@@ -97,7 +100,6 @@ public class XSLTransformer
      */
     private XInputStream m_xis;
     private XOutputStream m_xos;    // private static HashMap templatecache;
-    private static final int STREAM_BUFFER_SIZE = 4000;
     private static final String STATSPROP = "XSLTransformer.statsfile";
     private static PrintStream statsp;
     private String stylesheeturl;
@@ -110,11 +112,11 @@ public class XSLTransformer
     private Thread t;    // listeners
     private Vector listeners = new Vector();    //
     private XMultiServiceFactory svcfactory;    // cache for transformations by stylesheet
-    private static Hashtable transformers = new Hashtable();
+    private static Hashtable xsltReferences = new Hashtable();
     // struct for cached stylesheets
     private static class Transformation {
 
-        public Transformer transformer;
+        public Templates cachedXSLT;
         public long lastmod;
     }
     // Resolve URIs to an empty source
@@ -259,9 +261,10 @@ public class XSLTransformer
                     // in order to help performance and to remedy a a possible memory
                     // leak in xalan, where it seems, that Transformer instances cannot
                     // be reclaimed though they are no longer referenced here, we use
-                    // a cache of weak references to transformers created for specific
+                    // a cache of weak references (ie. xsltReferences) created for specific
                     // style sheet URLs see also #i48384#
 
+                    Templates xsltTemplate = null;
                     Transformer transformer = null;
                     Transformation transformation = null;
                     // File stylefile = new File(new URI(stylesheeturl));
@@ -278,36 +281,37 @@ public class XSLTransformer
                         }
                     }
 
-                    synchronized (transformers) {
+                    synchronized (xsltReferences) {
                         java.lang.ref.WeakReference ref = null;
-                        // try to get the transformer reference from the cache
-                        if ((ref = (java.lang.ref.WeakReference) transformers.get(stylesheeturl)) == null ||
+                        // try to get the xsltTemplate reference from the cache
+                        if ((ref = (java.lang.ref.WeakReference) xsltReferences.get(stylesheeturl)) == null ||
                                 (transformation = ((Transformation) ref.get())) == null ||
                                 ((Transformation) ref.get()).lastmod < lastmod) {
                             // we cannot find a valid reference for this stylesheet
                             // or the stylsheet was updated
                             if (ref != null) {
-                                transformers.remove(stylesheeturl);
+                                xsltReferences.remove(stylesheeturl);
                             }
-                            // create new transformer for this stylesheet
+                            // create new xsltTemplate for this stylesheet
                             TransformerFactory tfactory = TransformerFactory.newInstance();
                             debug("TransformerFactory is '" + tfactory.getClass().getName() + "'");
                 // some external saxons (Debian, Ubuntu, ...) have this disabled
                 // per default
                 tfactory.setAttribute(FeatureKeys.ALLOW_EXTERNAL_FUNCTIONS, new Boolean(true));
-                            transformer = tfactory.newTransformer(new StreamSource(stylesheeturl));
-                            transformer.setOutputProperty("encoding", "UTF-8");
-                            // transformer.setURIResolver(XSLTransformer.this);
+                            xsltTemplate = tfactory.newTemplates(new StreamSource(stylesheeturl));
 
                             // store the transformation into the cache
                             transformation = new Transformation();
                             transformation.lastmod = lastmod;
-                            transformation.transformer = transformer;
+                            transformation.cachedXSLT = xsltTemplate;
                             ref = new java.lang.ref.WeakReference(transformation);
-                            transformers.put(stylesheeturl, ref);
+                            xsltReferences.put(stylesheeturl, ref);
                         }
                     }
-                    transformer = transformation.transformer;
+                    xsltTemplate = transformation.cachedXSLT;
+                            transformer = xsltTemplate.newTransformer();
+                            transformer.setOutputProperty("encoding", "UTF-8");
+                            // transformer.setURIResolver(XSLTransformer.this);
 
                     // invalid to set 'null' as parameter as 'null' is not a valid Java object
                     if (sourceurl != null) {
@@ -356,12 +360,33 @@ public class XSLTransformer
                         if (is != null) {
                             is.close();
                         }
+                    } catch (java.lang.Throwable ex) {
+                        if (statsp != null) {
+                            statsp.println(ex.getClass().getName() + ": " + ex.getMessage());
+                            ex.printStackTrace(statsp);
+                        }
+                    }
+                    try {
                         if (os != null) {
                             os.close();
                         }
+                    } catch (java.lang.Throwable ex) {
+                        if (statsp != null) {
+                            statsp.println(ex.getClass().getName() + ": " + ex.getMessage());
+                            ex.printStackTrace(statsp);
+                        }
+                    }
+                    try {
                         if (m_xis != null) {
                             m_xis.closeInput();
                         }
+                    } catch (java.lang.Throwable ex) {
+                        if (statsp != null) {
+                            statsp.println(ex.getClass().getName() + ": " + ex.getMessage());
+                            ex.printStackTrace(statsp);
+                        }
+                    }
+                    try {
                         if (m_xos != null) {
                             m_xos.closeOutput();
                         }
@@ -469,7 +494,7 @@ public class XSLTransformer
     public static XSingleServiceFactory __getServiceFactory(
             String implName, XMultiServiceFactory multiFactory, XRegistryKey regKey) {
         XSingleServiceFactory xSingleServiceFactory = null;
-        if (implName.equals(XSLTransformer.class.getName())) {
+        if (implName.indexOf("XSLTransformer") != -1) {
             xSingleServiceFactory = FactoryHelper.getServiceFactory(XSLTransformer.class,
                     _serviceName, multiFactory, regKey);
         }
