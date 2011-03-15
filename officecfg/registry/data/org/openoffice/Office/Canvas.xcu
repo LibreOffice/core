@@ -14,6 +14,8 @@
    <value>
     <!-- Matrox G550 - blank display on 2nd head -->
     4139 9511 260313131 1 5 13 1 1320
+    <!-- Matrox G550 - blank display (single head?) -->
+    4139 9511 255987755 1 6 12 1 1930
     <!-- Matrox G400 - random crashes -->
     4139 1317 54005803 4 5 12 1 1200
     <!-- Mobility Radeon M6 16MB - blank screen 1st slide on internal LCD -->
