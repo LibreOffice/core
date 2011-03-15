@@ -50,9 +50,6 @@ $(eval $(call gb_Library_set_include,writerfilter,\
 $(eval $(call gb_Library_set_defs,writerfilter,\
 	$$(DEFS) \
 	-DWRITERFILTER_DLLIMPLEMENTATION \
-	-DDEBUG_CONTEXT_HANDLER \
-	-DDEBUG_FACTORY \
-	-DDEBUG_IMPORT \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,writerfilter,\
