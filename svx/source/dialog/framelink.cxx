@@ -1389,7 +1389,7 @@ double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOp
     basegfx::B2DPoint aBasePoint( 0.0, static_cast<double>( rBorder.GetWidth() / 2 ) );
 
     basegfx::B2DHomMatrix aRotation;
-    aRotation.rotate( nOtherAngle * F_PI18000 );
+    aRotation.rotate( double( nOtherAngle ) * M_PI / 18000.0 );
 
     basegfx::B2DVector aOtherVector = aRotation * aBaseVector;
     // Compute a line shifted by half the width of the other border
@@ -1401,6 +1401,7 @@ double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOp
     basegfx::tools::findCut(
             aBasePoint, aBaseVector, aOtherPoint, aOtherVector,
             CUTFLAG_ALL, &nCut );
+
     return nCut;
 }
 
