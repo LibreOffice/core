@@ -364,11 +364,7 @@ AVMEDIALIB=iavmedia.lib
 ICUINLIB=icuin.lib
 ICULELIB=icule.lib
 ICUUCLIB=icuuc.lib
-.IF "$(GUI)"=="OS2"
 ICUDATALIB=icudt.lib
-.ELSE
-ICUDATALIB=icudata.lib
-.ENDIF
 I18NUTILLIB=ii18nutil.lib
 I18NISOLANGLIB=ii18nisolang.lib
 I18NPAPERLIB=ii18npaper.lib
