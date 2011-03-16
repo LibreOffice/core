@@ -43,6 +43,7 @@ class XMLTextColumnsExport
     const ::rtl::OUString sSeparatorLineVerticalAlignment;
     const ::rtl::OUString sIsAutomatic;
     const ::rtl::OUString sAutomaticDistance;
+    const ::rtl::OUString sSeparatorLineStyle;
 
 protected:
 

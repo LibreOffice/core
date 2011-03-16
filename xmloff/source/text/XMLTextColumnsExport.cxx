@@ -61,7 +61,8 @@ XMLTextColumnsExport::XMLTextColumnsExport( SvXMLExport& rExp ) :
     sSeparatorLineRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineRelativeHeight")),
     sSeparatorLineVerticalAlignment(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineVerticalAlignment")),
     sIsAutomatic(RTL_CONSTASCII_USTRINGPARAM("IsAutomatic")),
-    sAutomaticDistance(RTL_CONSTASCII_USTRINGPARAM("AutomaticDistance"))
+    sAutomaticDistance(RTL_CONSTASCII_USTRINGPARAM("AutomaticDistance")),
+    sSeparatorLineStyle(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineStyle"))
 {
 }
 
@@ -133,12 +134,30 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_HEIGHT,
                                       sValue.makeStringAndClear() );
 
+            // style::style
+            aAny = xPropSet->getPropertyValue( sSeparatorLineStyle );
+            sal_Int8 nStyle = 0;
+            aAny >>= nStyle;
+
+            enum XMLTokenEnum eStr = XML_TOKEN_INVALID;
+            switch ( nStyle )
+            {
+                case 0:  eStr = XML_NONE; break;
+                case 1:  eStr = XML_SOLID; break;
+                case 2:  eStr = XML_DOTTED; break;
+                case 3:  eStr = XML_DASHED; break;
+                default:
+                         break;
+            }
+            if ( eStr != XML_TOKEN_INVALID )
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_STYLE, eStr );
+
             // style:vertical-align
             aAny = xPropSet->getPropertyValue( sSeparatorLineVerticalAlignment );
             VerticalAlignment eVertAlign;
             aAny >>= eVertAlign;
 
-            enum XMLTokenEnum eStr = XML_TOKEN_INVALID;
+            eStr = XML_TOKEN_INVALID;
             switch( eVertAlign )
             {
 //          case VerticalAlignment_TOP: eStr = XML_TOP;
