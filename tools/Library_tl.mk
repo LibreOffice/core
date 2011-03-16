@@ -33,8 +33,8 @@ $(eval $(call gb_Library_add_precompiled_header,tl,$(SRCDIR)/tools/inc/pch/preco
 
 $(eval $(call gb_Library_set_include,tl,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/tools/inc) \
-    -I$(realpath $(SRCDIR)/tools/inc/pch) \
+    -I$(SRCDIR)/tools/inc \
+    -I$(SRCDIR)/tools/inc/pch \
     -I$(SRCDIR)/solenv/inc \
     -I$(SRCDIR)/solenv/inc/Xp31 \
     -I$(OUTDIR)/inc/offuh \
