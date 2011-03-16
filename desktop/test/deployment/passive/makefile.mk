@@ -40,6 +40,7 @@ my_generic_components = passive_java passive_python
 
 .INCLUDE: settings.mk
 
+
 DLLPRE =
 
 SLOFILES = $(SHL1OBJS)
@@ -52,6 +53,8 @@ SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE: target.mk
+
+.IF "$(SOLAR_JAVA)" != ""
 
 ALLTAR : $(MISC)/passive.oxt
 
@@ -134,3 +137,5 @@ $(MISC)/$(TARGET)/passive_java.jar : MANIFEST.MF $(JAVATARGET)
         $(MISC)/$(TARGET)/passive_java.jar-zip/$(PACKAGE)/
     cd $(MISC)/$(TARGET)/passive_java.jar-zip && zip ../passive_java.jar \
         META-INF/MANIFEST.MF $(foreach,i,$(JAVAFILES:b) $(PACKAGE)/$i.class)
+
+.ENDIF
