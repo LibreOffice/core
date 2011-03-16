@@ -3,9 +3,6 @@ mkdir: %_DEST%\lib%_EXT%\python\lib-old
 mkdir: %_DEST%\lib%_EXT%\python\lib-tk
 mkdir: %_DEST%\lib%_EXT%\python\site-packages
 mkdir: %_DEST%\lib%_EXT%\python\encodings
-mkdir: %_DEST%\lib%_EXT%\python\test
-mkdir: %_DEST%\lib%_EXT%\python\test\output
-mkdir: %_DEST%\lib%_EXT%\python\test\data
 mkdir: %_DEST%\lib%_EXT%\python\email
 mkdir: %_DEST%\lib%_EXT%\python\email\mime
 mkdir: %_DEST%\lib%_EXT%\python\compiler
@@ -38,9 +35,6 @@ mkdir: %_DEST%\lib%_EXT%\python\ctypes\macholib
 ..\%__SRC%\misc\build\Python-2.6.1\Lib\lib-old\* %_DEST%\lib%_EXT%\python\lib-old\*
 ..\%__SRC%\misc\build\Python-2.6.1\Lib\lib-tk\* %_DEST%\lib%_EXT%\python\lib-tk\*
 ..\%__SRC%\misc\build\Python-2.6.1\Lib\site-packages\* %_DEST%\lib%_EXT%\python\site-packages\*
-..\%__SRC%\misc\build\Python-2.6.1\Lib\test\* %_DEST%\lib%_EXT%\python\test\*
-..\%__SRC%\misc\build\Python-2.6.1\Lib\test\output\* %_DEST%\lib%_EXT%\python\test\output\*
-..\%__SRC%\misc\build\Python-2.6.1\Lib\test\data\* %_DEST%\lib%_EXT%\python\test\data\*
 ..\%__SRC%\misc\build\Python-2.6.1\Lib\encodings\* %_DEST%\lib%_EXT%\python\encodings\*
 ..\%__SRC%\misc\build\Python-2.6.1\Lib\email\* %_DEST%\lib%_EXT%\python\email\*
 ..\%__SRC%\misc\build\Python-2.6.1\Lib\email\mime\* %_DEST%\lib%_EXT%\python\email\mime\*
