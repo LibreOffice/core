@@ -260,7 +260,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(PCHFLAGS) \
 		-I$(dir $(3)) \
 		$(INCLUDE) \
-		-c $(realpath $(3)) \
+		-c $(3) \
 		-Fo$(1))
 $(call gb_CObject__command_deponcompile,$(1),$(2),$(3),$(DEFS),$(CFLAGS),$(INCLUDE))
 endef
@@ -299,7 +299,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(PCHFLAGS) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE) \
-		-c $(realpath $(3)) \
+		-c $(3) \
 		-Fo$(1))
 $(call gb_CxxObject__command_deponcompile,$(1),$(2),$(3),$(DEFS),$(CFLAGS),$(INCLUDE))
 endef
@@ -341,7 +341,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(4) $(5) -Fd$(PDBFILE) \
 		-I$(dir $(3)) \
 		$(6) \
-		-c $(realpath $(3)) \
+		-c $(3) \
 		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj)
 $(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
@@ -382,7 +382,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(4) $(5) -Fd$(PDBFILE) \
 		-I$(dir $(3)) \
 		$(6) \
-		-c $(realpath $(3)) \
+		-c $(3) \
 		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj)
 $(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
