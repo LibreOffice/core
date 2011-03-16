@@ -33,7 +33,6 @@
 
 #if defined WNT
 
-#define ULONG        WIN_ULONG
 #define Rectangle    BLA_Rectangle
 #define Polygon      BLA_Polygon
 #define PolyPolygon  BLA_PolyPolygon

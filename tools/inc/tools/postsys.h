@@ -34,10 +34,6 @@
 #undef PolyPolygon
 #undef Polygon
 #undef Rectangle
-#undef ULONG
-#undef sal_Bool
-#undef BYTE
-#undef BOOL
 #undef DELETE
 
 /* Hilfe-Ids umbenennen */

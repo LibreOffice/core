@@ -567,9 +567,7 @@ FileStat::FileStat( const void *pInfo,      // struct dirent
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
 #endif
-#define ULONG WIN_ULONG
 #include <shlobj.h>
-#undef ULONG
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -608,7 +606,7 @@ HRESULT SHGetIDListFromPath( HWND hwndOwner, LPCTSTR pszPath, LPITEMIDLIST *ppid
     if ( FAILED(hResult) )
         return hResult;
 
-    WIN_ULONG chEaten = lstrlen( pszPath );
+    ULONG chEaten = lstrlen( pszPath );
     DWORD dwAttributes = FILE_ATTRIBUTE_DIRECTORY;
 
 #ifdef UNICODE
