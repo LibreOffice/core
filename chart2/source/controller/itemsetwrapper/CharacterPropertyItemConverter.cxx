@@ -193,6 +193,40 @@ void CharacterPropertyItemConverter::FillSpecialItem(
         }
         break;
 
+        case EE_CHAR_OVERLINE:
+        {
+            SvxOverlineItem aItem( UNDERLINE_NONE, EE_CHAR_OVERLINE );
+            bool bModified = false;
+
+            uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharOverline" ) ) );
+            if ( aValue.hasValue() )
+            {
+                aItem.PutValue( aValue, MID_TL_STYLE );
+                bModified = true;
+            }
+
+            aValue = GetPropertySet()->getPropertyValue( C2U( "CharOverlineHasColor" ) );
+            if ( aValue.hasValue() &&
+                 ( *reinterpret_cast< const sal_Bool* >( aValue.getValue() ) != sal_False ) )
+            {
+                aItem.PutValue( aValue, MID_TL_HASCOLOR );
+                bModified = true;
+            }
+
+            aValue = GetPropertySet()->getPropertyValue( C2U( "CharOverlineColor" ) );
+            if ( aValue.hasValue() )
+            {
+                aItem.PutValue( aValue, MID_TL_COLOR );
+                bModified = true;
+            }
+
+            if ( bModified )
+            {
+                rOutItemSet.Put( aItem );
+            }
+        }
+        break;
+
         case EE_CHAR_ITALIC:
         case EE_CHAR_ITALIC_CJK:
         case EE_CHAR_ITALIC_CTL:
@@ -391,6 +425,39 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                 if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharUnderlineHasColor" ) ))
                 {
                     GetPropertySet()->setPropertyValue( C2U( "CharUnderlineHasColor" ), aValue );
+                    bChanged = true;
+                }
+            }
+        }
+        break;
+
+        case EE_CHAR_OVERLINE:
+        {
+            const SvxOverlineItem& rItem = static_cast< const SvxOverlineItem & >( rItemSet.Get( nWhichId ) );
+
+            if ( rItem.QueryValue( aValue, MID_TL_STYLE ) )
+            {
+                if ( aValue != GetPropertySet()->getPropertyValue( C2U( "CharOverline" ) ) )
+                {
+                    GetPropertySet()->setPropertyValue( C2U( "CharOverline" ), aValue );
+                    bChanged = true;
+                }
+            }
+
+            if ( rItem.QueryValue( aValue, MID_TL_COLOR ) )
+            {
+                if ( aValue != GetPropertySet()->getPropertyValue( C2U( "CharOverlineColor" ) ) )
+                {
+                    GetPropertySet()->setPropertyValue( C2U( "CharOverlineColor" ), aValue );
+                    bChanged = true;
+                }
+            }
+
+            if ( rItem.QueryValue( aValue, MID_TL_HASCOLOR ) )
+            {
+                if ( aValue != GetPropertySet()->getPropertyValue( C2U( "CharOverlineHasColor" ) ) )
+                {
+                    GetPropertySet()->setPropertyValue( C2U( "CharOverlineHasColor" ), aValue );
                     bChanged = true;
                 }
             }
