@@ -58,11 +58,9 @@
 
 #define USE_UNISCRIBE
 #ifdef USE_UNISCRIBE
-#define ULONG WIN_ULONG
 #include <Usp10.h>
 #include <ShLwApi.h>
 #include <winver.h>
-#undef ULONG
 #endif // USE_UNISCRIBE
 
 #include <boost/unordered_map.hpp>
