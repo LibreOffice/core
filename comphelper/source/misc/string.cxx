@@ -101,7 +101,7 @@ sal_uInt32 decimalStringToNumber(
     for( sal_Int32 i = 0 ; i < str.getLength() ; )
     {
         sal_uInt32 c = str.iterateCodePoints(&i);
-        sal_uInt8 value = 0;
+        sal_uInt32 value = 0;
         if( c <= 0x0039)    // ASCII decimal digits, most common
             value = c - 0x0030;
         else if( c >= 0x1D7F6 )    // mathematical monospace digits
