@@ -29,6 +29,8 @@ PRJ=..$/..
 PRJNAME=basegfx
 TARGET=pixel
 
+ENABLE_EXCEPTIONS=TRUE
+
 # --- Settings ----------------------------------
 
 .INCLUDE :  	settings.mk
