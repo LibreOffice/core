@@ -2160,6 +2160,11 @@
                     <value xml:lang="en-US">~tOGGLE cASE</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ChangeCaseRotateCase" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Rotate case (Title Case, UPPERCASE, lowercase)</value>
+                </prop>
+            </node>
             <node oor:name=".uno:ChangeCaseToHalfWidth" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">H~alf-width</value>

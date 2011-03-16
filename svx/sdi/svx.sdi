@@ -1530,6 +1530,31 @@ SfxVoidItem ChangeCaseToToggleCase SID_TRANSLITERATE_TOGGLE_CASE
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem ChangeCaseRotateCase SID_TRANSLITERATE_ROTATE_CASE
+()
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem ChangeCaseToLower SID_TRANSLITERATE_LOWER
 ()
 [

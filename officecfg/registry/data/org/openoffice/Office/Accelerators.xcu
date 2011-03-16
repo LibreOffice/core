@@ -1556,6 +1556,11 @@
       <value xml:lang="en-US">.uno:EditGlossary</value>
      </prop>
     </node>
+    <node oor:name="F3_SHIFT" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US">.uno:ChangeCaseRotateCase</value>
+     </prop>
+    </node>
     <node oor:name="F4_SHIFT" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:JumpToNextFrame</value>
@@ -2597,6 +2602,11 @@
       <value xml:lang="en-US">.uno:EditGlossary</value>
      </prop>
     </node>
+    <node oor:name="F3_SHIFT" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US">.uno:ChangeCaseRotateCase</value>
+     </prop>
+    </node>
     <node oor:name="F4_SHIFT" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:JumpToNextFrame</value>
@@ -3220,6 +3230,11 @@
     <node oor:name="F3_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:EditGlossary</value>
+     </prop>
+    </node>
+    <node oor:name="F3_SHIFT" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US">.uno:ChangeCaseRotateCase</value>
      </prop>
     </node>
     <node oor:name="F4_SHIFT" oor:op="replace">
@@ -3847,6 +3862,11 @@
       <value xml:lang="en-US">.uno:EditGlossary</value>
      </prop>
     </node>
+    <node oor:name="F3_SHIFT" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US">.uno:ChangeCaseRotateCase</value>
+     </prop>
+    </node>
     <node oor:name="F4_SHIFT" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:JumpToNextFrame</value>
@@ -4455,6 +4475,11 @@
     <node oor:name="F3_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:EditGlossary</value>
+     </prop>
+    </node>
+    <node oor:name="F3_SHIFT" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US">.uno:ChangeCaseRotateCase</value>
      </prop>
     </node>
     <node oor:name="F4_SHIFT" oor:op="replace">
@@ -5070,6 +5095,11 @@
     <node oor:name="F3_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:EditGlossary</value>
+     </prop>
+    </node>
+    <node oor:name="F3_SHIFT" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US">.uno:ChangeCaseRotateCase</value>
      </prop>
     </node>
     <node oor:name="F4_SHIFT" oor:op="replace">
