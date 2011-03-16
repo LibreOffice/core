@@ -33,10 +33,10 @@ $(eval $(call gb_Library_set_include,fsstorage,\
     $$(SOLARINC) \
     -I$(WORKDIR)/inc/svl \
     -I$(WORKDIR)/inc/ \
-    -I$(SRCDIR)/svl/inc \
-    -I$(SRCDIR)/svl/inc/svl \
-    -I$(SRCDIR)/svl/source/inc \
-    -I$(SRCDIR)/svl/inc/pch \
+    -I$(realpath $(SRCDIR)/svl/inc) \
+    -I$(realpath $(SRCDIR)/svl/inc/svl) \
+    -I$(realpath $(SRCDIR)/svl/source/inc) \
+    -I$(realpath $(SRCDIR)/svl/inc/pch) \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
 ))

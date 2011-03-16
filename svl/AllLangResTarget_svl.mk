@@ -42,8 +42,8 @@ $(eval $(call gb_SrsTarget_set_include,svl/res,\
 ))
 
 $(eval $(call gb_SrsTarget_add_files,svl/res,\
-    svl/source/misc/mediatyp.src \
-    svl/source/items/cstitem.src \
+    clone/libs-gui/svl/source/misc/mediatyp.src \
+    clone/libs-gui/svl/source/items/cstitem.src \
 ))
 
 
