@@ -297,10 +297,19 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
     OSQLParseNode* pAtom        = pPart2->getChild(pPart2->count()-2);
     OSQLParseNode* pOptEscape   = pPart2->getChild(pPart2->count()-1);
 
-    if (!(pAtom->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(pAtom,parameter)))
+    if (!(pAtom->getNodeType() == SQL_NODE_STRING   ||
+          SQL_ISRULE(pAtom,parameter)               ||
+          // odbc date
+          SQL_ISRULE(pAtom,set_fct_spec)            ||
+          SQL_ISRULE(pAtom,position_exp)            ||
+          SQL_ISRULE(pAtom,char_substring_fct)      ||
+          // upper, lower etc.
+          SQL_ISRULE(pAtom,fold)) )
     {
-        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,NULL);
+        m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,NULL);
+        return NULL;
     }
+
     if (pOptEscape->count() != 0)
     {
         if (pOptEscape->count() != 2)
