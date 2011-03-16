@@ -420,6 +420,14 @@ bool ToolbarLayoutManager::requestToolbar( const ::rtl::OUString& rResourceURL )
     bool bMustCallCreate( false );
     uno::Reference< ui::XUIElement > xUIElement;
 
+    ReadGuard aReadLock( m_aLock );
+    uno::Reference< frame::XFrame > xFrame( m_xFrame );
+    aReadLock.unlock();
+
+    uno::Reference< frame::XModel > xModel( impl_getModelFromFrame( xFrame ));
+    if ( implts_isPreviewModel( xModel ))
+        return false; // no toolbars for preview frame!
+
     UIElement aRequestedToolbar = impl_findToolbar( rResourceURL );
     if ( aRequestedToolbar.m_aName != rResourceURL  )
     {
