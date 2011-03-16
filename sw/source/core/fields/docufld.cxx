@@ -103,6 +103,7 @@
 
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
+#include <switerator.hxx>
 
 #define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
 
@@ -176,14 +177,11 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc, sal_uInt16 nPage,
             if( 0 != (pDesc = (SwFmtPageDesc*)rPool.GetItem2( RES_PAGEDESC, n ) )
                 && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
             {
-                if( pDesc->GetDefinedIn()->ISA( SwCntntNode ))
+                SwCntntNode* pNd = PTR_CAST( SwCntntNode, pDesc->GetDefinedIn() );
+                if( pNd )
                 {
-                    SwClientIter aIter( *(SwModify*)pDesc->GetDefinedIn() );
-                    if( aIter.First( TYPE( SwFrm ) ) )
-                    {
+                    if ( SwIterator<SwFrm,SwCntntNode>::FirstElement(*pNd) )
                         bVirtuell = sal_True;
-                        break;
-                    }
                 }
                 else if( pDesc->GetDefinedIn()->ISA( SwFmt ))
                 {
@@ -249,9 +247,6 @@ sal_uInt16 SwPageNumberField::GetSubType() const
     return nSubType;
 }
 
-/*-----------------05.03.98 10:25-------------------
-
---------------------------------------------------*/
 sal_Bool SwPageNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
@@ -282,9 +277,7 @@ sal_Bool SwPageNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) co
     }
     return sal_True;
 }
-/*-----------------05.03.98 10:25-------------------
 
---------------------------------------------------*/
 sal_Bool SwPageNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     sal_Bool bRet = sal_True;
@@ -383,9 +376,6 @@ SwField* SwAuthorField::Copy() const
     return pTmp;
 }
 
-/*-----------------05.03.98 11:15-------------------
-
---------------------------------------------------*/
 sal_Bool SwAuthorField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     sal_Bool bVal;
@@ -410,9 +400,7 @@ sal_Bool SwAuthorField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     }
     return sal_True;
 }
-/*-----------------05.03.98 11:15-------------------
 
---------------------------------------------------*/
 sal_Bool SwAuthorField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
@@ -529,9 +517,6 @@ SwField* SwFileNameField::Copy() const
     return pTmp;
 }
 
-/*-----------------05.03.98 08:59-------------------
-
---------------------------------------------------*/
 sal_Bool SwFileNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
@@ -571,9 +556,7 @@ sal_Bool SwFileNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) cons
     }
     return sal_True;
 }
-/*-----------------05.03.98 09:01-------------------
 
---------------------------------------------------*/
 sal_Bool SwFileNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
@@ -705,9 +688,6 @@ SwField* SwTemplNameField::Copy() const
     return pTmp;
 }
 
-/*-----------------05.03.98 08:59-------------------
-
---------------------------------------------------*/
 sal_Bool SwTemplNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch ( nWhichId )
@@ -733,9 +713,7 @@ sal_Bool SwTemplNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) con
     }
     return sal_True;
 }
-/*-----------------05.03.98 09:01-------------------
 
---------------------------------------------------*/
 sal_Bool SwTemplNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch ( nWhichId )
@@ -796,8 +774,8 @@ String SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const
         case DS_WORD: nVal = rDStat.nWord;  break;
         case DS_CHAR: nVal = rDStat.nChar;  break;
         case DS_PAGE:
-            if( pDoc->GetRootFrm() )
-                ((SwDocStat &)rDStat).nPage = pDoc->GetRootFrm()->GetPageNum();
+            if( pDoc->GetCurrentLayout() )//swmod 080218
+                ((SwDocStat &)rDStat).nPage = pDoc->GetCurrentLayout()->GetPageNum();   //swmod 080218
             nVal = rDStat.nPage;
             if( SVX_NUM_PAGEDESC == nFmt )
                 nFmt = (sal_uInt32)nNumberingType;
@@ -860,9 +838,6 @@ void SwDocStatField::ChangeExpansion( const SwFrm* pFrm )
                 pFrm->FindPageFrm()->GetPageDesc()->GetNumType().GetNumberingType() );
 }
 
-/*-----------------05.03.98 11:38-------------------
-
---------------------------------------------------*/
 sal_Bool SwDocStatField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch ( nWhichId )
@@ -875,9 +850,7 @@ sal_Bool SwDocStatField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     }
     return sal_True;
 }
-/*-----------------05.03.98 11:38-------------------
 
---------------------------------------------------*/
 sal_Bool SwDocStatField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     sal_Bool bRet = sal_False;
@@ -912,9 +885,7 @@ SwDocInfoFieldType::SwDocInfoFieldType(SwDoc* pDc)
 {
 }
 
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 SwFieldType* SwDocInfoFieldType::Copy() const
 {
     SwDocInfoFieldType* pTyp = new SwDocInfoFieldType(GetDoc());
@@ -934,9 +905,7 @@ void lcl_GetLocalDataWrapper( sal_uLong nLang,
                         SvxCreateLocale( static_cast<LanguageType>(nLang) ) );
 }
 
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                                     sal_uInt16 nLang, const String& rName ) const
 {
@@ -1084,9 +1053,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
     return aStr;
 }
 
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const String& rName, sal_uInt32 nFmt) :
     SwValueField(pTyp, nFmt), nSubType(nSub)
 {
@@ -1101,9 +1068,8 @@ SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const 
     aContent = rValue;
 }
 
-/* ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 template<class T>
 double lcl_TimeToDouble( const T& rTime )
 {
@@ -1743,9 +1709,7 @@ SwField* SwHiddenParaField::Copy() const
 
     return pFld;
 }
-/*-----------------05.03.98 13:25-------------------
 
---------------------------------------------------*/
 sal_Bool SwHiddenParaField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch ( nWhichId )
@@ -1765,9 +1729,7 @@ sal_Bool SwHiddenParaField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) co
     }
     return sal_True;
 }
-/*-----------------05.03.98 13:25-------------------
 
---------------------------------------------------*/
 sal_Bool SwHiddenParaField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch ( nWhichId )
@@ -1908,9 +1870,6 @@ sal_uInt32 SwPostItField::GetNumberOfParagraphs() const
     return (mpText) ? mpText->Count() : 1;
 }
 
-/*-----------------05.03.98 13:42-------------------
-
---------------------------------------------------*/
 sal_Bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
@@ -1971,10 +1930,6 @@ sal_Bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return sal_True;
 }
 
-
-/*-----------------05.03.98 13:42-------------------
-
---------------------------------------------------*/
 sal_Bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
@@ -2116,9 +2071,6 @@ void SwExtUserField::SetSubType(sal_uInt16 nSub)
     nType = nSub;
 }
 
-/*-----------------05.03.98 14:14-------------------
-
---------------------------------------------------*/
 sal_Bool SwExtUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
@@ -2144,9 +2096,7 @@ sal_Bool SwExtUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     }
     return sal_True;
 }
-/*-----------------05.03.98 14:14-------------------
 
---------------------------------------------------*/
 sal_Bool SwExtUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
@@ -2194,7 +2144,7 @@ SwFieldType* SwRefPageSetFieldType::Copy() const
 
  ---------------------------------------------------------------------------*/
 // ueberlagert, weil es nichts zum Updaten gibt!
-void SwRefPageSetFieldType::Modify( SfxPoolItem *, SfxPoolItem * )
+void SwRefPageSetFieldType::Modify( const SfxPoolItem*, const SfxPoolItem * )
 {
 }
 
@@ -2236,9 +2186,6 @@ void SwRefPageSetField::SetPar2(const String& rStr)
     SetOffset( (short) rStr.ToInt32() );
 }
 
-/*-----------------05.03.98 14:52-------------------
-
---------------------------------------------------*/
 sal_Bool SwRefPageSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
@@ -2254,9 +2201,7 @@ sal_Bool SwRefPageSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) co
     }
     return sal_True;
 }
-/*-----------------05.03.98 14:52-------------------
 
---------------------------------------------------*/
 sal_Bool SwRefPageSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
@@ -2292,7 +2237,7 @@ SwFieldType* SwRefPageGetFieldType::Copy() const
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwRefPageGetFieldType::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     // Update auf alle GetReferenz-Felder
     if( !pNew && !pOld && GetDepends() )
@@ -2301,30 +2246,26 @@ void SwRefPageGetFieldType::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         _SetGetExpFlds aTmpLst( 10, 5 );
         if( MakeSetList( aTmpLst ) )
         {
-            SwClientIter aIter( *this );
-            if( aIter.GoStart() )
-                do {
+            SwIterator<SwFmtFld,SwFieldType> aIter( *this );
+            for ( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
                     // nur die GetRef-Felder Updaten
-                    SwFmtFld* pFmtFld = (SwFmtFld*)aIter();
                     if( pFmtFld->GetTxtFld() )
                         UpdateField( pFmtFld->GetTxtFld(), aTmpLst );
-                } while( aIter++ );
         }
     }
 
     // weiter an die Text-Felder, diese "Expandieren" den Text
-    SwModify::Modify( pOld, pNew );
+    NotifyClients( pOld, pNew );
 }
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
 sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
 {
-    SwClientIter aIter( *pDoc->GetSysFldType( RES_REFPAGESETFLD));
-    if( aIter.GoStart() )
-        do {
+    SwIterator<SwFmtFld,SwFieldType> aIter(*pDoc->GetSysFldType( RES_REFPAGESETFLD));
+    for ( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
+    {
             // nur die GetRef-Felder Updaten
-            SwFmtFld* pFmtFld = (SwFmtFld*)aIter();
             const SwTxtFld* pTFld = pFmtFld->GetTxtFld();
             if( pTFld )
             {
@@ -2332,7 +2273,7 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
 
                 // immer den ersten !! (in Tab-Headline, Kopf-/Fuss )
                 Point aPt;
-                const SwCntntFrm* pFrm = rTxtNd.GetFrm( &aPt, 0, sal_False );
+                const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rTxtNd.GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
 
                 _SetGetExpFld* pNew;
 
@@ -2364,7 +2305,7 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
                 if( !rTmpLst.Insert( pNew ))
                     delete pNew;
             }
-        } while( aIter++ );
+    }
 
     return rTmpLst.Count();
 }
@@ -2397,8 +2338,8 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
             {
                 // dann bestimme mal den entsp. Offset
                 Point aPt;
-                const SwCntntFrm* pFrm = pTxtNode->GetFrm( &aPt, 0, sal_False );
-                const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().GetFrm( &aPt, 0, sal_False );
+                const SwCntntFrm* pFrm = pTxtNode->getLayoutFrm( pTxtNode->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
+                const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().getLayoutFrm( pRefTxtFld->GetTxtNode().GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
                 const SwPageFrm* pPgFrm = 0;
                 sal_uInt16 nDiff = ( pFrm && pRefFrm )
                         ?   (pPgFrm = pFrm->FindPageFrm())->GetPhyPageNum() -
@@ -2416,7 +2357,7 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
         }
     }
     // dann die Formatierung anstossen
-    ((SwFmtFld&)pTxtFld->GetFld()).Modify( 0, 0 );
+    ((SwFmtFld&)pTxtFld->GetFld()).ModifyNotification( 0, 0 );
 }
 
 /*--------------------------------------------------------------------
@@ -2491,7 +2432,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
     const SwRefPageSetField* pSetFld =
                         (SwRefPageSetField*)pRefTxtFld->GetFld().GetFld();
     Point aPt;
-    const SwCntntFrm* pRefFrm = pRefTxtFld ? pRefTxtFld->GetTxtNode().GetFrm( &aPt, 0, sal_False ) : 0;
+    const SwCntntFrm* pRefFrm = pRefTxtFld ? pRefTxtFld->GetTxtNode().getLayoutFrm( pFrm->getRootFrm(), &aPt, 0, sal_False ) : 0;
     if( pSetFld->IsOn() && pRefFrm )
     {
         // dann bestimme mal den entsp. Offset
@@ -2507,9 +2448,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
         pGetFld->SetText( FormatNumber( nPageNum, nTmpFmt ) );
     }
 }
-/*-----------------05.03.98 14:52-------------------
 
---------------------------------------------------*/
 sal_Bool SwRefPageGetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
@@ -2525,9 +2464,7 @@ sal_Bool SwRefPageGetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) co
     }
     return sal_True;
 }
-/*-----------------05.03.98 14:52-------------------
 
---------------------------------------------------*/
 sal_Bool SwRefPageGetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
@@ -2643,9 +2580,6 @@ void SwJumpEditField::SetPar2(const String& rStr)
     sHelp = rStr;
 }
 
-/*-----------------05.03.98 15:00-------------------
-
---------------------------------------------------*/
 sal_Bool SwJumpEditField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
@@ -2677,9 +2611,7 @@ sal_Bool SwJumpEditField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) cons
     }
     return sal_True;
 }
-/*-----------------05.03.98 15:00-------------------
 
---------------------------------------------------*/
 sal_Bool SwJumpEditField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )

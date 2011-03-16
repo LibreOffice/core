@@ -122,8 +122,9 @@ public:
     virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getParaBefore(const css::uno::Reference< css::text::XFlatParagraph > & xPara) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
     virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getParaAfter(const css::uno::Reference< css::text::XFlatParagraph > & xPara) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
 
+protected:
     // SwClient
-    virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
 private:
     SwXFlatParagraphIterator( const SwXFlatParagraphIterator & ); // not defined

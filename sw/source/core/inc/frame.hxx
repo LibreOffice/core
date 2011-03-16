@@ -31,6 +31,7 @@
 #include "swtypes.hxx"  // fuer SwTwips
 #include "swrect.hxx"
 #include "calbck.hxx"   // fuer SwClient
+#include <svl/brdcst.hxx>
 
 class SwLayoutFrm;
 class SwRootFrm;
@@ -54,12 +55,10 @@ class SvxBrushItem;
 class SwSelectionList;
 struct SwPosition;
 struct SwCrsrMoveState;
+class SwFmt;
 class SwPrintData;
-
-// --> OD 2004-07-06 #i28701#
 class SwSortedObjs;
 class SwAnchoredObject;
-// <--
 
 //Jeder FrmTyp findet sich hier in einem Bit wieder.
 //Die Bits muessen so gesetzt werden, dass mit einer Maskierung festgestellt
@@ -270,7 +269,7 @@ enum MakePageType
 //typedef SdrObject* SdrObjectPtr;
 //SV_DECL_PTRARR(SwDrawObjs,SdrObjectPtr,1,1);
 
-class SwFrm: public SwClient
+class SwFrm: public SwClient, public SfxBroadcaster
 {
     //Der verkappte Frm
     friend class SwFlowFrm;
@@ -304,6 +303,7 @@ class SwFrm: public SwClient
     const  sal_uInt32 mnFrmId;
     // <--
 
+    SwRootFrm   *mpRoot;
     SwLayoutFrm *pUpper;
     SwFrm       *pNext;
     SwFrm       *pPrev;
@@ -374,7 +374,7 @@ class SwFrm: public SwClient
     SwCntntFrm* _FindPrevCnt( const bool _bInSameFtn = false );
 
 
-    void _UpdateAttrFrm( SfxPoolItem*, SfxPoolItem*, sal_uInt8 & );
+    void _UpdateAttrFrm( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 & );
     SwFrm* _GetIndNext();
     void SetDirFlags( sal_Bool bVert );
 
@@ -433,6 +433,9 @@ protected:
     void ColLock()      { bColLocked = sal_True; }
     void ColUnlock()    { bColLocked = sal_False; }
 
+    // Only used by SwRootFrm Ctor to get 'this' into mpRoot...
+    void setRootFrm( SwRootFrm* pRoot ) { mpRoot = pRoot; }
+
     SwPageFrm *InsertPage( SwPageFrm *pSibling, sal_Bool bFtn );
     void PrepareMake();
     void OptPrepareMake();
@@ -452,10 +455,10 @@ protected:
     virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) = 0;
     virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False ) = 0;
 
-    SwModify        *GetDep()       { return pRegisteredIn; }
-    const SwModify  *GetDep() const { return pRegisteredIn; }
+    SwModify        *GetDep()       { return GetRegisteredInNonConst(); }
+    const SwModify  *GetDep() const { return GetRegisteredIn(); }
 
-    SwFrm( SwModify* );
+    SwFrm( SwModify*, SwFrm* );
 
     void CheckDir( sal_uInt16 nDir, sal_Bool bVert, sal_Bool bOnlyBiDi, sal_Bool bBrowse );
 
@@ -490,6 +493,7 @@ protected:
 
         //Schatten und Umrandung painten
     void PaintShadow( const SwRect&, SwRect&, const SwBorderAttrs& ) const;
+    virtual void  Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
     TYPEINFO(); //Bereits in Basisklasse Client drin.
@@ -639,7 +643,6 @@ public:
     //Fussnote einzufuegen (nicht z.B. in wiederholten TabellenHeadlines).
     sal_Bool IsFtnAllowed() const;
 
-    virtual void  Modify( SfxPoolItem*, SfxPoolItem* );
     virtual void  Format( const SwBorderAttrs *pAttrs = 0 );
 
     virtual void  CheckDirection( sal_Bool bVert );
@@ -651,10 +654,6 @@ public:
     inline sal_Bool HasFixSize() const { return bFixSize; }
     inline void SetFixSize( sal_Bool bNew ) { bFixSize = bNew; }
 
-    //Kann 0 liefern, pruefen auch ob die Shell zum richtigen Dokument
-    //gehoert. Impl in frmsh.hxx
-    ViewShell *GetShell() const;
-
     //Prueft alle Seiten ab der Uebergebenen und korrigiert ggf.
     static void CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields = sal_True );
 
@@ -662,7 +661,7 @@ public:
     SwFrm               *GetNext()  { return pNext; }
     SwFrm               *GetPrev()  { return pPrev; }
     SwLayoutFrm         *GetUpper() { return pUpper; }
-    SwRootFrm           *FindRootFrm();
+    SwRootFrm           *getRootFrm(){ return mpRoot; }
     SwPageFrm           *FindPageFrm();
     SwFrm               *FindColFrm();
     SwFtnBossFrm        *FindFtnBossFrm( sal_Bool bFootnotes = sal_False );
@@ -675,6 +674,7 @@ public:
     const SwFrm         *GetNext()  const { return pNext; }
     const SwFrm         *GetPrev()  const { return pPrev; }
     const SwLayoutFrm   *GetUpper() const { return pUpper; }
+    const SwRootFrm     *getRootFrm()   const { return mpRoot; }
     inline SwTabFrm     *FindTabFrm();
     inline SwFtnFrm     *FindFtnFrm();
     inline SwFlyFrm     *FindFlyFrm();
@@ -685,7 +685,6 @@ public:
     // <--
     inline SwFrm        *FindPrev();
     inline const SwPageFrm *FindPageFrm() const;
-    inline const SwRootFrm *FindRootFrm() const;
     inline const SwFtnBossFrm *FindFtnBossFrm( sal_Bool bFtn = sal_False ) const;
     inline const SwFrm     *FindColFrm() const;
     inline const SwFrm     *FindFooterOrHeader() const;
@@ -951,6 +950,8 @@ public:
     bool IsInCoveredCell() const;
 
     // FME 2007-08-30 #i81146# new loop control
+    bool KnowsFormat( const SwFmt& rFmt ) const;
+    void RegisterToFormat( SwFmt& rFmt );
     void ValidateThisAndAllLowers( const sal_uInt16 nStage );
 };
 
@@ -1120,10 +1121,6 @@ inline Point SwFrm::GetRelPos() const
 inline const SwPageFrm *SwFrm::FindPageFrm() const
 {
     return ((SwFrm*)this)->FindPageFrm();
-}
-inline const SwRootFrm *SwFrm::FindRootFrm() const
-{
-    return ((SwFrm*)this)->FindRootFrm();
 }
 inline const SwFrm *SwFrm::FindColFrm() const
 {

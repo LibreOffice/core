@@ -2373,10 +2373,10 @@ void SwXTextDocument::refresh(void) throw( RuntimeException )
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
-    SwWrtShell *pWrtShell = pDocShell->GetWrtShell();
+    ViewShell *pViewShell = pDocShell->GetWrtShell();
     notifyRefreshListeners();
-    if(pWrtShell)
-        pWrtShell->CalcLayout();
+    if(pViewShell)
+        pViewShell->CalcLayout();
 }
 /*-- 21.02.00 08:41:06---------------------------------------------------
 
@@ -2678,42 +2678,59 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     else
     {
         SwDocShell *pRenderDocShell = pDoc->GetDocShell();
-        SwWrtShell *pWrtShell = pRenderDocShell->GetWrtShell();
+
+        // TODO/mba: we really need a generic way to get the ViewShell!
+        ViewShell* pViewShell = 0;
+        SwView* pSwView = PTR_CAST(SwView, pView);
+        if ( pSwView )
+        {
+            pViewShell = pSwView->GetWrtShellPtr();
+        }
+        else
+        {
+            if ( bIsPDFExport && bFormat )
+            {
+                //create a hidden view to be able to export as PDF also in print preview
+                //pView and pSwView are not changed intentionally!
+                m_pHiddenViewFrame = SfxViewFrame::LoadHiddenDocument( *pRenderDocShell, 2 );
+                pViewShell = ((SwView*)m_pHiddenViewFrame->GetViewShell())->GetWrtShellPtr();
+            }
+            else
+                pViewShell = ((SwPagePreView*)pView)->GetViewShell();
+        }
+
+        if (!pViewShell || !pViewShell->GetLayout())
+            return 0;
+
         if (bFormat)
         {
             // #i38289
-            if(pDoc->get(IDocumentSettingAccess::BROWSE_MODE))
+            if( pViewShell->GetViewOptions()->getBrowseMode() )
             {
-                pRenderDocShell->ToggleBrowserMode(false,NULL);
-            }
-
-            if (!pWrtShell)
-            {
-                //create a hidden view to be able to export as PDF also in print preview
-                m_pHiddenViewFrame = SfxViewFrame::LoadHiddenDocument( *pRenderDocShell, 2 );
-                SwView* pSwView = (SwView*) m_pHiddenViewFrame->GetViewShell();
-                pWrtShell = pSwView->GetWrtShellPtr();
+                SwViewOption aOpt( *pViewShell->GetViewOptions() );
+                aOpt.setBrowseMode( false );
+                pViewShell->ApplyViewOptions( aOpt );
+                pSwView->RecheckBrowseMode();
             }
 
             // reformating the document for printing will show the changes in the view
             // which is likely to produce many unwanted and not nice to view actions.
             // We don't want that! Thus we disable updating of the view.
-            pWrtShell->StartAction();
+            pViewShell->StartAction();
 
-            const TypeId aSwViewTypeId = TYPE(SwView);
-            if (pView->IsA(aSwViewTypeId))
+            if (pSwView)
             {
-                if (m_pRenderData && m_pRenderData->NeedNewViewOptionAdjust( *pWrtShell ) )
+                if (m_pRenderData && m_pRenderData->NeedNewViewOptionAdjust( *pViewShell ) )
                     m_pRenderData->ViewOptionAdjustStop();
                 if (m_pRenderData && !m_pRenderData->IsViewOptionAdjust())
-                    m_pRenderData->ViewOptionAdjustStart( *pWrtShell, *pWrtShell->GetViewOptions() );
+                    m_pRenderData->ViewOptionAdjustStart( *pViewShell, *pViewShell->GetViewOptions() );
             }
 
             m_pRenderData->SetSwPrtOptions( new SwPrintData );
             m_pRenderData->MakeSwPrtOptions( m_pRenderData->GetSwPrtOptionsRef(), pRenderDocShell,
                     m_pPrintUIOptions, m_pRenderData, bIsPDFExport );
 
-            if (pView->IsA(aSwViewTypeId))
+            if (pSwView)
             {
                 // PDF export should not make use of the SwPrtOptions
                 const SwPrintData *pPrtOptions = (bIsPDFExport)
@@ -2723,7 +2740,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
             // since printing now also use the API for PDF export this option
             // should be set for printing as well ...
-            pWrtShell->SetPDFExportOption( sal_True );
+            pViewShell->SetPDFExportOption( sal_True );
             bool bOrigStatus = pRenderDocShell->IsEnableSetModified();
             // check configuration: shall update of printing information in DocInfo set the document to "modified"?
             bool bStateChanged = false;
@@ -2733,9 +2750,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                 bStateChanged = true;
             }
 
-
             // --> FME 2005-05-23 #122919# Force field update before PDF export:
-            pWrtShell->ViewShell::UpdateFlds(sal_True);
+            pViewShell->ViewShell::UpdateFlds(sal_True);
             // <--
             if( bStateChanged )
                 pRenderDocShell->EnableSetModified( sal_True );
@@ -2743,17 +2759,16 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             // there is some redundancy between those two function calls, but right now
             // there is no time to sort this out.
             //TODO: check what exatly needs to be done and make just one function for that
-            pWrtShell->CalcLayout();
-            pWrtShell->CalcPagesForPrint( pDoc->GetPageCount() );
+            pViewShell->CalcLayout();
+            pViewShell->CalcPagesForPrint( pViewShell->GetPageCount() );
 
-            pWrtShell->SetPDFExportOption( sal_False );
-
+            pViewShell->SetPDFExportOption( sal_False );
 
             // enable view again
-            pWrtShell->EndAction();
+            pViewShell->EndAction();
         }
 
-        const sal_Int32 nPageCount = pDoc->GetPageCount();
+        const sal_Int32 nPageCount = pViewShell->GetPageCount();
 
         //
         // get number of pages to be rendered
@@ -2761,7 +2776,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         const bool bPrintProspect = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
         if (bPrintProspect)
         {
-            pDoc->CalculatePagePairsForProspectPrinting( *m_pRenderData, *m_pPrintUIOptions, nPageCount );
+            pDoc->CalculatePagePairsForProspectPrinting( *pViewShell->GetLayout(), *m_pRenderData, *m_pPrintUIOptions, nPageCount );
             nRet = m_pRenderData->GetPagePairsForProspectPrinting().size();
         }
         else
@@ -2770,12 +2785,12 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             if (nPostItMode != POSTITS_NONE)
             {
                 OutputDevice *pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
-                m_pRenderData->CreatePostItData( pDoc, pWrtShell->GetViewOptions(), pOutDev );
+                m_pRenderData->CreatePostItData( pDoc, pViewShell->GetViewOptions(), pOutDev );
             }
 
             // get set of valid document pages (according to the current settings)
             // and their start frames
-            pDoc->CalculatePagesForPrinting( *m_pRenderData, *m_pPrintUIOptions, bIsPDFExport, nPageCount );
+            pDoc->CalculatePagesForPrinting( *pViewShell->GetLayout(), *m_pRenderData, *m_pPrintUIOptions, bIsPDFExport, nPageCount );
 
             if (nPostItMode != POSTITS_NONE)
             {
@@ -2831,6 +2846,15 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     // Thus instead of throwing the exception we silently return.
     if (0 > nRenderer)
         throw IllegalArgumentException();
+
+    // TODO/mba: we really need a generic way to get the ViewShell!
+    ViewShell* pVwSh = 0;
+    SwView* pSwView = PTR_CAST(SwView, pView);
+    if ( pSwView )
+        pVwSh = pSwView->GetWrtShellPtr();
+    else
+        pVwSh = ((SwPagePreView*)pView)->GetViewShell();
+
     sal_Int32 nMaxRenderer = 0;
     if (!bIsSwSrcView && m_pRenderData)
     {
@@ -2899,7 +2923,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                     // we just state what output size we would need
                     // which may cause vcl to set that page size on the printer
                     // (if available and not overriden by the user)
-                    aTmpSize = pDoc->GetPageSize( nPage, bIsSkipEmptyPages );
+                    aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
                     aPreferredPageSize = awt::Size ( TWIP_TO_MM100( 2 * aTmpSize.Width() ),
                                                      TWIP_TO_MM100( aTmpSize.Height() ));
                 }
@@ -2921,7 +2945,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         }
         else
         {
-            aTmpSize = pDoc->GetPageSize( nPage, bIsSkipEmptyPages );
+            aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
             aPageSize = awt::Size ( TWIP_TO_MM100( aTmpSize.Width() ),
                                     TWIP_TO_MM100( aTmpSize.Height() ));
         }
@@ -3060,9 +3084,12 @@ void SAL_CALL SwXTextDocument::render(
                 ViewShell* pVwSh = 0;
                 if (pView)
                 {
-                    pVwSh = pView->IsA(aSwViewTypeId) ?
-                                ((SwView*)pView)->GetWrtShellPtr() :
-                                ((SwPagePreView*)pView)->GetViewShell();
+                    // TODO/mba: we really need a generic way to get the ViewShell!
+                    SwView* pSwView = PTR_CAST(SwView, pView);
+                    if ( pSwView )
+                        pVwSh = pSwView->GetWrtShellPtr();
+                    else
+                        pVwSh = ((SwPagePreView*)pView)->GetViewShell();
                 }
 
                 // get output device to use
@@ -3331,7 +3358,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
         }
     }
 
-    //get languages from "drawobject"
+    //TODO/mba: it's a strange concept that a view is needed to retrieve core data
     SwWrtShell *pWrtSh = pDocShell->GetWrtShell();
     SdrView *pSdrView = pWrtSh->GetDrawView();
 
@@ -4113,7 +4140,7 @@ void SwXDocumentPropertyHelper::onChange()
 
 /*****************************************************************************/
 
-SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl( SwWrtShell& rSh, const SwViewOption &rViewOptions ) :
+SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl( ViewShell& rSh, const SwViewOption &rViewOptions ) :
     m_rShell( rSh ),
     m_aOldViewOptions( rViewOptions )
 {

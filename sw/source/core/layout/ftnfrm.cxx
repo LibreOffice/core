@@ -48,18 +48,16 @@
 #include <ndindex.hxx>
 #include <sectfrm.hxx>
 #include <pam.hxx>
-// --> OD 2005-05-17 #i49383#
 #include <objectformatter.hxx>
-// <--
+#include "viewopt.hxx"
+#include "viewsh.hxx"
+#include <switerator.hxx>
 
 /*************************************************************************
 |*
 |*  lcl_FindFtnPos()        Sucht die Position des Attributes im FtnArray am
 |*      Dokument, dort stehen die Fussnoten gluecklicherweise nach ihrem
 |*      Index sortiert.
-|*
-|*  Ersterstellung      MA 29. Jun. 93
-|*  Letzte Aenderung    MA 13. Dec. 93
 |*
 |*************************************************************************/
 
@@ -119,9 +117,6 @@ sal_Bool SwFtnFrm::operator<( const SwTxtFtn* pTxtFtn ) const
 |*  oder eine Seite (ohne Spalten) sein. Wenn die Seite dabei gewechselt wird
 |*  enthaelt pPage die neue Seite und die Funktion liefert sal_True.
 |*
-|*  Ersterstellung      AMA 06. Nov. 98
-|*  Letzte Aenderung    AMA 06. Nov. 98
-|*
 |*************************************************************************/
 
 sal_Bool lcl_NextFtnBoss( SwFtnBossFrm* &rpBoss, SwPageFrm* &rpPage,
@@ -171,9 +166,6 @@ sal_Bool lcl_NextFtnBoss( SwFtnBossFrm* &rpBoss, SwPageFrm* &rpPage,
 |*  liefert die Spaltennummer, wenn pBoss eine Spalte ist,
 |*  sonst eine Null (bei Seiten).
 |*
-|*  Ersterstellung      AMA 06. Nov. 98
-|*  Letzte Aenderung    AMA 06. Nov. 98
-|*
 |*************************************************************************/
 
 sal_uInt16 lcl_ColumnNum( const SwFrm* pBoss )
@@ -208,14 +200,11 @@ sal_uInt16 lcl_ColumnNum( const SwFrm* pBoss )
 |*
 |*  SwFtnContFrm::SwFtnContFrm()
 |*
-|*  Ersterstellung      MA 24. Feb. 93
-|*  Letzte Aenderung    MA 02. Mar. 93
-|*
 |*************************************************************************/
 
 
-SwFtnContFrm::SwFtnContFrm( SwFrmFmt *pFmt ):
-    SwLayoutFrm( pFmt )
+SwFtnContFrm::SwFtnContFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
+    SwLayoutFrm( pFmt, pSib )
 {
     nType = FRMC_FTNCONT;
 }
@@ -257,8 +246,6 @@ long lcl_Undersize( const SwFrm* pFrm )
 |*
 |*  Beschreibung:       "Formatiert" den Frame;
 |*                      Die Fixsize wird hier nicht eingestellt.
-|*  Ersterstellung      MA 01. Mar. 93
-|*  Letzte Aenderung    MA 17. Nov. 98
 |*
 |*************************************************************************/
 
@@ -283,7 +270,14 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
 
     if ( !bValidSize )
     {
-        if ( pPage->IsFtnPage() && !GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        bool bGrow = pPage->IsFtnPage();
+        if( bGrow )
+        {
+            const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+            if( pSh && pSh->GetViewOptions()->getBrowseMode() )
+                bGrow = false;
+        }
+        if( bGrow )
                 Grow( LONG_MAX, sal_False );
         else
         {
@@ -340,9 +334,6 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
 |*
 |*  SwFtnContFrm::GrowFrm(), ShrinkFrm()
 |*
-|*  Ersterstellung      MA 24. Feb. 93
-|*  Letzte Aenderung    AMA 05. Nov. 98
-|*
 |*************************************************************************/
 
 SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
@@ -379,7 +370,8 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
             return 0;
         }
     }
-    const bool bBrowseMode = GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+    const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
     SwPageFrm *pPage = pBoss->FindPageFrm();
     if ( bBrowseMode || !pPage->IsFtnPage() )
     {
@@ -485,9 +477,19 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
 SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, sal_Bool bTst, sal_Bool bInfo )
 {
     SwPageFrm *pPage = FindPageFrm();
-    if ( pPage &&
-           ( !pPage->IsFtnPage() ||
-             GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ) )
+    bool bShrink = false;
+    if ( pPage )
+    {
+        if( !pPage->IsFtnPage() )
+            bShrink = true;
+        else
+        {
+            const ViewShell *pSh = getRootFrm()->GetCurrShell();
+            if( pSh && pSh->GetViewOptions()->getBrowseMode() )
+                bShrink = true;
+        }
+    }
+    if( bShrink )
     {
         SwTwips nRet = SwLayoutFrm::ShrinkFrm( nDiff, bTst, bInfo );
         if( IsInSct() && !bTst )
@@ -507,14 +509,11 @@ SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, sal_Bool bTst, sal_Bool bInfo )
 |*
 |*  SwFtnFrm::SwFtnFrm()
 |*
-|*  Ersterstellung      MA 24. Feb. 93
-|*  Letzte Aenderung    MA 11. Oct. 93
-|*
 |*************************************************************************/
 
 
-SwFtnFrm::SwFtnFrm( SwFrmFmt *pFmt, SwCntntFrm *pCnt, SwTxtFtn *pAt ):
-    SwLayoutFrm( pFmt ),
+SwFtnFrm::SwFtnFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwCntntFrm *pCnt, SwTxtFtn *pAt ):
+    SwLayoutFrm( pFmt, pSib ),
     pFollow( 0 ),
     pMaster( 0 ),
     pRef( pCnt ),
@@ -530,9 +529,6 @@ SwFtnFrm::SwFtnFrm( SwFrmFmt *pFmt, SwCntntFrm *pCnt, SwTxtFtn *pAt ):
 /*************************************************************************
 |*
 |*  SwFtnFrm::InvalidateNxtFtnCnts()
-|*
-|*  Ersterstellung      MA 29. Jun. 93
-|*  Letzte Aenderung    MA 29. Jun. 93
 |*
 |*************************************************************************/
 
@@ -601,9 +597,6 @@ SwTwips SwFtnFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 |*
 |*  SwFtnFrm::Cut()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 24. Jul. 95
-|*
 |*************************************************************************/
 
 
@@ -638,8 +631,8 @@ void SwFtnFrm::Cut()
             if ( pPage )
             {
                 SwLayoutFrm *pBody = pPage->FindBodyCont();
-                if ( !pBody->ContainsCntnt() )
-                    pPage->FindRootFrm()->SetSuperfluous();
+                if( pBody && !pBody->ContainsCntnt() )
+                    pPage->getRootFrm()->SetSuperfluous();
             }
             SwSectionFrm* pSect = pUp->FindSctFrm();
             pUp->Cut();
@@ -661,9 +654,6 @@ void SwFtnFrm::Cut()
 /*************************************************************************
 |*
 |*  SwFtnFrm::Paste()
-|*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 23. Feb. 94
 |*
 |*************************************************************************/
 
@@ -734,8 +724,6 @@ void SwFtnFrm::Paste(  SwFrm* pParent, SwFrm* pSibling )
 |*  Beschreibung        Liefert das naechste LayoutBlatt in den das
 |*      Frame gemoved werden kann.
 |*      Neue Seiten werden nur dann erzeugt, wenn der Parameter sal_True ist.
-|*  Ersterstellung      MA 16. Nov. 92
-|*  Letzte Aenderung    AMA 09. Nov. 98
 |*
 |*************************************************************************/
 
@@ -829,8 +817,6 @@ SwLayoutFrm *SwFrm::GetNextFtnLeaf( MakePageType eMakePage )
 |*
 |*  Beschreibung        Liefert das vorhergehende LayoutBlatt in das der
 |*      Frame gemoved werden kann.
-|*  Ersterstellung      MA 16. Nov. 92
-|*  Letzte Aenderung    AMA 06. Nov. 98
 |*
 |*************************************************************************/
 
@@ -962,9 +948,6 @@ SwLayoutFrm *SwFrm::GetPrevFtnLeaf( MakePageType eMakeFtn )
 |*
 |*  SwFrm::IsFtnAllowed()
 |*
-|*  Ersterstellung      MA 22. Mar. 94
-|*  Letzte Aenderung    MA 01. Dec. 94
-|*
 |*************************************************************************/
 
 
@@ -987,9 +970,6 @@ sal_Bool SwFrm::IsFtnAllowed() const
 |*
 |*  SwRootFrm::UpdateFtnNums()
 |*
-|*  Ersterstellung      MA 02. Mar. 93
-|*  Letzte Aenderung    MA 09. Dec. 97
-|*
 |*************************************************************************/
 
 
@@ -1011,9 +991,6 @@ void SwRootFrm::UpdateFtnNums()
 |*
 |*  RemoveFtns()        Entfernen aller Fussnoten (nicht etwa die Referenzen)
 |*                      und Entfernen aller Fussnotenseiten.
-|*
-|*  Ersterstellung      MA 05. Dec. 97
-|*  Letzte Aenderung    AMA 06. Nov. 98
 |*
 |*************************************************************************/
 
@@ -1108,9 +1085,6 @@ void SwRootFrm::RemoveFtns( SwPageFrm *pPage, sal_Bool bPageOnly, sal_Bool bEndN
 |*
 |*  SetFtnPageDescs()   Seitenvorlagen der Fussnotenseiten aendern
 |*
-|*  Ersterstellung      MA 11. Dec. 97
-|*  Letzte Aenderung    MA 11. Dec. 97
-|*
 |*************************************************************************/
 
 void SwRootFrm::CheckFtnPageDescs( sal_Bool bEndNote )
@@ -1129,9 +1103,6 @@ void SwRootFrm::CheckFtnPageDescs( sal_Bool bEndNote )
 |*
 |*  SwFtnBossFrm::MakeFtnCont()
 |*
-|*  Ersterstellung      MA 25. Feb. 93
-|*  Letzte Aenderung    AMA 29. Oct. 98
-|*
 |*************************************************************************/
 
 
@@ -1148,7 +1119,7 @@ SwFtnContFrm *SwFtnBossFrm::MakeFtnCont()
     }
 #endif
 
-    SwFtnContFrm *pNew = new SwFtnContFrm( GetFmt()->GetDoc()->GetDfltFrmFmt());
+    SwFtnContFrm *pNew = new SwFtnContFrm( GetFmt()->GetDoc()->GetDfltFrmFmt(), this );
     SwLayoutFrm *pLay = FindBodyCont();
     pNew->Paste( this, pLay->GetNext() );
     return pNew;
@@ -1157,9 +1128,6 @@ SwFtnContFrm *SwFtnBossFrm::MakeFtnCont()
 /*************************************************************************
 |*
 |*  SwFtnBossFrm::FindFtnCont()
-|*
-|*  Ersterstellung      MA 25. Feb. 93
-|*  Letzte Aenderung    AMA 29. Oct. 98
 |*
 |*************************************************************************/
 
@@ -1189,9 +1157,6 @@ SwFtnContFrm *SwFtnBossFrm::FindFtnCont()
 /*************************************************************************
 |*
 |*  SwFtnBossFrm::FindNearestFtnCont()  Sucht den naechst greifbaren Fussnotencontainer.
-|*
-|*  Ersterstellung      MA 02. Aug. 93
-|*  Letzte Aenderung    AMA 29. Oct. 98
 |*
 |*************************************************************************/
 
@@ -1225,8 +1190,6 @@ SwFtnContFrm *SwFtnBossFrm::FindNearestFtnCont( sal_Bool bDontLeave )
 |*  SwFtnBossFrm::FindFirstFtn()
 |*
 |*  Beschreibung        Erste Fussnote des Fussnotenbosses suchen.
-|*  Ersterstellung      MA 26. Feb. 93
-|*  Letzte Aenderung    AMA 29. Oct. 99
 |*
 |*************************************************************************/
 
@@ -1314,8 +1277,6 @@ SwFtnFrm *SwFtnBossFrm::FindFirstFtn()
 |*  SwFtnBossFrm::FindFirstFtn()
 |*
 |*  Beschreibunt        Erste Fussnote zum Cnt suchen.
-|*  Ersterstellung      MA 04. Mar. 93
-|*  Letzte Aenderung    AMA 28. Oct. 98
 |*
 |*************************************************************************/
 
@@ -1357,9 +1318,6 @@ const SwFtnFrm *SwFtnBossFrm::FindFirstFtn( SwCntntFrm *pCnt ) const
 |*
 |*  SwFtnBossFrm::ResetFtn()
 |*
-|*  Ersterstellung      MA 11. May. 95
-|*  Letzte Aenderung    AMA 29. Oct. 98
-|*
 |*************************************************************************/
 
 
@@ -1374,13 +1332,12 @@ void SwFtnBossFrm::ResetFtn( const SwFtnFrm *pCheck )
     if ( !pNd )
         pNd = pCheck->GetFmt()->GetDoc()->
               GetNodes().GoNextSection( &aIdx, sal_True, sal_False );
-    SwClientIter aIter( *pNd );
-    SwClient* pLast = aIter.GoStart();
-    while( pLast )
+    SwIterator<SwFrm,SwCntntNode> aIter( *pNd );
+    SwFrm* pFrm = aIter.First();
+    while( pFrm )
     {
-        if ( pLast->ISA(SwFrm) )
-        {
-            SwFrm *pFrm = (SwFrm*)pLast;
+            if( pFrm->getRootFrm() == pCheck->getRootFrm() )
+            {
             SwFrm *pTmp = pFrm->GetUpper();
             while ( pTmp && !pTmp->IsFtnFrm() )
                 pTmp = pTmp->GetUpper();
@@ -1399,16 +1356,14 @@ void SwFtnBossFrm::ResetFtn( const SwFtnFrm *pCheck )
                 }
             }
         }
-        pLast = ++aIter;
+
+        pFrm = aIter.Next();
     }
 }
 
 /*************************************************************************
 |*
 |*  SwFtnBossFrm::InsertFtn()
-|*
-|*  Ersterstellung      MA 26. Feb. 93
-|*  Letzte Aenderung    AMA 29. Oct. 98
 |*
 |*************************************************************************/
 
@@ -1685,9 +1640,6 @@ void SwFtnBossFrm::InsertFtn( SwFtnFrm* pNew )
 |*
 |*  SwFtnBossFrm::AppendFtn()
 |*
-|*  Ersterstellung      MA 25. Feb. 93
-|*  Letzte Aenderung    AMA 29. Oct. 98
-|*
 |*************************************************************************/
 
 
@@ -1832,7 +1784,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
         }
     }
 
-    SwFtnFrm *pNew = new SwFtnFrm( pDoc->GetDfltFrmFmt(), pRef, pAttr );
+    SwFtnFrm *pNew = new SwFtnFrm( pDoc->GetDfltFrmFmt(), this, pRef, pAttr );
     {
         SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
         ::_InsertCnt( pNew, pDoc, aIdx.GetIndex() );
@@ -1920,9 +1872,6 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
 |*
 |*  SwFtnBossFrm::FindFtn()
 |*
-|*  Ersterstellung      MA 25. Feb. 93
-|*  Letzte Aenderung    AMA 29. Oct. 98
-|*
 |*************************************************************************/
 
 
@@ -1937,14 +1886,12 @@ SwFtnFrm *SwFtnBossFrm::FindFtn( const SwCntntFrm *pRef, const SwTxtFtn *pAttr )
               GetNodes().GoNextSection( &aIdx, sal_True, sal_False );
     if ( !pNd )
         return 0;
-    SwClientIter aIter( *pNd );
-    SwClient *pClient;
-    if ( 0 != (pClient = aIter.GoStart()) )
+    SwIterator<SwFrm,SwCntntNode> aIter( *pNd );
+    SwFrm* pFrm = aIter.First();
+    if( pFrm )
         do
         {
-            if ( pClient->IsA( TYPE(SwFrm) ) )
-            {
-                SwFrm *pFrm = ((SwFrm*)pClient)->GetUpper();
+                pFrm = pFrm->GetUpper();
                 // #i28500#, #i27243# Due to the endnode collector, there are
                 // SwFtnFrms, which are not in the layout. Therefore the
                 // bInfFtn flags are not set correctly, and a cell of FindFtnFrm
@@ -1962,17 +1909,14 @@ SwFtnFrm *SwFtnBossFrm::FindFtn( const SwCntntFrm *pRef, const SwTxtFtn *pAttr )
                         pFtn = pFtn->GetMaster();
                     return pFtn;
                 }
-            }
-        } while ( 0 != (pClient = aIter++) );
+
+        } while ( 0 != (pFrm = aIter.Next()) );
 
     return 0;
 }
 /*************************************************************************
 |*
 |*  SwFtnBossFrm::RemoveFtn()
-|*
-|*  Ersterstellung      MA 25. Feb. 93
-|*  Letzte Aenderung    AMA 29. Oct. 98
 |*
 |*************************************************************************/
 
@@ -2005,9 +1949,6 @@ void SwFtnBossFrm::RemoveFtn( const SwCntntFrm *pRef, const SwTxtFtn *pAttr,
 |*
 |*  SwFtnBossFrm::ChangeFtnRef()
 |*
-|*  Ersterstellung      MA 25. Feb. 93
-|*  Letzte Aenderung    AMA 29. Oct. 98
-|*
 |*************************************************************************/
 
 
@@ -2025,9 +1966,6 @@ void SwFtnBossFrm::ChangeFtnRef( const SwCntntFrm *pOld, const SwTxtFtn *pAttr,
 /*************************************************************************
 |*
 |*  SwFtnBossFrm::CollectFtns()
-|*
-|*  Ersterstellung      MA 24. Jul. 95
-|*  Letzte Aenderung    AMA 29. Oct. 98
 |*
 |*************************************************************************/
 
@@ -2093,9 +2031,6 @@ void SwFtnBossFrm::CollectFtns( const SwCntntFrm* _pRef,
 /*************************************************************************
 |*
 |*  SwFtnBossFrm::_CollectFtns()
-|*
-|*  Ersterstellung      MA 24. Jul. 95
-|*  Letzte Aenderung    AMA 29. Oct. 98
 |*
 |*************************************************************************/
 inline void FtnInArr( SvPtrarr& rFtnArr, SwFtnFrm* pFtn )
@@ -2255,9 +2190,6 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
 /*************************************************************************
 |*
 |*  SwFtnBossFrm::_MoveFtns()
-|*
-|*  Ersterstellung      MA 26. Feb. 93
-|*  Letzte Aenderung    AMA 29. Oct. 98
 |*
 |*************************************************************************/
 
@@ -2474,9 +2406,6 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc )
 |*
 |*  SwFtnBossFrm::MoveFtns()
 |*
-|*  Ersterstellung      BP 05. Aug. 93
-|*  Letzte Aenderung    AMA 29. Oct. 98
-|*
 |*************************************************************************/
 
 
@@ -2521,9 +2450,6 @@ void SwFtnBossFrm::MoveFtns( const SwCntntFrm *pSrc, SwCntntFrm *pDest,
 /*************************************************************************
 |*
 |*  SwFtnBossFrm::RearrangeFtns()
-|*
-|*  Ersterstellung      MA 20. Jan. 94
-|*  Letzte Aenderung    AMA 29. Oct. 98
 |*
 |*************************************************************************/
 
@@ -2766,9 +2692,6 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock,
 |*
 |*  SwPageFrm::UpdateFtnNum()
 |*
-|*  Ersterstellung      MA 02. Mar. 93
-|*  Letzte Aenderung    AMA 29. Oct. 98
-|*
 |*************************************************************************/
 
 void SwPageFrm::UpdateFtnNum()
@@ -2831,9 +2754,6 @@ void SwPageFrm::UpdateFtnNum()
 |*
 |*  SwFtnBossFrm::SetFtnDeadLine()
 |*
-|*  Ersterstellung      MA 02. Aug. 93
-|*  Letzte Aenderung    MA 16. Nov. 98
-|*
 |*************************************************************************/
 
 void SwFtnBossFrm::SetFtnDeadLine( const SwTwips nDeadLine )
@@ -2852,7 +2772,8 @@ void SwFtnBossFrm::SetFtnDeadLine( const SwTwips nDeadLine )
     else
         nMaxFtnHeight = -(pBody->Frm().*fnRect->fnBottomDist)( nDeadLine );
 
-    if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+    if( pSh && pSh->GetViewOptions()->getBrowseMode() )
         nMaxFtnHeight += pBody->Grow( LONG_MAX, sal_True );
     if ( IsInSct() )
         nMaxFtnHeight += FindSctFrm()->Grow( LONG_MAX, sal_True );
@@ -2866,9 +2787,6 @@ void SwFtnBossFrm::SetFtnDeadLine( const SwTwips nDeadLine )
 /*************************************************************************
 |*
 |*  SwFtnBossFrm::GetVarSpace()
-|*
-|*  Ersterstellung      MA 03. Apr. 95
-|*  Letzte Aenderung    MA 16. Nov. 98
 |*
 |*************************************************************************/
 SwTwips SwFtnBossFrm::GetVarSpace() const
@@ -2934,9 +2852,12 @@ SwTwips SwFtnBossFrm::GetVarSpace() const
     }
     else
         nRet = 0;
-    if ( IsPageFrm() &&
-         GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    if ( IsPageFrm() )
+    {
+        const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+        if( pSh && pSh->GetViewOptions()->getBrowseMode() )
         nRet += BROWSE_HEIGHT - Frm().Height();
+    }
     return nRet;
 }
 
@@ -2951,9 +2872,6 @@ SwTwips SwFtnBossFrm::GetVarSpace() const
 |*  Spannend sind die spaltigen Bereiche: Wenn es in der Spalte einen Fussnotencontainer
 |*  gibt und die Fussnoten nicht vom Bereich eingesammelt werden, ist ein Adjust..,
 |*  ansonsten ein Grow/Shrink notwendig.
-|*
-|*  Ersterstellung      AMA 09. Dec 98
-|*  Letzte Aenderung    AMA 09. Dec 98
 |*
 |*************************************************************************/
 
@@ -2990,9 +2908,6 @@ sal_uInt8 SwFtnBossFrm::_NeighbourhoodAdjustment( const SwFrm* ) const
 |*
 |*  SwPageFrm::SetColMaxFtnHeight()
 |*
-|*  Ersterstellung      AMA 29. Oct 98
-|*  Letzte Aenderung    AMA 29. Oct 98
-|*
 |*************************************************************************/
 void SwPageFrm::SetColMaxFtnHeight()
 {
@@ -3011,9 +2926,6 @@ void SwPageFrm::SetColMaxFtnHeight()
 /*************************************************************************
 |*
 |*  SwLayoutFrm::MoveLowerFtns
-|*
-|*  Ersterstellung      MA 01. Sep. 94
-|*  Letzte Aenderung    MA 05. Sep. 95
 |*
 |*************************************************************************/
 
@@ -3110,9 +3022,6 @@ sal_Bool SwLayoutFrm::MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
 |*
 |*  SwLayoutFrm::MoveFtnCntFwd()
 |*
-|*  Ersterstellung      MA 24. Nov. 94
-|*  Letzte Aenderung    MA 15. Jun. 95
-|*
 |*************************************************************************/
 
 
@@ -3183,7 +3092,7 @@ sal_Bool SwCntntFrm::MoveFtnCntFwd( sal_Bool bMakePage, SwFtnBossFrm *pOldBoss )
             //Fussnote erzeugen.
             SwFtnFrm *pOld = FindFtnFrm();
             pTmpFtn = new SwFtnFrm( pOld->GetFmt()->GetDoc()->GetDfltFrmFmt(),
-                                    pOld->GetRef(), pOld->GetAttr() );
+                                    pOld, pOld->GetRef(), pOld->GetAttr() );
             //Verkettung der Fussnoten.
             if ( pOld->GetFollow() )
             {
@@ -3252,9 +3161,6 @@ sal_Bool SwCntntFrm::MoveFtnCntFwd( sal_Bool bMakePage, SwFtnBossFrm *pOldBoss )
 |*
 |*  class SwSaveFtnHeight
 |*
-|*  Ersterstellung      MA 19. Jan. 94
-|*  Letzte Aenderung    MA 19. Jan. 94
-|*
 |*************************************************************************/
 
 
@@ -3317,7 +3223,7 @@ SwCntntFrm* SwFtnFrm::GetRefFromAttr()
     ASSERT( pAttr, "invalid Attribute" );
     SwTxtNode& rTNd = (SwTxtNode&)pAttr->GetTxtNode();
     SwPosition aPos( rTNd, SwIndex( &rTNd, *pAttr->GetStart() ));
-    SwCntntFrm* pCFrm = rTNd.GetFrm( 0, &aPos, sal_False );
+    SwCntntFrm* pCFrm = rTNd.getLayoutFrm( getRootFrm(), 0, &aPos, sal_False );
     return pCFrm;
 }
 

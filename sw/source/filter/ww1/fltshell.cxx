@@ -430,7 +430,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                 pFmt->SetFmtAttr(aAnchor);
                 // Damit die Frames bei Einfuegen in existierendes Doc
                 //  erzeugt werden (erst nach Setzen des Ankers!):
-                if(pDoc->GetRootFrm()
+                if(pDoc->GetCurrentViewShell()  //swmod 071108//swmod 071225
                    && (FLY_AT_PARA == pFmt->GetAnchor().GetAnchorId()))
                 {
                     pFmt->MakeFrms();
@@ -777,11 +777,11 @@ SwFltAnchorClient::SwFltAnchorClient(SwFltAnchor * pFltAnchor)
 {
 }
 
-void  SwFltAnchorClient::Modify(SfxPoolItem *, SfxPoolItem * pNew)
+void  SwFltAnchorClient::Modify(const SfxPoolItem *, const SfxPoolItem * pNew)
 {
     if (pNew->Which() == RES_FMT_CHG)
     {
-        SwFmtChg * pFmtChg = dynamic_cast<SwFmtChg *> (pNew);
+        const SwFmtChg * pFmtChg = dynamic_cast<const SwFmtChg *> (pNew);
 
         if (pFmtChg != NULL)
         {
@@ -1605,7 +1605,7 @@ void SwFltOutDoc::EndTable()
     rStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
     rEndStack.SetAttr( *pPaM->GetPoint(), 0, sal_False );
 
-    if (GetDoc().GetRootFrm()){
+    if (GetDoc().GetCurrentViewShell()){    //swmod 071108//swmod 071225
         SwTableNode* pTableNode = GetDoc().IsIdxInTbl(
             pPaM->GetPoint()->nNode);
         pTableNode->DelFrms();

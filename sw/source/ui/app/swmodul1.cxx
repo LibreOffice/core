@@ -99,7 +99,7 @@ void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
     }
     if(bHScrollChanged)
     {
-        pView->ShowHScrollbar( pNewPref->IsViewHScrollBar() || pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE));
+        pView->ShowHScrollbar( pNewPref->IsViewHScrollBar() || pNewPref->getBrowseMode() );
     }
     //if only the position of the vertical ruler has been changed initiate an update
     if(bVAlignChanged && !bHScrollChanged && !bVScrollChanged)
@@ -658,7 +658,7 @@ void SwModule::CheckSpellChanges( sal_Bool bOnlineSpelling,
              pDocSh = (SwDocShell*)SfxObjectShell::GetNext( *pDocSh, &aType ) )
         {
             SwDoc* pTmp = pDocSh->GetDoc();
-            if ( pTmp->GetRootFrm() )
+            if ( pTmp->GetCurrentViewShell() )  //swmod 071108//swmod 071225
             {
                 pTmp->SpellItAgainSam( bInvalid, bOnlyWrong, bSmartTags );
                 ViewShell* pViewShell = 0;

@@ -234,6 +234,8 @@ protected:
             ::com::sun::star::lang::IllegalArgumentException,
             ::com::sun::star::uno::RuntimeException);
 
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew);
+
 public:
 
     SwAccessibleParagraph( SwAccessibleMap& rInitMap,
@@ -242,10 +244,6 @@ public:
     inline operator ::com::sun::star::accessibility::XAccessibleText *();
 
     virtual sal_Bool HasCursor();   // required by map to remember that object
-
-    // --> OD 2010-02-19 #i108125#
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew);
-    // <--
 
     //=====  XAccessibleContext  ==============================================
 

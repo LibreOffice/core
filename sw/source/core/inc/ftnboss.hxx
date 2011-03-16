@@ -70,7 +70,7 @@ protected:
     void          InsertFtn( SwFtnFrm * );
     static void   ResetFtn( const SwFtnFrm *pAssumed );
 public:
-    inline SwFtnBossFrm( SwFrmFmt* pFmt) : SwLayoutFrm( pFmt ) {}
+    inline SwFtnBossFrm( SwFrmFmt* pFmt, SwFrm* pSib ) : SwLayoutFrm( pFmt, pSib ) {}
 
                  SwLayoutFrm *FindBodyCont();
     inline const SwLayoutFrm *FindBodyCont() const;

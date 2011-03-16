@@ -38,6 +38,7 @@ class SwPageDesc;
 class SwHistory;
 class SwPaM;
 class IntlWrapper;
+class SwEndNoteInfo;
 
 //Pagedescriptor
 //Client vom SwPageDesc der durch das Attribut "beschrieben" wird.
@@ -55,6 +56,9 @@ class SW_DLLPUBLIC SwFmtPageDesc : public SfxPoolItem, public SwClient
     sal_uInt16 nDescNameIdx;        // SW3-Reader: Stringpool-Index des Vorlagennamens
     SwModify* pDefinedIn;       // Verweis auf das Objekt, in dem das
                                 // Attribut gesetzt wurde (CntntNode/Format)
+protected:
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint );
 
 public:
     SwFmtPageDesc( const SwPageDesc *pDesc = 0 );
@@ -75,8 +79,6 @@ public:
     virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
-
           SwPageDesc *GetPageDesc() { return (SwPageDesc*)GetRegisteredIn(); }
     const SwPageDesc *GetPageDesc() const { return (SwPageDesc*)GetRegisteredIn(); }
 
@@ -86,6 +88,9 @@ public:
     // erfrage/setze, wo drin das Attribut verankert ist
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     void ChgDefinedIn( const SwModify* pNew ) { pDefinedIn = (SwModify*)pNew; }
+    void RegisterToEndNotInfo( SwEndNoteInfo& );
+    void RegisterToPageDesc( SwPageDesc& );
+    bool KnowsPageDesc() const;
 };
 
 

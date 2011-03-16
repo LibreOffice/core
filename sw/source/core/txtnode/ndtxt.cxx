@@ -34,9 +34,7 @@
 #include <editeng/brkitem.hxx>
 #include <editeng/escpitem.hxx>
 #include <editeng/lrspitem.hxx>
-// --> OD 2008-01-17 #newlistlevelattrs#
 #include <editeng/tstpitem.hxx>
-// <--
 #include <svl/urihelper.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_ULONGS
@@ -88,17 +86,14 @@
 #include <istyleaccess.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <numrule.hxx>
-
-//--> #outlinelevel added by zhaojianwei
 #include <svl/intitem.hxx>
-//<--end
 #include <swtable.hxx>
 #include <docsh.hxx>
 #include <SwNodeNum.hxx>
-// --> OD 2008-02-25 #refactorlists#
 #include <svl/intitem.hxx>
 #include <list.hxx>
-// <--
+#include <switerator.hxx>
+#include <attrhint.hxx>
 
 
 using namespace ::com::sun::star;
@@ -134,26 +129,12 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
     // --> OD 2005-11-03 #125329#
     // call method <UpdateOutlineNode(..)> only for the document nodes array
     if ( IsDocNodes() )
-    {
-        //if ( pColl && NO_NUMBERING != pColl->GetOutlineLevel() )  //#outline level,removed by zhaojianwei
-        //{
-        //  UpdateOutlineNode( *pNode, NO_NUMBERING, pColl->GetOutlineLevel() );
-        //}
-//        if ( pColl && 0 != pColl->GetAttrOutlineLevel() )//#outline level,added by zhaojianwei
-//        {
-//            UpdateOutlineNode( *pNode, 0, pColl->GetAttrOutlineLevel() );
-//        }//<--end
-//        else
-        {
-            UpdateOutlineNode(*pNode);
-        }
-    }
-    // <--
+        UpdateOutlineNode(*pNode);
 
     //Wenn es noch kein Layout gibt oder in einer versteckten Section
     // stehen, brauchen wir uns um das MakeFrms nicht bemuehen.
     const SwSectionNode* pSectNd;
-    if( !GetDoc()->GetRootFrm() ||
+    if( !GetDoc()->GetCurrentViewShell() || //swmod 071108//swmod 071225
         ( 0 != (pSectNd = pNode->FindSectionNode()) &&
             pSectNd->GetSection().IsHiddenFlag() ))
         return pNode;
@@ -305,9 +286,9 @@ SwTxtNode::~SwTxtNode()
     InitSwParaStatistics( false );
 }
 
-SwCntntFrm *SwTxtNode::MakeFrm()
+SwCntntFrm *SwTxtNode::MakeFrm( SwFrm* pSib )
 {
-    SwCntntFrm *pFrm = new SwTxtFrm(this);
+    SwCntntFrm *pFrm = new SwTxtFrm( this, pSib );
     return pFrm;
 }
 
@@ -325,7 +306,7 @@ xub_StrLen SwTxtNode::Len() const
 void lcl_ChangeFtnRef( SwTxtNode &rNode )
 {
     SwpHints *pSwpHints = rNode.GetpSwpHints();
-    if( pSwpHints && rNode.GetDoc()->GetRootFrm() )
+    if( pSwpHints && rNode.GetDoc()->GetCurrentViewShell() )    //swmod 071108//swmod 071225
     {
         SwTxtAttr* pHt;
         SwCntntFrm* pFrm = NULL;
@@ -340,8 +321,7 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
             {
                 if( !pFrm )
                 {
-                    SwClientIter aNew( rNode );
-                    pFrm = (SwCntntFrm*)aNew.First( TYPE(SwCntntFrm) );
+                    pFrm = SwIterator<SwCntntFrm,SwTxtNode>::FirstElement( rNode );
                     if( !pFrm )
                         return;
                 }
@@ -354,11 +334,12 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                             GetNodes().GoNextSection( &aIdx, sal_True, sal_False );
                 if ( !pNd )
                     continue;
-                SwClientIter aIter( *pNd );
-                SwCntntFrm* pCntnt = (SwCntntFrm*)aIter.First(TYPE(SwCntntFrm));
+
+                SwIterator<SwCntntFrm,SwCntntNode> aIter( *pNd );
+                SwCntntFrm* pCntnt = aIter.First();
                 if( pCntnt )
                 {
-                    ASSERT( pCntnt->FindRootFrm() == pFrm->FindRootFrm(),
+                    ASSERT( pCntnt->getRootFrm() == pFrm->getRootFrm(),
                             "lcl_ChangeFtnRef: Layout double?" );
                     SwFtnFrm *pFtn = pCntnt->FindFtnFrm();
                     if( pFtn && pFtn->GetAttr() == pAttr )
@@ -375,7 +356,7 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                         }
                     }
 #ifdef DBG_UTIL
-                    while( 0 != (pCntnt = (SwCntntFrm*)aIter.Next()) )
+                    while( 0 != (pCntnt = aIter.Next()) )
                     {
                         SwFtnFrm *pDbgFtn = pCntnt->FindFtnFrm();
                         ASSERT( !pDbgFtn || pDbgFtn->GetRef() == pFrm,
@@ -518,21 +499,12 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 
         }
 
-        SwClientIter aIter( *this );
-        SwClient* pLastFrm = aIter.GoStart();
-        if( pLastFrm )
+        SwIterator<SwCntntFrm,SwTxtNode> aIter( *this );
+        for( SwCntntFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
         {
-            do
-            {   SwCntntFrm *pFrm = PTR_CAST( SwCntntFrm, pLastFrm );
-                if ( pFrm )
-                {
-                    pNode->Add( pFrm );
-                    if( pFrm->IsTxtFrm() && !pFrm->IsFollow() &&
-                        ((SwTxtFrm*)pFrm)->GetOfst() )
-                        ((SwTxtFrm*)pFrm)->SetOfst( 0 );
-                }
-                pLastFrm = aIter++;
-            } while ( pLastFrm );
+            pFrm->RegisterToNode( *pNode );
+            if( pFrm->IsTxtFrm() && !pFrm->IsFollow() && ((SwTxtFrm*)pFrm)->GetOfst() )
+                ((SwTxtFrm*)pFrm)->SetOfst( 0 );
         }
 
         if ( IsInCache() )
@@ -543,24 +515,24 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 
         UnlockModify(); // Benachrichtigungen wieder freischalten
 
-        const SwRootFrm * const pRootFrm = pNode->GetDoc()->GetRootFrm();
         // If there is an accessible layout we must call modify even
         // with length zero, because we have to notify about the changed
         // text node.
+        const SwRootFrm *pRootFrm;
         if ( (nTxtLen != nSplitPos) ||
-             ( pRootFrm && pRootFrm->IsAnyShellAccessible() ) )
-
+            ( (pRootFrm = pNode->GetDoc()->GetCurrentLayout()) != 0 &&
+              pRootFrm->IsAnyShellAccessible() ) )  //swmod 080218
         {
             // dann sage den Frames noch, das am Ende etwas "geloescht" wurde
             if( 1 == nTxtLen - nSplitPos )
             {
                 SwDelChr aHint( nSplitPos );
-                pNode->SwModify::Modify( 0, &aHint );
+                pNode->NotifyClients( 0, &aHint );
             }
             else
             {
                 SwDelTxt aHint( nSplitPos, nTxtLen - nSplitPos );
-                pNode->SwModify::Modify( 0, &aHint );
+                pNode->NotifyClients( 0, &aHint );
             }
         }
         if ( HasHints() )
@@ -643,7 +615,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         if( GetDepends() && SFX_ITEM_SET == pNode->GetSwAttrSet().
             GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
         {
-            pNode->Modify( (SfxPoolItem*)pItem, (SfxPoolItem*)pItem );
+            pNode->ModifyNotification( (SfxPoolItem*)pItem, (SfxPoolItem*)pItem );
         }
     }
     return pNode;
@@ -1503,7 +1475,7 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
     {
         // Frames benachrichtigen, sonst verschwinden die Ftn-Nummern
         SwUpdateAttr aHint( nOldPos, nOldPos, 0 );
-        pDest->Modify( 0, &aHint );
+        pDest->ModifyNotification( 0, &aHint );
     }
 }
 
@@ -1865,7 +1837,7 @@ void SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
     if ( GetDepends() )
     {
         SwInsTxt aHint( aPos, nLen );
-        SwModify::Modify( 0, &aHint );
+        NotifyClients( 0, &aHint );
     }
 
     // By inserting a character, the hidden flags
@@ -2260,9 +2232,9 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
 
     // Frames benachrichtigen;
     SwInsTxt aInsHint( nDestStart, nLen );
-    pDest->Modify( 0, &aInsHint );
+    pDest->ModifyNotification( 0, &aInsHint );
     SwDelTxt aDelHint( nTxtStartIdx, nLen );
-    Modify( 0, &aDelHint );
+    ModifyNotification( 0, &aDelHint );
 }
 
 
@@ -2357,12 +2329,12 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
     if( 1 == nCnt )
     {
         SwDelChr aHint( nStartIdx );
-        SwModify::Modify( 0, &aHint );
+        NotifyClients( 0, &aHint );
     }
     else
     {
         SwDelTxt aHint( nStartIdx, nCnt );
-        SwModify::Modify( 0, &aHint );
+        NotifyClients( 0, &aHint );
     }
 
     ASSERT(rIdx.GetIndex() == nStartIdx, "huh? start index has changed?");
@@ -2422,9 +2394,9 @@ void SwTxtNode::GCAttr()
     {
         //TxtFrm's reagieren auf aHint, andere auf aNew
         SwUpdateAttr aHint( nMin, nMax, 0 );
-        SwModify::Modify( 0, &aHint );
+        NotifyClients( 0, &aHint );
         SwFmtChg aNew( GetTxtColl() );
-        SwModify::Modify( 0, &aNew );
+        NotifyClients( 0, &aNew );
     }
 }
 
@@ -2578,7 +2550,7 @@ void SwTxtNode::NumRuleChgd()
     // Important note:
     {
         SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)GetSwAttrSet().GetLRSpace();
-        SwModify::Modify( &rLR, &rLR );
+        NotifyClients( &rLR, &rLR );
     }
 }
 
@@ -3476,10 +3448,10 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
 
     SetIgnoreDontExpand( bOldExpFlg );
     SwDelTxt aDelHint( nStartPos, nDelLen );
-    SwModify::Modify( 0, &aDelHint );
+    NotifyClients( 0, &aDelHint );
 
     SwInsTxt aHint( nStartPos, rText.Len() );
-    SwModify::Modify( 0, &aHint );
+    NotifyClients( 0, &aHint );
 }
 
 // --> OD 2008-03-27 #refactorlists#
@@ -3705,7 +3677,7 @@ namespace {
 }
 // <--
 
-void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
+void SwTxtNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
     bool bWasNotifiable = m_bNotifiable;
     m_bNotifiable = false;
@@ -3716,7 +3688,7 @@ void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
     //  Bug25481:
     //      bei Nodes im Undo nie _ChgTxtCollUpdateNum rufen.
     if( pOldValue && pNewValue && RES_FMT_CHG == pOldValue->Which() &&
-        pRegisteredIn == ((SwFmtChg*)pNewValue)->pChangedFmt &&
+        GetRegisteredIn() == ((SwFmtChg*)pNewValue)->pChangedFmt &&
         GetNodes().IsDocNodes() )
     {
         _ChgTxtCollUpdateNum(
@@ -5072,7 +5044,6 @@ sal_uInt16 SwTxtNode::ResetAllAttr()
 }
 // <--
 
-
 // sw::Metadatable
 ::sfx2::IXmlIdRegistry& SwTxtNode::GetRegistry()
 {
@@ -5092,6 +5063,13 @@ bool SwTxtNode::IsInUndo() const
 bool SwTxtNode::IsInContent() const
 {
     return !GetDoc()->IsInHeaderFooter( SwNodeIndex(*this) );
+}
+
+void SwTxtNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
+{
+    const SwAttrHint* pHint = dynamic_cast<const SwAttrHint*>(&rHint);
+    if ( pHint && pHint->GetId() == RES_CONDTXTFMTCOLL && &rModify == GetRegisteredIn() )
+        ChkCondColl();
 }
 
 #include <unoparagraph.hxx>

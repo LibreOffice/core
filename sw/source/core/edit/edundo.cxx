@@ -238,10 +238,16 @@ void lcl_SelectSdrMarkList( SwEditShell* pShell,
     if( pShell->ISA( SwFEShell ) )
     {
         SwFEShell* pFEShell = static_cast<SwFEShell*>( pShell );
+        bool bFirst = true;
         for( sal_uInt16 i = 0; i < pSdrMarkList->GetMarkCount(); ++i )
-            pFEShell->SelectObj( Point(),
-                                 (i==0) ? 0 : SW_ADD_SELECT,
-                                 pSdrMarkList->GetMark( i )->GetMarkedSdrObj() );
+        {
+            SdrObject *pObj = pSdrMarkList->GetMark( i )->GetMarkedSdrObj();
+            if( pObj )
+            {
+                pFEShell->SelectObj( Point(), bFirst ? 0 : SW_ADD_SELECT, pObj );
+                bFirst = false;
+            }
+        }
 
         // the old implementation would always unselect
         // objects, even if no new ones were selected. If this

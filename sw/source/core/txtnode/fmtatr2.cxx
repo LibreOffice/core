@@ -114,10 +114,10 @@ SfxPoolItem* SwFmtCharFmt::Clone( SfxItemPool* ) const
 
 
 // weiterleiten an das TextAttribut
-void SwFmtCharFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwFmtCharFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( pTxtAttr )
-        pTxtAttr->Modify( pOld, pNew );
+        pTxtAttr->ModifyNotification( pOld, pNew );
 }
 
 
@@ -729,7 +729,7 @@ void Meta::NotifyChangeTxtNodeImpl()
     }
     else if (!m_pTxtNode && GetRegisteredIn())
     {
-        const_cast<SwModify *>(GetRegisteredIn())->Remove(this);
+        GetRegisteredInNonConst()->Remove(this);
     }
 }
 
@@ -746,9 +746,9 @@ void Meta::NotifyChangeTxtNode(SwTxtNode *const pTxtNode)
 }
 
 // SwClient
-void Meta::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void Meta::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
 {
-    SwModify::Modify(pOld, pNew);
+    NotifyClients(pOld, pNew);
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
     {   // invalidate cached uno object
         SetXMeta(uno::Reference<rdf::XMetadatable>(0));
@@ -908,4 +908,5 @@ MetaFieldManager::getMetaFields()
 }
 
 } // namespace sw
+
 

@@ -50,6 +50,7 @@
 #include <frmtool.hxx>
 #include <doc.hxx>          // fuer GetAttrPool
 #include <poolfmt.hxx>
+#include <switerator.hxx>
 
 /*************************************************************************
 |*
@@ -257,20 +258,18 @@ void SwPageDesc::RegisterChange()
 
     nRegHeight = 0;
     {
-        SwClientIter aIter( GetMaster() );
-        for( SwClient* pLast = aIter.First(TYPE(SwFrm)); pLast;
-                pLast = aIter.Next() )
+        SwIterator<SwFrm,SwFmt> aIter( GetMaster() );
+        for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
-            if( ((SwFrm*)pLast)->IsPageFrm() )
+            if( pLast->IsPageFrm() )
                 ((SwPageFrm*)pLast)->PrepareRegisterChg();
         }
     }
     {
-        SwClientIter aIter( GetLeft() );
-        for( SwClient* pLast = aIter.First(TYPE(SwFrm)); pLast;
-                pLast = aIter.Next() )
+        SwIterator<SwFrm,SwFmt> aIter( GetLeft() );
+        for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
-            if( ((SwFrm*)pLast)->IsPageFrm() )
+            if( pLast->IsPageFrm() )
                 ((SwPageFrm*)pLast)->PrepareRegisterChg();
         }
     }
@@ -288,10 +287,10 @@ void SwPageDesc::RegisterChange()
 *************************************************************************/
 
 
-void SwPageDesc::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    SwModify::Modify( pOld, pNew );
+    NotifyClients( pOld, pNew );
 
     if ( (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich)
         || isCHRATR(nWhich) || (RES_PARATR_LINESPACING == nWhich) )
@@ -318,7 +317,7 @@ static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
         pMod = 0;
 
     Point aNullPt;
-    return pMod ? ::GetFrmOfModify( *pMod, nFrmType, &aNullPt, 0, sal_False )
+    return pMod ? ::GetFrmOfModify( 0, *pMod, nFrmType, &aNullPt, 0, sal_False )
                 : 0;
 }
 
@@ -343,14 +342,12 @@ const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
         const SwPageDesc* pPd = bCheckForThisPgDc ? this :
                                 ((SwPageFrm*)pChkFrm)->GetPageDesc();
         pRet = &pPd->GetMaster();
-        ASSERT( ((SwPageFrm*)pChkFrm)->GetPageDesc() == pPd,
-                "Falcher Node fuers erkennen des Seitenformats" );
+        ASSERT( ((SwPageFrm*)pChkFrm)->GetPageDesc() == pPd, "Wrong node for detection of page format!" );
         // an welchem Format haengt diese Seite?
-        if( pRet != pChkFrm->GetRegisteredIn() )
+        if( !pChkFrm->KnowsFormat(*pRet) )
         {
             pRet = &pPd->GetLeft();
-            ASSERT( pRet == pChkFrm->GetRegisteredIn(),
-                    "Falcher Node fuers erkennen des Seitenformats" );
+            ASSERT( pChkFrm->KnowsFormat(*pRet), "Wrong node for detection of page format!" );
         }
     }
     else

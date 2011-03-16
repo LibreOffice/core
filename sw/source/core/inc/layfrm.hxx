@@ -102,7 +102,7 @@ public:
                                    const SwCrsrMoveState *pCMS = 0,
                                    const sal_Bool bDefaultExpand = sal_True ) const;
 
-    SwLayoutFrm( SwFrmFmt* );
+    SwLayoutFrm( SwFrmFmt*, SwFrm* );
     ~SwLayoutFrm();
 
     virtual void Paint( SwRect const&,

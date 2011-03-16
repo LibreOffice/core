@@ -35,23 +35,17 @@
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <calbck.hxx>
-#include <errhdl.hxx>       // Fuer die inline-ASSERTs
-#include <error.h>          // Fuer die inline-ASSERTs
+#include <errhdl.hxx>
+#include <error.h>
 #include <hints.hxx>
 #include <hash_map>
 #include <stringhash.hxx>
-// --> OD 2008-02-21 #refactorlists#
-class SwNodeNum;
 #include <SwNumberTreeTypes.hxx>
-// <--
-// --> OD 2008-02-19 #refactorlists#
 #include <vector>
-class SwTxtFmtColl;
-// <--
-// --> OD 2008-07-08 #i91400#
-class IDocumentListsAccess;
-// <--
 
+class SwTxtFmtColl;
+class IDocumentListsAccess;
+class SwNodeNum;
 class Font;
 class SvxBrushItem;
 class SvxNumRule;
@@ -72,6 +66,9 @@ class SW_DLLPUBLIC SwNumFmt : public SvxNumberFormat, public SwClient
     using SvxNumberFormat::operator ==;
     using SvxNumberFormat::operator !=;
 
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
+
 public:
     SwNumFmt();
     SwNumFmt( const SwNumFmt& );
@@ -84,9 +81,9 @@ public:
     sal_Bool operator==( const SwNumFmt& ) const;
     sal_Bool operator!=( const SwNumFmt& r ) const { return !(*this == r); }
 
-    SwCharFmt* GetCharFmt() const { return (SwCharFmt*)pRegisteredIn; }
+    SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }
     void SetCharFmt( SwCharFmt* );
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
+    void ForgetCharFmt();
 
     virtual void            SetCharFmtName(const String& rSet);
     virtual const String&   GetCharFmtName()const;
@@ -167,9 +164,6 @@ private:
     // --> OD 2008-04-03 #refactorlists#
     String msDefaultListId;
     // <--
-
-    // forbidden and not implemented.
-    SwNumRule();
 
 public:
     // --> OD 2008-02-08 #newlistlevelattrs#

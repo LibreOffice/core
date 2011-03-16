@@ -45,7 +45,7 @@ class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
 {
     SwSection* pSection;
 
-    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, sal_uInt8 &,
+    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
     void _Cut( sal_Bool bRemove );
     // Is there a FtnContainer?
@@ -59,8 +59,11 @@ protected:
     virtual void MakeAll();
     virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool bHead, sal_Bool &rReformat );
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+    virtual void SwClientNotify( const SwModify&, const SfxHint& );
+
 public:
-    SwSectionFrm( SwSection & );                 //Inhalt wird nicht erzeugt!
+    SwSectionFrm( SwSection &, SwFrm* );                 //Inhalt wird nicht erzeugt!
     SwSectionFrm( SwSectionFrm &, sal_Bool bMaster );//_Nur_ zum Erzeugen von Master/Follows
     ~SwSectionFrm();
 
@@ -69,7 +72,6 @@ public:
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
     inline const SwSectionFrm *GetFollow() const;
     inline       SwSectionFrm *GetFollow();

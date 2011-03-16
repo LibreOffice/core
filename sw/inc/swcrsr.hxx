@@ -95,11 +95,7 @@ public:
 
     // @@@ semantic: no copy ctor.
     SwCursor( SwCursor& rCpy);
-private:
-    // forbidden and not implemented.
-    //SwCursor( const SwCursor& );
-    // @@@ used e.g. in core/frmedt/fetab.cxx @@@
-    // SwCursor & operator= ( const SwCursor& );
+
 public:
 
     virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
@@ -139,7 +135,7 @@ public:
     sal_Bool GoEndWord();
     sal_Bool GoNextWord();
     sal_Bool GoPrevWord();
-    sal_Bool SelectWord( const Point* pPt = 0 );
+    sal_Bool SelectWord( ViewShell* pViewShell, const Point* pPt = 0 );
 
     // API versions of above functions (will be used with a different
     // WordType for the break iterator)
@@ -150,7 +146,7 @@ public:
     sal_Bool GoEndWordWT( sal_Int16 nWordType );
     sal_Bool GoNextWordWT( sal_Int16 nWordType );
     sal_Bool GoPrevWordWT( sal_Int16 nWordType );
-    sal_Bool SelectWordWT( sal_Int16 nWordType, const Point* pPt = 0 );
+    sal_Bool SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, const Point* pPt = 0 );
 
     enum SentenceMoveType
     {

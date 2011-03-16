@@ -2669,10 +2669,10 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
 }
 
 // --> OD 2010-02-19 #i108125#
-void SwAccessibleParagraph::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwAccessibleParagraph::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     mpParaChangeTrackInfo->reset();
 
-    SwClient::Modify( pOld, pNew );
+    CheckRegistration( pOld, pNew );
 }
 // <--

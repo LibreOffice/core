@@ -68,7 +68,7 @@ protected:
     virtual void NotifyBackground( SwPageFrm *pPage,
                                    const SwRect& rRect, PrepareHint eHint);
 
-    SwFlyFreeFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
+    SwFlyFreeFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
 public:
     // --> OD 2004-06-29 #i28701#
@@ -130,11 +130,10 @@ public:
     // --> OD 2004-06-29 #i28701#
     TYPEINFO();
 
-    SwFlyLayFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
+    SwFlyLayFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
     SwFlyLayFrm( SwFlyLayFrm& );
-
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
-
+protected:
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 };
 
 //Die Flys, die an einem Cntnt haengen nicht aber im Inhalt
@@ -154,14 +153,13 @@ protected:
         @author OD
     */
     virtual void RegisterAtCorrectPage();
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
     // --> OD 2004-06-29 #i28701#
     TYPEINFO();
 
-    SwFlyAtCntFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
-
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
+    SwFlyAtCntFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
     void SetAbsPos( const Point &rNew );
 
@@ -193,16 +191,16 @@ protected:
     virtual void NotifyBackground( SwPageFrm *pPage,
                                    const SwRect& rRect, PrepareHint eHint);
     virtual void MakeAll();
+    virtual void  Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
     // --> OD 2004-06-29 #i28701#
     TYPEINFO();
 
-    SwFlyInCntFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
+    SwFlyInCntFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
 
     virtual ~SwFlyInCntFrm();
     virtual void  Format(  const SwBorderAttrs *pAttrs = 0 );
-    virtual void  Modify( SfxPoolItem*, SfxPoolItem* );
 
     void SetRefPoint( const Point& rPoint, const Point &rRelAttr,
         const Point &rRelPos );
