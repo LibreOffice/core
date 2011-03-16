@@ -62,6 +62,9 @@ EXCEPTIONSFILES=	$(SLO)$/salprn.obj
 
 .IF "$(ENABLE_GRAPHITE)" == "TRUE"
 CFLAGS+=-DENABLE_GRAPHITE
+.IF "$(SYSTEM_GRAPHITE)" != "YES"
+CDEFS+=-DGR2_STATIC
+.ENDIF
 .ENDIF
 
 # --- Targets ------------------------------------------------------
