@@ -182,7 +182,8 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
                             SwPrintData const*const pPrintData,
                             const SwRect& ,
                             const Color* _pPageBackgrdColor,
-                            const bool _bIsPageRightToLeft ) const
+                            const bool _bIsPageRightToLeft,
+                            sdr::contact::ViewObjectContactRedirector* pRedirector ) const
 {
     if ( HasDrawView() )
     {
@@ -232,7 +233,7 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
             SdrView &rSdrView = const_cast< SdrView & >(GetPageView()->GetView());
             rSdrView.setHideDraw( !pPrintData->IsPrintDraw() );
         }
-        GetPageView()->DrawLayer(_nLayerID, pOutDev);
+        GetPageView()->DrawLayer( _nLayerID, pOutDev, pRedirector );
         pOutDev->Pop();
 
         // OD 29.08.2002 #102450#
