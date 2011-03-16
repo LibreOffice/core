@@ -28,7 +28,6 @@
 
 #include "sal/config.h"
 #include "rtl/textcvt.h"
-#include "sal/main.h"
 
 #include <stdio.h>
 
@@ -77,7 +76,7 @@ struct Encoder
 };
 
 
-SAL_IMPLEMENT_MAIN()
+int main(int argc, char **argv)
 {
 #   define EXP(x) Encoder(x, #x)
 
