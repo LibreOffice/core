@@ -46,22 +46,6 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 }
 
 //=========================================================================
-extern "C" sal_Bool SAL_CALL component_writeInfo(
-    void * /*pServiceManager*/, void * pRegistryKey )
-{
-    return pRegistryKey &&
-
-    //////////////////////////////////////////////////////////////////////
-    // Write info into registry.
-    //////////////////////////////////////////////////////////////////////
-
-    // @@@ Adjust namespace names.
-    writeInfo( pRegistryKey,
-               ::odma::ContentProvider::getImplementationName_Static(),
-               ::odma::ContentProvider::getSupportedServiceNames_Static() );
-}
-
-//=========================================================================
 extern "C" void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {

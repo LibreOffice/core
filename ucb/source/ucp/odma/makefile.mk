@@ -102,3 +102,10 @@ LIB3OBJFILES=$(SLO3FILES)
 
 .INCLUDE: target.mk
 
+ALLTAR : $(MISC)/$(TARGET)$(UCP_VERSION).component
+
+$(MISC)/$(TARGET)$(UCP_VERSION).component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        $(TARGET)$(UCP_VERSION).component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt $(TARGET)$(UCP_VERSION).component
