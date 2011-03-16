@@ -142,7 +142,7 @@ ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_set_include,tl,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/tools/win/inc \
+    -I$(realpath $(SRCDIR)/tools/win/inc) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,tl,\
