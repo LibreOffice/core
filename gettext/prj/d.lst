@@ -27,4 +27,4 @@ symlink: %_DEST%\lib%_EXT%\libgettextlib-0.18.1.dylib %_DEST%\lib%_EXT%\libgette
 ..\%__SRC%\bin\msguniq %_DEST%\bin%_EXT%\msguniq
 ..\%__SRC%\bin\urlget %_DEST%\bin%_EXT%\urlget
 ..\%__SRC%\bin\xgettext %_DEST%\bin%_EXT%\xgettext
-
+..\%__SRC%\lib\iintl_t1.lib %_DEST%\lib%_EXT%\intl.lib
