@@ -41,9 +41,6 @@ my_components = \
     introspection \
     invocadapt \
     invocation \
-    javaloader \
-    javavm \
-    juh \
     namingservice \
     proxyfac \
     reflection \
@@ -52,6 +49,16 @@ my_components = \
     textinstream \
     textoutstream \
     uuresolver
+
+.IF "$(SOLAR_JAVA)" != ""
+
+my_components = \
+    $(my_components) \
+    javaloader \
+    javavm \
+    juh
+
+.ENDIF
 
 .INCLUDE: settings.mk
 .INCLUDE: target.mk
