@@ -779,15 +779,17 @@ testcase tmFileProperties
    Kontext "TabDokumentInfo"
    Call DialogTest ( TabDokumentInfo )
 
-   qaerrorlog "#i95523#"
-   'Kontext
-   'active.SetPage TabBenutzer
-   'Kontext "TabBenutzer"
-   'Call DialogTest ( TabBenutzer )
-   'Infofelder.Click
-   '   Kontext "InfonamenBearbeiten"
-   '   Call DialogTest (InfonamenBearbeiten)
-   'InfonamenBearbeiten.Cancel
+    Kontext
+    '/// select tabpage 'Security' ///'
+    active.SetPage TabSecurityProperties
+    Kontext "TabSecurityProperties"
+    Call DialogTest ( TabSecurityProperties)
+
+    Kontext
+    '/// select tabpage 'User defined' ///'
+    active.SetPage TabCustomProperties
+    Kontext "TabCustomProperties"
+    Call DialogTest ( TabCustomProperties )
 
    Kontext
    active.SetPage TabInternet
