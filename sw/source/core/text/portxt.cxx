@@ -51,10 +51,6 @@
 #include <doc.hxx>
 #include <xmloff/odffields.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-const sal_Char *GetLangName( const MSHORT nLang );
-#endif
-
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;

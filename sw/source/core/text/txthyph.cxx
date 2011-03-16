@@ -43,10 +43,6 @@
 #include <guess.hxx>    //
 #include <splargs.hxx>  // SwInterHyphInfo
 
-#if OSL_DEBUG_LEVEL > 1
-extern const sal_Char *GetLangName( const MSHORT nLang );
-#endif
-
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

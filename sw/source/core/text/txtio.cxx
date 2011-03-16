@@ -157,11 +157,6 @@ void SwLineLayout::DebugPortions( SvStream &, const XubString &, //$ ostream
 {
 }
 
-const char *GetLangName( const MSHORT  )
-{
-    return 0;
-}
-
 #else
 #include <limits.h>
 #include <stdlib.h>
@@ -294,11 +289,6 @@ void SwLineLayout::DebugPortions( SvStream &rOs, const XubString &/*rTxt*/, //$ 
         nPos = nPos + pPortion2->GetLen();
         pPortion2 = pPortion2->GetPortion();
     }
-}
-
-const char *GetLangName( const MSHORT /*nLang*/ )
-{
-    return "???";
 }
 
 SvStream &SwLinePortion::operator<<( SvStream &rOs ) const //$ ostream
