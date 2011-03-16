@@ -29,12 +29,14 @@
 $(eval $(call gb_Module_Module,tools))
 
 $(eval $(call gb_Module_add_targets,tools,\
+    Executable_bestreversemap \
     Executable_mkunroll \
     Executable_rscdep \
     Executable_so_checksum \
     Executable_sspretty \
     Library_tl \
     Package_inc \
+    Package_reversemap \
     StaticLibrary_ooopathutils \
 ))
 

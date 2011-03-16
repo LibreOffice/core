@@ -1,6 +1,3 @@
-#*************************************************************************
-#
-#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -14,34 +11,23 @@
 # License.
 #
 # The Initial Developer of the Original Code is
-#        Caolán McNamara <caolanm@redhat.com> (Red Hat, Inc.)
-# Portions created by the Initial Developer are Copyright (C) 2010 the
+#        Bjoern Michaelsen <bjoern.michaelsen@canonical.com> (Canonical Ltd.)
+# Portions created by the Initial Developer are Copyright (C) 2011 the
 # Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Caolán McNamara <caolanm@redhat.com>
+# Contributor(s): Bjoern Michaelsen <bjoern.michaelsen@canonical.com> (Canonical Ltd.)
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 3 or later (the "GPLv3+"), or
 # the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
-#
-#*************************************************************************
 
-PRJ = ../..
-PRJNAME = tl
-TARGET = bestreversemap
-LIBTARGET = NO
-TARGETTYPE = CUI
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_Package_Package,tools_reversemap,$(WORKDIR)/CustomTarget/tools/source/reversemap))
+$(eval $(call gb_Package_add_customtarget,tools_reversemap,tools/source/reversemap))
 
-.INCLUDE: settings.mk
+$(eval $(call gb_CustomTarget_add_outdir_dependencies,tools/source/reversemap,\
+	$(call gb_Executable_get_target,bestreversemap) \
+))
 
-OBJFILES = \
-    $(OBJ)$/bestreversemap.obj
-
-APP1TARGET = bestreversemap
-APP1OBJS = $(OBJ)$/bestreversemap.obj
-APP1STDLIBS = $(SALLIB)
-
-.INCLUDE: target.mk
+# vim: set noet sw=4:

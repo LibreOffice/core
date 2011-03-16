@@ -28,6 +28,7 @@
 $(eval $(call gb_Library_Library,tl))
 
 $(eval $(call gb_Library_add_package_headers,tl,tools_inc))
+$(eval $(call gb_Library_add_package_headers,tl,tools_reversemap))
 
 $(eval $(call gb_Library_add_precompiled_header,tl,$(SRCDIR)/tools/inc/pch/precompiled_tools))
 
@@ -38,6 +39,7 @@ $(eval $(call gb_Library_set_include,tl,\
     -I$(SRCDIR)/solenv/inc \
     -I$(SRCDIR)/solenv/inc/Xp31 \
     -I$(OUTDIR)/inc/offuh \
+    -I$(WORKDIR)/CustomTarget/tools/source/reversemap \
 ))
 
 $(eval $(call gb_Library_set_defs,tl,\
