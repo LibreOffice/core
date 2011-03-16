@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module report { module meta {
 /** identifies a <type>XFormulaParser</type> which allows to retrieve the meta data of all supported functions.
 
 */
-interface XFormulaParser
+published interface XFormulaParser
 {
     /** allows life-time control of report engine.
      */

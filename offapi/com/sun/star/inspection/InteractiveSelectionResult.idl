@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module inspection {
 
     @since OOo 2.0.3
 */
-enum InteractiveSelectionResult
+published enum InteractiveSelectionResult
 {
     /** The interactive selection of a property value was cancelled.
     */

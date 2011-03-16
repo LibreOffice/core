@@ -47,7 +47,7 @@ interface XPropertyHandler;
 
     @since OOo 2.0.3
 */
-interface XObjectInspectorModel
+published interface XObjectInspectorModel
 {
     /** describes a set of factories for creating <type>XPropertyHandler</type>s
 

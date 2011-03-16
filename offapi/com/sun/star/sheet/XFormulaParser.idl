@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** converts between text and token representations of formulas.
  */
-interface XFormulaParser
+published interface XFormulaParser
 {
     //-------------------------------------------------------------------------
 

@@ -48,7 +48,7 @@
     @see XReportDefinition
     @see XGroups
  */
-interface XGroup
+published interface XGroup
 {
     /** allows access to the groups collection of the report.
     */
