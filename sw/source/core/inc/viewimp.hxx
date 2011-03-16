@@ -59,6 +59,11 @@ class SwPrintData;
 class SwPagePreviewLayout;
 struct PrevwPage;
 class SwTxtFrm;
+// --> OD #i76669#
+namespace sdr { namespace contact {
+        class ViewObjectContactRedirector;
+} }
+// <--
 
 class SwViewImp
 {

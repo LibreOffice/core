@@ -95,6 +95,11 @@
 // --> FME 2004-06-08 #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 // <--
+// --> OD #i76669#
+#include <svx/sdr/contact/viewobjectcontactredirector.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+// <--
 
 #include <ndole.hxx>
 #include <svtools/chartprettypainter.hxx>
@@ -2707,9 +2712,6 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
 //
 
 // --> OD #i76669#
-#include <svx/sdr/contact/viewobjectcontactredirector.hxx>
-#include <svx/sdr/contact/viewobjectcontact.hxx>
-
 namespace
 {
     class SwViewObjectContactRedirector : public ::sdr::contact::ViewObjectContactRedirector
