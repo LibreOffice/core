@@ -52,8 +52,7 @@ my_components = \
 
 .IF "$(SOLAR_JAVA)" != ""
 
-my_components = \
-    $(my_components) \
+my_components += \
     javaloader \
     javavm \
     juh
