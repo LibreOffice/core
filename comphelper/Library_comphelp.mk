@@ -34,8 +34,8 @@ $(eval $(call gb_Library_add_precompiled_header,comphelper,$(SRCDIR)/comphelper/
 $(eval $(call gb_Library_set_componentfile,comphelper,comphelper/util/comphelp))
 
 $(eval $(call gb_Library_set_include,comphelper,\
-    -I$(realpath $(SRCDIR)/comphelper/inc/pch) \
-    -I$(realpath $(SRCDIR)/comphelper/source/inc) \
+    -I$(SRCDIR)/comphelper/inc/pch \
+    -I$(SRCDIR)/comphelper/source/inc \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
 ))
