@@ -38,6 +38,8 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     idl \
 	linguistic \
     padmin \
+	regexp \
+	sax \
     sfx2 \
     sot \
     starmath \
@@ -52,7 +54,8 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     unoxml \
     vcl \
     xmloff \
-+	xmlscript \
+	xmlreader \
+	xmlscript \
     vbahelper \
 ))
 
