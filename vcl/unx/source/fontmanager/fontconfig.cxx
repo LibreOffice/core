@@ -56,6 +56,9 @@ using namespace psp;
         #define FC_HINT_MEDIUM 2
         #define FC_HINT_FULL   3
     #endif
+    #ifndef FC_FT_FACE
+        #define FC_FT_FACE "ftface"
+    #endif
 #else
     typedef void FcConfig;
     typedef void FcObjectSet;
@@ -141,6 +144,7 @@ class FontCfgWrapper
     FcBool                    (*m_pFcPatternAddCharSet)(FcPattern*,const char*,const FcCharSet*);
     FcBool          (*m_pFcPatternAddString)(FcPattern*,const char*,const FcChar8*);
     FT_UInt         (*m_pFcFreeTypeCharIndex)(FT_Face,FcChar32);
+    FcBool          (*m_pFcPatternAddFTFace)(FcPattern*,const char*,const FT_Face);
 
     oslGenericFunction loadSymbol( const char* );
     void addFontSet( FcSetName );
@@ -257,10 +261,14 @@ public:
     { return m_pFcPatternAddBool( pPattern, pObject, nValue ); }
     FcBool FcPatternAddCharSet(FcPattern* pPattern,const char* pObject,const FcCharSet*pCharSet)
     { return m_pFcPatternAddCharSet(pPattern,pObject,pCharSet); }
-
     FT_UInt FcFreeTypeCharIndex( FT_Face face, FcChar32 ucs4 )
     { return m_pFcFreeTypeCharIndex ? m_pFcFreeTypeCharIndex( face, ucs4 ) : 0; }
-
+    FcBool FcPatternAddFTFace( FcPattern* pPattern, const char* pObject, const FT_Face nValue )
+    {
+        return m_pFcPatternAddFTFace
+            ? m_pFcPatternAddFTFace( pPattern, pObject, nValue )
+            : false;
+    }
 public:
     FcResult LocalizedElementFromPattern(FcPattern* pPattern, FcChar8 **family,
                                          const char *elementtype, const char *elementlangtype);
@@ -372,6 +380,8 @@ FontCfgWrapper::FontCfgWrapper()
         loadSymbol( "FcPatternAddString" );
     m_pFcFreeTypeCharIndex = (FT_UInt(*)(FT_Face,FcChar32))
         loadSymbol( "FcFreeTypeCharIndex" );
+    m_pFcPatternAddFTFace = (FcBool(*)(FcPattern*,const char*,const FT_Face))
+        loadSymbol( "FcPatternAddFTFace" );
 
     m_nFcVersion = FcGetVersion();
 #if (OSL_DEBUG_LEVEL > 1)
@@ -1093,6 +1103,26 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
     return aName;
 }
 
+class FontConfigFontOptions : public ImplFontOptions
+{
+public:
+    FontConfigFontOptions() : mpPattern(0) {}
+    ~FontConfigFontOptions()
+    {
+        FontCfgWrapper& rWrapper = FontCfgWrapper::get();
+        if( rWrapper.isValid() )
+            rWrapper.FcPatternDestroy( mpPattern );
+    }
+    virtual void *GetPattern(void * face) const
+    {
+        FontCfgWrapper& rWrapper = FontCfgWrapper::get();
+        if( rWrapper.isValid() )
+            rWrapper.FcPatternAddFTFace(mpPattern, FC_FT_FACE, static_cast<FT_Face>(face));
+        return mpPattern;
+    }
+    FcPattern* mpPattern;
+};
+
 ImplFontOptions* PrintFontManager::getFontOptions(
     const FastPrintFontInfo& rInfo, int nSize, void (*subcallback)(void*)) const
 {
@@ -1103,7 +1133,7 @@ ImplFontOptions* PrintFontManager::getFontOptions(
     if( ! rWrapper.isValid() )
         return NULL;
 
-    ImplFontOptions *pOptions = NULL;
+    FontConfigFontOptions* pOptions = NULL;
     FcConfig* pConfig = rWrapper.FcConfigGetCurrent();
     FcPattern* pPattern = rWrapper.FcPatternCreate();
 
@@ -1140,9 +1170,10 @@ ImplFontOptions* PrintFontManager::getFontOptions(
             FC_HINTING, 0, &hinting);
         /*FcResult eHintStyle =*/ rWrapper.FcPatternGetInteger(pResult,
             FC_HINT_STYLE, 0, &hintstyle);
-        rWrapper.FcPatternDestroy(pResult);
 
-        pOptions = new ImplFontOptions;
+        pOptions = new FontConfigFontOptions;
+
+        pOptions->mpPattern = pResult;
 
         if( eEmbeddedBitmap == FcResultMatch )
             pOptions->meEmbeddedBitmap = embitmap ? EMBEDDEDBITMAP_TRUE : EMBEDDEDBITMAP_FALSE;

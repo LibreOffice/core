@@ -188,6 +188,7 @@ public:
     virtual void*               GetFtFace() const { return 0; }
     virtual int                 GetLoadFlags() const { return 0; }
     virtual void                SetFontOptions( const ImplFontOptions*) {}
+    virtual const ImplFontOptions* GetFontOptions() const { return 0; }
     virtual bool                NeedsArtificialBold() const { return false; }
     virtual bool                NeedsArtificialItalic() const { return false; }
 

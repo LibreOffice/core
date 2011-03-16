@@ -967,6 +967,11 @@ void FreetypeServerFont::SetFontOptions( const ImplFontOptions* pFontOptions)
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
+const ImplFontOptions* FreetypeServerFont::GetFontOptions() const
+{
+    return mpFontOptions;
+}
+
 // -----------------------------------------------------------------------
 
 bool FreetypeServerFont::TestFont() const
