@@ -180,10 +180,9 @@ class ScRangeName
 {
 private:
     typedef ::boost::ptr_set<ScRangeData> DataType;
-    DataType    maData;
-
-    ScDocument* mpDoc;
+    DataType maData;
     sal_uInt16  mnSharedMaxIndex;
+
 public:
     /// Map that manages stored ScRangeName instances.
     typedef ::boost::ptr_map<SCTAB, ScRangeName>  TabNameMap;
@@ -195,7 +194,7 @@ public:
     typedef DataType::const_iterator const_iterator;
     typedef DataType::iterator iterator;
 
-    ScRangeName(ScDocument* pDoc = NULL);
+    ScRangeName();
     ScRangeName(const ScRangeName& r);
 
     SC_DLLPUBLIC const ScRangeData* findByRange(const ScRange& rRange) const;

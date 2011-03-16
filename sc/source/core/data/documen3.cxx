@@ -135,7 +135,7 @@ ScRangeName* ScDocument::GetRangeName(SCTAB nTab) const
 ScRangeName* ScDocument::GetRangeName() const
 {
     if (!pRangeName)
-        pRangeName = new ScRangeName(const_cast<ScDocument*>(this));
+        pRangeName = new ScRangeName;
     return pRangeName;
 }
 

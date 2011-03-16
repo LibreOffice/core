@@ -3027,7 +3027,7 @@ void ScTable::SetRangeName(ScRangeName* pNew)
 ScRangeName* ScTable::GetRangeName() const
 {
     if (!mpRangeName)
-        mpRangeName = new ScRangeName(pDocument);
+        mpRangeName = new ScRangeName;
     return mpRangeName;
 }
 
