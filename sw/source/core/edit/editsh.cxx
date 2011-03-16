@@ -1194,3 +1194,11 @@ void SwEditShell::CountWords( SwDocStat& rStat ) const
     FOREACHPAM_END()
 }
 
+void SwEditShell::ApplyViewOptions( const SwViewOption &rOpt )
+{
+    SwCrsrShell::StartAction();
+    ViewShell::ApplyViewOptions( rOpt );
+    SwEditShell::EndAction();
+}
+
+

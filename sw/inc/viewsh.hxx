@@ -439,7 +439,7 @@ public:
     void LayoutIdle();
 
     inline const SwViewOption *GetViewOptions() const { return pOpt; }
-           void  ApplyViewOptions( const SwViewOption &rOpt );
+    virtual void  ApplyViewOptions( const SwViewOption &rOpt );
            void  SetUIOptions( const SwViewOption &rOpt );
            void  SetReadonlyOption(sal_Bool bSet);   // Readonly-Bit d. ViewOptions setzen
            void  SetPDFExportOption(sal_Bool bSet);   // set/reset PDF export mode

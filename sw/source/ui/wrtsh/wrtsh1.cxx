@@ -98,6 +98,7 @@
 #include <ndtxt.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <IMark.hxx>
+#include <sfx2/bindings.hxx>
 
 // -> #111827#
 #include <SwRewriter.hxx>
@@ -1900,4 +1901,12 @@ String SwWrtShell::GetSelDescr() const
 
     return aResult;
 }
+
+void SwWrtShell::ApplyViewOptions( const SwViewOption &rOpt )
+{
+    SwFEShell::ApplyViewOptions( rOpt );
+    //#i115062# invalidate meta character slot
+    GetView().GetViewFrame()->GetBindings().Invalidate( FN_VIEW_META_CHARS );
+}
+
 
