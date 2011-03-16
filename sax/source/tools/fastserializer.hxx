@@ -138,6 +138,7 @@ private:
 
     public:
         ForMerge() : maData(), maPostponed() {}
+        virtual ~ForMerge() {}
 
         virtual void setCurrentElement( ::sal_Int32 /*nToken*/ ) {}
         virtual Int8Sequence& getData();
