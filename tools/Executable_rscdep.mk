@@ -29,9 +29,9 @@ $(eval $(call gb_Executable_Executable,rscdep))
 
 $(eval $(call gb_Executable_set_include,rscdep,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/tools/inc/ \
-    -I$(SRCDIR)/tools/inc/pch \
-    -I$(SRCDIR)/tools/bootstrp/ \
+    -I$(realpath $(SRCDIR)/tools/inc) \
+    -I$(realpath $(SRCDIR)/tools/inc/pch) \
+    -I$(realpath $(SRCDIR)/tools/bootstrp) \
 ))
 
 $(eval $(call gb_Executable_set_cxxflags,rscdep,\
