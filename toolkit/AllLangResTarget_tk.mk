@@ -41,5 +41,5 @@ $(eval $(call gb_SrsTarget_set_include,toolkit/awt,\
 ))
 
 $(eval $(call gb_SrsTarget_add_files,toolkit/awt,\
-    toolkit/source/awt/xthrobber.src \
+    clone/libs-gui/toolkit/source/awt/xthrobber.src \
 ))
