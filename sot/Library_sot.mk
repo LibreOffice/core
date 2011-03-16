@@ -34,7 +34,7 @@ $(eval $(call gb_Library_add_precompiled_header,sot,$(SRCDIR)/sot/inc/pch/precom
 $(eval $(call gb_Library_set_componentfile,sot,sot/util/sot))
 
 $(eval $(call gb_Library_set_include,sot,\
-    -I$(SRCDIR)/sot/inc/pch \
+    -I$(realpath $(SRCDIR)/sot/inc/pch) \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
 ))
