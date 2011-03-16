@@ -316,6 +316,7 @@
 #define WID_TXTCOL_LINE_IS_ON           4
 #define WID_TXTCOL_IS_AUTOMATIC         5
 #define WID_TXTCOL_AUTO_DISTANCE        6
+#define WID_TXTCOL_LINE_STYLE           7
 
 class SwItemPropertySet : public SfxItemPropertySet
 {

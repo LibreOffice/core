@@ -100,6 +100,12 @@ struct PropValData
         {}
 };
 
+// Constants for the css::text::ColumnSeparatorStyle
+#define API_COL_LINE_NONE               0
+#define API_COL_LINE_SOLID              1
+#define API_COL_LINE_DOTTED             2
+#define API_COL_LINE_DASHED             3
+
 typedef PropValData* PropValDataPtr;
 SV_DECL_PTRARR(PropValDataArr, PropValDataPtr, 5, 5 )
 SV_IMPL_PTRARR(PropValDataArr, PropValDataPtr)
@@ -2354,7 +2360,8 @@ SwXTextColumns::SwXTextColumns(sal_uInt16 nColCount) :
     nSepLineColor(0), //black
     nSepLineHeightRelative(100),//full height
     nSepLineVertAlign(style::VerticalAlignment_MIDDLE),
-    bSepLineIsOn(sal_False)
+    bSepLineIsOn(sal_False),
+    nSepLineStyle(API_COL_LINE_NONE) // None
 {
     if(nColCount)
         setColumnCount(nColCount);
@@ -2390,6 +2397,15 @@ SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
     nSepLineColor = rFmtCol.GetLineColor().GetColor();
     nSepLineHeightRelative = rFmtCol.GetLineHeight();
     bSepLineIsOn = rFmtCol.GetLineAdj() != COLADJ_NONE;
+    sal_Int8 nStyle = API_COL_LINE_NONE;
+    switch (rFmtCol.GetLineStyle())
+    {
+        case SOLID: nStyle = API_COL_LINE_SOLID; break;
+        case DOTTED: nStyle = API_COL_LINE_DOTTED; break;
+        case DASHED: nStyle = API_COL_LINE_DASHED; break;
+        default: break;
+    }
+    nSepLineStyle = nStyle;
     switch(rFmtCol.GetLineAdj())
     {
         case COLADJ_TOP:    nSepLineVertAlign = style::VerticalAlignment_TOP;   break;
@@ -2488,6 +2504,11 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
         case WID_TXTCOL_LINE_COLOR:
             aValue >>= nSepLineColor;
         break;
+        case WID_TXTCOL_LINE_STYLE:
+        {
+            aValue >>= nSepLineStyle;
+        }
+        break;
         case WID_TXTCOL_LINE_REL_HGT:
         {
             sal_Int8 nTmp = 0;
@@ -2550,6 +2571,9 @@ Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
         break;
         case WID_TXTCOL_LINE_COLOR:
             aRet <<= nSepLineColor;
+        break;
+        case WID_TXTCOL_LINE_STYLE:
+            aRet <<= nSepLineStyle;
         break;
         case WID_TXTCOL_LINE_REL_HGT:
             aRet <<= nSepLineHeightRelative;

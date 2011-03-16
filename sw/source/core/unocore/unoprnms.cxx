@@ -785,6 +785,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0740 UNO_NAME_VBA_DOCOBJ */       {MAP_CHAR_LEN("ThisVBADocObj")},
 
 /* 0741 UNO_NAME_NESTED_TEXT_CONTENT */ {MAP_CHAR_LEN("NestedTextContent")},
+/* 0742 UNO_NAME_SEPARATOR_LINE_STYLE */ {MAP_CHAR_LEN("SeparatorLineStyle")},
 };
 
 const SwPropNameLen& SwGetPropName( sal_uInt16 nId )

@@ -1071,6 +1071,14 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 nLineWidth = pSwColums->GetSepLineWidth();
                 aLineColor.SetColor(pSwColums->GetSepLineColor());
                 nLineHeight = pSwColums->GetSepLineHeightRelative();
+                switch ( pSwColums->GetSepLineStyle() )
+                {
+                    default:
+                    case 0: eLineStyle = NO_STYLE; break;
+                    case 1: eLineStyle = SOLID; break;
+                    case 2: eLineStyle = DOTTED; break;
+                    case 3: eLineStyle = DASHED; break;
+                }
                 if(!pSwColums->GetSepLineIsOn())
                     eAdj = COLADJ_NONE;
                 else switch(pSwColums->GetSepLineVertAlign())

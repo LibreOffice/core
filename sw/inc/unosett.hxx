@@ -262,6 +262,8 @@ class SwXTextColumns : public cppu::WeakAggImplHelper4
     sal_Int8                    nSepLineHeightRelative;
     sal_Int8                    nSepLineVertAlign;//style::VerticalAlignment
     sal_Bool                    bSepLineIsOn;
+    sal_Int8                    nSepLineStyle;
+
 protected:
     virtual ~SwXTextColumns();
 public:
@@ -301,6 +303,7 @@ public:
     sal_Int8    GetSepLineHeightRelative() const {return    nSepLineHeightRelative;}
     sal_Int8    GetSepLineVertAlign() const {return     nSepLineVertAlign;}
     sal_Bool    GetSepLineIsOn() const {return  bSepLineIsOn;}
+    sal_Int8    GetSepLineStyle() const {return nSepLineStyle;}
 
     sal_Bool    IsAutomaticWidth() const {return bIsAutomaticWidth;}
 };
