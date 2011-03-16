@@ -1836,7 +1836,7 @@ void SchXMLExportHelper_Impl::exportTable()
 
         for( t2DNumberContainer::const_iterator aRowIt( aData.aDataInRows.begin())
             ; aRowIt != aData.aDataInRows.end()
-            ; aRowIt++, nC++, aRowDescriptionsIter++ )
+            ; ++aRowIt, ++nC )
         {
             SvXMLElementExport aRow( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True );
 
@@ -1874,8 +1874,10 @@ void SchXMLExportHelper_Impl::exportTable()
                     if( !bHasOwnData && aRowDescriptions_RangeIter != aRowDescriptions_RangeEnd )
                     {
                         // remind the original range to allow a correct re-association when copying via clipboard
-                        SchXMLTools::exportRangeToSomewhere( mrExport, *aRowDescriptions_RangeIter++ );
+                        SchXMLTools::exportRangeToSomewhere( mrExport, *aRowDescriptions_RangeIter );
+                        ++aRowDescriptions_RangeIter;
                     }
+                    ++aRowDescriptionsIter;
                 }
             }
 
