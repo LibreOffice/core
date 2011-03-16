@@ -1135,6 +1135,7 @@ bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, S
                 {
                     bLocalName = pRangeName->findByName(sAddress) != NULL;
                     // TODO: Handle local names correctly.
+                    (void)bLocalName;
                 }
             }
         }
@@ -3564,7 +3565,7 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
 
     // #FIXME #TODO
     // The SortMethod param is not processed ( not sure what its all about, need to
-
+    (void)nSortMethod;
 }
 
 uno::Reference< excel::XRange > SAL_CALL
