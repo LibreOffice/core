@@ -2110,13 +2110,15 @@ void FileDialogHelper_Impl::loadConfig()
         {
             try
             {
+                // respect the last "insert as link" state
+                sal_Bool bLink = (sal_Bool) aUserData.GetToken( 0, ' ' ).ToInt32();
+                aValue <<= bLink;
+                xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aValue );
+
                 // respect the last "show preview" state
                 sal_Bool bShowPreview = (sal_Bool) aUserData.GetToken( 1, ' ' ).ToInt32();
-                if  ( !xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 ).hasValue() )
-                {
-                    aValue <<= bShowPreview;
-                    xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
-                }
+                aValue <<= bShowPreview;
+                xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
 
                 if ( maPath.isEmpty() )
                     displayFolder( getInitPath( aUserData, 2 ) );
