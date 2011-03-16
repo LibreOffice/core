@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <osl/diagnose.h>
 #include "tabcol.hxx"
 
 #include <limits.h> //for LONG_MAX
