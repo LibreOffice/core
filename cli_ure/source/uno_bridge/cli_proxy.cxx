@@ -865,7 +865,6 @@ sr::MethodInfo* CliProxy::getMethodInfo(int nUnoFunctionPos,
                                 "cli object does not implement interface method: "));
             buf.append(usMethodName);
             throw BridgeRuntimeError(buf.makeStringAndClear());
-            return 0;
         }
         m_arUnoPosToCliPos[nUnoFunctionPos] = indexCliMethod;
         ret = m_arMethodInfos[indexCliMethod];
