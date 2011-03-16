@@ -56,7 +56,7 @@ class EDITENG_DLLPUBLIC TextRanger
     {
         Range range;        //!< Range for which we calculated results.
         std::deque<long> results;  //!< Calculated results for the range.
-        RangeCache(const Range& rng) : range(rng) {};
+        inline RangeCache(const Range& rng) : range(rng) {};
     };
     std::deque<RangeCache> mRangeCache; //!< Cached range calculations.
     PolyPolygon *mpPolyPolygon; // Surface polygon
