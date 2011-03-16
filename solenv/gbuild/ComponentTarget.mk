@@ -36,7 +36,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XSLTPROC) --nonet --stringparam uri \
 		'$(subst \d,$$,$(COMPONENTPREFIX))$(LIBFILENAME)' -o $(1) \
-		$(gb_ComponentTarget_XSLTCOMMANDFILE) $(realpath $(2)))
+		$(gb_ComponentTarget_XSLTCOMMANDFILE) $(2))
 
 endef
 
