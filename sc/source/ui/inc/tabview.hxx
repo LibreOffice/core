@@ -194,6 +194,8 @@ private:
 
     void            UpdateVarZoom();
 
+    void            UpdateVisibleRange();
+
     static void     SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, sal_Bool bLayoutRTL );
     static long     GetScrollBarPos( ScrollBar& rScroll, sal_Bool bLayoutRTL );
 
