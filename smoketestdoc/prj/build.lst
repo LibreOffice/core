@@ -1,0 +1,4 @@
+smdoc   smoketestdoc :: soltools codemaker unoil javaunohelper NULL
+smdoc   smoketestdoc                                    usr1    -   all smdoc_mkout NULL
+smdoc   smoketestdoc\data                               nmake   -   all smdoc_data NULL
+smtoon  smoketestoo_native\com\sun\star\comp\smoketest  nmake   -   all smdoc_ext NULL

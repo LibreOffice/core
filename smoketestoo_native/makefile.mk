@@ -29,6 +29,8 @@ TARGET = smoketest
 
 ENABLE_EXCEPTIONS = TRUE
 
+ABORT_ON_ASSERTION = TRUE
+
 .INCLUDE: settings.mk
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
@@ -56,18 +58,18 @@ ALLTAR : cpptest
 
 cpptest : $(SHL1TARGETN)
 
-TEST_ARGUMENTS = smoketest.doc=$(BIN)/smoketestdoc.sxw
+TEST_ARGUMENTS = smoketest.doc=$(OUTDIR)/bin$(UPDMINOREXT)/smoketestdoc.sxw
 CPPTEST_LIBRARY = $(SHL1TARGETN)
 
 .IF "$(OS)" != "WNT"
 $(installationtest_instpath).flag : $(shell ls \
         $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).tar.gz)
-    $(RM) -r $(installationtest_instpath)
-    $(MKDIRHIER) $(installationtest_instpath)
-    cd $(installationtest_instpath) && $(GNUTAR) xfz \
+    $(COMMAND_ECHO)$(RM) -r $(installationtest_instpath)
+    $(COMMAND_ECHO)$(MKDIRHIER) $(installationtest_instpath)
+    $(COMMAND_ECHO)cd $(installationtest_instpath) && $(GNUTAR) xfz \
         $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).tar.gz
-    $(MV) $(installationtest_instpath)/OOo_*_install-arc_$(defaultlangiso) \
+    $(COMMAND_ECHO)$(MV) $(installationtest_instpath)/OOo_*_install-arc_$(defaultlangiso) \
         $(installationtest_instpath)/opt
-    $(TOUCH) $@
+    $(COMMAND_ECHO)$(TOUCH) $@
 cpptest : $(installationtest_instpath).flag
 .END

@@ -23,28 +23,23 @@
 # for a copy of the LGPLv3 License.
 #***********************************************************************/
 
-PRJ = ../..
+PRJ = ../../..
 PRJNAME = test
-TARGET = cpp
+TARGET = unoexceptionprotector
 
 ENABLE_EXCEPTIONS = TRUE
 VISIBILITY_HIDDEN = TRUE
 
 .INCLUDE: settings.mk
 
-CDEFS += -DOOO_DLLIMPLEMENTATION_TEST
+DLLPRE =
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 .IF "$(USE_SYSTEM_STL)" != "YES" && "$(SYSTEM_CPPUNIT)" == "YES"
 CFLAGSCXX += -DADAPT_EXT_STL
 .END
 
-SLOFILES = \
-    $(SLO)/getargument.obj \
-    $(SLO)/gettestargument.obj \
-    $(SLO)/officeconnection.obj \
-    $(SLO)/toabsolutefileurl.obj \
-    $(SLO)/uniquepipename.obj
+SLOFILES = $(SLO)/unoexceptionprotector.obj
 
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1OBJS = $(SLOFILES)
@@ -54,7 +49,7 @@ SHL1STDLIBS = \
     $(CPPULIB) \
     $(CPPUNITLIB) \
     $(SALLIB)
-SHL1TARGET = test
+SHL1TARGET = unoexceptionprotector
 SHL1USE_EXPORTS = name
 DEF1NAME = $(SHL1TARGET)
 

@@ -30,12 +30,13 @@
 
 const sSWLogFileName = &quot;swlog.dat&quot;, sSCLogFileName = &quot;sclog.dat&quot;
 const sSDLogFileName = &quot;sdlog.dat&quot;, sSMathLogFileName = &quot;smalog.dat&quot;
-const sSImDLogFileName = &quot;simlog.dat&quot;, sSChartLogFileName = &quot;schlog.dat&quot;
-const sSHptLogFileName = &quot;shptlog.dat&quot;, sSMessageLogFileName = &quot;smeslog.dat&quot;
+const sSChartLogFileName = &quot;schlog.dat&quot;
+const sSHptLogFileName = &quot;shptlog.dat&quot;
 const sSDrawLogFileName = &quot;sdrwlog.dat&quot;, sJavaLogFileName = &quot;javalog.dat&quot;
 const sSDBLogFileName = &quot;dblog.dat&quot;, sExtLogFileName = &quot;extlog.dat&quot;
-const sLogFileName = &quot;log.dat&quot;
-const cTempFileName = &quot;ttt&quot;
+const sTestGlueLogFileName = &quot;testclosure.log&quot;
+const sLogFileName = &quot;smoketest.log&quot;
+const cTempFileName = &quot;smoketest_file&quot;
 
 const cMessageSaveOpen8Doc = &quot;Save/Open open Documents (8.0)&quot;
 const cMessageSaveOpenXMLDoc = &quot;Save/Open Document XML (6/7)&quot;
@@ -44,8 +45,8 @@ const cMessageCloseDoc = &quot;Close Document&quot;
 
 Global sWorkPath$
 Global sWorkPathURL$
-Global FileChannel%
-Global MainFileChannel%
+Global LocalTestLog%
+Global GlobalTestLog%
 
 Sub Main
     call TestAllDocs()
@@ -107,23 +108,20 @@ Sub DeleteAllLogFiles()
     If FileExists (sWorkPath+sSMathLogFileName) then
         Kill (sWorkPath+sSMathLogFileName)
     End If
-    If FileExists (sWorkPath+sSImDLogFileName) then
-        Kill (sWorkPath+sSImDLogFileName)
-    End If
     If FileExists (sWorkPath+sSChartLogFileName) then
         Kill (sWorkPath+sSChartLogFileName)
     End If
     If FileExists (sWorkPath+sSHptLogFileName) then
         Kill (sWorkPath+sSHptLogFileName)
     End If
-    If FileExists (sWorkPath+sSMessageLogFileName) then
-        Kill (sWorkPath+sSMessageLogFileName)
-    End If
     If FileExists (sWorkPath+sSDrawLogFileName) then
         Kill (sWorkPath+sSDrawLogFileName)
     End If
     If FileExists (sWorkPath+sJavaLogFileName) then
         Kill (sWorkPath+sJavaLogFileName)
+    End If
+    If FileExists (sWorkPath+sTestGlueLogFileName) then
+        Kill (sWorkPath+sTestGlueLogFileName)
     End If
     If FileExists (sWorkPath+sSDBLogFileName) then
         Kill (sWorkPath+sSDBLogFileName)
@@ -143,15 +141,13 @@ Function OpenLogDat (sFileName as String) as Integer
     OpenLogDat = LocaleFileChannel%
 end Function
 
-Function GetWorkPath as string
-    sTemp = &quot;$(userpath)/temp/&quot;
-    GetWorkPath = CreateUnoService(&quot;com.sun.star.config.SpecialConfigManager&quot;).SubstituteVariables(sTemp)
-End Function
+Sub SetupWorkPath
+    Dim configManager as Object
+    configManager = CreateUnoService( &quot;com.sun.star.config.SpecialConfigManager&quot; )
 
-Function GetWorkURL as string
-    sTemp = &quot;$(userurl)/temp/&quot;
-    GetWorkURL = CreateUnoService(&quot;com.sun.star.config.SpecialConfigManager&quot;).SubstituteVariables(sTemp)
-End Function
+    sWorkPath = configManager.SubstituteVariables( &quot;$(userpath)/temp/&quot; )
+    sWorkPathURL = configManager.SubstituteVariables( &quot;$(userurl)/temp/&quot; )
+End Sub
 
 Function GetSystem (sTmpWorkPath as string) as string
     GetSystem = &quot;&quot;
@@ -180,100 +176,104 @@ Sub TestAllDocs()
 DIM sDocURL as String, sDocPath as String
 DIM nStrPos as Long
 
-    sWorkPath = GetWorkPath
-    sWorkPathURL = GetWorkURL
-
-    if GetSystem (sWorkPath) = &quot;windows&quot; then
-        sWorkPath = ConvertPathToWin (sWorkPath)
-    end if
-
     &apos;search ExtensionURL
-    sDocURL = gOutPutDoc.URL
+    sDocURL = gOutputDoc.URL
     CompatibilityMode(true)
     nStrPos = InStrRev (sDocURL, &quot;/&quot; )
     CompatibilityMode(false)
     sExtensionURL = Left (sDocURL, nStrPos)
 
-    call DeleteAllSavedFiles()
-    call DeleteAllLogFiles()
-    MainFileChannel = OpenLogDat (sLogFileName)
-    call WriteTestSequence (MainFileChannel)
+    GlobalTestLog = OpenLogDat (sLogFileName)
+    call WriteTestSequence
     if bMakeWriterTest then
-        call MakeDocTest (frmWriter)
+    gCurrentDocTest = frmWriter
+        call MakeDocTest
     end if
     if bMakeCalcTest then
-        call MakeDocTest (frmCalc)
+    gCurrentDocTest = frmCalc
+        call MakeDocTest
     end if
     if bMakeImpressTest then
-        call MakeDocTest (frmImpress)
+    gCurrentDocTest = frmImpress
+        call MakeDocTest
     end if
     if bMakeDrawTest then
-        call MakeDocTest (frmDraw)
+    gCurrentDocTest = frmDraw
+        call MakeDocTest
     end if
     if bMakeHTMLTest then
-        call MakeDocTest (frmHyperText)
+    gCurrentDocTest = frmHyperText
+        call MakeDocTest
     end if
     if bMakeChartTest then
-        call MakeChartTest (frmChart)
+    gCurrentDocTest = frmChart
+        call MakeChartTest
     end if
     if bMakeMathTest then
-        call MakeNewDoc (frmMath)
+    gCurrentDocTest = frmMath
+        call MakeNewDoc
     end if
     if bMakeJavaTest then
-        call TestJava (frmJava)
+    gCurrentDocTest = frmJava
+        call TestJava
     end if
     if bMakeDBTest then
-        call Test_DB.TestDB (frmDataBase)
+    gCurrentDocTest = frmDataBase
+        call Test_DB.TestDB
     end if
     if bMakeExtensionTest then
-        call Test_Ext.TestExtensions (frmExtension)
+    gCurrentDocTest = frmExtension
+        call Test_Ext.TestExtensions
     end if
 
-    Close #MainFileChannel
+    Close #GlobalTestLog
+    GlobalTestLog = 0
 end Sub
 
-Sub WriteTestSequence (FileChannel as integer)
-    Print #FileChannel, &quot;Sequence of testing&quot;
+Sub WriteTestSequence
+    Print #GlobalTestLog, &quot;Sequence of testing&quot;
 
     if bMakeWriterTest then
-        WriteTests (&quot;writer  : &quot;, true, FileChannel)
+        WriteTests (&quot;writer  : &quot;, true, GlobalTestLog)
     end if
     if bMakeCalcTest then
-        WriteTests (&quot;calc    : &quot;, true, FileChannel)
+        WriteTests (&quot;calc    : &quot;, true, GlobalTestLog)
     end if
     if bMakeImpressTest then
-        WriteTests (&quot;impress : &quot;, true, FileChannel)
+        WriteTests (&quot;impress : &quot;, true, GlobalTestLog)
     end if
     if bMakeDrawTest then
-        WriteTests (&quot;draw    : &quot;, true, FileChannel)
+        WriteTests (&quot;draw    : &quot;, true, GlobalTestLog)
     end if
     if bMakeHTMLTest then
-        WriteTests (&quot;HTML    : &quot;, true, FileChannel)
+        WriteTests (&quot;HTML    : &quot;, true, GlobalTestLog)
     end if
     if bMakeChartTest then
-        WriteTests (&quot;chart   : &quot;, false, FileChannel)
+        WriteTests (&quot;chart   : &quot;, false, GlobalTestLog)
     end if
     if bMakeMathTest then
-        WriteTests (&quot;math    : &quot;, false, FileChannel)
+        WriteTests (&quot;math    : &quot;, false, GlobalTestLog)
     end if
     if bMakeJavaTest then
-        WriteTests (&quot;Java    : &quot;, false, FileChannel)
+        WriteTests (&quot;Java    : &quot;, false, GlobalTestLog)
     end if
     if bMakeDBTest then
-        WriteDBTests (&quot;Database    : &quot;, FileChannel)
+        WriteDBTests (&quot;Database    : &quot;, GlobalTestLog)
     end if
     if bMakeExtensionTest then
-        WriteExtensionTests (&quot;Extension    : &quot;, FileChannel)
-    end if
+        WriteExtensionTests (&quot;Extension   : &quot;, GlobalTestLog)
+  end if
 
-    Print #FileChannel
-end Sub
+  Print #GlobalTestLog, &quot;testclosure : setup, write_status&quot;
 
-Sub WriteTests (sText as string, bTestAll as boolean, nFileChannel as integer)
-    Dim sWriteStr as string
+  Print #GlobalTestLog
+  end Sub
 
-    sWriteStr = sText
-    sWriteStr = sWriteStr + &quot;new&quot;
+  Sub WriteTests (sText as string, bTestAll as boolean)
+  Dim sWriteStr as string
+
+  sWriteStr = sText
+  sWriteStr = sWriteStr + &quot;new&quot;
     if bTestAll then
     if bMakeSaveOpen8Test then
         sWriteStr = sWriteStr + &quot;, save 8.0&quot;
@@ -291,7 +291,7 @@ Sub WriteTests (sText as string, bTestAll as boolean, nFileChannel as integer)
 
     sWriteStr = sWriteStr + &quot;, close&quot;
 
-    Print #nFileChannel, sWriteStr
+    Print #GlobalTestLog, sWriteStr
 end Sub
 
 Sub WriteDBTests (sText as string, nFileChannel as integer)
@@ -318,168 +318,142 @@ Sub WriteExtensionTests (sText as string, nFileChannel as integer)
     Print #nFileChannel, sWriteStr
 end Sub
 
-Sub MakeDocTest (FilterType as Integer)
+Sub MakeDocTest
     Dim oDoc as Object
     Dim sFileNameXML$, sFileName8$
-    Dim bError as Boolean
-    Dim nCurrentAction as Integer
+    Dim bSuccess as Boolean
 
     On Local Error GoTo DOCTESTERROR
-    nCurrentAction = cLogfileFailed
-    FileChannel% = OpenLogDat (GetLogFileName(FilterType))
-    nCurrentAction = cDocNew
-    oDoc = LoadDoc (&quot;private:factory/&quot; + GetDocFilter(FilterType or cFltNewDoc))
-    LogState (not IsNull (oDoc), GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, FileChannel)
-    LogState (not IsNull (oDoc), GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, MainFileChannel)
-    SetStatus (FilterType, cDocNew, not IsNull (oDoc))
+    gCurrentTestCase = cLogfileFailed
+    LocalTestLog% = OpenLogDat (GetLogFileName(gCurrentDocTest))
+    gCurrentTestCase = cDocNew
+    oDoc = LoadDoc (&quot;private:factory/&quot; + GetDocFilter(gCurrentDocTest or cFltNewDoc))
+    LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, not IsNull (oDoc) )
     if not IsNull (oDoc) then
-        nCurrentAction = cDocSaveOpen8
-        if bMakeSaveOpen8Test and IsFilterAvailable (FilterType or cFlt8) then
-            sFileName8 = sWorkPathURL+cTempFileName+&quot;.&quot;+GetDocEndings(FilterType or cFlt8)
-            SaveDoc (sFileName8, oDoc, GetDocFilter(FilterType or cFlt8))
+    gCurrentTestCase = cDocSaveOpen8
+    if bMakeSaveOpen8Test and IsFilterAvailable (gCurrentDocTest or cFlt8) then
+      sFileName8 = sWorkPathURL+cTempFileName+&quot;.&quot;+GetDocEndings(gCurrentDocTest or cFlt8)
+            SaveDoc (sFileName8, oDoc, GetDocFilter(gCurrentDocTest or cFlt8))
         end if
-        nCurrentAction = cDocSaveOpenXML
-        if bMakeSaveOpenXMLTest and IsFilterAvailable (FilterType or cFltXML) then
-            sFileNameXML = sWorkPathURL+cTempFileName+&quot;.&quot;+GetDocEndings(FilterType or cFltXML)
-            SaveDoc (sFileNameXML, oDoc, GetDocFilter(FilterType or cFltXML))
+        gCurrentTestCase = cDocSaveOpenXML
+        if bMakeSaveOpenXMLTest and IsFilterAvailable (gCurrentDocTest or cFltXML) then
+            sFileNameXML = sWorkPathURL+cTempFileName+&quot;.&quot;+GetDocEndings(gCurrentDocTest or cFltXML)
+            SaveDoc (sFileNameXML, oDoc, GetDocFilter(gCurrentDocTest or cFltXML))
         end if
-&apos;      oDoc.dispose
-        nCurrentAction = cDocClose
-        oDoc.close (true)
-&apos;      bError = true &apos; nur zum ¦bergang, weil bError = oDoc.CurrentController.frame.close nicht geht
-&apos;      LogState (bError, GetDocFilter(FilterType)+&quot; &quot;+ cMessageCloseDoc, FileChannel)
-&apos;      LogState (bError, GetDocFilter(FilterType)+&quot; &quot;+ cMessageCloseDoc, MainFileChannel)
-&apos;      SetStatus (FilterType, cDocClose, bError)
-        nCurrentAction = cDocSaveOpen8
-        if bMakeSaveOpen8Test and IsFilterAvailable (FilterType or cFlt8) then
+        gCurrentTestCase = cDocClose
+        bSuccess = CloseDoc( oDoc )
+        LogTestResult( GetDocFilter(gCurrentDocTest)+&quot; &quot;+ cMessageCloseDoc, bSuccess )
+        gCurrentTestCase = cDocSaveOpen8
+        if bMakeSaveOpen8Test and IsFilterAvailable (gCurrentDocTest or cFlt8) then
             oDoc = LoadDoc (sFileName8)
 
 &apos;          oDoc = Documents.open(sFileName)
-            LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpen8Doc, FileChannel)
-            LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpen8Doc, MainFileChannel)
-            SetStatus (FilterType, cDocSaveOpen8, not IsNull (oDoc))
+            LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpen8Doc, not IsNull (oDoc) )
 
             if not IsNull (oDoc) then
-&apos;              oDoc.dispose
-                nCurrentAction = cDocClose
+                gCurrentTestCase = cDocClose
                 oDoc.close (true)
             end If
         end if
 
-        nCurrentAction = cDocSaveOpenXML
-        if bMakeSaveOpenXMLTest and IsFilterAvailable (FilterType or cFltXML) then
+        gCurrentTestCase = cDocSaveOpenXML
+        if bMakeSaveOpenXMLTest and IsFilterAvailable (gCurrentDocTest or cFltXML) then
             oDoc = LoadDoc (sFileNameXML)
 
 &apos;          oDoc = Documents.open(sFileName)
-            LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpenXMLDoc, FileChannel)
-            LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpenXMLDoc, MainFileChannel)
-            SetStatus (FilterType, cDocSaveOpenXML, not IsNull (oDoc))
+            LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpenXMLDoc, not IsNull (oDoc) )
 
             if not IsNull (oDoc) then
-&apos;              oDoc.dispose
-                nCurrentAction = cDocClose
+                gCurrentTestCase = cDocClose
                 oDoc.close (true)
             end If
         end if
 
     end If
-    Print #FileChannel, &quot;---&quot;
-    Close #FileChannel%
+    Print #LocalTestLog, &quot;---&quot;
+    Close #LocalTestLog%
+    LocalTestLog = 0
     Exit Sub &apos; Without error
 
     DOCTESTERROR:
-    If  (nCurrentAction = cLogfileFailed) then
-        SetStatus (FilterType, cDocNew, False)
+    If ( gCurrentTestCase = cLogfileFailed ) then
+        LogTestResult( &quot; &quot;, False )
         Exit Sub
     else
-        LogState (False, GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ GetErrorMessage(nCurrentAction), FileChannel)
-        LogState (False, GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ GetErrorMessage(nCurrentAction), MainFileChannel)
-        SetStatus (FilterType, nCurrentAction, False)
-        Close #FileChannel%
+        LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ GetErrorMessage(gCurrentTestCase), False )
+        Close #LocalTestLog%
+        LocalTestLog = 0
     End If
     Exit Sub &apos; With error
 End Sub
 
-Sub MakeNewDoc (FilterType as Integer)
+Sub MakeNewDoc
     DIM oDoc as Object
-    Dim bError as Boolean
-    Dim nCurrentAction as Integer
+    Dim bSuccess as Boolean
     On Local Error GoTo DOCTESTERROR2
-    nCurrentAction = cLogfileFailed
-    FileChannel% = OpenLogDat (GetLogFileName(FilterType))
-    nCurrentAction = cDocNew
-&apos;  oDoc = Documents.Add(GetDocFilter(FilterType))
-    oDoc = LoadDoc (&quot;private:factory/&quot; + GetDocFilter(FilterType or cFltNewDoc))
-    LogState (not IsNull (oDoc), GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, FileChannel)
-    LogState (not IsNull (oDoc), GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, MainFileChannel)
-    SetStatus (FilterType, cDocNew, not IsNull (oDoc))
+    gCurrentTestCase = cLogfileFailed
+    LocalTestLog% = OpenLogDat (GetLogFileName(gCurrentDocTest))
+    gCurrentTestCase = cDocNew
+&apos;  oDoc = Documents.Add(GetDocFilter(gCurrentDocTest))
+    oDoc = LoadDoc (&quot;private:factory/&quot; + GetDocFilter(gCurrentDocTest or cFltNewDoc))
+    LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, not IsNull (oDoc) )
     if not IsNull (oDoc) then
-        nCurrentAction = cDocClose
-&apos;      oDoc.dispose
-        oDoc.close (true)
-&apos;      bError = true &apos; nur zum ¦bergang, weil bError = oDoc.CurrentController.frame.close nicht geht
-&apos;      LogState (bError, GetDocFilter(FilterType)+&quot; &quot;+ cMessageCloseDoc, FileChannel)
-&apos;      LogState (bError, GetDocFilter(FilterType)+&quot; &quot;+ cMessageCloseDoc, MainFileChannel)
-&apos;      SetStatus (FilterType, cDocClose, bError)
+        gCurrentTestCase = cDocClose
+        bSuccess = CloseDoc( oDoc )
+        LogTestResult( GetDocFilter(gCurrentDocTest)+&quot; &quot;+ cMessageCloseDoc, bSuccess )
     end If
-    Print #FileChannel, &quot;---&quot;
-    Close #FileChannel%
+    Print #LocalTestLog, &quot;---&quot;
+    Close #LocalTestLog%
+    LocalTestLog = 0
     Exit Sub &apos; Without error
 
     DOCTESTERROR2:
-    If  (nCurrentAction = cLogfileFailed) then
-        SetStatus (FilterType, cDocNew, False)
+    If ( gCurrentTestCase = cLogfileFailed ) then
+        LogTestResult( &quot; &quot;, False )
         Exit Sub
     else
-        LogState (False, GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ GetErrorMessage(nCurrentAction), FileChannel)
-        LogState (False, GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ GetErrorMessage(nCurrentAction), MainFileChannel)
-        SetStatus (FilterType, nCurrentAction, False)
-        Close #FileChannel%
+        LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ GetErrorMessage(gCurrentTestCase), False )
+        Close #LocalTestLog%
+        LocalTestLog = 0
     End If
     Exit Sub &apos; With error
 End Sub
 
-Sub MakeChartTest (FilterType as Integer)
+Sub MakeChartTest
     Dim oCharts as Object
     Dim oDoc as Object
     Dim oRange(0) as New com.sun.star.table.CellRangeAddress
     Dim oRect as New com.sun.star.awt.Rectangle
     const cChartName=&quot;TestChart&quot;
-    Dim bError as Boolean
-    Dim nCurrentAction as Integer
-    On Local Error GoTo CHARTTESTERROR
-    nCurrentAction = cLogfileFailed
-    FileChannel% = OpenLogDat (GetLogFileName(FilterType))
-    nCurrentAction = cDocNew
-    oDoc = LoadDoc (&quot;private:factory/&quot; + GetDocFilter(frmCalc or cFltNewDoc))
+  Dim bSuccess as Boolean
+  On Local Error GoTo CHARTTESTERROR
+  gCurrentTestCase = cLogfileFailed
+  LocalTestLog% = OpenLogDat (GetLogFileName(gCurrentDocTest))
+  gCurrentTestCase = cDocNew
+  oDoc = LoadDoc (&quot;private:factory/&quot; + GetDocFilter(frmCalc or cFltNewDoc))
     if not IsNull (oDoc) then
         oCharts = oDoc.sheets(0).Charts
         oCharts.AddNewByName (cChartName, oRect, oRange(), true, true)
-        bError=oCharts.HasByName(cChartName)
-        LogState (bError, GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, FileChannel)
-        LogState (bError, GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, MainFileChannel)
-        SetStatus (FilterType, cDocNew, bError)
-&apos;      oDoc.dispose
-        nCurrentAction = cDocClose
+        bSuccess=oCharts.HasByName(cChartName)
+        LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, bSuccess )
+        gCurrentTestCase = cDocClose
         oDoc.close (true)
     else
-        LogState (not IsNull (oDoc), GetDocFilter(frmCalc or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, FileChannel)
-        LogState (not IsNull (oDoc), GetDocFilter(frmCalc or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, MainFileChannel)
-        SetStatus (frmCalc, cDocNew, not IsNull (oDoc))
+        LogTestResult( GetDocFilter(frmCalc or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, FALSE )
     End if
-    Print #FileChannel, &quot;---&quot;
-    Close #FileChannel%
+    Print #LocalTestLog, &quot;---&quot;
+    Close #LocalTestLog%
+    LocalTestLog = 0
     Exit Sub &apos; Without error
 
     CHARTTESTERROR:
-    If  (nCurrentAction = cLogfileFailed) then
-        SetStatus (FilterType, cDocNew, False)
+    If ( gCurrentTestCase = cLogfileFailed ) then
+        LogTestResult( &quot; &quot;, False )
         Exit Sub
     else
-        LogState (False, GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ GetErrorMessage(nCurrentAction), FileChannel)
-        LogState (False, GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ GetErrorMessage(nCurrentAction), MainFileChannel)
-        SetStatus (FilterType, nCurrentAction, False)
-        Close #FileChannel%
+        LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ GetErrorMessage(gCurrentTestCase), FALSE )
+        Close #LocalTestLog%
+        LocalTestLog = 0
     End If
     Exit Sub &apos; With error
 End Sub
@@ -520,48 +494,44 @@ end Function
 Function GetDocFilter (DocType as Integer) as String
     Select Case ( DocType )
         case frmWriter or cFlt8
-            GetDocFilter = &quot;writer8&quot; &apos; Textdokument
+            GetDocFilter = &quot;writer8&quot; &apos; text document
         case frmCalc or cFlt8
-            GetDocFilter = &quot;calc8&quot; &apos;Tabellendokument
+            GetDocFilter = &quot;calc8&quot; &apos; spreadsheet document
         case frmImpress or cFlt8
-            GetDocFilter = &quot;impress8&quot; &apos;Präsentation
+            GetDocFilter = &quot;impress8&quot; &apos; presentation
         case frmDraw or cFlt8
-            GetDocFilter = &quot;draw8&quot; &apos;Zeichen
+            GetDocFilter = &quot;draw8&quot; &apos; drawing
         case frmMath or cFlt8
-            GetDocFilter = &quot;math8&quot; &apos;Formel
+            GetDocFilter = &quot;math8&quot; &apos; formula
 
         case frmWriter or cFltXML
-            GetDocFilter = &quot;StarOffice XML (Writer)&quot; &apos; Textdokument
+            GetDocFilter = &quot;StarOffice XML (Writer)&quot; &apos; text document
         case frmCalc or cFltXML
-            GetDocFilter = &quot;StarOffice XML (Calc)&quot; &apos;Tabellendokument
+            GetDocFilter = &quot;StarOffice XML (Calc)&quot; &apos; spreadsheet document
         case frmImpress or cFltXML
-            GetDocFilter = &quot;StarOffice XML (Impress)&quot; &apos;Präsentation
+            GetDocFilter = &quot;StarOffice XML (Impress)&quot; &apos; presentation
         case frmDraw or cFltXML
-            GetDocFilter = &quot;StarOffice XML (Draw)&quot; &apos;Zeichen
+            GetDocFilter = &quot;StarOffice XML (Draw)&quot; &apos; drawing
         case frmMath or cFltXML
-            GetDocFilter = &quot;StarOffice XML (Math)&quot; &apos;Formel
+            GetDocFilter = &quot;StarOffice XML (Math)&quot; &apos; formula
 
         case frmHyperText, frmHyperText or cFltXML
-            GetDocFilter = &quot;HTML&quot; &apos;Hypertext-Dokument
+            GetDocFilter = &quot;HTML&quot; &apos; HTML document
 
         case frmWriter or cFltNewDoc
-            GetDocFilter = &quot;swriter&quot; &apos; Textdokument
+            GetDocFilter = &quot;swriter&quot; &apos; text document
         case frmCalc or cFltNewDoc
-            GetDocFilter = &quot;scalc&quot; &apos;Tabellendokument
-        case frmMessage or cFltNewDoc
-            GetDocFilter = &quot;Message&quot; &apos;Nachricht
+            GetDocFilter = &quot;scalc&quot; &apos; spreadsheet document
         case frmImpress or cFltNewDoc
-            GetDocFilter = &quot;simpress&quot; &apos;Präsentation
+            GetDocFilter = &quot;simpress&quot; &apos; presentation
         case frmDraw or cFltNewDoc
-            GetDocFilter = &quot;sdraw&quot; &apos;Zeichen
+            GetDocFilter = &quot;sdraw&quot; &apos; drawing
         case frmMath or cFltNewDoc
-            GetDocFilter = &quot;smath&quot; &apos;Formel
-        case frmImage or cFltNewDoc
-            GetDocFilter = &quot;simage&quot; &apos;Bild
+            GetDocFilter = &quot;smath&quot; &apos; formula
         case frmHyperText or cFltNewDoc
-            GetDocFilter = &quot;swriter/web&quot; &apos;Hypertext-Dokument
+            GetDocFilter = &quot;swriter/web&quot; &apos; HTML document
         case frmChart or cFltNewDoc
-            GetDocFilter = &quot;schart&quot; &apos;Diagramm
+            GetDocFilter = &quot;schart&quot; &apos; chart
         case else
             GetDocFilter = &quot;&quot;
     end Select
@@ -570,25 +540,23 @@ end Function
 Function GetLogFileName (DocType as Integer) as String
     Select Case ( DocType )
         case frmWriter
-            GetLogFileName = sSWLogFileName &apos; Textdokument
+            GetLogFileName = sSWLogFileName &apos; text document
         case frmCalc
-            GetLogFileName = sSCLogFileName &apos;Tabellendokument
-        case frmMessage
-            GetLogFileName = sSMessageLogFileName &apos;Nachricht
+            GetLogFileName = sSCLogFileName &apos; spreadsheet document
         case frmImpress
-            GetLogFileName = sSDLogFileName &apos;PrÕsentation
+            GetLogFileName = sSDLogFileName &apos; presentation
         case frmDraw
-            GetLogFileName = sSDrawLogFileName &apos;Zeichnen
+            GetLogFileName = sSDrawLogFileName &apos; drawing
         case frmMath
-            GetLogFileName = sSMathLogFileName &apos;Formel
-        case frmImage
-            GetLogFileName = sSImDLogFileName &apos;Bild
+            GetLogFileName = sSMathLogFileName &apos; formula
         case frmHyperText
-            GetLogFileName = sSHptLogFileName &apos;Hypertext-Dokument
+            GetLogFileName = sSHptLogFileName &apos; HTML document
         case frmChart
-            GetLogFileName = sSChartLogFileName &apos;Diagramm
+            GetLogFileName = sSChartLogFileName &apos; chart
         case frmJava
             GetLogFileName = sJavaLogFileName &apos;Java
+        case frmTestClosure
+            GetLogFileName = sTestGlueLogFileName &apos; test framework
         case frmDataBase
             GetLogFileName = sSDBLogFileName &apos;Database
         case frmExtension
@@ -620,16 +588,17 @@ Function IsFilterAvailable (FilterType as Integer) as boolean
     end if
 End Function
 
-Function TestJava (FilterType as Integer) as boolean
+Function TestJava
     Dim oObj as Object
-    FileChannel% = OpenLogDat (GetLogFileName(FilterType))
-    oObj = createUnoService(cUnoJavaLoader)
-    LogState (not IsNull (oObj), &quot;Java &quot;+ cMessageNewDoc, FileChannel)
-    LogState (not IsNull (oObj), &quot;Java &quot;+ cMessageNewDoc, MainFileChannel)
-    SetStatus (FilterType, cDocNew, not IsNull (oObj))
+    gCurrentTestCase = cLogfileFailed
+    LocalTestLog% = OpenLogDat (GetLogFileName(gCurrentDocTest))
+    gCurrentTestCase = cDocNew
+    oObj = createUnoService( cUnoJavaLoader )
+    LogTestResult( &quot;Java &quot;+ cMessageNewDoc, not IsNull (oObj) )
 
-    Print #FileChannel, &quot;---&quot;
-    Close #FileChannel%
+    Print #LocalTestLog, &quot;---&quot;
+    Close #LocalTestLog%
+    LocalTestLog = 0
 
     TestJava = not IsNull (oObj)
 End Function
@@ -694,4 +663,19 @@ Sub SaveDoc (DocName as String, oDoc as Object, sFilterName as string )
         MessageBox &quot;Filtername is unknown!&quot;
     end if
 end Sub
+
+Function CloseDoc( oDoc as Object )
+  Dim oListener as Object
+  oListener = CreateUnoListener( "Events.closeListener_", "com.sun.star.util.XCloseListener" )
+  oDoc.addCloseListener( oListener )
+
+  Events.ResetCloseListenerFlag()
+  oDoc.close( true )
+  closeDoc = Events.HasCloseListenerBeenCalled()
+
+  if ( Not Events.HasCloseListenerBeenCalled() ) Then
+    &apos; do this only if closing was not successful - otherwise, we'd get a DisposedException
+    oDoc.removeCloseListener( oListener )
+  End If
+End Function
 </script:module>
