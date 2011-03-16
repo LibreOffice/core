@@ -4,7 +4,9 @@
  * can generate .cxx files nicely
  */
 
+#ifndef _MSC_VER
 #warning "checked in generated file - urgh"
+#endif
 
 //Do not edit manually, generated from bestreversemap.cxx
 rtl_TextEncoding getBestMSEncodingByChar(sal_Unicode c)
