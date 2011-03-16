@@ -264,7 +264,7 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
-#pragma warning(disable:4129 4273 4701)
+#pragma warning(disable:4129 4273 4701 4702)
 #endif
 #include "yyrscyacc.cxx"
 #if defined _MSC_VER
