@@ -164,6 +164,7 @@ gb_STDLIBS := \
 	uwinapi \
 	kernel32 \
 	msvcrt \
+	msvcprt \
 	oldnames \
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
@@ -438,6 +439,7 @@ gb_Library_PLAINLIBS_NONE += \
 	gnu_getopt \
 	kernel32 \
 	msvcrt \
+	msvcprt \
 	mpr \
 	oldnames \
 	ole32 \

@@ -125,6 +125,7 @@ gb_Library_NOILIBFILENAMES:=\
     icuuc \
     kernel32 \
     msvcrt \
+    msvcprt \
     mpr \
     oldnames \
     ole32 \

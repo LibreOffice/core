@@ -140,7 +140,7 @@ gb_PrecompiledHeader_EXCEPTIONFLAGS := $(gb_LinkTarget_EXCEPTIONFLAGS)
 gb_LinkTarget_NOEXCEPTIONFLAGS := \
 	-DEXCEPTIONS_OFF \
 	-fno-exceptions \
-	
+
 gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
 gb_LinkTarget_LDFLAGS := \
@@ -175,6 +175,7 @@ gb_STDLIBS := \
 	mingwex \
 	kernel32 \
 	msvcrt \
+	msvcprt \
 
 
 # Helper class
@@ -452,6 +453,7 @@ gb_Library_PLAINLIBS_NONE += \
 	gdi32 \
 	kernel32 \
 	msvcrt \
+	msvcprt \
 	mpr \
 	moldname \
 	ole32 \
