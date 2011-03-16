@@ -258,7 +258,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(gb_CC) \
 		$(DEFS) $(CFLAGS)  -Fd$(PDBFILE) \
 		$(PCHFLAGS) \
-		-I$(realpath $(dir $(3))) \
+		-I$(dir $(3)) \
 		$(INCLUDE) \
 		-c $(realpath $(3)) \
 		-Fo$(1))
@@ -297,7 +297,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(gb_CXX) \
 		$(DEFS) $(CXXFLAGS) -Fd$(PDBFILE)\
 		$(PCHFLAGS) \
-		-I$(realpath $(dir $(3))) \
+		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE) \
 		-c $(realpath $(3)) \
 		-Fo$(1))
@@ -339,7 +339,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	unset INCLUDE && \
 	$(gb_CXX) \
 		$(4) $(5) -Fd$(PDBFILE) \
-		-I$(realpath $(dir $(3))) \
+		-I$(dir $(3)) \
 		$(6) \
 		-c $(realpath $(3)) \
 		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj)
@@ -380,7 +380,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	unset INCLUDE && \
 	$(gb_CXX) \
 		$(4) $(5) -Fd$(PDBFILE) \
-		-I$(realpath $(dir $(3))) \
+		-I$(dir $(3)) \
 		$(6) \
 		-c $(realpath $(3)) \
 		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj)
