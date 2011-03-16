@@ -30,7 +30,6 @@
 
 #if defined WNT
 
-#define BOOL         WIN_BOOL
 #define BYTE         WIN_BYTE
 #ifndef VCL_NEED_BASETSD
 #define INT64        WIN_INT64
