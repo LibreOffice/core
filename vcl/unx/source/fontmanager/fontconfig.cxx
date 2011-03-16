@@ -1130,43 +1130,36 @@ ImplFontOptions* PrintFontManager::getFontOptions(
     FcPattern* pResult = rWrapper.FcFontSetMatch( pConfig, &pFontSet, 1, pPattern, &eResult );
     if( pResult )
     {
-        FcFontSet* pSet = rWrapper.FcFontSetCreate();
-        rWrapper.FcFontSetAdd( pSet, pResult );
-        if( pSet->nfont > 0 )
+        FcResult eEmbeddedBitmap = rWrapper.FcPatternGetBool(pResult,
+            FC_EMBEDDED_BITMAP, 0, &embitmap);
+        FcResult eAntialias = rWrapper.FcPatternGetBool(pResult,
+            FC_ANTIALIAS, 0, &antialias);
+        FcResult eAutoHint = rWrapper.FcPatternGetBool(pResult,
+            FC_AUTOHINT, 0, &autohint);
+        FcResult eHinting = rWrapper.FcPatternGetBool(pResult,
+            FC_HINTING, 0, &hinting);
+        /*FcResult eHintStyle =*/ rWrapper.FcPatternGetInteger(pResult,
+            FC_HINT_STYLE, 0, &hintstyle);
+        rWrapper.FcPatternDestroy(pResult);
+
+        pOptions = new ImplFontOptions;
+
+        if( eEmbeddedBitmap == FcResultMatch )
+            pOptions->meEmbeddedBitmap = embitmap ? EMBEDDEDBITMAP_TRUE : EMBEDDEDBITMAP_FALSE;
+        if( eAntialias == FcResultMatch )
+            pOptions->meAntiAlias = antialias ? ANTIALIAS_TRUE : ANTIALIAS_FALSE;
+        if( eAutoHint == FcResultMatch )
+            pOptions->meAutoHint = autohint ? AUTOHINT_TRUE : AUTOHINT_FALSE;
+        if( eHinting == FcResultMatch )
+            pOptions->meHinting = hinting ? HINTING_TRUE : HINTING_FALSE;
+        switch (hintstyle)
         {
-            FcResult eEmbeddedBitmap = rWrapper.FcPatternGetBool(pSet->fonts[0],
-                FC_EMBEDDED_BITMAP, 0, &embitmap);
-            FcResult eAntialias = rWrapper.FcPatternGetBool(pSet->fonts[0],
-                FC_ANTIALIAS, 0, &antialias);
-            FcResult eAutoHint = rWrapper.FcPatternGetBool(pSet->fonts[0],
-                FC_AUTOHINT, 0, &autohint);
-            FcResult eHinting = rWrapper.FcPatternGetBool(pSet->fonts[0],
-                FC_HINTING, 0, &hinting);
-            /*FcResult eHintStyle =*/ rWrapper.FcPatternGetInteger( pSet->fonts[0],
-                FC_HINT_STYLE, 0, &hintstyle);
-
-            pOptions = new ImplFontOptions;
-
-            if( eEmbeddedBitmap == FcResultMatch )
-                pOptions->meEmbeddedBitmap = embitmap ? EMBEDDEDBITMAP_TRUE : EMBEDDEDBITMAP_FALSE;
-            if( eAntialias == FcResultMatch )
-                pOptions->meAntiAlias = antialias ? ANTIALIAS_TRUE : ANTIALIAS_FALSE;
-            if( eAutoHint == FcResultMatch )
-                pOptions->meAutoHint = autohint ? AUTOHINT_TRUE : AUTOHINT_FALSE;
-            if( eHinting == FcResultMatch )
-                pOptions->meHinting = hinting ? HINTING_TRUE : HINTING_FALSE;
-            switch (hintstyle)
-            {
-                case FC_HINT_NONE:   pOptions->meHintStyle = HINT_NONE; break;
-                case FC_HINT_SLIGHT: pOptions->meHintStyle = HINT_SLIGHT; break;
-                case FC_HINT_MEDIUM: pOptions->meHintStyle = HINT_MEDIUM; break;
-                default: // fall through
-                case FC_HINT_FULL:   pOptions->meHintStyle = HINT_FULL; break;
-            }
+            case FC_HINT_NONE:   pOptions->meHintStyle = HINT_NONE; break;
+            case FC_HINT_SLIGHT: pOptions->meHintStyle = HINT_SLIGHT; break;
+            case FC_HINT_MEDIUM: pOptions->meHintStyle = HINT_MEDIUM; break;
+            default: // fall through
+            case FC_HINT_FULL:   pOptions->meHintStyle = HINT_FULL; break;
         }
-        // info: destroying the pSet destroys pResult implicitly
-        // since pResult was "added" to pSet
-        rWrapper.FcFontSetDestroy( pSet );
     }
 
     // cleanup
