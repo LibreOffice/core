@@ -308,7 +308,7 @@ void SAL_CALL CPreviewAdapterImpl::rearrangeLayout()
     // style bit of the FileOpen dialog must be set after that
     // message
     LONG lStyle = GetWindowLong(prvwnd,GWL_STYLE);
-    sal_Bool bIsVisible = (sal_Bool)(lStyle & WS_VISIBLE);
+    BOOL bIsVisible = (BOOL)(lStyle & WS_VISIBLE);
 
     int cx = 0;
 
