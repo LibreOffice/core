@@ -33,6 +33,12 @@ $(eval $(call gb_Library_add_precompiled_header,sw,$(SRCDIR)/sw/inc/pch/precompi
 
 $(eval $(call gb_Library_set_componentfile,sw,sw/util/sw))
 
+ifeq ($(strip $(SYSTEM_LIBXML)),YES)
+_XML_INCLUDE := $$(LIBXML_CFLAGS)
+else
+_XML_INCLUDE :=
+endif
+
 $(eval $(call gb_Library_set_include,sw,\
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/filter/inc \
@@ -42,6 +48,7 @@ $(eval $(call gb_Library_set_include,sw,\
     -I$(WORKDIR)/SdiTarget/sw/sdi \
     -I$(WORKDIR)/Misc/sw/ \
     $$(INCLUDE) \
+    $(_XML_INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
 ))
