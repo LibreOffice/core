@@ -343,7 +343,7 @@ static const sal_Unicode aWingDings2Tab[224] =
         0xe5c1,    0xe5c2,    0xe5c3,    0xe5c4,
         0xe5c5,    0xe5c6,    0xe5c7,    0xe5c8,
     // F0f0
-        0xe5c9,    0x2022,    0xe5cb,    0xe5cc,
+        0xe5c9,    0,    0xe5cb,    0xe5cc,
         0xe5cd,    0xe5ce,    0xe5cf,    0xe5d0,
         0x203b,    0x2042,         0,         0,
              0,         0,         0,         0
