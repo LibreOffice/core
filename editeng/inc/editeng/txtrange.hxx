@@ -31,11 +31,11 @@
 
 #include "editeng/editengdllapi.h"
 #include "tools/solar.h"
+#include "tools/gen.hxx"
 
 #include <deque>
 
 class PolyPolygon;
-class Range;
 class Rectangle;
 
 namespace basegfx {
@@ -54,9 +54,9 @@ class EDITENG_DLLPUBLIC TextRanger
     //! The RangeCache class is used to cache the result of a single range calculation.
     struct RangeCache
     {
-        const Range& range;        //!< Range for which we calculated results.
+        Range range;        //!< Range for which we calculated results.
         std::deque<long> results;  //!< Calculated results for the range.
-        inline RangeCache(const Range& rng) : range(rng) {};
+        RangeCache(const Range& rng) : range(rng) {};
     };
     std::deque<RangeCache> mRangeCache; //!< Cached range calculations.
     PolyPolygon *mpPolyPolygon; // Surface polygon
