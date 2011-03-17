@@ -231,14 +231,18 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             else if( !rsc_strnicmp( (*ppStr) + 1, "lip=", 4 ) )
             {  // additional language specific include for system dependent files
                 const ByteString    aSysSearchDir( (*ppStr)+5 );
-                DirEntry            aSysDir( String( aSysSearchDir, RTL_TEXTENCODING_ASCII_US ) );
 
-                m_aOutputFiles.back().aSysSearchDirs.push_back( ByteString( aSysDir.GetFull(), RTL_TEXTENCODING_ASCII_US ) );
-
-                if( m_aOutputFiles.back().aLangSearchPath.Len() )
-                    m_aOutputFiles.back().aLangSearchPath.Append( ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US ) );
-
-                m_aOutputFiles.back().aLangSearchPath.Append( aSysSearchDir );
+                // ignore empty -lip= arguments that we get lots of these days
+                if (aSysSearchDir.Len())
+                {
+                    DirEntry aSysDir( String( aSysSearchDir, RTL_TEXTENCODING_ASCII_US ) );
+                    m_aOutputFiles.back().aSysSearchDirs.push_back(
+                        ByteString( aSysDir.GetFull(), RTL_TEXTENCODING_ASCII_US ) );
+                    if( m_aOutputFiles.back().aLangSearchPath.Len() )
+                        m_aOutputFiles.back().aLangSearchPath.Append(
+                        ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US ) );
+                    m_aOutputFiles.back().aLangSearchPath.Append( aSysSearchDir );
+                }
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fp=", 3 ) )
             { // anderer Name fuer .srs-file
