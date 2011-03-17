@@ -198,7 +198,7 @@ template< typename Type >
 class OptValue
 {
 public:
-    inline explicit     OptValue() : mbHasValue( false ) {}
+    inline explicit     OptValue() : maValue(), mbHasValue( false ) {}
     inline explicit     OptValue( const Type& rValue ) : maValue( rValue ), mbHasValue( true ) {}
     inline explicit     OptValue( bool bHasValue, const Type& rValue ) : maValue( rValue ), mbHasValue( bHasValue ) {}
 
