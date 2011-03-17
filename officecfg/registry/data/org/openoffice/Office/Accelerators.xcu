@@ -538,6 +538,11 @@
       <value xml:lang="en-US">.uno:DefineName</value>
      </prop>
     </node>
+    <node oor:name="F3_SHIFT" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US">.uno:ChangeCaseRotateCase</value>
+     </prop>
+    </node>
     <node oor:name="F4" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:ViewDataSourceBrowser</value>
@@ -1110,9 +1115,14 @@
       <value xml:lang="en-US">.uno:LeaveGroup</value>
      </prop>
     </node>
-    <node oor:name="F3_SHIFT" oor:op="replace">
+    <!--<node oor:name="F3_SHIFT" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:CopyObjects</value>
+     </prop>
+    </node>-->
+    <node oor:name="F3_SHIFT" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US">.uno:ChangeCaseRotateCase</value>
      </prop>
     </node>
     <node oor:name="F4" oor:op="replace">
