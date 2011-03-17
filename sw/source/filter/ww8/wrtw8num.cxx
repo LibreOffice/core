@@ -231,8 +231,15 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
     sal_uInt8 nAlign;
     switch ( eAdjust )
     {
-        case SVX_ADJUST_CENTER: nAlign = 1; break;
-        default:                nAlign = 0; break;
+    case SVX_ADJUST_CENTER:
+        nAlign = 1;
+        break;
+    case SVX_ADJUST_RIGHT:
+        nAlign = 2;
+        break;
+    default:
+        nAlign = 0;
+        break;
     }
     *m_rWW8Export.pTableStrm << nAlign;
 
