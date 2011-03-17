@@ -783,7 +783,6 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
     }
 
     ::std::vector< ::rtl::OUString > aRowLabels;
-    ::std::vector< double > aDateRowLabels;
     ::std::vector< ::std::vector< double > > aDataValues;
     sal_Int32 nRowCount = 0;
     ::connectivity::ORowSetValue aValue;
@@ -792,16 +791,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
         ++nRowCount;
 
         aValue.fill( aColumns[0].nResultSetPosition, aColumns[0].nDataType, xRow );
-        switch(aColumns[0].nDataType)
-        {
-            case sdbc::DataType::DATE:
-            case sdbc::DataType::TIMESTAMP:
-                aDateRowLabels.push_back( aValue.getDouble() );
-                break;
-            default:
-                aRowLabels.push_back( aValue.getString() );
-                break;
-        }
+        aRowLabels.push_back( aValue.getString() );
 
         ::std::vector< double > aRow;
         for (   ColumnDescriptions::const_iterator col = aColumns.begin();
@@ -851,16 +841,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
     } // if ( !nRowCount )
 
     uno::Reference< chart::XChartDataArray> xData(m_xInternal,uno::UNO_QUERY);
-    if ( aDateRowLabels.empty() )
-    {
-        xData->setRowDescriptions(uno::Sequence< ::rtl::OUString >(&(*aRowLabels.begin()),aRowLabels.size()));
-    }
-    else
-    {
-        uno::Reference< chart::XDateCategories> xDate(m_xInternal,uno::UNO_QUERY);
-        xDate->setDateCategories(uno::Sequence< double >(&(*aDateRowLabels.begin()),aDateRowLabels.size()));
-    }
-
+    xData->setRowDescriptions(uno::Sequence< ::rtl::OUString >(&(*aRowLabels.begin()),aRowLabels.size()));
 
     const size_t nOffset = bFirstColumnIsCategory ? 1 : 0;
     uno::Sequence< ::rtl::OUString > aColumnDescriptions( aColumns.size() - nOffset );
