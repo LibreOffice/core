@@ -314,9 +314,9 @@ File gid_File_Dtd_Toolbar
     Name = "toolbar.dtd";
 End
 
-STD_FILTER_FILE( gid_File_Filter_Eme, eme)
+STD_LIB_FILE( gid_File_Filter_Sdfilt, sdfilt)
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Filter_Sdfilt, sdfilt)
+STD_FILTER_FILE( gid_File_Filter_Eme, eme)
 
 STD_FILTER_FILE( gid_File_Filter_Icg, icg)
 
