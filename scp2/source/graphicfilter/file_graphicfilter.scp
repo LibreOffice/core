@@ -38,4 +38,4 @@ STD_LIB_FILE( gid_File_Lib_Flash, flash )
 
 STD_LIB_FILE( gid_File_Lib_Svg, svgfilter )
 
-STD_LIB_FILE( gid_File_Lib_WPGImport, wpgimport )
+STD_FILTER_FILE( gid_File_Lib_WPGImport, wpgimport )
