@@ -30,9 +30,8 @@ $(eval $(call gb_Library_Library,xof))
 $(eval $(call gb_Library_set_componentfile,xof,xmloff/source/transform/xof))
 
 $(eval $(call gb_Library_set_include,xof,\
-    -I$(SRCDIR)/xmloff/inc/pch \
-    -I$(SRCDIR)/xmloff/inc \
-    -I$(SRCDIR)/xmloff/source/inc \
+    -I$(realpath $(SRCDIR)/xmloff/inc/pch) \
+    -I$(realpath $(SRCDIR)/xmloff/inc) \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
 ))
@@ -44,6 +43,7 @@ $(eval $(call gb_Library_add_linked_libs,xof,\
     sal \
     salhelper \
     xo \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,xof,\
