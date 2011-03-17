@@ -35,9 +35,9 @@ $(eval $(call gb_Library_set_defs,fwi,\
 ))
 
 $(eval $(call gb_Library_set_include,fwi,\
-    -I$(SRCDIR)/framework/inc/pch \
-    -I$(SRCDIR)/framework/source/inc \
-    -I$(SRCDIR)/framework/inc \
+    -I$(realpath $(SRCDIR)/framework/inc/pch) \
+    -I$(realpath $(SRCDIR)/framework/source/inc) \
+    -I$(realpath $(SRCDIR)/framework/inc) \
     -I$(WORKDIR)/inc/framework/ \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/framework \

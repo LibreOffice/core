@@ -30,9 +30,9 @@ $(eval $(call gb_Library_Library,fwl))
 $(eval $(call gb_Library_set_componentfile,fwl,framework/util/fwl))
 
 $(eval $(call gb_Library_set_include,fwl,\
-    -I$(SRCDIR)/framework/inc \
-    -I$(SRCDIR)/framework/inc/pch \
-    -I$(SRCDIR)/framework/source/inc \
+    -I$(realpath $(SRCDIR)/framework/inc) \
+    -I$(realpath $(SRCDIR)/framework/inc/pch) \
+    -I$(realpath $(SRCDIR)/framework/source/inc) \
     -I$(WORKDIR)/inc/framework/ \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/framework \
