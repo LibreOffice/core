@@ -49,7 +49,7 @@ typedef Image ( *pfunc_getImage)(
 
 pfunc_getImage FWE_DLLPUBLIC SAL_CALL SetImageProducer( pfunc_getImage pGetImageFunc );
 
-Image SAL_CALL GetImageFromURL(
+Image FWE_DLLPUBLIC SAL_CALL GetImageFromURL(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
     const ::rtl::OUString& aURL,
     bool bBig
