@@ -26,4 +26,8 @@ sa sal\qa\osl\process nmake - all sa_qa_osl_process sa_cppunittester sa_util NUL
 sa sal\qa\rtl\strings nmake - all sa_qa_rt_strings sa_cppunittester sa_util NULL
 sa sal\qa\rtl\oustringbuffer nmake - all sa_qa_rt_oustringbuffer sa_cppunittester sa_util NULL
 sa sal\qa\rtl\alloc nmake - all sa_qa_rt_alloc sa_cppunittester sa_util NULL
+sa sal\qa\rtl\crc32 nmake - all sa_qa_rtl_crc32 sa_cppunittester sa_util NULL
+sa sal\qa\rtl\cipher nmake - all sa_qa_rtl_cipher sa_cppunittester sa_util NULL
+sa sal\qa\rtl\doublelock nmake - all sa_qa_rtl_doublelock sa_cppunittester sa_util NULL
+sa sal\qa\rtl\locale nmake - all sa_qa_rtl_locale sa_cppunittester sa_util NULL
 sa sal\qa\sal nmake - all sa_qa_sal sa_cppunittester sa_util NULL
