@@ -37,6 +37,7 @@ $(eval $(call gb_SrsTarget_SrsTarget,toolkit/awt))
 
 $(eval $(call gb_SrsTarget_set_include,toolkit/awt,\
     $$(INCLUDE) \
+    -I$(SRCDIR)/toolkit/source/awt \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,toolkit/awt,\
