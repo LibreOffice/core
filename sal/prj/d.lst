@@ -32,5 +32,5 @@ symlink: %_DEST%\lib%_EXT%\libuno_sal.dylib.3 %_DEST%\lib%_EXT%\libuno_sal.dylib
 
 ..\%__SRC%\inc\udkversion.h %_DEST%\inc%_EXT%\sal\udkversion.h
 
-..\%__SRC%\bin\cppunittester %_DEST%\bin%_EXT%\cppunit\cppunittester
 ..\%__SRC%\bin\cppunittester.exe %_DEST%\bin%_EXT%\cppunit\cppunittester.exe
+..\%__SRC%\bin\cppunittester %_DEST%\bin%_EXT%\cppunit\cppunittester
