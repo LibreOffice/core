@@ -567,7 +567,7 @@ endef
 
 # CppunitTest class
 
-gb_CppunitTest_CPPTESTPRECOMMAND :=
+gb_CppunitTest_CPPTESTPRECOMMAND := PATH="`cygpath -u $(OUTDIR)`/bin:$${PATH}"
 gb_CppunitTest_SYSPRE := itest_
 gb_CppunitTest_EXT := .lib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
