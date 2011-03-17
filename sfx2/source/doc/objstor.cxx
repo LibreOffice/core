@@ -67,9 +67,12 @@
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/embed/XOptimizedStorage.hpp>
+#include <com/sun/star/embed/XEncryptionProtectedStorage.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/xml/crypto/CipherID.hpp>
+#include <com/sun/star/xml/crypto/DigestID.hpp>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -361,13 +364,13 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                 SvtSaveOptions::ODFDefaultVersion nDefVersion = aSaveOpt.GetODFDefaultVersion();
 
                 uno::Sequence< beans::NamedValue > aEncryptionAlgs( 3 );
-                aEncryptionAlg[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StartKeyGenerationAlgorithm" ) );
-                aEncryptionAlg[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptionAlgorithm" ) );
-                aEncryptionAlg[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ChecksumAlgorithm" ) );
+                aEncryptionAlgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StartKeyGenerationAlgorithm" ) );
+                aEncryptionAlgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptionAlgorithm" ) );
+                aEncryptionAlgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ChecksumAlgorithm" ) );
                 // the default values, that should be used for ODF1.1 and older formats
-                aEncryptionAlg[0].Value <<= xml::crypto::CipherID::SHA1;
-                aEncryptionAlg[1].Value <<= xml::crypto::CipherID::BLOWFISH_CFB_8;
-                aEncryptionAlg[2].Value <<= xml::crypto::CipherID::SHA1_1K;
+                aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA1;
+                aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::BLOWFISH_CFB_8;
+                aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA1_1K;
 
                 if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
                 {
@@ -380,13 +383,13 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                     {
                     }
 
-                    if ( !aSaveOpt.IsUseSHA1_ODF12() )
+                    if ( !aSaveOpt.IsUseSHA1InODF12() )
                     {
-                        aEncryptionAlg[0].Value <<= xml::crypto::CipherID::SHA256;
-                        aEncryptionAlg[2].Value <<= xml::crypto::CipherID::SHA256_1K;
+                        aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA256;
+                        aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
                     }
-                    if ( !aSaveOpt.IsUseBlowfish_ODF12() )
-                        aEncryptionAlg[1].Value <<= xml::crypto::CipherID::AES_CBC;
+                    if ( !aSaveOpt.IsUseBlowfishInODF12() )
+                        aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_CBC;
                 }
 
                 try
@@ -395,7 +398,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                     // the setting does not trigger encryption,
                     // it just provides the format for the case that contents should be encrypted
                     uno::Reference< embed::XEncryptionProtectedStorage > xEncr( xStorage, uno::UNO_QUERY_THROW );
-                    xEncr->setEncryptionAlgorithms( aEncryptionAlg );
+                    xEncr->setEncryptionAlgorithms( aEncryptionAlgs );
                 }
                 catch( uno::Exception& )
                 {
