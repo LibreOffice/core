@@ -249,7 +249,9 @@ short SfxPasswordDialog::Execute()
         maPasswordFT.Show();
     if( (mnExtras & SHOWEXTRAS_USER ) )
     {
+#ifndef _MSC_VER
 #warning Inevitably this layout logic will be wrong post merge until we can see the dialog to test it.
+#endif
         Size a3Size = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
         Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
         long nMinHeight = maHelpBtn.GetPosPixel().Y() +
