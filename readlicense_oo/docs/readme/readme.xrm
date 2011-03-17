@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
@@ -31,6 +30,7 @@
 
 		<div id="Installation">
 			<h2 id="rr3fgf42r" xml:lang="en-US">Notes on Installation</h2>
+			<p class="note" id="javaneeded" xml:lang="en-US">${PRODUCTNAME} requires a recent version of JAVA for full functionality which is part of the ${PRODUCTNAME} installation package.</p>
 			<h3 id="sdfsdfgf42r" xml:lang="en-US">System Requirements</h3>
 			<div class="MAC" id="SystemRequirements_OSX">
 				<ul>
