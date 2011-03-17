@@ -211,6 +211,8 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                     else
                         aMenuTitle = aSystemPath;
                 }
+#if 0 // Please don't remove this commented-out code just yet,
+      // we can try to resurrect it later in case somebody complains
 #ifdef WNT
                 else if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_ODMA && ::odma::DMSsAvailable ())
                 {
@@ -245,6 +247,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                     aMenuTitle += aShortTitle;
                     aTipHelpText = aURLString;
                 }
+#endif
 #endif
                 else
                 {
