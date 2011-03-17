@@ -297,11 +297,6 @@ gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .dylib
 gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
-ifeq ($(gb_PRODUCT),$(true))
-gb_Library_STLEXT := port_gcc$(gb_Library_PLAINEXT)
-else
-gb_Library_STLEXT := port_gcc_stldebug$(gb_Library_PLAINEXT)
-endif
 
 ifeq ($(CPUNAME),INTEL)
 gb_Library_OOOEXT := mxi$(gb_Library_PLAINEXT)
@@ -329,7 +324,6 @@ gb_Library_FILENAMES := \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
 	$(foreach lib,$(gb_Library_RTLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT)) \
 	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_RTEXT)) \
-	$(foreach lib,$(gb_Library_STLLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_STLEXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
@@ -341,7 +335,6 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_RTLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
-	$(foreach lib,$(gb_Library_STLLIBS),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \

@@ -472,7 +472,6 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_RTLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):OOO) \
-	$(foreach lib,$(gb_Library_STLLIBS),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
@@ -483,11 +482,6 @@ gb_Library_FILENAMES :=\
 gb_Library_DLLEXT := .dll
 gb_Library_MAJORVER := 3
 gb_Library_RTEXT := gcc3$(gb_Library_DLLEXT)
-ifeq ($(gb_PRODUCT),$(true))
-gb_Library_STLEXT := port_gcc$(gb_Library_DLLEXT)
-else
-gb_Library_STLEXT := port_gcc_stldebug$(gb_Library_DLLEXT)
-endif
 gb_Library_OOOEXT := gi$(gb_Library_DLLEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_DLLEXT)
 gb_Library_UNOVEREXT := $(gb_Library_MAJORVER)$(gb_Library_DLLEXT)

@@ -104,10 +104,6 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
     salhelper \
 ))
 
-$(eval $(call gb_Helper_register_libraries,STLLIBS, \
-    stl \
-))
-
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     fsstorage \
     hatchwindowfactory \

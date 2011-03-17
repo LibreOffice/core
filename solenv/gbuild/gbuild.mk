@@ -38,7 +38,6 @@
 # PRODUCT
 # SOLARINC
 # SOLARLIB
-# STLPORT_VER
 # UPD
 
 # GXX_INCLUDE_PATH (Linux)
@@ -46,7 +45,6 @@
 # SYSTEM_ICU (Linux)
 # SYSTEM_JPEG (Linux)
 # SYSTEM_LIBXML (Linux)
-# USE_SYSTEM_STL (Linux)
 
 SHELL := /bin/sh
 true := T
@@ -155,7 +153,6 @@ gb_GLOBALDEFS := \
 	-DENABLE_LAYOUT_EXPERIMENTAL=0 \
 	-DENABLE_LAYOUT=0 \
 	-DOSL_DEBUG_LEVEL=$(gb_DEBUGLEVEL) \
-	-DSTLPORT_VERSION=$(STLPORT_VER) \
 	-DSUPD=$(UPD) \
 	-DVCL \
 	$(gb_OSDEFS) \
@@ -170,7 +167,6 @@ gb_GLOBALDEFS += \
 else
 gb_GLOBALDEFS += \
 	-DDBG_UTIL \
-	-D_STLP_DEBUG \
 	-D_DEBUG \
 
 endif
