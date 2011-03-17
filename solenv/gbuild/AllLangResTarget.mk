@@ -69,10 +69,10 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	RESPONSEFILE=`$(gb_MKTEMP)` && \
 	echo "-s \
 		$(INCLUDE) \
-		-I$(dir $(3)) \
+		-I$(realpath $(dir $(3))) \
 		$(DEFS) \
 		-fp=$(1) \
-		$(if $<,$<,$(MERGEDFILE))" > $${RESPONSEFILE} && \
+		$(realpath $(if $<,$<,$(MERGEDFILE)))" > $${RESPONSEFILE} && \
 	$(gb_SrsPartTarget_RSCCOMMAND) -presponse @$${RESPONSEFILE} && \
 	rm -rf $${RESPONSEFILE})
 
@@ -199,7 +199,7 @@ endef
 
 gb_ResTarget_RSCTARGET := $(gb_SrsPartTarget_RSCTARGET)
 gb_ResTarget_RSCCOMMAND := $(gb_SrsPartTarget_RSCCOMMAND)
-gb_ResTarget_DEFIMAGESLOCATION := $(SRCDIR)/default_images/
+gb_ResTarget_DEFIMAGESLOCATION := $(realpath $(SRCDIR)/default_images)/
 
 $(call gb_ResTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),RES,2)
