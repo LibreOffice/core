@@ -424,6 +424,13 @@ of the current page is used as limit.
  */
 [optional,property] short FootnoteLineWeight;
 //-----------------------------------------------------------------------------
+/** contains the style of the separator line between the text and the footnote area.
+
+    @see com::sun::star::style::FootnoteLineStyle
+        for the possible values.
+ */
+[optional,property] short FootnoteLineStyle;
+//-----------------------------------------------------------------------------
 /** contains the color of the separator line between the text and the footnote area..
  */
 [optional,property] com::sun::star::util::Color FootnoteLineColor;
