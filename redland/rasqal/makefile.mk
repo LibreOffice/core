@@ -73,7 +73,7 @@ rasqal_CC+=-shared-libgcc
 .ENDIF
 rasqal_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-rasqal_LIBS+=-lstdc++_s
+rasqal_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 
 CONFIGURE_DIR=
@@ -90,7 +90,7 @@ BUILD_DIR=$(CONFIGURE_DIR)$/src
 .ELSE # "WNT"
 
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
-LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec -Wl,-z,noexecstack
+LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
 LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'

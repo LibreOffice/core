@@ -53,6 +53,9 @@ ZIP1LIST        = *.afm -x "*Helvetica-Narrow*"
 
 .INCLUDE : tg_ext.mk
 .IF "$(L10N_framework)"==""
+.IF "$(ZIP1TARGETN)"!=""
 $(ZIP1TARGETN):	$(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
+
+.ENDIF          # "$(ZIP1TARGETN)"!=""
 
 .ENDIF # L10N_framework

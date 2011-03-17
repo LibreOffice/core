@@ -63,7 +63,7 @@ BUILD_DIR=lpsolve55
 lpsolve_LDFLAGS=-shared-libgcc
 .ENDIF
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-lpsolve_LIBS=-lstdc++_s
+lpsolve_LIBS=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 BUILD_ACTION=lpsolve_LDFLAGS=$(lpsolve_LDFLAGS) lpsolve_LIBS=$(lpsolve_LIBS) cmd /c cgcc.bat
 .ELSE
