@@ -41,7 +41,7 @@ module com { module sun { module star { module document {
     @see XUndoManagerListener
     @see XUndoAction
  */
-struct UndoManagerEvent : ::com::sun::star::lang::EventObject
+published struct UndoManagerEvent : ::com::sun::star::lang::EventObject
 {
     /** the title of the undo action which is described by the event
         @see XUndoAction::Title

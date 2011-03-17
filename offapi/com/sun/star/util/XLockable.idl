@@ -41,7 +41,7 @@ module com { module sun { module star { module util {
     pairs. As long as there has been one more call to <code>lock</code> than to <code>unlock</code>, the
     component is considered locked, which is reflected by <member>isLocked</member> returning <TRUE/>.</p>
  */
-interface XLockable
+published interface XLockable
 {
     /** locks</a> the component
 

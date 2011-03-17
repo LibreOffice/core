@@ -40,7 +40,7 @@ module com { module sun { module star { module awt {
 
     <p>Three image sets are provided, of size 16x16, 32x32, and 64x64 pixels.</p>
  */
-service SpinningProgressControlModel
+published service SpinningProgressControlModel
 {
     service AnimatedImagesControlModel;
 };

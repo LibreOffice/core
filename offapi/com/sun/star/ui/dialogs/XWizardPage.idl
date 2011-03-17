@@ -37,7 +37,7 @@ module com { module sun { module star { module ui { module dialogs {
 
 /** is a single page of a <type>Wizard</type>
  */
-interface XWizardPage : ::com::sun::star::lang::XComponent
+published interface XWizardPage : ::com::sun::star::lang::XComponent
 {
     /** provides read-only access to the window of the page
     */
