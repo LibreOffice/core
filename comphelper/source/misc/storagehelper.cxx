@@ -34,6 +34,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
+#include <com/sun/star/xml/crypto/XDigestContext.hpp>
+#include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
+#include <com/sun/star/xml/crypto/DigestID.hpp>
 
 #include <rtl/digest.h>
 
@@ -422,22 +425,44 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
 }
 
 // ----------------------------------------------------------------------
-uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( const ::rtl::OUString& aPassword )
+uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( const ::rtl::OUString& aPassword, const uno::Reference< lang::XMultiServiceFactory >& xSF )
 {
     // TODO/LATER: Should not the method be part of DocPasswordHelper?
     uno::Sequence< beans::NamedValue > aEncryptionData;
+    sal_Int32 nSha1Ind = 0;
     if ( aPassword.getLength() )
     {
+        // generate SHA256 start key
+        try
+        {
+            uno::Reference< lang::XMultiServiceFactory > xFactory = xSF.is() ? xSF : ::comphelper::getProcessServiceFactory();
+            if ( !xFactory.is() )
+                throw uno::RuntimeException();
+
+            uno::Reference< xml::crypto::XDigestContextSupplier > xDigestContextSupplier( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.crypto.SEInitializer" ) ) ), uno::UNO_QUERY_THROW );
+            uno::Reference< xml::crypto::XDigestContext > xDigestContext( xDigestContextSupplier->getDigestContext( xml::crypto::DigestID::SHA256, uno::Sequence< beans::NamedValue >() ), uno::UNO_SET_THROW );
+
+            ::rtl::OString aUTF8Password( ::rtl::OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 ) );
+            xDigestContext->updateDigest( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aUTF8Password.getStr() ), aUTF8Password.getLength() ) );
+            uno::Sequence< sal_Int8 > aDigest = xDigestContext->finalizeDigestAndDispose();
+
+            aEncryptionData.realloc( ++nSha1Ind );
+            aEncryptionData[0].Name = PACKAGE_ENCRYPTIONDATA_SHA256UTF8;
+            aEncryptionData[0].Value <<= aDigest;
+        }
+        catch ( uno::Exception& )
+        {}
+
         // MS_1252 encoding was used for SO60 document format password encoding,
         // this encoding supports only a minor subset of nonascii characters,
         // but for compatibility reasons it has to be used for old document formats
-        aEncryptionData.realloc( 2 );
-        aEncryptionData[0].Name = PACKAGE_ENCRYPTIONDATA_SHA1UTF8;
-        aEncryptionData[1].Name = PACKAGE_ENCRYPTIONDATA_SHA1MS1252;
+        aEncryptionData.realloc( nSha1Ind + 2 );
+        aEncryptionData[nSha1Ind].Name = PACKAGE_ENCRYPTIONDATA_SHA1UTF8;
+        aEncryptionData[nSha1Ind + 1].Name = PACKAGE_ENCRYPTIONDATA_SHA1MS1252;
 
         rtl_TextEncoding pEncoding[2] = { RTL_TEXTENCODING_UTF8, RTL_TEXTENCODING_MS_1252 };
 
-        for ( sal_Int32 nInd = 0; nInd < 2; nInd++ )
+        for ( sal_Int32 nInd = nSha1Ind; nInd < nSha1Ind + 2; nInd++ )
         {
             ::rtl::OString aByteStrPass = ::rtl::OUStringToOString( aPassword, pEncoding[nInd] );
 
@@ -449,7 +474,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
 
             if ( nError != rtl_Digest_E_None )
             {
-                aEncryptionData.realloc( 0 );
+                aEncryptionData.realloc( nSha1Ind );
                 break;
             }
 

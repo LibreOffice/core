@@ -165,7 +165,10 @@ public:
         throw ( ::com::sun::star::uno::Exception );
 
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
-        CreatePackageEncryptionData( const ::rtl::OUString& aPassword );
+        CreatePackageEncryptionData(
+            const ::rtl::OUString& aPassword,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSF
+                = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() );
 
     static sal_Bool IsValidZipEntryFileName( const ::rtl::OUString& aName, sal_Bool bSlashAllowed );
     static sal_Bool IsValidZipEntryFileName( const sal_Unicode *pChar, sal_Int32 nLength, sal_Bool bSlashAllowed );
