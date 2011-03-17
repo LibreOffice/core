@@ -47,7 +47,6 @@ $(eval $(call gb_Library_add_linked_libs,fwl,\
     fwi \
     i18nisolang1 \
     sal \
-    stl \
     svl \
     svt \
     tk \

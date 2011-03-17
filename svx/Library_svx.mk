@@ -56,7 +56,6 @@ $(eval $(call gb_Library_add_linked_libs,svx,\
     sal \
     sfx \
     sot \
-    stl \
     svl \
     svt \
     svxcore \

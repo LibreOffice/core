@@ -48,7 +48,6 @@ $(eval $(call gb_Library_add_linked_libs,fwe,\
     cppuhelper \
     fwi \
     sal \
-    stl \
     svl \
     svt \
     tl \

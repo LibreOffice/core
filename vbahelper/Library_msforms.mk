@@ -60,7 +60,6 @@ $(eval $(call gb_Library_add_linked_libs,msforms,\
     vcl \
     tk \
     sb \
-    stl \
     $(gb_STDLIBS) \
 ))
 

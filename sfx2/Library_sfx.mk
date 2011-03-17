@@ -66,7 +66,6 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     sax \
     sb \
     sot \
-    stl \
     svl \
     svt \
     tk \

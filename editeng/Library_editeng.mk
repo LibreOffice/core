@@ -148,7 +148,6 @@ $(eval $(call gb_Library_add_linked_libs,editeng,\
     tk \
     vcl \
     svl \
-    stl \
     sot \
     utl \
     tl \

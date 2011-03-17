@@ -50,7 +50,6 @@ $(eval $(call gb_Library_add_linked_libs,fwk,\
     i18nisolang1 \
     sal \
     sot \
-    stl \
     svl \
     svt \
     tk \

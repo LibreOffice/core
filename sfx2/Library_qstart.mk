@@ -64,7 +64,6 @@ $(eval $(call gb_Library_add_linked_libs,qstart_gtk,\
     sax \
     sb \
     sot \
-    stl \
     svl \
     svt \
     tk \
