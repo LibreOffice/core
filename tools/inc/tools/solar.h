@@ -177,32 +177,6 @@ inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = ((BYTE*)&n)[7];
 #endif
 #endif
 
-
-/*** standard floating point definitions *******************************/
-
-#ifndef F_PI
-#define F_PI        3.14159265358979323846
-#endif
-#ifndef F_PI2
-#define F_PI2       1.57079632679489661923
-#endif
-#ifndef F_PI4
-#define F_PI4       0.785398163397448309616
-#endif
-#ifndef F_PI180
-#define F_PI180     0.01745329251994
-#endif
-#ifndef F_PI1800
-#define F_PI1800    0.001745329251994
-#endif
-#ifndef F_PI18000
-#define F_PI18000   0.0001745329251994
-#endif
-#ifndef F_2PI
-#define F_2PI       6.28318530717958647694
-#endif
-
-
 /*** standard macros *****************************************/
 
 #define SWAPSHORT(x) ((((x) >> 8) & 0x00FF) | (((x) & 0x00FF) << 8))
