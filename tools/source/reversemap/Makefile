@@ -26,7 +26,7 @@
 all : reversemap.hxx
 
 reversemap.hxx : $(OUTDIR)/bin/bestreversemap
-	$< > $@
+	$(gb_Helper_Execute) $< > $@
 
 .PHONY : all
 # vim: set noet sw=4 ts=4:
