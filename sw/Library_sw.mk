@@ -42,7 +42,7 @@ $(eval $(call gb_Library_set_include,sw,\
     -I$(WORKDIR)/SdiTarget/sw/sdi \
     -I$(WORKDIR)/Misc/sw/ \
     $$(INCLUDE) \
-    $(if $(filter YES,$(SYSTEM_LIBXML),$(LIBXML_CFLAGS)) \
+    $(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_CFLAGS)) \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
 ))
@@ -69,7 +69,6 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     sb \
     sfx \
     sot \
-    stl \
     svl \
     svt \
     svx \
