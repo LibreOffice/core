@@ -48,7 +48,7 @@ $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi | $(gb_SdiTarget_SVIDLTARGET
 			-fz$@.sid \
 			-fx$(EXPORTS) \
 			-fm$@ \
-			$<)
+			$(realpath $<))
 
 .PHONY : $(call gb_SdiTarget_get_clean_target,%)
 $(call gb_SdiTarget_get_clean_target,%) :
