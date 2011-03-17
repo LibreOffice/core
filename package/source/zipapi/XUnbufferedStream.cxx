@@ -291,7 +291,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
 
         if ( mbCheckCRC && ( !mbRawStream || mbWrappedRaw ) )
         {
-            if ( m_xCipherContext.is() && !mbWrappedRaw )
+            if ( !m_xCipherContext.is() && !mbWrappedRaw )
                 maCRC.update( aData );
 
 #if 0
