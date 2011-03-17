@@ -89,7 +89,8 @@ using namespace com::sun::star;
 using ::rtl::OUString;
 using ::rtl::OString;
 
-#define SERVICE_NAME "com.sun.star.xml.crypto.SEInitializer"
+#define SE_SERVICE_NAME "com.sun.star.xml.crypto.SEInitializer"
+#define NSS_SERVICE_NAME "com.sun.star.xml.crypto.NSSInitializer"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.bridge.xmlsec.SEInitializer_NssImpl"
 #define SECURITY_ENVIRONMENT "com.sun.star.xml.crypto.SecurityEnvironment"
 #define SECURITY_CONTEXT "com.sun.star.xml.crypto.XMLSecurityContext"
@@ -400,7 +401,7 @@ SEInitializer_NssImpl::~SEInitializer_NssImpl()
 
 /* XSEInitializer */
 cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
-    SEInitializer_NssImpl::createSecurityContext()
+    SEInitializer_NssImpl::createSecurityContext( const ::rtl::OUString& )
     throw (cssu::RuntimeException)
 {
     CERTCertDBHandle    *pCertHandle = NULL ;
@@ -441,7 +442,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     }
 }
 
-css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL SEInitializer_NssImpl::getDigestContext( ::sal_Int32 nDigestID, const css::uno::Any& aParams )
+css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL SEInitializer_NssImpl::getDigestContext( ::sal_Int32 nDigestID, const css::uno::Sequence< css::beans::NamedValue >& aParams )
     throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
 {
     SECOidTag nNSSDigestID = SEC_OID_UNKNOWN;
@@ -459,7 +460,7 @@ css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL SEInitializer_N
     else
         throw css::lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected digest requested." ) ), css::uno::Reference< css::uno::XInterface >(), 1 );
 
-    if ( aParams.hasValue() )
+    if ( aParams.getLength() )
         throw css::lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected arguments provided for digest creation." ) ), css::uno::Reference< css::uno::XInterface >(), 2 );
 
     css::uno::Reference< css::xml::crypto::XDigestContext > xResult;
@@ -473,7 +474,7 @@ css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL SEInitializer_N
     return xResult;
 }
 
-css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL SEInitializer_NssImpl::getCipherContext( ::sal_Int32 nCipherID, const css::uno::Sequence< ::sal_Int8 >& aKey, const css::uno::Sequence< ::sal_Int8 >& aInitializationVector, ::sal_Bool bEncryption, const css::uno::Any& aParams )
+css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL SEInitializer_NssImpl::getCipherContext( ::sal_Int32 nCipherID, const css::uno::Sequence< ::sal_Int8 >& aKey, const css::uno::Sequence< ::sal_Int8 >& aInitializationVector, ::sal_Bool bEncryption, const css::uno::Sequence< css::beans::NamedValue >& aParams )
     throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
 {
     CK_MECHANISM_TYPE nNSSCipherID = -1;
@@ -483,7 +484,7 @@ css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL SEInitializer_N
         if ( aKey.getLength() != 16 && aKey.getLength() != 24 && aKey.getLength() != 32 )
             throw css::lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected key length." ) ), css::uno::Reference< css::uno::XInterface >(), 2 );
 
-        if ( aParams.hasValue() )
+        if ( aParams.getLength() )
             throw css::lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected arguments provided for cipher creation." ) ), css::uno::Reference< css::uno::XInterface >(), 5 );
     }
     else
@@ -511,18 +512,18 @@ rtl::OUString SEInitializer_NssImpl_getImplementationName ()
 sal_Bool SAL_CALL SEInitializer_NssImpl_supportsService( const rtl::OUString& ServiceName )
     throw (cssu::RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ));
+    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SE_SERVICE_NAME )) || ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( NSS_SERVICE_NAME ));
 }
 
 cssu::Sequence< rtl::OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
-    cssu::Sequence < rtl::OUString > aRet(1);
+    cssu::Sequence < rtl::OUString > aRet(2);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    pArray[0] =  rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( SE_SERVICE_NAME ) );
+    pArray[1] =  rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( NSS_SERVICE_NAME ) );
     return aRet;
 }
-#undef SERVICE_NAME
 
 cssu::Reference< cssu::XInterface > SAL_CALL SEInitializer_NssImpl_createInstance( const cssu::Reference< cssl::XMultiServiceFactory > & rSMgr)
     throw( cssu::Exception )

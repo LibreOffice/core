@@ -31,6 +31,7 @@
 #include <xmlsecurity/xmlsignaturehelper.hxx>
 #include <xmlsignaturehelper2.hxx>
 
+#include <tools/solar.h>
 #include <unotools/streamhelper.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>

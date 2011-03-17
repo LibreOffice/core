@@ -184,8 +184,8 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                     if ( !bIgnoreEncryptData )
                     {
                         aString = aConvertedAttribs[sChecksumAttribute];
-                        Sequence < sal_uInt8 > aDecodeBuffer;
-                        Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
+                        uno::Sequence < sal_Int8 > aDecodeBuffer;
+                        Base64Codec::decodeBase64( aDecodeBuffer, aString );
                         aSequence[nNumProperty].Name = sDigestProperty;
                         aSequence[nNumProperty++].Value <<= aDecodeBuffer;
                     }
@@ -231,7 +231,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                     if ( !bIgnoreEncryptData )
                     {
                         aString = aConvertedAttribs[sInitialisationVectorAttribute];
-                        Sequence < sal_uInt8 > aDecodeBuffer;
+                        uno::Sequence < sal_Int8 > aDecodeBuffer;
                         Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
                         aSequence[nNumProperty].Name = sInitialisationVectorProperty;
                         aSequence[nNumProperty++].Value <<= aDecodeBuffer;
@@ -246,7 +246,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                     if ( aString.equals( sPBKDF2_Name ) || aString.equals( sPBKDF2_URL ) )
                     {
                         aString = aConvertedAttribs[sSaltAttribute];
-                        Sequence < sal_uInt8 > aDecodeBuffer;
+                        uno::Sequence < sal_Int8 > aDecodeBuffer;
                         Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
                         aSequence[nNumProperty].Name = sSaltProperty;
                         aSequence[nNumProperty++].Value <<= aDecodeBuffer;

@@ -24,19 +24,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _XMEMORY_STREAM_HXX
-#define _XMEMORY_STREAM_HXX
+#ifndef _SHA1CONTEXT_HXX
+#define _SHA1CONTEXT_HXX
 
-#include <ZipPackageBuffer.hxx>
+#include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
-class ZipPackage;
+#include <cppuhelper/implbase1.hxx>
+#include <osl/mutex.hxx>
 
-class XMemoryStream: public ZipPackageBuffer
+class SHA1DigestContext : public cppu::WeakImplHelper1< ::com::sun::star::xml::crypto::XDigestContext >
 {
+    ::osl::Mutex m_aMutex;
+    void* m_pDigest;
+
+    SHA1DigestContext()
+    : m_pDigest( NULL )
+    {}
+
 public:
-    XMemoryStream ( com::sun::star::uno::Sequence < sal_Int8 > & rNewBuffer );
-    virtual ~XMemoryStream(void);
-    virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& rType )
-        throw(com::sun::star::uno::RuntimeException);
+
+    virtual ~SHA1DigestContext();
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext >
+        Create();
+
+    virtual void SAL_CALL updateDigest( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData ) throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeDigestAndDispose() throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException);
+
 };
-#endif
+
+#endif // _SHA1CONTEXT_HXX
+

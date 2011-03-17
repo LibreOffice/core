@@ -311,7 +311,7 @@ void ZipPackage::parseManifest()
 
                                         if ( pSalt && pVector && pCount && pSize && pDigest && pDigestAlg && pEncryptionAlg )
                                         {
-                                            Sequence < sal_uInt8 > aSequence;
+                                            uno::Sequence < sal_Int8 > aSequence;
                                             sal_Int32 nCount = 0, nSize = 0, nDigestAlg = 0, nEncryptionAlg = 0, nDerivedKeySize = 16, nStartKeyAlg = xml::crypto::DigestID::SHA1;
 
                                             pStream->SetToBeEncrypted ( sal_True );
@@ -1185,7 +1185,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
     }
 
     // Hand it to the ZipOutputStream:
-    ZipOutputStream aZipOut ( xTempOut );
+    ZipOutputStream aZipOut( m_xFactory, xTempOut );
     aZipOut.setMethod( DEFLATED );
     aZipOut.setLevel( DEFAULT_COMPRESSION );
 

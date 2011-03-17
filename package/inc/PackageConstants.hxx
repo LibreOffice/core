@@ -34,15 +34,19 @@ const sal_Int32 n_ConstMaxMemoryStreamSize = 20480;
 const sal_Int32 n_ConstDigestLength = 1024;
 
 // the constants related to the manifest.xml entries
-#define PKG_MNFST_MEDIATYPE 0
-#define PKG_MNFST_VERSION   1
-#define PKG_MNFST_FULLPATH  2
+#define PKG_MNFST_MEDIATYPE   0
+#define PKG_MNFST_VERSION     1
+#define PKG_MNFST_FULLPATH    2
 
-#define PKG_MNFST_INIVECTOR 3
-#define PKG_MNFST_SALT      4
-#define PKG_MNFST_ITERATION 5
-#define PKG_MNFST_UCOMPSIZE 6
-#define PKG_MNFST_DIGEST    7
+#define PKG_MNFST_INIVECTOR   3
+#define PKG_MNFST_SALT        4
+#define PKG_MNFST_ITERATION   5
+#define PKG_MNFST_UCOMPSIZE   6
+#define PKG_MNFST_DIGEST      7
+#define PKG_MNFST_ENCALG      8
+#define PKG_MNFST_STARTALG    9
+#define PKG_MNFST_DIGESTALG  10
+#define PKG_MNFST_DERKEYSIZE 11
 
 #define PKG_SIZE_NOENCR_MNFST 3
 #define PKG_SIZE_ENCR_MNFST   8

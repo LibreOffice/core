@@ -27,31 +27,37 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_package.hxx"
+
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ucb/XProgressHandler.hpp>
+#include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <com/sun/star/xml/crypto/XCipherContext.hpp>
+#include <com/sun/star/xml/crypto/XDigestContext.hpp>
+#include <com/sun/star/xml/crypto/XCipherContextSupplier.hpp>
+#include <com/sun/star/xml/crypto/XDigestContextSupplier.hpp>
+#include <com/sun/star/xml/crypto/CipherID.hpp>
+#include <com/sun/star/xml/crypto/DigestID.hpp>
+
+#include <comphelper/storagehelper.hxx>
+#include <comphelper/processfactory.hxx>
+#include <rtl/digest.h>
+
+#include <string.h> // for memcpy
+#include <vector>
+
+#include "blowfishcontext.hxx"
+#include "sha1context.hxx"
 #include <ZipFile.hxx>
 #include <ZipEnumeration.hxx>
-#include <com/sun/star/packages/zip/ZipConstants.hpp>
-#include <rtl/cipher.h>
-#include <rtl/digest.h>
-/*
-#include <XMemoryStream.hxx>
-#include <XFileStream.hxx>
-*/
 #include <XUnbufferedStream.hxx>
 #include <PackageConstants.hxx>
 #include <EncryptedDataHeader.hxx>
 #include <EncryptionData.hxx>
 #include <MemoryByteGrabber.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ucb/XProgressHandler.hpp>
 
-#ifndef _CRC32_HXX_
 #include <CRC32.hxx>
-#endif
 
-#include <string.h> // for memcpy
-#include <vector>
-
-#include <comphelper/storagehelper.hxx>
+#define AES_CBC_BLOCK_SIZE 16
 
 using namespace vos;
 using namespace rtl;
@@ -73,7 +79,7 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
 , aInflater (sal_True)
 , xStream(xInput)
 , xSeek(xInput, UNO_QUERY)
-, xFactory ( xNewFactory )
+, m_xFactory ( xNewFactory )
 , bRecoveryMode( sal_False )
 {
     if (bInitialise)
@@ -94,7 +100,7 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
 , aInflater (sal_True)
 , xStream(xInput)
 , xSeek(xInput, UNO_QUERY)
-, xFactory ( xNewFactory )
+, m_xFactory ( xNewFactory )
 , xProgressHandler( xProgress )
 , bRecoveryMode( bForceRecovery )
 {
@@ -126,35 +132,75 @@ void ZipFile::setInputStream ( uno::Reference < XInputStream > xNewStream )
     aGrabber.setInputStream ( xStream );
 }
 
-sal_Bool ZipFile::StaticGetCipher ( const ::rtl::Reference< EncryptionData >& xEncryptionData, rtlCipher &rCipher, sal_Bool bDecode )
+uno::Reference< xml::crypto::XDigestContext > ZipFile::StaticGetDigestContextForChecksum( const uno::Reference< lang::XMultiServiceFactory >& xArgFactory, const ::rtl::Reference< EncryptionData >& xEncryptionData )
 {
-    sal_Bool bResult = sal_False;
-    if ( xEncryptionData.is() )
+    uno::Reference< xml::crypto::XDigestContext > xDigestContext;
+    if ( xEncryptionData->m_nCheckAlg == xml::crypto::DigestID::SHA256_1K )
     {
-        Sequence < sal_uInt8 > aDerivedKey (16);
-        rtlCipherError aResult;
-        Sequence < sal_Int8 > aDecryptBuffer;
+        uno::Reference< lang::XMultiServiceFactory > xFactory = xArgFactory;
+        if ( !xFactory.is() )
+            xFactory.set( comphelper::getProcessServiceFactory(), uno::UNO_SET_THROW );
 
-        // Get the key
-        rtl_digest_PBKDF2 ( aDerivedKey.getArray(), 16,
-                            reinterpret_cast < const sal_uInt8 * > (xEncryptionData->m_aKey.getConstArray() ),
+        uno::Reference< xml::crypto::XDigestContextSupplier > xDigestContextSupplier(
+            xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.crypto.SEInitializer" ) ) ),
+            uno::UNO_QUERY_THROW );
+
+        xDigestContext.set( xDigestContextSupplier->getDigestContext( xEncryptionData->m_nCheckAlg, uno::Sequence< beans::NamedValue >() ), uno::UNO_SET_THROW );
+    }
+    else if ( xEncryptionData->m_nCheckAlg == xml::crypto::DigestID::SHA1_1K )
+        xDigestContext.set( SHA1DigestContext::Create(), uno::UNO_SET_THROW );
+
+    return xDigestContext;
+}
+
+uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const uno::Reference< lang::XMultiServiceFactory >& xArgFactory, const ::rtl::Reference< EncryptionData >& xEncryptionData, bool bEncrypt )
+{
+    uno::Reference< xml::crypto::XCipherContext > xResult;
+
+    try
+    {
+        uno::Sequence< sal_Int8 > aDerivedKey( xEncryptionData->m_nDerivedKeySize );
+        rtlDigestError nErr = rtl_Digest_E_None;
+        if ( rtl_Digest_E_None != rtl_digest_PBKDF2( reinterpret_cast< sal_uInt8* >( aDerivedKey.getArray() ),
+                            aDerivedKey.getLength(),
+                            reinterpret_cast< const sal_uInt8 * > (xEncryptionData->m_aKey.getConstArray() ),
                             xEncryptionData->m_aKey.getLength(),
-                            reinterpret_cast < const sal_uInt8 * > ( xEncryptionData->m_aSalt.getConstArray() ),
+                            reinterpret_cast< const sal_uInt8 * > ( xEncryptionData->m_aSalt.getConstArray() ),
                             xEncryptionData->m_aSalt.getLength(),
-                            xEncryptionData->m_nIterationCount );
+                            xEncryptionData->m_nIterationCount ) )
+        {
+            throw ZipIOException( ::rtl::OUString::createFromAscii( "Can not create derived key!\n" ),
+                                  uno::Reference< XInterface >() );
+        }
 
-        rCipher = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream);
-        aResult = rtl_cipher_init( rCipher, bDecode ? rtl_Cipher_DirectionDecode : rtl_Cipher_DirectionEncode,
-                                   aDerivedKey.getConstArray(),
-                                   aDerivedKey.getLength(),
-                                   reinterpret_cast < const sal_uInt8 * > ( xEncryptionData->m_aInitVector.getConstArray() ),
-                                   xEncryptionData->m_aInitVector.getLength());
-        OSL_ASSERT (aResult == rtl_Cipher_E_None);
+        if ( xEncryptionData->m_nEncAlg == xml::crypto::CipherID::AES_CBC )
+        {
+            uno::Reference< lang::XMultiServiceFactory > xFactory = xArgFactory;
+            if ( !xFactory.is() )
+                xFactory.set( comphelper::getProcessServiceFactory(), uno::UNO_SET_THROW );
 
-        bResult = ( aResult == rtl_Cipher_E_None );
+            uno::Reference< xml::crypto::XCipherContextSupplier > xCipherContextSupplier(
+                xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.crypto.SEInitializer" ) ) ),
+                uno::UNO_QUERY_THROW );
+
+            xResult = xCipherContextSupplier->getCipherContext( xEncryptionData->m_nEncAlg, aDerivedKey, xEncryptionData->m_aInitVector, bEncrypt, uno::Sequence< beans::NamedValue >() );
+        }
+        else if ( xEncryptionData->m_nEncAlg == xml::crypto::CipherID::BLOWFISH_CFB_8 )
+        {
+            xResult = BlowfishCFB8CipherContext::Create( aDerivedKey, xEncryptionData->m_aInitVector, bEncrypt );
+        }
+        else
+        {
+            throw ZipIOException( ::rtl::OUString::createFromAscii( "Unknown cipher algorithm is requested!\n" ),
+                                  uno::Reference< XInterface >() );
+        }
+    }
+    catch( uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "Can not create cipher context!" );
     }
 
-    return bResult;
+    return xResult;
 }
 
 void ZipFile::StaticFillHeader( const ::rtl::Reference< EncryptionData >& rData,
@@ -327,7 +373,8 @@ sal_Bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rDa
     return bOk;
 }
 
-uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::Reference< XInputStream >& xStream,
+uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+                                                                const uno::Reference< XInputStream >& xStream,
                                                                 const ::rtl::Reference< EncryptionData > &rData )
         throw ( packages::WrongPasswordException, ZipIOException, RuntimeException )
 {
@@ -361,14 +408,32 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::R
 
         xStream->readBytes( aReadBuffer, nSize );
 
-        if ( !StaticHasValidPassword( aReadBuffer, rData ) )
+        if ( !StaticHasValidPassword( xFactory, aReadBuffer, rData ) )
             throw packages::WrongPasswordException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
-    return new XUnbufferedStream ( xStream, rData );
+    return new XUnbufferedStream( xFactory, xStream, rData );
 }
 
-sal_Bool ZipFile::StaticHasValidPassword( const Sequence< sal_Int8 > &aReadBuffer, const ::rtl::Reference< EncryptionData > &rData )
+void ZipFile::StaticRemoveW3CPadding( const ::rtl::Reference< EncryptionData >& rEncData, uno::Sequence< sal_Int8 >& o_rPaddedData )
+{
+    sal_Int32 nPaddedDataLen = o_rPaddedData.getLength();
+    if ( rEncData->m_nEncAlg == xml::crypto::CipherID::AES_CBC )
+    {
+        if ( nPaddedDataLen > AES_CBC_BLOCK_SIZE
+          && nPaddedDataLen % AES_CBC_BLOCK_SIZE == 1
+          && o_rPaddedData[ nPaddedDataLen - 1 ] <= AES_CBC_BLOCK_SIZE )
+        {
+            o_rPaddedData.realloc( nPaddedDataLen - AES_CBC_BLOCK_SIZE + o_rPaddedData[nPaddedDataLen - 1] );
+        }
+        else
+        {
+            OSL_ENSURE( sal_False, "No expected padding is found!" );
+        }
+    }
+}
+
+sal_Bool ZipFile::StaticHasValidPassword( const uno::Reference< lang::XMultiServiceFactory >& xFactory, const Sequence< sal_Int8 > &aReadBuffer, const ::rtl::Reference< EncryptionData > &rData )
 {
     if ( !rData.is() || !rData->m_aKey.getLength() )
         return sal_False;
@@ -376,29 +441,24 @@ sal_Bool ZipFile::StaticHasValidPassword( const Sequence< sal_Int8 > &aReadBuffe
     sal_Bool bRet = sal_False;
     sal_Int32 nSize = aReadBuffer.getLength();
 
-    // make a temporary cipher
-    rtlCipher aCipher;
-    StaticGetCipher ( rData, aCipher, sal_True );
+    uno::Reference< xml::crypto::XCipherContext > xCipher( StaticGetCipher( xFactory, rData, false ), uno::UNO_SET_THROW );
 
-    Sequence < sal_Int8 > aDecryptBuffer ( nSize );
-    rtlDigest aDigest = rtl_digest_createSHA1();
-    rtlDigestError aDigestResult;
-    Sequence < sal_uInt8 > aDigestSeq ( RTL_DIGEST_LENGTH_SHA1 );
-    rtlCipherError aResult = rtl_cipher_decode ( aCipher,
-                                  aReadBuffer.getConstArray(),
-                                  nSize,
-                                  reinterpret_cast < sal_uInt8 * > (aDecryptBuffer.getArray()),
-                                  nSize);
-    if(aResult != rtl_Cipher_E_None ) {
-        OSL_ASSERT ( aResult == rtl_Cipher_E_None);
+    uno::Sequence< sal_Int8 > aDecryptBuffer = xCipher->convertWithCipherContext( aReadBuffer );
+    uno::Sequence< sal_Int8 > aDecryptBuffer2 = xCipher->finalizeCipherContextAndDispose();
+    if ( aDecryptBuffer2.getLength() )
+    {
+        sal_Int32 nOldLen = aDecryptBuffer.getLength();
+        aDecryptBuffer.realloc( nOldLen + aDecryptBuffer2.getLength() );
+        memcpy( aDecryptBuffer.getArray() + nOldLen, aDecryptBuffer2.getArray(), aDecryptBuffer2.getLength() );
     }
 
-    aDigestResult = rtl_digest_updateSHA1 ( aDigest,
-                                            static_cast < const void * > ( aDecryptBuffer.getConstArray() ), nSize );
-    OSL_ASSERT ( aDigestResult == rtl_Digest_E_None );
+    StaticRemoveW3CPadding( rData, aDecryptBuffer );
 
-    aDigestResult = rtl_digest_getSHA1 ( aDigest, aDigestSeq.getArray(), RTL_DIGEST_LENGTH_SHA1 );
-    OSL_ASSERT ( aDigestResult == rtl_Digest_E_None );
+    uno::Sequence< sal_Int8 > aDigestSeq;
+    uno::Reference< xml::crypto::XDigestContext > xDigestContext( StaticGetDigestContextForChecksum( xFactory, rData ), uno::UNO_SET_THROW );
+
+    xDigestContext->updateDigest( aDecryptBuffer );
+    aDigestSeq = xDigestContext->finalizeDigestAndDispose();
 
     // If we don't have a digest, then we have to assume that the password is correct
     if (  rData->m_aDigest.getLength() != 0  &&
@@ -411,8 +471,6 @@ sal_Bool ZipFile::StaticHasValidPassword( const Sequence< sal_Int8 > &aReadBuffe
     }
     else
         bRet = sal_True;
-
-    rtl_digest_destroySHA1 ( aDigest );
 
     return bRet;
 }
@@ -433,7 +491,7 @@ sal_Bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ::rtl::Reference< 
 
         xStream->readBytes( aReadBuffer, nSize );
 
-        bRet = StaticHasValidPassword( aReadBuffer, rData );
+        bRet = StaticHasValidPassword( m_xFactory, aReadBuffer, rData );
     }
 
     return bRet;
@@ -449,7 +507,7 @@ uno::Reference< XInputStream > ZipFile::createUnbufferedStream(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return new XUnbufferedStream ( aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode );
+    return new XUnbufferedStream ( m_xFactory, aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode );
 }
 
 

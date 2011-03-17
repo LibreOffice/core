@@ -83,7 +83,7 @@ bool XMLSignatureHelper::Init()
     ImplCreateSEInitializer();
 
     if ( mxSEInitializer.is() )
-        mxSecurityContext = mxSEInitializer->createSecurityContext();
+        mxSecurityContext = mxSEInitializer->createSecurityContext( ::rtl::OUString() );
 
     return mxSecurityContext.is();
 }
@@ -417,25 +417,6 @@ sal_Int32 XMLSignatureHelper::GetSecurityEnvironmentNumber()
 {
     return (mxSecurityContext.is()?(mxSecurityContext->getSecurityEnvironmentNumber()): 0);
 }
-
-
-/*
-void XMLSignatureHelper::createSecurityContext( rtl::OUString tokenPath )
-{
-    if ( !mxSEInitializer.is() )
-        ImplCreateSEInitializer();
-
-    mxSecurityContext = mxSEInitializer->createSecurityContext(tokenPath);
-}
-
-void XMLSignatureHelper::freeSecurityContext()
-{
-    if ( !mxSEInitializer.is() )
-        ImplCreateSEInitializer();
-
-    mxSEInitializer->freeSecurityContext( mxSecurityContext );
-}
-*/
 
 IMPL_LINK( XMLSignatureHelper, SignatureCreationResultListener, XMLSignatureCreationResult*, pResult )
 {

@@ -51,8 +51,10 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 
 /** This class is used to write Zip files
  */
-ZipOutputStream::ZipOutputStream( uno::Reference < XOutputStream > &xOStream )
-: xStream(xOStream)
+ZipOutputStream::ZipOutputStream( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+                                  const uno::Reference < XOutputStream > &xOStream )
+: m_xFactory( xFactory )
+, xStream(xOStream)
 , aBuffer(n_ConstBufferSize)
 , aDeflater(DEFAULT_COMPRESSION, sal_True)
 , aChucker(xOStream)
@@ -102,9 +104,8 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
     {
         bEncryptCurrentEntry = sal_True;
 
-        ZipFile::StaticGetCipher( pStream->GetEncryptionData(), aCipher, sal_False );
-
-        aDigest = rtl_digest_createSHA1();
+        m_xCipherContext = ZipFile::StaticGetCipher( m_xFactory, pStream->GetEncryptionData(), true );
+        m_xDigestContext = ZipFile::StaticGetDigestContextForChecksum( m_xFactory, pStream->GetEncryptionData() );
         mnDigested = 0;
         rEntry.nFlag |= 1 << 4;
         m_pCurrentStream = pStream;
@@ -168,16 +169,17 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
 
         if (bEncryptCurrentEntry)
         {
-            rtlDigestError aDigestResult;
-            aEncryptionBuffer.realloc ( 0 );
             bEncryptCurrentEntry = sal_False;
-            rtl_cipher_destroy ( aCipher );
-            uno::Sequence< sal_uInt8 > aDigestSeq( RTL_DIGEST_LENGTH_SHA1 );
-            aDigestResult = rtl_digest_getSHA1 ( aDigest,
-                                                 aDigestSeq.getArray(),
-                                                 RTL_DIGEST_LENGTH_SHA1 );
-            OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
-            rtl_digest_destroySHA1 ( aDigest );
+
+            m_xCipherContext.clear();
+
+            uno::Sequence< sal_Int8 > aDigestSeq;
+            if ( m_xDigestContext.is() )
+            {
+                aDigestSeq = m_xDigestContext->finalizeDigestAndDispose();
+                m_xDigestContext.clear();
+            }
+
             if ( m_pCurrentStream )
                 m_pCurrentStream->setDigest( aDigestSeq );
         }
@@ -252,36 +254,39 @@ void ZipOutputStream::doDeflate()
 
     if ( nLength > 0 )
     {
-        Sequence < sal_Int8 > aTmpBuffer ( aBuffer.getConstArray(), nLength );
-        const void *pTmpBuffer = static_cast < const void * > ( aTmpBuffer.getConstArray() );
-        if (bEncryptCurrentEntry)
+        uno::Sequence< sal_Int8 > aTmpBuffer( aBuffer.getConstArray(), nLength );
+        if ( bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
         {
             // Need to update our digest before encryption...
-            rtlDigestError aDigestResult = rtl_Digest_E_None;
-            sal_Int16 nDiff = n_ConstDigestLength - mnDigested;
+            sal_Int32 nDiff = n_ConstDigestLength - mnDigested;
             if ( nDiff )
             {
-                sal_Int16 nEat = static_cast < sal_Int16 > ( nDiff > nLength ? nLength : nDiff );
-                aDigestResult = rtl_digest_updateSHA1 ( aDigest, pTmpBuffer, nEat );
+                sal_Int32 nEat = ::std::min( nLength, nDiff );
+                uno::Sequence< sal_Int8 > aTmpSeq( aTmpBuffer.getConstArray(), nEat );
+                m_xDigestContext->updateDigest( aTmpSeq );
                 mnDigested = mnDigested + nEat;
             }
-            OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
 
-            aEncryptionBuffer.realloc ( nLength );
-
-            rtlCipherError aCipherResult;
-            aCipherResult = rtl_cipher_encode ( aCipher, pTmpBuffer,
-                                            nLength, reinterpret_cast < sal_uInt8 * > (aEncryptionBuffer.getArray()),  nLength );
-            OSL_ASSERT( aCipherResult == rtl_Cipher_E_None );
+            uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->convertWithCipherContext( aTmpBuffer );
 
             aChucker.WriteBytes( aEncryptionBuffer );
-            aCRC.update ( aEncryptionBuffer );
-            aEncryptionBuffer.realloc ( nOldLength );
+            aCRC.update( aEncryptionBuffer );
         }
         else
             aChucker.WriteBytes ( aTmpBuffer );
     }
+
+    if ( aDeflater.finished() && bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
+    {
+        uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->finalizeCipherContextAndDispose();
+        if ( aEncryptionBuffer.getLength() )
+        {
+            aChucker.WriteBytes( aEncryptionBuffer );
+            aCRC.update( aEncryptionBuffer );
+        }
+    }
 }
+
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
     throw(IOException, RuntimeException)
 {

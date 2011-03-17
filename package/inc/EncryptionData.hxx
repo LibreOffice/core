@@ -33,9 +33,9 @@
 class BaseEncryptionData : public cppu::OWeakObject
 {
 public:
-    ::com::sun::star::uno::Sequence< sal_uInt8 > m_aSalt;
-    ::com::sun::star::uno::Sequence< sal_uInt8 > m_aInitVector;
-    ::com::sun::star::uno::Sequence< sal_uInt8 > m_aDigest;
+    ::com::sun::star::uno::Sequence< sal_Int8 > m_aSalt;
+    ::com::sun::star::uno::Sequence< sal_Int8 > m_aInitVector;
+    ::com::sun::star::uno::Sequence< sal_Int8 > m_aDigest;
     sal_Int32 m_nIterationCount;
 
     BaseEncryptionData()

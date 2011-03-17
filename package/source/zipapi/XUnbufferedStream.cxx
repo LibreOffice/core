@@ -32,7 +32,6 @@
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <PackageConstants.hxx>
-#include <rtl/cipher.h>
 #include <ZipFile.hxx>
 #include <EncryptedDataHeader.hxx>
 #include <algorithm>
@@ -47,6 +46,7 @@
 using namespace ::com::sun::star;
 #endif
 
+using namespace ::com::sun::star;
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
@@ -54,20 +54,21 @@ using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::packages::zip::ZipIOException;
 using ::rtl::OUString;
 
-XUnbufferedStream::XUnbufferedStream( SotMutexHolderRef aMutexHolder,
-                          ZipEntry & rEntry,
-                           Reference < XInputStream > xNewZipStream,
-                           const ::rtl::Reference< EncryptionData >& rData,
-                           sal_Int8 nStreamMode,
-                           sal_Bool bIsEncrypted,
-                          const ::rtl::OUString& aMediaType,
-                          sal_Bool bRecoveryMode )
+XUnbufferedStream::XUnbufferedStream(
+                      const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+                      SotMutexHolderRef aMutexHolder,
+                      ZipEntry & rEntry,
+                      Reference < XInputStream > xNewZipStream,
+                      const ::rtl::Reference< EncryptionData >& rData,
+                      sal_Int8 nStreamMode,
+                      sal_Bool bIsEncrypted,
+                      const ::rtl::OUString& aMediaType,
+                      sal_Bool bRecoveryMode )
 : maMutexHolder( aMutexHolder.Is() ? aMutexHolder : SotMutexHolderRef( new SotMutexHolder ) )
 , mxZipStream ( xNewZipStream )
 , mxZipSeek ( xNewZipStream, UNO_QUERY )
 , maEntry ( rEntry )
 , mxData ( rData )
-, maCipher ( NULL )
 , maInflater ( sal_True )
 , mbRawStream ( nStreamMode == UNBUFF_STREAM_RAW || nStreamMode == UNBUFF_STREAM_WRAPPEDRAW )
 , mbWrappedRaw ( nStreamMode == UNBUFF_STREAM_WRAPPEDRAW )
@@ -94,7 +95,7 @@ XUnbufferedStream::XUnbufferedStream( SotMutexHolderRef aMutexHolder,
     sal_Bool bMustDecrypt = ( nStreamMode == UNBUFF_STREAM_DATA && bHaveEncryptData && bIsEncrypted ) ? sal_True : sal_False;
 
     if ( bMustDecrypt )
-        ZipFile::StaticGetCipher ( rData, maCipher, sal_True );
+        m_xCipherContext = ZipFile::StaticGetCipher( xFactory, rData, false );
     if ( bHaveEncryptData && mbWrappedRaw && bIsEncrypted )
     {
         // if we have the data needed to decrypt it, but didn't want it decrypted (or
@@ -114,13 +115,14 @@ XUnbufferedStream::XUnbufferedStream( SotMutexHolderRef aMutexHolder,
 }
 
 // allows to read package raw stream
-XUnbufferedStream::XUnbufferedStream( const Reference < XInputStream >& xRawStream,
+XUnbufferedStream::XUnbufferedStream(
+                    const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+                    const Reference < XInputStream >& xRawStream,
                     const ::rtl::Reference< EncryptionData >& rData )
 : maMutexHolder( new SotMutexHolder )
 , mxZipStream ( xRawStream )
 , mxZipSeek ( xRawStream, UNO_QUERY )
 , mxData ( rData )
-, maCipher ( NULL )
 , maInflater ( sal_True )
 , mbRawStream ( sal_False )
 , mbWrappedRaw ( sal_False )
@@ -149,13 +151,11 @@ XUnbufferedStream::XUnbufferedStream( const Reference < XInputStream >& xRawStre
 
     mnZipEnd = mnZipCurrent + mnZipSize;
 
-    ZipFile::StaticGetCipher ( rData, maCipher, sal_True );
+    m_xCipherContext = ZipFile::StaticGetCipher( xFactory, rData, false );
 }
 
 XUnbufferedStream::~XUnbufferedStream()
 {
-    if ( maCipher )
-        rtl_cipher_destroy ( maCipher );
 }
 
 sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
@@ -255,23 +255,24 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                     mnZipCurrent += nZipRead;
                     // maCompBuffer now has the data, check if we need to decrypt
                     // before passing to the Inflater
-                    if ( maCipher )
+                    if ( m_xCipherContext.is() )
                     {
                         if ( mbCheckCRC )
                             maCRC.update( maCompBuffer );
 
-                        Sequence < sal_Int8 > aCryptBuffer ( nZipRead );
-                         rtlCipherError aResult =
-                            rtl_cipher_decode ( maCipher,
-                                      maCompBuffer.getConstArray(),
-                                      nZipRead,
-                                      reinterpret_cast < sal_uInt8 * > (aCryptBuffer.getArray()),
-                                      nZipRead);
-                        if( aResult != rtl_Cipher_E_None ) {
-                            OSL_ASSERT (aResult == rtl_Cipher_E_None);
+                        maCompBuffer = m_xCipherContext->convertWithCipherContext( maCompBuffer );
+                        if ( mnZipCurrent == mnZipEnd )
+                        {
+                            uno::Sequence< sal_Int8 > aSuffix = m_xCipherContext->finalizeCipherContextAndDispose();
+                            if ( aSuffix.getLength() )
+                            {
+                                sal_Int32 nOldLen = maCompBuffer.getLength();
+                                maCompBuffer.realloc( nOldLen + aSuffix.getLength() );
+                                memcpy( maCompBuffer.getArray() + nOldLen, aSuffix.getConstArray(), aSuffix.getLength() );
+                            }
                         }
-                        maCompBuffer = aCryptBuffer; // Now it holds the decrypted data
 
+                        ZipFile::StaticRemoveW3CPadding( mxData, maCompBuffer );
                     }
                     maInflater.setInput ( maCompBuffer );
                 }
@@ -290,7 +291,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
 
         if ( mbCheckCRC && ( !mbRawStream || mbWrappedRaw ) )
         {
-            if ( !maCipher && !mbWrappedRaw )
+            if ( m_xCipherContext.is() && !mbWrappedRaw )
                 maCRC.update( aData );
 
 #if 0

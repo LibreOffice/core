@@ -31,6 +31,8 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/packages/NoEncryptionException.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
+#include <com/sun/star/xml/crypto/XCipherContext.hpp>
+#include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
 #include <rtl/ref.hxx>
 
@@ -54,7 +56,6 @@ namespace com { namespace sun { namespace star {
 #define ZIP_MAXEXTRA 256
 #define ZIP_MAXENTRIES (0x10000 - 2)
 
-typedef void* rtlCipher;
 class ZipEnumeration;
 
 class ZipFile
@@ -68,7 +69,7 @@ protected:
     Inflater        aInflater;
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
-    const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xFactory;
+    const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
     ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XProgressHandler > xProgressHandler;
 
     sal_Bool bRecoveryMode;
@@ -130,7 +131,15 @@ public:
             SotMutexHolderRef aMutexHolder )
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
 
-    static sal_Bool StaticGetCipher ( const ::rtl::Reference < EncryptionData > & xEncryptionData, rtlCipher &rCipher, sal_Bool bDecode );
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext > StaticGetDigestContextForChecksum(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xArgFactory,
+            const ::rtl::Reference< EncryptionData >& xEncryptionData );
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > StaticGetCipher(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xArgFactory,
+            const ::rtl::Reference< EncryptionData >& xEncryptionData,
+            bool bEncrypt );
 
     static void StaticFillHeader ( const ::rtl::Reference < EncryptionData > & rData,
                                     sal_Int32 nSize,
@@ -146,14 +155,21 @@ public:
                                      ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &rStream );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > StaticGetDataFromRawStream(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xStream,
             const ::rtl::Reference < EncryptionData > &rData )
         throw ( ::com::sun::star::packages::WrongPasswordException,
                 ::com::sun::star::packages::zip::ZipIOException,
                 ::com::sun::star::uno::RuntimeException );
 
-    static sal_Bool StaticHasValidPassword ( const ::com::sun::star::uno::Sequence< sal_Int8 > &aReadBuffer,
-                                             const ::rtl::Reference < EncryptionData > &rData );
+    static void StaticRemoveW3CPadding(
+            const ::rtl::Reference< EncryptionData >& rEncData,
+            ::com::sun::star::uno::Sequence< sal_Int8 >& o_rPaddedData );
+
+    static sal_Bool StaticHasValidPassword (
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+            const ::com::sun::star::uno::Sequence< sal_Int8 > &aReadBuffer,
+            const ::rtl::Reference < EncryptionData > &rData );
 
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(

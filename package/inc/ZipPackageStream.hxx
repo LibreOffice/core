@@ -97,11 +97,13 @@ public:
 
     ::com::sun::star::uno::Sequence< sal_Int8 > GetEncryptionKey( bool bWinEncoding = false );
 
-    const com::sun::star::uno::Sequence < sal_uInt8 >& getInitialisationVector () const
+    sal_Int32 GetKeyGenID();
+
+    const com::sun::star::uno::Sequence < sal_Int8 >& getInitialisationVector () const
     { return m_xBaseEncryptionData->m_aInitVector;}
-    const com::sun::star::uno::Sequence < sal_uInt8 >& getDigest () const
+    const com::sun::star::uno::Sequence < sal_Int8 >& getDigest () const
     { return m_xBaseEncryptionData->m_aDigest;}
-    const com::sun::star::uno::Sequence < sal_uInt8 >& getSalt () const
+    const com::sun::star::uno::Sequence < sal_Int8 >& getSalt () const
     { return m_xBaseEncryptionData->m_aSalt;}
     sal_Int32 getIterationCount () const
     { return m_xBaseEncryptionData->m_nIterationCount;}
@@ -129,11 +131,11 @@ public:
 
     void setKey (const com::sun::star::uno::Sequence < sal_Int8 >& rNewKey )
     { m_aEncryptionKey = rNewKey; m_aStorageEncryptionKeys.realloc( 0 ); }
-    void setInitialisationVector (const com::sun::star::uno::Sequence < sal_uInt8 >& rNewVector )
+    void setInitialisationVector (const com::sun::star::uno::Sequence < sal_Int8 >& rNewVector )
     { m_xBaseEncryptionData->m_aInitVector = rNewVector;}
-    void setSalt (const com::sun::star::uno::Sequence < sal_uInt8 >& rNewSalt )
+    void setSalt (const com::sun::star::uno::Sequence < sal_Int8 >& rNewSalt )
     { m_xBaseEncryptionData->m_aSalt = rNewSalt;}
-    void setDigest (const com::sun::star::uno::Sequence < sal_uInt8 >& rNewDigest )
+    void setDigest (const com::sun::star::uno::Sequence < sal_Int8 >& rNewDigest )
     { m_xBaseEncryptionData->m_aDigest = rNewDigest;}
     void setIterationCount (const sal_Int32 nNewCount)
     { m_xBaseEncryptionData->m_nIterationCount = nNewCount;}

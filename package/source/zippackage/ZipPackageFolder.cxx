@@ -318,6 +318,10 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
     const ::rtl::OUString sIterationCountProperty ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
     const ::rtl::OUString sSizeProperty ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
     const ::rtl::OUString sDigestProperty ( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) );
+    const ::rtl::OUString sEncryptionAlgProperty    ( RTL_CONSTASCII_USTRINGPARAM ( "EncryptionAlgorithm" ) );
+    const ::rtl::OUString sStartKeyAlgProperty  ( RTL_CONSTASCII_USTRINGPARAM ( "StartKeyAlgorithm" ) );
+    const ::rtl::OUString sDigestAlgProperty    ( RTL_CONSTASCII_USTRINGPARAM ( "DigestAlgorithm" ) );
+    const ::rtl::OUString  sDerivedKeySizeProperty  ( RTL_CONSTASCII_USTRINGPARAM ( "DerivedKeySize" ) );
 
     sal_Bool bHaveEncryptionKey = rEncryptionKey.getLength() ? sal_True : sal_False;
 
@@ -506,7 +510,7 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
                 {
                     if ( bToBeEncrypted && !bTransportOwnEncrStreamAsRaw )
                     {
-                        uno::Sequence < sal_uInt8 > aSalt ( 16 ), aVector ( 8 );
+                        uno::Sequence < sal_Int8 > aSalt ( 16 ), aVector ( 8 );
                         rtl_random_getBytes ( rRandomPool, aSalt.getArray(), 16 );
                         rtl_random_getBytes ( rRandomPool, aVector.getArray(), 8 );
                         sal_Int32 nIterationCount = 1024;
@@ -537,8 +541,20 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
 
                     if ( bRawStream || bTransportOwnEncrStreamAsRaw )
                     {
-                        aPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
-                        aPropSet[PKG_MNFST_DIGEST].Value <<= pStream->getDigest();
+                        ::rtl::Reference< EncryptionData > xEncData = pStream->GetEncryptionData();
+                        if ( xEncData.is() )
+                        {
+                            aPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
+                            aPropSet[PKG_MNFST_DIGEST].Value <<= xEncData->m_aDigest;
+                            aPropSet[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
+                            aPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
+                            aPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
+                            aPropSet[PKG_MNFST_STARTALG].Value <<= pStream->GetKeyGenID();
+                            aPropSet[PKG_MNFST_DIGESTALG].Name = sDigestProperty;
+                            aPropSet[PKG_MNFST_DIGESTALG].Value <<= xEncData->m_nCheckAlg;
+                            aPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
+                            aPropSet[PKG_MNFST_DERKEYSIZE].Value <<= xEncData->m_nDerivedKeySize;
+                        }
                     }
                 }
             }
@@ -655,9 +671,22 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
 
                 if ( bToBeEncrypted )
                 {
-                    aPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
-                    aPropSet[PKG_MNFST_DIGEST].Value <<= pStream->getDigest();
-                    pStream->SetIsEncrypted ( sal_True );
+                    ::rtl::Reference< EncryptionData > xEncData = pStream->GetEncryptionData();
+                    if ( xEncData.is() )
+                    {
+                        aPropSet[PKG_MNFST_DIGEST].Name = sDigestProperty;
+                        aPropSet[PKG_MNFST_DIGEST].Value <<= xEncData->m_aDigest;
+                        aPropSet[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
+                        aPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
+                        aPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
+                        aPropSet[PKG_MNFST_STARTALG].Value <<= pStream->GetKeyGenID();
+                        aPropSet[PKG_MNFST_DIGESTALG].Name = sDigestProperty;
+                        aPropSet[PKG_MNFST_DIGESTALG].Value <<= xEncData->m_nCheckAlg;
+                        aPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
+                        aPropSet[PKG_MNFST_DERKEYSIZE].Value <<= xEncData->m_nDerivedKeySize;
+
+                        pStream->SetIsEncrypted ( sal_True );
+                    }
                 }
             }
 

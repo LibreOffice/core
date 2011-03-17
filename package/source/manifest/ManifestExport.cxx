@@ -260,7 +260,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             ::comphelper::AttributeList * pNewAttrList = new ::comphelper::AttributeList;
             uno::Reference < xml::sax::XAttributeList > xNewAttrList (pNewAttrList);
             ::rtl::OUStringBuffer aBuffer;
-            uno::Sequence < sal_uInt8 > aSequence;
+            uno::Sequence < sal_Int8 > aSequence;
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
 
@@ -277,7 +277,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
 
             pNewAttrList->AddAttribute ( sChecksumTypeAttribute, sCdataAttribute, sChecksumType );
             *pDigest >>= aSequence;
-            Base64Codec::encodeBase64 ( aBuffer, aSequence );
+            Base64Codec::encodeBase64( aBuffer, aSequence );
             pNewAttrList->AddAttribute ( sChecksumAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
 
             xHandler->startElement( sEncryptionDataElement , xNewAttrList);

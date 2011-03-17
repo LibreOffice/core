@@ -256,6 +256,13 @@ uno::Sequence< sal_Int8 > ZipPackageStream::GetEncryptionKey( bool bUseWinEncodi
 }
 
 //--------------------------------------------------------------------------
+sal_Int32 ZipPackageStream::GetKeyGenID()
+{
+    // all the streams must use the same Start Key
+    return rZipPackage.GetKeyGenID();
+}
+
+//--------------------------------------------------------------------------
 uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( sal_Bool bAddHeaderForEncr )
 {
     if ( m_nStreamMode != PACKAGE_STREAM_DATA || !GetOwnSeekStream().is() || ( bAddHeaderForEncr && !bToBeEncrypted ) )
@@ -556,7 +563,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
         return xResult;
     }
     else if ( m_nStreamMode == PACKAGE_STREAM_RAW )
-        return ZipFile::StaticGetDataFromRawStream( GetOwnSeekStream(), GetEncryptionData() );
+        return ZipFile::StaticGetDataFromRawStream( m_xFactory, GetOwnSeekStream(), GetEncryptionData() );
     else if ( GetOwnSeekStream().is() )
     {
         return new WrapStreamForShare( GetOwnSeekStream(), rZipPackage.GetSharedMutexRef() );

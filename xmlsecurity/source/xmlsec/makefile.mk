@@ -51,7 +51,7 @@ CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
 .IF "$(CRYPTO_ENGINE)" == "mscrypto"
 CDEFS += -DXMLSEC_CRYPTO_MSCRYPTO -DXMLSEC_NO_XSLT
 .ELSE
-CDEFS += -DXMLSEC_CRYPTO_NSS -DXMLSEC_NO_XSLT
+CDEFS += -DXMLSEC_NO_XSLT
 .ENDIF
 
 # --- Files --------------------------------------------------------

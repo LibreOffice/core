@@ -41,12 +41,6 @@ ENABLE_EXCEPTIONS = TRUE
 CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
 .ENDIF
 
-.IF "$(CRYPTO_ENGINE)" != "nss"
-LIBTARGET=NO
-.ENDIF
-
-.IF "$(CRYPTO_ENGINE)" == "nss"
-
 .IF "$(WITH_MOZILLA)" == "NO" || "$(ENABLE_NSS_MODULE)"!="YES"
 .IF "$(SYSTEM_MOZILLA)" != "YES"
 @all:
@@ -134,10 +128,6 @@ SLOFILES = \
     $(SLO)$/ciphercontext.obj \
     $(SLO)$/xsec_nss.obj \
         $(SLO)$/secerror.obj
-
-
-    
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
