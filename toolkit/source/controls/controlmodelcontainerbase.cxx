@@ -427,7 +427,7 @@ Sequence< ::rtl::OUString > ControlModelContainerBase::getAvailableServiceNames(
     static Sequence< ::rtl::OUString >* pNamesSeq = NULL;
     if ( !pNamesSeq )
     {
-        pNamesSeq = new Sequence< ::rtl::OUString >( 23 );
+        pNamesSeq = new Sequence< ::rtl::OUString >( 24 );
         ::rtl::OUString* pNames = pNamesSeq->getArray();
         pNames[0] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel );
         pNames[1] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel );
@@ -452,7 +452,7 @@ Sequence< ::rtl::OUString > ControlModelContainerBase::getAvailableServiceNames(
         pNames[20] = ::rtl::OUString::createFromAscii( szServiceName_TreeControlModel );
         pNames[21] = ::rtl::OUString::createFromAscii( szServiceName_GridControlModel );
         pNames[22] = ::rtl::OUString::createFromAscii( szServiceName_UnoControlTabPageContainerModel );
-
+        pNames[23] = ::rtl::OUString::createFromAscii( szServiceName_UnoControlTabPageModel );
     }
     return *pNamesSeq;
 }
