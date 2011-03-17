@@ -72,6 +72,8 @@ class DrawViewShell
     : public ViewShell,
       public SfxListener
 {
+    sal_uInt32  nF3ShiftCounter;
+
 public:
     static const int SLOTARRAY_COUNT = 24;
 
@@ -218,6 +220,7 @@ public:
     void            FuTemporary(SfxRequest& rReq);
     void            FuPermanent(SfxRequest& rReq);
     void            FuSupport(SfxRequest& rReq);
+    void                FuSupportRotate(SfxRequest& rReq);
     void            FuTable(SfxRequest& rReq);
 
     void            AttrExec (SfxRequest& rReq);

@@ -1485,6 +1485,35 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
     }
 }
 
+void DrawViewShell::FuSupportRotate(SfxRequest &rReq)
+{
+    using namespace ::com::sun::star::i18n;
+    {
+        sal_uInt32 nMode = 0;
+        OutlinerView* pOLV = GetView()->GetTextEditOutlinerView();
+
+        if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE ) {
+            switch ( nF3ShiftCounter ) {
+                case 0:
+                    nMode = TransliterationModulesExtra::TITLE_CASE;
+                    break;
+                case 1:
+                    nMode = TransliterationModules_LOWERCASE_UPPERCASE;
+                    break;
+                case 2:
+                    nMode = TransliterationModules_UPPERCASE_LOWERCASE;
+                    nF3ShiftCounter = -1;
+                    break;
+            }
+
+            if ( nMode )
+                pOLV->TransliterateText( nMode );
+
+            nF3ShiftCounter++;
+        }
+    }
+}
+
 /*************************************************************************
 |*
 |* URL-Feld einfuegen

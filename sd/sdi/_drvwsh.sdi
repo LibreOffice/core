@@ -2154,6 +2154,11 @@ interface DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetCtrlState ;
     ]
+    SID_TRANSLITERATE_ROTATE_CASE // ole : no, status : ?
+    [
+        ExecMethod = FuSupportRotate ;
+        StateMethod = GetCtrlState ;
+    ]
     SID_TRANSLITERATE_LOWER // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
