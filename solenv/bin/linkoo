@@ -55,7 +55,6 @@ export SAL_ALLOW_LINKOO_SYMLINKS=1
 
 my $dry_run = 0;
 my $usage = 0;
-
 my $LANG;
 my $TARGET;
 my $LIBVER;
@@ -67,14 +66,13 @@ my $brand_program_dir = 'program';
 my $ure_misc_dir = 'basis-link/ure-link/share/misc';
 my $ure_java_dir = 'basis-link/ure-link/share/java';
 my $ure_lib_dir = 'basis-link/ure-link/lib';
+
 $program_dir = 'openoffice.org/basis-link/MacOS' if ($ENV{OS} eq 'MACOSX'); # FIXME probably wrong
 
 my @exceptions = ( 'cppuhelper', 'sunjavaplugin', 'libjvmfwk' );
 
 my %replaceable = (
     $program_dir => '\.so',
-    $ure_lib_dir => '\.so',
-    $ure_java_dir => '\.jar$',
     $program_dir . '/resource' => '\.res$',
     $program_dir . '/classes' => '\.jar$',
     'basis-link/share/config' => '\.zip$',
@@ -251,7 +249,7 @@ sub scan_and_link_files($$$)
     }
 
     # Now scan the solver
-    my $upd = 330;
+    my $upd = 300;
     $upd = $ENV{UPD} if (defined $ENV{UPD});
     scan_one_dir ($installed_files, \%build_files, "$build_path/solver/$upd/$target", 1);
 
@@ -332,6 +330,21 @@ sub link_pagein_files()
     print "\n";
 }
 
+# link installed files back into src tree:
+sub link_soffice_bin_files()
+{
+    my $dest;
+    my $src = "$OOO_INSTALL/" . $brand_program_dir;
+
+    print "soffice files";
+    $dest = "$OOO_BUILD/desktop/$TARGET/bin";
+    do_link ($src, $dest, 'soffice', 'soffice.bin', 1);
+    do_link ($src, $dest, 'bootstraprc', 'bootstraprc', 1);
+    do_link ("$OOO_INSTALL", "$OOO_BUILD/desktop/$TARGET", 'share', 'share', 1);
+
+    print "\n";
+}
+
 for my $a (@ARGV) {
 
 # options
@@ -379,6 +392,7 @@ link_iso_res();
 link_types_rdb();
 link_oovbaapi_rdb();
 link_pagein_files();
+link_soffice_bin_files();
 
 if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
     my $ooenv;

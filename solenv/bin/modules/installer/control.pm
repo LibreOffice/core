@@ -320,6 +320,11 @@ sub check_logfile
     my @output = ();
     my $contains_error = 0;
 
+    my $ignore_error = 0;
+    my $make_error_to_warning = 0;
+
+    if (( ! $installer::globals::pro ) && ( $installer::globals::ignore_error_in_logfile )) { $ignore_error = 1; }
+
     for ( my $i = 0; $i <= $#{$logfile}; $i++ )
     {
         my $line = ${$logfile}[$i];
@@ -337,6 +342,12 @@ sub check_logfile
         {
             $contains_error = 1;
             push(@errors, $line);
+
+            if ( $ignore_error )
+            {
+                $contains_error = 0;
+                $make_error_to_warning = 1;
+            }
         }
     }
 
@@ -358,7 +369,26 @@ sub check_logfile
     }
     else
     {
-        my $line = "\n***********************************************************\n";
+        my $line = "";
+
+        if ( $make_error_to_warning )
+        {
+            $line = "\n*********************************************************************\n";
+            push(@output, $line);
+            $line = "The following errors in the log file were ignored:\n\n";
+            push(@output, $line);
+
+            for ( my $i = 0; $i <= $#errors; $i++ )
+            {
+                $line = "$errors[$i]";
+                push(@output, $line);
+            }
+
+            $line = "*********************************************************************\n";
+            push(@output, $line);
+        }
+
+        $line = "\n***********************************************************\n";
         push(@output, $line);
         $line = "Successful packaging process!\n";
         push(@output, $line);

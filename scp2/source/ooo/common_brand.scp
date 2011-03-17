@@ -86,6 +86,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Msvcm80crt_Manifest,
              gid_Brand_File_Lib_Npsoplugin,
              gid_Brand_File_Lib_Subscrib_C05,
+             gid_Brand_File_ServicesRdb,
              gid_Brand_File_Share_Registry_Brand_Xcd,
              gid_Brand_File_Share_Registry_O5oo_Xcd,
              gid_Brand_File_Script_Unopkg,
@@ -1248,6 +1249,14 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions_User
     Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":BUNDLED_EXTENSIONS_USER}";
 End
 
+ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions_Prereg
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "BUNDLED_EXTENSIONS_PREREG";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":BUNDLED_EXTENSIONS_PREREG}";
+End
+
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Packages_Cache
     ModuleID = gid_Module_Root_Brand;
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
@@ -1293,7 +1302,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Services
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_SERVICES";
-    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_SERVICES}";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_MORE_SERVICES} $ORIGIN/services.rdb";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Java_Types

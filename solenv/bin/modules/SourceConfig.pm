@@ -78,6 +78,14 @@ sub new {
     } else {
         $source_root = $ENV{SRC_ROOT};
     };
+    if ( defined $ENV{USE_GBUILD} and "$ENV{USE_GBUILD}" ne "" )
+    {
+        $self->{POSSIBLE_BUILD_LIST} = ('gbuild.lst', 'build.lst', 'build.xlist'); # build lists names
+    }
+    else
+    {
+        $self->{POSSIBLE_BUILD_LIST} = ('build.lst', 'build.xlist'); # build lists names
+    }
     $source_root = Cwd::realpath($source_root);
     $self->{SOURCE_ROOT} = $source_root;
     $self->{DEBUG} = 0;
@@ -94,6 +102,7 @@ sub new {
     $self->{REMOVE_REPOSITORIES} = {};
     $self->{NEW_REPOSITORIES} = [];
     $self->{WARNINGS} = [];
+    $self->{GBUILD} = 0;
     $self->{REPORT_MESSAGES} = [];
     $self->{CONFIG_FILE_CONTENT} = [];
     if (defined $self->{USER_SOURCE_ROOT}) {
@@ -173,11 +182,14 @@ sub get_module_build_list {
     if (defined ${$self->{MODULE_BUILD_LIST_PATHS}}{$module}) {
         return ${$self->{MODULE_BUILD_LIST_PATHS}}{$module};
     } else {
-        my @possible_build_lists = ('build.lst', 'build.xlist'); # build lists names
-        foreach (@possible_build_lists) {
-            my $possible_path = ${$self->{MODULE_PATHS}}{$module} . "/prj/$_";
+        my @possible_build_lists = $self->{POSSIBLE_BUILD_LIST}; # build lists names
+        foreach my $build_list (@possible_build_lists) {
+            my $possible_path = ${$self->{MODULE_PATHS}}{$module} . "/prj/$build_list";
             if (-e $possible_path) {
                 ${$self->{MODULE_BUILD_LIST_PATHS}}{$module} = $possible_path;
+                if ( $build_list eq "gbuild.lst" ) {
+                    $self->{GBUILD} = 1;
+                };
                 return $possible_path;
             };
         };
@@ -320,14 +332,14 @@ sub read_config_file {
                     next;
                 };
             };
-            croak("Line $line in " . $self->{SOURCE_CONFIG_FILE} . 'violates format. Please make your checks!!');
+            croak("Line $line in " . $self->{SOURCE_CONFIG_FILE} . ' violates format. Please make your checks!');
         };
         close SOURCE_CONFIG_FILE;
         if (!scalar keys %{$self->{REPOSITORIES}}) {
             get_fallback_repository($self);
         };
     } else {
-        croak('Cannot open ' . $self->{SOURCE_CONFIG_FILE} . 'for reading');
+        croak('Cannot open ' . $self->{SOURCE_CONFIG_FILE} . ' for reading');
     };
 };
 
@@ -388,7 +400,18 @@ sub add_active_repositories {
 
 sub add_active_modules {
     my $self = shift;
-    $self->{NEW_MODULES} = shift;
+    my $module_list_ref = shift;
+    my $ignored_modules_string = '';
+    my @real_modules = ();
+    foreach my $module (sort @$module_list_ref) {
+        if ($self->get_module_path($module)) {
+            push(@real_modules, $module);
+        } else {
+            $ignored_modules_string .= " $module";
+        };
+    };
+    push (@{$self->{WARNINGS}}, "\nWARNING: following modules are not found in active repositories, and have not been added to the " . $self->get_config_file_default_path() . ":$ignored_modules_string\n") if ($ignored_modules_string);
+    $self->{NEW_MODULES} = \@real_modules;
     croak('Empty module list passed for addition to source_config') if (!scalar @{$self->{NEW_MODULES}});
     $self->{VERBOSE} = shift;
     generate_config_file($self);

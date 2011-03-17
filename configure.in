@@ -150,11 +150,6 @@ AC_ARG_ENABLE(pch,
         [EXPERIMENTAL: Enables precompiled header support for C++.]),
 ,)
 
-AC_ARG_ENABLE(hids,
-    AS_HELP_STRING([--disable-hids],
-        [Disables generation of HelpId lists.]),
-,enable_hids=yes)
-
 AC_ARG_ENABLE(mozilla,
     AS_HELP_STRING([--disable-mozilla],
         [LibO usually includes a strangely hacked up mozilla binary for your
@@ -1401,6 +1396,7 @@ case "$host_os" in
         build_gstreamer=yes
         test_kde=yes
         test_freetype=yes
+        test_gstreamer=yes
         _os=SunOS
         AC_PATH_PROG( GNUTAR, gtar,,$PATH:/usr/sfw/bin)
         if test -z "$GNUTAR"; then
@@ -1916,7 +1912,8 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$GCC" = "yes"; then
 
    if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
       if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
-         CC=$GCC_HOME/bin/gcc-4.0
+         export CC=$GCC_HOME/bin/gcc-4.0
+          dnl  export CC to have it available in set_soenv -> config.guess
          GCCVER2=`"$CC" -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
          if test "$GCCVER2" -ge "040000" -a "$GCCVER2" -lt "040100" ; then
             GCCVER=$GCCVER2
@@ -1981,19 +1978,6 @@ fi
 AC_SUBST(ENABLE_PCH)
 
 dnl ===================================================================
-dnl Set the NO_HIDS variable. (enable with --enable-hids)
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable hid list feature])
-if test -n "$enable_hids" && test "$enable_hids" != "no"; then
-   NO_HIDS=""
-   AC_MSG_RESULT([yes])
-else
-   NO_HIDS="TRUE"
-   AC_MSG_RESULT([no])
-fi
-AC_SUBST(NO_HIDS)
-
-dnl ===================================================================
 dnl Search all the common names for GNU make
 dnl ===================================================================
 AC_MSG_CHECKING([for GNU make])
@@ -2012,18 +1996,10 @@ fi
 AC_MSG_CHECKING([the GNU make version])
 _make_version=`$GNUMAKE --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
 _make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-if test "$_make_longver" -ge "037901" ; then
-   AC_MSG_RESULT([$GNUMAKE $_make_version])
+if test "$_make_longver" -ge "038100" ; then
+    AC_MSG_RESULT([$GNUMAKE $_make_version])
 else
-   if test "$_os" = "Darwin"; then
-       if test "$_make_longver" -ge "037900" ; then
-           AC_MSG_RESULT([$GNUMAKE $_make_version])
-       else
-           AC_MSG_WARN([failed ($GNUMAKE $_make_version need 3.79.0+)])
-       fi
-   else
-       AC_MSG_ERROR([failed ($GNUMAKE $_make_version need 3.79.1+)])
-   fi
+   AC_MSG_ERROR([failed ($GNUMAKE version >= 3.81 needed])
 fi
 AC_SUBST(GNUMAKE)
 
@@ -2390,43 +2366,6 @@ AC_SUBST(WORDS_BIGENDIAN)
 AC_SUBST(LFS_CFLAGS)
 
 dnl ===================================================================
-dnl Check if we are to enable vba macro interoperability feature
-dnl ===================================================================
-AC_MSG_CHECKING([whether to disable vba feature])
-if test -n "$enable_vba" && test "$enable_vba" = "no"; then
-   AC_MSG_RESULT([yes])
-   ENABLE_VBA=NO
-else
-   AC_MSG_RESULT([no])
-   ENABLE_VBA=YES
-fi
-AC_SUBST(ENABLE_VBA)
-
-if test "$ENABLE_VBA" = "YES"; then
-   AC_MSG_CHECKING([how to package the vba compatibility api])
-   if test -n "$with_vba_package_format"; then
-      if test "$with_vba_package_format" = "extn"; then
-         VBA_EXTENSION=YES
-         AC_MSG_RESULT([uno extension])
-         AC_MSG_WARN([--with-vba-package-format=extn can cause problems])
-      else if test "$with_vba_package_format" = "builtin"; then
-            VBA_EXTENSION=NO
-            AC_MSG_RESULT([build into installset])
-         else
-            AC_MSG_ERROR([unknown packaging method])
-         fi
-      fi
-
-   else
-      VBA_EXTENSION=NO
-      AC_MSG_RESULT([defaulting to build into installset])
-   fi
-else
-      VBA_EXTENSION=NO
-fi
-AC_SUBST(VBA_EXTENSION)
-
-dnl ===================================================================
 dnl Check the whether vba need to be delivered as an uno package or part
 dnl of the install
 dnl ===================================================================
@@ -2609,14 +2548,23 @@ _ACEOF
       MINGW_GCCLIB_EH=YES
   fi
   AC_MSG_CHECKING([whether to use dynamic libstdc++])
+  MINGW_SHARED_LIBSTDCPP=
   if test -e "$MINGW_CLIB_DIR/libstdc++_s.a" ; then
+    MINGW_SHARED_LIBSTDCPP=stdc++_s
+  fi
+  if test -e "$MINGW_CLIB_DIR/libstdc++.dll.a" ; then
+    MINGW_SHARED_LIBSTDCPP=stdc++.dll
+  fi
+  if test -n "$MINGW_SHARED_LIBSTDCPP" ; then
     AC_MSG_CHECKING([dynamic libstdc++ name])
-    MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/libstdc++_s.a | $SED -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | $SED -e 's@_@?@g'`
+    MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/lib$MINGW_SHARED_LIBSTDCPP.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
     MINGW_GXXDLL=`cd $COMPATH/bin && ls $MINGW_GXXDLL_pattern 2>/dev/null`
     if test -n "$MINGW_GXXDLL"; then
+        MINGW_SHARED_LIBSTDCPP=-l$MINGW_SHARED_LIBSTDCPP
         MINGW_SHARED_GXXLIB=YES
         AC_MSG_RESULT([use $MINGW_GXXDLL])
     else
+        MINGW_SHARED_LIBSTDCPP=
         AC_MSG_RESULT([no])
     fi
   else
@@ -2627,6 +2575,7 @@ _ACEOF
   AC_SUBST(MINGW_SHARED_GCCLIB)
   AC_SUBST(MINGW_GCCLIB_EH)
   AC_SUBST(MINGW_SHARED_GXXLIB)
+  AC_SUBST(MINGW_SHARED_LIBSTDCPP)
   AC_SUBST(MINGW_GCCDLL)
   AC_SUBST(MINGW_GXXDLL)
 fi
@@ -4007,7 +3956,7 @@ if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
         test "$with_system_cppunit" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_CPPUNIT=YES
-    # might work for earlier, too but go sure
+    # might work for earlier, too but go sure:
     PKG_CHECK_MODULES( CPPUNIT, cppunit >= 1.12.0 )
 else
     AC_MSG_RESULT([internal])
@@ -5189,7 +5138,8 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
    AC_LANG_PUSH([C++])
    AC_MSG_CHECKING([for unicode/rbbi.h])
    AC_TRY_CPP(unicode/rbbi.h, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([icu headers not found.]))
-   AC_PATH_PROG(SYSTEM_GENBRK, genbrk, [], [$PATH:/usr/sbin:/sbin:/usr/local/bin])
+   AC_LANG_POP([C++])
+   AC_PATH_PROG(SYSTEM_GENBRK, genbrk, [], [$PATH:/usr/sbin:/sbin])
    if test -z "$SYSTEM_GENBRK"; then
       AC_MSG_ERROR([\"genbrk\" not found in \$PATH, install the icu development tool \"genbrk"\])
    fi
@@ -5215,7 +5165,6 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
       AC_MSG_ERROR([not suitable, only >= 4.0 supported currently])
    fi
 
-    AC_LANG_POP([C++])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU=NO
@@ -5443,7 +5392,7 @@ AC_MSG_CHECKING([which neon to use])
 if test -n "$with_system_neon" -o -n "$with_system_libs" && \
     test "$with_system_neon" != "no"; then
         AC_MSG_RESULT([external])
-        PKG_CHECK_MODULES(NEON, neon >= 0.24.0, , AC_MSG_ERROR([you need neon >= 0.24.x for system-neon]))
+        PKG_CHECK_MODULES(NEON, neon >= 0.26.0, , AC_MSG_ERROR([you need neon >= 0.26.x for system-neon]))
         NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
         NEON_CFLAGS="$NEON_CFLAGS -DSYSTEM_NEON -DUSE_DAV_LOCKS=1"
         SYSTEM_NEON=YES
@@ -5883,37 +5832,38 @@ if test "$_os" = "SunOS" -o "$_os" = "FreeBSD" -o "$_os" = "Darwin"; then
       if test -x "$with_gnu_patch"; then
     GNUPATCH=$with_gnu_patch
       else
-        AC_MSG_ERROR([--with-gnu-patch did not point to an executable])
+         AC_MSG_ERROR([--with-gnu-patch did not point to an executable])
       fi
    fi
 
    AC_MSG_CHECKING([whether $GNUPATCH is GNU patch])
    if $GNUPATCH --version | grep "Free Software Foundation" >/dev/null 2>/dev/null; then
-    AC_MSG_RESULT([yes])
+      AC_MSG_RESULT([yes])
    else
       AC_MSG_ERROR([no, GNU patch needed. install or specify with --with-gnu-patch=/path/to/it])
    fi
+fi
 
 dnl We also need to check for --with-gnu-cp
 
-  if test -z "$with_gnu_cp"; then
-    AC_PATH_PROGS(GNUCP, gnucp cp)
-    if test -z $GNUCP; then
+if test -z "$with_gnu_cp"; then
+   AC_PATH_PROGS(GNUCP, gnucp cp)
+   if test -z $GNUCP; then
       AC_MSG_ERROR([Neither gnucp nor cp found. Install GNU cp and/or specify --with-gnu-cp=/path/to/it])
-    fi
-  else
-    if test -x "$with_gnu_cp"; then
+   fi
+else
+   if test -x "$with_gnu_cp"; then
       GNUCP=$with_gnu_cp
-    else
+   else
       AC_MSG_ERROR([--with-gnu-cp did not point to an executable])
-    fi
-  fi
+   fi
+fi
 
-  AC_MSG_CHECKING([whether $GNUCP is GNU cp])
-  if $GNUCP --version 2>/dev/null | grep "Free Software Foundation" >/dev/null 2>/dev/null; then
-    AC_MSG_RESULT([yes])
-  else
-   if $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null; then
+AC_MSG_CHECKING([whether $GNUCP is GNU cp from coreutils with preserve= support])
+if $GNUCP --version 2>/dev/null | grep "coreutils" >/dev/null 2>/dev/null; then
+   AC_MSG_RESULT([yes])
+else
+ if $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null; then
     AC_MSG_RESULT([yes])
    else
       if test "$_os" = "Darwin"; then
@@ -5923,9 +5873,8 @@ dnl We also need to check for --with-gnu-cp
          AC_MSG_ERROR([no, GNU cp needed. install or specify with --with-gnu-cp=/path/to/it])
       fi
    fi
-  fi
-
 fi
+
 AC_SUBST(GNUPATCH)
 AC_SUBST(GNUCP)
 

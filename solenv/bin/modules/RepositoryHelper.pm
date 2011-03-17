@@ -118,21 +118,25 @@ sub search_for_hg {
 
 sub search_via_build_lst {
     my $self = shift;
-    my @possible_build_lists = ('build.lst', 'build.xlist'); # build lists names
+    my @possible_build_lists = ('gbuild.lst', 'build.lst'); # build lists names
     my $previous_dir = '';
     my $rep_root_candidate = $self->{INITIAL_DIRECTORY};
     do {
         foreach (@possible_build_lists) {
-            if (-e $rep_root_candidate . '/prj/'.$_) {
+            my $test_file;
+            if ($rep_root_candidate eq '/') {
+                $test_file = '/prj/' . $_;
+            } else {
+                $test_file = $rep_root_candidate . '/prj/' . $_;
+            };
+            if (-e $test_file) {
                 $self->{REPOSITORY_ROOT} = File::Basename::dirname($rep_root_candidate);
                 return 1;
-            } elsif ($rep_root_candidate eq $previous_dir) {
-                return 0;
             };
         };
         $previous_dir = $rep_root_candidate;
         $rep_root_candidate = File::Basename::dirname($rep_root_candidate);
-        return 0 if (!$rep_root_candidate);
+        return 0 if ((!$rep_root_candidate) || ($rep_root_candidate eq $previous_dir));
     }
     while (chdir "$rep_root_candidate");
 };

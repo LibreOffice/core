@@ -28,7 +28,6 @@
 PRJ=..
 PRJNAME=instsetoo_native
 TARGET=util
-GEN_HID2=TRUE
 
 .INCLUDE:  settings.mk
 .INCLUDE: $(SOLARINCDIR)$/rtlbootstrap.mk

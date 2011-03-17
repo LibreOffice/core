@@ -788,11 +788,16 @@ sub get_codepage_for_sis
 
 sub get_template_for_sis
 {
-    my ( $language ) = @_;
+    my ( $language, $allvariables ) = @_;
 
     my $windowslanguage = installer::windows::language::get_windows_language($language);
 
-    my $value = "\"Intel;" . $windowslanguage;  # adding the Windows language
+    my $architecture = "Intel";
+
+    # Adding 256, if this is a 64 bit installation set.
+    if (( $allvariables->{'64BITPRODUCT'} ) && ( $allvariables->{'64BITPRODUCT'} == 1 )) { $architecture = "x64"; }
+
+    my $value = "\"" . $architecture . ";" . $windowslanguage;  # adding the Windows language
 
     $value = $value . "\"";                     # adding ending '"'
 
@@ -930,7 +935,7 @@ sub write_summary_into_msi_database
 
     my $msiversion = get_msiversion_for_sis();
     my $codepage = get_codepage_for_sis($language);
-    my $template = get_template_for_sis($language);
+    my $template = get_template_for_sis($language, $allvariableshashref);
     my $guid = get_packagecode_for_sis();
     my $title = get_title_for_sis($sislanguage,$languagefile, "OOO_SIS_TITLE");
     my $author = get_author_for_sis();
@@ -1629,6 +1634,104 @@ sub set_uuid_into_component_table
     installer::files::save_file($componenttablename, $componenttable);
 }
 
+#########################################################################
+# Adding final 64 properties into msi database, if required.
+# RegLocator : +16 in type column to search in 64 bit registry.
+# All conditions: "VersionNT" -> "VersionNT64" (several tables).
+# Already done: "+256" in Attributes column of table "Component".
+# Still following: Setting "x64" instead of "Intel" in Summary
+# Information Stream of msi database in "get_template_for_sis".
+#########################################################################
+
+sub prepare_64bit_database
+{
+    my ($basedir, $allvariables) = @_;
+
+    my $infoline = "";
+
+    if (( $allvariables->{'64BITPRODUCT'} ) && ( $allvariables->{'64BITPRODUCT'} == 1 ))
+    {
+        # 1. Beginning with table "RegLocat.idt". Adding "16" to the type.
+
+        my $reglocatfile = "";
+        my $reglocatfilename = $basedir . $installer::globals::separator . "RegLocat.idt";
+
+        if ( -f $reglocatfilename )
+        {
+            my $saving_required = 0;
+            $reglocatfile = installer::files::read_file($reglocatfilename);
+
+            for ( my $i = 3; $i <= $#{$reglocatfile}; $i++ )    # ignoring the first three lines
+            {
+                my $oneline = ${$reglocatfile}[$i];
+
+                if ( $oneline =~ /^\s*\#/ ) { next; }   # this is a comment line
+                if ( $oneline =~ /^\s*$/ ) { next; }
+
+                if ( $oneline =~ /^\s*(.*?)\t(.*?)\t(.*?)\t(.*?)\t(\d+)\s*$/ )
+                {
+                    # Syntax: Signature_ Root Key Name Type
+                    my $sig = $1;
+                    my $root = $2;
+                    my $key = $3;
+                    my $name = $4;
+                    my $type = $5;
+
+                    $type = $type + 16;
+
+                    my $newline = $sig . "\t" . $root . "\t" . $key . "\t" . $name . "\t" . $type . "\n";
+                    ${$reglocatfile}[$i] = $newline;
+
+                    $saving_required = 1;
+                }
+            }
+
+            if ( $saving_required )
+            {
+                # Saving the files
+                installer::files::save_file($reglocatfilename ,$reglocatfile);
+                $infoline = "Making idt file 64 bit conform: $reglocatfilename\n";
+                push(@installer::globals::logfileinfo, $infoline);
+            }
+        }
+
+        # 2. Replacing all occurences of "VersionNT" by "VersionNT64"
+
+        my @versionnt_files = ("Componen.idt", "InstallE.idt", "InstallU.idt", "LaunchCo.idt");
+
+        foreach my $onefile ( @versionnt_files )
+        {
+            my $fullfilename = $basedir . $installer::globals::separator . $onefile;
+
+            if ( -f $fullfilename )
+            {
+                my $saving_required = 0;
+                $filecontent = installer::files::read_file($fullfilename);
+
+                for ( my $i = 3; $i <= $#{$filecontent}; $i++ )     # ignoring the first three lines
+                {
+                    my $oneline = ${$filecontent}[$i];
+
+                    if ( $oneline =~ /\bVersionNT\b/ )
+                    {
+                        ${$filecontent}[$i] =~ s/\bVersionNT\b/VersionNT64/g;
+                        $saving_required = 1;
+                    }
+                }
+
+                if ( $saving_required )
+                {
+                    # Saving the files
+                    installer::files::save_file($fullfilename ,$filecontent);
+                    $infoline = "Making idt file 64 bit conform: $fullfilename\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+                }
+            }
+        }
+    }
+
+}
+
 #################################################################
 # Include all cab files into the msi database.
 # This works only on Windows
@@ -1656,7 +1759,6 @@ sub include_cabs_into_msi
     $msifilename = installer::converter::make_path_conform($msifilename);
 
     # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
-    $idtdirbase =~ s/\//\\\\/g;
     $msifilename =~ s/\//\\\\/g;
     $extraslash = "\\";
 

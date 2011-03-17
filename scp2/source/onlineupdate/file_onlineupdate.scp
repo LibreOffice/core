@@ -27,7 +27,7 @@
 
 #include "macros.inc"
 
-SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Updchk , updchk.uno )
+SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Updchk , updchk.uno )
 
 File gid_File_Share_Registry_Onlineupdate_Xcd
     TXT_FILE_BODY;

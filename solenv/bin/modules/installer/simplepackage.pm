@@ -348,9 +348,10 @@ sub replace_one_variable_in_shellscript
 
 sub replace_variables_in_scriptfile
 {
-    my ($scriptfile, $volume_name, $allvariables) = @_;
+    my ($scriptfile, $volume_name, $volume_name_app, $allvariables) = @_;
 
     replace_one_variable_in_shellscript($scriptfile, $volume_name, "FULLPRODUCTNAME" );
+    replace_one_variable_in_shellscript($scriptfile, $volume_name_app, "FULLAPPPRODUCTNAME" );
     replace_one_variable_in_shellscript($scriptfile, $allvariables->{'PRODUCTNAME'}, "PRODUCTNAME" );
     replace_one_variable_in_shellscript($scriptfile, $allvariables->{'PRODUCTVERSION'}, "PRODUCTVERSION" );
 
@@ -409,10 +410,17 @@ sub create_package
             $folder = $packagename;
         }
 
-        my $volume_name = $allvariables->{'PRODUCTNAME'} . ' ' . $allvariables->{'PRODUCTVERSION'};
-        $volume_name = $volume_name . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'};
+        # my $volume_name = $allvariables->{'PRODUCTNAME'} . ' ' . $allvariables->{'PRODUCTVERSION'}; # Adding PRODUCTVERSION makes this difficult to maintain!
+        my $volume_name = $allvariables->{'PRODUCTNAME'};
+        my $volume_name_classic = $allvariables->{'PRODUCTNAME'} . ' ' . $allvariables->{'PRODUCTVERSION'};
+        my $volume_name_classic_app = $volume_name;  # "app" should not contain version number
+        # $volume_name = $volume_name . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'}; # Adding PRODUCTEXTENSION makes this difficult to maintain!
+        $volume_name_classic = $volume_name_classic . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'};
+        $volume_name_classic_app = $volume_name_classic_app . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'};
         if ( $allvariables->{'DMG_VOLUMEEXTENSION'} ) {
             $volume_name = $volume_name . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
+            $volume_name_classic = $volume_name_classic . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
+            $volume_name_classic_app = $volume_name_classic_app . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
         }
 
         my $sla = 'sla.r';
@@ -428,12 +436,23 @@ sub create_package
         if (( $installer::globals::languagepack ) || ( $installer::globals::helppack ) || ( $installer::globals::patch ))
         {
             $localtempdir = "$tempdir/$packagename";
-            if ( $installer::globals::languagepack ) { $volume_name = "$volume_name Language Pack"; }
             if ( $installer::globals::helppack ) { $volume_name = "$volume_name Help Pack"; }
-            if ( $installer::globals::patch ) { $volume_name = "$volume_name Patch"; }
+            if ( $installer::globals::languagepack )
+            {
+                $volume_name = "$volume_name Language Pack";
+                $volume_name_classic = "$volume_name_classic Language Pack";
+                $volume_name_classic_app = "$volume_name_classic_app Language Pack";
+            }
+            if ( $installer::globals::patch )
+            {
+                $volume_name = "$volume_name Patch";
+                $volume_name_classic = "$volume_name_classic Patch";
+                $volume_name_classic_app = "$volume_name_classic_app Patch";
+            }
 
             # Create tar ball named tarball.tar.bz2
-            my $appfolder = $localtempdir . "/" . $volume_name . "\.app";
+            # my $appfolder = $localtempdir . "/" . $volume_name . "\.app";
+            my $appfolder = $localtempdir . "/" . $volume_name_classic_app . "\.app";
             my $contentsfolder = $appfolder . "/Contents";
             my $tarballname = "tarball.tar.bz2";
 
@@ -477,7 +496,8 @@ sub create_package
             if ( $installer::globals::helppack ) { $scriptfilename = "osx_install_helppack.applescript"; }
             if ( $installer::globals::patch ) { $scriptfilename = "osx_install_patch.applescript"; }
             my $scripthelpersolverfilename = "mac_install.script";
-            my $scripthelperrealfilename = $volume_name;
+            # my $scripthelperrealfilename = $volume_name;
+            my $scripthelperrealfilename = $volume_name_classic_app;
             my $translationfilename = $installer::globals::macinstallfilename;
 
             # Finding both files in solver
@@ -500,7 +520,8 @@ sub create_package
             my $scriptfilecontent = installer::files::read_file($scriptfilename);
             my $translationfilecontent = installer::files::read_file($$translationfileref);
             localize_scriptfile($scriptfilecontent, $translationfilecontent, $languagestringref);
-            replace_variables_in_scriptfile($scriptfilecontent, $volume_name, $allvariables);
+            # replace_variables_in_scriptfile($scriptfilecontent, $volume_name, $allvariables);
+            replace_variables_in_scriptfile($scriptfilecontent, $volume_name_classic, $volume_name_classic_app, $allvariables);
             installer::files::save_file($scriptfilename, $scriptfilecontent);
 
             chmod 0775, $scriptfilename;
@@ -525,7 +546,8 @@ sub create_package
 
             # Replacing variables in Info.plist
             $scriptfilecontent = installer::files::read_file($destfile);
-            replace_one_variable_in_shellscript($scriptfilecontent, $volume_name, "FULLPRODUCTNAME" );
+            # replace_one_variable_in_shellscript($scriptfilecontent, $volume_name, "FULLPRODUCTNAME" );
+            replace_one_variable_in_shellscript($scriptfilecontent, $volume_name_classic_app, "FULLAPPPRODUCTNAME" ); # OpenOffice.org Language Pack
             installer::files::save_file($destfile, $scriptfilecontent);
 
             chdir $localfrom;

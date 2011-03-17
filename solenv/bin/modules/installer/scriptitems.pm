@@ -1222,7 +1222,7 @@ sub get_Source_Directory_For_Files_From_Includepathlist
         my $styles = "";
         my $file_can_miss = 0;
         if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
-        if (( $styles =~ /\bSTARREGISTRY\b/ ) || ( $styles =~ /\bFILE_CAN_MISS\b/ )) { $file_can_miss = 1; }
+        if ( $styles =~ /\bFILE_CAN_MISS\b/ ) { $file_can_miss = 1; }
 
         if (( $installer::globals::languagepack ) && ( ! $onefile->{'ismultilingual'} ) && ( ! ( $styles =~ /\bFORCELANGUAGEPACK\b/ ))) { $file_can_miss = 1; }
         if (( $installer::globals::helppack ) && ( ! $onefile->{'ismultilingual'} ) && ( ! ( $styles =~ /\bFORCEHELPPACK\b/ ))) { $file_can_miss = 1; }
@@ -1350,12 +1350,21 @@ sub remove_Files_Without_Sourcedirectory
         if ($sourcepath eq "")
         {
             my $styles = $onefile->{'Styles'};
+            my $filename = $onefile->{'Name'};
 
-            if ( ! ( $styles =~ /\bSTARREGISTRY\b/ ))   # StarRegistry files will be created later
+            if ( ! $installer::globals::languagepack && !$installer::globals::helppack)
             {
-                my $filename = $onefile->{'Name'};
+                $infoline = "ERROR: Removing file $filename from file list.\n";
+                push( @installer::globals::logfileinfo, $infoline);
 
-                if ( ! $installer::globals::languagepack && !$installer::globals::helppack)
+                push(@missingfiles, "ERROR: File not found: $filename\n");
+                $error_occurred = 1;
+
+                next;   # removing this file from list, if sourcepath is empty
+            }
+            elsif ( $installer::globals::languagepack ) # special case for language packs
+            {
+                if (( $onefile->{'ismultilingual'} ) || ( $styles =~ /\bFORCELANGUAGEPACK\b/ ))
                 {
                     $infoline = "ERROR: Removing file $filename from file list.\n";
                     push( @installer::globals::logfileinfo, $infoline);
@@ -1365,51 +1374,38 @@ sub remove_Files_Without_Sourcedirectory
 
                     next;   # removing this file from list, if sourcepath is empty
                 }
-                elsif ( $installer::globals::languagepack ) # special case for language packs
+                else
                 {
-                    if (( $onefile->{'ismultilingual'} ) || ( $styles =~ /\bFORCELANGUAGEPACK\b/ ))
-                    {
-                        $infoline = "ERROR: Removing file $filename from file list.\n";
-                        push( @installer::globals::logfileinfo, $infoline);
+                    $infoline = "INFO: Removing file $filename from file list. It is not language dependent.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    $infoline = "INFO: It is not language dependent and can be ignored in language packs.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
 
-                        push(@missingfiles, "ERROR: File not found: $filename\n");
-                        $error_occurred = 1;
-
-                        next;   # removing this file from list, if sourcepath is empty
-                    }
-                    else
-                    {
-                        $infoline = "INFO: Removing file $filename from file list. It is not language dependent.\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-                        $infoline = "INFO: It is not language dependent and can be ignored in language packs.\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-
-                        next;   # removing this file from list, if sourcepath is empty
-                    }
-                }
-                else # special case for help packs
-                {
-                    if (( $onefile->{'ismultilingual'} ) || ( $styles =~ /\bFORCEHELPPACK\b/ ))
-                    {
-                        $infoline = "ERROR: Removing file $filename from file list.\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-
-                        push(@missingfiles, "ERROR: File not found: $filename\n");
-                        $error_occured = 1;
-
-                        next;   # removing this file from list, if sourcepath is empty
-                    }
-                    else
-                    {
-                        $infoline = "INFO: Removing file $filename from file list. It is not language dependent.\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-                        $infoline = "INFO: It is not language dependent and can be ignored in help packs.\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-
-                        next;   # removing this file from list, if sourcepath is empty
-                    }
+                    next;   # removing this file from list, if sourcepath is empty
                 }
             }
+            else # special case for help packs
+            {
+                if (( $onefile->{'ismultilingual'} ) || ( $styles =~ /\bFORCEHELPPACK\b/ ))
+                {
+                    $infoline = "ERROR: Removing file $filename from file list.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+
+                    push(@missingfiles, "ERROR: File not found: $filename\n");
+                    $error_occured = 1;
+
+                    next;   # removing this file from list, if sourcepath is empty
+                }
+                else
+                {
+                    $infoline = "INFO: Removing file $filename from file list. It is not language dependent.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    $infoline = "INFO: It is not language dependent and can be ignored in help packs.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+
+                    next;   # removing this file from list, if sourcepath is empty
+                }
+           }
         }
 
         push(@newfilesarray, $onefile);

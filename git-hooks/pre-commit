@@ -20,8 +20,8 @@ sub fix_whitespace($$) {
 
     # usually we have nothing to do ;-)
     return if ( keys( %{$lines} ) == 0 ||
-                $file eq "" ||
-                !( $file =~ /\.(c|cpp|cxx|h|hrc|hxx|idl|inl|java|map|mk|MK|pl|pm|pmk|py|sdi|sh|src|tab)/ ) );
+                $file eq "" || $file eq "GNUmakefile" ||
+                !( $file =~ /\.(c|cpp|cxx|h|hrc|hxx|idl|inl|java|map|MK|pl|pm|pmk|py|sdi|sh|src|tab)/ ) );
 
     open( IN, "$file" ) || die "Cannot open $file for reading";
     my ( $out, $tmpfile ) = mkstemp( "/tmp/whitespace-fixing-XXXXXX" );
@@ -157,7 +157,8 @@ my $err_ext = "";
 open( FILES, "git diff-index --cached --name-only $against |" ) || die "Cannot run git diff-index.";
 while ( my $file = <FILES> ) {
     chomp( $file );
-    if ( $file =~ /\.(c|cpp|cxx|h|hrc|hxx|idl|inl|java|map|mk|MK|pmk|pl|pm|sdi|sh|src|tab|xcu|xml)$/) {
+    if ( $file ne "GNUmakefile" &&
+         $file =~ /\.(c|cpp|cxx|h|hrc|hxx|idl|inl|java|map|MK|pmk|pl|pm|sdi|sh|src|tab|xcu|xml)$/) {
         open( F, "git diff-index -p --cached $against -- '$file' |" );
         while ( my $line = <F> ) {
             if ( $line =~ /^\+ *\t/ ) {

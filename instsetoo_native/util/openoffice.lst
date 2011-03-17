@@ -4,15 +4,15 @@ Globals
 	{
 		variables
 		{
-			OOOBASEVERSION 3.3
-			OOOPACKAGEVERSION 3.3.0
-			UREPACKAGEVERSION 1.7.0
+			OOOBASEVERSION 3.4
+			OOOPACKAGEVERSION 3.4.0
+			UREPACKAGEVERSION 1.8.0
 			URELAYERVERSION 1
 			BASISROOTNAME LibreOffice
 			UNIXBASISROOTNAME libreoffice
-			SERVICETAG_PRODUCTNAME LibreOffice 3.3
-			SERVICETAG_PRODUCTVERSION 3.3
-			SERVICETAG_PARENTNAME LibreOffice 3.3
+			SERVICETAG_PRODUCTNAME LibreOffice 3.4
+			SERVICETAG_PRODUCTVERSION 3.4
+			SERVICETAG_PARENTNAME LibreOffice 3.4
 			SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
 			SERVICETAG_URN urn:uuid:0187debd-e458-11de-82d6-080020a9ed93
 			HIDELICENSEDIALOG 1
@@ -21,7 +21,7 @@ Globals
 			UREPACKAGEPREFIX libreoffice
 			SOLSUREPACKAGEPREFIX libreoffice
 			USE_FILEVERSION 1
-			LIBRARYVERSION 9.3.0
+			LIBRARYVERSION 9.4.0
             POOLPRODUCT 1
             REGISTRATION_HOST https://registration.libreoffice.org/RegistrationWeb
 			REGISTRATIONURL http://survey.libreoffice.org/user/index.php
@@ -36,7 +36,7 @@ Globals
             CREATE_MSP_INSTALLSET 0
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
  			PACKAGEMAP package_names.txt,package_names_ext.txt
-			WINDOWSPATCHLEVEL 6
+			WINDOWSPATCHLEVEL 8
             OOOVENDOR The Document Foundation
 			OOODOWNLOADNAME 1
 			STARTCENTER_LAYOUT_STYLE 0
@@ -54,16 +54,16 @@ LibreOffice
 		{
 			PRODUCTNAME LibreOffice
 			PRODUCTNAME_BR BrOffice
-			PRODUCTVERSION 3.3
+			PRODUCTVERSION 3.4
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION rc4
+			SHORT_PRODUCTEXTENSION
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.3.0
-			BASEPRODUCTVERSION 3.3
+			ABOUTBOXPRODUCTVERSION 3.4.0
+			BASEPRODUCTVERSION 3.4
             PCPFILENAME openoffice.pcp
 			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
@@ -74,10 +74,9 @@ LibreOffice
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.3.0
+			PACKAGEVERSION 3.4.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
-			SERVICESPROJEKT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
@@ -89,7 +88,7 @@ LibreOffice
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
-			LIBRARYVERSION 9.3.0
+			LIBRARYVERSION 9.4.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp
@@ -111,7 +110,7 @@ LibreOffice
 		downloadname	LibO_{productversion}_{os}_install_{languages}
 		langpackdownloadname	LibO_{productversion}_languagepack_{os}_install_{languages}
 		helppackdownloadname	LibO_{productversion}_helppack_{os}_install_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external,{solarpath}/pck.{minor}/brand
+		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
 
@@ -123,16 +122,16 @@ LibreOffice_wJRE
 		{
 			PRODUCTNAME LibreOffice
 			PRODUCTNAME_BR BrOffice
-			PRODUCTVERSION 3.3
+			PRODUCTVERSION 3.4
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION rc4
+			SHORT_PRODUCTEXTENSION
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.3.0
-			BASEPRODUCTVERSION 3.3
+			ABOUTBOXPRODUCTVERSION 3.4.0
+			BASEPRODUCTVERSION 3.4
 			UPDATEURL http://update.libreoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.libreoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt,version.lst
@@ -142,10 +141,9 @@ LibreOffice_wJRE
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.3.0
+			PACKAGEVERSION 3.4.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
-			SERVICESPROJEKT 1
 			WITHJREPRODUCT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
@@ -158,7 +156,7 @@ LibreOffice_wJRE
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
-			LIBRARYVERSION 9.3.0
+			LIBRARYVERSION 9.4.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			JAVAPRODUCT 1
 			DOWNLOADBANNER	ooobanner.bmp
@@ -177,7 +175,7 @@ LibreOffice_wJRE
 		compression		5
 		script			setup_osljre
 		downloadname	LibO_{productversion}_{os}_installwjre_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external,{solarpath}/pck.{minor}/brand
+		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
 
@@ -188,18 +186,18 @@ LibreOffice_Dev
 		variables
 		{
 			PRODUCTNAME LibO-dev
-			PRODUCTVERSION 3.3
+			PRODUCTVERSION 3.4
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION rc4
+			SHORT_PRODUCTEXTENSION
 			BASISROOTNAME LibO-dev
 			UNIXBASISROOTNAME lo-dev
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.3.0
-			BASEPRODUCTVERSION 3.3
+			ABOUTBOXPRODUCTVERSION 3.4.0
+			BASEPRODUCTVERSION 3.4
 			DEVELOPMENTPRODUCT 1
 			BASISPACKAGEPREFIX libobasis-dev
 			UREPACKAGEPREFIX lodev
@@ -213,10 +211,9 @@ LibreOffice_Dev
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.3.0
+			PACKAGEVERSION 3.4.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
-			SERVICESPROJEKT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			SPELLCHECKERFILE spellchecker_selection.txt
@@ -229,7 +226,7 @@ LibreOffice_Dev
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
 			JAVAPRODUCT 1
-			LIBRARYVERSION 9.3.0
+			LIBRARYVERSION 9.4.0
 			PATCHCODEFILE ooodev_patchcodes.txt
 			CODEFILENAME codes_ooodev.txt
 			DOWNLOADBANNER	ooobanner.bmp
@@ -251,7 +248,7 @@ LibreOffice_Dev
 		downloadname	LibO-dev_{productversion}_{os}_install_{languages}
 		langpackdownloadname	LibO_{productversion}_languagepack_{os}_install_{languages}
 		helppackdownloadname	LibO_{productversion}_helppack_{os}_install_{languages}
-		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/dev,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice_dev,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external,,{solarpath}/pck.{minor}/brand_dev
+		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/dev,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice_dev,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
 
@@ -263,15 +260,14 @@ URE
         variables
         {
             PRODUCTNAME URE
-            PRODUCTVERSION 1.7
-            PACKAGEVERSION 1.7
+            PRODUCTVERSION 1.8
+            PACKAGEVERSION 1.8
             PACKAGEREVISION 1
             PRODUCTEXTENSION
             BRANDPACKAGEVERSION 3
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION rc4
+            SHORT_PRODUCTEXTENSION
             LICENSENAME LGPL
-            SERVICESPROJEKT 1
             SETSTATICPATH 1
             NOVERSIONINDIRNAME 1
             PCPFILENAME ure.pcp
@@ -281,7 +277,6 @@ URE
             DOWNLOADBITMAP urebitmap.bmp
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
-            SERVICESPROJEKT 1
             RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
@@ -294,7 +289,7 @@ URE
         active 1
         compression 5
         script ure
-        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/ure,{solarpath}/bin.{minor},{solarpath}/bin.{minor}/osl,{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
+        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/ure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/xml.{minor},{solarenvpath}/{os}/MS
     }
 }
 
@@ -307,14 +302,14 @@ LibreOffice_SDK
         {
             PRODUCTNAME LibreOffice
             PRODUCTNAME_BR BrOffice
-            PRODUCTVERSION 3.3
+            PRODUCTVERSION 3.4
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION rc4
+            SHORT_PRODUCTEXTENSION
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 3
-            PACKAGEVERSION 3.3.0
+            PACKAGEVERSION 3.4.0
             PACKAGEREVISION {milestone}
             PACK_INSTALLED 1
             POOLPRODUCT 0
@@ -325,6 +320,7 @@ LibreOffice_SDK
             IGNOREDIRECTORYLAYER 1
             NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
+            NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DOWNLOADBANNER ooosdkbanner.bmp
             DOWNLOADBITMAP ooosdkbitmap.bmp
@@ -340,7 +336,7 @@ LibreOffice_SDK
         active 1
         compression 5
         script sdkoo
-        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarcommonpath}/bin.{minor},{solarenvpath}/{os}/MS
+        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
     }
 }
 
@@ -352,16 +348,16 @@ LibreOffice_Dev_SDK
         variables
         {
             PRODUCTNAME LibO-dev
-            PRODUCTVERSION 3.3
+            PRODUCTVERSION 3.4
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
-            SHORT_PRODUCTEXTENSION rc4
+            SHORT_PRODUCTEXTENSION
             BASISROOTNAME LibO-dev
             UNIXBASISROOTNAME lo-dev
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 3
-            PACKAGEVERSION 3.3.0
+            PACKAGEVERSION 3.4.0
             PACKAGEREVISION {milestone}
             BASISPACKAGEPREFIX libobasis-dev
             UREPACKAGEPREFIX lodev
@@ -377,6 +373,7 @@ LibreOffice_Dev_SDK
             IGNOREDIRECTORYLAYER 1
             NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
+            NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DOWNLOADBANNER ooosdkbanner.bmp
             DOWNLOADBITMAP ooosdkbitmap.bmp
@@ -392,6 +389,6 @@ LibreOffice_Dev_SDK
         active 1
         compression 5
         script sdkoo
-        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarcommonpath}/bin.{minor},{solarenvpath}/{os}/MS
+        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
     }
 }

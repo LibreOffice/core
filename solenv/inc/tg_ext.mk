@@ -303,11 +303,11 @@ $(MISC)/$(TARFILE_ROOTDIR).done : $(MISC)/$(TARFILE_MD5)-$(TARFILE_NAME).unpack 
 #.IF "$(my4ver:s/.//:s/,//)" >= "300"
 #	$(COMMAND_ECHO)cd $(MISC) && ( $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 )
 #.ELSE			# "$(my4ver:s/.//:s/,//)" >= "300"
-    $(COMMAND_ECHO)cd $(MISC) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2
+    $(COMMAND_ECHO)cd $(MISC) && $(TYPE:s/+//) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2
 #.ENDIF			# "$(my4ver:s/.//:s/,//)" >= "300"
 .ELSE           # "$(GUI)"=="WNT"
 .IF "$(BSCLIENT)"=="TRUE"
-    $(COMMAND_ECHO)cd $(MISC) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) -f $(PATCHFLAGS) -p2
+    $(COMMAND_ECHO)cd $(MISC) && $(TYPE) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) -f $(PATCHFLAGS) -p2
 .ELSE           # "$(BSCLIENT)"!=""
     $(COMMAND_ECHO)cd $(MISC) && $(TYPE) $(MBACK_PATH)$(PATH_IN_MODULE)/{$(PATCH_FILES)} | $(GNUPATCH) $(PATCHFLAGS) -p2
 .ENDIF          # "$(BSCLIENT)"!=""

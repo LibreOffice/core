@@ -45,12 +45,6 @@ STD_RES_FILE( gid_File_Res_Dbw, dbw )
 
 STD_RES_FILE( gid_File_Res_Dkt, dkt)
 
-STD_RES_FILE( gid_File_Res_Epb, epb )
-
-STD_RES_FILE( gid_File_Res_Epg, epg )
-
-STD_RES_FILE( gid_File_Res_Epp, epp )
-
 STD_RES_FILE( gid_File_Res_Eur, eur )
 
 STD_RES_FILE( gid_File_Res_Frm, frm)
@@ -95,10 +89,9 @@ STD_RES_FILE( gid_File_Res_Spa, spa )
 STD_RES_FILE( gid_File_Res_Stt, stt )
 STD_RES_FILE( gid_File_Res_Sb, sb )
 
-STD_RES_FILE( gid_File_Res_Svs, svs )
+STD_RES_FILE( gid_File_Res_Svl, svl )
 
 STD_RES_FILE( gid_File_Res_Svt, svt )
-STD_RES_FILE_ONLY( gid_File_Res_Svp, svp )
 
 STD_RES_FILE( gid_File_Res_Svx, svx )
 STD_RES_FILE( gid_File_Res_Editeng, editeng )

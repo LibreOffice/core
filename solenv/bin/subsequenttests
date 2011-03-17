@@ -30,6 +30,8 @@ eval 'exec "$PERL" -Sw "$0" "$@"'
 use lib("$ENV{SOLARENV}/bin/modules");
 use SourceConfig;
 
+my $keep_going = 0;
+my $dry_run = 0;
 my $max_running = 1;
 while (@ARGV) {
     my $arg = shift(@ARGV);
@@ -38,17 +40,36 @@ while (@ARGV) {
     } elsif ($arg eq '--') {
         last;
     } else {
-        print STDERR "unknown argument \"$arg\"\n";
-        print STDERR "usage: $0 [-P<n>] [-- <args>]\n";
-        print STDERR " -P<n>  number of parallel dmake invocations\n";
-        print STDERR " <args> are passed to dmake invocations\n";
-        exit(1);
+        my $n = substr($arg, 0, 1) eq '-' ? 1 : 0;
+        while ($n && $n < length($arg)) {
+            my $c = substr($arg, $n++, 1);
+            if ($c eq 'k') {
+                $keep_going = 1;
+            } elsif ($c eq 'n') {
+                $dry_run = 1;
+            } else {
+                $n = 0;
+                last;
+            }
+        }
+        if (!$n) {
+            print STDERR "unknown argument \"$arg\"\n";
+            print STDERR "usage: $0 [-kn] [-P<n>] [-- <args>]\n";
+            print STDERR " -k     continue with other dmake invocations upon\n";
+            print STDERR "        failure\n";
+            print STDERR " -n     write directories that would be processed\n";
+            print STDERR "        to standard output\n";
+            print STDERR " -P<n>  number of parallel dmake invocations\n";
+            print STDERR " <args> are passed to dmake invocations\n";
+            exit(1);
+        }
     }
 }
 
 my @testpaths = ();
 my $sc = SourceConfig->new($ENV{'SOLARSRC'});
 my $module;
+my $gbuildpath = "$ENV{'SOLARSRC'}/GNUmakefile";
 foreach $module ($sc->get_active_modules()) {
     my $buildlst = $sc->get_module_build_list($module);
     next unless defined($buildlst);
@@ -82,6 +103,26 @@ foreach $module ($sc->get_active_modules()) {
     }
 }
 
+if ($dry_run) {
+    foreach $path (@testpaths) {
+        print "$path\n";
+    }
+    print "$gbuildpath\n";
+    exit(0);
+}
+
+my @failedpaths = ();
+my @gbuildargs = ("-j$max_running", "-s");
+if ($keep_going) {
+    push(@gbuildargs,"-k");
+}
+push(@gbuildargs, "--file=$gbuildpath");
+push(@gbuildargs, "subsequentcheck");
+if (system($ENV{'GNUMAKE'}, @gbuildargs) != 0) {
+	push(@failedpaths,$gbuildpath);
+	@testpaths = () unless $keep_going;
+}
+
 my $cmd = 'dmake';
 foreach (@ARGV) {
     s/'/'\''/g;
@@ -90,7 +131,6 @@ foreach (@ARGV) {
 $cmd .= ' 2>&1 |';
 
 my %pids = ();
-my @failedpaths = ();
 my $running = 0;
 my $counter = 0;
 while (@testpaths || $running > 0) {
@@ -119,8 +159,8 @@ while (@testpaths || $running > 0) {
     my $testpath = delete($pids{$pid});
     defined($testpath) or die("unmatched PID $pid");
     if ($? != 0) {
-        @testpaths = ();
         push(@failedpaths, $testpath);
+        @testpaths = () unless $keep_going;
     }
     --$running;
 }

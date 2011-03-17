@@ -45,8 +45,9 @@ CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFI
 # unless you want to do runtime checks for 10.5 api, you also want to use the 10.4 sdk
 # (safer/easier than dealing with the MAC_OS_X_VERSION_MAX_ALLOWED macro)
 # http://developer.apple.com/technotes/tn2002/tn2064.html
-MACOSX_DEPLOYMENT_TARGET=10.4
-.EXPORT: MACOSX_DEPLOYMENT_TARGET
+# done in setsolar/configure now. left here for documentation
+#MACOSX_DEPLOYMENT_TARGET=10.4
+#.EXPORT: MACOSX_DEPLOYMENT_TARGET
 CDEFS+=-DQUARTZ 
 EXTRA_CDEFS*=-isysroot /Developer/SDKs/MacOSX10.4u.sdk
 .ENDIF
