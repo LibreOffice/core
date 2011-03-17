@@ -76,7 +76,7 @@ struct Encoder
 };
 
 
-int main(int argc, char **argv)
+int main(int, char**)
 {
 #   define EXP(x) Encoder(x, #x)
 
