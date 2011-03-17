@@ -31,8 +31,6 @@
 #include <com/sun/star/text/XTextColumns.idl>
 #endif
 
-#include <com/sun/star/text/ColumnSeparatorStyle.idl>
-
 #ifndef __com_sun_star_style_VerticalAlignment_idl__
 #include <com/sun/star/style/VerticalAlignment.idl>
 #endif
@@ -87,6 +85,8 @@ published service TextColumns
     [property]  boolean SeparatorLineIsOn;
     //------------------------------------------------------------------------
     /** determines the style of the separator lines between the columns.
+        @see com::sun::star::text:ColumnSeparatorStyle
+            for the possible values.
      */
     [property, optional]  short SeparatorLineStyle;
     //------------------------------------------------------------------------
