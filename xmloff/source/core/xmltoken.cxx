@@ -1082,6 +1082,7 @@ namespace xmloff { namespace token {
         TOKEN( "line-number",                     XML_LINE_NUMBER ),
         TOKEN( "line-skew",                       XML_LINE_SKEW ),
         TOKEN( "line-spacing",                    XML_LINE_SPACING ),
+        TOKEN( "line-style",                      XML_LINE_STYLE ),
         TOKEN( "linear",                          XML_LINEAR ),
         TOKEN( "linenumbering-configuration",     XML_LINENUMBERING_CONFIGURATION ),
         TOKEN( "linenumbering-separator",         XML_LINENUMBERING_SEPARATOR ),

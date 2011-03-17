@@ -74,6 +74,7 @@ void XMLFootnoteSeparatorExport::exportXML(
     sal_Int8 nLineRelWidth = 0;
     sal_Int32 nLineTextDistance = 0;
     sal_Int16 nLineWeight = 0;
+    sal_Int8 nLineStyle = 0;
 
     // find indices into property map and get values
     sal_uInt32 nCount = pProperties->size();
@@ -106,6 +107,9 @@ void XMLFootnoteSeparatorExport::exportXML(
                         "received wrong property state index" );
             rState.maValue >>= nLineWeight;
             break;
+        case CTF_PM_FTN_LINE_STYLE:
+            rState.maValue >>= nLineStyle;
+            break;
         }
     }
 
@@ -135,6 +139,22 @@ void XMLFootnoteSeparatorExport::exportXML(
                              sBuf.makeStringAndClear());
     }
 
+    // line style
+    static const SvXMLEnumMapEntry aXML_LineStyle_Enum[] =
+    {
+        { XML_NONE,     0 },
+        { XML_SOLID,    1 },
+        { XML_DOTTED,   2 },
+        { XML_DASH,     3 },
+        { XML_TOKEN_INVALID, 0 }
+    };
+    if (rExport.GetMM100UnitConverter().convertEnum(
+            sBuf, nLineStyle, aXML_LineStyle_Enum ) )
+    {
+        rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_LINE_STYLE,
+                sBuf.makeStringAndClear());
+    }
+
     // adjustment
     static const SvXMLEnumMapEntry aXML_HorizontalAdjust_Enum[] =
     {
@@ -160,6 +180,8 @@ void XMLFootnoteSeparatorExport::exportXML(
     rExport.GetMM100UnitConverter().convertColor(sBuf, nLineColor);
     rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_COLOR,
                          sBuf.makeStringAndClear());
+
+    // line-style
 
     SvXMLElementExport aElem(rExport, XML_NAMESPACE_STYLE,
                              XML_FOOTNOTE_SEP, sal_True, sal_True);
