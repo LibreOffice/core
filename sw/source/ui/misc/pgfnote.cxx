@@ -44,6 +44,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
+#include <editeng/borderline.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/pageitem.hxx>
 #include <svl/eitem.hxx>
@@ -57,39 +58,10 @@
 #include <misc.hrc>
 #include <pgfnote.hrc>
 
-#define TWIP_TO_LBOX 5
-
-/*-----------------------------------------------------#---------------
-    Beschreibung:   vordefinierte Linien in Point
- --------------------------------------------------------------------*/
-static const sal_uInt16 nLines[] = {
-    0,
-    50,
-    100,
-    150,
-    200,
-    500
-};
-
-static const sal_uInt16 nLineCount = SAL_N_ELEMENTS(nLines);
-
 static sal_uInt16 aPageRg[] = {
     FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO,
     0
 };
-
-/*------------------------------------------------------------------------
- Beschreibung:  liefert zurueck, ob die Linienbreite nWidth bereits
-                in der Listbox enthalten ist.
-------------------------------------------------------------------------*/
-sal_Bool lcl_HasLineWidth(sal_uInt16 nWidth)
-{
-    for(sal_uInt16 i = 0; i < nLineCount; ++i) {
-        if(nLines[i] == nWidth)
-            return sal_True;
-    }
-    return sal_False;
-}
 
 /*------------------------------------------------------------------------
  Beschreibung:  Handler fuer umschalten zwischen den unterschiedlichen
@@ -136,6 +108,17 @@ IMPL_LINK( SwFootNotePage, HeightModify, MetricField *, EMPTYARG )
     return 0;
 }
 
+IMPL_LINK( SwFootNotePage, LineWidthChanged_Impl, void *, EMPTYARG )
+{
+    sal_Int64 nVal = MetricField::ConvertDoubleValue(
+                aLineWidthEdit.GetValue( ),
+                aLineWidthEdit.GetDecimalDigits( ),
+                aLineWidthEdit.GetUnit(), MAP_TWIP );
+    aLineTypeBox.SetWidth( nVal );
+
+    return 0;
+}
+
 // CTOR / DTOR -----------------------------------------------------------
 
 SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet) :
@@ -155,6 +138,8 @@ SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet) :
     aLineTypeBox(this,      SW_RES(DLB_LINETYPE)),
     aLineWidthLbl(this,     SW_RES(FT_LINEWIDTH)),
     aLineWidthEdit(this,    SW_RES(ED_LINEWIDTH)),
+    aLineLengthLbl(this,    SW_RES(FT_LINELENGTH)),
+    aLineLengthEdit(this,   SW_RES(ED_LINELENGTH)),
     aLineDistLbl(this,      SW_RES(FT_LINEDIST)),
     aLineDistEdit(this,     SW_RES(ED_LINEDIST))
     {
@@ -217,14 +202,23 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     aDistEdit.SetLoseFocusHdl( aLk );
     aLineDistEdit.SetLoseFocusHdl( aLk );
 
-    // Trennlinie
-    for(sal_uInt16 i = 0; i < nLineCount; ++i)
-        aLineTypeBox.InsertEntry(nLines[i]);
+    // Separator width
+    aLineWidthEdit.SetModifyHdl( LINK( this, SwFootNotePage, LineWidthChanged_Impl ) );
 
-    const sal_uInt16 nWidth = (sal_uInt16)pFtnInfo->GetLineWidth() * TWIP_TO_LBOX;
-    if ( !lcl_HasLineWidth(nWidth) )
-        aLineTypeBox.InsertEntry(nWidth);
-    aLineTypeBox.SelectEntry(nWidth);
+    sal_Int64 nWidthPt = MetricField::ConvertDoubleValue(
+            sal_Int64( pFtnInfo->GetLineWidth() ), aLineWidthEdit.GetDecimalDigits(),
+            MAP_TWIP, aLineWidthEdit.GetUnit( ) );
+    aLineWidthEdit.SetValue( nWidthPt );
+
+    // Separator style
+    aLineTypeBox.SetSourceUnit( FUNIT_TWIP );
+
+    aLineTypeBox.SetNone( String( SW_RES( STR_NONE ) ) );
+    aLineTypeBox.InsertEntry( SvxBorderLine::getWidthImpl( SOLID ), SOLID );
+    aLineTypeBox.InsertEntry( SvxBorderLine::getWidthImpl( DOTTED ), DOTTED );
+    aLineTypeBox.InsertEntry( SvxBorderLine::getWidthImpl( DASHED ), DASHED );
+    aLineTypeBox.SetWidth( pFtnInfo->GetLineWidth( ) );
+    aLineTypeBox.SelectEntry( pFtnInfo->GetLineStyle() );
 
     // Position
     aLinePosBox.SelectEntryPos( static_cast< sal_uInt16 >(pFtnInfo->GetAdj()) );
@@ -232,7 +226,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
         // Breite
     Fraction aTmp( 100, 1 );
     aTmp *= pFtnInfo->GetWidth();
-    aLineWidthEdit.SetValue( static_cast<long>(aTmp) );
+    aLineLengthEdit.SetValue( static_cast<long>(aTmp) );
 
         // Abstand Fussnotenbereich
     aDistEdit.SetValue(aDistEdit.Normalize(pFtnInfo->GetTopDist()),FUNIT_TWIP);
@@ -265,16 +259,21 @@ sal_Bool SwFootNotePage::FillItemSet(SfxItemSet &rSet)
     rFtnInfo.SetBottomDist(  static_cast< SwTwips >(
             aLineDistEdit.Denormalize(aLineDistEdit.GetValue(FUNIT_TWIP))));
 
-        // Trennlinie
-    const sal_uInt16 nPos = aLineTypeBox.GetSelectEntryPos();
-    if( LISTBOX_ENTRY_NOTFOUND != nPos )
-        rFtnInfo.SetLineWidth(nLines[nPos] / TWIP_TO_LBOX);
+    // Separator style
+    rFtnInfo.SetLineStyle( SvxBorderStyle( aLineTypeBox.GetSelectEntryStyle() ) );
+
+    // Separator width
+    long nWidth = MetricField::ConvertDoubleValue(
+                   aLineWidthEdit.GetValue( ),
+                   aLineWidthEdit.GetDecimalDigits( ),
+                   aLineWidthEdit.GetUnit(), MAP_TWIP );
+    rFtnInfo.SetLineWidth( nWidth );
 
         // Position
     rFtnInfo.SetAdj((SwFtnAdj)aLinePosBox.GetSelectEntryPos());
 
         // Breite
-    rFtnInfo.SetWidth(Fraction( static_cast< long >(aLineWidthEdit.GetValue()), 100));
+    rFtnInfo.SetWidth(Fraction( static_cast< long >(aLineLengthEdit.GetValue()), 100));
 
     const SfxPoolItem* pOldItem;
     if(0 == (pOldItem = GetOldItem( rSet, FN_PARAM_FTN_INFO )) ||

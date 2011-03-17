@@ -67,12 +67,15 @@ private:
     LineListBox     aLineTypeBox;
     FixedText       aLineWidthLbl;
     MetricField     aLineWidthEdit;
+    FixedText       aLineLengthLbl;
+    MetricField     aLineLengthEdit;
     FixedText       aLineDistLbl;
     MetricField     aLineDistEdit;
 
     DECL_LINK( HeightPage, Button * );
     DECL_LINK( HeightMetric, Button * );
     DECL_LINK( HeightModify, MetricField * );
+    DECL_LINK( LineWidthChanged_Impl, void * );
 
     long            lMaxHeight;
 

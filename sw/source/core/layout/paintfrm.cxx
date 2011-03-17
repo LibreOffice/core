@@ -4806,7 +4806,8 @@ void SwFtnContFrm::PaintLine( const SwRect& rRect,
             : SwRect( Point( nX, Frm().Pos().Y() + rInf.GetTopDist() ),
                             Size( nWidth, rInf.GetLineWidth()));
     if ( aLineRect.HasArea() )
-        PaintBorderLine( rRect, aLineRect , pPage, &rInf.GetLineColor() );
+        PaintBorderLine( rRect, aLineRect , pPage, &rInf.GetLineColor(),
+                rInf.GetLineStyle() );
 }
 
 /*************************************************************************

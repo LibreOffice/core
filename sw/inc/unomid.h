@@ -118,6 +118,7 @@
 #define MID_LINE_ADJUST                         4
 #define MID_LINE_TEXT_DIST                      5
 #define MID_LINE_FOOTNOTE_DIST                  6
+#define MID_FTN_LINE_STYLE                      7
 
 //SwFmtRuby
 #define MID_RUBY_TEXT           0

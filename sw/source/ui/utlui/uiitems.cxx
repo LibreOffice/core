@@ -140,6 +140,18 @@ bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
         case MID_LINE_ADJUST       :     rVal <<= (sal_Int16)aFtnInfo.GetAdj();break;//text::HorizontalAdjust
         case MID_LINE_TEXT_DIST    :     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetTopDist());break;
         case MID_LINE_FOOTNOTE_DIST:     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetBottomDist());break;
+        case MID_FTN_LINE_STYLE    :
+        {
+            switch ( aFtnInfo.GetLineStyle( ) )
+            {
+                default:
+                case NO_STYLE: rVal <<= sal_Int8( 0 ); break;
+                case SOLID: rVal <<= sal_Int8( 1 ); break;
+                case DOTTED: rVal <<= sal_Int8( 2 ); break;
+                case DASHED: rVal <<= sal_Int8( 3 ); break;
+            }
+            break;
+        }
         default:
             bRet = false;
     }
@@ -201,6 +213,20 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
                 aFtnInfo.SetAdj((SwFtnAdj)nSet);
             else
                 bRet = false;
+        }
+        case MID_FTN_LINE_STYLE:
+        {
+            SvxBorderStyle eStyle = NO_STYLE;
+            sal_Int8 nSet = 0;
+            rVal >>= nSet;
+            switch ( nSet )
+            {
+                case 1: eStyle = SOLID; break;
+                case 2: eStyle = DOTTED; break;
+                case 3: eStyle = DASHED; break;
+                default: break;
+            }
+            aFtnInfo.SetLineStyle( eStyle );
         }
         break;
         default:

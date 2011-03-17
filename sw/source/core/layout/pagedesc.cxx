@@ -367,6 +367,7 @@ SwPageFtnInfo::SwPageFtnInfo() :
     nMaxHeight( 0 ),
 //  aPen( PEN_SOLID ),
     nLineWidth(10),
+    eLineStyle( SOLID ),
     aWidth( 25, 100 ),
     nTopDist( 57 ),         //1mm
     nBottomDist( 57 )
@@ -382,6 +383,7 @@ SwPageFtnInfo::SwPageFtnInfo() :
 SwPageFtnInfo::SwPageFtnInfo( const SwPageFtnInfo &rCpy ) :
     nMaxHeight( rCpy.GetHeight() ),
     nLineWidth(rCpy.nLineWidth),
+    eLineStyle(rCpy.eLineStyle),
     aLineColor(rCpy.aLineColor),
     aWidth( rCpy.GetWidth() ),
     eAdj( rCpy.GetAdj() ),
@@ -402,6 +404,7 @@ SwPageFtnInfo &SwPageFtnInfo::operator=( const SwPageFtnInfo& rCpy )
 {
     nMaxHeight  = rCpy.GetHeight();
     nLineWidth  = rCpy.nLineWidth;
+    eLineStyle  = rCpy.eLineStyle;
     aLineColor  = rCpy.aLineColor;
     aWidth      = rCpy.GetWidth();
     eAdj        = rCpy.GetAdj();
@@ -421,6 +424,7 @@ sal_Bool SwPageFtnInfo::operator==( const SwPageFtnInfo& rCmp ) const
 {
     return ( nMaxHeight == rCmp.GetHeight() &&
              nLineWidth == rCmp.nLineWidth &&
+             eLineStyle == rCmp.eLineStyle &&
              aLineColor == rCmp.aLineColor &&
              aWidth     == rCmp.GetWidth() &&
              eAdj       == rCmp.GetAdj() &&

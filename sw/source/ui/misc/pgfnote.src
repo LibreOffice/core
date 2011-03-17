@@ -129,7 +129,7 @@ TabPage TP_FOOTNOTE_PAGE
         Size = MAP_APPFONT ( 132 , 8 ) ;
         Group = TRUE ;
         Left = TRUE ;
-        Text [ en-US ] = "~Weight" ;
+        Text [ en-US ] = "~Style" ;
     };
     ListBox DLB_LINETYPE
     {
@@ -139,21 +139,45 @@ TabPage TP_FOOTNOTE_PAGE
         TabStop = TRUE ;
         Group = TRUE ;
         DropDown = TRUE ;
-        CurPos = 0 ;
     };
-
     FixedText FT_LINEWIDTH
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
+        Group = TRUE ;
         Left = TRUE ;
-        Text [ en-US ] = "~Length" ;
+        Text [ en-US ] = "~Thickness" ;
     };
     MetricField ED_LINEWIDTH
     {
         HelpID = "sw:MetricField:TP_FOOTNOTE_PAGE:ED_LINEWIDTH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 148 , 103 ) ;
+        Size = MAP_APPFONT ( 42 , 12 ) ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        SpinSize = 25 ;
+        First = 25 ;
+        Last = 900 ;
+        Maximum = 900 ;
+        Minimum = 25 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_POINT ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+
+    FixedText FT_LINELENGTH
+    {
+        Pos = MAP_APPFONT ( 12 , 121 ) ;
+        Size = MAP_APPFONT ( 132 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Length" ;
+    };
+    MetricField ED_LINELENGTH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 148 , 119 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -168,7 +192,7 @@ TabPage TP_FOOTNOTE_PAGE
     };
     FixedText FT_LINEDIST
     {
-        Pos = MAP_APPFONT ( 12 , 121 ) ;
+        Pos = MAP_APPFONT ( 12 , 137 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
         Text [ en-US ] = "~Spacing to footnote contents" ;
         Left = TRUE ;
@@ -177,7 +201,7 @@ TabPage TP_FOOTNOTE_PAGE
     {
         HelpID = "sw:MetricField:TP_FOOTNOTE_PAGE:ED_LINEDIST";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 148 , 119 ) ;
+        Pos = MAP_APPFONT ( 148 , 135 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;

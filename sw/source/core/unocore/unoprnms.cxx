@@ -786,6 +786,7 @@ const SwPropNameTab aPropNameTab = {
 
 /* 0741 UNO_NAME_NESTED_TEXT_CONTENT */ {MAP_CHAR_LEN("NestedTextContent")},
 /* 0742 UNO_NAME_SEPARATOR_LINE_STYLE */ {MAP_CHAR_LEN("SeparatorLineStyle")},
+/* 0743 UNO_NAME_FOOTNOTE_LINE_STYLE */ {MAP_CHAR_LEN("FootnoteLineStyle")},
 };
 
 const SwPropNameLen& SwGetPropName( sal_uInt16 nId )
