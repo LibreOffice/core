@@ -37,7 +37,7 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#include <tools/solar.h>    // for F_PI180
+#include "basegfx/numeric/ftools.hxx"
 #include "properties.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/theme.hxx"
