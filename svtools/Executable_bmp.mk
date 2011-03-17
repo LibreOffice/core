@@ -32,10 +32,10 @@ $(eval $(call gb_Executable_set_include,bmp,\
     -I$(WORKDIR)/inc/svtools \
     -I$(WORKDIR)/inc/ \
     -I$(OUTDIR)/inc/ \
-    -I$(SRCDIR)/svtools/inc \
-    -I$(SRCDIR)/svtools/inc/svtools \
-    -I$(SRCDIR)/svtools/source/inc \
-    -I$(SRCDIR)/svtools/inc/pch \
+    -I$(realpath $(SRCDIR)/svtools/inc) \
+    -I$(realpath $(SRCDIR)/svtools/inc/svtools) \
+    -I$(realpath $(SRCDIR)/svtools/source/inc) \
+    -I$(realpath $(SRCDIR)/svtools/inc/pch) \
     -I$(OUTDIR)/inc/offuh \
 ))
 

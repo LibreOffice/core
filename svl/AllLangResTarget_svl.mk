@@ -36,14 +36,11 @@ $(eval $(call gb_SrsTarget_SrsTarget,svl/res))
 $(eval $(call gb_SrsTarget_set_include,svl/res,\
     $$(INCLUDE) \
     -I$(WORKDIR)/inc \
-    -I$(SRCDIR)/svl/source/inc \
-    -I$(SRCDIR)/svl/inc/ \
-    -I$(SRCDIR)/svl/inc/svl \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,svl/res,\
-    clone/libs-gui/svl/source/misc/mediatyp.src \
-    clone/libs-gui/svl/source/items/cstitem.src \
+    svl/source/misc/mediatyp.src \
+    svl/source/items/cstitem.src \
 ))
 
 

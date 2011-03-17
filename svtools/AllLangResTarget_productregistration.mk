@@ -38,9 +38,6 @@ $(eval $(call gb_SrsTarget_SrsTarget,svt/productregistration))
 $(eval $(call gb_SrsTarget_set_include,svt/productregistration,\
     $$(INCLUDE) \
     -I$(WORKDIR)/inc \
-    -I$(SRCDIR)/svtools/source/inc \
-    -I$(SRCDIR)/svtools/inc/ \
-    -I$(SRCDIR)/svtools/inc/svtools \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,svt/productregistration,\
