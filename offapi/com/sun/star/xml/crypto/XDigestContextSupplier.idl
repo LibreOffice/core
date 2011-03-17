@@ -31,6 +31,10 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
+#ifndef __com_sun_star_beans_NamedValue_idl__
+#include <com/sun/star/beans/NamedValue.idl>
+#endif
+
 #ifndef __com_sun_star_xml_crypto_XDigestContext_idl__
 #include <com/sun/star/xml/crypto/XDigestContext.idl>
 #endif
@@ -65,7 +69,9 @@ interface XDigestContextSupplier : com::sun::star::uno::XInterface
         @throws ::com::sun::star::lang::IllegalArgumentException
             one of provided arguments is illegal
      */
-    XDigestContext getDigestContext( [in] long nDigestID, [in] any aParams )
+    XDigestContext getDigestContext(
+                [in] long nDigestID,
+                [in] sequence< ::com::sun::star::beans::NamedValue > aParams )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 };
 

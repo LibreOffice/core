@@ -31,6 +31,10 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
+#ifndef __com_sun_star_beans_NamedValue_idl__
+#include <com/sun/star/beans/NamedValue.idl>
+#endif
+
 #ifndef __com_sun_star_xml_crypto_XCipherContext_idl__
 #include <com/sun/star/xml/crypto/XCipherContext.idl>
 #endif
@@ -76,7 +80,7 @@ interface XCipherContextSupplier : com::sun::star::uno::XInterface
             one of provided arguments is illegal
      */
 
-    XCipherContext getCipherContext( [in] long nCipherID, [in] sequence< byte > aKey, [in] sequence< byte > aInitializationVector, [in] boolean bEncryption, [in] any aParams )
+    XCipherContext getCipherContext( [in] long nCipherID, [in] sequence< byte > aKey, [in] sequence< byte > aInitializationVector, [in] boolean bEncryption, [in] sequence< ::com::sun::star::beans::NamedValue > aParams )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 };
 
