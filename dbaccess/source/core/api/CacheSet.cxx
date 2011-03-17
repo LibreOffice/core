@@ -69,8 +69,9 @@ using namespace ::osl;
 
 DBG_NAME(OCacheSet)
 
-OCacheSet::OCacheSet()
-            :m_bInserted(sal_False)
+OCacheSet::OCacheSet(sal_Int32 i_nMaxRows)
+            :m_nMaxRows(i_nMaxRows)
+            ,m_bInserted(sal_False)
             ,m_bUpdated(sal_False)
             ,m_bDeleted(sal_False)
 {

@@ -373,7 +373,7 @@ namespace dbmm
                 break;
 
             case ERR_NEW_STYLE_REPORT:
-                pAsciiErrorDescription = "#doc# could not be processed, since you don't have the Sun Report Builder (TM) extension installed.";
+                pAsciiErrorDescription = "#doc# could not be processed, since you don't have the Oracle Report Builder (TM) extension installed.";
                 aAsciiParameterNames.push_back( "#doc#" );
                 break;
 
@@ -398,7 +398,7 @@ namespace dbmm
         }
 
         //----------------------------------------------------------------
-        void lcl_describeErrors( ::rtl::OUStringBuffer& _rBuffer, const ErrorLog& _rErrors, const USHORT _nHeadingResId )
+        void lcl_describeErrors( ::rtl::OUStringBuffer& _rBuffer, const ErrorLog& _rErrors, const sal_uInt16 _nHeadingResId )
         {
             _rBuffer.appendAscii( "=== " );
             _rBuffer.append     ( String( MacroMigrationResId( _nHeadingResId ) ) );

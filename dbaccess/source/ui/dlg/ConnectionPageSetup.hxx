@@ -69,7 +69,7 @@ namespace dbaui
         static  OGenericAdministrationPage* CreateUserDefinedTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
 
-        virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
+        virtual sal_Bool        FillItemSet (SfxItemSet& _rCoreAttrs);
 
         virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
@@ -87,7 +87,7 @@ namespace dbaui
 
 
     protected:
-        OConnectionTabPageSetup(Window* pParent, USHORT _rId, const SfxItemSet& _rCoreAttrs, USHORT _nHelpTextResId, USHORT _nHeaderResId, USHORT _nUrlResId);
+        OConnectionTabPageSetup(Window* pParent, sal_uInt16 _rId, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId);
         virtual bool checkTestConnection();
             // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
         virtual ~OConnectionTabPageSetup();

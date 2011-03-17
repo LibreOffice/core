@@ -53,7 +53,7 @@ namespace dbaui
         ~CharSetListBox();
 
         void    SelectEntryByIanaName( const String& _rIanaName );
-        bool    StoreSelectedCharSet( SfxItemSet& _rSet, const USHORT _nItemId );
+        bool    StoreSelectedCharSet( SfxItemSet& _rSet, const sal_uInt16 _nItemId );
 
     private:
         OCharsetDisplay     m_aCharSets;

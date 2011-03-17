@@ -38,7 +38,7 @@
 #include <toolkit/helper/convert.hxx>
 #include "RptPage.hxx"
 #include "corestrings.hrc"
-#include <dbaccess/singledoccontroller.hxx>
+#include <dbaccess/dbsubcomponentcontroller.hxx>
 #include "ModuleHelper.hxx"
 
 #include <RptResId.hrc>
@@ -508,12 +508,12 @@ OCustomShape::~OCustomShape()
     DBG_DTOR( rpt_OCustomShape, NULL);
 }
 // -----------------------------------------------------------------------------
-UINT16 OCustomShape::GetObjIdentifier() const
+sal_uInt16 OCustomShape::GetObjIdentifier() const
 {
-    return UINT16(OBJ_CUSTOMSHAPE);
+    return sal_uInt16(OBJ_CUSTOMSHAPE);
 }
 //----------------------------------------------------------------------------
-UINT32 OCustomShape::GetObjInventor() const
+sal_uInt32 OCustomShape::GetObjInventor() const
 {
     return ReportInventor;
 }
@@ -691,12 +691,12 @@ void OUnoObject::impl_setReportComponent_nothrow()
     impl_initializeModel_nothrow();
 }
 // -----------------------------------------------------------------------------
-UINT16 OUnoObject::GetObjIdentifier() const
+sal_uInt16 OUnoObject::GetObjIdentifier() const
 {
-    return UINT16(m_nObjectType);
+    return sal_uInt16(m_nObjectType);
 }
 //----------------------------------------------------------------------------
-UINT32 OUnoObject::GetObjInventor() const
+sal_uInt32 OUnoObject::GetObjInventor() const
 {
     return ReportInventor;
 }
@@ -959,7 +959,7 @@ SdrObject* OUnoObject::Clone() const
 //----------------------------------------------------------------------------
 TYPEINIT1(OOle2Obj, SdrOle2Obj);
 DBG_NAME( rpt_OOle2Obj );
-OOle2Obj::OOle2Obj(const uno::Reference< report::XReportComponent>& _xComponent,UINT16 _nType)
+OOle2Obj::OOle2Obj(const uno::Reference< report::XReportComponent>& _xComponent,sal_uInt16 _nType)
           :SdrOle2Obj()
           ,OObjectBase(_xComponent)
           ,m_nType(_nType)
@@ -971,7 +971,7 @@ OOle2Obj::OOle2Obj(const uno::Reference< report::XReportComponent>& _xComponent,
     m_bIsListening = sal_True;
 }
 //----------------------------------------------------------------------------
-OOle2Obj::OOle2Obj(const ::rtl::OUString& _sComponentName,UINT16 _nType)
+OOle2Obj::OOle2Obj(const ::rtl::OUString& _sComponentName,sal_uInt16 _nType)
           :SdrOle2Obj()
           ,OObjectBase(_sComponentName)
           ,m_nType(_nType)
@@ -986,12 +986,12 @@ OOle2Obj::~OOle2Obj()
     DBG_DTOR( rpt_OOle2Obj, NULL);
 }
 // -----------------------------------------------------------------------------
-UINT16 OOle2Obj::GetObjIdentifier() const
+sal_uInt16 OOle2Obj::GetObjIdentifier() const
 {
     return m_nType;
 }
 //----------------------------------------------------------------------------
-UINT32 OOle2Obj::GetObjInventor() const
+sal_uInt32 OOle2Obj::GetObjInventor() const
 {
     return ReportInventor;
 }

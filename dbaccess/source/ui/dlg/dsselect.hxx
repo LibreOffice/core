@@ -76,7 +76,7 @@ public:
     inline String   GetSelected() const { return m_aDatasource.GetSelectEntry();}
     void            Select( const String& _rEntry ) { m_aDatasource.SelectEntry(_rEntry); }
 
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
 protected:
     DECL_LINK( ListDblClickHdl, ListBox * );

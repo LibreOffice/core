@@ -52,11 +52,6 @@ String STR_ENTER_CONNECTION_PASSWORD
     Text [ en-US ] = "A password is needed to connect to the data source \"$name$\".";
 };
 
-String STR_QUERY_DROP_ALL
-{
-    Text[ en-US ] = "Do you want to delete all selected items?";
-};
-
 String STR_ASK_FOR_DIRECTORY_CREATION
 {
     Text [ en-US ] = "The directory\n\n$path$\n\ndoes not exist. Should it be created?";
@@ -67,45 +62,10 @@ String STR_COULD_NOT_CREATE_DIRECTORY
     Text [ en-US ] = "The directory $name$ could not be created.";
 };
 
-String STR_ADDRESSBOOK_SYSTEM
-{
-    Text[ en-US ] = "Windows address book";
-};
 
-String STR_ADDRESSBOOK_OUTLOOK
-{
-    Text[ en-US ] = "MS Outlook";
-};
 
-String STR_ADDRESSBOOK_MOZILLA
-{
-    Text[ en-US ] = "Mozilla address book";
-};
 
-String STR_ADDRESSBOOK_THUNDERBIRD
-{
-    Text[ en-US ] = "Thunderbird address book";
-};
 
-String STR_ADDRESSBOOK_EVOLUTION
-{
-    Text[ en-US ] = "Evolution address book";
-};
-
-String STR_ADDRESSBOOK_LDAP
-{
-    Text[ en-US ] = "LDAP address book";
-};
-
-String STR_HINT_READONLY_CONNECTION
-{
-    Text [ en-US ] = "(Connection is read-only)";
-};
-
-String STR_HINT_CONNECTION_NOT_CAPABLE
-{
-    Text [ en-US ] = "(Not supported by this connection)";
-};
 
 #define EDIT_SIZE_X     50
 #define FT_SIZE_X       90
@@ -114,6 +74,7 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 
 ModalDialog DLG_DOMAINPASSWORD
 {
+    HelpID = "dbaccess:ModalDialog:DLG_DOMAINPASSWORD";
     Border = TRUE ;
     Moveable = TRUE ;
     OutputSize = TRUE ;
@@ -130,6 +91,7 @@ ModalDialog DLG_DOMAINPASSWORD
 
     Edit ET_PASSWORD
     {
+        HelpID = "dbaccess:Edit:DLG_DOMAINPASSWORD:ET_PASSWORD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 + FT_SIZE_X , 16 ) ;
         Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;

@@ -483,10 +483,6 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
         return sal_False;
     }
 
-    OSL_ENSURE( getView(), "OApplicationController::Construct: have no view!" );
-    if ( getView() )
-        getView()->enableSeparator( );
-
     // now that we have a view we can create the clipboard listener
     m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard( getView() );
     m_aSystemClipboard.StartClipboardListening( );

@@ -43,8 +43,8 @@ namespace dbaccess
         sal_Bool fetchRow();
         void fillAllRows();
     public:
-        OStaticSet()
-            : m_aSetIter(m_aSet.end())
+        OStaticSet(sal_Int32 i_nMaxRows) : OCacheSet(i_nMaxRows)
+            , m_aSetIter(m_aSet.end())
             , m_bEnd(sal_False)
         {
             m_aSet.push_back(NULL); // this is the beforefirst record

@@ -51,10 +51,10 @@ OQueryTabConnUndoAction::~OQueryTabConnUndoAction()
 }
 
 // ------------------------------------------------------------------------------------------------
-OQueryTabConnUndoAction::OQueryTabConnUndoAction(OQueryTableView* pOwner, USHORT nCommentID)
+OQueryTabConnUndoAction::OQueryTabConnUndoAction(OQueryTableView* pOwner, sal_uInt16 nCommentID)
     :OQueryDesignUndoAction(pOwner, nCommentID)
     ,m_pConnection(NULL)
-    ,m_bOwnerOfConn(FALSE)
+    ,m_bOwnerOfConn(sal_False)
 {
     DBG_CTOR(OQueryTabConnUndoAction,NULL);
 }
@@ -67,13 +67,13 @@ OQueryAddTabConnUndoAction::OQueryAddTabConnUndoAction(OQueryTableView* pOwner)
 void OQueryAddTabConnUndoAction::Undo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->DropConnection(m_pConnection);
-    SetOwnership(TRUE);
+    SetOwnership(sal_True);
 }
 // -----------------------------------------------------------------------------
 void OQueryAddTabConnUndoAction::Redo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->GetConnection(m_pConnection);
-    SetOwnership(FALSE);
+    SetOwnership(sal_False);
 }
 // -----------------------------------------------------------------------------
 OQueryDelTabConnUndoAction::OQueryDelTabConnUndoAction(OQueryTableView* pOwner)
@@ -84,13 +84,13 @@ OQueryDelTabConnUndoAction::OQueryDelTabConnUndoAction(OQueryTableView* pOwner)
 void OQueryDelTabConnUndoAction::Undo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->GetConnection(m_pConnection);
-    SetOwnership(FALSE);
+    SetOwnership(sal_False);
 }
 // -----------------------------------------------------------------------------
 void OQueryDelTabConnUndoAction::Redo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->DropConnection(m_pConnection);
-    SetOwnership(TRUE);
+    SetOwnership(sal_True);
 }
 // -----------------------------------------------------------------------------
 OQueryTabWinShowUndoAct::OQueryTabWinShowUndoAct(OQueryTableView* pOwner)
@@ -105,13 +105,13 @@ OQueryTabWinShowUndoAct::~OQueryTabWinShowUndoAct()
 void OQueryTabWinShowUndoAct::Undo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->HideTabWin(m_pTabWin, this);
-    SetOwnership(TRUE);
+    SetOwnership(sal_True);
 }
 // -----------------------------------------------------------------------------
 void OQueryTabWinShowUndoAct::Redo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->ShowTabWin(m_pTabWin, this,sal_True);
-    SetOwnership(FALSE);
+    SetOwnership(sal_False);
 }
 // -----------------------------------------------------------------------------
 OQueryTabWinDelUndoAct::OQueryTabWinDelUndoAct(OQueryTableView* pOwner)
@@ -126,13 +126,13 @@ OQueryTabWinDelUndoAct::~OQueryTabWinDelUndoAct()
 void OQueryTabWinDelUndoAct::Undo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->ShowTabWin( m_pTabWin, this,sal_True );
-    SetOwnership(FALSE);
+    SetOwnership(sal_False);
 }
 // -----------------------------------------------------------------------------
 void OQueryTabWinDelUndoAct::Redo()
 {
     static_cast<OQueryTableView*>(m_pOwner)->HideTabWin( m_pTabWin, this );
-    SetOwnership(TRUE);
+    SetOwnership(sal_True);
 }
 // -----------------------------------------------------------------------------
 

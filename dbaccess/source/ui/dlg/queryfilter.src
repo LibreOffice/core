@@ -44,6 +44,7 @@ ModalDialog DLG_FILTERCRIT
     HelpId = HID_DLG_FILTERCRIT ;
     ListBox LB_WHEREFIELD1
     {
+        HelpID = "dbaccess:ListBox:DLG_FILTERCRIT:LB_WHEREFIELD1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 25 ) ;
         Size = MAP_APPFONT ( 60 , 90 ) ;
@@ -52,6 +53,7 @@ ModalDialog DLG_FILTERCRIT
     };
     ListBox LB_WHERECOMP1
     {
+        HelpID = "dbaccess:ListBox:DLG_FILTERCRIT:LB_WHERECOMP1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 25 ) ;
         Size = MAP_APPFONT ( 49 , 72 ) ;
@@ -62,6 +64,7 @@ ModalDialog DLG_FILTERCRIT
     };
     Edit ET_WHEREVALUE1
     {
+        HelpID = "dbaccess:Edit:DLG_FILTERCRIT:ET_WHEREVALUE1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 177 , 25 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
@@ -69,6 +72,7 @@ ModalDialog DLG_FILTERCRIT
     };
     ListBox LB_WHERECOND2
     {
+        HelpID = "dbaccess:ListBox:DLG_FILTERCRIT:LB_WHERECOND2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 15 , 41 ) ;
         Size = MAP_APPFONT ( 41 , 36 ) ;
@@ -83,6 +87,7 @@ ModalDialog DLG_FILTERCRIT
     };
     ListBox LB_WHEREFIELD2
     {
+        HelpID = "dbaccess:ListBox:DLG_FILTERCRIT:LB_WHEREFIELD2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 41 ) ;
         Size = MAP_APPFONT ( 60 , 90 ) ;
@@ -91,6 +96,7 @@ ModalDialog DLG_FILTERCRIT
     };
     ListBox LB_WHERECOMP2
     {
+        HelpID = "dbaccess:ListBox:DLG_FILTERCRIT:LB_WHERECOMP2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 41 ) ;
         Size = MAP_APPFONT ( 49 , 72 ) ;
@@ -101,6 +107,7 @@ ModalDialog DLG_FILTERCRIT
     };
     Edit ET_WHEREVALUE2
     {
+        HelpID = "dbaccess:Edit:DLG_FILTERCRIT:ET_WHEREVALUE2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 177 , 41 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
@@ -108,6 +115,7 @@ ModalDialog DLG_FILTERCRIT
     };
     ListBox LB_WHERECOND3
     {
+        HelpID = "dbaccess:ListBox:DLG_FILTERCRIT:LB_WHERECOND3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 15 , 57 ) ;
         Size = MAP_APPFONT ( 41 , 36 ) ;
@@ -122,6 +130,7 @@ ModalDialog DLG_FILTERCRIT
     };
     ListBox LB_WHEREFIELD3
     {
+        HelpID = "dbaccess:ListBox:DLG_FILTERCRIT:LB_WHEREFIELD3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 57 ) ;
         Size = MAP_APPFONT ( 60 , 90 ) ;
@@ -130,6 +139,7 @@ ModalDialog DLG_FILTERCRIT
     };
     ListBox LB_WHERECOMP3
     {
+        HelpID = "dbaccess:ListBox:DLG_FILTERCRIT:LB_WHERECOMP3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 57 ) ;
         Size = MAP_APPFONT ( 49 , 72 ) ;
@@ -140,6 +150,7 @@ ModalDialog DLG_FILTERCRIT
     };
     Edit ET_WHEREVALUE3
     {
+        HelpID = "dbaccess:Edit:DLG_FILTERCRIT:ET_WHEREVALUE3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 177 , 57 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;

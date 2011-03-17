@@ -132,7 +132,7 @@ namespace dbaui
 
     protected:
         // SfxTabPage overridables
-        virtual BOOL FillItemSet(SfxItemSet& _rCoreAttrs);
+        virtual sal_Bool FillItemSet(SfxItemSet& _rCoreAttrs);
         virtual void Reset(const SfxItemSet& _rCoreAttrs);
 
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);

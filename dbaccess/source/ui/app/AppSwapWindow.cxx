@@ -124,7 +124,7 @@ void OApplicationSwapWindow::DataChanged( const DataChangedEvent& rDCEvt )
 void OApplicationSwapWindow::clearSelection()
 {
     m_aIconControl.SetNoSelection();
-    ULONG nPos = 0;
+    sal_uLong nPos = 0;
     SvxIconChoiceCtrlEntry* pEntry = m_aIconControl.GetSelectedEntry(nPos);
     if ( pEntry )
         m_aIconControl.InvalidateEntry(pEntry);
@@ -151,7 +151,7 @@ bool OApplicationSwapWindow::interceptKeyInput( const KeyEvent& _rEvent )
 // -----------------------------------------------------------------------------
 ElementType OApplicationSwapWindow::getElementType() const
 {
-    ULONG nPos = 0;
+    sal_uLong nPos = 0;
     SvxIconChoiceCtrlEntry* pEntry = m_aIconControl.GetSelectedEntry(nPos);
     return ( pEntry ) ? *static_cast<ElementType*>(pEntry->GetUserData()) : E_NONE;
 }
@@ -176,7 +176,7 @@ bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
 // -----------------------------------------------------------------------------
 IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pControl)
 {
-    ULONG nPos = 0;
+    sal_uLong nPos = 0;
     SvxIconChoiceCtrlEntry* pEntry = _pControl->GetSelectedEntry( nPos );
     ElementType eType = E_NONE;
     if ( pEntry )
@@ -196,9 +196,9 @@ IMPL_LINK(OApplicationSwapWindow, ChangeToLastSelected, void*, EMPTYARG)
 // -----------------------------------------------------------------------------
 void OApplicationSwapWindow::selectContainer(ElementType _eType)
 {
-    ULONG nCount = m_aIconControl.GetEntryCount();
+    sal_uLong nCount = m_aIconControl.GetEntryCount();
     SvxIconChoiceCtrlEntry* pEntry = NULL;
-    for (ULONG i=0; i < nCount; ++i)
+    for (sal_uLong i=0; i < nCount; ++i)
     {
         pEntry = m_aIconControl.GetEntry(i);
         if ( pEntry && *static_cast<ElementType*>(pEntry->GetUserData()) == _eType )

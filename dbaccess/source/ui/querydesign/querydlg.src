@@ -82,6 +82,7 @@ ModalDialog DLG_QRY_JOIN
         };
         CheckBox CB_NATURAL
         {
+            HelpID = "dbaccess:CheckBox:DLG_QRY_JOIN:CB_NATURAL";
             Pos = MAP_APPFONT ( 101 , 31 ) ;
             Size = MAP_APPFONT ( 89 , 8 ) ;
 

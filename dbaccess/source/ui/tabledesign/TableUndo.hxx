@@ -50,7 +50,7 @@ namespace dbaui
         virtual void    Redo();
     public:
         TYPEINFO();
-        OTableDesignUndoAct( OTableRowView* pOwner ,USHORT nCommentID);
+        OTableDesignUndoAct( OTableRowView* pOwner ,sal_uInt16 nCommentID);
         virtual ~OTableDesignUndoAct();
     };
 
@@ -63,7 +63,7 @@ namespace dbaui
 
     public:
         TYPEINFO();
-        OTableEditorUndoAct( OTableEditorCtrl* pOwner,USHORT nCommentID );
+        OTableEditorUndoAct( OTableEditorCtrl* pOwner,sal_uInt16 nCommentID );
         virtual ~OTableEditorUndoAct();
     };
 
@@ -72,7 +72,7 @@ namespace dbaui
     class OTableDesignCellUndoAct : public OTableDesignUndoAct
     {
     protected:
-        USHORT  m_nCol;
+        sal_uInt16  m_nCol;
         long    m_nRow;
         ::com::sun::star::uno::Any  m_sOldText;
         ::com::sun::star::uno::Any  m_sNewText;
@@ -81,7 +81,7 @@ namespace dbaui
         virtual void    Redo();
     public:
         TYPEINFO();
-        OTableDesignCellUndoAct( OTableRowView* pOwner, long nRowID, USHORT nColumn );
+        OTableDesignCellUndoAct( OTableRowView* pOwner, long nRowID, sal_uInt16 nColumn );
         virtual ~OTableDesignCellUndoAct();
     };
 
@@ -90,7 +90,7 @@ namespace dbaui
     class OTableEditorTypeSelUndoAct : public OTableEditorUndoAct
     {
     protected:
-        USHORT          m_nCol;
+        sal_uInt16          m_nCol;
         long            m_nRow;
         TOTypeInfoSP    m_pOldType;
         TOTypeInfoSP    m_pNewType;
@@ -99,7 +99,7 @@ namespace dbaui
         virtual void    Redo();
     public:
         TYPEINFO();
-        OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, USHORT nColumn, const TOTypeInfoSP& _pOldType );
+        OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, sal_uInt16 nColumn, const TOTypeInfoSP& _pOldType );
         virtual ~OTableEditorTypeSelUndoAct();
     };
 
@@ -155,7 +155,7 @@ namespace dbaui
     protected:
         MultiSelection      m_aDelKeys,
                             m_aInsKeys;
-        BOOL                m_bActPrimKeySet;
+        sal_Bool                m_bActPrimKeySet;
         OTableEditorCtrl* m_pEditorCtrl;
 
         virtual void    Undo();

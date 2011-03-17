@@ -49,7 +49,7 @@ OJoinExchangeData::OJoinExchangeData(OTableWindowListBox* pBox)
     , pEntry(pBox->FirstSelected())
 { }
 
-const ULONG SCROLLING_TIMESPAN = 500;
+const sal_uLong SCROLLING_TIMESPAN = 500;
 const long LISTBOX_SCROLLING_AREA = 6;
 //==================================================================
 // class OTableWindowListBox
@@ -107,7 +107,7 @@ SvLBoxEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
     OJoinDesignView* pView = m_pTabWin->getDesignView();
     OJoinController& rController = pView->getController();
 
-    BOOL bCase = FALSE;
+    sal_Bool bCase = sal_False;
     try
     {
         Reference<XConnection> xConnection = rController.getConnection();
@@ -136,7 +136,7 @@ SvLBoxEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
 //------------------------------------------------------------------------------
 void OTableWindowListBox::NotifyScrolled()
 {
-    m_bReallyScrolled = TRUE;
+    m_bReallyScrolled = sal_True;
 }
 
 //------------------------------------------------------------------------------
@@ -147,13 +147,13 @@ void OTableWindowListBox::NotifyEndScroll()
         m_pTabWin->getTableView()->Invalidate(INVALIDATE_NOCHILDREN);
         // ohne das INVALIDATE_NOCHILDREN wuerden auch alle Tabellen neu gezeichnet werden,
         // sprich : es flackert
-    m_bReallyScrolled = FALSE;
+    m_bReallyScrolled = sal_False;
 }
 
 //------------------------------------------------------------------------------
 long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
 {
-    BOOL bHandled = FALSE;
+    sal_Bool bHandled = sal_False;
     switch (rNEvt.GetType())
     {
         case EVENT_KEYINPUT:
@@ -194,7 +194,7 @@ IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
     {
         ScrollOutputArea( -1 );
         pEntry = GetEntry( m_aMousePos );
-        Select( pEntry, TRUE );
+        Select( pEntry, sal_True );
     }
 
     return 0;
@@ -211,7 +211,7 @@ IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
     {
         ScrollOutputArea( 1 );
         pEntry = GetEntry( m_aMousePos );
-        Select( pEntry, TRUE );
+        Select( pEntry, sal_True );
     }
 
     return 0;
@@ -246,7 +246,7 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 
         // remove the selection if the dragging operation is leaving the window
         if (_rEvt.mbLeaving)
-            SelectAll(FALSE);
+            SelectAll(sal_False);
         else
         {
             // hit test
@@ -288,8 +288,8 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 
             // Beim Drag automatisch den richtigen Eintrag selektieren
             if ((FirstSelected() != pEntry) || (FirstSelected() && NextSelected(FirstSelected())))
-                SelectAll(FALSE);
-            Select(pEntry, TRUE);
+                SelectAll(sal_False);
+            Select(pEntry, sal_True);
 
             // Auf den ersten Eintrag (*) kann nicht gedroppt werden
             if(!( m_pTabWin->GetData()->IsShowAll() && (pEntry==First()) ))
@@ -363,8 +363,8 @@ void OTableWindowListBox::GetFocus()
         if ( GetSelectionCount() == 0 || GetCurEntry() != FirstSelected() )
         {
             if ( FirstSelected() )
-                Select(FirstSelected(), FALSE);
-            Select(GetCurEntry(), TRUE);
+                Select(FirstSelected(), sal_False);
+            Select(GetCurEntry(), sal_True);
         }
         else
             ShowFocusRect(FirstSelected());

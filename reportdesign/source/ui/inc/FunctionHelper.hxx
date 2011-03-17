@@ -79,10 +79,10 @@ public:
     virtual ::rtl::OUString getDescription() const ;
     virtual xub_StrLen getSuppressedArgumentCount() const ;
     virtual ::rtl::OUString getFormula(const ::std::vector< ::rtl::OUString >& _aArguments) const ;
-    virtual void fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) const ;
+    virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const ;
     virtual void initArgumentInfo()  const;
     virtual ::rtl::OUString getSignature() const ;
-    virtual long getHelpId() const ;
+    virtual rtl::OString getHelpId() const ;
     virtual sal_uInt32 getParameterCount() const ;
     virtual ::rtl::OUString getParameterName(sal_uInt32 _nPos) const ;
     virtual ::rtl::OUString getParameterDescription(sal_uInt32 _nPos) const ;

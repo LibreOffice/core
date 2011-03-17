@@ -39,7 +39,7 @@
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include "metadata.hxx"
 
 //........................................................................

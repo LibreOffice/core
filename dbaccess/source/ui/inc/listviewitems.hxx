@@ -52,7 +52,7 @@ namespace dbaui
         {
         }
 
-        virtual USHORT IsA();
+        virtual sal_uInt16 IsA();
 
         virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
         virtual void InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* _pViewData);

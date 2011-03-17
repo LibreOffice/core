@@ -69,13 +69,13 @@ public:
     virtual SdrPage* Clone() const;
     using SdrPage::Clone;
 
-    virtual void NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason* pReason);
-    virtual SdrObject* RemoveObject(ULONG nObjNum);
+    virtual void NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInsertReason* pReason);
+    virtual SdrObject* RemoveObject(sal_uLong nObjNum);
 
     /** returns the index inside the object list which belongs to the report component.
         @param  _xObject    the report component
     */
-    ULONG getIndexOf(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xObject);
+    sal_uLong getIndexOf(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xObject);
 
     /** removes the SdrObject which belongs to the report component.
         @param  _xObject    the report component

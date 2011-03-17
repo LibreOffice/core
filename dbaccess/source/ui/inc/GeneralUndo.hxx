@@ -46,7 +46,7 @@ namespace dbaui
 
     public:
         TYPEINFO();
-        OCommentUndoAction(USHORT nCommentID) { m_strComment = String(ModuleRes(nCommentID)); }
+        OCommentUndoAction(sal_uInt16 nCommentID) { m_strComment = String(ModuleRes(nCommentID)); }
 
         virtual UniString   GetComment() const { return m_strComment; }
     };

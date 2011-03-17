@@ -32,7 +32,7 @@
 #include "uistrings.hrc"
 #include "ReportController.hxx"
 #include "UITools.hxx"
-#include "Undo.hxx"
+#include "RptUndo.hxx"
 #include "reportformula.hxx"
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
@@ -74,9 +74,9 @@ using namespace ::com::sun::star;
 using namespace utl;
 using namespace ::comphelper;
 
-USHORT lcl_getImageId(const uno::Reference< report::XReportComponent>& _xElement)
+sal_uInt16 lcl_getImageId(const uno::Reference< report::XReportComponent>& _xElement)
 {
-    USHORT nId = 0;
+    sal_uInt16 nId = 0;
     uno::Reference< report::XFixedLine> xFixedLine(_xElement,uno::UNO_QUERY);
     if ( uno::Reference< report::XFixedText>(_xElement,uno::UNO_QUERY).is() )
         nId = SID_FM_FIXEDTEXT;
@@ -163,8 +163,8 @@ class NavigatorTree :   public ::cppu::BaseMutex
     ::rtl::Reference< comphelper::OSelectionChangeMultiplexer>                  m_pSelectionListener;
     unsigned short                                                              m_nTimerCounter;
 
-    SvLBoxEntry* insertEntry(const ::rtl::OUString& _sName,SvLBoxEntry* _pParent,USHORT _nImageId,ULONG _nPosition,UserData* _pData);
-    void traverseSection(const uno::Reference< report::XSection>& _xSection,SvLBoxEntry* _pParent,USHORT _nImageId,ULONG _nPosition = LIST_APPEND);
+    SvLBoxEntry* insertEntry(const ::rtl::OUString& _sName,SvLBoxEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition,UserData* _pData);
+    void traverseSection(const uno::Reference< report::XSection>& _xSection,SvLBoxEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition = LIST_APPEND);
     void traverseFunctions(const uno::Reference< report::XFunctions>& _xFunctions,SvLBoxEntry* _pParent);
 
     NavigatorTree(const NavigatorTree&);
@@ -310,12 +310,12 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
                                       uno::Reference< report::XFunction>(pData->getContent(),uno::UNO_QUERY).is());
             PopupMenu aContextMenu( ModuleRes( RID_MENU_NAVIGATOR ) );
 
-            USHORT nCount = aContextMenu.GetItemCount();
-            for (USHORT i = 0; i < nCount; ++i)
+            sal_uInt16 nCount = aContextMenu.GetItemCount();
+            for (sal_uInt16 i = 0; i < nCount; ++i)
             {
                 if ( MENUITEM_SEPARATOR != aContextMenu.GetItemType(i))
                 {
-                    USHORT nId = aContextMenu.GetItemId(i);
+                    sal_uInt16 nId = aContextMenu.GetItemId(i);
 
                     aContextMenu.CheckItem(nId,m_rController.isCommandChecked(nId));
                     sal_Bool bEnabled = m_rController.isCommandEnabled(nId);
@@ -328,7 +328,7 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
                         aContextMenu.EnableItem(nId,bEnabled);
                 }
             }
-            USHORT nId = aContextMenu.Execute(this, aWhere);
+            sal_uInt16 nId = aContextMenu.Execute(this, aWhere);
             if ( nId )
             {
                 uno::Sequence< beans::PropertyValue> aArgs;
@@ -493,7 +493,7 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent ) throw (
             SetCurEntry(pEntry);
         }
         else if ( !pEntry )
-            SelectAll(FALSE,FALSE);
+            SelectAll(sal_False,sal_False);
     }
     else
     {
@@ -512,20 +512,20 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent ) throw (
     m_pSelectionListener->unlock();
 }
 // -----------------------------------------------------------------------------
-SvLBoxEntry* NavigatorTree::insertEntry(const ::rtl::OUString& _sName,SvLBoxEntry* _pParent,USHORT _nImageId,ULONG _nPosition,UserData* _pData)
+SvLBoxEntry* NavigatorTree::insertEntry(const ::rtl::OUString& _sName,SvLBoxEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition,UserData* _pData)
 {
     SvLBoxEntry* pEntry = NULL;
     if ( _nImageId )
     {
         const Image aImage( m_aNavigatorImages.GetImage( _nImageId ) );
-        pEntry = InsertEntry(_sName,aImage,aImage,_pParent,FALSE,_nPosition,_pData);
+        pEntry = InsertEntry(_sName,aImage,aImage,_pParent,sal_False,_nPosition,_pData);
     }
     else
-        pEntry = InsertEntry(_sName,_pParent,FALSE,_nPosition,_pData);
+        pEntry = InsertEntry(_sName,_pParent,sal_False,_nPosition,_pData);
     return pEntry;
 }
 // -----------------------------------------------------------------------------
-void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xSection,SvLBoxEntry* _pParent,USHORT _nImageId,ULONG _nPosition)
+void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xSection,SvLBoxEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition)
 {
     SvLBoxEntry* pSection = insertEntry(_xSection->getName(),_pParent,_nImageId,_nPosition,new UserData(this,_xSection));
     const sal_Int32 nCount = _xSection->getCount();
@@ -666,7 +666,7 @@ void NavigatorTree::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) 
             SvLBoxEntry* pParent = find(xReport);
             if ( _rEvent.PropertyName == PROPERTY_REPORTHEADERON )
             {
-                ULONG nPos = xReport->getReportHeaderOn() ? 2 : 1;
+                sal_uLong nPos = xReport->getReportHeaderOn() ? 2 : 1;
                 traverseSection(xReport->getReportHeader(),pParent,SID_REPORTHEADERFOOTER,nPos);
             }
             else if ( _rEvent.PropertyName == PROPERTY_PAGEHEADERON )
@@ -677,7 +677,7 @@ void NavigatorTree::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) 
                 traverseSection(xReport->getPageFooter(),pParent, SID_PAGEHEADERFOOTER);
             else if ( _rEvent.PropertyName == PROPERTY_REPORTFOOTERON )
             {
-                ULONG nPos = xReport->getPageFooterOn() ? (GetLevelChildCount(pParent) - 1) : LIST_APPEND;
+                sal_uLong nPos = xReport->getPageFooterOn() ? (GetLevelChildCount(pParent) - 1) : LIST_APPEND;
                 traverseSection(xReport->getReportFooter(),pParent,SID_REPORTHEADERFOOTER,nPos);
             }
         }
@@ -708,7 +708,7 @@ void NavigatorTree::_elementInserted( const container::ContainerEvent& _rEvent )
         uno::Reference< report::XReportComponent> xElement(xProp,uno::UNO_QUERY);
         if ( xProp.is() )
             sName = lcl_getName(xProp);
-        insertEntry(sName,pEntry,(!xElement.is() ? USHORT(SID_RPT_NEW_FUNCTION) : lcl_getImageId(xElement)),LIST_APPEND,new UserData(this,xProp));
+        insertEntry(sName,pEntry,(!xElement.is() ? sal_uInt16(SID_RPT_NEW_FUNCTION) : lcl_getImageId(xElement)),LIST_APPEND,new UserData(this,xProp));
     }
     if ( !IsExpanded(pEntry) )
         Expand(pEntry);

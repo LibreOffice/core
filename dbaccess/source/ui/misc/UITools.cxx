@@ -1306,13 +1306,13 @@ namespace
 } // annonymous
 // .........................................................................
 // -----------------------------------------------------------------------------
-::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const sal_Int32 _nHelpId)
+::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName, const rtl::OString& sHelpId)
 {
     ::com::sun::star::util::URL aURL;
     aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ) );
     aURL.Complete += _sModuleName;
     aURL.Complete += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-    aURL.Complete += ::rtl::OUString::valueOf(_nHelpId);
+    aURL.Complete += ::rtl::OUString(sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8);
 
     ::rtl::OUString sAnchor;
     ::rtl::OUString sTempURL = aURL.Complete;
@@ -1451,7 +1451,7 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     return pTypeInfo;
 }
 // -----------------------------------------------------------------------------
-sal_Int32 askForUserAction(Window* _pParent,USHORT _nTitle,USHORT _nText,sal_Bool _bAll,const ::rtl::OUString& _sName)
+sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,sal_Bool _bAll,const ::rtl::OUString& _sName)
 {
     SolarMutexGuard aGuard;
     String aMsg = String(ModuleRes(_nText));

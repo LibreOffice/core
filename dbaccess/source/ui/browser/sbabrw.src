@@ -188,14 +188,12 @@ Menu RID_MENU_REFRESH_DATA
         MenuItem
         {
             MID_SBA_QRY_REFRESH
-            HelpId = SID_FM_REFRESH ;
             Command = ".uno:Refresh";
         };
         MenuItem
         {
             Identifier = ID_BROWSER_REFRESH_REBUILD;
             Command = ".uno:DBRebuildData";
-            HelpId = HID_BROWSER_REFRESH_REBUILDVIEW;
             Text [ en-US ] = "Rebuild";
         };
     };

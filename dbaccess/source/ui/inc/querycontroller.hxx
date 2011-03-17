@@ -100,7 +100,7 @@ namespace dbaui
         sal_Int32       m_nVisibleRows;     // which rows the selection browse should show
         sal_Int32       m_nSplitPos;        // the position of the splitter
         sal_Int32       m_nCommandType;     // the type of the object we're designing
-        sal_Bool        m_bGraphicalDesign; // are we in the graphical design mode (TRUE) or in the text design (FALSE)?
+        sal_Bool        m_bGraphicalDesign; // are we in the graphical design mode (sal_True) or in the text design (sal_False)?
         sal_Bool        m_bDistinct;        // true when you want "select distinct" otherwise false
         sal_Bool        m_bViewAlias;       // show the alias row in the design view
         sal_Bool        m_bViewTable;       // show the table row in the design view

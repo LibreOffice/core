@@ -44,7 +44,7 @@ namespace dbaui
         ElementType                         m_eLastType;
         OAppBorderWindow&                   m_rBorderWin;
 
-        void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
 
         DECL_LINK( OnContainerSelectHdl,    SvtIconChoiceCtrl* );
         DECL_LINK( ChangeToLastSelected, void* );
@@ -65,8 +65,8 @@ namespace dbaui
         inline void cut()   { }
         inline void paste() { }
 
-        inline ULONG                    GetEntryCount() const { return m_aIconControl.GetEntryCount(); }
-        inline SvxIconChoiceCtrlEntry*  GetEntry( ULONG nPos ) const { return m_aIconControl.GetEntry(nPos); }
+        inline sal_uLong                    GetEntryCount() const { return m_aIconControl.GetEntryCount(); }
+        inline SvxIconChoiceCtrlEntry*  GetEntry( sal_uLong nPos ) const { return m_aIconControl.GetEntry(nPos); }
         inline Rectangle                GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const { return m_aIconControl.GetBoundingBox(pEntry); }
 
         /** automatically creates mnemonics for the icon/texts in our left hand side panel

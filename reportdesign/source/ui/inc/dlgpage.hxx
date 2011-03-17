@@ -46,7 +46,7 @@ private:
     void operator =(const ORptPageDialog&);
 public:
 
-    ORptPageDialog( Window* pParent, const SfxItemSet* pAttr,USHORT _nPageId);
+    ORptPageDialog( Window* pParent, const SfxItemSet* pAttr,sal_uInt16 _nPageId);
     virtual ~ORptPageDialog() {}
 };
 // =============================================================================

@@ -35,9 +35,7 @@
 #include "JoinDesignView.hxx"
 #include "TableConnectionData.hxx"
 #include "TableWindowData.hxx"
-#ifndef _MEMORY_
 #include <memory>
-#endif
 #include <boost/shared_ptr.hpp>
 
 namespace comphelper

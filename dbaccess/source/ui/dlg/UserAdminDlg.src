@@ -48,7 +48,6 @@ TabDialog DLG_DATABASE_USERADMIN
     {
         OutputSize = TRUE ;
         HelpId = HID_DSADMIN_TABCONTROL;
-        SingleLine=TRUE;
     };
     String STR_PAGETITLE_USERADMIN
     {

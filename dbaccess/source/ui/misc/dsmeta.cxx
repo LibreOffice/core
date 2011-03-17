@@ -94,6 +94,7 @@ namespace dbaui
             { DSID_IGNORECURRENCY,          "IgnoreCurrency" },
             { DSID_ESCAPE_DATETIME,         "EscapeDateTime" },
             { DSID_PRIMARY_KEY_SUPPORT,     "PrimaryKeySupport" },
+            { DSID_MAX_ROW_SCAN,            "MaxRowScan" },
             { 0, NULL }
         };
         return s_aMappings;

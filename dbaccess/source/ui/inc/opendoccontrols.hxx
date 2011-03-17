@@ -66,7 +66,7 @@ namespace dbaui
     {
     private:
         typedef ::std::pair< String, String >       StringPair;
-        typedef ::std::map< USHORT, StringPair >    MapIndexToStringPair;
+        typedef ::std::map< sal_uInt16, StringPair >    MapIndexToStringPair;
 
         ::rtl::OUString         m_sModule;
         MapIndexToStringPair    m_aURLs;
@@ -80,7 +80,7 @@ namespace dbaui
     protected:
         virtual void        RequestHelp( const HelpEvent& _rHEvt );
 
-        StringPair  impl_getDocumentAtIndex( USHORT _nListIndex, bool _bSystemNotation = false ) const;
+        StringPair  impl_getDocumentAtIndex( sal_uInt16 _nListIndex, bool _bSystemNotation = false ) const;
 
     private:
         void    impl_init( const sal_Char* _pAsciiModuleName );

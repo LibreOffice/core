@@ -93,7 +93,7 @@ namespace rptui
     public:
         OWindowPositionCorrector(Window* _pWindow,long _nDeltaX, long _nDeltaY) :m_nDeltaX(_nDeltaX), m_nDeltaY(_nDeltaY)
         {
-            USHORT nCount = _pWindow->GetChildCount();
+            sal_uInt16 nCount = _pWindow->GetChildCount();
             m_aChildren.reserve(nCount);
             while( nCount )
             {
@@ -147,7 +147,7 @@ namespace rptui
         void ImplInitSettings();
         /** returns the iterator at pos _nPos or the end()
         */
-        TSectionsMap::iterator getIteratorAtPos(USHORT _nPos);
+        TSectionsMap::iterator getIteratorAtPos(sal_uInt16 _nPos);
         void collectRectangles(TRectangleMap& _rMap,bool _bBoundRects);
         void collectBoundResizeRect(const TRectangleMap& _rSortRectangles,sal_Int32 _nControlModification,bool _bAlignAtSection,bool _bBoundRects,Rectangle& _rBound,Rectangle& _rResize);
         void impl_resizeSectionWindow(OSectionWindow& _rSectionWindow,Point& _rStartPoint,bool _bSet);
@@ -182,7 +182,7 @@ namespace rptui
         *
         * \param _nPosition Zero based.
         */
-        void            removeSection(USHORT _nPosition);
+        void            removeSection(sal_uInt16 _nPosition);
 
         /** adds a new section at position _nPosition.
             If the section is <NULL/> nothing happens.
@@ -190,23 +190,23 @@ namespace rptui
         */
         void            addSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
                                     ,const ::rtl::OUString& _sColorEntry
-                                    ,USHORT _nPosition = USHRT_MAX);
+                                    ,sal_uInt16 _nPosition = USHRT_MAX);
 
-        USHORT          getSectionCount() const;
+        sal_uInt16          getSectionCount() const;
         /** return the section at the given position
         *
         * \param _nPos
         * \return the section at this pos or an empty section
         */
-        ::boost::shared_ptr<OSectionWindow> getSectionWindow(const USHORT _nPos) const;
+        ::boost::shared_ptr<OSectionWindow> getSectionWindow(const sal_uInt16 _nPos) const;
 
         /** turns the grid on or off
         *
         * \param _bVisible
         */
         void            toggleGrid(sal_Bool _bVisible);
-        void            setGridSnap(BOOL bOn);
-        void            setDragStripes(BOOL bOn);
+        void            setGridSnap(sal_Bool bOn);
+        void            setDragStripes(sal_Bool bOn);
 
         /** returns the total accumulated height of all sections until _pSection is reached
         */
@@ -214,7 +214,7 @@ namespace rptui
 
         inline bool     empty() const { return m_aSections.empty(); }
         void            SetMode( DlgEdMode m_eMode );
-        void            SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
+        void            SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
         rtl::OUString   GetInsertObjString() const;
         /** copies the current selection in this section
         */
@@ -224,7 +224,7 @@ namespace rptui
         *
         * \return <TRUE/> if paste is allowed
         */
-        BOOL IsPasteAllowed() const;
+        sal_Bool IsPasteAllowed() const;
 
         /** paste a new control in this section
         */
@@ -241,7 +241,7 @@ namespace rptui
 
         /** returns <TRUE/> when a object is marked
         */
-        BOOL HasSelection() const;
+        sal_Bool HasSelection() const;
 
         /** unmark all objects on the views without the given one.
         *
@@ -293,7 +293,7 @@ namespace rptui
 
         /** returns the current position in the list
         */
-        USHORT getPosition(const OSectionWindow* _pSectionWindow = NULL) const;
+        sal_uInt16 getPosition(const OSectionWindow* _pSectionWindow = NULL) const;
 
         /** calls on every section BrkAction
         *
@@ -309,12 +309,12 @@ namespace rptui
         bool isObjectInMyTempList(SdrObject *);
     public:
         void BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionView* _pSection);
-        void EndDragObj(BOOL _bDragIntoNewSection,const OSectionView* _pSection,const Point& _aPnt);
+        void EndDragObj(sal_Bool _bDragIntoNewSection,const OSectionView* _pSection,const Point& _aPnt);
 
         void EndAction();
         void ForceMarkedToAnotherPage();
-        BOOL IsAction() const;
-        BOOL IsDragObj() const;
+        sal_Bool IsAction() const;
+        sal_Bool IsDragObj() const;
         void handleKey(const KeyCode& _rCode);
         void stopScrollTimer();
 

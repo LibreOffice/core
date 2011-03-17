@@ -505,7 +505,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    BOOL OGeneralPage::FillItemSet(SfxItemSet& _rCoreAttrs)
+    sal_Bool OGeneralPage::FillItemSet(SfxItemSet& _rCoreAttrs)
     {
         sal_Bool bChangedSomething = sal_False;
 
@@ -530,7 +530,7 @@ namespace dbaui
 
         if ( bCommitTypeSelection )
         {
-            USHORT nEntry = m_pDatasourceType->GetSelectEntryPos();
+            sal_uInt16 nEntry = m_pDatasourceType->GetSelectEntryPos();
             ::rtl::OUString sURLPrefix = m_aURLPrefixes[nEntry];
             if (m_DBWizardMode)
             {

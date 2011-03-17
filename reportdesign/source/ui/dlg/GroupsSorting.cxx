@@ -103,13 +103,13 @@ class OFieldExpressionControl : public TContainerListenerBase
     ::svt::ComboBoxControl*         m_pComboCell;
     sal_Int32                       m_nDataPos;
     sal_Int32                       m_nCurrentPos;
-    ULONG                           m_nPasteEvent;
-    ULONG                           m_nDeleteEvent;
+    sal_uLong                           m_nPasteEvent;
+    sal_uLong                           m_nDeleteEvent;
     OGroupsSortingDialog*           m_pParent;
     bool                            m_bIgnoreEvent;
 
-    void fillListBox(const uno::Reference< beans::XPropertySet>& _xDest,long nRow,USHORT nColumnId);
-    BOOL SaveModified(bool _bAppend);
+    void fillListBox(const uno::Reference< beans::XPropertySet>& _xDest,long nRow,sal_uInt16 nColumnId);
+    sal_Bool SaveModified(bool _bAppend);
 
     OFieldExpressionControl(const OFieldExpressionControl&); // NO COPY
     void operator =(const OFieldExpressionControl&);         // NO ASSIGN
@@ -144,17 +144,17 @@ public:
     */
     void moveGroups(const uno::Sequence<uno::Any>& _aGroups,sal_Int32 _nRow,sal_Bool _bSelect = sal_True);
 
-    virtual BOOL CursorMoving(long nNewRow, USHORT nNewCol);
+    virtual sal_Bool CursorMoving(long nNewRow, sal_uInt16 nNewCol);
     using OFieldExpressionControl_Base::GetRowCount;
 protected:
-    virtual BOOL IsTabAllowed(BOOL bForward) const;
+    virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
 
-    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, USHORT nCol );
-    virtual ::svt::CellController* GetController( long nRow, USHORT nCol );
-    virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColId ) const;
-    virtual BOOL SeekRow( long nRow );
-    virtual BOOL SaveModified();
-    virtual String GetCellText( long nRow, USHORT nColId ) const;
+    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );
+    virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
+    virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
+    virtual sal_Bool SeekRow( long nRow );
+    virtual sal_Bool SaveModified();
+    virtual String GetCellText( long nRow, sal_uInt16 nColId ) const;
     virtual RowStatus GetRowStatus(long nRow) const;
 
     virtual void KeyInput(const KeyEvent& rEvt);
@@ -274,7 +274,7 @@ sal_Int8 OFieldExpressionControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt
     sal_Int8 nAction = DND_ACTION_NONE;
     if ( IsEditing() )
     {
-        USHORT nPos = m_pComboCell->GetSelectEntryPos();
+        sal_uInt16 nPos = m_pComboCell->GetSelectEntryPos();
         if ( COMBOBOX_ENTRY_NOTFOUND != nPos || m_pComboCell->GetText().Len() )
             SaveModified();
         DeactivateCell();
@@ -315,8 +315,8 @@ void OFieldExpressionControl::moveGroups(const uno::Sequence<uno::Any>& _aGroups
         m_bIgnoreEvent = true;
         {
             sal_Int32 nRow = _nRow;
-            String sUndoAction(ModuleRes(RID_STR_UNDO_MOVE_GROUP));
-            UndoManagerListAction aListAction(*m_pParent->m_pController->getUndoMgr(),sUndoAction);
+            const String sUndoAction(ModuleRes(RID_STR_UNDO_MOVE_GROUP));
+            const UndoContext aUndoContext( m_pParent->m_pController->getUndoManager(), sUndoAction );
 
             uno::Reference< report::XGroups> xGroups = m_pParent->getGroups();
             const uno::Any* pIter = _aGroups.getConstArray();
@@ -375,7 +375,7 @@ void OFieldExpressionControl::lateInit()
         aFont.SetWeight( WEIGHT_LIGHT );
         SetFont(aFont);
 
-        InsertHandleColumn(static_cast<USHORT>(GetTextWidth('0') * 4)/*, TRUE */);
+        InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth('0') * 4)/*, sal_True */);
         InsertDataColumn( FIELD_EXPRESSION, String(ModuleRes(STR_RPT_EXPRESSION)), 100);
 
         m_pComboCell = new ComboBoxControl( &GetDataWindow() );
@@ -402,7 +402,7 @@ void OFieldExpressionControl::lateInit()
         // not the first call
         RowRemoved(0, GetRowCount());
 
-    RowInserted(0, m_aGroupPositions.size(), TRUE);
+    RowInserted(0, m_aGroupPositions.size(), sal_True);
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -428,19 +428,19 @@ IMPL_LINK(OFieldExpressionControl, AsynchDeactivate, void*, EMPTYARG)
 }
 
 //------------------------------------------------------------------------------
-BOOL OFieldExpressionControl::IsTabAllowed(BOOL /*bForward*/) const
+sal_Bool OFieldExpressionControl::IsTabAllowed(sal_Bool /*bForward*/) const
 {
     DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
-    return FALSE;
+    return sal_False;
 }
 
 //------------------------------------------------------------------------------
-BOOL OFieldExpressionControl::SaveModified()
+sal_Bool OFieldExpressionControl::SaveModified()
 {
     return SaveModified(true);
 }
 //------------------------------------------------------------------------------
-BOOL OFieldExpressionControl::SaveModified(bool _bAppendRow)
+sal_Bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
 {
     DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     sal_Int32 nRow = GetCurRow();
@@ -454,7 +454,7 @@ BOOL OFieldExpressionControl::SaveModified(bool _bAppendRow)
             {
                 bAppend = sal_True;
                 String sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
-                m_pParent->m_pController->getUndoMgr()->EnterListAction( sUndoAction, String() );
+                m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, String() );
                 xGroup = m_pParent->getGroups()->createGroup();
                 xGroup->setHeaderOn(sal_True);
 
@@ -485,7 +485,7 @@ BOOL OFieldExpressionControl::SaveModified(bool _bAppendRow)
                 xGroup = m_pParent->getGroup(m_aGroupPositions[nRow]);
             if ( xGroup.is() )
             {
-                USHORT nPos = m_pComboCell->GetSelectEntryPos();
+                sal_uInt16 nPos = m_pComboCell->GetSelectEntryPos();
                 ::rtl::OUString sExpression;
                 if ( COMBOBOX_ENTRY_NOTFOUND == nPos )
                     sExpression = m_pComboCell->GetText();
@@ -498,7 +498,7 @@ BOOL OFieldExpressionControl::SaveModified(bool _bAppendRow)
                 ::rptui::adjustSectionName(xGroup,nPos);
 
                 if ( bAppend )
-                    m_pParent->m_pController->getUndoMgr()->LeaveListAction();
+                    m_pParent->m_pController->getUndoManager().LeaveListAction();
             }
 
             if ( Controller() )
@@ -518,10 +518,10 @@ BOOL OFieldExpressionControl::SaveModified(bool _bAppendRow)
         }
     }
 
-    return TRUE;
+    return sal_True;
 }
 //------------------------------------------------------------------------------
-String OFieldExpressionControl::GetCellText( long nRow, USHORT /*nColId*/ ) const
+String OFieldExpressionControl::GetCellText( long nRow, sal_uInt16 /*nColId*/ ) const
 {
     DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     String sText;
@@ -552,7 +552,7 @@ String OFieldExpressionControl::GetCellText( long nRow, USHORT /*nColId*/ ) cons
 }
 
 //------------------------------------------------------------------------------
-void OFieldExpressionControl::InitController( CellControllerRef& /*rController*/, long nRow, USHORT nColumnId )
+void OFieldExpressionControl::InitController( CellControllerRef& /*rController*/, long nRow, sal_uInt16 nColumnId )
 {
     DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
 
@@ -575,7 +575,7 @@ sal_Bool OFieldExpressionControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
     return sal_True;
 }
 //------------------------------------------------------------------------------
-CellController* OFieldExpressionControl::GetController( long /*nRow*/, USHORT /*nColumnId*/ )
+CellController* OFieldExpressionControl::GetController( long /*nRow*/, sal_uInt16 /*nColumnId*/ )
 {
     DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     ComboBoxCellController* pCellController = new ComboBoxCellController( m_pComboCell );
@@ -584,17 +584,17 @@ CellController* OFieldExpressionControl::GetController( long /*nRow*/, USHORT /*
 }
 
 //------------------------------------------------------------------------------
-BOOL OFieldExpressionControl::SeekRow( long _nRow )
+sal_Bool OFieldExpressionControl::SeekRow( long _nRow )
 {
     DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     // die Basisklasse braucht den Aufruf, da sie sich dort merkt, welche Zeile gepainted wird
     EditBrowseBox::SeekRow(_nRow);
     m_nCurrentPos = _nRow;
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------------
-void OFieldExpressionControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId ) const
+void OFieldExpressionControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
 {
     DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     String aText  =const_cast< OFieldExpressionControl*>(this)->GetCellText( m_nCurrentPos, nColumnId );
@@ -739,7 +739,7 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
                 return;
             }
 
-            USHORT nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
+            sal_uInt16 nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
 
             if ( nColId == HANDLE_ID )
             {
@@ -810,7 +810,7 @@ void OFieldExpressionControl::DeleteRows()
             {
                 bFirstTime = false;
                 String sUndoAction(ModuleRes(RID_STR_UNDO_REMOVE_SELECTION));
-                m_pParent->m_pController->getUndoMgr()->EnterListAction( sUndoAction, String() );
+                m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, String() );
             }
 
             sal_Int32 nGroupPos = m_aGroupPositions[nIndex];
@@ -830,7 +830,7 @@ void OFieldExpressionControl::DeleteRows()
     }
 
     if ( !bFirstTime )
-        m_pParent->m_pController->getUndoMgr()->LeaveListAction();
+        m_pParent->m_pController->getUndoManager().LeaveListAction();
 
     m_nDataPos = GetCurRow();
     InvalidateStatusCell( nOldDataPos );
@@ -916,8 +916,8 @@ void OFieldExpressionControl::InsertRows( long nRow )
         {
             m_bIgnoreEvent = false;
             {
-                String sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
-                UndoManagerListAction aListAction(*m_pParent->m_pController->getUndoMgr(),sUndoAction);
+                const String sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
+                const UndoContext aUndoContext( m_pParent->m_pController->getUndoManager(), sUndoAction );
 
                 uno::Reference<report::XGroups> xGroups = m_pParent->getGroups();
                 sal_Int32 nGroupPos = 0;
@@ -999,7 +999,7 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
     {
         pControlsLst[i]->SetGetFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusGot));
         pControlsLst[i]->SetLoseFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusLost));
-        pControlsLst[i]->Show(TRUE);
+        pControlsLst[i]->Show(sal_True);
     }
 
     for (size_t i = 0; i < (SAL_N_ELEMENTS(pControlsLst))-1; ++i)
@@ -1014,7 +1014,7 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
     {
-        pControls[i]->Show(TRUE);
+        pControls[i]->Show(sal_True);
         String sText = pControls[i]->GetText();
         if ( aMnemonicGenerator.CreateMnemonic(sText) )
             pControls[i]->SetText(sText);
@@ -1184,7 +1184,7 @@ IMPL_LINK(OGroupsSortingDialog, OnControlFocusGot, Control*, pControl )
                 NumericField* pNumericField = dynamic_cast< NumericField* >( pControl );
                 if ( pNumericField )
                     pNumericField->SaveValue();
-                showHelpText(static_cast<USHORT>(i+STR_RPT_HELP_FIELD));
+                showHelpText(static_cast<sal_uInt16>(i+STR_RPT_HELP_FIELD));
                 break;
             }
         }
@@ -1206,7 +1206,7 @@ IMPL_LINK( OGroupsSortingDialog, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
 {
     DBG_CHKTHIS( rpt_OGroupsSortingDialog,NULL);
 
-    USHORT nCommand = m_aToolBox.GetCurItemId();
+    sal_uInt16 nCommand = m_aToolBox.GetCurItemId();
 
     if ( m_pFieldExpression )
     {
@@ -1281,7 +1281,7 @@ IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox*, pListBox )
     return 1L;
 }
 // -----------------------------------------------------------------------------
-void OGroupsSortingDialog::showHelpText(USHORT _nResId)
+void OGroupsSortingDialog::showHelpText(sal_uInt16 _nResId)
 {
     m_aHelpWindow.SetText(String(ModuleRes(_nResId)));
 }
@@ -1325,8 +1325,8 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
         case sdbc::DataType::TIME:
         case sdbc::DataType::TIMESTAMP:
             {
-                USHORT nIds[] = { STR_RPT_YEAR, STR_RPT_QUARTER,STR_RPT_MONTH,STR_RPT_WEEK,STR_RPT_DAY,STR_RPT_HOUR,STR_RPT_MINUTE };
-                for (USHORT i = 0; i < SAL_N_ELEMENTS(nIds); ++i)
+                sal_uInt16 nIds[] = { STR_RPT_YEAR, STR_RPT_QUARTER,STR_RPT_MONTH,STR_RPT_WEEK,STR_RPT_DAY,STR_RPT_HOUR,STR_RPT_MINUTE };
+                for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(nIds); ++i)
                 {
                     m_aGroupOnLst.InsertEntry(String(ModuleRes(nIds[i])));
                     m_aGroupOnLst.SetEntryData(i+1,reinterpret_cast<void*>(i+2));
@@ -1338,8 +1338,7 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
             m_aGroupOnLst.SetEntryData(1,reinterpret_cast<void*>(report::GroupOn::INTERVAL));
             break;
     }
-
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
     switch(_xGroup->getGroupOn())
     {
         case report::GroupOn::DEFAULT:

@@ -247,7 +247,7 @@ private:
     ::comphelper::ComponentContext      m_aContext;
     Reference< XFrameLoader >           m_xMySelf;
     ::rtl::OUString                     m_sCurrentURL;
-    ULONG                               m_nStartWizard;
+    sal_uLong                               m_nStartWizard;
 
     DECL_LINK( OnStartTableWizard, void* );
 public:

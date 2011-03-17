@@ -47,6 +47,7 @@
 
 ModalDialog DLG_INDEXDESIGN
 {
+    HelpID = "dbaccess:ModalDialog:DLG_INDEXDESIGN";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( DIALOG_SIZE_X , DIALOG_SIZE_Y ) ;
@@ -131,6 +132,7 @@ ModalDialog DLG_INDEXDESIGN
     };
     CheckBox CB_UNIQUE
     {
+        HelpID = "dbaccess:CheckBox:DLG_INDEXDESIGN:CB_UNIQUE";
         Pos = MAP_APPFONT ( LIST_WIDTH + 16, 34 ) ;
         Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 22, 8 ) ;
         SVLook = TRUE;
@@ -153,6 +155,7 @@ ModalDialog DLG_INDEXDESIGN
     };
     PushButton PB_CLOSE
     {
+        HelpID = "dbaccess:PushButton:DLG_INDEXDESIGN:PB_CLOSE";
         Pos = MAP_APPFONT ( DIALOG_SIZE_X - BUTTON_SIZE_X - 6 - BUTTON_SIZE_X - 6, DIALOG_SIZE_Y - BUTTON_SIZE_Y - 6 ) ;
         Size = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y );
         SVLook = TRUE;

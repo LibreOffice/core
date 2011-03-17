@@ -131,8 +131,8 @@ void OTableTreeListBox::notifyHiContrastChanged()
     SvLBoxEntry* pEntryLoop = First();
     while (pEntryLoop)
     {
-        USHORT nCount = pEntryLoop->ItemCount();
-        for (USHORT i=0;i<nCount;++i)
+        sal_uInt16 nCount = pEntryLoop->ItemCount();
+        for (sal_uInt16 i=0;i<nCount;++i)
         {
             SvLBoxItem* pItem = pEntryLoop->GetItem(i);
             if ( pItem && pItem->IsA() == SV_ITEM_ID_LBOXCONTEXTBMP)
@@ -298,7 +298,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 sRootEntryText  = String(ModuleRes(STR_ALL_VIEWS));
             else
                 sRootEntryText  = String(ModuleRes(STR_ALL_TABLES_AND_VIEWS));
-            InsertEntry( sRootEntryText, NULL, FALSE, LIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
+            InsertEntry( sRootEntryText, NULL, sal_False, LIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
         }
 
         if ( _rTables.empty() )
@@ -344,7 +344,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 {
                     SvLBoxEntry* pFolder = GetEntryPosByName( *folder, pRootEntry );
                     if ( !pFolder )
-                        pFolder = InsertEntry( *folder, pRootEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
+                        pFolder = InsertEntry( *folder, pRootEntry, sal_False, LIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
                 }
             }
         }
@@ -481,7 +481,7 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
     {
         SvLBoxEntry* pFolder = GetEntryPosByName( rFirstName, pParentEntry );
         if ( !pFolder )
-            pFolder = InsertEntry( rFirstName, pParentEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFirstFolderType ) );
+            pFolder = InsertEntry( rFirstName, pParentEntry, sal_False, LIST_APPEND, reinterpret_cast< void* >( nFirstFolderType ) );
         pParentEntry = pFolder;
     }
 
@@ -489,14 +489,14 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
     {
         SvLBoxEntry* pFolder = GetEntryPosByName( rSecondName, pParentEntry );
         if ( !pFolder )
-            pFolder = InsertEntry( rSecondName, pParentEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nSecondFolderType ) );
+            pFolder = InsertEntry( rSecondName, pParentEntry, sal_False, LIST_APPEND, reinterpret_cast< void* >( nSecondFolderType ) );
         pParentEntry = pFolder;
     }
 
     SvLBoxEntry* pRet = NULL;
     if ( !_bCheckName || !GetEntryPosByName( sName, pParentEntry ) )
     {
-        pRet = InsertEntry( sName, pParentEntry, FALSE, LIST_APPEND );
+        pRet = InsertEntry( sName, pParentEntry, sal_False, LIST_APPEND );
 
         Image aImage;
         m_pImageProvider->getImages( _rTableName, DatabaseObject::TABLE, aImage );

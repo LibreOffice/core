@@ -189,7 +189,7 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
     m_aActions.SetSelectHdl(LINK(this, OAddFieldWindow, OnSortAction));
     setToolBox(&m_aActions);
     m_aActions.CheckItem(SID_FM_SORTUP);
-    m_aActions.EnableItem(SID_ADD_CONTROL_PAIR, FALSE);
+    m_aActions.EnableItem(SID_ADD_CONTROL_PAIR, sal_False);
 
     m_pListBox->SetDoubleClickHdl(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
     m_pListBox->SetSelectHdl(LINK( this, OAddFieldWindow, OnSelectHdl ) );
@@ -230,8 +230,8 @@ OAddFieldWindow::~OAddFieldWindow()
     if ( m_pListBox.get() )
     {
         SvLBoxTreeList* pModel = m_pListBox->GetModel();
-        ULONG nCount = pModel->GetEntryCount();
-        for(ULONG i = 0; i< nCount;++i)
+        sal_uLong nCount = pModel->GetEntryCount();
+        for(sal_uLong i = 0; i< nCount;++i)
         {
             delete static_cast<ColumnInfo*>(pModel->GetEntry(i)->GetUserData());
         }
@@ -291,7 +291,7 @@ namespace
         const ::rtl::OUString* pEntries = _rEntries.getConstArray();
         sal_Int32 nEntries = _rEntries.getLength();
         for ( sal_Int32 i = 0; i < nEntries; ++i, ++pEntries )
-            _rListBox.InsertEntry( *pEntries,NULL,FALSE,LIST_APPEND,new ColumnInfo(*pEntries) );
+            _rListBox.InsertEntry( *pEntries,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries) );
     }
     void lcl_addToList( OAddFieldWindowListBox& _rListBox, const uno::Reference< container::XNameAccess>& i_xColumns )
     {
@@ -305,9 +305,9 @@ namespace
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
             if ( sLabel.getLength() )
-                _rListBox.InsertEntry( sLabel,NULL,FALSE,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+                _rListBox.InsertEntry( sLabel,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
             else
-                _rListBox.InsertEntry( *pEntries,NULL,FALSE,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
+                _rListBox.InsertEntry( *pEntries,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries,sLabel) );
         }
     }
 }
@@ -324,10 +324,10 @@ void OAddFieldWindow::Update()
     {
         // ListBox loeschen
         m_pListBox->Clear();
-        const USHORT nItemCount = m_aActions.GetItemCount();
-        for (USHORT j = 0; j< nItemCount; ++j)
+        const sal_uInt16 nItemCount = m_aActions.GetItemCount();
+        for (sal_uInt16 j = 0; j< nItemCount; ++j)
         {
-            m_aActions.EnableItem(m_aActions.GetItemId(j),FALSE);
+            m_aActions.EnableItem(m_aActions.GetItemId(j),sal_False);
         }
 
         String aTitle(ModuleRes(RID_STR_FIELDSELECTION));
@@ -372,7 +372,7 @@ void OAddFieldWindow::Update()
             SetText( aTitle );
             if ( m_aCommandName.getLength() )
             {
-                for (USHORT i = 0; i < nItemCount; ++i)
+                for (sal_uInt16 i = 0; i < nItemCount; ++i)
                 {
                     m_aActions.EnableItem(m_aActions.GetItemId(i));
                 }
@@ -472,9 +472,9 @@ void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
             if ( sLabel.getLength() )
-                m_pListBox->InsertEntry( sLabel,NULL,FALSE,LIST_APPEND,new ColumnInfo(sName,sLabel) );
+                m_pListBox->InsertEntry( sLabel,NULL,sal_False,LIST_APPEND,new ColumnInfo(sName,sLabel) );
             else
-                m_pListBox->InsertEntry( sName,NULL,FALSE,LIST_APPEND,new ColumnInfo(sName,sLabel) );
+                m_pListBox->InsertEntry( sName,NULL,sal_False,LIST_APPEND,new ColumnInfo(sName,sLabel) );
         }
     }
 }
@@ -527,19 +527,19 @@ void OAddFieldWindow::resizeControls(const Size& _rDiff)
 //------------------------------------------------------------------
 IMPL_LINK( OAddFieldWindow, OnSortAction, ToolBox*, /*NOTINTERESTEDIN*/ )
 {
-    const USHORT nCurItem = m_aActions.GetCurItemId();
+    const sal_uInt16 nCurItem = m_aActions.GetCurItemId();
     if ( SID_ADD_CONTROL_PAIR == nCurItem )
         OnDoubleClickHdl(NULL);
     else
     {
         if ( SID_FM_REMOVE_FILTER_SORT == nCurItem || !m_aActions.IsItemChecked(nCurItem) )
         {
-            const USHORT nItemCount = m_aActions.GetItemCount();
-            for (USHORT j = 0; j< nItemCount; ++j)
+            const sal_uInt16 nItemCount = m_aActions.GetItemCount();
+            for (sal_uInt16 j = 0; j< nItemCount; ++j)
             {
-                const USHORT nItemId = m_aActions.GetItemId(j);
+                const sal_uInt16 nItemId = m_aActions.GetItemId(j);
                 if ( nCurItem != nItemId )
-                    m_aActions.CheckItem(nItemId,FALSE);
+                    m_aActions.CheckItem(nItemId,sal_False);
             }
             SvSortMode eSortMode = SortNone;
             if ( SID_FM_REMOVE_FILTER_SORT != nCurItem )

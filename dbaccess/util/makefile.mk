@@ -240,3 +240,23 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
 .ENDIF
 
 .ENDIF
+
+ALLTAR : $(MISC)/dba.component $(MISC)/dbu.component $(MISC)/sdbt.component
+
+$(MISC)/dba.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        dba.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt dba.component
+
+$(MISC)/dbu.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        dbu.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt dbu.component
+
+$(MISC)/sdbt.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        sdbt.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL3TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt sdbt.component

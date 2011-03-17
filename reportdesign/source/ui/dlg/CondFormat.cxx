@@ -88,11 +88,11 @@ namespace rptui
         UpdateLocker( Window& _rWindow )
             :m_rWindow( _rWindow )
         {
-            _rWindow.SetUpdateMode( FALSE );
+            _rWindow.SetUpdateMode( sal_False );
         }
         ~UpdateLocker()
         {
-            m_rWindow.SetUpdateMode( TRUE );
+            m_rWindow.SetUpdateMode( sal_True );
         }
     };
 
@@ -401,7 +401,7 @@ namespace rptui
     }
 
     // -----------------------------------------------------------------------------
-    void ConditionalFormattingDialog::applyCommand( size_t _nCondIndex, USHORT _nCommandId, const ::Color _aColor )
+    void ConditionalFormattingDialog::applyCommand( size_t _nCondIndex, sal_uInt16 _nCommandId, const ::Color _aColor )
     {
         OSL_PRECOND( _nCommandId, "ConditionalFormattingDialog::applyCommand: illegal command id!" );
         try
@@ -466,8 +466,8 @@ namespace rptui
         short nRet = ModalDialog::Execute();
         if ( nRet == RET_OK )
         {
-            String sUndoAction( ModuleRes( RID_STR_UNDO_CONDITIONAL_FORMATTING ) );
-            UndoManagerListAction aListAction(*m_rController.getUndoMgr(),sUndoAction);
+            const String sUndoAction( ModuleRes( RID_STR_UNDO_CONDITIONAL_FORMATTING ) );
+            const UndoContext aUndoContext( m_rController.getUndoManager(), sUndoAction );
             try
             {
                 sal_Int32 j(0), i(0);;

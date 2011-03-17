@@ -207,7 +207,7 @@ void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32
 namespace
 {
     // -------------------------------------------------------------------------
-    Font lcl_getReportControlFont( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat, awt::FontDescriptor& _out_rControlFont ,USHORT _nWichFont)
+    Font lcl_getReportControlFont( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat, awt::FontDescriptor& _out_rControlFont ,sal_uInt16 _nWichFont)
     {
         if ( !_rxReportControlFormat.is() )
             throw uno::RuntimeException();
@@ -231,14 +231,14 @@ namespace
     }
 
     // -------------------------------------------------------------------------
-    Font lcl_getReportControlFont( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,USHORT _nWhich )
+    Font lcl_getReportControlFont( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,sal_uInt16 _nWhich )
     {
         awt::FontDescriptor aAwtFont;
         return lcl_getReportControlFont( _rxReportControlFormat, aAwtFont, _nWhich );
     }
     // -------------------------------------------------------------------------
     const Font lcl_setFont(const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
-        SfxItemSet& _rItemSet,USHORT _nWhich,USHORT _nFont, USHORT _nFontHeight,USHORT _nLanguage,USHORT _nPosture, USHORT _nWeight)
+        SfxItemSet& _rItemSet,sal_uInt16 _nWhich,sal_uInt16 _nFont, sal_uInt16 _nFontHeight,sal_uInt16 _nLanguage,sal_uInt16 _nPosture, sal_uInt16 _nWeight)
     {
         // fill it
         awt::FontDescriptor aControlFont;
@@ -383,7 +383,7 @@ namespace
 
     // -------------------------------------------------------------------------
     void lcl_initAwtFont( const Font& _rOriginalFont, const SfxItemSet& _rItemSet, awt::FontDescriptor& _out_rAwtFont,
-        USHORT _nFont, USHORT _nFontHeight,USHORT _nPosture, USHORT _nWeight)
+        sal_uInt16 _nFont, sal_uInt16 _nFontHeight,sal_uInt16 _nPosture, sal_uInt16 _nWeight)
     {
         Font aNewFont( _rOriginalFont );
         const SfxPoolItem* pItem( NULL );
@@ -543,7 +543,7 @@ namespace
             lcl_pushBack( _out_rProperties, PROPERTY_CHARCASEMAP, uno::makeAny( pFontItem->GetValue() ) );
         }
         struct Items {
-                USHORT nWhich;
+                sal_uInt16 nWhich;
                 ::rtl::OUString sPropertyName;
         };
         const Items pItems[] = { {ITEMID_LANGUAGE,PROPERTY_CHARLOCALE}
@@ -666,9 +666,9 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         new SvxPostureItem(ITALIC_NONE,ITEMID_POSTURE),
         new SvxWeightItem(WEIGHT_NORMAL,ITEMID_WEIGHT),
 
-        new SvxShadowedItem(FALSE,ITEMID_SHADOWED),
-        new SvxWordLineModeItem(FALSE,ITEMID_WORDLINEMODE),
-        new SvxContourItem(FALSE,ITEMID_CONTOUR),
+        new SvxShadowedItem(sal_False,ITEMID_SHADOWED),
+        new SvxWordLineModeItem(sal_False,ITEMID_WORDLINEMODE),
+        new SvxContourItem(sal_False,ITEMID_CONTOUR),
         new SvxCrossedOutItem(STRIKEOUT_NONE,ITEMID_CROSSEDOUT),
         new SvxUnderlineItem(UNDERLINE_NONE,ITEMID_UNDERLINE),
 
@@ -677,15 +677,15 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         new SvxCaseMapItem(SVX_CASEMAP_NOT_MAPPED,ITEMID_CASEMAP),
         new SvxEscapementItem(ITEMID_ESCAPEMENT),
         new SvxFontListItem(pFontList.get(),ITEMID_FONTLIST),
-        new SvxAutoKernItem(FALSE,ITEMID_AUTOKERN),
+        new SvxAutoKernItem(sal_False,ITEMID_AUTOKERN),
         new SvxColorTableItem(pColorTable.get(),ITEMID_COLOR_TABLE),
-        new SvxBlinkItem(FALSE,ITEMID_BLINK),
+        new SvxBlinkItem(sal_False,ITEMID_BLINK),
         new SvxEmphasisMarkItem(EMPHASISMARK_NONE,ITEMID_EMPHASISMARK),
-        new SvxTwoLinesItem(TRUE,0,0,ITEMID_TWOLINES),
+        new SvxTwoLinesItem(sal_True,0,0,ITEMID_TWOLINES),
         new SvxCharRotateItem(0,sal_False,ITEMID_CHARROTATE),
         new SvxCharScaleWidthItem(100,ITEMID_CHARSCALE_W),
         new SvxCharReliefItem(RELIEF_NONE,ITEMID_CHARRELIEF),
-        new SvxCharHiddenItem(FALSE,ITEMID_CHARHIDDEN),
+        new SvxCharHiddenItem(sal_False,ITEMID_CHARHIDDEN),
         new SvxBrushItem(ITEMID_BRUSH),
         new SvxHorJustifyItem(ITEMID_HORJUSTIFY),
         new SvxVerJustifyItem(ITEMID_VERJUSTIFY),
@@ -706,7 +706,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
 
     OSL_ASSERT((SAL_N_ELEMENTS(pDefaults)) == (SAL_N_ELEMENTS(aItemInfos)));
 
-    static USHORT pRanges[] =
+    static sal_uInt16 pRanges[] =
     {
         ITEMID_FONT,ITEMID_WEIGHT_COMPLEX,
         0

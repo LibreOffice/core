@@ -38,7 +38,7 @@ ModelessDialog DLG_JOIN_TABADD
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    HelpID = DLG_JOIN_TABADD ;
+    HelpID = HID_DLG_JOIN_TABADD ;
     Size = MAP_APPFONT ( 178 , 147 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -46,6 +46,7 @@ ModelessDialog DLG_JOIN_TABADD
 
     RadioButton RB_CASE_TABLES
     {
+        HelpID = "dbaccess:RadioButton:DLG_JOIN_TABADD:RB_CASE_TABLES";
         Pos = MAP_APPFONT( 6, 6 );
         Size = MAP_APPFONT( 50, 8 );
         Text [ en-US ] = "Tables";
@@ -53,6 +54,7 @@ ModelessDialog DLG_JOIN_TABADD
 
     RadioButton RB_CASE_QUERIES
     {
+        HelpID = "dbaccess:RadioButton:DLG_JOIN_TABADD:RB_CASE_QUERIES";
         Pos = MAP_APPFONT( 62, 6 );
         Size = MAP_APPFONT( 50, 8 );
         Text [ en-US ] = "Queries";
@@ -70,6 +72,7 @@ ModelessDialog DLG_JOIN_TABADD
 
     PushButton PB_ADDTABLE
     {
+        HelpID = "dbaccess:PushButton:DLG_JOIN_TABADD:PB_ADDTABLE";
         Pos = MAP_APPFONT ( 123 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Add" ;

@@ -70,9 +70,9 @@ namespace dbaui
     struct BooleanSettingDesc
     {
         CheckBox**  ppControl;          // the dialog's control which displays this setting
-        USHORT      nControlResId;      // the resource ID to load the control from
-        USHORT      nItemId;            // the ID of the item (in an SfxItemSet) which corresponds to this setting
-        bool        bInvertedDisplay;   // true if and only if the checkbox is checked when the item is FALSE, and vice versa
+        sal_uInt16      nControlResId;      // the resource ID to load the control from
+        sal_uInt16      nItemId;            // the ID of the item (in an SfxItemSet) which corresponds to this setting
+        bool        bInvertedDisplay;   // true if and only if the checkbox is checked when the item is sal_False, and vice versa
     };
 
     //========================================================================
@@ -98,9 +98,12 @@ namespace dbaui
         ,m_pPrimaryKeySupport(NULL)
         ,m_pBooleanComparisonModeLabel( NULL )
         ,m_pBooleanComparisonMode( NULL )
+        ,m_pMaxRowScanLabel( NULL )
+        ,m_pMaxRowScan( NULL )
         ,m_aControlDependencies()
         ,m_aBooleanSettings()
         ,m_bHasBooleanComparisonMode( _rDSMeta.getFeatureSet().has( DSID_BOOLEANCOMPARISON ) )
+        ,m_bHasMaxRowScan( _rDSMeta.getFeatureSet().has( DSID_MAX_ROW_SCAN ) )
     {
         impl_initBooleanSettings();
 
@@ -111,17 +114,17 @@ namespace dbaui
                 ++setting
              )
         {
-            USHORT nItemId = setting->nItemId;
+            sal_uInt16 nItemId = setting->nItemId;
             if ( rFeatures.has( nItemId ) )
             {
-                USHORT nResourceId = setting->nControlResId;
+                sal_uInt16 nResourceId = setting->nControlResId;
                 (*setting->ppControl) = new CheckBox( this, ModuleRes( nResourceId ) );
                 (*setting->ppControl)->SetClickHdl( getControlModifiedLink() );
 
                 // check whether this must be a tristate check box
                 const SfxPoolItem& rItem = _rCoreAttrs.Get( nItemId );
                 if ( rItem.ISA( OptionalBoolItem ) )
-                    (*setting->ppControl)->EnableTriState( TRUE );
+                    (*setting->ppControl)->EnableTriState( sal_True );
             }
         }
 
@@ -165,6 +168,21 @@ namespace dbaui
             m_pBooleanComparisonModeLabel->SetPosPixel( Point( aLabelPos.X(), aLabelPos.Y() - nMoveUp ) );
             m_pBooleanComparisonMode->SetPosPixel( Point( aControlPos.X(), aControlPos.Y() - nMoveUp ) );
         }
+        // create the controls for the max row scan
+        if ( m_bHasMaxRowScan )
+        {
+            m_pMaxRowScanLabel = new FixedText( this, ModuleRes( FT_MAXROWSCAN ) );
+            m_pMaxRowScan = new NumericField( this, ModuleRes( NF_MAXROWSCAN ) );
+            m_pMaxRowScan->SetModifyHdl(getControlModifiedLink());
+            m_pMaxRowScan->SetUseThousandSep(sal_False);
+
+            Point aLabelPos( m_pMaxRowScanLabel->GetPosPixel() );
+            Point aControlPos( m_pMaxRowScan->GetPosPixel() );
+            long nMoveUp = aControlPos.Y() - aPos.Y();
+
+            m_pMaxRowScanLabel->SetPosPixel( Point( aLabelPos.X(), aLabelPos.Y() - nMoveUp ) );
+            m_pMaxRowScan->SetPosPixel( Point( aControlPos.X(), aControlPos.Y() - nMoveUp ) );
+        }
 
         FreeResource();
     }
@@ -191,6 +209,8 @@ namespace dbaui
         DELETEZ( m_pPrimaryKeySupport );
         DELETEZ( m_pBooleanComparisonModeLabel );
         DELETEZ( m_pBooleanComparisonMode );
+        DELETEZ( m_pMaxRowScanLabel );
+        DELETEZ( m_pMaxRowScan );
     }
 
     // -----------------------------------------------------------------------
@@ -231,6 +251,10 @@ namespace dbaui
         {
             _rControlList.push_back( new ODisableWrapper< FixedText >( m_pBooleanComparisonModeLabel ) );
         }
+        if ( m_bHasMaxRowScan )
+        {
+            _rControlList.push_back( new ODisableWrapper< FixedText >( m_pMaxRowScanLabel ) );
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -249,6 +273,8 @@ namespace dbaui
 
         if ( m_bHasBooleanComparisonMode )
             _rControlList.push_back( new OSaveValueWrapper< ListBox >( m_pBooleanComparisonMode ) );
+        if ( m_bHasMaxRowScan )
+            _rControlList.push_back(new OSaveValueWrapper<NumericField>(m_pMaxRowScan));
     }
 
     // -----------------------------------------------------------------------
@@ -293,7 +319,7 @@ namespace dbaui
             }
             else
             {
-                BOOL bValue = *aValue;
+                sal_Bool bValue = *aValue;
                 if ( setting->bInvertedDisplay )
                     bValue = !bValue;
                 (*setting->ppControl)->Check( bValue );
@@ -304,7 +330,13 @@ namespace dbaui
         if ( m_bHasBooleanComparisonMode )
         {
             SFX_ITEMSET_GET( _rSet, pBooleanComparison, SfxInt32Item, DSID_BOOLEANCOMPARISON, sal_True );
-            m_pBooleanComparisonMode->SelectEntryPos( static_cast< USHORT >( pBooleanComparison->GetValue() ) );
+            m_pBooleanComparisonMode->SelectEntryPos( static_cast< sal_uInt16 >( pBooleanComparison->GetValue() ) );
+        }
+
+        if ( m_bHasMaxRowScan )
+        {
+            SFX_ITEMSET_GET(_rSet, pMaxRowScan, SfxInt32Item, DSID_MAX_ROW_SCAN, sal_True);
+            m_pMaxRowScan->SetValue(pMaxRowScan->GetValue());
         }
 
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
@@ -334,6 +366,10 @@ namespace dbaui
                 _rSet.Put( SfxInt32Item( DSID_BOOLEANCOMPARISON, m_pBooleanComparisonMode->GetSelectEntryPos() ) );
                 bChangedSomething = sal_True;
             }
+        }
+        if ( m_bHasMaxRowScan )
+        {
+            fillInt32(_rSet,m_pMaxRowScan,DSID_MAX_ROW_SCAN,bChangedSomething);
         }
         return bChangedSomething;
     }
@@ -487,7 +523,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    void AdvancedSettingsDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
+    void AdvancedSettingsDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
     {
         // register ourself as modified listener
         static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory(m_pImpl->getORB());

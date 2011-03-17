@@ -157,6 +157,7 @@ ModalDialog DLG_PASSWORD
     };
     Edit ED_OLDPASSWORD
     {
+        HelpID = "dbaccess:Edit:DLG_PASSWORD:ED_OLDPASSWORD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 + FT_SIZE_X , 16 ) ;
         Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;
@@ -171,6 +172,7 @@ ModalDialog DLG_PASSWORD
     };
     Edit ED_PASSWORD
     {
+        HelpID = "dbaccess:Edit:DLG_PASSWORD:ED_PASSWORD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 + FT_SIZE_X , 34 ) ;
         Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;
@@ -184,6 +186,7 @@ ModalDialog DLG_PASSWORD
     };
     Edit ED_PASSWORD_REPEAT
     {
+        HelpID = "dbaccess:Edit:DLG_PASSWORD:ED_PASSWORD_REPEAT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 + FT_SIZE_X , 51 ) ;
         Size = MAP_APPFONT ( EDIT_SIZE_X , 12 ) ;

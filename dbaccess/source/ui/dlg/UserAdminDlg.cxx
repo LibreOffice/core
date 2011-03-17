@@ -134,7 +134,7 @@ DBG_NAME(OUserAdminDlg)
         return nRet;
     }
     //-------------------------------------------------------------------------
-    void OUserAdminDlg::PageCreated(USHORT _nId, SfxTabPage& _rPage)
+    void OUserAdminDlg::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
     {
         // register ourself as modified listener
         static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory(m_pImpl->getORB());

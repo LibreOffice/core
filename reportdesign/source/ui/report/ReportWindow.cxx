@@ -101,7 +101,7 @@ void OReportWindow::initialize()
     m_aViewsWindow.initialize();
 }
 //----------------------------------------------------------------------------
-void OReportWindow::SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType )
+void OReportWindow::SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType )
 {
     m_aViewsWindow.SetInsertObj( eObj,_sShapeType);
 }
@@ -117,14 +117,14 @@ void OReportWindow::SetMode( DlgEdMode eNewMode )
     m_aViewsWindow.SetMode(eNewMode);
 }
 //----------------------------------------------------------------------------
-void OReportWindow::removeSection(USHORT _nPosition)
+void OReportWindow::removeSection(sal_uInt16 _nPosition)
 {
     m_aViewsWindow.removeSection(_nPosition);
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
     m_aViewsWindow.Invalidate(INVALIDATE_TRANSPARENT);
 }
 //----------------------------------------------------------------------------
-void OReportWindow::addSection(const uno::Reference< report::XSection >& _xSection,const ::rtl::OUString& _sColorEntry,USHORT _nPosition)
+void OReportWindow::addSection(const uno::Reference< report::XSection >& _xSection,const ::rtl::OUString& _sColorEntry,sal_uInt16 _nPosition)
 {
     if ( !_xSection.is() )
         return;
@@ -250,7 +250,7 @@ void OReportWindow::ScrollChildren(const Point& _aThumbPos)
     m_aViewsWindow.scrollChildren(_aThumbPos);
 }
 //----------------------------------------------------------------------------
-USHORT OReportWindow::getSectionCount() const
+sal_uInt16 OReportWindow::getSectionCount() const
 {
     return m_aViewsWindow.getSectionCount();
 }
@@ -260,7 +260,7 @@ void OReportWindow::notifySizeChanged()
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
 }
 //----------------------------------------------------------------------------
-BOOL OReportWindow::HasSelection() const
+sal_Bool OReportWindow::HasSelection() const
 {
     return m_aViewsWindow.HasSelection();
 }
@@ -283,7 +283,7 @@ void OReportWindow::Paste()
     m_aViewsWindow.Paste();
 }
 //----------------------------------------------------------------------------
-BOOL OReportWindow::IsPasteAllowed() const
+sal_Bool OReportWindow::IsPasteAllowed() const
 {
     return m_aViewsWindow.IsPasteAllowed();
 }
@@ -363,13 +363,13 @@ void OReportWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAl
     m_aViewsWindow.alignMarkedObjects(_nControlModification, _bAlignAtSection, bBoundRects);
 }
 // -----------------------------------------------------------------------------
-void OReportWindow::setGridSnap(BOOL bOn)
+void OReportWindow::setGridSnap(sal_Bool bOn)
 {
 
     m_aViewsWindow.setGridSnap(bOn);
 }
 // -----------------------------------------------------------------------------
-void OReportWindow::setDragStripes(BOOL bOn)
+void OReportWindow::setDragStripes(sal_Bool bOn)
 {
     m_aViewsWindow.setDragStripes(bOn);
 }
@@ -421,14 +421,14 @@ sal_uInt16 OReportWindow::getZoomFactor(SvxZoomType _eType) const
             break;
         case SVX_ZOOM_WHOLEPAGE:
             {
-                nZoom = (USHORT)(long)Fraction(aSize.Width()*100,impl_getRealPixelWidth());
+                nZoom = (sal_uInt16)(long)Fraction(aSize.Width()*100,impl_getRealPixelWidth());
                 MapMode aMap( MAP_100TH_MM );
                 const Size aHeight = m_aViewsWindow.LogicToPixel(m_aViewsWindow.PixelToLogic(Size(0,GetTotalHeight() + m_aHRuler.GetSizePixel().Height())),aMap);
-                nZoom = ::std::min(nZoom,(USHORT)(long)Fraction(aSize.Height()*100,aHeight.Height()));
+                nZoom = ::std::min(nZoom,(sal_uInt16)(long)Fraction(aSize.Height()*100,aHeight.Height()));
             }
             break;
         case SVX_ZOOM_PAGEWIDTH:
-            nZoom = (USHORT)(long)Fraction(aSize.Width()*100,impl_getRealPixelWidth());
+            nZoom = (sal_uInt16)(long)Fraction(aSize.Width()*100,impl_getRealPixelWidth());
             break;
         default:
             break;

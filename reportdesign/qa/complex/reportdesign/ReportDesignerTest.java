@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex;
+package complex.reportdesign;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,21 +47,28 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 
-import complexlib.ComplexTestCase;
-import util.utils;
+// import complexlib.ComplexTestCase;
+// import util.utils;
 import helper.OfficeProvider;
 import helper.URLHelper;
-import helper.OfficeWatcher;
+// import helper.OfficeWatcher;
 
 import convwatch.DB;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
 
 class PropertySetHelper
 {
     XPropertySet m_xPropertySet;
     public PropertySetHelper(Object _aObj)
         {
-            m_xPropertySet = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, _aObj);
+            m_xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, _aObj);
         }
 
     /**
@@ -129,57 +136,73 @@ class PropertyHelper
         }
 }
 
-public class ReportDesignerTest extends ComplexTestCase {
+public class ReportDesignerTest
+{
 
     String mTestDocumentPath;
 
-    public String[] getTestMethodNames()
-        {
-            return new String[] {"firsttest"};
-        }
+//    public String[] getTestMethodNames()
+//        {
+//            return new String[] {"firsttest"};
+//        }
 
-    private void checkIfOfficeExists(String _sOfficePathWithTrash)
-        {
-            String sOfficePath = "";
-            int nIndex = _sOfficePathWithTrash.indexOf("soffice.exe");
-            if (nIndex > 0)
-            {
-                sOfficePath = _sOfficePathWithTrash.substring(0, nIndex + 11);
-            }
-            else
-            {
-                nIndex = _sOfficePathWithTrash.indexOf("soffice");
-                if (nIndex > 0)
-                {
-                    sOfficePath = _sOfficePathWithTrash.substring(0, nIndex + 7);
-                }
-            }
+    @Before public void before()
+    {
+        System.out.println("before");
+        // String tempdir = System.getProperty("java.io.tmpdir");
+        //
+        int dummy = 0;
+        // m_xXMultiServiceFactory = getMSF();
+    }
 
-            log.println(sOfficePath);
-            File sOffice = new File(sOfficePath);
-            if (! sOffice.exists())
-            {
-                log.println("ERROR: There exists no office installation at given path: '" + sOfficePath + "'");
-                System.exit(0);
-            }
-        }
+    @After public void after()
+    {
+        System.out.println("after");
+    }
+
+//    private void checkIfOfficeExists(String _sOfficePathWithTrash)
+//        {
+//            String sOfficePath = "";
+//            int nIndex = _sOfficePathWithTrash.indexOf("soffice.exe");
+//            if (nIndex > 0)
+//            {
+//                sOfficePath = _sOfficePathWithTrash.substring(0, nIndex + 11);
+//            }
+//            else
+//            {
+//                nIndex = _sOfficePathWithTrash.indexOf("soffice");
+//                if (nIndex > 0)
+//                {
+//                    sOfficePath = _sOfficePathWithTrash.substring(0, nIndex + 7);
+//                }
+//            }
+//
+//            System.out.println(sOfficePath);
+//            File sOffice = new File(sOfficePath);
+//            if (! sOffice.exists())
+//            {
+//                System.out.println("ERROR: There exists no office installation at given path: '" + sOfficePath + "'");
+//                System.exit(0);
+//            }
+//        }
 
 
-    private static XDesktop m_xDesktop = null;
-    public static XDesktop getXDesktop()
+    private XDesktop m_xDesktop = null;
+    public XDesktop getXDesktop()
         {
 
             if (m_xDesktop == null)
             {
                 try
                 {
-                    XInterface xInterface = (XInterface) m_xXMultiServiceFactory.createInstance( "com.sun.star.frame.Desktop" );
-                    m_xDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, xInterface);
+                    XInterface xInterface = (XInterface) getMSF().createInstance( "com.sun.star.frame.Desktop" );
+                    m_xDesktop = UnoRuntime.queryInterface(XDesktop.class, xInterface);
+                    assertNotNull("Can't get XDesktop", m_xDesktop);
                 }
                 catch (com.sun.star.uno.Exception e)
                 {
-                    log.println("ERROR: uno.Exception caught");
-                    log.println("Message: " + e.getMessage());
+                    System.out.println("ERROR: uno.Exception caught");
+                    System.out.println("Message: " + e.getMessage());
                 }
             }
             return m_xDesktop;
@@ -203,26 +226,27 @@ public class ReportDesignerTest extends ComplexTestCase {
 
 
     private OfficeProvider m_aProvider = null;
-    private static XMultiServiceFactory m_xXMultiServiceFactory = null;
-    private void startOffice()
-        {
-            param.put("TimeOut", new Integer(300000));
-            System.out.println("TimeOut: " + param.getInt("TimeOut"));
-            System.out.println("ThreadTimeOut: " + param.getInt("ThreadTimeOut"));
-
-            m_aProvider = new OfficeProvider();
-            m_xXMultiServiceFactory = (XMultiServiceFactory) m_aProvider.getManager(param);
-            param.put("ServiceFactory", m_xXMultiServiceFactory);
-        }
-
-    private void stopOffice()
-        {
-            if (m_aProvider != null)
-            {
-                m_aProvider.closeExistingOffice(param, true);
-                m_aProvider = null;
-            }
-        }
+//    private void startOffice()
+//        {
+//            // int tempTime = param.getInt("SingleTimeOut");
+//            param.put("TimeOut", new Integer(300000));
+//            System.out.println("TimeOut: " + param.getInt("TimeOut"));
+//            System.out.println("ThreadTimeOut: " + param.getInt("ThreadTimeOut"));
+//
+//            // OfficeProvider aProvider = null;
+//            m_aProvider = new OfficeProvider();
+//            m_xXMultiServiceFactory = (XMultiServiceFactory) m_aProvider.getManager(param);
+//            param.put("ServiceFactory", m_xXMultiServiceFactory);
+//        }
+//
+//    private void stopOffice()
+//        {
+//            if (m_aProvider != null)
+//            {
+//                m_aProvider.closeExistingOffice(param, true);
+//                m_aProvider = null;
+//            }
+//        }
 
     private String m_sMailAddress = null;
     private String m_sUPDMinor;
@@ -231,103 +255,104 @@ public class ReportDesignerTest extends ComplexTestCase {
     private static final int WRITER = 1;
     private static final int CALC = 2;
 
-    public void firsttest()
+    @Test public void firsttest()
         {
-            convwatch.GlobalLogWriter.set(log);
-            try
-            {
+            // convwatch.GlobalLogWriter.set(log);
 
-                // -------------------- preconditions, try to find an office --------------------
+            // -------------------- preconditions, try to find an office --------------------
 
-                String sAppExecutionCommand = (String) param.get("AppExecutionCommand");
+//                String sAppExecutionCommand = (String) param.get("AppExecutionCommand");
 
-                String sUser = System.getProperty("user.name");
-                log.println("user.name='" + sUser + "'");
+            String sUser = System.getProperty("user.name");
+            System.out.println("user.name='" + sUser + "'");
 
-                String sVCSID = System.getProperty("VCSID");
-                log.println("VCSID='" + sVCSID + "'");
-                m_sMailAddress = sVCSID + "@openoffice.org";
-                log.println("Assumed mail address: " + m_sMailAddress);
+            String sVCSID = System.getProperty("VCSID");
+            System.out.println("VCSID='" + sVCSID + "'");
+            m_sMailAddress = sVCSID + "@openoffice.org";
+            System.out.println("Assumed mail address: " + m_sMailAddress);
 
-                m_sUPDMinor = System.getProperty("UPDMINOR");
-                m_sCWS_WORK_STAMP = System.getProperty("CWS_WORK_STAMP");
-                log.println("Current CWS: " + m_sCWS_WORK_STAMP);
-                log.println("Current MWS: " + m_sUPDMinor);
+            m_sUPDMinor = System.getProperty("UPDMINOR");
+            m_sCWS_WORK_STAMP = System.getProperty("CWS_WORK_STAMP");
+            System.out.println("Current CWS: " + m_sCWS_WORK_STAMP);
+            System.out.println("Current MWS: " + m_sUPDMinor);
 
-                sAppExecutionCommand = sAppExecutionCommand.replaceAll( "\\$\\{USERNAME\\}", sUser);
-                log.println("sAppExecutionCommand='" + sAppExecutionCommand + "'");
+//                sAppExecutionCommand = sAppExecutionCommand.replaceAll( "\\$\\{USERNAME\\}", sUser);
+//                System.out.println("sAppExecutionCommand='" + sAppExecutionCommand + "'");
+//
+//                checkIfOfficeExists(sAppExecutionCommand);
+//                param.put("AppExecutionCommand", new String(sAppExecutionCommand));
 
-                checkIfOfficeExists(sAppExecutionCommand);
-                param.put("AppExecutionCommand", new String(sAppExecutionCommand));
+            // --------------------------- Start the given Office ---------------------------
 
-                // --------------------------- Start the given Office ---------------------------
+//                startOffice();
 
-                startOffice();
+            // ------------------------------ Start a test run ------------------------------
 
-                // ------------------------------ Start a test run ------------------------------
+//            String sCurrentDirectory = System.getProperty("user.dir");
+//            System.out.println("Current Dir: " + sCurrentDirectory);
+//
+            String sWriterDocument =  TestDocument.getUrl("RPTWriterTests.odb");
+            startTestForFile(sWriterDocument, WRITER);
 
-                String sCurrentDirectory = System.getProperty("user.dir");
-                log.println("Current Dir: " + sCurrentDirectory);
-
-                String sWriterDocument =  sCurrentDirectory + "/" + "RPTWriterTests.odb";
-                startTestForFile(sWriterDocument, WRITER);
-
-                String sCalcDocument =  sCurrentDirectory + "/" + "RPTCalcTests.odb";
-                startTestForFile(sCalcDocument, CALC);
-            }
-            catch (AssureException e)
-            {
-                stopOffice();
-                throw new AssureException(e.getMessage());
-            }
-
+            String sCalcDocument =  TestDocument.getUrl("RPTCalcTests.odb");
+            startTestForFile(sCalcDocument, CALC);
+//            catch (AssureException e)
+//            {
+//                stopOffice();
+//                throw new AssureException(e.getMessage());
+//            }
+//
             // ------------------------------ Office shutdown ------------------------------
-            stopOffice();
+//            stopOffice();
         }
 
 // -----------------------------------------------------------------------------
     private void startTestForFile(String _sDocument, int _nType)
         {
-            File aFile = new File(_sDocument);
-            assure("Test File doesn't '" + _sDocument + "'exist.", aFile.exists());
+            FileURL aFileURL = new FileURL(_sDocument);
+            assertTrue("Test File doesn't '" + _sDocument + "'exist.", aFileURL.exists());
 
-            String sFileURL = URLHelper.getFileURLFromSystemPath(_sDocument);
-            log.println("File URL: " + sFileURL);
+            String sFileURL = _sDocument; // URLHelper.getFileURLFromSystemPath(_sDocument);
+            System.out.println("File URL: " + sFileURL);
 
             XComponent xDocComponent = loadComponent(sFileURL, getXDesktop(), null);
-            log.println("Load done");
+            System.out.println("Load done");
+            assertNotNull("Can't load document ", xDocComponent);
+
 
             try
             {
-                XInterface x = (XInterface)m_xXMultiServiceFactory.createInstance("com.sun.star.sdb.DatabaseContext");
-                assure("can't create instance of com.sun.star.sdb.DatabaseContext", x != null);
-                log.println("createInstance com.sun.star.sdb.DatabaseContext done");
+                XInterface x = (XInterface)getMSF().createInstance("com.sun.star.sdb.DatabaseContext");
+                assertNotNull("can't create instance of com.sun.star.sdb.DatabaseContext", x);
+                System.out.println("createInstance com.sun.star.sdb.DatabaseContext done");
 
-                XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, x);
+                XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, x);
                 showElements(xNameAccess);
                 Object aObj = xNameAccess.getByName(sFileURL);
 
-                XDocumentDataSource xDataSource = (XDocumentDataSource)UnoRuntime.queryInterface(XDocumentDataSource.class, aObj);
+                XDocumentDataSource xDataSource = UnoRuntime.queryInterface(XDocumentDataSource.class, aObj);
                 XOfficeDatabaseDocument xOfficeDBDoc = xDataSource.getDatabaseDocument();
 
-                assure("can't access DatabaseDocument", xOfficeDBDoc != null);
+                assertNotNull("can't access DatabaseDocument", xOfficeDBDoc);
 
-                XModel xDBSource = (XModel)UnoRuntime.queryInterface(XModel.class, xOfficeDBDoc);
+                XModel xDBSource = UnoRuntime.queryInterface(XModel.class, xOfficeDBDoc);
                 Object aController = xDBSource.getCurrentController();
-                assure("Controller of xOfficeDatabaseDocument is empty!", aController != null);
+                assertNotNull("Controller of xOfficeDatabaseDocument is empty!", aController);
 
-                XDatabaseDocumentUI aDBDocUI = (XDatabaseDocumentUI)UnoRuntime.queryInterface(XDatabaseDocumentUI.class, aController);
-                boolean isConnect = aDBDocUI.connect();
+                XDatabaseDocumentUI aDBDocUI = UnoRuntime.queryInterface(XDatabaseDocumentUI.class, aController);
+                /* boolean isConnect = */
+// TODO: throws an exception in DEV300m78
+                aDBDocUI.connect();
                 Object aActiveConnectionObj = aDBDocUI.getActiveConnection();
-                assure("ActiveConnection is empty", aActiveConnectionObj != null);
+                assertNotNull("ActiveConnection is empty", aActiveConnectionObj);
 
-                XReportDocumentsSupplier xSupplier = (XReportDocumentsSupplier)UnoRuntime.queryInterface(XReportDocumentsSupplier.class, xOfficeDBDoc);
+                XReportDocumentsSupplier xSupplier = UnoRuntime.queryInterface(XReportDocumentsSupplier.class, xOfficeDBDoc);
                 xNameAccess = xSupplier.getReportDocuments();
-                assure("xOfficeDatabaseDocument returns no Report Document", xNameAccess != null);
+                assertNotNull("xOfficeDatabaseDocument returns no Report Document", xNameAccess);
 
                 showElements(xNameAccess);
 
-                ArrayList aPropertyList = new ArrayList();
+                ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
 
                 PropertyValue aActiveConnection = new PropertyValue();
                 aActiveConnection.Name = "ActiveConnection";
@@ -339,7 +364,7 @@ public class ReportDesignerTest extends ComplexTestCase {
             }
             catch(com.sun.star.uno.Exception e)
             {
-                log.println("ERROR: Exception caught");
+                fail("ERROR: Exception caught" + e.getMessage());
             }
 
                 // Close the document
@@ -355,8 +380,8 @@ public class ReportDesignerTest extends ComplexTestCase {
     private void createDBEntry(int _nType)
         {
             // try to connect the database
-            String sDBConnection = (String)param.get( convwatch.PropertyName.DB_CONNECTION_STRING );
-            log.println("DBConnection: " + sDBConnection);
+            String sDBConnection = ""; // (String)param.get( convwatch.PropertyName.DB_CONNECTION_STRING );
+            System.out.println("DBConnection: " + sDBConnection);
             DB.init(sDBConnection);
             String sDestinationVersion = m_sCWS_WORK_STAMP;
             if (sDestinationVersion.length() == 0)
@@ -370,10 +395,10 @@ public class ReportDesignerTest extends ComplexTestCase {
             String sSpecial = "";
 
             String sFixRefSubDirectory = "ReportDesign_qa_complex_" + getFileFormat(_nType);
-            DB.insertinto_documentcompare(sFixRefSubDirectory, "", "fixref",
-                                          sDestinationVersion, sDestinationName, sDestinationCreatorType,
-                                          sDocumentPoolDir, sDocumentPoolName, m_sMailAddress,
-                                          sSpecial);
+//            DB.insertinto_documentcompare(sFixRefSubDirectory, "", "fixref",
+//                                          sDestinationVersion, sDestinationName, sDestinationCreatorType,
+//                                          sDocumentPoolDir, sDocumentPoolName, m_sMailAddress,
+//                                          sSpecial);
         }
 
     private void loadAndStoreReports(XNameAccess _xNameAccess, ArrayList _aPropertyList, int _nType)
@@ -427,7 +452,7 @@ public class ReportDesignerTest extends ComplexTestCase {
 
     private String getOutputPath(int _nType)
         {
-            String sOutputPath = (String)param.get( convwatch.PropertyName.DOC_COMPARATOR_OUTPUT_PATH );
+            String sOutputPath = util.utils.getOfficeTemp/*Dir*/(getMSF());// (String)param.get( convwatch.PropertyName.DOC_COMPARATOR_OUTPUT_PATH );
 
             if (!sOutputPath.endsWith("/") ||         // construct the output file name
                 !sOutputPath.endsWith("\\"))
@@ -462,7 +487,7 @@ public class ReportDesignerTest extends ComplexTestCase {
 
             String sOutputURL = URLHelper.getFileURLFromSystemPath(sOutputPath);
 
-            ArrayList aPropertyList = new ArrayList(); // set some properties for storeAsURL
+            ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>(); // set some properties for storeAsURL
 
             PropertyValue aFileFormat = new PropertyValue();
             aFileFormat.Name = "FilterName";
@@ -475,19 +500,19 @@ public class ReportDesignerTest extends ComplexTestCase {
             aPropertyList.add(aOverwrite);
 
             // store the document in an other directory
-            XStorable aStorable = (XStorable) UnoRuntime.queryInterface( XStorable.class, _xComponent);
+            XStorable aStorable = UnoRuntime.queryInterface(XStorable.class, _xComponent);
             if (aStorable != null)
             {
-                log.println("store document as URL: '" + sOutputURL + "'");
+                System.out.println("store document as URL: '" + sOutputURL + "'");
                 try
                 {
                     aStorable.storeAsURL(sOutputURL, PropertyHelper.createPropertyValueArrayFormArrayList(aPropertyList));
                 }
                 catch (com.sun.star.io.IOException e)
                 {
-                    log.println("ERROR: Exception caught");
-                    log.println("Can't write document URL: '" + sOutputURL + "'");
-                    log.println("Message: " + e.getMessage());
+                    System.out.println("ERROR: Exception caught");
+                    System.out.println("Can't write document URL: '" + sOutputURL + "'");
+                    System.out.println("Message: " + e.getMessage());
                 }
             }
         }
@@ -495,25 +520,25 @@ public class ReportDesignerTest extends ComplexTestCase {
     private XComponent loadComponent(String _sName, Object _xComponent, ArrayList _aPropertyList)
         {
             XComponent xDocComponent = null;
-            XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface( XComponentLoader.class, _xComponent );
+            XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, _xComponent);
 
             try
             {
                 PropertyValue[] aLoadProperties = PropertyHelper.createPropertyValueArrayFormArrayList(_aPropertyList);
-                log.println("Load component: '" + _sName + "'");
+                System.out.println("Load component: '" + _sName + "'");
                 xDocComponent = xComponentLoader.loadComponentFromURL(_sName, "_blank", 0, aLoadProperties);
             }
             catch (com.sun.star.io.IOException e)
             {
-                log.println("ERROR: Exception caught");
-                log.println("Can't load document '" + _sName + "'");
-                log.println("Message: " + e.getMessage());
+                System.out.println("ERROR: Exception caught");
+                System.out.println("Can't load document '" + _sName + "'");
+                System.out.println("Message: " + e.getMessage());
             }
             catch (com.sun.star.lang.IllegalArgumentException e)
             {
-                log.println("ERROR: Exception caught");
-                log.println("Illegal Arguments given to loadComponentFromURL.");
-                log.println("Message: " + e.getMessage());
+                System.out.println("ERROR: Exception caught");
+                System.out.println("Illegal Arguments given to loadComponentFromURL.");
+                System.out.println("Message: " + e.getMessage());
             }
             return xDocComponent;
         }
@@ -521,17 +546,39 @@ public class ReportDesignerTest extends ComplexTestCase {
     private void closeComponent(XComponent _xDoc)
         {
             // Close the document
-            XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, _xDoc);
+            XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, _xDoc);
             try
             {
                 xCloseable.close(true);
             }
             catch (com.sun.star.util.CloseVetoException e)
             {
-                log.println("ERROR: CloseVetoException caught");
-                log.println("CloseVetoException occurred Can't close document.");
-                log.println("Message: " + e.getMessage());
+                System.out.println("ERROR: CloseVetoException caught");
+                System.out.println("CloseVetoException occured Can't close document.");
+                System.out.println("Message: " + e.getMessage());
             }
         }
+
+
+    private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
 
 }

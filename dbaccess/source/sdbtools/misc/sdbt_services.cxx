@@ -65,27 +65,6 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" sal_Bool SAL_CALL component_writeInfo(
-                void* pServiceManager,
-                void* pRegistryKey
-            )
-{
-    if (pRegistryKey)
-    try
-    {
-        return ::sdbtools::SdbtModule::getInstance().writeComponentInfos(
-            static_cast<XMultiServiceFactory*>(pServiceManager),
-            static_cast<XRegistryKey*>(pRegistryKey));
-    }
-    catch (const InvalidRegistryException& )
-    {
-        OSL_FAIL("sdbt::component_writeInfo: could not create a registry key (InvalidRegistryException) !");
-    }
-
-    return sal_False;
-}
-
-//---------------------------------------------------------------------------------------
 extern "C" void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,

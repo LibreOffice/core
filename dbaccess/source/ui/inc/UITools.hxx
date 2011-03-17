@@ -292,7 +292,7 @@ namespace dbaui
         @param  _xDatasource
             Asked for the properties.
         @param  _rAutoIncrementValueEnabled
-            <OUT/> Set to TRUE when the property was set in the datasource.
+            <OUT/> Set to sal_True when the property was set in the datasource.
         @param  _rsAutoIncrementValue
             <OUT/> Set to the value when the property was set in the datasource.
     */
@@ -304,7 +304,7 @@ namespace dbaui
         @param  _xConnection
             Used to get the datasource as parent from the connection.
         @param  _rAutoIncrementValueEnabled
-            <OUT/> Set to TRUE when the property was set in the datasource.
+            <OUT/> Set to sal_True when the property was set in the datasource.
         @param  _rsAutoIncrementValue
             <OUT/> Set to the value when the property was set in the datasource.
     */
@@ -318,7 +318,7 @@ namespace dbaui
         @return
             The URL for the help agent to dispatch.
     */
-    ::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const sal_Int32 _nHelpId);
+    ::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const rtl::OString& _rHelpId);
 
     /** set the evaluation flag at the number formatter
         @param  _rxFormatter
@@ -363,7 +363,7 @@ namespace dbaui
         @return
             RET_YES, RET_NO, RET_ALL
     */
-    sal_Int32 askForUserAction(Window* _pParent,USHORT _nTitle,USHORT _nText,sal_Bool _bAll,const ::rtl::OUString& _sName);
+    sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,sal_Bool _bAll,const ::rtl::OUString& _sName);
 
     /** creates a new view from a query or table
         @param  _sName

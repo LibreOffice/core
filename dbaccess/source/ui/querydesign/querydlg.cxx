@@ -75,7 +75,7 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
                        const TTableConnectionData::value_type& _pData,
                        OJoinTableView::OTableWindowMap* _pTableMap,
                        const Reference< XConnection >& _xConnection,
-                       BOOL _bAllowTableSelect)
+                       sal_Bool _bAllowTableSelect)
     :ModalDialog( pParent, ModuleRes(DLG_QRY_JOIN) )
     ,aML_HelpText( this, ModuleRes(ML_HELPTEXT) )
     ,aPB_OK( this, ModuleRes( PB_OK ) )
@@ -154,8 +154,8 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
     }
     else
     {
-        const USHORT nCount = m_pJoinControl->aLB_JoinType.GetEntryCount();
-        for (USHORT i = 0; i < nCount; ++i)
+        const sal_uInt16 nCount = m_pJoinControl->aLB_JoinType.GetEntryCount();
+        for (sal_uInt16 i = 0; i < nCount; ++i)
         {
             const long nJoinTyp = reinterpret_cast<long>(m_pJoinControl->aLB_JoinType.GetEntryData(i));
             if ( !bSupportFullJoin && nJoinTyp == ID_FULL_JOIN )
@@ -193,8 +193,8 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
     String sFirstWinName    = m_pConnData->getReferencingTable()->GetWinName();
     String sSecondWinName   = m_pConnData->getReferencedTable()->GetWinName();
     const EJoinType eOldJoinType = eJoinType;
-    USHORT nResId = 0;
-    const USHORT nPos = m_pJoinControl->aLB_JoinType.GetSelectEntryPos();
+    sal_uInt16 nResId = 0;
+    const sal_uInt16 nPos = m_pJoinControl->aLB_JoinType.GetSelectEntryPos();
     const long nJoinType = reinterpret_cast<long>(m_pJoinControl->aLB_JoinType.GetEntryData(nPos));
     sal_Bool bAddHint = sal_True;
     switch ( nJoinType )
@@ -229,11 +229,11 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
 
                 m_pConnData->ResetConnLines();
                 m_pTableControl->lateInit();
-                m_pJoinControl->m_aCBNatural.Check(FALSE);
+                m_pJoinControl->m_aCBNatural.Check(sal_False);
                 m_pTableControl->enableRelation(false);
                 ::rtl::OUString sEmpty;
                 m_pConnData->AppendConnLine(sEmpty,sEmpty);
-                aPB_OK.Enable(TRUE);
+                aPB_OK.Enable(sal_True);
             }
             break;
     }
@@ -284,7 +284,7 @@ IMPL_LINK( DlgQryJoin, OKClickHdl, Button*, /*pButton*/ )
 IMPL_LINK( DlgQryJoin, NaturalToggleHdl, CheckBox*, /*pButton*/ )
 {
     DBG_CHKTHIS(DlgQryJoin,NULL);
-    BOOL bChecked = m_pJoinControl->m_aCBNatural.IsChecked();
+    sal_Bool bChecked = m_pJoinControl->m_aCBNatural.IsChecked();
     static_cast<OQueryTableConnectionData*>(m_pConnData.get())->setNatural(bChecked);
     m_pTableControl->enableRelation(!bChecked);
     if ( bChecked )
@@ -356,8 +356,8 @@ void DlgQryJoin::setJoinType(EJoinType _eNewJoinType)
             break;
     }
 
-    const USHORT nCount = m_pJoinControl->aLB_JoinType.GetEntryCount();
-    for (USHORT i = 0; i < nCount; ++i)
+    const sal_uInt16 nCount = m_pJoinControl->aLB_JoinType.GetEntryCount();
+    for (sal_uInt16 i = 0; i < nCount; ++i)
     {
         if ( nJoinType == reinterpret_cast<long>(m_pJoinControl->aLB_JoinType.GetEntryData(i)) )
         {

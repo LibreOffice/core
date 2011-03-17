@@ -35,6 +35,7 @@
 
 ModalDialog DLG_DATASOURCE_SELECTION
 {
+    HelpID = "dbaccess:ModalDialog:DLG_DATASOURCE_SELECTION";
     OutputSize = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -50,6 +51,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
     };
     ListBox LB_DATASOURCE
     {
+        HelpID = "dbaccess:ListBox:DLG_DATASOURCE_SELECTION:LB_DATASOURCE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 19 ) ;
         Size = MAP_APPFONT ( 154 , 94 ) ;
@@ -79,6 +81,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
     };
     PushButton PB_MANAGE
     {
+        HelpID = "dbaccess:PushButton:DLG_DATASOURCE_SELECTION:PB_MANAGE";
         Pos = MAP_APPFONT ( 166 , 99 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -88,6 +91,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
     };
     PushButton PB_CREATE
     {
+        HelpID = "dbaccess:PushButton:DLG_DATASOURCE_SELECTION:PB_CREATE";
         Pos = MAP_APPFONT ( 166 , 99 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;

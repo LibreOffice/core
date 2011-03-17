@@ -102,7 +102,7 @@ sal_Bool OStaticSet::fetchRow()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::fetchRow" );
     sal_Bool bRet = sal_False;
-    if ( !m_bEnd )
+    if ( !m_bEnd && (!m_nMaxRows || sal_Int32(m_aSet.size()) < m_nMaxRows) )
         bRet = m_xDriverSet->next();
     if ( bRet )
     {
@@ -121,9 +121,10 @@ void OStaticSet::fillAllRows()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::fillAllRows" );
     if(!m_bEnd)
     {
+        sal_Int32 nColumnCount = m_xSetMetaData->getColumnCount();
         while(m_xDriverSet->next())
         {
-            ORowSetRow pRow = new connectivity::ORowVector< connectivity::ORowSetValue >(m_xSetMetaData->getColumnCount());
+            ORowSetRow pRow = new connectivity::ORowVector< connectivity::ORowSetValue >(nColumnCount);
             m_aSet.push_back(pRow);
             m_aSetIter = m_aSet.end() - 1;
             (pRow->get())[0] = getRow();

@@ -83,7 +83,7 @@ namespace dbaui
         void enableButtons();
 
 
-        USHORT adjustColumnPosition(ListBox* _pLeft,
+        sal_uInt16 adjustColumnPosition(ListBox* _pLeft,
                                     const ::rtl::OUString&  _sColumnName,
                                     ODatabaseExport::TColumnVector::size_type nCurrentPos,
                                     const ::comphelper::TStringMixEqualFunctor& _aCase);

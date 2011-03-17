@@ -111,3 +111,11 @@ DEF1NAME=$(SHL1TARGET)
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
+ALLTAR : $(MISC)/dbaxml.component
+
+$(MISC)/dbaxml.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        dbaxml.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt dbaxml.component

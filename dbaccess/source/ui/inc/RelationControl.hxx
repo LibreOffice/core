@@ -74,7 +74,7 @@ namespace dbaui
 
         /** enables the relation control
         *
-        * \param _bEnable when TRUE enables it, otherwise disable it.
+        * \param _bEnable when sal_True enables it, otherwise disable it.
         */
         void enableRelation(bool _bEnable);
 
@@ -90,7 +90,7 @@ namespace dbaui
         void lateUIInit(Window* _pTableSeparator = NULL);
         void lateInit();
 
-        BOOL SaveModified();
+        sal_Bool SaveModified();
 
         TTableWindowData::value_type getReferencingTable()  const;
 

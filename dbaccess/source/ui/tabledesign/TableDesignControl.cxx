@@ -55,9 +55,9 @@ OTableRowView::OTableRowView(Window* pParent)
     ,m_nDataPos(-1)
     ,m_nCurrentPos(-1)
     ,m_nCurUndoActId(0)
-    ,m_bCurrentModified(FALSE)
-    ,m_bUpdatable(FALSE)
-    ,m_bClipboardFilled(FALSE)
+    ,m_bCurrentModified(sal_False)
+    ,m_bUpdatable(sal_False)
+    ,m_bClipboardFilled(sal_False)
 {
     DBG_CTOR(OTableRowView,NULL);
 
@@ -85,7 +85,7 @@ void OTableRowView::Init()
     SetFont(aFont);
 
     // HandleColumn, fuer maximal fuenf Ziffern einrichten
-    InsertHandleColumn(static_cast<USHORT>(GetTextWidth('0') * 4)/*, TRUE */);
+    InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth('0') * 4)/*, sal_True */);
 
     BrowserMode nMode = BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_KEEPSELECTION |
                         BROWSER_HLINESFULL | BROWSER_VLINESFULL | BROWSER_AUTOSIZE_LASTCOL;
@@ -118,7 +118,7 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
 }
 
 //------------------------------------------------------------------------
-void OTableRowView::SetUpdatable( BOOL bUpdate )
+void OTableRowView::SetUpdatable( sal_Bool bUpdate )
 {
     m_bUpdatable = bUpdate;
 
@@ -138,7 +138,7 @@ void OTableRowView::Command(const CommandEvent& rEvt)
                 return;
             }
 
-            USHORT nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
+            sal_uInt16 nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
             long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
 
             if ( nColId == HANDLE_ID )

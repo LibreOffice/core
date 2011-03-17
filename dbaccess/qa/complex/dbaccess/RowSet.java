@@ -32,7 +32,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdb.XParametersSupplier;
 import com.sun.star.sdb.XResultSetAccess;
@@ -49,7 +48,7 @@ import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbcx.XDeleteRows;
 import com.sun.star.sdbcx.XRowLocate;
 import com.sun.star.uno.UnoRuntime;
-import complexlib.ComplexTestCase;
+
 import connectivity.tools.CRMDatabase;
 import connectivity.tools.DataSource;
 import connectivity.tools.HsqlDatabase;
@@ -57,7 +56,12 @@ import connectivity.tools.sdb.Connection;
 import java.lang.reflect.Method;
 import java.util.Random;
 
-public class RowSet extends ComplexTestCase
+// ---------- junit imports -----------------
+import org.junit.Test;
+import static org.junit.Assert.*;
+// ------------------------------------------
+
+public class RowSet extends TestCase
 {
 
     static final int MAX_TABLE_ROWS = 100;
@@ -82,7 +86,7 @@ public class RowSet extends ComplexTestCase
         XRow m_row;
         int m_id;
 
-        public ResultSetMovementStress(XResultSet _resultSet, int _id) throws java.lang.Exception
+        ResultSetMovementStress(XResultSet _resultSet, int _id) throws java.lang.Exception
         {
             m_resultSet = _resultSet;
             m_row = UnoRuntime.queryInterface( XRow.class, m_resultSet );
@@ -99,36 +103,15 @@ public class RowSet extends ComplexTestCase
                     int pos = m_resultSet.getRow();
                     testPosition(m_resultSet, m_row, i + 1, "clone move(" + m_id + ")");
                     int pos2 = m_resultSet.getRow();
-                    assure("ResultSetMovementStress wrong position: " + i + " Pos1: " + pos + " Pos2: " + pos2, pos == pos2);
+                    assertTrue("ResultSetMovementStress wrong position: " + i + " Pos1: " + pos + " Pos2: " + pos2, pos == pos2);
                 }
             }
             catch (Exception e)
             {
-                assure("ResultSetMovementStress(" + m_id + ") failed: " + e, false);
+                fail("ResultSetMovementStress(" + m_id + ") failed: " + e);
             }
         }
     }
-    // --------------------------------------------------------------------------------------------------------
-
-    public String[] getTestMethodNames()
-    {
-        return new String[]
-                {
-                    "testRowSet",
-                    "testRowSetEvents",
-                    "testDeleteBehavior",
-                    "testCloneMovesPlusDeletions",
-                    "testCloneMovesPlusInsertions",
-                    "testParameters"
-                };
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    public String getTestObjectName()
-    {
-        return "RowSet";
-    }
-
     // --------------------------------------------------------------------------------------------------------
     private void createTestCase(boolean _defaultRowSet)
     {
@@ -136,13 +119,13 @@ public class RowSet extends ComplexTestCase
         {
             try
             {
-                final CRMDatabase database = new CRMDatabase( getFactory(), false );
+                final CRMDatabase database = new CRMDatabase( getMSF(), false );
                 m_database = database.getDatabase();
                 m_dataSource = m_database.getDataSource();
             }
             catch (Exception e)
             {
-                assure("could not create the embedded HSQL database: " + e.getMessage(), false);
+                fail("could not create the embedded HSQL database: " + e.getMessage());
             }
         }
 
@@ -152,19 +135,13 @@ public class RowSet extends ComplexTestCase
         }
         catch (SQLException e)
         {
-            assure("could not connect to the database/table structure, error message:\n" + e.getMessage(), false);
+            fail("could not connect to the database/table structure, error message:\n" + e.getMessage());
         }
 
         if (_defaultRowSet)
         {
             createRowSet("TEST1", CommandType.TABLE, true, true);
         }
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    private XMultiServiceFactory getFactory()
-    {
-        return (XMultiServiceFactory) param.getMSF();
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -196,7 +173,7 @@ public class RowSet extends ComplexTestCase
     {
         try
         {
-            m_rowSet = UnoRuntime.queryInterface( XRowSet.class, getFactory().createInstance( "com.sun.star.sdb.RowSet" ) );
+            m_rowSet = UnoRuntime.queryInterface( XRowSet.class, getMSF().createInstance( "com.sun.star.sdb.RowSet" ) );
             final XPropertySet rowSetProperties = UnoRuntime.queryInterface( XPropertySet.class, m_rowSet );
             rowSetProperties.setPropertyValue("Command", command);
             rowSetProperties.setPropertyValue("CommandType", Integer.valueOf(commandType));
@@ -220,15 +197,16 @@ public class RowSet extends ComplexTestCase
         }
         catch (Exception e)
         {
-            assure("caught an exception while creating the RowSet. Type:\n" + e.getClass().toString() + "\nMessage:\n" + e.getMessage(), false);
+            fail("caught an exception while creating the RowSet. Type:\n" + e.getClass().toString() + "\nMessage:\n" + e.getMessage());
         }
     }
 
     // --------------------------------------------------------------------------------------------------------
+    @Test
     public void testRowSet() throws java.lang.Exception
     {
 
-        log.println("testing testRowSet");
+        System.out.println("testing testRowSet");
         createTestCase(true);
 
         // sequential postioning
@@ -278,8 +256,8 @@ public class RowSet extends ComplexTestCase
     {
         final int val = m_row.getInt(1);
         final int pos = m_resultSet.getRow();
-        assure(location + ": value/position do not match: " + pos + " (pos) != " + val + " (val)", val == pos);
-        assure(location + ": value/position are not as expected: " + val + " (val) != " + expectedValue + " (expected)", val == expectedValue);
+        assertTrue(location + ": value/position do not match: " + pos + " (pos) != " + val + " (val)", val == pos);
+        assertTrue(location + ": value/position are not as expected: " + val + " (val) != " + expectedValue + " (expected)", val == expectedValue);
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -297,7 +275,7 @@ public class RowSet extends ComplexTestCase
         }
         catch (Exception e)
         {
-            assure("testSequentialPositining failed: " + e, false);
+            fail("testSequentialPositining failed: " + e);
         }
     }
 
@@ -309,13 +287,13 @@ public class RowSet extends ComplexTestCase
             for (int i = 1; i <= MAX_FETCH_ROWS; ++i)
             {
                 final int calcPos = (MAX_TABLE_ROWS % i) + 1;
-                assure("testAbsolutePositioning failed", _resultSet.absolute(calcPos));
+                assertTrue("testAbsolutePositioning failed", _resultSet.absolute(calcPos));
                 testPosition(_resultSet, _row, calcPos, "testAbsolutePositioning");
             }
         }
         catch (Exception e)
         {
-            assure("testAbsolutePositioning failed: " + e, false);
+            fail("testAbsolutePositioning failed: " + e);
         }
     }
 
@@ -339,7 +317,7 @@ public class RowSet extends ComplexTestCase
         }
         catch (Exception e)
         {
-            assure("test3 failed: " + e, false);
+            fail("test3 failed: " + e);
         }
     }
 
@@ -366,14 +344,14 @@ public class RowSet extends ComplexTestCase
         }
         catch (Exception e)
         {
-            assure("test4 failed: " + e, false);
+            fail("test4 failed: " + e);
         }
     }
 
     // --------------------------------------------------------------------------------------------------------
     void testConcurrentAccess(XResultSet _resultSet)
     {
-        log.println("testing Thread");
+        System.out.println("testing Thread");
         try
         {
             _resultSet.beforeFirst();
@@ -384,7 +362,7 @@ public class RowSet extends ComplexTestCase
             for (int i = 0; i < numberOfThreads; ++i)
             {
                 threads[i] = new Thread(new ResultSetMovementStress(createClone(), i));
-                log.println("starting thread " + (i + 1) + " of " + (numberOfThreads));
+                System.out.println("starting thread " + (i + 1) + " of " + (numberOfThreads));
                 threads[i].start();
             }
 
@@ -395,14 +373,15 @@ public class RowSet extends ComplexTestCase
         }
         catch (Exception e)
         {
-            assure("testConcurrentAccess failed: " + e, false);
+            fail("testConcurrentAccess failed: " + e);
         }
     }
     // --------------------------------------------------------------------------------------------------------
 
+    @Test
     public void testRowSetEvents() throws java.lang.Exception
     {
-        log.println("testing RowSet Events");
+        System.out.println("testing RowSet Events");
         createTestCase(true);
 
         // first we create our RowSet object
@@ -547,26 +526,26 @@ public class RowSet extends ComplexTestCase
         _evt.clearCalling();
         _method.invoke(res, args);
 
-        log.println("testing events for " + _method.getName());
+        System.out.println("testing events for " + _method.getName());
         final int calling[] = _evt.getCalling();
         int pos = 1;
-        assure("Callings are not in the correct order for APPROVE_CURSOR_MOVE ",
+        assertTrue("Callings are not in the correct order for APPROVE_CURSOR_MOVE ",
                 (!_must[RowSetEventListener.APPROVE_CURSOR_MOVE] || calling[RowSetEventListener.APPROVE_CURSOR_MOVE] == -1) || calling[RowSetEventListener.APPROVE_CURSOR_MOVE] == pos++);
-        assure("Callings are not in the correct order for APPROVE_ROW_CHANGE",
+        assertTrue("Callings are not in the correct order for APPROVE_ROW_CHANGE",
                 (!_must[RowSetEventListener.APPROVE_ROW_CHANGE] || calling[RowSetEventListener.APPROVE_ROW_CHANGE] == -1) || calling[RowSetEventListener.APPROVE_ROW_CHANGE] == pos++);
-        assure("Callings are not in the correct order for COLUMN_VALUE",
+        assertTrue("Callings are not in the correct order for COLUMN_VALUE",
                 (!_must[RowSetEventListener.COLUMN_VALUE] || calling[RowSetEventListener.COLUMN_VALUE] == -1) || calling[RowSetEventListener.COLUMN_VALUE] == pos++);
-        assure("Callings are not in the correct order for CURSOR_MOVED",
+        assertTrue("Callings are not in the correct order for CURSOR_MOVED",
                 (!_must[RowSetEventListener.CURSOR_MOVED] || calling[RowSetEventListener.CURSOR_MOVED] == -1) || calling[RowSetEventListener.CURSOR_MOVED] == pos++);
-        assure("Callings are not in the correct order for ROW_CHANGED",
+        assertTrue("Callings are not in the correct order for ROW_CHANGED",
                 (!_must[RowSetEventListener.ROW_CHANGED] || calling[RowSetEventListener.ROW_CHANGED] == -1) || calling[RowSetEventListener.ROW_CHANGED] == pos++);
-        assure("Callings are not in the correct order for IS_MODIFIED",
+        assertTrue("Callings are not in the correct order for IS_MODIFIED",
                 (!_must[RowSetEventListener.IS_MODIFIED] || calling[RowSetEventListener.IS_MODIFIED] == -1) || calling[RowSetEventListener.IS_MODIFIED] == pos++);
-        assure("Callings are not in the correct order for IS_NEW",
+        assertTrue("Callings are not in the correct order for IS_NEW",
                 (!_must[RowSetEventListener.IS_NEW] || calling[RowSetEventListener.IS_NEW] == -1) || calling[RowSetEventListener.IS_NEW] == pos++);
-        assure("Callings are not in the correct order for ROW_COUNT",
+        assertTrue("Callings are not in the correct order for ROW_COUNT",
                 (!_must[RowSetEventListener.ROW_COUNT] || calling[RowSetEventListener.ROW_COUNT] == -1) || calling[RowSetEventListener.ROW_COUNT] == pos++);
-        assure("Callings are not in the correct order for IS_ROW_COUNT_FINAL",
+        assertTrue("Callings are not in the correct order for IS_ROW_COUNT_FINAL",
                 (!_must[RowSetEventListener.IS_ROW_COUNT_FINAL] || calling[RowSetEventListener.IS_ROW_COUNT_FINAL] == -1) || calling[RowSetEventListener.IS_ROW_COUNT_FINAL] == pos);
 
         _evt.clearCalling();
@@ -587,7 +566,7 @@ public class RowSet extends ComplexTestCase
     private int positionRandom() throws SQLException, UnknownPropertyException, WrappedTargetException
     {
         final int position = (new Random()).nextInt(currentRowCount() - 2) + 2;
-        assure("sub task failed: could not position to row no. " + (Integer.valueOf(position)).toString(),
+        assertTrue("sub task failed: could not position to row no. " + (Integer.valueOf(position)).toString(),
                 m_resultSet.absolute(position));
         return m_resultSet.getRow();
     }
@@ -609,14 +588,15 @@ public class RowSet extends ComplexTestCase
 
         final int positionAfter = m_resultSet.getRow();
         final int rowCountAfter = currentRowCount();
-        assure("position changed during |deleteRow| (it should not)", positionAfter == positionBefore);
-        assure("row count changed with a |deleteRow| (it should not)", rowCountBefore == rowCountAfter);
-        assure("RowSet does not report the current row as deleted after |deleteRow|", m_resultSet.rowDeleted());
+        assertTrue("position changed during |deleteRow| (it should not)", positionAfter == positionBefore);
+        assertTrue("row count changed with a |deleteRow| (it should not)", rowCountBefore == rowCountAfter);
+        assertTrue("RowSet does not report the current row as deleted after |deleteRow|", m_resultSet.rowDeleted());
 
         return positionBefore;
     }
 
     // --------------------------------------------------------------------------------------------------------
+    @Test
     public void testDeleteBehavior() throws Exception
     {
         createTestCase(true);
@@ -639,40 +619,40 @@ public class RowSet extends ComplexTestCase
         {
             caughtException = true;
         }
-        assure("asking for the bookmark of a deleted row should throw an exception", caughtException);
+        assertTrue("asking for the bookmark of a deleted row should throw an exception", caughtException);
 
         // .....................................................................................................
         // isXXX methods should return |false| on a deleted row
-        assure("one of the isFoo failed after |deleteRow|", !m_resultSet.isBeforeFirst() && !m_resultSet.isAfterLast() && !m_resultSet.isFirst() && !m_resultSet.isLast());
+        assertTrue("one of the isFoo failed after |deleteRow|", !m_resultSet.isBeforeFirst() && !m_resultSet.isAfterLast() && !m_resultSet.isFirst() && !m_resultSet.isLast());
         // note that we can assume that isFirst / isLast also return |false|, since deleteRandom did
         // not position on the first or last record, but inbetween
 
         // .....................................................................................................
         // check if moving away from this row in either direction yields the expected results
-        assure("|previous| after |deleteRow| failed", m_resultSet.previous());
+        assertTrue("|previous| after |deleteRow| failed", m_resultSet.previous());
         final int positionPrevious = m_resultSet.getRow();
-        assure("position after |previous| after |deleteRow| is not as expected", positionPrevious == deletedRow - 1);
+        assertTrue("position after |previous| after |deleteRow| is not as expected", positionPrevious == deletedRow - 1);
 
         deletedRow = deleteRandom();
-        assure("|next| after |deleteRow| failed", m_resultSet.next());
+        assertTrue("|next| after |deleteRow| failed", m_resultSet.next());
         final int positionAfter = m_resultSet.getRow();
-        assure("position after |next| after |deleteRow| is not as expected", positionAfter == deletedRow);
+        assertTrue("position after |next| after |deleteRow| is not as expected", positionAfter == deletedRow);
         // since the deleted record "vanishs" as soon as the cursor is moved away from it, the absolute position does
         // not change with a |next| call here
 
         // .....................................................................................................
         // check if the deleted rows really vanished after moving away from them
-        assure("row count did not change as expected after two deletions", initialRowCount - 2 == currentRowCount());
+        assertTrue("row count did not change as expected after two deletions", initialRowCount - 2 == currentRowCount());
 
         // .....................................................................................................
         // check if the deleted row vanishes after moving to the insertion row
         final int rowCountBefore = currentRowCount();
         final int deletedPos = deleteRandom();
         m_resultSetUpdate.moveToInsertRow();
-        assure("moving to the insertion row immediately after |deleteRow| does not adjust the row count", rowCountBefore == currentRowCount() + 1);
+        assertTrue("moving to the insertion row immediately after |deleteRow| does not adjust the row count", rowCountBefore == currentRowCount() + 1);
 
         m_resultSetUpdate.moveToCurrentRow();
-        assure("|moveToCurrentRow| after |deleteRow| + |moveToInsertRow| results in unexpected position",
+        assertTrue("|moveToCurrentRow| after |deleteRow| + |moveToInsertRow| results in unexpected position",
                 (m_resultSet.getRow() == deletedPos) && !m_resultSet.rowDeleted());
 
         // the same, but this time with deleting the first row (which is not covered by deleteRandom)
@@ -680,7 +660,7 @@ public class RowSet extends ComplexTestCase
         m_resultSetUpdate.deleteRow();
         m_resultSetUpdate.moveToInsertRow();
         m_resultSetUpdate.moveToCurrentRow();
-        assure("|last| + |deleteRow| + |moveToInsertRow| + |moveToCurrentRow| results in wrong state", m_resultSet.isAfterLast());
+        assertTrue("|last| + |deleteRow| + |moveToInsertRow| + |moveToCurrentRow| results in wrong state", m_resultSet.isAfterLast());
 
         // .....................................................................................................
         // check if deleting a deleted row fails as expected
@@ -694,7 +674,7 @@ public class RowSet extends ComplexTestCase
         {
             caughtException = true;
         }
-        assure("deleting a deleted row succeeded - it shouldn't", caughtException);
+        assertTrue("deleting a deleted row succeeded - it shouldn't", caughtException);
 
         // .....................................................................................................
         // check if deleteRows fails if it contains the bookmark of a previously-deleted row
@@ -708,7 +688,7 @@ public class RowSet extends ComplexTestCase
                 {
                     firstBookmark, deleteBookmark
                 });
-        assure("XDeleteRows::deleteRows with the bookmark of an already-deleted row failed",
+        assertTrue("XDeleteRows::deleteRows with the bookmark of an already-deleted row failed",
                 (deleteSuccess.length == 2) && (deleteSuccess[0] != 0) && (deleteSuccess[1] == 0));
 
         // .....................................................................................................
@@ -723,12 +703,12 @@ public class RowSet extends ComplexTestCase
         {
             caughtException = true;
         }
-        assure("refreshing a deleted row succeeded - it shouldn't", caughtException);
+        assertTrue("refreshing a deleted row succeeded - it shouldn't", caughtException);
 
         // .....................................................................................................
         // rowUpdated/rowDeleted
         deleteRandom();
-        assure("rowDeleted and/or rowUpdated are wrong on a deleted row", !m_resultSet.rowUpdated() && !m_resultSet.rowInserted());
+        assertTrue("rowDeleted and/or rowUpdated are wrong on a deleted row", !m_resultSet.rowUpdated() && !m_resultSet.rowInserted());
 
         // .....................................................................................................
         // updating values in a deleted row should fail
@@ -743,14 +723,14 @@ public class RowSet extends ComplexTestCase
         {
             caughtException = true;
         }
-        assure("updating values in a deleted row should not succeed", caughtException);
+        assertTrue("updating values in a deleted row should not succeed", caughtException);
     }
 
     // --------------------------------------------------------------------------------------------------------
     /** checks whether deletions on the main RowSet properly interfere (or don't interfere) with the movement
      *  on a clone of the RowSet
      */
-    @SuppressWarnings("empty-statement")
+    @Test
     public void testCloneMovesPlusDeletions() throws SQLException, UnknownPropertyException, WrappedTargetException
     {
         createTestCase(true);
@@ -768,20 +748,20 @@ public class RowSet extends ComplexTestCase
         final int clonePosition = clone.getRow();
         m_resultSetUpdate.deleteRow();
 
-        assure("clone doesn't know that its current row has been deleted via the RowSet", clone.rowDeleted());
-        assure("clone's position changed somehow during deletion", clonePosition == clone.getRow());
+        assertTrue("clone doesn't know that its current row has been deleted via the RowSet", clone.rowDeleted());
+        assertTrue("clone's position changed somehow during deletion", clonePosition == clone.getRow());
 
         // .....................................................................................................
         // move the row set away from the deleted record. This should still not touch the state of the clone
         m_resultSet.previous();
 
-        assure("clone doesn't know (anymore) that its current row has been deleted via the RowSet", clone.rowDeleted());
-        assure("clone's position changed somehow during deletion and RowSet-movement", clonePosition == clone.getRow());
+        assertTrue("clone doesn't know (anymore) that its current row has been deleted via the RowSet", clone.rowDeleted());
+        assertTrue("clone's position changed somehow during deletion and RowSet-movement", clonePosition == clone.getRow());
 
         // .....................................................................................................
         // move the clone away from the deleted record
         clone.next();
-        assure("clone still assumes that its row is deleted - but we already moved it", !clone.rowDeleted());
+        assertTrue("clone still assumes that its row is deleted - but we already moved it", !clone.rowDeleted());
 
         // .....................................................................................................
         // check whether deleting the extremes (first / last) work
@@ -789,36 +769,37 @@ public class RowSet extends ComplexTestCase
         cloneRowLocate.moveToBookmark(m_rowLocate.getBookmark());
         m_resultSetUpdate.deleteRow();
         clone.previous();
-        assure("deleting the first record left the clone in a strange state (after |previous|)", clone.isBeforeFirst());
+        assertTrue("deleting the first record left the clone in a strange state (after |previous|)", clone.isBeforeFirst());
         clone.next();
-        assure("deleting the first record left the clone in a strange state (after |previous| + |next|)", clone.isFirst());
+        assertTrue("deleting the first record left the clone in a strange state (after |previous| + |next|)", clone.isFirst());
 
         m_resultSet.last();
         cloneRowLocate.moveToBookmark(m_rowLocate.getBookmark());
         m_resultSetUpdate.deleteRow();
         clone.next();
-        assure("deleting the last record left the clone in a strange state (after |next|)", clone.isAfterLast());
+        assertTrue("deleting the last record left the clone in a strange state (after |next|)", clone.isAfterLast());
         clone.previous();
-        assure("deleting the first record left the clone in a strange state (after |next| + |previous|)", clone.isLast());
+        assertTrue("deleting the first record left the clone in a strange state (after |next| + |previous|)", clone.isLast());
 
         // .....................................................................................................
         // check whether movements of the clone interfere with movements of the RowSet, if the latter is on a deleted row
         final int positionBefore = positionRandom();
         m_resultSetUpdate.deleteRow();
-        assure("|deleteRow|, but no |rowDeleted| (this should have been found much earlier!)", m_resultSet.rowDeleted());
+        assertTrue("|deleteRow|, but no |rowDeleted| (this should have been found much earlier!)", m_resultSet.rowDeleted());
         clone.beforeFirst();
         while (clone.next());
-        assure("row set forgot that the current row is deleted", m_resultSet.rowDeleted());
+        assertTrue("row set forgot that the current row is deleted", m_resultSet.rowDeleted());
 
-        assure("moving to the next record after |deleteRow| and clone moves failed", m_resultSet.next());
-        assure("wrong position after |deleteRow| and clone movement", !m_resultSet.isAfterLast() && !m_resultSet.isBeforeFirst());
-        assure("wrong absolute position after |deleteRow| and clone movement", m_resultSet.getRow() == positionBefore);
+        assertTrue("moving to the next record after |deleteRow| and clone moves failed", m_resultSet.next());
+        assertTrue("wrong position after |deleteRow| and clone movement", !m_resultSet.isAfterLast() && !m_resultSet.isBeforeFirst());
+        assertTrue("wrong absolute position after |deleteRow| and clone movement", m_resultSet.getRow() == positionBefore);
     }
 
     // --------------------------------------------------------------------------------------------------------
     /** checks whether insertions on the main RowSet properly interfere (or don't interfere) with the movement
      *  on a clone of the RowSet
      */
+    @Test
     public void testCloneMovesPlusInsertions() throws SQLException, UnknownPropertyException, WrappedTargetException, PropertyVetoException, com.sun.star.lang.IllegalArgumentException
     {
         createTestCase(true);
@@ -839,7 +820,7 @@ public class RowSet extends ComplexTestCase
         final int rowValue1 = m_row.getInt(1);
         final int rowPos = m_resultSet.getRow();
         final int rowValue2 = m_row.getInt(1);
-        assure("repeated query for the same column value delivers different values (" + rowValue1 + " and " + rowValue2 + ") on row: " + rowPos,
+        assertTrue("repeated query for the same column value delivers different values (" + rowValue1 + " and " + rowValue2 + ") on row: " + rowPos,
                 rowValue1 == rowValue2);
 
         testPosition(clone, cloneRow, 1, "mixed clone/rowset move: clone check");
@@ -871,7 +852,7 @@ public class RowSet extends ComplexTestCase
         }
         catch (Exception e)
         {
-            assure("testing the parameters of a table failed" + e.getMessage(), false);
+            fail("testing the parameters of a table failed" + e.getMessage());
         }
     }
     // --------------------------------------------------------------------------------------------------------
@@ -888,7 +869,7 @@ public class RowSet extends ComplexTestCase
         }
         catch (Exception e)
         {
-            assure("testing the parameters of a table failed" + e.getMessage(), false);
+            fail("testing the parameters of a table failed" + e.getMessage());
         }
     }
 
@@ -899,7 +880,7 @@ public class RowSet extends ComplexTestCase
         final int expected = _paramNames.length;
         final int found = params != null ? params.getCount() : 0;
 
-        assure("wrong number of parameters (expected: " + expected + ", found: " + found + ") in " + _context,
+        assertTrue("wrong number of parameters (expected: " + expected + ", found: " + found + ") in " + _context,
                 found == expected);
 
         if (found == 0)
@@ -913,7 +894,7 @@ public class RowSet extends ComplexTestCase
 
             final String expectedName = _paramNames[i];
             final String foundName = (String) parameter.getPropertyValue("Name");
-            assure("wrong parameter name (expected: " + expectedName + ", found: " + foundName + ") in" + _context,
+            assertTrue("wrong parameter name (expected: " + expectedName + ", found: " + foundName + ") in" + _context,
                     expectedName.equals(foundName));
         }
     }
@@ -934,7 +915,7 @@ public class RowSet extends ComplexTestCase
         }
         catch (Exception e)
         {
-            assure("testing the parameters of a parametrized query failed" + e.getMessage(), false);
+            fail("testing the parameters of a parametrized query failed" + e.getMessage());
         }
     }
 
@@ -953,7 +934,7 @@ public class RowSet extends ComplexTestCase
             XPropertySet firstParam = UnoRuntime.queryInterface( XPropertySet.class, params.getByIndex( 0 ) );
             Object firstParamValue = firstParam.getPropertyValue("Value");
 
-            assure("XParameters and the parameters container do not properly interact",
+            assertTrue("XParameters and the parameters container do not properly interact",
                     "Apples".equals(firstParamValue));
 
             // let's see whether this also survices an execute of the row set
@@ -967,12 +948,12 @@ public class RowSet extends ComplexTestCase
                 firstParam = UnoRuntime.queryInterface( XPropertySet.class, params.getByIndex( 0 ) );
             }
             firstParamValue = firstParam.getPropertyValue("Value");
-            assure("XParameters and the parameters container do not properly interact, after the row set has been executed",
+            assertTrue("XParameters and the parameters container do not properly interact, after the row set has been executed",
                     "Oranges".equals(firstParamValue));
         }
         catch (Exception e)
         {
-            assure("could not test the relationship between XParameters and XParametersSupplier" + e.getMessage(), false);
+            fail("could not test the relationship between XParameters and XParametersSupplier" + e.getMessage());
         }
     }
 
@@ -997,13 +978,14 @@ public class RowSet extends ComplexTestCase
         }
         catch (Exception e)
         {
-            assure("testing the parameters within a WHERE clause failed" + e.getMessage(), false);
+            fail("testing the parameters within a WHERE clause failed" + e.getMessage());
         }
     }
 
     // --------------------------------------------------------------------------------------------------------
     /** checks the XParametersSupplier functionality of a RowSet
      */
+    @Test
     public void testParameters()
     {
         createTestCase(false);
