@@ -70,6 +70,7 @@ public:
         NET_WM_STATE_STAYS_ON_TOP,
         NET_WM_STATE_STICKY,
         NET_WM_STATE_FULLSCREEN,
+        NET_WM_FULLSCREEN_MONITORS,
         NET_WM_STRUT,
         NET_WM_STRUT_PARTIAL,
         NET_WM_USER_TIME,
@@ -347,6 +348,10 @@ public:
      *  if reference frame is NULL the root window is used instead
      */
     void changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame* pReferenceFrame ) const;
+
+    /* set fullscreen monitor range; takes X11 window as input since it is also used by gtk plugin
+     */
+    virtual void setFullScreenMonitors( XLIB_Window i_aWindow, sal_Int32 i_nScreen );
 };
 
 } // namespace

@@ -1815,6 +1815,7 @@ void GtkSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nScreen )
                     aNewPosSize = Rectangle( Point( 0, 0 ), pDisp->GetScreenSize(m_nScreen) );
                 else
                     aNewPosSize = pDisp->GetXineramaScreens()[ nScreen ];
+
                 gtk_window_resize( GTK_WINDOW(m_pWindow),
                                    maGeometry.nWidth = aNewPosSize.GetWidth(),
                                    maGeometry.nHeight = aNewPosSize.GetHeight() );
@@ -1829,6 +1830,7 @@ void GtkSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nScreen )
                 // _NET_WM_STATE_FULLSCREEN (Metacity <-> KWin)
                 if( ! getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
                 {
+                    pDisp->getWMAdaptor()->setFullScreenMonitors( GDK_WINDOW_XWINDOW( GTK_WIDGET(m_pWindow)->window ), nScreen );
                     if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
                         gtk_window_set_resizable( GTK_WINDOW(m_pWindow), sal_True );
                     gtk_window_fullscreen( GTK_WINDOW( m_pWindow ) );

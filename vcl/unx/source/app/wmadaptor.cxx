@@ -79,6 +79,7 @@ public:
                                  int top_start_x, int top_end_x,
                                  int bottom_start_x, int bottom_end_x ) const;
     virtual void setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const;
+    virtual void setFullScreenMonitors( XLIB_Window i_aWindow, sal_Int32 i_nScreen );
 };
 
 class GnomeWMAdaptor : public WMAdaptor
@@ -119,6 +120,7 @@ static const WMAdaptorProtocol aProtocolTab[] =
     { "_NET_CURRENT_DESKTOP", WMAdaptor::NET_CURRENT_DESKTOP },
     { "_NET_NUMBER_OF_DESKTOPS", WMAdaptor::NET_NUMBER_OF_DESKTOPS },
     { "_NET_WM_DESKTOP", WMAdaptor::NET_WM_DESKTOP },
+    { "_NET_WM_FULLSCREEN_MONITORS", WMAdaptor::NET_WM_FULLSCREEN_MONITORS },
     { "_NET_WM_ICON_NAME", WMAdaptor::NET_WM_ICON_NAME },
     { "_NET_WM_PING", WMAdaptor::NET_WM_PING },
     { "_NET_WM_STATE", WMAdaptor::NET_WM_STATE },
@@ -2541,3 +2543,67 @@ void WMAdaptor::answerPing( X11SalFrame* i_pFrame, XClientMessageEvent* i_pEvent
         XFlush( m_pDisplay );
     }
 }
+
+/*
+* WMAdaptor::setFullScreenMonitors
+*/
+void WMAdaptor::setFullScreenMonitors( XLIB_Window, sal_Int32 )
+{
+}
+
+/*
+* NetWMAdaptor::setFullScreenMonitors
+*/
+void NetWMAdaptor::setFullScreenMonitors( XLIB_Window i_aWindow, sal_Int32 i_nScreen )
+{
+    if( m_aWMAtoms[ NET_WM_FULLSCREEN_MONITORS ] )
+    {
+        const std::vector< Rectangle >& rScreens( m_pSalDisplay->GetXineramaScreens() );
+        if( m_pSalDisplay->IsXinerama() && rScreens.size() > 1 )
+        {
+            long nSpannedMonitors[4] = {0,0,0,0};
+            if( i_nScreen == -1 ) // all screens
+            {
+                long nLeft   = rScreens.front().Left();
+                long nRight  = rScreens.front().Right();
+                long nTop    = rScreens.front().Top();
+                long nBottom = rScreens.front().Bottom();
+                for( long i = 1; i < long(rScreens.size()); ++ i )
+                {
+                    if( rScreens[i].Left() < nLeft )
+                    {
+                        nLeft = rScreens[i].Left();
+                        nSpannedMonitors[2] = i;
+                    }
+                    if( rScreens[i].Top() < nTop )
+                    {
+                        nTop = rScreens[i].Top();
+                        nSpannedMonitors[0] = i;
+                    }
+                    if( rScreens[i].Bottom() > nBottom )
+                    {
+                        nBottom = rScreens[i].Bottom();
+                        nSpannedMonitors[1] = i;
+                    }
+                    if( rScreens[i].Right() > nRight )
+                    {
+                        nRight = rScreens[i].Right();
+                        nSpannedMonitors[3] = i;
+                    }
+                }
+            }
+            else
+            {
+                if( i_nScreen < 0 || i_nScreen >= sal_Int32(rScreens.size()) )
+                    i_nScreen = 0;
+                nSpannedMonitors[0] = nSpannedMonitors[1] = nSpannedMonitors[2] = nSpannedMonitors[3] = i_nScreen;
+            }
+            XChangeProperty( m_pDisplay, i_aWindow,
+                             m_aWMAtoms[ NET_WM_FULLSCREEN_MONITORS ],
+                             XA_CARDINAL, 32,
+                             PropModeReplace, (unsigned char*)nSpannedMonitors, 4 );
+
+        }
+    }
+}
+

@@ -2221,7 +2221,10 @@ void X11SalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nScreen )
             if( GetDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
                 GetDisplay()->getWMAdaptor()->enableAlwaysOnTop( this, true );
             else
+            {
+                GetDisplay()->getWMAdaptor()->setFullScreenMonitors( GetShellWindow(), nScreen );
                 GetDisplay()->getWMAdaptor()->showFullScreen( this, true );
+            }
             if( bVisible )
                 Show(sal_True);
 
