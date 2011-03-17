@@ -35,9 +35,12 @@
 #endif
 
 #include <math.h>
-#include <testshl/simpleheader.hxx>
 #include <rtl/math.h>
 #include <rtl/string.hxx>
+
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #include "valueequal.hxx"
 
@@ -615,7 +618,7 @@ public:
 }; // class test
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_math::test, "rtl_math");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_math::test);
 } // namespace rtl_math
 
 
@@ -623,6 +626,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_math::test, "rtl_math");
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
