@@ -38,11 +38,25 @@
 #include <vcl/svapp.hxx>
 #include <vcl/sound.hxx>
 #include <errhdl.hxx>
-#include <error.h>              // fuer die defines von ERR_SW6MSG_ ...
 
 #ifndef CVBREAK
 #define CVBREAK
 #endif
+
+// Error Codes.
+#define ERR_SWGBASE 25000
+
+#define ERR_VAR_IDX                            (ERR_SWGBASE+ 0)
+#define ERR_OUTOFSCOPE                         (ERR_SWGBASE+ 1)
+
+#define ERR_NUMLEVEL                           (ERR_SWGBASE+ 2)
+
+// Error Codes for TxtNode.
+#define ERR_NOHINTS                            (ERR_SWGBASE+ 3)
+
+// Strings to be queried are in COREDL.DLL from _START to _END.
+#define ERR_SWGMSG_START                       (ERR_VAR_IDX)
+#define ERR_SWGMSG_END                         (ERR_NOHINTS)
 
 sal_Bool bAssertFail = sal_False;           // ist gerade eine Assertbox oben ?
 sal_Bool bAssert = sal_False;               // sal_True, wenn mal ein ASSERT kam.

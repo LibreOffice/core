@@ -1513,7 +1513,7 @@ void SmParser::Term()
                         FontAttribut();
 
                     // check if casting in following line is ok
-                    OSL_ENSURE(!NodeStack.Top()->IsVisible(), "Sm : Ooops...");
+                    OSL_ENSURE(!m_aNodeStack.Top()->IsVisible(), "Sm : Ooops...");
 
                     aArray[n] = (SmStructureNode *) m_aNodeStack.Pop();
                     n++;
@@ -1671,7 +1671,7 @@ void SmParser::Oper()
         case TOPER :
             NextToken();
 
-            OSL_ENSURE(CurToken.eType == TSPECIAL, "Sm: wrong token");
+            OSL_ENSURE(m_aCurToken.eType == TSPECIAL, "Sm: wrong token");
             pNode = new SmGlyphSpecialNode(m_aCurToken);
             break;
 
@@ -1844,7 +1844,7 @@ void SmParser::FontAttribut()
 
 void SmParser::Color()
 {
-    OSL_ENSURE(CurToken.eType == TCOLOR, "Sm : Ooops...");
+    OSL_ENSURE(m_aCurToken.eType == TCOLOR, "Sm : Ooops...");
 
     // last color rules, get that one
     SmToken  aToken;
@@ -1865,7 +1865,7 @@ void SmParser::Color()
 
 void SmParser::Font()
 {
-    OSL_ENSURE(CurToken.eType == TFONT, "Sm : Ooops...");
+    OSL_ENSURE(m_aCurToken.eType == TFONT, "Sm : Ooops...");
 
     // last font rules, get that one
     SmToken  aToken;
@@ -1908,7 +1908,7 @@ bool lcl_IsNumber(const UniString& rText)
 
 void SmParser::FontSize()
 {
-    OSL_ENSURE(CurToken.eType == TSIZE, "Sm : Ooops...");
+    OSL_ENSURE(m_aCurToken.eType == TSIZE, "Sm : Ooops...");
 
     sal_uInt16   Type;
     SmFontNode *pFontNode = new SmFontNode(m_aCurToken);
@@ -1977,7 +1977,7 @@ void SmParser::FontSize()
 
 void SmParser::Brace()
 {
-    OSL_ENSURE(CurToken.eType == TLEFT  ||  TokenInGroup(TGLBRACES),
+    OSL_ENSURE(m_aCurToken.eType == TLEFT  ||  TokenInGroup(TGLBRACES),
         "Sm: kein Klammer Ausdruck");
 
     SmStructureNode *pSNode  = new SmBraceNode(m_aCurToken);
