@@ -39,11 +39,6 @@ Installation gid_Installation_Sdk
 #endif
 End
 
-DataCarrier gid_Datacarrier
-    Name = "%PRODUCTNAME %PRODUCTVERSION";
-    DiskNo = 1;
-End
-
 #ifndef MACOSX
 
 #ifdef WNT
