@@ -43,6 +43,13 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#ifdef WNT
+#include <windows.h>
+#else
+#include <unistd.h>
+#include <time.h>
+#endif
+
 // -----------------------------------------------------------------------------
 #define CONST_TEST_STRING "gregorian"
 
@@ -210,6 +217,8 @@ namespace rtl_DoubleLocking
 #if OSL_DEBUG_LEVEL > 2
                 printf("Value in Thread #1 is %d\n", nValueOK);
                 printf("Value in Thread #2 is %d\n", nValueOK2);
+#else
+                (void)nValueOK2;
 #endif
 
                 sal_Int32 nValueFails = 0;
