@@ -479,9 +479,13 @@ void Test::testPolyStruct() {
         (com::sun::star::uno::makeAny(
             test::codemaker::cppumaker::Struct< sal_Unicode, sal_Int16 >()).
          getValueType().getTypeName()));
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >
+        aEmptySequence;
+
     CPPUNIT_ASSERT_EQUAL(
-        (test::codemaker::cppumaker::make_Struct< sal_uInt32, sal_Bool >(5, 0).
-         member1),
+        (test::codemaker::cppumaker::make_Struct< sal_uInt32, sal_Bool >(5,
+            aEmptySequence).member1),
         static_cast< sal_uInt32 >(5));
 }
 
@@ -505,11 +509,14 @@ std::ostream & operator <<(
 }
 
 void Test::testExceptions() {
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >
+        aEmptySequence;
+
     test::codemaker::cppumaker::TestException1 e11(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")), 0, 1,
         com::sun::star::uno::makeAny(123.0),
         test::codemaker::cppumaker::HelperEnum_ONE,
-        test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, 0), 2);
+        test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, aEmptySequence), 2);
     test::codemaker::cppumaker::TestException1 e12(e11);
     CPPUNIT_ASSERT_EQUAL(e11, e12);
     test::codemaker::cppumaker::TestException1 e13;
@@ -519,7 +526,7 @@ void Test::testExceptions() {
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")), 0, 1,
         com::sun::star::uno::makeAny(123.0),
         test::codemaker::cppumaker::HelperEnum_ONE,
-        test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, 0), 2);
+        test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, aEmptySequence), 2);
     test::codemaker::cppumaker::TestException2 e22(e21);
     CPPUNIT_ASSERT_EQUAL(e21, e22);
     test::codemaker::cppumaker::TestException2 e23;
