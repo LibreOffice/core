@@ -96,7 +96,7 @@ CONFIGURE_DIR=out
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION= \
     ..$/dist$/configure
-CONFIGURE_FLAGS=--disable-cxx --enable-dynamic --enable-shared --enable-compat185
+CONFIGURE_FLAGS=--disable-cxx --enable-dynamic --enable-shared --enable-compat185 CC='$(CC) $(SOLARLIB)'
 .IF "$(OS)"=="MACOSX"
 CONFIGURE_FLAGS+=CPPFLAGS="$(EXTRA_CDEFS)"
 .ENDIF
