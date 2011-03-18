@@ -36,8 +36,8 @@ $(eval $(call gb_SrsTarget_SrsTarget,svx/gal))
 $(eval $(call gb_SrsTarget_set_include,svx/gal,\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc \
-    -I$(SRCDIR)/svx/source/gallery \
-    -I$(SRCDIR)/svx/inc/ \
+    -I$(realpath $(SRCDIR)/svx/source/gallery) \
+    -I$(realpath $(SRCDIR)/svx/inc/) \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,svx/gal,\
