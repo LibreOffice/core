@@ -433,7 +433,6 @@ sal_Bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  sal_Bool bExtendedInf
                                     sal_uInt8   nNumberOfImageComponents;
                                     sal_uInt8   nComponentsIdentifier;
                                     sal_uInt8   nHorizontalSamplingFactor;
-                                    sal_uInt8   nVerticalSamplingFactor;
                                     sal_uInt8   nQuantizationTableDestinationSelector;
                                     rStm >> nSamplePrecision
                                          >> nNumberOfLines
@@ -442,7 +441,6 @@ sal_Bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  sal_Bool bExtendedInf
                                          >> nComponentsIdentifier
                                          >> nHorizontalSamplingFactor
                                          >> nQuantizationTableDestinationSelector;
-                                    nVerticalSamplingFactor = nHorizontalSamplingFactor & 0xf;
                                     nHorizontalSamplingFactor >>= 4;
 
                                     aPixSize.Height() = nNumberOfLines;
