@@ -118,10 +118,11 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     // first try if the result can be used to do inserts and updates
     Reference< XPropertySet> xProp(_xRs,UNO_QUERY);
     Reference< XPropertySetInfo > xPropInfo = xProp->getPropertySetInfo();
+    sal_Bool bBookmarkable = sal_False;
     try
     {
         Reference< XResultSetUpdate> xUp(_xRs,UNO_QUERY_THROW);
-        sal_Bool bBookmarkable = xPropInfo->hasPropertyByName(PROPERTY_ISBOOKMARKABLE) &&
+        bBookmarkable = xPropInfo->hasPropertyByName(PROPERTY_ISBOOKMARKABLE) &&
                                 any2bool(xProp->getPropertyValue(PROPERTY_ISBOOKMARKABLE)) && Reference< XRowLocate >(_xRs, UNO_QUERY).is();
         if ( bBookmarkable )
         {
@@ -154,10 +155,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     sal_Bool bAllKeysFound = sal_False;
     sal_Int32 nTablesCount = 0;
 
-
-    sal_Bool bNeedKeySet = !(xPropInfo->hasPropertyByName(PROPERTY_ISBOOKMARKABLE) &&
-                             any2bool(xProp->getPropertyValue(PROPERTY_ISBOOKMARKABLE)) && Reference< XRowLocate >(_xRs, UNO_QUERY).is() );
-    bNeedKeySet = bNeedKeySet || (xPropInfo->hasPropertyByName(PROPERTY_RESULTSETCONCURRENCY) &&
+    sal_Bool bNeedKeySet = !bBookmarkable || (xPropInfo->hasPropertyByName(PROPERTY_RESULTSETCONCURRENCY) &&
                             ::comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETCONCURRENCY)) == ResultSetConcurrency::READ_ONLY);
 
     Reference< XIndexAccess> xUpdateTableKeys;
@@ -280,6 +278,16 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         // oj removed because keyset uses only the next// || (xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_RESULTSETTYPE) && comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETTYPE)) == ResultSetType::FORWARD_ONLY)
         if(!bAllKeysFound )
         {
+            if ( bBookmarkable )
+            {
+                // here I know that we have a read only bookmarable cursor
+                _xRs->beforeFirst();
+                m_nPrivileges = Privilege::SELECT;
+                m_pCacheSet = new WrappedResultSet(i_nMaxRows);
+                m_xCacheSet = m_pCacheSet;
+                m_pCacheSet->construct(_xRs,i_sRowSetFilter);
+                return;
+            }
             m_pCacheSet = new OStaticSet(i_nMaxRows);
             m_xCacheSet = m_pCacheSet;
             m_pCacheSet->construct(_xRs,i_sRowSetFilter);
