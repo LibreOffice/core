@@ -1253,10 +1253,10 @@ int HTMLParser::_GetNextToken()
                     {
                         ScanText( '>' );
 
-                        // #i34666# closing "/>"?:
+                        // fdo#34666: closing "/>"?:
                         // return HTML_UNKNOWNCONTROL_OFF instead of
                         // HTML_UNKNOWNCONTROL_ON
-                        if ('/' == aToken.GetChar(aToken.Len()-1)) {
+                        if (aToken.Len() >= 1 && '/' == aToken.GetChar(aToken.Len()-1)) {
                             if (HTML_UNKNOWNCONTROL_ON == nRet)
                                 nRet = HTML_UNKNOWNCONTROL_OFF;
                         }
