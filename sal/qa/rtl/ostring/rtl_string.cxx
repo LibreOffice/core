@@ -29,7 +29,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
-#include <testshl/simpleheader.hxx>
+
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+
+#include <rtl/ustring.hxx>
+#include <cstring>
 
 namespace rtl_string
 {
@@ -173,14 +179,14 @@ namespace rtl_string
 } // namespace rtl_string
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_string::getLength, "rtl_string");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_string::newFromString, "rtl_string");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_string::convertUStringToString, "rtl_string");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::getLength);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::newFromString);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_string::convertUStringToString);
 
 // -----------------------------------------------------------------------------
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
