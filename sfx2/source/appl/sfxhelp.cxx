@@ -704,7 +704,7 @@ XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow
 static bool impl_hasHelpInstalled( const rtl::OUString &rLang = rtl::OUString() )
 {
     String aHelpRootURL( DEFINE_CONST_OUSTRING("vnd.sun.star.help://") );
-    AppendConfigToken( aHelpRootURL, sal_True );
+    AppendConfigToken( aHelpRootURL, sal_True, rLang );
     Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpRootURL );
 
     return ( aFactories.getLength() != 0 );
