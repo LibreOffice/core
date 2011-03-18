@@ -519,7 +519,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 {
     const SfxPoolItem *pItem = 0;
     SfxItemPool &rPool = GetPool();
-    sal_Bool bResetSession = sal_False;
 
     SvtSaveOptions aSaveOptions;
     SvtUndoOptions aUndoOptions;
@@ -735,45 +734,38 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
         aSecurityOptions.SetExecutePlugins( ( (const SfxBoolItem *)pItem )->GetValue() );
-        bResetSession = sal_True;
     }
 
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), sal_True, &pItem))
     {
         DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
         aInetOptions.SetProxyType((SvtInetOptions::ProxyType)( (const SfxUInt16Item*)pItem )->GetValue());
-        bResetSession = sal_True;
     }
 
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
         aInetOptions.SetProxyHttpName( ((const SfxStringItem *)pItem)->GetValue() );
-        bResetSession = sal_True;
     }
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
         aInetOptions.SetProxyHttpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
-        bResetSession = sal_True;
     }
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_NAME ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
         aInetOptions.SetProxyFtpName( ((const SfxStringItem *)pItem)->GetValue() );
-        bResetSession = sal_True;
     }
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_PORT ), sal_True, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
         aInetOptions.SetProxyFtpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
-        bResetSession = sal_True;
     }
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_NOPROXY, sal_True, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
         aInetOptions.SetProxyNoProxy(((const SfxStringItem *)pItem)->GetValue());
-        bResetSession = sal_True;
     }
 
     // Secure-Referers
