@@ -166,10 +166,28 @@ TabPage TP_FOOTNOTE_PAGE
         TabStop = TRUE ;
         Left = TRUE ;
     };
+    FixedText FT_LINECOLOR
+    {
+        Pos = MAP_APPFONT ( 12 , 121 ) ;
+        Size = MAP_APPFONT ( 132 , 8 ) ;
+        Group = TRUE ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Color" ;
+    };
+    ListBox DLB_LINECOLOR
+    {
+        Pos = MAP_APPFONT ( 148 , 119 ) ;
+        Size = MAP_APPFONT ( 57 , 50 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+        Border = TRUE ;
+    };
 
     FixedText FT_LINELENGTH
     {
-        Pos = MAP_APPFONT ( 12 , 121 ) ;
+        Pos = MAP_APPFONT ( 12 , 137 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "~Length" ;
@@ -177,7 +195,7 @@ TabPage TP_FOOTNOTE_PAGE
     MetricField ED_LINELENGTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 148 , 119 ) ;
+        Pos = MAP_APPFONT ( 148 , 135 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -192,7 +210,7 @@ TabPage TP_FOOTNOTE_PAGE
     };
     FixedText FT_LINEDIST
     {
-        Pos = MAP_APPFONT ( 12 , 137 ) ;
+        Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
         Text [ en-US ] = "~Spacing to footnote contents" ;
         Left = TRUE ;
@@ -201,7 +219,7 @@ TabPage TP_FOOTNOTE_PAGE
     {
         HelpID = "sw:MetricField:TP_FOOTNOTE_PAGE:ED_LINEDIST";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 148 , 135 ) ;
+        Pos = MAP_APPFONT ( 148 , 151 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;

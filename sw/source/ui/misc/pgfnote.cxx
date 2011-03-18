@@ -39,6 +39,8 @@
 #include <hintids.hxx>
 #include <tools/ref.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/drawitem.hxx>
+#include <svx/xtable.hxx>               // XColorTable
 #include <sal/macros.h>
 #include <vcl/field.hxx>
 #include <vcl/svapp.hxx>
@@ -53,6 +55,7 @@
 #include <pagedesc.hxx>
 #include <pgfnote.hxx>
 #include <uiitems.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <globals.hrc>
 #include <misc.hrc>
@@ -119,6 +122,12 @@ IMPL_LINK( SwFootNotePage, LineWidthChanged_Impl, void *, EMPTYARG )
     return 0;
 }
 
+IMPL_LINK( SwFootNotePage, LineColorSelected_Impl, void *, EMPTYARG )
+{
+    aLineTypeBox.SetColor( aLineColorBox.GetSelectEntryColor() );
+    return 0;
+}
+
 // CTOR / DTOR -----------------------------------------------------------
 
 SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet) :
@@ -138,6 +147,8 @@ SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet) :
     aLineTypeBox(this,      SW_RES(DLB_LINETYPE)),
     aLineWidthLbl(this,     SW_RES(FT_LINEWIDTH)),
     aLineWidthEdit(this,    SW_RES(ED_LINEWIDTH)),
+    aLineColorLbl(this,     SW_RES(FT_LINECOLOR)),
+    aLineColorBox(this,     SW_RES(DLB_LINECOLOR)),
     aLineLengthLbl(this,    SW_RES(FT_LINELENGTH)),
     aLineLengthEdit(this,   SW_RES(ED_LINELENGTH)),
     aLineDistLbl(this,      SW_RES(FT_LINEDIST)),
@@ -220,6 +231,45 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     aLineTypeBox.SetWidth( pFtnInfo->GetLineWidth( ) );
     aLineTypeBox.SelectEntry( pFtnInfo->GetLineStyle() );
 
+    // Separator Color
+    SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
+    const SfxPoolItem*  pColorItem  = NULL;
+    XColorTable*        pColorTable = NULL;
+
+    DBG_ASSERT( pDocSh, "DocShell not found!" );
+
+    if ( pDocSh )
+    {
+        pColorItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        if ( pColorItem != NULL )
+            pColorTable = ( (SvxColorTableItem*)pColorItem )->GetColorTable();
+    }
+
+    DBG_ASSERT( pColorTable, "ColorTable not found!" );
+
+    if ( pColorTable )
+    {
+        aLineColorBox.SetUpdateMode( sal_False );
+
+        for ( long i = 0; i < pColorTable->Count(); ++i )
+        {
+            XColorEntry* pEntry = pColorTable->GetColor(i);
+            aLineColorBox.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+        }
+        aLineColorBox.SetUpdateMode( sal_True );
+    }
+
+    // select color in the list or add it as a user color
+    sal_uInt16 nSelPos = aLineColorBox.GetEntryPos( pFtnInfo->GetLineColor() );
+    if( nSelPos == LISTBOX_ENTRY_NOTFOUND )
+        nSelPos = aLineColorBox.InsertEntry( pFtnInfo->GetLineColor(),
+                String( SW_RES( RID_SVXSTR_COLOR_USER ) ) );
+
+    aLineColorBox.SetSelectHdl( LINK( this, SwFootNotePage, LineColorSelected_Impl ) );
+    aLineColorBox.SelectEntryPos( nSelPos );
+    aLineTypeBox.SetColor( pFtnInfo->GetLineColor() );
+
+
     // Position
     aLinePosBox.SelectEntryPos( static_cast< sal_uInt16 >(pFtnInfo->GetAdj()) );
 
@@ -268,6 +318,9 @@ sal_Bool SwFootNotePage::FillItemSet(SfxItemSet &rSet)
                    aLineWidthEdit.GetDecimalDigits( ),
                    aLineWidthEdit.GetUnit(), MAP_TWIP );
     rFtnInfo.SetLineWidth( nWidth );
+
+    // Separator color
+    rFtnInfo.SetLineColor( aLineColorBox.GetSelectEntryColor() );
 
         // Position
     rFtnInfo.SetAdj((SwFtnAdj)aLinePosBox.GetSelectEntryPos());

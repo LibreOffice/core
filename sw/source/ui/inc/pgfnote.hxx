@@ -67,6 +67,8 @@ private:
     LineListBox     aLineTypeBox;
     FixedText       aLineWidthLbl;
     MetricField     aLineWidthEdit;
+    FixedText       aLineColorLbl;
+    ColorListBox    aLineColorBox;
     FixedText       aLineLengthLbl;
     MetricField     aLineLengthEdit;
     FixedText       aLineDistLbl;
@@ -76,6 +78,7 @@ private:
     DECL_LINK( HeightMetric, Button * );
     DECL_LINK( HeightModify, MetricField * );
     DECL_LINK( LineWidthChanged_Impl, void * );
+    DECL_LINK( LineColorSelected_Impl, void * );
 
     long            lMaxHeight;
 

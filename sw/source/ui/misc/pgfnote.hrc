@@ -43,3 +43,5 @@
 #define FL_LINE             30
 #define FT_LINEWIDTH        31
 #define ED_LINEWIDTH        32
+#define FT_LINECOLOR        33
+#define DLB_LINECOLOR       34
