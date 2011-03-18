@@ -114,6 +114,10 @@ public:
         size can be zero and the default value is returned. */
     float                               getCharHeightPoints( float fDefault ) const;
 
+#if OSL_DEBUG_LEVEL > 0
+    void dump() const;
+#endif
+
 protected:
 
     TextCharacterProperties         maTextCharacterProperties;

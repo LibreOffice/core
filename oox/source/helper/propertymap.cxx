@@ -28,6 +28,16 @@
 
 #include "oox/helper/propertymap.hxx"
 
+#if OSL_DEBUG_LEVEL > 0
+# include <cstdio>
+# include <com/sun/star/style/LineSpacing.hpp>
+# include <com/sun/star/style/LineSpacingMode.hpp>
+# include <com/sun/star/text/WritingMode.hpp>
+# define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
+using ::com::sun::star::style::LineSpacing;
+using ::com::sun::star::text::WritingMode;
+#endif
+
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -196,7 +206,7 @@ Sequence< PropertyValue > PropertyMap::makePropertyValueSequence() const
             OSL_ENSURE( (0 <= aIt->first) && (aIt->first < PROP_COUNT), "PropertyMap::makePropertyValueSequence - invalid property identifier" );
             pValues->Name = (*mpPropNames)[ aIt->first ];
             pValues->Value = aIt->second;
-            pValues->State = ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
+            pValues->State = PropertyState_DIRECT_VALUE;
         }
     }
     return aSeq;
@@ -323,7 +333,7 @@ static void lclDumpAnyValue( Any value)
 void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
 {
     Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
-    Sequence< beans::Property > props = info->getProperties ();
+    Sequence< Property > props = info->getProperties ();
 
     OSL_TRACE("dump props, len: %d", props.getLength ());
 

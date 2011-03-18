@@ -173,6 +173,13 @@ void PropertySet::setAnyProperty( const OUString& rPropName, const Any& rValue )
     }
 }
 
+#if OSL_DEBUG_LEVEL > 0
+void PropertySet::dump()
+{
+    PropertyMap::dump( Reference< XPropertySet >( getXPropertySet(), UNO_QUERY ) );
+}
+#endif
+
 // ============================================================================
 
 } // namespace oox
