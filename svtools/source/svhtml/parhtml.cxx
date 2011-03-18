@@ -57,12 +57,10 @@ using namespace ::com::sun::star;
 
 
 const sal_Int32 MAX_LEN( 1024L );
-//static sal_Unicode sTmpBuffer[ MAX_LEN+1 ];
 const sal_Int32 MAX_MACRO_LEN( 1024 );
 
 const sal_Int32 MAX_ENTITY_LEN( 8L );
 
-/*  */
 
 // Tabellen zum Umwandeln von Options-Werten in Strings
 
@@ -113,7 +111,6 @@ static HTMLOptionEnum const aTableRulesOptEnums[] =
 
 SV_IMPL_PTRARR(HTMLOptions,HTMLOptionPtr)
 
-/*  */
 
 sal_uInt16 HTMLOption::GetEnum( const HTMLOptionEnum *pOptEnums, sal_uInt16 nDflt ) const
 {
@@ -269,7 +266,7 @@ void HTMLOption::GetColor( Color& rColor ) const
         xub_StrLen nPos = 0;
         for( sal_uInt32 i=0; i<6; i++ )
         {
-            // MIB 26.06.97: Wie auch immer Netscape Farbwerte ermittelt,
+            // Wie auch immer Netscape Farbwerte ermittelt,
             // maximal drei Zeichen, die kleiner als '0' sind werden
             // ignoriert. Bug #40901# stimmt damit. Mal schauen, was sich
             // irgendwelche HTML-Autoren noch so einfallen lassen...
@@ -311,8 +308,6 @@ HTMLTableRules HTMLOption::GetTableRules() const
     DBG_ASSERT( nToken==HTML_O_RULES, "GetTableRules: Option nicht RULES" );
     return (HTMLTableRules)GetEnum( aTableRulesOptEnums, HTML_TR_NONE );
 }
-
-/*  */
 
 HTMLParser::HTMLParser( SvStream& rIn, int bReadNewDoc )
     : SvParser( rIn )
@@ -571,8 +566,6 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             // wieder aufsetzen
                             sTmpBuffer.append( (sal_Unicode)'&' );
 
-//                          rInput.SeekRel( -(long)(++nPos*GetCharSize()) );
-//                          nlLinePos -= nPos;
                             DBG_ASSERT( rInput.Tell()-nStreamPos ==
                                         (sal_uLong)(nPos+1)*GetCharSize(),
                                         "Falsche Stream-Position" );
@@ -616,8 +609,6 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                                     {
                                         // mit dem Zeichen wieder aufsetzen
                                         nNextCh = '&';
-//                                      rInput.SeekRel( -(long)(++nPos*GetCharSize()) );
-//                                      nlLinePos -= nPos;
                                         DBG_ASSERT( rInput.Tell()-nStreamPos ==
                                                     (sal_uLong)(nPos+1)*GetCharSize(),
                                                     "Falsche Stream-Position" );
@@ -649,8 +640,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     else
                         nNextCh = 0U;
                 }
-                // MIB 03/02/2000: &{...};-JavaScript-Macros are not
-                // supported any longer.
+                // &{...};-JavaScript-Macros are not supported any longer.
                 else if( IsParserWorking() )
                 {
                     sTmpBuffer.append( (sal_Unicode)'&' );
@@ -730,7 +720,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
         case sal_Unicode(EOF):
             if( rInput.IsEof() )
             {
-// MIB 20.11.98: Das macht hier keinen Sinn, oder doch: Zumindest wird
+// Das macht hier keinen Sinn, oder doch: Zumindest wird
 // abc&auml;<EOF> nicht angezeigt, also lassen wir das in Zukunft.
 //              if( '>' != cBreak )
 //                  eState = SVPAR_ACCEPTED;
@@ -1509,16 +1499,14 @@ const HTMLOptions *HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
             // Netscape achtet aber nur auf "=" und Leerzeichen (siehe
             // Mozilla: PA_FetchRequestedNameValues in
             // lipparse/pa_mdl.c
-//          while( nPos < aToken.Len() &&
-//                  ( '-'==(c=aToken[nPos]) || isalnum(c) || '.'==c || '_'==c) )
             while( nPos < aToken.Len() && '=' != (cChar=aToken.GetChar(nPos)) &&
                    HTML_ISPRINTABLE(cChar) && !HTML_ISSPACE(cChar) )
                 nPos++;
 
             String sName( aToken.Copy( nStt, nPos-nStt ) );
 
-//JP 23.03.97: die PlugIns wollen die TokenName im "Original" haben
-//              also nur fuers Suchen in UpperCase wandeln
+            // die PlugIns wollen die TokenName im "Original" haben
+            // also nur fuers Suchen in UpperCase wandeln
             String sNameUpperCase( sName );
             sNameUpperCase.ToUpperAscii();
 
