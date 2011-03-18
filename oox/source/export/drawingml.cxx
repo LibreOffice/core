@@ -1176,10 +1176,6 @@ void DrawingML::WriteParagraphProperties( Reference< XTextContent > rParagraph )
     sal_Int16 nLevel = -1;
     GET( nLevel, NumberingLevel );
 
-    sal_Int32 nLeftMargin = 0;
-    // fix coordinates
-    //GET( nLeftMargin, ParaLeftMargin );
-
     sal_Int16 nAlignment( style::ParagraphAdjust_LEFT );
     GET( nAlignment, ParaAdjust );
 
@@ -1189,12 +1185,11 @@ void DrawingML::WriteParagraphProperties( Reference< XTextContent > rParagraph )
         bHasLinespacing = ( mAny >>= aLineSpacing );
 
     if( nLevel != -1
-        || nLeftMargin > 0
         || nAlignment != style::ParagraphAdjust_LEFT
         || bHasLinespacing ) {
         mpFS->startElementNS( XML_a, XML_pPr,
                               XML_lvl, nLevel > 0 ? I32S( nLevel ) : NULL,
-                              XML_marL, nLeftMargin > 0 ? IS( nLeftMargin ) : NULL,
+                              XML_marL, NULL,
                               XML_algn, GetAlignment( nAlignment ),
                               FSEND );
 
