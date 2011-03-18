@@ -47,6 +47,7 @@ TARFILE_NAME=Python-$(PYVERSION)
 TARFILE_MD5=e81c2f0953aa60f8062c05a4673f2be0
 PATCH_FILES=\
     Python-$(PYVERSION).patch \
+    Python-parallel-make.patch \
     Python-ssl.patch \
     Python-aix.patch \
     Python-2.6.1-urllib.patch
@@ -65,10 +66,6 @@ python_LDFLAGS+=-L$(SYSBASE)/usr/lib
 CC+:=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
 .ENDIF			# "$(SYSBASE)"!=""
-
-.IF "$(OS)$(COM)"=="LINUXGCC"
-python_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
 
 .IF "$(OS)$(CPU)"=="SOLARISU"
 CC+:=$(ARCH_FLAGS)
