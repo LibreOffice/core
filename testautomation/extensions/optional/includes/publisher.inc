@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@oracle.com
+'*  owner : gregor.hartmann@oracle.com
 '*
 '*  short description : Extension publisher and release notes
 '*
@@ -155,7 +155,7 @@ testcase tExtensionPublisher
                     warnlog( "Update list for extensions is stalled (expected: 7), " & _
                              "found: " & AvailableUpdatesList.getItemCount() )
                     kontext "ExtensionUpdate"
-                    ExtensionUpdate.cancel()
+                    ExtensionUpdate.close()
                     ExtensionUpdate.notExists( 2 )
                     kontext "PackageManager"
                     PackageManager.cancel()
@@ -258,7 +258,7 @@ testcase tExtensionPublisher
             endif
 
             kontext "ExtensionUpdate"
-            ExtensionUpdate.cancel()
+            ExtensionUpdate.close()
             ExtensionUpdate.notExists( 2 )
         else
             warnlog( "Extension Update dialog is not open" )

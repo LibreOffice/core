@@ -426,8 +426,8 @@ testcase tToolsOptionsWriterView5
 
     Call hNewDocument
     '/// open document: writer\\optional\\input\\options\\options1.sxw
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options1.sxw" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\options\options1.sxw" )
+    
     '///- Tools/Options/Writer: View
 
     printlog ("'/// - save states ///")
@@ -481,8 +481,8 @@ testcase tToolsOptionsWriterView6
 
     Call hNewDocument
     '/// open document: writer\\optional\\input\\options\\options1.sxw
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options1.sxw" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\options\options1.sxw" )
+    
     '///- Tools/Options/Writer: View
 
     printlog ("'/// - save states ///")
@@ -542,8 +542,8 @@ testcase tToolsOptionsWriterView7
 
     Call hNewDocument
     '/// open document: writer\\optional\\input\\options\\options1.sxw
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options1.sxw" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\options\options1.sxw" )
+    
     '///- Tools/Options/Writer: View
 
     printlog ("'/// - save states ///")
@@ -867,8 +867,8 @@ testcase tToolsOptionsWriterGrid4
     printlog ("'/// Function Test: Grid Resolution ///'")
     '///  ( gTesttoolPath + "writer\optional\input\options\gridtst.sxw" ) ///'
 
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\gridtst.sxw", False )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\options\gridtst.sxw", False )
+    
 
     ' select grafik element
     Call wNavigatorAuswahl(4,1)

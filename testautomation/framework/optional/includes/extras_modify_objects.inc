@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@oracle.com
+'* owner : gregor.hartmann@oracle.com
 '*
 '* short description : Perform standard operations on all samples/templates etc.
 '*
@@ -39,29 +39,43 @@ private const MAX_FILE_COUNT = 3000 ' the max number of templates or samples
 
 testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
 
+    ' This test loads/saves and reloads every template or sample shipped with
+    ' the product. One of the special challenges of the test is to find out
+    ' which document type a sample/template belongs to as well as to handle
+    ' any possible dialogs the samples/documents may trigger.
+
+    ' iMode = 1 means to open the document (0 = just get its name)
+    ' cCategory may be "SAMPLES" or "TEMPLATES"
+    ' sVER is the fileformat for saving files, typically this is "current"
+
     const CFN = "tModifyObjects::"
-    const RESTART = 15
-    const TEMPLATE_COUNT = 236 ' For en-US/Oracle Open Office, numbers may differ for Languages/Brands
+
+    const TEMPLATE_COUNT = 237 ' For en-US/Oracle Open Office, numbers may differ for Languages/Brands
     const SAMPLE_COUNT = 56    ' For en-US/Oracle Open Office, numbers may differ for Languages/Brands
 
-
+    ' Varaibles needed to navigate on the Templates And Samples dialog
     dim iObjectFolder as integer
     dim iObjectFolders as integer
-   
+
+    ' Iterators and number of documents, test values
     dim iObject as integer    ' Iterator
     dim iObjectCount( 100 ) as integer
     dim iObjectSum as integer : iObjectSum = 0
     dim iObjectCountExpected as integer
-   
-    dim sFile as string
-    dim sPath as string
-        sPath = hGetWorkPath()  
 
+    ' Where to store the files
+    dim sFile as string
+    dim sPath as string : sPath = hGetWorkPath()
+
+    ' Reset counter, if the office becomes unstable you might want to use it.
+    ' See further below on how to enable this feature
     dim iReset as integer : iReset = 0
 
     printlog( "" )
-    
-    select case( lcase( cCategory ))
+
+    ' Find out if we are testing samples or templates, fix the number of items
+    ' allowed for each category
+    select case( lcase( cCategory ) )
     case "templates" : iObjectCountExpected = TEMPLATE_COUNT
     case "samples"   : iObjectCountExpected = SAMPLE_COUNT
     end select
@@ -69,7 +83,11 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
     printlog( "Open Templates and Samples dialog" )
     FileNewFromTemplate
     WaitSlot( 2000 )
+
+    ' This is the icon on the left pane
     hSelectCategory( cCategory )
+
+    ' The number of folders for the category on the middle pane
     iObjectFolders = FileList.getItemCount()
    
     printlog( "Count the items in the templates and samples dialog" )
@@ -93,23 +111,35 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
     endif
    
     Kontext "TemplateAndDocuments"
-    printlog( "Switch from preview to document info" )
+    printlog( "Switch from preview to document info, required to limit load-times" )
+    ' Another good test case would be to enable the preview.
     docinfo.click()
     hCloseDialog( TemplateAndDocuments, "cancel" )
    
     printlog( "" )
     printlog( "Starting to load/save/close/reload/close all Objects" )
     printlog( "" )
-   
+
+    ' Iterate over the folders in the middle pane of the templates and samples
+    ' dialog, open the folders and load the containing files
+    ' If you want to debug the office using this test, get the Object indices
+    ' from the logfiles and change the loops to only load the file in question
+
+    ' These are the folders
     for iObjectFolder = 1 to iObjectFolders
-   
-        for iObject = 1 to iObjectCount( iObjectFolder ) 
-      
+    ' for iObjectFolder = MyFailedFolder to MyFailedFolder
+
+        ' These are the individual files
+        for iObject = 1 to iObjectCount( iObjectFolder )
+        ' for iObject = MyFailedFile to MyFailedFile
+
+            ' Preset gApplication to "Writer", this is the basis
             gApplication = "WRITER"    
             
             printlog( "" )
             printlog( "Folder index = " & iObjectFolder & ", Object index = " & iObject )
-            
+
+            printlog( "Close all files" )
             hFileCloseAll()
 
             ' every now and then the office becomes a little unstable.
@@ -120,14 +150,22 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
             '    iReset = 0
             'endif
           
-            printlog( "Select the item we want to load" )
+            printlog( "Open <FileNewFromTemplate>" )
             FileNewFromTemplate
             WaitSlot( 2000 )
+
+            printlog( "Select category: " & cCategory )
             hSelectCategory( cCategory )
+
+            printlog( "Select a folder, do not print debug info" )
             hSelectFileFolder( iObjectFolder , false )
+
+            printlog( "Select a document by index, iMode = 1 -> Open it" )
             hSelectDocumentObject( iObject , iMode )
             
-            ' treat it like a folder. If it is, skip it. Otherwise perform the test
+            ' In few cases we accidentially work on a folder. So we test for the
+            ' Templates and Samples dialog again, if it is closed we have a
+            ' regular document, otherwise we have a folder which we then skip.
             kontext "TemplateAndDocuments"
             if ( TemplateAndDocuments.exists() ) then
                 if ( not edit.isEnabled() ) then
@@ -138,6 +176,9 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
             else
                 printlog( "Loading file..." )
                 printlog( "Check for Filter Options dialog" )
+
+                ' Yes, hFileWait() knows which dialog is in the way so we can ask it
+                ' directly. The ASCII filter dialog has the number -6
                 if ( hFileWait( false ) = -6 ) then 
                     warnlog( "Load failure: ASCII filter dialog displayed, recovering" )
                     kontext "FilterAuswahl"
@@ -146,27 +187,44 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
                 else
                     printlog( "Build filename; save, reload and delete" )
                     sFile = sPath & cCategory & iObjectFolder & "_" & iObject
+                    printlog( "File is: " & sFile )
+
                     kontext "Navigator"
+                    printlog( "Close Navigator (if present)" )
                     hCloseDialog( Navigator, "close,optional" )
+
+                    printlog( "Save file" )
                     hFileSaveAsKill( sFile )
+
+                    printlog( "Close file" )
                     hDestroyDocument()
+
+                    printlog( "Open file" )
                     hFileOpen( sFile )
+
+                    printlog( "Handle possible dialogs" )
                     hHandleActivesOnLoad( 1 , 2 )
+
                     kontext "Navigator"
+                    printlog( "Close Navigator (if present)" )
                     hCloseDialog( Navigator, "close,optional" )
+
+                    printlog( "Close document" )
                     hDestroyDocument()
+
+                    printlog( "Delete work document" )
                     hDeleteFile( sFile )
-                    printlog( "Test cycle done, going for next object." )
                 endif
             endif
-            
+
             iReset = iReset + 1
       
         next iObject
       
     next iObjectFolder
-    
-    hDestroyDocument()
+
+    printlog( "Close last remaining document(s) and exit test" )
+    hFileCloseAll()
    
 endcase   
    

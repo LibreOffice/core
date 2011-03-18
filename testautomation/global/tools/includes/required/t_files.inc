@@ -34,7 +34,6 @@
 function hGrafikEinfuegen( cFile as string ) as Boolean
 
     hGrafikEinfuegen() = hInsertGraphic( cFile, "Static" )
-    exit function
     
 end function
 
@@ -43,7 +42,6 @@ end function
 function hGrafikVerknuepftEinfuegen( cFile as string ) as Boolean
 
     hGrafikVerknuepftEinfuegen() = hInsertGraphic( cFile, "Linked" )
-    exit function
 
 end function
 
@@ -103,7 +101,7 @@ end function
 function hIsNamedDocLoaded( cFileName as string ) as boolean
 
     ' Retrieve the current filename from the document properties - which in
-    ' comparision to the old approach to retrive the name from the file save
+    ' comparision to the old approach to retrieve the name from the file save
     ' dialog - gives us the file including its extension. So we only need
     ' to compare the last characters from a full path to be relatively
     ' certain that we work with the correct file. There is some small margin of
@@ -496,6 +494,167 @@ function hDeleteFile( cFileOrig as string ) as boolean
         printlog( CFN & "Nothing to do." )
         hDeleteFile() = true
     endif
+
+end function
+'
+'-------------------------------------------------------------------------------
+'
+function hGetWorkFile( cFileName as string ) as string
+    hGetWorkFile() = hGetWorkPath() & cFileName
+end function
+'
+'-------------------------------------------------------------------------------
+'
+function hGetWorkPath() as string
+
+    ' Retrieve the user's work directory using the API (or fallback)
+
+    dim sPath as string : sPath = ""
+    dim oOfficeConnect as object
+    dim oOfficeConfig as object
+    dim bPathIsFromAPI as boolean
+
+    const CFN = "global::tools::includes::required::t_files.inc:hGetWorkPath(): "
+
+    ' Create an UNO service and ask it for the location of Work
+    try
+        oOfficeConnect = hGetUnoService( true )
+        oOfficeConfig  = oOfficeConnect.createInstance( "com.sun.star.util.PathSettings" )
+        sPath = convertFromURL( oOfficeConfig.Work )
+        bPathIsFromAPI = true
+    catch
+        printlog( CFN & "Could not access service, connection broken?" )
+        sPath = convertpath( gOfficePath & "user/work" )
+        bPathIsFromAPI = false
+    endcatch
+
+    if ( GVERBOSE ) then
+
+        printlog( CFN & "Path is: " & sPath )
+
+        ' Check path existence
+        if ( FileExists( sPath ) ) then
+            printlog( CFN & "Path exists." )
+        else
+            warnlog( CFN & "Path does not exist." )
+        endif
+
+        ' Inform about the location from where the path was taken
+        if ( bPathIsFromAPI ) then
+        	printlog( CFN & "Path was taken from API" )
+        else
+            warnlog( CFN & "Path was taken from (hardcoded) fallback" )
+        endif
+
+    endif
+
+    hGetWorkPath() = sPath & getPathSeparator
+
+end function
+'
+'-------------------------------------------------------------------------------
+'
+function hFileGetLocalPath( sSourcePath as string ) as string
+
+    ' Isolate filename from path, prepend local work directory and return new file path
+    hFileGetLocalPath() = hGetWorkFile( hSplitString( sSourcePath, getPathSeparator, 0 ) )
+    
+end function
+'
+'-------------------------------------------------------------------------------
+'
+function hFileListCopyLocal( lsSourceList() as string ) as boolean
+
+    ' Copy a list of files from testautomation to the local work directory
+
+    const CFN = "global::tools::includes::required::t_files.inc:hFileListCopyLocal(): "
+    dim iCurrentPath as integer
+    dim cTargetPath as string
+    dim cSourcePath as string
+
+    hFileListCopyLocal() = true
+
+    for iCurrentPath = 1 to listcount( lsSourceList() )
+
+        cSourcePath = lsSourceList( iCurrentPath )
+        cTargetPath = hFileGetLocalPath( cSourcePath )
+
+        FileCopy( cSourcePath, cTargetPath )
+
+        ' If any one copy operation fails we
+        if ( not FileExists( cTargetPath ) ) then
+            hFileListCopyLocal() = false
+            warnlog( CFN & "File was not copied: " & cSourcePath )
+        endif
+
+    next iCurrentPath
+
+end function
+'
+'-------------------------------------------------------------------------------
+'
+function hFileOpenLocally( byVal sSourcePath as string ) as boolean
+
+    ' Issue #i112208# - implement a function that copies a file from testautomation
+    ' into the local work directory and opens it from there to avoid that the
+    ' document gets opened in read-only mode. See details of the implementation
+    ' in the issue description.
+
+    ' Parameters
+    ' 1) Path as string, URLs are untested.
+    ' 2) Separator, usually "getPathSeparator"
+    ' 3) Item number, 0 = last item which usually is the file name from a path.
+    '    Begin counting with 1, while the function internally accesses item 0
+    '    from the array.
+
+    const CFN = "global::tools::includes::required::t_files.inc:hFileOpenLocally(): "
+
+    dim sTargetPath as string
+
+    sSourcePath = convertpath( sSourcePath )
+
+    ' If the source file does not exist we quit
+    if ( not FileExists( sSourcePath ) ) then
+        warnlog( CFN & "Source path/file does not exist: " & sSourcePath )
+        hFileOpenLocally() = false
+        exit function
+    endif
+
+    ' Find out what the name of the target file is going to be
+    sTargetPath = hFileGetLocalPath( sSourcePath ) ' The path + file
+
+    ' For debugging purposes set global variable gVerbose to TRUE
+    if ( gVerbose ) then
+        printlog( CFN & "Copying file" )
+        printlog( CFN & "From: " & sSourcePath )
+        printlog( CFN & "To..: " & sTargetPath )
+    endif
+
+    ' Copy the file from anywhere to the local user directory if it does not
+    ' exist. This behavior was discussed on IRC
+    if ( FileExists( sTargetPath ) ) then
+        printlog( CFN & "Re-using existing local copy of workfile" )
+        'warnlog( CFN & "Target file exists, it has not been deleted by prior test" )
+    endif
+
+    FileCopy( sSourcePath, sTargetPath )
+
+    ' Verify that the file has been created. return an empty string and warn
+    if ( not FileExists( sTargetPath ) ) then
+        warnlog( CFN & "File was not copied: " & sTargetFile )
+        hFileOpenLocally() = false
+        gLastWorkFile = ""
+        exit function
+    endif
+
+    ' This is a hook that allows to access the filename under which the file
+    ' has been saved. Due to restrictive coding guidelines we cannot return
+    ' the new filename.
+    gLastWorkFile = sTargetPath
+
+    ' Finally open the file from the local work directory. It should open
+    ' ready for editing
+    hFileOpenLocally() = hFileOpen( gLastWorkFile )
 
 end function
 '

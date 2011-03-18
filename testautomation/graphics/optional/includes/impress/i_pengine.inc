@@ -36,26 +36,24 @@
 '\*******************************************************************
 
 testcase tiPenginefast
-'   dim i,t,q as integer
-'   dim e as string
-   dim sFileName as string
+    '   dim i,t,q as integer
+    '   dim e as string
+    dim sFileName as string
 
-'/// the Presentation-Engine consists of showing the presentation, with all it's effects. ///'
-
-'/// Create a new presentation. ///'
+    printlog "the Presentation-Engine consists of showing the presentation, with all it's effects."
+    printlog "Create a new presentation."
     Call hNewDocument
     sleep 1
 
+    printlog "Open the test-file."
+    Call hDateiOeffnen (gTesttoolpath + "graphics\required\input\allshapes.odp")
 
-    '/// Open the test-file. ///'
-    Call hDateiOeffnen (gTesttoolpath + "graphics\required\input\allshapes.odp") 'effects.odp")
-
-    '/// Start the slideshow. ///'
+    printlog "Start the slideshow."
     CALL hTypeKeys "<F5>"
     sleep (5)
     kontext "DocumentPresentation"
     DocumentPresentation.TypeKeys "<SPACE>"
-    '/// Wait for the presentation to reach a certain moment. ///'
+    printlog "Wait for the presentation to reach a certain moment."
     sleep (10)
     DocumentPresentation.TypeKeys "<SPACE>"
     sleep (7)
@@ -63,7 +61,7 @@ testcase tiPenginefast
     sleep (7)
     DocumentPresentation.TypeKeys "<SPACE>"
     sleep (7)
-    '/// Press "Space" again, to continue with slide two. ///'
+    printlog "Press "Space" again, to continue with slide two."
     DocumentPresentation.TypeKeys "<SPACE>"
     sleep (7)
     DocumentPresentation.TypeKeys "<SPACE>"
@@ -72,19 +70,18 @@ testcase tiPenginefast
     sleep (7)
     DocumentPresentation.TypeKeys "<SPACE>"
     sleep (7)
-    '/// And press "Space" again, to exit the presentation-mode. ///'
+    printlog "And press "Space" again, to exit the presentation-mode."
     DocumentPresentation.TypeKeys "<SPACE>"
-
     FileClose
 
     Call hNewDocument
     sleep 1
-    '/// Open the test-file. ///'
+    printlog "Open the test-file."
     Call hDateiOeffnen (gTesttoolpath + "graphics\required\input\effects.odp")
-    '/// Start the slideshow. ///'
+    printlog "Start the slideshow."
     CALL hTypeKeys "<F5>"
     sleep (200)
-    '/// Press "Space" again, to continue with slide two. ///'
+    printlog "Press Space again, to continue with slide two."
     kontext "DocumentPresentation"
     DocumentPresentation.TypeKeys "<SPACE>"
     sleep (40)
@@ -126,93 +123,93 @@ testcase tiPenginefast
         kontext "DocumentImpress"
     end if
 
-'/// Insert a new slide. ///'
-'   InsertSlide
-'   sleep 2
-'   hTypekeys "<Pagedown>"
-'   sleep 2
+    printlog "Insert a new slide."
+    '   InsertSlide
+    '   sleep 2
+    '   hTypekeys "<Pagedown>"
+    '   sleep 2
 
-'/// Menu: Slideshow: Check every menu-item. ///'
+    printlog "Menu: Slideshow: Check every menu-item."
 
-'Exists:
-' #1 tSlideShowSlideShow
-' #1 tSlideShowRehearseTimings
-' #1 tSlideShowSlideShowSettings
-' #1 tSlideShowCustomSlideShow
-' #1 tSlideShowSlideTransition
-' #1 tSlideShowShowHideSlide
+    'Exists:
+    ' #1 tSlideShowSlideShow
+    ' #1 tSlideShowRehearseTimings
+    ' #1 tSlideShowSlideShowSettings
+    ' #1 tSlideShowCustomSlideShow
+    ' #1 tSlideShowSlideTransition
+    ' #1 tSlideShowShowHideSlide
 
-'   Slideshow menu 1 - Slide show
-'   Slideshow menu 2 - Slide show settings
-'   Slideshow menu 3 - Rehearse timings
-'   Slideshow menu 4 - Interaction
-'   Slideshow menu 6 - Slide Transition
-'   Slideshow menu 7 - Show / Hide slide
-'   Slideshow menu 8 - Custom Slide show
+    '   Slideshow menu 1 - Slide show
+    '   Slideshow menu 2 - Slide show settings
+    '   Slideshow menu 3 - Rehearse timings
+    '   Slideshow menu 4 - Interaction
+    '   Slideshow menu 6 - Slide Transition
+    '   Slideshow menu 7 - Show / Hide slide
+    '   Slideshow menu 8 - Custom Slide show
 
 
-'Printlog " Here starts the test "
+    'Printlog " Here starts the test "
 
-'Presentation - Start / Stop. Different ways to do it.
-'Presentation - Effects.
-'LeftWindow
+    'Presentation - Start / Stop. Different ways to do it.
+    'Presentation - Effects.
+    'LeftWindow
 
-'/// Slideshow Settings: Range: test all three alternatives. ///'
-'/// Test if the Slideshow-types (Default, Window, Auto) works. ///'
-'/// Check if the checkboxes works. ///'
-'/// Close dialogue. ///'
-'/// Add an object. ///'
-'/// Custom Animation: Add an Animation to the object. ///'
-'/// Run the slideshow. ///'
+    printlog "Slideshow Settings: Range: test all three alternatives."
+    printlog "Test if the Slideshow-types (Default, Window, Auto) works."
+    printlog "Check if the checkboxes works."
+    printlog "Close dialogue."
+    printlog "Add an object."
+    printlog "Custom Animation: Add an Animation to the object."
+    printlog "Run the slideshow."
 
-'/// Change to the next effect and continue through every animation in ///'
-'/// Entrance, Emphasis, Exit and Motion Paths. ///'
-'/// While testing - test the speed-choices for every kind of animation. ///'
-'/// Check if the "Change" and "Remove"-buttons. ///'
-'/// Check the Start, "Direction" and "Speed" variables. ///'
-'/// Add two effects to one object and change the order. ///'
-'/// Try the Play and "Slide Show"-button. ///'
-'/// Try the Automatic preview-button. ///'
+    printlog "Change to the next effect and continue through every animation in"
+    printlog "Entrance, Emphasis, Exit and Motion Paths."
+    printlog "While testing - test the speed-choices for every kind of animation."
+    printlog "Check if the "Change" and "Remove"-buttons."
+    printlog "Check the Start, "Direction" and "Speed" variables."
+    printlog "Add two effects to one object and change the order."
+    printlog "Try the Play and "Slide Show"-button."
+    printlog "Try the Automatic preview-button."
 
-'/// Slidetransition. ///'
-'/// Go through every kind of effect, speed, and sound. ///'
-'/// Check loop until next sound. ///'
-'/// Check the Advance slide with mouseclick-function. ///'
-'/// Check the "Apply to all slides", "Play", and "Slide Show"-buttons. ///'
-'/// Check Automatic preview. ///'
+    printlog "Slidetransition."
+    printlog "Go through every kind of effect, speed, and sound."
+    printlog "Check loop until next sound."
+    printlog "Check the Advance slide with mouseclick-function."
+    printlog "Check the "Apply to all slides", "Play", and "Slide Show"-buttons."
+    printlog "Check Automatic preview."
 
-'/// Some effects doesnt have a right / left orientation. Test these. ///'
-'/// Possibility: check random effects and see if something hangs. ///'
+    printlog "Some effects doesnt have a right / left orientation. Test these."
+    printlog "Possibility: check random effects and see if something hangs."
 
-'/// Load/Save-test: Does the settings last? ///'
+    printlog "Load/Save-test: Does the settings last?"
 
-'/// Are two different objects dependant or independent from each other? ///'
+    printlog "Are two different objects dependant or independent from each other?"
 
-'/// Close Application ///'
+    printlog "Close Application"
     Call hCloseDocument
     Printlog "Finished Optional-test for Presentation-Engine"
-endcase
+endcase 'tiPenginefast
 
+'-------------------------------------------------------------------------------
 
 testcase tSlideShowInteraction
-   Dim Datei$
-   Dim i as integer
-   Dim Zaehler as integer
-   dim b115364 as boolean
+    Dim Datei$
+    Dim i as integer
+    Dim Zaehler as integer
+    dim b115364 as boolean
 
-   Datei$ =ConvertPath (gOfficePath + "user\work\interac.sxi")
+    Datei$ =ConvertPath (gOfficePath + "user\work\interac.sxi")
 
-'   '/// save file as presentation with name '"user\\work\\diashow.sxi")' ///'
+'   printlog "save file as presentation with name '"user\\work\\diashow.sxi")'"
 '   hFileSaveAsWithFilterKill ( sFile , gImpressFilter, FALSE )
 '   Printlog "saved presetation: '" + sFile + "'"
 
-   '/// open application ///'
+   printlog "open application"
    Call hNewDocument
    sleep 5
-   setStartCurrentPage(FALSE)   '/// Set "start with current page to OFF ///'
+   setStartCurrentPage(FALSE)   printlog "Set "start with current page to OFF"
 
-   '/// call 'Insert->Slide' three times and name the slides 2, 3, 4 and create a rectangle on it  ///'
-   '///+ we now have 4 slides ?! :-) ///'
+   printlog "call 'Insert->Slide' three times and name the slides 2, 3, 4 and create a rectangle on it "
    for i = 2 to 4
       InsertSlide
       sleep 2
@@ -222,7 +219,7 @@ testcase tSlideShowInteraction
       sleep 2
    next i
 
-   '///  check state of navigator ! expected: closed -> open navigator ///'
+   printlog "check state of navigator ! expected: closed -> open navigator"
    Kontext "Navigator"
    if Navigator.exists then
       warnlog "Navigator: already open :-("
@@ -232,194 +229,194 @@ testcase tSlideShowInteraction
    endif
    sleep 3
 
-   '/// Slide Show->Interaction ///'
-   SlideShowInteraction
-      Kontext "TabInteraktion"
-      sleep 1
-      if AktionBeiMausklick.GetItemCount = 13 Then
-         Printlog "- List is complete"
-      else
-         Warnlog "- Number of possible actions is wrong. It should be: 13, but it is: " + AktionBeiMausklick.GetItemCount
-      end if
-      sleep 1
+    printlog "Slide Show->Interaction"
+    SlideShowInteraction
+    Kontext "TabInteraktion"
+    sleep 1
+    if AktionBeiMausklick.GetItemCount = 13 Then
+        Printlog "- List is complete"
+    else
+        Warnlog "- Number of possible actions is wrong. It should be: 13, but it is: " + AktionBeiMausklick.GetItemCount
+    end if
+    sleep 1
 
-      AktionBeiMausklick.Select 1                       'Keine Aktion bei Mausclick
-         Printlog (AktionBeiMausklick.GetSelText + " chosen")
-         If Durchsuchen.IsVisible then Warnlog "- Control should be invisible because AktionBeiMausklick = " + AktionBeiMausKlick.GetSelText
-         sleep 1
+    AktionBeiMausklick.Select 1                       'Keine Aktion bei Mausclick
+    Printlog (AktionBeiMausklick.GetSelText + " chosen")
+    If Durchsuchen.IsVisible then Warnlog "- Control should be invisible because AktionBeiMausklick = " + AktionBeiMausKlick.GetSelText
+    sleep 1
 
-      Kontext "TabInteraktion"
-      AktionBeiMausklick.Select 2                       'Sprung zur vorhergehenden Seite
-         Printlog (AktionBeiMausklick.GetSelText + " chosen")
-         if Durchsuchen.IsVisible Then Warnlog "- Control should be invisible, beacause Action = " + AktionBeiMausKlick.GetSelText
-      TabInteraktion.OK
-      sleep 2
-   Kontext "DocumentImpress"
-   gMouseClick 90,90
-   sleep 1
-   gMouseClick 50,50
+    Kontext "TabInteraktion"
+    AktionBeiMausklick.Select 2                       'Sprung zur vorhergehenden Seite
+    Printlog (AktionBeiMausklick.GetSelText + " chosen")
+    if Durchsuchen.IsVisible Then Warnlog "- Control should be invisible, beacause Action = " + AktionBeiMausKlick.GetSelText
+    TabInteraktion.OK
+    sleep 2
+    Kontext "DocumentImpress"
+    gMouseClick 90,90
+    sleep 1
+    gMouseClick 50,50
     sleep 2
 
-   Kontext "NavigatorDraw"
-       sleep 2
-      if Not Liste.GetSelIndex = 3 Then
-         Warnlog "- jumped to wrong slide"
-      else
-         Printlog "- jumped to correct slide"
-      end if
-      sleep 1
+    Kontext "NavigatorDraw"
+    sleep 2
+    if Not Liste.GetSelIndex = 3 Then
+        Warnlog "- jumped to wrong slide"
+    else
+        Printlog "- jumped to correct slide"
+    end if
+    sleep 1
 
-   Kontext "DocumentImpress"
-   EditSelectAll
-   sleep 1
+    Kontext "DocumentImpress"
+    EditSelectAll
+    sleep 1
 
-   SlideShowInteraction
-      sleep 2
-      Kontext "TabInteraktion"
-      AktionBeiMausklick.select 3                       'Sprung zur naechsten Seite
-         Printlog (AktionBeiMausKlick.GetSelText + " chosen")
-      TabInteraktion.OK
-      sleep 1
+    SlideShowInteraction
+    sleep 2
+    Kontext "TabInteraktion"
+    AktionBeiMausklick.select 3                       'Sprung zur naechsten Seite
+     Printlog (AktionBeiMausKlick.GetSelText + " chosen")
+    TabInteraktion.OK
+    sleep 1
 
    Kontext "DocumentImpress"
    gMouseClick 90,90
    sleep 2
    gMouseClick 50,50
    Kontext "NavigatorDraw"
-      if Liste.GetSelIndex <> 4 Then
-         Warnlog "- Jumped to wrong slide"
-      else
-         Printlog " Jumped to correct slide"
-      end if
-      sleep 1
-   kontext "DocumentImpress"
-   EditSelectAll
-   sleep 1
+    if Liste.GetSelIndex <> 4 Then
+        Warnlog "- Jumped to wrong slide"
+    else
+        Printlog " Jumped to correct slide"
+    end if
+    sleep 1
+    kontext "DocumentImpress"
+    EditSelectAll
+    sleep 1
 
-   SlideShowInteraction
-      sleep 1
-      Kontext "TabInteraktion"
-      AktionBeiMausklick.select 4                        'Sprung zur ersten Seite
-         Printlog AktionBeiMausKlick.GetSelText
-         sleep 1
-      TabInteraktion.OK
-      sleep 1
-   Kontext "DocumentImpress"
-   gMouseClick 90,90
-   gMouseClick 50,50
-   Kontext "NavigatorDraw"
-      if Liste.GetSelIndex <> 1 Then Warnlog "- jumped to wrong slide"
-      Letzte.Click 'Liste.Select 4
-   Kontext "DocumentImpress"
-   EditSelectAll
-   sleep 2
+    SlideShowInteraction
+    sleep 1
+    Kontext "TabInteraktion"
+    AktionBeiMausklick.select 4                        'Sprung zur ersten Seite
+    Printlog AktionBeiMausKlick.GetSelText
+    sleep 1
+    TabInteraktion.OK
+    sleep 1
+    Kontext "DocumentImpress"
+    gMouseClick 90,90
+    gMouseClick 50,50
+    Kontext "NavigatorDraw"
+    if Liste.GetSelIndex <> 1 Then Warnlog "- jumped to wrong slide"
+    Letzte.Click 'Liste.Select 4
+    Kontext "DocumentImpress"
+    EditSelectAll
+    sleep 2
 
     try
         SlideShowInteraction
     catch
         warnlog "SlideshowInteraction diasabled :-("
     endcatch
-      Kontext "TabInteraktion"
-      AktionBeiMausklick.select 5                       'Sprung zur letzten Seite
-         printlog AktionBeiMausKlick.GetSelText
-      TabInteraktion.OK
-      sleep 1
-   Kontext "NavigatorDraw"
-      if Not Liste.GetSelIndex = 1 Then Warnlog "- jumped to wrong slide"
+    Kontext "TabInteraktion"
+    AktionBeiMausklick.select 5                       'Sprung zur letzten Seite
+    printlog AktionBeiMausKlick.GetSelText
+    TabInteraktion.OK
+    sleep 1
+    Kontext "NavigatorDraw"
+    if Not Liste.GetSelIndex = 1 Then Warnlog "- jumped to wrong slide"
 
-   kontext "DocumentImpress"
-   Call hRechteckErstellen 20,20,50,50
-   sleep 1
-   EditSelectAll
-   sleep 1
+    kontext "DocumentImpress"
+    Call hRechteckErstellen 20,20,50,50
+    sleep 1
+    EditSelectAll
+    sleep 1
     try
         FormatGroupGroup
     catch
         warnlog "GROUP?"
     endcatch
-   sleep 1
+    sleep 1
 
-   SlideShowInteraction
-      Kontext "TabInteraktion"
-      AktionBeiMausklick.select 6                       'Sprung zu Seite oder Objekt
-         printlog AktionBeiMausKlick.GetSelText
-         sleep 2
-         if Not ListeSprungZuSeiteObjekt.IsVisible Then Warnlog " list seems to be invisible"
-         Seite.SetText S2
-         Suchen.Click
-            if ListeSprungZuSeiteObjekt.GetSelIndex <> 3 Then Warnlog " Search does not work"
-            printlog ListeSprungZuSeiteObjekt.GetSelIndex
-      TabInteraktion.OK
-      sleep 1
+    SlideShowInteraction
+    Kontext "TabInteraktion"
+    AktionBeiMausklick.select 6                       'Sprung zu Seite oder Objekt
+    printlog AktionBeiMausKlick.GetSelText
+    sleep 2
+    if Not ListeSprungZuSeiteObjekt.IsVisible Then Warnlog " list seems to be invisible"
+    Seite.SetText S2
+    Suchen.Click
+    if ListeSprungZuSeiteObjekt.GetSelIndex <> 3 Then Warnlog " Search does not work"
+    printlog ListeSprungZuSeiteObjekt.GetSelIndex
+    TabInteraktion.OK
+    sleep 1
 
-   Kontext "DocumentImpress"
-   gMouseClick 90,90
-   gMouseClick 25,25,
-   sleep 2
-   Kontext "NavigatorDraw"
-      if Liste.GetSelIndex <> 2 Then Warnlog "- Jumped to wrong destination"
-      printlog Liste.GetSelIndex
-      Liste.Select 4
-   Kontext "DocumentImpress"
-   EditSelectAll
-   sleep 1
+    Kontext "DocumentImpress"
+    gMouseClick 90,90
+    gMouseClick 25,25,
+    sleep 2
+    Kontext "NavigatorDraw"
+    if Liste.GetSelIndex <> 2 Then Warnlog "- Jumped to wrong destination"
+    printlog Liste.GetSelIndex
+    Liste.Select 4
+    Kontext "DocumentImpress"
+    EditSelectAll
+    sleep 1
 
-       Kontext "DocumentImpress"
-       EditSelectAll
+    Kontext "DocumentImpress"
+    EditSelectAll
+    sleep 1
+    SlideShowInteraction
+    Kontext "TabInteraktion"
+    sleep 1
+    AktionBeiMausKlick.Select 7                    'Sprung zu Dokument
+    Printlog AktionBeiMausKlick.GetSelText + " chosen"
+    try
+        Durchsuchen.Click
         sleep 1
-        SlideShowInteraction
-         Kontext "TabInteraktion"
-         sleep 1
-         AktionBeiMausKlick.Select 7                    'Sprung zu Dokument
-           Printlog AktionBeiMausKlick.GetSelText + " chosen"
-           try
-              Durchsuchen.Click
-              sleep 1
-              Kontext "OeffnenDlg"
-              sleep 1
-               Dateiname.SetText ConvertPath (gTesttoolPath + "graphics\required\input\recht_49.sxi")
-              Oeffnen.Click
-              sleep 10
-              ' check if the document is writable
-              if fIsDocumentWritable = false then
-                 ' make the document writable and check if it's succesfull
-                 if fMakeDocumentWritable = false then
-                    warnlog "The document can't be make writeable. Test stopped."
-                    goto endsub
-                 endif
-              endif
-           catch
-              Warnlog "- Search button could not be accessed"
-           endcatch
-         sleep 1
-         Kontext "TabInteraktion"
-         sleep 1
-         TabInteraktion.OK
-         sleep 3
-         Kontext "DocumentImpress"
-         DocumentImpress.MouseDown 90,90
-         DocumentImpress.MouseUp 90,90
-        sleep 2
-         Kontext "DocumentImpress"
-         DocumentImpress.Mousedown 30,30
-     kontext
-     b115364 = false
-     if messagebox.exists then
-         printlog "baeh: '" + messagebox.gettext + "'"
-         try
-             messagebox.ok  ' was default in so7
-         catch
-             warnlog "behaviour changed #115364# mother document gets closed :-("
-             if fileExists(ConvertPath (gOfficePath + "user\work\bug115364.sxi")) then
-                 kill ConvertPath (gOfficePath + "user\work\bug115364.sxi")
-             endif
-             messagebox.yes ' don't save changes, before going on!
-             b115364 = true
-             kontext "SpeichernDlg"
-             Dateiname.setText ConvertPath (gOfficePath + "user\work\bug115364.sxi")
-             Speichern.click
-             sleep 10
-         endcatch
+        Kontext "OeffnenDlg"
+        sleep 1
+        Dateiname.SetText ConvertPath (gTesttoolPath + "graphics\required\input\recht_49.sxi")
+        Oeffnen.Click
+        sleep 10
+        ' check if the document is writable
+        if fIsDocumentWritable = false then
+            ' make the document writable and check if it's succesfull
+            if fMakeDocumentWritable = false then
+                warnlog "The document can't be make writeable. Test stopped."
+                goto endsub
+            endif
+        endif
+    catch
+        Warnlog "- Search button could not be accessed"
+    endcatch
+    sleep 1
+    Kontext "TabInteraktion"
+    sleep 1
+    TabInteraktion.OK
+    sleep 3
+    Kontext "DocumentImpress"
+    DocumentImpress.MouseDown 90,90
+    DocumentImpress.MouseUp 90,90
+    sleep 2
+    Kontext "DocumentImpress"
+    DocumentImpress.Mousedown 30,30
+    kontext
+    b115364 = false
+    if messagebox.exists then
+        printlog "baeh: '" + messagebox.gettext + "'"
+        try
+            messagebox.ok  ' was default in so7
+        catch
+            warnlog "behaviour changed #115364# mother document gets closed :-("
+            if fileExists(ConvertPath (gOfficePath + "user\work\bug115364.sxi")) then
+                kill ConvertPath (gOfficePath + "user\work\bug115364.sxi")
+            endif
+            messagebox.yes ' don't save changes, before going on!
+            b115364 = true
+            kontext "SpeichernDlg"
+            Dateiname.setText ConvertPath (gOfficePath + "user\work\bug115364.sxi")
+            Speichern.click
+            sleep 10
+        endcatch
     else
         printlog "OK :-)"
     endif
@@ -444,207 +441,207 @@ testcase tSlideShowInteraction
     endif
     sleep 5
 
-   Kontext "NavigatorDraw"
-      sleep 1
-      Naechste.click
+    Kontext "NavigatorDraw"
+    sleep 1
+    Naechste.click
 
-   Kontext "DocumentImpress"
-   EditSelectAll
-   sleep  1
+    Kontext "DocumentImpress"
+    EditSelectAll
+    sleep  1
 
-   SlideShowInteraction
-      Kontext "TabInteraktion"
-      sleep 1
-      AktionBeiMausKlick.Select 9
-         Printlog AktionBeiMausKlick.GetSelText + " chosen"
-         sleep 1
-      Tabinteraktion.OK
-   sleep 2
+    SlideShowInteraction
+    Kontext "TabInteraktion"
+    sleep 1
+    AktionBeiMausKlick.Select 9
+    Printlog AktionBeiMausKlick.GetSelText + " chosen"
+    sleep 1
+    Tabinteraktion.OK
+    sleep 2
 
-   SlideShowInteraction
-      Kontext "TabInteraktion"
-      sleep 1
-      if not AktionBeiMausKlick.GetSelIndex = 9 Then Warnlog "- Not the right action chosen"
-      sleep 1
-      AktionBeiMausKlick.Select 9                          'Klang abspielen
-           Printlog  AktionBeiMausKlick.GetSelText + "- chosen"
-         sleep 1
-      Tabinteraktion.OK
-      sleep 2
-         Kontext "NavigatorDraw"
-           sleep 1
-           Liste.Select 2
-           Kontext "DocumentImpress"
-            EditSelectAll
-            sleep  1
-           SlideShowInteraction
-            Kontext "TabInteraktion"
-            sleep 1
-             Durchsuchen.Click
-             sleep 1
-             Kontext "OeffnenDlg"
-             sleep 1
-             Dateiname.SetText ConvertPath (gTesttoolPath + "graphics\required\input\blip.wav")
-             sleep 1
-             Oeffnen.Click
-                sleep 1
-                Kontext "Active"
-                 if Active.Exists Then
-                    Warnlog Active.GetText + "  Gallery might be empty"
-                    Active.OK
-                    sleep 1
-                    Kontext "OeffnenDlg"
-                    OeffnenDlg.Cancel
-                    sleep 1
-                 end if
-                Kontext "TabInteraktion"
-                SetClipboard Klangwahl.GetText
-             TabInteraktion.OK
-             sleep 1
-             SlideShowInteraction
-             Kontext "TabInteraktion"
-             sleep 1
-             if Klangwahl.GetText <> GetClipboardText then Warnlog "- Not the right sound chosen"
-             TabInteraktion.OK
-             sleep 1
-             InsertGraphicsFromFile
-              sleep 1
-             Kontext "GrafikeinfuegenDlg"
-             sleep 1
-             if Verknuepfen.IsChecked then Verknuepfen.UnCheck
-             Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\enter.bmp")
-             Oeffnen.Click
-             sleep 3
-             Kontext "NavigatorDraw"
-             sleep 1
-             Liste.Select 4
-             sleep 1
-             SlideShowInteraction
-             Kontext "TabInteraktion"
-             sleep 1
-             AktionBeiMausKlick.Select 11                       'Objektaktion ausfuehren
-                Printlog  AktionBeiMausKlick.GetSelText + " chosen"
-             sleep 1
-            Zaehler=Effekt.GetItemCount
-         for i=1 to Zaehler
-            Effekt.Select i
-            Printlog Effekt.GetSelText + " chosen"
-            if i=1 Then
-               if Langsam.IsEnabled Then Warnlog "- Control should not be enabled, because no effect chosen"
-               if Mittel.IsEnabled Then Warnlog "- Control should not be enabled, because no effect chosen"
-               if Schnell.IsEnabled Then Warnlog "- Control should not be enabled, because no effect chosen"
-            end if
-            sleep 1
+    SlideShowInteraction
+    Kontext "TabInteraktion"
+    sleep 1
+    if not AktionBeiMausKlick.GetSelIndex = 9 Then Warnlog "- Not the right action chosen"
+    sleep 1
+    AktionBeiMausKlick.Select 9                          'Klang abspielen
+    Printlog  AktionBeiMausKlick.GetSelText + "- chosen"
+    sleep 1
+    Tabinteraktion.OK
+    sleep 2
+    Kontext "NavigatorDraw"
+    sleep 1
+    Liste.Select 2
+    Kontext "DocumentImpress"
+    EditSelectAll
+    sleep  1
+    SlideShowInteraction
+    Kontext "TabInteraktion"
+    sleep 1
+    Durchsuchen.Click
+    sleep 1
+    Kontext "OeffnenDlg"
+    sleep 1
+    Dateiname.SetText ConvertPath (gTesttoolPath + "graphics\required\input\blip.wav")
+    sleep 1
+    Oeffnen.Click
+    sleep 1
+    Kontext "Active"
+    if Active.Exists Then
+        Warnlog Active.GetText + "  Gallery might be empty"
+        Active.OK
+        sleep 1
+        Kontext "OeffnenDlg"
+        OeffnenDlg.Cancel
+        sleep 1
+    end if
+    Kontext "TabInteraktion"
+    SetClipboard Klangwahl.GetText
+    TabInteraktion.OK
+    sleep 1
+    SlideShowInteraction
+    Kontext "TabInteraktion"
+    sleep 1
+    if Klangwahl.GetText <> GetClipboardText then Warnlog "- Not the right sound chosen"
+    TabInteraktion.OK
+    sleep 1
+    InsertGraphicsFromFile
+    sleep 1
+    Kontext "GrafikeinfuegenDlg"
+    sleep 1
+    if Verknuepfen.IsChecked then Verknuepfen.UnCheck
+    Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\enter.bmp")
+    Oeffnen.Click
+    sleep 3
+    Kontext "NavigatorDraw"
+    sleep 1
+    Liste.Select 4
+    sleep 1
+    SlideShowInteraction
+    Kontext "TabInteraktion"
+    sleep 1
+    AktionBeiMausKlick.Select 11                       'Objektaktion ausfuehren
+    Printlog  AktionBeiMausKlick.GetSelText + " chosen"
+    sleep 1
+    Zaehler=Effekt.GetItemCount
+    for i=1 to Zaehler
+        Effekt.Select i
+        Printlog Effekt.GetSelText + " chosen"
+        if i=1 Then
+        if Langsam.IsEnabled Then Warnlog "- Control should not be enabled, because no effect chosen"
+        if Mittel.IsEnabled Then Warnlog "- Control should not be enabled, because no effect chosen"
+        if Schnell.IsEnabled Then Warnlog "- Control should not be enabled, because no effect chosen"
+        end if
+        sleep 1
 
-            TabInteraktion.OK
-            sleep 1
-            SlideShowInteraction
-            Kontext "TabInteraktion"
-            sleep 1
-         next i
-         TabInteraktion.OK
-         sleep 1
-   SlideShowInteraction
-      Kontext "TabInteraktion"
-      sleep 1
-      AktionBeiMausKlick.Select 10                       'Objekt ausblenden
-         Printlog AktionBeiMausKlick.GetSelText + " chosen"
-         ListeObjektAktion.Select 1
-         sleep 1
-      TabInteraktion.OK
-   sleep 1
-   gMouseClick 90,90
-   sleep 1
-   gMouseClick 55,55
-   sleep 1
-   Kontext "DocumentImage"
+        TabInteraktion.OK
+        sleep 1
+        SlideShowInteraction
+        Kontext "TabInteraktion"
+        sleep 1
+    next i
+    TabInteraktion.OK
+    sleep 1
+    SlideShowInteraction
+    Kontext "TabInteraktion"
+    sleep 1
+    AktionBeiMausKlick.Select 10                       'Objekt ausblenden
+    Printlog AktionBeiMausKlick.GetSelText + " chosen"
+    ListeObjektAktion.Select 1
+    sleep 1
+    TabInteraktion.OK
+    sleep 1
+    gMouseClick 90,90
+    sleep 1
+    gMouseClick 55,55
+    sleep 1
+    Kontext "DocumentImage"
 
-   SlideShowInteraction
-      Kontext "TabInteraktion"
-      sleep 1
-      AktionBeiMausKlick.Select 13 			'Makro
-         Printlog AktionBeiMausKlick.GetSelText + " chosen"
-         sleep 2
-         Durchsuchen.Click
-            sleep 5
-            Kontext "Makro"
-            sleep 5
-            Makro.Cancel
-         sleep 2
-      Kontext "TabInteraktion"
-      sleep 1
-      TabInteraktion.OK
-      sleep 3
+    SlideShowInteraction
+    Kontext "TabInteraktion"
+    sleep 1
+    AktionBeiMausKlick.Select 13 			'Makro
+    Printlog AktionBeiMausKlick.GetSelText + " chosen"
+    sleep 2
+    Durchsuchen.Click
+    sleep 5
+    Kontext "Makro"
+    sleep 5
+    Makro.Cancel
+    sleep 2
+    Kontext "TabInteraktion"
+    sleep 1
+    TabInteraktion.OK
+    sleep 3
 
-   SlideShowInteraction
-      Kontext "TabInteraktion"
-      sleep 2
-      if not AktionBeiMausKlick.GetSelIndex = 12 Then Warnlog "- Wrong action used"
-      sleep 1
-      AktionBeiMausKlick.Select 14           'Praesentation beenden
-         Printlog AktionBeiMausKlick.GetSelText
-      Tabinteraktion.OK
-      sleep 1
+    SlideShowInteraction
+    Kontext "TabInteraktion"
+    sleep 2
+    if not AktionBeiMausKlick.GetSelIndex = 12 Then Warnlog "- Wrong action used"
+    sleep 1
+    AktionBeiMausKlick.Select 14           'Praesentation beenden
+     Printlog AktionBeiMausKlick.GetSelText
+    Tabinteraktion.OK
+    sleep 1
 
-   SlideShowPresentationSettings
-      Kontext "Bildschirmpraesentation"
-      if not Fenster.IsChecked Then Fenster.Check
-      BildschirmPraesentation.OK
-   sleep 2
-   Kontext "DocumentImpress"
-   DocumentImpress.TypeKeys "<MOD1 F2>"
-      sleep 5
-      Kontext "DocumentPresentation"
-      sleep 2
-      DocumentPresentation.MouseDown 50,50
-      DocumentPresentation.MouseUp 50,50
-      sleep 5
-      try
-         Kontext "DocumentImpress"
-         EditSelectAll
-         Printlog "- Slideshow ended at right point"
-      catch
-         Warnlog "- Program is still in slideshow mode"
-         Kontext "DocumentPresentation"
-         DocumentPresentation.TypeKeys "<ESCAPE>"
-      endcatch
+    SlideShowPresentationSettings
+    Kontext "Bildschirmpraesentation"
+    if not Fenster.IsChecked Then Fenster.Check
+    BildschirmPraesentation.OK
+    sleep 2
+    Kontext "DocumentImpress"
+    DocumentImpress.TypeKeys "<MOD1 F2>"
+    sleep 5
+    Kontext "DocumentPresentation"
+    sleep 2
+    DocumentPresentation.MouseDown 50,50
+    DocumentPresentation.MouseUp 50,50
+    sleep 5
+    try
+        Kontext "DocumentImpress"
+        EditSelectAll
+        Printlog "- Slideshow ended at right point"
+    catch
+        Warnlog "- Program is still in slideshow mode"
+        Kontext "DocumentPresentation"
+        DocumentPresentation.TypeKeys "<ESCAPE>"
+    endcatch
 
-   Kontext "DocumentImpress"
-   DocumentImpress.TypeKeys "<SHIFT MOD1 F5>"
-   sleep 3
-   setStartCurrentPage(TRUE)   '/// Set "start with current page to ON = Default ///'
-   Call hCloseDocument
-endcase
+    Kontext "DocumentImpress"
+    DocumentImpress.TypeKeys "<SHIFT MOD1 F5>"
+    sleep 3
+    setStartCurrentPage(TRUE)   printlog "Set "start with current page to ON = Default"
+    Call hCloseDocument
+endcase 'tSlideShowInteraction
 
-'   Slideshow menu 5 - Custom Animation
+'-------------------------------------------------------------------------------
 
 testcase tSlideShowCustomAnimation
     dim bError as boolean
 
-    '/// open application ///'
+    printlog "open application"
     Call hNewDocument
-    '/// create textbox with text ///'
+    printlog "create textbox with text"
     Call hTextrahmenErstellen ("Test text to test text effects", 10, 10, 20, 40 )
-    '/// Slide Show->Custom Animation... ///'
+    printlog "Slide Show->Custom Animation..."
     SlideShowCustomAnimation
         Kontext "Tasks"
-        '/// click button 'Add...' ///'
+        printlog "click button 'Add...'"
         EffectAdd.click
-        '/// Dialog 'Custom Animation' comes up ///'
+        printlog "Dialog 'Custom Animation' comes up"
         kontext
-        '/// Switch to TabPage: Entrance ///'
+        printlog "Switch to TabPage: Entrance"
         active.setPage(TabEntrance)
         kontext "TabEntrance"
         if TabEntrance.exists(5) then
             DialogTest(TabEntrance)
-            '/// select in the listbox 'Effects' the second entry ///'
+            printlog "select in the listbox 'Effects' the second entry"
             Effects.select(2)
             Speed.getItemCount
             AutomaticPreview.unCheck
             sleep 1
             AutomaticPreview.Check
             kontext
-            '/// Switch to TabPage: Emphasis ///'
+            printlog "Switch to TabPage: Emphasis"
             active.setPage(TabEmphasis)
             kontext "TabEmphasis"
             if TabEmphasis.exists(5) then
@@ -654,7 +651,7 @@ testcase tSlideShowCustomAnimation
                 warnlog "Impress:Tasks Pane:Custom Animation:TabEmphasis tabPage doesn't work."
             endif
             kontext
-            '/// Switch to TabPage: Exit ///'
+            printlog "Switch to TabPage: Exit"
             active.setPage(TabExit)
             kontext "TabExit"
             if TabExit.exists(5) then
@@ -664,7 +661,7 @@ testcase tSlideShowCustomAnimation
                 warnlog "Impress:Tasks Pane:Custom Animation:TabExit tabPage doesn't work."
             endif
             kontext
-            '/// Switch to TabPage: Motion Paths ///'
+            printlog "Switch to TabPage: Motion Paths"
             active.setPage(TabMotionPaths)
             kontext "TabMotionPaths"
             if TabMotionPaths.exists(5) then
@@ -674,7 +671,7 @@ testcase tSlideShowCustomAnimation
                 bError = true
                 warnlog "Impress:Tasks Pane:Custom Animation:TabMotionPaths tabPage doesn't work."
             endif
-            '/// Close dialog 'Custom Animation' with 'OK' ///'
+            printlog "Close dialog 'Custom Animation' with 'OK'"
             TabMotionPaths.OK
             bError = false
         else
@@ -683,11 +680,11 @@ testcase tSlideShowCustomAnimation
         endif
         Kontext "Tasks"
         if (NOT bError) then
-            '/// click button 'Change...' ///'
+            printlog "click button 'Change...'"
             EffectChange.click
-            '/// Dialog 'Custom Animation' comes up ///'
+            printlog "Dialog 'Custom Animation' comes up"
             kontext
-            '/// Switch to TabPage: Entrance ///'
+            printlog "Switch to TabPage: Entrance"
             active.setPage(TabEntrance)
             kontext "TabEntrance"
             if (NOT TabEntrance.exists(5)) then
@@ -699,14 +696,14 @@ testcase tSlideShowCustomAnimation
             if EffectProperty.isEnabled then
                 EffectProperty.getItemCount
             endif
-            '/// CLick on button '...' (Options) ///'
+            printlog "CLick on button '...' (Options)"
             EffectOptions.click
             kontext "TabEffect"
             if TabEffect.exists(5) then
                 dialogTest(TabEffect)
                 Sound.getItemCount
                 AfterAnimation.getItemCount
-                '/// switch to TabPage 'Timing' ///'
+                printlog "switch to TabPage 'Timing'"
                 Kontext
                 active.setPage TabTiming
                 kontext "TabTiming"
@@ -723,7 +720,7 @@ testcase tSlideShowCustomAnimation
                 else
                     warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: Timing TabPage didn't work."
                 endif
-                '/// switch to TabPage 'Timing' ///'
+                printlog "switch to TabPage 'Timing'"
                 Kontext
                 active.setPage TabTextAnimation
                 kontext "TabTextAnimation"
@@ -753,10 +750,9 @@ testcase tSlideShowCustomAnimation
             endif
             kontext "Tasks"
             EffectAutomaticPreview.isChecked
-            '/// click button 'Remove' ///'
+            printlog "click button 'Remove'"
             EffectRemove.click
         endif
-    '/// close application ///'
+    printlog "close application"
     Call hCloseDocument
 endcase
-

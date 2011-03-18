@@ -42,14 +42,7 @@ sub main
 
     PrintLog "------------ Graphics User-scenario-test: PowerUser creates a Presentation ------------"
 
-    Call i_us_presentation1  ' User-Scenario: Pro.
-    Call i_us_presentation2
-    Call i_us_presentation3
-    Call i_us_presentation4
-    Call i_us_presentation5
-    Call i_us_presentation6
-    Call i_us_presentation7
-
+    Call i_us_presentation  ' User-Scenario: Pro.
     Call i_us2_pres1         ' User-Scenario: Beginner.
     Call i_us2_pres2
 

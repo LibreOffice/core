@@ -29,8 +29,8 @@
 #include "sal/config.h"
 
 #include "boost/noncopyable.hpp"
+#include "com/sun/star/awt/AsyncCallback.hpp"
 #include "com/sun/star/awt/XCallback.hpp"
-#include "com/sun/star/awt/XRequestCallback.hpp"
 #include "com/sun/star/beans/PropertyState.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/document/MacroExecMode.hpp"
@@ -59,7 +59,7 @@
 #include "osl/diagnose.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-#include "test/getargument.hxx"
+#include "test/gettestargument.hxx"
 #include "test/officeconnection.hxx"
 #include "test/oustringostreaminserter.hxx"
 #include "test/toabsolutefileurl.hxx"
@@ -150,8 +150,8 @@ void Test::tearDown() {
 void Test::test() {
     rtl::OUString doc;
     CPPUNIT_ASSERT(
-        test::getArgument(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("doc")), &doc));
+        test::getTestArgument(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smoketest.doc")), &doc));
     css::uno::Sequence< css::beans::PropertyValue > args(1);
     args[0].Name = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
@@ -169,10 +169,12 @@ void Test::test() {
             css::uno::Reference< css::frame::XController >(
                 css::uno::Reference< css::frame::XModel >(
                     css::uno::Reference< css::frame::XComponentLoader >(
-                        connection_.getFactory()->createInstance(
-                            rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.frame.Desktop"))),
+                        (connection_.getComponentContext()->
+                         getServiceManager()->createInstanceWithContext(
+                             rtl::OUString(
+                                 RTL_CONSTASCII_USTRINGPARAM(
+                                     "com.sun.star.frame.Desktop")),
+                             connection_.getComponentContext())),
                         css::uno::UNO_QUERY_THROW)->loadComponentFromURL(
                             test::toAbsoluteFileUrl(doc),
                             rtl::OUString(
@@ -185,11 +187,8 @@ void Test::test() {
         css::uno::UNO_QUERY_THROW);
     Result result;
     // Shifted to main thread to work around potential deadlocks (i112867):
-    css::uno::Reference< css::awt::XRequestCallback >(
-        connection_.getFactory()->createInstance( //TODO: AsyncCallback ctor
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AsyncCallback"))),
-        css::uno::UNO_QUERY_THROW)->addCallback(
+    com::sun::star::awt::AsyncCallback::create(
+        connection_.getComponentContext())->addCallback(
             new Callback(
                 disp, url, css::uno::Sequence< css::beans::PropertyValue >(),
                 new Listener(&result)),

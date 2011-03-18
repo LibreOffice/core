@@ -27,22 +27,16 @@
 '*
 '* owner : helge.delfs@oracle.com
 '*
-'* short description : Checks the export to all available Filters from 
+'* short description : Checks the export to all available Filters from
 '*
-'***********************************************************************
-'
-' #1 tExportAllReadableFormatsIntoODF
-' #1 tExportAllReadableFormatsIntoThemselves
-' #1 tExportTop5FormatsIntoTop5
-'
 '\***********************************************************************
 
 testcase tExportAllReadableFormatsIntoODF
 
-	if iSprache <> 1 then
-		QAErrorlog "#100970#test only support english language"
-		goto endsub
-	end if
+    if iSprache <> 1 then
+        QAErrorlog "#100970#test only support english language"
+        goto endsub
+    end if
 
     Dim AvailableFilters( 35 ) as String
     Dim ImportFileList ( 300 ) as String
@@ -65,7 +59,7 @@ testcase tExportAllReadableFormatsIntoODF
             for i=1 to FehlerListe(0)
                 printlog "  <> " & FehlerListe(i)
             next i
-			goto endsub
+            goto endsub
         end if
     end if
     app.Mkdir WorkDirectory
@@ -73,6 +67,9 @@ testcase tExportAllReadableFormatsIntoODF
     Printlog "- Read the directory with files we wish to import."
     GetFileList ( ImportDir, "*.*", ImportFileList() )
     printlog "-  Done."
+
+    ' Create local copies of all files to be imported
+    hFileListCopyLocal( ImportFileList() )
 
     printlog "- Start loading files in list"
 	For i = 1 to listCount(ImportFileList())
@@ -85,7 +82,7 @@ testcase tExportAllReadableFormatsIntoODF
         elseif LCase( sExceptionFile ) = "swdos.txt" then
             QAErrorlog "#i114062#General I/O error loading StarWriter DOS file"
 		else
-			Call hFileOpen ( ImportFileList(i) )
+			Call hFileOpenLocally( ImportFileList(i) )
 			printlog "-  done"
 	
 			Kontext "TextImport"
@@ -186,11 +183,11 @@ endcase
 
 testcase tExportAllReadableFormatsIntoThemselves
 
-	if iSprache <> 1 then
-		QAErrorlog "#100970#test only support english language"
-		goto endsub
-	end if
-	
+    if iSprache <> 1 then
+        QAErrorlog "#100970#test only support english language"
+        goto endsub
+    end if
+
     Dim AvailableFilters( 35 ) as String
     Dim SavedCorrectly as Boolean
     Dim ImportFileList ( 300 ) as String
@@ -220,156 +217,123 @@ testcase tExportAllReadableFormatsIntoThemselves
     end if
     app.Mkdir sWorkDirectory
 
-    For iCurrentFileIndex = 7 to 7
+    For iCurrentFileIndex = 1 to 7
         select case iCurrentFileIndex
-				case 1 :   sCurrentFile = "xml2.odt"
-						   sCurrentFilter = "writer8"
-				case 2 :   sCurrentFile = "wpsfile.wps"
-						   sCurrentFilter = "Text (encoded)"
-				case 3 :   sCurrentFile = "dostext.txt"
-						   sCurrentFilter = "Text (encoded)"
-				case 4 :   sCurrentFile = "sw30.sdw"
-						   sCurrentFilter = "StarWriter 3.0"
-				case 5 :   sCurrentFile = "sw50.vor"
-						   sCurrentFilter = "StarWriter 5.0 Vorlage/Template"
-				case 6 :   sCurrentFile = "sw31.sdw"
-						   sCurrentFilter = "StarWriter 3.0"
-				case 7 :   sCurrentFile = "sw31.vor"
-						   sCurrentFilter = "StarWriter 3.0 Vorlage/Template"
-				case 8 :   sCurrentFile = "sw40.sdw"
-						   sCurrentFilter = "StarWriter 4.0"
-				case 9 :   sCurrentFile = "sw40_sp2.vor"
-						   sCurrentFilter = "StarWriter 4.0 Vorlage/Template"
-				case 10 :  sCurrentFile = "sw50.sdw"
-						   sCurrentFilter = "StarWriter 5.0"
-				case 11 :  sCurrentFile = "html.html"
-						   sCurrentFilter = "HTML (StarWriter)"
-				case 12 :  sCurrentFile = "rtf.rtf"
-						   sCurrentFilter = "Rich Text Format"
-				case 13 :  sCurrentFile = "sw60.sxw"
-						   sCurrentFilter = "StarOffice XML (Writer)"
-				case 14 :  sCurrentFile = "winw97.doc"
-						   sCurrentFilter = "MS Word 97"
-				case 15 :  sCurrentFile = "winword6.doc"
-						   sCurrentFilter = "MS Word 95"
-				case 16 :  sCurrentFile = "wintext.txt"
-						   sCurrentFilter = "Text (encoded)"
-'               case 17 : sCurrentFile = "pocketword.psw"
-'                         sCurrentFilter = "PocketWord File"
-'				TODO: 18-23 not applyable. Can be opened, but saving in the format is not supported.
-'               case 18 : sCurrentFile = "unixtext.txt"
-'                         sCurrentFilter = "Text"
-'               case 19 : sCurrentFile = "sw2.sdw"
-'                         sCurrentFilter = "StarWriter 2.0"
-'               case 20 : sCurrentFile = "amipro3.sam"
-'                         sCurrentFilter = "Ami Pro 1.x-3.1 (W4W)"
-'               case 21 : sCurrentFile = "mactext.txt"
-'                         sCurrentFilter = "Mac Write 4.x 5.0 (W4W)"
-'               case 22 : sCurrentFile = "sw1.sdw"
-'                         sCurrentFilter = "StarWriter 1.0"
-'               case 23 : sCurrentFile = "swdoc.txt"
-'                         sCurrentFilter = "Text (encoded) (StarWriter/GlobalDocument)"
-'               case 24 : sCurrentFile = "hangul.hwp"
-'                         sCurrentFilter = "writer_MIZI_Hwp_97"
+        case 1 :   sCurrentFile = "xml2.odt"
+            sCurrentFilter = "writer8"
+        case 2 :   sCurrentFile = "wpsfile.wps"
+            sCurrentFilter = "Text (encoded)"
+        case 3 :   sCurrentFile = "dostext.txt"
+            sCurrentFilter = "Text (encoded)"
+        case 4 :  sCurrentFile = "html.html"
+            sCurrentFilter = "HTML (StarWriter)"
+        case 5 :  sCurrentFile = "rtf.rtf"
+            sCurrentFilter = "Rich Text Format"
+        case 6 :  sCurrentFile = "sw60.sxw"
+            sCurrentFilter = "StarOffice XML (Writer)"
+        case 7 :  sCurrentFile = "winw97.doc"
+            sCurrentFilter = "MS Word 97"
+        case 8 :  sCurrentFile = "winword6.doc"
+            sCurrentFilter = "MS Word 95"
+        case 9 :  sCurrentFile = "wintext.txt"
+            sCurrentFilter = "Text (encoded)"
         end select
 
         sLoadFile = sImportDir & sCurrentFile
-        sSaveFile = sWorkDirectory & "filenr_" & iCurrentFileIndex & "." & GetExtention ( sCurrentFile )        
+        sSaveFile = sWorkDirectory & "filenr_" & iCurrentFileIndex & "." & GetExtention ( sCurrentFile )
         printlog "- Export of File nr " + iCurrentFileIndex + " started"
         printlog " - Save file: " & sLoadFile
         printlog " - to file: " & sSaveFile
 
 
-		' Load In-file
-		Call hFileOpenWithFilter(sLoadFile, sCurrentFilter, false)
+        ' Load In-file
+        Call hFileOpenWithFilter(sLoadFile, sCurrentFilter, false)
 
-		kontext "active"
-		if active.exists(2) then 
-			active.ok
-			warnlog "Error with file " + sLoadFile + " as " + sSaveFile + "."
-		end if
+        kontext "active"
+        if active.exists(2) then
+            active.ok
+            warnlog "Error with file " + sLoadFile + " as " + sSaveFile + "."
+        end if
 
-		Kontext "TextImport"
-		if TextImport.Exists then
-			TextImport.Ok
-		end if
+        Kontext "TextImport"
+        if TextImport.Exists then
+            TextImport.Ok
+        end if
 
-		Kontext "Filterauswahl"
-		if Filterauswahl.Exists then
-			Filterauswahl.Cancel
-		end if
+        Kontext "Filterauswahl"
+        if Filterauswahl.Exists then
+            Filterauswahl.Cancel
+        end if
 
-		Kontext "AsciiFilterOptionen"
-		if AsciiFilterOptionen.Exists then AsciiFilterOptionen.Ok
-		Kontext "SecurityWarning"
-		if SecurityWarning.Exists(3) then SecurityWarning.Ok
-		Kontext "DocumentWriter"
-		if DocumentWriter.Exists(3) then
-			Do until DocumentWriter.StatusIsProgress = false
-				wait 500
-			Loop
-		else
-			Kontext "DocumentCalc"
-			if DocumentCalc.Exists(3) then
-				Do until DocumentCalc.StatusIsProgress = false
-					wait 500
-				Loop
-			else
-				Warnlog "Neither DocumentWriter or DocumentCalc existed? Some other dialogue in focus?"
-			end if
-		end if
+        Kontext "AsciiFilterOptionen"
+        if AsciiFilterOptionen.Exists then AsciiFilterOptionen.Ok
+        Kontext "SecurityWarning"
+        if SecurityWarning.Exists(3) then SecurityWarning.Ok
+        Kontext "DocumentWriter"
+        if DocumentWriter.Exists(3) then
+            Do until DocumentWriter.StatusIsProgress = false
+                wait 500
+            Loop
+        else
+            Kontext "DocumentCalc"
+            if DocumentCalc.Exists(3) then
+                Do until DocumentCalc.StatusIsProgress = false
+                    wait 500
+                Loop
+            else
+                Warnlog "Neither DocumentWriter or DocumentCalc existed? Some other dialogue in focus?"
+            end if
+        end if
 
-		' Check for macro alert
-		Kontext "SecurityWarning"
-		if SecurityWarning.Exists then
-			if inStr(currentfile,"sw40") = false then
-				QAErrorlog "Macro-Security Warning is up though document should have no macro! Macro disabled"
-			end if
-			SecurityWarning.Cancel
-		end if
-		Sleep 1
+        ' Check for macro alert
+        Kontext "SecurityWarning"
+        if SecurityWarning.Exists then
+            if inStr(currentfile,"sw40") = false then
+                QAErrorlog "Macro-Security Warning is up though document should have no macro! Macro disabled"
+            end if
+            SecurityWarning.Cancel
+        end if
+        Sleep 1
 
-		Kontext "AlienWarning"
-		if AlienWarning.Exists then AlienWarning.Ok
+        Kontext "AlienWarning"
+        if AlienWarning.Exists then AlienWarning.Ok
 
-		' Save Out-file
-		Call hFileSaveAsWithFilterKill(sSaveFile, sCurrentFilter)
+        ' Save Out-file
+        Call hFileSaveAsWithFilterKill(sSaveFile, sCurrentFilter)
 
-		kontext "active"
-		if active.exists(2) then 
-			active.ok
-			warnlog "Error saving file " + sLoadFile + " as " + sSaveFile + "."
-			goto Cleanup
-		end if
+        kontext "active"
+        if active.exists(2) then
+            active.ok
+            warnlog "Error saving file " + sLoadFile + " as " + sSaveFile + "."
+            goto Cleanup
+        end if
 
-		' Load Out-file again
-		Call hFileOpenWithFilter(sSaveFile, sCurrentFilter, false)
+        ' Load Out-file again
+        Call hFileOpenWithFilter(sSaveFile, sCurrentFilter, false)
 
-		' Check for macro alert
-		Kontext "SecurityWarning"
-		if SecurityWarning.Exists then
-			if inStr(currentfile,"sw40") > 0 then
-				QAErrorlog "Macro-Security Warning is up though document should have no macro! Macro disabled"
-			end if
-			SecurityWarning.Cancel
-		end if
-		Sleep 1
+        ' Check for macro alert
+        Kontext "SecurityWarning"
+        if SecurityWarning.Exists then
+            if inStr(currentfile,"sw40") > 0 then
+                QAErrorlog "Macro-Security Warning is up though document should have no macro! Macro disabled"
+            end if
+            SecurityWarning.Cancel
+        end if
+        Sleep 1
 
         Cleanup:
         kontext "active"
-        if active.exists(2) then 
+        if active.exists(2) then
             active.ok
             Select Case iCurrentFileIndex
-            	case 7: QAErrorlog "#i106758#Saving StarWriter 3 template corrupts file" 
-            	case else
-            		warnlog "Error with file " + sLoadFile + " as " + sSaveFile + "."
+            case 7: QAErrorlog "#i106758#Saving StarWriter 3 template corrupts file"
+            case else
+                warnlog "Error with file " + sLoadFile + " as " + sSaveFile + "."
             end select
         end if
 
         printlog "   Close all open files."
-        Do Until GetDocumentCount = 0
-            Call hCloseDocument
-        Loop
+        hFileCloseAll()
 
         printlog " - File nr " + iCurrentFileIndex + " completed."
     Next iCurrentFileIndex
@@ -380,10 +344,10 @@ endcase
 
 testcase tExportTop5FormatsIntoTop5
 
-	if iSprache <> 1 then
-		QAErrorlog "#100970#test only support english language"
-		goto endsub
-	end if
+    if iSprache <> 1 then
+        QAErrorlog "#100970#test only support english language"
+        goto endsub
+    end if
 
     Dim ExportFileList(300) as String
     Dim sWorkDirectory as String
@@ -415,76 +379,66 @@ testcase tExportTop5FormatsIntoTop5
     '// Start of the LOAD-Loop
     For iCurrentLoadFileIndex = 1 to 4
         Select case iCurrentLoadFileIndex
-				case 1 : sCurrentLoadFile = sImportDir & "xml2.odt"
-						 sCurrentLoadFilter = "writer8"
-				case 2 : sCurrentLoadFile = sImportDir & "sw60.sxw"
-						 sCurrentLoadFilter = "StarOffice XML (Writer)"
-				case 3 : sCurrentLoadFile = sImportDir & "winw97.doc"
-						 sCurrentLoadFilter = "MS Word 97"
-				case 4 : sCurrentLoadFile = sImportDir & "rtf.rtf"
-						 sCurrentLoadFilter = "Rich Text Format"
-				case 5 : sCurrentLoadFile = sImportDir & "html.html"
-						 sCurrentLoadFilter = "HTML (StarWriter)"
+        case 1 : sCurrentLoadFile = sImportDir & "xml2.odt"
+            sCurrentLoadFilter = "writer8"
+        case 2 : sCurrentLoadFile = sImportDir & "sw60.sxw"
+            sCurrentLoadFilter = "StarOffice XML (Writer)"
+        case 3 : sCurrentLoadFile = sImportDir & "winw97.doc"
+            sCurrentLoadFilter = "MS Word 97"
+        case 4 : sCurrentLoadFile = sImportDir & "rtf.rtf"
+            sCurrentLoadFilter = "Rich Text Format"
+        case 5 : sCurrentLoadFile = sImportDir & "html.html"
+            sCurrentLoadFilter = "HTML (StarWriter)"
         End select
 
         printlog "- Export of File nr " + iCurrentLoadFileIndex + " started."
         printlog " - Save file: " & sCurrentLoadFile
-        
+
         '///  Here comes the SAVE-Loop
         For iCurrentSaveFileIndex = 1 to 5
             if hFileOpenWithFilter((sCurrentLoadFile), sCurrentLoadFilter) = true then
-				Select case iCurrentSaveFileIndex
-					case 1 : sCurrentSaveFile = sWorkDirectory & "SavedFile_l" + iCurrentLoadFileIndex + "_s1.odt"
-							 sCurrentSaveFilter = "writer8"
-					case 2 : sCurrentSaveFile = sWorkDirectory & "SavedFile_l" + iCurrentLoadFileIndex + "_s2.sxw"
-							 sCurrentSaveFilter = "StarOffice XML (Writer)"
-					case 3 : sCurrentSaveFile = sWorkDirectory & "SavedFile_l" + iCurrentLoadFileIndex + "_s3.doc"
-							 sCurrentSaveFilter = "MS Word 97"
-					case 4 : sCurrentSaveFile = sWorkDirectory & "SavedFile_l" + iCurrentLoadFileIndex + "_s4.rtf"  
-							 sCurrentSaveFilter = "Rich Text Format"
-					case 5 : sCurrentSaveFile = sWorkDirectory & "SavedFile_l" + iCurrentLoadFileIndex + "_s5.html"
-							 sCurrentSaveFilter = "HTML (StarWriter)"
-				End select
-	
-				printlog " - " & iCurrentSaveFileIndex & ". to file: " & sCurrentSaveFile
-				if hFileSaveAsWithFilterKill(sCurrentSaveFile, sCurrentSaveFilter) = true then
-					printlog " - close all open documents"
-					Do Until GetDocumentCount = 0
-						Call hCloseDocument
-					Loop
-					printlog " - check if file exists"
-					if FileExists (sCurrentSaveFile) then
-						printlog "  - success"
-						printlog " - reload previously saved file"
-						if hFileOpenWithFilter(sCurrentSaveFile, sCurrentSaveFilter) = true then
-							printlog "  - success"
-						else
-							Warnlog "error loading file: " & sCurrentSaveFile
-						end if
-						Do Until GetDocumentCount = 0
-							Call hCloseDocument
-						Loop
-					else
-						Warnlog "Saved file doesn't exist"
-						'Close the opened file
-						Do Until GetDocumentCount = 0
-							Call hCloseDocument
-						Loop														
-					end if
-				else
-					Warnlog "Error saving file: " & sCurrentLoadFile
-					'Close the opened file
-					Do Until GetDocumentCount = 0
-						Call hCloseDocument
-					Loop								
-				end if
-			else
-				Warnlog "Error loading file: " & sCurrentLoadFile
-				'Close the opened file
-				Do Until GetDocumentCount = 0
-					Call hCloseDocument
-				Loop				
-			end if
+                Select case iCurrentSaveFileIndex
+                case 1 : sCurrentSaveFile = sWorkDirectory & "SavedFile_l" + iCurrentLoadFileIndex + "_s1.odt"
+                    sCurrentSaveFilter = "writer8"
+                case 2 : sCurrentSaveFile = sWorkDirectory & "SavedFile_l" + iCurrentLoadFileIndex + "_s2.sxw"
+                    sCurrentSaveFilter = "StarOffice XML (Writer)"
+                case 3 : sCurrentSaveFile = sWorkDirectory & "SavedFile_l" + iCurrentLoadFileIndex + "_s3.doc"
+                    sCurrentSaveFilter = "MS Word 97"
+                case 4 : sCurrentSaveFile = sWorkDirectory & "SavedFile_l" + iCurrentLoadFileIndex + "_s4.rtf"
+                    sCurrentSaveFilter = "Rich Text Format"
+                case 5 : sCurrentSaveFile = sWorkDirectory & "SavedFile_l" + iCurrentLoadFileIndex + "_s5.html"
+                    sCurrentSaveFilter = "HTML (StarWriter)"
+                End select
+
+                printlog " - " & iCurrentSaveFileIndex & ". to file: " & sCurrentSaveFile
+                if hFileSaveAsWithFilterKill(sCurrentSaveFile, sCurrentSaveFilter) = true then
+                    printlog " - close all open documents"
+                    hFileCloseAll()
+                    printlog " - check if file exists"
+                    if FileExists (sCurrentSaveFile) then
+                        printlog "  - success"
+                        printlog " - reload previously saved file"
+                        if hFileOpenWithFilter(sCurrentSaveFile, sCurrentSaveFilter) = true then
+                            printlog "  - success"
+                        else
+                            Warnlog "error loading file: " & sCurrentSaveFile
+                        end if
+                        hFileCloseAll()
+                    else
+                        Warnlog "Saved file doesn't exist"
+                        'Close the opened file
+                        hFileCloseAll()
+                    end if
+                else
+                    Warnlog "Error saving file: " & sCurrentLoadFile
+                    'Close the opened file
+                    hFileCloseAll()
+                end if
+            else
+                Warnlog "Error loading file: " & sCurrentLoadFile
+                'Close the opened file
+                hFileCloseAll()
+            end if
 
         Next iCurrentSaveFileIndex
         printlog "- Export of File nr " + iCurrentLoadFileIndex + " completed."

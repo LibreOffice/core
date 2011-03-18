@@ -51,16 +51,16 @@ sub main
     endif
 
     Call sFileExport 'OBSERVE - This line must run before the following testcases!
-    Call tEPS   '///+-   Encapsulated PostScript            ///'
-    Call tPCT   '///+-   Mac Pict                           ///'
-    Call tPBM   '///+-   Portable Bitmap                    ///'
-    Call tPGM   '///+-   Portable Graymap                   ///'
-    Call tPPM   '///+-   Portable Pixelmap                  ///'
-    Call tRAS   '///+-   Sun Raster Image                   ///'
-    Call tTIFF  '///+-   Tagged Image File Format           ///'
-    Call tXPM   '///+-   X PixMap                           ///'
-    Call tGIF   '///+-   Graphics Interchange Format        ///'
-    Call tJPEG  '///+-   Joint Photographic Experts Group   ///'
+    Call tEPS   'Encapsulated PostScript         
+    Call tPCT   'Mac Pict                        
+    Call tPBM   'Portable Bitmap                 
+    Call tPGM   'Portable Graymap                
+    Call tPPM   'Portable Pixelmap               
+    Call tRAS   'Sun Raster Image                
+    Call tTIFF  'Tagged Image File Format
+    Call tXPM   'X PixMap
+    Call tGIF   'Graphics Interchange Format     
+    Call tJPEG  'Joint Photographic Experts Group
 
     Call hStatusOut
 end sub

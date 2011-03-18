@@ -32,75 +32,77 @@
 '\******************************************************************************
 
 testcase tEPS
+
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
     dim x as integer
     dim i as integer
+
     const sFilter = "EPS - Encapsulated PostScript (.eps)"
     const sExt = ".eps"
 
     printlog "open the document"
     hFileOpen( gTesttoolPath + "graphics\required\input\graphicexport." + ExtensionString )
+
     if ( hCallExport ( OutputGrafikTBO , sFilter ) ) then
-        Kontext "EPSOptionen"
-        if ( EPSOptionen.Exists( 2 ) ) then
+        Kontext "EPSOptions"
+        if ( EPSOptions.Exists( 2 ) ) then
             printlog "check if all properties have the right count, and depend on each other"
-            ' they do not affect annything, i can check (TBO)
-            ' VorschauTIF.Check
-            '  InterchangeEPSI.Check
+
             Level1.Check
-            if Farbe.IsEnabled then warnlog " :-("
-            if Graustufen.IsEnabled then warnlog " :-("
-            if LZWKodierung.IsEnabled then warnlog " :-("
-            if Keine.IsEnabled then warnlog " :-("
-            ' if (TextEinstellungen.IsEnabled <> TRUE) then warnlog " :-("
+            if Color.IsEnabled then warnlog " :-("
+            if Greyscale.IsEnabled then warnlog " :-("
+            if LZWEncoding.IsEnabled then warnlog " :-("
+            if NoneCompression.IsEnabled then warnlog " :-("
+
             Level2.Check
-            if (Farbe.IsEnabled <> TRUE) then warnlog " :-("
-            if (Graustufen.IsEnabled <> TRUE) then warnlog " :-("
-            if (LZWKodierung.IsEnabled <> TRUE) then warnlog " :-("
-            if (Keine.IsEnabled <> TRUE) then warnlog " :-("
-            ' if (TextEinstellungen.IsEnabled <> TRUE) then warnlog " :-("
-            printlog "'Color Resolution' listbox contains eight items"
-            ' x = TextEinstellungen.GetItemCount
-            ' if x <> 2 then warnlog "'TextEinstellungen' Count is wrong; should:2, is:" + x
-            ' for i = 1 to x
-            ' TextEinstellungen.Select i
-            ' sleep 1
-            ' Printlog " - " + i + ": '" +TextEinstellungen.GetSelText + "'"
-            ' next i
+            if (Color.IsEnabled <> TRUE) then warnlog " :-("
+            if (Greyscale.IsEnabled <> TRUE) then warnlog " :-("
+            if (LZWEncoding.IsEnabled <> TRUE) then warnlog " :-("
+            if (NoneCompression.IsEnabled <> TRUE) then warnlog " :-("
+
             printlog "leave dialog with cancel -> there has to be no file created!"
-            hCloseDialog( EPSOptionen, "cancel" )
+            hCloseDialog( EPSOptions, "cancel" )
+
             if ( FileExists( OutputGrafikTBO+sExt ) ) then ' inspired by bug #99932 Graphic is exported though cancel is pressed
                 warnlog "Dialog was canceled, but file got saved, too :-(  - i35177"
             endif
         else
             warnlog( "No export options dialog was displayed" )
         end if
+
         Kontext "Active"
         if Active.Exists(2) then
             Warnlog "'" + sFilter + "' has a problem"
             Active.OK
         end if
     end if
+
     printlog( "Save the file" )
     if ( hCallExport( OutputGrafikTBO, sFilter ) ) then
 
-        Kontext "EPSOptionen"
-        if ( EPSOptionen.Exists( 2 ) ) then
-            printlog "TextEinstellungen.select 2"
-            hCloseDialog( EPSOptionen, "ok" )
+        Kontext "EPSOptions"
+        if ( EPSOptions.Exists( 2 ) ) then
+            hCloseDialog( EPSOptions, "ok" )
         else
             warnlog( "No export options dialog was displayed" )
         endif
+
         printlog( "Close file and re-insert graphics into new document" )
-        if ( lcase( gPlatform ) <> "osx" ) then
-            hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
-        else
-            qaErrorLog "#i100253# crash on MacOS X 10.4"
-        endif
+        hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
     endif
+
     call hCloseDocument
+
 endcase 'tEPS
 '-------------------------------------------------------------------------
 testcase tPCT
+
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     dim x as integer
     dim i as integer
@@ -122,24 +124,13 @@ testcase tPCT
     printlog "open the document"
     sDocument = convertpath( gTesttoolPath + "graphics\required\input\graphicexport." + ExtensionString )
     hFileOpen( sDocument )
-
+    printlog "----------1st: Trying export and canceling it."
     if ( hCallExport( OutputGrafikTBO , sFilter ) ) then
-
-        Kontext "PICTOptionen"
+        Kontext "PCTOptions"
         printlog( "Export options dialog" )
-        if ( PICTOptionen.Exists( 2 ) ) then
-
-            printlog "check if all properties have the right count, and depend on each other"
-            Original.Check
-            if Breite.IsEnabled then warnlog " :-("
-            if Hoehe.IsEnabled then warnlog " :-("
-            Groesse.Check
-            Breite.More
-            Hoehe.Less
-
+        if PCTOptions.Exists(2) then
             printlog "leave dialog with cancel -> there has to be no file created!"
-            hCloseDialog( PICTOptionen, "cancel" )
-
+            hCloseDialog( PCTOptions, "cancel" )
             if ( FileExists( OutputGrafikTBO + sExt ) ) then
                 warnlog( "#i35177# - dialog <PictOptions> canceled, still the file was saved" )
             endif
@@ -152,33 +143,25 @@ testcase tPCT
             Warnlog " '" + sFilter + "'  has a problem"
             Active.OK
         end if
-
     end if
 
-    printlog " now save it realy and load the file afterwards"
+    printlog "----------2nd: now save it really and load the file afterwards"
     if ( hCallExport( OutputGrafikTBO, sFilter ) ) then
 
-        Kontext "PICTOptionen"
+        Kontext "PCTOptions"
         printlog( "Export options dialog" )
-        if ( PICTOptionen.Exists( 2 ) ) then
-            Groesse.Check
-            Breite.Less
-            Hoehe.More
-            hCloseDialog( PICTOptionen, "ok" )
+        if ( PCTOptions.Exists( 2 ) ) then
+            hCloseDialog( PCTOptions, "ok" )
         else
             warnlog( "No export options dialog was displayed" )
         endif
-
         sOutputFile = OutputGrafikTBO+sExt
-
         if ( hWaitForOutputFile( sOutputFile ) ) then
-
-            printlog( "Close file and re-insert graphics into new document" )
+            printlog "Close file and re-insert graphics into new document"
             hInsertGraphicsToNewFile( sOutputFile ) ' local helper function, see bottom of this file
         else
             warnlog( "File was not saved: " & sOutputFile )
         endif
-
     endif
 
     hFileReOpen( sDocument )
@@ -192,104 +175,15 @@ testcase tPCT
         endif
     endif
 
-    hTypeKeys ("<escape><tab>")
-    fGetSizeXY sx1, sY, TRUE
-
-    if ( hCallExport( OutputGrafikTBO + "1", sFilter, TRUE ) ) then
-
-        Kontext "PICTOptionen"
-        printlog( "Export options dialog" )
-        if ( PICTOptionen.Exists( 2 ) ) then
-            Original.Check
-            hCloseDialog( PICTOptionen, "ok" )
-        else
-            warnlog( "No export options dialog was displayed" )
-        endif
-
-        sOutputFile = OutputGrafikTBO + "1" + sExt
-        if ( hWaitForOutputFile( sOutputFile ) ) then
-            printlog( "Close file and re-insert graphics into new document" )
-            hInsertGraphicsToNewFile( sOutputFile ) ' local helper function, see bottom of this file
-        else
-            warnlog( "File was not saved: " & sOutputFile )
-        endif
-
-        bTemp = fGetSizeXY( sx1, sY, bTemp )
-        if (bTemp = FALSE) then
-            warnlog "Selected original size NOT OK :-("
-        endif
-    endif
-
-    hFileReOpen( "" )
-    hRechteckErstellen ( 10, 10, 30, 40 )
-
-    if ( hCallExport( OutputGrafikTBO + "2" , sFilter, TRUE ) ) then
-
-        Kontext "PICTOptionen"
-        printlog( "Export options dialog" )
-        if ( PICTOptionen.Exists( 2 ) ) then
-            Groesse.Check
-            Breite.SetText "9"
-            Hoehe.SetText "9"
-            Groesse.Check
-
-            printlog "Check 'Size' one more time to make the change go through"
-            sx1 = Breite.GetText
-            sY = Hoehe.GetText
-            hCloseDialog( PICTOptionen, "ok" )
-        else
-            warnlog( "No export options dialog was displayed" )
-        endif
-
-        sOutputFile = OutputGrafikTBO + "2" + sExt
-
-        if ( not hWaitForOutputFile( sOutputFile ) ) then
-            warnlog( "File was not saved: " & sOutputFile )
-        endif
-
-        printlog( "Reload file if it exists. Warn if not" )
-        hFileReOpen( sOutputFile )
-
-        kontext "DocumentDraw"
-        DocumentDraw.TypeKeys ("<escape><tab>")
-        ContextOriginalSize
-        bTemp = fGetSizeXY( sx1, sY, bTemp )
-        if ( not bTemp ) then warnlog "Selected original size NOT OK :-("
-    endif
-
-    if ( hCallExport( OutputGrafikTBO + "3", sFilter, TRUE ) ) then
-
-        Kontext "PICTOptionen"
-        printlog( "Export options dialog" )
-        if ( PICTOptionen.Exists( 2 ) ) then
-            Groesse.Check
-            sX2 = Breite.GetText
-            if (LiberalMeasurement(sx1, sX2)) <> TRUE then
-                if (val(str(StrToDouble(sx1)+5)) >= StrToDouble(sX2) ) AND (val(str(StrToDouble ( sx1 )-5)) <= StrToDouble ( sX2 )) then
-                    Printlog "Width was ok. Expected: " + sx1 + "' was: '" + sX2 + "'"
-                else
-                    warnLog "Width is different expected: '" + sx1 + "' is: '" + sX2 + "'"
-                endif
-            endif
-            sY2 = Hoehe.GetText
-            if (LiberalMeasurement(sY, sY2)) <> TRUE then
-                if ( val(str(StrToDouble(sY)+5)) >= StrToDouble(sY2) ) AND (val(str(StrToDouble ( sY )-5)) <= StrToDouble ( sY2 )) then
-                    Printlog "Height was ok. Expected: " + sY + "' was: '" + sY2 + "'"
-                else
-                    warnLog "Height is different expected: '" + sY + "' is: '" + sY2 + "'"
-                endif
-            endif
-            hCloseDialog( PICTOptionen, "cancel" )
-        else
-            warnlog( "No export options dialog was displayed" )
-        endif
-    endif
-
     call hCloseDocument
 
 endcase 'tPCT
 '-------------------------------------------------------------------------------
 testcase tPBM
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "PBM - Portable Bitmap (.pbm)"
     const sExt = ".pbm"
@@ -300,15 +194,17 @@ testcase tPBM
     printlog "Save it"
     if ( hCallExport (OutputGrafikTBO , sFilter ) ) then
 
-        Kontext "PBMOptionen"
-        if ( PBMOptionen.Exists( 2 ) ) then
-            Ascii.Check
-            hCloseDialog( PBMOptionen, "ok" )
+        Kontext "PBMOptions"
+        if ( PBMOptions.Exists( 2 ) ) then
+            QualityBinary.Check
+            QualityText.Check
+            hCloseDialog( PBMOptions, "ok" )
         else
             warnlog( "No export options dialog was displayed" )
         endif
 
         printlog( "Close file and re-insert graphics into new document" )
+        sleep (1)
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
 
     endif
@@ -318,6 +214,10 @@ testcase tPBM
 endcase 'tPBM
 '-------------------------------------------------------------------------------
 testcase tPGM
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "PGM - Portable Graymap (.pgm)"
     const sExt = ".pgm"
@@ -328,10 +228,11 @@ testcase tPGM
     printlog "Save it"
     if ( hCallExport (OutputGrafikTBO , sFilter ) ) then
 
-        Kontext "PGMOptionen"
-        if ( PGMOptionen.Exists( 2 ) ) then
-            Ascii.Check
-            hCloseDialog( PGMOptionen, "ok" )
+        Kontext "PGMOptions"
+        if ( PGMOptions.Exists( 2 ) ) then
+            QualityBinary.Check
+            QualityText.Check
+            hCloseDialog( PGMOptions, "ok" )
         else
             warnlog( "No export options dialog was displayed" )
         endif
@@ -346,6 +247,10 @@ testcase tPGM
 endcase 'tPGM
 '-------------------------------------------------------------------------------
 testcase tPPM
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "PPM - Portable Pixelmap (.ppm)"
     const sExt = ".ppm"
@@ -356,10 +261,11 @@ testcase tPPM
     printlog "Save it"
     if ( hCallExport (OutputGrafikTBO , sFilter ) ) then
 
-        Kontext "PPMOptionen"
-        if ( PPMOptionen.Exists( 2 ) ) then
-            Ascii.Check
-            hCloseDialog( PPMOptionen, "ok" )
+        Kontext "PPMOptions"
+        if ( PPMOptions.Exists( 2 ) ) then
+            QualityBinary.Check
+            QualityText.Check
+            hCloseDialog( PPMOptions, "ok" )
         else
             warnlog( "No export options dialog was displayed" )
         endif
@@ -374,6 +280,10 @@ testcase tPPM
 endcase 'tPPM
 '------------------------------------------------------------------------------
 testcase tRAS
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "RAS - Sun Raster Image (.ras)"
     const sExt = ".ras"
@@ -394,6 +304,10 @@ testcase tRAS
 endcase 'tRAS
 '------------------------------------------------------------------------------
 testcase tTIFF
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     dim x as integer
     dim i as integer
@@ -417,6 +331,10 @@ testcase tTIFF
 endcase 'tTIFF
 '------------------------------------------------------------------------------
 testcase tXPM
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "XPM - X PixMap (.xpm)"
     const sExt = ".xpm"
@@ -437,6 +355,10 @@ testcase tXPM
 endcase 'tXPM
 '-------------------------------------------------------------------------------
 testcase tGIF
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "GIF - Graphics Interchange Format (.gif)"
     const sExt = ".gif"
@@ -447,16 +369,17 @@ testcase tGIF
     printlog "save it"
     if ( hCallExport( OutputGrafikTBO, sFilter ) ) then
 
-        Kontext "GIFOptionen"
-        if GIFOptionen.Exists (2) then
-            Interlace.Uncheck
-            TransparentSpeichern.UnCheck
-            hCloseDialog( GIFOptionen, "ok" )
+        Kontext "GIFOptions"
+        if GIFOptions.Exists (2) then
+            Interlaced.Uncheck
+            Transparency.UnCheck
+            hCloseDialog( GIFOptions, "ok" )
         else
             warnlog( "No export options dialog was displayed" )
         endif
 
         printlog( "Close file and re-insert graphics into new document" )
+        sleep (1)
         hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
 
     endif
@@ -466,6 +389,10 @@ testcase tGIF
 endcase 'tGIF
 '-------------------------------------------------------------------------------
 testcase tJPEG
+    warnlog( "#i115138# - Test document freezes draw" )
+    goto endsub
+
+
 
     const sFilter = "JPEG - Joint Photographic Experts Group (.jpg;.jpeg;.jfif;.jif;.jpe)"
     const sExt = ".jpg"
@@ -476,11 +403,10 @@ testcase tJPEG
     printlog " save it "
     if ( hCallExport( OutputGrafikTBO , sFilter ) ) then
 
-        Kontext "JpegOptionen"
-        if ( JpegOptionen.Exists( 2 ) ) then
-            Echtfarben.Check
-            Qualitaet.ToMin
-            hCloseDialog( JpegOptionen, "ok" )
+        Kontext "JPGOptions"
+        if ( JPGOptions.Exists( 2 ) ) then
+            Quality.ToMin
+            hCloseDialog( JPGOptions, "ok" )
         else
             warnlog( "No export options dialog was displayed" )
         endif
@@ -497,7 +423,7 @@ endcase 'tJPEG
 '*******************************************************************************
 
 function hInsertGraphicsToNewFile( sOutputFile as string )
-
+    sleep (1)
     if ( FileExists( sOutputFile ) ) then
         hFileReOpen( "" )
         Call hGrafikEinfuegen( sOutputFile )
@@ -533,21 +459,26 @@ end function
 '*******************************************************************************
 
 function hWaitForOutputFile( sOutputFile as string ) as boolean
+
     const FILE_WRITE_TIMEOUT = 30
     dim iWait as integer : iWait = 0
 
     for iWait = 1 to FILE_WRITE_TIMEOUT
+
         ' File found
         if ( FileExists( sOutputFile ) ) then
             hWaitForOutputFile() = true
             exit function
         endif
+
         ' Timeout
         if ( iWait = FILE_WRITE_TIMEOUT ) then
             hWaitForOutputFile() = false
             exit function
         endif
-        wait( 1000 )
-    next iWait
-end function
 
+        wait( 1000 )
+
+    next iWait
+
+end function

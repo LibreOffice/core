@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@oracle.com
+'*  owner : gregor.hartmann@oracle.com
 '*
 '*  short description : Window/Titlebar functionality
 '*
@@ -34,12 +34,6 @@
 testcase tWindowFunctions
 
     printlog( "Update test for window functions" )
-
-    if ( gtSysName = "Mac OS X" ) then
-        printlog( "No testing for Mac as some Window attributes do not exist" )
-        goto endsub
-    endif
-
 
     printlog( "Create initial document" )
     gApplication = "WRITER"
@@ -114,7 +108,7 @@ testcase tWindowFunctions
     if ( DocumentWriter.IsMin() ) then
         printlog( "Window is minimized" )
     else
-        qaerrorlog( "#i32672# Window not minimized" )
+        warnlog( "Window not minimized" )
     endif
 
     kontext "DocumentWriter"

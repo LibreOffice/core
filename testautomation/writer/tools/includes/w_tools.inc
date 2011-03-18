@@ -141,11 +141,14 @@ end function
 
 ' -----------------------------------------------------------------------
 
-sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optional sCloseToolbar as boolean )
+sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optional sCloseToolbar as boolean, optional bLeaveSelected as boolean )
 
     Kontext "DrawBar"
     if Not DrawBar.Exists then Call hToolbarSelect("Drawing", true)
     Sleep 2
+    if IsMissing(bLeaveSelected) then
+        bLeaveSelected = false
+    endif
 
     Objekt = UCase( Objekt )
     select case Objekt
@@ -187,8 +190,10 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
         end if
         if Objekt <> "TEXT" and Objekt <> "VTEXT" then
             Kontext "DocumentWriter"
-            Call gMouseClick (10, 10)
-            wait 100
+            if bLeaveSelected = false then
+                Call gMouseClick (10, 10)
+                wait 100
+            endif
         end if
 
     Case "MASTERDOCUMENT"
@@ -205,8 +210,10 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
         end if
         if Objekt <> "TEXT" and Objekt <> "VTEXT" then
             Kontext "DocumentMasterDoc"
-            Call gMouseClick (10, 10)
-            wait 100
+            if bLeaveSelected = false then
+                Call gMouseClick (10, 10)
+                wait 100
+            endif
         end if
     end select
     sleep (1)
@@ -215,18 +222,21 @@ end sub
 ' -----------------------------------------------------------------------
 
 sub wObjektSelektieren ( xStart%, yStart%, xEnde%, yEnde% )
-    '    Call gMouseClick(90,90)
     Call hToolbarSelect("DRAWING",true)
-    Auswahl.Click
+    if Auswahl.Getstate(2) = 0 then
+        Auswahl.Click
+    endif
     Select Case gApplication
     Case "WRITER"
         Kontext "DocumentWriter"
         DocumentWriter.MouseDown xStart%, yStart%
+        wait 500
         DocumentWriter.MouseMove xEnde%, yEnde%
         DocumentWriter.MouseUp xEnde%, yEnde%
     Case "MASTERDOCUMENT"
         Kontext "DocumentMasterDoc"
         DocumentMasterDoc.MouseDown xStart%, yStart%
+        wait 500
         DocumentMasterDoc.MouseMove xEnde%, yEnde%
         DocumentMasterDoc.MouseUp xEnde%, yEnde%
     end select
@@ -1042,7 +1052,7 @@ end sub
 
 function wInsertDocumentinMasterDoc(DocumentName as string) as boolean
     Call hNewDocument
-    Call hFileOpen(DocumentName)
+    hFileOpenLocally( DocumentName)
     Sleep 2
     Call wTypeKeys "<Mod1 A>"
     Sleep 2

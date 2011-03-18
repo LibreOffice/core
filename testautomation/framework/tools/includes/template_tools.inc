@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@oracle.com
+'*  owner : gregor.hartmann@oracle.com
 '*
 '*  short description : Helper functions to ease usage of templates
 '*
@@ -254,11 +254,14 @@ function hSelectDocumentObject( iTitle as integer , iMode as integer ) as string
     '///<u>Input</u>: 
     '///<ol>
     '///+<li>Index of the folder to be selected on the categories-pane (integer)</li>
+    '///<ul>
+    '///+<li>Valid positive index</li>
+    '///</ul>
     '///+<li>Mode in which to open the template (integer)</li>
     '///<ul>
     '///+<li>0 = Do not open the object, just return its name</li>
     '///+<li>1 = Open a new document based on the selected Template</li>
-    '///+<li>2 = edit the template</li>
+    '///+<li>2 = edit the template (unsupported)</li>
     '///</ul>
     '///</ol>
     '///<u>Returns</u>:
@@ -267,32 +270,12 @@ function hSelectDocumentObject( iTitle as integer , iMode as integer ) as string
     '///</ul>
     '///<u>Description</u>:
     '///<ul>
-    '///+<li>Verify function parameter iMode</li>
-
-    if ( ( iMode < 0 ) or ( iMode > 2 ) ) then
-        warnlog( CFN & "Invalid function parameter iMode: " & iMode )
-        hSelectDocumentObject() = ""
-        exit function
-    endif
 
     dim cTitle as string
     dim brc as boolean
     dim iObjectCount as integer
 
     Kontext "TemplateAndDocuments"
-    '///+<li>Verify the function parameter iTitle > 0</li>
-    if ( iTitle < 1 ) then
-        warnlog( CFN & "Invalid function parameter iTitle: " & iTitle )
-        hSelectDocumentObject() = ""
-        exit function
-    endif
-
-    '///+<li>Verify that the index is not too large</li>
-    if ( iTitle > FileList.getItemCount() ) then
-        warnlog( CFN & "Invalid function parameter iTitle: " & iTitle )
-        hSelectDocumentObject() = ""
-        exit function
-    endif
 
     '///+<li>Get the title of the selected object</li>
     cTitle = hGetFileFolderName( iTitle )
@@ -315,9 +298,7 @@ function hSelectDocumentObject( iTitle as integer , iMode as integer ) as string
             kontext "TemplateAndDocuments"
             if ( TemplateAndDocuments.exists() ) then
                 '///+<li>If yes: Try to determine if it is a new folder</li>
-                brc = hIsObjectAFolder( iObjectCount )
-
-                if ( brc ) then
+                if ( hIsObjectAFolder( iObjectCount ) ) then
                     hSelectDocumentObject() = "Folder"
                     exit function
                 endif
@@ -326,12 +307,13 @@ function hSelectDocumentObject( iTitle as integer , iMode as integer ) as string
         catch
         endcatch
         
-        hFileWait()
-        hHandleActivesOnLoad( 2, false )
-        hHandleInitialDialogs()
+    case 2 : warnlog( "Unsupported option: Edit template" )
         
     end select
 
+    hFileWait()
+    hHandleActivesOnLoad( 2, false )
+    brc = hHandleInitialDialogs()
 
     '///+<li>If all initial dialogs were handled correctly, return the title</li>
     if ( brc ) then

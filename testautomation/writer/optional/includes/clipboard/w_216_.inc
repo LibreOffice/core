@@ -50,8 +50,8 @@ testcase HTMLToWRITERText
     printlog "  Jump to beginning of document "
     printlog "  Select first paragraph "
     printlog "  Copy selected text "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    
     sleep (3)
     if GetDocumentCount() = 2 then
     	Warnlog "#i104365#read only document remains opened"
@@ -122,8 +122,8 @@ testcase HTMLToWRITERField
     printlog "  Jump to beginning of document "
     printlog "  Select paragraph with 'Date Field' "
     printlog "  Copy selected text "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    
     if GetDocumentCount() = 2 then
     	Warnlog "#i104365#read only document remains opened"
     endif            
@@ -192,8 +192,8 @@ testcase HTMLToWRITERTable
     printlog "  Jump to beginning of document "
     printlog "  Select 'Table' "
     printlog "  Copy selected table "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    
     if GetDocumentCount() = 2 then
     	Warnlog "#i104365#read only document remains opened"
     endif            
@@ -262,8 +262,8 @@ testcase HTMLToWRITERGraphicLinked
     printlog "  Jump to beginning of document "
     printlog "  Select 'Linked Graphic' "
     printlog "  Copy selected Linked Graphic "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    
     if GetDocumentCount() = 2 then
     	Warnlog "#i104365#read only document remains opened"
     endif            
@@ -297,7 +297,7 @@ testcase HTMLToWRITERGraphicLinked
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_writer_graphic1.odt",false)
+        hFileOpen( gOfficepath + "user\work\html_to_writer_graphic1.odt",false)
         printlog "  Reopen saved document "
         Wait 500
         printlog "  Close saved document "
@@ -321,8 +321,8 @@ testcase HTMLToWRITERControl
     printlog "  Jump to beginning of document "
     printlog "  Select 'Control' "
     printlog "  Copy selected Control "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    
     if GetDocumentCount() = 2 then
     	Warnlog "#i104365#read only document remains opened"
     endif            
@@ -357,7 +357,7 @@ testcase HTMLToWRITERControl
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_writer_control.odt",false)
+        hFileOpen( gOfficepath + "user\work\html_to_writer_control.odt",false)
         printlog "  Reopen saved document "
         Wait 500
         printlog "  Close saved document "
@@ -381,8 +381,8 @@ testcase HTMLToWRITERFloatingFrame
     printlog "  Jump to beginning of document "
     printlog "  Select 'Floating Frame' "
     printlog "  Copy selected Floating Frame "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    
     if GetDocumentCount() = 2 then
     	Warnlog "#i104365#read only document remains opened"
     endif            
@@ -423,7 +423,7 @@ testcase HTMLToWRITERFloatingFrame
         Call hCloseDocument
         printlog "  Close saved document "
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_writer_float.odt",false)
+        hFileOpen( gOfficepath + "user\work\html_to_writer_float.odt",false)
         printlog "  Reopen saved document "
         Wait 500
         Call hCloseDocument

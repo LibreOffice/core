@@ -85,7 +85,10 @@ sub GetUseFiles
     Call GetIniInformation                '///+<li><b>GetIniInformation</b>: Get all information out of the <i>testtool.ini/.testtoolrc</i> and set it on global variables (iniinfo.inc)</li>
     Call GetOfficeInformation             '///+<li><b>GetOfficeInformation</b>: Set <i>sAppExe</i> for startup (iniinfo.inc)</li>
 
-    Call prepareHidLst
+    gVersionsnummer = FindBuildID
+    ' split versionstring into its parts
+    call hSetBuildVersionInformation(False)
+
     Call LoadDeclaration                  '///+<ul><li><b>LoadDeclaration</b>: Load all declaration files (master.inc)</li>
 
     Call FirstOfficeStart                 '///+<li><b>FirstOfficeStart</b>: Try to start the office for first time (master.inc)</li>
@@ -139,97 +142,6 @@ sub GetUseFiles
 end sub
 
 '-------------------------------------------------------------------------
-function checkWriteable() as boolean
-    '//// Check hid.lst destination for user writeability
-    dim sTestDir as string
-    dim bReturn as boolean
-
-    bReturn = FALSE
-            try
-                sTestDir = "tbotest"   ' nasty bug, if the path is with a path sign at the end; usually on windows root dirs :-(
-                if (right(ConvertPath(gtHidLstPath, gtPlatform), 1) <> hGetPathSigne(gtPlatform)) then
-                    sTestDir = hgetPathSigne(gtPlatform) + sTestDir
-                end if
-                MkDir (ConvertPath(gtHidLstPath + sTestDir, gtPlatform))
-                RmDir (ConvertPath(gtHidLstPath + sTestDir, gtPlatform))
-                
-                bReturn = TRUE
-            catch
-                ' fail
-                bReturn = FALSE
-            endcatch
-    checkWriteable = bReturn
-end function
-'-------------------------------------------------------------------------
-
-sub prepareHidLst
-    '/// Determine and set OOo version information
-    '/// Check if hid.lst is at default location: testautomation/global/hid
-    '/// If not, check OOo basis path for hid.lst; check if default location from above is writeable for user
-    '/// Copy hid.lst from OOo basis path to the default location
-    '/// If something fails, give warnlog
-    dim sHidOOo as string
-    dim iShellReturn as integer
-    dim qHost as string
-    dim qPath as string
-
-        gVersionsnummer = FindBuildID
-        ' split versionstring into its parts
-        call hSetBuildVersionInformation(False)
-    qHost = "quaste.services.openoffice.org"
-    qPath = "/index.php?option=com_quaste&task=tests_overview&download=2" + "&workspace=" + gMajor + "&milestone=" + gMinor
-    ' check for hid.lst in $HID_DIR_LOCATION!
-    if (fileExists(gtHidLstPath + "hid.lst")) then
-        printlog "Found hid.lst file; It is taken from: " + gtHidLstPath
-    else
-        ' check for hid.lst in OOo installation
-        sHidOOo = convertPath(gOfficeBasisPath + "program/" + "hid.lst")
-        if (fileExists(sHidOOo)) then
-            printlog "Found hid.lst file; It exists in OOo installation: " + sHidOOo
-        
-            ' make compatibility hint against version.txt
-    
-            ' check for writeable global/hid/
-            if (checkWriteable()) then    
-                ' copy hid.lst
-                fileCopy(sHidOOo, gtHidLstPath + "hid.lst")
-                printlog "File hid.lst successfull copied to location in VCL TestTool settings: " + gtHidLstPath
-            else
-                ' fail: make hint for hid.lst path
-                warnlog "File hid.lst could not be copied to default location, due to missing access rights"
-                warnlog "Please open the settings in VCL TestTool and change the path for HID directory to: " + sHidOOo
-                if MsgBox ("The test won't start! Further informations are in the result file below...", 16, "Error with hid.lst file") = 1 then end
-            end if
-        else
-            ' Disabled, because Joomla! can not provide plain text webpage
-            'if (checkWriteable()) then
-                'try to get from Quaste via http
-                'httpSetProxy(Host, Port)
-            '    try 
-            '        iShellReturn = httpSend(qHost, qPath, 80, gtHidLstPath + "hid.lst")
-            '    catch
-            '        iShellReturn = 99
-            '    endcatch
-                ' when using internal httpSend, iShellReturn contains http status numbers: 200 means: ok
-            '    if (iShellReturn <> 200) then 
-            '        warnlog "Fetching file hid.lst with internal httpsend command failed with error code: " + iShellReturn + chr(13) + qHost+qPath + chr(13) + gtHidLstPath + "hid.lst"
-                    ' no hid.lst in OOo available and not available via http...
-            '        warnlog "No hid.lst file in OOo installation or on Quaste server found; Please read documentation at " + ConvertPath (gTestToolPath + "global\hid\readme.txt") + " or ask on mailing list: dev@qa.openoffice.org"
-            '        kill gtHidLstPath + "hid.lst"
-            '    else
-            '        printlog "File hid.lst successfull fetched from "+qHost+qPath+" and saved to location in VCL TestTool settings: " + gtHidLstPath
-            '    endif
-            'else
-            '    warnlog "File hid.lst could not be saved to default location, due to missing access rights"
-            '    warnlog "Please download hid.lst file from: "+qHost+qPath+" and open the settings in VCL TestTool and change the path for HID directory to your download location."
-                warnlog "Please download hid.lst file from: "+ chr(13) +"http://"+qHost+qPath+ chr(13) + "and save it to: "+ chr(13) + gtHidLstPath+"hid.lst"
-                if MsgBox ("The test won't start! Further informations are in the result file below...", 16, "Error with hid.lst file") = 1 then end
-            'end if
-        end if
-    end if
-end sub
-'-------------------------------------------------------------------------
-
 sub LoadDeclaration
 '/// Include all .sid-declarations (all menu-items as SlotIDs)
 '///+&lt;German names&gt; (<u><b>DEPRECATED</u>, only fixes allowed!</b>)
@@ -686,12 +598,7 @@ sub hFirstOutput
     Dim sDir as String
     Dim sDir1 as String
     Dim sMajor as String
-    Dim sHidVersion as String
   
-    sHidVersion = getBuildNumHidLst
-    if lCase(trim(sHidVersion)) <> lCase(gMajor + "." + gMinor) then
-        qaErrorLog "Version of file hid.lst differs from OOo version"
-    end if
     if gSamePC = TRUE then
         if (len(gMajor)>3) then
             sMajor = left(gMajor,3)
@@ -728,7 +635,6 @@ sub hFirstOutput
         'http://wiki.services.openoffice.org/wiki/QUASTe
         printlog "**  Status feature (QUASTe)       : Enabled " + gLocalStatusDatabase  
     end if
-    printlog    "**  HID.LST based on milestone    : " + sHidVersion
     printlog    "----------------------------------------------------------------------------------------------------"  
     printlog    "**  Application installation path : " +  gNetzOfficePath
     printlog    "**  User configuration path       : " +  gOfficePath

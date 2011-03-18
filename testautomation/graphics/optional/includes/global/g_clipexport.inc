@@ -165,87 +165,138 @@ global Text5 as string
 global Text6 as string
 global Text7 as string
 
+'--------------------------- Tests for Writer ----------------------------------
+sub writertest
+
+    try
+        call Make_And_Check_Formatted_Text_Line_From_Application
+    catch
+        warnlog "Something went wrong with testing writertest"
+    endcatch
+
+    try
+        call Make_Rectangle_From_Application
+        call Full_test_Draw
+        call Full_test_Impress
+        call Full_test_Writer
+        call Full_test_Calc
+    catch
+        warnlog "something wrong with testing writertest"
+    endcatch
+end sub ' big one
+
+'---------------------------- Tests for Calc -----------------------------------
+sub calctest
+
+    try
+        call Make_Rectangle_From_Application
+        call Full_test_Draw
+        call Full_test_Impress
+        call Full_test_Writer
+        call Full_test_Calc
+    catch
+        warnlog "something wrong with calctest"
+    endcatch
+    printlog "currently no specific tests from Calc"
+end sub
+
+'-------------------------------------------------------------------------------
+sub tClipboardFromDrawTest
+
+    EnableQAErrors = false
+    FromApp2 = gApplication
+    printlog "gApplication = " + gApplication
+
+    select case( gApplication )
+    case "WRITER" : call writertest()
+    case "CALC"   : call calctest()
+    case else     : warnlog( "Unsupported gApplication provided: " & gApplication )
+    end select
+
+end sub
+
 '------------------------------- "object"-dependant tests ----------------------
 
-try
-    call Make_Rectangle_From_Application
-    call Full_test_Draw
-    call Full_test_Impress
-    call Full_test_Writer
-    call Full_test_Calc
-catch
-    warnlog "something wrong with testing Rectangle"
-endcatch
+sub g_clipexport
+    try
+        call Make_Rectangle_From_Application
+        call Full_test_Draw
+        call Full_test_Impress
+        call Full_test_Writer
+        call Full_test_Calc
+    catch
+        warnlog "something wrong with testing Rectangle"
+    endcatch
 
-try
-    call Make_Make3dObject_From_Application
-    call Full_test_Draw
-    call Small_test_Impress
-    call Small_test_Calc
-    call Small_test_Writer
-catch
-    warnlog "something wrong with testing 3dObject"
-endcatch
+    try
+        call Make_Make3dObject_From_Application
+        call Full_test_Draw
+        call Small_test_Impress
+        call Small_test_Calc
+        call Small_test_Writer
+    catch
+        warnlog "something wrong with testing 3dObject"
+    endcatch
 
-'qaerrorlog "Make_CurveObject_From_Application needs an overview - FHA"
-try
-    call Make_CurveObject_From_Application
-    call Small_test_Draw
-    call Small_test_Impress
-    call Small_test_Calc
-    call Small_test_Writer
-catch
-    warnlog "something wrong with testing CurveObj"
-endcatch
+    'qaerrorlog "Make_CurveObject_From_Application needs an overview - FHA"
+    try
+        call Make_CurveObject_From_Application
+        call Small_test_Draw
+        call Small_test_Impress
+        call Small_test_Calc
+        call Small_test_Writer
+    catch
+        warnlog "something wrong with testing CurveObj"
+    endcatch
 
-try
-    call Make_ConnectorObject_From_Application
-    call Small_test_Draw
-    call Small_test_Impress
-    call Small_test_Calc
-    call Small_test_Writer
-catch
-    warnlog "something wrong with testing ConnectorObject"
-endcatch
+    try
+        call Make_ConnectorObject_From_Application
+        call Small_test_Draw
+        call Small_test_Impress
+        call Small_test_Calc
+        call Small_test_Writer
+    catch
+        warnlog "something wrong with testing ConnectorObject"
+    endcatch
 
-try
-    call Make_LineObject_From_Application
-    call Small_test_Draw
-    call Small_test_Impress
-    '   call Small_test_Calc
-    '   call Small_test_Writer
-catch
-    warnlog "something wrong with testing LineObject"
-endcatch
+    try
+        call Make_LineObject_From_Application
+        call Small_test_Draw
+        call Small_test_Impress
+        '   call Small_test_Calc
+        '   call Small_test_Writer
+    catch
+        warnlog "something wrong with testing LineObject"
+    endcatch
 
-try
-catch
-    warnlog "something wrong with testing ConnectorObject"
-endcatch
+    try
+    catch
+        warnlog "something wrong with testing ConnectorObject"
+    endcatch
 
-try
-    call Make_Circle_From_Application
-    call Small_test_Draw
-    call Small_test_Impress
-    call Small_test_Calc
-    call Small_test_Writer
-catch
-    warnlog "something wrong with testing Circle"
-endcatch
+    try
+        call Make_Circle_From_Application
+        call Small_test_Draw
+        call Small_test_Impress
+        call Small_test_Calc
+        call Small_test_Writer
+    catch
+        warnlog "something wrong with testing Circle"
+    endcatch
 
-try
-    call Make_TextSquare_From_Application
-    call Small_test_Draw
-    call Small_test_Impress
-    call Small_test_Calc
-    call Small_test_Writer
+    try
+        call Make_TextSquare_From_Application
+        call Small_test_Draw
+        call Small_test_Impress
+        call Small_test_Calc
+        call Small_test_Writer
 
-catch
-    warnlog "something wrong with testing TextSquare"
-endcatch
+    catch
+        warnlog "something wrong with testing TextSquare"
+    endcatch
 
-call clear_all_and_close
-Printlog "tClipboardFromDrawTest finished"
+    call clear_all_and_close
+    Printlog "tClipboardFromDrawTest finished"
 end sub
 
 

@@ -1325,23 +1325,4 @@ public class TestComponent {
 
         return xSingleServiceFactory;
     }
-
-    /**
-     * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey       the registryKey
-     * @see                  com.sun.star.comp.loader.JavaLoader
-     */
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        boolean result = true;
-
-        result = result & FactoryHelper.writeRegistryServiceInfo(_TestObject.class.getName(), _TestObject.__serviceName, regKey);
-        result = result & FactoryHelper.writeRegistryServiceInfo(_PerformancTestObject.class.getName(),
-                                                                 _PerformancTestObject.__serviceName, regKey);
-
-        return result;
-    }
-
 }

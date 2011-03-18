@@ -30,35 +30,31 @@
 '* short description : Tests the header-footer-function in Impress
 '*
 '*******************************************************************
-'*
-' #1 tiHeaderFooterSlide
-' #1 tiHeaderFooterNotesHandout
-'*
-'\*******************************************************************
-
-dim numbervalue1 as integer
-dim value2 as String
-dim value3 as String
-
-'------------------------------------------------------------------------------
 
 testcase tiHeaderFooterSlide
-    '/// This part checks the first Tabpage of the Header and Footer Dialog
-    
-    Call hNewDocument		'/// Open New document
+
+    dim numbervalue1 as integer
+    dim value2 as String
+    dim value3 as String
+
+    printlog "This part checks the first Tabpage of the Header and Footer Dialog"
+
+    printlog "Open New document"
+    Call hNewDocument		
     kontext "drawimpress"
     try
-       ViewHeaderAndFooter          '/// View - Header And Footer
+        printlog "View - Header And Footer"
+        ViewHeaderAndFooter
        sleep(1)
     catch
-       warnlog " Could'nt open ViewHeaderAndFooter!" '/// Warnlog for not opening dialog
+       warnlog " Could'nt open ViewHeaderAndFooter!" 
     endcatch
     
     printlog " Testing TabHeaderFooterSlide."
     kontext "TabHeaderFooterSlide"
 
-    '/// Check Date And Time on first tab
-    if DateTime.Exists = TRUE AND DateTimeFixed.isVisible = TRUE then '/// Testing date and time checkbox
+    printlog "Testing date and time checkbox"
+    if DateTime.Exists = TRUE AND DateTimeFixed.isVisible = TRUE then 
         DateTime.UnCheck
         sleep(1)
         DateTime.Check
@@ -74,7 +70,7 @@ testcase tiHeaderFooterSlide
         warnlog "DateTime does not exist or is not visible."
     endif
     
-    '/// Checking if DateTime checkbox setting is remembered...
+    printlog "Checking if DateTime checkbox setting is remembered..."
     DateTime.Uncheck
     printlog " Date Time is unchecked now."
     Apply.Click
@@ -87,7 +83,7 @@ testcase tiHeaderFooterSlide
     endif
     DateTime.Check
 
-   '/// Check DateTimeFixed can be checked/unchecked
+   printlog "Check DateTimeFixed can be checked/unchecked"
     if DateTimeFixed.Exists = TRUE AND DateTimeFixed.isVisible = TRUE then
         DateTimeFixed.Check
         sleep(1)
@@ -102,7 +98,7 @@ testcase tiHeaderFooterSlide
         warnlog " DateTimeFixed doesnt exist or is not visible!"
     endif
 
-    '/// Can text be inserted in the "fixed"-field?
+    printlog "Can text be inserted in the fixed-field?"
     if DateTimeFixedText.exists = TRUE AND DateTimeFixedText.isVisible = TRUE then
         DateTimeFixedText.settext "lalala"
         
@@ -116,7 +112,7 @@ testcase tiHeaderFooterSlide
         warnlog " DateTimeFixedText doesnt exist or is not visible!"
     endif
       
-    '/// Checking if DateTimeFixed and Text setting is remembered...
+    printlog "Checking if DateTimeFixed and Text setting is remembered..."
     DateTime.Check
     DateTimeFixed.Check
     DateTimeFixedText.settext "lalala"
@@ -130,7 +126,7 @@ testcase tiHeaderFooterSlide
     endif
     DateTimeFixedText.settext ""
 
-    '/// Can I change to "Variable" and check it?
+    printlog "Can I change to Variable and check it?"
     if DateTimeVariable.exists = TRUE AND DateTimeVariable.isVisible = TRUE then
         DateTimeVariable.Check
         sleep(1)
@@ -145,7 +141,7 @@ testcase tiHeaderFooterSlide
         warnlog " DateTimeVariable doesnt exist or is not visible!"
     endif
     
-    '/// Is the Variable setting saved?
+    printlog "Is the Variable setting saved?"
     Apply.Click
     ViewHeaderAndFooter
     if DateTimeVariable.isChecked then
@@ -154,24 +150,30 @@ testcase tiHeaderFooterSlide
         warnlog " Variable setting does not get saved!"
     endif
 
-    '/// Checking DateTimeFormat box
+    printlog "Checking DateTimeFormat box"
     if DateTimeFormat.exists = TRUE AND DateTimeFormat.isVisible = TRUE then
-        numbervalue1 = DateTimeFormat.getitemcount     '/// Get the number of choices
+        printlog "Get the number of choices"
+        numbervalue1 = DateTimeFormat.getitemcount     
         printlog " DateTimeFormat equals: " + numbervalue1
-        value2 = DateTimeFormat.getseltext             '/// Get the text for the choosen entry
+        printlog "Get the text for the choosen entry"
+        value2 = DateTimeFormat.getseltext             
         printlog " Tries to get ", numbervalue1 & "."
-        DateTimeFormat.select ( numbervalue1 - 1 )     '/// Select the last entry
-        value3 = DateTimeFormat.getseltext             '/// Get the text for the last entry
+        printlog "Select the last entry"
+        DateTimeFormat.select ( numbervalue1 - 1 )
+        printlog "Get the text for the last entry"
+        value3 = DateTimeFormat.getseltext             
         printlog " DateTimeFormat is: " + value3
         
-        if value2 = value3 then 
-            errorlog " More options for Date should exist!"   '/// Check if the first and last are the same.
-            DateTimeFormat.select value2                   '/// Choose the original state
+        if value2 = value3 then
+            printlog "Check if the first and last are the same."
+            errorlog " More options for Date should exist!"
+            printlog "Choose the original state"
+            DateTimeFormat.select value2                   
         else
             printlog " DateTimeFormat box works."
         endif
         
-        '/// Checking if settings of DateTimeFormat box get saved
+        printlog "Checking if settings of DateTimeFormat box get saved"
         Apply. Click
         ViewHeaderAndFooter
         if DateTimeFormat.GetSelText = value3 then
@@ -184,23 +186,30 @@ testcase tiHeaderFooterSlide
         warnlog " DateTimeFormat doesnt exist or is not visible."
     endif
 
-    '/// Checking DateTimeLanguage box
+    printlog "Checking DateTimeLanguage box"
     if DateTimeLanguage.exists = TRUE AND DateTimeLanguage.isVisible = TRUE then
-        numbervalue1 = DateTimeLanguage.GetItemCount   '/// Get the number of choices 
-        DateTimeFormat.select 1                        '/// Choose the first entry 
-        value2 = DateTimeLanguage.GetSelText           '/// Get the text for the choosen entry 
-        DateTimeLanguage.select ( numbervalue1 - 1 )   '/// Select the last entry 
-        value3 = DateTimeLanguage.GetSelText           '/// Get the text for the last entry 
+        printlog "Get the number of choices "
+        numbervalue1 = DateTimeLanguage.GetItemCount
+        printlog "Choose the first entry "
+        DateTimeFormat.select 1
+        printlog "Get the text for the choosen entry "
+        value2 = DateTimeLanguage.GetSelText
+        printlog "Select the last entry "
+        DateTimeLanguage.select ( numbervalue1 - 1 )
+        printlog "Get the text for the last entry "
+        value3 = DateTimeLanguage.GetSelText           
         
         if value2 = value3 then 
-            errorlog " More options for Date should exist!"   '/// Check  if the first and last aare the same. 
-            DateTimeLanguage.select value2                 '/// Choose the original state 
+            errorlog " More options for Date should exist!"
+            printlog "Check  if the first and last are the same. "
+            printlog "Choose the original state "
+            DateTimeLanguage.select value2                 
             value3 = DateTimeLanguage.GetSelText
             else
                 printlog " DateTimeLanguage box works."
             endif
             
-        '/// Checking if language settings get saved
+        printlog "Checking if language settings get saved"
         Apply.Click
         ViewHeaderAndFooter
         if DateTimeLanguage.GetSelText = value3 then
@@ -213,7 +222,7 @@ testcase tiHeaderFooterSlide
         warnlog " DateTime doesnt exist or is not visible!"
     endif
 
-    '/// Checking Footer checkbox 
+    printlog "Checking Footer checkbox "
     if Footer.exists = TRUE AND Footer.isVisible = TRUE then
         Footer.Check
         sleep(1)
@@ -228,7 +237,7 @@ testcase tiHeaderFooterSlide
         warnlog " Footer checkbox doesnt exist or is not visible!"
     endif
     
-    '/// Checking if Footer setting gest saved
+    printlog "Checking if Footer setting gest saved"
     Footer.Uncheck
     Apply.Click
     ViewHeaderAndFooter
@@ -239,7 +248,7 @@ testcase tiHeaderFooterSlide
     endif
     Footer.Check
 
-    '/// Checking if text can be inserted in FooterFixedText 
+    printlog "Checking if text can be inserted in FooterFixedText "
     if FooterFixedText.exists = TRUE AND FooterFixedText.isVisible = TRUE then
         FooterFixedText.SetText "lalala"
         
@@ -253,7 +262,7 @@ testcase tiHeaderFooterSlide
         warnlog " Footer doesnt exist or is not visible!"
     endif
     
-    '/// Checking if Footer text gets saved.
+    printlog "Checking if Footer text gets saved."
     Apply.Click
     ViewHeaderAndFooter
     
@@ -265,7 +274,7 @@ testcase tiHeaderFooterSlide
     endif
     FooterFixedText.SetText ""
 
-   '/// Checking Slidenumber checkbox
+   printlog "Checking Slidenumber checkbox"
     if Donotshowonfirstslide.exists = TRUE AND Donotshowonfirstslide.isVisible = TRUE then
         Slidenumber.Check
         sleep(1)
@@ -279,7 +288,7 @@ testcase tiHeaderFooterSlide
         warnlog " Do not show on first slide doesnt exist or is not visible!"
     endif
     
-    '/// Checking if Slidenumber gets saved.
+    printlog "Checking if Slidenumber gets saved."
     Apply.Click
     ViewHeaderAndFooter
     
@@ -289,7 +298,7 @@ testcase tiHeaderFooterSlide
         warnlog " Slidenumber setting is not remembered!"
     endif
 
-    '/// Checking "Do not show on first slide" checkbox
+    printlog "Checking Do not show on first slide checkbox"
     if Donotshowonfirstslide.exists = TRUE AND Donotshowonfirstslide.isVisible = TRUE then
         Donotshowonfirstslide.UnCheck
         sleep(1)
@@ -303,7 +312,7 @@ testcase tiHeaderFooterSlide
         warnlog " Do not show on first slide doesnt exist or is not visible!"
     endif
 
-    '/// Checking if Do not show on first slide is saved.
+    printlog "Checking if Do not show on first slide is saved."
     Apply.Click
     ViewHeaderAndFooter
     
@@ -313,34 +322,41 @@ testcase tiHeaderFooterSlide
         warnlog " Do not show on first slide setting is not saved!"
     endif
         
-    '/// Closing dialog with cancel
+    printlog "Closing dialog with cancel"
     sleep 1
     TabHeaderFooterSlide.Cancel
     sleep 1
     kontext "drawimpress"
     sleep 1
 
-    '/// Close document 
+    printlog "Close document"
     Call hCloseDocument
 
-endcase
+endcase 'tiHeaderFooterSlide
 
 '----------------------------------------------------------------------------
 
 testcase tiHeaderFooterNotesHandout
-        '/// This part checks the second Tabpage of the Header and Footer Dialog for notes and handout
 
-    Call hNewDocument		'/// Open New document 
+    dim numbervalue1 as integer
+    dim value2 as String
+    dim value3 as String
+
+    printlog "This part checks the second Tabpage of the Header and Footer Dialog for notes and handout"
+
+    printlog "Open New document "
+    Call hNewDocument		
     kontext "drawimpress"
     try
-        ViewHeaderAndFooter          '/// View - Header And Footer 
+        printlog "View - Header And Footer "
+        ViewHeaderAndFooter          
         sleep(1)
     catch
-        warnlog " Could'nt open ViewHeaderAndFooter!" '/// Warnlog for not opening dialog
+        printlog "Warnlog for not opening dialog"
+        warnlog " Could'nt open ViewHeaderAndFooter!" 
     endcatch 'goto endcase
     kontext " TabHeaderFooterSlide"
     
-    '/// Change tabpage to HeaderFooterNotesHandout 
     printlog " Testing TabHeaderFooterNotesHandout."
     sleep 2
     kontext
@@ -348,7 +364,7 @@ testcase tiHeaderFooterNotesHandout
     sleep 2
     kontext "TabHeaderFooterNotesHandout"
     
-    '/// Checking Header checkbox 
+    printlog "Checking Header checkbox "
     if Header.exists = TRUE AND Header.isVisible = TRUE then
         Header.UnCheck
         sleep(1)
@@ -365,7 +381,7 @@ testcase tiHeaderFooterNotesHandout
         warnlog " Header doesnt exist or is not visible!"
     endif
     
-    '/// Checking if Header setting is saved.
+    printlog "Checking if Header setting is saved."
     Header.Uncheck
     ApplyToAll.Click
     ViewHeaderAndFooter
@@ -380,7 +396,7 @@ testcase tiHeaderFooterNotesHandout
         Header.Check
     endif
     
-    '/// Checking if header text can be inserted
+    printlog "Checking if header text can be inserted"
     if HeaderFixedText.exists = TRUE AND HeaderFixedText.isVisible = TRUE then
         HeaderFixedText.settext "lalala"
         sleep(1)
@@ -394,7 +410,7 @@ testcase tiHeaderFooterNotesHandout
         warnlog " HeaderFixedText doesnt exist or is not visible!"
     endif
     
-    '/// Checking if text is saved.
+    printlog "Checking if text is saved."
     ApplyToAll.Click
     ViewHeaderAndFooter
     kontext
@@ -407,7 +423,7 @@ testcase tiHeaderFooterNotesHandout
     endif
     HeaderFixedText.SetText ""
 
-    '/// Checking Date And Time checkbox
+    printlog "Checking Date And Time checkbox"
     if DateTime.exists = TRUE AND DateTime.isVisible = TRUE then
         DateTime.UnCheck
         sleep(1)
@@ -424,7 +440,7 @@ testcase tiHeaderFooterNotesHandout
         warnlog " DateTime doesnt exist or is not visible!"
     endif
     
-    '/// Checking if Date and Time setting is saved.
+    printlog "Checking if Date and Time setting is saved."
     DateTime.Uncheck
     ApplyToAll.Click
     ViewHeaderAndFooter
@@ -439,7 +455,7 @@ testcase tiHeaderFooterNotesHandout
     endif
     DateTime.Check
 
-    '/// Check DateTimeFixed can be checked/unchecked 
+    printlog "Check DateTimeFixed can be checked/unchecked "
     if DateTimeFixed.exists = TRUE AND DateTimeFixed.isVisible = TRUE then
     
         if DateTimeFixed.isChecked then 
@@ -464,7 +480,7 @@ testcase tiHeaderFooterNotesHandout
         warnlog " DateTimeFixed doesnt exist or is not visible!"
     endif
 
-    '/// Can text be inserted in the "fixed"-field? 
+    printlog "Can text be inserted in the fixed-field? "
     if DateTimeFixedText.exists = TRUE AND DateTimeFixedText.isVisible = TRUE then
         DateTimeFixedText.settext "lalala"
       
@@ -474,7 +490,7 @@ testcase tiHeaderFooterNotesHandout
             printlog " DateTimeFixedText works."
         endif
         
-        '/// Checking if DateTimeFixedText gets saved.
+        printlog "Checking if DateTimeFixedText gets saved."
         ApplyToAll.Click
         ViewHeaderAndFooter
         kontext
@@ -491,7 +507,7 @@ testcase tiHeaderFooterNotesHandout
         warnlog "DateTimeFixedText doesnt exist or is not visible"
     endif
 
-    '/// Can it be changed to "Variable" and checked? 
+    printlog "Can it be changed to Variable and checked? "
     if DateTimeVariable.exists = TRUE AND DateTimeVariable.isVisible = TRUE then
         DateTimeVariable.Check
         sleep(1)
@@ -502,7 +518,7 @@ testcase tiHeaderFooterNotesHandout
             warnlog " Something wrong with the DateTimeVariable-checkbox or DateTimeFormat is checked!"
         endif
       
-        '/// Checking if DateTimeVariable setting gets saved.
+        printlog "Checking if DateTimeVariable setting gets saved."
         ApplyToAll.Click
         ViewHeaderAndFooter
         kontext
@@ -519,25 +535,31 @@ testcase tiHeaderFooterNotesHandout
         warnlog " DateTimeVariable doesnt exist or is not visible"
     endif
    
-    '/// Checking format dropdown box
-    numbervalue1 = DateTimeFormat.getitemcount           '/// Get the number of choices 
+    printlog "Checking format dropdown box"
+    printlog "Get the number of choices "
+    numbervalue1 = DateTimeFormat.getitemcount           
     printlog " DateTimeFormat equals: " + numbervalue1
-    value2 = DateTimeFormat.getseltext             '/// Get the text for the choosen entry 
+    printlog "Get the text for the choosen entry "
+    value2 = DateTimeFormat.getseltext
     printlog " Tries to get ", numbervalue1
 
     if DateTimeFormat.exists = TRUE AND DateTimeFormat.isVisible = TRUE then
-        DateTimeFormat.select ( numbervalue1 - 1 )     '/// Select the last entry 
-        value3 = DateTimeFormat.getseltext             '/// Get the text for the last entry 
+        printlog "Select the last entry "
+        DateTimeFormat.select ( numbervalue1 - 1 )
+        printlog "Get the text for the last entry "
+        value3 = DateTimeFormat.getseltext             
         printlog " DateTimeFormat is: " + value3
         
-        if value2 = value3 then 
-            errorlog " More options for Date should exist."   '/// Check if the first and last are the same. 
-            DateTimeFormat.select value2                   '/// Choose the original state 
+        if value2 = value3 then
+             printlog "Check if the first and last are the same. "
+            errorlog " More options for Date should exist."
+            printlog "Choose the original state "
+            DateTimeFormat.select value2                   
         else
             printlog " DateTimeFormat works."
         endif
         
-        '/// Checking if DateTimeFormat setting gets saved.
+        printlog "Checking if DateTimeFormat setting gets saved."
         ApplyToAll.Click
         ViewHeaderAndFooter
         kontext
@@ -555,19 +577,25 @@ testcase tiHeaderFooterNotesHandout
     endif
    
     if DateTimeLanguage.exists = TRUE AND DateTimeLanguage.isVisible = TRUE then
-        numbervalue1 = DateTimeLanguage.getitemcount   '/// Get the number of choices 
-        DateTimeFormat.select 1                        '/// Choose the first entry 
-        value2 = DateTimeLanguage.getseltext           '/// Get the text for the choosen entry 
-        DateTimeLanguage.select ( numbervalue1 - 1 )   '/// Select the last entry 
-        value3 = DateTimeLanguage.getseltext           '/// Get the text for the last entry 
+        printlog "Get the number of choices "
+        numbervalue1 = DateTimeLanguage.getitemcount
+        printlog "Choose the first entry "
+        DateTimeFormat.select 1
+        printlog "Get the text for the choosen entry "
+        value2 = DateTimeLanguage.getseltext
+        printlog "Select the last entry "
+        DateTimeLanguage.select ( numbervalue1 - 1 )
+        printlog "Get the text for the last entry"
+        value3 = DateTimeLanguage.getseltext           
       
-        if value2 = value3 then 
-            errorlog " More options for Date should exist!"   '/// Check if the first and last are the same. 
+        if value2 = value3 then
+            printlog "Check if the first and last are the same. "
+            errorlog " More options for Date should exist!"   
         else
             printlog " Footer works."
         endif
         
-        '/// Checking if DateTimeLanguage setting gets saved.
+        printlog "Checking if DateTimeLanguage setting gets saved."
         ApplyToAll.Click
         ViewHeaderAndFooter
         kontext
@@ -583,7 +611,7 @@ testcase tiHeaderFooterNotesHandout
         warnlog " DateTimeLanguage does not exist!"
     endif
 
-        '/// Checking Footer checkbox. 
+        printlog "Checking Footer checkbox. "
         if Footer.exists = TRUE AND Footer.isVisible = TRUE then
             Footer.UnCheck
             sleep(1)
@@ -597,7 +625,7 @@ testcase tiHeaderFooterNotesHandout
             Footer.Check
         endif
         
-        '///Check if Footer setting is saved.
+        printlog "Check if Footer setting is saved."
         Footer.Uncheck
         ApplyToAll.Click
         ViewHeaderAndFooter
@@ -611,10 +639,8 @@ testcase tiHeaderFooterNotesHandout
             printlog " Footer is not checked."
         endif
         Footer.Check
-        
-
    
-    '/// Checking if Footer text can be inserted
+    printlog "Checking if Footer text can be inserted"
     if FooterFixedText.exists = TRUE AND FooterFixedText.isVisible = TRUE then
         FooterFixedText.SetText "lalala"
         sleep(1)
@@ -629,7 +655,7 @@ testcase tiHeaderFooterNotesHandout
         warnlog " FooterFixedText does not exists!"
     endif
     
-    '///Checking if Footer text is saved.
+    printlog "Checking if Footer text is saved."
     ApplyToAll.Click
     ViewHeaderAndFooter
     kontext
@@ -642,7 +668,7 @@ testcase tiHeaderFooterNotesHandout
         printlog " FooterFixedText gets saved."
     endif
     
-    '/// Checking Slidenumber checkbox
+    printlog "Checking Slidenumber checkbox"
     if Slidenumber.exists = TRUE AND Slidenumber.isVisible = TRUE then
         Slidenumber.UnCheck
         sleep(1)
@@ -653,7 +679,7 @@ testcase tiHeaderFooterNotesHandout
             Slidenumber.Check
         endif
         
-        '/// Checking if Slidenumber setting is saved.
+        printlog "Checking if Slidenumber setting is saved."
         ApplyToAll.Click
         ViewHeaderAndFooter
         kontext
@@ -670,16 +696,16 @@ testcase tiHeaderFooterNotesHandout
         warnlog " Slidenumber does'nt exist or is not visible!"
     endif
 
-    '/// Close dialog with cancel
+    printlog "Close dialog with cancel"
     sleep 1
     TabHeaderFooterNotesHandout.Cancel
     sleep 1
     kontext "drawimpress"
     sleep 1
 
-   '/// Close document 
+   printlog "Close document "
     Call hCloseDocument
 
-endcase
+endcase 'tiHeaderFooterNotesHandout
 
 '-------------------------------------------------------------------------------

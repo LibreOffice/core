@@ -12,20 +12,20 @@
 ' ***** Standardbar
 ' **
 ' ** f�r alle
-FL_URL SID_OPENURL
+FL_URL .uno:OpenUrl
 FL_NeuLaden SID_RELOAD
-FL_Bearbeiten SID_EDITDOC
-FL_Speichern SID_SAVEDOC
-FL_Verknuepfen SID_CREATELINK
-FL_Drucken SID_PRINTDOCDIRECT
-FL_Ausschneiden SID_CUT
-FL_Kopieren SID_COPY
-FL_Einsetzen SID_PASTE
-FL_Undo SID_UNDO
-FL_Redo SID_REDO
-FL_Browser SID_BROWSER
-FL_Navigator SID_NAVIGATOR
-FL_Gestalter SID_STYLE_DESIGNER
+FL_Bearbeiten .uno:EditDoc
+FL_Speichern .uno:Save
+FL_Verknuepfen .uno:AddBookmark
+FL_Drucken .uno:PrintDefault
+FL_Ausschneiden .uno:Cut
+FL_Kopieren .uno:Copy
+FL_Einsetzen .uno:Paste
+FL_Undo .uno:Undo
+FL_Redo .uno:Redo
+FL_Browser .uno:Beamer
+FL_Navigator .uno:Navigator
+FL_Gestalter .uno:DesignerDialog
 
 ' *******************************************************
 '
@@ -34,10 +34,10 @@ FL_Gestalter SID_STYLE_DESIGNER
 ' **  f�r alle
 'HL_URLName ofa:ComboBox:RID_SVXDLG_HYPERLINK:CB_NAME
 'HL_URLListe ofa:ComboBox:RID_SVXDLG_HYPERLINK:CB_URL
-HL_Frame HID_OFA_HYPERLINK_TARGET
-HL_Link SID_HYPERLINK_SETLINK
-HL_Bookmark SID_CREATELINK
-HL_Suchen HID_OFA_HYPERLINK_SEARCH
+HL_Frame sym:SVX_HID_OFA_HYPERLINK_TARGET
+HL_Link .uno:SetHyperlink
+HL_Bookmark .uno:AddBookmark
+HL_Suchen sym:SVX_HID_OFA_HYPERLINK_SEARCH
 
 ' *******************************************************
 '
@@ -45,161 +45,161 @@ HL_Suchen HID_OFA_HYPERLINK_SEARCH
 ' **
 
 ' ** Datenbank-Beamer
-OL_DB_Beamer_StandardFilter SID_FM_FILTERCRIT
-OL_DB_Beamer_DatenInText  SID_SBA_BRW_INSERT
+OL_DB_Beamer_StandardFilter .uno:FilterCrit
+OL_DB_Beamer_DatenInText  .uno:SbaBrwInsert
 
 ' ** Form Toolbar
-FM_FormFilter_Start SID_FM_FILTER_START
-FM_FF_Navigator SID_FM_FILTER_NAVIGATOR
-FM_FF_Execute SID_FM_FILTER_EXECUTE
-FM_FF_Exit SID_FM_FILTER_EXIT
-FM_Remove_Filter SID_FM_REMOVE_FILTER_SORT
+FM_FormFilter_Start .uno:FormFilter
+FM_FF_Navigator .uno:FormFilterNavigator
+FM_FF_Execute .uno:FormFilterExecute
+FM_FF_Exit .uno:FormFilterExit
+FM_Remove_Filter .uno:RemoveFilterSort
 
-FM_No_Record SID_FM_RECORD_ABSOLUTE
-FM_First_Record SID_FM_RECORD_FIRST
-FM_Previous_Record SID_FM_RECORD_PREV
-FM_Next_Record SID_FM_RECORD_NEXT
-FM_Last_Record SID_FM_RECORD_LAST
-FM_Save_Record SID_FM_RECORD_SAVE
-'--10630: BUTTON: Allows you to undo a data entry.   SID_FM_RECORD_UNDO
-FM_New_Record SID_FM_RECORD_NEW
-FM_Delete_Record SID_FM_RECORD_DELETE
-'OB_DB_Beamer:Refresh   SID_FM_REFRESH
-FM_Search SID_FM_SEARCH
-FM_Sort_Asc SID_FM_SORTUP
-FM_Sort_Des SID_FM_SORTDOWN
-FM_AutoFilter SID_FM_AUTOFILTER
-'--10729: BUTTON: Prompts the database server to filter the visible data by specified criteria.   SID_FM_FILTER_START
-FM_Sort_Order SID_FM_ORDERCRIT
-FM_View_As_Grid SID_FM_VIEW_AS_GRID
-FM_Apply_Filter SID_FM_FORM_FILTERED
+FM_No_Record .uno:AbsoluteRecord
+FM_First_Record .uno:FirstRecord
+FM_Previous_Record .uno:PrevRecord
+FM_Next_Record .uno:NextRecord
+FM_Last_Record .uno:LastRecord
+FM_Save_Record .uno:RecSave
+'--10630: BUTTON: Allows you to undo a data entry.   .uno:RecUndo
+FM_New_Record .uno:NewRecord
+FM_Delete_Record .uno:DeleteRecord
+'OB_DB_Beamer:Refresh   .uno:Refresh
+FM_Search .uno:RecSearch
+FM_Sort_Asc .uno:Sortup
+FM_Sort_Des .uno:SortDown
+FM_AutoFilter .uno:AutoFilter
+'--10729: BUTTON: Prompts the database server to filter the visible data by specified criteria.   .uno:FormFilter
+FM_Sort_Order .uno:OrderCrit
+FM_View_As_Grid .uno:ViewFormAsGrid
+FM_Apply_Filter .uno:FormFiltered
 
 ' **  Writer
 ' - normal
-OL_Writer_Schriftart SID_ATTR_CHAR_FONT
-OL_Writer_Schriftgroesse SID_ATTR_CHAR_FONTHEIGHT
-OL_Writer_Fett SID_ATTR_CHAR_WEIGHT
-OL_Writer_Kursiv SID_ATTR_CHAR_POSTURE
-OL_Writer_Unterstrichen SID_ATTR_CHAR_UNDERLINE
-OL_Writer_Linksbuendig SID_ATTR_PARA_ADJUST_LEFT
-OL_Writer_Zentriert SID_ATTR_PARA_ADJUST_CENTER
-OL_Writer_Rechtsbuendig SID_ATTR_PARA_ADJUST_RIGHT
-OL_Writer_Blocksatz SID_ATTR_PARA_ADJUST_BLOCK
-OL_Writer_Numerierung FN_NUM_NUMBERING_ON
-OL_Writer_Aufzaehlung FN_NUM_BULLET_ON
-OL_Writer_EinzugVermindern SID_DEC_INDENT
-OL_Writer_EinzugErhoehen SID_INC_INDENT
-OL_Writer_Textfarbe SID_ATTR_CHAR_COLOR2
-OL_Writer_Zeichenhintergrund SID_ATTR_CHAR_COLOR_BACKGROUND
-OL_Writer_Absatzhintergrund SID_BACKGROUND_COLOR
+OL_Writer_Schriftart .uno:CharFontName
+OL_Writer_Schriftgroesse .uno:FontHeight
+OL_Writer_Fett .uno:Bold
+OL_Writer_Kursiv .uno:Italic
+OL_Writer_Unterstrichen .uno:Underline
+OL_Writer_Linksbuendig .uno:LeftPara
+OL_Writer_Zentriert .uno:CenterPara
+OL_Writer_Rechtsbuendig .uno:RightPara
+OL_Writer_Blocksatz .uno:JustifyPara
+OL_Writer_Numerierung .uno:DefaultNumbering
+OL_Writer_Aufzaehlung .uno:DefaultBullet
+OL_Writer_EinzugVermindern .uno:DecrementIndent
+OL_Writer_EinzugErhoehen .uno:IncrementIndent
+OL_Writer_Textfarbe .uno:FontColor
+OL_Writer_Zeichenhintergrund .uno:BackColor
+OL_Writer_Absatzhintergrund .uno:BackgroundColor
 
 ' ** Writer
 ' - Tabelle
-OL_Tabelle_SW_FormelEingeben FN_EDIT_FORMULA
-OL_Tabelle_SW_TabellenmodeFix FN_TABLE_MODE_FIX
-OL_Tabelle_SW_TabellenmodeProportional FN_TABLE_MODE_FIX_PROP
-OL_Tabelle_SW_TabellenmodeVariabel FN_TABLE_MODE_VARIABLE
-OL_Tabelle_SW_ZelleVerbinden FN_TABLE_MERGE_CELLS
-OL_Tabelle_SW_ZelleTeilen FN_TABLE_SPLIT_CELLS
-OL_Tabelle_SW_Optimieren FN_OPTIMIZE_TABLE
-OL_Tabelle_SW_ZeileEinfuegen FN_TABLE_INSERT_ROW_DLG
-OL_Tabelle_SW_SpalteEinfuegen FN_TABLE_INSERT_COL
-OL_Tabelle_SW_ZeileLoeschen FN_TABLE_DELETE_ROW
-OL_Tabelle_SW_SpalteLoeschen FN_TABLE_DELETE_COL
-OL_Tabelle_SW_Umrandung SID_ATTR_BORDER
-OL_Tabelle_SW_LinienStil SID_FRAME_LINESTYLE
-OL_Tabelle_SW_Hintergrundfarbe SID_BACKGROUND_COLOR
-OL_Tabelle_SW_ZeileAuswaehlen FN_TABLE_SELECT_ROW
-OL_Tabelle_SW_SpalteAuswaehlen FN_TABLE_SELECT_COL
-OL_Tabelle_SW_TabelleAuswaehlen FN_TABLE_SELECT_ALL
+OL_Tabelle_SW_FormelEingeben .uno:InsertFormula
+OL_Tabelle_SW_TabellenmodeFix .uno:TableModeFix
+OL_Tabelle_SW_TabellenmodeProportional .uno:TableModeFixProp
+OL_Tabelle_SW_TabellenmodeVariabel .uno:TableModeVariable
+OL_Tabelle_SW_ZelleVerbinden .uno:MergeCells
+OL_Tabelle_SW_ZelleTeilen .uno:SplitCell
+OL_Tabelle_SW_Optimieren .uno:OptimizeTable
+OL_Tabelle_SW_ZeileEinfuegen .uno:InsertRowDialog
+OL_Tabelle_SW_SpalteEinfuegen .uno:InsertColumns
+OL_Tabelle_SW_ZeileLoeschen .uno:DeleteRows
+OL_Tabelle_SW_SpalteLoeschen .uno:DeleteColumns
+OL_Tabelle_SW_Umrandung .uno:SetBorderStyle
+OL_Tabelle_SW_LinienStil .uno:LineStyle
+OL_Tabelle_SW_Hintergrundfarbe .uno:BackgroundColor
+OL_Tabelle_SW_ZeileAuswaehlen .uno:EntireRow
+OL_Tabelle_SW_SpalteAuswaehlen .uno:EntireColumn
+OL_Tabelle_SW_TabelleAuswaehlen .uno:SelectTable
 
 ' ** Writer
 ' - Rahmen / Grafik / OLE-Objekte
-OL_Objekt_SW_KeinUmlauf FN_FRAME_NOWRAP
-OL_Objekt_SW_Umlauf FN_FRAME_WRAP
-OL_Objekt_SW_Durchlauf FN_FRAME_WRAPTHRU
-OL_Objekt_SW_Links FN_FRAME_ALIGN_HORZ_LEFT
-OL_Objekt_SW_Zentriert FN_FRAME_ALIGN_HORZ_CENTER
-OL_Objekt_SW_Rechts FN_FRAME_ALIGN_HORZ_RIGHT
-OL_Objekt_SW_Oben FN_FRAME_ALIGN_VERT_TOP
-OL_Objekt_SW_Mitte FN_FRAME_ALIGN_VERT_CENTER
-OL_Objekt_SW_Unten FN_FRAME_ALIGN_VERT_BOTTOM
-OL_Objekt_SW_Umrandung SID_ATTR_BORDER
-OL_Objekt_SW_Linienstil SID_FRAME_LINESTYLE
-OL_Objekt_SW_LinienFarbe SID_FRAME_LINECOLOR
-OL_Objekt_SW_Hintergrundmuster SID_BACKGROUND_PATTERN
-OL_Objekt_SW_Hintergrundfarbe SID_BACKGROUND_COLOR
-OL_Objekt_SW_GanzNachVorn SID_FRAME_TO_TOP
-OL_Objekt_SW_GanzNachHinten SID_FRAME_TO_BOTTOM
-OL_Objekt_SW_Verankerungwechseln FN_TOOL_ANKER
-OL_Objekt_SW_HorizontalSpiegeln FN_FLIP_HORZ_GRAFIC
-OL_Objekt_SW_VertikalSpiegeln FN_FLIP_VERT_GRAFIC
-OL_Objekt_SW_PositionUndGroesse SID_ATTR_TRANSFORM
-OL_Objekt_SW_InDenVordergrund SID_OBJECT_HEAVEN
-OL_Objekt_SW_InDenHintergrund SID_OBJECT_HELL
-OL_Objekt_SW_EigenschaftenObjekt FN_FORMAT_FRAME_DLG
-OL_Objekt_SW_EigenschaftenControls SID_SHOW_BROWSER
+OL_Objekt_SW_KeinUmlauf .uno:WrapOff
+OL_Objekt_SW_Umlauf .uno:WrapOn
+OL_Objekt_SW_Durchlauf .uno:WrapThrough
+OL_Objekt_SW_Links .uno:AlignLeft
+OL_Objekt_SW_Zentriert .uno:AlignHorizontalCenter
+OL_Objekt_SW_Rechts .uno:AlignRight
+OL_Objekt_SW_Oben .uno:AlignTop
+OL_Objekt_SW_Mitte .uno:AlignVerticalCenter
+OL_Objekt_SW_Unten .uno:AlignBottom
+OL_Objekt_SW_Umrandung .uno:SetBorderStyle
+OL_Objekt_SW_Linienstil .uno:LineStyle
+OL_Objekt_SW_LinienFarbe .uno:FrameLineColor
+OL_Objekt_SW_Hintergrundmuster .uno:BackgroundPatternController
+OL_Objekt_SW_Hintergrundfarbe .uno:BackgroundColor
+OL_Objekt_SW_GanzNachVorn .uno:BringToFront
+OL_Objekt_SW_GanzNachHinten .uno:SendToBack
+OL_Objekt_SW_Verankerungwechseln .uno:ToggleAnchorType
+OL_Objekt_SW_HorizontalSpiegeln .uno:FlipHorizontal
+OL_Objekt_SW_VertikalSpiegeln .uno:FlipVertical
+OL_Objekt_SW_PositionUndGroesse .uno:TransformDialog
+OL_Objekt_SW_InDenVordergrund .uno:SetObjectToForeground
+OL_Objekt_SW_InDenHintergrund .uno:SetObjectToBackground
+OL_Objekt_SW_EigenschaftenObjekt .uno:FrameDialog
+OL_Objekt_SW_EigenschaftenControls .uno:ShowBrowser
 
 ' ** Writer
 ' - Numerierung / Aufzaehlung
-OL_Numerierung_NumerierungAusschalten FN_NUM_BULLET_OFF
-OL_Numerierung_Hochstufen FN_NUM_BULLET_UP
-OL_Numerierung_Hinunterstufen FN_NUM_BULLET_DOWN
-OL_Numerierung_HochstufenMitUnterpunkten FN_NUM_BULLET_OUTLINE_UP
-OL_Numerierung_HinunterstufenMitUnterpunkten FN_NUM_BULLET_OUTLINE_DOWN
-OL_Numerierung_AbsatzOhnenNumerierung FN_NUM_BULLET_NONUM
-OL_Numerierung_Hochschieben FN_NUM_BULLET_MOVEUP
-OL_Numerierung_Hinunterschieben FN_NUM_BULLET_MOVEDOWN
-OL_Numerierung_HochschiebenMitUnterpunkten FN_NUM_BULLET_OUTLINE_MOVEUP
-OL_Numerierung_HinunterschiebenMitUnterpunkten FN_NUM_BULLET_OUTLINE_MOVEDOWN
-OL_Numerierung_NumerierungNeuStarten FN_NUMBER_NEWSTART
-OL_Numerierung_NumerierungAufzaehlung FN_NUMBER_BULLETS
+OL_Numerierung_NumerierungAusschalten .uno:RemoveBullets
+OL_Numerierung_Hochstufen .uno:IncrementLevel
+OL_Numerierung_Hinunterstufen .uno:DecrementLevel
+OL_Numerierung_HochstufenMitUnterpunkten .uno:IncrementSubLevels
+OL_Numerierung_HinunterstufenMitUnterpunkten .uno:DecrementSubLevels
+OL_Numerierung_AbsatzOhnenNumerierung .uno:InsertNeutralParagraph
+OL_Numerierung_Hochschieben .uno:MoveUp
+OL_Numerierung_Hinunterschieben .uno:MoveDown
+OL_Numerierung_HochschiebenMitUnterpunkten .uno:MoveUpSubItems
+OL_Numerierung_HinunterschiebenMitUnterpunkten .uno:MoveDownSubItems
+OL_Numerierung_NumerierungNeuStarten .uno:NumberingStart
+OL_Numerierung_NumerierungAufzaehlung .uno:BulletsAndNumberingDialog
 
 ' ** Calc
 ' - normal
-OL_CALC_Schriftart SID_ATTR_CHAR_FONT
-OL_CALC_Schriftgroesse SID_ATTR_CHAR_FONTHEIGHT
-OL_CALC_Fett SID_ATTR_CHAR_WEIGHT
-OL_CALC_Kursiv SID_ATTR_CHAR_POSTURE
-OL_CALC_Unterstrichen SID_ATTR_CHAR_UNDERLINE
-OL_CALC_Schriftfarbe SID_ATTR_CHAR_COLOR
-OL_CALC_Linksbuendig SID_ATTR_PARA_ADJUST_LEFT
-OL_CALC_Zentriert SID_ATTR_PARA_ADJUST_CENTER
-OL_CALC_Rechtsbuendig SID_ATTR_PARA_ADJUST_RIGHT
-OL_CALC_Waehrungsformat SID_NUMBER_CURRENCY
-OL_CALC_Prozentformat SID_NUMBER_PERCENT
-OL_CALC_StandardWaehrungformat SID_NUMBER_STANDARD
-OL_CALC_DezimalstellenHinzufuegen SID_NUMBER_INCDEC
-OL_CALC_DezimalstellenLoeschen SID_NUMBER_DECDEC
-OL_CALC_EinzugVermindern SID_DEC_INDENT
-OL_CALC_EinzugErhoehen SID_INC_INDENT
-OL_CALC_Umrandung SID_ATTR_BORDER
-OL_CALC_Hintergrundfarbe SID_BACKGROUND_COLOR
-OL_CALC_VertikalOben SID_ALIGNTOP
-OL_CALC_VertikalMitte SID_ALIGNCENTERVER
-OL_CALC_VertikalUnten SID_ALIGNBOTTOM
+OL_CALC_Schriftart .uno:CharFontName
+OL_CALC_Schriftgroesse .uno:FontHeight
+OL_CALC_Fett .uno:Bold
+OL_CALC_Kursiv .uno:Italic
+OL_CALC_Unterstrichen .uno:Underline
+OL_CALC_Schriftfarbe .uno:Color
+OL_CALC_Linksbuendig .uno:LeftPara
+OL_CALC_Zentriert .uno:CenterPara
+OL_CALC_Rechtsbuendig .uno:RightPara
+OL_CALC_Waehrungsformat .uno:NumberFormatCurrency
+OL_CALC_Prozentformat .uno:NumberFormatPercent
+OL_CALC_StandardWaehrungformat .uno:NumberFormatStandard
+OL_CALC_DezimalstellenHinzufuegen .uno:NumberFormatIncDecimals
+OL_CALC_DezimalstellenLoeschen .uno:NumberFormatDecDecimals
+OL_CALC_EinzugVermindern .uno:DecrementIndent
+OL_CALC_EinzugErhoehen .uno:IncrementIndent
+OL_CALC_Umrandung .uno:SetBorderStyle
+OL_CALC_Hintergrundfarbe .uno:BackgroundColor
+OL_CALC_VertikalOben .uno:AlignTop
+OL_CALC_VertikalMitte .uno:AlignVCenter
+OL_CALC_VertikalUnten .uno:AlignBottom
 
 ' ** Draw / Impress
 ' - normal
 OL_DRAW_Linie .uno:FormatLine
-OL_DRAW_Linienendenstil SID_ATTR_LINEEND_STYLE
-OL_DRAW_Linienstil SID_ATTR_LINE_STYLE
-OL_DRAW_Linienbreite SID_ATTR_LINE_WIDTH
-OL_DRAW_Linienfarbe SID_ATTR_LINE_COLOR
+OL_DRAW_Linienendenstil .uno:LineEndStyle
+OL_DRAW_Linienstil .uno:XLineStyle
+OL_DRAW_Linienbreite .uno:LineWidth
+OL_DRAW_Linienfarbe .uno:XLineColor
 OL_DRAW_Flaeche .uno:FormatArea
-OL_DRAW_Flaechenstil SID_ATTR_FILL_STYLE
-OL_DRAW_Flaechenfarbe SID_ATTR_FILL_STYLE
+OL_DRAW_Flaechenstil .uno:FillStyle
+OL_DRAW_Flaechenfarbe .uno:FillStyle
 OL_DRAW_Schatten .uno:FillShadow
-OL_DRAW_Drehen SID_OBJECT_ROTATE
-OL_DRAW_PunkteBearbeiten SID_BEZIER_EDIT
-OL_DRAW_Ausrichtung SID_OBJECT_ALIGN
-OL_DRAW_GanzNachVorn SID_FRAME_TO_TOP
-OL_DRAW_GanzNachHinten SID_FRAME_TO_BOTTOM
-OL_DRAW_InDenVordergrund SID_OBJECT_HEAVEN
-OL_DRAW_InDenHintergrund SID_OBJECT_HELL
-OL_DRAW_VorDasObjekt SID_BEFORE_OBJ
-OL_DRAW_HinterDasObjekt SID_BEHIND_OBJ
-OL_DRAW_VerankerungWechseln FN_TOOL_ANKER
+OL_DRAW_Drehen .uno:ToggleObjectRotateMode
+OL_DRAW_PunkteBearbeiten .uno:ToggleObjectBezierMode
+OL_DRAW_Ausrichtung .uno:ObjectAlign
+OL_DRAW_GanzNachVorn .uno:BringToFront
+OL_DRAW_GanzNachHinten .uno:SendToBack
+OL_DRAW_InDenVordergrund .uno:SetObjectToForeground
+OL_DRAW_InDenHintergrund .uno:SetObjectToBackground
+OL_DRAW_VorDasObjekt .uno:BeforeObject
+OL_DRAW_HinterDasObjekt .uno:BehindObject
+OL_DRAW_VerankerungWechseln .uno:ToggleAnchorType
 
 ' ** Draw / Impress
 ' - Diamode
@@ -207,126 +207,126 @@ OL_DIA_Ueberblendeffekt .uno:DiaEffect
 OL_DIA_Geschwindigkeit .uno:DiaSpeed
 OL_DIA_Diawechsel .uno:DiaAuto
 OL_DIA_Zeit .uno:DiaTime
-OL_DIA_PraesentationMitZeitnahme SID_REHEARSE_TIMINGS
-OL_DIA_DiaAnzeigen SID_HIDE_SLIDE
-OL_DIA_DiasProReihe SID_PAGES_PER_ROW
+OL_DIA_PraesentationMitZeitnahme .uno:RehearseTimings
+OL_DIA_DiaAnzeigen .uno:HideSlide
+OL_DIA_DiasProReihe .uno:PagesPerRow
 
 ' ** Draw / Impress
 ' - Bezierleiste
-OL_BEZIER_Verschieben SID_BEZIER_MOVE
-OL_BEZIER_Einfuegen SID_BEZIER_INSERT
-OL_BEZIER_Loeschen SID_BEZIER_DELETE
-OL_BEZIER_Auftrennen SID_BEZIER_CUTLINE
-OL_BEZIER_InKurve SID_BEZIER_CONVERT
-OL_BEZIER_Ecke SID_BEZIER_EDGE
-OL_BEZIER_Glatt SID_BEZIER_SMOOTH
-OL_BEZIER_Symmetrisch SID_BEZIER_SYMMTR
-OL_BEZIER_Schliessen SID_BEZIER_CLOSE
-OL_BEZIER_PunkteReduzieren SID_BEZIER_ELIMINATE_POINTS
+OL_BEZIER_Verschieben .uno:BezierMove
+OL_BEZIER_Einfuegen .uno:BezierInsert
+OL_BEZIER_Loeschen .uno:BezierDelete
+OL_BEZIER_Auftrennen .uno:BezierCutLine
+OL_BEZIER_InKurve .uno:BezierConvert
+OL_BEZIER_Ecke .uno:BezierEdge
+OL_BEZIER_Glatt .uno:BezierSmooth
+OL_BEZIER_Symmetrisch .uno:BezierSymmetric
+OL_BEZIER_Schliessen .uno:BezierClose
+OL_BEZIER_PunkteReduzieren .uno:BezierEliminatePoints
 
 ' ** Draw / Impress
 ' - Klebepunte
-OL_KLEBE_PunkteEinfuegen SID_GLUE_INSERT_POINT
-OL_KLEBE_Links SID_GLUE_ESCDIR_LEFT
-OL_KLEBE_Oben SID_GLUE_ESCDIR_TOP
-OL_KLEBE_Rechts SID_GLUE_ESCDIR_RIGHT
-OL_KLEBE_Unten SID_GLUE_ESCDIR_BOTTOM
-OL_KLEBE_PositionAnObjektAnpassen SID_GLUE_PERCENT
-OL_KLEBE_HorizontalLinks SID_GLUE_HORZALIGN_LEFT
-OL_KLEBE_HorizontalZentriert SID_GLUE_HORZALIGN_CENTER
-OL_KLEBE_HorizontalRechts SID_GLUE_HORZALIGN_RIGHT
-OL_KLEBE_VertikalOben SID_GLUE_VERTALIGN_TOP
-OL_KLEBE_VertikalZentriert SID_GLUE_VERTALIGN_CENTER
-OL_KLEBE_VertikalUnten SID_GLUE_VERTALIGN_BOTTOM
+OL_KLEBE_PunkteEinfuegen .uno:GlueInsertPoint
+OL_KLEBE_Links .uno:GlueEscapeDirectionLeft
+OL_KLEBE_Oben .uno:GlueEscapeDirectionTop
+OL_KLEBE_Rechts .uno:GlueEscapeDirectionRight
+OL_KLEBE_Unten .uno:GlueEscapeDirectionBottom
+OL_KLEBE_PositionAnObjektAnpassen .uno:GluePercent
+OL_KLEBE_HorizontalLinks .uno:GlueHorzAlignLeft
+OL_KLEBE_HorizontalZentriert .uno:GlueHorzAlignCenter
+OL_KLEBE_HorizontalRechts .uno:GlueHorzAlignRight
+OL_KLEBE_VertikalOben .uno:GlueVertAlignTop
+OL_KLEBE_VertikalZentriert .uno:GlueVertAlignCenter
+OL_KLEBE_VertikalUnten .uno:GlueVertAlignBottom
 
 ' ** Frameset
 ' - normal
-OL_FRAME_HTMLQuelltext SID_SOURCEVIEW
+OL_FRAME_HTMLQuelltext .uno:SourceView
 
 ' ** Basicdokument
 ' - normal
-OL_BASIC_Bibliothek SID_BASICIDE_LIBSELECTOR
-OL_BASIC_Uebersetzen SID_BASICCOMPILE
-OL_BASIC_Ausfuehren SID_BASICRUN
-OL_BASIC_Anhalten SID_BASICSTOP
-OL_BASIC_Prozedurschritt SID_BASICSTEPOVER
-OL_BASIC_Einzelschritt SID_BASICSTEPINTO
-OL_BASIC_Haltepunkt SID_BASICIDE_TOGGLEBRKPNT
-OL_BASIC_BeobachterAnzeigen SID_BASICIDE_ADDWATCH
-OL_BASIC_Objektkatalog SID_BASICIDE_OBJCAT
-OL_BASIC_Makros SID_BASICIDE_CHOOSEMACRO
-OL_BASIC_Module SID_BASICIDE_MODULEDLG
-OL_BASIC_KlammerSuchen SID_BASICIDE_MATCHGROUP
-OL_BASIC_Kontrollfelder SID_CHOOSE_CONTROLS
-OL_BASIC_QuelltextEinfuegen SID_BASICLOAD
-OL_BASIC_QuelltextSpeichern SID_BASICSAVEAS
+OL_BASIC_Bibliothek .uno:LibSelector
+OL_BASIC_Uebersetzen .uno:CompileBasic
+OL_BASIC_Ausfuehren .uno:RunBasic
+OL_BASIC_Anhalten .uno:BasicStop
+OL_BASIC_Prozedurschritt .uno:BasicStepOver
+OL_BASIC_Einzelschritt .uno:BasicStepInto
+OL_BASIC_Haltepunkt .uno:ToggleBreakPoint
+OL_BASIC_BeobachterAnzeigen .uno:AddWatch
+OL_BASIC_Objektkatalog .uno:ObjectCatalog
+OL_BASIC_Makros .uno:ChooseMacro
+OL_BASIC_Module .uno:ModuleDialog
+OL_BASIC_KlammerSuchen .uno:MatchGroup
+OL_BASIC_Kontrollfelder .uno:ChooseControls
+OL_BASIC_QuelltextEinfuegen .uno:LoadBasic
+OL_BASIC_QuelltextSpeichern .uno:SaveBasicAs
 
 ' ** Allgemeine Objektleisten
 '
 ' ** Seitenansicht
 ' - normal
-OL_SEITENANSICHT_VorherigeSeite FN_PAGEUP
-OL_SEITENANSICHT_NaechsteSeite FN_PAGEDOWN
-OL_SEITENANSICHT_ErsteSeite FN_START_OF_DOCUMENT
-OL_SEITENANSICHT_LetzteSeite FN_END_OF_DOCUMENT
-OL_SEITENANSICHT_ZweiSeiten FN_SHOW_TWO_PAGES
-OL_SEITENANSICHT_VierSeiten FN_SHOW_MULTIPLE_PAGES
-OL_SEITENANSICHT_Massstab SID_ATTR_ZOOM
-OL_SEITENANSICHT_GanzerBildschirm SID_WIN_FULLSCREEN
-OL_SEITENANSICHT_DruckenSeitenansicht FN_PRINT_PAGEPREVIEW
-OL_SEITENANSICHT_Schliessen SID_CLOSEWIN
-OL_SEITENANSICHT_SeitenAnsichtSchliessen SID_CLOSEWIN
-OL_SEITENANSICHT_Seitenlayout SID_FORMATPAGE
-OL_SEITENANSICHT_MassstabVergroessern SID_PREVIEW_ZOOMIN
-OL_SEITENANSICHT_MassstabVerkleinern SID_PREVIEW_ZOOMOUT
-OL_SEITENANSICHT_NaechsteSeiteCalc SID_PREVIEW_NEXT
-OL_SEITENANSICHT_VorherigeSeiteCalc SID_PREVIEW_PREVIOUS
-OL_SEITENANSICHT_ErsteSeiteCalc SID_PREVIEW_FIRST
-OL_SEITENANSICHT_LetzteSeiteCalc SID_PREVIEW_LAST
+OL_SEITENANSICHT_VorherigeSeite .uno:PageUp
+OL_SEITENANSICHT_NaechsteSeite .uno:PageDown
+OL_SEITENANSICHT_ErsteSeite .uno:GoToStartOfDoc
+OL_SEITENANSICHT_LetzteSeite .uno:GoToEndOfDoc
+OL_SEITENANSICHT_ZweiSeiten .uno:ShowTwoPages
+OL_SEITENANSICHT_VierSeiten .uno:ShowMultiplePages
+OL_SEITENANSICHT_Massstab .uno:Zoom
+OL_SEITENANSICHT_GanzerBildschirm .uno:FullScreen
+OL_SEITENANSICHT_DruckenSeitenansicht .uno:PrintPagePreView
+OL_SEITENANSICHT_Schliessen .uno:CloseWin
+OL_SEITENANSICHT_SeitenAnsichtSchliessen .uno:CloseWin
+OL_SEITENANSICHT_Seitenlayout .uno:PageFormatDialog
+OL_SEITENANSICHT_MassstabVergroessern .uno:ZoomIn
+OL_SEITENANSICHT_MassstabVerkleinern .uno:ZoomOut
+OL_SEITENANSICHT_NaechsteSeiteCalc .uno:NextPage
+OL_SEITENANSICHT_VorherigeSeiteCalc .uno:PreviousPage
+OL_SEITENANSICHT_ErsteSeiteCalc .uno:FirstPage
+OL_SEITENANSICHT_LetzteSeiteCalc .uno:LastPage
 
 ' ** Zeichenobjekt
 ' - Text
-OL_ZO_Text_Schriftart SID_ATTR_CHAR_FONT
-OL_ZO_Text_Schriftgroesse SID_ATTR_CHAR_FONTHEIGHT
-OL_ZO_Text_Fett SID_ATTR_CHAR_WEIGHT
-OL_ZO_Text_Kursiv SID_ATTR_CHAR_POSTURE
-OL_ZO_Text_Unterstrichen SID_ATTR_CHAR_UNDERLINE
-OL_ZO_Text_Linksbuendig SID_ATTR_PARA_ADJUST_LEFT
-OL_ZO_Text_Zentriert SID_ATTR_PARA_ADJUST_CENTER
-OL_ZO_Text_Schriftfarbe SID_ATTR_CHAR_COLOR
-OL_ZO_Text_Einzeilig SID_ATTR_PARA_LINESPACE_10
-OL_ZO_Text_Eineinhalbzeilig SID_ATTR_PARA_LINESPACE_15
-OL_ZO_Text_Zweizeilig SID_ATTR_PARA_LINESPACE_20
-OL_ZO_Text_Hochstellen FN_SET_SUPER_SCRIPT
-OL_ZO_Text_Tiefstellen FN_SET_SUB_SCRIPT
-OL_ZO_Text_Zeichenformat SID_CHAR_DLG
-OL_ZO_Text_Absatzformat SID_PARA_DLG
-OL_ZO_Text_Hintergrundmuster SID_BACKGROUND_PATTERN
-OL_ZO_Text_Hintergrundfarbe SID_BACKGROUND_COLOR
-OL_ZO_Text_Aufzaehlungszeichen SID_OUTLINE_BULLET
+OL_ZO_Text_Schriftart .uno:CharFontName
+OL_ZO_Text_Schriftgroesse .uno:FontHeight
+OL_ZO_Text_Fett .uno:Bold
+OL_ZO_Text_Kursiv .uno:Italic
+OL_ZO_Text_Unterstrichen .uno:Underline
+OL_ZO_Text_Linksbuendig .uno:LeftPara
+OL_ZO_Text_Zentriert .uno:CenterPara
+OL_ZO_Text_Schriftfarbe .uno:Color
+OL_ZO_Text_Einzeilig .uno:SpacePara1
+OL_ZO_Text_Eineinhalbzeilig .uno:SpacePara15
+OL_ZO_Text_Zweizeilig .uno:SpacePara2
+OL_ZO_Text_Hochstellen .uno:SuperScript
+OL_ZO_Text_Tiefstellen .uno:SubScript
+OL_ZO_Text_Zeichenformat .uno:FontDialog
+OL_ZO_Text_Absatzformat .uno:ParagraphDialog
+OL_ZO_Text_Hintergrundmuster .uno:BackgroundPatternController
+OL_ZO_Text_Hintergrundfarbe .uno:BackgroundColor
+OL_ZO_Text_Aufzaehlungszeichen .uno:OutlineBullet
 
 ' ** Zeichenobjekt
 ' - Flaeche
 OL_ZO_FLAECHE_Linie .uno:FormatLine
-OL_ZO_FLAECHE_Linienendenstil SID_ATTR_LINEEND_STYLE
-OL_ZO_FLAECHE_Linienstil SID_ATTR_LINE_STYLE
-OL_ZO_FLAECHE_Linienbreite SID_ATTR_LINE_WIDTH
-OL_ZO_FLAECHE_Linienfarbe SID_ATTR_LINE_COLOR
-OL_ZO_FLAECHE_Flaeche SID_ATTRIBUTES_AREA
-OL_ZO_FLAECHE_Flaechenstil SID_ATTR_FILL_STYLE
-OL_ZO_FLAECHE_Flaechenfarbe SID_ATTR_FILL_STYLE
+OL_ZO_FLAECHE_Linienendenstil .uno:LineEndStyle
+OL_ZO_FLAECHE_Linienstil .uno:XLineStyle
+OL_ZO_FLAECHE_Linienbreite .uno:LineWidth
+OL_ZO_FLAECHE_Linienfarbe .uno:XLineColor
+OL_ZO_FLAECHE_Flaeche .uno:FormatArea
+OL_ZO_FLAECHE_Flaechenstil .uno:FillStyle
+OL_ZO_FLAECHE_Flaechenfarbe .uno:FillStyle
 OL_ZO_FLAECHE_Schatten .uno:FillShadow
-OL_ZO_FLAECHE_Animation SID_ANIMATION_OBJECTS
+OL_ZO_FLAECHE_Animation .uno:AnimationObjects
 OL_ZO_FLAECHE_Effekt .uno:EffectWindow
-OL_ZO_FLAECHE_Interaktion SID_ANIMATION_EFFECTS
-OL_ZO_FLAECHE_Drehen SID_OBJECT_ROTATE
-OL_ZO_FLAECHE_PunkteBearbeiten SID_BEZIER_EDIT
-OL_ZO_FLAECHE_Ausrichtung SID_OBJECT_ALIGN
-OL_ZO_FLAECHE_GanzNachVorn SID_FRAME_TO_TOP
-OL_ZO_FLAECHE_GanzNachHinten SID_FRAME_TO_BOTTOM
-OL_ZO_FLAECHE_InDenVordergrund SID_OBJECT_HEAVEN
-OL_ZO_FLAECHE_InDenHintergrund SID_OBJECT_HELL
-OL_ZO_FLAECHE_VerankerungWechseln FN_TOOL_ANKER
+OL_ZO_FLAECHE_Interaktion .uno:AnimationEffects
+OL_ZO_FLAECHE_Drehen .uno:ToggleObjectRotateMode
+OL_ZO_FLAECHE_PunkteBearbeiten .uno:ToggleObjectBezierMode
+OL_ZO_FLAECHE_Ausrichtung .uno:ObjectAlign
+OL_ZO_FLAECHE_GanzNachVorn .uno:BringToFront
+OL_ZO_FLAECHE_GanzNachHinten .uno:SendToBack
+OL_ZO_FLAECHE_InDenVordergrund .uno:SetObjectToForeground
+OL_ZO_FLAECHE_InDenHintergrund .uno:SetObjectToBackground
+OL_ZO_FLAECHE_VerankerungWechseln .uno:ToggleAnchorType
 
 ' *******************************************************
 '
@@ -334,412 +334,411 @@ OL_ZO_FLAECHE_VerankerungWechseln FN_TOOL_ANKER
 '
 ' ** Writer
 ' - normal
-WL_WRITER_Einfuegen FN_INSERT_CTRL
-WL_WRITER_Feldbefehle FN_INSERT_FIELD_CTRL
- WL_WRITER_Datum FN_INSERT_FLD_DATE
- WL_WRITER_Uhrzeit FN_INSERT_FLD_TIME
- WL_WRITER_Seitennummer FN_INSERT_FLD_PGNUMBER
- WL_WRITER_Seitenanzahl FN_INSERT_FLD_PGCOUNT
- WL_WRITER_Thema FN_INSERT_FLD_TOPIC
- WL_WRITER_Titel FN_INSERT_FLD_TITLE
- WL_WRITER_Autor FN_INSERT_FLD_AUTHOR
- WL_WRITER_Andere FN_INSERT_FIELD
-WL_WRITER_ObjektEinfuegen FN_INSERT_OBJ_CTRL
-WL_WRITER_Zeichnen SID_INSERT_DRAW
-WL_WRITER_Kontrollfelder SID_CHOOSE_CONTROLS
-WL_WRITER_Formular SID_FM_CONFIG
-WL_WRITER_AutoFormat SID_AUTOFORMAT
-WL_WRITER_Autotext FN_GLOSSARY_DLG
-WL_WRITER_AutomatischePruefung SID_AUTOSPELL_CHECK
-WL_WRITER_SuchenUndErsetzen SID_SEARCH_DLG
-WL_WRITER_SteuerzeichenEinAus FN_VIEW_META_CHARS
-WL_WRITER_GrafikenAusschalten FN_VIEW_GRAPHIC
-WL_WRITER_OnlineLayout SID_BROWSER_MODE
-WL_WRITER_SchattencursorEinschalten FN_SHADOWCURSOR
+WL_WRITER_Einfuegen .uno:InsertCtrl
+WL_WRITER_Feldbefehle .uno:InsertFieldCtrl
+ WL_WRITER_Datum .uno:InsertDateField
+ WL_WRITER_Uhrzeit .uno:InsertTimeField
+ WL_WRITER_Seitennummer .uno:InsertPageNumberField
+ WL_WRITER_Seitenanzahl .uno:InsertPageCountField
+ WL_WRITER_Thema .uno:InsertTopicField
+ WL_WRITER_Titel .uno:InsertTitleField
+ WL_WRITER_Autor .uno:InsertAuthorField
+ WL_WRITER_Andere .uno:InsertField
+WL_WRITER_ObjektEinfuegen .uno:InsertObjCtrl
+WL_WRITER_Zeichnen .uno:InsertDraw
+WL_WRITER_Kontrollfelder .uno:ChooseControls
+WL_WRITER_Formular .uno:Config
+WL_WRITER_AutoFormat .uno:AutoFormat
+WL_WRITER_Autotext .uno:EditGlossary
+WL_WRITER_AutomatischePruefung .uno:SpellOnline
+WL_WRITER_SuchenUndErsetzen .uno:SearchDialog
+WL_WRITER_SteuerzeichenEinAus .uno:ControlCodes
+WL_WRITER_GrafikenAusschalten .uno:Graphic
+WL_WRITER_Hyperlink .uno:InsertHyperlink
+WL_WRITER_OnlineLayout .uno:BrowseView
+WL_WRITER_SchattencursorEinschalten .uno:ShadowCursor
 
 ' ** Calc
 ' - normal
-WL_CALC_Einfuegen SID_TBXCTL_INSERT
-WL_CALC_ZellenEinfuegen SID_TBXCTL_INSCELLS
-WL_CALC_ObjektEinfuegen FN_INSERT_OBJ_CTRL
-WL_CALC_Zeichnen SID_INSERT_DRAW
-WL_CALC_Kontrollfelder SID_CHOOSE_CONTROLS
-WL_CALC_Autoformat SID_AUTOFORMAT
-WL_CALC_AutomatischeRechtschreibung SID_AUTOSPELL_CHECK
-WL_CALC_SuchenUndErsetzen SID_SEARCH_DLG
-WL_CALC_AutoFilter SID_AUTO_FILTER
-WL_CALC_SortierenAuf SID_SORT_ASCENDING
-WL_CALC_SortierenAb SID_SORT_DESCENDING
-WL_CALC_Gruppierung SID_OUTLINE_MAKE
-WL_CALC_GruppierungAufheben SID_OUTLINE_REMOVE
+WL_CALC_Einfuegen .uno:InsertCtrl
+WL_CALC_ZellenEinfuegen .uno:InsCellsCtrl
+WL_CALC_ObjektEinfuegen .uno:InsertObjCtrl
+WL_CALC_Zeichnen .uno:InsertDraw
+WL_CALC_Kontrollfelder .uno:ChooseControls
+WL_CALC_Autoformat .uno:AutoFormat
+WL_CALC_AutomatischeRechtschreibung .uno:SpellOnline
+WL_CALC_SuchenUndErsetzen .uno:SearchDialog
+WL_CALC_AutoFilter .uno:DataFilterAutoFilter
+WL_CALC_SortierenAuf .uno:SortAscending
+WL_CALC_SortierenAb .uno:SortDescending
+WL_CALC_Gruppierung .uno:Group
+WL_CALC_GruppierungAufheben .uno:Ungroup
 
 ' ** Draw / Impress
 ' - normal
-WL_DRAW_Auswahl SID_OBJECT_SELECT
-WL_DRAW_Zoom SID_ZOOM_TOOLBOX
-WL_DRAW_Grafikeffekte SID_OBJECT_CHOOSE_MODE
-WL_DRAW_Anordnung SID_POSITION
-WL_DRAW_TextBoxen SID_DRAWTBX_TEXT
-WL_DRAW_Rechteck SID_DRAW_RECT
-WL_DRAW_Ellipsen SID_DRAWTBX_ELLIPSES
-WL_DRAW_Kurven SID_DRAWTBX_LINES
-WL_DRAW_Linien SID_DRAWTBX_ARROWS
-WL_DRAW_3DObjekte SID_DRAWTBX_3D_OBJECTS
-WL_DRAW_Verbinder SID_DRAWTBX_CONNECTORS
-WL_DRAW_Einfuegen SID_DRAWTBX_INSERT
-WL_DRAW_Kontrollfelder SID_CHOOSE_CONTROLS
-WL_DRAW_Praesentation SID_PRESENTATION
+WL_DRAW_Auswahl .uno:SelectObject
+WL_DRAW_Zoom .uno:ZoomToolBox
+WL_DRAW_Grafikeffekte .uno:AdvancedMode
+WL_DRAW_Anordnung .uno:ObjectPosition
+WL_DRAW_TextBoxen .uno:TextToolbox
+WL_DRAW_Rechteck .uno:Rect
+WL_DRAW_Ellipsen .uno:EllipseToolbox
+WL_DRAW_Kurven .uno:LineToolbox
+WL_DRAW_Linien .uno:ArrowsToolbox
+WL_DRAW_3DObjekte .uno:Objects3DToolbox
+WL_DRAW_Verbinder .uno:ConnectorToolbox
+WL_DRAW_Einfuegen .uno:InsertToolbox
+WL_DRAW_Kontrollfelder .uno:ChooseControls
+WL_DRAW_Praesentation .uno:Presentation
 WL_DRAW_Effekt .uno:EffectWindow
-WL_DRAW_Interaktion SID_ANIMATION_OBJECTS
-WL_DRAW_3DEffekt SID_3D_WIN
+WL_DRAW_Interaktion .uno:AnimationObjects
+WL_DRAW_3DEffekt .uno:Window3D
 
 ' ** Draw / Impress
 ' - Gliederungsansicht
-WL_GL_DRAW_Zoom SID_ZOOM_TOOLBOX
-WL_GL_DRAW_Hinunterstufen SID_OUTLINE_RIGHT
-WL_GL_DRAW_Hochstufen SID_OUTLINE_LEFT
-WL_GL_DRAW_Hochschieben SID_OUTLINE_UP
-WL_GL_DRAW_Hinunterschieben SID_OUTLINE_DOWN
-WL_GL_DRAW_NurErsteEbene SID_OUTLINE_COLLAPSE_ALL
-WL_GL_DRAW_AlleEbenen SID_OUTLINE_EXPAND_ALL
-WL_GL_DRAW_UnterpunkteAusblenden SID_OUTLINE_COLLAPSE
-WL_GL_DRAW_UnterpunkteAnzeigen SID_OUTLINE_EXPAND
-WL_GL_DRAW_FormatierungEinAus SID_OUTLINE_FORMAT
-WL_GL_DRAW_SchwarzweisDarstellung SID_COLORVIEW
-WL_GL_DRAW_Praesentation SID_PRESENTATION
+WL_GL_DRAW_Zoom .uno:ZoomToolBox
+WL_GL_DRAW_Hinunterstufen .uno:OutlineRight
+WL_GL_DRAW_Hochstufen .uno:OutlineLeft
+WL_GL_DRAW_Hochschieben .uno:OutlineUp
+WL_GL_DRAW_Hinunterschieben .uno:OutlineDown
+WL_GL_DRAW_NurErsteEbene .uno:OutlineCollapseAll
+WL_GL_DRAW_AlleEbenen .uno:OutlineExpandAll
+WL_GL_DRAW_UnterpunkteAusblenden .uno:OutlineCollapse
+WL_GL_DRAW_UnterpunkteAnzeigen .uno:OutlineExpand
+WL_GL_DRAW_FormatierungEinAus .uno:OutlineFormat
+WL_GL_DRAW_SchwarzweisDarstellung .uno:ColorView
+WL_GL_DRAW_Praesentation .uno:Presentation
 
 ' ** Draw / Impress
 ' - Diamodus
-WL_DIA_Zoom SID_ZOOM_TOOLBOX
-WL_DIA_Praesentation SID_PRESENTATION
+WL_DIA_Zoom .uno:ZoomToolBox
+WL_DIA_Praesentation .uno:Presentation
 
 ' ** HTML-Dokument
 ' - normal
-WL_WEB_Einfuegen FN_INSERT_CTRL
-WL_WEB_Feldbefehle FN_INSERT_FIELD_CTRL
- WL_WEB_Datum FN_INSERT_FLD_DATE
- WL_WEB_Uhrzeit FN_INSERT_FLD_TIME
- WL_WEB_Seitennummer FN_INSERT_FLD_PGNUMBER
- WL_WEB_Seitenanzahl FN_INSERT_FLD_PGCOUNT
- WL_WEB_Thema FN_INSERT_FLD_TOPIC
- WL_WEB_Titel FN_INSERT_FLD_TITLE
+WL_WEB_Einfuegen .uno:InsertCtrl
+WL_WEB_Feldbefehle .uno:InsertFieldCtrl
+ WL_WEB_Datum .uno:InsertDateField
+ WL_WEB_Uhrzeit .uno:InsertTimeField
+ WL_WEB_Seitennummer .uno:InsertPageNumberField
+ WL_WEB_Seitenanzahl .uno:InsertPageCountField
+ WL_WEB_Thema .uno:InsertTopicField
+ WL_WEB_Titel .uno:InsertTitleField
 'WL_Web_Kopfzeile FN_INSERT_HEADER
 'WL_Web_Fusszeile FN_INSERT_FOOTER
-WL_WEB_Lauftext SID_DRAW_TEXT_MARQUEE
-WL_WEB_Kontrollfelder SID_CHOOSE_CONTROLS
-WL_WEB_SuchenUndErsetzen SID_SEARCH_DLG
-WL_WEB_SteuerzeichenEinAus FN_VIEW_META_CHARS
-WL_WEB_GrafikenAusschalten FN_VIEW_GRAPHIC
-WL_WEB_OnlineLayout SID_BROWSER_MODE
-WL_WEB_SchattencursorEinschalten FN_SHADOWCURSOR
-WL_WEB_DruckLayout FN_PRINT_LAYOUT
-WL_WEB_HTMLQuelltextWeb SID_SOURCEVIEW
+WL_WEB_Lauftext .uno:Text_Marquee
+WL_WEB_Kontrollfelder .uno:ChooseControls
+WL_WEB_SuchenUndErsetzen .uno:SearchDialog
+WL_WEB_SteuerzeichenEinAus .uno:ControlCodes
+WL_WEB_GrafikenAusschalten .uno:Graphic
+WL_WEB_Hyperlink .uno:InsertHyperlink
+WL_WEB_OnlineLayout .uno:BrowseView
+WL_WEB_SchattencursorEinschalten .uno:ShadowCursor
+WL_WEB_DruckLayout .uno:PrintLayout
+WL_WEB_HTMLQuelltextWeb .uno:SourceView
 
 
 ' ** Math
 ' - Normal
-WL_MATH_Vergroessern SID_ZOOMIN
-WL_MATH_Verkleinern SID_ZOOMOUT
-WL_MATH_ZoomHundertProzent SID_VIEW100
-WL_MATH_GanzeFormel SID_ADJUST
-WL_MATH_FormelAktualisieren SID_DRAW
-WL_MATH_FormelSymbole SID_SYMBOLS_CATALOGUE
+WL_MATH_Vergroessern .uno:ZoomIn
+WL_MATH_Verkleinern .uno:ZoomOut
+WL_MATH_ZoomHundertProzent .uno:View100
+WL_MATH_GanzeFormel .uno:Adjust
+WL_MATH_FormelAktualisieren .uno:Draw
+WL_MATH_FormelSymbole .uno:SymbolCatalogue
 
 ' *******************************************************
 '
 ' ***** Rechenleisten
 '
 ' ** Calc
-RL_CALC_Bereich HID_INSWIN_POS
-RL_CALC_Funktionsautopilot HID_INSWIN_CALC
-RL_CALC_Summe HID_INSWIN_SUMME
-RL_CALC_Funktion HID_INSWIN_FUNC
-RL_CALC_Eingabefeld HID_INSWIN_INPUT
-RL_CALC_Verwerfen HID_INSWIN_CANCEL
-RL_CALC_Uebernehmen HID_INSWIN_OK
+RL_CALC_Bereich sym:SC_HID_INSWIN_POS
+RL_CALC_Funktionsautopilot sym:SC_HID_INSWIN_CALC
+RL_CALC_Summe sym:SC_HID_INSWIN_SUMME
+RL_CALC_Funktion sym:SC_HID_INSWIN_FUNC
+RL_CALC_Eingabefeld sym:SC_HID_INSWIN_INPUT
+RL_CALC_Verwerfen sym:SC_HID_INSWIN_CANCEL
+RL_CALC_Uebernehmen sym:SC_HID_INSWIN_OK
 
 '
 ' ** Writer
-RL_WRITER_Formel FN_FORMULA_CALC
-RL_WRITER_VerwerfenWriter FN_FORMULA_CANCEL
-RL_WRITER_UebernehmenWriter FN_FORMULA_APPLY
-RL_WRITER_EingabefeldWriter HID_EDIT_FORMULA
-RL_WRITER_SummeWriter HID_MN_CALC_SUM
-RL_WRITER_Runden HID_MN_CALC_ROUND
-RL_WRITER_Prozent HID_MN_CALC_PHD
-RL_WRITER_Wurzel HID_MN_CALC_SQRT
-RL_WRITER_Potenziere HID_MN_CALC_POW
-RL_WRITER_OperatorenListentrenner HID_MN_CALC_LISTSEP
-RL_WRITER_OperatorenGleich HID_MN_CALC_EQ
-RL_WRITER_OperatorenNichtGleich HID_MN_CALC_NEQ
-RL_WRITER_OperatorenKleinerGleich HID_MN_CALC_LEQ
-RL_WRITER_OperatorenGroesserGleich HID_MN_CALC_GEQ
-RL_WRITER_OperatorenKleiner HID_MN_CALC_LES
-RL_WRITER_OperatorenGroesser HID_MN_CALC_GRE
-RL_WRITER_OperatorenOder HID_MN_CALC_OR
-RL_WRITER_OperatorenExklusivesOder HID_MN_CALC_XOR
-RL_WRITER_OperatorenUnd HID_MN_CALC_AND
-RL_WRITER_OperatorenNicht HID_MN_CALC_NOT
-RL_WRITER_Mittelwert HID_MN_CALC_MEAN
-RL_WRITER_Minimalwert HID_MN_CALC_MIN
-RL_WRITER_Maximalwert HID_MN_CALC_MAX
-RL_WRITER_Sinus HID_MN_CALC_SIN
-RL_WRITER_Cosinus HID_MN_CALC_COS
-RL_WRITER_Tangens HID_MN_CALC_TAN
-RL_WRITER_Arcussinus HID_MN_CALC_ASIN
-RL_WRITER_Arcuscosinus HID_MN_CALC_ACOS
-RL_WRITER_Arcustangens HID_MN_CALC_ATAN
+RL_WRITER_Formel sym:SW_HID_TBX_FORMULA_CALC
+RL_WRITER_VerwerfenWriter sym:SW_HID_TBX_FORMULA_CANCEL
+RL_WRITER_UebernehmenWriter sym:SW_HID_TBX_FORMULA_APPLY
+RL_WRITER_EingabefeldWriter sym:SW_HID_EDIT_FORMULA
+RL_WRITER_SummeWriter sym:SW_HID_MN_CALC_SUM
+RL_WRITER_Runden sym:SW_HID_MN_CALC_ROUND
+RL_WRITER_Prozent sym:SW_HID_MN_CALC_PHD
+RL_WRITER_Wurzel sym:SW_HID_MN_CALC_SQRT
+RL_WRITER_Potenziere sym:SW_HID_MN_CALC_POW
+RL_WRITER_OperatorenListentrenner sym:SW_HID_MN_CALC_LISTSEP
+RL_WRITER_OperatorenGleich sym:SW_HID_MN_CALC_EQ
+RL_WRITER_OperatorenNichtGleich sym:SW_HID_MN_CALC_NEQ
+RL_WRITER_OperatorenKleinerGleich sym:SW_HID_MN_CALC_LEQ
+RL_WRITER_OperatorenGroesserGleich sym:SW_HID_MN_CALC_GEQ
+RL_WRITER_OperatorenKleiner sym:SW_HID_MN_CALC_LES
+RL_WRITER_OperatorenGroesser sym:SW_HID_MN_CALC_GRE
+RL_WRITER_OperatorenOder sym:SW_HID_MN_CALC_OR
+RL_WRITER_OperatorenExklusivesOder sym:SW_HID_MN_CALC_XOR
+RL_WRITER_OperatorenUnd sym:SW_HID_MN_CALC_AND
+RL_WRITER_OperatorenNicht sym:SW_HID_MN_CALC_NOT
+RL_WRITER_Mittelwert sym:SW_HID_MN_CALC_MEAN
+RL_WRITER_Minimalwert sym:SW_HID_MN_CALC_MIN
+RL_WRITER_Maximalwert sym:SW_HID_MN_CALC_MAX
+RL_WRITER_Sinus sym:SW_HID_MN_CALC_SIN
+RL_WRITER_Cosinus sym:SW_HID_MN_CALC_COS
+RL_WRITER_Tangens sym:SW_HID_MN_CALC_TAN
+RL_WRITER_Arcussinus sym:SW_HID_MN_CALC_ASIN
+RL_WRITER_Arcuscosinus sym:SW_HID_MN_CALC_ACOS
+RL_WRITER_Arcustangens sym:SW_HID_MN_CALC_ATAN
 
 ' *******************************************************
 '
 ' ***** Toolboxen
 ' **
 ' ** Einfuegen Writer
-WL_TB_SW_EINFUEGEN_Rahmen FN_INSERT_FRAME_INTERACT
-WL_TB_SW_EINFUEGEN_Grafik SID_INSERT_GRAPHIC
-WL_TB_SW_EINFUEGEN_Tabelle FN_INSERT_TABLE
-WL_TB_SW_EINFUEGEN_TextEinfuegen SID_INSERTDOC
-WL_TB_SW_EINFUEGEN_Fussnote FN_INSERT_FOOTNOTE
-WL_TB_SW_EINFUEGEN_Sonderzeichen FN_INSERT_SYMBOL
-WL_TB_SW_EINFUEGEN_SpaltenAnzahl FN_INSERT_FRAME_INTERACT_NOCOL
-WL_TB_SW_EINFUEGEN_MehrspaltigenRahmen FN_INSERT_FRAME
-WL_TB_SW_EINFUEGEN_Verzeichnis FN_INSERT_IDX_ENTRY_DLG
-WL_TB_SW_EINFUEGEN_TextMarke FN_INSERT_BOOKMARK
+WL_TB_SW_EINFUEGEN_Rahmen .uno:InsertFrameInteract
+WL_TB_SW_EINFUEGEN_Grafik .uno:InsertGraphic
+WL_TB_SW_EINFUEGEN_Tabelle .uno:InsertTable
+WL_TB_SW_EINFUEGEN_TextEinfuegen .uno:InsertDoc
+WL_TB_SW_EINFUEGEN_Fussnote .uno:InsertFootnote
+WL_TB_SW_EINFUEGEN_SpaltenAnzahl .uno:InsertFrameInteractNoColumns
+WL_TB_SW_EINFUEGEN_MehrspaltigenRahmen .uno:InsertFrame
+WL_TB_SW_EINFUEGEN_Verzeichnis .uno:InsertIndexesEntry
+WL_TB_SW_EINFUEGEN_TextMarke .uno:InsertBookmark
 
 ' **
 ' ** Einfuegen-Objekt Writer
-WL_TB_SW_Objekt_Diagramm SID_INSERT_DIAGRAM
-WL_TB_SW_Objekt_FormelEinfuegen FN_INSERT_SMA
-WL_TB_SW_Objekt_Rahmenfenster SID_INSERT_FLOATINGFRAME
-WL_TB_SW_Objekt_Objekt FN_INSERT_OBJECT_DLG
+WL_TB_SW_Objekt_Diagramm .uno:InsertObjectChart
+WL_TB_SW_Objekt_FormelEinfuegen .uno:InsertObjectStarMath
+WL_TB_SW_Objekt_Rahmenfenster .uno:InsertObjectFloatingFrame
+WL_TB_SW_Objekt_Objekt .uno:InsertObjectDialog
 
 ' **
 ' ** Zeichenfunktionen
-WL_TB_ZF_Auswahl SID_OBJECT_SELECT
-WL_TB_ZF_Linie SID_DRAW_LINE
-WL_TB_ZF_Rechteck SID_DRAW_RECT
-WL_TB_ZF_Ellipse SID_DRAW_ELLIPSE
-WL_TB_ZF_Polygon SID_DRAW_POLYGON_NOFILL
-WL_TB_ZF_Bezier SID_DRAW_BEZIER_NOFILL
-WL_TB_ZF_Freihand SID_DRAW_FREELINE_NOFILL
-WL_TB_ZF_Kreisbogen SID_DRAW_ARC
-WL_TB_ZF_Kreissektor SID_DRAW_PIE
-WL_TB_ZF_Kreissegment SID_DRAW_CIRCLECUT
-WL_TB_ZF_Textobjekt SID_DRAW_TEXT
-WL_TB_ZF_Lauftext SID_DRAW_TEXT_MARQUEE
-WL_TB_ZF_Legende SID_DRAW_CAPTION
+WL_TB_ZF_Auswahl .uno:SelectObject
+WL_TB_ZF_Linie .uno:Line
+WL_TB_ZF_Rechteck .uno:Rect
+WL_TB_ZF_Ellipse .uno:Ellipse
+WL_TB_ZF_Polygon .uno:Polygon_Unfilled
+WL_TB_ZF_Bezier .uno:Bezier_Unfilled
+WL_TB_ZF_Freihand .uno:Freeline_Unfilled
+WL_TB_ZF_Kreisbogen .uno:Arc
+WL_TB_ZF_Kreissektor .uno:Pie
+WL_TB_ZF_Kreissegment .uno:CircleCut
+WL_TB_ZF_Textobjekt .uno:DrawText
+WL_TB_ZF_Lauftext .uno:Text_Marquee
+WL_TB_ZF_Legende .uno:DrawCaption
 
 ' **
 ' ** Kontrollfelder
-WL_TB_CONTROLS_CommandButton SID_INSERT_PUSHBUTTON
-WL_TB_CONTROLS_SpinButton SID_INSERT_SPINBUTTON
-WL_TB_CONTROLS_CheckBox SID_INSERT_CHECKBOX
-WL_TB_CONTROLS_OptionButton SID_INSERT_RADIOBUTTON
-WL_TB_CONTROLS_Label SID_INSERT_FIXEDTEXT
-WL_TB_CONTROLS_TextFeld SID_INSERT_EDIT
-WL_TB_CONTROLS_ListBox SID_INSERT_LISTBOX
-WL_TB_CONTROLS_ComboBox SID_INSERT_COMBOBOX
-WL_TB_CONTROLS_HScrollBar SID_INSERT_HSCROLLBAR
-WL_TB_CONTROLS_VScrollBar SID_INSERT_VSCROLLBAR
-WL_TB_CONTROLS_FrameControl SID_INSERT_GROUPBOX
-WL_TB_CONTROLS_Preview SID_INSERT_PREVIEW
-WL_TB_CONTROLS_URLButton SID_INSERT_URLBUTTON
-WL_TB_CONTROLS_Selektieren SID_OBJECT_SELECT
-WL_TB_CONTROLS_KontrollfeldEigenschaften SID_SHOW_BROWSER
-WL_TB_CONTROLS_Testmodus SID_DIALOG_TESTMODE
+WL_TB_CONTROLS_CommandButton .uno:InsertPushbutton
+WL_TB_CONTROLS_SpinButton .uno:Spinbutton
+WL_TB_CONTROLS_CheckBox .uno:Checkbox
+WL_TB_CONTROLS_OptionButton .uno:Radiobutton
+WL_TB_CONTROLS_Label .uno:InsertFixedText
+WL_TB_CONTROLS_TextFeld .uno:InsertEdit
+WL_TB_CONTROLS_ListBox .uno:InsertListbox
+WL_TB_CONTROLS_ComboBox .uno:Combobox
+WL_TB_CONTROLS_HScrollBar .uno:HScrollbar
+WL_TB_CONTROLS_VScrollBar .uno:VScrollbar
+WL_TB_CONTROLS_FrameControl .uno:Groupbox
+WL_TB_CONTROLS_Preview .uno:Preview
+WL_TB_CONTROLS_URLButton .uno:URLButton
+WL_TB_CONTROLS_Selektieren .uno:SelectObject
+WL_TB_CONTROLS_KontrollfeldEigenschaften .uno:ShowBrowser
+WL_TB_CONTROLS_Testmodus .uno:TestMode
 
 ' **
 ' ** Zoomen im Draw
-WL_SD_Groesser SID_ZOOM_OUT
-WL_SD_Kleiner SID_ZOOM_IN
-WL_SD_VerschiebenZoom SID_ZOOM_PANNING
-WL_SD_VorherigeDarstellung SID_ZOOM_PREV
-WL_SD_NaechsteDarstellung  SID_ZOOM_NEXT
-WL_SD_EinsZuEins SID_SIZE_REAL
-WL_SD_GanzeSeite SID_SIZE_PAGE
-WL_SD_Seitenbreite SID_SIZE_PAGE_WIDTH
-WL_SD_Optimal SID_SIZE_ALL
-WL_SD_Objektzoom SID_SIZE_OPTIMAL
+WL_SD_Groesser .uno:ZoomPlus
+WL_SD_Kleiner .uno:ZoomMinus
+WL_SD_VerschiebenZoom .uno:ZoomPanning
+WL_SD_VorherigeDarstellung .uno:ZoomPrevious
+WL_SD_NaechsteDarstellung  .uno:ZoomNext
+WL_SD_EinsZuEins .uno:Zoom100Percent
+WL_SD_GanzeSeite .uno:ZoomPage
+WL_SD_Seitenbreite .uno:ZoomPageWidth
+WL_SD_Optimal .uno:ZoomOptimal
+WL_SD_Objektzoom .uno:ZoomObjects
 
 ' **
 ' ** Anordnung im Draw
-WL_TB_ANORDNUNG_WeiterNachVorn SID_MOREFRONT
-WL_TB_ANORDNUNG_WeiterNachHinten SID_MOREBACK
-WL_TB_ANORDNUNG_VorDasObjekt SID_BEFORE_OBJ
-WL_TB_ANORDNUNG_HinterDasObjekt SID_BEHIND_OBJ
-WL_TB_ANORDNUNG_Vertauschen SID_REVERSE_ORDER
+WL_TB_ANORDNUNG_WeiterNachVorn .uno:Forward
+WL_TB_ANORDNUNG_WeiterNachHinten .uno:Backward
+WL_TB_ANORDNUNG_VorDasObjekt .uno:BeforeObject
+WL_TB_ANORDNUNG_HinterDasObjekt .uno:BehindObject
+WL_TB_ANORDNUNG_Vertauschen .uno:ReverseOrder
 
 ' **
 ' ** Ausrichtung im Draw
-WL_TB_AUSRICHTUNG_Links SID_OBJECT_ALIGN_LEFT
-WL_TB_AUSRICHTUNG_Rechts SID_OBJECT_ALIGN_RIGHT
-WL_TB_AUSRICHTUNG_Oben SID_OBJECT_ALIGN_UP
-WL_TB_AUSRICHTUNG_Mitte SID_OBJECT_ALIGN_MIDDLE
-WL_TB_AUSRICHTUNG_Unten SID_OBJECT_ALIGN_DOWN
-WL_TB_AUSRICHTUNG_Zentriert SID_OBJECT_ALIGN_CENTER
+WL_TB_AUSRICHTUNG_Links .uno:ObjectAlignLeft
+WL_TB_AUSRICHTUNG_Rechts .uno:ObjectAlignRight
+WL_TB_AUSRICHTUNG_Oben .uno:AlignUp
+WL_TB_AUSRICHTUNG_Mitte .uno:AlignMiddle
+WL_TB_AUSRICHTUNG_Unten .uno:AlignDown
+WL_TB_AUSRICHTUNG_Zentriert .uno:AlignCenter
 
 ' **
 ' ** Effekte im Draw
-WL_TB_SD_EFFEKTE_Spiegeln SID_OBJECT_MIRROR
-WL_TB_SD_EFFEKTE_Verzerren SID_OBJECT_SHEAR
-WL_TB_SD_EFFEKTE_Rotationskoerper SID_CONVERT_TO_3D_LATHE
-WL_TB_SD_EFFEKTE_KlebepunkteBearbeiten SID_GLUE_EDITMODE
-WL_TB_SD_EFFEKTE_SetzenAufKreisPerspektivisch SID_OBJECT_CROOK_ROTATE
-WL_TB_SD_EFFEKTE_SetzenAufKreisSchraeggestellt SID_OBJECT_CROOK_SLANT
+WL_TB_SD_EFFEKTE_Spiegeln .uno:Mirror
+WL_TB_SD_EFFEKTE_Verzerren .uno:Shear
+WL_TB_SD_EFFEKTE_Rotationskoerper .uno:ConvertInto3DLathe
+WL_TB_SD_EFFEKTE_KlebepunkteBearbeiten .uno:GlueEditMode
+WL_TB_SD_EFFEKTE_SetzenAufKreisPerspektivisch .uno:CrookRotate
+WL_TB_SD_EFFEKTE_SetzenAufKreisSchraeggestellt .uno:CrookSlant
 
 ' **
 ' ** Ellipsen im Draw
-WL_SD_Ellipsen SID_DRAW_ELLIPSE
-WL_SD_EllipseVoll SID_DRAW_ELLIPSE
-WL_SD_EllipseLeer SID_DRAW_ELLIPSE_NOFILL
-WL_SD_KreisVoll SID_DRAW_CIRCLE
-WL_SD_KreisLeer SID_DRAW_CIRCLE_NOFILL
-WL_SD_EllipsensegmentVoll SID_DRAW_PIE
-WL_SD_EllipsensegmentLeer SID_DRAW_PIE_NOFILL
-WL_SD_KreissegmentVoll SID_DRAW_CIRCLEPIE
-WL_SD_KreissegmentLeer SID_DRAW_CIRCLEPIE_NOFILL
-WL_SD_EllipsenabschnittVoll SID_DRAW_ELLIPSECUT
-WL_SD_EllipsenabschnittLeer SID_DRAW_ELLIPSECUT_NOFILL
-WL_SD_KreisabschnittVoll SID_DRAW_CIRCLECUT
-WL_SD_KreisabschnittLeer SID_DRAW_CIRCLECUT_NOFILL
-WL_SD_Kreisbogen SID_DRAW_CIRCLEARC
+WL_SD_Ellipsen .uno:Ellipse
+WL_SD_EllipseVoll .uno:Ellipse
+WL_SD_EllipseLeer .uno:Ellipse_Unfilled
+WL_SD_KreisVoll .uno:Circle
+WL_SD_KreisLeer .uno:Circle_Unfilled
+WL_SD_EllipsensegmentVoll .uno:Pie
+WL_SD_EllipsensegmentLeer .uno:Pie_Unfilled
+WL_SD_KreissegmentVoll .uno:CirclePie
+WL_SD_KreissegmentLeer .uno:CirclePie_Unfilled
+WL_SD_EllipsenabschnittVoll .uno:EllipseCut
+WL_SD_EllipsenabschnittLeer .uno:EllipseCut_Unfilled
+WL_SD_KreisabschnittVoll .uno:CircleCut
+WL_SD_KreisabschnittLeer .uno:CircleCut_Unfilled
+WL_SD_Kreisbogen .uno:CircleArc
 
 ' **
 ' ** Kurven im Draw
-WL_SD_KurveVoll SID_DRAW_BEZIER_FILL
-WL_SD_KurveLeer SID_DRAW_BEZIER_NOFILL
-WL_SD_PolygonVoll SID_DRAW_POLYGON
-WL_SD_Polygon SID_DRAW_POLYGON_NOFILL
-WL_SD_PolygonWinkelVoll SID_DRAW_XPOLYGON
-WL_SD_PolygonWinkel SID_DRAW_XPOLYGON_NOFILL
-WL_SD_FreihandlinieVoll SID_DRAW_FREELINE
-WL_SD_FreihandlinieLeer SID_DRAW_FREELINE_NOFILL
+WL_SD_KurveVoll .uno:BezierFill
+WL_SD_KurveLeer .uno:Bezier_Unfilled
+WL_SD_PolygonVoll .uno:Polygon
+WL_SD_Polygon .uno:Polygon_Unfilled
+WL_SD_PolygonWinkelVoll .uno:Polygon_Diagonal
+WL_SD_PolygonWinkel .uno:Polygon_Diagonal_Unfilled
+WL_SD_FreihandlinieVoll .uno:Freeline
+WL_SD_FreihandlinieLeer .uno:Freeline_Unfilled
 
 ' **
 ' ** Linien und Pfeile im Draw
-WL_SD_LinieZeichnen SID_DRAW_LINE
-WL_SD_LinieMitPfeilende SID_LINE_ARROW_END
-WL_SD_LinieMitPfeilKreisende SID_LINE_ARROW_CIRCLE
-WL_SD_LinieMitPfeilQuadratende SID_LINE_ARROW_SQUARE
-WL_SD_LinieWinkel SID_DRAW_XLINE
-WL_SD_LinieMitPfeilanfang SID_LINE_ARROW_START
-WL_SD_LinieMitKreisPfeilende SID_LINE_CIRCLE_ARROW
-WL_SD_LinieMitQuadratKreisende SID_LINE_SQUARE_ARROW
-WL_SD_Masslinie SID_DRAW_MEASURELINE
-WL_SD_LinieMitPfeilenden SID_LINE_ARROWS
+WL_SD_LinieZeichnen .uno:Line
+WL_SD_LinieMitPfeilende .uno:LineArrowEnd
+WL_SD_LinieMitPfeilKreisende .uno:LineArrowCircle
+WL_SD_LinieMitPfeilQuadratende .uno:LineArrowSquare
+WL_SD_LinieWinkel .uno:Line_Diagonal
+WL_SD_LinieMitPfeilanfang .uno:LineArrowStart
+WL_SD_LinieMitKreisPfeilende .uno:LineCircleArrow
+WL_SD_LinieMitQuadratKreisende .uno:LineSquareArrow
+WL_SD_Masslinie .uno:MeasureLine
+WL_SD_LinieMitPfeilenden .uno:LineArrows
 
 ' **
 ' ** Rechtecke im Draw
-WL_SD_RechteckVoll SID_DRAW_RECT
-WL_SD_RechteckLeer SID_DRAW_RECT_NOFILL
-WL_SD_RechteckRundVoll SID_DRAW_RECT_ROUND
-WL_SD_RechteckRundLeer SID_DRAW_RECT_ROUND_NOFILL
-WL_SD_QuadratVoll SID_DRAW_SQUARE
-WL_SD_QuadratLeer SID_DRAW_SQUARE_NOFILL
-WL_SD_QuadratRundVoll SID_DRAW_SQUARE_ROUND
-WL_SD_QuadratRundLeer SID_DRAW_SQUARE_ROUND_NOFILL
+WL_SD_RechteckVoll .uno:Rect
+WL_SD_RechteckLeer .uno:Rect_Unfilled
+WL_SD_RechteckRundVoll .uno:Rect_Rounded
+WL_SD_RechteckRundLeer .uno:Rect_Rounded_Unfilled
+WL_SD_QuadratVoll .uno:Square
+WL_SD_QuadratLeer .uno:Square_Unfilled
+WL_SD_QuadratRundVoll .uno:Square_Rounded
+WL_SD_QuadratRundLeer .uno:Square_Rounded_Unfilled
 
 ' **
 ' ** Text im Draw
-WL_SD_TextBox SID_DRAWTBX_TEXT
-WL_SD_TextEinfuegenDraw SID_ATTR_CHAR
-WL_SD_TextRahmen SID_TEXT_FITTOSIZE
-WL_SD_TextLegende SID_DRAW_CAPTION
+WL_SD_TextBox .uno:TextToolbox
+WL_SD_TextEinfuegenDraw .uno:Text
+WL_SD_TextRahmen .uno:TextFitToSizeTool
+WL_SD_TextLegende .uno:DrawCaption
 
 ' **
 ' ** Verbinder im Draw
-WL_SD_VVerbinder SID_TOOL_CONNECTOR
-WL_SD_VPfeilAnfang SID_CONNECTOR_ARROW_START
-WL_SD_VPfeilEnde SID_CONNECTOR_ARROW_END
-WL_SD_Vpfeile SID_CONNECTOR_ARROWS
-WL_SD_VkreisAnfang SID_CONNECTOR_CIRCLE_START
-WL_SD_VkreisEnde SID_CONNECTOR_CIRCLE_END
-WL_SD_Vkreise SID_CONNECTOR_CIRCLES
-WL_SD_LinienVerbinder SID_CONNECTOR_LINES
-WL_SD_LPfeilAnfang SID_CONNECTOR_LINES_ARROW_START
-WL_SD_LPfeilEnde SID_CONNECTOR_LINES_ARROW_END
-WL_SD_Lpfeile SID_CONNECTOR_LINES_ARROWS
-WL_SD_LkreisAnfang SID_CONNECTOR_LINES_CIRCLE_START
-WL_SD_LkreisEnde SID_CONNECTOR_LINES_CIRCLE_END
-WL_SD_Lkreise SID_CONNECTOR_LINES_CIRCLES
-WL_SD_Direktverbinder SID_CONNECTOR_LINE
-WL_SD_DPfeilAnfang SID_CONNECTOR_LINE_ARROW_START
-WL_SD_DPfeilEnde SID_CONNECTOR_LINE_ARROW_END
-WL_SD_Dpfeile SID_CONNECTOR_LINE_ARROWS
-WL_SD_DkreisAnfang SID_CONNECTOR_LINE_CIRCLE_START
-WL_SD_DkreisEnde SID_CONNECTOR_LINE_CIRCLE_END
-WL_SD_DKreise SID_CONNECTOR_LINE_CIRCLES
-WL_SD_KurvenVerbinder SID_CONNECTOR_CURVE
-WL_SD_KPfeilAnfang SID_CONNECTOR_CURVE_ARROW_START
-WL_SD_KPfeilEnde SID_CONNECTOR_CURVE_ARROW_END
-WL_SD_Kpfeile SID_CONNECTOR_CURVE_ARROWS
-WL_SD_KkreisAnfang SID_CONNECTOR_CURVE_CIRCLE_START
-WL_SD_KkreisEnde SID_CONNECTOR_CURVE_CIRCLE_END
-WL_SD_KKreise SID_CONNECTOR_CURVE_CIRCLES
+WL_SD_VVerbinder .uno:Connector
+WL_SD_VPfeilAnfang .uno:ConnectorArrowStart
+WL_SD_VPfeilEnde .uno:ConnectorArrowEnd
+WL_SD_Vpfeile .uno:ConnectorArrows
+WL_SD_VkreisAnfang .uno:ConnectorCircleStart
+WL_SD_VkreisEnde .uno:ConnectorCircleEnd
+WL_SD_Vkreise .uno:ConnectorCircles
+WL_SD_LinienVerbinder .uno:ConnectorLines
+WL_SD_LPfeilAnfang .uno:ConnectorLinesArrowStart
+WL_SD_LPfeilEnde .uno:ConnectorLinesArrowEnd
+WL_SD_Lpfeile .uno:ConnectorLinesArrows
+WL_SD_LkreisAnfang .uno:ConnectorLinesCircleStart
+WL_SD_LkreisEnde .uno:ConnectorLinesCircleEnd
+WL_SD_Lkreise .uno:ConnectorLinesCircles
+WL_SD_Direktverbinder .uno:ConnectorLine
+WL_SD_DPfeilAnfang .uno:ConnectorLineArrowStart
+WL_SD_DPfeilEnde .uno:ConnectorLineArrowEnd
+WL_SD_Dpfeile .uno:ConnectorLineArrows
+WL_SD_DkreisAnfang .uno:ConnectorLineCircleStart
+WL_SD_DkreisEnde .uno:ConnectorLineCircleEnd
+WL_SD_DKreise .uno:ConnectorLineCircles
+WL_SD_KurvenVerbinder .uno:ConnectorCurve
+WL_SD_KPfeilAnfang .uno:ConnectorCurveArrowStart
+WL_SD_KPfeilEnde .uno:ConnectorCurveArrowEnd
+WL_SD_Kpfeile .uno:ConnectorCurveArrows
+WL_SD_KkreisAnfang .uno:ConnectorCurveCircleStart
+WL_SD_KkreisEnde .uno:ConnectorCurveCircleEnd
+WL_SD_KKreise .uno:ConnectorCurveCircles
 
 ' **
 ' ** 3D-Objekte im Draw
-WL_SD_Wuerfel SID_3D_CUBE
-WL_SD_Kugel SID_3D_SPHERE
-WL_SD_Zylinder SID_3D_CYLINDER
-WL_SD_Kegel SID_3D_CONE
-WL_SD_Pyramide SID_3D_PYRAMID
-WL_SD_Torus SID_3D_TORUS
-WL_SD_Schale SID_3D_SHELL
-WL_SD_Halbkugel SID_3D_HALF_SPHERE
+WL_SD_Wuerfel .uno:Cube
+WL_SD_Kugel .uno:Sphere
+WL_SD_Zylinder .uno:Cylinder
+WL_SD_Kegel .uno:Cone
+WL_SD_Pyramide .uno:Cyramid
+WL_SD_Torus .uno:Torus
+WL_SD_Schale .uno:Shell3D
+WL_SD_Halbkugel .uno:HalfSphere
 
 ' **
 ' ** Einfuegen im Draw
-WL_TB_SD_EINFUEGEN_Diagramm SID_INSERT_DIAGRAM
-WL_TB_SD_EINFUEGEN_Formel SID_INSERT_MATH
-WL_TB_SD_EINFUEGEN_Objekt SID_INSERT_OBJECT
-WL_TB_SD_EINFUEGEN_Plugin SID_INSERT_PLUGIN
-WL_TB_SD_EINFUEGEN_Applet SID_INSERT_APPLET
-WL_TB_SD_EINFUEGEN_Tabelle SID_ATTR_TABLE
-WL_TB_SD_EINFUEGEN_Datei SID_INSERTFILE
-WL_TB_SD_EINFUEGEN_Seite SID_INSERTPAGE
-WL_TB_SD_EINFUEGEN_StarImage SID_INSERT_IMAGE
+WL_TB_SD_EINFUEGEN_Diagramm .uno:InsertObjectChart
+WL_TB_SD_EINFUEGEN_Formel .uno:InsertMath
+WL_TB_SD_EINFUEGEN_Objekt .uno:InsertObject
+WL_TB_SD_EINFUEGEN_Plugin .uno:InsertPlugin
+WL_TB_SD_EINFUEGEN_Tabelle .uno:InsertSpreadsheet
+WL_TB_SD_EINFUEGEN_Datei .uno:ImportFromFile
+WL_TB_SD_EINFUEGEN_Seite .uno:InsertPage
+WL_TB_SD_EINFUEGEN_StarImage .uno:InsertImage
 
 ' **
 ' ** Einfuegen im Calc
-WL_TB_SC_Einfuegen_Grafik SID_INSERT_GRAPHIC
-WL_TB_SC_Einfuegen_Sonderzeichen SID_CHARMAP
+WL_TB_SC_Einfuegen_Grafik .uno:InsertGraphic
+WL_TB_SC_Einfuegen_Sonderzeichen .uno:InsertSymbol
 
 ' **
 ' ** Einfuegen Objekte im Calc
-WL_TB_SC_OBJEKT_Diagramm SID_DRAW_CHART
-WL_TB_SC_OBJEKT_Image SID_INSERT_SIMAGE
-WL_TB_SC_OBJEKT_Formel SID_INSERT_SMATH
-WL_TB_SC_OBJEKT_Frame SID_INSERT_FLOATINGFRAME
-WL_TB_SC_OBJEKT_Objekt SID_INSERT_OBJECT
-WL_TB_SC_OBJEKT_Plugin SID_INSERT_PLUGIN
-WL_TB_SC_OBJEKT_Applet SID_INSERT_APPLET
+WL_TB_SC_OBJEKT_Diagramm .uno:DrawChart
+WL_TB_SC_OBJEKT_Image .uno:InsertObjectStarImage
+WL_TB_SC_OBJEKT_Formel .uno:InsertObjectStarMath
+WL_TB_SC_OBJEKT_Frame .uno:InsertObjectFloatingFrame
+WL_TB_SC_OBJEKT_Objekt .uno:InsertObject
+WL_TB_SC_OBJEKT_Plugin .uno:InsertPlugin
 
 ' **
 ' ** Einfuegen Zellen im Calc
-WL_TB_SC_Zellen_ZellenNachUnten FID_INS_CELLSDOWN
-WL_TB_SC_Zellen_ZellenNachRechts FID_INS_CELLSRIGHT
-WL_TB_SC_Zellen_GanzeZeile FID_INS_ROW
-WL_TB_SC_Zellen_GanzeSpalte FID_INS_COLUMN
+WL_TB_SC_Zellen_ZellenNachUnten .uno:InsertCellsDown
+WL_TB_SC_Zellen_ZellenNachRechts .uno:InsertCellsRight
+WL_TB_SC_Zellen_GanzeZeile .uno:InsertRows
+WL_TB_SC_Zellen_GanzeSpalte .uno:InsertColumns
 
 ' **
 ' ** Optionsleiste im Draw / Impress
-Opl_SD_PunkteBearbeiten SID_BEZIER_EDIT
-Opl_SD_KlebepunkteBearbeiten SID_GLUE_EDITMODE
+Opl_SD_PunkteBearbeiten .uno:ToggleObjectBezierMode
+Opl_SD_KlebepunkteBearbeiten .uno:GlueEditMode
 Opl_SD_EffekteZulassen .uno:AnimationObjects
-Opl_SD_DrehmodusNachKlick SID_CLICK_CHANGE_ROTATION
-Opl_SD_RasterSichtbar SID_GRID_VISIBLE
-Opl_SD_FanglinieSichtbar SID_HELPLINES_VISIBLE
-Opl_SD_HilfslinienBeimVerschieben SID_HELPLINES_MOVE
-Opl_SD_RasterBenutzen SID_GRID_USE
-Opl_SD_FanglinieBenutzen SID_HELPLINES_USE
-Opl_SD_FangenAnSeitenraendern SID_SNAP_BORDER
-Opl_SD_FangenAnObjektRahmen SID_SNAP_FRAME
-Opl_SD_FangenAnObjektpunkten SID_SNAP_POINTS
-Opl_SD_Schnellbearbeitung SID_QUICKEDIT
-Opl_SD_NurTextbreichSelektieren SID_PICK_THROUGH
-Opl_SD_TextBearbeitenBeiDoppelklick SID_DOUBLECLICK_TEXTEDIT
-Opl_SD_EinfacheHandles SID_HANDLES_DRAFT
-Opl_SD_GrosseHandles SID_BIG_HANDLES
-Opl_SD_ObjektMitAttributen SID_SOLID_CREATE
-Opl_SD_AlleGruppierungenVerlassen SID_CONNECTOR_LINES_CIRCLES
+Opl_SD_DrehmodusNachKlick .uno:ClickChangeRotation
+Opl_SD_RasterSichtbar .uno:GridVisible
+Opl_SD_FanglinieSichtbar .uno:HelplinesVisible
+Opl_SD_HilfslinienBeimVerschieben .uno:HelplinesMove
+Opl_SD_RasterBenutzen .uno:GridUse
+Opl_SD_FanglinieBenutzen .uno:HelplinesUse
+Opl_SD_FangenAnSeitenraendern .uno:SnapBorder
+Opl_SD_FangenAnObjektRahmen .uno:SnapFrame
+Opl_SD_FangenAnObjektpunkten .uno:SnapPoints
+Opl_SD_Schnellbearbeitung .uno:QuickEdit
+Opl_SD_NurTextbreichSelektieren .uno:PickThrough
+Opl_SD_TextBearbeitenBeiDoppelklick .uno:DoubleClickTextEdit
+Opl_SD_EinfacheHandles .uno:HandlesDraft
+Opl_SD_GrosseHandles .uno:BigHandles
+Opl_SD_ObjektMitAttributen .uno:SolidCreate
+Opl_SD_AlleGruppierungenVerlassen .uno:ConnectorLinesCircles

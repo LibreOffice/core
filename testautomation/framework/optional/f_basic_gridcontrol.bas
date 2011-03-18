@@ -32,17 +32,28 @@
 '\******************************************************************************
 
 sub main
+
     use "framework\optional\includes\basic_gridcontrol.inc"
+
     call hStatusIn ("framework", "f_basic_gridcontrol.bas")
-    printlog "Load Document with gridcontrol"
+
+    hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
     call tGridcontrolLoad
+    call tTabcontrolLoad
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
-    call hStatusOut   
+
+    call hStatusOut()
+
 end sub
 
 sub LoadIncludeFiles
+
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
+
+    use "global\tools\includes\optional\t_treelist_tools.inc"
+    use "global\tools\includes\optional\t_macro_tools.inc"
+    
     gApplication = "WRITER"
     call GetUseFiles()
 end sub

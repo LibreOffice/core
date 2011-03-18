@@ -38,13 +38,14 @@ sub ctrl_General
     call tPosAndSize_Protect_Position
     call tPosAndSize_Protect_Size
     call tPosAndSize_Keyboard
-    call tPosAndSize_Dialog    
+    call tPosAndSize_Dialog
     call tPosAndSize_KeepRatio
     'TODO Control the Setting on tabpage Rotation & Slant (should be inactive).
     
     call tTabStop
     call tActivationOrder
     call tAddFields
+    call tLabelFieldSelection
 
 end sub
 
@@ -1033,7 +1034,96 @@ testcase tAddFields
     call hCloseDocument
     
 endcase
+'-------------------------------------------------------------------------
+testcase tLabelFieldSelection
+    ' check if the assignment of lables to text fields work
+    dim sLabelText as String
 
+    printlog "Open a new document,"
+    call hNewDocument
+    Kontext "DocumentWriter"       
+    DocumentWriter.TypeKeys "tt_doc" , true
+    sleep(1)
+
+    printlog "open the form control toolbar"
+    call hToolbarSelect("FormControls",true)
+    
+    Kontext "FormControls"   	
+    Label.Click
+    sleep(1)
+    
+    printlog "insert a label field"
+    call hDrawingWithSelection ( 20, 20, 30, 30 )
+    sleep(2)
+
+    Kontext "FormControls"   	
+    Edit.Click
+    sleep(1)
+    
+    printlog "insert a text field"
+    call hDrawingWithSelection ( 40, 40, 50, 50 )
+    sleep(2)
+
+    printlog "open the control property browser"
+    call fOpenControlPropertyBrowser
+
+    Kontext "ControlPropertiesTabControl"
+        ControlPropertiesTabControl.setPage TabGeneralControl       'make shure that tabpage general in property is choosen
+        sleep(2)
+
+    printlog "click on button behind the lable field to open the field selection dialog"
+    Kontext "TabGeneralControl"
+        LabelFieldButton.Click
+        sleep(1)
+
+    printlog "select the lable fiiel in the tree list box"
+    Kontext "LabelFieldSelection"
+        LabelFieldSelection.TypeKeys "<DOWN>",TRUE
+        LabelFieldSelection.TypeKeys "<DOWN>",TRUE
+        sleep(1)
+        printlog "close the field selection dialog"
+        LabelFieldSelection.OK
+        sleep(1)
+
+    printlog "check if the lable field property contains some text"
+    'TODO: check for the correct text this has a language dependencie
+    Kontext "TabGeneralControl"        
+        sLabelText = LabelField.getText()
+        if(sLabelText = "") then
+            warnlog "the lable for a text field is not set"
+        else
+            printlog "the label for the text field is set"
+        endif
+
+    printlog "click on button behind the lable field to open the field selection dialog"
+    Kontext "TabGeneralControl"
+        LabelFieldButton.Click
+        sleep(1)
+
+    Kontext "LabelFieldSelection"    
+        LabelFieldSelection.TypeKeys "<DOWN>",TRUE
+        LabelFieldSelection.TypeKeys "<DOWN>",TRUE
+        sleep(1)
+        printlog "select the lable field and check the checkbox 'no assignment'"
+        CBNoAssignment.check
+        printlog "close the field selection dialog"
+        LabelFieldSelection.OK
+        sleep(1)
+
+    printlog "check if the lable field property contains no text"
+    Kontext "TabGeneralControl"        
+        sLabelText = LabelField.getText()
+        if(sLabelText <> "") then
+            warnlog "the lable for a text field is not deleted"
+        else
+            printlog "the label for the text field is deleted"
+        endif    
+
+    printlog "close the document"
+    call hCloseDocument
+
+endcase
+'-------------------------------------------------------------------------
 function fOpenPositionAndSizeDialog
 
     call hToolbarSelect("FormDesignTools",true)  	

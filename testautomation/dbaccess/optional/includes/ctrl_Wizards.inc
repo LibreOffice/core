@@ -239,7 +239,7 @@ testcase tGroupBoxWithDatasource
     Kontext "TabGeneralControl"
      TabGeneralControl.TypeKeys "<TAB>" , true 'this tab is importent, I don't not why but it is.
      sleep(1)
-     HelpURL.setText "HID:123456"
+     HelpURL.setText "customcontrol1"
      HelpURL.TypeKeys "<RETURN>",true
      sleep(1)
     Kontext "ControlPropertiesDialog" 
@@ -276,7 +276,7 @@ testcase tGroupBoxWithDatasource
     Kontext "TabGeneralControl"
 	 TabGeneralControl.TypeKeys "<TAB>" , true 'this tab is importent, I don't not why but it is.
      sleep(1)
-     HelpURL.setText "HID:1234567"
+     HelpURL.setText "customcontrol2"
      HelpURL.TypeKeys "<RETURN>", true
      sleep(1)
     Kontext "ControlPropertiesDialog" 
@@ -314,7 +314,7 @@ testcase tGroupBoxWithDatasource
      
     Kontext "TabGeneralControl"
      TabGeneralControl.TypeKeys "<TAB>" , true ' this tab is importent, I don't not why but it is.     
-     HelpURL.setText "HID:12345678"     
+     HelpURL.setText "customcontrol3"
      HelpURL.TypeKeys "<RETURN>", true
      sleep(1)
     Kontext "ControlPropertiesDialog" 
@@ -660,7 +660,7 @@ testcase tListBox
 		warnlog "The dropdown style is not active."
 	endif			
 	sleep(1)
-	fSetControlProperty("ListBox","HelpURL","HID:123456")
+	fSetControlProperty("ListBox","HelpURL","customcontrol1")
 	sleep(1)
     '/// save the document
     printlog "save the document"

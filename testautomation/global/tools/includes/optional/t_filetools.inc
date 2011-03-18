@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@oracle.com
+'*  owner : gregor.hartmann@oracle.com
 '*
 '*  short description : Functions that work with files like deleting, loading...
 '*
@@ -260,80 +260,6 @@ end function
 
 '*******************************************************************************
 
-function hGetWorkPath() as string
-
-    '///<h3>Retrieve the users work directory</h3>
-    '///<i>Uses: Call to UNO service</i><br>
-    '///<i>Errorhandling: Fixes &quot;$(user)&quot;-type path (uses fallback)</i><br>
-    '///<i>Errorhandling: Handles broken UNO connection (uses fallback)</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Path to local workdir (string)</li>
-    '///<ul>
-    '///+<li>Includes trailing slash/backslash</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-
-    dim sPath as string
-    dim sDefaultPath as string
-        sDefaultPath = convertpath( gOfficePath & "user/work" )
-    dim oOfficeConnect as object
-    dim oOfficeConfig as object
-    dim bPathIsFromAPI as boolean
-
-    const CFN     = "hGetWorkPath::"
-
-    '///+<li>Create an UNO service and ask it for the location of &quot;Work&quot;</li>
-    try
-        oOfficeConnect = hGetUnoService( true )
-        oOfficeConfig  = oOfficeConnect.createInstance( "com.sun.star.util.PathSettings" )
-        sPath = convertFromURL( oOfficeConfig.Work ) 
-        bPathIsFromAPI = true
-    catch
-        '///+<li>Handle broken UNO connection</li>
-        printlog( CFN & "Could not access service, connection broken?" )
-        sPath = ""
-        bPathIsFromAPI = false
-    endcatch
-
-    '///+<li>If the path differs from the default do a warnlog</li>
-    if ( sPath <> sDefaultPath ) then
-        printlog( CFN & "Default path is: " & sDefaultPath )
-        printlog( CFN & "Workpath is not defaultpath: " & sPath )
-        printlog( CFN & "Overriding UNO path" )
-        sPath = convertpath( gOfficePath & "user\work" )
-        bPathIsFromAPI = false
-    endif
-                
-    '///+<li>Apply fallback in case of broken connection or invalid path</li>
-    if ( instr( sPath , "$(user)" ) > 0 ) then
-        printlog( CFN & "sPath has $(user)-type string, using fallback" )
-        sPath = sDefaultPath
-        bPathIsFromAPI = false
-    endif
-
-    '///+<li>Add trailing pathseparator, do convertpath</li>
-    sPath = sPath & "/"
-    sPath = convertpath( sPath ) 
-    
-    '///+<li>Print info to the log and return the path</li>
-    if ( GVERBOSE ) then
-        if ( bPathIsFromAPI ) then
-        	printlog( CFN & "(From API): " & sPath )
-        else
-            qaerrorlog( CFN & "(Junked API-Path): " & sPath )
-        endif
-    endif
-    hGetWorkPath() = sPath 
-    '///</ul>
-
-end function
 
 '*******************************************************************************
 
@@ -389,24 +315,5 @@ end function
 
 '*******************************************************************************
 
-function hGetWorkFile( cFileName as string ) as string
-
-    '///<h3>Returns a fully qualified filename to a workfile</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Filename without path (string)</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Filename including path to user work directory (string)</li>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-    '///+<li>Concatenate workpath and filename, convertpath</li>
-    hGetWorkFile() = convertpath( hGetWorkPath() & cFileName )
-    '///</ul>
-
-end function
 
 
