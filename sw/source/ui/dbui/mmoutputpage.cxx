@@ -1055,6 +1055,11 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         }
         break;
         case MM_DOCTYPE_PDF:
+        {
+            pSfxFlt = pFilterContainer->GetFilter4FilterName(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_pdf_Export")),
+                SFX_FILTER_EXPORT);
+        }
         break;
         case MM_DOCTYPE_WORD:
         {
