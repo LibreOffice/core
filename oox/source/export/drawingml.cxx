@@ -1170,9 +1170,6 @@ void DrawingML::WriteParagraphProperties( Reference< XTextContent > rParagraph )
     if( !rXPropSet.is() || !rXPropState.is() )
         return;
 
-    //OSL_TRACE("write paragraph properties pset");
-    //DBG(lcl_dump_pset(rXPropSet));
-
     sal_Int16 nLevel = -1;
     GET( nLevel, NumberingLevel );
 
@@ -1295,7 +1292,6 @@ void DrawingML::WriteText( Reference< XShape > rXShape  )
     if( GETA( TextWordWrap ) ) {
         mAny >>= bWrap;
         bHasWrap = TRUE;
-        //DBG(printf("wrap: %d\n", bWrap));
     }
 
     mpFS->singleElementNS( XML_a, XML_bodyPr,
@@ -1308,7 +1304,6 @@ void DrawingML::WriteText( Reference< XShape > rXShape  )
                            XML_anchorCtr, bHorizontalCenter ? "1" : NULL,
                            XML_vert, sWritingMode,
                            FSEND );
-    //mpFS->singleElement( FSNS( XML_a, XML_lstStyle ), FSEND );
 
     Reference< XEnumerationAccess > access( xXText, UNO_QUERY );
     if( !access.is() )
@@ -1437,21 +1432,6 @@ void DrawingML::WritePolyPolygon( const PolyPolygon& rPolyPolygon )
                 mpFS->endElementNS( XML_a, XML_cubicBezTo );
                 mpFS->startElementNS( XML_a, XML_cubicBezTo, FSEND );
             }
-//             switch( rPoly.GetFlags(j) ) {
-//                 case POLY_NORMAL:
-//                     DBG(printf("normal\n"));
-//                     break;
-//                 case POLY_SMOOTH:
-//                     DBG(printf("smooth\n"));
-//                     break;
-//                 case POLY_CONTROL:
-//                     DBG(printf("control\n"));
-//                     break;
-//                 case POLY_SYMMTR:
-//                     DBG(printf("symmtr\n"));
-//                         break;
-//             }
-//             DBG(printf("point %ld %ld\n", rPoly[j].X() - aRect.Left(), rPoly[j].Y() - aRect.Top()));
         }
 
         mpFS->endElementNS( XML_a, XML_path );
@@ -1558,12 +1538,6 @@ void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
         return;
     FillStyle aFillStyle( FillStyle_NONE );
     xPropSet->getPropertyValue( S( "FillStyle" ) ) >>= aFillStyle;
-
-    if( aFillStyle == FillStyle_BITMAP )
-    {
-        //DBG(printf ("FillStyle_BITMAP properties\n"));
-        //DBG(dump_pset(rXPropSet));
-    }
 
     if( aFillStyle == FillStyle_NONE ||
         aFillStyle == FillStyle_HATCH )
