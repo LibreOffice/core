@@ -38,15 +38,6 @@
 
 #include "proplist.hxx"
 
-#if TEST_LAYOUT && !defined( DBG_UTIL )
-#undef DBG_ERROR
-#define DBG_ERROR OSL_TRACE
-#undef DBG_ERROR1
-#define DBG_ERROR1 OSL_TRACE
-#undef DBG_ERROR2
-#define DBG_ERROR2 OSL_TRACE
-#endif /* TEST_LAYOUT && !DBG_UTIL */
-
 namespace layoutimpl
 {
 using namespace com::sun::star;
