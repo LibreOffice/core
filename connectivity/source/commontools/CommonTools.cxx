@@ -290,6 +290,9 @@ namespace connectivity
                 pEnv->DeleteLocalRef( out );
             }
         }
+#else
+        (void)_pJVM;
+        (void)_sClassName;
 #endif
         return bRet;
     }
