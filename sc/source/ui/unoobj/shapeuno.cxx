@@ -332,22 +332,10 @@ awt::Point lcl_GetRelativePos( uno::Reference< drawing::XShape >& xShape, ScDocu
 {
     awt::Point aUnoPoint;
     rRange = lcl_GetAnchorCell(xShape, pDoc, nTab, aUnoPoint, rUnoSize, rCaptionPoint);
-    if (pDoc->IsNegativePage(nTab))
-    {
-        Rectangle aRect(pDoc->GetMMRect( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aStart.Tab() ));
-        Point aPoint(aRect.TopRight());
-        aUnoPoint.X -= aPoint.X();
-        aUnoPoint.Y -= aPoint.Y();
-    }
-    else
-    {
-        ScRange aRange = pDoc->GetRange( nTab, Rectangle( VCLPoint(aUnoPoint), VCLPoint(aUnoPoint) ));
-        Rectangle aRect(pDoc->GetMMRect( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aStart.Tab() ));
-        Point aPoint(aRect.TopLeft());
-        aUnoPoint.X -= aPoint.X();
-        aUnoPoint.Y -= aPoint.Y();
-    }
-
+    Rectangle aRect(pDoc->GetMMRect( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aStart.Tab() ));
+    Point aPoint = pDoc->IsNegativePage(nTab) ? aRect.TopRight() : aRect.TopLeft();
+    aUnoPoint.X -= aPoint.X();
+    aUnoPoint.Y -= aPoint.Y();
     return aUnoPoint;
 }
 
