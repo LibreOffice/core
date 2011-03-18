@@ -1972,7 +1972,7 @@ void TabBar::Clear()
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 
-    CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, (void*) PAGE_NOT_FOUND );
+    CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(PAGE_NOT_FOUND)) );
 }
 
 // -----------------------------------------------------------------------
