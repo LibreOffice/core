@@ -3517,7 +3517,6 @@ throw (uno::RuntimeException)
             ::Rectangle aHotZoneRightDockRect( implts_calcHotZoneRect( aRightDockRect, nMagneticZone ));
 
             Window* pContainerWindow( VCLUnoHelper::GetWindow( xContainerWindow ) );
-            Window* pDockingAreaWindow( 0 );
             ::Point aMousePos( pContainerWindow->ScreenToOutputPixel( ::Point( e.MousePos.X, e.MousePos.Y )));
 
             if ( aHotZoneTopDockRect.IsInside( aMousePos ))
@@ -3551,25 +3550,21 @@ throw (uno::RuntimeException)
                 {
                     aUIDockingElement.m_aDockedData.m_nDockedArea = ui::DockingArea_DOCKINGAREA_TOP;
                     aUIDockingElement.m_bFloating = false;
-                    pDockingAreaWindow = VCLUnoHelper::GetWindow( xTopDockingWindow );
                 }
                 else if ( eDockingArea == ui::DockingArea_DOCKINGAREA_BOTTOM )
                 {
                     aUIDockingElement.m_aDockedData.m_nDockedArea = ui::DockingArea_DOCKINGAREA_BOTTOM;
                     aUIDockingElement.m_bFloating = false;
-                    pDockingAreaWindow = VCLUnoHelper::GetWindow( xBottomDockingWindow );
                 }
                 else if ( eDockingArea == ui::DockingArea_DOCKINGAREA_LEFT )
                 {
                     aUIDockingElement.m_aDockedData.m_nDockedArea = ui::DockingArea_DOCKINGAREA_LEFT;
                     aUIDockingElement.m_bFloating = false;
-                    pDockingAreaWindow = VCLUnoHelper::GetWindow( xLeftDockingWindow );
                 }
                 else if ( eDockingArea == ui::DockingArea_DOCKINGAREA_RIGHT )
                 {
                     aUIDockingElement.m_aDockedData.m_nDockedArea = ui::DockingArea_DOCKINGAREA_RIGHT;
                     aUIDockingElement.m_bFloating = false;
-                    pDockingAreaWindow = VCLUnoHelper::GetWindow( xRightDockingWindow );
                 }
 
                 ::Point aOutputPos = pContainerWindow->ScreenToOutputPixel( aTrackingRect.TopLeft() );
