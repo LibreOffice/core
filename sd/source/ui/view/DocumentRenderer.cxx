@@ -1329,7 +1329,7 @@ public:
             ::boost::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
 
         if ( ! mpPrintView)
-            mpPrintView.reset(new DrawView(mrBase.GetDocShell(), &rPrinter, pDrawViewShell.get()));
+            mpPrintView.reset(new DrawView(mrBase.GetDocShell(), &rPrinter, NULL));
 
         if (nIndex<0 || sal::static_int_cast<sal_uInt32>(nIndex)>=maPrinterPages.size())
             return;
