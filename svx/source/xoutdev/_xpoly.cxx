@@ -1431,7 +1431,7 @@ bool ImpXPolyPolygon::operator==(const ImpXPolyPolygon& rImpXPolyPoly) const
 |*
 *************************************************************************/
 
-XPolyPolygon::XPolyPolygon( sal_uInt16 nInitSize, sal_uInt16 nResize )
+XPolyPolygon::XPolyPolygon( sal_uInt16 /*nInitSize*/, sal_uInt16 /*nResize*/ )
 {
     DBG_CTOR(XPolyPolygon,NULL);
     pImpXPolyPolygon = new ImpXPolyPolygon();
