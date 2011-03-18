@@ -36,7 +36,7 @@
 
 ModalDialog DLG_LEGEND
 {
-    HelpID = SID_INSERT_CHART_LEGEND ;
+    HelpID = HID_INSERT_CHART_LEGEND ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 156 , 80 ) ;

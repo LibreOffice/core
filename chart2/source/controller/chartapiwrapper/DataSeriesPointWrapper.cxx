@@ -174,43 +174,55 @@ void lcl_AddPropertiesToVector_SeriesOnly(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-const uno::Sequence< Property > & lcl_GetPropertySequence( DataSeriesPointWrapper::eType _eType )
+uno::Sequence< Property > lcl_GetPropertySequence( DataSeriesPointWrapper::eType _eType )
 {
-    static uno::Sequence< Property > aSeriesPropSeq;
-    static uno::Sequence< Property > aPointPropSeq;
+    ::std::vector< ::com::sun::star::beans::Property > aProperties;
 
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    uno::Sequence< Property >& rPropSeq =
-        (_eType == DataSeriesPointWrapper::DATA_SERIES) ? aSeriesPropSeq : aPointPropSeq;
-    if( 0 == rPropSeq.getLength() )
+    lcl_AddPropertiesToVector_PointProperties( aProperties );
+    if( _eType == DataSeriesPointWrapper::DATA_SERIES )
     {
-        // get properties
-        ::std::vector< ::com::sun::star::beans::Property > aProperties;
-
-        lcl_AddPropertiesToVector_PointProperties( aProperties );
-        if( _eType == DataSeriesPointWrapper::DATA_SERIES )
-        {
-            lcl_AddPropertiesToVector_SeriesOnly( aProperties );
-            WrappedStatisticProperties::addProperties( aProperties );
-        }
-        WrappedSymbolProperties::addProperties( aProperties ); //for series and  points
-        WrappedDataCaptionProperties::addProperties( aProperties ); //for series and  points
-
-        ::chart::FillProperties::AddPropertiesToVector( aProperties );
-        ::chart::LineProperties::AddPropertiesToVector( aProperties );
-        ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
-        ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
-        ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
-
-        // and sort them for access via bsearch
-        ::std::sort( aProperties.begin(), aProperties.end(), ::chart::PropertyNameLess() );
-
-        // transfer result to static Sequence
-        rPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        lcl_AddPropertiesToVector_SeriesOnly( aProperties );
+        WrappedStatisticProperties::addProperties( aProperties );
     }
+    WrappedSymbolProperties::addProperties( aProperties ); //for series and  points
+    WrappedDataCaptionProperties::addProperties( aProperties ); //for series and  points
 
-    return rPropSeq;
+    ::chart::FillProperties::AddPropertiesToVector( aProperties );
+    ::chart::LineProperties::AddPropertiesToVector( aProperties );
+    ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
+    ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
+    ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
+
+    ::std::sort( aProperties.begin(), aProperties.end(), ::chart::PropertyNameLess() );
+
+    return ::chart::ContainerHelper::ContainerToSequence( aProperties );
 }
+
+struct StaticSeriesWrapperPropertyArray_Initializer
+{
+    Sequence< Property >* operator()()
+    {
+        static Sequence< Property > aPropSeq( lcl_GetPropertySequence( DataSeriesPointWrapper::DATA_SERIES ) );
+        return &aPropSeq;
+    }
+};
+
+struct StaticSeriesWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticSeriesWrapperPropertyArray_Initializer >
+{
+};
+
+struct StaticPointWrapperPropertyArray_Initializer
+{
+    Sequence< Property >* operator()()
+    {
+        static Sequence< Property > aPropSeq( lcl_GetPropertySequence( DataSeriesPointWrapper::DATA_POINT ) );
+        return &aPropSeq;
+    }
+};
+
+struct StaticPointWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticPointWrapperPropertyArray_Initializer >
+{
+};
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -702,7 +714,10 @@ Reference< beans::XPropertySet > DataSeriesPointWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& DataSeriesPointWrapper::getPropertySequence()
 {
-    return lcl_GetPropertySequence( m_eType );
+    if( m_eType == DATA_SERIES )
+        return *StaticSeriesWrapperPropertyArray::get();
+    else
+        return *StaticPointWrapperPropertyArray::get();
 }
 
 const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedProperties()

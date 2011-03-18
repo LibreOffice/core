@@ -56,7 +56,7 @@ class ScInputStatusItem : public SfxPoolItem
 public:
                             TYPEINFO();
 
-                            ScInputStatusItem( USHORT nWhich,
+                            ScInputStatusItem( sal_uInt16 nWhich,
                                                const ScAddress& rCurPos,
                                                const ScAddress& rStartPos,
                                                const ScAddress& rEndPos,
@@ -94,16 +94,16 @@ public:
 
 class ScTablesHint : public SfxHint
 {
-    USHORT nId;
+    sal_uInt16 nId;
     SCTAB nTab1;
     SCTAB nTab2;
 
 public:
                     TYPEINFO();
-                    ScTablesHint(USHORT nNewId, SCTAB nTable1, SCTAB nTable2=0);
+                    ScTablesHint(sal_uInt16 nNewId, SCTAB nTable1, SCTAB nTable2=0);
                     ~ScTablesHint();
 
-    USHORT          GetId() const           { return nId; }
+    sal_uInt16          GetId() const           { return nId; }
     SCTAB           GetTab1() const         { return nTab1; }
     SCTAB           GetTab2() const         { return nTab2; }
 };
@@ -129,16 +129,16 @@ private:
 
 class ScIndexHint : public SfxHint
 {
-    USHORT nId;
-    USHORT nIndex;
+    sal_uInt16 nId;
+    sal_uInt16 nIndex;
 
 public:
                     TYPEINFO();
-                    ScIndexHint(USHORT nNewId, USHORT nIdx);
+                    ScIndexHint(sal_uInt16 nNewId, sal_uInt16 nIdx);
                     ~ScIndexHint();
 
-    USHORT          GetId() const           { return nId; }
-    USHORT          GetIndex() const        { return nIndex; }
+    sal_uInt16          GetId() const           { return nId; }
+    sal_uInt16          GetIndex() const        { return nIndex; }
 };
 
 //----------------------------------------------------------------------------
@@ -148,10 +148,10 @@ class SC_DLLPUBLIC ScSortItem : public SfxPoolItem
 {
 public:
                             TYPEINFO();
-                            ScSortItem( USHORT              nWhich,
+                            ScSortItem( sal_uInt16              nWhich,
                                         ScViewData*         ptrViewData,
                                         const ScSortParam*  pSortData );
-                            ScSortItem( USHORT              nWhich,
+                            ScSortItem( sal_uInt16              nWhich,
                                         const ScSortParam*  pSortData );
                             ScSortItem( const ScSortItem& rItem );
                             ~ScSortItem();
@@ -159,7 +159,7 @@ public:
     virtual String          GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberUd ) const;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberUd ) const;
 
     ScViewData*         GetViewData () const { return pViewData; }
     const ScSortParam&  GetSortData () const { return theSortData; }
@@ -176,10 +176,10 @@ class SC_DLLPUBLIC ScQueryItem : public SfxPoolItem
 {
 public:
                             TYPEINFO();
-                            ScQueryItem( USHORT                 nWhich,
+                            ScQueryItem( sal_uInt16                 nWhich,
                                          ScViewData*            ptrViewData,
                                          const ScQueryParam*    pQueryData );
-                            ScQueryItem( USHORT                 nWhich,
+                            ScQueryItem( sal_uInt16                 nWhich,
                                          const ScQueryParam*    pQueryData );
                             ScQueryItem( const ScQueryItem& rItem );
                             ~ScQueryItem();
@@ -191,13 +191,13 @@ public:
     ScViewData*         GetViewData () const { return pViewData; }
     const ScQueryParam& GetQueryData() const { return theQueryData; }
 
-    BOOL        GetAdvancedQuerySource(ScRange& rSource) const;
+    sal_Bool        GetAdvancedQuerySource(ScRange& rSource) const;
     void        SetAdvancedQuerySource(const ScRange* pSource);
 
 private:
     ScViewData*     pViewData;
     ScQueryParam    theQueryData;
-    BOOL            bIsAdvanced;
+    sal_Bool            bIsAdvanced;
     ScRange         aAdvSource;
 };
 
@@ -208,10 +208,10 @@ class SC_DLLPUBLIC ScSubTotalItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScSubTotalItem( USHORT                  nWhich,
+                ScSubTotalItem( sal_uInt16                  nWhich,
                                 ScViewData*             ptrViewData,
                                 const ScSubTotalParam*  pSubTotalData );
-                ScSubTotalItem( USHORT                  nWhich,
+                ScSubTotalItem( sal_uInt16                  nWhich,
                                 const ScSubTotalParam*  pSubTotalData );
                 ScSubTotalItem( const ScSubTotalItem&   rItem );
                 ~ScSubTotalItem();
@@ -219,7 +219,7 @@ public:
     virtual String          GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberUd ) const;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberUd ) const;
 
     ScViewData*             GetViewData () const { return pViewData; }
     const ScSubTotalParam&  GetSubTotalData() const { return theSubTotalData; }
@@ -236,7 +236,7 @@ class SC_DLLPUBLIC ScUserListItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScUserListItem( USHORT nWhich );
+                ScUserListItem( sal_uInt16 nWhich );
                 ScUserListItem( const ScUserListItem& rItem );
                 ~ScUserListItem();
 
@@ -258,7 +258,7 @@ class ScConsolidateItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScConsolidateItem( USHORT                    nWhich,
+                ScConsolidateItem( sal_uInt16                    nWhich,
                                    const ScConsolidateParam* pParam );
                 ScConsolidateItem( const ScConsolidateItem& rItem );
                 ~ScConsolidateItem();
@@ -280,8 +280,8 @@ class ScPivotItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScPivotItem( USHORT nWhich, const ScDPSaveData* pData,
-                             const ScRange* pRange, BOOL bNew );
+                ScPivotItem( sal_uInt16 nWhich, const ScDPSaveData* pData,
+                             const ScRange* pRange, sal_Bool bNew );
                 ScPivotItem( const ScPivotItem& rItem );
                 ~ScPivotItem();
 
@@ -291,12 +291,12 @@ public:
 
     const ScDPSaveData& GetData() const         { return *pSaveData; }
     const ScRange&      GetDestRange() const    { return aDestRange; }
-    BOOL                IsNewSheet() const      { return bNewSheet; }
+    sal_Bool                IsNewSheet() const      { return bNewSheet; }
 
 private:
     ScDPSaveData*   pSaveData;
     ScRange         aDestRange;
-    BOOL            bNewSheet;
+    sal_Bool            bNewSheet;
 };
 
 //----------------------------------------------------------------------------
@@ -306,7 +306,7 @@ class ScSolveItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScSolveItem( USHORT              nWhich,
+                ScSolveItem( sal_uInt16              nWhich,
                              const ScSolveParam* pParam );
                 ScSolveItem( const ScSolveItem& rItem );
                 ~ScSolveItem();
@@ -328,7 +328,7 @@ class ScTabOpItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScTabOpItem( USHORT              nWhich,
+                ScTabOpItem( sal_uInt16              nWhich,
                              const ScTabOpParam* pParam );
                 ScTabOpItem( const ScTabOpItem& rItem );
                 ~ScTabOpItem();
@@ -350,7 +350,7 @@ class ScCondFrmtItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScCondFrmtItem( USHORT nWhich,
+                ScCondFrmtItem( sal_uInt16 nWhich,
 //!                             const ScConditionalFormat* pCondFrmt );
                                 const ScConditionalFormat& rCondFrmt );
                 ScCondFrmtItem( const ScCondFrmtItem& rItem );

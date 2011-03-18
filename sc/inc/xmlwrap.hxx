@@ -76,8 +76,8 @@ class ScXMLImportWrapper
 
 public:
     ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >&);
-    BOOL Import(sal_Bool bStylesOnly, ErrCode& );
-    BOOL Export(sal_Bool bStylesOnly);
+    sal_Bool Import(sal_Bool bStylesOnly, ErrCode& );
+    sal_Bool Export(sal_Bool bStylesOnly);
 };
 
 #endif

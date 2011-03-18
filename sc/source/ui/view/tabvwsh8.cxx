@@ -61,9 +61,9 @@ void ScTabViewShell::SetDefaultFrameLine( const SvxBorderLine* pLine )
 
 //------------------------------------------------------------------
 
-BOOL ScTabViewShell::HasSelection( BOOL bText ) const
+sal_Bool ScTabViewShell::HasSelection( sal_Bool bText ) const
 {
-    BOOL bHas = FALSE;
+    sal_Bool bHas = false;
     ScViewData* pData = (ScViewData*)GetViewData();     // const weggecasted
     if ( bText )
     {
@@ -82,7 +82,7 @@ BOOL ScTabViewShell::HasSelection( BOOL bText ) const
         if ( eMarkType == SC_MARK_SIMPLE )
             bHas = ( aRange.aStart != aRange.aEnd );    // more than 1 cell
         else
-            bHas = TRUE;                                // multiple selection or filtered
+            bHas = sal_True;                                // multiple selection or filtered
     }
     return bHas;
 }

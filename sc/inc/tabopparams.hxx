@@ -45,14 +45,14 @@ struct ScInterpreterTableOpParams
     ScAddress   aFormulaPos;
     ::std::vector< ScFormulaCell* > aNotifiedFormulaCells;
     ::std::vector< ScAddress >      aNotifiedFormulaPos;
-    BOOL        bValid;
-    BOOL        bRefresh;
-    BOOL        bCollectNotifications;
+    sal_Bool        bValid;
+    sal_Bool        bRefresh;
+    sal_Bool        bCollectNotifications;
 
     ScInterpreterTableOpParams()
-            : bValid( FALSE )
-            , bRefresh( FALSE )
-            , bCollectNotifications( TRUE )
+            : bValid( false )
+            , bRefresh( false )
+            , bCollectNotifications( sal_True )
     {
     }
 

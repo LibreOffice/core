@@ -92,9 +92,9 @@ protected:
     ScAddress           aEingPos;
     ConvErr             eStatus;
     sal_Char*           pBuffer;        // Universal-Puffer
-    UINT16              nBufferSize;    // ...und seine Groesse
+    sal_uInt16              nBufferSize;    // ...und seine Groesse
 
-                        ConverterBase( UINT16 nNewBuffer );
+                        ConverterBase( sal_uInt16 nNewBuffer );
     virtual             ~ConverterBase();
 
     void                Reset();
@@ -111,7 +111,7 @@ public:
 class ExcelConverterBase : public ConverterBase
 {
 protected:
-                        ExcelConverterBase( UINT16 nNewBuffer );
+                        ExcelConverterBase( sal_uInt16 nNewBuffer );
     virtual             ~ExcelConverterBase();
 
 public:
@@ -130,23 +130,23 @@ class LotusConverterBase : public ConverterBase
 {
 protected:
     SvStream&           aIn;
-    INT32               nBytesLeft;
+    sal_Int32               nBytesLeft;
 
     inline void         Ignore( const long nSeekRel );
     inline void         Read( sal_Char& nByte );
-    inline void         Read( BYTE& nByte );
-    inline void         Read( UINT16& nUINT16 );
-    inline void         Read( INT16& nINT16 );
+    inline void         Read( sal_uInt8& nByte );
+    inline void         Read( sal_uInt16& nUINT16 );
+    inline void         Read( sal_Int16& nINT16 );
     inline void         Read( double& fDouble );
-        inline void                     Read( UINT32& nUINT32 );
+        inline void                     Read( sal_uInt32& nUINT32 );
 
-                        LotusConverterBase( SvStream& rStr, UINT16 nNewBuffer );
+                        LotusConverterBase( SvStream& rStr, sal_uInt16 nNewBuffer );
     virtual             ~LotusConverterBase();
 
 public:
     void                Reset( const ScAddress& rEingPos );
 
-    virtual ConvErr     Convert( const ScTokenArray*& rpErg, INT32& nRest,
+    virtual ConvErr     Convert( const ScTokenArray*& rpErg, sal_Int32& nRest,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
 
 protected:
@@ -166,19 +166,19 @@ inline void LotusConverterBase::Read( sal_Char& nByte )
     nBytesLeft--;
 }
 
-inline void LotusConverterBase::Read( BYTE& nByte )
+inline void LotusConverterBase::Read( sal_uInt8& nByte )
 {
     aIn >> nByte;
     nBytesLeft--;
 }
 
-inline void LotusConverterBase::Read( UINT16& nUINT16 )
+inline void LotusConverterBase::Read( sal_uInt16& nUINT16 )
 {
     aIn >> nUINT16;
     nBytesLeft -= 2;
 }
 
-inline void LotusConverterBase::Read( INT16& nINT16 )
+inline void LotusConverterBase::Read( sal_Int16& nINT16 )
 {
     aIn >> nINT16;
     nBytesLeft -= 2;
@@ -190,7 +190,7 @@ inline void LotusConverterBase::Read( double& fDouble )
     nBytesLeft -= 8;
 }
 
-inline void LotusConverterBase::Read( UINT32& nUINT32 )
+inline void LotusConverterBase::Read( sal_uInt32& nUINT32 )
 {
     aIn >> nUINT32;
     nBytesLeft -= 4;

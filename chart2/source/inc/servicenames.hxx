@@ -63,8 +63,6 @@ namespace chart
 
 #define CHART_RENDERER_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ChartRenderer" ))
 
-#define CHART_UNDOMANAGER_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.UndoManager" ))
-
 //.............................................................................
 } //namespace chart
 //.............................................................................

@@ -181,7 +181,7 @@ sal_Bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, const String& rN
             return sal_True;
         }
     }
-    return sal_False;       // is nich
+    return false;       // is nich
 }
 
 //------------------------------------------------------------------------
@@ -251,7 +251,7 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const rtl::OUString& aName, const 
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = sal_False;
+    sal_Bool bDone = false;
     //  Reflection muss nicht uno::XInterface sein, kann auch irgendein Interface sein...
     uno::Reference< uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
     if ( xInterface.is() )
@@ -422,7 +422,7 @@ sal_Bool SAL_CALL ScAutoFormatsObj::hasByName( const rtl::OUString& aName )
         sal_uInt16 nDummy;
         return lcl_FindAutoFormatIndex( *pFormats, aString, nDummy );
     }
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------
@@ -670,7 +670,7 @@ uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const rtl::OUString& aPrope
         DBG_ASSERT(pData,"AutoFormat Daten nicht da");
 
         sal_Bool bValue;
-        sal_Bool bError = sal_False;
+        sal_Bool bError = false;
 
         String aPropString(aPropertyName);
         if (aPropString.EqualsAscii( SC_UNONAME_INCBACK ))
@@ -745,7 +745,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
         {
             if( const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pEntry->nWID ) )
             {
-                sal_Bool bDone = sal_False;
+                sal_Bool bDone = false;
 
                 switch( pEntry->nWID )
                 {
@@ -757,18 +757,18 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                             switch( eOrient )
                             {
                                 case table::CellOrientation_STANDARD:
-                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, false ) );
                                 break;
                                 case table::CellOrientation_TOPBOTTOM:
-                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, false ) );
                                     pData->PutItem( nFieldIndex, SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
                                 break;
                                 case table::CellOrientation_BOTTOMTOP:
-                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, false ) );
                                     pData->PutItem( nFieldIndex, SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
                                 break;
                                 case table::CellOrientation_STACKED:
-                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, TRUE ) );
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, sal_True ) );
                                 break;
                                 default:
                                 {
@@ -841,7 +841,7 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const rtl::OUString& a
                     {
                         const SfxInt32Item* pRotItem = (const SfxInt32Item*)pData->GetItem( nFieldIndex, ATTR_ROTATE_VALUE );
                         sal_Int32 nRot = pRotItem ? pRotItem->GetValue() : 0;
-                        BOOL bStacked = ((const SfxBoolItem*)pItem)->GetValue();
+                        sal_Bool bStacked = ((const SfxBoolItem*)pItem)->GetValue();
                         SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aVal );
                     }
                     break;

@@ -521,7 +521,7 @@ XclTokenArrayRef XclExpFmlaCompImpl::CreateFormula( XclFormulaType eType,
     if( mxData->mbOk )
     {
         XclExpScToken aTokData( GetNextToken() );
-        USHORT nScError = rScTokArr.GetCodeError();
+        sal_uInt16 nScError = rScTokArr.GetCodeError();
         if( (nScError != 0) && (!aTokData.Is() || (aTokData.GetOpCode() == ocStop)) )
         {
             // #i50253# convert simple ocStop token to error code formula (e.g. =#VALUE!)
@@ -1319,7 +1319,7 @@ void XclExpFmlaCompImpl::ProcessMatrix( const XclExpScToken& rTokData )
                         AppendExt( static_cast< sal_uInt8 >( nMatVal.GetBoolean() ? 1 : 0 ) );
                         AppendExt( 0, 7 );
                     }
-                    else if( USHORT nErr = nMatVal.GetError() )
+                    else if( sal_uInt16 nErr = nMatVal.GetError() )
                     {
                         AppendExt( EXC_CACHEDVAL_ERROR );
                         AppendExt( XclTools::GetXclErrorCode( nErr ) );
@@ -1744,7 +1744,11 @@ void XclExpFmlaCompImpl::AppendTrailingParam( XclExpFuncData& rFuncData )
 
         break;
 
-        default:;
+        default:
+            // #i108420# function without parameters stored as macro call needs the external name reference
+            if( (nParamCount == 0) && rFuncData.IsMacroFunc() )
+                AppendDefaultParam( rFuncData );
+
     }
 }
 
@@ -1808,7 +1812,7 @@ void XclExpFmlaCompImpl::ConvertRefData(
         if( bTruncMaxCol && (rnScCol == mnMaxScCol) )
             rnScCol = mnMaxAbsCol;
         else if( (rnScCol < 0) || (rnScCol > mnMaxAbsCol) )
-            rRefData.SetColDeleted( TRUE );
+            rRefData.SetColDeleted( sal_True );
         rXclPos.mnCol = static_cast< sal_uInt16 >( rnScCol ) & mnMaxColMask;
 
         // convert row index
@@ -1816,7 +1820,7 @@ void XclExpFmlaCompImpl::ConvertRefData(
         if( bTruncMaxRow && (rnScRow == mnMaxScRow) )
             rnScRow = mnMaxAbsRow;
         else if( (rnScRow < 0) || (rnScRow > mnMaxAbsRow) )
-            rRefData.SetRowDeleted( TRUE );
+            rRefData.SetRowDeleted( sal_True );
         rXclPos.mnRow = static_cast< sal_uInt16 >( rnScRow ) & mnMaxRowMask;
     }
     else
@@ -1984,7 +1988,7 @@ void XclExpFmlaCompImpl::ProcessExternalCellRef( const XclExpScToken& rTokData )
         ConvertRefData( aRefData, aXclPos, false, false, false );
 
         // store external cell contents in CRN records
-        USHORT nFileId = rTokData.mpScToken->GetIndex();
+        sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
         const String& rTabName = rTokData.mpScToken->GetString();
         if( mxData->mrCfg.mbFromCell && mxData->mpScBasePos )
             mxData->mpLinkMgr->StoreCell( nFileId, rTabName, aRefData );
@@ -2020,7 +2024,7 @@ void XclExpFmlaCompImpl::ProcessExternalRangeRef( const XclExpScToken& rTokData 
         ConvertRefData( aRefData, aXclRange, false );
 
         // store external cell contents in CRN records
-        USHORT nFileId = rTokData.mpScToken->GetIndex();
+        sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
         const String& rTabName = rTokData.mpScToken->GetString();
         if( mxData->mrCfg.mbFromCell && mxData->mpScBasePos )
             mxData->mpLinkMgr->StoreCellRange( nFileId, rTabName, aRefData );
@@ -2084,7 +2088,7 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
     if( mxData->mpLinkMgr )
     {
         ScExternalRefManager& rExtRefMgr = *GetDoc().GetExternalRefManager();
-        USHORT nFileId = rTokData.mpScToken->GetIndex();
+        sal_uInt16 nFileId = rTokData.mpScToken->GetIndex();
         const String& rName = rTokData.mpScToken->GetString();
         ScExternalRefCache::TokenArrayRef xArray = rExtRefMgr.getRangeNameTokens( nFileId, rName );
         if( xArray.get() )
@@ -2524,11 +2528,11 @@ void lclInitOwnTab( ScSingleRefData& rRef, const ScAddress& rScPos, SCTAB nCurrS
     if( b3DRefOnly )
     {
         // no reduction to 2D reference, if global link manager is used
-        rRef.SetFlag3D( TRUE );
+        rRef.SetFlag3D( sal_True );
     }
     else if( rScPos.Tab() == nCurrScTab )
     {
-        rRef.SetTabRel( TRUE );
+        rRef.SetTabRel( sal_True );
         rRef.nRelTab = 0;
     }
 }

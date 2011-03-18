@@ -103,7 +103,7 @@ void ScDocShell::SetVisArea( const Rectangle & rVisArea )
 {
     //  with the SnapVisArea call in SetVisAreaOrSize, it's safe to always
     //  use both the size and position of the VisArea
-    SetVisAreaOrSize( rVisArea, TRUE );
+    SetVisAreaOrSize( rVisArea, sal_True );
 }
 
 void lcl_SetTopRight( Rectangle& rRect, const Point& rPos )
@@ -115,9 +115,9 @@ void lcl_SetTopRight( Rectangle& rRect, const Point& rPos )
     rRect.Bottom() = rPos.Y() + aSize.Height() - 1;
 }
 
-void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart )
+void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, sal_Bool bModifyStart )
 {
-    BOOL bNegativePage = aDocument.IsNegativePage( aDocument.GetVisibleTab() );
+    sal_Bool bNegativePage = aDocument.IsNegativePage( aDocument.GetVisibleTab() );
 
     Rectangle aArea = rVisArea;
     if (bModifyStart)
@@ -200,12 +200,12 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart 
     }
 }
 
-BOOL ScDocShell::IsOle()
+sal_Bool ScDocShell::IsOle()
 {
     return (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
 }
 
-void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
+void ScDocShell::UpdateOle( const ScViewData* pViewData, sal_Bool bSnapSize )
 {
     //  wenn's gar nicht Ole ist, kann man sich die Berechnungen sparen
     //  (VisArea wird dann beim Save wieder zurueckgesetzt)
@@ -218,7 +218,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
     Rectangle aOldArea = SfxObjectShell::GetVisArea();
     Rectangle aNewArea = aOldArea;
 
-    BOOL bEmbedded = aDocument.IsEmbedded();
+    sal_Bool bEmbedded = aDocument.IsEmbedded();
     if (bEmbedded)
         aNewArea = aDocument.GetEmbeddedRect();
     else
@@ -227,7 +227,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
         if ( nTab != aDocument.GetVisibleTab() )
             aDocument.SetVisibleTab( nTab );
 
-        BOOL bNegativePage = aDocument.IsNegativePage( nTab );
+        sal_Bool bNegativePage = aDocument.IsNegativePage( nTab );
         SCCOL nX = pViewData->GetPosX(SC_SPLIT_LEFT);
         SCROW nY = pViewData->GetPosY(SC_SPLIT_BOTTOM);
         Rectangle aMMRect = aDocument.GetMMRect( nX,nY, nX,nY, nTab );
@@ -240,7 +240,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
     }
 
     if (aNewArea != aOldArea)
-        SetVisAreaOrSize( aNewArea, TRUE ); // hier muss auch der Start angepasst werden
+        SetVisAreaOrSize( aNewArea, true ); // hier muss auch der Start angepasst werden
 }
 
 //
@@ -266,14 +266,14 @@ void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
         SfxItemSet& rStyleSet = pStyle->GetItemSet();
 
         const SfxPoolItem* pItem;
-        if (rStyleSet.GetItemState(ATTR_PAGE_HEADERSET,FALSE,&pItem) == SFX_ITEM_SET)
+        if (rStyleSet.GetItemState(ATTR_PAGE_HEADERSET,false,&pItem) == SFX_ITEM_SET)
         {
             SfxItemSet& rSrcSet = ((SvxSetItem*)pItem)->GetItemSet();
             SfxItemSet* pDestSet = new SfxItemSet(*rStyleSet.GetPool(),rSrcSet.GetRanges());
             pDestSet->Put(rSrcSet);
             rStyleSet.Put(SvxSetItem(ATTR_PAGE_HEADERSET,pDestSet));
         }
-        if (rStyleSet.GetItemState(ATTR_PAGE_FOOTERSET,FALSE,&pItem) == SFX_ITEM_SET)
+        if (rStyleSet.GetItemState(ATTR_PAGE_FOOTERSET,false,&pItem) == SFX_ITEM_SET)
         {
             SfxItemSet& rSrcSet = ((SvxSetItem*)pItem)->GetItemSet();
             SfxItemSet* pDestSet = new SfxItemSet(*rStyleSet.GetPool(),rSrcSet.GetRanges());
@@ -301,7 +301,7 @@ void ScDocShell::LoadStyles( SfxObjectShell &rSource )
     PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID | PAINT_LEFT );
 }
 
-void ScDocShell::LoadStylesArgs( ScDocShell& rSource, BOOL bReplace, BOOL bCellStyles, BOOL bPageStyles )
+void ScDocShell::LoadStylesArgs( ScDocShell& rSource, sal_Bool bReplace, sal_Bool bCellStyles, sal_Bool bPageStyles )
 {
     //  similar to LoadStyles, but with selectable behavior for XStyleLoader::loadStylesFromURL call
 
@@ -315,12 +315,12 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, BOOL bReplace, BOOL bCellS
             ( bPageStyles ? SFX_STYLE_FAMILY_ALL : SFX_STYLE_FAMILY_PARA ) :
             SFX_STYLE_FAMILY_PAGE;
     SfxStyleSheetIterator aIter( pSourcePool, eFamily );
-    USHORT nSourceCount = aIter.Count();
+    sal_uInt16 nSourceCount = aIter.Count();
     if ( nSourceCount == 0 )
         return;                             // no source styles
 
     ScStylePair* pStyles = new ScStylePair[ nSourceCount ];
-    USHORT nFound = 0;
+    sal_uInt16 nFound = 0;
 
     //  first create all new styles
 
@@ -351,7 +351,7 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, BOOL bReplace, BOOL bCellS
 
     //  then copy contents (after inserting all styles, for parent etc.)
 
-    for ( USHORT i = 0; i < nFound; ++i )
+    for ( sal_uInt16 i = 0; i < nFound; ++i )
     {
         pStyles[i].pDest->GetItemSet().PutExtended(
             pStyles[i].pSource->GetItemSet(), SFX_ITEM_DONTCARE, SFX_ITEM_DEFAULT);
@@ -368,11 +368,11 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, BOOL bReplace, BOOL bCellS
 }
 
 
-BOOL ScDocShell::Insert( SfxObjectShell &rSource,
-                                USHORT nSourceIdx1, USHORT nSourceIdx2, USHORT nSourceIdx3,
-                                USHORT &nIdx1, USHORT &nIdx2, USHORT &nIdx3, USHORT &rIdxDeleted )
+sal_Bool ScDocShell::Insert( SfxObjectShell &rSource,
+                                sal_uInt16 nSourceIdx1, sal_uInt16 nSourceIdx2, sal_uInt16 nSourceIdx3,
+                                sal_uInt16 &nIdx1, sal_uInt16 &nIdx2, sal_uInt16 &nIdx3, sal_uInt16 &rIdxDeleted )
 {
-    BOOL bRet = SfxObjectShell::Insert( rSource, nSourceIdx1, nSourceIdx2, nSourceIdx3,
+    sal_Bool bRet = SfxObjectShell::Insert( rSource, nSourceIdx1, nSourceIdx2, nSourceIdx3,
                                             nIdx1, nIdx2, nIdx3, rIdxDeleted );
     if (bRet)
         lcl_AdjustPool( GetStyleSheetPool() );      // SetItems anpassen
@@ -396,8 +396,8 @@ void ScDocShell::UpdateLinks()
 
     // nicht mehr benutzte Links raus
 
-    USHORT nCount = pLinkManager->GetLinks().Count();
-    for (USHORT k=nCount; k>0; )
+    sal_uInt16 nCount = pLinkManager->GetLinks().Count();
+    for (sal_uInt16 k=nCount; k>0; )
     {
         --k;
         ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[k];
@@ -412,7 +412,7 @@ void ScDocShell::UpdateLinks()
             }
             else        // nicht mehr benutzt -> loeschen
             {
-                pTabLink->SetAddUndo(TRUE);
+                pTabLink->SetAddUndo(sal_True);
                 pLinkManager->Remove(k);
             }
         }
@@ -428,8 +428,8 @@ void ScDocShell::UpdateLinks()
             String aDocName = aDocument.GetLinkDoc(i);
             String aFltName = aDocument.GetLinkFlt(i);
             String aOptions = aDocument.GetLinkOpt(i);
-            ULONG nRefresh  = aDocument.GetLinkRefreshDelay(i);
-            BOOL bThere = FALSE;
+            sal_uLong nRefresh  = aDocument.GetLinkRefreshDelay(i);
+            sal_Bool bThere = false;
             for (SCTAB j=0; j<i && !bThere; j++)                // im Dokument mehrfach?
                 if (aDocument.IsLinked(j)
                         && aDocument.GetLinkDoc(j) == aDocName
@@ -438,7 +438,7 @@ void ScDocShell::UpdateLinks()
                         // Ignore refresh delay in compare, it should be the
                         // same for identical links and we don't want dupes
                         // if it ain't.
-                    bThere = TRUE;
+                    bThere = sal_True;
 
             if (!bThere)                                        // schon als Filter eingetragen?
             {
@@ -446,36 +446,36 @@ void ScDocShell::UpdateLinks()
                 if (!aNames.Insert(pData))
                 {
                     delete pData;
-                    bThere = TRUE;
+                    bThere = sal_True;
                 }
             }
             if (!bThere)
             {
                 ScTableLink* pLink = new ScTableLink( this, aDocName, aFltName, aOptions, nRefresh );
-                pLink->SetInCreate( TRUE );
+                pLink->SetInCreate( sal_True );
                 pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aDocName, &aFltName );
                 pLink->Update();
-                pLink->SetInCreate( FALSE );
+                pLink->SetInCreate( false );
             }
         }
 }
 
-BOOL ScDocShell::ReloadTabLinks()
+sal_Bool ScDocShell::ReloadTabLinks()
 {
     sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
 
-    BOOL bAny = FALSE;
-    USHORT nCount = pLinkManager->GetLinks().Count();
-    for (USHORT i=0; i<nCount; i++ )
+    sal_Bool bAny = false;
+    sal_uInt16 nCount = pLinkManager->GetLinks().Count();
+    for (sal_uInt16 i=0; i<nCount; i++ )
     {
         ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
         if (pBase->ISA(ScTableLink))
         {
             ScTableLink* pTabLink = (ScTableLink*)pBase;
-            pTabLink->SetPaint(FALSE);          //  Paint nur einmal am Ende
+            pTabLink->SetPaint(false);          //  Paint nur einmal am Ende
             pTabLink->Update();
-            pTabLink->SetPaint(TRUE);
-            bAny = TRUE;
+            pTabLink->SetPaint(true);
+            bAny = true;
         }
     }
 
@@ -488,7 +488,7 @@ BOOL ScDocShell::ReloadTabLinks()
         SetDocumentModified();
     }
 
-    return TRUE;        //! Fehler erkennen
+    return sal_True;        //! Fehler erkennen
 }
 
 void ScDocShell::CheckConfigOptions()

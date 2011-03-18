@@ -60,7 +60,7 @@ ScMarkArray::~ScMarkArray()
 
 //------------------------------------------------------------------------
 
-void ScMarkArray::Reset( BOOL bMarked )
+void ScMarkArray::Reset( sal_Bool bMarked )
 {
     // always create pData here
     // (or have separate method to ensure pData)
@@ -75,11 +75,11 @@ void ScMarkArray::Reset( BOOL bMarked )
 
 //------------------------------------------------------------------------
 
-BOOL ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
+sal_Bool ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
 {
     long    nHi         = static_cast<long>(nCount) - 1;
     long    i           = 0;
-    BOOL    bFound      = (nCount == 1);
+    sal_Bool    bFound      = (nCount == 1);
     if (pData)
     {
         long    nLo         = 0;
@@ -98,11 +98,11 @@ BOOL ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
                 if (nStartRow >= (long) nRow)
                     nHi = --i;
                 else
-                    bFound = TRUE;
+                    bFound = sal_True;
         }
     }
     else
-        bFound = FALSE;
+        bFound = false;
 
     if (bFound)
         nIndex=(SCSIZE)i;
@@ -111,19 +111,19 @@ BOOL ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
     return bFound;
 }
 
-BOOL ScMarkArray::GetMark( SCROW nRow ) const
+sal_Bool ScMarkArray::GetMark( SCROW nRow ) const
 {
     SCSIZE i;
     if (Search( nRow, i ))
         return pData[i].bMarked;
     else
-        return FALSE;
+        return false;
 
 }
 
 //------------------------------------------------------------------------
 
-void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked )
+void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, sal_Bool bMarked )
 {
     if (ValidRow(nStartRow) && ValidRow(nEndRow))
     {
@@ -134,7 +134,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked )
         else
         {
             if (!pData)
-                Reset(FALSE);   // create pData for further processing - could use special case handling!
+                Reset(false);   // create pData for further processing - could use special case handling!
 
             SCSIZE nNeeded = nCount + 2;
             if ( nLimit < nNeeded )
@@ -150,8 +150,8 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked )
 
             SCSIZE ni;          // number of entries in beginning
             SCSIZE nInsert;     // insert position (MAXROW+1 := no insert)
-            BOOL bCombined = FALSE;
-            BOOL bSplit = FALSE;
+            sal_Bool bCombined = false;
+            sal_Bool bSplit = false;
             if ( nStartRow > 0 )
             {
                 // skip beginning
@@ -166,7 +166,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked )
                     {   // may be a split or a simple insert or just a shrink,
                         // row adjustment is done further down
                         if ( pData[ni].nRow > nEndRow )
-                            bSplit = TRUE;
+                            bSplit = sal_True;
                         ni++;
                         nInsert = ni;
                     }
@@ -177,7 +177,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked )
                 {   // combine
                     pData[ni-1].nRow = nEndRow;
                     nInsert = MAXROWCOUNT;
-                    bCombined = TRUE;
+                    bCombined = sal_True;
                 }
             }
             else
@@ -204,7 +204,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked )
                             pData[ni-1].nRow = nStartRow - 1;   // shrink
                     }
                     nInsert = MAXROWCOUNT;
-                    bCombined = TRUE;
+                    bCombined = sal_True;
                 }
                 else if ( ni > 0 && ni == nInsert )
                     pData[ni-1].nRow = nStartRow - 1;   // shrink
@@ -250,7 +250,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked )
     }
 }
 
-BOOL ScMarkArray::IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const
+sal_Bool ScMarkArray::IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const
 {
     SCSIZE nStartIndex;
     SCSIZE nEndIndex;
@@ -259,21 +259,21 @@ BOOL ScMarkArray::IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const
         if (pData[nStartIndex].bMarked)
             if (Search( nEndRow, nEndIndex ))
                 if (nEndIndex==nStartIndex)
-                    return TRUE;
+                    return sal_True;
 
-    return FALSE;
+    return false;
 }
 
-BOOL ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
+sal_Bool ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = false;
     if ( nCount == 1 )
     {
         if ( pData[0].bMarked )
         {
             rStartRow = 0;
             rEndRow = MAXROW;
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
     else if ( nCount == 2 )
@@ -288,7 +288,7 @@ BOOL ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
             rStartRow = pData[0].nRow + 1;
             rEndRow = MAXROW;
         }
-        bRet = TRUE;
+        bRet = sal_True;
     }
     else if ( nCount == 3 )
     {
@@ -296,7 +296,7 @@ BOOL ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
         {
             rStartRow = pData[0].nRow + 1;
             rEndRow = pData[1].nRow;
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
     return bRet;
@@ -317,10 +317,10 @@ void ScMarkArray::CopyMarksTo( ScMarkArray& rDestMarkArray ) const
     rDestMarkArray.nCount = rDestMarkArray.nLimit = nCount;
 }
 
-SCsROW ScMarkArray::GetNextMarked( SCsROW nRow, BOOL bUp ) const
+SCsROW ScMarkArray::GetNextMarked( SCsROW nRow, sal_Bool bUp ) const
 {
     if (!pData)
-        const_cast<ScMarkArray*>(this)->Reset(FALSE);   // create pData for further processing
+        const_cast<ScMarkArray*>(this)->Reset(false);   // create pData for further processing
 
     SCsROW nRet = nRow;
     if (VALIDROW(nRow))
@@ -343,10 +343,10 @@ SCsROW ScMarkArray::GetNextMarked( SCsROW nRow, BOOL bUp ) const
     return nRet;
 }
 
-SCROW ScMarkArray::GetMarkEnd( SCROW nRow, BOOL bUp ) const
+SCROW ScMarkArray::GetMarkEnd( SCROW nRow, sal_Bool bUp ) const
 {
     if (!pData)
-        const_cast<ScMarkArray*>(this)->Reset(FALSE);   // create pData for further processing
+        const_cast<ScMarkArray*>(this)->Reset(false);   // create pData for further processing
 
     SCROW nRet;
     SCSIZE nIndex;
@@ -379,15 +379,15 @@ ScMarkArrayIter::~ScMarkArrayIter()
 {
 }
 
-BOOL ScMarkArrayIter::Next( SCROW& rTop, SCROW& rBottom )
+sal_Bool ScMarkArrayIter::Next( SCROW& rTop, SCROW& rBottom )
 {
     if ( nPos >= pArray->nCount )
-        return FALSE;
+        return false;
     while (!pArray->pData[nPos].bMarked)
     {
         ++nPos;
         if ( nPos >= pArray->nCount )
-            return FALSE;
+            return false;
     }
     rBottom = pArray->pData[nPos].nRow;
     if (nPos==0)
@@ -395,7 +395,7 @@ BOOL ScMarkArrayIter::Next( SCROW& rTop, SCROW& rBottom )
     else
         rTop = pArray->pData[nPos-1].nRow + 1;
     ++nPos;
-    return TRUE;
+    return sal_True;
 }
 
 

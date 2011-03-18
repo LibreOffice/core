@@ -42,9 +42,9 @@ class ScDocument;
 class ScRange;
 class SvNumberFormatter;
 
-// return values im-/export filter  (ULONG)
+// return values im-/export filter  (sal_uLong)
 
-typedef ULONG FltError;
+typedef sal_uLong FltError;
 
 #define eERR_OK         ERRCODE_NONE                // no error
 #define eERR_OPEN       SCERR_IMPORT_OPEN           // ...
@@ -85,10 +85,10 @@ class ScHTMLImport;
 class ScEEAbsImport {
   public:
     virtual ~ScEEAbsImport() {}
-    virtual ULONG   Read( SvStream& rStream, const String& rBaseURL ) = 0;
+    virtual sal_uLong   Read( SvStream& rStream, const String& rBaseURL ) = 0;
     virtual ScRange GetRange() = 0;
     virtual void    WriteToDocument(
-        BOOL bSizeColsRows = FALSE, double nOutputFactor = 1.0,
+        sal_Bool bSizeColsRows = false, double nOutputFactor = 1.0,
         SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true ) = 0;
 };
 
@@ -104,14 +104,14 @@ class ScFormatFilterPlugin {
         // eFormat == EIF_BIFF_LE4 -> only non storage files _might_ be read sucessfully
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) = 0;
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
-                 const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, UINT32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
+                 const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
     virtual FltError ScImportRTF( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange ) = 0;
     virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0,
-                                   BOOL bCalcWidthHeight = TRUE, SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true ) = 0;
+                                   sal_Bool bCalcWidthHeight = sal_True, SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true ) = 0;
 
     // various import helpers
     virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) = 0;
-    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight ) = 0;
+    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, sal_Bool bCalcWidthHeight ) = 0;
     virtual String         GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName ) = 0;
 
     // various export filters
@@ -120,10 +120,10 @@ class ScFormatFilterPlugin {
 #endif
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, CharSet eDest ) = 0;
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const CharSet eDest,
-                                 UINT32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
+                                 sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest,
-                 UINT32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
-    virtual FltError ScExportHTML( SvStream&, const String& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, BOOL bAll,
+                 sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
+    virtual FltError ScExportHTML( SvStream&, const String& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, sal_Bool bAll,
                   const String& rStreamPath, String& rNonConvertibleChars ) = 0;
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest ) = 0;
 };

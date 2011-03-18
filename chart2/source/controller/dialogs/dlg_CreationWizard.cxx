@@ -84,7 +84,7 @@ CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XM
     m_apDialogModel.reset( new DialogModel( m_xChartModel, m_xCC ));
     // Do not call FreeResource(), because there are no sub-elements defined in
     // the dialog resource
-    ShowButtonFixedLine( TRUE );
+    ShowButtonFixedLine( sal_True );
     defaultButton( WZB_FINISH );
 
     if( m_nOnePageOnlyIndex < 0 || m_nOnePageOnlyIndex >= nPageCount )
@@ -102,7 +102,7 @@ CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XM
         , STATE_OBJECTS
         , WZS_INVALID_STATE
     );
-    this->SetRoadmapSmartHelpId( SmartId( HID_SCH_WIZARD_ROADMAP ) );
+    this->SetRoadmapHelpId( HID_SCH_WIZARD_ROADMAP );
     this->SetRoadmapInteractive( sal_True );
     Size aAdditionalRoadmapSize( LogicToPixel( Size( 85, 0 ), MAP_APPFONT ) );
     Size aSize( this->GetSizePixel() );
@@ -213,7 +213,7 @@ void CreationWizard::setValidPage( TabPage * /* pTabPage */ )
 
 String CreationWizard::getStateDisplayName( WizardState nState ) const
 {
-    USHORT nResId = 0;
+    sal_uInt16 nResId = 0;
     switch( nState )
     {
     case STATE_CHARTTYPE:

@@ -70,13 +70,13 @@ TabDialog RID_SCDLG_HFED_HEADER
             {
                 Identifier = 1 ;
                 HEADER_RIGHT
-                PageResID = HID_SCPAGE_HFED_HR ;
+                PageResID = RID_SCPAGE_HFED_HR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 HEADER_LEFT
-                PageResID = HID_SCPAGE_HFED_HL ;
+                PageResID = RID_SCPAGE_HFED_HL ;
             };
         };
     };
@@ -102,13 +102,13 @@ TabDialog RID_SCDLG_HFED_FOOTER
             {
                 Identifier = 1 ;
                 FOOTER_RIGHT
-                PageResID = HID_SCPAGE_HFED_FR ;
+                PageResID = RID_SCPAGE_HFED_FR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 FOOTER_LEFT
-                PageResID = HID_SCPAGE_HFED_FL ;
+                PageResID = RID_SCPAGE_HFED_FL ;
             };
         };
     };
@@ -137,25 +137,25 @@ TabDialog RID_SCDLG_HFEDIT_ALL
             {
                 Identifier = 1 ;
                 HEADER_RIGHT
-                PageResID = HID_SCPAGE_HFED_HR ;
+                PageResID = RID_SCPAGE_HFED_HR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 HEADER_LEFT
-                PageResID = HID_SCPAGE_HFED_HL ;
+                PageResID = RID_SCPAGE_HFED_HL ;
             };
             PageItem
             {
                 Identifier = 3 ;
                 FOOTER_RIGHT
-                PageResID = HID_SCPAGE_HFED_FR ;
+                PageResID = RID_SCPAGE_HFED_FR ;
             };
             PageItem
             {
                 Identifier = 4 ;
                 FOOTER_LEFT
-                PageResID = HID_SCPAGE_HFED_FL ;
+                PageResID = RID_SCPAGE_HFED_FL ;
             };
         };
     };
@@ -181,19 +181,19 @@ TabDialog RID_SCDLG_HFEDIT_SHDR
             {
                 Identifier = 1 ;
                 HEADER
-                PageResID = HID_SCPAGE_HFED_HR ;
+                PageResID = RID_SCPAGE_HFED_HR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 FOOTER_RIGHT
-                PageResID = HID_SCPAGE_HFED_FR ;
+                PageResID = RID_SCPAGE_HFED_FR ;
             };
             PageItem
             {
                 Identifier = 3 ;
                 FOOTER_LEFT
-                PageResID = HID_SCPAGE_HFED_FL ;
+                PageResID = RID_SCPAGE_HFED_FL ;
             };
         };
     };
@@ -219,19 +219,19 @@ TabDialog RID_SCDLG_HFEDIT_SFTR
             {
                 Identifier = 1 ;
                 HEADER_RIGHT
-                PageResID = HID_SCPAGE_HFED_HR ;
+                PageResID = RID_SCPAGE_HFED_HR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 HEADER_LEFT
-                PageResID = HID_SCPAGE_HFED_HL ;
+                PageResID = RID_SCPAGE_HFED_HL ;
             };
             PageItem
             {
                 Identifier = 3 ;
                 FOOTER
-                PageResID = HID_SCPAGE_HFED_FR ;
+                PageResID = RID_SCPAGE_HFED_FR ;
             };
         };
     };
@@ -257,13 +257,13 @@ TabDialog RID_SCDLG_HFEDIT
             {
                 Identifier = 1 ;
                 HEADER
-                PageResID = HID_SCPAGE_HFED_HR ;
+                PageResID = RID_SCPAGE_HFED_HR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 FOOTER
-                PageResID = HID_SCPAGE_HFED_FR ;
+                PageResID = RID_SCPAGE_HFED_FR ;
             };
         };
     };
@@ -289,13 +289,13 @@ TabDialog RID_SCDLG_HFEDIT_HEADER
             {
                 Identifier = 1 ;
                 HEADER_RIGHT
-                PageResID = HID_SCPAGE_HFED_HR ;
+                PageResID = RID_SCPAGE_HFED_HR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 HEADER_LEFT
-                PageResID = HID_SCPAGE_HFED_HL ;
+                PageResID = RID_SCPAGE_HFED_HL ;
             };
         };
     };
@@ -321,13 +321,13 @@ TabDialog RID_SCDLG_HFEDIT_FOOTER
             {
                 Identifier = 1 ;
                 FOOTER_RIGHT
-                PageResID = HID_SCPAGE_HFED_FR ;
+                PageResID = RID_SCPAGE_HFED_FR ;
             };
             PageItem
             {
                 Identifier = 2 ;
                 FOOTER_LEFT
-                PageResID = HID_SCPAGE_HFED_FL ;
+                PageResID = RID_SCPAGE_HFED_FL ;
             };
         };
     };
@@ -353,7 +353,7 @@ TabDialog RID_SCDLG_HFEDIT_RIGHTHEADER
             {
                 Identifier = 1 ;
                 HEADER_RIGHT
-                PageResID = HID_SCPAGE_HFED_HR ;
+                PageResID = RID_SCPAGE_HFED_HR ;
             };
         };
     };
@@ -379,7 +379,7 @@ TabDialog RID_SCDLG_HFEDIT_LEFTHEADER
             {
                 Identifier = 1 ;
                 HEADER_LEFT
-                PageResID = HID_SCPAGE_HFED_HL ;
+                PageResID = RID_SCPAGE_HFED_HL ;
             };
         };
     };
@@ -405,7 +405,7 @@ TabDialog RID_SCDLG_HFEDIT_RIGHTFOOTER
             {
                 Identifier = 1 ;
                 FOOTER_RIGHT
-                PageResID = HID_SCPAGE_HFED_FR ;
+                PageResID = RID_SCPAGE_HFED_FR ;
             };
         };
     };
@@ -431,7 +431,7 @@ TabDialog RID_SCDLG_HFEDIT_LEFTFOOTER
             {
                 Identifier = 1 ;
                 FOOTER_LEFT
-                PageResID = HID_SCPAGE_HFED_FL ;
+                PageResID = RID_SCPAGE_HFED_FL ;
             };
         };
     };

@@ -45,8 +45,8 @@ private:
     size_t      nPagesY;
     SCROW*      pPageEndY;
     long        nFirstPage;
-    BOOL        bTopDown;
-    BOOL        bAutomatic;
+    sal_Bool        bTopDown;
+    sal_Bool        bAutomatic;
 
 public:
                 ScPrintRangeData();
@@ -65,10 +65,10 @@ public:
 
     void            SetFirstPage( long nNew )   { nFirstPage = nNew; }
     long            GetFirstPage() const        { return nFirstPage; }
-    void            SetTopDown( BOOL bSet )     { bTopDown = bSet; }
-    BOOL            IsTopDown() const           { return bTopDown; }
-    void            SetAutomatic( BOOL bSet )   { bAutomatic = bSet; }
-    BOOL            IsAutomatic() const         { return bAutomatic; }
+    void            SetTopDown( sal_Bool bSet )     { bTopDown = bSet; }
+    sal_Bool            IsTopDown() const           { return bTopDown; }
+    void            SetAutomatic( sal_Bool bSet )   { bAutomatic = bSet; }
+    sal_Bool            IsAutomatic() const         { return bAutomatic; }
 };
 
 class ScPageBreakData
@@ -85,7 +85,7 @@ public:
     size_t              GetCount() const            { return nUsed; }
     ScPrintRangeData&   GetData(size_t i);
 
-    BOOL                IsEqual( const ScPageBreakData& rOther ) const;
+    sal_Bool                IsEqual( const ScPageBreakData& rOther ) const;
 
     void                AddPages();
 };

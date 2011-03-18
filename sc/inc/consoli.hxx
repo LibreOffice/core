@@ -79,13 +79,13 @@ class ScConsData
 {
 private:
     ScSubTotalFunc      eFunction;
-    BOOL                bReference;
-    BOOL                bColByName;
-    BOOL                bRowByName;
-    BOOL                bSubTitles;
+    sal_Bool                bReference;
+    sal_Bool                bColByName;
+    sal_Bool                bRowByName;
+    sal_Bool                bSubTitles;
     SCSIZE              nColCount;
     SCSIZE              nRowCount;
-    BOOL**              ppUsed;
+    sal_Bool**              ppUsed;
     double**            ppSum;
     double**            ppCount;
     double**            ppSumSqr;
@@ -96,7 +96,7 @@ private:
     SCSIZE              nTitleCount;
     String**            ppTitles;
     SCSIZE**            ppTitlePos;
-    BOOL                bCornerUsed;
+    sal_Bool                bCornerUsed;
     String              aCornerText;        // only for bColByName && bRowByName
 
 public:
@@ -104,9 +104,9 @@ public:
                 ~ScConsData();
 
     void        SetSize( SCCOL nCols, SCROW nRows );
-    void        SetFlags( ScSubTotalFunc eFunc, BOOL bColName, BOOL bRowName, BOOL bRef );
+    void        SetFlags( ScSubTotalFunc eFunc, sal_Bool bColName, sal_Bool bRowName, sal_Bool bRef );
 
-    void        InitData(BOOL bDelete=TRUE);
+    void        InitData(sal_Bool bDelete=sal_True);
     void        DeleteData();
 
     void        AddFields( ScDocument* pSrcDoc, SCTAB nTab,

@@ -112,7 +112,7 @@ bool RegressionCurveItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const USHORT * RegressionCurveItemConverter::GetWhichPairs() const
+const sal_uInt16 * RegressionCurveItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nRegressionCurveWhichPairs;
@@ -127,7 +127,7 @@ bool RegressionCurveItemConverter::GetItemProperty(
 
 
 bool RegressionCurveItemConverter::ApplySpecialItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet )
+    sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     uno::Reference< chart2::XRegressionCurve > xCurve( GetPropertySet(), uno::UNO_QUERY );
@@ -172,7 +172,7 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
             OSL_ASSERT( xCurve.is());
             if( xCurve.is())
             {
-                bool bNewShow = static_cast< BOOL >(
+                bool bNewShow = static_cast< sal_Bool >(
                     static_cast< const SfxBoolItem & >(
                         rItemSet.Get( nWhichId )).GetValue());
 
@@ -195,7 +195,7 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
             OSL_ASSERT( xCurve.is());
             if( xCurve.is())
             {
-                bool bNewShow = static_cast< BOOL >(
+                bool bNewShow = static_cast< sal_Bool >(
                     static_cast< const SfxBoolItem & >(
                         rItemSet.Get( nWhichId )).GetValue());
 
@@ -218,7 +218,7 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
 }
 
 void RegressionCurveItemConverter::FillSpecialItem(
-    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     uno::Reference< chart2::XRegressionCurve > xCurve( GetPropertySet(), uno::UNO_QUERY );

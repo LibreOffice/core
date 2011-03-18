@@ -38,11 +38,11 @@
 struct ScRangeFindData
 {
     ScRange     aRef;
-    USHORT      nFlags;
+    sal_uInt16      nFlags;
     xub_StrLen  nSelStart;
     xub_StrLen  nSelEnd;
 
-    ScRangeFindData( const ScRange& rR, USHORT nF, xub_StrLen nS, xub_StrLen nE ) :
+    ScRangeFindData( const ScRange& rR, sal_uInt16 nF, xub_StrLen nS, xub_StrLen nE ) :
         aRef(rR), nFlags(nF), nSelStart(nS), nSelEnd(nE) {}
 };
 
@@ -56,12 +56,12 @@ public:
             ScRangeFindList(const String& rName);
             ~ScRangeFindList();
 
-    ULONG   Count() const                       { return aEntries.Count(); }
+    sal_uLong   Count() const                       { return aEntries.Count(); }
     void    Insert( ScRangeFindData* pNew )     { aEntries.Insert(pNew, LIST_APPEND); }
-    ScRangeFindData* GetObject( ULONG nIndex ) const
+    ScRangeFindData* GetObject( sal_uLong nIndex ) const
                         { return (ScRangeFindData*)aEntries.GetObject(nIndex); }
 
-    void    SetHidden( BOOL bSet )              { bHidden = bSet; }
+    void    SetHidden( sal_Bool bSet )              { bHidden = bSet; }
 
     const String&   GetDocName() const          { return aDocName; }
     bool            IsHidden() const            { return bHidden; }

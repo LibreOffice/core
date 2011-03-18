@@ -216,7 +216,7 @@ void SAL_CALL ScDispatchProviderInterceptor::disposing( const lang::EventObject&
 
 ScDispatch::ScDispatch(ScTabViewShell* pViewSh) :
     pViewShell( pViewSh ),
-    bListeningToView( FALSE )
+    bListeningToView( false )
 {
     if (pViewShell)
         StartListening(*pViewShell);
@@ -250,7 +250,7 @@ void SAL_CALL ScDispatch::dispatch( const util::URL& aURL,
 {
     SolarMutexGuard aGuard;
 
-    BOOL bDone = FALSE;
+    sal_Bool bDone = false;
     if ( pViewShell && !aURL.Complete.compareToAscii(cURLInsertColumns) )
     {
         ScViewData* pViewData = pViewShell->GetViewData();
@@ -322,7 +322,7 @@ void SAL_CALL ScDispatch::addStatusListener(
             bListeningToView = sal_True;
         }
 
-        ScDBData* pDBData = pViewShell->GetDBData(FALSE,SC_DB_OLD);
+        ScDBData* pDBData = pViewShell->GetDBData(false,SC_DB_OLD);
         if ( pDBData )
             pDBData->GetImportParam( aLastImport );
         lcl_FillDataSource( aEvent, aLastImport );          // modifies State, IsEnabled
@@ -341,8 +341,8 @@ void SAL_CALL ScDispatch::removeStatusListener(
 
     if ( !aURL.Complete.compareToAscii(cURLDocDataSource) )
     {
-        USHORT nCount = aDataSourceListeners.Count();
-        for ( USHORT n=nCount; n--; )
+        sal_uInt16 nCount = aDataSourceListeners.Count();
+        for ( sal_uInt16 n=nCount; n--; )
         {
             uno::Reference<frame::XStatusListener> *pObj = aDataSourceListeners[n];
             if ( *pObj == xListener )
@@ -357,7 +357,7 @@ void SAL_CALL ScDispatch::removeStatusListener(
             uno::Reference<view::XSelectionSupplier> xSupplier(lcl_GetSelectionSupplier( pViewShell ));
             if ( xSupplier.is() )
                 xSupplier->removeSelectionChangeListener(this);
-            bListeningToView = sal_False;
+            bListeningToView = false;
         }
     }
 }
@@ -372,7 +372,7 @@ void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventO
     if ( pViewShell )
     {
         ScImportParam aNewImport;
-        ScDBData* pDBData = pViewShell->GetDBData(FALSE,SC_DB_OLD);
+        ScDBData* pDBData = pViewShell->GetDBData(false,SC_DB_OLD);
         if ( pDBData )
             pDBData->GetImportParam( aNewImport );
 
@@ -389,7 +389,7 @@ void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventO
 
             lcl_FillDataSource( aEvent, aNewImport );       // modifies State, IsEnabled
 
-            for ( USHORT n=0; n<aDataSourceListeners.Count(); n++ )
+            for ( sal_uInt16 n=0; n<aDataSourceListeners.Count(); n++ )
                 (*aDataSourceListeners[n])->statusChanged( aEvent );
 
             aLastImport = aNewImport;
@@ -404,11 +404,11 @@ void SAL_CALL ScDispatch::disposing( const ::com::sun::star::lang::EventObject& 
 {
     uno::Reference<view::XSelectionSupplier> xSupplier(rSource.Source, uno::UNO_QUERY);
     xSupplier->removeSelectionChangeListener(this);
-    bListeningToView = sal_False;
+    bListeningToView = false;
 
     lang::EventObject aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    for ( USHORT n=0; n<aDataSourceListeners.Count(); n++ )
+    for ( sal_uInt16 n=0; n<aDataSourceListeners.Count(); n++ )
         (*aDataSourceListeners[n])->disposing( aEvent );
 
     pViewShell = NULL;

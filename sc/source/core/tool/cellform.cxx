@@ -47,10 +47,10 @@ const ScFormulaCell* pLastFormulaTreeTop = 0;
 
 // -----------------------------------------------------------------------
 
-void ScCellFormat::GetString( ScBaseCell* pCell, ULONG nFormat, String& rString,
+void ScCellFormat::GetString( ScBaseCell* pCell, sal_uLong nFormat, String& rString,
                               Color** ppColor, SvNumberFormatter& rFormatter,
-                              BOOL bNullVals,
-                              BOOL bFormula,
+                              sal_Bool bNullVals,
+                              sal_Bool bFormula,
                               ScForceTextFmt eForceTextFmt )
 {
     *ppColor = NULL;
@@ -121,7 +121,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, ULONG nFormat, String& rString,
                     }
                     else
                     {
-                        USHORT nErrCode = pFCell->GetErrCode();
+                        sal_uInt16 nErrCode = pFCell->GetErrCode();
 
                         // get the number format only after interpretation (GetErrCode):
                         if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
@@ -156,7 +156,7 @@ void ScCellFormat::GetString( ScBaseCell* pCell, ULONG nFormat, String& rString,
     }
 }
 
-void ScCellFormat::GetInputString( ScBaseCell* pCell, ULONG nFormat, String& rString,
+void ScCellFormat::GetInputString( ScBaseCell* pCell, sal_uLong nFormat, String& rString,
                                       SvNumberFormatter& rFormatter )
 {
     if (&rFormatter==NULL)
@@ -200,7 +200,7 @@ void ScCellFormat::GetInputString( ScBaseCell* pCell, ULONG nFormat, String& rSt
                     ((ScFormulaCell*)pCell)->GetString( rString );
                 }
 
-                USHORT nErrCode = ((ScFormulaCell*)pCell)->GetErrCode();
+                sal_uInt16 nErrCode = ((ScFormulaCell*)pCell)->GetErrCode();
                 if (nErrCode != 0)
                 {
                     rString.Erase();

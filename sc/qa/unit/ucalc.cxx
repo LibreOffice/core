@@ -719,7 +719,7 @@ void Test::testDataPilot()
     pDPObj->SetSheetDesc(aSheetDesc);
     pDPObj->SetOutRange(ScAddress(0, 0, 1));
     ScPivotParam aParam;
-    pDPObj->FillOldParam(aParam, false);
+    pDPObj->FillOldParam(aParam);
     for (sal_uInt32 i = 0; i < nFieldCount; ++i)
     {
         vector<ScDPLabelData::Member> aMembers;

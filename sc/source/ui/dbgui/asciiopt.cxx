@@ -51,15 +51,15 @@ static const sal_Char pStrMrg[] = "MRG";
 // ============================================================================
 
 ScAsciiOptions::ScAsciiOptions() :
-    bFixedLen       ( FALSE ),
+    bFixedLen       ( false ),
     aFieldSeps      ( ';' ),
-    bMergeFieldSeps ( FALSE ),
+    bMergeFieldSeps ( false ),
     bQuotedFieldAsText(false),
     bDetectSpecialNumber(false),
     cTextSep        ( cDefaultTextSep ),
     eCharSet        ( gsl_getSystemTextEncoding() ),
     eLang           ( LANGUAGE_SYSTEM ),
-    bCharSetSystem  ( FALSE ),
+    bCharSetSystem  ( false ),
     nStartRow       ( 1 ),
     nInfoCount      ( 0 ),
     pColStart       ( NULL ),
@@ -84,8 +84,8 @@ ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
     if (nInfoCount)
     {
         pColStart = new xub_StrLen[nInfoCount];
-        pColFormat = new BYTE[nInfoCount];
-        for (USHORT i=0; i<nInfoCount; i++)
+        pColFormat = new sal_uInt8[nInfoCount];
+        for (sal_uInt16 i=0; i<nInfoCount; i++)
         {
             pColStart[i] = rOpt.pColStart[i];
             pColFormat[i] = rOpt.pColFormat[i];
@@ -106,7 +106,7 @@ ScAsciiOptions::~ScAsciiOptions()
 }
 
 
-void ScAsciiOptions::SetColInfo( USHORT nCount, const xub_StrLen* pStart, const BYTE* pFormat )
+void ScAsciiOptions::SetColInfo( sal_uInt16 nCount, const xub_StrLen* pStart, const sal_uInt8* pFormat )
 {
     delete[] pColStart;
     delete[] pColFormat;
@@ -116,8 +116,8 @@ void ScAsciiOptions::SetColInfo( USHORT nCount, const xub_StrLen* pStart, const 
     if (nInfoCount)
     {
         pColStart = new xub_StrLen[nInfoCount];
-        pColFormat = new BYTE[nInfoCount];
-        for (USHORT i=0; i<nInfoCount; i++)
+        pColFormat = new sal_uInt8[nInfoCount];
+        for (sal_uInt16 i=0; i<nInfoCount; i++)
         {
             pColStart[i] = pStart[i];
             pColFormat[i] = pFormat[i];
@@ -169,7 +169,7 @@ ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
 }
 
 
-BOOL ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
+sal_Bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
 {
     if ( bFixedLen       == rCmp.bFixedLen &&
          aFieldSeps      == rCmp.aFieldSeps &&
@@ -183,14 +183,14 @@ BOOL ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
     {
         DBG_ASSERT( !nInfoCount || (pColStart && pColFormat && rCmp.pColStart && rCmp.pColFormat),
                      "0-Zeiger in ScAsciiOptions" );
-        for (USHORT i=0; i<nInfoCount; i++)
+        for (sal_uInt16 i=0; i<nInfoCount; i++)
             if ( pColStart[i] != rCmp.pColStart[i] ||
                  pColFormat[i] != rCmp.pColFormat[i] )
-                return FALSE;
+                return false;
 
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return false;
 }
 
 //
@@ -212,18 +212,18 @@ void ScAsciiOptions::ReadFromString( const String& rString )
 
     if ( nCount >= 1 )
     {
-        bFixedLen = bMergeFieldSeps = FALSE;
+        bFixedLen = bMergeFieldSeps = false;
         aFieldSeps.Erase();
 
         aToken = rString.GetToken(0,',');
         if ( aToken.EqualsAscii(pStrFix) )
-            bFixedLen = TRUE;
+            bFixedLen = sal_True;
         nSub = aToken.GetTokenCount('/');
         for ( i=0; i<nSub; i++ )
         {
             String aCode = aToken.GetToken( i, '/' );
             if ( aCode.EqualsAscii(pStrMrg) )
-                bMergeFieldSeps = TRUE;
+                bMergeFieldSeps = sal_True;
             else
             {
                 sal_Int32 nVal = aCode.ToInt32();
@@ -279,11 +279,11 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         if (nInfoCount)
         {
             pColStart = new xub_StrLen[nInfoCount];
-            pColFormat = new BYTE[nInfoCount];
-            for (USHORT nInfo=0; nInfo<nInfoCount; nInfo++)
+            pColFormat = new sal_uInt8[nInfoCount];
+            for (sal_uInt16 nInfo=0; nInfo<nInfoCount; nInfo++)
             {
                 pColStart[nInfo]  = (xub_StrLen) aToken.GetToken( 2*nInfo, '/' ).ToInt32();
-                pColFormat[nInfo] = (BYTE) aToken.GetToken( 2*nInfo+1, '/' ).ToInt32();
+                pColFormat[nInfo] = (sal_uInt8) aToken.GetToken( 2*nInfo+1, '/' ).ToInt32();
             }
         }
         else
@@ -313,6 +313,10 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         aToken = rString.GetToken(7, ',');
         bDetectSpecialNumber = aToken.EqualsAscii("true") ? true : false;
     }
+    else
+        bDetectSpecialNumber = sal_True;    // default of versions that didn't add the parameter
+
+    // 9th token is used for "Save as shown" in export options
 }
 
 
@@ -375,7 +379,7 @@ String ScAsciiOptions::WriteToString() const
         //
 
     DBG_ASSERT( !nInfoCount || (pColStart && pColFormat), "0-Zeiger in ScAsciiOptions" );
-    for (USHORT nInfo=0; nInfo<nInfoCount; nInfo++)
+    for (sal_uInt16 nInfo=0; nInfo<nInfoCount; nInfo++)
     {
         if (nInfo)
             aOutStr += '/';
@@ -399,6 +403,8 @@ String ScAsciiOptions::WriteToString() const
 
     // Detect special nubmers.
     aOutStr += String::CreateFromAscii(bDetectSpecialNumber ? "true" : "false");
+
+    // 9th token is used for "Save as shown" in export options
 
     return aOutStr;
 }

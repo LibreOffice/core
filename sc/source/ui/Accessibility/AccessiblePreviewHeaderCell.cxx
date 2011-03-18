@@ -103,7 +103,7 @@ void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& 
     if (rHint.ISA( SfxSimpleHint ))
     {
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
-        ULONG nId = rRef.GetId();
+        sal_uLong nId = rRef.GetId();
         if (nId == SC_HINT_ACC_VISAREACHANGED)
         {
             if (mpTextHelper)
@@ -163,7 +163,7 @@ sal_Bool SAL_CALL ScAccessiblePreviewHeaderCell::setCurrentValue( const uno::Any
                                                                 throw (uno::RuntimeException)
 {
     //  it is not possible to set a value
-    return sal_False;
+    return false;
 }
 
 uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMaximumValue() throw (uno::RuntimeException)

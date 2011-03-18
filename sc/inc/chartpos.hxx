@@ -45,7 +45,7 @@ class ScChartPositionMap
             ScAddress**         ppData;
             ScAddress**         ppColHeader;
             ScAddress**         ppRowHeader;
-            ULONG               nCount;
+            sal_uLong               nCount;
             SCCOL               nColCount;
             SCROW               nRowCount;
 
@@ -62,17 +62,17 @@ class ScChartPositionMap
 
 public:
 
-            ULONG               GetCount() const { return nCount; }
+            sal_uLong               GetCount() const { return nCount; }
             SCCOL               GetColCount() const { return nColCount; }
             SCROW               GetRowCount() const { return nRowCount; }
 
-            BOOL                IsValid( SCCOL nCol, SCROW nRow ) const
+            sal_Bool                IsValid( SCCOL nCol, SCROW nRow ) const
                                     { return nCol < nColCount && nRow < nRowCount; }
                                 // data column by column
-            ULONG               GetIndex( SCCOL nCol, SCROW nRow ) const
-                                    { return (ULONG) nCol * nRowCount + nRow; }
+            sal_uLong               GetIndex( SCCOL nCol, SCROW nRow ) const
+                                    { return (sal_uLong) nCol * nRowCount + nRow; }
 
-            const ScAddress*    GetPosition( ULONG nIndex ) const
+            const ScAddress*    GetPosition( sal_uLong nIndex ) const
                                     {
                                         if ( nIndex < nCount )
                                             return ppData[ nIndex ];
@@ -119,9 +119,9 @@ class ScChartPositioner             // only parameter struct
     ScChartGlue eGlue;
     SCCOL       nStartCol;
     SCROW       nStartRow;
-    BOOL        bColHeaders;
-    BOOL        bRowHeaders;
-    BOOL        bDummyUpperLeft;
+    sal_Bool        bColHeaders;
+    sal_Bool        bRowHeaders;
+    sal_Bool        bDummyUpperLeft;
 
 private:
     void        CheckColRowHeaders();
@@ -142,15 +142,15 @@ public:
     void    SetRangeList( const ScRangeListRef& rNew ) { aRangeListRef = rNew; }
     void    SetRangeList( const ScRange& rNew );
 
-    void    SetHeaders(BOOL bCol, BOOL bRow) { bColHeaders=bCol; bRowHeaders=bRow; }
-    BOOL    HasColHeaders() const            { return bColHeaders; }
-    BOOL    HasRowHeaders() const            { return bRowHeaders; }
-    void    SetDummyUpperLeft(BOOL bNew) { bDummyUpperLeft = bNew; }
+    void    SetHeaders(sal_Bool bCol, sal_Bool bRow) { bColHeaders=bCol; bRowHeaders=bRow; }
+    sal_Bool    HasColHeaders() const            { return bColHeaders; }
+    sal_Bool    HasRowHeaders() const            { return bRowHeaders; }
+    void    SetDummyUpperLeft(sal_Bool bNew) { bDummyUpperLeft = bNew; }
     void    SeteGlue(ScChartGlue eNew) { eGlue = eNew; }
     void    SetStartCol(SCCOL nNew) { nStartCol = nNew; }
     void    SetStartRow(SCROW nNew) { nStartRow = nNew; }
 
-    BOOL    operator==(const ScChartPositioner& rCmp) const;
+    sal_Bool    operator==(const ScChartPositioner& rCmp) const;
 
     void                    InvalidateGlue()
                                 {

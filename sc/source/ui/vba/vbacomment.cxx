@@ -202,14 +202,14 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
             if ( bOverwrite )
             {
                 xTextCursor->collapseToStart();
-                xTextCursor->gotoStart( sal_False );
-                xTextCursor->goRight( nStart - 1, sal_False );
+                xTextCursor->gotoStart( false );
+                xTextCursor->goRight( nStart - 1, false );
                 xTextCursor->gotoEnd( sal_True );
             }
             else
             {
                 xTextCursor->collapseToStart();
-                xTextCursor->gotoStart( sal_False );
+                xTextCursor->gotoStart( false );
                 xTextCursor->goRight( nStart - 1 , sal_True );
             }
 

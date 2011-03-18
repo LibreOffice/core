@@ -36,14 +36,14 @@
 
 class LotusRangeList;
 
-typedef UINT16  LR_ID;
+typedef sal_uInt16  LR_ID;
 #define ID_FAIL 0xFFFF
 
 class LotusRange
 {
     friend class LotusRangeList;
 private:
-    UINT32              nHash;
+    sal_uInt32              nHash;
     SCCOL               nColStart;
     SCROW               nRowStart;
     SCCOL               nColEnd;
@@ -57,9 +57,9 @@ public:
                         LotusRange( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE );
                         LotusRange( const LotusRange& );
     inline LotusRange   &operator =( const LotusRange& );
-    inline BOOL         operator ==( const LotusRange& ) const;
-    inline BOOL         operator !=( const LotusRange& ) const;
-    inline BOOL         IsSingle( void ) const;
+    inline sal_Bool         operator ==( const LotusRange& ) const;
+    inline sal_Bool         operator !=( const LotusRange& ) const;
+    inline sal_Bool         IsSingle( void ) const;
 };
 
 
@@ -85,7 +85,7 @@ inline LotusRange &LotusRange::operator =( const LotusRange& rCpy )
 }
 
 
-inline BOOL LotusRange::operator ==( const LotusRange& rRef ) const
+inline sal_Bool LotusRange::operator ==( const LotusRange& rRef ) const
 {
     return ( nHash == rRef.nHash && nColStart == rRef.nColStart &&
         nRowStart == rRef.nRowStart && nColEnd == rRef.nColEnd &&
@@ -93,7 +93,7 @@ inline BOOL LotusRange::operator ==( const LotusRange& rRef ) const
 }
 
 
-inline BOOL LotusRange::operator !=( const LotusRange& rRef ) const
+inline sal_Bool LotusRange::operator !=( const LotusRange& rRef ) const
 {
     return ( nHash != rRef.nHash || nColStart != rRef.nColStart ||
         nRowStart != rRef.nRowStart || nColEnd != rRef.nColEnd ||
@@ -101,7 +101,7 @@ inline BOOL LotusRange::operator !=( const LotusRange& rRef ) const
 }
 
 
-inline BOOL LotusRange::IsSingle( void ) const
+inline sal_Bool LotusRange::IsSingle( void ) const
 {
     return ( nColStart == nColEnd && nRowStart == nRowEnd );
 }
@@ -120,9 +120,9 @@ private:
 public:
                         LotusRangeList( void );
                         ~LotusRangeList( void );
-    inline UINT16       GetIndex( SCCOL nCol, SCROW nRow );
-    inline UINT16       GetIndex( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE );
-    UINT16              GetIndex( const LotusRange& );
+    inline sal_uInt16       GetIndex( SCCOL nCol, SCROW nRow );
+    inline sal_uInt16       GetIndex( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE );
+    sal_uInt16              GetIndex( const LotusRange& );
     inline void         Append( SCCOL nCol, SCROW nRow, const String& );
     inline void         Append( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE, const String& );
     void                Append( LotusRange* pLR, const String& rName );

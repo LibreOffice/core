@@ -112,20 +112,20 @@ public:
 private:
     union
     {
-        ULONG   nNumFormat;
+        sal_uLong   nNumFormat;
         sal_Int32 mnDatePart;
     };
 
     String  aString;
     double  fValue;
-    BYTE    mbFlag;
+    sal_uInt8   mbFlag;
 
     friend class ScDPCache;
 public:
     ScDPItemData() : nNumFormat( 0 ), fValue(0.0), mbFlag( 0 ){}
-    ScDPItemData( ULONG nNF, const String & rS, double fV, BYTE bF ):nNumFormat(nNF), aString(rS), fValue(fV), mbFlag( bF ){}
-    ScDPItemData( const String& rS, double fV = 0.0, bool bHV = FALSE, const ULONG nNumFormat = 0 , bool bData = TRUE) ;
-    ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nDocTab );
+    ScDPItemData( sal_uLong nNF, const String & rS, double fV, sal_uInt8 bF ):nNumFormat(nNF), aString(rS), fValue(fV), mbFlag( bF ){}
+    ScDPItemData( const String& rS, double fV = 0.0, bool bHV = false, const sal_uLong nNumFormat = 0 , bool bData = true) ;
+    ScDPItemData( ScDocument* pDoc, SCROW nRow, sal_uInt16 nCol, sal_uInt16 nDocTab );
 
     void        SetString( const String& rS ) { aString = rS; mbFlag &= ~(MK_VAL|MK_DATE); nNumFormat = 0; mbFlag |= MK_DATA; }
     bool        IsCaseInsEqual( const ScDPItemData& r ) const;
@@ -147,7 +147,7 @@ public:
     bool IsValue() const;
     String  GetString() const ;
     double  GetValue() const ;
-    ULONG    GetNumFormat() const ;
+    sal_uLong    GetNumFormat() const ;
     bool HasStringData() const ;
     bool IsDate() const;
     bool HasDatePart() const;
@@ -155,8 +155,8 @@ public:
 
     TypedStrData*  CreateTypeString( );
     sal_uInt8    GetType() const;
-    BYTE & GetFlag() throw() { return mbFlag; }
-    const BYTE & GetFlag() const throw() { return const_cast<ScDPItemData*>(this)->GetFlag(); }
+    sal_uInt8 & GetFlag() throw() { return mbFlag; }
+    const sal_uInt8 & GetFlag() const throw() { return const_cast<ScDPItemData*>(this)->GetFlag(); }
 };
 
 class SC_DLLPUBLIC ScDPItemDataPool

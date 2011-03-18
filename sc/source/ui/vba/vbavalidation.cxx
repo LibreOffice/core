@@ -72,7 +72,7 @@ lcl_getValidationProps( const uno::Reference< table::XCellRange >& xRange )
 ScVbaValidation::getIgnoreBlank() throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
-    sal_Bool bBlank = sal_False;
+    sal_Bool bBlank = false;
     xProps->getPropertyValue( IGNOREBLANK )  >>= bBlank;
     return bBlank;
 }
@@ -91,13 +91,13 @@ ScVbaValidation::getInCellDropdown() throw (uno::RuntimeException)
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
     sal_Int32 nShowList = 0;
     xProps->getPropertyValue( SHOWLIST )  >>= nShowList;
-    return ( nShowList ? sal_True : sal_False );
+    return ( nShowList ? sal_True : false );
 }
 
 void SAL_CALL
 ScVbaValidation::setInCellDropdown( ::sal_Bool  _incelldropdown  ) throw (uno::RuntimeException)
 {
-    sal_Int32 nDropDown = sal_False;
+    sal_Int32 nDropDown = false;
     if ( _incelldropdown )
         nDropDown = 1;
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps(m_xRange) );
@@ -109,7 +109,7 @@ ScVbaValidation::setInCellDropdown( ::sal_Bool  _incelldropdown  ) throw (uno::R
 ScVbaValidation::getShowInput() throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
-    sal_Bool bShowInput = sal_False;
+    sal_Bool bShowInput = false;
     xProps->getPropertyValue( SHOWINPUT )  >>= bShowInput;
     return bShowInput;
 }
@@ -126,7 +126,7 @@ ScVbaValidation:: setShowInput( ::sal_Bool _showinput ) throw (uno::RuntimeExcep
 ScVbaValidation::getShowError() throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
-    sal_Bool bShowError = sal_False;
+    sal_Bool bShowError = false;
     xProps->getPropertyValue( SHOWERROR )  >>= bShowError;
     return bShowError;
 }

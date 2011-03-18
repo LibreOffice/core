@@ -41,8 +41,9 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/RelativeSize.hpp>
 
 #include <algorithm>
 
@@ -64,10 +65,11 @@ static const OUString lcl_aServiceName(
 enum
 {
     PROP_LEGEND_ANCHOR_POSITION,
-    PROP_LEGEND_PREFERRED_EXPANSION,
+    PROP_LEGEND_EXPANSION,
     PROP_LEGEND_SHOW,
     PROP_LEGEND_REF_PAGE_SIZE,
-    PROP_LEGEND_REL_POS
+    PROP_LEGEND_REL_POS,
+    PROP_LEGEND_REL_SIZE
 };
 
 void lcl_AddPropertiesToVector(
@@ -82,8 +84,8 @@ void lcl_AddPropertiesToVector(
 
     rOutProperties.push_back(
         Property( C2U( "Expansion" ),
-                  PROP_LEGEND_PREFERRED_EXPANSION,
-                  ::getCppuType( reinterpret_cast< const chart2::LegendExpansion * >(0)),
+                  PROP_LEGEND_EXPANSION,
+                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartLegendExpansion * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -106,29 +108,57 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const chart2::RelativePosition * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "RelativeSize" ),
+                  PROP_LEGEND_REL_SIZE,
+                  ::getCppuType( reinterpret_cast< const chart2::RelativeSize * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
 }
 
-void lcl_AddDefaultsToMap(
-    ::chart::tPropertyValueMap & rOutMap )
+struct StaticLegendDefaults_Initializer
 {
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_ANCHOR_POSITION, chart2::LegendPosition_LINE_END );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_PREFERRED_EXPANSION, chart2::LegendExpansion_HIGH );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_SHOW, true );
-
-    float fDefaultCharHeight = 10.0;
-    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
-    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
-    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
-}
-
-const Sequence< Property > & lcl_GetPropertySequence()
-{
-    static Sequence< Property > aPropSeq;
-
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    ::chart::tPropertyValueMap* operator()()
     {
-        // get properties
+        static ::chart::tPropertyValueMap aStaticDefaults;
+        lcl_AddDefaultsToMap( aStaticDefaults );
+        return &aStaticDefaults;
+    }
+private:
+    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    {
+        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
+        ::chart::FillProperties::AddDefaultsToMap( rOutMap );
+        ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
+
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_ANCHOR_POSITION, chart2::LegendPosition_LINE_END );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_EXPANSION, ::com::sun::star::chart::ChartLegendExpansion_HIGH );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_SHOW, true );
+
+        float fDefaultCharHeight = 10.0;
+        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
+        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
+        ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
+    }
+};
+
+struct StaticLegendDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticLegendDefaults_Initializer >
+{
+};
+
+struct StaticLegendInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()()
+    {
+        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
+        return &aPropHelper;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
@@ -136,25 +166,30 @@ const Sequence< Property > & lcl_GetPropertySequence()
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
-
-::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
+struct StaticLegendInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticLegendInfoHelper_Initializer >
 {
-    static ::cppu::OPropertyArrayHelper aArrayHelper(
-        lcl_GetPropertySequence(),
-        /* bSorted = */ sal_True );
+};
 
-    return aArrayHelper;
-}
+struct StaticLegendInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticLegendInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticLegendInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticLegendInfo_Initializer >
+{
+};
 
 } // anonymous namespace
 
@@ -173,58 +208,10 @@ Legend::Legend( const Legend & rOther ) :
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
-    CloneHelper::CloneRefVector< Reference< chart2::XLegendEntry > >( rOther.m_aLegendEntries, m_aLegendEntries );
-    ModifyListenerHelper::addListenerToAllElements( m_aLegendEntries, m_xModifyEventForwarder );
 }
 
 Legend::~Legend()
 {
-    try
-    {
-        ModifyListenerHelper::removeListenerFromAllElements( m_aLegendEntries, m_xModifyEventForwarder );
-    }
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-}
-
-// ____ XLegend ____
-void SAL_CALL Legend::registerEntry( const Reference< chart2::XLegendEntry >& xEntry )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
-{
-    if( ::std::find( m_aLegendEntries.begin(),
-                     m_aLegendEntries.end(),
-                     xEntry ) != m_aLegendEntries.end())
-        throw lang::IllegalArgumentException();
-
-    m_aLegendEntries.push_back( xEntry );
-    ModifyListenerHelper::addListener( xEntry, m_xModifyEventForwarder );
-    fireModifyEvent();
-}
-
-void SAL_CALL Legend::revokeEntry( const Reference< chart2::XLegendEntry >& xEntry )
-    throw (container::NoSuchElementException,
-           uno::RuntimeException)
-{
-    tLegendEntries::iterator aIt(
-        ::std::find( m_aLegendEntries.begin(),
-                     m_aLegendEntries.end(),
-                     xEntry ));
-
-    if( aIt == m_aLegendEntries.end())
-        throw container::NoSuchElementException();
-
-    m_aLegendEntries.erase( aIt );
-    ModifyListenerHelper::removeListener( xEntry, m_xModifyEventForwarder );
-    fireModifyEvent();
-}
-
-Sequence< Reference< chart2::XLegendEntry > > SAL_CALL Legend::getEntries()
-    throw (uno::RuntimeException)
-{
-    return ContainerHelper::ContainerToSequence( m_aLegendEntries );
 }
 
 // ____ XCloneable ____
@@ -309,48 +296,23 @@ Sequence< OUString > Legend::getSupportedServiceNames_Static()
 Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
-    static tPropertyValueMap aStaticDefaults;
-
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        LineProperties::AddDefaultsToMap( aStaticDefaults );
-        FillProperties::AddDefaultsToMap( aStaticDefaults );
-        CharacterProperties::AddDefaultsToMap( aStaticDefaults );
-        // call last to overwrite some character property defaults
-        lcl_AddDefaultsToMap( aStaticDefaults );
-    }
-
-    tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
-        return Any();
-
+    const tPropertyValueMap& rStaticDefaults = *StaticLegendDefaults::get();
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
+    if( aFound == rStaticDefaults.end() )
+        return uno::Any();
     return (*aFound).second;
 }
 
 ::cppu::IPropertyArrayHelper & SAL_CALL Legend::getInfoHelper()
 {
-    return lcl_getInfoHelper();
+    return *StaticLegendInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-Reference< beans::XPropertySetInfo > SAL_CALL
-    Legend::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > SAL_CALL Legend::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static Reference< beans::XPropertySetInfo > xInfo;
-
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
+    return *StaticLegendInfo::get();
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static

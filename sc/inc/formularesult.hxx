@@ -46,7 +46,7 @@ class ScFormulaResult
         double          mfValue;    // double result direct for performance and memory consumption
         const formula::FormulaToken*  mpToken;    // if not, result token obtained from interpreter
     };
-    USHORT              mnError;    // error code
+    sal_uInt16              mnError;    // error code
     bool                mbToken :1; // whether content of union is a token
     bool                mbEmpty :1; // empty cell result
     bool                mbEmptyDisplayedAsString :1;    // only if mbEmpty
@@ -166,10 +166,10 @@ public:
 
     /** Get error code if set or GetCellResultType() is formula::svError or svUnknown,
         else 0. */
-    inline  USHORT              GetResultError() const;
+    inline  sal_uInt16              GetResultError() const;
 
     /** Set error code, don't touch token or double. */
-    inline  void                SetResultError( USHORT nErr );
+    inline  void                SetResultError( sal_uInt16 nErr );
 
     /** Set direct double. Shouldn't be used externally except in
         ScFormulaCell for rounded CalcAsShown or SetErrCode(). If
@@ -435,7 +435,7 @@ inline bool ScFormulaResult::IsMultiline() const
 }
 
 
-inline USHORT ScFormulaResult::GetResultError() const
+inline sal_uInt16 ScFormulaResult::GetResultError() const
 {
     if (mnError)
         return mnError;
@@ -453,7 +453,7 @@ inline USHORT ScFormulaResult::GetResultError() const
 }
 
 
-inline void ScFormulaResult::SetResultError( USHORT nErr )
+inline void ScFormulaResult::SetResultError( sal_uInt16 nErr )
 {
     mnError = nErr;
 }

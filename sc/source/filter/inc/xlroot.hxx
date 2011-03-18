@@ -29,6 +29,8 @@
 #ifndef SC_XLROOT_HXX
 #define SC_XLROOT_HXX
 
+#include <com/sun/star/beans/NamedValue.hpp>
+
 #include <i18npool/lang.h>
 #include <sot/storage.hxx>
 #include "xlconst.hxx"
@@ -201,7 +203,8 @@ public:
     /** Returns the default password used for stream encryption. */
     inline const String& GetDefaultPassword() const { return mrData.maDefPassword; }
     /** Requests and verifies a password from the medium or the user. */
-    String              RequestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
+        RequestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
 
     /** Returns the OLE2 root storage of the imported/exported file.
         @return  Pointer to root storage or 0, if the file is a simple stream. */
@@ -241,6 +244,8 @@ public:
     SvNumberFormatter&  GetFormatter() const;
     /** Returns the null date of the current number formatter. */
     DateTime            GetNullDate() const;
+    /** Returns the base year depending on the current null date (1900 or 1904). */
+    sal_uInt16          GetBaseYear() const;
     /** Converts a date/time value to a floating-point value. */
     double              GetDoubleFromDateTime( const DateTime& rDateTime ) const;
     /** Converts a floating-point value to a date/time value. */

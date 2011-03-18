@@ -136,7 +136,7 @@ sal_Bool SAL_CALL ScLinkTargetTypesObj::hasByName(const rtl::OUString& aName) th
     for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
         if ( aNames[i] == aNameStr )
             return sal_True;
-    return sal_False;
+    return false;
 }
 
 // container::XElementAccess

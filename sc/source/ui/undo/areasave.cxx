@@ -74,7 +74,7 @@ ScDataObject*   ScAreaLinkSaver::Clone() const
     return new ScAreaLinkSaver( *this );
 }
 
-BOOL ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
+sal_Bool ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
 {
     return ( aFileName   == rCompare.GetFile() &&
              aFilterName == rCompare.GetFilter() &&
@@ -83,7 +83,7 @@ BOOL ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
              nRefresh    == rCompare.GetRefreshDelay() );
 }
 
-BOOL ScAreaLinkSaver::IsEqual( const ScAreaLink& rCompare ) const
+sal_Bool ScAreaLinkSaver::IsEqual( const ScAreaLink& rCompare ) const
 {
     return ( IsEqualSource( rCompare ) &&
              aDestArea == rCompare.GetDestArea() );
@@ -105,11 +105,11 @@ void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc ) const
     {
         ScAreaLink* pLink = new ScAreaLink( pObjSh, aFileName, aFilterName, aOptions,
                                             aSourceArea, aDestArea.aStart, nRefresh );
-        pLink->SetInCreate( TRUE );
+        pLink->SetInCreate( sal_True );
         pLink->SetDestArea( aDestArea );
         pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName, &aFilterName, &aSourceArea );
         pLink->Update();
-        pLink->SetInCreate( FALSE );
+        pLink->SetInCreate( false );
     }
 }
 
@@ -133,7 +133,7 @@ ScDataObject*   ScAreaLinkSaveCollection::Clone() const
     return new ScAreaLinkSaveCollection( *this );
 }
 
-BOOL ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
+sal_Bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
 {
     // IsEqual can be checked in sequence.
     // Neither ref-update nor removing links will change the order.
@@ -141,31 +141,31 @@ BOOL ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
     sfx2::LinkManager* pLinkManager = const_cast<ScDocument*>(pDoc)->GetLinkManager();
     if (pLinkManager)
     {
-        USHORT nPos = 0;
+        sal_uInt16 nPos = 0;
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        USHORT nLinkCount = rLinks.Count();
-        for (USHORT i=0; i<nLinkCount; i++)
+        sal_uInt16 nLinkCount = rLinks.Count();
+        for (sal_uInt16 i=0; i<nLinkCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))
             {
                 if ( nPos >= GetCount() || !(*this)[nPos]->IsEqual( *(ScAreaLink*)pBase ) )
-                    return FALSE;
+                    return false;
 
                 ++nPos;
             }
         }
         if ( nPos < GetCount() )
-            return FALSE;           // fewer links in the document than in the save collection
+            return false;           // fewer links in the document than in the save collection
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 ScAreaLink* lcl_FindLink( const ::sfx2::SvBaseLinks& rLinks, const ScAreaLinkSaver& rSaver )
 {
-    USHORT nLinkCount = rLinks.Count();
-    for (USHORT i=0; i<nLinkCount; i++)
+    sal_uInt16 nLinkCount = rLinks.Count();
+    for (sal_uInt16 i=0; i<nLinkCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
         if ( pBase->ISA(ScAreaLink) &&
@@ -188,8 +188,8 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc ) const
     if (pLinkManager)
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        USHORT nSaveCount = GetCount();
-        for (USHORT nPos=0; nPos<nSaveCount; nPos++)
+        sal_uInt16 nSaveCount = GetCount();
+        for (sal_uInt16 nPos=0; nPos<nSaveCount; nPos++)
         {
             ScAreaLinkSaver* pSaver = (*this)[nPos];
             ScAreaLink* pLink = lcl_FindLink( rLinks, *pSaver );
@@ -209,8 +209,8 @@ ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocum
     if (pLinkManager)
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        USHORT nLinkCount = rLinks.Count();
-        for (USHORT i=0; i<nLinkCount; i++)
+        sal_uInt16 nLinkCount = rLinks.Count();
+        for (sal_uInt16 i=0; i<nLinkCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))

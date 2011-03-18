@@ -44,6 +44,8 @@
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
 
+#include <com/sun/star/chart2/LegendPosition.hpp>
+
 namespace chart
 {
 
@@ -64,51 +66,18 @@ ChartItemPool::ChartItemPool():
     SvULongs aTmp;
     ppPoolDefaults[SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS - SCHATTR_START] = new SfxIntegerListItem(SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS,aTmp);
     ppPoolDefaults[SCHATTR_DATADESCR_NO_PERCENTVALUE    - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_NO_PERCENTVALUE);
-
-    ppPoolDefaults[SCHATTR_LEGEND_POS               - SCHATTR_START] = new SvxChartLegendPosItem( CHLEGEND_RIGHT, SCHATTR_LEGEND_POS );
-    ppPoolDefaults[SCHATTR_TEXT_STACKED             - SCHATTR_START] = new SfxBoolItem(SCHATTR_TEXT_STACKED,FALSE);
-    ppPoolDefaults[SCHATTR_TEXT_ORDER               - SCHATTR_START] = new SvxChartTextOrderItem(CHTXTORDER_SIDEBYSIDE, SCHATTR_TEXT_ORDER);
-
-    ppPoolDefaults[SCHATTR_Y_AXIS_AUTO_MIN          - SCHATTR_START] = new SfxBoolItem(SCHATTR_Y_AXIS_AUTO_MIN);
-    ppPoolDefaults[SCHATTR_Y_AXIS_MIN               - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_Y_AXIS_MIN);
-    ppPoolDefaults[SCHATTR_Y_AXIS_AUTO_MAX          - SCHATTR_START] = new SfxBoolItem(SCHATTR_Y_AXIS_AUTO_MAX);
-    ppPoolDefaults[SCHATTR_Y_AXIS_MAX               - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_Y_AXIS_MAX);
-    ppPoolDefaults[SCHATTR_Y_AXIS_AUTO_STEP_MAIN    - SCHATTR_START] = new SfxBoolItem(SCHATTR_Y_AXIS_AUTO_STEP_MAIN);
-    ppPoolDefaults[SCHATTR_Y_AXIS_STEP_MAIN         - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_Y_AXIS_STEP_MAIN);
-    ppPoolDefaults[SCHATTR_Y_AXIS_AUTO_STEP_HELP    - SCHATTR_START] = new SfxBoolItem(SCHATTR_Y_AXIS_AUTO_STEP_HELP);
-    ppPoolDefaults[SCHATTR_Y_AXIS_STEP_HELP         - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_Y_AXIS_STEP_HELP);
-    ppPoolDefaults[SCHATTR_Y_AXIS_LOGARITHM         - SCHATTR_START] = new SfxBoolItem(SCHATTR_Y_AXIS_LOGARITHM);
-    ppPoolDefaults[SCHATTR_Y_AXIS_AUTO_ORIGIN       - SCHATTR_START] = new SfxBoolItem(SCHATTR_Y_AXIS_AUTO_ORIGIN);
-    ppPoolDefaults[SCHATTR_Y_AXIS_ORIGIN            - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_Y_AXIS_ORIGIN);
-
-    ppPoolDefaults[SCHATTR_X_AXIS_AUTO_MIN          - SCHATTR_START] = new SfxBoolItem(SCHATTR_X_AXIS_AUTO_MIN);
-    ppPoolDefaults[SCHATTR_X_AXIS_MIN               - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_X_AXIS_MIN);
-    ppPoolDefaults[SCHATTR_X_AXIS_AUTO_MAX          - SCHATTR_START] = new SfxBoolItem(SCHATTR_X_AXIS_AUTO_MAX);
-    ppPoolDefaults[SCHATTR_X_AXIS_MAX               - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_X_AXIS_MAX);
-    ppPoolDefaults[SCHATTR_X_AXIS_AUTO_STEP_MAIN    - SCHATTR_START] = new SfxBoolItem(SCHATTR_X_AXIS_AUTO_STEP_MAIN);
-    ppPoolDefaults[SCHATTR_X_AXIS_STEP_MAIN         - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_X_AXIS_STEP_MAIN);
-    ppPoolDefaults[SCHATTR_X_AXIS_AUTO_STEP_HELP    - SCHATTR_START] = new SfxBoolItem(SCHATTR_X_AXIS_AUTO_STEP_HELP);
-    ppPoolDefaults[SCHATTR_X_AXIS_STEP_HELP         - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_X_AXIS_STEP_HELP);
-    ppPoolDefaults[SCHATTR_X_AXIS_LOGARITHM         - SCHATTR_START] = new SfxBoolItem(SCHATTR_X_AXIS_LOGARITHM);
-    ppPoolDefaults[SCHATTR_X_AXIS_AUTO_ORIGIN       - SCHATTR_START] = new SfxBoolItem(SCHATTR_X_AXIS_AUTO_ORIGIN);
-    ppPoolDefaults[SCHATTR_X_AXIS_ORIGIN            - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_X_AXIS_ORIGIN);
-
-    ppPoolDefaults[SCHATTR_Z_AXIS_AUTO_MIN          - SCHATTR_START] = new SfxBoolItem(SCHATTR_Z_AXIS_AUTO_MIN);
-    ppPoolDefaults[SCHATTR_Z_AXIS_MIN               - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_Z_AXIS_MIN);
-    ppPoolDefaults[SCHATTR_Z_AXIS_AUTO_MAX          - SCHATTR_START] = new SfxBoolItem(SCHATTR_Z_AXIS_AUTO_MAX);
-    ppPoolDefaults[SCHATTR_Z_AXIS_MAX               - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_Z_AXIS_MAX);
-    ppPoolDefaults[SCHATTR_Z_AXIS_AUTO_STEP_MAIN    - SCHATTR_START] = new SfxBoolItem(SCHATTR_Z_AXIS_AUTO_STEP_MAIN);
-    ppPoolDefaults[SCHATTR_Z_AXIS_STEP_MAIN         - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_Z_AXIS_STEP_MAIN);
-    ppPoolDefaults[SCHATTR_Z_AXIS_AUTO_STEP_HELP    - SCHATTR_START] = new SfxBoolItem(SCHATTR_Z_AXIS_AUTO_STEP_HELP);
-    ppPoolDefaults[SCHATTR_Z_AXIS_STEP_HELP         - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_Z_AXIS_STEP_HELP);
-    ppPoolDefaults[SCHATTR_Z_AXIS_LOGARITHM         - SCHATTR_START] = new SfxBoolItem(SCHATTR_Z_AXIS_LOGARITHM);
-    ppPoolDefaults[SCHATTR_Z_AXIS_AUTO_ORIGIN       - SCHATTR_START] = new SfxBoolItem(SCHATTR_Z_AXIS_AUTO_ORIGIN);
-    ppPoolDefaults[SCHATTR_Z_AXIS_ORIGIN            - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_Z_AXIS_ORIGIN);
-
-    ppPoolDefaults[SCHATTR_AXISTYPE                 - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXISTYPE, CHART_AXIS_X);
-    ppPoolDefaults[SCHATTR_PERCENT_NUMBERFORMAT_VALUE  - SCHATTR_START] = new SfxInt32Item(SCHATTR_PERCENT_NUMBERFORMAT_VALUE, 0);
+    ppPoolDefaults[SCHATTR_PERCENT_NUMBERFORMAT_VALUE  - SCHATTR_START] = new SfxUInt32Item(SCHATTR_PERCENT_NUMBERFORMAT_VALUE, 0);
     ppPoolDefaults[SCHATTR_PERCENT_NUMBERFORMAT_SOURCE - SCHATTR_START] = new SfxBoolItem(SCHATTR_PERCENT_NUMBERFORMAT_SOURCE);
 
+    //legend
+    ppPoolDefaults[SCHATTR_LEGEND_POS               - SCHATTR_START] = new SfxInt32Item(SCHATTR_LEGEND_POS, ::com::sun::star::chart2::LegendPosition_LINE_END );
+    ppPoolDefaults[SCHATTR_LEGEND_SHOW              - SCHATTR_START] = new SfxBoolItem(SCHATTR_LEGEND_SHOW, sal_True);
+
+    //text
+    ppPoolDefaults[SCHATTR_TEXT_DEGREES             - SCHATTR_START] = new SfxInt32Item(SCHATTR_TEXT_DEGREES, 0);
+    ppPoolDefaults[SCHATTR_TEXT_STACKED             - SCHATTR_START] = new SfxBoolItem(SCHATTR_TEXT_STACKED,sal_False);
+
+    //statistic
     ppPoolDefaults[SCHATTR_STAT_AVERAGE             - SCHATTR_START] = new SfxBoolItem (SCHATTR_STAT_AVERAGE);
     ppPoolDefaults[SCHATTR_STAT_KIND_ERROR          - SCHATTR_START] = new SvxChartKindErrorItem (CHERROR_NONE, SCHATTR_STAT_KIND_ERROR);
     ppPoolDefaults[SCHATTR_STAT_PERCENT             - SCHATTR_START] = new SvxDoubleItem (0.0, SCHATTR_STAT_PERCENT);
@@ -118,9 +87,6 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_STAT_INDICATE            - SCHATTR_START] = new SvxChartIndicateItem (CHINDICATE_NONE, SCHATTR_STAT_INDICATE);
     ppPoolDefaults[SCHATTR_STAT_RANGE_POS           - SCHATTR_START] = new SfxStringItem (SCHATTR_STAT_RANGE_POS, String());
     ppPoolDefaults[SCHATTR_STAT_RANGE_NEG           - SCHATTR_START] = new SfxStringItem (SCHATTR_STAT_RANGE_NEG, String());
-
-    ppPoolDefaults[SCHATTR_TEXT_DEGREES             - SCHATTR_START] = new SfxInt32Item(SCHATTR_TEXT_DEGREES, 0);
-    ppPoolDefaults[SCHATTR_TEXT_OVERLAP             - SCHATTR_START] = new SfxBoolItem(SCHATTR_TEXT_OVERLAP,FALSE);
 
     ppPoolDefaults[SCHATTR_STYLE_DEEP     - SCHATTR_START] = new SfxBoolItem (SCHATTR_STYLE_DEEP, 0);
     ppPoolDefaults[SCHATTR_STYLE_3D       - SCHATTR_START] = new SfxBoolItem (SCHATTR_STYLE_3D, 0);
@@ -135,36 +101,44 @@ ChartItemPool::ChartItemPool():
 
     ppPoolDefaults[SCHATTR_AXIS             - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS,2); //2 = Y-Axis!!!
 
+    //axis scale
+    ppPoolDefaults[SCHATTR_AXISTYPE             - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXISTYPE, CHART_AXIS_REALNUMBER);
+    ppPoolDefaults[SCHATTR_AXIS_REVERSE         - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_REVERSE,0);
     ppPoolDefaults[SCHATTR_AXIS_AUTO_MIN        - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_AUTO_MIN);
     ppPoolDefaults[SCHATTR_AXIS_MIN             - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_AXIS_MIN);
     ppPoolDefaults[SCHATTR_AXIS_AUTO_MAX        - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_AUTO_MAX);
     ppPoolDefaults[SCHATTR_AXIS_MAX             - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_AXIS_MAX);
     ppPoolDefaults[SCHATTR_AXIS_AUTO_STEP_MAIN  - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_MAIN);
     ppPoolDefaults[SCHATTR_AXIS_STEP_MAIN       - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_AXIS_STEP_MAIN);
+    ppPoolDefaults[SCHATTR_AXIS_MAIN_TIME_UNIT  - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_MAIN_TIME_UNIT,2);
     ppPoolDefaults[SCHATTR_AXIS_AUTO_STEP_HELP  - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_HELP);
     // type changed from double to sal_Int32
     ppPoolDefaults[SCHATTR_AXIS_STEP_HELP       - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_STEP_HELP,0);
+    ppPoolDefaults[SCHATTR_AXIS_HELP_TIME_UNIT  - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_HELP_TIME_UNIT,2);
+    ppPoolDefaults[SCHATTR_AXIS_AUTO_TIME_RESOLUTION    - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_AUTO_TIME_RESOLUTION);
+    ppPoolDefaults[SCHATTR_AXIS_TIME_RESOLUTION - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_TIME_RESOLUTION,2);
     ppPoolDefaults[SCHATTR_AXIS_LOGARITHM       - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_LOGARITHM);
+    ppPoolDefaults[SCHATTR_AXIS_AUTO_DATEAXIS       - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_AUTO_DATEAXIS);
+    ppPoolDefaults[SCHATTR_AXIS_ALLOW_DATEAXIS      - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_ALLOW_DATEAXIS);
     ppPoolDefaults[SCHATTR_AXIS_AUTO_ORIGIN     - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_AUTO_ORIGIN);
     ppPoolDefaults[SCHATTR_AXIS_ORIGIN          - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_AXIS_ORIGIN);
 
+    //axis position
     ppPoolDefaults[SCHATTR_AXIS_TICKS           - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_TICKS,CHAXIS_MARK_OUTER);
-    ppPoolDefaults[SCHATTR_AXIS_NUMFMT          - SCHATTR_START] = new SfxUInt32Item(SCHATTR_AXIS_NUMFMT,0);
-    ppPoolDefaults[SCHATTR_AXIS_NUMFMTPERCENT   - SCHATTR_START] = new SfxUInt32Item(SCHATTR_AXIS_NUMFMTPERCENT,11);
-    ppPoolDefaults[SCHATTR_AXIS_SHOWAXIS        - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_SHOWAXIS,0);
-    ppPoolDefaults[SCHATTR_AXIS_SHOWDESCR       - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_SHOWDESCR,0);
-    ppPoolDefaults[SCHATTR_AXIS_SHOWMAINGRID    - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_SHOWMAINGRID,0);
-    ppPoolDefaults[SCHATTR_AXIS_SHOWHELPGRID    - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_SHOWHELPGRID,0);
-    ppPoolDefaults[SCHATTR_AXIS_TOPDOWN         - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_TOPDOWN,0);
     ppPoolDefaults[SCHATTR_AXIS_HELPTICKS       - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_HELPTICKS,0);
-    ppPoolDefaults[SCHATTR_AXIS_REVERSE         - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_REVERSE,0);
-
     ppPoolDefaults[SCHATTR_AXIS_POSITION        - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_POSITION,0);
     ppPoolDefaults[SCHATTR_AXIS_POSITION_VALUE  - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_AXIS_POSITION_VALUE);
     ppPoolDefaults[SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT - SCHATTR_START] = new SfxUInt32Item(SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT,0);
     ppPoolDefaults[SCHATTR_AXIS_LABEL_POSITION  - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_LABEL_POSITION,0);
     ppPoolDefaults[SCHATTR_AXIS_MARK_POSITION   - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_MARK_POSITION,0);
 
+    //axis label
+    ppPoolDefaults[SCHATTR_AXIS_SHOWDESCR       - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_SHOWDESCR,0);
+    ppPoolDefaults[SCHATTR_AXIS_LABEL_ORDER     - SCHATTR_START] = new SvxChartTextOrderItem(CHTXTORDER_SIDEBYSIDE, SCHATTR_AXIS_LABEL_ORDER);
+    ppPoolDefaults[SCHATTR_AXIS_LABEL_OVERLAP   - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_LABEL_OVERLAP,sal_False);
+    ppPoolDefaults[SCHATTR_AXIS_LABEL_BREAK     - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_LABEL_BREAK, sal_False );
+
+    //--
     ppPoolDefaults[SCHATTR_SYMBOL_BRUSH         - SCHATTR_START] = new SvxBrushItem(SCHATTR_SYMBOL_BRUSH);
     ppPoolDefaults[SCHATTR_STOCK_VOLUME         - SCHATTR_START] = new SfxBoolItem(SCHATTR_STOCK_VOLUME,0);
     ppPoolDefaults[SCHATTR_STOCK_UPDOWN         - SCHATTR_START] = new SfxBoolItem(SCHATTR_STOCK_UPDOWN,0);
@@ -173,21 +147,21 @@ ChartItemPool::ChartItemPool():
     // new for New Chart
     ppPoolDefaults[SCHATTR_BAR_OVERLAP          - SCHATTR_START] = new SfxInt32Item(SCHATTR_BAR_OVERLAP,0);
     ppPoolDefaults[SCHATTR_BAR_GAPWIDTH         - SCHATTR_START] = new SfxInt32Item(SCHATTR_BAR_GAPWIDTH,0);
-    ppPoolDefaults[SCHATTR_BAR_CONNECT          - SCHATTR_START] = new SfxBoolItem(SCHATTR_BAR_CONNECT, FALSE);
+    ppPoolDefaults[SCHATTR_BAR_CONNECT          - SCHATTR_START] = new SfxBoolItem(SCHATTR_BAR_CONNECT, sal_False);
     ppPoolDefaults[SCHATTR_NUM_OF_LINES_FOR_BAR - SCHATTR_START] = new SfxInt32Item( SCHATTR_NUM_OF_LINES_FOR_BAR, 0 );
     ppPoolDefaults[SCHATTR_SPLINE_ORDER         - SCHATTR_START] = new SfxInt32Item( SCHATTR_SPLINE_ORDER, 3 );
     ppPoolDefaults[SCHATTR_SPLINE_RESOLUTION    - SCHATTR_START] = new SfxInt32Item( SCHATTR_SPLINE_RESOLUTION, 20 );
     ppPoolDefaults[SCHATTR_DIAGRAM_STYLE        - SCHATTR_START] = new SvxChartStyleItem( CHSTYLE_2D_COLUMN, SCHATTR_DIAGRAM_STYLE );
-    ppPoolDefaults[SCHATTR_TEXTBREAK            - SCHATTR_START] = new SfxBoolItem( SCHATTR_TEXTBREAK, FALSE );
-    ppPoolDefaults[SCHATTR_GROUP_BARS_PER_AXIS  - SCHATTR_START] = new SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, FALSE);
-    ppPoolDefaults[SCHATTR_INCLUDE_HIDDEN_CELLS - SCHATTR_START] = new SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, TRUE);
+    ppPoolDefaults[SCHATTR_GROUP_BARS_PER_AXIS  - SCHATTR_START] = new SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, sal_False);
     ppPoolDefaults[SCHATTR_STARTING_ANGLE       - SCHATTR_START] = new SfxInt32Item( SCHATTR_STARTING_ANGLE, 90 );
-    ppPoolDefaults[SCHATTR_CLOCKWISE            - SCHATTR_START] = new SfxBoolItem( SCHATTR_CLOCKWISE, FALSE );
+    ppPoolDefaults[SCHATTR_CLOCKWISE            - SCHATTR_START] = new SfxBoolItem( SCHATTR_CLOCKWISE, sal_False );
 
     ppPoolDefaults[SCHATTR_MISSING_VALUE_TREATMENT    - SCHATTR_START] = new SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT, 0);
     ppPoolDefaults[SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS - SCHATTR_START] = new SfxIntegerListItem(SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS,aTmp);
+    ppPoolDefaults[SCHATTR_INCLUDE_HIDDEN_CELLS - SCHATTR_START] = new SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, sal_True);
 
     ppPoolDefaults[SCHATTR_AXIS_FOR_ALL_SERIES  - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_FOR_ALL_SERIES, 0);
+
     ppPoolDefaults[SCHATTR_REGRESSION_TYPE          - SCHATTR_START] = new SvxChartRegressItem  (CHREGRESS_NONE, SCHATTR_REGRESSION_TYPE);
     ppPoolDefaults[SCHATTR_REGRESSION_SHOW_EQUATION - SCHATTR_START] = new SfxBoolItem(SCHATTR_REGRESSION_SHOW_EQUATION, 0);
     ppPoolDefaults[SCHATTR_REGRESSION_SHOW_COEFF - SCHATTR_START] = new SfxBoolItem(SCHATTR_REGRESSION_SHOW_COEFF, 0);
@@ -197,8 +171,8 @@ ChartItemPool::ChartItemPool():
     **************************************************************************/
     pItemInfos = new SfxItemInfo[SCHATTR_END - SCHATTR_START + 1];
 
-    const USHORT nMax = SCHATTR_END - SCHATTR_START + 1;
-    for( USHORT i = 0; i < nMax; i++ )
+    sal_uInt16 i;
+    for( i = SCHATTR_START; i <= SCHATTR_END; i++ )
     {
         pItemInfos[i]._nSID = 0;
         pItemInfos[i]._nFlags = SFX_ITEM_POOLABLE;
@@ -224,8 +198,8 @@ ChartItemPool::~ChartItemPool()
 
     delete[] pItemInfos;
 
-    const USHORT nMax = SCHATTR_END - SCHATTR_START + 1;
-    for( USHORT i = 0; i < nMax; i++ )
+    const sal_uInt16 nMax = SCHATTR_END - SCHATTR_START + 1;
+    for( sal_uInt16 i=0; i<nMax; ++i )
     {
         SetRefCount(*ppPoolDefaults[i], 0);
         delete ppPoolDefaults[i];
@@ -239,7 +213,7 @@ SfxItemPool* ChartItemPool::Clone() const
     return new ChartItemPool(*this);
 }
 
-SfxMapUnit ChartItemPool::GetMetric(USHORT /* nWhich */) const
+SfxMapUnit ChartItemPool::GetMetric(sal_uInt16 /* nWhich */) const
 {
     return SFX_MAPUNIT_100TH_MM;
 }

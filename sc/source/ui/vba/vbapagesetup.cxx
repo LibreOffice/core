@@ -81,7 +81,7 @@ rtl::OUString SAL_CALL ScVbaPageSetup::getPrintArea() throw (css::uno::RuntimeEx
     if( nCount )
     {
         ScAddress::Details aDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
-        USHORT nFlags = SCA_VALID;
+        sal_uInt16 nFlags = SCA_VALID;
         nFlags |= ( SCA_TAB_ABSOLUTE | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB2_ABSOLUTE | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE );
         ScRangeList aRangeList;
         for( sal_Int32 i=0; i<nCount; i++ )
@@ -153,7 +153,7 @@ uno::Any SAL_CALL ScVbaPageSetup::getFitToPagesTall() throw (css::uno::RuntimeEx
 
 void SAL_CALL ScVbaPageSetup::setFitToPagesTall( const uno::Any& fitToPagesTall) throw (css::uno::RuntimeException)
 {
-    USHORT scaleToPageY = 0;
+    sal_uInt16 scaleToPageY = 0;
     try
     {
         sal_Bool aValue;
@@ -176,10 +176,10 @@ uno::Any SAL_CALL ScVbaPageSetup::getFitToPagesWide() throw (css::uno::RuntimeEx
 
 void SAL_CALL ScVbaPageSetup::setFitToPagesWide( const uno::Any& fitToPagesWide) throw (css::uno::RuntimeException)
 {
-    USHORT scaleToPageX = 0;
+    sal_uInt16 scaleToPageX = 0;
     try
     {
-        sal_Bool aValue = sal_False;
+        sal_Bool aValue = false;
         if( fitToPagesWide.getValueTypeClass() != uno::TypeClass_BOOLEAN || (fitToPagesWide >>= aValue))
         {
             fitToPagesWide >>= scaleToPageX;
@@ -199,12 +199,12 @@ uno::Any SAL_CALL ScVbaPageSetup::getZoom() throw (css::uno::RuntimeException)
 
 void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom) throw (css::uno::RuntimeException)
 {
-    USHORT pageScale = 0;
+    sal_uInt16 pageScale = 0;
     try
     {
         if( zoom.getValueTypeClass() == uno::TypeClass_BOOLEAN )
         {
-            sal_Bool aValue = sal_False;
+            sal_Bool aValue = false;
             zoom >>= aValue;
             if( aValue )
             {
@@ -221,7 +221,7 @@ void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom) throw (css::uno::Ru
         }
 
         // these only exist in S08
-        USHORT nScale = 0;
+        sal_uInt16 nScale = 0;
         mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleToPages")), uno::makeAny( nScale ));
         mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleToPagesX")), uno::makeAny( nScale ));
         mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleToPagesY")), uno::makeAny( nScale ));
@@ -463,7 +463,7 @@ sal_Int32 SAL_CALL ScVbaPageSetup::getOrder() throw (css::uno::RuntimeException)
     try
     {
         uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PrintDownFirst")));
-        sal_Bool bPrintDownFirst = sal_False;
+        sal_Bool bPrintDownFirst = false;
         aValue >>= bPrintDownFirst;
         if( !bPrintDownFirst )
             order = excel::XlOrder::xlOverThenDown;
@@ -483,7 +483,7 @@ void SAL_CALL ScVbaPageSetup::setOrder( sal_Int32 order) throw (css::uno::Runtim
         case excel::XlOrder::xlDownThenOver:
             break;
         case excel::XlOrder::xlOverThenDown:
-            bOrder = sal_False;
+            bOrder = false;
             break;
         default:
             DebugHelper::exception(SbERR_BAD_PARAMETER, rtl::OUString() );
@@ -538,7 +538,7 @@ void SAL_CALL ScVbaPageSetup::setFirstPageNumber( sal_Int32 firstPageNumber) thr
 
 sal_Bool SAL_CALL ScVbaPageSetup::getCenterVertically() throw (css::uno::RuntimeException)
 {
-    sal_Bool centerVertically = sal_False;
+    sal_Bool centerVertically = false;
     try
     {
         uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CenterVertically")));
@@ -563,7 +563,7 @@ void SAL_CALL ScVbaPageSetup::setCenterVertically( sal_Bool centerVertically) th
 
 sal_Bool SAL_CALL ScVbaPageSetup::getCenterHorizontally() throw (css::uno::RuntimeException)
 {
-    sal_Bool centerHorizontally = sal_False;
+    sal_Bool centerHorizontally = false;
     try
     {
         uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CenterHorizontally")));
@@ -588,7 +588,7 @@ void SAL_CALL ScVbaPageSetup::setCenterHorizontally( sal_Bool centerHorizontally
 
 sal_Bool SAL_CALL ScVbaPageSetup::getPrintHeadings() throw (css::uno::RuntimeException)
 {
-    sal_Bool printHeadings = sal_False;
+    sal_Bool printHeadings = false;
     try
     {
         uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PrintHeaders")));
@@ -691,7 +691,7 @@ sal_Int32 SAL_CALL ScVbaPageSetup::getPaperSize() throw (css::uno::RuntimeExcept
     {
         uno::Any aValue = mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Size")));
         aValue >>= size;
-        ePaper = SvxPaperInfo::GetSvxPaper( Size(size.Width, size.Height), MAP_100TH_MM, TRUE);
+        ePaper = SvxPaperInfo::GetSvxPaper( Size(size.Width, size.Height), MAP_100TH_MM, true);
     }
     catch( uno::Exception& )
     {

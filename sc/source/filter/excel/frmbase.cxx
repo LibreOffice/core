@@ -40,7 +40,7 @@ _ScRangeListTabs::~_ScRangeListTabs()
 }
 
 
-void _ScRangeListTabs::Append( ScSingleRefData a, SCTAB nTab, bool b )
+void _ScRangeListTabs::Append( ScSingleRefData a, SCTAB nTab, const bool b )
 {
     if( b )
     {
@@ -179,7 +179,7 @@ const ScRange* _ScRangeListTabs::Next ()
     return &(*maItrCur);
 }
 
-ConverterBase::ConverterBase( UINT16 nNewBuffer ) :
+ConverterBase::ConverterBase( sal_uInt16 nNewBuffer ) :
     aEingPos( 0, 0, 0 ),
     eStatus( ConvOK ),
     nBufferSize( nNewBuffer )
@@ -203,7 +203,7 @@ void ConverterBase::Reset()
 
 
 
-ExcelConverterBase::ExcelConverterBase( UINT16 nNewBuffer ) :
+ExcelConverterBase::ExcelConverterBase( sal_uInt16 nNewBuffer ) :
     ConverterBase( nNewBuffer )
 {
 }
@@ -227,7 +227,7 @@ void ExcelConverterBase::Reset()
 
 
 
-LotusConverterBase::LotusConverterBase( SvStream &rStr, UINT16 nNewBuffer ) :
+LotusConverterBase::LotusConverterBase( SvStream &rStr, sal_uInt16 nNewBuffer ) :
     ConverterBase( nNewBuffer ),
     aIn( rStr ),
     nBytesLeft( 0 )

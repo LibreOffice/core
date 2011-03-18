@@ -37,6 +37,7 @@
 
 TabPage TP_RANGECHOOSER
 {
+    HelpID = "chart2:TabPage:TP_RANGECHOOSER";
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 248, 140 ) ;
@@ -55,18 +56,21 @@ TabPage TP_RANGECHOOSER
     };
     Edit ED_RANGE
     {
+        HelpID = "chart2:Edit:TP_RANGECHOOSER:ED_RANGE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 32  ) ;
         Size = MAP_APPFONT ( 220 , 12 ) ;
     };
     ImageButton IB_RANGE
     {
+        HelpID = "chart2:ImageButton:TP_RANGECHOOSER:IB_RANGE";
         Pos = MAP_APPFONT ( 228 , 31  ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         TabStop = FALSE ;
     };
     RadioButton RB_DATAROWS
     {
+        HelpID = "chart2:RadioButton:TP_RANGECHOOSER:RB_DATAROWS";
         Pos = MAP_APPFONT ( 6 , 52  ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
@@ -74,6 +78,7 @@ TabPage TP_RANGECHOOSER
     };
     RadioButton RB_DATACOLS
     {
+        HelpID = "chart2:RadioButton:TP_RANGECHOOSER:RB_DATACOLS";
         Pos = MAP_APPFONT ( 6 , 66  ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
@@ -81,12 +86,14 @@ TabPage TP_RANGECHOOSER
     };
     CheckBox CB_FIRST_ROW_ASLABELS
     {
+        HelpID = "chart2:CheckBox:TP_RANGECHOOSER:CB_FIRST_ROW_ASLABELS";
         Pos = MAP_APPFONT ( 6 , 84  ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "~First row as label" ;
     };
     CheckBox CB_FIRST_COLUMN_ASLABELS
     {
+        HelpID = "chart2:CheckBox:TP_RANGECHOOSER:CB_FIRST_COLUMN_ASLABELS";
         Pos = MAP_APPFONT ( 6 , 98  ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "F~irst column as label" ;

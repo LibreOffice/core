@@ -40,11 +40,11 @@
 #include "miscdlgs.hrc"
 
 
-static BYTE nDelItemChecked=0;
+static sal_uInt8 nDelItemChecked=0;
 
 //==================================================================
 
-ScDeleteCellDlg::ScDeleteCellDlg( Window* pParent, BOOL bDisallowCellMove ) :
+ScDeleteCellDlg::ScDeleteCellDlg( Window* pParent, sal_Bool bDisallowCellMove ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DELCELL ) ),
     //
     aFlFrame        ( this, ScResId( FL_FRAME ) ),

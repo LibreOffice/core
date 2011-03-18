@@ -174,7 +174,7 @@ class ScSheetLinksObj : public cppu::WeakImplHelper4<
 private:
     ScDocShell*             pDocShell;
 
-    ScSheetLinkObj*         GetObjectByIndex_Impl(INT32 nIndex);
+    ScSheetLinkObj*         GetObjectByIndex_Impl(sal_Int32 nIndex);
     ScSheetLinkObj*         GetObjectByName_Impl(const ::rtl::OUString& aName);
 
 public:
@@ -229,7 +229,7 @@ class ScAreaLinkObj : public cppu::WeakImplHelper4<
 private:
     SfxItemPropertySet      aPropSet;
     ScDocShell*             pDocShell;
-    USHORT                  nPos;
+    sal_uInt16                  nPos;
     XRefreshListenerArr_Impl aRefreshListeners;
 
     void    Modify_Impl( const ::rtl::OUString* pNewFile, const ::rtl::OUString* pNewFilter,
@@ -239,7 +239,7 @@ private:
     void    Refreshed_Impl();
 
 public:
-                            ScAreaLinkObj(ScDocShell* pDocSh, USHORT nP);
+                            ScAreaLinkObj(ScDocShell* pDocSh, sal_uInt16 nP);
     virtual                 ~ScAreaLinkObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -332,7 +332,7 @@ class ScAreaLinksObj : public cppu::WeakImplHelper3<
 private:
     ScDocShell*             pDocShell;
 
-    ScAreaLinkObj*          GetObjectByIndex_Impl(INT32 nIndex);
+    ScAreaLinkObj*          GetObjectByIndex_Impl(sal_Int32 nIndex);
 
 public:
                             ScAreaLinksObj(ScDocShell* pDocSh);
@@ -449,7 +449,7 @@ class ScDDELinksObj : public cppu::WeakImplHelper4<
 private:
     ScDocShell*             pDocShell;
 
-    ScDDELinkObj*           GetObjectByIndex_Impl(INT32 nIndex);
+    ScDDELinkObj*           GetObjectByIndex_Impl(sal_Int32 nIndex);
     ScDDELinkObj*           GetObjectByName_Impl(const ::rtl::OUString& aName);
 
 public:

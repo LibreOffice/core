@@ -58,7 +58,7 @@ XMLTableShapeImportHelper::XMLTableShapeImportHelper(
         ScXMLImport& rImp, SvXMLImportPropertyMapper *pImpMapper ) :
     XMLShapeImportHelper(rImp, rImp.GetModel(), pImpMapper ),
     pAnnotationContext(NULL),
-    bOnTable(sal_False)
+    bOnTable(false)
 {
 }
 

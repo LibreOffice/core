@@ -59,7 +59,7 @@ ScXMLAnnotationData::~ScXMLAnnotationData()
 //------------------------------------------------------------------
 
 ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                       ScXMLAnnotationData& rAnnotationData,
@@ -67,7 +67,7 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mrAnnotationData( rAnnotationData ),
     nParagraphCount(0),
-    bHasTextP(sal_False),
+    bHasTextP(false),
     pCellContext(pTempCellContext),
     pShapeContext(NULL)
 {
@@ -87,7 +87,7 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     {
         const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
-        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
@@ -137,7 +137,7 @@ void ScXMLAnnotationContext::StartElement(const com::sun::star::uno::Reference< 
         pShapeContext->StartElement(xAttrList);
 }
 
-SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )

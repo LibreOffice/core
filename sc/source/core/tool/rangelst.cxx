@@ -125,7 +125,7 @@ private:
 class FormatString : public ::std::unary_function<void, const ScRange*>
 {
 public:
-    FormatString(String& rStr, USHORT nFlags, ScDocument* pDoc, FormulaGrammar::AddressConvention eConv, sal_Unicode cDelim) :
+    FormatString(String& rStr, sal_uInt16 nFlags, ScDocument* pDoc, FormulaGrammar::AddressConvention eConv, sal_Unicode cDelim) :
         mrStr(rStr),
         mnFlags(nFlags),
         mpDoc(pDoc),
@@ -153,7 +153,7 @@ public:
     }
 private:
     String& mrStr;
-    USHORT mnFlags;
+    sal_uInt16 mnFlags;
     ScDocument* mpDoc;
     FormulaGrammar::AddressConvention meConv;
     sal_Unicode mcDelim;
@@ -169,7 +169,7 @@ ScRangeList::~ScRangeList()
     RemoveAll();
 }
 
-USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask,
+sal_uInt16 ScRangeList::Parse( const String& rStr, ScDocument* pDoc, sal_uInt16 nMask,
                            formula::FormulaGrammar::AddressConvention eConv,
                            sal_Unicode cDelimiter )
 {
@@ -179,7 +179,7 @@ USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask,
             cDelimiter = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
 
         nMask |= SCA_VALID;             // falls das jemand vergessen sollte
-        USHORT nResult = (USHORT)~0;    // alle Bits setzen
+        sal_uInt16 nResult = (sal_uInt16)~0;    // alle Bits setzen
         ScRange aRange;
         String aOne;
         SCTAB nTab = 0;
@@ -190,15 +190,15 @@ USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask,
         }
         else
             nTab = 0;
-        USHORT nTCount = rStr.GetTokenCount( cDelimiter );
-        for ( USHORT i=0; i<nTCount; i++ )
+        sal_uInt16 nTCount = rStr.GetTokenCount( cDelimiter );
+        for ( sal_uInt16 i=0; i<nTCount; i++ )
         {
             aOne = rStr.GetToken( i, cDelimiter );
             aRange.aStart.SetTab( nTab );   // Default Tab wenn nicht angegeben
-            USHORT nRes = aRange.ParseAny( aOne, pDoc, eConv );
-            USHORT nEndRangeBits = SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2;
-            USHORT nTmp1 = ( nRes & SCA_BITS );
-            USHORT nTmp2 = ( nRes & nEndRangeBits );
+            sal_uInt16 nRes = aRange.ParseAny( aOne, pDoc, eConv );
+            sal_uInt16 nEndRangeBits = SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2;
+            sal_uInt16 nTmp1 = ( nRes & SCA_BITS );
+            sal_uInt16 nTmp2 = ( nRes & nEndRangeBits );
             // If we have a valid single range with
             // any of the address bits we are interested in
             // set - set the equiv end range bits
@@ -216,7 +216,7 @@ USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask,
 }
 
 
-void ScRangeList::Format( String& rStr, USHORT nFlags, ScDocument* pDoc,
+void ScRangeList::Format( String& rStr, sal_uInt16 nFlags, ScDocument* pDoc,
                           formula::FormulaGrammar::AddressConvention eConv,
                           sal_Unicode cDelimiter ) const
 {
@@ -603,7 +603,7 @@ bool ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
         for ( size_t i = 0, nPairs = maPairs.size(); i < nPairs; ++i )
         {
             ScRangePair* pR = maPairs[ i ];
-            for ( USHORT j=0; j<2; j++ )
+            for ( sal_uInt16 j=0; j<2; j++ )
             {
                 ScRange& rRange = pR->GetRange(j);
                 SCCOL theCol1;
@@ -899,8 +899,8 @@ ScRangePair** ScRangePairList::CreateNameSortedArray( size_t& nListCount,
     DBG_ASSERT( nListCount * sizeof(ScRangePairNameSort) <= (size_t)~0x1F,
         "ScRangePairList::CreateNameSortedArray nListCount * sizeof(ScRangePairNameSort) > (size_t)~0x1F" );
     ScRangePairNameSort* pSortArray = (ScRangePairNameSort*)
-        new BYTE [ nListCount * sizeof(ScRangePairNameSort) ];
-    ULONG j;
+        new sal_uInt8 [ nListCount * sizeof(ScRangePairNameSort) ];
+    sal_uLong j;
     for ( j=0; j < nListCount; j++ )
     {
         pSortArray[j].pPair = maPairs[ j ];

@@ -43,7 +43,7 @@ struct ScImportSourceDesc
 {
     String  aDBName;
     String  aObject;
-    USHORT  nType;          // enum DataImportMode
+    sal_uInt16  nType;          // enum DataImportMode
     bool    bNative;
     ScDocument* mpDoc;
 
@@ -73,10 +73,10 @@ public:
 
     virtual long                    GetColumnCount();
     virtual String                  getDimensionName(long nColumn);
-    virtual BOOL                    getIsDataLayoutDimension(long nColumn);
-    virtual BOOL                    IsDateDimension(long nDim);
+    virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
+    virtual sal_Bool                    IsDateDimension(long nDim);
     virtual void                    DisposeData();
-    virtual void                    SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
+    virtual void                    SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty );
 
     virtual void                    CreateCacheTable();
     virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims);

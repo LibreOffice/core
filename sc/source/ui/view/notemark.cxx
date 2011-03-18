@@ -49,7 +49,7 @@
 
 ScNoteMarker::ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Window* pDiagonal,
                             ScDocument* pD, ScAddress aPos, const String& rUser,
-                            const MapMode& rMap, BOOL bLeftEdge, BOOL bForce, BOOL bKeyboard ) :
+                            const MapMode& rMap, sal_Bool bLeftEdge, sal_Bool bForce, sal_Bool bKeyboard ) :
     pWindow( pWin ),
     pRightWin( pRight ),
     pBottomWin( pBottom ),
@@ -62,7 +62,7 @@ ScNoteMarker::ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Windo
     bByKeyboard( bKeyboard ),
     pModel( NULL ),
     pObject( NULL ),
-    bVisible( FALSE )
+    bVisible( false )
 {
     Size aSizePixel = pWindow->GetOutputSizePixel();
     if( pRightWin )
@@ -105,7 +105,7 @@ IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, EMPTYARG )
             rOutliner.SetRefDevice(pPrinter);
         }
 
-        if( SdrPage* pPage = pModel->AllocPage( FALSE ) )
+        if( SdrPage* pPage = pModel->AllocPage( false ) )
         {
             pObject = ScNoteUtil::CreateTempCaption( *pDoc, aDocPos, *pPage, aUserText, aVisRect, bLeft );
             if( pObject )
@@ -115,7 +115,7 @@ IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, EMPTYARG )
             pModel->InsertPage( pPage );
 
         }
-        bVisible = TRUE;
+        bVisible = sal_True;
     }
 
     Draw();
@@ -127,7 +127,7 @@ void lcl_DrawWin( SdrObject* pObject, Window* pWindow, const MapMode& rMap )
     MapMode aOld = pWindow->GetMapMode();
     pWindow->SetMapMode( rMap );
 
-    ULONG nOldDrawMode = pWindow->GetDrawMode();
+    sal_uLong nOldDrawMode = pWindow->GetDrawMode();
     if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         pWindow->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |

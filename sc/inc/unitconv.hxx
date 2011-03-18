@@ -62,10 +62,10 @@ class ScUnitConverter : public ScStrCollection
         ScUnitConverter&    operator=( const ScUnitConverter& );
 
 public:
-                            ScUnitConverter( USHORT nInit = 16, USHORT nDelta = 4 );
+                            ScUnitConverter( sal_uInt16 nInit = 16, sal_uInt16 nDelta = 4 );
     virtual                 ~ScUnitConverter() {};
 
-        BOOL                GetValue( double& fValue, const String& rFromUnit,
+        sal_Bool                GetValue( double& fValue, const String& rFromUnit,
                                 const String& rToUnit ) const;
 };
 

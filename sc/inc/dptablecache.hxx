@@ -76,10 +76,10 @@ public:
 
     SCCOL GetDimensionIndex( String sName) const;
     const ScDPItemData* GetSortedItemData( SCCOL nDim, SCROW nOrder ) const;
-    ULONG GetNumType ( ULONG nFormat ) const;
-    ULONG GetNumberFormat( long nDim ) const;
+    sal_uLong GetNumType ( sal_uLong nFormat ) const;
+    sal_uLong GetNumberFormat( long nDim ) const;
     bool  IsDateDimension( long nDim ) const ;
-    ULONG GetDimNumType( SCCOL nDim) const;
+    sal_uLong GetDimNumType( SCCOL nDim) const;
     SCROW GetDimMemberCount( SCCOL nDim ) const;
 
     SCROW GetSortedItemDataId( SCCOL nDim, SCROW nOrder ) const;
@@ -88,9 +88,9 @@ public:
     bool InitFromDataBase(const  ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xRowSet, const Date& rNullDate);
 
     SCROW  GetRowCount() const;
-    SCROW  GetItemDataId( USHORT nDim, SCROW nRow, bool bRepeatIfEmpty ) const;
-    String GetDimensionName( USHORT nColumn ) const;
-    bool IsEmptyMember( SCROW nRow, USHORT nColumn ) const;
+    SCROW  GetItemDataId( sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty ) const;
+    String GetDimensionName( sal_uInt16 nColumn ) const;
+    bool IsEmptyMember( SCROW nRow, sal_uInt16 nColumn ) const;
     bool IsRowEmpty( SCROW nRow ) const;
     bool IsValid() const;
     bool ValidQuery( SCROW nRow, const ScQueryParam& rQueryParam, bool* pSpecial );

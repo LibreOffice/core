@@ -72,9 +72,6 @@
 #define CellMovement
 #include "scslots.hxx"
 
-#define SearchSettings
-#include <svx/svxslots.hxx>
-
 TYPEINIT1( ScCellShell, ScFormatShell );
 
 SFX_IMPL_INTERFACE(ScCellShell, ScFormatShell , ScResId(SCSTR_CELLSHELL) )
@@ -89,7 +86,7 @@ SFX_IMPL_INTERFACE(ScCellShell, ScFormatShell , ScResId(SCSTR_CELLSHELL) )
 ScCellShell::ScCellShell(ScViewData* pData) :
     ScFormatShell(pData),
     pImpl( new CellShell_Impl() ),
-    bPastePossible(FALSE)
+    bPastePossible(false)
 {
     SetHelpId(HID_SCSHELL_CELLSH);
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Cell")));
@@ -99,7 +96,7 @@ ScCellShell::~ScCellShell()
 {
     if ( pImpl->m_pClipEvtLstnr )
     {
-        pImpl->m_pClipEvtLstnr->AddRemoveListener( GetViewData()->GetActiveWin(), FALSE );
+        pImpl->m_pClipEvtLstnr->AddRemoveListener( GetViewData()->GetActiveWin(), false );
 
         //  The listener may just now be waiting for the SolarMutex and call the link
         //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
@@ -120,9 +117,9 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     ScRange aMarkRange;
     ScMarkType eMarkType = GetViewData()->GetSimpleArea( aMarkRange );
-    BOOL bSimpleArea = (eMarkType == SC_MARK_SIMPLE);
-    BOOL bOnlyNotBecauseOfMatrix;
-    BOOL bEditable = pTabViewShell->SelectionEditable( &bOnlyNotBecauseOfMatrix );
+    sal_Bool bSimpleArea = (eMarkType == SC_MARK_SIMPLE);
+    sal_Bool bOnlyNotBecauseOfMatrix;
+    sal_Bool bEditable = pTabViewShell->SelectionEditable( &bOnlyNotBecauseOfMatrix );
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
     ScMarkData& rMark = GetViewData()->GetMarkData();
@@ -134,11 +131,11 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     nRow2 = aMarkRange.aEnd.Row();
 
     SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
-        BOOL bDisable = FALSE;
-        BOOL bNeedEdit = TRUE;      // muss Selektion editierbar sein?
+        sal_Bool bDisable = false;
+        sal_Bool bNeedEdit = sal_True;      // muss Selektion editierbar sein?
         switch ( nWhich )
         {
             case FID_FILL_TO_BOTTOM:    // Fuellen oben/unten
@@ -172,7 +169,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_FILL_SERIES:       // Block fuellen
             case SID_OPENDLG_TABOP:     // Mehrfachoperationen, mind. 2 Zellen markiert?
                 if (pDoc->GetChangeTrack()!=NULL &&nWhich ==SID_OPENDLG_TABOP)
-                    bDisable = TRUE;
+                    bDisable = sal_True;
                 else
                     bDisable = (!bSimpleArea) || (nCol1 == nCol2 && nRow1 == nRow2);
 
@@ -210,7 +207,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 //! muss man leben.. wird in Copy-Routine abgefangen, sonst
                 //! muesste hier nochmal Aufwand getrieben werden
                 if ( !(!bEditable && bOnlyNotBecauseOfMatrix) )
-                    bNeedEdit = FALSE;          // erlaubt, wenn geschuetzt/ReadOnly
+                    bNeedEdit = false;          // erlaubt, wenn geschuetzt/ReadOnly
                 break;
 
             case SID_AUTOFORMAT:        // Autoformat, mind. 3x3 selektiert
@@ -222,11 +219,11 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 {
                     if ( !bEditable && bOnlyNotBecauseOfMatrix )
                     {
-                        bNeedEdit = FALSE;
+                        bNeedEdit = false;
                     }
                     if ( pDocShell && pDocShell->IsDocShared() )
                     {
-                        bDisable = TRUE;
+                        bDisable = sal_True;
                     }
                 }
                 break;
@@ -237,14 +234,14 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case SID_ENABLE_HYPHENATION :
                 // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
                 if ( !bEditable && bOnlyNotBecauseOfMatrix )
-                    bNeedEdit = FALSE;
+                    bNeedEdit = false;
                 break;
 
             case FID_VALIDATION:
                 {
                     if ( pDocShell && pDocShell->IsDocShared() )
                     {
-                        bDisable = TRUE;
+                        bDisable = sal_True;
                     }
                 }
                 break;
@@ -257,14 +254,14 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             break;
         }
         if (!bDisable && bNeedEdit && !bEditable)
-            bDisable = TRUE;
+            bDisable = sal_True;
 
         if (bDisable)
             rSet.DisableItem(nWhich);
         else if (nWhich == SID_ENABLE_HYPHENATION)
         {
             // toggle slots need a bool item
-            rSet.Put( SfxBoolItem( nWhich, FALSE ) );
+            rSet.Put( SfxBoolItem( nWhich, false ) );
         }
         nWhich = aIter.NextWhich();
     }
@@ -282,11 +279,11 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                         GetViewData()->GetTabNo() );
 
     SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
-        BOOL bDisable = FALSE;
-        BOOL bNeedEdit = TRUE;      // muss Cursorposition editierbar sein?
+        sal_Bool bDisable = false;
+        sal_Bool bNeedEdit = sal_True;      // muss Cursorposition editierbar sein?
         switch ( nWhich )
         {
             case SID_THESAURUS:
@@ -296,7 +293,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                     if (!bDisable)
                     {
                         //  test for available languages
-                        USHORT nLang = ScViewUtil::GetEffLanguage( pDoc, aCursor );
+                        sal_uInt16 nLang = ScViewUtil::GetEffLanguage( pDoc, aCursor );
                         bDisable = !ScModule::HasThesaurusLanguage( nLang );
                     }
                 }
@@ -312,9 +309,9 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                         if (!pDoc->IsBlockEditable( aCursor.Tab(), aRange.aStart.Col(),aRange.aStart.Row(),
                                             aRange.aEnd.Col(),aRange.aEnd.Row() ))
                         {
-                            bDisable = TRUE;
+                            bDisable = sal_True;
                         }
-                        bNeedEdit=FALSE;
+                        bNeedEdit=false;
                     }
 
                 }
@@ -323,7 +320,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                 {
                     if ( pDocShell && pDocShell->IsDocShared() )
                     {
-                        bDisable = TRUE;
+                        bDisable = sal_True;
                     }
                 }
                 break;
@@ -331,7 +328,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
         if (!bDisable && bNeedEdit)
             if (!pDoc->IsBlockEditable( aCursor.Tab(), aCursor.Col(),aCursor.Row(),
                                         aCursor.Col(),aCursor.Row() ))
-                bDisable = TRUE;
+                bDisable = sal_True;
         if (bDisable)
             rSet.DisableItem(nWhich);
         nWhich = aIter.NextWhich();
@@ -369,13 +366,13 @@ sal_Bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHe
         return sal_True;
     }
 
-    return sal_False;
+    return false;
 }
 
 void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
 {
     Window* pWin = GetViewData()->GetActiveWin();
-    BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
+    sal_Bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 
@@ -403,11 +400,11 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
 
 //  Einfuegen, Inhalte einfuegen
 
-BOOL lcl_IsCellPastePossible( const TransferableDataHelper& rData )
+sal_Bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
 {
-    BOOL bPossible = FALSE;
+    sal_Bool bPossible = false;
     if ( ScTransferObj::GetOwnClipboard( NULL ) || ScDrawTransferObj::GetOwnClipboard( NULL ) )
-        bPossible = TRUE;
+        bPossible = sal_True;
     else
     {
         if ( rData.HasFormat( SOT_FORMAT_BITMAP ) ||
@@ -427,7 +424,7 @@ BOOL lcl_IsCellPastePossible( const TransferableDataHelper& rData )
              rData.HasFormat( SOT_FORMATSTR_ID_HTML_SIMPLE ) ||
              rData.HasFormat( SOT_FORMATSTR_ID_DIF ) )
         {
-            bPossible = TRUE;
+            bPossible = sal_True;
         }
     }
     return bPossible;
@@ -460,14 +457,14 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
         pImpl->m_pClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScCellShell, ClipboardChanged ) );
         pImpl->m_pClipEvtLstnr->acquire();
         Window* pWin = GetViewData()->GetActiveWin();
-        pImpl->m_pClipEvtLstnr->AddRemoveListener( pWin, TRUE );
+        pImpl->m_pClipEvtLstnr->AddRemoveListener( pWin, sal_True );
 
         // get initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
         bPastePossible = lcl_IsCellPastePossible( aDataHelper );
     }
 
-    BOOL bDisable = !bPastePossible;
+    sal_Bool bDisable = !bPastePossible;
 
     //  Zellschutz / Multiselektion
 
@@ -478,11 +475,11 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
         SCTAB nTab = GetViewData()->GetTabNo();
         ScDocument* pDoc = GetViewData()->GetDocShell()->GetDocument();
         if (!pDoc->IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
-            bDisable = TRUE;
+            bDisable = sal_True;
         ScRange aDummy;
         ScMarkType eMarkType = GetViewData()->GetSimpleArea( aDummy);
         if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
-            bDisable = TRUE;
+            bDisable = sal_True;
     }
 
     if (bDisable)
@@ -532,7 +529,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
 
     SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
         switch ( nWhich )
@@ -548,7 +545,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     if ( pData->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
                     {
                         String aStr;
-                        USHORT nFlags = SCA_VALID | SCA_TAB_3D;
+                        sal_uInt16 nFlags = SCA_VALID | SCA_TAB_3D;
                         aRange.Format(aStr,nFlags,pDoc);
                         rSet.Put( SfxStringItem( nWhich, aStr ) );
                     }
@@ -612,7 +609,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                      * 1: ER    Click erweitert Selektion
                      * 2: ERG   Click definiert weitere Selektion
                      */
-                    USHORT nMode = pTabViewShell->GetLockedModifiers();
+                    sal_uInt16 nMode = pTabViewShell->GetLockedModifiers();
 
                     switch ( nMode )
                     {
@@ -654,7 +651,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                             String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("...")) ) );
                     else
                     {
-                        USHORT nErrCode = 0;
+                        sal_uInt16 nErrCode = 0;
                         ScBaseCell* pCell;
                         pDoc->GetCell( nPosX, nPosY, nTab, pCell );
                         if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
@@ -745,7 +742,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     if ( !pDoc->IsScenario(nTab) )
                     {
                         String aStr;
-                        USHORT nFlags;
+                        sal_uInt16 nFlags;
                         SCTAB nScTab = nTab + 1;
                         String aProtect;
                         bool bSheetProtected = pDoc->IsTabProtected(nTab);
@@ -756,7 +753,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                             aList.Insert( new String( aStr ), LIST_APPEND );
                             pDoc->GetScenarioData( nScTab, aStr, aDummyCol, nFlags );
                             aList.Insert( new String( aStr ), LIST_APPEND );
-                            // Protection is TRUE if both Sheet and Scenario are protected
+                            // Protection is sal_True if both Sheet and Scenario are protected
                             aProtect = (bSheetProtected && (nFlags & SC_SCENARIO_PROTECT)) ? '1' : '0';
                             aList.Insert( new String( aProtect), LIST_APPEND );
                             ++nScTab;
@@ -765,7 +762,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     else
                     {
                         String  aComment;
-                        USHORT  nDummyFlags;
+                        sal_uInt16  nDummyFlags;
                         pDoc->GetScenarioData( nTab, aComment, aDummyCol, nDummyFlags );
                         DBG_ASSERT( aList.Count() == 0, "List not empty!" );
                         aList.Insert( new String( aComment ) );
@@ -773,8 +770,8 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
                     rSet.Put( SfxStringListItem( nWhich, &aList ) );
 
-                    ULONG nCount = aList.Count();
-                    for ( ULONG i=0; i<nCount; i++ )
+                    sal_uLong nCount = aList.Count();
+                    for ( sal_uLong i=0; i<nCount; i++ )
                         delete (String*) aList.GetObject(i);
                 }
                 break;
@@ -809,7 +806,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 {
                     //! test for data pilot operation
                 }
-                else if (!pTabViewShell->OutlinePossible(FALSE))
+                else if (!pTabViewShell->OutlinePossible(false))
                     rSet.DisableItem( nWhich );
                 break;
 
@@ -819,7 +816,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 {
                     //! test for data pilot operation
                 }
-                else if (!pTabViewShell->OutlinePossible(TRUE))
+                else if (!pTabViewShell->OutlinePossible(sal_True))
                     rSet.DisableItem( nWhich );
                 break;
 
@@ -832,7 +829,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     }
                     else
                     {
-                        BOOL bCol, bRow;
+                        sal_Bool bCol, bRow;
                         pTabViewShell->TestRemoveOutline( bCol, bRow );
                         if ( !bCol && !bRow )
                             rSet.DisableItem( nWhich );
@@ -888,21 +885,21 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_DELETE_NOTE:
                 {
-                    BOOL bEnable = FALSE;
+                    sal_Bool bEnable = false;
                     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
                     {
                         if ( pDoc->IsSelectionEditable( rMark ) )
                         {
                             // look for at least one note in selection
                             ScRangeList aRanges;
-                            rMark.FillRangeListWithMarks( &aRanges, FALSE );
+                            rMark.FillRangeListWithMarks( &aRanges, false );
                             size_t nCount = aRanges.size();
                             for (size_t nPos = 0; nPos < nCount && !bEnable; ++nPos)
                             {
                                 ScCellIterator aCellIter(pDoc, *aRanges[nPos]);
                                 for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell && !bEnable; pCell = aCellIter.GetNext() )
                                     if ( pCell->HasNote() )
-                                        bEnable = TRUE;             // note found
+                                        bEnable = sal_True;             // note found
                             }
                         }
                     }

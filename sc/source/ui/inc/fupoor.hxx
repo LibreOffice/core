@@ -71,7 +71,7 @@ protected:
     Timer           aDragTimer;             // fuer Drag&Drop
     DECL_LINK( DragTimerHdl, Timer * );
     DECL_LINK( DragHdl, void * );
-    BOOL            bIsInDragMode;
+    sal_Bool            bIsInDragMode;
     Point           aMDPos;                 // Position von MouseButtonDown
 
     // member to hold state of the mouse buttons for creation
@@ -95,16 +95,16 @@ public:
     virtual void DoPaste();
 
     // Mouse- & Key-Events; Returnwert=TRUE: Event wurde bearbeitet
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL MouseMove(const MouseEvent&) { return FALSE; }
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual sal_Bool MouseMove(const MouseEvent&) { return false; }
 
     // moved from inline to *.cxx
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt); // { return FALSE; }
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt); // { return FALSE; }
 
     // moved from inline to *.cxx
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt); // { return FALSE; }
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt); // { return FALSE; }
 
-    virtual BYTE Command(const CommandEvent& rCEvt);
+    virtual sal_uInt8 Command(const CommandEvent& rCEvt);
 
     virtual void Activate();        // Function aktivieren
     virtual void Deactivate();      // Function deaktivieren
@@ -114,9 +114,9 @@ public:
 
     void SetWindow(Window* pWin) { pWindow = pWin; }
 
-    USHORT GetSlotID() const { return( aSfxRequest.GetSlot() ); }
+    sal_uInt16 GetSlotID() const { return( aSfxRequest.GetSlot() ); }
 
-    BOOL    IsDetectiveHit( const Point& rLogicPos );
+    sal_Bool    IsDetectiveHit( const Point& rLogicPos );
 
     void    StopDragTimer();
 

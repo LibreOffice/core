@@ -49,15 +49,15 @@ class ScTempDocCache
 {
 private:
     ScDocument*     pDoc;
-    BOOL            bInUse;
+    sal_Bool            bInUse;
 
 public:
                 ScTempDocCache();
                 ~ScTempDocCache();
 
     ScDocument* GetDocument() const     { return pDoc; }
-    BOOL        IsInUse() const         { return bInUse; }
-    void        SetInUse( BOOL bSet )   { bInUse = bSet; }
+    sal_Bool        IsInUse() const         { return bInUse; }
+    void        SetInUse( sal_Bool bSet )   { bInUse = bSet; }
 
     void        SetDocument( ScDocument* pNew );
     void        Clear();

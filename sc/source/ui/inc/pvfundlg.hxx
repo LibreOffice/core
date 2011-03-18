@@ -58,8 +58,8 @@ class ScDPFunctionListBox : public MultiListBox
 public:
     explicit            ScDPFunctionListBox( Window* pParent, const ResId& rResId );
 
-    void                SetSelection( USHORT nFuncMask );
-    USHORT              GetSelection() const;
+    void                SetSelection( sal_uInt16 nFuncMask );
+    sal_uInt16              GetSelection() const;
 
 private:
     void                FillFunctionNames();
@@ -71,10 +71,10 @@ class ScDPFunctionDlg : public ModalDialog
 {
     typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
 public:
-    explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVec& rLabelVec,
+    explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVector& rLabelVec,
                             const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
 
-    USHORT              GetFuncMask() const;
+    sal_uInt16              GetFuncMask() const;
     ::com::sun::star::sheet::DataPilotFieldReference GetFieldRef() const;
 
 private:
@@ -84,7 +84,7 @@ private:
     const ::rtl::OUString& GetBaseItemName(const ::rtl::OUString& rLayoutName) const;
 
     /** Searches for a listbox entry, starts search at specified position. */
-    sal_uInt16 FindBaseItemPos( const String& rEntry, USHORT nStartPos ) const;
+    sal_uInt16 FindBaseItemPos( const String& rEntry, sal_uInt16 nStartPos ) const;
 
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( DblClickHdl, MultiListBox* );
@@ -111,7 +111,7 @@ private:
 
     ScDPListBoxWrapper  maLbTypeWrp;        /// Wrapper for direct usage of API constants.
 
-    const ScDPLabelDataVec& mrLabelVec;     /// Data of all labels.
+    const ScDPLabelDataVector& mrLabelVec;  /// Data of all labels.
     bool                mbEmptyItem;        /// true = Empty base item in listbox.
 };
 
@@ -124,7 +124,7 @@ public:
                             const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData,
                             const ScDPNameVec& rDataFields, bool bEnableLayout );
 
-    USHORT              GetFuncMask() const;
+    sal_uInt16              GetFuncMask() const;
 
     void                FillLabelData( ScDPLabelData& rLabelData ) const;
 
@@ -174,7 +174,7 @@ private:
     const ::rtl::OUString& GetFieldName(const ::rtl::OUString& rLayoutName) const;
 
     /** Searches for a listbox entry, starts search at specified position. */
-    sal_uInt16 FindListBoxEntry( const ListBox& rLBox, const String& rEntry, USHORT nStartPos ) const;
+    sal_uInt16 FindListBoxEntry( const ListBox& rLBox, const String& rEntry, sal_uInt16 nStartPos ) const;
 
     DECL_LINK( RadioClickHdl, RadioButton* );
     DECL_LINK( CheckHdl, CheckBox* );
@@ -221,7 +221,7 @@ private:
 class ScDPShowDetailDlg : public ModalDialog
 {
 public:
-    explicit            ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, USHORT nOrient );
+    explicit            ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient );
 
     virtual short       Execute();
 

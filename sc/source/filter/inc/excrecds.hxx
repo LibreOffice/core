@@ -76,7 +76,7 @@ public:
     virtual void            Save( XclExpStream& rStrm );
     virtual void            SaveXml( XclExpXmlStream& rStrm );
 
-    virtual UINT16          GetNum() const = 0;
+    virtual sal_uInt16          GetNum() const = 0;
     virtual sal_Size        GetLen() const = 0;
 
 protected:
@@ -96,7 +96,7 @@ private:
 protected:
 public:
     virtual void            Save( XclExpStream& rStrm );
-    virtual UINT16          GetNum() const;
+    virtual sal_uInt16          GetNum() const;
     virtual sal_Size        GetLen() const;
 };
 
@@ -116,7 +116,7 @@ public:
     inline ExcRecord*       Next( void )                { return ( ExcRecord* ) List::Next(); }
 
     inline void             Append( ExcRecord* pNew )   { if( pNew ) List::Insert( pNew, LIST_APPEND ); }
-    inline const ExcRecord* Get( UINT32 nNum ) const    { return ( ExcRecord* ) List::GetObject( nNum ); }
+    inline const ExcRecord* Get( sal_uInt32 nNum ) const    { return ( ExcRecord* ) List::GetObject( nNum ); }
 
     virtual void            Save( XclExpStream& rStrm );
 };
@@ -129,13 +129,13 @@ class ExcDummyRec : public ExcRecord
 protected:
 public:
     virtual void            Save( XclExpStream& rStrm );
-    virtual UINT16          GetNum() const;
-    virtual const BYTE*     GetData() const = 0;    // byte data must contain header and body
+    virtual sal_uInt16          GetNum() const;
+    virtual const sal_uInt8*        GetData() const = 0;    // byte data must contain header and body
 };
 
 
 //------------------------------------------------------- class ExcBoolRecord -
-// stores BOOL as 16bit val ( 0x0000 | 0x0001 )
+// stores sal_Bool as 16bit val ( 0x0000 | 0x0001 )
 
 class ExcBoolRecord : public ExcRecord
 {
@@ -143,12 +143,12 @@ private:
     virtual void            SaveCont( XclExpStream& rStrm );
 
 protected:
-    BOOL                    bVal;
+    sal_Bool                    bVal;
 
-    inline                  ExcBoolRecord() : bVal( FALSE ) {}
+    inline                  ExcBoolRecord() : bVal( false ) {}
 
 public:
-    inline                  ExcBoolRecord( const BOOL bDefault ) : bVal( bDefault ) {}
+    inline                  ExcBoolRecord( const sal_Bool bDefault ) : bVal( bDefault ) {}
 
     virtual sal_Size        GetLen( void ) const;
 };
@@ -160,10 +160,10 @@ class ExcBof_Base : public ExcRecord
 {
 private:
 protected:
-    UINT16                  nDocType;
-    UINT16                  nVers;
-    UINT16                  nRupBuild;
-    UINT16                  nRupYear;
+    sal_uInt16                  nDocType;
+    sal_uInt16                  nVers;
+    sal_uInt16                  nRupBuild;
+    sal_uInt16                  nRupYear;
 public:
                             ExcBof_Base( void );
 };
@@ -179,7 +179,7 @@ private:
 public:
                             ExcBof( void );
 
-    virtual UINT16          GetNum( void ) const;
+    virtual sal_uInt16          GetNum( void ) const;
     virtual sal_Size        GetLen( void ) const;
 };
 
@@ -194,7 +194,7 @@ private:
 public:
                             ExcBofW( void );
 
-    virtual UINT16          GetNum( void ) const;
+    virtual sal_uInt16          GetNum( void ) const;
     virtual sal_Size        GetLen( void ) const;
 };
 
@@ -205,7 +205,7 @@ class ExcEof : public ExcRecord
 {
 private:
 public:
-    virtual UINT16          GetNum( void ) const;
+    virtual sal_uInt16          GetNum( void ) const;
     virtual sal_Size        GetLen( void ) const;
 };
 
@@ -216,11 +216,11 @@ public:
 class ExcDummy_00 : public ExcDummyRec
 {
 private:
-    static const BYTE       pMyData[];
+    static const sal_uInt8      pMyData[];
     static const sal_Size   nMyLen;
 public:
     virtual sal_Size        GetLen( void ) const;
-    virtual const BYTE*     GetData( void ) const;
+    virtual const sal_uInt8*        GetData( void ) const;
 };
 
 // EXC_ID_WINDOWPROTECTION
@@ -259,11 +259,11 @@ private:
 class ExcDummy_040 : public ExcDummyRec
 {
 private:
-    static const BYTE       pMyData[];
+    static const sal_uInt8      pMyData[];
     static const sal_Size   nMyLen;
 public:
     virtual sal_Size        GetLen( void ) const;
-    virtual const BYTE*     GetData( void ) const;
+    virtual const sal_uInt8*        GetData( void ) const;
 };
 
 
@@ -271,11 +271,11 @@ public:
 class ExcDummy_041 : public ExcDummyRec
 {
 private:
-    static const BYTE       pMyData[];
+    static const sal_uInt8      pMyData[];
     static const sal_Size   nMyLen;
 public:
     virtual sal_Size        GetLen( void ) const;
-    virtual const BYTE*     GetData( void ) const;
+    virtual const sal_uInt8*        GetData( void ) const;
 };
 
 
@@ -285,11 +285,11 @@ class Exc1904 : public ExcBoolRecord
 {
 public:
                             Exc1904( ScDocument& rDoc );
-    virtual UINT16          GetNum( void ) const;
+    virtual sal_uInt16          GetNum( void ) const;
 
     virtual void            SaveXml( XclExpXmlStream& rStrm );
 private:
-    BOOL                    bDateCompatibility;
+    sal_Bool                    bDateCompatibility;
 };
 
 
@@ -300,7 +300,7 @@ class ExcBundlesheetBase : public ExcRecord
 protected:
     sal_Size                nStrPos;
     sal_Size                nOwnPos;    // Position NACH # und Len
-    UINT16                  nGrbit;
+    sal_uInt16                  nGrbit;
     SCTAB                   nTab;
 
                             ExcBundlesheetBase();
@@ -311,7 +311,7 @@ public:
     inline void             SetStreamPos( sal_Size nNewStrPos ) { nStrPos = nNewStrPos; }
     void                    UpdateStreamPos( XclExpStream& rStrm );
 
-    virtual UINT16          GetNum() const;
+    virtual sal_uInt16          GetNum() const;
 };
 
 
@@ -334,11 +334,11 @@ public:
 class ExcDummy_02a : public ExcDummyRec
 {
 private:
-    static const BYTE       pMyData[];
+    static const sal_uInt8      pMyData[];
     static const sal_Size   nMyLen;
 public:
     virtual sal_Size        GetLen( void ) const;
-    virtual const BYTE*     GetData( void ) const;
+    virtual const sal_uInt8*        GetData( void ) const;
 };
 
 
@@ -400,8 +400,8 @@ private:
 class ExcFilterCondition
 {
 private:
-    UINT8                   nType;
-    UINT8                   nOper;
+    sal_uInt8                   nType;
+    sal_uInt8                   nOper;
     double                  fVal;
     XclExpString*           pText;
 
@@ -410,11 +410,11 @@ public:
                             ExcFilterCondition();
                             ~ExcFilterCondition();
 
-    inline BOOL             IsEmpty() const     { return (nType == EXC_AFTYPE_NOTUSED); }
-    inline BOOL             HasEqual() const    { return (nOper == EXC_AFOPER_EQUAL); }
-    ULONG                   GetTextBytes() const;
+    inline sal_Bool             IsEmpty() const     { return (nType == EXC_AFTYPE_NOTUSED); }
+    inline sal_Bool             HasEqual() const    { return (nOper == EXC_AFOPER_EQUAL); }
+    sal_uLong                   GetTextBytes() const;
 
-    void                    SetCondition( UINT8 nTp, UINT8 nOp, double fV, String* pT );
+    void                    SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, String* pT );
 
     void                    Save( XclExpStream& rStrm );
     void                    SaveXml( XclExpXmlStream& rStrm );
@@ -426,25 +426,25 @@ public:
 class XclExpAutofilter : public XclExpRecord, protected XclExpRoot
 {
 private:
-    UINT16                  nCol;
-    UINT16                  nFlags;
+    sal_uInt16                  nCol;
+    sal_uInt16                  nFlags;
     ExcFilterCondition      aCond[ 2 ];
 
-    BOOL                    AddCondition( ScQueryConnect eConn, UINT8 nType,
-                                UINT8 nOp, double fVal, String* pText,
-                                BOOL bSimple = FALSE );
+    sal_Bool                    AddCondition( ScQueryConnect eConn, sal_uInt8 nType,
+                                sal_uInt8 nOp, double fVal, String* pText,
+                                sal_Bool bSimple = false );
 
     virtual void            WriteBody( XclExpStream& rStrm );
 
 protected:
 public:
-                            XclExpAutofilter( const XclExpRoot& rRoot, UINT16 nC );
+                            XclExpAutofilter( const XclExpRoot& rRoot, sal_uInt16 nC );
 
-    inline UINT16           GetCol() const          { return nCol; }
-    inline BOOL             HasCondition() const    { return !aCond[ 0 ].IsEmpty(); }
-    inline BOOL             HasTop10() const        { return ::get_flag( nFlags, EXC_AFFLAG_TOP10 ); }
+    inline sal_uInt16           GetCol() const          { return nCol; }
+    inline sal_Bool             HasCondition() const    { return !aCond[ 0 ].IsEmpty(); }
+    inline sal_Bool             HasTop10() const        { return ::get_flag( nFlags, EXC_AFFLAG_TOP10 ); }
 
-    BOOL                    AddEntry( const ScQueryEntry& rEntry );
+    sal_Bool                    AddEntry( const ScQueryEntry& rEntry );
 
     virtual void            SaveXml( XclExpXmlStream& rStrm );
 };
@@ -466,7 +466,7 @@ public:
 
 private:
     XclExpAutofilter*   GetByCol( SCCOL nCol ); // always 0-based
-    BOOL                IsFiltered( SCCOL nCol );
+    sal_Bool                IsFiltered( SCCOL nCol );
 
 private:
     typedef XclExpRecordList< XclExpAutofilter >    XclExpAutofilterList;

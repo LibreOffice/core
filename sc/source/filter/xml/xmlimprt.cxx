@@ -267,17 +267,17 @@ protected:
 public:
 
     ScXMLDocContext_Impl( ScXMLImport& rImport,
-        USHORT nPrfx,
+        sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList );
     virtual ~ScXMLDocContext_Impl();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const rtl::OUString& rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList );
 };
 
-ScXMLDocContext_Impl::ScXMLDocContext_Impl( ScXMLImport& rImport, USHORT nPrfx,
+ScXMLDocContext_Impl::ScXMLDocContext_Impl( ScXMLImport& rImport, sal_uInt16 nPrfx,
                                            const OUString& rLName,
                                            const uno::Reference<xml::sax::XAttributeList>& /* xAttrList */ ) :
 SvXMLImportContext( rImport, nPrfx, rLName )
@@ -295,7 +295,7 @@ class ScXMLFlatDocContext_Impl
 {
 public:
     ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
-        USHORT i_nPrefix, const OUString & i_rLName,
+        sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder);
@@ -303,12 +303,12 @@ public:
     virtual ~ScXMLFlatDocContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
-        USHORT i_nPrefix, const OUString& i_rLocalName,
+        sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList);
 };
 
 ScXMLFlatDocContext_Impl::ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
-                                                   USHORT i_nPrefix, const OUString & i_rLName,
+                                                   sal_uInt16 i_nPrefix, const OUString & i_rLName,
                                                    const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
                                                    const uno::Reference<document::XDocumentProperties>& i_xDocProps,
                                                    const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder) :
@@ -323,7 +323,7 @@ ScXMLFlatDocContext_Impl::~ScXMLFlatDocContext_Impl() { }
 
 
 SvXMLImportContext *ScXMLFlatDocContext_Impl::CreateChildContext(
-    USHORT i_nPrefix, const OUString& i_rLocalName,
+    sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
 {
     // behave like meta base class iff we encounter office:meta
@@ -374,7 +374,7 @@ SvXMLImportContext *ScXMLBodyContext_Impl::CreateChildContext(
     return GetScImport().CreateBodyContext( rLocalName, xAttrList );
 }
 
-SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPrefix,
                                                              const rtl::OUString& rLocalName,
                                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
@@ -389,7 +389,7 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
         break;
     case XML_TOK_DOC_STYLES:
         if (GetScImport().getImportFlags() & IMPORT_STYLES)
-            pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, sal_False);
+            pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, false);
         break;
     case XML_TOK_DOC_AUTOSTYLES:
         if (GetScImport().getImportFlags() & IMPORT_AUTOSTYLES)
@@ -1626,7 +1626,7 @@ const SvXMLTokenMap& ScXMLImport::GetConsolidationAttrTokenMap()
 }
 
 
-SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
                                                const OUString& rLocalName,
                                                const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
@@ -1757,11 +1757,11 @@ ScXMLImport::ScXMLImport(
     nStyleFamilyMask( 0 ),
     nPrevCellType(0),
     bLoadDoc( sal_True ),
-    bRemoveLastChar(sal_False),
-    bNullDateSetted(sal_False),
-    bSelfImportingXMLSet(sal_False),
-    bLatinDefaultStyle(sal_False),
-    bFromWrapper(sal_False)
+    bRemoveLastChar(false),
+    bNullDateSetted(false),
+    bSelfImportingXMLSet(false),
+    bLatinDefaultStyle(false),
+    bFromWrapper(false)
 {
     pStylesImportHelper = new ScMyStylesImportHelper(*this);
 
@@ -1893,7 +1893,7 @@ ScXMLImport::~ScXMLImport() throw()
 
 // ---------------------------------------------------------------------
 
-SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const USHORT nPrefix, const ::rtl::OUString& rLocalName,
+SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
                                                         const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
     XMLFontStylesContext *pFSContext = new XMLFontStylesContext(
@@ -2014,7 +2014,7 @@ sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValida
 {
     if (pValidations)
     {
-        sal_Bool bFound(sal_False);
+        sal_Bool bFound(false);
         ScMyImportValidations::iterator aItr(pValidations->begin());
         ScMyImportValidations::iterator aEndItr(pValidations->end());
         while(aItr != aEndItr && !bFound)
@@ -2033,7 +2033,7 @@ sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValida
             aValidation = *aItr;
         return bFound;
     }
-    return sal_False;
+    return false;
 }
 
 ScXMLChangeTrackingImportHelper* ScXMLImport::GetChangeTrackingImportHelper()
@@ -2081,7 +2081,7 @@ void ScXMLImport::ExamineDefaultStyle()
                     aDecSep = aLocaleData.getNumDecimalSep();
                 }
 
-                BYTE nScript = pDoc->GetStringScriptType( aDecSep );
+                sal_uInt8 nScript = pDoc->GetStringScriptType( aDecSep );
                 if ( nScript == 0 || nScript == SCRIPTTYPE_LATIN )
                     bLatinDefaultStyle = sal_True;
             }
@@ -2232,6 +2232,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
         {
             sal_Int32 nCount(aConfigProps.getLength());
             rtl::OUString sCTName(RTL_CONSTASCII_USTRINGPARAM("TrackedChangesProtectionKey"));
+            rtl::OUString sVBName(RTL_CONSTASCII_USTRINGPARAM("VBACompatibilityMode"));
             rtl::OUString sSCName(RTL_CONSTASCII_USTRINGPARAM("ScriptConfiguration"));
             for (sal_Int32 i = nCount - 1; i >= 0; --i)
             {
@@ -2256,26 +2257,15 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
                         }
                     }
                 }
-                else if (aConfigProps[i].Name == sSCName)
+                // store the following items for later use (after document is loaded)
+                else if ((aConfigProps[i].Name == sVBName) || (aConfigProps[i].Name == sSCName))
                 {
-                    uno::Type aType = aConfigProps[i].Value.getValueType();
-                    uno::Reference<beans::XPropertySet> xImportInfo =
-                        getImportInfo();
-
-                    if (xImportInfo.is() &&
-                        (aType.equals(getCppuType(
-                          (uno::Reference<container::XNameContainer> *)0 ) ) ||
-                        aType.equals(getCppuType(
-                          (uno::Reference<container::XNameAccess> *)0 ) ) ) )
+                    uno::Reference< beans::XPropertySet > xImportInfo = getImportInfo();
+                    if (xImportInfo.is())
                     {
-                        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo =
-                            xImportInfo->getPropertySetInfo();
-                        if (xPropertySetInfo.is() &&
-                            xPropertySetInfo->hasPropertyByName(sSCName) )
-                        {
-                            xImportInfo->setPropertyValue(sSCName,
-                                    aConfigProps[i].Value );
-                        }
+                        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xImportInfo->getPropertySetInfo();
+                        if (xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName(aConfigProps[i].Name))
+                            xImportInfo->setPropertyValue( aConfigProps[i].Name, aConfigProps[i].Value );
                     }
                 }
             }
@@ -2380,7 +2370,7 @@ sal_Bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const rtl:
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
@@ -2463,7 +2453,7 @@ void ScXMLImport::AddStyleRange(const table::CellRangeAddress& rCellRange)
         DBG_ASSERT(xSheetCellRanges.is(), "didn't get SheetCellRanges");
 
     }
-    xSheetCellRanges->addRangeAddress(rCellRange, sal_False);
+    xSheetCellRanges->addRangeAddress(rCellRange, false);
 }
 
 void ScXMLImport::SetStyleToRanges()
@@ -2741,7 +2731,7 @@ public:
         mxPropSet(xPropSet), maPropName(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_MODIFY_BROADCAST))
     {
         uno::Any any;
-        any <<= sal_False;
+        any <<= false;
         mxPropSet->setPropertyValue(maPropName, any);
     }
 
@@ -2915,7 +2905,7 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
             SCTAB nTabCount = pDoc->GetTableCount();
             for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
                 if (!pSheetData->IsSheetBlocked( nTab ))
-                    pDoc->SetStreamValid( nTab, TRUE );
+                    pDoc->SetStreamValid( nTab, sal_True );
         }
 
         aTables.UpdateRowHeights();
@@ -3059,7 +3049,7 @@ void ScXMLImport::ExtractFormulaNamespaceGrammar(
 {
     // parse the attribute value, extract namespace ID, literal namespace, and formula string
     rFormulaNmsp = OUString();
-    sal_uInt16 nNsId = GetNamespaceMap()._GetKeyByAttrName( rAttrValue, 0, &rFormula, &rFormulaNmsp, sal_False );
+    sal_uInt16 nNsId = GetNamespaceMap()._GetKeyByAttrName( rAttrValue, 0, &rFormula, &rFormulaNmsp, false );
 
     // check if we have an ODF formula namespace
     if( !bRestrictToExternalNmsp ) switch( nNsId )

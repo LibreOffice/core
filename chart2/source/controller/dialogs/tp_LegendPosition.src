@@ -60,6 +60,7 @@ TabPage TP_LEGEND_POS
 
     ListBox LB_LEGEND_TEXTDIR
     {
+        HelpID = "chart2:ListBox:TP_LEGEND_POS:LB_LEGEND_TEXTDIR";
         Pos = MAP_APPFONT ( 78 , 14 + RESOURCE_LEGENDPOSITION_HEIGHT + 17 ) ;
         Size = MAP_APPFONT ( 170 , 100 ) ;
         Border = TRUE;

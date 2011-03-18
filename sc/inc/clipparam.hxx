@@ -31,6 +31,7 @@
 
 #include "rangelst.hxx"
 #include "rangenam.hxx"
+#include "charthelper.hxx"
 
 #include <vector>
 
@@ -42,9 +43,11 @@ struct ScClipParam
 {
     enum Direction { Unspecified, Column, Row };
 
-    ScRangeList maRanges;
-    Direction   meDirection;
-    bool        mbCutMode;
+    ScRangeList         maRanges;
+    Direction           meDirection;
+    bool                mbCutMode;
+    sal_uInt32          mnSourceDocID;
+    ScRangeListVector   maProtectedChartRangesVector;
 
     ScClipParam();
     ScClipParam(const ScRange& rRange, bool bCutMode);
@@ -71,6 +74,9 @@ struct ScClipParam
     ScRange getWholeRange() const;
 
     void transpose();
+
+    sal_uInt32 getSourceDocID() const { return mnSourceDocID; }
+    void setSourceDocID( sal_uInt32 nVal ) { mnSourceDocID = nVal; }
 };
 
 // ============================================================================

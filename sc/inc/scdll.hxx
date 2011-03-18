@@ -63,7 +63,7 @@ public:
     static void     Init();     // called directly after loading the DLL
     static void     Exit();     // called directly befor unloading the DLL
 
-    static ULONG    DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter,
+    static sal_uLong    DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter,
                                     SfxFilterFlags nMust, SfxFilterFlags nDont );
 };
 

@@ -54,7 +54,7 @@ using ::rtl::OUString;
 //------------------------------------------------------------------
 
 //  Version, ab der das Item kompatibel ist
-#define SC_VERSION ((USHORT)351)
+#define SC_VERSION ((sal_uInt16)351)
 
 
 //========================================================================
@@ -84,15 +84,15 @@ ScInputOptions::~ScInputOptions()
 void ScInputOptions::SetDefaults()
 {
     nMoveDir        = DIR_BOTTOM;
-    bMoveSelection  = TRUE;
-    bEnterEdit      = FALSE;
-    bExtendFormat   = FALSE;
-    bRangeFinder    = TRUE;
-    bExpandRefs     = FALSE;
-    bMarkHeader     = TRUE;
-    bUseTabCol      = FALSE;
-    bTextWysiwyg    = FALSE;
-    bReplCellsWarn  = TRUE;
+    bMoveSelection  = sal_True;
+    bEnterEdit      = false;
+    bExtendFormat   = false;
+    bRangeFinder    = sal_True;
+    bExpandRefs     = false;
+    bMarkHeader     = sal_True;
+    bUseTabCol      = false;
+    bTextWysiwyg    = false;
+    bReplCellsWarn  = sal_True;
 }
 
 //------------------------------------------------------------------------
@@ -175,7 +175,7 @@ ScInputCfg::ScInputCfg() :
                 {
                     case SCINPUTOPT_MOVEDIR:
                         if ( pValues[nProp] >>= nIntVal )
-                            SetMoveDir( (USHORT)nIntVal );
+                            SetMoveDir( (sal_uInt16)nIntVal );
                         break;
                     case SCINPUTOPT_MOVESEL:
                         SetMoveSelection( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );

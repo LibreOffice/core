@@ -81,7 +81,7 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         pDoc                ( pDocument ),
         nCurTab             ( aCursorPos.Tab() ),
         pEdActive           ( NULL ),
-        bDlgLostFocus       ( FALSE ),
+        bDlgLostFocus       ( false ),
         errMsgInvalidVar    ( ScResId( STR_INVALIDVAR ) ),
         errMsgInvalidForm   ( ScResId( STR_INVALIDFORM ) ),
         errMsgNoFormula     ( ScResId( STR_NOFORMULA ) ),
@@ -89,6 +89,9 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 {
     Init();
     FreeResource();
+
+    aRBFormulaCell.SetAccessibleRelationMemberOf(&aFlVariables);
+    aRBVariableCell.SetAccessibleRelationMemberOf(&aFlVariables);
 }
 
 //----------------------------------------------------------------------------
@@ -128,7 +131,7 @@ void ScSolverDlg::Init()
 
 //----------------------------------------------------------------------------
 
-BOOL ScSolverDlg::Close()
+sal_Bool ScSolverDlg::Close()
 {
     return DoClose( ScSolverDlgWrapper::GetChildWindowId() );
 }
@@ -139,7 +142,7 @@ void ScSolverDlg::SetActive()
 {
     if ( bDlgLostFocus )
     {
-        bDlgLostFocus = FALSE;
+        bDlgLostFocus = false;
         if( pEdActive )
             pEdActive->GrabFocus();
     }
@@ -161,7 +164,7 @@ void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
         String      aStr;
         ScAddress   aAdr = rRef.aStart;
-        USHORT      nFmt = ( aAdr.Tab() == nCurTab )
+        sal_uInt16      nFmt = ( aAdr.Tab() == nCurTab )
                                 ? SCA_ABS
                                 : SCA_ABS_3D;
 
@@ -205,14 +208,14 @@ void ScSolverDlg::RaiseError( ScSolverErr eError )
 
 //----------------------------------------------------------------------------
 
-BOOL ScSolverDlg::IsRefInputMode() const
+sal_Bool ScSolverDlg::IsRefInputMode() const
 {
     return pEdActive != NULL;
 }
 
 //----------------------------------------------------------------------------
 
-BOOL ScSolverDlg::CheckTargetValue( String& rStrVal )
+sal_Bool ScSolverDlg::CheckTargetValue( String& rStrVal )
 {
     sal_uInt32 n1 = 0;
     double n2;
@@ -235,8 +238,8 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
         // 3. wurde ein korrekter Zielwert eingegeben
 
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-        USHORT  nRes1 = theFormulaCell .Parse( aEdFormulaCell.GetText(),  pDoc, eConv );
-        USHORT  nRes2 = theVariableCell.Parse( aEdVariableCell.GetText(), pDoc, eConv );
+        sal_uInt16  nRes1 = theFormulaCell .Parse( aEdFormulaCell.GetText(),  pDoc, eConv );
+        sal_uInt16  nRes2 = theVariableCell.Parse( aEdVariableCell.GetText(), pDoc, eConv );
 
         if ( SCA_VALID == ( nRes1 & SCA_VALID ) )
         {
@@ -257,7 +260,7 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
                                                 theTargetValStr );
                         ScSolveItem  aOutItem( SCITEM_SOLVEDATA, &aOutParam );
 
-                        SetDispatcherLock( FALSE );
+                        SetDispatcherLock( false );
 
                         SwitchToDocument();
                         GetBindings().GetDispatcher()->Execute( SID_SOLVE,

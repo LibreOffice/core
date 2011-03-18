@@ -66,19 +66,19 @@ FuConstArc::~FuConstArc()
 |*
 \************************************************************************/
 
-BOOL FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
+sal_Bool FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = FuConstruct::MouseButtonDown( rMEvt );
+    sal_Bool bReturn = FuConstruct::MouseButtonDown( rMEvt );
 
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pWindow->CaptureMouse();
         pView->BegCreateObj( aPnt );
-        bReturn = TRUE;
+        bReturn = sal_True;
     }
     return bReturn;
 }
@@ -89,7 +89,7 @@ BOOL FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-BOOL FuConstArc::MouseMove( const MouseEvent& rMEvt )
+sal_Bool FuConstArc::MouseMove( const MouseEvent& rMEvt )
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -100,17 +100,17 @@ BOOL FuConstArc::MouseMove( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-BOOL FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
+sal_Bool FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = false;
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
         pView->EndCreateObj( SDRCREATE_NEXTPOINT );
-        bReturn = TRUE;
+        bReturn = sal_True;
     }
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }
@@ -119,14 +119,14 @@ BOOL FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-BOOL FuConstArc::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuConstArc::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
+    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
@@ -163,7 +163,7 @@ void FuConstArc::Activate()
             break;
     }
 
-    pView->SetCurrentObj( sal::static_int_cast<UINT16>( aObjKind ) );
+    pView->SetCurrentObj( sal::static_int_cast<sal_uInt16>( aObjKind ) );
 
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );

@@ -152,7 +152,7 @@ sal_Bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
 {
     if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
         return *(sal_Bool*)aAny.getValue();
-    return FALSE;
+    return false;
 }
 
 sal_Int16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )

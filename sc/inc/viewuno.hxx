@@ -93,13 +93,13 @@ class ScViewPaneBase : public com::sun::star::sheet::XViewPane,
 {
 private:
     ScTabViewShell*         pViewShell;
-    USHORT                  nPane;          // ScSplitPos oder SC_VIEWPANE_ACTIVE
+    sal_uInt16                  nPane;          // ScSplitPos oder SC_VIEWPANE_ACTIVE
 
 protected:
     ::com::sun::star::awt::Rectangle GetVisArea() const;
 
 public:
-                            ScViewPaneBase(ScTabViewShell* pViewSh, USHORT nP);
+                            ScViewPaneBase(ScTabViewShell* pViewSh, sal_uInt16 nP);
     virtual                 ~ScViewPaneBase();
 
     ScTabViewShell*         GetViewShell() const    { return pViewShell; }
@@ -163,7 +163,7 @@ public:
 class ScViewPaneObj : public ScViewPaneBase, public cppu::OWeakObject
 {
 public:
-                            ScViewPaneObj(ScTabViewShell* pViewSh, USHORT nP);
+                            ScViewPaneObj(ScTabViewShell* pViewSh, sal_uInt16 nP);
     virtual                 ~ScViewPaneObj();
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -202,11 +202,11 @@ private:
     sal_Bool                                bDrawSelModeSet;
     sal_Bool                                bFilteredRangeSelection;
 
-    ScViewPaneObj*          GetObjectByIndex_Impl(USHORT nIndex) const;
-    INT16                   GetZoom(void) const;
-    void                    SetZoom(INT16 Zoom);
-    INT16                   GetZoomType(void) const;
-    void                    SetZoomType(INT16 ZoomType);
+    ScViewPaneObj*          GetObjectByIndex_Impl(sal_uInt16 nIndex) const;
+    sal_Int16                   GetZoom(void) const;
+    void                    SetZoom(sal_Int16 Zoom);
+    sal_Int16                   GetZoomType(void) const;
+    void                    SetZoomType(sal_Int16 ZoomType);
 
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > GetClickedObject(const Point& rPoint) const;
     void                    StartMouseListening();
@@ -227,7 +227,8 @@ public:
 
     void                    SelectionChanged();
     void                    VisAreaChanged();
-    void                    SheetChanged();
+    // bSameTabButMoved = true if the same sheet as before is activated, used after moving/copying/inserting/deleting a sheet
+    void                    SheetChanged( bool bSameTabButMoved = false );
     bool                    IsMouseListening() const;
     sal_Bool                MousePressed( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
     sal_Bool                MouseReleased( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);

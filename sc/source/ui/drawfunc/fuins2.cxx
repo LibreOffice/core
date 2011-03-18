@@ -55,7 +55,8 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
-
+#include <sfx2/msgpool.hxx>
+#include <scmod.hxx>
 
 // BM/IHA --
 #include <cppuhelper/component_context.hxx>
@@ -98,7 +99,7 @@ extern SdrObject* pSkipPaintObj;            // output.cxx - dieses Objekt nicht 
 //------------------------------------------------------------------------
 
 #define IS_AVAILABLE(WhichId,ppItem) \
-    (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
+    (pReqArgs->GetItemState((WhichId), sal_True, ppItem ) == SFX_ITEM_SET)
 
 void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScViewData* pViewData,
                     const rtl::OUString& rRangeParam )
@@ -118,7 +119,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
 
         ScMarkData& rMark = pViewData->GetMarkData();
         if ( !rMark.IsMarked() )
-            pViewData->GetView()->MarkDataArea( TRUE );
+            pViewData->GetView()->MarkDataArea( sal_True );
 
         if ( pViewData->GetSimpleArea( nCol1,nRow1,nTab1, nCol2,nRow2,nTab2 ) == SC_MARK_SIMPLE )
         {
@@ -228,7 +229,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
     uno::Reference < embed::XEmbeddedObject > xObj;
     uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
-    BOOL bIsFromFile = FALSE;
+    sal_Bool bIsFromFile = false;
     ::rtl::OUString aName;
 
     sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
@@ -236,8 +237,8 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
     uno::Reference< io::XInputStream > xIconMetaFile;
 
 
-    USHORT nSlot = rReq.GetSlot();
-    SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
+    sal_uInt16 nSlot = rReq.GetSlot();
+    SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, false );
     if ( nSlot == SID_INSERT_OBJECT && pNameItem )
     {
         SvGlobalName aClassName = pNameItem->GetValue();
@@ -262,12 +263,11 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                 aServerLst.Remove( ScDocShell::Factory().GetClassId() );   // Starcalc nicht anzeigen
                 //TODO/LATER: currently no inserting of ClassId into SfxRequest!
             case SID_INSERT_PLUGIN :
-            case SID_INSERT_APPLET :
             case SID_INSERT_FLOATINGFRAME :
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 SfxAbstractInsertObjectDialog* pDlg =
-                        pFact->CreateInsertObjectDialog( pViewShell->GetWindow(), nSlot,
+                        pFact->CreateInsertObjectDialog( pViewShell->GetWindow(), SC_MOD()->GetSlotPool()->GetSlot(nSlot)->GetCommandString(),
                         xStorage, &aServerLst );
                 if ( pDlg )
                 {
@@ -428,7 +428,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                 if (bIsFromFile)
                 {
                     // Objekt ist selektiert, also Draw-Shell aktivieren
-                    pViewShell->SetDrawShell( TRUE );
+                    pViewShell->SetDrawShell( true );
                 }
                 else
                 {
@@ -517,7 +517,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             bool bAutomaticMark = false;
             if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
             {
-                pViewSh->GetViewData()->GetView()->MarkDataArea( TRUE );
+                pViewSh->GetViewData()->GetView()->MarkDataArea( sal_True );
                 bAutomaticMark = true;
             }
 
@@ -525,7 +525,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             aMultiMark.MarkToMulti();
 
             ScRangeList aRanges;
-            aMultiMark.FillRangeListWithMarks( &aRanges, FALSE );
+            aMultiMark.FillRangeListWithMarks( &aRanges, false );
             String aStr;
             ScDocument* pDocument = pViewSh->GetViewData()->GetDocument();
             aRanges.Format( aStr, SCR_ABS_3D, pDocument, pDocument->GetAddressConvention() );
@@ -568,7 +568,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         ScRangeListRef aDummy;
         Rectangle aMarkDest;
         SCTAB nMarkTab;
-        BOOL bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
+        sal_Bool bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
 
         //  Objekt-Groesse
         awt::Size aSz = xObj->getVisualAreaSize( nAspect );
@@ -576,17 +576,17 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
         MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
 
-        BOOL bSizeCh = FALSE;
+        sal_Bool bSizeCh = false;
         if (bDrawRect && !aMarkDest.IsEmpty())
         {
             aSize = aMarkDest.GetSize();
-            bSizeCh = TRUE;
+            bSizeCh = sal_True;
         }
         if (aSize.Height() <= 0 || aSize.Width() <= 0)
         {
             aSize.Width() = 5000;
             aSize.Height() = 5000;
-            bSizeCh = TRUE;
+            bSizeCh = sal_True;
         }
         if (bSizeCh)
         {
@@ -599,12 +599,12 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         ScViewData* pData = pViewSh->GetViewData();
         ScDocShell* pScDocSh = pData->GetDocShell();
         ScDocument* pScDoc   = pScDocSh->GetDocument();
-        BOOL bUndo (pScDoc->IsUndoEnabled());
+        sal_Bool bUndo (pScDoc->IsUndoEnabled());
 
         if( pReqArgs )
         {
             const SfxPoolItem* pItem;
-            UINT16 nToTable = 0;
+            sal_uInt16 nToTable = 0;
 
             if( IS_AVAILABLE( FN_PARAM_4, &pItem ) )
             {
@@ -616,15 +616,15 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                     //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
 
                     if ( ((const SfxBoolItem*)pItem)->GetValue() )
-                        nToTable = static_cast<UINT16>(pScDoc->GetTableCount());
+                        nToTable = static_cast<sal_uInt16>(pScDoc->GetTableCount());
                     else
-                        nToTable = static_cast<UINT16>(pData->GetTabNo());
+                        nToTable = static_cast<sal_uInt16>(pData->GetTabNo());
                 }
             }
             else
             {
                 if (bDrawRect)
-                    nToTable = static_cast<UINT16>(nMarkTab);
+                    nToTable = static_cast<sal_uInt16>(nMarkTab);
                 rReq.AppendItem( SfxUInt16Item( FN_PARAM_4, nToTable ) );
             }
 
@@ -639,7 +639,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
                 if ( pScDoc->InsertTab( nNewTab, aTabName ) )
                 {
-                    BOOL bAppend = TRUE;
+                    sal_Bool bAppend = sal_True;
 
                     if (bUndo)
                     {
@@ -649,7 +649,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                     }
 
                     pScDocSh->Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ) );
-                    pViewSh->SetTabNo( nNewTab, TRUE );
+                    pViewSh->SetTabNo( nNewTab, sal_True );
                     pScDocSh->PostPaintExtras();            //! erst hinterher ???
                 }
                 else
@@ -659,7 +659,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             }
             else if ( nToTable != pData->GetTabNo() )
             {
-                pViewSh->SetTabNo( nToTable, TRUE );
+                pViewSh->SetTabNo( nToTable, sal_True );
             }
         }
 
@@ -790,7 +790,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                             bAddUndo = false;       // don't create the undo action for inserting
 
                             // leave the draw shell
-                            pViewShell->SetDrawShell( FALSE );
+                            pViewShell->SetDrawShell( false );
                         }
                         else
                         {

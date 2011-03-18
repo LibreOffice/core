@@ -48,16 +48,16 @@ class ScDocument;
 class ScTpSubTotalGroup : public SfxTabPage
 {
 protected:
-            ScTpSubTotalGroup( Window* pParent, USHORT nResId,
+            ScTpSubTotalGroup( Window* pParent, sal_uInt16 nResId,
                                const SfxItemSet& rArgSet );
 
 public:
     virtual ~ScTpSubTotalGroup();
 
-    static USHORT*  GetRanges       ();
-    BOOL            DoReset         ( USHORT            nGroupNo,
+    static sal_uInt16*  GetRanges       ();
+    sal_Bool            DoReset         ( sal_uInt16            nGroupNo,
                                       const SfxItemSet& rArgSet  );
-    BOOL            DoFillItemSet   ( USHORT        nGroupNo,
+    sal_Bool            DoFillItemSet   ( sal_uInt16        nGroupNo,
                                       SfxItemSet&   rArgSet  );
 protected:
     FixedText       aFtGroup;
@@ -72,17 +72,17 @@ protected:
     ScViewData*             pViewData;
     ScDocument*             pDoc;
 
-    const USHORT            nWhichSubTotals;
+    const sal_uInt16            nWhichSubTotals;
     const ScSubTotalParam&  rSubTotalData;
     SCCOL                   nFieldArr[SC_MAXFIELDS];
-    const USHORT            nFieldCount;
+    const sal_uInt16            nFieldCount;
 
 private:
     void            Init            ();
     void            FillListBoxes   ();
-    ScSubTotalFunc  LbPosToFunc     ( USHORT nPos );
-    USHORT          FuncToLbPos     ( ScSubTotalFunc eFunc );
-    USHORT          GetFieldSelPos  ( SCCOL nField );
+    ScSubTotalFunc  LbPosToFunc     ( sal_uInt16 nPos );
+    sal_uInt16          FuncToLbPos     ( ScSubTotalFunc eFunc );
+    sal_uInt16          GetFieldSelPos  ( SCCOL nField );
 
     // Handler ------------------------
     DECL_LINK( SelectHdl, ListBox * );
@@ -102,7 +102,7 @@ public:
 
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    virtual BOOL        FillItemSet ( SfxItemSet& rArgSet );
+    virtual sal_Bool        FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 };
 
@@ -119,7 +119,7 @@ public:
 
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    virtual BOOL        FillItemSet ( SfxItemSet& rArgSet );
+    virtual sal_Bool        FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 };
 
@@ -136,7 +136,7 @@ public:
 
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    virtual BOOL        FillItemSet ( SfxItemSet& rArgSet );
+    virtual sal_Bool        FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 };
 
@@ -152,10 +152,10 @@ protected:
 public:
     virtual ~ScTpSubTotalOptions();
 
-    static USHORT*      GetRanges   ();
+    static sal_uInt16*      GetRanges   ();
     static SfxTabPage*  Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    virtual BOOL        FillItemSet ( SfxItemSet& rArgSet );
+    virtual sal_Bool        FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 
 private:
@@ -172,7 +172,7 @@ private:
 
     ScViewData*             pViewData;
     ScDocument*             pDoc;
-    const USHORT            nWhichSubTotals;
+    const sal_uInt16            nWhichSubTotals;
     const ScSubTotalParam&  rSubTotalData;
 
 private:

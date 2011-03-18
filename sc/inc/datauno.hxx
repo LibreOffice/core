@@ -122,7 +122,7 @@ class ScSubTotalDescriptorBase : public cppu::WeakImplHelper6<
 private:
     SfxItemPropertySet      aPropSet;
 
-    ScSubTotalFieldObj*     GetObjectByIndex_Impl(USHORT nIndex);
+    ScSubTotalFieldObj*     GetObjectByIndex_Impl(sal_uInt16 nIndex);
 
 public:
                             ScSubTotalDescriptorBase();
@@ -260,10 +260,10 @@ class ScSubTotalFieldObj : public cppu::WeakImplHelper2<
 private:
     com::sun::star::uno::Reference<com::sun::star::sheet::XSubTotalDescriptor> xRef;
     ScSubTotalDescriptorBase&   rParent;
-    USHORT                      nPos;
+    sal_uInt16                      nPos;
 
 public:
-                            ScSubTotalFieldObj( ScSubTotalDescriptorBase* pDesc, USHORT nP );
+                            ScSubTotalFieldObj( ScSubTotalDescriptorBase* pDesc, sal_uInt16 nP );
     virtual                 ~ScSubTotalFieldObj();
 
                             // XSubTotalField
@@ -606,7 +606,7 @@ class ScDatabaseRangesObj : public cppu::WeakImplHelper4<
 private:
     ScDocShell*             pDocShell;
 
-    ScDatabaseRangeObj*     GetObjectByIndex_Impl(USHORT nIndex);
+    ScDatabaseRangeObj*     GetObjectByIndex_Impl(sal_uInt16 nIndex);
     ScDatabaseRangeObj*     GetObjectByName_Impl(const ::rtl::OUString& aName);
 
 public:

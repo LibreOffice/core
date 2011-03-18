@@ -69,7 +69,7 @@ ScAuditingShell::ScAuditingShell(ScViewData* pData) :
     nFunction( SID_FILL_ADD_PRED )
 {
     SetPool( &pViewData->GetViewShell()->GetPool() );
-    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    ::svl::IUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
     if ( !pViewData->GetDocument()->IsUndoEnabled() )
     {
@@ -90,7 +90,7 @@ ScAuditingShell::~ScAuditingShell()
 void ScAuditingShell::Execute( SfxRequest& rReq )
 {
     SfxBindings& rBindings = pViewData->GetBindings();
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
         case SID_FILL_ADD_PRED:
@@ -105,7 +105,7 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
             break;
         case SID_CANCEL:        // Escape
         case SID_FILL_NONE:
-            pViewData->GetViewShell()->SetAuditShell( FALSE );
+            pViewData->GetViewShell()->SetAuditShell( false );
             break;
 
         case SID_FILL_SELECT:
@@ -115,15 +115,15 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
                 {
                     const SfxPoolItem* pXItem;
                     const SfxPoolItem* pYItem;
-                    if ( pReqArgs->GetItemState( SID_RANGE_COL, TRUE, &pXItem ) == SFX_ITEM_SET
-                      && pReqArgs->GetItemState( SID_RANGE_ROW, TRUE, &pYItem ) == SFX_ITEM_SET )
+                    if ( pReqArgs->GetItemState( SID_RANGE_COL, sal_True, &pXItem ) == SFX_ITEM_SET
+                      && pReqArgs->GetItemState( SID_RANGE_ROW, sal_True, &pYItem ) == SFX_ITEM_SET )
                     {
                         DBG_ASSERT( pXItem->ISA(SfxInt16Item) && pYItem->ISA(SfxInt32Item),
                                         "falsche Items" );
                         SCsCOL nCol = static_cast<SCsCOL>(((const SfxInt16Item*) pXItem)->GetValue());
                         SCsROW nRow = static_cast<SCsROW>(((const SfxInt32Item*) pYItem)->GetValue());
                         ScViewFunc* pView = pViewData->GetView();
-                        pView->MoveCursorAbs( nCol, nRow, SC_FOLLOW_LINE, FALSE, FALSE );
+                        pView->MoveCursorAbs( nCol, nRow, SC_FOLLOW_LINE, false, false );
                         switch ( nFunction )
                         {
                             case SID_FILL_ADD_PRED:
@@ -150,7 +150,7 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
 
 void ScAuditingShell::GetState( SfxItemSet& rSet )
 {
-    rSet.Put( SfxBoolItem( nFunction, TRUE ) );         // aktive Funktion markieren
+    rSet.Put( SfxBoolItem( nFunction, sal_True ) );         // aktive Funktion markieren
 }
 
 

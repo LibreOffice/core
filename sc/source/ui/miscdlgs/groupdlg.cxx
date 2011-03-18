@@ -43,9 +43,9 @@
 //==================================================================
 
 ScGroupDlg::ScGroupDlg( Window* pParent,
-                        USHORT  nResId,
-                        BOOL    bUngroup,
-                        BOOL    bRows ) :
+                        sal_uInt16  nResId,
+                        sal_Bool    bUngroup,
+                        sal_Bool    bRows ) :
     ModalDialog     ( pParent, ScResId( nResId ) ),
     //
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
@@ -69,7 +69,7 @@ ScGroupDlg::ScGroupDlg( Window* pParent,
 
 //------------------------------------------------------------------------
 
-BOOL ScGroupDlg::GetColsChecked() const
+sal_Bool ScGroupDlg::GetColsChecked() const
 {
     return aBtnCols.IsChecked();
 }

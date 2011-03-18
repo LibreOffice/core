@@ -73,7 +73,7 @@ ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
 ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
         ScAccessibleSpreadsheet& rParent, const ScRange& rRange ) :
     ScAccessibleTableBase( rParent.mpAccDoc, rParent.mpDoc, rRange),
-    mbIsSpreadsheet( sal_False )
+    mbIsSpreadsheet( false )
 {
     ConstructScAccessibleSpreadsheet( rParent.mpAccDoc, rParent.mpViewShell, rParent.mnTab, rParent.meSplitPos );
 }
@@ -101,9 +101,9 @@ void ScAccessibleSpreadsheet::ConstructScAccessibleSpreadsheet(
     mpAccCell = 0;
     meSplitPos = eSplitPos;
     mnTab = nTab;
-    mbHasSelection = sal_False;
-    mbDelIns = sal_False;
-    mbIsFocusSend = sal_False;
+    mbHasSelection = false;
+    mbDelIns = false;
+    mbIsFocusSend = false;
     maVisCells = GetVisCells(GetVisArea(mpViewShell, meSplitPos));
     if (mpViewShell)
     {
@@ -268,7 +268,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             if (!mbDelIns)
                 CommitTableModelChange(maRange.aStart.Row(), maRange.aStart.Col(), maRange.aEnd.Row(), maRange.aEnd.Col(), AccessibleTableModelChangeType::UPDATE);
             else
-                mbDelIns = sal_False;
+                mbDelIns = false;
         }
         // commented out, because to use a ModelChangeEvent is not the right way
         // at the moment there is no way, but the Java/Gnome Api should be extended sometime
@@ -457,7 +457,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nR
     if ((nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
         throw lang::IndexOutOfBoundsException();
 
-    sal_Bool bResult(sal_False);
+    sal_Bool bResult(false);
     if (mpViewShell && mpViewShell->GetViewData())
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
@@ -475,7 +475,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32
     if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0))
         throw lang::IndexOutOfBoundsException();
 
-    sal_Bool bResult(sal_False);
+    sal_Bool bResult(false);
     if (mpViewShell && mpViewShell->GetViewData())
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
@@ -527,7 +527,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow,
         (nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
         throw lang::IndexOutOfBoundsException();
 
-    sal_Bool bResult(sal_False);
+    sal_Bool bResult(false);
     if (mpViewShell)
     {
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
@@ -648,7 +648,7 @@ void SAL_CALL
         sal_Int32 nCol(getAccessibleColumn(nChildIndex));
         sal_Int32 nRow(getAccessibleRow(nChildIndex));
 
-        SelectCell(nRow, nCol, sal_False);
+        SelectCell(nRow, nCol, false);
     }
 }
 
@@ -690,7 +690,7 @@ sal_Int32 SAL_CALL
             mpMarkedRanges = new ScRangeList();
             ScMarkData aMarkData(mpViewShell->GetViewData()->GetMarkData());
             aMarkData.MarkToMulti();
-            aMarkData.FillRangeListWithMarks(mpMarkedRanges, sal_False);
+            aMarkData.FillRangeListWithMarks(mpMarkedRanges, false);
         }
         // is possible, because there shouldn't be overlapped ranges in it
         if (mpMarkedRanges)
@@ -711,7 +711,7 @@ uno::Reference<XAccessible > SAL_CALL
         if (!mpMarkedRanges)
         {
             mpMarkedRanges = new ScRangeList();
-            mpViewShell->GetViewData()->GetMarkData().FillRangeListWithMarks(mpMarkedRanges, sal_False);
+            mpViewShell->GetViewData()->GetMarkData().FillRangeListWithMarks(mpMarkedRanges, false);
         }
         if (mpMarkedRanges)
         {
@@ -755,7 +755,7 @@ void ScAccessibleSpreadsheet::SelectCell(sal_Int32 nRow, sal_Int32 nCol, sal_Boo
     mpViewShell->SetTabNo( maRange.aStart.Tab() );
 
     mpViewShell->DoneBlockMode( sal_True ); // continue selecting
-    mpViewShell->InitBlockMode( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), maRange.aStart.Tab(), bDeselect, sal_False, sal_False );
+    mpViewShell->InitBlockMode( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), maRange.aStart.Tab(), bDeselect, false, false );
 
     mpViewShell->SelectionChanged();
 }
@@ -905,7 +905,7 @@ sal_Bool ScAccessibleSpreadsheet::IsDefunc(
 sal_Bool ScAccessibleSpreadsheet::IsEditable(
     const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
-    sal_Bool bProtected(sal_False);
+    sal_Bool bProtected(false);
     if (mpDoc && mpDoc->IsTabProtected(maRange.aStart.Tab()))
         bProtected = sal_True;
     return !bProtected;
@@ -913,7 +913,7 @@ sal_Bool ScAccessibleSpreadsheet::IsEditable(
 
 sal_Bool ScAccessibleSpreadsheet::IsFocused()
 {
-    sal_Bool bFocused(sal_False);
+    sal_Bool bFocused(false);
     if (mpViewShell)
     {
         if (mpViewShell->GetViewData()->GetActivePart() == meSplitPos)
@@ -924,7 +924,7 @@ sal_Bool ScAccessibleSpreadsheet::IsFocused()
 
 sal_Bool ScAccessibleSpreadsheet::IsCompleteSheetSelected()
 {
-    sal_Bool bResult(sal_False);
+    sal_Bool bResult(false);
     if(mpViewShell)
     {
         //#103800#; use a copy of MarkData

@@ -51,21 +51,21 @@ public:
                            const SfxItemSet* pArgSet );
                 ~ScSortDlg();
 
-    void    SetHeaders( BOOL bHeaders );
-    void    SetByRows ( BOOL bByRows );
-    BOOL    GetHeaders() const;
-    BOOL    GetByRows () const;
+    void    SetHeaders( sal_Bool bHeaders );
+    void    SetByRows ( sal_Bool bByRows );
+    sal_Bool    GetHeaders() const;
+    sal_Bool    GetByRows () const;
 
 
 private:
-    BOOL    bIsHeaders;
-    BOOL    bIsByRows;
+    sal_Bool    bIsHeaders;
+    sal_Bool    bIsByRows;
 };
 
-inline void ScSortDlg::SetHeaders( BOOL bHeaders )  { bIsHeaders = bHeaders; }
-inline void ScSortDlg::SetByRows ( BOOL bByRows  )  { bIsByRows = bByRows; }
-inline BOOL ScSortDlg::GetHeaders() const           { return bIsHeaders; }
-inline BOOL ScSortDlg::GetByRows () const           { return bIsByRows; }
+inline void ScSortDlg::SetHeaders( sal_Bool bHeaders )  { bIsHeaders = bHeaders; }
+inline void ScSortDlg::SetByRows ( sal_Bool bByRows  )  { bIsByRows = bByRows; }
+inline sal_Bool ScSortDlg::GetHeaders() const           { return bIsHeaders; }
+inline sal_Bool ScSortDlg::GetByRows () const           { return bIsByRows; }
 
 class ScSortWarningDlg : public ModalDialog
 {

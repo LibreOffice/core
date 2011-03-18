@@ -56,7 +56,7 @@ ScHintWindow::ScHintWindow( Window* pParent, const String& rTit, const String& r
     SetBackground( aYellow );
 
     aTextFont = GetFont();
-    aTextFont.SetTransparent( TRUE );
+    aTextFont.SetTransparent( sal_True );
     aTextFont.SetWeight( WEIGHT_NORMAL );
     aHeadFont = aTextFont;
     aHeadFont.SetWeight( WEIGHT_BOLD );

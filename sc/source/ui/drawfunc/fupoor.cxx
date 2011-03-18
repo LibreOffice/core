@@ -56,7 +56,7 @@ FuPoor::FuPoor(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
     pDrDoc(pDoc),
     aSfxRequest(rReq),
     pDialog(NULL),
-    bIsInDragMode(FALSE),
+    bIsInDragMode(false),
     // remember MouseButton state
     mnCode(0)
 {
@@ -179,21 +179,21 @@ IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, EMPTYARG )
 IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
 
 // moved from inline to *.cxx
-BOOL FuPoor::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuPoor::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    return FALSE;
+    return false;
 }
 
 // moved from inline to *.cxx
-BOOL FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    return FALSE;
+    return false;
 }
 
 /*************************************************************************
@@ -208,25 +208,25 @@ BOOL FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-BOOL FuPoor::KeyInput(const KeyEvent& /* rKEvt */)
+sal_Bool FuPoor::KeyInput(const KeyEvent& /* rKEvt */)
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = false;
 
     return(bReturn);
 }
 
-BYTE FuPoor::Command(const CommandEvent& rCEvt)
+sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)
 {
     if ( COMMAND_STARTDRAG == rCEvt.GetCommand() )
     {
         //!!! sollte Joe eigentlich machen:
         // nur, wenn im Outliner was selektiert ist, darf
-        // Command TRUE zurueckliefern:
+        // Command sal_True zurueckliefern:
 
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
 
@@ -307,7 +307,7 @@ IMPL_LINK( FuPoor, DragHdl, void *, EMPTYARG )
     if ( pHdl==NULL && pView->IsMarkedHit(aMDPos) )
     {
         pWindow->ReleaseMouse();
-        bIsInDragMode = TRUE;
+        bIsInDragMode = sal_True;
 
 //      pView->BeginDrag(pWindow, aMDPos);
         pViewShell->GetScDrawView()->BeginDrag(pWindow, aMDPos);
@@ -317,24 +317,24 @@ IMPL_LINK( FuPoor, DragHdl, void *, EMPTYARG )
 
 //  Detektiv-Linie
 
-BOOL FuPoor::IsDetectiveHit( const Point& rLogicPos )
+sal_Bool FuPoor::IsDetectiveHit( const Point& rLogicPos )
 {
     SdrPageView* pPV = pView->GetSdrPageView();
     if (!pPV)
-        return FALSE;
+        return false;
 
-    BOOL bFound = FALSE;
+    sal_Bool bFound = false;
     SdrObjListIter aIter( *pPV->GetObjList(), IM_FLAT );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {
         if (ScDetectiveFunc::IsNonAlienArrow( pObject ))
         {
-            USHORT nHitLog = (USHORT) pWindow->PixelToLogic(
+            sal_uInt16 nHitLog = (sal_uInt16) pWindow->PixelToLogic(
                                 Size(pView->GetHitTolerancePixel(),0)).Width();
             if(SdrObjectPrimitiveHit(*pObject, rLogicPos, nHitLog, *pPV, 0, false))
             {
-                bFound = TRUE;
+                bFound = sal_True;
             }
         }
 

@@ -242,8 +242,8 @@ protected:
                                                     // deleted or moved or rejected
             ScChangeActionLinkEntry*    pLinkDeleted;   // links to deleted
             ScChangeActionLinkEntry*    pLinkDependent; // links to dependent
-            ULONG               nAction;
-            ULONG               nRejectAction;
+            sal_uLong               nAction;
+            sal_uLong               nRejectAction;
             ScChangeActionType  eType;
             ScChangeActionState eState;
 
@@ -254,8 +254,8 @@ protected:
                                 // only to be used in the XML import
                                 ScChangeAction( ScChangeActionType,
                                                 const ScBigRange&,
-                                                const ULONG nAction,
-                                                const ULONG nRejectAction,
+                                                const sal_uLong nAction,
+                                                const sal_uLong nRejectAction,
                                                 const ScChangeActionState eState,
                                                 const DateTime& aDateTime,
                                                 const String& aUser,
@@ -263,15 +263,15 @@ protected:
                                 // only to be used in the XML import
                                 ScChangeAction( ScChangeActionType,
                                                 const ScBigRange&,
-                                                const ULONG nAction);
+                                                const sal_uLong nAction);
 
     virtual                     ~ScChangeAction();
 
             String              GetRefString( const ScBigRange&,
-                                    ScDocument*, BOOL bFlag3D = FALSE ) const;
+                                    ScDocument*, sal_Bool bFlag3D = false ) const;
 
-            void                SetActionNumber( ULONG n ) { nAction = n; }
-            void                SetRejectAction( ULONG n ) { nRejectAction = n; }
+            void                SetActionNumber( sal_uLong n ) { nAction = n; }
+            void                SetRejectAction( sal_uLong n ) { nRejectAction = n; }
             void                SetUser( const String& r ) { aUser = r; }
             void                SetType( ScChangeActionType e ) { eType = e; }
             void                SetState( ScChangeActionState e ) { eState = e; }
@@ -299,7 +299,7 @@ protected:
                                         return new ScChangeActionLinkEntry(
                                             GetDeletedInAddress(), p );
                                     }
-            BOOL                RemoveDeletedIn( const ScChangeAction* );
+            sal_Bool                RemoveDeletedIn( const ScChangeAction* );
             void                SetDeletedIn( ScChangeAction* );
 
             ScChangeActionLinkEntry*    AddDeleted( ScChangeAction* p )
@@ -323,15 +323,15 @@ protected:
 
     virtual void                UpdateReference( const ScChangeTrack*,
                                     UpdateRefMode, const ScBigRange&,
-                                    INT32 nDx, INT32 nDy, INT32 nDz );
+                                    sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz );
 
             void                Accept();
-    virtual BOOL                Reject( ScDocument* ) = 0;
+    virtual sal_Bool                Reject( ScDocument* ) = 0;
             void                RejectRestoreContents( ScChangeTrack*,
                                     SCsCOL nDx, SCsROW nDy );
 
                                 // used in Reject() instead of IsRejectable()
-            BOOL                IsInternalRejectable() const;
+            sal_Bool                IsInternalRejectable() const;
 
                                 // Derived classes that hold a pointer to the
                                 // ChangeTrack must return that. Otherwise NULL.
@@ -339,49 +339,49 @@ protected:
 
 public:
 
-            BOOL                IsInsertType() const
+            sal_Bool                IsInsertType() const
                                     {
                                         return eType == SC_CAT_INSERT_COLS ||
                                             eType == SC_CAT_INSERT_ROWS ||
                                             eType == SC_CAT_INSERT_TABS;
                                     }
-            BOOL                IsDeleteType() const
+            sal_Bool                IsDeleteType() const
                                     {
                                         return eType == SC_CAT_DELETE_COLS ||
                                             eType == SC_CAT_DELETE_ROWS ||
                                             eType == SC_CAT_DELETE_TABS;
                                     }
-            BOOL                IsVirgin() const
+            sal_Bool                IsVirgin() const
                                     { return eState == SC_CAS_VIRGIN; }
-            BOOL                IsAccepted() const
+            sal_Bool                IsAccepted() const
                                     { return eState == SC_CAS_ACCEPTED; }
-            BOOL                IsRejected() const
+            sal_Bool                IsRejected() const
                                     { return eState == SC_CAS_REJECTED; }
 
                                 // Action rejects another Action
-            BOOL                IsRejecting() const
+            sal_Bool                IsRejecting() const
                                     { return nRejectAction != 0; }
 
                                 // if action is visible in the document
-            BOOL                IsVisible() const;
+            sal_Bool                IsVisible() const;
 
                                 // if action if touchable
-            BOOL                IsTouchable() const;
+            sal_Bool                IsTouchable() const;
 
                                 // if action is an entry in dialog root
-            BOOL                IsDialogRoot() const;
+            sal_Bool                IsDialogRoot() const;
 
                                 // if an entry in a dialog shall be a drop down entry
-            BOOL                IsDialogParent() const;
+            sal_Bool                IsDialogParent() const;
 
                                 // if action is a delete with subdeletes (aufgeklappt = open ?)
-            BOOL                IsMasterDelete() const;
+            sal_Bool                IsMasterDelete() const;
 
                                 // if action is acceptable/selectable/rejectable
-            BOOL                IsClickable() const;
+            sal_Bool                IsClickable() const;
 
                                 // if action is rejectable
-            BOOL                IsRejectable() const;
+            sal_Bool                IsRejectable() const;
 
             const ScBigRange&   GetBigRange() const { return aBigRange; }
             SC_DLLPUBLIC DateTime           GetDateTime() const;        // local time
@@ -391,37 +391,37 @@ public:
             const String&       GetComment() const { return aComment; }
             ScChangeActionType  GetType() const { return eType; }
             ScChangeActionState GetState() const { return eState; }
-            ULONG               GetActionNumber() const { return nAction; }
-            ULONG               GetRejectAction() const { return nRejectAction; }
+            sal_uLong               GetActionNumber() const { return nAction; }
+            sal_uLong               GetRejectAction() const { return nRejectAction; }
 
             ScChangeAction*     GetNext() const { return pNext; }
             ScChangeAction*     GetPrev() const { return pPrev; }
 
-            BOOL                IsDeletedIn() const
+            sal_Bool                IsDeletedIn() const
                                     { return GetDeletedIn() != NULL; }
-            BOOL                IsDeleted() const
+            sal_Bool                IsDeleted() const
                                     { return IsDeleteType() || IsDeletedIn(); }
-            BOOL                IsDeletedIn( const ScChangeAction* ) const;
-            BOOL                IsDeletedInDelType( ScChangeActionType ) const;
+            sal_Bool                IsDeletedIn( const ScChangeAction* ) const;
+            sal_Bool                IsDeletedInDelType( ScChangeActionType ) const;
             void                RemoveAllDeletedIn();
 
             const ScChangeActionLinkEntry* GetFirstDeletedEntry() const
                                     { return pLinkDeleted; }
             const ScChangeActionLinkEntry* GetFirstDependentEntry() const
                                     { return pLinkDependent; }
-            BOOL                HasDependent() const
+            sal_Bool                HasDependent() const
                                     { return pLinkDependent != NULL; }
-            BOOL                HasDeleted() const
+            sal_Bool                HasDeleted() const
                                     { return pLinkDeleted != NULL; }
 
                                 // description will be appended to string
                                 // with bSplitRange only one column/row will be considered for delete
                                 // (for a listing of entries)
     virtual void                GetDescription( String&, ScDocument*,
-                                    BOOL bSplitRange = FALSE, bool bWarning = true ) const;
+                                    sal_Bool bSplitRange = false, bool bWarning = true ) const;
 
     virtual void                GetRefString( String&, ScDocument*,
-                                    BOOL bFlag3D = FALSE ) const;
+                                    sal_Bool bFlag3D = false ) const;
 
                                 // for DocumentMerge set old date of the other
                                 // action, fetched by GetDateTimeUTC
@@ -433,10 +433,10 @@ public:
                                     { aComment = rStr; }
 
                                 // only to be used in the XML import
-            void                SetDeletedInThis( ULONG nActionNumber,
+            void                SetDeletedInThis( sal_uLong nActionNumber,
                                         const ScChangeTrack* pTrack );
                                 // only to be used in the XML import
-            void                AddDependent( ULONG nActionNumber,
+            void                AddDependent( sal_uLong nActionNumber,
                                         const ScChangeTrack* pTrack );
 };
 
@@ -453,14 +453,14 @@ class ScChangeActionIns : public ScChangeAction
     virtual void                AddContent( ScChangeActionContent* ) {}
     virtual void                DeleteCellEntries() {}
 
-    virtual BOOL                Reject( ScDocument* );
+    virtual sal_Bool                Reject( ScDocument* );
 
     virtual const ScChangeTrack*    GetChangeTrack() const { return 0; }
 
 public:
-                                ScChangeActionIns(const ULONG nActionNumber,
+                                ScChangeActionIns(const sal_uLong nActionNumber,
                                         const ScChangeActionState eState,
-                                        const ULONG nRejectingNumber,
+                                        const sal_uLong nRejectingNumber,
                                         const ScBigRange& aBigRange,
                                         const String& aUser,
                                         const DateTime& aDateTime,
@@ -468,7 +468,7 @@ public:
                                         const ScChangeActionType eType); // only to use in the XML import
 
     virtual void                GetDescription( String&, ScDocument*,
-                                    BOOL bSplitRange = FALSE, bool bWarning = true ) const;
+                                    sal_Bool bSplitRange = false, bool bWarning = true ) const;
 };
 
 
@@ -551,16 +551,16 @@ class ScChangeActionDel : public ScChangeAction
 
     virtual void                UpdateReference( const ScChangeTrack*,
                                     UpdateRefMode, const ScBigRange&,
-                                    INT32 nDx, INT32 nDy, INT32 nDz );
+                                    sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz );
 
-    virtual BOOL                Reject( ScDocument* );
+    virtual sal_Bool                Reject( ScDocument* );
 
     virtual const ScChangeTrack*    GetChangeTrack() const { return pTrack; }
 
 public:
-                                ScChangeActionDel(const ULONG nActionNumber,
+                                ScChangeActionDel(const sal_uLong nActionNumber,
                                                 const ScChangeActionState eState,
-                                                const ULONG nRejectingNumber,
+                                                const sal_uLong nRejectingNumber,
                                                 const ScBigRange& aBigRange,
                                                 const String& aUser,
                                                 const DateTime& aDateTime,
@@ -571,16 +571,16 @@ public:
                                                                         // which of nDx and nDy is set is dependend on the type
 
                                 // is the last in a row (or single)
-            BOOL                IsBaseDelete() const;
+            sal_Bool                IsBaseDelete() const;
 
                                 // is the first in a row (or single)
-            BOOL                IsTopDelete() const;
+            sal_Bool                IsTopDelete() const;
 
                                 // is part of a row
-            BOOL                IsMultiDelete() const;
+            sal_Bool                IsMultiDelete() const;
 
                                 // is col, belonging to a TabDelete
-            BOOL                IsTabDeleteCol() const;
+            sal_Bool                IsTabDeleteCol() const;
 
             SCsCOL              GetDx() const { return nDx; }
             SCsROW              GetDy() const { return nDy; }
@@ -594,7 +594,7 @@ public:
             short               GetCutOffCount() const { return nCutOff; }
 
     virtual void                GetDescription( String&, ScDocument*,
-                                    BOOL bSplitRange = FALSE, bool bWarning = true ) const;
+                                    sal_Bool bSplitRange = false, bool bWarning = true ) const;
             void                SetCutOffInsert( ScChangeActionIns* p, short n )
                                     { pCutOff = p; nCutOff = n; }   // only to use in the XML import
                                                                     // this should be protected, but for the XML import it is public
@@ -619,8 +619,8 @@ class ScChangeActionMove : public ScChangeAction
             ScBigRange          aFromRange;
             ScChangeTrack*      pTrack;
             ScChangeActionCellListEntry* pFirstCell;
-            ULONG               nStartLastCut;  // for PasteCut undo
-            ULONG               nEndLastCut;
+            sal_uLong               nStartLastCut;  // for PasteCut undo
+            sal_uLong               nEndLastCut;
 
                                 ScChangeActionMove( const ScRange& rFromRange,
                                     const ScRange& rToRange,
@@ -639,16 +639,16 @@ class ScChangeActionMove : public ScChangeAction
 
             ScBigRange&         GetFromRange() { return aFromRange; }
 
-            void                SetStartLastCut( ULONG nVal ) { nStartLastCut = nVal; }
-            ULONG               GetStartLastCut() const { return nStartLastCut; }
-            void                SetEndLastCut( ULONG nVal ) { nEndLastCut = nVal; }
-            ULONG               GetEndLastCut() const { return nEndLastCut; }
+            void                SetStartLastCut( sal_uLong nVal ) { nStartLastCut = nVal; }
+            sal_uLong               GetStartLastCut() const { return nStartLastCut; }
+            void                SetEndLastCut( sal_uLong nVal ) { nEndLastCut = nVal; }
+            sal_uLong               GetEndLastCut() const { return nEndLastCut; }
 
     virtual void                UpdateReference( const ScChangeTrack*,
                                     UpdateRefMode, const ScBigRange&,
-                                    INT32 nDx, INT32 nDy, INT32 nDz );
+                                    sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz );
 
-    virtual BOOL                Reject( ScDocument* );
+    virtual sal_Bool                Reject( ScDocument* );
 
     virtual const ScChangeTrack*    GetChangeTrack() const { return pTrack; }
 
@@ -656,9 +656,9 @@ protected:
     using ScChangeAction::GetRefString;
 
 public:
-                                ScChangeActionMove(const ULONG nActionNumber,
+                                ScChangeActionMove(const sal_uLong nActionNumber,
                                                 const ScChangeActionState eState,
-                                                const ULONG nRejectingNumber,
+                                                const sal_uLong nRejectingNumber,
                                                 const ScBigRange& aToBigRange,
                                                 const String& aUser,
                                                 const DateTime& aDateTime,
@@ -669,13 +669,13 @@ public:
                                     { return pFirstCell; } // only to use in the XML export
 
             const ScBigRange&   GetFromRange() const { return aFromRange; }
-    SC_DLLPUBLIC        void                GetDelta( INT32& nDx, INT32& nDy, INT32& nDz ) const;
+    SC_DLLPUBLIC        void                GetDelta( sal_Int32& nDx, sal_Int32& nDy, sal_Int32& nDz ) const;
 
     virtual void                GetDescription( String&, ScDocument*,
-                                    BOOL bSplitRange = FALSE, bool bWarning = true ) const;
+                                    sal_Bool bSplitRange = false, bool bWarning = true ) const;
 
     virtual void                GetRefString( String&, ScDocument*,
-                                    BOOL bFlag3D = FALSE ) const;
+                                    sal_Bool bFlag3D = false ) const;
 };
 
 
@@ -735,7 +735,7 @@ class ScChangeActionContent : public ScChangeAction
     static  void                GetStringOfCell( String& rStr,
                                     const ScBaseCell* pCell,
                                     const ScDocument* pDoc,
-                                    ULONG nFormat );
+                                    sal_uLong nFormat );
 
     static  void                SetValue( String& rStr, ScBaseCell*& pCell,
                                     const ScAddress& rPos,
@@ -744,15 +744,15 @@ class ScChangeActionContent : public ScChangeAction
                                     ScDocument* pToDoc );
 
     static  void                SetValue( String& rStr, ScBaseCell*& pCell,
-                                    ULONG nFormat,
+                                    sal_uLong nFormat,
                                     const ScBaseCell* pOrgCell,
                                     const ScDocument* pFromDoc,
                                     ScDocument* pToDoc );
 
     static  void                SetCell( String& rStr, ScBaseCell* pCell,
-                                    ULONG nFormat, const ScDocument* pDoc );
+                                    sal_uLong nFormat, const ScDocument* pDoc );
 
-    static  BOOL                NeedsNumberFormat( const ScBaseCell* );
+    static  sal_Bool                NeedsNumberFormat( const ScBaseCell* );
 
             void                SetValueString( String& rValue,
                                     ScBaseCell*& pCell, const String& rStr,
@@ -770,16 +770,16 @@ class ScChangeActionContent : public ScChangeAction
 
     virtual void                UpdateReference( const ScChangeTrack*,
                                     UpdateRefMode, const ScBigRange&,
-                                    INT32 nDx, INT32 nDy, INT32 nDz );
+                                    sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz );
 
-    virtual BOOL                Reject( ScDocument* );
+    virtual sal_Bool                Reject( ScDocument* );
 
     virtual const ScChangeTrack*    GetChangeTrack() const { return 0; }
 
                                 // pRejectActions!=NULL: reject actions get
                                 // stacked, no SetNewValue, no Append
-            BOOL                Select( ScDocument*, ScChangeTrack*,
-                                    BOOL bOldest, Stack* pRejectActions );
+            sal_Bool                Select( ScDocument*, ScChangeTrack*,
+                                    sal_Bool bOldest, Stack* pRejectActions );
 
             void                PutValueToDoc( ScBaseCell*, const String&,
                                     ScDocument*, SCsCOL nDx, SCsROW nDy ) const;
@@ -800,9 +800,9 @@ public:
                                         pNextInSlot( NULL ),
                                         ppPrevInSlot( NULL )
                                     {}
-                                ScChangeActionContent(const ULONG nActionNumber,
+                                ScChangeActionContent(const sal_uLong nActionNumber,
                                                 const ScChangeActionState eState,
-                                                const ULONG nRejectingNumber,
+                                                const sal_uLong nRejectingNumber,
                                                 const ScBigRange& aBigRange,
                                                 const String& aUser,
                                                 const DateTime& aDateTime,
@@ -810,7 +810,7 @@ public:
                                                 ScBaseCell* pOldCell,
                                                 ScDocument* pDoc,
                                                 const String& sOldValue); // to use for XML Import
-                                ScChangeActionContent(const ULONG nActionNumber,
+                                ScChangeActionContent(const sal_uLong nActionNumber,
                                                 ScBaseCell* pNewCell,
                                                 const ScBigRange& aBigRange,
                                                 ScDocument* pDoc,
@@ -820,7 +820,7 @@ public:
         ScChangeActionContent*  GetNextContent() const { return pNextContent; }
         ScChangeActionContent*  GetPrevContent() const { return pPrevContent; }
         ScChangeActionContent*  GetTopContent() const;
-            BOOL                IsTopContent() const
+            sal_Bool                IsTopContent() const
                                     { return pNextContent == NULL; }
 
     virtual ScChangeActionLinkEntry*    GetDeletedIn() const;
@@ -834,7 +834,7 @@ public:
             void                SetOldValue( const ScBaseCell*,
                                     const ScDocument* pFromDoc,
                                     ScDocument* pToDoc,
-                                    ULONG nFormat );
+                                    sal_uLong nFormat );
             void                SetOldValue( const ScBaseCell*,
                                     const ScDocument* pFromDoc,
                                     ScDocument* pToDoc );
@@ -843,8 +843,8 @@ public:
                                 // Used in import filter AppendContentOnTheFly,
                                 // takes ownership of cells.
             void                SetOldNewCells( ScBaseCell* pOldCell,
-                                    ULONG nOldFormat, ScBaseCell* pNewCell,
-                                    ULONG nNewFormat, ScDocument* pDoc );
+                                    sal_uLong nOldFormat, ScBaseCell* pNewCell,
+                                    sal_uLong nNewFormat, ScDocument* pDoc );
 
                                 // Use this only in the XML import,
                                 // takes ownership of cell.
@@ -867,30 +867,30 @@ public:
             const ScBaseCell*   GetOldCell() const { return pOldCell; }
             const ScBaseCell*   GetNewCell() const { return pNewCell; }
     virtual void                GetDescription( String&, ScDocument*,
-                                    BOOL bSplitRange = FALSE, bool bWarning = true ) const;
+                                    sal_Bool bSplitRange = false, bool bWarning = true ) const;
     virtual void                GetRefString( String&, ScDocument*,
-                                    BOOL bFlag3D = FALSE ) const;
+                                    sal_Bool bFlag3D = false ) const;
 
     static  ScChangeActionContentCellType   GetContentCellType( const ScBaseCell* );
 
                                 // NewCell
-            BOOL                IsMatrixOrigin() const
+            sal_Bool                IsMatrixOrigin() const
                                     {
                                         return GetContentCellType( GetNewCell() )
                                             == SC_CACCT_MATORG;
                                     }
-            BOOL                IsMatrixReference() const
+            sal_Bool                IsMatrixReference() const
                                     {
                                         return GetContentCellType( GetNewCell() )
                                             == SC_CACCT_MATREF;
                                     }
                                 // OldCell
-            BOOL                IsOldMatrixOrigin() const
+            sal_Bool                IsOldMatrixOrigin() const
                                     {
                                         return GetContentCellType( GetOldCell() )
                                             == SC_CACCT_MATORG;
                                     }
-            BOOL                IsOldMatrixReference() const
+            sal_Bool                IsOldMatrixReference() const
                                     {
                                         return GetContentCellType( GetOldCell() )
                                             == SC_CACCT_MATREF;
@@ -908,7 +908,7 @@ class ScChangeActionReject : public ScChangeAction
     friend class ScChangeTrack;
     friend class ScChangeActionContent;
 
-                                ScChangeActionReject( ULONG nReject )
+                                ScChangeActionReject( sal_uLong nReject )
                                     : ScChangeAction( SC_CAT_REJECT, ScRange() )
                                     {
                                         SetRejectAction( nReject );
@@ -918,14 +918,14 @@ class ScChangeActionReject : public ScChangeAction
     virtual void                AddContent( ScChangeActionContent* ) {}
     virtual void                DeleteCellEntries() {}
 
-    virtual BOOL                Reject( ScDocument* ) { return FALSE; }
+    virtual sal_Bool                Reject( ScDocument* ) { return false; }
 
     virtual const ScChangeTrack*    GetChangeTrack() const { return 0; }
 
 public:
-                                ScChangeActionReject(const ULONG nActionNumber,
+                                ScChangeActionReject(const sal_uLong nActionNumber,
                                                 const ScChangeActionState eState,
-                                                const ULONG nRejectingNumber,
+                                                const sal_uLong nRejectingNumber,
                                                 const ScBigRange& aBigRange,
                                                 const String& aUser,
                                                 const DateTime& aDateTime,
@@ -949,8 +949,8 @@ struct ScChangeTrackMsgInfo
     DECL_FIXEDMEMPOOL_NEWDEL( ScChangeTrackMsgInfo )
 
     ScChangeTrackMsgType    eMsgType;
-    ULONG                   nStartAction;
-    ULONG                   nEndAction;
+    sal_uLong                   nStartAction;
+    sal_uLong                   nEndAction;
 };
 
 // MsgQueue for notification via ModifiedLink
@@ -971,15 +971,15 @@ DECLARE_TABLE( ScChangeActionTable, ScChangeAction* )
 
 // Internally generated actions start at this value (nearly all bits set)
 // and are decremented, to keep values in a table seperated from "normal" actions.
-#define SC_CHGTRACK_GENERATED_START ((UINT32) 0xfffffff0)
+#define SC_CHGTRACK_GENERATED_START ((sal_uInt32) 0xfffffff0)
 
 class ScChangeTrack : public utl::ConfigurationListener
 {
     friend void ScChangeAction::RejectRestoreContents( ScChangeTrack*, SCsCOL, SCsROW );
-    friend BOOL ScChangeActionDel::Reject( ScDocument* pDoc );
+    friend sal_Bool ScChangeActionDel::Reject( ScDocument* pDoc );
     friend void ScChangeActionDel::DeleteCellEntries();
     friend void ScChangeActionMove::DeleteCellEntries();
-    friend BOOL ScChangeActionMove::Reject( ScDocument* pDoc );
+    friend sal_Bool ScChangeActionMove::Reject( ScDocument* pDoc );
 
     static  const SCROW         nContentRowsPerSlot;
     static  const SCSIZE        nContentSlots;
@@ -1007,21 +1007,21 @@ class ScChangeTrack : public utl::ConfigurationListener
     ScChangeActionLinkEntry*    pLinkMove;
         ScChangeTrackMsgInfo*   pBlockModifyMsg;
             ScDocument*         pDoc;
-            ULONG               nActionMax;
-            ULONG               nGeneratedMin;
-            ULONG               nMarkLastSaved;
-            ULONG               nStartLastCut;
-            ULONG               nEndLastCut;
-            ULONG               nLastMerge;
+            sal_uLong               nActionMax;
+            sal_uLong               nGeneratedMin;
+            sal_uLong               nMarkLastSaved;
+            sal_uLong               nStartLastCut;
+            sal_uLong               nEndLastCut;
+            sal_uLong               nLastMerge;
         ScChangeTrackMergeState eMergeState;
-            USHORT              nLoadedFileFormatVersion;
-            BOOL                bLoadSave;
-            BOOL                bInDelete;
-            BOOL                bInDeleteUndo;
-            BOOL                bInDeleteTop;
-            BOOL                bInPasteCut;
-            BOOL                bUseFixDateTime;
-            BOOL                bTime100thSeconds;
+            sal_uInt16              nLoadedFileFormatVersion;
+            sal_Bool                bLoadSave;
+            sal_Bool                bInDelete;
+            sal_Bool                bInDeleteUndo;
+            sal_Bool                bInDeleteTop;
+            sal_Bool                bInPasteCut;
+            sal_Bool                bUseFixDateTime;
+            sal_Bool                bTime100thSeconds;
 
                                 // not implemented, prevent usage
                                 ScChangeTrack( const ScChangeTrack& );
@@ -1030,53 +1030,53 @@ class ScChangeTrack : public utl::ConfigurationListener
 #ifdef SC_CHGTRACK_CXX
     static  SCROW               InitContentRowsPerSlot();
 
-                                // TRUE if one is MM_FORMULA and the other is
+                                // sal_True if one is MM_FORMULA and the other is
                                 // not, or if both are and range differs
-    static  BOOL                IsMatrixFormulaRangeDifferent(
+    static  sal_Bool                IsMatrixFormulaRangeDifferent(
                                     const ScBaseCell* pOldCell,
                                     const ScBaseCell* pNewCell );
 
             void                Init();
             void                DtorClear();
-            void                SetLoadSave( BOOL bVal ) { bLoadSave = bVal; }
+            void                SetLoadSave( sal_Bool bVal ) { bLoadSave = bVal; }
             void                SetInDeleteRange( const ScRange& rRange )
                                     { aInDeleteRange = rRange; }
-            void                SetInDelete( BOOL bVal )
+            void                SetInDelete( sal_Bool bVal )
                                     { bInDelete = bVal; }
-            void                SetInDeleteTop( BOOL bVal )
+            void                SetInDeleteTop( sal_Bool bVal )
                                     { bInDeleteTop = bVal; }
-            void                SetInDeleteUndo( BOOL bVal )
+            void                SetInDeleteUndo( sal_Bool bVal )
                                     { bInDeleteUndo = bVal; }
-            void                SetInPasteCut( BOOL bVal )
+            void                SetInPasteCut( sal_Bool bVal )
                                     { bInPasteCut = bVal; }
             void                SetMergeState( ScChangeTrackMergeState eState )
                                     { eMergeState = eState; }
         ScChangeTrackMergeState GetMergeState() const { return eMergeState; }
-            void                SetLastMerge( ULONG nVal ) { nLastMerge = nVal; }
-            ULONG               GetLastMerge() const { return nLastMerge; }
+            void                SetLastMerge( sal_uLong nVal ) { nLastMerge = nVal; }
+            sal_uLong               GetLastMerge() const { return nLastMerge; }
 
             void                SetLastCutMoveRange( const ScRange&, ScDocument* );
 
                                 // create block of ModifyMsg
             void                StartBlockModify( ScChangeTrackMsgType,
-                                    ULONG nStartAction );
-            void                EndBlockModify( ULONG nEndAction );
+                                    sal_uLong nStartAction );
+            void                EndBlockModify( sal_uLong nEndAction );
 
             void                AddDependentWithNotify( ScChangeAction* pParent,
                                     ScChangeAction* pDependent );
 
             void                Dependencies( ScChangeAction* );
-            void                UpdateReference( ScChangeAction*, BOOL bUndo );
+            void                UpdateReference( ScChangeAction*, sal_Bool bUndo );
             void                UpdateReference( ScChangeAction** ppFirstAction,
-                                    ScChangeAction* pAct, BOOL bUndo );
-            void                Append( ScChangeAction* pAppend, ULONG nAction );
+                                    ScChangeAction* pAct, sal_Bool bUndo );
+            void                Append( ScChangeAction* pAppend, sal_uLong nAction );
     SC_DLLPUBLIC        void                AppendDeleteRange( const ScRange&,
                                     ScDocument* pRefDoc, SCsTAB nDz,
-                                    ULONG nRejectingInsert );
+                                    sal_uLong nRejectingInsert );
             void                AppendOneDeleteRange( const ScRange& rOrgRange,
                                     ScDocument* pRefDoc,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ULONG nRejectingInsert );
+                                    sal_uLong nRejectingInsert );
             void                LookUpContents( const ScRange& rOrgRange,
                                     ScDocument* pRefDoc,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
@@ -1100,8 +1100,8 @@ class ScChangeTrack : public utl::ConfigurationListener
                                 // only needed for Insert and Move (MasterType),
                                 // is NULL otherwise.
                                 // bRecursion == called from reject with table
-            BOOL                Reject( ScChangeAction*,
-                                    ScChangeActionTable*, BOOL bRecursion );
+            sal_Bool                Reject( ScChangeAction*,
+                                    ScChangeActionTable*, sal_Bool bRecursion );
 
 #endif  // SC_CHGTRACK_CXX
 
@@ -1110,7 +1110,7 @@ class ScChangeTrack : public utl::ConfigurationListener
 
 public:
 
-    static  SCSIZE              ComputeContentSlot( INT32 nRow )
+    static  SCSIZE              ComputeContentSlot( sal_Int32 nRow )
                                     {
                                         if ( nRow < 0 || nRow > MAXROW )
                                             return nContentSlots - 1;
@@ -1126,34 +1126,34 @@ public:
             ScChangeActionContent*  GetFirstGenerated() const { return pFirstGeneratedDelContent; }
             ScChangeAction*     GetFirst() const { return pFirst; }
             ScChangeAction*     GetLast() const { return pLast; }
-            ULONG               GetActionMax() const { return nActionMax; }
-            BOOL                IsGenerated( ULONG nAction ) const
+            sal_uLong               GetActionMax() const { return nActionMax; }
+            sal_Bool                IsGenerated( sal_uLong nAction ) const
                                     { return nAction >= nGeneratedMin; }
-            ScChangeAction*     GetAction( ULONG nAction ) const
+            ScChangeAction*     GetAction( sal_uLong nAction ) const
                                     { return aTable.Get( nAction ); }
-            ScChangeAction*     GetGenerated( ULONG nGenerated ) const
+            ScChangeAction*     GetGenerated( sal_uLong nGenerated ) const
                                     { return aGeneratedTable.Get( nGenerated ); }
-            ScChangeAction*     GetActionOrGenerated( ULONG nAction ) const
+            ScChangeAction*     GetActionOrGenerated( sal_uLong nAction ) const
                                     {
                                         return IsGenerated( nAction ) ?
                                             GetGenerated( nAction ) :
                                             GetAction( nAction );
                                     }
-            ULONG               GetLastSavedActionNumber() const
+            sal_uLong               GetLastSavedActionNumber() const
                                     { return nMarkLastSaved; }
-            void                SetLastSavedActionNumber(ULONG nNew)
+            void                SetLastSavedActionNumber(sal_uLong nNew)
                                     { nMarkLastSaved = nNew; }
             ScChangeAction*     GetLastSaved() const
                                     { return aTable.Get( nMarkLastSaved ); }
         ScChangeActionContent** GetContentSlots() const { return ppContentSlots; }
 
-            BOOL                IsLoadSave() const { return bLoadSave; }
+            sal_Bool                IsLoadSave() const { return bLoadSave; }
             const ScRange&      GetInDeleteRange() const
                                     { return aInDeleteRange; }
-            BOOL                IsInDelete() const { return bInDelete; }
-            BOOL                IsInDeleteTop() const { return bInDeleteTop; }
-            BOOL                IsInDeleteUndo() const { return bInDeleteUndo; }
-            BOOL                IsInPasteCut() const { return bInPasteCut; }
+            sal_Bool                IsInDelete() const { return bInDelete; }
+            sal_Bool                IsInDeleteTop() const { return bInDeleteTop; }
+            sal_Bool                IsInDeleteUndo() const { return bInDeleteUndo; }
+            sal_Bool                IsInPasteCut() const { return bInPasteCut; }
     SC_DLLPUBLIC        void                SetUser( const String& );
             const String&       GetUser() const { return aUser; }
             const ScStrCollection&  GetUserCollection() const
@@ -1165,7 +1165,7 @@ public:
                                 // set this if the date/time set with
                                 // SetFixDateTime...() shall be applied to
                                 // appended actions
-            void                SetUseFixDateTime( BOOL bVal )
+            void                SetUseFixDateTime( sal_Bool bVal )
                                     { bUseFixDateTime = bVal; }
                                 // for MergeDocument, apply original date/time as UTC
             void                SetFixDateTimeUTC( const DateTime& rDT )
@@ -1180,7 +1180,7 @@ public:
                                 // => no generation of deleted contents
     SC_DLLPUBLIC        void                AppendDeleteRange( const ScRange&,
                                     ScDocument* pRefDoc,
-                                    ULONG& nStartAction, ULONG& nEndAction,
+                                    sal_uLong& nStartAction, sal_uLong& nEndAction,
                                     SCsTAB nDz = 0 );
                                     // nDz: multi TabDel, LookUpContent must be searched
                                     // with an offset of -nDz
@@ -1193,14 +1193,14 @@ public:
                                 // old values from RefDoc/UndoDoc
             void                AppendContentRange( const ScRange& rRange,
                                     ScDocument* pRefDoc,
-                                    ULONG& nStartAction, ULONG& nEndAction,
+                                    sal_uLong& nStartAction, sal_uLong& nEndAction,
                                     ScChangeActionClipMode eMode = SC_CACM_NONE );
                                 // after new value was set in the document,
                                 // old value from pOldCell, nOldFormat,
                                 // RefDoc==NULL => Doc
             void                AppendContent( const ScAddress& rPos,
                                     const ScBaseCell* pOldCell,
-                                    ULONG nOldFormat, ScDocument* pRefDoc = NULL );
+                                    sal_uLong nOldFormat, ScDocument* pRefDoc = NULL );
                                 // after new value was set in the document,
                                 // old value from pOldCell, format from Doc
             void                AppendContent( const ScAddress& rPos,
@@ -1209,7 +1209,7 @@ public:
                                 // old values from RefDoc/UndoDoc.
                                 // All contents with a cell in RefDoc
             void                AppendContentsIfInRefDoc( ScDocument* pRefDoc,
-                                    ULONG& nStartAction, ULONG& nEndAction );
+                                    sal_uLong& nStartAction, sal_uLong& nEndAction );
 
                                 // Meant for import filter, creates and inserts
                                 // an unconditional content action of the two
@@ -1222,8 +1222,8 @@ public:
     SC_DLLPUBLIC    ScChangeActionContent*  AppendContentOnTheFly( const ScAddress& rPos,
                                     ScBaseCell* pOldCell,
                                     ScBaseCell* pNewCell,
-                                    ULONG nOldFormat = 0,
-                                    ULONG nNewFormat = 0 );
+                                    sal_uLong nOldFormat = 0,
+                                    sal_uLong nNewFormat = 0 );
 
                                 // Only use the following two if there is no different solution!
                                 // (Assign String for NewValue or creation of a formula respectively)
@@ -1246,21 +1246,21 @@ public:
                                             pLastCutMove = NULL;
                                         }
                                     }
-            BOOL                HasLastCut() const
+            sal_Bool                HasLastCut() const
                                     {
                                         return nEndLastCut > 0 &&
                                             nStartLastCut <= nEndLastCut &&
                                             pLastCutMove;
                                     }
 
-    SC_DLLPUBLIC        void                Undo( ULONG nStartAction, ULONG nEndAction, bool bMerge = false );
+    SC_DLLPUBLIC        void                Undo( sal_uLong nStartAction, sal_uLong nEndAction, bool bMerge = false );
 
                                 // adjust references for MergeDocument
                                 //! may only be used in a temporary opened document.
                                 //! the Track (?) is unclean afterwards
             void                MergePrepare( ScChangeAction* pFirstMerge, bool bShared = false );
-            void                MergeOwn( ScChangeAction* pAct, ULONG nFirstMerge, bool bShared = false );
-    static  BOOL                MergeIgnore( const ScChangeAction&, ULONG nFirstMerge );
+            void                MergeOwn( ScChangeAction* pAct, sal_uLong nFirstMerge, bool bShared = false );
+    static  sal_Bool                MergeIgnore( const ScChangeAction&, sal_uLong nFirstMerge );
 
                                 // This comment was already really strange in German.
                                 // Tried to structure it a little. Hope no information got lost...
@@ -1284,25 +1284,25 @@ public:
 
     SC_DLLPUBLIC        void                GetDependents( ScChangeAction*,
                                     ScChangeActionTable&,
-                                    BOOL bListMasterDelete = FALSE,
-                                    BOOL bAllFlat = FALSE ) const;
+                                    sal_Bool bListMasterDelete = false,
+                                    sal_Bool bAllFlat = false ) const;
 
                                 // Reject visible action (and dependents)
-            BOOL                Reject( ScChangeAction*, bool bShared = false );
+            sal_Bool                Reject( ScChangeAction*, bool bShared = false );
 
                                 // Accept visible action (and dependents)
-    SC_DLLPUBLIC        BOOL                Accept( ScChangeAction* );
+    SC_DLLPUBLIC        sal_Bool                Accept( ScChangeAction* );
 
             void                AcceptAll();    // all Virgins
-            BOOL                RejectAll();    // all Virgins
+            sal_Bool                RejectAll();    // all Virgins
 
                                 // Selects a content of several contents at the same
                                 // position and accepts this one and
                                 // the older ones, rejects the more recent ones.
                                 // If bOldest==TRUE then the first OldValue
                                 // of a Virgin-Content-List will be restored.
-            BOOL                SelectContent( ScChangeAction*,
-                                    BOOL bOldest = FALSE );
+            sal_Bool                SelectContent( ScChangeAction*,
+                                    sal_Bool bOldest = false );
 
                                 // If ModifiedLink is set, changes go to
                                 // ScChangeTrackMsgQueue
@@ -1312,30 +1312,30 @@ public:
             ScChangeTrackMsgQueue& GetMsgQueue() { return aMsgQueue; }
 
             void                NotifyModified( ScChangeTrackMsgType eMsgType,
-                                    ULONG nStartAction, ULONG nEndAction );
+                                    sal_uLong nStartAction, sal_uLong nEndAction );
 
-            USHORT              GetLoadedFileFormatVersion() const
+            sal_uInt16              GetLoadedFileFormatVersion() const
                                     { return nLoadedFileFormatVersion; }
 
-            ULONG               AddLoadedGenerated(ScBaseCell* pOldCell,
+            sal_uLong               AddLoadedGenerated(ScBaseCell* pOldCell,
                                                 const ScBigRange& aBigRange, const String& sNewValue ); // only to use in the XML import
             void                AppendLoaded( ScChangeAction* pAppend ); // this is only for the XML import public, it should be protected
-            void                SetActionMax(ULONG nTempActionMax)
+            void                SetActionMax(sal_uLong nTempActionMax)
                                     { nActionMax = nTempActionMax; } // only to use in the XML import
 
             void                SetProtection( const com::sun::star::uno::Sequence< sal_Int8 >& rPass )
                                     { aProtectPass = rPass; }
     com::sun::star::uno::Sequence< sal_Int8 >   GetProtection() const
                                     { return aProtectPass; }
-            BOOL                IsProtected() const
+            sal_Bool                IsProtected() const
                                     { return aProtectPass.getLength() != 0; }
 
                                 // If time stamps of actions of this
                                 // ChangeTrack and a second one are to be
                                 // compared including 100th seconds.
-            void                SetTime100thSeconds( BOOL bVal )
+            void                SetTime100thSeconds( sal_Bool bVal )
                                     { bTime100thSeconds = bVal; }
-            BOOL                IsTime100thSeconds() const
+            sal_Bool                IsTime100thSeconds() const
                                     { return bTime100thSeconds; }
 
             void                AppendCloned( ScChangeAction* pAppend );

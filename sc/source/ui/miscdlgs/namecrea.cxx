@@ -42,7 +42,7 @@
 
 //==================================================================
 
-ScNameCreateDlg::ScNameCreateDlg( Window * pParent, USHORT nFlags )
+ScNameCreateDlg::ScNameCreateDlg( Window * pParent, sal_uInt16 nFlags )
     : ModalDialog( pParent, ScResId(RID_SCDLG_NAMES_CREATE) ),
     aFixedLine      ( this, ScResId( FL_FRAME ) ),
     aTopBox         ( this, ScResId( BTN_TOP ) ),
@@ -53,19 +53,19 @@ ScNameCreateDlg::ScNameCreateDlg( Window * pParent, USHORT nFlags )
     aCancelButton   ( this, ScResId( BTN_CANCEL ) ),
     aHelpButton     ( this, ScResId( BTN_HELP ) )
 {
-    aTopBox.Check   ( (nFlags & NAME_TOP)   ? TRUE : FALSE );
-    aLeftBox.Check  ( (nFlags & NAME_LEFT)  ? TRUE : FALSE );
-    aBottomBox.Check( (nFlags & NAME_BOTTOM)? TRUE : FALSE );
-    aRightBox.Check ( (nFlags & NAME_RIGHT) ? TRUE : FALSE );
+    aTopBox.Check   ( (nFlags & NAME_TOP)   ? sal_True : false );
+    aLeftBox.Check  ( (nFlags & NAME_LEFT)  ? sal_True : false );
+    aBottomBox.Check( (nFlags & NAME_BOTTOM)? sal_True : false );
+    aRightBox.Check ( (nFlags & NAME_RIGHT) ? sal_True : false );
 
     FreeResource();
 }
 
 //------------------------------------------------------------------
 
-USHORT ScNameCreateDlg::GetFlags() const
+sal_uInt16 ScNameCreateDlg::GetFlags() const
 {
-    USHORT  nResult = 0;
+    sal_uInt16  nResult = 0;
 
     nResult |= aTopBox.IsChecked()      ? NAME_TOP:     0 ;
     nResult |= aLeftBox.IsChecked()     ? NAME_LEFT:    0 ;

@@ -566,7 +566,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
 
         if ( nUsedHierarchy >= 0 )
         {
-            aAny <<= (INT32)nUsedHierarchy;
+            aAny <<= (sal_Int32)nUsedHierarchy;
             xDimProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_USEDHIERARCHY)), aAny );
         }
 
@@ -582,7 +582,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         {
             // single filter field: first field equal to selected string
             sheet::TableFilterField aField( sheet::FilterConnection_AND, 0,
-                    sheet::FilterOperator_EQUAL, sal_False, 0.0, *pSelectedPage );
+                    sheet::FilterOperator_EQUAL, false, 0.0, *pSelectedPage );
             aFilter = uno::Sequence<sheet::TableFilterField>( &aField, 1 );
         }
         // else keep empty sequence

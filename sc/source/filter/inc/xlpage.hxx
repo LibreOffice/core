@@ -153,7 +153,7 @@ struct XclPageData : private boost::noncopyable
     /** Returns the real paper size (twips) from the paper size index and paper orientation. */
     Size                GetScPaperSize() const;
     /** Sets the Excel paper size index and paper orientation from Calc paper size (twips). */
-    void                SetScPaperSize( const Size& rSize, bool bPortrait, bool bStrict = sal_False );
+    void                SetScPaperSize( const Size& rSize, bool bPortrait, bool bStrict = false );
 };
 
 // ============================================================================

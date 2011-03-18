@@ -167,7 +167,7 @@ public:
                             AnyToInterface( const com::sun::star::uno::Any& rAny );
     static sal_Bool         GetBoolProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,
-                                            const ::rtl::OUString& rName, sal_Bool bDefault = sal_False );
+                                            const ::rtl::OUString& rName, sal_Bool bDefault = false );
     static sal_Int32        GetLongProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,
                                             const ::rtl::OUString& rName, long nDefault = 0 );

@@ -110,11 +110,14 @@ class ScVbaRange : public ScVbaRange_BASE
 
     void fillSeries(  css::sheet::FillDirection nFillDirection, css::sheet::FillMode nFillMode, css::sheet::FillDateMode nFillDateMode, double fStep, double fEndValue ) throw( css::uno::RuntimeException );
 
-    void ClearContents( sal_Int32 nFlags ) throw (css::uno::RuntimeException);
-    virtual void   setValue( const css::uno::Any& aValue, ValueSetter& setter) throw ( css::uno::RuntimeException);
-    virtual css::uno::Any getValue( ValueGetter& rValueGetter ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any getFormulaValue( formula::FormulaGrammar::Grammar ) throw (css::uno::RuntimeException);
-    virtual void   setFormulaValue( const css::uno::Any& aValue, formula::FormulaGrammar::Grammar ) throw ( css::uno::RuntimeException);
+    void ClearContents( sal_Int32 nFlags, bool bFireEvent ) throw (css::uno::RuntimeException);
+
+    css::uno::Any getValue( ValueGetter& rValueGetter ) throw (css::uno::RuntimeException);
+    void setValue( const css::uno::Any& aValue, ValueSetter& setter, bool bFireEvent ) throw ( css::uno::RuntimeException);
+
+    css::uno::Any getFormulaValue( formula::FormulaGrammar::Grammar ) throw (css::uno::RuntimeException);
+    void setFormulaValue( const css::uno::Any& aValue, formula::FormulaGrammar::Grammar, bool bFireEvent ) throw ( css::uno::RuntimeException);
+
     css::uno::Reference< ov::excel::XRange > getArea( sal_Int32 nIndex  ) throw( css::uno::RuntimeException );
     ScCellRangeObj* getCellRangeObj( )  throw ( css::uno::RuntimeException );
     css::uno::Reference< ov::XCollection >& getBorders();
@@ -122,6 +125,10 @@ class ScVbaRange : public ScVbaRange_BASE
      css::uno::Reference< ov::excel::XRange > PreviousNext( bool bIsPrevious );
      css::uno::Reference< ov::excel::XRange > SpecialCellsImpl( sal_Int32 nType, const css::uno::Any& _oValue) throw ( css::script::BasicErrorException );
     css::awt::Point getPosition() throw ( css::uno::RuntimeException );
+
+    /** Fires a Worksheet_Change event for this range or range list. */
+    void fireChangeEvent();
+
 protected:
     virtual ScCellRangesBase* getCellRangesBase() throw ( css::uno::RuntimeException );
     virtual SfxItemSet* getCurrentDataSet( )  throw ( css::uno::RuntimeException );
@@ -151,6 +158,12 @@ public:
         const rtl::OUString& sRangeName, ScDocShell* pDocSh,
         formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1  ) throw ( css::uno::RuntimeException );
     css::table::CellAddress getLeftUpperCellAddress();
+
+    static css::uno::Reference< ov::excel::XRange > CellsHelper(
+        const css::uno::Reference< ov::XHelperInterface >& xParent,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::table::XCellRange >& xRange,
+        const css::uno::Any &nRowIndex, const css::uno::Any &nColumnIndex ) throw(css::uno::RuntimeException);
 
     // Attributes
     virtual css::uno::Any SAL_CALL getName() throw (css::uno::RuntimeException);

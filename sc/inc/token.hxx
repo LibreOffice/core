@@ -93,8 +93,8 @@ public:
     virtual const ScRefList*    GetRefList() const;
     virtual       ScRefList*    GetRefList();
 
-    virtual BOOL                TextEqual( const formula::FormulaToken& rToken ) const;
-    virtual BOOL                Is3DRef() const;    // reference with 3D flag set
+    virtual bool                TextEqual( const formula::FormulaToken& rToken ) const;
+    virtual bool                Is3DRef() const;    // reference with 3D flag set
 
     /** If rTok1 and rTok2 both are SingleRef or DoubleRef tokens, extend/merge
         ranges as needed for ocRange.
@@ -102,7 +102,7 @@ public:
             The formula's position, used to calculate absolute positions from
             relative references.
         @param bReuseDoubleRef
-            If TRUE, a DoubleRef token is reused if passed as rTok1 or rTok2,
+            If sal_True, a DoubleRef token is reused if passed as rTok1 or rTok2,
             else a new DoubleRef token is created and returned.
         @return
             A reused or new'ed ScDoubleRefToken, or a NULL TokenRef if rTok1 or
@@ -134,7 +134,7 @@ public:
     virtual ScSingleRefData&      GetSingleRef();
     virtual void                CalcAbsIfRel( const ScAddress& );
     virtual void                CalcRelFromAbs( const ScAddress& );
-    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScSingleRefToken(*this); }
 
     DECL_FIXEDMEMPOOL_NEWDEL( ScSingleRefToken );
@@ -163,7 +163,7 @@ public:
     virtual ScSingleRefData&      GetSingleRef2();
     virtual void                CalcAbsIfRel( const ScAddress& );
     virtual void                CalcRelFromAbs( const ScAddress& );
-    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScDoubleRefToken(*this); }
 
     DECL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken );
@@ -180,7 +180,7 @@ public:
                                     ScToken( r ), pMatrix( r.pMatrix ) {}
     virtual const ScMatrix*     GetMatrix() const;
     virtual ScMatrix*           GetMatrix();
-    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScMatrixToken(*this); }
 };
 
@@ -198,13 +198,13 @@ public:
                                 ScExternalSingleRefToken( const ScExternalSingleRefToken& r );
     virtual                     ~ScExternalSingleRefToken();
 
-    virtual USHORT                  GetIndex() const;
+    virtual sal_uInt16                  GetIndex() const;
     virtual const String&           GetString() const;
     virtual const ScSingleRefData&  GetSingleRef() const;
     virtual ScSingleRefData&          GetSingleRef();
     virtual void                CalcAbsIfRel( const ScAddress& );
     virtual void                CalcRelFromAbs( const ScAddress& );
-    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScExternalSingleRefToken(*this); }
 };
 
@@ -222,7 +222,7 @@ public:
                                 ScExternalDoubleRefToken( const ScExternalDoubleRefToken& r );
     virtual                     ~ScExternalDoubleRefToken();
 
-    virtual USHORT                 GetIndex() const;
+    virtual sal_uInt16                 GetIndex() const;
     virtual const String&          GetString() const;
     virtual const ScSingleRefData& GetSingleRef() const;
     virtual ScSingleRefData&       GetSingleRef();
@@ -232,7 +232,7 @@ public:
     virtual ScComplexRefData&      GetDoubleRef();
     virtual void                CalcAbsIfRel( const ScAddress& );
     virtual void                CalcRelFromAbs( const ScAddress& );
-    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScExternalDoubleRefToken(*this); }
 };
 
@@ -247,9 +247,9 @@ public:
                                 ScNameToken(sal_uInt16 nIndex, bool bGlobal);
                                 ScNameToken(const ScNameToken& r);
     virtual                     ~ScNameToken();
-    virtual BYTE                GetByte() const;
-    virtual USHORT              GetIndex() const;
-    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual sal_uInt8                GetByte() const;
+    virtual sal_uInt16              GetIndex() const;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScNameToken(*this); }
 };
 
@@ -264,9 +264,9 @@ public:
                                 ScExternalNameToken( sal_uInt16 nFileId, const String& rName );
                                 ScExternalNameToken( const ScExternalNameToken& r );
     virtual                     ~ScExternalNameToken();
-    virtual USHORT              GetIndex() const;
+    virtual sal_uInt16              GetIndex() const;
     virtual const String&       GetString() const;
-    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScExternalNameToken(*this); }
 };
 
@@ -284,7 +284,7 @@ public:
                                     ScToken( r ), pJumpMatrix( r.pJumpMatrix ) {}
     virtual                     ~ScJumpMatrixToken();
     virtual ScJumpMatrix*       GetJumpMatrix() const;
-    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScJumpMatrixToken(*this); }
 };
 
@@ -304,7 +304,7 @@ public:
     virtual void                CalcRelFromAbs( const ScAddress& );
     virtual const ScRefList*    GetRefList() const;
     virtual       ScRefList*    GetRefList();
-    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScRefListToken(*this); }
 };
 
@@ -326,7 +326,7 @@ public:
             bool                IsDisplayedAsString() const { return bDisplayedAsString; }
     virtual double              GetDouble() const;
     virtual const String &      GetString() const;
-    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScEmptyCellToken(*this); }
 };
 
@@ -351,7 +351,7 @@ public:
     virtual double              GetDouble() const;
     virtual const String &      GetString() const;
     virtual const ScMatrix*     GetMatrix() const;
-    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScMatrixCellResultToken(*this); }
     formula::StackVar           GetUpperLeftType() const
                                     {
@@ -388,7 +388,7 @@ public:
                                         if (xUpperLeft)
                                             xUpperLeft = xUpperLeft->Clone();
                                     }
-    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScMatrixFormulaCellToken(*this); }
             void                SetMatColsRows( SCCOL nC, SCROW nR )
                                     {
@@ -452,7 +452,7 @@ public:
             const String &      GetFormula() const  { return aFormula; }
     virtual double              GetDouble() const;
     virtual const String &      GetString() const;
-    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScHybridCellToken(*this); }
 };
 

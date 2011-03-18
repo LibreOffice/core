@@ -30,7 +30,7 @@
 ModelessDialog RID_SCDLG_PIVOT_LAYOUT
 {
     OutputSize = TRUE ;
-    HelpId = SID_OPENDLG_PIVOTTABLE ;
+    HelpId = CMD_SID_OPENDLG_PIVOTTABLE ;
     Size = MAP_APPFONT ( 350 , 216 ) ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -135,6 +135,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     PushButton BTN_REMOVE
     {
+        HelpID = "sc:PushButton:RID_SCDLG_PIVOT_LAYOUT:BTN_REMOVE";
         Pos = MAP_APPFONT ( 294 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -142,6 +143,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     PushButton BTN_OPTIONS
     {
+        HelpID = "sc:PushButton:RID_SCDLG_PIVOT_LAYOUT:BTN_OPTIONS";
         Pos = MAP_APPFONT ( 294 , 80 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -149,6 +151,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     MoreButton BTN_MORE
     {
+        HelpID = "sc:MoreButton:RID_SCDLG_PIVOT_LAYOUT:BTN_MORE";
         Pos = MAP_APPFONT ( 294 , 190 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -172,6 +175,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     Edit ED_INAREA
     {
+        HelpID = "sc:Edit:RID_SCDLG_PIVOT_LAYOUT:ED_INAREA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 73 , 227 ) ;
         Size = MAP_APPFONT ( 100 , 12 ) ;
@@ -180,6 +184,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     ImageButton RB_INAREA
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_PIVOT_LAYOUT:RB_INAREA";
         Pos = MAP_APPFONT ( 177 , 226 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = TRUE ;
@@ -196,6 +201,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     ListBox LB_OUTAREA
     {
+        HelpID = "sc:ListBox:RID_SCDLG_PIVOT_LAYOUT:LB_OUTAREA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 73 , 245 ) ;
         Size = MAP_APPFONT ( 75 , 90 ) ;
@@ -205,6 +211,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     Edit ED_OUTAREA
     {
+        HelpID = "sc:Edit:RID_SCDLG_PIVOT_LAYOUT:ED_OUTAREA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 152 , 245 ) ;
         Size = MAP_APPFONT ( 100 , 12 ) ;
@@ -213,6 +220,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     ImageButton RB_OUTAREA
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_PIVOT_LAYOUT:RB_OUTAREA";
         Pos = MAP_APPFONT ( 256 , 244 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = TRUE ;
@@ -221,6 +229,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_IGNEMPTYROWS
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_PIVOT_LAYOUT:BTN_IGNEMPTYROWS";
         Pos = MAP_APPFONT ( 12 , 263 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
@@ -229,6 +238,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_DETECTCAT
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_PIVOT_LAYOUT:BTN_DETECTCAT";
         Pos = MAP_APPFONT ( 142 , 263 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
@@ -237,6 +247,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_TOTALCOL
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_PIVOT_LAYOUT:BTN_TOTALCOL";
         Pos = MAP_APPFONT ( 12 , 277 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
@@ -245,6 +256,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_TOTALROW
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_PIVOT_LAYOUT:BTN_TOTALROW";
         Pos = MAP_APPFONT ( 142 , 277 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
@@ -253,6 +265,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_FILTER
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_PIVOT_LAYOUT:BTN_FILTER";
         Pos = MAP_APPFONT ( 12 , 291 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
@@ -261,6 +274,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_DRILLDOWN
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_PIVOT_LAYOUT:BTN_DRILLDOWN";
         Pos = MAP_APPFONT ( 142 , 291 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;

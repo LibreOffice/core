@@ -108,13 +108,13 @@ sal_Int32 lcl_getSymbolStyleForSymbol( const chart2::Symbol & rSymbol )
     return nStyle;
 }
 
-bool lcl_NumberFormatFromItemToPropertySet( USHORT nWhichId, const SfxItemSet & rItemSet, const uno::Reference< beans::XPropertySet > & xPropertySet, bool bOverwriteAttributedDataPointsAlso  )
+bool lcl_NumberFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxItemSet & rItemSet, const uno::Reference< beans::XPropertySet > & xPropertySet, bool bOverwriteAttributedDataPointsAlso  )
 {
     bool bChanged = false;
     if( !xPropertySet.is() )
         return bChanged;
     rtl::OUString aPropertyName = (SID_ATTR_NUMBERFORMAT_VALUE==nWhichId) ? C2U( "NumberFormat" ) : C2U( "PercentageNumberFormat" );
-    USHORT nSourceWhich = (SID_ATTR_NUMBERFORMAT_VALUE==nWhichId) ? SID_ATTR_NUMBERFORMAT_SOURCE : SCHATTR_PERCENT_NUMBERFORMAT_SOURCE;
+    sal_uInt16 nSourceWhich = (SID_ATTR_NUMBERFORMAT_VALUE==nWhichId) ? SID_ATTR_NUMBERFORMAT_SOURCE : SCHATTR_PERCENT_NUMBERFORMAT_SOURCE;
 
     if( SFX_ITEM_SET != rItemSet.GetItemState( nSourceWhich ) )
         return bChanged;
@@ -155,13 +155,13 @@ bool lcl_NumberFormatFromItemToPropertySet( USHORT nWhichId, const SfxItemSet & 
     return bChanged;
 }
 
-bool lcl_UseSourceFormatFromItemToPropertySet( USHORT nWhichId, const SfxItemSet & rItemSet, const uno::Reference< beans::XPropertySet > & xPropertySet, bool bOverwriteAttributedDataPointsAlso  )
+bool lcl_UseSourceFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxItemSet & rItemSet, const uno::Reference< beans::XPropertySet > & xPropertySet, bool bOverwriteAttributedDataPointsAlso  )
 {
     bool bChanged = false;
     if( !xPropertySet.is() )
         return bChanged;
     rtl::OUString aPropertyName = (SID_ATTR_NUMBERFORMAT_SOURCE==nWhichId) ? C2U( "NumberFormat" ) : C2U( "PercentageNumberFormat" );
-    USHORT nFormatWhich = (SID_ATTR_NUMBERFORMAT_SOURCE==nWhichId) ? SID_ATTR_NUMBERFORMAT_VALUE : SCHATTR_PERCENT_NUMBERFORMAT_VALUE;
+    sal_uInt16 nFormatWhich = (SID_ATTR_NUMBERFORMAT_SOURCE==nWhichId) ? SID_ATTR_NUMBERFORMAT_VALUE : SCHATTR_PERCENT_NUMBERFORMAT_VALUE;
 
     if( SFX_ITEM_SET != rItemSet.GetItemState( nWhichId ) )
         return bChanged;
@@ -291,7 +291,7 @@ bool DataPointItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const USHORT * DataPointItemConverter::GetWhichPairs() const
+const sal_uInt16 * DataPointItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     if( m_bDataSeries )
@@ -313,7 +313,7 @@ bool DataPointItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNa
 
 
 bool DataPointItemConverter::ApplySpecialItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet )
+    sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;
@@ -545,7 +545,7 @@ bool DataPointItemConverter::ApplySpecialItem(
 }
 
 void DataPointItemConverter::FillSpecialItem(
-    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )
@@ -643,7 +643,7 @@ void DataPointItemConverter::FillSpecialItem(
         {
             SvULongs aList;
             for ( sal_Int32 nN=0; nN<m_aAvailableLabelPlacements.getLength(); nN++ )
-                aList.Insert( m_aAvailableLabelPlacements[nN], sal::static_int_cast< USHORT >(nN) );
+                aList.Insert( m_aAvailableLabelPlacements[nN], sal::static_int_cast< sal_uInt16 >(nN) );
             rOutItemSet.Put( SfxIntegerListItem( nWhichId, aList ) );
         }
         break;

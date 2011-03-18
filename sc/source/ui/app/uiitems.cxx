@@ -58,7 +58,7 @@ TYPEINIT1(ScIndexHint,          SfxHint);
 //      ScInputStatusItem - Status-Update fuer Eingabezeile
 // -----------------------------------------------------------------------
 
-ScInputStatusItem::ScInputStatusItem( USHORT nWhichP,
+ScInputStatusItem::ScInputStatusItem( sal_uInt16 nWhichP,
                                       const ScAddress& rCurPos,
                                       const ScAddress& rStartPos,
                                       const ScAddress& rEndPos,
@@ -117,7 +117,7 @@ SfxPoolItem* ScInputStatusItem::Clone( SfxItemPool * ) const
 //  ScTablesHint - Views anpassen, wenn Tabellen eingefuegt / geloescht
 // -----------------------------------------------------------------------
 
-ScTablesHint::ScTablesHint(USHORT nNewId, SCTAB nTable1, SCTAB nTable2) :
+ScTablesHint::ScTablesHint(sal_uInt16 nNewId, SCTAB nTable1, SCTAB nTable2) :
     nId( nNewId ),
     nTab1( nTable1 ),
     nTab2( nTable2 )
@@ -133,7 +133,7 @@ ScTablesHint::~ScTablesHint()
 //  ScIndexHint
 // -----------------------------------------------------------------------
 
-ScIndexHint::ScIndexHint(USHORT nNewId, USHORT nIdx) :
+ScIndexHint::ScIndexHint(sal_uInt16 nNewId, sal_uInt16 nIdx) :
     nId( nNewId ),
     nIndex( nIdx )
 {
@@ -162,7 +162,7 @@ ScEditViewHint::~ScEditViewHint()
 //      ScSortItem - Daten fuer den Sortierdialog
 // -----------------------------------------------------------------------
 
-ScSortItem::ScSortItem( USHORT              nWhichP,
+ScSortItem::ScSortItem( sal_uInt16              nWhichP,
                         ScViewData*         ptrViewData,
                         const ScSortParam*  pSortData ) :
         SfxPoolItem ( nWhichP ),
@@ -173,7 +173,7 @@ ScSortItem::ScSortItem( USHORT              nWhichP,
 
 //------------------------------------------------------------------------
 
-ScSortItem::ScSortItem( USHORT              nWhichP,
+ScSortItem::ScSortItem( sal_uInt16              nWhichP,
                         const ScSortParam*  pSortData ) :
         SfxPoolItem ( nWhichP ),
         pViewData   ( NULL )
@@ -222,7 +222,7 @@ SfxPoolItem* ScSortItem::Clone( SfxItemPool * ) const
 
 //------------------------------------------------------------------------
 
-bool ScSortItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /* nMemberUd */ ) const
+bool ScSortItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nMemberUd */ ) const
 {
     // Return empty value as there is no useful conversion
     rVal = com::sun::star::uno::Any();
@@ -233,23 +233,23 @@ bool ScSortItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /* nMemberUd *
 //      ScQueryItem - Daten fuer den Filterdialog
 // -----------------------------------------------------------------------
 
-ScQueryItem::ScQueryItem( USHORT                nWhichP,
+ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
                           ScViewData*           ptrViewData,
                           const ScQueryParam*   pQueryData ) :
         SfxPoolItem ( nWhichP ),
         pViewData   ( ptrViewData ),
-        bIsAdvanced ( FALSE )
+        bIsAdvanced ( false )
 {
     if ( pQueryData ) theQueryData = *pQueryData;
 }
 
 //------------------------------------------------------------------------
 
-ScQueryItem::ScQueryItem( USHORT                nWhichP,
+ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
                           const ScQueryParam*   pQueryData ) :
         SfxPoolItem ( nWhichP ),
         pViewData   ( NULL ),
-        bIsAdvanced ( FALSE )
+        bIsAdvanced ( false )
 {
     if ( pQueryData ) theQueryData = *pQueryData;
 }
@@ -276,13 +276,13 @@ void ScQueryItem::SetAdvancedQuerySource(const ScRange* pSource)
     if (pSource)
     {
         aAdvSource = *pSource;
-        bIsAdvanced = TRUE;
+        bIsAdvanced = sal_True;
     }
     else
-        bIsAdvanced = FALSE;
+        bIsAdvanced = false;
 }
 
-BOOL ScQueryItem::GetAdvancedQuerySource(ScRange& rSource) const
+sal_Bool ScQueryItem::GetAdvancedQuerySource(ScRange& rSource) const
 {
     rSource = aAdvSource;
     return bIsAdvanced;
@@ -320,7 +320,7 @@ SfxPoolItem* ScQueryItem::Clone( SfxItemPool * ) const
 //      ScSubTotalItem - Daten fuer den Zwischenergebnisdialog
 // -----------------------------------------------------------------------
 
-ScSubTotalItem::ScSubTotalItem( USHORT                  nWhichP,
+ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
                                 ScViewData*             ptrViewData,
                                 const ScSubTotalParam*  pSubTotalData ) :
         SfxPoolItem ( nWhichP ),
@@ -331,7 +331,7 @@ ScSubTotalItem::ScSubTotalItem( USHORT                  nWhichP,
 
 //------------------------------------------------------------------------
 
-ScSubTotalItem::ScSubTotalItem( USHORT                  nWhichP,
+ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
                                 const ScSubTotalParam*  pSubTotalData ) :
         SfxPoolItem ( nWhichP ),
         pViewData   ( NULL )
@@ -380,7 +380,7 @@ SfxPoolItem* ScSubTotalItem::Clone( SfxItemPool * ) const
 
 //------------------------------------------------------------------------
 
-bool ScSubTotalItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /* nMemberUd */ ) const
+bool ScSubTotalItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nMemberUd */ ) const
 {
     // Return empty value as there is no useful conversion
     rVal = com::sun::star::uno::Any();
@@ -391,7 +391,7 @@ bool ScSubTotalItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /* nMember
 //      ScUserListItem - Transporter fuer den Benutzerlisten-TabPage
 // -----------------------------------------------------------------------
 
-ScUserListItem::ScUserListItem( USHORT nWhichP )
+ScUserListItem::ScUserListItem( sal_uInt16 nWhichP )
     :   SfxPoolItem ( nWhichP ),
         pUserList   ( NULL )
 {
@@ -427,7 +427,7 @@ int ScUserListItem::operator==( const SfxPoolItem& rItem ) const
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
     const ScUserListItem& r = (const ScUserListItem&)rItem;
-    BOOL bEqual = FALSE;
+    sal_Bool bEqual = false;
 
     if ( !pUserList || !(r.pUserList) )
         bEqual = ( !pUserList && !(r.pUserList) );
@@ -458,7 +458,7 @@ void ScUserListItem::SetUserList( const ScUserList& rUserList )
 // -----------------------------------------------------------------------
 
 ScConsolidateItem::ScConsolidateItem(
-                            USHORT                      nWhichP,
+                            sal_uInt16                      nWhichP,
                             const ScConsolidateParam*   pConsolidateData ) :
         SfxPoolItem ( nWhichP )
 {
@@ -509,8 +509,8 @@ SfxPoolItem* ScConsolidateItem::Clone( SfxItemPool * ) const
 //      ScPivotItem - Daten fuer den Pivot-Dialog
 // -----------------------------------------------------------------------
 
-ScPivotItem::ScPivotItem( USHORT nWhichP, const ScDPSaveData* pData,
-                             const ScRange* pRange, BOOL bNew ) :
+ScPivotItem::ScPivotItem( sal_uInt16 nWhichP, const ScDPSaveData* pData,
+                             const ScRange* pRange, sal_Bool bNew ) :
         SfxPoolItem ( nWhichP )
 {
     //  pSaveData must always exist
@@ -572,7 +572,7 @@ SfxPoolItem* ScPivotItem::Clone( SfxItemPool * ) const
 //      ScSolveItem - Daten fuer den Solver-Dialog
 // -----------------------------------------------------------------------
 
-ScSolveItem::ScSolveItem( USHORT                nWhichP,
+ScSolveItem::ScSolveItem( sal_uInt16                nWhichP,
                           const ScSolveParam*   pSolveData )
     :   SfxPoolItem ( nWhichP )
 {
@@ -622,7 +622,7 @@ SfxPoolItem* ScSolveItem::Clone( SfxItemPool * ) const
 //      ScTabOpItem - Daten fuer den TabOp-Dialog
 // -----------------------------------------------------------------------
 
-ScTabOpItem::ScTabOpItem( USHORT                nWhichP,
+ScTabOpItem::ScTabOpItem( sal_uInt16                nWhichP,
                           const ScTabOpParam*   pTabOpData )
     :   SfxPoolItem ( nWhichP )
 {
@@ -673,7 +673,7 @@ SfxPoolItem* ScTabOpItem::Clone( SfxItemPool * ) const
 //      ScCondFrmtItem - Daten fuer den Dialog bedingte Formatierung
 // -----------------------------------------------------------------------
 
-ScCondFrmtItem::ScCondFrmtItem( USHORT nWhichP,
+ScCondFrmtItem::ScCondFrmtItem( sal_uInt16 nWhichP,
 //!                             const ScConditionalFormat* pCondFrmt )
                                 const ScConditionalFormat& rCondFrmt )
     :   SfxPoolItem ( nWhichP ),

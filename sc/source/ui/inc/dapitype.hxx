@@ -52,7 +52,7 @@ private:
     HelpButton      aBtnHelp;
 
 public:
-            ScDataPilotSourceTypeDlg( Window* pParent, BOOL bEnableExternal );
+            ScDataPilotSourceTypeDlg( Window* pParent, sal_Bool bEnableExternal );
             ~ScDataPilotSourceTypeDlg();
 
     bool IsDatabase() const;

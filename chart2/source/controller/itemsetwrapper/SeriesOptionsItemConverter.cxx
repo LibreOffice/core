@@ -187,7 +187,7 @@ SeriesOptionsItemConverter::~SeriesOptionsItemConverter()
 {
 }
 
-const USHORT * SeriesOptionsItemConverter::GetWhichPairs() const
+const sal_uInt16 * SeriesOptionsItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nSeriesOptionsWhichPairs;
@@ -198,7 +198,7 @@ bool SeriesOptionsItemConverter::GetItemProperty( tWhichIdType /*nWhichId*/, tPr
     return false;
 }
 
-bool SeriesOptionsItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
+bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;
@@ -373,7 +373,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxIte
 }
 
 void SeriesOptionsItemConverter::FillSpecialItem(
-    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )
@@ -435,7 +435,7 @@ void SeriesOptionsItemConverter::FillSpecialItem(
         {
             SvULongs aList;
             for ( sal_Int32 nN=0; nN<m_aSupportedMissingValueTreatments.getLength(); nN++ )
-                aList.Insert( m_aSupportedMissingValueTreatments[nN], sal::static_int_cast< USHORT >(nN) );
+                aList.Insert( m_aSupportedMissingValueTreatments[nN], sal::static_int_cast< sal_uInt16 >(nN) );
             rOutItemSet.Put( SfxIntegerListItem( nWhichId, aList ) );
             break;
         }

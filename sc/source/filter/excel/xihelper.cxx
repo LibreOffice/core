@@ -811,7 +811,7 @@ XclImpCachedValue::~XclImpCachedValue()
 {
 }
 
-USHORT XclImpCachedValue::GetScError() const
+sal_uInt16 XclImpCachedValue::GetScError() const
 {
     return (mnType == EXC_CACHEDVAL_ERROR) ? XclTools::GetScErrorCode( mnBoolErr ) : 0;
 }
@@ -851,7 +851,7 @@ ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
 {
     ScMatrixRef xScMatrix;
     DBG_ASSERT( mnScCols * mnScRows == maValueList.size(), "XclImpCachedMatrix::CreateScMatrix - element count mismatch" );
-    if( mnScCols && mnScRows && static_cast< ULONG >( mnScCols * mnScRows ) <= maValueList.size() )
+    if( mnScCols && mnScRows && static_cast< sal_uLong >( mnScCols * mnScRows ) <= maValueList.size() )
     {
         xScMatrix = new ScMatrix( mnScCols, mnScRows );
         XclImpValueList::const_iterator itValue = maValueList.begin();

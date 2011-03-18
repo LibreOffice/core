@@ -43,6 +43,7 @@ ModelessDialog RID_SCDLG_SIMPLEREF
     };
     Edit ED_ASSIGN
     {
+        HelpID = "sc:Edit:RID_SCDLG_SIMPLEREF:ED_ASSIGN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 48 , 6 ) ;
         Size = MAP_APPFONT ( 90 , 12 ) ;
@@ -51,6 +52,7 @@ ModelessDialog RID_SCDLG_SIMPLEREF
     };
     ImageButton RB_ASSIGN
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_SIMPLEREF:RB_ASSIGN";
         Pos = MAP_APPFONT ( 142 , 5 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;

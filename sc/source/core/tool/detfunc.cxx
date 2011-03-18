@@ -110,7 +110,7 @@ private:
     SfxItemSet  aToTabSet;
     SfxItemSet  aFromTabSet;
     SfxItemSet  aCircleSet;         //! einzeln ?
-    USHORT      nMaxLevel;
+    sal_uInt16      nMaxLevel;
 
 public:
                 ScDetectiveData( SdrModel* pModel );
@@ -121,8 +121,8 @@ public:
     SfxItemSet& GetFromTabSet() { return aFromTabSet; }
     SfxItemSet& GetCircleSet()  { return aCircleSet; }
 
-    void        SetMaxLevel( USHORT nVal )      { nMaxLevel = nVal; }
-    USHORT      GetMaxLevel() const             { return nMaxLevel; }
+    void        SetMaxLevel( sal_uInt16 nVal )      { nMaxLevel = nVal; }
+    sal_uInt16      GetMaxLevel() const             { return nMaxLevel; }
 };
 
 class ScCommentData
@@ -142,11 +142,11 @@ private:
 ColorData ScDetectiveFunc::nArrowColor = 0;
 ColorData ScDetectiveFunc::nErrorColor = 0;
 ColorData ScDetectiveFunc::nCommentColor = 0;
-BOOL ScDetectiveFunc::bColorsInitialized = FALSE;
+sal_Bool ScDetectiveFunc::bColorsInitialized = false;
 
 //------------------------------------------------------------------------
 
-BOOL lcl_HasThickLine( SdrObject& rObj )
+sal_Bool lcl_HasThickLine( SdrObject& rObj )
 {
     // thin lines get width 0 -> everything greater 0 is a thick line
 
@@ -190,28 +190,28 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
 
     aArrowSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aCircle) ) );
     aArrowSet.Put( XLineStartWidthItem( 200 ) );
-    aArrowSet.Put( XLineStartCenterItem( TRUE ) );
+    aArrowSet.Put( XLineStartCenterItem( sal_True ) );
     aArrowSet.Put( XLineEndItem( aName, basegfx::B2DPolyPolygon(aTriangle) ) );
     aArrowSet.Put( XLineEndWidthItem( 200 ) );
-    aArrowSet.Put( XLineEndCenterItem( FALSE ) );
+    aArrowSet.Put( XLineEndCenterItem( false ) );
 
     aToTabSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aCircle) ) );
     aToTabSet.Put( XLineStartWidthItem( 200 ) );
-    aToTabSet.Put( XLineStartCenterItem( TRUE ) );
+    aToTabSet.Put( XLineStartCenterItem( sal_True ) );
     aToTabSet.Put( XLineEndItem( aName, basegfx::B2DPolyPolygon(aSquare) ) );
     aToTabSet.Put( XLineEndWidthItem( 300 ) );
-    aToTabSet.Put( XLineEndCenterItem( FALSE ) );
+    aToTabSet.Put( XLineEndCenterItem( false ) );
 
     aFromTabSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aSquare) ) );
     aFromTabSet.Put( XLineStartWidthItem( 300 ) );
-    aFromTabSet.Put( XLineStartCenterItem( TRUE ) );
+    aFromTabSet.Put( XLineStartCenterItem( sal_True ) );
     aFromTabSet.Put( XLineEndItem( aName, basegfx::B2DPolyPolygon(aTriangle) ) );
     aFromTabSet.Put( XLineEndWidthItem( 200 ) );
-    aFromTabSet.Put( XLineEndCenterItem( FALSE ) );
+    aFromTabSet.Put( XLineEndCenterItem( false ) );
 
     aCircleSet.Put( XLineColorItem( String(), Color( ScDetectiveFunc::GetErrorColor() ) ) );
     aCircleSet.Put( XFillStyleItem( XFILL_NONE ) );
-    USHORT nWidth = 55;     // 54 = 1 Pixel
+    sal_uInt16 nWidth = 55;     // 54 = 1 Pixel
     aCircleSet.Put( XLineWidthItem( nWidth ) );
 }
 
@@ -228,16 +228,16 @@ ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
 
     aCaptionSet.Put( XLineStartItem( aName, basegfx::B2DPolyPolygon(aTriangle) ) );
     aCaptionSet.Put( XLineStartWidthItem( 200 ) );
-    aCaptionSet.Put( XLineStartCenterItem( FALSE ) );
+    aCaptionSet.Put( XLineStartCenterItem( false ) );
     aCaptionSet.Put( XFillStyleItem( XFILL_SOLID ) );
     Color aYellow( ScDetectiveFunc::GetCommentColor() );
     aCaptionSet.Put( XFillColorItem( String(), aYellow ) );
 
     //  shadow
-    //  SdrShadowItem has FALSE, instead the shadow is set for the rectangle
+    //  SdrShadowItem has sal_False, instead the shadow is set for the rectangle
     //  only with SetSpecialTextBoxShadow when the object is created
     //  (item must be set to adjust objects from older files)
-    aCaptionSet.Put( SdrShadowItem( FALSE ) );
+    aCaptionSet.Put( SdrShadowItem( false ) );
     aCaptionSet.Put( SdrShadowXDistItem( 100 ) );
     aCaptionSet.Put( SdrShadowYDistItem( 100 ) );
 
@@ -247,8 +247,8 @@ ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
     aCaptionSet.Put( SdrTextUpperDistItem( 100 ) );
     aCaptionSet.Put( SdrTextLowerDistItem( 100 ) );
 
-    aCaptionSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
-    aCaptionSet.Put( SdrTextAutoGrowHeightItem( TRUE ) );
+    aCaptionSet.Put( SdrTextAutoGrowWidthItem( false ) );
+    aCaptionSet.Put( SdrTextAutoGrowHeightItem( sal_True ) );
 
     //  do use the default cell style, so the user has a chance to
     //  modify the font for the annotations
@@ -265,9 +265,9 @@ void ScCommentData::UpdateCaptionSet( const SfxItemSet& rItemSet )
     SfxWhichIter aWhichIter( rItemSet );
     const SfxPoolItem* pPoolItem = 0;
 
-    for( USHORT nWhich = aWhichIter.FirstWhich(); nWhich > 0; nWhich = aWhichIter.NextWhich() )
+    for( sal_uInt16 nWhich = aWhichIter.FirstWhich(); nWhich > 0; nWhich = aWhichIter.NextWhich() )
     {
-        if(rItemSet.GetItemState(nWhich, FALSE, &pPoolItem) == SFX_ITEM_SET)
+        if(rItemSet.GetItemState(nWhich, false, &pPoolItem) == SFX_ITEM_SET)
         {
             switch(nWhich)
             {
@@ -297,20 +297,20 @@ void ScCommentData::UpdateCaptionSet( const SfxItemSet& rItemSet )
 void ScDetectiveFunc::Modified()
 {
     if (pDoc->IsStreamValid(nTab))
-        pDoc->SetStreamValid(nTab, FALSE);
+        pDoc->SetStreamValid(nTab, false);
 }
 
-inline BOOL Intersect( SCCOL nStartCol1, SCROW nStartRow1, SCCOL nEndCol1, SCROW nEndRow1,
+inline sal_Bool Intersect( SCCOL nStartCol1, SCROW nStartRow1, SCCOL nEndCol1, SCROW nEndRow1,
                         SCCOL nStartCol2, SCROW nStartRow2, SCCOL nEndCol2, SCROW nEndRow2 )
 {
     return nEndCol1 >= nStartCol2 && nEndCol2 >= nStartCol1 &&
             nEndRow1 >= nStartRow2 && nEndRow2 >= nStartRow1;
 }
 
-BOOL ScDetectiveFunc::HasError( const ScRange& rRange, ScAddress& rErrPos )
+sal_Bool ScDetectiveFunc::HasError( const ScRange& rRange, ScAddress& rErrPos )
 {
     rErrPos = rRange.aStart;
-    USHORT nError = 0;
+    sal_uInt16 nError = 0;
 
     ScCellIterator aCellIter( pDoc, rRange);
     ScBaseCell* pCell = aCellIter.GetFirst();
@@ -391,7 +391,7 @@ Rectangle ScDetectiveFunc::GetDrawRect( SCCOL nCol, SCROW nRow ) const
     return GetDrawRect( nCol, nRow, nCol, nRow );
 }
 
-BOOL lcl_IsOtherTab( const basegfx::B2DPolyPolygon& rPolyPolygon )
+sal_Bool lcl_IsOtherTab( const basegfx::B2DPolyPolygon& rPolyPolygon )
 {
     //  test if rPolygon is the line end for "other table" (rectangle)
     if(1L == rPolyPolygon.count())
@@ -409,16 +409,16 @@ BOOL lcl_IsOtherTab( const basegfx::B2DPolyPolygon& rPolyPolygon )
     return false;
 }
 
-BOOL ScDetectiveFunc::HasArrow( const ScAddress& rStart,
+sal_Bool ScDetectiveFunc::HasArrow( const ScAddress& rStart,
                                     SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab )
 {
-    BOOL bStartAlien = ( rStart.Tab() != nTab );
-    BOOL bEndAlien   = ( nEndTab != nTab );
+    sal_Bool bStartAlien = ( rStart.Tab() != nTab );
+    sal_Bool bEndAlien   = ( nEndTab != nTab );
 
     if (bStartAlien && bEndAlien)
     {
         OSL_FAIL("bStartAlien && bEndAlien");
-        return TRUE;
+        return true;
     }
 
     Rectangle aStartRect;
@@ -432,7 +432,7 @@ BOOL ScDetectiveFunc::HasArrow( const ScAddress& rStart,
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
     DBG_ASSERT(pPage,"Page ?");
 
-    BOOL bFound = FALSE;
+    sal_Bool bFound = false;
     SdrObjListIter aIter( *pPage, IM_FLAT );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
@@ -442,18 +442,18 @@ BOOL ScDetectiveFunc::HasArrow( const ScAddress& rStart,
         {
             const SfxItemSet& rSet = pObject->GetMergedItemSet();
 
-            BOOL bObjStartAlien =
+            sal_Bool bObjStartAlien =
                 lcl_IsOtherTab( ((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).GetLineStartValue() );
-            BOOL bObjEndAlien =
+            sal_Bool bObjEndAlien =
                 lcl_IsOtherTab( ((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).GetLineEndValue() );
 
-            BOOL bStartHit = bStartAlien ? bObjStartAlien :
+            sal_Bool bStartHit = bStartAlien ? bObjStartAlien :
                                 ( !bObjStartAlien && aStartRect.IsInside(pObject->GetPoint(0)) );
-            BOOL bEndHit = bEndAlien ? bObjEndAlien :
+            sal_Bool bEndHit = bEndAlien ? bObjEndAlien :
                                 ( !bObjEndAlien && aEndRect.IsInside(pObject->GetPoint(1)) );
 
             if ( bStartHit && bEndHit )
-                bFound = TRUE;
+                bFound = sal_True;
         }
         pObject = aIter.Next();
     }
@@ -461,38 +461,38 @@ BOOL ScDetectiveFunc::HasArrow( const ScAddress& rStart,
     return bFound;
 }
 
-BOOL ScDetectiveFunc::IsNonAlienArrow( SdrObject* pObject )
+sal_Bool ScDetectiveFunc::IsNonAlienArrow( SdrObject* pObject )
 {
     if ( pObject->GetLayer()==SC_LAYER_INTERN &&
             pObject->IsPolyObj() && pObject->GetPointCount()==2 )
     {
         const SfxItemSet& rSet = pObject->GetMergedItemSet();
 
-        BOOL bObjStartAlien =
+        sal_Bool bObjStartAlien =
             lcl_IsOtherTab( ((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).GetLineStartValue() );
-        BOOL bObjEndAlien =
+        sal_Bool bObjEndAlien =
             lcl_IsOtherTab( ((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).GetLineEndValue() );
 
         return !bObjStartAlien && !bObjEndAlien;
     }
 
-    return FALSE;
+    return false;
 }
 
 //------------------------------------------------------------------------
 
 //  InsertXXX: called from DrawEntry/DrawAlienEntry and InsertObject
 
-BOOL ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
+sal_Bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
                                 SCCOL nRefStartCol, SCROW nRefStartRow,
                                 SCCOL nRefEndCol, SCROW nRefEndRow,
-                                BOOL bFromOtherTab, BOOL bRed,
+                                sal_Bool bFromOtherTab, sal_Bool bRed,
                                 ScDetectiveData& rData )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
 
-    BOOL bArea = ( nRefStartCol != nRefEndCol || nRefStartRow != nRefEndRow );
+    sal_Bool bArea = ( nRefStartCol != nRefEndCol || nRefStartRow != nRefEndRow );
     if (bArea && !bFromOtherTab)
     {
         // insert the rectangle before the arrow - this is relied on in FindFrameForObject
@@ -506,7 +506,7 @@ BOOL ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
         pPage->InsertObject( pBox );
         pModel->AddCalcUndo( new SdrUndoInsertObj( *pBox ) );
 
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, TRUE );
+        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, sal_True );
         pData->maStart.Set( nRefStartCol, nRefStartRow, nTab);
         pData->maEnd.Set( nRefEndCol, nRefEndRow, nTab);
     }
@@ -516,7 +516,7 @@ BOOL ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
 
     if (bFromOtherTab)
     {
-        BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+        sal_Bool bNegativePage = pDoc->IsNegativePage( nTab );
         long nPageSign = bNegativePage ? -1 : 1;
 
         aStartPos = Point( aEndPos.X() - 1000 * nPageSign, aEndPos.Y() - 1000 );
@@ -547,7 +547,7 @@ BOOL ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     pPage->InsertObject( pArrow );
     pModel->AddCalcUndo( new SdrUndoInsertObj( *pArrow ) );
 
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, TRUE );
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, sal_True );
     if (bFromOtherTab)
         pData->maStart.SetInvalid();
     else
@@ -556,17 +556,17 @@ BOOL ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     pData->maEnd.Set( nCol, nRow, nTab);
 
     Modified();
-    return TRUE;
+    return sal_True;
 }
 
-BOOL ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
-                                SCCOL nEndCol, SCROW nEndRow, BOOL bRed,
+sal_Bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
+                                SCCOL nEndCol, SCROW nEndRow, sal_Bool bRed,
                                 ScDetectiveData& rData )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
 
-    BOOL bArea = ( nStartCol != nEndCol || nStartRow != nEndRow );
+    sal_Bool bArea = ( nStartCol != nEndCol || nStartRow != nEndRow );
     if (bArea)
     {
         Rectangle aRect = GetDrawRect( nStartCol, nStartRow, nEndCol, nEndRow );
@@ -578,12 +578,12 @@ BOOL ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
         pPage->InsertObject( pBox );
         pModel->AddCalcUndo( new SdrUndoInsertObj( *pBox ) );
 
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, TRUE );
+        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, sal_True );
         pData->maStart.Set( nStartCol, nStartRow, nTab);
         pData->maEnd.Set( nEndCol, nEndRow, nTab);
     }
 
-    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+    sal_Bool bNegativePage = pDoc->IsNegativePage( nTab );
     long nPageSign = bNegativePage ? -1 : 1;
 
     Point aStartPos = GetDrawPos( nStartCol, nStartRow, DRAWPOS_DETARROW );
@@ -612,12 +612,12 @@ BOOL ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     pPage->InsertObject( pArrow );
     pModel->AddCalcUndo( new SdrUndoInsertObj( *pArrow ) );
 
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, TRUE );
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, sal_True );
     pData->maStart.Set( nStartCol, nStartRow, nTab);
     pData->maEnd.SetInvalid();
 
     Modified();
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
@@ -629,16 +629,16 @@ BOOL ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
 
 //      return FALSE: da war schon ein Pfeil
 
-BOOL ScDetectiveFunc::DrawEntry( SCCOL nCol, SCROW nRow,
+sal_Bool ScDetectiveFunc::DrawEntry( SCCOL nCol, SCROW nRow,
                                     const ScRange& rRef,
                                     ScDetectiveData& rData )
 {
     if ( HasArrow( rRef.aStart, nCol, nRow, nTab ) )
-        return FALSE;
+        return false;
 
     ScAddress aErrorPos;
-    BOOL bError = HasError( rRef, aErrorPos );
-    BOOL bAlien = ( rRef.aEnd.Tab() < nTab || rRef.aStart.Tab() > nTab );
+    sal_Bool bError = HasError( rRef, aErrorPos );
+    sal_Bool bAlien = ( rRef.aEnd.Tab() < nTab || rRef.aStart.Tab() > nTab );
 
     return InsertArrow( nCol, nRow,
                         rRef.aStart.Col(), rRef.aStart.Row(),
@@ -646,14 +646,14 @@ BOOL ScDetectiveFunc::DrawEntry( SCCOL nCol, SCROW nRow,
                         bAlien, bError, rData );
 }
 
-BOOL ScDetectiveFunc::DrawAlienEntry( const ScRange& rRef,
+sal_Bool ScDetectiveFunc::DrawAlienEntry( const ScRange& rRef,
                                         ScDetectiveData& rData )
 {
     if ( HasArrow( rRef.aStart, 0, 0, nTab+1 ) )
-        return FALSE;
+        return false;
 
     ScAddress aErrorPos;
-    BOOL bError = HasError( rRef, aErrorPos );
+    sal_Bool bError = HasError( rRef, aErrorPos );
 
     return InsertToOtherTab( rRef.aStart.Col(), rRef.aStart.Row(),
                                 rRef.aEnd.Col(), rRef.aEnd.Row(),
@@ -680,14 +680,14 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     pPage->InsertObject( pCircle );
     pModel->AddCalcUndo( new SdrUndoInsertObj( *pCircle ) );
 
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pCircle, TRUE );
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( pCircle, sal_True );
     pData->maStart.Set( nCol, nRow, nTab);
     pData->maEnd.SetInvalid();
 
     Modified();
 }
 
-void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, BOOL bDestPnt )
+void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, sal_Bool bDestPnt )
 {
     Rectangle aRect = GetDrawRect( nCol, nRow );
 
@@ -697,7 +697,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, BOOL bDestPnt )
 
     pPage->RecalcObjOrdNums();
 
-    ULONG nObjCount = pPage->GetObjCount();
+    sal_uLong nObjCount = pPage->GetObjCount();
     if (nObjCount)
     {
         long nDelCount = 0;
@@ -734,7 +734,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, BOOL bDestPnt )
 
 #define SC_DET_TOLERANCE    50
 
-inline BOOL RectIsPoints( const Rectangle& rRect, const Point& rStart, const Point& rEnd )
+inline sal_Bool RectIsPoints( const Rectangle& rRect, const Point& rStart, const Point& rEnd )
 {
     return rRect.Left()   >= rStart.X() - SC_DET_TOLERANCE
         && rRect.Left()   <= rStart.X() + SC_DET_TOLERANCE
@@ -761,7 +761,7 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
 
     pPage->RecalcObjOrdNums();
 
-    ULONG nObjCount = pPage->GetObjCount();
+    sal_uLong nObjCount = pPage->GetObjCount();
     if (nObjCount)
     {
         long nDelCount = 0;
@@ -798,10 +798,10 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
 
 //------------------------------------------------------------------------
 
-USHORT ScDetectiveFunc::InsertPredLevelArea( const ScRange& rRef,
-                                        ScDetectiveData& rData, USHORT nLevel )
+sal_uInt16 ScDetectiveFunc::InsertPredLevelArea( const ScRange& rRef,
+                                        ScDetectiveData& rData, sal_uInt16 nLevel )
 {
-    USHORT nResult = DET_INS_EMPTY;
+    sal_uInt16 nResult = DET_INS_EMPTY;
 
     ScCellIterator aCellIter( pDoc, rRef);
     ScBaseCell* pCell = aCellIter.GetFirst();
@@ -829,8 +829,8 @@ USHORT ScDetectiveFunc::InsertPredLevelArea( const ScRange& rRef,
     return nResult;
 }
 
-USHORT ScDetectiveFunc::InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetectiveData& rData,
-                                            USHORT nLevel )
+sal_uInt16 ScDetectiveFunc::InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetectiveData& rData,
+                                            sal_uInt16 nLevel )
 {
     ScBaseCell* pCell;
     pDoc->GetCell( nCol, nRow, nTab, pCell );
@@ -845,9 +845,9 @@ USHORT ScDetectiveFunc::InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetectiveData
 
     if (pFCell->GetDirty())
         pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
-    pFCell->SetRunning(TRUE);
+    pFCell->SetRunning(sal_True);
 
-    USHORT nResult = DET_INS_EMPTY;
+    sal_uInt16 nResult = DET_INS_EMPTY;
 
     ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
     ScRange aRef;
@@ -863,8 +863,8 @@ USHORT ScDetectiveFunc::InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetectiveData
 
             if ( nLevel < rData.GetMaxLevel() )
             {
-                USHORT nSubResult;
-                BOOL bArea = (aRef.aStart != aRef.aEnd);
+                sal_uInt16 nSubResult;
+                sal_Bool bArea = (aRef.aStart != aRef.aEnd);
                 if (bArea)
                     nSubResult = InsertPredLevelArea( aRef, rData, nLevel+1 );
                 else
@@ -893,15 +893,15 @@ USHORT ScDetectiveFunc::InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetectiveData
         }
     }
 
-    pFCell->SetRunning(FALSE);
+    pFCell->SetRunning(false);
 
     return nResult;
 }
 
-USHORT ScDetectiveFunc::FindPredLevelArea( const ScRange& rRef,
-                                                USHORT nLevel, USHORT nDeleteLevel )
+sal_uInt16 ScDetectiveFunc::FindPredLevelArea( const ScRange& rRef,
+                                                sal_uInt16 nLevel, sal_uInt16 nDeleteLevel )
 {
-    USHORT nResult = nLevel;
+    sal_uInt16 nResult = nLevel;
 
     ScCellIterator aCellIter( pDoc, rRef);
     ScBaseCell* pCell = aCellIter.GetFirst();
@@ -909,7 +909,7 @@ USHORT ScDetectiveFunc::FindPredLevelArea( const ScRange& rRef,
     {
         if (pCell->GetCellType() == CELLTYPE_FORMULA)
         {
-            USHORT nTemp = FindPredLevel( aCellIter.GetCol(), aCellIter.GetRow(), nLevel, nDeleteLevel );
+            sal_uInt16 nTemp = FindPredLevel( aCellIter.GetCol(), aCellIter.GetRow(), nLevel, nDeleteLevel );
             if (nTemp > nResult)
                 nResult = nTemp;
         }
@@ -921,7 +921,7 @@ USHORT ScDetectiveFunc::FindPredLevelArea( const ScRange& rRef,
 
                                             //  nDeleteLevel != 0   -> loeschen
 
-USHORT ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, USHORT nLevel, USHORT nDeleteLevel )
+sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nLevel, sal_uInt16 nDeleteLevel )
 {
     DBG_ASSERT( nLevel<1000, "Level" );
 
@@ -938,21 +938,21 @@ USHORT ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, USHORT nLevel, US
 
     if (pFCell->GetDirty())
         pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
-    pFCell->SetRunning(TRUE);
+    pFCell->SetRunning(sal_True);
 
-    USHORT nResult = nLevel;
-    BOOL bDelete = ( nDeleteLevel && nLevel == nDeleteLevel-1 );
+    sal_uInt16 nResult = nLevel;
+    sal_Bool bDelete = ( nDeleteLevel && nLevel == nDeleteLevel-1 );
 
     if ( bDelete )
     {
-        DeleteArrowsAt( nCol, nRow, TRUE );                 // Pfeile, die hierher zeigen
+        DeleteArrowsAt( nCol, nRow, sal_True );                 // Pfeile, die hierher zeigen
     }
 
     ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
     ScRange aRef;
     while ( aIter.GetNextRef( aRef) )
     {
-        BOOL bArea = ( aRef.aStart != aRef.aEnd );
+        sal_Bool bArea = ( aRef.aStart != aRef.aEnd );
 
         if ( bDelete )                  // Rahmen loeschen ?
         {
@@ -965,7 +965,7 @@ USHORT ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, USHORT nLevel, US
         {
             if ( HasArrow( aRef.aStart, nCol,nRow,nTab ) )
             {
-                USHORT nTemp;
+                sal_uInt16 nTemp;
                 if (bArea)
                     nTemp = FindPredLevelArea( aRef, nLevel+1, nDeleteLevel );
                 else
@@ -977,15 +977,15 @@ USHORT ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, USHORT nLevel, US
         }
     }
 
-    pFCell->SetRunning(FALSE);
+    pFCell->SetRunning(false);
 
     return nResult;
 }
 
 //------------------------------------------------------------------------
 
-USHORT ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiveData& rData,
-                                            USHORT nLevel )
+sal_uInt16 ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiveData& rData,
+                                            sal_uInt16 nLevel )
 {
     ScBaseCell* pCell;
     pDoc->GetCell( nCol, nRow, nTab, pCell );
@@ -1000,19 +1000,19 @@ USHORT ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiveDat
 
     if (pFCell->GetDirty())
         pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
-    pFCell->SetRunning(TRUE);
+    pFCell->SetRunning(sal_True);
 
-    USHORT nResult = DET_INS_EMPTY;
+    sal_uInt16 nResult = DET_INS_EMPTY;
 
     ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
     ScRange aRef;
     ScAddress aErrorPos;
-    BOOL bHasError = FALSE;
+    sal_Bool bHasError = false;
     while ( aIter.GetNextRef( aRef ) )
     {
         if (HasError( aRef, aErrorPos ))
         {
-            bHasError = TRUE;
+            bHasError = sal_True;
             if (DrawEntry( nCol, nRow, ScRange( aErrorPos), rData ))
                 nResult = DET_INS_INSERTED;
 
@@ -1027,7 +1027,7 @@ USHORT ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiveDat
         }
     }
 
-    pFCell->SetRunning(FALSE);
+    pFCell->SetRunning(false);
 
                                                     // Blaetter ?
     if (!bHasError)
@@ -1039,12 +1039,12 @@ USHORT ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiveDat
 
 //------------------------------------------------------------------------
 
-USHORT ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                        ScDetectiveData& rData, USHORT nLevel )
+sal_uInt16 ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                                        ScDetectiveData& rData, sal_uInt16 nLevel )
 {
     //  ueber ganzes Dokument
 
-    USHORT nResult = DET_INS_EMPTY;
+    sal_uInt16 nResult = DET_INS_EMPTY;
     ScCellIterator aCellIter( pDoc, 0,0,0, MAXCOL,MAXROW,MAXTAB );          // alle Tabellen
     ScBaseCell* pCell = aCellIter.GetFirst();
     while (pCell)
@@ -1052,11 +1052,11 @@ USHORT ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, 
         if (pCell->GetCellType() == CELLTYPE_FORMULA)
         {
             ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
-            BOOL bRunning = pFCell->IsRunning();
+            sal_Bool bRunning = pFCell->IsRunning();
 
             if (pFCell->GetDirty())
                 pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
-            pFCell->SetRunning(TRUE);
+            pFCell->SetRunning(sal_True);
 
             ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
             ScRange aRef;
@@ -1068,8 +1068,8 @@ USHORT ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, 
                             aRef.aStart.Col(),aRef.aStart.Row(),
                             aRef.aEnd.Col(),aRef.aEnd.Row() ))
                     {
-                        BOOL bAlien = ( aCellIter.GetTab() != nTab );
-                        BOOL bDrawRet;
+                        sal_Bool bAlien = ( aCellIter.GetTab() != nTab );
+                        sal_Bool bDrawRet;
                         if (bAlien)
                             bDrawRet = DrawAlienEntry( aRef, rData );
                         else
@@ -1092,7 +1092,7 @@ USHORT ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, 
 
                                 if ( nLevel < rData.GetMaxLevel() )
                                 {
-                                    USHORT nSubResult = InsertSuccLevel(
+                                    sal_uInt16 nSubResult = InsertSuccLevel(
                                                             aCellIter.GetCol(), aCellIter.GetRow(),
                                                             aCellIter.GetCol(), aCellIter.GetRow(),
                                                             rData, nLevel+1 );
@@ -1128,13 +1128,13 @@ USHORT ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, 
     return nResult;
 }
 
-USHORT ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                        USHORT nLevel, USHORT nDeleteLevel )
+sal_uInt16 ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                                        sal_uInt16 nLevel, sal_uInt16 nDeleteLevel )
 {
     DBG_ASSERT( nLevel<1000, "Level" );
 
-    USHORT nResult = nLevel;
-    BOOL bDelete = ( nDeleteLevel && nLevel == nDeleteLevel-1 );
+    sal_uInt16 nResult = nLevel;
+    sal_Bool bDelete = ( nDeleteLevel && nLevel == nDeleteLevel-1 );
 
     ScCellIterator aCellIter( pDoc, 0,0, nTab, MAXCOL,MAXROW, nTab );
     ScBaseCell* pCell = aCellIter.GetFirst();
@@ -1143,11 +1143,11 @@ USHORT ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SC
         if (pCell->GetCellType() == CELLTYPE_FORMULA)
         {
             ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
-            BOOL bRunning = pFCell->IsRunning();
+            sal_Bool bRunning = pFCell->IsRunning();
 
             if (pFCell->GetDirty())
                 pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
-            pFCell->SetRunning(TRUE);
+            pFCell->SetRunning(sal_True);
 
             ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
             ScRange aRef;
@@ -1166,13 +1166,13 @@ USHORT ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SC
                                 DeleteBox( aRef.aStart.Col(), aRef.aStart.Row(),
                                                 aRef.aEnd.Col(), aRef.aEnd.Row() );
                             }
-                            DeleteArrowsAt( aRef.aStart.Col(), aRef.aStart.Row(), FALSE );
+                            DeleteArrowsAt( aRef.aStart.Col(), aRef.aStart.Row(), false );
                         }
                         else if ( !bRunning &&
                                 HasArrow( aRef.aStart,
                                             aCellIter.GetCol(),aCellIter.GetRow(),aCellIter.GetTab() ) )
                         {
-                            USHORT nTemp = FindSuccLevel( aCellIter.GetCol(), aCellIter.GetRow(),
+                            sal_uInt16 nTemp = FindSuccLevel( aCellIter.GetCol(), aCellIter.GetRow(),
                                                             aCellIter.GetCol(), aCellIter.GetRow(),
                                                             nLevel+1, nDeleteLevel );
                             if (nTemp > nResult)
@@ -1195,16 +1195,16 @@ USHORT ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SC
 //  --------------------------------------------------------------------------------
 //
 
-BOOL ScDetectiveFunc::ShowPred( SCCOL nCol, SCROW nRow )
+sal_Bool ScDetectiveFunc::ShowPred( SCCOL nCol, SCROW nRow )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
-        return FALSE;
+        return false;
 
     ScDetectiveData aData( pModel );
 
-    USHORT nMaxLevel = 0;
-    USHORT nResult = DET_INS_CONTINUE;
+    sal_uInt16 nMaxLevel = 0;
+    sal_uInt16 nResult = DET_INS_CONTINUE;
     while (nResult == DET_INS_CONTINUE && nMaxLevel < 1000)
     {
         aData.SetMaxLevel( nMaxLevel );
@@ -1215,16 +1215,16 @@ BOOL ScDetectiveFunc::ShowPred( SCCOL nCol, SCROW nRow )
     return ( nResult == DET_INS_INSERTED );
 }
 
-BOOL ScDetectiveFunc::ShowSucc( SCCOL nCol, SCROW nRow )
+sal_Bool ScDetectiveFunc::ShowSucc( SCCOL nCol, SCROW nRow )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
-        return FALSE;
+        return false;
 
     ScDetectiveData aData( pModel );
 
-    USHORT nMaxLevel = 0;
-    USHORT nResult = DET_INS_CONTINUE;
+    sal_uInt16 nMaxLevel = 0;
+    sal_uInt16 nResult = DET_INS_CONTINUE;
     while (nResult == DET_INS_CONTINUE && nMaxLevel < 1000)
     {
         aData.SetMaxLevel( nMaxLevel );
@@ -1235,56 +1235,56 @@ BOOL ScDetectiveFunc::ShowSucc( SCCOL nCol, SCROW nRow )
     return ( nResult == DET_INS_INSERTED );
 }
 
-BOOL ScDetectiveFunc::ShowError( SCCOL nCol, SCROW nRow )
+sal_Bool ScDetectiveFunc::ShowError( SCCOL nCol, SCROW nRow )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
-        return FALSE;
+        return false;
 
     ScRange aRange( nCol, nRow, nTab );
     ScAddress aErrPos;
     if ( !HasError( aRange,aErrPos ) )
-        return FALSE;
+        return false;
 
     ScDetectiveData aData( pModel );
 
     aData.SetMaxLevel( 1000 );
-    USHORT nResult = InsertErrorLevel( nCol, nRow, aData, 0 );
+    sal_uInt16 nResult = InsertErrorLevel( nCol, nRow, aData, 0 );
 
     return ( nResult == DET_INS_INSERTED );
 }
 
-BOOL ScDetectiveFunc::DeleteSucc( SCCOL nCol, SCROW nRow )
+sal_Bool ScDetectiveFunc::DeleteSucc( SCCOL nCol, SCROW nRow )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
-        return FALSE;
+        return false;
 
-    USHORT nLevelCount = FindSuccLevel( nCol, nRow, nCol, nRow, 0, 0 );
+    sal_uInt16 nLevelCount = FindSuccLevel( nCol, nRow, nCol, nRow, 0, 0 );
     if ( nLevelCount )
         FindSuccLevel( nCol, nRow, nCol, nRow, 0, nLevelCount );            // loeschen
 
     return ( nLevelCount != 0 );
 }
 
-BOOL ScDetectiveFunc::DeletePred( SCCOL nCol, SCROW nRow )
+sal_Bool ScDetectiveFunc::DeletePred( SCCOL nCol, SCROW nRow )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
-        return FALSE;
+        return false;
 
-    USHORT nLevelCount = FindPredLevel( nCol, nRow, 0, 0 );
+    sal_uInt16 nLevelCount = FindPredLevel( nCol, nRow, 0, 0 );
     if ( nLevelCount )
         FindPredLevel( nCol, nRow, 0, nLevelCount );            // loeschen
 
     return ( nLevelCount != 0 );
 }
 
-BOOL ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
+sal_Bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
-        return FALSE;
+        return false;
 
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
     DBG_ASSERT(pPage,"Page ?");
@@ -1292,7 +1292,7 @@ BOOL ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
     pPage->RecalcObjOrdNums();
 
     long    nDelCount = 0;
-    ULONG   nObjCount = pPage->GetObjCount();
+    sal_uLong   nObjCount = pPage->GetObjCount();
     if (nObjCount)
     {
         SdrObject** ppObj = new SdrObject*[nObjCount];
@@ -1303,11 +1303,11 @@ BOOL ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
         {
             if ( pObject->GetLayer() == SC_LAYER_INTERN )
             {
-                BOOL bDoThis = TRUE;
+                sal_Bool bDoThis = sal_True;
                 if ( eWhat != SC_DET_ALL )
                 {
-                    BOOL bCircle = ( pObject->ISA(SdrCircObj) );
-                    BOOL bCaption = ScDrawLayer::IsNoteCaption( pObject );
+                    sal_Bool bCircle = ( pObject->ISA(SdrCircObj) );
+                    sal_Bool bCaption = ScDrawLayer::IsNoteCaption( pObject );
                     if ( eWhat == SC_DET_DETECTIVE )        // Detektiv, aus Menue
                         bDoThis = !bCaption;                // auch Kreise
                     else if ( eWhat == SC_DET_CIRCLES )     // Kreise, wenn neue erzeugt werden
@@ -1341,14 +1341,14 @@ BOOL ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
     return ( nDelCount != 0 );
 }
 
-BOOL ScDetectiveFunc::MarkInvalid(BOOL& rOverflow)
+sal_Bool ScDetectiveFunc::MarkInvalid(sal_Bool& rOverflow)
 {
-    rOverflow = FALSE;
+    rOverflow = false;
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
-        return FALSE;
+        return false;
 
-    BOOL bDeleted = DeleteAll( SC_DET_CIRCLES );        // nur die Kreise
+    sal_Bool bDeleted = DeleteAll( SC_DET_CIRCLES );        // nur die Kreise
 
     ScDetectiveData aData( pModel );
     long nInsCount = 0;
@@ -1362,7 +1362,7 @@ BOOL ScDetectiveFunc::MarkInvalid(BOOL& rOverflow)
     const ScPatternAttr* pPattern = aAttrIter.GetNext( nCol, nRow1, nRow2 );
     while ( pPattern && nInsCount < SC_DET_MAXCIRCLE )
     {
-        ULONG nIndex = ((const SfxUInt32Item&)pPattern->GetItem(ATTR_VALIDDATA)).GetValue();
+        sal_uLong nIndex = ((const SfxUInt32Item&)pPattern->GetItem(ATTR_VALIDDATA)).GetValue();
         if (nIndex)
         {
             const ScValidationData* pData = pDoc->GetValidationEntry( nIndex );
@@ -1370,7 +1370,7 @@ BOOL ScDetectiveFunc::MarkInvalid(BOOL& rOverflow)
             {
                 //  Zellen in dem Bereich durchgehen
 
-                BOOL bMarkEmpty = !pData->IsIgnoreBlank();
+                sal_Bool bMarkEmpty = !pData->IsIgnoreBlank();
                 SCROW nNextRow = nRow1;
                 SCROW nRow;
                 ScCellIterator aCellIter( pDoc, nCol,nRow1,nTab, nCol,nRow2,nTab );
@@ -1405,7 +1405,7 @@ BOOL ScDetectiveFunc::MarkInvalid(BOOL& rOverflow)
     }
 
     if ( nInsCount >= SC_DET_MAXCIRCLE )
-        rOverflow = TRUE;
+        rOverflow = sal_True;
 
     return ( bDeleted || nInsCount != 0 );
 }
@@ -1520,12 +1520,12 @@ void ScDetectiveFunc::UpdateAllArrowColors()
             {
                 if ( pObject->GetLayer() == SC_LAYER_INTERN )
                 {
-                    BOOL bArrow = FALSE;
-                    BOOL bError = FALSE;
+                    sal_Bool bArrow = false;
+                    sal_Bool bError = false;
 
                     ScAddress aPos;
                     ScRange aSource;
-                    BOOL bDummy;
+                    sal_Bool bDummy;
                     ScDetectiveObjType eType = GetDetectiveObjectType( pObject, nObjTab, aPos, aSource, bDummy );
                     if ( eType == SC_DETOBJ_ARROW || eType == SC_DETOBJ_TOOTHERTAB )
                     {
@@ -1533,9 +1533,9 @@ void ScDetectiveFunc::UpdateAllArrowColors()
 
                         ScAddress aErrPos;
                         if ( HasError( aSource, aErrPos ) )
-                            bError = TRUE;
+                            bError = sal_True;
                         else
-                            bArrow = TRUE;
+                            bArrow = sal_True;
                     }
                     else if ( eType == SC_DETOBJ_FROMOTHERTAB )
                     {
@@ -1545,15 +1545,15 @@ void ScDetectiveFunc::UpdateAllArrowColors()
 
                         ScAddress aErrPos;
                         if ( HasError( ScRange( aPos), aErrPos ) )
-                            bError = TRUE;
+                            bError = sal_True;
                         else
-                            bArrow = TRUE;
+                            bArrow = sal_True;
                     }
                     else if ( eType == SC_DETOBJ_CIRCLE )
                     {
                         //  circles (error marks) are always red
 
-                        bError = TRUE;
+                        bError = sal_True;
                     }
                     else if ( eType == SC_DETOBJ_NONE )
                     {
@@ -1561,7 +1561,7 @@ void ScDetectiveFunc::UpdateAllArrowColors()
 
                         if ( pObject->ISA( SdrRectObj ) && !pObject->ISA( SdrCaptionObj ) )
                         {
-                            bArrow = TRUE;
+                            bArrow = sal_True;
                         }
                     }
 
@@ -1579,17 +1579,17 @@ void ScDetectiveFunc::UpdateAllArrowColors()
     }
 }
 
-BOOL ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
+sal_Bool ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
 {
     //  find the rectangle for an arrow (always the object directly before the arrow)
     //  rRange must be initialized to the source cell of the arrow (start of area)
 
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
-    if (!pModel) return FALSE;
+    if (!pModel) return false;
 
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
     DBG_ASSERT(pPage,"Page ?");
-    if (!pPage) return FALSE;
+    if (!pPage) return false;
 
     // test if the object is a direct page member
     if( pObject && pObject->GetPage() && (pObject->GetPage() == pObject->GetObjList()) )
@@ -1607,18 +1607,18 @@ BOOL ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
                 if ( pPrevData && pPrevData->maStart.IsValid() && pPrevData->maEnd.IsValid() && (pPrevData->maStart == rRange.aStart) )
                 {
                     rRange.aEnd = pPrevData->maEnd;
-                    return TRUE;
+                    return sal_True;
                 }
             }
         }
     }
-    return FALSE;
+    return false;
 }
 
 ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, SCTAB nObjTab,
-                                ScAddress& rPosition, ScRange& rSource, BOOL& rRedLine )
+                                ScAddress& rPosition, ScRange& rSource, sal_Bool& rRedLine )
 {
-    rRedLine = FALSE;
+    rRedLine = false;
     ScDetectiveObjType eType = SC_DETOBJ_NONE;
 
     if ( pObject && pObject->GetLayer() == SC_LAYER_INTERN )
@@ -1651,7 +1651,7 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, 
 
                 ColorData nObjColor = ((const XLineColorItem&)pObject->GetMergedItem(XATTR_LINECOLOR)).GetColorValue().GetColor();
                 if ( nObjColor == GetErrorColor() && nObjColor != GetArrowColor() )
-                    rRedLine = TRUE;
+                    rRedLine = sal_True;
             }
             else if ( pObject->ISA(SdrCircObj) )
             {
@@ -1671,7 +1671,7 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, 
 
 void ScDetectiveFunc::InsertObject( ScDetectiveObjType eType,
                             const ScAddress& rPosition, const ScRange& rSource,
-                            BOOL bRedLine )
+                            sal_Bool bRedLine )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel) return;
@@ -1731,10 +1731,10 @@ void ScDetectiveFunc::InitializeColors()
     nErrorColor   = rColorCfg.GetColorValue(svtools::CALCDETECTIVEERROR).nColor;
     nCommentColor = rColorCfg.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor;
 
-    bColorsInitialized = TRUE;
+    bColorsInitialized = sal_True;
 }
 
-BOOL ScDetectiveFunc::IsColorsInitialized()
+sal_Bool ScDetectiveFunc::IsColorsInitialized()
 {
     return bColorsInitialized;
 }

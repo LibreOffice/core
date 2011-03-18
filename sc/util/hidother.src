@@ -24,39 +24,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "../inc/scfuncs.hrc"           // HID_FUNC_XXX
+#include "../inc/helpids.h"
 
 //  Help-IDs fuer Dokument-Fenster
 
 hidspecial HID_SC_WIN_GRIDWIN    { HelpID = HID_SC_WIN_GRIDWIN; };
 hidspecial HID_SC_WIN_PREVIEW    { HelpID = HID_SC_WIN_PREVIEW; };
-
-//  Help-IDs fuer Shells (Helferlein)
-
-hidspecial HID_SCSHELL_TABVWSH   { HelpID = HID_SCSHELL_TABVWSH; };
-hidspecial HID_SCSHELL_PREVWSH   { HelpID = HID_SCSHELL_PREVWSH; };
-hidspecial HID_SCSHELL_AUDIT     { HelpID = HID_SCSHELL_AUDIT; };
-hidspecial HID_SCSHELL_PIVOTSH   { HelpID = HID_SCSHELL_PIVOTSH; };
-hidspecial HID_SCSHELL_DRAWSH    { HelpID = HID_SCSHELL_DRAWSH; };
-hidspecial HID_SCSHELL_DRTXTOB   { HelpID = HID_SCSHELL_DRTXTOB; };
-hidspecial HID_SCSHELL_DRAWFORMSH{ HelpID = HID_SCSHELL_DRAWFORMSH ; };
-
-hidspecial HID_SCSHELL_CELLSH       { HelpID = HID_SCSHELL_CELLSH       ; };
-hidspecial HID_SCSHELL_FORMATSH     { HelpID = HID_SCSHELL_FORMATSH     ; };
-hidspecial HID_SCSHELL_OLEOBEJCTSH  { HelpID = HID_SCSHELL_OLEOBEJCTSH  ; };
-hidspecial HID_SCSHELL_CHARTSH      { HelpID = HID_SCSHELL_CHARTSH      ; };
-hidspecial HID_SCSHELL_GRAPHIC      { HelpID = HID_SCSHELL_GRAPHIC      ; };
-hidspecial HID_SCSHELL_PAGEBREAK    { HelpID = HID_SCSHELL_PAGEBREAK    ; };
-
-//  Help-IDs fuer Standard-Vorlagen
-
-hidspecial HID_SC_SHEET_CELL_STD    { HelpID = HID_SC_SHEET_CELL_STD; };
-hidspecial HID_SC_SHEET_CELL_ERG    { HelpID = HID_SC_SHEET_CELL_ERG; };
-hidspecial HID_SC_SHEET_CELL_ERG1   { HelpID = HID_SC_SHEET_CELL_ERG1; };
-hidspecial HID_SC_SHEET_CELL_UEB    { HelpID = HID_SC_SHEET_CELL_UEB; };
-hidspecial HID_SC_SHEET_CELL_UEB1   { HelpID = HID_SC_SHEET_CELL_UEB1; };
-hidspecial HID_SC_SHEET_PAGE_STD    { HelpID = HID_SC_SHEET_PAGE_STD; };
-hidspecial HID_SC_SHEET_PAGE_REP    { HelpID = HID_SC_SHEET_PAGE_REP; };
 
 //  Elemente in der Eingabezeile
 
@@ -497,7 +470,3 @@ hidspecial HID_DAI_FUNC_DIFFWEEKS   { HelpID = HID_DAI_FUNC_DIFFWEEKS; };
 hidspecial HID_DAI_FUNC_DIFFYEARS   { HelpID = HID_DAI_FUNC_DIFFYEARS; };
 hidspecial HID_DAI_FUNC_ROT13       { HelpID = HID_DAI_FUNC_ROT13; };
 
-//  These HelpIDs do appear in resources, but don't have hid list entries
-//  generated from there, because of the use of macros (#95943#):
-
-hidspecial SID_RENAME_OBJECT        { HelpID = SID_RENAME_OBJECT; };

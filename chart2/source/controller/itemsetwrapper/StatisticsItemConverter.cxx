@@ -154,7 +154,7 @@ uno::Reference< beans::XPropertySet > lcl_getEquationProperties(
     {
         SvxChartRegress eRegress = CHREGRESS_NONE;
         const SfxPoolItem *pPoolItem = NULL;
-        if( pItemSet->GetItemState( SCHATTR_REGRESSION_TYPE, TRUE, &pPoolItem ) == SFX_ITEM_SET )
+        if( pItemSet->GetItemState( SCHATTR_REGRESSION_TYPE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
         {
             eRegress = static_cast< const SvxChartRegressItem * >( pPoolItem )->GetValue();
             bEquationExists = ( eRegress != CHREGRESS_NONE );
@@ -204,7 +204,7 @@ StatisticsItemConverter::StatisticsItemConverter(
 StatisticsItemConverter::~StatisticsItemConverter()
 {}
 
-const USHORT * StatisticsItemConverter::GetWhichPairs() const
+const sal_uInt16 * StatisticsItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nStatWhichPairs;
@@ -218,7 +218,7 @@ bool StatisticsItemConverter::GetItemProperty(
 }
 
 bool StatisticsItemConverter::ApplySpecialItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet )
+    sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;
@@ -522,7 +522,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
 }
 
 void StatisticsItemConverter::FillSpecialItem(
-    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )

@@ -60,6 +60,7 @@ ModelessDialog RID_SCDLG_AREAS
     };
     ListBox LB_PRINTAREA
     {
+        HelpID = "sc:ListBox:RID_SCDLG_AREAS:LB_PRINTAREA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 60 ) ;
@@ -74,12 +75,14 @@ ModelessDialog RID_SCDLG_AREAS
     };
     Edit ED_PRINTAREA
     {
+        HelpID = "sc:Edit:RID_SCDLG_AREAS:ED_PRINTAREA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 106 , 14 ) ;
         Size = MAP_APPFONT ( 131 , 12 ) ;
     };
     ImageButton RB_PRINTAREA
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_AREAS:RB_PRINTAREA";
         Pos = MAP_APPFONT ( 239 , 13 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -93,6 +96,7 @@ ModelessDialog RID_SCDLG_AREAS
     };
     ListBox LB_REPEATROW
     {
+        HelpID = "sc:ListBox:RID_SCDLG_AREAS:LB_REPEATROW";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 90 , 60 ) ;
@@ -105,12 +109,14 @@ ModelessDialog RID_SCDLG_AREAS
     };
     Edit ED_REPEATROW
     {
+        HelpID = "sc:Edit:RID_SCDLG_AREAS:ED_REPEATROW";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 106 , 43 ) ;
         Size = MAP_APPFONT ( 131 , 12 ) ;
     };
     ImageButton RB_REPEATROW
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_AREAS:RB_REPEATROW";
         Pos = MAP_APPFONT ( 239 , 42 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -124,6 +130,7 @@ ModelessDialog RID_SCDLG_AREAS
     };
     ListBox LB_REPEATCOL
     {
+        HelpID = "sc:ListBox:RID_SCDLG_AREAS:LB_REPEATCOL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 72 ) ;
         Size = MAP_APPFONT ( 90 , 60 ) ;
@@ -136,12 +143,14 @@ ModelessDialog RID_SCDLG_AREAS
     };
     Edit ED_REPEATCOL
     {
+        HelpID = "sc:Edit:RID_SCDLG_AREAS:ED_REPEATCOL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 106 , 72 ) ;
         Size = MAP_APPFONT ( 131 , 12 ) ;
     };
     ImageButton RB_REPEATCOL
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_AREAS:RB_REPEATCOL";
         Pos = MAP_APPFONT ( 239 , 71 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -158,6 +167,7 @@ TabPage RID_SCPAGE_TABLE
     Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox BTN_HEADER
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_HEADER";
         Pos = MAP_APPFONT ( 12 , 73 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
         Text [ en-US ] = "~Column and row headers" ;
@@ -165,6 +175,7 @@ TabPage RID_SCPAGE_TABLE
     };
     CheckBox BTN_GRID
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_GRID";
         Pos = MAP_APPFONT ( 12 , 87 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
         Text [ en-US ] = "~Grid" ;
@@ -172,6 +183,7 @@ TabPage RID_SCPAGE_TABLE
     };
     CheckBox BTN_NOTES
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_NOTES";
             Pos = MAP_APPFONT ( 12 , 101 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
         Text [ en-US ] = "~Comments" ;
@@ -179,6 +191,7 @@ TabPage RID_SCPAGE_TABLE
     };
     CheckBox BTN_OBJECTS
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_OBJECTS";
         Pos = MAP_APPFONT ( 12 , 115 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
         Text [ en-US ] = "~Objects/graphics" ;
@@ -186,6 +199,7 @@ TabPage RID_SCPAGE_TABLE
     };
     CheckBox BTN_CHARTS
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_CHARTS";
         Pos = MAP_APPFONT ( 160 , 73 ) ;
         Size = MAP_APPFONT ( 91 , 10 ) ;
         Text [ en-US ] = "Ch~arts" ;
@@ -193,6 +207,7 @@ TabPage RID_SCPAGE_TABLE
     };
     CheckBox BTN_DRAWINGS
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_DRAWINGS";
         Pos = MAP_APPFONT ( 160 , 87 ) ;
         Size = MAP_APPFONT ( 91 , 10 ) ;
         Text [ en-US ] = "~Drawing objects" ;
@@ -200,6 +215,7 @@ TabPage RID_SCPAGE_TABLE
     };
     CheckBox BTN_FORMULAS
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_FORMULAS";
         Pos = MAP_APPFONT ( 160 , 101 ) ;
         Size = MAP_APPFONT ( 91 , 10 ) ;
         Text [ en-US ] = "~Formulas" ;
@@ -207,6 +223,7 @@ TabPage RID_SCPAGE_TABLE
     };
     CheckBox BTN_NULLVALS
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_NULLVALS";
         Pos = MAP_APPFONT ( 160 , 115 ) ;
         Size = MAP_APPFONT ( 91 , 10 ) ;
         Text [ en-US ] = "Zero ~values" ;
@@ -220,6 +237,7 @@ TabPage RID_SCPAGE_TABLE
     };
     RadioButton BTN_TOPDOWN
     {
+        HelpID = "sc:RadioButton:RID_SCPAGE_TABLE:BTN_TOPDOWN";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
         Text [ en-US ] = "~Top to bottom, then right" ;
@@ -227,6 +245,7 @@ TabPage RID_SCPAGE_TABLE
     };
     RadioButton BTN_LEFTRIGHT
     {
+        HelpID = "sc:RadioButton:RID_SCPAGE_TABLE:BTN_LEFTRIGHT";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
         Text [ en-US ] = "~Left to right, then down" ;
@@ -249,6 +268,7 @@ TabPage RID_SCPAGE_TABLE
     };
     CheckBox BTN_PAGENO
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_PAGENO";
         Pos = MAP_APPFONT ( 12 , 46 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text [ en-US ] = "First ~page number" ;
@@ -256,6 +276,7 @@ TabPage RID_SCPAGE_TABLE
     };
     NumericField ED_PAGENO
     {
+        HelpID = "sc:NumericField:RID_SCPAGE_TABLE:ED_PAGENO";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 106 , 44 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -280,6 +301,7 @@ TabPage RID_SCPAGE_TABLE
     };
     ListBox LB_SCALEMODE
     {
+        HelpID = "sc:ListBox:RID_SCPAGE_TABLE:LB_SCALEMODE";
         Border = TRUE;
         Pos = MAP_APPFONT( 12, 155 );
         Size = MAP_APPFONT( 124, 60 );
@@ -293,6 +315,7 @@ TabPage RID_SCPAGE_TABLE
     };
     MetricField ED_SCALEALL
     {
+        HelpID = "sc:MetricField:RID_SCPAGE_TABLE:ED_SCALEALL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 218 , 155 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -309,6 +332,7 @@ TabPage RID_SCPAGE_TABLE
     };
     NumericField ED_SCALEPAGEWIDTH
     {
+        HelpID = "sc:NumericField:RID_SCPAGE_TABLE:ED_SCALEPAGEWIDTH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 218 , 144 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -322,6 +346,7 @@ TabPage RID_SCPAGE_TABLE
     };
     NumericField ED_SCALEPAGEHEIGHT
     {
+        HelpID = "sc:NumericField:RID_SCPAGE_TABLE:ED_SCALEPAGEHEIGHT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 218 , 160 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -335,6 +360,7 @@ TabPage RID_SCPAGE_TABLE
     };
     NumericField ED_SCALEPAGENUM
     {
+        HelpID = "sc:NumericField:RID_SCPAGE_TABLE:ED_SCALEPAGENUM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 218 , 155 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;

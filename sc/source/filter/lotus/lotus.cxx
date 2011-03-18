@@ -46,7 +46,7 @@ extern FltError ScImportLotus123old( SvStream&, ScDocument*, CharSet eSrc );
 FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, CharSet eSrc )
 {
         ScFilterOptions aFilterOpt;
-    BOOL bWithWK3 = aFilterOpt.GetWK3Flag();
+    sal_Bool bWithWK3 = aFilterOpt.GetWK3Flag();
 
     SvStream*           pStream = rMedium.GetInStream();
 
@@ -87,7 +87,7 @@ FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocum
     {// versuchen *.FM3-File zu laden
         INetURLObject aURL( rMedium.GetURLObject() );
         aURL.setExtension( CREATE_STRING( "FM3" ) );
-        SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ, TRUE );
+        SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ, sal_True );
         pStream = aMedium.GetInStream();
         if ( pStream )
         {

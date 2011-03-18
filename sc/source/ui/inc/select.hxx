@@ -58,13 +58,13 @@ private:
     ScViewData*             pViewData;
     ScViewSelectionEngine*  pEngine;
 
-    BOOL            bAnchor;
-    BOOL            bStarted;
+    sal_Bool            bAnchor;
+    sal_Bool            bStarted;
     ScAddress       aAnchorPos;
 
     ScSplitPos      GetWhich();
 
-    ULONG           CalcUpdateInterval( const Size& rWinSize, const Point& rEffPos,
+    sal_uLong           CalcUpdateInterval( const Size& rWinSize, const Point& rEffPos,
                                         bool bLeftScroll, bool bTopScroll, bool bRightScroll, bool bBottomScroll );
 
 public:
@@ -73,17 +73,17 @@ public:
     void            SetSelectionEngine( ScViewSelectionEngine* pSelEngine );
 
     void            SetAnchor( SCCOL nPosX, SCROW nPosY );
-    void            SetAnchorFlag( BOOL bSet );
+    void            SetAnchorFlag( sal_Bool bSet );
 
     virtual void    BeginDrag();
     virtual void    CreateAnchor();
     virtual void    DestroyAnchor();
-    virtual BOOL    SetCursorAtPoint( const Point& rPointPixel, BOOL bDontSelectAtCursor = FALSE );
-    virtual BOOL    IsSelectionAtPoint( const Point& rPointPixel );
+    virtual sal_Bool    SetCursorAtPoint( const Point& rPointPixel, sal_Bool bDontSelectAtCursor = false );
+    virtual sal_Bool    IsSelectionAtPoint( const Point& rPointPixel );
     virtual void    DeselectAtPoint( const Point& rPointPixel );
     virtual void    DeselectAll();
 
-    BOOL            SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScroll );
+    sal_Bool            SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, sal_Bool bScroll );
 };
 
 
@@ -94,27 +94,27 @@ class ScHeaderFunctionSet : public FunctionSet          // Spalten- / Zeilenkoep
 {
 private:
     ScViewData*     pViewData;
-    BOOL            bColumn;                // Col- / Rowbar
+    sal_Bool            bColumn;                // Col- / Rowbar
     ScSplitPos      eWhich;
 
-    BOOL            bAnchor;
+    sal_Bool            bAnchor;
     SCCOLROW        nCursorPos;
 
 public:
                     ScHeaderFunctionSet( ScViewData* pNewViewData );
 
-    void            SetColumn( BOOL bSet );
+    void            SetColumn( sal_Bool bSet );
     void            SetWhich( ScSplitPos eNew );
 
     virtual void    BeginDrag();
     virtual void    CreateAnchor();
     virtual void    DestroyAnchor();
-    virtual BOOL    SetCursorAtPoint( const Point& rPointPixel, BOOL bDontSelectAtCursor = FALSE );
-    virtual BOOL    IsSelectionAtPoint( const Point& rPointPixel );
+    virtual sal_Bool    SetCursorAtPoint( const Point& rPointPixel, sal_Bool bDontSelectAtCursor = false );
+    virtual sal_Bool    IsSelectionAtPoint( const Point& rPointPixel );
     virtual void    DeselectAtPoint( const Point& rPointPixel );
     virtual void    DeselectAll();
 
-    void            SetAnchorFlag(BOOL bSet)    { bAnchor = bSet; }
+    void            SetAnchorFlag(sal_Bool bSet)    { bAnchor = bSet; }
 };
 
 

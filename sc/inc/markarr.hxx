@@ -37,7 +37,7 @@
 struct ScMarkEntry
 {
     SCROW           nRow;
-    BOOL            bMarked;
+    sal_Bool            bMarked;
 };
 
 class ScMarkArray
@@ -52,21 +52,21 @@ friend class ScDocument;                // for FillInfo
 public:
             ScMarkArray();
             ~ScMarkArray();
-    void    Reset( BOOL bMarked = FALSE );
-    BOOL    GetMark( SCROW nRow ) const;
-    void    SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked );
-    BOOL    IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const;
-    BOOL    HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const;
+    void    Reset( sal_Bool bMarked = false );
+    sal_Bool    GetMark( SCROW nRow ) const;
+    void    SetMarkArea( SCROW nStartRow, SCROW nEndRow, sal_Bool bMarked );
+    sal_Bool    IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const;
+    sal_Bool    HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const;
 
-    BOOL    HasMarks() const    { return ( nCount > 1 || ( nCount == 1 && pData[0].bMarked ) ); }
+    sal_Bool    HasMarks() const    { return ( nCount > 1 || ( nCount == 1 && pData[0].bMarked ) ); }
 
     void    CopyMarksTo( ScMarkArray& rDestMarkArray ) const;
 
-    BOOL    Search( SCROW nRow, SCSIZE& nIndex ) const;
+    sal_Bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
 
     /// Including current row, may return -1 if bUp and not found
-    SCsROW  GetNextMarked( SCsROW nRow, BOOL bUp ) const;
-    SCROW   GetMarkEnd( SCROW nRow, BOOL bUp ) const;
+    SCsROW  GetNextMarked( SCsROW nRow, sal_Bool bUp ) const;
+    SCROW   GetMarkEnd( SCROW nRow, sal_Bool bUp ) const;
 };
 
 
@@ -78,7 +78,7 @@ public:
                 ScMarkArrayIter( const ScMarkArray* pNewArray );
                 ~ScMarkArrayIter();
 
-    BOOL        Next( SCROW& rTop, SCROW& rBottom );
+    sal_Bool        Next( SCROW& rTop, SCROW& rBottom );
 };
 
 

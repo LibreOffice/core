@@ -95,7 +95,7 @@ ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLo
     eLocation(eLoc),
     pAcc(NULL)
 {
-    EnableRTL(FALSE);
+    EnableRTL(false);
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
@@ -107,7 +107,7 @@ ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLo
     Size aSize( GetOutputSize() );
     aSize.Height() *= 4;
 
-    pEdEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), TRUE );
+    pEdEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), sal_True );
     pEdEngine->SetPaperSize( aSize );
     pEdEngine->SetRefDevice( this );
 
@@ -159,8 +159,8 @@ EditTextObject* ScEditWindow::CreateTextObject()
     //  (GetAttribs beim Format-Dialog-Aufruf gibt immer gesetzte Items zurueck)
 
     const SfxItemSet& rEmpty = pEdEngine->GetEmptyItemSet();
-    USHORT nParCnt = pEdEngine->GetParagraphCount();
-    for (USHORT i=0; i<nParCnt; i++)
+    sal_uInt16 nParCnt = pEdEngine->GetParagraphCount();
+    for (sal_uInt16 i=0; i<nParCnt; i++)
         pEdEngine->SetParaAttribs( i, rEmpty );
 
     return pEdEngine->CreateTextObject();
@@ -212,7 +212,7 @@ void ScEditWindow::SetCharAttriutes()
 
     if ( pDocSh && pViewSh )
     {
-        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(TRUE);
+        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(sal_True);
 
         SfxItemSet aSet( pEdView->GetAttribs() );
 
@@ -230,7 +230,7 @@ void ScEditWindow::SetCharAttriutes()
             pEdView->SetAttribs( aSet );
         }
 
-        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(FALSE);
+        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(false);
         delete pDlg;
     }
 }
@@ -279,7 +279,7 @@ void ScEditWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 void ScEditWindow::KeyInput( const KeyEvent& rKEvt )
 {
-    USHORT nKey =  rKEvt.GetKeyCode().GetModifier()
+    sal_uInt16 nKey =  rKEvt.GetKeyCode().GetModifier()
                  + rKEvt.GetKeyCode().GetCode();
 
     if ( nKey == KEY_TAB || nKey == KEY_TAB + KEY_SHIFT )
@@ -362,7 +362,7 @@ ScExtIButton::ScExtIButton(Window* pParent, const ResId& rResId )
 {
     nSelected=0;
     aTimer.SetTimeout(600);
-    SetDropDown( TRUE);
+    SetDropDown( true);
 }
 
 void ScExtIButton::SetPopupMenu(ScPopupMenu* pPopUp)
@@ -370,7 +370,7 @@ void ScExtIButton::SetPopupMenu(ScPopupMenu* pPopUp)
     pPopupMenu=pPopUp;
 }
 
-USHORT ScExtIButton::GetSelected()
+sal_uInt16 ScExtIButton::GetSelected()
 {
     return nSelected;
 }
@@ -405,7 +405,7 @@ void ScExtIButton::StartPopup()
 
     if(pPopupMenu!=NULL)
     {
-        SetPressed( TRUE );
+        SetPressed( sal_True );
         EndSelection();
         Point aPoint(0,0);
         aPoint.Y()=GetOutputSizePixel().Height();
@@ -416,13 +416,13 @@ void ScExtIButton::StartPopup()
         {
             aMLink.Call(this);
         }
-        SetPressed( FALSE);
+        SetPressed( false);
     }
 }
 
 long ScExtIButton::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nSwitch=rNEvt.GetType();
+    sal_uInt16 nSwitch=rNEvt.GetType();
     if(nSwitch==EVENT_MOUSEBUTTONUP)
     {
         MouseButtonUp(*rNEvt.GetMouseEvent());

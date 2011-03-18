@@ -57,30 +57,80 @@ namespace
 static const OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.ChartArea" ));
 
-const Sequence< Property > & lcl_GetPropertySequence()
+struct StaticUpDownBarWrapperPropertyArray_Initializer
 {
-    static Sequence< Property > aPropSeq;
-
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    Sequence< Property >* operator()()
     {
-        // get properties
+        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
+        return &aPropSeq;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
 
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
+struct StaticUpDownBarWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticUpDownBarWrapperPropertyArray_Initializer >
+{
+};
+
+struct StaticUpDownBarWrapperInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()()
+    {
+        static ::cppu::OPropertyArrayHelper aPropHelper( *StaticUpDownBarWrapperPropertyArray::get() );
+        return &aPropHelper;
+    }
+};
+
+struct StaticUpDownBarWrapperInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticUpDownBarWrapperInfoHelper_Initializer >
+{
+};
+
+struct StaticUpDownBarWrapperInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticUpDownBarWrapperInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticUpDownBarWrapperInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticUpDownBarWrapperInfo_Initializer >
+{
+};
+
+struct StaticUpDownBarWrapperDefaults_Initializer
+{
+    ::chart::tPropertyValueMap* operator()()
+    {
+        static ::chart::tPropertyValueMap aStaticDefaults;
+        lcl_AddDefaultsToMap( aStaticDefaults );
+        return &aStaticDefaults;
+    }
+private:
+    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    {
+        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
+        ::chart::FillProperties::AddDefaultsToMap( rOutMap );
+    }
+};
+
+struct StaticUpDownBarWrapperDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticUpDownBarWrapperDefaults_Initializer >
+{
+};
 
 } // anonymous namespace
 
@@ -96,8 +146,6 @@ UpDownBarWrapper::UpDownBarWrapper(
         : m_spChart2ModelContact( spChart2ModelContact )
         , m_aEventListenerContainer( m_aMutex )
         , m_aPropertySetName( bUp ? C2U("WhiteDay") : C2U("BlackDay") )
-        , m_xInfo(0)
-        , m_pPropertyArrayHelper()
 {
 }
 
@@ -111,9 +159,6 @@ void SAL_CALL UpDownBarWrapper::dispose()
 {
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
-
-    MutexGuard aGuard( GetMutex());
-    m_xInfo.clear();
 }
 
 void SAL_CALL UpDownBarWrapper::addEventListener(
@@ -132,29 +177,14 @@ void SAL_CALL UpDownBarWrapper::removeEventListener(
 
 ::cppu::IPropertyArrayHelper& UpDownBarWrapper::getInfoHelper()
 {
-    if(!m_pPropertyArrayHelper.get())
-    {
-        ::osl::MutexGuard aGuard( GetMutex() );
-        if(!m_pPropertyArrayHelper.get())
-        {
-            sal_Bool bSorted = sal_True;
-            m_pPropertyArrayHelper = ::boost::shared_ptr< ::cppu::OPropertyArrayHelper >( new ::cppu::OPropertyArrayHelper( lcl_GetPropertySequence(), bSorted ) );
-        }
-    }
-    return *m_pPropertyArrayHelper.get();
+    return *StaticUpDownBarWrapperInfoHelper::get();
 }
 
 //XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL UpDownBarWrapper::getPropertySetInfo()
                     throw (uno::RuntimeException)
 {
-    if( !m_xInfo.is() )
-    {
-        ::osl::MutexGuard aGuard( GetMutex() );
-        if( !m_xInfo.is() )
-            m_xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
-    }
-    return m_xInfo;
+    return *StaticUpDownBarWrapperInfo::get();
 }
 void SAL_CALL UpDownBarWrapper::setPropertyValue( const ::rtl::OUString& rPropertyName, const uno::Any& rValue )
                     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
@@ -308,26 +338,14 @@ void SAL_CALL UpDownBarWrapper::setPropertyToDefault( const ::rtl::OUString& rPr
 {
     this->setPropertyValue( rPropertyName, this->getPropertyDefault(rPropertyName) );
 }
+
 uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const ::rtl::OUString& rPropertyName )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    static tPropertyValueMap aStaticDefaults;
-
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        LineProperties::AddDefaultsToMap( aStaticDefaults );
-        FillProperties::AddDefaultsToMap( aStaticDefaults );
-    }
-
-    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
-
-    tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
+    const tPropertyValueMap& rStaticDefaults = *StaticUpDownBarWrapperDefaults::get();
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( getInfoHelper().getHandleByName( rPropertyName ) ) );
+    if( aFound == rStaticDefaults.end() )
         return uno::Any();
-
     return (*aFound).second;
 }
 
@@ -336,7 +354,7 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const ::rtl::OUString& r
 void SAL_CALL UpDownBarWrapper::setAllPropertiesToDefault(  )
                     throw (uno::RuntimeException)
 {
-    const Sequence< beans::Property >&  rPropSeq = lcl_GetPropertySequence();
+    const Sequence< beans::Property >& rPropSeq = *StaticUpDownBarWrapperPropertyArray::get();
     for(sal_Int32 nN=0; nN<rPropSeq.getLength(); nN++)
     {
         ::rtl::OUString aPropertyName( rPropSeq[nN].Name );

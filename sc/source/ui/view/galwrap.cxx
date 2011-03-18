@@ -47,12 +47,12 @@ Graphic GalleryGetGraphic()
     return pGal->GetGraphic();
 }
 
-USHORT GallerySGA_FORMAT_GRAPHIC()
+sal_uInt16 GallerySGA_FORMAT_GRAPHIC()
 {
     return SGA_FORMAT_GRAPHIC;
 }
 
-BOOL GalleryIsLinkage()
+sal_Bool GalleryIsLinkage()
 {
     GalleryExplorer* pGal = SVX_GALLERY();
     DBG_ASSERT( pGal, "Wo ist die Gallery?" );

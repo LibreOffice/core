@@ -54,7 +54,7 @@
 #include "op.h"
 
 // Konstanten ------------------------------------------------------------
-const UINT16        nBOF = 0x0000;
+const sal_uInt16        nBOF = 0x0000;
 
 
 
@@ -62,8 +62,8 @@ const UINT16        nBOF = 0x0000;
 extern WKTYP        eTyp;   // Typ der gerade in bearbeitung befindlichen Datei
 WKTYP               eTyp;
 
-extern BOOL         bEOF;           // zeigt Ende der Datei
-BOOL                bEOF;
+extern sal_Bool         bEOF;           // zeigt Ende der Datei
+sal_Bool                bEOF;
 
 extern CharSet      eCharNach;      // Zeichenkonvertierung von->nach
 CharSet             eCharNach;
@@ -88,7 +88,7 @@ extern long         nDateiLaenge;   // -> datei.cpp, ...der gerade offenen Datei
 LOTUS_ROOT*         pLotusRoot = NULL;
 
 
-std::map<UINT16, ScPatternAttr> aLotusPatternPool;
+std::map<sal_uInt16, ScPatternAttr> aLotusPatternPool;
 
 static FltError
 generate_Opcodes( SvStream& aStream, ScDocument& rDoc,
@@ -119,12 +119,12 @@ generate_Opcodes( SvStream& aStream, ScDocument& rDoc,
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
     while( !bEOF && !aStream.IsEof() && (aStream.Tell() < nStrmSize) )
     {
-        UINT16 nOpcode, nLength;
+        sal_uInt16 nOpcode, nLength;
 
         aStream >> nOpcode >> nLength;
         aPrgrsBar.Progress();
         if( nOpcode == LOTUS_EOF )
-        bEOF = TRUE;
+        bEOF = sal_True;
 
         else if( nOpcode == LOTUS_FILEPASSWD )
         return eERR_FILEPASSWD;
@@ -168,7 +168,7 @@ WKTYP ScanVersion( SvStream& aStream )
 {
     // PREC:    pWKDatei:   Zeiger auf offene Datei
     // POST:    return:     Typ der Datei
-    UINT16          nOpcode, nVersNr, nRecLen;
+    sal_uInt16          nOpcode, nVersNr, nRecLen;
 
     // erstes Byte muss wegen BOF zwingend 0 sein!
     aStream >> nOpcode;
@@ -225,7 +225,7 @@ FltError ScImportLotus123old( SvStream& aStream, ScDocument* pDocument, CharSet 
     // Zeiger auf Dokument global machen
     pDoc = pDocument;
 
-    bEOF = FALSE;
+    bEOF = false;
 
     eCharVon = eSrc;
 

@@ -41,44 +41,44 @@
 
 void QProToSc::ReadSRD( ScSingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 nRelBit )
 {
-    UINT16 nTmp = nRelBit & 0x1fff;
+    sal_uInt16 nTmp = nRelBit & 0x1fff;
     rSRD.InitAddress( ScAddress( nCol, (~nTmp + 1), 0 ) );
     if( nRelBit & 0x4000 )
     {
         rSRD.nRelCol = nCol;
-        rSRD.SetColRel( TRUE );
+        rSRD.SetColRel( sal_True );
     }
     else
     {
         rSRD.nCol = nCol;
-        rSRD.SetColRel( FALSE );
+        rSRD.SetColRel( false );
     }
     if( nRelBit & 0x2000 )
     {
         rSRD.nRelRow = (~nTmp + 1);
-        rSRD.nRelRow = (INT16)(nTmp << 3);
+        rSRD.nRelRow = (sal_Int16)(nTmp << 3);
         rSRD.nRelRow /= 8;
-        rSRD.SetRowRel( TRUE );
+        rSRD.SetRowRel( sal_True );
     }
     else
     {
         rSRD.nRow = nTmp;
-        rSRD.SetRowRel( FALSE );
+        rSRD.SetRowRel( false );
     }
     if( nRelBit & 0x8000 )
     {
         rSRD.nRelTab = nPage;
-        rSRD.SetTabRel( TRUE );
+        rSRD.SetTabRel( sal_True );
         // absolute tab needed in caller for comparison in case of DoubleRef
         rSRD.nTab = aEingPos.Tab() + nPage;
     }
     else
     {
         rSRD.nTab = nPage;
-        rSRD.SetTabRel( FALSE );
+        rSRD.SetTabRel( false );
     }
     if (rSRD.nTab != aEingPos.Tab())
-        rSRD.SetFlag3D( TRUE);
+        rSRD.SetFlag3D( sal_True);
 }
 
 QProToSc::QProToSc( SvStream& rStream, const ScAddress& rRefPos ) :
@@ -91,15 +91,15 @@ QProToSc::QProToSc( SvStream& rStream, const ScAddress& rRefPos ) :
 void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtString )
 {
     TokenId  eParam[ nBufSize ];
-    INT32    nCount;
+    sal_Int32    nCount;
     TokenId  nPush, nPush1;
 
-    BOOL bAddIn = FALSE;
-    BOOL bNeg = FALSE;
+    sal_Bool bAddIn = false;
+    sal_Bool bNeg = false;
 
     if( eOc == ocNoName )
     {
-        bAddIn = TRUE;
+        bAddIn = sal_True;
         if( pExtString )
         {
             ByteString s;
@@ -152,7 +152,7 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
 
     if( nArgs> 0 )
     {
-        INT16 nLast = nArgs- 1;
+        sal_Int16 nLast = nArgs- 1;
 
         if( eOc == ocZGZ )
             aPool << eParam[ 2 ] << ocSep << eParam[ 1 ] << ocSep << eParam[ 0 ];
@@ -160,7 +160,7 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
             aPool << eParam[ 3 ] << ocSep << eParam[ 2 ] << ocSep << eParam[ 1 ] << ocSep << eParam[ 0 ];
         else
         {
-            INT16 nNull = -1;
+            sal_Int16 nNull = -1;
             aPool << eParam[ nLast ];
             for( nCount = nLast - 1 ; nCount >= 0 ; nCount-- )
             {
@@ -327,7 +327,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
                 // Sheet name of second corner is not displayed if identical
                 if (aCRD.Ref1.IsFlag3D() && aCRD.Ref1.nTab == aCRD.Ref2.nTab &&
                         aCRD.Ref1.IsTabRel() == aCRD.Ref2.IsTabRel())
-                    aCRD.Ref2.SetFlag3D( FALSE);
+                    aCRD.Ref2.SetFlag3D( false);
                 aStack << aPool.Store( aCRD );
                 break;
 

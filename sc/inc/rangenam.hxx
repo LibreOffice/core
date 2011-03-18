@@ -50,7 +50,7 @@ namespace rtl {
 
 //------------------------------------------------------------------------
 
-typedef USHORT RangeType;
+typedef sal_uInt16 RangeType;
 
 #define RT_NAME             ((RangeType)0x0000)
 #define RT_DATABASE         ((RangeType)0x0001)
@@ -77,15 +77,15 @@ private:
     ScAddress       aPos;
     RangeType       eType;
     ScDocument*     pDoc;
-    USHORT          nIndex;
-    BOOL            bModified;          // is set/cleared by UpdateReference
+    sal_uInt16          nIndex;
+    sal_Bool            bModified;          // is set/cleared by UpdateReference
 
     // max row and column to use for wrapping of references.  If -1 use the
     // application's default.
     SCROW           mnMaxRow;
     SCCOL           mnMaxCol;
 
-    ScRangeData( USHORT nIndex );
+    ScRangeData( sal_uInt16 nIndex );
 public:
     typedef ::std::map<sal_uInt16, sal_uInt16> IndexMap;
 
@@ -108,25 +108,25 @@ public:
 
     SC_DLLPUBLIC ~ScRangeData();
 
-    BOOL            operator== (const ScRangeData& rData) const;
+    sal_Bool            operator== (const ScRangeData& rData) const;
 
     void            GetName( String& rName ) const  { rName = aName; }
     const String&   GetName( void ) const           { return aName; }
     const String&   GetUpperName( void ) const      { return aUpperName; }
     ScAddress       GetPos() const                  { return aPos; }
     // The index has to be unique. If index=0 a new index value is assigned.
-    void            SetIndex( USHORT nInd )         { nIndex = nInd; }
-    USHORT    GetIndex() const                { return nIndex; }
+    void            SetIndex( sal_uInt16 nInd )         { nIndex = nInd; }
+    sal_uInt16    GetIndex() const                { return nIndex; }
     ScTokenArray*   GetCode()                       { return pCode; }
     const ScTokenArray* GetCode() const             { return pCode; }
-    USHORT          GetErrCode();
-    BOOL            HasReferences() const;
+    sal_uInt16          GetErrCode();
+    sal_Bool            HasReferences() const;
     void            SetDocument( ScDocument* pDocument){ pDoc = pDocument; }
     ScDocument*     GetDocument() const             { return pDoc; }
     void            SetType( RangeType nType )      { eType = nType; }
     void            AddType( RangeType nType )      { eType = eType|nType; }
     RangeType       GetType() const                 { return eType; }
-    BOOL            HasType( RangeType nType ) const;
+    sal_Bool            HasType( RangeType nType ) const;
     SC_DLLPUBLIC void GetSymbol( String& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     SC_DLLPUBLIC void GetSymbol( rtl::OUString& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress&,
@@ -134,19 +134,19 @@ public:
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
                              const ScRange& r,
                              SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-    BOOL            IsModified() const              { return bModified; }
+    sal_Bool            IsModified() const              { return bModified; }
 
     SC_DLLPUBLIC void           GuessPosition();
 
     void            UpdateTranspose( const ScRange& rSource, const ScAddress& rDest );
     void            UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
-    SC_DLLPUBLIC BOOL           IsReference( ScRange& rRef ) const;
-    BOOL            IsReference( ScRange& rRef, const ScAddress& rPos ) const;
-    SC_DLLPUBLIC BOOL           IsValidReference( ScRange& rRef ) const;
-    BOOL            IsRangeAtBlock( const ScRange& ) const;
+    SC_DLLPUBLIC sal_Bool           IsReference( ScRange& rRef ) const;
+    sal_Bool            IsReference( ScRange& rRef, const ScAddress& rPos ) const;
+    SC_DLLPUBLIC sal_Bool           IsValidReference( ScRange& rRef ) const;
+    sal_Bool            IsRangeAtBlock( const ScRange& ) const;
 
-    void            UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable);
+    void            UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTable);
     void            TransferTabRef( SCTAB nOldTab, SCTAB nNewTab );
 
     void            ValidateTabRefs();
@@ -154,7 +154,7 @@ public:
     void            ReplaceRangeNamesInUse( const IndexMap& rMap );
 
     static void     MakeValidName( String& rName );
-    SC_DLLPUBLIC static BOOL        IsNameValid( const String& rName, ScDocument* pDoc );
+    SC_DLLPUBLIC static sal_Bool        IsNameValid( const String& rName, ScDocument* pDoc );
 
     SC_DLLPUBLIC void SetMaxRow(SCROW nRow);
     SCROW GetMaxRow() const;
@@ -162,7 +162,7 @@ public:
     SCCOL GetMaxCol() const;
 };
 
-inline BOOL ScRangeData::HasType( RangeType nType ) const
+inline sal_Bool ScRangeData::HasType( RangeType nType ) const
 {
     return ( ( eType & nType ) == nType );
 }
@@ -202,7 +202,7 @@ public:
     SC_DLLPUBLIC const ScRangeData* findByName(const rtl::OUString& rName) const;
     ScRangeData* findByUpperName(const rtl::OUString& rName);
     const ScRangeData* findByUpperName(const rtl::OUString& rName) const;
-    SC_DLLPUBLIC ScRangeData* findByIndex(USHORT i);
+    SC_DLLPUBLIC ScRangeData* findByIndex(sal_uInt16 i);
     void UpdateReference(UpdateRefMode eUpdateRefMode, const ScRange& rRange,
                          SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
     void UpdateTabRef(SCTAB nTable, sal_uInt16 nFlag, SCTAB nNewTable = 0);

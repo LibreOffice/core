@@ -32,7 +32,7 @@
 #include "VPolarAngleAxis.hxx"
 #include "VPolarRadiusAxis.hxx"
 #include "macros.hxx"
-#include "TickmarkHelper.hxx"
+#include "Tickmarks.hxx"
 #include "ShapeFactory.hxx"
 
 #include <memory>
@@ -69,12 +69,12 @@ VPolarAxis::~VPolarAxis()
     m_pPosHelper = NULL;
 }
 
-void VPolarAxis::setIncrements( const uno::Sequence< ExplicitIncrementData >& rIncrements )
+void VPolarAxis::setIncrements( const std::vector< ExplicitIncrementData >& rIncrements )
 {
     m_aIncrements = rIncrements;
 }
 
-sal_Bool SAL_CALL VPolarAxis::isAnythingToDraw()
+sal_Bool VPolarAxis::isAnythingToDraw()
 {
     return ( 2==m_nDimension && VAxisBase::isAnythingToDraw() );
 }

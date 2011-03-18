@@ -42,7 +42,7 @@ class ScTpCompatOptions : public SfxTabPage
 public:
     static  SfxTabPage* Create (Window* pParent, const SfxItemSet& rCoreAttrs);
 
-    virtual BOOL FillItemSet(SfxItemSet& rCoreAttrs);
+    virtual sal_Bool FillItemSet(SfxItemSet& rCoreAttrs);
     virtual void Reset(const SfxItemSet& rCoreAttrs);
     virtual int DeactivatePage(SfxItemSet* pSet = NULL);
 

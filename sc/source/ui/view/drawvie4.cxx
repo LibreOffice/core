@@ -72,18 +72,18 @@ Point aDragStartDiff;
 
 // -----------------------------------------------------------------------
 
-void lcl_CheckOle( const SdrMarkList& rMarkList, BOOL& rAnyOle, BOOL& rOneOle )
+void lcl_CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rOneOle )
 {
-    rAnyOle = rOneOle = FALSE;
-    ULONG nCount = rMarkList.GetMarkCount();
-    for (ULONG i=0; i<nCount; i++)
+    rAnyOle = rOneOle = false;
+    sal_uLong nCount = rMarkList.GetMarkCount();
+    for (sal_uLong i=0; i<nCount; i++)
     {
         SdrMark* pMark = rMarkList.GetMark(i);
         SdrObject* pObj = pMark->GetMarkedSdrObj();
-        UINT16 nSdrObjKind = pObj->GetObjIdentifier();
+        sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
         if (nSdrObjKind == OBJ_OLE2)
         {
-            rAnyOle = TRUE;
+            rAnyOle = sal_True;
             rOneOle = (nCount == 1);
             break;
         }
@@ -95,8 +95,8 @@ void lcl_CheckOle( const SdrMarkList& rMarkList, BOOL& rAnyOle, BOOL& rOneOle )
             {
                 if ( pSubObj->GetObjIdentifier() == OBJ_OLE2 )
                 {
-                    rAnyOle = TRUE;
-                    // rOneOle remains FALSE - a group isn't treated like a single OLE object
+                    rAnyOle = sal_True;
+                    // rOneOle remains sal_False - a group isn't treated like a single OLE object
                     return;
                 }
                 pSubObj = aIter.Next();
@@ -105,9 +105,9 @@ void lcl_CheckOle( const SdrMarkList& rMarkList, BOOL& rAnyOle, BOOL& rOneOle )
     }
 }
 
-BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
+sal_Bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = false;
 
     if ( AreObjectsMarked() )
     {
@@ -118,7 +118,7 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 
         aDragStartDiff = rStartPos - aMarkedRect.TopLeft();
 
-        BOOL bAnyOle, bOneOle;
+        sal_Bool bAnyOle, bOneOle;
         const SdrMarkList& rMarkList = GetMarkedObjectList();
         lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
 
@@ -160,7 +160,7 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 
 void ScDrawView::DoCopy()
 {
-    BOOL bAnyOle, bOneOle;
+    sal_Bool bAnyOle, bOneOle;
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
 
@@ -196,7 +196,7 @@ void ScDrawView::DoCopy()
 
 uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
 {
-    BOOL bAnyOle, bOneOle;
+    sal_Bool bAnyOle, bOneOle;
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
 
@@ -258,12 +258,12 @@ void ScDrawView::SetMarkedOriginalSize()
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     long nDone = 0;
-    ULONG nCount = rMarkList.GetMarkCount();
-    for (ULONG i=0; i<nCount; i++)
+    sal_uLong nCount = rMarkList.GetMarkCount();
+    for (sal_uLong i=0; i<nCount; i++)
     {
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-        USHORT nIdent = pObj->GetObjIdentifier();
-        BOOL bDo = FALSE;
+        sal_uInt16 nIdent = pObj->GetObjIdentifier();
+        sal_Bool bDo = false;
         Size aOriginalSize;
         if (nIdent == OBJ_OLE2)
         {
@@ -277,7 +277,7 @@ void ScDrawView::SetMarkedOriginalSize()
                 {
                     MapMode aMapMode( MAP_100TH_MM );
                     aOriginalSize = ((SdrOle2Obj*)pObj)->GetOrigObjSize( &aMapMode );
-                    bDo = TRUE;
+                    bDo = sal_True;
                 }
                 else
                 {
@@ -289,10 +289,10 @@ void ScDrawView::SetMarkedOriginalSize()
                         aOriginalSize = OutputDevice::LogicToLogic(
                                             Size( aSz.Width, aSz.Height ),
                                             aUnit, MAP_100TH_MM );
-                        bDo = TRUE;
+                        bDo = sal_True;
                     } catch( embed::NoVisualAreaSizeException& )
                     {
-                        OSL_ENSURE( sal_False, "Can't get the original size of the object!" );
+                        OSL_ENSURE( false, "Can't get the original size of the object!" );
                     }
                 }
             }
@@ -319,7 +319,7 @@ void ScDrawView::SetMarkedOriginalSize()
                 {
                     aOriginalSize = pActWin->LogicToLogic(
                                     rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
-                    bDo = TRUE;
+                    bDo = sal_True;
                 }
             }
         }

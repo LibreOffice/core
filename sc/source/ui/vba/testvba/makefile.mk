@@ -36,11 +36,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 DLLPRE =
 
-.IF "$(ENABLE_VBA)"!="YES"
-dummy:
-        @echo "not building vba..."
-.ENDIF
-
 INCPRE=$(INCCOM)$/$(TARGET)
 CDEFS+=-DVBA_OOBUILD_HACK
 

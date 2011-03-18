@@ -977,7 +977,7 @@ public:
 
 protected:
     /** Returns a color from the Excel color palette. */
-    virtual bool        GetColorFromPalette( USHORT nIndex, Color& rColor ) const;
+    virtual bool        GetColorFromPalette( sal_uInt16 nIndex, Color& rColor ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -1038,7 +1038,7 @@ private:
                             Rectangle& rTextRect,
                             SdrObject* pOldSdrObj = 0 );
     /** Returns the BLIP stream position, based on the passed DFF stream position. */
-    virtual ULONG       Calc_nBLIPPos( ULONG nOrgVal, ULONG nStreamPos ) const;
+    virtual sal_uLong       Calc_nBLIPPos( sal_uLong nOrgVal, sal_uLong nStreamPos ) const;
 
     // virtual functions of SvxMSConvertOCXControls
 
@@ -1049,7 +1049,7 @@ private:
                             const ::com::sun::star::awt::Size& rSize,
                             ::com::sun::star::uno::Reference<
                                 ::com::sun::star::drawing::XShape >* pxShape,
-                            BOOL bFloatingCtrl );
+                            sal_Bool bFloatingCtrl );
 
 private:
     /** Data per registered drawing manager, will be stacked for recursive calls. */

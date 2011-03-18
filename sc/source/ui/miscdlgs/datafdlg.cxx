@@ -81,7 +81,7 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
         nTab = pViewData->GetTabNo();
         //if there is no selection
         if ((nStartCol == nEndCol) && (nStartRow == nEndRow))
-            bNoSelection = TRUE;
+            bNoSelection = true;
 
         if (bNoSelection)
         {
@@ -285,7 +285,7 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
 IMPL_LINK( ScDataFormDlg, Impl_DataModifyHdl, Edit*, pEdit)
 {
     if ( pEdit->IsModified() )
-        aBtnRestore.Enable( TRUE );
+        aBtnRestore.Enable( true );
     return 0;
 }
 
@@ -295,7 +295,7 @@ IMPL_LINK( ScDataFormDlg, Impl_NewHdl, PushButton*, EMPTYARG )
     ScDocShell* pDocSh = pViewData->GetDocShell();
     if ( pDoc )
     {
-        sal_Bool bHasData = sal_False;
+        sal_Bool bHasData = false;
         for(sal_uInt16 i = 0; i < aColLength; i++)
             if (pEdits[i])
                 if ( pEdits[i]->GetText().Len() != 0 )
@@ -396,19 +396,19 @@ void ScDataFormDlg::SetButtonState()
 {
     if ( aCurrentRow > nEndRow )
     {
-        aBtnDelete.Enable( FALSE );
-        aBtnLast.Enable( TRUE );
-        aBtnNext.Enable( FALSE );
+        aBtnDelete.Enable( false );
+        aBtnLast.Enable( true );
+        aBtnNext.Enable( false );
     }
     else
     {
-        aBtnDelete.Enable( TRUE );
-        aBtnNext.Enable( TRUE );
+        aBtnDelete.Enable( true );
+        aBtnNext.Enable( true );
     }
     if ( 1 == aCurrentRow )
-        aBtnLast.Enable( FALSE );
+        aBtnLast.Enable( false );
 
-    aBtnRestore.Enable( FALSE );
+    aBtnRestore.Enable( false );
     if ( pEdits )
         pEdits[0]->GrabFocus();
 }

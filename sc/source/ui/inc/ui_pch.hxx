@@ -76,7 +76,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/event.hxx>
 #include <limits.h>
 #include <tools/errinf.hxx>
@@ -202,7 +202,7 @@
 #include <svl/stritem.hxx>
 #include <collect.hxx>
 #include <svx/svdsob.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdlayer.hxx>

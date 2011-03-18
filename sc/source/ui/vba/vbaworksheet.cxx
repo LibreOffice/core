@@ -30,6 +30,7 @@
 #include <cppuhelper/queryinterface.hxx>
 
 #include "vbaworksheet.hxx"
+#include "vbanames.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
@@ -52,6 +53,7 @@
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <com/sun/star/sheet/XSheetPageBreak.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
+#include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -62,6 +64,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <ooo/vba/excel/XlEnableSelection.hpp>
+#include <ooo/vba/excel/XlSheetVisibility.hpp>
 #include <ooo/vba/excel/XWorkbook.hpp>
 #include <ooo/vba/XControlProvider.hpp>
 #include <ooo/vba/excel/XlSheetVisibility.hpp>
@@ -182,7 +185,7 @@ openNewDoc(rtl::OUString aSheetName )
     return xModel;
 }
 
-ScVbaWorksheet::ScVbaWorksheet( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : WorksheetImpl_BASE( xParent, xContext )
+ScVbaWorksheet::ScVbaWorksheet( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : WorksheetImpl_BASE( xParent, xContext ), mbVeryHidden( false )
 {
 }
 
@@ -193,9 +196,9 @@ ScVbaWorksheet::ScVbaWorksheet(const uno::Reference< XHelperInterface >& xParent
 }
 
 ScVbaWorksheet::ScVbaWorksheet( uno::Sequence< uno::Any> const & args,
-    uno::Reference< uno::XComponentContext> const & xContext ) throw ( lang::IllegalArgumentException ) :  WorksheetImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext ), mxModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) )
+    uno::Reference< uno::XComponentContext> const & xContext ) throw ( lang::IllegalArgumentException ) :  WorksheetImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext ), mxModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) ), mbVeryHidden( false )
 {
-    if ( args.getLength() < 2 )
+    if ( args.getLength() < 3 )
         throw lang::IllegalArgumentException();
 
     rtl::OUString sSheetName;
@@ -243,24 +246,31 @@ ScVbaWorksheet::getVisible() throw (uno::RuntimeException)
 }
 
 void
-ScVbaWorksheet::setVisible( ::sal_Int32 _Visible ) throw (uno::RuntimeException)
+ScVbaWorksheet::setVisible( ::sal_Int32 nVisible ) throw (uno::RuntimeException)
 {
-    uno::Reference< beans::XPropertySet > xProps( getSheet(), uno::UNO_QUERY_THROW );
-
-    sal_Bool bVisible = true;
-    switch( _Visible )
+    using namespace ::ooo::vba::excel::XlSheetVisibility;
+    bool bVisible = true;
+    switch( nVisible )
     {
-        case excel::XlSheetVisibility::xlSheetHidden:
-        case excel::XlSheetVisibility::xlSheetVeryHidden:
-            bVisible = false;
-            break;
-        case excel::XlSheetVisibility::xlSheetVisible:
+        case xlSheetVisible: case 1:  // Excel accepts -1 and 1 for visible sheets
             bVisible = true;
-            break;
+            mbVeryHidden = false;
+        break;
+        case xlSheetHidden:
+            bVisible = false;
+            mbVeryHidden = false;
+        break;
+        case xlSheetVeryHidden:
+            bVisible = false;
+            mbVeryHidden = true;
+        break;
+        default:
+            throw uno::RuntimeException();
     }
-    uno::Any aValue( bVisible );
+    uno::Reference< beans::XPropertySet > xProps( getSheet(), uno::UNO_QUERY_THROW );
     xProps->setPropertyValue
-            (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ), aValue);
+            ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ),
+              uno::Any( bVisible ) );
 }
 
 sal_Int16
@@ -279,8 +289,8 @@ ScVbaWorksheet::getEnableSelection() throw (uno::RuntimeException)
         uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
         ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
         ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
-        sal_Bool bLockedCells = sal_False;
-        sal_Bool bUnlockedCells = sal_False;
+        sal_Bool bLockedCells = false;
+        sal_Bool bUnlockedCells = false;
         if( pProtect )
         {
             bLockedCells   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
@@ -318,8 +328,8 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeEx
         ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
         ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
         // default is xlNoSelection
-        sal_Bool bLockedCells = sal_False;
-        sal_Bool bUnlockedCells = sal_False;
+        sal_Bool bLockedCells = false;
+        sal_Bool bUnlockedCells = false;
         if( nSelection == excel::XlEnableSelection::xlNoRestrictions )
         {
             bLockedCells = sal_True;
@@ -362,7 +372,7 @@ uno::Reference< beans::XPropertySet > ScVbaWorksheet::getFirstDBRangeProperties(
 sal_Bool SAL_CALL ScVbaWorksheet::getAutoFilterMode() throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xDBRangeProps = getFirstDBRangeProperties();
-    sal_Bool bAutoFilterMode = sal_False;
+    sal_Bool bAutoFilterMode = false;
     return
         xDBRangeProps.is() &&
         (xDBRangeProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AutoFilter" ) ) ) >>= bAutoFilterMode) &&
@@ -436,7 +446,7 @@ ScVbaWorksheet::getStandardHeight() throw (uno::RuntimeException)
 sal_Bool
 ScVbaWorksheet::getProtectionMode() throw (uno::RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool
@@ -461,13 +471,13 @@ ScVbaWorksheet::getProtectDrawingObjects() throw (uno::RuntimeException)
         if ( pProtect )
             return pProtect->isOptionEnabled( ScTableProtection::OBJECTS );
     }
-    return sal_False;
+    return false;
 }
 
 sal_Bool
 ScVbaWorksheet::getProtectScenarios() throw (uno::RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 void
@@ -592,7 +602,7 @@ ScVbaWorksheet::Copy( const uno::Any& Before, const uno::Any& After ) throw (uno
             ScDocShell* pDestDocShell = excel::getDocShell( pDestSheet->getModel() );
             ScDocShell* pSrcDocShell = excel::getDocShell( getModel() );
             if ( pDestDocShell && pSrcDocShell )
-                pDestDocShell->TransferTab( *pSrcDocShell, static_cast<SCTAB>(nSrc), static_cast<SCTAB>(nDest), TRUE, TRUE );
+                pDestDocShell->TransferTab( *pSrcDocShell, static_cast<SCTAB>(nSrc), static_cast<SCTAB>(nDest), true, true );
         }
     }
     // active the new sheet
@@ -729,7 +739,10 @@ uno::Reference< excel::XRange >
 ScVbaWorksheet::Cells( const ::uno::Any &nRow, const ::uno::Any &nCol )
         throw (uno::RuntimeException)
 {
-    return getSheetRange()->Cells( nRow, nCol );
+    // Performance optimization for often-called Cells method:
+    // Use a common helper method instead of creating a new ScVbaRange object
+    uno::Reference< table::XCellRange > xRange( getSheet(), uno::UNO_QUERY_THROW );
+    return ScVbaRange::CellsHelper( this, mxContext, xRange, nRow, nCol );
 }
 
 uno::Reference< excel::XRange >
@@ -806,8 +819,15 @@ ScVbaWorksheet::Hyperlinks( const uno::Any& aIndex ) throw (uno::RuntimeExceptio
 uno::Any SAL_CALL
 ScVbaWorksheet::Names( const css::uno::Any& aIndex ) throw (uno::RuntimeException)
 {
-    uno::Reference< excel::XWorkbook > xWorkbook( getParent(), uno::UNO_QUERY_THROW );
-    return xWorkbook->Names( aIndex );
+    // fake sheet-local names by returning all global names
+    // #163498# initialize Names object with correct parent (this worksheet)
+    // TODO: real sheet-local names...
+    uno::Reference< beans::XPropertySet > xProps( mxModel, uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NamedRanges") ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, mxModel ) );
+    if ( aIndex.hasValue() )
+        return uno::Any( xNames->Item( aIndex, uno::Any() ) );
+    return uno::Any( xNames );
 }
 
 uno::Any SAL_CALL
@@ -962,7 +982,7 @@ ScVbaWorksheet::getValue( const ::rtl::OUString& aPropertyName ) throw (beans::U
 ::sal_Bool SAL_CALL
 ScVbaWorksheet::hasMethod( const ::rtl::OUString& /*aName*/ ) throw (uno::RuntimeException)
 {
-    return sal_False;
+    return false;
 }
 
 uno::Reference< container::XNameAccess >
@@ -993,7 +1013,7 @@ ScVbaWorksheet::hasProperty( const ::rtl::OUString& aName ) throw (uno::RuntimeE
     uno::Reference< container::XNameAccess > xFormControls( getFormControls() );
     if ( xFormControls.is() )
         return xFormControls->hasByName( aName );
-    return sal_False;
+    return false;
 }
 
 uno::Any
@@ -1081,9 +1101,9 @@ ScVbaWorksheet::PrintOut( const uno::Any& From, const uno::Any& To, const uno::A
     sal_Int32 nTo = 0;
     sal_Int32 nFrom = 0;
     sal_Int16 nCopies = 1;
-    sal_Bool bCollate = sal_False;
-    sal_Bool bSelection = sal_False;
-    sal_Bool bIgnorePrintAreas = sal_False;
+    sal_Bool bCollate = false;
+    sal_Bool bSelection = false;
+    sal_Bool bIgnorePrintAreas = false;
     From >>= nFrom;
     To >>= nTo;
     Copies >>= nCopies;

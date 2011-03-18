@@ -60,7 +60,7 @@
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute();
 
-inline void EnableDisable( Window& rWin, BOOL bEnable )
+inline void EnableDisable( Window& rWin, sal_Bool bEnable )
 {
     if (bEnable)
         rWin.Enable();
@@ -103,16 +103,17 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
     aOkButton.SetClickHdl(LINK( this, ScHighlightChgDlg, OKBtnHdl));
     aHighlightBox.SetClickHdl(LINK( this, ScHighlightChgDlg, HighLightHandle ));
     aFilterCtr.SetRefHdl(LINK( this, ScHighlightChgDlg, RefHandle ));
-    aFilterCtr.HideRange(FALSE);
+    aFilterCtr.HideRange(false);
     aFilterCtr.Show();
-    SetDispatcherLock( TRUE );
+    SetDispatcherLock( true );
 
     Init();
 
 }
+
 ScHighlightChgDlg::~ScHighlightChgDlg()
 {
-    SetDispatcherLock( FALSE );
+    SetDispatcherLock( false );
 }
 
 void ScHighlightChgDlg::Init()
@@ -128,7 +129,7 @@ void ScHighlightChgDlg::Init()
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
         aFilterCtr.ClearAuthors();
         ScStrCollection aUserColl=pChanges->GetUserCollection();
-        for(USHORT  i=0;i<aUserColl.GetCount();i++)
+        for(sal_uInt16  i=0;i<aUserColl.GetCount();i++)
             aFilterCtr.InsertAuthor(aUserColl[i]->GetString());
     }
 
@@ -143,7 +144,7 @@ void ScHighlightChgDlg::Init()
     aFilterCtr.SetFirstTime(aChangeViewSet.GetTheFirstDateTime());
     aFilterCtr.SetLastDate(aChangeViewSet.GetTheLastDateTime());
     aFilterCtr.SetLastTime(aChangeViewSet.GetTheLastDateTime());
-    aFilterCtr.SetDateMode((USHORT)aChangeViewSet.GetTheDateMode());
+    aFilterCtr.SetDateMode((sal_uInt16)aChangeViewSet.GetTheDateMode());
     aFilterCtr.CheckAuthor(aChangeViewSet.HasAuthor());
     aFilterCtr.CheckComment(aChangeViewSet.HasComment());
     aFilterCtr.SetComment(aChangeViewSet.GetTheComment());
@@ -170,7 +171,7 @@ void ScHighlightChgDlg::Init()
         pRangeEntry->Format( aRefStr, ABS_DREF3D, pDoc );
         aFilterCtr.SetRange(aRefStr);
     }
-    aFilterCtr.Enable(TRUE,TRUE);
+    aFilterCtr.Enable(sal_True,sal_True);
     HighLightHandle(&aHighlightBox);
 }
 
@@ -192,12 +193,12 @@ void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 //----------------------------------------------------------------------------
-BOOL ScHighlightChgDlg::Close()
+sal_Bool ScHighlightChgDlg::Close()
 {
     return DoClose( ScHighlightChgDlgWrapper::GetChildWindowId() );
 }
 
-void ScHighlightChgDlg::RefInputDone( BOOL bForced)
+void ScHighlightChgDlg::RefInputDone( sal_Bool bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
     if(bForced || !aRbAssign.IsVisible())
@@ -213,7 +214,7 @@ void ScHighlightChgDlg::SetActive()
 {
 }
 
-BOOL ScHighlightChgDlg::IsRefInputMode() const
+sal_Bool ScHighlightChgDlg::IsRefInputMode() const
 {
     return aEdAssign.IsVisible();
 }
@@ -224,13 +225,13 @@ IMPL_LINK( ScHighlightChgDlg, HighLightHandle, CheckBox*, pCb )
     {
         if(aHighlightBox.IsChecked())
         {
-            aFilterCtr.Enable(TRUE,TRUE);
+            aFilterCtr.Enable(sal_True,sal_True);
             aCbAccept.Enable();
             aCbReject.Enable();
         }
         else
         {
-            aFilterCtr.Disable(TRUE);
+            aFilterCtr.Disable(sal_True);
             aCbAccept.Disable();
             aCbReject.Disable();
         }
@@ -242,7 +243,7 @@ IMPL_LINK( ScHighlightChgDlg, RefHandle, SvxTPFilter*, pRef )
 {
     if(pRef!=NULL)
     {
-        SetDispatcherLock( TRUE );
+        SetDispatcherLock( true );
         aEdAssign.Show();
         aRbAssign.Show();
         aEdAssign.SetText(aFilterCtr.GetRange());

@@ -42,7 +42,7 @@ String SvxDrawToolItem::GetValueText() const
 
 //------------------------------------------------------------------------
 
-String SvxDrawToolItem::GetValueText( USHORT nVal ) const
+String SvxDrawToolItem::GetValueText( sal_uInt16 nVal ) const
 {
     const sal_Char* p;
 
@@ -72,9 +72,9 @@ SfxPoolItem* SvxDrawToolItem::Clone( SfxItemPool * ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* SvxDrawToolItem::Create( SvStream& rStream, USHORT nVer ) const
+SfxPoolItem* SvxDrawToolItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
 {
-    USHORT nVal;
+    sal_uInt16 nVal;
     rStream >> nVal;
     return new SvxDrawToolItem(nVal);
 }

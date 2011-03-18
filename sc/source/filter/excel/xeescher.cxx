@@ -85,7 +85,7 @@
 #include "svx/xlnstit.hxx"
 #include "svx/sxmspitm.hxx"
 
-#include <oox/core/tokens.hxx>
+#include <oox/token/tokens.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/chartexport.hxx>
 #include <oox/export/utils.hxx>
@@ -115,6 +115,7 @@ using ::com::sun::star::chart2::XChartDocument;
 using ::com::sun::star::container::XNamed;
 using ::oox::drawingml::DrawingML;
 using ::oox::drawingml::ChartExport;
+using namespace oox;
 
 #define  HMM2XL(x)        ((x)/26.5)+0.5
 
@@ -172,11 +173,11 @@ static void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr rComments, Rectan
 }
 #endif
 
-static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, INT32 nTab, Rectangle &aFrom, Rectangle &aTo )
+static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_Int32 nTab, Rectangle &aFrom, Rectangle &aTo )
 {
     bool bTo = false;
-    INT32 nCol = 0, nRow = 0;
-    INT32 nColOff = 0, nRowOff= 0;
+    sal_Int32 nCol = 0, nRow = 0;
+    sal_Int32 nColOff = 0, nRowOff= 0;
 
     while(1)
     {
@@ -531,10 +532,10 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
     ScfPropertySet aCtrlProp( XclControlHelper::GetControlModel( xShape ) );
 
     // OBJ record flags
-    SetLocked( TRUE );
+    SetLocked( sal_True );
     SetPrintable( aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "Printable" ) ) );
-    SetAutoFill( FALSE );
-    SetAutoLine( FALSE );
+    SetAutoFill( false );
+    SetAutoLine( false );
 
     // fill DFF property set
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
@@ -553,7 +554,7 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
     // meta file
     //! TODO - needs check
     Reference< XPropertySet > xShapePS( xShape, UNO_QUERY );
-    if( xShapePS.is() && aPropOpt.CreateGraphicProperties( xShapePS, CREATE_STRING( "MetaFile" ), sal_False ) )
+    if( xShapePS.is() && aPropOpt.CreateGraphicProperties( xShapePS, CREATE_STRING( "MetaFile" ), false ) )
     {
         sal_uInt32 nBlipId;
         if( aPropOpt.GetOpt( ESCHER_Prop_pib, nBlipId ) )
@@ -675,10 +676,10 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
         return;
 
     // OBJ record flags
-    SetLocked( TRUE );
+    SetLocked( sal_True );
     SetPrintable( aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "Printable" ) ) );
-    SetAutoFill( FALSE );
-    SetAutoLine( FALSE );
+    SetAutoFill( false );
+    SetAutoLine( false );
 
     // fill DFF property set
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
@@ -1256,7 +1257,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
 
                     // AutoFill style would change if Postit.cxx object creation values are changed
                     OUString aCol(((XFillColorItem &)GETITEM(aItemSet, XFillColorItem , XATTR_FILLCOLOR)).GetValue());
-                    mbAutoFill  = !aCol.getLength() && (GETITEMVALUE(aItemSet, XFillStyleItem, XATTR_FILLSTYLE, ULONG) == XFILL_SOLID);
+                    mbAutoFill  = !aCol.getLength() && (GETITEMVALUE(aItemSet, XFillStyleItem, XATTR_FILLSTYLE, sal_uLong) == XFILL_SOLID);
                     mbAutoLine  = true;
                     mbRowHidden = (rRoot.GetDoc().RowHidden(maScPos.Row(),maScPos.Tab()));
                     mbColHidden = (rRoot.GetDoc().ColHidden(maScPos.Col(),maScPos.Tab()));

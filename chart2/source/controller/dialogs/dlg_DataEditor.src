@@ -36,7 +36,7 @@
 
 ModalDialog DLG_DIAGRAM_DATA
 {
-    HelpID = SID_DIAGRAM_DATA ;
+    HelpID = HID_DIAGRAM_DATA ;
     OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;

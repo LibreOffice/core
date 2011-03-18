@@ -251,7 +251,7 @@ sal_Bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, const 
     else if( IsXMLToken(rString, XML_REMOVE_PRECEDENTS ) )
         rDetOpType = SCDETOP_DELPRED;
     else
-        return sal_False;
+        return false;
     return sal_True;
 }
 
@@ -316,8 +316,8 @@ void ScXMLConverter::GetStringFromDetOpType(
 void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
 {
     OUStringBuffer sBuffer(sFormula.getLength());
-    sal_Bool bInQuotationMarks(sal_False);
-    sal_Bool bInDoubleQuotationMarks(sal_False);
+    sal_Bool bInQuotationMarks(false);
+    sal_Bool bInDoubleQuotationMarks(false);
     sal_Int16 nCountBraces(0);
     sal_Unicode chPrevious('=');
     for (sal_Int32 i = 0; i < sFormula.getLength(); ++i)

@@ -53,12 +53,12 @@ class ScPreviewLocationEntry;
 
 struct ScPreviewColRowInfo
 {
-    BOOL    bIsHeader;
+    sal_Bool    bIsHeader;
     SCCOLROW    nDocIndex;
     long    nPixelStart;
     long    nPixelEnd;
 
-    void Set( BOOL bHeader, SCCOLROW nIndex, long nStart, long nEnd )
+    void Set( sal_Bool bHeader, SCCOLROW nIndex, long nStart, long nEnd )
     {
         bIsHeader   = bHeader;
         nDocIndex   = nIndex;
@@ -100,7 +100,7 @@ class ScPreviewLocationData
     MapMode     aDrawMapMode[SC_PREVIEW_MAXRANGES];
     Rectangle   aDrawRectangle[SC_PREVIEW_MAXRANGES];
         sal_uInt8       aDrawRangeId[SC_PREVIEW_MAXRANGES];
-    USHORT      nDrawRanges;
+    sal_uInt16      nDrawRanges;
     SCTAB       nPrintTab;
     boost::ptr_list<ScPreviewLocationEntry> aEntries;
 
@@ -113,11 +113,11 @@ public:
     void    SetCellMapMode( const MapMode& rMapMode );
     void    SetPrintTab( SCTAB nNew );
     void    Clear();
-    void    AddCellRange( const Rectangle& rRect, const ScRange& rRange, BOOL bRepCol, BOOL bRepRow,
+    void    AddCellRange( const Rectangle& rRect, const ScRange& rRange, sal_Bool bRepCol, sal_Bool bRepRow,
                             const MapMode& rDrawMap );
-    void    AddColHeaders( const Rectangle& rRect, SCCOL nStartCol, SCCOL nEndCol, BOOL bRepCol );
-    void    AddRowHeaders( const Rectangle& rRect, SCROW nStartRow, SCROW nEndRow, BOOL bRepRow );
-    void    AddHeaderFooter( const Rectangle& rRect, BOOL bHeader, BOOL bLeft );
+    void    AddColHeaders( const Rectangle& rRect, SCCOL nStartCol, SCCOL nEndCol, sal_Bool bRepCol );
+    void    AddRowHeaders( const Rectangle& rRect, SCROW nStartRow, SCROW nEndRow, sal_Bool bRepRow );
+    void    AddHeaderFooter( const Rectangle& rRect, sal_Bool bHeader, sal_Bool bLeft );
     void    AddNoteMark( const Rectangle& rRect, const ScAddress& rPos );
     void    AddNoteText( const Rectangle& rRect, const ScAddress& rPos );
 
@@ -126,24 +126,24 @@ public:
     //  Get info on visible columns/rows in the visible area
     void    GetTableInfo( const Rectangle& rVisiblePixel, ScPreviewTableInfo& rInfo ) const;
 
-    USHORT  GetDrawRanges() const   { return nDrawRanges; }
-    void    GetDrawRange( USHORT nPos, Rectangle& rPixelRect, MapMode& rMapMode, sal_uInt8& rRangeId ) const;
+    sal_uInt16  GetDrawRanges() const   { return nDrawRanges; }
+    void    GetDrawRange( sal_uInt16 nPos, Rectangle& rPixelRect, MapMode& rMapMode, sal_uInt8& rRangeId ) const;
 
-    BOOL    GetHeaderPosition( Rectangle& rHeaderRect ) const;
-    BOOL    GetFooterPosition( Rectangle& rFooterRect ) const;
-    BOOL    IsHeaderLeft() const;
-    BOOL    IsFooterLeft() const;
+    sal_Bool    GetHeaderPosition( Rectangle& rHeaderRect ) const;
+    sal_Bool    GetFooterPosition( Rectangle& rFooterRect ) const;
+    sal_Bool    IsHeaderLeft() const;
+    sal_Bool    IsFooterLeft() const;
 
-    long    GetNoteCountInRange( const Rectangle& rVisiblePixel, BOOL bNoteMarks ) const;
-    BOOL    GetNoteInRange( const Rectangle& rVisiblePixel, long nIndex, BOOL bNoteMarks,
+    long    GetNoteCountInRange( const Rectangle& rVisiblePixel, sal_Bool bNoteMarks ) const;
+    sal_Bool    GetNoteInRange( const Rectangle& rVisiblePixel, long nIndex, sal_Bool bNoteMarks,
                             ScAddress& rCellPos, Rectangle& rNoteRect ) const;
-    Rectangle GetNoteInRangeOutputRect(const Rectangle& rVisiblePixel, BOOL bNoteMarks,
+    Rectangle GetNoteInRangeOutputRect(const Rectangle& rVisiblePixel, sal_Bool bNoteMarks,
                             const ScAddress& aCellPos) const;
 
     //  Check if any cells (including column/row headers) are in the visible area
-    BOOL    HasCellsInRange( const Rectangle& rVisiblePixel ) const;
+    sal_Bool    HasCellsInRange( const Rectangle& rVisiblePixel ) const;
 
-    BOOL    GetCellPosition( const ScAddress& rCellPos, Rectangle& rCellRect ) const;
+    sal_Bool    GetCellPosition( const ScAddress& rCellPos, Rectangle& rCellRect ) const;
 
     // returns the rectangle where the EditEngine draws the text of a Header Cell
     // if bColHeader is true it returns the rectangle of the header of the column in rCellPos
@@ -152,8 +152,8 @@ public:
     Rectangle GetCellOutputRect(const ScAddress& rCellPos) const;
 
     // Query the range and rectangle of the main (non-repeat) cell range.
-    // Returns FALSE if not contained.
-    BOOL    GetMainCellRange( ScRange& rRange, Rectangle& rPixRect ) const;
+    // Returns sal_False if not contained.
+    sal_Bool    GetMainCellRange( ScRange& rRange, Rectangle& rPixRect ) const;
 };
 
 #endif

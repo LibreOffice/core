@@ -55,7 +55,7 @@ using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 
-#define SC_VERSION ((USHORT)251)
+#define SC_VERSION ((sal_uInt16)251)
 
 TYPEINIT1(ScTpCalcItem, SfxPoolItem);
 
@@ -69,7 +69,7 @@ inline long TwipsToEvenHMM(long nTwips) { return ( (nTwips * 127 + 72) / 144 ) *
 
 //------------------------------------------------------------------------
 
-USHORT lcl_GetDefaultTabDist()
+sal_uInt16 lcl_GetDefaultTabDist()
 {
     if ( ScOptionsUtil::IsMetricSystem() )
         return 709;                 // 1,25 cm
@@ -123,8 +123,8 @@ ScDocOptions::~ScDocOptions()
 
 void ScDocOptions::ResetDocOptions()
 {
-    bIsIgnoreCase       = FALSE;
-    bIsIter             = FALSE;
+    bIsIgnoreCase       = false;
+    bIsIter             = false;
     nIterCount          = 100;
     fIterEps            = 1.0E-3;
     nPrecStandardFormat = SvNumberFormatter::UNLIMITED_PRECISION;
@@ -134,11 +134,11 @@ void ScDocOptions::ResetDocOptions()
     nYear               = 1899;
     nYear2000           = SvNumberFormatter::GetYear2000Default();
     nTabDistance        = lcl_GetDefaultTabDist();
-    bCalcAsShown        = FALSE;
-    bMatchWholeCell     = TRUE;
-    bDoAutoSpell        = FALSE;
-    bLookUpColRowNames  = TRUE;
-    bFormulaRegexEnabled= TRUE;
+    bCalcAsShown        = false;
+    bMatchWholeCell     = true;
+    bDoAutoSpell        = false;
+    bLookUpColRowNames  = true;
+    bFormulaRegexEnabled= true;
     bUseEnglishFuncName = false;
     eFormulaGrammar     = ::formula::FormulaGrammar::GRAM_NATIVE;
 
@@ -208,7 +208,7 @@ const LocaleDataWrapper& ScDocOptions::GetLocaleDataWrapper()
 
 //------------------------------------------------------------------------
 
-ScTpCalcItem::ScTpCalcItem( USHORT nWhichP, const ScDocOptions& rOpt )
+ScTpCalcItem::ScTpCalcItem( sal_uInt16 nWhichP, const ScDocOptions& rOpt )
     :   SfxPoolItem ( nWhichP ),
         theOptions  ( rOpt )
 {
@@ -377,7 +377,7 @@ ScDocCfg::ScDocCfg() :
     Sequence<Any> aValues;
     const Any* pValues = NULL;
 
-    USHORT nDateDay, nDateMonth, nDateYear;
+    sal_uInt16 nDateDay, nDateMonth, nDateYear;
     GetDate( nDateDay, nDateMonth, nDateYear );
 
     aNames = GetCalcPropertyNames();
@@ -399,22 +399,22 @@ ScDocCfg::ScDocCfg() :
                         SetIter( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCCALCOPT_ITER_STEPS:
-                        if (pValues[nProp] >>= nIntVal) SetIterCount( (USHORT) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetIterCount( (sal_uInt16) nIntVal );
                         break;
                     case SCCALCOPT_ITER_MINCHG:
                         if (pValues[nProp] >>= fDoubleVal) SetIterEps( fDoubleVal );
                         break;
                     case SCCALCOPT_DATE_DAY:
-                        if (pValues[nProp] >>= nIntVal) nDateDay = (USHORT) nIntVal;
+                        if (pValues[nProp] >>= nIntVal) nDateDay = (sal_uInt16) nIntVal;
                         break;
                     case SCCALCOPT_DATE_MONTH:
-                        if (pValues[nProp] >>= nIntVal) nDateMonth = (USHORT) nIntVal;
+                        if (pValues[nProp] >>= nIntVal) nDateMonth = (sal_uInt16) nIntVal;
                         break;
                     case SCCALCOPT_DATE_YEAR:
-                        if (pValues[nProp] >>= nIntVal) nDateYear = (USHORT) nIntVal;
+                        if (pValues[nProp] >>= nIntVal) nDateYear = (sal_uInt16) nIntVal;
                         break;
                     case SCCALCOPT_DECIMALS:
-                        if (pValues[nProp] >>= nIntVal) SetStdPrecision( (USHORT) nIntVal );
+                        if (pValues[nProp] >>= nIntVal) SetStdPrecision( (sal_uInt16) nIntVal );
                         break;
                     case SCCALCOPT_CASESENSITIVE:
                         // content is reversed
@@ -530,7 +530,7 @@ ScDocCfg::ScDocCfg() :
                     case SCDOCLAYOUTOPT_TABSTOP:
                         // TabDistance in ScDocOptions is in twips
                         if (pValues[nProp] >>= nIntVal)
-                            SetTabDistance( (USHORT) HMMToTwips( nIntVal ) );
+                            SetTabDistance( (sal_uInt16) HMMToTwips( nIntVal ) );
                         break;
                 }
             }
@@ -567,7 +567,7 @@ IMPL_LINK( ScDocCfg, CalcCommitHdl, void *, EMPTYARG )
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    USHORT nDateDay, nDateMonth, nDateYear;
+    sal_uInt16 nDateDay, nDateMonth, nDateYear;
     GetDate( nDateDay, nDateMonth, nDateYear );
 
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)

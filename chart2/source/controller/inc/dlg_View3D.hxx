@@ -73,7 +73,7 @@ private:
 
     ControllerLockHelper                m_aControllerLocker;
 
-    static USHORT m_nLastPageId;
+    static sal_uInt16 m_nLastPageId;
 };
 
 //.............................................................................

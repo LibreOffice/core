@@ -243,7 +243,7 @@ void ScParameterClassification::Init()
                     if ( pRun->aData.nParam[j] )
                     {
                         eLast = pRun->aData.nParam[j];
-                        pRun->nMinParams = sal::static_int_cast<BYTE>( j+1 );
+                        pRun->nMinParams = sal::static_int_cast<sal_uInt8>( j+1 );
                     }
                     else
                         pRun->aData.nParam[j] = eLast;
@@ -256,7 +256,7 @@ void ScParameterClassification::Init()
                     if ( !pRun->aData.nParam[j] )
                     {
                         if ( j == 0 || pRun->aData.nParam[j-1] != Bounds )
-                            pRun->nMinParams = sal::static_int_cast<BYTE>( j );
+                            pRun->nMinParams = sal::static_int_cast<sal_uInt8>( j );
                         pRun->aData.nParam[j] = Bounds;
                     }
                 }
@@ -289,7 +289,7 @@ void ScParameterClassification::Exit()
 
 
 ScParameterClassification::Type ScParameterClassification::GetParameterType(
-        const formula::FormulaToken* pToken, USHORT nParameter)
+        const formula::FormulaToken* pToken, sal_uInt16 nParameter)
 {
     OpCode eOp = pToken->GetOpCode();
     switch ( eOp )
@@ -323,11 +323,11 @@ ScParameterClassification::Type ScParameterClassification::GetParameterType(
 
 ScParameterClassification::Type
 ScParameterClassification::GetExternalParameterType( const formula::FormulaToken* pToken,
-        USHORT nParameter)
+        sal_uInt16 nParameter)
 {
     Type eRet = Unknown;
     // similar to ScInterpreter::ScExternal()
-    USHORT nIndex;
+    sal_uInt16 nIndex;
     String aUnoName;
     String aFuncName( ScGlobal::pCharClass->upper( pToken->GetExternal()));
     if ( ScGlobal::GetFuncCollection()->SearchFunc( aFuncName, nIndex) )
@@ -351,7 +351,7 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
         }
     }
     else if ( (aUnoName = ScGlobal::GetAddInCollection()->FindFunction(
-                    aFuncName, FALSE)).Len() )
+                    aFuncName, false)).Len() )
     {
         // the relevant parts of ScUnoAddInCall without having to create one
         const ScUnoAddInFuncData* pFuncData =
@@ -426,7 +426,7 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
             nArgs = CommonData::nMaxParams;
             pRun->aData.bRepeatLast = true;
         }
-        pRun->nMinParams = static_cast< BYTE >( nArgs );
+        pRun->nMinParams = static_cast< sal_uInt8 >( nArgs );
         for ( size_t j=0; j < nArgs; ++j )
         {
             pRun->aData.nParam[j] = Value;
@@ -471,7 +471,7 @@ void ScParameterClassification::GenerateDocumentation()
             ByteString aStr( xMap->getSymbol(eOp), RTL_TEXTENCODING_UTF8);
             aStr += "(";
             formula::FormulaByteToken aToken( eOp);
-            BYTE nParams = GetMinimumParameters( eOp);
+            sal_uInt8 nParams = GetMinimumParameters( eOp);
             // preset parameter count according to opcode value, with some
             // special handling
             if ( eOp < SC_OPCODE_STOP_DIV )
@@ -522,7 +522,7 @@ void ScParameterClassification::GenerateDocumentation()
             if ( nParams != aToken.GetParamCount() )
                 fprintf( stdout, "(parameter count differs, token ParamCount: %d  classification: %d) ",
                         aToken.GetParamCount(), nParams);
-            for ( USHORT j=0; j < nParams; ++j )
+            for ( sal_uInt16 j=0; j < nParams; ++j )
             {
                 if ( j > 0 )
                     aStr += ",";

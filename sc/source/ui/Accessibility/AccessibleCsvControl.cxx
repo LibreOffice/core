@@ -549,7 +549,7 @@ sal_Bool SAL_CALL ScAccessibleCsvRuler::setSelection( sal_Int32 /* nStartIndex *
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     ensureAlive();
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL ScAccessibleCsvRuler::getText() throw( RuntimeException )
@@ -744,7 +744,7 @@ sal_Bool SAL_CALL ScAccessibleCsvRuler::copyText( sal_Int32 /* nStartIndex */, s
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     ensureAlive();
-    return sal_False;
+    return false;
 }
 
 
@@ -1112,7 +1112,7 @@ sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleRowSelected( sal_Int32 /* nRo
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     ensureAlive();
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleColumnSelected( sal_Int32 nColumn )

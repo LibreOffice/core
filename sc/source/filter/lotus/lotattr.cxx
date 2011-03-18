@@ -89,7 +89,7 @@ LotAttrCache::LotAttrCache ()
 
 LotAttrCache::~LotAttrCache()
 {
-    for( UINT16 nCnt = 0 ; nCnt < 6 ; nCnt++ )
+    for( sal_uInt16 nCnt = 0 ; nCnt < 6 ; nCnt++ )
         delete ppColorItems[ nCnt ];
 
     delete pBlack;
@@ -101,7 +101,7 @@ LotAttrCache::~LotAttrCache()
 
 const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
 {
-    UINT32  nRefHash;
+    sal_uInt32  nRefHash;
     MakeHash( rAttr, nRefHash );
 
     boost::ptr_vector<ENTRY>::const_iterator iter = std::find_if(aEntries.begin(),aEntries.end(),
@@ -120,7 +120,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
 
     pLotusRoot->pFontBuff->Fill( rAttr.nFont, rItemSet );
 
-    UINT8 nLine = rAttr.nLineStyle;
+    sal_uInt8 nLine = rAttr.nLineStyle;
     if( nLine )
     {
         SvxBoxItem      aBox( ATTR_BORDER );
@@ -142,7 +142,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
         rItemSet.Put( aBox );
     }
 
-    UINT8               nFontCol = rAttr.nFontCol & 0x07;
+    sal_uInt8               nFontCol = rAttr.nFontCol & 0x07;
     if( nFontCol )
     {
         // nFontCol > 0
@@ -152,7 +152,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
             rItemSet.Put( *pWhite );
     }
 
-    UINT8 nBack = rAttr.nBack & 0x1F;
+    sal_uInt8 nBack = rAttr.nBack & 0x1F;
     if( nBack )
         rItemSet.Put( SvxBrushItem( GetColor( nBack & 0x07 ), ATTR_BACKGROUND ) );
 
@@ -168,9 +168,9 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
 }
 
 
-void LotAttrCache::LotusToScBorderLine( UINT8 nLine, SvxBorderLine& aBL )
+void LotAttrCache::LotusToScBorderLine( sal_uInt8 nLine, SvxBorderLine& aBL )
 {
-    static const UINT16 pPara[ 4 ][ 3 ] =
+    static const sal_uInt16 pPara[ 4 ][ 3 ] =
     {
         { 0,0,0 },
         { DEF_LINE_WIDTH_1, 0, 0 },
@@ -188,7 +188,7 @@ void LotAttrCache::LotusToScBorderLine( UINT8 nLine, SvxBorderLine& aBL )
     }
 }
 
-const SvxColorItem& LotAttrCache::GetColorItem( const UINT8 nLotIndex ) const
+const SvxColorItem& LotAttrCache::GetColorItem( const sal_uInt8 nLotIndex ) const
 {
     DBG_ASSERT( nLotIndex > 0 && nLotIndex < 7,
         "-LotAttrCache::GetColorItem(): so nicht!" );
@@ -196,7 +196,7 @@ const SvxColorItem& LotAttrCache::GetColorItem( const UINT8 nLotIndex ) const
     return *ppColorItems[ nLotIndex - 1 ];
 }
 
-const Color& LotAttrCache::GetColor( const UINT8 nLotIndex ) const
+const Color& LotAttrCache::GetColor( const sal_uInt8 nLotIndex ) const
 {
     // Farbe <-> Index passt fuer Background, nicht aber fuer Fonts (0 <-> 7)!
     DBG_ASSERT( nLotIndex < 8, "*LotAttrCache::GetColor(): Index > 7!" );
@@ -235,7 +235,7 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
 }
 
 
-void LotAttrCol::Apply( const SCCOL nColNum, const SCTAB nTabNum, const BOOL /*bClear*/ )
+void LotAttrCol::Apply( const SCCOL nColNum, const SCTAB nTabNum, const sal_Bool /*bClear*/ )
 {
     ScDocument*     pDoc = pLotusRoot->pDoc;
 

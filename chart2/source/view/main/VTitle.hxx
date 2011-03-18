@@ -48,7 +48,7 @@ public:
                   ::com::sun::star::chart2::XTitle > & xTitle );
     virtual ~VTitle();
 
-    void SAL_CALL init( const ::com::sun::star::uno::Reference<
+    void    init( const ::com::sun::star::uno::Reference<
                      ::com::sun::star::drawing::XShapes >& xTargetPage
              , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
              , const rtl::OUString& rCID );

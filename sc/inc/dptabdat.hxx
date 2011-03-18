@@ -75,9 +75,9 @@ namespace com { namespace sun { namespace star { namespace sheet {
 struct ScDPValueData
 {
     double  fValue;
-    BYTE    nType;
+    sal_uInt8   nType;
 
-    void    Set( double fV, BYTE nT ) { fValue = fV; nType = nT; }
+    void    Set( double fV, sal_uInt8 nT ) { fValue = fV; nType = nT; }
 };
 
 class ScDPResultMember;
@@ -135,12 +135,12 @@ public:
     virtual long                    GetColumnCount() = 0;
     virtual   const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
     virtual String                  getDimensionName(long nColumn) = 0;
-    virtual BOOL                    getIsDataLayoutDimension(long nColumn) = 0;
-    virtual BOOL                    IsDateDimension(long nDim) = 0;
-    virtual ULONG                   GetNumberFormat(long nDim);
-    virtual UINT32                  GetNumberFormatByIdx( NfIndexTableOffset );
+    virtual sal_Bool                    getIsDataLayoutDimension(long nColumn) = 0;
+    virtual sal_Bool                    IsDateDimension(long nDim) = 0;
+    virtual sal_uLong                   GetNumberFormat(long nDim);
+    virtual sal_uInt32                  GetNumberFormatByIdx( NfIndexTableOffset );
     virtual void                    DisposeData() = 0;
-    virtual void                    SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty ) = 0;
+    virtual void                    SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty ) = 0;
 
     virtual bool                    IsRepeatIfEmpty();
 
@@ -153,12 +153,12 @@ public:
     virtual const ScDPCacheTable&   GetCacheTable() const = 0;
 
                                     // overloaded in ScDPGroupTableData:
-    virtual BOOL                    IsBaseForGroup(long nDim) const;
+    virtual sal_Bool                    IsBaseForGroup(long nDim) const;
     virtual long                      GetGroupBase(long nGroupDim) const;
-    virtual BOOL                    IsNumOrDateGroup(long nDim) const;
-    virtual BOOL                    IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
+    virtual sal_Bool                    IsNumOrDateGroup(long nDim) const;
+    virtual sal_Bool                    IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
                                                const ScDPItemData& rBaseData, long nBaseIndex ) const;
-    virtual BOOL                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
+    virtual sal_Bool                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                                       const ScDPItemData& rSecondData, long nSecondIndex ) const;
 
     virtual long                            GetMembersCount( long nDim );

@@ -130,8 +130,8 @@ ScTableLink* ScSheetLinkObj::GetLink_Impl() const
     if (pDocShell)
     {
         sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
-        USHORT nCount = pLinkManager->GetLinks().Count();
-        for (USHORT i=0; i<nCount; i++)
+        sal_uInt16 nCount = pLinkManager->GetLinks().Count();
+        for (sal_uInt16 i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
             if (pBase->ISA(ScTableLink))
@@ -188,8 +188,8 @@ void SAL_CALL ScSheetLinkObj::removeRefreshListener(
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    USHORT nCount = aRefreshListeners.Count();
-    for ( USHORT n=nCount; n--; )
+    sal_uInt16 nCount = aRefreshListeners.Count();
+    for ( sal_uInt16 n=nCount; n--; )
     {
         uno::Reference<util::XRefreshListener>* pObj = aRefreshListeners[n];
         if ( *pObj == xListener )
@@ -206,7 +206,7 @@ void ScSheetLinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
     aEvent.Source.set((cppu::OWeakObject*)this);
-    for ( USHORT n=0; n<aRefreshListeners.Count(); n++ )
+    for ( sal_uInt16 n=0; n<aRefreshListeners.Count(); n++ )
         (*aRefreshListeners[n])->refreshed( aEvent );
 }
 
@@ -214,7 +214,7 @@ void ScSheetLinkObj::ModifyRefreshDelay_Impl( sal_Int32 nRefresh )
 {
     ScTableLink* pLink = GetLink_Impl();
     if( pLink )
-        pLink->SetRefreshDelay( (ULONG) nRefresh );
+        pLink->SetRefreshDelay( (sal_uLong) nRefresh );
 }
 
 // XPropertySet
@@ -418,11 +418,11 @@ void ScSheetLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XSheetLinks
 
-ScSheetLinkObj* ScSheetLinksObj::GetObjectByIndex_Impl(INT32 nIndex)
+ScSheetLinkObj* ScSheetLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
     if (pDocShell)
     {
-        INT32 nCount = 0;
+        sal_Int32 nCount = 0;
         ScStrCollection aNames; // um doppelte wegzulassen
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTabCount = pDoc->GetTableCount();
@@ -481,7 +481,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScSheetLinksObj::createEnumerat
 sal_Int32 SAL_CALL ScSheetLinksObj::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    INT32 nCount = 0;
+    sal_Int32 nCount = 0;
     if (pDocShell)
     {
         ScStrCollection aNames; // um doppelte wegzulassen
@@ -556,10 +556,10 @@ sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const rtl::OUString& aName )
                 //! case-insensitiv ???
                 String aLinkDoc(pDoc->GetLinkDoc( nTab ));
                 if ( aLinkDoc == aNameStr )
-                    return TRUE;
+                    return sal_True;
             }
     }
-    return FALSE;
+    return false;
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(uno::RuntimeException)
@@ -574,10 +574,10 @@ uno::Sequence<rtl::OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(u
         SCTAB nTabCount = pDoc->GetTableCount();
         String aName;
 
-        INT32 nLinkCount = getCount();
+        sal_Int32 nLinkCount = getCount();
         uno::Sequence<rtl::OUString> aSeq(nLinkCount);
         rtl::OUString* pAry = aSeq.getArray();
-        USHORT nPos = 0;
+        sal_uInt16 nPos = 0;
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
         {
             if (pDoc->IsLinked(nTab))
@@ -598,14 +598,14 @@ uno::Sequence<rtl::OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(u
 
 //------------------------------------------------------------------------
 
-ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, USHORT nPos )
+ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, sal_uInt16 nPos )
 {
     if (pDocShell)
     {
         sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
-        USHORT nTotalCount = pLinkManager->GetLinks().Count();
-        USHORT nAreaCount = 0;
-        for (USHORT i=0; i<nTotalCount; i++)
+        sal_uInt16 nTotalCount = pLinkManager->GetLinks().Count();
+        sal_uInt16 nAreaCount = 0;
+        for (sal_uInt16 i=0; i<nTotalCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
             if (pBase->ISA(ScAreaLink))
@@ -619,7 +619,7 @@ ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, USHORT nPos )
     return NULL;    // nicht gefunden
 }
 
-ScAreaLinkObj::ScAreaLinkObj(ScDocShell* pDocSh, USHORT nP) :
+ScAreaLinkObj::ScAreaLinkObj(ScDocShell* pDocSh, sal_uInt16 nP) :
     aPropSet( lcl_GetSheetLinkMap() ),
     pDocShell( pDocSh ),
     nPos( nP )
@@ -670,7 +670,7 @@ void ScAreaLinkObj::Modify_Impl( const rtl::OUString* pNewFile, const rtl::OUStr
         String aOptions (pLink->GetOptions());
         String aSource  (pLink->GetSource());
         ScRange aDest   (pLink->GetDestArea());
-        ULONG nRefresh  = pLink->GetRefreshDelay();
+        sal_uLong nRefresh  = pLink->GetRefreshDelay();
 
         //! Undo fuer Loeschen
         //! Undo zusammenfassen
@@ -679,7 +679,7 @@ void ScAreaLinkObj::Modify_Impl( const rtl::OUString* pNewFile, const rtl::OUStr
         pLinkManager->Remove( pLink );
         pLink = NULL;   // bei Remove geloescht
 
-        BOOL bFitBlock = TRUE;          // verschieben, wenn durch Update Groesse geaendert
+        sal_Bool bFitBlock = sal_True;          // verschieben, wenn durch Update Groesse geaendert
         if (pNewFile)
         {
             aFile = String( *pNewFile );
@@ -694,11 +694,11 @@ void ScAreaLinkObj::Modify_Impl( const rtl::OUString* pNewFile, const rtl::OUStr
         if (pNewDest)
         {
             ScUnoConversion::FillScRange( aDest, *pNewDest );
-            bFitBlock = FALSE;  // neuer Bereich angegeben -> keine Inhalte verschieben
+            bFitBlock = false;  // neuer Bereich angegeben -> keine Inhalte verschieben
         }
 
         ScDocFunc aFunc(*pDocShell);
-        aFunc.InsertAreaLink( aFile, aFilter, aOptions, aSource, aDest, nRefresh, bFitBlock, TRUE );
+        aFunc.InsertAreaLink( aFile, aFilter, aOptions, aSource, aDest, nRefresh, bFitBlock, sal_True );
     }
 }
 
@@ -706,7 +706,7 @@ void ScAreaLinkObj::ModifyRefreshDelay_Impl( sal_Int32 nRefresh )
 {
     ScAreaLink* pLink = lcl_GetAreaLink( pDocShell, nPos );
     if( pLink )
-        pLink->SetRefreshDelay( (ULONG) nRefresh );
+        pLink->SetRefreshDelay( (sal_uLong) nRefresh );
 }
 
 // XRefreshable
@@ -738,8 +738,8 @@ void SAL_CALL ScAreaLinkObj::removeRefreshListener(
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    USHORT nCount = aRefreshListeners.Count();
-    for ( USHORT n=nCount; n--; )
+    sal_uInt16 nCount = aRefreshListeners.Count();
+    for ( sal_uInt16 n=nCount; n--; )
     {
         uno::Reference<util::XRefreshListener>* pObj = aRefreshListeners[n];
         if ( *pObj == xListener )
@@ -756,7 +756,7 @@ void ScAreaLinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
     aEvent.Source.set((cppu::OWeakObject*)this);
-    for ( USHORT n=0; n<aRefreshListeners.Count(); n++ )
+    for ( sal_uInt16 n=0; n<aRefreshListeners.Count(); n++ )
         (*aRefreshListeners[n])->refreshed( aEvent );
 }
 
@@ -960,10 +960,10 @@ void ScAreaLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XAreaLinks
 
-ScAreaLinkObj* ScAreaLinksObj::GetObjectByIndex_Impl(INT32 nIndex)
+ScAreaLinkObj* ScAreaLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
     if ( pDocShell && nIndex >= 0 && nIndex < getCount() )
-        return new ScAreaLinkObj( pDocShell, (USHORT)nIndex );
+        return new ScAreaLinkObj( pDocShell, (sal_uInt16)nIndex );
 
     return NULL;    // nicht gefunden
 }
@@ -989,14 +989,14 @@ void SAL_CALL ScAreaLinksObj::insertAtPosition( const table::CellAddress& aDestP
         ScDocFunc aFunc(*pDocShell);
         aFunc.InsertAreaLink( aFileStr, aFilterStr, aOptionStr,
                                 aSourceStr, ScRange(aDestAddr),
-                                0, FALSE, TRUE );                   // keine Inhalte verschieben
+                                0, false, sal_True );                   // keine Inhalte verschieben
     }
 }
 
 void SAL_CALL ScAreaLinksObj::removeByIndex( sal_Int32 nIndex ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, (USHORT)nIndex);
+    ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, (sal_uInt16)nIndex);
     if (pLink)
     {
         //! SetAddUndo oder so
@@ -1020,12 +1020,12 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAreaLinksObj::createEnumerati
 sal_Int32 SAL_CALL ScAreaLinksObj::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    INT32 nAreaCount = 0;
+    sal_Int32 nAreaCount = 0;
     if (pDocShell)
     {
         sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
-        USHORT nTotalCount = pLinkManager->GetLinks().Count();
-        for (USHORT i=0; i<nTotalCount; i++)
+        sal_uInt16 nTotalCount = pLinkManager->GetLinks().Count();
+        for (sal_uInt16 i=0; i<nTotalCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
             if (pBase->ISA(ScAreaLink))
@@ -1181,8 +1181,8 @@ void SAL_CALL ScDDELinkObj::removeRefreshListener(
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    USHORT nCount = aRefreshListeners.Count();
-    for ( USHORT n=nCount; n--; )
+    sal_uInt16 nCount = aRefreshListeners.Count();
+    for ( sal_uInt16 n=nCount; n--; )
     {
         uno::Reference<util::XRefreshListener>* pObj = aRefreshListeners[n];
         if ( *pObj == xListener )
@@ -1209,7 +1209,7 @@ uno::Sequence< uno::Sequence< uno::Any > > ScDDELinkObj::getResults(  )
         ScDocument* pDoc = pDocShell->GetDocument();
         if ( pDoc )
         {
-            USHORT nPos = 0;
+            sal_uInt16 nPos = 0;
             if ( pDoc->FindDdeLink( aAppl, aTopic, aItem, SC_DDE_IGNOREMODE, nPos ) )
             {
                 const ScMatrix* pMatrix = pDoc->GetDdeLinkResultMatrix( nPos );
@@ -1247,7 +1247,7 @@ void ScDDELinkObj::setResults( const uno::Sequence< uno::Sequence< uno::Any > >&
         ScDocument* pDoc = pDocShell->GetDocument();
         if ( pDoc )
         {
-            USHORT nPos = 0;
+            sal_uInt16 nPos = 0;
             if ( pDoc->FindDdeLink( aAppl, aTopic, aItem, SC_DDE_IGNOREMODE, nPos ) )
             {
                 uno::Any aAny;
@@ -1270,7 +1270,7 @@ void ScDDELinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
     aEvent.Source.set((cppu::OWeakObject*)this);
-    for ( USHORT n=0; n<aRefreshListeners.Count(); n++ )
+    for ( sal_uInt16 n=0; n<aRefreshListeners.Count(); n++ )
         (*aRefreshListeners[n])->refreshed( aEvent );
 }
 
@@ -1301,13 +1301,13 @@ void ScDDELinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XDDELinks
 
-ScDDELinkObj* ScDDELinksObj::GetObjectByIndex_Impl(INT32 nIndex)
+ScDDELinkObj* ScDDELinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
     if (pDocShell)
     {
         String aAppl, aTopic, aItem;
         if ( nIndex <= USHRT_MAX &&
-                pDocShell->GetDocument()->GetDdeLinkData( (USHORT)nIndex, aAppl, aTopic, aItem ) )
+                pDocShell->GetDocument()->GetDdeLinkData( (sal_uInt16)nIndex, aAppl, aTopic, aItem ) )
             return new ScDDELinkObj( pDocShell, aAppl, aTopic, aItem );
     }
     return NULL;
@@ -1321,8 +1321,8 @@ ScDDELinkObj* ScDDELinksObj::GetObjectByName_Impl(const rtl::OUString& aName)
         String aAppl, aTopic, aItem;
 
         ScDocument* pDoc = pDocShell->GetDocument();
-        USHORT nCount = pDoc->GetDdeLinkCount();
-        for (USHORT i=0; i<nCount; i++)
+        sal_uInt16 nCount = pDoc->GetDdeLinkCount();
+        for (sal_uInt16 i=0; i<nCount; i++)
         {
             pDoc->GetDdeLinkData( i, aAppl, aTopic, aItem );
             if ( lcl_BuildDDEName(aAppl, aTopic, aItem) == aNamStr )
@@ -1346,7 +1346,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScDDELinksObj::createEnumeratio
 sal_Int32 SAL_CALL ScDDELinksObj::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    INT32 nAreaCount = 0;
+    sal_Int32 nAreaCount = 0;
     if (pDocShell)
         nAreaCount = pDocShell->GetDocument()->GetDdeLinkCount();
     return nAreaCount;
@@ -1396,11 +1396,11 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDDELinksObj::getElementNames() throw(uno
         String aAppl, aTopic, aItem;
 
         ScDocument* pDoc = pDocShell->GetDocument();
-        USHORT nCount = pDoc->GetDdeLinkCount();
+        sal_uInt16 nCount = pDoc->GetDdeLinkCount();
         uno::Sequence<rtl::OUString> aSeq(nCount);
         rtl::OUString* pAry = aSeq.getArray();
 
-        for (USHORT i=0; i<nCount; i++)
+        for (sal_uInt16 i=0; i<nCount; i++)
         {
             pDoc->GetDdeLinkData( i, aAppl, aTopic, aItem );
             pAry[i] = lcl_BuildDDEName(aAppl, aTopic, aItem);
@@ -1420,15 +1420,15 @@ sal_Bool SAL_CALL ScDDELinksObj::hasByName( const rtl::OUString& aName )
         String aAppl, aTopic, aItem;
 
         ScDocument* pDoc = pDocShell->GetDocument();
-        USHORT nCount = pDoc->GetDdeLinkCount();
-        for (USHORT i=0; i<nCount; i++)
+        sal_uInt16 nCount = pDoc->GetDdeLinkCount();
+        for (sal_uInt16 i=0; i<nCount; i++)
         {
             pDoc->GetDdeLinkData( i, aAppl, aTopic, aItem );
             if ( lcl_BuildDDEName(aAppl, aTopic, aItem) == aNamStr )
-                return TRUE;
+                return sal_True;
         }
     }
-    return FALSE;
+    return false;
 }
 
 // XDDELinks
@@ -1446,7 +1446,7 @@ uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
         ScDocument* pDoc = pDocShell->GetDocument();
         if ( pDoc )
         {
-            BYTE nMod = SC_DDE_DEFAULT;
+            sal_uInt8 nMod = SC_DDE_DEFAULT;
             switch ( nMode )
             {
                 case sheet::DDELinkMode_DEFAULT:

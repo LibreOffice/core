@@ -106,7 +106,7 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
         nSrcTab         ( nSourceTab ),     // ist nicht im QueryParam
         nFieldCount     ( 0 )
 {
-    for (USHORT i=0; i<=MAXCOL; i++)
+    for (sal_uInt16 i=0; i<=MAXCOL; i++)
         pEntryLists[i] = NULL;
 
     Init( rArgSet );
@@ -117,7 +117,7 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
 
 ScPivotFilterDlg::~ScPivotFilterDlg()
 {
-    for (USHORT i=0; i<=MAXCOL; i++)
+    for (sal_uInt16 i=0; i<=MAXCOL; i++)
         delete pEntryLists[i];
 
     if ( pOutItem )
@@ -223,12 +223,12 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
                 else if (rEntry.nVal == SC_NONEMPTYFIELDS)
                     aValStr = aStrNotEmpty;
             }
-            USHORT  nCondPos     = (USHORT)rEntry.eOp;
-            USHORT  nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
+            sal_uInt16  nCondPos     = (sal_uInt16)rEntry.eOp;
+            sal_uInt16  nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
 
             aFieldLbArr[i]->SelectEntryPos( nFieldSelPos );
             aCondLbArr [i]->SelectEntryPos( nCondPos );
-            UpdateValueList( static_cast<USHORT>(i+1) );
+            UpdateValueList( static_cast<sal_uInt16>(i+1) );
             aValueEdArr[i]->SetText( aValStr );
             if (aValStr == aStrEmpty || aValStr == aStrNotEmpty)
                 aCondLbArr[i]->Disable();
@@ -237,7 +237,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
         {
             aFieldLbArr[i]->SelectEntryPos( 0 ); // "keiner" selektieren
             aCondLbArr [i]->SelectEntryPos( 0 ); // "=" selektieren
-            UpdateValueList( static_cast<USHORT>(i) );
+            UpdateValueList( static_cast<sal_uInt16>(i) );
             aValueEdArr[i]->SetText( EMPTY_STRING );
         }
         aValueEdArr[i]->SetModifyHdl( LINK( this, ScPivotFilterDlg, ValModifyHdl ) );
@@ -247,12 +247,12 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
 
        (aLbField1.GetSelectEntryPos() != 0)
     && (aLbField2.GetSelectEntryPos() != 0)
-        ? aLbConnect1.SelectEntryPos( (USHORT)theQueryData.GetEntry(1).eConnect )
+        ? aLbConnect1.SelectEntryPos( (sal_uInt16)theQueryData.GetEntry(1).eConnect )
         : aLbConnect1.SetNoSelection();
 
        (aLbField2.GetSelectEntryPos() != 0)
     && (aLbField3.GetSelectEntryPos() != 0)
-        ? aLbConnect2.SelectEntryPos( (USHORT)theQueryData.GetEntry(2).eConnect )
+        ? aLbConnect2.SelectEntryPos( (sal_uInt16)theQueryData.GetEntry(2).eConnect )
         : aLbConnect2.SetNoSelection();
 
     if ( aLbField1.GetSelectEntryPos() == 0 )
@@ -303,7 +303,7 @@ void ScPivotFilterDlg::FillFieldLists()
         SCROW   nFirstRow   = theQueryData.nRow1;
         SCCOL   nMaxCol     = theQueryData.nCol2;
         SCCOL   col = 0;
-        USHORT  i=1;
+        sal_uInt16  i=1;
 
         for ( col=nFirstCol; col<=nMaxCol; col++ )
         {
@@ -325,13 +325,13 @@ void ScPivotFilterDlg::FillFieldLists()
 
 //------------------------------------------------------------------------
 
-void ScPivotFilterDlg::UpdateValueList( USHORT nList )
+void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
 {
     if ( pDoc && nList>0 && nList<=3 )
     {
         ComboBox*   pValList        = aValueEdArr[nList-1];
-        USHORT      nFieldSelPos    = aFieldLbArr[nList-1]->GetSelectEntryPos();
-        USHORT      nListPos        = 0;
+        sal_uInt16      nFieldSelPos    = aFieldLbArr[nList-1]->GetSelectEntryPos();
+        sal_uInt16      nListPos        = 0;
         String      aCurValue       = pValList->GetText();
 
         pValList->Clear();
@@ -359,10 +359,10 @@ void ScPivotFilterDlg::UpdateValueList( USHORT nList )
             }
 
             TypedScStrCollection* pColl = pEntryLists[nColumn];
-            USHORT nValueCount = pColl->GetCount();
+            sal_uInt16 nValueCount = pColl->GetCount();
             if ( nValueCount > 0 )
             {
-                for ( USHORT i=0; i<nValueCount; i++ )
+                for ( sal_uInt16 i=0; i<nValueCount; i++ )
                 {
                     pValList->InsertEntry( (*pColl)[i]->GetString(), nListPos );
                     nListPos++;
@@ -375,7 +375,7 @@ void ScPivotFilterDlg::UpdateValueList( USHORT nList )
 
 //------------------------------------------------------------------------
 
-void ScPivotFilterDlg::ClearValueList( USHORT nList )
+void ScPivotFilterDlg::ClearValueList( sal_uInt16 nList )
 {
     if ( nList>0 && nList<=3 )
     {
@@ -389,10 +389,10 @@ void ScPivotFilterDlg::ClearValueList( USHORT nList )
 
 //------------------------------------------------------------------------
 
-USHORT ScPivotFilterDlg::GetFieldSelPos( SCCOL nField )
+sal_uInt16 ScPivotFilterDlg::GetFieldSelPos( SCCOL nField )
 {
     if ( nField >= theQueryData.nCol1 && nField <= theQueryData.nCol2 )
-        return static_cast<USHORT>(nField - theQueryData.nCol1 + 1);
+        return static_cast<sal_uInt16>(nField - theQueryData.nCol1 + 1);
     else
         return 0;
 }
@@ -402,15 +402,15 @@ USHORT ScPivotFilterDlg::GetFieldSelPos( SCCOL nField )
 const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
 {
     ScQueryParam    theParam( theQueryData );
-    USHORT          nConnect1 = aLbConnect1.GetSelectEntryPos();
-    USHORT          nConnect2 = aLbConnect2.GetSelectEntryPos();
+    sal_uInt16          nConnect1 = aLbConnect1.GetSelectEntryPos();
+    sal_uInt16          nConnect2 = aLbConnect2.GetSelectEntryPos();
 
     for ( SCSIZE i=0; i<3; i++ )
     {
-        USHORT      nField  = aFieldLbArr[i]->GetSelectEntryPos();
+        sal_uInt16      nField  = aFieldLbArr[i]->GetSelectEntryPos();
         ScQueryOp   eOp     = (ScQueryOp)aCondLbArr[i]->GetSelectEntryPos();
 
-        BOOL bDoThis = (aFieldLbArr[i]->GetSelectEntryPos() != 0);
+        sal_Bool bDoThis = (aFieldLbArr[i]->GetSelectEntryPos() != 0);
         theParam.GetEntry(i).bDoQuery = bDoThis;
 
         if ( bDoThis )
@@ -428,19 +428,19 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
             {
                 *rEntry.pStr    = EMPTY_STRING;
                 rEntry.nVal     = SC_EMPTYFIELDS;
-                rEntry.bQueryByString = FALSE;
+                rEntry.bQueryByString = false;
             }
             else if ( aStrVal == aStrNotEmpty )
             {
                 *rEntry.pStr    = EMPTY_STRING;
                 rEntry.nVal     = SC_NONEMPTYFIELDS;
-                rEntry.bQueryByString = FALSE;
+                rEntry.bQueryByString = false;
             }
             else
             {
                 *rEntry.pStr    = aStrVal;
                 rEntry.nVal     = 0;
-                rEntry.bQueryByString = TRUE;
+                rEntry.bQueryByString = sal_True;
             }
 
             rEntry.nField   = nField ? (theQueryData.nCol1 +
@@ -456,7 +456,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
                                     ? (ScQueryConnect)nConnect2
                                     : SC_AND;
 
-    theParam.bInplace   = FALSE;
+    theParam.bInplace   = false;
     theParam.nDestTab   = 0;    // Woher kommen diese Werte?
     theParam.nDestCol   = 0;
     theParam.nDestRow   = 0;
@@ -574,7 +574,7 @@ IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 
     if ( pBox == &aBtnCase )                    // Wertlisten
     {
-        for (USHORT i=0; i<=MAXCOL; i++)
+        for (sal_uInt16 i=0; i<=MAXCOL; i++)
             DELETEZ( pEntryLists[i] );
 
         String aCurVal1 = aEdVal1.GetText();

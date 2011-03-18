@@ -39,7 +39,10 @@
 #include "servicenames_coosystems.hxx"
 #include "DataSeriesHelper.hxx"
 #include "Scaling.hxx"
+#include "ChartModelHelper.hxx"
+#include "DataSourceHelper.hxx"
 
+#include <tools/debug.hxx>
 #include <unotools/saveopt.hxx>
 
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
@@ -51,6 +54,8 @@
 
 // header for class OUStringBuffer
 #include <rtl/ustrbuf.hxx>
+#include <rtl/math.hxx>
+
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 
@@ -79,6 +84,8 @@ ScaleData AxisHelper::createDefaultScale()
 {
     ScaleData aScaleData;
     aScaleData.AxisType = chart2::AxisType::REALNUMBER;
+    aScaleData.AutoDateAxis = true;
+    aScaleData.ShiftedCategoryPosition = false;//this is adapted in the view code currently
     Sequence< SubIncrement > aSubIncrements(1);
     aSubIncrements[0] = SubIncrement();
     aScaleData.IncrementData.SubIncrements = aSubIncrements;
@@ -90,6 +97,9 @@ void AxisHelper::removeExplicitScaling( ScaleData& rScaleData )
     uno::Any aEmpty;
     rScaleData.Minimum = rScaleData.Maximum = rScaleData.Origin = aEmpty;
     rScaleData.Scaling = 0;
+    ScaleData aDefaultScale( createDefaultScale() );
+    rScaleData.IncrementData = aDefaultScale.IncrementData;
+    rScaleData.TimeIncrement = aDefaultScale.TimeIncrement;
 }
 
 bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
@@ -99,6 +109,227 @@ bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
     bReturn =( xServiceName.is() && (xServiceName->getServiceName()).equals(
               C2U( "com.sun.star.chart2.LogarithmicScaling" )));
     return bReturn;
+}
+
+chart2::ScaleData AxisHelper::getDateCheckedScale( const Reference< chart2::XAxis >& xAxis, const Reference< frame::XModel >& xChartModel )
+{
+    DBG_ASSERT(xChartModel.is(),"missing chart model");
+    ScaleData aScale = xAxis->getScaleData();
+    Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+    if( aScale.AutoDateAxis && aScale.AxisType == AxisType::CATEGORY )
+    {
+        sal_Int32 nDimensionIndex=0; sal_Int32 nAxisIndex=0;
+        AxisHelper::getIndicesForAxis(xAxis, xCooSys, nDimensionIndex, nAxisIndex );
+        bool bChartTypeAllowsDateAxis = ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( xCooSys, 0 ), 2, nDimensionIndex );
+        if( bChartTypeAllowsDateAxis )
+            aScale.AxisType = AxisType::DATE;
+    }
+    if( aScale.AxisType == AxisType::DATE )
+    {
+        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys,xChartModel );
+        if( !aExplicitCategoriesProvider.isDateAxis() )
+            aScale.AxisType = AxisType::CATEGORY;
+    }
+    return aScale;
+}
+
+void AxisHelper::checkDateAxis( chart2::ScaleData& rScale, ExplicitCategoriesProvider* pExplicitCategoriesProvider, bool bChartTypeAllowsDateAxis )
+{
+    if( rScale.AutoDateAxis && rScale.AxisType == AxisType::CATEGORY && bChartTypeAllowsDateAxis )
+    {
+        rScale.AxisType = AxisType::DATE;
+        removeExplicitScaling( rScale );
+    }
+    if( rScale.AxisType == AxisType::DATE && (!pExplicitCategoriesProvider || !pExplicitCategoriesProvider->isDateAxis()) )
+    {
+        rScale.AxisType = AxisType::CATEGORY;
+        removeExplicitScaling( rScale );
+    }
+}
+
+sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
+                  const Reference< chart2::XAxis >& xAxis
+                , const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
+                , const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+                , bool bSearchForParallelAxisIfNothingIsFound )
+{
+    sal_Int32 nNumberFormatKey(0);
+    bool bNumberFormatKeyFoundViaAttachedData = false;
+    sal_Int32 nAxisIndex = 0;
+    sal_Int32 nDimensionIndex = 1;
+    AxisHelper::getIndicesForAxis( xAxis, xCorrespondingCoordinateSystem, nDimensionIndex, nAxisIndex );
+    Reference< chart2::XChartDocument > xChartDoc( xNumberFormatsSupplier, uno::UNO_QUERY );
+
+    Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
+    if( xProp.is() && !( xProp->getPropertyValue( C2U( "NumberFormat" ) ) >>= nNumberFormatKey ) )
+    {
+        bool bFormatSet = false;
+        //check wether we have a percent scale -> use percent format
+        if( xNumberFormatsSupplier.is() )
+        {
+            ScaleData aData = AxisHelper::getDateCheckedScale( xAxis, Reference< frame::XModel >( xNumberFormatsSupplier, uno::UNO_QUERY ) );
+            if( aData.AxisType==AxisType::PERCENT )
+            {
+                sal_Int32 nPercentFormat = DiagramHelper::getPercentNumberFormat( xNumberFormatsSupplier );
+                if( nPercentFormat != -1 )
+                {
+                    nNumberFormatKey = nPercentFormat;
+                    bFormatSet = true;
+                }
+            }
+            else if( aData.AxisType==AxisType::DATE )
+            {
+                if( aData.Categories.is() )
+                {
+                    Reference< data::XDataSequence > xSeq( aData.Categories->getValues());
+                    if( xSeq.is() && !( xChartDoc.is() && xChartDoc->hasInternalDataProvider()) )
+                        nNumberFormatKey = xSeq->getNumberFormatKeyByIndex( -1 );
+                    else
+                        nNumberFormatKey = DiagramHelper::getDateNumberFormat( xNumberFormatsSupplier );
+                    bFormatSet = true;
+                }
+            }
+            else if( xChartDoc.is() && xChartDoc->hasInternalDataProvider() && nDimensionIndex == 0 ) //maybe date axis
+            {
+                Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram() );
+                if( DiagramHelper::isSupportingDateAxis( xDiagram ) )
+                {
+                    nNumberFormatKey = DiagramHelper::getDateNumberFormat( xNumberFormatsSupplier );
+                }
+                else
+                {
+                    Reference< data::XDataSource > xSource( DataSourceHelper::getUsedData( xChartDoc ) );
+                    if( xSource.is() )
+                    {
+                        ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aXValues(
+                            DataSeriesHelper::getAllDataSequencesByRole( xSource->getDataSequences(), C2U("values-x"), true ) );
+                        if( aXValues.empty() )
+                        {
+                            Reference< data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
+                            if( xCategories.is() )
+                            {
+                                Reference< data::XDataSequence > xSeq( xCategories->getValues());
+                                if( xSeq.is() )
+                                {
+                                    bool bHasValidDoubles = false;
+                                    double fTest=0.0;
+                                    Sequence< uno::Any > aCats( xSeq->getData() );
+                                    sal_Int32 nCount = aCats.getLength();
+                                    for( sal_Int32 i = 0; i < nCount; ++i )
+                                    {
+                                        if( (aCats[i]>>=fTest) && !::rtl::math::isNan(fTest) )
+                                        {
+                                            bHasValidDoubles=true;
+                                            break;
+                                        }
+                                    }
+                                    if( bHasValidDoubles )
+                                        nNumberFormatKey = DiagramHelper::getDateNumberFormat( xNumberFormatsSupplier );
+                                }
+                            }
+                        }
+                    }
+                }
+                bFormatSet = true;
+            }
+        }
+
+        if( !bFormatSet )
+        {
+            typedef ::std::map< sal_Int32, sal_Int32 > tNumberformatFrequency;
+            tNumberformatFrequency aKeyMap;
+
+            try
+            {
+                Reference< XChartTypeContainer > xCTCnt( xCorrespondingCoordinateSystem, uno::UNO_QUERY_THROW );
+                if( xCTCnt.is() )
+                {
+                    ::rtl::OUString aRoleToMatch;
+                    if( nDimensionIndex == 0 )
+                        aRoleToMatch = C2U("values-x");
+                    Sequence< Reference< XChartType > > aChartTypes( xCTCnt->getChartTypes());
+                    for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
+                    {
+                        if( nDimensionIndex != 0 )
+                            aRoleToMatch = ChartTypeHelper::getRoleOfSequenceForYAxisNumberFormatDetection( aChartTypes[nCTIdx] );
+                        Reference< XDataSeriesContainer > xDSCnt( aChartTypes[nCTIdx], uno::UNO_QUERY_THROW );
+                        Sequence< Reference< XDataSeries > > aDataSeriesSeq( xDSCnt->getDataSeries());
+                        for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aDataSeriesSeq.getLength(); ++nSeriesIdx )
+                        {
+                            Reference< chart2::XDataSeries > xDataSeries(aDataSeriesSeq[nSeriesIdx]);
+                            Reference< data::XDataSource > xSource( xDataSeries, uno::UNO_QUERY_THROW );
+
+                            if( nDimensionIndex == 1 )
+                            {
+                                //only take those series into accoutn that are attached to this axis
+                                sal_Int32 nAttachedAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
+                                if( nAttachedAxisIndex != nAxisIndex )
+                                    continue;
+                            }
+
+                            Reference< data::XLabeledDataSequence > xLabeledSeq(
+                                DataSeriesHelper::getDataSequenceByRole( xSource, aRoleToMatch ) );
+
+                            if( !xLabeledSeq.is() && nDimensionIndex==0 )
+                            {
+                                ScaleData aData = xAxis->getScaleData();
+                                xLabeledSeq = aData.Categories;
+                            }
+
+                            if( xLabeledSeq.is() )
+                            {
+                                Reference< data::XDataSequence > xSeq( xLabeledSeq->getValues());
+                                if( xSeq.is() )
+                                {
+                                    sal_Int32 nKey = xSeq->getNumberFormatKeyByIndex( -1 );
+                                    // initialize the value
+                                    if( aKeyMap.find( nKey ) == aKeyMap.end())
+                                        aKeyMap[ nKey ] = 0;
+                                    // increase frequency
+                                    aKeyMap[ nKey ] = (aKeyMap[ nKey ] + 1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch( const uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+
+            if( ! aKeyMap.empty())
+            {
+                sal_Int32 nMaxFreq = 0;
+                // find most frequent key
+                for( tNumberformatFrequency::const_iterator aIt = aKeyMap.begin();
+                    aIt != aKeyMap.end(); ++aIt )
+                {
+                    OSL_TRACE( "NumberFormatKey %d appears %d times", (*aIt).first, (*aIt).second );
+                    // all values must at least be 1
+                    if( (*aIt).second > nMaxFreq )
+                    {
+                        nNumberFormatKey = (*aIt).first;
+                        bNumberFormatKeyFoundViaAttachedData = true;
+                        nMaxFreq = (*aIt).second;
+                    }
+                }
+            }
+
+            if( bSearchForParallelAxisIfNothingIsFound )
+            {
+                //no format is set to this axis and no data is set to this axis
+                //--> try to obtain the format from the parallel y-axis
+                if( !bNumberFormatKeyFoundViaAttachedData && nDimensionIndex == 1 )
+                {
+                    sal_Int32 nParallelAxisIndex = (nAxisIndex==1) ?0 :1;
+                    Reference< XAxis > xParallelAxis( AxisHelper::getAxis( 1, nParallelAxisIndex, xCorrespondingCoordinateSystem ) );
+                    nNumberFormatKey = AxisHelper::getExplicitNumberFormatKeyForAxis( xParallelAxis, xCorrespondingCoordinateSystem, xNumberFormatsSupplier, false );
+                }
+            }
+        }
+    }
+    return nNumberFormatKey;
 }
 
 Reference< XAxis > AxisHelper::createAxis(
@@ -132,6 +363,7 @@ Reference< XAxis > AxisHelper::createAxis(
                 ScaleData aMainScale = xMainAxis->getScaleData();
 
                 aScale.AxisType = aMainScale.AxisType;
+                aScale.AutoDateAxis = aMainScale.AutoDateAxis;
                 aScale.Categories = aMainScale.Categories;
                 aScale.Orientation = aMainScale.Orientation;
 

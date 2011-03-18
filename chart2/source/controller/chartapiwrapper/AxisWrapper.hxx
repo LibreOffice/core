@@ -31,9 +31,10 @@
 #include "WrappedPropertySet.hxx"
 #include "ReferenceSizePropertyProvider.hxx"
 #include "ServiceMacros.hxx"
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <com/sun/star/chart/XAxis.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -46,14 +47,13 @@
 
 namespace chart
 {
-
 namespace wrapper
 {
-
 class Chart2ModelContact;
 
-class AxisWrapper : public ::cppu::ImplInheritanceHelper4<
+class AxisWrapper : public ::cppu::ImplInheritanceHelper5<
                       WrappedPropertySet
+                    , com::sun::star::chart::XAxis
                     , com::sun::star::drawing::XShape
                     , com::sun::star::lang::XComponent
                     , com::sun::star::lang::XServiceInfo
@@ -94,6 +94,11 @@ public:
                                                ::com::sun::star::lang::XEventListener >& aListener )
         throw (::com::sun::star::uno::RuntimeException);
 
+    // ____ chart::XAxis ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getAxisTitle(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getMajorGrid(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getMinorGrid(  ) throw (::com::sun::star::uno::RuntimeException);
+
     // ____ XShape ____
     virtual ::com::sun::star::awt::Point SAL_CALL getPosition()
         throw (::com::sun::star::uno::RuntimeException);
@@ -132,6 +137,10 @@ private: //member
 
     tAxisType           m_eType;
     ::com::sun::star::uno::Any m_aTemporaryHelpStepValue;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xAxisTitle;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xMajorGrid;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xMinorGrid;
 };
 
 } //  namespace wrapper

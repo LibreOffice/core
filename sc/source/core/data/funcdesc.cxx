@@ -84,7 +84,6 @@ ScFuncDesc::ScFuncDesc() :
         nFIndex         (0),
         nCategory       (0),
         nArgCount       (0),
-        nHelpId         (0),
         bIncomplete     (false),
         bHasSuppressedArgs(false)
 {}
@@ -122,7 +121,7 @@ void ScFuncDesc::Clear()
 
     nFIndex = 0;
     nCategory = 0;
-    nHelpId = 0;
+    sHelpId = rtl::OString();
     bIncomplete = false;
     bHasSuppressedArgs = false;
 }
@@ -343,9 +342,9 @@ void ScFuncDesc::initArgumentInfo()  const
     }
 }
 
-long ScFuncDesc::getHelpId() const
+::rtl::OString ScFuncDesc::getHelpId() const
 {
-    return (long)nHelpId;
+    return sHelpId;
 }
 
 sal_uInt32 ScFuncDesc::getParameterCount() const
@@ -816,7 +815,6 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
 {
     rbSuppressed = (bool)GetNum();
     pDesc->nCategory = GetNum();
-    pDesc->nHelpId = GetNum() + 32768; //! Hack, see scfuncs.src
     pDesc->nArgCount = GetNum();
     sal_uInt16 nArgs = pDesc->nArgCount;
     if (nArgs >= VAR_ARGS)

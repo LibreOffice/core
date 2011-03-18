@@ -58,6 +58,9 @@ TextSeparatorResources::TextSeparatorResources( Window* pWindow )
     m_aEntryMap[ C2U( ", " ) ] = 1;
     m_aEntryMap[ C2U( "; " ) ] = 2;
     m_aEntryMap[ C2U( "\n" ) ] = 3;
+
+    m_aLB_Separator.SetAccessibleName(m_aFT_Separator.GetText());
+    m_aLB_Separator.SetAccessibleRelationLabeledBy(&m_aFT_Separator);
 }
 TextSeparatorResources::~TextSeparatorResources()
 {
@@ -123,7 +126,7 @@ Size TextSeparatorResources::GetCurrentListBoxSize() const
 
 void TextSeparatorResources::SetValue( const rtl::OUString& rSeparator )
 {
-    ::std::map< ::rtl::OUString, USHORT >::iterator aIter( m_aEntryMap.find(rSeparator) );
+    ::std::map< ::rtl::OUString, sal_uInt16 >::iterator aIter( m_aEntryMap.find(rSeparator) );
     if( aIter == m_aEntryMap.end() )
         m_aLB_Separator.SelectEntryPos( m_nDefaultPos );
     else
@@ -137,8 +140,8 @@ void TextSeparatorResources::SetDefault()
 
 rtl::OUString TextSeparatorResources::GetValue() const
 {
-    USHORT nPos = m_aLB_Separator.GetSelectEntryPos();
-    ::std::map< ::rtl::OUString, USHORT >::const_iterator aIter( m_aEntryMap.begin() );
+    sal_uInt16 nPos = m_aLB_Separator.GetSelectEntryPos();
+    ::std::map< ::rtl::OUString, sal_uInt16 >::const_iterator aIter( m_aEntryMap.begin() );
     while( aIter != m_aEntryMap.end() )
     {
         if(aIter->second==nPos )

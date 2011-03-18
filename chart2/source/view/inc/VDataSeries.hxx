@@ -77,6 +77,10 @@ public:
         getModel() const;
 
     void setCategoryXAxis();
+    void setXValues( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::data::XDataSequence >& xValues );
+    void setXValuesIfNone( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::data::XDataSequence >& xValues );
     void setParticle( const rtl::OUString& rSeriesParticle );
     void setGlobalSeriesIndex( sal_Int32 nGlobalSeriesIndex );
     void setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize );

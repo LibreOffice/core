@@ -45,11 +45,11 @@ class ScNumFormatAbbrev
 public:
     ScNumFormatAbbrev();
     ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat);
-    ScNumFormatAbbrev(ULONG nFormat, SvNumberFormatter& rFormatter);
+    ScNumFormatAbbrev(sal_uLong nFormat, SvNumberFormatter& rFormatter);
     void Load( SvStream& rStream, CharSet eByteStrSet );            // loading of the numberformats
     void Save( SvStream& rStream, CharSet eByteStrSet ) const;   // saving of the numberformats
-    void PutFormatIndex(ULONG nFormat, SvNumberFormatter& rFormatter);
-    ULONG GetFormatIndex( SvNumberFormatter& rFormatter);
+    void PutFormatIndex(sal_uLong nFormat, SvNumberFormatter& rFormatter);
+    sal_uLong GetFormatIndex( SvNumberFormatter& rFormatter);
     inline int operator==(const ScNumFormatAbbrev& rNumFormat) const
     {
         return ((sFormatstring == rNumFormat.sFormatstring)

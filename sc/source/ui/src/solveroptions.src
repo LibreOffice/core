@@ -42,6 +42,7 @@ ModalDialog RID_SCDLG_SOLVEROPTIONS
     };
     ListBox LB_ENGINE
     {
+        HelpID = "sc:ListBox:RID_SCDLG_SOLVEROPTIONS:LB_ENGINE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 67 , 6 ) ;
         Size = MAP_APPFONT ( 145 , 90 ) ;
@@ -63,6 +64,7 @@ ModalDialog RID_SCDLG_SOLVEROPTIONS
     };
     PushButton BTN_EDIT
     {
+        HelpID = "sc:PushButton:RID_SCDLG_SOLVEROPTIONS:BTN_EDIT";
         Pos = MAP_APPFONT ( 6 , 108 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -111,6 +113,7 @@ ModalDialog RID_SCDLG_SOLVER_INTEGER
     };
     NumericField NF_VALUE
     {
+        HelpID = "sc:NumericField:RID_SCDLG_SOLVER_INTEGER:NF_VALUE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -160,6 +163,7 @@ ModalDialog RID_SCDLG_SOLVER_DOUBLE
     };
     Edit ED_VALUE
     {
+        HelpID = "sc:Edit:RID_SCDLG_SOLVER_DOUBLE:ED_VALUE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;

@@ -47,13 +47,13 @@ private:
     ScDocShell*     pDocSh;
     Timer           aTimer;
     Timer           aInitTimer;
-    ULONG           nTimerStart;
+    sal_uLong           nTimerStart;
     boost::ptr_vector<ScAutoStyleData> aEntries;
     boost::ptr_vector<ScAutoStyleInitData> aInitials;
 
     void    ExecuteEntries();
-    void    AdjustEntries(ULONG nDiff);
-    void    StartTimer(ULONG nNow);
+    void    AdjustEntries(sal_uLong nDiff);
+    void    StartTimer(sal_uLong nNow);
     DECL_LINK( TimerHdl, Timer* );
     DECL_LINK( InitHdl, Timer* );
 
@@ -62,8 +62,8 @@ public:
             ~ScAutoStyleList();
 
     void    AddInitial( const ScRange& rRange, const String& rStyle1,
-                        ULONG nTimeout, const String& rStyle2 );
-    void    AddEntry( ULONG nTimeout, const ScRange& rRange, const String& rStyle );
+                        sal_uLong nTimeout, const String& rStyle2 );
+    void    AddEntry( sal_uLong nTimeout, const ScRange& rRange, const String& rStyle );
 
     void    ExecuteAllNow();
 };

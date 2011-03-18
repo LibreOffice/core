@@ -1,4 +1,4 @@
-sc      sc      :       filter l10n vbahelper oovbaapi svx uui stoc BOOST:boost formula MDDS:mdds oox unoxml NULL
+sc      sc      :       filter L10N:l10n vbahelper oovbaapi svx uui stoc BOOST:boost formula MDDS:mdds oox LIBXSLT:libxslt unoxml NULL
 sc	sc							usr1	-	all	sc_mkout NULL
 sc	sc\inc							nmake	-	all	sc_inc NULL
 sc	sc\prj							get	-	all	sc_prj NULL
@@ -43,4 +43,4 @@ sc	sc\source\filter\html					nmake	-	all	sc_html sc_sdi sc_inc NULL
 sc	sc\source\filter\xml					nmake	-	all	sc_xml sc_sdi sc_inc NULL
 sc	sc\source\filter\xcl97					nmake	-	all	sc_xcl97 sc_sdi sc_inc NULL
 sc	sc\util							nmake	-	all	sc_util sc_app sc_attr sc_cctrl sc_cosrc sc_data sc_dbgui sc_dif sc_docsh sc_drfnc sc_excel sc_form sc_html sc_lotus sc_qpro sc_misc sc_name sc_nvipi sc_opt sc_page sc_rtf sc_scalc sc_style sc_tool sc_uisrc sc_undo sc_unobj sc_view sc_xcl97 sc_xml sc_acc sc_ftools sc_inc sc_vba NULL
-sc	sc\qa\unit						nmake	-	all	sc_qa_cppunit sc_util NULL
+# sc	sc\qa\unit						nmake	-	all	sc_qa_cppunit sc_util NULL

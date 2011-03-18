@@ -87,10 +87,11 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <oox/core/tokens.hxx>
+#include <oox/token/tokens.hxx>
 #include <boost/shared_ptr.hpp>
 
 using ::rtl::OString;
+using namespace oox;
 
 static String lcl_GetVbaTabName( SCTAB n )
 {
@@ -194,8 +195,8 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     SCTAB   nC;
     String  aTmpString;
     SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
-    UINT16  nExcTabCount    = rTabInfo.GetXclTabCount();
-    UINT16  nCodenames      = static_cast< UINT16 >( GetExtDocOptions().GetCodeNameCount() );
+    sal_uInt16  nExcTabCount    = rTabInfo.GetXclTabCount();
+    sal_uInt16  nCodenames      = static_cast< sal_uInt16 >( GetExtDocOptions().GetCodeNameCount() );
 
     SfxObjectShell* pShell = GetDocShell();
     sal_uInt16 nWriteProtHash = pShell ? pShell->GetModifyPasswordHash() : 0;
@@ -219,7 +220,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     else
     {
         if( IsDocumentEncrypted() )
-            Add( new XclExpFilePass( GetRoot() ) );
+            Add( new XclExpFileEncryption( GetRoot() ) );
         Add( new XclExpInterfaceHdr( nCodePage ) );
         Add( new XclExpUInt16Record( EXC_ID_MMS, 0 ) );
         Add( new XclExpInterfaceEnd );

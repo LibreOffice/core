@@ -29,6 +29,7 @@
 
 TabPage TP_DATA_SOURCE
 {
+    HelpID = "chart2:TabPage:TP_DATA_SOURCE";
     Hide = TRUE;
     Size = MAP_APPFONT ( 248, 140 );
     SVLook = TRUE ;
@@ -86,6 +87,7 @@ TabPage TP_DATA_SOURCE
     };
     Edit EDT_RANGE
     {
+        HelpID = "chart2:Edit:TP_DATA_SOURCE:EDT_RANGE";
         Border = TRUE;
         TabStop = TRUE;
         Pos  = MAP_APPFONT ( 82 , 89  );
@@ -93,6 +95,7 @@ TabPage TP_DATA_SOURCE
     };
     ImageButton IMB_RANGE_MAIN
     {
+        HelpID = "chart2:ImageButton:TP_DATA_SOURCE:IMB_RANGE_MAIN";
         TabStop = TRUE;
         Pos  = MAP_APPFONT ( 228 , 88  );
         Size = MAP_APPFONT ( 14 , 14 );
@@ -118,6 +121,7 @@ TabPage TP_DATA_SOURCE
 
     Edit EDT_CATEGORIES
     {
+        HelpID = "chart2:Edit:TP_DATA_SOURCE:EDT_CATEGORIES";
         Border = TRUE;
         TabStop = TRUE;
         Pos  = MAP_APPFONT ( 82 , 117  );
@@ -125,6 +129,7 @@ TabPage TP_DATA_SOURCE
     };
     ImageButton IMB_RANGE_CAT
     {
+        HelpID = "chart2:ImageButton:TP_DATA_SOURCE:IMB_RANGE_CAT";
         TabStop = TRUE;
         Pos  = MAP_APPFONT ( 228 , 116  );
         Size = MAP_APPFONT ( 14 , 14 );
@@ -134,6 +139,7 @@ TabPage TP_DATA_SOURCE
 
     PushButton BTN_ADD
     {
+        HelpID = "chart2:PushButton:TP_DATA_SOURCE:BTN_ADD";
         TabStop = TRUE;
         Disable = FALSE;
         Pos  = MAP_APPFONT ( 6 , 105  );
@@ -143,6 +149,7 @@ TabPage TP_DATA_SOURCE
     };
     PushButton BTN_REMOVE
     {
+        HelpID = "chart2:PushButton:TP_DATA_SOURCE:BTN_REMOVE";
         TabStop = TRUE;
         Disable = TRUE;
         Pos  = MAP_APPFONT ( 6 , 121  );
@@ -154,6 +161,7 @@ TabPage TP_DATA_SOURCE
     // Note: Text is only a black triangle symbol
     PushButton BTN_UP
     {
+        HelpID = "chart2:PushButton:TP_DATA_SOURCE:BTN_UP";
         TabStop = TRUE;
         Disable = TRUE;
         Pos  = MAP_APPFONT ( 64 , 105  );
@@ -163,6 +171,7 @@ TabPage TP_DATA_SOURCE
     // Note: Text is only a black triangle symbol
     PushButton BTN_DOWN
     {
+        HelpID = "chart2:PushButton:TP_DATA_SOURCE:BTN_DOWN";
         TabStop = TRUE;
         Disable = TRUE;
         Pos  = MAP_APPFONT ( 64 , 121  );

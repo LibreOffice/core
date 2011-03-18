@@ -91,7 +91,7 @@ public:
     void                    AddListener( SfxListener& rListener );
     void                    RemoveListener( SfxListener& rListener );
 
-    void                    UpdateText( USHORT nPart, EditEngine& rSource );
+    void                    UpdateText( sal_uInt16 nPart, EditEngine& rSource );
 
                             // XHeaderFooterContent
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL
@@ -126,15 +126,15 @@ class ScHeaderFooterTextData : public SfxListener
 {
 private:
     ScHeaderFooterContentObj&   rContentObj;
-    USHORT                      nPart;
+    sal_uInt16                      nPart;
     ScEditEngineDefaulter*      pEditEngine;
     SvxEditEngineForwarder*     pForwarder;
-    BOOL                        bDataValid;
-    BOOL                        bInUpdate;
+    sal_Bool                        bDataValid;
+    sal_Bool                        bInUpdate;
 
 public:
                             ScHeaderFooterTextData( ScHeaderFooterContentObj& rContent,
-                                                    USHORT nP );
+                                                    sal_uInt16 nP );
                             ~ScHeaderFooterTextData();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -144,7 +144,7 @@ public:
     void                    UpdateData();
     ScEditEngineDefaulter*  GetEditEngine() { GetTextForwarder(); return pEditEngine; }
 
-    USHORT                  GetPart() const         { return nPart; }
+    sal_uInt16                  GetPart() const         { return nPart; }
     ScHeaderFooterContentObj& GetContentObj() const { return rContentObj; }
 };
 
@@ -165,7 +165,7 @@ private:
 
 public:
                             ScHeaderFooterTextObj( ScHeaderFooterContentObj& rContent,
-                                                    USHORT nP );
+                                                    sal_uInt16 nP );
     virtual                 ~ScHeaderFooterTextObj();
 
     const SvxUnoText&       GetUnoText();
@@ -377,10 +377,10 @@ protected:
     ScFieldEditEngine*      pEditEngine;
     SvxEditEngineForwarder* pForwarder;
     ScSharedCellEditSource* pOriginalSource;
-    BOOL                    bDataValid;
-    BOOL                    bInUpdate;
-    BOOL                    bDirty;
-    BOOL                    bDoUpdate;
+    sal_Bool                    bDataValid;
+    sal_Bool                    bInUpdate;
+    sal_Bool                    bDirty;
+    sal_Bool                    bDoUpdate;
 
 protected:
     virtual void            GetCellText(const ScAddress& rCellPos, String& rText);
@@ -402,9 +402,9 @@ public:
     ScDocShell*             GetDocShell() const     { return pDocShell; }
     const ScAddress&        GetCellPos() const      { return aCellPos; }
 
-    void                    SetDirty(BOOL bValue)   { bDirty = bValue; }
-    BOOL                    IsDirty() const         { return bDirty; }
-    void                    SetDoUpdate(BOOL bValue)    { bDoUpdate = bValue; }
+    void                    SetDirty(sal_Bool bValue)   { bDirty = bValue; }
+    sal_Bool                    IsDirty() const         { return bDirty; }
+    void                    SetDoUpdate(sal_Bool bValue)    { bDoUpdate = bValue; }
 };
 
 class ScCellTextObj : public ScCellTextData, public SvxUnoText

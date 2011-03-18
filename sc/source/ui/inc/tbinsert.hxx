@@ -33,20 +33,20 @@
 
 class ScTbxInsertCtrl : public SfxToolBoxControl
 {
-    USHORT                  nLastSlotId;
+    sal_uInt16                  nLastSlotId;
 
     using SfxToolBoxControl::Select;
-    virtual void            Select( BOOL bMod1 = FALSE );
+    virtual void            Select( sal_Bool bMod1 = false );
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    ScTbxInsertCtrl( USHORT nSlotId, USHORT nId, ToolBox& rBox );
+    ScTbxInsertCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
     ~ScTbxInsertCtrl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                StateChanged( USHORT nSID,
+    virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 };

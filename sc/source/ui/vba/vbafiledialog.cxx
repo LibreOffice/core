@@ -103,7 +103,7 @@ ScVbaFileDialog::Show( ) throw (::com::sun::star::uno::RuntimeException)
             xFilePicker->setMultiSelectionMode(sal_True);
             if ( xFilePicker->execute() )
             {
-                sal_Bool bUseXFilePicker2 = sal_False;
+                sal_Bool bUseXFilePicker2 = false;
                 Reference< lang::XServiceInfo > xServiceInfo( xFilePicker, UNO_QUERY );
                 if (xServiceInfo.is())
                 {

@@ -49,7 +49,7 @@ const sal_Unicode ScRefFinder::pDelimiters[] = {
 
 // =======================================================================
 
-inline BOOL IsText( sal_Unicode c )
+inline sal_Bool IsText( sal_Unicode c )
 {
     bool bFound = ScGlobal::UnicodeStrChr( ScRefFinder::pDelimiters, c );
     if (bFound)
@@ -61,15 +61,15 @@ inline BOOL IsText( sal_Unicode c )
     return c != sep;
 }
 
-inline BOOL IsText( BOOL& bQuote, sal_Unicode c )
+inline sal_Bool IsText( sal_Bool& bQuote, sal_Unicode c )
 {
     if ( c == '\'' )
     {
         bQuote = !bQuote;
-        return TRUE;
+        return sal_True;
     }
     if ( bQuote )
-        return TRUE;
+        return sal_True;
     return IsText( c );
 }
 
@@ -86,9 +86,9 @@ ScRefFinder::~ScRefFinder()
 {
 }
 
-USHORT lcl_NextFlags( USHORT nOld )
+sal_uInt16 lcl_NextFlags( sal_uInt16 nOld )
 {
-    USHORT nNew = nOld & 7;                 // die drei Abs-Flags
+    sal_uInt16 nNew = nOld & 7;                 // die drei Abs-Flags
     nNew = ( nNew - 1 ) & 7;                // weiterzaehlen
 
     if (!(nOld & SCA_TAB_3D))
@@ -132,7 +132,7 @@ void ScRefFinder::ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos )
         while ( nEStart <= nEndPos && !IsText(pSource[nEStart]) )
             ++nEStart;
 
-        BOOL bQuote = FALSE;
+        sal_Bool bQuote = false;
         xub_StrLen nEEnd = nEStart;
         while ( nEEnd <= nEndPos && IsText(bQuote,pSource[nEEnd]) )
             ++nEEnd;
@@ -142,10 +142,10 @@ void ScRefFinder::ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos )
 
         //  Test, ob aExpr eine Referenz ist
 
-        USHORT nResult = aAddr.Parse( aExpr, pDoc, pDoc->GetAddressConvention() );
+        sal_uInt16 nResult = aAddr.Parse( aExpr, pDoc, pDoc->GetAddressConvention() );
         if ( nResult & SCA_VALID )
         {
-            USHORT nFlags = lcl_NextFlags( nResult );
+            sal_uInt16 nFlags = lcl_NextFlags( nResult );
             aAddr.Format( aExpr, nFlags, pDoc, pDoc->GetAddressConvention() );
 
             xub_StrLen nAbsStart = nStartPos+aResult.Len()+aSep.Len();

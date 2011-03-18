@@ -69,6 +69,9 @@
 #include "drawview.hxx"
 #include "viewdata.hxx"
 #include "scmod.hxx"
+#include "chartlis.hxx"
+#include "rangeutl.hxx"
+#include "formula/grammar.hxx"
 
 // #108584#
 #include "scitems.hxx"
@@ -79,6 +82,7 @@
 // #108584#
 #include <editeng/fhgtitem.hxx>
 #include <vcl/svapp.hxx>
+
 
 using namespace com::sun::star;
 
@@ -97,12 +101,12 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     pModel( pClipModel ),
     aObjDesc( rDesc ),
     pBookmark( NULL ),
-    bGraphic( FALSE ),
-    bGrIsBit( FALSE ),
-    bOleObj( FALSE ),
+    bGraphic( false ),
+    bGrIsBit( false ),
+    bOleObj( false ),
     pDragSourceView( NULL ),
     nDragSourceFlags( 0 ),
-    bDragWasInternal( FALSE ),
+    bDragWasInternal( false ),
     nSourceDocID( 0 )
 {
     //
@@ -120,7 +124,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
             //  OLE object
             //
 
-            UINT16 nSdrObjKind = pObject->GetObjIdentifier();
+            sal_uInt16 nSdrObjKind = pObject->GetObjIdentifier();
             if (nSdrObjKind == OBJ_OLE2)
             {
                 // if object has no persistence it must be copied as a part of document
@@ -128,7 +132,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                 {
                     uno::Reference< embed::XEmbedPersist > xPersObj( ((SdrOle2Obj*)pObject)->GetObjRef(), uno::UNO_QUERY );
                     if ( xPersObj.is() && xPersObj->hasEntry() )
-                        bOleObj = TRUE;
+                        bOleObj = sal_True;
                 }
                 catch( uno::Exception& )
                 {}
@@ -141,9 +145,9 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
 
             if (nSdrObjKind == OBJ_GRAF)
             {
-                bGraphic = TRUE;
+                bGraphic = sal_True;
                 if ( ((SdrGrafObj*)pObject)->GetGraphic().GetType() == GRAPHIC_BITMAP )
-                    bGrIsBit = TRUE;
+                    bGrIsBit = sal_True;
             }
 
             //
@@ -236,9 +240,15 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     //
     if ( pContainerShell )
     {
-        const ScDocument* pDoc = pContainerShell->GetDocument();
+        ScDocument* pDoc = pContainerShell->GetDocument();
         if ( pDoc )
+        {
             nSourceDocID = pDoc->GetDocumentID();
+            if ( pPage )
+            {
+                ScChartHelper::FillProtectedChartRangesVector( m_aProtectedChartRangesVector, pDoc, pPage );
+            }
+        }
     }
 }
 
@@ -274,9 +284,9 @@ ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard( Window* )
     return pObj;
 }
 
-BOOL lcl_HasOnlyControls( SdrModel* pModel )
+sal_Bool lcl_HasOnlyControls( SdrModel* pModel )
 {
-    BOOL bOnlyControls = FALSE;         // default if there are no objects
+    sal_Bool bOnlyControls = false;         // default if there are no objects
 
     if ( pModel )
     {
@@ -287,12 +297,12 @@ BOOL lcl_HasOnlyControls( SdrModel* pModel )
             SdrObject* pObj = aIter.Next();
             if ( pObj )
             {
-                bOnlyControls = TRUE;   // only set if there are any objects at all
+                bOnlyControls = sal_True;   // only set if there are any objects at all
                 while ( pObj )
                 {
                     if (!pObj->ISA(SdrUnoObj))
                     {
-                        bOnlyControls = FALSE;
+                        bOnlyControls = false;
                         break;
                     }
                     pObj = aIter.Next();
@@ -377,7 +387,7 @@ void ScDrawTransferObj::AddSupportedFormats()
 
 sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    sal_Bool bOK = sal_False;
+    sal_Bool bOK = false;
     sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
 
     if ( bOleObj && nFormat != SOT_FORMAT_GDIMETAFILE )
@@ -391,7 +401,7 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
 
         if( aOleData.GetTransferable().is() && aOleData.HasFormat( rFlavor ) )
         {
-            ULONG nOldSwapMode = 0;
+            sal_uLong nOldSwapMode = 0;
 
             if( pModel )
             {
@@ -427,9 +437,9 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
             DBG_ASSERT( pPv, "pPv not there..." );
             aView.MarkAllObj( pPv );
             if ( nFormat == SOT_FORMAT_GDIMETAFILE )
-                bOK = SetGDIMetaFile( aView.GetAllMarkedMetaFile( TRUE ), rFlavor );
+                bOK = SetGDIMetaFile( aView.GetAllMarkedMetaFile( sal_True ), rFlavor );
             else
-                bOK = SetBitmap( aView.GetAllMarkedBitmap( TRUE ), rFlavor );
+                bOK = SetBitmap( aView.GetAllMarkedBitmap( sal_True ), rFlavor );
         }
         else if ( nFormat == SOT_FORMATSTR_ID_SVXB )
         {
@@ -479,7 +489,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
 {
     // called from SetObject, put data into stream
 
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
     switch (nUserObjectId)
     {
         case SCDRAWTRANS_TYPE_DRAWMODEL:
@@ -580,11 +590,11 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                         ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
 
                     // write document storage
-                    pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, sal_False );
+                    pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false );
 
                     // mba: no relative ULRs for clipboard!
                     SfxMedium aMedium( xWorkStore, String() );
-                    bRet = pEmbObj->DoSaveObjectAs( aMedium, FALSE );
+                    bRet = pEmbObj->DoSaveObjectAs( aMedium, false );
                     pEmbObj->DoSaveCompleted();
 
                     uno::Reference< embed::XTransactedObject > xTransact( xWorkStore, uno::UNO_QUERY );
@@ -599,7 +609,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                         delete pSrcStm;
                     }
 
-                    bRet = TRUE;
+                    bRet = sal_True;
 
                     xWorkStore->dispose();
                     xWorkStore = uno::Reference < embed::XStorage >();
@@ -658,8 +668,8 @@ void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB nTab )
     DBG_ASSERT(pDestPV,"PageView ?");
 
     const SdrMarkList& rMarkList = rSource.GetMarkedObjectList();
-    ULONG nCount = rMarkList.GetMarkCount();
-    for (ULONG i=0; i<nCount; i++)
+    sal_uLong nCount = rMarkList.GetMarkCount();
+    for (sal_uLong i=0; i<nCount; i++)
     {
         SdrMark* pMark = rMarkList.GetMark(i);
         SdrObject* pObj = pMark->GetMarkedSdrObj();
@@ -688,14 +698,14 @@ void ScDrawTransferObj::SetDragSourceObj( SdrObject* pObj, SCTAB nTab )
     //! add as listener with document, delete pDragSourceView if document gone
 }
 
-void ScDrawTransferObj::SetDragSourceFlags( USHORT nFlags )
+void ScDrawTransferObj::SetDragSourceFlags( sal_uInt16 nFlags )
 {
     nDragSourceFlags = nFlags;
 }
 
 void ScDrawTransferObj::SetDragWasInternal()
 {
-    bDragWasInternal = TRUE;
+    bDragWasInternal = sal_True;
 }
 
 SdrOle2Obj* ScDrawTransferObj::GetSingleObject()
@@ -761,7 +771,7 @@ void ScDrawTransferObj::InitDocShell()
         pDocSh->SetVisArea( aDestArea );
 
         ScViewOptions aViewOpt( pDestDoc->GetViewOptions() );
-        aViewOpt.SetOption( VOPT_GRID, FALSE );
+        aViewOpt.SetOption( VOPT_GRID, false );
         pDestDoc->SetViewOptions( aViewOpt );
 
         ScViewData aViewData( pDocSh, NULL );
@@ -769,7 +779,7 @@ void ScDrawTransferObj::InitDocShell()
         aViewData.SetScreen( aDestArea );
         aViewData.SetCurX( 0 );
         aViewData.SetCurY( 0 );
-        pDocSh->UpdateOle(&aViewData, TRUE);
+        pDocSh->UpdateOle(&aViewData, sal_True);
     }
 }
 

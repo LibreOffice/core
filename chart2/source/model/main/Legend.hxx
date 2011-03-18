@@ -91,20 +91,6 @@ protected:
         getPropertySetInfo()
         throw (::com::sun::star::uno::RuntimeException);
 
-    // ____ XLegend ____
-    virtual void SAL_CALL registerEntry( const ::com::sun::star::uno::Reference<
-                                         ::com::sun::star::chart2::XLegendEntry >& xEntry )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL revokeEntry( const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::chart2::XLegendEntry >& xEntry )
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XLegendEntry > > SAL_CALL getEntries()
-        throw (::com::sun::star::uno::RuntimeException);
-
     // ____ XCloneable ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
         throw (::com::sun::star::uno::RuntimeException);
@@ -134,11 +120,6 @@ protected:
     void fireModifyEvent();
 
 private:
-    typedef ::std::vector<
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XLegendEntry > > tLegendEntries;
-
-    tLegendEntries                                    m_aLegendEntries;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
 };
 

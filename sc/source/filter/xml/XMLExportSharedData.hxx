@@ -40,7 +40,7 @@ struct ScMyDrawPage
     com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> xDrawPage;
     sal_Bool bHasForms;
 
-    ScMyDrawPage() : bHasForms(sal_False) {}
+    ScMyDrawPage() : bHasForms(false) {}
 };
 
 typedef std::list< com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > ScMyTableXShapes;

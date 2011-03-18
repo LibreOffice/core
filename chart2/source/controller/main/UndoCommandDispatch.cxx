@@ -30,18 +30,19 @@
 #include "precompiled_chart2.hxx"
 
 #include "UndoCommandDispatch.hxx"
+#include "ResId.hxx"
 #include "macros.hxx"
 
-#include <com/sun/star/chart2/XUndoSupplier.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 
 // for ressource strings STR_UNDO and STR_REDO
-#include <sfx2/sfx.hrc>
-
-#include "ResId.hxx"
+#include <svtools/svtools.hrc>
+#include <svtools/svtdata.hxx>
 
 using namespace ::com::sun::star;
 
@@ -58,10 +59,8 @@ UndoCommandDispatch::UndoCommandDispatch(
         CommandDispatch( xContext ),
         m_xModel( xModel )
 {
-    Reference< chart2::XUndoSupplier > xUndoSupplier( xModel, uno::UNO_QUERY );
-    OSL_ASSERT( xUndoSupplier.is());
-    if( xUndoSupplier.is())
-        m_xUndoManager.set( xUndoSupplier->getUndoManager());
+    uno::Reference< document::XUndoManagerSupplier > xSuppUndo( m_xModel, uno::UNO_QUERY_THROW );
+    m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_QUERY_THROW );
 }
 
 UndoCommandDispatch::~UndoCommandDispatch()
@@ -70,10 +69,8 @@ UndoCommandDispatch::~UndoCommandDispatch()
 void UndoCommandDispatch::initialize()
 {
     Reference< util::XModifyBroadcaster > xBroadcaster( m_xUndoManager, uno::UNO_QUERY );
-    if( xBroadcaster.is() )
-    {
-        xBroadcaster->addModifyListener( this );
-    }
+    ENSURE_OR_RETURN_VOID( xBroadcaster.is(), "UndoCommandDispatch::initialize: missing modification broadcaster interface!" );
+    xBroadcaster->addModifyListener( this );
 }
 
 void UndoCommandDispatch::fireStatusEvent(
@@ -84,23 +81,23 @@ void UndoCommandDispatch::fireStatusEvent(
     {
         bool bFireAll = (rURL.getLength() == 0);
         uno::Any aUndoState, aRedoState;
-        if( m_xUndoManager->undoPossible())
+        if( m_xUndoManager->isUndoPossible())
         {
             // using assignment for broken gcc 3.3
-            OUString aUndo = OUString( String( SchResId( STR_UNDO )));
-            aUndoState <<= ( aUndo + m_xUndoManager->getCurrentUndoString());
+            OUString aUndo = OUString( String( SvtResId( STR_UNDO )));
+            aUndoState <<= ( aUndo + m_xUndoManager->getCurrentUndoActionTitle());
         }
-        if( m_xUndoManager->redoPossible())
+        if( m_xUndoManager->isRedoPossible())
         {
             // using assignment for broken gcc 3.3
-            OUString aRedo = OUString( String( SchResId( STR_REDO )));
-            aRedoState <<= ( aRedo + m_xUndoManager->getCurrentRedoString());
+            OUString aRedo = OUString( String( SvtResId( STR_REDO )));
+            aRedoState <<= ( aRedo + m_xUndoManager->getCurrentRedoActionTitle());
         }
 
         if( bFireAll || rURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(".uno:Undo")))
-            fireStatusEventForURL( C2U(".uno:Undo"), aUndoState, m_xUndoManager->undoPossible(), xSingleListener );
+            fireStatusEventForURL( C2U(".uno:Undo"), aUndoState, m_xUndoManager->isUndoPossible(), xSingleListener );
         if( bFireAll || rURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(".uno:Redo")))
-            fireStatusEventForURL( C2U(".uno:Redo"), aRedoState, m_xUndoManager->redoPossible(), xSingleListener );
+            fireStatusEventForURL( C2U(".uno:Redo"), aRedoState, m_xUndoManager->isRedoPossible(), xSingleListener );
     }
 }
 
@@ -114,10 +111,22 @@ void SAL_CALL UndoCommandDispatch::dispatch(
     {
         // why is it necessary to lock the solar mutex here?
         SolarMutexGuard aSolarGuard;
-        if( URL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Undo" )))
-            m_xUndoManager->undo( m_xModel );
-        else
-            m_xUndoManager->redo( m_xModel );
+        try
+        {
+            if( URL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Undo" )))
+                m_xUndoManager->undo();
+            else
+                m_xUndoManager->redo();
+        }
+        catch( const document::UndoFailedException& )
+        {
+            // silently ignore
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        // \--
     }
 }
 
@@ -126,6 +135,7 @@ void SAL_CALL UndoCommandDispatch::dispatch(
 void SAL_CALL UndoCommandDispatch::disposing()
 {
     Reference< util::XModifyBroadcaster > xBroadcaster( m_xUndoManager, uno::UNO_QUERY );
+    OSL_ENSURE( xBroadcaster.is(), "UndoCommandDispatch::initialize: missing modification broadcaster interface!" );
     if( xBroadcaster.is() )
     {
         xBroadcaster->removeModifyListener( this );

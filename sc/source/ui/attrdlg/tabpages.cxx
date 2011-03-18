@@ -44,7 +44,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-static USHORT pProtectionRanges[] =
+static sal_uInt16 pProtectionRanges[] =
 {
     SID_SCATTR_PROTECTION,
     SID_SCATTR_PROTECTION,
@@ -74,7 +74,7 @@ ScTabPageProtection::ScTabPageProtection( Window*           pParent,
     SetExchangeSupport();
 
     //  States werden in Reset gesetzt
-    bTriEnabled = bDontCare = bProtect = bHideForm = bHideCell = bHidePrint = FALSE;
+    bTriEnabled = bDontCare = bProtect = bHideForm = bHideCell = bHidePrint = false;
 
     aBtnProtect.SetClickHdl(     LINK( this, ScTabPageProtection, ButtonClickHdl ) );
     aBtnHideCell.SetClickHdl(    LINK( this, ScTabPageProtection, ButtonClickHdl ) );
@@ -92,7 +92,7 @@ ScTabPageProtection::~ScTabPageProtection()
 
 //------------------------------------------------------------------------
 
-USHORT* ScTabPageProtection::GetRanges()
+sal_uInt16* ScTabPageProtection::GetRanges()
 {
     return pProtectionRanges;
 }
@@ -111,9 +111,9 @@ void ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
 {
     //  Variablen initialisieren
 
-    USHORT nWhich = GetWhich( SID_SCATTR_PROTECTION );
+    sal_uInt16 nWhich = GetWhich( SID_SCATTR_PROTECTION );
     const ScProtectionAttr* pProtAttr = NULL;
-    SfxItemState eItemState = rCoreAttrs.GetItemState( nWhich, FALSE,
+    SfxItemState eItemState = rCoreAttrs.GetItemState( nWhich, false,
                                           (const SfxPoolItem**)&pProtAttr );
 
     // handelt es sich um ein Default-Item?
@@ -128,8 +128,8 @@ void ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
         //  Defaults, die erscheinen wenn ein TriState weggeklickt wird:
         //  (weil alles zusammen ein Attribut ist, kann auch nur alles zusammen
         //  auf DontCare stehen - #38543#)
-        bProtect = TRUE;
-        bHideForm = bHideCell = bHidePrint = FALSE;
+        bProtect = sal_True;
+        bHideForm = bHideCell = bHidePrint = false;
     }
     else
     {
@@ -151,13 +151,13 @@ void ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
 
 // -----------------------------------------------------------------------
 
-BOOL ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
+sal_Bool ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
 {
-    BOOL                bAttrsChanged   = FALSE;
-    USHORT              nWhich          = GetWhich( SID_SCATTR_PROTECTION );
+    sal_Bool                bAttrsChanged   = false;
+    sal_uInt16              nWhich          = GetWhich( SID_SCATTR_PROTECTION );
     const SfxPoolItem*  pOldItem        = GetOldItem( rCoreAttrs, SID_SCATTR_PROTECTION );
     const SfxItemSet&   rOldSet         = GetItemSet();
-    SfxItemState        eItemState      = rOldSet.GetItemState( nWhich, FALSE );
+    SfxItemState        eItemState      = rOldSet.GetItemState( nWhich, false );
     ScProtectionAttr    aProtAttr;
 
     if ( !bDontCare )
@@ -168,7 +168,7 @@ BOOL ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
         aProtAttr.SetHidePrint( bHidePrint );
 
         if ( bTriEnabled )
-            bAttrsChanged = TRUE;                   // DontCare -> richtiger Wert
+            bAttrsChanged = sal_True;                   // DontCare -> richtiger Wert
         else
             bAttrsChanged = !pOldItem || !( aProtAttr == *(const ScProtectionAttr*)pOldItem );
     }
@@ -199,11 +199,11 @@ IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
 {
     TriState eState = pBox->GetState();
     if ( eState == STATE_DONTKNOW )
-        bDontCare = TRUE;                           // alles zusammen auf DontCare
+        bDontCare = sal_True;                           // alles zusammen auf DontCare
     else
     {
-        bDontCare = FALSE;                          // DontCare ueberall aus
-        BOOL bOn = ( eState == STATE_CHECK );       // ausgewaehlter Wert
+        bDontCare = false;                          // DontCare ueberall aus
+        sal_Bool bOn = ( eState == STATE_CHECK );       // ausgewaehlter Wert
 
         if ( pBox == &aBtnProtect )
             bProtect = bOn;
@@ -243,7 +243,7 @@ void ScTabPageProtection::UpdateButtons()
         aBtnHidePrint.SetState( bHidePrint ? STATE_CHECK : STATE_NOCHECK );
     }
 
-    BOOL bEnable = ( aBtnHideCell.GetState() != STATE_CHECK );
+    sal_Bool bEnable = ( aBtnHideCell.GetState() != STATE_CHECK );
     {
         aBtnProtect.Enable( bEnable );
         aBtnHideFormula.Enable( bEnable );

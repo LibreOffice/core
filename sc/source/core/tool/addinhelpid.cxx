@@ -38,7 +38,7 @@
 struct ScUnoAddInHelpId
 {
     const sal_Char*             pFuncName;
-    sal_uInt16                  nHelpId;
+    const sal_Char*             sHelpId;
 };
 
 
@@ -185,10 +185,10 @@ void ScUnoAddInHelpIdGenerator::SetServiceName( const ::rtl::OUString& rServiceN
     nArrayCount = nSize / sizeof( ScUnoAddInHelpId );
 }
 
-sal_uInt16 ScUnoAddInHelpIdGenerator::GetHelpId( const ::rtl::OUString& rFuncName ) const
+rtl::OString ScUnoAddInHelpIdGenerator::GetHelpId( const ::rtl::OUString& rFuncName ) const
 {
     if( !pCurrHelpIds || !nArrayCount )
-        return 0;
+        return rtl::OString();
 
     const ScUnoAddInHelpId* pFirst = pCurrHelpIds;
     const ScUnoAddInHelpId* pLast = pCurrHelpIds + nArrayCount - 1;
@@ -198,14 +198,14 @@ sal_uInt16 ScUnoAddInHelpIdGenerator::GetHelpId( const ::rtl::OUString& rFuncNam
         const ScUnoAddInHelpId* pMiddle = pFirst + (pLast - pFirst) / 2;
         sal_Int32 nResult = rFuncName.compareToAscii( pMiddle->pFuncName );
         if( !nResult )
-            return pMiddle->nHelpId;
+            return pMiddle->sHelpId;
         else if( nResult < 0 )
             pLast = pMiddle - 1;
         else
             pFirst = pMiddle + 1;
     }
 
-    return 0;
+    return rtl::OString();
 }
 
 

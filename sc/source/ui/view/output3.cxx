@@ -210,7 +210,7 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 
     pModel->UseHyphenator();
 
-    ULONG nOldDrawMode = pDev->GetDrawMode();
+    sal_uLong nOldDrawMode = pDev->GetDrawMode();
     if ( bUseStyleColor && Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         pDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
@@ -244,7 +244,7 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 // #109985#
 void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
 {
-    BOOL    bHad    = FALSE;
+    sal_Bool    bHad    = false;
     SCSIZE  nArrY;
     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -254,13 +254,13 @@ void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
         {
             if (!bHad)
             {
-                bHad = TRUE;
+                bHad = sal_True;
             }
         }
         else if (bHad)
         {
             DrawSelectiveObjects( nLayer );
-            bHad = FALSE;
+            bHad = false;
         }
     }
 

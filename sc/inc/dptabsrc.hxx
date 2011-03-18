@@ -116,10 +116,10 @@ private:
     long                    nRowDimCount;
     long                    nDataDimCount;
     long                    nPageDimCount;
-    BOOL                    bColumnGrand;
-    BOOL                    bRowGrand;
-    BOOL                    bIgnoreEmptyRows;
-    BOOL                    bRepeatIfEmpty;
+    sal_Bool                    bColumnGrand;
+    sal_Bool                    bRowGrand;
+    sal_Bool                    bIgnoreEmptyRows;
+    sal_Bool                    bRepeatIfEmpty;
 
     long                    nDupCount;
 
@@ -131,13 +131,13 @@ private:
     com::sun::star::uno::Sequence<com::sun::star::sheet::MemberResult>* pRowResults;
     std::vector<ScDPLevel*> aColLevelList;
     std::vector<ScDPLevel*> aRowLevelList;
-    BOOL                    bResultOverflow;
+    sal_Bool                    bResultOverflow;
 
     ::std::auto_ptr<rtl::OUString> mpGrandTotalName;
 
     void                    CreateRes_Impl();
     void                    FillMemberResults();
-    void                    FillLevelList( USHORT nOrientation, std::vector<ScDPLevel*> &rList );
+    void                    FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*> &rList );
     void                    FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool &bHasAutoShow);
 
     /**
@@ -163,8 +163,8 @@ public:
 
     const ::rtl::OUString*  GetGrandTotalName() const;
 
-    USHORT                  GetOrientation(long nColumn);
-    void                    SetOrientation(long nColumn, USHORT nNew);
+    sal_uInt16                  GetOrientation(long nColumn);
+    void                    SetOrientation(long nColumn, sal_uInt16 nNew);
     long                    GetPosition(long nColumn);
 
     long                    GetDataDimensionCount();
@@ -174,12 +174,12 @@ public:
     const ScDPItemData*            GetItemDataById( long nDim, long nId );
     long                                       GetDataLayoutDim(){ return pData->GetColumnCount(); }
     SCROW                                GetMemberId(  long  nDim, const ScDPItemData& rData );
-    BOOL                    IsDataLayoutDimension(long nDim);
-    USHORT                  GetDataLayoutOrientation();
+    sal_Bool                    IsDataLayoutDimension(long nDim);
+    sal_uInt16                  GetDataLayoutOrientation();
 
-    BOOL                    IsDateDimension(long nDim);
+    sal_Bool                    IsDateDimension(long nDim);
 
-    BOOL                    SubTotalAllowed(long nColumn);      //! move to ScDPResultData
+    sal_Bool                    SubTotalAllowed(long nColumn);      //! move to ScDPResultData
 
     ScDPDimension*          AddDuplicated(long nSource, const String& rNewName);
     long                    GetDupCount() const { return nDupCount; }
@@ -267,15 +267,15 @@ public:
 
     virtual String              getDataDescription();       //! ???
 
-    virtual BOOL                getColumnGrand() const;
-    virtual void                setColumnGrand(BOOL bSet);
-    virtual BOOL                getRowGrand() const;
-    virtual void                setRowGrand(BOOL bSet);
+    virtual sal_Bool                getColumnGrand() const;
+    virtual void                setColumnGrand(sal_Bool bSet);
+    virtual sal_Bool                getRowGrand() const;
+    virtual void                setRowGrand(sal_Bool bSet);
 
-    virtual BOOL                getIgnoreEmptyRows() const;
-    virtual void                setIgnoreEmptyRows(BOOL bSet);
-    virtual BOOL                getRepeatIfEmpty() const;
-    virtual void                setRepeatIfEmpty(BOOL bSet);
+    virtual sal_Bool                getIgnoreEmptyRows() const;
+    virtual void                setIgnoreEmptyRows(sal_Bool bSet);
+    virtual sal_Bool                getRepeatIfEmpty() const;
+    virtual void                setRepeatIfEmpty(sal_Bool bSet);
 
     virtual void                validate();     //! ???
     virtual void                disposeData();
@@ -335,14 +335,14 @@ private:
     long                nDim;               // dimension index (== column ID)
     ScDPHierarchies*    pHierarchies;
     long                nUsedHier;
-    USHORT              nFunction;          // enum GeneralFunction
+    sal_uInt16              nFunction;          // enum GeneralFunction
     String              aName;              // if empty, take from source
     ::std::auto_ptr<rtl::OUString> mpLayoutName;
     ::std::auto_ptr<rtl::OUString> mpSubtotalName;
     long                nSourceDim;         // >=0 if dup'ed
     ::com::sun::star::sheet::DataPilotFieldReference
                         aReferenceValue;    // settings for "show data as" / "displayed value"
-    BOOL                bHasSelectedPage;
+    sal_Bool                bHasSelectedPage;
     String              aSelectedPage;
     ScDPItemData*       pSelectedData;      // internal, temporary, created from aSelectedPage
     sal_Bool            mbHasHiddenMember;
@@ -422,18 +422,18 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    virtual USHORT              getOrientation() const;
-    virtual void                setOrientation(USHORT nNew);
+    virtual sal_uInt16              getOrientation() const;
+    virtual void                setOrientation(sal_uInt16 nNew);
     virtual long                getPosition() const;
     virtual void                setPosition(long nNew);
-    virtual BOOL                getIsDataLayoutDimension() const;
-    virtual USHORT              getFunction() const;
-    virtual void                setFunction(USHORT nNew);       // for data dimension
+    virtual sal_Bool                getIsDataLayoutDimension() const;
+    virtual sal_uInt16              getFunction() const;
+    virtual void                setFunction(sal_uInt16 nNew);       // for data dimension
     virtual long                getUsedHierarchy() const;
     virtual void                setUsedHierarchy(long nNew);
-    virtual BOOL                isDuplicated() const;
+    virtual sal_Bool                isDuplicated() const;
 
-    BOOL                        HasSelectedPage() const     { return bHasSelectedPage; }
+    sal_Bool                        HasSelectedPage() const     { return bHasSelectedPage; }
     const ScDPItemData&         GetSelectedData();
 
     const ::com::sun::star::sheet::DataPilotFieldReference& GetReferenceValue() const;
@@ -571,7 +571,7 @@ private:
     long                        nLev;
     ScDPMembers*                pMembers;
     com::sun::star::uno::Sequence<com::sun::star::sheet::GeneralFunction> aSubTotals;
-    BOOL                        bShowEmpty;
+    sal_Bool                        bShowEmpty;
     ::com::sun::star::sheet::DataPilotFieldSortInfo     aSortInfo;      // stored user settings
     ::com::sun::star::sheet::DataPilotFieldAutoShowInfo aAutoShowInfo;  // stored user settings
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo   aLayoutInfo;    // stored user settings
@@ -579,7 +579,7 @@ private:
     ::std::vector<sal_Int32>    aGlobalOrder;       // result of sorting by name or position
     long                        nSortMeasure;       // measure (index of data dimension) to sort by
     long                        nAutoMeasure;       // measure (index of data dimension) for AutoShow
-    BOOL                        bEnableLayout;      // enabled only for row fields, not for the innermost one
+    sal_Bool                        bEnableLayout;      // enabled only for row fields, not for the innermost one
 
 public:
                             ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL );
@@ -652,31 +652,31 @@ public:
     virtual com::sun::star::uno::Sequence<com::sun::star::sheet::GeneralFunction> getSubTotals() const;
     virtual void            setSubTotals(const com::sun::star::uno::Sequence<
                                             com::sun::star::sheet::GeneralFunction>& rNew);
-    virtual BOOL            getShowEmpty() const;
-    virtual void            setShowEmpty(BOOL bSet);
+    virtual sal_Bool            getShowEmpty() const;
+    virtual void            setShowEmpty(sal_Bool bSet);
 
     const ::com::sun::star::sheet::DataPilotFieldSortInfo& GetSortInfo() const      { return aSortInfo; }
     const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo& GetAutoShow() const  { return aAutoShowInfo; }
 
     void                    EvaluateSortOrder();
-    void                    SetEnableLayout( BOOL bSet );
+    void                    SetEnableLayout( sal_Bool bSet );
 
     const ::std::vector<sal_Int32>& GetGlobalOrder() const      { return aGlobalOrder; }
     ::std::vector<sal_Int32>&  GetGlobalOrder()                 { return aGlobalOrder; }
     long                    GetSortMeasure() const              { return nSortMeasure; }
     long                    GetAutoMeasure() const              { return nAutoMeasure; }
 
-    BOOL                    IsOutlineLayout() const
+    sal_Bool                    IsOutlineLayout() const
                             { return bEnableLayout &&
                                aLayoutInfo.LayoutMode !=
                                 ::com::sun::star::sheet::DataPilotFieldLayoutMode::TABULAR_LAYOUT; }
 
-    BOOL                    IsSubtotalsAtTop() const
+    sal_Bool                    IsSubtotalsAtTop() const
                             { return bEnableLayout &&
                                aLayoutInfo.LayoutMode ==
                                 ::com::sun::star::sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP; }
 
-    BOOL                    IsAddEmpty() const          { return bEnableLayout && aLayoutInfo.AddEmptyLines; }
+    sal_Bool                    IsAddEmpty() const          { return bEnableLayout && aLayoutInfo.AddEmptyLines; }
 
     //! number format (for data fields and date fields)
 };
@@ -751,8 +751,8 @@ private:
     ::std::auto_ptr<rtl::OUString> mpLayoutName;
 
     sal_Int32       nPosition;          // manual sorting
-    BOOL            bVisible;
-    BOOL            bShowDet;
+    sal_Bool            bVisible;
+    sal_Bool            bShowDet;
 
 public:
     ScDPMember( ScDPSource* pSrc, long nD, long nH, long nL,
@@ -763,7 +763,7 @@ public:
     void                    FillItemData( ScDPItemData& rData ) const;
     const ScDPItemData&  GetItemData() const;
     inline SCROW               GetItemDataId() const { return mnDataId; }
-    BOOL                           IsNamedItem( SCROW    nIndex  ) const;
+    sal_Bool                           IsNamedItem( SCROW    nIndex  ) const;
 
     SC_DLLPUBLIC const ::rtl::OUString*  GetLayoutName() const;
 
@@ -823,10 +823,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    virtual BOOL            getIsVisible() const;
-    virtual void            setIsVisible(BOOL bSet);
-    virtual BOOL            getShowDetails() const;
-    virtual void            setShowDetails(BOOL bSet);
+    virtual sal_Bool            getIsVisible() const;
+    virtual void            setIsVisible(sal_Bool bSet);
+    virtual sal_Bool            getShowDetails() const;
+    virtual void            setShowDetails(sal_Bool bSet);
 
     sal_Int32               getPosition() const;
     void                    setPosition(sal_Int32 nNew);

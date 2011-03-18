@@ -609,9 +609,7 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
     if( aServiceName.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.MeanValueRegressionCurve" )))
     {
-        OSL_FAIL( "Meanvalue lines in legend not supported" );
-        aResult = OUString();
-        // aResult = ::chart::SchResId::getResString( STR_OBJECT_AVERAGE_LINE );
+        aResult = ::chart::SchResId::getResString( STR_REGRESSION_MEAN );
     }
     else if( aServiceName.equalsAsciiL(
                  RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.LinearRegressionCurve" )))

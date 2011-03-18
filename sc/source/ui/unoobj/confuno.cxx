@@ -143,7 +143,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         ScDocument* pDoc = pDocShell->GetDocument();
         if (pDoc)
         {
-            sal_Bool bUpdateHeights = sal_False;
+            sal_Bool bUpdateHeights = false;
 
             ScViewOptions aViewOpt(pDoc->GetViewOptions());
 
@@ -243,7 +243,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             {
                 // Int16 contains CharacterCompressionType values
                 sal_Int16 nUno = ScUnoHelpFunctions::GetInt16FromAny( aValue );
-                pDoc->SetAsianCompression( (BYTE) nUno );
+                pDoc->SetAsianCompression( (sal_uInt8) nUno );
                 bUpdateHeights = sal_True;
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_ASIANKERN ) == 0 )
@@ -253,7 +253,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.compareToAscii( SCSAVEVERSION ) == 0)
             {
-                sal_Bool bTmp=sal_False;
+                sal_Bool bTmp=false;
                 if ( aValue >>= bTmp )
                     pDocShell->SetSaveVersionOnClose( bTmp );
             }
@@ -265,13 +265,13 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_LOADREADONLY ) == 0 )
             {
-                sal_Bool bTmp=sal_False;
+                sal_Bool bTmp=false;
                 if ( aValue >>= bTmp )
                     pDocShell->SetLoadReadonly( bTmp );
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_SHAREDOC ) == 0 )
             {
-                sal_Bool bDocShared = sal_False;
+                sal_Bool bDocShared = false;
                 if ( aValue >>= bDocShared )
                 {
                     pDocShell->SetSharedXMLFlag( bDocShared );
@@ -378,7 +378,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             {
                 // #i75610# don't create the printer, return empty string if no printer created yet
                 // (as in SwXDocumentSettings)
-                SfxPrinter* pPrinter = pDoc->GetPrinter( FALSE );
+                SfxPrinter* pPrinter = pDoc->GetPrinter( false );
                 if (pPrinter)
                     aRet <<= rtl::OUString ( pPrinter->GetName());
                 else
@@ -388,7 +388,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             {
                 // #i75610# don't create the printer, return empty sequence if no printer created yet
                 // (as in SwXDocumentSettings)
-                SfxPrinter* pPrinter = pDoc->GetPrinter( FALSE );
+                SfxPrinter* pPrinter = pDoc->GetPrinter( false );
                 if (pPrinter)
                 {
                     SvMemoryStream aStream;

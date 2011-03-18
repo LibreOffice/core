@@ -35,7 +35,7 @@ TabPage RID_SCPAGE_OPREDLINE
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_CONTENT
     {
-        HelpID = 1 ;
+        HelpID = HID_SCPAGE_OPREDLINBE_FT_CONTENT ;
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Chan~ges" ;
@@ -66,6 +66,7 @@ TabPage RID_SCPAGE_OPREDLINE
     };
     ListBox CLB_CONTENT
     {
+        HelpID = "sc:ListBox:RID_SCPAGE_OPREDLINE:CLB_CONTENT";
         Pos = MAP_APPFONT ( 90 , 14 ) ;
         Size = MAP_APPFONT ( 120 , 86 ) ;
         TabStop = TRUE ;
@@ -73,6 +74,7 @@ TabPage RID_SCPAGE_OPREDLINE
     };
     ListBox CLB_REMOVE
     {
+        HelpID = "sc:ListBox:RID_SCPAGE_OPREDLINE:CLB_REMOVE";
         Pos = MAP_APPFONT ( 90 , 30 ) ;
         Size = MAP_APPFONT ( 120 , 86 ) ;
         TabStop = TRUE ;
@@ -80,6 +82,7 @@ TabPage RID_SCPAGE_OPREDLINE
     };
     ListBox CLB_INSERT
     {
+        HelpID = "sc:ListBox:RID_SCPAGE_OPREDLINE:CLB_INSERT";
         Pos = MAP_APPFONT ( 90 , 46 ) ;
         Size = MAP_APPFONT ( 120 , 86 ) ;
         TabStop = TRUE ;
@@ -87,6 +90,7 @@ TabPage RID_SCPAGE_OPREDLINE
     };
     ListBox CLB_MOVE
     {
+        HelpID = "sc:ListBox:RID_SCPAGE_OPREDLINE:CLB_MOVE";
         Pos = MAP_APPFONT ( 90 , 62 ) ;
         Size = MAP_APPFONT ( 120 , 86 ) ;
         TabStop = TRUE ;

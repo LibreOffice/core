@@ -163,13 +163,13 @@ namespace
     rtl::OUString lcl_makeColorName( Color rColor )
     {
         String aStr(SVX_RES(RID_SVXFLOAT3D_FIX_R));
-        aStr += String::CreateFromInt32((INT32)rColor.GetRed());
+        aStr += String::CreateFromInt32((sal_Int32)rColor.GetRed());
         aStr += sal_Unicode(' ');
         aStr += String(SVX_RES(RID_SVXFLOAT3D_FIX_G));
-        aStr += String::CreateFromInt32((INT32)rColor.GetGreen());
+        aStr += String::CreateFromInt32((sal_Int32)rColor.GetGreen());
         aStr += sal_Unicode(' ');
         aStr += String(SVX_RES(RID_SVXFLOAT3D_FIX_B));
-        aStr += String::CreateFromInt32((INT32)rColor.GetBlue());
+        aStr += String::CreateFromInt32((sal_Int32)rColor.GetBlue());
         return aStr;
     }
     void lcl_selectColor( ColorListBox& rListBox, const Color& rColor )
@@ -178,7 +178,7 @@ namespace
         rListBox.SelectEntry( rColor );
         if( rListBox.GetSelectEntryCount() == 0 )
         {
-            USHORT nPos = rListBox.InsertEntry( rColor, lcl_makeColorName( rColor ) );
+            sal_uInt16 nPos = rListBox.InsertEntry( rColor, lcl_makeColorName( rColor ) );
             rListBox.SelectEntryPos( nPos );
         }
     }
@@ -354,6 +354,15 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( Window* pWin
     ClickLightSourceButtonHdl(&m_aBtn_Light2);
 
     m_aModelChangeListener.startListening( uno::Reference< util::XModifyBroadcaster >(m_xSceneProperties, uno::UNO_QUERY) );
+    m_aBtn_Light1.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light2.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light3.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light4.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light5.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light6.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light7.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light8.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aCtl_Preview.SetAccessibleName(String(SchResId( STR_LIGHT_PREVIEW )));
 }
 
 ThreeD_SceneIllumination_TabPage::~ThreeD_SceneIllumination_TabPage()

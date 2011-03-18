@@ -29,6 +29,7 @@
 
 ModalDialog RID_SCDLG_ASCII
 {
+    HelpID = "sc:ModalDialog:RID_SCDLG_ASCII";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 320 , 305 ) ;
@@ -71,6 +72,7 @@ ModalDialog RID_SCDLG_ASCII
 
     ListBox LB_CHARSET
     {
+        HelpID = "sc:ListBox:RID_SCDLG_ASCII:LB_CHARSET";
         Pos = MAP_APPFONT ( 76 , 14 ) ;
         Size = MAP_APPFONT ( 130 , 61 ) ;
         TabStop = TRUE ;
@@ -87,6 +89,7 @@ ModalDialog RID_SCDLG_ASCII
 
     ListBox LB_CUSTOMLANG
     {
+        HelpID = "sc:ListBox:RID_SCDLG_ASCII:LB_CUSTOMLANG";
         Pos = MAP_APPFONT ( 76 , 30 ) ;
         Size = MAP_APPFONT ( 130 , 61 ) ;
         TabStop = TRUE ;
@@ -103,6 +106,7 @@ ModalDialog RID_SCDLG_ASCII
 
     NumericField NF_AT_ROW
     {
+        HelpID = "sc:NumericField:RID_SCDLG_ASCII:NF_AT_ROW";
         Border = TRUE ;
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 76 , 46 ) ;
@@ -121,6 +125,7 @@ ModalDialog RID_SCDLG_ASCII
     };
     RadioButton RB_FIXED
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_ASCII:RB_FIXED";
         Pos = MAP_APPFONT ( 12 , 75 ) ;
         Size = MAP_APPFONT ( 243 , 10 ) ;
         Text [ en-US ] = "~Fixed width" ;
@@ -128,6 +133,7 @@ ModalDialog RID_SCDLG_ASCII
     };
     RadioButton RB_SEPARATED
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_ASCII:RB_SEPARATED";
         Pos = MAP_APPFONT ( 12 , 89 ) ;
         Size = MAP_APPFONT ( 243 , 10 ) ;
         Text [ en-US ] = "~Separated by" ;
@@ -137,6 +143,7 @@ ModalDialog RID_SCDLG_ASCII
 
     CheckBox CKB_TAB
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_ASCII:CKB_TAB";
         Pos = MAP_APPFONT ( 20 , 102 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
         TabStop = TRUE ;
@@ -144,6 +151,7 @@ ModalDialog RID_SCDLG_ASCII
     };
     CheckBox CKB_COMMA
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_ASCII:CKB_COMMA";
         Pos = MAP_APPFONT ( 92 , 102 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
         TabStop = TRUE ;
@@ -151,6 +159,7 @@ ModalDialog RID_SCDLG_ASCII
     };
     CheckBox CKB_OTHER
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_ASCII:CKB_OTHER";
         Pos = MAP_APPFONT ( 164 , 102 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         TabStop = TRUE ;
@@ -158,6 +167,7 @@ ModalDialog RID_SCDLG_ASCII
     };
     Edit ED_OTHER
     {
+        HelpID = "sc:Edit:RID_SCDLG_ASCII:ED_OTHER";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 218 , 100 ) ;
         Size = MAP_APPFONT ( 37 , 12 ) ;
@@ -167,6 +177,7 @@ ModalDialog RID_SCDLG_ASCII
 
     CheckBox CKB_SEMICOLON
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_ASCII:CKB_SEMICOLON";
         Pos = MAP_APPFONT ( 20 , 115 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
         TabStop = TRUE ;
@@ -174,6 +185,7 @@ ModalDialog RID_SCDLG_ASCII
     };
     CheckBox CKB_SPACE
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_ASCII:CKB_SPACE";
         Pos = MAP_APPFONT ( 92 , 115 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
         TabStop = TRUE ;
@@ -182,6 +194,7 @@ ModalDialog RID_SCDLG_ASCII
 
     CheckBox CB_ASONCE
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_ASCII:CB_ASONCE";
         Pos = MAP_APPFONT ( 20 , 130 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
         TabStop = TRUE ;
@@ -190,6 +203,7 @@ ModalDialog RID_SCDLG_ASCII
 
     ComboBox CB_TEXTSEP
     {
+        HelpID = "sc:ComboBox:RID_SCDLG_ASCII:CB_TEXTSEP";
         Pos = MAP_APPFONT ( 218 , 128 ) ;
         Size = MAP_APPFONT ( 37 , 94 ) ;
         TabStop = TRUE ;
@@ -211,6 +225,7 @@ ModalDialog RID_SCDLG_ASCII
 
     CheckBox CB_QUOTED_AS_TEXT
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_ASCII:CB_QUOTED_AS_TEXT";
         Pos = MAP_APPFONT ( 12 , 158 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
         TabStop = TRUE ;
@@ -219,6 +234,7 @@ ModalDialog RID_SCDLG_ASCII
 
     CheckBox CB_DETECT_SPECIAL_NUMBER
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_ASCII:CB_DETECT_SPECIAL_NUMBER";
         Pos = MAP_APPFONT ( 12 , 171 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
         TabStop = TRUE ;
@@ -239,6 +255,7 @@ ModalDialog RID_SCDLG_ASCII
     };
     ListBox LB_TYPE1
     {
+        HelpID = "sc:ListBox:RID_SCDLG_ASCII:LB_TYPE1";
         Pos = MAP_APPFONT ( 76 , 198 ) ;
         Size = MAP_APPFONT ( 60 , 68 ) ;
         TabStop = TRUE ;

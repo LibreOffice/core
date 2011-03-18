@@ -65,8 +65,8 @@ ScPrintOptions::~ScPrintOptions()
 
 void ScPrintOptions::SetDefaults()
 {
-    bSkipEmpty = TRUE;
-    bAllSheets = FALSE;
+    bSkipEmpty = sal_True;
+    bAllSheets = false;
 }
 
 const ScPrintOptions& ScPrintOptions::operator=( const ScPrintOptions& rCpy )
@@ -90,7 +90,7 @@ int ScPrintOptions::operator!=( const ScPrintOptions& rOpt ) const
 // -----------------------------------------------------------------------
 
 
-ScTpPrintItem::ScTpPrintItem( USHORT nWhichP, const ScPrintOptions& rOpt ) :
+ScTpPrintItem::ScTpPrintItem( sal_uInt16 nWhichP, const ScPrintOptions& rOpt ) :
     SfxPoolItem ( nWhichP ),
     theOptions  ( rOpt )
 {

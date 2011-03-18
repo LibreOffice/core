@@ -30,7 +30,7 @@
 ModelessDialog RID_SCDLG_TABOP
 {
     OutputSize = TRUE ;
-    HelpId = SID_OPENDLG_TABOP ;
+    HelpId = CMD_SID_OPENDLG_TABOP ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 240 , 64 ) ;
@@ -45,12 +45,14 @@ ModelessDialog RID_SCDLG_TABOP
     };
     Edit ED_FORMULARANGE
     {
+        HelpID = "sc:Edit:RID_SCDLG_TABOP:ED_FORMULARANGE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 82 , 14 ) ;
         Size = MAP_APPFONT ( 79 , 12 ) ;
     };
     ImageButton RB_FORMULARANGE
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_TABOP:RB_FORMULARANGE";
         Pos = MAP_APPFONT ( 163 , 13 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -64,12 +66,14 @@ ModelessDialog RID_SCDLG_TABOP
     };
     Edit ED_ROWCELL
     {
+        HelpID = "sc:Edit:RID_SCDLG_TABOP:ED_ROWCELL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 82 , 30 ) ;
         Size = MAP_APPFONT ( 79 , 12 ) ;
     };
     ImageButton RB_ROWCELL
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_TABOP:RB_ROWCELL";
         Pos = MAP_APPFONT ( 163 , 29 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -83,12 +87,14 @@ ModelessDialog RID_SCDLG_TABOP
     };
     Edit ED_COLCELL
     {
+        HelpID = "sc:Edit:RID_SCDLG_TABOP:ED_COLCELL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 82 , 46 ) ;
         Size = MAP_APPFONT ( 79 , 12 ) ;
     };
     ImageButton RB_COLCELL
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_TABOP:RB_COLCELL";
         Pos = MAP_APPFONT ( 163 , 45 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;

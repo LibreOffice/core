@@ -29,7 +29,7 @@
 #define _CHART2_VPOLARGRID_HXX
 
 #include "VAxisOrGridBase.hxx"
-#include "TickmarkHelper.hxx"
+#include "Tickmarks.hxx"
 #include "VLineProperties.hxx"
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 
@@ -56,16 +56,15 @@ public:
         );
     virtual ~VPolarGrid();
 
-    virtual void SAL_CALL createShapes();
+    virtual void createShapes();
 
-    void setIncrements( const ::com::sun::star::uno::Sequence<
-                    ::com::sun::star::chart2::ExplicitIncrementData >& rIncrements );
+    void setIncrements( const std::vector< ExplicitIncrementData >& rIncrements );
 
     static void createLinePointSequence_ForAngleAxis(
                     ::com::sun::star::drawing::PointSequenceSequence& rPoints
                     , ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos
-                    , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement
-                    , const ::com::sun::star::chart2::ExplicitScaleData& rScale
+                    , const ExplicitIncrementData& rIncrement
+                    , const ExplicitScaleData& rScale
                     , PolarPlottingPositionHelper* pPosHelper
                     , double fLogicRadius, double fLogicZ );
 
@@ -74,8 +73,7 @@ private: //member
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > > m_aGridPropertiesList;//main grid, subgrid, subsubgrid etc
     PolarPlottingPositionHelper* m_pPosHelper;
-    ::com::sun::star::uno::Sequence<
-            ::com::sun::star::chart2::ExplicitIncrementData >   m_aIncrements;
+    ::std::vector< ExplicitIncrementData >   m_aIncrements;
 
     void    getAllTickInfos( sal_Int32 nDimensionIndex, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
 

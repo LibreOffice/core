@@ -40,7 +40,7 @@ using ::std::vector;
 ScQueryParamBase::ScQueryParamBase()
 {
     Resize( MAXQUERY );
-    for (USHORT i=0; i<MAXQUERY; i++)
+    for (sal_uInt16 i=0; i<MAXQUERY; i++)
         maEntries[i].Clear();
 }
 
@@ -111,7 +111,7 @@ void ScQueryParamBase::FillInExcelSyntax(String& aCellStr, SCSIZE nIndex)
 
         ScQueryEntry& rEntry = GetEntry(nIndex);
 
-        rEntry.bDoQuery = TRUE;
+        rEntry.bDoQuery = sal_True;
         // Operatoren herausfiltern
         if (aCellStr.GetChar(0) == '<')
         {
@@ -219,11 +219,11 @@ void ScQueryParam::Clear()
     nCol1=nCol2 = 0;
     nRow1=nRow2 = 0;
     nTab = SCTAB_MAX;
-    bHasHeader = bCaseSens = bRegExp = bMixedComparison = FALSE;
-    bInplace = bByRow = bDuplicate = TRUE;
+    bHasHeader = bCaseSens = bRegExp = bMixedComparison = false;
+    bInplace = bByRow = bDuplicate = sal_True;
 
     Resize( MAXQUERY );
-    for (USHORT i=0; i<MAXQUERY; i++)
+    for (sal_uInt16 i=0; i<MAXQUERY; i++)
         maEntries[i].Clear();
 
     ClearDestParams();
@@ -269,9 +269,9 @@ ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
 
 //------------------------------------------------------------------------
 
-BOOL ScQueryParam::operator==( const ScQueryParam& rOther ) const
+sal_Bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
 {
-    BOOL bEqual = FALSE;
+    sal_Bool bEqual = false;
 
     // Anzahl der Queries gleich?
     SCSIZE nUsed      = 0;
@@ -303,7 +303,7 @@ BOOL ScQueryParam::operator==( const ScQueryParam& rOther ) const
         && (nDynamicEndRow == rOther.nDynamicEndRow)
         && (bUseDynamicRange == rOther.bUseDynamicRange) )
     {
-        bEqual = TRUE;
+        bEqual = sal_True;
         for ( SCSIZE i=0; i<nUsed && bEqual; i++ )
             bEqual = maEntries[i] == rOther.maEntries[i];
     }
@@ -330,7 +330,7 @@ void ScQueryParam::MoveToDest()
         for (size_t i=0; i<n; i++)
             maEntries[i].nField += nDifX;
 
-        bInplace = TRUE;
+        bInplace = sal_True;
     }
     else
     {

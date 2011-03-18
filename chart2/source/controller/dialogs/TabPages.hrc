@@ -77,28 +77,9 @@
 #define FL_SEPARATOR                    18
 #define FT_AXIS_TEXTDIR                 19
 #define LB_AXIS_TEXTDIR                 20
-#define FL_SCALE            1
 
-#define TXT_MIN             1
-#define TXT_MAX             2
-#define TXT_STEP_MAIN       3
-#define TXT_STEP_HELP       4
-#define TXT_ORIGIN          5
+//#define TP_AXIS_POSITIONS   904
 
-#define CBX_AUTO_MIN        1
-#define CBX_AUTO_MAX        2
-#define CBX_AUTO_STEP_MAIN  3
-#define CBX_AUTO_STEP_HELP  4
-#define CBX_AUTO_ORIGIN     5
-#define CBX_LOGARITHM       6
-#define CBX_REVERSE         7
-
-#define EDT_STEP_MAIN       1
-#define EDT_MAX             2
-#define EDT_MIN             3
-#define EDT_ORIGIN          4
-
-#define MT_STEPHELP         10
 #define FL_AXIS_LINE        1
 #define FL_LABELS           2
 #define FL_TICKS            3

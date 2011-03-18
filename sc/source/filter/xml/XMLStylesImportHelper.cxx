@@ -476,7 +476,7 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
 {
     if (!bPrevRangeAdded)
     {
-        sal_Bool bAddRange(sal_False);
+        sal_Bool bAddRange(false);
         if (nCellType == nPrevCellType &&
             IsEqual(pStyleName, pPrevStyleName) &&
             IsEqual(pCurrency, pPrevCurrency))
@@ -515,7 +515,7 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
     {
         aPrevRange = rRange;
         ResetAttributes();
-        bPrevRangeAdded = sal_False;
+        bPrevRangeAdded = false;
     }
 }
 

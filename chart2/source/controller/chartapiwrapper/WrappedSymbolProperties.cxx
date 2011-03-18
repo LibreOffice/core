@@ -555,8 +555,19 @@ void WrappedSymbolAndLinesProperty::setValueToSeries(
     if(!xSeriesPropertySet.is())
         return;
 
-    drawing::LineStyle eLineStyle( bDrawLines ? drawing::LineStyle_SOLID : drawing::LineStyle_NONE  );
-    xSeriesPropertySet->setPropertyValue( C2U("LineStyle"), uno::makeAny( eLineStyle ) );
+    drawing::LineStyle eOldLineStyle( drawing::LineStyle_SOLID );
+    xSeriesPropertySet->getPropertyValue( C2U("LineStyle") ) >>= eOldLineStyle;
+    if( bDrawLines )
+    {
+        //#i114298# don't overwrite dashed lines with solid lines here
+        if( eOldLineStyle == drawing::LineStyle_NONE )
+            xSeriesPropertySet->setPropertyValue( C2U("LineStyle"), uno::makeAny( drawing::LineStyle_SOLID ) );
+    }
+    else
+    {
+        if( eOldLineStyle != drawing::LineStyle_NONE )
+            xSeriesPropertySet->setPropertyValue( C2U("LineStyle"), uno::makeAny( drawing::LineStyle_NONE ) );
+    }
 }
 
 beans::PropertyState WrappedSymbolAndLinesProperty::getPropertyState( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const

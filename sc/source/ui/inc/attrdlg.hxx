@@ -55,7 +55,7 @@ public:
                 ~ScAttrDlg();
 
 protected:
-    virtual void    PageCreated( USHORT nPageId, SfxTabPage& rTabPage );
+    virtual void    PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage );
 
 private:
     DECL_LINK( OkHandler, void* ); // fuer DoppelClick-Beenden in TabPages

@@ -51,7 +51,7 @@ class ScAreaLink;
 #define SC_CONTENT_DRAWING      8
 #define SC_CONTENT_COUNT        9
 
-const ULONG SC_CONTENT_NOCHILD  = ~0UL;
+const sal_uLong SC_CONTENT_NOCHILD  = ~0UL;
 
 //
 //  TreeListBox fuer Inhalte
@@ -62,24 +62,24 @@ class ScContentTree : public SvTreeListBox
     ScNavigatorDlg*     pParentWindow;
     ImageList           aEntryImages;
     SvLBoxEntry*        pRootNodes[SC_CONTENT_COUNT];
-    USHORT              nRootType;          // als Root eingestellt
+    sal_uInt16              nRootType;          // als Root eingestellt
     String              aManualDoc;         // im Navigator umgeschaltet (Title)
-    BOOL                bHiddenDoc;         // verstecktes aktiv?
+    sal_Bool                bHiddenDoc;         // verstecktes aktiv?
     String              aHiddenName;        // URL zum Laden
     String              aHiddenTitle;       // fuer Anzeige
     ScDocument*         pHiddenDocument;    // temporaer
 
-    USHORT              pPosList[SC_CONTENT_COUNT];     // fuer die Reihenfolge
+    sal_uInt16              pPosList[SC_CONTENT_COUNT];     // fuer die Reihenfolge
 
-    static BOOL bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
+    static sal_Bool bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
 
     ScDocShell* GetManualOrCurrent();
 
-    void    InitRoot(USHORT nType);
-    void    ClearType(USHORT nType);
+    void    InitRoot(sal_uInt16 nType);
+    void    ClearType(sal_uInt16 nType);
     void    ClearAll();
-    void    InsertContent( USHORT nType, const String& rValue );
-    void    GetDrawNames( USHORT nType );
+    void    InsertContent( sal_uInt16 nType, const String& rValue );
+    void    GetDrawNames( sal_uInt16 nType );
 
     void    GetTableNames();
     void    GetAreaNames();
@@ -90,24 +90,24 @@ class ScContentTree : public SvTreeListBox
     void    GetDrawingNames();
     void    GetNoteStrings();
 
-    static bool IsPartOfType( USHORT nContentType, USHORT nObjIdentifier );
+    static bool IsPartOfType( sal_uInt16 nContentType, sal_uInt16 nObjIdentifier );
 
-    BOOL    DrawNamesChanged( USHORT nType );
-    BOOL    NoteStringsChanged();
+    sal_Bool    DrawNamesChanged( sal_uInt16 nType );
+    sal_Bool    NoteStringsChanged();
 
-    ScAddress GetNotePos( ULONG nIndex );
-    const ScAreaLink* GetLink( ULONG nIndex );
+    ScAddress GetNotePos( sal_uLong nIndex );
+    const ScAreaLink* GetLink( sal_uLong nIndex );
 
     /** Returns the indexes of the specified listbox entry.
         @param rnRootIndex  Root index of specified entry is returned.
         @param rnChildIndex  Index of the entry inside its root is returned (or SC_CONTENT_NOCHILD if entry is root).
         @param pEntry  The entry to examine. */
-    void    GetEntryIndexes( USHORT& rnRootIndex, ULONG& rnChildIndex, SvLBoxEntry* pEntry ) const;
+    void    GetEntryIndexes( sal_uInt16& rnRootIndex, sal_uLong& rnChildIndex, SvLBoxEntry* pEntry ) const;
 
     /** Returns the child index of the specified listbox entry.
         @param pEntry  The entry to examine or NULL for the selected entry.
         @return  Index of the entry inside its root or SC_CONTENT_NOCHILD if entry is root. */
-    ULONG   GetChildIndex( SvLBoxEntry* pEntry ) const;
+    sal_uLong   GetChildIndex( SvLBoxEntry* pEntry ) const;
 
     void    DoDrag();
 
@@ -117,8 +117,8 @@ class ScContentTree : public SvTreeListBox
     DECL_STATIC_LINK( ScContentTree, ExecDragHdl, void* );
 
 protected:
-//  virtual BOOL    Drop( const DropEvent& rEvt );
-//  virtual BOOL    QueryDrop( DropEvent& rEvt );
+//  virtual sal_Bool    Drop( const DropEvent& rEvt );
+//  virtual sal_Bool    QueryDrop( DropEvent& rEvt );
 
     using SvTreeListBox::ExecuteDrop;
 
@@ -137,18 +137,18 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    KeyInput( const KeyEvent& rKEvt );
 
-    void    InitWindowBits( BOOL bButtons );
+    void    InitWindowBits( sal_Bool bButtons );
 
-    void    Refresh( USHORT nType = 0 );
+    void    Refresh( sal_uInt16 nType = 0 );
 
     void    ToggleRoot();
-    void    SetRootType( USHORT nNew );
-    USHORT  GetRootType() const             { return nRootType; }
+    void    SetRootType( sal_uInt16 nNew );
+    sal_uInt16  GetRootType() const             { return nRootType; }
 
     void    ActiveDocChanged();
     void    ResetManualDoc();
     void    SetManualDoc(const String& rName);
-    BOOL    LoadFile(const String& rUrl);
+    sal_Bool    LoadFile(const String& rUrl);
     void    SelectDoc(const String& rName);
 
     const String& GetHiddenTitle() const    { return aHiddenTitle; }
@@ -158,7 +158,7 @@ public:
     /** Stores the current listbox state in the navigator settings. */
     void                        StoreSettings() const;
 
-    static BOOL IsInDrag()  { return bIsInDrag; }
+    static sal_Bool IsInDrag()  { return bIsInDrag; }
 };
 
 

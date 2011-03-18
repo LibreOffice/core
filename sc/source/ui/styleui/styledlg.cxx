@@ -59,12 +59,12 @@
 
 ScStyleDlg::ScStyleDlg( Window*             pParent,
                         SfxStyleSheetBase&  rStyleBase,
-                        USHORT              nRscId )
+                        sal_uInt16              nRscId )
 
     :   SfxStyleDialog  ( pParent,
                           ScResId( nRscId ),
                           rStyleBase,
-                          FALSE ),
+                          false ),
         nDlgRsc         ( nRscId )
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
@@ -137,7 +137,7 @@ ScStyleDlg::~ScStyleDlg()
 
 // -----------------------------------------------------------------------
 
-void ScStyleDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
+void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
     if ( nDlgRsc == RID_SCDLG_STYLES_PAR )
     {
@@ -179,7 +179,7 @@ void ScStyleDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
         switch ( nPageId )
         {
             case TP_PAGE_STD:
-                aSet.Put (SfxAllEnumItem((const USHORT)SID_ENUM_PAGE_MODE, SVX_PAGE_MODE_CENTER));
+                aSet.Put (SfxAllEnumItem((const sal_uInt16)SID_ENUM_PAGE_MODE, SVX_PAGE_MODE_CENTER));
                 rTabPage.PageCreated(aSet);
                 break;
 

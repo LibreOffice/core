@@ -84,9 +84,9 @@ void ScUndoAllRangeNames::Repeat(SfxRepeatTarget& /*rTarget*/)
 {
 }
 
-BOOL ScUndoAllRangeNames::CanRepeat(SfxRepeatTarget& /*rTarget*/) const
+sal_Bool ScUndoAllRangeNames::CanRepeat(SfxRepeatTarget& /*rTarget*/) const
 {
-    return false;
+    return sal_False;
 }
 
 String ScUndoAllRangeNames::GetComment() const

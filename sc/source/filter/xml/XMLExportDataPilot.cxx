@@ -152,8 +152,8 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
     SCSIZE nQueryEntryCount = aQueryParam.GetEntryCount();
     if (nQueryEntryCount > 0)
     {
-        sal_Bool bAnd(sal_False);
-        sal_Bool bOr(sal_False);
+        sal_Bool bAnd(false);
+        sal_Bool bOr(false);
         sal_Bool bHasEntries(sal_True);
         SCSIZE nEntries(0);
         SCSIZE j;
@@ -173,7 +173,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                 ++nEntries;
             }
             else
-                bHasEntries = sal_False;
+                bHasEntries = false;
         }
         nQueryEntryCount = nEntries;
         if (nQueryEntryCount)
@@ -225,7 +225,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                     bOpenAndElement = sal_True;
                 }
                 else
-                    bOpenAndElement = sal_False;
+                    bOpenAndElement = false;
                 for (j = 1; j < nQueryEntryCount; ++j)
                 {
                     if (aConnection != aQueryParam.GetEntry(j).eConnect)
@@ -241,7 +241,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                             {
                                 WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
                                 rExport.EndElement(aName, sal_True);
-                                bOpenAndElement = sal_False;
+                                bOpenAndElement = false;
                             }
                         }
                         else
@@ -251,7 +251,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                             if (bOpenAndElement)
                             {
                                 rExport.EndElement(aName, sal_True);
-                                bOpenAndElement = sal_False;
+                                bOpenAndElement = false;
                             }
                             if (j == nQueryEntryCount - 1)
                             {

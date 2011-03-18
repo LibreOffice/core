@@ -212,7 +212,7 @@ ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper()
     sIDPrefix(RTL_CONSTASCII_USTRINGPARAM(SC_CHANGE_ID_PREFIX)),
     nMultiSpanned(0),
     nMultiSpannedSlaveCount(0),
-    bChangeTrack(sal_False)
+    bChangeTrack(false)
 {
     nPrefixLength = sIDPrefix.getLength();
 }
@@ -465,10 +465,10 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, S
 
     // old files didn't store 100th seconds, enable again
     if ( aInfo.aDateTime.HundredthSeconds )
-        pTrack->SetTime100thSeconds( TRUE );
+        pTrack->SetTime100thSeconds( sal_True );
 
     StrData aStrData( aInfo.sUser );
-    USHORT nPos;
+    sal_uInt16 nPos;
     if ( pTrack->GetUserCollection().Search( &aStrData, nPos ) )
     {
         const StrData* pUser = static_cast<const StrData*>( pTrack->GetUserCollection().At( nPos ) );
@@ -836,7 +836,7 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
     {
         pTrack = new ScChangeTrack(pDoc, aUsers);
         // old files didn't store 100th seconds, disable until encountered
-        pTrack->SetTime100thSeconds( FALSE );
+        pTrack->SetTime100thSeconds( false );
 
         ScMyActions::iterator aItr(aActions.begin());
         ScMyActions::iterator aEndItr(aActions.end());

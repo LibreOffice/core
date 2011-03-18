@@ -46,21 +46,21 @@
 
 extern WKTYP                eTyp;
 
-static const sal_Char*      GetAddInName( const UINT8 nIndex );
+static const sal_Char*      GetAddInName( const sal_uInt8 nIndex );
 
 static DefTokenId           lcl_KnownAddIn( const ByteString& sTest );
 
-//extern double decipher_Number123( UINT32 nValue );
+//extern double decipher_Number123( sal_uInt32 nValue );
 
 
-void LotusToSc::DoFunc( DefTokenId eOc, BYTE nAnz, const sal_Char* pExtString )
+void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtString )
 {
     TokenId                     eParam[ 256 ];
-    INT32                       nLauf;
+    sal_Int32                       nLauf;
     TokenId                     nMerk0, nMerk1;
 
-    BOOL                        bAddIn = FALSE;
-    BOOL                        bNeg = FALSE;
+    sal_Bool                        bAddIn = false;
+    sal_Bool                        bNeg = false;
 
     DBG_ASSERT( nAnz < 128, "-LotusToSc::DoFunc(): Neee! -so viel kann ich nicht!" );
 
@@ -89,7 +89,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, BYTE nAnz, const sal_Char* pExtString )
 
         if( eOc == ocNoName )
         {
-            bAddIn = TRUE;
+            bAddIn = sal_True;
             nMerk0 = aPool.Store( eOc, String( t, eSrcChar ) );
 
             aPool << nMerk0;
@@ -168,7 +168,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, BYTE nAnz, const sal_Char* pExtString )
     {
             // ACHTUNG: 0 ist der letzte Parameter, nAnz-1 der erste
 
-        INT16 nLast = nAnz - 1;
+        sal_Int16 nLast = nAnz - 1;
 
         if( eOc == ocRMZ )
         {   // Extrawurst ocRMZ letzter Parameter negiert!
@@ -183,7 +183,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, BYTE nAnz, const sal_Char* pExtString )
             // [Parameter{;Parameter}]
             aPool << eParam[ nLast ];
 
-            INT16 nNull = -1;   // gibt einen auszulassenden Parameter an
+            sal_Int16 nNull = -1;   // gibt einen auszulassenden Parameter an
             for( nLauf = nLast - 1 ; nLauf >= 0 ; nLauf-- )
             {
                 if( nLauf != nNull )
@@ -223,12 +223,12 @@ void LotusToSc::DoFunc( DefTokenId eOc, BYTE nAnz, const sal_Char* pExtString )
 }
 
 
-void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, ScSingleRefData& rSRD )
+void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefData& rSRD )
 {
     // Col-Bemachung
     if( nCol & 0x8000 )
     {
-        rSRD.SetColRel( TRUE );
+        rSRD.SetColRel( sal_True );
         if( nCol & 0x0080 )
             nCol |= 0xFF00;
         else
@@ -238,14 +238,14 @@ void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, ScSingleRefData& rSRD
     }
     else
     {
-        rSRD.SetColRel( FALSE );
+        rSRD.SetColRel( false );
         rSRD.nCol = static_cast< SCsCOL >( nCol & 0x00FF );
     }
 
     // Row-Bemachung
     if( nRow & 0x8000 )
     {
-        rSRD.SetRowRel( TRUE );
+        rSRD.SetRowRel( sal_True );
         // vorzeichenrichtige Erweiterung
         switch( eTyp )
         {
@@ -272,7 +272,7 @@ void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, ScSingleRefData& rSRD
     }
     else
     {
-        rSRD.SetRowRel( FALSE );
+        rSRD.SetRowRel( false );
         switch( eTyp )
         {
             // 5432 1098 7654 3210
@@ -302,16 +302,16 @@ void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, ScSingleRefData& rSRD
 }
 
 
-void LotusToSc::ReadSRD( ScSingleRefData& rSRD, BYTE nRelBit )
+void LotusToSc::ReadSRD( ScSingleRefData& rSRD, sal_uInt8 nRelBit )
 {
-    BYTE            nTab, nCol;
-    UINT16          nRow;
+    sal_uInt8           nTab, nCol;
+    sal_uInt16          nRow;
 
     Read( nRow );
     Read( nTab );
     Read( nCol );
 
-    BOOL b3D = ( static_cast< SCTAB >( nTab ) != aEingPos.Tab() );
+    sal_Bool b3D = ( static_cast< SCTAB >( nTab ) != aEingPos.Tab() );
 
     rSRD.SetColRel( ( nRelBit & 0x01 ) != 0 );
     rSRD.nCol = static_cast< SCsCOL >( nCol );
@@ -365,27 +365,27 @@ void LotusToSc::Reset( const ScAddress& rEingPos )
 }
 
 
-LotusToSc::LotusToSc( SvStream &rStream, CharSet e, BOOL b ) :
+LotusToSc::LotusToSc( SvStream &rStream, CharSet e, sal_Bool b ) :
     LotusConverterBase( rStream, 128 )
 {
     eSrcChar = e;
-    bWK3 = FALSE;
+    bWK3 = false;
     bWK123 = b;
 }
 
 
-typedef FUNC_TYPE ( FuncType1 ) ( BYTE );
-typedef DefTokenId ( FuncType2 ) ( BYTE );
+typedef FUNC_TYPE ( FuncType1 ) ( sal_uInt8 );
+typedef DefTokenId ( FuncType2 ) ( sal_uInt8 );
 
 
-ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
+ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
     const FORMULA_TYPE /*eFT*/ )
 {
-    BYTE                nOc;
-    BYTE                nAnz;
-    BYTE                nRelBits;
-    UINT16              nStrLen;
-    UINT16              nRngIndex;
+    sal_uInt8               nOc;
+    sal_uInt8               nAnz;
+    sal_uInt8               nRelBits;
+    sal_uInt16              nStrLen;
+    sal_uInt16              nRngIndex;
     FUNC_TYPE           eType = FT_NOP;
     TokenId             nMerk0;
     DefTokenId          eOc;
@@ -419,10 +419,10 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
         pIndexToType = IndexToType;
         pIndexToToken = IndexToToken;
 
-        rR.SetTabRel( TRUE );
+        rR.SetTabRel( sal_True );
         rR.nTab = aEingPos.Tab();
         rR.nRelTab = 0;
-        rR.SetFlag3D( FALSE );
+        rR.SetFlag3D( false );
     }
 
     aCRD.Ref2 = rR;
@@ -480,7 +480,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
                 break;
             case FT_Variable:
             {
-                UINT16  nCol, nRow;
+                sal_uInt16  nCol, nRow;
                 Read( nCol );
                 Read( nRow );
 
@@ -496,7 +496,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
                         // kein Range dazu
                         nNewId = aPool.Store( rR );
                     else
-                        nNewId = aPool.Store( ( UINT16 ) nId );
+                        nNewId = aPool.Store( ( sal_uInt16 ) nId );
                 }
 
                 aStack << nNewId;
@@ -504,7 +504,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
                 break;
             case FT_Range:
             {
-                UINT16  nColS, nRowS, nColE, nRowE;
+                sal_uInt16  nColS, nRowS, nColE, nRowE;
                 Read( nColS );
                 Read( nRowS );
                 Read( nColE );
@@ -524,7 +524,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
                         // kein Range dazu
                         nNewId = aPool.Store( aCRD );
                     else
-                        nNewId = aPool.Store( ( UINT16 ) nId );
+                        nNewId = aPool.Store( ( sal_uInt16 ) nId );
                 }
 
                 aStack << nNewId;
@@ -536,7 +536,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
                 break;
             case FT_ConstInt:
             {
-                INT16   nVal;
+                sal_Int16   nVal;
                 Read( nVal );
                 aStack << aPool.Store( ( double ) nVal );
             }
@@ -634,7 +634,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
             case FT_Snum:
                     if ( bWK123 )
                 {
-                         UINT32   nValue;
+                         sal_uInt32   nValue;
 
                          Read( nValue );
                      double  fValue = Snum32ToDouble( nValue );
@@ -642,7 +642,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
                 }
                 else
                 {
-                        INT16 nVal;
+                        sal_Int16 nVal;
                         Read( nVal );
                         aStack << aPool.Store( SnumToDouble( nVal ) );
                 }
@@ -666,7 +666,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
 }
 
 
-FUNC_TYPE LotusToSc::IndexToType( BYTE nIndex )
+FUNC_TYPE LotusToSc::IndexToType( sal_uInt8 nIndex )
 {
     static const FUNC_TYPE pType[ 256 ] =
     {                       // Code Bezeichnung
@@ -931,7 +931,7 @@ FUNC_TYPE LotusToSc::IndexToType( BYTE nIndex )
 }
 
 
-DefTokenId LotusToSc::IndexToToken( BYTE nIndex )
+DefTokenId LotusToSc::IndexToToken( sal_uInt8 nIndex )
 {
     static const DefTokenId pToken[ 256 ] =
     {                       // Code Bezeichnung
@@ -1197,7 +1197,7 @@ DefTokenId LotusToSc::IndexToToken( BYTE nIndex )
 }
 
 
-FUNC_TYPE LotusToSc::IndexToTypeWK123( BYTE nIndex )
+FUNC_TYPE LotusToSc::IndexToTypeWK123( sal_uInt8 nIndex )
 {
     static const FUNC_TYPE pType[ 256 ] =
     {                       // Code Bezeichnung
@@ -1462,7 +1462,7 @@ FUNC_TYPE LotusToSc::IndexToTypeWK123( BYTE nIndex )
 }
 
 
-DefTokenId LotusToSc::IndexToTokenWK123( BYTE nIndex )
+DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
 {
     static const DefTokenId pToken[ 256 ] =
     {                       // Code Bezeichnung
@@ -1730,7 +1730,7 @@ DefTokenId LotusToSc::IndexToTokenWK123( BYTE nIndex )
 
 
 
-const sal_Char* GetAddInName( const UINT8 n )
+const sal_Char* GetAddInName( const sal_uInt8 n )
 {
     static const sal_Char*  pNames[ 256 ] =
     {

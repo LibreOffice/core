@@ -49,10 +49,56 @@
 
 #include "cellsuno.hxx"
 #include "convuno.hxx"
+#include "vbaapplication.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::script::vba::VBAEventId;
 using namespace ::ooo::vba;
+
+// ============================================================================
+
+namespace {
+
+/** Extracts a sheet index from the specified element of the passed sequence.
+    The element may be an integer, a Calc range or ranges object, or a VBA Range object. */
+SCTAB lclGetTabFromArgs( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) throw (lang::IllegalArgumentException)
+{
+    VbaEventsHelperBase::checkArgument( rArgs, nIndex );
+
+    // first try to extract a sheet index
+    SCTAB nTab = -1;
+    if( rArgs[ nIndex ] >>= nTab )
+        return nTab;
+
+    // try VBA Range object
+    uno::Reference< excel::XRange > xVbaRange = getXSomethingFromArgs< excel::XRange >( rArgs, nIndex );
+    if( xVbaRange.is() )
+    {
+        uno::Reference< XHelperInterface > xVbaHelper( xVbaRange, uno::UNO_QUERY_THROW );
+        // TODO: in the future, the parent may be an excel::XChart (chart sheet) -> will there be a common base interface?
+        uno::Reference< excel::XWorksheet > xVbaSheet( xVbaHelper->getParent(), uno::UNO_QUERY_THROW );
+        // VBA sheet index is 1-based
+        return static_cast< SCTAB >( xVbaSheet->getIndex() - 1 );
+    }
+
+    // try single UNO range object
+    uno::Reference< sheet::XCellRangeAddressable > xCellRangeAddressable = getXSomethingFromArgs< sheet::XCellRangeAddressable >( rArgs, nIndex );
+    if( xCellRangeAddressable.is() )
+        return xCellRangeAddressable->getRangeAddress().Sheet;
+
+    // at last, try UNO range list
+    uno::Reference< sheet::XSheetCellRangeContainer > xRanges = getXSomethingFromArgs< sheet::XSheetCellRangeContainer >( rArgs, nIndex );
+    if( xRanges.is() )
+    {
+        uno::Sequence< table::CellRangeAddress > aRangeAddresses = xRanges->getRangeAddresses();
+        if( aRangeAddresses.getLength() > 0 )
+            return aRangeAddresses[ 0 ].Sheet;
+    }
+
+    throw lang::IllegalArgumentException();
+}
+
+} // namespace
 
 // ============================================================================
 
@@ -288,7 +334,7 @@ void SAL_CALL ScVbaEventsListener::changesOccurred( const util::ChangesEvent& aE
         aChange.ReplacedElement >>= xRangeObj;
         if( xRangeObj.is() )
         {
-            uno::Sequence< uno::Any > aArgs(1);
+            uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[0] <<= xRangeObj;
             mrVbaEvents.processVbaEvent( WORKSHEET_CHANGE, aArgs );
         }
@@ -363,8 +409,14 @@ bool ScVbaEventsListener::isMouseReleased()
 
 IMPL_LINK( ScVbaEventsListener, fireResizeMacro, void*, EMPTYARG )
 {
-    if( !mbDisposed && isMouseReleased() )
-        processWindowResizeMacro();
+    if( !mbDisposed && isMouseReleased() ) try
+    {
+        mrVbaEvents.processVbaEvent( WORKBOOK_WINDOWRESIZE, uno::Sequence< uno::Any >() );
+    }
+    catch( uno::Exception& )
+    {
+        // #163419# do not throw exceptions into application core
+    }
     release();
     return 0;
 }
@@ -450,43 +502,19 @@ void SAL_CALL ScVbaEventsHelper::disposing( const lang::EventObject& rSource ) t
 
 // protected ------------------------------------------------------------------
 
-bool ScVbaEventsHelper::implEventsEnabled() throw (uno::RuntimeException)
-{
-    // document and document shell are needed during event processing
-    if( !mpDocShell || !mpDoc )
-        throw uno::RuntimeException();
-
-    // get Application object and check if events are enabled (this is an Excel-only attribute)
-    uno::Reference< excel::XApplication > xApplication( mxApplication.get(), uno::UNO_QUERY );
-    if( !xApplication.is() && mpShell )
-    {
-        uno::Any aVBAGlobals;
-        mpShell->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aVBAGlobals );
-        uno::Reference< XHelperInterface > xHelperInterface( aVBAGlobals, uno::UNO_QUERY );
-        if( xHelperInterface.is() )
-        {
-            xApplication.set( xHelperInterface->Application(), uno::UNO_QUERY );
-            mxApplication = xApplication;
-        }
-    }
-    if( !xApplication.is() )
-        throw uno::RuntimeException();
-
-    // return whether event processing is enabled
-    return xApplication->getEnableEvents();
-}
-
 bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
         const EventHandlerInfo& rInfo, const uno::Sequence< uno::Any >& rArgs ) throw (uno::RuntimeException)
 {
-    // check preconditions for some events, add more events if needed
-    bool bExecuteEvent = true;
+    // document and document shell are needed during event processing
+    if( !mpShell || !mpDoc )
+        throw uno::RuntimeException();
+
+    // framework and Calc fire a few events before 'opened', ignore them
+    bool bExecuteEvent = mbOpened;
+
+    // special handling for some events
     switch( rInfo.mnEventId )
     {
-        case WORKBOOK_ACTIVATE:
-            // while loading, framework fires this before 'opened' event, delay it
-            bExecuteEvent = mbOpened;
-        break;
         case WORKBOOK_OPEN:
             bExecuteEvent = !mbOpened;
             if( bExecuteEvent )
@@ -499,15 +527,25 @@ bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
         break;
         case WORKSHEET_SELECTIONCHANGE:
             // if selection is not changed, then do not fire the event
-            bExecuteEvent = mbOpened && isSelectionChanged( rArgs, 0 );
+            bExecuteEvent = bExecuteEvent && isSelectionChanged( rArgs, 0 );
         break;
     }
 
-    // add workbook event associated to a sheet event
-    bool bSheetEvent = false;
-    rInfo.maUserData >>= bSheetEvent;
-    if( bSheetEvent && bExecuteEvent )
-        rEventQueue.push_back( EventQueueEntry( rInfo.mnEventId + USERDEFINED_START, rArgs ) );
+    if( bExecuteEvent )
+    {
+        // add workbook event associated to a sheet event
+        bool bSheetEvent = false;
+        if( (rInfo.maUserData >>= bSheetEvent) && bSheetEvent )
+            rEventQueue.push_back( EventQueueEntry( rInfo.mnEventId + USERDEFINED_START, rArgs ) );
+
+        /*  For document events: check if events are enabled via the
+            Application.EnableEvents symbol (this is an Excel-only attribute).
+            Check this again for every event, as the event handler may change
+            the state of the EnableEvents symbol. Global events such as
+            AUTO_OPEN and AUTO_CLOSE are always enabled. */
+        if( rInfo.meType == EVENTHANDLER_DOCUMENT )
+            bExecuteEvent = ScVbaApplication::getDocumentEventsEnabled();
+    }
 
     return bExecuteEvent;
 }
@@ -631,7 +669,7 @@ void ScVbaEventsHelper::implPostProcessEvent( EventQueue& rEventQueue,
 {
     bool bSheetEvent = false;
     rInfo.maUserData >>= bSheetEvent;
-    SCTAB nTab = bSheetEvent ? getTabFromArgs( rArgs, 0 ) : -1;
+    SCTAB nTab = bSheetEvent ? lclGetTabFromArgs( rArgs, 0 ) : -1;
     if( bSheetEvent && (nTab < 0) )
         throw lang::IllegalArgumentException();
 
@@ -645,31 +683,27 @@ void ScVbaEventsHelper::implPostProcessEvent( EventQueue& rEventQueue,
 
 // private --------------------------------------------------------------------
 
-SCTAB ScVbaEventsHelper::getTabFromArgs( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) throw (lang::IllegalArgumentException)
+namespace {
+
+/** Compares the passed range lists representing sheet selections. Ignores
+    selections that refer to different sheets (returns false in this case). */
+bool lclSelectionChanged( const ScRangeList& rLeft, const ScRangeList& rRight )
 {
-    checkArgument( rArgs, nIndex );
+    // one of the range lists empty? -> return false, if both lists empty
+    bool bLeftEmpty = rLeft.empty();
+    bool bRightEmpty = rRight.empty();
+    if( bLeftEmpty || bRightEmpty )
+        return !(bLeftEmpty && bRightEmpty);
 
-    // first try to extract a sheet index
-    SCTAB nTab = -1;
-    if( rArgs[ nIndex ] >>= nTab )
-        return nTab;
+    // check sheet indexes of the range lists (assuming that all ranges in a list are on the same sheet)
+    if( rLeft.front()->aStart.Tab() != rRight.front()->aStart.Tab() )
+        return false;
 
-    // next, try single range object
-    uno::Reference< sheet::XCellRangeAddressable > xCellRangeAddressable = getXSomethingFromArgs< sheet::XCellRangeAddressable >( rArgs, nIndex );
-    if( xCellRangeAddressable.is() )
-        return xCellRangeAddressable->getRangeAddress().Sheet;
-
-    // at last, try range list
-    uno::Reference< sheet::XSheetCellRangeContainer > xRanges = getXSomethingFromArgs< sheet::XSheetCellRangeContainer >( rArgs, nIndex );
-    if( xRanges.is() )
-    {
-        uno::Sequence< table::CellRangeAddress > aRangeAddresses = xRanges->getRangeAddresses();
-        if( aRangeAddresses.getLength() > 0 )
-            return aRangeAddresses[ 0 ].Sheet;
-    }
-
-    throw lang::IllegalArgumentException();
+    // compare all ranges
+    return rLeft != rRight;
 }
+
+} // namespace
 
 bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
@@ -687,53 +721,46 @@ bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rAr
 uno::Any ScVbaEventsHelper::createWorksheet( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
         throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    // Eventually we will be able to pull the Workbook/Worksheet objects
-    // directly from basic and register them as listeners
-
     // extract sheet index, will throw, if parameter is invalid
-    SCTAB nTab = getTabFromArgs( rArgs, nIndex );
-
-    // create Workbook
-    uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= uno::Reference< uno::XInterface >();
-    aArgs[ 1 ] <<= mxModel;
-    uno::Reference< uno::XInterface > xWorkbook( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Workbook", aArgs ), uno::UNO_SET_THROW );
-
-    // create WorkSheet
-    String aSheetName;
-    mpDoc->GetName( nTab, aSheetName );
-    aArgs = uno::Sequence< uno::Any >( 3 );
-    aArgs[ 0 ] <<= xWorkbook;
-    aArgs[ 1 ] <<= mxModel;
-    aArgs[ 2 ] <<= ::rtl::OUString( aSheetName );
-    uno::Reference< uno::XInterface > xWorksheet( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Worksheet", aArgs ), uno::UNO_SET_THROW );
-    return uno::Any( xWorksheet );
+    SCTAB nTab = lclGetTabFromArgs( rArgs, nIndex );
+    return uno::Any( excel::getUnoSheetModuleObj( mxModel, nTab ) );
 }
 
 uno::Any ScVbaEventsHelper::createRange( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
         throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    uno::Reference< sheet::XSheetCellRangeContainer > xRanges = getXSomethingFromArgs< sheet::XSheetCellRangeContainer >( rArgs, nIndex );
-    uno::Reference< table::XCellRange > xRange = getXSomethingFromArgs< table::XCellRange >( rArgs, nIndex );
-    if ( !xRanges.is() && !xRange.is() )
-        throw lang::IllegalArgumentException();
+    // it is possible to pass an existing VBA Range object
+    uno::Reference< excel::XRange > xVbaRange = getXSomethingFromArgs< excel::XRange >( rArgs, nIndex );
+    if( !xVbaRange.is() )
+    {
+        uno::Reference< sheet::XSheetCellRangeContainer > xRanges = getXSomethingFromArgs< sheet::XSheetCellRangeContainer >( rArgs, nIndex );
+        uno::Reference< table::XCellRange > xRange = getXSomethingFromArgs< table::XCellRange >( rArgs, nIndex );
+        if ( !xRanges.is() && !xRange.is() )
+            throw lang::IllegalArgumentException();
 
-    uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= uno::Reference< uno::XInterface >(); // dummy parent
-    if ( xRanges.is() )
-        aArgs[ 1 ] <<= xRanges;
-    else
-        aArgs[ 1 ] <<= xRange;
-    uno::Reference< uno::XInterface > xVbaRange( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Range", aArgs ), uno::UNO_SET_THROW );
+        uno::Sequence< uno::Any > aArgs( 2 );
+        if ( xRanges.is() )
+        {
+            aArgs[ 0 ] <<= excel::getUnoSheetModuleObj( xRanges );
+            aArgs[ 1 ] <<= xRanges;
+        }
+        else
+        {
+            aArgs[ 0 ] <<= excel::getUnoSheetModuleObj( xRange );
+            aArgs[ 1 ] <<= xRange;
+        }
+        xVbaRange.set( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Range", aArgs ), uno::UNO_QUERY_THROW );
+    }
     return uno::Any( xVbaRange );
 }
 
 uno::Any ScVbaEventsHelper::createHyperlink( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
         throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
+    uno::Reference< table::XCell > xCell = getXSomethingFromArgs< table::XCell >( rArgs, nIndex, false );
     uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= uno::Reference< uno::XInterface >(); // dummy parent
-    aArgs[ 1 ] <<= getXSomethingFromArgs< table::XCell >( rArgs, nIndex, false );
+    aArgs[ 0 ] <<= excel::getUnoSheetModuleObj( xCell );
+    aArgs[ 1 ] <<= xCell;
     uno::Reference< uno::XInterface > xHyperlink( createVBAUnoAPIServiceWithArgs( mpShell, "ooo.vba.excel.Hyperlink", aArgs ), uno::UNO_SET_THROW );
     return uno::Any( xHyperlink );
 }

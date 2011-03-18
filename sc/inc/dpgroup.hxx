@@ -50,7 +50,7 @@ struct ScDPNumGroupInfo
     double   End;
     double   Step;
 
-    ScDPNumGroupInfo() : Enable(sal_False), DateValues(sal_False), AutoStart(sal_False), AutoEnd(sal_False),
+    ScDPNumGroupInfo() : Enable(false), DateValues(false), AutoStart(false), AutoEnd(false),
                          Start(0.0), End(0.0), Step(0.0) {}
 };
 
@@ -208,11 +208,11 @@ public:
     virtual long Compare( long nDim, long nDataId1, long nDataId2);
 
     virtual String                  getDimensionName(long nColumn);
-    virtual BOOL                    getIsDataLayoutDimension(long nColumn);
-    virtual BOOL                    IsDateDimension(long nDim);
-    virtual ULONG                  GetNumberFormat(long nDim);
+    virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
+    virtual sal_Bool                    IsDateDimension(long nDim);
+    virtual sal_uLong                  GetNumberFormat(long nDim);
     virtual void                    DisposeData();
-    virtual void                    SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
+    virtual void                    SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty );
 
     virtual bool                    IsRepeatIfEmpty();
 
@@ -224,12 +224,12 @@ public:
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
     virtual const ScDPCacheTable&   GetCacheTable() const;
 
-    virtual BOOL                    IsBaseForGroup(long nDim) const;
+    virtual sal_Bool                    IsBaseForGroup(long nDim) const;
     virtual long                    GetGroupBase(long nGroupDim) const;
-    virtual BOOL                    IsNumOrDateGroup(long nDim) const;
-    virtual BOOL                    IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
+    virtual sal_Bool                    IsNumOrDateGroup(long nDim) const;
+    virtual sal_Bool                    IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
                                                const ScDPItemData& rBaseData, long nBaseIndex ) const;
-    virtual BOOL                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
+    virtual sal_Bool                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                                       const ScDPItemData& rSecondData, long nSecondIndex ) const;
 };
 

@@ -62,9 +62,19 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
                                   String        aStartStr,
                                   double        fStep,
                                   double        fMax,
-                                  USHORT        nPossDir )
+                                  sal_uInt16        nPossDir )
 
     :   ModalDialog     ( pParent, ScResId( RID_SCDLG_FILLSERIES ) ),
+
+        aFtStartVal     ( this, ScResId( FT_START_VALUE ) ),
+        aEdStartVal     ( this, ScResId( ED_START_VALUES ) ),
+        aStartStrVal    ( aStartStr),
+
+        aFtEndVal       ( this, ScResId( FT_END_VALUE ) ),
+        aEdEndVal       ( this, ScResId( ED_END_VALUES ) ),
+
+        aFtIncrement    ( this, ScResId( FT_INCREMENT ) ),
+        aEdIncrement    ( this, ScResId( ED_INCREMENT ) ),
 
         aFlDirection    ( this, ScResId( FL_DIRECTION ) ),
         aBtnDown        ( this, ScResId( BTN_BOTTOM ) ),
@@ -83,14 +93,6 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
         aBtnDayOfWeek   ( this, ScResId( BTN_DAY_OF_WEEK ) ),
         aBtnMonth       ( this, ScResId( BTN_MONTH ) ),
         aBtnYear        ( this, ScResId( BTN_YEAR ) ),
-
-        aFtStartVal     ( this, ScResId( FT_START_VALUE ) ),
-        aEdStartVal     ( this, ScResId( ED_START_VALUES ) ),
-        aStartStrVal    ( aStartStr),
-        aFtEndVal       ( this, ScResId( FT_END_VALUE ) ),
-        aEdEndVal       ( this, ScResId( ED_END_VALUES ) ),
-        aFtIncrement    ( this, ScResId( FT_INCREMENT ) ),
-        aEdIncrement    ( this, ScResId( ED_INCREMENT ) ),
 
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
@@ -116,7 +118,7 @@ ScFillSeriesDlg::~ScFillSeriesDlg()
 
 //----------------------------------------------------------------------------
 
-void ScFillSeriesDlg::SetEdStartValEnabled(BOOL bFlag)
+void ScFillSeriesDlg::SetEdStartValEnabled(sal_Bool bFlag)
 {
     bStartValFlag=bFlag;
     if(bFlag)
@@ -133,7 +135,7 @@ void ScFillSeriesDlg::SetEdStartValEnabled(BOOL bFlag)
 
 //----------------------------------------------------------------------------
 
-void ScFillSeriesDlg::Init( USHORT nPossDir )
+void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 {
     aBtnOk.SetClickHdl         ( LINK( this, ScFillSeriesDlg, OKHdl ) );
     aBtnArithmetic.SetClickHdl ( LINK( this, ScFillSeriesDlg, DisableHdl ) );
@@ -222,7 +224,7 @@ void ScFillSeriesDlg::Init( USHORT nPossDir )
         rDoc.GetFormatTable()->GetInputLineString( fEndVal, 0, aEndTxt );
     aEdEndVal.SetText( aEndTxt );
 
-    bStartValFlag=FALSE;
+    bStartValFlag=false;
 
     aFlSep1.SetStyle( aFlSep1.GetStyle() | WB_VERT );
     aFlSep2.SetStyle( aFlSep2.GetStyle() | WB_VERT );
@@ -231,15 +233,15 @@ void ScFillSeriesDlg::Init( USHORT nPossDir )
 
 //----------------------------------------------------------------------------
 
-BOOL ScFillSeriesDlg::CheckStartVal()
+sal_Bool ScFillSeriesDlg::CheckStartVal()
 {
-    BOOL bValOk = FALSE;
+    sal_Bool bValOk = false;
     String aStr( aEdStartVal.GetText() );
 
     if ( aStr.Len() == 0 || aBtnAutoFill.IsChecked())
     {
         fStartVal = MAXDOUBLE;
-        bValOk = TRUE;
+        bValOk = sal_True;
     }
     else
     {
@@ -252,7 +254,7 @@ BOOL ScFillSeriesDlg::CheckStartVal()
 
 //----------------------------------------------------------------------------
 
-BOOL ScFillSeriesDlg::CheckIncrementVal()
+sal_Bool ScFillSeriesDlg::CheckIncrementVal()
 {
     sal_uInt32 nKey = 0;
     String aStr( aEdIncrement.GetText() );
@@ -263,15 +265,15 @@ BOOL ScFillSeriesDlg::CheckIncrementVal()
 
 //----------------------------------------------------------------------------
 
-BOOL ScFillSeriesDlg::CheckEndVal()
+sal_Bool ScFillSeriesDlg::CheckEndVal()
 {
-    BOOL    bValOk = FALSE;
+    sal_Bool    bValOk = false;
     String  aStr( aEdEndVal.GetText() );
 
     if ( aStr.Len() == 0 )
     {
         fEndVal = (fIncrement < 0) ? -MAXDOUBLE : MAXDOUBLE;
-        bValOk  = TRUE;
+        bValOk  = sal_True;
     }
     else
     {
@@ -342,21 +344,21 @@ IMPL_LINK( ScFillSeriesDlg, OKHdl, void *, EMPTYARG )
     else if ( aBtnMonth.IsChecked() )       theFillDateCmd = FILL_MONTH;
     else if ( aBtnYear.IsChecked() )        theFillDateCmd = FILL_YEAR;
 
-    BOOL  bAllOk = TRUE;
+    sal_Bool  bAllOk = sal_True;
     Edit* pEdWrong = NULL;
     if ( !CheckStartVal() )
     {
-        bAllOk = FALSE;
+        bAllOk = false;
         pEdWrong = &aEdStartVal;
     }
     else if ( !CheckIncrementVal() )
     {
-        bAllOk = FALSE;
+        bAllOk = false;
         pEdWrong = &aEdIncrement;
     }
     else if ( !CheckEndVal() )
     {
-        bAllOk = FALSE;
+        bAllOk = false;
         pEdWrong = &aEdEndVal;
     }
     if ( bAllOk )

@@ -46,11 +46,11 @@
 
 ScShowTabDlg::ScShowTabDlg( Window* pParent ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_SHOW_TAB ) ),
+    aFtLbTitle      ( this, ScResId( FT_LABEL ) ),
     aLb             ( this, ScResId( LB_ENTRYLIST ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-    aFtLbTitle      ( this, ScResId( FT_LABEL ) )
+    aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
     aLb.Clear();
     aLb.SetDoubleClickHdl( LINK( this, ScShowTabDlg, DblClkHdl ) );
@@ -63,15 +63,15 @@ ScShowTabDlg::ScShowTabDlg( Window* pParent ) :
 
 void ScShowTabDlg::SetDescription(
         const String& rTitle, const String& rFixedText,
-        ULONG nDlgHelpId, ULONG nLbHelpId )
+        const rtl::OString& rDlgHelpId, const rtl::OString& sLbHelpId )
 {
     SetText( rTitle );
     aFtLbTitle.SetText( rFixedText );
-    SetHelpId( nDlgHelpId );
-    aLb.SetHelpId( nLbHelpId );
+    SetHelpId( rDlgHelpId );
+    aLb.SetHelpId( sLbHelpId );
 }
 
-void ScShowTabDlg::Insert( const String& rString, BOOL bSelected )
+void ScShowTabDlg::Insert( const String& rString, sal_Bool bSelected )
 {
     aLb.InsertEntry( rString );
     if( bSelected )
@@ -80,17 +80,17 @@ void ScShowTabDlg::Insert( const String& rString, BOOL bSelected )
 
 //------------------------------------------------------------------------
 
-USHORT ScShowTabDlg::GetSelectEntryCount() const
+sal_uInt16 ScShowTabDlg::GetSelectEntryCount() const
 {
     return aLb.GetSelectEntryCount();
 }
 
-String ScShowTabDlg::GetSelectEntry(USHORT nPos) const
+String ScShowTabDlg::GetSelectEntry(sal_uInt16 nPos) const
 {
     return aLb.GetSelectEntry(nPos);
 }
 
-USHORT ScShowTabDlg::GetSelectEntryPos(USHORT nPos) const
+sal_uInt16 ScShowTabDlg::GetSelectEntryPos(sal_uInt16 nPos) const
 {
     return aLb.GetSelectEntryPos(nPos);
 }

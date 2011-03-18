@@ -42,7 +42,7 @@ sal_Bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, String& rCodeN
 {
     uno::Sequence<beans::PropertyValue> aProps;
     if( !(aAny >>= aProps) )
-        return sal_False;
+        return false;
 
     OUString sCodeNameProp( RTL_CONSTASCII_USTRINGPARAM("CodeName") );
     sal_Int32 nPropCount = aProps.getLength();
@@ -59,7 +59,7 @@ sal_Bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, String& rCodeN
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -92,7 +92,7 @@ XMLCodeNameProvider::~XMLCodeNameProvider()
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 uno::Any SAL_CALL XMLCodeNameProvider::getByName( const OUString& aName )
@@ -176,7 +176,7 @@ uno::Type SAL_CALL XMLCodeNameProvider::getElementType(  )
             return sal_True;
     }
 
-    return sal_False;
+    return false;
 }
 
 void XMLCodeNameProvider::set( const uno::Reference< container::XNameAccess>& xNameAccess, ScDocument *pDoc )

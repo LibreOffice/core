@@ -108,9 +108,9 @@ public:
     inline  ScTabViewShell * GetTabViewShell();
 
     bool    SetupRefDlg();
-    bool    RemoveRefDlg( BOOL bRestoreModal = TRUE );
+    bool    RemoveRefDlg( sal_Bool bRestoreModal = sal_True );
 
-    virtual void            SetModal( BOOL bModal ){ ScValidationDlgBase::SetModalInputMode( bModal ); }
+    virtual void            SetModal( sal_Bool bModal ){ ScValidationDlgBase::SetModalInputMode( bModal ); }
 
     virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc )
     {
@@ -129,7 +129,7 @@ public:
         DBG_ASSERT( false, "should not execute here!!!when the edit kill focus, should remove refhandler.\r\n" );
 
         if ( IsInExecute() )
-            EndDialog( FALSE );
+            EndDialog( false );
         else if ( GetStyle() & WB_CLOSEABLE )
             Close();
     }
@@ -149,7 +149,7 @@ public:
             (m_pHandler->*m_pRefInputStartPostHdl)( pEdit, pButton );
     }
 
-    virtual void        RefInputDone( BOOL bForced = FALSE )
+    virtual void        RefInputDone( sal_Bool bForced = false )
     {
         if( !CanInputDone( bForced ) )
             return;
@@ -164,11 +164,11 @@ public:
             (m_pHandler->*m_pRefInputDonePostHdl)();
     }
 
-    BOOL IsChildFocus();
+    sal_Bool IsChildFocus();
 
     enum { SLOTID = SID_VALIDITY_REFERENCE };
 
-    BOOL Close();
+    sal_Bool Close();
 };
 
 
@@ -182,9 +182,9 @@ public:
     virtual                     ~ScTPValidationValue();
 
     static SfxTabPage*          Create( Window* pParent, const SfxItemSet& rArgSet );
-    static USHORT*              GetRanges();
+    static sal_uInt16*              GetRanges();
 
-    virtual BOOL                FillItemSet( SfxItemSet& rArgSet );
+    virtual sal_Bool                FillItemSet( SfxItemSet& rArgSet );
     virtual void                Reset( const SfxItemSet& rArgSet );
 
 private:
@@ -240,7 +240,7 @@ private:
 
     void            TidyListBoxes();
 public:
-    USHORT          GetAllowEntryPos();
+    sal_uInt16          GetAllowEntryPos();
     String          GetMinText();
     void    SetupRefDlg();
     void    RemoveRefDlg();
@@ -271,8 +271,8 @@ public:
             ~ScTPValidationHelp();
 
     static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
-    static  USHORT*     GetRanges   ();
-    virtual BOOL        FillItemSet ( SfxItemSet& rArgSet );
+    static  sal_uInt16*     GetRanges   ();
+    virtual sal_Bool        FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 };
 
@@ -304,8 +304,8 @@ public:
             ~ScTPValidationError();
 
     static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
-    static  USHORT*     GetRanges   ();
-    virtual BOOL        FillItemSet ( SfxItemSet& rArgSet );
+    static  sal_uInt16*     GetRanges   ();
+    virtual sal_Bool        FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 };
 

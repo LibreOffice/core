@@ -162,7 +162,7 @@ void lcl_createRoleIndexMap( lcl_tRoleIndexMap & rOutMap )
 struct lcl_DataSeriesContainerAppend : public
     ::std::iterator< ::std::output_iterator_tag, Reference< XDataSeriesContainer > >
 {
-    typedef ::std::vector< chart::DialogModel::tSeriesWithChartTypeByName > tContainerType;
+    typedef ::std::vector< ::chart::DialogModel::tSeriesWithChartTypeByName > tContainerType;
 
     explicit lcl_DataSeriesContainerAppend( tContainerType & rCnt )
             : m_rDestCnt( rCnt )
@@ -182,7 +182,7 @@ struct lcl_DataSeriesContainerAppend : public
                 for( sal_Int32 nI = 0; nI < aSeq.getLength(); ++ nI )
                 {
                     m_rDestCnt.push_back(
-                        chart::DialogModel::tSeriesWithChartTypeByName(
+                        ::chart::DialogModel::tSeriesWithChartTypeByName(
                             ::chart::DataSeriesHelper::getDataSeriesLabel( aSeq[nI], aRole ),
                             ::std::make_pair( aSeq[nI], xCT )));
                 }
@@ -383,7 +383,6 @@ DialogModel::DialogModel(
         m_xContext( xContext ),
         m_aTimerTriggeredControllerLock( uno::Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) )
 {
-    createBackup();
 }
 
 DialogModel::~DialogModel()
@@ -751,20 +750,6 @@ sal_Int32 DialogModel::GetRoleIndexForSorting( const ::rtl::OUString & rInternal
 }
 
 // private methods
-
-void DialogModel::createBackup()
-{
-    OSL_ENSURE( ! m_xBackupChartDocument.is(), "Cloning already cloned model" );
-    try
-    {
-        Reference< util::XCloneable > xCloneable( m_xChartDocument, uno::UNO_QUERY_THROW );
-        m_xBackupChartDocument.set( xCloneable->createClone(), uno::UNO_QUERY_THROW );
-    }
-    catch( uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-}
 
 void DialogModel::applyInterpretedData(
     const InterpretedData & rNewData,

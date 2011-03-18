@@ -34,6 +34,7 @@
 #include "ChartModelHelper.hxx"
 #include "ControllerLockGuard.hxx"
 #include <com/sun/star/chart2/LegendPosition.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include "chartview/ExplicitValueProvider.hxx"
@@ -84,51 +85,12 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     }
     else if(OBJECTTYPE_LEGEND==eObjectType)
     {
-        LegendPosition ePos = LegendPosition_LINE_END;
-        xObjectProp->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos;
+        xObjectProp->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny(LegendPosition(LegendPosition_CUSTOM)));
+        xObjectProp->setPropertyValue( C2U( "Expansion" ), uno::makeAny(::com::sun::star::chart::ChartLegendExpansion_CUSTOM));
         chart2::RelativePosition aRelativePosition;
+        chart2::RelativeSize aRelativeSize;
         Point aAnchor = aObjectRect.TopLeft();
 
-        switch( ePos )
-        {
-            case LegendPosition_LINE_START:
-                {
-                    //@todo language dependent positions ...
-                    aRelativePosition.Anchor = drawing::Alignment_LEFT;
-                    aAnchor = aObjectRect.LeftCenter();
-                }
-                break;
-            case LegendPosition_LINE_END:
-                {
-                    //@todo language dependent positions ...
-                    aRelativePosition.Anchor = drawing::Alignment_RIGHT;
-                    aAnchor = aObjectRect.RightCenter();
-                }
-                break;
-            case LegendPosition_PAGE_START:
-                {
-                    //@todo language dependent positions ...
-                    aRelativePosition.Anchor = drawing::Alignment_TOP;
-                    aAnchor = aObjectRect.TopCenter();
-                }
-                break;
-            case LegendPosition_PAGE_END:
-                //@todo language dependent positions ...
-                {
-                    aRelativePosition.Anchor = drawing::Alignment_BOTTOM;
-                    aAnchor = aObjectRect.BottomCenter();
-                }
-                break;
-            case LegendPosition_CUSTOM:
-                {
-                    //@todo language dependent positions ...
-                    aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
-                }
-                break;
-            case LegendPosition_MAKE_FIXED_SIZE:
-                OSL_ASSERT( false );
-                break;
-        }
         aRelativePosition.Primary =
             static_cast< double >( aAnchor.X()) /
             static_cast< double >( aPageRect.getWidth() );
@@ -137,6 +99,19 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
             static_cast< double >( aPageRect.getHeight());
 
         xObjectProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
+
+        aRelativeSize.Primary =
+            static_cast< double >( aObjectRect.getWidth()) /
+            static_cast< double >( aPageRect.getWidth() );
+        if (aRelativeSize.Primary > 1.0)
+            aRelativeSize.Primary = 1.0;
+        aRelativeSize.Secondary =
+            static_cast< double >( aObjectRect.getHeight()) /
+            static_cast< double >( aPageRect.getHeight());
+        if (aRelativeSize.Secondary > 1.0)
+            aRelativeSize.Secondary = 1.0;
+
+        xObjectProp->setPropertyValue( C2U( "RelativeSize" ), uno::makeAny(aRelativeSize) );
     }
     else if(OBJECTTYPE_DIAGRAM==eObjectType || OBJECTTYPE_DIAGRAM_WALL==eObjectType || OBJECTTYPE_DIAGRAM_FLOOR==eObjectType)
     {

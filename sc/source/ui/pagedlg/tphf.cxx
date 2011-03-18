@@ -60,15 +60,15 @@
 // class ScHFPage
 //==================================================================
 
-ScHFPage::ScHFPage( Window* pParent, USHORT nResId,
-                    const SfxItemSet& rSet, USHORT nSetId )
+ScHFPage::ScHFPage( Window* pParent, sal_uInt16 nResId,
+                    const SfxItemSet& rSet, sal_uInt16 nSetId )
 
     :   SvxHFPage   ( pParent, nResId, rSet, nSetId ),
         aBtnEdit    ( this, ScResId( RID_SCBTN_HFEDIT ) ),
         aDataSet    ( *rSet.GetPool(),
                        ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERRIGHT,
                        ATTR_PAGE, ATTR_PAGE, 0 ),
-        nPageUsage  ( (USHORT)SVX_PAGE_ALL ),
+        nPageUsage  ( (sal_uInt16)SVX_PAGE_ALL ),
         pStyleDlg   ( NULL )
 {
     SetExchangeSupport();
@@ -101,6 +101,8 @@ ScHFPage::ScHFPage( Window* pParent, USHORT nResId,
         aBtnEdit.SetHelpId( HID_SC_HEADER_EDIT );
     else
         aBtnEdit.SetHelpId( HID_SC_FOOTER_EDIT );
+
+    aBtnEdit.SetAccessibleRelationMemberOf(&aFrm);
 }
 
 //------------------------------------------------------------------
@@ -119,9 +121,9 @@ void ScHFPage::Reset( const SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-BOOL ScHFPage::FillItemSet( SfxItemSet& rOutSet )
+sal_Bool ScHFPage::FillItemSet( SfxItemSet& rOutSet )
 {
-    BOOL bResult = SvxHFPage::FillItemSet( rOutSet );
+    sal_Bool bResult = SvxHFPage::FillItemSet( rOutSet );
 
     if ( nId == SID_ATTR_PAGE_HEADERSET )
     {
@@ -141,7 +143,7 @@ BOOL ScHFPage::FillItemSet( SfxItemSet& rOutSet )
 
 void ScHFPage::ActivatePage( const SfxItemSet& rSet )
 {
-    USHORT              nPageWhich = GetWhich( SID_ATTR_PAGE );
+    sal_uInt16              nPageWhich = GetWhich( SID_ATTR_PAGE );
     const SvxPageItem&  rPageItem  = (const SvxPageItem&)
                                      rSet.Get(nPageWhich);
 
@@ -219,7 +221,7 @@ IMPL_LINK( ScHFPage, HFEditHdl, void*, EMPTYARG )
     if (   aCntSharedBox.IsEnabled()
         && !aCntSharedBox.IsChecked() )
     {
-        USHORT nResId = ( nId == SID_ATTR_PAGE_HEADERSET )
+        sal_uInt16 nResId = ( nId == SID_ATTR_PAGE_HEADERSET )
                             ? RID_SCDLG_HFED_HEADER
                             : RID_SCDLG_HFED_FOOTER;
 
@@ -238,7 +240,7 @@ IMPL_LINK( ScHFPage, HFEditHdl, void*, EMPTYARG )
     {
         String              aText;
         SfxSingleTabDialog* pDlg = new SfxSingleTabDialog( this, aDataSet, 42 );
-        BOOL bRightPage =   aCntSharedBox.IsChecked()
+        sal_Bool bRightPage =   aCntSharedBox.IsChecked()
                          || ( SVX_PAGE_LEFT != SvxPageUsage(nPageUsage) );
 
         if ( nId == SID_ATTR_PAGE_HEADERSET )
@@ -298,7 +300,7 @@ SfxTabPage* ScHeaderPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 
 //------------------------------------------------------------------
 
-USHORT* ScHeaderPage::GetRanges()
+sal_uInt16* ScHeaderPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }
@@ -321,7 +323,7 @@ SfxTabPage* ScFooterPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 
 //------------------------------------------------------------------
 
-USHORT* ScFooterPage::GetRanges()
+sal_uInt16* ScFooterPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }

@@ -117,7 +117,7 @@ void ScDPSaveGroupItem::AddToData( ScDPGroupDimension& rDataDim, SvNumberFormatt
         sal_uInt32 nFormat = 0;      //! ...
         double fValue;
         if ( pFormatter->IsNumberFormat( *aIter, nFormat, fValue ) )
-            aData = ScDPItemData( *aIter, fValue, TRUE );
+            aData = ScDPItemData( *aIter, fValue, sal_True );
         else
             aData.SetString( *aIter );
 
@@ -258,7 +258,7 @@ bool ScDPSaveGroupDimension::HasOnlyHidden( const ScStrCollection& rVisible )
     for ( ScDPSaveGroupItemVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end() && bAllHidden; aIter++ )
     {
         StrData aSearch( aIter->GetGroupName() );
-        USHORT nCollIndex;
+        sal_uInt16 nCollIndex;
         if ( rVisible.Search( &aSearch, nCollIndex ) )
             bAllHidden = false;                             // found one that is visible
     }

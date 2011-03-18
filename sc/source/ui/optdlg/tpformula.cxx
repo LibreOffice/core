@@ -215,7 +215,7 @@ SfxTabPage* ScTpFormulaOptions::Create(Window* pParent, const SfxItemSet& rCoreS
     return new ScTpFormulaOptions(pParent, rCoreSet);
 }
 
-BOOL ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
+sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
 {
     ::formula::FormulaGrammar::Grammar eGram = ::formula::FormulaGrammar::GRAM_DEFAULT;
     switch (maLbFormulaSyntax.GetSelectEntryPos())

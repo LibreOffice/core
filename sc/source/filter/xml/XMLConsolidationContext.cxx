@@ -49,13 +49,13 @@ using namespace xmloff::token;
 
 ScXMLConsolidationContext::ScXMLConsolidationContext(
         ScXMLImport& rImport,
-        USHORT nPrfx,
+        sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     eFunction( SUBTOTAL_FUNC_NONE ),
-    bLinkToSource( sal_False ),
-    bTargetAddr(sal_False)
+    bLinkToSource( false ),
+    bTargetAddr(false)
 {
     ScXMLImport::MutexGuard aGuard(GetScImport());
     if( !xAttrList.is() ) return;
@@ -68,7 +68,7 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
         const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
         const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -100,7 +100,7 @@ ScXMLConsolidationContext::~ScXMLConsolidationContext()
 }
 
 SvXMLImportContext *ScXMLConsolidationContext::CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -117,12 +117,12 @@ void ScXMLConsolidationContext::EndElement()
         aConsParam.nTab = aTargetAddr.Tab();
         aConsParam.eFunction = eFunction;
 
-        USHORT nCount = (USHORT) Min( ScRangeStringConverter::GetTokenCount( sSourceList ), (sal_Int32)0xFFFF );
+        sal_uInt16 nCount = (sal_uInt16) Min( ScRangeStringConverter::GetTokenCount( sSourceList ), (sal_Int32)0xFFFF );
         ScArea** ppAreas = nCount ? new ScArea*[ nCount ] : NULL;
         if( ppAreas )
         {
             sal_Int32 nOffset = 0;
-            USHORT nIndex;
+            sal_uInt16 nIndex;
             for( nIndex = 0; nIndex < nCount; ++nIndex )
             {
                 ppAreas[ nIndex ] = new ScArea;
@@ -141,13 +141,13 @@ void ScXMLConsolidationContext::EndElement()
             delete[] ppAreas;
         }
 
-        aConsParam.bByCol = aConsParam.bByRow = FALSE;
+        aConsParam.bByCol = aConsParam.bByRow = false;
         if( IsXMLToken(sUseLabel, XML_COLUMN ) )
-            aConsParam.bByCol = TRUE;
+            aConsParam.bByCol = sal_True;
         else if( IsXMLToken( sUseLabel, XML_ROW ) )
-            aConsParam.bByRow = TRUE;
+            aConsParam.bByRow = sal_True;
         else if( IsXMLToken( sUseLabel, XML_BOTH ) )
-            aConsParam.bByCol = aConsParam.bByRow = TRUE;
+            aConsParam.bByCol = aConsParam.bByRow = sal_True;
 
         aConsParam.bReferenceData = bLinkToSource;
 

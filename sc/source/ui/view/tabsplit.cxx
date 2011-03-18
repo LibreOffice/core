@@ -45,8 +45,8 @@ ScTabSplitter::ScTabSplitter( Window* pParent, WinBits nWinStyle, ScViewData* pD
     Splitter( pParent, nWinStyle ),
     pViewData(pData)
 {
-    SetFixed(FALSE);
-    EnableRTL( FALSE );
+    SetFixed(false);
+    EnableRTL( false );
 }
 
 
@@ -91,7 +91,7 @@ void ScTabSplitter::Splitting( Point& rSplitPos )
 }
 
 
-void ScTabSplitter::SetFixed(BOOL bSet)
+void ScTabSplitter::SetFixed(sal_Bool bSet)
 {
     bFixed = bSet;
     if (bSet)

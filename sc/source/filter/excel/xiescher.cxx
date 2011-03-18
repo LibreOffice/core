@@ -481,7 +481,7 @@ void XclImpDrawObjBase::PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrOb
     if( (maMacroName.Len() > 0 ) ||
  (maHyperlink.Len() > 0) )
     {
-        if( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( &rSdrObj, TRUE ) )
+        if( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( &rSdrObj, sal_True ) )
         {
             pInfo->SetMacro( XclTools::GetSbMacroUrl( maMacroName, GetDocShell() ) );
             pInfo->SetHlink( maHyperlink );
@@ -570,9 +570,9 @@ void XclImpDrawObjBase::ConvertLineStyle( SdrObject& rSdrObj, const XclObjLineDa
         rSdrObj.SetMergedItem( XLineColorItem( EMPTY_STRING, GetPalette().GetColor( rLineData.mnColorIdx ) ) );
         rSdrObj.SetMergedItem( XLineJointItem( XLINEJOINT_MITER ) );
 
-        ULONG nDotLen = ::std::max< ULONG >( 70 * rLineData.mnWidth, 35 );
-        ULONG nDashLen = 3 * nDotLen;
-        ULONG nDist = 2 * nDotLen;
+        sal_uLong nDotLen = ::std::max< sal_uLong >( 70 * rLineData.mnWidth, 35 );
+        sal_uLong nDashLen = 3 * nDotLen;
+        sal_uLong nDist = 2 * nDotLen;
 
         switch( rLineData.mnStyle )
         {
@@ -668,7 +668,7 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
                 aMemStrm << sal_uInt32( pnPattern[ nIdx ] ); // 32-bit little-endian
             aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
             Bitmap aBitmap;
-            aBitmap.Read( aMemStrm, FALSE );
+            aBitmap.Read( aMemStrm, false );
             XOBitmap aXOBitmap( aBitmap );
             aXOBitmap.Bitmap2Array();
             aXOBitmap.SetBitmapType( XBITMAP_8X8 );
@@ -686,7 +686,7 @@ void XclImpDrawObjBase::ConvertFrameStyle( SdrObject& rSdrObj, sal_uInt16 nFrame
 {
     if( ::get_flag( nFrameFlags, EXC_OBJ_FRAME_SHADOW ) )
     {
-        rSdrObj.SetMergedItem( SdrShadowItem( TRUE ) );
+        rSdrObj.SetMergedItem( SdrShadowItem( sal_True ) );
         rSdrObj.SetMergedItem( SdrShadowXDistItem( 35 ) );
         rSdrObj.SetMergedItem( SdrShadowYDistItem( 35 ) );
         rSdrObj.SetMergedItem( SdrShadowColorItem( EMPTY_STRING, GetPalette().GetColor( EXC_COLOR_WINDOWTEXT ) ) );
@@ -1082,13 +1082,13 @@ SdrObject* XclImpLineObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const Re
         {
             xSdrObj->SetMergedItem( XLineStartItem( EMPTY_STRING, aArrowPolyPoly ) );
             xSdrObj->SetMergedItem( XLineStartWidthItem( nWidth ) );
-            xSdrObj->SetMergedItem( XLineStartCenterItem( FALSE ) );
+            xSdrObj->SetMergedItem( XLineStartCenterItem( false ) );
         }
         if( bLineEnd )
         {
             xSdrObj->SetMergedItem( XLineEndItem( EMPTY_STRING, aArrowPolyPoly ) );
             xSdrObj->SetMergedItem( XLineEndWidthItem( nWidth ) );
-            xSdrObj->SetMergedItem( XLineEndCenterItem( FALSE ) );
+            xSdrObj->SetMergedItem( XLineEndCenterItem( false ) );
         }
     }
     rDffConv.Progress();
@@ -1373,10 +1373,10 @@ SdrObject* XclImpTextObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const Re
     OUString aRectType = CREATE_OUSTRING( "rectangle" );
     xSdrObj->MergeDefaultAttributes( &aRectType );
     ConvertRectStyle( *xSdrObj );
-    BOOL bAutoSize = ::get_flag( maTextData.maData.mnFlags, EXC_OBJ_TEXT_AUTOSIZE );
+    sal_Bool bAutoSize = ::get_flag( maTextData.maData.mnFlags, EXC_OBJ_TEXT_AUTOSIZE );
     xSdrObj->SetMergedItem( SdrTextAutoGrowWidthItem( bAutoSize ) );
     xSdrObj->SetMergedItem( SdrTextAutoGrowHeightItem( bAutoSize ) );
-    xSdrObj->SetMergedItem( SdrTextWordWrapItem( TRUE ) );
+    xSdrObj->SetMergedItem( SdrTextWordWrapItem( sal_True ) );
     rDffConv.Progress();
     return xSdrObj.release();
 }
@@ -3129,7 +3129,7 @@ XclImpSimpleDffConverter::~XclImpSimpleDffConverter()
 {
 }
 
-bool XclImpSimpleDffConverter::GetColorFromPalette( USHORT nIndex, Color& rColor ) const
+bool XclImpSimpleDffConverter::GetColorFromPalette( sal_uInt16 nIndex, Color& rColor ) const
 {
     ColorData nColor = GetPalette().GetColorData( static_cast< sal_uInt16 >( nIndex ) );
 
@@ -3285,7 +3285,7 @@ SdrObject* XclImpDffConverter::CreateSdrObject( const XclImpTbxObjBase& rTbxObj,
         ::com::sun::star::awt::Size aDummySize;
         Reference< XShape > xShape;
         XclImpDffConvData& rConvData = GetConvData();
-        if( rConvData.mxCtrlForm.is() && InsertControl( xFormComp, aDummySize, &xShape, TRUE ) )
+        if( rConvData.mxCtrlForm.is() && InsertControl( xFormComp, aDummySize, &xShape, sal_True ) )
         {
             xSdrObj.reset( rTbxObj.CreateSdrObjectFromShape( xShape, rAnchorRect ) );
             // try to attach a macro to the control
@@ -3321,7 +3321,7 @@ SdrObject* XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicObj,
                 mxCtlsStrm->Seek( rPicObj.GetCtlsStreamPos() );
                 // read from mxCtlsStrm into xShape, insert the control model into the form
                 Reference< XShape > xShape;
-                if( GetConvData().mxCtrlForm.is() && ReadOCXExcelKludgeStream( mxCtlsStrm, &xShape, TRUE ) )
+                if( GetConvData().mxCtrlForm.is() && ReadOCXExcelKludgeStream( mxCtlsStrm, &xShape, sal_True ) )
                     xSdrObj.reset( rPicObj.CreateSdrObjectFromShape( xShape, rAnchorRect ) );
             }
             catch( Exception& )
@@ -3485,14 +3485,14 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
     return xSdrObj.release();
 }
 
-ULONG XclImpDffConverter::Calc_nBLIPPos( ULONG /*nOrgVal*/, ULONG nStreamPos ) const
+sal_uLong XclImpDffConverter::Calc_nBLIPPos( sal_uLong /*nOrgVal*/, sal_uLong nStreamPos ) const
 {
     return nStreamPos + 4;
 }
 
 sal_Bool XclImpDffConverter::InsertControl( const Reference< XFormComponent >& rxFormComp,
         const ::com::sun::star::awt::Size& /*rSize*/, Reference< XShape >* pxShape,
-        BOOL /*bFloatingCtrl*/ )
+        sal_Bool /*bFloatingCtrl*/ )
 {
     if( GetDocShell() ) try
     {
@@ -3520,7 +3520,7 @@ sal_Bool XclImpDffConverter::InsertControl( const Reference< XFormComponent >& r
         DBG_ERRORFILE( "XclImpDffConverter::InsertControl - cannot create form control" );
     }
 
-    return sal_False;
+    return false;
 }
 
 // private --------------------------------------------------------------------
@@ -3917,7 +3917,7 @@ void XclImpDrawing::ReadBmp( Graphic& rGraphic, const XclImpRoot& rRoot, XclImpS
     // import the graphic from memory stream
     aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
     Bitmap aBitmap;
-    if( aBitmap.Read( aMemStrm, FALSE ) )   // read DIB without file header
+    if( aBitmap.Read( aMemStrm, false ) )   // read DIB without file header
         rGraphic = aBitmap;
 }
 

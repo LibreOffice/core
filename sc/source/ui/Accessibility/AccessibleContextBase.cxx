@@ -223,7 +223,7 @@ sal_Bool SAL_CALL ScAccessibleContextBase::isShowing(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    sal_Bool bShowing(sal_False);
+    sal_Bool bShowing(false);
     if (mxParent.is())
     {
         uno::Reference<XAccessibleComponent> xParentComponent (mxParent->getAccessibleContext(), uno::UNO_QUERY);
@@ -497,7 +497,7 @@ sal_Bool SAL_CALL
     for (int i=0; i<nLength; ++i, ++pServiceNames)
         if (sServiceName == *pServiceNames)
             return sal_True;
-    return sal_False;
+    return false;
 }
 
 uno::Sequence< ::rtl::OUString> SAL_CALL

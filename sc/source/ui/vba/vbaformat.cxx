@@ -534,7 +534,7 @@ ScVbaFormat<Ifc1>::setLocked( const uno::Any& _aLocked ) throw (script::BasicErr
 {
     try
     {
-        sal_Bool bIsLocked = sal_False;
+        sal_Bool bIsLocked = false;
         if ( !( _aLocked >>= bIsLocked ) )
             throw uno::RuntimeException();
         util::CellProtection aCellProtection;
@@ -555,7 +555,7 @@ ScVbaFormat<Ifc1>::setFormulaHidden( const uno::Any& FormulaHidden ) throw (scri
 {
     try
     {
-        sal_Bool bIsFormulaHidden = sal_False;
+        sal_Bool bIsFormulaHidden = false;
         FormulaHidden >>= bIsFormulaHidden;
         util::CellProtection aCellProtection;
         rtl::OUString sCellProt( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CELLPRO ) );
@@ -583,8 +583,8 @@ ScVbaFormat<Ifc1>::getLocked(  ) throw (script::BasicErrorException, uno::Runtim
             SfxItemSet* pDataSet = getCurrentDataSet();
             if ( pDataSet )
             {
-                const ScProtectionAttr& rProtAttr = (const ScProtectionAttr &) pDataSet->Get(ATTR_PROTECTION, TRUE);
-                SfxItemState eState = pDataSet->GetItemState(ATTR_PROTECTION, TRUE, NULL);
+                const ScProtectionAttr& rProtAttr = (const ScProtectionAttr &) pDataSet->Get(ATTR_PROTECTION, sal_True);
+                SfxItemState eState = pDataSet->GetItemState(ATTR_PROTECTION, sal_True, NULL);
                 if(eState != SFX_ITEM_DONTCARE)
                     aCellProtection =  uno::makeAny(rProtAttr.GetProtection());
             }
@@ -616,8 +616,8 @@ ScVbaFormat<Ifc1>::getFormulaHidden(  ) throw (script::BasicErrorException, uno:
             SfxItemSet* pDataSet = getCurrentDataSet();
             if ( pDataSet )
             {
-                const ScProtectionAttr& rProtAttr = (const ScProtectionAttr &) pDataSet->Get(ATTR_PROTECTION, TRUE);
-                SfxItemState eState = pDataSet->GetItemState(ATTR_PROTECTION, TRUE, NULL);
+                const ScProtectionAttr& rProtAttr = (const ScProtectionAttr &) pDataSet->Get(ATTR_PROTECTION, sal_True);
+                SfxItemState eState = pDataSet->GetItemState(ATTR_PROTECTION, sal_True, NULL);
                 if(eState != SFX_ITEM_DONTCARE)
                     aBoolRet = uno::makeAny(rProtAttr.GetHideFormula());
             }

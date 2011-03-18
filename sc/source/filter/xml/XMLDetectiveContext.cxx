@@ -53,7 +53,7 @@ using namespace xmloff::token;
 ScMyImpDetectiveObj::ScMyImpDetectiveObj() :
     aSourceRange(),
     eObjType( SC_DETOBJ_NONE ),
-    bHasError( sal_False )
+    bHasError( false )
 {
 }
 
@@ -72,7 +72,7 @@ void ScMyImpDetectiveOpArray::Sort()
 sal_Bool ScMyImpDetectiveOpArray::GetFirstOp( ScMyImpDetectiveOp& rDetOp )
 {
     if( aDetectiveOpList.empty() )
-        return sal_False;
+        return false;
     ScMyImpDetectiveOpList::iterator aItr = aDetectiveOpList.begin();
     rDetOp = *aItr;
     aDetectiveOpList.erase( aItr );
@@ -84,7 +84,7 @@ sal_Bool ScMyImpDetectiveOpArray::GetFirstOp( ScMyImpDetectiveOp& rDetOp )
 
 ScXMLDetectiveContext::ScXMLDetectiveContext(
         ScXMLImport& rImport,
-        USHORT nPrfx,
+        sal_uInt16 nPrfx,
         const OUString& rLName,
         ScMyImpDetectiveObjVec* pNewDetectiveObjVec ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -97,7 +97,7 @@ ScXMLDetectiveContext::~ScXMLDetectiveContext()
 }
 
 SvXMLImportContext *ScXMLDetectiveContext::CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
@@ -128,14 +128,14 @@ void ScXMLDetectiveContext::EndElement()
 
 ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
         ScXMLImport& rImport,
-        USHORT nPrfx,
+        sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList,
         ScMyImpDetectiveObjVec* pNewDetectiveObjVec ):
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pDetectiveObjVec( pNewDetectiveObjVec ),
     aDetectiveObj(),
-    bValid( sal_False )
+    bValid( false )
 {
     if( !xAttrList.is() ) return;
 
@@ -147,7 +147,7 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
         const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
         const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -179,7 +179,7 @@ ScXMLDetectiveHighlightedContext::~ScXMLDetectiveHighlightedContext()
 }
 
 SvXMLImportContext *ScXMLDetectiveHighlightedContext::CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -198,7 +198,7 @@ void ScXMLDetectiveHighlightedContext::EndElement()
             bValid = sal_True;
         break;
         default:
-            bValid = sal_False;
+            bValid = false;
     }
     if( bValid )
         pDetectiveObjVec->push_back( aDetectiveObj );
@@ -209,12 +209,12 @@ void ScXMLDetectiveHighlightedContext::EndElement()
 
 ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
         ScXMLImport& rImport,
-        USHORT nPrfx,
+        sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     aDetectiveOp(),
-    bHasType( sal_False )
+    bHasType( false )
 {
     if( !xAttrList.is() ) return;
 
@@ -226,7 +226,7 @@ ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
         const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
         const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -250,7 +250,7 @@ ScXMLDetectiveOperationContext::~ScXMLDetectiveOperationContext()
 }
 
 SvXMLImportContext *ScXMLDetectiveOperationContext::CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList>& /* xAttrList */ )
 {

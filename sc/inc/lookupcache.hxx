@@ -175,7 +175,7 @@ public:
 
     /** Insert query and result.
         @param bAvailable
-            Pass FALSE if the search didn't deliver a result. A subsequent
+            Pass sal_False if the search didn't deliver a result. A subsequent
             lookup() then will return Result::NOT_AVAILABLE.
         @returns successful insertion.
       */

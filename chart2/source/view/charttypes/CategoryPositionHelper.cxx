@@ -56,7 +56,7 @@ CategoryPositionHelper::~CategoryPositionHelper()
 {
 }
 
-double CategoryPositionHelper::getSlotWidth() const
+double CategoryPositionHelper::getScaledSlotWidth() const
 {
     double fWidth = m_fCategoryWidth /
                 (  m_fSeriesCount
@@ -65,14 +65,14 @@ double CategoryPositionHelper::getSlotWidth() const
     return fWidth;
 }
 
-double CategoryPositionHelper::getSlotPos( double fCategoryX, double fSeriesNumber ) const
+double CategoryPositionHelper::getScaledSlotPos( double fScaledXPos, double fSeriesNumber ) const
 {
     //the returned position is in the middle of the rect
     //fSeriesNumber 0...n-1
-    double fPos = fCategoryX - (m_fCategoryWidth/2.0)
-           + (m_fOuterDistance/2.0 + fSeriesNumber*(1.0+m_fInnerDistance)) * getSlotWidth()
-           + getSlotWidth()/2.0;
-
+    double fPos = fScaledXPos
+           - (m_fCategoryWidth/2.0)
+           + (m_fOuterDistance/2.0 + fSeriesNumber*(1.0+m_fInnerDistance)) * getScaledSlotWidth()
+           + getScaledSlotWidth()/2.0;
     return fPos;
 }
 
@@ -92,6 +92,11 @@ void CategoryPositionHelper::setOuterDistance( double fOuterDistance )
     if( fOuterDistance > 6.0 )
         fOuterDistance = 6.0;
     m_fOuterDistance = fOuterDistance;
+}
+
+void CategoryPositionHelper::setCategoryWidth( double fCategoryWidth )
+{
+    m_fCategoryWidth = fCategoryWidth;
 }
 
 //.............................................................................

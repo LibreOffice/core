@@ -84,10 +84,10 @@ SV_DECL_PTRARR_DEL(ScDetOpArr_Impl, ScDetOpDataPtr, SC_DETOP_GROW, SC_DETOP_GROW
 
 class ScDetOpList : public ScDetOpArr_Impl
 {
-    BOOL    bHasAddError;       // updated in append
+    sal_Bool    bHasAddError;       // updated in append
 
 public:
-        ScDetOpList() : bHasAddError(FALSE) {}
+        ScDetOpList() : bHasAddError(false) {}
         ScDetOpList(const ScDetOpList& rList);
         ~ScDetOpList() {}
 
@@ -95,11 +95,11 @@ public:
     void    UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
-    BOOL    operator==( const ScDetOpList& r ) const;       // for ref-undo
+    sal_Bool    operator==( const ScDetOpList& r ) const;       // for ref-undo
 
     void    Append( ScDetOpData* pData );
 
-    BOOL    HasAddError() const     { return bHasAddError; }
+    sal_Bool    HasAddError() const     { return bHasAddError; }
 };
 
 

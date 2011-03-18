@@ -194,7 +194,7 @@ public:
     SCSIZE CalcOffset( SCSIZE nC, SCSIZE nR) const;
     bool ValidColRowReplicated( SCSIZE & rC, SCSIZE & rR ) const;
     bool ValidColRowOrReplicated( SCSIZE & rC, SCSIZE & rR ) const;
-    void SetErrorAtInterpreter( USHORT nError ) const;
+    void SetErrorAtInterpreter( sal_uInt16 nError ) const;
     void PutDouble(double fVal, SCSIZE nC, SCSIZE nR);
     void PutDouble( double fVal, SCSIZE nIndex);
     void PutString(const String& rStr, SCSIZE nC, SCSIZE nR);
@@ -202,9 +202,9 @@ public:
 
     void PutEmpty(SCSIZE nC, SCSIZE nR);
     void PutEmptyPath(SCSIZE nC, SCSIZE nR);
-    void PutError( USHORT nErrorCode, SCSIZE nC, SCSIZE nR );
+    void PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR );
     void PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR);
-    USHORT GetError( SCSIZE nC, SCSIZE nR) const;
+    sal_uInt16 GetError( SCSIZE nC, SCSIZE nR) const;
     double GetDouble(SCSIZE nC, SCSIZE nR) const;
     double GetDouble( SCSIZE nIndex) const;
     const String& GetString(SCSIZE nC, SCSIZE nR) const;
@@ -337,7 +337,7 @@ bool ScMatrixImpl::ValidColRowOrReplicated( SCSIZE & rC, SCSIZE & rR ) const
     return ValidColRow( rC, rR) || ValidColRowReplicated( rC, rR);
 }
 
-void ScMatrixImpl::SetErrorAtInterpreter( USHORT nError ) const
+void ScMatrixImpl::SetErrorAtInterpreter( sal_uInt16 nError ) const
 {
     if ( pErrorInterpreter )
         pErrorInterpreter->SetError( nError);
@@ -403,7 +403,7 @@ void ScMatrixImpl::PutEmptyPath(SCSIZE nC, SCSIZE nR)
     }
 }
 
-void ScMatrixImpl::PutError( USHORT nErrorCode, SCSIZE nC, SCSIZE nR )
+void ScMatrixImpl::PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR )
 {
     maMat.set_numeric(nR, nC, CreateDoubleError(nErrorCode));
 }
@@ -418,7 +418,7 @@ void ScMatrixImpl::PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR)
     }
 }
 
-USHORT ScMatrixImpl::GetError( SCSIZE nC, SCSIZE nR) const
+sal_uInt16 ScMatrixImpl::GetError( SCSIZE nC, SCSIZE nR) const
 {
     if (ValidColRowOrReplicated( nC, nR ))
     {
@@ -439,7 +439,7 @@ double ScMatrixImpl::GetDouble(SCSIZE nC, SCSIZE nR) const
         double fVal = maMat.get_numeric(nR, nC);
         if ( pErrorInterpreter )
         {
-            USHORT nError = GetDoubleErrorValue(fVal);
+            sal_uInt16 nError = GetDoubleErrorValue(fVal);
             if ( nError )
                 SetErrorAtInterpreter( nError);
         }
@@ -497,7 +497,7 @@ String ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE
     {
         if (IsEmptyPath( nC, nR))
         {   // result of empty FALSE jump path
-            ULONG nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_LOGICAL,
+            sal_uLong nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_LOGICAL,
                     ScGlobal::eLnge);
             String aStr;
             Color* pColor = NULL;
@@ -507,7 +507,7 @@ String ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE
         return GetString( nC, nR);
     }
 
-    USHORT nError = GetError( nC, nR);
+    sal_uInt16 nError = GetError( nC, nR);
     if (nError)
     {
         SetErrorAtInterpreter( nError);
@@ -515,7 +515,7 @@ String ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE
     }
 
     double fVal= GetDouble( nC, nR);
-    ULONG nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_NUMBER,
+    sal_uLong nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_NUMBER,
             ScGlobal::eLnge);
     String aStr;
     rFormatter.GetInputLineString( fVal, nKey, aStr);
@@ -1039,7 +1039,7 @@ void ScMatrix::PutEmptyPath(SCSIZE nC, SCSIZE nR)
     pImpl->PutEmptyPath(nC, nR);
 }
 
-void ScMatrix::PutError( USHORT nErrorCode, SCSIZE nC, SCSIZE nR )
+void ScMatrix::PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR )
 {
     pImpl->PutError(nErrorCode, nC, nR);
 }
@@ -1049,7 +1049,7 @@ void ScMatrix::PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR)
     pImpl->PutBoolean(bVal, nC, nR);
 }
 
-USHORT ScMatrix::GetError( SCSIZE nC, SCSIZE nR) const
+sal_uInt16 ScMatrix::GetError( SCSIZE nC, SCSIZE nR) const
 {
     return pImpl->GetError(nC, nR);
 }
@@ -1084,47 +1084,47 @@ ScMatrixValue ScMatrix::Get(SCSIZE nC, SCSIZE nR) const
     return pImpl->Get(nC, nR);
 }
 
-BOOL ScMatrix::IsString( SCSIZE nIndex ) const
+sal_Bool ScMatrix::IsString( SCSIZE nIndex ) const
 {
     return pImpl->IsString(nIndex);
 }
 
-BOOL ScMatrix::IsString( SCSIZE nC, SCSIZE nR ) const
+sal_Bool ScMatrix::IsString( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsString(nC, nR);
 }
 
-BOOL ScMatrix::IsEmpty( SCSIZE nC, SCSIZE nR ) const
+sal_Bool ScMatrix::IsEmpty( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsEmpty(nC, nR);
 }
 
-BOOL ScMatrix::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
+sal_Bool ScMatrix::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsEmptyPath(nC, nR);
 }
 
-BOOL ScMatrix::IsValue( SCSIZE nIndex ) const
+sal_Bool ScMatrix::IsValue( SCSIZE nIndex ) const
 {
     return pImpl->IsValue(nIndex);
 }
 
-BOOL ScMatrix::IsValue( SCSIZE nC, SCSIZE nR ) const
+sal_Bool ScMatrix::IsValue( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsValue(nC, nR);
 }
 
-BOOL ScMatrix::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
+sal_Bool ScMatrix::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsValueOrEmpty(nC, nR);
 }
 
-BOOL ScMatrix::IsBoolean( SCSIZE nC, SCSIZE nR ) const
+sal_Bool ScMatrix::IsBoolean( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsBoolean(nC, nR);
 }
 
-BOOL ScMatrix::IsNumeric() const
+sal_Bool ScMatrix::IsNumeric() const
 {
     return pImpl->IsNumeric();
 }

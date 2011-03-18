@@ -49,7 +49,7 @@ private:
         SvxFontItem*        pFont;
         SvxFontHeightItem*  pHeight;
         SvxColorItem*       pColor;
-        INT32               nType;      // < 0 -> undefiniert
+        sal_Int32               nType;      // < 0 -> undefiniert
         inline              ENTRY( void )
                             {
                                 pTmpName = NULL;
@@ -94,17 +94,17 @@ private:
                                     delete pColor;
                                 pColor = &rNew;
                             }
-        inline void         Type( const UINT16 nNew )       { nType = nNew; }
+        inline void         Type( const sal_uInt16 nNew )       { nType = nNew; }
     };
 
     ENTRY                   pData[ 8 ];
-    const static UINT16     nSize;
+    const static sal_uInt16     nSize;
     void                    MakeFont( ENTRY* pEntry );
 public:
-    void                    Fill( const UINT8 nIndex, SfxItemSet& rItemSet );
-    void                    SetName( const UINT16 nIndex, const String& rName );
-    void                    SetHeight( const UINT16 nIndex, const UINT16 nHeight );
-    void                    SetType( const UINT16 nIndex, const UINT16 nType );
+    void                    Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet );
+    void                    SetName( const sal_uInt16 nIndex, const String& rName );
+    void                    SetHeight( const sal_uInt16 nIndex, const sal_uInt16 nHeight );
+    void                    SetType( const sal_uInt16 nIndex, const sal_uInt16 nType );
 };
 
 

@@ -113,7 +113,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
         aBtnMore        ( this, ScResId( BTN_MORE ) ),
         //
-        bSaved          (FALSE),
+        bSaved          (false),
         aStrAdd         ( ScResId( STR_ADD ) ),
         aStrModify      ( ScResId( STR_MODIFY ) ),
         errMsgInvalidSym( ScResId( STR_INVALIDSYMBOL ) ),
@@ -138,6 +138,8 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
     Init();
     FreeResource();
+
+    aRbAssign.SetAccessibleRelationMemberOf(&aFlAssign);
 }
 
 ScNameDlg::~ScNameDlg()
@@ -203,16 +205,16 @@ void ScNameDlg::Init()
     UpdateChecks();
     EdModifyHdl( 0 );
 
-    bSaved=TRUE;
+    bSaved=sal_True;
     SaveControlStates();
 }
 
-BOOL ScNameDlg::IsRefInputMode() const
+sal_Bool ScNameDlg::IsRefInputMode() const
 {
     return aEdAssign.IsEnabled();
 }
 
-void ScNameDlg::RefInputDone( BOOL bForced)
+void ScNameDlg::RefInputDone( sal_Bool bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
     EdModifyHdl(&aEdAssign);
@@ -231,7 +233,7 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     }
 }
 
-BOOL ScNameDlg::Close()
+sal_Bool ScNameDlg::Close()
 {
     return DoClose( ScNameDlgWrapper::GetChildWindowId() );
 }
@@ -282,8 +284,8 @@ void ScNameDlg::UpdateChecks()
 
 void ScNameDlg::UpdateNames()
 {
-    aEdName.SetUpdateMode( FALSE );
-    USHORT  nNamePos = aEdName.GetTopEntry();
+    aEdName.SetUpdateMode( false );
+    sal_uInt16  nNamePos = aEdName.GetTopEntry();
     aEdName.Clear();
 
     aEdAssign.SetText( EMPTY_STRING );
@@ -304,7 +306,7 @@ void ScNameDlg::UpdateNames()
         }
     }
 
-    aEdName.SetUpdateMode( TRUE );
+    aEdName.SetUpdateMode( true );
     aEdName.SetTopEntry(nNamePos);
     aEdName.Invalidate();
 }
@@ -350,7 +352,7 @@ bool ScNameDlg::AddPushed()
 {
     bool bAdded = false;
     String  aNewEntry = aEdName.GetText();
-    USHORT  nNamePos = aEdName.GetTopEntry();
+    sal_uInt16  nNamePos = aEdName.GetTopEntry();
     aNewEntry.EraseLeadingChars( ' ' );
     aNewEntry.EraseTrailingChars( ' ' );
 
@@ -399,7 +401,7 @@ bool ScNameDlg::AddPushed()
                         delete pNewEntry;
 
                     UpdateNames();
-                    bSaved=FALSE;
+                    bSaved=false;
                     RestoreControlStates();
                     aEdName.SetText(EMPTY_STRING);
                     aEdName.GrabFocus();
@@ -408,7 +410,7 @@ bool ScNameDlg::AddPushed()
                     aBtnAdd.Disable();
                     aBtnRemove.Disable();
 
-                    bAdded = TRUE;
+                    bAdded = true;
                 }
                 else
                 {
@@ -449,7 +451,7 @@ void ScNameDlg::RemovePushed()
             mpCurRangeName->erase(*pData);
             UpdateNames();
             UpdateChecks();
-            bSaved=FALSE;
+            bSaved=false;
             RestoreControlStates();
             theCurSel = Selection( 0, SELECTION_MAX );
             aBtnAdd.SetText( aStrAdd );
@@ -520,7 +522,7 @@ void ScNameDlg::NameModified(Edit* pEd)
 {
     String  theName     = aEdName.GetText();
     String  theSymbol   = aEdAssign.GetText();
-    BOOL    bNameFound  = (COMBOBOX_ENTRY_NOTFOUND
+    sal_Bool    bNameFound  = (COMBOBOX_ENTRY_NOTFOUND
                            != aEdName.GetEntryPos( theName ));
 
     if ( pEd == &aEdName )
@@ -546,7 +548,7 @@ void ScNameDlg::NameModified(Edit* pEd)
 
                 if(!bSaved)
                 {
-                    bSaved=TRUE;
+                    bSaved=true;
                     SaveControlStates();
                 }
                 NameSelectHdl( 0 );
@@ -557,7 +559,7 @@ void ScNameDlg::NameModified(Edit* pEd)
                     aBtnAdd.SetText( aStrAdd );
                 aBtnRemove.Disable();
 
-                bSaved=FALSE;
+                bSaved=false;
                 RestoreControlStates();
             }
             theSymbol = aEdAssign.GetText();

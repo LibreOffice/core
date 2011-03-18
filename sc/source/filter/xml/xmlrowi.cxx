@@ -65,14 +65,14 @@ using namespace xmloff::token;
 //------------------------------------------------------------------
 
 ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sVisibility(GetXMLToken(XML_VISIBLE)),
     nRepeatedRows(1),
-    bHasCell(sal_False)
+    bHasCell(false)
 {
     rtl::OUString sCellStyleName;
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
@@ -122,7 +122,7 @@ ScXMLTableRowContext::~ScXMLTableRowContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -137,7 +137,7 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( USHORT nPrefix,
         {
             bHasCell = sal_True;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList, sal_False, nRepeatedRows
+                                                      rLName, xAttrList, false, nRepeatedRows
                                                       //this
                                                       );
         }
@@ -209,14 +209,14 @@ void ScXMLTableRowContext::EndElement()
                         }
                     }
                     sal_Bool bVisible (sal_True);
-                    sal_Bool bFiltered (sal_False);
+                    sal_Bool bFiltered (false);
                     if (IsXMLToken(sVisibility, XML_COLLAPSE))
                     {
-                        bVisible = sal_False;
+                        bVisible = false;
                     }
                     else if (IsXMLToken(sVisibility, XML_FILTER))
                     {
-                        bVisible = sal_False;
+                        bVisible = false;
                         bFiltered = sal_True;
                     }
                     if (!bVisible)
@@ -230,7 +230,7 @@ void ScXMLTableRowContext::EndElement()
 }
 
 ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -273,7 +273,7 @@ ScXMLTableRowsContext::~ScXMLTableRowsContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -286,17 +286,17 @@ SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( USHORT nPrefix,
     case XML_TOK_TABLE_ROWS_ROW_GROUP:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_False, sal_True );
+                                                   false, sal_True );
         break;
     case XML_TOK_TABLE_ROWS_HEADER_ROWS:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_True, sal_False );
+                                                   sal_True, false );
         break;
     case XML_TOK_TABLE_ROWS_ROWS:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   sal_False, sal_False );
+                                                   false, false );
         break;
     case XML_TOK_TABLE_ROWS_ROW:
             pContext = new ScXMLTableRowContext( GetScImport(), nPrefix,

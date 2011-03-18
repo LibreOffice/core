@@ -42,16 +42,16 @@ class SvStream;
 class ScDdeLink : public ::sfx2::SvBaseLink, public SvtBroadcaster
 {
 private:
-static BOOL bIsInUpdate;
+static sal_Bool bIsInUpdate;
 
     ScDocument*     pDoc;
 
     String          aAppl;          // Verbindungsdaten
     String          aTopic;
     String          aItem;
-    BYTE            nMode;          // Zahlformat-Modus
+    sal_uInt8           nMode;          // Zahlformat-Modus
 
-    BOOL            bNeedUpdate;    // wird gesetzt, wenn Update nicht moeglich war
+    sal_Bool            bNeedUpdate;    // wird gesetzt, wenn Update nicht moeglich war
 
     ScMatrixRef     pResult;        // Ergebnis
 
@@ -60,7 +60,7 @@ public:
 
             ScDdeLink( ScDocument* pD,
                         const String& rA, const String& rT, const String& rI,
-                        BYTE nM );
+                        sal_uInt8 nM );
             ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& rHdr );
             ScDdeLink( ScDocument* pD, const ScDdeLink& rOther );
     virtual ~ScDdeLink();
@@ -85,14 +85,14 @@ public:
     const String&   GetAppl() const     { return aAppl; }
     const String&   GetTopic() const    { return aTopic; }
     const String&   GetItem() const     { return aItem; }
-    BYTE            GetMode() const     { return nMode; }
+    sal_uInt8           GetMode() const     { return nMode; }
 
     void            ResetValue();           // Wert zuruecksetzen
     void            TryUpdate();
 
-    BOOL            NeedsUpdate() const { return bNeedUpdate; }
+    sal_Bool            NeedsUpdate() const { return bNeedUpdate; }
 
-    static BOOL     IsInUpdate()        { return bIsInUpdate; }
+    static sal_Bool     IsInUpdate()        { return bIsInUpdate; }
 };
 
 

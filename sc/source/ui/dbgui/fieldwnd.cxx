@@ -356,7 +356,7 @@ void ScDPFieldControlBase::MouseMove( const MouseEvent& rMEvt )
 void ScDPFieldControlBase::KeyInput( const KeyEvent& rKEvt )
 {
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
-    USHORT nCode = rKeyCode.GetCode();
+    sal_uInt16 nCode = rKeyCode.GetCode();
     bool bKeyEvaluated = false;
 
     const FieldNames& rFields = GetFieldNames();
@@ -415,7 +415,7 @@ void ScDPFieldControlBase::GetFocus()
             ScrollToEnd();
     }
     else                                            // else change focus
-        mpDlg->NotifyFieldFocus( GetFieldType(), TRUE );
+        mpDlg->NotifyFieldFocus( GetFieldType(), true );
 
     AccessibleSetFocus(true);
 }
@@ -424,7 +424,7 @@ void ScDPFieldControlBase::LoseFocus()
 {
     Control::LoseFocus();
     Redraw();
-    mpDlg->NotifyFieldFocus( GetFieldType(), FALSE );
+    mpDlg->NotifyFieldFocus( GetFieldType(), false );
 
     AccessibleSetFocus(false);
 }
@@ -779,7 +779,7 @@ void ScDPHorFieldControl::Redraw()
     Point           aPos0;
     Size            aSize( GetSizePixel() );
     Font            aFont( GetFont() );         // Font vom Window
-    aFont.SetTransparent( TRUE );
+    aFont.SetTransparent( true );
     aVirDev.SetFont( aFont );
     aVirDev.SetOutputSizePixel( aSize );
 

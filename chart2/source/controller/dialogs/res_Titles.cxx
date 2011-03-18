@@ -127,7 +127,7 @@ TitleResources::~TitleResources()
 
 void TitleResources::SetUpdateDataHdl( const Link& rLink )
 {
-    ULONG nTimeout = 4*EDIT_UPDATEDATA_TIMEOUT;
+    sal_uLong nTimeout = 4*EDIT_UPDATEDATA_TIMEOUT;
 
     m_aEd_Main.EnableUpdateData( nTimeout );
     m_aEd_Main.SetUpdateDataHdl( rLink );

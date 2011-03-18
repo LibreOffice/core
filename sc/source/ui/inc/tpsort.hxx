@@ -62,8 +62,8 @@ public:
 
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    static  USHORT*     GetRanges   ();
-    virtual BOOL        FillItemSet ( SfxItemSet& rArgSet );
+    static  sal_uInt16*     GetRanges   ();
+    virtual sal_Bool        FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 
 protected:
@@ -94,16 +94,16 @@ private:
     String          aStrColumn;
     String          aStrRow;
 
-    const USHORT        nWhichSort;
+    const sal_uInt16        nWhichSort;
     ScSortDlg*          pDlg;
     ScViewData*         pViewData;
     const ScSortParam&  rSortData;
     SCCOLROW            nFieldArr[SC_MAXFIELDS];
-    USHORT              nFieldCount;
+    sal_uInt16              nFieldCount;
     SCCOL               nFirstCol;
     SCROW               nFirstRow;
-    BOOL                bHasHeader;
-    BOOL                bSortByRows;
+    sal_Bool                bHasHeader;
+    sal_Bool                bSortByRows;
 
     ListBox*            aSortLbArr[3];
     RadioButton*        aDirBtnArr[3][2];
@@ -112,10 +112,10 @@ private:
 #ifdef _TPSORT_CXX
 private:
     void    Init            ();
-    void    DisableField    ( USHORT nField );
-    void    EnableField     ( USHORT nField );
+    void    DisableField    ( sal_uInt16 nField );
+    void    EnableField     ( sal_uInt16 nField );
     void    FillFieldLists  ();
-    USHORT  GetFieldSelPos  ( SCCOLROW nField );
+    sal_uInt16  GetFieldSelPos  ( SCCOLROW nField );
 
     // Handler ------------------------
     DECL_LINK( SelectHdl, ListBox * );
@@ -148,8 +148,8 @@ public:
 #define SfxTabPage ::SfxTabPage
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    static  USHORT*     GetRanges   ();
-    virtual BOOL        FillItemSet ( SfxItemSet& rArgSet );
+    static  sal_uInt16*     GetRanges   ();
+    virtual sal_Bool        FillItemSet ( SfxItemSet& rArgSet );
     virtual void        Reset       ( const SfxItemSet& rArgSet );
 
 protected:
@@ -191,7 +191,7 @@ private:
     String              aStrNoName;
     String              aStrAreaLabel;
 
-    const USHORT        nWhichSort;
+    const sal_uInt16        nWhichSort;
     const ScSortParam&  rSortData;
     ScViewData*         pViewData;
     ScDocument*         pDoc;

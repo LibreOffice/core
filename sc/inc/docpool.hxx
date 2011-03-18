@@ -38,28 +38,28 @@ class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
 {
     SfxPoolItem**   ppPoolDefaults;
     SfxItemPool*    pSecondary;
-    static USHORT*  pVersionMap1;
-    static USHORT*  pVersionMap2;
-    static USHORT*  pVersionMap3;
-    static USHORT*  pVersionMap4;
-    static USHORT*  pVersionMap5;
-    static USHORT*  pVersionMap6;
-    static USHORT*  pVersionMap7;
-    static USHORT*  pVersionMap8;
-    static USHORT*  pVersionMap9;
-    static USHORT*  pVersionMap10;
-    static USHORT*  pVersionMap11;
+    static sal_uInt16*  pVersionMap1;
+    static sal_uInt16*  pVersionMap2;
+    static sal_uInt16*  pVersionMap3;
+    static sal_uInt16*  pVersionMap4;
+    static sal_uInt16*  pVersionMap5;
+    static sal_uInt16*  pVersionMap6;
+    static sal_uInt16*  pVersionMap7;
+    static sal_uInt16*  pVersionMap8;
+    static sal_uInt16*  pVersionMap9;
+    static sal_uInt16*  pVersionMap10;
+    static sal_uInt16*  pVersionMap11;
 
 public:
-            ScDocumentPool( SfxItemPool* pSecPool = NULL, BOOL bLoadRefCounts = FALSE );
+            ScDocumentPool( SfxItemPool* pSecPool = NULL, sal_Bool bLoadRefCounts = false );
 protected:
             virtual ~ScDocumentPool();
 public:
 
     virtual SfxItemPool*        Clone() const;
-    virtual SfxMapUnit          GetMetric( USHORT nWhich ) const;
+    virtual SfxMapUnit          GetMetric( sal_uInt16 nWhich ) const;
 
-    virtual const SfxPoolItem&  Put( const SfxPoolItem&, USHORT nWhich = 0 );
+    virtual const SfxPoolItem&  Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 );
     virtual void                Remove( const SfxPoolItem& );
     static void                 CheckRef( const SfxPoolItem& );
 

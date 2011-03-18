@@ -174,7 +174,7 @@ class XclImpChTrFmlConverter : public ExcelToSc8
 private:
     XclImpChangeTrack&          rChangeTrack;
 
-    virtual bool                Read3DTabReference( UINT16 nIxti, SCTAB& rFirstTab, SCTAB& rLastTab, ExternalTabInfo& rExtInfo );
+    virtual bool                Read3DTabReference( sal_uInt16 nIxti, SCTAB& rFirstTab, SCTAB& rLastTab, ExternalTabInfo& rExtInfo );
 
 public:
     inline                      XclImpChTrFmlConverter(

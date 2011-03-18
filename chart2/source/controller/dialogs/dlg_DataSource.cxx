@@ -147,7 +147,7 @@ void DataSourceTabControl::EnableTabToggling()
 
 // ----------------------------------------
 
-USHORT DataSourceDialog::m_nLastPageId = 0;
+sal_uInt16 DataSourceDialog::m_nLastPageId = 0;
 
 DataSourceDialog::DataSourceDialog(
     Window * pParent,
@@ -221,7 +221,7 @@ void DataSourceDialog::setInvalidPage( TabPage * pTabPage )
 
     if( ! (m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid ))
     {
-        m_aBtnOK.Enable( FALSE );
+        m_aBtnOK.Enable( sal_False );
         OSL_ASSERT( m_pTabControl );
         // note: there seems to be no suitable mechanism to address pages by
         // identifier, at least it is unclear what the page identifiers are.
@@ -243,7 +243,7 @@ void DataSourceDialog::setValidPage( TabPage * pTabPage )
 
     if( m_bRangeChooserTabIsValid && m_bDataSourceTabIsValid )
     {
-        m_aBtnOK.Enable( TRUE );
+        m_aBtnOK.Enable( sal_True );
         OSL_ASSERT( m_pTabControl );
         m_pTabControl->EnableTabToggling();
     }

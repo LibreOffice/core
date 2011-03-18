@@ -59,7 +59,7 @@ void ScAddInResult::NewValue()
     ++nTickCount;
 
     uno::Any aAny;
-    if ( TRUE /* nTickCount % 4 */ )
+    if ( true /* nTickCount % 4 */ )
     {
         String aRet = aArg;
         aRet += nTickCount;
@@ -71,7 +71,7 @@ void ScAddInResult::NewValue()
 //  sheet::ResultEvent aEvent( (UsrObject*)this, aAny );
     sheet::ResultEvent aEvent( (cppu::OWeakObject*)this, aAny );
 
-    for ( USHORT n=0; n<aListeners.Count(); n++ )
+    for ( sal_uInt16 n=0; n<aListeners.Count(); n++ )
         (*aListeners[n])->modified( aEvent );
 }
 
@@ -106,8 +106,8 @@ void SAL_CALL ScAddInResult::removeResultListener( const ::com::sun::star::uno::
 {
     acquire();
 
-    USHORT nCount = aListeners.Count();
-    for ( USHORT n=nCount; n--; )
+    sal_uInt16 nCount = aListeners.Count();
+    for ( sal_uInt16 n=nCount; n--; )
     {
         uno::Reference<sheet::XResultListener> *pObj = aListeners[n];
         if ( *pObj == aListener )

@@ -68,9 +68,9 @@ sal_Bool ScXMLExportDDELinks::CellsEqual(const sal_Bool bPrevEmpty, const sal_Bo
             else
                 return (fPrevValue == fValue);
         else
-            return sal_False;
+            return false;
     else
-        return sal_False;
+        return false;
 }
 
 void ScXMLExportDDELinks::WriteCell(const ScMatrixValue& aVal, sal_Int32 nRepeat)
@@ -109,7 +109,7 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
     if (!pDoc)
         return;
 
-    const ScMatrix* pMatrix = pDoc->GetDdeLinkResultMatrix(static_cast<USHORT>(nPos));
+    const ScMatrix* pMatrix = pDoc->GetDdeLinkResultMatrix(static_cast<sal_uInt16>(nPos));
     if (!pMatrix)
         return;
 
@@ -171,7 +171,7 @@ void ScXMLExportDDELinks::WriteDDELinks(uno::Reference<sheet::XSpreadsheetDocume
                             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_DDE_TOPIC, xDDELink->getTopic());
                             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_DDE_ITEM, xDDELink->getItem());
                             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_AUTOMATIC_UPDATE, XML_TRUE);
-                            BYTE nMode;
+                            sal_uInt8 nMode;
                             if (rExport.GetDocument() &&
                                 rExport.GetDocument()->GetDdeLinkMode(nDDELink, nMode))
                             {

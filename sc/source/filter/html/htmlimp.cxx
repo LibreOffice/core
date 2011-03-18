@@ -61,23 +61,23 @@
 //------------------------------------------------------------------------
 
 FltError ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const String& rBaseURL, ScDocument *pDoc,
-        ScRange& rRange, double nOutputFactor, BOOL bCalcWidthHeight, SvNumberFormatter* pFormatter,
+        ScRange& rRange, double nOutputFactor, sal_Bool bCalcWidthHeight, SvNumberFormatter* pFormatter,
         bool bConvertDate )
 {
     ScHTMLImport aImp( pDoc, rBaseURL, rRange, bCalcWidthHeight );
     FltError nErr = (FltError) aImp.Read( rStream, rBaseURL );
     ScRange aR = aImp.GetRange();
     rRange.aEnd = aR.aEnd;
-    aImp.WriteToDocument( TRUE, nOutputFactor, pFormatter, bConvertDate );
+    aImp.WriteToDocument( sal_True, nOutputFactor, pFormatter, bConvertDate );
     return nErr;
 }
 
-ScEEAbsImport *ScFormatFilterPluginImpl::CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight )
+ScEEAbsImport *ScFormatFilterPluginImpl::CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, sal_Bool bCalcWidthHeight )
 {
     return new ScHTMLImport( pDocP, rBaseURL, rRange, bCalcWidthHeight );
 }
 
-ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight ) :
+ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, sal_Bool bCalcWidthHeight ) :
     ScEEImport( pDocP, rRange )
 {
     Size aPageSize;
@@ -137,7 +137,7 @@ void ScHTMLImport::InsertRangeName( ScDocument* pDoc, const String& rName, const
 }
 
 void ScHTMLImport::WriteToDocument(
-    BOOL bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
+    sal_Bool bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
 {
     ScEEImport::WriteToDocument( bSizeColsRows, nOutputFactor, pFormatter, bConvertDate );
 
@@ -235,7 +235,7 @@ String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrig
         String aToken( rOrigName.GetToken( 0, ';', nStringIx ) );
         if( pRangeNames && ScfTools::IsHTMLTablesName( aToken ) )
         {   // build list with all HTML tables
-            ULONG nIndex = 1;
+            sal_uLong nIndex = 1;
             bool bLoop = true;
             while( bLoop )
             {

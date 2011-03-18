@@ -479,7 +479,7 @@ XclExpStringRef lclCreateFormattedString(
             {
                 // test if the character is a text field
                 const SfxPoolItem* pItem;
-                if( aEditSet.GetItemState( EE_FEATURE_FIELD, FALSE, &pItem ) == SFX_ITEM_SET )
+                if( aEditSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SFX_ITEM_SET )
                 {
                     const SvxFieldData* pField = static_cast< const SvxFieldItem* >( pItem )->GetField();
                     if( const SvxURLField* pUrlField = PTR_CAST( SvxURLField, pField ) )
@@ -592,8 +592,8 @@ XclExpStringRef XclExpStringHelper::CreateCellString(
     {
         // formatted cell
         ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
-        BOOL bOldUpdateMode = rEE.GetUpdateMode();
-        rEE.SetUpdateMode( TRUE );
+        sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
+        rEE.SetUpdateMode( sal_True );
         // default items
         const SfxItemSet& rItemSet = pCellAttr ? pCellAttr->GetItemSet() : rRoot.GetDoc().GetDefPattern()->GetItemSet();
         SfxItemSet* pEEItemSet = new SfxItemSet( rEE.GetEmptyItemSet() );
@@ -622,8 +622,8 @@ XclExpStringRef XclExpStringHelper::CreateString(
     if( const OutlinerParaObject* pParaObj = rTextObj.GetOutlinerParaObject() )
     {
         EditEngine& rEE = rRoot.GetDrawEditEngine();
-        BOOL bOldUpdateMode = rEE.GetUpdateMode();
-        rEE.SetUpdateMode( TRUE );
+        sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
+        rEE.SetUpdateMode( sal_True );
         // create the string
         rEE.SetText( pParaObj->GetTextObject() );
         xString = lclCreateFormattedString( rRoot, rEE, 0, nFlags, nMaxLen );
@@ -650,8 +650,8 @@ XclExpStringRef XclExpStringHelper::CreateString(
 {
     XclExpStringRef xString;
     EditEngine& rEE = rRoot.GetDrawEditEngine();
-    BOOL bOldUpdateMode = rEE.GetUpdateMode();
-    rEE.SetUpdateMode( TRUE );
+    sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
+    rEE.SetUpdateMode( sal_True );
     rEE.SetText( rEditObj );
     xString = lclCreateFormattedString( rRoot, rEE, 0, nFlags, nMaxLen );
     rEE.SetUpdateMode( bOldUpdateMode );
@@ -710,8 +710,8 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
     SfxItemSet aItemSet( *GetDoc().GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END );
 
     // edit engine
-    BOOL bOldUpdateMode = mrEE.GetUpdateMode();
-    mrEE.SetUpdateMode( TRUE );
+    sal_Bool bOldUpdateMode = mrEE.GetUpdateMode();
+    mrEE.SetUpdateMode( sal_True );
     mrEE.SetText( *pTextObj );
 
     // font information
@@ -832,7 +832,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
                 const SfxPoolItem* pItem;
                 if( (aSel.nStartPos + 1 == aSel.nEndPos) &&     // fields are single characters
-                    (aEditSet.GetItemState( EE_FEATURE_FIELD, sal_False, &pItem ) == SFX_ITEM_SET) )
+                    (aEditSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SFX_ITEM_SET) )
                 {
                     if( const SvxFieldData* pFieldData = static_cast< const SvxFieldItem* >( pItem )->GetField() )
                     {
@@ -931,7 +931,7 @@ bool lclConvertToDos( String& rUrl, const String& rBasePath, bool bSaveRelUrl )
             bool bLoop = true;
             while( bLoop && ((nPos = aDosBase.Search( '\\', nStartSearch )) != STRING_NOTFOUND) )
             {
-                bLoop = (TRUE == aDosBase.Equals( aDosUrl, 0, nPos + 1 ));
+                bLoop = (sal_True == aDosBase.Equals( aDosUrl, 0, nPos + 1 ));
                 if( bLoop )
                 {
                     aDosBase.Erase( 0, nPos + 1 );
@@ -1106,7 +1106,7 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
                 rStrm << EXC_CACHEDVAL_BOOL << nBool;
                 rStrm.WriteZeroBytes( 7 );
             }
-            else if( USHORT nScError = nMatVal.GetError() )
+            else if( sal_uInt16 nScError = nMatVal.GetError() )
             {
                 sal_Int8 nError ( XclTools::GetXclErrorCode( nScError ) );
                 rStrm.SetSliceSize( 9 );

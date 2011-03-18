@@ -50,7 +50,7 @@ public:
     virtual void Undo();
     virtual void Redo();
     virtual void Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual sal_Bool CanRepeat(SfxRepeatTarget& rTarget) const;
     virtual String GetComment() const;
 
 private:

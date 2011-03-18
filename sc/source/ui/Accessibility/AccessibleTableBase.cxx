@@ -234,14 +234,14 @@ sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleRowSelected( sal_Int32 /* n
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     OSL_FAIL("not implemented yet");
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleColumnSelected( sal_Int32 /* nColumn */ )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     OSL_FAIL("not implemented yet");
-    return sal_False;
+    return false;
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCellAt( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
@@ -272,7 +272,7 @@ sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     OSL_FAIL("not implemented yet");
-    return sal_False;
+    return false;
 }
 
     //=====  XAccessibleExtendedTable  ========================================

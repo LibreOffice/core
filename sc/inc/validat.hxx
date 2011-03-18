@@ -68,8 +68,8 @@ class SC_DLLPUBLIC ScValidationData : public ScConditionEntry
     sal_uInt32          nKey;               // index in attributes
 
     ScValidationMode    eDataMode;
-    BOOL                bShowInput;
-    BOOL                bShowError;
+    sal_Bool                bShowInput;
+    sal_Bool                bShowError;
     ScValidErrorStyle   eErrorStyle;
     sal_Int16           mnListType;         // selection list type: none, unsorted, sorted.
     String              aInputTitle;
@@ -77,12 +77,12 @@ class SC_DLLPUBLIC ScValidationData : public ScConditionEntry
     String              aErrorTitle;
     String              aErrorMessage;
 
-    BOOL                bIsUsed;            // temporary during saving
+    sal_Bool                bIsUsed;            // temporary during saving
 
-    BOOL            DoMacro( const ScAddress& rPos, const String& rInput,
+    sal_Bool            DoMacro( const ScAddress& rPos, const String& rInput,
                                 ScFormulaCell* pCell, Window* pParent ) const;
 
-    BOOL            DoScript( const ScAddress& rPos, const String& rInput,
+    sal_Bool            DoScript( const ScAddress& rPos, const String& rInput,
                                 ScFormulaCell* pCell, Window* pParent ) const;
 
     using ScConditionEntry::operator==;
@@ -112,11 +112,11 @@ public:
     void            SetError( const String& rTitle, const String& rMsg,
                                 ScValidErrorStyle eStyle );
 
-    BOOL            GetInput( String& rTitle, String& rMsg ) const
+    sal_Bool            GetInput( String& rTitle, String& rMsg ) const
                         { rTitle = aInputTitle; rMsg = aInputMessage; return bShowInput; }
-    BOOL            GetErrMsg( String& rTitle, String& rMsg, ScValidErrorStyle& rStyle ) const;
+    sal_Bool            GetErrMsg( String& rTitle, String& rMsg, ScValidErrorStyle& rStyle ) const;
 
-    BOOL            HasErrMsg() const       { return bShowError; }
+    sal_Bool            HasErrMsg() const       { return bShowError; }
 
     ScValidationMode GetDataMode() const    { return eDataMode; }
 
@@ -134,27 +134,27 @@ public:
     bool            FillSelectionList( TypedScStrCollection& rStrings, const ScAddress& rPos ) const;
 
                     //  with string: during input, with cell: for detective / RC_FORCED
-    BOOL            IsDataValid( const String& rTest, const ScPatternAttr& rPattern,
+    sal_Bool            IsDataValid( const String& rTest, const ScPatternAttr& rPattern,
                                     const ScAddress& rPos ) const;
-    BOOL            IsDataValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
+    sal_Bool            IsDataValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
 
                     // TRUE -> break
-    BOOL            DoError( Window* pParent, const String& rInput, const ScAddress& rPos ) const;
+    sal_Bool            DoError( Window* pParent, const String& rInput, const ScAddress& rPos ) const;
     void            DoCalcError( ScFormulaCell* pCell ) const;
 
-    BOOL            IsEmpty() const;
+    sal_Bool            IsEmpty() const;
     sal_uInt32      GetKey() const          { return nKey; }
     void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
 
-    void            SetUsed(BOOL bSet)      { bIsUsed = bSet; }
-    BOOL            IsUsed() const          { return bIsUsed; }
+    void            SetUsed(sal_Bool bSet)      { bIsUsed = bSet; }
+    sal_Bool            IsUsed() const          { return bIsUsed; }
 
-    BOOL            EqualEntries( const ScValidationData& r ) const;    // for undo
+    sal_Bool            EqualEntries( const ScValidationData& r ) const;    // for undo
 
     //  sort (using PTRARR) by index
     //  operator== only for sorting
-    BOOL operator ==( const ScValidationData& r ) const { return nKey == r.nKey; }
-    BOOL operator < ( const ScValidationData& r ) const { return nKey <  r.nKey; }
+    sal_Bool operator ==( const ScValidationData& r ) const { return nKey == r.nKey; }
+    sal_Bool operator < ( const ScValidationData& r ) const { return nKey <  r.nKey; }
 
 private:
     /** Tries to fill the passed collection with list validation entries.
@@ -203,7 +203,7 @@ public:
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
-    BOOL    operator==( const ScValidationDataList& r ) const;      // for ref-undo
+    sal_Bool    operator==( const ScValidationDataList& r ) const;      // for ref-undo
 };
 
 #endif

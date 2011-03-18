@@ -52,7 +52,7 @@ template< typename A, typename D > class ScCompressedArrayIterator;
 
     typename A := access type, e.g. SCROW or SCCOL, must be a POD.
 
-    typename D := data type, e.g. USHORT or BYTE or whatever, may also be a
+    typename D := data type, e.g. sal_uInt16 or sal_uInt8 or whatever, may also be a
     struct or class.
 
     D::operator==() and D::operator=() must be implemented. Force template

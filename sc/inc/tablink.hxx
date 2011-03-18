@@ -45,17 +45,17 @@ private:
     String          aFileName;
     String          aFilterName;
     String          aOptions;
-    BOOL            bInCreate;
-    BOOL            bInEdit;
-    BOOL            bAddUndo;
-    BOOL            bDoPaint;
+    sal_Bool            bInCreate;
+    sal_Bool            bInEdit;
+    sal_Bool            bAddUndo;
+    sal_Bool            bDoPaint;
 
 public:
     TYPEINFO();
     ScTableLink( ScDocShell* pDocSh, const String& rFile,
-                    const String& rFilter, const String& rOpt, ULONG nRefresh );
+                    const String& rFilter, const String& rOpt, sal_uLong nRefresh );
     ScTableLink( SfxObjectShell* pShell, const String& rFile,
-                    const String& rFilter, const String& rOpt, ULONG nRefresh );
+                    const String& rFilter, const String& rOpt, sal_uLong nRefresh );
     virtual ~ScTableLink();
     virtual void Closed();
     virtual void DataChanged( const String& rMimeType,
@@ -63,17 +63,17 @@ public:
 
     virtual void    Edit( Window*, const Link& rEndEditHdl );
 
-    BOOL    Refresh(const String& rNewFile, const String& rNewFilter,
-                    const String* pNewOptions /* = NULL */, ULONG nNewRefresh );
-    void    SetInCreate(BOOL bSet)      { bInCreate = bSet; }
-    void    SetAddUndo(BOOL bSet)       { bAddUndo = bSet; }
-    void    SetPaint(BOOL bSet)         { bDoPaint = bSet; }
+    sal_Bool    Refresh(const String& rNewFile, const String& rNewFilter,
+                    const String* pNewOptions /* = NULL */, sal_uLong nNewRefresh );
+    void    SetInCreate(sal_Bool bSet)      { bInCreate = bSet; }
+    void    SetAddUndo(sal_Bool bSet)       { bAddUndo = bSet; }
+    void    SetPaint(sal_Bool bSet)         { bDoPaint = bSet; }
 
     const String& GetFileName() const   { return aFileName; }
     const String& GetFilterName() const { return aFilterName; }
     const String& GetOptions() const    { return aOptions; }
 
-    BOOL    IsUsed() const;
+    sal_Bool    IsUsed() const;
 
     DECL_LINK( RefreshHdl, ScTableLink* );
     DECL_LINK( TableEndEditHdl, ::sfx2::SvBaseLink* );
@@ -92,11 +92,11 @@ private:
 public:
                         ScDocumentLoader( const String& rFileName,
                                             String& rFilterName, String& rOptions,
-                                            UINT32 nRekCnt = 0, BOOL bWithInteraction = FALSE );
+                                            sal_uInt32 nRekCnt = 0, sal_Bool bWithInteraction = false );
                         ~ScDocumentLoader();
     ScDocument*         GetDocument();
     ScDocShell*         GetDocShell()       { return pDocShell; }
-    BOOL                IsError() const;
+    sal_Bool                IsError() const;
     String              GetTitle() const;
 
     void                ReleaseDocRef();    // without calling DoClose
@@ -107,10 +107,10 @@ public:
         @param bWithContent
             true = Tries to detect the filter by looking at the file contents.
             false = Detects filter by file name extension only (should be used in filter code only).
-        @return TRUE if a filter could be found, FALSE otherwise. */
-    static BOOL         GetFilterName( const String& rFileName,
+        @return sal_True if a filter could be found, sal_False otherwise. */
+    static sal_Bool         GetFilterName( const String& rFileName,
                                         String& rFilter, String& rOptions,
-                                        BOOL bWithContent, BOOL bWithInteraction );
+                                        sal_Bool bWithContent, sal_Bool bWithInteraction );
 
     static void         RemoveAppPrefix( String& rFilterName );
 };

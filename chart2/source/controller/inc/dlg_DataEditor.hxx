@@ -63,7 +63,7 @@ public:
     virtual void Resize();
 
     // Dialog
-    virtual BOOL Close();
+    virtual sal_Bool Close();
 
     void SetReadOnly( bool bReadOnly );
     bool ApplyChangesToModel();

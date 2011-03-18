@@ -39,12 +39,13 @@
 
 typedef cppu::ImplInheritanceHelper1< VbaApplicationBase, ov::excel::XApplication > ScVbaApplication_BASE;
 
+struct ScVbaAppSettings;
+
 class ScVbaApplication : public ScVbaApplication_BASE
 {
 private:
-    sal_Int32 m_xCalculation;
-    sal_Bool m_bDisplayAlerts;
-     sal_Bool m_bEnableEvents;
+    // note: member variables moved to struct "ScVbaAppSettings", see cxx file, to be shared by all application instances
+    ScVbaAppSettings& mrAppSettings;
 
     rtl::OUString getOfficePath( const rtl::OUString& sPath ) throw ( css::uno::RuntimeException );
     css::uno::Reference< ov::XFileSearch > m_xFileSearch;
@@ -55,6 +56,9 @@ protected:
 public:
     ScVbaApplication( const css::uno::Reference< css::uno::XComponentContext >& m_xContext );
     virtual ~ScVbaApplication();
+
+    /** Returns true, if VBA document events are enabled. */
+    static bool getDocumentEventsEnabled();
 
     virtual SfxObjectShell* GetDocShell( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
 

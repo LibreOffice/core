@@ -73,15 +73,15 @@ using namespace xmloff::token;
 //------------------------------------------------------------------
 
 ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
-                                              USHORT nPrfx,
+                                              sal_uInt16 nPrfx,
                                                    const ::rtl::OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sPassword(),
     meHash1(PASSHASH_SHA1),
     meHash2(PASSHASH_UNSPECIFIED),
-    bProtected(sal_False),
-    bHadCalculationSettings(sal_False),
+    bProtected(false),
+    bHadCalculationSettings(false),
     pChangeTrackingImportHelper(NULL)
 {
     ScDocument* pDoc = GetScImport().GetDocument();
@@ -115,7 +115,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
     {
         const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
-        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
@@ -137,7 +137,7 @@ ScXMLBodyContext::~ScXMLBodyContext()
 {
 }
 
-SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -158,13 +158,13 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
 //  case XML_TOK_TEXT_H:
-//      bHeading = TRUE;
+//      bHeading = sal_True;
 //  case XML_TOK_TEXT_P:
 //      pContext = new SwXMLParaContext( GetSwImport(),nPrefix, rLocalName,
 //                                       xAttrList, bHeading );
 //      break;
 //  case XML_TOK_TEXT_ORDERED_LIST:
-//      bOrdered = TRUE;
+//      bOrdered = sal_True;
 //  case XML_TOK_TEXT_UNORDERED_LIST:
 //      pContext = new SwXMLListBlockContext( GetSwImport(),nPrefix, rLocalName,
 //                                            xAttrList, bOrdered );

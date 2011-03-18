@@ -50,7 +50,7 @@ using namespace xmloff::token;
 //------------------------------------------------------------------
 
 ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
@@ -58,9 +58,9 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
     fIterationEpsilon(0.001),
     nIterationCount(100),
     nYear2000(1930),
-    bIsIterationEnabled(sal_False),
-    bCalcAsShown(sal_False),
-    bIgnoreCase(sal_False),
+    bIsIterationEnabled(false),
+    bCalcAsShown(false),
+    bIgnoreCase(false),
     bLookUpLabels(sal_True),
     bMatchWholeCell(sal_True),
     bUseRegularExpressions(sal_True)
@@ -92,12 +92,12 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
             else if (IsXMLToken(aLocalName, XML_SEARCH_CRITERIA_MUST_APPLY_TO_WHOLE_CELL))
             {
                 if (IsXMLToken(sValue, XML_FALSE))
-                    bMatchWholeCell = sal_False;
+                    bMatchWholeCell = false;
             }
             else if (IsXMLToken(aLocalName, XML_AUTOMATIC_FIND_LABELS))
             {
                 if (IsXMLToken(sValue, XML_FALSE))
-                    bLookUpLabels = sal_False;
+                    bLookUpLabels = false;
             }
             else if (IsXMLToken(aLocalName, XML_NULL_YEAR))
             {
@@ -108,7 +108,7 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
             else if (IsXMLToken(aLocalName, XML_USE_REGULAR_EXPRESSIONS))
             {
                 if (IsXMLToken(sValue, XML_FALSE))
-                    bUseRegularExpressions = sal_False;
+                    bUseRegularExpressions = false;
             }
         }
     }
@@ -118,7 +118,7 @@ ScXMLCalculationSettingsContext::~ScXMLCalculationSettingsContext()
 {
 }
 
-SvXMLImportContext *ScXMLCalculationSettingsContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLCalculationSettingsContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -167,7 +167,7 @@ void ScXMLCalculationSettingsContext::EndElement()
 }
 
 ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -200,7 +200,7 @@ ScXMLNullDateContext::~ScXMLNullDateContext()
 {
 }
 
-SvXMLImportContext *ScXMLNullDateContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLNullDateContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
@@ -215,7 +215,7 @@ void ScXMLNullDateContext::EndElement()
 }
 
 ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -258,7 +258,7 @@ ScXMLIterationContext::~ScXMLIterationContext()
 {
 }
 
-SvXMLImportContext *ScXMLIterationContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLIterationContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )

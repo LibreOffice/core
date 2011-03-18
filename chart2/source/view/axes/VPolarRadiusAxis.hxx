@@ -51,7 +51,7 @@ public:
            , sal_Int32 nDimensionCount );
     virtual ~VPolarRadiusAxis();
 
-    virtual void SAL_CALL initPlotter(
+    virtual void initPlotter(
           const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xLogicTarget
         , const ::com::sun::star::uno::Reference<
@@ -63,28 +63,24 @@ public:
 
     virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
 
-    virtual void SAL_CALL setScales(
-          const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::chart2::ExplicitScaleData >& rScales
-            , sal_Bool bSwapXAndYAxis )
+    virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
+
+    virtual void setExplicitScaleAndIncrement(
+            const ExplicitScaleData& rScale
+          , const ExplicitIncrementData& rIncrement )
                 throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL setExplicitScaleAndIncrement(
-            const ::com::sun::star::chart2::ExplicitScaleData& rScale
-          , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement )
-                throw (::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL initAxisLabelProperties(
+    virtual void initAxisLabelProperties(
                     const ::com::sun::star::awt::Size& rFontReferenceSize
                   , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels );
 
     virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
 
-    virtual void SAL_CALL createMaximumLabels();
-    virtual void SAL_CALL createLabels();
-    virtual void SAL_CALL updatePositions();
+    virtual void createMaximumLabels();
+    virtual void createLabels();
+    virtual void updatePositions();
 
-    virtual void SAL_CALL createShapes();
+    virtual void createShapes();
 
 protected: //methods
     virtual bool prepareShapeCreation();

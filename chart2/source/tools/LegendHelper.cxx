@@ -30,7 +30,7 @@
 #include "precompiled_chart2.hxx"
 #include "LegendHelper.hxx"
 #include "macros.hxx"
-#include <com/sun/star/chart2/LegendExpansion.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -63,11 +63,11 @@ Reference< chart2::XLegend > LegendHelper::showLegend( const Reference< frame::X
             if( !(xProp->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos ) )
                 xProp->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny( ePos ));
 
-            chart2::LegendExpansion eExpansion =
+            ::com::sun::star::chart::ChartLegendExpansion eExpansion =
                     ( ePos == chart2::LegendPosition_LINE_END ||
                       ePos == chart2::LegendPosition_LINE_START )
-                    ? chart2::LegendExpansion_HIGH
-                    : chart2::LegendExpansion_WIDE;
+                    ? ::com::sun::star::chart::ChartLegendExpansion_HIGH
+                    : ::com::sun::star::chart::ChartLegendExpansion_WIDE;
             if( !(xProp->getPropertyValue( C2U( "Expansion" )) >>= eExpansion ) )
                 xProp->setPropertyValue( C2U( "Expansion" ), uno::makeAny( eExpansion ));
 

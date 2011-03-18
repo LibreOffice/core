@@ -166,7 +166,7 @@ ScVbaChart::getChartType() throw ( uno::RuntimeException, script::BasicErrorExce
             }
         else if (sDiagramType.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.StockDiagram"))))
         {
-            sal_Bool bVolume = sal_False;
+            sal_Bool bVolume = false;
             mxDiagramPropertySet->getPropertyValue(VOLUME) >>= bVolume;
             if (bVolume)
             {
@@ -179,7 +179,7 @@ ScVbaChart::getChartType() throw ( uno::RuntimeException, script::BasicErrorExce
         }
         else if (sDiagramType.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.XYDiagram"))))
         {
-            sal_Bool bHasLines = sal_False;
+            sal_Bool bHasLines = false;
             mxDiagramPropertySet->getPropertyValue(LINES) >>= bHasLines;
             sal_Int32 nSplineType = 0;
             mxDiagramPropertySet->getPropertyValue(SPLINETYPE) >>= nSplineType;
@@ -583,8 +583,8 @@ ScVbaChart::setSourceData( const css::uno::Reference< ::ooo::vba::excel::XRange 
 
         mxTableChart->setRanges(mRangeAddresses);
 
-        sal_Bool bsetRowHeaders = sal_False;
-        sal_Bool bsetColumnHeaders = sal_False;
+        sal_Bool bsetRowHeaders = false;
+        sal_Bool bsetColumnHeaders = false;
 
         ScVbaRange* pRange = static_cast< ScVbaRange* >( _xCalcRange.get() );
         if ( pRange )
@@ -822,7 +822,7 @@ ScVbaChart::setLocation( ::sal_Int32 /*where*/, const css::uno::Any& /*Name*/ ) 
 sal_Bool SAL_CALL
 ScVbaChart::getHasTitle(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    sal_Bool bHasTitle = sal_False;
+    sal_Bool bHasTitle = false;
     try
     {
         mxChartPropertySet->getPropertyValue(HASMAINTITLE) >>= bHasTitle;
@@ -851,7 +851,7 @@ ScVbaChart::setHasTitle( ::sal_Bool bTitle ) throw (script::BasicErrorException,
 ::sal_Bool SAL_CALL
 ScVbaChart::getHasLegend(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    sal_Bool bHasLegend = sal_False;
+    sal_Bool bHasLegend = false;
     try
     {
         mxChartPropertySet->getPropertyValue(HASLEGEND) >>= bHasLegend;
@@ -897,7 +897,7 @@ bool
 ScVbaChart::is3D() throw ( uno::RuntimeException )
 {
     // #TODO perhaps provide limited Debughelper functionality
-    sal_Bool is3d = sal_False;
+    sal_Bool is3d = false;
     mxDiagramPropertySet->getPropertyValue(DIM3D) >>= is3d;
     return is3d;
 }
@@ -921,7 +921,7 @@ bool
 ScVbaChart::isStacked() throw ( uno::RuntimeException )
 {
     // #TODO perhaps provide limited Debughelper functionality
-    sal_Bool bStacked = sal_False;
+    sal_Bool bStacked = false;
     mxDiagramPropertySet->getPropertyValue(STACKED) >>= bStacked;
     return bStacked;
 }
@@ -930,7 +930,7 @@ bool
 ScVbaChart::is100PercentStacked() throw ( uno::RuntimeException )
 {
     // #TODO perhaps provide limited Debughelper functionality
-    sal_Bool b100Percent = sal_False;
+    sal_Bool b100Percent = false;
     mxDiagramPropertySet->getPropertyValue(PERCENT) >>= b100Percent;
     return b100Percent;
 }
@@ -971,7 +971,7 @@ ScVbaChart::getSolidType(sal_Int32 _nDeep, sal_Int32 _nVertiStacked, sal_Int32 _
 sal_Int32
 ScVbaChart::getStockUpDownValue(sal_Int32 _nUpDown, sal_Int32 _nNotUpDown) throw (script::BasicErrorException)
 {
-    sal_Bool bUpDown = sal_False;
+    sal_Bool bUpDown = false;
     try
     {
         mxDiagramPropertySet->getPropertyValue(UPDOWN) >>= bUpDown;

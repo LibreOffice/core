@@ -64,7 +64,7 @@ public:
 class ExportWK1 : public ExportTyp
 {
 private:
-    BYTE                GenFormByte( const ScPatternAttr& );
+    sal_uInt8               GenFormByte( const ScPatternAttr& );
     void                Bof();
     void                Eof();
     void                Calcmode();
@@ -74,10 +74,10 @@ private:
     void                Dimensions();
     void                Window1();
     void                Colw();
-    void                Blank( const UINT16 nC, const UINT16 nR, const ScPatternAttr& );
-    void                Number( const UINT16 nC, const UINT16 nR, const double f, const ScPatternAttr& );
-    void                Label( const UINT16 nC, const UINT16 nR, const String&, const ScPatternAttr& );
-    void                Formula( const UINT16 nC, const UINT16 nR, const ScFormulaCell*, const ScPatternAttr& );
+    void                Blank( const sal_uInt16 nC, const sal_uInt16 nR, const ScPatternAttr& );
+    void                Number( const sal_uInt16 nC, const sal_uInt16 nR, const double f, const ScPatternAttr& );
+    void                Label( const sal_uInt16 nC, const sal_uInt16 nR, const String&, const ScPatternAttr& );
+    void                Formula( const sal_uInt16 nC, const sal_uInt16 nR, const ScFormulaCell*, const ScPatternAttr& );
     void                Protect();
     void                Footer();
     void                Header();
@@ -85,14 +85,14 @@ private:
     void                Labelfmt();
     void                Calccount();
     void                Cursorw12();
-    void                WKString( const UINT16 nC, const UINT16 nR, const ScFormulaCell*, const ScPatternAttr& );
+    void                WKString( const sal_uInt16 nC, const sal_uInt16 nR, const ScFormulaCell*, const ScPatternAttr& );
     void                Snrange();
     void                Hidcol();
     void                Cpi();
 public:
 
-    static  const USHORT    WK1MAXCOL;
-    static  const USHORT    WK1MAXROW;
+    static  const sal_uInt16    WK1MAXCOL;
+    static  const sal_uInt16    WK1MAXROW;
 
     inline              ExportWK1( SvStream& r, ScDocument* p, CharSet e ) :
                             ExportTyp( r, p, e ) {};

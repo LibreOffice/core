@@ -91,16 +91,16 @@ public:
     virtual                 ~ScDPLayoutDlg();
 
     virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual BOOL            IsRefInputMode() const { return bRefInputMode; }
+    virtual sal_Bool            IsRefInputMode() const { return bRefInputMode; }
     virtual void            SetActive();
-    virtual BOOL            Close();
+    virtual sal_Bool            Close();
     virtual void            StateChanged( StateChangedType nStateChange );
 
     void                    NotifyDoubleClick    ( ScDPFieldType eType, size_t nFieldIndex );
     PointerStyle            NotifyMouseButtonDown( ScDPFieldType eType, size_t nFieldIndex );
     void                    NotifyMouseButtonUp  ( const Point& rAt );
     PointerStyle            NotifyMouseMove      ( const Point& rAt );
-    void                    NotifyFieldFocus     ( ScDPFieldType eType, BOOL bGotFocus );
+    void                    NotifyFieldFocus     ( ScDPFieldType eType, sal_Bool bGotFocus );
     void                    NotifyMoveFieldToEnd      ( ScDPFieldType eToType );
     void                    NotifyRemoveField    ( ScDPFieldType eType, size_t nFieldIndex );
 
@@ -157,7 +157,7 @@ private:
 
     ScDPFieldType           eDnDFromType;
     size_t                  nDnDFromIndex;
-    BOOL                    bIsDrag;
+    sal_Bool                    bIsDrag;
 
     ::formula::RefEdit*     pEditActive;
 
@@ -198,8 +198,8 @@ private:
     ScDPLabelData*          GetLabelData    ( SCsCOL nCol, size_t* pPos = NULL );
     String                  GetLabelString  ( SCsCOL nCol );
     bool                    IsOrientationAllowed( SCsCOL nCol, ScDPFieldType eType );
-    String                  GetFuncString   ( USHORT& rFuncMask, BOOL bIsValue = TRUE );
-    BOOL                    Contains        ( ScDPFuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
+    String                  GetFuncString   ( sal_uInt16& rFuncMask, sal_Bool bIsValue = true );
+    sal_Bool                    Contains        ( ScDPFuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
     void                    Remove          ( ScDPFuncDataVec* pArr, size_t nAt );
     void                    Insert          ( ScDPFuncDataVec* pArr, const ScDPFuncData& rFData, size_t nAt );
 

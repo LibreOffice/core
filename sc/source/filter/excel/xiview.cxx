@@ -227,8 +227,8 @@ void XclImpTabViewSettings::Finalize()
 
     // sheet flags
     if( maData.mbMirrored )
-        // do not call this function with FALSE, it would mirror away all drawing objects
-        rDoc.SetLayoutRTL( nScTab, TRUE );
+        // do not call this function with sal_False, it would mirror away all drawing objects
+        rDoc.SetLayoutRTL( nScTab, sal_True );
     rTabSett.mbSelected = maData.mbSelected || bDisplayed;
 
     // first visible cell in top-left pane and in additional pane(s)

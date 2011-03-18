@@ -29,19 +29,9 @@
 #ifndef SC_DATAFDLG_HXX
 #define SC_DATAFDLG_HXX
 
-
-#ifndef _SV_DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-
-#ifndef _SV_BUTTON_HXX //autogen
-#include <vcl/imagebtn.hxx>
-#endif
-
-#ifndef _SV_FIXED_HXX //autogen
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#endif
-
 
 #include "global.hxx"
 
@@ -81,7 +71,7 @@ private:
     SCROW           nStartRow;
     SCROW           nEndRow;
     SCTAB           nTab;
-    BOOL            bNoSelection;
+    sal_Bool            bNoSelection;
 
     FixedText** pFixedTexts;
     Edit** pEdits;

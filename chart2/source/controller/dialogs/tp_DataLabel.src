@@ -28,10 +28,6 @@
 #include "TabPages.hrc"
 #include "res_DataLabel.hrc"
 
-#ifndef _GLOBLMN_HRC
-#include <svx/globlmn.hrc>
-#endif
-
 TabPage TP_DATA_DESCR
 {
     Hide = TRUE ;

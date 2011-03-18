@@ -57,7 +57,7 @@ protected:
 public:
 
     ScRedComDialog( Window* pParent, const SfxItemSet& rCoreSet,
-                    ScDocShell *,ScChangeAction *,BOOL bPrevNext = FALSE);
+                    ScDocShell *,ScChangeAction *,sal_Bool bPrevNext = false);
     ~ScRedComDialog();
 
     short Execute();

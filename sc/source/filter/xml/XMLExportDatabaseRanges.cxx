@@ -130,7 +130,7 @@ void ScXMLExportDatabaseRanges::WriteImportDescriptor(const uno::Sequence <beans
     rtl::OUString sConRes;
     rtl::OUString sSourceObject;
     sheet::DataImportMode nSourceType = sheet::DataImportMode_NONE;
-    sal_Bool bNative = sal_False;
+    sal_Bool bNative = false;
     for (sal_Int16 i = 0; i < nProperties; ++i)
     {
         if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_DBNAME)))
@@ -311,8 +311,8 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
             rExport.CheckAttrList();
             sal_Bool bIsCaseSensitive = ::cppu::any2bool(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE))));
             sal_Bool bUseRegularExpressions = ::cppu::any2bool(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_USEREGEX))));
-            sal_Bool bAnd = sal_False;
-            sal_Bool bOr = sal_False;
+            sal_Bool bAnd = false;
+            sal_Bool bOr = false;
             for (sal_Int32 i = 1; i < nTableFilterFields; ++i)
             {
                 if (aTableFilterFields[i].Connection == sheet::FilterConnection_AND)
@@ -353,7 +353,7 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
                     bOpenAndElement = sal_True;
                 }
                 else
-                    bOpenAndElement = sal_False;
+                    bOpenAndElement = false;
                 for (sal_Int32 i = 1; i < nTableFilterFields; ++i)
                 {
                     if (aConnection != aTableFilterFields[i].Connection)
@@ -369,7 +369,7 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
                             {
                                 WriteCondition(aPrevFilterField, bIsCaseSensitive, bUseRegularExpressions);
                                 rExport.EndElement(aName, sal_True);
-                                bOpenAndElement = sal_False;
+                                bOpenAndElement = false;
                             }
                         }
                         else
@@ -379,7 +379,7 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
                             if (bOpenAndElement)
                             {
                                 rExport.EndElement(aName, sal_True);
-                                bOpenAndElement = sal_False;
+                                bOpenAndElement = false;
                             }
                             if (i == nTableFilterFields - 1)
                             {
@@ -406,8 +406,8 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
 {
     uno::Sequence <table::TableSortField> aSortFields;
     sal_Bool bBindFormatsToContent (sal_True);
-    sal_Bool bCopyOutputData (sal_False);
-    sal_Bool bIsUserListEnabled (sal_False);
+    sal_Bool bCopyOutputData (false);
+    sal_Bool bIsUserListEnabled (false);
     table::CellAddress aOutputPosition;
     sal_Int32 nUserListIndex = 0;
     sal_Int32 nProperties = aSortProperties.getLength();
@@ -627,7 +627,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONTAINS_HEADER, XML_FALSE);
 
                                     sal_Bool bSortColumns(sal_True);
-                                    sal_Bool bFound(sal_False);
+                                    sal_Bool bFound(false);
                                     sal_Int32 nProperty(0);
                                     while (!bFound && (nProperty < aSortProperties.getLength()))
                                     {

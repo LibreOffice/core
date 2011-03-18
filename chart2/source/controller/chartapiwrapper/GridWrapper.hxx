@@ -43,7 +43,6 @@
 
 namespace chart
 {
-
 namespace wrapper
 {
 
@@ -58,12 +57,12 @@ class GridWrapper : public ::cppu::ImplInheritanceHelper2<
 public:
     enum tGridType
     {
-        X_MAIN_GRID,
-        Y_MAIN_GRID,
-        Z_MAIN_GRID,
-        X_SUB_GRID,
-        Y_SUB_GRID,
-        Z_SUB_GRID
+        X_MAJOR_GRID,
+        Y_MAJOR_GRID,
+        Z_MAJOR_GRID,
+        X_MINOR_GRID,
+        Y_MINOR_GRID,
+        Z_MINOR_GRID
     };
 
     GridWrapper( tGridType eType, ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );

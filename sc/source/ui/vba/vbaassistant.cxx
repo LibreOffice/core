@@ -41,7 +41,7 @@ using namespace ooo::vba::office::MsoAnimationType;
 ScVbaAssistant::ScVbaAssistant( const uno::Reference< XHelperInterface > xParent, const uno::Reference< uno::XComponentContext > xContext ): ScVbaAssistantImpl_BASE( xParent, xContext ),
 m_sName( RTL_CONSTASCII_USTRINGPARAM( "Clippit" ) )
 {
-    m_bIsVisible = sal_False;
+    m_bIsVisible = false;
     m_nPointsLeft = 795;
     m_nPointsTop = 248;
     m_nAnimation = msoAnimationIdle;
@@ -66,7 +66,7 @@ sal_Bool SAL_CALL ScVbaAssistant::getOn() throw (uno::RuntimeException)
     if( SvtHelpOptions().IsHelpAgentAutoStartMode() )
         return sal_True;
     else
-        return sal_False;
+        return false;
 }
 
 void SAL_CALL ScVbaAssistant::setOn( sal_Bool bOn ) throw (uno::RuntimeException)

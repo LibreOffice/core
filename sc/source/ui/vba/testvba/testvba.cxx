@@ -132,7 +132,7 @@ mxCompLoader( _xCompLoader ), msOutDirPath( convertToURL( _outDirPath  ) )
                     // Loading the wanted document
                     Sequence< PropertyValue > propertyValues(1);
                     propertyValues[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Hidden" ));
-                    propertyValues[0].Value <<= sal_False;
+                    propertyValues[0].Value <<= false;
 
                     rtl::OUString sfileUrl = convertToURL( sUrl );
                     printf( "try to get xDoc %s\n", rtl::OUStringToOString( sfileUrl, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -208,7 +208,7 @@ mxCompLoader( _xCompLoader ), msOutDirPath( convertToURL( _outDirPath  ) )
                         // if only one frame and model, click a button which related will colse.
                         // will make a crash. It related with window listener.
                         // so, for run all test cases, it should not close the document at this moment.
-                        xCloseable->close(sal_False);
+                        xCloseable->close(false);
                         printf("closed\n");
                     }
                     else
@@ -237,7 +237,7 @@ mxCompLoader( _xCompLoader ), msOutDirPath( convertToURL( _outDirPath  ) )
             throw lang::IllegalArgumentException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "not a directory: ")).concat( sFileDirectoryURL ), Reference<uno::XInterface>(), 1 );
         }
         // Getting all files and directories in the current directory
-        Sequence<OUString> entries = mxSFA->getFolderContents( sFileDirectoryURL, sal_False );
+        Sequence<OUString> entries = mxSFA->getFolderContents( sFileDirectoryURL, false );
 
         // Iterating for each file and directory
         printf( "Entries %d\n", (int)entries.getLength() );

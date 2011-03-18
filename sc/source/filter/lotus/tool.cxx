@@ -62,10 +62,10 @@ extern sal_Char*            pDummy2;        // -> memory.cxx
 extern ScDocument*          pDoc;           // -> filter.cxx, Aufhaenger zum Dokumentzugriff
 extern CharSet              eCharNach;      // -> filter.cxx, Zeichenkonvertierung von->nach
 
-extern BOOL                 bFormInit;      // -> memory.cxx, fuer GetFormHandle()
+extern sal_Bool                 bFormInit;      // -> memory.cxx, fuer GetFormHandle()
 
 //--------------------------------------------------------- GLOBALE VARIABLEN -
-BYTE                        nDefaultFormat; // -> op.cpp, Standard-Zellenformat
+sal_uInt8                       nDefaultFormat; // -> op.cpp, Standard-Zellenformat
 
 extern SvxHorJustifyItem    *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
 extern ScProtectionAttr*    pAttrUnprot;
@@ -123,14 +123,14 @@ void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
     {
         pDoc->ApplyAttr( nCol, nRow, nTab, *pJustify );
         ScStringCell*   pZelle = new ScStringCell( String( pString, pLotusRoot->eCharsetQ ) );
-        pDoc->PutCell( nCol, nRow, nTab, pZelle, ( BOOL ) TRUE );
+        pDoc->PutCell( nCol, nRow, nTab, pZelle, ( sal_Bool ) sal_True );
     }
 }
 
 
 
 
-void SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, BYTE nFormat, BYTE nSt )
+void SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt )
 {
     //  PREC:   nSt = Standard-Dezimalstellenanzahl
     pDoc->ApplyAttr( nCol, nRow, nTab, *( pValueFormCache->GetAttr( nFormat, nSt ) ) );
@@ -148,7 +148,7 @@ void InitPage( void )
 }
 
 
-double SnumToDouble( INT16 nVal )
+double SnumToDouble( sal_Int16 nVal )
 {
     const double pFacts[ 8 ] = {
         5000.0,
@@ -165,15 +165,15 @@ double SnumToDouble( INT16 nVal )
     if( nVal & 0x0001 )
     {
         fVal = pFacts[ ( nVal >> 1 ) & 0x0007 ];
-        fVal *= ( INT16 ) ( nVal >> 4 );
+        fVal *= ( sal_Int16 ) ( nVal >> 4 );
     }
     else
-        fVal = ( INT16 ) ( nVal >> 1 );
+        fVal = ( sal_Int16 ) ( nVal >> 1 );
 
     return fVal;
 }
 
-double Snum32ToDouble( UINT32 nValue )
+double Snum32ToDouble( sal_uInt32 nValue )
 {
     double fValue, temp;
 
@@ -193,36 +193,36 @@ double Snum32ToDouble( UINT32 nValue )
 }
 
 
-FormCache::FormCache( ScDocument* pDoc1, BYTE nNewDefaultFormat )
+FormCache::FormCache( ScDocument* pDoc1, sal_uInt8 nNewDefaultFormat )
 {   // Default-Format ist 'Default'
     nDefaultFormat = nNewDefaultFormat;
     pFormTable = pDoc1->GetFormatTable();
-    for( UINT16 nC = 0 ; nC < __nSize ; nC++ )
-        bValid[ nC ] = FALSE;
+    for( sal_uInt16 nC = 0 ; nC < __nSize ; nC++ )
+        bValid[ nC ] = false;
     eLanguage = ScGlobal::eLnge;
 }
 
 
 FormCache::~FormCache()
 {
-    for( UINT16 nC = 0 ; nC < __nSize ; nC++ )
+    for( sal_uInt16 nC = 0 ; nC < __nSize ; nC++ )
         delete aIdents[ nC ].GetAttr();
 }
 
 
-SfxUInt32Item* FormCache::NewAttr( BYTE nFormat, BYTE nSt )
+SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
 {
     // neues Format erzeugen
-    BYTE        nL, nH; // Low-/High-Nibble
-    BYTE        nForm = nFormat;
+    sal_uInt8       nL, nH; // Low-/High-Nibble
+    sal_uInt8       nForm = nFormat;
     String      aFormString;
     const sal_Char* pFormString = 0;
-    INT16       eType = NUMBERFORMAT_ALL;
-    UINT32      nIndex1;
-    UINT32      nHandle;
-    BOOL        bDefault = FALSE;
+    sal_Int16       eType = NUMBERFORMAT_ALL;
+    sal_uInt32      nIndex1;
+    sal_uInt32      nHandle;
+    sal_Bool        bDefault = false;
     //void GenerateFormat( aFormString, eType, COUNTRY_SYSTEM, LANGUAGE_SYSTEM,
-    //  BOOL bThousand, BOOL IsRed, UINT16 nPrecision, UINT16 nAnzLeading );
+    //  sal_Bool bThousand, sal_Bool IsRed, sal_uInt16 nPrecision, sal_uInt16 nAnzLeading );
 
     if( nForm == 0xFF ) // Default-Format?
         nForm = nDefaultFormat;
@@ -239,49 +239,49 @@ SfxUInt32Item* FormCache::NewAttr( BYTE nFormat, BYTE nSt )
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
             pFormTable->GenerateFormat( aFormString, nIndex1,
-                eLanguage, FALSE, FALSE, nL, 1 );
+                eLanguage, false, false, nL, 1 );
             break;
         case 0x01:  // Exponentdarstellung (scientific notation)
             //fExponent;nL;
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_SCIENTIFIC, eLanguage );
             pFormTable->GenerateFormat( aFormString, nIndex1,
-                eLanguage, FALSE, FALSE, nL, 1 );
+                eLanguage, false, false, nL, 1 );
             break;
         case 0x02:  // Waehrungsdarstellung (currency)
             //fMoney;nL;
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_CURRENCY, eLanguage );
             pFormTable->GenerateFormat( aFormString, nIndex1,
-                eLanguage, FALSE, FALSE, nL, 1 );
+                eLanguage, false, false, nL, 1 );
             break;
         case 0x03:  // Prozent
             //fPercent;nL;
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_PERCENT, eLanguage );
             pFormTable->GenerateFormat( aFormString, nIndex1,
-                eLanguage, FALSE, FALSE, nL, 1 );
+                eLanguage, false, false, nL, 1 );
             break;
         case 0x04:  // Komma
             //fStandard;nL;
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
             pFormTable->GenerateFormat( aFormString, nIndex1,
-                eLanguage, TRUE, FALSE, nL, 1 );
+                eLanguage, sal_True, false, nL, 1 );
             break;
         case 0x05:  // frei
             //fStandard;nL;
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
             pFormTable->GenerateFormat( aFormString, nIndex1,
-                eLanguage, FALSE, FALSE, nL, 1 );
+                eLanguage, false, false, nL, 1 );
             break;
         case 0x06:  // frei
             //fStandard;nL;
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
             pFormTable->GenerateFormat( aFormString, nIndex1,
-                eLanguage, FALSE, FALSE, nL, 1 );
+                eLanguage, false, false, nL, 1 );
             nIndex1 = 0;
             break;
         case 0x07:  // Spezialformat
@@ -292,14 +292,14 @@ SfxUInt32Item* FormCache::NewAttr( BYTE nFormat, BYTE nSt )
                     nIndex1 = pFormTable->GetStandardFormat(
                         NUMBERFORMAT_NUMBER, eLanguage );
                     pFormTable->GenerateFormat( aFormString, nIndex1,
-                        eLanguage, FALSE, TRUE, nSt, 1 );
+                        eLanguage, false, sal_True, nSt, 1 );
                     break;
                 case 0x01:  // generelles Format
                     //fStandard;nSt;
                     nIndex1 = pFormTable->GetStandardFormat(
                         NUMBERFORMAT_NUMBER, eLanguage );
                     pFormTable->GenerateFormat( aFormString, nIndex1,
-                        eLanguage, FALSE, FALSE, nSt, 1 );
+                        eLanguage, false, false, nSt, 1 );
                     break;
                 case 0x02:  // Datum: Tag, Monat, Jahr
                     //fDate;dfDayMonthYearLong;
@@ -322,7 +322,7 @@ SfxUInt32Item* FormCache::NewAttr( BYTE nFormat, BYTE nSt )
                     pFormString = "@";
                     break;
                 case 0x06:  // versteckt
-                    //wFlag |= paHideAll;bSetFormat = FALSE;
+                    //wFlag |= paHideAll;bSetFormat = sal_False;
                     eType = NUMBERFORMAT_NUMBER;
                     pFormString = "";
                     break;
@@ -336,33 +336,33 @@ SfxUInt32Item* FormCache::NewAttr( BYTE nFormat, BYTE nSt )
                     eType = NUMBERFORMAT_TIME;
                     pFormString = "HH:MM";
                     break;
-                case 0x09:  // Date, intern INT32 1
+                case 0x09:  // Date, intern sal_Int32 1
                     //fDate;dfDayMonthYearLong;
                     eType = NUMBERFORMAT_DATE;
                     pFormString = "TT.MM.JJJJ";
                     break;
-                case 0x0A:  // Date, intern INT32 2
+                case 0x0A:  // Date, intern sal_Int32 2
                     //fDate;dfDayMonthYearLong;
                     eType = NUMBERFORMAT_DATE;
                     pFormString = "TT.MM.JJJJ";
                     break;
-                case 0x0B:  // Time, intern INT32 1
+                case 0x0B:  // Time, intern sal_Int32 1
                     //fTime;tfHourMinSec24;
                     eType = NUMBERFORMAT_TIME;
                     pFormString = "HH:MM:SS";
                     break;
-                case 0x0C:  // Time, intern INT32 2
+                case 0x0C:  // Time, intern sal_Int32 2
                     //fTime;tfHourMinSec24;
                     eType = NUMBERFORMAT_TIME;
                     pFormString = "HH:MM:SS";
                     break;
                 case 0x0F:  // Standardeinstellung
                     //fStandard;nSt;
-                    bDefault = TRUE;
+                    bDefault = sal_True;
                     break;
                 default:
                     //fStandard;nSt;
-                    bDefault = TRUE;
+                    bDefault = sal_True;
                     break;
             }
             break;
@@ -371,7 +371,7 @@ SfxUInt32Item* FormCache::NewAttr( BYTE nFormat, BYTE nSt )
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
             pFormTable->GenerateFormat( aFormString, nIndex1,
-                eLanguage, FALSE, FALSE, nL, 1 );
+                eLanguage, false, false, nL, 1 );
             nIndex1 = 0;
             break;
     }
@@ -388,7 +388,7 @@ SfxUInt32Item* FormCache::NewAttr( BYTE nFormat, BYTE nSt )
         pFormTable->PutEntry( aFormString, nDummy, eType, nHandle, eLanguage );
     }
 
-    return new SfxUInt32Item( ATTR_VALUE_FORMAT, ( UINT32 ) nHandle );
+    return new SfxUInt32Item( ATTR_VALUE_FORMAT, ( sal_uInt32 ) nHandle );
 }
 
 
@@ -402,10 +402,10 @@ void LotusRange::MakeHash( void )
     //                   ********       nColE
     //     ****************             nRowS
     // ****************                 nRowE
-    nHash =  static_cast<UINT32>(nColStart);
-    nHash += static_cast<UINT32>(nColEnd) << 6;
-    nHash += static_cast<UINT32>(nRowStart) << 12;
-    nHash += static_cast<UINT32>(nRowEnd ) << 16;
+    nHash =  static_cast<sal_uInt32>(nColStart);
+    nHash += static_cast<sal_uInt32>(nColEnd) << 6;
+    nHash += static_cast<sal_uInt32>(nRowStart) << 12;
+    nHash += static_cast<sal_uInt32>(nRowEnd ) << 16;
 }
 
 
@@ -447,17 +447,17 @@ LotusRangeList::LotusRangeList( void )
 
     pSingRef = &aComplRef.Ref1;
     pSingRef->nTab = pSingRef->nRelTab = 0;
-    pSingRef->SetColRel( FALSE );
-    pSingRef->SetRowRel( FALSE );
-    pSingRef->SetTabRel( TRUE );
-    pSingRef->SetFlag3D( FALSE );
+    pSingRef->SetColRel( false );
+    pSingRef->SetRowRel( false );
+    pSingRef->SetTabRel( sal_True );
+    pSingRef->SetFlag3D( false );
 
     pSingRef = &aComplRef.Ref2;
     pSingRef->nTab = pSingRef->nRelTab = 0;
-    pSingRef->SetColRel( FALSE );
-    pSingRef->SetRowRel( FALSE );
-    pSingRef->SetTabRel( TRUE );
-    pSingRef->SetFlag3D( FALSE );
+    pSingRef->SetColRel( false );
+    pSingRef->SetRowRel( false );
+    pSingRef->SetTabRel( sal_True );
+    pSingRef->SetFlag3D( false );
 }
 
 
@@ -561,12 +561,12 @@ void RangeNameBufferWK3::Add( const String& rOrgName, const ScComplexRefData& rC
     if( rRef1.nCol == rRef2.nCol && rRef1.nRow == rRef2.nRow && rRef1.nTab == rRef2.nTab )
     {
         pScTokenArray->AddSingleReference( rCRD.Ref1 );
-        pInsert->bSingleRef = TRUE;
+        pInsert->bSingleRef = sal_True;
     }
     else
     {
         pScTokenArray->AddDoubleReference( rCRD );
-        pInsert->bSingleRef = FALSE;
+        pInsert->bSingleRef = false;
     }
 
     ScRangeData*        pData = new ScRangeData( pLotusRoot->pDoc, aScName, *pScTokenArray );
@@ -579,7 +579,7 @@ void RangeNameBufferWK3::Add( const String& rOrgName, const ScComplexRefData& rC
 }
 
 
-BOOL RangeNameBufferWK3::FindRel( const String& rRef, UINT16& rIndex )
+sal_Bool RangeNameBufferWK3::FindRel( const String& rRef, sal_uInt16& rIndex )
 {
     StringHashEntry     aRef( rRef );
 
@@ -590,16 +590,16 @@ BOOL RangeNameBufferWK3::FindRel( const String& rRef, UINT16& rIndex )
         if( aRef == pFind->aStrHashEntry )
         {
             rIndex = pFind->nRelInd;
-            return TRUE;
+            return sal_True;
         }
         pFind = ( ENTRY* ) List::Next();
     }
 
-    return FALSE;
+    return false;
 }
 
 
-BOOL RangeNameBufferWK3::FindAbs( const String& rRef, UINT16& rIndex )
+sal_Bool RangeNameBufferWK3::FindAbs( const String& rRef, sal_uInt16& rIndex )
 {
     String              aTmp( rRef );
     StringHashEntry     aRef( aTmp.Erase( 0, 1 ) ); // ohne '$' suchen!
@@ -618,18 +618,18 @@ BOOL RangeNameBufferWK3::FindAbs( const String& rRef, UINT16& rIndex )
                 ScSingleRefData*        pRef = &pFind->aScComplexRefDataRel.Ref1;
                 pScTokenArray->Clear();
 
-                pRef->SetColRel( FALSE );
-                pRef->SetRowRel( FALSE );
-                pRef->SetTabRel( TRUE );
+                pRef->SetColRel( false );
+                pRef->SetRowRel( false );
+                pRef->SetTabRel( sal_True );
 
                 if( pFind->bSingleRef )
                     pScTokenArray->AddSingleReference( *pRef );
                 else
                 {
                     pRef = &pFind->aScComplexRefDataRel.Ref2;
-                    pRef->SetColRel( FALSE );
-                    pRef->SetRowRel( FALSE );
-                    pRef->SetTabRel( TRUE );
+                    pRef->SetColRel( false );
+                    pRef->SetRowRel( false );
+                    pRef->SetTabRel( sal_True );
                     pScTokenArray->AddDoubleReference( pFind->aScComplexRefDataRel );
                 }
 
@@ -642,12 +642,12 @@ BOOL RangeNameBufferWK3::FindAbs( const String& rRef, UINT16& rIndex )
                 pLotusRoot->pScRangeName->insert( pData );
             }
 
-            return TRUE;
+            return sal_True;
         }
         pFind = ( ENTRY* ) List::Next();
     }
 
-    return FALSE;
+    return false;
 }
 
 

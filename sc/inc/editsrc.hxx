@@ -48,14 +48,14 @@ class SdrObject;
 
 class ScHeaderFooterChangedHint : public SfxHint
 {
-    USHORT nPart;
+    sal_uInt16 nPart;
 
 public:
                     TYPEINFO();
-                    ScHeaderFooterChangedHint(USHORT nP);
+                    ScHeaderFooterChangedHint(sal_uInt16 nP);
                     ~ScHeaderFooterChangedHint();
 
-    USHORT          GetPart() const         { return nPart; }
+    sal_uInt16          GetPart() const         { return nPart; }
 };
 
 
@@ -88,8 +88,8 @@ public:
 class ScHeaderFooterEditSource : public ScSharedHeaderFooterEditSource
 {
 public:
-                                ScHeaderFooterEditSource( ScHeaderFooterContentObj* pContent, USHORT nP );
-                                ScHeaderFooterEditSource( ScHeaderFooterContentObj& rContent, USHORT nP );
+                                ScHeaderFooterEditSource( ScHeaderFooterContentObj* pContent, sal_uInt16 nP );
+                                ScHeaderFooterEditSource( ScHeaderFooterContentObj& rContent, sal_uInt16 nP );
     virtual                     ~ScHeaderFooterEditSource();
 
     virtual SvxEditSource*      Clone() const;
@@ -141,7 +141,7 @@ private:
     ScAddress               aCellPos;
     ScEditEngineDefaulter*  pEditEngine;
     SvxEditEngineForwarder* pForwarder;
-    BOOL                    bDataValid;
+    sal_Bool                    bDataValid;
 
     SdrObject*                  GetCaptionObj();
 public:
@@ -185,7 +185,7 @@ public:
     virtual SvxEditSource*      Clone() const;
     virtual SvxTextForwarder*   GetTextForwarder();
     virtual SvxViewForwarder*   GetViewForwarder();
-    virtual SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool bCreate = sal_False );
+    virtual SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool bCreate = false );
     virtual void                UpdateData();
     virtual SfxBroadcaster&     GetBroadcaster() const;
 };

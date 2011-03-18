@@ -121,12 +121,6 @@ private: //member
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySetInfo >
-                        m_xInfo;//outer PropertySetInfo
-
-    ::boost::shared_ptr< ::cppu::OPropertyArrayHelper > m_pPropertyArrayHelper;
-
     WrappedIgnoreProperty               m_aWrappedLineJointProperty;
 };
 

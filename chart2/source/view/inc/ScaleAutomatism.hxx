@@ -28,9 +28,10 @@
 #ifndef _CHART2_SCALEAUTOMATISM_HXX
 #define _CHART2_SCALEAUTOMATISM_HXX
 
-#include <com/sun/star/chart2/ExplicitIncrementData.hpp>
-#include <com/sun/star/chart2/ExplicitScaleData.hpp>
+#include "chartview/ExplicitScaleValues.hxx"
 #include <com/sun/star/chart2/ScaleData.hpp>
+
+#include <tools/date.hxx>
 
 //.............................................................................
 namespace chart
@@ -45,7 +46,7 @@ class ScaleAutomatism
 {
 public:
     explicit            ScaleAutomatism(
-                            const ::com::sun::star::chart2::ScaleData& rSourceScale );
+                            const ::com::sun::star::chart2::ScaleData& rSourceScale, const Date& rNullDate );
     virtual             ~ScaleAutomatism();
 
     /** Expands own value range with the passed minimum and maximum. */
@@ -76,30 +77,41 @@ public:
                 of the axis and the font size of the axis caption text. */
     void                setMaximumAutoMainIncrementCount( sal_Int32 nMaximumAutoMainIncrementCount );
 
+    /** Sets the time resolution to be used in case it is not set explicitly within the scale
+    */
+    void setAutomaticTimeResolution( sal_Int32 nTimeResolution );
+
     /** Fills the passed scale data and increment data according to the own settings. */
     void                calculateExplicitScaleAndIncrement(
-                            ::com::sun::star::chart2::ExplicitScaleData& rExplicitScale,
-                            ::com::sun::star::chart2::ExplicitIncrementData& rExplicitIncrement ) const;
+                            ExplicitScaleData& rExplicitScale,
+                            ExplicitIncrementData& rExplicitIncrement ) const;
 
     ::com::sun::star::chart2::ScaleData getScale() const;
+    Date getNullDate() const;
 
 private:
     /** Fills the passed scale data and increment data for category scaling. */
     void                calculateExplicitIncrementAndScaleForCategory(
-                            ::com::sun::star::chart2::ExplicitScaleData& rExplicitScale,
-                            ::com::sun::star::chart2::ExplicitIncrementData& rExplicitIncrement,
+                            ExplicitScaleData& rExplicitScale,
+                            ExplicitIncrementData& rExplicitIncrement,
                             bool bAutoMinimum, bool bAutoMaximum ) const;
 
     /** Fills the passed scale data and increment data for logarithmic scaling. */
     void                calculateExplicitIncrementAndScaleForLogarithmic(
-                            ::com::sun::star::chart2::ExplicitScaleData& rExplicitScale,
-                            ::com::sun::star::chart2::ExplicitIncrementData& rExplicitIncrement,
+                            ExplicitScaleData& rExplicitScale,
+                            ExplicitIncrementData& rExplicitIncrement,
                             bool bAutoMinimum, bool bAutoMaximum ) const;
 
     /** Fills the passed scale data and increment data for linear scaling. */
     void                calculateExplicitIncrementAndScaleForLinear(
-                            ::com::sun::star::chart2::ExplicitScaleData& rExplicitScale,
-                            ::com::sun::star::chart2::ExplicitIncrementData& rExplicitIncrement,
+                            ExplicitScaleData& rExplicitScale,
+                            ExplicitIncrementData& rExplicitIncrement,
+                            bool bAutoMinimum, bool bAutoMaximum ) const;
+
+    /** Fills the passed scale data and increment data for date-time axis. */
+    void                calculateExplicitIncrementAndScaleForDateTimeAxis(
+                            ExplicitScaleData& rExplicitScale,
+                            ExplicitIncrementData& rExplicitIncrement,
                             bool bAutoMinimum, bool bAutoMaximum ) const;
 
 private:
@@ -112,6 +124,9 @@ private:
     bool                m_bExpandIfValuesCloseToBorder;     /// true = Expand if values are too close to the borders.
     bool                m_bExpandWideValuesToZero;          /// true = Expand wide spread values to zero.
     bool                m_bExpandNarrowValuesTowardZero;    /// true = Expand narrow range toward zero (add half of range).
+    sal_Int32           m_nTimeResolution;// a constant out of ::com::sun::star::chart::TimeUnit
+
+    Date                m_aNullDate;
 };
 
 //.............................................................................

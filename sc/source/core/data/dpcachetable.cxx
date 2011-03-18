@@ -65,7 +65,7 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::sheet::DataPilotFieldFilter;
 
 
-static BOOL lcl_HasQueryEntry( const ScQueryParam& rParam )
+static sal_Bool lcl_HasQueryEntry( const ScQueryParam& rParam )
 {
     return rParam.GetEntryCount() > 0 &&
             rParam.GetEntry(0).bDoQuery;
