@@ -258,7 +258,7 @@ void LayoutManager::implts_lock()
 sal_Bool LayoutManager::implts_unlock()
 {
     WriteGuard aWriteLock( m_aLock );
-    m_nLockCount = std::max( --m_nLockCount, static_cast<sal_Int32>(0) );
+    m_nLockCount = std::max( m_nLockCount-1, static_cast<sal_Int32>(0) );
     return ( m_nLockCount == 0 );
 }
 
@@ -1659,7 +1659,6 @@ throw (uno::RuntimeException)
 {
     bool            bResult( false );
     bool            bNotify( false );
-    bool            bDoLayout( false );
     ::rtl::OUString aElementType;
     ::rtl::OUString aElementName;
 
@@ -1693,7 +1692,6 @@ throw (uno::RuntimeException)
                     pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                     bResult   = true;
                     bNotify   = true;
-                    bDoLayout = true;
                 }
             }
         }
@@ -1704,7 +1702,6 @@ throw (uno::RuntimeException)
         implts_showProgressBar();
         bResult   = true;
         bNotify   = true;
-        bDoLayout = true;
     }
     else if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ) && m_bVisible )
     {
@@ -1716,7 +1713,6 @@ throw (uno::RuntimeException)
         if ( pToolbarManager && bComponentAttached )
         {
                 bNotify   = pToolbarManager->requestToolbar( rResourceURL );
-            bDoLayout = true;
             }
     }
     else if ( aElementType.equalsIgnoreAsciiCaseAscii( "dockingwindow" ))
@@ -1875,7 +1871,6 @@ throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::hideElement" );
 
-    bool            bResult( false );
     bool            bNotify( false );
     bool            bMustLayout( false );
     ::rtl::OUString aElementType;
@@ -1901,7 +1896,6 @@ throw (RuntimeException)
                 if ( pMenuBar )
                 {
                     pMenuBar->SetDisplayable( sal_False );
-                    bResult = true;
                     bNotify = true;
                 }
             }
@@ -1916,12 +1910,11 @@ throw (RuntimeException)
             implts_writeWindowStateData( m_aStatusBarAlias, m_aStatusBarElement );
             bMustLayout = sal_True;
             bNotify     = sal_True;
-            bResult     = sal_True;
         }
     }
     else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ))
     {
-        bResult = bNotify = implts_hideProgressBar();
+        bNotify = implts_hideProgressBar();
     }
     else if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
     {
