@@ -215,7 +215,7 @@ private:
             Layout of the page to insert or to assign.
     */
     SfxRequest CreateRequest (
-        USHORT nSlotId,
+        sal_uInt16 nSlotId,
         AutoLayout aLayout);
 
     /** Select the layout that is used by the current page.

@@ -106,7 +106,7 @@ void PPTWriter::exportPPTPre()
 
     if ( mXStatusIndicator.is() )
     {
-        mbStatusIndicator = TRUE;
+        mbStatusIndicator = sal_True;
         mnStatMaxValue = ( mnPages + mnMasterPages ) * 5;
         mXStatusIndicator->start( String( RTL_CONSTASCII_USTRINGPARAM( "PowerPoint Export" ) ),
                                     mnStatMaxValue + ( mnStatMaxValue >> 3 ) );
@@ -154,7 +154,7 @@ void PPTWriter::exportPPTPost( )
     if ( !ImplCreateDocumentSummaryInformation() )
         return;
 
-    mbStatus = TRUE;
+    mbStatus = sal_True;
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -185,7 +185,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         aAny >>= bVisible;
     if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Change" ) ) ) )
     {
-        switch ( *(INT32*)aAny.getValue() )
+        switch ( *(sal_Int32*)aAny.getValue() )
         {
             case 1 :        // automatisch
                 mnDiaMode++;
@@ -218,7 +218,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LoopSound" ) ) ) )
         aAny >>= bLoopSound;
 
-    sal_Bool bNeedsSSSlideInfoAtom = ( bVisible == FALSE )
+    sal_Bool bNeedsSSSlideInfoAtom = ( bVisible == sal_False )
                                     || ( mnDiaMode == 2 )
                                     || ( bIsSound )
                                     || ( bStopSound )
@@ -228,7 +228,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         sal_uInt8   nDirection = 0;
         sal_uInt8   nTransitionType = 0;
         sal_uInt16  nBuildFlags = 1;        // advange by mouseclick
-        INT32       nSlideTime = 0;         // muss noch !!!
+        sal_Int32       nSlideTime = 0;         // muss noch !!!
         sal_uInt8   nSpeed = 1;
 
         if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) ) ) )
@@ -251,7 +251,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
             nTransitionType = GetTransition( eFe, nDirection );
         if ( mnDiaMode == 2 )                                   // automatic ?
             nBuildFlags |= 0x400;
-        if ( bVisible == FALSE )
+        if ( bVisible == sal_False )
             nBuildFlags |= 4;
         if ( bIsSound )
             nBuildFlags |= 16;
@@ -261,7 +261,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
             nBuildFlags |= 256;
 
         if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Duration" ) ) ) )// duration of this slide
-            nSlideTime = *(INT32*)aAny.getValue() << 10;        // in ticks
+            nSlideTime = *(sal_Int32*)aAny.getValue() << 10;        // in ticks
 
         mpPptEscherEx->AddAtom( 16, EPP_SSSlideInfoAtom );
         *mpStrm << nSlideTime       // standtime in ticks
@@ -279,7 +279,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup(0,0);
-    ImplWritePage( rLayout, aSolverContainer, NORMAL, FALSE, nPageNum );    // Die Shapes der Seite werden im PPT Dok. erzeugt
+    ImplWritePage( rLayout, aSolverContainer, NORMAL, sal_False, nPageNum );    // Die Shapes der Seite werden im PPT Dok. erzeugt
     mpPptEscherEx->LeaveGroup();
 
     if ( bHasBackground )
@@ -358,7 +358,7 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainMaster | nPageNum, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_MainMaster );
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
-    *mpStrm << (INT32)EPP_LAYOUT_TITLEANDBODYSLIDE  // slide layout -> title and body slide
+    *mpStrm << (sal_Int32)EPP_LAYOUT_TITLEANDBODYSLIDE  // slide layout -> title and body slide
             << (sal_uInt8)1 << (sal_uInt8)2 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0     // placeholderID
             << (sal_uInt32)0        // master ID ( ist gleich null bei einer masterpage )
             << (sal_uInt32)0        // notes ID ( ist gleich null wenn keine notizen vorhanden )
@@ -393,8 +393,8 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
 
         mpPptEscherEx->BeginAtom();
 
-        sal_Bool bFirst = TRUE;
-        sal_Bool bSimpleText = FALSE;
+        sal_Bool bFirst = sal_True;
+        sal_Bool bSimpleText = sal_False;
 
         *mpStrm << (sal_uInt16)5;                           // paragraph count
 
@@ -402,13 +402,13 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
         {
             if ( nInstance >= EPP_TEXTTYPE_CenterBody )
             {
-                bFirst = FALSE;
-                bSimpleText = TRUE;
+                bFirst = sal_False;
+                bSimpleText = sal_True;
                 *mpStrm << nLev;
             }
             mpStyleSheet->mpParaSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
             mpStyleSheet->mpCharSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
-            bFirst = FALSE;
+            bFirst = sal_False;
         }
         mpPptEscherEx->EndAtom( EPP_TxMasterStyleAtom, 0, nInstance );
     }
@@ -420,7 +420,7 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
 
     mpPptEscherEx->EnterGroup(0,0);
-    ImplWritePage( GetLayout( 0 ), aSolverContainer, MASTER, TRUE );    // Die Shapes der Seite werden im PPT Dok. erzeugt
+    ImplWritePage( GetLayout( 0 ), aSolverContainer, MASTER, sal_True );    // Die Shapes der Seite werden im PPT Dok. erzeugt
     mpPptEscherEx->LeaveGroup();
 
     ImplWriteBackground( aXBackgroundPropSet );
@@ -446,6 +446,11 @@ PPTWriter::~PPTWriter()
     void*  pPtr;
     delete mpExEmbed;
     delete mpPptEscherEx;
+    delete mpCurUserStrm;
+    delete mpPicStrm;
+    delete mpStrm;
+
+
 
     std::vector< PPTExStyleSheet* >::iterator aStyleSheetIter( maStyleSheetList.begin() );
     while( aStyleSheetIter < maStyleSheetList.end() )
@@ -468,7 +473,7 @@ sal_Bool PPTWriter::ImplCreateCurrentUserStream()
 {
     mpCurUserStrm = mrStg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Current User" ) ) );
     if ( !mpCurUserStrm )
-        return FALSE;
+        return sal_False;
     char pUserName[] = "Current User";
     sal_uInt32 nLenOfUserName = strlen( pUserName );
     sal_uInt32 nSizeOfRecord = 0x14 + ( ( nLenOfUserName + 4 ) & ~ 3 );
@@ -491,7 +496,7 @@ sal_Bool PPTWriter::ImplCreateCurrentUserStream()
         *mpCurUserStrm << (sal_uInt8)0;                 // pad bytes
     };
     mpCurUserStrm->Seek( nEditPos );
-    return TRUE;
+    return sal_True;
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -698,9 +703,9 @@ sal_Bool PPTWriter::ImplCreateDocument()
     mpPptEscherEx->AddAtom( 40, EPP_DocumentAtom, 1 );
     *mpStrm << nWidth                           // Slide Size in Master coordinates X
             << nHeight                          //   "     "   "    "        "      Y
-            << (INT32)maNotesPageSize.Width     // Notes Page Size                  X
-            << (INT32)maNotesPageSize.Height    //   "     "   "                    Y
-            << (INT32)1 << (INT32)2;            // the scale used when the Powerpoint document is embedded. the default is 1:2
+            << (sal_Int32)maNotesPageSize.Width     // Notes Page Size                  X
+            << (sal_Int32)maNotesPageSize.Height    //   "     "   "                    Y
+            << (sal_Int32)1 << (sal_Int32)2;            // the scale used when the Powerpoint document is embedded. the default is 1:2
     mpPptEscherEx->InsertPersistOffset( EPP_MAINNOTESMASTER_PERSIST_KEY, mpStrm->Tell() );
     *mpStrm << (sal_uInt32)0                        // Reference to NotesMaster ( 0 if none );
             << (sal_uInt32)0                        // Reference to HandoutMaster ( 0 if none );
@@ -734,12 +739,12 @@ sal_Bool PPTWriter::ImplCreateDocument()
         mpPptEscherEx->InsertPersistOffset( EPP_MAINSLIDE_PERSIST_KEY | i, mpStrm->Tell() );
         *mpStrm << (sal_uInt32)0                                // psrReference - logical reference to the slide persist object ( EPP_MAINSLIDE_PERSIST_KEY )
                 << (sal_uInt32)4                                // flags - only bit 3 used, if set then slide contains shapes other than placeholders
-                << (INT32)0                                     // numberTexts - number of placeholder texts stored with the persist object.  Allows to display outline view without loading the slide persist objects
-                << (INT32)i + 0x100                             // slideId - Unique slide identifier, used for OLE link monikers for example
+                << (sal_Int32)0                                     // numberTexts - number of placeholder texts stored with the persist object.  Allows to display outline view without loading the slide persist objects
+                << (sal_Int32)i + 0x100                             // slideId - Unique slide identifier, used for OLE link monikers for example
                 << (sal_uInt32)0;                               // reserved, usualy 0
 
         if ( !GetPageByIndex( i, NORMAL ) )                     // sehr aufregend: noch einmal ueber alle seiten
-            return FALSE;
+            return sal_False;
         SetCurrentStyleSheet( GetMasterIndex( NORMAL ) );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >
@@ -763,8 +768,8 @@ sal_Bool PPTWriter::ImplCreateDocument()
         mpPptEscherEx->InsertPersistOffset( EPP_MAINNOTES_PERSIST_KEY | i, mpStrm->Tell() );
         *mpStrm << (sal_uInt32)0
                 << (sal_uInt32)4
-                << (INT32)0
-                << (INT32)i + 0x100
+                << (sal_Int32)0
+                << (sal_Int32)i + 0x100
                 << (sal_uInt32)0;
     }
     mpPptEscherEx->CloseContainer();        // EPP_SlideListWithText
@@ -784,7 +789,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
             {
                 ::rtl::OUString aCustomShow;
                 sal_uInt32  nPenColor = 0x1000000;
-                INT32   nRestartTime = 0x7fffffff;
+                sal_Int32   nRestartTime = 0x7fffffff;
                 sal_Int16   nStartSlide = 0;
                 sal_Int16   nEndSlide = 0;
                 sal_uInt32  nFlags = 0;             // Bit 0:   Auto advance
@@ -834,7 +839,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                         nFlags |= 1;
                 }
 
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsEndless" ) ) ) ) // muesste eigendlich heissen IsNotEndless !=)"§()&
+                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsEndless" ) ) ) ) // muesste eigendlich heissen IsNotEndless !=)"ï¿½()&
                 {
                     sal_Bool bBool = sal_False;
                     mAny >>= bBool;
@@ -902,8 +907,8 @@ sal_Bool PPTWriter::ImplCreateDocument()
                                         {
                                             mpPptEscherEx->BeginAtom();
 
-                                            INT32 nSlideCount = aXIC->getCount();
-                                            for ( INT32 j = 0; j < nSlideCount; j++ )   // Anzahl der Slides
+                                            sal_Int32 nSlideCount = aXIC->getCount();
+                                            for ( sal_Int32 j = 0; j < nSlideCount; j++ )   // Anzahl der Slides
                                             {
                                                 mAny = aXIC->getByIndex( j );
                                                 if ( mAny.getValue() )
@@ -948,7 +953,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
     }
     mpPptEscherEx->AddAtom( 0, EPP_EndDocument );
     mpPptEscherEx->CloseContainer();    // EPP_Document
-    return TRUE;
+    return sal_True;
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -1031,7 +1036,7 @@ sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
     rStrm << (sal_uInt32)( nCurrentOfs - ( nParaOfs + 4 ) );
     rStrm << nParaCount;
     rStrm.Seek( nCurrentOfs );
-    return TRUE;
+    return sal_True;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -1049,7 +1054,7 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup(0,0);
 
-    ImplWritePage( GetLayout( 20 ), aSolverContainer, NOTICE, TRUE );
+    ImplWritePage( GetLayout( 20 ), aSolverContainer, NOTICE, sal_True );
 
     mpPptEscherEx->LeaveGroup();
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -1073,7 +1078,7 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
     mpPptEscherEx->AddAtom( 32, EPP_ColorSchemeAtom, 0, 1 );
     *mpStrm << (sal_uInt32)0xffffff << (sal_uInt32)0x000000 << (sal_uInt32)0x808080 << (sal_uInt32)0x000000 << (sal_uInt32)0x99cc00 << (sal_uInt32)0xcc3333 << (sal_uInt32)0xffcccc << (sal_uInt32)0xb2b2b2;
     mpPptEscherEx->CloseContainer();    // EPP_Notes
-    return TRUE;
+    return sal_True;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -1182,7 +1187,7 @@ void PPTWriter::ImplWriteNotes( sal_uInt32 nPageNum )
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup(0,0);
 
-    ImplWritePage( GetLayout( 20 ), aSolverContainer, NOTICE, FALSE );  // Die Shapes der Seite werden im PPT Dok. erzeugt
+    ImplWritePage( GetLayout( 20 ), aSolverContainer, NOTICE, sal_False );  // Die Shapes der Seite werden im PPT Dok. erzeugt
 
     mpPptEscherEx->LeaveGroup();
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -1310,13 +1315,13 @@ void PPTWriter::ImplWriteOLE( )
                     ::uno::Reference < embed::XEmbeddedObject > xObj( ( (SdrOle2Obj*) pSdrObj )->GetObjRef() );
                     if( xObj.is() )
                     {
-                        SvStorageRef xTempStorage( new SvStorage( new SvMemoryStream(), TRUE ) );
+                        SvStorageRef xTempStorage( new SvStorage( new SvMemoryStream(), sal_True ) );
                         aOleExport.ExportOLEObject( xObj, *xTempStorage );
 
                         //TODO/MBA: testing
                         String aPersistStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( SVEXT_PERSIST_STREAM ) ) );
                         SvMemoryStream aStream;
-                        SvStorageRef xCleanStorage( new SvStorage( FALSE, aStream ) );
+                        SvStorageRef xCleanStorage( new SvStorage( sal_False, aStream ) );
                         xTempStorage->CopyTo( xCleanStorage );
                         // create a dummy content stream, the dummy content is necessary for ppt, but not for
                         // doc files, so we can't share code.
@@ -1342,7 +1347,7 @@ void PPTWriter::ImplWriteOLE( )
                 {
                     String aName;
                     ::com::sun::star::awt::Size aSize;
-                    SvStorageRef xDest( new SvStorage( new SvMemoryStream(), TRUE ) );
+                    SvStorageRef xDest( new SvStorage( new SvMemoryStream(), sal_True ) );
                     sal_Bool bOk = SvxMSConvertOCXControls::WriteOCXStream( xDest, pPtr->xControlModel, aSize, aName );
                     if ( bOk )
                         pStrm = xDest->CreateMemoryStream();
@@ -1469,7 +1474,7 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
 
     *mpCurUserStrm << (sal_uInt32)nPos;             // offset to current edit setzen
     mpPptEscherEx->AddAtom( 28, EPP_UserEditAtom );
-    *mpStrm << (INT32)0x100                     // last slide ID
+    *mpStrm << (sal_Int32)0x100                     // last slide ID
             << (sal_uInt32)0x03000dbc               // minor and major app version that did the save
             << (sal_uInt32)0                        // offset last save, 0 after a full save
             << nPersistOfs                      // File offset to persist pointers for this save operation
@@ -1478,37 +1483,37 @@ sal_Bool PPTWriter::ImplWriteAtomEnding()
             << (sal_Int16)EPP_LastViewTypeSlideView // last view type
             << (sal_Int16)0x12;                     // padword
 
-    return TRUE;
+    return sal_True;
 }
 
 // ---------------------
 // - exported function -
 // ---------------------
 
-extern "C" SAL_DLLPUBLIC_EXPORT BOOL __LOADONCALLAPI ExportPPT( SvStorageRef& rSvStorage,
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI ExportPPT( SvStorageRef& rSvStorage,
                     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
                         ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
                             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags )
 {
     PPTWriter*  pPPTWriter;
-    BOOL bStatus = FALSE;
+    sal_Bool bStatus = sal_False;
 
     pPPTWriter = new PPTWriter( rSvStorage, rXModel, rXStatInd, pVBA, nCnvrtFlags );
     if ( pPPTWriter )
     {
         pPPTWriter->exportPPT();
-        bStatus = ( pPPTWriter->IsValid() == TRUE );
+        bStatus = ( pPPTWriter->IsValid() == sal_True );
         delete pPPTWriter;
     }
 
     return bStatus;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT BOOL __LOADONCALLAPI SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas )
 {
-    SvStorageRef xDest( new SvStorage( new SvMemoryStream(), TRUE ) );
-    SvxImportMSVBasic aMSVBas( rDocShell, *xDest, FALSE, FALSE );
-    aMSVBas.SaveOrDelMSVBAStorage( TRUE, String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
+    SvStorageRef xDest( new SvStorage( new SvMemoryStream(), sal_True ) );
+    SvxImportMSVBasic aMSVBas( rDocShell, *xDest, sal_False, sal_False );
+    aMSVBas.SaveOrDelMSVBAStorage( sal_True, String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
 
     SvStorageRef xOverhead = xDest->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
     if ( xOverhead.Is() && ( xOverhead->GetError() == SVSTREAM_OK ) )
@@ -1519,7 +1524,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT BOOL __LOADONCALLAPI SaveVBA( SfxObjectShell& rD
             SvStorageStreamRef xTemp = xOverhead2->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead2") ) );
             if ( xTemp.Is() && ( xTemp->GetError() == SVSTREAM_OK ) )
             {
-                UINT32 nLen = xTemp->GetSize();
+                sal_uInt32 nLen = xTemp->GetSize();
                 if ( nLen )
                 {
                     char* pTemp = new char[ nLen ];
@@ -1528,15 +1533,15 @@ extern "C" SAL_DLLPUBLIC_EXPORT BOOL __LOADONCALLAPI SaveVBA( SfxObjectShell& rD
                         xTemp->Seek( STREAM_SEEK_TO_BEGIN );
                         xTemp->Read( pTemp, nLen );
                         pBas = new SvMemoryStream( pTemp, nLen, STREAM_READ );
-                        pBas->ObjectOwnsMemory( TRUE );
-                        return TRUE;
+                        pBas->ObjectOwnsMemory( sal_True );
+                        return sal_True;
                     }
                 }
             }
         }
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -269,7 +269,7 @@ IMPL_LINK(MasterPagesSelector, RightClickHandler, MouseEvent*, pEvent)
     mpPageSet->ReleaseMouse();
     if (GetDispatcher() != NULL &&  pEvent != NULL)
     {
-        USHORT nIndex = mpPageSet->GetItemId (pEvent->GetPosPixel());
+        sal_uInt16 nIndex = mpPageSet->GetItemId (pEvent->GetPosPixel());
         if (nIndex > 0)
             mpPageSet->SelectItem (nIndex);
     }
@@ -285,7 +285,7 @@ IMPL_LINK(MasterPagesSelector, ContextMenuCallback, CommandEvent*, pEvent)
     // center.
     if (GetShellManager() != NULL)
         GetShellManager()->MoveToTop (this);
-    const USHORT nIndex = mpPageSet->GetSelectItemId();
+    const sal_uInt16 nIndex = mpPageSet->GetSelectItemId();
     if (nIndex > 0 && pEvent!=NULL)
     {
         // The position of the upper left corner of the context menu is
@@ -327,7 +327,7 @@ SdPage* MasterPagesSelector::GetSelectedMasterPage (void)
     const ::osl::MutexGuard aGuard (maMutex);
 
     SdPage* pMasterPage = NULL;
-    USHORT nIndex = mpPageSet->GetSelectItemId();
+    sal_uInt16 nIndex = mpPageSet->GetSelectItemId();
     UserData* pData = GetUserData(nIndex);
     if (pData != NULL)
     {
@@ -347,7 +347,7 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
     if (pMasterPage == NULL)
         return;
 
-    USHORT nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
+    sal_uInt16 nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
     if (nPageCount == 0)
         return;
 
@@ -357,7 +357,7 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
     String sFullLayoutName (pMasterPage->GetLayoutName());
     ::sd::slidesorter::SharedPageSelection pPageList (
         new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
-    for (USHORT nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
+    for (sal_uInt16 nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
     {
         SdPage* pPage = mrDocument.GetSdPage (nPageIndex, PK_STANDARD);
         if (pPage != NULL
@@ -431,9 +431,9 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
             if (nIndex >= 0)
             {
                 mpPageSet->SetItemImage (
-                    (USHORT)nIndex,
+                    (sal_uInt16)nIndex,
                     mpContainer->GetPreviewForToken(rEvent.maChildToken));
-                mpPageSet->Invalidate(mpPageSet->GetItemRect((USHORT)nIndex));
+                mpPageSet->Invalidate(mpPageSet->GetItemRect((sal_uInt16)nIndex));
             }
         }
         break;
@@ -468,7 +468,7 @@ MasterPagesSelector::UserData* MasterPagesSelector::GetUserData (int nIndex) con
     const ::osl::MutexGuard aGuard (maMutex);
 
     if (nIndex>0 && static_cast<unsigned int>(nIndex)<=mpPageSet->GetItemCount())
-        return reinterpret_cast<UserData*>(mpPageSet->GetItemData((USHORT)nIndex));
+        return reinterpret_cast<UserData*>(mpPageSet->GetItemData((sal_uInt16)nIndex));
     else
         return NULL;
 }
@@ -485,7 +485,7 @@ void MasterPagesSelector::SetUserData (int nIndex, UserData* pData)
         UserData* pOldData = GetUserData(nIndex);
         if (pOldData!=NULL && pOldData!=pData)
             delete pOldData;
-        mpPageSet->SetItemData((USHORT)nIndex, pData);
+        mpPageSet->SetItemData((sal_uInt16)nIndex, pData);
     }
 }
 
@@ -568,7 +568,7 @@ void MasterPagesSelector::Execute (SfxRequest& rRequest)
                 SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
                 if (pDispatcher != NULL)
                 {
-                    USHORT nIndex = mpPageSet->GetSelectItemId();
+                    sal_uInt16 nIndex = mpPageSet->GetSelectItemId();
                     pDispatcher->Execute(SID_MASTERPAGE, SFX_CALLMODE_SYNCHRON);
                     mpPageSet->SelectItem (nIndex);
                     mrBase.GetDrawController().setCurrentPage(xSelectedMaster);
@@ -605,7 +605,7 @@ void MasterPagesSelector::GetState (SfxItemSet& rItemSet)
 
 
 void MasterPagesSelector::SetItem (
-    USHORT nIndex,
+    sal_uInt16 nIndex,
     MasterPageContainer::Token aToken)
 {
     const ::osl::MutexGuard aGuard (maMutex);
@@ -654,7 +654,7 @@ void MasterPagesSelector::SetItem (
 
 
 void MasterPagesSelector::AddTokenToIndexEntry (
-    USHORT nIndex,
+    sal_uInt16 nIndex,
     MasterPageContainer::Token aToken)
 {
     const ::osl::MutexGuard aGuard (maMutex);
@@ -666,7 +666,7 @@ void MasterPagesSelector::AddTokenToIndexEntry (
 
 
 void MasterPagesSelector::RemoveTokenToIndexEntry (
-    USHORT nIndex,
+    sal_uInt16 nIndex,
     MasterPageContainer::Token aNewToken)
 {
     const ::osl::MutexGuard aGuard (maMutex);
@@ -692,7 +692,7 @@ void MasterPagesSelector::InvalidatePreview (const SdPage* pPage)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    for (USHORT nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
+    for (sal_uInt16 nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
     {
         UserData* pData = GetUserData(nIndex);
         if (pData != NULL)
@@ -712,7 +712,7 @@ void MasterPagesSelector::UpdateAllPreviews (void)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    for (USHORT nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
+    for (sal_uInt16 nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
     {
         UserData* pData = GetUserData(nIndex);
         if (pData != NULL)
@@ -735,7 +735,7 @@ void MasterPagesSelector::ClearPageSet (void)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    for (USHORT nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
+    for (sal_uInt16 nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
     {
         UserData* pData = GetUserData(nIndex);
         if (pData != NULL)
@@ -747,11 +747,11 @@ void MasterPagesSelector::ClearPageSet (void)
 
 
 
-void MasterPagesSelector::SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode )
+void MasterPagesSelector::SetHelpId( const rtl::OString& aId )
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    mpPageSet->SetSmartHelpId( aId, aMode );
+    mpPageSet->SetHelpId( aId );
 }
 
 
@@ -807,7 +807,7 @@ void MasterPagesSelector::UpdateItemList (::std::auto_ptr<ItemList> pNewItemList
     ItemList::const_iterator iCurrentItem (maCurrentItemList.begin());
     ItemList::const_iterator iNewEnd (pNewItemList->end());
     ItemList::const_iterator iCurrentEnd (maCurrentItemList.end());
-    USHORT nIndex (1);
+    sal_uInt16 nIndex (1);
 
     // Update existing items.
     for ( ; iNewItem!=iNewEnd && iCurrentItem!=iCurrentEnd; ++iNewItem, ++iCurrentItem,++nIndex)

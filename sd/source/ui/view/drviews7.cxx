@@ -36,6 +36,7 @@
 #include <svx/svdouno.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
 #include <svx/clipfmtitem.hxx>
@@ -225,7 +226,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     ViewShell::GetMenuState(rSet);
-    BOOL bDisableVerticalText = !SvtLanguageOptions().IsVerticalTextEnabled();
+    sal_Bool bDisableVerticalText = !SvtLanguageOptions().IsVerticalTextEnabled();
 
     if ( bDisableVerticalText )
     {
@@ -235,10 +236,10 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_DRAW_TEXT_VERTICAL );
     }
 
-    bool bConvertToPathPossible = mpDrawView->IsConvertToPathObjPossible(FALSE);
+    bool bConvertToPathPossible = mpDrawView->IsConvertToPathObjPossible(sal_False);
 
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-    const ULONG nMarkCount = rMarkList.GetMarkCount();
+    const sal_uLong nMarkCount = rMarkList.GetMarkCount();
 
     //format paintbrush
     FuFormatPaintBrush::GetMenuState( *this, rSet );
@@ -247,16 +248,16 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     SetChildWindowState( rSet );
 
     // Images der Toolboxen mappen (nur Zoom)
-    UpdateToolboxImages( rSet, FALSE );
+    UpdateToolboxImages( rSet, sal_False );
 
     if(HasCurrentFunction())
     {
-        USHORT nSId = GetCurrentFunction()->GetSlotID();
+        sal_uInt16 nSId = GetCurrentFunction()->GetSlotID();
 
-        rSet.Put( SfxBoolItem( nSId, TRUE ) );
+        rSet.Put( SfxBoolItem( nSId, sal_True ) );
 
         // Bewirkt ein uncheck eines simulierten Slots
-        USHORT nId = GetIdBySubId( nSId );
+        sal_uInt16 nId = GetIdBySubId( nSId );
 
         // Images der Toolboxen mappen
         UpdateToolboxImages( rSet );
@@ -305,7 +306,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
         if(bDisable)
         {
-            rSet.DisableItem(SID_EXPAND_PAGE);
+            rSet.DisableItem(SID_ASSIGN_LAYOUT);
         }
     }
 
@@ -320,9 +321,26 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             {
                 SdrObject* pObj = pPage->GetPresObj(PRESOBJ_OUTLINE);
 
-                if(pObj && !pObj->IsEmptyPresObj())
+                if (pObj!=NULL )
                 {
-                    bDisable = false;
+                    if( !pObj->IsEmptyPresObj() )
+                    {
+                        bDisable = false;
+                    }
+                    else
+                    {
+                        // check if the object is in edit, than its temporarely not empty
+                        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+                        if( pTextObj )
+                        {
+                            OutlinerParaObject* pParaObj = pTextObj->GetEditOutlinerParaObject();
+                            if( pParaObj )
+                            {
+                                delete pParaObj;
+                                bDisable = false;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -381,15 +399,15 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REHEARSE_TIMINGS ) )
     {
-        BOOL bDisable = TRUE;
-        USHORT nCount = GetDoc()->GetSdPageCount( PK_STANDARD );
+        sal_Bool bDisable = sal_True;
+        sal_uInt16 nCount = GetDoc()->GetSdPageCount( PK_STANDARD );
 
-        for( USHORT i = 0; i < nCount && bDisable; i++ )
+        for( sal_uInt16 i = 0; i < nCount && bDisable; i++ )
         {
             SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
 
             if( !pPage->IsExcluded() )
-                bDisable = FALSE;
+                bDisable = sal_False;
         }
 
         if( bDisable || GetDocSh()->IsPreview())
@@ -435,12 +453,12 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         else
         {
             // Horizontale Ausrichtung
-            USHORT nHorz = mpDrawView->GetMarkedGluePointsAlign( FALSE );
+            sal_uInt16 nHorz = mpDrawView->GetMarkedGluePointsAlign( sal_False );
             rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_CENTER, nHorz == SDRHORZALIGN_CENTER ) );
             rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_LEFT,   nHorz == SDRHORZALIGN_LEFT ) );
             rSet.Put( SfxBoolItem( SID_GLUE_HORZALIGN_RIGHT,  nHorz == SDRHORZALIGN_RIGHT ) );
             // Vertikale Ausrichtung
-            USHORT nVert = mpDrawView->GetMarkedGluePointsAlign( TRUE );
+            sal_uInt16 nVert = mpDrawView->GetMarkedGluePointsAlign( sal_True );
             rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_CENTER, nVert == SDRVERTALIGN_CENTER ) );
             rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_TOP,    nVert == SDRVERTALIGN_TOP ) );
             rSet.Put( SfxBoolItem( SID_GLUE_VERTALIGN_BOTTOM, nVert == SDRVERTALIGN_BOTTOM ) );
@@ -484,16 +502,16 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     if (!mpDrawView->IsFrameDragSingles())
-        rSet.Put(SfxBoolItem(SID_BEZIER_EDIT, TRUE));
+        rSet.Put(SfxBoolItem(SID_BEZIER_EDIT, sal_True));
     else
-        rSet.Put(SfxBoolItem(SID_BEZIER_EDIT, FALSE));
+        rSet.Put(SfxBoolItem(SID_BEZIER_EDIT, sal_False));
 
     if(dynamic_cast<FuEditGluePoints*>( GetCurrentFunction().get()))
-        rSet.Put(SfxBoolItem(SID_GLUE_EDITMODE, TRUE));
+        rSet.Put(SfxBoolItem(SID_GLUE_EDITMODE, sal_True));
     else
-        rSet.Put(SfxBoolItem(SID_GLUE_EDITMODE, FALSE));
+        rSet.Put(SfxBoolItem(SID_GLUE_EDITMODE, sal_False));
 
-    if( !mpDrawView->IsMirrorAllowed( TRUE, TRUE ) )
+    if( !mpDrawView->IsMirrorAllowed( sal_True, sal_True ) )
     {
         rSet.DisableItem( SID_HORIZONTAL );
         rSet.DisableItem( SID_VERTICAL );
@@ -543,12 +561,12 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if ( !mpDrawView->IsGroupEntered() )
     {
         rSet.DisableItem( SID_LEAVE_GROUP );
-        rSet.Put( SfxBoolItem( SID_LEAVE_ALL_GROUPS, FALSE ) );
+        rSet.Put( SfxBoolItem( SID_LEAVE_ALL_GROUPS, sal_False ) );
         rSet.ClearItem( SID_LEAVE_ALL_GROUPS );
         rSet.DisableItem( SID_LEAVE_ALL_GROUPS );
     }
     else
-        rSet.Put( SfxBoolItem( SID_LEAVE_ALL_GROUPS, TRUE ) );
+        rSet.Put( SfxBoolItem( SID_LEAVE_ALL_GROUPS, sal_True ) );
 
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_THESAURUS ) )
     {
@@ -603,14 +621,14 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                 // create listener
                 mpClipEvtLstnr = new TransferableClipboardListener( LINK( this, DrawViewShell, ClipboardChanged ) );
                 mpClipEvtLstnr->acquire();
-                mpClipEvtLstnr->AddRemoveListener( GetActiveWindow(), TRUE );
+                mpClipEvtLstnr->AddRemoveListener( GetActiveWindow(), sal_True );
 
                 // get initial state
                 TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
                 mbPastePossible = ( aDataHelper.GetFormatCount() != 0 );
             }
             else
-                mbPastePossible = FALSE;
+                mbPastePossible = sal_False;
         }
 
         if( !mbPastePossible )
@@ -642,10 +660,10 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         return;
     }
 
-    if( !( mpDrawView->IsConvertToPolyObjPossible(FALSE) || mpDrawView->IsVectorizeAllowed() ) )
+    if( !( mpDrawView->IsConvertToPolyObjPossible(sal_False) || mpDrawView->IsVectorizeAllowed() ) )
         rSet.DisableItem(SID_CHANGEPOLYGON);
 
-    if( !( mpDrawView->IsConvertToPolyObjPossible(FALSE) || mpDrawView->IsConvertToContourPossible() ) )
+    if( !( mpDrawView->IsConvertToPolyObjPossible(sal_False) || mpDrawView->IsConvertToContourPossible() ) )
         rSet.DisableItem(SID_CONVERT_TO_CONTOUR);
 
     if ( !mpDrawView->IsConvertTo3DObjPossible() )
@@ -731,19 +749,19 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         /**********************************************************************
         * Seiten-Modus
         **********************************************************************/
-        rSet.Put(SfxBoolItem(SID_PAGEMODE, TRUE));
-        rSet.Put(SfxBoolItem(SID_MASTERPAGE, FALSE));
-        rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, FALSE));
-        rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, FALSE));
-        rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, FALSE));
+        rSet.Put(SfxBoolItem(SID_PAGEMODE, sal_True));
+        rSet.Put(SfxBoolItem(SID_MASTERPAGE, sal_False));
+        rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, sal_False));
+        rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, sal_False));
+        rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, sal_False));
 
         if (mePageKind == PK_STANDARD &&
             rSet.GetItemState(SID_TITLE_MASTERPAGE) == SFX_ITEM_AVAILABLE)
         {
             // Gibt es eine Seite mit dem AutoLayout "Titel"?
-            BOOL bDisable = TRUE;
-            USHORT i = 0;
-            USHORT nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
+            sal_Bool bDisable = sal_True;
+            sal_uInt16 i = 0;
+            sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
 
             while (i < nCount && bDisable)
             {
@@ -751,7 +769,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
                 if (pPage->GetAutoLayout() == AUTOLAYOUT_TITLE)
                 {
-                    bDisable = FALSE;
+                    bDisable = sal_False;
                 }
 
                 i++;
@@ -763,7 +781,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             }
             else
             {
-                rSet.Put(SfxBoolItem(SID_TITLE_MASTERPAGE, FALSE));
+                rSet.Put(SfxBoolItem(SID_TITLE_MASTERPAGE, sal_False));
             }
         }
         else
@@ -778,28 +796,28 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
     else
     {
-        rSet.Put(SfxBoolItem(SID_PAGEMODE, FALSE));
-        rSet.Put(SfxBoolItem(SID_MASTERPAGE, TRUE));
+        rSet.Put(SfxBoolItem(SID_PAGEMODE, sal_False));
+        rSet.Put(SfxBoolItem(SID_MASTERPAGE, sal_True));
 
         /**********************************************************************
         * Hintergrundseiten-Modus
         **********************************************************************/
         if (mePageKind == PK_STANDARD)
         {
-            rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, TRUE));
-            rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, FALSE));
-            rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, FALSE));
+            rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, sal_True));
+            rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, sal_False));
+            rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, sal_False));
 
             if (rSet.GetItemState(SID_TITLE_MASTERPAGE) == SFX_ITEM_AVAILABLE)
             {
-                BOOL bCheck = FALSE;
-                BOOL bDisable = TRUE;
+                sal_Bool bCheck = sal_False;
+                sal_Bool bDisable = sal_True;
                 if( pPageView )
                 {
                     SdPage* pMPage = dynamic_cast< SdPage* >( pPageView->GetPage() );
 
-                    USHORT i = 0;
-                    USHORT nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
+                    sal_uInt16 i = 0;
+                    sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
 
                     // Referenziert eine Seite mit dem AutoLayout "Titel" die
                     // aktuelle MasterPage?
@@ -811,7 +829,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         if (pPage->GetAutoLayout() == AUTOLAYOUT_TITLE)
                         {
                             // Eine Seite hat das AutoLayout "Titel"
-                            bDisable = FALSE;
+                            bDisable = sal_False;
 
                             SdPage& rRefMPage = (SdPage&)(pPage->TRG_GetMasterPage());
 
@@ -819,7 +837,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                             {
                                 // Eine Seite mit dem AutoLayout "Titel"
                                 // referenziert die aktuelle MasterPage
-                                bCheck = TRUE;
+                                bCheck = sal_True;
                             }
                         }
 
@@ -829,7 +847,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
                 if (bCheck)
                 {
-                    rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, FALSE));
+                    rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, sal_False));
                 }
 
                 rSet.Put(SfxBoolItem(SID_TITLE_MASTERPAGE, bCheck));
@@ -843,17 +861,17 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
         else if (mePageKind == PK_NOTES)
         {
-            rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, FALSE));
+            rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, sal_False));
             rSet.DisableItem(SID_TITLE_MASTERPAGE);
-            rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, TRUE));
-            rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, FALSE));
+            rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, sal_True));
+            rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, sal_False));
         }
         else if (mePageKind == PK_HANDOUT)
         {
-            rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, FALSE));
+            rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, sal_False));
             rSet.DisableItem(SID_TITLE_MASTERPAGE);
-            rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, FALSE));
-            rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, TRUE));
+            rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, sal_False));
+            rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, sal_True));
         }
     }
 
@@ -881,10 +899,10 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     // darf der aktuelle Layer geloescht werden?
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DELETE_LAYER ) )
     {
-        USHORT        nCurrentLayer = GetLayerTabControl()->GetCurPageId();
+        sal_uInt16        nCurrentLayer = GetLayerTabControl()->GetCurPageId();
         const String& rName         = GetLayerTabControl()->GetPageText(nCurrentLayer);
 
-        BOOL bDisableIt = !IsLayerModeActive();
+        sal_Bool bDisableIt = !IsLayerModeActive();
         bDisableIt |= (rName == String(SdResId(STR_LAYER_LAYOUT)));
         bDisableIt |= (rName == String(SdResId(STR_LAYER_BCKGRND)));
         bDisableIt |= (rName == String(SdResId(STR_LAYER_BCKGRNDOBJ)));
@@ -904,25 +922,25 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
 
-        // Sonderbehandlung für SID_OUTLINE_BULLET wenn Objekte
+        // Sonderbehandlung fï¿½r SID_OUTLINE_BULLET wenn Objekte
         // mit unterschiedlichen arten von NumBullet Items markiert
         // sind
-        BOOL bHasOutliner = FALSE;
-        BOOL bHasOther    = FALSE;
-        for(ULONG nNum = 0; nNum < nMarkCount; nNum++)
+        sal_Bool bHasOutliner = sal_False;
+        sal_Bool bHasOther    = sal_False;
+        for(sal_uLong nNum = 0; nNum < nMarkCount; nNum++)
         {
             SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
             if( pObj->GetObjInventor() == SdrInventor )
             {
                 if( pObj->GetObjIdentifier() == OBJ_OUTLINETEXT )
                 {
-                    bHasOutliner = TRUE;
+                    bHasOutliner = sal_True;
                     if(bHasOther)
                         break;
                 }
                 else
                 {
-                    bHasOther = TRUE;
+                    bHasOther = sal_True;
                     if(bHasOutliner)
                         break;
                 }
@@ -951,7 +969,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_PLUGIN );
         rSet.DisableItem( SID_INSERT_SOUND );
         rSet.DisableItem( SID_INSERT_VIDEO );
-        rSet.DisableItem( SID_INSERT_APPLET );
         rSet.DisableItem( SID_INSERT_FLOATINGFRAME );
         rSet.DisableItem( SID_INSERT_MATH );
         rSet.DisableItem( SID_INSERT_DIAGRAM );
@@ -961,7 +978,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_SIZE_ALL );
         rSet.DisableItem( SID_SIZE_PAGE_WIDTH );
         rSet.DisableItem( SID_SIZE_PAGE );
-//      rSet.DisableItem( SID_INSERTPAGE );
         rSet.DisableItem( SID_DUPLICATE_PAGE );
         rSet.DisableItem( SID_ZOOM_TOOLBOX );
     }
@@ -992,7 +1008,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     // EditText aktiv
     if (GetViewShellBase().GetViewShellManager()->GetShell(RID_DRAW_TEXT_TOOLBOX) != NULL)
     {
-        USHORT nCurrentSId = SID_ATTR_CHAR;
+        sal_uInt16 nCurrentSId = SID_ATTR_CHAR;
 
         if(HasCurrentFunction())
         {
@@ -1003,7 +1019,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             nCurrentSId != SID_ATTR_CHAR_VERTICAL )
             nCurrentSId = SID_ATTR_CHAR;
 
-        rSet.Put( SfxBoolItem( nCurrentSId, TRUE ) );
+        rSet.Put( SfxBoolItem( nCurrentSId, sal_True ) );
 
         // Kurzform von UpdateToolboxImages()
         rSet.Put( TbxImageItem( SID_DRAWTBX_TEXT, nCurrentSId ) );
@@ -1017,11 +1033,11 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         if (GetDoc()->GetOnlineSpell())
         {
-            rSet.Put(SfxBoolItem(SID_AUTOSPELL_CHECK, TRUE));
+            rSet.Put(SfxBoolItem(SID_AUTOSPELL_CHECK, sal_True));
         }
         else
         {
-            rSet.Put(SfxBoolItem(SID_AUTOSPELL_CHECK, FALSE));
+            rSet.Put(SfxBoolItem(SID_AUTOSPELL_CHECK, sal_False));
         }
     }
 
@@ -1052,7 +1068,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_PLUGIN );
         rSet.DisableItem( SID_INSERT_SOUND );
         rSet.DisableItem( SID_INSERT_VIDEO );
-        rSet.DisableItem( SID_INSERT_APPLET );
         rSet.DisableItem( SID_INSERT_FLOATINGFRAME );
 
         rSet.DisableItem( SID_INSERT_MATH );
@@ -1355,20 +1370,20 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         // get marklist
         SdrMarkList aMarkList = mpDrawView->GetMarkedObjectList();
 
-        BOOL bFoundBitmap         = FALSE;
-        BOOL bFoundMetafile       = FALSE;
-        BOOL bFoundObjNoLine      = FALSE;
-        BOOL bFoundObjNoArea      = FALSE;
-        BOOL bFoundNoGraphicObj = FALSE;
-        BOOL bFoundAny            = FALSE;
+        sal_Bool bFoundBitmap         = sal_False;
+        sal_Bool bFoundMetafile       = sal_False;
+        sal_Bool bFoundObjNoLine      = sal_False;
+        sal_Bool bFoundObjNoArea      = sal_False;
+        sal_Bool bFoundNoGraphicObj = sal_False;
+        sal_Bool bFoundAny            = sal_False;
         bool bFoundTable = false;
 
 //      const int nMarkCount = (int) aMarkList.GetMarkCount();
-        for (ULONG i=0; i < nMarkCount && !bFoundAny; i++)
+        for (sal_uLong i=0; i < nMarkCount && !bFoundAny; i++)
         {
             SdrObject* pObj=  aMarkList.GetMark(i)->GetMarkedSdrObj();
-            UINT16 nId = pObj->GetObjIdentifier();
-            UINT32 nInv = pObj->GetObjInventor();
+            sal_uInt16 nId = pObj->GetObjIdentifier();
+            sal_uInt32 nInv = pObj->GetObjInventor();
 
             if(nInv == SdrInventor)
             {
@@ -1381,42 +1396,42 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                     case OBJ_FREELINE :
                     case OBJ_EDGE:
                     case OBJ_CARC :
-                        bFoundObjNoArea      = TRUE;
-                        bFoundNoGraphicObj = TRUE;
+                        bFoundObjNoArea      = sal_True;
+                        bFoundNoGraphicObj = sal_True;
                         break;
                     case OBJ_OLE2 :
-                        bFoundObjNoLine      = TRUE;
-                        bFoundObjNoArea      = TRUE;
-                        bFoundNoGraphicObj = TRUE;
+                        bFoundObjNoLine      = sal_True;
+                        bFoundObjNoArea      = sal_True;
+                        bFoundNoGraphicObj = sal_True;
                         break;
                     case OBJ_GRAF :
                         bSingleGraphicSelected = nMarkCount == 1;
                         switch ( ((SdrGrafObj*)pObj)->GetGraphicType() )
                         {
                             case GRAPHIC_BITMAP :
-                                bFoundBitmap = TRUE;
+                                bFoundBitmap = sal_True;
                                 break;
                             case GRAPHIC_GDIMETAFILE :
-                                bFoundMetafile = TRUE;
+                                bFoundMetafile = sal_True;
                                 break;
                             default:
                                 break;
                         }
 
-                        // #i25616# bFoundObjNoLine = TRUE;
-                        // #i25616# bFoundObjNoArea = TRUE;
+                        // #i25616# bFoundObjNoLine = sal_True;
+                        // #i25616# bFoundObjNoArea = sal_True;
                         break;
                     case OBJ_TABLE:
                         bFoundTable = true;
                         break;
                     default :
-                        bFoundAny = TRUE;
+                        bFoundAny = sal_True;
                 }
             }
             else if(nInv == E3dInventor)
             {
                 // 3D objects
-                bFoundAny = TRUE;
+                bFoundAny = sal_True;
             }
         }
 
@@ -1502,7 +1517,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     //highlight selected custom shape
     {
-        USHORT nCurrentSId = 0;
+        sal_uInt16 nCurrentSId = 0;
         if(HasCurrentFunction())
             nCurrentSId = GetCurrentFunction()->GetSlotID();
 
@@ -1526,17 +1541,12 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if ( bDisableEditHyperlink )
         rSet.DisableItem( SID_OPEN_HYPERLINK );
 
-#if defined WIN || defined WNT || defined UNX
+#if defined WNT || defined UNX
     if( !mxScannerManager.is() )
     {
         rSet.DisableItem( SID_TWAIN_SELECT );
         rSet.DisableItem( SID_TWAIN_TRANSFER );
     }
-#endif
-
-// Fuer Win16
-#ifndef SOLAR_JAVA
-    rSet.DisableItem( SID_INSERT_APPLET );
 #endif
 
     // Set the state of two entries in the 'Slide' context sub-menu
@@ -1551,8 +1561,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-            BYTE aBackgroundId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
-            BYTE aObjectId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
+            sal_uInt8 aBackgroundId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
+            sal_uInt8 aObjectId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
             rSet.Put(SfxBoolItem(SID_DISPLAY_MASTER_BACKGROUND,
                     aVisibleLayers.IsSet(aBackgroundId)));
             rSet.Put(SfxBoolItem(SID_DISPLAY_MASTER_OBJECTS,
@@ -1566,25 +1576,25 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
 {
     //draview
-    rSet.Put(SfxBoolItem(SID_DIAMODE, FALSE));
-    rSet.Put(SfxBoolItem(SID_OUTLINEMODE, FALSE));
+    rSet.Put(SfxBoolItem(SID_DIAMODE, sal_False));
+    rSet.Put(SfxBoolItem(SID_OUTLINEMODE, sal_False));
     if (mePageKind == PK_NOTES)
     {
-        rSet.Put(SfxBoolItem(SID_DRAWINGMODE, FALSE));
-        rSet.Put(SfxBoolItem(SID_NOTESMODE, TRUE));
-        rSet.Put(SfxBoolItem(SID_HANDOUTMODE, FALSE));
+        rSet.Put(SfxBoolItem(SID_DRAWINGMODE, sal_False));
+        rSet.Put(SfxBoolItem(SID_NOTESMODE, sal_True));
+        rSet.Put(SfxBoolItem(SID_HANDOUTMODE, sal_False));
     }
     else if (mePageKind == PK_HANDOUT)
     {
-        rSet.Put(SfxBoolItem(SID_DRAWINGMODE, FALSE));
-        rSet.Put(SfxBoolItem(SID_NOTESMODE, FALSE));
-        rSet.Put(SfxBoolItem(SID_HANDOUTMODE, TRUE));
+        rSet.Put(SfxBoolItem(SID_DRAWINGMODE, sal_False));
+        rSet.Put(SfxBoolItem(SID_NOTESMODE, sal_False));
+        rSet.Put(SfxBoolItem(SID_HANDOUTMODE, sal_True));
     }
     else
     {
-        rSet.Put(SfxBoolItem(SID_DRAWINGMODE, TRUE));
-        rSet.Put(SfxBoolItem(SID_NOTESMODE, FALSE));
-        rSet.Put(SfxBoolItem(SID_HANDOUTMODE, FALSE));
+        rSet.Put(SfxBoolItem(SID_DRAWINGMODE, sal_True));
+        rSet.Put(SfxBoolItem(SID_NOTESMODE, sal_False));
+        rSet.Put(SfxBoolItem(SID_HANDOUTMODE, sal_False));
     }
 
     // Removed [GetDocSh()->GetCurrentFunction() ||] from the following
@@ -1640,7 +1650,7 @@ void DrawViewShell::GetState (SfxItemSet& rSet)
 {
     // Iterate over all requested items in the set.
     SfxWhichIter aIter( rSet );
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while (nWhich)
     {
         switch (nWhich)

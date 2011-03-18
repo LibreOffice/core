@@ -70,3 +70,11 @@ DEF1EXPORTFILE=../exports.dxp
 # ==========================================================================
 
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/ogltrans.component
+
+$(MISC)/ogltrans.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        ogltrans.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ogltrans.component

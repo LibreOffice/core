@@ -38,7 +38,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 .IF "$(ENABLE_PRESENTER_EXTRA_UI)"=="YES"
-CDEFS+=-DENABLE_PRESENTER_EXTRA_UI
+ENABLE_PRESENTER_EXTRA_UI is not used anymore
 .ENDIF
 
 # --- Common ----------------------------------------------------------

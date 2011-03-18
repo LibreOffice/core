@@ -324,11 +324,6 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_INSERT_APPLET // ole : yes, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_INSERT_PLUGIN // ole : yes, status : ?
     [
         ExecMethod = FuTemporary ;

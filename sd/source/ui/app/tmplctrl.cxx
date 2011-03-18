@@ -53,10 +53,10 @@ class TemplatePopup_Impl : public PopupMenu
 public:
     TemplatePopup_Impl();
 
-    USHORT          GetCurId() const { return nCurId; }
+    sal_uInt16          GetCurId() const { return nCurId; }
 
 private:
-    USHORT          nCurId;
+    sal_uInt16          nCurId;
 
     virtual void    Select();
 };
@@ -78,8 +78,8 @@ void TemplatePopup_Impl::Select()
 
 // class SdTemplateControl ------------------------------------------
 
-SdTemplateControl::SdTemplateControl( USHORT _nSlotId,
-                                      USHORT _nId,
+SdTemplateControl::SdTemplateControl( sal_uInt16 _nSlotId,
+                                      sal_uInt16 _nId,
                                       StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb )
 {
@@ -94,7 +94,7 @@ SdTemplateControl::~SdTemplateControl()
 // -----------------------------------------------------------------------
 
 void SdTemplateControl::StateChanged(
-    USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( eState != SFX_ITEM_AVAILABLE || pState->ISA( SfxVoidItem ) )
         GetStatusBar().SetItemText( GetId(), String() );
@@ -131,10 +131,10 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
         CaptureMouse();
         TemplatePopup_Impl aPop;
         {
-            const USHORT nMasterCount = pDoc->GetMasterSdPageCount(PK_STANDARD);
+            const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PK_STANDARD);
 
-            USHORT nCount = 0;
-            for( USHORT nPage = 0; nPage < nMasterCount; ++nPage )
+            sal_uInt16 nCount = 0;
+            for( sal_uInt16 nPage = 0; nPage < nMasterCount; ++nPage )
             {
                 SdPage* pMaster = pDoc->GetMasterSdPage(nPage, PK_STANDARD);
                 if( pMaster )
@@ -142,7 +142,7 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
             }
             aPop.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
 
-            USHORT nCurrId = aPop.GetCurId()-1;
+            sal_uInt16 nCurrId = aPop.GetCurId()-1;
             if( nCurrId < nMasterCount )
             {
                 SdPage* pMaster = pDoc->GetMasterSdPage(nCurrId, PK_STANDARD);

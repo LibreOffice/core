@@ -94,7 +94,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
                 {
                     std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateCaptionDialog( NULL, mpView ) );
 
-                    const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
+                    const sal_uInt16* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                     SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
                     aCombSet.Put( aNewAttr );
                     aCombSet.Put( aSet );

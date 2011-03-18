@@ -93,9 +93,6 @@ public:
     virtual SdPage* GetActualPage (void);
     virtual SdPage* getCurrentPage (void) const;
 
-    void Execute (SfxRequest& rRequest);
-    void GetState (SfxItemSet& rItemSet);
-
     virtual void ArrangeGUIElements (void);
 
     TaskPaneShellManager& GetSubShellManager (void) const;
@@ -146,7 +143,7 @@ private:
     /** The id of the menu in the menu bar/tool box of the parent docking
         window.
     */
-    USHORT mnMenuId;
+    sal_uInt16 mnMenuId;
 
     /** Create a popup menu.  it contains two sections, one for
         docking or un-docking the tool panel, one for toggling the

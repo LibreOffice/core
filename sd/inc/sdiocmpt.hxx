@@ -38,17 +38,17 @@ class old_SdrDownCompat
 {
 protected:
     SvStream&                   rStream;
-    UINT32                      nSubRecSiz;
-    UINT32                      nSubRecPos;
-    UINT16                      nMode;
-    BOOL                        bOpen;
+    sal_uInt32                      nSubRecSiz;
+    sal_uInt32                      nSubRecPos;
+    sal_uInt16                      nMode;
+    sal_Bool                        bOpen;
 
 protected:
     void Read();
     void Write();
 
 public:
-    old_SdrDownCompat(SvStream& rNewStream, UINT16 nNewMode);
+    old_SdrDownCompat(SvStream& rNewStream, sal_uInt16 nNewMode);
     ~old_SdrDownCompat();
     void  OpenSubRecord();
     void  CloseSubRecord();
@@ -56,20 +56,20 @@ public:
 //////////////////////////////////////////////////////////////////////////////
 #include "sddllapi.h"
 
-#define SDIOCOMPAT_VERSIONDONTKNOW (UINT16)0xffff
+#define SDIOCOMPAT_VERSIONDONTKNOW (sal_uInt16)0xffff
 
 class SD_DLLPUBLIC SdIOCompat : public old_SdrDownCompat
 {
 private:
-    UINT16 nVersion;
+    sal_uInt16 nVersion;
 
 public:
                 // nNewMode: STREAM_READ oder STREAM_WRITE
                 // nVer:     nur beim Schreiben angeben
-            SdIOCompat(SvStream& rNewStream, USHORT nNewMode,
-                       UINT16 nVer = SDIOCOMPAT_VERSIONDONTKNOW);
+            SdIOCompat(SvStream& rNewStream, sal_uInt16 nNewMode,
+                       sal_uInt16 nVer = SDIOCOMPAT_VERSIONDONTKNOW);
             ~SdIOCompat();
-    UINT16  GetVersion() const { return nVersion; }
+    sal_uInt16  GetVersion() const { return nVersion; }
 };
 
 #endif      // _SD_SDIOCMPT_HXX

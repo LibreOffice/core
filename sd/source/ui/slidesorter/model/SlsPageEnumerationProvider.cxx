@@ -57,7 +57,7 @@ class SelectedPagesPredicate
 public:
     bool operator() (const SharedPageDescriptor& rpDescriptor)
     {
-        return rpDescriptor->IsSelected();
+        return rpDescriptor->HasState(PageDescriptor::ST_Selected);
     }
 };
 
@@ -69,7 +69,7 @@ class VisiblePagesPredicate
 public:
     bool operator() (const SharedPageDescriptor& rpDescriptor)
     {
-        return rpDescriptor->IsVisible();
+        return rpDescriptor->HasState(PageDescriptor::ST_Visible);
     }
 };
 

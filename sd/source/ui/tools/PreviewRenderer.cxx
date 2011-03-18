@@ -44,12 +44,37 @@
 #include <tools/link.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 
 namespace sd {
 
 const int PreviewRenderer::snSubstitutionTextSize = 11;
 const int PreviewRenderer::snFrameWidth = 1;
+
+namespace {
+    /** This incarnation of the ViewObjectContactRedirector filters away all
+        PageObj objects, unconditionally.
+    */
+    class ViewRedirector : public ::sdr::contact::ViewObjectContactRedirector
+    {
+    public:
+        ViewRedirector (void);
+        virtual ~ViewRedirector (void);
+        virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
+            const sdr::contact::ViewObjectContact& rOriginal,
+                const sdr::contact::DisplayInfo& rDisplayInfo);
+    };
+}
+
+
+
+
+//===== PreviewRenderer =======================================================
 
 PreviewRenderer::PreviewRenderer (
     OutputDevice* pTemplate,
@@ -67,7 +92,10 @@ PreviewRenderer::PreviewRenderer (
         mpPreviewDevice->SetBackground(pTemplate->GetBackground());
     }
     else
-        mpPreviewDevice->SetBackground(Wallpaper(COL_WHITE));
+    {
+        mpPreviewDevice->SetBackground(Wallpaper(
+            Application::GetSettings().GetStyleSettings().GetWindowColor()));
+    }
 }
 
 
@@ -86,7 +114,8 @@ Image PreviewRenderer::RenderPage (
     const SdPage* pPage,
     const sal_Int32 nWidth,
     const String& rSubstitutionText,
-    const bool bObeyHighContrastMode)
+    const bool bObeyHighContrastMode,
+    const bool bDisplayPresentationObjects)
 {
     if (pPage != NULL)
     {
@@ -96,7 +125,12 @@ Image PreviewRenderer::RenderPage (
         const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
         const sal_Int32 nHeight (sal::static_int_cast<sal_Int32>(
             (nWidth - 2*nFrameWidth) / nAspectRatio + 2*nFrameWidth + 0.5));
-        return RenderPage (pPage, Size(nWidth,nHeight), rSubstitutionText, bObeyHighContrastMode);
+        return RenderPage (
+            pPage,
+            Size(nWidth,nHeight),
+            rSubstitutionText,
+            bObeyHighContrastMode,
+            bDisplayPresentationObjects);
     }
     else
         return Image();
@@ -109,7 +143,8 @@ Image PreviewRenderer::RenderPage (
     const SdPage* pPage,
     Size aPixelSize,
     const String& rSubstitutionText,
-    const bool bObeyHighContrastMode)
+    const bool bObeyHighContrastMode,
+    const bool bDisplayPresentationObjects)
 {
     Image aPreview;
 
@@ -117,10 +152,10 @@ Image PreviewRenderer::RenderPage (
     {
         try
         {
-            if (Initialize (pPage, aPixelSize, bObeyHighContrastMode))
+            if (Initialize(pPage, aPixelSize, bObeyHighContrastMode))
             {
-                PaintPage (pPage);
-                PaintSubstitutionText (rSubstitutionText);
+                PaintPage(pPage, bDisplayPresentationObjects);
+                PaintSubstitutionText(rSubstitutionText);
                 PaintFrame();
 
                 Size aSize (mpPreviewDevice->GetOutputSizePixel());
@@ -155,17 +190,17 @@ Image PreviewRenderer::RenderSubstitution (
         mpPreviewDevice->SetOutputSizePixel(rPreviewPixelSize);
 
         // Adjust contrast mode.
-        bool bUseContrast = Application::GetSettings().GetStyleSettings().
-            GetHighContrastMode();
+        const bool bUseContrast (
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode());
         mpPreviewDevice->SetDrawMode (bUseContrast
             ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
             : ViewShell::OUTPUT_DRAWMODE_COLOR);
 
-        // Set a map mode makes a typical substitution text completely
+        // Set a map mode that makes a typical substitution text completely
         // visible.
         MapMode aMapMode (mpPreviewDevice->GetMapMode());
         aMapMode.SetMapUnit(MAP_100TH_MM);
-        double nFinalScale (25.0 * rPreviewPixelSize.Width() / 28000.0);
+        const double nFinalScale (25.0 * rPreviewPixelSize.Width() / 28000.0);
         aMapMode.SetScaleX(nFinalScale);
         aMapMode.SetScaleY(nFinalScale);
         const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
@@ -174,21 +209,21 @@ Image PreviewRenderer::RenderSubstitution (
         mpPreviewDevice->SetMapMode (aMapMode);
 
         // Clear the background.
-        Rectangle aPaintRectangle (
+        const Rectangle aPaintRectangle (
             Point(0,0),
             mpPreviewDevice->GetOutputSizePixel());
-        mpPreviewDevice->EnableMapMode(FALSE);
+        mpPreviewDevice->EnableMapMode(sal_False);
         mpPreviewDevice->SetLineColor();
         svtools::ColorConfig aColorConfig;
         mpPreviewDevice->SetFillColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
         mpPreviewDevice->DrawRect (aPaintRectangle);
-        mpPreviewDevice->EnableMapMode(TRUE);
+        mpPreviewDevice->EnableMapMode(sal_True);
 
         // Paint substitution text and a frame around it.
         PaintSubstitutionText (rSubstitutionText);
         PaintFrame();
 
-        Size aSize (mpPreviewDevice->GetOutputSizePixel());
+        const Size aSize (mpPreviewDevice->GetOutputSizePixel());
         aPreview = mpPreviewDevice->GetBitmap (
             mpPreviewDevice->PixelToLogic(Point(0,0)),
             mpPreviewDevice->PixelToLogic(aSize));
@@ -262,6 +297,8 @@ bool PreviewRenderer::Initialize (
         rOutliner.SetDefaultLanguage(pDocument->GetLanguage(EE_CHAR_LANGUAGE));
         mpView->SetApplicationBackgroundColor(
             Color(aColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor));
+        mpPreviewDevice->SetBackground(Wallpaper(aPageBackgroundColor));
+        mpPreviewDevice->Erase();
 
         bSuccess = true;
     }
@@ -281,7 +318,9 @@ void PreviewRenderer::Cleanup (void)
 
 
 
-void PreviewRenderer::PaintPage (const SdPage* pPage)
+void PreviewRenderer::PaintPage (
+    const SdPage* pPage,
+    const bool bDisplayPresentationObjects)
 {
     // Paint the page.
     Rectangle aPaintRectangle (Point(0,0), pPage->GetSize());
@@ -289,18 +328,22 @@ void PreviewRenderer::PaintPage (const SdPage* pPage)
 
     // Turn off online spelling and redlining.
     SdrOutliner* pOutliner = NULL;
-    ULONG nOriginalControlWord = 0;
+    sal_uLong nSavedControlWord (0);
     if (mpDocShellOfView!=NULL && mpDocShellOfView->GetDoc()!=NULL)
     {
         pOutliner = &mpDocShellOfView->GetDoc()->GetDrawOutliner();
-        nOriginalControlWord = pOutliner->GetControlWord();
-        pOutliner->SetControlWord(
-            (nOriginalControlWord & ~EE_CNTRL_ONLINESPELLING));
+        nSavedControlWord = pOutliner->GetControlWord();
+        pOutliner->SetControlWord((nSavedControlWord & ~EE_CNTRL_ONLINESPELLING));
     }
+
+    // Use a special redirector to prevent PresObj shapes from being painted.
+    boost::scoped_ptr<ViewRedirector> pRedirector;
+    if ( ! bDisplayPresentationObjects)
+        pRedirector.reset(new ViewRedirector());
 
     try
     {
-        mpView->CompleteRedraw (mpPreviewDevice.get(), aRegion);
+        mpView->CompleteRedraw(mpPreviewDevice.get(), aRegion, pRedirector.get());
     }
     catch (const ::com::sun::star::uno::Exception&)
     {
@@ -309,7 +352,7 @@ void PreviewRenderer::PaintPage (const SdPage* pPage)
 
     // Restore the previous online spelling and redlining states.
     if (pOutliner != NULL)
-        pOutliner->SetControlWord(nOriginalControlWord);
+        pOutliner->SetControlWord(nSavedControlWord);
 }
 
 
@@ -331,7 +374,7 @@ void PreviewRenderer::PaintSubstitutionText (const String& rSubstitutionText)
             Point(0,0),
             mpPreviewDevice->PixelToLogic(
                 mpPreviewDevice->GetOutputSizePixel()));
-        USHORT nTextStyle =
+        sal_uInt16 nTextStyle =
             TEXT_DRAW_CENTER
             | TEXT_DRAW_VCENTER
             | TEXT_DRAW_MULTILINE
@@ -354,11 +397,11 @@ void PreviewRenderer::PaintFrame (void)
         Rectangle aPaintRectangle (
             Point(0,0),
             mpPreviewDevice->GetOutputSizePixel());
-        mpPreviewDevice->EnableMapMode(FALSE);
+        mpPreviewDevice->EnableMapMode(sal_False);
         mpPreviewDevice->SetLineColor(maFrameColor);
         mpPreviewDevice->SetFillColor();
         mpPreviewDevice->DrawRect(aPaintRectangle);
-        mpPreviewDevice->EnableMapMode(TRUE);
+        mpPreviewDevice->EnableMapMode(sal_True);
      }
 }
 
@@ -372,23 +415,26 @@ void PreviewRenderer::SetupOutputSize (
     // First set the map mode to some arbitrary scale that is numerically
     // stable.
     MapMode aMapMode (mpPreviewDevice->GetMapMode());
-    aMapMode.SetMapUnit(MAP_100TH_MM);
-    double nInitialScale = 1;
-    aMapMode.SetScaleX (Fraction(nInitialScale));
-    aMapMode.SetScaleY (Fraction(nInitialScale));
-    aMapMode.SetOrigin (Point(0,0));
+    aMapMode.SetMapUnit(MAP_PIXEL);
 
     // Adapt it to the desired width.
     const Size aPageModelSize (rPage.GetSize());
-    const Size aOutputSize = mpPreviewDevice->LogicToPixel(rPage.GetSize(), aMapMode);
-    const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
-    const double nFinalScale (nInitialScale * (rFramePixelSize.Width()-2*nFrameWidth)
-        / aOutputSize.Width());
-    aMapMode.SetScaleX (nFinalScale);
-    aMapMode.SetScaleY (nFinalScale);
-    aMapMode.SetOrigin (mpPreviewDevice->PixelToLogic(
-        Point(nFrameWidth,nFrameWidth),aMapMode));
-
+    if (aPageModelSize.Width()>0 || aPageModelSize.Height()>0)
+    {
+        const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
+        aMapMode.SetScaleX(
+            Fraction(rFramePixelSize.Width()-2*nFrameWidth-1, aPageModelSize.Width()));
+        aMapMode.SetScaleY(
+            Fraction(rFramePixelSize.Height()-2*nFrameWidth-1, aPageModelSize.Height()));
+        aMapMode.SetOrigin(mpPreviewDevice->PixelToLogic(Point(nFrameWidth,nFrameWidth),aMapMode));
+    }
+    else
+    {
+        // We should never get here.
+        OSL_ASSERT(false);
+        aMapMode.SetScaleX(1.0);
+        aMapMode.SetScaleY(1.0);
+    }
     mpPreviewDevice->SetMapMode (aMapMode);
     mpPreviewDevice->SetOutputSizePixel(rFramePixelSize);
 }
@@ -415,10 +461,17 @@ void PreviewRenderer::ProvideView (DrawDocShell* pDocShell)
     {
         mpView.reset (new DrawView (pDocShell, mpPreviewDevice.get(), NULL));
     }
-    mpView->SetPreviewRenderer( sal_True );
-    mpView->SetBordVisible(FALSE);
-    mpView->SetPageBorderVisible(FALSE);
-    mpView->SetPageVisible(TRUE);
+    mpView->SetPreviewRenderer(true);
+#if 1
+    mpView->SetPageVisible(false);
+    mpView->SetPageBorderVisible(true);
+    mpView->SetBordVisible(false);
+#else
+    // This works in the slide sorter but prevents the master page
+    // background being painted in the list of current master pages in the
+    // task manager.
+    mpView->SetPagePaintingAllowed(false);
+#endif
 }
 
 
@@ -498,6 +551,58 @@ void PreviewRenderer::Notify(SfxBroadcaster&, const SfxHint& rHint)
     }
 }
 
+
+
+
+//===== ViewRedirector ========================================================
+
+namespace {
+
+ViewRedirector::ViewRedirector (void)
+{
+}
+
+
+
+
+ViewRedirector::~ViewRedirector (void)
+{
+}
+
+
+
+
+drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedPrimitive2DSequence(
+    const sdr::contact::ViewObjectContact& rOriginal,
+    const sdr::contact::DisplayInfo& rDisplayInfo)
+{
+    SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
+
+    if (pObject==NULL || pObject->GetPage() == NULL)
+    {
+        // not a SdrObject visualisation (maybe e.g. page) or no page
+        return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
+            rOriginal,
+            rDisplayInfo);
+    }
+
+    const bool bDoCreateGeometry (pObject->GetPage()->checkVisibility( rOriginal, rDisplayInfo, true));
+
+    if ( ! bDoCreateGeometry
+        && (pObject->GetObjInventor() != SdrInventor || pObject->GetObjIdentifier() != OBJ_PAGE))
+    {
+        return drawinglayer::primitive2d::Primitive2DSequence();
+    }
+
+    if (pObject->IsEmptyPresObj())
+        return drawinglayer::primitive2d::Primitive2DSequence();
+
+    return sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
+        rOriginal,
+        rDisplayInfo);
+}
+
+} // end of anonymous namespace
 
 
 } // end of namespace ::sd

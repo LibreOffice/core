@@ -60,19 +60,19 @@ typedef cppu::ImplInheritanceHelper5< SfxUnoStyleSheet,
 class SdStyleSheet : public SdStyleSheetBase, private ::cppu::BaseMutex
 {
 public:
-    SdStyleSheet( const rtl::OUString& rDisplayName, SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily, USHORT nMask );
+    SdStyleSheet( const rtl::OUString& rDisplayName, SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily, sal_uInt16 nMask );
     SdStyleSheet( const SdStyleSheet& );
 
-    virtual BOOL        SetParent (const String& rParentName);
+    virtual sal_Bool        SetParent (const String& rParentName);
     virtual SfxItemSet& GetItemSet();
-    virtual BOOL        IsUsed() const;
-    virtual BOOL        HasFollowSupport() const;
-    virtual BOOL        HasParentSupport() const;
-    virtual BOOL        HasClearParentSupport() const;
-    virtual BOOL        SetName( const UniString& );
-    virtual void        SetHelpId( const String& r, ULONG nId );
+    virtual sal_Bool        IsUsed() const;
+    virtual sal_Bool        HasFollowSupport() const;
+    virtual sal_Bool        HasParentSupport() const;
+    virtual sal_Bool        HasClearParentSupport() const;
+    virtual sal_Bool        SetName( const UniString& );
+    virtual void        SetHelpId( const String& r, sal_uLong nId );
 
-    void        AdjustToFontHeight(SfxItemSet& rSet, BOOL bOnlyMissingItems = TRUE);
+    void        AdjustToFontHeight(SfxItemSet& rSet, sal_Bool bOnlyMissingItems = sal_True);
 
     SdStyleSheet* GetRealStyleSheet() const;
     SdStyleSheet* GetPseudoStyleSheet() const;
@@ -131,7 +131,7 @@ public:
 protected:
     const SfxItemPropertySimpleEntry* getPropertyMapEntry( const ::rtl::OUString& rPropertyName ) const throw();
 
-    virtual void Load (SvStream& rIn, USHORT nVersion);
+    virtual void Load (SvStream& rIn, sal_uInt16 nVersion);
     virtual void Store(SvStream& rOut);
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);

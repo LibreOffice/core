@@ -30,7 +30,7 @@
 #ifndef _SD_VECTDLG_HXX
 #define _SD_VECTDLG_HXX
 
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>

@@ -51,7 +51,7 @@ using namespace ::com::sun::star::frame;
 
 // z.Z. werden von Joe nur die u.a. Moeglichkeiten unterstuetzt
 #define ESCDIR_COUNT 5
-static UINT16 aEscDirArray[] =
+static sal_uInt16 aEscDirArray[] =
 {
     SDRESC_SMART,
     SDRESC_LEFT,
@@ -108,7 +108,7 @@ GlueEscDirLB::~GlueEscDirLB()
 
 void GlueEscDirLB::Select()
 {
-    UINT16 nPos = GetSelectEntryPos();
+    sal_uInt16 nPos = GetSelectEntryPos();
     SfxUInt16Item aItem( SID_GLUE_ESCDIR, aEscDirArray[ nPos ] );
 
     if ( m_xFrame.is() )
@@ -159,7 +159,7 @@ void GlueEscDirLB::Fill()
 \************************************************************************/
 
 SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir(
-    USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+    sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
         SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
@@ -170,7 +170,7 @@ SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir(
 |*
 \************************************************************************/
 
-void SdTbxCtlGlueEscDir::StateChanged( USHORT nSId,
+void SdTbxCtlGlueEscDir::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
     if( eState == SFX_ITEM_AVAILABLE )
@@ -188,7 +188,7 @@ void SdTbxCtlGlueEscDir::StateChanged( USHORT nSId,
                 }
                 else
                 {
-                    UINT16 nEscDir = ( (const SfxUInt16Item*) pState )->GetValue();
+                    sal_uInt16 nEscDir = ( (const SfxUInt16Item*) pState )->GetValue();
                     pGlueEscDirLB->SelectEntryPos( GetEscDirPos( nEscDir ) );
                 }
             }
@@ -220,9 +220,9 @@ Window* SdTbxCtlGlueEscDir::CreateItemWindow( Window *pParent )
 |*
 \************************************************************************/
 
-UINT16 SdTbxCtlGlueEscDir::GetEscDirPos( UINT16 nEscDir )
+sal_uInt16 SdTbxCtlGlueEscDir::GetEscDirPos( sal_uInt16 nEscDir )
 {
-    for( UINT16 i = 0; i < ESCDIR_COUNT; i++ )
+    for( sal_uInt16 i = 0; i < ESCDIR_COUNT; i++ )
     {
         if( aEscDirArray[ i ] == nEscDir )
             return( i );

@@ -59,7 +59,7 @@ private:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    void ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
+    void ImpInsertPolygons(List& rPolyPolyList3D, sal_Bool bAttributeFade,
         const SdrObject* pObj1, const SdrObject* pObj2);
     ::basegfx::B2DPolyPolygon* ImpCreateMorphedPolygon(
         const ::basegfx::B2DPolyPolygon& rPolyPolyStart,

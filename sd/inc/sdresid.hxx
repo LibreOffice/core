@@ -35,7 +35,7 @@
 class SD_DLLPUBLIC SdResId : public ResId
 {
 public:
-    SdResId(USHORT nId);
+    SdResId(sal_uInt16 nId);
 };
 
 #endif /* _SD_SDRESID_HXX */

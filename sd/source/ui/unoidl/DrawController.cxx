@@ -814,14 +814,16 @@ sal_Bool DrawController::convertFastPropertyValue (
     else if (mxSubController.is())
     {
         rConvertedValue = rValue;
-        rOldValue = mxSubController->getFastPropertyValue(nHandle);
-        bResult = (rOldValue != rConvertedValue);
-        /*        bResult = mpSubController->convertFastPropertyValue(
-            rConvertedValue,
-            rOldValue,
-            nHandle,
-            rValue);
-        */
+        try
+        {
+            rOldValue = mxSubController->getFastPropertyValue(nHandle);
+            bResult = (rOldValue != rConvertedValue);
+        }
+        catch(beans::UnknownPropertyException aException)
+        {
+            // The prperty is unknown and thus an illegal argument to this method.
+            throw com::sun::star::lang::IllegalArgumentException();
+        }
     }
 
     return bResult;

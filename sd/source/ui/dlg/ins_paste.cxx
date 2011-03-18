@@ -50,7 +50,7 @@ SdInsertPasteDlg::SdInsertPasteDlg( Window* pWindow ) :
     aBtnHelp( this, SdResId( BTN_HELP ) )
 {
     FreeResource();
-    aRbAfter.Check( TRUE );
+    aRbAfter.Check( sal_True );
 }
 
 // -----------------------------------------------------------------------------
@@ -61,7 +61,7 @@ SdInsertPasteDlg::~SdInsertPasteDlg()
 
 // -----------------------------------------------------------------------------
 
-BOOL SdInsertPasteDlg::IsInsertBefore() const
+sal_Bool SdInsertPasteDlg::IsInsertBefore() const
 {
     return( aRbBefore.IsChecked() );
 }

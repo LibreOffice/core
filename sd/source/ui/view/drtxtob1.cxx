@@ -95,15 +95,15 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pPoolItem = NULL;
-    USHORT nSlot = rReq.GetSlot();
-    BOOL bOutlineMode = FALSE;
+    sal_uInt16 nSlot = rReq.GetSlot();
+    sal_Bool bOutlineMode = sal_False;
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
     std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
 
     if (mpView->ISA(OutlineView))
     {
-        bOutlineMode = TRUE;
+        bOutlineMode = sal_True;
         pOLV = static_cast<OutlineView*>(mpView)
             ->GetViewByWindow(mpViewShell->GetActiveWindow());
 
@@ -149,14 +149,14 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 ESelection aSel = pOLV->GetSelection();
                 aSel.Adjust();
-                ULONG nStartPara = aSel.nStartPara;
-                ULONG nEndPara = aSel.nEndPara;
+                sal_uLong nStartPara = aSel.nStartPara;
+                sal_uLong nEndPara = aSel.nEndPara;
                 if( !aSel.HasRange() )
                 {
                     nStartPara = 0;
                     nEndPara = pOLV->GetOutliner()->GetParagraphCount() - 1;
                 }
-                for( ULONG nPara = nStartPara; nPara <= nEndPara; nPara++ )
+                for( sal_uLong nPara = nStartPara; nPara <= nEndPara; nPara++ )
                 {
                     SfxStyleSheet* pStyleSheet = NULL;
                     if (pOLV->GetOutliner() != NULL)
@@ -164,8 +164,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     if (pStyleSheet != NULL)
                     {
                         SfxItemSet aAttr( pStyleSheet->GetItemSet() );
-                        SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( (USHORT) nPara ) );
-                        aAttr.Put( aTmpSet, FALSE ); // FALSE= InvalidItems nicht als Default, sondern als "Loecher" betrachten
+                        SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( (sal_uInt16) nPara ) );
+                        aAttr.Put( aTmpSet, sal_False ); // sal_False= InvalidItems nicht als Default, sondern als "Loecher" betrachten
                         const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aAttr.Get( EE_PARA_ULSPACE );
                         SvxULSpaceItem* pNewItem = (SvxULSpaceItem*) rItem.Clone();
 
@@ -177,7 +177,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                             nUpper -= 100;
                             nUpper = Max( (long) nUpper, 0L );
                         }
-                        pNewItem->SetUpper( (USHORT) nUpper );
+                        pNewItem->SetUpper( (sal_uInt16) nUpper );
 
                         long nLower = pNewItem->GetLower();
                         if( nSlot == SID_PARASPACE_INCREASE )
@@ -187,12 +187,12 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                             nLower -= 100;
                             nLower = Max( (long) nLower, 0L );
                         }
-                        pNewItem->SetLower( (USHORT) nLower );
+                        pNewItem->SetLower( (sal_uInt16) nLower );
 
                         SfxItemSet aNewAttrs( aAttr );
                         aNewAttrs.Put( *pNewItem );
                         delete pNewItem;
-                        pOLV->GetOutliner()->SetParaAttribs( (USHORT)nPara, aNewAttrs );
+                        pOLV->GetOutliner()->SetParaAttribs( (sal_uInt16)nPara, aNewAttrs );
                     }
                 }
             }
@@ -218,7 +218,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         nUpper -= 100;
                         nUpper = Max( (long) nUpper, 0L );
                     }
-                    pNewItem->SetUpper( (USHORT) nUpper );
+                    pNewItem->SetUpper( (sal_uInt16) nUpper );
 
                     long nLower = pNewItem->GetLower();
                     if( nSlot == SID_PARASPACE_INCREASE )
@@ -228,7 +228,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         nLower -= 100;
                         nLower = Max( (long) nLower, 0L );
                     }
-                    pNewItem->SetLower( (USHORT) nLower );
+                    pNewItem->SetLower( (sal_uInt16) nLower );
 
                     aNewAttrs.Put( *pNewItem );
                     delete pNewItem;
@@ -241,7 +241,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             Invalidate();
             // Um die Preview (im Gliederungsmodus) zu aktualisieren muss
             // der Slot invalidiert werden:
-            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
         }
         break;
 
@@ -254,7 +254,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 // Ensure bold/italic etc. icon state updates
                 Invalidate();
                 // trigger preview refresh
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
             }
             rReq.Done();
         }
@@ -269,7 +269,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 // Ensure bold/italic etc. icon state updates
                 Invalidate();
                 // trigger preview refresh
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
             }
             rReq.Done();
         }
@@ -282,7 +282,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 pOLV->AdjustHeight( -1 );
 
                 // trigger preview refresh
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
             }
             rReq.Done();
         }
@@ -295,7 +295,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 pOLV->AdjustHeight( 1 );
 
                 // trigger preview refresh
-                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+                mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
             }
             rReq.Done();
         }
@@ -313,7 +313,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             rReq.Done( aAttr );
             mpView->SetAttributes( aAttr );
             Invalidate();
-            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
         }
         break;
 
@@ -489,7 +489,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     {
                         if( pArgs )
                         {
-                            if( SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_FONTINFO, TRUE, &pPoolItem ) )
+                            if( SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_FONTINFO, sal_True, &pPoolItem ) )
                                 aNewAttr.Put( *pPoolItem );
                         }
                         else
@@ -501,7 +501,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     {
                         if( pArgs )
                         {
-                            if( SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_FONTHEIGHT, TRUE, &pPoolItem ) )
+                            if( SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_FONTHEIGHT, sal_True, &pPoolItem ) )
                                 aNewAttr.Put( *pPoolItem );
                         }
                         else
@@ -511,7 +511,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_ATTR_CHAR_COLOR:
                     {
-                        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_COLOR, TRUE, &pPoolItem ) )
+                        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( EE_CHAR_COLOR, sal_True, &pPoolItem ) )
                             aNewAttr.Put( *pPoolItem );
                     }
                     break;
@@ -551,8 +551,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 sal_Bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
-                USHORT nAdjust = SVX_ADJUST_LEFT;
-                if( SFX_ITEM_ON == aEditAttr.GetItemState(EE_PARA_JUST, TRUE, &pPoolItem ) )
+                sal_uInt16 nAdjust = SVX_ADJUST_LEFT;
+                if( SFX_ITEM_ON == aEditAttr.GetItemState(EE_PARA_JUST, sal_True, &pPoolItem ) )
                     nAdjust = ( (SvxAdjustItem*)pPoolItem)->GetEnumValue();
 
                 if( bLeftToRight )
@@ -579,7 +579,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                       nSlot == SID_ATTR_CHAR_WEIGHT )
             {
                 // #i78017 establish the same behaviour as in Writer
-                USHORT nScriptType = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                sal_uInt16 nScriptType = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
                 if (nSlot == SID_ATTR_CHAR_FONT)
                     nScriptType = mpView->GetScriptType();
 
@@ -599,7 +599,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
             // Um die Preview (im Gliederungsmodus) zu aktualisieren muss
             // der Slot invalidiert werden:
-            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
+            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, sal_True, sal_False );
         }
         break;
     }

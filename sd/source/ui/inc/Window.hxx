@@ -140,7 +140,7 @@ public:
         larger than the view or the value of aWinPos in this direction is -1
         then the window is centered in this direction.
         */
-    void UpdateMapOrigin (BOOL bInvalidate = TRUE);
+    void UpdateMapOrigin (sal_Bool bInvalidate = sal_True);
 
     void UpdateMapMode (void);
 
@@ -172,10 +172,11 @@ protected:
     Point maViewOrigin;
     Size maViewSize;
     Size maPrevSize; // contains previous window size in logical coords
-    USHORT mnMinZoom;
-    USHORT mnMaxZoom;
+    sal_uInt16 mnMinZoom;
+    sal_uInt16 mnMaxZoom;
+
     /** This flag tells whether to re-calculate the minimal zoom factor
-        depening on the current zoom factor.  Its default value is now FALSE.
+        depening on the current zoom factor.  Its default value is now sal_False.
     */
     bool mbMinZoomAutoCalc;
     bool mbCalcMinZoomByMinSide;

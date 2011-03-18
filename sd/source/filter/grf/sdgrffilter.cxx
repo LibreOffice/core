@@ -108,7 +108,7 @@ using namespace ::sfx2;
 class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper1< com::sun::star::task::XInteractionHandler >
 {
     com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > m_xInter;
-    USHORT nFilterError;
+    sal_uInt16 nFilterError;
 
     public:
 
@@ -119,7 +119,7 @@ class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper1< com::sun:
 
     ~SdGRFFilter_ImplInteractionHdl();
 
-    USHORT GetErrorCode() const { return nFilterError; };
+    sal_uInt16 GetErrorCode() const { return nFilterError; };
 
     virtual void SAL_CALL   handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& )
                                 throw( com::sun::star::uno::RuntimeException );
@@ -137,7 +137,7 @@ void SdGRFFilter_ImplInteractionHdl::handle( const com::sun::star::uno::Referenc
 
     com::sun::star::drawing::GraphicFilterRequest aErr;
     if ( xRequest->getRequest() >>= aErr )
-        nFilterError = (USHORT)aErr.ErrCode;
+        nFilterError = (sal_uInt16)aErr.ErrCode;
     else
         m_xInter->handle( xRequest );
 }
@@ -160,9 +160,9 @@ SdGRFFilter::~SdGRFFilter()
 
 // -----------------------------------------------------------------------------
 
-void SdGRFFilter::HandleGraphicFilterError( USHORT nFilterError, ULONG nStreamError )
+void SdGRFFilter::HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong nStreamError )
 {
-    USHORT nId;
+    sal_uInt16 nId;
 
     switch( nFilterError )
     {
@@ -209,14 +209,14 @@ sal_Bool SdGRFFilter::Import()
     Graphic         aGraphic;
     const String    aFileName( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
     GraphicFilter*  pGraphicFilter = GraphicFilter::GetGraphicFilter();
-    const USHORT    nFilter = pGraphicFilter->GetImportFormatNumberForTypeName( mrMedium.GetFilter()->GetTypeName() );
+    const sal_uInt16    nFilter = pGraphicFilter->GetImportFormatNumberForTypeName( mrMedium.GetFilter()->GetTypeName() );
     sal_Bool        bRet = sal_False;
 
     // ggf. Filterdialog ausfuehren
     if ( !pGraphicFilter->HasImportDialog( nFilter ) || pGraphicFilter->DoImportDialog( NULL, nFilter ) )
     {
         SvStream*       pIStm = mrMedium.GetInStream();
-        USHORT          nReturn = pIStm ? pGraphicFilter->ImportGraphic( aGraphic, aFileName, *pIStm, nFilter ) : 1;
+        sal_uInt16          nReturn = pIStm ? pGraphicFilter->ImportGraphic( aGraphic, aFileName, *pIStm, nFilter ) : 1;
 
         if( nReturn )
             HandleGraphicFilterError( nReturn, pGraphicFilter->GetLastError().nStreamError );
@@ -314,7 +314,7 @@ sal_Bool SdGRFFilter::Export()
                     if ( pSet && pGraphicFilter && xSource.is() )
                     {
                         const String aTypeName( mrMedium.GetFilter()->GetTypeName() );
-                        const USHORT nFilter = pGraphicFilter->GetExportFormatNumberForTypeName( aTypeName );
+                        const sal_uInt16 nFilter = pGraphicFilter->GetExportFormatNumberForTypeName( aTypeName );
                         if ( nFilter != GRFILTER_FORMAT_NOTFOUND )
                         {
                             uno::Reference< task::XInteractionHandler > mXInteractionHandler;
@@ -479,11 +479,11 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
         GraphicFilter& rGF = *GraphicFilter::GetGraphicFilter();
         Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
         OUString aDefaultFormatName;
-        USHORT nCount = rGF.GetExportFormatCount();
+        sal_uInt16 nCount = rGF.GetExportFormatCount();
 
         std::map< OUString, OUString > aMimeTypeMap;
 
-        for ( USHORT i = 0; i < nCount; i++ )
+        for ( sal_uInt16 i = 0; i < nCount; i++ )
         {
             const OUString aExportFormatName( rGF.GetExportFormatName( i ) );
             const OUString aFilterMimeType( rGF.GetExportFormatMediaType( i ) );
@@ -496,7 +496,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
         if( aDefaultFormatName.getLength() == 0 )
         {
             nCount = rGF.GetImportFormatCount();
-            for( USHORT i = 0; i < nCount; i++ )
+            for( sal_uInt16 i = 0; i < nCount; i++ )
             {
                 const OUString aFilterMimeType( rGF.GetImportFormatMediaType( i ) );
                 if( aMimeType == aFilterMimeType )

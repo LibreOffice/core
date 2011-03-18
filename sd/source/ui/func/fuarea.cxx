@@ -90,7 +90,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
         }
 
         // Attribute wurden geaendert, Listboxes in Objectbars muessen aktualisiert werden
-        static USHORT SidArray[] = {
+        static sal_uInt16 SidArray[] = {
                         SID_ATTR_FILL_STYLE,
                         SID_ATTR_FILL_COLOR,
                         SID_ATTR_FILL_GRADIENT,

@@ -29,9 +29,13 @@
 #ifndef SD_SLIDESORTER_SELECTION_FUNCTION_HXX
 #define SD_SLIDESORTER_SELECTION_FUNCTION_HXX
 
-#include "controller/SlsSlideFunction.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"
-#include <memory>
+#include "controller/SlsFocusManager.hxx"
+#include "controller/SlsInsertionIndicatorHandler.hxx"
+#include "fupoor.hxx"
+#include <svtools/transfer.hxx>
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class SdSlideViewShell;
 class SdWindow;
@@ -46,9 +50,12 @@ class SlideSorter;
 namespace sd { namespace slidesorter { namespace controller {
 
 class SlideSorterController;
+class DragAndDropContext;
+
 
 class SelectionFunction
-    : public SlideFunction
+    : public FuPoor,
+      private ::boost::noncopyable
 {
 public:
     TYPEINFO();
@@ -56,14 +63,13 @@ public:
     static FunctionReference Create( SlideSorter& rSlideSorter, SfxRequest& rRequest );
 
     // Mouse- & Key-Events
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL MouseMove(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
-    virtual void Paint(const Rectangle&, ::sd::Window* );
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();
+    virtual void Deactivate();
 
     virtual void ScrollStart();
     virtual void ScrollEnd();
@@ -86,6 +92,42 @@ public:
     */
     virtual bool cancel();
 
+    void MouseDragged (
+        const AcceptDropEvent& rEvent,
+        const sal_Int8 nDragAction);
+
+    /** Turn of substitution display and insertion indicator.
+    */
+    void NotifyDragFinished (void);
+
+    /** Call when drag-and-drop or multi selection is started or stopped in
+        order to update permission of mouse over indication.
+    */
+    void UpdateMouseOverIndicationPermission (void);
+
+    class EventDescriptor;
+    class ModeHandler;
+    friend class ModeHandler;
+    enum Mode
+    {
+        NormalMode,
+        MultiSelectionMode,
+        DragAndDropMode,
+        ButtonMode
+    };
+    void SwitchToNormalMode (void);
+    void SwitchToDragAndDropMode(const Point aMousePosition);
+    void SwitchToMultiSelectionMode (const Point aMousePosition, const sal_uInt32 nEventCode);
+    bool SwitchToButtonMode (void);
+
+    void ResetShiftKeySelectionAnchor (void);
+    /** Special case handling for when the context menu is hidden.  This
+        method will reinitialize the current mouse position to prevent the
+        mouse motion during the time the context menu is displayed from
+        being interpreted as drag-and-drop start.
+    */
+    void ResetMouseAnchor (void);
+
 protected:
     SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
@@ -97,11 +139,6 @@ protected:
     virtual ~SelectionFunction();
 
 private:
-    class SubstitutionHandler;
-    class EventDescriptor;
-
-    /// Set in MouseButtonDown this flag indicates that a page has been hit.
-    bool mbPageHit;
 
     /// The rectangle of the mouse drag selection.
     Rectangle maDragSelectionRectangle;
@@ -118,20 +155,17 @@ private:
     */
     bool mbProcessingMouseButtonDown;
 
-    ::std::auto_ptr<SubstitutionHandler> mpSubstitutionHandler;
+    bool mbIsDeselectionPending;
 
-    DECL_LINK( DragSlideHdl, Timer* );
-    void StartDrag (void);
-
-    /** Set the selection to exactly the specified page and also set it as
-        the current page.
+    /** Remember the slide where the shift key was pressed and started a
+        multiselection via keyboard.
     */
-    void SetCurrentPage (const model::SharedPageDescriptor& rpDescriptor);
+    sal_Int32 mnShiftKeySelectionAnchor;
 
-    /** When the view on which this selection function is working is the
-        main view then the view is switched to the regular editing view.
+    /** The selection function can be in one of several mutually
+        exclusive modes.
     */
-    void SwitchView (const model::SharedPageDescriptor& rpDescriptor);
+    ::boost::shared_ptr<ModeHandler> mpModeHandler;
 
     /** Make the slide nOffset slides away of the current one the new
         current slide.  When the new index is outside the range of valid
@@ -142,60 +176,29 @@ private:
     */
     void GotoNextPage (int nOffset);
 
+    /** Make the slide with the given index the new current slide.
+        @param nIndex
+            Index of the new current slide.  When the new index is outside
+            the range of valid page numbers it is clipped to that range.
+    */
+    void GotoPage (int nIndex);
+
     void ProcessMouseEvent (sal_uInt32 nEventType, const MouseEvent& rEvent);
     void ProcessKeyEvent (const KeyEvent& rEvent);
 
     // What follows are a couple of helper methods that are used by
     // ProcessMouseEvent().
 
-    /// Select the specified page and set the selection anchor.
-    void SelectHitPage (const model::SharedPageDescriptor& rpDescriptor);
-    /// Deselect the specified page.
-    void DeselectHitPage (const model::SharedPageDescriptor& rpDescriptor);
-    /// Deselect all pages.
-    void DeselectAllPages (void);
+    void ProcessEvent (EventDescriptor& rEvent);
 
-    /** for a possibly following mouse motion by starting the drag timer
-        that after a short time of pressed but un-moved mouse starts a drag
-        operation.
-    */
-    void PrepareMouseMotion (const Point& aMouseModelPosition);
+    void MoveFocus (
+        const FocusManager::FocusMoveDirection eDirection,
+        const bool bIsShiftDown,
+        const bool bIsControlDown);
 
-    /** Select all pages between and including the selection anchor and the
-        specified page.
-    */
-    void RangeSelect (const model::SharedPageDescriptor& rpDescriptor);
+    void StopDragAndDrop (void);
 
-    /** Start a rectangle selection at the given position.
-    */
-    void StartRectangleSelection (const Point& aMouseModelPosition);
-
-    /** Update the rectangle selection so that the given position becomes
-        the new second point of the selection rectangle.
-    */
-    void UpdateRectangleSelection (const Point& aMouseModelPosition);
-
-    /** Select all pages that lie completly in the selection rectangle.
-    */
-    void ProcessRectangleSelection (bool bToggleSelection);
-
-    /** Compute a numerical code that describes a mouse event and that can
-        be used for fast look up of the appropriate reaction.
-    */
-    sal_uInt32 EncodeMouseEvent (
-        const EventDescriptor& rDescriptor,
-        const MouseEvent& rEvent) const;
-
-    /** Compute a numerical code that describes a key event and that can
-        be used for fast look up of the appropriate reaction.
-    */
-    sal_uInt32 EncodeKeyEvent (
-        const EventDescriptor& rDescriptor,
-        const KeyEvent& rEvent) const;
-
-    void EventPreprocessing (const EventDescriptor& rEvent);
-    bool EventProcessing (const EventDescriptor& rEvent);
-    void EventPostprocessing (const EventDescriptor& rEvent);
+    void SwitchMode (const ::boost::shared_ptr<ModeHandler>& rpHandler);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

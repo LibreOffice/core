@@ -326,7 +326,6 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
             mpPageCaches->begin(),
             mpPageCaches->end(),
             PageCacheContainer::CompareWithCache(rpCache)));
-        OSL_ASSERT(iCacheToChange != mpPageCaches->end());
         if (iCacheToChange != mpPageCaches->end())
         {
             OSL_ASSERT(iCacheToChange->second == rpCache);
@@ -343,6 +342,10 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
 
             pResult = rpCache;
         }
+        else
+        {
+            OSL_ASSERT(iCacheToChange != mpPageCaches->end());
+        }
     }
 
     return pResult;
@@ -351,10 +354,12 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
 
 
 
-void PageCacheManager::InvalidatePreviewBitmap (
+bool PageCacheManager::InvalidatePreviewBitmap (
     DocumentKey pDocument,
     const SdrPage* pKey)
 {
+    bool bHasChanged (false);
+
     if (pDocument!=NULL)
     {
         // Iterate over all caches that are currently in use and invalidate
@@ -362,7 +367,7 @@ void PageCacheManager::InvalidatePreviewBitmap (
         PageCacheContainer::iterator iCache;
         for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end();  ++iCache)
             if (iCache->first.mpDocument == pDocument)
-                iCache->second->InvalidateBitmap(pKey);
+                bHasChanged |= iCache->second->InvalidateBitmap(pKey);
 
         // Invalidate the previews in the recently used caches belonging to
         // the given document.
@@ -371,8 +376,36 @@ void PageCacheManager::InvalidatePreviewBitmap (
         {
             RecentlyUsedQueue::const_iterator iCache2;
             for (iCache2=iQueue->second.begin(); iCache2!=iQueue->second.end(); ++iCache2)
-                iCache2->mpCache->InvalidateBitmap(pKey);
+                bHasChanged |= iCache2->mpCache->InvalidateBitmap(pKey);
         }
+    }
+
+    return bHasChanged;
+}
+
+
+
+
+void PageCacheManager::InvalidateAllPreviewBitmaps (DocumentKey pDocument)
+{
+    if (pDocument == NULL)
+        return;
+
+    // Iterate over all caches that are currently in use and invalidate the
+    // previews in those that belong to the document.
+    PageCacheContainer::iterator iCache;
+    for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end();  ++iCache)
+        if (iCache->first.mpDocument == pDocument)
+            iCache->second->InvalidateCache();
+
+    // Invalidate the previews in the recently used caches belonging to the
+    // given document.
+    RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
+    if (iQueue != mpRecentlyUsedPageCaches->end())
+    {
+        RecentlyUsedQueue::const_iterator iCache2;
+        for (iCache2=iQueue->second.begin(); iCache2!=iQueue->second.end(); ++iCache2)
+            iCache2->mpCache->InvalidateCache();
     }
 }
 
@@ -390,6 +423,16 @@ void PageCacheManager::InvalidateAllCaches (void)
     // Remove all recently used caches, there is not much sense in storing
     // invalidated and unused caches.
     mpRecentlyUsedPageCaches->clear();
+}
+
+
+
+
+void PageCacheManager::ReleasePreviewBitmap (const SdrPage* pPage)
+{
+    PageCacheContainer::iterator iCache;
+    for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end(); ++iCache)
+        iCache->second->ReleaseBitmap(pPage);
 }
 
 

@@ -607,7 +607,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     if(!(aValue >>= nVerb))
                         throw lang::IllegalArgumentException();
 
-                    pInfo->mnVerb = (USHORT)nVerb;
+                    pInfo->mnVerb = (sal_uInt16)nVerb;
                     break;
                 }
                 case WID_DIMCOLOR:
@@ -787,7 +787,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             {
                 SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
                 // is the bookmark a page?
-                BOOL bIsMasterPage;
+                sal_Bool bIsMasterPage;
                 if(pDoc->GetPageByName( pInfo->GetBookmark(), bIsMasterPage ) != SDRPAGE_NOTFOUND)
                 {
                     aString = SdDrawPage::getPageApiNameFromUiName( pInfo->GetBookmark() );
@@ -1419,7 +1419,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             case presentation::ClickAction_VERB:
                 if( nFound & FOUND_VERB )
                 {
-                    pInfo->mnVerb = (USHORT)nVerb;
+                    pInfo->mnVerb = (sal_uInt16)nVerb;
                     bOk = sal_True;
                 }
                 break;

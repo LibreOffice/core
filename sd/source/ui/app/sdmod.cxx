@@ -86,7 +86,7 @@ SFX_IMPL_INTERFACE(SdModule, SfxModule, SdResId(STR_APPLICATIONOBJECTBAR))
 \************************************************************************/
 
 SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
-:   SfxModule( SfxApplication::CreateResManager("sd"), FALSE,
+:   SfxModule( SfxApplication::CreateResManager("sd"), sal_False,
                   pFact1, pFact2, NULL ),
     pTransferClip(NULL),
     pTransferDrag(NULL),
@@ -95,7 +95,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     pDrawOptions(NULL),
     pSearchItem(NULL),
     pNumberFormatter( NULL ),
-    bWaterCan(FALSE),
+    bWaterCan(sal_False),
     mpResourceContainer(new ::sd::SdGlobalResourceContainer())
 {
     SetName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarDraw" ) ) );  // Nicht uebersetzen!
@@ -157,46 +157,6 @@ SdModule::~SdModule()
 
 /*************************************************************************
 |*
-|* Statusbar erzeugen
-|*
-\************************************************************************/
-
-#define AUTOSIZE_WIDTH  180
-#define TEXT_WIDTH(s)   rStatusBar.GetTextWidth((s))
-
-void SdModule::FillStatusBar(StatusBar& rStatusBar)
-{
-    // Hinweis
-    rStatusBar.InsertItem( SID_CONTEXT, TEXT_WIDTH( String().Fill( 30, 'x' ) ), // vorher 52
-                            SIB_IN | SIB_LEFT | SIB_AUTOSIZE );
-
-    // Groesse und Position
-    rStatusBar.InsertItem( SID_ATTR_SIZE, SvxPosSizeStatusBarControl::GetDefItemWidth(rStatusBar), // vorher 42
-                            SIB_IN | SIB_USERDRAW );
-
-    // Massstab
-    rStatusBar.InsertItem( SID_ATTR_ZOOM, SvxZoomStatusBarControl::GetDefItemWidth(rStatusBar), SIB_IN | SIB_CENTER );
-
-    // Dokument geaendert
-    rStatusBar.InsertItem( SID_DOC_MODIFIED, SvxModifyControl::GetDefItemWidth(rStatusBar) );
-
-    // signatures
-    rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
-    rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
-
-    // Seite
-    rStatusBar.InsertItem( SID_STATUS_PAGE, TEXT_WIDTH( String().Fill( 24, 'X' ) ),
-                            SIB_IN | SIB_LEFT );
-
-    // Praesentationslayout
-    rStatusBar.InsertItem( SID_STATUS_LAYOUT, TEXT_WIDTH( String().Fill( 10, 'X' ) ),
-                            SIB_IN | SIB_LEFT | SIB_AUTOSIZE );
-}
-
-
-
-/*************************************************************************
-|*
 |* get notifications
 |*
 \************************************************************************/
@@ -237,7 +197,7 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
     }
     if( pOptions )
     {
-        UINT16 nMetric = pOptions->GetMetric();
+        sal_uInt16 nMetric = pOptions->GetMetric();
 
         ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
         SdDrawDocument* pDoc = NULL;
@@ -279,7 +239,7 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
             SvStream* pStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE );
 
             if( pStm )
-                xOptionStorage = new SvStorage( pStm, TRUE );
+                xOptionStorage = new SvStorage( pStm, sal_True );
         }
 
         if( DOCUMENT_TYPE_DRAW == eType )

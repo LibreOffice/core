@@ -78,10 +78,10 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
     AbstractSdCustomShowDlg* pDlg = pFact ? pFact->CreateSdCustomShowDlg( NULL, *mpDoc ) : 0;
     if( pDlg )
     {
-        USHORT nRet = pDlg->Execute();
+        sal_uInt16 nRet = pDlg->Execute();
         if( pDlg->IsModified() )
         {
-            mpDoc->SetChanged( TRUE );
+            mpDoc->SetChanged( sal_True );
             sd::PresentationSettings& rSettings = mpDoc->getPresentationSettings();
             rSettings.mbCustomShow = pDlg->IsCustomShow();
         }

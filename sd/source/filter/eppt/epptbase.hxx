@@ -81,9 +81,9 @@ struct PHLayout
     sal_uInt8   nTypeOfTitle;
     sal_uInt8   nTypeOfOutliner;
 
-    BOOL    bTitlePossible;
-    BOOL    bOutlinerPossible;
-    BOOL    bSecOutlinerPossible;
+    sal_Bool    bTitlePossible;
+    sal_Bool    bOutlinerPossible;
+    sal_Bool    bSecOutlinerPossible;
 };
 
 enum PageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3, LAYOUT = 4 };
@@ -375,7 +375,7 @@ protected:
     virtual sal_Bool ImplCreateMainNotes()=0;
 
     sal_Bool GetStyleSheets();
-    sal_Bool GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup = FALSE );
+    sal_Bool GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup = sal_False );
 
     sal_Bool CreateMainNotes();
 

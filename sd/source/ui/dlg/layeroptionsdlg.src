@@ -27,10 +27,11 @@
 
 #include "app.hrc"
 #include "layeroptionsdlg.hrc"
+#include "helpids.h"
 
 ModalDialog DLG_INSERT_LAYER
 {
-    HelpID = SID_INSERTLAYER ;
+    HelpID = CMD_SID_INSERTLAYER ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 200 , 172 ) ;
@@ -46,6 +47,7 @@ ModalDialog DLG_INSERT_LAYER
 
     Edit EDT_NAME
     {
+        HelpID = "sd:Edit:DLG_INSERT_LAYER:EDT_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 188 , 12 ) ;
@@ -61,6 +63,7 @@ ModalDialog DLG_INSERT_LAYER
 
     Edit EDT_TITLE
     {
+        HelpID = "sd:Edit:DLG_INSERT_LAYER:EDT_TITLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 43 ) ;
         Size = MAP_APPFONT ( 188 , 12 ) ;
@@ -76,6 +79,7 @@ ModalDialog DLG_INSERT_LAYER
 
     MultiLineEdit EDT_DESCRIPTION
     {
+        HelpID = "sd:MultiLineEdit:DLG_INSERT_LAYER:EDT_DESCRIPTION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 69 ) ;
         Size = MAP_APPFONT ( 188 , 34 ) ;
@@ -86,6 +90,7 @@ ModalDialog DLG_INSERT_LAYER
 
     CheckBox CBX_VISIBLE
     {
+        HelpID = "sd:CheckBox:DLG_INSERT_LAYER:CBX_VISIBLE";
         Pos = MAP_APPFONT ( 6 , 106 ) ;
         Size = MAP_APPFONT ( 188 , 10 ) ;
         Text [ en-US ] = "~Visible" ;
@@ -94,6 +99,7 @@ ModalDialog DLG_INSERT_LAYER
 
     CheckBox CBX_PRINTABLE
     {
+        HelpID = "sd:CheckBox:DLG_INSERT_LAYER:CBX_PRINTABLE";
         Pos = MAP_APPFONT ( 6 , 119 ) ;
         Size = MAP_APPFONT ( 188 , 10 ) ;
         Text [ en-US ] = "~Printable" ;
@@ -102,6 +108,7 @@ ModalDialog DLG_INSERT_LAYER
 
     CheckBox CBX_LOCKED
     {
+        HelpID = "sd:CheckBox:DLG_INSERT_LAYER:CBX_LOCKED";
         Pos = MAP_APPFONT ( 6 , 132 ) ;
         Size = MAP_APPFONT ( 188 , 10 ) ;
         Text [ en-US ] = "~Locked" ;

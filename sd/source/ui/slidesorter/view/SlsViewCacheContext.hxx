@@ -36,9 +36,11 @@ namespace sd { namespace slidesorter { namespace model {
 class SlideSorterModel;
 } } }
 
-namespace sd { namespace slidesorter { namespace view {
+namespace sd { namespace slidesorter {
+class SlideSorter;
+} }
 
-class SlideSorterView;
+namespace sd { namespace slidesorter { namespace view {
 
 /** The cache context for the SlideSorter as used by Draw and Impress.  See
     the base class for documentation of the individual methods.
@@ -46,11 +48,9 @@ class SlideSorterView;
 class ViewCacheContext : public cache::CacheContext
 {
 public:
-    ViewCacheContext (
-        model::SlideSorterModel& rModel,
-        SlideSorterView& rView);
+    ViewCacheContext (SlideSorter& rSlideSorter);
     virtual ~ViewCacheContext (void);
-    virtual void NotifyPreviewCreation (cache::CacheKey aKey, const ::boost::shared_ptr<BitmapEx>& rPreview);
+    virtual void NotifyPreviewCreation (cache::CacheKey aKey, const Bitmap& rPreview);
     virtual bool IsIdle (void);
     virtual bool IsVisible (cache::CacheKey aKey);
     virtual const SdrPage* GetPage (cache::CacheKey aKey);
@@ -60,7 +60,7 @@ public:
 
 private:
     model::SlideSorterModel& mrModel;
-    SlideSorterView& mrView;
+    SlideSorter& mrSlideSorter;
 
     model::SharedPageDescriptor GetDescriptor (cache::CacheKey aKey);
 };

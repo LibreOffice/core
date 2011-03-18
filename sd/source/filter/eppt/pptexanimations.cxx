@@ -790,12 +790,12 @@ sal_Bool AnimationExporter::GetNodeType( const Reference< XAnimationNode >& xNod
         if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "node-type" ) ) )
         {
         if ( p->Value >>= nType )
-            return TRUE;
+            return sal_True;
         }
     }
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnimationNode >& xNode,

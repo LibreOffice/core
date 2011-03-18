@@ -67,13 +67,13 @@ PortionObj::PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star
     mnFont              ( 0 ),
     mnAsianOrComplexFont( 0xffff ),
     mnTextSize          ( 0 ),
-    mbLastPortion       ( TRUE ),
+    mbLastPortion       ( sal_True ),
     mpText              ( NULL ),
     mpFieldEntry        ( NULL )
 {
     mXPropSet = rXPropSet;
 
-    ImplGetPortionValues( rFontCollection, FALSE );
+    ImplGetPortionValues( rFontCollection, sal_False );
 }
 
 PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRange,
@@ -88,7 +88,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
 {
     String aString( rXTextRange->getString() );
     String aURL;
-    BOOL bRTL_endingParen = FALSE;
+    sal_Bool bRTL_endingParen = sal_False;
 
     mnTextSize = aString.Len();
     if ( bLast )
@@ -118,14 +118,14 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
                 mpFieldEntry->aFieldUrl = aURL;
             }
         }
-        sal_Bool bSymbol = FALSE;
+        sal_Bool bSymbol = sal_False;
 
-        if ( bPropSetsValid && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSet" ) ), FALSE ) )
+        if ( bPropSetsValid && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSet" ) ), sal_False ) )
         {
             sal_Int16 nCharset = 0;
             mAny >>= nCharset;
             if ( nCharset == ::com::sun::star::awt::CharSet::SYMBOL )
-                bSymbol = TRUE;
+                bSymbol = sal_True;
         }
         if ( mpFieldEntry && ( nFieldType & 0x800000 ) )    // placeholder ?
         {
@@ -143,7 +143,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
             if ( bLast && pText[ aString.Len() - 1 ] == sal_Unicode(')') && rFontCollection.GetScriptDirection( aString ) == com::sun::star::i18n::ScriptDirection::RIGHT_TO_LEFT )
             {
                 mnTextSize++;
-                bRTL_endingParen = TRUE;
+                bRTL_endingParen = sal_True;
             }
             mpText = new sal_uInt16[ mnTextSize ];
             sal_uInt16 nChar;
@@ -202,7 +202,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
             mpText[ mnTextSize - 1 ] = 0xd;
 
         if ( bPropSetsValid )
-            ImplGetPortionValues( rFontCollection, TRUE );
+            ImplGetPortionValues( rFontCollection, sal_True );
     }
 }
 
@@ -504,7 +504,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             xFieldPropSet( aXTextField, ::com::sun::star::uno::UNO_QUERY );
                         if ( xFieldPropSet.is() )
                         {
-                            String aFieldKind( aXTextField->getPresentation( TRUE ) );
+                            String aFieldKind( aXTextField->getPresentation( sal_True ) );
                             if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Date" ) ) )
                             {
                                 if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), sal_True )
@@ -645,13 +645,13 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
 {
     mXPropSet = rXPropSet;
 
-    bExtendedParameters = FALSE;
+    bExtendedParameters = sal_False;
 
     nDepth = 0;
     nBulletFlags = 0;
     nParaFlags = 0;
 
-    ImplGetParagraphValues( rProv, FALSE );
+    ImplGetParagraphValues( rProv, sal_False );
 }
 
     ParagraphObj::ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContent,
@@ -661,7 +661,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
     mbFirstParagraph    ( aParaFlags.bFirstParagraph ),
     mbLastParagraph     ( aParaFlags.bLastParagraph )
 {
-    bExtendedParameters = FALSE;
+    bExtendedParameters = sal_False;
 
     nDepth = 0;
     nBulletFlags = 0;
@@ -700,7 +700,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
                 }
             }
         }
-        ImplGetParagraphValues( rProv, TRUE );
+        ImplGetParagraphValues( rProv, sal_True );
     }
 }
 
@@ -815,7 +815,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
             sal_Int32 nPropertyCount = aPropertySequence.getLength();
             if ( nPropertyCount )
             {
-                bExtendedParameters = TRUE;
+                bExtendedParameters = sal_True;
                 nBulletRealSize = 100;
                 nMappedNumType = 0;
 
@@ -910,7 +910,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 {
                                     nBulletId = rBuProv.GetId( aUniqueId, aBuGraSize );
                                     if ( nBulletId != 0xffff )
-                                        bExtendedBulletsUsed = TRUE;
+                                        bExtendedBulletsUsed = sal_True;
                                 }
                             }
                         }
@@ -959,7 +959,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                     {
                         if ( nNumberingType != SVX_NUM_CHAR_SPECIAL )
                         {
-                            bExtendedBulletsUsed = TRUE;
+                            bExtendedBulletsUsed = sal_True;
                             if ( nNumberingDepth & 1 )
                                 cBulletId = 0x2013;         // defaulting bullet characters for ppt97
                             else if ( nNumberingDepth == 4 )
@@ -1243,8 +1243,8 @@ ImplTextObj::ImplTextObj( int nInstance )
     mnTextSize = 0;
     mnInstance = nInstance;
     mpList = new List;
-    mbHasExtendedBullets = FALSE;
-    mbFixedCellHeightUsed = FALSE;
+    mbHasExtendedBullets = sal_False;
+    mbFixedCellHeightUsed = sal_False;
 }
 
 ImplTextObj::~ImplTextObj()
@@ -1276,11 +1276,11 @@ TextObj::TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSim
                 if ( aAny >>= aXParagraph )
                 {
                     if ( !aXTextParagraphE->hasMoreElements() )
-                        aParaFlags.bLastParagraph = TRUE;
+                        aParaFlags.bLastParagraph = sal_True;
                     ParagraphObj* pPara = new ParagraphObj( aXParagraph, aParaFlags, rFontCollection, rProv );
                     mpImplTextObj->mbHasExtendedBullets |= pPara->bExtendedBulletsUsed;
                     mpImplTextObj->mpList->Insert( pPara, LIST_APPEND );
-                    aParaFlags.bFirstParagraph = FALSE;
+                    aParaFlags.bFirstParagraph = sal_False;
                 }
             }
         }

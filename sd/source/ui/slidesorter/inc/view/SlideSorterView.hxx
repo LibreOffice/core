@@ -29,28 +29,29 @@
 #ifndef SD_SLIDESORTER_SLIDE_SORTER_VIEW_HXX
 #define SD_SLIDESORTER_SLIDE_SORTER_VIEW_HXX
 
-#include "View.hxx"
-
+#include "SlideSorter.hxx"
+#include "model/SlsPageDescriptor.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"
+#include "view/SlsLayouter.hxx"
+#include "view/SlsILayerPainter.hxx"
 
+#include "View.hxx"
 #include <sfx2/viewfrm.hxx>
 #include "pres.hxx"
 #include <tools/gen.hxx>
+#include <svx/svdmodel.hxx>
+#include <vcl/region.hxx>
+#include <vcl/outdev.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <memory>
 #include <boost/shared_ptr.hpp>
+#include <boost/noncopyable.hpp>
 
 class Point;
 
-namespace sdr { namespace contact {
-class ObjectContact;
-} }
-
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
-
 namespace sd { namespace slidesorter { namespace controller {
 class SlideSorterController;
+class Properties;
 } } }
 
 namespace sd { namespace slidesorter { namespace cache {
@@ -63,15 +64,20 @@ class SlideSorterModel;
 
 namespace sd { namespace slidesorter { namespace view {
 
+class ButtonBar;
+class LayeredDevice;
 class Layouter;
-class ViewOverlay;
+class PageObjectPainter;
+class SelectionPainter;
+class ToolTip;
 
 
 class SlideSorterView
-    : public View
+    : public sd::View,
+      public ::boost::noncopyable
 {
 public:
-    TYPEINFO();
+    TYPEINFO ();
 
     /** Create a new view for the slide sorter.
         @param rViewShell
@@ -80,52 +86,23 @@ public:
 
     */
     SlideSorterView (SlideSorter& rSlideSorter);
+    void Init (void);
 
     virtual ~SlideSorterView (void);
+    void Dispose (void);
 
-    enum Orientation { HORIZONTAL, VERTICAL };
-    void SetOrientation (const Orientation eOrientation);
-    Orientation GetOrientation (void) const;
+    /** Set the general way of layouting the page objects.  Note that this
+        method does not trigger any repaints or layouts.
+    */
+    bool SetOrientation (const Layouter::Orientation eOrientation);
+    Layouter::Orientation GetOrientation (void) const;
 
     void RequestRepaint (void);
     void RequestRepaint (const model::SharedPageDescriptor& rDescriptor);
+    void RequestRepaint (const Rectangle& rRepaintBox);
+    void RequestRepaint (const Region& rRepaintRegion);
 
     Rectangle GetModelArea (void);
-
-    enum CoordinateSystem { CS_SCREEN, CS_MODEL };
-    enum BoundingBoxType { BBT_SHAPE, BBT_INFO };
-
-    /** Return the rectangle that bounds the page object represented by the
-        given page descriptor.
-        @param rDescriptor
-            The descriptor of the page for which to return the bounding box.
-        @param eCoordinateSystem
-            Specifies whether to return the screen or model coordinates.
-        @param eBoundingBoxType
-            Specifies whether to return the bounding box of only the page
-            object or the one that additionally includes other displayed
-            information like page name and fader symbol.
-    */
-    Rectangle GetPageBoundingBox (
-        const model::SharedPageDescriptor& rpDescriptor,
-        CoordinateSystem eCoordinateSystem,
-        BoundingBoxType eBoundingBoxType) const;
-
-    /** Return the rectangle that bounds the page object represented by the
-        given page index .
-        @param nIndex
-            The index of the page for which to return the bounding box.
-        @param eCoordinateSystem
-            Specifies whether to return the screen or model coordinates.
-        @param eBoundingBoxType
-            Specifies whether to return the bounding box of only the page
-            object or the one that additionally includes other displayed
-            information like page name and fader symbol.
-    */
-    Rectangle GetPageBoundingBox (
-        sal_Int32 nIndex,
-        CoordinateSystem eCoordinateSystem,
-        BoundingBoxType eBoundingBoxType) const;
 
     /** Return the index of the page that is rendered at the given position.
         @param rPosition
@@ -164,12 +141,17 @@ public:
     void HandleDrawModeChange (void);
 
     virtual void Resize (void);
-    virtual void CompleteRedraw (OutputDevice* pDevice, const Region& rPaintArea, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
-    virtual void InvalidateOneWin (
-        ::Window& rWindow);
-    virtual void InvalidateOneWin (
-        ::Window& rWindow,
-        const Rectangle& rPaintArea );
+    virtual void CompleteRedraw (
+        OutputDevice* pDevice,
+        const Region& rPaintArea,
+        sdr::contact::ViewObjectContactRedirector* pRedirector = NULL);
+    void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea);
+
+    virtual void ConfigurationChanged (
+        utl::ConfigurationBroadcaster* pBroadcaster,
+        sal_uInt32 nHint);
+
+    void HandleDataChangeEvent (void);
 
     void Layout (void);
     /** This tells the view that it has to re-determine the visibility of
@@ -179,12 +161,9 @@ public:
 
     /** Return the window to which this view renders its output.
     */
-    ::sd::Window* GetWindow (void) const;
-
+    //    ::boost::shared_ptr<sd::Window> GetWindow (void) const;
 
     ::boost::shared_ptr<cache::PageCache> GetPreviewCache (void);
-
-    view::ViewOverlay& GetOverlay (void);
 
     /** Set the bounding box of the insertion marker in model coordinates.
 
@@ -206,19 +185,18 @@ public:
     */
     void SetSelectionRectangleVisibility (bool bVisible);
 
-    typedef ::std::pair<sal_Int32,sal_Int32> PageRange;
     /** Return the range of currently visible page objects including the
         first and last one in that range.
         @return
             The returned pair of page object indices is empty when the
             second index is lower than the first.
     */
-    PageRange GetVisiblePageRange (void);
+    Pair GetVisiblePageRange (void);
 
     /** Add a shape to the page.  Typically used from inside
         PostModelChange().
     */
-    void AddSdrObject (SdrObject& rObject);
+    //    void AddSdrObject (SdrObject& rObject);
 
     /** Add a listener that is called when the set of visible slides.
         @param rListener
@@ -235,71 +213,87 @@ public:
     */
     void RemoveVisibilityChangeListener (const Link& rListener);
 
+    /** The page under the mouse is not highlighted in some contexts.  Call
+        this method on context changes.
+    */
+    void UpdatePageUnderMouse (bool bAnimate);
+    void UpdatePageUnderMouse (
+        const Point& rMousePosition,
+        const bool bIsMouseButtonDown,
+        const bool bAnimate = true);
+    void UpdatePageUnderMouse (
+        const model::SharedPageDescriptor& rpDescriptor,
+        const Point& rMousePosition,
+        const bool bIsMouseButtonDown,
+        const bool bAnimate = true);
+    void SetPageUnderMouse (
+        const model::SharedPageDescriptor& rpDescriptor,
+        const bool bAnimate = true);
+
+    bool SetState (
+        const model::SharedPageDescriptor& rpDescriptor,
+        const model::PageDescriptor::State eState,
+        const bool bStateValue,
+        const bool bAnimate = true);
+
+    void UpdateOrientation (void);
+
+    ::boost::shared_ptr<PageObjectPainter> GetPageObjectPainter (void);
+    ::boost::shared_ptr<LayeredDevice> GetLayeredDevice (void) const;
+
+    class DrawLock
+    {
+    public:
+        DrawLock (view::SlideSorterView& rView, const SharedSdWindow& rpWindow);
+        DrawLock (SlideSorter& rSlideSorter);
+        ~DrawLock (void);
+        /** When the DrawLock is disposed then it will not request a repaint
+            on destruction.
+        */
+        void Dispose (void);
+    private:
+        view::SlideSorterView& mrView;
+        SharedSdWindow mpWindow;
+    };
+
+    ButtonBar& GetButtonBar (void) const;
+    ToolTip& GetToolTip (void) const;
+
 protected:
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
 
 private:
     SlideSorter& mrSlideSorter;
     model::SlideSorterModel& mrModel;
-    /// This model is used for the maPage object and for the page visualizers
-    /// (SdrPageObj)
-    SdrModel maPageModel;
-    /** This page acts as container for the page objects that represent the
-        pages of the document that is represented by the SlideSorterModel.
-    */
-    SdrPage* mpPage;
+    bool mbIsDisposed;
     ::std::auto_ptr<Layouter> mpLayouter;
     bool mbPageObjectVisibilitiesValid;
     ::boost::shared_ptr<cache::PageCache> mpPreviewCache;
-    ::std::auto_ptr<ViewOverlay> mpViewOverlay;
-
-    int mnFirstVisiblePageIndex;
-    int mnLastVisiblePageIndex;
-
-    SvBorder maPagePixelBorder;
-
+    ::boost::shared_ptr<LayeredDevice> mpLayeredDevice;
+    Range maVisiblePageRange;
     bool mbModelChangedWhileModifyEnabled;
-
     Size maPreviewSize;
-
     bool mbPreciousFlagUpdatePending;
-
-    Size maPageNumberAreaModelSize;
-    SvBorder maModelBorder;
-
-    Orientation meOrientation;
-
+    Layouter::Orientation meOrientation;
+    ::boost::shared_ptr<controller::Properties> mpProperties;
+    model::SharedPageDescriptor mpPageUnderMouse;
+    sal_Int32 mnButtonUnderMouse;
+    ::boost::shared_ptr<PageObjectPainter> mpPageObjectPainter;
+    ::boost::shared_ptr<SelectionPainter> mpSelectionPainter;
+    Region maRedrawRegion;
+    SharedILayerPainter mpBackgroundPainter;
+    ::boost::scoped_ptr<ButtonBar> mpButtonBar;
+    ::boost::scoped_ptr<ToolTip> mpToolTip;
+    bool mbIsRearrangePending;
     ::std::vector<Link> maVisibilityChangeListeners;
-
-    /** Adapt the coordinates of the given bounding box according to the
-        other parameters.
-        @param rModelPageObjectBoundingBox
-            Bounding box given in model coordinates that bounds only the
-            page object.
-        @param eCoordinateSystem
-            When CS_SCREEN is given then the bounding box is converted into
-            screen coordinates.
-        @param eBoundingBoxType
-            When BBT_INFO is given then the bounding box is made larger so
-            that it encloses all relevant displayed information.
-        */
-    void AdaptBoundingBox (
-        Rectangle& rModelPageObjectBoundingBox,
-        CoordinateSystem eCoordinateSystem,
-        BoundingBoxType eBoundingBoxType) const;
 
     /** Determine the visibility of all page objects.
     */
     void DeterminePageObjectVisibilities (void);
 
-    /** Update the page borders used by the layouter by using those returned
-        by the first page.  Call this function when the model changes,
-        especially when the number of pages changes, or when the window is
-        resized as the borders may be device dependent.
-    */
-    void UpdatePageBorders (void);
-
     void UpdatePreciousFlags (void);
+    void RequestRearrange (void);
+    void Rearrange (void);
 };
 
 

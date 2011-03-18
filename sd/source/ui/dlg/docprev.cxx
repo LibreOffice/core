@@ -73,7 +73,7 @@ void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage
 }
 
 SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const ResId& rResId )
-: Control(pParent, rResId), pMetaFile( 0 ), bInEffect(FALSE), mpObj(NULL), mnShowPage(0)
+: Control(pParent, rResId), pMetaFile( 0 ), bInEffect(sal_False), mpObj(NULL), mnShowPage(0)
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
     svtools::ColorConfig aColorConfig;
@@ -106,13 +106,13 @@ void SdDocPreviewWin::CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rP
 
     if (dRatio>dRatioPreV)
     {
-        rSize=Size(nWidth, (USHORT)(nWidth/dRatio));
-        rPoint=Point( 0, (USHORT)((nHeight-rSize.Height())/2));
+        rSize=Size(nWidth, (sal_uInt16)(nWidth/dRatio));
+        rPoint=Point( 0, (sal_uInt16)((nHeight-rSize.Height())/2));
     }
     else
     {
-        rSize=Size((USHORT)(nHeight*dRatio), nHeight);
-        rPoint=Point((USHORT)((nWidth-rSize.Width())/2),0);
+        rSize=Size((sal_uInt16)(nHeight*dRatio), nHeight);
+        rPoint=Point((sal_uInt16)((nWidth-rSize.Width())/2),0);
     }
 }
 
@@ -239,7 +239,7 @@ void SdDocPreviewWin::updateViewSettings()
             aVDev.SetMapMode( aMap );
 
             // Disable output, as we only want to record a metafile
-            aVDev.EnableOutput( FALSE );
+            aVDev.EnableOutput( sal_False );
 
             pMtf->Record( &aVDev );
 
@@ -248,8 +248,8 @@ void SdDocPreviewWin::updateViewSettings()
 
             const Size aSize( pPage->GetSize() );
 
-            pView->SetBordVisible( FALSE );
-            pView->SetPageVisible( FALSE );
+            pView->SetBordVisible( sal_False );
+            pView->SetPageVisible( sal_False );
             pView->ShowSdrPage( pPage );
 
             const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );

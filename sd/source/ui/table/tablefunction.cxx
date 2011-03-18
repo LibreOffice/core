@@ -187,7 +187,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         }
 
         if( pPickObj )
-            mpView->ReplaceObjectAtView(pPickObj, *pPV, pObj, TRUE );
+            mpView->ReplaceObjectAtView(pPickObj, *pPV, pObj, sal_True );
         else
             mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER);
 

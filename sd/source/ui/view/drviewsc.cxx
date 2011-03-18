@@ -78,12 +78,12 @@ namespace sd {
 
 void DrawViewShell::FuTemp03(SfxRequest& rReq)
 {
-    USHORT nSId = rReq.GetSlot();
+    sal_uInt16 nSId = rReq.GetSlot();
     switch( nSId )
     {
         case SID_GROUP:  // BASIC
         {
-            if ( mpDrawView->IsPresObjSelected( TRUE, TRUE, TRUE ) )
+            if ( mpDrawView->IsPresObjSelected( sal_True, sal_True, sal_True ) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
@@ -133,7 +133,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             }
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
+            rBindings.Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
             rBindings.Invalidate( SID_CONTEXT );
 
             Cancel();
@@ -168,7 +168,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             }
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
-            rBindings.Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
+            rBindings.Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
             rBindings.Invalidate( SID_CONTEXT );
 
             Cancel();
@@ -302,10 +302,10 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_DISMANTLE:  // BASIC
         {
-            if ( mpDrawView->IsDismantlePossible(FALSE) )
+            if ( mpDrawView->IsDismantlePossible(sal_False) )
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                mpDrawView->DismantleMarkedObjects(FALSE);
+                mpDrawView->DismantleMarkedObjects(sal_False);
             }
             Cancel();
             rReq.Done ();
@@ -341,21 +341,21 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                 WaitObject aWait( (Window*)GetActiveWindow() );
                 mpDrawView->Break3DObj();
             }
-            else if ( mpDrawView->IsDismantlePossible(TRUE) )
+            else if ( mpDrawView->IsDismantlePossible(sal_True) )
             {
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                mpDrawView->DismantleMarkedObjects(TRUE);
+                mpDrawView->DismantleMarkedObjects(sal_True);
             }
             else if ( mpDrawView->IsImportMtfPossible() )
             {
 
                 WaitObject aWait( (Window*)GetActiveWindow() );
                 const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-                ULONG nAnz=rMarkList.GetMarkCount();
+                sal_uLong nAnz=rMarkList.GetMarkCount();
 
                 // Summe der Metaobjekte aller sel. Metafiles erm.
-                ULONG nCount = 0;
-                for(ULONG nm=0; nm<nAnz; nm++)
+                sal_uLong nCount = 0;
+                for(sal_uLong nm=0; nm<nAnz; nm++)
                 {
                     SdrMark*     pM=rMarkList.GetMark(nm);
                     SdrObject*   pObj=pM->GetMarkedSdrObj();
@@ -411,7 +411,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                     }
 
                     WaitObject aWait( (Window*)GetActiveWindow() );
-                    mpDrawView->ConvertMarkedObjTo3D(TRUE);
+                    mpDrawView->ConvertMarkedObjTo3D(sal_True);
                 }
             }
 
@@ -571,7 +571,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                 SfxStringItem aStyleNameItem( SID_STYLE_EDIT, pStyleSheet->GetName() );
                 aSet.Put(aStyleNameItem);
 
-                SfxUInt16Item aStyleFamilyItem( SID_STYLE_FAMILY, (UINT16)pStyleSheet->GetFamily() );
+                SfxUInt16Item aStyleFamilyItem( SID_STYLE_FAMILY, (sal_uInt16)pStyleSheet->GetFamily() );
                 aSet.Put(aStyleFamilyItem);
 
                 rReq.SetArgs(aSet);
@@ -593,7 +593,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         case SID_IMAP:
         {
             SvxIMapDlg* pDlg;
-            USHORT      nId = SvxIMapDlgChildWindow::GetChildWindowId();
+            sal_uInt16      nId = SvxIMapDlgChildWindow::GetChildWindowId();
 
             GetViewFrame()->ToggleChildWindow( nId );
             GetViewFrame()->GetBindings().Invalidate( SID_IMAP );
@@ -641,9 +641,9 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 |*
 \************************************************************************/
 
-USHORT DrawViewShell::GetIdBySubId( USHORT nSId )
+sal_uInt16 DrawViewShell::GetIdBySubId( sal_uInt16 nSId )
 {
-    USHORT nMappedSId = 0;
+    sal_uInt16 nMappedSId = 0;
     switch( nSId )
     {
         case SID_OBJECT_ROTATE:
@@ -793,7 +793,6 @@ USHORT DrawViewShell::GetIdBySubId( USHORT nSId )
         case SID_INSERT_PLUGIN:
         case SID_INSERT_SOUND:
         case SID_INSERT_VIDEO:
-        case SID_INSERT_APPLET:
         case SID_INSERT_TABLE:
         {
             nMappedSId = SID_DRAWTBX_INSERT;
@@ -842,13 +841,13 @@ USHORT DrawViewShell::GetIdBySubId( USHORT nSId )
 |*
 \************************************************************************/
 
-void DrawViewShell::MapSlot( USHORT nSId )
+void DrawViewShell::MapSlot( sal_uInt16 nSId )
 {
-    USHORT nMappedSId = GetIdBySubId( nSId );
+    sal_uInt16 nMappedSId = GetIdBySubId( nSId );
 
     if( nMappedSId > 0 )
     {
-        USHORT nID = GetArrayId( nMappedSId ) + 1;
+        sal_uInt16 nID = GetArrayId( nMappedSId ) + 1;
         mpSlotArray[ nID ] = nSId;
     }
 }
@@ -859,11 +858,11 @@ void DrawViewShell::MapSlot( USHORT nSId )
 |*
 \************************************************************************/
 
-void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, BOOL bPermanent )
+void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, sal_Bool bPermanent )
 {
     if( !bPermanent )
     {
-        USHORT nId = GetArrayId( SID_ZOOM_TOOLBOX ) + 1;
+        sal_uInt16 nId = GetArrayId( SID_ZOOM_TOOLBOX ) + 1;
         rSet.Put( TbxImageItem( SID_ZOOM_TOOLBOX, mpSlotArray[nId] ) );
 
         nId = GetArrayId( SID_DRAWTBX_INSERT ) + 1;
@@ -877,7 +876,7 @@ void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, BOOL bPermanent )
     }
     else
     {
-        for( USHORT nId = 0; nId < SLOTARRAY_COUNT; nId += 2 )
+        for( sal_uInt16 nId = 0; nId < SLOTARRAY_COUNT; nId += 2 )
         {
             rSet.Put( TbxImageItem( mpSlotArray[nId], mpSlotArray[nId+1] ) );
         }
@@ -890,10 +889,10 @@ void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, BOOL bPermanent )
 |*
 \************************************************************************/
 
-USHORT DrawViewShell::GetMappedSlot( USHORT nSId )
+sal_uInt16 DrawViewShell::GetMappedSlot( sal_uInt16 nSId )
 {
-    USHORT nSlot = 0;
-    USHORT nId = GetArrayId( nSId );
+    sal_uInt16 nSlot = 0;
+    sal_uInt16 nId = GetArrayId( nSId );
     if( nId != USHRT_MAX )
         nSlot = mpSlotArray[ nId+1 ];
 
@@ -913,9 +912,9 @@ USHORT DrawViewShell::GetMappedSlot( USHORT nSId )
 |*
 \************************************************************************/
 
-USHORT DrawViewShell::GetArrayId( USHORT nSId )
+sal_uInt16 DrawViewShell::GetArrayId( sal_uInt16 nSId )
 {
-    for( USHORT i = 0; i < SLOTARRAY_COUNT; i += 2 )
+    for( sal_uInt16 i = 0; i < SLOTARRAY_COUNT; i += 2 )
     {
         if( mpSlotArray[ i ] == nSId )
             return( i );

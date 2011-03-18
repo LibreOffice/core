@@ -161,7 +161,7 @@ bool AnnotationDragMove::EndSdrDrag(bool /*bCopy*/)
     Hide();
     if( mxTag.is() )
         mxTag->Move( DragStat().GetDX(), DragStat().GetDY() );
-    return TRUE;
+    return sal_True;
 }
 
 void AnnotationDragMove::CancelSdrDrag()
@@ -177,7 +177,7 @@ public:
     AnnotationHdl( const SmartTagReference& xTag, const Reference< XAnnotation >& xAnnotation, const Point& rPnt );
     virtual ~AnnotationHdl();
     virtual void CreateB2dIAObject();
-    virtual BOOL IsFocusHdl() const;
+    virtual sal_Bool IsFocusHdl() const;
     virtual Pointer GetSdrDragPointer() const;
     virtual bool isMarkable() const;
 
@@ -250,10 +250,10 @@ void AnnotationHdl::CreateB2dIAObject()
 
                                 pOverlayObject = new ::sdr::overlay::OverlayAnimatedBitmapEx(aPosition, aBitmapEx, aBitmapEx2, nBlinkTime, 0, 0, 0, 0 );
 /*
-                                    (UINT16)(aBitmapEx.GetSizePixel().Width() - 1) >> 1,
-                                    (UINT16)(aBitmapEx.GetSizePixel().Height() - 1) >> 1,
-                                    (UINT16)(aBitmapEx2.GetSizePixel().Width() - 1) >> 1,
-                                    (UINT16)(aBitmapEx2.GetSizePixel().Height() - 1) >> 1);
+                                    (sal_uInt16)(aBitmapEx.GetSizePixel().Width() - 1) >> 1,
+                                    (sal_uInt16)(aBitmapEx.GetSizePixel().Height() - 1) >> 1,
+                                    (sal_uInt16)(aBitmapEx2.GetSizePixel().Width() - 1) >> 1,
+                                    (sal_uInt16)(aBitmapEx2.GetSizePixel().Height() - 1) >> 1);
 */
                             }
                             else
@@ -273,9 +273,9 @@ void AnnotationHdl::CreateB2dIAObject()
 
 // --------------------------------------------------------------------
 
-BOOL AnnotationHdl::IsFocusHdl() const
+sal_Bool AnnotationHdl::IsFocusHdl() const
 {
-    return TRUE;
+    return sal_True;
 }
 
 // --------------------------------------------------------------------
@@ -377,7 +377,7 @@ bool AnnotationTag::KeyInput( const KeyEvent& rKEvt )
     if( !mxAnnotation.is() )
         return false;
 
-    USHORT nCode = rKEvt.GetKeyCode().GetCode();
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
     switch( nCode )
     {
     case KEY_DELETE:
@@ -517,31 +517,31 @@ void AnnotationTag::CheckPossibilities()
 
 // --------------------------------------------------------------------
 
-ULONG AnnotationTag::GetMarkablePointCount() const
+sal_uLong AnnotationTag::GetMarkablePointCount() const
 {
     return 0;
 }
 
 // --------------------------------------------------------------------
 
-ULONG AnnotationTag::GetMarkedPointCount() const
+sal_uLong AnnotationTag::GetMarkedPointCount() const
 {
     return 0;
 }
 
 // --------------------------------------------------------------------
 
-BOOL AnnotationTag::MarkPoint(SdrHdl& /*rHdl*/, BOOL /*bUnmark*/ )
+sal_Bool AnnotationTag::MarkPoint(SdrHdl& /*rHdl*/, sal_Bool /*bUnmark*/ )
 {
-    BOOL bRet=FALSE;
+    sal_Bool bRet=sal_False;
     return bRet;
 }
 
 // --------------------------------------------------------------------
 
-BOOL AnnotationTag::MarkPoints(const Rectangle* /*pRect*/, BOOL /*bUnmark*/ )
+sal_Bool AnnotationTag::MarkPoints(const Rectangle* /*pRect*/, sal_Bool /*bUnmark*/ )
 {
-    BOOL bChgd=FALSE;
+    sal_Bool bChgd=sal_False;
     return bChgd;
 }
 
@@ -638,7 +638,7 @@ BitmapEx AnnotationTag::CreateAnnotationBitmap( bool bSelected )
     const int BORDER_Y = 4; // pixels
 
     maSize = Size( aVDev.GetTextWidth( sAuthor ) + 2*BORDER_X, aVDev.GetTextHeight() + 2*BORDER_Y );
-    aVDev.SetOutputSizePixel( maSize, FALSE );
+    aVDev.SetOutputSizePixel( maSize, sal_False );
 
     Color aBorderColor( maColor );
 
@@ -692,7 +692,7 @@ void AnnotationTag::OpenPopup( bool bEdit )
             mpAnnotationWindow->InitControls();
             mpAnnotationWindow->setAnnotation(mxAnnotation);
 
-            USHORT nArrangeIndex = 0;
+            sal_uInt16 nArrangeIndex = 0;
             Point aPopupPos( FloatingWindow::CalcFloatingPosition( mpAnnotationWindow.get(), aRect, FLOATWIN_POPUPMODE_RIGHT, nArrangeIndex ) );
             Size aPopupSize( 320, 240 );
 
@@ -760,7 +760,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent*, pEvent)
                         if( pHdl )
                         {
                             mrView.BrkAction();
-                            const USHORT nDrgLog = (USHORT)pWindow->PixelToLogic(Size(DRGPIX,0)).Width();
+                            const sal_uInt16 nDrgLog = (sal_uInt16)pWindow->PixelToLogic(Size(DRGPIX,0)).Width();
 
                             rtl::Reference< AnnotationTag > xTag( this );
 
@@ -776,7 +776,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent*, pEvent)
             }
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 IMPL_LINK( AnnotationTag, ClosePopupHdl, void *, EMPTYARG )

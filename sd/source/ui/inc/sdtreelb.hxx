@@ -67,7 +67,7 @@ class SD_DLLPUBLIC SdPageObjsTLB : public SvTreeListBox
 {
 private:
 
-    static BOOL  SD_DLLPRIVATE bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
+    static sal_Bool  SD_DLLPRIVATE bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
 
 public:
 
@@ -135,8 +135,8 @@ protected:
     SfxMedium*              mpOwnMedium;
     Image                   maImgOle;
     Image                   maImgGraphic;
-    BOOL                    mbLinkableSelected;
-    BOOL                    mbDragEnabled;
+    sal_Bool                    mbLinkableSelected;
+    sal_Bool                    mbDragEnabled;
     String                  maDocName;
     ::sd::DrawDocShellRef       mxBookmarkDocShRef; // Zum Laden von Bookmarks
     ::sd::DrawDocShell*         mpDropDocSh;
@@ -178,11 +178,11 @@ protected:
         reorders both the involved shapes in their page as well as the
         associated list box entries.
     */
-    virtual BOOL NotifyMoving(
+    virtual sal_Bool NotifyMoving(
         SvLBoxEntry*  pTarget,
         SvLBoxEntry*  pEntry,
         SvLBoxEntry*& rpNewParent,
-        ULONG&        rNewChildPos);
+        sal_uLong&        rNewChildPos);
 
     using Window::GetDropTarget;
     virtual SvLBoxEntry* GetDropTarget (const Point& rLocation);
@@ -198,23 +198,24 @@ public:
     void                    SetViewFrame( SfxViewFrame* pViewFrame ) { mpFrame = pViewFrame; }
     SfxViewFrame*           GetViewFrame() const { return mpFrame; }
 
-    void                    Fill( const SdDrawDocument*, BOOL bAllPages, const String& rDocName );
+    void                    Fill( const SdDrawDocument*, sal_Bool bAllPages, const String& rDocName );
     void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const String& rDocName );
     void                    SetShowAllShapes (const bool bShowAllShapes, const bool bFill);
     bool                    GetShowAllShapes (void) const;
-    BOOL                    IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
-    BOOL                    HasSelectedChilds( const String& rName );
-    BOOL                    SelectEntry( const String& rName );
+    sal_Bool                    IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
+    sal_Bool                    HasSelectedChilds( const String& rName );
+    sal_Bool                    SelectEntry( const String& rName );
     String                  GetSelectEntry();
-    List*                   GetSelectEntryList( USHORT nDepth );
+    List*                   GetSelectEntryList( sal_uInt16 nDepth );
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
     ::sd::DrawDocShell*         GetDropDocSh() { return(mpDropDocSh); }
 
-    BOOL                    IsLinkableSelected() const { return mbLinkableSelected; }
+    sal_Bool                    IsLinkableSelected() const { return mbLinkableSelected; }
 
-    static BOOL             IsInDrag();
+    static sal_Bool             IsInDrag();
     using SvLBox::ExecuteDrop;
 
+    using SvTreeListBox::SelectEntry;
 private:
     /** This flag controls whether all shapes are shown as children of pages
         and group shapes or only the named shapes.

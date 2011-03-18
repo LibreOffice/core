@@ -113,7 +113,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdParagraphTabDlg(NULL, &aNewAttr ) : 0;
         if( pDlg )
         {
-            USHORT nResult = pDlg->Execute();
+            sal_uInt16 nResult = pDlg->Execute();
 
             switch( nResult )
             {
@@ -155,7 +155,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
     }
 
     // invalidieren der Slots
-    static USHORT SidArray[] = {
+    static sal_uInt16 SidArray[] = {
         SID_ATTR_TABSTOP,
         SID_ATTR_PARA_ADJUST_LEFT,
         SID_ATTR_PARA_ADJUST_RIGHT,

@@ -364,10 +364,10 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
         SvtLinguConfig().GetOptions( aOpt );
 
         struct FontDta {
-            INT16       nFallbackLang;
-            INT16       nLang;
-            USHORT      nFontType;
-            USHORT      nFontInfoId;
+            sal_Int16       nFallbackLang;
+            sal_Int16       nLang;
+            sal_uInt16      nFontType;
+            sal_uInt16      nFontInfoId;
             } aTable[3] =
         {
             // info to get western font to be used
@@ -404,8 +404,8 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
 
         pEditEngine = new EditEngine (mpEditEngineItemPool);
 
-        pEditEngine->EnableUndo (TRUE);
-        pEditEngine->SetDefTab (USHORT(
+        pEditEngine->EnableUndo (sal_True);
+        pEditEngine->SetDefTab (sal_uInt16(
             Application::GetDefaultDevice()->GetTextWidth(
                 UniString::CreateFromAscii("XXXX"))));
 
@@ -459,8 +459,8 @@ void PresenterTextView::Implementation::SetBackgroundColor (const Color aColor)
     DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
     DBG_ASSERT(mpEditEngineItemPool!=NULL, "EditEngineItemPool missing");
     mpEditEngine->SetBackgroundColor(aColor);
-    mpEditEngine->EnableAutoColor(FALSE);
-    mpEditEngine->ForceAutoColor(FALSE);
+    mpEditEngine->EnableAutoColor(sal_False);
+    mpEditEngine->ForceAutoColor(sal_False);
 }
 
 
@@ -577,7 +577,7 @@ Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap (void
             delete mpOutputDevice;
         mpOutputDevice = new VirtualDevice(*Application::GetDefaultDevice(), 0, 0);
         mpOutputDevice->SetMapMode(MAP_PIXEL);
-        mpOutputDevice->SetOutputSizePixel(maSize, TRUE);
+        mpOutputDevice->SetOutputSizePixel(maSize, sal_True);
         mpOutputDevice->SetLineColor();
         mpOutputDevice->SetFillColor();
         mpOutputDevice->SetBackground(Wallpaper());

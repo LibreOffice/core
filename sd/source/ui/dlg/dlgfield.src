@@ -28,6 +28,7 @@
 #include "dlgfield.hrc"
 ModalDialog DLG_FIELD_MODIFY
 {
+    HelpID = "sd:ModalDialog:DLG_FIELD_MODIFY";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 138 , 154 ) ;
@@ -41,6 +42,7 @@ ModalDialog DLG_FIELD_MODIFY
     };
     RadioButton RBT_FIX
     {
+        HelpID = "sd:RadioButton:DLG_FIELD_MODIFY:RBT_FIX";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 64 , 10 ) ;
         TabStop = TRUE ;
@@ -48,6 +50,7 @@ ModalDialog DLG_FIELD_MODIFY
     };
     RadioButton RBT_VAR
     {
+        HelpID = "sd:RadioButton:DLG_FIELD_MODIFY:RBT_VAR";
         Pos = MAP_APPFONT ( 12 , 25 ) ;
         Size = MAP_APPFONT ( 64 , 10 ) ;
         TabStop = TRUE ;
@@ -62,6 +65,7 @@ ModalDialog DLG_FIELD_MODIFY
 
     ListBox LB_LANGUAGE
     {
+        HelpID = "sd:ListBox:DLG_FIELD_MODIFY:LB_LANGUAGE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 52 , 65 ) ;
         Size = MAP_APPFONT ( 80 , 70 ) ;
@@ -71,6 +75,7 @@ ModalDialog DLG_FIELD_MODIFY
 
     ListBox LB_FORMAT
     {
+        HelpID = "sd:ListBox:DLG_FIELD_MODIFY:LB_FORMAT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 94 ) ;
         Size = MAP_APPFONT ( 126 , 54 ) ;

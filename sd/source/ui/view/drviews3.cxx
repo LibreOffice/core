@@ -131,7 +131,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
     CheckLineTo (rReq);
 
     // End text edit mode for some requests.
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     switch (nSlot)
     {
         case SID_OUTPUT_QUALITY_COLOR:
@@ -147,7 +147,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             }
     }
 
-    //  USHORT nSlot = rReq.GetSlot();
+    //  sal_uInt16 nSlot = rReq.GetSlot();
     switch (nSlot)
     {
         case SID_SWITCHPAGE:  // BASIC
@@ -155,13 +155,13 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             // switch page in running slide show
             if(SlideShow::IsRunning(GetViewShellBase()) && rReq.GetArgs())
             {
-                SFX_REQUEST_ARG(rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, FALSE);
+                SFX_REQUEST_ARG(rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, sal_False);
                 SlideShow::GetSlideShow(GetViewShellBase())->jumpToPageNumber((sal_Int32)((pWhatPage->GetValue()-1)>>1));
             }
             else
             {
                 const SfxItemSet *pArgs = rReq.GetArgs ();
-                USHORT nSelectedPage = 0;
+                sal_uInt16 nSelectedPage = 0;
 
                 if (! pArgs)
                 {
@@ -169,8 +169,8 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 }
                 else if (pArgs->Count () == 2)
                 {
-                    SFX_REQUEST_ARG (rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, FALSE);
-                    SFX_REQUEST_ARG (rReq, pWhatKind, SfxUInt32Item, ID_VAL_WHATKIND, FALSE);
+                    SFX_REQUEST_ARG (rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, sal_False);
+                    SFX_REQUEST_ARG (rReq, pWhatKind, SfxUInt32Item, ID_VAL_WHATKIND, sal_False);
 
                     sal_Int32 nWhatPage = (sal_Int32)pWhatPage->GetValue ();
                     sal_Int32 nWhatKind = (sal_Int32)pWhatKind->GetValue ();
@@ -219,11 +219,11 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_SWITCHLAYER:  // BASIC
         {
             const SfxItemSet *pArgs = rReq.GetArgs ();
-            USHORT nCurPage = GetLayerTabControl()->GetCurPageId ();
+            sal_uInt16 nCurPage = GetLayerTabControl()->GetCurPageId ();
 
             if( pArgs && pArgs->Count () == 1)
             {
-                SFX_REQUEST_ARG (rReq, pWhatLayer, SfxUInt32Item, ID_VAL_WHATLAYER, FALSE);
+                SFX_REQUEST_ARG (rReq, pWhatLayer, SfxUInt32Item, ID_VAL_WHATLAYER, sal_False);
                 if( pWhatLayer )
                     nCurPage = (short) pWhatLayer->GetValue ();
             }
@@ -242,8 +242,8 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
             if ( pArgs && pArgs->Count () == 2)
             {
-                SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem, ID_VAL_ISACTIVE, FALSE);
-                SFX_REQUEST_ARG (rReq, pWhatKind, SfxUInt32Item, ID_VAL_WHATKIND, FALSE);
+                SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem, ID_VAL_ISACTIVE, sal_False);
+                SFX_REQUEST_ARG (rReq, pWhatKind, SfxUInt32Item, ID_VAL_WHATKIND, sal_False);
 
                 sal_Int32 nWhatKind = (sal_Int32)pWhatKind->GetValue ();
                 if (CHECK_RANGE (PK_STANDARD, nWhatKind, PK_HANDOUT))
@@ -270,8 +270,8 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
             if ( pArgs && pArgs->Count () == 2)
             {
-                SFX_REQUEST_ARG (rReq, pWhatLayerMode, SfxBoolItem, ID_VAL_ISACTIVE, FALSE);
-                SFX_REQUEST_ARG (rReq, pWhatLayer, SfxUInt32Item, ID_VAL_WHATLAYER, FALSE);
+                SFX_REQUEST_ARG (rReq, pWhatLayerMode, SfxBoolItem, ID_VAL_ISACTIVE, sal_False);
+                SFX_REQUEST_ARG (rReq, pWhatLayer, SfxUInt32Item, ID_VAL_WHATLAYER, sal_False);
 
                 sal_Int32 nWhatLayer = (sal_Int32)pWhatLayer->GetValue ();
                 if (CHECK_RANGE (EM_PAGE, nWhatLayer, EM_MASTERPAGE))
@@ -368,7 +368,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
         case SID_RELOAD:
         {
-            USHORT nId = Svx3DChildWindow::GetChildWindowId();
+            sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
             SfxViewFrame* pFrame = GetViewFrame();
 
             try
@@ -419,7 +419,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         {
             if( rReq.GetArgs() )
             {
-                SFX_REQUEST_ARG(rReq, pBookmark, SfxStringItem, SID_JUMPTOMARK, FALSE);
+                SFX_REQUEST_ARG(rReq, pBookmark, SfxStringItem, SID_JUMPTOMARK, sal_False);
 
                 if (pBookmark)
                 {
@@ -462,7 +462,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             {
                 const SfxPoolItem* pItem;
                 if (rReq.GetArgs()->GetItemState(
-                    SID_ATTR_YEAR2000, TRUE, &pItem) == SFX_ITEM_SET)
+                    SID_ATTR_YEAR2000, sal_True, &pItem) == SFX_ITEM_SET)
                     pFormShell->SetY2KState (
                         static_cast<const SfxUInt16Item*>(pItem)->GetValue());
             }
@@ -538,8 +538,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 long nRight = Max(0L, rLRSpace.GetRight() + aPagePos.X() +
                                       aPageSize.Width() - aViewSize.Width());
 
-                USHORT nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
-                USHORT i;
+                sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
+                sal_uInt16 i;
                 for ( i = 0; i < nPageCnt; i++)
                 {
                     SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
@@ -596,8 +596,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 long nLower = Max(0L, rULSpace.GetLower() + aPagePos.Y() +
                                       aPageSize.Height() - aViewSize.Height());
 
-                USHORT nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
-                USHORT i;
+                sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
+                sal_uInt16 i;
                 for ( i = 0; i < nPageCnt; i++)
                 {
                     SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
@@ -678,11 +678,11 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         {
             if( mpDrawView->IsTextEdit() )
             {
-                USHORT nId = SID_ATTR_PARA_LRSPACE;
+                sal_uInt16 nId = SID_ATTR_PARA_LRSPACE;
                 const SvxLRSpaceItem& rItem = (const SvxLRSpaceItem&)
                             pArgs->Get( nId );
 
-                static const USHORT aWhichTable[]=
+                static const sal_uInt16 aWhichTable[]=
                 {
                     EE_PARA_OUTLLEVEL, EE_PARA_OUTLLEVEL,
                     EE_PARA_LRSPACE, EE_PARA_LRSPACE,
@@ -699,7 +699,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                         rItem.GetRight(), rItem.GetTxtLeft(),
                         rItem.GetTxtFirstLineOfst(), nId );
 
-                const INT16 nOutlineLevel = ((const SfxInt16Item&)aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
+                const sal_Int16 nOutlineLevel = ((const SfxInt16Item&)aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
                 const SvxLRSpaceItem& rOrigLRSpaceItem = (const SvxLRSpaceItem&) aEditAttr.Get( EE_PARA_LRSPACE );
                 const SvxNumBulletItem& rNumBulletItem = (const SvxNumBulletItem&) aEditAttr.Get( EE_PARA_NUMBULLET );
                 if( nOutlineLevel != -1 &&
@@ -827,12 +827,12 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     rSet.Put( rItem );
 
                     const SvxLRSpaceItem& rLRSpaceItem = (const SvxLRSpaceItem&) aEditAttr.Get( EE_PARA_LRSPACE );
-                    USHORT nId = SID_ATTR_PARA_LRSPACE;
+                    sal_uInt16 nId = SID_ATTR_PARA_LRSPACE;
                     SvxLRSpaceItem aLRSpaceItem( rLRSpaceItem.GetLeft(),
                             rLRSpaceItem.GetRight(), rLRSpaceItem.GetTxtLeft(),
                             rLRSpaceItem.GetTxtFirstLineOfst(), nId );
 
-                    const INT16 nOutlineLevel = ((const SfxInt16Item&)aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
+                    const sal_Int16 nOutlineLevel = ((const SfxInt16Item&)aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
                     const SvxNumBulletItem& rNumBulletItem = (const SvxNumBulletItem&) aEditAttr.Get( EE_PARA_NUMBULLET );
                     if( nOutlineLevel != -1 &&
                         rNumBulletItem.GetNumRule() &&
@@ -876,8 +876,8 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     rSet.DisableItem( SID_RULER_OBJECT );
 
                     // Seitenraender werden gelocked
-                    aProtect.SetSizeProtect( TRUE );
-                    aProtect.SetPosProtect( TRUE );
+                    aProtect.SetSizeProtect( sal_True );
+                    aProtect.SetPosProtect( sal_True );
                 }
 
                 if( aEditAttr.GetItemState( EE_PARA_WRITINGDIR ) >= SFX_ITEM_AVAILABLE )
@@ -892,7 +892,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
             rSet.DisableItem( EE_PARA_TABS );
             rSet.DisableItem( SID_RULER_TEXT_RIGHT_TO_LEFT );
 
-            if( mpDrawView->IsResizeAllowed(TRUE) )
+            if( mpDrawView->IsResizeAllowed(sal_True) )
             {
                 Rectangle aResizeRect( maMarkRect );
 
@@ -961,9 +961,9 @@ void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
 {
     SdrPageView* pPV;
     Point   aMPos = GetActiveWindow()->PixelToLogic(maMousePos);
-    USHORT  nHitLog = (USHORT) GetActiveWindow()->PixelToLogic(
+    sal_uInt16  nHitLog = (sal_uInt16) GetActiveWindow()->PixelToLogic(
         Size(FuPoor::HITPIX,0)).Width();
-    USHORT  nHelpLine;
+    sal_uInt16  nHelpLine;
 
     if ( mpDrawView->PickHelpLine(aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
     {

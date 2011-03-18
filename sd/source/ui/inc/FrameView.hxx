@@ -78,17 +78,17 @@ public:
                          { maPrintableLayers = rPrintableLayers; }
     const SetOfByte& GetPrintableLayers() { return maPrintableLayers; }
 
-    void SetRuler(const BOOL bRulerOn)
+    void SetRuler(const sal_Bool bRulerOn)
                  { mbRuler = bRulerOn; }
-    BOOL HasRuler() const { return mbRuler; }
+    sal_Bool HasRuler() const { return mbRuler; }
 
-    void SetNoColors(const BOOL bNoCol)
+    void SetNoColors(const sal_Bool bNoCol)
                  { mbNoColors = bNoCol; }
-    BOOL IsNoColors() const { return mbNoColors; }
+    sal_Bool IsNoColors() const { return mbNoColors; }
 
-    void SetNoAttribs(const BOOL bNoAttr)
+    void SetNoAttribs(const sal_Bool bNoAttr)
                  { mbNoAttribs = bNoAttr; }
-    BOOL IsNoAttribs() const { return mbNoAttribs; }
+    sal_Bool IsNoAttribs() const { return mbNoAttribs; }
 
     void SetVisArea(const Rectangle& rVisArea)
                  { maVisArea = rVisArea; }
@@ -104,15 +104,15 @@ public:
     /** can be used to get the page kind that was selected on last save of this document */
     PageKind GetPageKindOnLoad() const { return mePageKindOnLoad; }
 
-    SD_DLLPUBLIC void SetSelectedPage (USHORT nPage);
-    USHORT GetSelectedPage () const;
+    SD_DLLPUBLIC void SetSelectedPage (sal_uInt16 nPage);
+    sal_uInt16 GetSelectedPage () const;
 
     /** is used in FrameView::ReadUserDataSequence() only to store the
         page that was selected while last saving this document */
-    void SetSelectedPageOnLoad (USHORT nPage) { mnSelectedPageOnLoad = nPage; }
+    void SetSelectedPageOnLoad (sal_uInt16 nPage) { mnSelectedPageOnLoad = nPage; }
 
     /** can be used to get the page that was selected on last save of this document */
-    USHORT GetSelectedPageOnLoad () const { return mnSelectedPageOnLoad; }
+    sal_uInt16 GetSelectedPageOnLoad () const { return mnSelectedPageOnLoad; }
 
     SD_DLLPUBLIC void SetViewShEditMode(EditMode eMode, PageKind eKind);
     EditMode GetViewShEditMode (PageKind eKind);
@@ -127,22 +127,22 @@ public:
     */
     EditMode GetViewShEditModeOnLoad (void) const;
 
-    void SetLayerMode(BOOL bMode)
+    void SetLayerMode(sal_Bool bMode)
                  { mbLayerMode = bMode; }
-    BOOL IsLayerMode() const { return mbLayerMode; }
+    sal_Bool IsLayerMode() const { return mbLayerMode; }
 
-    void SetQuickEdit(BOOL bQEdit)
+    void SetQuickEdit(sal_Bool bQEdit)
                  { mbQuickEdit = bQEdit; }
-    BOOL IsQuickEdit() const { return mbQuickEdit; }
+    sal_Bool IsQuickEdit() const { return mbQuickEdit; }
 
-    void        SetBigHandles( BOOL bOn = TRUE ) { mbBigHandles = bOn; }
-    BOOL    IsBigHandles() const { return mbBigHandles; }
+    void        SetBigHandles( sal_Bool bOn = sal_True ) { mbBigHandles = bOn; }
+    sal_Bool    IsBigHandles() const { return mbBigHandles; }
 
-    void        SetDoubleClickTextEdit( BOOL bOn = TRUE ) { mbDoubleClickTextEdit = bOn; }
-    BOOL    IsDoubleClickTextEdit() const { return mbDoubleClickTextEdit; }
+    void        SetDoubleClickTextEdit( sal_Bool bOn = sal_True ) { mbDoubleClickTextEdit = bOn; }
+    sal_Bool    IsDoubleClickTextEdit() const { return mbDoubleClickTextEdit; }
 
-    void        SetClickChangeRotation( BOOL bOn = TRUE ) { mbClickChangeRotation = bOn; }
-    BOOL    IsClickChangeRotation() const { return mbClickChangeRotation; }
+    void        SetClickChangeRotation( sal_Bool bOn = sal_True ) { mbClickChangeRotation = bOn; }
+    sal_Bool    IsClickChangeRotation() const { return mbClickChangeRotation; }
 
     /** Remember the type of the view shell that was (or soon will be)
         previously associated with this frame view.
@@ -164,18 +164,18 @@ public:
 
     ViewShell::ShellType GetViewShellTypeOnLoad (void) const;
 
-    void SetPresentationViewShellId(USHORT nId)
+    void SetPresentationViewShellId(sal_uInt16 nId)
                  { mnPresViewShellId = nId; }
-    USHORT GetPresentationViewShellId() const { return mnPresViewShellId; }
+    sal_uInt16 GetPresentationViewShellId() const { return mnPresViewShellId; }
 
-    void SetSlotId(USHORT nId) { mnSlotId = nId; }
-    USHORT GetSlotId() const { return mnSlotId; }
+    void SetSlotId(sal_uInt16 nId) { mnSlotId = nId; }
+    sal_uInt16 GetSlotId() const { return mnSlotId; }
 
-    void SetSlidesPerRow(USHORT nSlides) { mnSlidesPerRow = nSlides; }
-    USHORT GetSlidesPerRow() const { return mnSlidesPerRow; }
+    void SetSlidesPerRow(sal_uInt16 nSlides) { mnSlidesPerRow = nSlides; }
+    sal_uInt16 GetSlidesPerRow() const { return mnSlidesPerRow; }
 
-    void SetDrawMode(ULONG nNewDrawMode) { mnDrawMode = nNewDrawMode; };
-    ULONG GetDrawMode() const { return mnDrawMode; };
+    void SetDrawMode(sal_uLong nNewDrawMode) { mnDrawMode = nNewDrawMode; };
+    sal_uLong GetDrawMode() const { return mnDrawMode; };
 
     void SetTabCtrlPercent( double nPercent ) { mnTabCtrlPercent = nPercent; }
     double GetTabCtrlPercent() const { return mnTabCtrlPercent; }
@@ -187,35 +187,35 @@ public:
     virtual void    ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
 
 private:
-    USHORT          mnRefCount;
+    sal_uInt16          mnRefCount;
     VirtualDevice*  mpVDev;
-    BOOL            mbRuler;
+    sal_Bool            mbRuler;
     SetOfByte       maVisibleLayers;
     SetOfByte       maLockedLayers;
     SetOfByte       maPrintableLayers;
     SdrHelpLineList maStandardHelpLines;
     SdrHelpLineList maNotesHelpLines;
     SdrHelpLineList maHandoutHelpLines;
-    BOOL            mbNoColors;        // Gliederungsmodus
-    BOOL            mbNoAttribs;       // Gliederungsmodus
+    sal_Bool            mbNoColors;        // Gliederungsmodus
+    sal_Bool            mbNoAttribs;       // Gliederungsmodus
     Rectangle       maVisArea;         // Sichtbarer Bereich
     PageKind        mePageKind;        // Seitentyp (Standard, Notizen, Handzettel)
-    USHORT          mnSelectedPage;    // Selektierte Seite
+    sal_uInt16          mnSelectedPage;    // Selektierte Seite
     PageKind        mePageKindOnLoad;
-    USHORT          mnSelectedPageOnLoad;
+    sal_uInt16          mnSelectedPageOnLoad;
     EditMode        meStandardEditMode; // Editmode im Zeichenmodus (Page/MasterPage)
     EditMode        meNotesEditMode;    // Editmode im Notizen-Modus (Page/MasterPage)
     EditMode        meHandoutEditMode;  // Editmode im Handzettel-Modus (Page/MasterPage)
     EditMode        meEditModeOnLoad;
-    BOOL            mbLayerMode;       // Layer an/aus
-    BOOL            mbQuickEdit;       // QuickEdit an/aus
-    BOOL            mbBigHandles;      // Grosse Handles
-    BOOL            mbDoubleClickTextEdit; // Textmodus nach Doppelklick
-    BOOL            mbClickChangeRotation; // Einfachklick wechselt Selektions-/Rotationsmodus
-    USHORT          mnPresViewShellId;  // ViewShell aus der die Pres. gestartet wurde
-    USHORT          mnSlotId;          // SlotId, welche initial ausgefuehrt wird
-    USHORT          mnSlidesPerRow;     // Dias pro Reihe auf dem Diatisch
-    ULONG           mnDrawMode;        // Drawmode fuer das normale Fenster
+    sal_Bool            mbLayerMode;       // Layer an/aus
+    sal_Bool            mbQuickEdit;       // QuickEdit an/aus
+    sal_Bool            mbBigHandles;      // Grosse Handles
+    sal_Bool            mbDoubleClickTextEdit; // Textmodus nach Doppelklick
+    sal_Bool            mbClickChangeRotation; // Einfachklick wechselt Selektions-/Rotationsmodus
+    sal_uInt16          mnPresViewShellId;  // ViewShell aus der die Pres. gestartet wurde
+    sal_uInt16          mnSlotId;          // SlotId, welche initial ausgefuehrt wird
+    sal_uInt16          mnSlidesPerRow;     // Dias pro Reihe auf dem Diatisch
+    sal_uLong           mnDrawMode;        // Drawmode fuer das normale Fenster
     double          mnTabCtrlPercent;
     /** Remember whether the navigator shows all shapes (<TRUE/>) or only
         the names ones (<FALSE/>).  Not persistent.

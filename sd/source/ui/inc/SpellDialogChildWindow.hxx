@@ -46,7 +46,7 @@ class SpellDialogChildWindow
 public:
     SpellDialogChildWindow (
         ::Window* pParent,
-        USHORT nId,
+        sal_uInt16 nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo);
     virtual ~SpellDialogChildWindow (void);

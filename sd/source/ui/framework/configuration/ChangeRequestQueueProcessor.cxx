@@ -198,9 +198,10 @@ void ChangeRequestQueueProcessor::ProcessOneEvent (void)
             // its state.
             if (mpConfigurationUpdater.get() != NULL)
             {
+#ifdef VERBOSE
                 ConfigurationTracer::TraceConfiguration (
                     mxConfiguration, "updating to configuration");
-
+#endif
                 mpConfigurationUpdater->RequestUpdate(mxConfiguration);
             }
         }

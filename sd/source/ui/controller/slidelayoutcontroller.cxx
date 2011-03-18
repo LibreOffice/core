@@ -102,8 +102,8 @@ private:
 
 struct snewfoil_value_info
 {
-    USHORT mnBmpResId;
-    USHORT mnStrResId;
+    sal_uInt16 mnBmpResId;
+    sal_uInt16 mnStrResId;
     WritingMode meWritingMode;
     AutoLayout maAutoLayout;
 };
@@ -162,7 +162,7 @@ static void fillLayoutValueSet( ValueSet* pValue, snewfoil_value_info* pInfo )
         String   aText( SdResId( pInfo->mnStrResId ) );
         BitmapEx aBmp(  SdResId( pInfo->mnBmpResId ) );
 
-        pValue->InsertItem( static_cast<USHORT>(pInfo->maAutoLayout)+1, aBmp, aText );
+        pValue->InsertItem( static_cast<sal_uInt16>(pInfo->maAutoLayout)+1, aBmp, aText );
 
         aLayoutItemSize.Width()  = std::max( aLayoutItemSize.Width(),  aBmp.GetSizePixel().Width()  );
         aLayoutItemSize.Height() = std::max( aLayoutItemSize.Height(), aBmp.GetSizePixel().Height() );
@@ -238,7 +238,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 
         mpLayoutSet2->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
         mpLayoutSet2->SetColCount( 4 );
-        mpLayoutSet2->EnableFullItemMode( FALSE );
+        mpLayoutSet2->EnableFullItemMode( sal_False );
         mpLayoutSet2->SetColor( GetControlBackground() );
 
         fillLayoutValueSet( mpLayoutSet2, &v_standard[0] );
@@ -264,7 +264,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
                 sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DuplicatePage" ) );
             else
                 sSlotStr = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Undo" ) );
-            aSlotImage = ::GetImage( mxFrame, sSlotStr, FALSE );
+            aSlotImage = ::GetImage( mxFrame, sSlotStr, sal_False );
 
             String sSlotTitle;
             if( bInsertPage )

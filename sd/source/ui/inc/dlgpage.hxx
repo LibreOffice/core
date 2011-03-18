@@ -39,7 +39,7 @@ class XGradientList;
 class XHatchList;
 class XBitmapList;
 
-typedef USHORT ChangeType;
+typedef sal_uInt16 ChangeType;
 
 /*************************************************************************
 |*
@@ -59,10 +59,10 @@ private:
     XBitmapList*        mpBitmapList;
 public:
 
-    SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, BOOL bAreaPage = TRUE );
+    SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet* pAttr, sal_Bool bAreaPage = sal_True );
     ~SdPageDlg() {};
 
-    virtual void PageCreated(USHORT nId, SfxTabPage& rPage);
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage);
 };
 
 #endif // _SD_DLGPAGE_HXX

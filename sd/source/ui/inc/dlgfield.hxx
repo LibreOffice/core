@@ -48,9 +48,9 @@ class SvxFieldData;
 class SdModifyFieldDlg : public ModalDialog
 {
 private:
+    FixedLine           aGrpType;
     RadioButton         aRbtFix;
     RadioButton         aRbtVar;
-    FixedLine           aGrpType;
     FixedText           maFtLanguage;
     SvxLanguageBox      maLbLanguage;
     FixedText           aFtFormat;

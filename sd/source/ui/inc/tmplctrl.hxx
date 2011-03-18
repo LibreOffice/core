@@ -34,10 +34,10 @@
 class SdTemplateControl : public SfxStatusBarControl
 {
 public:
-    SdTemplateControl( USHORT nSlotId, USHORT nId, StatusBar& rStb );
+    SdTemplateControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
     ~SdTemplateControl();
 
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual void    Paint( const UserDrawEvent& rEvt );
 
     SFX_DECL_STATUSBAR_CONTROL();

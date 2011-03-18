@@ -116,17 +116,17 @@ void SdPresLayoutDlg::Reset()
     long nName;
 
     // MasterPage austauschen
-    if( mrOutAttrs.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE, FALSE, &pPoolItem ) == SFX_ITEM_SET )
+    if( mrOutAttrs.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE, sal_False, &pPoolItem ) == SFX_ITEM_SET )
     {
-        BOOL bMasterPage = ( (const SfxBoolItem*) pPoolItem)->GetValue();
+        sal_Bool bMasterPage = ( (const SfxBoolItem*) pPoolItem)->GetValue();
         maCbxMasterPage.Enable( !bMasterPage );
         maCbxMasterPage.Check( bMasterPage );
     }
 
     // Nicht verwendete MasterPages entfernen
-    maCbxCheckMasters.Check(FALSE);
+    maCbxCheckMasters.Check(sal_False);
 
-    if(mrOutAttrs.GetItemState(ATTR_PRESLAYOUT_NAME, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if(mrOutAttrs.GetItemState(ATTR_PRESLAYOUT_NAME, sal_True, &pPoolItem) == SFX_ITEM_SET)
         maName = ((const SfxStringItem*)pPoolItem)->GetValue();
     else
         maName.Erase();
@@ -141,7 +141,7 @@ void SdPresLayoutDlg::Reset()
     }
     DBG_ASSERT(nName < mnLayoutCount, "Layout nicht gefunden");
 
-    maVS.SelectItem((USHORT)nName + 1);  // Inizes des ValueSets beginnen bei 1
+    maVS.SelectItem((sal_uInt16)nName + 1);  // Inizes des ValueSets beginnen bei 1
 
 }
 
@@ -154,7 +154,7 @@ void SdPresLayoutDlg::Reset()
 void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
 {
     short nId = maVS.GetSelectItemId();
-    BOOL bLoad = nId > mnLayoutCount;
+    sal_Bool bLoad = nId > mnLayoutCount;
     rOutAttrs.Put( SfxBoolItem( ATTR_PRESLAYOUT_LOAD, bLoad ) );
 
     String aLayoutName;
@@ -195,9 +195,9 @@ void SdPresLayoutDlg::FillValueSet()
 
     SdDrawDocument* pDoc = mpDocSh->GetDoc();
 
-    USHORT nCount = pDoc->GetMasterPageCount();
+    sal_uInt16 nCount = pDoc->GetMasterPageCount();
 
-    for (USHORT nLayout = 0; nLayout < nCount; nLayout++)
+    for (sal_uInt16 nLayout = 0; nLayout < nCount; nLayout++)
     {
         SdPage* pMaster = (SdPage*)pDoc->GetMasterPage(nLayout);
         if (pMaster->GetPageKind() == PK_STANDARD)
@@ -207,7 +207,7 @@ void SdPresLayoutDlg::FillValueSet()
             mpLayoutNames->Insert(new String(aLayoutName), LIST_APPEND);
 
             Bitmap aBitmap(mpDocSh->GetPagePreviewBitmap(pMaster, 90));
-            maVS.InsertItem((USHORT)mpLayoutNames->Count(), aBitmap, aLayoutName);
+            maVS.InsertItem((sal_uInt16)mpLayoutNames->Count(), aBitmap, aLayoutName);
         }
     }
 
@@ -244,12 +244,12 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
         return 0;
     }
 
-    USHORT nResult = pDlg->Execute();
+    sal_uInt16 nResult = pDlg->Execute();
     // Inserted update to force repaint
     Update();
 
     String aFile;
-    BOOL   bCancel = FALSE;
+    sal_Bool   bCancel = sal_False;
 
     switch (nResult)
     {
@@ -268,14 +268,14 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
         break;
 
         default:
-            bCancel = TRUE;
+            bCancel = sal_True;
     }
     delete pDlg;
 
     if( !bCancel )
     {
         // Pruefen, ob Vorlage schon vorhanden
-        BOOL bExists = FALSE;
+        sal_Bool bExists = sal_False;
         String* pName = (String*)mpLayoutNames->First();
         String aCompareStr( maName );
         if( maName.Len() == 0 )
@@ -285,9 +285,9 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
         {
             if( aCompareStr == *pName )
             {
-                bExists = TRUE;
+                bExists = sal_True;
                 // Vorlage selektieren
-                USHORT nId = (USHORT) mpLayoutNames->GetCurPos() + 1;
+                sal_uInt16 nId = (sal_uInt16) mpLayoutNames->GetCurPos() + 1;
                 maVS.SelectItem( nId );
             }
             pName = (String*)mpLayoutNames->Next();
@@ -306,9 +306,9 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
                 {
                     ::sd::DrawDocShell*  pTemplDocSh= pTemplDoc->GetDocSh();
 
-                    USHORT nCount = pTemplDoc->GetMasterPageCount();
+                    sal_uInt16 nCount = pTemplDoc->GetMasterPageCount();
 
-                    for (USHORT nLayout = 0; nLayout < nCount; nLayout++)
+                    for (sal_uInt16 nLayout = 0; nLayout < nCount; nLayout++)
                     {
                         SdPage* pMaster = (SdPage*) pTemplDoc->GetMasterPage(nLayout);
                         if (pMaster->GetPageKind() == PK_STANDARD)
@@ -318,13 +318,13 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
                             mpLayoutNames->Insert(new String(aLayoutName), LIST_APPEND);
 
                             Bitmap aBitmap(pTemplDocSh->GetPagePreviewBitmap(pMaster, 90));
-                            maVS.InsertItem((USHORT)mpLayoutNames->Count(), aBitmap, aLayoutName);
+                            maVS.InsertItem((sal_uInt16)mpLayoutNames->Count(), aBitmap, aLayoutName);
                         }
                     }
                 }
                 else
                 {
-                    bCancel = TRUE;
+                    bCancel = sal_True;
                 }
 
                 pDoc->CloseBookmarkDoc();
@@ -333,14 +333,14 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
             {
                 // leeres Layout
                 mpLayoutNames->Insert( new String( maStrNone ), LIST_APPEND );
-                maVS.InsertItem( (USHORT) mpLayoutNames->Count(),
+                maVS.InsertItem( (sal_uInt16) mpLayoutNames->Count(),
                         Bitmap( SdResId( BMP_FOIL_NONE ) ), maStrNone );
             }
 
             if (!bCancel)
             {
                 // Vorlage selektieren
-                maVS.SelectItem( (USHORT) mpLayoutNames->Count() );
+                maVS.SelectItem( (sal_uInt16) mpLayoutNames->Count() );
             }
         }
     }

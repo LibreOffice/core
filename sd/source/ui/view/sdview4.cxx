@@ -133,15 +133,15 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             else
             {
                 pNewGrafObj = new SdrGrafObj( rGraphic, pPickObj->GetLogicRect() );
-                pNewGrafObj->SetEmptyPresObj(TRUE);
+                pNewGrafObj->SetEmptyPresObj(sal_True);
             }
 
             if ( pNewGrafObj->IsEmptyPresObj() )
             {
                 Rectangle aRect( pNewGrafObj->GetLogicRect() );
-                pNewGrafObj->AdjustToMaxRect( aRect, FALSE );
+                pNewGrafObj->AdjustToMaxRect( aRect, sal_False );
                 pNewGrafObj->SetOutlinerParaObject(NULL);
-                pNewGrafObj->SetEmptyPresObj(FALSE);
+                pNewGrafObj->SetEmptyPresObj(sal_False);
             }
 
             if (pPage && pPage->IsPresObj(pPickObj))
@@ -207,10 +207,10 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         Size aPageSize( pPage->GetSize() );
         aPageSize.Width()  -= pPage->GetLftBorder() + pPage->GetRgtBorder();
         aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
-        pNewGrafObj->AdjustToMaxRect( Rectangle( Point(), aPageSize ), TRUE );
+        pNewGrafObj->AdjustToMaxRect( Rectangle( Point(), aPageSize ), sal_True );
 
-        ULONG   nOptions = SDRINSERT_SETDEFLAYER;
-        BOOL    bIsPresTarget = FALSE;
+        sal_uLong   nOptions = SDRINSERT_SETDEFLAYER;
+        sal_Bool    bIsPresTarget = sal_False;
 
         if ((mpViewSh
                 && mpViewSh->GetViewShell()!=NULL
@@ -377,7 +377,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
     {
         String          aCurrentDropFile( *aIter );
         INetURLObject   aURL( aCurrentDropFile );
-        BOOL            bOK = FALSE;
+        sal_Bool            bOK = sal_False;
 
         if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
         {
@@ -402,12 +402,12 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
                 if( aIter == maDropFileVector.begin() )
                     mnAction = nTempAction;
 
-                bOK = TRUE;
+                bOK = sal_True;
             }
             if( !bOK )
             {
                 const SfxFilter*        pFoundFilter = NULL;
-                SfxMedium               aSfxMedium( aCurrentDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
+                SfxMedium               aSfxMedium( aCurrentDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, sal_False );
                 ErrCode                 nErr = SFX_APP()->GetFilterMatcher().GuessFilter(  aSfxMedium, &pFoundFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
                 if( pFoundFilter && !nErr )
@@ -438,7 +438,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
                         aReq.AppendItem( aItem1 );
                         aReq.AppendItem( aItem2 );
                         FuInsertFile::Create( mpViewSh, pWin, this, mpDoc, aReq );
-                        bOK = TRUE;
+                        bOK = sal_True;
                     }
                 }
             }
@@ -512,7 +512,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
                             aRect = Rectangle( maDropPos, aSize );
 
                             SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect );
-                            ULONG       nOptions = SDRINSERT_SETDEFLAYER;
+                            sal_uLong       nOptions = SDRINSERT_SETDEFLAYER;
 
                             if (mpViewSh != NULL)
                             {
@@ -570,7 +570,7 @@ IMPL_LINK( View, DropErrorHdl, Timer*, EMPTYARG )
 |*
 \************************************************************************/
 
-void View::LockRedraw(BOOL bLock)
+void View::LockRedraw(sal_Bool bLock)
 {
     if (bLock)
     {

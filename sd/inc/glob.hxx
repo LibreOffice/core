@@ -71,10 +71,10 @@
 #define SD_IF_SDTOOLPANELSHELL          SFX_INTERFACE_SD_START + 30
 
 // Inventor-Id fuer StarDraw UserData
-const UINT32 SdUDInventor=UINT32('S')*0x00000001+
-                          UINT32('D')*0x00000100+
-                          UINT32('U')*0x00010000+
-                          UINT32('D')*0x01000000;
+const sal_uInt32 SdUDInventor=sal_uInt32('S')*0x00000001+
+                          sal_uInt32('D')*0x00000100+
+                          sal_uInt32('U')*0x00010000+
+                          sal_uInt32('D')*0x01000000;
 
 // Object-Ids fuer StarDraw UserData
 #define SD_ANIMATIONINFO_ID 1

@@ -143,7 +143,7 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
     rBuProv     ( rProv ),
     mnInstance  ( nInstance )
 {
-    sal_Bool bHasBullet = FALSE;
+    sal_Bool bHasBullet = sal_False;
 
     sal_uInt16 nUpperDist = 0;
     sal_uInt16 nBulletChar = 0x2022;
@@ -163,7 +163,7 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
             case EPP_TEXTTYPE_HalfBody :
             case EPP_TEXTTYPE_QuarterBody :
             {
-                bHasBullet = TRUE;
+                bHasBullet = sal_True;
                 nUpperDist = 0x14;
             }
             break;
@@ -225,7 +225,7 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
         rLev.mnAsianSettings = 2;
         rLev.mnBiDi = 0;
 
-        rLev.mbExtendedBulletsUsed = FALSE;
+        rLev.mbExtendedBulletsUsed = sal_False;
         rLev.mnBulletId = 0xffff;
         rLev.mnBulletStart = 0;
         rLev.mnMappedNumType = 0;
@@ -304,7 +304,7 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
             {
                 PPTExParaLevel& rLevel = maParaLevel[ i ];
                 if ( i )
-                    aParagraphObj.ImplGetNumberingLevel( rBuProv, i, FALSE );
+                    aParagraphObj.ImplGetNumberingLevel( rBuProv, i, sal_False );
                 rLevel.mnTextOfs = aParagraphObj.nTextOfs;
                 rLevel.mnBulletOfs = (sal_uInt16)aParagraphObj.nBulletOfs;
                 rLevel.mnBulletChar = aParagraphObj.cBulletId;
@@ -436,7 +436,7 @@ sal_Bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLev
 
     switch ( eAttr )
     {
-        case ParaAttr_BulletOn : return ( rPara.mbIsBullet ) ? ( nValue ) ? FALSE : TRUE : ( nValue ) ? TRUE : FALSE;
+        case ParaAttr_BulletOn : return ( rPara.mbIsBullet ) ? ( nValue ) ? sal_False : sal_True : ( nValue ) ? sal_True : sal_False;
         case ParaAttr_BuHardFont :
         case ParaAttr_BulletFont : return ( rPara.mnBulletFont != nValue );
         case ParaAttr_BuHardColor :
@@ -460,7 +460,7 @@ sal_Bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLev
         case CharAttr_Embossed : nFlag = 512; break;
         case CharAttr_Font : return ( rChar.mnFont != nValue );
         case CharAttr_AsianOrComplexFont : return ( rChar.mnAsianOrComplexFont != nValue );
-        case CharAttr_Symbol : return TRUE;
+        case CharAttr_Symbol : return sal_True;
         case CharAttr_FontHeight : return ( rChar.mnFontHeight != nValue );
         case CharAttr_FontColor : return ( rChar.mnFontColor != nValue );
         case CharAttr_Escapement : return ( rChar.mnEscapement != nValue );
@@ -474,7 +474,7 @@ sal_Bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLev
         else
             return ( ( nValue & nFlag ) != 0 );
     }
-    return TRUE;
+    return sal_True;
 }
 
 sal_uInt32 PPTExStyleSheet::SizeOfTxCFStyleAtom() const

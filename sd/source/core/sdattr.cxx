@@ -43,7 +43,7 @@ TYPEINIT1_AUTOFACTORY( DiaEffectItem, SfxEnumItem );
 
 
 DiaEffectItem::DiaEffectItem( presentation::FadeEffect eFE ) :
-    SfxEnumItem( ATTR_DIA_EFFECT, (USHORT)eFE )
+    SfxEnumItem( ATTR_DIA_EFFECT, (sal_uInt16)eFE )
 {
 }
 
@@ -60,7 +60,7 @@ SfxPoolItem* DiaEffectItem::Clone( SfxItemPool* ) const
 }
 
 
-SfxPoolItem* DiaEffectItem::Create( SvStream& rIn, USHORT ) const
+SfxPoolItem* DiaEffectItem::Create( SvStream& rIn, sal_uInt16 ) const
 {
     return new DiaEffectItem( rIn );
 }
@@ -74,7 +74,7 @@ TYPEINIT1_AUTOFACTORY( DiaSpeedItem, SfxEnumItem );
 
 
 DiaSpeedItem::DiaSpeedItem( FadeSpeed eFS ) :
-    SfxEnumItem( ATTR_DIA_SPEED, (USHORT)eFS )
+    SfxEnumItem( ATTR_DIA_SPEED, (sal_uInt16)eFS )
 {
 }
 
@@ -91,7 +91,7 @@ SfxPoolItem* DiaSpeedItem::Clone( SfxItemPool* ) const
 }
 
 
-SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn, USHORT ) const
+SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn, sal_uInt16 ) const
 {
     return new DiaSpeedItem( rIn );
 }
@@ -104,7 +104,7 @@ SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn, USHORT ) const
 TYPEINIT1_AUTOFACTORY( DiaAutoItem, SfxEnumItem );
 
 DiaAutoItem::DiaAutoItem( PresChange eChange ) :
-    SfxEnumItem( ATTR_DIA_AUTO, (USHORT)eChange )
+    SfxEnumItem( ATTR_DIA_AUTO, (sal_uInt16)eChange )
 {
 }
 
@@ -121,7 +121,7 @@ SfxPoolItem* DiaAutoItem::Clone( SfxItemPool* ) const
 }
 
 
-SfxPoolItem* DiaAutoItem::Create( SvStream& rIn, USHORT ) const
+SfxPoolItem* DiaAutoItem::Create( SvStream& rIn, sal_uInt16 ) const
 {
     return new DiaAutoItem( rIn );
 }
@@ -134,7 +134,7 @@ SfxPoolItem* DiaAutoItem::Create( SvStream& rIn, USHORT ) const
 TYPEINIT1_AUTOFACTORY( DiaTimeItem, SfxUInt32Item );
 
 
-DiaTimeItem::DiaTimeItem( UINT32 nValue ) :
+DiaTimeItem::DiaTimeItem( sal_uInt32 nValue ) :
         SfxUInt32Item( ATTR_DIA_TIME, nValue )
 {
 }

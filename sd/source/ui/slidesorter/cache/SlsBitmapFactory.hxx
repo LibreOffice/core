@@ -32,7 +32,6 @@
 #include "PreviewRenderer.hxx"
 #include <boost/shared_ptr.hpp>
 
-class BitmapEx;
 class SdPage;
 class Size;
 
@@ -51,9 +50,10 @@ public:
     BitmapFactory (void);
     ~BitmapFactory (void);
 
-    ::boost::shared_ptr<BitmapEx> CreateBitmap (
+    Bitmap CreateBitmap (
         const SdPage& rPage,
-        const Size& rPixelSize);
+        const Size& rPixelSize,
+        const bool bDoSuperSampling);
 
 private:
     PreviewRenderer maRenderer;

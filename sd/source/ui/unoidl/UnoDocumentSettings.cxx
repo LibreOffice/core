@@ -235,11 +235,11 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
     SdOptionsPrintItem aOptionsPrintItem( ATTR_OPTIONS_PRINT );
 
-    SfxPrinter* pPrinter = pDocSh->GetPrinter( FALSE );
+    SfxPrinter* pPrinter = pDocSh->GetPrinter( sal_False );
     if( pPrinter )
     {
         SdOptionsPrintItem* pPrinterOptions = NULL;
-        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, FALSE, (const SfxPoolItem**) &pPrinterOptions) == SFX_ITEM_SET)
+        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, sal_False, (const SfxPoolItem**) &pPrinterOptions) == SFX_ITEM_SET)
             aOptionsPrintItem.GetOptionsPrint() = pPrinterOptions->GetOptionsPrint();
     }
     else
@@ -456,7 +456,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     {
                         if( static_cast<sal_Int16>( aPrintOpts.GetHandoutPages() ) != nValue )
                         {
-                            aPrintOpts.SetHandoutPages( static_cast< UINT16 >( nValue ) );
+                            aPrintOpts.SetHandoutPages( static_cast< sal_uInt16 >( nValue ) );
                             bOptionsChanged = true;
                         }
                         bOk = sal_True;
@@ -721,16 +721,16 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
                         pDoc->SetSummationOfParagraphs( bIsSummationOfParagraphs );
                         SdDrawDocument* pDocument = pDocSh->GetDoc();
-                        SdrOutliner& rOutl = pDocument->GetDrawOutliner( FALSE );
+                        SdrOutliner& rOutl = pDocument->GetDrawOutliner( sal_False );
                         nCntrl = rOutl.GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
                         rOutl.SetControlWord( nCntrl | nSum );
-                        ::sd::Outliner* pOutl = pDocument->GetOutliner( FALSE );
+                        ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
                         if( pOutl )
                         {
                             nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
                             pOutl->SetControlWord( nCntrl | nSum );
                         }
-                        pOutl = pDocument->GetInternalOutliner( FALSE );
+                        pOutl = pDocument->GetInternalOutliner( sal_False );
                         if( pOutl )
                         {
                             nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
@@ -748,19 +748,19 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 {
                     bOk = sal_True;
 
-                    pDoc->SetCharCompressType( (UINT16)nCharCompressType );
+                    pDoc->SetCharCompressType( (sal_uInt16)nCharCompressType );
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
-                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( FALSE );
-                    rOutl.SetAsianCompressionMode( (UINT16)nCharCompressType );
-                    ::sd::Outliner* pOutl = pDocument->GetOutliner( FALSE );
+                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( sal_False );
+                    rOutl.SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
+                    ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
                     if( pOutl )
                     {
-                        pOutl->SetAsianCompressionMode( (UINT16)nCharCompressType );
+                        pOutl->SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
                     }
-                    pOutl = pDocument->GetInternalOutliner( FALSE );
+                    pOutl = pDocument->GetInternalOutliner( sal_False );
                     if( pOutl )
                     {
-                        pOutl->SetAsianCompressionMode( (UINT16)nCharCompressType );
+                        pOutl->SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
                     }
                 }
                 break;
@@ -775,14 +775,14 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
                     pDoc->SetKernAsianPunctuation( bAsianPunct );
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
-                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( FALSE );
+                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( sal_False );
                     rOutl.SetKernAsianPunctuation( bAsianPunct );
-                    ::sd::Outliner* pOutl = pDocument->GetOutliner( FALSE );
+                    ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
                     if( pOutl )
                     {
                         pOutl->SetKernAsianPunctuation( bAsianPunct );
                     }
-                    pOutl = pDocument->GetInternalOutliner( FALSE );
+                    pOutl = pDocument->GetInternalOutliner( sal_False );
                     if( pOutl )
                     {
                         pOutl->SetKernAsianPunctuation( bAsianPunct );
@@ -857,7 +857,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
     if( bOptionsChanged )
     {
         if( !pPrinter )
-            pPrinter = pDocSh->GetPrinter( TRUE );
+            pPrinter = pDocSh->GetPrinter( sal_True );
         SfxItemSet aNewOptions( pPrinter->GetOptions() );
         aNewOptions.Put( aOptionsPrintItem );
         pPrinter->SetOptions( aNewOptions );
@@ -878,11 +878,11 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
 
     SdOptionsPrintItem aOptionsPrintItem( ATTR_OPTIONS_PRINT );
 
-    SfxPrinter* pPrinter = pDocSh->GetPrinter( FALSE );
+    SfxPrinter* pPrinter = pDocSh->GetPrinter( sal_False );
     if( pPrinter )
     {
         SdOptionsPrintItem* pPrinterOptions = NULL;
-        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, FALSE, (const SfxPoolItem**) &pPrinterOptions) == SFX_ITEM_SET)
+        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, sal_False, (const SfxPoolItem**) &pPrinterOptions) == SFX_ITEM_SET)
             aOptionsPrintItem.GetOptionsPrint() = pPrinterOptions->GetOptionsPrint();
     }
     else

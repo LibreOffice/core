@@ -343,8 +343,8 @@ private:
     ::std::auto_ptr<LayouterLock> mpSynchronousLayouterLock;
     ::std::auto_ptr<LayouterLock> mpAsynchronousLayouterLock;
     ::std::auto_ptr<ViewShellManager::UpdateLock> mpViewShellManagerLock;
-    ULONG mnPendingUpdateCall;
-    ULONG mnPendingSetValidCall;
+    sal_uLong mnPendingUpdateCall;
+    sal_uLong mnPendingSetValidCall;
     ToolBarRules maToolBarRules;
 
     ::rtl::OUString GetToolBarResourceName (const ::rtl::OUString& rsBaseName) const;

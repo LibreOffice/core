@@ -33,7 +33,8 @@
 #include <tools/gen.hxx>
 #include <boost/shared_ptr.hpp>
 
-class BitmapEx;
+
+class Bitmap;
 
 namespace sd { namespace slidesorter { namespace cache {
 
@@ -49,8 +50,7 @@ public:
     /** Compress the given bitmap into a replacement format that is specific
         to the compressor class.
     */
-    virtual ::boost::shared_ptr<BitmapReplacement> Compress (
-        const ::boost::shared_ptr<BitmapEx>& rpBitmap) const = 0;
+    virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const = 0;
 
     /** Decompress the given replacement data into a preview bitmap.
         Depending on the compression technique the returned bitmap may
@@ -59,7 +59,7 @@ public:
         task of the caller to create a new preview bitmap if the returned
         one is not as desired.
     */
-    virtual ::boost::shared_ptr<BitmapEx> Decompress (const BitmapReplacement& rBitmapData)const=0;
+    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData)const=0;
 
     /** Return whether the compression and decompression is lossless.  This
         value is used by the caller of Decompress() to decide whether to use
@@ -92,9 +92,8 @@ class NoBitmapCompression
 {
     class DummyReplacement;
 public:
-    virtual ::boost::shared_ptr<BitmapReplacement> Compress (
-        const ::boost::shared_ptr<BitmapEx>& rpBitmap) const;
-    virtual ::boost::shared_ptr<BitmapEx> Decompress (const BitmapReplacement& rBitmapData) const;
+    virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rpBitmap) const;
+    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const;
     virtual bool IsLossless (void) const;
 };
 
@@ -110,9 +109,8 @@ class CompressionByDeletion
     : public BitmapCompressor
 {
 public:
-    virtual ::boost::shared_ptr<BitmapReplacement> Compress (
-        const ::boost::shared_ptr<BitmapEx>& rpBitmap) const;
-    virtual ::boost::shared_ptr<BitmapEx> Decompress (const BitmapReplacement& rBitmapData) const;
+    virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const;
+    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const;
     virtual bool IsLossless (void) const;
 };
 
@@ -130,11 +128,10 @@ class ResolutionReduction
     class ResolutionReducedReplacement;
     static const sal_Int32 mnWidth = 100;
 public:
-    virtual ::boost::shared_ptr<BitmapReplacement> Compress (
-        const ::boost::shared_ptr<BitmapEx>& rpBitmap) const;
+    virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rpBitmap) const;
     /** Scale the replacement bitmap up to the original size.
     */
-    virtual ::boost::shared_ptr<BitmapEx> Decompress (const BitmapReplacement& rBitmapData) const;
+    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const;
     virtual bool IsLossless (void) const;
 };
 
@@ -149,9 +146,8 @@ class PngCompression
 {
     class PngReplacement;
 public:
-    virtual ::boost::shared_ptr<BitmapReplacement> Compress (
-        const ::boost::shared_ptr<BitmapEx>& rpBitmap) const;
-    virtual ::boost::shared_ptr<BitmapEx> Decompress (const BitmapReplacement& rBitmapData) const;
+    virtual ::boost::shared_ptr<BitmapReplacement> Compress (const Bitmap& rBitmap) const;
+    virtual Bitmap Decompress (const BitmapReplacement& rBitmapData) const;
     virtual bool IsLossless (void) const;
 };
 

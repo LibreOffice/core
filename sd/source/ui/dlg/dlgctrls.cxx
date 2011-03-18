@@ -85,14 +85,14 @@ void FadeEffectLB::Fill()
 /*
 void FadeEffectLB::SelectEffect( presentation::FadeEffect eFE )
 {
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
 
     for( long i = 0, nCount = sizeof( aEffects ) / sizeof( FadeEffectPair ); ( i < nCount ) && !bFound; i++ )
     {
         if( aEffects[ i ].meFE == eFE )
         {
-            SelectEntryPos( (USHORT) i );
-            bFound = TRUE;
+            SelectEntryPos( (sal_uInt16) i );
+            bFound = sal_True;
         }
     }
 }
@@ -102,7 +102,7 @@ void FadeEffectLB::SelectEffect( presentation::FadeEffect eFE )
 
 void FadeEffectLB::applySelected( SdPage* pSlide ) const
 {
-    const USHORT nPos = GetSelectEntryPos();
+    const sal_uInt16 nPos = GetSelectEntryPos();
 
     if( pSlide && (nPos < mpImpl->maPresets.size() ) )
     {

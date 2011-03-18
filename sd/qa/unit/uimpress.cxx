@@ -125,7 +125,7 @@ void Test::testAddPage()
 void Test::testCustomShow()
 {
     CPPUNIT_ASSERT_MESSAGE("test generation of custom show list!",
-                           m_pDoc->GetCustomShowList(TRUE));
+                           m_pDoc->GetCustomShowList(sal_True));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
