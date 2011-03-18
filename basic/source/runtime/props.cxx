@@ -33,6 +33,7 @@
 #include "stdobj.hxx"
 #include "rtlproto.hxx"
 #include "errobject.hxx"
+#include "basegfx/numeric/ftools.hxx"
 
 
 // Properties und Methoden legen beim Get (bWrite = sal_False) den Returnwert
