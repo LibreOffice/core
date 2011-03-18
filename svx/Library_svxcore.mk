@@ -37,9 +37,9 @@ $(eval $(call gb_Library_add_package_headers,svxcore,\
 ))
 
 $(eval $(call gb_Library_set_include,svxcore,\
-    -I$(SRCDIR)/svx/inc \
-    -I$(SRCDIR)/svx/inc/pch \
-    -I$(SRCDIR)/svx/source/inc \
+    -I$(realpath $(SRCDIR)/svx/inc) \
+    -I$(realpath $(SRCDIR)/svx/inc/pch) \
+    -I$(realpath $(SRCDIR)/svx/source/inc) \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
     -I$(WORKDIR)/SdiTarget/svx/sdi \
@@ -446,8 +446,8 @@ $(eval $(call gb_SdiTarget_SdiTarget,svx/sdi/svxslots,svx/sdi/svx))
 
 $(eval $(call gb_SdiTarget_set_include,svx/sdi/svxslots,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/svx/inc \
-    -I$(SRCDIR)/svx/sdi \
+    -I$(realpath $(SRCDIR)/svx/inc) \
+    -I$(realpath $(SRCDIR)/svx/sdi) \
 ))
 
 # vim: set noet sw=4 ts=4:
