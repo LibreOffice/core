@@ -63,14 +63,27 @@ namespace basegfx {
 
 class CairoFontsCache
 {
+public:
+    struct CacheId
+    {
+        const void *mpFace;
+        const void *mpOptions;
+        bool mbEmbolden;
+        bool operator ==(const CacheId& rOther) const
+        {
+            return mpFace == rOther.mpFace &&
+                mpOptions == rOther.mpOptions &&
+                mbEmbolden == rOther.mbEmbolden;
+        }
+    };
 private:
     static int mnRefCount;
-    typedef std::deque< std::pair<void *, void*> > LRUFonts;
+    typedef std::deque< std::pair<void *, CacheId> > LRUFonts;
     static LRUFonts maLRUFonts;
 public:
     CairoFontsCache();
-    static void  CacheFont(void *pFont, void *pId);
-    static void* FindCachedFont(void *pId);
+    static void  CacheFont(void *pFont, const CacheId &rId);
+    static void* FindCachedFont(const CacheId &rId);
     ~CairoFontsCache();
 };
 

@@ -271,7 +271,7 @@ private:
     void (*mp_set_font_options)(cairo_t *, const void *);
     void (*mp_ft_font_options_substitute)(const void*, void*);
 
-    bool canEmbolden() const { return false; }
+    bool canEmbolden() const { return mp_ft_font_face_create_for_pattern != NULL; }
 
     CairoWrapper();
 public:
@@ -447,9 +447,9 @@ CairoFontsCache::~CairoFontsCache()
     }
 }
 
-void CairoFontsCache::CacheFont(void *pFont, void* pId)
+void CairoFontsCache::CacheFont(void *pFont, const CairoFontsCache::CacheId &rId)
 {
-    maLRUFonts.push_front( std::pair<void*, void *>(pFont, pId) );
+    maLRUFonts.push_front( std::pair<void*, CairoFontsCache::CacheId>(pFont, rId) );
     if (maLRUFonts.size() > 8)
     {
         CairoWrapper &rCairo = CairoWrapper::get();
@@ -458,11 +458,11 @@ void CairoFontsCache::CacheFont(void *pFont, void* pId)
     }
 }
 
-void* CairoFontsCache::FindCachedFont(void *pId)
+void* CairoFontsCache::FindCachedFont(const CairoFontsCache::CacheId &rId)
 {
     LRUFonts::iterator aEnd = maLRUFonts.end();
     for (LRUFonts::iterator aI = maLRUFonts.begin(); aI != aEnd; ++aI)
-        if (aI->second == pId)
+        if (aI->second == rId)
             return aI->first;
     return NULL;
 }
@@ -533,17 +533,21 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
 
     cairo_font_face_t* font_face = NULL;
 
-    void *pId = rFont.GetFtFace();
-    font_face = (cairo_font_face_t*)m_aCairoFontsCache.FindCachedFont(pId);
+    void* pFace = rFont.GetFtFace();
+    CairoFontsCache::CacheId aId;
+    aId.mpFace = pFace;
+    aId.mpOptions = rFont.GetFontOptions();
+    aId.mbEmbolden = rFont.NeedsArtificialBold();
+    font_face = (cairo_font_face_t*)m_aCairoFontsCache.FindCachedFont(aId);
     if (!font_face)
     {
         const ImplFontOptions *pOptions = rFont.GetFontOptions();
-        void *pPattern = pOptions ? pOptions->GetPattern(pId) : NULL;
+        void *pPattern = pOptions ? pOptions->GetPattern(pFace, aId.mbEmbolden) : NULL;
         if (pPattern)
             font_face = rCairo.ft_font_face_create_for_pattern(pPattern);
         if (!font_face)
-            font_face = rCairo.ft_font_face_create_for_ft_face(pId, rFont.GetLoadFlags());
-        m_aCairoFontsCache.CacheFont(font_face, pId);
+            font_face = rCairo.ft_font_face_create_for_ft_face(pFace, rFont.GetLoadFlags());
+        m_aCairoFontsCache.CacheFont(font_face, aId);
     }
 
     rCairo.set_font_face(cr, font_face);

@@ -59,6 +59,9 @@ using namespace psp;
     #ifndef FC_FT_FACE
         #define FC_FT_FACE "ftface"
     #endif
+    #ifndef FC_EMBOLDEN
+        #define FC_EMBOLDEN "embolden"
+    #endif
 #else
     typedef void FcConfig;
     typedef void FcObjectSet;
@@ -1165,11 +1168,14 @@ public:
         if( rWrapper.isValid() )
             rWrapper.FcPatternDestroy( mpPattern );
     }
-    virtual void *GetPattern(void * face) const
+    virtual void *GetPattern(void * face, bool bEmbolden) const
     {
         FontCfgWrapper& rWrapper = FontCfgWrapper::get();
         if( rWrapper.isValid() )
+        {
             rWrapper.FcPatternAddFTFace(mpPattern, FC_FT_FACE, static_cast<FT_Face>(face));
+            rWrapper.FcPatternAddBool(mpPattern, FC_EMBOLDEN, bEmbolden ? FcTrue : FcFalse);
+        }
         return mpPattern;
     }
     FcPattern* mpPattern;

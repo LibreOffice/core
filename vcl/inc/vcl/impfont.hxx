@@ -166,7 +166,7 @@ public:
         { return meAntiAlias == ANTIALIAS_FALSE; }
     bool DontUseHinting() const
         { return (meHinting == HINTING_FALSE) || (GetHintStyle() == HINT_NONE); }
-    virtual void *GetPattern(void * /*pFace*/) const
+    virtual void *GetPattern(void * /*pFace*/, bool /*bEmbolden*/) const
         { return NULL; }
 };
 
