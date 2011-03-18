@@ -1044,25 +1044,20 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     String sExtension = lcl_GetExtensionForDocType(nDocType);
     switch( nDocType )
     {
-        case MM_DOCTYPE_OOO : break;
-        case MM_DOCTYPE_PDF :
+        case MM_DOCTYPE_OOO:
         {
-            //the method SwIOSystemGetFilterOfFormat( ) returns the template filter
-            //because it uses the same user data :-(
-            SfxFilterMatcher aMatcher( pFilterContainer->GetName() );
-            SfxFilterMatcherIter aIter( &aMatcher );
-            const SfxFilter* pFilter = aIter.First();
-            String sFilterMime( String::CreateFromAscii( "application/pdf" ));
-            while ( pFilter )
-            {
-                if( pFilter->GetMimeType() == sFilterMime  && pFilter->CanExport() )
-                {
-                    pSfxFlt = pFilter;
-                    break;
-                }
-                pFilter = aIter.Next();
-            }
-
+            //Make sure we don't pick e.g. the flat xml filter
+            //for this format
+            pSfxFlt = SwIoSystem::GetFilterOfFormat(
+                String::CreateFromAscii( FILTER_XML ),
+                SwDocShell::Factory().GetFilterContainer() );
+        }
+        break;
+        case MM_DOCTYPE_PDF:
+        {
+            pSfxFlt = pFilterContainer->GetFilter4FilterName(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_pdf_Export")),
+                SFX_FILTER_EXPORT);
         }
         break;
         case MM_DOCTYPE_WORD:
