@@ -54,15 +54,6 @@ struct Gregorian : public ::rtl::StaticWithInit<const ::rtl::OUString, Gregorian
 };
 }
 
-inline void printOUString( ::rtl::OUString const & _suStr )
-{
-    rtl::OString aString;
-
-    printf( "OUString: " );
-    aString = ::rtl::OUStringToOString( _suStr, RTL_TEXTENCODING_ASCII_US );
-    printf( "'%s'\n", aString.getStr( ) );
-}
-
 // -----------------------------------------------------------------------------
 namespace ThreadHelper
 {
@@ -127,8 +118,6 @@ protected:
             while(schedule())
             {
                 rtl::OUString aStr = Gregorian::get();
-                 printOUString(aStr);
-                 printOUString(m_sConstStr);
                 if (aStr.equals(m_sConstStr))
                 {
                     m_nOK++;
@@ -181,7 +170,6 @@ namespace rtl_DoubleLocking
         void getValue_001()
             {
                 rtl::OUString aStr = Gregorian::get();
-                printOUString(aStr);
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Gregorian::get() failed, wrong value expected.",
@@ -208,7 +196,7 @@ namespace rtl_DoubleLocking
                 pThread->create();
                 p2Thread->create();
 
-                ThreadHelper::thread_sleep_tenth_sec(50);
+                ThreadHelper::thread_sleep_tenth_sec(5);
 
                 pThread->terminate();
                 p2Thread->terminate();
@@ -219,8 +207,10 @@ namespace rtl_DoubleLocking
                 sal_Int32 nValueOK2 = 0;
                 nValueOK2 = p2Thread->getOK();
 
+#if OSL_DEBUG_LEVEL > 2
                 printf("Value in Thread #1 is %d\n", nValueOK);
                 printf("Value in Thread #2 is %d\n", nValueOK2);
+#endif
 
                 sal_Int32 nValueFails = 0;
                 nValueFails = pThread->getFails();
@@ -228,10 +218,11 @@ namespace rtl_DoubleLocking
                 sal_Int32 nValueFails2 = 0;
                 nValueFails2 = p2Thread->getFails();
 
+#if OSL_DEBUG_LEVEL > 2
                 printf("Fails in Thread #1 is %d\n", nValueFails);
                 printf("Fails in Thread #2 is %d\n", nValueFails2);
+#endif
 
-                // ThreadHelper::thread_sleep_tenth_sec(1);
                 pThread->join();
                 p2Thread->join();
 

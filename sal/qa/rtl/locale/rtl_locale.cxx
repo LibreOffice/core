@@ -142,16 +142,14 @@ public:
     // insert your test code here.
     void getLanguage_001()
     {
-       rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
+        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suLanguage = aLocale.getLanguage();
-        printf("Language: %s\n", rtl::OUStringToOString(suLanguage, osl_getThreadTextEncoding()).getStr());
         CPPUNIT_ASSERT_MESSAGE("locale language must be 'de'", suLanguage.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("de"))));
     }
     void getLanguage_002()
     {
-       rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
+        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suLanguage = rtl_locale_getLanguage(aLocale.getData());
-        printf("Language: %s\n", rtl::OUStringToOString(suLanguage, osl_getThreadTextEncoding()).getStr());
         CPPUNIT_ASSERT_MESSAGE("locale language must be 'de'", suLanguage.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("de"))));
     }
 
@@ -183,16 +181,14 @@ public:
     // insert your test code here.
     void getCountry_001()
     {
-       rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
+        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suCountry = aLocale.getCountry();
-        printf("Country: %s\n", rtl::OUStringToOString(suCountry, osl_getThreadTextEncoding()).getStr());
         CPPUNIT_ASSERT_MESSAGE("locale country must be 'DE'", suCountry.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DE"))));
     }
     void getCountry_002()
     {
-       rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
+        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suCountry = rtl_locale_getCountry(aLocale.getData());
-        printf("Country: %s\n", rtl::OUStringToOString(suCountry, osl_getThreadTextEncoding()).getStr());
         CPPUNIT_ASSERT_MESSAGE("locale country must be 'DE'", suCountry.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DE"))));
     }
 
@@ -224,16 +220,14 @@ public:
     // insert your test code here.
     void getVariant_001()
     {
-       rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
+        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suVariant = aLocale.getVariant();
-        printf("Variant: %s\n", rtl::OUStringToOString(suVariant, osl_getThreadTextEncoding()).getStr());
         CPPUNIT_ASSERT_MESSAGE("locale variant must be 'hochdeutsch'", suVariant.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hochdeutsch"))));
     }
     void getVariant_002()
     {
-       rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
+        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suVariant = rtl_locale_getVariant(aLocale.getData());
-        printf("Variant: %s\n", rtl::OUStringToOString(suVariant, osl_getThreadTextEncoding()).getStr());
         CPPUNIT_ASSERT_MESSAGE("locale variant must be 'hochdeutsch'", suVariant.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hochdeutsch"))));
     }
 
@@ -265,16 +259,14 @@ public:
     // insert your test code here.
     void hashCode_001()
     {
-       rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
+        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         sal_Int32 nHashCode = aLocale.hashCode();
-        printf("Hashcode: %d\n", nHashCode);
         CPPUNIT_ASSERT_MESSAGE("locale hashcode must be 3831", nHashCode != 0);
     }
     void hashCode_002()
     {
-       rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
+        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         sal_Int32 nHashCode = rtl_locale_hashCode(aLocale.getData());
-        printf("Hashcode: %d\n", nHashCode);
         CPPUNIT_ASSERT_MESSAGE("locale hashcode must be 3831", nHashCode != 0);
     }
 
@@ -321,7 +313,6 @@ public:
         rtl::OLocale aLocale2 = rtl::OLocale::registerLocale(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")));
 
         sal_Int32 nEqual = rtl_locale_equals(aLocale1.getData(), aLocale2.getData());
-        printf("rtl_locale_equals() result: %d\n", nEqual);
         CPPUNIT_ASSERT(nEqual != 0);
     }
 
