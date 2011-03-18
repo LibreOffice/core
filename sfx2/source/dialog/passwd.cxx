@@ -177,10 +177,10 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
     nChildIndex = xLayout->addChild( xButtons );
     xLayout->setBorders( nChildIndex, -2, 0, -2, -2 );
 
-    size_t nBtnIndex = xButtons->addWindow( &maHelpBtn, 0, aBtnSize );
+    xButtons->addWindow( &maHelpBtn, 0, aBtnSize );
     xButtons->addChild( new vcl::Spacer( xButtons.get() ) );
-    nBtnIndex = xButtons->addWindow( &maOKBtn, 0, aBtnSize );
-    nBtnIndex = xButtons->addWindow( &maCancelBtn, 0, aBtnSize );
+    xButtons->addWindow( &maOKBtn, 0, aBtnSize );
+    xButtons->addWindow( &maCancelBtn, 0, aBtnSize );
 
     Link aLink = LINK( this, SfxPasswordDialog, EditModifyHdl );
     maPasswordED.SetModifyHdl( aLink );
