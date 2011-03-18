@@ -138,7 +138,7 @@ void lcl_dump_pset(Reference< XPropertySet > rXPropSet)
         if( value >>= strValue )
             fprintf (stderr,"\"%s\"\n", USS( strValue ) );
         else if( value >>= intValue )
-            fprintf (stderr,"%d            (hex: %x)\n", intValue, intValue);
+            fprintf (stderr,"%" SAL_PRIdINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", intValue, intValue);
         else if( value >>= boolValue )
             fprintf (stderr,"%d            (bool)\n", boolValue);
     else if( value >>= spacing ) {
