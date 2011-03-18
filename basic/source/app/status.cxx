@@ -82,10 +82,6 @@ IMPL_LINK( StatusLine, ActivateTask, TaskToolBox*, pTTB )
 
     nFirstWinPos += pTTB->GetItemPos( pTTB->GetCurItemId() ) / 2;
 
-    sal_uInt16 x;
-    x = pTTB->GetItemPos( pTTB->GetCurItemId() );
-    x = pWinMenu->GetItemId( nFirstWinPos );
-    x = pWinMenu->GetItemCount();
     AppWin* pWin = pFrame->FindWin( pWinMenu->GetItemText( pWinMenu->GetItemId( nFirstWinPos ) ).EraseAllChars( L'~' ) );
     if ( pWin )
     {
