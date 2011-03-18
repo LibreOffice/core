@@ -1043,7 +1043,6 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             nEnd = rConfigItem.GetMergedDocumentCount();
     }
     bool bAsBody = false;
-    bool bIsPDF = false;
     rtl_TextEncoding eEncoding = ::gsl_getSystemTextEncoding();
     SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
     const SfxFilter *pSfxFlt = 0;
@@ -1051,8 +1050,22 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     String sExtension = lcl_GetExtensionForDocType(nDocType);
     switch( nDocType )
     {
-        case MM_DOCTYPE_OOO : break;
-        case MM_DOCTYPE_PDF : bIsPDF = true; break;
+        case MM_DOCTYPE_OOO:
+        {
+            //Make sure we don't pick e.g. the flat xml filter
+            //for this format
+            pSfxFlt = SwIoSystem::GetFilterOfFormat(
+                String::CreateFromAscii( FILTER_XML ),
+                SwDocShell::Factory().GetFilterContainer() );
+        }
+        break;
+        case MM_DOCTYPE_PDF:
+        {
+            pSfxFlt = pFilterContainer->GetFilter4FilterName(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_pdf_Export")),
+                SFX_FILTER_EXPORT);
+        }
+        break;
         case MM_DOCTYPE_WORD:
         {
             //the method SwIOSystemGetFilterOfFormat( ) returns the template filter
@@ -1195,14 +1208,6 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                     INetURLObject(), utl::TempFile::CreateTempName(0),
                     URIHelper::GetMaybeFileHdl()) );
 
-/*        if(bIsPDF)
-        {
-            SfxDispatcher* pSfxDispatcher = pTempView->GetViewFrame()->GetDispatcher();
-            pSfxDispatcher->Execute(
-                            SID_DIRECTEXPORTDOCASPDF,
-                                  SFX_CALLMODE_SYNCHRON, &aName, &aFilterName, 0L );
-        }
-        else*/
         {
             uno::Sequence< beans::PropertyValue > aFilterValues(MM_DOCTYPE_TEXT == nDocType ? 2 : 1);
             beans::PropertyValue* pFilterValues = aFilterValues.getArray();
