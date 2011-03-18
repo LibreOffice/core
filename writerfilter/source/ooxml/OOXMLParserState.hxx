@@ -34,6 +34,7 @@
 
 #if OSL_DEBUG_LEVEL > 1
 #include <resourcemodel/TagLogger.hxx>
+#include <resourcemodel/XPathLogger.hxx>
 #endif
 
 namespace writerfilter {
@@ -58,6 +59,9 @@ class OOXMLParserState
     stack<OOXMLPropertySet::Pointer_t> mCellProps;
     stack<OOXMLPropertySet::Pointer_t> mRowProps;
     stack<OOXMLPropertySet::Pointer_t> mTableProps;
+#ifdef DEBUG
+    XPathLogger m_xPathLogger;
+#endif
 
 public:
     typedef boost::shared_ptr<OOXMLParserState> Pointer_t;
@@ -109,6 +113,7 @@ public:
 public:
     unsigned int getContextCount() const;
     void dumpXml( const TagLogger::Pointer_t& pLogger );
+    XPathLogger & getXPathLogger();
 #endif
 
 };

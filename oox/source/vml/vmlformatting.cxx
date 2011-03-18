@@ -27,26 +27,29 @@
  ************************************************************************/
 
 #include "oox/vml/vmlformatting.hxx"
+
 #include <rtl/strbuf.hxx>
-#include "tokens.hxx"
-#include "oox/token/tokenmap.hxx"
-#include "oox/helper/graphichelper.hxx"
-#include "oox/helper/propertymap.hxx"
 #include "oox/drawingml/color.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/lineproperties.hxx"
+#include "oox/helper/attributelist.hxx"
+#include "oox/helper/graphichelper.hxx"
+#include "oox/helper/propertymap.hxx"
 
-using ::rtl::OStringBuffer;
-using ::rtl::OUString;
-using ::com::sun::star::geometry::IntegerRectangle2D;
+namespace oox {
+namespace vml {
+
+// ============================================================================
+
+using namespace ::com::sun::star::geometry;
+
 using ::oox::drawingml::Color;
 using ::oox::drawingml::FillProperties;
 using ::oox::drawingml::LineArrowProperties;
 using ::oox::drawingml::LineProperties;
-
-namespace oox {
-namespace vml {
+using ::rtl::OStringBuffer;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -82,8 +85,9 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
 
 /*static*/ bool ConversionHelper::decodeBool( const OUString& rValue )
 {
+    sal_Int32 nToken = AttributeConversion::decodeToken( rValue );
     // anything else than 't' or 'true' is considered to be false, as specified
-    return ((rValue.getLength() == 1) && (rValue[ 0 ] == 't')) || (rValue == CREATE_OUSTRING( "true" ));
+    return (nToken == XML_t) || (nToken == XML_true);
 }
 
 /*static*/ double ConversionHelper::decodePercent( const OUString& rValue, double fDefValue )
@@ -172,58 +176,35 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
     return (decodeMeasureToEmu( rGraphicHelper, rValue, nRefValue, bPixelX, bDefaultAsPixel ) + 180) / 360;
 }
 
-// ============================================================================
-
-namespace {
-
-/** Converts a VML color attribute to a DrawingML color.
-
-    @param orDmlColor  (out-parameter) The destination DrawingML color.
-
-    @param roVmlColor  The VML string representation of the color. If existing,
-        this can be a 6-digit hexadecimal RGB value with leading '#' character,
-        a predefined color name (e.g. 'black', 'red', etc.), the index into an
-        application defined color palette in brackets with leading color name
-        (e.g. 'red [9]' or 'windowColor [64]'), or a color modifier used in
-        one-color gradients (e.g. 'fill darken(128)' or 'fill lighten(0)'.
-
-    @param roVmlOpacity  The opacity of the color. If existing, this should be
-        a floating-point value in the range [0.0;1.0].
-
-    @param nDefaultRgb  Deafult RGB color used if the parameter roVmlColor is
-        empty.
-
-    @param nPrimaryRgb  If set to something else than API_RGB_TRANSPARENT,
-        specifies the color to be used to resolve the color modifiers used in
-        one-color gradients.
-  */
-void lclGetColor( Color& orDmlColor, const GraphicHelper& rGraphicHelper,
+/*static*/ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
         const OptValue< OUString >& roVmlColor, const OptValue< double >& roVmlOpacity,
-        sal_Int32 nDefaultRgb, sal_Int32 nPrimaryRgb = API_RGB_TRANSPARENT )
+        sal_Int32 nDefaultRgb, sal_Int32 nPrimaryRgb )
 {
+    Color aDmlColor;
+
     // convert opacity
     const sal_Int32 DML_FULL_OPAQUE = ::oox::drawingml::MAX_PERCENT;
     double fOpacity = roVmlOpacity.get( 1.0 );
     sal_Int32 nOpacity = getLimitedValue< sal_Int32, double >( fOpacity * DML_FULL_OPAQUE, 0, DML_FULL_OPAQUE );
     if( nOpacity < DML_FULL_OPAQUE )
-        orDmlColor.addTransformation( XML_alpha, nOpacity );
+        aDmlColor.addTransformation( XML_alpha, nOpacity );
 
     // color attribute not present - set passed default color
     if( !roVmlColor.has() )
     {
-        orDmlColor.setSrgbClr( nDefaultRgb );
-        return;
+        aDmlColor.setSrgbClr( nDefaultRgb );
+        return aDmlColor;
     }
 
     // separate leading color name or RGB value from following palette index
     OUString aColorName, aColorIndex;
-    ConversionHelper::separatePair( aColorName, aColorIndex, roVmlColor.get(), ' ' );
+    separatePair( aColorName, aColorIndex, roVmlColor.get(), ' ' );
 
     // RGB colors in the format '#RRGGBB'
     if( (aColorName.getLength() == 7) && (aColorName[ 0 ] == '#') )
     {
-        orDmlColor.setSrgbClr( aColorName.copy( 1 ).toInt32( 16 ) );
-        return;
+        aDmlColor.setSrgbClr( aColorName.copy( 1 ).toInt32( 16 ) );
+        return aDmlColor;
     }
 
     // RGB colors in the format '#RGB'
@@ -232,27 +213,27 @@ void lclGetColor( Color& orDmlColor, const GraphicHelper& rGraphicHelper,
         sal_Int32 nR = aColorName.copy( 1, 1 ).toInt32( 16 ) * 0x11;
         sal_Int32 nG = aColorName.copy( 2, 1 ).toInt32( 16 ) * 0x11;
         sal_Int32 nB = aColorName.copy( 3, 1 ).toInt32( 16 ) * 0x11;
-        orDmlColor.setSrgbClr( (nR << 16) | (nG << 8) | nB );
-        return;
+        aDmlColor.setSrgbClr( (nR << 16) | (nG << 8) | nB );
+        return aDmlColor;
     }
 
     /*  Predefined color names or system color names (resolve to RGB to detect
         valid color name). */
-    sal_Int32 nColorToken = StaticTokenMap::get().getTokenFromUnicode( aColorName );
+    sal_Int32 nColorToken = AttributeConversion::decodeToken( aColorName );
     sal_Int32 nRgbValue = Color::getVmlPresetColor( nColorToken, API_RGB_TRANSPARENT );
     if( nRgbValue == API_RGB_TRANSPARENT )
         nRgbValue = rGraphicHelper.getSystemColor( nColorToken, API_RGB_TRANSPARENT );
     if( nRgbValue != API_RGB_TRANSPARENT )
     {
-        orDmlColor.setSrgbClr( nRgbValue );
-        return;
+        aDmlColor.setSrgbClr( nRgbValue );
+        return aDmlColor;
     }
 
     // try palette colors enclosed in brackets
     if( (aColorIndex.getLength() >= 3) && (aColorIndex[ 0 ] == '[') && (aColorIndex[ aColorIndex.getLength() - 1 ] == ']') )
     {
-        orDmlColor.setPaletteClr( aColorIndex.copy( 1, aColorIndex.getLength() - 2 ).toInt32() );
-        return;
+        aDmlColor.setPaletteClr( aColorIndex.copy( 1, aColorIndex.getLength() - 2 ).toInt32() );
+        return aDmlColor;
     }
 
     // try fill gradient modificator 'fill <modifier>(<amount>)'
@@ -263,7 +244,7 @@ void lclGetColor( Color& orDmlColor, const GraphicHelper& rGraphicHelper,
         if( (2 <= nOpenParen) && (nOpenParen + 1 < nCloseParen) && (nCloseParen + 1 == aColorIndex.getLength()) )
         {
             sal_Int32 nModToken = XML_TOKEN_INVALID;
-            switch( StaticTokenMap::get().getTokenFromUnicode( aColorIndex.copy( 0, nOpenParen ) ) )
+            switch( AttributeConversion::decodeToken( aColorIndex.copy( 0, nOpenParen ) ) )
             {
                 case XML_darken:    nModToken = XML_shade;
                 case XML_lighten:   nModToken = XML_tint;
@@ -274,17 +255,22 @@ void lclGetColor( Color& orDmlColor, const GraphicHelper& rGraphicHelper,
                 /*  Simulate this modifier color by a color with related transformation.
                     The modifier amount has to be converted from the range [0;255] to
                     percentage [0;100000] used by DrawingML. */
-                orDmlColor.setSrgbClr( nPrimaryRgb );
-                orDmlColor.addTransformation( nModToken, static_cast< sal_Int32 >( nValue * ::oox::drawingml::MAX_PERCENT / 255 ) );
-                return;
+                aDmlColor.setSrgbClr( nPrimaryRgb );
+                aDmlColor.addTransformation( nModToken, static_cast< sal_Int32 >( nValue * ::oox::drawingml::MAX_PERCENT / 255 ) );
+                return aDmlColor;
             }
         }
     }
 
     OSL_FAIL( OStringBuffer( "lclGetColor - invalid VML color name '" ).
         append( OUStringToOString( roVmlColor.get(), RTL_TEXTENCODING_ASCII_US ) ).append( '\'' ).getStr() );
-    orDmlColor.setSrgbClr( nDefaultRgb );
+    aDmlColor.setSrgbClr( nDefaultRgb );
+    return aDmlColor;
 }
+
+// ============================================================================
+
+namespace {
 
 sal_Int32 lclGetEmu( const GraphicHelper& rGraphicHelper, const OptValue< OUString >& roValue, sal_Int32 nDefValue )
 {
@@ -296,7 +282,7 @@ void lclGetDmlLineDash( OptValue< sal_Int32 >& oroPresetDash, LineProperties::Da
     if( roDashStyle.has() )
     {
         const OUString& rDashStyle = roDashStyle.get();
-        switch( StaticTokenMap::get().getTokenFromUnicode( rDashStyle ) )
+        switch( AttributeConversion::decodeToken( rDashStyle ) )
         {
             case XML_solid:             oroPresetDash = XML_solid;          return;
             case XML_shortdot:          oroPresetDash = XML_sysDot;         return;
@@ -442,7 +428,7 @@ void StrokeModel::pushToPropMap( PropertyMap& rPropMap,
         aLineProps.maLineFill.moFillType = XML_solidFill;
         lclConvertArrow( aLineProps.maStartArrow, maStartArrow );
         lclConvertArrow( aLineProps.maEndArrow, maEndArrow );
-        lclGetColor( aLineProps.maLineFill.maFillColor, rGraphicHelper, moColor, moOpacity, API_RGB_BLACK );
+        aLineProps.maLineFill.maFillColor = ConversionHelper::decodeColor( rGraphicHelper, moColor, moOpacity, API_RGB_BLACK );
         aLineProps.moLineWidth = lclGetEmu( rGraphicHelper, moWeight, 1 );
         lclGetDmlLineDash( aLineProps.moPresetDash, aLineProps.maCustomDash, moDashStyle );
         aLineProps.moLineCompound = lclGetDmlLineCompound( moLineStyle );
@@ -495,9 +481,8 @@ void FillModel::pushToPropMap( PropertyMap& rPropMap,
                 double fFocus = moFocus.get( 0.0 );
 
                 // prepare colors
-                Color aColor1, aColor2;
-                lclGetColor( aColor1, rGraphicHelper, moColor, moOpacity, API_RGB_WHITE );
-                lclGetColor( aColor2, rGraphicHelper, moColor2, moOpacity2, API_RGB_WHITE, aColor1.getColor( rGraphicHelper ) );
+                Color aColor1 = ConversionHelper::decodeColor( rGraphicHelper, moColor, moOpacity, API_RGB_WHITE );
+                Color aColor2 = ConversionHelper::decodeColor( rGraphicHelper, moColor2, moOpacity2, API_RGB_WHITE, aColor1.getColor( rGraphicHelper ) );
 
                 // type XML_gradient is linear or axial gradient
                 if( nFillType == XML_gradient )
@@ -585,7 +570,7 @@ void FillModel::pushToPropMap( PropertyMap& rPropMap,
             {
                 aFillProps.moFillType = XML_solidFill;
                 // fill color (default is white)
-                lclGetColor( aFillProps.maFillColor, rGraphicHelper, moColor, moOpacity, API_RGB_WHITE );
+                aFillProps.maFillColor = ConversionHelper::decodeColor( rGraphicHelper, moColor, moOpacity, API_RGB_WHITE );
             }
         }
     }

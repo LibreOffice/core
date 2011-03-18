@@ -27,22 +27,25 @@
  ************************************************************************/
 
 #include "oox/xls/scenariocontext.hxx"
-#include "oox/xls/scenariobuffer.hxx"
 
-using ::oox::core::ContextHandlerRef;
+#include "oox/xls/scenariobuffer.hxx"
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-OoxScenarioContext::OoxScenarioContext( OoxWorksheetContextBase& rParent, SheetScenarios& rSheetScenarios ) :
-    OoxWorksheetContextBase( rParent ),
+using ::oox::core::ContextHandlerRef;
+
+// ============================================================================
+
+ScenarioContext::ScenarioContext( WorksheetContextBase& rParent, SheetScenarios& rSheetScenarios ) :
+    WorksheetContextBase( rParent ),
     mrScenario( rSheetScenarios.createScenario() )
 {
 }
 
-ContextHandlerRef OoxScenarioContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef ScenarioContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -53,24 +56,24 @@ ContextHandlerRef OoxScenarioContext::onCreateContext( sal_Int32 nElement, const
     return 0;
 }
 
-void OoxScenarioContext::onStartElement( const AttributeList& rAttribs )
+void ScenarioContext::onStartElement( const AttributeList& rAttribs )
 {
     if( isRootElement() )
         mrScenario.importScenario( rAttribs );
 }
 
-ContextHandlerRef OoxScenarioContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef ScenarioContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
-        case OOBIN_ID_SCENARIO:
-            if( nRecId == OOBIN_ID_INPUTCELLS ) mrScenario.importInputCells( rStrm );
+        case BIFF12_ID_SCENARIO:
+            if( nRecId == BIFF12_ID_INPUTCELLS ) mrScenario.importInputCells( rStrm );
         break;
     }
     return 0;
 }
 
-void OoxScenarioContext::onStartRecord( RecordInputStream& rStrm )
+void ScenarioContext::onStartRecord( SequenceInputStream& rStrm )
 {
     if( isRootElement() )
         mrScenario.importScenario( rStrm );
@@ -78,41 +81,41 @@ void OoxScenarioContext::onStartRecord( RecordInputStream& rStrm )
 
 // ============================================================================
 
-OoxScenariosContext::OoxScenariosContext( OoxWorksheetFragmentBase& rFragment ) :
-    OoxWorksheetContextBase( rFragment ),
+ScenariosContext::ScenariosContext( WorksheetFragmentBase& rFragment ) :
+    WorksheetContextBase( rFragment ),
     mrSheetScenarios( getScenarios().createSheetScenarios( getSheetIndex() ) )
 {
 }
 
-ContextHandlerRef OoxScenariosContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef ScenariosContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( scenarios ):
-            if( nElement == XLS_TOKEN( scenario ) ) return new OoxScenarioContext( *this, mrSheetScenarios );
+            if( nElement == XLS_TOKEN( scenario ) ) return new ScenarioContext( *this, mrSheetScenarios );
         break;
     }
     return 0;
 }
 
-void OoxScenariosContext::onStartElement( const AttributeList& rAttribs )
+void ScenariosContext::onStartElement( const AttributeList& rAttribs )
 {
     if( isRootElement() )
         mrSheetScenarios.importScenarios( rAttribs );
 }
 
-ContextHandlerRef OoxScenariosContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
+ContextHandlerRef ScenariosContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& )
 {
     switch( getCurrentElement() )
     {
-        case OOBIN_ID_SCENARIOS:
-            if( nRecId == OOBIN_ID_SCENARIO ) return new OoxScenarioContext( *this, mrSheetScenarios );
+        case BIFF12_ID_SCENARIOS:
+            if( nRecId == BIFF12_ID_SCENARIO ) return new ScenarioContext( *this, mrSheetScenarios );
         break;
     }
     return 0;
 }
 
-void OoxScenariosContext::onStartRecord( RecordInputStream& rStrm )
+void ScenariosContext::onStartRecord( SequenceInputStream& rStrm )
 {
     if( isRootElement() )
         mrSheetScenarios.importScenarios( rStrm );

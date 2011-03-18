@@ -34,8 +34,7 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
+#include "oox/token/tokens.hxx"
 
 using ::rtl::OUString;
 using ::oox::core::XmlFilterBase;
@@ -97,7 +96,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
         rPropMap[ PROP_CharFontFamilyComplex ] <<= nFontFamily;
     }
 
-    // symbol font not supported
+    // symbolfont, will now be ... textrun.cxx ... ausgewertet !!!i#113673
 
     if( maCharColor.isUsed() )
         rPropMap[ PROP_CharColor ] <<= maCharColor.getColor( rFilter.getGraphicHelper() );

@@ -27,42 +27,34 @@
  ************************************************************************/
 
 #include "oox/helper/graphichelper.hxx"
+
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XUnitConversion.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/seqstream.hxx>
-#include "tokens.hxx"
 #include "oox/helper/containerhelper.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::awt::DeviceInfo;
-using ::com::sun::star::awt::Point;
-using ::com::sun::star::awt::Size;
-using ::com::sun::star::awt::XDevice;
-using ::com::sun::star::awt::XUnitConversion;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::frame::XFrame;
-using ::com::sun::star::frame::XFramesSupplier;
-using ::com::sun::star::graphic::GraphicObject;
-using ::com::sun::star::graphic::XGraphic;
-using ::com::sun::star::graphic::XGraphicObject;
-using ::com::sun::star::graphic::XGraphicProvider;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
+#include "oox/helper/propertyset.hxx"
+#include "oox/token/tokens.hxx"
 
 namespace oox {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::graphic;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -77,13 +69,17 @@ inline sal_Int32 lclConvertScreenPixelToHmm( double fPixel, double fPixelPerHmm 
 
 // ============================================================================
 
-GraphicHelper::GraphicHelper( const Reference< XMultiServiceFactory >& rxGlobalFactory, const Reference< XFrame >& rxTargetFrame, const StorageRef& rxStorage ) :
-    mxGraphicProvider( rxGlobalFactory->createInstance( CREATE_OUSTRING( "com.sun.star.graphic.GraphicProvider" ) ), UNO_QUERY ),
+GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, const Reference< XFrame >& rxTargetFrame, const StorageRef& rxStorage ) :
+    mxCompContext( rxContext ),
     mxStorage( rxStorage ),
     maGraphicObjScheme( CREATE_OUSTRING( "vnd.sun.star.GraphicObject:" ) )
 {
-    ::comphelper::ComponentContext aContext( rxGlobalFactory );
-    mxCompContext = aContext.getUNOContext();
+    OSL_ENSURE( mxCompContext.is(), "GraphicHelper::GraphicHelper - missing component context" );
+    Reference< XMultiServiceFactory > xFactory( mxCompContext->getServiceManager(), UNO_QUERY_THROW );
+    OSL_ENSURE( xFactory.is(), "GraphicHelper::GraphicHelper - missing service factory" );
+
+    if( xFactory.is() )
+        mxGraphicProvider.set( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.graphic.GraphicProvider" ) ), UNO_QUERY );
 
     //! TODO: get colors from system
     maSystemPalette[ XML_3dDkShadow ]               = 0x716F64;
@@ -120,9 +116,9 @@ GraphicHelper::GraphicHelper( const Reference< XMultiServiceFactory >& rxGlobalF
     // if no target frame has been passed (e.g. OLE objects), try to fallback to the active frame
     // TODO: we need some mechanism to keep and pass the parent frame
     Reference< XFrame > xFrame = rxTargetFrame;
-    if( !xFrame.is() && rxGlobalFactory.is() ) try
+    if( !xFrame.is() && xFactory.is() ) try
     {
-        Reference< XFramesSupplier > xFramesSupp( rxGlobalFactory->createInstance( CREATE_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY_THROW );
+        Reference< XFramesSupplier > xFramesSupp( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY_THROW );
         xFrame = xFramesSupp->getActiveFrame();
     }
     catch( Exception& )
@@ -351,6 +347,19 @@ OUString GraphicHelper::importEmbeddedGraphicObject( const OUString& rStreamName
 {
     Reference< XGraphic > xGraphic = importEmbeddedGraphic( rStreamName );
     return xGraphic.is() ? createGraphicObject( xGraphic ) : OUString();
+}
+
+Size GraphicHelper::getOriginalSize( const Reference< XGraphic >& xGraphic ) const
+{
+    Size aSizeHmm;
+    PropertySet aPropSet( xGraphic );
+    if( aPropSet.getProperty( aSizeHmm, PROP_Size100thMM ) && (aSizeHmm.Width == 0) && (aSizeHmm.Height == 0) )     // MAPMODE_PIXEL used?
+    {
+        Size aSizePixel( 0, 0 );
+        if( aPropSet.getProperty( aSizePixel, PROP_SizePixel ) )
+            aSizeHmm = convertScreenPixelToHmm( aSizePixel );
+    }
+    return aSizeHmm;
 }
 
 // ============================================================================

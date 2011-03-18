@@ -27,11 +27,11 @@
  ************************************************************************/
 #ifndef INCLUDED_FFDataHandler_HXX
 #define INCLUDED_FFDataHandler_HXX
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/LoggedResources.hxx>
 #include <rtl/ustring.hxx>
 namespace writerfilter {
 namespace dmapper {
-class FFDataHandler : public Properties
+class FFDataHandler : public LoggedProperties
 {
 public:
     // typedefs
@@ -116,11 +116,7 @@ public:
     void setTextFormat(const rtl::OUString & r_sTextFormat);
 
     // sprm
-    void sprm(Sprm & r_sprm);
     void resolveSprm(Sprm & r_sprm);
-
-    // attribute
-    void attribute(Id name, Value & val);
 
 private:
     rtl::OUString m_sName;
@@ -143,6 +139,12 @@ private:
     sal_uInt32 m_nTextMaxLength;
     rtl::OUString m_sTextDefault;
     rtl::OUString m_sTextFormat;
+
+    // sprm
+    void lcl_sprm(Sprm & r_sprm);
+
+    // attribute
+    void lcl_attribute(Id name, Value & val);
 };
 
 

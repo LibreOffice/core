@@ -36,7 +36,6 @@
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"
-#include "properties.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -79,7 +78,55 @@ void TextRun::insertAt(
             }
             else
             {
-                xText->insertString( xStart, getText(), sal_False );
+                OUString aLatinFontName, aSymbolFontName;
+                sal_Int16 nLatinFontPitch = 0, nSymbolFontPitch = 0;
+                sal_Int16 nLatinFontFamily = 0, nSymbolFontFamily = 0;
+
+                if ( !aTextCharacterProps.maSymbolFont.getFontData( aSymbolFontName, nSymbolFontPitch, nSymbolFontFamily, rFilterBase ) )
+                    xText->insertString( xStart, getText(), sal_False );
+                else if ( getText().getLength() )
+                {   // !!#i113673<<<
+                    aTextCharacterProps.maLatinFont.getFontData( aLatinFontName, nLatinFontPitch, nLatinFontFamily, rFilterBase );
+
+                    sal_Int32 nIndex = 0;
+                    while ( sal_True )
+                    {
+                        sal_Int32 nCount = 0;
+                        sal_Bool bSymbol = ( getText()[ nIndex ] & 0xff00 ) == 0xf000;
+                        if ( bSymbol )
+                        {
+                            do
+                            {
+                                nCount++;
+                            }
+                            while( ( ( nCount + nIndex ) < getText().getLength() ) && ( ( getText()[ nCount + nIndex ] & 0xff00 ) == 0xf000 ) );
+                            aPropSet.setAnyProperty( PROP_CharFontName, Any( aSymbolFontName ) );
+                            aPropSet.setAnyProperty( PROP_CharFontPitch, Any( nSymbolFontPitch ) );
+                            aPropSet.setAnyProperty( PROP_CharFontFamily, Any( nSymbolFontFamily ) );
+                        }
+                        else
+                        {
+                            do
+                            {
+                                nCount++;
+                            }
+                            while( ( ( nCount + nIndex ) < getText().getLength() ) && ( ( getText()[ nCount + nIndex ] & 0xff00 ) != 0xf000 ) );
+                            aPropSet.setAnyProperty( PROP_CharFontName, Any( aLatinFontName ) );
+                            aPropSet.setAnyProperty( PROP_CharFontPitch, Any( nLatinFontPitch ) );
+                            aPropSet.setAnyProperty( PROP_CharFontFamily, Any( nLatinFontFamily ) );
+                        }
+                        rtl::OUString aSubString( getText().copy( nIndex, nCount ) );
+                        xText->insertString( xStart, aSubString, sal_False );
+                        nIndex += nCount;
+
+                        if ( nIndex >= getText().getLength() )
+                            break;
+
+                        xStart = Reference< XTextRange >( xAt, UNO_QUERY );
+                        aPropSet = PropertySet( xStart );
+                        aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
+                    }
+                }
             }
         }
         else

@@ -27,10 +27,8 @@
  ************************************************************************/
 
 #include "oox/ppt/pptshape.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/textbody.hxx"
-#include "tokens.hxx"
 
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -120,7 +118,7 @@ oox::drawingml::TextListStylePtr PPTShape::getSubTypeTextListStyle( const SlideP
 }
 
 void PPTShape::addShape(
-        const oox::core::XmlFilterBase& rFilterBase,
+        oox::core::XmlFilterBase& rFilterBase,
         const SlidePersist& rSlidePersist,
         const oox::drawingml::Theme* pTheme,
         const Reference< XShapes >& rxShapes,

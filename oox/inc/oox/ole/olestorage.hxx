@@ -32,8 +32,8 @@
 #include "oox/helper/storagebase.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace lang { class XMultiServiceFactory; }
     namespace container { class XNameContainer; }
+    namespace lang { class XMultiServiceFactory; }
 } } }
 
 namespace oox {

@@ -37,22 +37,19 @@ namespace xls {
 
 // ============================================================================
 
-class OoxCommentsFragment : public OoxWorksheetFragmentBase
+class CommentsFragment : public WorksheetFragmentBase
 {
 public:
-    explicit            OoxCommentsFragment(
+    explicit            CommentsFragment(
                             const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onEndElement( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onEndElement();
 
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
     virtual void        onEndRecord();
-
-    // oox.core.FragmentHandler2 interface ------------------------------------
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
 
@@ -60,7 +57,7 @@ private:
     /** Imports comment data from the comment element. */
     void                importComment( const AttributeList& rAttribs );
     /** Imports comment data from the COMMENT record. */
-    void                importComment( RecordInputStream& rStrm );
+    void                importComment( SequenceInputStream& rStrm );
 
 private:
     CommentRef          mxComment;

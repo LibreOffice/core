@@ -43,20 +43,14 @@ DEPTARGET=vepgm
 CDEFS+= -DEDITDEBUG
 .ENDIF
 
-SRS1NAME=$(TARGET)
-SRC1FILES=	dlgepgm.src \
-            epgmstr.src
 .IF "$(L10N_framework)"==""
 SLOFILES = \
 	$(EXCEPTIONSFILES)
 EXCEPTIONSFILES = \
-	$(SLO)$/epgm.obj \
-	$(SLO)$/dlgepgm.obj
+	$(SLO)$/epgm.obj
 .ENDIF
 # ==========================================================================
 
-RESLIB1NAME=$(TARGET2)
-RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
 .IF "$(L10N_framework)"==""
 SHL1TARGET= 	epg$(DLLPOSTFIX)
 SHL1IMPLIB= 	epgm

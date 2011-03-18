@@ -61,8 +61,8 @@ class CGMOutAct
         sal_uInt32                  mnGroupLevel;
         sal_uInt32*                 mpGroupLevel;
 
-        USHORT                  mnIndex;                // figure
-        BYTE*                   mpFlags;
+        sal_uInt16                  mnIndex;                // figure
+        sal_uInt8*                  mpFlags;
         Point*                  mpPoints;
         PolyPolygon             maPolyPolygon;
         ::com::sun::star::awt::Gradient*            mpGradient;

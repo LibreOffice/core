@@ -38,9 +38,7 @@
 #include <map>
 #include <vector>
 
-#ifdef DEBUG_DOMAINMAPPER
 #include <resourcemodel/TagLogger.hxx>
-#endif
 
 namespace com{namespace sun{namespace star{
     namespace beans{

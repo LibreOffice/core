@@ -191,6 +191,9 @@ protected:
                             ::oox::xls::BiffStringFlags nUniFlags = ::oox::xls::BIFF_STR_DEFAULT,
                             rtl_TextEncoding eDefaultTextEnc = RTL_TEXTENCODING_DONTKNOW );
 
+    ::rtl::OUString     dumpSegmentedUniString( const String& rName );
+    void                dumpSegmentedUniStringArray( const String& rName );
+
     sal_uInt8           dumpBoolean( const String& rName = EMPTY_STRING );
     sal_uInt8           dumpErrorCode( const String& rName = EMPTY_STRING );
 
@@ -440,6 +443,8 @@ private:
     void                dumpExtColor( const String& rName = EMPTY_STRING );
     void                dumpExtCfColor( const String& rName = EMPTY_STRING );
     void                dumpExtGradientHead();
+
+    sal_uInt8           dumpFilterColumnOperator( const String& rName );
 
     ::rtl::OUString     dumpPivotString( const String& rName, sal_uInt16 nStrLen );
     ::rtl::OUString     dumpPivotString( const String& rName );

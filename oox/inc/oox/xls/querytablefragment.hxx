@@ -34,19 +34,39 @@
 namespace oox {
 namespace xls {
 
+class QueryTable;
+
 // ============================================================================
 
-class OoxQueryTableFragment : public OoxWorkbookFragmentBase
+class QueryTableFragment : public WorksheetFragmentBase
 {
 public:
-    explicit            OoxQueryTableFragment(
-                            const WorkbookHelper& rHelper,
+    explicit            QueryTableFragment(
+                            const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+
+    virtual const ::oox::core::RecordInfo* getRecordInfos() const;
+
+private:
+    QueryTable&         mrQueryTable;
+};
+
+// ============================================================================
+
+class BiffQueryTableContext : public BiffWorksheetContextBase
+{
+public:
+    explicit            BiffQueryTableContext( const WorksheetHelper& rHelper );
+
+    /** Imports all records related to the current query table. */
+    virtual void        importRecord( BiffInputStream& rStrm );
+
+private:
+    QueryTable&         mrQueryTable;
 };
 
 // ============================================================================

@@ -156,8 +156,8 @@ private:
 
     void parseDoc()
     {
-        UINT8 nDelim, nDummy, nLen, nData;
-        UINT16 nOpcode;
+        sal_uInt8 nDelim, nDummy, nLen, nData;
+        sal_uInt16 nOpcode;
         OUStringBuffer sBuf( MAXCHARS );
         sal_Int32 nChars = 0;
 
@@ -173,7 +173,7 @@ private:
                         m_InputStream >> nLen >> nDummy;
                         while( nLen > 0 && !m_InputStream.IsEof() )
                         {
-                            UINT8 nChar;
+                            sal_uInt8 nChar;
                             m_InputStream >> nChar;
                             if( CheckValidData( nChar ) )
                             {

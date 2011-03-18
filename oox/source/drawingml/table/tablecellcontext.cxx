@@ -32,7 +32,6 @@
 #include "oox/drawingml/textbodycontext.hxx"
 #include "oox/drawingml/linepropertiescontext.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/helper/attributelist.hxx"
 
 using namespace ::oox::core;
@@ -67,7 +66,7 @@ TableCellContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::
 
     switch( aElementToken )
     {
-    case NMSP_DRAWINGML|XML_txBody:     // CT_TextBody
+    case A_TOKEN( txBody ):     // CT_TextBody
         {
             oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
             mrTableCell.setTextBody( xTextBody );
@@ -75,7 +74,7 @@ TableCellContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::
         }
         break;
 
-    case NMSP_DRAWINGML|XML_tcPr:       // CT_TableCellProperties
+    case A_TOKEN( tcPr ):       // CT_TableCellProperties
         {
             AttributeList aAttribs( xAttribs );
             mrTableCell.setLeftMargin( aAttribs.getInteger( XML_marL, 91440 ) );
@@ -88,28 +87,28 @@ TableCellContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::
             mrTableCell.setHorzOverflowToken( xAttribs->getOptionalValueToken( XML_horzOverflow, XML_clip ) );  // ST_TextHorzOverflowType
         }
         break;
-        case NMSP_DRAWINGML|XML_lnL:
+        case A_TOKEN( lnL ):
                 xRet.set( new oox::drawingml::LinePropertiesContext( *this, xAttribs, mrTableCell.maLinePropertiesLeft ) );
             break;
-        case NMSP_DRAWINGML|XML_lnR:
+        case A_TOKEN( lnR ):
                 xRet.set( new oox::drawingml::LinePropertiesContext( *this, xAttribs, mrTableCell.maLinePropertiesRight ) );
             break;
-        case NMSP_DRAWINGML|XML_lnT:
+        case A_TOKEN( lnT ):
                 xRet.set( new oox::drawingml::LinePropertiesContext( *this, xAttribs, mrTableCell.maLinePropertiesTop ) );
             break;
-        case NMSP_DRAWINGML|XML_lnB:
+        case A_TOKEN( lnB ):
                 xRet.set( new oox::drawingml::LinePropertiesContext( *this, xAttribs, mrTableCell.maLinePropertiesBottom ) );
             break;
-        case NMSP_DRAWINGML|XML_lnTlToBr:
+        case A_TOKEN( lnTlToBr ):
                 xRet.set( new oox::drawingml::LinePropertiesContext( *this, xAttribs, mrTableCell.maLinePropertiesTopLeftToBottomRight ) );
             break;
-        case NMSP_DRAWINGML|XML_lnBlToTr:
+        case A_TOKEN( lnBlToTr ):
                 xRet.set( new oox::drawingml::LinePropertiesContext( *this, xAttribs, mrTableCell.maLinePropertiesBottomLeftToTopRight ) );
             break;
-        case NMSP_DRAWINGML|XML_cell3D: // CT_Cell3D
+        case A_TOKEN( cell3D ): // CT_Cell3D
         break;
 
-    case NMSP_DRAWINGML|XML_extLst:     // CT_OfficeArtExtensionList
+    case A_TOKEN( extLst ):     // CT_OfficeArtExtensionList
     break;
 
     default:

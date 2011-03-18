@@ -36,8 +36,6 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace oox::core;
@@ -64,7 +62,7 @@ Reference< XFastContextHandler > ConnectorShapeContext::createFastChildContext( 
 {
     Reference< XFastContextHandler > xRet;
 
-    switch( getToken( aElementToken ) )
+    switch( getBaseToken( aElementToken ) )
     {
         case XML_nvCxnSpPr :
         break;

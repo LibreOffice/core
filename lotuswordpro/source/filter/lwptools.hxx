@@ -91,7 +91,7 @@ class LwpTools
 public:
     static sal_uInt16 QuickReadUnicode( LwpObjectStream* pObjStrm,
         OUString& str, sal_uInt16 strlen,  rtl_TextEncoding aEncoding );
-    static BOOL IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len);
+    static sal_Bool IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len);
 
     inline static double ConvertFromUnits(const sal_Int32& nUnits);
     inline static double ConvertToMetric(const double& fInch);

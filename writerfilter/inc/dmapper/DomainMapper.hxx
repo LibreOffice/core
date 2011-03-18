@@ -29,7 +29,7 @@
 #define INCLUDED_DOMAINMAPPER_HXX
 
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/LoggedResources.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
@@ -78,8 +78,8 @@ enum SourceDocumentType
     DOCUMENT_OOXML,
     DOCUMENT_RTF
 };
-class WRITERFILTER_DLLPUBLIC DomainMapper : public Properties, public Table,
-                    public BinaryObj, public Stream
+class WRITERFILTER_DLLPUBLIC DomainMapper : public LoggedProperties, public LoggedTable,
+                    public BinaryObj, public LoggedStream
 {
     DomainMapper_Impl   *m_pImpl;
 
@@ -90,38 +90,14 @@ public:
                                 SourceDocumentType eDocumentType );
     virtual ~DomainMapper();
 
-    // Properties
-    virtual void attribute(Id Name, Value & val);
-    virtual void sprm(Sprm & sprm);
-
-    // Table
-    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+    // Stream
+    virtual void markLastParagraphInSection();
 
     // BinaryObj
     virtual void data(const sal_uInt8* buf, size_t len,
                       writerfilter::Reference<Properties>::Pointer_t ref);
 
-    // Stream
-    virtual void startSectionGroup();
-    virtual void endSectionGroup();
-    virtual void startParagraphGroup();
-    virtual void endParagraphGroup();
-    virtual void markLastParagraphInSection();
-    virtual void startCharacterGroup();
-    virtual void endCharacterGroup();
-    virtual void startShape( ::com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
-    virtual void endShape( );
-
-    virtual void text(const sal_uInt8 * data, size_t len);
-    virtual void utext(const sal_uInt8 * data, size_t len);
-    virtual void props(writerfilter::Reference<Properties>::Pointer_t ref);
-    virtual void table(Id name,
-                       writerfilter::Reference<Table>::Pointer_t ref);
-    virtual void substream(Id name,
-                           ::writerfilter::Reference<Stream>::Pointer_t ref);
-    virtual void info(const string & info);
-
-    void sprm( Sprm& sprm, ::boost::shared_ptr<PropertyMap> pContext, SprmType = SPRM_DEFAULT );
+    void sprmWithProps( Sprm& sprm, ::boost::shared_ptr<PropertyMap> pContext, SprmType = SPRM_DEFAULT );
 
     void PushStyleSheetProperties( ::boost::shared_ptr<PropertyMap> pStyleProperties, bool bAffectTableMngr = false );
     void PopStyleSheetProperties( bool bAffectTableMngr = false );
@@ -138,6 +114,32 @@ public:
     boost::shared_ptr< StyleSheetTable > GetStyleSheetTable( );
 
 private:
+    // Stream
+    virtual void lcl_startSectionGroup();
+    virtual void lcl_endSectionGroup();
+    virtual void lcl_startParagraphGroup();
+    virtual void lcl_endParagraphGroup();
+    virtual void lcl_startCharacterGroup();
+    virtual void lcl_endCharacterGroup();
+    virtual void lcl_startShape( ::com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
+    virtual void lcl_endShape( );
+
+    virtual void lcl_text(const sal_uInt8 * data, size_t len);
+    virtual void lcl_utext(const sal_uInt8 * data, size_t len);
+    virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref);
+    virtual void lcl_table(Id name,
+                           writerfilter::Reference<Table>::Pointer_t ref);
+    virtual void lcl_substream(Id name,
+                               ::writerfilter::Reference<Stream>::Pointer_t ref);
+    virtual void lcl_info(const string & info);
+
+    // Properties
+    virtual void lcl_attribute(Id Name, Value & val);
+    virtual void lcl_sprm(Sprm & sprm);
+
+    // Table
+    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+
     void handleUnderlineType(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext);
     void handleParaJustification(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext, const bool bExchangeLeftRight);
     bool getColorFromIndex(const sal_Int32 nIndex, sal_Int32 &nColor);

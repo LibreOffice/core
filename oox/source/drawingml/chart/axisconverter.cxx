@@ -27,36 +27,22 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/axisconverter.hxx"
+
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
-#include <com/sun/star/chart2/TickmarkStyle.hpp>
+#include <com/sun/star/chart/TimeInterval.hpp>
+#include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
-#include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/chart/axismodel.hxx"
 #include "oox/drawingml/chart/titleconverter.hxx"
 #include "oox/drawingml/chart/typegroupconverter.hxx"
-#include "properties.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::chart2::IncrementData;
-using ::com::sun::star::chart2::ScaleData;
-using ::com::sun::star::chart2::SubIncrement;
-using ::com::sun::star::chart2::XAxis;
-using ::com::sun::star::chart2::XCoordinateSystem;
-using ::com::sun::star::chart2::XScaling;
-using ::com::sun::star::chart2::XTitled;
+#include "oox/drawingml/lineproperties.hxx"
 
 namespace oox {
 namespace drawingml {
@@ -64,25 +50,45 @@ namespace chart {
 
 // ============================================================================
 
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::chart2;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
+
+// ============================================================================
+
 namespace {
 
-template< typename Type >
-inline void lclSetValueOrClearAny( Any& orAny, const OptValue< Type >& roValue )
+inline void lclSetValueOrClearAny( Any& orAny, const OptValue< double >& rofValue )
 {
-    if( roValue.has() ) orAny <<= roValue.get(); else orAny.clear();
-}
-
-void lclSetScaledValueOrClearAny( Any& orAny, const OptValue< double >& rofValue, const Reference< XScaling >& rxScaling )
-{
-    if( rofValue.has() && rxScaling.is() )
-        orAny <<= rxScaling->doScaling( rofValue.get() );
-    else
-        lclSetValueOrClearAny( orAny, rofValue );
+    if( rofValue.has() ) orAny <<= rofValue.get(); else orAny.clear();
 }
 
 bool lclIsLogarithmicScale( const AxisModel& rAxisModel )
 {
     return rAxisModel.mofLogBase.has() && (2.0 <= rAxisModel.mofLogBase.get()) && (rAxisModel.mofLogBase.get() <= 1000.0);
+}
+
+sal_Int32 lclGetApiTimeUnit( sal_Int32 nTimeUnit )
+{
+    using namespace ::com::sun::star::chart;
+    switch( nTimeUnit )
+    {
+        case XML_days:      return TimeUnit::DAY;
+        case XML_months:    return TimeUnit::MONTH;
+        case XML_years:     return TimeUnit::YEAR;
+        default:            OSL_ENSURE( false, "lclGetApiTimeUnit - unexpected time unit" );
+    }
+    return TimeUnit::DAY;
+}
+
+void lclConvertTimeInterval( Any& orInterval, const OptValue< double >& rofUnit, sal_Int32 nTimeUnit )
+{
+    if( rofUnit.has() && (1.0 <= rofUnit.get()) && (rofUnit.get() <= SAL_MAX_INT32) )
+        orInterval <<= ::com::sun::star::chart::TimeInterval( static_cast< sal_Int32 >( rofUnit.get() ), lclGetApiTimeUnit( nTimeUnit ) );
+    else
+        orInterval.clear();
 }
 
 ::com::sun::star::chart::ChartAxisLabelPosition lclGetLabelPosition( sal_Int32 nToken )
@@ -184,8 +190,13 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
                 if( rTypeInfo.mbCategoryAxis )
                 {
                     OSL_ENSURE( (mrModel.mnTypeId == C_TOKEN( catAx )) || (mrModel.mnTypeId == C_TOKEN( dateAx )),
-                        "AxisConverter::convertFromModel - unexpected axis model type (must: c:catAx or c:dateEx)" );
-                    aScaleData.AxisType = cssc2::AxisType::CATEGORY;
+                        "AxisConverter::convertFromModel - unexpected axis model type (must: c:catAx or c:dateAx)" );
+                    bool bDateAxis = mrModel.mnTypeId == C_TOKEN( dateAx );
+                    /*  Chart2 requires axis type CATEGORY for automatic
+                        category/date axis (even if it is a date axis
+                        currently). */
+                    aScaleData.AxisType = (bDateAxis && !mrModel.mbAuto) ? cssc2::AxisType::DATE : cssc2::AxisType::CATEGORY;
+                    aScaleData.AutoDateAxis = mrModel.mbAuto;
                     aScaleData.Categories = rTypeGroup.createCategorySequence();
                 }
                 else
@@ -211,14 +222,37 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         {
             case cssc2::AxisType::CATEGORY:
             case cssc2::AxisType::SERIES:
+            case cssc2::AxisType::DATE:
             {
-                // do not overlap text unless all labels are visible
-                aAxisProp.setProperty( PROP_TextOverlap, mrModel.mnTickLabelSkip == 1 );
-                // do not break text into several lines
-                aAxisProp.setProperty( PROP_TextBreak, false );
-                // do not stagger labels in two lines
-                aAxisProp.setProperty( PROP_ArrangeOrder, cssc::ChartAxisArrangeOrderType_SIDE_BY_SIDE );
-                //! TODO #i58731# show n-th category
+                /*  Determine date axis type from XML type identifier, and not
+                    via aScaleData.AxisType, as this value sticks to CATEGORY
+                    for automatic category/date axes). */
+                if( mrModel.mnTypeId == C_TOKEN( dateAx ) )
+                {
+                    // scaling algorithm
+                    aScaleData.Scaling.set( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.LinearScaling" ) ), UNO_QUERY );
+                    // min/max
+                    lclSetValueOrClearAny( aScaleData.Minimum, mrModel.mofMin );
+                    lclSetValueOrClearAny( aScaleData.Maximum, mrModel.mofMax );
+                    // major/minor increment
+                    lclConvertTimeInterval( aScaleData.TimeIncrement.MajorTimeInterval, mrModel.mofMajorUnit, mrModel.mnMajorTimeUnit );
+                    lclConvertTimeInterval( aScaleData.TimeIncrement.MinorTimeInterval, mrModel.mofMinorUnit, mrModel.mnMinorTimeUnit );
+                    // base time unit
+                    if( mrModel.monBaseTimeUnit.has() )
+                        aScaleData.TimeIncrement.TimeResolution <<= lclGetApiTimeUnit( mrModel.monBaseTimeUnit.get() );
+                    else
+                        aScaleData.TimeIncrement.TimeResolution.clear();
+                }
+                else
+                {
+                    // do not overlap text unless all labels are visible
+                    aAxisProp.setProperty( PROP_TextOverlap, mrModel.mnTickLabelSkip == 1 );
+                    // do not break text into several lines
+                    aAxisProp.setProperty( PROP_TextBreak, false );
+                    // do not stagger labels in two lines
+                    aAxisProp.setProperty( PROP_ArrangeOrder, cssc::ChartAxisArrangeOrderType_SIDE_BY_SIDE );
+                    //! TODO #i58731# show n-th category
+                }
             }
             break;
             case cssc2::AxisType::REALNUMBER:
@@ -235,26 +269,25 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
                 lclSetValueOrClearAny( aScaleData.Maximum, mrModel.mofMax );
                 // major increment
                 IncrementData& rIncrementData = aScaleData.IncrementData;
-                lclSetScaledValueOrClearAny( rIncrementData.Distance, mrModel.mofMajorUnit, aScaleData.Scaling );
+                if( mrModel.mofMajorUnit.has() && aScaleData.Scaling.is() )
+                    rIncrementData.Distance <<= aScaleData.Scaling->doScaling( mrModel.mofMajorUnit.get() );
+                else
+                    lclSetValueOrClearAny( rIncrementData.Distance, mrModel.mofMajorUnit );
                 // minor increment
                 Sequence< SubIncrement >& rSubIncrementSeq = rIncrementData.SubIncrements;
                 rSubIncrementSeq.realloc( 1 );
                 Any& rIntervalCount = rSubIncrementSeq[ 0 ].IntervalCount;
+                rIntervalCount.clear();
                 if( bLogScale )
                 {
                     if( mrModel.mofMinorUnit.has() )
                         rIntervalCount <<= sal_Int32( 9 );
                 }
-                else
+                else if( mrModel.mofMajorUnit.has() && mrModel.mofMinorUnit.has() && (0.0 < mrModel.mofMinorUnit.get()) && (mrModel.mofMinorUnit.get() <= mrModel.mofMajorUnit.get()) )
                 {
-                    OptValue< sal_Int32 > onCount;
-                    if( mrModel.mofMajorUnit.has() && mrModel.mofMinorUnit.has() && (0.0 < mrModel.mofMinorUnit.get()) && (mrModel.mofMinorUnit.get() <= mrModel.mofMajorUnit.get()) )
-                    {
-                        double fCount = mrModel.mofMajorUnit.get() / mrModel.mofMinorUnit.get() + 0.5;
-                        if( (1.0 <= fCount) && (fCount < 1001.0) )
-                            onCount = static_cast< sal_Int32 >( fCount );
-                    }
-                    lclSetValueOrClearAny( rIntervalCount, onCount );
+                    double fCount = mrModel.mofMajorUnit.get() / mrModel.mofMinorUnit.get() + 0.5;
+                    if( (1.0 <= fCount) && (fCount < 1001.0) )
+                        rIntervalCount <<= static_cast< sal_Int32 >( fCount );
                 }
             }
             break;

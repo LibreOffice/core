@@ -92,6 +92,8 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResM
     mpFilterListBox->SetSelectHdl( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
     mpFilterListBox->SetDeselectHdl( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
     mpFilterListBox->SetDoubleClickHdl( LINK( this, XMLFilterSettingsDialog, DoubleClickHdl_Impl ) );
+    mpFilterListBox->SetAccessibleName(String( RESID( STR_XML_FILTER_LISTBOX )));
+    maCtrlFilterList.SetAccessibleName(String( RESID( STR_XML_FILTER_LISTBOX )));
     mpFilterListBox->SetHelpId( HID_XML_FILTER_LIST );
 
     maPBNew.SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
@@ -198,7 +200,7 @@ void XMLFilterSettingsDialog::ShowWindow()
     updateStates();
     mpFilterListBox->Reset();
 
-    WorkWindow::Show( TRUE );
+    WorkWindow::Show( sal_True );
 }
 
 // -----------------------------------------------------------------------
@@ -1050,12 +1052,12 @@ long XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
         {
             const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
             KeyCode         aKeyCode = pKEvt->GetKeyCode();
-            USHORT          nKeyCode = aKeyCode.GetCode();
+            sal_uInt16          nKeyCode = aKeyCode.GetCode();
 
             if( nKeyCode == KEY_ESCAPE )
             {
                 Close();
-                return TRUE;
+                return sal_True;
             }
         }
     }
@@ -1434,9 +1436,7 @@ XMLFilterListBox::XMLFilterListBox( SvxPathControl_Impl * pParent )
     static long nTabs[] = {3, 0, nTabSize, 2*nTabSize };
     Size aHeadSize( mpHeaderBar->GetSizePixel() );
 
-    WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
     pParent->SetFocusControl( this );
-    SetWindowBits( nBits );
 //  SetDoubleClickHdl( aLink );
 //  SetSelectHdl( LINK( this, SvxPathTabPage, PathSelect_Impl ) );
     SetSelectionMode( MULTIPLE_SELECTION );
@@ -1496,7 +1496,7 @@ IMPL_LINK( XMLFilterListBox, HeaderSelect_Impl, HeaderBar*, pBar )
         return 0;
 
     HeaderBarItemBits nBits = mpHeaderBar->GetItemBits(ITEMID_TYPE);
-    BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     SvSortMode eMode = SortAscending;
 
     if ( bUp )
@@ -1527,7 +1527,7 @@ IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
     if ( !mpHeaderBar->IsItemMode() )
     {
         Size aSz;
-        USHORT nTabs = mpHeaderBar->GetItemCount();
+        sal_uInt16 nTabs = mpHeaderBar->GetItemCount();
         long nTmpSz = 0;
         long nWidth = mpHeaderBar->GetItemSize(ITEMID_NAME);
         long nBarWidth = mpHeaderBar->GetSizePixel().Width();
@@ -1537,7 +1537,7 @@ IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
         else if ( ( nBarWidth - nWidth ) < 30 )
             mpHeaderBar->SetItemSize( ITEMID_TYPE, nBarWidth - 30 );
 
-        for ( USHORT i = 1; i <= nTabs; ++i )
+        for ( sal_uInt16 i = 1; i <= nTabs; ++i )
         {
             long nW = mpHeaderBar->GetItemSize(i);
             aSz.Width() =  nW + nTmpSz;
@@ -1561,8 +1561,8 @@ void XMLFilterListBox::addFilterEntry( const filter_info_impl* pInfo )
 
 void XMLFilterListBox::changeEntry( const filter_info_impl* pInfo )
 {
-    const ULONG nCount = GetEntryCount();
-    ULONG nPos;
+    const sal_uLong nCount = GetEntryCount();
+    sal_uLong nPos;
     for( nPos = 0; nPos < nCount; nPos++ )
     {
         SvLBoxEntry* pEntry = GetEntry( nPos );

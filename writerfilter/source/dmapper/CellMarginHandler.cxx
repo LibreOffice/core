@@ -30,6 +30,7 @@
 #include <doctok/resourceids.hxx>
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
+#include "dmapperLoggers.hxx"
 
 namespace writerfilter {
 namespace dmapper {
@@ -37,17 +38,17 @@ namespace dmapper {
 using namespace ::com::sun::star;
 using namespace ::writerfilter;
 
-
 CellMarginHandler::CellMarginHandler() :
-    m_nValue( 0 ),
-    m_nLeftMargin( 0 ),
-    m_bLeftMarginValid( false ),
-    m_nRightMargin( 0 ),
-    m_bRightMarginValid( false ),
-    m_nTopMargin( 0 ),
-    m_bTopMarginValid( false ),
-    m_nBottomMargin( 0 ),
-    m_bBottomMarginValid( false )
+LoggedProperties(dmapper_logger, "CellMarginHandler"),
+m_nValue( 0 ),
+m_nLeftMargin( 0 ),
+m_bLeftMarginValid( false ),
+m_nRightMargin( 0 ),
+m_bRightMarginValid( false ),
+m_nTopMargin( 0 ),
+m_bTopMarginValid( false ),
+m_nBottomMargin( 0 ),
+m_bBottomMarginValid( false )
 {
 }
 
@@ -55,7 +56,7 @@ CellMarginHandler::~CellMarginHandler()
 {
 }
 
-void CellMarginHandler::attribute(Id rName, Value & rVal)
+void CellMarginHandler::lcl_attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
     (void)nIntValue;
@@ -73,7 +74,7 @@ void CellMarginHandler::attribute(Id rName, Value & rVal)
     }
 }
 
-void CellMarginHandler::sprm(Sprm & rSprm)
+void CellMarginHandler::lcl_sprm(Sprm & rSprm)
 {
     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
     if( pProperties.get())

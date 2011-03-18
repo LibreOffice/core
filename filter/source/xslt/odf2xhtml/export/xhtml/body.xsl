@@ -57,15 +57,16 @@
 	<xsl:key match="style:master-page" name="masterPageElements" use="@style:name"/>
 	<xsl:key match="style:page-layout" name="pageLayoutElements" use="@style:name"/>
 	<xsl:key name="writingModeStyles" match="/*/office:styles/style:style/style:paragraph-properties/@style:writing-mode | /*/office:automatic-styles/style:style/style:paragraph-properties/@style:writing-mode" use="'test'"/>
+
 	<xsl:template name="create-body">
 		<xsl:param name="globalData"/>
-        <xsl:call-template name="create-body.collect-page-properties">
-            <xsl:with-param name="globalData" select="$globalData"/>
-        </xsl:call-template>
-    </xsl:template>
+		<xsl:call-template name="create-body.collect-page-properties">
+			<xsl:with-param name="globalData" select="$globalData"/>
+		</xsl:call-template>
+	</xsl:template>
 
-    <xsl:template name="create-body.collect-page-properties">
-        <xsl:param name="globalData"/>
+	<xsl:template name="create-body.collect-page-properties">
+		<xsl:param name="globalData"/>
 
 		<!-- approximation to find the correct master page style (with page dimensions) -->
 		<xsl:variable name="masterPageNames">
@@ -93,34 +94,35 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-        <xsl:choose>
-            <xsl:when test="function-available('common:node-set')">
-                <xsl:call-template name="create-body.create">
-                    <xsl:with-param name="globalData" select="common:node-set($globalData)"/>
-                    <xsl:with-param name="pageProperties" select="common:node-set($pagePropertiesRTF)"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="function-available('xalan:nodeset')">
-                <xsl:call-template name="create-body.create">
-                    <xsl:with-param name="globalData" select="xalan:nodeset($globalData)"/>
-                    <xsl:with-param name="pageProperties" select="xalan:nodeset($pagePropertiesRTF)"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="function-available('xt:node-set')">
-                <xsl:call-template name="create-body.create">
-                    <xsl:with-param name="globalData" select="xt:node-set($globalData)"/>
-                    <xsl:with-param name="pageProperties" select="xt:node-set($pagePropertiesRTF)"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:message terminate="yes">The required node-set function was not found!</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
 
-    <xsl:template name="create-body.create">
-        <xsl:param name="globalData"/>
-        <xsl:param name="pageProperties"/>
+		<xsl:choose>
+			<xsl:when test="function-available('common:node-set')">
+				<xsl:call-template name="create-body.create">
+					<xsl:with-param name="globalData" select="common:node-set($globalData)"/>
+					<xsl:with-param name="pageProperties" select="common:node-set($pagePropertiesRTF)"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="function-available('xalan:nodeset')">
+				<xsl:call-template name="create-body.create">
+					<xsl:with-param name="globalData" select="xalan:nodeset($globalData)"/>
+					<xsl:with-param name="pageProperties" select="xalan:nodeset($pagePropertiesRTF)"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="function-available('xt:node-set')">
+				<xsl:call-template name="create-body.create">
+					<xsl:with-param name="globalData" select="xt:node-set($globalData)"/>
+					<xsl:with-param name="pageProperties" select="xt:node-set($pagePropertiesRTF)"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:message terminate="yes">The required node-set function was not found!</xsl:message>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="create-body.create">
+		<xsl:param name="globalData"/>
+		<xsl:param name="pageProperties"/>
 
 		<xsl:element name="body">
 			<!-- direction of text flow -->
@@ -1803,11 +1805,11 @@
 		<xsl:param name="minLabelWidth"/>
 		<xsl:param name="listIndent" />
 
-        <!-- The text:list-header shall not be labeled. According to ODF specification (sect. 4.3.2):
-            "The <text:list-header> element represents a list header and is a special kind of list item. It
-            contains one or more paragraphs that are displayed before a list. The paragraphs are formatted
-            like list items but they do not have a preceding number or bullet." -->
-        <xsl:variable name="isListHeader" select="boolean(self::text:list-header)"/>
+		<!-- The text:list-header shall not be labeled. According to ODF specification (sect. 4.3.2):
+		"The <text:list-header> element represents a list header and is a special kind of list item. It
+		contains one or more paragraphs that are displayed before a list. The paragraphs are formatted
+		like list items but they do not have a preceding number or bullet." -->
+		<xsl:variable name="isListHeader" select="boolean(self::text:list-header)"/>
 
 		<xsl:variable name="listIndentNew">
 			<xsl:choose>
@@ -1827,14 +1829,14 @@
 			<xsl:if test="$listStyle/text:list-style/text:list-level-style-number">
 				<xsl:choose>
 					<xsl:when test="$isListHeader">0</xsl:when>
-                    <xsl:when test="$isEmptyList">
+					<xsl:when test="$isEmptyList">
 						<!--  An empty list item (no text:h/text:p as child), will not count as item and does not increment the count.  -->
 						<xsl:variable name="tempItemNumber">
 							<xsl:choose>
 								<!-- siblings will be incremented by one -->
 								<xsl:when test="$itemNumber">
 									<xsl:if test="not($isListHeader)">
-									    <xsl:value-of select="$itemNumber + 1"/>
+										<xsl:value-of select="$itemNumber + 1"/>
 									</xsl:if>
 								</xsl:when>
 								<!-- if a higher list level had content the numbering starts with 1 -->
@@ -2168,6 +2170,7 @@
 		<!-- E.g.: If a list level 2 number is searched, a level 3 with content found with only a level 1 parent with content,
 			the level 3 gets a 'pseudoLevel' -->
 		<xsl:param name="pseudoLevel" select="0" />
+
 		<xsl:variable name="isListHeader" select="boolean(self::text:list-header)"/>
 		<xsl:variable name="isEmptyList" select="not(*[name() = 'text:h' or name() = 'text:p'])"/>
 

@@ -27,27 +27,30 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/chartconverter.hxx"
+
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "oox/drawingml/chart/chartspaceconverter.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
+#include "oox/helper/containerhelper.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::awt::Point;
-using ::com::sun::star::awt::Size;
-using ::com::sun::star::drawing::XShapes;
-using ::com::sun::star::chart2::XChartDocument;
-using ::com::sun::star::chart2::data::XDataProvider;
-using ::com::sun::star::chart2::data::XDataSequence;
-using ::oox::core::XmlFilterBase;
 using ::oox::drawingml::chart::DataSequenceModel;
 using ::com::sun::star::uno::Any;
 using ::rtl::OUStringBuffer;
-
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2::data;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::uno;
+
+using ::oox::core::XmlFilterBase;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -66,7 +69,7 @@ static OUString lclGenerateApiString( const OUString& rString )
     return OUStringBuffer().append( sal_Unicode( '"' ) ).append( aRetString ).append( sal_Unicode( '"' ) ).makeStringAndClear();
 }
 
-static OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )
+    static ::rtl::OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )
 {
     OSL_ENSURE( !rMatrix.empty(), "ChartConverter::lclGenerateApiArray - missing matrix values" );
     OUStringBuffer aBuffer;
@@ -78,7 +81,7 @@ static OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )
         for( Matrix< Any >::const_iterator aBeg = rMatrix.row_begin( nRow ), aIt = aBeg, aEnd = rMatrix.row_end( nRow ); aIt != aEnd; ++aIt )
         {
             double fValue = 0.0;
-            OUString aString;
+            ::rtl::OUString aString;
             if( aIt != aBeg )
                 aBuffer.append( API_TOKEN_ARRAY_COLSEP );
             if( *aIt >>= fValue )
@@ -133,7 +136,7 @@ Reference< XDataSequence > ChartConverter::createDataSequence( const Reference< 
     Reference< XDataSequence > xDataSeq;
     if( rxDataProvider.is() )
     {
-        OUString aRangeRep;
+        ::rtl::OUString aRangeRep;
         if( !rDataSeq.maData.empty() )
         {
             // create a single-row array from constant source data

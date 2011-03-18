@@ -346,30 +346,6 @@ extern "C"
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-
-    sal_Bool SAL_CALL component_writeInfo(
-        void * , void * pRegistryKey )
-    {
-        if (pRegistryKey)
-        {
-            try
-            {
-                Reference< XRegistryKey > xKey( reinterpret_cast< XRegistryKey * >( pRegistryKey ) );
-
-                Reference< XRegistryKey > xNewKey = xKey->createKey(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" )) );
-                xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME )) );
-
-                return sal_True;
-            }
-            catch (InvalidRegistryException &)
-            {
-                OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-            }
-        }
-        return sal_False;
-    }
-
     void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void *  )
     {
         void * pRet = 0;

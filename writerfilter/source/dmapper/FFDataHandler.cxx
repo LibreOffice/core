@@ -28,10 +28,8 @@
 #include "FFDataHandler.hxx"
 
 #include <ooxml/resourceids.hxx>
-#ifdef DEBUG_DOMAINMAPPER
-#include <resourcemodel/QNameToString.hxx>
 #include "dmapperLoggers.hxx"
-#endif
+
 namespace writerfilter {
 namespace dmapper {
 
@@ -39,17 +37,18 @@ namespace dmapper {
  * class: FFDataHandler *
  ************************/
 
-FFDataHandler::FFDataHandler()
-: m_bEnabled(false),
-  m_bCalcOnExit(false),
-  m_nHelpTextType(0),
-  m_nStatusTextType(0),
-  m_nCheckboxHeight(0),
-  m_bCheckboxAutoHeight(false),
-  m_bCheckboxDefault(false),
-  m_bCheckboxChecked(false),
-  m_nTextType(0),
-  m_nTextMaxLength(0)
+FFDataHandler::FFDataHandler() :
+LoggedProperties(dmapper_logger, "FFDataHandler"),
+m_bEnabled(false),
+m_bCalcOnExit(false),
+m_nHelpTextType(0),
+m_nStatusTextType(0),
+m_nCheckboxHeight(0),
+m_bCheckboxAutoHeight(false),
+m_bCheckboxDefault(false),
+m_bCheckboxChecked(false),
+m_nTextType(0),
+m_nTextMaxLength(0)
 {
 }
 
@@ -239,12 +238,8 @@ void FFDataHandler::setTextFormat(const rtl::OUString & r_sTextFormat)
 }
 
 
-void FFDataHandler::sprm(Sprm & r_Sprm)
+void FFDataHandler::lcl_sprm(Sprm & r_Sprm)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("FFDataHandler.sprm");
-    dmapper_logger->chars(r_Sprm.toString());
-#endif
     switch(r_Sprm.getId())
     {
     case NS_ooxml::LN_CT_FFData_name:
@@ -358,9 +353,6 @@ void FFDataHandler::sprm(Sprm & r_Sprm)
 #endif
         break;
     }
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
-#endif
 }
 
 void FFDataHandler::resolveSprm(Sprm & r_Sprm)
@@ -370,14 +362,8 @@ void FFDataHandler::resolveSprm(Sprm & r_Sprm)
         pProperties->resolve(*this);
 }
 
-void FFDataHandler::attribute(Id name, Value & val)
+void FFDataHandler::lcl_attribute(Id name, Value & val)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("FFDataHandler.attribute");
-    dmapper_logger->attribute("name", (*QNameToString::Instance())(name));
-    dmapper_logger->attribute("value", val.toString());
-    dmapper_logger->endElement();
-#endif
     switch (name)
     {
     case NS_ooxml::LN_CT_FFHelpText_type:

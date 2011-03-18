@@ -27,27 +27,28 @@
  ************************************************************************/
 
 #include "oox/xls/sharedstringsfragment.hxx"
-#include "oox/xls/sharedstringsbuffer.hxx"
-#include "oox/xls/richstringcontext.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::RecordInfo;
+#include "oox/xls/richstringcontext.hxx"
+#include "oox/xls/sharedstringsbuffer.hxx"
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-OoxSharedStringsFragment::OoxSharedStringsFragment(
+using namespace ::oox::core;
+
+using ::rtl::OUString;
+
+// ============================================================================
+
+SharedStringsFragment::SharedStringsFragment(
         const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
-    OoxWorkbookFragmentBase( rHelper, rFragmentPath )
+    WorkbookFragmentBase( rHelper, rFragmentPath )
 {
 }
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
-
-ContextHandlerRef OoxSharedStringsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef SharedStringsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     switch( getCurrentElement() )
     {
@@ -58,42 +59,40 @@ ContextHandlerRef OoxSharedStringsFragment::onCreateContext( sal_Int32 nElement,
 
         case XLS_TOKEN( sst ):
             if( nElement == XLS_TOKEN( si ) )
-                return new OoxRichStringContext( *this, getSharedStrings().createRichString() );
+                return new RichStringContext( *this, getSharedStrings().createRichString() );
         break;
     }
     return 0;
 }
 
-ContextHandlerRef OoxSharedStringsFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef SharedStringsFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            if( nRecId == OOBIN_ID_SST )
+            if( nRecId == BIFF12_ID_SST )
                 return this;
         break;
 
-        case OOBIN_ID_SST:
-            if( nRecId == OOBIN_ID_SI )
+        case BIFF12_ID_SST:
+            if( nRecId == BIFF12_ID_SI )
                 getSharedStrings().createRichString()->importString( rStrm, true );
         break;
     }
     return 0;
 }
 
-// oox.core.FragmentHandler2 interface ----------------------------------------
-
-const RecordInfo* OoxSharedStringsFragment::getRecordInfos() const
+const RecordInfo* SharedStringsFragment::getRecordInfos() const
 {
     static const RecordInfo spRecInfos[] =
     {
-        { OOBIN_ID_SST,     OOBIN_ID_SST + 1    },
+        { BIFF12_ID_SST,    BIFF12_ID_SST + 1   },
         { -1,               -1                  }
     };
     return spRecInfos;
 }
 
-void OoxSharedStringsFragment::finalizeImport()
+void SharedStringsFragment::finalizeImport()
 {
     getSharedStrings().finalizeImport();
 }

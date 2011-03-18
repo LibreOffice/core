@@ -78,9 +78,9 @@ struct AxisModel
     OptValue< double >  mofLogBase;         /// Logarithmic base for logarithmic axes.
     OptValue< double >  mofMax;             /// Maximum axis value.
     OptValue< double >  mofMin;             /// Minimum axis value.
+    OptValue< sal_Int32 > monBaseTimeUnit;  /// Base time unit shown on a date axis.
     sal_Int32           mnAxisId;           /// Unique axis identifier.
     sal_Int32           mnAxisPos;          /// Position of the axis (top/bottom/left/right).
-    sal_Int32           mnBaseTimeUnit;     /// Base time unit shown on a date axis.
     sal_Int32           mnCrossAxisId;      /// Identifier of a crossing axis.
     sal_Int32           mnCrossBetween;     /// This value axis crosses between or inside category.
     sal_Int32           mnCrossMode;        /// Mode this axis crosses another axis (min, max, auto).
@@ -95,7 +95,7 @@ struct AxisModel
     sal_Int32           mnTickLabelSkip;    /// Number of tick mark labels to skip.
     sal_Int32           mnTickMarkSkip;     /// Number of tick marks to skip.
     sal_Int32           mnTypeId;           /// Type identifier of this axis.
-    bool                mbAuto;             /// True = automatic axis settings.
+    bool                mbAuto;             /// True = automatic selection of text/date axis type.
     bool                mbDeleted;          /// True = axis has been deleted manually.
     bool                mbNoMultiLevel;     /// True = no multi-level categories supported.
 

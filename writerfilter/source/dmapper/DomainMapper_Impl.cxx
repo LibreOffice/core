@@ -701,10 +701,9 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->attribute("isTextAppend", xTextAppend.is());
-    dmapper_logger->attribute("isIgnor", getTableManager().isIgnore());
 #endif
 
-    if(xTextAppend.is() && ! getTableManager( ).isIgnore())
+    if(xTextAppend.is() && ! getTableManager( ).isIgnore() && pParaContext != NULL)
     {
         try
         {
@@ -723,7 +722,10 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
               old _and_ new DropCap must not occur
              */
 
-            bool bIsDropCap = pParaContext->IsFrameMode() && sal::static_int_cast<Id>(pParaContext->GetDropCap()) != NS_ooxml::LN_Value_wordprocessingml_ST_DropCap_none;
+            bool bIsDropCap =
+                pParaContext->IsFrameMode() &&
+                sal::static_int_cast<Id>(pParaContext->GetDropCap()) != NS_ooxml::LN_Value_wordprocessingml_ST_DropCap_none;
+
             style::DropCapFormat aDrop;
             ParagraphPropertiesPtr pToBeSavedProperties;
             bool bKeepLastParagraphProperties = false;
@@ -2169,7 +2171,7 @@ void DomainMapper_Impl::handleToc
 //                    {
                             //todo: entries can only be included completely
 //                    }
-//                  \n Builds a table of contents or a range of entries, sucah as “1-9”, in a table of contents without page numbers
+//                  \n Builds a table of contents or a range of entries, sucah as ï¿½1-9ï¿½, in a table of contents without page numbers
 //                    if( lcl_FindInCommand( pContext->GetCommand(), 'n', sValue ))
 //                    {
                         //todo: what does the description mean?

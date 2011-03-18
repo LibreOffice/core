@@ -42,12 +42,13 @@ using namespace ::com::sun::star;
 
 
 BorderHandler::BorderHandler( bool bOOXML ) :
-    m_nCurrentBorderPosition( BORDER_TOP ),
-    m_nLineWidth(0),
-    m_nLineType(0),
-    m_nLineColor(0),
-    m_nLineDistance(0),
-    m_bOOXML( bOOXML )
+LoggedProperties(dmapper_logger, "BorderHandler"),
+m_nCurrentBorderPosition( BORDER_TOP ),
+m_nLineWidth(0),
+m_nLineType(0),
+m_nLineColor(0),
+m_nLineDistance(0),
+m_bOOXML( bOOXML )
 {
     const int nBorderCount(BORDER_COUNT);
     std::fill_n(m_aFilledLines, nBorderCount, false);
@@ -58,14 +59,8 @@ BorderHandler::~BorderHandler()
 {
 }
 
-void BorderHandler::attribute(Id rName, Value & rVal)
+void BorderHandler::lcl_attribute(Id rName, Value & rVal)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("BorderHandler.attribute");
-    dmapper_logger->attribute("id", (*QNameToString::Instance())(rName));
-    dmapper_logger->endElement();
-#endif
-
     sal_Int32 nIntValue = rVal.getInt();
     switch( rName )
     {
@@ -109,13 +104,8 @@ void BorderHandler::attribute(Id rName, Value & rVal)
     }
 }
 
-void BorderHandler::sprm(Sprm & rSprm)
+void BorderHandler::lcl_sprm(Sprm & rSprm)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("BorderHandler.sprm");
-    dmapper_logger->attribute("sprm", rSprm.toString());
-#endif
-
     switch( rSprm.getId())
     {
         case NS_ooxml::LN_CT_TblBorders_top:
@@ -136,11 +126,6 @@ void BorderHandler::sprm(Sprm & rSprm)
         break;
         default:;
     }
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement();
-#endif
-
 }
 
 PropertyMapPtr  BorderHandler::getProperties()

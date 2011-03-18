@@ -76,8 +76,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         try
         {
             // use the oox.core.FilterDetect implementation to extract the decrypted ZIP package
-            uno::Reference< lang::XMultiServiceFactory > xFactory( m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-            ::oox::core::FilterDetect aDetector( xFactory );
+            ::oox::core::FilterDetect aDetector( m_xContext );
             xInputStream = aDetector.extractUnencryptedPackage( aMediaDesc );
         }
         catch( uno::Exception& )
@@ -89,7 +88,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
             return sal_False;
         }
 
-#ifdef DEBUG_ELEMENT
+#ifdef DEBUG_IMPORT
         OUString sURL = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
         ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
 
@@ -131,7 +130,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         oox::StorageRef xVbaPrjStrg( new ::oox::ole::OleStorage( uno::Reference< lang::XMultiServiceFactory >( m_xContext->getServiceManager(), uno::UNO_QUERY_THROW ), pVBAProjectStream->getDocumentStream(), false ) );
         if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
         {
-            ::oox::ole::VbaProject aVbaProject( uno::Reference< lang::XMultiServiceFactory >( m_xContext->getServiceManager(), uno::UNO_QUERY_THROW ), xModel, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Writer" ) ) );
+            ::oox::ole::VbaProject aVbaProject( m_xContext, xModel, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Writer" ) ) );
             uno::Reference< frame::XFrame > xFrame = aMediaDesc.getUnpackedValueOrDefault(  MediaDescriptor::PROP_FRAME(), uno::Reference< frame::XFrame > () );
 
             // if no XFrame try fallback to what we can glean from the Model
@@ -141,7 +140,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
                 xFrame =  xController.is() ? xController->getFrame() : NULL;
             }
 
-            oox::GraphicHelper gHelper(  uno::Reference< lang::XMultiServiceFactory >( m_xContext->getServiceManager(), uno::UNO_QUERY_THROW ), xFrame, xVbaPrjStrg );
+            oox::GraphicHelper gHelper( m_xContext, xFrame, xVbaPrjStrg );
             aVbaProject.importVbaProject( *xVbaPrjStrg, gHelper );
         }
     }
@@ -154,8 +153,8 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     }
 
     pStream.reset();
+#ifdef DEBUG_IMPORT
 
-#ifdef DEBUG_ELEMENT
     dmapperLogger->endDocument();
     debugLogger->endDocument();
 #endif

@@ -109,12 +109,12 @@ void LwpFribPtr::ReadPara(LwpObjectStream* pObjStrm)
     sal_uInt8 FribTag=0;
     sal_uInt8 FribType;
     sal_uInt8 FribEditor;
-    BOOL ProblemFrib;
+    sal_Bool ProblemFrib;
 
     LwpFrib* pCurFrib = m_pFribs = NULL;
     for(;;)
     {
-        ProblemFrib = FALSE;
+        ProblemFrib = sal_False;
         // Get the frib type
         pObjStrm->QuickRead(&FribTag, sizeof(FribTag));
 
@@ -152,7 +152,7 @@ void LwpFribPtr::ReadPara(LwpObjectStream* pObjStrm)
             pCurFrib = pFrib;
         }
         else
-            ProblemFrib = TRUE;
+            ProblemFrib = sal_True;
     }
 }
 

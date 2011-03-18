@@ -35,8 +35,6 @@
 #include <ooxml/OOXMLFastTokens.hxx>
 #include "ooxmlLoggers.hxx"
 
-//#define DEBUG_RESOLVE
-
 namespace writerfilter {
 namespace ooxml
 {
@@ -475,15 +473,22 @@ string OOXMLPropertySetImpl::getType() const
 
 void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
 {
+#ifdef DEBUG_PROPERTY_SET
+    debug_logger->startElement("propertyset.add");
+    debug_logger->chars(pProperty->toString());
+#endif
+
     if (pProperty.get() != NULL && pProperty->getId() != 0x0)
     {
         mProperties.push_back(pProperty);
     }
-#ifdef DEBUG_PROPERTIES
+#ifdef DEBUG_PROPERTY_SET
     else
     {
         debug_logger->element("warning.property_not_added");
     }
+
+    debug_logger->endElement("propertyset.add");
 #endif
 }
 

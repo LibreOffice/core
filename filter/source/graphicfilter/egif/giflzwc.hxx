@@ -45,19 +45,19 @@ private:
     GIFImageDataOutputStream*   pIDOS;
     GIFLZWCTreeNode*            pTable;
     GIFLZWCTreeNode*            pPrefix;
-    USHORT                      nDataSize;
-    USHORT                      nClearCode;
-    USHORT                      nEOICode;
-    USHORT                      nTableSize;
-    USHORT                      nCodeSize;
+    sal_uInt16                      nDataSize;
+    sal_uInt16                      nClearCode;
+    sal_uInt16                      nEOICode;
+    sal_uInt16                      nTableSize;
+    sal_uInt16                      nCodeSize;
 
 public:
 
                                 GIFLZWCompressor();
                                 ~GIFLZWCompressor();
 
-    void                        StartCompression( SvStream& rGIF, USHORT nPixelSize );
-    void                        Compress( HPBYTE pSrc, ULONG nSize );
+    void                        StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize );
+    void                        Compress( HPBYTE pSrc, sal_uLong nSize );
     void                        EndCompression();
 };
 

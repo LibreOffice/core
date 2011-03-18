@@ -42,9 +42,9 @@ using ::rtl::OUString;
 
 // ============================================================================
 
-VbaProjectFilterBase::VbaProjectFilterBase( const Reference< XMultiServiceFactory >& rxGlobalFactory,
-        const OUString& rAppName, const OUString& rStorageName ) :
-    BinaryFilterBase( rxGlobalFactory ),
+VbaProjectFilterBase::VbaProjectFilterBase( const Reference< XComponentContext >& rxContext,
+        const OUString& rAppName, const OUString& rStorageName ) throw( RuntimeException ) :
+    BinaryFilterBase( rxContext ),
     maAppName( rAppName ),
     maStorageName( rStorageName )
 {
@@ -53,18 +53,21 @@ VbaProjectFilterBase::VbaProjectFilterBase( const Reference< XMultiServiceFactor
 bool VbaProjectFilterBase::importDocument() throw()
 {
     StorageRef xVbaPrjStrg = openSubStorage( maStorageName, false );
-    if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
-    {
-        VbaProject aVbaProject( getGlobalFactory(), getModel(), maAppName );
-        aVbaProject.importVbaProject( *xVbaPrjStrg, getGraphicHelper() );
-        return true;
-    }
-    return false;
+    if( !xVbaPrjStrg || !xVbaPrjStrg->isStorage() )
+        return false;
+
+    getVbaProject().importVbaProject( *xVbaPrjStrg, getGraphicHelper() );
+    return true;
 }
 
 bool VbaProjectFilterBase::exportDocument() throw()
 {
     return false;
+}
+
+VbaProject* VbaProjectFilterBase::implCreateVbaProject() const
+{
+    return new VbaProject( getComponentContext(), getModel(), maAppName );
 }
 
 // ============================================================================
@@ -77,20 +80,20 @@ OUString SAL_CALL WordVbaProjectFilter_getImplementationName() throw()
 Sequence< OUString > SAL_CALL WordVbaProjectFilter_getSupportedServiceNames() throw()
 {
     Sequence< OUString > aSeq( 1 );
-    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.comp.oox.WordVBAProjectFilter" );
+    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.ImportFilter" );
     return aSeq;
 }
 
 Reference< XInterface > SAL_CALL WordVbaProjectFilter_createInstance(
-        const Reference< XMultiServiceFactory >& rxGlobalFactory ) throw( Exception )
+        const Reference< XComponentContext >& rxContext ) throw( Exception )
 {
-    return static_cast< ::cppu::OWeakObject* >( new WordVbaProjectFilter( rxGlobalFactory ) );
+    return static_cast< ::cppu::OWeakObject* >( new WordVbaProjectFilter( rxContext ) );
 }
 
 // ----------------------------------------------------------------------------
 
-WordVbaProjectFilter::WordVbaProjectFilter( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
-    VbaProjectFilterBase( rxGlobalFactory, CREATE_OUSTRING( "Writer" ), CREATE_OUSTRING( "Macros" ) )
+WordVbaProjectFilter::WordVbaProjectFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    VbaProjectFilterBase( rxContext, CREATE_OUSTRING( "Writer" ), CREATE_OUSTRING( "Macros" ) )
 {
 }
 

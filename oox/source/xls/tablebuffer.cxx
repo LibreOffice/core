@@ -27,25 +27,23 @@
  ************************************************************************/
 
 #include "oox/xls/tablebuffer.hxx"
-#include <com/sun/star/sheet/XDatabaseRanges.hpp>
-#include <com/sun/star/sheet/XDatabaseRange.hpp>
-#include "properties.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
-#include "oox/xls/addressconverter.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::sheet::XDatabaseRanges;
-using ::com::sun::star::sheet::XDatabaseRange;
+#include <com/sun/star/sheet/XDatabaseRange.hpp>
+#include "oox/helper/attributelist.hxx"
+#include "oox/helper/binaryinputstream.hxx"
+#include "oox/helper/propertyset.hxx"
+#include "oox/xls/addressconverter.hxx"
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -61,6 +59,7 @@ TableModel::TableModel() :
 
 Table::Table( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
+    maAutoFilters( rHelper ),
     mnTokenIndex( -1 )
 {
 }
@@ -76,7 +75,7 @@ void Table::importTable( const AttributeList& rAttribs, sal_Int16 nSheet )
     maModel.mnTotalsRows  = rAttribs.getInteger( XML_totalsRowCount, 0 );
 }
 
-void Table::importTable( RecordInputStream& rStrm, sal_Int16 nSheet )
+void Table::importTable( SequenceInputStream& rStrm, sal_Int16 nSheet )
 {
     BinRange aBinRange;
     sal_Int32 nType;
@@ -91,22 +90,20 @@ void Table::importTable( RecordInputStream& rStrm, sal_Int16 nSheet )
 
 void Table::finalizeImport()
 {
-    // validate cell range
-    maDestRange = maModel.maRange;
-    bool bValidRange = getAddressConverter().validateCellRange( maDestRange, true, true );
-
     // create database range
-    if( bValidRange && (maModel.mnId > 0) && (maModel.maDisplayName.getLength() > 0) ) try
+    if( (maModel.mnId > 0) && (maModel.maDisplayName.getLength() > 0) ) try
     {
-        // find an unused name
-        Reference< XDatabaseRanges > xDatabaseRanges = getDatabaseRanges();
-        Reference< XNameAccess > xNameAccess( xDatabaseRanges, UNO_QUERY_THROW );
-        OUString aName = ContainerHelper::getUnusedName( xNameAccess, maModel.maDisplayName, '_' );
-        xDatabaseRanges->addNewByName( aName, maModel.maRange );
-        Reference< XDatabaseRange > xDatabaseRange( xDatabaseRanges->getByName( aName ), UNO_QUERY_THROW );
+        maDBRangeName = maModel.maDisplayName;
+        Reference< XDatabaseRange > xDatabaseRange( createDatabaseRangeObject( maDBRangeName, maModel.maRange ), UNO_SET_THROW );
+        maDestRange = xDatabaseRange->getDataArea();
+
+        // get formula token index of the database range
         PropertySet aPropSet( xDatabaseRange );
         if( !aPropSet.getProperty( mnTokenIndex, PROP_TokenIndex ) )
             mnTokenIndex = -1;
+
+        // filter settings
+        maAutoFilters.finalizeImport( xDatabaseRange );
     }
     catch( Exception& )
     {
@@ -121,24 +118,19 @@ TableBuffer::TableBuffer( const WorkbookHelper& rHelper ) :
 {
 }
 
-TableRef TableBuffer::importTable( const AttributeList& rAttribs, sal_Int16 nSheet )
+Table& TableBuffer::createTable()
 {
-    TableRef xTable( new Table( *this ) );
-    xTable->importTable( rAttribs, nSheet );
-    insertTable( xTable );
-    return xTable;
-}
-
-TableRef TableBuffer::importTable( RecordInputStream& rStrm, sal_Int16 nSheet )
-{
-    TableRef xTable( new Table( *this ) );
-    xTable->importTable( rStrm, nSheet );
-    insertTable( xTable );
-    return xTable;
+    TableVector::value_type xTable( new Table( *this ) );
+    maTables.push_back( xTable );
+    return *xTable;
 }
 
 void TableBuffer::finalizeImport()
 {
+    // map all tables by identifier and display name
+    for( TableVector::iterator aIt = maTables.begin(), aEnd = maTables.end(); aIt != aEnd; ++aIt )
+        insertTableToMaps( *aIt );
+    // finalize all valid tables
     maIdTables.forEachMem( &Table::finalizeImport );
 }
 
@@ -154,16 +146,16 @@ TableRef TableBuffer::getTable( const OUString& rDispName ) const
 
 // private --------------------------------------------------------------------
 
-void TableBuffer::insertTable( TableRef xTable )
+void TableBuffer::insertTableToMaps( const TableRef& rxTable )
 {
-    sal_Int32 nTableId = xTable->getTableId();
-    const OUString& rDispName = xTable->getDisplayName();
+    sal_Int32 nTableId = rxTable->getTableId();
+    const OUString& rDispName = rxTable->getDisplayName();
     if( (nTableId > 0) && (rDispName.getLength() > 0) )
     {
-        OSL_ENSURE( maIdTables.find( nTableId ) == maIdTables.end(), "TableBuffer::insertTable - multiple table identifier" );
-        maIdTables[ nTableId ] = xTable;
-        OSL_ENSURE( maNameTables.find( rDispName ) == maNameTables.end(), "TableBuffer::insertTable - multiple table name" );
-        maNameTables[ rDispName ] = xTable;
+        OSL_ENSURE( !maIdTables.has( nTableId ), "TableBuffer::insertTableToMaps - multiple table identifier" );
+        maIdTables[ nTableId ] = rxTable;
+        OSL_ENSURE( !maNameTables.has( rDispName ), "TableBuffer::insertTableToMaps - multiple table name" );
+        maNameTables[ rDispName ] = rxTable;
     }
 }
 

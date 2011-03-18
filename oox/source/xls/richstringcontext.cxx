@@ -27,28 +27,37 @@
  ************************************************************************/
 
 #include "oox/xls/richstringcontext.hxx"
-#include "oox/xls/stylesfragment.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandlerRef;
+#include "oox/xls/stylesfragment.hxx"
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
+using ::oox::core::ContextHandlerRef;
+using ::rtl::OUString;
 
-ContextHandlerRef OoxRichStringContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+// ============================================================================
+
+ContextHandlerRef RichStringContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() )
     {
         switch( nElement )
         {
-            case XLS_TOKEN( t ):            mxPortion = mxString->importText( rAttribs );           return this;    // collect text in onEndElement()
-            case XLS_TOKEN( r ):            mxPortion = mxString->importRun( rAttribs );            return this;
-            case XLS_TOKEN( rPh ):          mxPhonetic = mxString->importPhoneticRun( rAttribs );   return this;
-            case XLS_TOKEN( phoneticPr ):   mxString->importPhoneticPr( rAttribs );                 break;
+            case XLS_TOKEN( t ):
+                mxPortion = mxString->importText( rAttribs );
+                return this;    // collect text in onCharacters()
+            case XLS_TOKEN( r ):
+                mxPortion = mxString->importRun( rAttribs );
+                return this;
+            case XLS_TOKEN( rPh ):
+                mxPhonetic = mxString->importPhoneticRun( rAttribs );
+                return this;
+            case XLS_TOKEN( phoneticPr ):
+                mxString->importPhoneticPr( rAttribs );
+            break;
         }
     }
     else switch( getCurrentElement() )
@@ -58,11 +67,11 @@ ContextHandlerRef OoxRichStringContext::onCreateContext( sal_Int32 nElement, con
             {
                 case XLS_TOKEN( rPr ):
                     if( mxPortion.get() )
-                        return new OoxFontContext( *this, mxPortion->createFont() );
+                        return new FontContext( *this, mxPortion->createFont() );
                 break;
 
                 case XLS_TOKEN( t ):
-                    return this;    // collect portion text in onEndElement()
+                    return this;    // collect portion text in onCharacters()
             }
         break;
 
@@ -70,22 +79,24 @@ ContextHandlerRef OoxRichStringContext::onCreateContext( sal_Int32 nElement, con
             switch( nElement )
             {
                 case XLS_TOKEN( t ):
-                    return this;    // collect phonetic text in onEndElement()
+                    return this;    // collect phonetic text in onCharacters()
             }
         break;
     }
     return 0;
 }
 
-void OoxRichStringContext::onEndElement( const OUString& rChars )
+void RichStringContext::onCharacters( const OUString& rChars )
 {
-    if( getCurrentElement() == XLS_TOKEN( t ) )
+    if( isCurrentElement( XLS_TOKEN( t ) ) ) switch( getParentElement() )
     {
-        switch( getPreviousElement() )
-        {
-            case XLS_TOKEN( rPh ):  if( mxPhonetic.get() ) mxPhonetic->setText( rChars );   break;
-            default:                if( mxPortion.get() ) mxPortion->setText( rChars );     break;
-        }
+        case XLS_TOKEN( rPh ):
+            if( mxPhonetic.get() )
+                mxPhonetic->setText( rChars );
+        break;
+        default:
+            if( mxPortion.get() )
+                mxPortion->setText( rChars );
     }
 }
 

@@ -62,9 +62,9 @@ SHL1STDLIBS=\
     $(SALLIB)			\
     $(OOXLIB)
 
-.IF "$(DBG_LEVEL)">="2"
+# .IF "$(DBG_LEVEL)">="2"
 SHL1STDLIBS+= $(LIBXML2LIB)
-.ENDIF
+# .ENDIF
 
 
 SHL1DEPN=
@@ -79,4 +79,10 @@ DEF1NAME=$(SHL1TARGET)
 
 .INCLUDE :	target.mk
 
+ALLTAR : $(MISC)/writerfilter.component
 
+$(MISC)/writerfilter.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt writerfilter.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt writerfilter.component

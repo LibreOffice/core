@@ -651,36 +651,6 @@ extern "C"
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    sal_Bool SAL_CALL
-    component_writeInfo(void * /* pServiceManager */, void * pRegistryKey)
-    {
-        sal_Bool bRetVal = sal_False;
-        if (pRegistryKey)
-            {
-                try
-                    {
-                        Reference<XRegistryKey> pXNewKey(
-                                static_cast<XRegistryKey*> (pRegistryKey));
-                        pXNewKey->createKey(
-                                OUString(
-                                        RTL_CONSTASCII_USTRINGPARAM( "/" FILTER_IMPL_NAME "/UNO/SERVICES/" FILTER_SERVICE_NAME )));
-                        bRetVal = sal_True;
-
-                        pXNewKey = static_cast<XRegistryKey*> (pRegistryKey);
-                        pXNewKey->createKey(
-                                OUString(
-                                        RTL_CONSTASCII_USTRINGPARAM( "/" TRANSFORMER_IMPL_NAME "/UNO/SERVICES/" TRANSFORMER_SERVICE_NAME )));
-                        bRetVal = sal_True;
-                    }
-                catch (InvalidRegistryException&)
-                    {
-                        OSL_ENSURE(sal_False, "InvalidRegistryException caught");
-                        bRetVal = sal_False;
-                    }
-            }
-        return bRetVal;
-    }
-
     void *
     SAL_CALL component_getFactory(const sal_Char * pImplName,
             void * pServiceManager, void * /* pRegistryKey */)

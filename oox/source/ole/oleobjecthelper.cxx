@@ -27,31 +27,29 @@
  ************************************************************************/
 
 #include "oox/ole/oleobjecthelper.hxx"
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
+
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
-#include "properties.hxx"
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "oox/helper/propertymap.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::lang::XComponent;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::awt::Rectangle;
-using ::com::sun::star::awt::Size;
 
 namespace oox {
 namespace ole {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 

@@ -65,7 +65,7 @@ ImpSWFDialog::ImpSWFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
     maBtnHelp( this, ResId( BTN_HELP, rResMgr ) ),
     maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Flash/Export/" ) ), &rFilterData )
 {
-    const ULONG nCompressMode = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 75 );
+    const sal_uLong nCompressMode = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 75 );
     maNumFldQuality.SetValue( nCompressMode );
 
     maCheckExportAll.Check();

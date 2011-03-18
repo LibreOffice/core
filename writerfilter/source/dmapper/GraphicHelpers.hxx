@@ -5,7 +5,7 @@
 #include "PropertyMap.hxx"
 
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/LoggedResources.hxx>
 
 #include <boost/shared_ptr.hpp>
 
@@ -13,7 +13,7 @@ namespace writerfilter {
 namespace dmapper
 {
 
-class WRITERFILTER_DLLPRIVATE PositionHandler: public Properties
+class WRITERFILTER_DLLPRIVATE PositionHandler: public LoggedProperties
 {
 public:
     PositionHandler( );
@@ -23,12 +23,13 @@ public:
     sal_Int16 m_nRelation;
     sal_Int32 m_nPosition;
 
-    virtual void attribute( Id aName, Value& rVal );
-    virtual void sprm( Sprm& rSprm );
+ private:
+    virtual void lcl_attribute( Id aName, Value& rVal );
+    virtual void lcl_sprm( Sprm& rSprm );
 };
 typedef boost::shared_ptr<PositionHandler> PositionHandlerPtr;
 
-class WRITERFILTER_DLLPRIVATE WrapHandler: public Properties
+class WRITERFILTER_DLLPRIVATE WrapHandler: public LoggedProperties
 {
 public:
     WrapHandler( );
@@ -39,8 +40,9 @@ public:
 
     sal_Int32 getWrapMode( );
 
-    virtual void attribute( Id aName, Value& rVal );
-    virtual void sprm( Sprm& rSprm );
+ private:
+    virtual void lcl_attribute( Id aName, Value& rVal );
+    virtual void lcl_sprm( Sprm& rSprm );
 };
 typedef boost::shared_ptr<WrapHandler> WrapHandlerPtr;
 

@@ -32,7 +32,6 @@
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include <vector>
-#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/color.hxx"
 
 namespace oox { namespace drawingml {

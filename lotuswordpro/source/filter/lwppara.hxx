@@ -292,7 +292,7 @@ private:
     void OverrideParaBullet(LwpParaProperty* pProps);
     void OverrideParaNumbering(LwpParaProperty* pProps);
     void OverrideTab(LwpTabOverride* base,LwpTabOverride* over,XFParaStyle* pOverStyle);
-    BOOL IsBadHintsInFile();
+    sal_Bool IsBadHintsInFile();
 
     //void OutPutSectionTail(IXFStream* pOutputStream);
     //void OutPutBulletTail(LwpBulletStyleMgr* pBulletStyleMgr,IXFStream* pOutputStream);
@@ -410,9 +410,9 @@ inline void LwpPara::SetDropcapLayout(LwpDropcapLayout* pLayout)
 {
     m_pDropcapLayout = pLayout;
 }
-inline BOOL LwpPara::IsBadHintsInFile()
+inline sal_Bool LwpPara::IsBadHintsInFile()
 {
-    return (BOOL) ((m_nFlags & DOC_BADFILEPARAHINTS) != 0);
+    return (sal_Bool) ((m_nFlags & DOC_BADFILEPARAHINTS) != 0);
 }
 inline double LwpPara::GetBelowSpacing()
 {

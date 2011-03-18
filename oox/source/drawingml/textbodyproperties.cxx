@@ -28,8 +28,7 @@
 
 #include "oox/drawingml/textbodyproperties.hxx"
 #include <com/sun/star/text/WritingMode.hpp>
-#include "properties.hxx"
-#include "tokens.hxx"
+#include "oox/token/tokens.hxx"
 
 namespace oox {
 namespace drawingml {

@@ -31,8 +31,6 @@
 #include "oox/drawingml/table/tablerowcontext.hxx"
 #include "oox/drawingml/table/tablecellcontext.hxx"
 #include "oox/drawingml/table/tablerow.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;
@@ -59,14 +57,14 @@ TableRowContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::R
 
     switch( aElementToken )
     {
-    case NMSP_DRAWINGML|XML_tc:         // CT_TableCell
+    case A_TOKEN( tc ):         // CT_TableCell
         {
             std::vector< TableCell >& rvTableCells = mrTableRow.getTableCells();
             rvTableCells.resize( rvTableCells.size() + 1 );
             xRet.set( new TableCellContext( *this, xAttribs, rvTableCells.back() ) );
         }
         break;
-    case NMSP_DRAWINGML|XML_extLst:     // CT_OfficeArtExtensionList
+    case A_TOKEN( extLst ):     // CT_OfficeArtExtensionList
     default:
         break;
     }

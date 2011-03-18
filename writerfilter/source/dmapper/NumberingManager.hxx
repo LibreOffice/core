@@ -6,7 +6,7 @@
 
 #include <WriterFilterDllApi.hxx>
 #include <dmapper/DomainMapper.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/LoggedResources.hxx>
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 
@@ -171,8 +171,8 @@ public:
 /** This class provides access to the defined numbering styles.
   */
 class ListsManager :
-    public Properties,
-    public Table
+    public LoggedProperties,
+    public LoggedTable
 {
 private:
 
@@ -191,6 +191,13 @@ private:
 
     AbstractListDef::Pointer    GetAbstractList( sal_Int32 nId );
 
+    // Properties
+    virtual void lcl_attribute( Id nName, Value & rVal );
+    virtual void lcl_sprm(Sprm & sprm);
+
+    // Table
+    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+
 public:
 
     ListsManager(
@@ -199,13 +206,6 @@ public:
     virtual ~ListsManager();
 
     typedef boost::shared_ptr< ListsManager >  Pointer;
-
-    // Properties
-    virtual void attribute( Id nName, Value & rVal );
-    virtual void sprm(Sprm & sprm);
-
-    // Table
-    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
 
     // Config methods
     void SetLFOImport( bool bLFOImport ) { m_bIsLFOImport = bLFOImport; };

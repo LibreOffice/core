@@ -191,7 +191,7 @@ private:
     void                    ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient, const ::rtl::OUString* pStyle, sal_uInt32 nWriteFlags );
     void                    ImplWriteGradientLinear( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
     void                    ImplWriteGradientStop( const Color& rColor, double fOffset );
-    Color                   ImplGetColorWithIntensity( const Color& rColor, USHORT nIntensity );
+    Color                   ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );
     Color                   ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
     void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, const ::rtl::OUString* pStyle, sal_uInt32 nWriteFlags );
     void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, const ::rtl::OUString* pStyle = NULL );

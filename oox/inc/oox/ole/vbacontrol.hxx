@@ -34,6 +34,7 @@
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace oox { class StorageBase; }
@@ -188,7 +189,7 @@ class VbaUserForm : public VbaFormControl
 {
 public:
     explicit            VbaUserForm(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
                             const GraphicHelper& rGraphicHelper,
                             bool bDefaultColorBgr = true );
@@ -196,14 +197,14 @@ public:
     /** Imports the form and its embedded controls, and inserts the form with
         all its controls into the passed dialog library. */
     void                importForm(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxDialogLib,
-                            StorageBase& rVbaFormStrg,
-                            const ::rtl::OUString& rModuleName,
-                            rtl_TextEncoding eTextEnc );
+                           const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
+                           const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxDialogLib,
+                           StorageBase& rVbaFormStrg,
+                           const ::rtl::OUString& rModuleName,
+                           rtl_TextEncoding eTextEnc );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxGlobalFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxCompContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxDocModel;
     ControlConverter    maConverter;
 };

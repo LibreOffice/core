@@ -33,10 +33,7 @@
 #include <boost/unordered_map.hpp>
 #include "oox/helper/helper.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/token/tokenmap.hxx"
 #include "oox/helper/propertymap.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -244,7 +241,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
         sal_Char    nVal = 0;
 
         // first check if its a constant value
-        switch( StaticTokenMap::get().getTokenFromUnicode( rValue ) )
+        switch( AttributeConversion::decodeToken( rValue ) )
         {
             case XML_3cd4 : nConstant = 270 * 60000; break;
             case XML_3cd8 : nConstant = 135 * 60000; break;
@@ -632,7 +629,7 @@ static rtl::OUString convertToOOEquation( CustomShapeProperties& rCustomShapePro
 
 Reference< XFastContextHandler > GeomGuideListContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
-    if ( aElementToken == ( NMSP_DRAWINGML | XML_gd ) ) // CT_GeomGuide
+    if ( aElementToken == A_TOKEN( gd ) )   // CT_GeomGuide
     {
         CustomShapeGuide aGuide;
         aGuide.maName = xAttribs->getOptionalValue( XML_name );
@@ -713,7 +710,7 @@ XYAdjustHandleContext::XYAdjustHandleContext( ContextHandler& rParent, const Ref
 Reference< XFastContextHandler > XYAdjustHandleContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xContext;
-    if ( aElementToken == ( NMSP_DRAWINGML | XML_pos ) )
+    if ( aElementToken == A_TOKEN( pos ) )
         xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
     return xContext;
 }
@@ -767,7 +764,7 @@ PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler& rParent, con
 Reference< XFastContextHandler > PolarAdjustHandleContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xContext;
-    if ( aElementToken == ( NMSP_DRAWINGML | XML_pos ) )
+    if ( aElementToken == A_TOKEN( pos ) )
         xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
     return xContext;
 }
@@ -795,13 +792,13 @@ AdjustHandleListContext::AdjustHandleListContext( ContextHandler& rParent, Custo
 Reference< XFastContextHandler > AdjustHandleListContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xContext;
-    if ( aElementToken == ( NMSP_DRAWINGML | XML_ahXY ) )           // CT_XYAdjustHandle
+    if ( aElementToken == A_TOKEN( ahXY ) )         // CT_XYAdjustHandle
     {
         AdjustHandle aAdjustHandle( sal_False );
         mrAdjustHandleList.push_back( aAdjustHandle );
         xContext = new XYAdjustHandleContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandleList.back() );
     }
-    else if ( aElementToken == ( NMSP_DRAWINGML | XML_ahPolar ) )   // CT_PolarAdjustHandle
+    else if ( aElementToken == A_TOKEN( ahPolar ) ) // CT_PolarAdjustHandle
     {
         AdjustHandle aAdjustHandle( sal_True );
         mrAdjustHandleList.push_back( aAdjustHandle );
@@ -834,7 +831,7 @@ ConnectionSiteContext::ConnectionSiteContext( ContextHandler& rParent, const Ref
 Reference< XFastContextHandler > ConnectionSiteContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xContext;
-    if ( aElementToken == ( NMSP_DRAWINGML | XML_pos ) )
+    if ( aElementToken == A_TOKEN( pos ) )
         xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrConnectionSite.pos ); // CT_AdjPoint2D
     return xContext;
 }
@@ -862,7 +859,7 @@ Path2DMoveToContext::Path2DMoveToContext( ContextHandler& rParent, CustomShapePr
 Reference< XFastContextHandler > Path2DMoveToContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xContext;
-    if ( aElementToken == ( NMSP_DRAWINGML | XML_pt ) )
+    if ( aElementToken == A_TOKEN( pt ) )
         xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
     return xContext;
 }
@@ -890,7 +887,7 @@ Path2DLineToContext::Path2DLineToContext( ContextHandler& rParent, CustomShapePr
 Reference< XFastContextHandler > Path2DLineToContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xContext;
-    if ( aElementToken == ( NMSP_DRAWINGML | XML_pt ) )
+    if ( aElementToken == A_TOKEN( pt ) )
         xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
     return xContext;
 }
@@ -925,7 +922,7 @@ Path2DQuadBezierToContext::Path2DQuadBezierToContext( ContextHandler& rParent,
 Reference< XFastContextHandler > Path2DQuadBezierToContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xContext;
-    if ( aElementToken == ( NMSP_DRAWINGML | XML_pt ) )
+    if ( aElementToken == A_TOKEN( pt ) )
         xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, nCount++ ? mrPt2 : mrPt1 ); // CT_AdjPoint2D
     return xContext;
 }
@@ -963,7 +960,7 @@ Path2DCubicBezierToContext::Path2DCubicBezierToContext( ContextHandler& rParent,
 Reference< XFastContextHandler > Path2DCubicBezierToContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xContext;
-    if ( aElementToken == ( NMSP_DRAWINGML | XML_pt ) )
+    if ( aElementToken == A_TOKEN( pt ) )
         xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties,
             nCount++ ? nCount == 2 ? mrControlPt2 : mrEndPt : mrControlPt1 );   // CT_AdjPoint2D
     return xContext;
@@ -1022,7 +1019,7 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
     Reference< XFastContextHandler > xContext;
     switch( aElementToken )
     {
-        case NMSP_DRAWINGML | XML_close :
+        case A_TOKEN( close ) :
         {
             EnhancedCustomShapeSegment aNewSegment;
             aNewSegment.Command = EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
@@ -1030,7 +1027,7 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
             mrSegments.push_back( aNewSegment );
         }
         break;
-        case NMSP_DRAWINGML | XML_moveTo :
+        case A_TOKEN( moveTo ) :
         {
             EnhancedCustomShapeSegment aNewSegment;
             aNewSegment.Command = EnhancedCustomShapeSegmentCommand::MOVETO;
@@ -1042,7 +1039,7 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
             xContext = new Path2DMoveToContext( *this, mrCustomShapeProperties, mrPath2D.parameter.back() );
         }
         break;
-        case NMSP_DRAWINGML | XML_lnTo :
+        case A_TOKEN( lnTo ) :
         {
 
             if ( !mrSegments.empty() && ( mrSegments.back().Command == EnhancedCustomShapeSegmentCommand::LINETO ) )
@@ -1059,7 +1056,7 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
             xContext = new Path2DLineToContext( *this, mrCustomShapeProperties, mrPath2D.parameter.back() );
         }
         break;
-        case NMSP_DRAWINGML | XML_arcTo :   // CT_Path2DArcTo
+        case A_TOKEN( arcTo ) : // CT_Path2DArcTo
         {
             if ( !mrSegments.empty() && ( mrSegments.back().Command == EnhancedCustomShapeSegmentCommand::ARCTO ) )
                 mrSegments.back().Count++;
@@ -1085,7 +1082,7 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
             mrPath2D.parameter.push_back( aPt );
         }
         break;
-        case NMSP_DRAWINGML | XML_quadBezTo :
+        case A_TOKEN( quadBezTo ) :
         {
             if ( !mrSegments.empty() && ( mrSegments.back().Command == EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO ) )
                 mrSegments.back().Count++;
@@ -1105,7 +1102,7 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
                                 mrPath2D.parameter.back() );
         }
         break;
-        case NMSP_DRAWINGML | XML_cubicBezTo :
+        case A_TOKEN( cubicBezTo ) :
         {
             if ( !mrSegments.empty() && ( mrSegments.back().Command == EnhancedCustomShapeSegmentCommand::CURVETO ) )
                 mrSegments.back().Count++;
@@ -1161,7 +1158,7 @@ Path2DListContext::Path2DListContext( ContextHandler& rParent, CustomShapeProper
 ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL Path2DListContext::createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {
     Reference< XFastContextHandler > xContext;
-    if ( aElementToken == ( NMSP_DRAWINGML | XML_path ) )
+    if ( aElementToken == A_TOKEN( path ) )
     {
         Path2D aPath2D;
         mrPath2DList.push_back( aPath2D );
@@ -1984,19 +1981,19 @@ Reference< XFastContextHandler > CustomShapeGeometryContext::createFastChildCont
     Reference< XFastContextHandler > xContext;
     switch( aElementToken )
     {
-        case NMSP_DRAWINGML|XML_avLst:          // CT_GeomGuideList adjust value list
+        case A_TOKEN( avLst ):          // CT_GeomGuideList adjust value list
             xContext = new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustmentGuideList() );
         break;
-        case NMSP_DRAWINGML|XML_gdLst:          // CT_GeomGuideList guide list
+        case A_TOKEN( gdLst ):          // CT_GeomGuideList guide list
             xContext = new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getGuideList() );
         break;
-        case NMSP_DRAWINGML|XML_ahLst:          // CT_AdjustHandleList adjust handle list
+        case A_TOKEN( ahLst ):          // CT_AdjustHandleList adjust handle list
             xContext = new AdjustHandleListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustHandleList() );
         break;
-        case NMSP_DRAWINGML|XML_cxnLst:         // CT_ConnectionSiteList connection site list
+        case A_TOKEN( cxnLst ):         // CT_ConnectionSiteList connection site list
             xContext = this;
         break;
-        case NMSP_DRAWINGML|XML_rect:           // CT_GeomRectList geometry rect list
+        case A_TOKEN( rect ):           // CT_GeomRectList geometry rect list
         {
             GeomRect aGeomRect;
             aGeomRect.l = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_l ), sal_True );
@@ -2006,12 +2003,12 @@ Reference< XFastContextHandler > CustomShapeGeometryContext::createFastChildCont
             mrCustomShapeProperties.getTextRect() = aGeomRect;
         }
         break;
-        case NMSP_DRAWINGML|XML_pathLst:        // CT_Path2DList 2d path list
+        case A_TOKEN( pathLst ):        // CT_Path2DList 2d path list
             xContext = new Path2DListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getSegments(), mrCustomShapeProperties.getPath2DList() );
         break;
 
         // from cxnLst:
-        case NMSP_DRAWINGML|XML_cxn:                // CT_ConnectionSite
+        case A_TOKEN( cxn ):                // CT_ConnectionSite
         {
             ConnectionSite aConnectionSite;
             mrCustomShapeProperties.getConnectionSiteList().push_back( aConnectionSite );
@@ -2038,7 +2035,7 @@ PresetShapeGeometryContext::PresetShapeGeometryContext( ContextHandler& rParent,
 
 Reference< XFastContextHandler > PresetShapeGeometryContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
 {
-    if ( aElementToken == ( NMSP_DRAWINGML | XML_avLst ) )
+    if ( aElementToken == A_TOKEN( avLst ) )
         return new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustmentGuideList() );
     else
         return this;
@@ -2060,7 +2057,7 @@ PresetTextShapeContext::PresetTextShapeContext( ContextHandler& rParent, const R
 
 Reference< XFastContextHandler > PresetTextShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
 {
-    if ( aElementToken == ( NMSP_DRAWINGML | XML_avLst ) )
+    if ( aElementToken == A_TOKEN( avLst ) )
         return new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustmentGuideList() );
     else
         return this;

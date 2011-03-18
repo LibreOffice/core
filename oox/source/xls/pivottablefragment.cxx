@@ -27,25 +27,28 @@
  ************************************************************************/
 
 #include "oox/xls/pivottablefragment.hxx"
+
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/pivottablebuffer.hxx"
-
-using ::rtl::OUString;
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::RecordInfo;
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-OoxPivotTableFieldContext::OoxPivotTableFieldContext( OoxWorksheetFragmentBase& rFragment, PivotTableField& rTableField ) :
-    OoxWorksheetContextBase( rFragment ),
+using namespace ::oox::core;
+
+using ::rtl::OUString;
+
+// ============================================================================
+
+PivotTableFieldContext::PivotTableFieldContext( WorksheetFragmentBase& rFragment, PivotTableField& rTableField ) :
+    WorksheetContextBase( rFragment ),
     mrTableField( rTableField )
 {
 }
 
-ContextHandlerRef OoxPivotTableFieldContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef PivotTableFieldContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -75,43 +78,43 @@ ContextHandlerRef OoxPivotTableFieldContext::onCreateContext( sal_Int32 nElement
     return 0;
 }
 
-void OoxPivotTableFieldContext::onStartElement( const AttributeList& rAttribs )
+void PivotTableFieldContext::onStartElement( const AttributeList& rAttribs )
 {
     if( isRootElement() )
         mrTableField.importPivotField( rAttribs );
 }
 
-ContextHandlerRef OoxPivotTableFieldContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef PivotTableFieldContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
-        case OOBIN_ID_PTFIELD:
+        case BIFF12_ID_PTFIELD:
             switch( nRecId )
             {
-                case OOBIN_ID_PTFITEMS:         return this;
-                case OOBIN_ID_AUTOSORTSCOPE:    return this;
+                case BIFF12_ID_PTFITEMS:        return this;
+                case BIFF12_ID_AUTOSORTSCOPE:   return this;
             }
         break;
-        case OOBIN_ID_PTFITEMS:
-            if( nRecId == OOBIN_ID_PTFITEM ) mrTableField.importPTFItem( rStrm );
+        case BIFF12_ID_PTFITEMS:
+            if( nRecId == BIFF12_ID_PTFITEM ) mrTableField.importPTFItem( rStrm );
         break;
-        case OOBIN_ID_AUTOSORTSCOPE:
-            if( nRecId == OOBIN_ID_PIVOTAREA ) return this;
+        case BIFF12_ID_AUTOSORTSCOPE:
+            if( nRecId == BIFF12_ID_PIVOTAREA ) return this;
         break;
-        case OOBIN_ID_PIVOTAREA:
-            if( nRecId == OOBIN_ID_PTREFERENCES ) return this;
+        case BIFF12_ID_PIVOTAREA:
+            if( nRecId == BIFF12_ID_PTREFERENCES ) return this;
         break;
-        case OOBIN_ID_PTREFERENCES:
-            if( nRecId == OOBIN_ID_PTREFERENCE ) { mrTableField.importPTReference( rStrm ); return this; }
+        case BIFF12_ID_PTREFERENCES:
+            if( nRecId == BIFF12_ID_PTREFERENCE ) { mrTableField.importPTReference( rStrm ); return this; }
         break;
-        case OOBIN_ID_PTREFERENCE:
-            if( nRecId == OOBIN_ID_PTREFERENCEITEM ) mrTableField.importPTReferenceItem( rStrm );
+        case BIFF12_ID_PTREFERENCE:
+            if( nRecId == BIFF12_ID_PTREFERENCEITEM ) mrTableField.importPTReferenceItem( rStrm );
         break;
     }
     return 0;
 }
 
-void OoxPivotTableFieldContext::onStartRecord( RecordInputStream& rStrm )
+void PivotTableFieldContext::onStartRecord( SequenceInputStream& rStrm )
 {
     if( isRootElement() )
         mrTableField.importPTField( rStrm );
@@ -119,13 +122,13 @@ void OoxPivotTableFieldContext::onStartRecord( RecordInputStream& rStrm )
 
 // ============================================================================
 
-OoxPivotTableFilterContext::OoxPivotTableFilterContext( OoxWorksheetFragmentBase& rFragment, PivotTableFilter& rTableFilter ) :
-    OoxWorksheetContextBase( rFragment ),
+PivotTableFilterContext::PivotTableFilterContext( WorksheetFragmentBase& rFragment, PivotTableFilter& rTableFilter ) :
+    WorksheetContextBase( rFragment ),
     mrTableFilter( rTableFilter )
 {
 }
 
-ContextHandlerRef OoxPivotTableFilterContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef PivotTableFilterContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -142,30 +145,30 @@ ContextHandlerRef OoxPivotTableFilterContext::onCreateContext( sal_Int32 nElemen
     return 0;
 }
 
-void OoxPivotTableFilterContext::onStartElement( const AttributeList& rAttribs )
+void PivotTableFilterContext::onStartElement( const AttributeList& rAttribs )
 {
     if( isRootElement() )
         mrTableFilter.importFilter( rAttribs );
 }
 
-ContextHandlerRef OoxPivotTableFilterContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef PivotTableFilterContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
-        case OOBIN_ID_PTFILTER:
-            if( nRecId == OOBIN_ID_AUTOFILTER ) return this;
+        case BIFF12_ID_PTFILTER:
+            if( nRecId == BIFF12_ID_AUTOFILTER ) return this;
         break;
-        case OOBIN_ID_AUTOFILTER:
-            if( nRecId == OOBIN_ID_FILTERCOLUMN ) return this;
+        case BIFF12_ID_AUTOFILTER:
+            if( nRecId == BIFF12_ID_FILTERCOLUMN ) return this;
         break;
-        case OOBIN_ID_FILTERCOLUMN:
-            if( nRecId == OOBIN_ID_TOP10FILTER ) mrTableFilter.importTop10Filter( rStrm );
+        case BIFF12_ID_FILTERCOLUMN:
+            if( nRecId == BIFF12_ID_TOP10FILTER ) mrTableFilter.importTop10Filter( rStrm );
         break;
     }
     return 0;
 }
 
-void OoxPivotTableFilterContext::onStartRecord( RecordInputStream& rStrm )
+void PivotTableFilterContext::onStartRecord( SequenceInputStream& rStrm )
 {
     if( isRootElement() )
         mrTableFilter.importPTFilter( rStrm );
@@ -173,13 +176,13 @@ void OoxPivotTableFilterContext::onStartRecord( RecordInputStream& rStrm )
 
 // ============================================================================
 
-OoxPivotTableFragment::OoxPivotTableFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
-    OoxWorksheetFragmentBase( rHelper, rFragmentPath ),
-    mrPivotTable( rHelper.getPivotTables().createPivotTable() )
+PivotTableFragment::PivotTableFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
+    WorksheetFragmentBase( rHelper, rFragmentPath ),
+    mrPivotTable( getPivotTables().createPivotTable() )
 {
 }
 
-ContextHandlerRef OoxPivotTableFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef PivotTableFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -201,7 +204,7 @@ ContextHandlerRef OoxPivotTableFragment::onCreateContext( sal_Int32 nElement, co
         break;
 
         case XLS_TOKEN( pivotFields ):
-            if( nElement == XLS_TOKEN( pivotField ) ) return new OoxPivotTableFieldContext( *this, mrPivotTable.createTableField() );
+            if( nElement == XLS_TOKEN( pivotField ) ) return new PivotTableFieldContext( *this, mrPivotTable.createTableField() );
         break;
         case XLS_TOKEN( rowFields ):
             if( nElement == XLS_TOKEN( field ) ) mrPivotTable.importRowField( rAttribs );
@@ -216,75 +219,75 @@ ContextHandlerRef OoxPivotTableFragment::onCreateContext( sal_Int32 nElement, co
             if( nElement == XLS_TOKEN( dataField ) ) mrPivotTable.importDataField( rAttribs );
         break;
         case XLS_TOKEN( filters ):
-            if( nElement == XLS_TOKEN( filter ) ) return new OoxPivotTableFilterContext( *this, mrPivotTable.createTableFilter() );
+            if( nElement == XLS_TOKEN( filter ) ) return new PivotTableFilterContext( *this, mrPivotTable.createTableFilter() );
         break;
     }
     return 0;
 }
 
-ContextHandlerRef OoxPivotTableFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef PivotTableFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            if( nRecId == OOBIN_ID_PTDEFINITION ) { mrPivotTable.importPTDefinition( rStrm ); return this; }
+            if( nRecId == BIFF12_ID_PTDEFINITION ) { mrPivotTable.importPTDefinition( rStrm ); return this; }
         break;
 
-        case OOBIN_ID_PTDEFINITION:
+        case BIFF12_ID_PTDEFINITION:
             switch( nRecId )
             {
-                case OOBIN_ID_PTLOCATION:   mrPivotTable.importPTLocation( rStrm, getSheetIndex() );    break;
-                case OOBIN_ID_PTFIELDS:     return this;
-                case OOBIN_ID_PTROWFIELDS:  mrPivotTable.importPTRowFields( rStrm );                    break;
-                case OOBIN_ID_PTCOLFIELDS:  mrPivotTable.importPTColFields( rStrm );                    break;
-                case OOBIN_ID_PTPAGEFIELDS: return this;
-                case OOBIN_ID_PTDATAFIELDS: return this;
-                case OOBIN_ID_PTFILTERS:    return this;
+                case BIFF12_ID_PTLOCATION:      mrPivotTable.importPTLocation( rStrm, getSheetIndex() );    break;
+                case BIFF12_ID_PTFIELDS:        return this;
+                case BIFF12_ID_PTROWFIELDS:     mrPivotTable.importPTRowFields( rStrm );                    break;
+                case BIFF12_ID_PTCOLFIELDS:     mrPivotTable.importPTColFields( rStrm );                    break;
+                case BIFF12_ID_PTPAGEFIELDS:    return this;
+                case BIFF12_ID_PTDATAFIELDS:    return this;
+                case BIFF12_ID_PTFILTERS:       return this;
             }
         break;
 
-        case OOBIN_ID_PTFIELDS:
-            if( nRecId == OOBIN_ID_PTFIELD ) return new OoxPivotTableFieldContext( *this, mrPivotTable.createTableField() );
+        case BIFF12_ID_PTFIELDS:
+            if( nRecId == BIFF12_ID_PTFIELD ) return new PivotTableFieldContext( *this, mrPivotTable.createTableField() );
         break;
-        case OOBIN_ID_PTPAGEFIELDS:
-            if( nRecId == OOBIN_ID_PTPAGEFIELD ) mrPivotTable.importPTPageField( rStrm );
+        case BIFF12_ID_PTPAGEFIELDS:
+            if( nRecId == BIFF12_ID_PTPAGEFIELD ) mrPivotTable.importPTPageField( rStrm );
         break;
-        case OOBIN_ID_PTDATAFIELDS:
-            if( nRecId == OOBIN_ID_PTDATAFIELD ) mrPivotTable.importPTDataField( rStrm );
+        case BIFF12_ID_PTDATAFIELDS:
+            if( nRecId == BIFF12_ID_PTDATAFIELD ) mrPivotTable.importPTDataField( rStrm );
         break;
-        case OOBIN_ID_PTFILTERS:
-            if( nRecId == OOBIN_ID_PTFILTER ) return new OoxPivotTableFilterContext( *this, mrPivotTable.createTableFilter() );
+        case BIFF12_ID_PTFILTERS:
+            if( nRecId == BIFF12_ID_PTFILTER ) return new PivotTableFilterContext( *this, mrPivotTable.createTableFilter() );
         break;
     }
     return 0;
 }
 
-const RecordInfo* OoxPivotTableFragment::getRecordInfos() const
+const RecordInfo* PivotTableFragment::getRecordInfos() const
 {
     static const RecordInfo spRecInfos[] =
     {
-        { OOBIN_ID_AUTOFILTER,      OOBIN_ID_AUTOFILTER + 1         },
-        { OOBIN_ID_AUTOSORTSCOPE,   OOBIN_ID_AUTOSORTSCOPE + 1      },
-        { OOBIN_ID_FILTERCOLUMN,    OOBIN_ID_FILTERCOLUMN + 1       },
-        { OOBIN_ID_PIVOTAREA,       OOBIN_ID_PIVOTAREA + 1          },
-        { OOBIN_ID_PTCOLFIELDS,     OOBIN_ID_PTCOLFIELDS + 1        },
-        { OOBIN_ID_PTDATAFIELD,     OOBIN_ID_PTDATAFIELD + 1        },
-        { OOBIN_ID_PTDATAFIELDS,    OOBIN_ID_PTDATAFIELDS + 1       },
-        { OOBIN_ID_PTDEFINITION,    OOBIN_ID_PTDEFINITION + 35      },
-        { OOBIN_ID_PTFIELD,         OOBIN_ID_PTFIELD + 1            },
-        { OOBIN_ID_PTFIELDS,        OOBIN_ID_PTFIELDS + 1           },
-        { OOBIN_ID_PTFILTER,        OOBIN_ID_PTFILTER + 1           },
-        { OOBIN_ID_PTFILTERS,       OOBIN_ID_PTFILTERS + 1          },
-        { OOBIN_ID_PTFITEM,         OOBIN_ID_PTFITEM - 1            },
-        { OOBIN_ID_PTFITEMS,        OOBIN_ID_PTFITEMS + 1           },
-        { OOBIN_ID_PTLOCATION,      OOBIN_ID_PTLOCATION - 1         },
-        { OOBIN_ID_PTPAGEFIELD,     OOBIN_ID_PTPAGEFIELD + 1        },
-        { OOBIN_ID_PTPAGEFIELDS,    OOBIN_ID_PTPAGEFIELDS + 1       },
-        { OOBIN_ID_PTREFERENCE,     OOBIN_ID_PTREFERENCE + 1        },
-        { OOBIN_ID_PTREFERENCEITEM, OOBIN_ID_PTREFERENCEITEM + 1    },
-        { OOBIN_ID_PTREFERENCES,    OOBIN_ID_PTREFERENCES + 1       },
-        { OOBIN_ID_PTROWFIELDS,     OOBIN_ID_PTROWFIELDS + 1        },
-        { -1,                       -1                              }
+        { BIFF12_ID_AUTOFILTER,         BIFF12_ID_AUTOFILTER + 1        },
+        { BIFF12_ID_AUTOSORTSCOPE,      BIFF12_ID_AUTOSORTSCOPE + 1     },
+        { BIFF12_ID_FILTERCOLUMN,       BIFF12_ID_FILTERCOLUMN + 1      },
+        { BIFF12_ID_PIVOTAREA,          BIFF12_ID_PIVOTAREA + 1         },
+        { BIFF12_ID_PTCOLFIELDS,        BIFF12_ID_PTCOLFIELDS + 1       },
+        { BIFF12_ID_PTDATAFIELD,        BIFF12_ID_PTDATAFIELD + 1       },
+        { BIFF12_ID_PTDATAFIELDS,       BIFF12_ID_PTDATAFIELDS + 1      },
+        { BIFF12_ID_PTDEFINITION,       BIFF12_ID_PTDEFINITION + 35     },
+        { BIFF12_ID_PTFIELD,            BIFF12_ID_PTFIELD + 1           },
+        { BIFF12_ID_PTFIELDS,           BIFF12_ID_PTFIELDS + 1          },
+        { BIFF12_ID_PTFILTER,           BIFF12_ID_PTFILTER + 1          },
+        { BIFF12_ID_PTFILTERS,          BIFF12_ID_PTFILTERS + 1         },
+        { BIFF12_ID_PTFITEM,            BIFF12_ID_PTFITEM - 1           },
+        { BIFF12_ID_PTFITEMS,           BIFF12_ID_PTFITEMS + 1          },
+        { BIFF12_ID_PTLOCATION,         BIFF12_ID_PTLOCATION - 1        },
+        { BIFF12_ID_PTPAGEFIELD,        BIFF12_ID_PTPAGEFIELD + 1       },
+        { BIFF12_ID_PTPAGEFIELDS,       BIFF12_ID_PTPAGEFIELDS + 1      },
+        { BIFF12_ID_PTREFERENCE,        BIFF12_ID_PTREFERENCE + 1       },
+        { BIFF12_ID_PTREFERENCEITEM,    BIFF12_ID_PTREFERENCEITEM + 1   },
+        { BIFF12_ID_PTREFERENCES,       BIFF12_ID_PTREFERENCES + 1      },
+        { BIFF12_ID_PTROWFIELDS,        BIFF12_ID_PTROWFIELDS + 1       },
+        { -1,                           -1                              }
     };
     return spRecInfos;
 }
@@ -292,22 +295,22 @@ const RecordInfo* OoxPivotTableFragment::getRecordInfos() const
 // ============================================================================
 // ============================================================================
 
-BiffPivotTableContext::BiffPivotTableContext( const BiffWorksheetFragmentBase& rFragment, PivotTable& rPivotTable ) :
-    BiffWorksheetContextBase( rFragment ),
-    mrPivotTable( rPivotTable )
+BiffPivotTableContext::BiffPivotTableContext( const WorksheetHelper& rHelper ) :
+    BiffWorksheetContextBase( rHelper ),
+    mrPivotTable( getPivotTables().createPivotTable() )
 {
 }
 
-void BiffPivotTableContext::importRecord()
+void BiffPivotTableContext::importRecord( BiffInputStream& rStrm )
 {
-    switch( mrStrm.getRecId() )
+    switch( rStrm.getRecId() )
     {
-        case BIFF_ID_PTDEFINITION:      mrPivotTable.importPTDefinition( mrStrm, getSheetIndex() ); break;
-        case BIFF_ID_PTDEFINITION2:     mrPivotTable.importPTDefinition2( mrStrm );                 break;
-        case BIFF_ID_PTFIELD:           mrPivotTable.createTableField().importPTField( mrStrm );    break;
-        case BIFF_ID_PTROWCOLFIELDS:    mrPivotTable.importPTRowColFields( mrStrm );                break;
-        case BIFF_ID_PTPAGEFIELDS:      mrPivotTable.importPTPageFields( mrStrm );                  break;
-        case BIFF_ID_PTDATAFIELD:       mrPivotTable.importPTDataField( mrStrm );                   break;
+        case BIFF_ID_PTDEFINITION:      mrPivotTable.importPTDefinition( rStrm, getSheetIndex() );  break;
+        case BIFF_ID_PTDEFINITION2:     mrPivotTable.importPTDefinition2( rStrm );                  break;
+        case BIFF_ID_PTFIELD:           mrPivotTable.createTableField().importPTField( rStrm );     break;
+        case BIFF_ID_PTROWCOLFIELDS:    mrPivotTable.importPTRowColFields( rStrm );                 break;
+        case BIFF_ID_PTPAGEFIELDS:      mrPivotTable.importPTPageFields( rStrm );                   break;
+        case BIFF_ID_PTDATAFIELD:       mrPivotTable.importPTDataField( rStrm );                    break;
     }
 }
 

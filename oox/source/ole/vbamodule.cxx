@@ -213,8 +213,6 @@ void VbaModule::createEmptyModule( const Reference< XNameContainer >& rxBasicLib
     createModule( OUString(), rxBasicLib, rxDocObjectNA );
 }
 
-// private --------------------------------------------------------------------
-
 OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< XNameContainer >& rxOleNameOverrides ) const
 {
     OUStringBuffer aSourceCode;
@@ -303,7 +301,7 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
         break;
         case ModuleType::DOCUMENT:
             aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VBADocumentModule" ) );
-            // get the VBA object associated to the document module
+            // get the VBA implementation object associated to the document module
             if( rxDocObjectNA.is() ) try
             {
                 aModuleInfo.ModuleObject.set( rxDocObjectNA->getByName( maName ), UNO_QUERY );

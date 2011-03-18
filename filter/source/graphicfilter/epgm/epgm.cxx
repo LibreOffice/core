@@ -36,9 +36,6 @@
 #include <svl/solar.hrc>
 #include <svtools/fltcall.hxx>
 #include <svtools/FilterConfigItem.hxx>
-#include "strings.hrc"
-#include "dlgepgm.hrc"
-#include "dlgepgm.hxx"
 
 //============================ PGMWriter ==================================
 
@@ -47,14 +44,14 @@ class PGMWriter {
 private:
 
     SvStream& m_rOStm;          // Die auszugebende PGM-Datei
-    USHORT              mpOStmOldModus;
+    sal_uInt16              mpOStmOldModus;
 
-    BOOL                mbStatus;
-    UINT32              mnMode;
+    sal_Bool                mbStatus;
+    sal_uInt32              mnMode;
     BitmapReadAccess*   mpAcc;
-    ULONG               mnWidth, mnHeight;  // Bildausmass in Pixeln
+    sal_uLong               mnWidth, mnHeight;  // Bildausmass in Pixeln
 
-    BOOL                ImplWriteHeader();
+    sal_Bool                ImplWriteHeader();
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
 
@@ -64,14 +61,14 @@ public:
     PGMWriter(SvStream &rStream);
     ~PGMWriter();
 
-    BOOL WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
+    sal_Bool WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von PGMWriter ==============================
 
 PGMWriter::PGMWriter(SvStream &rStream)
     : m_rOStm(rStream)
-    , mbStatus(TRUE)
+    , mbStatus(sal_True)
     , mpAcc(NULL)
 {
 }
@@ -84,7 +81,7 @@ PGMWriter::~PGMWriter()
 
 // ------------------------------------------------------------------------
 
-BOOL PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
+sal_Bool PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem )
 {
     if ( pFilterConfigItem )
     {
@@ -115,7 +112,7 @@ BOOL PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConf
         aBmp.ReleaseAccess( mpAcc );
     }
     else
-        mbStatus = FALSE;
+        mbStatus = sal_False;
 
     m_rOStm.SetNumberFormatInt( mpOStmOldModus );
 
@@ -127,7 +124,7 @@ BOOL PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConf
 
 // ------------------------------------------------------------------------
 
-BOOL PGMWriter::ImplWriteHeader()
+sal_Bool PGMWriter::ImplWriteHeader()
 {
     mnWidth = mpAcc->Width();
     mnHeight = mpAcc->Height();
@@ -139,14 +136,14 @@ BOOL PGMWriter::ImplWriteHeader()
             m_rOStm << "P2\x0a";
 
         ImplWriteNumber( mnWidth );
-        m_rOStm << (BYTE)32;
+        m_rOStm << (sal_uInt8)32;
         ImplWriteNumber( mnHeight );
-        m_rOStm << (BYTE)32;
+        m_rOStm << (sal_uInt8)32;
         ImplWriteNumber( 255 );         // max. gray value
-        m_rOStm << (BYTE)10;
+        m_rOStm << (sal_uInt8)10;
     }
     else
-        mbStatus = FALSE;
+        mbStatus = sal_False;
 
     return mbStatus;
 }
@@ -157,37 +154,37 @@ void PGMWriter::ImplWriteBody()
 {
     if ( mnMode == 0 )
     {
-        for ( ULONG y = 0; y < mnHeight; y++ )
+        for ( sal_uLong y = 0; y < mnHeight; y++ )
         {
-            for ( ULONG x = 0; x < mnWidth; x++ )
+            for ( sal_uLong x = 0; x < mnWidth; x++ )
             {
-                m_rOStm << (BYTE)( mpAcc->GetPixel( y, x ) );
+                m_rOStm << (sal_uInt8)( mpAcc->GetPixel( y, x ) );
             }
         }
     }
     else
     {
-        for ( ULONG y = 0; y < mnHeight; y++ )
+        for ( sal_uLong y = 0; y < mnHeight; y++ )
         {
             int nCount = 70;
-            for ( ULONG x = 0; x < mnWidth; x++ )
+            for ( sal_uLong x = 0; x < mnWidth; x++ )
             {
-                BYTE nDat, nNumb;
+                sal_uInt8 nDat, nNumb;
                 if ( nCount < 0 )
                 {
                     nCount = 69;
-                    m_rOStm << (BYTE)10;
+                    m_rOStm << (sal_uInt8)10;
                 }
-                nDat = (BYTE)mpAcc->GetPixel( y, x );
+                nDat = (sal_uInt8)mpAcc->GetPixel( y, x );
                 nNumb = nDat / 100;
                 if ( nNumb )
                 {
-                    m_rOStm << (BYTE)( nNumb + '0' );
+                    m_rOStm << (sal_uInt8)( nNumb + '0' );
                     nDat -= ( nNumb * 100 );
                     nNumb = nDat / 10;
-                    m_rOStm << (BYTE)( nNumb + '0' );
+                    m_rOStm << (sal_uInt8)( nNumb + '0' );
                     nDat -= ( nNumb * 10 );
-                    m_rOStm << (BYTE)( nDat + '0' );
+                    m_rOStm << (sal_uInt8)( nDat + '0' );
                     nCount -= 4;
                 }
                 else
@@ -195,20 +192,20 @@ void PGMWriter::ImplWriteBody()
                     nNumb = nDat / 10;
                     if ( nNumb )
                     {
-                        m_rOStm << (BYTE)( nNumb + '0' );
+                        m_rOStm << (sal_uInt8)( nNumb + '0' );
                         nDat -= ( nNumb * 10 );
-                        m_rOStm << (BYTE)( nDat + '0' );
+                        m_rOStm << (sal_uInt8)( nDat + '0' );
                         nCount -= 3;
                     }
                     else
                     {
-                        m_rOStm << (BYTE)( nDat + '0' );
+                        m_rOStm << (sal_uInt8)( nDat + '0' );
                         nCount -= 2;
                     }
                 }
-                m_rOStm << (BYTE)' ';
+                m_rOStm << (sal_uInt8)' ';
             }
-            m_rOStm << (BYTE)10;
+            m_rOStm << (sal_uInt8)10;
         }
     }
 }
@@ -231,7 +228,7 @@ void PGMWriter::ImplWriteNumber( sal_Int32 nNumber )
 // - exported function -
 // ---------------------
 
-extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, BOOL )
+extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )
 {
     PGMWriter aPGMWriter(rStream);
 
@@ -240,57 +237,5 @@ extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGrap
 
 // ------------------------------------------------------------------------
 
-extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
-{
-    BOOL bRet = FALSE;
-
-    if ( rPara.pWindow )
-    {
-        ByteString  aResMgrName( "epg" );
-        ResMgr* pResMgr;
-
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-
-        if( pResMgr )
-        {
-            rPara.pResMgr = pResMgr;
-            bRet = ( DlgExportEPGM( rPara ).Execute() == RET_OK );
-            delete pResMgr;
-        }
-        else
-            bRet = TRUE;
-    }
-
-    return bRet;
-}
-
-// ------------------------------------------------------------------------
-
-// ---------------
-// - Win16 trash -
-// ---------------
-
-#ifdef WIN
-
-static HINSTANCE hDLLInst = 0;
-
-extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
-{
-    if ( nHeap )
-        UnlockData( 0 );
-
-    hDLLInst = hDLL;
-
-    return TRUE;
-}
-
-// ------------------------------------------------------------------------
-
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

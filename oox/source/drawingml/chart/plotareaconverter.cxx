@@ -27,32 +27,30 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/plotareaconverter.hxx"
-#include <com/sun/star/drawing/Direction3D.hpp>
-#include <com/sun/star/drawing/ProjectionMode.hpp>
-#include <com/sun/star/drawing/ShadeMode.hpp>
+
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
+#include <com/sun/star/drawing/Direction3D.hpp>
+#include <com/sun/star/drawing/ProjectionMode.hpp>
+#include <com/sun/star/drawing/ShadeMode.hpp>
 #include "oox/drawingml/chart/axisconverter.hxx"
 #include "oox/drawingml/chart/plotareamodel.hxx"
 #include "oox/drawingml/chart/typegroupconverter.hxx"
-#include "properties.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::awt::Rectangle;
-using ::com::sun::star::chart2::XCoordinateSystem;
-using ::com::sun::star::chart2::XCoordinateSystemContainer;
-using ::com::sun::star::chart2::XDiagram;
 
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::chart2;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 

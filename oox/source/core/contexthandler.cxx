@@ -27,18 +27,18 @@
  ************************************************************************/
 
 #include "oox/core/contexthandler.hxx"
-#include "oox/core/fragmenthandler.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::xml::sax::SAXException;
-using ::com::sun::star::xml::sax::XFastAttributeList;
-using ::com::sun::star::xml::sax::XFastContextHandler;
-using ::com::sun::star::xml::sax::XLocator;
+#include "oox/core/fragmenthandler.hxx"
 
 namespace oox {
 namespace core {
+
+// ============================================================================
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::sax;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -134,12 +134,12 @@ void ContextHandler::processingInstruction( const OUString&, const OUString& ) t
 
 // record context interface ---------------------------------------------------
 
-ContextHandlerRef ContextHandler::createRecordContext( sal_Int32, RecordInputStream& )
+ContextHandlerRef ContextHandler::createRecordContext( sal_Int32, SequenceInputStream& )
 {
     return 0;
 }
 
-void ContextHandler::startRecord( sal_Int32, RecordInputStream& )
+void ContextHandler::startRecord( sal_Int32, SequenceInputStream& )
 {
 }
 

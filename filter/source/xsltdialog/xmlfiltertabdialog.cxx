@@ -299,7 +299,7 @@ bool XMLFilterTabDialog::onOk()
 
     if( 0 != nErrorId )
     {
-        maTabCtrl.SetCurPageId( (USHORT)nErrorPage );
+        maTabCtrl.SetCurPageId( (sal_uInt16)nErrorPage );
         ActivatePageHdl( &maTabCtrl );
 
         ResId aResId( nErrorId, mrResMgr );
@@ -358,7 +358,7 @@ IMPL_LINK( XMLFilterTabDialog, OkHdl, Button *, EMPTYARG )
 
 IMPL_LINK( XMLFilterTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
-    const USHORT nId = pTabCtrl->GetCurPageId();
+    const sal_uInt16 nId = pTabCtrl->GetCurPageId();
     TabPage* pTabPage = pTabCtrl->GetTabPage( nId );
     pTabPage->Show();
 
@@ -369,7 +369,7 @@ IMPL_LINK( XMLFilterTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 IMPL_LINK( XMLFilterTabDialog, DeactivatePageHdl, TabControl *, /* pTabCtrl */ )
 {
-    return TRUE;
+    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

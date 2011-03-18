@@ -109,6 +109,9 @@ public:
     virtual void endAction(OOXMLFastContextHandler * pHandler);
     virtual void attributeAction(OOXMLFastContextHandler * pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue);
     virtual string getDefineName(Id nId) const;
+#ifdef DEBUG_FACTORY
+    virtual string getName() const;
+#endif
 
     AttributeToResourceMapPointer getAttributeToResourceMap(Id nId);
     ListValueMapPointer getListValueMap(Id nId);

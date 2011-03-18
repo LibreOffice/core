@@ -27,18 +27,20 @@
  ************************************************************************/
 
 #include "oox/core/relationshandler.hxx"
-#include <rtl/ustrbuf.hxx>
-#include "tokens.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/core/namespaces.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
+#include <rtl/ustrbuf.hxx>
+#include "oox/helper/attributelist.hxx"
 
 namespace oox {
 namespace core {
+
+// ============================================================================
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::sax;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -77,7 +79,7 @@ Reference< XFastContextHandler > RelationsFragment::createFastChildContext(
     AttributeList aAttribs( rxAttribs );
     switch( nElement )
     {
-        case NMSP_PACKAGE_RELATIONSHIPS|XML_Relationship:
+        case PR_TOKEN( Relationship ):
         {
             Relation aRelation;
             aRelation.maId     = aAttribs.getString( XML_Id, OUString() );
@@ -96,7 +98,7 @@ Reference< XFastContextHandler > RelationsFragment::createFastChildContext(
             }
         }
         break;
-        case NMSP_PACKAGE_RELATIONSHIPS|XML_Relationships:
+        case PR_TOKEN( Relationships ):
             xRet = getFastContextHandler();
         break;
     }

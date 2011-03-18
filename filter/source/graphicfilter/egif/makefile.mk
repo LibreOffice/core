@@ -42,24 +42,17 @@ DEPTARGET=vegif
 CDEFS+= -DEDITDEBUG
 .ENDIF
 
-SRS1NAME=$(TARGET)
-SRC1FILES =	dlgegif.src		\
-        egifstr.src
 .IF "$(L10N_framework)"==""
 SLOFILES= \
         $(EXCEPTIONSFILES)	\
-        $(SLO)$/giflzwc.obj
+            $(SLO)$/giflzwc.obj
 
 EXCEPTIONSFILES= \
-        $(SLO)$/dlgegif.obj	\
         $(SLO)$/egif.obj
 
 .ENDIF
 
 # ==========================================================================
-
-RESLIB1NAME=$(TARGET2)
-RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
 
 .IF "$(L10N_framework)"==""
 SHL1TARGET=     egi$(DLLPOSTFIX)

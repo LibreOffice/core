@@ -27,8 +27,7 @@
  ************************************************************************/
 
 #include "oox/xls/stylesbuffer.hxx"
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
+
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
@@ -39,6 +38,8 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XFont2.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -47,40 +48,33 @@
 #include <com/sun/star/table/TableBorder.hpp>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
-#include "properties.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
-#include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/condformatbuffer.hxx"
 #include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::container::XIndexAccess;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::container::XNamed;
-using ::com::sun::star::awt::FontDescriptor;
-using ::com::sun::star::awt::XDevice;
-using ::com::sun::star::awt::XFont2;
-using ::com::sun::star::table::BorderLine;
 using ::com::sun::star::table::BorderLine2;
-using ::com::sun::star::table::TableBorder;
-using ::com::sun::star::text::XText;
-using ::com::sun::star::style::XStyle;
-using ::oox::core::FilterBase;
-
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::uno;
+
+using ::oox::core::FilterBase;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -88,11 +82,11 @@ namespace {
 
 // OOXML constants ------------------------------------------------------------
 
-// OOX predefined color indexes (also used in BIFF3-BIFF8)
-const sal_Int32 OOX_COLOR_USEROFFSET        = 0;        /// First user defined color in palette (OOX).
-const sal_Int32 BIFF_COLOR_USEROFFSET       = 8;        /// First user defined color in palette (BIFF).
+// OOXML predefined color indexes (also used in BIFF3-BIFF8)
+const sal_Int32 OOX_COLOR_USEROFFSET        = 0;        /// First user defined color in palette (OOXML/BIFF12).
+const sal_Int32 BIFF_COLOR_USEROFFSET       = 8;        /// First user defined color in palette (BIFF3-BIFF8).
 
-// OOX font family (also used in BIFF)
+// OOXML font family (also used in BIFF)
 const sal_Int32 OOX_FONTFAMILY_NONE         = 0;
 const sal_Int32 OOX_FONTFAMILY_ROMAN        = 1;
 const sal_Int32 OOX_FONTFAMILY_SWISS        = 2;
@@ -100,102 +94,102 @@ const sal_Int32 OOX_FONTFAMILY_MODERN       = 3;
 const sal_Int32 OOX_FONTFAMILY_SCRIPT       = 4;
 const sal_Int32 OOX_FONTFAMILY_DECORATIVE   = 5;
 
-// OOX cell text direction (also used in BIFF)
+// OOXML cell text direction (also used in BIFF)
 const sal_Int32 OOX_XF_TEXTDIR_CONTEXT      = 0;
 const sal_Int32 OOX_XF_TEXTDIR_LTR          = 1;
 const sal_Int32 OOX_XF_TEXTDIR_RTL          = 2;
 
-// OOX cell rotation (also used in BIFF)
+// OOXML cell rotation (also used in BIFF)
 const sal_Int32 OOX_XF_ROTATION_NONE        = 0;
 const sal_Int32 OOX_XF_ROTATION_90CCW       = 90;
 const sal_Int32 OOX_XF_ROTATION_90CW        = 180;
 const sal_Int32 OOX_XF_ROTATION_STACKED     = 255;
 
-// OOX cell indentation
+// OOXML cell indentation
 const sal_Int32 OOX_XF_INDENT_NONE          = 0;
 
-// OOX built-in cell styles (also used in BIFF)
+// OOXML built-in cell styles (also used in BIFF)
 const sal_Int32 OOX_STYLE_NORMAL            = 0;        /// Default cell style.
 const sal_Int32 OOX_STYLE_ROWLEVEL          = 1;        /// RowLevel_x cell style.
 const sal_Int32 OOX_STYLE_COLLEVEL          = 2;        /// ColLevel_x cell style.
 
 const sal_Int32 OOX_STYLE_LEVELCOUNT        = 7;        /// Number of outline level styles.
 
-// OOBIN constants ------------------------------------------------------------
+// BIFF12 constants -----------------------------------------------------------
 
-// OOBIN color types
-const sal_uInt8 OOBIN_COLOR_AUTO            = 0;
-const sal_uInt8 OOBIN_COLOR_INDEXED         = 1;
-const sal_uInt8 OOBIN_COLOR_RGB             = 2;
-const sal_uInt8 OOBIN_COLOR_THEME           = 3;
+// BIFF12 color types
+const sal_uInt8 BIFF12_COLOR_AUTO           = 0;
+const sal_uInt8 BIFF12_COLOR_INDEXED        = 1;
+const sal_uInt8 BIFF12_COLOR_RGB            = 2;
+const sal_uInt8 BIFF12_COLOR_THEME          = 3;
 
-// OOBIN diagonal borders
-const sal_uInt8 OOBIN_BORDER_DIAG_TLBR      = 0x01;     /// Top-left to bottom-right.
-const sal_uInt8 OOBIN_BORDER_DIAG_BLTR      = 0x02;     /// Bottom-left to top-right.
+// BIFF12 diagonal borders
+const sal_uInt8 BIFF12_BORDER_DIAG_TLBR     = 0x01;     /// Top-left to bottom-right.
+const sal_uInt8 BIFF12_BORDER_DIAG_BLTR     = 0x02;     /// Bottom-left to top-right.
 
-// OOBIN gradient fill
-const sal_Int32 OOBIN_FILL_GRADIENT         = 40;
+// BIFF12 gradient fill
+const sal_Int32 BIFF12_FILL_GRADIENT        = 40;
 
-// OOBIN XF flags
-const sal_uInt32 OOBIN_XF_WRAPTEXT          = 0x00400000;
-const sal_uInt32 OOBIN_XF_JUSTLASTLINE      = 0x00800000;
-const sal_uInt32 OOBIN_XF_SHRINK            = 0x01000000;
-const sal_uInt32 OOBIN_XF_LOCKED            = 0x10000000;
-const sal_uInt32 OOBIN_XF_HIDDEN            = 0x20000000;
+// BIFF12 XF flags
+const sal_uInt32 BIFF12_XF_WRAPTEXT         = 0x00400000;
+const sal_uInt32 BIFF12_XF_JUSTLASTLINE     = 0x00800000;
+const sal_uInt32 BIFF12_XF_SHRINK           = 0x01000000;
+const sal_uInt32 BIFF12_XF_LOCKED           = 0x10000000;
+const sal_uInt32 BIFF12_XF_HIDDEN           = 0x20000000;
 
-// OOBIN XF attribute used flags
-const sal_uInt16 OOBIN_XF_NUMFMT_USED       = 0x0001;
-const sal_uInt16 OOBIN_XF_FONT_USED         = 0x0002;
-const sal_uInt16 OOBIN_XF_ALIGN_USED        = 0x0004;
-const sal_uInt16 OOBIN_XF_BORDER_USED       = 0x0008;
-const sal_uInt16 OOBIN_XF_AREA_USED         = 0x0010;
-const sal_uInt16 OOBIN_XF_PROT_USED         = 0x0020;
+// BIFF12 XF attribute used flags
+const sal_uInt16 BIFF12_XF_NUMFMT_USED      = 0x0001;
+const sal_uInt16 BIFF12_XF_FONT_USED        = 0x0002;
+const sal_uInt16 BIFF12_XF_ALIGN_USED       = 0x0004;
+const sal_uInt16 BIFF12_XF_BORDER_USED      = 0x0008;
+const sal_uInt16 BIFF12_XF_AREA_USED        = 0x0010;
+const sal_uInt16 BIFF12_XF_PROT_USED        = 0x0020;
 
-// OOBIN DXF constants
-const sal_uInt16 OOBIN_DXF_FILL_PATTERN     = 0;
-const sal_uInt16 OOBIN_DXF_FILL_FGCOLOR     = 1;
-const sal_uInt16 OOBIN_DXF_FILL_BGCOLOR     = 2;
-const sal_uInt16 OOBIN_DXF_FILL_GRADIENT    = 3;
-const sal_uInt16 OOBIN_DXF_FILL_STOP        = 4;
-const sal_uInt16 OOBIN_DXF_FONT_COLOR       = 5;
-const sal_uInt16 OOBIN_DXF_BORDER_TOP       = 6;
-const sal_uInt16 OOBIN_DXF_BORDER_BOTTOM    = 7;
-const sal_uInt16 OOBIN_DXF_BORDER_LEFT      = 8;
-const sal_uInt16 OOBIN_DXF_BORDER_RIGHT     = 9;
-const sal_uInt16 OOBIN_DXF_BORDER_DIAG      = 10;
-const sal_uInt16 OOBIN_DXF_BORDER_VERT      = 11;
-const sal_uInt16 OOBIN_DXF_BORDER_HOR       = 12;
-const sal_uInt16 OOBIN_DXF_BORDER_DIAGUP    = 13;
-const sal_uInt16 OOBIN_DXF_BORDER_DIAGDOWN  = 14;
-const sal_uInt16 OOBIN_DXF_FONT_NAME        = 24;
-const sal_uInt16 OOBIN_DXF_FONT_WEIGHT      = 25;
-const sal_uInt16 OOBIN_DXF_FONT_UNDERLINE   = 26;
-const sal_uInt16 OOBIN_DXF_FONT_ESCAPEMENT  = 27;
-const sal_uInt16 OOBIN_DXF_FONT_ITALIC      = 28;
-const sal_uInt16 OOBIN_DXF_FONT_STRIKE      = 29;
-const sal_uInt16 OOBIN_DXF_FONT_OUTLINE     = 30;
-const sal_uInt16 OOBIN_DXF_FONT_SHADOW      = 31;
-const sal_uInt16 OOBIN_DXF_FONT_CONDENSE    = 32;
-const sal_uInt16 OOBIN_DXF_FONT_EXTEND      = 33;
-const sal_uInt16 OOBIN_DXF_FONT_CHARSET     = 34;
-const sal_uInt16 OOBIN_DXF_FONT_FAMILY      = 35;
-const sal_uInt16 OOBIN_DXF_FONT_HEIGHT      = 36;
-const sal_uInt16 OOBIN_DXF_FONT_SCHEME      = 37;
-const sal_uInt16 OOBIN_DXF_NUMFMT_CODE      = 38;
-const sal_uInt16 OOBIN_DXF_NUMFMT_ID        = 41;
+// BIFF12 DXF constants
+const sal_uInt16 BIFF12_DXF_FILL_PATTERN    = 0;
+const sal_uInt16 BIFF12_DXF_FILL_FGCOLOR    = 1;
+const sal_uInt16 BIFF12_DXF_FILL_BGCOLOR    = 2;
+const sal_uInt16 BIFF12_DXF_FILL_GRADIENT   = 3;
+const sal_uInt16 BIFF12_DXF_FILL_STOP       = 4;
+const sal_uInt16 BIFF12_DXF_FONT_COLOR      = 5;
+const sal_uInt16 BIFF12_DXF_BORDER_TOP      = 6;
+const sal_uInt16 BIFF12_DXF_BORDER_BOTTOM   = 7;
+const sal_uInt16 BIFF12_DXF_BORDER_LEFT     = 8;
+const sal_uInt16 BIFF12_DXF_BORDER_RIGHT    = 9;
+const sal_uInt16 BIFF12_DXF_BORDER_DIAG     = 10;
+const sal_uInt16 BIFF12_DXF_BORDER_VERT     = 11;
+const sal_uInt16 BIFF12_DXF_BORDER_HOR      = 12;
+const sal_uInt16 BIFF12_DXF_BORDER_DIAGUP   = 13;
+const sal_uInt16 BIFF12_DXF_BORDER_DIAGDOWN = 14;
+const sal_uInt16 BIFF12_DXF_FONT_NAME       = 24;
+const sal_uInt16 BIFF12_DXF_FONT_WEIGHT     = 25;
+const sal_uInt16 BIFF12_DXF_FONT_UNDERLINE  = 26;
+const sal_uInt16 BIFF12_DXF_FONT_ESCAPEMENT = 27;
+const sal_uInt16 BIFF12_DXF_FONT_ITALIC     = 28;
+const sal_uInt16 BIFF12_DXF_FONT_STRIKE     = 29;
+const sal_uInt16 BIFF12_DXF_FONT_OUTLINE    = 30;
+const sal_uInt16 BIFF12_DXF_FONT_SHADOW     = 31;
+const sal_uInt16 BIFF12_DXF_FONT_CONDENSE   = 32;
+const sal_uInt16 BIFF12_DXF_FONT_EXTEND     = 33;
+const sal_uInt16 BIFF12_DXF_FONT_CHARSET    = 34;
+const sal_uInt16 BIFF12_DXF_FONT_FAMILY     = 35;
+const sal_uInt16 BIFF12_DXF_FONT_HEIGHT     = 36;
+const sal_uInt16 BIFF12_DXF_FONT_SCHEME     = 37;
+const sal_uInt16 BIFF12_DXF_NUMFMT_CODE     = 38;
+const sal_uInt16 BIFF12_DXF_NUMFMT_ID       = 41;
 
-// OOBIN CELLSTYLE flags
-const sal_uInt16 OOBIN_CELLSTYLE_BUILTIN    = 0x0001;
-const sal_uInt16 OOBIN_CELLSTYLE_HIDDEN     = 0x0002;
-const sal_uInt16 OOBIN_CELLSTYLE_CUSTOM     = 0x0004;
+// BIFF12 CELLSTYLE flags
+const sal_uInt16 BIFF12_CELLSTYLE_BUILTIN   = 0x0001;
+const sal_uInt16 BIFF12_CELLSTYLE_HIDDEN    = 0x0002;
+const sal_uInt16 BIFF12_CELLSTYLE_CUSTOM    = 0x0004;
 
-// OOBIN and BIFF constants ---------------------------------------------------
+// BIFF constants -------------------------------------------------------------
 
 // BIFF predefined color indexes
 const sal_uInt16 BIFF2_COLOR_BLACK          = 0;        /// Black (text) in BIFF2.
 const sal_uInt16 BIFF2_COLOR_WHITE          = 1;        /// White (background) in BIFF2.
 
-// BIFF font flags, also used in OOBIN
+// BIFF font flags, also used in BIFF12
 const sal_uInt16 BIFF_FONTFLAG_BOLD         = 0x0001;
 const sal_uInt16 BIFF_FONTFLAG_ITALIC       = 0x0002;
 const sal_uInt16 BIFF_FONTFLAG_UNDERLINE    = 0x0004;
@@ -207,7 +201,7 @@ const sal_uInt16 BIFF_FONTFLAG_CONDENSE     = 0x0040;
 // BIFF font weight
 const sal_uInt16 BIFF_FONTWEIGHT_BOLD       = 450;
 
-// BIFF font underline, also used in OOBIN
+// BIFF font underline, also used in BIFF12
 const sal_uInt8 BIFF_FONTUNDERL_NONE        = 0;
 const sal_uInt8 BIFF_FONTUNDERL_SINGLE      = 1;
 const sal_uInt8 BIFF_FONTUNDERL_DOUBLE      = 2;
@@ -311,14 +305,14 @@ sal_Int32 lclReadRgbColor( BinaryInputStream& rStrm )
 // ============================================================================
 
 ExcelGraphicHelper::ExcelGraphicHelper( const WorkbookHelper& rHelper ) :
-    GraphicHelper( rHelper.getGlobalFactory(), rHelper.getBaseFilter().getTargetFrame(), rHelper.getBaseFilter().getStorage() ),
+    GraphicHelper( rHelper.getBaseFilter().getComponentContext(), rHelper.getBaseFilter().getTargetFrame(), rHelper.getBaseFilter().getStorage() ),
     WorkbookHelper( rHelper )
 {
 }
 
 sal_Int32 ExcelGraphicHelper::getSchemeColor( sal_Int32 nToken ) const
 {
-    if( getFilterType() == FILTER_OOX )
+    if( getFilterType() == FILTER_OOXML )
         return getTheme().getColorByToken( nToken );
     return GraphicHelper::getSchemeColor( nToken );
 }
@@ -377,7 +371,7 @@ void Color::importColor( const AttributeList& rAttribs )
     }
 }
 
-void Color::importColor( RecordInputStream& rStrm )
+void Color::importColor( SequenceInputStream& rStrm )
 {
     sal_uInt8 nFlags, nIndex;
     sal_Int16 nTint;
@@ -392,18 +386,18 @@ void Color::importColor( RecordInputStream& rStrm )
 
     switch( extractValue< sal_uInt8 >( nFlags, 1, 7 ) )
     {
-        case OOBIN_COLOR_AUTO:
+        case BIFF12_COLOR_AUTO:
             setAuto();
             rStrm.skip( 4 );
         break;
-        case OOBIN_COLOR_INDEXED:
+        case BIFF12_COLOR_INDEXED:
             setIndexed( nIndex, fTint );
             rStrm.skip( 4 );
         break;
-        case OOBIN_COLOR_RGB:
+        case BIFF12_COLOR_RGB:
             setRgb( lclReadRgbColor( rStrm ), fTint );
         break;
-        case OOBIN_COLOR_THEME:
+        case BIFF12_COLOR_THEME:
             setTheme( nIndex, fTint );
             rStrm.skip( 4 );
         break;
@@ -414,12 +408,12 @@ void Color::importColor( RecordInputStream& rStrm )
     }
 }
 
-void Color::importColorId( RecordInputStream& rStrm )
+void Color::importColorId( SequenceInputStream& rStrm )
 {
     setIndexed( rStrm.readInt32() );
 }
 
-void Color::importColorRgb( RecordInputStream& rStrm )
+void Color::importColorRgb( SequenceInputStream& rStrm )
 {
     setRgb( lclReadRgbColor( rStrm ) );
 }
@@ -434,7 +428,7 @@ void Color::importColorRgb( BiffInputStream& rStrm )
     setRgb( lclReadRgbColor( rStrm ) );
 }
 
-RecordInputStream& operator>>( RecordInputStream& rStrm, Color& orColor )
+SequenceInputStream& operator>>( SequenceInputStream& rStrm, Color& orColor )
 {
     orColor.importColor( rStrm );
     return rStrm;
@@ -478,7 +472,7 @@ static const sal_Int32 spnDefColors5[] =
 /* 56 */    0x1D2FBE, 0x286676, 0x004500, 0x453E01, 0x6A2813, 0x85396A, 0x4A3285, 0x424242
 };
 
-/** Default color table for BIFF8/OOX. */
+/** Default color table for BIFF8/BIFF12/OOXML. */
 static const sal_Int32 spnDefColors8[] =
 {
 /*  0 */    PALETTE_EGA_COLORS_LIGHT,
@@ -504,7 +498,7 @@ ColorPalette::ColorPalette( const WorkbookHelper& rHelper ) :
     // default colors
     switch( getFilterType() )
     {
-        case FILTER_OOX:
+        case FILTER_OOXML:
             maColors.insert( maColors.begin(), spnDefColors8, STATIC_ARRAY_END( spnDefColors8 ) );
             mnAppendIndex = OOX_COLOR_USEROFFSET;
         break;
@@ -529,7 +523,7 @@ void ColorPalette::importPaletteColor( const AttributeList& rAttribs )
     appendColor( rAttribs.getIntegerHex( XML_rgb, API_RGB_WHITE ) );
 }
 
-void ColorPalette::importPaletteColor( RecordInputStream& rStrm )
+void ColorPalette::importPaletteColor( SequenceInputStream& rStrm )
 {
     sal_Int32 nRgb = lclReadRgbColor( rStrm );
     appendColor( nRgb & 0xFFFFFF );
@@ -547,6 +541,18 @@ void ColorPalette::importPalette( BiffInputStream& rStrm )
     {
         sal_Int32 nRgb = lclReadRgbColor( rStrm );
         appendColor( nRgb & 0xFFFFFF );
+    }
+}
+
+void ColorPalette::importPalette( const Any& rPalette )
+{
+    Sequence< sal_Int32 > rColorSeq;
+    if( (rPalette >>= rColorSeq) && rColorSeq.hasElements() )
+    {
+        const sal_Int32* pnColor = rColorSeq.getConstArray();
+        const sal_Int32* pnColorEnd = pnColor + rColorSeq.getLength();
+        for( ; pnColor < pnColorEnd; ++pnColor )
+            appendColor( *pnColor & 0xFFFFFF );
     }
 }
 
@@ -622,7 +628,7 @@ FontModel::FontModel() :
 {
 }
 
-void FontModel::setBinScheme( sal_uInt8 nScheme )
+void FontModel::setBiff12Scheme( sal_uInt8 nScheme )
 {
     static const sal_Int32 spnSchemes[] = { XML_none, XML_major, XML_minor };
     mnScheme = STATIC_ARRAY_SELECT( spnSchemes, nScheme, XML_none );
@@ -790,7 +796,7 @@ void Font::importAttribs( sal_Int32 nElement, const AttributeList& rAttribs )
     }
 }
 
-void Font::importFont( RecordInputStream& rStrm )
+void Font::importFont( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( !mbDxf, "Font::importFont - unexpected conditional formatting flag" );
 
@@ -800,71 +806,71 @@ void Font::importFont( RecordInputStream& rStrm )
     rStrm.skip( 1 );
     rStrm >> maModel.maColor >> nScheme >> maModel.maName;
 
-    // equal constants in BIFF and OOBIN for weight, underline, and escapement
-    maModel.setBinScheme( nScheme );
+    // equal constants in all BIFFs for weight, underline, and escapement
+    maModel.setBiff12Scheme( nScheme );
     maModel.setBiffHeight( nHeight );
     maModel.setBiffWeight( nWeight );
     maModel.setBiffUnderline( nUnderline );
     maModel.setBiffEscapement( nEscapement );
     maModel.mnFamily    = nFamily;
     maModel.mnCharSet   = nCharSet;
-    // equal flags in BIFF and OOBIN
+    // equal flags in all BIFFs
     maModel.mbItalic    = getFlag( nFlags, BIFF_FONTFLAG_ITALIC );
     maModel.mbStrikeout = getFlag( nFlags, BIFF_FONTFLAG_STRIKEOUT );
     maModel.mbOutline   = getFlag( nFlags, BIFF_FONTFLAG_OUTLINE );
     maModel.mbShadow    = getFlag( nFlags, BIFF_FONTFLAG_SHADOW );
 }
 
-void Font::importDxfName( RecordInputStream& rStrm )
+void Font::importDxfName( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfName - missing conditional formatting flag" );
-    maModel.maName = rStrm.readString( false );
+    maModel.maName = BiffHelper::readString( rStrm, false );
     maUsedFlags.mbColorUsed = true;
 }
 
-void Font::importDxfColor( RecordInputStream& rStrm )
+void Font::importDxfColor( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfColor - missing conditional formatting flag" );
     rStrm >> maModel.maColor;
     maUsedFlags.mbColorUsed = true;
 }
 
-void Font::importDxfScheme( RecordInputStream& rStrm )
+void Font::importDxfScheme( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfScheme - missing conditional formatting flag" );
-    maModel.setBinScheme( rStrm.readuInt8() );
+    maModel.setBiff12Scheme( rStrm.readuInt8() );
     maUsedFlags.mbSchemeUsed = true;
 }
 
-void Font::importDxfHeight( RecordInputStream& rStrm )
+void Font::importDxfHeight( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfHeight - missing conditional formatting flag" );
     maModel.setBiffHeight( rStrm.readuInt16() );
     maUsedFlags.mbHeightUsed = true;
 }
 
-void Font::importDxfWeight( RecordInputStream& rStrm )
+void Font::importDxfWeight( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfWeight - missing conditional formatting flag" );
     maModel.setBiffWeight( rStrm.readuInt16() );
     maUsedFlags.mbWeightUsed = true;
 }
 
-void Font::importDxfUnderline( RecordInputStream& rStrm )
+void Font::importDxfUnderline( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfUnderline - missing conditional formatting flag" );
     maModel.setBiffUnderline( rStrm.readuInt16() );
     maUsedFlags.mbUnderlineUsed = true;
 }
 
-void Font::importDxfEscapement( RecordInputStream& rStrm )
+void Font::importDxfEscapement( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfEscapement - missing conditional formatting flag" );
     maModel.setBiffEscapement( rStrm.readuInt16() );
     maUsedFlags.mbEscapementUsed = true;
 }
 
-void Font::importDxfFlag( sal_Int32 nElement, RecordInputStream& rStrm )
+void Font::importDxfFlag( sal_Int32 nElement, SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Font::importDxfFlag - missing conditional formatting flag" );
     bool bFlag = rStrm.readuInt8() != 0;
@@ -1044,7 +1050,8 @@ void Font::finalizeImport()
     // supported script types
     if( maUsedFlags.mbNameUsed )
     {
-        Reference< XDevice > xDevice = getReferenceDevice();
+        PropertySet aDocProps( getDocument() );
+        Reference< XDevice > xDevice( aDocProps.getAnyProperty( PROP_ReferenceDevice ), UNO_QUERY );
         if( xDevice.is() )
         {
             Reference< XFont2 > xFont( xDevice->getFont( maApiData.maDesc ), UNO_QUERY );
@@ -1232,7 +1239,7 @@ AlignmentModel::AlignmentModel() :
 {
 }
 
-void AlignmentModel::setBinHorAlign( sal_uInt8 nHorAlign )
+void AlignmentModel::setBiffHorAlign( sal_uInt8 nHorAlign )
 {
     static const sal_Int32 spnHorAligns[] = {
         XML_general, XML_left, XML_center, XML_right,
@@ -1240,14 +1247,14 @@ void AlignmentModel::setBinHorAlign( sal_uInt8 nHorAlign )
     mnHorAlign = STATIC_ARRAY_SELECT( spnHorAligns, nHorAlign, XML_general );
 }
 
-void AlignmentModel::setBinVerAlign( sal_uInt8 nVerAlign )
+void AlignmentModel::setBiffVerAlign( sal_uInt8 nVerAlign )
 {
     static const sal_Int32 spnVerAligns[] = {
         XML_top, XML_center, XML_bottom, XML_justify, XML_distributed };
     mnVerAlign = STATIC_ARRAY_SELECT( spnVerAligns, nVerAlign, XML_bottom );
 }
 
-void AlignmentModel::setBinTextOrient( sal_uInt8 nTextOrient )
+void AlignmentModel::setBiffTextOrient( sal_uInt8 nTextOrient )
 {
     static const sal_Int32 spnRotations[] = {
         OOX_XF_ROTATION_NONE, OOX_XF_ROTATION_STACKED,
@@ -1305,49 +1312,49 @@ void Alignment::importAlignment( const AttributeList& rAttribs )
     maModel.mbJustLastLine = rAttribs.getBool( XML_justifyLastLine, false );
 }
 
-void Alignment::setBinData( sal_uInt32 nFlags )
+void Alignment::setBiff12Data( sal_uInt32 nFlags )
 {
-    maModel.setBinHorAlign( extractValue< sal_uInt8 >( nFlags, 16, 3 ) );
-    maModel.setBinVerAlign( extractValue< sal_uInt8 >( nFlags, 19, 3 ) );
+    maModel.setBiffHorAlign( extractValue< sal_uInt8 >( nFlags, 16, 3 ) );
+    maModel.setBiffVerAlign( extractValue< sal_uInt8 >( nFlags, 19, 3 ) );
     maModel.mnTextDir      = extractValue< sal_Int32 >( nFlags, 26, 2 );
     maModel.mnRotation     = extractValue< sal_Int32 >( nFlags, 0, 8 );
     maModel.mnIndent       = extractValue< sal_uInt8 >( nFlags, 8, 8 );
-    maModel.mbWrapText     = getFlag( nFlags, OOBIN_XF_WRAPTEXT );
-    maModel.mbShrink       = getFlag( nFlags, OOBIN_XF_SHRINK );
-    maModel.mbJustLastLine = getFlag( nFlags, OOBIN_XF_JUSTLASTLINE );
+    maModel.mbWrapText     = getFlag( nFlags, BIFF12_XF_WRAPTEXT );
+    maModel.mbShrink       = getFlag( nFlags, BIFF12_XF_SHRINK );
+    maModel.mbJustLastLine = getFlag( nFlags, BIFF12_XF_JUSTLASTLINE );
 }
 
 void Alignment::setBiff2Data( sal_uInt8 nFlags )
 {
-    maModel.setBinHorAlign( extractValue< sal_uInt8 >( nFlags, 0, 3 ) );
+    maModel.setBiffHorAlign( extractValue< sal_uInt8 >( nFlags, 0, 3 ) );
 }
 
 void Alignment::setBiff3Data( sal_uInt16 nAlign )
 {
-    maModel.setBinHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
+    maModel.setBiffHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
     maModel.mbWrapText = getFlag( nAlign, BIFF_XF_WRAPTEXT ); // new in BIFF3
 }
 
 void Alignment::setBiff4Data( sal_uInt16 nAlign )
 {
-    maModel.setBinHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
-    maModel.setBinVerAlign( extractValue< sal_uInt8 >( nAlign, 4, 2 ) ); // new in BIFF4
-    maModel.setBinTextOrient( extractValue< sal_uInt8 >( nAlign, 6, 2 ) ); // new in BIFF4
+    maModel.setBiffHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
+    maModel.setBiffVerAlign( extractValue< sal_uInt8 >( nAlign, 4, 2 ) ); // new in BIFF4
+    maModel.setBiffTextOrient( extractValue< sal_uInt8 >( nAlign, 6, 2 ) ); // new in BIFF4
     maModel.mbWrapText = getFlag( nAlign, BIFF_XF_WRAPTEXT );
 }
 
 void Alignment::setBiff5Data( sal_uInt16 nAlign )
 {
-    maModel.setBinHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
-    maModel.setBinVerAlign( extractValue< sal_uInt8 >( nAlign, 4, 3 ) );
-    maModel.setBinTextOrient( extractValue< sal_uInt8 >( nAlign, 8, 2 ) );
+    maModel.setBiffHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
+    maModel.setBiffVerAlign( extractValue< sal_uInt8 >( nAlign, 4, 3 ) );
+    maModel.setBiffTextOrient( extractValue< sal_uInt8 >( nAlign, 8, 2 ) );
     maModel.mbWrapText = getFlag( nAlign, BIFF_XF_WRAPTEXT );
 }
 
 void Alignment::setBiff8Data( sal_uInt16 nAlign, sal_uInt16 nMiscAttrib )
 {
-    maModel.setBinHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
-    maModel.setBinVerAlign( extractValue< sal_uInt8 >( nAlign, 4, 3 ) );
+    maModel.setBiffHorAlign( extractValue< sal_uInt8 >( nAlign, 0, 3 ) );
+    maModel.setBiffVerAlign( extractValue< sal_uInt8 >( nAlign, 4, 3 ) );
     maModel.mnTextDir      = extractValue< sal_Int32 >( nMiscAttrib, 6, 2 ); // new in BIFF8
     maModel.mnRotation     = extractValue< sal_Int32 >( nAlign, 8, 8 ); // new in BIFF8
     maModel.mnIndent       = extractValue< sal_uInt8 >( nMiscAttrib, 0, 4 ); // new in BIFF8
@@ -1391,11 +1398,11 @@ void Alignment::finalizeImport()
         maApiData.mnVerJustifyMethod = csstab::CellJustifyMethod::DISTRIBUTE;
 
     /*  indentation: expressed as number of blocks of 3 space characters in
-        OOX, and as multiple of 10 points in BIFF. */
+        OOXML/BIFF12, and as multiple of 10 points in BIFF8. */
     sal_Int32 nIndent = 0;
     switch( getFilterType() )
     {
-        case FILTER_OOX:    nIndent = getUnitConverter().scaleToMm100( 3.0 * maModel.mnIndent, UNIT_SPACE );  break;
+        case FILTER_OOXML:  nIndent = getUnitConverter().scaleToMm100( 3.0 * maModel.mnIndent, UNIT_SPACE );  break;
         case FILTER_BIFF:   nIndent = getUnitConverter().scaleToMm100( 10.0 * maModel.mnIndent, UNIT_POINT ); break;
         case FILTER_UNKNOWN: break;
     }
@@ -1477,10 +1484,10 @@ void Protection::importProtection( const AttributeList& rAttribs )
     maModel.mbHidden = rAttribs.getBool( XML_hidden, false );
 }
 
-void Protection::setBinData( sal_uInt32 nFlags )
+void Protection::setBiff12Data( sal_uInt32 nFlags )
 {
-    maModel.mbLocked = getFlag( nFlags, OOBIN_XF_LOCKED );
-    maModel.mbHidden = getFlag( nFlags, OOBIN_XF_HIDDEN );
+    maModel.mbLocked = getFlag( nFlags, BIFF12_XF_LOCKED );
+    maModel.mbHidden = getFlag( nFlags, BIFF12_XF_HIDDEN );
 }
 
 void Protection::setBiff2Data( sal_uInt8 nNumFmt )
@@ -1675,11 +1682,11 @@ void Border::importColor( sal_Int32 nElement, const AttributeList& rAttribs )
         pBorderLine->maColor.importColor( rAttribs );
 }
 
-void Border::importBorder( RecordInputStream& rStrm )
+void Border::importBorder( SequenceInputStream& rStrm )
 {
     sal_uInt8 nFlags = rStrm.readuInt8();
-    maModel.mbDiagTLtoBR = getFlag( nFlags, OOBIN_BORDER_DIAG_TLBR );
-    maModel.mbDiagBLtoTR = getFlag( nFlags, OOBIN_BORDER_DIAG_BLTR );
+    maModel.mbDiagTLtoBR = getFlag( nFlags, BIFF12_BORDER_DIAG_TLBR );
+    maModel.mbDiagBLtoTR = getFlag( nFlags, BIFF12_BORDER_DIAG_BLTR );
     maModel.maTop.setBiffStyle( rStrm.readuInt16() );
     rStrm >> maModel.maTop.maColor;
     maModel.maBottom.setBiffStyle( rStrm.readuInt16() );
@@ -1692,7 +1699,7 @@ void Border::importBorder( RecordInputStream& rStrm )
     rStrm >> maModel.maDiagonal.maColor;
 }
 
-void Border::importDxfBorder( sal_Int32 nElement, RecordInputStream& rStrm )
+void Border::importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Border::importDxfBorder - missing conditional formatting flag" );
     if( BorderLineModel* pBorderLine = getBorderLine( nElement ) )
@@ -1874,7 +1881,7 @@ PatternFillModel::PatternFillModel( bool bDxf ) :
     maFillColor.setIndexed( OOX_COLOR_WINDOWBACK );
 }
 
-void PatternFillModel::setBinPattern( sal_Int32 nPattern )
+void PatternFillModel::setBiffPattern( sal_Int32 nPattern )
 {
     static const sal_Int32 spnPatternIds[] = {
         XML_none, XML_solid, XML_mediumGray, XML_darkGray,
@@ -1889,8 +1896,8 @@ void PatternFillModel::setBiffData( sal_uInt16 nPatternColor, sal_uInt16 nFillCo
 {
     maPatternColor.setIndexed( nPatternColor );
     maFillColor.setIndexed( nFillColor );
-    // patterns equal in BIFF and OOBIN
-    setBinPattern( nPattern );
+    // patterns equal in all BIFFs
+    setBiffPattern( nPattern );
 }
 
 // ----------------------------------------------------------------------------
@@ -1905,7 +1912,7 @@ GradientFillModel::GradientFillModel() :
 {
 }
 
-void GradientFillModel::readGradient( RecordInputStream& rStrm )
+void GradientFillModel::readGradient( SequenceInputStream& rStrm )
 {
     sal_Int32 nType;
     rStrm >> nType >> mfAngle >> mfLeft >> mfRight >> mfTop >> mfBottom;
@@ -1913,7 +1920,7 @@ void GradientFillModel::readGradient( RecordInputStream& rStrm )
     mnType = STATIC_ARRAY_SELECT( spnTypes, nType, XML_TOKEN_INVALID );
 }
 
-void GradientFillModel::readGradientStop( RecordInputStream& rStrm, bool bDxf )
+void GradientFillModel::readGradientStop( SequenceInputStream& rStrm, bool bDxf )
 {
     Color aColor;
     double fPosition;
@@ -2020,11 +2027,11 @@ void Fill::importColor( const AttributeList& rAttribs, double fPosition )
         mxGradientModel->maColors[ fPosition ].importColor( rAttribs );
 }
 
-void Fill::importFill( RecordInputStream& rStrm )
+void Fill::importFill( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( !mbDxf, "Fill::importFill - unexpected conditional formatting flag" );
     sal_Int32 nPattern = rStrm.readInt32();
-    if( nPattern == OOBIN_FILL_GRADIENT )
+    if( nPattern == BIFF12_FILL_GRADIENT )
     {
         mxGradientModel.reset( new GradientFillModel );
         sal_Int32 nStopCount;
@@ -2037,21 +2044,21 @@ void Fill::importFill( RecordInputStream& rStrm )
     else
     {
         mxPatternModel.reset( new PatternFillModel( mbDxf ) );
-        mxPatternModel->setBinPattern( nPattern );
+        mxPatternModel->setBiffPattern( nPattern );
         rStrm >> mxPatternModel->maPatternColor >> mxPatternModel->maFillColor;
     }
 }
 
-void Fill::importDxfPattern( RecordInputStream& rStrm )
+void Fill::importDxfPattern( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Fill::importDxfPattern - missing conditional formatting flag" );
     if( !mxPatternModel )
         mxPatternModel.reset( new PatternFillModel( mbDxf ) );
-    mxPatternModel->setBinPattern( rStrm.readuInt8() );
+    mxPatternModel->setBiffPattern( rStrm.readuInt8() );
     mxPatternModel->mbPatternUsed = true;
 }
 
-void Fill::importDxfFgColor( RecordInputStream& rStrm )
+void Fill::importDxfFgColor( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Fill::importDxfFgColor - missing conditional formatting flag" );
     if( !mxPatternModel )
@@ -2060,7 +2067,7 @@ void Fill::importDxfFgColor( RecordInputStream& rStrm )
     mxPatternModel->mbPattColorUsed = true;
 }
 
-void Fill::importDxfBgColor( RecordInputStream& rStrm )
+void Fill::importDxfBgColor( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Fill::importDxfBgColor - missing conditional formatting flag" );
     if( !mxPatternModel )
@@ -2069,7 +2076,7 @@ void Fill::importDxfBgColor( RecordInputStream& rStrm )
     mxPatternModel->mbFillColorUsed = true;
 }
 
-void Fill::importDxfGradient( RecordInputStream& rStrm )
+void Fill::importDxfGradient( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Fill::importDxfGradient - missing conditional formatting flag" );
     if( !mxGradientModel )
@@ -2077,7 +2084,7 @@ void Fill::importDxfGradient( RecordInputStream& rStrm )
     mxGradientModel->readGradient( rStrm );
 }
 
-void Fill::importDxfStop( RecordInputStream& rStrm )
+void Fill::importDxfStop( SequenceInputStream& rStrm )
 {
     OSL_ENSURE( mbDxf, "Fill::importDxfStop - missing conditional formatting flag" );
     if( !mxGradientModel )
@@ -2147,7 +2154,7 @@ void Fill::finalizeImport()
 
     if( mxPatternModel.get() )
     {
-        // finalize the OOX data struct
+        // finalize the OOXML data struct
         PatternFillModel& rModel = *mxPatternModel;
         if( mbDxf )
         {
@@ -2299,7 +2306,7 @@ void Xf::importProtection( const AttributeList& rAttribs )
     maProtection.importProtection( rAttribs );
 }
 
-void Xf::importXf( RecordInputStream& rStrm, bool bCellXf )
+void Xf::importXf( SequenceInputStream& rStrm, bool bCellXf )
 {
     maModel.mbCellXf = bCellXf;
     maModel.mnStyleXfId = rStrm.readuInt16();
@@ -2308,16 +2315,16 @@ void Xf::importXf( RecordInputStream& rStrm, bool bCellXf )
     maModel.mnFillId = rStrm.readuInt16();
     maModel.mnBorderId = rStrm.readuInt16();
     sal_uInt32 nFlags = rStrm.readuInt32();
-    maAlignment.setBinData( nFlags );
-    maProtection.setBinData( nFlags );
+    maAlignment.setBiff12Data( nFlags );
+    maProtection.setBiff12Data( nFlags );
     // used flags, see comments in Xf::setBiffUsedFlags()
     sal_uInt16 nUsedFlags = rStrm.readuInt16();
-    maModel.mbFontUsed   = maModel.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_FONT_USED );
-    maModel.mbNumFmtUsed = maModel.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_NUMFMT_USED );
-    maModel.mbAlignUsed  = maModel.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_ALIGN_USED );
-    maModel.mbProtUsed   = maModel.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_PROT_USED );
-    maModel.mbBorderUsed = maModel.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_BORDER_USED );
-    maModel.mbAreaUsed   = maModel.mbCellXf == getFlag( nUsedFlags, OOBIN_XF_AREA_USED );
+    maModel.mbFontUsed   = maModel.mbCellXf == getFlag( nUsedFlags, BIFF12_XF_FONT_USED );
+    maModel.mbNumFmtUsed = maModel.mbCellXf == getFlag( nUsedFlags, BIFF12_XF_NUMFMT_USED );
+    maModel.mbAlignUsed  = maModel.mbCellXf == getFlag( nUsedFlags, BIFF12_XF_ALIGN_USED );
+    maModel.mbProtUsed   = maModel.mbCellXf == getFlag( nUsedFlags, BIFF12_XF_PROT_USED );
+    maModel.mbBorderUsed = maModel.mbCellXf == getFlag( nUsedFlags, BIFF12_XF_BORDER_USED );
+    maModel.mbAreaUsed   = maModel.mbCellXf == getFlag( nUsedFlags, BIFF12_XF_AREA_USED );
 }
 
 void Xf::importXf( BiffInputStream& rStrm )
@@ -2595,7 +2602,7 @@ void Dxf::importProtection( const AttributeList& rAttribs )
     mxProtection->importProtection( rAttribs );
 }
 
-void Dxf::importDxf( RecordInputStream& rStrm )
+void Dxf::importDxf( SequenceInputStream& rStrm )
 {
     sal_Int32 nNumFmtId = -1;
     OUString aFmtCode;
@@ -2610,28 +2617,28 @@ void Dxf::importDxf( RecordInputStream& rStrm )
         nRecEnd += nSubRecSize;
         switch( nSubRecId )
         {
-            case OOBIN_DXF_FILL_PATTERN:    createFill( false )->importDxfPattern( rStrm );                         break;
-            case OOBIN_DXF_FILL_FGCOLOR:    createFill( false )->importDxfFgColor( rStrm );                         break;
-            case OOBIN_DXF_FILL_BGCOLOR:    createFill( false )->importDxfBgColor( rStrm );                         break;
-            case OOBIN_DXF_FILL_GRADIENT:   createFill( false )->importDxfGradient( rStrm );                        break;
-            case OOBIN_DXF_FILL_STOP:       createFill( false )->importDxfStop( rStrm );                            break;
-            case OOBIN_DXF_FONT_COLOR:      createFont( false )->importDxfColor( rStrm );                           break;
-            case OOBIN_DXF_BORDER_TOP:      createBorder( false )->importDxfBorder( XLS_TOKEN( top ), rStrm );      break;
-            case OOBIN_DXF_BORDER_BOTTOM:   createBorder( false )->importDxfBorder( XLS_TOKEN( bottom ), rStrm );   break;
-            case OOBIN_DXF_BORDER_LEFT:     createBorder( false )->importDxfBorder( XLS_TOKEN( left ), rStrm );     break;
-            case OOBIN_DXF_BORDER_RIGHT:    createBorder( false )->importDxfBorder( XLS_TOKEN( right ), rStrm );    break;
-            case OOBIN_DXF_FONT_NAME:       createFont( false )->importDxfName( rStrm );                            break;
-            case OOBIN_DXF_FONT_WEIGHT:     createFont( false )->importDxfWeight( rStrm );                          break;
-            case OOBIN_DXF_FONT_UNDERLINE:  createFont( false )->importDxfUnderline( rStrm );                       break;
-            case OOBIN_DXF_FONT_ESCAPEMENT: createFont( false )->importDxfEscapement( rStrm );                      break;
-            case OOBIN_DXF_FONT_ITALIC:     createFont( false )->importDxfFlag( XML_i, rStrm );                     break;
-            case OOBIN_DXF_FONT_STRIKE:     createFont( false )->importDxfFlag( XML_strike, rStrm );                break;
-            case OOBIN_DXF_FONT_OUTLINE:    createFont( false )->importDxfFlag( XML_outline, rStrm );               break;
-            case OOBIN_DXF_FONT_SHADOW:     createFont( false )->importDxfFlag( XML_shadow, rStrm );                break;
-            case OOBIN_DXF_FONT_HEIGHT:     createFont( false )->importDxfHeight( rStrm );                          break;
-            case OOBIN_DXF_FONT_SCHEME:     createFont( false )->importDxfScheme( rStrm );                          break;
-            case OOBIN_DXF_NUMFMT_CODE:     aFmtCode = rStrm.readString( false );                                   break;
-            case OOBIN_DXF_NUMFMT_ID:       nNumFmtId = rStrm.readuInt16();                                         break;
+            case BIFF12_DXF_FILL_PATTERN:       createFill( false )->importDxfPattern( rStrm );                         break;
+            case BIFF12_DXF_FILL_FGCOLOR:       createFill( false )->importDxfFgColor( rStrm );                         break;
+            case BIFF12_DXF_FILL_BGCOLOR:       createFill( false )->importDxfBgColor( rStrm );                         break;
+            case BIFF12_DXF_FILL_GRADIENT:      createFill( false )->importDxfGradient( rStrm );                        break;
+            case BIFF12_DXF_FILL_STOP:          createFill( false )->importDxfStop( rStrm );                            break;
+            case BIFF12_DXF_FONT_COLOR:         createFont( false )->importDxfColor( rStrm );                           break;
+            case BIFF12_DXF_BORDER_TOP:         createBorder( false )->importDxfBorder( XLS_TOKEN( top ), rStrm );      break;
+            case BIFF12_DXF_BORDER_BOTTOM:      createBorder( false )->importDxfBorder( XLS_TOKEN( bottom ), rStrm );   break;
+            case BIFF12_DXF_BORDER_LEFT:        createBorder( false )->importDxfBorder( XLS_TOKEN( left ), rStrm );     break;
+            case BIFF12_DXF_BORDER_RIGHT:       createBorder( false )->importDxfBorder( XLS_TOKEN( right ), rStrm );    break;
+            case BIFF12_DXF_FONT_NAME:          createFont( false )->importDxfName( rStrm );                            break;
+            case BIFF12_DXF_FONT_WEIGHT:        createFont( false )->importDxfWeight( rStrm );                          break;
+            case BIFF12_DXF_FONT_UNDERLINE:     createFont( false )->importDxfUnderline( rStrm );                       break;
+            case BIFF12_DXF_FONT_ESCAPEMENT:    createFont( false )->importDxfEscapement( rStrm );                      break;
+            case BIFF12_DXF_FONT_ITALIC:        createFont( false )->importDxfFlag( XML_i, rStrm );                     break;
+            case BIFF12_DXF_FONT_STRIKE:        createFont( false )->importDxfFlag( XML_strike, rStrm );                break;
+            case BIFF12_DXF_FONT_OUTLINE:       createFont( false )->importDxfFlag( XML_outline, rStrm );               break;
+            case BIFF12_DXF_FONT_SHADOW:        createFont( false )->importDxfFlag( XML_shadow, rStrm );                break;
+            case BIFF12_DXF_FONT_HEIGHT:        createFont( false )->importDxfHeight( rStrm );                          break;
+            case BIFF12_DXF_FONT_SCHEME:        createFont( false )->importDxfScheme( rStrm );                          break;
+            case BIFF12_DXF_NUMFMT_CODE:        aFmtCode = BiffHelper::readString( rStrm, false );                      break;
+            case BIFF12_DXF_NUMFMT_ID:          nNumFmtId = rStrm.readuInt16();                                         break;
         }
         rStrm.seek( nRecEnd );
     }
@@ -2900,16 +2907,16 @@ void CellStyle::importCellStyle( const AttributeList& rAttribs )
     maModel.mbHidden    = rAttribs.getBool( XML_hidden, false );
 }
 
-void CellStyle::importCellStyle( RecordInputStream& rStrm )
+void CellStyle::importCellStyle( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
     rStrm >> maModel.mnXfId >> nFlags;
     maModel.mnBuiltinId = rStrm.readInt8();
     maModel.mnLevel = rStrm.readInt8();
     rStrm >> maModel.maName;
-    maModel.mbBuiltin = getFlag( nFlags, OOBIN_CELLSTYLE_BUILTIN );
-    maModel.mbCustom = getFlag( nFlags, OOBIN_CELLSTYLE_CUSTOM );
-    maModel.mbHidden = getFlag( nFlags, OOBIN_CELLSTYLE_HIDDEN );
+    maModel.mbBuiltin = getFlag( nFlags, BIFF12_CELLSTYLE_BUILTIN );
+    maModel.mbCustom = getFlag( nFlags, BIFF12_CELLSTYLE_CUSTOM );
+    maModel.mbHidden = getFlag( nFlags, BIFF12_CELLSTYLE_HIDDEN );
 }
 
 void CellStyle::importStyle( BiffInputStream& rStrm )
@@ -3001,7 +3008,7 @@ CellStyleRef CellStyleBuffer::importCellStyle( const AttributeList& rAttribs )
     return xCellStyle;
 }
 
-CellStyleRef CellStyleBuffer::importCellStyle( RecordInputStream& rStrm )
+CellStyleRef CellStyleBuffer::importCellStyle( SequenceInputStream& rStrm )
 {
     CellStyleRef xCellStyle( new CellStyle( *this ) );
     xCellStyle->importCellStyle( rStrm );
@@ -3162,6 +3169,19 @@ OUString CellStyleBuffer::createCellStyle( const CellStyleRef& rxCellStyle ) con
 
 // ============================================================================
 
+AutoFormatModel::AutoFormatModel() :
+    mnAutoFormatId( 0 ),
+    mbApplyNumFmt( false ),
+    mbApplyFont( false ),
+    mbApplyAlignment( false ),
+    mbApplyBorder( false ),
+    mbApplyFill( false ),
+    mbApplyProtection( false )
+{
+}
+
+// ============================================================================
+
 StylesBuffer::StylesBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     maPalette( rHelper ),
@@ -3238,17 +3258,17 @@ CellStyleRef StylesBuffer::importCellStyle( const AttributeList& rAttribs )
     return maCellStyles.importCellStyle( rAttribs );
 }
 
-void StylesBuffer::importPaletteColor( RecordInputStream& rStrm )
+void StylesBuffer::importPaletteColor( SequenceInputStream& rStrm )
 {
     maPalette.importPaletteColor( rStrm );
 }
 
-void StylesBuffer::importNumFmt( RecordInputStream& rStrm )
+void StylesBuffer::importNumFmt( SequenceInputStream& rStrm )
 {
     maNumFmts.importNumFmt( rStrm );
 }
 
-void StylesBuffer::importCellStyle( RecordInputStream& rStrm )
+void StylesBuffer::importCellStyle( SequenceInputStream& rStrm )
 {
     maCellStyles.importCellStyle( rStrm );
 }
@@ -3303,6 +3323,11 @@ void StylesBuffer::importXf( BiffInputStream& rStrm )
 void StylesBuffer::importStyle( BiffInputStream& rStrm )
 {
     maCellStyles.importStyle( rStrm );
+}
+
+void StylesBuffer::importPalette( const Any& rPalette )
+{
+    maPalette.importPalette( rPalette );
 }
 
 void StylesBuffer::finalizeImport()
@@ -3388,7 +3413,7 @@ bool StylesBuffer::equalBorders( sal_Int32 nBorderId1, sal_Int32 nBorderId2 ) co
 
     switch( getFilterType() )
     {
-        case FILTER_OOX:
+        case FILTER_OOXML:
             // in OOXML, borders are assumed to be unique
             return false;
 
@@ -3413,7 +3438,7 @@ bool StylesBuffer::equalFills( sal_Int32 nFillId1, sal_Int32 nFillId2 ) const
 
     switch( getFilterType() )
     {
-        case FILTER_OOX:
+        case FILTER_OOXML:
             // in OOXML, fills are assumed to be unique
             return false;
 

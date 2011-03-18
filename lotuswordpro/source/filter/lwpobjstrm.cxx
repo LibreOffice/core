@@ -64,7 +64,7 @@
 /**
  * @descr  ctor() from LwpSvStream
  */
-LwpObjectStream::LwpObjectStream(LwpSvStream *pStrm, BOOL isCompressed, sal_uInt16 size)
+LwpObjectStream::LwpObjectStream(LwpSvStream *pStrm, sal_Bool isCompressed, sal_uInt16 size)
     :m_pContentBuf(NULL), m_nBufSize(size), m_nReadPos(0),
     m_pStrm(pStrm), m_bCompressed(isCompressed)
 {
@@ -189,14 +189,14 @@ void LwpObjectStream::SeekRel(sal_uInt16 pos)
 /**
  * @descr  Seek to pos in object buffer/buffer
  */
-BOOL LwpObjectStream::Seek( sal_uInt16 pos)
+sal_Bool LwpObjectStream::Seek( sal_uInt16 pos)
 {
     if (pos < m_nBufSize)
     {
         m_nReadPos = pos;
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /**

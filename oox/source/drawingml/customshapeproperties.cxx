@@ -30,9 +30,6 @@
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/core/namespaces.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

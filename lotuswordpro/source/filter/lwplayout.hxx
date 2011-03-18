@@ -280,7 +280,7 @@ class LwpMiddleLayout : public LwpVirtualLayout
 public:
     LwpMiddleLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm );
     virtual ~LwpMiddleLayout();
-    virtual BOOL MarginsSameAsParent();
+    virtual sal_Bool MarginsSameAsParent();
     virtual double GetMarginsValue(const sal_uInt8& nWhichSide);
     virtual double GetExtMarginsValue(const sal_uInt8& nWhichSide);
     LwpLayoutGeometry* GetGeometry();

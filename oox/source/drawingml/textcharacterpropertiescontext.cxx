@@ -33,10 +33,8 @@
 #include "oox/drawingml/colorchoicecontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/textparagraphproperties.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/core/relations.hxx"
 #include "hyperlinkcontext.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -79,21 +77,21 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
 
   // ST_TextNonNegativePoint
     const OUString sCharKerning( CREATE_OUSTRING( "CharKerning" ) );
-    //case NMSP_DRAWINGML|XML_kern:
+    //case A_TOKEN( kern ):
 
   // ST_TextLanguageID
     OUString sAltLang = rXAttributes->getOptionalValue( XML_altLang );
 
-        case NMSP_DRAWINGML|XML_kumimoji:       // xsd:boolean
+        case A_TOKEN( kumimoji ):       // xsd:boolean
             break;
-        case NMSP_DRAWINGML|XML_spc:            // ST_TextPoint
-        case NMSP_DRAWINGML|XML_normalizeH:     // xsd:boolean
-        case NMSP_DRAWINGML|XML_baseline:       // ST_Percentage
-        case NMSP_DRAWINGML|XML_noProof:        // xsd:boolean
-        case NMSP_DRAWINGML|XML_dirty:          // xsd:boolean
-        case NMSP_DRAWINGML|XML_err:            // xsd:boolean
-        case NMSP_DRAWINGML|XML_smtClean:       // xsd:boolean
-        case NMSP_DRAWINGML|XML_smtId:          // xsd:unsignedInt
+        case A_TOKEN( spc ):            // ST_TextPoint
+        case A_TOKEN( normalizeH ):     // xsd:boolean
+        case A_TOKEN( baseline ):       // ST_Percentage
+        case A_TOKEN( noProof ):        // xsd:boolean
+        case A_TOKEN( dirty ):          // xsd:boolean
+        case A_TOKEN( err ):            // xsd:boolean
+        case A_TOKEN( smtClean ):       // xsd:boolean
+        case A_TOKEN( smtId ):          // xsd:unsignedInt
             break;
 */
 
@@ -118,56 +116,56 @@ Reference< XFastContextHandler > TextCharacterPropertiesContext::createFastChild
     switch( aElementToken )
     {
 // TODO unsupported yet
-//        case NMSP_DRAWINGML|XML_ln:         // CT_LineProperties
+//        case A_TOKEN( ln ):         // CT_LineProperties
 //            xRet.set( new LinePropertiesContext( getHandler(), xAttributes, maTextOutlineProperties ) );
 //        break;
 
-        case NMSP_DRAWINGML|XML_solidFill:  // EG_FillProperties
+        case A_TOKEN( solidFill ):  // EG_FillProperties
             xRet.set( new ColorContext( *this, mrTextCharacterProperties.maCharColor ) );
         break;
 
         // EG_EffectProperties
-        case NMSP_DRAWINGML|XML_effectDag:  // CT_EffectContainer 5.1.10.25
-        case NMSP_DRAWINGML|XML_effectLst:  // CT_EffectList 5.1.10.26
+        case A_TOKEN( effectDag ):  // CT_EffectContainer 5.1.10.25
+        case A_TOKEN( effectLst ):  // CT_EffectList 5.1.10.26
         break;
 
-        case NMSP_DRAWINGML|XML_highlight:  // CT_Color
+        case A_TOKEN( highlight ):  // CT_Color
             xRet.set( new ColorContext( *this, mrTextCharacterProperties.maHighlightColor ) );
         break;
 
         // EG_TextUnderlineLine
-        case NMSP_DRAWINGML|XML_uLnTx:      // CT_TextUnderlineLineFollowText
+        case A_TOKEN( uLnTx ):      // CT_TextUnderlineLineFollowText
             mrTextCharacterProperties.moUnderlineLineFollowText = true;
         break;
 // TODO unsupported yet
-//        case NMSP_DRAWINGML|XML_uLn:        // CT_LineProperties
+//        case A_TOKEN( uLn ):        // CT_LineProperties
 //            xRet.set( new LinePropertiesContext( getHandler(), xAttributes, maUnderlineProperties ) );
 //        break;
 
         // EG_TextUnderlineFill
-        case NMSP_DRAWINGML|XML_uFillTx:    // CT_TextUnderlineFillFollowText
+        case A_TOKEN( uFillTx ):    // CT_TextUnderlineFillFollowText
             mrTextCharacterProperties.moUnderlineFillFollowText = true;
         break;
-        case NMSP_DRAWINGML|XML_uFill:      // CT_TextUnderlineFillGroupWrapper->EG_FillProperties (not supported)
+        case A_TOKEN( uFill ):      // CT_TextUnderlineFillGroupWrapper->EG_FillProperties (not supported)
             xRet.set( new SimpleFillPropertiesContext( *this, mrTextCharacterProperties.maUnderlineColor ) );
         break;
 
         // CT_FontCollection
-        case NMSP_DRAWINGML|XML_latin:      // CT_TextFont
+        case A_TOKEN( latin ):      // CT_TextFont
             mrTextCharacterProperties.maLatinFont.setAttributes( aAttribs );
         break;
-        case NMSP_DRAWINGML|XML_ea:         // CT_TextFont
+        case A_TOKEN( ea ):         // CT_TextFont
             mrTextCharacterProperties.maAsianFont.setAttributes( aAttribs );
         break;
-        case NMSP_DRAWINGML|XML_cs:         // CT_TextFont
+        case A_TOKEN( cs ):         // CT_TextFont
             mrTextCharacterProperties.maComplexFont.setAttributes( aAttribs );
         break;
-        case NMSP_DRAWINGML|XML_sym:        // CT_TextFont
+        case A_TOKEN( sym ):        // CT_TextFont
             mrTextCharacterProperties.maSymbolFont.setAttributes( aAttribs );
         break;
 
-        case NMSP_DRAWINGML|XML_hlinkClick:     // CT_Hyperlink
-        case NMSP_DRAWINGML|XML_hlinkMouseOver: // CT_Hyperlink
+        case A_TOKEN( hlinkClick ):     // CT_Hyperlink
+        case A_TOKEN( hlinkMouseOver ): // CT_Hyperlink
             xRet.set( new HyperLinkContext( *this, xAttributes,  mrTextCharacterProperties.maHyperlinkPropertyMap ) );
         break;
     }

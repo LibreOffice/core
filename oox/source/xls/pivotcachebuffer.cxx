@@ -27,20 +27,20 @@
  ************************************************************************/
 
 #include "oox/xls/pivotcachebuffer.hxx"
+
 #include <set>
-#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupInfo.hpp>
 #include <com/sun/star/sheet/XDataPilotFieldGrouping.hpp>
-#include "properties.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
+#include <com/sun/star/table/XCell.hpp>
+#include <rtl/ustrbuf.hxx>
 #include "oox/core/filterbase.hxx"
+#include "oox/helper/attributelist.hxx"
+#include "oox/helper/containerhelper.hxx"
+#include "oox/helper/propertyset.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
 #include "oox/xls/excelhandlers.hxx"
@@ -49,75 +49,71 @@
 #include "oox/xls/unitconverter.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::container::XIndexAccess;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::container::XNamed;
-using ::com::sun::star::util::DateTime;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::sheet::DataPilotFieldGroupInfo;
-using ::com::sun::star::table::XCell;
-using ::com::sun::star::sheet::XDataPilotField;
-using ::com::sun::star::sheet::XDataPilotFieldGrouping;
-using ::oox::core::Relations;
-
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+
+using ::oox::core::Relations;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
+// ============================================================================
+
 namespace {
 
-const sal_uInt16 OOBIN_PCDFIELD_SERVERFIELD         = 0x0001;
-const sal_uInt16 OOBIN_PCDFIELD_NOUNIQUEITEMS       = 0x0002;
-const sal_uInt16 OOBIN_PCDFIELD_DATABASEFIELD       = 0x0004;
-const sal_uInt16 OOBIN_PCDFIELD_HASCAPTION          = 0x0008;
-const sal_uInt16 OOBIN_PCDFIELD_MEMBERPROPFIELD     = 0x0010;
-const sal_uInt16 OOBIN_PCDFIELD_HASFORMULA          = 0x0100;
-const sal_uInt16 OOBIN_PCDFIELD_HASPROPERTYNAME     = 0x0200;
+const sal_uInt16 BIFF12_PCDFIELD_SERVERFIELD        = 0x0001;
+const sal_uInt16 BIFF12_PCDFIELD_NOUNIQUEITEMS      = 0x0002;
+const sal_uInt16 BIFF12_PCDFIELD_DATABASEFIELD      = 0x0004;
+const sal_uInt16 BIFF12_PCDFIELD_HASCAPTION         = 0x0008;
+const sal_uInt16 BIFF12_PCDFIELD_MEMBERPROPFIELD    = 0x0010;
+const sal_uInt16 BIFF12_PCDFIELD_HASFORMULA         = 0x0100;
+const sal_uInt16 BIFF12_PCDFIELD_HASPROPERTYNAME    = 0x0200;
 
-const sal_uInt16 OOBIN_PCDFSITEMS_HASSEMIMIXED      = 0x0001;
-const sal_uInt16 OOBIN_PCDFSITEMS_HASNONDATE        = 0x0002;
-const sal_uInt16 OOBIN_PCDFSITEMS_HASDATE           = 0x0004;
-const sal_uInt16 OOBIN_PCDFSITEMS_HASSTRING         = 0x0008;
-const sal_uInt16 OOBIN_PCDFSITEMS_HASBLANK          = 0x0010;
-const sal_uInt16 OOBIN_PCDFSITEMS_HASMIXED          = 0x0020;
-const sal_uInt16 OOBIN_PCDFSITEMS_ISNUMERIC         = 0x0040;
-const sal_uInt16 OOBIN_PCDFSITEMS_ISINTEGER         = 0x0080;
-const sal_uInt16 OOBIN_PCDFSITEMS_HASMINMAX         = 0x0100;
-const sal_uInt16 OOBIN_PCDFSITEMS_HASLONGTEXT       = 0x0200;
+const sal_uInt16 BIFF12_PCDFSITEMS_HASSEMIMIXED     = 0x0001;
+const sal_uInt16 BIFF12_PCDFSITEMS_HASNONDATE       = 0x0002;
+const sal_uInt16 BIFF12_PCDFSITEMS_HASDATE          = 0x0004;
+const sal_uInt16 BIFF12_PCDFSITEMS_HASSTRING        = 0x0008;
+const sal_uInt16 BIFF12_PCDFSITEMS_HASBLANK         = 0x0010;
+const sal_uInt16 BIFF12_PCDFSITEMS_HASMIXED         = 0x0020;
+const sal_uInt16 BIFF12_PCDFSITEMS_ISNUMERIC        = 0x0040;
+const sal_uInt16 BIFF12_PCDFSITEMS_ISINTEGER        = 0x0080;
+const sal_uInt16 BIFF12_PCDFSITEMS_HASMINMAX        = 0x0100;
+const sal_uInt16 BIFF12_PCDFSITEMS_HASLONGTEXT      = 0x0200;
 
-const sal_uInt16 OOBIN_PCITEM_ARRAY_DOUBLE          = 0x0001;
-const sal_uInt16 OOBIN_PCITEM_ARRAY_STRING          = 0x0002;
-const sal_uInt16 OOBIN_PCITEM_ARRAY_ERROR           = 0x0010;
-const sal_uInt16 OOBIN_PCITEM_ARRAY_DATE            = 0x0020;
+const sal_uInt16 BIFF12_PCITEM_ARRAY_DOUBLE         = 0x0001;
+const sal_uInt16 BIFF12_PCITEM_ARRAY_STRING         = 0x0002;
+const sal_uInt16 BIFF12_PCITEM_ARRAY_ERROR          = 0x0010;
+const sal_uInt16 BIFF12_PCITEM_ARRAY_DATE           = 0x0020;
 
-const sal_uInt8 OOBIN_PCDFRANGEPR_AUTOSTART         = 0x01;
-const sal_uInt8 OOBIN_PCDFRANGEPR_AUTOEND           = 0x02;
-const sal_uInt8 OOBIN_PCDFRANGEPR_DATEGROUP         = 0x04;
+const sal_uInt8 BIFF12_PCDFRANGEPR_AUTOSTART        = 0x01;
+const sal_uInt8 BIFF12_PCDFRANGEPR_AUTOEND          = 0x02;
+const sal_uInt8 BIFF12_PCDFRANGEPR_DATEGROUP        = 0x04;
 
-const sal_uInt8 OOBIN_PCDEFINITION_SAVEDATA         = 0x01;
-const sal_uInt8 OOBIN_PCDEFINITION_INVALID          = 0x02;
-const sal_uInt8 OOBIN_PCDEFINITION_REFRESHONLOAD    = 0x04;
-const sal_uInt8 OOBIN_PCDEFINITION_OPTIMIZEMEMORY   = 0x08;
-const sal_uInt8 OOBIN_PCDEFINITION_ENABLEREFRESH    = 0x10;
-const sal_uInt8 OOBIN_PCDEFINITION_BACKGROUNDQUERY  = 0x20;
-const sal_uInt8 OOBIN_PCDEFINITION_UPGRADEONREFR    = 0x40;
-const sal_uInt8 OOBIN_PCDEFINITION_TUPELCACHE       = 0x80;
+const sal_uInt8 BIFF12_PCDEFINITION_SAVEDATA        = 0x01;
+const sal_uInt8 BIFF12_PCDEFINITION_INVALID         = 0x02;
+const sal_uInt8 BIFF12_PCDEFINITION_REFRESHONLOAD   = 0x04;
+const sal_uInt8 BIFF12_PCDEFINITION_OPTIMIZEMEMORY  = 0x08;
+const sal_uInt8 BIFF12_PCDEFINITION_ENABLEREFRESH   = 0x10;
+const sal_uInt8 BIFF12_PCDEFINITION_BACKGROUNDQUERY = 0x20;
+const sal_uInt8 BIFF12_PCDEFINITION_UPGRADEONREFR   = 0x40;
+const sal_uInt8 BIFF12_PCDEFINITION_TUPELCACHE      = 0x80;
 
-const sal_uInt8 OOBIN_PCDEFINITION_HASUSERNAME      = 0x01;
-const sal_uInt8 OOBIN_PCDEFINITION_HASRELID         = 0x02;
-const sal_uInt8 OOBIN_PCDEFINITION_SUPPORTSUBQUERY  = 0x04;
-const sal_uInt8 OOBIN_PCDEFINITION_SUPPORTDRILL     = 0x08;
+const sal_uInt8 BIFF12_PCDEFINITION_HASUSERNAME     = 0x01;
+const sal_uInt8 BIFF12_PCDEFINITION_HASRELID        = 0x02;
+const sal_uInt8 BIFF12_PCDEFINITION_SUPPORTSUBQUERY = 0x04;
+const sal_uInt8 BIFF12_PCDEFINITION_SUPPORTDRILL    = 0x08;
 
-const sal_uInt8 OOBIN_PCDWBSOURCE_HASRELID          = 0x01;
-const sal_uInt8 OOBIN_PCDWBSOURCE_HASSHEET          = 0x02;
+const sal_uInt8 BIFF12_PCDWBSOURCE_HASRELID         = 0x01;
+const sal_uInt8 BIFF12_PCDWBSOURCE_HASSHEET         = 0x02;
+
+// ----------------------------------------------------------------------------
 
 const sal_uInt16 BIFF_PCDSOURCE_WORKSHEET           = 0x0001;
 const sal_uInt16 BIFF_PCDSOURCE_EXTERNAL            = 0x0002;
@@ -217,19 +213,19 @@ void PivotCacheItem::readIndex( const AttributeList& rAttribs )
     mnType = XML_x;
 }
 
-void PivotCacheItem::readString( RecordInputStream& rStrm )
+void PivotCacheItem::readString( SequenceInputStream& rStrm )
 {
-    maValue <<= rStrm.readString();
+    maValue <<= BiffHelper::readString( rStrm );
     mnType = XML_s;
 }
 
-void PivotCacheItem::readDouble( RecordInputStream& rStrm )
+void PivotCacheItem::readDouble( SequenceInputStream& rStrm )
 {
     maValue <<= rStrm.readDouble();
     mnType = XML_n;
 }
 
-void PivotCacheItem::readDate( RecordInputStream& rStrm )
+void PivotCacheItem::readDate( SequenceInputStream& rStrm )
 {
     DateTime aDateTime;
     aDateTime.Year = rStrm.readuInt16();
@@ -243,19 +239,19 @@ void PivotCacheItem::readDate( RecordInputStream& rStrm )
     mnType = XML_d;
 }
 
-void PivotCacheItem::readBool( RecordInputStream& rStrm )
+void PivotCacheItem::readBool( SequenceInputStream& rStrm )
 {
     maValue <<= (rStrm.readuInt8() != 0);
     mnType = XML_b;
 }
 
-void PivotCacheItem::readError( RecordInputStream& rStrm )
+void PivotCacheItem::readError( SequenceInputStream& rStrm )
 {
     maValue <<= static_cast< sal_Int32 >( rStrm.readuInt8() );
     mnType = XML_e;
 }
 
-void PivotCacheItem::readIndex( RecordInputStream& rStrm )
+void PivotCacheItem::readIndex( SequenceInputStream& rStrm )
 {
     maValue <<= rStrm.readInt32();
     mnType = XML_x;
@@ -343,9 +339,9 @@ void PivotCacheItemList::importItem( sal_Int32 nElement, const AttributeList& rA
     }
 }
 
-void PivotCacheItemList::importItem( sal_Int32 nRecId, RecordInputStream& rStrm )
+void PivotCacheItemList::importItem( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
-    if( nRecId == OOBIN_ID_PCITEM_ARRAY )
+    if( nRecId == BIFF12_ID_PCITEM_ARRAY )
     {
         importArray( rStrm );
         return;
@@ -354,18 +350,18 @@ void PivotCacheItemList::importItem( sal_Int32 nRecId, RecordInputStream& rStrm 
     PivotCacheItem& rItem = createItem();
     switch( nRecId )
     {
-        case OOBIN_ID_PCITEM_MISSING:
-        case OOBIN_ID_PCITEMA_MISSING:                              break;
-        case OOBIN_ID_PCITEM_STRING:
-        case OOBIN_ID_PCITEMA_STRING:   rItem.readString( rStrm );  break;
-        case OOBIN_ID_PCITEM_DOUBLE:
-        case OOBIN_ID_PCITEMA_DOUBLE:   rItem.readDouble( rStrm );  break;
-        case OOBIN_ID_PCITEM_DATE:
-        case OOBIN_ID_PCITEMA_DATE:     rItem.readDate( rStrm );    break;
-        case OOBIN_ID_PCITEM_BOOL:
-        case OOBIN_ID_PCITEMA_BOOL:     rItem.readBool( rStrm );    break;
-        case OOBIN_ID_PCITEM_ERROR:
-        case OOBIN_ID_PCITEMA_ERROR:    rItem.readError( rStrm );   break;
+        case BIFF12_ID_PCITEM_MISSING:
+        case BIFF12_ID_PCITEMA_MISSING:                             break;
+        case BIFF12_ID_PCITEM_STRING:
+        case BIFF12_ID_PCITEMA_STRING:  rItem.readString( rStrm );  break;
+        case BIFF12_ID_PCITEM_DOUBLE:
+        case BIFF12_ID_PCITEMA_DOUBLE:  rItem.readDouble( rStrm );  break;
+        case BIFF12_ID_PCITEM_DATE:
+        case BIFF12_ID_PCITEMA_DATE:    rItem.readDate( rStrm );    break;
+        case BIFF12_ID_PCITEM_BOOL:
+        case BIFF12_ID_PCITEMA_BOOL:    rItem.readBool( rStrm );    break;
+        case BIFF12_ID_PCITEM_ERROR:
+        case BIFF12_ID_PCITEMA_ERROR:   rItem.readError( rStrm );   break;
         default:    OSL_FAIL( "PivotCacheItemList::importItem - unknown record type" );
     }
 }
@@ -412,7 +408,7 @@ PivotCacheItem& PivotCacheItemList::createItem()
     return maItems.back();
 }
 
-void PivotCacheItemList::importArray( RecordInputStream& rStrm )
+void PivotCacheItemList::importArray( SequenceInputStream& rStrm )
 {
     sal_uInt16 nType = rStrm.readuInt16();
     sal_Int32 nCount = rStrm.readInt32();
@@ -420,10 +416,10 @@ void PivotCacheItemList::importArray( RecordInputStream& rStrm )
     {
         switch( nType )
         {
-            case OOBIN_PCITEM_ARRAY_DOUBLE: createItem().readDouble( rStrm );   break;
-            case OOBIN_PCITEM_ARRAY_STRING: createItem().readString( rStrm );   break;
-            case OOBIN_PCITEM_ARRAY_ERROR:  createItem().readError( rStrm );    break;
-            case OOBIN_PCITEM_ARRAY_DATE:   createItem().readDate( rStrm );     break;
+            case BIFF12_PCITEM_ARRAY_DOUBLE: createItem().readDouble( rStrm );   break;
+            case BIFF12_PCITEM_ARRAY_STRING: createItem().readString( rStrm );   break;
+            case BIFF12_PCITEM_ARRAY_ERROR:  createItem().readError( rStrm );    break;
+            case BIFF12_PCITEM_ARRAY_DATE:   createItem().readDate( rStrm );     break;
             default:
                 OSL_FAIL( "PivotCacheItemList::importArray - unknown data type" );
                 nIdx = nCount;
@@ -478,7 +474,7 @@ PCFieldGroupModel::PCFieldGroupModel() :
 {
 }
 
-void PCFieldGroupModel::setBinGroupBy( sal_uInt8 nGroupBy )
+void PCFieldGroupModel::setBiffGroupBy( sal_uInt8 nGroupBy )
 {
     static const sal_Int32 spnGroupBy[] = { XML_range,
         XML_seconds, XML_minutes, XML_hours, XML_days, XML_months, XML_quarters, XML_years };
@@ -563,62 +559,62 @@ void PivotCacheField::importGroupItem( sal_Int32 nElement, const AttributeList& 
     maGroupItems.importItem( nElement, rAttribs );
 }
 
-void PivotCacheField::importPCDField( RecordInputStream& rStrm )
+void PivotCacheField::importPCDField( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
     rStrm >> nFlags >> maFieldModel.mnNumFmtId;
     maFieldModel.mnSqlType = rStrm.readInt16();
     rStrm >> maFieldModel.mnHierarchy >> maFieldModel.mnLevel >> maFieldModel.mnMappingCount >> maFieldModel.maName;
-    if( getFlag( nFlags, OOBIN_PCDFIELD_HASCAPTION ) )
+    if( getFlag( nFlags, BIFF12_PCDFIELD_HASCAPTION ) )
         rStrm >> maFieldModel.maCaption;
-    if( getFlag( nFlags, OOBIN_PCDFIELD_HASFORMULA ) )
+    if( getFlag( nFlags, BIFF12_PCDFIELD_HASFORMULA ) )
         rStrm.skip( ::std::max< sal_Int32 >( rStrm.readInt32(), 0 ) );
     if( maFieldModel.mnMappingCount > 0 )
         rStrm.skip( ::std::max< sal_Int32 >( rStrm.readInt32(), 0 ) );
-    if( getFlag( nFlags, OOBIN_PCDFIELD_HASPROPERTYNAME ) )
+    if( getFlag( nFlags, BIFF12_PCDFIELD_HASPROPERTYNAME ) )
         rStrm >> maFieldModel.maPropertyName;
 
-    maFieldModel.mbDatabaseField   = getFlag( nFlags, OOBIN_PCDFIELD_DATABASEFIELD );
-    maFieldModel.mbServerField     = getFlag( nFlags, OOBIN_PCDFIELD_SERVERFIELD );
-    maFieldModel.mbUniqueList      = !getFlag( nFlags, OOBIN_PCDFIELD_NOUNIQUEITEMS );
-    maFieldModel.mbMemberPropField = getFlag( nFlags, OOBIN_PCDFIELD_MEMBERPROPFIELD );
+    maFieldModel.mbDatabaseField   = getFlag( nFlags, BIFF12_PCDFIELD_DATABASEFIELD );
+    maFieldModel.mbServerField     = getFlag( nFlags, BIFF12_PCDFIELD_SERVERFIELD );
+    maFieldModel.mbUniqueList      = !getFlag( nFlags, BIFF12_PCDFIELD_NOUNIQUEITEMS );
+    maFieldModel.mbMemberPropField = getFlag( nFlags, BIFF12_PCDFIELD_MEMBERPROPFIELD );
 }
 
-void PivotCacheField::importPCDFSharedItems( RecordInputStream& rStrm )
+void PivotCacheField::importPCDFSharedItems( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
     rStrm >> nFlags;
-    maSharedItemsModel.mbHasSemiMixed = getFlag( nFlags, OOBIN_PCDFSITEMS_HASSEMIMIXED );
-    maSharedItemsModel.mbHasNonDate   = getFlag( nFlags, OOBIN_PCDFSITEMS_HASNONDATE );
-    maSharedItemsModel.mbHasDate      = getFlag( nFlags, OOBIN_PCDFSITEMS_HASDATE );
-    maSharedItemsModel.mbHasString    = getFlag( nFlags, OOBIN_PCDFSITEMS_HASSTRING );
-    maSharedItemsModel.mbHasBlank     = getFlag( nFlags, OOBIN_PCDFSITEMS_HASBLANK );
-    maSharedItemsModel.mbHasMixed     = getFlag( nFlags, OOBIN_PCDFSITEMS_HASMIXED );
-    maSharedItemsModel.mbIsNumeric    = getFlag( nFlags, OOBIN_PCDFSITEMS_ISNUMERIC );
-    maSharedItemsModel.mbIsInteger    = getFlag( nFlags, OOBIN_PCDFSITEMS_ISINTEGER );
-    maSharedItemsModel.mbHasLongText  = getFlag( nFlags, OOBIN_PCDFSITEMS_HASLONGTEXT );
+    maSharedItemsModel.mbHasSemiMixed = getFlag( nFlags, BIFF12_PCDFSITEMS_HASSEMIMIXED );
+    maSharedItemsModel.mbHasNonDate   = getFlag( nFlags, BIFF12_PCDFSITEMS_HASNONDATE );
+    maSharedItemsModel.mbHasDate      = getFlag( nFlags, BIFF12_PCDFSITEMS_HASDATE );
+    maSharedItemsModel.mbHasString    = getFlag( nFlags, BIFF12_PCDFSITEMS_HASSTRING );
+    maSharedItemsModel.mbHasBlank     = getFlag( nFlags, BIFF12_PCDFSITEMS_HASBLANK );
+    maSharedItemsModel.mbHasMixed     = getFlag( nFlags, BIFF12_PCDFSITEMS_HASMIXED );
+    maSharedItemsModel.mbIsNumeric    = getFlag( nFlags, BIFF12_PCDFSITEMS_ISNUMERIC );
+    maSharedItemsModel.mbIsInteger    = getFlag( nFlags, BIFF12_PCDFSITEMS_ISINTEGER );
+    maSharedItemsModel.mbHasLongText  = getFlag( nFlags, BIFF12_PCDFSITEMS_HASLONGTEXT );
 }
 
-void PivotCacheField::importPCDFSharedItem( sal_Int32 nRecId, RecordInputStream& rStrm )
+void PivotCacheField::importPCDFSharedItem( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     maSharedItems.importItem( nRecId, rStrm );
 }
 
-void PivotCacheField::importPCDFieldGroup( RecordInputStream& rStrm )
+void PivotCacheField::importPCDFieldGroup( SequenceInputStream& rStrm )
 {
     rStrm >> maFieldGroupModel.mnParentField >> maFieldGroupModel.mnBaseField;
 }
 
-void PivotCacheField::importPCDFRangePr( RecordInputStream& rStrm )
+void PivotCacheField::importPCDFRangePr( SequenceInputStream& rStrm )
 {
     sal_uInt8 nGroupBy, nFlags;
     rStrm >> nGroupBy >> nFlags >> maFieldGroupModel.mfStartValue >> maFieldGroupModel.mfEndValue >> maFieldGroupModel.mfInterval;
 
-    maFieldGroupModel.setBinGroupBy( nGroupBy );
+    maFieldGroupModel.setBiffGroupBy( nGroupBy );
     maFieldGroupModel.mbRangeGroup   = true;
-    maFieldGroupModel.mbDateGroup    = getFlag( nFlags, OOBIN_PCDFRANGEPR_DATEGROUP );
-    maFieldGroupModel.mbAutoStart    = getFlag( nFlags, OOBIN_PCDFRANGEPR_AUTOSTART );
-    maFieldGroupModel.mbAutoEnd      = getFlag( nFlags, OOBIN_PCDFRANGEPR_AUTOEND );
+    maFieldGroupModel.mbDateGroup    = getFlag( nFlags, BIFF12_PCDFRANGEPR_DATEGROUP );
+    maFieldGroupModel.mbAutoStart    = getFlag( nFlags, BIFF12_PCDFRANGEPR_AUTOSTART );
+    maFieldGroupModel.mbAutoEnd      = getFlag( nFlags, BIFF12_PCDFRANGEPR_AUTOEND );
 
     OSL_ENSURE( maFieldGroupModel.mbDateGroup == (maFieldGroupModel.mnGroupBy != XML_range), "PivotCacheField::importPCDFRangePr - wrong date flag" );
     if( maFieldGroupModel.mbDateGroup )
@@ -628,14 +624,14 @@ void PivotCacheField::importPCDFRangePr( RecordInputStream& rStrm )
     }
 }
 
-void PivotCacheField::importPCDFDiscretePrItem( sal_Int32 nRecId, RecordInputStream& rStrm )
+void PivotCacheField::importPCDFDiscretePrItem( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
-    OSL_ENSURE( nRecId == OOBIN_ID_PCITEM_INDEX, "PivotCacheField::importPCDFDiscretePrItem - unexpected record" );
-    if( nRecId == OOBIN_ID_PCITEM_INDEX )
+    OSL_ENSURE( nRecId == BIFF12_ID_PCITEM_INDEX, "PivotCacheField::importPCDFDiscretePrItem - unexpected record" );
+    if( nRecId == BIFF12_ID_PCITEM_INDEX )
         maDiscreteItems.push_back( rStrm.readInt32() );
 }
 
-void PivotCacheField::importPCDFGroupItem( sal_Int32 nRecId, RecordInputStream& rStrm )
+void PivotCacheField::importPCDFGroupItem( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     maGroupItems.importItem( nRecId, rStrm );
 }
@@ -697,7 +693,7 @@ void PivotCacheField::importPCDFRangePr( BiffInputStream& rStrm )
 {
     sal_uInt16 nFlags;
     rStrm >> nFlags;
-    maFieldGroupModel.setBinGroupBy( extractValue< sal_uInt8 >( nFlags, 2, 3 ) );
+    maFieldGroupModel.setBiffGroupBy( extractValue< sal_uInt8 >( nFlags, 2, 3 ) );
     maFieldGroupModel.mbRangeGroup = true;
     maFieldGroupModel.mbDateGroup  = maFieldGroupModel.mnGroupBy != XML_range;
     maFieldGroupModel.mbAutoStart  = getFlag( nFlags, BIFF_PCDFRANGEPR_AUTOSTART );
@@ -838,7 +834,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
     typedef ::std::vector< GroupItemList > GroupItemMap;
     GroupItemMap aItemMap( maGroupItems.size() );
     for( IndexVector::const_iterator aBeg = maDiscreteItems.begin(), aIt = aBeg, aEnd = maDiscreteItems.end(); aIt != aEnd; ++aIt )
-        if( GroupItemList* pItems = ContainerHelper::getVectorElement( aItemMap, *aIt ) )
+        if( GroupItemList* pItems = ContainerHelper::getVectorElementAccess( aItemMap, *aIt ) )
             pItems->push_back( static_cast< sal_Int32 >( aIt - aBeg ) );
 
     // process all groups
@@ -925,7 +921,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                     }
                     // replace original item names in passed vector with group name
                     for( GroupItemList::iterator aIt2 = aIt->begin(), aEnd2 = aIt->end(); aIt2 != aEnd2; ++aIt2 )
-                        if( PivotCacheGroupItem* pName = ContainerHelper::getVectorElement( orItemNames, *aIt2 ) )
+                        if( PivotCacheGroupItem* pName = ContainerHelper::getVectorElementAccess( orItemNames, *aIt2 ) )
                             pName->maGroupName = aGroupName;
                 }
             }
@@ -954,7 +950,7 @@ void PivotCacheField::writeSourceDataCell( WorksheetHelper& rSheetHelper, sal_In
         writeItemToSourceDataCell( rSheetHelper, nCol, nRow, rItem );
 }
 
-void PivotCacheField::importPCRecordItem( RecordInputStream& rStrm, WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const
+void PivotCacheField::importPCRecordItem( SequenceInputStream& rStrm, WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const
 {
     if( hasSharedItems() )
     {
@@ -1089,29 +1085,29 @@ void PivotCache::importWorksheetSource( const AttributeList& rAttribs, const Rel
     getAddressConverter().convertToCellRangeUnchecked( maSheetSrcModel.maRange, rAttribs.getString( XML_ref, OUString() ), 0 );
 }
 
-void PivotCache::importPCDefinition( RecordInputStream& rStrm )
+void PivotCache::importPCDefinition( SequenceInputStream& rStrm )
 {
     sal_uInt8 nFlags1, nFlags2;
     rStrm.skip( 3 );    // create/refresh version id's
     rStrm >> nFlags1 >> maDefModel.mnMissItemsLimit >> maDefModel.mfRefreshedDate >> nFlags2 >> maDefModel.mnRecords;
-    if( getFlag( nFlags2, OOBIN_PCDEFINITION_HASUSERNAME ) )
+    if( getFlag( nFlags2, BIFF12_PCDEFINITION_HASUSERNAME ) )
         rStrm >> maDefModel.maRefreshedBy;
-    if( getFlag( nFlags2, OOBIN_PCDEFINITION_HASRELID ) )
+    if( getFlag( nFlags2, BIFF12_PCDEFINITION_HASRELID ) )
         rStrm >> maDefModel.maRelId;
 
-    maDefModel.mbInvalid          = getFlag( nFlags1, OOBIN_PCDEFINITION_INVALID );
-    maDefModel.mbSaveData         = getFlag( nFlags1, OOBIN_PCDEFINITION_SAVEDATA );
-    maDefModel.mbRefreshOnLoad    = getFlag( nFlags1, OOBIN_PCDEFINITION_REFRESHONLOAD );
-    maDefModel.mbOptimizeMemory   = getFlag( nFlags1, OOBIN_PCDEFINITION_OPTIMIZEMEMORY );
-    maDefModel.mbEnableRefresh    = getFlag( nFlags1, OOBIN_PCDEFINITION_ENABLEREFRESH );
-    maDefModel.mbBackgroundQuery  = getFlag( nFlags1, OOBIN_PCDEFINITION_BACKGROUNDQUERY );
-    maDefModel.mbUpgradeOnRefresh = getFlag( nFlags1, OOBIN_PCDEFINITION_UPGRADEONREFR );
-    maDefModel.mbTupleCache       = getFlag( nFlags1, OOBIN_PCDEFINITION_TUPELCACHE );
-    maDefModel.mbSupportSubquery  = getFlag( nFlags2, OOBIN_PCDEFINITION_SUPPORTSUBQUERY );
-    maDefModel.mbSupportDrill     = getFlag( nFlags2, OOBIN_PCDEFINITION_SUPPORTDRILL );
+    maDefModel.mbInvalid          = getFlag( nFlags1, BIFF12_PCDEFINITION_INVALID );
+    maDefModel.mbSaveData         = getFlag( nFlags1, BIFF12_PCDEFINITION_SAVEDATA );
+    maDefModel.mbRefreshOnLoad    = getFlag( nFlags1, BIFF12_PCDEFINITION_REFRESHONLOAD );
+    maDefModel.mbOptimizeMemory   = getFlag( nFlags1, BIFF12_PCDEFINITION_OPTIMIZEMEMORY );
+    maDefModel.mbEnableRefresh    = getFlag( nFlags1, BIFF12_PCDEFINITION_ENABLEREFRESH );
+    maDefModel.mbBackgroundQuery  = getFlag( nFlags1, BIFF12_PCDEFINITION_BACKGROUNDQUERY );
+    maDefModel.mbUpgradeOnRefresh = getFlag( nFlags1, BIFF12_PCDEFINITION_UPGRADEONREFR );
+    maDefModel.mbTupleCache       = getFlag( nFlags1, BIFF12_PCDEFINITION_TUPELCACHE );
+    maDefModel.mbSupportSubquery  = getFlag( nFlags2, BIFF12_PCDEFINITION_SUPPORTSUBQUERY );
+    maDefModel.mbSupportDrill     = getFlag( nFlags2, BIFF12_PCDEFINITION_SUPPORTDRILL );
 }
 
-void PivotCache::importPCDSource( RecordInputStream& rStrm )
+void PivotCache::importPCDSource( SequenceInputStream& rStrm )
 {
     sal_Int32 nSourceType;
     rStrm >> nSourceType >> maSourceModel.mnConnectionId;
@@ -1119,13 +1115,13 @@ void PivotCache::importPCDSource( RecordInputStream& rStrm )
     maSourceModel.mnSourceType = STATIC_ARRAY_SELECT( spnSourceTypes, nSourceType, XML_TOKEN_INVALID );
 }
 
-void PivotCache::importPCDSheetSource( RecordInputStream& rStrm, const Relations& rRelations )
+void PivotCache::importPCDSheetSource( SequenceInputStream& rStrm, const Relations& rRelations )
 {
     sal_uInt8 nIsDefName, nIsBuiltinName, nFlags;
     rStrm >> nIsDefName >> nIsBuiltinName >> nFlags;
-    if( getFlag( nFlags, OOBIN_PCDWBSOURCE_HASSHEET ) )
+    if( getFlag( nFlags, BIFF12_PCDWBSOURCE_HASSHEET ) )
         rStrm >> maSheetSrcModel.maSheet;
-    if( getFlag( nFlags, OOBIN_PCDWBSOURCE_HASRELID ) )
+    if( getFlag( nFlags, BIFF12_PCDWBSOURCE_HASRELID ) )
         rStrm >> maSheetSrcModel.maRelId;
 
     // read cell range or defined name
@@ -1269,7 +1265,7 @@ const PivotCacheField* PivotCache::getCacheField( sal_Int32 nFieldIdx ) const
 
 sal_Int32 PivotCache::getCacheDatabaseIndex( sal_Int32 nFieldIdx ) const
 {
-    return ContainerHelper::getVectorElement< sal_Int32 >( maDatabaseIndexes, nFieldIdx, -1 );
+    return ContainerHelper::getVectorElement( maDatabaseIndexes, nFieldIdx, -1 );
 }
 
 void PivotCache::writeSourceHeaderCells( WorksheetHelper& rSheetHelper ) const
@@ -1291,7 +1287,7 @@ void PivotCache::writeSourceDataCell( WorksheetHelper& rSheetHelper, sal_Int32 n
         pCacheField->writeSourceDataCell( rSheetHelper, maSheetSrcModel.maRange.StartColumn + nCol, maSheetSrcModel.maRange.StartRow + nRow, rItem );
 }
 
-void PivotCache::importPCRecord( RecordInputStream& rStrm, WorksheetHelper& rSheetHelper, sal_Int32 nRow ) const
+void PivotCache::importPCRecord( SequenceInputStream& rStrm, WorksheetHelper& rSheetHelper, sal_Int32 nRow ) const
 {
     OSL_ENSURE( (0 < nRow) && (nRow <= maSheetSrcModel.maRange.EndRow - maSheetSrcModel.maRange.StartRow), "PivotCache::importPCRecord - invalid row index" );
     sal_Int32 nCol = maSheetSrcModel.maRange.StartColumn;
@@ -1412,7 +1408,7 @@ void PivotCache::finalizeExternalSheetSource()
 {
     /*  If pivot cache is based on external sheet data, try to restore sheet
         data from cache records. No support for external defined names or tables,
-        sheet name and path to cache records fragment (OOX only) are required. */
+        sheet name and path to cache records fragment (OOXML only) are required. */
     bool bHasRelation = (getFilterType() == FILTER_BIFF) || (maDefModel.maRelId.getLength() > 0);
     if( bHasRelation && (maSheetSrcModel.maDefName.getLength() == 0) && (maSheetSrcModel.maSheet.getLength() > 0) )
         prepareSourceDataSheet();
@@ -1472,6 +1468,29 @@ PivotCache* PivotCacheBuffer::importPivotCacheFragment( sal_Int32 nCacheId )
 {
     switch( getFilterType() )
     {
+        /*  OOXML/BIFF12 filter: On first call for the cache ID, the pivot
+            cache object is created and inserted into maCaches. Then, the cache
+            definition fragment is read and the cache is returned. On
+            subsequent calls, the created cache will be found in maCaches and
+            returned immediately. */
+        case FILTER_OOXML:
+        {
+            // try to find an imported pivot cache
+            if( PivotCache* pCache = maCaches.get( nCacheId ).get() )
+                return pCache;
+
+            // check if a fragment path exists for the passed cache identifier
+            FragmentPathMap::iterator aIt = maFragmentPaths.find( nCacheId );
+            if( aIt == maFragmentPaths.end() )
+                return 0;
+
+            /*  Import the cache fragment. This may create a dummy data sheet
+                for external sheet sources. */
+            PivotCache& rCache = createPivotCache( nCacheId );
+            importOoxFragment( new PivotCacheDefinitionFragment( *this, aIt->second, rCache ) );
+            return &rCache;
+        }
+
         /*  BIFF filter: Pivot table provides 0-based index into list of pivot
             cache source links (PIVOTCACHE/PCDSOURCE/... record blocks in
             workbook stream). First, this index has to be resolved to the cache
@@ -1486,7 +1505,7 @@ PivotCache* PivotCacheBuffer::importPivotCacheFragment( sal_Int32 nCacheId )
         {
             /*  Resolve cache index to cache identifier and try to find pivot
                 cache. Cache must exist already for a valid cache index. */
-            nCacheId = ContainerHelper::getVectorElement< sal_Int32 >( maCacheIds, nCacheId, -1 );
+            nCacheId = ContainerHelper::getVectorElement( maCacheIds, nCacheId, -1 );
             PivotCache* pCache = maCaches.get( nCacheId ).get();
             if( !pCache )
                 return 0;
@@ -1503,29 +1522,6 @@ PivotCache* PivotCacheBuffer::importPivotCacheFragment( sal_Int32 nCacheId )
                 maFragmentPaths.erase( aIt );
             }
             return pCache;
-        }
-
-        /*  OOX/OOBIN filter: On first call for the cache ID, the pivot cache
-            object is created and inserted into maCaches. Then, the cache
-            definition fragment is read and the cache is returned. On
-            subsequent calls, the created cache will be found in maCaches and
-            returned immediately. */
-        case FILTER_OOX:
-        {
-            // try to find an imported pivot cache
-            if( PivotCache* pCache = maCaches.get( nCacheId ).get() )
-                return pCache;
-
-            // check if a fragment path exists for the passed cache identifier
-            FragmentPathMap::iterator aIt = maFragmentPaths.find( nCacheId );
-            if( aIt == maFragmentPaths.end() )
-                return 0;
-
-            /*  Import the cache fragment. This may create a dummy data sheet
-                for external sheet sources. */
-            PivotCache& rCache = createPivotCache( nCacheId );
-            importOoxFragment( new OoxPivotCacheDefinitionFragment( *this, aIt->second, rCache ) );
-            return &rCache;
         }
 
         case FILTER_UNKNOWN:

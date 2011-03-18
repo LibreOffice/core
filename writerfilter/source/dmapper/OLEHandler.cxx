@@ -45,6 +45,8 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include "dmapperLoggers.hxx"
+
 namespace writerfilter {
 namespace dmapper {
 
@@ -52,8 +54,9 @@ using namespace ::com::sun::star;
 
 
 OLEHandler::OLEHandler() :
-    m_nDxaOrig(0),
-    m_nDyaOrig(0),
+LoggedProperties(dmapper_logger, "OLEHandler"),
+m_nDxaOrig(0),
+m_nDyaOrig(0),
     m_nWrapMode(1)
 {
 }
@@ -64,7 +67,7 @@ OLEHandler::~OLEHandler()
 }
 
 
-void OLEHandler::attribute(Id rName, Value & rVal)
+void OLEHandler::lcl_attribute(Id rName, Value & rVal)
 {
     rtl::OUString sStringValue = rVal.getString();
     (void)rName;
@@ -135,7 +138,7 @@ void OLEHandler::attribute(Id rName, Value & rVal)
 }
 
 
-void OLEHandler::sprm(Sprm & rSprm)
+void OLEHandler::lcl_sprm(Sprm & rSprm)
 {
     sal_uInt32 nSprmId = rSprm.getId();
     switch( nSprmId )

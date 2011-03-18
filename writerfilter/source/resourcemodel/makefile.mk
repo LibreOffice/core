@@ -44,14 +44,17 @@ NOOPTFILES= \
     $(SLO)$/qnametostr.obj
 
 SLOFILES= \
-    $(SLO)$/qnametostr.obj \
-    $(SLO)$/sprmcodetostr.obj \
-    $(SLO)$/resourcemodel.obj \
-    $(SLO)$/util.obj \
-    $(SLO)$/TagLogger.obj \
+    $(SLO)$/Fraction.obj \
+    $(SLO)$/LoggedResources.obj \
+    $(SLO)$/Protocol.obj \
     $(SLO)$/ResourceModelHelper.obj \
+    $(SLO)$/TagLogger.obj \
     $(SLO)$/WW8Analyzer.obj \
-    $(SLO)$/Protocol.obj
+    $(SLO)$/XPathLogger.obj \
+    $(SLO)$/qnametostr.obj \
+    $(SLO)$/resourcemodel.obj \
+    $(SLO)$/sprmcodetostr.obj \
+    $(SLO)$/util.obj \
 
 SHL1TARGET=$(TARGET)
 
@@ -70,9 +73,9 @@ SHL1STDLIBS=$(SALLIB)\
     $(CPPUHELPERLIB) \
     $(COMPHELPERLIB)
 
-.IF "$(DBG_LEVEL)">="2"
+# .IF "$(DBG_LEVEL)">="2"
 SHL1STDLIBS+= $(LIBXML2LIB)
-.ENDIF
+# .ENDIF
 
 SHL1IMPLIB=i$(SHL1TARGET)
 SHL1USE_EXPORTS=name

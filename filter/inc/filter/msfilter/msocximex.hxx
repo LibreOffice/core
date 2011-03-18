@@ -99,14 +99,14 @@ public:
     sal_Bool ReadOCXStream( SotStorageRef& rSrc1,
         com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > *pShapeRef=0,
-        BOOL bFloatingCtrl=FALSE );
+        sal_Bool bFloatingCtrl=sal_False );
 
 
     //Excel has a nasty kludged mechanism for this, read
     //the comments in the source to follow it
     sal_Bool ReadOCXExcelKludgeStream(SotStorageStreamRef& rSrc1,
         com::sun::star::uno::Reference <
-        com::sun::star::drawing::XShape > *pShapeRef,BOOL bFloatingCtrl);
+        com::sun::star::drawing::XShape > *pShapeRef,sal_Bool bFloatingCtrl);
 
 
     //Writes the given Uno Control into the given storage
@@ -137,7 +137,7 @@ public:
         const com::sun::star::awt::Size& /*rSize*/,
         com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape >* /*pShape*/,
-        BOOL /*bFloatingCtrl*/ ) {return sal_False;}
+        sal_Bool /*bFloatingCtrl*/ ) {return sal_False;}
 
     /*begin: Backwards compatability with office 95 import, modify later*/
     const com::sun::star::uno::Reference<
@@ -179,7 +179,7 @@ class OCX_FontData
 public:
     OCX_FontData() : nFontNameLen(0), fBold(0), fItalic(0), fUnderline(0),
         fStrike(0), nFontSize(12), nJustification(1), pFontName(0),
-        bHasAlign(FALSE), bHasFont(TRUE) {}
+        bHasAlign(sal_False), bHasFont(sal_True) {}
     ~OCX_FontData()  {
         if (pFontName)
         delete [] pFontName;
@@ -230,7 +230,7 @@ class MSFILTER_DLLPUBLIC OCX_Control
 public:
     OCX_Control(UniString sN, OCX_Control* parent = NULL ) : nWidth( 0 ), nHeight( 0 ), mnLeft(0), mnTop(0),
         mnStep(0), mnBackColor(0x8000000FL), mnForeColor(0), mnTabPos(0), mbVisible(true), sName(sN), pDocSh(0),
-        bSetInDialog(FALSE), mpParent( parent ) {}
+        bSetInDialog(sal_False), mpParent( parent ) {}
     sal_Bool FullRead(SotStorageStream *pS)
     {
         return Read(pS) && ReadFontData(pS);
@@ -698,7 +698,7 @@ public:
         msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlCheckBoxModel" ));
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
     }
 
     using OCX_ModernControl::Import; // to not hide the other two import methods
@@ -725,7 +725,7 @@ public:
         msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.RadioButton" ));
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
     }
 
     using OCX_ModernControl::Import; // to not hide the other two import methods
@@ -753,7 +753,7 @@ public:
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         nBorderColor = 0x80000006L;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
     }
 
     using OCX_ModernControl::Import; // to not hide the other two import methods
@@ -800,7 +800,7 @@ public:
 
         mnBackColor = 0x8000000F;
         mnForeColor = 0x80000012;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
         aFontData.nJustification = 3;   // centered by default
     }
     static OCX_Control *Create() { return new OCX_ToggleButton;}
@@ -827,7 +827,7 @@ public:
         mnBackColor = 0x80000005;
         mnForeColor = 0x80000008;
         nBorderColor = 0x80000006;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
     }
     static OCX_Control *Create() { return new OCX_ComboBox;}
     using OCX_ModernControl::Import; // to not hide the other two import methods
@@ -853,7 +853,7 @@ public:
         mnBackColor = 0x80000005;
         mnForeColor = 0x80000008;
         nBorderColor = 0x80000006;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
     }
     static OCX_Control *Create() { return new OCX_ListBox;}
     using OCX_ModernControl::Import; // to not hide the other two import methods
@@ -952,8 +952,8 @@ class OCX_ImageButton: public OCX_CommandButton
 {
 public:
     OCX_ImageButton() {
-        aFontData.SetHasAlign(FALSE);
-        aFontData.SetHasFont(FALSE);
+        aFontData.SetHasAlign(sal_False);
+        aFontData.SetHasFont(sal_False);
     }
     static OCX_Control *Create() { return new OCX_ImageButton;}
     sal_Bool Export(SotStorageRef &rObj,
@@ -997,7 +997,7 @@ public:
         msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFixedTextModel" ));
                 mnForeColor = 0x80000008;
                 mnBackColor = 0x80000005;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
     }
 
     ~OCX_Label() {
@@ -1187,7 +1187,7 @@ public:
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         nBorderColor = 0x80000006L;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
     }
 
     using OCX_ModernControl::Import; // to not hide the other two import methods

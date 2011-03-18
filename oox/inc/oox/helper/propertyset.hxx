@@ -31,6 +31,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include "oox/token/properties.hxx"
 
 namespace oox {
 
@@ -127,10 +128,6 @@ public:
     /** Puts the passed property map into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropertyMap  The property map. */
     void                setProperties( const PropertyMap& rPropertyMap );
-
-#if OSL_DEBUG_LEVEL > 0
-    void dump();
-#endif
 
     // ------------------------------------------------------------------------
 private:

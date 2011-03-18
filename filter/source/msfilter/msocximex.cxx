@@ -1166,7 +1166,7 @@ class ContainerRecReader
             {
                 // Skip ActiveX Controls we can't import
                 SotStorageStreamRef oStream = pContainerControl->getContainedControlsStream();
-                ULONG nStrmPos = oStream->Tell();
+                sal_uLong nStrmPos = oStream->Tell();
                 oStream->Seek( nStrmPos + rec.nSubStreamLen );
             }
             else
@@ -2002,7 +2002,7 @@ sal_Bool OCX_OptionButton::Import(com::sun::star::uno::Reference<
 
     if (pValue)
     {
-        INT16 nTmp = pValue[0]-0x30;
+        sal_Int16 nTmp = pValue[0]-0x30;
         aTmp <<= nTmp;
         if (!bSetInDialog)
             rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultState"), aTmp);
@@ -2693,7 +2693,7 @@ sal_Bool OCX_ToggleButton::Import(com::sun::star::uno::Reference<
 
     if (pValue)
     {
-        INT16 nTmp=pValue[0]-0x30;
+        sal_Int16 nTmp=pValue[0]-0x30;
         //aTmp <<= nTmp == 1;
         aTmp <<= nTmp;
         rPropSet->setPropertyValue( WW8_ASCII2STR("State"), aTmp);
@@ -3808,7 +3808,7 @@ OCX_MultiPage::OCX_MultiPage( SotStorageRef& parent,
     mnForeColor = 0x80000012L,
     mnBackColor = 0x8000000FL;
     bSetInDialog = true;// UserForm control only
-    aFontData.SetHasAlign(TRUE);
+    aFontData.SetHasAlign(sal_True);
     nActiveTab = 0;
     // open up the 'x' stream
     mXStream = mContainerStorage->OpenSotStream(
@@ -3939,7 +3939,7 @@ OCX_Page::OCX_Page( SotStorageRef& parent,
     mnForeColor = 0x80000012,
     mnBackColor = 0x8000000F,
     bSetInDialog = true;// UserForm control only
-    aFontData.SetHasAlign(TRUE);
+    aFontData.SetHasAlign(sal_True);
 }
 
 
@@ -3977,7 +3977,7 @@ OCX_Frame::OCX_Frame( SotStorageRef& parent,
     mnForeColor = 0x80000012;
     mnBackColor = 0x8000000F;
     bSetInDialog = true;// UserForm control only
-    aFontData.SetHasAlign(TRUE);
+    aFontData.SetHasAlign(sal_True);
 }
 
 
@@ -4370,7 +4370,7 @@ OCX_Control * SvxMSConvertOCXControls::OCX_Factory(
 
 
 sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
-        uno::Reference < drawing::XShape > *pShapeRef,BOOL bFloatingCtrl)
+        uno::Reference < drawing::XShape > *pShapeRef,sal_Bool bFloatingCtrl)
 {
 
     SvStorageStreamRef xCrash = rSrc1->OpenSotStream( WW8_ASCII2STR("contents") );
@@ -4422,7 +4422,7 @@ sal_Bool SvxMSConvertOCXControls::ReadOCXStream( SvStorageRef& rSrc1,
 
 sal_Bool SvxMSConvertOCXControls::ReadOCXExcelKludgeStream(
     SvStorageStreamRef& rSrc1, uno::Reference < drawing::XShape > *
-    pShapeRef,BOOL bFloatingCtrl)
+    pShapeRef,sal_Bool bFloatingCtrl)
 {
     sal_Bool bRet=sal_False;
     /*Get Class Id of this object, see if it is one of the types
@@ -4586,7 +4586,7 @@ sal_Bool OCX_CheckBox::Import(com::sun::star::uno::Reference<
 
     if (pValue)
     {
-        INT16 nTmp=pValue[0]-0x30;
+        sal_Int16 nTmp=pValue[0]-0x30;
         aTmp <<= nTmp;
         if ( !bSetInDialog )
             rPropSet->setPropertyValue( WW8_ASCII2STR("DefaultState"), aTmp);
@@ -4829,7 +4829,7 @@ sal_Bool OCX_FontData::Read(SvStorageStream *pS)
         lclReadCharArray( *pS, pFontName, nFontNameLen, pS->Tell() - nStart);
 
     ReadAlign(pS, pS->Tell() - nStart, 4);
-    return(TRUE);
+    return(sal_True);
 }
 
 void OCX_FontData::Import(uno::Reference< beans::XPropertySet > &rPropSet)
@@ -5290,7 +5290,7 @@ sal_Bool OCX_TabStrip::ReadFontData(SotStorageStream* /* pS */)
 
 sal_Bool OCX_Image::Read(SotStorageStream *pS)
 {
-    ULONG nStart = pS->Tell();
+    sal_uLong nStart = pS->Tell();
     *pS >> nIdentifier;
     DBG_ASSERT(nStandardId==nIdentifier,
         "A control that has a different identifier");
@@ -5804,7 +5804,7 @@ void OCX_SpinButton::GetBoolProperty(
 sal_Bool OCX_SpinButton::WriteData( SvStream& rStrm ) const
 {
     sal_Bool bRet = sal_True;
-    ULONG nStartPos = rStrm.Tell();
+    sal_uLong nStartPos = rStrm.Tell();
 
     rStrm << sal_Int32( 0 ) << mnBlockFlags;
 
@@ -6061,11 +6061,11 @@ sal_Bool OCX_ProgressBar::Import(uno::Reference< beans::XPropertySet > &rPropSet
 }
 
 // ============================================================================
-OCX_ParentControl::OCX_ParentControl( SotStorageRef& parent, const OUString& storageName, const OUString& sN, const ::uno::Reference< container::XNameContainer >  &rParent, OCX_Control* pParent ) : OCX_Control(sN, pParent),  mxParent(rParent), nNextAvailableID(0), nBooleanProperties(0), nGroupCnt(0), nZoom(0), fEnabled(1), fLocked(0), fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0), nVertPos(1), nHorzPos(7), nBorderColor(0x80000012), nShapeCookie(0), nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nMousePointer(0), nSpecialEffect(0), nPicture(0), nPictureAlignment(2), nPictureSizeMode(0), bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0), nScrollWidth(0), nScrollHeight(0), nScrollLeft(0), nScrollTop(0), nIconLen(0), pIcon(0), nPictureLen(0)
+OCX_ParentControl::OCX_ParentControl( SotStorageRef& parent, const OUString& storageName, const OUString& sN, const ::uno::Reference< container::XNameContainer >  &rParent, OCX_Control* pParent ) : OCX_Control(sN, pParent),  mxParent(rParent), nNextAvailableID(0), nBooleanProperties(0), nGroupCnt(0), nZoom(0), fEnabled(1), fLocked(0), fBackStyle(1), fWordWrap(1), fAutoSize(0), nCaptionLen(0), nVertPos(1), nHorzPos(7), nBorderColor(0x80000012), nShapeCookie(0), nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nMousePointer(0), nSpecialEffect(0), nPicture(0), nPictureAlignment(2), nPictureSizeMode(0), bPictureTiling(sal_False), nAccelerator(0), nIcon(0), pCaption(0), nScrollWidth(0), nScrollHeight(0), nScrollLeft(0), nScrollTop(0), nIconLen(0), pIcon(0), nPictureLen(0)
 {
     mnForeColor = 0x80000012;
     mnBackColor = 0x8000000F;
-    aFontData.SetHasAlign(TRUE);
+    aFontData.SetHasAlign(sal_True);
     mContainerStorage = parent->OpenSotStorage(storageName,
         STREAM_READWRITE |
         STREAM_NOCREATE |
@@ -6227,7 +6227,7 @@ void OCX_ParentControl::ProcessControl(OCX_Control* pControl,SvStorageStream* /*
         // #117490# DR: container records provide size of substream, use it here...
 
         // remember initial position to set correct stream position
-        ULONG nStrmPos = oStream->Tell();
+        sal_uLong nStrmPos = oStream->Tell();
         // import control, may return with invalid stream position
         pControl->FullRead(oStream);
         // set stream to position behind substream of this control

@@ -41,8 +41,6 @@
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
 #include "oox/drawingml/connectorshapecontext.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace oox::core;
@@ -73,7 +71,7 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
 
     switch( aElementToken )
     {
-    case NMSP_PPT|XML_cNvPr:
+    case PPT_TOKEN( cNvPr ):
     {
         AttributeList aAttribs( xAttribs );
         mpGroupShapePtr->setHidden( aAttribs.getBool( XML_hidden, false ) );
@@ -81,37 +79,37 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
         mpGroupShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
         break;
     }
-    case NMSP_PPT|XML_ph:
+    case PPT_TOKEN( ph ):
         mpGroupShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, FastToken::DONTKNOW ) );
         if( xAttribs->hasAttribute( XML_idx ) )
             mpGroupShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
         break;
     // nvSpPr CT_ShapeNonVisual end
 
-    case NMSP_PPT|XML_grpSpPr:
+    case PPT_TOKEN( grpSpPr ):
         xRet = new oox::drawingml::ShapePropertiesContext( *this, *mpGroupShapePtr );
         break;
-    case NMSP_PPT|XML_spPr:
+    case PPT_TOKEN( spPr ):
         xRet = new oox::drawingml::ShapePropertiesContext( *this, *mpGroupShapePtr );
         break;
 /*
-    case NMSP_PPT|XML_style:
+    case PPT_TOKEN( style ):
         xRet = new ShapeStyleContext( getParser() );
         break;
 */
-    case NMSP_PPT|XML_cxnSp:        // connector shape
+    case PPT_TOKEN( cxnSp ):        // connector shape
         xRet.set( new oox::drawingml::ConnectorShapeContext( *this, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.ConnectorShape" ) ) ) );
         break;
-    case NMSP_PPT|XML_grpSp:        // group shape
+    case PPT_TOKEN( grpSp ):        // group shape
         xRet.set( new PPTShapeGroupContext( *this, mpSlidePersistPtr, meShapeLocation, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) ) ) );
         break;
-    case NMSP_PPT|XML_sp:           // Shape
+    case PPT_TOKEN( sp ):           // Shape
         xRet.set( new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.CustomShape" ) ) ) );
         break;
-    case NMSP_PPT|XML_pic:          // CT_Picture
+    case PPT_TOKEN( pic ):          // CT_Picture
         xRet.set( new PPTGraphicShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr,  oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GraphicObjectShape" ) ) ) );
         break;
-    case NMSP_PPT|XML_graphicFrame: // CT_GraphicalObjectFrame
+    case PPT_TOKEN( graphicFrame ): // CT_GraphicalObjectFrame
         xRet.set( new oox::drawingml::GraphicalObjectFrameContext( *this, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.OLE2Shape" ) ), true ) );
         break;
 

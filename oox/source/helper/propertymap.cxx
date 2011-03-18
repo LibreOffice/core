@@ -27,69 +27,44 @@
  ************************************************************************/
 
 #include "oox/helper/propertymap.hxx"
-#include <osl/mutex.hxx>
-#include <cppuhelper/implbase2.hxx>
+
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
-#include "properties.hxx"
-#include "oox/token/propertylist.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::lang::IllegalArgumentException;
-using ::com::sun::star::lang::WrappedTargetException;
-using ::com::sun::star::beans::Property;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::beans::PropertyVetoException;
-using ::com::sun::star::beans::UnknownPropertyException;
-using ::com::sun::star::beans::XPropertyChangeListener;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::beans::XPropertySetInfo;
-using ::com::sun::star::beans::XVetoableChangeListener;
-using ::com::sun::star::container::XIndexReplace;
-
-#if OSL_DEBUG_LEVEL > 0
-#include <cstdio>
-#include <com/sun/star/style/LineSpacing.hpp>
-#include <com/sun/star/style/LineSpacingMode.hpp>
-#include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::uno;
-using ::rtl::OString;
-using ::com::sun::star::style::LineSpacing;
-using ::com::sun::star::text::WritingMode;
-using ::com::sun::star::drawing::TextHorizontalAdjust;
-using ::com::sun::star::drawing::TextVerticalAdjust;
-#endif
+#include <cppuhelper/implbase2.hxx>
+#include <osl/mutex.hxx>
+#include "oox/token/propertynames.hxx"
 
 namespace oox {
+using ::com::sun::star::container::XIndexReplace;
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::uno;
+using ::com::sun::star::drawing::TextHorizontalAdjust;
+using ::com::sun::star::drawing::TextVerticalAdjust;
+
+using ::rtl::OString;
+using ::rtl::OUString;
 
 // ============================================================================
 
 namespace {
 
-/** Thread-save singleton of a vector of all supported property names. */
-struct StaticPropertyList : public ::rtl::Static< PropertyList, StaticPropertyList > {};
-
-// ----------------------------------------------------------------------------
-
-typedef ::cppu::WeakImplHelper2< XPropertySet, XPropertySetInfo > GenericPropertySetImplBase;
+typedef ::cppu::WeakImplHelper2< XPropertySet, XPropertySetInfo > GenericPropertySetBase;
 
 /** This class implements a generic XPropertySet.
 
     Properties of all names and types can be set and later retrieved.
     TODO: move this to comphelper or better find an existing implementation
  */
-class GenericPropertySet : public GenericPropertySetImplBase, private ::osl::Mutex
+class GenericPropertySet : public GenericPropertySetBase, private ::osl::Mutex
 {
 public:
     explicit            GenericPropertySet();
@@ -122,7 +97,7 @@ GenericPropertySet::GenericPropertySet()
 
 GenericPropertySet::GenericPropertySet( const PropertyMap& rPropMap )
 {
-    const PropertyList& rPropNames = StaticPropertyList::get();
+    const PropertyNameVector& rPropNames = StaticPropertyNameVector::get();
     for( PropertyMap::const_iterator aIt = rPropMap.begin(), aEnd = rPropMap.end(); aIt != aEnd; ++aIt )
         maPropMap[ rPropNames[ aIt->first ] ] = aIt->second;
 }
@@ -190,7 +165,7 @@ sal_Bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& rProper
 // ============================================================================
 
 PropertyMap::PropertyMap() :
-    mpPropNames( &StaticPropertyList::get() )
+    mpPropNames( &StaticPropertyNameVector::get() ) // pointer instead reference to get compiler generated copy c'tor and operator=
 {
 }
 
@@ -201,7 +176,7 @@ PropertyMap::~PropertyMap()
 /*static*/ const OUString& PropertyMap::getPropertyName( sal_Int32 nPropId )
 {
     OSL_ENSURE( (0 <= nPropId) && (nPropId < PROP_COUNT), "PropertyMap::getPropertyName - invalid property identifier" );
-    return StaticPropertyList::get()[ nPropId ];
+    return StaticPropertyNameVector::get()[ nPropId ];
 }
 
 const Any* PropertyMap::getProperty( sal_Int32 nPropId ) const

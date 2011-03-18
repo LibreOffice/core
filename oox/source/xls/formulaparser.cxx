@@ -27,14 +27,13 @@
  ************************************************************************/
 
 #include "oox/xls/formulaparser.hxx"
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/SingleReference.hpp>
-#include "properties.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
@@ -43,23 +42,17 @@
 #include "oox/xls/tablebuffer.hxx"
 #include "oox/xls/worksheethelper.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::sheet::ComplexReference;
-using ::com::sun::star::sheet::ExternalReference;
-using ::com::sun::star::sheet::SingleReference;
-using ::com::sun::star::sheet::XFormulaParser;
-using namespace ::com::sun::star::sheet::ReferenceFlags;
-
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::sheet::ReferenceFlags;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -250,7 +243,7 @@ const ApiToken* FormulaFinalizer::processParameters(
                 if( !aParamInfoIt.isExcelOnlyParam() )
                 {
                     // replace empty second and third parameter in IF function with zeros
-                    if( (pRealFuncInfo->mnOobFuncId == OOBIN_FUNC_IF) && ((nParam == 1) || (nParam == 2)) && bIsEmpty )
+                    if( (pRealFuncInfo->mnBiff12FuncId == BIFF_FUNC_IF) && ((nParam == 1) || (nParam == 2)) && bIsEmpty )
                     {
                         maTokens.append< double >( OPCODE_PUSH, 0.0 );
                         bIsEmpty = false;
@@ -369,10 +362,10 @@ const ApiToken* FormulaFinalizer::findParameters( ParameterPosVector& rParams,
 void FormulaFinalizer::appendCalcOnlyParameter( const FunctionInfo& rFuncInfo, size_t nParam )
 {
     (void)nParam;   // prevent 'unused' warning
-    switch( rFuncInfo.mnOobFuncId )
+    switch( rFuncInfo.mnBiff12FuncId )
     {
-        case OOBIN_FUNC_FLOOR:
-        case OOBIN_FUNC_CEILING:
+        case BIFF_FUNC_FLOOR:
+        case BIFF_FUNC_CEILING:
             OSL_ENSURE( nParam == 2, "FormulaFinalizer::appendCalcOnlyParameter - unexpected parameter index" );
             maTokens.append< double >( OPCODE_PUSH, 1.0 );
             maTokens.append( OPCODE_SEP );
@@ -382,9 +375,9 @@ void FormulaFinalizer::appendCalcOnlyParameter( const FunctionInfo& rFuncInfo, s
 
 void FormulaFinalizer::appendRequiredParameters( const FunctionInfo& rFuncInfo, size_t nParamCount )
 {
-    switch( rFuncInfo.mnOobFuncId )
+    switch( rFuncInfo.mnBiff12FuncId )
     {
-        case OOBIN_FUNC_WEEKNUM:
+        case BIFF_FUNC_WEEKNUM:
             if( nParamCount == 1 )
             {
                 maTokens.append< double >( OPCODE_PUSH, 1.0 );
@@ -423,12 +416,12 @@ public:
                             FormulaContext& rContext,
                             const OUString& rFormulaString );
 
-    /** Imports and converts a OOBIN token array from the passed stream. */
-    virtual void        importOobFormula(
+    /** Imports and converts a BIFF12 token array from the passed stream. */
+    virtual void        importBiff12Formula(
                             FormulaContext& rContext,
-                            RecordInputStream& rStrm );
+                            SequenceInputStream& rStrm );
 
-    /** Imports and converts a BIFF token array from the passed stream. */
+    /** Imports and converts a BIFF2-BIFF8 token array from the passed stream. */
     virtual void        importBiffFormula(
                             FormulaContext& rContext,
                             BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize );
@@ -440,7 +433,7 @@ public:
                             const ApiTokenSequence& rTokens );
 
     /** Tries to resolve the passed ref-id to an OLE target URL. */
-    OUString            resolveOleTarget( sal_Int32 nRefId ) const;
+    OUString            resolveOleTarget( sal_Int32 nRefId, bool bUseRefSheets ) const;
 
 protected:
     typedef ::std::pair< sal_Int32, bool >  WhiteSpace;
@@ -590,7 +583,7 @@ void FormulaParserImpl::importOoxFormula( FormulaContext&, const OUString& )
     OSL_FAIL( "FormulaParserImpl::importOoxFormula - not implemented" );
 }
 
-void FormulaParserImpl::importOobFormula( FormulaContext&, RecordInputStream& )
+void FormulaParserImpl::importBiff12Formula( FormulaContext&, SequenceInputStream& )
 {
     OSL_FAIL( "FormulaParserImpl::importOobFormula - not implemented" );
 }
@@ -606,9 +599,9 @@ void FormulaParserImpl::setFormula( FormulaContext& rContext, const ApiTokenSequ
     finalizeImport( rTokens );
 }
 
-OUString FormulaParserImpl::resolveOleTarget( sal_Int32 nRefId ) const
+OUString FormulaParserImpl::resolveOleTarget( sal_Int32 nRefId, bool bUseRefSheets ) const
 {
-    const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId ).get();
+    const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId, bUseRefSheets ).get();
     OSL_ENSURE( pExtLink && (pExtLink->getLinkType() == LINKTYPE_OLE), "FormulaParserImpl::resolveOleTarget - missing or wrong link" );
     if( pExtLink && (pExtLink->getLinkType() == LINKTYPE_OLE) )
          return getBaseFilter().getAbsoluteUrl( pExtLink->getTargetUrl() );
@@ -904,7 +897,7 @@ bool FormulaParserImpl::pushValueOperand( const Type& rValue, sal_Int32 nOpCode 
 
 bool FormulaParserImpl::pushBoolOperand( bool bValue )
 {
-    if( const FunctionInfo* pFuncInfo = getFuncInfoFromOobFuncId( bValue ? OOBIN_FUNC_TRUE : OOBIN_FUNC_FALSE ) )
+    if( const FunctionInfo* pFuncInfo = getFuncInfoFromBiff12FuncId( bValue ? BIFF_FUNC_TRUE : BIFF_FUNC_FALSE ) )
         return pushFunctionOperator( pFuncInfo->mnApiOpCode, 0 );
     return pushValueOperand< double >( bValue ? 1.0 : 0.0 );
 }
@@ -1235,7 +1228,7 @@ OUString FormulaParserImpl::resolveDefinedName( sal_Int32 nTokenIndex ) const
     return OUString();
 }
 
-// OOX parser implementation ==================================================
+// OOXML/BIFF12 parser implementation =========================================
 
 class OoxFormulaParserImpl : public FormulaParserImpl
 {
@@ -1246,40 +1239,40 @@ public:
                             FormulaContext& rContext,
                             const OUString& rFormulaString );
 
-    virtual void        importOobFormula(
+    virtual void        importBiff12Formula(
                             FormulaContext& rContext,
-                            RecordInputStream& rStrm );
+                            SequenceInputStream& rStrm );
 
 private:
     // import token contents and create API formula token ---------------------
 
-    bool                importAttrToken( RecordInputStream& rStrm );
-    bool                importSpaceToken( RecordInputStream& rStrm );
-    bool                importTableToken( RecordInputStream& rStrm );
-    bool                importArrayToken( RecordInputStream& rStrm );
-    bool                importRefToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
-    bool                importAreaToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
-    bool                importRef3dToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
-    bool                importArea3dToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
-    bool                importMemAreaToken( RecordInputStream& rStrm, bool bAddData );
-    bool                importMemFuncToken( RecordInputStream& rStrm );
-    bool                importNameToken( RecordInputStream& rStrm );
-    bool                importNameXToken( RecordInputStream& rStrm );
-    bool                importFuncToken( RecordInputStream& rStrm );
-    bool                importFuncVarToken( RecordInputStream& rStrm );
-    bool                importExpToken( RecordInputStream& rStrm );
+    bool                importAttrToken( SequenceInputStream& rStrm );
+    bool                importSpaceToken( SequenceInputStream& rStrm );
+    bool                importTableToken( SequenceInputStream& rStrm );
+    bool                importArrayToken( SequenceInputStream& rStrm );
+    bool                importRefToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
+    bool                importAreaToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
+    bool                importRef3dToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
+    bool                importArea3dToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset );
+    bool                importMemAreaToken( SequenceInputStream& rStrm, bool bAddData );
+    bool                importMemFuncToken( SequenceInputStream& rStrm );
+    bool                importNameToken( SequenceInputStream& rStrm );
+    bool                importNameXToken( SequenceInputStream& rStrm );
+    bool                importFuncToken( SequenceInputStream& rStrm );
+    bool                importFuncVarToken( SequenceInputStream& rStrm );
+    bool                importExpToken( SequenceInputStream& rStrm );
 
-    LinkSheetRange      readSheetRange( RecordInputStream& rStrm );
+    LinkSheetRange      readSheetRange( SequenceInputStream& rStrm );
 
-    void                swapStreamPosition( RecordInputStream& rStrm );
-    void                skipMemAreaAddData( RecordInputStream& rStrm );
+    void                swapStreamPosition( SequenceInputStream& rStrm );
+    void                skipMemAreaAddData( SequenceInputStream& rStrm );
 
     // convert BIN token and push API operand or operator ---------------------
 
-    bool                pushOobName( sal_Int32 nNameId );
-    bool                pushOobExtName( sal_Int32 nRefId, sal_Int32 nNameId );
-    bool                pushOobFunction( sal_uInt16 nFuncId );
-    bool                pushOobFunction( sal_uInt16 nFuncId, sal_uInt8 nParamCount );
+    bool                pushBiff12Name( sal_Int32 nNameId );
+    bool                pushBiff12ExtName( sal_Int32 nRefId, sal_Int32 nNameId );
+    bool                pushBiff12Function( sal_uInt16 nFuncId );
+    bool                pushBiff12Function( sal_uInt16 nFuncId, sal_uInt8 nParamCount );
 
 private:
     ApiParserWrapper    maApiParser;        /// Wrapper for the API formula parser object.
@@ -1308,7 +1301,7 @@ void OoxFormulaParserImpl::importOoxFormula( FormulaContext& rContext, const OUS
     finalizeImport( maApiParser.parseFormula( rFormulaString, rContext.getBaseAddress() ) );
 }
 
-void OoxFormulaParserImpl::importOobFormula( FormulaContext& rContext, RecordInputStream& rStrm )
+void OoxFormulaParserImpl::importBiff12Formula( FormulaContext& rContext, SequenceInputStream& rStrm )
 {
     initializeImport( rContext );
 
@@ -1337,34 +1330,34 @@ void OoxFormulaParserImpl::importOobFormula( FormulaContext& rContext, RecordInp
             // base tokens
             switch( nBaseId )
             {
-                case BIFF_TOKID_EXP:        bOk = importExpToken( rStrm );                          break;
-                case BIFF_TOKID_ADD:        bOk = pushBinaryOperator( OPCODE_ADD );                 break;
-                case BIFF_TOKID_SUB:        bOk = pushBinaryOperator( OPCODE_SUB );                 break;
-                case BIFF_TOKID_MUL:        bOk = pushBinaryOperator( OPCODE_MULT );                break;
-                case BIFF_TOKID_DIV:        bOk = pushBinaryOperator( OPCODE_DIV );                 break;
-                case BIFF_TOKID_POWER:      bOk = pushBinaryOperator( OPCODE_POWER );               break;
-                case BIFF_TOKID_CONCAT:     bOk = pushBinaryOperator( OPCODE_CONCAT );              break;
-                case BIFF_TOKID_LT:         bOk = pushBinaryOperator( OPCODE_LESS );                break;
-                case BIFF_TOKID_LE:         bOk = pushBinaryOperator( OPCODE_LESS_EQUAL );          break;
-                case BIFF_TOKID_EQ:         bOk = pushBinaryOperator( OPCODE_EQUAL );               break;
-                case BIFF_TOKID_GE:         bOk = pushBinaryOperator( OPCODE_GREATER_EQUAL );       break;
-                case BIFF_TOKID_GT:         bOk = pushBinaryOperator( OPCODE_GREATER );             break;
-                case BIFF_TOKID_NE:         bOk = pushBinaryOperator( OPCODE_NOT_EQUAL );           break;
-                case BIFF_TOKID_ISECT:      bOk = pushBinaryOperator( OPCODE_INTERSECT );           break;
-                case BIFF_TOKID_LIST:       bOk = pushBinaryOperator( OPCODE_LIST );                break;
-                case BIFF_TOKID_RANGE:      bOk = pushBinaryOperator( OPCODE_RANGE );               break;
-                case BIFF_TOKID_UPLUS:      bOk = pushUnaryPreOperator( OPCODE_PLUS_SIGN );         break;
-                case BIFF_TOKID_UMINUS:     bOk = pushUnaryPreOperator( OPCODE_MINUS_SIGN );        break;
-                case BIFF_TOKID_PERCENT:    bOk = pushUnaryPostOperator( OPCODE_PERCENT );          break;
-                case BIFF_TOKID_PAREN:      bOk = pushParenthesesOperator();                        break;
-                case BIFF_TOKID_MISSARG:    bOk = pushOperand( OPCODE_MISSING );                    break;
-                case BIFF_TOKID_STR:        bOk = pushValueOperand( rStrm.readString( false ) );    break;
-                case BIFF_TOKID_NLR:        bOk = importTableToken( rStrm );                        break;
-                case BIFF_TOKID_ATTR:       bOk = importAttrToken( rStrm );                         break;
-                case BIFF_TOKID_ERR:        bOk = pushBiffErrorOperand( rStrm.readuInt8() );        break;
-                case BIFF_TOKID_BOOL:       bOk = pushBiffBoolOperand( rStrm.readuInt8() );         break;
-                case BIFF_TOKID_INT:        bOk = pushValueOperand< double >( rStrm.readuInt16() ); break;
-                case BIFF_TOKID_NUM:        bOk = pushValueOperand( rStrm.readDouble() );           break;
+                case BIFF_TOKID_EXP:        bOk = importExpToken( rStrm );                                      break;
+                case BIFF_TOKID_ADD:        bOk = pushBinaryOperator( OPCODE_ADD );                             break;
+                case BIFF_TOKID_SUB:        bOk = pushBinaryOperator( OPCODE_SUB );                             break;
+                case BIFF_TOKID_MUL:        bOk = pushBinaryOperator( OPCODE_MULT );                            break;
+                case BIFF_TOKID_DIV:        bOk = pushBinaryOperator( OPCODE_DIV );                             break;
+                case BIFF_TOKID_POWER:      bOk = pushBinaryOperator( OPCODE_POWER );                           break;
+                case BIFF_TOKID_CONCAT:     bOk = pushBinaryOperator( OPCODE_CONCAT );                          break;
+                case BIFF_TOKID_LT:         bOk = pushBinaryOperator( OPCODE_LESS );                            break;
+                case BIFF_TOKID_LE:         bOk = pushBinaryOperator( OPCODE_LESS_EQUAL );                      break;
+                case BIFF_TOKID_EQ:         bOk = pushBinaryOperator( OPCODE_EQUAL );                           break;
+                case BIFF_TOKID_GE:         bOk = pushBinaryOperator( OPCODE_GREATER_EQUAL );                   break;
+                case BIFF_TOKID_GT:         bOk = pushBinaryOperator( OPCODE_GREATER );                         break;
+                case BIFF_TOKID_NE:         bOk = pushBinaryOperator( OPCODE_NOT_EQUAL );                       break;
+                case BIFF_TOKID_ISECT:      bOk = pushBinaryOperator( OPCODE_INTERSECT );                       break;
+                case BIFF_TOKID_LIST:       bOk = pushBinaryOperator( OPCODE_LIST );                            break;
+                case BIFF_TOKID_RANGE:      bOk = pushBinaryOperator( OPCODE_RANGE );                           break;
+                case BIFF_TOKID_UPLUS:      bOk = pushUnaryPreOperator( OPCODE_PLUS_SIGN );                     break;
+                case BIFF_TOKID_UMINUS:     bOk = pushUnaryPreOperator( OPCODE_MINUS_SIGN );                    break;
+                case BIFF_TOKID_PERCENT:    bOk = pushUnaryPostOperator( OPCODE_PERCENT );                      break;
+                case BIFF_TOKID_PAREN:      bOk = pushParenthesesOperator();                                    break;
+                case BIFF_TOKID_MISSARG:    bOk = pushOperand( OPCODE_MISSING );                                break;
+                case BIFF_TOKID_STR:        bOk = pushValueOperand( BiffHelper::readString( rStrm, false ) );   break;
+                case BIFF_TOKID_NLR:        bOk = importTableToken( rStrm );                                    break;
+                case BIFF_TOKID_ATTR:       bOk = importAttrToken( rStrm );                                     break;
+                case BIFF_TOKID_ERR:        bOk = pushBiffErrorOperand( rStrm.readuInt8() );                    break;
+                case BIFF_TOKID_BOOL:       bOk = pushBiffBoolOperand( rStrm.readuInt8() );                     break;
+                case BIFF_TOKID_INT:        bOk = pushValueOperand< double >( rStrm.readuInt16() );             break;
+                case BIFF_TOKID_NUM:        bOk = pushValueOperand( rStrm.readDouble() );                       break;
                 default:                    bOk = false;
             }
         }
@@ -1410,31 +1403,31 @@ void OoxFormulaParserImpl::importOobFormula( FormulaContext& rContext, RecordInp
 
 // import token contents and create API formula token -------------------------
 
-bool OoxFormulaParserImpl::importAttrToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importAttrToken( SequenceInputStream& rStrm )
 {
     bool bOk = true;
     sal_uInt8 nType;
     rStrm >> nType;
-    // equal flags in BIFF and OOBIN
+    // equal flags in all BIFFs
     switch( nType )
     {
         case 0:     // sometimes, tAttrSkip tokens miss the type flag
-        case OOBIN_TOK_ATTR_VOLATILE:
-        case OOBIN_TOK_ATTR_IF:
-        case OOBIN_TOK_ATTR_SKIP:
-        case OOBIN_TOK_ATTR_ASSIGN:
-        case OOBIN_TOK_ATTR_IFERROR:
+        case BIFF_TOK_ATTR_VOLATILE:
+        case BIFF_TOK_ATTR_IF:
+        case BIFF_TOK_ATTR_SKIP:
+        case BIFF_TOK_ATTR_ASSIGN:
+        case BIFF_TOK_ATTR_IFERROR:
             rStrm.skip( 2 );
         break;
-        case OOBIN_TOK_ATTR_CHOOSE:
+        case BIFF_TOK_ATTR_CHOOSE:
             rStrm.skip( 2 * rStrm.readuInt16() + 2 );
         break;
-        case OOBIN_TOK_ATTR_SUM:
+        case BIFF_TOK_ATTR_SUM:
             rStrm.skip( 2 );
-            bOk = pushOobFunction( OOBIN_FUNC_SUM, 1 );
+            bOk = pushBiff12Function( BIFF_FUNC_SUM, 1 );
         break;
-        case OOBIN_TOK_ATTR_SPACE:
-        case OOBIN_TOK_ATTR_SPACE_VOLATILE:
+        case BIFF_TOK_ATTR_SPACE:
+        case BIFF_TOK_ATTR_SPACE_VOLATILE:
             bOk = importSpaceToken( rStrm );
         break;
         default:
@@ -1443,7 +1436,7 @@ bool OoxFormulaParserImpl::importAttrToken( RecordInputStream& rStrm )
     return bOk;
 }
 
-bool OoxFormulaParserImpl::importSpaceToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importSpaceToken( SequenceInputStream& rStrm )
 {
     // equal constants in BIFF and OOX
     sal_uInt8 nType, nCount;
@@ -1472,7 +1465,7 @@ bool OoxFormulaParserImpl::importSpaceToken( RecordInputStream& rStrm )
     return true;
 }
 
-bool OoxFormulaParserImpl::importTableToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importTableToken( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags, nTableId, nCol1, nCol2;
     rStrm.skip( 3 );
@@ -1492,8 +1485,8 @@ bool OoxFormulaParserImpl::importTableToken( RecordInputStream& rStrm )
         bool bFixedStartRow = true;
         bool bFixedHeight = false;
 
-        bool bSingleCol = getFlag( nFlags, OOBIN_TOK_TABLE_COLUMN );
-        bool bColRange = getFlag( nFlags, OOBIN_TOK_TABLE_COLRANGE );
+        bool bSingleCol = getFlag( nFlags, BIFF12_TOK_TABLE_COLUMN );
+        bool bColRange = getFlag( nFlags, BIFF12_TOK_TABLE_COLRANGE );
         bool bValidRef = !bSingleCol || !bColRange;
         OSL_ENSURE( bValidRef, "OoxFormulaParserImpl::importTableToken - illegal combination of single column and column range" );
         if( bValidRef )
@@ -1508,11 +1501,11 @@ bool OoxFormulaParserImpl::importTableToken( RecordInputStream& rStrm )
 
         if( bValidRef )
         {
-            bool bAllRows    = getFlag( nFlags, OOBIN_TOK_TABLE_ALL );
-            bool bHeaderRows = getFlag( nFlags, OOBIN_TOK_TABLE_HEADERS );
-            bool bDataRows   = getFlag( nFlags, OOBIN_TOK_TABLE_DATA );
-            bool bTotalsRows = getFlag( nFlags, OOBIN_TOK_TABLE_TOTALS );
-            bool bThisRow    = getFlag( nFlags, OOBIN_TOK_TABLE_THISROW );
+            bool bAllRows    = getFlag( nFlags, BIFF12_TOK_TABLE_ALL );
+            bool bHeaderRows = getFlag( nFlags, BIFF12_TOK_TABLE_HEADERS );
+            bool bDataRows   = getFlag( nFlags, BIFF12_TOK_TABLE_DATA );
+            bool bTotalsRows = getFlag( nFlags, BIFF12_TOK_TABLE_TOTALS );
+            bool bThisRow    = getFlag( nFlags, BIFF12_TOK_TABLE_THISROW );
 
             sal_Int32 nStartDataRow = xTable->getHeaderRows();
             sal_Int32 nEndDataRow = nEndRow - xTable->getTotalsRows();
@@ -1568,8 +1561,8 @@ bool OoxFormulaParserImpl::importTableToken( RecordInputStream& rStrm )
             if( (nStartCol == 0) && (nEndCol + 1 == nWidth) && (nStartRow == 0) && (nEndRow + 1 == nHeight) )
                 return pushValueOperand( nTokenIndex, OPCODE_DBAREA );
             // create an OFFSET function call to refer to a subrange of the table
-            const FunctionInfo* pRowsInfo = getFuncInfoFromOobFuncId( OOBIN_FUNC_ROWS );
-            const FunctionInfo* pColumnsInfo = getFuncInfoFromOobFuncId( OOBIN_FUNC_COLUMNS );
+            const FunctionInfo* pRowsInfo = getFuncInfoFromBiff12FuncId( BIFF_FUNC_ROWS );
+            const FunctionInfo* pColumnsInfo = getFuncInfoFromBiff12FuncId( BIFF_FUNC_COLUMNS );
             return
                 pRowsInfo && pColumnsInfo &&
                 pushValueOperandToken( nTokenIndex, OPCODE_DBAREA ) &&
@@ -1591,13 +1584,13 @@ bool OoxFormulaParserImpl::importTableToken( RecordInputStream& rStrm )
                     (pushValueOperandToken( nTokenIndex, OPCODE_DBAREA ) &&
                      pushFunctionOperatorToken( *pColumnsInfo, 1 )) :
                     pushValueOperandToken< double >( nEndCol - nStartCol + 1 )) &&
-                pushOobFunction( OOBIN_FUNC_OFFSET, 5 );
+                pushBiff12Function( BIFF_FUNC_OFFSET, 5 );
         }
     }
     return pushBiffErrorOperand( BIFF_ERR_REF );
 }
 
-bool OoxFormulaParserImpl::importArrayToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importArrayToken( SequenceInputStream& rStrm )
 {
     rStrm.skip( 14 );
 
@@ -1623,16 +1616,16 @@ bool OoxFormulaParserImpl::importArrayToken( RecordInputStream& rStrm )
                 appendRawToken( OPCODE_ARRAY_COLSEP );
             switch( rStrm.readuInt8() )
             {
-                case OOBIN_TOK_ARRAY_DOUBLE:
+                case BIFF_TOK_ARRAY_DOUBLE:
                     appendRawToken( OPCODE_PUSH ) <<= rStrm.readDouble();
                 break;
-                case OOBIN_TOK_ARRAY_STRING:
-                    appendRawToken( OPCODE_PUSH ) <<= rStrm.readString( false );
+                case BIFF_TOK_ARRAY_STRING:
+                    appendRawToken( OPCODE_PUSH ) <<= BiffHelper::readString( rStrm, false );
                 break;
-                case OOBIN_TOK_ARRAY_BOOL:
+                case BIFF_TOK_ARRAY_BOOL:
                     appendRawToken( OPCODE_PUSH ) <<= static_cast< double >( (rStrm.readuInt8() == BIFF_TOK_BOOL_FALSE) ? 0.0 : 1.0 );
                 break;
-                case OOBIN_TOK_ARRAY_ERROR:
+                case BIFF_TOK_ARRAY_ERROR:
                     appendRawToken( OPCODE_PUSH ) <<= BiffHelper::calcDoubleFromError( rStrm.readuInt8() );
                     rStrm.skip( 3 );
                 break;
@@ -1650,37 +1643,37 @@ bool OoxFormulaParserImpl::importArrayToken( RecordInputStream& rStrm )
     return true;
 }
 
-bool OoxFormulaParserImpl::importRefToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
+bool OoxFormulaParserImpl::importRefToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
 {
     BinSingleRef2d aRef;
-    aRef.readOobData( rStrm, bRelativeAsOffset );
+    aRef.readBiff12Data( rStrm, bRelativeAsOffset );
     return pushReferenceOperand( aRef, bDeleted, bRelativeAsOffset );
 }
 
-bool OoxFormulaParserImpl::importAreaToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
+bool OoxFormulaParserImpl::importAreaToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
 {
     BinComplexRef2d aRef;
-    aRef.readOobData( rStrm, bRelativeAsOffset );
+    aRef.readBiff12Data( rStrm, bRelativeAsOffset );
     return pushReferenceOperand( aRef, bDeleted, bRelativeAsOffset );
 }
 
-bool OoxFormulaParserImpl::importRef3dToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
+bool OoxFormulaParserImpl::importRef3dToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
 {
     LinkSheetRange aSheetRange = readSheetRange( rStrm );
     BinSingleRef2d aRef;
-    aRef.readOobData( rStrm, bRelativeAsOffset );
+    aRef.readBiff12Data( rStrm, bRelativeAsOffset );
     return pushReferenceOperand( aSheetRange, aRef, bDeleted, bRelativeAsOffset );
 }
 
-bool OoxFormulaParserImpl::importArea3dToken( RecordInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
+bool OoxFormulaParserImpl::importArea3dToken( SequenceInputStream& rStrm, bool bDeleted, bool bRelativeAsOffset )
 {
     LinkSheetRange aSheetRange = readSheetRange( rStrm );
     BinComplexRef2d aRef;
-    aRef.readOobData( rStrm, bRelativeAsOffset );
+    aRef.readBiff12Data( rStrm, bRelativeAsOffset );
     return pushReferenceOperand( aSheetRange, aRef, bDeleted, bRelativeAsOffset );
 }
 
-bool OoxFormulaParserImpl::importMemAreaToken( RecordInputStream& rStrm, bool bAddData )
+bool OoxFormulaParserImpl::importMemAreaToken( SequenceInputStream& rStrm, bool bAddData )
 {
     rStrm.skip( 6 );
     if( bAddData )
@@ -1688,40 +1681,40 @@ bool OoxFormulaParserImpl::importMemAreaToken( RecordInputStream& rStrm, bool bA
     return true;
 }
 
-bool OoxFormulaParserImpl::importMemFuncToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importMemFuncToken( SequenceInputStream& rStrm )
 {
     rStrm.skip( 2 );
     return true;
 }
 
-bool OoxFormulaParserImpl::importNameToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importNameToken( SequenceInputStream& rStrm )
 {
-    return pushOobName( rStrm.readInt32() );
+    return pushBiff12Name( rStrm.readInt32() );
 }
 
-bool OoxFormulaParserImpl::importNameXToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importNameXToken( SequenceInputStream& rStrm )
 {
     sal_Int32 nRefId = rStrm.readInt16();
     sal_Int32 nNameId = rStrm.readInt32();
-    return pushOobExtName( nRefId, nNameId );
+    return pushBiff12ExtName( nRefId, nNameId );
 }
 
-bool OoxFormulaParserImpl::importFuncToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importFuncToken( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFuncId;
     rStrm >> nFuncId;
-    return pushOobFunction( nFuncId );
+    return pushBiff12Function( nFuncId );
 }
 
-bool OoxFormulaParserImpl::importFuncVarToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importFuncVarToken( SequenceInputStream& rStrm )
 {
     sal_uInt8 nParamCount;
     sal_uInt16 nFuncId;
     rStrm >> nParamCount >> nFuncId;
-    return pushOobFunction( nFuncId, nParamCount );
+    return pushBiff12Function( nFuncId, nParamCount );
 }
 
-bool OoxFormulaParserImpl::importExpToken( RecordInputStream& rStrm )
+bool OoxFormulaParserImpl::importExpToken( SequenceInputStream& rStrm )
 {
     BinAddress aBaseAddr;
     rStrm >> aBaseAddr.mnRow;
@@ -1733,19 +1726,19 @@ bool OoxFormulaParserImpl::importExpToken( RecordInputStream& rStrm )
     return false;
 }
 
-LinkSheetRange OoxFormulaParserImpl::readSheetRange( RecordInputStream& rStrm )
+LinkSheetRange OoxFormulaParserImpl::readSheetRange( SequenceInputStream& rStrm )
 {
     return getExternalLinks().getSheetRange( rStrm.readInt16() );
 }
 
-void OoxFormulaParserImpl::swapStreamPosition( RecordInputStream& rStrm )
+void OoxFormulaParserImpl::swapStreamPosition( SequenceInputStream& rStrm )
 {
     sal_Int64 nRecPos = rStrm.tell();
     rStrm.seek( mnAddDataPos );
     mnAddDataPos = nRecPos;
 }
 
-void OoxFormulaParserImpl::skipMemAreaAddData( RecordInputStream& rStrm )
+void OoxFormulaParserImpl::skipMemAreaAddData( SequenceInputStream& rStrm )
 {
     swapStreamPosition( rStrm );
     rStrm.skip( 16 * rStrm.readInt32() );
@@ -1754,38 +1747,38 @@ void OoxFormulaParserImpl::skipMemAreaAddData( RecordInputStream& rStrm )
 
 // convert BIN token and push API operand or operator -------------------------
 
-bool OoxFormulaParserImpl::pushOobName( sal_Int32 nNameId )
+bool OoxFormulaParserImpl::pushBiff12Name( sal_Int32 nNameId )
 {
-    // one-based in OOBIN formulas
+    // one-based in BIFF12 formulas
     return pushDefinedNameOperand( getDefinedNames().getByIndex( nNameId - 1 ) );
 }
 
-bool OoxFormulaParserImpl::pushOobExtName( sal_Int32 nRefId, sal_Int32 nNameId )
+bool OoxFormulaParserImpl::pushBiff12ExtName( sal_Int32 nRefId, sal_Int32 nNameId )
 {
     if( const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId ).get() )
     {
         if( pExtLink->getLinkType() == LINKTYPE_SELF )
-            return pushOobName( nNameId );
-        // external name indexes are one-based in OOBIN
+            return pushBiff12Name( nNameId );
+        // external name indexes are one-based in BIFF12
         ExternalNameRef xExtName = pExtLink->getNameByIndex( nNameId - 1 );
         return pushExternalNameOperand( xExtName, *pExtLink );
     }
     return pushBiffErrorOperand( BIFF_ERR_NAME );
 }
 
-bool OoxFormulaParserImpl::pushOobFunction( sal_uInt16 nFuncId )
+bool OoxFormulaParserImpl::pushBiff12Function( sal_uInt16 nFuncId )
 {
-    if( const FunctionInfo* pFuncInfo = getFuncInfoFromOobFuncId( nFuncId ) )
+    if( const FunctionInfo* pFuncInfo = getFuncInfoFromBiff12FuncId( nFuncId ) )
         if( pFuncInfo->mnMinParamCount == pFuncInfo->mnMaxParamCount )
             return pushFunctionOperator( *pFuncInfo, pFuncInfo->mnMinParamCount );
     return pushFunctionOperator( OPCODE_NONAME, 0 );
 }
 
-bool OoxFormulaParserImpl::pushOobFunction( sal_uInt16 nFuncId, sal_uInt8 nParamCount )
+bool OoxFormulaParserImpl::pushBiff12Function( sal_uInt16 nFuncId, sal_uInt8 nParamCount )
 {
     if( getFlag( nFuncId, BIFF_TOK_FUNCVAR_CMD ) )
         nParamCount &= BIFF_TOK_FUNCVAR_COUNTMASK;
-    if( const FunctionInfo* pFuncInfo = getFuncInfoFromOobFuncId( nFuncId ) )
+    if( const FunctionInfo* pFuncInfo = getFuncInfoFromBiff12FuncId( nFuncId ) )
         return pushFunctionOperator( *pFuncInfo, nParamCount );
     return pushFunctionOperator( OPCODE_NONAME, nParamCount );
 }
@@ -2735,12 +2728,35 @@ bool BiffFormulaParserImpl::pushBiffFunction( sal_uInt16 nFuncId, sal_uInt8 nPar
 
 // ============================================================================
 
+namespace {
+
+/** Extracts the reference identifier and the remaining data from a formula in
+    the format '[RefID]Remaining'. */
+bool lclExtractRefId( sal_Int32& rnRefId, OUString& rRemainder, const OUString& rFormulaString )
+{
+    if( (rFormulaString.getLength() >= 4) && (rFormulaString[ 0 ] == '[') )
+    {
+        sal_Int32 nBracketClose = rFormulaString.indexOf( ']', 1 );
+        if( nBracketClose >= 2 )
+        {
+            rnRefId = rFormulaString.copy( 1, nBracketClose - 1 ).toInt32();
+            rRemainder = rFormulaString.copy( nBracketClose + 1 );
+            return rRemainder.getLength() > 0;
+        }
+    }
+    return false;
+}
+
+}
+
+// ----------------------------------------------------------------------------
+
 FormulaParser::FormulaParser( const WorkbookHelper& rHelper ) :
     FormulaProcessorBase( rHelper )
 {
     switch( getFilterType() )
     {
-        case FILTER_OOX:    mxImpl.reset( new OoxFormulaParserImpl( *this ) );  break;
+        case FILTER_OOXML:  mxImpl.reset( new OoxFormulaParserImpl( *this ) );  break;
         case FILTER_BIFF:   mxImpl.reset( new BiffFormulaParserImpl( *this ) ); break;
         case FILTER_UNKNOWN: break;
     }
@@ -2755,9 +2771,9 @@ void FormulaParser::importFormula( FormulaContext& rContext, const OUString& rFo
     mxImpl->importOoxFormula( rContext, rFormulaString );
 }
 
-void FormulaParser::importFormula( FormulaContext& rContext, RecordInputStream& rStrm ) const
+void FormulaParser::importFormula( FormulaContext& rContext, SequenceInputStream& rStrm ) const
 {
-    mxImpl->importOobFormula( rContext, rStrm );
+    mxImpl->importBiff12Formula( rContext, rStrm );
 }
 
 void FormulaParser::importFormula( FormulaContext& rContext, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize ) const
@@ -2792,7 +2808,7 @@ void FormulaParser::convertNameToFormula( FormulaContext& rContext, sal_Int32 nT
 void FormulaParser::convertNumberToHyperlink( FormulaContext& rContext, const OUString& rUrl, double fValue ) const
 {
     OSL_ENSURE( rUrl.getLength() > 0, "FormulaParser::convertNumberToHyperlink - missing URL" );
-    if( const FunctionInfo* pFuncInfo = getFuncInfoFromOobFuncId( OOBIN_FUNC_HYPERLINK ) )
+    if( const FunctionInfo* pFuncInfo = getFuncInfoFromBiff12FuncId( BIFF_FUNC_HYPERLINK ) )
     {
         ApiTokenSequence aTokens( 6 );
         aTokens[ 0 ].OpCode = pFuncInfo->mnApiOpCode;
@@ -2809,27 +2825,15 @@ void FormulaParser::convertNumberToHyperlink( FormulaContext& rContext, const OU
 
 OUString FormulaParser::importOleTargetLink( const OUString& rFormulaString )
 {
-    // obviously, this would overburden our formula parser, so we parse it manually
-    OUString aTargetLink;
-    sal_Int32 nFmlaLen = rFormulaString.getLength();
-    if( (nFmlaLen >= 8) && (rFormulaString[ 0 ] == '[') )
-    {
-        // passed string is trimmed already
-        sal_Int32 nBracketClose = rFormulaString.indexOf( ']' );
-        sal_Int32 nExclamation = rFormulaString.indexOf( '!' );
-        if( (nBracketClose >= 2) &&
-            (nBracketClose + 1 == nExclamation) &&
-            (rFormulaString[ nExclamation + 1 ] == '\'') &&
-            (rFormulaString[ nFmlaLen - 1 ] == '\'') )
-        {
-            sal_Int32 nRefId = rFormulaString.copy( 1, nBracketClose - 1 ).toInt32();
-            aTargetLink = mxImpl->resolveOleTarget( nRefId );
-        }
-    }
-    return aTargetLink;
+    sal_Int32 nRefId = -1;
+    OUString aRemainder;
+    if( lclExtractRefId( nRefId, aRemainder, rFormulaString ) && (aRemainder.getLength() >= 3) &&
+            (aRemainder[ 0 ] == '!') && (aRemainder[ 1 ] == '\'') && (aRemainder[ aRemainder.getLength() - 1 ] == '\'') )
+        return mxImpl->resolveOleTarget( nRefId, false );
+    return OUString();
 }
 
-OUString FormulaParser::importOleTargetLink( RecordInputStream& rStrm )
+OUString FormulaParser::importOleTargetLink( SequenceInputStream& rStrm )
 {
     OUString aTargetLink;
     sal_Int32 nFmlaSize = rStrm.readInt32();
@@ -2841,7 +2845,7 @@ OUString FormulaParser::importOleTargetLink( RecordInputStream& rStrm )
         sal_Int32 nNameId;
         rStrm >> nToken >> nRefId >> nNameId;
         if( nToken == (BIFF_TOKCLASS_VAL|BIFF_TOKID_NAMEX) )
-            aTargetLink = mxImpl->resolveOleTarget( nRefId );
+            aTargetLink = mxImpl->resolveOleTarget( nRefId, true );
     }
     rStrm.seek( nFmlaEndPos );
     return aTargetLink;
@@ -2853,6 +2857,59 @@ OUString FormulaParser::importOleTargetLink( BiffInputStream& rStrm, const sal_u
     sal_uInt16 nFmlaSize = lclReadFmlaSize( rStrm, getBiff(), pnFmlaSize );
     rStrm.skip( nFmlaSize );
     return aTargetLink;
+}
+
+OUString FormulaParser::importMacroName( const OUString& rFormulaString )
+{
+    /*  Valid macros are either sheet macros or VBA macros. OOXML and all BIFF
+        documents store defined names for sheet macros, but OOXML documents do
+        not store any defined name for VBA macros (while BIFF documents do).
+        Sheet macros may be defined locally to a sheet, or globally to the
+        document. As a result, all of the following macro specifiers are valid:
+
+        1) Macros located in the own document:
+            [0]!MySheetMacro    (global sheet macro 'MySheetMacro')
+            Macro1!MyMacro      (sheet-local sheet macro 'MyMacro')
+            [0]!MyVBAProc       (VBA macro 'MyVBAProc')
+            [0]!Mod1.MyVBAProc  (VBA macro 'MyVBAProc' from code module 'Mod1')
+
+        2) Macros from an external document:
+            [2]!MySheetMacro    (global external sheet macro 'MySheetMacro')
+            [2]Macro1!MyMacro   (sheet-local external sheet macro 'MyMacro')
+            [2]!MyVBAProc       (external VBA macro 'MyVBAProc')
+            [2]!Mod1.MyVBAProc  (external VBA macro from code module 'Mod1')
+
+        This implementation is only interested in VBA macros from the own
+        document, ignoring the valid syntax 'Macro1!MyMacro' for sheet-local
+        sheet macros.
+     */
+    sal_Int32 nRefId = -1;
+    OUString aRemainder;
+    if( lclExtractRefId( nRefId, aRemainder, rFormulaString ) && (aRemainder.getLength() > 1) && (aRemainder[ 0 ] == '!') )
+    {
+        /*  In BIFF12 documents, the reference identifier is always the
+            one-based index of the external link as it is in OOXML documents
+            (it is not an index into the list of reference sheets as used in
+            cell formulas). Index 0 is an implicit placeholder for the own
+            document. In BIFF12 documents, the reference to the own document is
+            stored explicitly, mostly at the top of the list, so index 1 may
+            resolve to the own document too.
+            Passing 'false' to getExternalLink() specifies to ignore the
+            reference sheets list (if existing) and to access the list of
+            external links directly. */
+        const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId, false ).get();
+        OSL_ENSURE( pExtLink, "FormulaParser::importMacroName - missing link" );
+        // do not accept macros in external documents (not supported)
+        if( pExtLink && (pExtLink->getLinkType() == LINKTYPE_SELF) )
+        {
+            // ignore sheet macros (defined name for VBA macros may not exist, see above)
+            OUString aMacroName = aRemainder.copy( 1 );
+            const DefinedName* pDefName = getDefinedNames().getByModelName( aMacroName ).get();
+            if( !pDefName || pDefName->isVBName() )
+                return aMacroName;
+        }
+    }
+    return OUString();
 }
 
 // ============================================================================

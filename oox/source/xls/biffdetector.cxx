@@ -27,28 +27,28 @@
  ************************************************************************/
 
 #include "oox/xls/biffdetector.hxx"
+
 #include <algorithm>
-#include <rtl/strbuf.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/mediadescriptor.hxx>
+#include <rtl/strbuf.hxx>
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/ole/olestorage.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OStringBuffer;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::io::XInputStream;
-using ::comphelper::MediaDescriptor;
-
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+
+using ::comphelper::MediaDescriptor;
+using ::rtl::OStringBuffer;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -61,18 +61,18 @@ Sequence< OUString > BiffDetector_getSupportedServiceNames()
 
 OUString BiffDetector_getImplementationName()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.BiffDetector" );
+    return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.BiffDetector" );
 }
 
-Reference< XInterface > SAL_CALL BiffDetector_createInstance( const Reference< XMultiServiceFactory >& rxFactory ) throw( Exception )
+Reference< XInterface > SAL_CALL BiffDetector_createInstance( const Reference< XComponentContext >& rxContext ) throw( Exception )
 {
-    return static_cast< ::cppu::OWeakObject* >( new BiffDetector( rxFactory ) );
+    return static_cast< ::cppu::OWeakObject* >( new BiffDetector( rxContext ) );
 }
 
 // ============================================================================
 
-BiffDetector::BiffDetector( const Reference< XMultiServiceFactory >& rxFactory ) :
-    mxFactory( rxFactory )
+BiffDetector::BiffDetector( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    mxContext( rxContext, UNO_SET_THROW )
 {
 }
 
@@ -80,7 +80,7 @@ BiffDetector::~BiffDetector()
 {
 }
 
-BiffType BiffDetector::detectStreamBiffVersion( BinaryInputStream& rInStream )
+/*static*/ BiffType BiffDetector::detectStreamBiffVersion( BinaryInputStream& rInStream )
 {
     BiffType eBiff = BIFF_UNKNOWN;
     if( !rInStream.isEof() && rInStream.isSeekable() && (rInStream.getLength() > 4) )
@@ -132,36 +132,36 @@ BiffType BiffDetector::detectStreamBiffVersion( BinaryInputStream& rInStream )
     return eBiff;
 }
 
-BiffType BiffDetector::detectStorageBiffVersion( OUString& orWorkbookStreamName, StorageRef xStorage )
+/*static*/ BiffType BiffDetector::detectStorageBiffVersion( OUString& orWorkbookStreamName, const StorageRef& rxStorage )
 {
     static const OUString saBookName = CREATE_OUSTRING( "Book" );
     static const OUString saWorkbookName = CREATE_OUSTRING( "Workbook" );
 
     BiffType eBiff = BIFF_UNKNOWN;
-    if( xStorage.get() )
+    if( rxStorage.get() )
     {
-        if( xStorage->isStorage() )
+        if( rxStorage->isStorage() )
         {
             // try to open the "Book" stream
-            BinaryXInputStream aBookStrm5( xStorage->openInputStream( saBookName ), true );
+            BinaryXInputStream aBookStrm5( rxStorage->openInputStream( saBookName ), true );
             BiffType eBookStrm5Biff = detectStreamBiffVersion( aBookStrm5 );
 
             // try to open the "Workbook" stream
-            BinaryXInputStream aBookStrm8( xStorage->openInputStream( saWorkbookName ), true );
+            BinaryXInputStream aBookStrm8( rxStorage->openInputStream( saWorkbookName ), true );
             BiffType eBookStrm8Biff = detectStreamBiffVersion( aBookStrm8 );
 
             // decide which stream to use
             if( (eBookStrm8Biff != BIFF_UNKNOWN) && ((eBookStrm5Biff == BIFF_UNKNOWN) || (eBookStrm8Biff > eBookStrm5Biff)) )
             {
-                /*  Only "Workbook" stream exists; or both streams exist,
-                    and "Workbook" has higher BIFF version than "Book" stream. */
+                /*  Only "Workbook" stream exists; or both streams exist, and
+                    "Workbook" has higher BIFF version than "Book" stream. */
                 eBiff = eBookStrm8Biff;
                 orWorkbookStreamName = saWorkbookName;
             }
             else if( eBookStrm5Biff != BIFF_UNKNOWN )
             {
-                /*  Only "Book" stream exists; or both streams exist,
-                    and "Book" has higher BIFF version than "Workbook" stream. */
+                /*  Only "Book" stream exists; or both streams exist, and
+                    "Book" has higher BIFF version than "Workbook" stream. */
                 eBiff = eBookStrm5Biff;
                 orWorkbookStreamName = saBookName;
             }
@@ -169,7 +169,7 @@ BiffType BiffDetector::detectStorageBiffVersion( OUString& orWorkbookStreamName,
         else
         {
             // no storage, try plain input stream from medium (even for BIFF5+)
-            BinaryXInputStream aStrm( xStorage->openInputStream( OUString() ), false );
+            BinaryXInputStream aStrm( rxStorage->openInputStream( OUString() ), false );
             eBiff = detectStreamBiffVersion( aStrm );
             orWorkbookStreamName = OUString();
         }
@@ -187,7 +187,7 @@ OUString SAL_CALL BiffDetector::getImplementationName() throw( RuntimeException 
 
 sal_Bool SAL_CALL BiffDetector::supportsService( const OUString& rService ) throw( RuntimeException )
 {
-    const Sequence< OUString > aServices( BiffDetector_getSupportedServiceNames() );
+    const Sequence< OUString > aServices = BiffDetector_getSupportedServiceNames();
     const OUString* pArray = aServices.getConstArray();
     const OUString* pArrayEnd = pArray + aServices.getLength();
     return ::std::find( pArray, pArrayEnd, rService ) != pArrayEnd;
@@ -207,20 +207,19 @@ OUString SAL_CALL BiffDetector::detect( Sequence< PropertyValue >& rDescriptor )
     MediaDescriptor aDescriptor( rDescriptor );
     aDescriptor.addInputStream();
 
-    Reference< XInputStream > xInStrm( aDescriptor[ MediaDescriptor::PROP_INPUTSTREAM() ], UNO_QUERY );
-    if( xInStrm.is() )
+    Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
+    Reference< XInputStream > xInStrm( aDescriptor[ MediaDescriptor::PROP_INPUTSTREAM() ], UNO_QUERY_THROW );
+    StorageRef xStorage( new ::oox::ole::OleStorage( xFactory, xInStrm, true ) );
+
+    OUString aWorkbookName;
+    switch( detectStorageBiffVersion( aWorkbookName, xStorage ) )
     {
-        OUString aWorkbookName;
-        StorageRef xStorage( new ::oox::ole::OleStorage( mxFactory, xInStrm, true ) );
-        switch( detectStorageBiffVersion( aWorkbookName, xStorage ) )
-        {
-            case BIFF2:
-            case BIFF3:
-            case BIFF4: aTypeName = CREATE_OUSTRING( "calc_MS_Excel_40" );  break;
-            case BIFF5: aTypeName = CREATE_OUSTRING( "calc_MS_Excel_95" );  break;
-            case BIFF8: aTypeName = CREATE_OUSTRING( "calc_MS_Excel_97" );  break;
-            default:;
-        }
+        case BIFF2:
+        case BIFF3:
+        case BIFF4: aTypeName = CREATE_OUSTRING( "calc_MS_Excel_40" );  break;
+        case BIFF5: aTypeName = CREATE_OUSTRING( "calc_MS_Excel_95" );  break;
+        case BIFF8: aTypeName = CREATE_OUSTRING( "calc_MS_Excel_97" );  break;
+        default:;
     }
 
     return aTypeName;

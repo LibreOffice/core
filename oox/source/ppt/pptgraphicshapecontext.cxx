@@ -37,13 +37,13 @@
 #include "oox/ppt/pptshapepropertiescontext.hxx"
 #include "oox/ppt/slidepersist.hxx"
 #include "oox/drawingml/shapestylecontext.hxx"
-#include "oox/core/namespaces.hxx"
+#include "oox/token/namespaces.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
-#include "tokens.hxx"
+#include <oox/token/tokens.hxx>
 
 using rtl::OUString;
 using namespace oox::core;
@@ -119,11 +119,11 @@ Reference< XFastContextHandler > PPTGraphicShapeContext::createFastChildContext(
     // nvSpPr CT_ShapeNonVisual begin
 //  case NMSP_PPT|XML_drElemPr:
 //      break;
-    case NMSP_PPT|XML_cNvPr:
+    case PPT_TOKEN(cNvPr):
         mpShapePtr->setId( xAttribs->getOptionalValue( XML_id ) );
         mpShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
         break;
-    case NMSP_PPT|XML_ph:
+    case PPT_TOKEN(ph):
     {
         sal_Int32 nSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
         mpShapePtr->setSubType( nSubType );
@@ -210,15 +210,15 @@ Reference< XFastContextHandler > PPTGraphicShapeContext::createFastChildContext(
     }
     // nvSpPr CT_ShapeNonVisual end
 
-    case NMSP_PPT|XML_spPr:
+    case PPT_TOKEN(spPr):
         xRet = new PPTShapePropertiesContext( *this, *mpShapePtr );
         break;
 
-    case NMSP_PPT|XML_style:
+    case PPT_TOKEN(style):
         xRet = new oox::drawingml::ShapeStyleContext( *this, *mpShapePtr );
         break;
 
-    case NMSP_PPT|XML_txBody:
+    case PPT_TOKEN(txBody):
     {
         oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
         mpShapePtr->setTextBody( xTextBody );

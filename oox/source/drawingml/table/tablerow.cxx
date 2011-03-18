@@ -28,8 +28,6 @@
 
 #include "oox/drawingml/table/tablerow.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include "oox/helper/propertyset.hxx"

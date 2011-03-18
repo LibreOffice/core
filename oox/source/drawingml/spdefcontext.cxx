@@ -31,8 +31,6 @@
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/textbodypropertiescontext.hxx"
 #include "oox/drawingml/textliststylecontext.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -52,22 +50,22 @@ Reference< XFastContextHandler > spDefContext::createFastChildContext( sal_Int32
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-        case NMSP_DRAWINGML|XML_spPr:
+        case A_TOKEN( spPr ):
         {
             xRet = new ShapePropertiesContext( *this, mrDefaultObject );
             break;
         }
-        case NMSP_DRAWINGML|XML_bodyPr:
+        case A_TOKEN( bodyPr ):
         {
             TextBodyPtr xTextBody( new TextBody );
             mrDefaultObject.setTextBody( xTextBody );
             xRet = new TextBodyPropertiesContext( *this, xAttribs, xTextBody->getTextProperties() );
             break;
         }
-        case NMSP_DRAWINGML|XML_lstStyle:
+        case A_TOKEN( lstStyle ):
             xRet.set( new TextListStyleContext( *this, *mrDefaultObject.getMasterTextListStyle() ) );
             break;
-        case NMSP_DRAWINGML|XML_style:
+        case A_TOKEN( style ):
             break;
     }
     if( !xRet.is() )

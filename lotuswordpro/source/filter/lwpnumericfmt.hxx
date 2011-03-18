@@ -192,7 +192,7 @@ private:
     std::map<sal_uInt16,LwpCurrencyInfo> m_aCurrencyInfo;
     void InitCurrencySymbol()
     {
-        USHORT nC=FMT_ARGENTINEANPESO;
+        sal_uInt16 nC=FMT_ARGENTINEANPESO;
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo(String::CreateFromAscii("A"));                    //FMT_ARGENTINEANPESO       = 1,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo(String::CreateFromAscii("A$"));                   //FMT_AUSTRALIANDOLLAR  = 2,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo(String::CreateFromAscii("oS"),sal_True, sal_True);//FMT_AUSTRIANSCHILLING = 3,
@@ -248,8 +248,8 @@ public:
     LwpNumericFormat(LwpObjectStream * pStrm);
     ~LwpNumericFormat(){}
     void Read();
-    static sal_Bool IsCurrencyFormat(USHORT Format);
-    USHORT GetDecimalPlaces(void);
+    static sal_Bool IsCurrencyFormat(sal_uInt16 Format);
+    sal_uInt16 GetDecimalPlaces(void);
     sal_Bool IsDecimalPlacesOverridden(void);
     sal_Bool IsNegativeOverridden(void);
     sal_Bool IsZeroOverridden(void);
@@ -273,7 +273,7 @@ private:
 
     sal_uInt16 cDecimalPlaces;
 
-    static USHORT GetDefaultDecimalPlaces(USHORT Format);
+    static sal_uInt16 GetDefaultDecimalPlaces(sal_uInt16 Format);
     static LwpCurrencyPool m_aCurrencyInfo;
 
     void GetCurrencyStr(LwpNumericFormatSubset aNumber, String& aPrefix, String& aSuffix, sal_Bool bNegtive=sal_False);

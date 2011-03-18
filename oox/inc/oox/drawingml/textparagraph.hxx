@@ -32,7 +32,6 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XText.hpp>
 
-#include "oox/helper/containerhelper.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/textrun.hxx"
 #include "oox/drawingml/textliststyle.hxx"

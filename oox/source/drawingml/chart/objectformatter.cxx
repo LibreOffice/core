@@ -27,13 +27,11 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/objectformatter.hxx"
-#include <rtl/strbuf.hxx>
-#include <osl/thread.h>
+
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include "properties.hxx"
-#include "tokens.hxx"
-#include "oox/helper/modelobjecthelper.hxx"
+#include <osl/thread.h>
+#include <rtl/strbuf.hxx>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/lineproperties.hxx"
@@ -41,28 +39,25 @@
 #include "oox/drawingml/textparagraph.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
-
-using ::rtl::OStringBuffer;
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::lang::Locale;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::frame::XModel;
-using ::com::sun::star::chart2::XChartDocument;
-using ::com::sun::star::graphic::XGraphic;
-using ::com::sun::star::util::XNumberFormats;
-using ::com::sun::star::util::XNumberFormatsSupplier;
-using ::com::sun::star::util::XNumberFormatTypes;
-using ::oox::core::XmlFilterBase;
+#include "oox/helper/modelobjecthelper.hxx"
 
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using namespace ::com::sun::star::chart2;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::graphic;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+
+using ::oox::core::XmlFilterBase;
+using ::rtl::OStringBuffer;
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 // ============================================================================
 

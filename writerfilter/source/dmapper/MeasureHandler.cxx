@@ -31,6 +31,7 @@
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
 #include <com/sun/star/text/SizeType.hpp>
+#include "dmapperLoggers.hxx"
 
 namespace writerfilter {
 namespace dmapper {
@@ -40,9 +41,10 @@ using namespace ::com::sun::star;
 
 
 MeasureHandler::MeasureHandler() :
-    m_nMeasureValue( 0 ),
-    m_nUnit( -1 ),
-    m_nRowHeightSizeType( text::SizeType::MIN )
+LoggedProperties(dmapper_logger, "MeasureHandler"),
+m_nMeasureValue( 0 ),
+m_nUnit( -1 ),
+m_nRowHeightSizeType( text::SizeType::MIN )
 {
 }
 
@@ -52,7 +54,7 @@ MeasureHandler::~MeasureHandler()
 }
 
 
-void MeasureHandler::attribute(Id rName, Value & rVal)
+void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
     (void)rName;
@@ -89,7 +91,7 @@ void MeasureHandler::attribute(Id rName, Value & rVal)
 }
 
 
-void MeasureHandler::sprm(Sprm & rSprm)
+void MeasureHandler::lcl_sprm(Sprm & rSprm)
 {
     (void)rSprm;
 }

@@ -46,14 +46,14 @@ private:
 
     VirtualDevice * pVirDev;
     const DXFRepresentation * pDXF;
-    BOOL bStatus;
+    sal_Bool bStatus;
 
-    USHORT OptPointsPerCircle;
+    sal_uInt16 OptPointsPerCircle;
 
-    ULONG nMinPercent;
-    ULONG nMaxPercent;
-    ULONG nLastPercent;
-    ULONG nMainEntitiesCount;
+    sal_uLong nMinPercent;
+    sal_uLong nMaxPercent;
+    sal_uLong nLastPercent;
+    sal_uLong nMainEntitiesCount;
 
     long        nBlockColor;
     DXFLineInfo aBlockDXFLineInfo;
@@ -63,9 +63,9 @@ private:
     Color       aActFillColor;
     Font        aActFont;
 
-    ULONG CountEntities(const DXFEntities & rEntities);
+    sal_uLong CountEntities(const DXFEntities & rEntities);
 
-    Color ConvertColor(BYTE nColor);
+    Color ConvertColor(sal_uInt8 nColor);
 
     long GetEntityColor(const DXFBasicEntity & rE);
 
@@ -73,12 +73,12 @@ private:
 
     DXFLineInfo GetEntityDXFLineInfo(const DXFBasicEntity & rE);
 
-    BOOL SetLineAttribute(const DXFBasicEntity & rE, ULONG nWidth=0);
+    sal_Bool SetLineAttribute(const DXFBasicEntity & rE, sal_uLong nWidth=0);
 
-    BOOL SetAreaAttribute(const DXFBasicEntity & rE);
+    sal_Bool SetAreaAttribute(const DXFBasicEntity & rE);
 
-    BOOL SetFontAttribute(const DXFBasicEntity & rE, short nAngle,
-                          USHORT nHeight, double fWidthScale);
+    sal_Bool SetFontAttribute(const DXFBasicEntity & rE, short nAngle,
+                          sal_uInt16 nHeight, double fWidthScale);
 
     void DrawLineEntity(const DXFLineEntity & rE, const DXFTransform & rTransform);
 
@@ -116,7 +116,7 @@ public:
     DXF2GDIMetaFile();
     ~DXF2GDIMetaFile();
 
-    BOOL Convert( const DXFRepresentation & rDXF, GDIMetaFile & rMTF, USHORT nMinPercent, USHORT nMaxPercent);
+    sal_Bool Convert( const DXFRepresentation & rDXF, GDIMetaFile & rMTF, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent);
 
 };
 

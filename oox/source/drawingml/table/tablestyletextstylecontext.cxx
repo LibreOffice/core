@@ -30,9 +30,8 @@
 
 #include "oox/drawingml/table/tablestyletextstylecontext.hxx"
 #include "oox/drawingml/colorchoicecontext.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "tokens.hxx"
+
 using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -78,23 +77,23 @@ TableStyleTextStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
     switch( aElementToken )
     {
         // EG_ThemeableFontStyles (choice)
-        case NMSP_DRAWINGML|XML_font:       // CT_FontCollection
+        case A_TOKEN( font ):       // CT_FontCollection
             xRet.set( this );
             break;
-        case NMSP_DRAWINGML|XML_ea:             // CT_TextFont
+        case A_TOKEN( ea ):             // CT_TextFont
             mrTableStylePart.getAsianFont().setAttributes( aAttribs );
             return 0;
-        case NMSP_DRAWINGML|XML_cs:             // CT_TextFont
+        case A_TOKEN( cs ):             // CT_TextFont
             mrTableStylePart.getComplexFont().setAttributes( aAttribs );
             return 0;
-        case NMSP_DRAWINGML|XML_sym:            // CT_TextFont
+        case A_TOKEN( sym ):            // CT_TextFont
             mrTableStylePart.getSymbolFont().setAttributes( aAttribs );
             return 0;
-        case NMSP_DRAWINGML|XML_latin:          // CT_TextFont
+        case A_TOKEN( latin ):          // CT_TextFont
             mrTableStylePart.getLatinFont().setAttributes( aAttribs );
             return 0;
 
-        case NMSP_DRAWINGML|XML_fontRef:    // CT_FontReference
+        case A_TOKEN( fontRef ):    // CT_FontReference
             {
                 ShapeStyleRef& rFontStyle = mrTableStylePart.getStyleRefs()[ XML_fontRef ];
                 rFontStyle.mnThemedIdx = aAttribs.getToken( XML_idx, XML_none );
@@ -102,7 +101,7 @@ TableStyleTextStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
             }
             break;
 
-        case NMSP_DRAWINGML|XML_extLst:     // CT_OfficeArtExtensionList
+        case A_TOKEN( extLst ):     // CT_OfficeArtExtensionList
             break;
     }
     if( !xRet.is() )

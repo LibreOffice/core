@@ -61,6 +61,7 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     const PropertyValue*        pValue = rDescriptor.getConstArray();
     sal_Bool                    bRet = sal_False;
     Reference< task::XStatusIndicator > xStatusIndicator;
+    Reference< task::XInteractionHandler > xIH;
 
     for ( sal_Int32 i = 0 ; ( i < nLength ) && !xOStm.is(); ++i)
     {
@@ -70,6 +71,8 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             pValue[ i ].Value >>= aFilterData;
         else if ( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
             pValue[ i ].Value >>= xStatusIndicator;
+        else if( pValue[i].Name.equalsAscii( "InteractionHandler" ) )
+            pValue[i].Value >>= xIH;
     }
 
     /* we don't get FilterData if we are exporting directly
@@ -118,7 +121,7 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     }
     if( mxSrcDoc.is() && xOStm.is() )
     {
-        PDFExport       aExport( mxSrcDoc, xStatusIndicator, mxMSF );
+        PDFExport       aExport( mxSrcDoc, xStatusIndicator, xIH, mxMSF );
         ::utl::TempFile aTempFile;
 
         aTempFile.EnableKillingFile();
