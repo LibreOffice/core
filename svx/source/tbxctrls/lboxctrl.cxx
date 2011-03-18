@@ -47,7 +47,7 @@
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <svx/dialmgr.hxx>
-#include <lboxctrl.hxx>
+#include <svx/lboxctrl.hxx>
 #include <vcl/mnemonic.hxx>
 #include <tools/urlobj.hxx>
 
@@ -71,47 +71,47 @@ class SvxPopupWindowListBox : public SfxPopupWindow
 
     ListBox *       pListBox;
     ToolBox &       rToolBox;
-    BOOL            bUserSel;
-    USHORT          nTbxId;
+    sal_Bool            bUserSel;
+    sal_uInt16          nTbxId;
     rtl::OUString   maCommandURL;
     // disallow copy-constructor and assignment-operator
 
     SvxPopupWindowListBox(const int& );
     SvxPopupWindowListBox & operator = (const int& );
 
-//  SvxPopupWindowListBox( USHORT nSlotId, ToolBox& rTbx, USHORT nTbxItemId );
+//  SvxPopupWindowListBox( sal_uInt16 nSlotId, ToolBox& rTbx, sal_uInt16 nTbxItemId );
 
 public:
-    SvxPopupWindowListBox( USHORT nSlotId, const rtl::OUString& rCommandURL, USHORT nTbxId, ToolBox& rTbx );
+    SvxPopupWindowListBox( sal_uInt16 nSlotId, const rtl::OUString& rCommandURL, sal_uInt16 nTbxId, ToolBox& rTbx );
     virtual ~SvxPopupWindowListBox();
 
     // SfxPopupWindow
     virtual SfxPopupWindow *    Clone() const;
     virtual void                PopupModeEnd();
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
 
     void                        StartSelection();
     inline ListBox &            GetListBox()    { return *pListBox; }
 
-    BOOL                        IsUserSelected() const          { return bUserSel; }
-    void                        SetUserSelected( BOOL bVal )    { bUserSel = bVal; }
+    sal_Bool                        IsUserSelected() const          { return bUserSel; }
+    void                        SetUserSelected( sal_Bool bVal )    { bUserSel = bVal; }
     /*virtual*/Window*                     GetPreferredKeyInputWindow();
 };
 
 /////////////////////////////////////////////////////////////////
 
-SvxPopupWindowListBox::SvxPopupWindowListBox( USHORT nSlotId, const rtl::OUString& rCommandURL, USHORT nId, ToolBox& rTbx ) :
+SvxPopupWindowListBox::SvxPopupWindowListBox( sal_uInt16 nSlotId, const rtl::OUString& rCommandURL, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxPopupWindow( nSlotId, Reference< XFrame >(), SVX_RES( RID_SVXTBX_UNDO_REDO_CTRL ) ),
     rToolBox    ( rTbx ),
-    bUserSel    ( FALSE ),
+    bUserSel    ( sal_False ),
     nTbxId      ( nId ),
     maCommandURL( rCommandURL )
 {
     DBG_ASSERT( nSlotId == GetId(), "id mismatch" );
     pListBox = new ListBox( this, SVX_RES( LB_SVXTBX_UNDO_REDO_CTRL ) );
     FreeResource();
-    pListBox->EnableMultiSelection( TRUE, TRUE );
+    pListBox->EnableMultiSelection( sal_True, sal_True );
     SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     AddStatusListener( rCommandURL );
 }
@@ -145,7 +145,7 @@ void SvxPopupWindowListBox::PopupModeEnd()
 
 
 void SvxPopupWindowListBox::StateChanged(
-        USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+        sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     rToolBox.EnableItem( nTbxId, ( SfxToolBoxControl::GetItemState( pState ) != SFX_ITEM_DISABLED) );
     SfxPopupWindow::StateChanged( nSID, eState, pState );
@@ -169,7 +169,7 @@ Window* SvxPopupWindowListBox::GetPreferredKeyInputWindow()
 SFX_IMPL_TOOLBOX_CONTROL( SvxListBoxControl, SfxStringItem );
 
 
-SvxListBoxControl::SvxListBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+SvxListBoxControl::SvxListBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx ),
     pPopupWin   ( 0 )
 {
@@ -197,7 +197,7 @@ SfxPopupWindowType SvxListBoxControl::GetPopupWindowType() const
 
 
 void SvxListBoxControl::StateChanged(
-        USHORT, SfxItemState, const SfxPoolItem* pState )
+        sal_uInt16, SfxItemState, const SfxPoolItem* pState )
 {
     GetToolBox().EnableItem( GetId(),
                             SFX_ITEM_DISABLED != GetItemState(pState) );
@@ -209,7 +209,7 @@ IMPL_LINK( SvxListBoxControl, PopupModeEndHdl, void *, EMPTYARG )
     if( pPopupWin && 0 == pPopupWin->GetPopupModeFlags()  &&
         pPopupWin->IsUserSelected() )
     {
-        USHORT nCount = pPopupWin->GetListBox().GetSelectEntryCount();
+        sal_uInt16 nCount = pPopupWin->GetListBox().GetSelectEntryCount();
 
         INetURLObject aObj( m_aCommandURL );
 
@@ -222,13 +222,13 @@ IMPL_LINK( SvxListBoxControl, PopupModeEndHdl, void *, EMPTYARG )
 }
 
 
-void SvxListBoxControl::Impl_SetInfo( USHORT nCount )
+void SvxListBoxControl::Impl_SetInfo( sal_uInt16 nCount )
 {
     DBG_ASSERT( pPopupWin, "NULL pointer, PopupWindow missing" );
 
 //    ListBox &rListBox = pPopupWin->GetListBox();
 
-    USHORT nId;
+    sal_uInt16 nId;
     if (nCount == 1)
         nId = SID_UNDO == GetSlotId() ? RID_SVXSTR_NUM_UNDO_ACTION : RID_SVXSTR_NUM_REDO_ACTION;
     else
@@ -246,14 +246,14 @@ IMPL_LINK( SvxListBoxControl, SelectHdl, void *, EMPTYARG )
 {
     if (pPopupWin)
     {
-        //pPopupWin->SetUserSelected( FALSE );
+        //pPopupWin->SetUserSelected( sal_False );
 
         ListBox &rListBox = pPopupWin->GetListBox();
         if (rListBox.IsTravelSelect())
             Impl_SetInfo( rListBox.GetSelectEntryCount() );
         else
         {
-            pPopupWin->SetUserSelected( TRUE );
+            pPopupWin->SetUserSelected( sal_True );
             pPopupWin->EndPopupMode( 0 );
         }
     }
@@ -264,7 +264,7 @@ IMPL_LINK( SvxListBoxControl, SelectHdl, void *, EMPTYARG )
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxUndoRedoControl, SfxStringItem );
 
-SvxUndoRedoControl::SvxUndoRedoControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+SvxUndoRedoControl::SvxUndoRedoControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     : SvxListBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
@@ -277,7 +277,7 @@ SvxUndoRedoControl::~SvxUndoRedoControl()
 }
 
 void SvxUndoRedoControl::StateChanged(
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     if ( nSID == SID_UNDO || nSID == SID_REDO )
     {

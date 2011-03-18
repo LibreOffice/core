@@ -72,13 +72,6 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 
 //------------------------------------------------------------------------------
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void *pRegistryKey) {
-    return cppu::component_writeInfoHelper(
-        pServiceManager, pRegistryKey, kImplementations_entries);
-}
-
-//------------------------------------------------------------------------------
-
 extern "C" void *component_getFactory( const sal_Char *aImplementationName, void *aServiceManager, void *aRegistryKey)
 {
 

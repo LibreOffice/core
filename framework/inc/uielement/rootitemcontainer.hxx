@@ -58,13 +58,12 @@
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <vector>
+#include <fwidllapi.h>
 
 namespace framework
 {
-
 class ConstItemContainer;
-class ItemContainer;
-class RootItemContainer :   public ::com::sun::star::lang::XTypeProvider            ,
+class RootItemContainer : public ::com::sun::star::lang::XTypeProvider            ,
                             public ::com::sun::star::container::XIndexContainer     ,
                             public ::com::sun::star::lang::XSingleComponentFactory  ,
                             public ::com::sun::star::lang::XUnoTunnel               ,
@@ -76,10 +75,10 @@ class RootItemContainer :   public ::com::sun::star::lang::XTypeProvider        
     friend class ConstItemContainer;
 
     public:
-        RootItemContainer();
-        RootItemContainer( const ConstItemContainer& rConstItemContainer );
-        RootItemContainer( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rItemAccessContainer );
-        virtual ~RootItemContainer();
+        FWI_DLLPUBLIC RootItemContainer();
+        FWI_DLLPUBLIC RootItemContainer( const ConstItemContainer& rConstItemContainer );
+        FWI_DLLPUBLIC RootItemContainer( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& rItemAccessContainer );
+        virtual FWI_DLLPUBLIC ~RootItemContainer();
 
         //---------------------------------------------------------------------------------------------------------
         //  XInterface, XTypeProvider
@@ -88,8 +87,8 @@ class RootItemContainer :   public ::com::sun::star::lang::XTypeProvider        
         FWK_DECLARE_XTYPEPROVIDER
 
         // XUnoTunnel
-        static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
-        static RootItemContainer*                                   GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
+        static FWI_DLLPUBLIC const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
+        static FWI_DLLPUBLIC RootItemContainer*                                   GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
         sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
         // XIndexContainer

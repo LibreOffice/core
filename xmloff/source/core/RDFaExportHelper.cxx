@@ -30,7 +30,7 @@
 
 #include "RDFaExportHelper.hxx"
 
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>

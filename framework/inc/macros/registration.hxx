@@ -38,10 +38,8 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/InvalidRegistryException.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -58,64 +56,11 @@
     macros for registration of services
     Please use follow public macros only!
 
-    1)  COMPONENTINFO( CLASS )                      => use it as parameter for COMPONENT_WRITEINFO( INFOS )
-    2)  IFFACTORY( CLASS )                          => use it as parameter for COMPONENT_GETFACTORY( IFFACTORIES )
-    3)  COMPONENTGETIMPLEMENTATIONENVIRONMENT       => use it to define exported function component_getImplementationEnvironment()
-    4)  COMPONENTWRITEINFO( INFOS )                 => use it to define exported function component_writeInfo()
-    5)  COMPONENTGETFACTORY( IFFACTORIES )          => use it to define exported function component_getFactory()
+    IFFACTORY( CLASS )                          => use it as parameter for COMPONENT_GETFACTORY( IFFACTORIES )
+    COMPONENTGETIMPLEMENTATIONENVIRONMENT       => use it to define exported function component_getImplementationEnvironment()
+    COMPONENTGETFACTORY( IFFACTORIES )          => use it to define exported function component_getFactory()
 
 _________________________________________________________________________________________________________________*/
-
-//*****************************************************************************************************************
-//  public
-//  use it as parameter for COMPONENT_WRITEINFO( INFOS )
-//*****************************************************************************************************************
-
-#define COMPONENTINFO( CLASS )                                                                                                          \
-    try                                                                                                                                 \
-    {                                                                                                                                   \
-        /* Set default result of follow operations !!! */                                                                               \
-        bReturn = sal_False;                                                                                                            \
-        /* Do the follow only, if given key is valid ! */                                                                               \
-        if ( xKey.is() == sal_True )                                                                                                    \
-        {                                                                                                                               \
-            LOG_REGISTRATION_WRITEINFO( "\t\t\txKey is valid ...\n" )                                                                   \
-            /* Build new keyname    */                                                                                                  \
-            sKeyName     =  DECLARE_ASCII( "/" );                                                                                       \
-            sKeyName    +=  CLASS::impl_getStaticImplementationName();                                                                  \
-            sKeyName    +=  DECLARE_ASCII( "/UNO/SERVICES" );                                                                           \
-            LOG_REGISTRATION_WRITEINFO( "\t\t\tcreate key \"" )                                                                         \
-            LOG_REGISTRATION_WRITEINFO( U2B( sKeyName ) )                                                                               \
-            LOG_REGISTRATION_WRITEINFO( "\" ...\n" )                                                                                    \
-            /* Create new key with new name. */                                                                                         \
-             xNewKey = xKey->createKey( sKeyName );                                                                                     \
-            /* If this new key valid ... */                                                                                             \
-            if ( xNewKey.is() == sal_True )                                                                                             \
-            {                                                                                                                           \
-                LOG_REGISTRATION_WRITEINFO( "\t\t\t\ttsuccessful ...\n" )                                                               \
-                /* Get information about supported services. */                                                                         \
-                seqServiceNames =   CLASS::impl_getStaticSupportedServiceNames()    ;                                                   \
-                pArray          =   seqServiceNames.getArray()                      ;                                                   \
-                nLength         =   seqServiceNames.getLength()                     ;                                                   \
-                nCounter        =   0                                               ;                                                   \
-                /* Then set this information on this key. */                                                                            \
-                for ( nCounter = 0; nCounter < nLength; ++nCounter )                                                                    \
-                {                                                                                                                       \
-                    LOG_REGISTRATION_WRITEINFO( "\t\t\t\twrite key \"" )                                                                \
-                    LOG_REGISTRATION_WRITEINFO( U2B( pArray[nCounter] ) )                                                               \
-                    LOG_REGISTRATION_WRITEINFO( "\" to registry ...\n" )                                                                \
-                    xNewKey->createKey( pArray[nCounter] );                                                                             \
-                }                                                                                                                       \
-                /* Result of this operations = OK. */                                                                                   \
-                bReturn = sal_True ;                                                                                                    \
-            }                                                                                                                           \
-        }                                                                                                                               \
-    }                                                                                                                                   \
-    catch( ::com::sun::star::registry::InvalidRegistryException& )                                                                      \
-    {                                                                                                                                   \
-        LOG_REGISTRATION_WRITEINFO( "\n\nERROR:\nInvalidRegistryException detected\n\n" )                                               \
-        bReturn = sal_False ;                                                                                                           \
-    }
 
 //*****************************************************************************************************************
 //  public
@@ -141,41 +86,6 @@ ________________________________________________________________________________
                                                                              uno_Environment**                          )               \
     {                                                                                                                                   \
         *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;                                                                   \
-    }
-
-//*****************************************************************************************************************
-//  public
-//  define registration of service
-//*****************************************************************************************************************
-#define COMPONENTWRITEINFO( INFOS )                                                                                                     \
-    extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(  void* /*pServiceManager*/   ,                                                       \
-                                                        void*   pRegistryKey    )                                                       \
-    {                                                                                                                                   \
-        LOG_REGISTRATION_WRITEINFO( "\t[start]\n" )                                                                                     \
-        /* Set default return value for this operation - if it failed. */                                                               \
-        sal_Bool bReturn = sal_False ;                                                                                                  \
-        if ( pRegistryKey != NULL )                                                                                                     \
-        {                                                                                                                               \
-            LOG_REGISTRATION_WRITEINFO( "\t\tpRegistryKey is valid ...\n" )                                                             \
-            /* Define variables for following helper macros! */                                                                         \
-            /* bReturn will set automaticly.                 */                                                                         \
-            ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >    xKey            ;                           \
-            ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >    xNewKey         ;                           \
-            ::com::sun::star::uno::Sequence<  ::rtl::OUString >                             seqServiceNames ;                           \
-            const ::rtl::OUString*                                                          pArray          ;                           \
-            sal_Int32                                                                       nLength         ;                           \
-            sal_Int32                                                                       nCounter        ;                           \
-            ::rtl::OUString                                                                 sKeyName        ;                           \
-            xKey = reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pRegistryKey );                                       \
-            /* This parameter will expand to */                                                                                         \
-            /*   "COMPONENT_INFO(a)          */                                                                                         \
-            /*    ...                        */                                                                                         \
-            /*    COMPONENT_INFO(z)"         */                                                                                         \
-            INFOS                                                                                                                       \
-        }                                                                                                                               \
-        LOG_REGISTRATION_WRITEINFO( "\t[end]\n" )                                                                                       \
-        /* Return with result of this operation. */                                                                                     \
-        return bReturn ;                                                                                                                \
     }
 
 //*****************************************************************************************************************

@@ -106,7 +106,7 @@ sal_Int32 ADOS::MapADOType2Jdbc(DataTypeEnum eType)
         case adDBTime:              nType = DataType::TIME;         break;
         case adDate:
         case adDBTimeStamp:         nType = DataType::TIMESTAMP;    break;
-        case adBoolean:             nType = DataType::BIT;          break;
+        case adBoolean:             nType = DataType::BOOLEAN;      break;
 //      case adArray:               nType = DataType::ARRAY;        break;
         case adBinary:              nType = DataType::BINARY;       break;
         case adGUID:                nType = DataType::OBJECT;       break;
@@ -152,6 +152,7 @@ DataTypeEnum ADOS::MapJdbc2ADOType(sal_Int32 _nType,sal_Int32 _nJetEngine)
         case DataType::DATE:            return isJetEngine(_nJetEngine) ? adDate : adDBDate;            break;
         case DataType::TIME:            return adDBTime;            break;
         case DataType::TIMESTAMP:       return isJetEngine(_nJetEngine) ? adDate : adDBTimeStamp;       break;
+        case DataType::BOOLEAN:
         case DataType::BIT:             return adBoolean;           break;
         case DataType::BINARY:          return adBinary;            break;
         case DataType::VARCHAR:         return adVarWChar;          break;

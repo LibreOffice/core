@@ -37,9 +37,9 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlnumi.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
-#include "i18nmap.hxx"
+#include "xmloff/i18nmap.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlement.hxx>
@@ -966,7 +966,7 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
     // rename field
     // currently: no family in use! Use 0.
     OUString sName = rImportHelper.GetRenameMap().Get(
-        sal::static_int_cast< USHORT >(eVarType), sVarName);
+        sal::static_int_cast< sal_uInt16 >(eVarType), sVarName);
 
     // get text fields supplier and field masters
     Reference<XTextFieldsSupplier> xTextFieldsSupp(rImport.GetModel(),
@@ -1018,7 +1018,7 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
             sNew = aBuf.makeStringAndClear();
 
             rImportHelper.GetRenameMap().Add(
-                sal::static_int_cast< USHORT >(eVarType), sName, sNew);
+                sal::static_int_cast< sal_uInt16 >(eVarType), sName, sNew);
 
             // call FindFieldMaster recursively to create new master
             return FindFieldMaster(xMaster, rImport, rImportHelper,
@@ -1043,7 +1043,7 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
             sNew = aBuf.makeStringAndClear();
 
             rImportHelper.GetRenameMap().Add(
-                sal::static_int_cast< USHORT >(eVarType), sName, sNew);
+                sal::static_int_cast< sal_uInt16 >(eVarType), sName, sNew);
 
             // call FindFieldMaster recursively to create new master
             return FindFieldMaster(xMaster, rImport, rImportHelper,

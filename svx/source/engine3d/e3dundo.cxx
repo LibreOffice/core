@@ -53,9 +53,9 @@ E3dUndoAction::~E3dUndoAction ()
 |* Repeat gibt es nicht
 |*
 \************************************************************************/
-BOOL E3dUndoAction::CanRepeat(SfxRepeatTarget&) const
+sal_Bool E3dUndoAction::CanRepeat(SfxRepeatTarget&) const
 {
-    return FALSE;
+    return sal_False;
 }
 
 /************************************************************************/
@@ -117,7 +117,7 @@ E3dAttributesUndoAction::E3dAttributesUndoAction( SdrModel &rModel,
     E3dObject*  pInObject,
     const SfxItemSet& rNewSet,
     const SfxItemSet& rOldSet,
-    BOOL bUseSubObj)
+    sal_Bool bUseSubObj)
 :   SdrUndoAction( rModel ),
     pObject      ( pInObject ),
     pView        ( p3dView ),
@@ -165,9 +165,9 @@ void E3dAttributesUndoAction::Redo()
 |* Mehrfaches Undo nicht moeglich
 |*
 \************************************************************************/
-BOOL E3dAttributesUndoAction::CanRepeat(SfxRepeatTarget& /*rView*/) const
+sal_Bool E3dAttributesUndoAction::CanRepeat(SfxRepeatTarget& /*rView*/) const
 {
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************

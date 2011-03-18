@@ -40,72 +40,10 @@ using namespace com::sun::star;
 using namespace tdoc_ucp;
 
 //=========================================================================
-static sal_Bool writeInfo( void * pRegistryKey,
-                           const rtl::OUString & rImplementationName,
-                           uno::Sequence< rtl::OUString > const & rServiceNames )
-{
-    rtl::OUString aKeyName( RTL_CONSTASCII_USTRINGPARAM("/") );
-    aKeyName += rImplementationName;
-    aKeyName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-
-    uno::Reference< registry::XRegistryKey > xKey;
-    try
-    {
-        xKey = static_cast< registry::XRegistryKey * >(
-                                    pRegistryKey )->createKey( aKeyName );
-    }
-    catch ( registry::InvalidRegistryException const & )
-    {
-    }
-
-    if ( !xKey.is() )
-        return sal_False;
-
-    sal_Bool bSuccess = sal_True;
-
-    for ( sal_Int32 n = 0; n < rServiceNames.getLength(); ++n )
-    {
-        try
-        {
-            xKey->createKey( rServiceNames[ n ] );
-        }
-        catch ( registry::InvalidRegistryException const & )
-        {
-            bSuccess = sal_False;
-            break;
-        }
-    }
-    return bSuccess;
-}
-
-//=========================================================================
 extern "C" void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//=========================================================================
-extern "C" sal_Bool SAL_CALL component_writeInfo(
-    void * /*pServiceManager*/, void * pRegistryKey )
-{
-    return pRegistryKey &&
-
-    //////////////////////////////////////////////////////////////////////
-    // Transient Documents Content Provider.
-    //////////////////////////////////////////////////////////////////////
-
-    writeInfo( pRegistryKey,
-               ContentProvider::getImplementationName_Static(),
-               ContentProvider::getSupportedServiceNames_Static() ) &&
-
-    //////////////////////////////////////////////////////////////////////
-    // Transient Documents Document Content Factory.
-    //////////////////////////////////////////////////////////////////////
-
-    writeInfo( pRegistryKey,
-               DocumentContentFactory::getImplementationName_Static(),
-               DocumentContentFactory::getSupportedServiceNames_Static() );
 }
 
 //=========================================================================

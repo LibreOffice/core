@@ -29,14 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include "EnhancedCustomShapeEngine.hxx"
-#include "EnhancedCustomShape2d.hxx"
+#include "svx/EnhancedCustomShape2d.hxx"
 #include "EnhancedCustomShape3d.hxx"
 #include "EnhancedCustomShapeFontWork.hxx"
 #include "EnhancedCustomShapeHandle.hxx"
-#include "EnhancedCustomShapeGeometry.hxx"
+#include "svx/EnhancedCustomShapeGeometry.hxx"
 #include <svx/unoshape.hxx>
 #include "svx/unopage.hxx"
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdogrp.hxx>
@@ -48,7 +48,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include "unopolyhelper.hxx"
 #include <uno/mapping.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -315,7 +315,7 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
                     nShearWink = -nShearWink;
                     nTan = -nTan;
                 }
-                pRenderedShape->Shear( pSdrObjCustomShape->GetSnapRect().Center(), nShearWink, nTan, FALSE);
+                pRenderedShape->Shear( pSdrObjCustomShape->GetSnapRect().Center(), nShearWink, nTan, sal_False);
             }
             if( nRotateAngle )
             {
@@ -398,7 +398,7 @@ com::sun::star::drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEng
                     nShearWink = -nShearWink;
                     nTan = -nTan;
                 }
-                pObj->Shear( aRect.Center(), nShearWink, nTan, FALSE);
+                pObj->Shear( aRect.Center(), nShearWink, nTan, sal_False);
             }
             sal_Int32 nRotateAngle = aCustomShape2d.GetRotateAngle();
             if( nRotateAngle )
@@ -434,7 +434,7 @@ com::sun::star::drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEng
                 }
                 else
                 {
-                    pNewObj = pNext->ConvertToPolyObj( FALSE, FALSE );
+                    pNewObj = pNext->ConvertToPolyObj( sal_False, sal_False );
                     SdrPathObj* pPath = PTR_CAST( SdrPathObj, pNewObj );
                     if ( pPath )
                         aPP = pPath->GetPathPoly();

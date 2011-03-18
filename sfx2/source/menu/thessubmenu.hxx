@@ -44,21 +44,17 @@ namespace css = ::com::sun::star;
 
 ////////////////////////////////////////////////////////////
 
-String GetThesaurusReplaceText_Impl( const ::rtl::OUString &rText );
-
-////////////////////////////////////////////////////////////
-
 class SfxThesSubMenuControl : public SfxMenuControl
 {
     PopupMenu*          pMenu;
     Menu&               rParent;
 
 private:
-    virtual void    StateChanged( USHORT, SfxItemState, const SfxPoolItem* pState );
+    virtual void    StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* pState );
     DECL_LINK( MenuSelect, Menu * );
 
 public:
-    SfxThesSubMenuControl(USHORT, Menu&, SfxBindings&);
+    SfxThesSubMenuControl(sal_uInt16, Menu&, SfxBindings&);
     ~SfxThesSubMenuControl();
 
     virtual PopupMenu*  GetPopup() const;

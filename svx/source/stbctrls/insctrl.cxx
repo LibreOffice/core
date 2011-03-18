@@ -40,7 +40,7 @@
 
 #include <svx/dialogs.hrc>
 
-#include "insctrl.hxx"
+#include "svx/insctrl.hxx"
 #include <svx/dialmgr.hxx>
 
 #define PAINT_OFFSET    5
@@ -49,14 +49,13 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxInsertStatusBarControl, SfxBoolItem);
 
 // class SvxInsertStatusBarControl ---------------------------------------
 
-SvxInsertStatusBarControl::SvxInsertStatusBarControl( USHORT _nSlotId,
-                                                      USHORT _nId,
+SvxInsertStatusBarControl::SvxInsertStatusBarControl( sal_uInt16 _nSlotId,
+                                                      sal_uInt16 _nId,
                                                       StatusBar& rStb ) :
 
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
-    bInsert( TRUE )
+    bInsert( sal_True )
 {
-    rStb.SetHelpId( _nId, _nSlotId );
 }
 
 // -----------------------------------------------------------------------
@@ -67,7 +66,7 @@ SvxInsertStatusBarControl::~SvxInsertStatusBarControl()
 
 // -----------------------------------------------------------------------
 
-void SvxInsertStatusBarControl::StateChanged( USHORT , SfxItemState eState,
+void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
                                               const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE != eState )
@@ -110,14 +109,14 @@ void SvxInsertStatusBarControl::Paint( const UserDrawEvent& )
 
 void SvxInsertStatusBarControl::DrawItemText_Impl()
 {
-    USHORT _nId = RID_SVXSTR_OVERWRITE_TEXT;
+    sal_uInt16 _nId = RID_SVXSTR_OVERWRITE_TEXT;
 
     if ( bInsert )
         _nId = RID_SVXSTR_INSERT_TEXT;
     GetStatusBar().SetItemText( GetId(), SVX_RESSTR( _nId ) );
 }
 
-ULONG SvxInsertStatusBarControl::GetDefItemWidth(const StatusBar& rStb)
+sal_uIntPtr SvxInsertStatusBarControl::GetDefItemWidth(const StatusBar& rStb)
 {
     long nWidth1 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_OVERWRITE_TEXT));
     long nWidth2 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_INSERT_TEXT));

@@ -52,19 +52,19 @@
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/document/XExporter.hpp>
-
 #include <rtl/textenc.h>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <mailmodelapi.hxx>
+#include <sfx2/mailmodelapi.hxx>
 #include "sfxtypes.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxsids.hrc>
 #include "dialog.hrc"
 
@@ -81,6 +81,7 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 // --------------------------------------------------------------
 using namespace ::com::sun::star;
@@ -95,6 +96,54 @@ using namespace ::com::sun::star::system;
 using namespace ::rtl;
 
 namespace css = ::com::sun::star;
+// - class PrepareListener_Impl ------------------------------------------
+class PrepareListener_Impl : public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
+{
+    bool m_bState;
+public:
+        PrepareListener_Impl();
+        virtual ~PrepareListener_Impl();
+
+        // css.frame.XStatusListener
+        virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& aEvent)
+          throw(css::uno::RuntimeException);
+
+        // css.lang.XEventListener
+        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
+          throw(css::uno::RuntimeException);
+
+        bool IsSet() const {return m_bState;}
+};
+
+/*-- 25.08.2010 14:32:49---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+PrepareListener_Impl::PrepareListener_Impl() :
+    m_bState( false )
+{
+}
+/*-- 25.08.2010 14:32:51---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+PrepareListener_Impl::~PrepareListener_Impl()
+{
+}
+/*-- 25.08.2010 14:32:51---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void PrepareListener_Impl::statusChanged(const css::frame::FeatureStateEvent& rEvent) throw(css::uno::RuntimeException)
+{
+    if( rEvent.IsEnabled )
+        rEvent.State >>= m_bState;
+    else
+        m_bState = sal_False;
+}
+/*-- 25.08.2010 14:32:52---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void PrepareListener_Impl::disposing(const css::lang::EventObject& /*rEvent*/) throw(css::uno::RuntimeException)
+{
+}
 
 // class SfxMailModel -----------------------------------------------
 
@@ -537,46 +586,68 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 aArgs[nNumArgs-1].Value = css::uno::makeAny( aPassword );
             }
 
-            if ( bModified || !bHasLocation || bStoreTo )
+            bool bNeedsPreparation = false;
+            css::util::URL aPrepareURL;
+            css::uno::Reference< css::frame::XDispatch > xPrepareDispatch;
+            css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( xFrame, css::uno::UNO_QUERY );
+            css::uno::Reference< css::util::XURLTransformer > xURLTransformer(
+                        xSMGR->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
+                        css::uno::UNO_QUERY );
+            if( !bSendAsPDF )
+            {
+                try
+                {
+                    // check if the document needs to be prepared for sending as mail (embedding of links, removal of invisible content)
+
+                    if ( xURLTransformer.is() )
+                    {
+                        aPrepareURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PrepareMailExport" ));
+                        xURLTransformer->parseStrict( aPrepareURL );
+                    }
+
+                    if ( xDispatchProvider.is() )
+                    {
+                        xPrepareDispatch = css::uno::Reference< css::frame::XDispatch >(
+                            xDispatchProvider->queryDispatch( aPrepareURL, ::rtl::OUString(), 0 ));
+                        if ( xPrepareDispatch.is() )
+                        {
+                                PrepareListener_Impl* pPrepareListener;
+                                uno::Reference< css::frame::XStatusListener > xStatusListener = pPrepareListener = new PrepareListener_Impl;
+                                xPrepareDispatch->addStatusListener( xStatusListener, aPrepareURL );
+                                bNeedsPreparation = pPrepareListener->IsSet();
+                                xPrepareDispatch->removeStatusListener( xStatusListener, aPrepareURL );
+                        }
+                    }
+                }
+                catch ( css::uno::RuntimeException& )
+                {
+                    throw;
+                }
+                catch ( css::uno::Exception& )
+                {
+                }
+            }
+
+            if ( bModified || !bHasLocation || bStoreTo || bNeedsPreparation )
             {
                 // Document is modified, is newly created or should be stored in a special format
                 try
                 {
-                    css::uno::Reference< css::util::XURLTransformer > xURLTransformer(
-                        xSMGR->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                        css::uno::UNO_QUERY );
-
-                    css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( xFrame, css::uno::UNO_QUERY );
-                    css::uno::Reference< css::frame::XDispatch > xDispatch;
-
-                    css::util::URL aURL;
-                    css::uno::Sequence< css::beans::PropertyValue > aDispatchArgs;
-
-                    if( !bSendAsPDF )
+                    if( bNeedsPreparation && xPrepareDispatch.is() )
                     {
-                        if ( xURLTransformer.is() )
+                        if ( xPrepareDispatch.is() )
                         {
-                            aURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PrepareMailExport" ));
-                            xURLTransformer->parseStrict( aURL );
-                        }
-
-                        if ( xDispatchProvider.is() )
-                        {
-                            xDispatch = css::uno::Reference< css::frame::XDispatch >(
-                                xDispatchProvider->queryDispatch( aURL, ::rtl::OUString(), 0 ));
-                            if ( xDispatch.is() )
+                            try
                             {
-                                try
-                                {
-                                    xDispatch->dispatch( aURL, aDispatchArgs );
-                                }
-                                catch ( css::uno::RuntimeException& )
-                                {
-                                    throw;
-                                }
-                                catch ( css::uno::Exception& )
-                                {
-                                }
+                                css::uno::Sequence< css::beans::PropertyValue > aDispatchArgs;
+                                xPrepareDispatch->dispatch( aPrepareURL, aDispatchArgs );
+                            }
+                            catch ( css::uno::RuntimeException& )
+                            {
+                                throw;
+                            }
+                            catch ( css::uno::Exception& )
+                            {
                             }
                         }
                     }
@@ -598,6 +669,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
                     if( !bSendAsPDF )
                     {
+                        css::util::URL aURL;
                         // #i30432# notify that export is finished - the Writer may want to restore removed content
                         if ( xURLTransformer.is() )
                         {
@@ -607,12 +679,13 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
                         if ( xDispatchProvider.is() )
                         {
-                            xDispatch = css::uno::Reference< css::frame::XDispatch >(
+                            css::uno::Reference< css::frame::XDispatch > xDispatch = css::uno::Reference< css::frame::XDispatch >(
                                 xDispatchProvider->queryDispatch( aURL, ::rtl::OUString(), 0 ));
                             if ( xDispatch.is() )
                             {
                                 try
                                 {
+                                    css::uno::Sequence< css::beans::PropertyValue > aDispatchArgs;
                                     xDispatch->dispatch( aURL, aDispatchArgs );
                                 }
                                 catch ( css::uno::RuntimeException& )
@@ -904,7 +977,7 @@ SfxMailModel::SendMailResult SfxMailModel::SaveAndSend( const css::uno::Referenc
 
 // functions -------------------------------------------------------------
 
-BOOL CreateFromAddress_Impl( String& rFrom )
+sal_Bool CreateFromAddress_Impl( String& rFrom )
 
 /* [Description]
 
@@ -914,8 +987,8 @@ BOOL CreateFromAddress_Impl( String& rFrom )
 
     [Return value]
 
-    TRUE:       Address could be created.
-    FALSE:      Address could not be created.
+    sal_True:       Address could be created.
+    sal_False:      Address could not be created.
 */
 
 {

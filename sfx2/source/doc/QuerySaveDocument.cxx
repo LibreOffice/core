@@ -28,10 +28,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-#include "QuerySaveDocument.hxx"
+#include "sfx2/QuerySaveDocument.hxx"
 
 #include <sfx2/sfx.hrc>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxuno.hxx>
 #include "doc.hrc"
 #include <vcl/msgbox.hxx>

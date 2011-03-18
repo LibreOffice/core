@@ -145,7 +145,7 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMINCHAR;
             }
             else
-                nRes = (BYTE) ImpRound( dVal );
+                nRes = (sal_uInt8) ImpRound( dVal );
             break;
             }
         case SbxBYREF | SbxSTRING:
@@ -276,17 +276,17 @@ start:
         case SbxBYREF | SbxCHAR:
             *p->pChar = n; break;
         case SbxBYREF | SbxBYTE:
-            *p->pByte = (BYTE) n; break;
+            *p->pByte = (sal_uInt8) n; break;
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
             *p->pInteger = n; break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
-            *p->pUShort = (UINT16) n; break;
+            *p->pUShort = (sal_uInt16) n; break;
         case SbxBYREF | SbxLONG:
-            *p->pLong = (INT32) n; break;
+            *p->pLong = (sal_Int32) n; break;
         case SbxBYREF | SbxULONG:
-            *p->pULong = (UINT32) n; break;
+            *p->pULong = (sal_uInt32) n; break;
         case SbxBYREF | SbxSINGLE:
             *p->pSingle = (float) n; break;
         case SbxBYREF | SbxDATE:

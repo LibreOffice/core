@@ -52,6 +52,14 @@
 #define RID_SVXSTR_LINESTYLE                (RID_SVX_START + 173)
 #define RID_SVXSTR_FIELDUNIT_TABLE          (RID_SVX_START + 311)
 #define RID_SVXSTR_COLOR_USER               (RID_SVX_START + 250)
+//IAccessibility2 Implementation 2009-----
+#define RID_SVXSTR_GALLERYPROPS_GALTHEME    (RID_SVX_START + 251)
+#define RID_SVXSTR_GALLERY_THEMEITEMS       (RID_SVX_START + 252)
+#define RID_SVXSTR_GALLERY_THEMENAME        (RID_SVX_START + 253)
+#define RID_SVXSTR_GALLERY_FILESFOUND       (RID_SVX_START + 254)
+#define RID_SVXSTR_GALLERY_PREVIEW          (RID_SVX_START + 255)
+//-----IAccessibility2 Implementation 2009
+
 
 // factory IDs of tabpages implemented in CUI
 #define RID_SVXPAGE_CHAR_TWOLINES           (RID_SVX_START + 242)
@@ -305,10 +313,6 @@
 #define RID_SVXBMP_3D_FOCAL_LENGTH_08       (RID_SVX_START + 179)
 #define RID_SVXBMP_3D_FOCAL_LENGTH_09       (RID_SVX_START + 180)
 #define RID_SVXBMP_3D_FOCAL_LENGTH_10       (RID_SVX_START + 181)
-
-// for ToolboxControls alignment and draw objects
-#define RID_SVXTBX_DRAW                     (RID_SVX_START + 189)
-#define RID_SVXTBX_ALIGNMENT                (RID_SVX_START + 190)
 
 // Ids fuer auto correction
 #define RID_SVX_AUTOCORR                    (RID_SVX_START + 192)
@@ -942,6 +946,9 @@
 
 #define RID_SVXSTR_NEXTFREE                                 (RID_SVX_START + 1191)
 
+//IAccessibility2 Implementation 2009-----
+#define RID_SVXSTR_TEXTCOLOR                                (RID_SVX_START + 1178)
+//-----IAccessibility2 Implementation 2009
 // ----------------------------------------------------------------------------
 // if we have _a_lot_ time, we should group the resource ids by type, instead
 // of grouping them by semantics. The reason is that resource ids have to be
@@ -1017,8 +1024,10 @@
 #define SID_SC_TP_MISC                  (RID_OFA_START + 239)
 #define OFA_TP_TABPROPERTIES_TEXT       (RID_OFA_START + 245)
 #define OFA_TP_HELPERPROG               (RID_OFA_START + 249)
-#define SID_SC_TP_FORMULA               (RID_OFA_START + 257)
-#define SID_SC_TP_COMPATIBILITY         (RID_OFA_START + 258)
+#define STR_COLORTABLE                  (RID_OFA_START + 257)
+#define STR_SWITCH                      (RID_OFA_START + 258)
+#define SID_SC_TP_FORMULA               (RID_OFA_START + 259)
+#define SID_SC_TP_COMPATIBILITY         (RID_OFA_START + 260)
 
 // ----------------------------------------------------------------------------
 // ooo-build specific resources

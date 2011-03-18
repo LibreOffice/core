@@ -235,10 +235,5 @@ component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey)
-{
-    return component_writeInfoHelper(pServiceManager, pRegistryKey, services);
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

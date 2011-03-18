@@ -34,11 +34,11 @@
 #include <com/sun/star/style/TabAlign.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "xmltabe.hxx"
+#include "xmloff/xmltabe.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

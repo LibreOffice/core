@@ -49,7 +49,7 @@
 #include <svl/eitem.hxx>
 #include <tools/rtti.hxx>
 #include <svl/lstner.hxx>
-#include <sfxhelp.hxx>
+#include <sfx2/sfxhelp.hxx>
 #include <basic/sbstar.hxx>
 #include <svl/stritem.hxx>
 #include <basic/sbx.hxx>
@@ -87,7 +87,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "objshimp.hxx"
 #include "appbas.hxx"
 #include "sfxtypes.hxx"
@@ -98,8 +98,8 @@
 #include "appdata.hxx"
 #include <sfx2/appuno.hxx>
 #include <sfx2/sfxsids.hrc>
-#include "basmgr.hxx"
-#include "QuerySaveDocument.hxx"
+#include "sfx2/basmgr.hxx"
+#include "sfx2/QuerySaveDocument.hxx"
 #include "helpid.hrc"
 #include <sfx2/msg.hxx>
 #include "appbaslib.hxx"
@@ -197,11 +197,11 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
 
     if ( mpDoc->Get_Impl()->bHiddenLockedByAPI )
     {
-        mpDoc->Get_Impl()->bHiddenLockedByAPI = FALSE;
-        mpDoc->OwnerLock(FALSE);
+        mpDoc->Get_Impl()->bHiddenLockedByAPI = sal_False;
+        mpDoc->OwnerLock(sal_False);
     }
     else if ( !mpDoc->Get_Impl()->bClosing )
-        // GCC crashes when already in the destructor, so first query the Flag
+        // GCC stuerzt ab, wenn schon im dtor, also vorher Flag abfragen
         mpDoc->DoClose();
 }
 
@@ -816,11 +816,33 @@ void SfxObjectShell::InitBasicManager_Impl()
 */
 
 {
-    DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicManager->isValid(), "Local BasicManager already exists");
-    pImp->bBasicInitialized = TRUE;
+    /*  #163556# (DR) - Handling of recursive calls while creating the Bacic
+        manager.
 
+        It is possible that (while creating the Basic manager) the code that
+        imports the Basic storage wants to access the Basic manager again.
+        Especially in VBA compatibility mode, there is code that wants to
+        access the "VBA Globals" object which is stored as global UNO constant
+        in the Basic manager.
+
+        To achieve correct handling of the recursive calls of this function
+        from lcl_getBasicManagerForDocument(), the implementation of the
+        function BasicManagerRepository::getDocumentBasicManager() has been
+        changed to return the Basic manager currently under construction, when
+        called repeatedly.
+
+        The variable pImp->bBasicInitialized will be set to sal_True after
+        construction now, to ensure that the recursive call of the function
+        lcl_getBasicManagerForDocument() will be routed into this function too.
+
+        Calling BasicManagerHolder::reset() twice is not a big problem, as it
+        does not take ownership but stores only the raw pointer. Owner of all
+        Basic managers is the global BasicManagerRepository instance.
+     */
+    DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicManager->isValid(), "Lokaler BasicManager bereits vorhanden");
     pImp->pBasicManager->reset( BasicManagerRepository::getDocumentBasicManager( GetModel() ) );
     DBG_ASSERT( pImp->pBasicManager->isValid(), "SfxObjectShell::InitBasicManager_Impl: did not get a BasicManager!" );
+    pImp->bBasicInitialized = sal_True;
 }
 
 //--------------------------------------------------------------------
@@ -846,7 +868,7 @@ SfxObjectShell* SfxObjectShell::GetObjectShell()
 
 //--------------------------------------------------------------------
 
-SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames()
+uno::Sequence< ::rtl::OUString > SfxObjectShell::GetEventNames()
 {
     static uno::Sequence< ::rtl::OUString >* pEventNameContainer = NULL;
 
@@ -936,7 +958,7 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
     String aPrefix = String::CreateFromAscii( "private:factory/" );
     if ( aPrefix.Len() == aFact.Match( aPrefix ) )
         aFact.Erase( 0, aPrefix.Len() );
-    USHORT nPos = aFact.Search( '?' );
+    sal_uInt16 nPos = aFact.Search( '?' );
     String aParam;
     if ( nPos != STRING_NOTFOUND )
     {
@@ -1035,8 +1057,8 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
 {
     uno::Sequence < beans::PropertyValue > aProps;
     TransformItems( SID_OPENDOC, rSet, aProps );
-    SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE);
-    SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, FALSE);
+    SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False);
+    SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, sal_False);
     ::rtl::OUString aURL;
     ::rtl::OUString aTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
     if ( pFileNameItem )

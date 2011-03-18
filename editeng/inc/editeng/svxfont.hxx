@@ -47,7 +47,7 @@ class EDITENG_DLLPUBLIC SvxFont : public Font
     LanguageType eLang;         // Language
     SvxCaseMap   eCaseMap;      // Text Markup
     short nEsc;                 // Degree of Superscript/Subscript
-    BYTE  nPropr;               // Degree of reduction of the font height
+    sal_uInt8  nPropr;          // Degree of reduction of the font height
     short nKern;                // Kerning in Pt
 
 public:
@@ -59,10 +59,10 @@ public:
     inline short GetEscapement() const { return nEsc; }
     inline void SetEscapement( const short nNewEsc ) { nEsc = nNewEsc; }
 
-    inline BYTE GetPropr() const { return nPropr; }
-    inline void SetPropr( const BYTE nNewPropr ) { nPropr = nNewPropr; }
-    inline void SetProprRel( const BYTE nNewPropr )
-        { SetPropr( (BYTE)( (long)nNewPropr * (long)nPropr / 100L ) ); }
+    inline sal_uInt8 GetPropr() const { return nPropr; }
+    inline void SetPropr( const sal_uInt8 nNewPropr ) { nPropr = nNewPropr; }
+    inline void SetProprRel( const sal_uInt8 nNewPropr )
+        { SetPropr( (sal_uInt8)( (long)nNewPropr * (long)nPropr / 100L ) ); }
 
     // Kerning
     inline short GetFixKerning() const { return nKern; }
@@ -76,10 +76,10 @@ public:
         { eLang = eNewLan;  Font::SetLanguage(eNewLan); }
 
     // Is-Methods:
-    inline BOOL IsCaseMap() const { return SVX_CASEMAP_NOT_MAPPED != eCaseMap; }
-    inline BOOL IsCapital() const { return SVX_CASEMAP_KAPITAELCHEN == eCaseMap; }
-    inline BOOL IsKern() const { return 0 != nKern; }
-    inline BOOL IsEsc() const { return 0 != nEsc; }
+    inline sal_Bool IsCaseMap() const { return SVX_CASEMAP_NOT_MAPPED != eCaseMap; }
+    inline sal_Bool IsCapital() const { return SVX_CASEMAP_KAPITAELCHEN == eCaseMap; }
+    inline sal_Bool IsKern() const { return 0 != nKern; }
+    inline sal_Bool IsEsc() const { return 0 != nEsc; }
 
     // Consider Upper case, Lower case letters etc.
     String CalcCaseMap( const String &rTxt ) const;
@@ -88,40 +88,40 @@ public:
 #ifndef REDUCEDSVXFONT
     // Handle upper case letters
     void DoOnCapitals( SvxDoCapitals &rDo,
-                       const USHORT nPartLen = USHRT_MAX ) const;
+                       const sal_uInt16 nPartLen = USHRT_MAX ) const;
 
     void SetPhysFont( OutputDevice *pOut ) const;
     Font ChgPhysFont( OutputDevice *pOut ) const;
 
     Size GetCapitalSize( const OutputDevice *pOut, const String &rTxt,
-                          const USHORT nIdx, const USHORT nLen) const;
+                          const sal_uInt16 nIdx, const sal_uInt16 nLen) const;
     void DrawCapital( OutputDevice *pOut, const Point &rPos, const String &rTxt,
-                      const USHORT nIdx, const USHORT nLen ) const;
+                      const sal_uInt16 nIdx, const sal_uInt16 nLen ) const;
 
     Size GetPhysTxtSize( const OutputDevice *pOut, const String &rTxt,
-                         const USHORT nIdx, const USHORT nLen ) const;
+                         const sal_uInt16 nIdx, const sal_uInt16 nLen ) const;
 
     Size GetPhysTxtSize( const OutputDevice *pOut, const String &rTxt );
 
     Size GetTxtSize( const OutputDevice *pOut, const String &rTxt,
-                      const USHORT nIdx = 0, const USHORT nLen = STRING_LEN );
+                      const sal_uInt16 nIdx = 0, const sal_uInt16 nLen = STRING_LEN );
 
     void DrawText( OutputDevice *pOut, const Point &rPos, const String &rTxt,
-               const USHORT nIdx = 0, const USHORT nLen = STRING_LEN ) const;
+               const sal_uInt16 nIdx = 0, const sal_uInt16 nLen = STRING_LEN ) const;
 
     void QuickDrawText( OutputDevice *pOut, const Point &rPos, const String &rTxt,
-               const USHORT nIdx = 0, const USHORT nLen = STRING_LEN, const sal_Int32* pDXArray = NULL ) const;
+               const sal_uInt16 nIdx = 0, const sal_uInt16 nLen = STRING_LEN, const sal_Int32* pDXArray = NULL ) const;
 
     Size QuickGetTextSize( const OutputDevice *pOut, const String &rTxt,
-                         const USHORT nIdx, const USHORT nLen, sal_Int32* pDXArray = NULL ) const;
+                         const sal_uInt16 nIdx, const sal_uInt16 nLen, sal_Int32* pDXArray = NULL ) const;
 
     void DrawPrev( OutputDevice* pOut, Printer* pPrinter,
                    const Point &rPos, const String &rTxt,
-                   const USHORT nIdx = 0, const USHORT nLen = STRING_LEN ) const;
+                   const sal_uInt16 nIdx = 0, const sal_uInt16 nLen = STRING_LEN ) const;
 
 #endif // !REDUCEDSVXFONT
     static void DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
-        const Size& rSize, const Color& rCol, BOOL bLeft );
+        const Size& rSize, const Color& rCol, sal_Bool bLeft );
     SvxFont&    operator=( const SvxFont& rFont );
     SvxFont&    operator=( const Font& rFont );
 };

@@ -43,7 +43,7 @@ class FORMULA_DLLPUBLIC RefEdit : public Edit
 private:
     Timer               aTimer;
     IControlReferenceHandler*      pAnyRefDlg;         // parent dialog
-    BOOL                bSilentFocus;       // for SilentGrabFocus()
+    sal_Bool                bSilentFocus;       // for SilentGrabFocus()
 
     DECL_LINK( UpdateHdl, Timer* );
 

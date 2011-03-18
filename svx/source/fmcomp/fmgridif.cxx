@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "fmgridif.hxx"
+#include "svx/fmgridif.hxx"
 #include "fmprop.hrc"
 #include "fmservs.hxx"
 #include "svx/fmtools.hxx"
@@ -39,6 +39,7 @@
 #include "sdbdatacolumn.hxx"
 #include "svx/fmgridcl.hxx"
 #include "svx/svxids.hrc"
+#include <tools/urlobj.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/PosSize.hpp>
@@ -366,7 +367,8 @@ Reference< XInterface > SAL_CALL FmXGridControl_NewInstance_Impl(const Reference
 DBG_NAME(FmXGridControl )
 //------------------------------------------------------------------------------
 FmXGridControl::FmXGridControl(const Reference< XMultiServiceFactory >& _rxFactory)
-               :m_aModifyListeners(*this, GetMutex())
+               :UnoControl( _rxFactory)
+               ,m_aModifyListeners(*this, GetMutex())
                ,m_aUpdateListeners(*this, GetMutex())
                ,m_aContainerListeners(*this, GetMutex())
                ,m_aSelectionListeners(*this, GetMutex())
@@ -1973,14 +1975,12 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_HELPURL ) )
     {
-        String sHelpURL(::comphelper::getString(Value));
-        String sPattern;
-        sPattern.AssignAscii("HID:");
-        if (sHelpURL.Equals(sPattern, 0, sPattern.Len()))
-        {
-            String sID = sHelpURL.Copy(sPattern.Len());
-            pGrid->SetHelpId(sID.ToInt32());
-        }
+        ::rtl::OUString sHelpURL;
+        OSL_VERIFY( Value >>= sHelpURL );
+        INetURLObject aHID( sHelpURL );
+        if ( aHID.GetProtocol() == INET_PROT_HID )
+            sHelpURL = aHID.GetURLPath();
+        pGrid->SetHelpId( rtl::OUStringToOString( sHelpURL, RTL_TEXTENCODING_UTF8 ) );
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_DISPLAYSYNCHRON ) )
     {
@@ -2076,25 +2076,28 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_HASNAVIGATION ) )
     {
-        if (Value.getValueType() == ::getBooleanCppuType())
-            pGrid->EnableNavigationBar(*(sal_Bool*)Value.getValue());
+        sal_Bool bValue( sal_True );
+        OSL_VERIFY( Value >>= bValue );
+        pGrid->EnableNavigationBar( bValue );
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_RECORDMARKER ) )
     {
-        if (Value.getValueType() == ::getBooleanCppuType())
-            pGrid->EnableHandle(*(sal_Bool*)Value.getValue());
+        sal_Bool bValue( sal_True );
+        OSL_VERIFY( Value >>= bValue );
+        pGrid->EnableHandle( bValue );
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_ENABLED ) )
     {
-        if (Value.getValueType() == ::getBooleanCppuType())
-        {
-            // Im DesignModus nur das Datenfenster disablen
-            // Sonst kann das Control nicht mehr konfiguriert werden
-            if (isDesignMode())
-                pGrid->GetDataWindow().Enable(*(sal_Bool*)Value.getValue());
-            else
-                pGrid->Enable(*(sal_Bool*)Value.getValue());
-        }
+        sal_Bool bValue( sal_True );
+        OSL_VERIFY( Value >>= bValue );
+        pGrid->EnableHandle( bValue );
+
+        // Im DesignModus nur das Datenfenster disablen
+        // Sonst kann das Control nicht mehr konfiguriert werden
+        if (isDesignMode())
+            pGrid->GetDataWindow().Enable( bValue );
+        else
+            pGrid->Enable( bValue );
     }
     else
         VCLXWindow::setProperty( PropertyName, Value );
@@ -2109,7 +2112,7 @@ Reference< XAccessibleContext > FmXGridPeer::CreateAccessibleContext()
     Window* pGrid = GetWindow();
     if ( pGrid )
     {
-        Reference< XAccessible > xAcc( pGrid->GetAccessible( TRUE ) );
+        Reference< XAccessible > xAcc( pGrid->GetAccessible( sal_True ) );
         if ( xAcc.is() )
             xContext = xAcc->getAccessibleContext();
         // TODO: this has a slight conceptual problem:

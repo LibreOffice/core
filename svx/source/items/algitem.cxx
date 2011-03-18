@@ -66,12 +66,12 @@ TYPEINIT1_FACTORY( SvxMarginItem, SfxPoolItem, new SvxMarginItem(0) );
 // class SvxOrientationItem ----------------------------------------------
 
 SvxOrientationItem::SvxOrientationItem( const SvxCellOrientation eOrientation,
-                                        const USHORT nId):
-    SfxEnumItem( nId, (USHORT)eOrientation )
+                                        const sal_uInt16 nId):
+    SfxEnumItem( nId, (sal_uInt16)eOrientation )
 {
 }
 
-SvxOrientationItem::SvxOrientationItem( INT32 nRotation, BOOL bStacked, const USHORT nId ) :
+SvxOrientationItem::SvxOrientationItem( sal_Int32 nRotation, sal_Bool bStacked, const sal_uInt16 nId ) :
     SfxEnumItem( nId )
 {
     SetFromRotation( nRotation, bStacked );
@@ -102,7 +102,7 @@ SfxItemPresentation SvxOrientationItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-bool SvxOrientationItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxOrientationItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     table::CellOrientation eUno = table::CellOrientation_STANDARD;
     switch ( (SvxCellOrientation)GetValue() )
@@ -116,7 +116,7 @@ bool SvxOrientationItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
     return true;
 }
 
-bool SvxOrientationItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxOrientationItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     table::CellOrientation eOrient;
     if(!(rVal >>= eOrient))
@@ -135,13 +135,13 @@ bool SvxOrientationItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
         case table::CellOrientation_STACKED:    eSvx = SVX_ORIENTATION_STACKED;   break;
         default: ; //prevent warning
     }
-    SetValue( (USHORT)eSvx );
+    SetValue( (sal_uInt16)eSvx );
     return true;
 }
 
 //------------------------------------------------------------------------
 
-XubString SvxOrientationItem::GetValueText( USHORT nVal ) const
+XubString SvxOrientationItem::GetValueText( sal_uInt16 nVal ) const
 {
     DBG_ASSERT( nVal <= SVX_ORIENTATION_STACKED, "enum overflow!" );
     return SVX_RESSTR(RID_SVXITEMS_ORI_STANDARD + nVal);
@@ -156,30 +156,30 @@ SfxPoolItem* SvxOrientationItem::Clone( SfxItemPool* ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* SvxOrientationItem::Create( SvStream& rStream, USHORT ) const
+SfxPoolItem* SvxOrientationItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
-    USHORT nVal;
+    sal_uInt16 nVal;
     rStream >> nVal;
     return new SvxOrientationItem( (SvxCellOrientation)nVal, Which() );
 }
 
 //------------------------------------------------------------------------
 
-USHORT SvxOrientationItem::GetValueCount() const
+sal_uInt16 SvxOrientationItem::GetValueCount() const
 {
     return SVX_ORIENTATION_STACKED + 1; // letzter Enum-Wert + 1
 }
 
 //------------------------------------------------------------------------
 
-BOOL SvxOrientationItem::IsStacked() const
+sal_Bool SvxOrientationItem::IsStacked() const
 {
     return static_cast< SvxCellOrientation >( GetValue() ) == SVX_ORIENTATION_STACKED;
 }
 
-INT32 SvxOrientationItem::GetRotation( INT32 nStdAngle ) const
+sal_Int32 SvxOrientationItem::GetRotation( sal_Int32 nStdAngle ) const
 {
-    INT32 nAngle = nStdAngle;
+    sal_Int32 nAngle = nStdAngle;
     switch( static_cast< SvxCellOrientation >( GetValue() ) )
     {
         case SVX_ORIENTATION_BOTTOMTOP: nAngle = 9000;
@@ -189,7 +189,7 @@ INT32 SvxOrientationItem::GetRotation( INT32 nStdAngle ) const
     return nAngle;
 }
 
-void SvxOrientationItem::SetFromRotation( INT32 nRotation, BOOL bStacked )
+void SvxOrientationItem::SetFromRotation( sal_Int32 nRotation, sal_Bool bStacked )
 {
     if( bStacked )
     {
@@ -205,7 +205,7 @@ void SvxOrientationItem::SetFromRotation( INT32 nRotation, BOOL bStacked )
 
 // class SvxMarginItem ---------------------------------------------------
 
-SvxMarginItem::SvxMarginItem( const USHORT nId ) :
+SvxMarginItem::SvxMarginItem( const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),
 
@@ -222,7 +222,7 @@ SvxMarginItem::SvxMarginItem( sal_Int16 nLeft,
                               sal_Int16 nTop,
                               sal_Int16 nRight,
                               sal_Int16 nBottom,
-                              const USHORT nId ) :
+                              const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
 
     nLeftMargin  ( nLeft ),
@@ -316,7 +316,7 @@ SfxPoolItem* SvxMarginItem::Clone( SfxItemPool* ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* SvxMarginItem::Create( SvStream& rStream, USHORT ) const
+SfxPoolItem* SvxMarginItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
     sal_Int16   nLeft;
     sal_Int16   nTop;
@@ -331,7 +331,7 @@ SfxPoolItem* SvxMarginItem::Create( SvStream& rStream, USHORT ) const
 
 //------------------------------------------------------------------------
 
-SvStream& SvxMarginItem::Store( SvStream &rStream, USHORT /*nItemVersion*/) const
+SvStream& SvxMarginItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion*/) const
 {
     rStream << nLeftMargin;
     rStream << nTopMargin;
@@ -343,7 +343,7 @@ SvStream& SvxMarginItem::Store( SvStream &rStream, USHORT /*nItemVersion*/) cons
 
 //------------------------------------------------------------------------
 
-bool SvxMarginItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -371,7 +371,7 @@ bool SvxMarginItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 //------------------------------------------------------------------------
 
-bool SvxMarginItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = ( ( nMemberId & CONVERT_TWIPS ) != 0 );
     long nMaxVal = bConvert ? TWIP_TO_MM100(SHRT_MAX) : SHRT_MAX;   // Members sind sal_Int16

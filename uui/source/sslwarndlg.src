@@ -41,7 +41,6 @@ ModalDialog DLG_UUI_SSLWARN
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Pos = MAP_APPFONT( 221, 158 );
     Size = MAP_APPFONT( DLG_WIDTH, DLG_HEIGHT );
 
     Text [ en-US ] = "Security Warning: ";
@@ -59,6 +58,7 @@ ModalDialog DLG_UUI_SSLWARN
 
     PushButton PB_VIEW__CERTIFICATE
     {
+        HelpID = "uui:PushButton:DLG_UUI_SSLWARN:PB_VIEW__CERTIFICATE";
         Pos = MAP_APPFONT( DLG_CTLBTN_CERT_START_X, DLG_CTLBTN_START_Y );
         Size = MAP_APPFONT( DLG_CTLBTN_CERT_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
 
@@ -77,6 +77,7 @@ ModalDialog DLG_UUI_SSLWARN
 
     PushButton PB_OK
     {
+        HelpID = "uui:PushButton:DLG_UUI_SSLWARN:PB_OK";
         Pos = MAP_APPFONT( DLG_CTLBTN_OK_START_X, DLG_CTLBTN_START_Y );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
 

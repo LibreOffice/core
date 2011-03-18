@@ -37,7 +37,6 @@
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/lang/XSingleComponentFactory.hpp"
 #include "com/sun/star/registry/InvalidRegistryException.hpp"
 #include "com/sun/star/registry/InvalidValueException.hpp"
 #include "com/sun/star/registry/MergeConflictException.hpp"
@@ -57,13 +56,11 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/util/XFlushable.hpp"
 #include "cppu/unotype.hxx"
-#include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase3.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
-#include "rtl/unload.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -878,53 +875,12 @@ rtl::OUString RegistryKey::getResolvedName(rtl::OUString const & aKeyName)
     return aKeyName;
 }
 
-class Factory:
-    public cppu::WeakImplHelper1< css::lang::XSingleComponentFactory >,
-    private boost::noncopyable
-{
-public:
-    Factory() {}
-
-private:
-    virtual ~Factory() {}
-
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
-    createInstanceWithContext(
-        css::uno::Reference< css::uno::XComponentContext > const & Context)
-        throw (css::uno::Exception, css::uno::RuntimeException);
-
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
-    createInstanceWithArgumentsAndContext(
-        css::uno::Sequence< css::uno::Any > const & Arguments,
-        css::uno::Reference< css::uno::XComponentContext > const & Context)
-        throw (css::uno::Exception, css::uno::RuntimeException);
-};
-
-css::uno::Reference< css::uno::XInterface > Factory::createInstanceWithContext(
-    css::uno::Reference< css::uno::XComponentContext > const & Context)
-    throw (css::uno::Exception, css::uno::RuntimeException)
-{
-    return createInstanceWithArgumentsAndContext(
-        css::uno::Sequence< css::uno::Any >(), Context);
 }
 
-css::uno::Reference< css::uno::XInterface >
-Factory::createInstanceWithArgumentsAndContext(
-    css::uno::Sequence< css::uno::Any > const & Arguments,
-    css::uno::Reference< css::uno::XComponentContext > const & Context)
-    throw (css::uno::Exception, css::uno::RuntimeException)
+css::uno::Reference< css::uno::XInterface > create(
+    css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    if (Arguments.getLength() != 0) {
-        throw css::uno::Exception(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationRegistry must be"
-                    " instantiated without arguments")),
-            static_cast< cppu::OWeakObject * >(this));
-    }
-    return static_cast< cppu::OWeakObject * >(new Service(Context));
-}
-
+    return static_cast< cppu::OWeakObject * >(new Service(context));
 }
 
 rtl::OUString getImplementationName() {
@@ -938,14 +894,6 @@ css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
         RTL_CONSTASCII_USTRINGPARAM(
             "com.sun.star.configuration.ConfigurationRegistry"));
     return css::uno::Sequence< rtl::OUString >(&name, 1);
-}
-
-css::uno::Reference< css::lang::XSingleComponentFactory > createFactory(
-    cppu::ComponentFactoryFunc, rtl::OUString const &,
-    css::uno::Sequence< rtl::OUString > const &, rtl_ModuleCount *)
-    SAL_THROW(())
-{
-    return new Factory;
 }
 
 } }

@@ -34,3 +34,4 @@ mkdir: %_DEST%\inc%_EXT%\formula
 
 
 
+..\%__SRC%\misc\for.component %_DEST%\xml%_EXT%\for.component

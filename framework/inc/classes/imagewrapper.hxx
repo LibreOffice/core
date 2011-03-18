@@ -35,11 +35,12 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <vcl/image.hxx>
+#include <framework/fwedllapi.h>
 
 namespace framework
 {
 
-class ImageWrapper : public ThreadHelpBase                          ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+class FWE_DLLPUBLIC ImageWrapper : public ThreadHelpBase                            ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                      public ::cppu::WeakImplHelper2< ::com::sun::star::awt::XBitmap,
                                                     ::com::sun::star::lang::XUnoTunnel >
 {

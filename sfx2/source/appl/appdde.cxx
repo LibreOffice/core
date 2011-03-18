@@ -39,6 +39,7 @@
 #include <sfx2/linkmgr.hxx>
 
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/pathoptions.hxx>
 
 #include <sfx2/app.hxx>
@@ -73,11 +74,11 @@ public:
     ImplDdeService( const String& rNm )
         : DdeService( rNm )
     {}
-    virtual BOOL MakeTopic( const String& );
+    virtual sal_Bool MakeTopic( const String& );
 
     virtual String  Topics();
 
-    virtual BOOL SysTopicExecute( const String* pStr );
+    virtual sal_Bool SysTopicExecute( const String* pStr );
 };
 
 class SfxDdeTriggerTopic_Impl : public DdeTopic
@@ -87,7 +88,7 @@ public:
     : DdeTopic( DEFINE_CONST_UNICODE("TRIGGER") )
     {}
 
-    virtual BOOL Execute( const String* );
+    virtual sal_Bool Execute( const String* );
 };
 
 class SfxDdeDocTopic_Impl : public DdeTopic
@@ -101,11 +102,11 @@ public:
         : DdeTopic( pShell->GetTitle(SFX_TITLE_FULLNAME) ), pSh( pShell )
     {}
 
-    virtual DdeData* Get( ULONG );
-    virtual BOOL Put( const DdeData* );
-    virtual BOOL Execute( const String* );
-    virtual BOOL StartAdviseLoop();
-    virtual BOOL MakeItem( const String& rItem );
+    virtual DdeData* Get( sal_uIntPtr );
+    virtual sal_Bool Put( const DdeData* );
+    virtual sal_Bool Execute( const String* );
+    virtual sal_Bool StartAdviseLoop();
+    virtual sal_Bool MakeItem( const String& rItem );
 };
 
 
@@ -114,7 +115,7 @@ SV_IMPL_PTRARR( SfxDdeDocTopics_Impl, SfxDdeDocTopic_Impl *)
 
 //========================================================================
 
-BOOL SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
+sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
                        const String &rCmd, const String &rEvent )
 
 /*  [Description]
@@ -141,7 +142,7 @@ BOOL SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
         {
             // Transform into the ApplicationEvent Format
             aData.Erase( aData.Len()-1, 1 );
-            for ( USHORT n = 0; n < aData.Len(); ++n )
+            for ( sal_uInt16 n = 0; n < aData.Len(); ++n )
             {
                 if ( aData.GetChar(n) == 0x0022 ) // " = 22h
                     for ( ; aData.GetChar(++n) != 0x0022 ; )
@@ -152,11 +153,11 @@ BOOL SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
             aData.EraseAllChars( 0x0022 );
             ApplicationAddress aAddr;
             rAppEvent = ApplicationEvent( String(), aAddr, U2S(rEvent), aData );
-            return TRUE;
+            return sal_True;
         }
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 //-------------------------------------------------------------------------
@@ -185,11 +186,9 @@ long SfxApplication::DdeExecute
     else
     {
         // all others are BASIC
-        EnterBasicCall();
         StarBASIC* pBasic = GetBasic();
         DBG_ASSERT( pBasic, "Where is the Basic???" );
         SbxVariable* pRet = pBasic->Execute( rCmd );
-        LeaveBasicCall();
         if( !pRet )
         {
             SbxBase::ResetError();
@@ -453,7 +452,7 @@ long SfxViewFrame::DdeSetData
 
 //========================================================================
 
-BOOL SfxApplication::InitializeDde()
+sal_Bool SfxApplication::InitializeDde()
 {
     DBG_ASSERT( !pAppData_Impl->pDdeService,
                 "Dde can not be initialized multiple times" );
@@ -499,14 +498,14 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 
     // prevent double submit
     String sShellNm;
-    BOOL bFnd = FALSE;
-    for( USHORT n = pAppData_Impl->pDocTopics->Count(); n; )
+    sal_Bool bFnd = sal_False;
+    for( sal_uInt16 n = pAppData_Impl->pDocTopics->Count(); n; )
         if( (*pAppData_Impl->pDocTopics)[ --n ]->pSh == pSh )
         {
             // If the document is untitled, is still a new Topic is created!
             if( !bFnd )
             {
-                bFnd = TRUE;
+                bFnd = sal_True;
                 (sShellNm = pSh->GetTitle(SFX_TITLE_FULLNAME)).ToLowerAscii();
             }
             String sNm( (*pAppData_Impl->pDocTopics)[ n ]->GetName() );
@@ -528,7 +527,7 @@ void SfxApplication::RemoveDdeTopic( SfxObjectShell* pSh )
         return;
 
     SfxDdeDocTopic_Impl* pTopic;
-    for( USHORT n = pAppData_Impl->pDocTopics->Count(); n; )
+    for( sal_uInt16 n = pAppData_Impl->pDocTopics->Count(); n; )
         if( ( pTopic = (*pAppData_Impl->pDocTopics)[ --n ])->pSh == pSh )
         {
             pAppData_Impl->pDdeService->RemoveTopic( *pTopic );
@@ -548,17 +547,17 @@ DdeService* SfxApplication::GetDdeService()
 
 //--------------------------------------------------------------------
 
-BOOL ImplDdeService::MakeTopic( const String& rNm )
+sal_Bool ImplDdeService::MakeTopic( const String& rNm )
 {
     // Workaround for Event after Main() under OS/2
     // happens when exiting starts the App again
     if ( !Application::IsInExecute() )
-        return FALSE;
+        return sal_False;
 
     // The Topic rNm is sought, do we have it?
     // First only loop over the ObjectShells to find those
     // with the specific name:
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     String sNm( rNm );
     sNm.ToLowerAscii();
     TypeId aType( TYPE(SfxObjectShell) );
@@ -570,7 +569,7 @@ BOOL ImplDdeService::MakeTopic( const String& rNm )
         if( sTmp == sNm )
         {
             SFX_APP()->AddDdeTopic( pShell );
-            bRet = TRUE;
+            bRet = sal_True;
             break;
         }
         pShell = SfxObjectShell::GetNext( *pShell, &aType );
@@ -585,9 +584,9 @@ BOOL ImplDdeService::MakeTopic( const String& rNm )
         {
             // File exists? then try to load it:
             SfxStringItem aName( SID_FILE_NAME, aFile.GetMainURL( INetURLObject::NO_DECODE ) );
-            SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, TRUE);
+            SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, sal_True);
 
-            SfxBoolItem aSilent(SID_SILENT, TRUE);
+            SfxBoolItem aSilent(SID_SILENT, sal_True);
             SfxDispatcher* pDispatcher = SFX_APP()->GetDispatcher_Impl();
             const SfxPoolItem* pRet = pDispatcher->Execute( SID_OPENDOC,
                     SFX_CALLMODE_SYNCHRON,
@@ -600,7 +599,7 @@ BOOL ImplDdeService::MakeTopic( const String& rNm )
                     ->GetFrame()->GetObjectShell() ) )
             {
                 SFX_APP()->AddDdeTopic( pShell );
-                bRet = TRUE;
+                bRet = sal_True;
             }
         }
     }
@@ -630,20 +629,20 @@ String ImplDdeService::Topics()
     return sRet;
 }
 
-BOOL ImplDdeService::SysTopicExecute( const String* pStr )
+sal_Bool ImplDdeService::SysTopicExecute( const String* pStr )
 {
-    return (BOOL)SFX_APP()->DdeExecute( *pStr );
+    return (sal_Bool)SFX_APP()->DdeExecute( *pStr );
 }
 
 //--------------------------------------------------------------------
 
-BOOL SfxDdeTriggerTopic_Impl::Execute( const String* )
+sal_Bool SfxDdeTriggerTopic_Impl::Execute( const String* )
 {
-    return TRUE;
+    return sal_True;
 }
 
 //--------------------------------------------------------------------
-DdeData* SfxDdeDocTopic_Impl::Get( ULONG nFormat )
+DdeData* SfxDdeDocTopic_Impl::Get( sal_uIntPtr nFormat )
 {
     String sMimeType( SotExchange::GetFormatMimeType( nFormat ));
     ::com::sun::star::uno::Any aValue;
@@ -657,11 +656,11 @@ DdeData* SfxDdeDocTopic_Impl::Get( ULONG nFormat )
     return 0;
 }
 
-BOOL SfxDdeDocTopic_Impl::Put( const DdeData* pData )
+sal_Bool SfxDdeDocTopic_Impl::Put( const DdeData* pData )
 {
     aSeq = ::com::sun::star::uno::Sequence< sal_Int8 >(
                             (sal_Int8*)(const void*)*pData, (long)*pData );
-    BOOL bRet;
+    sal_Bool bRet;
     if( aSeq.getLength() )
     {
         ::com::sun::star::uno::Any aValue;
@@ -670,25 +669,25 @@ BOOL SfxDdeDocTopic_Impl::Put( const DdeData* pData )
         bRet = 0 != pSh->DdeSetData( GetCurItem(), sMimeType, aValue );
     }
     else
-        bRet = FALSE;
+        bRet = sal_False;
     return bRet;
 }
 
-BOOL SfxDdeDocTopic_Impl::Execute( const String* pStr )
+sal_Bool SfxDdeDocTopic_Impl::Execute( const String* pStr )
 {
     long nRet = pStr ? pSh->DdeExecute( *pStr ) : 0;
     return 0 != nRet;
 }
 
-BOOL SfxDdeDocTopic_Impl::MakeItem( const String& rItem )
+sal_Bool SfxDdeDocTopic_Impl::MakeItem( const String& rItem )
 {
     AddItem( DdeItem( rItem ) );
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SfxDdeDocTopic_Impl::StartAdviseLoop()
+sal_Bool SfxDdeDocTopic_Impl::StartAdviseLoop()
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     ::sfx2::SvLinkSource* pNewObj = pSh->DdeCreateLinkSource( GetCurItem() );
     if( pNewObj )
     {
@@ -696,7 +695,7 @@ BOOL SfxDdeDocTopic_Impl::StartAdviseLoop()
         String sNm, sTmp( Application::GetAppName() );
         ::sfx2::MakeLnkName( sNm, &sTmp, pSh->GetTitle(SFX_TITLE_FULLNAME), GetCurItem() );
         new ::sfx2::SvBaseLink( sNm, OBJECT_DDE_EXTERN, pNewObj );
-        bRet = TRUE;
+        bRet = sal_True;
     }
     return bRet;
 }

@@ -442,19 +442,12 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
         return;
     // Everything tested and we have the name of the Column.
     // What number is the Column?
-    try
-    {
-        m_aOrderbyColumnNumber.push_back(xColLocate->findColumn(aColumnName));
-    }
-    catch(Exception)
-    {
-        ::rtl::Reference<OSQLColumns> aSelectColumns = m_aSQLIterator.getSelectColumns();
-        ::comphelper::UStringMixEqual aCase;
-        OSQLColumns::Vector::const_iterator aFind = ::connectivity::find(aSelectColumns->get().begin(),aSelectColumns->get().end(),aColumnName,aCase);
-        if ( aFind == aSelectColumns->get().end() )
-            throw SQLException();
-        m_aOrderbyColumnNumber.push_back((aFind - aSelectColumns->get().begin()) + 1);
-    }
+    ::rtl::Reference<OSQLColumns> aSelectColumns = m_aSQLIterator.getSelectColumns();
+    ::comphelper::UStringMixEqual aCase;
+    OSQLColumns::Vector::const_iterator aFind = ::connectivity::find(aSelectColumns->get().begin(),aSelectColumns->get().end(),aColumnName,aCase);
+    if ( aFind == aSelectColumns->get().end() )
+        throw SQLException();
+    m_aOrderbyColumnNumber.push_back((aFind - aSelectColumns->get().begin()) + 1);
 
     // Ascending or Descending?
     m_aOrderbyAscending.push_back((SQL_ISTOKEN(pAscendingDescending,DESC)) ? SQL_DESC : SQL_ASC);
@@ -740,7 +733,7 @@ void OStatement_Base::ParseAssignValues(const ::std::vector< String>& aColumnNam
     else if (SQL_ISTOKEN(pRow_Value_Constructor_Elem,NULL))
     {
         // set NULL
-        SetAssignValue(aColumnName, String(), TRUE);
+        SetAssignValue(aColumnName, String(), sal_True);
     }
     else if (SQL_ISRULE(pRow_Value_Constructor_Elem,parameter))
         parseParamterElem(aColumnName,pRow_Value_Constructor_Elem);
@@ -752,8 +745,8 @@ void OStatement_Base::ParseAssignValues(const ::std::vector< String>& aColumnNam
 //------------------------------------------------------------------
 void OStatement_Base::SetAssignValue(const String& aColumnName,
                                    const String& aValue,
-                                   BOOL bSetNull,
-                                   UINT32 nParameter)
+                                   sal_Bool bSetNull,
+                                   sal_uInt32 nParameter)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::SetAssignValue" );
     Reference<XPropertySet> xCol;

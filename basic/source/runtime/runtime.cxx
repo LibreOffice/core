@@ -46,6 +46,8 @@
 #include "sbunoobj.hxx"
 #include "errobject.hxx"
 
+#include "comenumwrapper.hxx"
+
 SbxVariable* getDefaultProp( SbxVariable* pRef );
 
 using namespace ::com::sun::star;
@@ -60,13 +62,13 @@ bool SbiRuntime::isVBAEnabled()
 }
 
 // #91147 Global reschedule flag
-static BOOL bStaticGlobalEnableReschedule = TRUE;
+static sal_Bool bStaticGlobalEnableReschedule = sal_True;
 
-void StarBASIC::StaticEnableReschedule( BOOL bReschedule )
+void StarBASIC::StaticEnableReschedule( sal_Bool bReschedule )
 {
     bStaticGlobalEnableReschedule = bReschedule;
 }
-void StarBASIC::SetVBAEnabled( BOOL bEnabled )
+void StarBASIC::SetVBAEnabled( sal_Bool bEnabled )
 {
     if ( bDocBasic )
     {
@@ -74,15 +76,15 @@ void StarBASIC::SetVBAEnabled( BOOL bEnabled )
     }
 }
 
-BOOL StarBASIC::isVBAEnabled()
+sal_Bool StarBASIC::isVBAEnabled()
 {
     if ( bDocBasic )
     {
         if( SbiRuntime::isVBAEnabled() )
-            return TRUE;
+            return sal_True;
         return bVBAEnabled;
     }
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -254,12 +256,12 @@ SbiRTLData::~SbiRTLData()
 // (siehe auch step2.cxx, SbiRuntime::StepSTMNT() )
 
 // Hilfsfunktion, um den BreakCallLevel gemaess der der Debug-Flags zu ermitteln
-void SbiInstance::CalcBreakCallLevel( USHORT nFlags )
+void SbiInstance::CalcBreakCallLevel( sal_uInt16 nFlags )
 {
     // Break-Flag wegfiltern
-    nFlags &= ~((USHORT)SbDEBUG_BREAK);
+    nFlags &= ~((sal_uInt16)SbDEBUG_BREAK);
 
-    USHORT nRet;
+    sal_uInt16 nRet;
     switch( nFlags )
     {
         case SbDEBUG_STEPINTO:
@@ -292,8 +294,8 @@ SbiInstance::SbiInstance( StarBASIC* p )
     nBreakCallLvl = 0;
     nErr     =
     nErl     = 0;
-    bReschedule = TRUE;
-    bCompatibility = FALSE;
+    bReschedule = sal_True;
+    bCompatibility = sal_False;
 }
 
 SbiInstance::~SbiInstance()
@@ -451,7 +453,7 @@ void SbiInstance::ErrorVB( sal_Int32 nVBNumber, const String& rMsg )
 {
     if( !bWatchMode )
     {
-        SbError n = StarBASIC::GetSfxFromVBError( static_cast< USHORT >( nVBNumber ) );
+        SbError n = StarBASIC::GetSfxFromVBError( static_cast< sal_uInt16 >( nVBNumber ) );
         if ( !n )
             n = nVBNumber; // force orig number, probably should have a specific table of vb ( localized ) errors
 
@@ -465,7 +467,7 @@ void SbiInstance::ErrorVB( sal_Int32 nVBNumber, const String& rMsg )
 
 void SbiInstance::setErrorVB( sal_Int32 nVBNumber, const String& rMsg )
 {
-    SbError n = StarBASIC::GetSfxFromVBError( static_cast< USHORT >( nVBNumber ) );
+    SbError n = StarBASIC::GetSfxFromVBError( static_cast< sal_uInt16 >( nVBNumber ) );
     if( !n )
         n = nVBNumber; // force orig number, probably should have a specific table of vb ( localized ) errors
 
@@ -516,7 +518,7 @@ SbModule* SbiInstance::GetActiveModule()
         return NULL;
 }
 
-SbMethod* SbiInstance::GetCaller( USHORT nLevel )
+SbMethod* SbiInstance::GetCaller( sal_uInt16 nLevel )
 {
     SbiRuntime* p = pRun;
     while( nLevel-- && p )
@@ -544,7 +546,7 @@ SbxArray* SbiInstance::GetLocals( SbMethod* pMeth )
 
 // Achtung: pMeth kann auch NULL sein (beim Aufruf des Init-Codes)
 
-SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, UINT32 nStart )
+SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
          : rBasic( *(StarBASIC*)pm->pParent ), pInst( pINST ),
            pMod( pm ), pMeth( pe ), pImg( pMod->pImage ), mpExtCaller(0), m_nLastTime(0)
 {
@@ -559,11 +561,11 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, UINT32 nStart )
     pRestart  = NULL;
     pNext     = NULL;
     pCode     =
-    pStmnt    = (const BYTE* ) pImg->GetCode() + nStart;
+    pStmnt    = (const sal_uInt8* ) pImg->GetCode() + nStart;
     bRun      =
-    bError    = TRUE;
-    bInError  = FALSE;
-    bBlocked  = FALSE;
+    bError    = sal_True;
+    bInError  = sal_False;
+    bBlocked  = sal_False;
     nLine     = 0;
     nCol1     = 0;
     nCol2     = 0;
@@ -623,10 +625,10 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
     refParams->Put( pMeth, 0 );
 
     SbxInfo* pInfo = pMeth ? pMeth->GetInfo() : NULL;
-    USHORT nParamCount = pParams ? pParams->Count() : 1;
+    sal_uInt16 nParamCount = pParams ? pParams->Count() : 1;
     if( nParamCount > 1 )
     {
-        for( USHORT i = 1 ; i < nParamCount ; i++ )
+        for( sal_uInt16 i = 1 ; i < nParamCount ; i++ )
         {
             const SbxParamInfo* p = pInfo ? pInfo->GetParam( i ) : NULL;
 
@@ -634,9 +636,9 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
             if( p && (p->nUserData & PARAM_INFO_PARAMARRAY) != 0 )
             {
                 SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
-                USHORT nParamArrayParamCount = nParamCount - i;
+                sal_uInt16 nParamArrayParamCount = nParamCount - i;
                 pArray->unoAddDim( 0, nParamArrayParamCount - 1 );
-                for( USHORT j = i ; j < nParamCount ; j++ )
+                for( sal_uInt16 j = i ; j < nParamCount ; j++ )
                 {
                     SbxVariable* v = pParams->Get( j );
                     short nDimIndex = j - i;
@@ -654,16 +656,16 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
 
             SbxVariable* v = pParams->Get( i );
             // Methoden sind immer byval!
-            BOOL bByVal = v->IsA( TYPE(SbxMethod) );
+            sal_Bool bByVal = v->IsA( TYPE(SbxMethod) );
             SbxDataType t = v->GetType();
             if( p )
             {
-                bByVal |= BOOL( ( p->eType & SbxBYREF ) == 0 );
+                bByVal |= sal_Bool( ( p->eType & SbxBYREF ) == 0 );
                 t = (SbxDataType) ( p->eType & 0x0FFF );
 
                 if( !bByVal && t != SbxVARIANT &&
                     (!v->IsFixed() || (SbxDataType)(v->GetType() & 0x0FFF ) != t) )
-                        bByVal = TRUE;
+                        bByVal = sal_True;
             }
             if( bByVal )
             {
@@ -709,7 +711,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
 
 // Einen P-Code ausfuehren
 
-BOOL SbiRuntime::Step()
+sal_Bool SbiRuntime::Step()
 {
     if( bRun )
     {
@@ -732,7 +734,7 @@ BOOL SbiRuntime::Step()
         }
 
         SbiOpcode eOp = (SbiOpcode ) ( *pCode++ );
-        UINT32 nOp1, nOp2;
+        sal_uInt32 nOp1, nOp2;
         if( eOp <= SbOP0_END )
         {
             (this->*( aStep0[ eOp ] ) )();
@@ -782,7 +784,7 @@ BOOL SbiRuntime::Step()
             // Im Error Handler? Dann Std-Error
             if ( !bInError )
             {
-                bInError = TRUE;
+                bInError = sal_True;
 
                 if( !bError )           // On Error Resume Next
                     StepRESUME( 1 );
@@ -807,7 +809,7 @@ BOOL SbiRuntime::Step()
                 while( NULL != (pRt = pRt->pNext) )
                 {
                     // Gibt es einen Error-Handler?
-                    if( pRt->bError == FALSE || pRt->pError != NULL )
+                    if( pRt->bError == sal_False || pRt->pError != NULL )
                     {
                         pRtErrHdl = pRt;
                         break;
@@ -830,7 +832,7 @@ BOOL SbiRuntime::Step()
                         // Fehler setzen
                         pRt->nError = err;
                         if( pRt != pRtErrHdl )
-                            pRt->bRun = FALSE;
+                            pRt->bRun = sal_False;
 
                         // In Error-Stack eintragen
                         SbErrorStackEntry *pEntry = new SbErrorStackEntry
@@ -882,11 +884,12 @@ void SbiRuntime::Error( SbError _errCode, const String& _details )
 {
     if ( _errCode )
     {
-        OSL_ENSURE( pInst->pRun == this, "SbiRuntime::Error: can't propagate the error message details!" );
+        // Not correct for class module usage, remove for now
+        //OSL_ENSURE( pInst->pRun == this, "SbiRuntime::Error: can't propagate the error message details!" );
         if ( pInst->pRun == this )
         {
             pInst->Error( _errCode, _details );
-            OSL_POSTCOND( nError == _errCode, "SbiRuntime::Error: the instance is expecte to propagate the error code back to me!" );
+            //OSL_POSTCOND( nError == _errCode, "SbiRuntime::Error: the instance is expecte to propagate the error code back to me!" );
         }
         else
         {
@@ -918,7 +921,7 @@ sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, String& rMsg )
     {
         // TEST, has to be vb here always
 #ifdef DBG_UTIL
-        SbError nTmp = StarBASIC::GetSfxFromVBError( (USHORT)nError );
+        SbError nTmp = StarBASIC::GetSfxFromVBError( (sal_uInt16)nError );
         DBG_ASSERT( nTmp, "No VB error!" );
 #endif
 
@@ -928,7 +931,7 @@ sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, String& rMsg )
             rMsg = String( RTL_CONSTASCII_USTRINGPARAM("Internal Object Error:") );
     }
     // no num? most likely then it *is* really a vba err
-    USHORT nVBErrorCode = StarBASIC::GetVBErrorCode( nError );
+    sal_uInt16 nVBErrorCode = StarBASIC::GetVBErrorCode( nError );
     sal_Int32 nVBAErrorNumber = ( nVBErrorCode == 0 ) ? nError : nVBErrorCode;
     return nVBAErrorNumber;
 }
@@ -989,7 +992,7 @@ SbxVariableRef SbiRuntime::PopVar()
     return xVar;
 }
 
-BOOL SbiRuntime::ClearExprStack()
+sal_Bool SbiRuntime::ClearExprStack()
 {
     // Achtung: Clear() reicht nicht, da Methods geloescht werden muessen
     while ( nExprLvl )
@@ -997,7 +1000,7 @@ BOOL SbiRuntime::ClearExprStack()
         PopVar();
     }
     refExprStk->Clear();
-    return FALSE;
+    return sal_False;
 }
 
 // Variable auf dem Expression-Stack holen, ohne sie zu entfernen
@@ -1013,7 +1016,7 @@ SbxVariable* SbiRuntime::GetTOS( short n )
         return new SbxVariable;
     }
 #endif
-    return refExprStk->Get( (USHORT) n );
+    return refExprStk->Get( (sal_uInt16) n );
 }
 
 // Sicherstellen, dass TOS eine temporaere Variable ist
@@ -1048,7 +1051,7 @@ void SbiRuntime::TOSMakeTemp()
 }
 
 // Der GOSUB-Stack nimmt Returnadressen fuer GOSUBs auf
-void SbiRuntime::PushGosub( const BYTE* pc )
+void SbiRuntime::PushGosub( const sal_uInt8* pc )
 {
     if( ++nGosubLvl > MAXRECURSION )
         StarBASIC::FatalError( SbERR_STACK_OVERFLOW );
@@ -1185,6 +1188,23 @@ void SbiRuntime::PushForEach()
             p->xEnumeration = xEnumerationAccess->createEnumeration();
             p->eForType = FOR_EACH_XENUMERATION;
         }
+        else if ( isVBAEnabled() && pUnoObj->isNativeCOMObject() )
+        {
+            uno::Reference< script::XInvocation > xInvocation;
+            if ( ( aAny >>= xInvocation ) && xInvocation.is() )
+            {
+                try
+                {
+                    p->xEnumeration = new ComEnumerationWrapper( xInvocation );
+                    p->eForType = FOR_EACH_XENUMERATION;
+                }
+                catch( uno::Exception& )
+                {}
+            }
+
+            if ( !p->xEnumeration.is() )
+                bError_ = true;
+        }
         else
         {
             bError_ = true;
@@ -1238,7 +1258,7 @@ void SbiRuntime::DllCall
       const String& aDLLName,   // Name der DLL
       SbxArray* pArgs,          // Parameter (ab Index 1, kann NULL sein)
       SbxDataType eResType,     // Returnwert
-      BOOL bCDecl )             // TRUE: nach C-Konventionen
+      sal_Bool bCDecl )             // sal_True: nach C-Konventionen
 {
     // No DllCall for "virtual" portal users
     if( needSecurityRestrictions() )
@@ -1265,13 +1285,13 @@ void SbiRuntime::DllCall
         Error( nErr );
     PushVar( pRes );
 }
-USHORT
-SbiRuntime::GetImageFlag( USHORT n ) const
+
+sal_uInt16 SbiRuntime::GetImageFlag( sal_uInt16 n ) const
 {
     return pImg->GetFlag( n );
 }
-USHORT
-SbiRuntime::GetBase()
+
+sal_uInt16 SbiRuntime::GetBase()
 {
     return pImg->GetBase();
 }

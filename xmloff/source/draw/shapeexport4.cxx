@@ -69,7 +69,7 @@
 #include <tools/string.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "XMLBase64Export.hxx"
 
 using ::rtl::OUString;
@@ -1114,38 +1114,46 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
 
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW, XML_FRAME, bCreateNewline, sal_True );
 
-        if( !bIsEmptyPresObj )
+        // do not export in ODF 1.1 or older
+        if( mrExport.getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
         {
-            uno::Reference< container::XNamed > xTemplate( xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TableTemplate" ) ) ), uno::UNO_QUERY );
-            if( xTemplate.is() )
+            if( !bIsEmptyPresObj )
             {
-                const OUString sTemplate( xTemplate->getName() );
-                if( sTemplate.getLength() )
+                uno::Reference< container::XNamed > xTemplate( xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TableTemplate" ) ) ), uno::UNO_QUERY );
+                if( xTemplate.is() )
                 {
-                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sTemplate );
-
-                    for( const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0]; pEntry->msApiName; pEntry++ )
+                    const OUString sTemplate( xTemplate->getName() );
+                    if( sTemplate.getLength() )
                     {
-                        try
-                        {
-                            sal_Bool bBool = sal_False;
-                            const OUString sAPIPropertyName( OUString(pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US ) );
+                        mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sTemplate );
 
-                            xPropSet->getPropertyValue( sAPIPropertyName ) >>= bBool;
-                            if( bBool )
-                                mrExport.AddAttribute(pEntry->mnNameSpace, pEntry->meXMLName, XML_TRUE );
-                        }
-                        catch( uno::Exception& )
+                        for( const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0]; pEntry->msApiName; pEntry++ )
                         {
+                            try
+                            {
+                                sal_Bool bBool = sal_False;
+                                const OUString sAPIPropertyName( OUString(pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US ) );
+
+                                xPropSet->getPropertyValue( sAPIPropertyName ) >>= bBool;
+                                if( bBool )
+                                    mrExport.AddAttribute(pEntry->mnNameSpace, pEntry->meXMLName, XML_TRUE );
+                            }
+                            catch( uno::Exception& )
+                            {
                             OSL_FAIL("XMLShapeExport::ImpExportTableShape(), exception caught!");
+                            }
                         }
                     }
                 }
+
+
+                uno::Reference< table::XColumnRowRange > xRange( xPropSet->getPropertyValue( msModel ), uno::UNO_QUERY_THROW );
+                GetShapeTableExport()->exportTable( xRange );
             }
-            uno::Reference< table::XColumnRowRange > xRange( xPropSet->getPropertyValue( msModel ), uno::UNO_QUERY_THROW );
+        }
 
-            GetShapeTableExport()->exportTable( xRange );
-
+        if( !bIsEmptyPresObj )
+        {
             uno::Reference< graphic::XGraphic > xGraphic( xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ReplacementGraphic" ) ) ), uno::UNO_QUERY );
             if( xGraphic.is() ) try
             {

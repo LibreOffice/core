@@ -33,7 +33,7 @@
 #include "svx/fmtools.hxx"
 #include "fmservs.hxx"
 
-#include "fmobjfac.hxx"
+#include "svx/fmobjfac.hxx"
 
 #include <svx/fmglob.hxx>
 
@@ -46,7 +46,7 @@
 #include "tbxform.hxx"
 #include <tools/resid.hxx>
 
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 #include "fmservs.hxx"
@@ -62,7 +62,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::svxform;
 
-static BOOL bInit = FALSE;
+static sal_Bool bInit = sal_False;
 
 /*************************************************************************
 |*
@@ -98,7 +98,7 @@ FmFormObjFactory::FmFormObjFactory()
         FmFormShell::RegisterInterface(0);
 
         ImplSmartRegisterUnoServices();
-        bInit = TRUE;
+        bInit = sal_True;
     }
 }
 

@@ -37,7 +37,7 @@
 
 #include <xmloff/xmlmetai.hxx>
 #include "ximpstyl.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
@@ -48,7 +48,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include "sdpropls.hxx"
 #include <xmloff/xmlexppr.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <tools/debug.hxx>
 #include <com/sun/star/style/XStyle.hpp>
 
@@ -127,14 +127,14 @@ protected:
 public:
     SdXMLDocContext_Impl(
         SdXMLImport& rImport,
-        USHORT nPrfx,
+        sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList);
     virtual ~SdXMLDocContext_Impl();
 
     TYPEINFO();
 
-    virtual SvXMLImportContext *CreateChildContext(USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList);
 };
@@ -143,7 +143,7 @@ public:
 
 SdXMLDocContext_Impl::SdXMLDocContext_Impl(
     SdXMLImport& rImport,
-    USHORT nPrfx,
+    sal_uInt16 nPrfx,
     const OUString& rLName,
     const uno::Reference<xml::sax::XAttributeList>&)
 :   SvXMLImportContext(rImport, nPrfx, rLName)
@@ -161,7 +161,7 @@ TYPEINIT1( SdXMLDocContext_Impl, SvXMLImportContext );
 //////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
@@ -251,7 +251,7 @@ class SdXMLFlatDocContext_Impl
 {
 public:
     SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
-        USHORT i_nPrefix, const OUString & i_rLName,
+        sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder);
@@ -259,12 +259,12 @@ public:
     virtual ~SdXMLFlatDocContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
-        USHORT i_nPrefix, const OUString& i_rLocalName,
+        sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList);
 };
 
 SdXMLFlatDocContext_Impl::SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
-        USHORT i_nPrefix, const OUString & i_rLName,
+        sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder) :
@@ -278,7 +278,7 @@ SdXMLFlatDocContext_Impl::SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
 SdXMLFlatDocContext_Impl::~SdXMLFlatDocContext_Impl() { }
 
 SvXMLImportContext *SdXMLFlatDocContext_Impl::CreateChildContext(
-    USHORT i_nPrefix, const OUString& i_rLocalName,
+    sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
 {
     // behave like meta base class iff we encounter office:meta
@@ -713,7 +713,7 @@ const SvXMLTokenMap& SdXMLImport::GetPresentationPlaceholderAttrTokenMap()
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext *SdXMLImport::CreateContext(USHORT nPrefix,
+SvXMLImportContext *SdXMLImport::CreateContext(sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
@@ -793,7 +793,7 @@ SvXMLStylesContext *SdXMLImport::CreateStylesContext(const OUString& rLocalName,
         return GetShapeImport()->GetStylesContext();
 
     GetShapeImport()->SetStylesContext(new SdXMLStylesContext(
-        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, FALSE));
+        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, sal_False));
 
     return GetShapeImport()->GetStylesContext();
 }
@@ -807,7 +807,7 @@ SvXMLStylesContext *SdXMLImport::CreateAutoStylesContext(const OUString& rLocalN
         return GetShapeImport()->GetAutoStylesContext();
 
     GetShapeImport()->SetAutoStylesContext(new SdXMLStylesContext(
-        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, TRUE));
+        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, sal_True));
 
     return GetShapeImport()->GetAutoStylesContext();
 }
@@ -903,10 +903,12 @@ void SdXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::
     {
         xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ), uno::makeAny( aVisArea )  );
     }
-    catch( com::sun::star::uno::Exception e )
+    catch( com::sun::star::uno::Exception /*e*/ )
     {
+/* #i79978# since old documents may contain invalid view settings, this is nothing to worry the user about.
         uno::Sequence<OUString> aSeq(0);
         SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );
+*/
     }
 }
 

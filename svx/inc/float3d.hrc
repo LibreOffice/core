@@ -141,3 +141,6 @@
 #define FL_MAT_SPECULAR             123
 #define FT_MAT_FAVORITES            124
 #define LB_MAT_FAVORITES            125
+
+// IAccessibility2 implementation
+#define STR_COLOR_LIGHT_PRE             162

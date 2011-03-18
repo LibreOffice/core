@@ -65,7 +65,7 @@ class EditToolbarController : public IEditListener,
         EditToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                ToolBox*     pToolBar,
-                               USHORT       nID,
+                               sal_uInt16       nID,
                                sal_Int32    nWidth,
                                const rtl::OUString& aCommand );
         virtual ~EditToolbarController();

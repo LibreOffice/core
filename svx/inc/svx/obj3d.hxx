@@ -93,10 +93,10 @@ public:
     SVX_DLLPUBLIC E3dObjList(const E3dObjList& rSrcList);
     SVX_DLLPUBLIC virtual ~E3dObjList();
 
-    virtual void NbcInsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL);
-    virtual void InsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL);
-    virtual SdrObject* NbcRemoveObject(ULONG nObjNum);
-    virtual SdrObject* RemoveObject(ULONG nObjNum);
+    virtual void NbcInsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL);
+    virtual void InsertObject(SdrObject* pObj, sal_uIntPtr nPos=CONTAINER_APPEND, const SdrInsertReason* pReason=NULL);
+    virtual SdrObject* NbcRemoveObject(sal_uIntPtr nObjNum);
+    virtual SdrObject* RemoveObject(sal_uIntPtr nObjNum);
 };
 
 /*************************************************************************
@@ -142,7 +142,7 @@ protected:
     // and no instances should be created from anyone, so i move the constructors
     // to protected area
     E3dObject();
-    E3dObject(BOOL bIsFromChart);
+    E3dObject(sal_Bool bIsFromChart);
 
 public:
     TYPEINFO();
@@ -151,8 +151,8 @@ public:
 
     virtual ~E3dObject();
 
-    virtual UINT32  GetObjInventor() const;
-    virtual UINT16  GetObjIdentifier() const;
+    virtual sal_uInt32  GetObjInventor() const;
+    virtual sal_uInt16  GetObjIdentifier() const;
 
     virtual void    TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
 
@@ -195,7 +195,7 @@ public:
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
-    USHORT GetLogicalGroup() { return 0; }
+    sal_uInt16 GetLogicalGroup() { return 0; }
     virtual void operator=(const SdrObject&);
 
     virtual SdrObjGeoData *NewGeoData() const;
@@ -207,7 +207,7 @@ public:
     void SetSelected(bool bNew);
 
     // break up
-    virtual BOOL IsBreakObjPossible();
+    virtual sal_Bool IsBreakObjPossible();
     virtual SdrAttrObj* GetBreakObj();
 };
 
@@ -257,28 +257,28 @@ public :
     virtual sal_uInt32 GetHdlCount() const;
     virtual void    AddToHdlList(SdrHdlList& rHdlList) const;
 
-    // DoubleSided: TRUE/FALSE
-    BOOL GetDoubleSided() const
+    // DoubleSided: sal_True/FALSE
+    sal_Bool GetDoubleSided() const
         { return ((const Svx3DDoubleSidedItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue(); }
 
-    // NormalsKind: 0 == FALSE/FALSE, 1 == TRUE/FALSE, else == TRUE/TRUE
+    // NormalsKind: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
     sal_uInt16 GetNormalsKind() const
         { return ((const Svx3DNormalsKindItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_NORMALS_KIND)).GetValue(); }
 
-    // NormalsInvert: TRUE/FALSE
-    BOOL GetNormalsInvert() const
+    // NormalsInvert: sal_True/FALSE
+    sal_Bool GetNormalsInvert() const
         { return ((const Svx3DNormalsInvertItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue(); }
 
-    // TextureProjX: 0 == FALSE/FALSE, 1 == TRUE/FALSE, else == TRUE/TRUE
+    // TextureProjX: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
     sal_uInt16 GetTextureProjectionX() const
         { return ((const Svx3DTextureProjectionXItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_PROJ_X)).GetValue(); }
 
-    // TextureProjY: 0 == FALSE/FALSE, 1 == TRUE/FALSE, else == TRUE/TRUE
+    // TextureProjY: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
     sal_uInt16 GetTextureProjectionY() const
         { return ((const Svx3DTextureProjectionYItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_PROJ_Y)).GetValue(); }
 
-    // Shadow3D: TRUE/FALSE
-    BOOL GetShadow3D() const
+    // Shadow3D: sal_True/FALSE
+    sal_Bool GetShadow3D() const
         { return ((const Svx3DShadow3DItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue(); }
 
     // MaterialColor: Color
@@ -297,24 +297,24 @@ public :
     sal_uInt16 GetMaterialSpecularIntensity() const
         { return ((const Svx3DMaterialSpecularIntensityItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue(); }
 
-    // TextureFilter: TRUE/FALSE
-    BOOL GetTextureFilter() const
+    // TextureFilter: sal_True/FALSE
+    sal_Bool GetTextureFilter() const
         { return ((const Svx3DTextureFilterItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue(); }
 
     // #i28528#
     // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
-    BOOL GetReducedLineGeometry() const
+    sal_Bool GetReducedLineGeometry() const
         { return ((const Svx3DReducedLineGeometryItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY)).GetValue(); }
 
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void RecalcSnapRect();
 
     // set/get parameters for geometry creation
-    BOOL GetCreateNormals() const { return bCreateNormals; }
-    void SetCreateNormals(BOOL bNew);
+    sal_Bool GetCreateNormals() const { return bCreateNormals; }
+    void SetCreateNormals(sal_Bool bNew);
 
-    BOOL GetCreateTexture() const { return bCreateTexture; }
-    void SetCreateTexture(BOOL bNew);
+    sal_Bool GetCreateTexture() const { return bCreateTexture; }
+    void SetCreateTexture(sal_Bool bNew);
 
     // copy operator
     virtual void operator=(const SdrObject&);

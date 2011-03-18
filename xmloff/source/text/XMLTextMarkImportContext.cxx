@@ -39,8 +39,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/odffields.hxx>
-#include "xmlnmspe.hxx"
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -293,7 +293,12 @@ void XMLTextMarkImportContext::EndElement()
                             Reference<XTextCursor> xInsertionCursor =
                                 m_rHelper.GetText()->createTextCursorByRange(
                                     xEndRange);
+                            try {
                             xInsertionCursor->gotoRange(xStartRange, sal_True);
+                            } catch (uno::Exception&) {
+                                OSL_ENSURE(false,
+                                    "cannot go to end position of bookmark");
+                            }
 
                             //DBG_ASSERT(! xInsertionCursor->isCollapsed(),
                             //              "we want no point mark");
@@ -355,7 +360,7 @@ void XMLTextMarkImportContext::EndElement()
     }
 }
 
-SvXMLImportContext *XMLTextMarkImportContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *XMLTextMarkImportContext::CreateChildContext( sal_uInt16 nPrefix,
                                         const ::rtl::OUString& rLocalName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >&  )
 {

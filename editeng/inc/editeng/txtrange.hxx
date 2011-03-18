@@ -62,56 +62,56 @@ class EDITENG_DLLPUBLIC TextRanger
     PolyPolygon *mpPolyPolygon; // Surface polygon
     PolyPolygon *mpLinePolyPolygon; // Line polygon
     Rectangle *pBound;  // Comprehensive rectangle
-    USHORT nCacheSize;  // Cache-Size
-    USHORT nRight;      // Distance Contour-Text
-    USHORT nLeft;       // Distance Text-Contour
-    USHORT nUpper;      // Distance Contour-Text
-    USHORT nLower;      // Distance Text-Contour
+    sal_uInt16 nCacheSize;  // Cache-Size
+    sal_uInt16 nRight;      // Distance Contour-Text
+    sal_uInt16 nLeft;       // Distance Text-Contour
+    sal_uInt16 nUpper;      // Distance Contour-Text
+    sal_uInt16 nLower;      // Distance Text-Contour
     sal_uInt32 nPointCount; // Number of polygon points
-    BOOL bSimple : 1;   // Just outside edge
-    BOOL bInner  : 1;   // TRUE: Objekt inline (EditEngine);
+    sal_Bool bSimple : 1;   // Just outside edge
+    sal_Bool bInner  : 1;   // TRUE: Objekt inline (EditEngine);
                         // FALSE: Objekt flow (StarWriter);
-    BOOL bVertical :1;  // for vertical writing mode
-    BOOL bFlag3 :1;
-    BOOL bFlag4 :1;
-    BOOL bFlag5 :1;
-    BOOL bFlag6 :1;
-    BOOL bFlag7 :1;
+    sal_Bool bVertical :1;  // for vertical writing mode
+    sal_Bool bFlag3 :1;
+    sal_Bool bFlag4 :1;
+    sal_Bool bFlag5 :1;
+    sal_Bool bFlag6 :1;
+    sal_Bool bFlag7 :1;
     TextRanger( const TextRanger& ); // not implemented
     const Rectangle& _GetBoundRect();
 public:
     TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,
                 const basegfx::B2DPolyPolygon* pLinePolyPolygon,
-                USHORT nCacheSize, USHORT nLeft, USHORT nRight,
-                BOOL bSimple, BOOL bInner, BOOL bVert = sal_False );
+                sal_uInt16 nCacheSize, sal_uInt16 nLeft, sal_uInt16 nRight,
+                sal_Bool bSimple, sal_Bool bInner, sal_Bool bVert = sal_False );
     ~TextRanger();
     LongDqPtr GetTextRanges( const Range& rRange );
-    USHORT GetRight() const { return nRight; }
-    USHORT GetLeft() const { return nLeft; }
-    USHORT GetUpper() const { return nUpper; }
-    USHORT GetLower() const { return nLower; }
+    sal_uInt16 GetRight() const { return nRight; }
+    sal_uInt16 GetLeft() const { return nLeft; }
+    sal_uInt16 GetUpper() const { return nUpper; }
+    sal_uInt16 GetLower() const { return nLower; }
     sal_uInt32 GetPointCount() const { return nPointCount; }
-    BOOL IsSimple() const { return bSimple; }
-    BOOL IsInner() const { return bInner; }
-    BOOL IsVertical() const { return bVertical; }
-    BOOL HasBorder() const { return nRight || nLeft; }
+    sal_Bool IsSimple() const { return bSimple; }
+    sal_Bool IsInner() const { return bInner; }
+    sal_Bool IsVertical() const { return bVertical; }
+    sal_Bool HasBorder() const { return nRight || nLeft; }
     const PolyPolygon& GetPolyPolygon() const { return *mpPolyPolygon; }
     const PolyPolygon* GetLinePolygon() const { return mpLinePolyPolygon; }
     const Rectangle& GetBoundRect()
         { return pBound ? static_cast< const Rectangle& >(*pBound) : _GetBoundRect(); }
-    void SetUpper( USHORT nNew ){ nUpper = nNew; }
-    void SetLower( USHORT nNew ){ nLower = nNew; }
-    void SetVertical( BOOL bNew );
-    BOOL IsFlag3() const { return bFlag3; }
-    void SetFlag3( BOOL bNew ) { bFlag3 = bNew; }
-    BOOL IsFlag4() const { return bFlag4; }
-    void SetFlag4( BOOL bNew ) { bFlag4 = bNew; }
-    BOOL IsFlag5() const { return bFlag5; }
-    void SetFlag5( BOOL bNew ) { bFlag5 = bNew; }
-    BOOL IsFlag6() const { return bFlag6; }
-    void SetFlag6( BOOL bNew ) { bFlag6 = bNew; }
-    BOOL IsFlag7() const { return bFlag7; }
-    void SetFlag7( BOOL bNew ) { bFlag7 = bNew; }
+    void SetUpper( sal_uInt16 nNew ){ nUpper = nNew; }
+    void SetLower( sal_uInt16 nNew ){ nLower = nNew; }
+    void SetVertical( sal_Bool bNew );
+    sal_Bool IsFlag3() const { return bFlag3; }
+    void SetFlag3( sal_Bool bNew ) { bFlag3 = bNew; }
+    sal_Bool IsFlag4() const { return bFlag4; }
+    void SetFlag4( sal_Bool bNew ) { bFlag4 = bNew; }
+    sal_Bool IsFlag5() const { return bFlag5; }
+    void SetFlag5( sal_Bool bNew ) { bFlag5 = bNew; }
+    sal_Bool IsFlag6() const { return bFlag6; }
+    void SetFlag6( sal_Bool bNew ) { bFlag6 = bNew; }
+    sal_Bool IsFlag7() const { return bFlag7; }
+    void SetFlag7( sal_Bool bNew ) { bFlag7 = bNew; }
 };
 
 

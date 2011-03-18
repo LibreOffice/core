@@ -41,7 +41,7 @@ class SfxItemPool;
 * class UHashMap                                                       *
 ***********************************************************************/
 
-#define UHASHMAP_NOTFOUND sal::static_int_cast< UINT32 >(~0)
+#define UHASHMAP_NOTFOUND sal::static_int_cast< sal_uInt32 >(~0)
 class UHashMap
 {
     UHashMap() {}
@@ -89,12 +89,12 @@ class SVX_DLLPUBLIC SvxUnoPropertyMapProvider
 {
     SfxItemPropertyMapEntry* aMapArr[SVXMAP_END];
     SvxItemPropertySet* aSetArr[SVXMAP_END];
-//  void Sort(USHORT nId);
+//  void Sort(sal_uInt16 nId);
 public:
     SvxUnoPropertyMapProvider();
     ~SvxUnoPropertyMapProvider();
-    const SfxItemPropertyMapEntry* GetMap(UINT16 nPropertyId);
-    const SvxItemPropertySet* GetPropertySet(UINT16 nPropertyId, SfxItemPool& rPool);
+    const SfxItemPropertyMapEntry* GetMap(sal_uInt16 nPropertyId);
+    const SvxItemPropertySet* GetPropertySet(sal_uInt16 nPropertyId, SfxItemPool& rPool);
 };
 
 /***********************************************************************

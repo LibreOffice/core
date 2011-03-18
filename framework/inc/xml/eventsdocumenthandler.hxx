@@ -29,7 +29,7 @@
 #ifndef __FRAMEWORK_XML_EVENTSDOCUMENTHANDLER_HXX_
 #define __FRAMEWORK_XML_EVENTSDOCUMENTHANDLER_HXX_
 
-#include <xml/eventsconfiguration.hxx>
+#include <framework/eventsconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -47,6 +47,7 @@
 #include <boost/unordered_map.hpp>
 #include <stdtypes.h>
 
+#include <framework/fwedllapi.h>
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -56,7 +57,7 @@ namespace framework{
 //*****************************************************************************************************************
 // Hash code function for using in all hash maps of follow implementation.
 
-class OReadEventsDocumentHandler :  private ThreadHelpBase, // Struct for right initalization of lock member! Must be first of baseclasses.
+class FWE_DLLPUBLIC OReadEventsDocumentHandler :    private ThreadHelpBase, // Struct for right initalization of lock member! Must be first of baseclasses.
                                     public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
@@ -146,7 +147,7 @@ class OReadEventsDocumentHandler :  private ThreadHelpBase, // Struct for right 
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >    m_xLocator;
 };
 
-class OWriteEventsDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
+class FWE_DLLPUBLIC OWriteEventsDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
 {
     public:
         OWriteEventsDocumentHandler(

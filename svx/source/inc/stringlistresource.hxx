@@ -66,7 +66,7 @@ namespace svx
             @return String
                 The string.
         */
-        String getString( USHORT _nResId )
+        String getString( sal_uInt16 _nResId )
         {
             return String( ResId( _nResId, *m_pResMgr ) );
         }

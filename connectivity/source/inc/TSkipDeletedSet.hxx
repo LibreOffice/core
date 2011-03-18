@@ -99,7 +99,7 @@ namespace connectivity
             @return the last position
         */
         inline sal_Int32    getLastPosition() const { return m_aBookmarksPositions.size(); }
-        inline void SetDeleted(bool _bDeletedVisible) { m_bDeletedVisible = _bDeletedVisible; }
+        inline void SetDeletedVisible(bool _bDeletedVisible) { m_bDeletedVisible = _bDeletedVisible; }
     };
 }
 #endif // CONNECTIVITY_SKIPDELETEDSSET_HXX

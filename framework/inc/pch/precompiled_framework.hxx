@@ -466,7 +466,7 @@
 #include "vcl/keycod.hxx"
 #include "vcl/keycodes.hxx"
 #include "vcl/lstbox.hxx"
-#include "vcl/mapunit.hxx"
+#include "tools/mapunit.hxx"
 #include "vcl/menu.hxx"
 #include "vcl/mnemonic.hxx"
 #include "vcl/morebtn.hxx"
@@ -485,7 +485,7 @@
 #include "vcl/timer.hxx"
 #include "vcl/wall.hxx"
 #include "vcl/window.hxx"
-#include "vcl/wintypes.hxx"
+#include "tools/wintypes.hxx"
 
 
 

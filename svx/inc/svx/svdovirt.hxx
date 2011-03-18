@@ -71,8 +71,8 @@ public:
     virtual void SetModel(SdrModel* pNewModel);
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual UINT32 GetObjInventor() const;
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt32 GetObjInventor() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual SdrObjList* GetSubList() const;
 
     virtual const Rectangle& GetCurrentBoundRect() const;

@@ -55,7 +55,7 @@ struct BrandName : public ::rtl::StaticWithInit<const ::rtl::OUString, BrandName
 class DpGuiResId : public ResId
 {
 public:
-    DpGuiResId( USHORT nId ):ResId( nId, *DeploymentGuiResMgr::get() ) {}
+    DpGuiResId( sal_uInt16 nId ):ResId( nId, *DeploymentGuiResMgr::get() ) {}
 };
 
 } // namespace dp_gui

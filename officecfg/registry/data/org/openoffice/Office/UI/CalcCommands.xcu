@@ -170,7 +170,7 @@
             </node>
             <node oor:name=".uno:DataPilotFilter" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">DataPilot Filter</value>
+                    <value xml:lang="en-US">Pivot Table Filter</value>
                 </prop>
             </node>
             <node oor:name=".uno:NextPage" oor:op="replace">
@@ -323,10 +323,10 @@
             </node>
             <node oor:name=".uno:DataDataPilotRun" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Start DataPilot...</value>
+                    <value xml:lang="en-US">~Create Pivot Table...</value>
                 </prop>
                 <prop oor:name="ContextLabel" oor:type="xs:string">
-                    <value xml:lang="en-US">~Start...</value>
+                    <value xml:lang="en-US">~Create...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1131,7 +1131,7 @@
             </node>
             <node oor:name=".uno:RecalcPivotTable" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Refresh DataPilot</value>
+                    <value xml:lang="en-US">~Refresh Pivot Table</value>
                 </prop>
                 <prop oor:name="ContextLabel" oor:type="xs:string">
                     <value xml:lang="en-US">~Refresh</value>
@@ -1139,7 +1139,7 @@
             </node>
             <node oor:name=".uno:DeletePivotTable" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Delete DataPilot</value>
+                    <value xml:lang="en-US">~Delete Pivot Table</value>
                 </prop>
                 <prop oor:name="ContextLabel" oor:type="xs:string">
                     <value xml:lang="en-US">~Delete</value>
@@ -1545,7 +1545,7 @@
             </node>
             <node oor:name=".uno:DataPilotMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Data~Pilot</value>
+                    <value xml:lang="en-US">~Pivot Table</value>
                 </prop>
             </node>
             <node oor:name=".uno:EditSheetMenu" oor:op="replace">

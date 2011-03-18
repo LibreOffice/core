@@ -83,26 +83,29 @@ OUString ComponentBackendDb::getKeyElementName()
 void ComponentBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
 {
     try{
-        Reference<css::xml::dom::XNode> componentNode = writeKeyElement(url);
-        writeSimpleElement(OUSTR("java-type-library"),
-                           OUString::valueOf((sal_Bool) data.javaTypeLibrary),
-                           componentNode);
+        if (!activateEntry(url))
+        {
+            Reference<css::xml::dom::XNode> componentNode = writeKeyElement(url);
+            writeSimpleElement(OUSTR("java-type-library"),
+                               OUString::valueOf((sal_Bool) data.javaTypeLibrary),
+                               componentNode);
 
-        writeSimpleList(
-            data.implementationNames,
-            OUSTR("implementation-names"),
-            OUSTR("name"),
-            componentNode);
+            writeSimpleList(
+                data.implementationNames,
+                OUSTR("implementation-names"),
+                OUSTR("name"),
+                componentNode);
 
-        writeVectorOfPair(
-            data.singletons,
-            OUSTR("singletons"),
-            OUSTR("item"),
-            OUSTR("key"),
-            OUSTR("value"),
-            componentNode);
+            writeVectorOfPair(
+                data.singletons,
+                OUSTR("singletons"),
+                OUSTR("item"),
+                OUSTR("key"),
+                OUSTR("value"),
+                componentNode);
 
-        save();
+            save();
+        }
     }
     catch(css::uno::Exception &)
     {

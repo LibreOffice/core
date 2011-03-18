@@ -63,7 +63,7 @@ namespace dp_gui {
 
 class LicenseView : public MultiLineEdit, public SfxListener
 {
-    BOOL            mbEndReached;
+    sal_Bool            mbEndReached;
     Link            maEndReachedHdl;
     Link            maScrolledHdl;
 
@@ -73,9 +73,9 @@ public:
 
     void ScrollDown( ScrollType eScroll );
 
-    BOOL IsEndReached() const;
-    BOOL EndReached() const { return mbEndReached; }
-    void SetEndReached( BOOL bEnd ) { mbEndReached = bEnd; }
+    sal_Bool IsEndReached() const;
+    sal_Bool EndReached() const { return mbEndReached; }
+    void SetEndReached( sal_Bool bEnd ) { mbEndReached = bEnd; }
 
     void SetEndReachedHdl( const Link& rHdl )  { maEndReachedHdl = rHdl; }
     const Link& GetAutocompleteHdl() const { return maEndReachedHdl; }
@@ -146,20 +146,20 @@ void LicenseView::ScrollDown( ScrollType eScroll )
         pScroll->DoScrollAction( eScroll );
 }
 
-BOOL LicenseView::IsEndReached() const
+sal_Bool LicenseView::IsEndReached() const
 {
-    BOOL bEndReached;
+    sal_Bool bEndReached;
 
     ExtTextView*    pView = GetTextView();
     ExtTextEngine*  pEdit = GetTextEngine();
-    ULONG           nHeight = pEdit->GetTextHeight();
+    sal_uLong           nHeight = pEdit->GetTextHeight();
     Size            aOutSize = pView->GetWindow()->GetOutputSizePixel();
     Point           aBottom( 0, aOutSize.Height() );
 
-    if ( (ULONG) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
-        bEndReached = TRUE;
+    if ( (sal_uLong) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
+        bEndReached = sal_True;
     else
-        bEndReached = FALSE;
+        bEndReached = sal_False;
 
     return bEndReached;
 }
@@ -168,8 +168,8 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.IsA( TYPE(TextHint) ) )
     {
-        BOOL    bLastVal = EndReached();
-        ULONG   nId = ((const TextHint&)rHint).GetId();
+        sal_Bool    bLastVal = EndReached();
+        sal_uLong   nId = ((const TextHint&)rHint).GetId();
 
         if ( nId == TEXT_HINT_PARAINSERTED )
         {

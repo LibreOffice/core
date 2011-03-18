@@ -88,48 +88,6 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
     return pRet;
 }
 
-sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, void * pRegistryKey )
-{
-    if (pRegistryKey)
-    {
-        try
-        {
-            sal_Int32 nInd = 0;
-            uno::Reference< registry::XRegistryKey > xKey( reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ) );
-
-            uno::Reference< registry::XRegistryKey >  xNewKey;
-
-            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-                                        OOoEmbeddedObjectFactory::impl_staticGetImplementationName() +
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
-            uno::Sequence< ::rtl::OUString > rServices = OOoEmbeddedObjectFactory::impl_staticGetSupportedServiceNames();
-            for( nInd = 0; nInd < rServices.getLength(); nInd++ )
-                xNewKey->createKey( rServices.getConstArray()[nInd] );
-
-            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-                                        OOoSpecialEmbeddedObjectFactory::impl_staticGetImplementationName() +
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
-            rServices = OOoSpecialEmbeddedObjectFactory::impl_staticGetSupportedServiceNames();
-            for( nInd = 0; nInd < rServices.getLength(); nInd++ )
-                xNewKey->createKey( rServices.getConstArray()[nInd] );
-
-            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-                                        UNOEmbeddedObjectCreator::impl_staticGetImplementationName() +
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
-            rServices = UNOEmbeddedObjectCreator::impl_staticGetSupportedServiceNames();
-            for( nInd = 0; nInd < rServices.getLength(); nInd++ )
-                xNewKey->createKey( rServices.getConstArray()[nInd] );
-
-            return sal_True;
-        }
-        catch (registry::InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
-}
-
 } // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -355,7 +355,7 @@ void SfxStateCache::SetState
 (
     SfxItemState        eState,  // <SfxItemState> from 'pState'
     const SfxPoolItem*  pState,  // Slot Status, 0 or -1
-    BOOL bMaybeDirty
+    sal_Bool bMaybeDirty
 )
 
 /*  [Description]
@@ -371,7 +371,7 @@ void SfxStateCache::SetState
 
 //--------------------------------------------------------------------
 
-void SfxStateCache::SetVisibleState( BOOL bShow )
+void SfxStateCache::SetVisibleState( sal_Bool bShow )
 {
     SfxItemState        eState( SFX_ITEM_AVAILABLE );
     const SfxPoolItem*  pState( NULL );
@@ -394,7 +394,7 @@ void SfxStateCache::SetVisibleState( BOOL bShow )
         }
         else
         {
-            pState = new SfxVisibilityItem( nId, FALSE );
+            pState = new SfxVisibilityItem( nId, sal_False );
             bDeleteItem = sal_True;
         }
 
@@ -421,7 +421,7 @@ void SfxStateCache::SetState_Impl
 (
     SfxItemState        eState,  // <SfxItemState> from 'pState'
     const SfxPoolItem*  pState,  // Slot Status, 0 or -1
-    BOOL bMaybeDirty
+    sal_Bool bMaybeDirty
 )
 {
     (void)bMaybeDirty; //unused
@@ -486,7 +486,7 @@ void SfxStateCache::SetState_Impl
 //--------------------------------------------------------------------
 // Set old status again in all the controllers
 
-void SfxStateCache::SetCachedState( BOOL bAlways )
+void SfxStateCache::SetCachedState( sal_Bool bAlways )
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxStateCache, 0);

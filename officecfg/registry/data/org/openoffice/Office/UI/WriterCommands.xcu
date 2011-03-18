@@ -166,6 +166,16 @@
                     <value xml:lang="en-US">~Protect Records...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:RejectTracedChange" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Reject Change</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:AcceptTracedChange" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Accept Change</value>
+                </prop>
+            </node>
             <node oor:name=".uno:UpdateAllLinks" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Links</value>

@@ -37,7 +37,7 @@
 #define _STDLIB_H
 #endif
 
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <editeng/flditem.hxx>
 #include <editeng/editdata.hxx>
 #include <svx/svdpool.hxx>
@@ -67,7 +67,7 @@
 #include <svl/rectitem.hxx>
 
 #include <svl/rngitem.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -92,18 +92,18 @@ public:
     XubString                   aName;
     XubString                   aValue;
     SfxItemState                eState;
-    UINT16                      nWhichId;
+    sal_uInt16                      nWhichId;
 
     TypeId                      pType;
     ItemType                    eItemType;
 
-    INT32                       nVal;
-    INT32                       nMin;
-    INT32                       nMax;
+    sal_Int32                       nVal;
+    sal_Int32                       nMin;
+    sal_Int32                       nMax;
 
-    BOOL                        bComment;
-    BOOL                        bIsNum;
-    BOOL                        bCanNum;
+    sal_Bool                        bComment;
+    sal_Bool                        bIsNum;
+    sal_Bool                        bCanNum;
 
 public:
     ImpItemListRow()
@@ -114,14 +114,14 @@ public:
         nVal(0),
         nMin(0),
         nMax(0),
-        bComment(FALSE),
-        bIsNum(FALSE),
-        bCanNum(FALSE)
+        bComment(sal_False),
+        bIsNum(sal_False),
+        bCanNum(sal_False)
     {}
 
     XubString GetItemTypeStr() const;
-    BOOL operator==(const ImpItemListRow& rEntry) const;
-    BOOL operator!=(const ImpItemListRow& rEntry) const { return !operator==(rEntry); }
+    sal_Bool operator==(const ImpItemListRow& rEntry) const;
+    sal_Bool operator!=(const ImpItemListRow& rEntry) const { return !operator==(rEntry); }
 };
 
 XubString ImpItemListRow::GetItemTypeStr() const
@@ -156,7 +156,7 @@ XubString ImpItemListRow::GetItemTypeStr() const
     return aStr;
 }
 
-BOOL ImpItemListRow::operator==(const ImpItemListRow& rEntry) const
+sal_Bool ImpItemListRow::operator==(const ImpItemListRow& rEntry) const
 {
     return (aName.Equals(rEntry.aName)
         && aValue.Equals(rEntry.aValue)
@@ -196,7 +196,7 @@ void ImpItemEdit::KeyInput(const KeyEvent& rKEvt)
 {
     _SdrItemBrowserControl* pBrowseMerk = pBrowse;
 
-    UINT16 nKeyCode(rKEvt.GetKeyCode().GetCode() + rKEvt.GetKeyCode().GetModifier());
+    sal_uInt16 nKeyCode(rKEvt.GetKeyCode().GetCode() + rKEvt.GetKeyCode().GetModifier());
 
     if(nKeyCode == KEY_RETURN)
     {
@@ -248,13 +248,13 @@ void _SdrItemBrowserControl::ImpCtor()
     nLastWhich = 0;
     nLastWhichOben = 0;  // not implemented yet
     nLastWhichUnten = 0; // not implemented yet
-    bWhichesButNames = FALSE;
-    bDontHideIneffectiveItems = FALSE;
-    bDontSortItems = FALSE;
-    bShowWhichIds = FALSE;
-    bShowRealValues = FALSE;
-    bShowWhichIds = TRUE;   // not implemented yet
-    bShowRealValues = TRUE; // not implemented yet
+    bWhichesButNames = sal_False;
+    bDontHideIneffectiveItems = sal_False;
+    bDontSortItems = sal_False;
+    bShowWhichIds = sal_False;
+    bShowRealValues = sal_False;
+    bShowWhichIds = sal_True;   // not implemented yet
+    bShowRealValues = sal_True; // not implemented yet
 
     rtl_TextEncoding aTextEncoding = gsl_getSystemTextEncoding();
 
@@ -295,8 +295,8 @@ void _SdrItemBrowserControl::ImpCtor()
 
 void _SdrItemBrowserControl::Clear()
 {
-    ULONG nAnz=aList.Count();
-    for (ULONG nNum=0; nNum<nAnz; nNum++) {
+    sal_uIntPtr nAnz=aList.Count();
+    for (sal_uIntPtr nNum=0; nNum<nAnz; nNum++) {
         delete ImpGetEntry(nNum);
     }
     aList.Clear();
@@ -308,13 +308,13 @@ long _SdrItemBrowserControl::GetRowCount() const
     return aList.Count();
 }
 
-BOOL _SdrItemBrowserControl::SeekRow(long nRow)
+sal_Bool _SdrItemBrowserControl::SeekRow(long nRow)
 {
     nAktPaintRow=nRow;
-    return TRUE;
+    return sal_True;
 }
 
-String _SdrItemBrowserControl::GetCellText(long _nRow, USHORT _nColId) const
+String _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
 {
     String sRet;
     if ( _nRow >= 0 && _nRow < (sal_Int32)aList.Count() )
@@ -357,9 +357,9 @@ String _SdrItemBrowserControl::GetCellText(long _nRow, USHORT _nColId) const
     return sRet;
 }
 
-void _SdrItemBrowserControl::PaintField(OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId) const
+void _SdrItemBrowserControl::PaintField(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const
 {
-    if (nAktPaintRow<0 || (ULONG)nAktPaintRow>=aList.Count()) {
+    if (nAktPaintRow<0 || (sal_uIntPtr)nAktPaintRow>=aList.Count()) {
         return;
     }
     Rectangle aR(rRect);
@@ -383,22 +383,22 @@ void _SdrItemBrowserControl::PaintField(OutputDevice& rDev, const Rectangle& rRe
     }
 }
 
-ULONG _SdrItemBrowserControl::GetCurrentPos() const
+sal_uIntPtr _SdrItemBrowserControl::GetCurrentPos() const
 {
-    ULONG nRet=CONTAINER_ENTRY_NOTFOUND;
+    sal_uIntPtr nRet=CONTAINER_ENTRY_NOTFOUND;
     if (GetSelectRowCount()==1) {
         long nPos=((BrowseBox*)this)->FirstSelectedRow();
-        if (nPos>=0 && (ULONG)nPos<aList.Count()) {
-            nRet=(ULONG)nPos;
+        if (nPos>=0 && (sal_uIntPtr)nPos<aList.Count()) {
+            nRet=(sal_uIntPtr)nPos;
         }
     }
     return nRet;
 }
 
-USHORT _SdrItemBrowserControl::GetCurrentWhich() const
+sal_uInt16 _SdrItemBrowserControl::GetCurrentWhich() const
 {
-    USHORT nRet=0;
-    ULONG nPos=GetCurrentPos();
+    sal_uInt16 nRet=0;
+    sal_uIntPtr nPos=GetCurrentPos();
     if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
         nRet=ImpGetEntry(nPos)->nWhichId;
     }
@@ -407,7 +407,7 @@ USHORT _SdrItemBrowserControl::GetCurrentWhich() const
 
 void _SdrItemBrowserControl::DoubleClick(const BrowserMouseEvent&)
 {
-    ULONG nPos=GetCurrentPos();
+    sal_uIntPtr nPos=GetCurrentPos();
     if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
         BegChangeEntry(nPos);
     }
@@ -415,9 +415,9 @@ void _SdrItemBrowserControl::DoubleClick(const BrowserMouseEvent&)
 
 void _SdrItemBrowserControl::KeyInput(const KeyEvent& rKEvt)
 {
-    USHORT nKeyCode=rKEvt.GetKeyCode().GetCode()+rKEvt.GetKeyCode().GetModifier();
+    sal_uInt16 nKeyCode=rKEvt.GetKeyCode().GetCode()+rKEvt.GetKeyCode().GetModifier();
     bool bAusgewertet = false;
-    ULONG nPos=GetCurrentPos();
+    sal_uIntPtr nPos=GetCurrentPos();
     if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
         if (nKeyCode==KEY_RETURN) {
             if (BegChangeEntry(nPos)) bAusgewertet = true;
@@ -467,7 +467,7 @@ void _SdrItemBrowserControl::Select()
 
 void _SdrItemBrowserControl::ImpSaveWhich()
 {
-    USHORT nWh=GetCurrentWhich();
+    sal_uInt16 nWh=GetCurrentWhich();
     if (nWh!=0) {
         long nPos=GetCurrentPos();
         long nTop=GetTopRow();
@@ -485,12 +485,12 @@ void _SdrItemBrowserControl::ImpRestoreWhich()
 {
     if (nLastWhich!=0) {
         bool bFnd = false;
-        ULONG nAnz=aList.Count();
-        ULONG nNum;
+        sal_uIntPtr nAnz=aList.Count();
+        sal_uIntPtr nNum;
         for (nNum=0; nNum<nAnz && !bFnd; nNum++) {
             ImpItemListRow* pEntry=ImpGetEntry(nNum);
             if (!pEntry->bComment) {
-                USHORT nWh=pEntry->nWhichId;
+                sal_uInt16 nWh=pEntry->nWhichId;
                 if (nWh==nLastWhich) bFnd = true;
             }
         }
@@ -505,7 +505,7 @@ void _SdrItemBrowserControl::ImpRestoreWhich()
     }
 }
 
-bool _SdrItemBrowserControl::BegChangeEntry(ULONG nPos)
+bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
 {
     BrkChangeEntry();
     bool bRet = false;
@@ -513,7 +513,7 @@ bool _SdrItemBrowserControl::BegChangeEntry(ULONG nPos)
     if (pEntry!=NULL && !pEntry->bComment) {
         SetMode(MYBROWSEMODE & ~BROWSER_KEEPHIGHLIGHT);
         pEditControl=new ImpItemEdit(&GetDataWindow(),this,0/*|WB_BORDER|WB_3DLOOK*/);
-        Rectangle aRect(GetFieldRectPixel(nPos,ITEMBROWSER_VALUECOL_ID,FALSE));
+        Rectangle aRect(GetFieldRectPixel(nPos,ITEMBROWSER_VALUECOL_ID,sal_False));
         aRect.Left()+=2; // Kleiner Offset fuer's Edit, damit's pixelgenau stimmt
         aRect.Right()--;
         pEditControl->SetPosSizePixel(aRect.TopLeft(),aRect.GetSize());
@@ -574,7 +574,7 @@ void _SdrItemBrowserControl::BrkChangeEntry()
     }
 }
 
-void _SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, ULONG nEntryNum)
+void _SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, sal_uIntPtr nEntryNum)
 {
     ImpItemListRow* pAktEntry=ImpGetEntry(nEntryNum);
     if (pAktEntry==NULL) {
@@ -601,19 +601,19 @@ void _SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, ULONG nEn
     }
 }
 
-bool ImpGetItem(const SfxItemSet& rSet, USHORT nWhich, const SfxPoolItem*& rpItem)
+bool ImpGetItem(const SfxItemSet& rSet, sal_uInt16 nWhich, const SfxPoolItem*& rpItem)
 {
-    SfxItemState eState=rSet.GetItemState(nWhich,TRUE,&rpItem);
+    SfxItemState eState=rSet.GetItemState(nWhich,sal_True,&rpItem);
     if (eState==SFX_ITEM_DEFAULT) {
         rpItem=&rSet.Get(nWhich);
     }
     return (eState==SFX_ITEM_DEFAULT || eState==SFX_ITEM_SET) && rpItem!=NULL;
 }
 
-bool IsItemIneffective(USHORT nWhich, const SfxItemSet* pSet, USHORT& rIndent)
+bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rIndent)
 {
     rIndent=0;
-    if (pSet==NULL) return FALSE;
+    if (pSet==NULL) return sal_False;
     const SfxPoolItem* pItem=NULL;
     bool bRet = false;
     switch (nWhich) {
@@ -630,21 +630,21 @@ bool IsItemIneffective(USHORT nWhich, const SfxItemSet* pSet, USHORT& rIndent)
             rIndent=1;
             if (ImpGetItem(*pSet,XATTR_LINESTYLE,pItem)) {
                 XLineStyle eLineStyle=((const XLineStyleItem*)pItem)->GetValue();
-                if (eLineStyle==XLINE_NONE) return TRUE;
-                if (eLineStyle!=XLINE_DASH && nWhich==XATTR_LINEDASH) return TRUE;
+                if (eLineStyle==XLINE_NONE) return sal_True;
+                if (eLineStyle!=XLINE_DASH && nWhich==XATTR_LINEDASH) return sal_True;
             }
             if (nWhich==XATTR_LINESTART || nWhich==XATTR_LINESTARTCENTER) {
                 rIndent=2;
                 if (ImpGetItem(*pSet,XATTR_LINESTARTWIDTH,pItem)) {
-                    INT32 nWdt=((const XLineStartWidthItem*)pItem)->GetValue();
-                    if (nWdt==0) return TRUE;
+                    sal_Int32 nWdt=((const XLineStartWidthItem*)pItem)->GetValue();
+                    if (nWdt==0) return sal_True;
                 }
             }
             if (nWhich==XATTR_LINEEND || nWhich==XATTR_LINEENDCENTER) {
                 rIndent=2;
                 if (ImpGetItem(*pSet,XATTR_LINEENDWIDTH,pItem)) {
-                    INT32 nWdt=((const XLineEndWidthItem*)pItem)->GetValue();
-                    if (nWdt==0) return TRUE;
+                    sal_Int32 nWdt=((const XLineEndWidthItem*)pItem)->GetValue();
+                    if (nWdt==0) return sal_True;
                 }
             }
         } break;
@@ -658,31 +658,31 @@ bool IsItemIneffective(USHORT nWhich, const SfxItemSet* pSet, USHORT& rIndent)
             rIndent=1;
             if (ImpGetItem(*pSet,XATTR_FILLSTYLE,pItem)) {
                 XFillStyle eFillStyle=((const XFillStyleItem*)pItem)->GetValue();
-                if (eFillStyle==XFILL_NONE) return TRUE;
+                if (eFillStyle==XFILL_NONE) return sal_True;
                 // Transparenz z.Zt. nur fuer SolidFill
-                if (eFillStyle!=XFILL_SOLID && (nWhich==XATTR_FILLCOLOR || nWhich==XATTR_FILLTRANSPARENCE)) return TRUE;
-                if (eFillStyle!=XFILL_GRADIENT && (nWhich==XATTR_FILLGRADIENT || nWhich==XATTR_GRADIENTSTEPCOUNT)) return TRUE;
-                if (eFillStyle!=XFILL_HATCH && (nWhich==XATTR_FILLHATCH || nWhich==XATTR_FILLBACKGROUND)) return TRUE;
+                if (eFillStyle!=XFILL_SOLID && (nWhich==XATTR_FILLCOLOR || nWhich==XATTR_FILLTRANSPARENCE)) return sal_True;
+                if (eFillStyle!=XFILL_GRADIENT && (nWhich==XATTR_FILLGRADIENT || nWhich==XATTR_GRADIENTSTEPCOUNT)) return sal_True;
+                if (eFillStyle!=XFILL_HATCH && (nWhich==XATTR_FILLHATCH || nWhich==XATTR_FILLBACKGROUND)) return sal_True;
             }
         } break;
         case XATTR_FILLBITMAP          :
         case XATTR_FILLBMP_TILE        :
-        case XATTR_FILLBMP_POS         : /* z.Zt. nur wenn TILE=TRUE */
+        case XATTR_FILLBMP_POS         : /* z.Zt. nur wenn TILE=sal_True */
         case XATTR_FILLBMP_SIZEX       : /* nur wenn nicht Stretch */
         case XATTR_FILLBMP_SIZEY       : /* nur wenn nicht Stretch */
-        case XATTR_FILLBMP_SIZELOG     : /* nur wenn SIZELOG=FALSE zum ruecksetzen auf TRUE (alt) -> doch noch in Gebrauch */
-        case XATTR_FILLBMP_TILEOFFSETX : /* nur wenn TILE=TRUE */
-        case XATTR_FILLBMP_TILEOFFSETY : /* nur wenn TILE=TRUE */
-        case XATTR_FILLBMP_STRETCH     : /* nur wenn TILE=FALSE */
-        case XATTR_FILLBMP_POSOFFSETX  : /* nur wenn TILE=TRUE*/
-        case XATTR_FILLBMP_POSOFFSETY  : { /* nur wenn TILE=TRUE*/
+        case XATTR_FILLBMP_SIZELOG     : /* nur wenn SIZELOG=sal_False zum ruecksetzen auf sal_True (alt) -> doch noch in Gebrauch */
+        case XATTR_FILLBMP_TILEOFFSETX : /* nur wenn TILE=sal_True */
+        case XATTR_FILLBMP_TILEOFFSETY : /* nur wenn TILE=sal_True */
+        case XATTR_FILLBMP_STRETCH     : /* nur wenn TILE=sal_False */
+        case XATTR_FILLBMP_POSOFFSETX  : /* nur wenn TILE=sal_True*/
+        case XATTR_FILLBMP_POSOFFSETY  : { /* nur wenn TILE=sal_True*/
             rIndent=1;
             if (ImpGetItem(*pSet,XATTR_FILLSTYLE,pItem)) {
                 XFillStyle eFillStyle=((const XFillStyleItem*)pItem)->GetValue();
-                if (eFillStyle!=XFILL_BITMAP) return TRUE;
+                if (eFillStyle!=XFILL_BITMAP) return sal_True;
             }
             if (nWhich==XATTR_FILLBITMAP || nWhich==XATTR_FILLBMP_TILE) {
-                return FALSE; // immer anwaehlbar
+                return sal_False; // immer anwaehlbar
             }
             bool bTileTRUE = false;
             bool bTileFALSE = false;
@@ -710,8 +710,8 @@ bool IsItemIneffective(USHORT nWhich, const SfxItemSet* pSet, USHORT& rIndent)
             }
             // Noch 2 Items speziell fuer Tile die sich jedoch gegenseitig ausschliessen
             if (nWhich==XATTR_FILLBMP_TILEOFFSETX || nWhich==XATTR_FILLBMP_TILEOFFSETY) {
-                if (bTileFALSE) return TRUE;
-                USHORT nX=0,nY=0;
+                if (bTileFALSE) return sal_True;
+                sal_uInt16 nX=0,nY=0;
                 bool bX = false,bY = false;
                 if (ImpGetItem(*pSet,XATTR_FILLBMP_TILEOFFSETX,pItem)) {
                     nX=((const XFillBmpTileOffsetXItem*)pItem)->GetValue();
@@ -722,19 +722,19 @@ bool IsItemIneffective(USHORT nWhich, const SfxItemSet* pSet, USHORT& rIndent)
                     bY = true;
                 }
                 if (nWhich==XATTR_FILLBMP_TILEOFFSETX) {
-                    if (nX!=0 || !bX) return FALSE;
-                    if (nY!=0) return TRUE;
+                    if (nX!=0 || !bX) return sal_False;
+                    if (nY!=0) return sal_True;
                 } else {
-                    if (nY!=0 || !bY) return FALSE;
-                    if (nX!=0) return TRUE;
+                    if (nY!=0 || !bY) return sal_False;
+                    if (nX!=0) return sal_True;
                 }
             }
             // SizeLog nicht anwaehlbar bei Stretch=TRUE
-            // und sonst auch nur wenn es auf SizeLog=FALSE gesetzt ist.
+            // und sonst auch nur wenn es auf SizeLog=sal_False gesetzt ist.
             // -> wohl doch noch in Gebrauch
-            // (TRUE ist der statische PoolDefault)
+            // (sal_True ist der statische PoolDefault)
             if (nWhich==XATTR_FILLBMP_SIZELOG) {
-                if (bTileFALSE && bStretchTRUE) return TRUE;
+                if (bTileFALSE && bStretchTRUE) return sal_True;
             }
         } break;
 
@@ -753,13 +753,13 @@ bool IsItemIneffective(USHORT nWhich, const SfxItemSet* pSet, USHORT& rIndent)
             rIndent=1;
             if (ImpGetItem(*pSet,XATTR_FORMTXTSTYLE,pItem)) {
                 XFormTextStyle eStyle=((const XFormTextStyleItem*)pItem)->GetValue();
-                if (eStyle==XFT_NONE) return TRUE;
+                if (eStyle==XFT_NONE) return sal_True;
             }
             if ((nWhich>=XATTR_FORMTXTSHDWCOLOR && nWhich<=XATTR_FORMTXTSHDWYVAL) || nWhich>=XATTR_FORMTXTSHDWTRANSP) {
                 rIndent=2;
                 if (ImpGetItem(*pSet,XATTR_FORMTXTSHADOW,pItem)) {
                     XFormTextShadow eShadow=((const XFormTextShadowItem*)pItem)->GetValue();
-                    if (eShadow==XFTSHADOW_NONE) return TRUE;
+                    if (eShadow==XFTSHADOW_NONE) return sal_True;
                 }
             }
         } break;
@@ -773,7 +773,7 @@ bool IsItemIneffective(USHORT nWhich, const SfxItemSet* pSet, USHORT& rIndent)
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_SHADOW,pItem)) {
                 bool bShadow=((const SdrShadowItem*)pItem)->GetValue();
-                if (!bShadow) return TRUE;
+                if (!bShadow) return sal_True;
             }
         } break;
 
@@ -781,7 +781,7 @@ bool IsItemIneffective(USHORT nWhich, const SfxItemSet* pSet, USHORT& rIndent)
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_CAPTIONFIXEDANGLE,pItem)) {
                 bool bFixed=((const SdrCaptionFixedAngleItem*)pItem)->GetValue();
-                if (!bFixed) return TRUE;
+                if (!bFixed) return sal_True;
             }
         } break;
         case SDRATTR_CAPTIONESCREL:
@@ -789,15 +789,15 @@ bool IsItemIneffective(USHORT nWhich, const SfxItemSet* pSet, USHORT& rIndent)
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_CAPTIONESCISREL,pItem)) {
                 bool bRel=((const SdrCaptionEscIsRelItem*)pItem)->GetValue();
-                if (bRel && nWhich==SDRATTR_CAPTIONESCABS) return TRUE;
-                if (!bRel && nWhich==SDRATTR_CAPTIONESCREL) return TRUE;
+                if (bRel && nWhich==SDRATTR_CAPTIONESCABS) return sal_True;
+                if (!bRel && nWhich==SDRATTR_CAPTIONESCREL) return sal_True;
             }
         } break;
         case SDRATTR_CAPTIONLINELEN: {
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_CAPTIONFITLINELEN,pItem)) {
                 bool bFit=((const SdrCaptionFitLineLenItem*)pItem)->GetValue();
-                if (bFit) return TRUE;
+                if (bFit) return sal_True;
             }
         } break;
 
@@ -806,7 +806,7 @@ bool IsItemIneffective(USHORT nWhich, const SfxItemSet* pSet, USHORT& rIndent)
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_TEXT_AUTOGROWHEIGHT,pItem)) {
                 bool bAutoGrow=((const SdrTextAutoGrowHeightItem*)pItem)->GetValue();
-                if (!bAutoGrow) return TRUE;
+                if (!bAutoGrow) return sal_True;
             }
         } break;
         case SDRATTR_TEXT_MINFRAMEWIDTH:
@@ -814,14 +814,14 @@ bool IsItemIneffective(USHORT nWhich, const SfxItemSet* pSet, USHORT& rIndent)
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_TEXT_AUTOGROWWIDTH,pItem)) {
                 bool bAutoGrow=((const SdrTextAutoGrowWidthItem*)pItem)->GetValue();
-                if (!bAutoGrow) return TRUE;
+                if (!bAutoGrow) return sal_True;
             }
         } break;
         case SDRATTR_TEXT_VERTADJUST:
         case SDRATTR_TEXT_HORZADJUST: {
             if (ImpGetItem(*pSet,SDRATTR_TEXT_FITTOSIZE,pItem)) {
                 SdrFitToSizeType eFit=((const SdrTextFitToSizeTypeItem*)pItem)->GetValue();
-                if (eFit!=SDRTEXTFIT_NONE) return TRUE;
+                if (eFit!=SDRTEXTFIT_NONE) return sal_True;
             }
         } break;
 
@@ -834,30 +834,30 @@ bool IsItemIneffective(USHORT nWhich, const SfxItemSet* pSet, USHORT& rIndent)
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_TEXT_ANIKIND,pItem)) {
                 SdrTextAniKind eAniKind=((const SdrTextAniKindItem*)pItem)->GetValue();
-                if (eAniKind==SDRTEXTANI_NONE) return TRUE;
-                if (eAniKind==SDRTEXTANI_BLINK && (nWhich==SDRATTR_TEXT_ANIDIRECTION || nWhich==SDRATTR_TEXT_ANIAMOUNT)) return TRUE;
-                if (eAniKind==SDRTEXTANI_SLIDE && (nWhich==SDRATTR_TEXT_ANISTARTINSIDE || nWhich==SDRATTR_TEXT_ANISTOPINSIDE)) return TRUE;
+                if (eAniKind==SDRTEXTANI_NONE) return sal_True;
+                if (eAniKind==SDRTEXTANI_BLINK && (nWhich==SDRATTR_TEXT_ANIDIRECTION || nWhich==SDRATTR_TEXT_ANIAMOUNT)) return sal_True;
+                if (eAniKind==SDRTEXTANI_SLIDE && (nWhich==SDRATTR_TEXT_ANISTARTINSIDE || nWhich==SDRATTR_TEXT_ANISTOPINSIDE)) return sal_True;
             }
         } break;
 
-        case SDRATTR_EDGELINEDELTAANZ: return TRUE;
+        case SDRATTR_EDGELINEDELTAANZ: return sal_True;
         case SDRATTR_EDGELINE1DELTA:
         case SDRATTR_EDGELINE2DELTA:
         case SDRATTR_EDGELINE3DELTA: {
             if (ImpGetItem(*pSet,SDRATTR_EDGEKIND,pItem)) {
                 SdrEdgeKind eKind=((const SdrEdgeKindItem*)pItem)->GetValue();
                 if (eKind==SDREDGE_THREELINES) {
-                    if (nWhich>SDRATTR_EDGELINE2DELTA) return TRUE;
-                    else return FALSE;
+                    if (nWhich>SDRATTR_EDGELINE2DELTA) return sal_True;
+                    else return sal_False;
                 }
-                if (eKind!=SDREDGE_ORTHOLINES && eKind!=SDREDGE_BEZIER) return TRUE;
+                if (eKind!=SDREDGE_ORTHOLINES && eKind!=SDREDGE_BEZIER) return sal_True;
             }
             if (ImpGetItem(*pSet,SDRATTR_EDGELINEDELTAANZ,pItem)) {
-                UINT16 nAnz=((const SdrEdgeLineDeltaAnzItem*)pItem)->GetValue();
-                if (nAnz==0) return TRUE;
-                if (nAnz==1 && nWhich>SDRATTR_EDGELINE1DELTA) return TRUE;
-                if (nAnz==2 && nWhich>SDRATTR_EDGELINE2DELTA) return TRUE;
-                if (nAnz==3 && nWhich>SDRATTR_EDGELINE3DELTA) return TRUE;
+                sal_uInt16 nAnz=((const SdrEdgeLineDeltaAnzItem*)pItem)->GetValue();
+                if (nAnz==0) return sal_True;
+                if (nAnz==1 && nWhich>SDRATTR_EDGELINE1DELTA) return sal_True;
+                if (nAnz==2 && nWhich>SDRATTR_EDGELINE2DELTA) return sal_True;
+                if (nAnz==3 && nWhich>SDRATTR_EDGELINE3DELTA) return sal_True;
             }
         } break;
 
@@ -866,14 +866,14 @@ bool IsItemIneffective(USHORT nWhich, const SfxItemSet* pSet, USHORT& rIndent)
             rIndent=1;
             if (ImpGetItem(*pSet,SDRATTR_CIRCKIND,pItem)) {
                 SdrCircKind eKind=((const SdrCircKindItem*)pItem)->GetValue();
-                if (eKind==SDRCIRC_FULL) return TRUE;
+                if (eKind==SDRCIRC_FULL) return sal_True;
             }
         } break;
     } // switch
     return bRet;
 }
 
-USHORT ImpSortWhich(USHORT nWhich)
+sal_uInt16 ImpSortWhich(sal_uInt16 nWhich)
 {
     switch (nWhich) {
         // Line
@@ -928,11 +928,11 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
     SetMode(MYBROWSEMODE & ~BROWSER_KEEPHIGHLIGHT);
     if (pSet!=NULL) {
         rtl_TextEncoding aTextEncoding = gsl_getSystemTextEncoding();
-        USHORT nEntryNum=0;
+        sal_uInt16 nEntryNum=0;
         SfxWhichIter aIter(*pSet);
         const SfxItemPool* pPool=pSet->GetPool();
-        USHORT nWhich0=0;
-        USHORT nWhich=aIter.FirstWhich();
+        sal_uInt16 nWhich0=0;
+        sal_uInt16 nWhich=aIter.FirstWhich();
         while (nWhich!=0) {
             // Nun erstmal etwas umsortieren
             // Geht nur, solange keine InvalidItems, d.h. keine Luecken
@@ -946,12 +946,12 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
             }
             if (eState!=SFX_ITEM_DISABLED) {
                 const SfxPoolItem& rItem=pSet->Get(nWhich);
-                USHORT nIndent=0;
+                sal_uInt16 nIndent=0;
                 if (!HAS_BASE(SfxVoidItem,&rItem) && !HAS_BASE(SfxSetItem,&rItem) && (!IsItemIneffective(nWhich,pSet,nIndent) || bDontHideIneffectiveItems)) {
                     XubString aCommentStr;
 
                     INSERTCOMMENT(XATTR_LINE_FIRST,XATTR_LINE_LAST,String("L I N I E", aTextEncoding));
-                    INSERTCOMMENT(XATTR_FILL_FIRST,XATTR_FILL_LAST,String("F L Ä C H E", aTextEncoding));
+                    INSERTCOMMENT(XATTR_FILL_FIRST,XATTR_FILL_LAST,String("F L ï¿½ C H E", aTextEncoding));
                     INSERTCOMMENT(XATTR_TEXT_FIRST,XATTR_TEXT_LAST,String("F O N T W O R K", aTextEncoding));
                     INSERTCOMMENT(SDRATTR_SHADOW_FIRST,SDRATTR_SHADOW_LAST,String("S C H A T T E N", aTextEncoding));
                     INSERTCOMMENT(SDRATTR_CAPTION_FIRST,SDRATTR_CAPTION_LAST,String("L E G E N D E", aTextEncoding));
@@ -1039,7 +1039,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                             if (aEntry.eItemType==ITEM_BOOL) aEntry.aValue.AppendAscii(aEntry.nVal!=0 ? "True" : "False");
                             else if (aEntry.bCanNum) aEntry.aValue = UniString::CreateFromInt32(aEntry.nVal);
                             else if (aEntry.eItemType==ITEM_STRING) aEntry.aValue=((SfxStringItem&)rItem).GetValue();
-                            else if (aEntry.eItemType==ITEM_ENUM && nWhich!=EE_CHAR_WEIGHT) aEntry.aValue=((SfxEnumItemInterface&)rItem).GetValueTextByPos((BOOL)aEntry.nVal);
+                            else if (aEntry.eItemType==ITEM_ENUM && nWhich!=EE_CHAR_WEIGHT) aEntry.aValue=((SfxEnumItemInterface&)rItem).GetValueTextByPos((sal_Bool)aEntry.nVal);
                             else aEntry.aValue = String("GPF", aTextEncoding);
                         }
                     } else {
@@ -1053,8 +1053,8 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
         } // while
 
         if (aList.Count()>nEntryNum) { // evtl. noch zuviele Eintraege
-            ULONG nTooMuch=aList.Count()-nEntryNum;
-            for (ULONG nNum=0; nNum<nTooMuch; nNum++) {
+            sal_uIntPtr nTooMuch=aList.Count()-nEntryNum;
+            for (sal_uIntPtr nNum=0; nNum<nTooMuch; nNum++) {
                 delete ImpGetEntry(nEntryNum);
                 aList.Remove(nEntryNum);
             }
@@ -1097,7 +1097,7 @@ void _SdrItemBrowserWindow::GetFocus()
 SdrItemBrowser::SdrItemBrowser(SdrView& rView):
     _SdrItemBrowserWindow(ImpGetViewWin(rView)),
     pView(&rView),
-    bDirty(FALSE)
+    bDirty(sal_False)
 {
     aIdleTimer.SetTimeoutHdl(LINK(this,SdrItemBrowser,IdleHdl));
     GetBrowserControl().SetEntryChangedHdl(LINK(this,SdrItemBrowser,ChangedHdl));
@@ -1140,7 +1140,7 @@ void SdrItemBrowser::SetDirty()
 void SdrItemBrowser::Undirty()
 {
     aIdleTimer.Stop();
-    bDirty = FALSE;
+    bDirty = sal_False;
 
 //  SfxItemSet aSet(pView->GetAttributes());
     SfxItemSet aSet(pView->GetModel()->GetItemPool());
@@ -1148,9 +1148,9 @@ void SdrItemBrowser::Undirty()
 
     if(pView->AreObjectsMarked())
     {
-        // SfxItemSet a2ndSet(pView->GetAttributes(TRUE));
+        // SfxItemSet a2ndSet(pView->GetAttributes(sal_True));
         SfxItemSet a2ndSet(pView->GetModel()->GetItemPool());
-        pView->GetAttributes(a2ndSet, TRUE);
+        pView->GetAttributes(a2ndSet, sal_True);
 
         SetAttributes(&aSet,&a2ndSet);
     }
@@ -1177,7 +1177,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
 
         SfxItemSet aNewSet(*aSet.GetPool(),pEntry->nWhichId,pEntry->nWhichId);
         XubString aNewText(pBrowse->GetNewEntryValue());
-        BOOL bDel( aNewText.EqualsAscii("del")
+        sal_Bool bDel( aNewText.EqualsAscii("del")
             || aNewText.EqualsAscii("Del")
             || aNewText.EqualsAscii("DEL")
             || aNewText.EqualsAscii("default")
@@ -1194,7 +1194,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
             }
             bool bPairX = true;
             bool bPairY = false;
-            USHORT nSepLen=1;
+            sal_uInt16 nSepLen=1;
             long nLongX = aNewText.ToInt32();
             long nLongY=0;
             xub_StrLen nPos = aNewText.Search(sal_Unicode('/'));
@@ -1205,13 +1205,13 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                 bPairX=nPos>0;
                 XubString s(aNewText);
                 s.Erase(0,nPos+nSepLen);
-                bPairY = (BOOL)aNewText.Len();
+                bPairY = (sal_Bool)aNewText.Len();
                 nLongY = s.ToInt32();
             }
             switch (pEntry->eItemType) {
-                case ITEM_BYTE  : ((SfxByteItem  *)pNewItem)->SetValue((BYTE  )nLongVal); break;
-                case ITEM_INT16 : ((SfxInt16Item *)pNewItem)->SetValue((INT16 )nLongVal); break;
-                case ITEM_UINT16: ((SfxUInt16Item*)pNewItem)->SetValue((UINT16)nLongVal); break;
+                case ITEM_BYTE  : ((SfxByteItem  *)pNewItem)->SetValue((sal_uInt8  )nLongVal); break;
+                case ITEM_INT16 : ((SfxInt16Item *)pNewItem)->SetValue((sal_Int16 )nLongVal); break;
+                case ITEM_UINT16: ((SfxUInt16Item*)pNewItem)->SetValue((sal_uInt16)nLongVal); break;
                 case ITEM_INT32: {
                     if(HAS_BASE(SdrAngleItem, pNewItem))
                     {
@@ -1219,10 +1219,10 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                         double nVal = aNewText.ToFloat();
                         nLongVal = (long)(nVal * 100 + 0.5);
                     }
-                    ((SfxInt32Item *)pNewItem)->SetValue((INT32)nLongVal);
+                    ((SfxInt32Item *)pNewItem)->SetValue((sal_Int32)nLongVal);
                 } break;
                 case ITEM_UINT32: ((SfxUInt32Item*)pNewItem)->SetValue(aNewText.ToInt32()); break;
-                case ITEM_ENUM  : ((SfxEnumItemInterface*)pNewItem)->SetEnumValue((USHORT)nLongVal); break;
+                case ITEM_ENUM  : ((SfxEnumItemInterface*)pNewItem)->SetEnumValue((sal_uInt16)nLongVal); break;
                 case ITEM_BOOL: {
                     aNewText.ToUpperAscii();
                     if (aNewText.EqualsAscii("TRUE")) nLongVal=1;
@@ -1231,15 +1231,15 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                     if (aNewText.EqualsAscii("EIN")) nLongVal=1;
                     if (aNewText.EqualsAscii("ON")) nLongVal=1;
                     if (aNewText.EqualsAscii("YES")) nLongVal=1;
-                    ((SfxBoolItem*)pNewItem)->SetValue((BOOL)nLongVal);
+                    ((SfxBoolItem*)pNewItem)->SetValue((sal_Bool)nLongVal);
                 } break;
-                case ITEM_FLAG  : ((SfxFlagItem  *)pNewItem)->SetValue((USHORT)nLongVal); break;
+                case ITEM_FLAG  : ((SfxFlagItem  *)pNewItem)->SetValue((sal_uInt16)nLongVal); break;
                 case ITEM_STRING: ((SfxStringItem*)pNewItem)->SetValue(aNewText); break;
                 case ITEM_POINT : ((SfxPointItem*)pNewItem)->SetValue(Point(nLongX,nLongY)); break;
                 case ITEM_RECT  : break;
                 case ITEM_RANGE : {
-                    ((SfxRangeItem*)pNewItem)->From()=(USHORT)nLongX;
-                    ((SfxRangeItem*)pNewItem)->From()=(USHORT)nLongY;
+                    ((SfxRangeItem*)pNewItem)->From()=(sal_uInt16)nLongX;
+                    ((SfxRangeItem*)pNewItem)->From()=(sal_uInt16)nLongY;
                 } break;
                 case ITEM_LRANGE : {
                 } break;
@@ -1256,19 +1256,19 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                     ((SvxFontItem*)pNewItem)->GetStyleName().Erase();
                 } break;
                 case ITEM_FONTHEIGHT: {
-                    ULONG nHgt=0;
-                    USHORT nProp=100;
+                    sal_uIntPtr nHgt=0;
+                    sal_uInt16 nProp=100;
                     if (aNewText.Search(sal_Unicode('%'))!=STRING_NOTFOUND) {
-                        nProp=(USHORT)nLongVal;
+                        nProp=(sal_uInt16)nLongVal;
                     } else {
                         nHgt=nLongVal;
                     }
                     ((SvxFontHeightItem*)pNewItem)->SetHeight(nHgt,nProp);
                 } break;
                 case ITEM_FONTWIDTH: {
-                    USHORT nProp=100;
+                    sal_uInt16 nProp=100;
                     if (aNewText.Search(sal_Unicode('%'))!=STRING_NOTFOUND) {
-                        nProp=(USHORT)nLongVal;
+                        nProp=(sal_uInt16)nLongVal;
                     }
                     ((SvxCharScaleWidthItem*)pNewItem)->SetValue(nProp);
                 } break;

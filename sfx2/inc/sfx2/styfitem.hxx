@@ -39,7 +39,7 @@
 
 struct SfxFilterTupel {
     String aName;
-    USHORT nFlags;
+    sal_uInt16 nFlags;
 };
 typedef ::std::vector< SfxFilterTupel* > SfxStyleFilter;
 
@@ -51,7 +51,7 @@ class SfxStyleFamilyItem: public Resource
     Bitmap          aBitmap;
     String          aText;
     String          aHelpText;
-    USHORT          nFamily;
+    sal_uInt16          nFamily;
     SfxStyleFilter  aFilterList;
 
 public:

@@ -53,7 +53,7 @@ using namespace com::sun::star;
     its Parent.
  */
 
-SfxObjectVerbsControl::SfxObjectVerbsControl(USHORT nSlotId, Menu &rMenu, SfxBindings &rBindings)
+SfxObjectVerbsControl::SfxObjectVerbsControl(sal_uInt16 nSlotId, Menu &rMenu, SfxBindings &rBindings)
     : SfxMenuControl( nSlotId, rBindings )
     , pMenu(new PopupMenu)
     , rParent(rMenu)
@@ -79,8 +79,8 @@ void SfxObjectVerbsControl::FillMenu()
         const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs =  pView->GetVerbs();
         if ( aVerbs.getLength() )
         {
-            USHORT nSlotId = SID_VERB_START;
-            for (USHORT n=0; n<aVerbs.getLength(); n++)
+            sal_uInt16 nSlotId = SID_VERB_START;
+            for (sal_uInt16 n=0; n<aVerbs.getLength(); n++)
             {
                 // check for ReadOnly verbs
                 if ( pDoc->IsReadOnly() && !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_NEVERDIRTIES) )
@@ -99,7 +99,7 @@ void SfxObjectVerbsControl::FillMenu()
         }
     }
 
-    rParent.EnableItem( GetId(), (BOOL)pMenu->GetItemCount() );
+    rParent.EnableItem( GetId(), (sal_Bool)pMenu->GetItemCount() );
 }
 
 //--------------------------------------------------------------------
@@ -112,7 +112,7 @@ void SfxObjectVerbsControl::FillMenu()
  */
 
 void SfxObjectVerbsControl::StateChanged(
-    USHORT /*nSID*/,
+    sal_uInt16 /*nSID*/,
     SfxItemState eState,
     const SfxPoolItem* /*pState*/ )
 {
@@ -130,7 +130,7 @@ void SfxObjectVerbsControl::StateChanged(
 
 IMPL_LINK_INLINE_START( SfxObjectVerbsControl, MenuSelect, Menu *, pSelMenu )
 {
-    const USHORT nSlotId = pSelMenu->GetCurItemId();
+    const sal_uInt16 nSlotId = pSelMenu->GetCurItemId();
     if( nSlotId )
         GetBindings().Execute(nSlotId);
     return 1;

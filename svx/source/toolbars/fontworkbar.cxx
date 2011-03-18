@@ -33,7 +33,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewsh.hxx>
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <svx/dialmgr.hxx>
@@ -47,11 +47,11 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/kernitem.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/fontworkbar.hxx>
-#include "fontworkgallery.hxx"
+#include "svx/fontworkgallery.hxx"
 
 using ::rtl::OUString;
 
@@ -64,7 +64,7 @@ using namespace ::com::sun::star::uno;
 void SetAlignmentState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    ULONG nCount = rMarkList.GetMarkCount(), i;
+    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
     sal_Int32   nAlignment = -1;
     for( i = 0; i < nCount; i++ )
@@ -101,7 +101,7 @@ void SetAlignmentState( SdrView* pSdrView, SfxItemSet& rSet )
 void SetCharacterSpacingState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    ULONG nCount = rMarkList.GetMarkCount(), i;
+    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
     sal_Int32   nCharacterSpacing = -1;
     for( i = 0; i < nCount; i++ )
@@ -126,7 +126,7 @@ void SetCharacterSpacingState( SdrView* pSdrView, SfxItemSet& rSet )
 void SetKernCharacterPairsState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    ULONG nCount = rMarkList.GetMarkCount(), i;
+    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
     sal_Bool    bChecked = sal_False;
     for( i = 0; i < nCount; i++ )
@@ -145,7 +145,7 @@ void SetKernCharacterPairsState( SdrView* pSdrView, SfxItemSet& rSet )
 void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    ULONG nCount = rMarkList.GetMarkCount(), i;
+    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
     rtl::OUString aFontWorkShapeType;
 
@@ -257,7 +257,7 @@ bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
     static const rtl::OUString  sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    ULONG nCount = rMarkList.GetMarkCount(), i;
+    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
     sal_Bool bFound = sal_False;
     for(i=0;(i<nCount) && !bFound ; i++)
     {
@@ -348,7 +348,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     }
 }
 
-#include "gallery.hxx"
+#include "svx/gallery.hxx"
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svl/itempool.hxx>
@@ -525,7 +525,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
             {
                 sal_Int32 nCharSpacing = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_FONTWORK_CHARACTER_SPACING))->GetValue();
                 FontworkCharacterSpacingDialog aDlg( 0L, nCharSpacing );
-                USHORT nRet = aDlg.Execute();
+                sal_uInt16 nRet = aDlg.Execute();
                 if( nRet != 0 )
                 {
                     SfxInt32Item aItem( SID_FONTWORK_CHARACTER_SPACING, aDlg.getScale() );
@@ -558,7 +558,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                 nStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_SAME_LETTER_HEIGHT;
 
             const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-            ULONG nCount = rMarkList.GetMarkCount(), i;
+            sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
             for( i = 0; i < nCount; i++ )
             {
                 SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();

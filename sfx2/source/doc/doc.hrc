@@ -44,7 +44,6 @@
 #define STR_NOSTARTPRINTER                  (RID_SFX_DOC_START+ 8)
 #define MSG_CONFIRM_FILTER                  (RID_SFX_DOC_START+11)
 #define MSG_CONFIRM_OVERWRITE_TEMPLATE      (RID_SFX_DOC_START+12)
-#define MSG_QUERY_LOAD_TEMPLATE             (RID_SFX_DOC_START+13)
 
 #define STR_DELETE_REGION                   (RID_SFX_DOC_START+14)
 #define STR_DELETE_TEMPLATE                 (RID_SFX_DOC_START+15)
@@ -137,7 +136,6 @@
 #define RID_CNT_STR_WAITING                 (RID_SFX_DOC_START+ 83)
 
 #define STR_OBJECT                          (RID_SFX_DOC_START+ 84)
-#define STR_EDITOBJECT                      (RID_SFX_DOC_START+ 85)
 
 #define DLOAD_URL 1
 #define DLOAD_STATUS 2

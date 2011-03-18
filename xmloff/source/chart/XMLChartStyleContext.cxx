@@ -30,7 +30,7 @@
 #include "precompiled_xmloff.hxx"
 #include "XMLChartStyleContext.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/families.hxx>
 

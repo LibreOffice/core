@@ -30,7 +30,7 @@
 
 #include <sfx2/fcontnr.hxx>
 
-BOOL SfxIsHelpEntryURL( const String &rURL, const String &rExtMask );
+sal_Bool SfxIsHelpEntryURL( const String &rURL, const String &rExtMask );
 
 #endif
 

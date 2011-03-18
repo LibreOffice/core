@@ -59,7 +59,7 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    void FormToolboxes::toggleToolbox( USHORT _nSlotId ) const
+    void FormToolboxes::toggleToolbox( sal_uInt16 _nSlotId ) const
     {
         try
         {
@@ -87,14 +87,14 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    bool FormToolboxes::isToolboxVisible( USHORT _nSlotId ) const
+    bool FormToolboxes::isToolboxVisible( sal_uInt16 _nSlotId ) const
     {
         return m_xLayouter.is() && m_xLayouter->isElementVisible(
             getToolboxResourceName( _nSlotId ) );
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString FormToolboxes::getToolboxResourceName( USHORT _nSlotId ) const
+    ::rtl::OUString FormToolboxes::getToolboxResourceName( sal_uInt16 _nSlotId ) const
     {
         OSL_ENSURE( ( _nSlotId == SID_FM_MORE_CONTROLS ) || ( _nSlotId == SID_FM_FORM_DESIGN_TOOLS ) || ( _nSlotId == SID_FM_CONFIG ),
             "FormToolboxes::getToolboxResourceName: unsupported slot!" );

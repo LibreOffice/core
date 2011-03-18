@@ -46,6 +46,7 @@ namespace avmedia { namespace priv {
 // - MediaWindowBaseImpl -
 // -----------------------
 
+
 MediaWindowBaseImpl::MediaWindowBaseImpl( MediaWindow* pMediaWindow ) :
     mpMediaWindow( pMediaWindow )
 {
@@ -141,10 +142,7 @@ void MediaWindowBaseImpl::stopPlayingInternal( bool bStop )
 {
     if( isPlaying() )
     {
-        if( bStop )
-            mxPlayer->stop();
-        else
-            mxPlayer->start();
+        bStop ? mxPlayer->stop() : mxPlayer->start();
     }
 }
 

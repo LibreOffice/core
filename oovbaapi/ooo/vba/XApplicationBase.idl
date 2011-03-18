@@ -49,9 +49,9 @@ interface XApplicationBase
 
     void Quit();
 
-    any CommandBars( [in] any aIndex );
+    any CommandBars( [in] any Index );
     any Run([in] string MacroName, [in] /*Optional*/ any varg1, [in] /*Optional*/ any varg2, [in] /*Optional*/ any varg3, [in] /*Optional*/ any varg4, [in] /*Optional*/ any varg5, [in] /*Optional*/ any varg6, [in] /*Optional*/ any varg7, [in] /*Optional*/ any varg8, [in] /*Optional*/ any varg9, [in] /*Optional*/ any varg10, [in] /*Optional*/ any varg11, [in] /*Optional*/ any varg12, [in] /*Optional*/ any varg13, [in] /*Optional*/ any varg14, [in] /*Optional*/ any varg15, [in] /*Optional*/ any varg16, [in] /*Optional*/ any varg17, [in] /*Optional*/ any varg18, [in] /*Optional*/ any varg19, [in] /*Optional*/ any varg20, [in] /*Optional*/ any varg21, [in] /*Optional*/ any varg22, [in] /*Optional*/ any varg23, [in] /*Optional*/ any varg24, [in] /*Optional*/ any varg25, [in] /*Optional*/ any varg26, [in] /*Optional*/ any varg27, [in] /*Optional*/ any varg28, [in] /*Optional*/ any varg29, [in] /*Optional*/ any varg30);
-    void OnTime( [in] any aEarliestTime, [in] string aFunction, [in] any aLatestTime, [in] any aSchedule );
+    void OnTime( [in] any EarliestTime, [in] string Procedure, [in] any LatestTime, [in] any Schedule );
     float CentimetersToPoints([in] float Centimeters );
     void Undo();
 };

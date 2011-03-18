@@ -45,7 +45,7 @@
 #include "versdlg.hrc"
 #include "versdlg.hxx"
 #include <sfx2/viewfrm.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -153,7 +153,7 @@ static String ConvertDateTime_Impl(const DateTime& rTime, const LocaleDataWrappe
      const String pDelim ( DEFINE_CONST_UNICODE( ", "));
      String aStr(rWrapper.getDate(rTime));
      aStr += pDelim;
-     aStr += rWrapper.getTime(rTime, TRUE, FALSE);
+     aStr += rWrapper.getTime(rTime, sal_True, sal_False);
      return aStr;
 }
 
@@ -201,7 +201,7 @@ SfxVersionsTabListBox_Impl::SfxVersionsTabListBox_Impl( Window* pParent, const R
 {
 }
 
-SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, BOOL bIsSaveVersionOnClose )
+SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, sal_Bool bIsSaveVersionOnClose )
     : SfxModalDialog( NULL, SfxResId( DLG_VERSIONS ) )
     , aNewGroup( this, SfxResId( GB_NEWVERSIONS ) )
     , aSaveButton( this, SfxResId( PB_SAVE ) )
@@ -236,7 +236,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, BOOL bIsSaveVersion
     aVersionBox.SetDoubleClickHdl( LINK( this, SfxVersionDialog, DClickHdl_Impl ) );
 
     aVersionBox.GrabFocus();
-    aVersionBox.SetWindowBits( WB_HSCROLL | WB_CLIPCHILDREN );
+    aVersionBox.SetStyle( aVersionBox.GetStyle() | WB_HSCROLL | WB_CLIPCHILDREN );
     aVersionBox.SetSelectionMode( SINGLE_SELECTION );
     aVersionBox.SetTabs( &nTabs_Impl[0], MAP_APPFONT );
     aVersionBox.Resize();       // OS: Hack for correct selection
@@ -297,7 +297,7 @@ void SfxVersionDialog::Init_Impl()
 
     aSaveCheckBox.Check( mbIsSaveVersionOnClose );
 
-    BOOL bEnable = !pObjShell->IsReadOnly();
+    sal_Bool bEnable = !pObjShell->IsReadOnly();
     aSaveButton.Enable( bEnable );
     aSaveCheckBox.Enable( bEnable );
 
@@ -320,19 +320,19 @@ void SfxVersionDialog::Open_Impl()
     SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
 
     SvLBoxEntry *pEntry = aVersionBox.FirstSelected();
-    ULONG nPos = aVersionBox.GetModel()->GetRelPos( pEntry );
+    sal_uIntPtr nPos = aVersionBox.GetModel()->GetRelPos( pEntry );
     SfxInt16Item aItem( SID_VERSION, (short)nPos+1 );
     SfxStringItem aTarget( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
     SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:user") );
     SfxStringItem aFile( SID_FILE_NAME, pObjShell->GetMedium()->GetName() );
 
-    ::rtl::OUString aPassString;
-    if ( GetPasswd_Impl( pObjShell->GetMedium()->GetItemSet(), aPassString ) )
+    uno::Sequence< beans::NamedValue > aEncryptionData;
+    if ( GetEncryptionData_Impl( pObjShell->GetMedium()->GetItemSet(), aEncryptionData ) )
     {
         // there is a password, it should be used during the opening
-        SfxStringItem aPassItem( SID_PASSWORD, aPassString );
+        SfxUnoAnyItem aEncryptionDataItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) );
         pViewFrame->GetDispatcher()->Execute(
-            SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aFile, &aItem, &aTarget, &aReferer, &aPassItem, 0L );
+            SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aFile, &aItem, &aTarget, &aReferer, &aEncryptionDataItem, 0L );
     }
     else
         pViewFrame->GetDispatcher()->Execute(
@@ -407,20 +407,20 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     {
         SfxVersionInfo aInfo;
         aInfo.aAuthor = SvtUserOptions().GetFullName();
-        SfxViewVersionDialog_Impl* pDlg = new SfxViewVersionDialog_Impl( this, aInfo, TRUE );
+        SfxViewVersionDialog_Impl* pDlg = new SfxViewVersionDialog_Impl( this, aInfo, sal_True );
         short nRet = pDlg->Execute();
         if ( nRet == RET_OK )
         {
             SfxStringItem aComment( SID_DOCINFO_COMMENTS, aInfo.aComment );
-            pObjShell->SetModified( TRUE );
+            pObjShell->SetModified( sal_True );
             const SfxPoolItem* aItems[2];
             aItems[0] = &aComment;
             aItems[1] = NULL;
             pViewFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, aItems, 0 );
-            aVersionBox.SetUpdateMode( FALSE );
+            aVersionBox.SetUpdateMode( sal_False );
             aVersionBox.Clear();
             Init_Impl();
-            aVersionBox.SetUpdateMode( TRUE );
+            aVersionBox.SetUpdateMode( sal_True );
         }
 
         delete pDlg;
@@ -428,11 +428,11 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     if ( pButton == &aDeleteButton && pEntry )
     {
         pObjShell->GetMedium()->RemoveVersion_Impl( ((SfxVersionInfo*) pEntry->GetUserData())->aName );
-        pObjShell->SetModified( TRUE );
-        aVersionBox.SetUpdateMode( FALSE );
+        pObjShell->SetModified( sal_True );
+        aVersionBox.SetUpdateMode( sal_False );
         aVersionBox.Clear();
         Init_Impl();
-        aVersionBox.SetUpdateMode( TRUE );
+        aVersionBox.SetUpdateMode( sal_True );
     }
     else if ( pButton == &aOpenButton && pEntry )
     {
@@ -441,20 +441,20 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     else if ( pButton == &aViewButton && pEntry )
     {
         SfxVersionInfo* pInfo = (SfxVersionInfo*) pEntry->GetUserData();
-        SfxViewVersionDialog_Impl* pDlg = new SfxViewVersionDialog_Impl( this, *pInfo, FALSE );
+        SfxViewVersionDialog_Impl* pDlg = new SfxViewVersionDialog_Impl( this, *pInfo, sal_False );
         pDlg->Execute();
         delete pDlg;
     }
     else if ( pEntry && pButton == &aCompareButton )
     {
         SfxAllItemSet aSet( pObjShell->GetPool() );
-        ULONG nPos = aVersionBox.GetModel()->GetRelPos( pEntry );
+        sal_uIntPtr nPos = aVersionBox.GetModel()->GetRelPos( pEntry );
         aSet.Put( SfxInt16Item( SID_VERSION, (short)nPos+1 ) );
         aSet.Put( SfxStringItem( SID_FILE_NAME, pObjShell->GetMedium()->GetName() ) );
 
         SfxItemSet* pSet = pObjShell->GetMedium()->GetItemSet();
-        SFX_ITEMSET_ARG( pSet, pFilterItem, SfxStringItem, SID_FILTER_NAME, FALSE );
-        SFX_ITEMSET_ARG( pSet, pFilterOptItem, SfxStringItem, SID_FILE_FILTEROPTIONS, FALSE );
+        SFX_ITEMSET_ARG( pSet, pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+        SFX_ITEMSET_ARG( pSet, pFilterOptItem, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
         if ( pFilterItem )
             aSet.Put( *pFilterItem );
         if ( pFilterOptItem )
@@ -467,7 +467,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     return 0L;
 }
 
-SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl ( Window *pParent, SfxVersionInfo& rInfo, BOOL bEdit )
+SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl ( Window *pParent, SfxVersionInfo& rInfo, sal_Bool bEdit )
     : SfxModalDialog( pParent, SfxResId( DLG_COMMENTS ) )
     , aDateTimeText( this, SfxResId( FT_DATETIME ) )
     , aSavedByText( this, SfxResId( FT_SAVEDBY ) )
@@ -493,7 +493,7 @@ SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl ( Window *pParent, SfxVersi
     {
         aOKButton.Hide();
         aCancelButton.Hide();
-        aEdit.SetReadOnly( TRUE );
+        aEdit.SetReadOnly( sal_True );
     }
     else
         aCloseButton.Hide();

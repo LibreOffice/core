@@ -163,7 +163,9 @@ Size MediaWindow::getPreferredSize() const
 void MediaWindow::setPosSize( const Rectangle& rNewRect )
 {
     if( mpImpl )
+    {
         mpImpl->setPosSize( rNewRect );
+    }
 }
 
 // -------------------------------------------------------------------------
@@ -370,6 +372,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
                                         "AVI", "avi",
                                         "CD Audio", "cda",
                                         "FLAC Audio", "flac",
+                                        "Matroska Media", "mkv",
                                         "MIDI Audio", "mid;midi",
                                         "MPEG Audio", "mp2;mp3;mpa",
                                         "MPEG Video", "mpg;mpeg;mpv;mp4",
@@ -466,39 +469,26 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
     {
         if( bDeep || pPreferredSizePixel )
         {
-            uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-
-            if( xFactory.is() )
+            try
             {
-                try
+                uno::Reference< media::XPlayer > xPlayer( priv::MediaWindowImpl::createPlayer(
+                                                            aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) );
+
+                if( xPlayer.is() )
                 {
-                    fprintf(stderr, "-->%s uno reference \n\n",AVMEDIA_MANAGER_SERVICE_NAME);
+                    bRet = true;
 
-                    uno::Reference< ::com::sun::star::media::XManager > xManager(
-                        xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_MANAGER_SERVICE_NAME )) ),
-                        uno::UNO_QUERY );
-
-                    if( xManager.is() )
+                    if( pPreferredSizePixel )
                     {
-                        uno::Reference< media::XPlayer > xPlayer( xManager->createPlayer( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) );
+                        const awt::Size aAwtSize( xPlayer->getPreferredPlayerWindowSize() );
 
-                        if( xPlayer.is() )
-                        {
-                            bRet = true;
-
-                            if( pPreferredSizePixel )
-                            {
-                                const awt::Size aAwtSize( xPlayer->getPreferredPlayerWindowSize() );
-
-                                pPreferredSizePixel->Width() = aAwtSize.Width;
-                                pPreferredSizePixel->Height() = aAwtSize.Height;
-                            }
-                        }
+                        pPreferredSizePixel->Width() = aAwtSize.Width;
+                        pPreferredSizePixel->Height() = aAwtSize.Height;
                     }
                 }
-                catch( ... )
-                {
-                }
+            }
+            catch( ... )
+            {
             }
         }
         else

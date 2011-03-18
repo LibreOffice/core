@@ -29,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include "dinfedt.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/dinfedt.hxx"
+#include "sfx2/sfxresid.hxx"
 
 #include <sfx2/sfx.hrc>
 #include "dinfedt.hrc"

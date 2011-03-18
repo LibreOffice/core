@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include "sqlparserclient.hxx"
-#include "ParseContext.hxx"
+#include "svx/ParseContext.hxx"
 
 //........................................................................
 namespace svxform

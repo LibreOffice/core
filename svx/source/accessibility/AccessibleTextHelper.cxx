@@ -577,7 +577,7 @@ namespace accessibility
                         OSL_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): Parent has focus!");
                     }
 
-                    USHORT nMaxValidParaIndex( static_cast< USHORT >( GetTextForwarder().GetParagraphCount() ) - 1 );
+                    sal_uInt16 nMaxValidParaIndex( static_cast< sal_uInt16 >( GetTextForwarder().GetParagraphCount() ) - 1 );
 
                     // notify all affected paragraphs (TODO: may be suboptimal,
                     // since some paragraphs might stay selected)
@@ -846,7 +846,7 @@ namespace accessibility
                 DBG_ASSERT(nCurrPara >= 0 && nCurrPara <= USHRT_MAX,
                            "AccessibleTextHelper_Impl::UpdateVisibleChildren: index value overflow");
 
-                aTmpBB = rCacheTF.GetParaBounds( static_cast< USHORT >( nCurrPara ) );
+                aTmpBB = rCacheTF.GetParaBounds( static_cast< sal_uInt16 >( nCurrPara ) );
 
                 // convert to screen coordinates
                 aParaBB = ::accessibility::AccessibleEditableTextPara::LogicToPixel( aTmpBB, rCacheTF.GetMapMode(), rCacheVF );
@@ -1704,7 +1704,7 @@ namespace accessibility
             DBG_ASSERT(nChild >= 0 && nChild <= USHRT_MAX,
                        "AccessibleTextHelper_Impl::getAccessibleAt: index value overflow");
 
-            Rectangle aParaBounds( rCacheTF.GetParaBounds( static_cast< USHORT > (nChild) ) );
+            Rectangle aParaBounds( rCacheTF.GetParaBounds( static_cast< sal_uInt16 > (nChild) ) );
 
             if( aParaBounds.IsInside( aLogPoint ) )
                 return getAccessibleChild( nChild - mnFirstVisibleChild + GetStartIndex() );

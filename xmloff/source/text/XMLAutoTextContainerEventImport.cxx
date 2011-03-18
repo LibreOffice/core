@@ -33,7 +33,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
@@ -55,7 +55,7 @@ TYPEINIT1(XMLAutoTextContainerEventImport, SvXMLImportContext);
 
 XMLAutoTextContainerEventImport::XMLAutoTextContainerEventImport(
     SvXMLImport& rImport,
-    USHORT nPrfx,
+    sal_uInt16 nPrfx,
     const OUString& rLName,
     const Reference<XNameReplace> & rEvnts ) :
         SvXMLImportContext(rImport, nPrfx, rLName),
@@ -68,7 +68,7 @@ XMLAutoTextContainerEventImport::~XMLAutoTextContainerEventImport()
 }
 
 SvXMLImportContext* XMLAutoTextContainerEventImport::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & )
 {

@@ -95,8 +95,8 @@ SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference<lang::XMultiService
         GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, (char *)NULL );
 
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
-    gtk_file_chooser_set_local_only( GTK_FILE_CHOOSER( m_pDialog ), FALSE );
-    gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), FALSE );
+    gtk_file_chooser_set_local_only( GTK_FILE_CHOOSER( m_pDialog ), sal_False );
+    gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), sal_False );
 }
 
 // -------------------------------------------------

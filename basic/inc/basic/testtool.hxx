@@ -41,7 +41,7 @@
 
 // #94145# Due to a tab in TT_SIGNATURE_FOR_UNICODE_TEXTFILES which is changed to blanks by some editors
 // this routine became necessary
-BOOL IsTTSignatureForUnicodeTextfile( String aLine );
+sal_Bool IsTTSignatureForUnicodeTextfile( String aLine );
 
 #define ADD_ERROR_QUIET(nNr, aStr)                                      \
 {                                                                       \
@@ -101,9 +101,9 @@ public:
     String aKurzname;
     String aSlotname;
     String aLangname;
-    USHORT nRType;
+    sal_uInt16 nRType;
     String aRName;
-    BOOL bIsReset;
+    sal_Bool bIsReset;
 };
 
 // Defines for syntax Highlighting
@@ -132,20 +132,20 @@ public:
 class TTExecutionStatusHint : public SfxSimpleHint
 {
 private:
-    USHORT mnType;
+    sal_uInt16 mnType;
     String maExecutionStatus;
     String maAdditionalExecutionStatus;
 
 public:
             TYPEINFO();
-            TTExecutionStatusHint( USHORT nType, sal_Char *pExecutionStatus, const sal_Char *pAdditionalExecutionStatus = "" )
+            TTExecutionStatusHint( sal_uInt16 nType, sal_Char *pExecutionStatus, const sal_Char *pAdditionalExecutionStatus = "" )
                 : SfxSimpleHint(SBX_HINT_EXECUTION_STATUS_INFORMATION)
                 , mnType( nType )
                 , maExecutionStatus( pExecutionStatus, RTL_TEXTENCODING_ASCII_US )
                 , maAdditionalExecutionStatus( pAdditionalExecutionStatus, RTL_TEXTENCODING_ASCII_US )
                 {;}
 
-            TTExecutionStatusHint( USHORT nType, const String &aExecutionStatus = String(), const String &aAdditionalExecutionStatus = String() )
+            TTExecutionStatusHint( sal_uInt16 nType, const String &aExecutionStatus = String(), const String &aAdditionalExecutionStatus = String() )
                 : SfxSimpleHint(SBX_HINT_EXECUTION_STATUS_INFORMATION)
                 , mnType( nType )
                 , maExecutionStatus( aExecutionStatus )
@@ -154,7 +154,7 @@ public:
 
     const String& GetExecutionStatus() const { return maExecutionStatus; }
     const String& GetAdditionalExecutionStatus() const { return maAdditionalExecutionStatus; }
-    USHORT GetType(){ return mnType; }
+    sal_uInt16 GetType(){ return mnType; }
 };
 
 #endif // _BASIC_TESTTOOL_HXX_

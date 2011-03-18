@@ -30,10 +30,10 @@
 #include "precompiled_linguistic.hxx"
 
 #include <sal/macros.h>
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 
 #include "sprophelp.hxx"
-#include "lngprops.hxx"
+#include "linguistic/lngprops.hxx"
 #include <tools/debug.hxx>
 
 #include <com/sun/star/linguistic2/LinguServiceEvent.hpp>

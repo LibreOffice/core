@@ -294,7 +294,7 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
             (pWindow->IsSystemWindow())
            )
         {
-            ULONG nMask  =   WINDOWSTATE_MASK_ALL;
+            sal_uLong nMask  =   WINDOWSTATE_MASK_ALL;
                   nMask &= ~(WINDOWSTATE_MASK_MINIMIZED);
             sWindowState = B2U_ENC(
                             ((SystemWindow*)pWindow)->GetWindowState(nMask),

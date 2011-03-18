@@ -30,7 +30,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include "srchdlg.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxuno.hxx>
 
 #include "srchdlg.hrc"
@@ -45,7 +45,7 @@ using namespace ::com::sun::star::uno;
 namespace sfx2 {
 
 #define USERITEM_NAME       DEFINE_CONST_OUSTRING("UserItem")
-#define MAX_SAVE_COUNT      (USHORT)10
+#define MAX_SAVE_COUNT      (sal_uInt16)10
 
 // ============================================================================
 // SearchDialog
@@ -114,7 +114,7 @@ void SearchDialog::LoadConfig()
         }
     }
     else
-        m_aWrapAroundBox.Check( TRUE );
+        m_aWrapAroundBox.Check( sal_True );
 }
 
 void SearchDialog::SaveConfig()
@@ -122,7 +122,7 @@ void SearchDialog::SaveConfig()
     SvtViewOptions aViewOpt( E_DIALOG, m_sConfigName );
     aViewOpt.SetWindowState( rtl::OUString::createFromAscii( m_sWinState.GetBuffer() ) );
     String sUserData;
-    USHORT i = 0, nCount = Min( m_aSearchEdit.GetEntryCount(), MAX_SAVE_COUNT );
+    sal_uInt16 i = 0, nCount = Min( m_aSearchEdit.GetEntryCount(), MAX_SAVE_COUNT );
     for ( ; i < nCount; ++i )
     {
         sUserData += m_aSearchEdit.GetEntry(i);
@@ -145,7 +145,7 @@ void SearchDialog::SaveConfig()
 IMPL_LINK( SearchDialog, FindHdl, PushButton*, EMPTYARG )
 {
     String sSrchTxt = m_aSearchEdit.GetText();
-    USHORT nPos = m_aSearchEdit.GetEntryPos( sSrchTxt );
+    sal_uInt16 nPos = m_aSearchEdit.GetEntryPos( sSrchTxt );
     if ( nPos > 0 && nPos != COMBOBOX_ENTRY_NOTFOUND )
         m_aSearchEdit.RemoveEntry( nPos );
     if ( nPos > 0 )
@@ -169,9 +169,9 @@ void SearchDialog::SetFocusOnEdit()
     m_aSearchEdit.GrabFocus();
 }
 
-BOOL SearchDialog::Close()
+sal_Bool SearchDialog::Close()
 {
-    BOOL bRet = ModelessDialog::Close();
+    sal_Bool bRet = ModelessDialog::Close();
     m_aCloseHdl.Call( this );
     return bRet;
 }
@@ -182,7 +182,7 @@ void SearchDialog::StateChanged( StateChangedType nStateChange )
     {
         if ( m_sWinState.Len() )
             SetWindowState( m_sWinState );
-        m_bIsConstructed = TRUE;
+        m_bIsConstructed = sal_True;
     }
 
     ModelessDialog::StateChanged( nStateChange );

@@ -30,11 +30,11 @@
 #include "precompiled_xmloff.hxx"
 #include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
-#include "DashStyle.hxx"
+#include "xmloff/DashStyle.hxx"
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>

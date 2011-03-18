@@ -51,7 +51,7 @@ class SVX_DLLPUBLIC SdrUShortCont
     sal_Bool                                            mbSorted;
 
 private:
-    void CheckSort(ULONG nPos);
+    void CheckSort(sal_uLong nPos);
 
 public:
     SdrUShortCont(sal_uInt16 nBlock, sal_uInt16 nInit, sal_uInt16 nResize)
@@ -100,9 +100,9 @@ public:
         }
     }
 
-    void Insert(sal_uInt16 nElem, ULONG nPos = CONTAINER_APPEND)
+    void Insert(sal_uInt16 nElem, sal_uLong nPos = CONTAINER_APPEND)
     {
-        maArray.Insert((void*)ULONG(nElem),nPos);
+        maArray.Insert((void*)sal_uLong(nElem),nPos);
 
         if(mbSorted)
         {
@@ -110,14 +110,14 @@ public:
         }
     }
 
-    void Remove(ULONG nPos)
+    void Remove(sal_uLong nPos)
     {
         maArray.Remove(nPos);
     }
 
-    void Replace(sal_uInt16 nElem, ULONG nPos)
+    void Replace(sal_uInt16 nElem, sal_uLong nPos)
     {
-        maArray.Replace((void*)ULONG(nElem), nPos);
+        maArray.Replace((void*)sal_uLong(nElem), nPos);
 
         if(mbSorted)
         {
@@ -125,24 +125,24 @@ public:
         }
     }
 
-    sal_uInt16 GetObject(ULONG nPos) const
+    sal_uInt16 GetObject(sal_uLong nPos) const
     {
         return sal_uInt16(sal_uIntPtr(maArray.GetObject(nPos)));
     }
 
-    ULONG GetPos(sal_uInt16 nElem) const
+    sal_uLong GetPos(sal_uInt16 nElem) const
     {
-        return maArray.GetPos((void*)(ULONG)nElem);
+        return maArray.GetPos((void*)(sal_uLong)nElem);
     }
 
-    ULONG GetCount() const
+    sal_uLong GetCount() const
     {
         return maArray.Count();
     }
 
     sal_Bool Exist(sal_uInt16 nElem) const
     {
-        return (CONTAINER_ENTRY_NOTFOUND != maArray.GetPos((void*)(ULONG)nElem));
+        return (CONTAINER_ENTRY_NOTFOUND != maArray.GetPos((void*)(sal_uLong)nElem));
     }
 };
 
@@ -323,20 +323,20 @@ public:
         mbSorted = sal_False;
     }
 
-    ULONG GetMarkCount() const
+    sal_uLong GetMarkCount() const
     {
         return maList.Count();
     }
 
-    SdrMark* GetMark(ULONG nNum) const
+    SdrMark* GetMark(sal_uLong nNum) const
     {
         return (SdrMark*)(maList.GetObject(nNum));
     }
 
-    ULONG FindObject(const SdrObject* pObj) const;
+    sal_uLong FindObject(const SdrObject* pObj) const;
     void InsertEntry(const SdrMark& rMark, sal_Bool bChkSort = sal_True);
-    void DeleteMark(ULONG nNum);
-    void ReplaceMark(const SdrMark& rNewMark, ULONG nNum);
+    void DeleteMark(sal_uLong nNum);
+    void ReplaceMark(const SdrMark& rNewMark, sal_uLong nNum);
     void Merge(const SdrMarkList& rSrcList, sal_Bool bReverse = sal_False);
     sal_Bool DeletePageView(const SdrPageView& rPV);
     sal_Bool InsertPageView(const SdrPageView& rPV);

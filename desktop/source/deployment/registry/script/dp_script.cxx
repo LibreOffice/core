@@ -100,8 +100,8 @@ class BackendImpl : public t_helper
         Reference<XCommandEnvironment> const & xCmdEnv );
 
     void addDataToDb(OUString const & url);
-    void deleteDataFromDb(OUString const & url);
-    bool isRegisteredInDb(OUString const & url);
+    bool hasActiveEntry(OUString const & url);
+    void revokeEntryFromDb(OUString const & url);
 
     const Reference<deployment::XPackageTypeInfo> m_xBasicLibTypeInfo;
     const Reference<deployment::XPackageTypeInfo> m_xDialogLibTypeInfo;
@@ -117,6 +117,10 @@ public:
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
+    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException);
+
 };
 
 //______________________________________________________________________________
@@ -185,18 +189,11 @@ void BackendImpl::addDataToDb(OUString const & url)
         m_backendDb->addEntry(url);
 }
 
-bool BackendImpl::isRegisteredInDb(OUString const & url)
-{
-    bool registered = false;
-    if (m_backendDb.get())
-        registered = m_backendDb->getEntry(url);
-    return registered;
-}
-
-void BackendImpl::deleteDataFromDb(OUString const & url)
+bool BackendImpl::hasActiveEntry(OUString const & url)
 {
     if (m_backendDb.get())
-        m_backendDb->removeEntry(url);
+        return m_backendDb->hasActiveEntry(url);
+    return false;
 }
 
 // XUpdatable
@@ -212,6 +209,19 @@ Sequence< Reference<deployment::XPackageTypeInfo> >
 BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
     return m_typeInfos;
+}
+void BackendImpl::revokeEntryFromDb(OUString const & url)
+{
+    if (m_backendDb.get())
+        m_backendDb->revokeEntry(url);
+}
+
+void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaType*/)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException)
+{
+    if (m_backendDb.get())
+        m_backendDb->removeEntry(url);
 }
 
 // PackageRegistryBackend
@@ -313,7 +323,7 @@ BackendImpl::PackageImpl::isRegistered_(
     BackendImpl * that = getMyBackend();
     Reference< deployment::XPackage > xThisPackage( this );
 
-    bool registered = that->isRegisteredInDb(getURL());
+    bool registered = that->hasActiveEntry(getURL());
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
         true /* IsPresent */,
         beans::Ambiguous<sal_Bool>( registered, false /* IsAmbiguous */ ) );
@@ -410,7 +420,7 @@ void BackendImpl::PackageImpl::processPackage_(
                     xComponentContext ), UNO_QUERY_THROW );
         }
     }
-    bool bRegistered = getMyBackend()->isRegisteredInDb(getURL());
+    bool bRegistered = getMyBackend()->hasActiveEntry(getURL());
     if( !doRegisterPackage )
     {
         //We cannot just call removeLibrary(name) because this could remove a
@@ -431,7 +441,7 @@ void BackendImpl::PackageImpl::processPackage_(
                 lcl_maybeRemoveScript(bScript, m_name, m_scriptURL, xScriptLibs);
                 lcl_maybeRemoveScript(bDialog, m_dialogName, m_dialogURL, xDialogLibs);
             }
-            getMyBackend()->deleteDataFromDb(getURL());
+            getMyBackend()->revokeEntryFromDb(getURL());
             return;
         }
     }

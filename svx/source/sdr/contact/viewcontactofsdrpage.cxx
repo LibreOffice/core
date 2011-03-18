@@ -45,6 +45,10 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
+#include <vcl/lazydelete.hxx>
+#include <svx/svdstr.hrc>
+#include <svx/svdglob.hxx>
+#include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -132,31 +136,54 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfPageShadow::createViewIndependentPrimitive2DSequence() const
         {
+            static bool bUseOldPageShadow(false);
             const SdrPage& rPage = getPage();
             basegfx::B2DHomMatrix aPageMatrix;
             aPageMatrix.set(0, 0, (double)rPage.GetWdt());
             aPageMatrix.set(1, 1, (double)rPage.GetHgt());
 
-            // create page shadow polygon
-            const double fPageBorderFactor(1.0 / 256.0);
-            basegfx::B2DPolygon aPageShadowPolygon;
-            aPageShadowPolygon.append(basegfx::B2DPoint(1.0, fPageBorderFactor));
-            aPageShadowPolygon.append(basegfx::B2DPoint(1.0 + fPageBorderFactor, fPageBorderFactor));
-            aPageShadowPolygon.append(basegfx::B2DPoint(1.0 + fPageBorderFactor, 1.0 + fPageBorderFactor));
-            aPageShadowPolygon.append(basegfx::B2DPoint(fPageBorderFactor, 1.0 + fPageBorderFactor));
-            aPageShadowPolygon.append(basegfx::B2DPoint(fPageBorderFactor, 1.0));
-            aPageShadowPolygon.append(basegfx::B2DPoint(1.0, 1.0));
-            aPageShadowPolygon.setClosed(true);
-            aPageShadowPolygon.transform(aPageMatrix);
+            if(bUseOldPageShadow)
+            {
+                // create page shadow polygon
+                const double fPageBorderFactor(1.0 / 256.0);
+                basegfx::B2DPolygon aPageShadowPolygon;
+                aPageShadowPolygon.append(basegfx::B2DPoint(1.0, fPageBorderFactor));
+                aPageShadowPolygon.append(basegfx::B2DPoint(1.0 + fPageBorderFactor, fPageBorderFactor));
+                aPageShadowPolygon.append(basegfx::B2DPoint(1.0 + fPageBorderFactor, 1.0 + fPageBorderFactor));
+                aPageShadowPolygon.append(basegfx::B2DPoint(fPageBorderFactor, 1.0 + fPageBorderFactor));
+                aPageShadowPolygon.append(basegfx::B2DPoint(fPageBorderFactor, 1.0));
+                aPageShadowPolygon.append(basegfx::B2DPoint(1.0, 1.0));
+                aPageShadowPolygon.setClosed(true);
+                aPageShadowPolygon.transform(aPageMatrix);
 
-            // We have only the page information, not the view information. Use the
-            // svtools::FONTCOLOR color for initialisation
-            const svtools::ColorConfig aColorConfig;
-            const Color aShadowColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
-            const basegfx::BColor aRGBShadowColor(aShadowColor.getBColor());
-            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPageShadowPolygon), aRGBShadowColor));
+                // We have only the page information, not the view information. Use the
+                // svtools::FONTCOLOR color for initialisation
+                const svtools::ColorConfig aColorConfig;
+                const Color aShadowColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
+                const basegfx::BColor aRGBShadowColor(aShadowColor.getBColor());
+                const drawinglayer::primitive2d::Primitive2DReference xReference(
+                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                        basegfx::B2DPolyPolygon(aPageShadowPolygon),
+                        aRGBShadowColor));
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            }
+            else
+            {
+                static vcl::DeleteOnDeinit<drawinglayer::primitive2d::DiscreteShadow>
+                    aDiscreteShadow(new drawinglayer::primitive2d::DiscreteShadow(
+                        BitmapEx(ResId(SIP_SA_PAGESHADOW35X35, *ImpGetResMgr()))));
+                if (aDiscreteShadow.get() != NULL)
+                {
+                    const drawinglayer::primitive2d::Primitive2DReference xReference(
+                        new drawinglayer::primitive2d::DiscreteShadowPrimitive2D(
+                            aPageMatrix,
+                                *aDiscreteShadow.get()));
+
+                    return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                }
+                return drawinglayer::primitive2d::Primitive2DSequence();
+            }
         }
 
         ViewContactOfPageShadow::ViewContactOfPageShadow(ViewContactOfSdrPage& rParentViewContactOfSdrPage)
@@ -314,11 +341,17 @@ namespace sdr
             const SdrPage& rPage = getPage();
             const basegfx::B2DRange aPageBorderRange(0.0, 0.0, (double)rPage.GetWdt(), (double)rPage.GetHgt());
 
-            // We have only the page information, not the view information. Use the
-            // svtools::FONTCOLOR color for initialisation
-            const svtools::ColorConfig aColorConfig;
-            const Color aBorderColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
-            const basegfx::BColor aRGBBorderColor(aBorderColor.getBColor());
+            // Changed to 0x949599 for renaissance, before svtools::FONTCOLOR was used.
+            // Added old case as fallback for HighContrast.
+            basegfx::BColor aRGBBorderColor(0x94 / (double)0xff, 0x95 / (double)0xff, 0x99 / (double)0xff);
+
+            if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+            {
+                const svtools::ColorConfig aColorConfig;
+                const Color aBorderColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
+
+                aRGBBorderColor = aBorderColor.getBColor();
+            }
 
             if(rPage.getPageBorderOnlyLeftRight())
             {

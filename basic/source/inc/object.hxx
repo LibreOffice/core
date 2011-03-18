@@ -59,7 +59,7 @@ using SbxVariable::GetInfo;
 public:
 #endif
     typedef void( SampleObject::*pMeth )
-        ( SbxVariable* pThis, SbxArray* pArgs, BOOL bWrite );
+        ( SbxVariable* pThis, SbxArray* pArgs, sal_Bool bWrite );
 #if defined ( ICC )
 private:
 #endif
@@ -73,10 +73,10 @@ private:
     static Methods aMethods[];  // Methodentabelle
 
     // Methoden
-    void Display( SbxVariable*, SbxArray*, BOOL );
-    void Event( SbxVariable*, SbxArray*, BOOL );
-    void Square( SbxVariable*, SbxArray*, BOOL );
-    void Create( SbxVariable*, SbxArray*, BOOL );
+    void Display( SbxVariable*, SbxArray*, sal_Bool );
+    void Event( SbxVariable*, SbxArray*, sal_Bool );
+    void Square( SbxVariable*, SbxArray*, sal_Bool );
+    void Create( SbxVariable*, SbxArray*, sal_Bool );
     // Infoblock auffuellen
     SbxInfo* GetInfo( short nIdx );
     // Broadcaster Notification

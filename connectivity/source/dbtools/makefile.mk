@@ -94,3 +94,11 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo _TI				>$@
     @echo _real				>>$@
 
+
+ALLTAR : $(MISC)/dbtools.component
+
+$(MISC)/dbtools.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        dbtools.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt dbtools.component

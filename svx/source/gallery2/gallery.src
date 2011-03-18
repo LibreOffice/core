@@ -35,7 +35,7 @@
 
 DockingWindow RID_SVXDLG_GALLERYBROWSER
 {
-    HelpId = SID_GALLERY;
+    HelpId = "SVX_HID_GALLERY_BROWSER" ;
     OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -395,86 +395,4 @@ Menu RID_SVXMN_GALLERY2
         };
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

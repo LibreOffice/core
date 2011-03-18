@@ -53,8 +53,8 @@ private:
     using SvTreeListBox::InsertEntry;
     // Avoid ambiguity with new InsertEntry:
     virtual SvLBoxEntry*    InsertEntry( const XubString& rText, SvLBoxEntry* pParent,
-                                         BOOL bChildsOnDemand,
-                                         ULONG nPos, void* pUserData,
+                                         sal_Bool bChildsOnDemand,
+                                         sal_uIntPtr nPos, void* pUserData,
                                          SvLBoxButtonKind eButtonKind );
 
 public:
@@ -65,23 +65,23 @@ public:
     ~SvxCheckListBox();
 
     void            InsertEntry         ( const String& rStr,
-                                          USHORT nPos = LISTBOX_APPEND,
+                                          sal_uInt16 nPos = LISTBOX_APPEND,
                                           void* pUserData = NULL,
                                           SvLBoxButtonKind eButtonKind =
                                               SvLBoxButtonKind_enabledCheckbox );
-    void            RemoveEntry         ( USHORT nPos );
+    void            RemoveEntry         ( sal_uInt16 nPos );
 
-    void            SelectEntryPos      ( USHORT nPos, BOOL bSelect = TRUE );
-    USHORT          GetSelectEntryPos   () const;
+    void            SelectEntryPos      ( sal_uInt16 nPos, sal_Bool bSelect = sal_True );
+    sal_uInt16          GetSelectEntryPos   () const;
 
-    String          GetText             ( USHORT nPos ) const;
-    USHORT          GetCheckedEntryCount() const;
-    void            CheckEntryPos       ( USHORT nPos, BOOL bCheck = TRUE );
-    BOOL            IsChecked           ( USHORT nPos ) const;
+    String          GetText             ( sal_uInt16 nPos ) const;
+    sal_uInt16          GetCheckedEntryCount() const;
+    void            CheckEntryPos       ( sal_uInt16 nPos, sal_Bool bCheck = sal_True );
+    sal_Bool            IsChecked           ( sal_uInt16 nPos ) const;
     void            ToggleCheckButton   ( SvLBoxEntry* pEntry );
 
-    void*           SetEntryData        ( USHORT nPos, void* pNewData );
-    void*           GetEntryData        ( USHORT nPos ) const;
+    void*           SetEntryData        ( sal_uInt16 nPos, void* pNewData );
+    void*           GetEntryData        ( sal_uInt16 nPos ) const;
 
     virtual void    MouseButtonDown     ( const MouseEvent& rMEvt );
     virtual void    KeyInput            ( const KeyEvent& rKEvt );

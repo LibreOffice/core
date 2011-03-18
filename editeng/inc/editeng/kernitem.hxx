@@ -54,12 +54,12 @@ class EDITENG_DLLPUBLIC SvxKerningItem : public SfxInt16Item
 public:
     TYPEINFO();
 
-    SvxKerningItem( const short nKern /*= 0*/, const USHORT nId  );
+    SvxKerningItem( const short nKern /*= 0*/, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
     virtual bool            ScaleMetrics( long nMult, long nDiv );
     virtual bool            HasMetrics() const;
 
@@ -73,8 +73,8 @@ public:
             return *this;
         }
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 #endif

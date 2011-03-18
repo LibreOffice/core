@@ -79,7 +79,7 @@ class SVX_DLLPUBLIC Viewport3D
 
     basegfx::B3DPoint       aViewPoint;     // Beobachterstandpunkt in Weltkoordinaten;
                                     // wird mit der Transformation berechnet
-    BOOL            bTfValid;       // Flag, ob Transformation gueltig ist
+    sal_Bool            bTfValid;       // Flag, ob Transformation gueltig ist
 
     double fWRatio;                 // Device/View-Seitenverhaeltnisse
     double fHRatio;
@@ -106,11 +106,11 @@ class SVX_DLLPUBLIC Viewport3D
     double  GetFarClipDist() const  { return fFarClipDist; }
 
     void SetProjection(ProjectionType ePrj)
-        { eProjection = ePrj; bTfValid = FALSE; }
+        { eProjection = ePrj; bTfValid = sal_False; }
     ProjectionType GetProjection() const { return(eProjection); }
 
     void SetAspectMapping(AspectMapType eAsp)
-        { eAspectMapping = eAsp; bTfValid = FALSE; }
+        { eAspectMapping = eAsp; bTfValid = sal_False; }
     AspectMapType GetAspectMapping() { return eAspectMapping; }
 
     void SetViewWindow(double fX, double fY, double fW, double fH);

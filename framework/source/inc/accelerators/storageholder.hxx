@@ -209,7 +209,7 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
                     using the given open mode. If it failed there is second step,
                     which tries to do the same again ... but removing a might existing
                     WRITE flag from the open mode. The user can supress this fallback
-                    handling by setting the parameter bAllowFallback to FALSE.
+                    handling by setting the parameter bAllowFallback to sal_False.
 
             @param  xBaseStorage
                     the storage, where the sub element should be searched.

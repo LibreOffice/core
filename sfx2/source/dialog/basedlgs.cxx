@@ -48,9 +48,9 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewsh.hxx>
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include "workwin.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "dialog.hrc"
 
 using namespace ::com::sun::star::uno;
@@ -63,7 +63,7 @@ class SfxModelessDialog_Impl : public SfxListener
 public:
     ByteString      aWinState;
     SfxChildWindow* pMgr;
-    BOOL            bConstructed;
+    sal_Bool            bConstructed;
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     Timer           aMoveTimer;
@@ -87,7 +87,7 @@ class SfxFloatingWindow_Impl : public SfxListener
 public:
     ByteString      aWinState;
     SfxChildWindow* pMgr;
-    BOOL            bConstructed;
+    sal_Bool            bConstructed;
     Timer           aMoveTimer;
 
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -161,9 +161,6 @@ void SfxModalDialog::GetDialogData_Impl()
 void SfxModalDialog::init()
 {
     GetDialogData_Impl();
-    aTimer.SetTimeout( 100 );
-    aTimer.SetTimeoutHdl( LINK( this, SfxModalDialog, TimerHdl_Impl ) );
-    aTimer.Start();
 }
 
 // -----------------------------------------------------------------------
@@ -215,7 +212,6 @@ SfxModalDialog::~SfxModalDialog()
 
 {
     SetDialogData_Impl();
-    aTimer.Stop();
     delete pOutputSet;
 }
 
@@ -227,11 +223,6 @@ void SfxModalDialog::CreateOutputItemSet( SfxItemPool& rPool )
 }
 
 // -----------------------------------------------------------------------
-
-IMPL_LINK( SfxModalDialog, TimerHdl_Impl, Timer*, EMPTYARG )
-{
-    return 0L;
-}
 
 void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
 {
@@ -283,7 +274,7 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
             }
         }
 
-        pImp->bConstructed = TRUE;
+        pImp->bConstructed = sal_True;
     }
 
     ModelessDialog::StateChanged( nStateChange );
@@ -342,7 +333,7 @@ IMPL_LINK( SfxModelessDialog, TimerHdl, Timer*, EMPTYARG)
     {
         if ( !IsRollUp() )
             aSize = GetSizePixel();
-        ULONG nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
+        sal_uIntPtr nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
         if ( GetStyle() & WB_SIZEABLE )
             nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
         pImp->aWinState = GetWindowState( nMask );
@@ -361,10 +352,9 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
     pImp( new SfxModelessDialog_Impl )
 {
     pImp->pMgr = pCW;
-    pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    pImp->bConstructed = sal_False;
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);
@@ -381,10 +371,9 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
     pImp( new SfxModelessDialog_Impl )
 {
     pImp->pMgr = pCW;
-    pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    pImp->bConstructed = sal_False;
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);
@@ -407,15 +396,15 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
         pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
         pImp->pMgr->Activate_Impl();
         Window* pWindow = rEvt.GetWindow();
-        ULONG nHelpId  = 0;
-        while ( !nHelpId && pWindow )
+        rtl::OString sHelpId;
+        while ( !sHelpId.getLength() && pWindow )
         {
-            nHelpId = pWindow->GetHelpId();
+            sHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
-        if ( nHelpId )
-            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
+        if ( sHelpId.getLength() )
+            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), sHelpId );
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )
     {
@@ -505,15 +494,15 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
         pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
         pImp->pMgr->Activate_Impl();
         Window* pWindow = rEvt.GetWindow();
-        ULONG nHelpId  = 0;
-        while ( !nHelpId && pWindow )
+        rtl::OString sHelpId;
+        while ( !sHelpId.getLength() && pWindow )
         {
-            nHelpId = pWindow->GetHelpId();
+            sHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
-        if ( nHelpId )
-            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
+        if ( sHelpId.getLength() )
+            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), sHelpId );
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS )
     {
@@ -545,10 +534,9 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     pImp( new SfxFloatingWindow_Impl )
 {
     pImp->pMgr = pCW;
-    pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    pImp->bConstructed = sal_False;
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);
@@ -566,10 +554,9 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     pImp( new SfxFloatingWindow_Impl )
 {
     pImp->pMgr = pCW;
-    pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    pImp->bConstructed = sal_False;
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);
@@ -653,7 +640,7 @@ IMPL_LINK( SfxFloatingWindow, TimerHdl, Timer*, EMPTYARG)
     {
         if ( !IsRollUp() )
             aSize = GetSizePixel();
-        ULONG nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
+        sal_uIntPtr nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
         if ( GetStyle() & WB_SIZEABLE )
             nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
         pImp->aWinState = GetWindowState( nMask );
@@ -670,7 +657,7 @@ void SfxFloatingWindow::StateChanged( StateChangedType nStateChange )
         // FloatingWindows are not centered by default
         if ( pImp->aWinState.Len() )
             SetWindowState( pImp->aWinState );
-        pImp->bConstructed = TRUE;
+        pImp->bConstructed = sal_True;
     }
 
     FloatingWindow::StateChanged( nStateChange );

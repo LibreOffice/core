@@ -41,11 +41,11 @@ class SVX_DLLPUBLIC SdrYesNoItem: public SfxBoolItem {
 public:
     TYPEINFO();
     SdrYesNoItem(): SfxBoolItem() {}
-    SdrYesNoItem(USHORT nId, BOOL bOn=FALSE): SfxBoolItem(nId,bOn) {}
-    SdrYesNoItem(USHORT nId, SvStream& rIn):  SfxBoolItem(nId,rIn) {}
+    SdrYesNoItem(sal_uInt16 nId, sal_Bool bOn=sal_False): SfxBoolItem(nId,bOn) {}
+    SdrYesNoItem(sal_uInt16 nId, SvStream& rIn):  SfxBoolItem(nId,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
-    virtual String  GetValueTextByVal(BOOL bVal) const;
+    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual String  GetValueTextByVal(sal_Bool bVal) const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
 };
 

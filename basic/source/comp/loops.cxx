@@ -35,7 +35,7 @@
 
 void SbiParser::If()
 {
-    UINT32 nEndLbl;
+    sal_uInt32 nEndLbl;
     SbiToken eTok = NIL;
     // Ende-Tokens ignorieren:
     SbiExpression aCond( this );
@@ -47,8 +47,8 @@ void SbiParser::If()
         // eingefuegt werden, damit bei ELSEIF nicht erneut die Bedingung
         // ausgewertet wird. Die Tabelle nimmt alle Absprungstellen auf.
 #define JMP_TABLE_SIZE 100
-        UINT32 pnJmpToEndLbl[JMP_TABLE_SIZE];   // 100 ELSEIFs zulaessig
-        USHORT iJmp = 0;                        // aktueller Tabellen-Index
+        sal_uInt32 pnJmpToEndLbl[JMP_TABLE_SIZE];   // 100 ELSEIFs zulaessig
+        sal_uInt16 iJmp = 0;                        // aktueller Tabellen-Index
 
         // multiline IF
         nEndLbl = aGen.Gen( _JUMPF, 0 );
@@ -59,7 +59,7 @@ void SbiParser::If()
             eTok = Peek();
             if( IsEof() )
             {
-                Error( SbERR_BAD_BLOCK, IF ); bAbort = TRUE; return;
+                Error( SbERR_BAD_BLOCK, IF ); bAbort = sal_True; return;
             }
         }
         // ELSEIF?
@@ -68,7 +68,7 @@ void SbiParser::If()
             // #27720# Bei erfolgreichem IF/ELSEIF auf ENDIF springen
             if( iJmp >= JMP_TABLE_SIZE )
             {
-                Error( SbERR_PROG_TOO_LARGE );  bAbort = TRUE;  return;
+                Error( SbERR_PROG_TOO_LARGE );  bAbort = sal_True;  return;
             }
             pnJmpToEndLbl[iJmp++] = aGen.Gen( _JUMP, 0 );
 
@@ -88,14 +88,14 @@ void SbiParser::If()
                 eTok = Peek();
                 if( IsEof() )
                 {
-                    Error( SbERR_BAD_BLOCK, ELSEIF );  bAbort = TRUE; return;
+                    Error( SbERR_BAD_BLOCK, ELSEIF );  bAbort = sal_True; return;
                 }
             }
         }
         if( eTok == ELSE )
         {
             Next();
-            UINT32 nElseLbl = nEndLbl;
+            sal_uInt32 nElseLbl = nEndLbl;
             nEndLbl = aGen.Gen( _JUMP, 0 );
             aGen.BackChain( nElseLbl );
 
@@ -115,7 +115,7 @@ void SbiParser::If()
     else
     {
         // single line IF
-        bSingleLineIf = TRUE;
+        bSingleLineIf = sal_True;
         nEndLbl = aGen.Gen( _JUMPF, 0 );
         Push( eCurTok );
         while( !bAbort )
@@ -128,7 +128,7 @@ void SbiParser::If()
         if( eTok == ELSE )
         {
             Next();
-            UINT32 nElseLbl = nEndLbl;
+            sal_uInt32 nElseLbl = nEndLbl;
             nEndLbl = aGen.Gen( _JUMP, 0 );
             aGen.BackChain( nElseLbl );
             while( !bAbort )
@@ -139,7 +139,7 @@ void SbiParser::If()
                     break;
             }
         }
-        bSingleLineIf = FALSE;
+        bSingleLineIf = sal_False;
     }
     aGen.BackChain( nEndLbl );
 }
@@ -157,7 +157,7 @@ void SbiParser::NoIf()
 
 void SbiParser::DoLoop()
 {
-    UINT32 nStartLbl = aGen.GetPC();
+    sal_uInt32 nStartLbl = aGen.GetPC();
     OpenBlock( DO );
     SbiToken eTok = Next();
     if( IsEoln( eTok ) )
@@ -184,7 +184,7 @@ void SbiParser::DoLoop()
             SbiExpression aCond( this );
             aCond.Gen();
         }
-        UINT32 nEndLbl = aGen.Gen( eTok == UNTIL ? _JUMPT : _JUMPF, 0 );
+        sal_uInt32 nEndLbl = aGen.Gen( eTok == UNTIL ? _JUMPT : _JUMPF, 0 );
         StmntBlock( LOOP );
         TestEoln();
         aGen.Gen( _JUMP, nStartLbl );
@@ -198,9 +198,9 @@ void SbiParser::DoLoop()
 void SbiParser::While()
 {
     SbiExpression aCond( this );
-    UINT32 nStartLbl = aGen.GetPC();
+    sal_uInt32 nStartLbl = aGen.GetPC();
     aCond.Gen();
-    UINT32 nEndLbl = aGen.Gen( _JUMPF, 0 );
+    sal_uInt32 nEndLbl = aGen.Gen( _JUMPF, 0 );
     StmntBlock( WEND );
     aGen.Gen( _JUMP, nStartLbl );
     aGen.BackChain( nEndLbl );
@@ -249,9 +249,9 @@ void SbiParser::For()
         aGen.Gen( _INITFOR );
     }
 
-    UINT32 nLoop = aGen.GetPC();
+    sal_uInt32 nLoop = aGen.GetPC();
     // Test durchfuehren, evtl. Stack freigeben
-    UINT32 nEndTarget = aGen.Gen( _TESTFOR, 0 );
+    sal_uInt32 nEndTarget = aGen.Gen( _TESTFOR, 0 );
     OpenBlock( FOR );
     StmntBlock( NEXT );
     aGen.Gen( _NEXT );
@@ -306,7 +306,7 @@ void SbiParser::OnGoto()
 {
     SbiExpression aCond( this );
     aCond.Gen();
-    UINT32 nLabelsTarget = aGen.Gen( _ONJUMP, 0 );
+    sal_uInt32 nLabelsTarget = aGen.Gen( _ONJUMP, 0 );
     SbiToken eTok = Next();
     if( eTok != GOTO && eTok != GOSUB )
     {
@@ -314,13 +314,13 @@ void SbiParser::OnGoto()
         eTok = GOTO;
     }
     // Label-Tabelle einlesen:
-    UINT32 nLbl = 0;
+    sal_uInt32 nLbl = 0;
     do
     {
         Next(); // Label holen
         if( MayBeLabel() )
         {
-            UINT32 nOff = pProc->GetLabels().Reference( aSym );
+            sal_uInt32 nOff = pProc->GetLabels().Reference( aSym );
             aGen.Gen( _JUMP, nOff );
             nLbl++;
         }
@@ -340,7 +340,7 @@ void SbiParser::Goto()
     Next();
     if( MayBeLabel() )
     {
-        UINT32 nOff = pProc->GetLabels().Reference( aSym );
+        sal_uInt32 nOff = pProc->GetLabels().Reference( aSym );
         aGen.Gen( eOp, nOff );
     }
     else Error( SbERR_LABEL_EXPECTED );
@@ -353,7 +353,7 @@ void SbiParser::Return()
     Next();
     if( MayBeLabel() )
     {
-        UINT32 nOff = pProc->GetLabels().Reference( aSym );
+        sal_uInt32 nOff = pProc->GetLabels().Reference( aSym );
         aGen.Gen( _RETURN, nOff );
     }
     else aGen.Gen( _RETURN, 0 );
@@ -369,9 +369,9 @@ void SbiParser::Select()
     aCase.Gen();
     aGen.Gen( _CASE );
     TestEoln();
-    UINT32 nNextTarget = 0;
-    UINT32 nDoneTarget = 0;
-    BOOL bElse = FALSE;
+    sal_uInt32 nNextTarget = 0;
+    sal_uInt32 nDoneTarget = 0;
+    sal_Bool bElse = sal_False;
     // Die Cases einlesen:
     while( !bAbort )
     {
@@ -382,13 +382,13 @@ void SbiParser::Select()
                 aGen.BackChain( nNextTarget ), nNextTarget = 0;
             aGen.Statement();
             // Jeden Case einlesen
-            BOOL bDone = FALSE;
-            UINT32 nTrueTarget = 0;
+            sal_Bool bDone = sal_False;
+            sal_uInt32 nTrueTarget = 0;
             if( Peek() == ELSE )
             {
                 // CASE ELSE
                 Next();
-                bElse = TRUE;
+                bElse = sal_True;
             }
             else while( !bDone )
             {
@@ -407,7 +407,7 @@ void SbiParser::Select()
                     aCompare.Gen();
                     nTrueTarget = aGen.Gen(
                         _CASEIS, nTrueTarget,
-                        sal::static_int_cast< UINT16 >(
+                        sal::static_int_cast< sal_uInt16 >(
                             SbxEQ + ( eTok2 - EQ ) ) );
                 }
                 else
@@ -428,7 +428,7 @@ void SbiParser::Select()
 
                 }
                 if( Peek() == COMMA ) Next();
-                else TestEoln(), bDone = TRUE;
+                else TestEoln(), bDone = sal_True;
             }
             // Alle Cases abgearbeitet
             if( !bElse )
@@ -493,7 +493,7 @@ void SbiParser::On()
                     aGen.Gen( _STDERROR );
                 else
                 {
-                    UINT32 nOff = pProc->GetLabels().Reference( aSym );
+                    sal_uInt32 nOff = pProc->GetLabels().Reference( aSym );
                     aGen.Gen( _ERRHDL, nOff );
                 }
             }
@@ -525,7 +525,7 @@ void SbiParser::On()
 
 void SbiParser::Resume()
 {
-    UINT32 nLbl;
+    sal_uInt32 nLbl;
 
     switch( Next() )
     {

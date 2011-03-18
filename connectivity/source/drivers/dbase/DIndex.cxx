@@ -68,7 +68,7 @@ using namespace com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.sun.star.sdbcx.Index");
 // -------------------------------------------------------------------------
-ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(sal_True/*_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers()*/)
+ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(sal_True/*_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()*/)
     ,m_pFileStream(NULL)
     ,m_nCurNode(NODE_NOTFOUND)
     ,m_pTable(_pTable)
@@ -144,7 +144,7 @@ ONDXPagePtr ODbaseIndex::getRoot()
     {
         m_nRootPage = m_aHeader.db_rootpage;
         m_nPageCount = m_aHeader.db_pagecount;
-        m_aRoot = CreatePage(m_nRootPage,NULL,TRUE);
+        m_aRoot = CreatePage(m_nRootPage,NULL,sal_True);
     }
     return m_aRoot;
 }
@@ -186,7 +186,7 @@ OIndexIterator* ODbaseIndex::createIterator(OBoolOperator* pOp,
     return new OIndexIterator(this, pOp, pOperand);
 }
 //------------------------------------------------------------------
-BOOL ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue)
+sal_Bool ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
     // Search a specific value in Index
@@ -208,13 +208,13 @@ BOOL ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValu
     catch (Exception&)
     {
         OSL_ASSERT(0);
-        return FALSE;
+        return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------
-BOOL ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
+sal_Bool ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
@@ -225,7 +225,7 @@ BOOL ODbaseIndex::Find(sal_uInt32 nRec, const ORowSetValue& rValue)
 }
 
 //------------------------------------------------------------------
-BOOL ODbaseIndex::Insert(sal_uInt32 nRec, const ORowSetValue& rValue)
+sal_Bool ODbaseIndex::Insert(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
@@ -234,35 +234,35 @@ BOOL ODbaseIndex::Insert(sal_uInt32 nRec, const ORowSetValue& rValue)
     // Does the value already exist
     // Use Find() always to determine the actual leaf
     if (!ConvertToKey(&aKey, nRec, rValue) || (getRoot()->Find(aKey) && isUnique()))
-        return FALSE;
+        return sal_False;
 
     ONDXNode aNewNode(aKey);
 
     // insert in the current leaf
     if (!m_aCurLeaf.Is())
-        return FALSE;
+        return sal_False;
 
-    BOOL bResult = m_aCurLeaf->Insert(aNewNode);
+    sal_Bool bResult = m_aCurLeaf->Insert(aNewNode);
     Release(bResult);
 
     return bResult;
 }
 
 //------------------------------------------------------------------
-BOOL ODbaseIndex::Update(sal_uInt32 nRec, const ORowSetValue& rOldValue,
+sal_Bool ODbaseIndex::Update(sal_uInt32 nRec, const ORowSetValue& rOldValue,
                          const ORowSetValue& rNewValue)
 {
     openIndexFile();
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
     ONDXKey aKey;
     if (!ConvertToKey(&aKey, nRec, rNewValue) || (isUnique() && getRoot()->Find(aKey)))
-        return FALSE;
+        return sal_False;
     else
         return Delete(nRec, rOldValue) && Insert(nRec,rNewValue);
 }
 
 //------------------------------------------------------------------
-BOOL ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
+sal_Bool ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
 {
     openIndexFile();
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
@@ -270,13 +270,13 @@ BOOL ODbaseIndex::Delete(sal_uInt32 nRec, const ORowSetValue& rValue)
     // Always use Find() to determine the actual leaf
     ONDXKey aKey;
     if (!ConvertToKey(&aKey, nRec, rValue) || !getRoot()->Find(aKey))
-        return FALSE;
+        return sal_False;
 
     ONDXNode aNewNode(aKey);
 
     // insert in the current leaf
     if (!m_aCurLeaf.Is())
-        return FALSE;
+        return sal_False;
 #if OSL_DEBUG_LEVEL > 1
     m_aRoot->PrintPage();
 #endif
@@ -290,10 +290,10 @@ void ODbaseIndex::Collect(ONDXPage* pPage)
         m_aCollector.push_back(pPage);
 }
 //------------------------------------------------------------------
-void ODbaseIndex::Release(BOOL bSave)
+void ODbaseIndex::Release(sal_Bool bSave)
 {
     // Release the Index-recources
-    m_bUseCollector = FALSE;
+    m_bUseCollector = sal_False;
 
     if (m_aCurLeaf.Is())
     {
@@ -308,7 +308,7 @@ void ODbaseIndex::Release(BOOL bSave)
         m_aRoot.Clear();
     }
     // Release all references, before the FileStream will be closed
-    for (ULONG i = 0; i < m_aCollector.size(); i++)
+    for (sal_uIntPtr i = 0; i < m_aCollector.size(); i++)
         m_aCollector[i]->QueryDelete();
 
     m_aCollector.clear();
@@ -336,7 +336,7 @@ void ODbaseIndex::closeImpl()
     }
 }
 //------------------------------------------------------------------
-ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, BOOL bLoad)
+ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, sal_Bool bLoad)
 {
     OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
 
@@ -401,14 +401,14 @@ void ODbaseIndex::createINFEntry()
     Config aInfFile(sPhysicalPath);
     aInfFile.SetGroup(dBASE_III_GROUP);
 
-    USHORT nSuffix = aInfFile.GetKeyCount();
+    sal_uInt16 nSuffix = aInfFile.GetKeyCount();
     ByteString aNewEntry,aKeyName;
-    BOOL bCase = isCaseSensitive();
+    sal_Bool bCase = isCaseSensitive();
     while (!aNewEntry.Len())
     {
         aNewEntry = "NDX";
         aNewEntry += ByteString::CreateFromInt32(++nSuffix);
-        for (USHORT i = 0; i < aInfFile.GetKeyCount(); i++)
+        for (sal_uInt16 i = 0; i < aInfFile.GetKeyCount(); i++)
         {
             aKeyName = aInfFile.GetKeyName(i);
             if (bCase ? aKeyName == aNewEntry : aKeyName.EqualsIgnoreCaseAscii(aNewEntry))
@@ -421,7 +421,7 @@ void ODbaseIndex::createINFEntry()
     aInfFile.WriteKey(aNewEntry,ByteString(sEntry,m_pTable->getConnection()->getTextEncoding()));
 }
 // -------------------------------------------------------------------------
-BOOL ODbaseIndex::DropImpl()
+sal_Bool ODbaseIndex::DropImpl()
 {
     closeImpl();
 
@@ -444,13 +444,13 @@ BOOL ODbaseIndex::DropImpl()
 
     Config aInfFile(sPhysicalPath);
     aInfFile.SetGroup(dBASE_III_GROUP);
-    USHORT nKeyCnt = aInfFile.GetKeyCount();
+    sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
     ByteString aKeyName;
     String sEntry = m_Name;
     sEntry += String::CreateFromAscii(".ndx");
 
     // delete entries from the inf file
-    for (USHORT nKey = 0; nKey < nKeyCnt; nKey++)
+    for (sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++)
     {
         // References the Key to an Index-file?
         aKeyName = aInfFile.GetKeyName( nKey );
@@ -463,7 +463,7 @@ BOOL ODbaseIndex::DropImpl()
             }
         }
     }
-    return TRUE;
+    return sal_True;
 }
 // -------------------------------------------------------------------------
 void ODbaseIndex::impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const ::rtl::OUString& _sFile)
@@ -474,7 +474,7 @@ void ODbaseIndex::impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const ::
     m_pTable->getConnection()->throwGenericSQLException(_nErrorId,*this);
 }
 //------------------------------------------------------------------
-BOOL ODbaseIndex::CreateImpl()
+sal_Bool ODbaseIndex::CreateImpl()
 {
     // Create the Index
     const ::rtl::OUString sFile = getCompletePath();
@@ -556,7 +556,7 @@ BOOL ODbaseIndex::CreateImpl()
     xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
 
     m_aHeader.db_keytype = (nType == DataType::VARCHAR || nType == DataType::CHAR) ? 0 : 1;
-    m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : (USHORT)getINT32(xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
+    m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : (sal_uInt16)getINT32(xTableCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
     m_aHeader.db_keylen = (( m_aHeader.db_keylen - 1) / 4 + 1) * 4;
     m_aHeader.db_maxkeys = (PAGE_SIZE - 4) / (8 + m_aHeader.db_keylen);
     if ( m_aHeader.db_maxkeys < 3 )
@@ -567,7 +567,7 @@ BOOL ODbaseIndex::CreateImpl()
     m_pFileStream->SetStreamSize(PAGE_SIZE);
 
     ByteString aCol(aName,m_pTable->getConnection()->getTextEncoding());
-    strncpy(m_aHeader.db_name,aCol.GetBuffer(),std::min((USHORT)sizeof(m_aHeader.db_name), aCol.Len()));
+    strncpy(m_aHeader.db_name,aCol.GetBuffer(),std::min((sal_uInt16)sizeof(m_aHeader.db_name), aCol.Len()));
     m_aHeader.db_unique  = m_IsUnique ? 1: 0;
     m_aHeader.db_keyrec  = m_aHeader.db_keylen + 8;
 
@@ -577,9 +577,9 @@ BOOL ODbaseIndex::CreateImpl()
     m_nPageCount = 2;
 
     m_aCurLeaf = m_aRoot = CreatePage(m_nRootPage);
-    m_aRoot->SetModified(TRUE);
+    m_aRoot->SetModified(sal_True);
 
-    m_bUseCollector = TRUE;
+    m_bUseCollector = sal_True;
 
     sal_Int32 nRowsLeft = 0;
     Reference<XRow> xRow(xSet,UNO_QUERY);

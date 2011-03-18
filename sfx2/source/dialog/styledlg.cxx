@@ -36,7 +36,7 @@
 
 #include <sfx2/styledlg.hxx>
 #include <sfx2/mgetempl.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxuno.hxx>
 
 #include "dialog.hrc"
@@ -48,7 +48,7 @@ SfxStyleDialog::SfxStyleDialog
     Window* pParent,            // Parent
     const ResId& rResId,        // ResId
     SfxStyleSheetBase& rStyle,  // stylesheet to be processed
-    BOOL bFreeRes,              // Flag release resources
+    sal_Bool bFreeRes,              // Flag release resources
     const String* pUserBtnTxt
 ) :
 
@@ -59,9 +59,9 @@ SfxStyleDialog::SfxStyleDialog
 
     SfxTabDialog( pParent, rResId,
                   rStyle.GetItemSet().Clone(),
-                  // return TRUE also without ParentSupport , but extended
-                  // to suppress the standardButton
-                  rStyle.HasParentSupport() ? TRUE : 2,
+                  // auch ohne ParentSupport TRUE "ubergeben, aber erweitert
+                  // um den StandardButton zu unterdr"ucken
+                  rStyle.HasParentSupport() ? sal_True : 2,
                   pUserBtnTxt ),
 
     pStyle( &rStyle )
@@ -69,7 +69,7 @@ SfxStyleDialog::SfxStyleDialog
 {
     AddTabPage( ID_TABPAGE_MANAGESTYLES,
                 String( SfxResId( STR_TABPAGE_MANAGESTYLES ) ),
-                SfxManageStyleSheetPage::Create, 0, FALSE, 0 );
+                SfxManageStyleSheetPage::Create, 0, sal_False, 0 );
 
     // With new template always set the management page as the current page
 
@@ -150,11 +150,11 @@ IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
 
     const SfxItemSet* pInSet = GetInputSetImpl();
     SfxWhichIter aIter( *pInSet );
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
 
     while ( nWhich )
     {
-        SfxItemState eState = pInSet->GetItemState( nWhich, FALSE );
+        SfxItemState eState = pInSet->GetItemState( nWhich, sal_False );
 
         if ( SFX_ITEM_DEFAULT == eState )
             pExampleSet->ClearItem( nWhich );

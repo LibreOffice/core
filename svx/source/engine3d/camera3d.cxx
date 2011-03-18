@@ -38,7 +38,7 @@ Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLook
     fResetFocalLength(fFocalLen),
     fResetBankAngle(fBankAng),
     fBankAngle(fBankAng),
-    bAutoAdjustProjection(TRUE)
+    bAutoAdjustProjection(sal_True)
 {
     SetVPD(0);
     SetPosition(rPos);

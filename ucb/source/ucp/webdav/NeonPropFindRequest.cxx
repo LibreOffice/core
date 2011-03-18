@@ -195,22 +195,13 @@ extern "C" int NPFR_propfind_iter( void* userdata,
 
 // -------------------------------------------------------------------
 extern "C" void NPFR_propfind_results( void* userdata,
-#if NEON_VERSION >= 0x0260
                                        const ne_uri* uri,
-#else
-                                       const char* href,
-#endif
                                        const NeonPropFindResultSet* set )
 {
     // @@@ href is not the uri! DAVResource ctor wants uri!
 
-#if NEON_VERSION >= 0x0260
     DAVResource theResource(
         OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
-#else
-    DAVResource theResource(
-        OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
-#endif
 
     ne_propset_iterate( set, NPFR_propfind_iter, &theResource );
 
@@ -237,22 +228,13 @@ extern "C" int NPFR_propnames_iter( void* userdata,
 
 // -------------------------------------------------------------------
 extern "C" void NPFR_propnames_results( void* userdata,
-#if NEON_VERSION >= 0x0260
                                         const ne_uri* uri,
-#else
-                                        const char* href,
-#endif
                                         const NeonPropFindResultSet* results )
 {
     // @@@ href is not the uri! DAVResourceInfo ctor wants uri!
     // Create entry for the resource.
-#if NEON_VERSION >= 0x0260
     DAVResourceInfo theResource(
         OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
-#else
-    DAVResourceInfo theResource(
-        OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
-#endif
 
     // Fill entry.
     ne_propset_iterate( results, NPFR_propnames_iter, &theResource );

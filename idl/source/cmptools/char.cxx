@@ -80,20 +80,20 @@ char * SvChar::GetTable( CharSet nSource , CharSet nDest )
     if( !pCharTable )
         pCharTable = new Table();
 
-    BYTE * pSet;
-    pSet = (BYTE *)pCharTable->Get( ((ULONG)nSource << 16) + (ULONG)nDest );
+    sal_uInt8 * pSet;
+    pSet = (sal_uInt8 *)pCharTable->Get( ((sal_uLong)nSource << 16) + (sal_uLong)nDest );
 
     if( !pSet )
     {
-        pSet = new BYTE[ 256 ];
+        pSet = new sal_uInt8[ 256 ];
         memcpy( pSet, EqualTab, sizeof( EqualTab ) );
-        for( USHORT i = 128; i < 256; i++ )
+        for( sal_uInt16 i = 128; i < 256; i++ )
         {
             char c = ByteString::Convert( pSet[i], nSource, nDest );
             if( c )
-                pSet[ i ] = (BYTE)c;
+                pSet[ i ] = (sal_uInt8)c;
         }
-        pCharTable->Insert( ((ULONG)nSource << 16) + (ULONG)nDest, pSet );
+        pCharTable->Insert( ((sal_uLong)nSource << 16) + (sal_uLong)nDest, pSet );
     }
 
     return (char *)pSet;

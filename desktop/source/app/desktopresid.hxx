@@ -37,7 +37,7 @@ namespace desktop
 class DesktopResId : public ResId
 {
     public:
-        DesktopResId( USHORT nId );
+        DesktopResId( sal_uInt16 nId );
 };
 
 }

@@ -84,29 +84,6 @@ void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-//-----------------------------------------------------------------------
-// component_writeInfo
-//-----------------------------------------------------------------------
-
-sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
-{
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
-            pXNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( SHELLEXEC_REGKEY_NAME ) ) );
-            return sal_True;
-        }
-        catch( InvalidRegistryException& )
-        {
-            OSL_ENSURE(sal_False, "InvalidRegistryException caught");
-    }
-    }
-
-    return sal_False;
-}
-
 //----------------------------------------------------------------------
 // component_getFactory
 //----------------------------------------------------------------------

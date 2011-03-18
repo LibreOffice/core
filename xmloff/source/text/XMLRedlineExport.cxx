@@ -43,7 +43,7 @@
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
 

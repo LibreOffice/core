@@ -43,10 +43,10 @@ class SfxObjectShell;
 
 class SvxLineBox : public LineLB
 {
-    USHORT          nCurPos;
+    sal_uInt16          nCurPos;
     Timer           aDelayTimer;
     Size            aLogicalSize;
-    BOOL            bRelease;
+    sal_Bool            bRelease;
     SfxObjectShell* mpSh;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
@@ -77,11 +77,11 @@ class SvxColorBox : public ColorLB
 {
     using Window::Update;
 
-    USHORT          nCurPos;
-    USHORT          nId;
+    sal_uInt16          nCurPos;
+    sal_uInt16          nId;
     Timer           aDelayTimer;
     Size            aLogicalSize;
-    BOOL            bRelease;
+    sal_Bool            bRelease;
     ::rtl::OUString maCommand;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
@@ -152,17 +152,17 @@ public:
     SvxFillTypeBox( Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
     ~SvxFillTypeBox();
 
-    void            Selected() { bSelect = TRUE; }
-    BOOL            IsRelease() { return bRelease;}
+    void            Selected() { bSelect = sal_True; }
+    sal_Bool            IsRelease() { return bRelease;}
 
 protected:
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
 
 private:
-    USHORT          nCurPos;
-    BOOL            bSelect;
-    BOOL            bRelease;
+    sal_uInt16          nCurPos;
+    sal_Bool            bSelect;
+    sal_Bool            bRelease;
 
 #ifdef _SVX_ITEMWIN_CXX
     void            ReleaseFocus_Impl();
@@ -177,7 +177,7 @@ public:
     SvxFillAttrBox( Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
     ~SvxFillAttrBox();
 
-    BOOL            IsRelease() { return bRelease;}
+    sal_Bool            IsRelease() { return bRelease;}
 
 protected:
     virtual long    PreNotify( NotifyEvent& rNEvt );
@@ -185,8 +185,8 @@ protected:
     virtual void    Select();
 
 private:
-    USHORT          nCurPos;
-    BOOL            bRelease;
+    sal_uInt16          nCurPos;
+    sal_Bool            bRelease;
 
 #ifdef _SVX_ITEMWIN_CXX
     void            ReleaseFocus_Impl();

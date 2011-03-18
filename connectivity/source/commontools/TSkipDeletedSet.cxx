@@ -155,10 +155,15 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
             bDone = sal_False;
     }
 
-    if(bDataFound && bDone )
+    if(bDataFound && bDone)
     {
         const sal_Int32 nDriverPos = m_pHelper->getDriverPos();
-        if ( ::std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),nDriverPos) == m_aBookmarksPositions.end() )
+        if ( m_bDeletedVisible )
+        {
+            if ( nDriverPos > (sal_Int32)m_aBookmarksPositions.size() )
+                m_aBookmarksPositions.push_back(nDriverPos);
+        }
+        else if ( ::std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),nDriverPos) == m_aBookmarksPositions.end() )
             m_aBookmarksPositions.push_back(nDriverPos);
         /*sal_Int32 nDriverPos = m_pHelper->getDriverPos();
         if(m_aBookmarks.find(nDriverPos) == m_aBookmarks.end())

@@ -158,5 +158,11 @@ String RID_SVXSTR_MORE
     Text [ en-US ] = "More...";
 };
 
+//IAccessibility2 Implementation 2009-----
+String RID_SVXSTR_TEXTCOLOR
+{
+    Text [ en-US ] = "Font color";
+};
+//-----IAccessibility2 Implementation 2009
 // ********************************************************************** EOF
 

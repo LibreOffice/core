@@ -63,7 +63,7 @@ TextConvWrapper::TextConvWrapper( Window* pWindow,
         const Font* pTargetFont,
         sal_Int32 nOptions,
         sal_Bool bIsInteractive,
-        BOOL bIsStart,
+        sal_Bool bIsStart,
         EditView* pView ) :
     HangulHanjaConversion( pWindow, rxMSF, rSourceLocale, rTargetLocale, pTargetFont, nOptions, bIsInteractive )
 {
@@ -259,8 +259,8 @@ sal_Bool TextConvWrapper::ConvContinue_impl()
 
 
 void TextConvWrapper::SetLanguageAndFont( const ESelection &rESel,
-    LanguageType nLang, USHORT nLangWhichId,
-    const Font *pFont,  USHORT nFontWhichId )
+    LanguageType nLang, sal_uInt16 nLangWhichId,
+    const Font *pFont,  sal_uInt16 nFontWhichId )
 {
     ESelection aOldSel = pEditView->GetSelection();
     pEditView->SetSelection( rESel );
@@ -294,7 +294,7 @@ void TextConvWrapper::SelectNewUnit_impl(
         const sal_Int32 nUnitStart,
         const sal_Int32 nUnitEnd )
 {
-    BOOL bOK = 0 <= nUnitStart && 0 <= nUnitEnd && nUnitStart <= nUnitEnd;
+    sal_Bool bOK = 0 <= nUnitStart && 0 <= nUnitEnd && nUnitStart <= nUnitEnd;
     DBG_ASSERT( bOK, "invalid arguments" );
     if (!bOK)
         return;
@@ -302,8 +302,8 @@ void TextConvWrapper::SelectNewUnit_impl(
     ESelection  aSelection = pEditView->GetSelection();
     DBG_ASSERT( aSelection.nStartPara == aSelection.nEndPara,
         "paragraph mismatch in selection" );
-    aSelection.nStartPos = (USHORT) (nLastPos + nUnitOffset + nUnitStart);
-    aSelection.nEndPos   = (USHORT) (nLastPos + nUnitOffset + nUnitEnd);
+    aSelection.nStartPos = (sal_uInt16) (nLastPos + nUnitOffset + nUnitStart);
+    aSelection.nEndPos   = (sal_uInt16) (nLastPos + nUnitOffset + nUnitEnd);
     pEditView->SetSelection( aSelection );
 }
 
@@ -345,7 +345,7 @@ void TextConvWrapper::ReplaceUnit(
         ReplacementAction eAction,
         LanguageType *pNewUnitLanguage )
 {
-    BOOL bOK = 0 <= nUnitStart && 0 <= nUnitEnd && nUnitStart <= nUnitEnd;
+    sal_Bool bOK = 0 <= nUnitStart && 0 <= nUnitEnd && nUnitStart <= nUnitEnd;
     DBG_ASSERT( bOK, "invalid arguments" );
     if (!bOK)
         return;
@@ -378,7 +378,7 @@ void TextConvWrapper::ReplaceUnit(
         default:
             OSL_FAIL( "unexpected case" );
     }
-    nUnitOffset = sal::static_int_cast< USHORT >(
+    nUnitOffset = sal::static_int_cast< sal_uInt16 >(
         nUnitOffset + nUnitStart + aNewTxt.getLength());
 
     // remember current original language for kater use
@@ -431,13 +431,13 @@ void TextConvWrapper::ReplaceUnit(
     {
         // Note: replacement is always done in the current paragraph
         // which is the one ConvContinue points to
-        pConvInfo->aConvContinue.nIndex = sal::static_int_cast< USHORT >(
+        pConvInfo->aConvContinue.nIndex = sal::static_int_cast< sal_uInt16 >(
             pConvInfo->aConvContinue.nIndex + nDelta);
 
         // if that is the same as the one where the conversions ends
         // the end needs to be updated also
         if (pConvInfo->aConvTo.nPara == pConvInfo->aConvContinue.nPara)
-            pConvInfo->aConvTo.nIndex = sal::static_int_cast< USHORT >(
+            pConvInfo->aConvTo.nIndex = sal::static_int_cast< sal_uInt16 >(
                 pConvInfo->aConvTo.nIndex + nDelta);
     }
 }

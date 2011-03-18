@@ -30,7 +30,7 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svdotext.hxx>
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
@@ -42,7 +42,7 @@
 #include <svx/sdr/properties/properties.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svl/itemset.hxx>
-#include <svditer.hxx>
+#include <svx/svditer.hxx>
 #include <drawinglayer/processor2d/textaspolygonextractor2d.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/xflclit.hxx>
@@ -231,7 +231,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 
 void SdrTextObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 {
-    SetGlueReallyAbsolute(TRUE);
+    SetGlueReallyAbsolute(sal_True);
     long dx=aRect.Right()-aRect.Left();
     long dy=aRect.Bottom()-aRect.Top();
     Point aP(aRect.TopLeft());
@@ -250,18 +250,18 @@ void SdrTextObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     }
     SetRectsDirty();
     NbcRotateGluePoints(rRef,nWink,sn,cs);
-    SetGlueReallyAbsolute(FALSE);
+    SetGlueReallyAbsolute(sal_False);
 }
 
 void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
 {
-    SetGlueReallyAbsolute(TRUE);
+    SetGlueReallyAbsolute(sal_True);
 
     // #75889# when this is a SdrPathObj aRect maybe not initialized
     Polygon aPol(Rect2Poly(aRect.IsEmpty() ? GetSnapRect() : aRect, aGeo));
 
-    USHORT nPointCount=aPol.GetSize();
-    for (USHORT i=0; i<nPointCount; i++) {
+    sal_uInt16 nPointCount=aPol.GetSize();
+    for (sal_uInt16 i=0; i<nPointCount; i++) {
          ShearPoint(aPol[i],rRef,tn,bVShear);
     }
     Poly2Rect(aPol,aRect,aGeo);
@@ -272,12 +272,12 @@ void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear
     ImpCheckShear();
     SetRectsDirty();
     NbcShearGluePoints(rRef,nWink,tn,bVShear);
-    SetGlueReallyAbsolute(FALSE);
+    SetGlueReallyAbsolute(sal_False);
 }
 
 void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
-    SetGlueReallyAbsolute(TRUE);
+    SetGlueReallyAbsolute(sal_True);
     bool bNoShearMerk=aGeo.nShearWink==0;
     bool bRota90Merk = false;
     if (bNoShearMerk &&
@@ -286,8 +286,8 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         bRota90Merk=aGeo.nDrehWink % 9000 ==0;
     }
     Polygon aPol(Rect2Poly(aRect,aGeo));
-    USHORT i;
-    USHORT nPntAnz=aPol.GetSize();
+    sal_uInt16 i;
+    sal_uInt16 nPntAnz=aPol.GetSize();
     for (i=0; i<nPntAnz; i++) {
          MirrorPoint(aPol[i],rRef1,rRef2);
     }
@@ -325,7 +325,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     ImpCheckShear();
     SetRectsDirty();
     NbcMirrorGluePoints(rRef1,rRef2);
-    SetGlueReallyAbsolute(FALSE);
+    SetGlueReallyAbsolute(sal_False);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -346,7 +346,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
     if(xSequence.hasElements())
     {
         // create an extractor with neutral ViewInformation
-        const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+        const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
         drawinglayer::processor2d::TextAsPolygonExtractor2D aExtractor(aViewInformation2D);
 
         // extract text as polygons
@@ -453,7 +453,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
 
 //////////////////////////////////////////////////////////////////////////////
 
-SdrObject* SdrTextObj::DoConvertToPolyObj(BOOL bBezier) const
+SdrObject* SdrTextObj::DoConvertToPolyObj(sal_Bool bBezier) const
 {
     return ImpConvertContainedTextToSdrPathObjs(!bBezier);
 }

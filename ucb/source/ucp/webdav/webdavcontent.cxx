@@ -1163,7 +1163,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     std::auto_ptr< ContentProperties > xProps;
     std::auto_ptr< ContentProperties > xCachedProps;
     std::auto_ptr< DAVResourceAccess > xResAccess;
-    rtl::OUString aEscapedTitle;
+    rtl::OUString aUnescapedTitle;
     bool bHasAll = false;
     uno::Reference< lang::XMultiServiceFactory > xSMgr;
     uno::Reference< ucb::XContentIdentifier > xIdentifier;
@@ -1172,7 +1172,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        aEscapedTitle = NeonUri::unescape( m_aEscapedTitle );
+        aUnescapedTitle = NeonUri::unescape( m_aEscapedTitle );
         xSMgr.set( m_xSMgr );
         xIdentifier.set( m_xIdentifier );
         xProvider.set( m_xProvider.get() );
@@ -1345,7 +1345,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         if ( m_eResourceType == NON_DAV )
                             xProps->addProperties( aMissingProps,
                                                    ContentProperties(
-                                                       aEscapedTitle,
+                                                       aUnescapedTitle,
                                                        false ) );
                     }
                     catch ( DAVException const & e )
@@ -1366,32 +1366,33 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         // might trigger HTTP redirect.
         // Therefore, title must be updated here.
         NeonUri aUri( xResAccess->getURL() );
-        aEscapedTitle = aUri.GetPathBaseName();
+        aUnescapedTitle = aUri.GetPathBaseNameUnescaped();
 
-        if ( UNKNOWN == rType )
+        if ( rType == UNKNOWN )
         {
-            xProps.reset( new ContentProperties( aEscapedTitle ) );
+            xProps.reset( new ContentProperties( aUnescapedTitle ) );
         }
 
         // For DAV resources we only know the Title, for non-DAV
         // resources we additionally know that it is a document.
-        if ( DAV == rType  )
+
+        if ( rType == DAV )
         {
             //xProps.reset(
-            //    new ContentProperties( aEscapedTitle ) );
+            //    new ContentProperties( aUnescapedTitle ) );
             xProps->addProperty(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
-                uno::makeAny( aEscapedTitle ),
+                uno::makeAny( aUnescapedTitle ),
                 true );
         }
         else
         {
             if ( !xProps.get() )
-                xProps.reset( new ContentProperties( aEscapedTitle, false ) );
+                xProps.reset( new ContentProperties( aUnescapedTitle, false ) );
             else
                 xProps->addProperty(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
-                    uno::makeAny( aEscapedTitle ),
+                    uno::makeAny( aUnescapedTitle ),
                     true );
 
             xProps->addProperty(
@@ -1409,7 +1410,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         // No server access for just created (not yet committed) objects.
         // Only a minimal set of properties supported at this stage.
         if (m_bTransient)
-            xProps.reset( new ContentProperties( aEscapedTitle,
+            xProps.reset( new ContentProperties( aUnescapedTitle,
                                                  m_bCollection ) );
     }
 
@@ -1455,12 +1456,12 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
         if ( !m_xCachedProps.get() )
-            m_xCachedProps.reset( new ContentProperties( *xProps.get() ) );
+            m_xCachedProps.reset( new CachableContentProperties( *xProps.get() ) );
         else
             m_xCachedProps->addProperties( *xProps.get() );
 
         m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
-        m_aEscapedTitle = aEscapedTitle;
+        m_aEscapedTitle = NeonUri::escapeSegment( aUnescapedTitle );
     }
 
     return xResultRow;
@@ -1991,7 +1992,7 @@ uno::Any Content::open(
                     // cache headers.
                     if ( !m_xCachedProps.get())
                         m_xCachedProps.reset(
-                            new ContentProperties( aResource ) );
+                            new CachableContentProperties( aResource ) );
                     else
                         m_xCachedProps->addProperties( aResource );
 
@@ -2037,7 +2038,7 @@ uno::Any Content::open(
                         // cache headers.
                         if ( !m_xCachedProps.get())
                             m_xCachedProps.reset(
-                                new ContentProperties( aResource ) );
+                                new CachableContentProperties( aResource ) );
                         else
                             m_xCachedProps->addProperties(
                                 aResource.properties );
@@ -2927,6 +2928,20 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
     // Map DAVException...
     uno::Any aException;
 
+    rtl::OUString aURL;
+    if ( m_bTransient )
+    {
+        aURL = getParentURL();
+        if ( aURL.lastIndexOf( '/' ) != ( aURL.getLength() - 1 ) )
+            aURL += rtl::OUString::createFromAscii( "/" );
+
+        aURL += m_aEscapedTitle;
+    }
+    else
+    {
+        aURL = m_xIdentifier->getContentIdentifier();
+    }
+
     switch ( e.getStatus() )
     {
         case SC_NOT_FOUND:
@@ -2934,7 +2949,7 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
             uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= beans::PropertyValue(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")), -1,
-                uno::makeAny(m_xIdentifier->getContentIdentifier()),
+                uno::makeAny(aURL),
                 beans::PropertyState_DIRECT_VALUE);
 
             aException <<=
@@ -3024,14 +3039,14 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locked!")),
                 static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
-                m_xIdentifier->getContentIdentifier(),
-                sal_True );
+                aURL,
+                sal_False ); // not SelfOwned
 #else
         {
             uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= beans::PropertyValue(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")), -1,
-                uno::makeAny(m_xIdentifier->getContentIdentifier()),
+                uno::makeAny(aURL),
                 beans::PropertyState_DIRECT_VALUE);
 
             aException <<=
@@ -3051,8 +3066,8 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locked (self)!")),
                 static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
-                m_xIdentifier->getContentIdentifier(),
-                sal_True );
+                aURL,
+                sal_True ); // SelfOwned
         break;
 
     case DAVException::DAV_NOT_LOCKED:
@@ -3061,7 +3076,7 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Not locked!")),
                 static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
-                m_xIdentifier->getContentIdentifier() );
+                aURL );
         break;
 
     case DAVException::DAV_LOCK_EXPIRED:
@@ -3070,7 +3085,7 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lock expired!")),
                 static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
-                m_xIdentifier->getContentIdentifier() );
+                aURL );
         break;
 
     default:
@@ -3194,7 +3209,7 @@ const Content::ResourceType & Content::getResourceType(
                 if ( resources.size() == 1 )
                 {
                     m_xCachedProps.reset(
-                        new ContentProperties( resources[ 0 ] ) );
+                        new CachableContentProperties( resources[ 0 ] ) );
                     m_xCachedProps->containsAllNames(
                         aProperties, m_aFailedPropNames );
                 }

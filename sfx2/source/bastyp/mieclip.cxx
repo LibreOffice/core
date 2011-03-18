@@ -34,7 +34,7 @@
 #include <sot/storage.hxx>
 #include <sot/formats.hxx>
 
-#include <mieclip.hxx>
+#include <sfx2/mieclip.hxx>
 #include <sfx2/sfxuno.hxx>
 
 MSE40HTMLClipFormatObj::~MSE40HTMLClipFormatObj()
@@ -44,13 +44,13 @@ MSE40HTMLClipFormatObj::~MSE40HTMLClipFormatObj()
 
 SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if( pStrm )
         delete pStrm, pStrm = 0;
 
     ByteString sLine, sVersion;
-    ULONG nStt = 0, nEnd = 0;
-    USHORT nIndex = 0;
+    sal_uIntPtr nStt = 0, nEnd = 0;
+    sal_uInt16 nIndex = 0;
 
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
     rStream.ResetError();
@@ -64,16 +64,16 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
             nIndex = 0;
             ByteString sTmp( sLine.GetToken( 0, ':', nIndex ) );
             if( sTmp == "StartHTML" )
-                nStt = (ULONG)(sLine.Erase( 0, nIndex ).ToInt32());
+                nStt = (sal_uIntPtr)(sLine.Erase( 0, nIndex ).ToInt32());
             else if( sTmp == "EndHTML" )
-                nEnd = (ULONG)(sLine.Erase( 0, nIndex ).ToInt32());
+                nEnd = (sal_uIntPtr)(sLine.Erase( 0, nIndex ).ToInt32());
             else if( sTmp == "SourceURL" )
                 sBaseURL = String(S2U(sLine.Erase( 0, nIndex )));
 
             if( nEnd && nStt &&
                 ( sBaseURL.Len() || rStream.Tell() >= nStt ))
             {
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             }
         }

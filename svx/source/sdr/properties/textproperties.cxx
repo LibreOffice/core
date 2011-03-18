@@ -489,7 +489,7 @@ namespace sdr
                                     if(bHasURL)
                                     {
                                         SfxItemSet aColorSet(*aSet.GetPool(), EE_CHAR_COLOR, EE_CHAR_COLOR );
-                                        aColorSet.Put(aSet, FALSE);
+                                        aColorSet.Put(aSet, sal_False);
 
                                         ESelection aSel((sal_uInt16)nPara, 0);
 
@@ -520,7 +520,7 @@ namespace sdr
 
                                 }
 
-                                aSet.Put(aParaSet, FALSE);
+                                aSet.Put(aParaSet, sal_False);
 
                                 if(bHasURL)
                                 {

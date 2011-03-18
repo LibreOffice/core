@@ -41,9 +41,8 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/registry/XRegistryKey.hpp"
 #include "com/sun/star/task/XAbortChannel.hpp"
-#include "com/sun/star/ucb/CommandFailedException.hpp"
-#include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "com/sun/star/xml/dom/XElement.hpp"
 #include "com/sun/star/xml/dom/XNode.hpp"
 
@@ -72,9 +71,8 @@ namespace xml = com::sun::star::xml ;
 namespace dp_info {
 
 class PackageInformationProvider :
-    public ::cppu::WeakImplHelper3< deployment::XPackageInformationProvider,
-                                    css_ucb::XCommandEnvironment,
-                                    task::XInteractionHandler >
+        public ::cppu::WeakImplHelper1< deployment::XPackageInformationProvider >
+
 {
     public:
                  PackageInformationProvider( uno::Reference< uno::XComponentContext >const& xContext);
@@ -82,16 +80,6 @@ class PackageInformationProvider :
 
     static uno::Sequence< rtl::OUString > getServiceNames();
     static rtl::OUString getImplName();
-
-    // XInteractionHandler
-    virtual void SAL_CALL handle( const uno::Reference< task::XInteractionRequest >& Request )
-                                throw( uno::RuntimeException );
-    // XCommandEnvironment
-    virtual uno::Reference< task::XInteractionHandler > SAL_CALL getInteractionHandler()
-        throw ( uno::RuntimeException ) { return static_cast<task::XInteractionHandler*>(this); };
-
-    virtual uno::Reference< css_ucb::XProgressHandler > SAL_CALL getProgressHandler()
-        throw ( uno::RuntimeException ) { return uno::Reference< css_ucb::XProgressHandler >(); };
 
     // XPackageInformationProvider
     virtual rtl::OUString SAL_CALL getPackageLocation( const rtl::OUString& extensionId )
@@ -126,17 +114,6 @@ PackageInformationProvider::~PackageInformationProvider()
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL PackageInformationProvider::handle( uno::Reference< task::XInteractionRequest > const & rRequest)
-    throw (uno::RuntimeException)
-{
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > xContinuations = rRequest->getContinuations();
-    if ( xContinuations.getLength() == 1 )
-    {
-        xContinuations[0]->select();
-    }
-}
-
-//------------------------------------------------------------------------------
 rtl::OUString PackageInformationProvider::getPackageLocation(
     const rtl::OUString & repository,
     const rtl::OUString& _rExtensionId )
@@ -151,7 +128,7 @@ rtl::OUString PackageInformationProvider::getPackageLocation(
                 xManager->getDeployedExtensions(
                     repository,
                     uno::Reference< task::XAbortChannel >(),
-                    static_cast < XCommandEnvironment *> (this) ) );
+                    uno::Reference< css_ucb::XCommandEnvironment > () ) );
 
         for ( int pos = packages.getLength(); pos--; )
         {
@@ -321,7 +298,7 @@ uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL PackageInformationProvi
     const uno::Sequence< uno::Sequence< uno::Reference<deployment::XPackage > > >
         allExt =  mgr->getAllExtensions(
             uno::Reference< task::XAbortChannel >(),
-            static_cast < XCommandEnvironment *> (this) );
+            uno::Reference< css_ucb::XCommandEnvironment > () );
 
     uno::Sequence< uno::Sequence< rtl::OUString > > retList;
 

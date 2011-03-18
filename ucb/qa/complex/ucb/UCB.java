@@ -34,7 +34,6 @@ package complex.ucb;
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 
-import complexlib.ComplexTestCase;
 import java.util.List;
 import java.util.Vector;
 
@@ -42,13 +41,22 @@ import com.sun.star.beans.Property;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
-import com.sun.star.uno.XComponentContext;
+// import com.sun.star.uno.XComponentContext;
 import com.sun.star.ucb.*;
-import com.sun.star.bridge.XUnoUrlResolver;
+// import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.beans.XPropertySet;
+// import com.sun.star.uno.XComponentContext;
+// import com.sun.star.lang.XMultiComponentFactory;
+// import com.sun.star.beans.XPropertySet;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
+
 /**
  * @author rpiterman
  * This class is used to copy the content of a folder to
@@ -56,12 +64,12 @@ import com.sun.star.beans.XPropertySet;
  * There is an incosistency with argument order.
  * It should be always: dir,filename.
  */
-public class UCB extends ComplexTestCase {
+public class UCB  {
     private Object ucb;
 
-    public String[] getTestMethodNames() {
-        return new String[] {"checkWrongFtpConnection"};
-    }
+//  public String[] getTestMethodNames() {
+//      return new String[] {"checkWrongFtpConnection"};
+//  }
 
     public void init(XMultiServiceFactory xmsf) throws Exception {
         String[] keys = new String[2];
@@ -79,11 +87,13 @@ public class UCB extends ComplexTestCase {
 
     /**
      * target name can be "", in which case the name stays lige the source name
-     * @param sourceDir
-     * @param filename
-     * @param targetDir
-     * @param targetName
-     * @return
+
+         * @param xContent
+         * @param aCommandName
+         * @param aArgument
+         * @return
+         * @throws com.sun.star.ucb.CommandAbortedException
+         * @throws com.sun.star.uno.Exception
      */
 
     public Object executeCommand(
@@ -92,9 +102,7 @@ public class UCB extends ComplexTestCase {
         Object aArgument)
         throws com.sun.star.ucb.CommandAbortedException, com.sun.star.uno.Exception {
         XCommandProcessor xCmdProcessor =
-            (XCommandProcessor) UnoRuntime.queryInterface(
-                XCommandProcessor.class,
-                xContent);
+            UnoRuntime.queryInterface(XCommandProcessor.class, xContent);
         Command aCommand = new Command();
         aCommand.Name = aCommandName;
         aCommand.Handle = -1; // not available
@@ -118,39 +126,44 @@ public class UCB extends ComplexTestCase {
         XDynamicResultSet xSet;
 
         xSet =
-            (XDynamicResultSet) UnoRuntime.queryInterface(
-                XDynamicResultSet.class,
-                executeCommand(xContent, "open", aArg));
+            UnoRuntime.queryInterface(XDynamicResultSet.class, executeCommand(xContent, "open", aArg));
 
         XResultSet xResultSet = xSet.getStaticResultSet();
 
         List files = new Vector();
 
-        if (xResultSet.first()) {
+        if (xResultSet.first())
+                {
             // obtain XContentAccess interface for child content access and XRow for properties
-            XContentAccess xContentAccess =
-                (XContentAccess) UnoRuntime.queryInterface(
-                    XContentAccess.class,
-                    xResultSet);
-            XRow xRow =
-                (XRow) UnoRuntime.queryInterface(XRow.class, xResultSet);
-            do {
+            XContentAccess xContentAccess = UnoRuntime.queryInterface(XContentAccess.class, xResultSet);
+            XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
+            do
+                        {
                 // Obtain URL of child.
                 String aId = xContentAccess.queryContentIdentifierString();
                 // First column: Title (column numbers are 1-based!)
                 String aTitle = xRow.getString(1);
-                if (aTitle.length() == 0 && xRow.wasNull());
-                //ignore
+                if (aTitle.length() == 0 && xRow.wasNull())
+                                {
+                                    //ignore
+                                }
                 else
-                    files.add(aTitle);
+                                {
+                                    files.add(aTitle);
+                                }
             } while (xResultSet.next()); // next child
         }
 
         if (verifier != null)
-            for (int i = 0; i < files.size(); i++)
-                if (!verifier.verify(files.get(i)))
-                    files.remove(i--);
-
+                {
+                    for (int i = 0; i < files.size(); i++)
+                    {
+                        if (!verifier.verify(files.get(i)))
+                        {
+                            files.remove(i--);
+                        }
+                    }
+                }
         return files;
     }
 
@@ -165,45 +178,46 @@ public class UCB extends ComplexTestCase {
         pv[0].Handle = -1;
 
         Object row = executeCommand(content, "getPropertyValues", pv);
-        XRow xrow = (XRow) UnoRuntime.queryInterface(XRow.class, row);
+        XRow xrow = UnoRuntime.queryInterface(XRow.class, row);
         if (type.equals(String.class))
-            return xrow.getString(1);
+                {
+                    return xrow.getString(1);
+                }
         else if (type.equals(Boolean.class))
-            return xrow.getBoolean(1) ? Boolean.TRUE : Boolean.FALSE;
+                {
+                    return xrow.getBoolean(1) ? Boolean.TRUE : Boolean.FALSE;
+                }
         else if (type.equals(Integer.class))
-            return new Integer(xrow.getInt(1));
+                {
+                    return new Integer(xrow.getInt(1));
+                }
         else if (type.equals(Short.class))
-            return new Short(xrow.getShort(1));
+                {
+                    return new Short(xrow.getShort(1));
+                }
         else
-            return null;
+                {
+                    return null;
+                }
 
     }
 
-    public Object getContent(String path) throws Exception {
-        XContentIdentifier id =
-            (
-                (XContentIdentifierFactory) UnoRuntime.queryInterface(
-                    XContentIdentifierFactory.class,
-                    ucb)).createContentIdentifier(
-                path);
-
-        return (
-            (XContentProvider) UnoRuntime.queryInterface(
-                XContentProvider.class,
-                ucb)).queryContent(
-            id);
+    public Object getContent(String path) throws Exception
+        {
+        XContentIdentifier id = (UnoRuntime.queryInterface(XContentIdentifierFactory.class, ucb)).createContentIdentifier(path);
+        return (UnoRuntime.queryInterface(XContentProvider.class, ucb)).queryContent(id);
     }
 
     public static interface Verifier {
         public boolean verify(Object object);
     }
 
-    public void checkWrongFtpConnection() {
+    @Test public void checkWrongFtpConnection() {
         //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
         try {
-            XMultiServiceFactory xLocMSF = (XMultiServiceFactory)param.getMSF();
+            XMultiServiceFactory xLocMSF = getMSF();
             String acountUrl = "ftp://noname:nopasswd@nohost";
-            log.println(acountUrl);
+            System.out.println(acountUrl);
             init(xLocMSF);
             Object content = getContent(acountUrl);
 
@@ -211,22 +225,45 @@ public class UCB extends ComplexTestCase {
             aArg.Mode = OpenMode.ALL; // FOLDER, DOCUMENTS -> simple filter
             aArg.Priority = 32768; // Ignored by most implementations
 
-            log.println("now executing open");
+            System.out.println("now executing open");
             executeCommand(content, "open", aArg);
-            failed("Expected 'IllegalArgumentException' was not thrown.");
+            fail("Expected 'IllegalArgumentException' was not thrown.");
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
             //TODO error message;
-            log.println("Correct exception thrown: " + ex.getClass().toString());
-        } catch(com.sun.star.ucb.InteractiveNetworkResolveNameException ex) {
-            log.println("This Exception is correctly thrown when no Proxy in StarOffice is used.");
-            log.println("To reproduce the bug behaviour, use a Proxy and try again.");
+            System.out.println("Correct exception thrown: " + ex.getClass().toString());
+        } catch(com.sun.star.ucb.InteractiveNetworkException ex) {
+            System.out.println("This Exception is correctly thrown when no Proxy in StarOffice is used.");
+            System.out.println("To reproduce the bug behaviour, use a Proxy and try again.");
         } catch (Exception ex) {
-            ex.printStackTrace((java.io.PrintWriter)log);
+            ex.printStackTrace();
             String exceptionName = ex.toString();
-            log.println("ExName: '"+exceptionName+"'");
-            failed("Wrong exception thrown: " + exceptionName);
+            System.out.println("ExName: '"+exceptionName+"'");
+            fail("Wrong exception thrown: " + exceptionName);
         }
 //      System.exit(0);
     }
+
+
+
+         private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
 
 }

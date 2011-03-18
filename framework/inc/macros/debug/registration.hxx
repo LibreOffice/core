@@ -54,26 +54,6 @@
                     "registration.log"
     #endif
 
-    /*_____________________________________________________________________________________________________________
-        LOG_REGISTRATION_WRITEINFO( SINFOTEXT )
-
-        Write informations for component_writeInfo() in log file.
-    _____________________________________________________________________________________________________________*/
-
-    #define LOG_REGISTRATION_WRITEINFO( SINFOTEXT )                                                             \
-                {                                                                                               \
-                    ::rtl::OStringBuffer sOut( 1024 );                                                          \
-                    sOut.append( "component_writeInfo():" );                                                    \
-                    sOut.append( SINFOTEXT                );                                                    \
-                    WRITE_LOGFILE( LOGFILE_REGISTRATION, sOut.makeStringAndClear() )                            \
-                }
-
-    /*_____________________________________________________________________________________________________________
-        LOG_REGISTRATION_WRITEINFO( SINFOTEXT )
-
-        Write informations for component_getFactory() in log file.
-    _____________________________________________________________________________________________________________*/
-
     #define LOG_REGISTRATION_GETFACTORY( SINFOTEXT )                                                            \
                 {                                                                                               \
                     ::rtl::OStringBuffer sOut( 1024 );                                                          \
@@ -89,7 +69,6 @@
     _____________________________________________________________________________________________________________*/
 
     #undef  LOGFILE_REGISTRATION
-    #define LOG_REGISTRATION_WRITEINFO( SINFOTEXT )
     #define LOG_REGISTRATION_GETFACTORY( SINFOTEXT )
 
 #endif  // #ifdef ENABLE_REGISTRATIONDEBUG

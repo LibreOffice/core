@@ -34,9 +34,9 @@
 #include <svx/svdomeas.hxx>
 #include <svx/svdmodel.hxx>
 
-#include "measctrl.hxx"
+#include "svx/measctrl.hxx"
 #include <svx/dialmgr.hxx>
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 
 SvxXMeasurePreview::SvxXMeasurePreview
 (
@@ -100,9 +100,9 @@ void SvxXMeasurePreview::SetAttributes( const SfxItemSet& rInAttrs )
 
 void SvxXMeasurePreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    BOOL bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
-    BOOL bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
-    BOOL bCtrl    = rMEvt.IsMod1();
+    sal_Bool bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
+    sal_Bool bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
+    sal_Bool bCtrl    = rMEvt.IsMod1();
 
     if( bZoomIn || bZoomOut )
     {

@@ -629,7 +629,7 @@ void removeFolder(OUString const & folderUrl)
         dir.close();
         ::osl::Directory::remove(url);
     }
-    else
+    else if (rc != osl::File::E_NOENT)
     {
         dp_misc::writeConsole(
             OUSTR("unopkg: Error while removing ") + url + OUSTR("\n"));

@@ -303,23 +303,6 @@ component_getImplementationEnvironment(const sal_Char **ppEnvironmentTypeName, u
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
-sal_Bool SAL_CALL
-component_writeInfo(void *pServiceManager, void *pRegistryKey)
-{
-    Reference< XMultiServiceFactory > xMan(reinterpret_cast< XMultiServiceFactory* >(pServiceManager));
-    Reference< XRegistryKey > xKey(reinterpret_cast< XRegistryKey* >(pRegistryKey));
-
-    // register service
-    ::rtl::OUString aTempStr;
-    ::rtl::OUString aImpl(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += Acceptor::impl_getImplementationName();
-    aImpl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    Reference< XRegistryKey > xNewKey = xKey->createKey(aImpl);
-    xNewKey->createKey(Acceptor::impl_getSupportedServiceNames()[0]);
-
-    return sal_True;
-}
-
 void * SAL_CALL
 component_getFactory(const sal_Char *pImplementationName, void *pServiceManager, void *)
 {

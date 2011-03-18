@@ -36,6 +36,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <basic/sbmeth.hxx>
+#include <svl/lstner.hxx>
 
 class BasicManager;
 
@@ -52,7 +53,7 @@ namespace basprov
         ::com::sun::star::script::provider::XScript > BasicScriptImpl_BASE;
 
 
-    class BasicScriptImpl : public BasicScriptImpl_BASE,
+    class BasicScriptImpl : public BasicScriptImpl_BASE, public SfxListener,
                                 public ::scripting_helper::OMutexHolder,
                                 public ::scripting_helper::OBroadcastHelperHolder,
                                 public ::comphelper::OPropertyContainer,
@@ -106,6 +107,9 @@ namespace basprov
         // XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
             throw (::com::sun::star::uno::RuntimeException);
+
+        // SfxListener
+        virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     };
 
 //.........................................................................

@@ -126,15 +126,27 @@ namespace connectivity
         class OOO_DLLPUBLIC_DBTOOLS OOrderColumn :
             public OOrderColumn_BASE, public OOrderColumn_PROP
         {
-            sal_Bool        m_bAscending;
-            sal_Bool        m_bOrder;
+            const   sal_Bool        m_bAscending;
+            const   ::rtl::OUString m_sTableName;
+
         protected:
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
 
             virtual ~OOrderColumn();
         public:
-            OOrderColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,sal_Bool _bCase,sal_Bool _bAscending);
+            OOrderColumn(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
+                const ::rtl::OUString& i_rOriginatingTableName,
+                sal_Bool _bCase,
+                sal_Bool _bAscending
+            );
+
+            OOrderColumn(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
+                sal_Bool _bCase,
+                sal_Bool _bAscending
+            );
 
             virtual void construct();
 

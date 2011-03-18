@@ -239,7 +239,6 @@ Sequence< ::rtl::OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(
 #include <cppuhelper/factory.hxx>
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::registry::XRegistryKey;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
@@ -250,50 +249,6 @@ component_getImplementationEnvironment(
             )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//---------------------------------------------------------------------------------------
-void REGISTER_PROVIDER(
-        const ::rtl::OUString& aServiceImplName,
-        const Sequence< ::rtl::OUString>& Services,
-        const Reference< ::com::sun::star::registry::XRegistryKey > & xKey)
-{
-    ::rtl::OUString aMainKeyName;
-    aMainKeyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/"));
-    aMainKeyName += aServiceImplName;
-    aMainKeyName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-
-    Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
-    OSL_ENSURE(xNewKey.is(), "MOZAB::component_writeInfo : could not create a registry key !");
-
-    for (sal_Int32 i=0; i<Services.getLength(); ++i)
-        xNewKey->createKey(Services[i]);
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-                void* /*pServiceManager*/,
-                void* pRegistryKey
-            )
-{
-    if (pRegistryKey)
-    try
-    {
-        Reference< ::com::sun::star::registry::XRegistryKey > xKey(reinterpret_cast< ::com::sun::star::registry::XRegistryKey*>(pRegistryKey));
-
-        Sequence< ::rtl::OUString > aSNS( 1 );
-        aSNS[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap"));
-        REGISTER_PROVIDER(
-             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.mozilla.MozillaBootstrap")),
-             aSNS, xKey);
-
-        return sal_True;
-    }
-    catch (::com::sun::star::registry::InvalidRegistryException& )
-    {
-        OSL_ENSURE(sal_False, "Mozab::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
-    }
-
-    return sal_False;
 }
 
 static Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )

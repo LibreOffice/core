@@ -128,8 +128,8 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     if( NULL == pItem && pPool )
         pItem = &(pPool->GetDefaultItem( pMap->nWID ));
 
-    const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
-    BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
+    const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((sal_uInt16)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
+    sal_uInt8 nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
     if( eMapUnit == SFX_MAPUNIT_100TH_MM )
         nMemberId &= (~CONVERT_TWIPS);
 
@@ -190,7 +190,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
     {
         uno::Any aValue( rVal );
 
-        const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
+        const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((sal_uInt16)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
 
         // check for needed metric translation
         if( (pMap->nMemberId & SFX_METRIC_ITEM) && eMapUnit != SFX_MAPUNIT_100TH_MM )
@@ -201,7 +201,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
 
         pNewItem = pItem->Clone();
 
-        BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
+        sal_uInt8 nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
         if( eMapUnit == SFX_MAPUNIT_100TH_MM )
             nMemberId &= (~CONVERT_TWIPS);
 
@@ -223,8 +223,8 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
         return *pUsrAny;
 
     // No UsrAny detected yet, generate Default entry and return this
-    const SfxMapUnit eMapUnit = mrItemPool.GetMetric((USHORT)pMap->nWID);
-    BYTE nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
+    const SfxMapUnit eMapUnit = mrItemPool.GetMetric((sal_uInt16)pMap->nWID);
+    sal_uInt8 nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
     if( eMapUnit == SFX_MAPUNIT_100TH_MM )
         nMemberId &= (~CONVERT_TWIPS);
     uno::Any aVal;

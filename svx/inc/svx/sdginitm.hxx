@@ -43,11 +43,11 @@ public:
 
                             TYPEINFO();
 
-                            SdrGrafInvertItem( BOOL bInvert = FALSE ) : SdrOnOffItem( SDRATTR_GRAFINVERT, bInvert ) {}
+                            SdrGrafInvertItem( sal_Bool bInvert = sal_False ) : SdrOnOffItem( SDRATTR_GRAFINVERT, bInvert ) {}
                             SdrGrafInvertItem( SvStream& rIn ) : SdrOnOffItem( SDRATTR_GRAFINVERT, rIn ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
 };
 
 #endif // _SDGINITM_HXX

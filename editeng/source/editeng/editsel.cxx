@@ -54,20 +54,20 @@ void EditSelFunctionSet::DestroyAnchor()
     // Only with multiple selection
 }
 
-BOOL EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL )
+sal_Bool EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool )
 {
     if ( pCurView )
         return pCurView->pImpEditView->SetCursorAtPoint( rPointPixel );
 
-    return FALSE;
+    return sal_False;
 }
 
-BOOL EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
+sal_Bool EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
     if ( pCurView )
         return pCurView->pImpEditView->IsSelectionAtPoint( rPointPixel );
 
-    return FALSE;
+    return sal_False;
 }
 
 void EditSelFunctionSet::DeselectAtPoint( const Point& )
@@ -95,7 +95,7 @@ void EditSelFunctionSet::DeselectAll()
 EditSelectionEngine::EditSelectionEngine() : SelectionEngine( (Window*)0 )
 {
     SetSelectionMode( RANGE_SELECTION );
-    EnableDrag( TRUE );
+    EnableDrag( sal_True );
 }
 
 void EditSelectionEngine::SetCurView( EditView* pNewView )

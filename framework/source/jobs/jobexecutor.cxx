@@ -99,6 +99,11 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE( JobExecutor                   ,
 
 DEFINE_INIT_SERVICE( JobExecutor,
                      {
+                         m_xModuleManager = css::uno::Reference< css::frame::XModuleManager >(
+                             m_xSMGR->createInstance(
+                                 SERVICENAME_MODULEMANAGER ),
+                             css::uno::UNO_QUERY_THROW );
+
                          /*Attention
                              I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
                              to create a new instance of this class by our own supported service factory.
@@ -143,6 +148,7 @@ JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::lang::XMultiSer
     : ThreadHelpBase      (&Application::GetSolarMutex()                                   )
     , ::cppu::OWeakObject (                                                                )
     , m_xSMGR             (xSMGR                                                           )
+    , m_xModuleManager    (                                                                )
     , m_aConfig           (xSMGR, ::rtl::OUString::createFromAscii(JobData::EVENTCFG_ROOT) )
 {
     // Don't do any reference related code here! Do it inside special
@@ -237,6 +243,15 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     // This optimization supress using of the cfg api for getting event and job descriptions.
     // see using of m_lEvents.find() below ...
 
+    // retrieve event context from event source
+    rtl::OUString aModuleIdentifier;
+    try
+    {
+        aModuleIdentifier = m_xModuleManager->identify( aEvent.Source );
+    }
+    catch( css::uno::Exception& )
+    {}
+
     // Special feature: If the events "OnNew" or "OnLoad" occures - we generate our own event "onDocumentOpened".
     if (
         (aEvent.EventName.equals(EVENT_ON_NEW )) ||
@@ -278,6 +293,9 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
         JobData aCfg(m_xSMGR);
         aCfg.setEvent(rBinding.m_sDocEvent, rBinding.m_sJobName);
         aCfg.setEnvironment(JobData::E_DOCUMENTEVENT);
+
+        if (!aCfg.hasCorrectContext(aModuleIdentifier))
+            continue;
 
         /*Attention!
             Jobs implements interfaces and dies by ref count!

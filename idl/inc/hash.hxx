@@ -35,24 +35,24 @@
 
 class SvHashTable
 {
-    UINT32       nMax;                 // size of hash-tabel
-    UINT32       nFill;                // elements in hash-tabel
-    UINT32       lAsk;                 // number of requests
-    UINT32       lTry;                 // number of tries
+    sal_uInt32       nMax;                 // size of hash-tabel
+    sal_uInt32       nFill;                // elements in hash-tabel
+    sal_uInt32       lAsk;                 // number of requests
+    sal_uInt32       lTry;                 // number of tries
 protected:
-    BOOL        Test_Insert( const void *, BOOL bInsert, UINT32 * pInsertPos );
+    sal_Bool        Test_Insert( const void *, sal_Bool bInsert, sal_uInt32 * pInsertPos );
 
                             // compare element with entry
-    virtual StringCompare   Compare( const void * , UINT32 ) const = 0;
+    virtual StringCompare   Compare( const void * , sal_uInt32 ) const = 0;
                             // get hash value from subclass
-    virtual UINT32          HashFunc( const void * ) const = 0;
+    virtual sal_uInt32          HashFunc( const void * ) const = 0;
 public:
-                SvHashTable( UINT32 nMaxEntries );
+                SvHashTable( sal_uInt32 nMaxEntries );
                 virtual ~SvHashTable();
 
-    UINT32      GetMax() const { return nMax; }
+    sal_uInt32      GetMax() const { return nMax; }
 
-    virtual BOOL            IsEntry( UINT32 ) const = 0;
+    virtual sal_Bool            IsEntry( sal_uInt32 ) const = 0;
 };
 
 class SvStringHashTable;
@@ -60,28 +60,28 @@ class SvStringHashEntry : public SvRefBase
 {
 friend class SvStringHashTable;
     ByteString  aName;
-    UINT32  nHashId;
-    ULONG   nValue;
-    BOOL    bHasId;
+    sal_uInt32  nHashId;
+    sal_uLong   nValue;
+    sal_Bool    bHasId;
 public:
-                    SvStringHashEntry() : bHasId( FALSE ) {;}
-                    SvStringHashEntry( const ByteString & rName, UINT32 nIdx )
+                    SvStringHashEntry() : bHasId( sal_False ) {;}
+                    SvStringHashEntry( const ByteString & rName, sal_uInt32 nIdx )
                         : aName( rName )
                         , nHashId( nIdx )
                         , nValue( 0 )
-                        , bHasId( TRUE ) {}
+                        , bHasId( sal_True ) {}
                     ~SvStringHashEntry();
 
     const ByteString &  GetName() const { return aName; }
-    BOOL            HasId() const { return bHasId; }
-    UINT32          GetId() const { return nHashId; }
+    sal_Bool            HasId() const { return bHasId; }
+    sal_uInt32          GetId() const { return nHashId; }
 
-    void            SetValue( ULONG n ) { nValue = n; }
-    ULONG           GetValue() const { return nValue; }
+    void            SetValue( sal_uLong n ) { nValue = n; }
+    sal_uLong           GetValue() const { return nValue; }
 
-    BOOL            operator == ( const SvStringHashEntry & rRef )
+    sal_Bool            operator == ( const SvStringHashEntry & rRef )
                     { return nHashId == rRef.nHashId; }
-    BOOL            operator != ( const SvStringHashEntry & rRef )
+    sal_Bool            operator != ( const SvStringHashEntry & rRef )
                     { return ! operator == ( rRef ); }
     SvStringHashEntry & operator = ( const SvStringHashEntry & rRef )
         { SvRefBase::operator=( rRef );
@@ -101,19 +101,19 @@ class SvStringHashTable : public SvHashTable
 {
     SvStringHashEntry*      pEntries;
 protected:
-    virtual UINT32          HashFunc( const void * pElement ) const;
-    virtual StringCompare   Compare( const void * pElement, UINT32 nIndex ) const;
+    virtual sal_uInt32          HashFunc( const void * pElement ) const;
+    virtual StringCompare   Compare( const void * pElement, sal_uInt32 nIndex ) const;
 public:
-            SvStringHashTable( UINT32 nMaxEntries );   // max size of hash-tabel
+            SvStringHashTable( sal_uInt32 nMaxEntries );   // max size of hash-tabel
             virtual ~SvStringHashTable();
 
     ByteString          GetNearString( const ByteString & rName ) const;
-    virtual BOOL    IsEntry( UINT32 nIndex ) const;
+    virtual sal_Bool    IsEntry( sal_uInt32 nIndex ) const;
 
-    BOOL    Insert( const ByteString & rStr, UINT32 * pHash ); // insert string
-    BOOL    Test( const ByteString & rStr, UINT32 * pHash ) const; // test of insert string
-    SvStringHashEntry * Get ( UINT32 nIndex ) const; // return pointer to string
-    SvStringHashEntry & operator []( UINT32 nPos ) const
+    sal_Bool    Insert( const ByteString & rStr, sal_uInt32 * pHash ); // insert string
+    sal_Bool    Test( const ByteString & rStr, sal_uInt32 * pHash ) const; // test of insert string
+    SvStringHashEntry * Get ( sal_uInt32 nIndex ) const; // return pointer to string
+    SvStringHashEntry & operator []( sal_uInt32 nPos ) const
             { return pEntries[ nPos ]; }
 
     void    FillHashList( SvStringHashList * rList ) const;

@@ -76,3 +76,11 @@ DEF1NAME=$(SHL1TARGET)
 .INCLUDE : target.mk
 
 .ENDIF # "$(OS)" != "MACOSX"
+
+ALLTAR : $(MISC)/macbe1.component
+
+$(MISC)/macbe1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        macbe1.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt macbe1.component

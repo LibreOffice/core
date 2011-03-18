@@ -45,54 +45,54 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags
     sal_Unicode cBullet;
     sal_Unicode cByInputBullet;
 
-    USHORT nAutoCmpltWordLen, nAutoCmpltListLen;
-    USHORT nAutoCmpltExpandKey;
+    sal_uInt16 nAutoCmpltWordLen, nAutoCmpltListLen;
+    sal_uInt16 nAutoCmpltExpandKey;
 
-    BYTE nRightMargin;
+    sal_uInt8 nRightMargin;
 
-    BOOL bAutoCorrect : 1;
-    BOOL bCptlSttSntnc : 1;
-    BOOL bCptlSttWrd : 1;
-    BOOL bChkFontAttr : 1;
+    sal_Bool bAutoCorrect : 1;
+    sal_Bool bCptlSttSntnc : 1;
+    sal_Bool bCptlSttWrd : 1;
+    sal_Bool bChkFontAttr : 1;
 
-    BOOL bChgUserColl : 1;
-    BOOL bChgEnumNum : 1;
+    sal_Bool bChgUserColl : 1;
+    sal_Bool bChgEnumNum : 1;
 
-    BOOL bAFmtByInput : 1;
-    BOOL bDelEmptyNode : 1;
-    BOOL bSetNumRule : 1;
+    sal_Bool bAFmtByInput : 1;
+    sal_Bool bDelEmptyNode : 1;
+    sal_Bool bSetNumRule : 1;
 
-    BOOL bChgOrdinalNumber : 1;
-    BOOL bChgToEnEmDash : 1;
-    BOOL bAddNonBrkSpace : 1;
-    BOOL bChgWeightUnderl : 1;
-    BOOL bSetINetAttr : 1;
+    sal_Bool bChgOrdinalNumber : 1;
+    sal_Bool bChgToEnEmDash : 1;
+    sal_Bool bAddNonBrkSpace : 1;
+    sal_Bool bChgWeightUnderl : 1;
+    sal_Bool bSetINetAttr : 1;
 
-    BOOL bSetBorder : 1;
-    BOOL bCreateTable : 1;
-    BOOL bReplaceStyles : 1;
-    BOOL bDummy : 1;
+    sal_Bool bSetBorder : 1;
+    sal_Bool bCreateTable : 1;
+    sal_Bool bReplaceStyles : 1;
+    sal_Bool bDummy : 1;
 
-    BOOL bWithRedlining : 1;
+    sal_Bool bWithRedlining : 1;
 
-    BOOL bRightMargin : 1;
+    sal_Bool bRightMargin : 1;
 
-    BOOL bAutoCompleteWords : 1;
-    BOOL bAutoCmpltCollectWords : 1;
-    BOOL bAutoCmpltEndless : 1;
+    sal_Bool bAutoCompleteWords : 1;
+    sal_Bool bAutoCmpltCollectWords : 1;
+    sal_Bool bAutoCmpltEndless : 1;
 // -- under NT here starts a new long
-    BOOL bAutoCmpltAppendBlanc : 1;
-    BOOL bAutoCmpltShowAsTip : 1;
+    sal_Bool bAutoCmpltAppendBlanc : 1;
+    sal_Bool bAutoCmpltShowAsTip : 1;
 
-    BOOL bAFmtDelSpacesAtSttEnd : 1;
-    BOOL bAFmtDelSpacesBetweenLines : 1;
-    BOOL bAFmtByInpDelSpacesAtSttEnd : 1;
-    BOOL bAFmtByInpDelSpacesBetweenLines : 1;
+    sal_Bool bAFmtDelSpacesAtSttEnd : 1;
+    sal_Bool bAFmtDelSpacesBetweenLines : 1;
+    sal_Bool bAFmtByInpDelSpacesAtSttEnd : 1;
+    sal_Bool bAFmtByInpDelSpacesBetweenLines : 1;
 
-    BOOL bAutoCmpltKeepList : 1;
+    sal_Bool bAutoCmpltKeepList : 1;
 
     // some dummies for any new options
-    BOOL bDummy6 : 1,
+    sal_Bool bDummy6 : 1,
          bDummy7 : 1,
          bDummy8 : 1
          ;

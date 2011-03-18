@@ -548,7 +548,7 @@ com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCr
     }
     else
     {
-        SvxNumRule aDefaultRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , FALSE);
+        SvxNumRule aDefaultRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , sal_False);
         return new SvxUnoNumberingRules( aDefaultRule );
     }
 }
@@ -584,13 +584,13 @@ sal_Int16 SvxUnoNumberingRules::Compare( const Any& Any1, const Any& Any2 )
                 const SvxNumRule& rRule1 = pRule1->getNumRule();
                 const SvxNumRule& rRule2 = pRule2->getNumRule();
 
-                const USHORT nLevelCount1 = rRule1.GetLevelCount();
-                const USHORT nLevelCount2 = rRule2.GetLevelCount();
+                const sal_uInt16 nLevelCount1 = rRule1.GetLevelCount();
+                const sal_uInt16 nLevelCount2 = rRule2.GetLevelCount();
 
                 if( nLevelCount1 == 0 || nLevelCount2 == 0 )
                     return -1;
 
-                for( USHORT i = 0; (i < nLevelCount1) && (i < nLevelCount2); i++ )
+                for( sal_uInt16 i = 0; (i < nLevelCount1) && (i < nLevelCount2); i++ )
                 {
                     if( rRule1.GetLevel(i) != rRule2.GetLevel(i) )
                         return -1;

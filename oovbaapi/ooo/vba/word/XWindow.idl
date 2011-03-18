@@ -47,7 +47,7 @@ interface XWindow : com::sun::star::uno::XInterface
     [attribute] any WindowState;
     void Activate();
     void Close([in] any SaveChanges, [in] any RouteDocument);
-    any Panes( [in] any aIndex ); // this is a fake api for it seems not support in Write
+    any Panes( [in] any Index ); // this is a fake api for it seems not support in Write
     any ActivePane(); // this is a fake api for it seems not support in Write
 };
 

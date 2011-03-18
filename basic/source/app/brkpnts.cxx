@@ -57,7 +57,7 @@ BreakpointWindow::BreakpointWindow( Window *pParent )
 , nCurYOffset( 0 )
 , nMarkerPos( MARKER_NOMARKER )
 , pModule( NULL )
-, bErrorMarker( FALSE )
+, bErrorMarker( sal_False )
 {
     if ( !pImages )
         pImages = new ImageList( SttResId( RID_IMGLST_LAYOUT ) );
@@ -81,7 +81,7 @@ void BreakpointWindow::Reset()
 void BreakpointWindow::SetModule( SbModule *pMod )
 {
     pModule = pMod;
-    USHORT i;
+    sal_uInt16 i;
     for ( i=0 ; i < pModule->GetBPCount() ; i++ )
     {
         InsertBreakpoint( pModule->GetBP( i ) );
@@ -97,13 +97,12 @@ void BreakpointWindow::SetBPsInModule()
     for ( size_t i = 0, n = BreakpointList.size(); i < n; ++i )
     {
         Breakpoint* pBrk = BreakpointList[ i ];
-        pModule->SetBP( (USHORT)pBrk->nLine );
+        pModule->SetBP( (sal_uInt16)pBrk->nLine );
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( (USHORT)pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" );
+        DBG_ASSERT( !pModule->IsCompiled() || pModule->IsBP( (sal_uInt16)pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" );
 #endif
     }
-
-    for ( USHORT nMethod = 0; nMethod < pModule->GetMethods()->Count(); nMethod++ )
+    for ( sal_uInt16 nMethod = 0; nMethod < pModule->GetMethods()->Count(); nMethod++ )
     {
         SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Get( nMethod );
         DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
@@ -146,7 +145,7 @@ void BreakpointWindow::InsertBreakpoint( sal_uInt32 nLine )
 #endif
         if ( StarBASIC::IsRunning() )
         {
-            for ( USHORT nMethod = 0; nMethod < pModule->GetMethods()->Count(); nMethod++ )
+            for ( sal_uInt16 nMethod = 0; nMethod < pModule->GetMethods()->Count(); nMethod++ )
             {
                 SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Get( nMethod );
                 DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
@@ -226,7 +225,7 @@ void BreakpointWindow::LoadBreakpoints( String aFilename )
 
     for ( i = 0 ; i < aBreakpoints.GetTokenCount( ';' ) ; i++ )
     {
-        InsertBreakpoint( (USHORT)aBreakpoints.GetToken( i, ';' ).ToInt32() );
+        InsertBreakpoint( (sal_uInt16)aBreakpoints.GetToken( i, ';' ).ToInt32() );
     }
 }
 
@@ -276,7 +275,7 @@ void BreakpointWindow::Paint( const Rectangle& )
         sal_Int32 nY = nLine*nLineHeight - nCurYOffset;
         DrawImage( Point( 0, nY ) + aBmpOff, aBrk );
     }
-    ShowMarker( TRUE );
+    ShowMarker( sal_True );
 }
 
 
@@ -341,7 +340,7 @@ void BreakpointWindow::ShowMarker( bool bShow )
     aMarkerOff.X() = ( aOutSz.Width() - aMarkerSz.Width() ) / 2;
     aMarkerOff.Y() = ( nLineHeight - aMarkerSz.Height() ) / 2;
 
-    ULONG nY = nMarkerPos*nLineHeight - nCurYOffset;
+    sal_uIntPtr nY = nMarkerPos*nLineHeight - nCurYOffset;
     Point aPos( 0, nY );
     aPos += aMarkerOff;
     if ( bShow )
@@ -359,7 +358,7 @@ void BreakpointWindow::MouseButtonDown( const MouseEvent& rMEvt )
         long nLineHeight = GetTextHeight();
         long nYPos = aMousePos.Y() + nCurYOffset;
         long nLine = nYPos / nLineHeight + 1;
-        ToggleBreakpoint( sal::static_int_cast< USHORT >(nLine) );
+        ToggleBreakpoint( sal::static_int_cast< sal_uInt16 >(nLine) );
         Invalidate();
     }
 }
@@ -375,7 +374,7 @@ void BreakpointWindow::SetMarkerPos( sal_uInt32 nLine, bool bError )
 }
 
 
-void BreakpointWindow::Scroll( long nHorzScroll, long nVertScroll, USHORT nFlags )
+void BreakpointWindow::Scroll( long nHorzScroll, long nVertScroll, sal_uInt16 nFlags )
 {
     (void) nFlags; /* avoid warning about unused parameter */
     nCurYOffset -= nVertScroll;

@@ -50,7 +50,7 @@ protected:
 public:
 
     SvXMLPropertySetContext(
-            SvXMLImport& rImport, USHORT nPrfx,
+            SvXMLImport& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
             sal_uInt32 nFamily,
@@ -60,14 +60,14 @@ public:
 
     virtual ~SvXMLPropertySetContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     // This method is called from this instance implementation of
     // CreateChildContext if the element matches an entry in the
     // SvXMLImportItemMapper with the mid flag MID_FLAG_ELEMENT_ITEM_IMPORT
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const ::rtl::OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                                    ::std::vector< XMLPropertyState > &rProperties,

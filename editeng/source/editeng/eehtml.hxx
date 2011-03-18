@@ -53,34 +53,34 @@ private:
     ImpEditEngine*          pImpEditEngine;
     AnchorInfo*             pCurAnchor;
 
-    BOOL                    bInPara;
-    BOOL                    bWasInPara; // Remember bInPara before HeadingStart, because afterwards it will be gone.
-    BOOL                    bFieldsInserted;
-    BYTE                    nInTable;
-    BYTE                    nInCell;
-    BOOL                    bInTitle;
+    sal_Bool                    bInPara;
+    sal_Bool                    bWasInPara; // Remember bInPara before HeadingStart, because afterwards it will be gone.
+    sal_Bool                    bFieldsInserted;
+    sal_uInt8                   nInTable;
+    sal_uInt8                   nInCell;
+    sal_Bool                    bInTitle;
 
-    BYTE                    nDefListLevel;
-    BYTE                    nBulletLevel;
-    BYTE                    nNumberingLevel;
+    sal_uInt8                   nDefListLevel;
+    sal_uInt8                   nBulletLevel;
+    sal_uInt8                   nNumberingLevel;
 
-    BYTE                    nLastAction;
+    sal_uInt8                   nLastAction;
 
-    void                    StartPara( BOOL bReal );
-    void                    EndPara( BOOL bReal );
+    void                    StartPara( sal_Bool bReal );
+    void                    EndPara( sal_Bool bReal );
     void                    AnchorStart();
     void                    AnchorEnd();
     void                    HeadingStart( int nToken );
     void                    HeadingEnd( int nToken );
     void                    SkipGroup( int nEndToken );
-    BOOL                    ThrowAwayBlank();
-    BOOL                    HasTextInCurrentPara();
-    void                    ProcessUnknownControl( BOOL bOn );
+    sal_Bool                    ThrowAwayBlank();
+    sal_Bool                    HasTextInCurrentPara();
+    void                    ProcessUnknownControl( sal_Bool bOn );
 
     void                    ImpInsertParaBreak();
     void                    ImpInsertText( const String& rText );
     void                    ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSel = 0 );
-    void                    ImpSetStyleSheet( USHORT nHeadingLevel );
+    void                    ImpSetStyleSheet( sal_uInt16 nHeadingLevel );
 
 protected:
     virtual void            NextToken( int nToken );

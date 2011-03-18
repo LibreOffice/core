@@ -88,7 +88,7 @@
 #include <com/sun/star/text/XEndnotesSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/families.hxx>
 #include "txtexppr.hxx"
@@ -104,7 +104,7 @@
 #include <xmloff/txtprmap.hxx>
 #include "XMLImageMapExport.hxx"
 #include "XMLTextNumRuleInfo.hxx"
-#include "XMLTextListAutoStylePool.hxx"
+#include "xmloff/XMLTextListAutoStylePool.hxx"
 #include <xmloff/txtparae.hxx>
 #include "XMLSectionExport.hxx"
 #include "XMLIndexMarkExport.hxx"
@@ -3270,7 +3270,7 @@ void XMLTextParagraphExport::exportTextRange(
 void XMLTextParagraphExport::exportText( const OUString& rText,
                                            sal_Bool& rPrevCharIsSpace )
 {
-    sal_Int32 nExpStartPos = 0L;
+    sal_Int32 nExpStartPos = 0;
     sal_Int32 nEndPos = rText.getLength();
     sal_Int32 nSpaceChars = 0;
     for( sal_Int32 nPos = 0; nPos < nEndPos; nPos++ )

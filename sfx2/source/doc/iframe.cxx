@@ -185,10 +185,10 @@ throw( uno::RuntimeException )
         if ( xDisp.is() )
             xDisp->dispatch( aTargetURL, aProps );
 
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 void SAL_CALL IFrameObject::cancel() throw( com::sun::star::uno::RuntimeException )
@@ -275,7 +275,7 @@ void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
         sal_Bool bIsAutoBorder = sal_Bool();
         if ( (aAny >>= bIsAutoBorder) )
         {
-            BOOL bBorder = maFrmDescr.IsFrameBorderOn();
+            sal_Bool bBorder = maFrmDescr.IsFrameBorderOn();
             maFrmDescr.ResetBorder();
             if ( bIsAutoBorder )
                 maFrmDescr.SetFrameBorder( bBorder );
@@ -384,7 +384,7 @@ void SAL_CALL IFrameObject::removeVetoableChangeListener(const ::rtl::OUString&,
 ::sal_Int16 SAL_CALL IFrameObject::execute() throw (::com::sun::star::uno::RuntimeException)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    VclAbstractDialog* pDlg = pFact->CreateEditObjectDialog( NULL, SID_INSERT_FLOATINGFRAME, mxObj );
+    VclAbstractDialog* pDlg = pFact->CreateEditObjectDialog( NULL, rtl::OUString::createFromAscii(".uno:InsertObjectFloatingFrame"), mxObj );
     if ( pDlg )
         pDlg->Execute();
     return 0;

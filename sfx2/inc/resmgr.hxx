@@ -43,30 +43,30 @@ class SfxResourceManager
 {
     SfxResMgrArr                aResMgrArr;
     SfxResMgrArr                aResMgrBmpArr;
-    USHORT                      nEnterCount;
+    sal_uInt16                      nEnterCount;
     SfxMessageTable*            pMessageTable;
 
 private:
     void                        ClearMsgTable_Impl();
-    SfxMessageDescription*      MakeDesc_Impl(USHORT);
+    SfxMessageDescription*      MakeDesc_Impl(sal_uInt16);
 
 public:
                                 SfxResourceManager();
                                 ~SfxResourceManager();
 
-    USHORT                      RegisterResource( const char *pFileName);
-    void                        ReleaseResource( USHORT nRegisterId );
+    sal_uInt16                      RegisterResource( const char *pFileName);
+    void                        ReleaseResource( sal_uInt16 nRegisterId );
 
-    USHORT                      RegisterBitmap(const char *pMono, const char *pColor);
+    sal_uInt16                      RegisterBitmap(const char *pMono, const char *pColor);
 
-    USHORT                      RegisterBitmap( const char *pSingleFile );
-    void                        ReleaseBitmap( USHORT nRegisterId );
+    sal_uInt16                      RegisterBitmap( const char *pSingleFile );
+    void                        ReleaseBitmap( sal_uInt16 nRegisterId );
 
-    Bitmap                      GetAllBitmap( USHORT nBmpsPerRow );
+    Bitmap                      GetAllBitmap( sal_uInt16 nBmpsPerRow );
 
     void                        Enter();
     void                        Leave();
-    SfxMessageDescription*      CreateDescription( USHORT nId );
+    SfxMessageDescription*      CreateDescription( sal_uInt16 nId );
 };
 
 

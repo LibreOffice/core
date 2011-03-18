@@ -53,7 +53,7 @@ public:
     TYPEINFO();
 
     SvxWeightItem(  const FontWeight eWght /*= WEIGHT_NORMAL*/,
-                    const USHORT nId  );
+                    const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem + SfxEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -62,17 +62,17 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
-    virtual String          GetValueTextByPos( USHORT nPos ) const;
-    virtual USHORT          GetValueCount() const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual sal_uInt16          GetValueCount() const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual int             HasBoolValue() const;
-    virtual BOOL            GetBoolValue() const;
-    virtual void            SetBoolValue( BOOL bVal );
+    virtual sal_Bool            GetBoolValue() const;
+    virtual void            SetBoolValue( sal_Bool bVal );
 
     inline SvxWeightItem& operator=(const SvxWeightItem& rWeight) {
             SetValue( rWeight.GetValue() );
@@ -83,7 +83,7 @@ public:
     FontWeight              GetWeight() const
                                 { return (FontWeight)GetValue(); }
     void                    SetWeight( FontWeight eNew )
-                                { SetValue( (USHORT)eNew ); }
+                                { SetValue( (sal_uInt16)eNew ); }
 };
 
 #endif // #ifndef _SVX_WGHTITEM_HXX

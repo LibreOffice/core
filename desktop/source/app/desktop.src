@@ -159,6 +159,7 @@ InfoBox INFOBOX_CMDLINEHELP
 
 ModalDialog DLG_CMDLINEHELP
 {
+    HelpID = "desktop:ModalDialog:DLG_CMDLINEHELP";
     Text = "Help Message...";
     Size = MAP_APPFONT(250, 365);
     Border = True;

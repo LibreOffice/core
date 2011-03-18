@@ -27,52 +27,31 @@
 #ifndef _EDITENG_HELPID_HRC
 #define _EDITENG_HELPID_HRC
 
-// include ---------------------------------------------------------------
+#define HID_EDITENG_SPELLER_WORDLANGUAGE                   "EDITENG_HID_EDITENG_SPELLER_WORDLANGUAGE"
+#define HID_EDITENG_SPELLER_PARALANGUAGE                   "EDITENG_HID_EDITENG_SPELLER_PARALANGUAGE"
+#define HID_EDITENG_SPELLER_ADDWORD                        "EDITENG_HID_EDITENG_SPELLER_ADDWORD"
+#define HID_EDITENG_SPELLER_AUTOCORRECT                    "EDITENG_HID_EDITENG_SPELLER_AUTOCORRECT"
+#define HID_EDITENG_SPELLER_IGNORE                         "EDITENG_HID_EDITENG_SPELLER_IGNORE"
+#define HID_EDITENG_SPELLER_START                          "EDITENG_HID_EDITENG_SPELLER_START"
 
-#include <svl/solar.hrc>
-
-// Help-Ids --------------------------------------------------------------
-#define HID_EDITENG_SPELLER_WORDLANGUAGE                            (HID_EDIT_START)
-#define HID_EDITENG_SPELLER_PARALANGUAGE                            (HID_EDIT_START +  1)
-#define HID_EDITENG_SPELLER_ADDWORD                                 (HID_EDIT_START +  2)
-#define HID_EDITENG_SPELLER_AUTOCORRECT                             (HID_EDIT_START +  3)
-#define HID_EDITENG_SPELLER_IGNORE                                  (HID_EDIT_START +  4)
-#define HID_EDITENG_SPELLER_START                                   (HID_EDIT_START +  5)
-#define HID_AUTOCORR_HELP_END                                       (HID_EDIT_START +  6)
-#define HID_AUTOCORR_HELP_START                                     (HID_EDIT_START +  7)
-#define HID_AUTOCORR_HELP_WORD                                               HID_AUTOCORR_HELP_START
-
-#define HID_AUTOCORR_HELP_SENT                                               (HID_AUTOCORR_HELP_START+1)
-#define HID_AUTOCORR_HELP_SENTWORD                                           (HID_AUTOCORR_HELP_START+2)
-#define HID_AUTOCORR_HELP_ACORWORD                                           (HID_AUTOCORR_HELP_START+3)
-
-#define HID_AUTOCORR_HELP_ACORSENTWORD                                       (HID_AUTOCORR_HELP_START+5)
-
-#define HID_AUTOCORR_HELP_CHGTOENEMDASH                                      (HID_AUTOCORR_HELP_START+7)
-#define HID_AUTOCORR_HELP_WORDENEMDASH                                       (HID_AUTOCORR_HELP_START+8)
-#define HID_AUTOCORR_HELP_SENTENEMDASH                                       (HID_AUTOCORR_HELP_START+9)
-#define HID_AUTOCORR_HELP_SENTWORDENEMDASH                                   (HID_AUTOCORR_HELP_START+10)
-#define HID_AUTOCORR_HELP_ACORWORDENEMDASH                                   (HID_AUTOCORR_HELP_START+11)
-
-#define HID_AUTOCORR_HELP_ACORSENTWORDENEMDASH                               (HID_AUTOCORR_HELP_START+13)
-#define HID_AUTOCORR_HELP_CHGQUOTES                                          (HID_AUTOCORR_HELP_START+15)
-#define HID_AUTOCORR_HELP_CHGSGLQUOTES                                       (HID_AUTOCORR_HELP_START+16)
-#define HID_AUTOCORR_HELP_SETINETATTR                                        (HID_AUTOCORR_HELP_START+17)
-#define HID_AUTOCORR_HELP_INGNOREDOUBLESPACE                                 (HID_AUTOCORR_HELP_START+18)
-#define HID_AUTOCORR_HELP_CHGWEIGHTUNDERL                                    (HID_AUTOCORR_HELP_START+19)
-#define HID_AUTOCORR_HELP_CHGFRACTIONSYMBOL                                  (HID_AUTOCORR_HELP_START+20)
-#define HID_AUTOCORR_HELP_CHGORDINALNUMBER                                   (HID_AUTOCORR_HELP_START+21) // HID_EDIT_START +  28
-
-// please adjust ACT_SVX_HID_END2 below if you add entries here!
-
-// -----------------------------------------------------------------------
-// Overrun check ---------------------------------------------------------
-// -----------------------------------------------------------------------
-
-#define ACT_SVX_HID_END     (HID_EDIT_START+28)
-#if ACT_SVX_HID_END > HID_EDIT_END
-#error Resource overflow on #line, #file
-#endif
+#define HID_AUTOCORR_HELP_WORD                             "EDITENG_HID_AUTOCORR_HELP_START"
+#define HID_AUTOCORR_HELP_SENT                             "EDITENG_HID_AUTOCORR_HELP_SENT"
+#define HID_AUTOCORR_HELP_SENTWORD                         "EDITENG_HID_AUTOCORR_HELP_SENTWORD"
+#define HID_AUTOCORR_HELP_ACORWORD                         "EDITENG_HID_AUTOCORR_HELP_ACORWORD"
+#define HID_AUTOCORR_HELP_ACORSENTWORD                     "EDITENG_HID_AUTOCORR_HELP_ACORSENTWORD"
+#define HID_AUTOCORR_HELP_CHGTOENEMDASH                    "EDITENG_HID_AUTOCORR_HELP_CHGTOENEMDASH"
+#define HID_AUTOCORR_HELP_WORDENEMDASH                     "EDITENG_HID_AUTOCORR_HELP_WORDENEMDASH"
+#define HID_AUTOCORR_HELP_SENTENEMDASH                     "EDITENG_HID_AUTOCORR_HELP_SENTENEMDASH"
+#define HID_AUTOCORR_HELP_SENTWORDENEMDASH                 "EDITENG_HID_AUTOCORR_HELP_SENTWORDENEMDASH"
+#define HID_AUTOCORR_HELP_ACORWORDENEMDASH                 "EDITENG_HID_AUTOCORR_HELP_ACORWORDENEMDASH"
+#define HID_AUTOCORR_HELP_ACORSENTWORDENEMDASH             "EDITENG_HID_AUTOCORR_HELP_ACORSENTWORDENEMDASH"
+#define HID_AUTOCORR_HELP_CHGQUOTES                        "EDITENG_HID_AUTOCORR_HELP_CHGQUOTES"
+#define HID_AUTOCORR_HELP_CHGSGLQUOTES                     "EDITENG_HID_AUTOCORR_HELP_CHGSGLQUOTES"
+#define HID_AUTOCORR_HELP_SETINETATTR                      "EDITENG_HID_AUTOCORR_HELP_SETINETATTR"
+#define HID_AUTOCORR_HELP_INGNOREDOUBLESPACE               "EDITENG_HID_AUTOCORR_HELP_INGNOREDOUBLESPACE"
+#define HID_AUTOCORR_HELP_CHGWEIGHTUNDERL                  "EDITENG_HID_AUTOCORR_HELP_CHGWEIGHTUNDERL"
+#define HID_AUTOCORR_HELP_CHGFRACTIONSYMBOL                "EDITENG_HID_AUTOCORR_HELP_CHGFRACTIONSYMBOL"
+#define HID_AUTOCORR_HELP_CHGORDINALNUMBER                 "EDITENG_HID_AUTOCORR_HELP_CHGORDINALNUMBER"
 
 #endif
 

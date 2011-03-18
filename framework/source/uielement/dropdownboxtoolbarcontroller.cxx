@@ -147,7 +147,7 @@ DropdownToolbarController::DropdownToolbarController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
-    USHORT                                   nID,
+    sal_uInt16                                   nID,
     sal_Int32                                nWidth,
     const ::rtl::OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )

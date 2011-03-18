@@ -57,12 +57,12 @@ SvxEditEngineForwarder::~SvxEditEngineForwarder()
     // the EditEngine may need to be deleted from the outside
 }
 
-USHORT SvxEditEngineForwarder::GetParagraphCount() const
+sal_uInt16 SvxEditEngineForwarder::GetParagraphCount() const
 {
     return rEditEngine.GetParagraphCount();
 }
 
-USHORT SvxEditEngineForwarder::GetTextLen( USHORT nParagraph ) const
+sal_uInt16 SvxEditEngineForwarder::GetTextLen( sal_uInt16 nParagraph ) const
 {
     return rEditEngine.GetTextLen( nParagraph );
 }
@@ -74,7 +74,7 @@ String SvxEditEngineForwarder::GetText( const ESelection& rSel ) const
     return aRet;
 }
 
-SfxItemSet SvxEditEngineForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib ) const
+SfxItemSet SvxEditEngineForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib ) const
 {
     if( rSel.nStartPara == rSel.nEndPara )
     {
@@ -102,14 +102,14 @@ SfxItemSet SvxEditEngineForwarder::GetAttribs( const ESelection& rSel, BOOL bOnl
     }
 }
 
-SfxItemSet SvxEditEngineForwarder::GetParaAttribs( USHORT nPara ) const
+SfxItemSet SvxEditEngineForwarder::GetParaAttribs( sal_uInt16 nPara ) const
 {
     SfxItemSet aSet( rEditEngine.GetParaAttribs( nPara ) );
 
-    USHORT nWhich = EE_PARA_START;
+    sal_uInt16 nWhich = EE_PARA_START;
     while( nWhich <= EE_PARA_END )
     {
-        if( aSet.GetItemState( nWhich, TRUE ) != SFX_ITEM_ON )
+        if( aSet.GetItemState( nWhich, sal_True ) != SFX_ITEM_ON )
         {
             if( rEditEngine.HasParaAttrib( nPara, nWhich ) )
                 aSet.Put( rEditEngine.GetParaAttrib( nPara, nWhich ) );
@@ -120,7 +120,7 @@ SfxItemSet SvxEditEngineForwarder::GetParaAttribs( USHORT nPara ) const
     return aSet;
 }
 
-void SvxEditEngineForwarder::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet )
+void SvxEditEngineForwarder::SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet )
 {
     rEditEngine.SetParaAttribs( nPara, rSet );
 }
@@ -135,7 +135,7 @@ SfxItemPool* SvxEditEngineForwarder::GetPool() const
     return rEditEngine.GetEmptyItemSet().GetPool();
 }
 
-void SvxEditEngineForwarder::GetPortions( USHORT nPara, SvUShorts& rList ) const
+void SvxEditEngineForwarder::GetPortions( sal_uInt16 nPara, SvUShorts& rList ) const
 {
     rEditEngine.GetPortions( nPara, rList );
 }
@@ -160,24 +160,24 @@ void SvxEditEngineForwarder::QuickSetAttribs( const SfxItemSet& rSet, const ESel
     rEditEngine.QuickSetAttribs( rSet, rSel );
 }
 
-BOOL SvxEditEngineForwarder::IsValid() const
+sal_Bool SvxEditEngineForwarder::IsValid() const
 {
     // cannot reliably query EditEngine state
     // while in the middle of an update
     return rEditEngine.GetUpdateMode();
 }
 
-XubString SvxEditEngineForwarder::CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor )
+XubString SvxEditEngineForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     return rEditEngine.CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }
 
-void SvxEditEngineForwarder::FieldClicked( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos )
+void SvxEditEngineForwarder::FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos )
 {
     rEditEngine.FieldClicked( rField, nPara, nPos );
 }
 
-USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, USHORT nWhich )
+sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, sal_uInt16 nWhich )
 {
     EECharAttribArray aAttribs;
 
@@ -186,16 +186,16 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
     SfxItemState eState = SFX_ITEM_DEFAULT;
 
     // check all paragraphs inside the selection
-    for( USHORT nPara = rSel.nStartPara; nPara <= rSel.nEndPara; nPara++ )
+    for( sal_uInt16 nPara = rSel.nStartPara; nPara <= rSel.nEndPara; nPara++ )
     {
         SfxItemState eParaState = SFX_ITEM_DEFAULT;
 
         // calculate start and endpos for this paragraph
-        USHORT nPos = 0;
+        sal_uInt16 nPos = 0;
         if( rSel.nStartPara == nPara )
             nPos = rSel.nStartPos;
 
-        USHORT nEndPos = rSel.nEndPos;
+        sal_uInt16 nEndPos = rSel.nEndPos;
         if( rSel.nEndPara != nPara )
             nEndPos = rEditEngine.GetTextLen( nPara );
 
@@ -203,13 +203,13 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
         // get list of char attribs
         rEditEngine.GetCharAttribs( nPara, aAttribs );
 
-        BOOL bEmpty = TRUE;     // we found no item inside the selektion of this paragraph
-        BOOL bGaps  = FALSE;    // we found items but theire gaps between them
-        USHORT nLastEnd = nPos;
+        sal_Bool bEmpty = sal_True;     // we found no item inside the selektion of this paragraph
+        sal_Bool bGaps  = sal_False;    // we found items but theire gaps between them
+        sal_uInt16 nLastEnd = nPos;
 
         const SfxPoolItem* pParaItem = NULL;
 
-        for( USHORT nAttrib = 0; nAttrib < aAttribs.Count(); nAttrib++ )
+        for( sal_uInt16 nAttrib = 0; nAttrib < aAttribs.Count(); nAttrib++ )
         {
             struct EECharAttrib aAttrib = aAttribs.GetObject( nAttrib );
             DBG_ASSERT( aAttrib.pAttr, "GetCharAttribs gives corrupt data" );
@@ -237,16 +237,16 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
             }
 
             if( bEmpty )
-                bEmpty = FALSE;
+                bEmpty = sal_False;
 
             if( !bGaps && aAttrib.nStart > nLastEnd )
-                bGaps = TRUE;
+                bGaps = sal_True;
 
             nLastEnd = aAttrib.nEnd;
         }
 
         if( !bEmpty && !bGaps && nLastEnd < ( nEndPos - 1 ) )
-            bGaps = TRUE;
+            bGaps = sal_True;
 /*
         // since we have no portion with our item or if there were gaps
         if( bEmpty || bGaps )
@@ -309,45 +309,45 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
     return eState;
 }
 
-USHORT SvxEditEngineForwarder::GetItemState( const ESelection& rSel, USHORT nWhich ) const
+sal_uInt16 SvxEditEngineForwarder::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
 {
     return GetSvxEditEngineItemState( rEditEngine, rSel, nWhich );
 }
 
-USHORT SvxEditEngineForwarder::GetItemState( USHORT nPara, USHORT nWhich ) const
+sal_uInt16 SvxEditEngineForwarder::GetItemState( sal_uInt16 nPara, sal_uInt16 nWhich ) const
 {
     const SfxItemSet& rSet = rEditEngine.GetParaAttribs( nPara );
     return rSet.GetItemState( nWhich );
 }
 
-LanguageType SvxEditEngineForwarder::GetLanguage( USHORT nPara, USHORT nIndex ) const
+LanguageType SvxEditEngineForwarder::GetLanguage( sal_uInt16 nPara, sal_uInt16 nIndex ) const
 {
     return rEditEngine.GetLanguage(nPara, nIndex);
 }
 
-USHORT SvxEditEngineForwarder::GetFieldCount( USHORT nPara ) const
+sal_uInt16 SvxEditEngineForwarder::GetFieldCount( sal_uInt16 nPara ) const
 {
     return rEditEngine.GetFieldCount(nPara);
 }
 
-EFieldInfo SvxEditEngineForwarder::GetFieldInfo( USHORT nPara, USHORT nField ) const
+EFieldInfo SvxEditEngineForwarder::GetFieldInfo( sal_uInt16 nPara, sal_uInt16 nField ) const
 {
     return rEditEngine.GetFieldInfo( nPara, nField );
 }
 
-EBulletInfo SvxEditEngineForwarder::GetBulletInfo( USHORT ) const
+EBulletInfo SvxEditEngineForwarder::GetBulletInfo( sal_uInt16 ) const
 {
     return EBulletInfo();
 }
 
-Rectangle SvxEditEngineForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
+Rectangle SvxEditEngineForwarder::GetCharBounds( sal_uInt16 nPara, sal_uInt16 nIndex ) const
 {
     // #101701#
     // EditEngine's 'internal' methods like GetCharacterBounds()
     // don't rotate for vertical text.
     Size aSize( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() );
     ::std::swap( aSize.Width(), aSize.Height() );
-    bool bIsVertical( rEditEngine.IsVertical() == TRUE );
+    bool bIsVertical( rEditEngine.IsVertical() == sal_True );
 
     // #108900# Handle virtual position one-past-the end of the string
     if( nIndex >= rEditEngine.GetTextLen(nPara) )
@@ -388,12 +388,12 @@ Rectangle SvxEditEngineForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) c
     }
 }
 
-Rectangle SvxEditEngineForwarder::GetParaBounds( USHORT nPara ) const
+Rectangle SvxEditEngineForwarder::GetParaBounds( sal_uInt16 nPara ) const
 {
     const Point aPnt = rEditEngine.GetDocPosTopLeft( nPara );
-    ULONG nWidth;
-    ULONG nHeight;
-    ULONG nTextWidth;
+    sal_uLong nWidth;
+    sal_uLong nHeight;
+    sal_uLong nTextWidth;
 
     if( rEditEngine.IsVertical() )
     {
@@ -426,13 +426,13 @@ OutputDevice* SvxEditEngineForwarder::GetRefDevice() const
     return rEditEngine.GetRefDevice();
 }
 
-sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara, USHORT& nIndex ) const
+sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, sal_uInt16& nPara, sal_uInt16& nIndex ) const
 {
     Size aSize( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() );
     ::std::swap( aSize.Width(), aSize.Height() );
     Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,
                                                       aSize,
-                                                      rEditEngine.IsVertical() == TRUE ));
+                                                      rEditEngine.IsVertical() == sal_True ));
 
     EPosition aDocPos = rEditEngine.FindDocPosition( aEEPos );
 
@@ -442,7 +442,7 @@ sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPa
     return sal_True;
 }
 
-sal_Bool SvxEditEngineForwarder::GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const
+sal_Bool SvxEditEngineForwarder::GetWordIndices( sal_uInt16 nPara, sal_uInt16 nIndex, sal_uInt16& nStart, sal_uInt16& nEnd ) const
 {
     ESelection aRes = rEditEngine.GetWord( ESelection(nPara, nIndex, nPara, nIndex), com::sun::star::i18n::WordType::DICTIONARY_WORD );
 
@@ -458,33 +458,33 @@ sal_Bool SvxEditEngineForwarder::GetWordIndices( USHORT nPara, USHORT nIndex, US
     return sal_False;
 }
 
-sal_Bool SvxEditEngineForwarder::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const
+sal_Bool SvxEditEngineForwarder::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex ) const
 {
     return SvxEditSourceHelper::GetAttributeRun( nStartIndex, nEndIndex, rEditEngine, nPara, nIndex );
 }
 
-USHORT SvxEditEngineForwarder::GetLineCount( USHORT nPara ) const
+sal_uInt16 SvxEditEngineForwarder::GetLineCount( sal_uInt16 nPara ) const
 {
     return rEditEngine.GetLineCount(nPara);
 }
 
-USHORT SvxEditEngineForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
+sal_uInt16 SvxEditEngineForwarder::GetLineLen( sal_uInt16 nPara, sal_uInt16 nLine ) const
 {
     return rEditEngine.GetLineLen(nPara, nLine);
 }
 
-void SvxEditEngineForwarder::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nPara, USHORT nLine ) const
+void SvxEditEngineForwarder::GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_uInt16 nPara, sal_uInt16 nLine ) const
 {
     rEditEngine.GetLineBoundaries(rStart, rEnd, nPara, nLine);
 }
 
-USHORT SvxEditEngineForwarder::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
+sal_uInt16 SvxEditEngineForwarder::GetLineNumberAtIndex( sal_uInt16 nPara, sal_uInt16 nIndex ) const
 {
     return rEditEngine.GetLineNumberAtIndex(nPara, nIndex);
 }
 
 
-sal_Bool SvxEditEngineForwarder::QuickFormatDoc( BOOL )
+sal_Bool SvxEditEngineForwarder::QuickFormatDoc( sal_Bool )
 {
     rEditEngine.QuickFormatDoc();
 
@@ -507,13 +507,13 @@ sal_Bool SvxEditEngineForwarder::InsertText( const String& rStr, const ESelectio
     return sal_True;
 }
 
-sal_Int16 SvxEditEngineForwarder::GetDepth( USHORT ) const
+sal_Int16 SvxEditEngineForwarder::GetDepth( sal_uInt16 ) const
 {
     // EditEngine does not support outline depth
     return -1;
 }
 
-sal_Bool SvxEditEngineForwarder::SetDepth( USHORT, sal_Int16 nNewDepth )
+sal_Bool SvxEditEngineForwarder::SetDepth( sal_uInt16, sal_Int16 nNewDepth )
 {
     // EditEngine does not support outline depth
     return nNewDepth == -1 ? sal_True : sal_False;
@@ -529,11 +529,11 @@ void SvxEditEngineForwarder::AppendParagraph()
     rEditEngine.InsertParagraph( rEditEngine.GetParagraphCount(), String::EmptyString() );
 }
 
-xub_StrLen SvxEditEngineForwarder::AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet & /*rSet*/ )
+xub_StrLen SvxEditEngineForwarder::AppendTextPortion( sal_uInt16 nPara, const String &rText, const SfxItemSet & /*rSet*/ )
 {
     xub_StrLen nLen = 0;
 
-    USHORT nParaCount = rEditEngine.GetParagraphCount();
+    sal_uInt16 nParaCount = rEditEngine.GetParagraphCount();
     DBG_ASSERT( nPara < nParaCount, "paragraph index out of bounds" );
     if (/*0 <= nPara && */nPara < nParaCount)
     {

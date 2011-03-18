@@ -33,7 +33,7 @@
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLTextMasterPageContext.hxx>
 #include "XMLTextHeaderFooterContext.hxx"

@@ -31,7 +31,7 @@
 
 #include <classes/fwktabwindow.hxx>
 #include "framework.hrc"
-#include <classes/fwlresid.hxx>
+#include <classes/fwkresid.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
@@ -46,6 +46,7 @@
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/stream.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/image.hxx>
 #include <vcl/msgbox.hxx>
@@ -70,10 +71,10 @@ FwkTabControl::FwkTabControl( Window* pParent, const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
-void FwkTabControl::BroadcastEvent( ULONG nEvent )
+void FwkTabControl::BroadcastEvent( sal_uLong nEvent )
 {
     if ( VCLEVENT_TABPAGE_ACTIVATE == nEvent || VCLEVENT_TABPAGE_DEACTIVATE == nEvent )
-        ImplCallEventListeners( nEvent, (void*)(ULONG)GetCurPageId() );
+        ImplCallEventListeners( nEvent, (void*)(sal_uIntPtr)GetCurPageId() );
     else
     {
         DBG_ERRORFILE( "FwkTabControl::BroadcastEvent(): illegal event" );
@@ -156,7 +157,7 @@ sal_Bool FwkTabPage::CallMethod( const rtl::OUString& rMethod )
         }
         catch ( uno::Exception& )
         {
-            DBG_ERRORFILE( "FwkTabPage::CallMethod(): exception of XDialogEventHandler::callHandlerMethod()" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     return bRet;
@@ -204,9 +205,9 @@ void FwkTabPage::Resize()
 
 FwkTabWindow::FwkTabWindow( Window* pParent ) :
 
-    Window( pParent, FwlResId( WIN_TABWINDOW ) ),
+    Window( pParent, FwkResId( WIN_TABWINDOW ) ),
 
-    m_aTabCtrl  ( this, FwlResId( TC_TABCONTROL ) )
+    m_aTabCtrl  ( this, FwkResId( TC_TABCONTROL ) )
 {
     uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     m_xWinProvider = uno::Reference < awt::XContainerWindowProvider >(
@@ -288,7 +289,7 @@ TabEntry* FwkTabWindow::FindEntry( sal_Int32 nIndex ) const
 
 IMPL_LINK( FwkTabWindow, ActivatePageHdl, TabControl *, EMPTYARG )
 {
-    const USHORT nId = m_aTabCtrl.GetCurPageId();
+    const sal_uInt16 nId = m_aTabCtrl.GetCurPageId();
     FwkTabPage* pTabPage = static_cast< FwkTabPage* >( m_aTabCtrl.GetTabPage( nId ) );
     if ( !pTabPage )
     {
@@ -367,7 +368,7 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
 
     TabEntry* pEntry = new TabEntry( nIndex, sPageURL, xEventHdl );
     m_TabList.push_back( pEntry );
-    USHORT nIdx = static_cast< USHORT >( nIndex );
+    sal_uInt16 nIdx = static_cast< sal_uInt16 >( nIndex );
     m_aTabCtrl.InsertPage( nIdx, sTitle );
     if ( sToolTip.getLength() > 0 )
         m_aTabCtrl.SetHelpText( nIdx, sToolTip );
@@ -383,7 +384,7 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
 
 void FwkTabWindow::ActivatePage( sal_Int32 nIndex )
 {
-    m_aTabCtrl.SetCurPageId( static_cast< USHORT >( nIndex ) );
+    m_aTabCtrl.SetCurPageId( static_cast< sal_uInt16 >( nIndex ) );
     ActivatePageHdl( &m_aTabCtrl );
 }
 
@@ -394,7 +395,7 @@ void FwkTabWindow::RemovePage( sal_Int32 nIndex )
     TabEntry* pEntry = FindEntry(nIndex);
     if ( pEntry )
     {
-        m_aTabCtrl.RemovePage( static_cast< USHORT >( nIndex ) );
+        m_aTabCtrl.RemovePage( static_cast< sal_uInt16 >( nIndex ) );
         if (RemoveEntry(nIndex))
             delete pEntry;
     }

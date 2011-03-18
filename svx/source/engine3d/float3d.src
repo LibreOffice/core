@@ -27,6 +27,8 @@
 
 #include <svx/dialogs.hrc>
 #include "float3d.hrc"
+#include <svx/svxcommands.h>
+
 #define WIDTH               158
 #define HEIGHT              209
 #define BORDER              3
@@ -64,7 +66,7 @@
 
 DockingWindow RID_SVXFLOAT_3D
 {
-    HelpID = SID_3D_WIN ;
+    HelpID = CMD_SID_3D_WIN ;
     Border = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -81,6 +83,7 @@ DockingWindow RID_SVXFLOAT_3D
 
     ImageButton BTN_GEO
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_GEO";
         Pos = MAP_APPFONT ( 4 , BORDER ) ;
         Size = MAP_APPFONT ( VT_BUTTON_WIDTH , IMG_BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
@@ -93,6 +96,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_REPRESENTATION
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_REPRESENTATION";
         Pos = MAP_APPFONT ( 22 , BORDER ) ;
         Size = MAP_APPFONT ( VT_BUTTON_WIDTH , IMG_BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
@@ -105,6 +109,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT";
         Pos = MAP_APPFONT ( 40 , BORDER ) ;
         Size = MAP_APPFONT ( VT_BUTTON_WIDTH , IMG_BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
@@ -117,6 +122,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEXTURE
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEXTURE";
         Pos = MAP_APPFONT ( 58 , BORDER ) ;
         Size = MAP_APPFONT ( VT_BUTTON_WIDTH , IMG_BUTTON_HEIGHT ) ;
         ButtonImage = Image
@@ -129,6 +135,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_MATERIAL
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_MATERIAL";
         Pos = MAP_APPFONT ( 76 , BORDER ) ;
         Size = MAP_APPFONT ( VT_BUTTON_WIDTH , IMG_BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
@@ -142,6 +149,7 @@ DockingWindow RID_SVXFLOAT_3D
 
     ImageButton BTN_UPDATE
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_UPDATE";
         Pos = MAP_APPFONT ( WIDTH - BORDER - BUTTON_WIDTH * 2 , BORDER ) ;
         Size = IMG_BUTTON_SIZE;
         TabStop = TRUE ;
@@ -154,6 +162,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_ASSIGN
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_ASSIGN";
         Pos = MAP_APPFONT ( WIDTH - BORDER - BUTTON_WIDTH , BORDER ) ;
         Size = IMG_BUTTON_SIZE;
         TabStop = TRUE ;
@@ -167,6 +176,7 @@ DockingWindow RID_SVXFLOAT_3D
      // Unterer Teil
     ImageButton BTN_CHANGE_TO_3D
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_CHANGE_TO_3D";
         Pos = MAP_APPFONT ( 9 , 200 - BUTTON_HEIGHT ) ;
         Size = IMG_BUTTON_SIZE;
         TabStop = TRUE ;
@@ -180,6 +190,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LATHE_OBJ
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LATHE_OBJ";
         Pos = MAP_APPFONT ( 9 + BUTTON_WIDTH + 1 , 200 - BUTTON_HEIGHT ) ;
         Size = IMG_BUTTON_SIZE;
         TabStop = TRUE ;
@@ -193,6 +204,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_PERSPECTIVE
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_PERSPECTIVE";
         Pos = MAP_APPFONT ( 9 + ( BUTTON_WIDTH + 1 ) * 2 , 200 - BUTTON_HEIGHT ) ;
         Size = IMG_BUTTON_SIZE;
         TabStop = TRUE ;
@@ -232,6 +244,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     MetricField MTR_PERCENT_DIAGONAL
     {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_PERCENT_DIAGONAL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1 , FIRST_FT_START_Y - 2 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
@@ -252,6 +265,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     MetricField MTR_BACKSCALE
     {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_BACKSCALE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1,
                             FIRST_FT_START_Y + FT_OFFSET_NEXT - 2 ) ;
@@ -273,6 +287,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     MetricField MTR_END_ANGLE
     {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_END_ANGLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1,
                             FIRST_FT_START_Y + 2*FT_OFFSET_NEXT - 2 ) ;
@@ -295,6 +310,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     MetricField MTR_DEPTH
     {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_DEPTH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1,
                             FIRST_FT_START_Y + 3*FT_OFFSET_NEXT - 2 ) ;
@@ -326,6 +342,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     NumericField NUM_HORIZONTAL
     {
+        HelpID = "svx:NumericField:RID_SVXFLOAT_3D:NUM_HORIZONTAL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( FT_INDENT + 42, SEGMENTS_START_Y+13-2 ) ;
         Size = MAP_APPFONT ( 22 , 12 ) ;
@@ -345,6 +362,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     NumericField NUM_VERTICAL
     {
+        HelpID = "svx:NumericField:RID_SVXFLOAT_3D:NUM_VERTICAL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( FT_INDENT + 114+2 , SEGMENTS_START_Y+13-2 ) ;
         Size = MAP_APPFONT ( 22 , 12 ) ;
@@ -365,6 +383,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_NORMALS_OBJ
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_NORMALS_OBJ";
         Pos = MAP_APPFONT ( FT_INDENT , NORMALS_BT_START_Y ) ;
         Size = IMG_BUTTON_SIZE;
         ButtonImage = Image
@@ -377,6 +396,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_NORMALS_FLAT
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_NORMALS_FLAT";
         Pos = MAP_APPFONT ( FT_INDENT + (1+BUTTON_WIDTH) , NORMALS_BT_START_Y ) ;
         Size = IMG_BUTTON_SIZE;
         ButtonImage = Image
@@ -389,6 +409,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_NORMALS_SPHERE
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_NORMALS_SPHERE";
         Pos = MAP_APPFONT ( FT_INDENT + (1+BUTTON_WIDTH) * 2 , NORMALS_BT_START_Y ) ;
         Size = IMG_BUTTON_SIZE;
         ButtonImage = Image
@@ -401,6 +422,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_NORMALS_INVERT
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_NORMALS_INVERT";
         Pos = MAP_APPFONT ( FT_INDENT , NORMALS_BT_START_Y + IMG_BUTTON_NEXT ) ;
         Size = IMG_BUTTON_SIZE;
         ButtonImage = Image
@@ -413,6 +435,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TWO_SIDED_LIGHTING
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TWO_SIDED_LIGHTING";
         Pos = MAP_APPFONT ( FT_INDENT + (1+BUTTON_WIDTH) * 2 ,
                             NORMALS_BT_START_Y + IMG_BUTTON_NEXT ) ;
         Size = IMG_BUTTON_SIZE;
@@ -426,6 +449,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_DOUBLE_SIDED
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_DOUBLE_SIDED";
         Pos = MAP_APPFONT ( FT_INDENT , NORMALS_BT_START_Y + 2*IMG_BUTTON_NEXT ) ;
         Size = IMG_BUTTON_SIZE;
         ButtonImage = Image
@@ -446,6 +470,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ListBox LB_SHADEMODE
     {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_SHADEMODE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , 30 ) ;
         Size = MAP_APPFONT ( 83 , 100 ) ;
@@ -466,6 +491,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_SHADOW_3D
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_SHADOW_3D";
         Pos = MAP_APPFONT ( FT_INDENT , SHADOW_START_Y + 11 ) ;
         Size = IMG_BUTTON_SIZE;
         TabStop = TRUE ;
@@ -486,6 +512,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     MetricField MTR_SLANT
     {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_SLANT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 99 , SHADOW_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
@@ -513,6 +540,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     MetricField MTR_DISTANCE
     {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_DISTANCE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1 ,
                             CAMERA_START_Y + 11 - 2 ) ;
@@ -537,6 +565,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     MetricField MTR_FOCAL_LENGTH
     {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_FOCAL_LENGTH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1 ,
                             CAMERA_START_Y + 11 + FT_OFFSET_NEXT - 2 ) ;
@@ -568,6 +597,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_1
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_1";
         Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
         ButtonImage = Image
@@ -580,6 +610,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_2
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_2";
         Pos = MAP_APPFONT ( FT_INDENT + 13 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
         ButtonImage = Image
@@ -592,6 +623,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_3
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_3";
         Pos = MAP_APPFONT ( FT_INDENT + 2*13 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
         ButtonImage = Image
@@ -604,6 +636,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_4
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_4";
         Pos = MAP_APPFONT ( FT_INDENT + 3*13 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
         ButtonImage = Image
@@ -616,6 +649,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_5
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_5";
         Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 26 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
         ButtonImage = Image
@@ -628,6 +662,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_6
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_6";
         Pos = MAP_APPFONT ( FT_INDENT + 13, FIRST_FT_START_Y + 26 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
         ButtonImage = Image
@@ -640,6 +675,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_7
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_7";
         Pos = MAP_APPFONT ( FT_INDENT + 2*13, FIRST_FT_START_Y + 26 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
         ButtonImage = Image
@@ -652,6 +688,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_8
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_8";
         Pos = MAP_APPFONT ( FT_INDENT +3*13 , FIRST_FT_START_Y + 26 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
         ButtonImage = Image
@@ -664,6 +701,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ListBox LB_LIGHT_1
     {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
@@ -672,6 +710,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ListBox LB_LIGHT_2
     {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
@@ -680,6 +719,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ListBox LB_LIGHT_3
     {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
@@ -688,6 +728,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ListBox LB_LIGHT_4
     {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_4";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
@@ -696,6 +737,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ListBox LB_LIGHT_5
     {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_5";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
@@ -704,6 +746,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ListBox LB_LIGHT_6
     {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_6";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
@@ -712,6 +755,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ListBox LB_LIGHT_7
     {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_7";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
@@ -720,6 +764,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ListBox LB_LIGHT_8
     {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_8";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
@@ -728,6 +773,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_LIGHT_COLOR
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_COLOR";
         Pos = MAP_APPFONT ( 137 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
         ButtonImage = Image
@@ -746,6 +792,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ListBox LB_AMBIENTLIGHT
     {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_AMBIENTLIGHT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 , FIRST_FT_START_Y + 53 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
@@ -754,6 +801,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_AMBIENT_COLOR
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_AMBIENT_COLOR";
         Pos = MAP_APPFONT ( 137 , FIRST_FT_START_Y + 53 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
         ButtonImage = Image
@@ -780,6 +828,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_LUMINANCE
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_LUMINANCE";
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
                             FIRST_FT_START_Y - 2 ) ;
         Size = IMG_BUTTON_SIZE;
@@ -793,6 +842,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_COLOR
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_COLOR";
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + BUTTON_WIDTH,
                             FIRST_FT_START_Y - 2 ) ;
         Size = IMG_BUTTON_SIZE;
@@ -812,6 +862,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_REPLACE
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_REPLACE";
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
                             FIRST_FT_START_Y + IMG_BUTTON_NEXT - 2 ) ;
         Size = IMG_BUTTON_SIZE;
@@ -825,6 +876,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_MODULATE
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_MODULATE";
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + BUTTON_WIDTH,
                             FIRST_FT_START_Y + IMG_BUTTON_NEXT - 2 ) ;
         Size = IMG_BUTTON_SIZE;
@@ -838,6 +890,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_BLEND
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_BLEND";
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + 2*BUTTON_WIDTH,
                             FIRST_FT_START_Y + IMG_BUTTON_NEXT - 2 ) ;
         Size = IMG_BUTTON_SIZE;
@@ -857,6 +910,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_OBJECT_X
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_OBJECT_X";
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
                             FIRST_FT_START_Y + 2*IMG_BUTTON_NEXT - 2 ) ;
         Size = IMG_BUTTON_SIZE;
@@ -870,6 +924,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_PARALLEL_X
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_PARALLEL_X";
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + BUTTON_WIDTH,
                             FIRST_FT_START_Y + 2*IMG_BUTTON_NEXT - 2 ) ;
         Size = IMG_BUTTON_SIZE;
@@ -883,6 +938,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_CIRCLE_X
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_CIRCLE_X";
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + 2*BUTTON_WIDTH,
                             FIRST_FT_START_Y + 2*IMG_BUTTON_NEXT - 2 ) ;
         Size = IMG_BUTTON_SIZE;
@@ -902,6 +958,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_OBJECT_Y
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_OBJECT_Y";
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
                             FIRST_FT_START_Y + 3*IMG_BUTTON_NEXT - 2 ) ;
         Size = IMG_BUTTON_SIZE;
@@ -915,6 +972,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_PARALLEL_Y
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_PARALLEL_Y";
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + BUTTON_WIDTH,
                             FIRST_FT_START_Y + 3*IMG_BUTTON_NEXT - 2 ) ;
         Size = IMG_BUTTON_SIZE;
@@ -928,6 +986,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_CIRCLE_Y
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_CIRCLE_Y";
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + 2*BUTTON_WIDTH,
                             FIRST_FT_START_Y + 3*IMG_BUTTON_NEXT - 2 ) ;
         Size = IMG_BUTTON_SIZE;
@@ -947,6 +1006,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_TEX_FILTER
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_FILTER";
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
                             FIRST_FT_START_Y + 4*IMG_BUTTON_NEXT - 2 ) ;
         Size = IMG_BUTTON_SIZE;
@@ -974,6 +1034,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ListBox LB_MAT_FAVORITES
     {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_MAT_FAVORITES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
                             FIRST_FT_START_Y - 2 ) ;
@@ -998,6 +1059,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ListBox LB_MAT_COLOR
     {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_MAT_COLOR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 ,
                             FIRST_FT_START_Y + FT_OFFSET_NEXT - 2 ) ;
@@ -1007,6 +1069,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_MAT_COLOR
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_MAT_COLOR";
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 72 ,
                             FIRST_FT_START_Y + FT_OFFSET_NEXT - 2 ) ;
         Size = MAP_APPFONT ( 12, 14 ) ;
@@ -1026,6 +1089,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ListBox LB_MAT_EMISSION
     {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_MAT_EMISSION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 ,
                             FIRST_FT_START_Y + 2*FT_OFFSET_NEXT - 2 ) ;
@@ -1035,6 +1099,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_EMISSION_COLOR
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_EMISSION_COLOR";
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 72 ,
                             FIRST_FT_START_Y + 2*FT_OFFSET_NEXT - 2 ) ;
         Size = MAP_APPFONT ( 12, 14 ) ;
@@ -1061,6 +1126,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ListBox LB_MAT_SPECULAR
     {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_MAT_SPECULAR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1, SPECULAR_START_Y + 13 - 2 ) ;
         Size = MAP_APPFONT ( 68 , 100 ) ;
@@ -1069,6 +1135,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     ImageButton BTN_SPECULAR_COLOR
     {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_SPECULAR_COLOR";
         Pos = MAP_APPFONT ( 137 , SPECULAR_START_Y + 13 - 2 ) ;
         Size = MAP_APPFONT ( 12, 14 ) ;
         ButtonImage = Image
@@ -1087,6 +1154,7 @@ DockingWindow RID_SVXFLOAT_3D
     };
     MetricField MTR_MAT_SPECULAR_INTENSITY
     {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_MAT_SPECULAR_INTENSITY";
         Border = TRUE ;
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 ,
                             SPECULAR_START_Y + 13 + FT_OFFSET_NEXT ) ;
@@ -1102,6 +1170,8 @@ DockingWindow RID_SVXFLOAT_3D
         Last = 100 ;
         SpinSize = 1 ;
     };
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_MAT_FAVORITES";
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_MAT_EDITOR";
     FixedLine FL_MATERIAL
     {
         Pos = TOP_FIXED_LINE_POS;
@@ -1163,3 +1233,8 @@ String RID_SVXFLOAT3D_FIX_B
 {
     Text [ en-US ] = "B:";
 };
+String STR_COLOR_LIGHT_PRE
+{
+    Text [ en-US ] = "Color Light Preview";
+};
+

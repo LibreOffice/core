@@ -36,7 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 
 #include <xmloff/families.hxx>
@@ -302,7 +302,7 @@ void XMLFootnoteConfigurationImportContext::StartElement(
 }
 
 SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {

@@ -156,13 +156,26 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
             NULL,
             0)))
     {
-        DragQueryFileA(
-            reinterpret_cast<HDROP>(medium.hGlobal),
-            0,
-            m_szFileName,
-            sizeof(m_szFileName));
-
-        hr = S_OK;
+        UINT size = DragQueryFile( reinterpret_cast<HDROP>(medium.hGlobal), 0, 0, 0 );
+        if ( size != 0 )
+        {
+            TCHAR * buffer = new TCHAR[ size + 1 ];
+            UINT result_size = DragQueryFile( reinterpret_cast<HDROP>(medium.hGlobal),
+                                              0, buffer, size + 1 );
+            if ( result_size != 0 )
+            {
+                std::wstring fname = getShortPathName( buffer );
+                std::string fnameA = WStringToString( fname );
+                ZeroMemory( m_szFileName, sizeof( m_szFileName ) );
+                strncpy( m_szFileName, fnameA.c_str(), ( sizeof( m_szFileName ) - 1 ) );
+                hr = S_OK;
+            }
+            else
+                hr = E_INVALIDARG;
+            delete [] buffer;
+        }
+        else
+            hr = E_INVALIDARG;
     }
     else
         hr = E_INVALIDARG;
@@ -319,24 +332,29 @@ BOOL CALLBACK CPropertySheet::PropPageStatisticsProc(HWND hwnd, UINT uiMsg, WPAR
 //##################################
 void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
 {
-    CMetaInfoReader metaInfo(m_szFileName);
-
-    SetWindowText(GetDlgItem(hwnd,IDC_TITLE),    metaInfo.getTagData( META_INFO_TITLE ).c_str() );
-    SetWindowText(GetDlgItem(hwnd,IDC_AUTHOR),   metaInfo.getTagData( META_INFO_AUTHOR ).c_str() );
-    SetWindowText(GetDlgItem(hwnd,IDC_SUBJECT),  metaInfo.getTagData( META_INFO_SUBJECT ).c_str() );
-    SetWindowText(GetDlgItem(hwnd,IDC_KEYWORDS), metaInfo.getTagData( META_INFO_KEYWORDS ).c_str() );
-
-    // comments read from meta.xml use "\n" for return, but this will not displayable in Edit control, add
-    // "\r" before "\n" to form "\r\n" in order to display return in Edit control.
-    std::wstring tempStr = metaInfo.getTagData( META_INFO_DESCRIPTION ).c_str();
-    std::wstring::size_type itor = tempStr.find ( L"\n" , 0 );
-    while (itor != std::wstring::npos)
+    try
     {
-        tempStr.insert(itor, L"\r");
-        itor = tempStr.find(L"\n", itor + 2);
-    }
-    SetWindowText(GetDlgItem(hwnd,IDC_COMMENTS), tempStr.c_str());
+        CMetaInfoReader metaInfo(m_szFileName);
 
+        SetWindowText(GetDlgItem(hwnd,IDC_TITLE),    metaInfo.getTagData( META_INFO_TITLE ).c_str() );
+        SetWindowText(GetDlgItem(hwnd,IDC_AUTHOR),   metaInfo.getTagData( META_INFO_AUTHOR ).c_str() );
+        SetWindowText(GetDlgItem(hwnd,IDC_SUBJECT),  metaInfo.getTagData( META_INFO_SUBJECT ).c_str() );
+        SetWindowText(GetDlgItem(hwnd,IDC_KEYWORDS), metaInfo.getTagData( META_INFO_KEYWORDS ).c_str() );
+
+        // comments read from meta.xml use "\n" for return, but this will not displayable in Edit control, add
+        // "\r" before "\n" to form "\r\n" in order to display return in Edit control.
+        std::wstring tempStr = metaInfo.getTagData( META_INFO_DESCRIPTION ).c_str();
+        std::wstring::size_type itor = tempStr.find ( L"\n" , 0 );
+        while (itor != std::wstring::npos)
+        {
+            tempStr.insert(itor, L"\r");
+            itor = tempStr.find(L"\n", itor + 2);
+        }
+        SetWindowText(GetDlgItem(hwnd,IDC_COMMENTS), tempStr.c_str());
+    }
+    catch (const std::exception&)
+    {
+    }
 }
 
 //---------------------------------
@@ -344,23 +362,24 @@ void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
 */
 void CPropertySheet::InitPropPageStatistics(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
 {
-    CMetaInfoReader metaInfo(m_szFileName);
+    try
+    {
+        CMetaInfoReader metaInfo(m_szFileName);
 
-    document_statistic_reader_ptr doc_stat_reader = create_document_statistic_reader(m_szFileName, &metaInfo);
+        document_statistic_reader_ptr doc_stat_reader = create_document_statistic_reader(m_szFileName, &metaInfo);
 
-    statistic_group_list_t sgl;
-    doc_stat_reader->read(&sgl);
+        statistic_group_list_t sgl;
+        doc_stat_reader->read(&sgl);
 
-    list_view_builder_ptr lv_builder = create_list_view_builder(
-        GetDlgItem(hwnd, IDC_STATISTICSLIST),
-        GetResString(IDS_PROPERTY),
-        GetResString(IDS_PROPERTY_VALUE));
+        list_view_builder_ptr lv_builder = create_list_view_builder(
+            GetDlgItem(hwnd, IDC_STATISTICSLIST),
+            GetResString(IDS_PROPERTY),
+            GetResString(IDS_PROPERTY_VALUE));
 
-    lv_builder->build(sgl);
-
+        lv_builder->build(sgl);
+    }
+    catch (const std::exception&)
+    {
+    }
 }
-
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

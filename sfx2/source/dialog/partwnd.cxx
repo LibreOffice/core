@@ -81,7 +81,7 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
     pWindow->SetSizePixel( Size( 175, 175 ) );
 
     ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );
-    SetHideNotDelete( TRUE );
+    SetHideNotDelete( sal_True );
 }
 
 SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()

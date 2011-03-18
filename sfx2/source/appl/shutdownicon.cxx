@@ -67,7 +67,7 @@
 #endif
 #include <vcl/timer.hxx>
 
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -77,13 +77,21 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::ui::dialogs;
+#ifdef WNT
+using ::rtl::OUString;
+#else
 using namespace ::rtl;
+#endif
 using namespace ::sfx2;
 
 #ifdef ENABLE_QUICKSTART_APPLET
 # if !defined(WIN32) && !defined(QUARTZ)
 extern "C" { static void SAL_CALL thisModule() {} }
 # endif
+#endif
+
+#if defined(UNX) && defined(ENABLE_SYSTRAY_GTK)
+#define PLUGIN_NAME "libqstart_gtkli.so"
 #endif
 
 class SfxNotificationListener_Impl : public cppu::WeakImplHelper1< XDispatchResultListener >
@@ -754,14 +762,14 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
 
 void ShutdownIcon::EnterModalMode()
 {
-    bModalMode = TRUE;
+    bModalMode = sal_True;
 }
 
 // -------------------------------
 
 void ShutdownIcon::LeaveModalMode()
 {
-    bModalMode = FALSE;
+    bModalMode = sal_False;
 }
 
 #ifdef WNT

@@ -71,13 +71,11 @@ static ::std::vector< sal_Int32 >* m_pSearchIDs = NULL;
 //*************************************************************************
 ScriptNameResolverImpl::ScriptNameResolverImpl(
     const Reference< XComponentContext > & xContext ) :
-    m_xContext( xContext )
+    m_xContext( xContext, UNO_SET_THROW )
 {
     OSL_TRACE( "< ScriptNameResolverImpl ctor called >\n" );
     validateXRef( m_xContext, "ScriptNameResolverImpl::ScriptNameResolverImpl: invalid context" );
-    m_xMultiComFac = m_xContext->getServiceManager();
-
-    validateXRef( m_xMultiComFac, "ScriptNameResolverImpl::ScriptNameResolverImpl: invalid XMultiComponentFactory " );
+    m_xMultiComFac.set( m_xContext->getServiceManager(), UNO_SET_THROW );
 
     if( !m_pSearchIDs )
     {
@@ -221,11 +219,14 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
             OUString temp = OUSTR( "ScriptNameResolverImpl::resolve: " );
             throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
         }
-        Reference< XInterface > xInterface = m_xMultiComFac->createInstanceWithContext(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ucb.SimpleFileAccess" )), m_xContext );
-        validateXRef( xInterface,
-            "ScriptProvider::initialise: cannot get SimpleFileAccess Service\n" );
+        Reference< XInterface > xInterface(
+            m_xMultiComFac->createInstanceWithContext(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.ucb.SimpleFileAccess" ),
+                m_xContext
+            ),
+            UNO_SET_THROW
+        );
         Reference < ucb::XSimpleFileAccess > xSimpleFileAccess = Reference <
                     ucb::XSimpleFileAccess > ( xInterface, UNO_QUERY_THROW );
 
@@ -237,15 +238,8 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
         try
         {
             // need to get the ScriptStorageManager
-            Any a = m_xContext->getValueByName(
-                    scriptingConstantsPool.SCRIPTSTORAGEMANAGER_SERVICE );
-            if ( sal_False == ( a >>= xScriptStorageMgr ) )
-            {
-                OUString temp = OUSTR( "ScriptNameResolverImpl::resolve: failed to get ScriptStorageManager" );
-                throw RuntimeException( temp, Reference< XInterface >() );
-                // need to throw
-            }
-            validateXRef( xScriptStorageMgr, "Cannot get ScriptStorageManager" );
+            xScriptStorageMgr.set( m_xContext->getValueByName(
+                    scriptingConstantsPool.SCRIPTSTORAGEMANAGER_SERVICE ), UNO_QUERY_THROW );
             filesysScriptStorageID =
                     xScriptStorageMgr->createScriptStorageWithURI(
                         xSimpleFileAccess, filesysURL );
@@ -365,20 +359,12 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
         if( filesysScriptStorageID >  2 )
         {
             // get the filesys storage and dispose of it
-            Reference< XInterface > xScriptStorage =
-                xScriptStorageMgr->getScriptStorage( filesysScriptStorageID );
-            validateXRef( xScriptStorage,
-                          "ScriptNameResolverImpl::getStorageInstance: cannot get Script Storage service" );
+            Reference< XInterface > xScriptStorage( xScriptStorageMgr->getScriptStorage( filesysScriptStorageID ), UNO_SET_THROW );
             Reference< storage::XScriptInfoAccess > xScriptInfoAccess = Reference<
                 storage::XScriptInfoAccess > ( xScriptStorage, UNO_QUERY_THROW );
-            validateXRef( xScriptInfoAccess,
-            "ScriptNameResolverImpl::resolveURIFromStorageID: cannot get XScriptInfoAccess" );
             Sequence< Reference< storage::XScriptInfo > > results =
                 xScriptInfoAccess->getAllImplementations( );
-            Reference < lang::XEventListener > xEL_ScriptStorageMgr =
-                Reference< lang::XEventListener >
-                    ( xScriptStorageMgr ,UNO_QUERY_THROW );
-            validateXRef( xEL_ScriptStorageMgr, "ScriptNameResolverImpl::resolve: can't get ScriptStorageManager XEventListener interface when trying to dispose of filesystem storage" );
+            Reference < lang::XEventListener > xEL_ScriptStorageMgr(( xScriptStorageMgr ,UNO_QUERY_THROW );
             lang::EventObject event( results[ 0 ] );
             xEL_ScriptStorageMgr->disposing( event );
         }
@@ -448,9 +434,7 @@ SAL_THROW ( ( lang::IllegalArgumentException, css::security::AccessControlExcept
                 throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
             }
         }
-        Reference< storage::XScriptInfoAccess > storage = getStorageInstance( sid, permissionURI );
-        validateXRef( storage,
-        "ScriptNameResolverImpl::resolveURIFromStorageID: cannot get XScriptInfoAccess" );
+        Reference< storage::XScriptInfoAccess > storage( getStorageInstance( sid, permissionURI ), UNO_SET_THROW );
         Sequence< Reference< storage::XScriptInfo > > results =
             storage->getImplementations( scriptURI );
 
@@ -517,22 +501,10 @@ const ::rtl::OUString & permissionURI ) SAL_THROW ( ( RuntimeException, css::sec
     Reference< storage::XScriptInfoAccess > xScriptInfoAccess;
     try
     {
-        Reference< XInterface > xInterface;
-
-        Any a = m_xContext->getValueByName(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( SCRIPTSTORAGEMANAGER_SERVICE )) );
-        if ( sal_False == ( a >>= xInterface ) )
-        {
-            throw RuntimeException(
-                OUSTR( "ScriptNameResolverImpl::getStorageInstance: could not obtain ScriptStorageManager singleton" ),
-                Reference< XInterface >() );
-        }
-        validateXRef( xInterface,
-                      "ScriptNameResolverImpl::getStorageInstance: cannot get Storage service" );
+        Reference< XInterface > xInterface( m_xContext->getValueByName(
+                    OUString::createFromAscii( SCRIPTSTORAGEMANAGER_SERVICE ) ), UNO_QUERY_THROW );
         // check that we have permissions for this storage
         Reference< dcsssf::security::XScriptSecurity > xScriptSecurity( xInterface, UNO_QUERY_THROW );
-        validateXRef( xScriptSecurity,
-                      "ScriptNameResolverImpl::getStorageInstance:  cannot get Script Security service" );
         scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
                 scripting_constants::ScriptingConstantsPool::instance();
         // if we dealing with a document storage (ie. not user or share
@@ -547,14 +519,8 @@ const ::rtl::OUString & permissionURI ) SAL_THROW ( ( RuntimeException, css::sec
             OSL_TRACE( "ScriptNameResolverImpl::getStorageInstance: got execute permission for ID=%d", sid );
         }
         Reference< storage::XScriptStorageManager > xScriptStorageManager( xInterface, UNO_QUERY_THROW );
-        validateXRef( xScriptStorageManager,
-                      "ScriptNameResolverImpl::getStorageInstance:  cannot get Script Storage Manager service" );
-        Reference< XInterface > xScriptStorage =
-            xScriptStorageManager->getScriptStorage( sid );
-        validateXRef( xScriptStorage,
-                      "ScriptNameResolverImpl::getStorageInstance: cannot get Script Storage service" );
-        xScriptInfoAccess = Reference<
-            storage::XScriptInfoAccess > ( xScriptStorage, UNO_QUERY_THROW );
+        Reference< XInterface > xScriptStorage( ScriptStorageManager->getScriptStorage( sid ), UNO_SET_THROW );
+        xScriptInfoAccess.set( xScriptStorage, UNO_QUERY_THROW );
     }
     catch ( lang::IllegalArgumentException & e )
     {

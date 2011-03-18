@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "menu.hrc"
+#include <sfx2/sfxcommands.h>
 
 String STR_MENU_CFGITEM
 {
@@ -44,19 +45,19 @@ Menu MN_CLIPBOARDFUNCS
         MenuItem
         {
             Identifier = SID_CUT ;
-            HelpID = SID_CUT ;
+            HelpID = CMD_SID_CUT ;
             Text [ en-US ] = "Cu~t" ;
         };
         MenuItem
         {
             Identifier = SID_COPY ;
-            HelpID = SID_COPY ;
+            HelpID = CMD_SID_COPY ;
             Text [ en-US ] = "~Copy" ;
         };
         MenuItem
         {
             Identifier = SID_PASTE ;
-            HelpID = SID_PASTE ;
+            HelpID = CMD_SID_PASTE ;
             Text [ en-US ] = "~Paste" ;
         };
     };

@@ -54,10 +54,10 @@
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
 
-#include "gallery.hxx"
-#include <dlgutil.hxx>
+#include "svx/gallery.hxx"
+#include <svx/dlgutil.hxx>
 
-#include "fontworkgallery.hxx"
+#include <svx/fontworkgallery.hxx>
 #include "fontworkgallery.hrc"
 
 #include <algorithm>
@@ -84,8 +84,8 @@ const int nLineCount = 4;
 \************************************************************************/
 FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, Window* pParent, sal_uInt16 /*nSID*/ ) :
         ModalDialog( pParent, SVX_RES( RID_SVX_MDLG_FONTWORK_GALLERY ) ),
-        maCtlFavorites      ( this, SVX_RES( CTL_FAVORITES ) ),
         maFLFavorites       ( this, SVX_RES( FL_FAVORITES ) ),
+        maCtlFavorites      ( this, SVX_RES( CTL_FAVORITES ) ),
         maOKButton          ( this, SVX_RES( BTN_OK ) ),
         maCancelButton      ( this, SVX_RES( BTN_CANCEL ) ),
         maHelpButton        ( this, SVX_RES( BTN_HELP ) ),
@@ -122,7 +122,7 @@ FontWorkGalleryDialog::~FontWorkGalleryDialog()
 void FontWorkGalleryDialog::initfavorites(sal_uInt16 nThemeId, std::vector< Bitmap * >& rFavorites)
 {
     // Ueber die Gallery werden die Favoriten eingelesen
-    ULONG nFavCount = GalleryExplorer::GetSdrObjCount( nThemeId );
+    sal_uIntPtr nFavCount = GalleryExplorer::GetSdrObjCount( nThemeId );
 
     // Gallery thema locken
     GalleryExplorer::BeginLocking(nThemeId);
@@ -198,10 +198,10 @@ void FontWorkGalleryDialog::changeText( SdrTextObj* pObj )
     {
         SdrOutliner& rOutl = mpModel->GetDrawOutliner(pObj);
 
-        USHORT nOutlMode = rOutl.GetMode();
+        sal_uInt16 nOutlMode = rOutl.GetMode();
         Size aPaperSize = rOutl.GetPaperSize();
-        BOOL bUpdateMode = rOutl.GetUpdateMode();
-        rOutl.SetUpdateMode(FALSE);
+        sal_Bool bUpdateMode = rOutl.GetUpdateMode();
+        rOutl.SetUpdateMode(sal_False);
         rOutl.SetParaAttribs( 0, rOutl.GetEmptyItemSet() );
 
         // #95114# Always set the object's StyleSheet at the Outliner to
@@ -233,7 +233,7 @@ void FontWorkGalleryDialog::SetSdrObjectRef( SdrObject** ppSdrObject, SdrModel* 
 
 void FontWorkGalleryDialog::insertSelectedFontwork()
 {
-    USHORT nItemId = maCtlFavorites.GetSelectItemId();
+    sal_uInt16 nItemId = maCtlFavorites.GetSelectItemId();
 
     if( nItemId > 0 )
     {
@@ -308,7 +308,7 @@ IMPL_LINK( FontWorkGalleryDialog, DoubleClickFavoriteHdl, void*, EMPTYARG )
 //------------------------------------------------------------------------
 
 SFX_IMPL_TOOLBOX_CONTROL( FontWorkShapeTypeControl, SfxStringItem );
-FontWorkShapeTypeControl::FontWorkShapeTypeControl( USHORT nSlotId, USHORT nId, ToolBox &rTbx )
+FontWorkShapeTypeControl::FontWorkShapeTypeControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx )
 : SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
@@ -339,7 +339,7 @@ SfxPopupWindow* FontWorkShapeTypeControl::CreatePopupWindow()
 
 // -----------------------------------------------------------------------
 
-void FontWorkShapeTypeControl::Select( BOOL )
+void FontWorkShapeTypeControl::Select( sal_Bool )
 {
 
 }

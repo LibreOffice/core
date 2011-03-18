@@ -44,21 +44,21 @@ class BigInt;
 class SvToken
 {
 friend class SvTokenStream;
-    ULONG                   nLine, nColumn;
+    sal_uLong                   nLine, nColumn;
     SVTOKEN_ENUM            nType;
     ByteString                  aString;
     union
     {
-        ULONG               nLong;
-        BOOL                bBool;
+        sal_uLong               nLong;
+        sal_Bool                bBool;
         char                cChar;
         SvStringHashEntry * pHash;
     };
 public:
             SvToken();
             SvToken( const SvToken & rObj );
-            SvToken( ULONG n );
-            SvToken( SVTOKEN_ENUM nTypeP, BOOL b );
+            SvToken( sal_uLong n );
+            SvToken( SVTOKEN_ENUM nTypeP, sal_Bool b );
             SvToken( char c );
             SvToken( SVTOKEN_ENUM nTypeP, const ByteString & rStr );
             SvToken( SVTOKEN_ENUM nTypeP );
@@ -68,27 +68,27 @@ public:
     ByteString          GetTokenAsString() const;
     SVTOKEN_ENUM    GetType() const { return nType; }
 
-    void        SetLine( ULONG nLineP )     { nLine = nLineP;       }
-    ULONG       GetLine() const             { return nLine;         }
+    void        SetLine( sal_uLong nLineP )     { nLine = nLineP;       }
+    sal_uLong       GetLine() const             { return nLine;         }
 
-    void        SetColumn( ULONG nColumnP ) { nColumn = nColumnP;   }
-    ULONG       GetColumn() const           { return nColumn;       }
+    void        SetColumn( sal_uLong nColumnP ) { nColumn = nColumnP;   }
+    sal_uLong       GetColumn() const           { return nColumn;       }
 
-    BOOL        IsEmpty() const     { return nType == SVTOKEN_EMPTY; }
-    BOOL        IsComment() const   { return nType == SVTOKEN_COMMENT; }
-    BOOL        IsInteger() const   { return nType == SVTOKEN_INTEGER; }
-    BOOL        IsString() const    { return nType == SVTOKEN_STRING; }
-    BOOL        IsBool() const      { return nType == SVTOKEN_BOOL; }
-    BOOL        IsIdentifierHash() const
+    sal_Bool        IsEmpty() const     { return nType == SVTOKEN_EMPTY; }
+    sal_Bool        IsComment() const   { return nType == SVTOKEN_COMMENT; }
+    sal_Bool        IsInteger() const   { return nType == SVTOKEN_INTEGER; }
+    sal_Bool        IsString() const    { return nType == SVTOKEN_STRING; }
+    sal_Bool        IsBool() const      { return nType == SVTOKEN_BOOL; }
+    sal_Bool        IsIdentifierHash() const
                 { return nType == SVTOKEN_HASHID; }
-    BOOL        IsIdentifier() const
+    sal_Bool        IsIdentifier() const
                 {
                     return nType == SVTOKEN_IDENTIFIER
                             || nType == SVTOKEN_HASHID;
                 }
-    BOOL        IsChar() const      { return nType == SVTOKEN_CHAR; }
-    BOOL        IsRttiBase() const  { return nType == SVTOKEN_RTTIBASE; }
-    BOOL        IsEof() const       { return nType == SVTOKEN_EOF; }
+    sal_Bool        IsChar() const      { return nType == SVTOKEN_CHAR; }
+    sal_Bool        IsRttiBase() const  { return nType == SVTOKEN_RTTIBASE; }
+    sal_Bool        IsEof() const       { return nType == SVTOKEN_EOF; }
 
     const ByteString & GetString() const
                 {
@@ -96,26 +96,26 @@ public:
                         ? pHash->GetName()
                         : aString;
                 }
-    ULONG       GetNumber() const       { return nLong;         }
-    BOOL        GetBool() const         { return bBool;         }
+    sal_uLong       GetNumber() const       { return nLong;         }
+    sal_Bool        GetBool() const         { return bBool;         }
     char        GetChar() const         { return cChar;         }
 
     void        SetHash( SvStringHashEntry * pHashP )
                 { pHash = pHashP; nType = SVTOKEN_HASHID; }
-    BOOL        HasHash() const
+    sal_Bool        HasHash() const
                 { return nType == SVTOKEN_HASHID; }
     SvStringHashEntry * GetHash() const { return pHash; }
-    BOOL        Is( SvStringHashEntry * pEntry ) const
+    sal_Bool        Is( SvStringHashEntry * pEntry ) const
                 { return IsIdentifierHash() && pHash == pEntry; }
 };
 
 inline SvToken::SvToken()
     : nType( SVTOKEN_EMPTY ) {}
 
-inline SvToken::SvToken( ULONG n )
+inline SvToken::SvToken( sal_uLong n )
     : nType( SVTOKEN_INTEGER ), nLong( n ) {}
 
-inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, BOOL b )
+inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, sal_Bool b )
     : nType( nTypeP ), bBool( b ) {}
 
 inline SvToken::SvToken( char c )
@@ -131,15 +131,15 @@ DECLARE_LIST( SvTokenList, SvToken * )
 
 class SvTokenStream
 {
-    ULONG       nLine, nColumn;
+    sal_uLong       nLine, nColumn;
     int         nBufPos;
     int         c;          // next character
     CharSet     nCharSet;
     char *      pCharTab;   // pointer to conversion table
-    USHORT      nTabSize;   // length of tabulator
+    sal_uInt16      nTabSize;   // length of tabulator
     ByteString      aStrTrue;
     ByteString      aStrFalse;
-    ULONG       nMaxPos;
+    sal_uLong       nMaxPos;
 
     SvFileStream *  pInStream;
     SvStream &      rInStream;
@@ -153,16 +153,16 @@ class SvTokenStream
     int             GetNextChar();
     int             GetFastNextChar()
                     {
-                        return aBufStr.GetChar((USHORT)nBufPos++);
+                        return aBufStr.GetChar((sal_uInt16)nBufPos++);
                     }
 
     void            FillTokenList();
-    ULONG           GetNumber();
-    BOOL            MakeToken( SvToken & );
-    BOOL            IsEof() const { return rInStream.IsEof(); }
+    sal_uLong           GetNumber();
+    sal_Bool            MakeToken( SvToken & );
+    sal_Bool            IsEof() const { return rInStream.IsEof(); }
     void            SetMax()
                     {
-                        ULONG n = Tell();
+                        sal_uLong n = Tell();
                         if( n > nMaxPos )
                             nMaxPos = n;
                     }
@@ -171,7 +171,7 @@ class SvTokenStream
                         // if end of line spare calculation
                         if( 0 != c )
                         {
-                            USHORT n = 0;
+                            sal_uInt16 n = 0;
                             nColumn = 0;
                             while( n < nBufPos )
                                 nColumn += aBufStr.GetChar(n++) == '\t' ? nTabSize : 1;
@@ -188,9 +188,9 @@ public:
     void            SetCharSet( CharSet nSet );
     CharSet         GetCharSet() const { return nCharSet; }
 
-    void            SetTabSize( USHORT nTabSizeP )
+    void            SetTabSize( sal_uInt16 nTabSizeP )
                     { nTabSize = nTabSizeP; }
-    USHORT          GetTabSize() const { return nTabSize; }
+    sal_uInt16          GetTabSize() const { return nTabSize; }
 
     SvToken *       GetToken_PrevAll()
                     {
@@ -216,16 +216,16 @@ public:
                         return GetToken_NextAll();
                     }
     SvToken *       GetToken() const { return pCurToken; }
-    BOOL            Read( char cChar )
+    sal_Bool            Read( char cChar )
                     {
                         if( pCurToken->IsChar()
                           && cChar == pCurToken->GetChar() )
                         {
                             GetToken_Next();
-                            return TRUE;
+                            return sal_True;
                         }
                         else
-                            return FALSE;
+                            return sal_False;
                     }
     void            ReadDelemiter()
                     {
@@ -237,14 +237,14 @@ public:
                         }
                     }
 
-    UINT32          Tell() const
+    sal_uInt32          Tell() const
                     { return aTokList.GetCurPos(); }
-    void            Seek( UINT32 nPos )
+    void            Seek( sal_uInt32 nPos )
                     {
                         pCurToken = aTokList.Seek( nPos );
                         SetMax();
                     }
-    void            SeekRel( INT32 nRelPos )
+    void            SeekRel( sal_Int32 nRelPos )
                     {
                         pCurToken = aTokList.Seek( Tell() + nRelPos );
                         SetMax();

@@ -814,9 +814,9 @@ ErrCode SfxContentHelper::QueryDiskSpace( const String& rPath, sal_Int64& rFreeB
 
 // -----------------------------------------------------------------------
 
-ULONG SfxContentHelper::GetSize( const String& rContent )
+sal_uIntPtr SfxContentHelper::GetSize( const String& rContent )
 {
-    ULONG nSize = 0;
+    sal_uIntPtr nSize = 0;
     sal_Int64 nTemp = 0;
     INetURLObject aObj( rContent );
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
@@ -833,7 +833,7 @@ ULONG SfxContentHelper::GetSize( const String& rContent )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
-    nSize = (UINT32)nTemp;
+    nSize = (sal_uInt32)nTemp;
     return nSize;
 }
 

@@ -93,8 +93,8 @@ protected:
     void Init( Config &aConf );
 
 public:
-    ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf );
-    ConfEdit( Window* pParent, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf );
+    ConfEdit( Window* pParent, sal_uInt16 nResText, sal_uInt16 nResEdit, sal_uInt16 nResButton, const ByteString& aKN, Config &aConf );
+    ConfEdit( Window* pParent, sal_uInt16 nResEdit, sal_uInt16 nResButton, const ByteString& aKN, Config &aConf );
     void Save( Config &aConf );
     void Reload( Config &aConf );
     void Click();
@@ -110,7 +110,7 @@ protected:
     ConfEdit& rBase;
     DECL_LINK( ToggleHdl, CheckBox* );
 public:
-    OptConfEdit( Window* pParent, USHORT nResCheck, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, ConfEdit& rBaseEdit, Config& aConf );
+    OptConfEdit( Window* pParent, sal_uInt16 nResCheck, sal_uInt16 nResEdit, sal_uInt16 nResButton, const ByteString& aKN, ConfEdit& rBaseEdit, Config& aConf );
     void Reload( Config &aConf );
     DECL_LINK( BaseModifyHdl, Edit* );
 };
@@ -130,7 +130,7 @@ private:
 public:
     OptionsDialog( Window* pParent, const ResId& );
     ~OptionsDialog();
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
 
     DECL_LINK( ActivatePageHdl, TabControl * );
@@ -261,7 +261,7 @@ class GenericOptions : public TabPage
     PushButton aPbDelValue;
 
     int nMoveButtons;
-    BOOL bShowSelectPath;
+    sal_Bool bShowSelectPath;
     AutoTimer aMoveTimer;
     DECL_LINK( MoveButtons, AutoTimer* );
 
@@ -309,7 +309,7 @@ protected:
     DockingWindow* pSlots;
     SplitWindow *pSplit;
 
-    ULONG nDisplayMode;
+    sal_uIntPtr nDisplayMode;
 
     DECL_LINK( Select, void* );
     DECL_LINK( SelectAll, PushButton* );

@@ -204,8 +204,8 @@ public:
 
     const Color& GetDiffuseColor() { return maDiffuseColor; }
     const ::basegfx::B3DVector& GetDirection() { return maDirection; }
-    BOOL GetEnabled() { return mbEnabled; }
-    BOOL GetSpecular() { return mbSpecular; }
+    sal_Bool GetEnabled() { return mbEnabled; }
+    sal_Bool GetSpecular() { return mbSpecular; }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -222,7 +222,7 @@ protected:
 
     // local parameters which need to be read
     com::sun::star::drawing::HomogenMatrix mxHomMat;
-    BOOL                        mbSetTransform;
+    sal_Bool                        mbSetTransform;
 
     com::sun::star::drawing::ProjectionMode mxPrjMode;
     sal_Int32                   mnDistance;
@@ -235,9 +235,9 @@ protected:
     ::basegfx::B3DVector        maVRP;
     ::basegfx::B3DVector        maVPN;
     ::basegfx::B3DVector        maVUP;
-    BOOL                        mbVRPUsed;
-    BOOL                        mbVPNUsed;
-    BOOL                        mbVUPUsed;
+    sal_Bool                        mbVRPUsed;
+    sal_Bool                        mbVPNUsed;
+    sal_Bool                        mbVUPUsed;
 
 public:
     SdXML3DSceneAttributesHelper( SvXMLImport& rImporter );
@@ -263,7 +263,7 @@ protected:
     rtl::OUString                                                       msHyperlink;
 
 public:
-    SvXMLShapeContext( SvXMLImport& rImp, USHORT nPrfx,
+    SvXMLShapeContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
         const ::rtl::OUString& rLName, sal_Bool bTemporaryShape ) : SvXMLImportContext( rImp, nPrfx, rLName ), mbTemporaryShape(bTemporaryShape) {}
 
     TYPEINFO();
@@ -338,7 +338,7 @@ public:
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xFrameAttrList);
     SvXMLImportContext* CreateFrameChildContext(
-        SvXMLImportContext *pThisContext, USHORT nPrefix, const rtl::OUString& rLocalName,
+        SvXMLImportContext *pThisContext, sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     SvXMLShapeContext* Create3DSceneChildContext(

@@ -54,10 +54,8 @@ import org.apache.lucene.search.WildcardQuery;
 import com.sun.star.script.XInvocation;
 import com.sun.star.beans.XIntrospectionAccess;
 
-/** This class capsulates the class, that implements the minimal component, a
- * factory for creating the service (<CODE>__getComponentFactory</CODE>) and a
- * method, that writes the information into the given registry key
- * (<CODE>__writeRegistryServiceInfo</CODE>).
+/** This class capsulates the class, that implements the minimal component and a
+ * factory for creating the service (<CODE>__getComponentFactory</CODE>).
  */
 public class HelpSearch
 {
@@ -314,19 +312,6 @@ public class HelpSearch
         return xFactory;
     }
 
-    /**
-     * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey the registryKey
-     * @see     com.sun.star.comp.loader.JavaLoader
-     */
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return Factory.writeRegistryServiceInfo(_HelpSearch.class.getName(),
-                                                _HelpSearch.getServiceNames(),
-                                                regKey);
-    }
         /** This method is a member of the interface for initializing an object
          * directly after its creation.
          * @param object This array of arbitrary objects will be passed to the

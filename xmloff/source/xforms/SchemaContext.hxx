@@ -59,7 +59,7 @@ class SchemaContext : public TokenContext
 public:
 
     SchemaContext( SvXMLImport& rImport,
-                   USHORT nPrfx,
+                   sal_uInt16 nPrfx,
                    const ::rtl::OUString& rLName,
                    const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& rRepository );
     virtual ~SchemaContext();

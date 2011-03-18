@@ -110,3 +110,11 @@ DEF1EXPORTFILE=	exports.dxp
 .INCLUDE : $(PRJ)$/target.pmk
 
 
+
+ALLTAR : $(MISC)/jdbc.component
+
+$(MISC)/jdbc.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        jdbc.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt jdbc.component

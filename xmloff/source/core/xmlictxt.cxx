@@ -46,7 +46,7 @@ using namespace ::com::sun::star;
 
 DBG_NAME(SvXMLImportContext)
 TYPEINIT0( SvXMLImportContext );
-SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, USHORT nPrfx,
+SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
                               const OUString& rLName ) :
     mrImport( rImp ),
     mnPrefix( nPrfx ),
@@ -63,7 +63,7 @@ SvXMLImportContext::~SvXMLImportContext()
     DBG_DTOR(SvXMLImportContext,NULL);
 }
 
-SvXMLImportContext *SvXMLImportContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *SvXMLImportContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLocalName,
                                             const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {

@@ -30,7 +30,7 @@
 #include "precompiled_xmloff.hxx"
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 
 #include <xmloff/formsimp.hxx>
@@ -50,7 +50,7 @@ XMLFormsContext::~XMLFormsContext()
 {
 }
 
-SvXMLImportContext * XMLFormsContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+SvXMLImportContext * XMLFormsContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     return GetImport().GetFormImport()->createContext( nPrefix, rLocalName, xAttrList );

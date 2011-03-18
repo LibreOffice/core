@@ -25,10 +25,12 @@
  *
  ************************************************************************/
 
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include <svx/svxids.hrc>
 #include "globlmn.hrc"
 #include "fmhelp.hrc"
+#include <svx/svxcommands.h>
+
 Menu RID_SVXMNU_ROWS
 {
     ItemList =
@@ -36,19 +38,19 @@ Menu RID_SVXMNU_ROWS
         MenuItem
         {
             Identifier = SID_FM_DELETEROWS ;
-            HelpID = SID_FM_DELETEROWS ;
+            HelpId = HID_FM_DELETEROWS ;
             Text [ en-US ] = "Delete Rows" ;
         };
         MenuItem
         {
             Identifier = SID_FM_RECORD_SAVE ;
-            HelpID = SID_FM_RECORD_SAVE ;
+            HelpId = CMD_SID_FM_RECORD_SAVE ;
             Text [ en-US ] = "Save Record" ;
         };
         MenuItem
         {
             Identifier = SID_FM_RECORD_UNDO ;
-            HelpID = SID_FM_RECORD_UNDO ;
+            HelpId = CMD_SID_FM_RECORD_UNDO ;
             Text [ en-US ] = "Undo: Data entry" ;
         };
     };
@@ -60,7 +62,7 @@ Menu RID_SVXMNU_COLS
         MenuItem
         {
             Identifier = SID_FM_INSERTCOL ;
-            HelpID = SID_FM_INSERTCOL ;
+            HelpId = HID_FM_INSERTCOL ;
             Text [ en-US ] = "Insert ~Column" ;
             SubMenu = Menu
             {
@@ -69,61 +71,61 @@ Menu RID_SVXMNU_COLS
                     MenuItem
                     {
                         Identifier = SID_FM_EDIT ;
-                        HelpID = SID_FM_EDIT ;
+                        HelpId = CMD_SID_FM_EDIT ;
                         Text [ en-US ] = "Text Box" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_CHECKBOX ;
-                        HelpID = SID_FM_CHECKBOX ;
+                        HelpId = CMD_SID_FM_CHECKBOX ;
                         Text [ en-US ] = "Check Box" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_COMBOBOX ;
-                        HelpID = SID_FM_COMBOBOX ;
+                        HelpId = CMD_SID_FM_COMBOBOX ;
                         Text [ en-US ] = "Combo Box" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_LISTBOX ;
-                        HelpID = SID_FM_LISTBOX ;
+                        HelpId = CMD_SID_FM_LISTBOX ;
                         Text [ en-US ] = "List Box" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_DATEFIELD ;
-                        HelpID = SID_FM_DATEFIELD ;
+                        HelpId = CMD_SID_FM_DATEFIELD ;
                         Text [ en-US ] = "Date Field" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_TIMEFIELD ;
-                        HelpID = SID_FM_TIMEFIELD ;
+                        HelpId = CMD_SID_FM_TIMEFIELD ;
                         Text [ en-US ] = "Time Field" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_NUMERICFIELD ;
-                        HelpID = SID_FM_NUMERICFIELD ;
+                        HelpId = CMD_SID_FM_NUMERICFIELD ;
                         Text [ en-US ] = "Numeric Field" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_CURRENCYFIELD ;
-                        HelpID = SID_FM_CURRENCYFIELD ;
+                        HelpId = CMD_SID_FM_CURRENCYFIELD ;
                         Text [ en-US ] = "Currency Field" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_PATTERNFIELD ;
-                        HelpID = SID_FM_PATTERNFIELD ;
+                        HelpId = CMD_SID_FM_PATTERNFIELD ;
                         Text [ en-US ] = "Pattern Field" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_FORMATTEDFIELD ;
-                        HelpID = SID_FM_FORMATTEDFIELD ;
+                        HelpId = CMD_SID_FM_FORMATTEDFIELD ;
                         Text [ en-US ] = "Formatted Field" ;
                     };
                     MenuItem
@@ -140,25 +142,25 @@ Menu RID_SVXMNU_COLS
         MenuItem
         {
             Identifier = SID_FM_CHANGECOL ;
-            HelpID = SID_FM_CHANGECOL ;
+            HelpId = HID_FM_CHANGECOL ;
             Text [ en-US ] = "~Replace with" ;
         };
         MenuItem
         {
             Identifier = SID_FM_DELETECOL ;
-            HelpID = SID_FM_DELETECOL ;
+            HelpId = HID_FM_DELETECOL ;
             Text [ en-US ] = "Delete Column" ;
         };
         MenuItem
         {
             Identifier = SID_FM_HIDECOL ;
-            HelpID = SID_FM_HIDECOL ;
+            HelpId = HID_FM_HIDECOL ;
             Text [ en-US ] = "~Hide Column";
         };
         MenuItem
         {
             Identifier = SID_FM_SHOWCOLS ;
-            HelpID = SID_FM_SHOWCOLS ;
+            HelpId = HID_FM_SHOWCOLS ;
             SubMenu = Menu
             {
                 ItemList =
@@ -166,7 +168,7 @@ Menu RID_SVXMNU_COLS
                     MenuItem
                     {
                         Identifier = SID_FM_SHOWCOLS_MORE ;
-                        HelpID = SID_FM_SHOWCOLS_MORE ;
+                        HelpId = HID_FM_SHOWCOLS_MORE ;
                         Text [ en-US ] = "~More...";
                     };
                     MenuItem
@@ -176,7 +178,7 @@ Menu RID_SVXMNU_COLS
                     MenuItem
                     {
                         Identifier = SID_FM_SHOWALLCOLS ;
-                        HelpID = SID_FM_SHOWALLCOLS ;
+                        HelpId = HID_FM_SHOWALLCOLS ;
                         Text [ en-US ] = "~All";
                     };
                 };
@@ -186,7 +188,7 @@ Menu RID_SVXMNU_COLS
         MenuItem
         {
             Identifier = SID_FM_SHOW_PROPERTY_BROWSER ;
-            HelpID = SID_FM_SHOW_PROPERTY_BROWSER ;
+            HelpId = CMD_SID_FM_SHOW_PROPERTY_BROWSER ;
             Text [ en-US ] = "Column..." ;
         };
     };

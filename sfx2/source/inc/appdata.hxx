@@ -116,7 +116,6 @@ public:
 
     // global pointers
     SfxItemPool*                        pPool;
-    SfxEventConfiguration*              pEventConfig;
     SvUShorts*                          pDisabledSlotList;
     SvStrings*                          pSecureURLs;
     SvtSaveOptions*                     pSaveOptions;
@@ -127,12 +126,11 @@ public:
     SfxProgress*                        pProgress;
     ISfxTemplateCommon*                 pTemplateCommon;
 
-    USHORT                              nDocModalMode;              // counts documents in modal mode
-    USHORT                              nAutoTabPageId;
-    USHORT                              nBasicCallLevel;
-    USHORT                              nRescheduleLocks;
-    USHORT                              nInReschedule;
-    USHORT                              nAsynchronCalls;
+    sal_uInt16                              nDocModalMode;              // counts documents in modal mode
+    sal_uInt16                              nAutoTabPageId;
+    sal_uInt16                              nRescheduleLocks;
+    sal_uInt16                              nInReschedule;
+    sal_uInt16                              nAsynchronCalls;
 
     rtl::Reference< sfx2::appl::ImeStatusWindow > m_xImeStatusWindow;
 
@@ -154,19 +152,19 @@ public:
     SfxDispatcher*              pAppDispat;     // Dispatcher if no document
     SfxInterface**              pInterfaces;
 
-    USHORT                      nDocNo;         // current Doc-Number (AutoName)
-    USHORT                      nInterfaces;
+    sal_uInt16                      nDocNo;             // current Doc-Number (AutoName)
+    sal_uInt16                      nInterfaces;
 
-    BOOL                        bDispatcherLocked:1;    // do nothing
-    BOOL                        bDowning:1;   // TRUE on Exit and afterwards
-    BOOL                        bInQuit : 1;
-    BOOL                        bInvalidateOnUnlock : 1;
-    BOOL                        bODFVersionWarningLater : 1;
+    sal_Bool                        bDispatcherLocked:1;    // do nothing
+    sal_Bool                        bDowning:1;   // sal_True on Exit and afterwards
+    sal_Bool                        bInQuit : 1;
+    sal_Bool                        bInvalidateOnUnlock : 1;
+    sal_Bool                        bODFVersionWarningLater : 1;
 
                                 SfxAppData_Impl( SfxApplication* );
                                 ~SfxAppData_Impl();
 
-    void                        UpdateApplicationSettings( BOOL bDontHide );
+    void                        UpdateApplicationSettings( sal_Bool bDontHide );
     SfxDocumentTemplates*       GetDocumentTemplates();
     void                        DeInitDDE();
 

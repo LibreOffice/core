@@ -30,6 +30,7 @@
 #include "precompiled_scripting.hxx"
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <util/scriptingconstants.hxx>
 #include <util/util.hxx>
@@ -40,7 +41,6 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::script;
-using namespace ::scripting_util;
 
 namespace func_provider
 {
@@ -52,7 +52,7 @@ ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, co
     // will use createContentEnumeration
 
     m_xMgr = m_xContext->getServiceManager();
-    validateXRef( m_xMgr, "ProviderCache::ProviderCache() failed to obtain ServiceManager" );
+    ENSURE_OR_THROW( m_xMgr.is(), "ProviderCache::ProviderCache() failed to obtain ServiceManager" );
     populateCache();
 }
 
@@ -65,7 +65,7 @@ ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, co
     // will use createContentEnumeration
 
     m_xMgr = m_xContext->getServiceManager();
-    validateXRef( m_xMgr, "ProviderCache::ProviderCache() failed to obtain ServiceManager" );
+    ENSURE_OR_THROW( m_xMgr.is(), "ProviderCache::ProviderCache() failed to obtain ServiceManager" );
     populateCache();
 }
 
@@ -164,14 +164,8 @@ ProviderCache::populateCache() throw ( RuntimeException )
         while ( xEnum->hasMoreElements() )
         {
 
-            Reference< lang::XSingleComponentFactory > factory;
-            if ( sal_False == ( xEnum->nextElement() >>= factory ) )
-            {
-                throw new RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("  error extracting XSingleComponentFactory from Content enumeration. ")), Reference< XInterface >() );
-            }
-            validateXRef( factory, "ProviderCache::populateCache() invalid factory" );
+            Reference< lang::XSingleComponentFactory > factory( xEnum->nextElement(), UNO_QUERY_THROW );
             Reference< lang::XServiceInfo > xServiceInfo( factory, UNO_QUERY_THROW );
-            validateXRef( xServiceInfo, "ProviderCache::populateCache() failed to get XServiceInfo from factory" );
 
             Sequence< ::rtl::OUString > serviceNames = xServiceInfo->getSupportedServiceNames();
 
@@ -208,9 +202,8 @@ ProviderCache::createProvider( ProviderDetails& details ) throw ( RuntimeExcepti
 {
     try
     {
-        details.provider  = Reference< provider::XScriptProvider >(
+        details.provider.set(
             details.factory->createInstanceWithArgumentsAndContext( m_Sctx, m_xContext ), UNO_QUERY_THROW );
-        validateXRef( details.provider, "ProviderCache::createProvider, failed to create provider");
     }
     catch ( RuntimeException& e )
     {

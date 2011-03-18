@@ -32,7 +32,7 @@
 // include ---------------------------------------------------------------
 
 #define _SVX_POSTATTR_CXX
-#include "postattr.hxx"
+#include "svx/postattr.hxx"
 #include <editeng/itemtype.hxx>
 #include <svx/svxitems.hrc>
 #include <svx/dialmgr.hxx>

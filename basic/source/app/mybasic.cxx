@@ -60,7 +60,7 @@ TYPEINIT1(MyBasic,StarBASIC)
 class MyFactory : public SbxFactory
 {
 public:
-    virtual SbxBase* Create( UINT16 nSbxId, UINT32 = SBXCR_SBX );
+    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
 };
 
 static SampleObjectFac aFac1;
@@ -68,7 +68,7 @@ static MyFactory aFac2;
 static ProcessFactory aProcessFac;
 static short nInst = 0;
 
-SbxBase* MyFactory::Create( UINT16 nSbxId, UINT32 nCr )
+SbxBase* MyFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCr )
 {
     if( nCr == SBXCR_TEST && nSbxId == SBXID_MYBASIC )
         return new MyBasic;
@@ -152,7 +152,7 @@ void MyBasic::LoadIniFile()
 {
 }
 
-SbTextType MyBasic::GetSymbolType( const String &rSymbol, BOOL bWasTTControl )
+SbTextType MyBasic::GetSymbolType( const String &rSymbol, sal_Bool bWasTTControl )
 {
     (void) rSymbol;       /* avoid warning about unused parameter */
     (void) bWasTTControl; /* avoid warning about unused parameter */
@@ -179,7 +179,7 @@ void MyBasic::Reset()
     CurrentError = 0;
 }
 
-BOOL MyBasic::Compile( SbModule* p )
+sal_Bool MyBasic::Compile( SbModule* p )
 {
     Reset();
     return StarBASIC::Compile( p );
@@ -215,7 +215,7 @@ BasicError* MyBasic::FirstError()
     return NULL;
 }
 
-BOOL MyBasic::ErrorHdl()
+sal_Bool MyBasic::ErrorHdl()
 {
     AppBasEd* pWin = aBasicApp.pFrame->FindModuleWin( GetActiveModule()->GetName() );
     if( !pWin )
@@ -233,12 +233,12 @@ BOOL MyBasic::ErrorHdl()
             );
         nError++;
         CurrentError = aErrors.size() - 1;
-        return BOOL( nError < 20 ); // Cancel after 20 errors
+        return sal_Bool( nError < 20 ); // Cancel after 20 errors
     }
     else
     {
         ReportRuntimeError( pWin );
-        return FALSE;
+        return sal_False;
     }
 }
 
@@ -255,7 +255,7 @@ void MyBasic::ReportRuntimeError( AppBasEd *pEditWin )
         GetCol1(), GetCol2() ).Show();
 }
 
-void MyBasic::DebugFindNoErrors( BOOL bDebugFindNoErrors )
+void MyBasic::DebugFindNoErrors( sal_Bool bDebugFindNoErrors )
 {
     (void) bDebugFindNoErrors; /* avoid warning about unused parameter */
 }
@@ -265,7 +265,7 @@ const String MyBasic::GetSpechialErrorText()
     return GetErrorText();
 }
 
-USHORT MyBasic::BreakHdl()
+sal_uInt16 MyBasic::BreakHdl()
 {
     SbModule* pMod = GetActiveModule();
     if( pMod )
@@ -299,7 +299,7 @@ USHORT MyBasic::BreakHdl()
 ***************************************************************************/
 
 BasicError::BasicError
-    ( AppBasEd* w, USHORT nE, const String& r, USHORT nL, USHORT nC1, USHORT nC2 )
+    ( AppBasEd* w, sal_uInt16 nE, const String& r, sal_uInt16 nL, sal_uInt16 nC1, sal_uInt16 nC2 )
     : aText( SttResId( IDS_ERROR1 ) )
 {
     pWin  = w;

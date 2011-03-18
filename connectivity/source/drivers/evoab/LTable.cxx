@@ -72,7 +72,7 @@ using namespace ::com::sun::star::lang;
 // -------------------------------------------------------------------------
 void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 {
-    BOOL bRead = TRUE;
+    sal_Bool bRead = sal_True;
 
     QuotedTokenizedString aHeaderLine;
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
@@ -115,7 +115,7 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     m_aPrecisions.reserve(nFieldCount);
     m_aScales.reserve(nFieldCount);
 
-    sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+    sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
     CharClass aCharClass(pConnection->getDriver()->getFactory(),_aLocale);
     // read description
     sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
@@ -141,11 +141,11 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         //OSL_TRACE("OEvoabTable::aColumnName = %s\n", ((OUtoCStr(::rtl::OUString(aColumnName))) ? (OUtoCStr(::rtl::OUString(aColumnName))):("NULL")) );
 
         sal_Int32 eType;
-        UINT16 nPrecision = 0;
-        UINT16 nScale = 0;
+        sal_uInt16 nPrecision = 0;
+        sal_uInt16 nScale = 0;
 
-        BOOL bNumeric = FALSE;
-        ULONG  nIndex = 0;
+        sal_Bool bNumeric = sal_False;
+        sal_uIntPtr  nIndex = 0;
 
         // first without fielddelimiter
         String aField;
@@ -155,7 +155,7 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         if (aField.Len() == 0 ||
             (pConnection->getStringDelimiter() && pConnection->getStringDelimiter() == aField.GetChar(0)))
         {
-            bNumeric = FALSE;
+            bNumeric = sal_False;
         }
         else
         {
@@ -169,11 +169,11 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 
             if (aField2.Len() == 0)
             {
-                bNumeric = FALSE;
+                bNumeric = sal_False;
             }
             else
             {
-                bNumeric = TRUE;
+                bNumeric = sal_True;
                 xub_StrLen nDot = 0;
                 for (xub_StrLen j = 0; j < aField2.Len(); j++)
                 {
@@ -183,7 +183,7 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                         (!cThousandDelimiter || c != cThousandDelimiter) &&
                         !aCharClass.isDigit(aField2,j))
                     {
-                        bNumeric = FALSE;
+                        bNumeric = sal_False;
                         break;
                     }
                     if (cDecimalDelimiter && c == cDecimalDelimiter)
@@ -195,7 +195,7 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                 }
 
                 if (nDot > 1) // if there is more than one dot it isn't a number
-                    bNumeric = FALSE;
+                    bNumeric = sal_False;
                 if (bNumeric && cThousandDelimiter)
                 {
                     // is the delimiter given correctly
@@ -208,7 +208,7 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                             continue;
                         else
                         {
-                            bNumeric = FALSE;
+                            bNumeric = sal_False;
                             break;
                         }
                     }
@@ -510,7 +510,7 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
     *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
-        return TRUE;
+        return sal_True;
 
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
     // Fields:
@@ -669,7 +669,7 @@ sal_Bool OEvoabTable::setColumnAliases()
             aColumnFinalName = aColumnReadName;
         sColumnFinalName = aColumnFinalName;
 
-        sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+        sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
         ::rtl::OUString aTypeName;
         aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
         sdbcx::OColumn* pColumn = new sdbcx::OColumn(sColumnFinalName,aTypeName,::rtl::OUString(),
@@ -695,7 +695,7 @@ sal_Bool OEvoabTable::checkHeaderLine()
 {
     if (m_nFilePos == 0 && ((OEvoabConnection*)m_pConnection)->isHeaderLine())
     {
-        BOOL bRead2;
+        sal_Bool bRead2;
         do
         {
             bRead2 = m_pFileStream->ReadByteStringLine(m_aCurrentLine,m_pConnection->getTextEncoding());

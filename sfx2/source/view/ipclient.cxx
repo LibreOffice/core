@@ -221,6 +221,7 @@ void SAL_CALL SfxInPlaceClient_Impl::notifyEvent( const document::EventObject& a
 
     if ( m_pClient && aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnVisAreaChanged")) && m_nAspect != embed::Aspects::MSOLE_ICON )
     {
+        m_pClient->FormatChanged(); // for Writer when format of the object is changed with the area
         m_pClient->ViewChanged();
         m_pClient->Invalidate();
     }
@@ -399,7 +400,7 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingUI()
         throw uno::RuntimeException();
 
     m_pClient->GetViewShell()->ResetAllClients_Impl(m_pClient);
-    m_bUIActive = TRUE;
+    m_bUIActive = sal_True;
     m_pClient->GetViewShell()->UIActivating( m_pClient );
 }
 
@@ -423,7 +424,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
         throw uno::RuntimeException();
 
     m_pClient->GetViewShell()->UIDeactivated( m_pClient );
-    m_bUIActive = FALSE;
+    m_bUIActive = sal_False;
 }
 
 //--------------------------------------------------------------------
@@ -771,7 +772,7 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
 }
 
 //--------------------------------------------------------------------
-BOOL SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
+sal_Bool SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
 {
     if( rArea != m_pImp->m_aObjArea )
     {
@@ -779,10 +780,10 @@ BOOL SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
         m_pImp->SizeHasChanged();
 
         Invalidate();
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 //--------------------------------------------------------------------
@@ -992,7 +993,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
             {
 
                 if ( m_pViewSh )
-                    m_pViewSh->GetViewFrame()->GetTopFrame().LockResize_Impl(TRUE);
+                    m_pViewSh->GetViewFrame()->GetTopFrame().LockResize_Impl(sal_True);
                 try
                 {
                     m_pImp->m_xObject->setClientSite( m_pImp->m_xClient );
@@ -1042,7 +1043,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                 if ( m_pViewSh )
                 {
                     SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
-                    pFrame->GetTopFrame().LockResize_Impl(FALSE);
+                    pFrame->GetTopFrame().LockResize_Impl(sal_False);
                     pFrame->GetTopFrame().Resize();
                 }
             }
@@ -1083,14 +1084,19 @@ void SfxInPlaceClient::MakeVisible()
     // dummy implementation
 }
 
+void SfxInPlaceClient::FormatChanged()
+{
+    // dummy implementation
+}
+
 void SfxInPlaceClient::DeactivateObject()
 {
     if ( GetObject().is() )
     {
         try
         {
-            m_pImp->m_bUIActive = FALSE;
-            BOOL bHasFocus = FALSE;
+            m_pImp->m_bUIActive = sal_False;
+            sal_Bool bHasFocus = sal_False;
             uno::Reference< frame::XModel > xModel( m_pImp->m_xObject->getComponent(), uno::UNO_QUERY );
             if ( xModel.is() )
             {
@@ -1098,12 +1104,12 @@ void SfxInPlaceClient::DeactivateObject()
                 if ( xController.is() )
                 {
                     Window* pWindow = VCLUnoHelper::GetWindow( xController->getFrame()->getContainerWindow() );
-                    bHasFocus = pWindow->HasChildPathFocus( TRUE );
+                    bHasFocus = pWindow->HasChildPathFocus( sal_True );
                 }
             }
 
             if ( m_pViewSh )
-                m_pViewSh->GetViewFrame()->GetTopFrame().LockResize_Impl(TRUE);
+                m_pViewSh->GetViewFrame()->GetTopFrame().LockResize_Impl(sal_True);
 
             if ( m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
             {
@@ -1125,7 +1131,7 @@ void SfxInPlaceClient::DeactivateObject()
             {
                 SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
                 SfxViewFrame::SetViewFrame( pFrame );
-                pFrame->GetTopFrame().LockResize_Impl(FALSE);
+                pFrame->GetTopFrame().LockResize_Impl(sal_False);
                 pFrame->GetTopFrame().Resize();
             }
         }
@@ -1140,7 +1146,7 @@ void SfxInPlaceClient::ResetObject()
     {
         try
         {
-            m_pImp->m_bUIActive = FALSE;
+            m_pImp->m_bUIActive = sal_False;
             if ( m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
                 m_pImp->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
             else
@@ -1158,7 +1164,7 @@ void SfxInPlaceClient::ResetObject()
     }
 }
 
-BOOL SfxInPlaceClient::IsUIActive()
+sal_Bool SfxInPlaceClient::IsUIActive()
 {
     return m_pImp->m_bUIActive;
 }

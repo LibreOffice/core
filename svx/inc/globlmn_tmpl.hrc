@@ -38,288 +38,242 @@
 #define ITEM_FORM_CONTROL_PROPERTIES\
     Identifier = SID_FM_CTL_PROPERTIES ; \
     Command = ".uno:ControlProperties" ; \
-    HelpID = SID_FM_CTL_PROPERTIES ; \
     Text [ en-US ] = "Con~trol..." ; \
 
 #define ITEM_FORM_PROPERTIES\
     Identifier = SID_FM_PROPERTIES ; \
     Command = ".uno:FormProperties" ; \
-    HelpID = SID_FM_PROPERTIES ; \
     Text [ en-US ] = "For~m..." ; \
 
 #define ITEM_REPLACE_CONTROL\
     Identifier = SID_FM_CHANGECONTROLTYPE ;\
     Command = ".uno:ChangeControlType" ; \
-    HelpID = SID_FM_CHANGECONTROLTYPE ; \
         Text [ en-US ] = "~Replace with";   \
 
 #define ITEM_FORMAT_TEMPLATECATALOG \
     Identifier = SID_STYLE_CATALOG ; \
     Command = ".uno:StyleCatalog" ; \
-    HelpID = SID_STYLE_CATALOG ; \
     Text [ en-US ] = "~Catalog..." ; \
 
 #define ITEM_FORMAT_TEMPLATE \
     Identifier = SID_STYLE_DESIGNER ; \
     Command = ".uno:DesignerDialog" ; \
-    HelpID = SID_STYLE_DESIGNER ; \
     Text [ en-US ] = "St~ylist" ; \
 
 #define ITEM_FORMAT_AUTOFORMAT \
     Identifier = SID_AUTOFORMAT ; \
     Command = ".uno:AutoFormat" ; \
-    HelpID = SID_AUTOFORMAT ; \
     Text [ en-US ] = "Auto~Format..." ;\
 
 #define ITEM_FORMAT_CHAR_DLG \
     Identifier = SID_CHAR_DLG ; \
     Command = ".uno:FontDialog" ; \
-    HelpID = SID_CHAR_DLG ; \
     Text [ en-US ] = "C~haracter..." ;\
 
 #define ITEM_FORMAT_PARA_DLG \
     Identifier = SID_PARA_DLG ; \
     Command = ".uno:ParagraphDialog" ; \
-    HelpID = SID_PARA_DLG ; \
     Text [ en-US ] = "P~aragraph..." ;\
 
 #define ITEM_FORMAT_FONTWORK \
     Identifier = SID_FONTWORK ; \
     Command = ".uno:FontWork" ; \
-    HelpID = SID_FONTWORK ; \
     Text [ en-US ] = "F~ontwork" ;\
 
 #define ITEM_EDIT_CUT \
     Identifier = SID_CUT ; \
     Command = ".uno:Cut" ; \
-    HelpID = SID_CUT ; \
     Text [ en-US ] = "Cu~t" ;\
 
 #define ITEM_EDIT_COPY \
     Identifier = SID_COPY ; \
     Command = ".uno:Copy" ; \
-    HelpID = SID_COPY ; \
     Text [ en-US ] = "~Copy" ;\
 
 #define ITEM_EDIT_DELETE \
     Identifier = SID_DELETE ; \
     Command = ".uno:Delete" ; \
-    HelpID = SID_DELETE ; \
     Text [ en-US ] = "~Delete" ;\
 
 #define ITEM_FORMAT_ATTR_CHAR_FONT \
     Identifier = SID_ATTR_CHAR_FONT ; \
     Command = ".uno:CharFontName" ; \
-    HelpID = SID_ATTR_CHAR_FONT ; \
     Text [ en-US ] = "Font" ;\
 
 #define ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT \
     Identifier = SID_ATTR_CHAR_FONTHEIGHT ; \
     Command = ".uno:FontHeight" ; \
-    HelpID = SID_ATTR_CHAR_FONTHEIGHT ; \
     Text [ en-US ] = "Size" ;\
 
 #define ITEM_FORMAT_ATTR_CHAR_WEIGHT \
     Identifier = SID_ATTR_CHAR_WEIGHT ; \
     Command = ".uno:Bold" ; \
-    HelpID = SID_ATTR_CHAR_WEIGHT ; \
     Text [ en-US ] = "Bold" ; \
 
 #define ITEM_FORMAT_ATTR_CHAR_POSTURE \
     Identifier = SID_ATTR_CHAR_POSTURE ; \
     Command = ".uno:Italic" ; \
-    HelpID = SID_ATTR_CHAR_POSTURE ; \
     Text [ en-US ] = "Italic" ;\
 
 #define ITEM_FORMAT_ATTR_CHAR_UNDERLINE \
     Identifier = SID_ATTR_CHAR_UNDERLINE ; \
     Command = ".uno:Underline" ; \
-    HelpID = SID_ATTR_CHAR_UNDERLINE ; \
     Text [ en-US ] = "Underline" ;\
 
 #define ITEM_FORMAT_ATTR_CHAR_OVERLINE \
     Identifier = SID_ATTR_CHAR_OVERLINE ; \
         Command = ".uno:Overline" ; \
-    HelpID = SID_ATTR_CHAR_OVERLINE ; \
     Text [ en-US ] = "Overline" ;\
 
 #define ITEM_FORMAT_ATTR_CHAR_STRIKEOUT \
     Identifier = SID_ATTR_CHAR_STRIKEOUT ; \
     Command = ".uno:Strikeout" ; \
-    HelpID = SID_ATTR_CHAR_STRIKEOUT ; \
     Text [ en-US ] = "Strikethrough" ;\
 
 #define ITEM_FORMAT_ATTR_CHAR_SHADOWED \
     Identifier = SID_ATTR_CHAR_SHADOWED ; \
     Command = ".uno:Shadowed" ; \
-    HelpID = SID_ATTR_CHAR_SHADOWED ; \
     Text [ en-US ] = "Shadow" ;\
 
 #define ITEM_FORMAT_ATTR_CHAR_CONTOUR \
     Identifier = SID_ATTR_CHAR_CONTOUR ; \
     Command = ".uno:OutlineFont" ; \
-    HelpID = SID_ATTR_CHAR_CONTOUR ; \
     Text [ en-US ] = "Outline" ;\
 
 #define ITEM_FORMAT_SET_SUPER_SCRIPT \
     Identifier = SID_SET_SUPER_SCRIPT; \
-    HelpID = SID_SET_SUPER_SCRIPT; \
+    Command = CMD_SID_SET_SUPER_SCRIPT; \
     Text [ en-US  ] = "Su~perscript"; \
 
 #define ITEM_FORMAT_SET_SUB_SCRIPT \
     Identifier = SID_SET_SUB_SCRIPT; \
-    HelpID = SID_SET_SUB_SCRIPT; \
+    Command = CMD_SID_SET_SUB_SCRIPT; \
     Text [ en-US ] = "Su~bscript"; \
 
 
 #define ITEM_FORMAT_ATTR_PARA_ADJUST_LEFT \
     Identifier = SID_ATTR_PARA_ADJUST_LEFT ; \
     Command = ".uno:LeftPara" ; \
-    HelpID = SID_ATTR_PARA_ADJUST_LEFT ; \
     Text [ en-US ] = "~Left" ;\
 
 #define ITEM_FORMAT_ATTR_PARA_ADJUST_RIGHT \
     Identifier = SID_ATTR_PARA_ADJUST_RIGHT ; \
     Command = ".uno:RightPara" ; \
-    HelpID = SID_ATTR_PARA_ADJUST_RIGHT ; \
     Text [ en-US ] = "~Right" ;\
 
 #define ITEM_FORMAT_ATTR_PARA_ADJUST_CENTER \
     Identifier = SID_ATTR_PARA_ADJUST_CENTER ; \
     Command = ".uno:CenterPara" ; \
-    HelpID = SID_ATTR_PARA_ADJUST_CENTER ; \
     Text [ en-US ] = "~Centered" ;\
 
 #define ITEM_FORMAT_ATTR_PARA_ADJUST_BLOCK \
     Identifier = SID_ATTR_PARA_ADJUST_BLOCK ; \
     Command = ".uno:JustifyPara" ; \
-    HelpID = SID_ATTR_PARA_ADJUST_BLOCK ; \
     Text [ en-US ] = "Justified" ;\
 
 #define ITEM_FORMAT_PARA_LINESPACE_10 \
     Identifier = SID_ATTR_PARA_LINESPACE_10 ; \
     Command = ".uno:SpacePara1" ; \
-    HelpID = SID_ATTR_PARA_LINESPACE_10 ; \
     Text [ en-US ] = "Single" ;\
 
 #define ITEM_FORMAT_PARA_LINESPACE_15 \
     Identifier = SID_ATTR_PARA_LINESPACE_15 ; \
     Command = ".uno:SpacePara15" ; \
-    HelpID = SID_ATTR_PARA_LINESPACE_15 ; \
     Text [ en-US ] = "1.5 lines" ;\
 
 #define ITEM_FORMAT_PARA_LINESPACE_20 \
     Identifier = SID_ATTR_PARA_LINESPACE_20 ; \
     Command = ".uno:SpacePara2" ; \
-    HelpID = SID_ATTR_PARA_LINESPACE_20 ; \
     Text [ en-US ] = "~Double" ;\
 
 #define ITEM_FORMAT_FRAME_TO_TOP \
     Identifier = SID_FRAME_TO_TOP ; \
     Command = ".uno:BringToFront" ; \
-    HelpID = SID_FRAME_TO_TOP ; \
     Text [ en-US ] = "~Bring to Front" ;\
 
 #define ITEM_FORMAT_FRAME_TO_BOTTOM \
     Identifier = SID_FRAME_TO_BOTTOM ; \
     Command = ".uno:SendToBack" ; \
-    HelpID = SID_FRAME_TO_BOTTOM ; \
     Text [ en-US ] = "~Send to Back" ;\
 
 #define ITEM_FORMAT_OBJECT_ALIGN \
     Identifier = SID_OBJECT_ALIGN ; \
     Command = ".uno:ObjectAlign" ; \
-    HelpID = SID_OBJECT_ALIGN ; \
     Text [ en-US ] = "A~lignment" ;\
 
 #define ITEM_FORMAT_OBJECT_ALIGN_LEFT \
     Identifier = SID_OBJECT_ALIGN_LEFT ; \
     Command = ".uno:ObjectAlignLeft" ; \
-    HelpID = SID_OBJECT_ALIGN_LEFT ; \
     Text [ en-US ] = "~Left" ;\
 
 #define ITEM_FORMAT_OBJECT_ALIGN_CENTER \
     Identifier = SID_OBJECT_ALIGN_CENTER ; \
     Command = ".uno:AlignCenter" ; \
-    HelpID = SID_OBJECT_ALIGN_CENTER ; \
     Text [ en-US ] = "~Centered" ;\
 
 #define ITEM_FORMAT_OBJECT_ALIGN_RIGHT \
     Identifier = SID_OBJECT_ALIGN_RIGHT ; \
     Command = ".uno:ObjectAlignRight" ; \
-    HelpID = SID_OBJECT_ALIGN_RIGHT ; \
     Text [ en-US ] = "~Right" ;\
 
 #define ITEM_FORMAT_OBJECT_ALIGN_UP \
     Identifier = SID_OBJECT_ALIGN_UP ; \
     Command = ".uno:AlignUp" ; \
-    HelpID = SID_OBJECT_ALIGN_UP ; \
     Text [ en-US ] = "~Top" ;\
 
 #define ITEM_FORMAT_OBJECT_ALIGN_MIDDLE \
     Identifier = SID_OBJECT_ALIGN_MIDDLE ; \
     Command = ".uno:AlignMiddle" ; \
-    HelpID = SID_OBJECT_ALIGN_MIDDLE ; \
     Text [ en-US ] = "C~enter" ;\
 
 #define ITEM_FORMAT_OBJECT_ALIGN_DOWN \
     Identifier = SID_OBJECT_ALIGN_DOWN ; \
     Command = ".uno:AlignDown" ; \
-    HelpID = SID_OBJECT_ALIGN_DOWN ; \
     Text [ en-US ] = "~Bottom" ;\
 
 #define ITEM_FORMAT_ATTRIBUTES_LINE \
     Identifier = SID_ATTRIBUTES_LINE ; \
     Command = ".uno:FormatLine" ; \
-    HelpID = SID_ATTRIBUTES_LINE ; \
     Text [ en-US ] = "L~ine..." ;\
 
 #define ITEM_FORMAT_ATTRIBUTES_AREA \
     Identifier = SID_ATTRIBUTES_AREA ; \
     Command = ".uno:FormatArea" ; \
-    HelpID = SID_ATTRIBUTES_AREA ; \
     Text [ en-US ] = "A~rea..." ;\
 
 #define ITEM_FORMAT_ATTR_TRANSFORM \
     Identifier = SID_ATTR_TRANSFORM ; \
     Command = ".uno:TransformDialog" ; \
-    HelpID = SID_ATTR_TRANSFORM ; \
     Text [ en-US ] = "Position and Si~ze..." ;\
 
 #define ITEM_FORMAT_OBJECT_HEAVEN \
     Identifier = SID_OBJECT_HEAVEN ; \
     Command = ".uno:SetObjectToForeground" ; \
-    HelpID = SID_OBJECT_HEAVEN ; \
     Text [ en-US ] = "~To Foreground" ;\
 
 #define ITEM_FORMAT_OBJECT_HELL \
     Identifier = SID_OBJECT_HELL ; \
     Command = ".uno:SetObjectToBackground" ; \
-    HelpID = SID_OBJECT_HELL ; \
     Text [ en-US ] = "T~o Background" ;\
 
 #define ITEM_FORMAT_BEZIER_EDIT \
     Identifier = SID_BEZIER_EDIT ; \
     Command = ".uno:ToggleObjectBezierMode" ; \
-    HelpID = SID_BEZIER_EDIT ; \
     Text [ en-US ] = "Edit ~Points" ;\
 
 #define ITEM_FILE_PICKLIST \
     Identifier = SID_PICKLIST ; \
     Command = ".uno:PickList" ; \
-    HelpID = SID_PICKLIST ; \
     Text [ en-US ] = "~File" ;  \
 
 #define ITEM_FILE_NEWDOC \
     Identifier = SID_NEWDOCDIRECT ; \
     Command = ".uno:AddDirect" ; \
-    HelpID = SID_NEWDOCDIRECT ; \
     Text [ en-US ] = "~New" ;\
 
 #define ITEM_FILE_OPENDOC \
     Identifier = SID_OPENDOC ; \
     Command = ".uno:Open" ; \
-    HelpID = SID_OPENDOC ; \
     Text [ en-US ] = "~Open..." ;\
 
 
@@ -328,62 +282,52 @@
     {\
         Identifier = SID_AUTOPILOTMENU ; \
         Command = ".uno:AutoPilotMenu" ; \
-        HelpID = SID_AUTOPILOTMENU ; \
         Text [ en-US ] = "A~utoPilot" ; \
             };
 
 #define ITEM_FILE_CLOSEDOC \
     Identifier = SID_CLOSEDOC ; \
     Command = ".uno:CloseDoc" ; \
-    HelpID = SID_CLOSEDOC ; \
     Text [ en-US ] = "~Close" ;\
 
 #define ITEM_FILE_SAVEDOC \
     Identifier = SID_SAVEDOC ; \
     Command = ".uno:Save" ; \
-    HelpID = SID_SAVEDOC ; \
     Text [ en-US ] = "~Save" ;  \
 
 #define ITEM_FILE_SAVEDOCS \
     Identifier = SID_SAVEDOCS ; \
     Command = ".uno:SaveAll" ; \
-    HelpID = SID_SAVEDOCS ; \
     Text [ en-US ] = "Sa~ve All" ; \
 
 #define ITEM_FILE_SAVEASDOC \
     Identifier = SID_SAVEASDOC ; \
     Command = ".uno:SaveAs" ; \
-    HelpID = SID_SAVEASDOC ; \
     Text [ en-US ] = "Save ~As..." ;    \
 
 #define ITEM_FILE_EXPORTDOC \
     Identifier = SID_EXPORTDOC ; \
     Command = ".uno:ExportTo" ; \
-    HelpID = SID_EXPORTDOC ; \
     Text [ en-US ] = "Expor~t..." ;   \
 
 #define ITEM_FILE_EXPORTDOCASPDF \
     Identifier = SID_EXPORTDOCASPDF ; \
     Command = ".uno:ExportToPDF" ; \
-    HelpID = SID_EXPORTDOCASPDF ; \
     Text [ en-US ] = "Export as P~DF..." ;  \
 
 #define ITEM_FILE_VERSIONDIALOG \
     Identifier = SID_VERSION ; \
     Command = ".uno:VersionDialog" ; \
-    HelpID = SID_VERSION ; \
     Text [ en-US ] = "Versions..." ; \
 
 #define ITEM_FILE_LASTVERSIONDOC \
     Identifier = SID_RELOAD ; \
     Command = ".uno:Reload" ; \
-    HelpID = SID_RELOAD ; \
     Text [ en-US ] = "Reload" ;\
 
 #define ITEM_FILE_DOCINFO \
     Identifier = SID_DOCINFO ; \
     Command = ".uno:SetDocumentProperties" ; \
-    HelpID = SID_DOCINFO ; \
     Text [ en-US ] = "Propert~ies..." ;\
 
 #define ITEM_FILE_DOCTEMPLATE \
@@ -398,28 +342,24 @@
             {                               \
                 Identifier = SID_ORGANIZER ; \
                 Command = ".uno:Organizer" ; \
-                HelpId = SID_ORGANIZER ;     \
                 Text [ en-US ] = "~Organize...";\
             };                                      \
             MenuItem    \
             {   \
                 Identifier = SID_TEMPLATE_ADDRESSBOKSOURCE; \
                 Command = ".uno:AddressBookSource" ; \
-                HelpId = SID_TEMPLATE_ADDRESSBOKSOURCE; \
                                 Text [ en-US ] = "~Address Book Source..."; \
             };  \
             MenuItem                                \
             {                                       \
                 Identifier = SID_DOCTEMPLATE ;      \
                 Command = ".uno:SaveAsTemplate" ;       \
-                HelpId = SID_DOCTEMPLATE ;          \
                 Text [ en-US ] = "~Save...";\
             };                                      \
             MenuItem                                \
             {                                       \
                 Identifier = SID_OPENTEMPLATE ;     \
                 Command = ".uno:OpenTemplate" ;     \
-                HelpId = SID_OPENTEMPLATE ;         \
                 Text [ en-US ] = "~Edit...";\
             };                                      \
         };                                          \
@@ -428,164 +368,138 @@
 #define ITEM_FILE_PRINTPREVIEW \
     Identifier = SID_PRINTPREVIEW ; \
     Command = ".uno:PrintPreview" ; \
-    HelpID = SID_PRINTPREVIEW ; \
     Text [ en-US ] = "Pa~ge Preview" ;\
 
 #define ITEM_FILE_SETUPPRINTER \
     Identifier = SID_SETUPPRINTER ; \
     Command = ".uno:PrinterSetup" ; \
-    HelpID = SID_SETUPPRINTER ; \
     Text [ en-US ] = "P~rinter Settings..." ;   \
 
 #define ITEM_FILE_PRINTDOC \
     Identifier = SID_PRINTDOC ; \
     Command = ".uno:Print" ; \
-    HelpID = SID_PRINTDOC ; \
     Text [ en-US ] = "~Print..." ;  \
 
 #define ITEM_FILE_MAIL_SENDDOC \
     Identifier = SID_MAIL_SENDDOC ; \
     Command = ".uno:SendMail" ; \
-    HelpID = SID_MAIL_SENDDOC ; \
     Text [ en-US ] = "Document as ~E-mail..." ; \
 
 #define ITEM_FILE_MAIL_SENDDOCASPDF \
     Identifier = SID_MAIL_SENDDOCASPDF ; \
     Command = ".uno:SendMailDocAsPDF" ; \
-    HelpID = SID_MAIL_SENDDOCASPDF ; \
     Text [ en-US ] = "Document as P~DF Attachment..." ; \
 
 
 #define ITEM_FILE_QUITAPP \
     Identifier = SID_QUITAPP ; \
     Command = ".uno:Quit" ; \
-    HelpID = SID_QUITAPP ; \
     Text [ en-US ] = "E~xit" ; \
 
 #define ITEM_FILE_LOGOUT \
     Identifier = SID_LOGOUT ; \
     Command = ".uno:Logout" ; \
-    HelpID = SID_LOGOUT ; \
     Text [ en-US ] = "Logout" ; \
 
 #define ITEM_EDIT_UNDO \
     Identifier = SID_UNDO ; \
     Command = ".uno:UndoAction" ; \
-    HelpID = SID_UNDO ; \
     Text [ en-US ] = "Undo" ;   \
 
 #define ITEM_EDIT_REDO \
     Identifier = SID_REDO ; \
     Command = ".uno:Redo" ; \
-    HelpID = SID_REDO ; \
     Text [ en-US ] = "Redo" ; \
 
 #define ITEM_EDIT_REPEAT \
     Identifier = SID_REPEAT ; \
     Command = ".uno:Repeat" ; \
-    HelpID = SID_REPEAT ; \
     Text [ en-US ] = "~Repeat" ; \
 
 #define ITEM_EDIT_PASTE \
     Identifier = SID_PASTE ; \
     Command = ".uno:Paste" ; \
-    HelpID = SID_PASTE ; \
     Text [ en-US ] = "~Paste" ; \
 
 #define ITEM_EDIT_SELECTALL \
     Identifier = SID_SELECTALL ; \
     Command = ".uno:SelectAll" ; \
-    HelpID = SID_SELECTALL ; \
     Text [ en-US ] = "Select ~All" ; \
 
 #define ITEM_EDIT_SEARCH_DLG \
     Identifier = SID_SEARCH_DLG ; \
     Command = ".uno:SearchDialog" ; \
-    HelpID = SID_SEARCH_DLG ; \
     Text [ en-US ] = "~Find & Replace..." ; \
 
 #define ITEM_EDIT_NAVIGATOR \
     Identifier = SID_NAVIGATOR ; \
     Command = ".uno:Navigator" ; \
-    HelpID = SID_NAVIGATOR ; \
     Text [ en-US ] = "~Navigator" ; \
 
 
 #define ITEM_EDIT_BIBLIOGRAPHY \
     Identifier = SID_COMP_BIBLIOGRAPHY ; \
     Command = ".uno:BibliographyComponent" ; \
-    HelpID = SID_COMP_BIBLIOGRAPHY ; \
     Text [ en-US ] = "~Bibliography Database";  \
 
 #define ITEM_EDIT_PLUGINS_ACTIVE \
     Identifier = SID_PLUGINS_ACTIVE ; \
     Command = ".uno:PlugInsActive" ; \
-    HelpID = SID_PLUGINS_ACTIVE ; \
     Text [ en-US ] = "P~lug-in" ; \
 
 #define ITEM_EDIT_IMAP \
     Identifier = SID_IMAP ; \
     Command = ".uno:ImageMapDialog" ; \
-    HelpID = SID_IMAP ; \
     Text [ en-US ] = "ImageMap" ; \
 
 #define ITEM_EDIT_OBJECT \
     Identifier = SID_OBJECT ; \
     Command = ".uno:ObjectMenue" ; \
-    HelpID = SID_OBJECT ; \
     Text [ en-US ] = "~Object" ; \
 
 #define ITEM_VIEW_ATTR_ZOOM \
     Identifier = SID_ATTR_ZOOM ; \
     Command = ".uno:Zoom" ; \
-    HelpID = SID_ATTR_ZOOM ; \
     Text [ en-US ] = "~Zoom..." ; \
 
 #define ITEM_VIEW_TOGGLEFUNCTIONBAR \
     Identifier = SID_TOGGLEFUNCTIONBAR ; \
     Command = ".uno:FunctionBarVisible" ; \
-    HelpID = SID_TOGGLEFUNCTIONBAR ; \
     Text [ en-US ] = "~Function Bar" ; \
 
 #define ITEM_VIEW_TOGGLEOBJECTBAR \
     Identifier = SID_TOGGLEOBJECTBAR ; \
     Command = ".uno:ObjectBarVisible" ; \
-    HelpID = SID_TOGGLEOBJECTBAR ; \
     Text [ en-US ] = "~Object Bar" ; \
 
 #define ITEM_VIEW_TOGGLEINETBAR \
     Identifier = SID_TOGGLEINETBAR ; \
-    HelpID = SID_TOGGLEINETBAR ; \
+    Command = CMD_SID_TOGGLEINETBAR; \
     Text [ en-US ] = "Internet Bar" ; \
 
 #define ITEM_VIEW_TOGGLESTATUSBAR \
     Identifier = SID_TOGGLESTATUSBAR ; \
     Command = ".uno:StatusBarVisible" ; \
-    HelpID = SID_TOGGLESTATUSBAR ; \
     Text [ en-US ] = "~Status Bar" ; \
 
 #define ITEM_VIEW_TOGGLEIMESTATUSWINDOW \
     Identifier = SID_SHOW_IME_STATUS_WINDOW ; \
     Command = ".uno:ShowImeStatusWindow" ; \
-    HelpID = SID_SHOW_IME_STATUS_WINDOW ; \
     Text [ en-US ] = "~Input Method Status";    \
 
 #define ITEM_VIEW_TASKBAR \
     Identifier = SID_TASKBAR ; \
     Command = ".uno:TaskBarVisible" ; \
-    HelpID = SID_TASKBAR ; \
     Text [ en-US ] = "~Status Bar" ; \
 
 #define ITEM_VIEW_COLORBAR \
     Identifier = SID_COLOR_CONTROL ; \
     Command = ".uno:ColorControl" ; \
-    HelpID = SID_COLOR_CONTROL ; \
     Text [ en-US ] = "~Color Bar" ; \
 
 #define ITEM_VIEW_FULLSCREEN \
     Identifier = SID_WIN_FULLSCREEN ; \
     Command = ".uno:FullScreen" ; \
-    HelpID = SID_WIN_FULLSCREEN ; \
     Text [ en-US ] = "F~ull Screen" ; \
 
 
@@ -598,19 +512,16 @@
 #define ITEM_VIEW_BROWSER_MODE \
     Identifier = SID_BROWSER_MODE ; \
     Command = ".uno:BrowseView" ; \
-    HelpID = SID_BROWSER_MODE ; \
     Text [ en-US ] = "~Online Layout" ; \
 
 #define ITEM_VIEW_BROWSER \
     Identifier = SID_BROWSER ; \
     Command = ".uno:Beamer" ; \
-    HelpID = SID_BROWSER ; \
     Text [ en-US ] = "~Beamer" ; \
 
 #define ITEM_INSERT_INSERT_GRAPHIC \
     Identifier = SID_INSERT_GRAPHIC ; \
     Command = ".uno:InsertGraphic" ; \
-    HelpID = SID_INSERT_GRAPHIC ; \
     Text [ en-US ] = "~Graphics..." ; \
 
 #define ITEM_INSERT_TWAIN_SELECT \
@@ -618,7 +529,6 @@
     {\
         Identifier = SID_TWAIN_SELECT ; \
         Command = ".uno:TwainSelect" ; \
-        HelpID = SID_TWAIN_SELECT ; \
         Text [ en-US ] = "~Select Source..." ; \
             };
 
@@ -627,7 +537,6 @@
     {\
         Identifier = SID_TWAIN_TRANSFER ; \
         Command = ".uno:TwainTransfer" ; \
-        HelpID = SID_TWAIN_TRANSFER ; \
         Text [ en-US ] = "~Request..." ; \
             };
 
@@ -636,7 +545,6 @@
     {\
         Identifier = SID_SCAN ; \
         Command = ".uno:Scan" ; \
-        HelpID = SID_SCAN ; \
         Text [ en-US ] = "Scan" ; \
         SubMenu = Menu\
         {\
@@ -651,19 +559,16 @@
 #define ITEM_INSERT_INSERT_DIAGRAM \
     Identifier = SID_INSERT_DIAGRAM ; \
     Command = ".uno:InsertObjectChart" ; \
-    HelpID = SID_INSERT_DIAGRAM ; \
     Text [ en-US ] = "~Chart..." ; \
 
 #define ITEM_INSERT_GALLERY \
     Identifier = SID_GALLERY ; \
     Command = ".uno:Gallery" ; \
-    HelpID = SID_GALLERY ; \
     Text [ en-US ] = "~Gallery" ; \
 
 #define ITEM_INSERT_INSERTDOC \
     Identifier = SID_INSERTDOC ; \
     Command = ".uno:InsertDoc" ; \
-    HelpID = SID_INSERTDOC ; \
     Text [ en-US ] = "~File..." ; \
 
 #define TMP_SID_INSERT_PLUGIN \
@@ -671,7 +576,6 @@
     {\
         Identifier = SID_INSERT_PLUGIN ; \
         Command = ".uno:InsertPlugin" ; \
-        HelpID = SID_INSERT_PLUGIN ; \
         Text [ en-US ] = "~Plug-in..." ; \
             };
 
@@ -680,7 +584,6 @@
     {\
         Identifier = SID_INSERT_SOUND ; \
         Command = ".uno:InsertSound" ; \
-        HelpID = SID_INSERT_SOUND ; \
         Text [ en-US ] = "~Sound..." ; \
     };
 
@@ -689,27 +592,13 @@
     {\
         Identifier = SID_INSERT_VIDEO ; \
         Command = ".uno:InsertVideo" ; \
-        HelpID = SID_INSERT_VIDEO ; \
         Text [ en-US ] = "~Video..." ; \
     };
 
-#ifdef SOLAR_JAVA
-#define TMP_SID_INSERT_APPLET \
-    MenuItem\
-    {\
-        Identifier = SID_INSERT_APPLET ; \
-        Command = ".uno:InsertApplet" ; \
-        HelpID = SID_INSERT_APPLET ; \
-        Text [ en-US ] = "~Applet..." ; \
-            };
-#else
-#define TMP_SID_INSERT_APPLET
-#endif
 #define ITEM_INSERT_OBJECT_MN \
     MenuItem\
     {\
         Identifier = SID_MN_INSERT_OBJECT_DLGS ; \
-        HelpID = SID_MN_INSERT_OBJECT_DLGS ; \
         Command = ".uno:ObjectMenu" ; \
         Text [ en-US ] = "~Object" ; \
         SubMenu = Menu\
@@ -720,18 +609,15 @@
                 {\
                     Identifier = SID_INSERT_OBJECT ; \
                     Command = ".uno:InsertObject" ; \
-                    HelpID = SID_INSERT_OBJECT ; \
                     Text [ en-US ] = "~OLE Object..." ; \
                                     };\
                 TMP_SID_INSERT_PLUGIN\
                 TMP_SID_INSERT_SOUND\
                 TMP_SID_INSERT_VIDEO\
-                TMP_SID_INSERT_APPLET\
                 MenuItem\
                 {\
                     Identifier = SID_INSERT_MATH ; \
                     Command = ".uno:InsertMath" ; \
-                    HelpID = SID_INSERT_MATH ; \
                     Text [ en-US ] = "~Formula..." ; \
                                     };\
             };\
@@ -742,7 +628,6 @@
     MenuItem\
     {\
         Identifier = SID_MN_INSERT_OBJECT_DLGS ; \
-        HelpID = SID_MN_INSERT_OBJECT_DLGS ; \
         Command = ".uno:ObjectMenu" ; \
         Text [ en-US ] = "~Object" ; \
         SubMenu = Menu\
@@ -753,14 +638,12 @@
                 {\
                     Identifier = SID_INSERT_OBJECT ; \
                     Command = ".uno:InsertObject" ; \
-                    HelpID = SID_INSERT_OBJECT ; \
                     Text [ en-US ] = "~OLE Object..." ; \
                                     };\
                 MenuItem\
                 {\
                     Identifier = SID_INSERT_MATH ; \
                     Command = ".uno:InsertMath" ; \
-                    HelpID = SID_INSERT_MATH ; \
                     Text [ en-US ] = "~Formula" ; \
                                     };\
             };\
@@ -771,7 +654,6 @@
     MenuItem\
     {\
         Identifier = DEFINE_SLOTID_FOR_NUMBER_BULLETS ; \
-        HelpID = DEFINE_SLOTID_FOR_NUMBER_BULLETS ; \
         Text [ en-US ] = "~Numbering/Bullets..." ; \
             };
 
@@ -779,7 +661,6 @@
 
 #define ITEM_FORMAT \
     Identifier = SID_OBJECTMENU0 ; \
-    HelpID = SID_OBJECTMENU0 ; \
     Command = ".uno:FormatMenu" ; \
     Text [ en-US ] = "F~ormat" ; \
 
@@ -787,7 +668,6 @@
 
 #define ITEM_TOOLS_MACROS                               \
     Identifier = SID_SCRIPTORGANIZER ;          \
-    HelpId = SID_SCRIPTORGANIZER ;          \
     Command = ".uno:ScriptOrganizer" ;                       \
         Text [ en-US ] = "Scripts/Macros" ;                 \
 
@@ -803,13 +683,11 @@
             {                                           \
                 Identifier = SID_RECORDMACRO ;          \
                 Command = ".uno:MacroRecorder" ;    \
-                HelpId = SID_RECORDMACRO ;          \
                                 Text [ en-US ] = "Record Macro";            };                                          \
             MenuItem                                    \
             {                                           \
                 Identifier = SID_BASICCHOOSER ;         \
                 Command = ".uno:MacroDialog" ;          \
-                HelpID = SID_BASICCHOOSER ;             \
                                 Text [ en-US ] = "~Macro..." ; \
                             };                                          \
         };                                              \
@@ -822,7 +700,6 @@
 #define ITEM_TOOLS_CONFIG \
     Identifier = SID_CONFIG ; \
     Command = ".uno:ConfigureDialog"; \
-    HelpID = SID_CONFIG ; \
     Text [ en-US ] = "~Configure..." ; \
 
 
@@ -831,7 +708,6 @@
     {\
         Identifier = SID_AUTO_CORRECT_DLG ; \
         Command = ".uno:AutoCorrectDlg" ; \
-        HelpID = SID_AUTO_CORRECT_DLG ; \
         Text [ en-US ] = "~AutoCorrect..." ; \
             };
 
@@ -840,7 +716,6 @@
     {\
         Identifier = SID_SD_GRAPHIC_OPTIONS ; \
         Command = ".uno:SdGraphicOptions" ; \
-        HelpID = SID_SD_GRAPHIC_OPTIONS ; \
         Text [ en-US ] = "~Drawing..." ; \
             };
 
@@ -849,7 +724,6 @@
     {\
         Identifier = SID_OPTIONS_TREEDIALOG ; \
         Command = ".uno:OptionsTreeDialog" ; \
-        HelpID = SID_OPTIONS_TREEDIALOG ; \
         Text [ en-US ] = "~Options..." ; \
             };
 
@@ -860,13 +734,11 @@
 #define ITEM_WINDOW_MDIWINDOWLIST \
     Identifier = SID_MDIWINDOWLIST ; \
     Command = ".uno:WindowList" ; \
-    HelpID = SID_MDIWINDOWLIST ; \
     Text [ en-US ] = "~Window" ; \
 
 #define ITEM_WINDOW_CLONEWIN \
     Identifier = SID_NEWWINDOW ; \
     Command = ".uno:NewWindow" ; \
-    HelpID = SID_NEWWINDOW ; \
     Text [ en-US ] = "~New Window" ; \
 
 #define ITEM_WINDOW_CASCADEWINS \
@@ -874,7 +746,6 @@
     {\
         Identifier = SID_CASCADEWINS ; \
         Command = ".uno:Cascade" ; \
-        HelpID = SID_CASCADEWINS ; \
         Text [ en-US ] = "~Cascade" ; \
             };
 
@@ -883,7 +754,6 @@
     {\
         Identifier = SID_TILEWINS ; \
         Command = ".uno:Tile" ; \
-        HelpID = SID_TILEWINS ; \
         Text [ en-US ] = "~Tile" ; \
             };
 
@@ -892,7 +762,6 @@
     {\
         Identifier = SID_HORIZONTALWINS ; \
         Command = ".uno:ArrangeHorizontal" ; \
-        HelpID = SID_HORIZONTALWINS ; \
         Text [ en-US ] = "~Horizontally" ; \
             };
 
@@ -901,14 +770,12 @@
     {\
         Identifier = SID_VERTICALWINS ; \
         Command = ".uno:ArrangeVertical" ; \
-        HelpID = SID_VERTICALWINS ; \
         Text [ en-US ] = "~Vertically" ; \
             };
 
 #define ITEM_WINDOW_CLOSEWIN \
     Identifier = SID_CLOSEWIN ; \
     Command = ".uno:CloseWin" ; \
-    HelpID = SID_CLOSEWIN ; \
     Text [ en-US ] = "Close Window" ; \
 
 #define ITEM_HYPERLINK_DIALOG \
@@ -916,7 +783,6 @@
     {\
         Identifier = SID_HYPERLINK_DIALOG ; \
         Command = ".uno:HyperlinkDialog" ; \
-        HelpID = SID_HYPERLINK_DIALOG ; \
                 Text [ en-US ] = "~Hyperlink" ; \
             } ;
 
@@ -925,7 +791,6 @@
     {\
         Identifier = SID_POLY_MERGE ; \
         Command = ".uno:Merge" ; \
-        HelpID = SID_POLY_MERGE ; \
         Text [ en-US ] = "~Merge" ; \
     };
 #define ITEM_POLY_SUBSTRACT \
@@ -933,7 +798,6 @@
     {\
         Identifier = SID_POLY_SUBSTRACT ; \
         Command = ".uno:Substract" ; \
-        HelpID = SID_POLY_SUBSTRACT ; \
         Text [ en-US ] = "~Subtract" ; \
         };
 #define ITEM_POLY_INTERSECT \
@@ -941,7 +805,6 @@
     {\
         Identifier = SID_POLY_INTERSECT ; \
         Command = ".uno:Intersect" ; \
-        HelpID = SID_POLY_INTERSECT ; \
         Text [ en-US ] = "I~ntersect" ; \
             };
 
@@ -950,7 +813,6 @@
     { \
         Identifier = SID_POLY_FORMEN ; \
         Command = ".uno:PolyFormen" ; \
-        HelpID = SID_POLY_FORMEN ; \
                 Text [ en-US ] = "~Shapes" ; \
         SubMenu = Menu \
         {\
@@ -1009,43 +871,36 @@
 #define ITEM_HELP_HELPMENU \
     Identifier = SID_HELPMENU ; \
     Command = ".uno:HelpMenu" ; \
-    HelpID = SID_HELPMENU ; \
     Text [ en-US ] = "~Help" ; \
 
 #define ITEM_HELP_HELPINDEX \
     Identifier = SID_HELPINDEX ; \
     Command = ".uno:HelpIndex" ; \
-    HelpID = SID_HELPINDEX ; \
     Text [ en-US ] = "~Contents" ;  \
 
 #define ITEM_HELP_HELPONHELP \
     Identifier = SID_HELPONHELP ; \
     Command = ".uno:HelpOnHelp" ; \
-    HelpID = SID_HELPONHELP ; \
     Text [ en-US ] = "Using Help" ; \
 
 #define ITEM_HELP_HELP_PI \
     Identifier = SID_HELP_PI ; \
     Command = ".uno:HelperDialog" ; \
-    HelpID = SID_HELP_PI ; \
     Text [ en-US ] = "Help ~Agent" ; \
 
 #define ITEM_HELP_HELPTIPS \
     Identifier = SID_HELPTIPS ; \
     Command = ".uno:HelpTip" ; \
-    HelpID = SID_HELPTIPS ; \
     Text [ en-US ] = "~Tips" ; \
 
 #define ITEM_HELP_BALLOONHELP \
     Identifier = SID_HELPBALLOONS ; \
     Command = ".uno:ActiveHelp" ; \
-    HelpID = SID_HELPBALLOONS ; \
     Text [ en-US ] = "~Extended Tips" ; \
 
 #define ITEM_SHOW_LICENSE \
     Identifier = SID_SHOW_LICENSE ; \
     Command = ".uno:ShowLicense" ; \
-    HelpID = SID_SHOW_LICENSE ; \
     Text [ en-US ] = "License information..." ; \
 
 #define ITEM_SHOW_CREDITS \
@@ -1057,14 +912,12 @@
 #define ITEM_HELP_ONLINE_REGISTRATION \
     Identifier = SID_ONLINE_REGISTRATION ; \
     Command = ".uno:OnlineRegistrationDlg" ; \
-    HelpID = SID_ONLINE_REGISTRATION ; \
     Text [ en-US ] = "~Registration..." ; \
 
 
 #define ITEM_HELP_ABOUT \
     Identifier = SID_ABOUT ; \
     Command = ".uno:About" ; \
-    HelpID = SID_ABOUT ; \
     Text [ en-US ] = "A~bout %PRODUCTNAME..." ; \
 
 /*------------------------------------------------------------------------
@@ -1130,39 +983,33 @@
 #define ITEM_POPUP_TEMPLATE_EDIT \
     Identifier = SID_STYLE_EDIT ; \
     Command = ".uno:EditStyle" ; \
-    HelpID = SID_STYLE_EDIT ; \
     Text [ en-US ] = "Edit Paragraph Style..." ; \
 
  // Gruppen-/Kombination-Funktionen
 #define ITEM_POPUP_GROUP \
     Identifier = SID_GROUP ; \
     Command = ".uno:FormatGroup" ; \
-    HelpID = SID_GROUP ; \
     Text [ en-US ] = "~Group" ; \
 
 #define ITEM_POPUP_UNGROUP \
     Identifier = SID_UNGROUP ; \
     Command = ".uno:FormatUngroup" ; \
-    HelpID = SID_UNGROUP ; \
     Text [ en-US ] = "~Ungroup" ; \
 
 #define ITEM_POPUP_ENTER_GROUP \
     Identifier = SID_ENTER_GROUP ; \
     Command = ".uno:EnterGroup" ; \
-    HelpID = SID_ENTER_GROUP ; \
     Text [ en-US ] = "~Edit Group" ; \
 
 #define ITEM_POPUP_LEAVE_GROUP \
     Identifier = SID_LEAVE_GROUP ; \
     Command = ".uno:LeaveGroup" ; \
-    HelpID = SID_LEAVE_GROUP ; \
     Text [ en-US ] = "E~xit Group" ; \
 
 #define ITEM_GROUP_MENU \
     MenuItem\
     {\
         Identifier = SID_MN_GROUP ; \
-        HelpID = SID_MN_GROUP ; \
         Command = ".uno:GroupMenu" ; \
         SubMenu = Menu\
         {\
@@ -1194,14 +1041,12 @@
     { \
         Identifier = SID_DATASOURCE_ADMINISTRATION ; \
         Command = ".uno:DatasourceAdministration" ; \
-        HelpID = SID_DATASOURCE_ADMINISTRATION ; \
         Text [ en-US ] = "~Data Sources..." ; \
     };
 
 #define ITEM_VIEW_DATA_SOURCE_BROWSER \
     Identifier = SID_VIEW_DATA_SOURCE_BROWSER; \
     Command = ".uno:ViewDataSourceBrowser" ; \
-    HelpID = SID_VIEW_DATA_SOURCE_BROWSER; \
         Text [ en-US ] = "~Data Sources" ; \
 
 /*------------------------------------------------------------------------
@@ -1210,112 +1055,92 @@
 #define ITEM_TOOLBAR_SET_JUSTIFY_PARA \
     Identifier = SID_ATTR_PARA_ADJUST_BLOCK ; \
     Command = ".uno:JustifyPara" ; \
-    HelpID = SID_ATTR_PARA_ADJUST_BLOCK ;
 
 #define ITEM_TOOLBAR_NEWDOCDIRECT \
     Identifier = SID_NEWDOCDIRECT ; \
     Command = ".uno:AddDirect" ; \
-    HelpID = SID_NEWDOCDIRECT ;
 
 #define ITEM_TOOLBAR_PRINTDOCDIRECT \
     Identifier = SID_PRINTDOCDIRECT ; \
     Command = ".uno:PrintDefault" ; \
-    HelpID = SID_PRINTDOCDIRECT ;
 
 #define ITEM_TOOLBAR_INSERT_DRAW \
     Identifier = SID_INSERT_DRAW ; \
     Command = ".uno:InsertDraw" ; \
-    HelpID = SID_INSERT_DRAW ; \
     DropDown = TRUE ;
 
 #define ITEM_TOOLBAR_CHOOSE_CONTROLS \
     Identifier = SID_CHOOSE_CONTROLS ; \
     Command = ".uno:ChooseControls" ; \
-    HelpID = SID_CHOOSE_CONTROLS ; \
     DropDown = TRUE ;
 
 #define ITEM_TOOLBAR_AUTOSPELL_CHECK \
     Identifier = SID_AUTOSPELL_CHECK ; \
     Command = ".uno:SpellOnline" ; \
-    HelpID = SID_AUTOSPELL_CHECK ;
 
 #define ITEM_TOOLBAR_TEMPLATE_APPLY \
     Identifier = SID_STYLE_APPLY ; \
     Command = ".uno:StyleApply" ; \
-    HelpID = SID_STYLE_APPLY ;
 
 #define ITEM_TOOLBAR_ATTR_CHAR_COLOR \
     Identifier = SID_ATTR_CHAR_COLOR ; \
     Command = ".uno:Color" ; \
-    HelpID = SID_ATTR_CHAR_COLOR ;\
     DropDown = TRUE ;
 
 #define ITEM_TOOLBAR_BACKGROUND_PATTERN \
     Identifier = SID_BACKGROUND_PATTERN ; \
     Command = ".uno:BackgroundPatternController" ; \
-    HelpID = SID_BACKGROUND_PATTERN ;\
     DropDown = TRUE ;
 
 #define ITEM_TOOLBAR_BACKGROUND_COLOR \
     Identifier = SID_BACKGROUND_COLOR ; \
     Command = ".uno:BackgroundColor" ; \
-    HelpID = SID_BACKGROUND_COLOR ;\
     DropDown = TRUE ;
 
 #define ITEM_TOOLBAR_ATTR_BORDER \
     Identifier = SID_ATTR_BORDER ; \
     Command = ".uno:BorderStyle" ; \
-    HelpID = SID_ATTR_BORDER ;
 
 #define ITEM_TOOLBAR_FRAME_LINESTYLE \
     Identifier = SID_FRAME_LINESTYLE ; \
     Command = ".uno:LineStyle" ; \
-    HelpID = SID_FRAME_LINESTYLE ;
 
 #define ITEM_TOOLBAR_FRAME_LINECOLOR \
     Identifier = SID_FRAME_LINECOLOR ; \
     Command = ".uno:FrameLineColor" ; \
-    HelpID = SID_FRAME_LINECOLOR ;
 
 #define ITEM_TOOLBAR_SIM_START \
     Identifier = SID_SIM_START ; \
     Command = ".uno:LaunchStarImage" ; \
-    HelpID = SID_SIM_START ;
 
 #define ITEM_TOOLBAR_ATTR_LINEEND_STYLE \
     Identifier = SID_ATTR_LINEEND_STYLE ; \
     Command = ".uno:LineEndStyle" ; \
-    HelpID = SID_ATTR_LINEEND_STYLE ; \
     DropDown = TRUE ;
 
 #define ITEM_TOOLBAR_ATTR_LINE_STYLE \
     Identifier = SID_ATTR_LINE_STYLE ; \
     Command = ".uno:XLineStyle" ; \
-    HelpID = SID_ATTR_LINE_STYLE ;
 
 #define ITEM_TOOLBAR_ATTR_LINE_WIDTH \
     Identifier = SID_ATTR_LINE_WIDTH ; \
     Command = ".uno:LineWidth" ; \
-    HelpID = SID_ATTR_LINE_WIDTH ;
 
 #define ITEM_TOOLBAR_ATTR_LINE_COLOR \
     Identifier = SID_ATTR_LINE_COLOR ; \
     Command = ".uno:XLineColor" ; \
-    HelpID = SID_ATTR_LINE_COLOR ;
 
 #define ITEM_TOOLBAR_ATTR_FILL_STYLE \
     Identifier = SID_ATTR_FILL_STYLE ; \
     Command = ".uno:FillStyle" ; \
-    HelpID = SID_ATTR_FILL_STYLE ;
 
 #define ITEM_TOOLBAR_OBJECT_ROTATE \
     Identifier = SID_OBJECT_ROTATE ; \
     Command = ".uno:ToggleObjectRotateMode" ; \
-    HelpID = SID_OBJECT_ROTATE ;
 
 #define ITEM_VIEW_OFFICEBAR \
     Identifier = SID_GROUPVIEW; \
-    HelpID = SID_GROUPVIEW; \
+    Command = CMD_SID_GROUPVIEW; \
     Text [ en-US ] = "~Office Bar" ; \
 
 
@@ -1323,7 +1148,6 @@
     MenuItem\
     {\
         Identifier = SID_MN_SUB_TRANSLITERATE ; \
-        HelpID = SID_MN_SUB_TRANSLITERATE ; \
         Command = ".uno:TransliterateMenu" ; \
         SubMenu = Menu\
         {\
@@ -1333,63 +1157,54 @@
                 {\
                     Identifier = SID_TRANSLITERATE_SENTENCE_CASE; \
                     Command = ".uno:ChangeCaseToSentenceCase" ; \
-                    HelpID = SID_TRANSLITERATE_SENTENCE_CASE; \
                     Text [ en-US ] = "~Sentence case";\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_TRANSLITERATE_LOWER; \
                     Command = ".uno:ChangeCaseToLower" ; \
-                    HelpID = SID_TRANSLITERATE_LOWER; \
                     Text [ en-US ] = "~lowercase";\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_TRANSLITERATE_UPPER ; \
                     Command = ".uno:ChangeCaseToUpper" ; \
-                    HelpID = SID_TRANSLITERATE_UPPER ; \
                     Text [ en-US ] = "~UPPERCASE";\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_TRANSLITERATE_TITLE_CASE; \
                     Command = ".uno:ChangeCaseToTitleCase" ; \
-                    HelpID = SID_TRANSLITERATE_TITLE_CASE; \
                     Text [ en-US ] = "~Capitalize Every Word";\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_TRANSLITERATE_TOGGLE_CASE; \
                     Command = ".uno:ChangeCaseToToggleCase" ; \
-                    HelpID = SID_TRANSLITERATE_TOGGLE_CASE; \
                     Text [ en-US ] = "~tOGGLE cASE";\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_TRANSLITERATE_HALFWIDTH; \
                     Command = ".uno:ChangeCaseToHalfWidth" ; \
-                    HelpID = SID_TRANSLITERATE_HALFWIDTH; \
                     Text [ en-US ] = "H~alf-width";\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_TRANSLITERATE_FULLWIDTH; \
                     Command = ".uno:ChangeCaseToFullWidth" ; \
-                    HelpID = SID_TRANSLITERATE_FULLWIDTH; \
                     Text [ en-US ] = "Full-width";\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_TRANSLITERATE_HIRAGANA; \
                     Command = ".uno:ChangeCaseToHiragana" ; \
-                    HelpID = SID_TRANSLITERATE_HIRAGANA; \
                     Text [ en-US ] = "~Hiragana";\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_TRANSLITERATE_KATAGANA; \
                     Command = ".uno:ChangeCaseToKatakana" ; \
-                    HelpID = SID_TRANSLITERATE_KATAGANA; \
                     Text [ en-US ] = "~Katakana";\
                 };\
             };\
@@ -1399,23 +1214,23 @@
 
 #define ITEM_OPEN_HYPERLINK \
     Identifier = SID_OPEN_HYPERLINK ; \
-    HelpID = SID_OPEN_HYPERLINK ; \
+    Command = CMD_SID_OPEN_HYPERLINK; \
     Text [ en-US ] = "~Open Hyperlink" ;    \
 
 #define ITEM_OPEN_SMARTTAGMENU \
     Identifier = SID_OPEN_SMARTTAGMENU ; \
-    HelpID = SID_OPEN_SMARTTAGMENU ; \
+    Command = CMD_SID_OPEN_SMARTTAGMENU; \
     Text [ en-US ] = "Open ~Smart Tag Menu" ;   \
 
 
 #define ITEM_OPEN_XML_FILTERSETTINGS \
     Identifier = SID_OPEN_XML_FILTERSETTINGS ; \
-    HelpID = SID_OPEN_XML_FILTERSETTINGS ; \
+    Command = CMD_SID_OPEN_XML_FILTERSETTINGS; \
         Text [ en-US ] = "~XML Filter Settings..."; \
 
 #define ITEM_HANGUL_HANJA_CONVERSION \
     Identifier = SID_HANGUL_HANJA_CONVERSION; \
-    HelpId = SID_HANGUL_HANJA_CONVERSION; \
+    Command = CMD_SID_HANGUL_HANJA_CONVERSION; \
     Text [ en-US ] = "Hangul/Hanja Conversion...";     \
 
 #endif // #ifndef _GLOBLMN_HRC

@@ -68,7 +68,7 @@
 #include "sdpropls.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <osl/mutex.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -1263,7 +1263,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
     }
 }
 
-SvXMLImportContext * AnimationNodeContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+SvXMLImportContext * AnimationNodeContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     if( mxNode.is())
@@ -1280,7 +1280,7 @@ public:
     AnimationsImport( const Reference< XMultiServiceFactory > & rSMgr );
     ~AnimationsImport() throw ();
 
-    SvXMLImportContext* CreateContext(USHORT nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList);
+    SvXMLImportContext* CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList);
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& aType ) throw (RuntimeException);
@@ -1349,7 +1349,7 @@ void SAL_CALL AnimationsImport::release() throw ()
     SvXMLImport::release();
 }
 
-SvXMLImportContext *AnimationsImport::CreateContext(USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList)
+SvXMLImportContext *AnimationsImport::CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList)
 {
     SvXMLImportContext* pContext = 0;
 

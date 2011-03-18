@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 #include <tools/svwin.h>
 #endif
 
@@ -46,7 +46,7 @@
 #include "dde.hrc"
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/linkmgr.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -132,7 +132,7 @@ SvDDEObject::SvDDEObject()
     : pConnection( 0 ), pLink( 0 ), pRequest( 0 ), pGetData( 0 ), nError( 0 )
 {
     SetUpdateTimeout( 100 );
-    bWaitForData = FALSE;
+    bWaitForData = sal_False;
 }
 
 SvDDEObject::~SvDDEObject()
@@ -142,12 +142,12 @@ SvDDEObject::~SvDDEObject()
     delete pConnection;
 }
 
-BOOL SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+sal_Bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                             const String & rMimeType,
-                            BOOL bSynchron )
+                            sal_Bool bSynchron )
 {
     if( !pConnection )
-        return FALSE;
+        return sal_False;
 
     if( pConnection->GetError() )  // then we try once more
     {
@@ -161,10 +161,10 @@ BOOL SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
     }
 
     if( bWaitForData ) // we are in an rekursive loop, get out again
-        return FALSE;
+        return sal_False;
 
     // Lock against Reentrance
-    bWaitForData = TRUE;
+    bWaitForData = sal_True;
 
     // if you want to print, we'll wait until the data is available
     if( bSynchron )
@@ -182,7 +182,7 @@ BOOL SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
         if( pConnection->GetError() )
             nError = DDELINK_ERROR_DATA;
 
-        bWaitForData = FALSE;
+        bWaitForData = sal_False;
     }
     else
     {
@@ -206,12 +206,12 @@ BOOL SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
 }
 
 
-BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
+sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
 {
-#if defined(WIN) || defined(WNT)
-    static BOOL bInWinExec = FALSE;
+#if defined(WNT)
+    static sal_Bool bInWinExec = sal_False;
 #endif
-    USHORT nLinkType = pSvLink->GetUpdateMode();
+    sal_uInt16 nLinkType = pSvLink->GetUpdateMode();
     if( pConnection )           // Connection is already made
     {
         // well, then just add it as dependent
@@ -222,17 +222,17 @@ BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
                         : 0 );
         AddConnectAdvise( pSvLink );
 
-        return TRUE;
+        return sal_True;
     }
 
     if( !pSvLink->GetLinkManager() )
-        return FALSE;
+        return sal_False;
 
     String sServer, sTopic;
     pSvLink->GetLinkManager()->GetDisplayNames( pSvLink, &sServer, &sTopic, &sItem );
 
     if( !sServer.Len() || !sTopic.Len() || !sItem.Len() )
-        return FALSE;
+        return sal_False;
 
     pConnection = new DdeConnection( sServer, sTopic );
     if( pConnection->GetError() )
@@ -241,7 +241,7 @@ BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
        // then the server is up, it just does not know the topic!
         if( sTopic.EqualsIgnoreCaseAscii( "SYSTEM" ) )
         {
-            BOOL bSysTopic;
+            sal_Bool bSysTopic;
             {
                 DdeConnection aTmp( sServer, String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "SYSTEM" ) ) );
                 bSysTopic = !aTmp.GetError();
@@ -250,12 +250,12 @@ BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
             if( bSysTopic )
             {
                 nError = DDELINK_ERROR_DATA;
-                return FALSE;
+                return sal_False;
             }
             // otherwise in  Win/WinNT, start the Application directly
         }
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 
         // Server not up, try once more to start it.
         if( !bInWinExec )
@@ -268,12 +268,12 @@ BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
                 nError = DDELINK_ERROR_APP;
             else
             {
-                USHORT i;
+                sal_uInt16 i;
                 for( i=0; i<5; i++ )
                 {
-                    bInWinExec = TRUE;
+                    bInWinExec = sal_True;
                     Application::Reschedule();
-                    bInWinExec = FALSE;
+                    bInWinExec = sal_False;
 
                     delete pConnection;
                     pConnection = new DdeConnection( sServer, sTopic );
@@ -288,7 +288,7 @@ BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
             }
         }
         else
-#endif  // WIN / WNT
+#endif  // WNT
         {
             nError = DDELINK_ERROR_APP;
         }
@@ -305,7 +305,7 @@ BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
     }
 
     if( pConnection->GetError() )
-        return FALSE;
+        return sal_False;
 
     AddDataAdvise( pSvLink,
                 SotExchange::GetFormatMimeType( pSvLink->GetContentType()),
@@ -314,7 +314,7 @@ BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
                         : 0 );
     AddConnectAdvise( pSvLink );
     SetUpdateTimeout( 0 );
-    return TRUE;
+    return sal_True;
 }
 
 void SvDDEObject::Edit( Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link& rEndEditHdl )
@@ -327,9 +327,9 @@ void SvDDEObject::Edit( Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link
     }
 }
 
-BOOL SvDDEObject::ImplHasOtherFormat( DdeTransaction& rReq )
+sal_Bool SvDDEObject::ImplHasOtherFormat( DdeTransaction& rReq )
 {
-    USHORT nFmt = 0;
+    sal_uInt16 nFmt = 0;
     switch( rReq.GetFormat() )
     {
     case FORMAT_RTF:
@@ -356,7 +356,7 @@ BOOL SvDDEObject::ImplHasOtherFormat( DdeTransaction& rReq )
     return 0 != nFmt;
 }
 
-BOOL SvDDEObject::IsPending() const
+sal_Bool SvDDEObject::IsPending() const
 /*  [Description]
 
     The method determines whether the data-object can be read from a DDE.
@@ -370,14 +370,14 @@ BOOL SvDDEObject::IsPending() const
     return bWaitForData;
 }
 
-BOOL SvDDEObject::IsDataComplete() const
+sal_Bool SvDDEObject::IsDataComplete() const
 {
     return bWaitForData;
 }
 
 IMPL_LINK( SvDDEObject, ImplGetDDEData, DdeData*, pData )
 {
-    ULONG nFmt = pData->GetFormat();
+    sal_uIntPtr nFmt = pData->GetFormat();
     switch( nFmt )
     {
     case FORMAT_GDIMETAFILE:
@@ -403,7 +403,7 @@ IMPL_LINK( SvDDEObject, ImplGetDDEData, DdeData*, pData )
                 aVal <<= aSeq;
                 DataChanged( SotExchange::GetFormatMimeType(
                                                 pData->GetFormat() ), aVal );
-                bWaitForData = FALSE;
+                bWaitForData = sal_False;
             }
         }
     }
@@ -413,7 +413,7 @@ IMPL_LINK( SvDDEObject, ImplGetDDEData, DdeData*, pData )
 
 IMPL_LINK( SvDDEObject, ImplDoneDDEData, void*, pData )
 {
-    BOOL bValid = (BOOL)(ULONG)pData;
+    sal_Bool bValid = (sal_Bool)(sal_uIntPtr)pData;
     if( !bValid && ( pRequest || pLink ))
     {
         DdeTransaction* pReq = 0;
@@ -430,13 +430,13 @@ IMPL_LINK( SvDDEObject, ImplDoneDDEData, void*, pData )
             }
             else if( pReq == pRequest )
             {
-                bWaitForData = FALSE;
+                bWaitForData = sal_False;
             }
         }
     }
     else
         // End waiting
-        bWaitForData = FALSE;
+        bWaitForData = sal_False;
 
     return 0;
 }

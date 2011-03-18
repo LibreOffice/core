@@ -110,7 +110,7 @@ namespace connectivity
 
             inline void startSelection(ORowSetValueDecoratorRef& _rVal)
             {
-                return evaluateSelection(m_rCompiler->m_aCodeList,_rVal);
+                evaluateSelection(m_rCompiler->m_aCodeList,_rVal);
             }
 
 

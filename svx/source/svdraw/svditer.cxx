@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdobj.hxx>
@@ -74,7 +74,7 @@ SdrObjListIter::SdrObjListIter( const SdrMarkList& rMarkList, SdrIterMode eMode,
 
 void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, bool bUseZOrder)
 {
-    for( ULONG nIdx = 0, nCount = rObjList.GetObjCount(); nIdx < nCount; ++nIdx )
+    for( sal_uIntPtr nIdx = 0, nCount = rObjList.GetObjCount(); nIdx < nCount; ++nIdx )
     {
         SdrObject* pObj = bUseZOrder ?
             rObjList.GetObj( nIdx ) : rObjList.GetObjectForNavigationPosition( nIdx );
@@ -86,7 +86,7 @@ void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMod
 
 void SdrObjListIter::ImpProcessMarkList( const SdrMarkList& rMarkList, SdrIterMode eMode )
 {
-    for( ULONG nIdx = 0, nCount = rMarkList.GetMarkCount(); nIdx < nCount; ++nIdx )
+    for( sal_uIntPtr nIdx = 0, nCount = rMarkList.GetMarkCount(); nIdx < nCount; ++nIdx )
         if( SdrObject* pObj = rMarkList.GetMark( nIdx )->GetMarkedSdrObj() )
             ImpProcessObj( pObj, eMode, false );
 }

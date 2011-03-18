@@ -33,7 +33,7 @@
 #include "XMLChangeInfoContext.hxx"
 #include <com/sun/star/uno/Reference.h>
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 
 

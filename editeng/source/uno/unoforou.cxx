@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
-SvxOutlinerForwarder::SvxOutlinerForwarder( Outliner& rOutl, BOOL bOutlText /* = FALSE */ ) :
+SvxOutlinerForwarder::SvxOutlinerForwarder( Outliner& rOutl, sal_Bool bOutlText /* = sal_False */ ) :
     rOutliner( rOutl ),
     bOutlinerText( bOutlText ),
     mpAttribsCache( NULL ),
@@ -64,12 +64,12 @@ SvxOutlinerForwarder::~SvxOutlinerForwarder()
     flushCache();
 }
 
-USHORT SvxOutlinerForwarder::GetParagraphCount() const
+sal_uInt16 SvxOutlinerForwarder::GetParagraphCount() const
 {
-    return (USHORT)rOutliner.GetParagraphCount();
+    return (sal_uInt16)rOutliner.GetParagraphCount();
 }
 
-USHORT SvxOutlinerForwarder::GetTextLen( USHORT nParagraph ) const
+sal_uInt16 SvxOutlinerForwarder::GetTextLen( sal_uInt16 nParagraph ) const
 {
     return rOutliner.GetEditEngine().GetTextLen( nParagraph );
 }
@@ -82,7 +82,7 @@ String SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
     return pEditEngine->GetText( rSel, LINEEND_LF );
 }
 
-static SfxItemSet ImplOutlinerForwarderGetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib, EditEngine& rEditEngine )
+static SfxItemSet ImplOutlinerForwarderGetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib, EditEngine& rEditEngine )
 {
     if( rSel.nStartPara == rSel.nEndPara )
     {
@@ -110,7 +110,7 @@ static SfxItemSet ImplOutlinerForwarderGetAttribs( const ESelection& rSel, BOOL 
     }
 }
 
-SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib ) const
+SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib ) const
 {
     if( mpAttribsCache && ( 0 == bOnlyHardAttrib ) )
     {
@@ -147,7 +147,7 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyH
     return aSet;
 }
 
-SfxItemSet SvxOutlinerForwarder::GetParaAttribs( USHORT nPara ) const
+SfxItemSet SvxOutlinerForwarder::GetParaAttribs( sal_uInt16 nPara ) const
 {
     if( mpParaAttribsCache )
     {
@@ -177,7 +177,7 @@ SfxItemSet SvxOutlinerForwarder::GetParaAttribs( USHORT nPara ) const
     return *mpParaAttribsCache;
 }
 
-void SvxOutlinerForwarder::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet )
+void SvxOutlinerForwarder::SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet )
 {
     flushCache();
 
@@ -201,7 +201,7 @@ SfxItemPool* SvxOutlinerForwarder::GetPool() const
     return rOutliner.GetEmptyItemSet().GetPool();
 }
 
-void SvxOutlinerForwarder::GetPortions( USHORT nPara, SvUShorts& rList ) const
+void SvxOutlinerForwarder::GetPortions( sal_uInt16 nPara, SvUShorts& rList ) const
 {
     ((EditEngine&)rOutliner.GetEditEngine()).GetPortions( nPara, rList );
 }
@@ -237,31 +237,31 @@ void SvxOutlinerForwarder::QuickSetAttribs( const SfxItemSet& rSet, const ESelec
     rOutliner.QuickSetAttribs( rSet, rSel );
 }
 
-XubString SvxOutlinerForwarder::CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor )
+XubString SvxOutlinerForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     return rOutliner.CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }
 
-void SvxOutlinerForwarder::FieldClicked( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos )
+void SvxOutlinerForwarder::FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos )
 {
     rOutliner.FieldClicked( rField, nPara, nPos );
 }
 
-BOOL SvxOutlinerForwarder::IsValid() const
+sal_Bool SvxOutlinerForwarder::IsValid() const
 {
     // cannot reliably query outliner state
     // while in the middle of an update
     return rOutliner.GetUpdateMode();
 }
 
-extern USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, USHORT nWhich );
+extern sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, sal_uInt16 nWhich );
 
-USHORT SvxOutlinerForwarder::GetItemState( const ESelection& rSel, USHORT nWhich ) const
+sal_uInt16 SvxOutlinerForwarder::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
 {
     return GetSvxEditEngineItemState( (EditEngine&)rOutliner.GetEditEngine(), rSel, nWhich );
 }
 
-USHORT SvxOutlinerForwarder::GetItemState( USHORT nPara, USHORT nWhich ) const
+sal_uInt16 SvxOutlinerForwarder::GetItemState( sal_uInt16 nPara, sal_uInt16 nWhich ) const
 {
     const SfxItemSet& rSet = rOutliner.GetParaAttribs( nPara );
     return rSet.GetItemState( nWhich );
@@ -283,33 +283,33 @@ void SvxOutlinerForwarder::flushCache()
     }
 }
 
-LanguageType SvxOutlinerForwarder::GetLanguage( USHORT nPara, USHORT nIndex ) const
+LanguageType SvxOutlinerForwarder::GetLanguage( sal_uInt16 nPara, sal_uInt16 nIndex ) const
 {
     return rOutliner.GetLanguage(nPara, nIndex);
 }
 
-USHORT SvxOutlinerForwarder::GetFieldCount( USHORT nPara ) const
+sal_uInt16 SvxOutlinerForwarder::GetFieldCount( sal_uInt16 nPara ) const
 {
     return rOutliner.GetEditEngine().GetFieldCount(nPara);
 }
 
-EFieldInfo SvxOutlinerForwarder::GetFieldInfo( USHORT nPara, USHORT nField ) const
+EFieldInfo SvxOutlinerForwarder::GetFieldInfo( sal_uInt16 nPara, sal_uInt16 nField ) const
 {
     return rOutliner.GetEditEngine().GetFieldInfo( nPara, nField );
 }
 
-EBulletInfo SvxOutlinerForwarder::GetBulletInfo( USHORT nPara ) const
+EBulletInfo SvxOutlinerForwarder::GetBulletInfo( sal_uInt16 nPara ) const
 {
     return rOutliner.GetBulletInfo( nPara );
 }
 
-Rectangle SvxOutlinerForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
+Rectangle SvxOutlinerForwarder::GetCharBounds( sal_uInt16 nPara, sal_uInt16 nIndex ) const
 {
     // EditEngine's 'internal' methods like GetCharacterBounds()
     // don't rotate for vertical text.
     Size aSize( rOutliner.CalcTextSize() );
     ::std::swap( aSize.Width(), aSize.Height() );
-    bool bIsVertical( rOutliner.IsVertical() == TRUE );
+    bool bIsVertical( rOutliner.IsVertical() == sal_True );
 
     // #108900# Handle virtual position one-past-the end of the string
     if( nIndex >= GetTextLen(nPara) )
@@ -350,7 +350,7 @@ Rectangle SvxOutlinerForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) con
     }
 }
 
-Rectangle SvxOutlinerForwarder::GetParaBounds( USHORT nPara ) const
+Rectangle SvxOutlinerForwarder::GetParaBounds( sal_uInt16 nPara ) const
 {
     Point aPnt = rOutliner.GetDocPosTopLeft( nPara );
     Size aSize = rOutliner.CalcTextSize();
@@ -360,13 +360,13 @@ Rectangle SvxOutlinerForwarder::GetParaBounds( USHORT nPara ) const
         // Hargl. Outliner's 'external' methods return the rotated
         // dimensions, 'internal' methods like GetTextHeight( n )
         // don't rotate.
-        ULONG nWidth = rOutliner.GetTextHeight( nPara );
+        sal_uLong nWidth = rOutliner.GetTextHeight( nPara );
 
         return Rectangle( aSize.Width() - aPnt.Y() - nWidth, 0, aSize.Width() - aPnt.Y(), aSize.Height() );
     }
     else
     {
-        ULONG nHeight = rOutliner.GetTextHeight( nPara );
+        sal_uLong nHeight = rOutliner.GetTextHeight( nPara );
 
         return Rectangle( 0, aPnt.Y(), aSize.Width(), aPnt.Y() + nHeight );
     }
@@ -382,13 +382,13 @@ OutputDevice* SvxOutlinerForwarder::GetRefDevice() const
     return rOutliner.GetRefDevice();
 }
 
-sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara, USHORT& nIndex ) const
+sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, sal_uInt16& nPara, sal_uInt16& nIndex ) const
 {
     Size aSize( rOutliner.CalcTextSize() );
     ::std::swap( aSize.Width(), aSize.Height() );
     Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,
                                                       aSize,
-                                                      rOutliner.IsVertical() == TRUE ));
+                                                      rOutliner.IsVertical() == sal_True ));
 
     EPosition aDocPos = rOutliner.GetEditEngine().FindDocPosition( aEEPos );
 
@@ -398,7 +398,7 @@ sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara
     return sal_True;
 }
 
-sal_Bool SvxOutlinerForwarder::GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const
+sal_Bool SvxOutlinerForwarder::GetWordIndices( sal_uInt16 nPara, sal_uInt16 nIndex, sal_uInt16& nStart, sal_uInt16& nEnd ) const
 {
     ESelection aRes = rOutliner.GetEditEngine().GetWord( ESelection(nPara, nIndex, nPara, nIndex), com::sun::star::i18n::WordType::DICTIONARY_WORD );
 
@@ -414,32 +414,32 @@ sal_Bool SvxOutlinerForwarder::GetWordIndices( USHORT nPara, USHORT nIndex, USHO
     return sal_False;
 }
 
-sal_Bool SvxOutlinerForwarder::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const
+sal_Bool SvxOutlinerForwarder::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex ) const
 {
     return SvxEditSourceHelper::GetAttributeRun( nStartIndex, nEndIndex, rOutliner.GetEditEngine(), nPara, nIndex );
 }
 
-USHORT SvxOutlinerForwarder::GetLineCount( USHORT nPara ) const
+sal_uInt16 SvxOutlinerForwarder::GetLineCount( sal_uInt16 nPara ) const
 {
-    return static_cast < USHORT >( rOutliner.GetLineCount(nPara) );
+    return static_cast < sal_uInt16 >( rOutliner.GetLineCount(nPara) );
 }
 
-USHORT SvxOutlinerForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
+sal_uInt16 SvxOutlinerForwarder::GetLineLen( sal_uInt16 nPara, sal_uInt16 nLine ) const
 {
     return rOutliner.GetLineLen(nPara, nLine);
 }
 
-void SvxOutlinerForwarder::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nPara, USHORT nLine ) const
+void SvxOutlinerForwarder::GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_uInt16 nPara, sal_uInt16 nLine ) const
 {
     return rOutliner.GetEditEngine().GetLineBoundaries( rStart, rEnd, nPara, nLine );
 }
 
-USHORT SvxOutlinerForwarder::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
+sal_uInt16 SvxOutlinerForwarder::GetLineNumberAtIndex( sal_uInt16 nPara, sal_uInt16 nIndex ) const
 {
     return rOutliner.GetEditEngine().GetLineNumberAtIndex( nPara, nIndex );
 }
 
-sal_Bool SvxOutlinerForwarder::QuickFormatDoc( BOOL )
+sal_Bool SvxOutlinerForwarder::QuickFormatDoc( sal_Bool )
 {
     rOutliner.QuickFormatDoc();
 
@@ -464,7 +464,7 @@ sal_Bool SvxOutlinerForwarder::InsertText( const String& rStr, const ESelection&
     return sal_True;
 }
 
-sal_Int16 SvxOutlinerForwarder::GetDepth( USHORT nPara ) const
+sal_Int16 SvxOutlinerForwarder::GetDepth( sal_uInt16 nPara ) const
 {
     DBG_ASSERT( nPara < GetParagraphCount(), "SvxOutlinerForwarder::GetDepth: Invalid paragraph index");
 
@@ -478,7 +478,7 @@ sal_Int16 SvxOutlinerForwarder::GetDepth( USHORT nPara ) const
     return nLevel;
 }
 
-sal_Bool SvxOutlinerForwarder::SetDepth( USHORT nPara, sal_Int16 nNewDepth )
+sal_Bool SvxOutlinerForwarder::SetDepth( sal_uInt16 nPara, sal_Int16 nNewDepth )
 {
     DBG_ASSERT( nPara < GetParagraphCount(), "SvxOutlinerForwarder::SetDepth: Invalid paragraph index");
 
@@ -562,12 +562,12 @@ void SvxOutlinerForwarder::AppendParagraph()
     rEditEngine.InsertParagraph( rEditEngine.GetParagraphCount(), String::EmptyString() );
 }
 
-xub_StrLen SvxOutlinerForwarder::AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet & /*rSet*/ )
+xub_StrLen SvxOutlinerForwarder::AppendTextPortion( sal_uInt16 nPara, const String &rText, const SfxItemSet & /*rSet*/ )
 {
     xub_StrLen nLen = 0;
 
     EditEngine& rEditEngine = const_cast< EditEngine& >( rOutliner.GetEditEngine() );
-    USHORT nParaCount = rEditEngine.GetParagraphCount();
+    sal_uInt16 nParaCount = rEditEngine.GetParagraphCount();
     DBG_ASSERT( nPara < nParaCount, "paragraph index out of bounds" );
     if (/*0 <= nPara && */nPara < nParaCount)
     {

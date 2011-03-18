@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/AccessibleShape.hxx>
-#include "DescriptionGenerator.hxx"
+#include "svx/DescriptionGenerator.hxx"
 #include <svx/AccessibleShapeInfo.hxx>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <rtl/uuid.h>
@@ -48,13 +48,13 @@
 #include <svx/unoshtxt.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <com/sun/star/uno/Exception.hpp>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
 
 #include "accessibility.hrc"
-#include "svdstr.hrc"
+#include "svx/svdstr.hrc"
 #include <svx/dialmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -249,7 +249,7 @@ void AccessibleShape::UpdateStates (void)
     // XXX fix_me this has to be done with an extra interface later on
     if ( m_pShape && maShapeTreeInfo.GetSdrView() )
     {
-        bShapeIsSelected = maShapeTreeInfo.GetSdrView()->IsObjMarked(m_pShape) == TRUE;
+        bShapeIsSelected = maShapeTreeInfo.GetSdrView()->IsObjMarked(m_pShape) == sal_True;
     }
 
     if (bShapeIsSelected)

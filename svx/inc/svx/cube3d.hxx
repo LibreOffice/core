@@ -56,7 +56,7 @@ private:
     // Parameter
     basegfx::B3DPoint                   aCubePos;
     basegfx::B3DVector                  aCubeSize;
-    UINT16                              nSideFlags;
+    sal_uInt16                              nSideFlags;
 
     // BOOLeans
     unsigned                            bPosIsCenter : 1;
@@ -70,8 +70,8 @@ public:
     E3dCubeObj(E3dDefaultAttributes& rDefault, basegfx::B3DPoint aPos, const basegfx::B3DVector& r3DSize);
     E3dCubeObj();
 
-    virtual UINT16 GetObjIdentifier() const;
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
     virtual void operator=(const SdrObject&);
 
@@ -82,11 +82,11 @@ public:
     void SetCubeSize(const basegfx::B3DVector& rNew);
     const basegfx::B3DVector& GetCubeSize() { return aCubeSize; }
 
-    void SetPosIsCenter(BOOL bNew);
-    BOOL GetPosIsCenter() { return (BOOL)bPosIsCenter; }
+    void SetPosIsCenter(sal_Bool bNew);
+    sal_Bool GetPosIsCenter() { return (sal_Bool)bPosIsCenter; }
 
-    void SetSideFlags(UINT16 nNew);
-    UINT16 GetSideFlags() { return nSideFlags; }
+    void SetSideFlags(sal_uInt16 nNew);
+    sal_uInt16 GetSideFlags() { return nSideFlags; }
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual void TakeObjNameSingul(String& rName) const;

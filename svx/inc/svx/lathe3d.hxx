@@ -99,12 +99,12 @@ private:
     sal_Bool GetCloseBack() const
         { return ((const Svx3DCloseBackItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_BACK)).GetValue(); }
 
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     void    ReSegment(sal_uInt32 nHSegs, sal_uInt32 nVSegs);
 
     virtual void operator=(const SdrObject&);
 
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual void TakeObjNameSingul(String& rName) const;
@@ -115,7 +115,7 @@ private:
     const basegfx::B2DPolyPolygon& GetPolyPoly2D() { return maPolyPoly2D; }
 
     // break up
-    virtual BOOL IsBreakObjPossible();
+    virtual sal_Bool IsBreakObjPossible();
     virtual SdrAttrObj* GetBreakObj();
 };
 

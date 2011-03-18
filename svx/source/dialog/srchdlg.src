@@ -29,6 +29,7 @@
 
 #include <svx/dialogs.hrc>
 #include "srchdlg.hrc"
+#include <sfx2/sfxcommands.h>
 
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
 
@@ -51,7 +52,7 @@ String RID_SVXSTR_REPLACE
 
 ModelessDialog RID_SVXDLG_SEARCH
 {
-    HelpId = SID_SEARCH_DLG ;
+    HelpId = CMD_SID_SEARCH_DLG ;
     OutputSize = TRUE ;
     Hide = TRUE ;
     SvLook = TRUE ;
@@ -66,6 +67,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     ComboBox ED_SEARCH
     {
+        HelpID = "svx:ComboBox:RID_SVXDLG_SEARCH:ED_SEARCH";
         Pos = MAP_APPFONT ( 6 , 18 ) ;
         Size = MAP_APPFONT ( 132 , 98 ) ;
         TabStop = TRUE ;
@@ -73,6 +75,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     ListBox LB_SEARCH
     {
+        HelpID = "svx:ListBox:RID_SVXDLG_SEARCH:LB_SEARCH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 18 ) ;
         Size = MAP_APPFONT ( 132 , 98 ) ;
@@ -103,6 +106,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     ComboBox ED_REPLACE
     {
+        HelpID = "svx:ComboBox:RID_SVXDLG_SEARCH:ED_REPLACE";
         Pos = MAP_APPFONT ( 6 , 65 ) ;
         Size = MAP_APPFONT ( 132 , 98 ) ;
         TabStop = TRUE ;
@@ -110,6 +114,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     ListBox LB_REPLACE
     {
+        HelpID = "svx:ListBox:RID_SVXDLG_SEARCH:LB_REPLACE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 65 ) ;
         Size = MAP_APPFONT ( 132 , 98 ) ;
@@ -134,6 +139,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     PushButton BTN_SEARCH
     {
+        HelpID = "svx:PushButton:RID_SVXDLG_SEARCH:BTN_SEARCH";
         Pos = MAP_APPFONT ( 144 , 9 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Find" ;
@@ -142,6 +148,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     PushButton BTN_SEARCH_ALL
     {
+        HelpID = "svx:PushButton:RID_SVXDLG_SEARCH:BTN_SEARCH_ALL";
         Pos = MAP_APPFONT ( 144 , 26 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Find ~All" ;
@@ -154,6 +161,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     PushButton BTN_REPLACE
     {
+        HelpID = "svx:PushButton:RID_SVXDLG_SEARCH:BTN_REPLACE";
         Pos = MAP_APPFONT ( 144 , 56 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Replace" ;
@@ -161,6 +169,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     PushButton BTN_REPLACE_ALL
     {
+        HelpID = "svx:PushButton:RID_SVXDLG_SEARCH:BTN_REPLACE_ALL";
         Pos = MAP_APPFONT ( 144 , 73 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Replace A~ll" ;
@@ -174,6 +183,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     PushButton BTN_COMPONENT_1
     {
+        HelpID = "svx:PushButton:RID_SVXDLG_SEARCH:BTN_COMPONENT_1";
         Pos = MAP_APPFONT ( 144 , 103 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -181,6 +191,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     PushButton BTN_COMPONENT_2
     {
+        HelpID = "svx:PushButton:RID_SVXDLG_SEARCH:BTN_COMPONENT_2";
         Pos = MAP_APPFONT ( 144 , 120 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -188,6 +199,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     CheckBox CB_MATCH_CASE
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_SEARCH:CB_MATCH_CASE";
         Pos = MAP_APPFONT ( 12 , 101 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         TabStop = TRUE ;
@@ -195,6 +207,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     CheckBox CB_WHOLE_WORDS
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_SEARCH:CB_WHOLE_WORDS";
         Pos = MAP_APPFONT ( 12 , 114 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         Text [ en-US ] = "Whole wor~ds only" ;
@@ -207,6 +220,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     MoreButton BTN_MORE
     {
+        HelpID = "svx:MoreButton:RID_SVXDLG_SEARCH:BTN_MORE";
         Pos = MAP_APPFONT ( 6 , 135 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -235,6 +249,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     CheckBox CB_SELECTIONS
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_SEARCH:CB_SELECTIONS";
         Pos = MAP_APPFONT ( 12 , 163 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         Text [ en-US ] = "C~urrent selection only" ;
@@ -243,6 +258,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     CheckBox CB_BACKWARDS
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_SEARCH:CB_BACKWARDS";
         Pos = MAP_APPFONT ( 12 , 176 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         Text [ en-US ] = "Bac~kwards" ;
@@ -251,6 +267,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     CheckBox CB_REGEXP
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_SEARCH:CB_REGEXP";
         Pos = MAP_APPFONT ( 12 , 189 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         Text [ en-US ] = "Regular e~xpressions" ;
@@ -259,6 +276,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     CheckBox CB_SIMILARITY
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_SEARCH:CB_SIMILARITY";
         Pos = MAP_APPFONT ( 12 , 204 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text [ en-US ] = "S~imilarity search" ;
@@ -267,6 +285,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     PushButton PB_SIMILARITY
     {
+        HelpID = "svx:PushButton:RID_SVXDLG_SEARCH:PB_SIMILARITY";
         Pos = MAP_APPFONT ( 124 , 202 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Text = "~..." ;
@@ -275,6 +294,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     CheckBox CB_LAYOUTS
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_SEARCH:CB_LAYOUTS";
         Pos = MAP_APPFONT ( 12 , 219 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         Text [ en-US ] = "Search for St~yles" ;
@@ -283,6 +303,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     CheckBox CB_NOTES
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_SEARCH:CB_NOTES";
         Pos = MAP_APPFONT ( 12 , 232 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         TabStop = TRUE ;
@@ -290,6 +311,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     CheckBox CB_JAP_MATCH_FULL_HALF_WIDTH
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_SEARCH:CB_JAP_MATCH_FULL_HALF_WIDTH";
         Pos = MAP_APPFONT ( 12 , 247 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         TabStop = TRUE ;
@@ -298,6 +320,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     CheckBox CB_JAP_SOUNDS_LIKE
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_SEARCH:CB_JAP_SOUNDS_LIKE";
         Pos = MAP_APPFONT ( 12 , 260 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         TabStop = TRUE ;
@@ -306,6 +329,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     PushButton PB_JAP_OPTIONS
     {
+        HelpID = "svx:PushButton:RID_SVXDLG_SEARCH:PB_JAP_OPTIONS";
         Pos = MAP_APPFONT ( 124 , 258 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Text = "..." ;
@@ -314,6 +338,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     PushButton BTN_ATTRIBUTE
     {
+        HelpID = "svx:PushButton:RID_SVXDLG_SEARCH:BTN_ATTRIBUTE";
         Pos = MAP_APPFONT ( 144 , 163 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Attri~butes..." ;
@@ -322,6 +347,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     PushButton BTN_FORMAT
     {
+        HelpID = "svx:PushButton:RID_SVXDLG_SEARCH:BTN_FORMAT";
         Pos = MAP_APPFONT ( 144 , 180 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "For~mat..." ;
@@ -330,6 +356,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     PushButton BTN_NOFORMAT
     {
+        HelpID = "svx:PushButton:RID_SVXDLG_SEARCH:BTN_NOFORMAT";
         Pos = MAP_APPFONT ( 144 , 197 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~No Format" ;
@@ -351,6 +378,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     ListBox LB_CALC_SEARCHIN
     {
+        HelpID = "svx:ListBox:RID_SVXDLG_SEARCH:LB_CALC_SEARCHIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 75 , 283 ) ;
         Size = MAP_APPFONT ( 63 , 48 ) ;
@@ -373,6 +401,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     RadioButton RB_CALC_ROWS
     {
+        HelpID = "svx:RadioButton:RID_SVXDLG_SEARCH:RB_CALC_ROWS";
         Pos = MAP_APPFONT ( 75 , 300 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
         Text [ en-US ] = "Ro~ws" ;
@@ -380,6 +409,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     RadioButton RB_CALC_COLUMNS
     {
+        HelpID = "svx:RadioButton:RID_SVXDLG_SEARCH:RB_CALC_COLUMNS";
         Pos = MAP_APPFONT ( 75 , 313 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
         Text [ en-US ] = "Colu~mns" ;
@@ -387,6 +417,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     CheckBox CB_ALL_SHEETS
     {
+        HelpID = "svx:CheckBox:RID_SVXDLG_SEARCH:CB_ALL_SHEETS";
         Pos = MAP_APPFONT ( 12 , 326 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         Text [ en-US ] = "Search in all sheets" ;

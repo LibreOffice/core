@@ -44,7 +44,7 @@ protected:
     const SdrPage* mpVisualizedPage;
 
 public:
-    SdrOutliner( SfxItemPool* pItemPool, USHORT nMode );
+    SdrOutliner( SfxItemPool* pItemPool, sal_uInt16 nMode );
     virtual ~SdrOutliner() ;
 
     void  SetTextObj( const SdrTextObj* pObj );
@@ -54,7 +54,7 @@ public:
     void setVisualizedPage(const SdrPage* pPage) { if(pPage != mpVisualizedPage) mpVisualizedPage = pPage; }
     const SdrPage* getVisualizedPage() const { return mpVisualizedPage; }
 
-    virtual String  CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor);
+    virtual String  CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor);
 };
 
 #endif //_SVDOUTL_HXX

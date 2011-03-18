@@ -36,7 +36,7 @@
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <classes/sfxhelperfunctions.hxx>
+#include <framework/sfxhelperfunctions.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -92,9 +92,9 @@ static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 namespace framework
 {
 
-static USHORT impl_convertItemStyleToItemBits( sal_Int16 nStyle )
+static sal_uInt16 impl_convertItemStyleToItemBits( sal_Int16 nStyle )
 {
-    USHORT nItemBits( 0 );
+    sal_uInt16 nItemBits( 0 );
 
     if (( nStyle & css_ui::ItemStyle::ALIGN_RIGHT ) == css_ui::ItemStyle::ALIGN_RIGHT )
         nItemBits |= SIB_RIGHT;
@@ -362,9 +362,9 @@ void StatusBarManager::CreateControllers()
     if ( xProps.is() )
         xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xComponentContext;
 
-    for ( USHORT i = 0; i < m_pStatusBar->GetItemCount(); i++ )
+    for ( sal_uInt16 i = 0; i < m_pStatusBar->GetItemCount(); i++ )
     {
-        USHORT nId = m_pStatusBar->GetItemId( i );
+        sal_uInt16 nId = m_pStatusBar->GetItemId( i );
         if ( nId == 0 )
             continue;
 
@@ -470,7 +470,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
     if ( m_bDisposed || !m_pStatusBar )
         return;
 
-    USHORT         nId( 1 );
+    sal_uInt16         nId( 1 );
     rtl::OUString  aHelpIdPrefix( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX ));
 
     RemoveControllers();
@@ -525,21 +525,11 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
                 if (( nType == ::com::sun::star::ui::ItemType::DEFAULT ) && ( aCommandURL.getLength() > 0 ))
                 {
                     rtl::OUString aString( RetrieveLabelFromCommand( aCommandURL ));
-                    USHORT        nItemBits( impl_convertItemStyleToItemBits( nStyle ));
+                    sal_uInt16        nItemBits( impl_convertItemStyleToItemBits( nStyle ));
 
                     m_pStatusBar->InsertItem( nId, nWidth, nItemBits, nOffset );
                     m_pStatusBar->SetItemCommand( nId, aCommandURL );
                     m_pStatusBar->SetAccessibleName( nId, aString );
-//                    m_pStatusBar->SetHelpText( nId, aString );
-
-                    if ( aHelpURL.indexOf( aHelpIdPrefix ) == 0 )
-                    {
-                        rtl::OUString aId( aHelpURL.copy( HELPID_PREFIX_LENGTH ));
-                        sal_uInt16    nHelpId = (sal_uInt16)(aId.toInt32());
-                        if ( nHelpId > 0 )
-                            m_pStatusBar->SetHelpId( nId, nHelpId );
-                    }
-
                     ++nId;
                 }
             }
@@ -593,7 +583,7 @@ void StatusBarManager::UserDraw( const UserDrawEvent& rUDEvt )
     if ( m_bDisposed )
         return;
 
-    USHORT nId( rUDEvt.GetItemId() );
+    sal_uInt16 nId( rUDEvt.GetItemId() );
     if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
     {
         uno::Reference< frame::XStatusbarController > xController(
@@ -623,7 +613,7 @@ void StatusBarManager::Command( const CommandEvent& rEvt )
 
     if ( rEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
-        USHORT nId = m_pStatusBar->GetItemId( rEvt.GetMousePosPixel() );
+        sal_uInt16 nId = m_pStatusBar->GetItemId( rEvt.GetMousePosPixel() );
         if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
         {
             uno::Reference< frame::XStatusbarController > xController(
@@ -651,7 +641,7 @@ void StatusBarManager::MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL
 
     if ( !m_bDisposed )
     {
-        USHORT nId = m_pStatusBar->GetItemId( rMEvt.GetPosPixel() );
+        sal_uInt16 nId = m_pStatusBar->GetItemId( rMEvt.GetPosPixel() );
         if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
         {
             uno::Reference< frame::XStatusbarController > xController(
@@ -687,7 +677,7 @@ IMPL_LINK( StatusBarManager, Click, StatusBar*, EMPTYARG )
     if ( m_bDisposed )
         return 1;
 
-    USHORT nId = m_pStatusBar->GetCurItemId();
+    sal_uInt16 nId = m_pStatusBar->GetCurItemId();
     if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
     {
         uno::Reference< frame::XStatusbarController > xController(
@@ -706,7 +696,7 @@ IMPL_LINK( StatusBarManager, DoubleClick, StatusBar*, EMPTYARG )
     if ( m_bDisposed )
         return 1;
 
-    USHORT nId = m_pStatusBar->GetCurItemId();
+    sal_uInt16 nId = m_pStatusBar->GetCurItemId();
     if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
     {
         uno::Reference< frame::XStatusbarController > xController(

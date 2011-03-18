@@ -30,7 +30,7 @@
 #ifndef _CONNECTIVITY_OFUNCTIONDEFS_HXX_
 #define _CONNECTIVITY_OFUNCTIONDEFS_HXX_
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 
 #ifdef _MSC_VER
 #pragma warning(push)

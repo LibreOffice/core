@@ -2609,39 +2609,6 @@
 				</constraints>
 				<value>100</value>
 			</prop>
-			<prop oor:name="LookAndFeel" oor:type="xs:short">
-				<!-- OldPath: General/View -->
-				<!-- OldLocation: soffice.cfg -->
-				<!-- UIHints: Tools  Options - General  View  [Section] Display -->
-				<info>
-					<author>PB</author>
-					<desc>Determines the look and feel of the application.</desc>
-					<label>Look &amp; Feel</label>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc>Standard</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc>Macintosh</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc>X Window</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="3">
-						<info>
-							<desc>OS/2</desc>
-						</info>
-					</enumeration>
-				</constraints>
-				<value>0</value>
-			</prop>
 			<group oor:name="NewDocumentHandling">
 				<info>
 					<author>CD</author>
@@ -2723,17 +2690,6 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="ColoredTab" oor:type="xs:boolean">
-					<!-- OldPath: General/View -->
-					<!-- OldLocation: soffice.cfg -->
-					<!-- UIHints: Tools  Options - General  View  [Section] Options -->
-					<info>
-						<author>PB</author>
-						<desc>Specifies TabDialogs with colored tab control (True)</desc>
-						<label>Colored tab controls</label>
-					</info>
-					<value>false</value>
-				</prop>
 				<prop oor:name="MousePositioning" oor:type="xs:short">
 					<!-- OldPath: General/View -->
 					<!-- OldLocation: soffice.cfg -->
@@ -2788,17 +2744,6 @@
 						</enumeration>
 					</constraints>
 					<value>1</value>
-				</prop>
-				<prop oor:name="SingleLineTab" oor:type="xs:boolean">
-					<!-- OldPath: General/View -->
-					<!-- OldLocation: soffice.cfg -->
-					<!-- UIHints: Tools  Options - General  View  [Section] Options -->
-					<info>
-						<author>PB</author>
-						<desc>Specifies TabDialogs with single line tab control (True).</desc>
-						<label>Single line tab controls</label>
-					</info>
-					<value>false</value>
 				</prop>
 			</group>
 			<group oor:name="Localisation">
@@ -4377,69 +4322,133 @@
 					<info>
 						<desc>Specifies default settings of graphic export dialogs.</desc>
 					</info>
-					<group oor:name="BMP">
+          <prop oor:name="PixelExportUnit" oor:type="xs:int">
+            <info>
+                <desc>Specifies the unit default that is used in the the graphic export dialog if exporting pixel graphics.</desc>
+            </info>
+            <constraints>
+              <enumeration oor:value="0">
+                <info>
+                  <desc>inches</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="1">
+                <info>
+                  <desc>cm</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="2">
+                <info>
+                  <desc>mm</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="3">
+                <info>
+                  <desc>points</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="4">
+                <info>
+                  <desc>pica</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="5">
+                <info>
+                  <desc>pixels</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="-1">
+                <info>
+                  <desc>default (depends to the metric settings in tools/options)</desc>
+                </info>
+              </enumeration>
+            </constraints>
+            <value>-1</value>
+          </prop>
+          <prop oor:name="PixelExportResolutionUnit" oor:type="xs:int">
+            <info>
+              <desc>Specifies the unit default for the resolution that is used in the the graphic export dialog if exporting pixel graphics.</desc>
+            </info>
+            <constraints>
+              <enumeration oor:value="0">
+                <info>
+                  <desc>pixels/inch</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="1">
+                <info>
+                  <desc>pixels/cm</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="2">
+                <info>
+                  <desc>pixels/meter</desc>
+                </info>
+              </enumeration>
+            </constraints>
+            <value>0</value>
+          </prop>
+          <prop oor:name="PixelExportResolution" oor:type="xs:int">
+            <info>
+              <desc>Specifies the logical width of a graphic. [UNIT=1/100 mm].</desc>
+            </info>
+            <constraints>
+              <minInclusive oor:value="1">
+                <info>
+                  <desc>Represents the lowest value that can be entered in the dialog.</desc>
+                </info>
+              </minInclusive>
+            </constraints>
+            <value>96</value>
+          </prop>
+          <prop oor:name="MaxFilesizeForRealtimePreview" oor:type="xs:int">
+            <info>
+              <desc>Specifies the maximum raw graphic size in bytes up to which the realtime preview is enabled, for fast computers this value may be enlarged</desc>
+            </info>
+            <value>4000000</value>
+          </prop>
+          <prop oor:name="VectorExportUnit" oor:type="xs:int">
+            <info>
+              <desc>Specifies the unit default that is used in the the graphic export dialog if exporting vector graphics.</desc>
+            </info>
+            <constraints>
+              <enumeration oor:value="0">
+                <info>
+                  <desc>inches</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="1">
+                <info>
+                  <desc>cm</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="2">
+                <info>
+                  <desc>mm</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="3">
+                <info>
+                  <desc>points</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="4">
+                <info>
+                  <desc>pica</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="-1">
+                <info>
+                  <desc>default (depends to the metric settings in tools/options)</desc>
+                </info>
+              </enumeration>
+            </constraints>
+            <value>-1</value>
+          </prop>
+          <group oor:name="BMP">
 						<info>
 							<desc>Specifies default settings of the Windows Bitmap export dialog.</desc>
 						</info>
-						<prop oor:name="ExportMode" oor:type="xs:int">
-							<!-- OldPath: BMP-EXPORT-MODE -->
-							<!-- OldLocation: fltopt.ini -->
-							<!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
-							<info>
-								<desc>Specifies usable export modes.</desc>
-								<label>Mode - Original / Resolution / Size</label>
-							</info>
-							<constraints>
-								<enumeration oor:value="0">
-									<info>
-										<desc>Original size</desc>
-									</info>
-								</enumeration>
-								<enumeration oor:value="1">
-									<info>
-										<desc>Logical size (dpi/pixel ratio)</desc>
-									</info>
-								</enumeration>
-								<enumeration oor:value="2">
-									<info>
-										<desc>Given size</desc>
-									</info>
-								</enumeration>
-							</constraints>
-							<value>0</value>
-						</prop>
-						<prop oor:name="Resolution" oor:type="xs:int">
-							<!-- OldPath: BMP-EXPORT-RES -->
-							<!-- OldLocation: fltopt.ini -->
-							<!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
-							<info>
-								<desc>Specifies resolution which is to be used if export mode is 1. [UNIT=dpi]</desc>
-								<label>Resolution</label>
-							</info>
-							<constraints>
-								<enumeration oor:value="75">
-									<info>
-										<desc>75</desc>
-									</info>
-								</enumeration>
-								<enumeration oor:value="150">
-									<info>
-										<desc>150</desc>
-									</info>
-								</enumeration>
-								<enumeration oor:value="300">
-									<info>
-										<desc>300</desc>
-									</info>
-								</enumeration>
-								<enumeration oor:value="600">
-									<info>
-										<desc>600</desc>
-									</info>
-								</enumeration>
-							</constraints>
-							<value>75</value>
-						</prop>
 						<prop oor:name="Color" oor:type="xs:int">
 							<!-- OldLocation: fltopt.ini -->
 							<!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
@@ -4501,13 +4510,6 @@
 							</info>
 							<value>true</value>
 						</prop>
-						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
-							<info>
-								<desc>Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
-							</info>
-							<!-- OldLocation: fltopt.ini -->
-							<!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
-						</node-ref>
 					</group>
 					<group oor:name="EPS">
 						<!-- OldLocation: fltopt.ini -->
@@ -4715,72 +4717,6 @@
 							<value>0</value>
 						</prop>
 					</group>
-					<group oor:name="MET">
-						<info>
-							<desc>Specifies if graphics are exported with the original- or selected size.</desc>
-						</info>
-						<prop oor:name="ExportMode" oor:type="xs:int">
-							<!-- OldPath: MET-EXPORT-MODE -->
-							<!-- OldLocation: fltopt.ini -->
-							<!-- UIHints: File  Export  Filetype  MET-OS/2 Metafile -->
-							<info>
-								<desc>Specifies if graphics are exported with the original- or selected size.</desc>
-							</info>
-							<constraints>
-								<enumeration oor:value="0">
-									<info>
-										<desc>Original size</desc>
-									</info>
-								</enumeration>
-								<enumeration oor:value="1">
-									<info>
-										<desc>Given size</desc>
-									</info>
-								</enumeration>
-							</constraints>
-							<value>0</value>
-						</prop>
-						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
-							<info>
-								<desc>Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
-							</info>
-							<!-- OldLocation: fltopt.ini -->
-							<!-- UIHints: File  Export  Filetype  MET-MS Windows - [dialog] MET Options -->
-						</node-ref>
-					</group>
-					<group oor:name="PCT">
-						<info>
-							<desc>Specifies default settings of the PCT - Mac Pict export dialog.</desc>
-						</info>
-						<prop oor:name="ExportMode" oor:type="xs:int">
-							<!-- OldPath: PCT-EXPORT-MODE -->
-							<!-- OldLocation: fltopt.ini -->
-							<!-- UIHints: File  Export  Filetype  PCT-Mac Pict -->
-							<info>
-								<desc>Specifies if graphics are exported with original- or selected size.</desc>
-							</info>
-							<constraints>
-								<enumeration oor:value="0">
-									<info>
-										<desc>Original size</desc>
-									</info>
-								</enumeration>
-								<enumeration oor:value="1">
-									<info>
-										<desc>Given size</desc>
-									</info>
-								</enumeration>
-							</constraints>
-							<value>0</value>
-						</prop>
-						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
-							<info>
-								<desc>Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
-							</info>
-							<!-- OldLocation: fltopt.ini -->
-							<!-- UIHints: File  Export  Filetype  PCT-MS Windows - [dialog] PCT Options -->
-						</node-ref>
-					</group>
 					<group oor:name="PBM">
 						<info>
 							<desc>Specifies default settings of the PBM - Portable Bitmap export dialog.</desc>
@@ -4858,105 +4794,6 @@
 							</constraints>
 							<value>1</value>
 						</prop>
-					</group>
-					<group oor:name="SVM">
-						<info>
-							<desc>Specifies default settings of the SVM - StarView Meta File export dialog.</desc>
-						</info>
-						<prop oor:name="ExportMode" oor:type="xs:int">
-							<!-- OldPath: SVM-EXPORT-MODE -->
-							<!-- OldLocation: fltopt.ini -->
-							<!-- UIHints: File  Export  Filetype  SVM - StarView Metafile -->
-							<info>
-								<desc>Specifies if graphics should be exported with the original- or selected size.</desc>
-							</info>
-							<constraints>
-								<enumeration oor:value="0">
-									<info>
-										<desc>Original size</desc>
-									</info>
-								</enumeration>
-								<enumeration oor:value="1">
-									<info>
-										<desc>Given size</desc>
-									</info>
-								</enumeration>
-							</constraints>
-							<value>0</value>
-						</prop>
-						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
-							<info>
-								<desc>Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
-							</info>
-							<!-- OldLocation: fltopt.ini -->
-							<!-- UIHints: File  Export  Filetype  SVM  - StarView Metafile - [dialog] SVM Options -->
-						</node-ref>
-					</group>
-					<group oor:name="WMF">
-						<info>
-							<desc>Specifies default settings of the WMF - Windows Metafile export dialog.</desc>
-						</info>
-						<prop oor:name="ExportMode" oor:type="xs:int">
-							<!-- OldPath: WMF-EXPORT-MODE -->
-							<!-- OldLocation: fltopt.ini -->
-							<!-- UIHints: File  Export  Filetype  WMF -MS Windows Metafile -->
-							<info>
-								<desc>Specifies if graphics should be exported with the original- or selected size.</desc>
-							</info>
-							<constraints>
-								<enumeration oor:value="0">
-									<info>
-										<desc>Original size</desc>
-									</info>
-								</enumeration>
-								<enumeration oor:value="1">
-									<info>
-										<desc>Given size</desc>
-									</info>
-								</enumeration>
-							</constraints>
-							<value>0</value>
-						</prop>
-						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
-							<info>
-								<desc>Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
-							</info>
-							<!-- OldLocation: fltopt.ini -->
-							<!-- UIHints: File  Export  Filetype  WMF - MS Windows Metafile - [dialog] WMF Options -->
-						</node-ref>
-					</group>
-					<group oor:name="EMF">
-						<info>
-							<desc>Specifies default settings of the EMF - Enhanced Metafile export dialog.</desc>
-						</info>
-						<prop oor:name="ExportMode" oor:type="xs:int">
-							<!-- OldPath: EMF-EXPORT-MODE -->
-							<!-- OldLocation: fltopt.ini -->
-							<!-- UIHints: File - Export -->
-							<info>
-								<desc>Specifies if graphics should be exported with the original- or selected size.</desc>
-							</info>
-							<constraints>
-								<enumeration oor:value="0">
-									<info>
-										<desc>Original size</desc>
-									</info>
-								</enumeration>
-								<enumeration oor:value="1">
-									<info>
-										<desc>Given size</desc>
-									</info>
-								</enumeration>
-							</constraints>
-							<value>0</value>
-						</prop>
-						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
-							<info>
-								<desc>Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
-							</info>
-							<!-- OldLocation: fltopt.ini -->
-							<!-- UIHints: File  Export  Filetype  EMF - Enhanced Metafile - [dialog] EMF Options -->
-						</node-ref>
 					</group>
 					<group oor:name="PNG">
 						<info>

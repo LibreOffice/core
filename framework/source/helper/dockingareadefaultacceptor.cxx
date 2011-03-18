@@ -76,7 +76,7 @@ using namespace ::osl                           ;
 //*****************************************************************************************************************
 //  constructor
 //*****************************************************************************************************************
-DockingAreaDefaultAcceptor::DockingAreaDefaultAcceptor( const   Reference< XFrame >&        xOwner  )
+DockingAreaDefaultAcceptor::DockingAreaDefaultAcceptor( const   css::uno::Reference< XFrame >&      xOwner  )
         //  Init baseclasses first
         :   ThreadHelpBase  ( &Application::GetSolarMutex() )
         // Init member
@@ -100,8 +100,8 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL DockingAreaDefaultAcceptor::ge
     ResetableGuard aGuard( m_aLock );
 
     // Try to "lock" the frame for access to taskscontainer.
-    Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );
-    Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
+    css::uno::Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );
+    css::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
 
     return xContainerWindow;
 }
@@ -112,13 +112,13 @@ sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css
     ResetableGuard aGuard( m_aLock );
 
     // Try to "lock" the frame for access to taskscontainer.
-    Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );
+    css::uno::Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );
     aGuard.unlock();
 
     if ( xFrame.is() == sal_True )
     {
-        Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
-        Reference< css::awt::XWindow > xComponentWindow( xFrame->getComponentWindow() );
+        css::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
+        css::uno::Reference< css::awt::XWindow > xComponentWindow( xFrame->getComponentWindow() );
 
         if (( xContainerWindow.is() == sal_True ) &&
             ( xComponentWindow.is() == sal_True )       )
@@ -152,11 +152,11 @@ void SAL_CALL DockingAreaDefaultAcceptor::setDockingAreaSpace( const css::awt::R
     ResetableGuard aGuard( m_aLock );
 
     // Try to "lock" the frame for access to taskscontainer.
-    Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );
+    css::uno::Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );
     if ( xFrame.is() == sal_True )
     {
-        Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
-        Reference< css::awt::XWindow > xComponentWindow( xFrame->getComponentWindow() );
+        css::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
+        css::uno::Reference< css::awt::XWindow > xComponentWindow( xFrame->getComponentWindow() );
 
         if (( xContainerWindow.is() == sal_True ) &&
             ( xComponentWindow.is() == sal_True )       )

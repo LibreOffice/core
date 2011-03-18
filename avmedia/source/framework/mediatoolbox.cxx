@@ -96,7 +96,7 @@ SFX_IMPL_TOOLBOX_CONTROL( ::avmedia::MediaToolBoxControl, ::avmedia::MediaItem )
 
 // -----------------------------------------------------------------------------
 
-MediaToolBoxControl::MediaToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+MediaToolBoxControl::MediaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
         rTbx.Invalidate();
@@ -110,7 +110,7 @@ MediaToolBoxControl::~MediaToolBoxControl()
 
 // -----------------------------------------------------------------------------
 
-void MediaToolBoxControl::StateChanged( USHORT /* nSID */, SfxItemState eState, const SfxPoolItem* pState )
+void MediaToolBoxControl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     MediaToolBoxControl_Impl* pCtrl = static_cast< MediaToolBoxControl_Impl* >( GetToolBox().GetItemWindow( GetId() ) );

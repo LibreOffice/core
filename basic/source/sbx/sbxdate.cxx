@@ -122,13 +122,13 @@ double ImpGetDate( const SbxValues* p )
 
                 pFormatter->PutandConvertEntry( aStr, nCheckPos,    nType,
                     nIndex, LANGUAGE_GERMAN, eLangType );
-                BOOL bSuccess = pFormatter->IsNumberFormat( *p->pOUString, nIndex, nRes );
+                sal_Bool bSuccess = pFormatter->IsNumberFormat( *p->pOUString, nIndex, nRes );
                 if ( bSuccess )
                 {
                     short nType_ = pFormatter->GetType( nIndex );
                     if(!(nType_ & ( NUMBERFORMAT_DATETIME | NUMBERFORMAT_DATE |
                                     NUMBERFORMAT_TIME | NUMBERFORMAT_DEFINED )))
-                        bSuccess = FALSE;
+                        bSuccess = sal_False;
                 }
 
                 if ( !bSuccess )
@@ -317,7 +317,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
             }
-            *p->pByte = (BYTE) n; break;
+            *p->pByte = (sal_uInt8) n; break;
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
             if( n > SbxMAXINT )
@@ -328,7 +328,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMININT;
             }
-            *p->pInteger = (INT16) n; break;
+            *p->pInteger = (sal_Int16) n; break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
             if( n > SbxMAXUINT )
@@ -339,7 +339,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
             }
-            *p->pUShort = (UINT16) n; break;
+            *p->pUShort = (sal_uInt16) n; break;
         case SbxBYREF | SbxLONG:
             if( n > SbxMAXLNG )
             {
@@ -349,7 +349,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMINLNG;
             }
-            *p->pLong = (INT32) n; break;
+            *p->pLong = (sal_Int32) n; break;
         case SbxBYREF | SbxULONG:
             if( n > SbxMAXULNG )
             {
@@ -359,7 +359,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
             }
-            *p->pULong = (UINT32) n; break;
+            *p->pULong = (sal_uInt32) n; break;
         case SbxBYREF | SbxSINGLE:
             if( n > SbxMAXSNG )
             {

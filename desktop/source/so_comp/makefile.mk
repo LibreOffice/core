@@ -70,3 +70,10 @@ SHL1STDLIBS= \
 
 .INCLUDE :  target.mk
 
+ALLTAR : $(MISC)/socomp.component
+
+$(MISC)/socomp.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        socomp.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt socomp.component

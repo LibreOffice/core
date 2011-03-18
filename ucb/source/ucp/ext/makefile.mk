@@ -59,3 +59,11 @@ SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE : target.mk
+
+ALLTAR : $(MISC)/ucpext.component
+
+$(MISC)/ucpext.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        ucpext.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ucpext.component

@@ -64,8 +64,8 @@
 #include "svx/framelink.hxx"
 #include "svx/sdr/table/tabledesign.hxx"
 #include "svx/svdundo.hxx"
-#include "svdstr.hrc"
-#include "svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include "editeng/writingmodeitem.hxx"
 #include "editeng/frmdiritem.hxx"
 #include "svx/xflhtit.hxx"
@@ -758,7 +758,7 @@ SdrTableObj::SdrTableObj(SdrModel* _pModel, const ::Rectangle& rNewRect, sal_Int
 
 void SdrTableObj::init( sal_Int32 nColumns, sal_Int32 nRows )
 {
-    bClosedObj = TRUE;
+    bClosedObj = sal_True;
 
     mpImpl = new SdrTableObjImpl;
     mpImpl->acquire();
@@ -1401,34 +1401,34 @@ void SdrTableObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 
 void SdrTableObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bResizeFreeAllowed=TRUE;
-    rInfo.bResizePropAllowed=TRUE;
-    rInfo.bRotateFreeAllowed=FALSE;
-    rInfo.bRotate90Allowed  =FALSE;
-    rInfo.bMirrorFreeAllowed=FALSE;
-    rInfo.bMirror45Allowed  =FALSE;
-    rInfo.bMirror90Allowed  =FALSE;
+    rInfo.bResizeFreeAllowed=sal_True;
+    rInfo.bResizePropAllowed=sal_True;
+    rInfo.bRotateFreeAllowed=sal_False;
+    rInfo.bRotate90Allowed  =sal_False;
+    rInfo.bMirrorFreeAllowed=sal_False;
+    rInfo.bMirror45Allowed  =sal_False;
+    rInfo.bMirror90Allowed  =sal_False;
 
     // allow transparence
-    rInfo.bTransparenceAllowed = TRUE;
+    rInfo.bTransparenceAllowed = sal_True;
 
     // gradient depends on fillstyle
     XFillStyle eFillStyle = ((XFillStyleItem&)(GetObjectItem(XATTR_FILLSTYLE))).GetValue();
     rInfo.bGradientAllowed = (eFillStyle == XFILL_GRADIENT);
-    rInfo.bShearAllowed     =FALSE;
-    rInfo.bEdgeRadiusAllowed=FALSE;
-    rInfo.bCanConvToPath    =FALSE;
-    rInfo.bCanConvToPoly    =FALSE;
-    rInfo.bCanConvToPathLineToArea=FALSE;
-    rInfo.bCanConvToPolyLineToArea=FALSE;
-    rInfo.bCanConvToContour = FALSE;
+    rInfo.bShearAllowed     =sal_False;
+    rInfo.bEdgeRadiusAllowed=sal_False;
+    rInfo.bCanConvToPath    =sal_False;
+    rInfo.bCanConvToPoly    =sal_False;
+    rInfo.bCanConvToPathLineToArea=sal_False;
+    rInfo.bCanConvToPolyLineToArea=sal_False;
+    rInfo.bCanConvToContour = sal_False;
 }
 
 // --------------------------------------------------------------------
 
-UINT16 SdrTableObj::GetObjIdentifier() const
+sal_uInt16 SdrTableObj::GetObjIdentifier() const
 {
-    return static_cast<UINT16>(OBJ_TABLE);
+    return static_cast<sal_uInt16>(OBJ_TABLE);
 }
 
 // --------------------------------------------------------------------
@@ -1462,7 +1462,7 @@ void SdrTableObj::SetModel(SdrModel* pNewModel)
 
 // --------------------------------------------------------------------
 
-void SdrTableObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText, Rectangle* pAnchorRect, BOOL bLineWidth ) const
+void SdrTableObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText, Rectangle* pAnchorRect, bool bLineWidth ) const
 {
     if( mpImpl )
         TakeTextRect( mpImpl->maEditPos, rOutliner, rTextRect, bNoEditText, pAnchorRect, bLineWidth );
@@ -1470,7 +1470,7 @@ void SdrTableObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bo
 
 // --------------------------------------------------------------------
 
-void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText, Rectangle* pAnchorRect, BOOL /*bLineWidth*/ ) const
+void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText, Rectangle* pAnchorRect, bool /*bLineWidth*/ ) const
 {
     if( !mpImpl )
         return;
@@ -1485,7 +1485,7 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rec
     SdrTextVertAdjust eVAdj=xCell->GetTextVerticalAdjust();
 //  SdrTextHorzAdjust eHAdj=xCell->GetTextHorizontalAdjust();
 
-    ULONG nStat0=rOutliner.GetControlWord();
+    sal_uIntPtr nStat0=rOutliner.GetControlWord();
     Size aNullSize;
     nStat0 |= EE_CNTRL_AUTOPAGESIZE;
     rOutliner.SetControlWord(nStat0);
@@ -1521,7 +1521,7 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rec
             if( bHitTest ) // #i33696# take back fix #i27510#
                 rOutliner.SetTextObj( this );
 
-            rOutliner.SetUpdateMode(TRUE);
+            rOutliner.SetUpdateMode(sal_True);
             rOutliner.SetText(*pPara);
         }
     }
@@ -1533,7 +1533,7 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rec
     if (pEdtOutl && !bNoEditText && pPara && mpImpl->mxActiveCell == xCell )
         delete pPara;
 
-    rOutliner.SetUpdateMode(TRUE);
+    rOutliner.SetUpdateMode(sal_True);
     rOutliner.SetControlWord(nStat0);
 
     Point aTextPos(aAnkRect.TopLeft());
@@ -1752,7 +1752,7 @@ void SdrTableObj::TakeTextEditArea( const CellPos& rPos, Size* pPaperMin, Size* 
 
 // --------------------------------------------------------------------
 
-USHORT SdrTableObj::GetOutlinerViewAnchorMode() const
+sal_uInt16 SdrTableObj::GetOutlinerViewAnchorMode() const
 {
     EVAnchorMode eRet=ANCHOR_TOP_LEFT;
     CellRef xCell( getActiveCell() );
@@ -1809,7 +1809,7 @@ USHORT SdrTableObj::GetOutlinerViewAnchorMode() const
         }
 */
     }
-    return (USHORT)eRet;
+    return (sal_uInt16)eRet;
 }
 
 // --------------------------------------------------------------------
@@ -2046,14 +2046,14 @@ sal_Bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
 
 //  ForceOutlinerParaObject();
 
-    mbInEditMode = TRUE;
+    mbInEditMode = sal_True;
 
     rOutl.Init( OUTLINERMODE_TEXTOBJECT );
     rOutl.SetRefDevice( pModel->GetRefDevice() );
 
 // --
         bool bUpdMerk=rOutl.GetUpdateMode();
-        if (bUpdMerk) rOutl.SetUpdateMode(FALSE);
+        if (bUpdMerk) rOutl.SetUpdateMode(sal_False);
         Size aPaperMin;
         Size aPaperMax;
         Rectangle aEditArea;
@@ -2063,10 +2063,10 @@ sal_Bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
         rOutl.SetMaxAutoPaperSize(aPaperMax);
         rOutl.SetPaperSize(aPaperMax);
 
-        if (bUpdMerk) rOutl.SetUpdateMode(TRUE);
+        if (bUpdMerk) rOutl.SetUpdateMode(sal_True);
 //---
 
-    ULONG nStat=rOutl.GetControlWord();
+    sal_uIntPtr nStat=rOutl.GetControlWord();
 //  nStat   &= ~EE_CNTRL_AUTOPAGESIZE;
     nStat   |= EE_CNTRL_AUTOPAGESIZE;
     nStat   &=~EE_CNTRL_STRETCHING;
@@ -2095,7 +2095,7 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
 
         OutlinerParaObject* pNewText = 0;
         Paragraph* p1stPara = rOutl.GetParagraph( 0 );
-        UINT32 nParaAnz = rOutl.GetParagraphCount();
+        sal_uInt32 nParaAnz = rOutl.GetParagraphCount();
 
         if(p1stPara)
         {
@@ -2125,11 +2125,11 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
 
     pEdtOutl = 0;
     rOutl.Clear();
-    UINT32 nStat = rOutl.GetControlWord();
+    sal_uInt32 nStat = rOutl.GetControlWord();
     nStat &= ~EE_CNTRL_AUTOPAGESIZE;
     rOutl.SetControlWord(nStat);
 
-    mbInEditMode = FALSE;
+    mbInEditMode = sal_False;
 }
 
 // --------------------------------------------------------------------
@@ -2237,7 +2237,7 @@ bool SdrTableObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 bool SdrTableObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHeight, bool bWidth) const
 {
     if((pModel == NULL) || rR.IsEmpty() || !mpImpl || !mpImpl->mxTable.is() )
-        return FALSE;
+        return sal_False;
 
     Rectangle aRectangle( rR );
     mpImpl->LayoutTable( aRectangle, !bWidth, !bHeight );
@@ -2245,11 +2245,11 @@ bool SdrTableObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHeight, boo
     if( aRectangle != rR )
     {
         rR = aRectangle;
-        return TRUE;
+        return sal_True;
     }
     else
     {
-        return FALSE;
+        return sal_False;
     }
 }
 
@@ -2441,8 +2441,8 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
     rHdlList.AddHdl( pH = new SdrHdl(aRect.BottomCenter(),HDL_LOWER) ); pH->SetMoveOutside( true );
     rHdlList.AddHdl( pH = new SdrHdl(aRect.BottomRight(),HDL_LWRGT) ); pH->SetMoveOutside( true );
 
-    ULONG nHdlCount = rHdlList.GetHdlCount();
-    for( ULONG nHdl = 0; nHdl < nHdlCount; nHdl++ )
+    sal_uIntPtr nHdlCount = rHdlList.GetHdlCount();
+    for( sal_uIntPtr nHdl = 0; nHdl < nHdlCount; nHdl++ )
         rHdlList.GetHdl(nHdl)->SetObj((SdrObject*)this);
 }
 
@@ -2621,7 +2621,7 @@ bool SdrTableObj::MovCreate(SdrDragStat& rStat)
     rStat.SetActionRect(aRect1);
     aRect=aRect1; // fuer ObjName
     SetBoundRectDirty();
-    bSnapRectDirty=TRUE;
+    bSnapRectDirty=sal_True;
     return true;
 }
 

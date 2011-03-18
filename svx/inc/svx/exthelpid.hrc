@@ -28,8 +28,6 @@
 #define _SVX_EXTHELPID_HRC
 // include ---------------------------------------------------------------
 
-#include <svl/solar.hrc>
-
 // these HIDs are used in SVX and also in other modules, mainly CUI
 // the reason is that different controls have the same help texts assigned
 // but are implemented in different libraries
@@ -37,19 +35,8 @@
 // are moved to this exported (delivered) hrc file
 
 // Help-Ids --------------------------------------------------------------
-#define HID_GALLERY_ACTUALIZE                     (HID_SVX_EXT0_START +  0)
-#define HID_GALLERY_TITLE                         (HID_SVX_EXT0_START +  1)
-
-// please adjust ACT_SVX_EXT_HID_END2 below if you add entries here!
-
-// -----------------------------------------------------------------------
-// Overrun check ---------------------------------------------------------
-// -----------------------------------------------------------------------
-
-#define ACT_SVX_EXT_HID_END     (HID_SVX_EXT0_START +  1)
-#if ACT_SVX_EXT_HID_END > HID_SVX_EXT0_END
-#error Resource-Ueberlauf in #line, #file
-#endif
+#define HID_GALLERY_ACTUALIZE                     "SVX_HID_GALLERY_ACTUALIZE"
+#define HID_GALLERY_TITLE                         "SVX_HID_GALLERY_TITLE"
 
 #endif
 

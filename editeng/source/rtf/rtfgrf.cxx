@@ -41,12 +41,12 @@
 
 using namespace ::rtl;
 
-static BYTE aPal1[ 2 * 4 ] = {
+static sal_uInt8 aPal1[ 2 * 4 ] = {
         0x00, 0x00, 0x00, 0x00,             // Black
         0xFF, 0xFF, 0xFF, 0x00              // White
 };
 
-static BYTE aPal4[ 16 * 4 ] = {
+static sal_uInt8 aPal4[ 16 * 4 ] = {
         0x00, 0x00, 0x00, 0x00,
         0x80, 0x00, 0x00, 0x00,
         0x00, 0x80, 0x00, 0x00,
@@ -65,7 +65,7 @@ static BYTE aPal4[ 16 * 4 ] = {
         0xFF, 0xFF, 0xFF, 0x00
 };
 
-static BYTE aPal8[ 256 * 4 ] =
+static sal_uInt8 aPal8[ 256 * 4 ] =
 {
 0x00, 0x00, 0x00, 0x00,   0x80, 0x00, 0x00, 0x00,   0x00, 0x92, 0x00, 0x00,
 0x80, 0x92, 0x00, 0x00,   0x00, 0x00, 0xAA, 0x00,   0x80, 0x00, 0xAA, 0x00,
@@ -181,14 +181,14 @@ inline short SwapShort( short n )
 static void WriteBMPHeader( SvStream& rStream,
                             const SvxRTFPictureType& rPicType )
 {
-    ULONG n4Width = rPicType.nWidth;
-    ULONG n4Height = rPicType.nHeight;
-    USHORT n4ColBits = rPicType.nBitsPerPixel;
+    sal_uInt32 n4Width = rPicType.nWidth;
+    sal_uInt32 n4Height = rPicType.nHeight;
+    sal_uInt16 n4ColBits = rPicType.nBitsPerPixel;
 
-    USHORT nColors = (1 << n4ColBits);  // Number of colors (1, 16, 256)
-    USHORT nWdtOut = rPicType.nWidthBytes;
+    sal_uInt16 nColors = (1 << n4ColBits);  // Number of colors (1, 16, 256)
+    sal_uInt16 nWdtOut = rPicType.nWidthBytes;
     if( !nWdtOut )
-        nWdtOut = (USHORT)((( n4Width * n4ColBits + 31 ) / 32 ) * 4 );
+        nWdtOut = (sal_uInt16)((( n4Width * n4ColBits + 31 ) / 32 ) * 4 );
 
     long nOffset = 14 + 40;     // BMP_FILE_HD_SIZ + sizeof(*pBmpInfo);
     if( 256 >= nColors )
@@ -203,7 +203,7 @@ static void WriteBMPHeader( SvStream& rStream,
     rStream << SwapLong(40)             // sizeof( BmpInfo )
             << SwapLong(n4Width)
             << SwapLong(n4Height)
-            << (USHORT)1
+            << (sal_uInt16)1
             << n4ColBits
             << SwapLong(0)
             << SwapLong(0)
@@ -237,7 +237,7 @@ xub_StrLen SvxRTFParser::HexToBin( String& rToken )
 
     xub_StrLen n, nLen;
     sal_Unicode nVal;
-    BOOL bValidData = TRUE;
+    sal_Bool bValidData = sal_True;
     const sal_Unicode* pStr = rToken.GetBufferAccess();
     sal_Char* pData = (sal_Char*)pStr;
     for( n = 0, nLen = rToken.Len(); n < nLen; ++n, ++pStr )
@@ -251,7 +251,7 @@ xub_StrLen SvxRTFParser::HexToBin( String& rToken )
         else
         {
             DBG_ASSERT( !this, "invalid Hex value" );
-            bValidData = FALSE;
+            bValidData = sal_False;
             break;
         }
 
@@ -264,7 +264,7 @@ xub_StrLen SvxRTFParser::HexToBin( String& rToken )
     return bValidData ? nLen / 2  : STRING_NOTFOUND;
 }
 
-BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
+sal_Bool SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
 {
     // Delete the old data
     rGrf.Clear();
@@ -287,7 +287,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
     while( _nOpenBrakets && IsParserWorking() && bValidBmp )
     {
         nToken = GetNextToken();
-        USHORT nVal = USHORT( nTokenValue );
+        sal_uInt16 nVal = sal_uInt16( nTokenValue );
         switch( nToken )
         {
         case '}':
@@ -390,7 +390,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
             {
                 rStrm.SeekRel(-1);
                 sal_uInt8 aData[4096];
-                ULONG nSize = sizeof(aData);
+                sal_uInt32 nSize = sizeof(aData);
 
                 while (rPicType.uPicLen > 0)
                 {
@@ -447,14 +447,14 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
                 default:
                     break;
                 }
-                bFirstTextToken = FALSE;
+                bFirstTextToken = sal_False;
             }
 
             if( pTmpFile && SvxRTFPictureType::HEX_MODE == rPicType.nMode )
             {
                 xub_StrLen nTokenLen = HexToBin( aToken );
                 if( STRING_NOTFOUND == nTokenLen )
-                    bValidBmp = FALSE;
+                    bValidBmp = sal_False;
                 else
                 {
                     pTmpFile->Write( (sal_Char*)aToken.GetBuffer(),
@@ -475,12 +475,12 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
         if( bValidBmp )
         {
             GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-            USHORT nImportFilter = GRFILTER_FORMAT_DONTKNOW;
+            sal_uInt16 nImportFilter = GRFILTER_FORMAT_DONTKNOW;
 
             if( pFilterNm )
             {
                 String sTmp;
-                for( USHORT n = pGF->GetImportFormatCount(); n; )
+                for( sal_uInt16 n = pGF->GetImportFormatCount(); n; )
                 {
                     sTmp = pGF->GetImportFormatShortName( --n );
                     if( sTmp.EqualsAscii( pFilterNm ))
@@ -523,8 +523,8 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
                 else
                     aSize = OutputDevice::LogicToLogic( aSize,
                                         rGrf.GetPrefMapMode(), aMap );
-                rPicType.nWidth = sal::static_int_cast< USHORT >(aSize.Width());
-                rPicType.nHeight = sal::static_int_cast< USHORT >(
+                rPicType.nWidth = sal::static_int_cast< sal_uInt16 >(aSize.Width());
+                rPicType.nHeight = sal::static_int_cast< sal_uInt16 >(
                     aSize.Height());
             }
             break;

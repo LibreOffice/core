@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--**********************************************************************
+*
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2000, 2010 Oracle and/or its affiliates.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+*
+**********************************************************************-->
+
+<component loader="com.sun.star.loader.SharedLibrary"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="SchXMLExport.Compact">
+    <service name="com.sun.star.comp.Chart.XMLExporter"/>
+  </implementation>
+  <implementation name="SchXMLExport.Content">
+    <service name="com.sun.star.comp.Chart.XMLContentExporter"/>
+  </implementation>
+  <implementation name="SchXMLExport.Oasis.Compact">
+    <service name="com.sun.star.comp.Chart.XMLOasisExporter"/>
+  </implementation>
+  <implementation name="SchXMLExport.Oasis.Content">
+    <service name="com.sun.star.comp.Chart.XMLOasisContentExporter"/>
+  </implementation>
+  <implementation name="SchXMLExport.Oasis.Meta">
+    <service name="com.sun.star.comp.Chart.XMLOasisMetaExporter"/>
+  </implementation>
+  <implementation name="SchXMLExport.Oasis.Styles">
+    <service name="com.sun.star.comp.Chart.XMLOasisStylesExporter"/>
+  </implementation>
+  <implementation name="SchXMLExport.Styles">
+    <service name="com.sun.star.comp.Chart.XMLStylesExporter"/>
+  </implementation>
+  <implementation name="SchXMLImport">
+    <service name="com.sun.star.comp.Chart.XMLOasisImporter"/>
+  </implementation>
+  <implementation name="SchXMLImport.Content">
+    <service name="com.sun.star.comp.Chart.XMLOasisContentImporter"/>
+  </implementation>
+  <implementation name="SchXMLImport.Meta">
+    <service name="com.sun.star.comp.Chart.XMLOasisMetaImporter"/>
+  </implementation>
+  <implementation name="SchXMLImport.Styles">
+    <service name="com.sun.star.comp.Chart.XMLOasisStylesImporter"/>
+  </implementation>
+  <implementation name="XMLDrawContentExportOOO">
+    <service name="com.sun.star.comp.Draw.XMLContentExporter"/>
+  </implementation>
+  <implementation name="XMLDrawContentExportOasis">
+    <service name="com.sun.star.comp.Draw.XMLOasisContentExporter"/>
+  </implementation>
+  <implementation name="XMLDrawExportOOO">
+    <service name="com.sun.star.comp.Draw.XMLExporter"/>
+  </implementation>
+  <implementation name="XMLDrawExportOasis">
+    <service name="com.sun.star.comp.Draw.XMLOasisExporter"/>
+  </implementation>
+  <implementation name="XMLDrawImportOasis">
+    <service name="com.sun.star.comp.Draw.XMLOasisImporter"/>
+  </implementation>
+  <implementation name="XMLDrawMetaExportOOO">
+    <service name="com.sun.star.comp.Draw.XMLMetaExporter"/>
+  </implementation>
+  <implementation name="XMLDrawMetaExportOasis">
+    <service name="com.sun.star.comp.Draw.XMLOasisMetaExporter"/>
+  </implementation>
+  <implementation name="XMLDrawSettingsExportOOO">
+    <service name="com.sun.star.comp.Draw.XMLSettingsExporter"/>
+  </implementation>
+  <implementation name="XMLDrawSettingsExportOasis">
+    <service name="com.sun.star.comp.Draw.XMLOasisSettingsExporter"/>
+  </implementation>
+  <implementation name="XMLDrawStylesExportOOO">
+    <service name="com.sun.star.comp.Draw.XMLStylesExporter"/>
+  </implementation>
+  <implementation name="XMLDrawStylesExportOasis">
+    <service name="com.sun.star.comp.Draw.XMLOasisStylesExporter"/>
+  </implementation>
+  <implementation name="XMLDrawingLayerExport">
+    <service name="com.sun.star.comp.DrawingLayer.XMLExporter"/>
+  </implementation>
+  <implementation name="XMLImpressClipboardExport">
+    <service name="com.sun.star.comp.Impress.XMLClipboardExporter"/>
+  </implementation>
+  <implementation name="XMLImpressContentExportOOO">
+    <service name="com.sun.star.comp.Impress.XMLContentExporter"/>
+  </implementation>
+  <implementation name="XMLImpressContentExportOasis">
+    <service name="com.sun.star.comp.Impress.XMLOasisContentExporter"/>
+  </implementation>
+  <implementation name="XMLImpressContentImportOasis">
+    <service name="com.sun.star.comp.Draw.XMLOasisContentImporter"/>
+    <service name="com.sun.star.comp.Impress.XMLOasisContentImporter"/>
+  </implementation>
+  <implementation name="XMLImpressExportOOO">
+    <service name="com.sun.star.comp.Impress.XMLExporter"/>
+  </implementation>
+  <implementation name="XMLImpressExportOasis">
+    <service name="com.sun.star.comp.Impress.XMLOasisExporter"/>
+  </implementation>
+  <implementation name="XMLImpressImportOasis">
+    <service name="com.sun.star.comp.Impress.XMLOasisImporter"/>
+  </implementation>
+  <implementation name="XMLImpressMetaExportOOO">
+    <service name="com.sun.star.comp.Impress.XMLMetaExporter"/>
+  </implementation>
+  <implementation name="XMLImpressMetaExportOasis">
+    <service name="com.sun.star.comp.Impress.XMLOasisMetaExporter"/>
+  </implementation>
+  <implementation name="XMLImpressMetaImportOasis">
+    <service name="com.sun.star.comp.Draw.XMLOasisMetaImporter"/>
+    <service name="com.sun.star.comp.Impress.XMLOasisMetaImporter"/>
+  </implementation>
+  <implementation name="XMLImpressSettingsExportOOO">
+    <service name="com.sun.star.comp.Impress.XMLSettingsExporter"/>
+  </implementation>
+  <implementation name="XMLImpressSettingsExportOasis">
+    <service name="com.sun.star.comp.Impress.XMLOasisSettingsExporter"/>
+  </implementation>
+  <implementation name="XMLImpressSettingsImportOasis">
+    <service name="com.sun.star.comp.Draw.XMLOasisSettingsImporter"/>
+    <service name="com.sun.star.comp.Impress.XMLOasisSettingsImporter"/>
+  </implementation>
+  <implementation name="XMLImpressStylesExportOOO">
+    <service name="com.sun.star.comp.Impress.XMLStylesExporter"/>
+  </implementation>
+  <implementation name="XMLImpressStylesExportOasis">
+    <service name="com.sun.star.comp.Impress.XMLOasisStylesExporter"/>
+  </implementation>
+  <implementation name="XMLImpressStylesImportOasis">
+    <service name="com.sun.star.comp.Draw.XMLOasisStylesImporter"/>
+    <service name="com.sun.star.comp.Impress.XMLOasisStylesImporter"/>
+  </implementation>
+  <implementation name="XMLMetaExportComponent">
+    <service name="com.sun.star.document.XMLOasisMetaExporter"/>
+  </implementation>
+  <implementation name="XMLMetaExportOOo">
+    <service name="com.sun.star.document.XMLMetaExporter"/>
+  </implementation>
+  <implementation name="XMLMetaImportComponent">
+    <service name="com.sun.star.document.XMLOasisMetaImporter"/>
+  </implementation>
+  <implementation name="XMLVersionListPersistence">
+    <service name="com.sun.star.document.DocumentRevisionListPersistence"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLAutotextEventsExporter">
+    <service name="com.sun.star.comp.Writer.XMLAutotextEventsExporter"/>
+  </implementation>
+  <implementation
+      name="com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter">
+    <service name="com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"/>
+  </implementation>
+  <implementation
+      name="com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter">
+    <service name="com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter"/>
+  </implementation>
+  <implementation name="xmloff::AnimationsImport">
+    <service name="com.sun.star.comp.Xmloff.AnimationsImport"/>
+  </implementation>
+</component>

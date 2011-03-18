@@ -53,6 +53,7 @@ TabPage TP_DOCINFODESC
     };
     Edit ED_TITLE
     {
+        HelpID = "sfx2:Edit:TP_DOCINFODESC:ED_TITLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 6 ) ;
         Size = MAP_APPFONT ( 184 , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -68,6 +69,7 @@ TabPage TP_DOCINFODESC
     };
     Edit ED_THEMA
     {
+        HelpID = "sfx2:Edit:TP_DOCINFODESC:ED_THEMA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 21 ) ;
         Size = MAP_APPFONT ( 184 , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -83,6 +85,7 @@ TabPage TP_DOCINFODESC
     };
     Edit ED_KEYWORDS
     {
+        HelpID = "sfx2:Edit:TP_DOCINFODESC:ED_KEYWORDS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 36 ) ;
         Size = MAP_APPFONT ( 184 , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -98,6 +101,7 @@ TabPage TP_DOCINFODESC
     };
     MultiLineEdit ED_COMMENT
     {
+        HelpID = "sfx2:MultiLineEdit:TP_DOCINFODESC:ED_COMMENT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 51 ) ;
         Size = MAP_APPFONT ( 184 , 128 ) ;
@@ -121,6 +125,7 @@ TabPage TP_DOCINFODOC
     };
     Edit ED_FILE_NAME
     {
+        HelpID = "sfx2:Edit:TP_DOCINFODOC:ED_FILE_NAME";
         Pos = MAP_APPFONT ( 54 , 12 ) ;
         Size = MAP_APPFONT ( 200 , RSC_CD_TEXTBOX_HEIGHT ) ;
         Border = TRUE ;
@@ -138,11 +143,13 @@ TabPage TP_DOCINFODOC
     };
     Edit FT_FILE_SHOW_TYP
     {
+        HelpID = "sfx2:Edit:TP_DOCINFODOC:FT_FILE_SHOW_TYP";
         Pos = MAP_APPFONT ( 78 , 37 ) ;
         Size = MAP_APPFONT ( 106 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
     };
     CheckBox CB_FILE_READONLY
     {
+        HelpID = "sfx2:CheckBox:TP_DOCINFODOC:CB_FILE_READONLY";
         Pos = MAP_APPFONT ( 163 , 37 ) ;
         Size = MAP_APPFONT ( 91 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "~Read-only" ;
@@ -155,6 +162,7 @@ TabPage TP_DOCINFODOC
     };
     Edit FT_FILE_VAL
     {
+        HelpID = "sfx2:Edit:TP_DOCINFODOC:FT_FILE_VAL";
         Pos = MAP_APPFONT ( 78 , 49 ) ;
         Size = MAP_APPFONT ( 176 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
     };
@@ -166,6 +174,7 @@ TabPage TP_DOCINFODOC
     };
     Edit FT_FILE_SHOW_SIZE
     {
+        HelpID = "sfx2:Edit:TP_DOCINFODOC:FT_FILE_SHOW_SIZE";
         Pos = MAP_APPFONT ( 78 , 61 ) ;
         Size = MAP_APPFONT ( 176 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
     };
@@ -182,6 +191,7 @@ TabPage TP_DOCINFODOC
     };
     Edit FT_CREATE_VAL
     {
+        HelpID = "sfx2:Edit:TP_DOCINFODOC:FT_CREATE_VAL";
         Pos = MAP_APPFONT ( 78 , 80 ) ;
         Size = MAP_APPFONT ( 176 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
     };
@@ -193,6 +203,7 @@ TabPage TP_DOCINFODOC
     };
     Edit FT_CHANGE_VAL
     {
+        HelpID = "sfx2:Edit:TP_DOCINFODOC:FT_CHANGE_VAL";
         Pos = MAP_APPFONT ( 78 , 92 ) ;
         Size = MAP_APPFONT ( 176 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
     };
@@ -204,11 +215,13 @@ TabPage TP_DOCINFODOC
     };
     Edit FT_SIGNED_VAL
     {
+        HelpID = "sfx2:Edit:TP_DOCINFODOC:FT_SIGNED_VAL";
         Pos = MAP_APPFONT ( 78 , 104 ) ;
         Size = MAP_APPFONT ( 123 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
     };
     PushButton BTN_SIGNATURE
     {
+        HelpID = "sfx2:PushButton:TP_DOCINFODOC:BTN_SIGNATURE";
         Pos = MAP_APPFONT ( 204 , 101 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Text [ en-US ] = "Digital Signature...";
@@ -225,6 +238,7 @@ TabPage TP_DOCINFODOC
     };
     Edit FT_PRINT_VAL
     {
+        HelpID = "sfx2:Edit:TP_DOCINFODOC:FT_PRINT_VAL";
         Pos = MAP_APPFONT ( 78 , 116 ) ;
         Size = MAP_APPFONT ( 176 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
     };
@@ -236,6 +250,7 @@ TabPage TP_DOCINFODOC
     };
     Edit FT_TIMELOG_VAL
     {
+        HelpID = "sfx2:Edit:TP_DOCINFODOC:FT_TIMELOG_VAL";
         Pos = MAP_APPFONT ( 78 , 128 ) ;
         Size = MAP_APPFONT ( 30 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
     };
@@ -247,11 +262,13 @@ TabPage TP_DOCINFODOC
     };
     Edit FT_DOCNO_VAL
     {
+        HelpID = "sfx2:Edit:TP_DOCINFODOC:FT_DOCNO_VAL";
         Pos = MAP_APPFONT ( 78 , 140 ) ;
         Size = MAP_APPFONT ( 30 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
     };
     PushButton BTN_DELETE
     {
+        HelpID = "sfx2:PushButton:TP_DOCINFODOC:BTN_DELETE";
         Pos = MAP_APPFONT ( 204 , 150 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Hide = TRUE;
@@ -259,6 +276,7 @@ TabPage TP_DOCINFODOC
     };
     CheckBox CB_USE_USERDATA
     {
+        HelpID = "sfx2:CheckBox:TP_DOCINFODOC:CB_USE_USERDATA";
         Pos = MAP_APPFONT ( 6 , 152 ) ;
         Size = MAP_APPFONT ( 192 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Hide = TRUE;
@@ -277,12 +295,17 @@ TabPage TP_DOCINFODOC
     };
     Edit FT_TEMPL_VAL
     {
+        HelpID = "sfx2:Edit:TP_DOCINFODOC:FT_TEMPL_VAL";
         Pos = MAP_APPFONT ( 78 , 172 ) ;
         Size = MAP_APPFONT ( 180 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
     };
     String STR_UNKNOWNSIZE
     {
         Text [ en-US ] = "unknown" ;
+    };
+    String EDIT_FILE_NAME
+    {
+        Text [ en-US ] = "File Name" ;
     };
 };
 
@@ -301,6 +324,7 @@ TabPage TP_DOCINFOUSER
     };
     Edit ED_INFO1
     {
+        HelpID = "sfx2:Edit:TP_DOCINFOUSER:ED_INFO1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 248 , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -314,6 +338,7 @@ TabPage TP_DOCINFOUSER
     };
     Edit ED_INFO2
     {
+        HelpID = "sfx2:Edit:TP_DOCINFOUSER:ED_INFO2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 43 ) ;
         Size = MAP_APPFONT ( 248 , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -327,6 +352,7 @@ TabPage TP_DOCINFOUSER
     };
     Edit ED_INFO3
     {
+        HelpID = "sfx2:Edit:TP_DOCINFOUSER:ED_INFO3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 69 ) ;
         Size = MAP_APPFONT ( 248 , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -340,6 +366,7 @@ TabPage TP_DOCINFOUSER
     };
     Edit ED_INFO4
     {
+        HelpID = "sfx2:Edit:TP_DOCINFOUSER:ED_INFO4";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 95 ) ;
         Size = MAP_APPFONT ( 248 , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -347,6 +374,7 @@ TabPage TP_DOCINFOUSER
     };
     PushButton BTN_EDITLABEL
     {
+        HelpID = "sfx2:PushButton:TP_DOCINFOUSER:BTN_EDITLABEL";
         Pos = MAP_APPFONT ( 194 , 165 ) ;
         Size = MAP_APPFONT ( 60 , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Text [ en-US ] = "~Info fields..." ;
@@ -362,6 +390,7 @@ TabPage TP_DOCINFORELOAD
     Size = MAP_APPFONT ( 260 , 185 ) ;
     RadioButton RB_NOAUTOUPDATE
     {
+        HelpID = "sfx2:RadioButton:TP_DOCINFORELOAD:RB_NOAUTOUPDATE";
         TabStop = TRUE ;
         Pos = MAP_APPFONT( COL_0 , ROW_0 ) ;
         Size = MAP_APPFONT( COL_7 - COL_1 , RSC_CD_RADIOBUTTON_HEIGHT ) ;
@@ -370,6 +399,7 @@ TabPage TP_DOCINFORELOAD
 
     RadioButton RB_RELOADUPDATE
     {
+        HelpID = "sfx2:RadioButton:TP_DOCINFORELOAD:RB_RELOADUPDATE";
         TabStop = TRUE ;
         Pos = MAP_APPFONT( COL_0, ROW_1 ) ;
         Size = MAP_APPFONT( COL_7 - COL_1, RSC_CD_RADIOBUTTON_HEIGHT ) ;
@@ -383,6 +413,7 @@ TabPage TP_DOCINFORELOAD
     };
     NumericField ED_RELOAD
     {
+        HelpID = "sfx2:NumericField:TP_DOCINFORELOAD:ED_RELOAD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , ROW_2 - ROWDIFF_FT_EDTFLD ) ;
         Size = MAP_APPFONT ( WIDTH_2 , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -403,6 +434,7 @@ TabPage TP_DOCINFORELOAD
 
     RadioButton RB_FORWARDUPDATE
     {
+        HelpID = "sfx2:RadioButton:TP_DOCINFORELOAD:RB_FORWARDUPDATE";
         TabStop = TRUE ;
         Pos = MAP_APPFONT( COL_0, ROW_3 ) ;
         Size = MAP_APPFONT( COL_7 - COL_1, RSC_CD_RADIOBUTTON_HEIGHT ) ;
@@ -416,6 +448,7 @@ TabPage TP_DOCINFORELOAD
     };
     NumericField ED_FORWARD
     {
+        HelpID = "sfx2:NumericField:TP_DOCINFORELOAD:ED_FORWARD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , ROW_4 - ROWDIFF_FT_EDTFLD ) ;
         Size = MAP_APPFONT ( WIDTH_2 , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -441,12 +474,14 @@ TabPage TP_DOCINFORELOAD
     };
     Edit ED_URL
     {
+        HelpID = "sfx2:Edit:TP_DOCINFORELOAD:ED_URL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , ROW_5 - ROWDIFF_FT_EDTFLD ) ;
         Size = MAP_APPFONT ( COL_5 - COL_2 , RSC_CD_TEXTBOX_HEIGHT ) ;
     };
     PushButton PB_BROWSEURL
     {
+        HelpID = "sfx2:PushButton:TP_DOCINFORELOAD:PB_BROWSEURL";
         Pos = MAP_APPFONT ( COL_6 , ROW_5 - ROWDIFF_FT_EDTFLD ) ;
         Size = MAP_APPFONT ( COL_7 - COL_6 , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Text = "..." ;
@@ -459,6 +494,7 @@ TabPage TP_DOCINFORELOAD
     };
     ComboBox CB_FRAME
     {
+        HelpID = "sfx2:ComboBox:TP_DOCINFORELOAD:CB_FRAME";
         Pos = MAP_APPFONT ( COL_2 , ROW_6 - ROWDIFF_FT_EDTFLD ) ;
         Size = MAP_APPFONT ( COL_7 - COL_2 , RSC_CD_DROPDOWN_HEIGHT * 10 ) ;
         DropDown = TRUE ;
@@ -524,6 +560,7 @@ TabPage TP_CUSTOMPROPERTIES
     };
     PushButton BTN_ADD
     {
+        HelpID = "sfx2:PushButton:TP_CUSTOMPROPERTIES:BTN_ADD";
         Pos = MAP_APPFONT( 204 , 165 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "~Add";
@@ -751,6 +788,7 @@ ModalDialog RID_EDIT_DURATIONS
     };
     CheckBox CB_NEGATIVE
     {
+        HelpID = "sfx2:CheckBox:RID_EDIT_DURATIONS:CB_NEGATIVE";
         Pos = MAP_APPFONT ( 6 , 21 ) ;
         Size = MAP_APPFONT ( 60 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "~Negative" ;
@@ -764,6 +802,7 @@ ModalDialog RID_EDIT_DURATIONS
     };
     NumericField ED_YEAR
     {
+        HelpID = "sfx2:NumericField:RID_EDIT_DURATIONS:ED_YEAR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 36 ) ;
         Size = MAP_APPFONT ( 40, RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -784,6 +823,7 @@ ModalDialog RID_EDIT_DURATIONS
     };
     NumericField ED_MONTH
     {
+        HelpID = "sfx2:NumericField:RID_EDIT_DURATIONS:ED_MONTH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 50 ) ;
         Size = MAP_APPFONT ( 40, RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -804,6 +844,7 @@ ModalDialog RID_EDIT_DURATIONS
     };
     NumericField ED_DAY
     {
+        HelpID = "sfx2:NumericField:RID_EDIT_DURATIONS:ED_DAY";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 64 ) ;
         Size = MAP_APPFONT ( 40, RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -824,6 +865,7 @@ ModalDialog RID_EDIT_DURATIONS
     };
     NumericField ED_HOUR
     {
+        HelpID = "sfx2:NumericField:RID_EDIT_DURATIONS:ED_HOUR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 78 ) ;
         Size = MAP_APPFONT ( 40, RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -844,6 +886,7 @@ ModalDialog RID_EDIT_DURATIONS
     };
     NumericField ED_MINUTE
     {
+        HelpID = "sfx2:NumericField:RID_EDIT_DURATIONS:ED_MINUTE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70, 92) ;
         Size = MAP_APPFONT ( 40, RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -864,6 +907,7 @@ ModalDialog RID_EDIT_DURATIONS
     };
     NumericField ED_SECOND
     {
+        HelpID = "sfx2:NumericField:RID_EDIT_DURATIONS:ED_SECOND";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 106 ) ;
         Size = MAP_APPFONT ( 40, RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -884,6 +928,7 @@ ModalDialog RID_EDIT_DURATIONS
     };
     NumericField ED_MSECOND
     {
+        HelpID = "sfx2:NumericField:RID_EDIT_DURATIONS:ED_MSECOND";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 120 ) ;
         Size = MAP_APPFONT ( 40, RSC_CD_TEXTBOX_HEIGHT ) ;

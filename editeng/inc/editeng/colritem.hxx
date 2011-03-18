@@ -57,17 +57,17 @@ private:
 public:
     TYPEINFO();
 
-    SvxColorItem( const USHORT nId );
-    SvxColorItem( const Color& aColor, const USHORT nId  );
-    SvxColorItem( SvStream& rStrm, const USHORT nId  );
+    SvxColorItem( const sal_uInt16 nId );
+    SvxColorItem( const Color& aColor, const sal_uInt16 nId  );
+    SvxColorItem( SvStream& rStrm, const sal_uInt16 nId  );
     SvxColorItem( const SvxColorItem& rCopy );
     ~SvxColorItem();
 
     // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-    virtual USHORT          GetVersion( USHORT nFileVersion ) const;
+    virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -75,8 +75,8 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
 
     inline SvxColorItem& operator=(const SvxColorItem& rColor)
     {

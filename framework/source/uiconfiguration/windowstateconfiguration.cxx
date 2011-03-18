@@ -368,16 +368,20 @@ throw ( RuntimeException )
 sal_Bool SAL_CALL ConfigurationAccess_WindowState::hasByName( const ::rtl::OUString& rResourceURL )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    try
-    {
-        getByName( rResourceURL );
-    }
-    catch ( NoSuchElementException& )
-    {
-        return sal_False;
-    }
+    // SAFE
+    ResetableGuard aLock( m_aLock );
 
-    return sal_True;
+    ResourceURLToInfoCache::const_iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
+    if ( pIter != m_aResourceURLToInfoCache.end() )
+        return sal_True;
+    else
+    {
+        Any a( impl_getWindowStateFromResourceURL( rResourceURL ) );
+        if ( a == Any() )
+            return sal_False;
+        else
+            return sal_True;
+    }
 }
 
 // XElementAccess
@@ -1048,12 +1052,11 @@ Any ConfigurationAccess_WindowState::impl_getWindowStateFromResourceURL( const r
     try
     {
         // Try to ask our configuration access
-        if ( m_xConfigAccess.is() )
+        if ( m_xConfigAccess.is() && m_xConfigAccess->hasByName( rResourceURL ) )
         {
-            Reference< XNameAccess > xNameAccess;
-            Any a( m_xConfigAccess->getByName( rResourceURL ));
 
-            if ( a >>= xNameAccess )
+            Reference< XNameAccess > xNameAccess( m_xConfigAccess->getByName( rResourceURL ), UNO_QUERY );
+            if ( xNameAccess.is() )
                 return impl_insertCacheAndReturnSequence( rResourceURL, xNameAccess );
         }
     }

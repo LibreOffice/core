@@ -138,7 +138,7 @@ namespace connectivity
         ::rtl::OUString StorageContainer::removeOldURLPrefix(const ::rtl::OUString& _sURL)
         {
             ::rtl::OUString sRet = _sURL;
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
             sal_Int32 nIndex = sRet.lastIndexOf('\\');
 #else
             sal_Int32 nIndex = sRet.lastIndexOf('/');

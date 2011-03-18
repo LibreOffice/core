@@ -105,7 +105,7 @@ Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
 
 //==================================================================================================
 void SAL_CALL importDialogModel(
-    Reference< io::XInputStream > xInput,
+    Reference< io::XInputStream > const & xInput,
     Reference< container::XNameContainer > const & xDialogModel,
     Reference< XComponentContext > const & xContext,
     Reference< XModel > const & xDocument )

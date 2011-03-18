@@ -89,52 +89,52 @@ IMPL_GEN_RES_STR;
 
 #ifdef DBG_UTIL
 // filter Messages generated due to missing configuration  Bug:#83887#
-void TestToolDebugMessageFilter( const sal_Char *pString, BOOL bIsOsl )
+void TestToolDebugMessageFilter( const sal_Char *pString, sal_Bool bIsOsl )
 {
-    static BOOL static_bInsideFilter = FALSE;
+    static sal_Bool static_bInsideFilter = sal_False;
 
     // Ignore messages during filtering to avoid endless recursions
     if ( static_bInsideFilter )
         return;
 
-    static_bInsideFilter = TRUE;
+    static_bInsideFilter = sal_True;
 
     ByteString aMessage( pString );
 
-    BOOL bIgnore = FALSE;
+    sal_Bool bIgnore = sal_False;
 
     if ( bIsOsl )
     {
         // OSL
         if ( aMessage.Search( CByteString("Cannot open Configuration: Connector: unknown delegatee com.sun.star.connection.Connector.portal") ) != STRING_NOTFOUND )
-            bIgnore = TRUE;
+            bIgnore = sal_True;
     }
     else
     {
         // DBG
 #if ! (OSL_DEBUG_LEVEL > 1)
         if ( aMessage.Search( CByteString("SelectAppIconPixmap") ) != STRING_NOTFOUND )
-            bIgnore = TRUE;
+            bIgnore = sal_True;
 #endif
         if ( aMessage.Search( CByteString("PropertySetRegistry::") ) != STRING_NOTFOUND )
-            bIgnore = TRUE;
+            bIgnore = sal_True;
         if ( aMessage.Search( CByteString("property value missing") ) != STRING_NOTFOUND )
-            bIgnore = TRUE;
+            bIgnore = sal_True;
         if ( aMessage.Search( CByteString("getDateFormatsImpl") ) != STRING_NOTFOUND
             && aMessage.Search( CByteString("no date formats") ) != STRING_NOTFOUND )
-            bIgnore = TRUE;
+            bIgnore = sal_True;
         if ( aMessage.Search( CByteString("ucb::configureUcb(): Bad arguments") ) != STRING_NOTFOUND )
-            bIgnore = TRUE;
+            bIgnore = sal_True;
         if ( aMessage.Search( CByteString("CreateInstance with arguments exception") ) != STRING_NOTFOUND )
-            bIgnore = TRUE;
+            bIgnore = sal_True;
         if ( aMessage.Search( CByteString("AcquireTree failed") ) != STRING_NOTFOUND )
-            bIgnore = TRUE;
+            bIgnore = sal_True;
     }
 
 
     if ( bIgnore )
     {
-        static_bInsideFilter = FALSE;
+        static_bInsideFilter = sal_False;
         return;
     }
 
@@ -156,25 +156,25 @@ void TestToolDebugMessageFilter( const sal_Char *pString, BOOL bIsOsl )
             printf("DbgPrintMsgBox failed: %s\n", pString );
         }
     }
-    static_bInsideFilter = FALSE;
+    static_bInsideFilter = sal_False;
 }
 
 void SAL_CALL DBG_TestToolDebugMessageFilter( const sal_Char *pString )
 {
-        TestToolDebugMessageFilter( pString, FALSE );
+        TestToolDebugMessageFilter( pString, sal_False );
 }
 
 extern "C" void SAL_CALL osl_TestToolDebugMessageFilter( const sal_Char *pString )
 {
     if ( !getenv( "DISABLE_SAL_DBGBOX" ) )
-        TestToolDebugMessageFilter( pString, TRUE );
+        TestToolDebugMessageFilter( pString, sal_True );
 }
 
 #endif
 
 // #94145# Due to a tab in TT_SIGNATURE_FOR_UNICODE_TEXTFILES which is changed to blanks by some editors
 // this routine became necessary
-BOOL IsTTSignatureForUnicodeTextfile( String aLine )
+sal_Bool IsTTSignatureForUnicodeTextfile( String aLine )
 {
     aLine.SearchAndReplace( '\t', ' ' );
     String ThreeBlanks = CUniString("   ");
@@ -272,7 +272,7 @@ int BasicApp::Main( )
             if ( aDefIniPath.Exists() )
             {
                 aDefIniPath.CopyTo( aIniPath, FSYS_ACTION_COPYFILE );
-                FileStat::SetReadOnlyFlag( aIniPath, FALSE );
+                FileStat::SetReadOnlyFlag( aIniPath, sal_False );
             }
         }
     }
@@ -355,7 +355,7 @@ void BasicApp::SetFocus()
 IMPL_LINK( BasicApp, LateInit, void *, pDummy )
 {
     (void) pDummy; /* avoid warning about unused parameter */
-    USHORT i;
+    sal_uInt16 i;
     for ( i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
     {
         if ( Application::GetCommandLineParam( i ).Copy(0,4).CompareIgnoreCaseToAscii("-run") == COMPARE_EQUAL
@@ -363,7 +363,7 @@ IMPL_LINK( BasicApp, LateInit, void *, pDummy )
             || Application::GetCommandLineParam( i ).Copy(0,4).CompareIgnoreCaseToAscii("/run") == COMPARE_EQUAL
 #endif
             )
-            pFrame->SetAutoRun( TRUE );
+            pFrame->SetAutoRun( sal_True );
         else if ( Application::GetCommandLineParam( i ).Copy(0,7).CompareIgnoreCaseToAscii("-result") == COMPARE_EQUAL
 #ifndef UNX
             || Application::GetCommandLineParam( i ).Copy(0,7).CompareIgnoreCaseToAscii("/result") == COMPARE_EQUAL
@@ -374,7 +374,7 @@ IMPL_LINK( BasicApp, LateInit, void *, pDummy )
             {
                 if ( ByteString( Application::GetCommandLineParam( i+1 ), osl_getThreadTextEncoding() ).IsNumericAscii() )
                 {
-                    MsgEdit::SetMaxLogLen( sal::static_int_cast< USHORT >( Application::GetCommandLineParam( i+1 ).ToInt32() ) );
+                    MsgEdit::SetMaxLogLen( sal::static_int_cast< sal_uInt16 >( Application::GetCommandLineParam( i+1 ).ToInt32() ) );
                 }
                 i++;
             }
@@ -446,7 +446,7 @@ FloatingExecutionStatus::FloatingExecutionStatus( Window * pParent )
 
 void FloatingExecutionStatus::SetStatus( String aW )
 {
-    Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+    Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
     ToTop( TOTOP_NOGRABFOCUS );
     aAusblend.Start();
     aStatus.SetText( aW );
@@ -454,7 +454,7 @@ void FloatingExecutionStatus::SetStatus( String aW )
 
 void FloatingExecutionStatus::SetAdditionalInfo( String aF )
 {
-    Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+    Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
     ToTop( TOTOP_NOGRABFOCUS );
     aAusblend.Start();
     aAdditionalInfo.SetText( aF );
@@ -473,11 +473,11 @@ TYPEINIT1(TTExecutionStatusHint, SfxSimpleHint);
 
 BasicFrame::BasicFrame() : WorkWindow( NULL,
     WinBits( WB_APP | WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) )
-, bIsAutoRun( FALSE )
+, bIsAutoRun( sal_False )
 , pDisplayHidDlg( NULL )
 , pEditVar ( 0 )
-, bAutoReload( FALSE )
-, bAutoSave( TRUE )
+, bAutoReload( sal_False )
+, bAutoSave( sal_True )
 , pBasic( NULL )
 , pExecutionStatus( NULL )
 , pStatus( NULL )
@@ -487,10 +487,10 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
 {
 
     Application::SetDefDialogParent( this );
-    AlwaysEnableInput( TRUE );
+    AlwaysEnableInput( sal_True );
     pBasic  = TTBasic::CreateMyBasic();     // depending on what was linked to the executable
-    bInBreak = FALSE;
-    bDisas = FALSE;
+    bInBreak = sal_False;
+    bDisas = sal_False;
     nFlags  = 0;
 //  Icon aAppIcon;
 
@@ -594,11 +594,11 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
 }
 
 const ByteString ProfilePrefix("_profile_");
-const USHORT ProfilePrefixLen = ProfilePrefix.Len();
+const sal_uInt16 ProfilePrefixLen = ProfilePrefix.Len();
 
 void BasicFrame::LoadIniFile()
 {
-    USHORT i;
+    sal_uInt16 i;
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
 
     for ( i = 0 ; i < aConf.GetGroupCount() ; i++ )
@@ -714,12 +714,12 @@ IMPL_LINK( BasicFrame, CheckAllFiles, Timer*, pTimer )
     return 0;
 }
 
-BOOL BasicFrame::IsAutoRun()
+sal_Bool BasicFrame::IsAutoRun()
 {
     return bIsAutoRun;
 }
 
-void BasicFrame::SetAutoRun( BOOL bAuto )
+void BasicFrame::SetAutoRun( sal_Bool bAuto )
 {
     bIsAutoRun = bAuto;
 }
@@ -809,7 +809,7 @@ IMPL_LINK( BasicFrame, CloseButtonClick, void*, EMPTYARG )
             break;
         }
     }
-    return Command( RID_FILECLOSE, FALSE );
+    return Command( RID_FILECLOSE, sal_False );
 }
 
 IMPL_LINK( BasicFrame, FloatButtonClick, void*, EMPTYARG )
@@ -848,7 +848,7 @@ void BasicFrame::WinShow_Hide()
         return;
 
     AppWin* p;
-    BOOL bWasFullscreen = FALSE;
+    sal_Bool bWasFullscreen = sal_False;
     for ( size_t i = pList->size(); i > 0; --i )
     {
         p = pList->at( i - 1 );
@@ -859,7 +859,7 @@ void BasicFrame::WinShow_Hide()
                )
                 p->Hide( SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             else
-                p->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                p->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
         }
         bWasFullscreen |= p->GetWinState() == TT_WIN_STATE_MAX;
     }
@@ -869,13 +869,13 @@ void BasicFrame::WinMax_Restore()
 {
     // The application buttons
     AppWin* p;
-    BOOL bHasFullscreenWin = FALSE;
+    sal_Bool bHasFullscreenWin = sal_False;
     for ( size_t i = 0, n = pList->size(); i < n && !bHasFullscreenWin; ++i )
     {
         p = pList->at( i );
         bHasFullscreenWin = ( p->GetWinState() == TT_WIN_STATE_MAX );
     }
-    GetMenuBar()->ShowButtons( bHasFullscreenWin, FALSE, FALSE );
+    GetMenuBar()->ShowButtons( bHasFullscreenWin, sal_False, sal_False );
     WinShow_Hide();
 }
 
@@ -901,9 +901,9 @@ void BasicFrame::RemoveWindow( AppWin *pWin )
     Menu* pMenu = GetMenuBar();
     if( pList->empty() )
     {
-        pMenu->EnableItem( RID_APPEDIT,   FALSE );
-        pMenu->EnableItem( RID_APPRUN,    FALSE );
-        pMenu->EnableItem( RID_APPWINDOW, FALSE );
+        pMenu->EnableItem( RID_APPEDIT,   sal_False );
+        pMenu->EnableItem( RID_APPRUN,    sal_False );
+        pMenu->EnableItem( RID_APPWINDOW, sal_False );
     }
 
     PopupMenu* pWinMenu = pMenu->GetPopupMenu( RID_APPWINDOW );
@@ -928,20 +928,20 @@ void BasicFrame::AddWindow( AppWin *pWin )
     MenuBar* pMenu = GetMenuBar();
     if( !pList->empty() )
     {
-        pMenu->EnableItem( RID_APPEDIT,   TRUE );
-        pMenu->EnableItem( RID_APPRUN,    TRUE );
-        pMenu->EnableItem( RID_APPWINDOW, TRUE );
+        pMenu->EnableItem( RID_APPEDIT,   sal_True );
+        pMenu->EnableItem( RID_APPRUN,    sal_True );
+        pMenu->EnableItem( RID_APPWINDOW, sal_True );
     }
 
     PopupMenu* pWinMenu = pMenu->GetPopupMenu( RID_APPWINDOW );
-    USHORT nLastID = pWinMenu->GetItemId( pWinMenu->GetItemCount() - 1 );
+    sal_uInt16 nLastID = pWinMenu->GetItemId( pWinMenu->GetItemCount() - 1 );
 
     // Separator necessary
     if ( nLastID < RID_WIN_FILE1 && pWinMenu->GetItemType( pWinMenu->GetItemCount() - 1 ) != MENUITEM_SEPARATOR )
         pWinMenu->InsertSeparator();
 
     // Find free ID
-    USHORT nFreeID = RID_WIN_FILE1;
+    sal_uInt16 nFreeID = RID_WIN_FILE1;
     while ( pWinMenu->GetItemPos( nFreeID ) != MENU_ITEM_NOTFOUND && nFreeID < RID_WIN_FILEn )
         nFreeID++;
 
@@ -974,7 +974,7 @@ void BasicFrame::FocusWindow( AppWin *pWin )
         }
     }
     pList->push_back( pWin );
-    pWin->Minimize( FALSE );
+    pWin->Minimize( sal_False );
 
     aAppFile = pWin->GetText();
     UpdateTitle();
@@ -983,14 +983,14 @@ void BasicFrame::FocusWindow( AppWin *pWin )
     pStatus->LoadTaskToolBox();
 }
 
-BOOL BasicFrame::Close()
+sal_Bool BasicFrame::Close()
 {
     if( bInBreak || Basic().IsRunning() )
         if( RET_NO == QueryBox( this, SttResId( IDS_RUNNING ) ).Execute() )
-            return FALSE;
+            return sal_False;
 
     StarBASIC::Stop();
-    bInBreak = FALSE;
+    bInBreak = sal_False;
     if( CloseAll() )
     {
         aLineNum.Stop();
@@ -1004,33 +1004,33 @@ BOOL BasicFrame::Close()
         Application::SetDefDialogParent( NULL );
         WorkWindow::Close();
 
-        return TRUE;
-    } else return FALSE;
+        return sal_True;
+    } else return sal_False;
 }
 
-BOOL BasicFrame::CloseAll()
+sal_Bool BasicFrame::CloseAll()
 {
     while ( !pList->empty() )
         if ( !pList->back()->Close() )
-            return FALSE;
-    return TRUE;
+            return sal_False;
+    return sal_True;
 }
 
-BOOL BasicFrame::CompileAll()
+sal_Bool BasicFrame::CompileAll()
 {
     AppWin* p;
     for ( size_t i = 0, n = pList->size(); i < n; ++i )
     {
         p = pList->at( i );
-        if ( p->ISA(AppBasEd) && !((AppBasEd*)p)->Compile() ) return FALSE;
+        if ( p->ISA(AppBasEd) && !((AppBasEd*)p)->Compile() ) return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 // Setup menu
 #define MENU2FILENAME( Name ) Name.Copy( Name.SearchAscii(" ") +1).EraseAllChars( '~' )
 #define LRUNr( nNr ) CByteString("LRU").Append( ByteString::CreateFromInt32( nNr ) )
-String FILENAME2MENU( USHORT nNr, String aName )
+String FILENAME2MENU( sal_uInt16 nNr, String aName )
 {
     String aRet;
     if ( nNr <= 9 )
@@ -1049,9 +1049,9 @@ void BasicFrame::AddToLRU(String const& aFile)
     PopupMenu *pPopup  = GetMenuBar()->GetPopupMenu(RID_APPFILE);
 
     aConfig.SetGroup("LRU");
-    USHORT nMaxLRU = (USHORT)aConfig.ReadKey("MaxLRU","4").ToInt32();
+    sal_uInt16 nMaxLRU = (sal_uInt16)aConfig.ReadKey("MaxLRU","4").ToInt32();
     DirEntry aFileEntry( aFile );
-    USHORT i,nLastMove = nMaxLRU;
+    sal_uInt16 i,nLastMove = nMaxLRU;
 
     for ( i = 1 ; i<nMaxLRU && nLastMove == nMaxLRU ; i++ )
     {
@@ -1083,15 +1083,15 @@ void BasicFrame::LoadLRU()
 {
     Config     aConfig(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     PopupMenu *pPopup  = GetMenuBar()->GetPopupMenu(RID_APPFILE);
-    BOOL       bAddSep = TRUE;
+    sal_Bool       bAddSep = sal_True;
 
     aConfig.SetGroup("LRU");
-    USHORT nMaxLRU = (USHORT)aConfig.ReadKey("MaxLRU","4").ToInt32();
+    sal_uInt16 nMaxLRU = (sal_uInt16)aConfig.ReadKey("MaxLRU","4").ToInt32();
 
     if ( pPopup )
         bAddSep = pPopup->GetItemPos( IDM_FILE_LRU1 ) == MENU_ITEM_NOTFOUND;
 
-    USHORT i;
+    sal_uInt16 i;
     for ( i = 1; i <= nMaxLRU && pPopup != NULL; i++)
     {
         String aFile = UniString( aConfig.ReadKey(LRUNr(i)), RTL_TEXTENCODING_UTF8 );
@@ -1101,7 +1101,7 @@ void BasicFrame::LoadLRU()
             if (bAddSep)
             {
                 pPopup->InsertSeparator();
-                bAddSep = FALSE;
+                bAddSep = sal_False;
             }
 
             if ( pPopup->GetItemPos( IDM_FILE_LRU1 + i-1 ) == MENU_ITEM_NOTFOUND )
@@ -1120,10 +1120,10 @@ void BasicFrame::LoadLRU()
 
 IMPL_LINK( BasicFrame, InitMenu, Menu *, pMenu )
 {
-    BOOL bNormal = BOOL( !bInBreak );
+    sal_Bool bNormal = sal_Bool( !bInBreak );
     pMenu->EnableItem( RID_RUNCOMPILE, bNormal );
 
-    BOOL bHasEdit = BOOL( pWork != NULL );
+    sal_Bool bHasEdit = sal_Bool( pWork != NULL );
 
     pMenu->EnableItem( RID_FILECLOSE,   bHasEdit );
     pMenu->EnableItem( RID_FILESAVE,    bHasEdit );
@@ -1133,16 +1133,16 @@ IMPL_LINK( BasicFrame, InitMenu, Menu *, pMenu )
     pMenu->EnableItem( RID_FILELOADLIB, bNormal );
     pMenu->EnableItem( RID_FILESAVELIB, bHasEdit );
 
-    BOOL bHasErr = BOOL( bNormal && pBasic->GetErrors() != 0 );
-    BOOL bNext   = bHasErr & bNormal;
-    BOOL bPrev   = bHasErr & bNormal;
+    sal_Bool bHasErr = sal_Bool( bNormal && pBasic->GetErrors() != 0 );
+    sal_Bool bNext   = bHasErr & bNormal;
+    sal_Bool bPrev   = bHasErr & bNormal;
     if( bHasErr )
     {
         size_t n = pBasic->GetCurrentError();
         if( n == 0 )
-            bPrev = FALSE;
+            bPrev = sal_False;
         if( SbError(n+1) == pBasic->GetErrors() )
-            bNext = FALSE;
+            bNext = sal_False;
     }
     pMenu->EnableItem( RID_RUNNEXTERR, bNext );
     pMenu->EnableItem( RID_RUNPREVERR, bPrev );
@@ -1150,14 +1150,14 @@ IMPL_LINK( BasicFrame, InitMenu, Menu *, pMenu )
     if( pWork )
         pWork->InitMenu( pMenu );
 
-    return TRUE;
+    return sal_True;
 }
 
 IMPL_LINK_INLINE_START( BasicFrame, DeInitMenu, Menu *, pMenu )
 {
     (void) pMenu; /* avoid warning about unused parameter */
 
-    SetAutoRun( FALSE );
+    SetAutoRun( sal_False );
     String aString;
     pStatus->Message( aString );
     return 0L;
@@ -1174,15 +1174,15 @@ IMPL_LINK_INLINE_END( BasicFrame, HighlightMenu, Menu *, pMenu )
 
 IMPL_LINK_INLINE_START( BasicFrame, MenuCommand, Menu *, pMenu )
 {
-    USHORT nId = pMenu->GetCurItemId();
-    BOOL bChecked = pMenu->IsItemChecked( nId );
+    sal_uInt16 nId = pMenu->GetCurItemId();
+    sal_Bool bChecked = pMenu->IsItemChecked( nId );
     return Command( nId, bChecked );
 }
 IMPL_LINK_INLINE_END( BasicFrame, MenuCommand, Menu *, pMenu )
 
 IMPL_LINK_INLINE_START( BasicFrame, Accel, Accelerator*, pAcc )
 {
-    SetAutoRun( FALSE );
+    SetAutoRun( sal_False );
     return Command( pAcc->GetCurItemId() );
 }
 IMPL_LINK_INLINE_END( BasicFrame, Accel, Accelerator*, pAcc )
@@ -1247,14 +1247,14 @@ AppBasEd* BasicFrame::CreateModuleWin( SbModule* pMod )
     return p;
 }
 
-BOOL BasicFrame::LoadFile( String aFilename )
+sal_Bool BasicFrame::LoadFile( String aFilename )
 {
-    BOOL bIsResult = DirEntry( aFilename ).GetExtension().CompareIgnoreCaseToAscii("RES") == COMPARE_EQUAL;
-    BOOL bIsBasic = DirEntry( aFilename ).GetExtension().CompareIgnoreCaseToAscii("BAS") == COMPARE_EQUAL;
+    sal_Bool bIsResult = DirEntry( aFilename ).GetExtension().CompareIgnoreCaseToAscii("RES") == COMPARE_EQUAL;
+    sal_Bool bIsBasic = DirEntry( aFilename ).GetExtension().CompareIgnoreCaseToAscii("BAS") == COMPARE_EQUAL;
     bIsBasic |= DirEntry( aFilename ).GetExtension().CompareIgnoreCaseToAscii("INC") == COMPARE_EQUAL;
 
     AppWin* p;
-    BOOL bSuccess = TRUE;
+    sal_Bool bSuccess = sal_True;
     if ( bIsResult )
     {
         p = new AppError( this, aFilename );
@@ -1281,7 +1281,7 @@ BOOL BasicFrame::LoadFile( String aFilename )
 }
 
 // Execute command
-long BasicFrame::Command( short nID, BOOL bChecked )
+long BasicFrame::Command( short nID, sal_Bool bChecked )
 {
     BasicError* pErr;
 
@@ -1294,7 +1294,7 @@ long BasicFrame::Command( short nID, BOOL bChecked )
         case RID_FILEOPEN:
             {
                 String s;
-                if( QueryFileName( s, FT_BASIC_SOURCE | FT_RESULT_FILE, FALSE ) ) {
+                if( QueryFileName( s, FT_BASIC_SOURCE | FT_RESULT_FILE, sal_False ) ) {
                     AddToLRU( s );
                     LoadFile( s );
                 }
@@ -1333,7 +1333,7 @@ long BasicFrame::Command( short nID, BOOL bChecked )
             {
                 SbModule *pModule = ((AppBasEd*)pWork)->GetModule();
 #if OSL_DEBUG_LEVEL > 1
-                USHORT x;
+                sal_uInt16 x;
                 x = pWork->GetLineNr();
                 x = ((AppBasEd*)pWork)->GetModule()->GetBPCount();
                 if ( !x )
@@ -1341,7 +1341,7 @@ long BasicFrame::Command( short nID, BOOL bChecked )
                 x = pModule->GetBPCount();
 #endif
 
-                for ( USHORT nMethod = 0; nMethod < pModule->GetMethods()->Count(); nMethod++ )
+                for ( sal_uInt16 nMethod = 0; nMethod < pModule->GetMethods()->Count(); nMethod++ )
                 {
                     SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Get( nMethod );
                     DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
@@ -1382,7 +1382,7 @@ long BasicFrame::Command( short nID, BOOL bChecked )
 
                 if( bInBreak )
                     // Reset the flag
-                    bInBreak = FALSE;
+                    bInBreak = sal_False;
                 else
                 {
                     if( IsAutoSave() && !SaveAll() ) break;
@@ -1391,10 +1391,10 @@ long BasicFrame::Command( short nID, BOOL bChecked )
                     pStatus->Message( aString );
                     if( p )
                     {
-                        BasicDLL::SetDebugMode( TRUE );
+                        BasicDLL::SetDebugMode( sal_True );
                         Basic().ClearGlobalVars();
                         p->Run();
-                        BasicDLL::SetDebugMode( FALSE );
+                        BasicDLL::SetDebugMode( sal_False );
                         // If cancelled during Interactive=FALSE
                     }
                 }}
@@ -1409,7 +1409,7 @@ long BasicFrame::Command( short nID, BOOL bChecked )
             }
             break;
         case RID_RUNDISAS:
-            bDisas = BOOL( !bChecked );
+            bDisas = sal_Bool( !bChecked );
             break;
         case RID_RUNBREAK:
             if ( Basic().IsRunning() && !bInBreak )
@@ -1419,7 +1419,7 @@ long BasicFrame::Command( short nID, BOOL bChecked )
             break;
         case RID_RUNSTOP:
             Basic().Stop();
-            bInBreak = FALSE;
+            bInBreak = sal_False;
             break;
         case RID_RUNNEXTERR:
             pErr = pBasic->NextError();
@@ -1560,23 +1560,23 @@ long BasicFrame::Command( short nID, BOOL bChecked )
                     pWork->Command( CommandEvent( Point(), nID ) );
             }
     }
-    return TRUE;
+    return sal_True;
 }
 
-BOOL BasicFrame::SaveAll()
+sal_Bool BasicFrame::SaveAll()
 {
     AppWin* p, *q = pWork;
     for ( size_t i = 0, n = pList->size(); i < n ; i++ )
     {
         p = pList->at( i );
-        USHORT nRes = p->QuerySave( QUERY_DISK_CHANGED );
+        sal_uInt16 nRes = p->QuerySave( QUERY_DISK_CHANGED );
         if( (( nRes == SAVE_RES_ERROR ) && QueryBox(this,SttResId(IDS_ASKSAVEERROR)).Execute() == RET_NO )
             || ( nRes == SAVE_RES_CANCEL ) )
-            return FALSE;
+            return sal_False;
     }
     if ( q )
         q->ToTop();
-    return TRUE;
+    return sal_True;
 }
 
 IMPL_LINK( BasicFrame, ModuleWinExists, String*, pFilename )
@@ -1620,7 +1620,7 @@ AppWin* BasicFrame::FindWin( const String& rName )
     return NULL;
 }
 
-AppWin* BasicFrame::FindWin( USHORT nWinId )
+AppWin* BasicFrame::FindWin( sal_uInt16 nWinId )
 {
     AppWin* p;
     for ( size_t i = 0, n = pList->size(); i < n ; i++ )
@@ -1649,10 +1649,10 @@ IMPL_LINK( BasicFrame, WriteString, String*, pString )
     if ( !pList->empty() )
     {
         pList->back()->pDataEdit->ReplaceSelected( *pString );
-        return TRUE;
+        return sal_True;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
 class NewFileDialog : public FileDialog
@@ -1675,7 +1675,7 @@ void NewFileDialog::FilterSelect()
         return; // User decides after he has changed the path
 
     String aCurFilter = GetCurFilter();
-    USHORT nFilterNr = 0;
+    sal_uInt16 nFilterNr = 0;
     while ( nFilterNr < GetFilterCount() && aCurFilter != GetFilterName( nFilterNr ) )
     {
         nFilterNr++;
@@ -1692,7 +1692,7 @@ void NewFileDialog::FilterSelect()
 
 short NewFileDialog::Execute()
 {
-    BOOL bRet = (BOOL)FileDialog::Execute();
+    sal_Bool bRet = (sal_Bool)FileDialog::Execute();
     if ( bRet )
     {
         Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
@@ -1705,8 +1705,8 @@ short NewFileDialog::Execute()
     return bRet;
 }
 
-BOOL BasicFrame::QueryFileName
-                (String& rName, FileType nFileType, BOOL bSave )
+sal_Bool BasicFrame::QueryFileName
+                (String& rName, FileType nFileType, sal_Bool bSave )
 {
     NewFileDialog aDlg( this, bSave ? WinBits( WB_SAVEAS ) :
                                 WinBits( WB_OPEN ) );
@@ -1752,13 +1752,13 @@ BOOL BasicFrame::QueryFileName
     if( aDlg.Execute() )
     {
         rName = aDlg.GetPath();
-        return TRUE;
-    } else return FALSE;
+        return sal_True;
+    } else return sal_False;
 }
 
-USHORT BasicFrame::BreakHandler()
+sal_uInt16 BasicFrame::BreakHandler()
 {
-    bInBreak = TRUE;
+    bInBreak = sal_True;
     SetAppMode( String( SttResId ( IDS_APPMODE_BREAK ) ) );
 
     while( bInBreak ) {
@@ -1773,7 +1773,7 @@ USHORT BasicFrame::BreakHandler()
 void BasicFrame::LoadLibrary()
 {
     String s;
-    if( QueryFileName( s, FT_BASIC_LIBRARY, FALSE ) )
+    if( QueryFileName( s, FT_BASIC_LIBRARY, sal_False ) )
     {
         CloseAll();
         SvFileStream aStrm( s, STREAM_STD_READ );
@@ -1783,7 +1783,7 @@ void BasicFrame::LoadLibrary()
             pBasic = pNew;
             // Show all contents if existing
             SbxArray* pMods = pBasic->GetModules();
-            for( USHORT i = 0; i < pMods->Count(); i++ )
+            for( sal_uInt16 i = 0; i < pMods->Count(); i++ )
             {
                 SbModule* pMod = (SbModule*) pMods->Get( i );
                 AppWin* p = new AppBasEd( this, pMod );
@@ -1801,7 +1801,7 @@ void BasicFrame::LoadLibrary()
 void BasicFrame::SaveLibrary()
 {
     String s;
-    if( QueryFileName( s, FT_BASIC_LIBRARY, TRUE ) )
+    if( QueryFileName( s, FT_BASIC_LIBRARY, sal_True ) )
     {
         SvFileStream aStrm( s, STREAM_STD_WRITE );
         if( !Basic().Store( aStrm ) )
@@ -1815,8 +1815,8 @@ String BasicFrame::GenRealString( const String &aResString )
     String aType,aValue,aResult(aResString);
     String aString;
     xub_StrLen nInsertPos = 0;
-    BOOL bFound;
-    bFound = FALSE;
+    sal_Bool bFound;
+    bFound = sal_False;
 
     while ( (nStart = aResult.Search(StartKenn,nStartPos)) != STRING_NOTFOUND &&
             (nGleich = aResult.SearchAscii("=",nStart+StartKenn.Len())) != STRING_NOTFOUND &&
@@ -1836,16 +1836,16 @@ String BasicFrame::GenRealString( const String &aResString )
                 aString.Erase();
             }
 
-            aString = String( SttResId( (USHORT)(aValue.ToInt32()) ) );
+            aString = String( SttResId( (sal_uInt16)(aValue.ToInt32()) ) );
             nInsertPos = nStart;
             nStartPos = nStart;
             aResult.Erase( nStart, nEnd-nStart+1 );
-            bFound = TRUE;
+            bFound = sal_True;
         }
         else if ( aType.Search(BaseArgKenn) == 0 ) // Starts with BaseArgKenn
         {
             // TODO: What the hell is that for??
-            USHORT nArgNr = USHORT( aType.Copy( BaseArgKenn.Len() ).ToInt32() );
+            sal_uInt16 nArgNr = sal_uInt16( aType.Copy( BaseArgKenn.Len() ).ToInt32() );
             DBG_ASSERT( aString.Search( CUniString("($Arg").Append( String::CreateFromInt32(nArgNr) ).AppendAscii(")") ) != STRING_NOTFOUND, "Extra Argument given in String");
             aString.SearchAndReplace( CUniString("($Arg").Append( String::CreateFromInt32(nArgNr) ).AppendAscii(")"), aValue );
             nStartPos = nStart;

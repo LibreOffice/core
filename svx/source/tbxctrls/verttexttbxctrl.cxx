@@ -31,7 +31,7 @@
 
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include <verttexttbxctrl.hxx>
+#include <svx/verttexttbxctrl.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/app.hxx>
 #include <svl/eitem.hxx>
@@ -41,22 +41,22 @@
 SFX_IMPL_TOOLBOX_CONTROL(SvxCTLTextTbxCtrl, SfxBoolItem);
 SFX_IMPL_TOOLBOX_CONTROL(SvxVertTextTbxCtrl, SfxBoolItem);
 
-SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxVertCTLTextTbxCtrl( nSlotId, nId, rTbx )
 {
-    SetVert(FALSE);
+    SetVert(sal_False);
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CTLFontState" )));
 }
 
-SvxVertTextTbxCtrl::SvxVertTextTbxCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxVertTextTbxCtrl::SvxVertTextTbxCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SvxVertCTLTextTbxCtrl( nSlotId, nId, rTbx )
 {
-    SetVert(TRUE);
+    SetVert(sal_True);
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:VerticalTextState" )));
 }
 
 /* ---------------------------------------------------------------------------*/
-SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     bCheckVertical(sal_True)
 {
@@ -67,13 +67,13 @@ SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl( )
 }
 
 void SvxVertCTLTextTbxCtrl::StateChanged(
-    USHORT nSID,
+    sal_uInt16 nSID,
     SfxItemState eState,
     const SfxPoolItem* pState )
 {
     SvtLanguageOptions aLangOptions;
-    BOOL bCalc = sal_False;
-    BOOL bVisible = GetToolBox().IsItemVisible(GetId());
+    sal_Bool bCalc = sal_False;
+    sal_Bool bVisible = GetToolBox().IsItemVisible(GetId());
     sal_Bool bEnabled = sal_False;
     if ( nSID == SID_VERTICALTEXT_STATE )
         bEnabled = aLangOptions.IsVerticalTextEnabled();
@@ -89,7 +89,7 @@ void SvxVertCTLTextTbxCtrl::StateChanged(
     {
         if(!bVisible)
         {
-            GetToolBox().ShowItem( GetId(), TRUE );
+            GetToolBox().ShowItem( GetId(), sal_True );
             bCalc = sal_True;
         }
     }

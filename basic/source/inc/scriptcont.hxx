@@ -44,6 +44,7 @@ namespace basic
 class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPassword
 {
     ::rtl::OUString maScriptLanguage;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > mxCodeNameAccess;
 
     // Methods to distinguish between deffirent library types
     virtual SfxLibrary* SAL_CALL implCreateLibrary( const ::rtl::OUString& aName );

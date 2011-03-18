@@ -34,7 +34,7 @@
 #define _XMLOFF_TXTFLDE_HXX
 
 #include <com/sun/star/uno/Reference.h>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 #include <rtl/ustring.hxx>
 #include <xmloff/xmltoken.hxx>

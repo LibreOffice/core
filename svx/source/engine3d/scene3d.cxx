@@ -29,14 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdstr.hrc"
-#include "svdglob.hxx"
-#include "svditer.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
+#include "svx/svditer.hxx"
 
 #if defined( UNX ) || defined( ICC )
 #include <stdlib.h>
 #endif
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/svdpage.hxx>
 #include <svl/style.hxx>
 #include <svx/scene3d.hxx>
@@ -242,7 +242,7 @@ void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& /*rDefault*/)
 #endif
 
     // Fuer WIN95/NT die FP-Exceptions abschalten
-#if defined(WNT) || defined(WIN)
+#if defined(WNT)
 #define SC_FPEXCEPTIONS_ON()    _control87( _MCW_EM, 0 )
 #define SC_FPEXCEPTIONS_OFF()   _control87( _MCW_EM, _MCW_EM )
     SC_FPEXCEPTIONS_OFF();
@@ -331,7 +331,7 @@ sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nNewOrdNum) const
 |*
 \************************************************************************/
 
-UINT16 E3dScene::GetObjIdentifier() const
+sal_uInt16 E3dScene::GetObjIdentifier() const
 {
     return E3D_SCENE_ID;
 }
@@ -753,7 +753,7 @@ void E3dScene::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     // Also derzeit sind die Klebepunkte relativ zum aOutRect der Szene definiert. Vor dem Drehen
     // werden die Klebepunkte relativ zur Seite definiert. Sie nehmen an der Drehung der Szene noch nicht Teil
     // dafuer gibt es den
-    SetGlueReallyAbsolute(TRUE);
+    SetGlueReallyAbsolute(sal_True);
 
     // So dass war die Szene, ab jetzt kommen die Objekte in der Szene
     // 3D-Objekte gibt es nur ein einziges das kann zwar mehrere Flaechen haben aber die Flaechen
@@ -772,7 +772,7 @@ void E3dScene::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     SetRectsDirty();    // Veranlasst eine Neuberechnung aller BoundRects
     NbcRotateGluePoints(rRef,nWink,sn,cs);  // Rotiert die Klebepunkte (die haben noch Koordinaten relativ
                                             // zum Urpsung des Blattes
-    SetGlueReallyAbsolute(FALSE);  // ab jetzt sind sie wieder relativ zum BoundRect (also dem aOutRect definiert)
+    SetGlueReallyAbsolute(sal_False);  // ab jetzt sind sie wieder relativ zum BoundRect (also dem aOutRect definiert)
     SetRectsDirty();
 }
 
@@ -807,7 +807,7 @@ void E3dScene::RecalcSnapRect()
 |*
 \************************************************************************/
 
-BOOL E3dScene::IsBreakObjPossible()
+sal_Bool E3dScene::IsBreakObjPossible()
 {
     // Szene ist aufzubrechen, wenn alle Mitglieder aufzubrechen sind
     SdrObjListIter a3DIterator(maSubList, IM_DEEPWITHGROUPS);
@@ -817,10 +817,10 @@ BOOL E3dScene::IsBreakObjPossible()
         E3dObject* pObj = (E3dObject*) a3DIterator.Next();
         DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
         if(!pObj->IsBreakObjPossible())
-            return FALSE;
+            return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 basegfx::B3DVector E3dScene::GetShadowPlaneDirection() const
@@ -833,7 +833,7 @@ basegfx::B3DVector E3dScene::GetShadowPlaneDirection() const
 
 void E3dScene::SetShadowPlaneDirection(const basegfx::B3DVector& rVec)
 {
-    UINT16 nSceneShadowSlant = (UINT16)((atan2(rVec.getY(), rVec.getZ()) / F_PI180) + 0.5);
+    sal_uInt16 nSceneShadowSlant = (sal_uInt16)((atan2(rVec.getY(), rVec.getZ()) / F_PI180) + 0.5);
     GetProperties().SetObjectItemDirect(Svx3DShadowSlantItem(nSceneShadowSlant));
 }
 
@@ -849,7 +849,7 @@ bool E3dScene::BegCreate(SdrDragStat& rStat)
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
     NbcSetSnapRect(aRect1);
-    return TRUE;
+    return sal_True;
 }
 
 bool E3dScene::MovCreate(SdrDragStat& rStat)
@@ -860,8 +860,8 @@ bool E3dScene::MovCreate(SdrDragStat& rStat)
     rStat.SetActionRect(aRect1);
     NbcSetSnapRect(aRect1);
     SetBoundRectDirty();
-    bSnapRectDirty=TRUE;
-    return TRUE;
+    bSnapRectDirty=sal_True;
+    return sal_True;
 }
 
 bool E3dScene::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
@@ -876,7 +876,7 @@ bool E3dScene::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
 bool E3dScene::BckCreate(SdrDragStat& /*rStat*/)
 {
-    return FALSE;
+    return sal_False;
 }
 
 void E3dScene::BrkCreate(SdrDragStat& /*rStat*/)

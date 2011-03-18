@@ -72,13 +72,13 @@ struct SfxRequest_Impl: public SfxListener
     SfxPoolItem*    pRetVal;     // Return value belongs to itself
     SfxShell*       pShell;      // run from this shell
     const SfxSlot*  pSlot;       // executed Slot
-    USHORT          nModifier;   // which Modifier was pressed?
-    BOOL            bDone;       // at all executed
-    BOOL            bIgnored;    // Cancelled by the User
-    BOOL            bCancelled;  // no longer notify
-    BOOL            bUseTarget;  // aTarget was set by Application
-    USHORT              nCallMode;   // Synch/Asynch/API/Record
-    BOOL                bAllowRecording;
+    sal_uInt16          nModifier;   // which Modifier was pressed?
+    sal_Bool            bDone;       // at all executed
+    sal_Bool            bIgnored;    // Cancelled by the User
+    sal_Bool            bCancelled;  // no longer notify
+    sal_Bool            bUseTarget;  // aTarget was set by Application
+    sal_uInt16              nCallMode;   // Synch/Asynch/API/Record
+    sal_Bool                bAllowRecording;
     SfxAllItemSet*      pInternalArgs;
     SfxViewFrame*       pViewFrame;
 
@@ -88,9 +88,9 @@ struct SfxRequest_Impl: public SfxListener
                         : pAnti( pOwner)
                         , pPool(0)
                         , nModifier(0)
-                        , bCancelled(FALSE)
+                        , bCancelled(sal_False)
                         , nCallMode( SFX_CALLMODE_SYNCHRON )
-                        , bAllowRecording( FALSE )
+                        , bAllowRecording( sal_False )
                         , pInternalArgs( 0 )
                         , pViewFrame(0)
                         {}
@@ -158,8 +158,8 @@ SfxRequest::SfxRequest
     DBG_MEMTEST();
 
     pImp->bAllowRecording = rOrig.pImp->bAllowRecording;
-    pImp->bDone = FALSE;
-    pImp->bIgnored = FALSE;
+    pImp->bDone = sal_False;
+    pImp->bIgnored = sal_False;
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
@@ -182,7 +182,7 @@ SfxRequest::SfxRequest
 SfxRequest::SfxRequest
 (
     SfxViewFrame*   pViewFrame,
-    USHORT          nSlotId
+    sal_uInt16          nSlotId
 
 )
 
@@ -201,16 +201,16 @@ SfxRequest::SfxRequest
 {
     DBG_MEMTEST();
 
-    pImp->bDone = FALSE;
-    pImp->bIgnored = FALSE;
+    pImp->bDone = sal_False;
+    pImp->bIgnored = sal_False;
     pImp->SetPool( &pViewFrame->GetPool() );
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = SFX_CALLMODE_SYNCHRON;
-    pImp->bUseTarget = FALSE;
+    pImp->bUseTarget = sal_False;
     pImp->pViewFrame = pViewFrame;
-    if( pImp->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl( nSlotId, &pImp->pShell, &pImp->pSlot, TRUE, TRUE ) )
+    if( pImp->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl( nSlotId, &pImp->pShell, &pImp->pSlot, sal_True, sal_True ) )
     {
         pImp->SetPool( &pImp->pShell->GetPool() );
         pImp->xRecorder = SfxRequest::GetMacroRecorder( pViewFrame );
@@ -231,7 +231,7 @@ SfxRequest::SfxRequest
 
 SfxRequest::SfxRequest
 (
-    USHORT        nSlotId,  // executed <Slot-Id>
+    sal_uInt16        nSlotId,  // executed <Slot-Id>
     SfxCallMode     nMode,      // Synch/API/...
     SfxItemPool&  rPool     // necessary for the SfxItemSet for parameters
 )
@@ -244,14 +244,14 @@ SfxRequest::SfxRequest
 {
     DBG_MEMTEST();
 
-    pImp->bDone = FALSE;
-    pImp->bIgnored = FALSE;
+    pImp->bDone = sal_False;
+    pImp->bIgnored = sal_False;
     pImp->SetPool( &rPool );
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = nMode;
-    pImp->bUseTarget = FALSE;
+    pImp->bUseTarget = sal_False;
 }
 
 SfxRequest::SfxRequest
@@ -267,14 +267,14 @@ SfxRequest::SfxRequest
 {
     DBG_MEMTEST();
 
-    pImp->bDone = FALSE;
-    pImp->bIgnored = FALSE;
+    pImp->bDone = sal_False;
+    pImp->bIgnored = sal_False;
     pImp->SetPool( &rPool );
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = nMode;
-    pImp->bUseTarget = FALSE;
+    pImp->bUseTarget = sal_False;
     TransformParameters( nSlot, rArgs, *pArgs, pSlot );
 }
 
@@ -282,8 +282,8 @@ SfxRequest::SfxRequest
 
 SfxRequest::SfxRequest
 (
-    USHORT                  nSlotId,
-    USHORT                  nMode,
+    sal_uInt16                  nSlotId,
+    sal_uInt16                  nMode,
     const SfxAllItemSet&    rSfxArgs
 )
 
@@ -295,37 +295,37 @@ SfxRequest::SfxRequest
 {
     DBG_MEMTEST();
 
-    pImp->bDone = FALSE;
-    pImp->bIgnored = FALSE;
+    pImp->bDone = sal_False;
+    pImp->bIgnored = sal_False;
     pImp->SetPool( rSfxArgs.GetPool() );
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
     pImp->nCallMode = nMode;
-    pImp->bUseTarget = FALSE;
+    pImp->bUseTarget = sal_False;
 }
 //--------------------------------------------------------------------
 
-USHORT SfxRequest::GetCallMode() const
+sal_uInt16 SfxRequest::GetCallMode() const
 {
     return pImp->nCallMode;
 }
 
 //--------------------------------------------------------------------
 
-BOOL SfxRequest::IsSynchronCall() const
+sal_Bool SfxRequest::IsSynchronCall() const
 {
     return SFX_CALLMODE_SYNCHRON == ( SFX_CALLMODE_SYNCHRON & pImp->nCallMode );
 }
 
 //--------------------------------------------------------------------
 
-void SfxRequest::SetSynchronCall( BOOL bSynchron )
+void SfxRequest::SetSynchronCall( sal_Bool bSynchron )
 {
     if ( bSynchron )
         pImp->nCallMode |= SFX_CALLMODE_SYNCHRON;
     else
-        pImp->nCallMode &= ~(USHORT) SFX_CALLMODE_SYNCHRON;
+        pImp->nCallMode &= ~(sal_uInt16) SFX_CALLMODE_SYNCHRON;
 }
 
 void SfxRequest::SetInternalArgs_Impl( const SfxAllItemSet& rArgs )
@@ -449,7 +449,7 @@ void SfxRequest::AppendItem(const SfxPoolItem &rItem)
 
 //--------------------------------------------------------------------
 
-void SfxRequest::RemoveItem( USHORT nID )
+void SfxRequest::RemoveItem( sal_uInt16 nID )
 {
     if (pArgs)
     {
@@ -463,8 +463,8 @@ void SfxRequest::RemoveItem( USHORT nID )
 
 const SfxPoolItem* SfxRequest::GetArg
 (
-    USHORT  nSlotId,  // Slot-Id or Which-Id of the parameters
-    bool    bDeep,    // FALSE: do not seach in the Parent-ItemSets
+    sal_uInt16  nSlotId,  // Slot-Id or Which-Id of the parameters
+    bool    bDeep,    // sal_False: do not seach in the Parent-ItemSets
     TypeId  aType     // != 0:  RTTI check with Assertion
 )   const
 {
@@ -476,8 +476,8 @@ const SfxPoolItem* SfxRequest::GetArg
 const SfxPoolItem* SfxRequest::GetItem
 (
     const SfxItemSet* pArgs,
-    USHORT            nSlotId,  // Slot-Id or Which-Id of the parameters
-    bool              bDeep,    // FALSE: do not seach in the Parent-ItemSets
+    sal_uInt16            nSlotId,  // Slot-Id or Which-Id of the parameters
+    bool              bDeep,    // sal_False: do not seach in the Parent-ItemSets
     TypeId            aType     // != 0:  RTTI check with Assertion
 )
 
@@ -499,12 +499,12 @@ const SfxPoolItem* SfxRequest::GetItem
                 ...
                 // An Example on not using the macros
                 const SfxInt32Item *pPosItem = (const SfxUInt32Item*)
-                    rReq.GetArg( SID_POS, FALSE, TYPE(SfxInt32Item) );
-                USHORT nPos = pPosItem ? pPosItem->GetValue() : 0;
+                    rReq.GetArg( SID_POS, sal_False, TYPE(SfxInt32Item) );
+                sal_uInt16 nPos = pPosItem ? pPosItem->GetValue() : 0;
 
                 // An Example on using the macros
-                SFX_REQUEST_ARG(rReq, pSizeItem, SfxInt32Item, SID_SIZE, FALSE);
-                USHORT nSize = pSizeItem ? pPosItem->GetValue() : 0;
+                SFX_REQUEST_ARG(rReq, pSizeItem, SfxInt32Item, SID_SIZE, sal_False);
+                sal_uInt16 nSize = pSizeItem ? pPosItem->GetValue() : 0;
 
                 ...
             }
@@ -518,9 +518,9 @@ const SfxPoolItem* SfxRequest::GetItem
     if ( pArgs )
     {
         // Which may be converted to ID
-        USHORT nWhich = pArgs->GetPool()->GetWhich(nSlotId);
+        sal_uInt16 nWhich = pArgs->GetPool()->GetWhich(nSlotId);
 
-        // Is the item set or available at bDeep == TRUE?
+        // Is the item set or available at bDeep == sal_True?
         const SfxPoolItem *pItem = 0;
         if ( ( bDeep ? SFX_ITEM_AVAILABLE : SFX_ITEM_SET )
              <= pArgs->GetItemState( nWhich, bDeep, &pItem ) )
@@ -564,10 +564,10 @@ void SfxRequest::Done
                                    in a dialogue, 0 if no parameters have been
                                    set */
 
-    bool                bKeep   /*  TRUE (default)
+    bool                bKeep   /*  true (default)
                                    'rSet' is saved and GetArgs() queriable.
 
-                                    FALSE
+                                    false
                                    'rSet' is not copied (faster) */
 )
 
@@ -619,7 +619,7 @@ void SfxRequest::Done
 //--------------------------------------------------------------------
 
 
-void SfxRequest::Done( BOOL bRelease )
+void SfxRequest::Done( sal_Bool bRelease )
 //  [<SfxRequest::Done(SfxItemSet&)>]
 {
     Done_Impl( pArgs );
@@ -637,7 +637,7 @@ void SfxRequest::ForgetAllArgs()
 
 //--------------------------------------------------------------------
 
-BOOL SfxRequest::IsCancelled() const
+sal_Bool SfxRequest::IsCancelled() const
 {
     return pImp->bCancelled;
 }
@@ -653,7 +653,7 @@ void SfxRequest::Cancel()
 */
 
 {
-    pImp->bCancelled = TRUE;
+    pImp->bCancelled = sal_True;
     pImp->SetPool( 0 );
     DELETEZ( pArgs );
 }
@@ -677,7 +677,7 @@ void SfxRequest::Ignore()
 
 {
     // Mark as actually executed
-    pImp->bIgnored = TRUE;
+    pImp->bIgnored = sal_True;
 }
 
 //--------------------------------------------------------------------
@@ -699,7 +699,7 @@ void SfxRequest::Done_Impl
 
 {
     // Mark as actually executed
-    pImp->bDone = TRUE;
+    pImp->bDone = sal_True;
 
     // not Recording
     if ( !pImp->xRecorder.is() )
@@ -735,8 +735,8 @@ void SfxRequest::Done_Impl
     {
         // get the property as SfxPoolItem
         const SfxPoolItem *pItem;
-        USHORT nWhich = rPool.GetWhich(pImp->pSlot->GetSlotId());
-        SfxItemState eState = pSet ? pSet->GetItemState( nWhich, FALSE, &pItem ) : SFX_ITEM_UNKNOWN;
+        sal_uInt16 nWhich = rPool.GetWhich(pImp->pSlot->GetSlotId());
+        SfxItemState eState = pSet ? pSet->GetItemState( nWhich, sal_False, &pItem ) : SFX_ITEM_UNKNOWN;
 #ifdef DBG_UTIL
         if ( SFX_ITEM_SET != eState )
         {
@@ -770,13 +770,13 @@ void SfxRequest::Done_Impl
             for ( const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem() )
             {
                 // to determine the slot ID for the individual item
-                USHORT nSlotId = rPool.GetSlotId( pItem->Which() );
+                sal_uInt16 nSlotId = rPool.GetSlotId( pItem->Which() );
                 if ( nSlotId == nSlot )
                 {
                     // play it safe; repair the wrong flags
                     OSL_FAIL( "recursion RecordPerItem - use RecordPerSet!" );
                     SfxSlot *pSlot = (SfxSlot*) pImp->pSlot;
-                    pSlot->nFlags &= ~((ULONG)SFX_SLOT_RECORDPERITEM);
+                    pSlot->nFlags &= ~((sal_uIntPtr)SFX_SLOT_RECORDPERITEM);
                     pSlot->nFlags &=  SFX_SLOT_RECORDPERSET;
                 }
 
@@ -797,7 +797,7 @@ void SfxRequest::Done_Impl
 
 //--------------------------------------------------------------------
 
-BOOL SfxRequest::IsDone() const
+sal_Bool SfxRequest::IsDone() const
 
 /*  [Description]
 
@@ -806,7 +806,7 @@ BOOL SfxRequest::IsDone() const
     because it was canceled by the user or the context for this request was
     wrong, this was not implemented on a separate <SfxShell>.
 
-    SfxRequest instances that return FALSE will not be recorded.
+    SfxRequest instances that return sal_False will not be recorded.
 
     [Cross-reference]
 
@@ -864,7 +864,7 @@ com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRe
     return xRecorder;
 }
 
-BOOL SfxRequest::HasMacroRecorder( SfxViewFrame* pView )
+sal_Bool SfxRequest::HasMacroRecorder( SfxViewFrame* pView )
 {
     return GetMacroRecorder( pView ).is();
 }
@@ -872,12 +872,12 @@ BOOL SfxRequest::HasMacroRecorder( SfxViewFrame* pView )
 
 //--------------------------------------------------------------------
 
-BOOL SfxRequest::IsAPI() const
+sal_Bool SfxRequest::IsAPI() const
 
 /*  [Description]
 
-    Returns TRUE if this SfxRequest was generated by an API (for example BASIC),
-    otherwise FALSE.
+    Returns sal_True if this SfxRequest was generated by an API (for example BASIC),
+    otherwise sal_False.
 */
 
 {
@@ -891,11 +891,11 @@ bool SfxRequest::IsRecording() const
 
 /*  [Description]
 
-    Returns TRUE if this SfxRequest is to be recorded ie
+    Returns sal_True if this SfxRequest is to be recorded ie
     1. Currently a macro is beeing recorded
     2. This request is even recorded
     3. the request did not originate from a pure API (for example BASIC),
-    otherwise FALSE.
+    otherwise sal_False.
 */
 
 {
@@ -903,13 +903,13 @@ bool SfxRequest::IsRecording() const
 }
 
 //--------------------------------------------------------------------
-void SfxRequest::SetModifier( USHORT nModi )
+void SfxRequest::SetModifier( sal_uInt16 nModi )
 {
     pImp->nModifier = nModi;
 }
 
 //--------------------------------------------------------------------
-USHORT SfxRequest::GetModifier() const
+sal_uInt16 SfxRequest::GetModifier() const
 {
     return pImp->nModifier;
 }
@@ -936,17 +936,17 @@ void SfxRequest::SetTarget( const String &rTarget )
 
 {
     pImp->aTarget = rTarget;
-    pImp->bUseTarget = TRUE;
+    pImp->bUseTarget = sal_True;
 }
 
-void SfxRequest::AllowRecording( BOOL bSet )
+void SfxRequest::AllowRecording( sal_Bool bSet )
 {
     pImp->bAllowRecording = bSet;
 }
 
-BOOL SfxRequest::AllowsRecording() const
+sal_Bool SfxRequest::AllowsRecording() const
 {
-    BOOL bAllow = pImp->bAllowRecording;
+    sal_Bool bAllow = pImp->bAllowRecording;
     if( !bAllow )
         bAllow = ( SFX_CALLMODE_API != ( SFX_CALLMODE_API & pImp->nCallMode ) ) &&
                  ( SFX_CALLMODE_RECORD == ( SFX_CALLMODE_RECORD & pImp->nCallMode ) );

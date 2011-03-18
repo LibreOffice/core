@@ -34,7 +34,7 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-#include <classes/addonsoptions.hxx>
+#include <framework/addonsoptions.hxx>
 #include "uielement/toolbar.hxx"
 
 //_________________________________________________________________________________________________________________
@@ -131,7 +131,7 @@ ImageButtonToolbarController::ImageButtonToolbarController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
-    USHORT                                   nID,
+    sal_uInt16                                   nID,
     const ::rtl::OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
 {

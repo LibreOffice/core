@@ -62,7 +62,7 @@ namespace avmedia
             virtual void    cleanUp();
             virtual void    onURLChanged();
 
-            static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const ::rtl::OUString& rURL );
+            static ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > createPlayer( const ::rtl::OUString& rURL);
 
         public:
 
@@ -113,6 +113,7 @@ namespace avmedia
             void    stopPlayingInternal( bool );
 
             MediaWindow* getMediaWindow() const;
+            inline sal_Bool isMediaWindowJavaBased() const { return( mbIsMediaWindowJavaBased ); }
 
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > getPlayer() const;
 
@@ -125,6 +126,7 @@ namespace avmedia
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >        mxPlayer;
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >  mxPlayerWindow;
             MediaWindow*                                                                mpMediaWindow;
+            sal_Bool                                                                    mbIsMediaWindowJavaBased;
         };
     }
 }

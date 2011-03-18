@@ -43,25 +43,25 @@ class SbiImage {
 
     SbxArrayRef    rTypes;          // User defined types
     SbxArrayRef    rEnums;          // Enum types
-    UINT32*        pStringOff;      // StringId-Offsets
+    sal_uInt32*        pStringOff;      // StringId-Offsets
     sal_Unicode*   pStrings;        // StringPool
     char*          pCode;           // Code-Image
     char*          pLegacyPCode;        // Code-Image
-    BOOL           bError;          // TRUE: Fehler
-    USHORT         nFlags;          // Flags (s.u.)
+    sal_Bool           bError;          // sal_True: Fehler
+    sal_uInt16         nFlags;          // Flags (s.u.)
     short          nStrings;        // Anzahl Strings
-    UINT32         nStringSize;     // Groesse des String-Puffers
-    UINT32         nCodeSize;       // Groesse des Code-Blocks
-    UINT16         nLegacyCodeSize;     // Groesse des Code-Blocks
-    UINT16         nDimBase;        // OPTION BASE-Wert
+    sal_uInt32         nStringSize;     // Groesse des String-Puffers
+    sal_uInt32         nCodeSize;       // Groesse des Code-Blocks
+    sal_uInt16         nLegacyCodeSize;     // Groesse des Code-Blocks
+    sal_uInt16         nDimBase;        // OPTION BASE-Wert
     rtl_TextEncoding eCharSet;      // Zeichensatz fuer Strings
                                     // temporaere Verwaltungs-Variable:
     short          nStringIdx;      // aktueller String-Index
-    UINT32         nStringOff;      // aktuelle Pos im Stringpuffer
+    sal_uInt32         nStringOff;      // aktuelle Pos im Stringpuffer
                                     // Routinen fuer Compiler:
     void MakeStrings( short );      // StringPool einrichten
     void AddString( const String& );// String zufuegen
-    void AddCode( char*, UINT32 );  // Codeblock dazu
+    void AddCode( char*, sal_uInt32 );  // Codeblock dazu
     void AddType(SbxObject *);      // User-Type mit aufnehmen
     void AddEnum(SbxObject *);      // Register enum type
 
@@ -69,35 +69,35 @@ public:
     String aName;                   // Makroname
     ::rtl::OUString aOUSource;      // Quellcode
     String aComment;                // Kommentar
-    BOOL   bInit;                   // TRUE: Init-Code ist gelaufen
-    BOOL   bFirstInit;              // TRUE, wenn das Image das erste mal nach
+    sal_Bool   bInit;                   // sal_True: Init-Code ist gelaufen
+    sal_Bool   bFirstInit;              // sal_True, wenn das Image das erste mal nach
                                     // dem Compilieren initialisiert wird.
     SbiImage();
    ~SbiImage();
     void Clear();                   // Inhalt loeschen
-    BOOL Load( SvStream&, UINT32& nVer );       // Loads image from stream
+    sal_Bool Load( SvStream&, sal_uInt32& nVer );       // Loads image from stream
                             // nVer is set to version
                             // of image
-    BOOL Load( SvStream& );
-    BOOL Save( SvStream&, UINT32 = B_CURVERSION );
-    BOOL IsError()                  { return bError;    }
+    sal_Bool Load( SvStream& );
+    sal_Bool Save( SvStream&, sal_uInt32 = B_CURVERSION );
+    sal_Bool IsError()                  { return bError;    }
 
     const char* GetCode() const     { return pCode;     }
-    UINT32      GetCodeSize() const { return nCodeSize; }
+    sal_uInt32      GetCodeSize() const { return nCodeSize; }
     ::rtl::OUString& GetSource32()  { return aOUSource; }
-    USHORT      GetBase() const     { return nDimBase;  }
+    sal_uInt16      GetBase() const     { return nDimBase;  }
     String      GetString( short nId ) const;
     //const char* GetString( short nId ) const;
     const SbxObject*  FindType (String aTypeName) const;
 
     SbxArrayRef GetEnums()          { return rEnums; }
 
-    void        SetFlag( USHORT n ) { nFlags |= n;      }
-    USHORT      GetFlag( USHORT n ) const { return nFlags & n; }
-    UINT16      CalcLegacyOffset( INT32 nOffset );
-    UINT32      CalcNewOffset( INT16 nOffset );
+    void        SetFlag( sal_uInt16 n ) { nFlags |= n;      }
+    sal_uInt16      GetFlag( sal_uInt16 n ) const { return nFlags & n; }
+    sal_uInt16      CalcLegacyOffset( sal_Int32 nOffset );
+    sal_uInt32      CalcNewOffset( sal_Int16 nOffset );
     void        ReleaseLegacyBuffer();
-    BOOL        ExceedsLegacyLimits();
+    sal_Bool        ExceedsLegacyLimits();
 
 };
 

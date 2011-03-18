@@ -40,14 +40,14 @@
 
 #include "fmobj.hxx"
 
-#include "fmresids.hrc"
+#include <svx/fmresids.hrc>
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 
 #include "fmpgeimp.hxx"
 
 #include <sfx2/objsh.hxx>
-#include "svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdview.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
@@ -141,7 +141,7 @@ SdrPage* FmFormPage::Clone() const
 }
 
 //------------------------------------------------------------------
-void FmFormPage::InsertObject(SdrObject* pObj, ULONG nPos,
+void FmFormPage::InsertObject(SdrObject* pObj, sal_uLong nPos,
                               const SdrInsertReason* pReason)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::InsertObject" );
@@ -231,7 +231,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
 }
 
 //------------------------------------------------------------------
-SdrObject* FmFormPage::RemoveObject(ULONG nObjNum)
+SdrObject* FmFormPage::RemoveObject(sal_uLong nObjNum)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::RemoveObject" );
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);

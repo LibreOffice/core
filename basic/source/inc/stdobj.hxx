@@ -46,7 +46,7 @@ class SbiStdObject : public SbxObject
 public:
     SbiStdObject( const String&, StarBASIC* );
     virtual SbxVariable* Find( const String&, SbxClassType );
-    virtual void SetModified( BOOL );
+    virtual void SetModified( sal_Bool );
 };
 
 #endif

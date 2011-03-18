@@ -354,6 +354,8 @@ HRESULT STDMETHODCALLTYPE CInfoTip::Load(LPCOLESTR pszFileName, DWORD /*dwMode*/
 
     m_FileNameOnly = std::wstring(begin, end);
 
+    fname = getShortPathName( fname );
+
     std::string fnameA = WStringToString(fname);
 
     // #115531#

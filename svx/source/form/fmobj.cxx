@@ -32,7 +32,7 @@
 #include "fmprop.hrc"
 #include "fmvwimp.hxx"
 #include "fmpgeimp.hxx"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "svx/fmview.hxx"
 #include "svx/fmglob.hxx"
 #include "svx/fmpage.hxx"

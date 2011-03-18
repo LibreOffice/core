@@ -81,7 +81,7 @@ static LONG RegWriteValue( HKEY hBaseKey, LPCTSTR lpSubKey, LPCTSTR lpValueName,
 
     if ( ERROR_SUCCESS == lResult )
     {
-        lResult = RegSetValueEx( hKey, lpValueName, NULL, dwType, (CONST BYTE *)lpData, cbData );
+        lResult = RegSetValueEx( hKey, lpValueName, NULL, dwType, (CONST sal_uInt8 *)lpData, cbData );
         RegCloseKey( hKey );
     }
 
@@ -125,14 +125,14 @@ namespace svx{
                 sizeof(szBuffer) ) )
                 maEMailAddrED.SetText( (sal_Unicode *)szBuffer );
 
-            DWORD   fAllowContact = FALSE;
+            DWORD   fAllowContact = sal_False;
             RegReadValue(
                 HKEY_CURRENT_USER,
                 TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
                 TEXT("AllowContact"),
                 &fAllowContact,
                 sizeof(fAllowContact) );
-            maContactCB.Check( (BOOL)fAllowContact );
+            maContactCB.Check( (sal_Bool)fAllowContact );
 
             DWORD   uInternetConnection = 0;
             RegReadValue(
@@ -237,7 +237,7 @@ namespace svx{
                         szBuffer,
                         NULL,
                         NULL,
-                        FALSE,
+                        sal_False,
                         0,
                         NULL, NULL, &StartupInfo, &ProcessInfo )
                     )

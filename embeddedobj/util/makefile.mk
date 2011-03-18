@@ -85,3 +85,11 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo CLEAR_THE_FILE	> $@
     @echo __CT				>>$@
 
+
+ALLTAR : $(MISC)/embobj.component
+
+$(MISC)/embobj.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        embobj.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt embobj.component

@@ -191,6 +191,9 @@ class BackendImpl : public ImplBaseT
         virtual OUString SAL_CALL getDescription()
             throw (deployment::ExtensionRemovedException, RuntimeException);
 
+        virtual OUString SAL_CALL getLicenseText()
+            throw (deployment::ExtensionRemovedException, RuntimeException);
+
         virtual void SAL_CALL exportTo(
             OUString const & destFolderURL, OUString const & newTitle,
             sal_Int32 nameClashAction,
@@ -248,7 +251,7 @@ class BackendImpl : public ImplBaseT
 
     void addDataToDb(OUString const & url, ExtensionBackendDb::Data const & data);
     ExtensionBackendDb::Data readDataFromDb(OUString const & url);
-    void deleteDataFromDb(OUString const & url);
+    void revokeEntryFromDb(OUString const & url);
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
@@ -274,6 +277,9 @@ public:
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
+    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException);
 
     using ImplBaseT::disposing;
 };
@@ -356,6 +362,21 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
     return m_typeInfos;
 }
 
+void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaType*/)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException)
+{
+    //Notify the backend responsible for processing the different media
+    //types that this extension was removed.
+    ExtensionBackendDb::Data data = readDataFromDb(url);
+    for (ExtensionBackendDb::Data::ITC_ITEMS i = data.items.begin(); i != data.items.end(); i++)
+    {
+        m_xRootRegistry->packageRemoved(i->first, i->second);
+    }
+
+    if (m_backendDb.get())
+        m_backendDb->removeEntry(url);
+}
 
 
 // PackageRegistryBackend
@@ -456,10 +477,10 @@ ExtensionBackendDb::Data BackendImpl::readDataFromDb(
     return data;
 }
 
-void BackendImpl::deleteDataFromDb(OUString const & url)
+void BackendImpl::revokeEntryFromDb(OUString const & url)
 {
     if (m_backendDb.get())
-        m_backendDb->removeEntry(url);
+        m_backendDb->revokeEntry(url);
 }
 
 
@@ -965,7 +986,7 @@ void BackendImpl::PackageImpl::processPackage_(
                 // selected
             }
         }
-        getMyBackend()->deleteDataFromDb(getURL());
+        getMyBackend()->revokeEntryFromDb(getURL());
     }
 }
 
@@ -995,6 +1016,31 @@ OUString BackendImpl::PackageImpl::getDescription()
     if (sDescription.getLength())
         return sDescription;
     return m_oldDescription;
+}
+
+//______________________________________________________________________________
+OUString BackendImpl::PackageImpl::getLicenseText()
+    throw (deployment::ExtensionRemovedException, RuntimeException)
+{
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
+
+    OUString sLicense;
+    DescriptionInfoset aInfo = getDescriptionInfoset();
+
+    ::boost::optional< SimpleLicenseAttributes > aSimplLicAttr = aInfo.getSimpleLicenseAttributes();
+    if ( aSimplLicAttr )
+    {
+        OUString aLicenseURL = aInfo.getLocalizedLicenseURL();
+
+        if ( aLicenseURL.getLength() )
+        {
+            OUString aFullURL = m_url_expanded + OUSTR("/") + aLicenseURL;
+               sLicense = getTextFromURL( Reference< ucb::XCommandEnvironment >(), aFullURL);
+           }
+    }
+
+     return sLicense;
 }
 
 //______________________________________________________________________________

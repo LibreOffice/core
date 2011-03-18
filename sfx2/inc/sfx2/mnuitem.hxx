@@ -47,23 +47,23 @@ class SFX2_DLLPUBLIC SfxMenuControl: public SfxControllerItem
     String                  aTitle;
     SfxVirtualMenu*         pOwnMenu;
     SfxVirtualMenu*         pSubMenu;
-    BOOL                    b_ShowStrings;
-    BOOL                    b_UnusedDummy;
+    sal_Bool                    b_ShowStrings;
+    sal_Bool                    b_UnusedDummy;
 
 public:
                             SfxMenuControl();
-                            SfxMenuControl( BOOL bShowStrings );
-                            SfxMenuControl( USHORT, SfxBindings&);
+                            SfxMenuControl( sal_Bool bShowStrings );
+                            SfxMenuControl( sal_uInt16, SfxBindings&);
 
-    static SfxMenuControl*  CreateImpl( USHORT nId, Menu &rMenu, SfxBindings &rBindings );
-    static void             RegisterControl( USHORT nSlotId = 0, SfxModule *pMod=NULL );
+    static SfxMenuControl*  CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings );
+    static void             RegisterControl( sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL );
 
                             ~SfxMenuControl();
 
         using SfxControllerItem::Bind;
-    void                    Bind( SfxVirtualMenu* pOwnMenu, USHORT nId,
+    void                    Bind( SfxVirtualMenu* pOwnMenu, sal_uInt16 nId,
                                   const String& rTitle, SfxBindings& rBindings );
-    void                    Bind( SfxVirtualMenu* pOwnMenu, USHORT nId,
+    void                    Bind( SfxVirtualMenu* pOwnMenu, sal_uInt16 nId,
                                   SfxVirtualMenu& rSubMenu,
                                   const String& rTitle, SfxBindings& rBindings );
 
@@ -73,13 +73,13 @@ public:
     void                    SetOwnMenu( SfxVirtualMenu* pMenu );
     void                    RemovePopup();
 
-    virtual void            StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                           const SfxPoolItem* pState );
 
-    static SfxMenuControl*    CreateControl( USHORT nId, Menu &, SfxBindings & );
-    static SfxUnoMenuControl* CreateControl( const String&, USHORT, Menu&, SfxBindings&, SfxVirtualMenu* );
-    static SfxUnoMenuControl* CreateControl( const String&, USHORT, Menu&, const String& sItemText, SfxBindings&, SfxVirtualMenu* );
-    static BOOL             IsSpecialControl( USHORT nId, SfxModule* );
+    static SfxMenuControl*    CreateControl( sal_uInt16 nId, Menu &, SfxBindings & );
+    static SfxUnoMenuControl* CreateControl( const String&, sal_uInt16, Menu&, SfxBindings&, SfxVirtualMenu* );
+    static SfxUnoMenuControl* CreateControl( const String&, sal_uInt16, Menu&, const String& sItemText, SfxBindings&, SfxVirtualMenu* );
+    static sal_Bool             IsSpecialControl( sal_uInt16 nId, SfxModule* );
     static void             RegisterMenuControl(SfxModule*, SfxMenuCtrlFactory*);
 
 };
@@ -88,25 +88,25 @@ class SfxUnoMenuControl : public SfxMenuControl
 {
     SfxUnoControllerItem*   pUnoCtrl;
 public:
-                            SfxUnoMenuControl( const String&, USHORT nId, Menu&,
+                            SfxUnoMenuControl( const String&, sal_uInt16 nId, Menu&,
                                                 SfxBindings&, SfxVirtualMenu* );
-                            SfxUnoMenuControl( const String&, USHORT nId, Menu&,
+                            SfxUnoMenuControl( const String&, sal_uInt16 nId, Menu&,
                                                const String&,
                                                 SfxBindings&, SfxVirtualMenu* );
                             ~SfxUnoMenuControl();
     void                    Select();
 };
 
-typedef SfxMenuControl* (*SfxMenuControlCtor)( USHORT nId, Menu &, SfxBindings & );
+typedef SfxMenuControl* (*SfxMenuControlCtor)( sal_uInt16 nId, Menu &, SfxBindings & );
 
 struct SfxMenuCtrlFactory
 {
     SfxMenuControlCtor  pCtor;
     TypeId              nTypeId;
-    USHORT              nSlotId;
+    sal_uInt16              nSlotId;
 
     SfxMenuCtrlFactory( SfxMenuControlCtor pTheCtor,
-            TypeId nTheTypeId, USHORT nTheSlotId ):
+            TypeId nTheTypeId, sal_uInt16 nTheSlotId ):
         pCtor(pTheCtor),
         nTypeId(nTheTypeId),
         nSlotId(nTheSlotId)
@@ -124,13 +124,13 @@ inline SfxVirtualMenu* SfxMenuControl::GetPopupMenu() const
 }
 
 #define SFX_DECL_MENU_CONTROL() \
-        static SfxMenuControl* CreateImpl( USHORT nId, Menu &rMenu, SfxBindings &rBindings ); \
-        static void RegisterControl(USHORT nSlotId = 0, SfxModule *pMod=NULL)
+        static SfxMenuControl* CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings ); \
+        static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL)
 
 #define SFX_IMPL_MENU_CONTROL(Class, nItemClass) \
-        SfxMenuControl* Class::CreateImpl( USHORT nId, Menu &rMenu, SfxBindings &rBindings ) \
+        SfxMenuControl* Class::CreateImpl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings ) \
                { return new Class(nId, rMenu, rBindings); } \
-        void Class::RegisterControl(USHORT nSlotId, SfxModule *pMod) \
+        void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxMenuControl::RegisterMenuControl( pMod, new SfxMenuCtrlFactory( \
                     Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
 
@@ -138,15 +138,15 @@ inline SfxVirtualMenu* SfxMenuControl::GetPopupMenu() const
 class SfxAppMenuControl_Impl : public SfxMenuControl
 {
     PopupMenu*  pMenu;
-    ULONG       m_nSymbolsStyle;
-    BOOL        m_bShowMenuImages;
+    sal_uIntPtr       m_nSymbolsStyle;
+    sal_Bool        m_bShowMenuImages;
 
 protected:
     DECL_LINK( Activate, Menu * );
 
 public:
     SFX_DECL_MENU_CONTROL();
-    SfxAppMenuControl_Impl( USHORT nPos, Menu& rMenu, SfxBindings& rBindings );
+    SfxAppMenuControl_Impl( sal_uInt16 nPos, Menu& rMenu, SfxBindings& rBindings );
     ~SfxAppMenuControl_Impl();
 };
 

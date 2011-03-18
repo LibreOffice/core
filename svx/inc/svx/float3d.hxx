@@ -33,7 +33,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <sfx2/dockwin.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/stdctrl.hxx>
 #include "svx/svxdllapi.h"
@@ -80,6 +80,7 @@ private:
     ImageButton         aBtnAssign;
 
 // geometry
+    FixedLine           aFLGeometrie;
     FixedText           aFtPercentDiagonal;
     MetricField         aMtrPercentDiagonal;
     FixedText           aFtBackscale;
@@ -88,36 +89,35 @@ private:
     MetricField         aMtrEndAngle;
     FixedText           aFtDepth;
     MetricField         aMtrDepth;
-    FixedLine           aFLGeometrie;
+      FixedLine           aFLSegments;
 
     FixedText           aFtHorizontal;
     NumericField        aNumHorizontal;
     FixedText           aFtVertical;
     NumericField        aNumVertical;
-    FixedLine           aFLSegments;
+       FixedLine           aFLNormals;
 
     ImageButton         aBtnNormalsObj;
     ImageButton         aBtnNormalsFlat;
     ImageButton         aBtnNormalsSphere;
     ImageButton         aBtnNormalsInvert;
     ImageButton         aBtnTwoSidedLighting;
-    FixedLine           aFLNormals;
 
     ImageButton         aBtnDoubleSided;
-
+    FixedLine           aFLRepresentation;
 // presentation
     FixedText           aFtShademode;
     ListBox             aLbShademode;
+    FixedLine           aFLShadow;
     ImageButton         aBtnShadow3d;
     FixedText           aFtSlant;
     MetricField         aMtrSlant;
-    FixedLine           aFLShadow;
     FixedText           aFtDistance;
     MetricField         aMtrDistance;
     FixedText           aFtFocalLeng;
     MetricField         aMtrFocalLength;
     FixedLine           aFLCamera;
-    FixedLine           aFLRepresentation;
+    FixedLine           aFLLight;
 
 // lighting
     ImageButton         aBtnLight1;
@@ -128,6 +128,7 @@ private:
     ImageButton         aBtnLight6;
     ImageButton         aBtnLight7;
     ImageButton         aBtnLight8;
+    FixedText           aFTLightsource;
     ColorLB             aLbLight1;
     ColorLB             aLbLight2;
     ColorLB             aLbLight3;
@@ -138,7 +139,6 @@ private:
     ColorLB             aLbLight8;
 
     ImageButton         aBtnLightColor;
-    FixedText           aFTLightsource;
 
     // #99694# Keyboard shortcuts activate the next control, so the
     // order needed to be changed here
@@ -146,7 +146,7 @@ private:
     ColorLB             aLbAmbientlight;    // ListBox
     ImageButton         aBtnAmbientColor;   // color button
 
-    FixedLine           aFLLight;
+       FixedLine           aFLTexture;
 
 // Textures
     FixedText           aFtTexKind;
@@ -166,10 +166,10 @@ private:
     ImageButton         aBtnTexCircleY;
     FixedText           aFtTexFilter;
     ImageButton         aBtnTexFilter;
-    FixedLine           aFLTexture;
 
 // material
 // material editor
+       FixedLine           aFLMaterial;
     FixedText           aFtMatFavorites;
     ListBox             aLbMatFavorites;
     FixedText           aFtMatColor;
@@ -178,25 +178,25 @@ private:
     FixedText           aFtMatEmission;
     ColorLB             aLbMatEmission;
     ImageButton         aBtnEmissionColor;
+       FixedLine           aFLMatSpecular;
     FixedText           aFtMatSpecular;
     ColorLB             aLbMatSpecular;
     ImageButton         aBtnSpecularColor;
     FixedText           aFtMatSpecularIntensity;
     MetricField         aMtrMatSpecularIntensity;
-    FixedLine           aFLMatSpecular;
-    FixedLine           aFLMaterial;
+
+    Svx3DPreviewControl aCtlPreview;
+    SvxLightCtl3D       aCtlLightPreview;
 
 // bottom part
     ImageButton         aBtnConvertTo3D;
     ImageButton         aBtnLatheObject;
     ImageButton         aBtnPerspective;
-    Svx3DPreviewControl aCtlPreview;
-    SvxLightCtl3D       aCtlLightPreview;
 
 // the rest ...
     Image               aImgLightOn;
     Image               aImgLightOff;
-    BOOL                bUpdate;
+    sal_Bool                bUpdate;
     ViewType3D          eViewType;
     Size                aSize;
 
@@ -221,7 +221,7 @@ private:
     // ItemSet used to remember set 2d attributes
     SfxItemSet*         mpRemember2DAttributes;
 
-    BOOL                bOnly3DChanged;
+    sal_Bool                bOnly3DChanged;
 
     //------------------------------------
 
@@ -242,8 +242,8 @@ private:
     SVX_DLLPRIVATE void         Construct();
     SVX_DLLPRIVATE void         Reset();
 
-    SVX_DLLPRIVATE BOOL         LBSelectColor( ColorLB* pLb, const Color& rColor );
-    SVX_DLLPRIVATE USHORT           GetLightSource( const PushButton* pBtn = NULL );
+    SVX_DLLPRIVATE sal_Bool         LBSelectColor( ColorLB* pLb, const Color& rColor );
+    SVX_DLLPRIVATE sal_uInt16           GetLightSource( const PushButton* pBtn = NULL );
     SVX_DLLPRIVATE ColorLB*     GetLbByButton( const PushButton* pBtn = NULL );
 
     SVX_DLLPRIVATE bool         GetUILightState( ImageButton& aBtn ) const;
@@ -258,7 +258,7 @@ public:
             ~Svx3DWin();
 
     void    InitColorLB( const SdrModel* pDoc );
-    BOOL    IsUpdateMode() const { return bUpdate; }
+    sal_Bool    IsUpdateMode() const { return bUpdate; }
 
     void    Update( SfxItemSet& rSet );
     void    GetAttr( SfxItemSet& rSet );
@@ -278,11 +278,11 @@ class Svx3DCtrlItem : public SfxControllerItem
     Svx3DWin* p3DWin;
 
  protected:
-    virtual void StateChanged( USHORT nSId, SfxItemState eState,
+    virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
                                 const SfxPoolItem* pState );
 
  public:
-    Svx3DCtrlItem( USHORT, Svx3DWin*, SfxBindings* );
+    Svx3DCtrlItem( sal_uInt16, Svx3DWin*, SfxBindings* );
 };
 
 /*************************************************************************
@@ -294,14 +294,14 @@ class Svx3DCtrlItem : public SfxControllerItem
 
 class SvxConvertTo3DItem : public SfxControllerItem
 {
-    BOOL                        bState;
+    sal_Bool                        bState;
 
 protected:
-    virtual void StateChanged(UINT16 nSId, SfxItemState eState, const SfxPoolItem* pState);
+    virtual void StateChanged(sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState);
 
 public:
-    SvxConvertTo3DItem(UINT16 nId, SfxBindings* pBindings);
-    BOOL GetState() const { return bState; }
+    SvxConvertTo3DItem(sal_uInt16 nId, SfxBindings* pBindings);
+    sal_Bool GetState() const { return bState; }
 };
 
 #endif      // _SVX_FLOAT3D_HXX

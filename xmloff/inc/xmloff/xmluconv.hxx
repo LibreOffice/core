@@ -224,7 +224,7 @@ public:
         this method will either use the given default or return
         false if not default is set */
     static sal_Bool convertEnum( ::rtl::OUStringBuffer& rBuffer,
-                                 USHORT nValue,
+                                 sal_uInt16 nValue,
                                  const SvXMLEnumStringMapEntry *pMap,
                                  sal_Char* pDefault = NULL );
 
@@ -259,18 +259,18 @@ public:
     /** convert double number to string (using ::rtl::math) and DO
         convert to export MapUnit */
     void convertDouble(::rtl::OUStringBuffer& rBuffer,
-        double fNumber, BOOL bWriteUnits) const;
+        double fNumber, sal_Bool bWriteUnits) const;
 
     /** convert double number to string (using ::rtl::math) and
         DO convert from eSrcUnit to export MapUnit */
     static void convertDouble( ::rtl::OUStringBuffer& rBuffer,
-        double fNumber, BOOL bWriteUnits, MapUnit eCoreUnit, MapUnit eDstUnit);
+        double fNumber, sal_Bool bWriteUnits, MapUnit eCoreUnit, MapUnit eDstUnit);
 
     /** convert double number to string (using ::rtl::math) without unit conversion */
     static void convertDouble( ::rtl::OUStringBuffer& rBuffer, double fNumber);
 
     /** convert string to double number (using ::rtl::math) and DO convert. */
-    sal_Bool convertDouble(double& rValue, const ::rtl::OUString& rString, BOOL bLookForUnits) const;
+    sal_Bool convertDouble(double& rValue, const ::rtl::OUString& rString, sal_Bool bLookForUnits) const;
 
     /** convert string to double number (using ::rtl::math) and DO convert from
         SrcUnit to DstUnit. */

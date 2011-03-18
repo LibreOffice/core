@@ -816,7 +816,7 @@ void SAL_CALL Job::notifyTermination( /*IN*/ const css::lang::EventObject& ) thr
                 describes the broadcaster and must be the frame instance
 
     @param  bGetsOwnerShip
-                If it's set to <TRUE> and we throw the right veto excepion, we have to close this frame later
+                If it's set to <sal_True> and we throw the right veto excepion, we have to close this frame later
                 if our internal processes will be finished. If it's set to <FALSE/> we can ignore it.
 
     @throw  CloseVetoException

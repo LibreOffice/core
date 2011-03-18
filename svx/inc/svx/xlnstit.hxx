@@ -44,7 +44,7 @@ class SVX_DLLPUBLIC XLineStartItem : public NameOrIndex
 
 public:
             TYPEINFO();
-            XLineStartItem(INT32 nIndex = -1);
+            XLineStartItem(sal_Int32 nIndex = -1);
             XLineStartItem(const String& rName, const basegfx::B2DPolyPolygon& rPolyPolygon);
             XLineStartItem(SfxItemPool* pPool, const basegfx::B2DPolyPolygon& rPolyPolygon);
             XLineStartItem(SfxItemPool* pPool );
@@ -53,11 +53,11 @@ public:
 
     virtual int             operator==(const SfxPoolItem& rItem) const;
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem*    Create(SvStream& rIn, USHORT nVer) const;
-    virtual SvStream&       Store(SvStream& rOut, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual SvStream&       Store(SvStream& rOut, sal_uInt16 nItemVersion ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

@@ -72,14 +72,14 @@ osl::Mutex s_mutex;
 } // anon namespace
 
 //==============================================================================
-ResId getResId( USHORT id )
+ResId getResId( sal_uInt16 id )
 {
     const osl::MutexGuard guard( s_mutex );
     return ResId( id, *DeploymentResMgr::get() );
 }
 
 //==============================================================================
-String getResourceString( USHORT id )
+String getResourceString( sal_uInt16 id )
 {
     const osl::MutexGuard guard( s_mutex );
     String ret( ResId( id, *DeploymentResMgr::get() ) );

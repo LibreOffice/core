@@ -154,7 +154,7 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
         return 0L;
 
     const int nCommand = pData->GetDialogId();
-    ::rtl::OUString sCommand;
+          ::rtl::OUString sCommand;
 
     switch (nCommand)
     {

@@ -59,6 +59,17 @@ public:
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& aSource ) throw (css::uno::RuntimeException);
 
+    // little helpers ---------------------------------------------------------
+
+    /** Throws, if the passed sequence does not contain a value at the specified index. */
+    static inline void checkArgument( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) throw (css::lang::IllegalArgumentException)
+        { if( (nIndex < 0) || (nIndex >= rArgs.getLength()) ) throw css::lang::IllegalArgumentException(); }
+
+    /** Throws, if the passed sequence does not contain a value of a specific at the specified index. */
+    template< typename Type >
+    static inline void checkArgumentType( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) throw (css::lang::IllegalArgumentException)
+        { checkArgument( rArgs, nIndex ); if( !rArgs[ nIndex ].has< Type >() ) throw css::lang::IllegalArgumentException(); }
+
 protected:
     // ------------------------------------------------------------------------
 
@@ -74,7 +85,7 @@ protected:
 
     /** Registers a supported event handler.
 
-        @param nEventId  Event identifier from com.sun.star.script.vba.EventIdentifier.
+        @param nEventId  Event identifier from com.sun.star.script.vba.VBAEventId.
         @param pcMacroName  Name of the associated VBA event handler macro.
         @param eType  Document event or global event.
         @param nCancelIndex  0-based index of Cancel parameter, or -1.
@@ -86,15 +97,6 @@ protected:
             sal_Int32 nCancelIndex = -1,
             const css::uno::Any& rUserData = css::uno::Any() );
 
-    /** Throws, if the passed sequence does not contain a value at the specified index. */
-    static inline void checkArgument( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) throw (css::lang::IllegalArgumentException)
-        { if( rArgs.getLength() <= nIndex ) throw css::lang::IllegalArgumentException(); }
-
-    /** Throws, if the passed sequence does not contain a value of a specific at the specified index. */
-    template< typename Type >
-    static inline void checkArgumentType( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) throw (css::lang::IllegalArgumentException)
-        { if( (rArgs.getLength() <= nIndex) || !rArgs[ nIndex ].has< Type >() ) throw css::lang::IllegalArgumentException(); }
-
     // ------------------------------------------------------------------------
 
     struct EventQueueEntry
@@ -105,10 +107,6 @@ protected:
         inline EventQueueEntry( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs ) : mnEventId( nEventId ), maArgs( rArgs ) {}
     };
     typedef ::std::deque< EventQueueEntry > EventQueue;
-
-    /** Derived classes return whether event processing is enabled. Throws if
-        the instance is in an invalid state. */
-    virtual bool implEventsEnabled() throw (css::uno::RuntimeException) = 0;
 
     /** Derived classes do additional prpeparations and return whether the
         event handler has to be called. */

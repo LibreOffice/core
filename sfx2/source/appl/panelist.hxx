@@ -34,17 +34,17 @@ namespace sfx2
 {
     // source in newhelp.cxx
 
-    void HandleTaskPaneList( Window* pWindow, BOOL bAddToList );
+    void HandleTaskPaneList( Window* pWindow, sal_Bool bAddToList );
         // pWindow: just a system window or something which is child of a system window
 
     inline void AddToTaskPaneList( Window* pWindowToBeHandled )
     {
-        HandleTaskPaneList( pWindowToBeHandled, TRUE );
+        HandleTaskPaneList( pWindowToBeHandled, sal_True );
     }
 
     inline void RemoveFromTaskPaneList( Window* pWindowToBeHandled )
     {
-        HandleTaskPaneList( pWindowToBeHandled, FALSE );
+        HandleTaskPaneList( pWindowToBeHandled, sal_False );
     }
 }
 

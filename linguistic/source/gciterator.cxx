@@ -60,16 +60,16 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/extract.hxx>
 #include <cppuhelper/factory.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/processfactory.hxx>
+#include <comphelper/extract.hxx>
 
 #include <deque>
 #include <map>
 #include <vector>
 
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "defs.hxx"
 #include "lngopt.hxx"
 
@@ -1222,10 +1222,10 @@ throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
-    for( INT32 i = 0; i < aSNL.getLength(); ++i )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); ++i )
         if( pArray[i] == rServiceName )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 
@@ -1334,29 +1334,6 @@ void * SAL_CALL GrammarCheckingIterator_getFactory(
         pRet = xFactory.get();
     }
     return pRet;
-}
-
-
-sal_Bool SAL_CALL GrammarCheckingIterator_writeInfo(
-    void * /*pServiceManager*/,
-    registry::XRegistryKey * pRegistryKey )
-{
-    try
-    {
-        OUString aImpl( '/' );
-        aImpl += GrammarCheckingIterator_getImplementationName().getStr();
-        aImpl += A2OU( "/UNO/SERVICES" );
-        uno::Reference< registry::XRegistryKey > xNewKey = pRegistryKey->createKey( aImpl );
-        uno::Sequence< OUString > aServices = GrammarCheckingIterator_getSupportedServiceNames();
-        for( sal_Int32 i = 0; i < aServices.getLength(); i++ )
-            xNewKey->createKey( aServices.getConstArray()[i] );
-
-        return sal_True;
-    }
-    catch (uno::Exception &)
-    {
-        return sal_False;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -143,6 +143,7 @@ ModalDialog RID_FORMULADLG_FORMULA_MODAL
     Moveable = TRUE ;
     TabControl TC_FUNCTION
     {
+        HelpID = "formula:TabControl:RID_FORMULADLG_FORMULA_MODAL:TC_FUNCTION";
         Pos = MAP_APPFONT ( 6 , 5 ) ;
         Size = MAP_APPFONT ( 102 , 199 ) ;
         PageList =
@@ -229,6 +230,7 @@ ModalDialog RID_FORMULADLG_FORMULA_MODAL
     };
     CheckBox BTN_MATRIX
     {
+        HelpID = "formula:CheckBox:RID_FORMULADLG_FORMULA_MODAL:BTN_MATRIX";
         Pos = MAP_APPFONT ( 6 , 208 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         TabStop = TRUE ;
@@ -236,12 +238,14 @@ ModalDialog RID_FORMULADLG_FORMULA_MODAL
     };
     Edit ED_REF
     {
+        HelpID = "formula:Edit:RID_FORMULADLG_FORMULA_MODAL:ED_REF";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 76 , 205 ) ;
         Size = MAP_APPFONT ( 66 , 12 ) ;
     };
     ImageButton RB_REF
     {
+        HelpID = "formula:ImageButton:RID_FORMULADLG_FORMULA_MODAL:RB_REF";
         Pos = MAP_APPFONT ( 144 , 205 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -261,6 +265,7 @@ ModalDialog RID_FORMULADLG_FORMULA_MODAL
     };
     PushButton BTN_BACKWARD
     {
+        HelpID = "formula:PushButton:RID_FORMULADLG_FORMULA_MODAL:BTN_BACKWARD";
         Pos = MAP_APPFONT ( 171 , 208 ) ;
         Size = MAP_APPFONT ( 45 , 14 ) ;
         TabStop = TRUE ;
@@ -268,6 +273,7 @@ ModalDialog RID_FORMULADLG_FORMULA_MODAL
     };
     PushButton BTN_FORWARD
     {
+        HelpID = "formula:PushButton:RID_FORMULADLG_FORMULA_MODAL:BTN_FORWARD";
         Pos = MAP_APPFONT ( 219 , 208 ) ;
         Size = MAP_APPFONT ( 45 , 14 ) ;
         TabStop = TRUE ;
@@ -304,6 +310,7 @@ ModelessDialog RID_FORMULADLG_FORMULA
     Moveable = TRUE ;
     TabControl TC_FUNCTION
     {
+        HelpID = "formula:TabControl:RID_FORMULADLG_FORMULA:TC_FUNCTION";
         Pos = MAP_APPFONT ( 6 , 5 ) ;
         Size = MAP_APPFONT ( 102 , 199 ) ;
         PageList =
@@ -390,6 +397,7 @@ ModelessDialog RID_FORMULADLG_FORMULA
     };
     CheckBox BTN_MATRIX
     {
+        HelpID = "formula:CheckBox:RID_FORMULADLG_FORMULA:BTN_MATRIX";
         Pos = MAP_APPFONT ( 6 , 208 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         TabStop = TRUE ;
@@ -397,12 +405,14 @@ ModelessDialog RID_FORMULADLG_FORMULA
     };
     Edit ED_REF
     {
+        HelpID = "formula:Edit:RID_FORMULADLG_FORMULA:ED_REF";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 76 , 205 ) ;
         Size = MAP_APPFONT ( 66 , 12 ) ;
     };
     ImageButton RB_REF
     {
+        HelpID = "formula:ImageButton:RID_FORMULADLG_FORMULA:RB_REF";
         Pos = MAP_APPFONT ( 144 , 205 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -422,6 +432,7 @@ ModelessDialog RID_FORMULADLG_FORMULA
     };
     PushButton BTN_BACKWARD
     {
+        HelpID = "formula:PushButton:RID_FORMULADLG_FORMULA:BTN_BACKWARD";
         Pos = MAP_APPFONT ( 171 , 208 ) ;
         Size = MAP_APPFONT ( 45 , 14 ) ;
         TabStop = TRUE ;
@@ -429,6 +440,7 @@ ModelessDialog RID_FORMULADLG_FORMULA
     };
     PushButton BTN_FORWARD
     {
+        HelpID = "formula:PushButton:RID_FORMULADLG_FORMULA:BTN_FORWARD";
         Pos = MAP_APPFONT ( 219 , 208 ) ;
         Size = MAP_APPFONT ( 45 , 14 ) ;
         TabStop = TRUE ;

@@ -64,7 +64,6 @@ class Timer;
 class SfxItemSet;
 class DateTime;
 class SvStringsDtor;
-class SvEaMgr;
 
 #define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
@@ -78,7 +77,6 @@ class SvEaMgr;
 #define OWEAKOBJECT                 ::cppu::OWeakObject
 #define REFERENCE                   ::com::sun::star::uno::Reference
 #define XINTERFACE                  ::com::sun::star::uno::XInterface
-#define SEQUENCE                    ::com::sun::star::uno::Sequence
 #define EXCEPTION                   ::com::sun::star::uno::Exception
 #define RUNTIMEEXCEPTION            ::com::sun::star::uno::RuntimeException
 #define ANY                         ::com::sun::star::uno::Any
@@ -114,7 +112,7 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     SAL_DLLPRIVATE void CloseStreams_Impl();
     DECL_DLLPRIVATE_STATIC_LINK( SfxMedium, UCBHdl_Impl, sal_uInt32 * );
 
-    SAL_DLLPRIVATE void SetPasswordToStorage_Impl();
+    SAL_DLLPRIVATE void SetEncryptionDataToStorage_Impl();
 #endif
 
 public:
@@ -124,7 +122,7 @@ public:
                         SfxMedium();
                         SfxMedium( const String &rName,
                                    StreamMode nOpenMode,
-                                   sal_Bool bDirect=FALSE,
+                                   sal_Bool bDirect=sal_False,
                                    const SfxFilter *pFilter = 0,
                                    SfxItemSet *pSet = 0 );
 
@@ -138,7 +136,7 @@ public:
 
                         ~SfxMedium();
 
-    void                UseInteractionHandler( BOOL );
+    void                UseInteractionHandler( sal_Bool );
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
                         GetInteractionHandler();
 
@@ -204,8 +202,6 @@ public:
     SvStream*           GetInStream();
     SvStream*           GetOutStream();
 
-    SvEaMgr*            GetEaMgr();
-
     sal_Bool            Commit();
     sal_Bool            IsStorage();
 
@@ -239,7 +235,7 @@ public:
     ::rtl::OUString     GetBaseURL( bool bForSaving=false );
 
 #if _SOLAR__PRIVATE
-    SAL_DLLPRIVATE BOOL HasStorage_Impl() const;
+    SAL_DLLPRIVATE sal_Bool HasStorage_Impl() const;
 
     SAL_DLLPRIVATE void StorageBackup_Impl();
     SAL_DLLPRIVATE ::rtl::OUString GetBackup_Impl();

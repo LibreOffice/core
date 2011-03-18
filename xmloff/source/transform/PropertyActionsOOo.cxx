@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "PropType.hxx"
 #include "PropertyActionsOOo.hxx"
 
@@ -644,6 +644,10 @@ XMLTransformerActionInit aTextPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_FO, XML_HYPHENATION_PUSH_CHAR_COUNT, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_STYLE, XML_TEXT_OVERLINE_STYLE, XML_ATACTION_REMOVE,
+        NO_PARAMS }, /* #i113645# */
+    { XML_NAMESPACE_STYLE, XML_TEXT_OVERLINE_COLOR, XML_ATACTION_REMOVE,
+        NO_PARAMS }, /* #i113645# */
 
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };

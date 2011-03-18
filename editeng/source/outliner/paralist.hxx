@@ -38,35 +38,35 @@ class Paragraph;
 class ParagraphList
 {
 public:
-    void            Clear( BOOL bDestroyParagraphs );
+    void            Clear( sal_Bool bDestroyParagraphs );
 
     sal_uInt32      GetParagraphCount() const
     {
         return maEntries.size();
     }
 
-    Paragraph*      GetParagraph( ULONG nPos ) const
+    Paragraph*      GetParagraph( sal_uLong nPos ) const
     {
         return nPos < maEntries.size() ? maEntries[nPos] : NULL;
     }
 
-    ULONG           GetAbsPos( Paragraph* pParent ) const;
-    ULONG           GetVisPos( Paragraph* pParagraph ) const;
+    sal_uLong           GetAbsPos( Paragraph* pParent ) const;
+    sal_uLong           GetVisPos( Paragraph* pParagraph ) const;
 
     void            Append( Paragraph *pPara);
-    void            Insert( Paragraph* pPara, ULONG nAbsPos);
-    void            Remove( ULONG nPara );
-    void            MoveParagraphs( ULONG nStart, ULONG nDest, ULONG nCount );
+    void            Insert( Paragraph* pPara, sal_uLong nAbsPos);
+    void            Remove( sal_uLong nPara );
+    void            MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong nCount );
 
     Paragraph*      NextVisible( Paragraph* ) const;
     Paragraph*      PrevVisible( Paragraph* ) const;
     Paragraph*      LastVisible() const;
 
-    Paragraph*      GetParent( Paragraph* pParagraph /*, USHORT& rRelPos */ ) const;
-    BOOL            HasChilds( Paragraph* pParagraph ) const;
-    BOOL            HasHiddenChilds( Paragraph* pParagraph ) const;
-    BOOL            HasVisibleChilds( Paragraph* pParagraph ) const;
-    ULONG           GetChildCount( Paragraph* pParagraph ) const;
+    Paragraph*      GetParent( Paragraph* pParagraph /*, sal_uInt16& rRelPos */ ) const;
+    sal_Bool            HasChilds( Paragraph* pParagraph ) const;
+    sal_Bool            HasHiddenChilds( Paragraph* pParagraph ) const;
+    sal_Bool            HasVisibleChilds( Paragraph* pParagraph ) const;
+    sal_uLong           GetChildCount( Paragraph* pParagraph ) const;
 
     void            Expand( Paragraph* pParent );
     void            Collapse( Paragraph* pParent );

@@ -48,7 +48,6 @@
 #include <osl/mutex.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/frame/XDesktop.hpp>
-
 #include <unotools/ucbstreamhelper.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <comphelper/processfactory.hxx>
@@ -56,13 +55,14 @@
 #include <unotools/bootstrap.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
 
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/app.hxx>
 #include "appdata.hxx"
 #include "arrdecl.hxx"
 #include <sfx2/tbxctrl.hxx>
-#include "stbitem.hxx"
+#include "sfx2/stbitem.hxx"
 #include <sfx2/mnuitem.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
@@ -152,38 +152,6 @@ SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
 }
 
 //--------------------------------------------------------------------
-
-void SfxApplication::InitializeDisplayName_Impl()
-{
-    SfxAppData_Impl* pAppData = Get_Impl();
-    if ( !pAppData->pLabelResMgr )
-        return;
-
-    String aTitle = Application::GetDisplayName();
-    if ( !aTitle.Len() )
-    {
-        osl::ClearableMutexGuard aGuard( osl::Mutex::getGlobalMutex() );
-
-        // load application title
-        aTitle = String( ResId( RID_APPTITLE, *pAppData->pLabelResMgr ) );
-        // merge version into title
-        aTitle.SearchAndReplaceAscii( "$(VER)", String() /*aVersion*/ );
-
-        aGuard.clear();
-
-#ifdef DBG_UTIL
-        ::rtl::OUString aDefault;
-        aTitle += DEFINE_CONST_UNICODE(" [");
-
-        String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
-        aTitle += aVerId;
-        aTitle += ']';
-#endif
-        Application::SetDisplayName( aTitle );
-    }
-}
-
-//--------------------------------------------------------------------
 SfxProgress* SfxApplication::GetProgress() const
 
 /*  [Description]
@@ -221,8 +189,8 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
             pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
         }
 
-        BOOL bSlotsEnabled = SvtInternalOptions().SlotCFGEnabled();
-        BOOL bSlots = ( pStream && !pStream->GetError() );
+        sal_Bool bSlotsEnabled = SvtInternalOptions().SlotCFGEnabled();
+        sal_Bool bSlots = ( pStream && !pStream->GetError() );
         if( bSlots && bSlotsEnabled )
         {
             // Read Slot file
@@ -288,7 +256,7 @@ SfxModule* SfxApplication::GetModule_Impl()
 {
     SfxModule* pModule = SfxModule::GetActiveModule();
     if ( !pModule )
-        pModule = SfxModule::GetActiveModule( SfxViewFrame::GetFirst( FALSE ) );
+        pModule = SfxModule::GetActiveModule( SfxViewFrame::GetFirst( sal_False ) );
     if( pModule )
         return pModule;
     else
@@ -310,8 +278,76 @@ ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon( SfxBindings& rBind
 }
 
 SfxResourceManager& SfxApplication::GetResourceManager() const { return *pAppData_Impl->pResMgr; }
-BOOL  SfxApplication::IsDowning() const { return pAppData_Impl->bDowning; }
+sal_Bool  SfxApplication::IsDowning() const { return pAppData_Impl->bDowning; }
 SfxDispatcher* SfxApplication::GetAppDispatcher_Impl() { return pAppData_Impl->pAppDispat; }
 SfxSlotPool& SfxApplication::GetAppSlotPool_Impl() const { return *pAppData_Impl->pSlotPool; }
+
+static bool impl_loadBitmap(
+    const rtl::OUString &rPath, const rtl::OUString &rBmpFileName,
+    Image &rLogo )
+{
+    rtl::OUString uri( rPath );
+    rtl::Bootstrap::expandMacros( uri );
+    INetURLObject aObj( uri );
+    aObj.insertName( rBmpFileName );
+    SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
+    if ( !aStrm.GetError() )
+    {
+        // Use graphic class to also support more graphic formats (bmp,png,...)
+        Graphic aGraphic;
+
+        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+        pGF->ImportGraphic( aGraphic, String(), aStrm, GRFILTER_FORMAT_DONTKNOW );
+
+        // Default case, we load the intro bitmap from a seperate file
+        // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
+        BitmapEx aBmp = aGraphic.GetBitmapEx();
+        rLogo = Image( aBmp );
+        return true;
+    }
+    return false;
+}
+
+/** loads the application logo as used in the about dialog and impress slideshow pause screen */
+Image SfxApplication::GetApplicationLogo()
+{
+    Image aAppLogo;
+
+    rtl::OUString aAbouts;
+    bool bLoaded = false;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        bLoaded = impl_loadBitmap(
+            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
+            aAbouts.getToken( 0, ',', nIndex ), aAppLogo );
+    }
+    while ( !bLoaded && ( nIndex >= 0 ) );
+
+    // fallback to "about.bmp"
+    if ( !bLoaded )
+    {
+        bLoaded = impl_loadBitmap(
+            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
+            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
+        if ( !bLoaded )
+            bLoaded = impl_loadBitmap(
+                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
+                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
+    }
+
+    if ( !bLoaded )
+    {
+        bLoaded = impl_loadBitmap(
+            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
+            rtl::OUString::createFromAscii( "about.png" ), aAppLogo );
+        if ( !bLoaded )
+            bLoaded = impl_loadBitmap(
+                rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
+                rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
+    }
+
+    return aAppLogo;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

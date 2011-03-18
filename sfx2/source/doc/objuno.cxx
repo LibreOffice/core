@@ -70,7 +70,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "doc.hrc"
 
 using namespace ::com::sun::star;
@@ -133,10 +133,10 @@ const SfxItemPropertyMapEntry* lcl_GetDocInfoPropertyMap()
     return aDocInfoPropertyMap_Impl;
 }
 
-static USHORT aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
+static sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
                                    31, 31, 30, 31, 30, 31 };
 
-inline USHORT DaysInMonth( USHORT nMonth, USHORT nYear )
+inline sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
 {
     if ( nMonth != 2 )
         return aDaysInMonth[nMonth-1];
@@ -713,7 +713,7 @@ void SAL_CALL SfxDocumentInfoObject::removeProperty(const ::rtl::OUString& sName
     return xPropSet->removeProperty(sName);
 }
 
-BOOL equalsDateTime( const util::DateTime& D1, const util::DateTime& D2 )
+sal_Bool equalsDateTime( const util::DateTime& D1, const util::DateTime& D2 )
 {
     return D1.HundredthSeconds == D2.HundredthSeconds &&
            D1.Seconds == D2.Seconds &&

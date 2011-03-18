@@ -48,6 +48,7 @@
 
 #include <unotools/configitem.hxx>
 #include <rtl/ustring.hxx>
+#include <fwidllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -77,7 +78,7 @@ namespace framework{
     This struct holds the information about one such registered protocol handler.
     A list of handler objects is defined as ProtocolHandlerHash. see below
 */
-struct ProtocolHandler
+struct FWI_DLLPUBLIC ProtocolHandler
 {
     /* member */
     public:
@@ -95,7 +96,7 @@ struct ProtocolHandler
     uno implementation names as value. Overloading of the index operator makes it possible
     to search for a key by using a full qualified URL on list of all possible pattern keys.
 */
-class PatternHash : public BaseHash< ::rtl::OUString >
+class FWI_DLLPUBLIC PatternHash : public BaseHash< ::rtl::OUString >
 {
     /* interface */
     public:
@@ -134,7 +135,7 @@ typedef BaseHash< ProtocolHandler > HandlerHash;
 */
 
 class HandlerCFGAccess;
-class HandlerCache
+class FWI_DLLPUBLIC HandlerCache
 {
     /* member */
     private:
@@ -179,7 +180,7 @@ class HandlerCache
 
     @modified       30.04.2002 09:58, as96863
 */
-class HandlerCFGAccess : public ::utl::ConfigItem
+class FWI_DLLPUBLIC HandlerCFGAccess : public ::utl::ConfigItem
 {
     private:
         HandlerCache* m_pCache;

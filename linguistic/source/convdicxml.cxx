@@ -57,7 +57,7 @@
 
 #include "convdic.hxx"
 #include "convdicxml.hxx"
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "defs.hxx"
 
 using namespace std;
@@ -129,7 +129,7 @@ public:
 class ConvDicXMLDictionaryContext_Impl :
     public ConvDicXMLImportContext
 {
-    INT16       nLanguage;
+    sal_Int16       nLanguage;
     sal_Int16   nConversionType;
 
 public:
@@ -145,7 +145,7 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList );
 
-    INT16       GetLanguage() const         { return nLanguage; }
+    sal_Int16       GetLanguage() const         { return nLanguage; }
     sal_Int16   GetConversionType() const   { return nConversionType; }
 };
 

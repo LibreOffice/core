@@ -65,7 +65,7 @@ public:
     virtual ~SdrObjGroup();
 
     virtual void SetBoundRectDirty();
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual SdrLayerID GetLayer() const;
     virtual void NbcSetLayer(SdrLayerID nLayer);
@@ -119,7 +119,7 @@ public:
     virtual void NbcReformatText();
     virtual void ReformatText();
 
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 };
 
 #endif //_SVDOGRP_HXX

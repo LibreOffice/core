@@ -34,9 +34,11 @@
 #include <svl/itemset.hxx>
 #include <svtools/parrtf.hxx>
 
-#define _SVSTDARR_USHORTS
+#define _SVSTDARR_sal_uInt16S
 #include <svl/svstdarr.hxx>
 #include <editeng/editengdllapi.h>
+
+#include <deque>
 #include <utility>
 #include <vector>
 class Font;
@@ -66,7 +68,7 @@ class SvxNodeIdx
 {
 public:
     virtual ~SvxNodeIdx() {}
-    virtual ULONG   GetIdx() const = 0;
+    virtual sal_uLong   GetIdx() const = 0;
     virtual SvxNodeIdx* Clone() const = 0;  // Cloning itself
 };
 
@@ -75,7 +77,7 @@ class SvxPosition
 public:
     virtual ~SvxPosition() {}
 
-    virtual ULONG       GetNodeIdx() const = 0;
+    virtual sal_uLong   GetNodeIdx() const = 0;
     virtual xub_StrLen  GetCntIdx() const = 0;
 
     virtual SvxPosition* Clone() const = 0; // Cloning itself
@@ -84,24 +86,27 @@ public:
 
 
 typedef Color* ColorPtr;
-SV_DECL_PTRARR( SvxRTFColorTbl, ColorPtr, 16, 4 )
+typedef std::deque< ColorPtr > SvxRTFColorTbl;
 DECLARE_TABLE( SvxRTFFontTbl, Font* )
 DECLARE_TABLE( SvxRTFStyleTbl, SvxRTFStyleType* )
 typedef SvxRTFItemStackType* SvxRTFItemStackTypePtr;
 SV_DECL_PTRARR_DEL( SvxRTFItemStackList, SvxRTFItemStackTypePtr, 1, 1 )
-SV_DECL_PTRARR_STACK( SvxRTFItemStack, SvxRTFItemStackTypePtr, 0, 1 )
+
+// SvxRTFItemStack can't be "std::stack< SvxRTFItemStackTypePtr >" type, because
+// the methods are using operator[] in sw/source/filter/rtf/rtftbl.cxx file
+typedef std::deque< SvxRTFItemStackTypePtr > SvxRTFItemStack;
 
 // own helper classes for the RTF Parser
 struct SvxRTFStyleType
 {
     SfxItemSet aAttrSet;        // the attributes of Style (+ derivate!)
     String sName;
-    USHORT nBasedOn, nNext;
-    BOOL bBasedOnIsSet;
-    BYTE nOutlineNo;
-    BOOL bIsCharFmt;
+    sal_uInt16 nBasedOn, nNext;
+    sal_Bool bBasedOnIsSet;
+    sal_uInt8 nOutlineNo;
+    sal_Bool bIsCharFmt;
 
-    SvxRTFStyleType( SfxItemPool& rPool, const USHORT* pWhichRange );
+    SvxRTFStyleType( SfxItemPool& rPool, const sal_uInt16* pWhichRange );
 };
 
 
@@ -128,14 +133,14 @@ struct EDITENG_DLLPUBLIC SvxRTFPictureType
         HEX_MODE
     } nMode;
 
-    USHORT  nType;
+    sal_uInt16  nType;
     sal_uInt32 uPicLen;
-    USHORT  nWidth, nHeight;
-    USHORT  nGoalWidth, nGoalHeight;
-    USHORT  nBitsPerPixel;
-    USHORT  nPlanes;
-    USHORT  nWidthBytes;
-    USHORT  nScalX, nScalY;
+    sal_uInt16  nWidth, nHeight;
+    sal_uInt16  nGoalWidth, nGoalHeight;
+    sal_uInt16  nBitsPerPixel;
+    sal_uInt16  nPlanes;
+    sal_uInt16  nWidthBytes;
+    sal_uInt16  nScalX, nScalY;
     short   nCropT, nCropB, nCropL, nCropR;
     PictPropertyNameValuePairs aPropertyPairs;
     SvxRTFPictureType() { ResetValues(); }
@@ -148,7 +153,7 @@ struct EDITENG_DLLPUBLIC SvxRTFPictureType
 // the SlotIds from POOL.
 struct RTFPlainAttrMapIds
 {
-    USHORT  nCaseMap,
+    sal_uInt16  nCaseMap,
             nBgColor,
             nColor,
             nContour,
@@ -191,7 +196,7 @@ struct RTFPlainAttrMapIds
 // the SlotIds from POOL.
 struct RTFPardAttrMapIds
 {
-    USHORT  nLinespacing,
+    sal_uInt16  nLinespacing,
             nAdjust,
             nTabStop,
             nHyphenzone,
@@ -242,23 +247,23 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     long    nVersionNo;
     int     nDfltFont;
 
-    BOOL    bNewDoc : 1;            // FALSE - Reading in an existing
-    BOOL    bNewGroup : 1;          // TRUE - there was an opening parenthesis
-    BOOL    bIsSetDfltTab : 1;      // TRUE - DefTab was loaded
-    BOOL    bChkStyleAttr : 1;      // TRUE - StyleSheets are evaluated
-    BOOL    bCalcValue : 1;         // TRUE - Twip values adapt to App
-    BOOL    bPardTokenRead : 1;     // TRUE - Token \pard was detected
-    BOOL    bReadDocInfo : 1;       // TRUE - DocInfo to read
-    BOOL    bIsLeftToRightDef : 1;  // TRUE - in LeftToRight char run def.
-                                    // FALSE - in RightToLeft char run def.
-    BOOL    bIsInReadStyleTab : 1;  // TRUE - in ReadStyleTable
+    sal_Bool    bNewDoc : 1;            // FALSE - Reading in an existing
+    sal_Bool    bNewGroup : 1;          // TRUE - there was an opening parenthesis
+    sal_Bool    bIsSetDfltTab : 1;      // TRUE - DefTab was loaded
+    sal_Bool    bChkStyleAttr : 1;      // TRUE - StyleSheets are evaluated
+    sal_Bool    bCalcValue : 1;         // TRUE - Twip values adapt to App
+    sal_Bool    bPardTokenRead : 1;     // TRUE - Token \pard was detected
+    sal_Bool    bReadDocInfo : 1;       // TRUE - DocInfo to read
+    sal_Bool    bIsLeftToRightDef : 1;  // TRUE - in LeftToRight char run def.
+                                        // FALSE - in RightToLeft char run def.
+    sal_Bool    bIsInReadStyleTab : 1;  // TRUE - in ReadStyleTable
 
     void ClearColorTbl();
     void ClearFontTbl();
     void ClearStyleTbl();
     void ClearAttrStack();
 
-    SvxRTFItemStackTypePtr _GetAttrSet( int bCopyAttr=FALSE );  // Create new ItemStackType:s
+    SvxRTFItemStackTypePtr _GetAttrSet( int bCopyAttr=sal_False );  // Create new ItemStackType:s
     void _ClearStyleAttr( SvxRTFItemStackType& rStkType );
 
     // Sets all the attributes that are different from the current
@@ -317,7 +322,7 @@ protected:
 
 
     virtual void InsertText() = 0;
-    virtual void MovePos( int bForward = TRUE ) = 0;
+    virtual void MovePos( int bForward = sal_True ) = 0;
     virtual void SetEndPrevPara( SvxNodeIdx*& rpNodePos,
                                  xub_StrLen& rCntPos )=0;
     virtual void SetAttrInDoc( SvxRTFItemStackType &rSet );
@@ -331,7 +336,7 @@ protected:
                     SvStream& rIn,
                     ::com::sun::star::uno::Reference<
                         ::com::sun::star::document::XDocumentProperties> i_xDocProps,
-                    int bReadNewDoc = TRUE );
+                    int bReadNewDoc = sal_True );
     virtual ~SvxRTFParser();
 
     int IsNewDoc() const                { return bNewDoc; }
@@ -355,8 +360,8 @@ protected:
 
     // Query/Set the mapping IDs for the Pard/Plain attributes
     //(Set: It is noted in the pointers, which thus does not create a copy)
-    void AddPardAttr( USHORT nWhich ) { aPardMap.Insert( nWhich, aPardMap.Count() ); }
-    void AddPlainAttr( USHORT nWhich ) { aPlainMap.Insert( nWhich, aPlainMap.Count() ); }
+    void AddPardAttr( sal_uInt16 nWhich ) { aPardMap.Insert( nWhich, aPardMap.Count() ); }
+    void AddPlainAttr( sal_uInt16 nWhich ) { aPlainMap.Insert( nWhich, aPlainMap.Count() ); }
 
     SvxRTFStyleTbl& GetStyleTbl()               { return aStyleTbl; }
     SvxRTFItemStack& GetAttrStack()             { return aAttrStack; }
@@ -368,7 +373,7 @@ protected:
     // Read the graphics data and make up for the graphics and the picture
     // meta data.
     // Return - TRUE: the graphic is valid
-    BOOL ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType );
+    sal_Bool ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType );
         // Change the ASCII-HexCodes into binary characters. If invalid data is
         // found (strings not 0-9 | a-f | A-F, then USHRT_MAX is returned,
         // otherwise the number of the converted character.
@@ -378,8 +383,8 @@ public:
 
     virtual SvParserState CallParser();
 
-    inline const Color& GetColor( USHORT nId ) const;
-    const Font& GetFont( USHORT nId );      // Changes the dflt Font
+    inline const Color& GetColor( size_t nId ) const;
+    const Font& GetFont( sal_uInt16 nId );      // Changes the dflt Font
 
     virtual int IsEndPara( SvxNodeIdx* pNd, xub_StrLen nCnt ) const = 0;
 
@@ -392,8 +397,8 @@ public:
     RTFPlainAttrMapIds& GetPlainMap()
                         { return (RTFPlainAttrMapIds&)*aPlainMap.GetData(); }
     // to be able to assign them from the outside as for example table cells
-    void ReadBorderAttr( int nToken, SfxItemSet& rSet, int bTableDef=FALSE );
-    void ReadBackgroundAttr( int nToken, SfxItemSet& rSet, int bTableDef=FALSE  );
+    void ReadBorderAttr( int nToken, SfxItemSet& rSet, int bTableDef=sal_False );
+    void ReadBackgroundAttr( int nToken, SfxItemSet& rSet, int bTableDef=sal_False  );
 
     // for asynchronous read from the SvStream
     virtual void Continue( int nToken );
@@ -415,9 +420,9 @@ class EDITENG_DLLPUBLIC SvxRTFItemStackType
     SvxNodeIdx  *pSttNd, *pEndNd;
     xub_StrLen nSttCnt, nEndCnt;
     SvxRTFItemStackList* pChildList;
-    USHORT nStyleNo;
+    sal_uInt16 nStyleNo;
 
-    SvxRTFItemStackType( SfxItemPool&, const USHORT* pWhichRange,
+    SvxRTFItemStackType( SfxItemPool&, const sal_uInt16* pWhichRange,
                             const SvxPosition& );
     ~SvxRTFItemStackType();
 
@@ -426,7 +431,7 @@ class EDITENG_DLLPUBLIC SvxRTFItemStackType
 
 public:
     SvxRTFItemStackType( const SvxRTFItemStackType&, const SvxPosition&,
-                        int bCopyAttr = FALSE );
+                        int bCopyAttr = sal_False );
     //cmc, I'm very suspicios about SetStartPos, it doesn't change
     //its children's starting position, and the implementation looks
     //bad, consider this deprecated.
@@ -435,8 +440,8 @@ public:
     void MoveFullNode(const SvxNodeIdx &rOldNode,
         const SvxNodeIdx &rNewNode);
 
-    ULONG GetSttNodeIdx() const { return pSttNd->GetIdx(); }
-    ULONG GetEndNodeIdx() const { return pEndNd->GetIdx(); }
+    sal_uLong GetSttNodeIdx() const { return pSttNd->GetIdx(); }
+    sal_uLong GetEndNodeIdx() const { return pEndNd->GetIdx(); }
 
     const SvxNodeIdx& GetSttNode() const { return *pSttNd; }
     const SvxNodeIdx& GetEndNode() const { return *pEndNd; }
@@ -447,7 +452,7 @@ public:
           SfxItemSet& GetAttrSet()          { return aAttrSet; }
     const SfxItemSet& GetAttrSet() const    { return aAttrSet; }
 
-    USHORT StyleNo() const  { return nStyleNo; }
+    sal_uInt16 StyleNo() const  { return nStyleNo; }
 
     void SetRTFDefaults( const SfxItemSet& rDefaults );
 };
@@ -455,10 +460,10 @@ public:
 
 // ----------- Inline Implementations --------------
 
-inline const Color& SvxRTFParser::GetColor( USHORT nId ) const
+inline const Color& SvxRTFParser::GetColor( size_t nId ) const
 {
     ColorPtr pColor = (ColorPtr)pDfltColor;
-    if( nId < aColorTbl.Count() )
+    if( nId < aColorTbl.size() )
         pColor = aColorTbl[ nId ];
     return *pColor;
 }
@@ -466,7 +471,7 @@ inline const Color& SvxRTFParser::GetColor( USHORT nId ) const
 inline SfxItemSet& SvxRTFParser::GetAttrSet()
 {
     SvxRTFItemStackTypePtr pTmp;
-    if( bNewGroup || 0 == ( pTmp = aAttrStack.Top()) )
+    if( bNewGroup || 0 == ( pTmp = aAttrStack.empty() ? 0 : aAttrStack.back()) )
         pTmp = _GetAttrSet();
     return pTmp->aAttrSet;
 }

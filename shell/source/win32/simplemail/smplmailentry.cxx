@@ -86,32 +86,6 @@ void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-//-----------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------
-
-sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
-{
-    sal_Bool bRetVal = sal_True;
-
-    if ( pRegistryKey )
-    {
-        try
-        {
-            Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
-            pXNewKey->createKey(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( COMP_REGKEY_NAME )) );
-        }
-        catch( InvalidRegistryException& )
-        {
-            OSL_ENSURE(sal_False, "InvalidRegistryException caught");
-            bRetVal = sal_False;
-        }
-    }
-
-    return bRetVal;
-}
-
 //----------------------------------------------------------------------
 // component_getFactory
 // returns a factory to create XFilePicker-Services

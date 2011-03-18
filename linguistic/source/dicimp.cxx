@@ -76,32 +76,32 @@ static const sal_Char*      pVerStr5    = "WBSWG5";
 static const sal_Char*      pVerStr6    = "WBSWG6";
 static const sal_Char*      pVerOOo7    = "OOoUserDict1";
 
-static const INT16 DIC_VERSION_DONTKNOW = -1;
-static const INT16 DIC_VERSION_2 = 2;
-static const INT16 DIC_VERSION_5 = 5;
-static const INT16 DIC_VERSION_6 = 6;
-static const INT16 DIC_VERSION_7 = 7;
+static const sal_Int16 DIC_VERSION_DONTKNOW = -1;
+static const sal_Int16 DIC_VERSION_2 = 2;
+static const sal_Int16 DIC_VERSION_5 = 5;
+static const sal_Int16 DIC_VERSION_6 = 6;
+static const sal_Int16 DIC_VERSION_7 = 7;
 
 static sal_Bool getTag(const ByteString &rLine,
         const sal_Char *pTagName, ByteString &rTagValue)
 {
     xub_StrLen nPos = rLine.Search( pTagName );
     if (nPos == STRING_NOTFOUND)
-        return FALSE;
+        return sal_False;
 
     rTagValue = rLine.Copy( nPos + sal::static_int_cast< xub_StrLen >(strlen( pTagName )) ).EraseLeadingAndTrailingChars();
-    return TRUE;
+    return sal_True;
 }
 
 
-INT16 ReadDicVersion( SvStreamPtr &rpStream, USHORT &nLng, BOOL &bNeg )
+sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNeg )
 {
     // Sniff the header
-    INT16 nDicVersion = DIC_VERSION_DONTKNOW;
+    sal_Int16 nDicVersion = DIC_VERSION_DONTKNOW;
     sal_Char pMagicHeader[MAX_HEADER_LENGTH];
 
     nLng = LANGUAGE_NONE;
-    bNeg = FALSE;
+    bNeg = sal_False;
 
     if (!rpStream.get() || rpStream->GetError())
         return -1;
@@ -142,9 +142,9 @@ INT16 ReadDicVersion( SvStreamPtr &rpStream, USHORT &nLng, BOOL &bNeg )
             if (getTag(aLine, "type: ", aTagValue))
             {
                 if (aTagValue == "negative")
-                    bNeg = TRUE;
+                    bNeg = sal_True;
                 else
-                    bNeg = FALSE;
+                    bNeg = sal_False;
             }
 
             if (aLine.Search ("---") != STRING_NOTFOUND) // end of header
@@ -155,7 +155,7 @@ INT16 ReadDicVersion( SvStreamPtr &rpStream, USHORT &nLng, BOOL &bNeg )
     }
     else
     {
-        USHORT nLen;
+        sal_uInt16 nLen;
 
         rpStream->Seek (nSniffPos );
 
@@ -189,7 +189,7 @@ INT16 ReadDicVersion( SvStreamPtr &rpStream, USHORT &nLng, BOOL &bNeg )
             // Negative Flag
             sal_Char nTmp;
             *rpStream >> nTmp;
-            bNeg = (BOOL)nTmp;
+            bNeg = (sal_Bool)nTmp;
         }
     }
 
@@ -212,15 +212,15 @@ DictionaryNeo::DictionaryNeo() :
 {
     nCount       = 0;
     nDicVersion  = DIC_VERSION_DONTKNOW;
-    bNeedEntries = FALSE;
-    bIsModified  = bIsActive = FALSE;
-    bIsReadonly  = FALSE;
+    bNeedEntries = sal_False;
+    bIsModified  = bIsActive = sal_False;
+    bIsReadonly  = sal_False;
 }
 
 DictionaryNeo::DictionaryNeo(const OUString &rName,
-                             INT16 nLang, DictionaryType eType,
+                             sal_Int16 nLang, DictionaryType eType,
                              const OUString &rMainURL,
-                             BOOL bWriteable) :
+                             sal_Bool bWriteable) :
     aDicEvtListeners( GetLinguMutex() ),
     aDicName        (rName),
     aMainURL        (rMainURL),
@@ -229,13 +229,13 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
 {
     nCount       = 0;
     nDicVersion  = DIC_VERSION_DONTKNOW;
-    bNeedEntries = TRUE;
-    bIsModified  = bIsActive = FALSE;
+    bNeedEntries = sal_True;
+    bIsModified  = bIsActive = sal_False;
     bIsReadonly = !bWriteable;
 
     if( rMainURL.getLength() > 0 )
     {
-        BOOL bExists = FileExists( rMainURL );
+        sal_Bool bExists = FileExists( rMainURL );
         if( !bExists )
         {
             // save new dictionaries with in Format 7 (UTF8 plain text)
@@ -248,14 +248,14 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
                     "DictionaryNeo: dictionaries should be writeable if they are to be saved" );
             if (!bIsReadonly)
                 saveEntries( rMainURL );
-            bNeedEntries = FALSE;
+            bNeedEntries = sal_False;
         }
     }
     else
     {
         // non persistent dictionaries (like IgnoreAllList) should always be writable
-        bIsReadonly  = FALSE;
-        bNeedEntries = FALSE;
+        bIsReadonly  = sal_False;
+        bNeedEntries = sal_False;
     }
 }
 
@@ -263,16 +263,16 @@ DictionaryNeo::~DictionaryNeo()
 {
 }
 
-ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
+sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    // counter check that it is safe to set bIsModified to FALSE at
+    // counter check that it is safe to set bIsModified to sal_False at
     // the end of the function
     DBG_ASSERT(!bIsModified, "lng : dictionary already modified!");
 
     // function should only be called once in order to load entries from file
-    bNeedEntries = FALSE;
+    bNeedEntries = sal_False;
 
     if (rMainURL.getLength() == 0)
         return 0;
@@ -293,15 +293,15 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
         (void) e;
     }
     if (!xStream.is())
-        return static_cast< ULONG >(-1);
+        return static_cast< sal_uLong >(-1);
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
 
-    ULONG nErr = sal::static_int_cast< ULONG >(-1);
+    sal_uLong nErr = sal::static_int_cast< sal_uLong >(-1);
 
     // read header
-    BOOL bNegativ;
-    USHORT nLang;
+    sal_Bool bNegativ;
+    sal_uInt16 nLang;
     nDicVersion = ReadDicVersion(pStream, nLang, bNegativ);
     if (0 != (nErr = pStream->GetError()))
         return nErr;
@@ -319,7 +319,7 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
         DIC_VERSION_5 == nDicVersion ||
         DIC_VERSION_2 == nDicVersion)
     {
-        USHORT  nLen = 0;
+        sal_uInt16  nLen = 0;
         sal_Char aWordBuf[ BUFSIZE ];
 
         // Read the first word
@@ -347,7 +347,7 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
                 String aText( aDummy, eEnc );
                 uno::Reference< XDictionaryEntry > xEntry =
                         new DicEntry( aText, bNegativ );
-                addEntry_Impl( xEntry , TRUE ); //! don't launch events here
+                addEntry_Impl( xEntry , sal_True ); //! don't launch events here
             }
 
             *pStream >> nLen;
@@ -384,7 +384,7 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
             rtl::OUString aText = rtl::OStringToOUString (aLine, RTL_TEXTENCODING_UTF8);
             uno::Reference< XDictionaryEntry > xEntry =
                     new DicEntry( aText, eDicType == DictionaryType_NEGATIVE );
-            addEntry_Impl( xEntry , TRUE ); //! don't launch events here
+            addEntry_Impl( xEntry , sal_True ); //! don't launch events here
         }
     }
 
@@ -393,7 +393,7 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
     // since this routine should be called only initialy (prior to any
     // modification to be saved) we reset the bIsModified flag here that
     // was implicitly set by addEntry_Impl
-    bIsModified = FALSE;
+    bIsModified = sal_False;
 
     return pStream->GetError();
 }
@@ -413,7 +413,7 @@ static ByteString formatForSave(
 }
 
 
-ULONG DictionaryNeo::saveEntries(const OUString &rURL)
+sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -437,107 +437,54 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
         (void) e;
     }
     if (!xStream.is())
-        return static_cast< ULONG >(-1);
+        return static_cast< sal_uLong >(-1);
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
+    sal_uLong nErr = sal::static_int_cast< sal_uLong >(-1);
 
-    ULONG nErr = sal::static_int_cast< ULONG >(-1);
-
-    rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
-    if (nDicVersion >= DIC_VERSION_6)
-        eEnc = RTL_TEXTENCODING_UTF8;
-
-    if (nDicVersion == DIC_VERSION_7)
-    {
-        pStream->WriteLine(ByteString (pVerOOo7));
-        if (0 != (nErr = pStream->GetError()))
-            return nErr;
-
-        if (nLanguage == LANGUAGE_NONE)
-            pStream->WriteLine(ByteString("lang: <none>"));
-        else
-        {
-            ByteString aLine("lang: ");
-            aLine += ByteString( String( MsLangId::convertLanguageToIsoString( nLanguage ) ), eEnc);
-            pStream->WriteLine( aLine );
-        }
-        if (0 != (nErr = pStream->GetError()))
-            return nErr;
-
-        if (eDicType == DictionaryType_POSITIVE)
-            pStream->WriteLine(ByteString("type: positive"));
-        else
-            pStream->WriteLine(ByteString("type: negative"));
-        if (0 != (nErr = pStream->GetError()))
-            return nErr;
-
-        pStream->WriteLine(ByteString("---"));
-        if (0 != (nErr = pStream->GetError()))
-            return nErr;
-
-        const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
-        for (INT32 i = 0;  i < nCount;  i++)
-        {
-            ByteString aOutStr = formatForSave(pEntry[i], eEnc);
-            pStream->WriteLine (aOutStr);
-            if (0 != (nErr = pStream->GetError()))
-                return nErr;
-        }
-    }
+    //
+    // Always write as the latest version, i.e. DIC_VERSION_7
+    //
+    rtl_TextEncoding eEnc = RTL_TEXTENCODING_UTF8;
+    pStream->WriteLine(ByteString (pVerOOo7));
+    if (0 != (nErr = pStream->GetError()))
+        return nErr;
+    if (nLanguage == LANGUAGE_NONE)
+        pStream->WriteLine(ByteString("lang: <none>"));
     else
     {
-        sal_Char aWordBuf[BUFSIZE];
-
-        // write version
-        const sal_Char *pVerStr = NULL;
-        if (DIC_VERSION_6 == nDicVersion)
-            pVerStr = pVerStr6;
-        else
-            pVerStr = eDicType == DictionaryType_POSITIVE ? pVerStr2 : pVerStr5;
-        strcpy( aWordBuf, pVerStr );
-        USHORT nLen = sal::static_int_cast< USHORT >(strlen( aWordBuf ));
-        *pStream << nLen;
+        ByteString aLine("lang: ");
+        aLine += ByteString( String( MsLangId::convertLanguageToIsoString( nLanguage ) ), eEnc);
+        pStream->WriteLine( aLine );
+    }
+    if (0 != (nErr = pStream->GetError()))
+        return nErr;
+    if (eDicType == DictionaryType_POSITIVE)
+        pStream->WriteLine(ByteString("type: positive"));
+    else
+        pStream->WriteLine(ByteString("type: negative"));
+    if (0 != (nErr = pStream->GetError()))
+        return nErr;
+    pStream->WriteLine(ByteString("---"));
+    if (0 != (nErr = pStream->GetError()))
+        return nErr;
+    const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
+    for (sal_Int32 i = 0;  i < nCount;  i++)
+    {
+        ByteString aOutStr = formatForSave(pEntry[i], eEnc);
+        pStream->WriteLine (aOutStr);
         if (0 != (nErr = pStream->GetError()))
             return nErr;
-        pStream->Write(aWordBuf, nLen);
-        if (0 != (nErr = pStream->GetError()))
-            return nErr;
-
-        *pStream << nLanguage;
-        if (0 != (nErr = pStream->GetError()))
-            return nErr;
-        *pStream << (sal_Char) (eDicType == DictionaryType_NEGATIVE ? TRUE : FALSE);
-        if (0 != (nErr = pStream->GetError()))
-            return nErr;
-
-        const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
-        for (INT32 i = 0;  i < nCount;  i++)
-        {
-            ByteString aOutStr = formatForSave(pEntry[i], eEnc);
-
-            // the old format would fail (mis-calculation of nLen) and write
-            // uninitialized junk for combined len >= BUFSIZE - we truncate
-            // silently here, but BUFSIZE is large anyway.
-            nLen = aOutStr.Len();
-            if (nLen >= BUFSIZE)
-                nLen = BUFSIZE - 1;
-
-            *pStream << nLen;
-            if (0 != (nErr = pStream->GetError()))
-                return nErr;
-            pStream->Write(aOutStr.GetBuffer(), nLen);
-            if (0 != (nErr = pStream->GetError()))
-                return nErr;
-        }
     }
 
-    //! get return value before Stream is destroyed
-    ULONG nError = pStream->GetError();
+    //If we are migrating from an older version, then on first successful
+    //write, we're now converted to the latest version, i.e. DIC_VERSION_7
+    nDicVersion = DIC_VERSION_7;
 
-    return nError;
+    return nErr;
 }
 
-void DictionaryNeo::launchEvent(INT16 nEvent,
+void DictionaryNeo::launchEvent(sal_Int16 nEvent,
                                 uno::Reference< XDictionaryEntry > xEntry)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -558,7 +505,7 @@ void DictionaryNeo::launchEvent(INT16 nEvent,
 
 int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
                                const OUString &rWord2,
-                               BOOL bSimilarOnly)
+                               sal_Bool bSimilarOnly)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -570,7 +517,7 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
 
     OUString    aWord1( rWord1 ),
                 aWord2( rWord2 );
-    INT32       nLen1 = aWord1.getLength(),
+    sal_Int32       nLen1 = aWord1.getLength(),
                   nLen2 = aWord2.getLength();
     if (bSimilarOnly)
     {
@@ -582,7 +529,7 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
     }
 
     const sal_Unicode cIgnChar = '=';
-    INT32       nIdx1 = 0,
+    sal_Int32       nIdx1 = 0,
                   nIdx2 = 0,
                   nNumIgnChar1 = 0,
                   nNumIgnChar2 = 0;
@@ -633,17 +580,17 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
                 nNumIgnChar2++;
         }
 
-        nRes = ((INT32) nLen1 - nNumIgnChar1) - ((INT32) nLen2 - nNumIgnChar2);
+        nRes = ((sal_Int32) nLen1 - nNumIgnChar1) - ((sal_Int32) nLen2 - nNumIgnChar2);
     }
 
     return nRes;
 }
 
-BOOL DictionaryNeo::seekEntry(const OUString &rWord,
-                              INT32 *pPos, BOOL bSimilarOnly)
+sal_Bool DictionaryNeo::seekEntry(const OUString &rWord,
+                              sal_Int32 *pPos, sal_Bool bSimilarOnly)
 {
     // look for entry with binary search.
-    // return TRUE if found FALSE else.
+    // return sal_True if found sal_False else.
     // if pPos != NULL it will become the position of the found entry, or
     // if that was not found the position where it has to be inserted
     // to keep the entries sorted
@@ -651,7 +598,7 @@ BOOL DictionaryNeo::seekEntry(const OUString &rWord,
     MutexGuard  aGuard( GetLinguMutex() );
 
     const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
-    INT32 nUpperIdx = getCount(),
+    sal_Int32 nUpperIdx = getCount(),
           nMidIdx,
           nLowerIdx = 0;
     if( nUpperIdx > 0 )
@@ -667,66 +614,66 @@ BOOL DictionaryNeo::seekEntry(const OUString &rWord,
             if(nCmp == 0)
             {
                 if( pPos ) *pPos = nMidIdx;
-                return TRUE;
+                return sal_True;
             }
             else if(nCmp > 0)
                 nLowerIdx = nMidIdx + 1;
             else if( nMidIdx == 0 )
             {
                 if( pPos ) *pPos = nLowerIdx;
-                return FALSE;
+                return sal_False;
             }
             else
                 nUpperIdx = nMidIdx - 1;
         }
     }
     if( pPos ) *pPos = nLowerIdx;
-    return FALSE;
+    return sal_False;
 }
 
-BOOL DictionaryNeo::isSorted()
+sal_Bool DictionaryNeo::isSorted()
 {
-    BOOL bRes = TRUE;
+    sal_Bool bRes = sal_True;
 
     const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
-    INT32 nEntries = getCount();
-    INT32 i;
+    sal_Int32 nEntries = getCount();
+    sal_Int32 i;
     for (i = 1;  i < nEntries;  i++)
     {
         if (cmpDicEntry( pEntry[i-1]->getDictionaryWord(),
                          pEntry[i]->getDictionaryWord() ) > 0)
         {
-            bRes = FALSE;
+            bRes = sal_False;
             break;
         }
     }
     return bRes;
 }
 
-BOOL DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry > xDicEntry,
-        BOOL bIsLoadEntries)
+sal_Bool DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry > xDicEntry,
+        sal_Bool bIsLoadEntries)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
 
     if ( bIsLoadEntries || (!bIsReadonly  &&  xDicEntry.is()) )
     {
-        BOOL bIsNegEntry = xDicEntry->isNegative();
-        BOOL bAddEntry   = !isFull() &&
+        sal_Bool bIsNegEntry = xDicEntry->isNegative();
+        sal_Bool bAddEntry   = !isFull() &&
                    (   ( eDicType == DictionaryType_POSITIVE && !bIsNegEntry )
                     || ( eDicType == DictionaryType_NEGATIVE &&  bIsNegEntry )
                     || ( eDicType == DictionaryType_MIXED ) );
 
         // look for position to insert entry at
         // if there is already an entry do not insert the new one
-        INT32 nPos = 0;
-        BOOL bFound = FALSE;
+        sal_Int32 nPos = 0;
+        sal_Bool bFound = sal_False;
         if (bAddEntry)
         {
             bFound = seekEntry( xDicEntry->getDictionaryWord(), &nPos );
             if (bFound)
-                bAddEntry = FALSE;
+                bAddEntry = sal_False;
         }
 
         if (bAddEntry)
@@ -738,7 +685,7 @@ BOOL DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry > xDicE
             uno::Reference< XDictionaryEntry > *pEntry = aEntries.getArray();
 
             // shift old entries right
-            INT32 i;
+            sal_Int32 i;
             for (i = nCount - 1; i >= nPos;  i--)
                 pEntry[ i+1 ] = pEntry[ i ];
             // insert new entry at specified position
@@ -747,8 +694,8 @@ BOOL DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry > xDicE
 
             nCount++;
 
-            bIsModified = TRUE;
-            bRes = TRUE;
+            bIsModified = sal_True;
+            bRes = sal_True;
 
             if (!bIsLoadEntries)
                 launchEvent( DictionaryEventFlags::ADD_ENTRY, xDicEntry );
@@ -803,13 +750,13 @@ void SAL_CALL DictionaryNeo::setActive( sal_Bool bActivate )
     if (bIsActive != bActivate)
     {
         bIsActive = bActivate != 0;
-        INT16 nEvent = bIsActive ?
+        sal_Int16 nEvent = bIsActive ?
                 DictionaryEventFlags::ACTIVATE_DIC : DictionaryEventFlags::DEACTIVATE_DIC;
 
         // remove entries from memory if dictionary is deactivated
-        if (bIsActive == FALSE)
+        if (bIsActive == sal_False)
         {
-            BOOL bIsEmpty = nCount == 0;
+            sal_Bool bIsEmpty = nCount == 0;
 
             // save entries first if necessary
             if (bIsModified && hasLocation() && !isReadonly())
@@ -857,11 +804,11 @@ void SAL_CALL DictionaryNeo::setLocale( const Locale& aLocale )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    INT16 nLanguageP = LocaleToLanguage( aLocale );
+    sal_Int16 nLanguageP = LocaleToLanguage( aLocale );
     if (!bIsReadonly  &&  nLanguage != nLanguageP)
     {
         nLanguage = nLanguageP;
-        bIsModified = TRUE; // new language needs to be saved with dictionary
+        bIsModified = sal_True; // new language needs to be saved with dictionary
 
         launchEvent( DictionaryEventFlags::CHG_LANGUAGE, NULL );
     }
@@ -876,8 +823,8 @@ uno::Reference< XDictionaryEntry > SAL_CALL DictionaryNeo::getEntry(
     if (bNeedEntries)
         loadEntries( aMainURL );
 
-    INT32 nPos;
-    BOOL bFound = seekEntry( aWord, &nPos, TRUE );
+    sal_Int32 nPos;
+    sal_Bool bFound = seekEntry( aWord, &nPos, sal_True );
     DBG_ASSERT( nCount <= aEntries.getLength(), "lng : wrong number of entries");
     DBG_ASSERT(!bFound || nPos < nCount, "lng : index out of range");
 
@@ -891,7 +838,7 @@ sal_Bool SAL_CALL DictionaryNeo::addEntry(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
 
     if (!bIsReadonly)
     {
@@ -910,7 +857,7 @@ sal_Bool SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
 
     if (!bIsReadonly)
     {
@@ -947,15 +894,15 @@ sal_Bool SAL_CALL DictionaryNeo::remove( const OUString& aWord )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRemoved = FALSE;
+    sal_Bool bRemoved = sal_False;
 
     if (!bIsReadonly)
     {
         if (bNeedEntries)
             loadEntries( aMainURL );
 
-        INT32 nPos;
-        BOOL bFound = seekEntry( aWord, &nPos );
+        sal_Int32 nPos;
+        sal_Bool bFound = seekEntry( aWord, &nPos );
         DBG_ASSERT( nCount < aEntries.getLength(),
                 "lng : wrong number of entries");
         DBG_ASSERT(!bFound || nPos < nCount, "lng : index out of range");
@@ -972,7 +919,7 @@ sal_Bool SAL_CALL DictionaryNeo::remove( const OUString& aWord )
 
             //! the following call reduces the length of the sequence by 1 also
             lcl_SequenceRemoveElementAt( aEntries, nPos );
-            bRemoved = bIsModified = TRUE;
+            bRemoved = bIsModified = sal_True;
 
             launchEvent( DictionaryEventFlags::DEL_ENTRY, xDicEntry );
         }
@@ -1017,8 +964,8 @@ void SAL_CALL DictionaryNeo::clear(  )
         aEntries = uno::Sequence< uno::Reference< XDictionaryEntry > > ( 32 );
 
         nCount = 0;
-        bNeedEntries = FALSE;
-        bIsModified = TRUE;
+        bNeedEntries = sal_False;
+        bIsModified = sal_True;
 
         launchEvent( DictionaryEventFlags::ENTRIES_CLEARED , NULL );
     }
@@ -1030,10 +977,10 @@ sal_Bool SAL_CALL DictionaryNeo::addDictionaryEventListener(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (xListener.is())
     {
-        INT32   nLen = aDicEvtListeners.getLength();
+        sal_Int32   nLen = aDicEvtListeners.getLength();
         bRes = aDicEvtListeners.addInterface( xListener ) != nLen;
     }
     return bRes;
@@ -1045,10 +992,10 @@ sal_Bool SAL_CALL DictionaryNeo::removeDictionaryEventListener(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (xListener.is())
     {
-        INT32   nLen = aDicEvtListeners.getLength();
+        sal_Int32   nLen = aDicEvtListeners.getLength();
         bRes = aDicEvtListeners.removeInterface( xListener ) != nLen;
     }
     return bRes;
@@ -1091,7 +1038,7 @@ void SAL_CALL DictionaryNeo::store()
 #endif
         }
         else
-            bIsModified = FALSE;
+            bIsModified = sal_False;
     }
 }
 
@@ -1111,7 +1058,7 @@ void SAL_CALL DictionaryNeo::storeAsURL(
     else
     {
         aMainURL = aURL;
-        bIsModified = FALSE;
+        bIsModified = sal_False;
         bIsReadonly = IsReadOnly( getLocation() );
     }
 }
@@ -1135,18 +1082,18 @@ void SAL_CALL DictionaryNeo::storeToURL(
 
 DicEntry::DicEntry()
 {
-    bIsNegativ = FALSE;
+    bIsNegativ = sal_False;
 }
 
 DicEntry::DicEntry(const OUString &rDicFileWord,
-                   BOOL bIsNegativWord)
+                   sal_Bool bIsNegativWord)
 {
     if (rDicFileWord.getLength())
         splitDicFileWord( rDicFileWord, aDicWord, aReplacement );
     bIsNegativ = bIsNegativWord;
 }
 
-DicEntry::DicEntry(const OUString &rDicWord, BOOL bNegativ,
+DicEntry::DicEntry(const OUString &rDicWord, sal_Bool bNegativ,
                    const OUString &rRplcText) :
     aDicWord                (rDicWord),
     aReplacement            (rRplcText),

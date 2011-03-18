@@ -63,11 +63,6 @@ namespace xmloff
         OFormLayerXMLImport(SvXMLImport& _rImporter);
         ~OFormLayerXMLImport();
 
-        /** retrieves the property mapper form form related auto styles.
-        */
-        ::rtl::Reference< SvXMLImportPropertyMapper >
-                getStylePropertyMapper() const;
-
         /** start importing the forms of the given page
 
             <p>starting the import of a new page (by using this method) invalidates the current page position

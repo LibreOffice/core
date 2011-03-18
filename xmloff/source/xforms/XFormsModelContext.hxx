@@ -58,7 +58,7 @@ class XFormsModelContext : public TokenContext
 public:
 
     XFormsModelContext( SvXMLImport& rImport,
-                        USHORT nPrfx,
+                        sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName );
     virtual ~XFormsModelContext();
 

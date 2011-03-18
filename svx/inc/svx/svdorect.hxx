@@ -63,7 +63,7 @@ protected:
     XPolygon*                   mpXPoly;
 
 protected:
-    // Liefert TRUE, wenn das Painten ein Polygon erfordert.
+    // Liefert sal_True, wenn das Painten ein Polygon erfordert.
     bool PaintNeedsXPoly(long nEckRad) const;
 
 protected:
@@ -88,12 +88,12 @@ public:
     // Konstruktion eines Textrahmens
     SdrRectObj(SdrObjKind eNewTextKind);
     SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect);
-    // der USHORT eFormat nimmt Werte des enum EETextFormat entgegen
-    SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, USHORT eFormat);
+    // der sal_uInt16 eFormat nimmt Werte des enum EETextFormat entgegen
+    SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat);
     virtual ~SdrRectObj();
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
 
     virtual void TakeObjNameSingul(String& rName) const;
@@ -126,10 +126,10 @@ public:
     virtual bool DoMacro(const SdrObjMacroHitRec& rRec);
     virtual XubString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
 
-    virtual SdrGluePoint GetVertexGluePoint(USHORT nNum) const;
-    virtual SdrGluePoint GetCornerGluePoint(USHORT nNum) const;
+    virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;
+    virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const;
 
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 };

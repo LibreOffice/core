@@ -412,7 +412,7 @@ namespace basprov
                 StarBASIC* pBasic = pBasicMgr->GetLib( aLibrary );
                 if ( !pBasic )
                 {
-                    USHORT nId = pBasicMgr->GetLibId( aLibrary );
+                    sal_uInt16 nId = pBasicMgr->GetLibId( aLibrary );
                     if ( nId != LIB_NOTFOUND )
                     {
                         pBasicMgr->LoadLib( nId );
@@ -603,13 +603,6 @@ extern "C"
         (void)ppEnv;
 
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-
-    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-        lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
-    {
-        return ::cppu::component_writeInfoHelper(
-            pServiceManager, pRegistryKey, ::basprov::s_component_entries );
     }
 
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(

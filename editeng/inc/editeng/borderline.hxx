@@ -102,37 +102,37 @@ class EDITENG_DLLPUBLIC SvxBorderLine
 {
 protected:
     Color  aColor;
-    USHORT nOutWidth;
-    USHORT nInWidth;
-    USHORT nDistance;
     SvxBorderStyle   m_nStyle;
+    sal_uInt16 nOutWidth;
+    sal_uInt16 nInWidth;
+    sal_uInt16 nDistance;
 
 public:
-    SvxBorderLine( const Color *pCol = 0, USHORT nOut = 0, USHORT nIn = 0, USHORT nDist = 0,
-           SvxBorderStyle nStyle = SOLID );
+    SvxBorderLine( const Color *pCol = 0, sal_uInt16 nOut = 0, sal_uInt16 nIn = 0, sal_uInt16 nDist = 0,
+                   SvxBorderStyle nStyle = SOLID );
     SvxBorderLine( const SvxBorderLine& r );
 
     SvxBorderLine& operator=( const SvxBorderLine& r );
 
     const Color&    GetColor() const { return aColor; }
-    USHORT          GetOutWidth() const { return nOutWidth; }
-    USHORT          GetInWidth() const { return nInWidth; }
-    USHORT          GetDistance() const { return nDistance; }
+    sal_uInt16          GetOutWidth() const { return nOutWidth; }
+    sal_uInt16          GetInWidth() const { return nInWidth; }
+    sal_uInt16          GetDistance() const { return nDistance; }
 
     SvxBorderStyle  GetStyle() const { return m_nStyle; }
 
     void            SetColor( const Color &rColor ) { aColor = rColor; }
-    void            SetOutWidth( USHORT nNew ) { nOutWidth = nNew; }
-    void            SetInWidth( USHORT nNew ) { nInWidth = nNew;  }
-    void            SetDistance( USHORT nNew ) { nDistance = nNew; }
     void            SetStyle( SvxBorderStyle nNew ) { m_nStyle = nNew; }
+    void            SetOutWidth( sal_uInt16 nNew ) { nOutWidth = nNew; }
+    void            SetInWidth( sal_uInt16 nNew ) { nInWidth = nNew;  }
+    void            SetDistance( sal_uInt16 nNew ) { nDistance = nNew; }
     void            ScaleMetrics( long nMult, long nDiv );
 
-    BOOL            operator==( const SvxBorderLine &rCmp ) const;
+    sal_Bool            operator==( const SvxBorderLine &rCmp ) const;
 
     String          GetValueString( SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit,
                                     const IntlWrapper* pIntl,
-                                    BOOL bMetricStr = FALSE ) const;
+                                    sal_Bool bMetricStr = sal_False ) const;
 
     bool            HasPriority( const SvxBorderLine& rOtherLine ) const;
 

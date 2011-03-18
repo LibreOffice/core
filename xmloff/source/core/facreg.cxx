@@ -41,7 +41,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <uno/lbnames.h>
-#include "xmlreg.hxx"
+#include "xmloff/xmlreg.hxx"
 
 using namespace com::sun::star;
 
@@ -167,117 +167,6 @@ extern "C"
 XMLOFF_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-void SAL_CALL writeInfo( registry::XRegistryKey * pRegistryKey, const OUString& rImplementationName, const uno::Sequence< OUString >& rServices )
-{
-    uno::Reference< registry::XRegistryKey > xNewKey(
-        pRegistryKey->createKey(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + rImplementationName + OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) ) );
-
-    for( sal_Int32 i = 0; i < rServices.getLength(); i++ )
-        xNewKey->createKey( rServices.getConstArray()[i]);
-}
-
-#define WRITEINFO(className)\
-    writeInfo( pKey, className##_getImplementationName(), className##_getSupportedServiceNames() )
-
-XMLOFF_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, void * pRegistryKey )
-{
-    if( pRegistryKey )
-    {
-        try
-        {
-            registry::XRegistryKey *pKey = reinterpret_cast< registry::XRegistryKey * >( pRegistryKey );
-
-            // impress oasis import
-            WRITEINFO( XMLImpressImportOasis );
-            WRITEINFO( XMLImpressStylesImportOasis );
-            WRITEINFO( XMLImpressContentImportOasis );
-            WRITEINFO( XMLImpressMetaImportOasis );
-            WRITEINFO( XMLImpressSettingsImportOasis );
-
-            // impress oasis export
-            WRITEINFO( XMLImpressExportOasis );
-            WRITEINFO( XMLImpressStylesExportOasis );
-            WRITEINFO( XMLImpressContentExportOasis );
-            WRITEINFO( XMLImpressMetaExportOasis );
-            WRITEINFO( XMLImpressSettingsExportOasis );
-
-            // animation import
-            WRITEINFO( AnimationsImport );
-
-            // impress OOo export
-            WRITEINFO( XMLImpressExportOOO );
-            WRITEINFO( XMLImpressStylesExportOOO );
-            WRITEINFO( XMLImpressContentExportOOO );
-            WRITEINFO( XMLImpressMetaExportOOO );
-            WRITEINFO( XMLImpressSettingsExportOOO );
-
-            // draw oasis import
-            WRITEINFO( XMLDrawImportOasis );
-            WRITEINFO( XMLDrawStylesImportOasis );
-            WRITEINFO( XMLDrawContentImportOasis );
-            WRITEINFO( XMLDrawMetaImportOasis );
-            WRITEINFO( XMLDrawSettingsImportOasis );
-
-            // draw oasis export
-            WRITEINFO( XMLDrawExportOasis );
-            WRITEINFO( XMLDrawStylesExportOasis );
-            WRITEINFO( XMLDrawContentExportOasis );
-            WRITEINFO( XMLDrawMetaExportOasis );
-            WRITEINFO( XMLDrawSettingsExportOasis );
-
-            // draw OOo export
-            WRITEINFO( XMLDrawExportOOO );
-            WRITEINFO( XMLDrawStylesExportOOO );
-            WRITEINFO( XMLDrawContentExportOOO );
-            WRITEINFO( XMLDrawMetaExportOOO );
-            WRITEINFO( XMLDrawSettingsExportOOO );
-
-            // drawing layer export
-            WRITEINFO( XMLDrawingLayerExport );
-
-            // impress xml clipboard export
-            WRITEINFO( XMLImpressClipboardExport );
-
-            // chart oasis import
-            WRITEINFO( SchXMLImport );
-            WRITEINFO( SchXMLImport_Meta );
-            WRITEINFO( SchXMLImport_Styles );
-            WRITEINFO( SchXMLImport_Content );
-
-            // chart oasis export
-            WRITEINFO( SchXMLExport_Oasis );
-            WRITEINFO( SchXMLExport_Oasis_Meta );
-            WRITEINFO( SchXMLExport_Oasis_Styles );
-            WRITEINFO( SchXMLExport_Oasis_Content );
-
-            // chart OOo export
-            WRITEINFO( SchXMLExport );
-            WRITEINFO( SchXMLExport_Styles );
-            WRITEINFO( SchXMLExport_Content );
-
-            // meta
-            WRITEINFO( XMLMetaImportComponent );
-            WRITEINFO( XMLMetaExportComponent );
-
-            WRITEINFO( XMLVersionListPersistence );
-
-            // meta OOo
-            WRITEINFO( XMLMetaExportOOO );
-
-            // writer auto text events
-            WRITEINFO( XMLAutoTextEventExport );
-            WRITEINFO( XMLAutoTextEventImport );
-            WRITEINFO( XMLAutoTextEventExportOOO );
-        }
-        catch (registry::InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_True;
 }
 
 #define SINGLEFACTORY(classname)\

@@ -148,9 +148,9 @@
         XubString aRes;
         aTmp.eType = SbxSTRING;
         if( p->eType == SbxDOUBLE )
-            ImpPutDouble( &aTmp, p->nDouble, TRUE );    // true = bCoreString
+            ImpPutDouble( &aTmp, p->nDouble, sal_True );    // true = bCoreString
         else
-            ImpPutDouble( &aTmp, *p->pDouble, TRUE );   // true = bCoreString
+            ImpPutDouble( &aTmp, *p->pDouble, sal_True );   // true = bCoreString
         return aRes;
     }
     else
@@ -228,7 +228,7 @@ void ImpPutString( SbxValues* p, const ::rtl::OUString* n )
         case SbxBYREF | SbxINTEGER:
             *p->pInteger = ImpGetInteger( p ); break;
         case SbxBYREF | SbxBOOL:
-            *p->pUShort = sal::static_int_cast< UINT16 >( ImpGetBool( p ) );
+            *p->pUShort = sal::static_int_cast< sal_uInt16 >( ImpGetBool( p ) );
             break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
@@ -275,10 +275,10 @@ SbxArray* StringToByteArray(const ::rtl::OUString& rStr)
         pArray->unoAddDim( 0, -1 );
     }
 
-    for( USHORT i=0; i< nArraySize; i++)
+    for( sal_uInt16 i=0; i< nArraySize; i++)
     {
         SbxVariable* pNew = new SbxVariable( SbxBYTE );
-        BYTE aByte = static_cast< BYTE >( i%2 ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
+        sal_uInt8 aByte = static_cast< sal_uInt8 >( i%2 ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
         pNew->PutByte( aByte );
         pNew->SetFlag( SBX_WRITE );
         pArray->Put( pNew, i );
@@ -291,10 +291,10 @@ SbxArray* StringToByteArray(const ::rtl::OUString& rStr)
 // Convert an array of bytes to string (2bytes per character)
 ::rtl::OUString ByteArrayToString(SbxArray* pArr)
 {
-    USHORT nCount = pArr->Count();
+    sal_uInt16 nCount = pArr->Count();
     ::rtl::OUStringBuffer aStrBuf;
     sal_Unicode aChar = 0;
-    for( USHORT i = 0 ; i < nCount ; i++ )
+    for( sal_uInt16 i = 0 ; i < nCount ; i++ )
     {
         sal_Unicode aTempChar = pArr->Get(i)->GetByte();
         if( i%2 )

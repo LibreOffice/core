@@ -31,7 +31,7 @@
 
 // include ---------------------------------------------------------------
 
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <svl/itemset.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/module.hxx>
@@ -46,7 +46,7 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
 {
     FieldUnit eUnit = FUNIT_INCH;
     const SfxPoolItem* pItem = NULL;
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC, FALSE, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC, sal_False, &pItem ) )
         eUnit = (FieldUnit)( (const SfxUInt16Item*)pItem )->GetValue();
     else
     {
@@ -57,12 +57,12 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
     return eUnit;
 }
 
-BOOL GetApplyCharUnit( const SfxItemSet& rSet )
+bool GetApplyCharUnit( const SfxItemSet& rSet )
 {
-    BOOL  bUseCharUnit = FALSE;
+    bool  bUseCharUnit = false;
     const SfxPoolItem* pItem = NULL;
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_APPLYCHARUNIT, FALSE, &pItem ) )
-        bUseCharUnit = (BOOL)( (const SfxBoolItem*)pItem )->GetValue();
+    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_APPLYCHARUNIT, sal_False, &pItem ) )
+        bUseCharUnit =  ((const SfxBoolItem*)pItem )->GetValue();
     else
     {
         // FIXME - this might be wrong, cf. the DEV300 changes in GetModuleFieldUnit()
@@ -77,7 +77,7 @@ BOOL GetApplyCharUnit( const SfxItemSet& rSet )
             {
                 pItem = pModule->GetItem( SID_ATTR_APPLYCHARUNIT );
                 if ( pItem )
-                    bUseCharUnit = (BOOL)( (SfxBoolItem*)pItem )->GetValue();
+                    bUseCharUnit = ((SfxBoolItem*)pItem )->GetValue();
             }
             else
             {

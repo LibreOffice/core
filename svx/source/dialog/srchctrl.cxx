@@ -41,14 +41,14 @@
 
 
 #include "srchctrl.hxx"
-#include "srchdlg.hxx"
+#include "svx/srchdlg.hxx"
 #include <svl/srchitem.hxx>
 
 // class SvxSearchFamilyControllerItem -----------------------------------
 
 SvxSearchController::SvxSearchController
 (
-    USHORT _nId,
+    sal_uInt16 _nId,
     SfxBindings& rBind,
     SvxSearchDialog& rDlg
 ) :
@@ -60,7 +60,7 @@ SvxSearchController::SvxSearchController
 
 // -----------------------------------------------------------------------
 
-void SvxSearchController::StateChanged( USHORT nSID, SfxItemState eState,
+void SvxSearchController::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                         const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE == eState )
@@ -75,7 +75,7 @@ void SvxSearchController::StateChanged( USHORT nSID, SfxItemState eState,
         else if ( SID_SEARCH_OPTIONS == nSID )
         {
             DBG_ASSERT( pState->ISA(SfxUInt16Item), "wrong item type" );
-            USHORT nFlags = (USHORT)( (SfxUInt16Item*)pState )->GetValue();
+            sal_uInt16 nFlags = (sal_uInt16)( (SfxUInt16Item*)pState )->GetValue();
             rSrchDlg.EnableControls_Impl( nFlags );
         }
         else if ( SID_SEARCH_ITEM == nSID )

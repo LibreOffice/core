@@ -36,7 +36,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
-#include "svdstr.hrc"
+#include "svx/svdstr.hrc"
 
 
 using namespace ::rtl;

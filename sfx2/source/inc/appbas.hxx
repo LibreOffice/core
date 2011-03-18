@@ -37,7 +37,7 @@ class SbxObject;
 //=========================================================================
 
 SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
-                   const char *pName, ULONG nSID, SbxDataType eType=SbxOBJECT,
+                   const char *pName, sal_uIntPtr nSID, SbxDataType eType=SbxOBJECT,
                    SbxClassType = SbxCLASS_PROPERTY );
 
 

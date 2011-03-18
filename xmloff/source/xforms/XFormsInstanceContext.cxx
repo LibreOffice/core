@@ -42,10 +42,10 @@
 #include <com/sun/star/xforms/XModel.hpp>
 #include <tools/debug.hxx>
 
-#include <xmlnmspe.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmlerror.hxx>
+#include <xmloff/xmlerror.hxx>
 #include <xmloff/nmspmap.hxx>
 
 
@@ -73,7 +73,7 @@ static SvXMLTokenMapEntry aAttributes[] =
 
 XFormsInstanceContext::XFormsInstanceContext(
     SvXMLImport& rImport,
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     Reference<XPropertySet> xModel ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributes, aEmptyMap ),
@@ -87,7 +87,7 @@ XFormsInstanceContext::~XFormsInstanceContext()
 }
 
 SvXMLImportContext* XFormsInstanceContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList>& )
 {

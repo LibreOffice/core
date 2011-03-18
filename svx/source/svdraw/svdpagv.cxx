@@ -48,7 +48,7 @@
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdogrp.hxx>
 #include <svx/svdtypes.hxx>
 
@@ -67,7 +67,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 #include <svx/sdrpagewindow.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 
 TYPEINIT1(SdrPageView, SfxListener);
 DBG_NAME(SdrPageView);
@@ -332,8 +332,8 @@ void SdrPageView::PaintOutlinerView(OutputDevice* pOut, const Rectangle& rRect) 
     //const SdrObject* pTextObjTmp=GetView().GetTextEditObject();
     //const SdrTextObj* pText=PTR_CAST(SdrTextObj,pTextObjTmp);
     //bool bTextFrame=pText!=NULL && pText->IsTextFrame();
-    ULONG nViewAnz=GetView().pTextEditOutliner->GetViewCount();
-    for (ULONG i=0; i<nViewAnz; i++) {
+    sal_uIntPtr nViewAnz=GetView().pTextEditOutliner->GetViewCount();
+    for (sal_uIntPtr i=0; i<nViewAnz; i++) {
         OutlinerView* pOLV=GetView().pTextEditOutliner->GetView(i);
         if (pOLV->GetWindow()==pOut) {
             GetView().ImpPaintOutlinerView(*pOLV, rRect);
@@ -355,6 +355,21 @@ void SdrPageView::PrePaint()
         if(pCandidate)
         {
             pCandidate->PrePaint();
+        }
+    }
+}
+
+void SdrPageView::PostPaint()
+{
+    const sal_uInt32 nCount(PageWindowCount());
+
+    for(sal_uInt32 a(0); a < nCount; a++)
+    {
+        SdrPageWindow* pCandidate = GetPageWindow(a);
+
+        if(pCandidate)
+        {
+            pCandidate->PostPaint();
         }
     }
 }
@@ -483,7 +498,7 @@ void SdrPageView::SetDesignMode( bool _bDesignMode ) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef OS2
-#define RGBCOLOR(r,g,b) ((ULONG)(((BYTE)(b) | ((USHORT)(g)<<8)) | (((ULONG)(BYTE)(r))<<16)))
+#define RGBCOLOR(r,g,b) ((sal_uIntPtr)(((sal_uInt8)(b) | ((sal_uInt16)(g)<<8)) | (((sal_uIntPtr)(sal_uInt8)(r))<<16)))
 #endif
 
 void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, Color aColor)
@@ -581,10 +596,6 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
         rOut.SetLineColor( aColor );
 
         bool bMap0=rOut.IsMapModeEnabled();
-#ifdef WIN // SetPixel-Profiling fuer Windows
-       COLORREF aWinColRef=PALETTERGB(aColor.GetRed()>>8,aColor.GetGreen()>>8,aColor.GetBlue()>>8);
-       HDC aWinhDC=Sysdepen::GethDC(rOut);
-#endif
 
         long nWrX=0;//aWriterPageOffset.X();
         long nWrY=0;//aWriterPageOffset.Y();
@@ -594,11 +605,11 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
         long y1=GetPage()->GetUppBorder()+1+nWrX;
         long y2=GetPage()->GetHgt()-GetPage()->GetLwrBorder()-1+nWrY;
         const SdrPageGridFrameList* pFrames=GetPage()->GetGridFrameList(this,NULL);
-        //USHORT nBufSiz=1024; // 4k Buffer = max. 512 Punkte
+        //sal_uInt16 nBufSiz=1024; // 4k Buffer = max. 512 Punkte
         // #90353# long* pBuf = NULL;
-        USHORT nGridPaintAnz=1;
+        sal_uInt16 nGridPaintAnz=1;
         if (pFrames!=NULL) nGridPaintAnz=pFrames->GetCount();
-        for (USHORT nGridPaintNum=0; nGridPaintNum<nGridPaintAnz; nGridPaintNum++) {
+        for (sal_uInt16 nGridPaintNum=0; nGridPaintNum<nGridPaintAnz; nGridPaintNum++) {
             if (pFrames!=NULL) {
                 const SdrPageGridFrame& rGF=(*pFrames)[nGridPaintNum];
                 nWrX=rGF.GetPaperRect().Left();
@@ -639,13 +650,13 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
             {
                 if( bHoriLines )
                 {
-                    ULONG nGridFlags = ( bHoriSolid ? GRID_HORZLINES : GRID_DOTS );
-                    UINT16 nSteps = sal_uInt16(nx1 / nx2);
-                    UINT32 nRestPerStepMul1000 = nSteps ? ( ((nx1 * 1000L)/ nSteps) - (nx2 * 1000L) ) : 0;
-                    UINT32 nStepOffset = 0;
-                    UINT16 nPointOffset = 0;
+                    sal_uIntPtr nGridFlags = ( bHoriSolid ? GRID_HORZLINES : GRID_DOTS );
+                    sal_uInt16 nSteps = sal_uInt16(nx1 / nx2);
+                    sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((nx1 * 1000L)/ nSteps) - (nx2 * 1000L) ) : 0;
+                    sal_uInt32 nStepOffset = 0;
+                    sal_uInt16 nPointOffset = 0;
 
-                    for(UINT16 a=0;a<nSteps;a++)
+                    for(sal_uInt16 a=0;a<nSteps;a++)
                     {
                         // Zeichnen
                         rOut.DrawGrid(
@@ -664,13 +675,13 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
 
                 if( bVertLines )
                 {
-                    ULONG nGridFlags = ( bVertSolid ? GRID_VERTLINES : GRID_DOTS );
-                    UINT16 nSteps = sal_uInt16(ny1 / ny2);
-                    UINT32 nRestPerStepMul1000 = nSteps ? ( ((ny1 * 1000L)/ nSteps) - (ny2 * 1000L) ) : 0;
-                    UINT32 nStepOffset = 0;
-                    UINT16 nPointOffset = 0;
+                    sal_uIntPtr nGridFlags = ( bVertSolid ? GRID_VERTLINES : GRID_DOTS );
+                    sal_uInt16 nSteps = sal_uInt16(ny1 / ny2);
+                    sal_uInt32 nRestPerStepMul1000 = nSteps ? ( ((ny1 * 1000L)/ nSteps) - (ny2 * 1000L) ) : 0;
+                    sal_uInt32 nStepOffset = 0;
+                    sal_uInt16 nPointOffset = 0;
 
-                    for(UINT16 a=0;a<nSteps;a++)
+                    for(sal_uInt16 a=0;a<nSteps;a++)
                     {
                         // Zeichnen
                         rOut.DrawGrid(
@@ -796,7 +807,7 @@ sal_Bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
         {
             // Der Layer muss sichtbar und darf nicht gesperrt sein
             SdrLayerID nL = pObj->GetLayer();
-            return (aLayerVisi.IsSet(BYTE(nL)) && !aLayerLock.IsSet(BYTE(nL)));
+            return (aLayerVisi.IsSet(sal_uInt8(nL)) && !aLayerLock.IsSet(sal_uInt8(nL)));
         }
     }
 
@@ -813,7 +824,7 @@ void SdrPageView::SetPageOrigin(const Point& rOrg)
     }
 }
 
-void SdrPageView::ImpInvalidateHelpLineArea(USHORT nNum) const
+void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt16 nNum) const
 {
     if (GetView().IsHlplVisible() && nNum<aHelpLines.GetCount()) {
         const SdrHelpLine& rHL=aHelpLines[nNum];
@@ -843,7 +854,7 @@ void SdrPageView::SetHelpLines(const SdrHelpLineList& rHLL)
     InvalidateAllWin();
 }
 
-void SdrPageView::SetHelpLine(USHORT nNum, const SdrHelpLine& rNewHelpLine)
+void SdrPageView::SetHelpLine(sal_uInt16 nNum, const SdrHelpLine& rNewHelpLine)
 {
     if (nNum<aHelpLines.GetCount() && aHelpLines[nNum]!=rNewHelpLine) {
         bool bNeedRedraw = true;
@@ -860,7 +871,7 @@ void SdrPageView::SetHelpLine(USHORT nNum, const SdrHelpLine& rNewHelpLine)
     }
 }
 
-void SdrPageView::DeleteHelpLine(USHORT nNum)
+void SdrPageView::DeleteHelpLine(sal_uInt16 nNum)
 {
     if (nNum<aHelpLines.GetCount()) {
         ImpInvalidateHelpLineArea(nNum);
@@ -868,7 +879,7 @@ void SdrPageView::DeleteHelpLine(USHORT nNum)
     }
 }
 
-void SdrPageView::InsertHelpLine(const SdrHelpLine& rHL, USHORT nNum)
+void SdrPageView::InsertHelpLine(const SdrHelpLine& rHL, sal_uInt16 nNum)
 {
     if (nNum>aHelpLines.GetCount()) nNum=aHelpLines.GetCount();
     aHelpLines.Insert(rHL,nNum);
@@ -951,7 +962,7 @@ void SdrPageView::LeaveOneGroup()
 {
     if(GetAktGroup())
     {
-        BOOL bGlueInvalidate = (GetView().ImpIsGlueVisible());
+        sal_Bool bGlueInvalidate = (GetView().ImpIsGlueVisible());
 
         if(bGlueInvalidate)
             GetView().GlueInvalidate();
@@ -989,7 +1000,7 @@ void SdrPageView::LeaveAllGroup()
 {
     if(GetAktGroup())
     {
-        BOOL bGlueInvalidate = (GetView().ImpIsGlueVisible());
+        sal_Bool bGlueInvalidate = (GetView().ImpIsGlueVisible());
 
         if(bGlueInvalidate)
             GetView().GlueInvalidate();
@@ -1023,9 +1034,9 @@ void SdrPageView::LeaveAllGroup()
     }
 }
 
-USHORT SdrPageView::GetEnteredLevel() const
+sal_uInt16 SdrPageView::GetEnteredLevel() const
 {
-    USHORT nAnz=0;
+    sal_uInt16 nAnz=0;
     SdrObject* pGrp=GetAktGroup();
     while (pGrp!=NULL) {
         nAnz++;
@@ -1052,7 +1063,7 @@ XubString SdrPageView::GetActualGroupName() const
 XubString SdrPageView::GetActualPathName(sal_Unicode cSep) const
 {
     XubString aStr;
-    BOOL bNamFnd(FALSE);
+    sal_Bool bNamFnd(sal_False);
     SdrObject* pGrp = GetAktGroup();
 
     while(pGrp)
@@ -1062,7 +1073,7 @@ XubString SdrPageView::GetActualPathName(sal_Unicode cSep) const
         if(!aStr1.Len())
             aStr1 += sal_Unicode('?');
         else
-            bNamFnd = TRUE;
+            bNamFnd = sal_True;
 
         aStr += aStr1;
         pGrp = pGrp->GetUpGroup();

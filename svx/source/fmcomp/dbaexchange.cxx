@@ -388,7 +388,7 @@ namespace svx
             {
                 Any aContent = makeAny( m_aDescriptor.createPropertyValueSequence() );
                 _pContainer->CopyAny(
-                    sal::static_int_cast< USHORT >( getDescriptorFormatId() ),
+                    sal::static_int_cast< sal_uInt16 >( getDescriptorFormatId() ),
                     aContent );
             }
         }
@@ -494,7 +494,7 @@ namespace svx
     // -----------------------------------------------------------------------------
     sal_Bool ODataAccessObjectTransferable::GetData( const DataFlavor& rFlavor )
     {
-        ULONG nFormat = SotExchange::GetFormat(rFlavor);
+        sal_uIntPtr nFormat = SotExchange::GetFormat(rFlavor);
         switch (nFormat)
         {
             case SOT_FORMATSTR_ID_DBACCESS_TABLE:

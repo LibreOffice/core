@@ -362,11 +362,7 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
 
         ne_xml_parse( parser, rInData.getStr(), rInData.getLength() );
 
-#if NEON_VERSION >= 0x0250
         success = !ne_xml_failed( parser );
-#else
-        success = !!ne_xml_valid( parser );
-#endif
 
         ne_xml_destroy( parser );
 

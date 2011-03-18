@@ -1,4 +1,4 @@
-tc	scripting	:	filter oovbaapi vbahelper bridges rdbmaker vcl xmlscript basic sfx2 rhino BSH:beanshell javaunohelper NULL
+tc	scripting	:	filter oovbaapi vbahelper bridges rdbmaker vcl xmlscript basic sfx2 rhino BSH:beanshell javaunohelper LIBXSLT:libxslt NULL
 tc	scripting									usr1	-	all	tc1_mkout NULL
 tc	scripting\inc								nmake	-	all	tc1_inc NULL
 tc	scripting\source\provider				nmake	-	all	tc1_scriptingprovider tc1_inc NULL

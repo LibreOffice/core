@@ -31,7 +31,7 @@
 #include <stdarg.h>
 
 #include <vcl/menu.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <tools/link.hxx>
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -59,11 +59,11 @@ friend class SfxPopupMenuManager;
 
     SfxVirtualMenu*         pMenu;          // das eigentliche Menu
     SfxVirtualMenu*         pOldMenu;       // only while reconfiguring
-    BOOL                    bMenuBar;       // Popup oder MenuBar
+    sal_Bool                    bMenuBar;       // Popup oder MenuBar
     SfxBindings*            pBindings;
     ResMgr*                 pResMgr;
     sal_uInt32              nType;
-    BOOL                    bAddClipboardFuncs : 1;
+    sal_Bool                    bAddClipboardFuncs : 1;
 
     void                    Construct( SfxVirtualMenu& rMenu );
 
@@ -71,7 +71,7 @@ protected:
                             SfxMenuManager( Menu*, SfxBindings& );
                             SfxMenuManager( const ResId&, SfxBindings& );
                             ~SfxMenuManager();
-    USHORT                  GetItemPos( USHORT nId );
+    sal_uInt16                  GetItemPos( sal_uInt16 nId );
     sal_uInt32              GetType() { return nType; }
 public:
 
@@ -86,9 +86,9 @@ public:
     const SfxBindings&      GetBindings() const { return *pBindings; }
     void                    SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
     ResMgr*                 GetResMgr() const { return pResMgr; }
-    void                    SetPopupMenu( USHORT nId, PopupMenu *pMenu );
+    void                    SetPopupMenu( sal_uInt16 nId, PopupMenu *pMenu );
 
-    void            Construct_Impl( Menu* pMenu, BOOL bWithHelp );
+    void            Construct_Impl( Menu* pMenu, sal_Bool bWithHelp );
 };
 
 //--------------------------------------------------------------------
@@ -118,20 +118,20 @@ public:
     // Changing code which relies on Popup would need much more effort.
     static SfxPopupMenuManager* Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, Window* pWindow );
 
-    USHORT              Execute( const Point& rPos, Window *pWindow );
-    USHORT              Execute( const Point& rPoint, Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 );
-    USHORT              Execute( const Point& rPoint, Window* pWindow, const SfxPoolItem *pArg1 ... );
+    sal_uInt16              Execute( const Point& rPos, Window *pWindow );
+    sal_uInt16              Execute( const Point& rPoint, Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 );
+    sal_uInt16              Execute( const Point& rPoint, Window* pWindow, const SfxPoolItem *pArg1 ... );
 
     // @deprecated (start)!!
     // Don't use these methods any longer. The whole class will be removed in the future.
     // Changing code which relies on these methods would need much more effort!
     void                StartInsert();
     void                EndInsert();
-    void                CheckItem( USHORT, BOOL );
-    void                RemoveItem( USHORT );
-    void                InsertItem( USHORT, const String&, MenuItemBits,
-                                USHORT nPos = MENU_APPEND );
-    void                InsertSeparator( USHORT nPos = MENU_APPEND );
+    void                CheckItem( sal_uInt16, sal_Bool );
+    void                RemoveItem( sal_uInt16 );
+    void                InsertItem( sal_uInt16, const String&, MenuItemBits, const rtl::OString& rHelpId,
+                                sal_uInt16 nPos = MENU_APPEND );
+    void                InsertSeparator( sal_uInt16 nPos = MENU_APPEND );
     // @deprecated (end)
 
     void                RemoveDisabledEntries();

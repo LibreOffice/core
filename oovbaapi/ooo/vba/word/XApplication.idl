@@ -53,10 +53,10 @@ interface XApplication : com::sun::star::uno::XInterface
     [attribute] boolean DisplayAutoCompleteTips;
     [attribute] long EnableCancelKey;
 
-    any CommandBars( [in] any aIndex );
-    any Documents( [in] any aIndex );
-    any Addins( [in] any aIndex );
-    any Dialogs( [in] any aIndex );
+    any CommandBars( [in] any Index );
+    any Documents( [in] any Index );
+    any Addins( [in] any Index );
+    any Dialogs( [in] any Index );
     any ListGalleries( [in] any aIndex );
     float CentimetersToPoints([in] float Centimeters );
 };

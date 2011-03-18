@@ -272,7 +272,7 @@ namespace drawinglayer
                             nChars = nWidthToFill / nWidth;
 
                         String aFilled;
-                        aFilled.Fill( (USHORT)nChars, aText.GetChar( 0 ) );
+                        aFilled.Fill( (sal_uInt16)nChars, aText.GetChar( 0 ) );
                         aText = aFilled;
                         nPos = 0;
                         nLen = nChars;

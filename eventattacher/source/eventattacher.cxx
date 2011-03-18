@@ -828,34 +828,6 @@ void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * , void * pRegistryKey )
-{
-    if (pRegistryKey)
-    {
-        try
-        {
-            // DefaultRegistry
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "/" IMPLNAME "/UNO/SERVICES") )));
-
-            Sequence< OUString > aSNL
-                ( ::comp_EventAttacher::EventAttacherImpl::getSupportedServiceNames_Static() );
-            const OUString * pArray = aSNL.getConstArray();
-            for ( sal_Int32 nPos = aSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
-}
-//==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {

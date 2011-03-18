@@ -38,7 +38,7 @@
 #include <comphelper/extract.hxx>
 #include <tools/color.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlement.hxx>

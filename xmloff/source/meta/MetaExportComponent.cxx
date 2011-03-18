@@ -38,7 +38,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlmetae.hxx>

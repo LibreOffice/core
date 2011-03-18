@@ -47,24 +47,24 @@ class SbiParser : public SbiTokenizer
     SbiProcDef* pProc;              // aktuelle Prozedur
     SbiExprNode*  pWithVar;         // aktuelle With-Variable
     SbiToken    eEndTok;            // das Ende-Token
-    UINT32      nGblChain;          // Chainkette fuer globale DIMs
-    BOOL        bGblDefs;           // TRUE globale Definitionen allgemein
-    BOOL        bNewGblDefs;        // TRUE globale Definitionen vor Sub
-    BOOL        bSingleLineIf;      // TRUE einzeiliges if-Statement
+    sal_uInt32      nGblChain;          // Chainkette fuer globale DIMs
+    sal_Bool        bGblDefs;           // sal_True globale Definitionen allgemein
+    sal_Bool        bNewGblDefs;        // sal_True globale Definitionen vor Sub
+    sal_Bool        bSingleLineIf;      // sal_True einzeiliges if-Statement
 
-    SbiSymDef*  VarDecl( SbiDimList**,BOOL,BOOL );// Variablen-Deklaration
-    SbiProcDef* ProcDecl(BOOL bDecl);// Prozedur-Deklaration
-    void DefStatic( BOOL bPrivate );
-    void DefProc( BOOL bStatic, BOOL bPrivate ); // Prozedur einlesen
-    void DefVar( SbiOpcode eOp, BOOL bStatic ); // DIM/REDIM einlesen
-    void TypeDecl( SbiSymDef&, BOOL bAsNewAlreadyParsed=FALSE );    // AS-Deklaration
+    SbiSymDef*  VarDecl( SbiDimList**,sal_Bool,sal_Bool );// Variablen-Deklaration
+    SbiProcDef* ProcDecl(sal_Bool bDecl);// Prozedur-Deklaration
+    void DefStatic( sal_Bool bPrivate );
+    void DefProc( sal_Bool bStatic, sal_Bool bPrivate ); // Prozedur einlesen
+    void DefVar( SbiOpcode eOp, sal_Bool bStatic ); // DIM/REDIM einlesen
+    void TypeDecl( SbiSymDef&, sal_Bool bAsNewAlreadyParsed=sal_False );    // AS-Deklaration
     void OpenBlock( SbiToken, SbiExprNode* = NULL );    // Block oeffnen
     void CloseBlock();              // Block aufloesen
-    BOOL Channel( BOOL=FALSE );     // Kanalnummer parsen
+    sal_Bool Channel( sal_Bool=sal_False );     // Kanalnummer parsen
     void StmntBlock( SbiToken );    // Statement-Block abarbeiten
-    void DefType( BOOL bPrivate );  // Parse type declaration
-    void DefEnum( BOOL bPrivate );  // Parse enum declaration
-    void DefDeclare( BOOL bPrivate );
+    void DefType( sal_Bool bPrivate );  // Parse type declaration
+    void DefEnum( sal_Bool bPrivate );  // Parse enum declaration
+    void DefDeclare( sal_Bool bPrivate );
     void EnableCompatibility();
 public:
     SbxArrayRef   rTypeArray;       // das Type-Array
@@ -79,26 +79,26 @@ public:
     SbiSymPool*   pPool;            // aktueller Pool
     SbiExprType   eCurExpr;         // aktueller Expr-Typ
     short         nBase;            // OPTION BASE-Wert
-    BOOL          bText;            // OPTION COMPARE TEXT
-    BOOL          bExplicit;        // TRUE: OPTION EXPLICIT
-    BOOL          bClassModule;     // TRUE: OPTION ClassModule
+    sal_Bool          bText;            // OPTION COMPARE TEXT
+    sal_Bool          bExplicit;        // sal_True: OPTION EXPLICIT
+    sal_Bool          bClassModule;     // sal_True: OPTION ClassModule
     StringVector  aIfaceVector;     // Holds all interfaces implemented by a class module
     StringVector  aRequiredTypes;   // Types used in Dim As New <type> outside subs
     SbxDataType   eDefTypes[26];    // DEFxxx-Datentypen
 
     SbiParser( StarBASIC*, SbModule* );
-    BOOL Parse();                   // die Aktion
+    sal_Bool Parse();                   // die Aktion
     SbiExprNode* GetWithVar();      // Innerste With-Variable liefern
 
     // AB 31.3.1996, Symbol in Runtime-Library suchen
     SbiSymDef* CheckRTLForSym( const String& rSym, SbxDataType eType );
     void AddConstants( void );
 
-    BOOL HasGlobalCode();           // Globaler Code definiert?
+    sal_Bool HasGlobalCode();           // Globaler Code definiert?
 
-    BOOL TestToken( SbiToken );     // bestimmtes TOken?
-    BOOL TestSymbol( BOOL=FALSE );  // Symbol?
-    BOOL TestComma();               // Komma oder EOLN?
+    sal_Bool TestToken( SbiToken );     // bestimmtes TOken?
+    sal_Bool TestSymbol( sal_Bool=sal_False );  // Symbol?
+    sal_Bool TestComma();               // Komma oder EOLN?
     void TestEoln();                // EOLN?
 
     void Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo = NULL );  // Let oder Call

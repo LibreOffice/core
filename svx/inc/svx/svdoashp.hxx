@@ -175,7 +175,7 @@ public:
     };
     sal_Bool IsDefaultGeometry( const DefaultType eDefaultType ) const;
 
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
 
     virtual void SetModel(SdrModel* pNewModel);
@@ -200,7 +200,7 @@ public:
     virtual void NbcSetSnapRect(const Rectangle& rRect);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
 
-    virtual SdrGluePoint GetVertexGluePoint(USHORT nNum) const;
+    virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;
 
     virtual void NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr );
 
@@ -224,7 +224,7 @@ public:
     virtual void EndTextEdit( SdrOutliner& rOutl );
     virtual void TakeTextAnchorRect( Rectangle& rAnchorRect ) const;
     virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false,
-        Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
+        Rectangle* pAnchorRect=NULL, sal_Bool bLineWidth=sal_True ) const;
     virtual void operator=(const SdrObject& rObj);
 
     virtual void TakeObjNameSingul(String& rName) const;
@@ -237,7 +237,7 @@ public:
 
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);
 
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
     virtual void SetPage( SdrPage* pNewPage );
 

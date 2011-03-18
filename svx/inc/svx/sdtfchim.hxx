@@ -35,7 +35,7 @@ class SVX_DLLPUBLIC SdrTextFixedCellHeightItem : public SfxBoolItem
 public:
 
     TYPEINFO();
-    SdrTextFixedCellHeightItem( BOOL bUseFixedCellHeight = FALSE );
+    SdrTextFixedCellHeightItem( sal_Bool bUseFixedCellHeight = sal_False );
     SVX_DLLPRIVATE SdrTextFixedCellHeightItem( SvStream & rStream, sal_uInt16 nVersion );
 
     SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation,
@@ -47,8 +47,8 @@ public:
     SVX_DLLPRIVATE virtual SfxPoolItem*     Clone( SfxItemPool* pPool = NULL ) const;
     SVX_DLLPRIVATE virtual  sal_uInt16          GetVersion( sal_uInt16 nFileFormatVersion ) const;
 
-    SVX_DLLPRIVATE virtual  bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    SVX_DLLPRIVATE virtual  bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    SVX_DLLPRIVATE virtual  bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    SVX_DLLPRIVATE virtual  bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 #endif

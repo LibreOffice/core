@@ -32,7 +32,9 @@
 #include "connectivity/PColumn.hxx"
 #include "connectivity/dbtools.hxx"
 #include "TConnection.hxx"
+
 #include <comphelper/types.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -152,7 +154,7 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
         _rxResMetaData->getColumnType( _nColumnPos ),
         _rxResMetaData->isAutoIncrement( _nColumnPos ),
         _rxResMetaData->isCurrency( _nColumnPos ),
-        _rxDBMetaData->storesMixedCaseQuotedIdentifiers()
+        _rxDBMetaData->supportsMixedCaseQuotedIdentifiers()
     );
     pColumn->setTableName(  ::dbtools::composeTableName( _rxDBMetaData,
         _rxResMetaData->getCatalogName( _nColumnPos ),
@@ -190,38 +192,85 @@ void OParseColumn::construct()
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & SAL_CALL OParseColumn::getInfoHelper()
 {
-    OSL_ENSURE( !isNew(), "OParseColumn::OOrderColumn: a *new* OrderColumn?" );
+    OSL_ENSURE( !isNew(), "OParseColumn::getInfoHelper: a *new* ParseColumn?" );
     return *OParseColumn_PROP::getArrayHelper();
 }
+
 // -----------------------------------------------------------------------------
-OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn
-                                     ,sal_Bool  _bCase
-                                     ,sal_Bool _bAscending)
-    : connectivity::sdbcx::OColumn( getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))
-                                ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)))
-                                ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)))
-                                ,   getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION)))
-                                ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)))
-                                ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)))
-                                ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)))
-                                ,   getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)))
-                                ,   getBOOL(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)))
-                                ,   sal_False
-                                ,   getBOOL(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))
-                                ,   _bCase
-                                )
-    , m_bAscending(_bAscending)
+namespace
+{
+    ::rtl::OUString lcl_getColumnTableName( const Reference< XPropertySet >& i_parseColumn )
+    {
+        ::rtl::OUString sColumnTableName;
+        try
+        {
+            OSL_VERIFY( i_parseColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_TABLENAME ) ) >>= sColumnTableName );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return sColumnTableName;
+    }
+}
+
+// -----------------------------------------------------------------------------
+OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn, const ::rtl::OUString& i_rOriginatingTableName,
+                            sal_Bool    _bCase, sal_Bool _bAscending )
+    : connectivity::sdbcx::OColumn(
+        getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),
+        getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME))),
+        getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE))),
+        getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION))),
+        getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))),
+        getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))),
+        getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))),
+        getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))),
+        getBOOL(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))),
+        sal_False,
+        getBOOL(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY))),
+        _bCase
+    )
+    ,m_bAscending(_bAscending)
+    ,m_sTableName( i_rOriginatingTableName )
 {
     construct();
 }
+
+// -----------------------------------------------------------------------------
+OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn, sal_Bool _bCase, sal_Bool _bAscending )
+    : connectivity::sdbcx::OColumn(
+        getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),
+        getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME))),
+        getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE))),
+        getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION))),
+        getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))),
+        getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))),
+        getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))),
+        getINT32(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))),
+        getBOOL(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))),
+        sal_False,
+        getBOOL(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY))),
+        _bCase
+    )
+    ,m_bAscending(_bAscending)
+    ,m_sTableName( lcl_getColumnTableName( _xColumn ) )
+{
+    construct();
+}
+
 // -------------------------------------------------------------------------
 OOrderColumn::~OOrderColumn()
 {
 }
+
 // -------------------------------------------------------------------------
 void OOrderColumn::construct()
 {
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING),PROPERTY_ID_ISASCENDING,0,&m_bAscending,     ::getCppuType(reinterpret_cast< sal_Bool*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING), PROPERTY_ID_ISASCENDING,
+        PropertyAttribute::READONLY,  const_cast< sal_Bool* >( &m_bAscending ),    ::getCppuType( reinterpret_cast< sal_Bool* >( NULL ) ) );
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME),   PROPERTY_ID_TABLENAME,
+        PropertyAttribute::READONLY,  const_cast< ::rtl::OUString* >( &m_sTableName ),  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OOrderColumn::createArrayHelper() const
@@ -231,17 +280,14 @@ void OOrderColumn::construct()
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & SAL_CALL OOrderColumn::getInfoHelper()
 {
-    OSL_ENSURE( !isNew(), "OOrderColumn::OOrderColumn: a *new* OrderColumn?" );
+    OSL_ENSURE( !isNew(), "OOrderColumn::getInfoHelper: a *new* OrderColumn?" );
     return *OOrderColumn_PROP::getArrayHelper();
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OOrderColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
-    if ( m_bOrder )
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OrderColumn"));
-    else
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.GroupColumn"));
+    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OrderColumn"));
 
     return aSupported;
 }

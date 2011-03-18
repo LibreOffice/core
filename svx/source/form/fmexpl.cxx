@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmexpl.hrc"
 #include "fmexpl.hxx"
 
@@ -45,7 +45,7 @@
 
 #include "fmprop.hrc"
 #include <svx/dialmgr.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdouno.hxx>
 #include <fmundo.hxx>
 #include <svx/svdobj.hxx>

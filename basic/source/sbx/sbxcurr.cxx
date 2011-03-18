@@ -474,7 +474,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); val = 0;
             }
-            *p->pByte = (BYTE) val; break;
+            *p->pByte = (sal_uInt8) val; break;
         }
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
@@ -488,7 +488,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); val = SbxMININT;
             }
-            *p->pInteger = (INT16) val; break;
+            *p->pInteger = (sal_uInt16) val; break;
         }
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
@@ -502,7 +502,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); val = 0;
             }
-            *p->pUShort = (UINT16) val; break;
+            *p->pUShort = (sal_uInt16) val; break;
         }
         case SbxBYREF | SbxLONG:
         {
@@ -515,7 +515,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); val = SbxMINLNG;
             }
-            *p->pLong = (INT32) val; break;
+            *p->pLong = (sal_Int32) val; break;
         }
         case SbxBYREF | SbxULONG:
         {
@@ -528,7 +528,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); val = 0;
             }
-            *p->pULong = (UINT32) val;
+            *p->pULong = (sal_uInt32) val; break;
             break;
         }
         case SbxBYREF | SbxCURRENCY:

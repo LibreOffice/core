@@ -31,27 +31,27 @@
 
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
-#include "cppuhelper/factory.hxx"
-#include "rtl/unload.h"
 #include "sal/types.h"
 
-namespace com { namespace sun { namespace star { namespace lang {
-    class XSingleComponentFactory;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace uno {
+        class XComponentContext;
+        class XInterface;
+    }
+} } }
 namespace rtl { class OUString; }
 
 namespace configmgr { namespace configuration_registry {
+
+com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
+create(
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        const & context);
 
 rtl::OUString SAL_CALL getImplementationName();
 
 com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
 getSupportedServiceNames();
-
-com::sun::star::uno::Reference< com::sun::star::lang::XSingleComponentFactory >
-SAL_CALL createFactory(
-    cppu::ComponentFactoryFunc, rtl::OUString const &,
-    com::sun::star::uno::Sequence< rtl::OUString > const &, rtl_ModuleCount *)
-    SAL_THROW(());
 
 } }
 

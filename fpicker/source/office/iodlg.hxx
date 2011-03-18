@@ -107,7 +107,7 @@ private:
     ::svt::IFilePickerListener* _pFileNotifier;
     SvtExpFileDlg_Impl*         _pImp;
     WinBits                     _nExtraBits;
-    BOOL                        _bIsInExecute   :   1;
+    sal_Bool                        _bIsInExecute   :   1;
 
     ImageList                   m_aImages;
     ::svt::SmartContent         m_aContent;
@@ -160,14 +160,14 @@ private:
     DECL_LINK( PlayButtonHdl_Impl, PushButton* );
 
     // removes a filter with wildcards from the path and returns it
-    BOOL IsolateFilterFromPath_Impl( String& rPath, String& rFilter );
+    sal_Bool IsolateFilterFromPath_Impl( String& rPath, String& rFilter );
 
     void    implArrangeControls();
     void    implUpdateImages( );
 
 protected:
     virtual long                Notify( NotifyEvent& rNEvt );
-    void                        EnableInternet( BOOL bInternet );
+    void                        EnableInternet( sal_Bool bInternet );
 
     // originally from VclFileDialog
     Link                        _aOKHdl;
@@ -188,14 +188,14 @@ protected:
         This is under the assumption that you'll use EnableControl. Direct access to the control
         (such as pControl->Enable()) will break this.
     */
-    void                        EnableUI( BOOL _bEnable );
+    void                        EnableUI( sal_Bool _bEnable );
 
     /** enables or disables a control
 
         You are strongly encouraged to prefer this method over pControl->Enable( _bEnable ). See
         <member>EnableUI</member> for details.
     */
-    void                        EnableControl( Control* _pControl, BOOL _bEnable );
+    void                        EnableControl( Control* _pControl, sal_Bool _bEnable );
     short                       PrepareExecute();
 
 public:
@@ -225,8 +225,8 @@ public:
 
             void                SetCurFilter( const String& rFilter );
             String              GetCurFilter() const;
-            USHORT              GetFilterCount() const;
-            const String&       GetFilterName( USHORT nPos ) const;
+            sal_uInt16              GetFilterCount() const;
+            const String&       GetFilterName( sal_uInt16 nPos ) const;
 
     virtual void                Resize();
     virtual void                DataChanged( const DataChangedEvent& _rDCEvt );
@@ -239,7 +239,7 @@ public:
     void                        DisableSaveLastDirectory();
     void                        InitSize();
     void                        UpdateControls( const String& rURL );
-    void                        EnableAutocompletion( BOOL _bEnable = TRUE );
+    void                        EnableAutocompletion( sal_Bool _bEnable = sal_True );
 
     void                        SetFileCallback( ::svt::IFilePickerListener *pNotifier ) { _pFileNotifier = pNotifier; }
 
@@ -264,7 +264,7 @@ public:
     }
 
     // originally from VclFileDialog
-    virtual BOOL                AddControl( Window* pControl, BOOL bNewLine = FALSE );
+    virtual sal_Bool                AddControl( Window* pControl, sal_Bool bNewLine = sal_False );
 
     // inline
     inline void                 SetPath( const String& rNewURL );

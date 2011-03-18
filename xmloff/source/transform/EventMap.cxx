@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include "EventMap.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 
 XMLTransformerEventMapEntry aTransformerEventMap[] =

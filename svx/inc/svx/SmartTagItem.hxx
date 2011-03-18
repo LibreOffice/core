@@ -64,7 +64,7 @@ class SVX_DLLPUBLIC SvxSmartTagItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxSmartTagItem( const USHORT nId,
+    SvxSmartTagItem( const sal_uInt16 nId,
                      const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
                      const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< sal_Int32 > >& rActionIndicesSequence,
                      const com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
@@ -77,10 +77,10 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const; // leer
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion) const; // leer
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const; // leer
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ); // leer
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const; // leer
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const; // leer
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > > >& GetActionComponentsSequence() const { return maActionComponentsSequence; }
     const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< sal_Int32 > >& GetActionIndicesSequence() const { return maActionIndicesSequence; }

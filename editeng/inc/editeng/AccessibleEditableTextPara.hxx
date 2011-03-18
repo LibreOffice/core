@@ -320,7 +320,7 @@ namespace accessibility
 
             @return sal_False, if the method was not able to determine the range
          */
-        sal_Bool GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, sal_Int32 nIndex );
+        sal_Bool GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_Int32 nIndex );
 
         // syntactic sugar for FireEvent
         void GotPropertyEvent( const ::com::sun::star::uno::Any& rNewValue, const sal_Int16 nEventId ) const;
@@ -353,13 +353,13 @@ namespace accessibility
         // Get text from forwarder
         String GetText( sal_Int32 nIndex ) SAL_THROW((::com::sun::star::uno::RuntimeException));
         String GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) SAL_THROW((::com::sun::star::uno::RuntimeException));
-        USHORT GetTextLen() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        sal_uInt16 GetTextLen() const SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** Get the current selection of this paragraph
 
             @return sal_False, if nothing in this paragraph is selected
          */
-        sal_Bool GetSelection( USHORT& nStartPos, USHORT& nEndPos ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+        sal_Bool GetSelection( sal_uInt16& nStartPos, sal_uInt16& nEndPos ) SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** create selection from Accessible selection.
 

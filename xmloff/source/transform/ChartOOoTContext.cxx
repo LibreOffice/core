@@ -30,7 +30,7 @@
 #include "precompiled_xmloff.hxx"
 #include "ChartOOoTContext.hxx"
 #include "MutableAttrList.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "ActionMapTypesOOo.hxx"
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"

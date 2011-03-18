@@ -93,32 +93,32 @@ void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, con
 
 void ResizePoly(Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    USHORT nAnz=rPoly.GetSize();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetSize();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ResizePoint(rPoly[i],rRef,xFact,yFact);
     }
 }
 
 void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    USHORT nAnz=rPoly.GetPointCount();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ResizePoint(rPoly[i],rRef,xFact,yFact);
     }
 }
 
 void ResizePoly(PolyPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ResizePoly(rPoly[i],rRef,xFact,yFact);
     }
 }
 
 void ResizeXPoly(XPolyPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ResizeXPoly(rPoly[i],rRef,xFact,yFact);
     }
 }
@@ -127,32 +127,32 @@ void ResizeXPoly(XPolyPolygon& rPoly, const Point& rRef, const Fraction& xFact, 
 
 void RotatePoly(Polygon& rPoly, const Point& rRef, double sn, double cs)
 {
-    USHORT nAnz=rPoly.GetSize();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetSize();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         RotatePoint(rPoly[i],rRef,sn,cs);
     }
 }
 
 void RotateXPoly(XPolygon& rPoly, const Point& rRef, double sn, double cs)
 {
-    USHORT nAnz=rPoly.GetPointCount();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         RotatePoint(rPoly[i],rRef,sn,cs);
     }
 }
 
 void RotatePoly(PolyPolygon& rPoly, const Point& rRef, double sn, double cs)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         RotatePoly(rPoly[i],rRef,sn,cs);
     }
 }
 
 void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         RotateXPoly(rPoly[i],rRef,sn,cs);
     }
 }
@@ -202,32 +202,32 @@ void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
 
 void MirrorPoly(Polygon& rPoly, const Point& rRef1, const Point& rRef2)
 {
-    USHORT nAnz=rPoly.GetSize();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetSize();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         MirrorPoint(rPoly[i],rRef1,rRef2);
     }
 }
 
 void MirrorXPoly(XPolygon& rPoly, const Point& rRef1, const Point& rRef2)
 {
-    USHORT nAnz=rPoly.GetPointCount();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         MirrorPoint(rPoly[i],rRef1,rRef2);
     }
 }
 
 void MirrorPoly(PolyPolygon& rPoly, const Point& rRef1, const Point& rRef2)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         MirrorPoly(rPoly[i],rRef1,rRef2);
     }
 }
 
 void MirrorXPoly(XPolyPolygon& rPoly, const Point& rRef1, const Point& rRef2)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         MirrorXPoly(rPoly[i],rRef1,rRef2);
     }
 }
@@ -236,32 +236,32 @@ void MirrorXPoly(XPolyPolygon& rPoly, const Point& rRef1, const Point& rRef2)
 
 void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, bool bVShear)
 {
-    USHORT nAnz=rPoly.GetSize();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetSize();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ShearPoint(rPoly[i],rRef,tn,bVShear);
     }
 }
 
 void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
 {
-    USHORT nAnz=rPoly.GetPointCount();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ShearPoint(rPoly[i],rRef,tn,bVShear);
     }
 }
 
 void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ShearPoly(rPoly[i],rRef,tn,bVShear);
     }
 }
 
 void ShearXPoly(XPolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ShearXPoly(rPoly[i],rRef,tn,bVShear);
     }
 }
@@ -400,8 +400,8 @@ double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCen
 void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
     double nSin,nCos;
-    USHORT nPointAnz=rPoly.GetPointCount();
-    USHORT i=0;
+    sal_uInt16 nPointAnz=rPoly.GetPointCount();
+    sal_uInt16 i=0;
     while (i<nPointAnz) {
         Point* pPnt=&rPoly[i];
         Point* pC1=NULL;
@@ -423,8 +423,8 @@ void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, b
 void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
     double nSin,nCos;
-    USHORT nPointAnz=rPoly.GetPointCount();
-    USHORT i=0;
+    sal_uInt16 nPointAnz=rPoly.GetPointCount();
+    sal_uInt16 i=0;
     while (i<nPointAnz) {
         Point* pPnt=&rPoly[i];
         Point* pC1=NULL;
@@ -446,8 +446,8 @@ void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bo
 void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle rRefRect)
 {
     double nSin,nCos;
-    USHORT nPointAnz=rPoly.GetPointCount();
-    USHORT i=0;
+    sal_uInt16 nPointAnz=rPoly.GetPointCount();
+    sal_uInt16 i=0;
     while (i<nPointAnz) {
         Point* pPnt=&rPoly[i];
         Point* pC1=NULL;
@@ -470,24 +470,24 @@ void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, 
 
 void CrookRotatePoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
-    USHORT nPolyAnz=rPoly.Count();
-    for (USHORT nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
+    sal_uInt16 nPolyAnz=rPoly.Count();
+    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
         CrookRotatePoly(rPoly[nPolyNum],rCenter,rRad,bVert);
     }
 }
 
 void CrookSlantPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
-    USHORT nPolyAnz=rPoly.Count();
-    for (USHORT nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
+    sal_uInt16 nPolyAnz=rPoly.Count();
+    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
         CrookSlantPoly(rPoly[nPolyNum],rCenter,rRad,bVert);
     }
 }
 
 void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle rRefRect)
 {
-    USHORT nPolyAnz=rPoly.Count();
-    for (USHORT nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
+    sal_uInt16 nPolyAnz=rPoly.Count();
+    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
         CrookStretchPoly(rPoly[nPolyNum],rCenter,rRad,bVert,rRefRect);
     }
 }
@@ -522,7 +522,7 @@ long NormAngle360(long a)
     return a;
 }
 
-USHORT GetAngleSector(long nWink)
+sal_uInt16 GetAngleSector(long nWink)
 {
     while (nWink<0) nWink+=36000;
     while (nWink>=36000) nWink-=36000;
@@ -701,17 +701,17 @@ long BigMulDiv(long nVal, long nMul, long nDiv)
 
 void Kuerzen(Fraction& rF, unsigned nDigits)
 {
-    INT32 nMul=rF.GetNumerator();
-    INT32 nDiv=rF.GetDenominator();
+    sal_Int32 nMul=rF.GetNumerator();
+    sal_Int32 nDiv=rF.GetDenominator();
     bool bNeg = false;
     if (nMul<0) { nMul=-nMul; bNeg=!bNeg; }
     if (nDiv<0) { nDiv=-nDiv; bNeg=!bNeg; }
     if (nMul==0 || nDiv==0) return;
-    UINT32 a;
-    a=UINT32(nMul); unsigned nMulZ=0; // Fuehrende Nullen zaehlen
+    sal_uInt32 a;
+    a=sal_uInt32(nMul); unsigned nMulZ=0; // Fuehrende Nullen zaehlen
     while (a<0x00800000) { nMulZ+=8; a<<=8; }
     while (a<0x80000000) { nMulZ++; a<<=1; }
-    a=UINT32(nDiv); unsigned nDivZ=0; // Fuehrende Nullen zaehlen
+    a=sal_uInt32(nDiv); unsigned nDivZ=0; // Fuehrende Nullen zaehlen
     while (a<0x00800000) { nDivZ+=8; a<<=8; }
     while (a<0x80000000) { nDivZ++; a<<=1; }
     // Anzahl der verwendeten Digits bestimmen
@@ -948,7 +948,7 @@ void SdrFormatter::Undirty()
     nMul_=nMul1;
     nDiv_=nDiv1;
     nKomma_=nKomma1;
-    bDirty=FALSE;
+    bDirty=sal_False;
 }
 
 
@@ -964,7 +964,7 @@ void SdrFormatter::TakeStr(long nVal, XubString& rStr) const
     }
 
     // Hier fallen trotzdem evtl. Nachkommastellen weg, wg. MulDiv statt Real
-    BOOL bNeg(nVal < 0);
+    sal_Bool bNeg(nVal < 0);
     SvtSysLocale aSysLoc;
     const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();
 

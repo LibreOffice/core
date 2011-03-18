@@ -74,7 +74,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxitems.hrc>
 #include "helpid.hrc"
-#include "htmlmode.hxx"
+#include "svx/htmlmode.hxx"
 #include <svx/xtable.hxx>
 #include "editeng/fontitem.hxx"
 #include <editeng/fhgtitem.hxx>
@@ -83,9 +83,9 @@
 #include <editeng/colritem.hxx>
 #include "editeng/flstitem.hxx"
 #include "editeng/bolnitem.hxx"
-#include "drawitem.hxx"
+#include "svx/drawitem.hxx"
 #include <svx/tbcontrl.hxx>
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
 #include "colorwindow.hxx"
 #include <memory>
@@ -106,11 +106,11 @@
 #define DELETEZ(p) (delete (p), (p)=NULL)
 #endif
 // don't make more than 15 entries visible at once
-#define MAX_STYLES_ENTRIES          static_cast< USHORT >( 15 )
+#define MAX_STYLES_ENTRIES          static_cast< sal_uInt16 >( 15 )
 
 void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet );
 void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemSize );
-BOOL lcl_FontChangedHint( const SfxHint &rHint );
+sal_Bool lcl_FontChangedHint( const SfxHint &rHint );
 
 // namespaces
 using ::rtl::OUString;
@@ -141,12 +141,12 @@ class SvxStyleBox_Impl : public ComboBox
 {
     using Window::IsVisible;
 public:
-    SvxStyleBox_Impl( Window* pParent, USHORT nSlot, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider,
-                        const Reference< XFrame >& _xFrame,const String& rClearFormatKey, const String& rMoreKey, BOOL bInSpecialMode );
+    SvxStyleBox_Impl( Window* pParent, sal_uInt16 nSlot, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider,
+                        const Reference< XFrame >& _xFrame,const String& rClearFormatKey, const String& rMoreKey, sal_Bool bInSpecialMode );
     ~SvxStyleBox_Impl();
 
     void            SetFamily( SfxStyleFamily eNewFamily );
-    inline BOOL     IsVisible() { return bVisible; }
+    inline sal_Bool     IsVisible() { return bVisible; }
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
@@ -163,20 +163,20 @@ protected:
     virtual void    Select();
 
 private:
-    USHORT                          nSlotId;
+    sal_uInt16                          nSlotId;
     SfxStyleFamily                  eStyleFamily;
-    USHORT                          nCurSel;
-    BOOL                            bRelease;
+    sal_uInt16                          nCurSel;
+    sal_Bool                            bRelease;
     Size                            aLogicalSize;
     Link                            aVisibilityListener;
-    BOOL                            bVisible;
+    sal_Bool                            bVisible;
     Reference< XDispatchProvider >  m_xDispatchProvider;
     Reference< XFrame >             m_xFrame;
     OUString                        m_aCommand;
     String                          aClearFormatKey;
     String                          aMoreKey;
     String                          sDefaultStyle;
-    BOOL                            bInSpecialMode;
+    sal_Bool                            bInSpecialMode;
 
     void            ReleaseFocus();
 };
@@ -194,8 +194,8 @@ private:
     Font                           aCurFont;
     Size                           aLogicalSize;
     String                         aCurText;
-    USHORT                         nFtCount;
-    BOOL                           bRelease;
+    sal_uInt16                         nFtCount;
+    sal_Bool                           bRelease;
     Reference< XDispatchProvider > m_xDispatchProvider;
     Reference< XFrame >            m_xFrame;
 
@@ -213,7 +213,7 @@ public:
 
     void            FillList();
     void            Update( const SvxFontItem* pFontItem );
-    USHORT          GetListCount() { return nFtCount; }
+    sal_uInt16          GetListCount() { return nFtCount; }
     void            Clear() { FontNameBox::Clear(); nFtCount = 0; }
     void            Fill( const FontList* pList )
                         { FontNameBox::Fill( pList );
@@ -233,12 +233,12 @@ public:
 
 class SvxFrmValueSet_Impl : public ValueSet
 {
-    USHORT          nModifier;
+    sal_uInt16          nModifier;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
 public:
     SvxFrmValueSet_Impl(Window* pParent,  WinBits nWinStyle)
         : ValueSet(pParent, nWinStyle), nModifier(0) {}
-    USHORT          GetModifier() const {return nModifier;}
+    sal_uInt16          GetModifier() const {return nModifier;}
 
 };
 
@@ -263,16 +263,16 @@ private:
 
 protected:
     virtual void    Resize();
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
     virtual Window* GetPreferredKeyInputWindow();
     virtual void    GetFocus();
 
 public:
-    SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame, Window* pParentWindow );
+    SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow );
     ~SvxFrameWindow_Impl();
     void            StartSelection();
 
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
     virtual SfxPopupWindow* Clone() const;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -288,20 +288,20 @@ private:
     bool                m_bIsWriter;
 
 #if _SOLAR__PRIVATE
-    void            MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& rSize, String& rStr,
+    void            MakeLineBitmap( sal_uInt16 nNo, Bitmap& rBmp, const Size& rSize, String& rStr,
                                     const ::Color& rLine, const ::Color& rBack );
     DECL_LINK( SelectHdl, void * );
 #endif
 
 protected:
     virtual void    Resize();
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
     virtual Window* GetPreferredKeyInputWindow();
     virtual void    GetFocus();
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     void            CreateBitmaps( void );
 public:
-    SvxLineWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame, Window* pParentWindow );
+    SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow );
 
     void                    StartSelection();
     virtual SfxPopupWindow* Clone() const;
@@ -318,12 +318,12 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
 {
     public:
         SfxStyleControllerItem_Impl( const Reference< XDispatchProvider >& rDispatchProvider,
-                                     USHORT nSlotId,
+                                     sal_uInt16 nSlotId,
                                      const rtl::OUString& rCommand,
                                      SvxStyleToolBoxControl& rTbxCtl );
 
     protected:
-        virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+        virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
 
     private:
         SvxStyleToolBoxControl& rControl;
@@ -335,21 +335,21 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
 
 SvxStyleBox_Impl::SvxStyleBox_Impl(
     Window*                                 pParent,
-    USHORT                                  nSlot,
+    sal_uInt16                                  nSlot,
     const rtl::OUString&                    rCommand,
     SfxStyleFamily                          eFamily,
     const Reference< XDispatchProvider >&   rDispatchProvider,
     const Reference< XFrame >&              _xFrame,
     const String&                           rClearFormatKey,
     const String&                           rMoreKey,
-    BOOL                                    bInSpec) :
+    sal_Bool                                    bInSpec) :
 
     ComboBox( pParent, SVX_RES( RID_SVXTBX_STYLE ) ),
 
     nSlotId     ( nSlot ),
     eStyleFamily( eFamily ),
-    bRelease    ( TRUE ),
-    bVisible(FALSE),
+    bRelease    ( sal_True ),
+    bVisible(sal_False),
     m_xDispatchProvider( rDispatchProvider ),
     m_xFrame(_xFrame),
     m_aCommand  ( rCommand ),
@@ -358,7 +358,7 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(
     bInSpecialMode  ( bInSpec )
 {
     aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
-    EnableAutocomplete( TRUE );
+    EnableAutocomplete( sal_True );
 }
 
 SvxStyleBox_Impl::~SvxStyleBox_Impl()
@@ -371,7 +371,7 @@ void SvxStyleBox_Impl::ReleaseFocus()
 {
     if ( !bRelease )
     {
-        bRelease = TRUE;
+        bRelease = sal_True;
         return;
     }
     if ( m_xFrame.is() && m_xFrame->getContainerWindow().is() )
@@ -459,7 +459,7 @@ void SvxStyleBox_Impl::SetFamily( SfxStyleFamily eNewFamily )
 
 long SvxStyleBox_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nType = rNEvt.GetType();
+    sal_uInt16 nType = rNEvt.GetType();
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         nCurSel = GetSelectEntryPos();
@@ -480,7 +480,7 @@ long SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        USHORT nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+        sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 
         switch ( nCode )
         {
@@ -488,7 +488,7 @@ long SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
             case KEY_TAB:
             {
                 if ( KEY_TAB == nCode )
-                    bRelease = FALSE;
+                    bRelease = sal_False;
                 else
                     nHandled = 1;
                 Select();
@@ -530,7 +530,7 @@ void SvxStyleBox_Impl::StateChanged( StateChangedType nStateChange )
     }
     else if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
-        bVisible = TRUE;
+        bVisible = sal_True;
         if ( aVisibilityListener.IsSet() )
             aVisibilityListener.Call( this );
     }
@@ -548,9 +548,9 @@ IMPL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control*, _pCtrl )
 
 // -----------------------------------------------------------------------
 
-BOOL GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* pBox )
+sal_Bool GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* pBox )
 {
-    BOOL bChanged = FALSE;
+    sal_Bool bChanged = sal_False;
     const SfxObjectShell* pDocSh = SfxObjectShell::Current();
     SvxFontListItem* pFontListItem = NULL;
 
@@ -562,7 +562,7 @@ BOOL GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* pBox
         ::std::auto_ptr<FontList> aFontList(new FontList( pBox ));
         *ppFontList = aFontList.get();
         pBox->SetOwnFontList(aFontList);
-        bChanged = TRUE;
+        bChanged = sal_True;
     }
 
     if ( pFontListItem )
@@ -575,7 +575,7 @@ BOOL GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* pBox
         {
             // => "ubernehmen
             *ppFontList = pNewFontList;
-            bChanged = TRUE;
+            bChanged = sal_True;
         }
         else
         {
@@ -628,7 +628,7 @@ SvxFontNameBox_Impl::SvxFontNameBox_Impl( Window* pParent, const Reference< XDis
     pFontList          ( NULL ),
     aLogicalSize       ( 75,160 ),
     nFtCount           ( 0 ),
-    bRelease           ( TRUE ),
+    bRelease           ( sal_True ),
     m_xDispatchProvider( rDispatchProvider ),
     m_xFrame (_xFrame)
 {
@@ -668,7 +668,7 @@ void SvxFontNameBox_Impl::Update( const SvxFontItem* pFontItem )
 
 long SvxFontNameBox_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nType = rNEvt.GetType();
+    sal_uInt16 nType = rNEvt.GetType();
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
     {
@@ -686,7 +686,7 @@ long SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        USHORT nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+        sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 
         switch ( nCode )
         {
@@ -694,7 +694,7 @@ long SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
             case KEY_TAB:
             {
                 if ( KEY_TAB == nCode )
-                    bRelease = FALSE;
+                    bRelease = sal_False;
                 else
                     nHandled = 1;
                 Select();
@@ -737,7 +737,7 @@ void SvxFontNameBox_Impl::ReleaseFocus_Impl()
 {
     if ( !bRelease )
     {
-        bRelease = TRUE;
+        bRelease = sal_True;
         return;
     }
     if ( m_xFrame.is() && m_xFrame->getContainerWindow().is() )
@@ -749,8 +749,8 @@ void SvxFontNameBox_Impl::ReleaseFocus_Impl()
 void SvxFontNameBox_Impl::EnableControls_Impl()
 {
     SvtFontOptions aFontOpt;
-    BOOL bEnable = aFontOpt.IsFontHistoryEnabled();
-    USHORT nEntries = bEnable ? MAX_MRU_FONTNAME_ENTRIES : 0;
+    sal_Bool bEnable = aFontOpt.IsFontHistoryEnabled();
+    sal_uInt16 nEntries = bEnable ? MAX_MRU_FONTNAME_ENTRIES : 0;
     if ( GetMaxMRUCount() != nEntries )
     {
         // refill in the next GetFocus-Handler
@@ -818,7 +818,7 @@ void SvxFontNameBox_Impl::Select()
 #define PALETTE_SIZE (PALETTE_X * PALETTE_Y)
 
 SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
-                                          USHORT                     nSlotId,
+                                          sal_uInt16                     nSlotId,
                                           const Reference< XFrame >& rFrame,
                                           const String&              rWndTitle,
                                           Window*                    pParentWindow,
@@ -835,7 +835,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
     XColorTable* pColorTable = NULL;
-    BOOL bKillTable = FALSE;
+    sal_Bool bKillTable = sal_False;
     const Size aSize12( 13, 13 );
 
     if ( pDocSh )
@@ -845,13 +845,14 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     if ( !pColorTable )
     {
         pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
-        bKillTable = TRUE;
+        bKillTable = sal_True;
     }
 
     if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId )
     {
         aColorSet.SetStyle( aColorSet.GetStyle() | WB_NONEFIELD );
         aColorSet.SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
+        aColorSet.SetAccessibleName( SVX_RESSTR( RID_SVXSTR_BACKGROUND ) );
     }
     else if ( SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2 == theSlotId || SID_EXTRUSION_3D_COLOR == theSlotId )
     {
@@ -866,7 +867,12 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         {
             aColorSet.SetStyle( aColorSet.GetStyle() | WB_NONEFIELD );
             aColorSet.SetText( SVX_RESSTR( RID_SVXSTR_AUTOMATIC ) );
+            aColorSet.SetAccessibleName( SVX_RESSTR( RID_SVXSTR_TEXTCOLOR ) );
         }
+    }
+    else
+    {
+        aColorSet.SetAccessibleName( SVX_RESSTR( RID_SVXSTR_FRAME_COLOR ) );
     }
 
     if ( pColorTable )
@@ -932,7 +938,7 @@ SfxPopupWindow* SvxColorWindow_Impl::Clone() const
 
 IMPL_LINK( SvxColorWindow_Impl, SelectHdl, void *, EMPTYARG )
 {
-    USHORT nItemId = aColorSet.GetSelectItemId();
+    sal_uInt16 nItemId = aColorSet.GetSelectItemId();
     SvxColorItem aColorItem( aColorSet.GetItemColor( nItemId ), theSlotId );
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() calls.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
@@ -996,14 +1002,14 @@ void SvxColorWindow_Impl::StartSelection()
 
 // -----------------------------------------------------------------------
 
-BOOL SvxColorWindow_Impl::Close()
+sal_Bool SvxColorWindow_Impl::Close()
 {
     return SfxPopupWindow::Close();
 }
 
 // -----------------------------------------------------------------------
 
-void SvxColorWindow_Impl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     if (( SFX_ITEM_DISABLED != eState ) && pState )
     {
@@ -1050,7 +1056,7 @@ void SvxColorWindow_Impl::StateChanged( USHORT nSID, SfxItemState eState, const 
 // class SvxFrameWindow_Impl --------------------------------------------------
 //========================================================================
 
-SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame, Window* pParentWindow ) :
+SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow ) :
 
     SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP ) ),
     aFrameSet   ( this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
@@ -1072,7 +1078,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >&
      *                                             abgeschaltet werden
      */
 
-    USHORT i = 0;
+    sal_uInt16 i = 0;
 
     for ( i=1; i<9; i++ )
         aFrameSet.InsertItem( i, aImgList.GetImage(i) );
@@ -1089,6 +1095,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >&
 
     SetHelpId( HID_POPUP_FRAME );
     SetText( SVX_RESSTR(RID_SVXSTR_FRAME) );
+    aFrameSet.SetAccessibleName( SVX_RESSTR(RID_SVXSTR_FRAME) );
     aFrameSet.Show();
 }
 
@@ -1121,9 +1128,9 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     {
         aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
 
-        USHORT  nNumOfItems = aFrameSet.GetItemCount();
+        sal_uInt16  nNumOfItems = aFrameSet.GetItemCount();
 
-        for( USHORT i = 1 ; i <= nNumOfItems ; ++i )
+        for( sal_uInt16 i = 1 ; i <= nNumOfItems ; ++i )
             aFrameSet.SetItemImage( i, aImgList.GetImage( i ) );
     }
 }
@@ -1152,9 +1159,9 @@ IMPL_LINK( SvxFrameWindow_Impl, SelectHdl, void *, EMPTYARG )
                         *pRight = 0,
                         *pTop = 0,
                         *pBottom = 0;
-    USHORT              nSel = aFrameSet.GetSelectItemId();
-    USHORT              nModifier = aFrameSet.GetModifier();
-    BYTE                nValidFlags = 0;
+    sal_uInt16              nSel = aFrameSet.GetSelectItemId();
+    sal_uInt16              nModifier = aFrameSet.GetModifier();
+    sal_uInt8               nValidFlags = 0;
 
     theDefLine.SetOutWidth( DEF_LINE_WIDTH_0 );
     switch ( nSel )
@@ -1228,8 +1235,8 @@ IMPL_LINK( SvxFrameWindow_Impl, SelectHdl, void *, EMPTYARG )
     aBorderInner.SetValid( VALID_RIGHT,     0 != (nValidFlags&FRM_VALID_RIGHT ));
     aBorderInner.SetValid( VALID_HORI,      0 != (nValidFlags&FRM_VALID_HINNER ));
     aBorderInner.SetValid( VALID_VERT,      0 != (nValidFlags&FRM_VALID_VINNER));
-    aBorderInner.SetValid( VALID_DISTANCE, TRUE );
-    aBorderInner.SetValid( VALID_DISABLE, FALSE );
+    aBorderInner.SetValid( VALID_DISTANCE, sal_True );
+    aBorderInner.SetValid( VALID_DISABLE, sal_False );
 
     if ( IsInPopupMode() )
         EndPopupMode();
@@ -1265,7 +1272,7 @@ void SvxFrameWindow_Impl::Resize()
 
 void SvxFrameWindow_Impl::StateChanged(
 
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     if ( pState && nSID == SID_BORDER_REDUCED_MODE)
@@ -1274,24 +1281,24 @@ void SvxFrameWindow_Impl::StateChanged(
 
         if ( pItem )
         {
-            bParagraphMode = (BOOL)pItem->GetValue();
+            bParagraphMode = (sal_Bool)pItem->GetValue();
             //initial calls mustn't insert or remove elements
             if(aFrameSet.GetItemCount())
             {
-                BOOL bTableMode = ( aFrameSet.GetItemCount() == 12 );
-                BOOL bResize    = FALSE;
+                sal_Bool bTableMode = ( aFrameSet.GetItemCount() == 12 );
+                sal_Bool bResize    = sal_False;
 
                 if ( bTableMode && bParagraphMode )
                 {
-                    for ( USHORT i = 9; i < 13; i++ )
+                    for ( sal_uInt16 i = 9; i < 13; i++ )
                         aFrameSet.RemoveItem(i);
-                    bResize = TRUE;
+                    bResize = sal_True;
                 }
                 else if ( !bTableMode && !bParagraphMode )
                 {
-                    for ( USHORT i = 9; i < 13; i++ )
+                    for ( sal_uInt16 i = 9; i < 13; i++ )
                         aFrameSet.InsertItem( i, aImgList.GetImage(i) );
-                    bResize = TRUE;
+                    bResize = sal_True;
                 }
 
                 if ( bResize )
@@ -1313,7 +1320,7 @@ void SvxFrameWindow_Impl::StartSelection()
 
 // -----------------------------------------------------------------------
 
-BOOL SvxFrameWindow_Impl::Close()
+sal_Bool SvxFrameWindow_Impl::Close()
 {
     return SfxPopupWindow::Close();
 }
@@ -1322,7 +1329,7 @@ BOOL SvxFrameWindow_Impl::Close()
 // class SvxLineWindow_Impl --------------------------------------------------
 //========================================================================
 
-SvxLineWindow_Impl::SvxLineWindow_Impl( USHORT nId, const Reference< XFrame >& rFrame, Window* pParentWindow ) :
+SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow ) :
 
     SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP ) ),
 
@@ -1343,6 +1350,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( USHORT nId, const Reference< XFrame >& r
     aLineSet.SetSelectHdl( LINK( this, SvxLineWindow_Impl, SelectHdl ) );
     aLineSet.SetText( SVX_RESSTR(STR_NONE) );
 
+    aLineSet.SetAccessibleName( SVX_RESSTR(RID_SVXSTR_FRAME_STYLE) );
     lcl_CalcSizeValueSet( *this, aLineSet, aBmpSize );
 
     SetHelpId( HID_POPUP_LINE );
@@ -1357,7 +1365,7 @@ SfxPopupWindow* SvxLineWindow_Impl::Clone() const
 
 // -----------------------------------------------------------------------
 
-void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& rSize, String& rStr,
+void SvxLineWindow_Impl::MakeLineBitmap( sal_uInt16 nNo, Bitmap& rBmp, const Size& rSize, String& rStr,
                                             const ::Color& rLineCol, const ::Color& rBackCol )
 {
     VirtualDevice   aVirDev( *this );
@@ -1383,14 +1391,14 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
             aRect.Top()     = 5;
             aRect.Bottom()  = 6;
             aVirDev.DrawRect( aRect );
-            nLineWidth = (USHORT) DEF_LINE_WIDTH_1/20;
+            nLineWidth = (sal_uInt16) DEF_LINE_WIDTH_1/20;
             break;
 
         case 3: // DEF_LINE_WIDTH_2
             aRect.Top()     = 5;
             aRect.Bottom()  = 7;
             aVirDev.DrawRect( aRect );
-            nLineWidth = (USHORT) DEF_LINE_WIDTH_2/20;
+            nLineWidth = (sal_uInt16) DEF_LINE_WIDTH_2/20;
             break;
 
         case 4: // DEF_LINE_WIDTH_3
@@ -1398,14 +1406,14 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
             aRect.Bottom()  = 7;
             aVirDev.DrawRect( aRect );
             aVirDev.DrawRect( Rectangle( Point(2,4), Point(37,7) ) );
-            nLineWidth = (USHORT) DEF_LINE_WIDTH_3/20;
+            nLineWidth = (sal_uInt16) DEF_LINE_WIDTH_3/20;
             break;
 
         case 5: // DEF_LINE_WIDTH_4
             aRect.Top()     = 4;
             aRect.Bottom()  = 8;
             aVirDev.DrawRect( aRect );
-            nLineWidth = (USHORT) DEF_LINE_WIDTH_4/20;
+            nLineWidth = (sal_uInt16) DEF_LINE_WIDTH_4/20;
             break;
 
         case 6: // DEF_DOUBLE_LINE0
@@ -1415,7 +1423,7 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
             aRect.Top()     = 7;
             aRect.Bottom()  = 7;
             aVirDev.DrawRect( aRect );
-            nLineWidth = (USHORT) (DEF_DOUBLE_LINE0_OUT+DEF_DOUBLE_LINE0_IN+DEF_DOUBLE_LINE0_DIST)/20;
+            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE0_OUT+DEF_DOUBLE_LINE0_IN+DEF_DOUBLE_LINE0_DIST)/20;
             break;
 
         case 7: // DEF_DOUBLE_LINE7
@@ -1425,7 +1433,7 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
             aRect.Top()     = 7;
             aRect.Bottom()  = 7;
             aVirDev.DrawRect( aRect );
-            nLineWidth = (USHORT) (DEF_DOUBLE_LINE7_OUT+DEF_DOUBLE_LINE7_IN+DEF_DOUBLE_LINE7_DIST)/20;
+            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE7_OUT+DEF_DOUBLE_LINE7_IN+DEF_DOUBLE_LINE7_DIST)/20;
             break;
 
         case 8: // DEF_DOUBLE_LINE1
@@ -1435,7 +1443,7 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
             aRect.Top()     = 7;
             aRect.Bottom()  = 8;
             aVirDev.DrawRect( aRect );
-            nLineWidth = (USHORT) (DEF_DOUBLE_LINE1_OUT+DEF_DOUBLE_LINE1_IN+DEF_DOUBLE_LINE1_DIST)/20;
+            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE1_OUT+DEF_DOUBLE_LINE1_IN+DEF_DOUBLE_LINE1_DIST)/20;
             break;
 
         case 9: // DEF_DOUBLE_LINE2
@@ -1445,7 +1453,7 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
             aRect.Top()     = 8;
             aRect.Bottom()  = 10;
             aVirDev.DrawRect( aRect );
-            nLineWidth = (USHORT) (DEF_DOUBLE_LINE2_OUT+DEF_DOUBLE_LINE2_IN+DEF_DOUBLE_LINE2_DIST)/20;
+            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE2_OUT+DEF_DOUBLE_LINE2_IN+DEF_DOUBLE_LINE2_DIST)/20;
             break;
 
         case 10: // DEF_DOUBLE_LINE8
@@ -1455,7 +1463,7 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
             aRect.Top()     = 7;
             aRect.Bottom()  = 7;
             aVirDev.DrawRect( aRect );
-            nLineWidth = (USHORT) (DEF_DOUBLE_LINE8_OUT+DEF_DOUBLE_LINE8_IN+DEF_DOUBLE_LINE8_DIST)/20;
+            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE8_OUT+DEF_DOUBLE_LINE8_IN+DEF_DOUBLE_LINE8_DIST)/20;
             break;
 
         case 11: // DEF_DOUBLE_LINE9
@@ -1465,7 +1473,7 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
             aRect.Top()     = 8;
             aRect.Bottom()  = 8;
             aVirDev.DrawRect( aRect );
-            nLineWidth = (USHORT) (DEF_DOUBLE_LINE9_OUT+DEF_DOUBLE_LINE9_IN+DEF_DOUBLE_LINE9_DIST)/20;
+            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE9_OUT+DEF_DOUBLE_LINE9_IN+DEF_DOUBLE_LINE9_DIST)/20;
             break;
 
         case 12: // DEF_DOUBLE_LINE10
@@ -1475,7 +1483,7 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
             aRect.Top()     = 8;
             aRect.Bottom()  = 8;
             aVirDev.DrawRect( aRect );
-            nLineWidth = (USHORT) (DEF_DOUBLE_LINE10_OUT+DEF_DOUBLE_LINE10_IN+DEF_DOUBLE_LINE10_DIST)/20;
+            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE10_OUT+DEF_DOUBLE_LINE10_IN+DEF_DOUBLE_LINE10_DIST)/20;
             break;
 
         case 13: // DEF_DOUBLE_LINE3
@@ -1485,7 +1493,7 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
             aRect.Top()     = 7;
             aRect.Bottom()  = 7;
             aVirDev.DrawRect( aRect );
-            nLineWidth = (USHORT) (DEF_DOUBLE_LINE3_OUT+DEF_DOUBLE_LINE3_IN+DEF_DOUBLE_LINE3_DIST)/20;
+            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE3_OUT+DEF_DOUBLE_LINE3_IN+DEF_DOUBLE_LINE3_DIST)/20;
             break;
 
         case 14: // DEF_DOUBLE_LINE4
@@ -1495,7 +1503,7 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
             aRect.Top()     = 6;
             aRect.Bottom()  = 7;
             aVirDev.DrawRect( aRect );
-            nLineWidth = (USHORT) (DEF_DOUBLE_LINE4_OUT+DEF_DOUBLE_LINE4_IN+DEF_DOUBLE_LINE4_DIST)/20;
+            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE4_OUT+DEF_DOUBLE_LINE4_IN+DEF_DOUBLE_LINE4_DIST)/20;
             break;
 
         case 15: // DEF_DOUBLE_LINE5
@@ -1505,7 +1513,7 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
             aRect.Top()     = 8;
             aRect.Bottom()  = 9;
             aVirDev.DrawRect( aRect );
-            nLineWidth = (USHORT) (DEF_DOUBLE_LINE5_OUT+DEF_DOUBLE_LINE5_IN+DEF_DOUBLE_LINE5_DIST)/20;
+            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE5_OUT+DEF_DOUBLE_LINE5_IN+DEF_DOUBLE_LINE5_DIST)/20;
             break;
 
         case 16: // DEF_DOUBLE_LINE6
@@ -1515,7 +1523,7 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
             aRect.Top()     = 7;
             aRect.Bottom()  = 9;
             aVirDev.DrawRect( aRect );
-            nLineWidth = (USHORT) (DEF_DOUBLE_LINE6_OUT+DEF_DOUBLE_LINE6_IN+DEF_DOUBLE_LINE6_DIST)/20;
+            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE6_OUT+DEF_DOUBLE_LINE6_IN+DEF_DOUBLE_LINE6_DIST)/20;
             break;
         case 17: // Dotted line
             aRect.Top()     = 6;
@@ -1549,11 +1557,11 @@ void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& r
 IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
 {
     SvxLineItem     aLineItem( SID_FRAME_LINESTYLE );
-    USHORT          n1 = 0,
+    sal_uInt16          n1 = 0,
                     n2 = 0,
                     n3 = 0;
     SvxBorderStyle  nStyle = SOLID;
-    BOOL            bSetLine = TRUE;
+    sal_Bool            bSetLine = sal_True;
 
     switch ( aLineSet.GetSelectItemId() )
     {
@@ -1606,7 +1614,7 @@ IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
                  break;
         case  0:
         default:
-            bSetLine = FALSE;
+            bSetLine = sal_False;
             break;
     }
     if ( bSetLine )
@@ -1653,7 +1661,7 @@ void SvxLineWindow_Impl::StartSelection()
 
 // -----------------------------------------------------------------------
 
-BOOL SvxLineWindow_Impl::Close()
+sal_Bool SvxLineWindow_Impl::Close()
 {
     return SfxPopupWindow::Close();
 }
@@ -1695,7 +1703,7 @@ void SvxLineWindow_Impl::CreateBitmaps( void )
     ::Color                 aBackCol( rStyleSettings.GetWindowColor() );
     aLineSet.Clear();
 
-    for( USHORT i = 1 ; i < 19 ; ++i )
+    for( sal_uInt16 i = 1 ; i < 19 ; ++i )
     {
         MakeLineBitmap( i, aBmp, aBmpSize, aStr, aLineCol, aBackCol );
         aLineSet.InsertItem( i, aBmp, aStr );
@@ -1713,7 +1721,7 @@ void SvxLineWindow_Impl::CreateBitmaps( void )
 
 SfxStyleControllerItem_Impl::SfxStyleControllerItem_Impl(
     const Reference< XDispatchProvider >& rDispatchProvider,
-    USHORT                                nSlotId,      // Family-ID
+    sal_uInt16                                nSlotId,      // Family-ID
     const rtl::OUString&                  rCommand,     // .uno: command bound to this item
     SvxStyleToolBoxControl&               rTbxCtl )     // Controller-Instanz, dem dieses Item zugeordnet ist.
     :   SfxStatusListener( rDispatchProvider, nSlotId, rCommand ),
@@ -1724,7 +1732,7 @@ SfxStyleControllerItem_Impl::SfxStyleControllerItem_Impl(
 // -----------------------------------------------------------------------
 
 void SfxStyleControllerItem_Impl::StateChanged(
-    USHORT, SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
     switch ( GetId() )
     {
@@ -1734,7 +1742,7 @@ void SfxStyleControllerItem_Impl::StateChanged(
         case SID_STYLE_FAMILY4:
         case SID_STYLE_FAMILY5:
         {
-            const USHORT nIdx = GetId() - SID_STYLE_FAMILY_START;
+            const sal_uInt16 nIdx = GetId() - SID_STYLE_FAMILY_START;
 
             if ( SFX_ITEM_AVAILABLE == eState )
             {
@@ -1761,16 +1769,16 @@ struct SvxStyleToolBoxControl::Impl
     String                              aClearForm;
     String                              aMore;
     ::std::vector< ::rtl::OUString >    aDefaultStyles;
-    BOOL                        bListening;
-    BOOL                        bSpecModeWriter;
-    BOOL                        bSpecModeCalc;
+    sal_Bool                        bListening;
+    sal_Bool                        bSpecModeWriter;
+    sal_Bool                        bSpecModeCalc;
 
     inline Impl( void )
         :aClearForm         ( SVX_RESSTR( RID_SVXSTR_CLEARFORM ) )
         ,aMore              ( SVX_RESSTR( RID_SVXSTR_MORE ) )
-        ,bListening         ( FALSE )
-        ,bSpecModeWriter    ( FALSE )
-        ,bSpecModeCalc      ( FALSE )
+        ,bListening         ( sal_False )
+        ,bSpecModeWriter    ( sal_False )
+        ,bSpecModeCalc      ( sal_False )
     {
 
 
@@ -1819,8 +1827,7 @@ struct SvxStyleToolBoxControl::Impl
                 static const sal_Char* aCalcStyles[] =
                 {
                     "Default",
-                    "Heading 1",
-                    "Heading 2",
+                    "Heading1",
                     "Result",
                     "Result2"
                 };
@@ -1832,12 +1839,15 @@ struct SvxStyleToolBoxControl::Impl
                 {
                     try
                     {
-                        Reference< beans::XPropertySet > xStyle;
-                        xCellStyles->getByName( rtl::OUString::createFromAscii( aCalcStyles[nStyle] )) >>= xStyle;
-                        ::rtl::OUString sName;
-                        xStyle->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName")))>>= sName;
-                        if( sName.getLength() )
-                            aDefaultStyles.push_back(sName);
+                        const rtl::OUString sStyleName( rtl::OUString::createFromAscii( aCalcStyles[nStyle] ) );
+                        if( xCellStyles->hasByName( sStyleName ) )
+                        {
+                            Reference< beans::XPropertySet > xStyle( xCellStyles->getByName( sStyleName), UNO_QUERY_THROW );
+                            ::rtl::OUString sName;
+                            xStyle->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName"))) >>= sName;
+                            if( sName.getLength() )
+                                aDefaultStyles.push_back(sName);
+                        }
                     }
                     catch( const uno::Exception& )
                     {}
@@ -1865,14 +1875,14 @@ static const char* StyleSlotToStyleCommand[MAX_FAMILIES] =
 };
 
 SvxStyleToolBoxControl::SvxStyleToolBoxControl(
-    USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+    sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :   SfxToolBoxControl   ( nSlotId, nId, rTbx ),
         pStyleSheetPool     ( NULL ),
         nActFamily          ( 0xffff ),
-        bListening          ( FALSE ),
+        bListening          ( sal_False ),
         pImpl               ( new Impl )
 {
-    for ( USHORT i=0; i<MAX_FAMILIES; i++ )
+    for ( sal_uInt16 i=0; i<MAX_FAMILIES; i++ )
     {
         pBoundItems[i] = 0;
         m_xBoundItems[i] = Reference< XComponent >();
@@ -1897,7 +1907,7 @@ throw ( Exception, RuntimeException)
     {
         pImpl->InitializeStyles(m_xFrame->getController()->getModel());
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame->getController(), UNO_QUERY );
-        for ( USHORT i=0; i<MAX_FAMILIES; i++ )
+        for ( sal_uInt16 i=0; i<MAX_FAMILIES; i++ )
         {
             pBoundItems[i]   = new SfxStyleControllerItem_Impl( xDispatchProvider,
                                                                 SID_STYLE_FAMILY_START + i,
@@ -1915,7 +1925,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     SfxToolBoxControl::dispose();
 
-    for( USHORT i=0; i<MAX_FAMILIES; i++ )
+    for( sal_uInt16 i=0; i<MAX_FAMILIES; i++ )
     {
         if ( m_xBoundItems[i].is() )
         {
@@ -1981,9 +1991,9 @@ void SvxStyleToolBoxControl::FillStyleBox()
     if ( pStyleSheetPool && pBox && nActFamily!=0xffff )
     {
         const SfxStyleFamily    eFamily     = GetActFamily();
-        USHORT                  nCount      = pStyleSheetPool->Count();
+        sal_uInt16                  nCount      = pStyleSheetPool->Count();
         SfxStyleSheetBase*      pStyle      = NULL;
-        BOOL                    bDoFill     = FALSE;
+        sal_Bool                    bDoFill     = sal_False;
 
         pStyleSheetPool->SetSearchMask( eFamily, SFXSTYLEBIT_USED );
 
@@ -1996,11 +2006,11 @@ void SvxStyleToolBoxControl::FillStyleBox()
         //!!! so the list doesn't show the count
         if ( nCount != pBox->GetEntryCount() )
         {
-            bDoFill = TRUE;
+            bDoFill = sal_True;
         }
         else
         {
-            USHORT i= 0;
+            sal_uInt16 i= 0;
             while ( pStyle && !bDoFill )
             {
                 bDoFill = ( pBox->GetEntry(i) != pStyle->GetName() );
@@ -2011,11 +2021,11 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
         if ( bDoFill )
         {
-            pBox->SetUpdateMode( FALSE );
+            pBox->SetUpdateMode( sal_False );
             pBox->Clear();
 
             {
-                USHORT  _i;
+                sal_uInt16  _i;
                 sal_uInt32  nCnt = pImpl->aDefaultStyles.size();
 
                 pStyle = pStyleSheetPool->First();
@@ -2055,9 +2065,9 @@ void SvxStyleToolBoxControl::FillStyleBox()
             if( pImpl->bSpecModeWriter || pImpl->bSpecModeCalc )
             {
                 // insert default styles
-                USHORT  _i;
+                sal_uInt16  _i;
                 sal_uInt32  nCnt = pImpl->aDefaultStyles.size();
-                USHORT nPos = 1;
+                sal_uInt16 nPos = 1;
                 for( _i = 0 ; _i < nCnt ; ++_i )
                 {
                     pBox->InsertEntry( pImpl->aDefaultStyles[_i], nPos );
@@ -2079,10 +2089,10 @@ void SvxStyleToolBoxControl::FillStyleBox()
                 pBox->SetStyle( nWinBits );
             }
 
-            pBox->SetUpdateMode( TRUE );
+            pBox->SetUpdateMode( sal_True );
             pBox->SetFamily( eFamily );
 
-            USHORT nLines = Min( pBox->GetEntryCount(), MAX_STYLES_ENTRIES );
+            sal_uInt16 nLines = Min( pBox->GetEntryCount(), MAX_STYLES_ENTRIES );
             pBox->SetDropDownLineCount( nLines );
         }
     }
@@ -2122,7 +2132,7 @@ void SvxStyleToolBoxControl::Update()
     if ( pDocShell )
         pPool = pDocShell->GetStyleSheetPool();
 
-    USHORT i;
+    sal_uInt16 i;
     for ( i=0; i<MAX_FAMILIES; i++ )
         if( pFamilyState[i] )
             break;
@@ -2166,7 +2176,7 @@ void SvxStyleToolBoxControl::Update()
 
 // -----------------------------------------------------------------------
 
-void SvxStyleToolBoxControl::SetFamilyState( USHORT nIdx,
+void SvxStyleToolBoxControl::SetFamilyState( sal_uInt16 nIdx,
                                              const SfxTemplateItem* pItem )
 {
     DELETEZ( pFamilyState[nIdx] );
@@ -2182,7 +2192,7 @@ void SvxStyleToolBoxControl::SetFamilyState( USHORT nIdx,
 IMPL_LINK( SvxStyleToolBoxControl, VisibilityNotification, void*, EMPTYARG )
 {
 
-    USHORT i;
+    sal_uInt16 i;
 
     // Call ReBind() && UnBind() according to visibility
     SvxStyleBox_Impl* pBox = (SvxStyleBox_Impl*)( GetToolBox().GetItemWindow( GetId() ));
@@ -2207,10 +2217,10 @@ IMPL_LINK( SvxStyleToolBoxControl, VisibilityNotification, void*, EMPTYARG )
 
 void SvxStyleToolBoxControl::StateChanged(
 
-    USHORT , SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
 
 {
-    USHORT       nId    = GetId();
+    sal_uInt16       nId    = GetId();
     ToolBox&     rTbx   = GetToolBox();
     SvxStyleBox_Impl* pBox   = (SvxStyleBox_Impl*)(rTbx.GetItemWindow( nId ));
     TriState     eTri   = STATE_NOCHECK;
@@ -2269,8 +2279,8 @@ Window* SvxStyleToolBoxControl::CreateItemWindow( Window *pParent )
 //========================================================================
 
 SvxFontNameToolBoxControl::SvxFontNameToolBoxControl(
-                                            USHORT          nSlotId,
-                                            USHORT          nId,
+                                            sal_uInt16          nSlotId,
+                                            sal_uInt16          nId,
                                             ToolBox&        rTbx )
 
     :   SfxToolBoxControl( nSlotId, nId, rTbx )
@@ -2281,10 +2291,10 @@ SvxFontNameToolBoxControl::SvxFontNameToolBoxControl(
 
 void SvxFontNameToolBoxControl::StateChanged(
 
-    USHORT , SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
 
 {
-    USHORT               nId    = GetId();
+    sal_uInt16               nId    = GetId();
     ToolBox&             rTbx   = GetToolBox();
     SvxFontNameBox_Impl* pBox   = (SvxFontNameBox_Impl*)(rTbx.GetItemWindow( nId ));
 
@@ -2330,8 +2340,8 @@ Window* SvxFontNameToolBoxControl::CreateItemWindow( Window *pParent )
 //========================================================================
 
 SvxFontColorToolBoxControl::SvxFontColorToolBoxControl(
-    USHORT          nSlotId,
-    USHORT          nId,
+    sal_uInt16          nSlotId,
+    sal_uInt16          nId,
     ToolBox&        rTbx )
 
     :   SfxToolBoxControl( nSlotId, nId, rTbx ),
@@ -2380,10 +2390,10 @@ SfxPopupWindow* SvxFontColorToolBoxControl::CreatePopupWindow()
 
 void SvxFontColorToolBoxControl::StateChanged(
 
-    USHORT , SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
 
 {
-    USHORT nId = GetId();
+    sal_uInt16 nId = GetId();
     ToolBox& rTbx = GetToolBox();
     const SvxColorItem* pItem = 0;
 
@@ -2404,7 +2414,7 @@ void SvxFontColorToolBoxControl::StateChanged(
 // class SvxColorToolBoxControl --------------------------------
 //========================================================================
 
-SvxColorToolBoxControl::SvxColorToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxColorToolBoxControl::SvxColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     mLastColor( COL_AUTO )
@@ -2435,7 +2445,7 @@ SfxPopupWindowType SvxColorToolBoxControl::GetPopupWindowType() const
 
 SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
 {
-    USHORT nResId = GetSlotId() == SID_BACKGROUND_COLOR ?
+    sal_uInt16 nResId = GetSlotId() == SID_BACKGROUND_COLOR ?
                         RID_SVXSTR_BACKGROUND : RID_SVXSTR_COLOR;
     SvxColorWindow_Impl* pColorWin = new SvxColorWindow_Impl(
         OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:BackgroundColor" )),
@@ -2455,7 +2465,7 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
 // -----------------------------------------------------------------------
 
 void SvxColorToolBoxControl::StateChanged(
-    USHORT , SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
 {
     const SvxColorItem* pItem = 0;
     if ( SFX_ITEM_DONTCARE != eState )
@@ -2466,7 +2476,7 @@ void SvxColorToolBoxControl::StateChanged(
         mLastColor= pItem->GetValue();
     }
 
-    USHORT nId = GetId();
+    sal_uInt16 nId = GetId();
     ToolBox& rTbx = GetToolBox();
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
     rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
@@ -2477,8 +2487,8 @@ void SvxColorToolBoxControl::StateChanged(
 //========================================================================
 
 SvxFontColorExtToolBoxControl::SvxFontColorExtToolBoxControl(
-    USHORT nSlotId,
-    USHORT nId,
+    sal_uInt16 nSlotId,
+    sal_uInt16 nId,
     ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
@@ -2492,7 +2502,7 @@ SvxFontColorExtToolBoxControl::SvxFontColorExtToolBoxControl(
     else
         addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharBackgroundExt" )));
 
-    USHORT nMode =  SID_ATTR_CHAR_COLOR2 == nSlotId
+    sal_uInt16 nMode =  SID_ATTR_CHAR_COLOR2 == nSlotId
         ? TBX_UPDATER_MODE_CHAR_COLOR_NEW : TBX_UPDATER_MODE_CHAR_COLOR_NEW;
     pBtnUpdater = new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox(), nMode );
 }
@@ -2538,10 +2548,10 @@ SfxPopupWindow* SvxFontColorExtToolBoxControl::CreatePopupWindow()
 
 void SvxFontColorExtToolBoxControl::StateChanged(
 
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
-    USHORT nId = GetId();
+    sal_uInt16 nId = GetId();
     ToolBox& rTbx = GetToolBox();
     const SvxColorItem* pItem = 0;
 
@@ -2570,7 +2580,7 @@ void SvxFontColorExtToolBoxControl::StateChanged(
 
 // -----------------------------------------------------------------------
 
-void SvxFontColorExtToolBoxControl::Select( BOOL )
+void SvxFontColorExtToolBoxControl::Select( sal_Bool )
 {
     OUString aCommand;
     OUString aParamName;
@@ -2596,8 +2606,8 @@ void SvxFontColorExtToolBoxControl::Select( BOOL )
 //========================================================================
 
 SvxFrameToolBoxControl::SvxFrameToolBoxControl(
-    USHORT      nSlotId,
-    USHORT      nId,
+    sal_uInt16      nSlotId,
+    sal_uInt16      nId,
     ToolBox&    rTbx )
 
     :   SfxToolBoxControl( nSlotId, nId, rTbx )
@@ -2630,10 +2640,10 @@ SfxPopupWindow* SvxFrameToolBoxControl::CreatePopupWindow()
 
 void SvxFrameToolBoxControl::StateChanged(
 
-    USHORT, SfxItemState eState, const SfxPoolItem*  )
+    sal_uInt16, SfxItemState eState, const SfxPoolItem*  )
 
 {
-    USHORT                  nId     = GetId();
+    sal_uInt16                  nId     = GetId();
     ToolBox&                rTbx    = GetToolBox();
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
@@ -2647,8 +2657,8 @@ void SvxFrameToolBoxControl::StateChanged(
 //========================================================================
 
 SvxFrameLineStyleToolBoxControl::SvxFrameLineStyleToolBoxControl(
-    USHORT          nSlotId,
-    USHORT          nId,
+    sal_uInt16          nSlotId,
+    sal_uInt16          nId,
     ToolBox&        rTbx )
 
     :    SfxToolBoxControl( nSlotId, nId, rTbx )
@@ -2679,9 +2689,9 @@ SfxPopupWindow* SvxFrameLineStyleToolBoxControl::CreatePopupWindow()
 
 void SvxFrameLineStyleToolBoxControl::StateChanged(
 
-    USHORT , SfxItemState eState, const SfxPoolItem*  )
+    sal_uInt16 , SfxItemState eState, const SfxPoolItem*  )
 {
-    USHORT       nId    = GetId();
+    sal_uInt16       nId    = GetId();
     ToolBox&     rTbx   = GetToolBox();
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
@@ -2695,8 +2705,8 @@ void SvxFrameLineStyleToolBoxControl::StateChanged(
 //========================================================================
 
 SvxFrameLineColorToolBoxControl::SvxFrameLineColorToolBoxControl(
-    USHORT      nSlotId,
-    USHORT      nId,
+    sal_uInt16      nSlotId,
+    sal_uInt16      nId,
     ToolBox&    rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
@@ -2743,9 +2753,9 @@ SfxPopupWindow* SvxFrameLineColorToolBoxControl::CreatePopupWindow()
 // -----------------------------------------------------------------------
 
 void SvxFrameLineColorToolBoxControl::StateChanged(
-    USHORT , SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
 {
-    USHORT nId = GetId();
+    sal_uInt16 nId = GetId();
     ToolBox& rTbx = GetToolBox();
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
     rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
@@ -2785,7 +2795,7 @@ public:
 
 // -----------------------------------------------------------------------
 
-SvxReloadControllerItem::SvxReloadControllerItem( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+SvxReloadControllerItem::SvxReloadControllerItem( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
 :   SfxToolBoxControl( nSlotId, nId, rTbx )
 ,   pImpl( new SvxReloadControllerItem_Impl )
 {
@@ -2802,7 +2812,7 @@ SvxReloadControllerItem::~SvxReloadControllerItem()
 // -----------------------------------------------------------------------
 
 void SvxReloadControllerItem::StateChanged(
-    USHORT , SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
 {
     SfxBoolItem* pItem = PTR_CAST( SfxBoolItem, pState );
     ToolBox& rBox = GetToolBox();
@@ -2819,7 +2829,7 @@ void SvxReloadControllerItem::StateChanged(
 // class SvxSimpleUndoRedoController -------------------------------------
 //========================================================================
 
-SvxSimpleUndoRedoController::SvxSimpleUndoRedoController( USHORT nSlotId, USHORT nId, ToolBox& rTbx  )
+SvxSimpleUndoRedoController::SvxSimpleUndoRedoController( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx  )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     aDefaultText = rTbx.GetItemText( nId );
@@ -2833,7 +2843,7 @@ SvxSimpleUndoRedoController::~SvxSimpleUndoRedoController()
 
 // -----------------------------------------------------------------------
 
-void SvxSimpleUndoRedoController::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* pState )
+void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
     SfxStringItem* pItem = PTR_CAST( SfxStringItem, pState );
     ToolBox& rBox = GetToolBox();
@@ -2869,7 +2879,7 @@ void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemS
 
 // -----------------------------------------------------------------------
 
-BOOL lcl_FontChangedHint( const SfxHint &rHint )
+sal_Bool lcl_FontChangedHint( const SfxHint &rHint )
 {
     SfxPoolItemHint *pItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
     if ( pItemHint )

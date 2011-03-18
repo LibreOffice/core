@@ -197,7 +197,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
-    AcceleratorCache& rCache = impl_getCFG(sal_True); // TRUE => force getting of a writeable cache!
+    AcceleratorCache& rCache = impl_getCFG(sal_True); // sal_True => force getting of a writeable cache!
     rCache.setKeyCommandPair(aKeyEvent, sCommand);
 
     aWriteLock.unlock();
@@ -303,7 +303,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
-    AcceleratorCache& rCache = impl_getCFG(sal_True); // TRUE => force getting of a writeable cache!
+    AcceleratorCache& rCache = impl_getCFG(sal_True); // sal_True => force getting of a writeable cache!
     if (!rCache.hasCommand(sCommand))
         throw css::container::NoSuchElementException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command does not exists inside this container.")),
@@ -323,7 +323,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::io::XStream > xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // TRUE => open or create!
+    css::uno::Reference< css::io::XStream > xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // sal_True => open or create!
     try
     {
         xStreamNoLang = m_aPresetHandler.openPreset(PresetHandler::PRESET_DEFAULT(), sal_True);
@@ -366,7 +366,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::store()
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::io::XStream > xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // TRUE => open or create!
+    css::uno::Reference< css::io::XStream > xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // sal_True => open or create!
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -427,7 +427,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::io::XStream > xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // TRUE => open or create!
+    css::uno::Reference< css::io::XStream > xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), sal_True); // sal_True => open or create!
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -768,8 +768,8 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
-    AcceleratorCache& rPrimaryCache   = impl_getCFG(sal_True, sal_True ); // TRUE => force getting of a writeable cache!
-    AcceleratorCache& rSecondaryCache = impl_getCFG(sal_False, sal_True); // TRUE => force getting of a writeable cache!
+    AcceleratorCache& rPrimaryCache   = impl_getCFG(sal_True, sal_True ); // sal_True => force getting of a writeable cache!
+    AcceleratorCache& rSecondaryCache = impl_getCFG(sal_False, sal_True); // sal_True => force getting of a writeable cache!
 
     if ( rPrimaryCache.hasKey(aKeyEvent) )
     {

@@ -137,12 +137,12 @@ sal_Bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno:
     if( rValue >>= aStrFamilyName )
     {
         OUStringBuffer sValue( aStrFamilyName.getLength() + 2L );
-        sal_Int32 nPos = 0L;
+        sal_Int32 nPos = 0;
         do
         {
             sal_Int32 nFirst = nPos;
             nPos = aStrFamilyName.indexOf( sal_Unicode(';'), nPos );
-            sal_Int32 nLast = (-1L == nPos ? aStrFamilyName.getLength() : nPos);
+            sal_Int32 nLast = (-1 == nPos ? aStrFamilyName.getLength() : nPos);
 
             // Set position to the character behind the ';', so we won't
             // forget this.
@@ -174,7 +174,7 @@ sal_Bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno:
                     sValue.append( sal_Unicode( ',' ) );
                     sValue.append( sal_Unicode( ' ' ));
                 }
-                sal_Int32 nLen = nLast-nFirst+1L;
+                sal_Int32 nLen = nLast-nFirst+1;
                 OUString sFamily( aStrFamilyName.copy( nFirst, nLen ) );
                 sal_Bool bQuote = sal_False;
                 for( sal_Int32 i=0; i < nLen; i++ )
@@ -292,7 +292,7 @@ XMLFontPitchPropHdl::~XMLFontPitchPropHdl()
 
 sal_Bool XMLFontPitchPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    USHORT eNewPitch;
+    sal_uInt16 eNewPitch;
     sal_Bool bRet = SvXMLUnitConverter::convertEnum( eNewPitch, rStrImpValue, aFontPitchMapping );
     if( bRet )
         rValue <<= (sal_Int16)eNewPitch;

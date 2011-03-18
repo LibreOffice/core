@@ -44,17 +44,17 @@ enum SdrTextAniDirection {SDRTEXTANI_LEFT,
 class SVX_DLLPUBLIC SdrTextAniDirectionItem: public SfxEnumItem {
 public:
     TYPEINFO();
-    SdrTextAniDirectionItem(SdrTextAniDirection eDir=SDRTEXTANI_LEFT): SfxEnumItem(SDRATTR_TEXT_ANIDIRECTION,(USHORT)eDir) {}
+    SdrTextAniDirectionItem(SdrTextAniDirection eDir=SDRTEXTANI_LEFT): SfxEnumItem(SDRATTR_TEXT_ANIDIRECTION,(sal_uInt16)eDir) {}
     SdrTextAniDirectionItem(SvStream& rIn)                           : SfxEnumItem(SDRATTR_TEXT_ANIDIRECTION,rIn)  {}
     virtual SfxPoolItem*   Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem*   Create(SvStream& rIn, USHORT nVer) const;
-    virtual USHORT         GetValueCount() const;
+    virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual sal_uInt16         GetValueCount() const;
     SdrTextAniDirection GetValue() const      { return (SdrTextAniDirection)SfxEnumItem::GetValue(); }
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual String  GetValueTextByPos(USHORT nPos) const;
+    virtual String  GetValueTextByPos(sal_uInt16 nPos) const;
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
 };

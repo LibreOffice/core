@@ -46,7 +46,7 @@
 // header for class XMLPropertySetMapper
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlmetai.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -179,7 +179,7 @@ static SvXMLEnumMapEntry aXMLChartClassMap[] =
 
 SchXMLChartTypeEnum GetChartTypeEnum( const OUString& rClassName )
 {
-    USHORT nEnumVal = XML_CHART_CLASS_UNKNOWN;
+    sal_uInt16 nEnumVal = XML_CHART_CLASS_UNKNOWN;
     if( !SvXMLUnitConverter::convertEnum(
                                     nEnumVal, rClassName, aXMLChartClassMap ) )
         nEnumVal = XML_CHART_CLASS_UNKNOWN;

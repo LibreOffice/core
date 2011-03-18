@@ -32,8 +32,8 @@
 #include <vcl/svapp.hxx>
 
 #include <svx/svdomedia.hxx>
-#include "svdglob.hxx"
-#include "svdstr.hrc"
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <avmedia/mediawindow.hxx>
 
@@ -104,9 +104,9 @@ void SdrMediaObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 
 // ------------------------------------------------------------------------------
 
-UINT16 SdrMediaObj::GetObjIdentifier() const
+sal_uInt16 SdrMediaObj::GetObjIdentifier() const
 {
-    return UINT16( OBJ_MEDIA );
+    return sal_uInt16( OBJ_MEDIA );
 }
 
 // ------------------------------------------------------------------------------

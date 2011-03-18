@@ -153,7 +153,7 @@ class SdXMLExport : public SvXMLExport
     const rtl::OUString         msEndShape;
     const rtl::OUString         msPageLayoutNames;
 
-    virtual void _ExportStyles(BOOL bUsed);
+    virtual void _ExportStyles(sal_Bool bUsed);
     virtual void _ExportAutoStyles();
     virtual void _ExportMasterStyles();
     virtual void _ExportContent();
@@ -173,7 +173,7 @@ class SdXMLExport : public SvXMLExport
     void ImpWritePresentationStyles();
     ::rtl::OUString ImpCreatePresPageStyleName( com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> xDrawPage, bool bExportBackground = true );
 
-    BOOL ImpPrepAutoLayoutInfo(const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >& xPage, rtl::OUString& rName);
+    sal_Bool ImpPrepAutoLayoutInfo(const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >& xPage, rtl::OUString& rName);
     void ImpWriteAutoLayoutInfos();
     void ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectangle& rRect);
     void ImpWriteHeaderFooterDecls();
@@ -211,13 +211,13 @@ public:
     XMLShapeExportPropertyMapper* GetPropertySetMapper() const { return mpPropertySetMapper; }
     XMLPageExportPropertyMapper* GetPresPagePropsMapper() const { return mpPresPagePropsMapper; }
 
-    BOOL IsDraw() const { return mbIsDraw; }
-    BOOL IsImpress() const { return !mbIsDraw; }
+    sal_Bool IsDraw() const { return mbIsDraw; }
+    sal_Bool IsImpress() const { return !mbIsDraw; }
 
-    BOOL IsFamilyGraphicUsed() const { return mbFamilyGraphicUsed; }
-    void SetFamilyGraphicUsed() { mbFamilyGraphicUsed = TRUE; }
-    BOOL IsFamilyPresentationUsed() const { return mbFamilyPresentationUsed; }
-    void SetFamilyPresentationUsed() { mbFamilyPresentationUsed = TRUE; }
+    sal_Bool IsFamilyGraphicUsed() const { return mbFamilyGraphicUsed; }
+    void SetFamilyGraphicUsed() { mbFamilyGraphicUsed = sal_True; }
+    sal_Bool IsFamilyPresentationUsed() const { return mbFamilyPresentationUsed; }
+    void SetFamilyPresentationUsed() { mbFamilyPresentationUsed = sal_True; }
 
     virtual void addDataStyle(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat = sal_False );
     virtual void exportDataStyles();

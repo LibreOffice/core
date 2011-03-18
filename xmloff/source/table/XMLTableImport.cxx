@@ -49,7 +49,7 @@
 #include "xmloff/prstylei.hxx"
 #include "xmloff/xmlimp.hxx"
 
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "table.hxx"
 
 #include <boost/shared_ptr.hpp>
@@ -81,9 +81,9 @@ struct ColumnInfo
 class XMLProxyContext : public SvXMLImportContext
 {
 public:
-    XMLProxyContext( SvXMLImport& rImport, const SvXMLImportContextRef& xParent, USHORT nPrfx, const OUString& rLName );
+    XMLProxyContext( SvXMLImport& rImport, const SvXMLImportContextRef& xParent, sal_uInt16 nPrfx, const OUString& rLName );
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
 
 private:
     SvXMLImportContextRef mxParent;
@@ -109,10 +109,10 @@ typedef std::vector< boost::shared_ptr< MergeInfo > > MergeInfoVector;
 class XMLTableImportContext : public SvXMLImportContext
 {
 public:
-    XMLTableImportContext( const rtl::Reference< XMLTableImport >& xThis, USHORT nPrfx, const OUString& rLName, Reference< XColumnRowRange >& xColumnRowRange );
+    XMLTableImportContext( const rtl::Reference< XMLTableImport >& xThis, sal_uInt16 nPrfx, const OUString& rLName, Reference< XColumnRowRange >& xColumnRowRange );
     virtual ~XMLTableImportContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
 
     virtual void StartElement( const Reference< XAttributeList >& xAttrList );
 
@@ -120,9 +120,9 @@ public:
 
     void InitColumns();
 
-    SvXMLImportContext * ImportColumn( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
-    SvXMLImportContext * ImportRow( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
-    SvXMLImportContext * ImportCell( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
+    SvXMLImportContext * ImportColumn( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
+    SvXMLImportContext * ImportRow( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
+    SvXMLImportContext * ImportCell( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
 
     OUString GetDefaultCellStyleName() const;
 
@@ -149,12 +149,12 @@ public:
     XMLCellImportContext( SvXMLImport& rImport,
                           const Reference< XMergeableCell >& xCell,
                           const OUString& sDefaultCellStyleName,
-                          USHORT nPrfx, const OUString& rLName,
+                          sal_uInt16 nPrfx, const OUString& rLName,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual ~XMLCellImportContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
 
     virtual void EndElement();
 
@@ -175,9 +175,9 @@ public:
 class XMLTableTemplateContext : public SvXMLStyleContext
 {
 public:
-    XMLTableTemplateContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList );
+    XMLTableTemplateContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList );
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
 
     virtual void StartElement( const Reference< XAttributeList >& xAttrList );
 
@@ -192,7 +192,7 @@ private:
 // class XMLProxyContext
 // --------------------------------------------------------------------
 
-XMLProxyContext::XMLProxyContext( SvXMLImport& rImport, const SvXMLImportContextRef& xParent, USHORT nPrfx, const OUString& rLName )
+XMLProxyContext::XMLProxyContext( SvXMLImport& rImport, const SvXMLImportContextRef& xParent, sal_uInt16 nPrfx, const OUString& rLName )
 : SvXMLImportContext( rImport, nPrfx, rLName )
 , mxParent( xParent )
 {
@@ -200,7 +200,7 @@ XMLProxyContext::XMLProxyContext( SvXMLImport& rImport, const SvXMLImportContext
 
 // --------------------------------------------------------------------
 
-SvXMLImportContext * XMLProxyContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContext * XMLProxyContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
 {
     if( mxParent.Is() )
         return mxParent->CreateChildContext( nPrefix, rLocalName, xAttrList );
@@ -234,7 +234,7 @@ XMLTableImport::~XMLTableImport()
 
 // --------------------------------------------------------------------
 
-SvXMLImportContext* XMLTableImport::CreateTableContext( USHORT nPrfx, const OUString& rLName, Reference< XColumnRowRange >& xColumnRowRange )
+SvXMLImportContext* XMLTableImport::CreateTableContext( sal_uInt16 nPrfx, const OUString& rLName, Reference< XColumnRowRange >& xColumnRowRange )
 {
     rtl::Reference< XMLTableImport > xThis( this );
     return new XMLTableImportContext( xThis, nPrfx, rLName, xColumnRowRange );
@@ -242,7 +242,7 @@ SvXMLImportContext* XMLTableImport::CreateTableContext( USHORT nPrfx, const OUSt
 
 // --------------------------------------------------------------------
 
-SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext( USHORT nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList )
+SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext( sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList )
 {
     return new XMLTableTemplateContext( mrImport, nPrfx, rLName, xAttrList );
 }
@@ -315,7 +315,7 @@ void XMLTableImport::finishStyles()
 // --------------------------------------------------------------------
 
 
-XMLTableImportContext::XMLTableImportContext( const rtl::Reference< XMLTableImport >& xImporter, USHORT nPrfx, const OUString& rLName,  Reference< XColumnRowRange >& xColumnRowRange )
+XMLTableImportContext::XMLTableImportContext( const rtl::Reference< XMLTableImport >& xImporter, sal_uInt16 nPrfx, const OUString& rLName,  Reference< XColumnRowRange >& xColumnRowRange )
 : SvXMLImportContext( xImporter->mrImport, nPrfx, rLName )
 , mxTableImporter( xImporter )
 , mxTable( xColumnRowRange, UNO_QUERY )
@@ -334,7 +334,7 @@ XMLTableImportContext::~XMLTableImportContext()
 
 // --------------------------------------------------------------------
 
-SvXMLImportContext * XMLTableImportContext::ImportColumn( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContext * XMLTableImportContext::ImportColumn( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
 {
     if( mxColumns.is() && (mnCurrentRow == -1) ) try
     {
@@ -435,7 +435,7 @@ void XMLTableImportContext::InitColumns()
 
 // --------------------------------------------------------------------
 
-SvXMLImportContext * XMLTableImportContext::ImportRow( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContext * XMLTableImportContext::ImportRow( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
 {
     if( mxRows.is() )
     {
@@ -517,7 +517,7 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( USHORT nPrefix, const OUS
 
 // --------------------------------------------------------------------
 
-SvXMLImportContext * XMLTableImportContext::ImportCell( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContext * XMLTableImportContext::ImportCell( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
 {
     mnCurrentColumn++;
     if( mxColumns.is() ) try
@@ -552,7 +552,7 @@ SvXMLImportContext * XMLTableImportContext::ImportCell( USHORT nPrefix, const OU
 
 // --------------------------------------------------------------------
 
-SvXMLImportContext *XMLTableImportContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContext *XMLTableImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
 {
     if( nPrefix == XML_NAMESPACE_TABLE )
     {
@@ -620,7 +620,7 @@ OUString XMLTableImportContext::GetDefaultCellStyleName() const
 // XMLCellImportContext
 // --------------------------------------------------------------------
 
-XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Reference< XMergeableCell >& xCell, const OUString& sDefaultCellStyleName, USHORT nPrfx, const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Reference< XMergeableCell >& xCell, const OUString& sDefaultCellStyleName, sal_uInt16 nPrfx, const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 : SvXMLImportContext( rImport, nPrfx, rLName )
 , mxCell( xCell )
 , mbListContextPushed( false )
@@ -698,7 +698,7 @@ XMLCellImportContext::~XMLCellImportContext()
 
 // --------------------------------------------------------------------
 
-SvXMLImportContext * XMLCellImportContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContext * XMLCellImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
 {
     // create text cursor on demand
     if( !mxCursor.is() )
@@ -764,7 +764,7 @@ void XMLCellImportContext::EndElement()
 // class XMLTableTemplateContext
 // --------------------------------------------------------------------
 
-XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList )
+XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList )
 : SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_TABLE_TEMPLATE_ID, sal_False )
 {
 }
@@ -777,7 +777,7 @@ void XMLTableTemplateContext::StartElement( const Reference< XAttributeList >& x
     for(sal_Int16 i=0; i < nAttrCount; i++)
     {
         OUString sAttrName;
-        USHORT nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( i ), &sAttrName );
+        sal_uInt16 nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( i ), &sAttrName );
         if( (nAttrPrefix == XML_NAMESPACE_TEXT ) && IsXMLToken( sAttrName, XML_STYLE_NAME ) )
         {
             msTemplateStyleName = xAttrList->getValueByIndex( i );
@@ -797,7 +797,7 @@ void XMLTableTemplateContext::EndElement()
 
 // --------------------------------------------------------------------
 
-SvXMLImportContext * XMLTableTemplateContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContext * XMLTableTemplateContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
 {
     if( nPrefix == XML_NAMESPACE_TABLE )
     {
@@ -811,7 +811,7 @@ SvXMLImportContext * XMLTableTemplateContext::CreateChildContext( USHORT nPrefix
             for(sal_Int16 i=0; i < nAttrCount; i++)
             {
                 OUString sAttrName;
-                USHORT nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( i ), &sAttrName );
+                sal_uInt16 nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( i ), &sAttrName );
                 if( (nAttrPrefix == XML_NAMESPACE_TEXT) && IsXMLToken( sAttrName, XML_STYLE_NAME ) )
                 {
                     maTableTemplate[pElements->msStyleName] = xAttrList->getValueByIndex( i );

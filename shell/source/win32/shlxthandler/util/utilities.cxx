@@ -149,6 +149,28 @@ bool HasOnlySpaces(const std::wstring& String)
     return true;
 }
 
+//---------------------------------
+/** helper function to convert windows pathes to short form.
+    @returns
+        shortend path.
+*/
+
+std::wstring getShortPathName( const std::wstring& aLongName )
+{
+    std::wstring shortName = aLongName;
+    long         length    = GetShortPathName( aLongName.c_str(), NULL, 0 );
+
+    if ( length != 0 )
+    {
+        TCHAR* buffer = new TCHAR[ length+1 ];
+        length = GetShortPathName( aLongName.c_str(), buffer, length );
+        if ( length != 0 )
+            shortName = std::wstring( buffer );
+        delete [] buffer;
+    }
+    return shortName;
+}
+
 /** convert LocaleSet pair into Microsoft List of Locale ID (LCID)
     according to ISO-639 and ISO-3166.
     http://etext.lib.virginia.edu/tei/iso639.html

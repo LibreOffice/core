@@ -260,7 +260,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
             }
-            *p->pByte = (BYTE) n; break;
+            *p->pByte = (sal_uInt8) n; break;
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
             if( n > SbxMAXINT )
@@ -271,7 +271,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMININT;
             }
-            *p->pInteger = (INT16) n; break;
+            *p->pInteger = (sal_Int16) n; break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
             if( n > SbxMAXUINT )
@@ -282,10 +282,10 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
             }
-            *p->pUShort = (UINT16) n; break;
+            *p->pUShort = (sal_uInt16) n; break;
         case SbxBYREF | SbxLONG:
         {
-            INT32 i;
+            sal_Int32 i;
             if( n > SbxMAXLNG )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); i = SbxMAXLNG;
@@ -296,13 +296,13 @@ start:
             }
             else
             {
-                i = sal::static_int_cast< INT32 >(n);
+                i = sal::static_int_cast< sal_Int32 >(n);
             }
             *p->pLong = i; break;
         }
         case SbxBYREF | SbxULONG:
         {
-            UINT32 i;
+            sal_uInt32 i;
             if( n > SbxMAXULNG )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); i = SbxMAXULNG;
@@ -313,7 +313,7 @@ start:
             }
             else
             {
-                i = sal::static_int_cast< UINT32 >(n);
+                i = sal::static_int_cast< sal_uInt32 >(n);
             }
             *p->pULong = i; break;
         }

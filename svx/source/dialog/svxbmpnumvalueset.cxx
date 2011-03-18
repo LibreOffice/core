@@ -38,7 +38,7 @@
 #include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
-#include <gallery.hxx>
+#include <svx/gallery.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/brshitem.hxx>
 #include <svl/intitem.hxx>
@@ -46,14 +46,14 @@
 #include <vcl/graph.hxx>
 #include <vcl/msgbox.hxx>
 #include <editeng/flstitem.hxx>
-#include <dlgutil.hxx>
+#include <svx/dlgutil.hxx>
 #ifndef _XTABLE_HXX //autogen
 
 #include <svx/xtable.hxx>
 #endif
-#include <drawitem.hxx>
-#include <numvset.hxx>
-#include <htmlmode.hxx>
+#include <svx/drawitem.hxx>
+#include <svx/numvset.hxx>
+#include <svx/htmlmode.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <editeng/unolingu.hxx>
@@ -115,7 +115,7 @@ static const sal_Unicode aBulletTypes[] =
 
 static Font& lcl_GetDefaultBulletFont()
 {
-    static BOOL bInit = 0;
+    static sal_Bool bInit = 0;
     static Font aDefBulletFont( UniString::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM( "StarSymbol" ) ),
                                 String(), Size( 0, 14 ) );
@@ -125,8 +125,8 @@ static Font& lcl_GetDefaultBulletFont()
         aDefBulletFont.SetFamily( FAMILY_DONTKNOW );
         aDefBulletFont.SetPitch( PITCH_DONTKNOW );
         aDefBulletFont.SetWeight( WEIGHT_DONTKNOW );
-        aDefBulletFont.SetTransparent( TRUE );
-        bInit = TRUE;
+        aDefBulletFont.SetTransparent( sal_True );
+        bInit = sal_True;
     }
     return aDefBulletFont;
 }
@@ -152,7 +152,7 @@ static void lcl_PaintLevel(OutputDevice* pVDev, sal_Int16 nNumberingType,
 }
 void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    static USHORT const aLinesArr[] =
+    static sal_uInt16 aLinesArr[] =
     {
         15, 10,
         20, 30,
@@ -172,7 +172,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
     OutputDevice*  pDev = rUDEvt.GetDevice();
     Rectangle aRect = rUDEvt.GetRect();
-    USHORT  nItemId = rUDEvt.GetItemId();
+    sal_uInt16  nItemId = rUDEvt.GetItemId();
     long nRectWidth = aRect.GetWidth();
     long nRectHeight = aRect.GetHeight();
     Size aRectSize(nRectWidth, aRect.GetHeight());
@@ -221,7 +221,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         {
             Point aStart(aBLPos.X() + nRectWidth *25 / 100,0);
             Point aEnd(aBLPos.X() + nRectWidth * 9 / 10,0);
-            for( USHORT i = 11; i < 100; i += 33)
+            for( sal_uInt16 i = 11; i < 100; i += 33)
             {
                 aStart.Y() = aEnd.Y() = aBLPos.Y() + nRectHeight  * i / 100;
                 pVDev->DrawLine(aStart, aEnd);
@@ -239,9 +239,9 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             NUM_PAGETYPE_BULLET == nPageType )
     {
         Point aStart(aBLPos.X() + nRectWidth / 9,0);
-        for( USHORT i = 0; i < 3; i++ )
+        for( sal_uInt16 i = 0; i < 3; i++ )
         {
-            USHORT nY = 11 + i * 33;
+            sal_uInt16 nY = 11 + i * 33;
             aStart.Y() = aBLPos.Y() + nRectHeight  * nY / 100;
             String sText;
             if(nPageType == NUM_PAGETYPE_BULLET)
@@ -394,7 +394,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 #ifdef DBG_UTIL
             catch(Exception&)
             {
-                static sal_Bool bAssert = FALSE;
+                static sal_Bool bAssert = sal_False;
                 if(!bAssert)
                 {
                     OSL_FAIL("exception in ::UserDraw");
@@ -416,13 +416,13 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->SetLineColor(aOldColor);
 }
 
-SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nType ) :
+SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, sal_uInt16 nType ) :
 
     ValueSet( pParent, rResId ),
 
     aLineColor  ( COL_LIGHTGRAY ),
     nPageType   ( nType ),
-    bHTMLMode   ( FALSE ),
+    bHTMLMode   ( sal_False ),
     pVDev       ( NULL )
 {
     SetColCount( 4 );
@@ -430,7 +430,7 @@ SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nTy
     SetStyle( GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
     if(NUM_PAGETYPE_BULLET == nType)
     {
-        for ( USHORT i = 0; i < 8; i++ )
+        for ( sal_uInt16 i = 0; i < 8; i++ )
         {
             InsertItem( i + 1, i );
             SetItemText( i + 1, SVX_RESSTR( RID_SVXSTR_BULLET_DESCRIPTIONS + i ) );
@@ -453,7 +453,7 @@ void SvxNumValueSet::SetNumberingSettings(
     aLocale = rLocale;
     if(aNum.getLength() > 8)
             SetStyle( GetStyle()|WB_VSCROLL);
-    for ( USHORT i = 0; i < aNum.getLength(); i++ )
+    for ( sal_uInt16 i = 0; i < aNum.getLength(); i++ )
     {
             InsertItem( i + 1, i );
             if( i < 8 )
@@ -482,7 +482,7 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
 SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId ) :
 
     SvxNumValueSet( pParent, rResId, NUM_PAGETYPE_BMP ),
-    bGrfNotFound( FALSE )
+    bGrfNotFound( sal_False )
 
 {
     GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
@@ -504,7 +504,7 @@ void SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
     Rectangle aRect = rUDEvt.GetRect();
     OutputDevice*  pDev = rUDEvt.GetDevice();
-    USHORT  nItemId = rUDEvt.GetItemId();
+    sal_uInt16  nItemId = rUDEvt.GetItemId();
     Point aBLPos = aRect.TopLeft();
 
     int nRectHeight = aRect.GetHeight();
@@ -514,14 +514,14 @@ void SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     if(!GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nItemId - 1,
                         &aGraphic, NULL))
     {
-        bGrfNotFound = TRUE;
+        bGrfNotFound = sal_True;
     }
     else
     {
         Point aPos(aBLPos.X() + 5, 0);
-        for( USHORT i = 0; i < 3; i++ )
+        for( sal_uInt16 i = 0; i < 3; i++ )
         {
-            USHORT nY = 11 + i * 33;
+            sal_uInt16 nY = 11 + i * 33;
             aPos.Y() = aBLPos.Y() + nRectHeight  * nY / 100;
             aGraphic.Draw( pDev, aPos, aSize );
         }
@@ -533,7 +533,7 @@ IMPL_LINK(SvxBmpNumValueSet, FormatHdl_Impl, Timer*, EMPTYARG)
     // only when a graphics was not there, it needs to be formatted
     if(bGrfNotFound)
     {
-        bGrfNotFound = FALSE;
+        bGrfNotFound = sal_False;
         Format();
     }
     Invalidate();

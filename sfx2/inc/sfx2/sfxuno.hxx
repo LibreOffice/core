@@ -38,6 +38,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 
 //________________________________________________________________________________________________________________________
@@ -72,7 +73,6 @@
 #define UNOPROPERTYVALUE                ::com::sun::star::beans::PropertyValue
 #define UNOREFERENCE                    ::com::sun::star::uno::Reference
 #define UNORUNTIMEEXCEPTION             ::com::sun::star::uno::RuntimeException
-#define UNOINVALIDREGISTRYEXCEPTION     ::com::sun::star::registry::InvalidRegistryException
 #define UNOSEQUENCE                     ::com::sun::star::uno::Sequence
 #define UNOTYPE                         ::com::sun::star::uno::Type
 #define UNOURL                          ::com::sun::star::util::URL
@@ -104,7 +104,7 @@ SFX2_DLLPUBLIC void TransformItems(         sal_uInt16                          
                                     UNOSEQUENCE< UNOPROPERTYVALUE >&    seqArgs     ,
                             const   SfxSlot*                            pSlot = 0   );
 
-sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, ::rtl::OUString& rPasswd );
+bool GetEncryptionData_Impl( const SfxItemSet* pSet, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData );
 
 #define FrameSearchFlags            sal_Int32
 
@@ -588,52 +588,6 @@ sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, ::rtl::OUString& rPasswd );
                                                         );                                                                                          \
         return xReturn ;                                                                                                                            \
     }
-
-//************************************************************************************************************************
-//  definition for "extern c component_writeInfo()"
-//************************************************************************************************************************
-#define COMPONENT_INFO(CLASS)                                                                                           \
-                                                                                                                        \
-    try                                                                                                                 \
-    {                                                                                                                   \
-        /* Set default result of follow operations !!! */                                                               \
-        bReturn = sal_False ;                                                                                           \
-                                                                                                                        \
-        /* Do the follow only, if given key is valid ! */                                                               \
-        if ( xKey.is () )                                                                                               \
-        {                                                                                                               \
-            /* Build new keyname */                                                                                     \
-            sKeyName     =  UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM( "/" ))         ;                                               \
-            sKeyName    +=  CLASS::impl_getStaticImplementationName()   ;                                               \
-            sKeyName    +=  UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ));                                            \
-                                                                                                                        \
-            /* Create new key with new name. */                                                                         \
-             xNewKey = xKey->createKey( sKeyName );                                                                     \
-                                                                                                                        \
-            /* If this new key valid ... */                                                                             \
-            if ( xNewKey.is () )                                                                                        \
-            {                                                                                                           \
-                /* Get information about supported services. */                                                         \
-                seqServiceNames =   CLASS::impl_getStaticSupportedServiceNames()    ;                                   \
-                pArray          =   seqServiceNames.getArray()                      ;                                   \
-                nLength         =   seqServiceNames.getLength()                     ;                                   \
-                nCounter        =   0                                               ;                                   \
-                                                                                                                        \
-                /* Then set this information on this key. */                                                            \
-                for ( nCounter = 0; nCounter < nLength; ++nCounter )                                                    \
-                {                                                                                                       \
-                    xNewKey->createKey( pArray [nCounter] );                                                            \
-                }                                                                                                       \
-                                                                                                                        \
-                /* Result of this operations = OK. */                                                                   \
-                bReturn = sal_True ;                                                                                    \
-            }                                                                                                           \
-        }                                                                                                               \
-    }                                                                                                                   \
-    catch( UNOINVALIDREGISTRYEXCEPTION& )                                                                               \
-    {                                                                                                                   \
-        bReturn = sal_False ;                                                                                           \
-    }                                                                                                                   \
 
 //************************************************************************************************************************
 //  definition for "extern c component_getFactory()"

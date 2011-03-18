@@ -287,7 +287,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
             if (rStr == m_aCurLang && eMode == MODE_SetLanguageSelectionMenu )
             {
                 //make a sign for the current language
-                pPopupMenu->CheckItem( nItemId, TRUE );
+                pPopupMenu->CheckItem( nItemId, sal_True );
             }
             aLangMap[ nItemId ] = rStr;
             ++nItemId;

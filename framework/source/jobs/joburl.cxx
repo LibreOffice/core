@@ -279,8 +279,8 @@ sal_Bool JobURL::implst_split( /*IN*/  const ::rtl::OUString& sPart           ,
     // first search for the given identifier
     sal_Bool bPartFound = (sPart.matchIgnoreAsciiCaseAsciiL(pPartIdentifier,nPartLength,0));
 
-    // If it exist - we can split the part and return TRUE.
-    // Otherwhise we do nothing and return FALSE.
+    // If it exist - we can split the part and return sal_True.
+    // Otherwhise we do nothing and return sal_False.
     if (bPartFound)
     {
         // But may the part has optional arguments - seperated by a "?".

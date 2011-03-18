@@ -101,16 +101,16 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< 
     }
 
     // Further descend in Parse Tree
-    for (UINT32 i = 0; i < pParseNode->count(); i++)
+    for (sal_uInt32 i = 0; i < pParseNode->count(); i++)
         scanParameter(pParseNode->getChild(i),_rParaNodes);
 }
 // -----------------------------------------------------------------------------
 OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRefRow& _rRow)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OResultSet::GetOrderbyKeyValue" );
-    UINT32 nBookmarkValue = Abs((sal_Int32)(_rRow->get())[0]->getValue());
+    sal_uInt32 nBookmarkValue = Abs((sal_Int32)(_rRow->get())[0]->getValue());
 
-    OKeyValue* pKeyValue = OKeyValue::createKeyValue((UINT32)nBookmarkValue);
+    OKeyValue* pKeyValue = OKeyValue::createKeyValue((sal_uInt32)nBookmarkValue);
 
     ::std::vector<sal_Int32>::iterator aIter = m_aOrderbyColumnNumber.begin();
     for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)

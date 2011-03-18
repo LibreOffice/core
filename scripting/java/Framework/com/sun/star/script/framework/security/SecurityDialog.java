@@ -215,11 +215,6 @@ XInitialization {
         return xSingleServiceFactory;
     }
 
-    public static boolean __writeRegistryServiceInfo( XRegistryKey regKey ) {
-        return FactoryHelper.writeRegistryServiceInfo(
-            SecurityDialog.class.getName(), SecurityDialog.__serviceName, regKey );
-    }
-
     // XServiceInfo
     public String getImplementationName(  ) {
         return getClass().getName();

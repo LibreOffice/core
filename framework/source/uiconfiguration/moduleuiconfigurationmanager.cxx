@@ -34,10 +34,10 @@
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/uielementtypenames.hxx>
-#include <xml/menuconfiguration.hxx>
-#include <xml/toolboxconfiguration.hxx>
+#include <framework/menuconfiguration.hxx>
+#include <framework/toolboxconfiguration.hxx>
 
-#include <xml/statusbarconfiguration.hxx>
+#include <framework/statusbarconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -722,8 +722,9 @@ void ModuleUIConfigurationManager::impl_Initialize()
             Reference< XStorage > xElementTypeStorage;
             try
             {
-                Any a = xNameAccess->getByName( OUString::createFromAscii( UIELEMENTTYPENAMES[i] ));
-                a >>= xElementTypeStorage;
+                const OUString sName( OUString::createFromAscii( UIELEMENTTYPENAMES[i] ) );
+                if( xNameAccess->hasByName( sName ) )
+                    xNameAccess->getByName( sName ) >>= xElementTypeStorage;
             }
             catch ( com::sun::star::container::NoSuchElementException& )
             {

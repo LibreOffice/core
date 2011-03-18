@@ -52,17 +52,17 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
     Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILY_ITEM ) )
 
 {
-    ULONG nMask = ReadLongRes();
+    sal_uIntPtr nMask = ReadLongRes();
 
     if(nMask & RSC_SFX_STYLE_ITEM_LIST)
     {
-        ULONG nCount = ReadLongRes();
-        for( ULONG i = 0; i < nCount; i++ )
+        sal_uIntPtr nCount = ReadLongRes();
+        for( sal_uIntPtr i = 0; i < nCount; i++ )
         {
             SfxFilterTupel *pTupel = new SfxFilterTupel;
             pTupel->aName = ReadStringRes();
             long lFlags = ReadLongRes();
-            pTupel->nFlags = (USHORT)lFlags;
+            pTupel->nFlags = (sal_uInt16)lFlags;
             aFilterList.push_back( pTupel );
         }
     }
@@ -81,7 +81,7 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
     }
     if(nMask & RSC_SFX_STYLE_ITEM_STYLEFAMILY)
     {
-        nFamily = (USHORT)ReadLongRes();
+        nFamily = (sal_uInt16)ReadLongRes();
     }
     else
         nFamily = SFX_STYLE_FAMILY_PARA;
@@ -110,10 +110,10 @@ SfxStyleFamilyItem::~SfxStyleFamilyItem()
 // Implementation of the resource constructor
 
 SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
-    Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILIES ).SetAutoRelease( FALSE ) )
+    Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILIES ).SetAutoRelease( false ) )
 {
-    ULONG nCount = ReadLongRes();
-    for( ULONG i = 0; i < nCount; i++ )
+    sal_uIntPtr nCount = ReadLongRes();
+    for( sal_uIntPtr i = 0; i < nCount; i++ )
     {
         const ResId aResId((RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr());
         SfxStyleFamilyItem *pItem = new SfxStyleFamilyItem(aResId);

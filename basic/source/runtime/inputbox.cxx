@@ -161,14 +161,14 @@ RTLFUNC(InputBox)
     (void)pBasic;
     (void)bWrite;
 
-    ULONG nArgCount = rPar.Count();
+    sal_uIntPtr nArgCount = rPar.Count();
     if ( nArgCount < 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
         String aTitle;
         String aDefault;
-        INT32 nX = -1, nY = -1;  // zentrieren
+        sal_Int32 nX = -1, nY = -1;  // zentrieren
         const String& rPrompt = rPar.Get(1)->GetString();
         if ( nArgCount > 2 && !rPar.Get(2)->IsErr() )
             aTitle = rPar.Get(2)->GetString();

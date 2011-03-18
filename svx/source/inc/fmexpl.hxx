@@ -397,7 +397,7 @@ namespace svxform
         void ClearBranch( FmFormData* pParentData );
         void UpdateContent( FmFormShell* pNewShell );
 
-        void Insert( FmEntryData* pEntryData, ULONG nRelPos = LIST_APPEND,
+        void Insert( FmEntryData* pEntryData, sal_uLong nRelPos = LIST_APPEND,
                                               sal_Bool bAlterModel = sal_False );
         void Remove( FmEntryData* pEntryData, sal_Bool bAlterModel = sal_False );
 
@@ -446,7 +446,7 @@ namespace svxform
         SvLBoxEntry*        m_pRootEntry;
         SvLBoxEntry*        m_pEditEntry;
 
-        ULONG               nEditEvent;
+        sal_uLong               nEditEvent;
 
         SELDATA_ITEMS       m_sdiState;
         Point               m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde
@@ -471,7 +471,7 @@ namespace svxform
         sal_Bool        IsDeleteAllowed();
         FmControlData*  NewControl( const ::rtl::OUString& rServiceName, SvLBoxEntry* pParentEntry, sal_Bool bEditName = sal_True );
         void            NewForm( SvLBoxEntry* pParentEntry );
-        SvLBoxEntry*    Insert( FmEntryData* pEntryData, ULONG nRelPos=LIST_APPEND );
+        SvLBoxEntry*    Insert( FmEntryData* pEntryData, sal_uLong nRelPos=LIST_APPEND );
         void            Remove( FmEntryData* pEntryData );
 
 

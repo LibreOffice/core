@@ -40,8 +40,8 @@
 
 #include <sspellimp.hxx>
 
-#include "lngprops.hxx"
-#include "spelldta.hxx"
+#include "linguistic/lngprops.hxx"
+#include "linguistic/spelldta.hxx"
 
 using namespace utl;
 using namespace osl;

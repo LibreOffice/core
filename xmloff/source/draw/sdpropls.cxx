@@ -61,7 +61,7 @@
 #include "sdpropls.hxx"
 #include "propimp0.hxx"
 #include <xmloff/xmlexp.hxx>
-#include <xmlnmspe.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <com/sun/star/drawing/TextureKind.hpp>
@@ -956,7 +956,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SD_TYPE_BACKFACE_CULLING:
             {
                 // #87922# DoubleSided -> BackfaceCulling
-                // This BOOL needs to be flipped, DoubleSided TRUE -> NO Backface culling
+                // This sal_Bool needs to be flipped, DoubleSided sal_True -> NO Backface culling
                 // and vice versa.
                 pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_DISABLED), GetXMLToken(XML_ENABLED) );
                 break;

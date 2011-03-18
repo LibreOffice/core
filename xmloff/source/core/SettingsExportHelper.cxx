@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include <xmloff/SettingsExportHelper.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
@@ -204,6 +204,7 @@ void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const rtl::OUStr
 
 void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const rtl::OUString& rName) const
 {
+#if 0
     DBG_ASSERT(rName.getLength(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_BYTE );
@@ -212,6 +213,13 @@ void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const rtl::OUStr
     SvXMLUnitConverter::convertNumber(sBuffer, sal_Int32(nValue));
     m_rContext.Characters( sBuffer.makeStringAndClear() );
     m_rContext.EndElement( sal_False );
+#else
+    (void) nValue; (void) rName;
+    OSL_ENSURE(false, "XMLSettingsExportHelper::exportByte(): #i114162#:\n"
+        "config-items of type \"byte\" are not valid ODF, "
+        "so storing them is disabled!\n"
+        "Use a different type instead (e.g. \"short\").");
+#endif
 }
 void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUString& rName) const
 {

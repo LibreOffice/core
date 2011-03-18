@@ -2,7 +2,7 @@
 -o fwl.FilterFactory
 -o fwl.FrameLoaderFactory
 -o fwl.SubstituteVariables
--o fwl.TypeDetection
+#i113245 -o fwl.TypeDetection
 #i84346 -o fwl.PathSettings
 -o fwk.DispatchRecorder
 -o fwk.DispatchRecorderSupplier
@@ -17,7 +17,7 @@
 -o fwk.ServiceHandler
 -o fwk.URLTransformer
 -o fwk.MacrosMenuController
--o fwk.ModuleManager
+#i112746 -o fwk.ModuleManager
 -o fwk.UIElementFactoryManager
 -o fwk.UICommandDescription
 -o fwk.LayoutManager

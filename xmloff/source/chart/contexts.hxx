@@ -78,14 +78,14 @@ public:
     SchXMLFlatDocContext_Impl(
         SchXMLImportHelper& i_rImpHelper,
         SchXMLImport& i_rImport,
-        USHORT i_nPrefix, const ::rtl::OUString & i_rLName,
+        sal_uInt16 i_nPrefix, const ::rtl::OUString & i_rLName,
         const com::sun::star::uno::Reference<com::sun::star::document::XDocumentProperties>& i_xDocProps,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>& i_xDocBuilder);
 
     virtual ~SchXMLFlatDocContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
-        USHORT i_nPrefix, const ::rtl::OUString& i_rLocalName,
+        sal_uInt16 i_nPrefix, const ::rtl::OUString& i_rLocalName,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& i_xAttrList);
 };
 

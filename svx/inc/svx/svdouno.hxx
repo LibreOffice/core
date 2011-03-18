@@ -62,7 +62,7 @@ class SVX_DLLPUBLIC SdrUnoObj : public SdrRectObj
 
     String                      aUnoControlModelTypeName;
     String                      aUnoControlTypeName;
-    BOOL                        bOwnUnoControlModel;
+    sal_Bool                        bOwnUnoControlModel;
 
 protected:
     ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > xUnoControlModel; // kann auch von aussen gesetzt werden
@@ -75,17 +75,17 @@ private:
 public:
     TYPEINFO();
 
-    SdrUnoObj(const String& rModelName, BOOL bOwnsModel = TRUE);
+    SdrUnoObj(const String& rModelName, sal_Bool bOwnsModel = sal_True);
     SdrUnoObj(const String& rModelName,
         const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac,
-        BOOL bOwnsModel = TRUE);
+        sal_Bool bOwnsModel = sal_True);
     virtual ~SdrUnoObj();
 
     virtual void SetPage(SdrPage* pNewPage);
     virtual void SetModel(SdrModel* pModel);
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
 
     virtual void operator = (const SdrObject& rObj);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);

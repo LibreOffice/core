@@ -33,7 +33,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 
@@ -69,7 +69,7 @@ SchXMLCalculationSettingsContext::SchXMLCalculationSettingsContext( SvXMLImport&
         }
     }
 }
-SvXMLImportContext* SchXMLCalculationSettingsContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext* SchXMLCalculationSettingsContext::CreateChildContext( sal_uInt16 nPrefix,
                                    const ::rtl::OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 {

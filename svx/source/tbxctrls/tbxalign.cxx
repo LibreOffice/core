@@ -33,8 +33,8 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-#include "tbxalign.hxx"
-#include "tbxdraw.hxx"
+#include "svx/tbxalign.hxx"
+#include "svx/tbxdraw.hxx"
 #include "tbxdraw.hrc"
 #include <tools/shl.hxx>
 #include <sfx2/imagemgr.hxx>
@@ -52,7 +52,7 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlAlign, SfxAllEnumItem);
 |*
 \************************************************************************/
 
-SvxTbxCtlAlign::SvxTbxCtlAlign( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxTbxCtlAlign::SvxTbxCtlAlign( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
     ,   m_aSubTbName( RTL_CONSTASCII_USTRINGPARAM( "alignmentbar" ))
     ,   m_aSubTbResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/alignmentbar" ))

@@ -61,7 +61,7 @@ void DescriptionEdit::Init()
     // read-only
     SetReadOnly();
     // no cursor
-    EnableCursor( FALSE );
+    EnableCursor( sal_False );
 }
 
 // -----------------------------------------------------------------------

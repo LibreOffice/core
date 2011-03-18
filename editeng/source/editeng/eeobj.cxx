@@ -62,7 +62,7 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
 {
     uno::Any aAny;
 
-    ULONG nT = SotExchange::GetFormat( rFlavor );
+    sal_uLong nT = SotExchange::GetFormat( rFlavor );
     if ( nT == SOT_FORMAT_STRING )
     {
         aAny <<= (::rtl::OUString)GetString();
@@ -75,7 +75,7 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
 
         SvMemoryStream* pStream = ( nT == SOT_FORMATSTR_ID_EDITENGINE ) ? &GetStream() : &GetRTFStream();
         pStream->Seek( STREAM_SEEK_TO_END );
-        ULONG nLen = pStream->Tell();
+        sal_uLong nLen = pStream->Tell();
         pStream->Seek(0);
 
         uno::Sequence< sal_Int8 > aSeq( nLen );
@@ -105,7 +105,7 @@ sal_Bool EditDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& 
 {
     sal_Bool bSupported = sal_False;
 
-    ULONG nT = SotExchange::GetFormat( rFlavor );
+    sal_uLong nT = SotExchange::GetFormat( rFlavor );
     if ( ( nT == SOT_FORMAT_STRING ) || ( nT == SOT_FORMAT_RTF ) || ( nT == SOT_FORMATSTR_ID_EDITENGINE ) )
         bSupported = sal_True;
 

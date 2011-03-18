@@ -50,7 +50,7 @@ SFX_IMPL_MENU_CONTROL(SvxSmartTagsControl, SvxSmartTagItem);
 
 SvxSmartTagsControl::SvxSmartTagsControl
 (
-    USHORT          _nId,
+    sal_uInt16          _nId,
     Menu&           rMenu,
     SfxBindings&    /*rBindings*/
 ) :
@@ -63,17 +63,17 @@ SvxSmartTagsControl::SvxSmartTagsControl
 
 //--------------------------------------------------------------------
 
-const USHORT MN_ST_INSERT_START = 500;
+const sal_uInt16 MN_ST_INSERT_START = 500;
 
 void SvxSmartTagsControl::FillMenu()
 {
     if ( !mpSmartTagItem )
         return;
 
-    USHORT nMenuPos = 0;
-    USHORT nSubMenuPos = 0;
-    USHORT nMenuId = 1;
-    USHORT nSubMenuId = MN_ST_INSERT_START;
+    sal_uInt16 nMenuPos = 0;
+    sal_uInt16 nSubMenuPos = 0;
+    sal_uInt16 nMenuId = 1;
+    sal_uInt16 nSubMenuId = MN_ST_INSERT_START;
 
     const Sequence < Sequence< Reference< smarttags::XSmartTagAction > > >& rActionComponentsSequence = mpSmartTagItem->GetActionComponentsSequence();
     const Sequence < Sequence< sal_Int32 > >& rActionIndicesSequence = mpSmartTagItem->GetActionIndicesSequence();
@@ -84,7 +84,7 @@ void SvxSmartTagsControl::FillMenu()
     const Reference<text::XTextRange>& xTextRange = mpSmartTagItem->GetTextRange();
     const Reference<frame::XController>& xController = mpSmartTagItem->GetController();
 
-    for ( USHORT j = 0; j < rActionComponentsSequence.getLength(); ++j )
+    for ( sal_uInt16 j = 0; j < rActionComponentsSequence.getLength(); ++j )
     {
         Reference< container::XStringKeyMap > xSmartTagProperties = rStringKeyMaps[j];
 
@@ -122,7 +122,7 @@ void SvxSmartTagsControl::FillMenu()
         pSbMenu->InsertSeparator( nSubMenuPos++ );
 
         // Add subitem for every action reference for the current smart tag type:
-        for ( USHORT i = 0; i < rActionComponents.getLength(); ++i )
+        for ( sal_uInt16 i = 0; i < rActionComponents.getLength(); ++i )
         {
             xAction = rActionComponents[i];
 
@@ -148,7 +148,7 @@ void SvxSmartTagsControl::FillMenu()
 
 //--------------------------------------------------------------------
 
-void SvxSmartTagsControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* pState )
+void SvxSmartTagsControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     mrParent.EnableItem( GetId(), SFX_ITEM_DISABLED != eState );
@@ -195,7 +195,7 @@ IMPL_LINK_INLINE_START( SvxSmartTagsControl, MenuSelect, PopupMenu *, pMen )
 
     // ohne dispatcher!!!
     // GetBindings().Execute( GetId(), SFX_CALLMODE_RECORD,meine beiden items, 0L );*/
-    //SfxBoolItem aBool(SID_OPEN_SMARTTAGOPTIONS, TRUE);
+    //SfxBoolItem aBool(SID_OPEN_SMARTTAGOPTIONS, sal_True);
     //GetBindings().GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SFX_CALLMODE_ASYNCHRON, &aBool, 0L );
 
     return 0;

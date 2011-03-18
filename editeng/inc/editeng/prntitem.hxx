@@ -49,13 +49,13 @@ class EDITENG_DLLPUBLIC SvxPrintItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxPrintItem( const USHORT nId , const BOOL bPrt = TRUE );
+    SvxPrintItem( const sal_uInt16 nId , const sal_Bool bPrt = sal_True );
     inline SvxPrintItem &operator=( const SvxPrintItem &rCpy );
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -63,7 +63,7 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 };
 
-inline SvxPrintItem::SvxPrintItem( const USHORT nId, const BOOL bPrt )
+inline SvxPrintItem::SvxPrintItem( const sal_uInt16 nId, const sal_Bool bPrt )
     : SfxBoolItem( nId, bPrt )
 {}
 

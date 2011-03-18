@@ -29,15 +29,19 @@
 #include "vbahelper/vbadocumentbase.hxx"
 #include "vbahelper/helperdecl.hxx"
 
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp> //Michael E. Bohn
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
@@ -72,25 +76,29 @@ VbaDocumentBase::getName() throw (uno::RuntimeException)
     {
         uno::Reference< frame::XTitle > xTitle( getModel(), uno::UNO_QUERY_THROW );
         sName = xTitle->getTitle();
+        sName = sName.trim();
     }
     return sName;
 }
 ::rtl::OUString
 VbaDocumentBase::getPath() throw (uno::RuntimeException)
 {
-       INetURLObject aURL( getModel()->getURL() );
-    rtl::OUString sURL( aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
-    sURL = sURL.copy( 0, sURL.getLength() - aURL.GetLastName().getLength() - 1 );
-        rtl::OUString sPath;
-    ::osl::File::getSystemPathFromFileURL( sURL, sPath );
+    INetURLObject aURL( getModel()->getURL() );
+    rtl::OUString sURL = aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
+    rtl::OUString sPath;
+    if( sURL.getLength() > 0 )
+    {
+       sURL = sURL.copy( 0, sURL.getLength() - aURL.GetLastName().getLength() - 1 );
+       ::osl::File::getSystemPathFromFileURL( sURL, sPath );
+    }
     return sPath;
 }
 
 ::rtl::OUString
 VbaDocumentBase::getFullName() throw (uno::RuntimeException)
 {
-        rtl::OUString sPath;
-    ::osl::File::getSystemPathFromFileURL( getModel()->getURL(), sPath );
+    rtl::OUString sPath = getName();
+    //::osl::File::getSystemPathFromFileURL( getModel()->getURL(), sPath );
     return sPath;
 }
 
@@ -124,38 +132,69 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
     else
         xModifiable->setModified( false );
 
-    uno::Reference< util::XCloseable > xCloseable( getModel(), uno::UNO_QUERY );
-
-    if( xCloseable.is() )
+    // first try to close the document using UI dispatch functionality
+    sal_Bool bUIClose = sal_False;
+    try
     {
-        // use close(boolean DeliverOwnership)
+        uno::Reference< frame::XController > xController( getModel()->getCurrentController(), uno::UNO_SET_THROW );
+        uno::Reference< frame::XDispatchProvider > xDispatchProvider( xController->getFrame(), uno::UNO_QUERY_THROW );
 
-        // The boolean parameter DeliverOwnership tells objects vetoing the close process that they may
-        // assume ownership if they object the closure by throwing a CloseVetoException
-        // Here we give up ownership. To be on the safe side, catch possible veto exception anyway.
-        try{
-            xCloseable->close(sal_True);
-        }
-        catch( util::CloseVetoException )
-        {
-            //close is cancelled, nothing to do
-        }
+        uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
+        uno::Reference< util::XURLTransformer > xURLTransformer(
+                        xServiceManager->createInstanceWithContext(
+                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ),
+                            mxContext ),
+                        uno::UNO_QUERY_THROW );
+
+        util::URL aURL;
+        aURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CloseDoc" ) );
+        xURLTransformer->parseStrict( aURL );
+
+        uno::Reference< css::frame::XDispatch > xDispatch(
+                xDispatchProvider->queryDispatch( aURL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_self" ) ), 0 ),
+                uno::UNO_SET_THROW );
+        xDispatch->dispatch( aURL, uno::Sequence< beans::PropertyValue >() );
+        bUIClose = sal_True;
     }
-    // If close is not supported by this model - try to dispose it.
-    // But if the model disagree with a reset request for the modify state
-    // we shouldn't do so. Otherwhise some strange things can happen.
-    else
+    catch( uno::Exception& )
     {
-        uno::Reference< lang::XComponent > xDisposable ( getModel(), uno::UNO_QUERY );
-        if ( xDisposable.is() )
+    }
+
+    if ( !bUIClose )
+    {
+        // if it is not possible to use UI dispatch, try to close the model directly
+        uno::Reference< util::XCloseable > xCloseable( getModel(), uno::UNO_QUERY );
+        if( xCloseable.is() )
         {
-            // To be on the safe side, catch possible veto exception anyway.
-            try
-            {
-                xDisposable->dispose();
+            // use close(boolean DeliverOwnership)
+
+            // The boolean parameter DeliverOwnership tells objects vetoing the close process that they may
+            // assume ownership if they object the closure by throwing a CloseVetoException
+            // Here we give up ownership. To be on the safe side, catch possible veto exception anyway.
+            try{
+                xCloseable->close(sal_True);
             }
-            catch( uno::Exception& )
+            catch( util::CloseVetoException )
             {
+                //close is cancelled, nothing to do
+            }
+        }
+        // If close is not supported by this model - try to dispose it.
+        // But if the model disagree with a reset request for the modify state
+        // we shouldn't do so. Otherwhise some strange things can happen.
+        else
+        {
+            uno::Reference< lang::XComponent > xDisposable ( getModel(), uno::UNO_QUERY );
+            if ( xDisposable.is() )
+            {
+                // To be on the safe side, catch possible veto exception anyway.
+                try
+                {
+                    xDisposable->dispose();
+                }
+                catch( uno::Exception& )
+                {
+                }
             }
         }
     }
@@ -195,7 +234,22 @@ void
 VbaDocumentBase::setSaved( sal_Bool bSave ) throw (uno::RuntimeException)
 {
     uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY_THROW );
-    xModifiable->setModified( !bSave );
+    try
+    {
+        xModifiable->setModified( !bSave );
+    }
+    catch ( lang::DisposedException& )
+    {
+        // impossibility to set the modified state on disposed document should not trigger an error
+    }
+    catch ( beans::PropertyVetoException& )
+    {
+        uno::Any aCaught( ::cppu::getCaughtException() );
+        throw lang::WrappedTargetRuntimeException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can't change modified state of model!" ) ),
+                uno::Reference< uno::XInterface >(),
+                aCaught );
+    }
 }
 
 sal_Bool
@@ -227,7 +281,7 @@ VbaDocumentBase::getVBProject() throw (uno::RuntimeException)
     {
         uno::Sequence< uno::Any > aArgs( 2 );
         aArgs[ 0 ] <<= uno::Reference< XHelperInterface >( this );
-        aArgs[ 1 ] <<= mxModel;
+        aArgs[ 1 ] <<= getModel();
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         uno::Reference< uno::XInterface > xVBProjects = xServiceManager->createInstanceWithArgumentsAndContext(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBProject" ) ), aArgs, mxContext );

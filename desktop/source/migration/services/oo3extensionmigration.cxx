@@ -293,7 +293,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
                     utl::TextSearch  ts(param, LANGUAGE_DONTKNOW);
 
                     xub_StrLen start = 0;
-                    xub_StrLen end   = static_cast<USHORT>(aExtIdentifier.getLength());
+                    xub_StrLen end   = static_cast<sal_uInt16>(aExtIdentifier.getLength());
                     if (ts.SearchFrwrd(aExtIdentifier, &start, &end))
                         return false;
                 }
@@ -318,7 +318,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
                 utl::TextSearch  ts(param, LANGUAGE_DONTKNOW);
 
                 xub_StrLen start = 0;
-                xub_StrLen end   = static_cast<USHORT>(sDescriptionXmlURL.getLength());
+                xub_StrLen end   = static_cast<sal_uInt16>(sDescriptionXmlURL.getLength());
                 if (ts.SearchFrwrd(sDescriptionXmlURL, &start, &end))
                     return false;
             }

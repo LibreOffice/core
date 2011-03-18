@@ -104,7 +104,7 @@ struct lt_LanguageType
     }
 };
 
-typedef std::map< LanguageType, USHORT, lt_LanguageType >   LangCheckState_map_t;
+typedef std::map< LanguageType, sal_uInt16, lt_LanguageType >   LangCheckState_map_t;
 
 static LangCheckState_map_t & GetLangCheckState()
 {

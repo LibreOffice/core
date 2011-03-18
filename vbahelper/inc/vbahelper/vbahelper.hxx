@@ -83,7 +83,7 @@ namespace ooo
 
         VBAHELPER_DLLPUBLIC void dispatchRequests( const css::uno::Reference< css::frame::XModel>& xModel, const rtl::OUString& aUrl );
      VBAHELPER_DLLPUBLIC void dispatchRequests (const css::uno::Reference< css::frame::XModel>& xModel, const rtl::OUString & aUrl, const css::uno::Sequence< css::beans::PropertyValue >& sProps, const css::uno::Reference< css::frame::XDispatchResultListener >& rListener = css::uno::Reference< css::frame::XDispatchResultListener >(), const sal_Bool bSilent = sal_True );
-        VBAHELPER_DLLPUBLIC void dispatchExecute(SfxViewShell* pView, USHORT nSlot, SfxCallMode nCall = SFX_CALLMODE_SYNCHRON );
+        VBAHELPER_DLLPUBLIC void dispatchExecute(SfxViewShell* pView, sal_uInt16 nSlot, SfxCallMode nCall = SFX_CALLMODE_SYNCHRON );
         VBAHELPER_DLLPUBLIC sal_Int32 OORGBToXLRGB( sal_Int32 );
         VBAHELPER_DLLPUBLIC sal_Int32 XLRGBToOORGB( sal_Int32 );
         VBAHELPER_DLLPUBLIC css::uno::Any OORGBToXLRGB( const css::uno::Any& );
@@ -193,6 +193,7 @@ public:
     virtual void setHeight( double nHeight );
     virtual double getWidth();
     virtual void setWidth( double nWidth);
+    virtual ~ConcreteXShapeGeometryAttributes();
 };
 
 #define VBA_LEFT "PositionX"
@@ -201,11 +202,8 @@ public:
 #define VBA_WIDTH "Width"
 class VBAHELPER_DLLPUBLIC UserFormGeometryHelper : public AbstractGeometryAttributes
 {
-    css::uno::Reference< css::awt::XUnitConversion > mxControlUnits;
-    css::uno::Reference< css::beans::XPropertySet > mxModel;
-
-    sal_Int32 ConvertLogicToPixel( sal_Int32 nValue, sal_Bool bIsPoint, sal_Bool bIsX, sal_Int16 nSourceUnit );
-    sal_Int32 ConvertPixelToLogic( sal_Int32 nValue, sal_Bool bIsPoint, sal_Bool bIsX, sal_Int16 nTargetUnit );
+    css::uno::Reference< css::awt::XWindow > mxWindow;
+    sal_Bool mbDialog;
 
 public:
     UserFormGeometryHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::awt::XControl >& xControl );

@@ -42,7 +42,7 @@ static const char* pCount;
 static const char* pAdd;
 static const char* pItem;
 static const char* pRemove;
-static USHORT nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
+static sal_uInt16 nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -62,7 +62,7 @@ SbxCollection::SbxCollection( const XubString& rClass )
     }
     Initialize();
     // For Access on itself
-    StartListening( GetBroadcaster(), TRUE );
+    StartListening( GetBroadcaster(), sal_True );
 }
 
 SbxCollection::SbxCollection( const SbxCollection& rColl )
@@ -102,7 +102,7 @@ void SbxCollection::Initialize()
     p->SetFlag( SBX_DONTSTORE );
 }
 
-SbxVariable* SbxCollection::FindUserData( UINT32 nData )
+SbxVariable* SbxCollection::FindUserData( sal_uInt32 nData )
 {
     if( GetParameters() )
     {
@@ -130,9 +130,9 @@ void SbxCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
     const SbxHint* p = PTR_CAST(SbxHint,&rHint);
     if( p )
     {
-        ULONG nId = p->GetId();
-        BOOL bRead  = BOOL( nId == SBX_HINT_DATAWANTED );
-        BOOL bWrite = BOOL( nId == SBX_HINT_DATACHANGED );
+        sal_uIntPtr nId = p->GetId();
+        sal_Bool bRead  = sal_Bool( nId == SBX_HINT_DATAWANTED );
+        sal_Bool bWrite = sal_Bool( nId == SBX_HINT_DATACHANGED );
         SbxVariable* pVar = p->GetVar();
         SbxArray* pArg = pVar->GetParameters();
         if( bRead || bWrite )
@@ -192,7 +192,7 @@ void SbxCollection::CollItem( SbxArray* pPar_ )
         {
             short n = p->GetInteger();
             if( n >= 1 && n <= (short) pObjs->Count() )
-                pRes = pObjs->Get( (USHORT) n - 1 );
+                pRes = pObjs->Get( (sal_uInt16) n - 1 );
         }
         if( !pRes )
             SetError( SbxERR_BAD_INDEX );
@@ -212,13 +212,13 @@ void SbxCollection::CollRemove( SbxArray* pPar_ )
         if( n < 1 || n > (short) pObjs->Count() )
             SetError( SbxERR_BAD_INDEX );
         else
-            Remove( pObjs->Get( (USHORT) n - 1 ) );
+            Remove( pObjs->Get( (sal_uInt16) n - 1 ) );
     }
 }
 
-BOOL SbxCollection::LoadData( SvStream& rStrm, USHORT nVer )
+sal_Bool SbxCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
-    BOOL bRes = SbxObject::LoadData( rStrm, nVer );
+    sal_Bool bRes = SbxObject::LoadData( rStrm, nVer );
     Initialize();
     return bRes;
 }
@@ -226,7 +226,7 @@ BOOL SbxCollection::LoadData( SvStream& rStrm, USHORT nVer )
 /////////////////////////////////////////////////////////////////////////
 
 SbxStdCollection::SbxStdCollection
-                    ( const XubString& rClass, const XubString& rElem, BOOL b )
+                    ( const XubString& rClass, const XubString& rElem, sal_Bool b )
                   : SbxCollection( rClass ), aElemClass( rElem ),
                     bAddRemoveOk( b )
 {}
@@ -278,9 +278,9 @@ void SbxStdCollection::CollRemove( SbxArray* pPar_ )
         SbxCollection::CollRemove( pPar_ );
 }
 
-BOOL SbxStdCollection::LoadData( SvStream& rStrm, USHORT nVer )
+sal_Bool SbxStdCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
-    BOOL bRes = SbxCollection::LoadData( rStrm, nVer );
+    sal_Bool bRes = SbxCollection::LoadData( rStrm, nVer );
     if( bRes )
     {
         rStrm.ReadByteString( aElemClass, RTL_TEXTENCODING_ASCII_US );
@@ -289,9 +289,9 @@ BOOL SbxStdCollection::LoadData( SvStream& rStrm, USHORT nVer )
     return bRes;
 }
 
-BOOL SbxStdCollection::StoreData( SvStream& rStrm ) const
+sal_Bool SbxStdCollection::StoreData( SvStream& rStrm ) const
 {
-    BOOL bRes = SbxCollection::StoreData( rStrm );
+    sal_Bool bRes = SbxCollection::StoreData( rStrm );
     if( bRes )
     {
         rStrm.WriteByteString( aElemClass, RTL_TEXTENCODING_ASCII_US );

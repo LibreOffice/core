@@ -128,3 +128,11 @@ dummy:
 
 .INCLUDE : $(PRJ)$/target.pmk
 
+
+ALLTAR : $(MISC)/macab1.component
+
+$(MISC)/macab1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        macab1.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt macab1.component

@@ -30,28 +30,28 @@ import com.sun.star.beans.Property;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.sdbc.XResultSet;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.ucb.Command;
-import com.sun.star.ucb.OpenCommandArgument2;
-import com.sun.star.ucb.OpenMode;
 import com.sun.star.ucb.XCommandProcessor;
 import com.sun.star.ucb.XContent;
-import com.sun.star.ucb.XContentAccess;
 import com.sun.star.ucb.XContentIdentifier;
 import com.sun.star.ucb.XContentIdentifierFactory;
 import com.sun.star.ucb.XContentProvider;
-import com.sun.star.ucb.XDynamicResultSet;
 import com.sun.star.uno.UnoRuntime;
-import complexlib.ComplexTestCase;
 import util.WriterTools;
-import util.utils;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
 /**
  *
  */
-public class CheckTransientDocumentsContent extends ComplexTestCase{
+public class CheckTransientDocumentsContent {
+    // TODO: document doesn't exists
     private final String testDocuments[] = new String[]{"sForm.sxw"};//, "chinese.sxw", "Iterator.sxw"};
     private final int countDocs = testDocuments.length;
     private XMultiServiceFactory xMSF = null;
@@ -61,17 +61,18 @@ public class CheckTransientDocumentsContent extends ComplexTestCase{
         return new String[] {"checkTransientDocumentsContent"};
     }
 
-    public void before() {
-        xMSF = (XMultiServiceFactory)param.getMSF();
+    @Before public void before() {
+        xMSF = getMSF();
         xTextDoc = new XTextDocument[countDocs];
-        log.println("Open some documents.");
+        System.out.println("Open some documents.");
         for (int i=0; i<countDocs; i++) {
-            String fileName = utils.getFullTestURL(testDocuments[i]);
+            String fileName = TestDocument.getUrl(testDocuments[i]);
             xTextDoc[i] = WriterTools.loadTextDoc(xMSF, fileName);
+            assertNotNull("Can't load document " + fileName, xTextDoc[i]);
         }
     }
-    public void after() {
-        log.println("Close all documents.");
+    @After public void after() {
+        System.out.println("Close all documents.");
         for (int i=0; i<countDocs; i++) {
             xTextDoc[i].dispose();
         }
@@ -80,15 +81,13 @@ public class CheckTransientDocumentsContent extends ComplexTestCase{
     /**
      * Check the content of one document
      */
-    public void checkTransientDocumentsContent() {
+    @Test public void checkTransientDocumentsContent() {
         try {
             // create the ucb
             XContentIdentifierFactory xContentIdentifierFactory =
-                            (XContentIdentifierFactory)UnoRuntime.queryInterface(
-                            XContentIdentifierFactory.class, xMSF.createInstance(
-                            "com.sun.star.ucb.UniversalContentBroker"));
+                            UnoRuntime.queryInterface(XContentIdentifierFactory.class, xMSF.createInstance("com.sun.star.ucb.UniversalContentBroker"));
             XContentProvider xContentProvider =
-                            (XContentProvider)UnoRuntime.queryInterface(XContentProvider.class, xContentIdentifierFactory);
+                            UnoRuntime.queryInterface(XContentProvider.class, xContentIdentifierFactory);
             // create a content identifier from the ucb for tdoc
             XContentIdentifier xContentIdentifier =
                                xContentIdentifierFactory.createContentIdentifier("vnd.sun.star.tdoc:/1");
@@ -96,7 +95,7 @@ public class CheckTransientDocumentsContent extends ComplexTestCase{
             XContent xContent = xContentProvider.queryContent(xContentIdentifier);
 
             // actual test: commands to get some properties
-            XCommandProcessor xCommandProcessor = (XCommandProcessor)UnoRuntime.queryInterface(XCommandProcessor.class, xContent);
+            XCommandProcessor xCommandProcessor = UnoRuntime.queryInterface(XCommandProcessor.class, xContent);
             // build up the command
             Command command = new Command();
             command.Name = "getPropertySetInfo";
@@ -106,16 +105,16 @@ public class CheckTransientDocumentsContent extends ComplexTestCase{
             Object result = xCommandProcessor.execute(command, 0, null);
 
             // check the result
-            log.println("Result: "+ result.getClass().toString());
-            XPropertySetInfo xPropertySetInfo = (XPropertySetInfo)UnoRuntime.queryInterface(XPropertySetInfo.class, result);
+            System.out.println("Result: "+ result.getClass().toString());
+            XPropertySetInfo xPropertySetInfo = UnoRuntime.queryInterface(XPropertySetInfo.class, result);
             Property[] props = xPropertySetInfo.getProperties();
             boolean res = false;
             for(int i=0; i<props.length; i++) {
                 String propName = props[i].Name;
                 res |= propName.equals("DocumentModel");
-                log.println("Found property: " + propName + "   type: " + props[i].Type.getTypeName());
+                System.out.println("Found property: " + propName + "   type: " + props[i].Type.getTypeName());
             }
-            assure("Did not find property 'DocumentModel' in the Property array.", res);
+            assertNotNull("Did not find property 'DocumentModel' in the Property array.", res);
 
             // get on property
             command.Name = "getPropertyValues";
@@ -130,16 +129,38 @@ public class CheckTransientDocumentsContent extends ComplexTestCase{
             result = xCommandProcessor.execute(command, 0, null);
 
             // check the result
-            log.println("Result: "+ result.getClass().toString());
+            System.out.println("Result: "+ result.getClass().toString());
 
-            XModel xModel = (XModel)UnoRuntime.queryInterface(XModel.class, result);
-            assure("Did not get property 'DocumentModel'.", xModel == null);
+            XModel xModel = UnoRuntime.queryInterface(XModel.class, result);
+            assertTrue("Did not get property 'DocumentModel'.", xModel == null);
         }
         catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace((java.io.PrintWriter)log);
-            failed("Could not create test objects.");
+            e.printStackTrace();
+            fail("Could not create test objects.");
         }
 
     }
+
+     private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
 
 }

@@ -97,14 +97,14 @@ void FindTextFieldControl::InitControls_Impl()
     SetText( SVX_RESSTR( RID_SVXSTR_FINDBAR_FIND ) );
     SetControlForeground(GetSettings().GetStyleSettings().GetDisableColor());
 
-    EnableAutocomplete(TRUE, TRUE);
+    EnableAutocomplete(sal_True, sal_True);
 }
 
 void FindTextFieldControl::Remember_Impl(const String& rStr)
 {
-    USHORT nCount = GetEntryCount();
+    sal_uInt16 nCount = GetEntryCount();
 
-    for (USHORT i=0; i<nCount; ++i)
+    for (sal_uInt16 i=0; i<nCount; ++i)
     {
         if ( rStr == GetEntry(i))
             return;
@@ -371,8 +371,8 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< :
     ToolBox* pToolBox = (ToolBox*)pWindow;
     if ( pToolBox )
     {
-        USHORT nItemCount = pToolBox->GetItemCount();
-        for ( USHORT i=0; i<nItemCount; ++i )
+        sal_uInt16 nItemCount = pToolBox->GetItemCount();
+        for ( sal_uInt16 i=0; i<nItemCount; ++i )
         {
             ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
             if ( sItemCommand.equals( COMMAND_DOWNSEARCH ) )
@@ -542,8 +542,8 @@ void SAL_CALL DownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
     ToolBox* pToolBox = (ToolBox*)pWindow;
     if ( pToolBox )
     {
-        USHORT nItemCount = pToolBox->GetItemCount();
-        for ( USHORT i=0; i<nItemCount; ++i )
+        sal_uInt16 nItemCount = pToolBox->GetItemCount();
+        for ( sal_uInt16 i=0; i<nItemCount; ++i )
         {
             ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
             if ( sItemCommand.equals( COMMAND_FINDTEXT ) )
@@ -671,8 +671,8 @@ void SAL_CALL UpSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) th
     ToolBox* pToolBox = (ToolBox*)pWindow;
     if ( pToolBox )
     {
-        USHORT nItemCount = pToolBox->GetItemCount();
-        for ( USHORT i=0; i<nItemCount; ++i )
+        sal_uInt16 nItemCount = pToolBox->GetItemCount();
+        for ( sal_uInt16 i=0; i<nItemCount; ++i )
         {
             ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
             if ( sItemCommand.equals( COMMAND_FINDTEXT ) )
@@ -836,8 +836,8 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
         ToolBox* pToolBox = (ToolBox*)pWindow;
         if ( pToolBox )
         {
-            USHORT nItemCount = pToolBox->GetItemCount();
-            for ( USHORT i=0; i<nItemCount; ++i )
+            sal_uInt16 nItemCount = pToolBox->GetItemCount();
+            for ( sal_uInt16 i=0; i<nItemCount; ++i )
             {
                 ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
                 if ( sItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:FindText")) )

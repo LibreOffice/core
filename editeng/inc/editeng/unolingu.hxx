@@ -55,17 +55,17 @@ class Window;
 
 class SvxLinguConfigUpdate
 {
-    static INT32    nCurrentDataFilesChangedCheckValue;
-    static INT16    nNeedUpdating;  // n == -1 => needs to be checked
+    static sal_Int32    nCurrentDataFilesChangedCheckValue;
+    static sal_Int16    nNeedUpdating;  // n == -1 => needs to be checked
                                     // n ==  0 => already updated, nothing to be done
                                     // n ==  1 => needs to be updated
 
-    static INT32 CalcDataFilesChangedCheckValue();
+    static sal_Int32 CalcDataFilesChangedCheckValue();
 
 public:
 
     EDITENG_DLLPUBLIC static void UpdateAll( sal_Bool bForceCheck = sal_False );
-    static BOOL IsNeedUpdateAll( sal_Bool bForceCheck = sal_False );
+    static sal_Bool IsNeedUpdateAll( sal_Bool bForceCheck = sal_False );
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -155,15 +155,15 @@ struct SvxAlternativeSpelling
     String      aReplacement;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenatedWord >    xHyphWord;
-    INT16       nChangedPos,
+    sal_Int16       nChangedPos,
                  nChangedLength;
-    BOOL        bIsAltSpelling;
+    sal_Bool        bIsAltSpelling;
 
     inline SvxAlternativeSpelling();
 };
 
 inline SvxAlternativeSpelling::SvxAlternativeSpelling() :
-    nChangedPos(-1), nChangedLength(-1), bIsAltSpelling(FALSE)
+    nChangedPos(-1), nChangedLength(-1), bIsAltSpelling(sal_False)
 {
 }
 

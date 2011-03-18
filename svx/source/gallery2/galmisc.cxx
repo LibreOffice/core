@@ -52,7 +52,7 @@
 #include "codec.hxx"
 #include "gallery.hrc"
 #include "svx/gallery1.hxx"
-#include "galtheme.hxx"
+#include "svx/galtheme.hxx"
 #include "svx/galmisc.hxx"
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -113,11 +113,11 @@ IMPL_LINK( SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
 // - GalleryGraphicImport -
 // ------------------------
 
-USHORT GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
-                             String& rFilterName, BOOL bShowProgress )
+sal_uInt16 GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
+                             String& rFilterName, sal_Bool bShowProgress )
 {
-    USHORT      nRet = SGA_IMPORT_NONE;
-    SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, TRUE );
+    sal_uInt16      nRet = SGA_IMPORT_NONE;
+    SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, sal_True );
     String      aFilterName;
 
     aMedium.DownLoad();
@@ -128,7 +128,7 @@ USHORT GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
     {
         GraphicFilter*      pGraphicFilter = GraphicFilter::GetGraphicFilter();
         GalleryProgress*    pProgress = bShowProgress ? new GalleryProgress( pGraphicFilter ) : NULL;
-        USHORT              nFormat;
+        sal_uInt16              nFormat;
 
         if( !pGraphicFilter->ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
         {
@@ -146,10 +146,10 @@ USHORT GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
 // - GallerySvDrawImport -
 // -----------------------
 
-BOOL GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
+sal_Bool GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
 {
-    UINT32  nVersion;
-    BOOL    bRet = FALSE;
+    sal_uInt32  nVersion;
+    sal_Bool    bRet = sal_False;
 
     if( GalleryCodec::IsCoded( rIStm, nVersion ) )
     {
@@ -194,9 +194,9 @@ BOOL GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
 // - CreateIMapGraphic -
 // ---------------------
 
-BOOL CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap )
+sal_Bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if ( rModel.GetPageCount() )
     {
@@ -205,10 +205,10 @@ BOOL CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& 
 
         if ( pPage->GetObjCount() == 1 && pObj->ISA( SdrGrafObj ) )
         {
-            const USHORT nCount = pObj->GetUserDataCount();
+            const sal_uInt16 nCount = pObj->GetUserDataCount();
 
             // gibt es in den User-Daten eine IMap-Information?
-            for ( USHORT i = 0; i < nCount; i++ )
+            for ( sal_uInt16 i = 0; i < nCount; i++ )
             {
                 const SdrObjUserData* pUserData = pObj->GetUserData( i );
 
@@ -216,7 +216,7 @@ BOOL CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& 
                 {
                     rGraphic = ( (SdrGrafObj*) pObj )->GetGraphic();
                     rImageMap = ( (SgaIMapInfo*) pUserData )->GetImageMap();
-                    bRet = TRUE;
+                    bRet = sal_True;
                     break;
                 }
             }
@@ -230,7 +230,7 @@ BOOL CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& 
 // - GetReducedString -
 // --------------------
 
-String GetReducedString( const INetURLObject& rURL, ULONG nMaxLen )
+String GetReducedString( const INetURLObject& rURL, sal_uIntPtr nMaxLen )
 {
     String aReduced( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
 
@@ -244,7 +244,7 @@ String GetReducedString( const INetURLObject& rURL, ULONG nMaxLen )
 
         if( aPath.Len() > nMaxLen )
         {
-            aReduced = aPath.Copy( 0, (USHORT)( nMaxLen - aName.Len() - 4 ) );
+            aReduced = aPath.Copy( 0, (sal_uInt16)( nMaxLen - aName.Len() - 4 ) );
             aReduced += String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
             aReduced += aDelimiter;
             aReduced += aName;
@@ -273,9 +273,9 @@ String GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
 
 // -----------------------------------------------------------------------------
 
-BOOL FileExists( const INetURLObject& rURL )
+sal_Bool FileExists( const INetURLObject& rURL )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( rURL.GetProtocol() != INET_PROT_NOT_VALID )
     {
@@ -303,9 +303,9 @@ BOOL FileExists( const INetURLObject& rURL )
 
 // -----------------------------------------------------------------------------
 
-BOOL CreateDir( const INetURLObject& rURL )
+sal_Bool CreateDir( const INetURLObject& rURL )
 {
-    BOOL bRet = FileExists( rURL );
+    sal_Bool bRet = FileExists( rURL );
 
     if( !bRet )
     {
@@ -340,9 +340,9 @@ BOOL CreateDir( const INetURLObject& rURL )
 
 // -----------------------------------------------------------------------------
 
-BOOL CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
+sal_Bool CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     try
     {
@@ -351,7 +351,7 @@ BOOL CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
         aDestPath.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")),
                                   uno::makeAny( ucb::TransferInfo( sal_False, rSrcURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                 rDstURL.GetName(), ucb::NameClash::OVERWRITE ) ) );
-        bRet = TRUE;
+        bRet = sal_True;
     }
     catch( const ucb::ContentCreationException& )
     {
@@ -368,9 +368,9 @@ BOOL CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
 
 // -----------------------------------------------------------------------------
 
-BOOL KillFile( const INetURLObject& rURL )
+sal_Bool KillFile( const INetURLObject& rURL )
 {
-    BOOL bRet = FileExists( rURL );
+    sal_Bool bRet = FileExists( rURL );
 
     if( bRet )
     {
@@ -381,15 +381,15 @@ BOOL KillFile( const INetURLObject& rURL )
         }
         catch( const ucb::ContentCreationException& )
         {
-            bRet = FALSE;
+            bRet = sal_False;
         }
         catch( const uno::RuntimeException& )
         {
-            bRet = FALSE;
+            bRet = sal_False;
         }
         catch( const uno::Exception& )
         {
-            bRet = FALSE;
+            bRet = sal_False;
         }
     }
 
@@ -446,17 +446,17 @@ GalleryProgress::~GalleryProgress()
 
 // ------------------------------------------------------------------------
 
-void GalleryProgress::Update( ULONG nVal, ULONG nMaxVal )
+void GalleryProgress::Update( sal_uIntPtr nVal, sal_uIntPtr nMaxVal )
 {
     if( mxProgressBar.is() && nMaxVal )
-        mxProgressBar->setValue( Min( (ULONG)( (double) nVal / nMaxVal * GALLERY_PROGRESS_RANGE ), (ULONG) GALLERY_PROGRESS_RANGE ) );
+        mxProgressBar->setValue( Min( (sal_uIntPtr)( (double) nVal / nMaxVal * GALLERY_PROGRESS_RANGE ), (sal_uIntPtr) GALLERY_PROGRESS_RANGE ) );
 }
 
 // -----------------------
 // - GalleryTransferable -
 // -----------------------
 
-GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, ULONG nObjectPos, bool bLazy ) :
+GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, sal_uIntPtr nObjectPos, bool bLazy ) :
     mpTheme( pTheme ),
     meObjectKind( mpTheme->GetObjectKind( nObjectPos ) ),
     mnObjectPos( nObjectPos ),
@@ -626,7 +626,7 @@ sal_Bool GalleryTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pU
 
 void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
 {
-    mpTheme->SetDragging( FALSE );
+    mpTheme->SetDragging( sal_False );
     mpTheme->SetDragPos( 0 );
     if ( nDropAction )
     {

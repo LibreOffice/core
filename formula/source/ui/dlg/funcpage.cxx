@@ -70,7 +70,7 @@ long FormulaListBox::PreNotify( NotifyEvent& rNEvt )
 
     long nResult=ListBox::PreNotify(rNEvt);
 
-    USHORT nSwitch=aNotifyEvt.GetType();
+    sal_uInt16 nSwitch=aNotifyEvt.GetType();
     if(nSwitch==EVENT_KEYINPUT)
     {
         KeyInput(*aNotifyEvt.GetKeyEvent());
@@ -82,7 +82,7 @@ long FormulaListBox::PreNotify( NotifyEvent& rNEvt )
 
 //============================================================================
 
-inline USHORT Lb2Cat( USHORT nLbPos )
+inline sal_uInt16 Lb2Cat( sal_uInt16 nLbPos )
 {
     // Category 0 == LRU, otherwise Categories == LbPos-1
     if ( nLbPos > 0 )
@@ -103,8 +103,8 @@ FuncPage::FuncPage(Window* pParent,const IFunctionManager* _pFunctionManager):
     m_pFunctionManager(_pFunctionManager)
 {
     FreeResource();
-    m_aSmartHelpId = aLbFunction.GetSmartHelpId();
-    aLbFunction.SetSmartUniqueId(m_aSmartHelpId);
+    m_aHelpId = aLbFunction.GetHelpId();
+    aLbFunction.SetUniqueId(m_aHelpId);
 
     InitLRUList();
 
@@ -135,15 +135,15 @@ void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory)
 
 void FuncPage::UpdateFunctionList()
 {
-    USHORT  nSelPos   = aLbCategory.GetSelectEntryPos();
+    sal_uInt16  nSelPos   = aLbCategory.GetSelectEntryPos();
     const IFunctionCategory* pCategory = static_cast<const IFunctionCategory*>(aLbCategory.GetEntryData(nSelPos));
-    USHORT  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
+    sal_uInt16  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
                             ? Lb2Cat( nSelPos ) : 0;
 
     (void)nCategory;
 
     aLbFunction.Clear();
-    aLbFunction.SetUpdateMode( FALSE );
+    aLbFunction.SetUpdateMode( sal_False );
     //------------------------------------------------------
 
     if ( nSelPos > 0 )
@@ -178,7 +178,7 @@ void FuncPage::UpdateFunctionList()
     }
 
     //------------------------------------------------------
-    aLbFunction.SetUpdateMode( TRUE );
+    aLbFunction.SetUpdateMode( sal_True );
     aLbFunction.SelectEntryPos(0);
 
     if(IsVisible()) SelHdl(&aLbFunction);
@@ -191,15 +191,15 @@ IMPL_LINK( FuncPage, SelHdl, ListBox*, pLb )
         const IFunctionDescription* pDesc = GetFuncDesc( GetFunction() );
         if ( pDesc )
         {
-            const long nHelpId = pDesc->getHelpId();
-            if ( nHelpId )
-                aLbFunction.SetSmartHelpId(SmartId(nHelpId));
+            const rtl::OString sHelpId = pDesc->getHelpId();
+            if ( sHelpId.getLength() )
+                aLbFunction.SetHelpId(sHelpId);
         }
         aSelectionLink.Call(this);
     }
     else
     {
-        aLbFunction.SetSmartHelpId(m_aSmartHelpId);
+        aLbFunction.SetHelpId(m_aHelpId);
         UpdateFunctionList();
     }
     return 0;
@@ -211,16 +211,16 @@ IMPL_LINK( FuncPage, DblClkHdl, ListBox*, EMPTYARG )
     return 0;
 }
 
-void FuncPage::SetCategory(USHORT nCat)
+void FuncPage::SetCategory(sal_uInt16 nCat)
 {
     aLbCategory.SelectEntryPos(nCat);
     UpdateFunctionList();
 }
-USHORT FuncPage::GetFuncPos(const IFunctionDescription* _pDesc)
+sal_uInt16 FuncPage::GetFuncPos(const IFunctionDescription* _pDesc)
 {
     return aLbFunction.GetEntryPos(_pDesc);
 }
-void FuncPage::SetFunction(USHORT nFunc)
+void FuncPage::SetFunction(sal_uInt16 nFunc)
 {
     aLbFunction.SelectEntryPos(nFunc);
 }
@@ -230,17 +230,17 @@ void FuncPage::SetFocus()
     aLbFunction.GrabFocus();
 }
 
-USHORT FuncPage::GetCategory()
+sal_uInt16 FuncPage::GetCategory()
 {
     return aLbCategory.GetSelectEntryPos();
 }
 
-USHORT FuncPage::GetFunction()
+sal_uInt16 FuncPage::GetFunction()
 {
     return aLbFunction.GetSelectEntryPos();
 }
 
-USHORT FuncPage::GetFunctionEntryCount()
+sal_uInt16 FuncPage::GetFunctionEntryCount()
 {
     return aLbFunction.GetSelectEntryCount();
 }
@@ -249,7 +249,7 @@ String FuncPage::GetSelFunctionName() const
 {
     return aLbFunction.GetSelectEntry();
 }
-const IFunctionDescription* FuncPage::GetFuncDesc( USHORT nPos ) const
+const IFunctionDescription* FuncPage::GetFuncDesc( sal_uInt16 nPos ) const
 {
     // not pretty, but hopefully rare
     return (const IFunctionDescription*) aLbFunction.GetEntryData(nPos);

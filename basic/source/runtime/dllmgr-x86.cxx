@@ -165,7 +165,7 @@ std::size_t alignment(SbxVariable * variable) {
                 std::size_t n = 1;
                 SbxArray * props = PTR_CAST(SbxObject, variable->GetObject())->
                     GetProperties();
-                for (USHORT i = 0; i < props->Count(); ++i) {
+                for (sal_uInt16 i = 0; i < props->Count(); ++i) {
                     n = std::max(n, alignment(props->Get(i)));
                 }
                 return n;
@@ -180,9 +180,9 @@ std::size_t alignment(SbxVariable * variable) {
     } else {
         SbxDimArray * arr = PTR_CAST(SbxDimArray, variable->GetObject());
         int dims = arr->GetDims();
-        std::vector< INT32 > low(dims);
+        std::vector< sal_Int32 > low(dims);
         for (int i = 0; i < dims; ++i) {
-            INT32 up;
+            sal_Int32 up;
             arr->GetDim32(i + 1, low[i], up);
         }
         return alignment(arr->Get32(&low[0]));
@@ -203,7 +203,8 @@ SbError marshalString(
         return e;
     }
     std::vector< char > * blob = data.newBlob();
-    blob->insert(blob->begin(), str.getStr(), str.getStr() + str.getLength() + 1 );
+    blob->insert(
+        blob->begin(), str.getStr(), str.getStr() + str.getLength() + 1);
     *buffer = address(*blob);
     data.unmarshalStrings.push_back(StringData(variable, *buffer, special));
     return ERRCODE_NONE;
@@ -216,7 +217,7 @@ SbError marshalStruct(
     OSL_ASSERT(variable != 0);
     SbxArray * props = PTR_CAST(SbxObject, variable->GetObject())->
         GetProperties();
-    for (USHORT i = 0; i < props->Count(); ++i) {
+    for (sal_uInt16 i = 0; i < props->Count(); ++i) {
         SbError e = marshal(false, props->Get(i), false, blob, offset, data);
         if (e != ERRCODE_NONE) {
             return e;
@@ -232,12 +233,12 @@ SbError marshalArray(
     OSL_ASSERT(variable != 0);
     SbxDimArray * arr = PTR_CAST(SbxDimArray, variable->GetObject());
     int dims = arr->GetDims();
-    std::vector< INT32 > low(dims);
-    std::vector< INT32 > up(dims);
+    std::vector< sal_Int32 > low(dims);
+    std::vector< sal_Int32 > up(dims);
     for (int i = 0; i < dims; ++i) {
         arr->GetDim32(i + 1, low[i], up[i]);
     }
-    for (std::vector< INT32 > idx = low;;) {
+    for (std::vector< sal_Int32 > idx = low;;) {
         SbError e = marshal(
             false, arr->Get32(&idx[0]), false, blob, offset, data);
         if (e != ERRCODE_NONE) {
@@ -402,7 +403,7 @@ void const * unmarshal(SbxVariable * variable, void const * data) {
                         alignment(variable)));
                 SbxArray * props = PTR_CAST(SbxObject, variable->GetObject())->
                     GetProperties();
-                for (USHORT i = 0; i < props->Count(); ++i) {
+                for (sal_uInt16 i = 0; i < props->Count(); ++i) {
                     data = unmarshal(props->Get(i), data);
                 }
                 break;
@@ -420,12 +421,12 @@ void const * unmarshal(SbxVariable * variable, void const * data) {
     } else {
         SbxDimArray * arr = PTR_CAST(SbxDimArray, variable->GetObject());
         int dims = arr->GetDims();
-        std::vector< INT32 > low(dims);
-        std::vector< INT32 > up(dims);
+        std::vector< sal_Int32 > low(dims);
+        std::vector< sal_Int32 > up(dims);
         for (int i = 0; i < dims; ++i) {
             arr->GetDim32(i + 1, low[i], up[i]);
         }
-        for (std::vector< INT32 > idx = low;;) {
+        for (std::vector< sal_Int32 > idx = low;;) {
             data = unmarshal(arr->Get32(&idx[0]), data);
             int i = dims - 1;
             while (idx[i] == up[i]) {
@@ -485,7 +486,7 @@ SbError call(
             RTL_CONSTASCII_STRINGPARAM("KERNEL32.DLL")) &&
         (proc.name ==
          rtl::OString(RTL_CONSTASCII_STRINGPARAM("GetLogicalDriveStringsA")));
-    for (USHORT i = 1; i < (arguments == 0 ? 0 : arguments->Count()); ++i) {
+    for (sal_uInt16 i = 1; i < (arguments == 0 ? 0 : arguments->Count()); ++i) {
         SbError e = marshal(
             true, arguments->Get(i), special && i == 2, stack, stack.size(),
             data);
@@ -547,7 +548,7 @@ SbError call(
         OSL_ASSERT(false);
         break;
     }
-    for (USHORT i = 1; i < (arguments == 0 ? 0 : arguments->Count()); ++i) {
+    for (sal_uInt16 i = 1; i < (arguments == 0 ? 0 : arguments->Count()); ++i) {
         arguments->Get(i)->ResetFlag(SBX_REFERENCE);
             //TODO: skipped for errors?!?
     }

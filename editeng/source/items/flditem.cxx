@@ -75,7 +75,7 @@ int SvxFieldData::operator==( const SvxFieldData& rFld ) const
 {
     DBG_ASSERT( Type() == rFld.Type(), "==: Different Types" );
     (void)rFld;
-    return TRUE;    // Basic class is always the same.
+    return sal_True;    // Basic class is always the same.
 }
 
 // -----------------------------------------------------------------------
@@ -103,7 +103,7 @@ MetaAction* SvxFieldData::createEndComment() const
 
 // -----------------------------------------------------------------------
 
-SvxFieldItem::SvxFieldItem( SvxFieldData* pFld, const USHORT nId ) :
+SvxFieldItem::SvxFieldItem( SvxFieldData* pFld, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
 {
     pField = pFld;  // belongs directly to the item
@@ -111,7 +111,7 @@ SvxFieldItem::SvxFieldItem( SvxFieldData* pFld, const USHORT nId ) :
 
 // -----------------------------------------------------------------------
 
-SvxFieldItem::SvxFieldItem( const SvxFieldData& rField, const USHORT nId ) :
+SvxFieldItem::SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
 {
     pField = rField.Clone();
@@ -141,7 +141,7 @@ SfxPoolItem* SvxFieldItem::Clone( SfxItemPool* ) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxFieldItem::Create( SvStream& rStrm, USHORT ) const
+SfxPoolItem* SvxFieldItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
     SvxFieldData* pData = 0;
     SvPersistStream aPStrm( GetClassManager(), &rStrm );
@@ -158,7 +158,7 @@ SfxPoolItem* SvxFieldItem::Create( SvStream& rStrm, USHORT ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxFieldItem::Store( SvStream& rStrm, USHORT /*nItemVersion*/ ) const
+SvStream& SvxFieldItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     DBG_ASSERT( pField, "SvxFieldItem::Store: Field?!" );
     SvPersistStream aPStrm( GetClassManager(), &rStrm );
@@ -185,10 +185,10 @@ int SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
 
     const SvxFieldData* pOtherFld = ((const SvxFieldItem&)rItem).GetField();
     if ( !pField && !pOtherFld )
-        return TRUE;
+        return sal_True;
 
     if ( ( !pField && pOtherFld ) || ( pField && !pOtherFld ) )
-        return FALSE;
+        return sal_False;
 
     return ( ( pField->Type() == pOtherFld->Type() )
                 && ( *pField == *pOtherFld ) );
@@ -230,7 +230,7 @@ SvxFieldData* SvxDateField::Clone() const
 int SvxDateField::operator==( const SvxFieldData& rOther ) const
 {
     if ( rOther.Type() != Type() )
-        return FALSE;
+        return sal_False;
 
     const SvxDateField& rOtherFld = (const SvxDateField&) rOther;
     return ( ( nFixDate == rOtherFld.nFixDate ) &&
@@ -242,7 +242,7 @@ int SvxDateField::operator==( const SvxFieldData& rOther ) const
 
 void SvxDateField::Load( SvPersistStream & rStm )
 {
-    USHORT nType, nFormat;
+    sal_uInt16 nType, nFormat;
 
     rStm >> nFixDate;
     rStm >> nType;
@@ -257,8 +257,8 @@ void SvxDateField::Load( SvPersistStream & rStm )
 void SvxDateField::Save( SvPersistStream & rStm )
 {
     rStm << nFixDate;
-    rStm << (USHORT)eType;
-    rStm << (USHORT)eFormat;
+    rStm << (sal_uInt16)eType;
+    rStm << (sal_uInt16)eFormat;
 }
 
 // -----------------------------------------------------------------------
@@ -285,7 +285,7 @@ String SvxDateField::GetFormatted( Date& aDate, SvxDateFormat eFormat, SvNumberF
         eFormat = SVXDATEFORMAT_STDSMALL;
     }
 
-    ULONG nFormatKey;
+    sal_uLong nFormatKey;
 
     switch( eFormat )
     {
@@ -366,7 +366,7 @@ SvxFieldData* SvxURLField::Clone() const
 int SvxURLField::operator==( const SvxFieldData& rOther ) const
 {
     if ( rOther.Type() != Type() )
-        return FALSE;
+        return sal_False;
 
     const SvxURLField& rOtherFld = (const SvxURLField&) rOther;
     return ( ( eFormat == rOtherFld.eFormat ) &&
@@ -377,83 +377,46 @@ int SvxURLField::operator==( const SvxFieldData& rOther ) const
 
 // -----------------------------------------------------------------------
 
+static void write_unicode( SvPersistStream & rStm, const String& rString )
+{
+    sal_uInt16 nL = rString.Len();
+    rStm << nL;
+    rStm.Write( rString.GetBuffer(), nL*sizeof(sal_Unicode) );
+}
+
+static void read_unicode( SvPersistStream & rStm, String& rString )
+{
+    sal_uInt16 nL = 0;
+    rStm >> nL;
+    if ( nL )
+    {
+        rString.AllocBuffer( nL );
+        rStm.Read( rString.GetBufferAccess(), nL*sizeof(sal_Unicode) );
+        rString.ReleaseBufferAccess( nL );
+    }
+}
+
 void SvxURLField::Load( SvPersistStream & rStm )
 {
-    USHORT nFormat;
-    sal_uInt32 nFrameMarker, nCharSetMarker;
-    long nUlongSize = (long)sizeof(sal_uInt32);
-    String aTmpURL;
+    sal_uInt16 nFormat = 0;
 
     rStm >> nFormat;
-
-    // UNICODE: rStm >> aTmpURL;
-    rStm.ReadByteString(aTmpURL);
-
-    // UNICODE: rStm >> aRepresentation;
-    // read to a temp string first, read text encoding and
-    // convert later to stay compatible to fileformat
-    ByteString aTempString;
-    rtl_TextEncoding aTempEncoding = RTL_TEXTENCODING_MS_1252;  // Init for old documents
-    rStm.ReadByteString(aTempString);
-
-    rStm >> nFrameMarker;
-    if ( nFrameMarker == FRAME_MARKER )
-    {
-        // UNICODE: rStm >> aTargetFrame;
-        rStm.ReadByteString(aTargetFrame);
-
-        rStm >> nCharSetMarker;
-        if ( nCharSetMarker == CHARSET_MARKER )
-        {
-            USHORT nCharSet;
-            rStm >> nCharSet;
-
-            // remember encoding
-            aTempEncoding = (rtl_TextEncoding)nCharSet;
-        }
-        else
-            rStm.SeekRel( -nUlongSize );
-    }
-    else
-        rStm.SeekRel( -nUlongSize );
-
-    // now build representation string due to known encoding
-    aRepresentation = String(aTempString, aTempEncoding);
-
     eFormat= (SvxURLFormat)nFormat;
 
-    // Relative save => make it absolute for loading
-    OSL_FAIL("No BaseURL!");
-    // TODO/MBA: no BaseURL
-    aURL = INetURLObject::GetAbsURL( String(), aTmpURL );
+    read_unicode( rStm, aURL );
+    read_unicode( rStm, aRepresentation );
+    read_unicode( rStm, aTargetFrame );
 }
 
 // -----------------------------------------------------------------------
 
 void SvxURLField::Save( SvPersistStream & rStm )
 {
-    // Relative save of the URL
-    OSL_FAIL("No BaseURL!");
-    // TODO/MBA: no BaseURL
-    String aTmpURL = INetURLObject::GetRelURL( String(), aURL );
+    rStm << (sal_uInt16)eFormat;
 
-    rStm << (USHORT)eFormat;
-
-    // UNICODE: rStm << aTmpURL;
-    rStm.WriteByteString(aTmpURL);
-
-    // UNICODE: rStm << aRepresentation;
-    rStm.WriteByteString(aRepresentation);
-
-    rStm << FRAME_MARKER;
-
-    // UNICODE: rStm << aTargetFrame;
-    rStm.WriteByteString(aTargetFrame);
-
-    rStm << CHARSET_MARKER;
-
-    // #90477# rStm << (USHORT)GetStoreCharSet(gsl_getSystemTextEncoding(), rStm.GetVersion());
-    rStm << (USHORT)GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rStm.GetVersion());
+    write_unicode( rStm, aURL );
+    write_unicode( rStm, aRepresentation );
+    write_unicode( rStm, aTargetFrame );
 }
 
 MetaAction* SvxURLField::createBeginComment() const
@@ -461,7 +424,7 @@ MetaAction* SvxURLField::createBeginComment() const
     // #i46618# Adding target URL to metafile comment
     return new MetaCommentAction( "FIELD_SEQ_BEGIN",
                                   0,
-                                  reinterpret_cast<const BYTE*>(aURL.GetBuffer()),
+                                  reinterpret_cast<const sal_uInt8*>(aURL.GetBuffer()),
                                   2*aURL.Len() );
 }
 
@@ -616,7 +579,7 @@ SvxFieldData* SvxExtTimeField::Clone() const
 int SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
 {
     if ( rOther.Type() != Type() )
-        return FALSE;
+        return sal_False;
 
     const SvxExtTimeField& rOtherFld = (const SvxExtTimeField&) rOther;
     return ( ( nFixTime == rOtherFld.nFixTime ) &&
@@ -628,7 +591,7 @@ int SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
 
 void SvxExtTimeField::Load( SvPersistStream & rStm )
 {
-    USHORT nType, nFormat;
+    sal_uInt16 nType, nFormat;
 
     rStm >> nFixTime;
     rStm >> nType;
@@ -643,8 +606,8 @@ void SvxExtTimeField::Load( SvPersistStream & rStm )
 void SvxExtTimeField::Save( SvPersistStream & rStm )
 {
     rStm << nFixTime;
-    rStm << (USHORT) eType;
-    rStm << (USHORT) eFormat;
+    rStm << (sal_uInt16) eType;
+    rStm << (sal_uInt16) eFormat;
 }
 
 //----------------------------------------------------------------------------
@@ -684,7 +647,7 @@ String SvxExtTimeField::GetFormatted( Time& aTime, SvxTimeFormat eFormat, SvNumb
             String aFormatCode( RTL_CONSTASCII_USTRINGPARAM( "HH:MM:SS.00 AM/PM" ) );
             xub_StrLen nCheckPos;
             short nType;
-            /*BOOL bInserted = */rFormatter.PutandConvertEntry( aFormatCode,
+            /*sal_Bool bInserted = */rFormatter.PutandConvertEntry( aFormatCode,
                 nCheckPos, nType, nFormatKey, LANGUAGE_ENGLISH_US, eLang );
             DBG_ASSERT( nCheckPos == 0, "SVXTIMEFORMAT_12_HMSH: could not insert format code" );
             if ( nCheckPos )
@@ -755,7 +718,7 @@ SvxFieldData* SvxExtFileField::Clone() const
 int SvxExtFileField::operator==( const SvxFieldData& rOther ) const
 {
     if ( rOther.Type() != Type() )
-        return FALSE;
+        return sal_False;
 
     const SvxExtFileField& rOtherFld = (const SvxExtFileField&) rOther;
     return ( ( aFile == rOtherFld.aFile ) &&
@@ -767,7 +730,7 @@ int SvxExtFileField::operator==( const SvxFieldData& rOther ) const
 
 void SvxExtFileField::Load( SvPersistStream & rStm )
 {
-    USHORT nType, nFormat;
+    sal_uInt16 nType, nFormat;
 
     // UNICODE: rStm >> aFile;
     rStm.ReadByteString(aFile);
@@ -786,8 +749,8 @@ void SvxExtFileField::Save( SvPersistStream & rStm )
     // UNICODE: rStm << aFile;
     rStm.WriteByteString(aFile);
 
-    rStm << (USHORT) eType;
-    rStm << (USHORT) eFormat;
+    rStm << (sal_uInt16) eType;
+    rStm << (sal_uInt16) eFormat;
 }
 
 //----------------------------------------------------------------------------
@@ -907,7 +870,7 @@ SvxFieldData* SvxAuthorField::Clone() const
 int SvxAuthorField::operator==( const SvxFieldData& rOther ) const
 {
     if ( rOther.Type() != Type() )
-        return FALSE;
+        return sal_False;
 
     const SvxAuthorField& rOtherFld = (const SvxAuthorField&) rOther;
     return ( ( aName == rOtherFld.aName ) &&
@@ -921,16 +884,11 @@ int SvxAuthorField::operator==( const SvxFieldData& rOther ) const
 
 void SvxAuthorField::Load( SvPersistStream & rStm )
 {
-    USHORT nType, nFormat;
+    sal_uInt16 nType = 0, nFormat = 0;
 
-    // UNICODE: rStm >> aName;
-    rStm.ReadByteString(aName);
-
-    // UNICODE: rStm >> aFirstName;
-    rStm.ReadByteString(aFirstName);
-
-    // UNICODE: rStm >> aShortName;
-    rStm.ReadByteString(aShortName);
+    read_unicode( rStm, aName );
+    read_unicode( rStm, aFirstName );
+    read_unicode( rStm, aShortName );
 
     rStm >> nType;
     rStm >> nFormat;
@@ -943,17 +901,12 @@ void SvxAuthorField::Load( SvPersistStream & rStm )
 
 void SvxAuthorField::Save( SvPersistStream & rStm )
 {
-    // UNICODE: rStm << aName;
-    rStm.WriteByteString(aName);
+    write_unicode( rStm, aName );
+    write_unicode( rStm, aFirstName );
+    write_unicode( rStm, aShortName );
 
-    // UNICODE: rStm << aFirstName;
-    rStm.WriteByteString(aFirstName);
-
-    // UNICODE: rStm << aShortName;
-    rStm.WriteByteString(aShortName);
-
-    rStm << (USHORT) eType;
-    rStm << (USHORT) eFormat;
+    rStm << (sal_uInt16) eType;
+    rStm << (sal_uInt16) eFormat;
 }
 
 //----------------------------------------------------------------------------

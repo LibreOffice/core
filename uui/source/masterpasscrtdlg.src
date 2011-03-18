@@ -63,6 +63,7 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
     };
     Edit ED_MASTERPASSWORD_CRT
     {
+        HelpID = "uui:Edit:DLG_UUI_MASTERPASSWORD_CRT:ED_MASTERPASSWORD_CRT";
         Pos = MAP_APPFONT ( COL_0 , ROW_3 ) ;
         Size = MAP_APPFONT ( CTRL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
         Border = TRUE ;
@@ -76,6 +77,7 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
     };
     Edit ED_MASTERPASSWORD_REPEAT
     {
+        HelpID = "uui:Edit:DLG_UUI_MASTERPASSWORD_CRT:ED_MASTERPASSWORD_REPEAT";
         Pos = MAP_APPFONT ( COL_0 , ROW_5 ) ;
         Size = MAP_APPFONT ( CTRL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
         Border = TRUE ;
@@ -86,7 +88,7 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
         Pos = MAP_APPFONT ( COL_0 , ROW_6 ) ;
         Size = MAP_APPFONT ( CTRL_WIDTH , 8*RSC_CD_FIXEDTEXT_HEIGHT ) ;
         WordBreak = TRUE ;
-        Text [ en-US ] = "Caution: Make sure you remember the Master Password you have set. If you forget your Master Password, you will be unable to access any of the information protected by it. Passwords are case-sensitive and at least five characters long.";
+        Text [ en-US ] = "Caution: If you forget the master password, you will be unable to access any of the information protected by it. Passwords are case-sensitive.";
     };
     FixedLine FL_CAUTIONTEXT
     {

@@ -39,7 +39,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/txtimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -210,7 +210,7 @@ const sal_Char sAPI_is_fixed_language[] = "IsFixedLanguage";
 const sal_Char sAPI_is_visible[]        = "IsVisible";
 const sal_Char sAPI_TextRange[]         = "TextRange";
 
-const sal_Char sAPI_true[] = "TRUE";
+const sal_Char sAPI_true[] = "sal_True";
 
 
 TYPEINIT1( XMLTextFieldImportContext, SvXMLImportContext);
@@ -3657,7 +3657,7 @@ void XMLAnnotationImportContext::ProcessAttribute(
 }
 
 SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList >& xAttrList )
 {
@@ -3965,7 +3965,7 @@ bool lcl_ProcessLabel( const SvXMLImport& rImport,
 }
 
 SvXMLImportContext* XMLDropDownFieldImportContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList>& xAttrList )
 {

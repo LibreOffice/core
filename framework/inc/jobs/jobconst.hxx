@@ -42,6 +42,7 @@
 // other includes
 
 #include <rtl/ustring.hxx>
+#include <fwidllapi.h>
 
 //_______________________________________
 // namespace
@@ -60,10 +61,9 @@ namespace framework{
             it's code. Typos can occure or code will be changed by new developers ...
             Shared set of constant values can help to improve the mentainance of this code.
  */
-class JobConst
+class FWI_DLLPUBLIC JobConst
 {
     public:
-
         static const ::rtl::OUString ANSWER_DEACTIVATE_JOB();
         static const ::rtl::OUString ANSWER_SAVE_ARGUMENTS();
         static const ::rtl::OUString ANSWER_SEND_DISPATCHRESULT();

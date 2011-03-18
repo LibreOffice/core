@@ -31,7 +31,7 @@
 #include "officeforms.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -66,7 +66,7 @@ namespace xmloff
     }
 
     //-------------------------------------------------------------------------
-    SvXMLImportContext* OFormsRootImport::CreateChildContext( USHORT _nPrefix, const ::rtl::OUString& _rLocalName,
+    SvXMLImportContext* OFormsRootImport::CreateChildContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
             const Reference< sax::XAttributeList>& xAttrList )
     {
         return GetImport().GetFormImport()->createContext( _nPrefix, _rLocalName, xAttrList );

@@ -45,7 +45,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 
 using namespace com::sun::star;
 
@@ -54,9 +54,9 @@ namespace linguistic
 
 ///////////////////////////////////////////////////////////////////////////
 
-BOOL FileExists( const String &rMainURL )
+sal_Bool FileExists( const String &rMainURL )
 {
-    BOOL bExists = FALSE;
+    sal_Bool bExists = sal_False;
     if (rMainURL.Len())
     {
         try
@@ -187,7 +187,10 @@ String  GetWritableDictionaryURL( const String &rDicName )
     aURLObj.Append( rDicName, INetURLObject::ENCODE_ALL );
     DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
 
-    return aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+    // NO_DECODE preserves the escape sequences that might be included in aDirName
+    // depending on the characters used in the path string. (Needed when comparing
+    // the dictionary URL with GetDictionaryWriteablePath in DicList::createDictionary.)
+    return aURLObj.GetMainURL( INetURLObject::NO_DECODE );
 }
 
 
@@ -203,11 +206,11 @@ String SearchFileInPaths(
     const sal_Int32 nPaths = rPaths.getLength();
     for (sal_Int32 k = 0;  k < nPaths;  ++k)
     {
-        BOOL bIsURL = TRUE;
+        sal_Bool bIsURL = sal_True;
         INetURLObject aObj( rPaths[k] );
         if ( aObj.HasError() )
         {
-            bIsURL = FALSE;
+            bIsURL = sal_False;
             String aURL;
             if ( utl::LocalFileHelper::ConvertPhysicalNameToURL( rPaths[k], aURL ) )
                 aObj.SetURL( aURL );

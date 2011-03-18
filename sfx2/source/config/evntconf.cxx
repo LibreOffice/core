@@ -35,27 +35,20 @@
 #include <basic/sbmod.hxx>
 #include <tools/urlobj.hxx>
 #include <basic/sbx.hxx>
-
 #include <sot/storage.hxx>
 #include <unotools/securityoptions.hxx>
 
-#ifndef _RTL_USTRING_
 #include <rtl/ustring.h>
-#endif
-
 #include <com/sun/star/uno/Any.hxx>
 #include <framework/eventsconfiguration.hxx>
 #include <comphelper/processfactory.hxx>
-
 #include <sfx2/evntconf.hxx>
 
-#include <sfx2/macrconf.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>
-#include "config.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "eventsupplier.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -67,6 +60,7 @@
 // -----------------------------------------------------------------------
 TYPEINIT1(SfxEventHint, SfxHint);
 TYPEINIT1(SfxEventNamesItem, SfxPoolItem);
+TYPEINIT1(SfxViewEventHint, SfxHint);
 
 using namespace com::sun::star;
 
@@ -97,7 +91,7 @@ int SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
     const SfxEventNamesList& rOther = ( (SfxEventNamesItem&) rAttr ).aEventsList;
 
     if ( rOwn.size() != rOther.size() )
-        return FALSE;
+        return sal_False;
 
     for ( size_t nNo = 0, nCnt = rOwn.size(); nNo < nCnt; ++nNo )
     {
@@ -106,10 +100,10 @@ int SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
         if (    pOwn->mnId != pOther->mnId ||
                 pOwn->maEventName != pOther->maEventName ||
                 pOwn->maUIName != pOther->maUIName )
-            return FALSE;
+            return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 
 }
 
@@ -128,25 +122,25 @@ SfxPoolItem* SfxEventNamesItem::Clone( SfxItemPool *) const
     return new SfxEventNamesItem(*this);
 }
 
-SfxPoolItem* SfxEventNamesItem::Create(SvStream &, USHORT) const
+SfxPoolItem* SfxEventNamesItem::Create(SvStream &, sal_uInt16) const
 {
     OSL_FAIL("not streamable!");
     return new SfxEventNamesItem(Which());
 }
 
-SvStream& SfxEventNamesItem::Store(SvStream &rStream, USHORT ) const
+SvStream& SfxEventNamesItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
     OSL_FAIL("not streamable!");
     return rStream;
 }
 
-USHORT SfxEventNamesItem::GetVersion( USHORT ) const
+sal_uInt16 SfxEventNamesItem::GetVersion( sal_uInt16 ) const
 {
     OSL_FAIL("not streamable!");
     return 0;
 }
 
-void SfxEventNamesItem::AddEvent( const String& rName, const String& rUIName, USHORT nID )
+void SfxEventNamesItem::AddEvent( const String& rName, const String& rUIName, sal_uInt16 nID )
 {
     aEventsList.push_back( new SfxEventName( nID, rName, rUIName.Len() ? rUIName : rName ) );
 }
@@ -290,7 +284,7 @@ void SfxEventConfiguration::ConfigureEvent( rtl::OUString aName, const SvxMacro&
 }
 
 // -------------------------------------------------------------------------------------------------------
-SvxMacro* SfxEventConfiguration::ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, BOOL bBlowUp )
+SvxMacro* SfxEventConfiguration::ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, sal_Bool bBlowUp )
 {
     return SfxEvents_Impl::ConvertToMacro( rElement, pDoc, bBlowUp );
 }

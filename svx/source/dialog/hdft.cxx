@@ -49,9 +49,9 @@
 #include <svx/hdft.hxx>
 #include <svx/pageitem.hxx>
 
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
-#include "htmlmode.hxx"
+#include "svx/htmlmode.hxx"
 
 #include <editeng/brshitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -71,7 +71,7 @@ static const long MINBODY = 56;  // 1mm in twips rounded
 static const long DEF_DIST_WRITER = 500;    // 5mm (Writer)
 static const long DEF_DIST_CALC = 250;      // 2.5mm (Calc)
 
-static USHORT pRanges[] =
+static sal_uInt16 pRanges[] =
 {
     SID_ATTR_BRUSH,          SID_ATTR_BRUSH,
     SID_ATTR_BORDER_OUTER,   SID_ATTR_BORDER_OUTER,
@@ -92,7 +92,7 @@ static USHORT pRanges[] =
 // returns the Which values to the range
 
 
-USHORT* SvxHeaderPage::GetRanges()
+sal_uInt16* SvxHeaderPage::GetRanges()
 {
     return pRanges;
 }
@@ -106,7 +106,7 @@ SfxTabPage* SvxHeaderPage::Create( Window* pParent, const SfxItemSet& rSet )
 
 //------------------------------------------------------------------------
 
-USHORT* SvxFooterPage::GetRanges()
+sal_uInt16* SvxFooterPage::GetRanges()
 {
     return pRanges;
 }
@@ -138,10 +138,11 @@ SvxFooterPage::SvxFooterPage( Window* pParent, const SfxItemSet& rAttr ) :
 
 // -----------------------------------------------------------------------
 
-SvxHFPage::SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rAttr, USHORT nSetId ) :
+SvxHFPage::SvxHFPage( Window* pParent, sal_uInt16 nResId, const SfxItemSet& rAttr, sal_uInt16 nSetId ) :
 
     SfxTabPage( pParent, SVX_RES( nResId ), rAttr ),
 
+    aFrm            ( this, SVX_RES( FL_FRAME ) ),
     aTurnOnBox      ( this, SVX_RES( CB_TURNON ) ),
     aCntSharedBox   ( this, SVX_RES( CB_SHARED ) ),
     aLMLbl          ( this, SVX_RES( FT_LMARGIN ) ),
@@ -154,18 +155,17 @@ SvxHFPage::SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rAttr, U
     aHeightFT       ( this, SVX_RES( FT_HEIGHT ) ),
     aHeightEdit     ( this, SVX_RES( ED_HEIGHT ) ),
     aHeightDynBtn   ( this, SVX_RES( CB_HEIGHT_DYN ) ),
-    aFrm            ( this, SVX_RES( FL_FRAME ) ),
     aBspWin         ( this, SVX_RES( WN_BSP ) ),
     aBackgroundBtn  ( this, SVX_RES( BTN_EXTRAS ) ),
 
     nId                         ( nSetId ),
     pBBSet                      ( NULL ),
-    bDisableQueryBox            ( FALSE ),
-    bEnableBackgroundSelector   ( TRUE )
+    bDisableQueryBox            ( sal_False ),
+    bEnableBackgroundSelector   ( sal_True )
 
 {
     InitHandler();
-    aBspWin.EnableRTL( FALSE );
+    aBspWin.EnableRTL( sal_False );
 
     // This Page needs ExchangeSupport
     SetExchangeSupport();
@@ -178,6 +178,20 @@ SvxHFPage::SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rAttr, U
     SetFieldUnit( aHeightEdit, eFUnit );
     SetFieldUnit( aLMEdit, eFUnit );
     SetFieldUnit( aRMEdit, eFUnit );
+
+    aTurnOnBox.SetAccessibleRelationMemberOf( &aFrm );
+    aCntSharedBox.SetAccessibleRelationMemberOf( &aFrm );
+    aLMLbl.SetAccessibleRelationMemberOf( &aFrm );
+    aLMEdit.SetAccessibleRelationMemberOf( &aFrm );
+    aRMLbl.SetAccessibleRelationMemberOf( &aFrm );
+    aRMEdit.SetAccessibleRelationMemberOf( &aFrm );
+    aDistFT.SetAccessibleRelationMemberOf( &aFrm );
+    aDistEdit.SetAccessibleRelationMemberOf( &aFrm );
+    aDynSpacingCB.SetAccessibleRelationMemberOf( &aFrm );
+    aHeightFT.SetAccessibleRelationMemberOf( &aFrm );
+    aHeightEdit.SetAccessibleRelationMemberOf( &aFrm );
+    aHeightDynBtn.SetAccessibleRelationMemberOf( &aFrm );
+    aBackgroundBtn.SetAccessibleRelationMemberOf(&aFrm);
 }
 
 // -----------------------------------------------------------------------
@@ -189,20 +203,20 @@ SvxHFPage::~SvxHFPage()
 
 // -----------------------------------------------------------------------
 
-BOOL SvxHFPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
 {
-    const USHORT        nWSize      = GetWhich( SID_ATTR_PAGE_SIZE );
-    const USHORT        nWLRSpace   = GetWhich( SID_ATTR_LRSPACE );
-    const USHORT        nWULSpace   = GetWhich( SID_ATTR_ULSPACE );
-    const USHORT        nWOn        = GetWhich( SID_ATTR_PAGE_ON );
-    const USHORT        nWDynamic   = GetWhich( SID_ATTR_PAGE_DYNAMIC );
-    const USHORT        nWDynSpacing = GetWhich( SID_ATTR_HDFT_DYNAMIC_SPACING );
-    const USHORT        nWShared    = GetWhich( SID_ATTR_PAGE_SHARED );
-    const USHORT        nWBrush     = GetWhich( SID_ATTR_BRUSH );
-    const USHORT        nWBox       = GetWhich( SID_ATTR_BORDER_OUTER );
-    const USHORT        nWBoxInfo   = GetWhich( SID_ATTR_BORDER_INNER );
-    const USHORT        nWShadow    = GetWhich( SID_ATTR_BORDER_SHADOW );
-    const USHORT        aWhichTab[] = { nWSize,     nWSize,
+    const sal_uInt16        nWSize      = GetWhich( SID_ATTR_PAGE_SIZE );
+    const sal_uInt16        nWLRSpace   = GetWhich( SID_ATTR_LRSPACE );
+    const sal_uInt16        nWULSpace   = GetWhich( SID_ATTR_ULSPACE );
+    const sal_uInt16        nWOn        = GetWhich( SID_ATTR_PAGE_ON );
+    const sal_uInt16        nWDynamic   = GetWhich( SID_ATTR_PAGE_DYNAMIC );
+    const sal_uInt16        nWDynSpacing = GetWhich( SID_ATTR_HDFT_DYNAMIC_SPACING );
+    const sal_uInt16        nWShared    = GetWhich( SID_ATTR_PAGE_SHARED );
+    const sal_uInt16        nWBrush     = GetWhich( SID_ATTR_BRUSH );
+    const sal_uInt16        nWBox       = GetWhich( SID_ATTR_BORDER_OUTER );
+    const sal_uInt16        nWBoxInfo   = GetWhich( SID_ATTR_BORDER_INNER );
+    const sal_uInt16        nWShadow    = GetWhich( SID_ATTR_BORDER_SHADOW );
+    const sal_uInt16        aWhichTab[] = { nWSize,     nWSize,
                                         nWLRSpace,  nWLRSpace,
                                         nWULSpace,  nWULSpace,
                                         nWOn,       nWOn,
@@ -246,15 +260,15 @@ BOOL SvxHFPage::FillItemSet( SfxItemSet& rSet )
 
     // Margins
     SvxLRSpaceItem aLR( nWLRSpace );
-    aLR.SetLeft( (USHORT)GetCoreValue( aLMEdit, eUnit ) );
-    aLR.SetRight( (USHORT)GetCoreValue( aRMEdit, eUnit ) );
+    aLR.SetLeft( (sal_uInt16)GetCoreValue( aLMEdit, eUnit ) );
+    aLR.SetRight( (sal_uInt16)GetCoreValue( aRMEdit, eUnit ) );
     aSet.Put( aLR );
 
     SvxULSpaceItem aUL( nWULSpace );
     if ( nId == SID_ATTR_PAGE_HEADERSET )
-        aUL.SetLower( (USHORT)nDist );
+        aUL.SetLower( (sal_uInt16)nDist );
     else
-        aUL.SetUpper( (USHORT)nDist );
+        aUL.SetUpper( (sal_uInt16)nDist );
     aSet.Put( aUL );
 
     // Background and border?
@@ -266,7 +280,7 @@ BOOL SvxHFPage::FillItemSet( SfxItemSet& rSet )
         const SfxPoolItem* pItem;
 
         if ( SFX_ITEM_SET ==
-             GetItemSet().GetItemState( GetWhich( nId ), FALSE, &pItem ) )
+             GetItemSet().GetItemState( GetWhich( nId ), sal_False, &pItem ) )
         {
             _pSet = &( (SvxSetItem*)pItem )->GetItemSet();
 
@@ -285,7 +299,7 @@ BOOL SvxHFPage::FillItemSet( SfxItemSet& rSet )
     SvxSetItem aSetItem( GetWhich( nId ), aSet );
     rSet.Put( aSetItem );
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -301,7 +315,7 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
     // Evaluate header-/footer- attributes
     const SvxSetItem* pSetItem = 0;
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich(nId), FALSE,
+    if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich(nId), sal_False,
                                             (const SfxPoolItem**)&pSetItem ) )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
@@ -365,9 +379,9 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
 
     if ( !pSetItem )
     {
-        aTurnOnBox.Check( FALSE );
-        aHeightDynBtn.Check( TRUE );
-        aCntSharedBox.Check( TRUE );
+        aTurnOnBox.Check( sal_False );
+        aHeightDynBtn.Check( sal_True );
+        aCntSharedBox.Check( sal_True );
     }
 
     TurnOnHdl(0);
@@ -383,11 +397,11 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
 
     const SfxPoolItem* pItem = 0;
     SfxObjectShell* pShell;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem) ||
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, sal_False, &pItem) ||
         ( 0 != (pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
-        USHORT nHtmlMode = 0;
+        sal_uInt16 nHtmlMode = 0;
         nHtmlMode = ((SfxUInt16Item*)pItem)->GetValue();
         if(nHtmlMode && HTMLMODE_ON)
         {
@@ -429,7 +443,7 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
         aRMLbl.Enable();
         aRMEdit.Enable();
 
-        USHORT nUsage = aBspWin.GetUsage();
+        sal_uInt16 nUsage = aBspWin.GetUsage();
 
         if( nUsage == SVX_PAGE_RIGHT || nUsage == SVX_PAGE_LEFT )
             aCntSharedBox.Disable();
@@ -439,16 +453,16 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
     }
     else
     {
-        BOOL bDelete = TRUE;
+        sal_Bool bDelete = sal_True;
 
-        if ( !bDisableQueryBox && pBox && aTurnOnBox.GetSavedValue() == TRUE )
+        if ( !bDisableQueryBox && pBox && aTurnOnBox.GetSavedValue() == sal_True )
             bDelete = ( QueryBox( this, SVX_RES( RID_SVXQBX_DELETE_HEADFOOT ) ).Execute() == RET_YES );
 
         if ( bDelete )
         {
             aDistFT.Disable();
             aDistEdit.Disable();
-            aDynSpacingCB.Enable(FALSE);
+            aDynSpacingCB.Enable(sal_False);
             aHeightFT.Disable();
             aHeightEdit.Disable();
             aHeightDynBtn.Disable();
@@ -495,10 +509,10 @@ IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
     if ( !pBBSet )
     {
         // Use only the necessary items for border and background
-        USHORT nBrush = GetWhich( SID_ATTR_BRUSH );
-        USHORT nOuter = GetWhich( SID_ATTR_BORDER_OUTER );
-        USHORT nInner = GetWhich( SID_ATTR_BORDER_INNER, sal_False );
-        USHORT nShadow = GetWhich( SID_ATTR_BORDER_SHADOW );
+        sal_uInt16 nBrush = GetWhich( SID_ATTR_BRUSH );
+        sal_uInt16 nOuter = GetWhich( SID_ATTR_BORDER_OUTER );
+        sal_uInt16 nInner = GetWhich( SID_ATTR_BORDER_INNER, sal_False );
+        sal_uInt16 nShadow = GetWhich( SID_ATTR_BORDER_SHADOW );
 
         // Create an empty set
         pBBSet = new SfxItemSet( *GetItemSet().GetPool(), nBrush, nBrush,
@@ -507,12 +521,12 @@ IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
         const SfxPoolItem* pItem;
 
         if ( SFX_ITEM_SET ==
-             GetItemSet().GetItemState( GetWhich( nId ), FALSE, &pItem ) )
+             GetItemSet().GetItemState( GetWhich( nId ), sal_False, &pItem ) )
             // if there is one that is already set, then use this
             pBBSet->Put( ( (SvxSetItem*)pItem)->GetItemSet() );
 
         if ( SFX_ITEM_SET ==
-             GetItemSet().GetItemState( nInner, FALSE, &pItem ) )
+             GetItemSet().GetItemState( nInner, sal_False, &pItem ) )
             // The set InfoItem is always required
             pBBSet->Put( *pItem );
     }
@@ -536,7 +550,7 @@ IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
 
             //----------------------------------------------------------------
 
-            USHORT nWhich = GetWhich( SID_ATTR_BRUSH );
+            sal_uInt16 nWhich = GetWhich( SID_ATTR_BRUSH );
 
             if ( pBBSet->GetItemState( nWhich ) == SFX_ITEM_SET )
             {
@@ -591,12 +605,12 @@ void SvxHFPage::UpdateExample()
 
 void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 {
-    USHORT nWhich = GetWhich( SID_ATTR_PAGE_HEADERSET );
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_PAGE_HEADERSET );
 
-    if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
         const SvxSetItem& rSetItem =
-            (const SvxSetItem&)rSet.Get( nWhich, FALSE );
+            (const SvxSetItem&)rSet.Get( nWhich, sal_False );
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
         const SfxBoolItem& rOn =
             (const SfxBoolItem&)rTmpSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );
@@ -623,10 +637,10 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
     nWhich = GetWhich( SID_ATTR_PAGE_FOOTERSET );
 
-    if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
         const SvxSetItem& rSetItem =
-            (const SvxSetItem&)rSet.Get( nWhich, FALSE );
+            (const SvxSetItem&)rSet.Get( nWhich, sal_False );
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
         const SfxBoolItem& rOn =
             (const SfxBoolItem&)rTmpSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );
@@ -709,7 +723,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         aBspWin.SetBottom( 0 );
     }
 
-    USHORT nUsage = SVX_PAGE_ALL;
+    sal_uInt16 nUsage = SVX_PAGE_ALL;
     pItem = GetItem( rSet, SID_ATTR_PAGE );
 
     if ( pItem )
@@ -735,7 +749,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     const SvxSetItem* pSetItem = 0;
 
     if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_HEADERSET ),
-                                            FALSE,
+                                            sal_False,
                                             (const SfxPoolItem**)&pSetItem ) )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
@@ -756,7 +770,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
             aBspWin.SetHdDist( nDist );
             aBspWin.SetHdLeft( rLR.GetLeft() );
             aBspWin.SetHdRight( rLR.GetRight() );
-            aBspWin.SetHeader( TRUE );
+            aBspWin.SetHeader( sal_True );
         }
         else
             pSetItem = 0;
@@ -764,7 +778,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( !pSetItem )
     {
-        aBspWin.SetHeader( FALSE );
+        aBspWin.SetHeader( sal_False );
 
         if ( SID_ATTR_PAGE_HEADERSET == nId )
             aCntSharedBox.Disable();
@@ -772,7 +786,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     pSetItem = 0;
 
     if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_FOOTERSET ),
-                                            FALSE,
+                                            sal_False,
                                             (const SfxPoolItem**)&pSetItem ) )
     {
         const SfxItemSet& rFooterSet = pSetItem->GetItemSet();
@@ -793,7 +807,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
             aBspWin.SetFtDist( nDist );
             aBspWin.SetFtLeft( rLR.GetLeft() );
             aBspWin.SetFtRight( rLR.GetRight() );
-            aBspWin.SetFooter( TRUE );
+            aBspWin.SetFooter( sal_True );
         }
         else
             pSetItem = 0;
@@ -801,7 +815,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( !pSetItem )
     {
-        aBspWin.SetFooter( FALSE );
+        aBspWin.SetFooter( sal_False );
 
         if ( SID_ATTR_PAGE_FOOTERSET == nId )
             aCntSharedBox.Disable();
@@ -811,7 +825,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( pItem && pItem->ISA(SfxBoolItem) )
     {
-        aBspWin.SetTable( TRUE );
+        aBspWin.SetTable( sal_True );
         aBspWin.SetHorz( ( (SfxBoolItem*)pItem )->GetValue() );
     }
 
@@ -819,7 +833,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( pItem && pItem->ISA(SfxBoolItem) )
     {
-        aBspWin.SetTable( TRUE );
+        aBspWin.SetTable( sal_True );
         aBspWin.SetVert( ( (SfxBoolItem*)pItem )->GetValue() );
     }
     ResetBackground_Impl( rSet );

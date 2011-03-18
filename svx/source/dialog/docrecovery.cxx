@@ -894,7 +894,7 @@ void SaveProgressDialog::end()
 
 //===============================================
 RecovDocListEntry::RecovDocListEntry(      SvLBoxEntry* pEntry,
-                                           USHORT       nFlags,
+                                           sal_uInt16       nFlags,
                                      const String&      sText )
     : SvLBoxString( pEntry, nFlags, sText )
 {
@@ -903,7 +903,7 @@ RecovDocListEntry::RecovDocListEntry(      SvLBoxEntry* pEntry,
 //===============================================
 void RecovDocListEntry::Paint(const Point&       aPos   ,
                                     SvLBox&      aDevice,
-                                    USHORT       /*nFlags */,
+                                    sal_uInt16       /*nFlags */,
                                     SvLBoxEntry* pEntry )
 {
     const Image*        pImg  = 0;
@@ -1071,7 +1071,7 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
 
     m_aFileListLB.SetBackground( rStyleSettings.GetDialogColor() );
 
-    m_aNextBtn.Enable(TRUE);
+    m_aNextBtn.Enable(sal_True);
     m_aNextBtn.SetClickHdl( LINK( this, RecoveryDialog, NextButtonHdl ) );
     m_aCancelBtn.SetClickHdl( LINK( this, RecoveryDialog, CancelButtonHdl ) );
 
@@ -1114,8 +1114,8 @@ short RecoveryDialog::execute()
                 // Dialog was started first time ...
                 // wait for user decision ("start" or "cancel" recovery)
                 // This decision will be made inside the NextBtn handler.
-                m_aNextBtn.Enable(TRUE);
-                m_aCancelBtn.Enable(TRUE);
+                m_aNextBtn.Enable(sal_True);
+                m_aCancelBtn.Enable(sal_True);
                 m_bWaitForUser = sal_True;
                 while(m_bWaitForUser)
                     Application::Yield();
@@ -1133,8 +1133,8 @@ short RecoveryDialog::execute()
                 // do it asynchronous (to allow repaints)
                 // and wait for this asynchronous operation.
                 m_aDescrFT.SetText( m_aTitleRecoveryInProgress );
-                m_aNextBtn.Enable(FALSE);
-                m_aCancelBtn.Enable(FALSE);
+                m_aNextBtn.Enable(sal_False);
+                m_aCancelBtn.Enable(sal_False);
                 m_pCore->setProgressHandler(m_xProgress);
                 m_pCore->setUpdateListener(this);
                 m_pCore->doRecovery();
@@ -1156,15 +1156,15 @@ short RecoveryDialog::execute()
                  {
                      m_aDescrFT.SetText(m_aRecoveryOnlyFinishDescr);
                      m_aNextBtn.SetText(m_aRecoveryOnlyFinish);
-                     m_aNextBtn.Enable(TRUE);
-                     m_aCancelBtn.Enable(FALSE);
+                     m_aNextBtn.Enable(sal_True);
+                     m_aCancelBtn.Enable(sal_False);
                  }
                  else
                  {
                     m_aDescrFT.SetText(m_aTitleRecoveryReport);
                     m_aNextBtn.SetText(m_aNextStr);
-                    m_aNextBtn.Enable(TRUE);
-                    m_aCancelBtn.Enable(TRUE);
+                    m_aNextBtn.Enable(sal_True);
+                    m_aCancelBtn.Enable(sal_True);
                  }
 
                  m_bWaitForUser = sal_True;
@@ -1341,8 +1341,8 @@ void RecoveryDialog::start()
 //===============================================
 void RecoveryDialog::updateItems()
 {
-    ULONG c = m_aFileListLB.GetEntryCount();
-    ULONG i = 0;
+    sal_uIntPtr c = m_aFileListLB.GetEntryCount();
+    sal_uIntPtr i = 0;
     for ( i=0; i<c; ++i )
     {
         SvLBoxEntry* pEntry = m_aFileListLB.GetEntry(i);
@@ -1365,8 +1365,8 @@ void RecoveryDialog::updateItems()
 //===============================================
 void RecoveryDialog::stepNext(TURLInfo* pItem)
 {
-    ULONG c = m_aFileListLB.GetEntryCount();
-    ULONG i = 0;
+    sal_uIntPtr c = m_aFileListLB.GetEntryCount();
+    sal_uIntPtr i = 0;
     for (i=0; i<c; ++i)
     {
         SvLBoxEntry* pEntry = m_aFileListLB.GetEntry(i);
@@ -1516,7 +1516,7 @@ void BrokenRecoveryDialog::impl_refresh()
 
         m_bExecutionNeeded = sal_True;
 
-        USHORT nPos = m_aFileListLB.InsertEntry(rInfo.DisplayName, rInfo.StandardImage );
+        sal_uInt16 nPos = m_aFileListLB.InsertEntry(rInfo.DisplayName, rInfo.StandardImage );
         m_aFileListLB.SetEntryData( nPos, (void*)&rInfo );
     }
     m_sSavePath = ::rtl::OUString();
@@ -1568,7 +1568,6 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 {
     css::uno::Reference< css::ui::dialogs::XFolderPicker > xFolderPicker(
         m_pCore->getSMGR()->createInstance(SERVICENAME_FOLDERPICKER), css::uno::UNO_QUERY_THROW);
-//  svt::SetDialogHelpId( xFolderPicker, HID_OPTIONS_PATHS_SELECTFOLDER );
 
     INetURLObject aURL(m_sSavePath, INET_PROT_FILE);
     xFolderPicker->setDisplayDirectory(aURL.GetMainURL(INetURLObject::NO_DECODE));
@@ -1681,13 +1680,13 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             ExtTextEngine* pTextEngine = GetTextEngine();
             DBG_ASSERT( pTextEngine, "no text engine" );
 
-            ULONG i, nParaCount = pTextEngine->GetParagraphCount();
-            USHORT nLineCount = 0;
+            sal_uIntPtr i, nParaCount = pTextEngine->GetParagraphCount();
+            sal_uInt16 nLineCount = 0;
 
             for ( i = 0; i < nParaCount; ++i )
                 nLineCount = nLineCount + pTextEngine->GetLineCount(i);
 
-            USHORT nVisCols = 0, nVisLines = 0;
+            sal_uInt16 nVisCols = 0, nVisLines = 0;
             GetMaxVisColumnsAndLines( nVisCols, nVisLines );
             GetVScrollBar()->Show( nLineCount > nVisLines );
 
@@ -1928,14 +1927,14 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             default:
 #ifdef WNT
             case 0:
-                maSystemBtn.Check( TRUE );
+                maSystemBtn.Check( sal_True );
                 break;
 #endif
             case 1:
-                maDirectBtn.Check( TRUE );
+                maDirectBtn.Check( sal_True );
                 break;
             case 2:
-                maManualBtn.Check( TRUE );
+                maManualBtn.Check( sal_True );
                 break;
             }
 
@@ -1997,7 +1996,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             GetTextEngine()->SetFont( aFont );
 
             // no blinking cursor and a little left margin
-            EnableCursor( FALSE );
+            EnableCursor( sal_False );
             SetLeftMargin( 4 );
         }
 

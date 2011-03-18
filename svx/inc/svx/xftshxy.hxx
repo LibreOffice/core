@@ -45,7 +45,7 @@ public:
                             XFormTextShadowXValItem(long nVal = 0);
                             XFormTextShadowXValItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem*    Create(SvStream& rIn, USHORT nVer) const;
+    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
 };
 
 /*************************************************************************
@@ -61,7 +61,7 @@ public:
                             XFormTextShadowYValItem(long nVal = 0);
                             XFormTextShadowYValItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem*    Create(SvStream& rIn, USHORT nVer) const;
+    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
 };
 
 #endif

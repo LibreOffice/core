@@ -42,11 +42,11 @@
 #include "EnhancedCustomShapeToken.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xexptran.hxx"
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <tools/debug.hxx>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -150,7 +150,7 @@ void GetEnum( std::vector< com::sun::star::beans::PropertyValue >& rDest,
                          const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp,
                         const SvXMLEnumMapEntry& rMap )
 {
-    USHORT eKind;
+    sal_uInt16 eKind;
     if( SvXMLUnitConverter::convertEnum( eKind, rValue, &rMap ) )
     {
         sal_Int16 nEnum = (sal_Int16)eKind;
@@ -1260,7 +1260,6 @@ void XMLEnhancedCustomShapeContext::EndElement()
             {
                 switch( EASGet( pValues->Name ) )
                 {
-                    case EAS_Position :
                     case EAS_RangeYMinimum :
                     case EAS_RangeYMaximum :
                     case EAS_RangeXMinimum :
@@ -1272,6 +1271,8 @@ void XMLEnhancedCustomShapeContext::EndElement()
                             pValues->Value.getValue()), pH );
                     }
                     break;
+
+                    case EAS_Position :
                     case EAS_Polar :
                     {
                         CheckAndResolveEquationParameter( (*((com::sun::star::drawing::EnhancedCustomShapeParameterPair*)
@@ -1298,7 +1299,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
         SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maHandles, EASGet( EAS_Handles ) );
 }
 
-SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( USHORT nPrefix,const rtl::OUString& rLocalName,
+SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt16 nPrefix,const rtl::OUString& rLocalName,
                                                                     const uno::Reference< xml::sax::XAttributeList> & xAttrList )
 {
     EnhancedCustomShapeTokenEnum aTokenEnum = EASGet( rLocalName );

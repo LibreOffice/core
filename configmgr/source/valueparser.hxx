@@ -37,19 +37,19 @@
 #include "rtl/ref.hxx"
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
+#include "xmlreader/pad.hxx"
+#include "xmlreader/xmlreader.hxx"
 
-#include "pad.hxx"
 #include "type.hxx"
-#include "xmlreader.hxx"
 
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
 } } } }
+namespace xmlreader { struct Span; }
 
 namespace configmgr {
 
 class Node;
-struct Span;
 
 class ValueParser: private boost::noncopyable {
 public:
@@ -57,14 +57,14 @@ public:
 
     ~ValueParser();
 
-    XmlReader::Text getTextMode() const;
+    xmlreader::XmlReader::Text getTextMode() const;
 
     bool startElement(
-        XmlReader & reader, XmlReader::Namespace ns, Span const & name);
+        xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name);
 
     bool endElement();
 
-    void characters(Span const & text);
+    void characters(xmlreader::Span const & text);
 
     void start(
         rtl::Reference< Node > const & property,
@@ -84,7 +84,7 @@ private:
     rtl::Reference< Node > node_;
     rtl::OUString localizedName_;
     State state_;
-    Pad pad_;
+    xmlreader::Pad pad_;
     std::vector< com::sun::star::uno::Any > items_;
 };
 

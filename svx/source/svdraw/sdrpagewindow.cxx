@@ -40,7 +40,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <osl/mutex.hxx>
@@ -80,8 +80,8 @@ using namespace ::com::sun::star;
             // , thus it seems not necessary to make
             // it visible her at all.
             // #58917# Das Show darf nicht am VCL-Fenster landen, weil dann Assertion vom SFX
-            // BOOL bVis = pWindow->IsVisible();
-            // xC->setVisible(TRUE);
+            // sal_Bool bVis = pWindow->IsVisible();
+            // xC->setVisible(sal_True);
             // if ( !bVis )
             //  pWindow->Hide();
             //  if( !mxContext.is() && bVisible )
@@ -191,6 +191,10 @@ void SdrPageWindow::PrePaint()
     {
         GetObjectContact().PrepareProcessDisplay();
     }
+}
+
+void SdrPageWindow::PostPaint()
+{
 }
 
 void SdrPageWindow::PrepareRedraw(const Region& rReg)

@@ -36,7 +36,7 @@
 //------------------------------------
 class SdrTextAutoGrowHeightItem: public SdrOnOffItem {
 public:
-    SdrTextAutoGrowHeightItem(BOOL bAuto=TRUE): SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT,bAuto) {}
+    SdrTextAutoGrowHeightItem(sal_Bool bAuto=sal_True): SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT,bAuto) {}
     SdrTextAutoGrowHeightItem(SvStream& rIn)  : SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT,rIn)   {}
 };
 
@@ -45,7 +45,7 @@ public:
 //------------------------------------
 class SdrTextAutoGrowWidthItem: public SdrOnOffItem {
 public:
-    SdrTextAutoGrowWidthItem(BOOL bAuto=FALSE): SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH,bAuto) {}
+    SdrTextAutoGrowWidthItem(sal_Bool bAuto=sal_False): SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH,bAuto) {}
     SdrTextAutoGrowWidthItem(SvStream& rIn)   : SdrOnOffItem(SDRATTR_TEXT_AUTOGROWWIDTH,rIn)   {}
 };
 

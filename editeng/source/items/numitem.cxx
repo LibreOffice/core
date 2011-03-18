@@ -110,14 +110,14 @@ SvxNumberType::~SvxNumberType()
         xFormatter = 0;
 }
 
-String SvxNumberType::GetNumStr( ULONG nNo ) const
+String SvxNumberType::GetNumStr( sal_uLong nNo ) const
 {
     LanguageType eLang = Application::GetSettings().GetLanguage();
     Locale aLocale = SvxCreateLocale(eLang);
     return GetNumStr( nNo, aLocale );
 }
 
-String  SvxNumberType::GetNumStr( ULONG nNo, const Locale& rLocale ) const
+String  SvxNumberType::GetNumStr( sal_uLong nNo, const Locale& rLocale ) const
 {
     lcl_getFormatter(xFormatter);
     String aTmpStr;
@@ -206,16 +206,16 @@ SvxNumberFormat::SvxNumberFormat(SvStream &rStream)
   mnIndentAt( 0 )
 {
 
-    USHORT nVersion;
+    sal_uInt16 nVersion;
   rStream >> nVersion;
 
-  USHORT nUSHORT;
+  sal_uInt16 nUSHORT;
   rStream >> nUSHORT;
   SetNumberingType((sal_Int16)nUSHORT);
   rStream >> nUSHORT;
   eNumAdjust      = (SvxAdjust)nUSHORT;
   rStream >> nUSHORT;
-  nInclUpperLevels = (BYTE)nUSHORT;
+  nInclUpperLevels = (sal_uInt8)nUSHORT;
   rStream >> nUSHORT;
   nStart          = nUSHORT;
   rStream >> nUSHORT;
@@ -263,7 +263,7 @@ SvxNumberFormat::SvxNumberFormat(SvStream &rStream)
   rStream >> nUSHORT;
   nBulletRelSize = nUSHORT;
   rStream >> nUSHORT;
-  SetShowSymbol((BOOL)nUSHORT);
+  SetShowSymbol((sal_Bool)nUSHORT);
 
   if( nVersion < NUMITEM_VERSION_03 )
       cBullet = ByteString::ConvertToUnicode( (sal_Char)cBullet,
@@ -271,7 +271,7 @@ SvxNumberFormat::SvxNumberFormat(SvStream &rStream)
                                       : RTL_TEXTENCODING_SYMBOL );
     if(pBulletFont)
     {
-        BOOL bConvertBulletFont = rStream.GetVersion() <= SOFFICE_FILEFORMAT_50;
+        sal_Bool bConvertBulletFont = rStream.GetVersion() <= SOFFICE_FILEFORMAT_50;
         if(bConvertBulletFont)
         {
 
@@ -313,13 +313,13 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
         pBulletFont->SetName(sFontName);
     }
 
-    rStream << (USHORT)NUMITEM_VERSION_04;
+    rStream << (sal_uInt16)NUMITEM_VERSION_04;
 
-    rStream << (USHORT)GetNumberingType();
-    rStream << (USHORT)eNumAdjust;
-    rStream << (USHORT)nInclUpperLevels;
+    rStream << (sal_uInt16)GetNumberingType();
+    rStream << (sal_uInt16)eNumAdjust;
+    rStream << (sal_uInt16)nInclUpperLevels;
     rStream << nStart;
-    rStream << (USHORT)cBullet;
+    rStream << (sal_uInt16)cBullet;
 
     rStream << nFirstLineOffset;
     rStream << nAbsLSpace;
@@ -332,7 +332,7 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
     rStream.WriteByteString(sCharStyleName, eEnc);
     if(pGraphicBrush)
     {
-        rStream << (USHORT)1;
+        rStream << (sal_uInt16)1;
 
         // in SD or SI force bullet itself to be stored,
         // for that purpose throw away link when link and graphic
@@ -346,16 +346,16 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
         pGraphicBrush->Store(rStream, BRUSH_GRAPHIC_VERSION);
     }
     else
-        rStream << (USHORT)0;
+        rStream << (sal_uInt16)0;
 
-    rStream << (USHORT)eVertOrient;
+    rStream << (sal_uInt16)eVertOrient;
     if(pBulletFont)
     {
-        rStream << (USHORT)1;
+        rStream << (sal_uInt16)1;
         rStream << *pBulletFont;
     }
     else
-        rStream << (USHORT)0;
+        rStream << (sal_uInt16)0;
     rStream << aGraphicSize;
 
     Color nTempColor = nBulletColor;
@@ -363,10 +363,10 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
         nTempColor = COL_BLACK;
     rStream << nTempColor;
     rStream << nBulletRelSize;
-    rStream << (USHORT)IsShowSymbol();
+    rStream << (sal_uInt16)IsShowSymbol();
 
-    rStream << ( USHORT ) mePositionAndSpaceMode;
-    rStream << ( USHORT ) meLabelFollowedBy;
+    rStream << ( sal_uInt16 ) mePositionAndSpaceMode;
+    rStream << ( sal_uInt16 ) meLabelFollowedBy;
     rStream << ( long ) mnListtabPos;
     rStream << ( long ) mnFirstLineIndent;
     rStream << ( long ) mnIndentAt;
@@ -410,7 +410,7 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
     return *this;
 }
 
-BOOL  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
+sal_Bool  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
 {
     if( GetNumberingType()  != rFormat.GetNumberingType() ||
         eNumAdjust          != rFormat.eNumAdjust ||
@@ -435,14 +435,14 @@ BOOL  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
         IsShowSymbol()      != rFormat.IsShowSymbol() ||
         sCharStyleName      != rFormat.sCharStyleName
         )
-        return FALSE;
+        return sal_False;
     if (
         (pGraphicBrush && !rFormat.pGraphicBrush) ||
         (!pGraphicBrush && rFormat.pGraphicBrush) ||
         (pGraphicBrush && *pGraphicBrush != *rFormat.pGraphicBrush)
        )
     {
-        return FALSE;
+        return sal_False;
     }
     if (
         (pBulletFont && !rFormat.pBulletFont) ||
@@ -450,9 +450,9 @@ BOOL  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
         (pBulletFont && *pBulletFont != *rFormat.pBulletFont)
        )
     {
-        return FALSE;
+        return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
@@ -612,7 +612,7 @@ Size SvxNumberFormat::GetGraphicSizeMM100(const Graphic* pGraphic)
     return aRetSize;
 }
 
-String SvxNumberFormat::CreateRomanString( ULONG nNo, BOOL bUpper )
+String SvxNumberFormat::CreateRomanString( sal_uLong nNo, sal_Bool bUpper )
 {
     nNo %= 4000;            // more can not be displayed
 //      i, ii, iii, iv, v, vi, vii, vii, viii, ix
@@ -622,11 +622,11 @@ String SvxNumberFormat::CreateRomanString( ULONG nNo, BOOL bUpper )
                         : "mdclxvi--";  // +2 Dummy entries!
 
     String sRet;
-    USHORT nMask = 1000;
+    sal_uInt16 nMask = 1000;
     while( nMask )
     {
-        BYTE nZahl = BYTE(nNo / nMask);
-        BYTE nDiff = 1;
+        sal_uInt8 nZahl = sal_uInt8(nNo / nMask);
+        sal_uInt8 nDiff = 1;
         nNo %= nMask;
 
         if( 5 < nZahl )
@@ -666,9 +666,9 @@ const String&   SvxNumberFormat::GetCharFmtName()const
 sal_Int32 SvxNumRule::nRefCount = 0;
 static SvxNumberFormat* pStdNumFmt = 0;
 static SvxNumberFormat* pStdOutlineNumFmt = 0;
-SvxNumRule::SvxNumRule( ULONG nFeatures,
-                        USHORT nLevels,
-                        BOOL bCont,
+SvxNumRule::SvxNumRule( sal_uLong nFeatures,
+                        sal_uInt16 nLevels,
+                        sal_Bool bCont,
                         SvxNumRuleType eType,
                         SvxNumberFormat::SvxNumPositionAndSpaceMode
                                     eDefaultNumberFormatPositionAndSpaceMode )
@@ -680,7 +680,7 @@ SvxNumRule::SvxNumRule( ULONG nFeatures,
     ++nRefCount;
     LanguageType eLang = Application::GetSettings().GetLanguage();
     aLocale = SvxCreateLocale(eLang);
-    for(USHORT i = 0; i < SVX_MAX_NUM; i++)
+    for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
         if(i < nLevels)
         {
@@ -719,7 +719,7 @@ SvxNumRule::SvxNumRule( ULONG nFeatures,
         }
         else
             aFmts[i] = 0;
-        aFmtsSet[i] = FALSE;
+        aFmtsSet[i] = sal_False;
     }
 }
 
@@ -732,7 +732,7 @@ SvxNumRule::SvxNumRule(const SvxNumRule& rCopy)
     bContinuousNumbering = rCopy.bContinuousNumbering;
     eNumberingType       = rCopy.eNumberingType;
     memset( aFmts, 0, sizeof( aFmts ));
-    for(USHORT i = 0; i < SVX_MAX_NUM; i++)
+    for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
         if(rCopy.aFmts[i])
             aFmts[i] = new SvxNumberFormat(*rCopy.aFmts[i]);
@@ -747,31 +747,31 @@ SvxNumRule::SvxNumRule(SvStream &rStream)
     ++nRefCount;
     LanguageType eLang = Application::GetSettings().GetLanguage();
     aLocale = SvxCreateLocale(eLang);
-    USHORT nVersion;
-    USHORT nTemp;
+    sal_uInt16 nVersion;
+    sal_uInt16 nTemp;
     rStream >> nVersion;
     rStream >> nLevelCount;
     rStream >> nTemp;
     nFeatureFlags = nTemp;
     rStream >> nTemp;
-    bContinuousNumbering = (BOOL)nTemp;
+    bContinuousNumbering = (sal_Bool)nTemp;
     rStream >> nTemp;
     eNumberingType       = (SvxNumRuleType)nTemp;
     memset( aFmts, 0, sizeof( aFmts ));
 
-    for(USHORT i = 0; i < SVX_MAX_NUM; i++)
+    for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
-        USHORT nSet;
+        sal_uInt16 nSet;
         rStream >> nSet;
         if(nSet)
             aFmts[i] = new SvxNumberFormat(rStream);
         else
             aFmts[i] = 0;
-        aFmtsSet[i] = aFmts[i] ? TRUE : FALSE;
+        aFmtsSet[i] = aFmts[i] ? sal_True : sal_False;
     }
     if(NUMITEM_VERSION_02 <= nVersion)
     {
-        USHORT nShort;
+        sal_uInt16 nShort;
         rStream >> nShort;
         nFeatureFlags = nShort;
     }
@@ -779,20 +779,20 @@ SvxNumRule::SvxNumRule(SvStream &rStream)
 
 SvStream&   SvxNumRule::Store(SvStream &rStream)
 {
-    rStream<<(USHORT)NUMITEM_VERSION_03;
+    rStream<<(sal_uInt16)NUMITEM_VERSION_03;
     rStream<<nLevelCount;
     //first save of nFeatureFlags for old versions
-    rStream<<(USHORT)nFeatureFlags;
-    rStream<<(USHORT)bContinuousNumbering;
-    rStream<<(USHORT)eNumberingType;
+    rStream<<(sal_uInt16)nFeatureFlags;
+    rStream<<(sal_uInt16)bContinuousNumbering;
+    rStream<<(sal_uInt16)eNumberingType;
 
     FontToSubsFontConverter pConverter = 0;
-    BOOL bConvertBulletFont = rStream.GetVersion() <= SOFFICE_FILEFORMAT_50;
-    for(USHORT i = 0; i < SVX_MAX_NUM; i++)
+    sal_Bool bConvertBulletFont = rStream.GetVersion() <= SOFFICE_FILEFORMAT_50;
+    for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
         if(aFmts[i])
         {
-            rStream << USHORT(1);
+            rStream << sal_uInt16(1);
             if(bConvertBulletFont && aFmts[i]->GetBulletFont())
             {
                 if(!pConverter)
@@ -803,10 +803,10 @@ SvStream&   SvxNumRule::Store(SvStream &rStream)
             aFmts[i]->Store(rStream, pConverter);
         }
         else
-            rStream << USHORT(0);
+            rStream << sal_uInt16(0);
     }
     //second save of nFeatureFlags for new versions
-    rStream<<(USHORT)nFeatureFlags;
+    rStream<<(sal_uInt16)nFeatureFlags;
     if(pConverter)
         DestroyFontToSubsFontConverter(pConverter);
 
@@ -815,7 +815,7 @@ SvStream&   SvxNumRule::Store(SvStream &rStream)
 
 SvxNumRule::~SvxNumRule()
 {
-    for(USHORT i = 0; i < SVX_MAX_NUM; i++)
+    for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
         delete aFmts[i];
     if(!--nRefCount)
     {
@@ -830,7 +830,7 @@ SvxNumRule& SvxNumRule::operator=( const SvxNumRule& rCopy )
     nFeatureFlags        = rCopy.nFeatureFlags;
     bContinuousNumbering = rCopy.bContinuousNumbering;
     eNumberingType       = rCopy.eNumberingType;
-    for(USHORT i = 0; i < SVX_MAX_NUM; i++)
+    for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
     {
         delete aFmts[i];
         if(rCopy.aFmts[i])
@@ -848,8 +848,8 @@ int   SvxNumRule::operator==( const SvxNumRule& rCopy) const
         nFeatureFlags != rCopy.nFeatureFlags ||
             bContinuousNumbering != rCopy.bContinuousNumbering ||
                 eNumberingType != rCopy.eNumberingType)
-            return FALSE;
-    for(USHORT i = 0; i < nLevelCount; i++)
+            return sal_False;
+    for(sal_uInt16 i = 0; i < nLevelCount; i++)
     {
         if (
             (aFmtsSet[i] != rCopy.aFmtsSet[i]) ||
@@ -858,13 +858,13 @@ int   SvxNumRule::operator==( const SvxNumRule& rCopy) const
             (aFmts[i] && *aFmts[i] !=  *rCopy.aFmts[i])
            )
         {
-            return FALSE;
+            return sal_False;
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
-const SvxNumberFormat*  SvxNumRule::Get(USHORT nLevel)const
+const SvxNumberFormat*  SvxNumRule::Get(sal_uInt16 nLevel)const
 {
     DBG_ASSERT(nLevel < SVX_MAX_NUM, "Wrong Level" );
     if( nLevel < SVX_MAX_NUM )
@@ -873,7 +873,7 @@ const SvxNumberFormat*  SvxNumRule::Get(USHORT nLevel)const
         return 0;
 }
 
-const SvxNumberFormat&  SvxNumRule::GetLevel(USHORT nLevel)const
+const SvxNumberFormat&  SvxNumRule::GetLevel(sal_uInt16 nLevel)const
 {
     if(!pStdNumFmt)
     {
@@ -888,8 +888,7 @@ const SvxNumberFormat&  SvxNumRule::GetLevel(USHORT nLevel)const
                                                         *pStdNumFmt : *pStdOutlineNumFmt;
 }
 
-
-void SvxNumRule::SetLevel( USHORT i, const SvxNumberFormat& rNumFmt, BOOL bIsValid )
+void SvxNumRule::SetLevel( sal_uInt16 i, const SvxNumberFormat& rNumFmt, sal_Bool bIsValid )
 {
     DBG_ASSERT(i < SVX_MAX_NUM, "Wrong Level" );
 
@@ -901,7 +900,7 @@ void SvxNumRule::SetLevel( USHORT i, const SvxNumberFormat& rNumFmt, BOOL bIsVal
     }
 }
 
-void SvxNumRule::SetLevel(USHORT nLevel, const SvxNumberFormat* pFmt)
+void SvxNumRule::SetLevel(sal_uInt16 nLevel, const SvxNumberFormat* pFmt)
 {
     DBG_ASSERT(nLevel < SVX_MAX_NUM, "Wrong Level" );
 
@@ -918,7 +917,7 @@ void SvxNumRule::SetLevel(USHORT nLevel, const SvxNumberFormat* pFmt)
     }
 }
 
-String  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, BOOL bInclStrings ) const
+String  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, sal_Bool bInclStrings ) const
 {
     String aStr;
     if( SVX_NO_NUM > rNum.GetLevel() && !( SVX_NO_NUMLEVEL & rNum.GetLevel() ) )
@@ -926,12 +925,12 @@ String  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, BOOL bInclStrings ) c
         const SvxNumberFormat& rMyNFmt = GetLevel( rNum.GetLevel() );
         if( SVX_NUM_NUMBER_NONE != rMyNFmt.GetNumberingType() )
         {
-            BYTE i = rNum.GetLevel();
+            sal_uInt8 i = rNum.GetLevel();
 
             if( !IsContinuousNumbering() &&
                 1 < rMyNFmt.GetIncludeUpperLevels() )       // only on own level?
             {
-                BYTE n = rMyNFmt.GetIncludeUpperLevels();
+                sal_uInt8 n = rMyNFmt.GetIncludeUpperLevels();
                 if( 1 < n )
                 {
                     if( i+1 >= n )
@@ -974,10 +973,10 @@ String  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, BOOL bInclStrings ) c
 }
 
 // changes linked to embedded bitmaps
-BOOL SvxNumRule::UnLinkGraphics()
+sal_Bool SvxNumRule::UnLinkGraphics()
 {
-    BOOL bRet = FALSE;
-    for(USHORT i = 0; i < GetLevelCount(); i++)
+    sal_Bool bRet = sal_False;
+    for(sal_uInt16 i = 0; i < GetLevelCount(); i++)
     {
         SvxNumberFormat aFmt(GetLevel(i));
         const SvxBrushItem* pBrush = aFmt.GetBrush();
@@ -995,7 +994,7 @@ BOOL SvxNumRule::UnLinkGraphics()
                 aTempItem.SetGraphic(*pGraphic);
                 sal_Int16    eOrient = aFmt.GetVertOrient();
                 aFmt.SetGraphicBrush( &aTempItem, &aFmt.GetGraphicSize(), &eOrient );
-                bRet = TRUE;
+                bRet = sal_True;
             }
         }
         else if((SVX_NUM_BITMAP|LINK_TOKEN) == aFmt.GetNumberingType())
@@ -1011,13 +1010,13 @@ SvxNumBulletItem::SvxNumBulletItem(SvxNumRule& rRule) :
 {
 }
 
-SvxNumBulletItem::SvxNumBulletItem(SvxNumRule& rRule, USHORT _nWhich ) :
+SvxNumBulletItem::SvxNumBulletItem(SvxNumRule& rRule, sal_uInt16 _nWhich ) :
     SfxPoolItem(_nWhich),
     pNumRule(new SvxNumRule(rRule))
 {
 }
 
-SfxPoolItem* SvxNumBulletItem::Create(SvStream &s, USHORT n) const
+SfxPoolItem* SvxNumBulletItem::Create(SvStream &s, sal_uInt16 n) const
 {
     return SfxPoolItem::Create(s, n );
 }
@@ -1043,24 +1042,24 @@ SfxPoolItem*  SvxNumBulletItem::Clone( SfxItemPool * ) const
     return new SvxNumBulletItem(*this);
 }
 
-USHORT  SvxNumBulletItem::GetVersion( USHORT /*nFileVersion*/ ) const
+sal_uInt16  SvxNumBulletItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
 {
     return NUMITEM_VERSION_03;
 }
 
-SvStream&   SvxNumBulletItem::Store(SvStream &rStream, USHORT /*nItemVersion*/ )const
+SvStream&   SvxNumBulletItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/ )const
 {
     pNumRule->Store(rStream);
     return rStream;
 }
 
-bool SvxNumBulletItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxNumBulletItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= SvxCreateNumRule( pNumRule );
     return true;
 }
 
-bool SvxNumBulletItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxNumBulletItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     uno::Reference< container::XIndexReplace > xRule;
     if( rVal >>= xRule )
@@ -1086,12 +1085,12 @@ bool SvxNumBulletItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nM
     return false;
 }
 
-SvxNumRule* SvxConvertNumRule( const SvxNumRule* pRule, USHORT nLevels, SvxNumRuleType eType )
+SvxNumRule* SvxConvertNumRule( const SvxNumRule* pRule, sal_uInt16 nLevels, SvxNumRuleType eType )
 {
-    const USHORT nSrcLevels = pRule->GetLevelCount();
+    const sal_uInt16 nSrcLevels = pRule->GetLevelCount();
     SvxNumRule* pNewRule = new SvxNumRule( pRule->GetFeatureFlags(), nLevels, pRule->IsContinuousNumbering(), eType );
 
-    for( USHORT nLevel = 0; (nLevel < nLevels) && (nLevel < nSrcLevels); nLevel++ )
+    for( sal_uInt16 nLevel = 0; (nLevel < nLevels) && (nLevel < nSrcLevels); nLevel++ )
         pNewRule->SetLevel( nLevel, pRule->GetLevel( nLevel ) );
 
     return pNewRule;

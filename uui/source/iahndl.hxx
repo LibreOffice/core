@@ -40,10 +40,10 @@
 #include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/task/InteractionClassification.hpp"
 
-#include "tools/solar.h" // USHORT
+#include "tools/solar.h" // sal_uInt16
 #include "tools/errcode.hxx" // ErrCode
 #include "tools/rc.hxx" // Resource
-#include "vcl/wintypes.hxx" // WinBits
+#include "tools/wintypes.hxx" // WinBits
 
 namespace com { namespace sun { namespace star {
     namespace awt {
@@ -214,6 +214,15 @@ private:
     handleCertificateValidationRequest(
         com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionRequest > const & rRequest)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
+    handleNameClashResolveRequest(
+        com::sun::star::ucb::NameClashResolveRequest const & rRequest,
+        com::sun::star::uno::Sequence<
+            com::sun::star::uno::Reference<
+                com::sun::star::task::XInteractionContinuation > > const &
+                    rContinuations)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     bool
