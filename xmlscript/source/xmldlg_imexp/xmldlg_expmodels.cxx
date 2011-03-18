@@ -115,10 +115,7 @@ void ElementDescriptor::readFrameModel( StyleBag * all_styles )
 {
     // collect styles
     Style aStyle( 0x1 | 0x2 | 0x8 | 0x20 );
-/*
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
-        aStyle._set |= 0x1;
-*/
+
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
@@ -1561,7 +1558,6 @@ void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":progressmeter") ), _xDocument );
                 pElem->readProgressBarModel( all_styles );
             }
-            //
 
             if (pElem)
             {

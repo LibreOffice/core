@@ -52,7 +52,6 @@ namespace css = ::com::sun::star;
 namespace xmlscript
 {
 
-//
 inline sal_Int32 toInt32( ::rtl::OUString const & rStr ) SAL_THROW( () )
 {
     sal_Int32 nVal;

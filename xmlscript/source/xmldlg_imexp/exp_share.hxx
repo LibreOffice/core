@@ -115,13 +115,10 @@ public:
         ::rtl::OUString const & propName, ::rtl::OUString const & attrName,
         bool forceAttribute = false );
 
-    //
     template<typename T>
     inline bool readProp( T * ret, ::rtl::OUString const & rPropName );
     css::uno::Any readProp( ::rtl::OUString const & rPropName );
-    //
     void readDefaults( bool supportPrintable = true, bool supportVisible = true );
-    //
     void readStringAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     inline void readDoubleAttr(
@@ -162,7 +159,6 @@ public:
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     void readSelectionTypeAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
-    //
     void readDataAwareAttr(
         ::rtl::OUString const & rAttrName );
     inline void addBoolAttr(
@@ -173,9 +169,7 @@ public:
         const & xFormatProperties,
         ::rtl::OUString const & rAttrName );
 
-    //
     void readEvents() SAL_THROW( (css::uno::Exception) );
-    //
     void readDialogModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
     void readBullitinBoard( StyleBag * all_styles )

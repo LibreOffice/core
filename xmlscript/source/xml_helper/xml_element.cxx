@@ -73,7 +73,6 @@ void XMLElement::dump( Reference< xml::sax::XDocumentHandler > const & xOut )
     xOut->startElement( _name, static_cast< xml::sax::XAttributeList * >( this ) );
     // write sub elements
     dumpSubElements( xOut );
-    //
     xOut->ignorableWhitespace( OUString() );
     xOut->endElement( _name );
 }

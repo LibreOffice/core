@@ -51,7 +51,6 @@ using namespace ::com::sun::star::uno;
 
 namespace xmlscript
 {
-//
 inline sal_Int32 toInt32( OUString const & rStr ) SAL_THROW( () )
 {
     sal_Int32 nVal;
