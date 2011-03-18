@@ -28,11 +28,11 @@
 $(eval $(call gb_Library_Library,swui))
 
 $(eval $(call gb_Library_set_include,swui,\
-    -I$(SRCDIR)/sw/inc \
-    -I$(SRCDIR)/sw/inc/pch \
-    -I$(SRCDIR)/sw/source/core/inc \
-    -I$(SRCDIR)/sw/source/filter/inc \
-    -I$(SRCDIR)/sw/source/ui/inc \
+    -I$(realpath $(SRCDIR)/sw/inc) \
+    -I$(realpath $(SRCDIR)/sw/inc/pch) \
+    -I$(realpath $(SRCDIR)/sw/source/core/inc) \
+    -I$(realpath $(SRCDIR)/sw/source/filter/inc) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
     -I$(WORKDIR)/SdiTarget/sw/sdi \
     -I$(WORKDIR)/Misc/sw \
     $$(INCLUDE) \

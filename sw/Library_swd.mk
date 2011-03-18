@@ -33,11 +33,11 @@ $(eval $(call gb_Library_set_include,swd,\
     $$(INCLUDE) \
     -I$(WORKDIR)/inc/sw/sdi \
     -I$(WORKDIR)/inc/sw \
-    -I$(SRCDIR)/sw/inc \
-    -I$(SRCDIR)/sw/inc/pch \
-    -I$(SRCDIR)/sw/source/core/inc \
-    -I$(SRCDIR)/sw/source/filter/inc \
-    -I$(SRCDIR)/sw/source/ui/inc \
+    -I$(realpath $(SRCDIR)/sw/inc) \
+    -I$(realpath $(SRCDIR)/sw/inc/pch) \
+    -I$(realpath $(SRCDIR)/sw/source/core/inc) \
+    -I$(realpath $(SRCDIR)/sw/source/filter/inc) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
     -I$(OUTDIR)/inc/offuh \
 ))
 

@@ -37,32 +37,32 @@ $(eval $(call gb_SrsTarget_set_include,sw/res,\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc \
     -I$(WORKDIR)/inc/sw \
-    -I$(SRCDIR)/sw/inc \
-    -I$(SRCDIR)/sw/source/core/inc \
-    -I$(SRCDIR)/sw/source/core/undo \
-    -I$(SRCDIR)/sw/source/core/unocore \
-    -I$(SRCDIR)/sw/source/ui/chrdlg \
-    -I$(SRCDIR)/sw/source/ui/config \
-    -I$(SRCDIR)/sw/source/ui/dbui \
-    -I$(SRCDIR)/sw/source/ui/dialog \
-    -I$(SRCDIR)/sw/source/ui/docvw \
-    -I$(SRCDIR)/sw/source/ui/envelp \
-    -I$(SRCDIR)/sw/source/ui/fldui \
-    -I$(SRCDIR)/sw/source/ui/fmtui \
-    -I$(SRCDIR)/sw/source/ui/frmdlg \
-    -I$(SRCDIR)/sw/source/ui/globdoc \
-    -I$(SRCDIR)/sw/source/ui/inc \
-    -I$(SRCDIR)/sw/source/ui/index \
-    -I$(SRCDIR)/sw/source/ui/lingu \
-    -I$(SRCDIR)/sw/source/ui/misc \
-    -I$(SRCDIR)/sw/source/ui/ribbar \
-    -I$(SRCDIR)/sw/source/ui/shells \
-    -I$(SRCDIR)/sw/source/ui/smartmenu \
-    -I$(SRCDIR)/sw/source/ui/table \
-    -I$(SRCDIR)/sw/source/ui/uiview \
-    -I$(SRCDIR)/sw/source/ui/utlui \
-    -I$(SRCDIR)/sw/source/ui/web \
-    -I$(SRCDIR)/sw/source/ui/wrtsh \
+    -I$(realpath $(SRCDIR)/sw/inc) \
+    -I$(realpath $(SRCDIR)/sw/source/core/inc) \
+    -I$(realpath $(SRCDIR)/sw/source/core/undo) \
+    -I$(realpath $(SRCDIR)/sw/source/core/unocore) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/chrdlg) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/config) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/dbui) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/dialog) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/docvw) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/envelp) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/fldui) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/fmtui) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/frmdlg) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/globdoc) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/index) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/lingu) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/misc) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/ribbar) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/shells) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/smartmenu) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/table) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/uiview) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/utlui) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/web) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/wrtsh) \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,sw/res,\
