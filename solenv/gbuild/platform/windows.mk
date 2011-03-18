@@ -567,7 +567,12 @@ endef
 
 # CppunitTest class
 
+# cppunittester.exe is in the cppunit subdirectory of ${OUTDIR}/bin,
+# thus it won't find its DLLs unless ${OUTDIR}/bin is added to PATH.
+# PATH is the Cygwin one while ${OUTDIR} is a Win32 pathname, thus
+# cygpath -u.
 gb_CppunitTest_CPPTESTPRECOMMAND := PATH="`cygpath -u $(OUTDIR)`/bin:$${PATH}"
+
 gb_CppunitTest_SYSPRE := itest_
 gb_CppunitTest_EXT := .lib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
@@ -636,11 +641,13 @@ endef
 
 # SdiTarget class
 
-gb_SdiTarget_SVIDLPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
+# svidl.exe is in ${OUTDIR}/bin itself, so nothing special needed to have it find
+# DLLs in the same directory
+gb_SdiTarget_SVIDLPRECOMMAND :=
 
 # SrsPartMergeTarget
-
-gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
+# Ditto for transex3
+gb_SrsPartMergeTarget_TRANSEXPRECOMMAND :=
 
 # SrsPartTarget class
 
@@ -670,7 +677,9 @@ endif
 
 # ComponentTarget
 
-gb_XSLTPROCPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
+# See comment for svidl.exe
+gb_XSLTPROCPRECOMMAND :=
+
 gb_Library_COMPONENTPREFIXES := \
 	OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/ \
 	URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
