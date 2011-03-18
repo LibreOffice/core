@@ -2108,9 +2108,13 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                     pDoc->GetNodes().GetEndOfInserts().StartOfSectionIndex()
                     < aInsPos.GetIndex() )
             {
-                nNodeCnt -=
+                ULONG nDistance =
                     ( pAktNode->EndOfSectionIndex() -
                         aRg.aStart.GetIndex() );
+                if (nDistance < nNodeCnt)
+                    nNodeCnt -= nDistance;
+                else
+                    nNodeCnt = 1;
 
                 // dann alle Nodes der Tabelle in die akt. Zelle kopieren
                 // fuer den TabellenNode einen DummyNode einfuegen?
@@ -2145,7 +2149,11 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                 SwNodeIndex nStt( aInsPos, -1 );
                 SwTableNode* pTblNd = ((SwTableNode*)pAktNode)->
                                         MakeCopy( pDoc, aInsPos );
-                nNodeCnt -= aInsPos.GetIndex() - nStt.GetIndex() -2;
+                ULONG nDistance = aInsPos.GetIndex() - nStt.GetIndex() - 2;
+                if (nDistance < nNodeCnt)
+                    nNodeCnt -= nDistance;
+                else
+                    nNodeCnt = 1;
 
                 aRg.aStart = pAktNode->EndOfSectionIndex();
 
@@ -2169,7 +2177,11 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                 SwSectionNode* pSectNd = ((SwSectionNode*)pAktNode)->
                                     MakeCopy( pDoc, aInsPos );
 
-                nNodeCnt -= aInsPos.GetIndex() - nStt.GetIndex() -2;
+                ULONG nDistance = aInsPos.GetIndex() - nStt.GetIndex() - 2;
+                if (nDistance < nNodeCnt)
+                    nNodeCnt -= nDistance;
+                else
+                    nNodeCnt = 1;
                 aRg.aStart = pAktNode->EndOfSectionIndex();
 
                 if( bNewFrms && pSectNd &&
