@@ -712,7 +712,7 @@ sal_uInt16 SfxUndoManager::GetUndoActionId() const
 
     DBG_ASSERT( m_pData->pActUndoArray->nCurUndoAction > 0, "svl::SfxUndoManager::GetUndoActionId(), illegal id!" );
     if ( m_pData->pActUndoArray->nCurUndoAction == 0 )
-        return NULL;
+        return 0;
     return m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1].pAction->GetId();
 }
 
