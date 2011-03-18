@@ -6706,9 +6706,9 @@ if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE" ; then
 
     dnl What to test
     qt_test_include="qstyle.h"
-    qt_test_library="libqt-mt.so*"
+    qt_test_library="libqt-mt.so"
     kde_test_include="kapp.h"
-    kde_test_library="libDCOP.so*"
+    kde_test_library="libDCOP.so"
 
     dnl Check for Qt3 headers
     AC_MSG_CHECKING([for Qt3 headers])

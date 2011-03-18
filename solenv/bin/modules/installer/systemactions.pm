@@ -1099,7 +1099,7 @@ sub rename_directory
     }
     else
     {
-        installer::exiter::exit_program("ERROR: Could not move directory from $olddir to $newdir", "rename_directory");
+        installer::exiter::exit_program("ERROR: Could not move directory from $olddir to $newdir $!", "rename_directory");
     }
 
     return $newdir;
