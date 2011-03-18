@@ -1,0 +1,13 @@
+--- misc/Python-2.6.1/configure	Thu Mar 17 13:00:41 2011
++++ misc/build/Python-2.6.1/configure	Thu Mar 17 12:58:50 2011
+@@ -2042,7 +2042,9 @@
+ if test -z "$MACHDEP"
+ then
+ 	ac_sys_system=`uname -s`
+-	if test "$ac_sys_system" = "AIX" -o "$ac_sys_system" = "Monterey64" \
++        if test -n "$OOO_SYSBASE_SYS_RELEASE"; then
++                ac_sys_release=$OOO_SYSBASE_SYS_RELEASE
++	elif test "$ac_sys_system" = "AIX" -o "$ac_sys_system" = "Monterey64" \
+ 	-o "$ac_sys_system" = "UnixWare" -o "$ac_sys_system" = "OpenUNIX"; then
+ 		ac_sys_release=`uname -v`
+ 	else
