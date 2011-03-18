@@ -68,6 +68,7 @@ ParseManager::ParseManager(
             RTL_CONSTASCII_STRINGPARAM(
                 "http://www.w3.org/2001/XMLSchema-instance")));
     OSL_ASSERT(id == NAMESPACE_XSI);
+    (void)id;
 }
 
 bool ParseManager::parse() {
