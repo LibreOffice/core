@@ -879,9 +879,9 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
     if ( NULL == locale )
     {
 
-        locale = (char *)malloc( 20 );
+        locale = (char *)malloc( 128 );
         if ( locale )
-            macosx_getLocale( locale, 20 );
+            macosx_getLocale( locale, 128 );
         else
             fprintf( stderr, "nlsupport.c:  locale allocation returned NULL!\n" );
     }

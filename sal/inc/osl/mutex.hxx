@@ -272,6 +272,7 @@ namespace osl
     };
     typedef osl::Guard< SolarMutex > SolarGuard;
     typedef osl::ClearableGuard< SolarMutex > ClearableSolarGuard;
+    typedef osl::ResettableGuard< SolarMutex > ResettableSolarGuard;
 }
 
 #endif  /* __cplusplus */

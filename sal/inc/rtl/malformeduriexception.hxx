@@ -54,8 +54,8 @@ public:
     inline SAL_EXCEPTION_DLLPRIVATE ~MalformedUriException() {}
 
     inline SAL_EXCEPTION_DLLPRIVATE MalformedUriException operator =(
-        MalformedUriException const & other)
-    { m_aMessage = other.m_aMessage; return *this; }
+        MalformedUriException const & rOther)
+    { m_aMessage = rOther.m_aMessage; return *this; }
 
     /** Get the message.
 

@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: UIElementType.idl,v $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,6 +79,11 @@ constants UIElementType
     /** specifies a tool panel
     */
     const short TOOLPANEL       = 7;
+
+    //-------------------------------------------------------------------------
+    /** specifies a window that can be docked.
+    */
+    const short DOCKINGWINDOW   = 7;
 
     //-------------------------------------------------------------------------
     /** specifies the number of constants.

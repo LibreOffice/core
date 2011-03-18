@@ -229,9 +229,17 @@ Reference< XInterface > OSingleFactoryHelper::createInstanceWithArgumentsAndCont
     else
     {
         if ( rArguments.getLength() )
+        {
+            // dispose the here created UNO object before throwing out exception
+            // to avoid risk of memory leaks #i113722#
+            Reference<XComponent> xComp( xRet, UNO_QUERY );
+            if (xComp.is())
+                xComp->dispose();
+
             throw lang::IllegalArgumentException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("cannot pass arguments to component => no XInitialization implemented!") ),
                 Reference< XInterface >(), 0 );
+        }
     }
 
     return xRet;

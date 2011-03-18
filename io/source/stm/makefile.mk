@@ -75,3 +75,10 @@ DEF1NAME=		$(SHL1TARGET)
 
 .INCLUDE :	target.mk
 
+ALLTAR : $(MISC)/streams.component
+
+$(MISC)/streams.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        streams.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_URE_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt streams.component

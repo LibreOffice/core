@@ -14435,11 +14435,7 @@ namespace rtl_OStringBuffer
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
             OString                expVal( kTestStr116 );
-#if defined(UNX) || defined(OS2)
-            sal_Int64              input = 9223372036854775807LL;
-#else
-            sal_Int64              input = 9223372036854775807;
-#endif
+            sal_Int64              input = SAL_CONST_INT64(9223372036854775807);
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
@@ -14519,11 +14515,7 @@ namespace rtl_OStringBuffer
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
             OString                expVal( kTestStr118 );
-#if defined(UNX) || defined(OS2)
-            sal_Int64              input = 9223372036854775807LL;
-#else
-            sal_Int64              input = 9223372036854775807;
-#endif
+            sal_Int64              input = SAL_CONST_INT64(9223372036854775807);
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
@@ -14602,11 +14594,7 @@ namespace rtl_OStringBuffer
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
             OString                expVal( kTestStr118 );
-#if defined(UNX) || defined(OS2)
-            sal_Int64              input = 9223372036854775807LL;
-#else
-            sal_Int64              input = 9223372036854775807;
-#endif
+            sal_Int64              input = SAL_CONST_INT64(9223372036854775807);
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
@@ -14685,11 +14673,7 @@ namespace rtl_OStringBuffer
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
             OString                expVal( kTestStr118 );
-#if defined(UNX) || defined(OS2)
-            sal_Int64              input = 9223372036854775807LL;
-#else
-            sal_Int64              input = 9223372036854775807;
-#endif
+            sal_Int64              input = SAL_CONST_INT64(9223372036854775807);
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
@@ -14768,11 +14752,7 @@ namespace rtl_OStringBuffer
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
             OString                expVal( kTestStr120 );
-#if defined(UNX) || defined(OS2)
-            sal_Int64              input = 9223372036854775807LL;
-#else
-            sal_Int64              input = 9223372036854775807;
-#endif
+            sal_Int64              input = SAL_CONST_INT64(9223372036854775807);
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE

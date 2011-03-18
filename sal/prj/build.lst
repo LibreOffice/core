@@ -17,12 +17,15 @@ sa sal\cppunittester nmake - all sa_cppunittester sa_cpprt.u sa_util NULL
 sa sal\qa\ByteSequence nmake - all sa_qa_ByteSequence sa_cppunittester sa_util NULL
 sa sal\qa\OStringBuffer nmake - all sa_qa_OStringBuffer sa_cppunittester sa_util NULL
 sa sal\qa\osl\mutex nmake - all sa_qa_osl_mutex sa_cppunittester sa_util NULL
+sa sal\qa\osl\pipe nmake - all sa_qa_osl_pipe sa_cppunittester sa_util NULL
 sa sal\qa\osl\profile nmake - all sa_qa_osl_profile sa_cppunittester sa_util NULL
 sa sal\qa\osl\file nmake - u sa_qa_osl_file sa_cppunittester sa_util NULL
 sa sal\qa\osl\module nmake - u sa_qa_osl_module sa_cppunittester sa_util NULL
 sa sal\qa\osl\condition nmake - all sa_qa_osl_condition sa_cppunittester sa_util NULL
 sa sal\qa\osl\security nmake - all sa_qa_osl_security sa_cppunittester sa_util NULL
 sa sal\qa\osl\process nmake - all sa_qa_osl_process sa_cppunittester sa_util NULL
+sa sal\qa\osl\setthreadname nmake - all sa_qa_osl_setthreadname sa_cppunittester sa_util NULL
+sa sal\qa\rtl\math nmake - all sa_qa_rtl_math sa_cppunittester sa_util NULL
 sa sal\qa\rtl\strings nmake - all sa_qa_rt_strings sa_cppunittester sa_util NULL
 sa sal\qa\rtl\oustringbuffer nmake - all sa_qa_rt_oustringbuffer sa_cppunittester sa_util NULL
 sa sal\qa\rtl\alloc nmake - all sa_qa_rt_alloc sa_cppunittester sa_util NULL

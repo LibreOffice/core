@@ -199,6 +199,7 @@ IDLFILES=\
     SpreadsheetDocumentSettings.idl\
     SpreadsheetDrawPage.idl\
     SpreadsheetView.idl\
+    SpreadsheetViewObjectsMode.idl\
     SpreadsheetViewPane.idl\
     SpreadsheetViewPanesEnumeration.idl\
     SpreadsheetViewSettings.idl\

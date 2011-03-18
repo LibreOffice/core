@@ -2,9 +2,6 @@ br	bridges	:	cppuhelper jurt jvmaccess salhelper NULL
 br	bridges									usr1	-	all	br_mkout NULL
 br	bridges\inc								nmake	-	all	br_inc NULL
 br	bridges\unotypes						nmake	-	all	br_unotypes NULL
-br	bridges\source\remote\static			nmake	-	all	br_rem_static br_unotypes br_inc NULL
-br	bridges\source\remote\urp				nmake	-	all	br_rem_urp br_rem_static br_inc NULL
-br	bridges\source\remote\context			nmake	-	all	br_rcon br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\mingw_intel	nmake	-	w	br_gcc3i br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\msvc_win32_intel	nmake	-	w	br_msci br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\msvc_win32_x86-64	nmake	-	w	br_mscx br_cppuno_shared br_unotypes br_inc NULL

@@ -55,13 +55,15 @@ SLOFILES=	\
             $(SLO)$/utility.obj\
             $(SLO)$/filepath.obj\
             $(SLO)$/debugbase.obj\
-            $(SLO)$/loadmodulerelative.obj
+            $(SLO)$/loadmodulerelative.obj \
+            $(SLO)/printtrace.obj
 
 OBJFILES=	\
             $(OBJ)$/utility.obj\
             $(OBJ)$/filepath.obj\
             $(OBJ)$/debugbase.obj\
-            $(OBJ)$/loadmodulerelative.obj
+            $(OBJ)$/loadmodulerelative.obj \
+            $(OBJ)/printtrace.obj
 
 # --- Targets ------------------------------------------------------
 

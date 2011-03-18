@@ -44,23 +44,28 @@ module com {  module sun {  module star {  module text {
 
 constants TextMarkupType
 {
-    /// Markup originates from spell checking.
+    /** Markup originates from spell checking.
+     */
     const long SPELLCHECK = 1;
 
-    /// Markup originates from proofreading
-    /// @since OOo 3.0.1
+    /** Markup originates from proofreading
+        @since OOo 3.0.1
+     */
     const long PROOFREADING = 2;
 
-    /// Markup originates from smart tag checking.
+    /** Markup originates from smart tag checking.
+     */
     const long SMARTTAG = 3;
 
-    /// Markup originates from proofreading
-    /// An invisible markup used to identify sentence boundaries.
-    /// @since OOo 3.0.1
+    /** Markup originates from proofreading
+        An inivisible markup type used in proofreading API calls.
+        @since OOo 3.0.1
+     */
     const long SENTENCE = 4;
 
-    /// Markups originates from change tracking.
-        /// @since OOo 3.3
+    /** Markups originates from change tracking.
+        @since OOo 3.3
+     */
     const long TRACK_CHANGE_INSERTION = 5;
     const long TRACK_CHANGE_DELETION = 6;
     const long TRACK_CHANGE_FORMATCHANGE = 7;

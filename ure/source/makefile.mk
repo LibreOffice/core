@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,52 +25,51 @@
 #
 #*************************************************************************
 
-PRJ := ..
-PRJNAME := ure
-TARGET := $(PRJNAME)
-
-.INCLUDE: settings.mk
-
-.IF "$(OS)" == "WNT" || "$(OS)" == "OS2"
-MY_RC = .ini
-.ELSE
-MY_RC = rc
-.ENDIF
+PRJ = ..
+PRJNAME = ure
+TARGET = source
 
 ZIP1TARGET = uretest
 ZIP1FLAGS = -r
 ZIP1LIST = uretest
 
-.INCLUDE: target.mk
+my_components = \
+    acceptor \
+    binaryurp \
+    bootstrap \
+    connector \
+    introspection \
+    invocadapt \
+    invocation \
+    namingservice \
+    proxyfac \
+    reflection \
+    stocservices \
+    streams \
+    textinstream \
+    textoutstream \
+    uuresolver
 
-ALLTAR: \
-    $(BIN)$/ure$/README \
-    $(BIN)$/ure$/THIRDPARTYLICENSEREADME.html \
-    $(BIN)$/ure$/jvmfwk3$(MY_RC) \
-    $(BIN)$/ure$/uno$(MY_RC)
+.IF "$(SOLAR_JAVA)" != ""
 
-$(BIN)$/ure$/README: README
-    -$(MKDIR) $(@:d)
-    $(COPY) $< $@
-
-$(BIN)$/ure$/THIRDPARTYLICENSEREADME.html: THIRDPARTYLICENSEREADME.html
-    - $(MKDIR) $(@:d)
-    $(COPY) $< $@
-
-$(BIN)$/ure$/jvmfwk3$(MY_RC): jvmfwk3$(MY_RC)
-    -$(MKDIR) $(@:d)
-    $(COPY) $< $@
-
-$(BIN)$/ure$/uno$(MY_RC): uno$(MY_RC)
-    -$(MKDIR) $(@:d)
-    $(COPY) $< $@
-
-.IF "$(OS)" != "WNT"
-
-ALLTAR: $(BIN)$/ure$/startup.sh
-
-$(BIN)$/ure$/startup.sh: startup.sh
-    -$(MKDIR) $(@:d)
-    $(COPY) $< $@
+my_components += \
+    javaloader \
+    javavm \
+    juh
 
 .ENDIF
+
+.INCLUDE: settings.mk
+.INCLUDE: target.mk
+
+ALLTAR : $(MISC)/services.rdb
+
+$(MISC)/services.rdb .ERRREMOVE : $(SOLARENV)/bin/packcomponents.xslt \
+        $(MISC)/services.input $(my_components:^"$(SOLARXMLDIR)/":+".component")
+    $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
+        $(SOLARENV)/bin/packcomponents.xslt $(MISC)/services.input
+
+$(MISC)/services.input :
+    echo \
+        '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
+        > $@

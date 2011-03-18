@@ -373,7 +373,6 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
     delete pCallbacks;
     pCallbacks = 0;
 #endif // CPPU_LEAK_STATIC_DATA
-
     if( pMutex )
     {
         delete pMutex;

@@ -550,6 +550,10 @@ void SAL_CALL osl_yieldThread()
     DosSleep(0);
 }
 
+void osl_setThreadName(char const * name) {
+    (void) name;
+}
+
 typedef struct _TLS
 {
     PULONG                          pulPtr;

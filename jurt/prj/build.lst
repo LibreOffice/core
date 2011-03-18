@@ -17,3 +17,4 @@ ju	jurt\com\sun\star\comp\urlresolver		nmake	-	all	ju_urlres ju_co_loader NULL
 ju	jurt\source\pipe			nmake	-	all	ju_src_pipe NULL
 ju  jurt\source\pipe\wrapper nmake - w ju_src_pipe_wrapper NULL
 ju	jurt\util								nmake	-	all	ju_ut ju_brid_jrm ju_co_bfactr ju_con ju_con_sock ju_con_pipe ju_cssl_uno ju_env_java ju_prot_urp ju_servman ju_urlres ju_src_pipe ju_libutil ju_uno NULL
+ju jurt\test\com\sun\star\lib\uno\protocols\urp nmake - all ju_test_css_lib_uno_protocols_urp NULL

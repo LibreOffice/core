@@ -71,3 +71,11 @@ DEF1NAME=		$(SHL1TARGET)
 .ENDIF 		# L10N_framework
 
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/connector.component
+
+$(MISC)/connector.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        connector.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_URE_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt connector.component

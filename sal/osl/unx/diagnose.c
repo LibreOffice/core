@@ -29,7 +29,6 @@
 #include "osl/diagnose.h"
 #include "system.h"
 
-
 #ifndef HAVE_DLFCN_H
 
 #if defined(LINUX) || defined(SOLARIS)
@@ -58,6 +57,8 @@
 #include <stddef.h>
 #define INCLUDED_STDDEF_H
 #endif
+
+#include "printtrace.h"
 
 /************************************************************************/
 /* Internal data structures and functions */
@@ -302,33 +303,11 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc (
 /************************************************************************/
 /* osl_trace */
 /************************************************************************/
-/* comment this define to stop output thread identifier*/
-#define OSL_TRACE_THREAD 1
-void SAL_CALL osl_trace (
-    const sal_Char* lpszFormat, ...)
-{
+void osl_trace(char const * pszFormat, ...) {
     va_list args;
-
-#if defined(OSL_PROFILING)
-    fprintf(stderr, "Time: %06lu : ", osl_getGlobalTimer() );
-#else
-#if defined(OSL_TRACE_THREAD)
-    fprintf(
-        stderr, "Thread: %6lu :",
-        SAL_INT_CAST(unsigned long, osl_getThreadIdentifier(NULL)));
-#else
-    fprintf(stderr, "Trace Message: ");
-#endif
-#endif
-
-    va_start(args, lpszFormat);
-    vfprintf(stderr, lpszFormat, args);
+    va_start(args, pszFormat);
+    printTrace((unsigned long) getpid(), pszFormat, args);
     va_end(args);
-
-    fprintf(stderr,"\n");
-    fflush(stderr);
 }
-
-/************************************************************************/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

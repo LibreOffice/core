@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -23,74 +23,33 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#*************************************************************************
-PRJ=..$/..$/..
-INCPRE+= $(PRJ)$/qa$/inc
+#***********************************************************************/
 
-PRJNAME=sal
-TARGET=rtl_math
-# this is removed at the moment because we need some enhancements
-# TESTDIR=TRUE
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-ENABLE_EXCEPTIONS=TRUE
+PRJ = ../../..
+PRJNAME = sal
+TARGET = qa_rtl_profile
 
-# --- Settings -----------------------------------------------------
+ENABLE_EXCEPTIONS = TRUE
 
-.INCLUDE :  settings.mk
-
-CFLAGS+= $(LFS_CFLAGS)
-CXXFLAGS+= $(LFS_CFLAGS)
+.INCLUDE: settings.mk
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-#----------------------------------- OStringBuffer -----------------------------------
+SHL1IMPLIB = i$(SHL1TARGET)
+SHL1OBJS = $(SLO)/test-rtl-math.obj
+SHL1RPATH = NONE
+SHL1STDLIBS = $(CPPUNITLIB) $(SALLIB)
+SHL1TARGET = test-rtl-math
+SHL1VERSIONMAP = $(PRJ)/qa/export.map
+DEF1NAME = $(SHL1TARGET)
 
-SHL1OBJS= \
-    $(SLO)$/test_rtl_math.obj
+SLOFILES = $(SHL1OBJS)
 
-SHL1TARGET= rtl_math
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME    =$(SHL1TARGET)
-# DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
-
-# --- BEGIN --------------------------------------------------------
-SHL2OBJS=  \
-    $(SLO)$/rtl_math.obj
-SHL2TARGET= rtl_math2
-SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB)
-
-SHL2IMPLIB= i$(SHL2TARGET)
-DEF2NAME=    $(SHL2TARGET)
-SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
-
-
-
-# # --- BEGIN --------------------------------------------------------
-# LLA: this is an old test, which seems not to work
-# sal_setInt64()
-# sal_getInt64()
-# does not exist.
-#
-# SHL3OBJS=  \
-# 	$(SLO)$/rtl_old_testint64.obj
-# SHL3TARGET= rtl_old_testint64
-# SHL3STDLIBS= $(SALLIB) $(CPPUNITLIB)
-#
-# SHL3IMPLIB= i$(SHL3TARGET)
-# DEF3NAME=    $(SHL3TARGET)
-# SHL3VERSIONMAP = $(PRJ)$/qa$/export.map
-#
-
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES=$(SHL1OBJS)
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
+.INCLUDE: target.mk
 .INCLUDE : $(PRJ)$/qa$/cppunit_local.mk
+
+.END

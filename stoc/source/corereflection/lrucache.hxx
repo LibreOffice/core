@@ -178,9 +178,9 @@ template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
 inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
     const t_Key & rKey, const t_Val & rValue )
 {
+    ::osl::MutexGuard aGuard( _aCacheMutex );
     if (_nCachedElements > 0)
     {
-        ::osl::MutexGuard aGuard( _aCacheMutex );
         const typename t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
 
         CacheEntry * pEntry;
@@ -222,6 +222,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::clear()
         _pBlock[nPos].aKey = t_Key();
         _pBlock[nPos].aVal = t_Val();
     }
+    _nCachedElements = 0;
 #ifdef __CACHE_DIAGNOSE
     OSL_TRACE( "> cleared cache <\n" );
 #endif

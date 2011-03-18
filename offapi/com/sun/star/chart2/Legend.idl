@@ -29,7 +29,7 @@
 
 #include <com/sun/star/chart2/XLegend.idl>
 #include <com/sun/star/chart2/LegendPosition.idl>
-#include <com/sun/star/chart2/LegendExpansion.idl>
+#include <com/sun/star/chart/ChartLegendExpansion.idl>
 
 #include <com/sun/star/beans/PropertySet.idl>
 #include <com/sun/star/drawing/LineProperties.idl>
@@ -63,12 +63,12 @@ service Legend
     /** Determines how the aspect ratio of the legend should roughly
         be.
 
-        <p>Set the Expansion to <member>LegendExpansion::HIGH</member>
+        <p>Set the Expansion to <member>::com::sun::star::chart::ChartLegendExpansion::HIGH</member>
         for a legend that is positioned on the right or left hand
         side.  Use <member>LegendExpansion::WIDE</member> for a legend
         that is positioned on top or the bottom.</p>
      */
-    [property] LegendExpansion Expansion;
+    [property] ::com::sun::star::chart::ChartLegendExpansion Expansion;
 
     /** Determines, whether the legend should be rendered by the view.
      */

@@ -29,10 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
 
+#include <exception>
+#include <typeinfo>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <rtl/alloc.h>
+
+#include "rtl/alloc.h"
+#include "rtl/ustrbuf.hxx"
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -238,6 +242,18 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
 
 //==================================================================================================
 
+namespace {
+
+void appendCString(OUStringBuffer & buffer, char const * text) {
+    if (text != 0) {
+        buffer.append(
+            OStringToOUString(OString(text), RTL_TEXTENCODING_ISO_8859_1));
+            // use 8859-1 to avoid conversion failure
+    }
+}
+
+}
+
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,
@@ -370,13 +386,31 @@ static void cpp_call(
 
     try
     {
-        callVirtualMethod(
-            pAdjustedThisPtr, aVtableSlot.index,
-            pCppReturn, pReturnTypeRef, bSimpleReturn,
-            pStackStart, ( pStack - pStackStart ),
-            pGPR, nGPR,
-            pFPR, nFPR );
-        // NO exception occurred...
+        try {
+            callVirtualMethod(
+                pAdjustedThisPtr, aVtableSlot.index,
+                pCppReturn, pReturnTypeRef, bSimpleReturn,
+                pStackStart, ( pStack - pStackStart ),
+                pGPR, nGPR,
+                pFPR, nFPR );
+        } catch (Exception &) {
+            throw;
+        } catch (std::exception & e) {
+            OUStringBuffer buf;
+            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("C++ code threw "));
+            appendCString(buf, typeid(e).name());
+            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(": "));
+            appendCString(buf, e.what());
+            throw RuntimeException(
+                buf.makeStringAndClear(), Reference< XInterface >());
+        } catch (...) {
+            throw RuntimeException(
+                OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "C++ code threw unknown exception")),
+                Reference< XInterface >());
+        }
+
         *ppUnoExc = 0;
 
         // reconvert temporary params
