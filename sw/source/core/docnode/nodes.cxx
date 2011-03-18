@@ -1998,7 +1998,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                     pDoc->GetNodes().GetEndOfInserts().StartOfSectionIndex()
                     < aInsPos.GetIndex() )
             {
-                ULONG nDistance =
+                sal_uLong nDistance =
                     ( pAktNode->EndOfSectionIndex() -
                         aRg.aStart.GetIndex() );
                 if (nDistance < nNodeCnt)
@@ -2039,7 +2039,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                 SwNodeIndex nStt( aInsPos, -1 );
                 SwTableNode* pTblNd = ((SwTableNode*)pAktNode)->
                                         MakeCopy( pDoc, aInsPos );
-                ULONG nDistance = aInsPos.GetIndex() - nStt.GetIndex() - 2;
+                sal_uLong nDistance = aInsPos.GetIndex() - nStt.GetIndex() - 2;
                 if (nDistance < nNodeCnt)
                     nNodeCnt -= nDistance;
                 else
@@ -2067,7 +2067,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                 SwSectionNode* pSectNd = ((SwSectionNode*)pAktNode)->
                                     MakeCopy( pDoc, aInsPos );
 
-                ULONG nDistance = aInsPos.GetIndex() - nStt.GetIndex() - 2;
+                sal_uLong nDistance = aInsPos.GetIndex() - nStt.GetIndex() - 2;
                 if (nDistance < nNodeCnt)
                     nNodeCnt -= nDistance;
                 else
