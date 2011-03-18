@@ -247,8 +247,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/edit/edtox \
     sw/source/core/edit/edundo \
     sw/source/core/edit/edws \
-    sw/source/core/except/dbgloop \
-    sw/source/core/except/errhdl \
     sw/source/core/fields/authfld \
     sw/source/core/fields/cellfml \
     sw/source/core/fields/chpfld \
