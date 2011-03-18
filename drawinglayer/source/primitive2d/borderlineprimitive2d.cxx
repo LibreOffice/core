@@ -83,7 +83,7 @@ namespace drawinglayer
         {
             Primitive2DSequence xRetval;
 
-            if(!getStart().equal(getEnd()) && getWidth() > 0)
+            if(!getStart().equal(getEnd()) && ( isInsideUsed() || isOutsideUsed() ) )
             {
                 // get data and vectors
                 const double fWidth(getWidth());
@@ -120,8 +120,8 @@ namespace drawinglayer
                                 aLeft,
                                 getRGBColorLeft()));
 
-                            aGap.append( aTmpStart );
-                            aGap.append( aTmpEnd );
+                            aGap.append( getStart() - getExtendLeftStart() * aVector );
+                            aGap.append( getEnd() + getExtendLeftEnd() * aVector );
                         }
                         else
                         {
@@ -165,8 +165,8 @@ namespace drawinglayer
                                 aRight,
                                 getRGBColorRight()));
 
-                            aGap.append( aTmpEnd );
-                            aGap.append( aTmpStart );
+                            aGap.append( getStart() - getExtendRightStart() * aVector );
+                            aGap.append( getEnd() + getExtendRightEnd() * aVector );
                         }
                         else
                         {
@@ -226,8 +226,8 @@ namespace drawinglayer
                     if(bIsHairline)
                     {
                         // create hairline primitive
-                        aPolygon.append(aTmpStart);
-                        aPolygon.append(aTmpEnd);
+                        aPolygon.append( getStart() );
+                        aPolygon.append( getEnd() );
 
                         xRetval[0] = Primitive2DReference(new PolygonHairlinePrimitive2D(
                             aPolygon,
