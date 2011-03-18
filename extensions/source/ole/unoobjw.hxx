@@ -127,8 +127,8 @@ public:
 
     /* IUnknown methods */
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
-    STDMETHOD_(WIN_ULONG, AddRef)();
-    STDMETHOD_(WIN_ULONG, Release)();
+    STDMETHOD_(ULONG, AddRef)();
+    STDMETHOD_(ULONG, Release)();
 
     /* IDispatch methods */
     STDMETHOD( GetTypeInfoCount )( unsigned int * pctinfo );

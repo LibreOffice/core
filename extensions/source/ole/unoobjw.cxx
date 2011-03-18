@@ -156,7 +156,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::QueryInterface(REFIID riid, LPVOID FAR * 
     return ret;
 }
 
-STDMETHODIMP_(WIN_ULONG) InterfaceOleWrapper_Impl::AddRef()
+STDMETHODIMP_(ULONG) InterfaceOleWrapper_Impl::AddRef()
 {
     acquire();
     // does not need to guard because one should not rely on the return value of
@@ -164,9 +164,9 @@ STDMETHODIMP_(WIN_ULONG) InterfaceOleWrapper_Impl::AddRef()
     return m_refCount;
 }
 
-STDMETHODIMP_(WIN_ULONG) InterfaceOleWrapper_Impl::Release()
+STDMETHODIMP_(ULONG) InterfaceOleWrapper_Impl::Release()
 {
-    WIN_ULONG n= m_refCount;
+    ULONG n= m_refCount;
     release();
     return n - 1;
 }
