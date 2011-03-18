@@ -446,7 +446,7 @@ void Test::testBigStruct() {
 
 #if defined __GNUC__ && __GNUC__ >= 3 // see CPPU_GCC3_ALIGN
     CPPUNIT_ASSERT_EQUAL(
-#if defined X86_64
+#if defined X86_64 || defined PPC
         static_cast< std::size_t >(24),
 #else
         static_cast< std::size_t >(16),
