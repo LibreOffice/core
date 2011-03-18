@@ -1046,7 +1046,7 @@ void PrintDialog::setupOptionalUI()
     boost::shared_ptr< vcl::RowOrColumn > pCurColumn;
 
     Window* pCurParent = 0, *pDynamicPageParent = 0;
-    sal_uInt16 nOptPageId = 9, nCurSubGroup = 0;
+    sal_uInt16 nOptPageId = 9;
     bool bOnStaticPage = false;
     bool bSubgroupOnStaticPage = false;
 
@@ -1226,9 +1226,6 @@ void PrintDialog::setupOptionalUI()
             setHelpId( pNewGroup, aHelpIds, 0 );
             // set help text
             setHelpText( pNewGroup, aHelpTexts, 0 );
-
-            // reset subgroup counter
-            nCurSubGroup = 0;
 
             aDynamicColumns.push_back( boost::dynamic_pointer_cast<vcl::RowOrColumn>(pNewGroup->getLayout()) );
             pCurColumn = aDynamicColumns.back();
