@@ -1303,7 +1303,7 @@ XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& r
             /*  3)  Row/column/page/hidden fields. */
             for (iter = rDimList.begin(); iter != rDimList.end(); ++iter)
                 if (iter->GetOrientation() != DataPilotFieldOrientation_DATA)
-                    SetDataFieldPropertiesFromDim(*iter);
+                    SetFieldPropertiesFromDim(*iter);
 
             // Finalize -------------------------------------------------------
 
