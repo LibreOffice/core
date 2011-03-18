@@ -3001,7 +3001,7 @@ void SfxBaseModel::postEvent_Impl( const ::rtl::OUString& aName, const uno::Refe
 #ifdef DBG_UTIL
         ByteString aTmp( "SfxDocumentEvent: " );
         aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
-        DBG_TRACE( aTmp.GetBuffer() );
+        OSL_TRACE( aTmp.GetBuffer() );
 #endif
 
         document::DocumentEvent aDocumentEvent( (frame::XModel*)this, aName, xController, uno::Any() );

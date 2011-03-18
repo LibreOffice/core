@@ -847,7 +847,7 @@ sal_Bool SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const S
 #ifdef DBG_UTIL
     ByteString aTmp("SfxHelp: HelpId = ");
     aTmp += ByteString( aHelpURL, RTL_TEXTENCODING_UTF8 );
-    DBG_TRACE( aTmp.GetBuffer() );
+    OSL_TRACE( aTmp.GetBuffer() );
 #endif
 
     pHelpWindow->SetHelpURL( aHelpURL );
