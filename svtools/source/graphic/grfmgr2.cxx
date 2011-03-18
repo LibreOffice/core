@@ -47,7 +47,7 @@
 // -----------
 
 #define MAX_PRINTER_EXT             1024
-#define MAP( cVal0, cVal1, nFrac )  ((BYTE)((((long)(cVal0)<<20L)+nFrac*((long)(cVal1)-(cVal0)))>>20L))
+#define MAP( cVal0, cVal1, nFrac )  ((sal_uInt8)((((long)(cVal0)<<20L)+nFrac*((long)(cVal1)-(cVal0)))>>20L))
 #define WATERMARK_LUM_OFFSET        50
 #define WATERMARK_CON_OFFSET        -70
 
@@ -113,7 +113,7 @@ BitmapEx muckWithBitmap( const BitmapEx& rBmpEx,
 // - GraphicManager -
 // ------------------
 
-GraphicManager::GraphicManager( ULONG nCacheSize, ULONG nMaxObjCacheSize ) :
+GraphicManager::GraphicManager( sal_uLong nCacheSize, sal_uLong nMaxObjCacheSize ) :
         mpCache( new GraphicCache( *this, nCacheSize, nMaxObjCacheSize ) )
 {
 }
@@ -130,56 +130,56 @@ GraphicManager::~GraphicManager()
 
 // -----------------------------------------------------------------------------
 
-void GraphicManager::SetMaxCacheSize( ULONG nNewCacheSize )
+void GraphicManager::SetMaxCacheSize( sal_uLong nNewCacheSize )
 {
     mpCache->SetMaxDisplayCacheSize( nNewCacheSize );
 }
 
 // -----------------------------------------------------------------------------
 
-ULONG GraphicManager::GetMaxCacheSize() const
+sal_uLong GraphicManager::GetMaxCacheSize() const
 {
     return mpCache->GetMaxDisplayCacheSize();
 }
 
 // -----------------------------------------------------------------------------
 
-void GraphicManager::SetMaxObjCacheSize( ULONG nNewMaxObjSize, BOOL bDestroyGreaterCached )
+void GraphicManager::SetMaxObjCacheSize( sal_uLong nNewMaxObjSize, sal_Bool bDestroyGreaterCached )
 {
     mpCache->SetMaxObjDisplayCacheSize( nNewMaxObjSize, bDestroyGreaterCached );
 }
 
 // -----------------------------------------------------------------------------
 
-ULONG GraphicManager::GetMaxObjCacheSize() const
+sal_uLong GraphicManager::GetMaxObjCacheSize() const
 {
     return mpCache->GetMaxObjDisplayCacheSize();
 }
 
 // -----------------------------------------------------------------------------
 
-ULONG GraphicManager::GetUsedCacheSize() const
+sal_uLong GraphicManager::GetUsedCacheSize() const
 {
     return mpCache->GetUsedDisplayCacheSize();
 }
 
 // -----------------------------------------------------------------------------
 
-ULONG GraphicManager::GetFreeCacheSize() const
+sal_uLong GraphicManager::GetFreeCacheSize() const
 {
     return mpCache->GetFreeDisplayCacheSize();
 }
 
 // -----------------------------------------------------------------------------
 
-void GraphicManager::SetCacheTimeout( ULONG nTimeoutSeconds )
+void GraphicManager::SetCacheTimeout( sal_uLong nTimeoutSeconds )
 {
     mpCache->SetCacheTimeout( nTimeoutSeconds );
 }
 
 // -----------------------------------------------------------------------------
 
-ULONG GraphicManager::GetCacheTimeout() const
+sal_uLong GraphicManager::GetCacheTimeout() const
 {
     return mpCache->GetCacheTimeout();
 }
@@ -200,7 +200,7 @@ void GraphicManager::ReleaseFromCache( const GraphicObject& /*rObj*/ )
 
 // -----------------------------------------------------------------------------
 
-BOOL GraphicManager::IsInCache( OutputDevice* pOut, const Point& rPt,
+sal_Bool GraphicManager::IsInCache( OutputDevice* pOut, const Point& rPt,
                                     const Size& rSz, const GraphicObject& rObj,
                                     const GraphicAttr& rAttr ) const
 {
@@ -209,15 +209,15 @@ BOOL GraphicManager::IsInCache( OutputDevice* pOut, const Point& rPt,
 
 // -----------------------------------------------------------------------------
 
-BOOL GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+sal_Bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                               GraphicObject& rObj, const GraphicAttr& rAttr,
-                              const ULONG nFlags, BOOL& rCached )
+                              const sal_uLong nFlags, sal_Bool& rCached )
 {
     Point   aPt( rPt );
     Size    aSz( rSz );
-    BOOL    bRet = FALSE;
+    sal_Bool    bRet = sal_False;
 
-    rCached = FALSE;
+    rCached = sal_False;
 
     if( ( rObj.GetType() == GRAPHIC_BITMAP ) || ( rObj.GetType() == GRAPHIC_GDIMETAFILE ) )
     {
@@ -235,7 +235,7 @@ BOOL GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
 
             if( aGraphic.IsSupportedGraphic() )
             {
-                const USHORT nRot10 = rAttr.GetRotation() % 3600;
+                const sal_uInt16 nRot10 = rAttr.GetRotation() % 3600;
 
                 if( nRot10 )
                 {
@@ -250,7 +250,7 @@ BOOL GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
                 aGraphic.Draw( pOut, aPt, aSz );
             }
 
-            bRet = TRUE;
+            bRet = sal_True;
         }
 
         if( !bRet )
@@ -259,7 +259,7 @@ BOOL GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
             if( !mpCache->DrawDisplayCacheObj( pOut, aPt, aSz, rObj, rAttr ) )
                 bRet = ImplDraw( pOut, aPt, aSz, rObj, rAttr, nFlags, rCached );
             else
-                bRet = rCached = TRUE;
+                bRet = rCached = sal_True;
         }
     }
 
@@ -299,7 +299,7 @@ ByteString GraphicManager::ImplGetUniqueID( const GraphicObject& rObj ) const
 
 // -----------------------------------------------------------------------------
 
-BOOL GraphicManager::ImplFillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
+sal_Bool GraphicManager::ImplFillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
 {
     return( mpCache->FillSwappedGraphicObject( rObj, rSubstitute ) );
 }
@@ -313,13 +313,13 @@ void GraphicManager::ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj )
 
 // -----------------------------------------------------------------------------
 
-BOOL GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
+sal_Bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                                const Size& rSz, GraphicObject& rObj,
                                const GraphicAttr& rAttr,
-                               const ULONG nFlags, BOOL& rCached )
+                               const sal_uLong nFlags, sal_Bool& rCached )
 {
     const Graphic&  rGraphic = rObj.GetGraphic();
-    BOOL            bRet = FALSE;
+    sal_Bool            bRet = sal_False;
 
     if( rGraphic.IsSupportedGraphic() && !rGraphic.IsSwapOut() )
     {
@@ -337,7 +337,7 @@ BOOL GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                 if( ImplCreateOutput( pOut, rPt, rSz, aSrcBmpEx, rAttr, nFlags, &aDstBmpEx ) )
                 {
                     rCached = mpCache->CreateDisplayCacheObj( pOut, rPt, rSz, rObj, rAttr, aDstBmpEx );
-                    bRet = TRUE;
+                    bRet = sal_True;
                 }
             }
 
@@ -365,13 +365,13 @@ BOOL GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                         if( ImplCreateOutput( pOut, rPt, rSz, aContainedBmpEx, rAttr, nFlags, &aDstBmpEx ) )
                         {
                             rCached = mpCache->CreateDisplayCacheObj( pOut, rPt, rSz, rObj, rAttr, aDstBmpEx );
-                            bRet = TRUE;
+                            bRet = sal_True;
                         }
                     }
                     else
                     {
                         rCached = mpCache->CreateDisplayCacheObj( pOut, rPt, rSz, rObj, rAttr, aDstMtf );
-                        bRet = TRUE;
+                        bRet = sal_True;
                     }
                 }
             }
@@ -383,7 +383,7 @@ BOOL GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                 if( aGraphic.IsSupportedGraphic() )
                 {
                     aGraphic.Draw( pOut, rPt, rSz );
-                    bRet = TRUE;
+                    bRet = sal_True;
                 }
             }
         }
@@ -394,16 +394,16 @@ BOOL GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
 
 // -----------------------------------------------------------------------------
 
-BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
+sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                                        const Point& rPt, const Size& rSz,
                                        const BitmapEx& rBmpEx, const GraphicAttr& rAttr,
-                                       const ULONG nFlags, BitmapEx* pBmpEx )
+                                       const sal_uLong nFlags, BitmapEx* pBmpEx )
 {
-    USHORT  nRot10 = rAttr.GetRotation() % 3600;
+    sal_uInt16  nRot10 = rAttr.GetRotation() % 3600;
     Point   aOutPtPix;
     Size    aOutSzPix;
     Size    aUnrotatedSzPix( pOut->LogicToPixel( rSz ) );
-    BOOL    bRet = FALSE;
+    sal_Bool    bRet = sal_False;
 
     if( nRot10 )
     {
@@ -438,8 +438,8 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
         long*           pMapFY = new long[ nNewH ];
         long            nStartX = -1, nStartY = -1, nEndX = -1, nEndY = -1;
         long            nX, nY, nTmp, nTmpX, nTmpY;
-        BOOL            bHMirr = ( rAttr.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
-        BOOL            bVMirr = ( rAttr.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
+        sal_Bool            bHMirr = ( rAttr.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
+        sal_Bool            bVMirr = ( rAttr.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
 
         if( nFlags & GRFMGR_DRAW_BILINEAR )
         {
@@ -541,7 +541,7 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
         // do transformation
         if( nStartX >= 0L )
         {
-            const BOOL bSimple = ( 1 == nW || 1 == nH );
+            const sal_Bool bSimple = ( 1 == nW || 1 == nH );
 
             if( nRot10 )
             {
@@ -570,7 +570,7 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                     aOutPt = pOut->PixelToLogic( aOutPtPix );
                     aOutSz = pOut->PixelToLogic( aOutSzPix );
                     aOutBmpEx = aBmpEx;
-                    bRet = TRUE;
+                    bRet = sal_True;
                 }
                 else
                 {
@@ -624,10 +624,10 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
 
 // -----------------------------------------------------------------------------
 
-BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
+sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                                        const Point& rPt, const Size& rSz,
                                        const GDIMetaFile& rMtf, const GraphicAttr& rAttr,
-                                       const ULONG /*nFlags*/, GDIMetaFile& rOutMtf, BitmapEx& rOutBmpEx )
+                                       const sal_uLong /*nFlags*/, GDIMetaFile& rOutMtf, BitmapEx& rOutBmpEx )
 {
     const Size aNewSize( rMtf.GetPrefSize() );
 
@@ -919,12 +919,12 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
         rOutBmpEx = BitmapEx();
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------------
 
-BOOL GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
+sal_Bool GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
                                        long* pMapIX, long* pMapFX, long* pMapIY, long* pMapFY,
                                        long nStartX, long nEndX, long nStartY, long nEndY,
                                        BitmapEx& rOutBmpEx )
@@ -938,8 +938,8 @@ BOOL GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
     const long          nDstH = nEndY - nStartY + 1L;
     long                nX, nY, nTmpX, nTmpY, nTmpFX, nTmpFY;
     long                nXDst, nYDst;
-    BYTE                cR0, cG0, cB0, cR1, cG1, cB1;
-    BOOL                bRet = FALSE;
+    sal_uInt8               cR0, cG0, cB0, cR1, cG1, cB1;
+    sal_Bool                bRet = sal_False;
 
     DBG_ASSERT( aBmp.GetSizePixel() == rBmpEx.GetSizePixel(),
                 "GraphicManager::ImplCreateScaled(): bmp size inconsistent" );
@@ -1117,7 +1117,7 @@ BOOL GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
             }
 
             aOutBmp.ReleaseAccess( pWAcc );
-            bRet = TRUE;
+            bRet = sal_True;
         }
 
         aBmp.ReleaseAccess( pAcc );
@@ -1125,7 +1125,7 @@ BOOL GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
 
     if( bRet && rBmpEx.IsTransparent() )
     {
-        bRet = FALSE;
+        bRet = sal_False;
 
         if( rBmpEx.IsAlpha() )
         {
@@ -1198,7 +1198,7 @@ BOOL GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
                     }
 
                     aOutAlpha.ReleaseAccess( pWAcc );
-                    bRet = TRUE;
+                    bRet = sal_True;
                 }
 
                 aAlpha.ReleaseAccess( pAcc );
@@ -1277,7 +1277,7 @@ BOOL GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
                             {
                                 for( nX = 0L; nX < nDstW; nX++ )
                                 {
-                                    if( pAcc->GetPaletteColor( (BYTE) pAcc->GetPixel( pMapLY[ nY ], pMapLX[ nX ] ) ) == aB )
+                                    if( pAcc->GetPaletteColor( (sal_uInt8) pAcc->GetPixel( pMapLY[ nY ], pMapLX[ nX ] ) ) == aB )
                                         pWAcc->SetPixel( nY, nX, aWB );
                                     else
                                         pWAcc->SetPixel( nY, nX, aWW );
@@ -1302,7 +1302,7 @@ BOOL GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
                     delete[] pMapLX;
                     delete[] pMapLY;
                     aOutMsk.ReleaseAccess( pWAcc );
-                    bRet = TRUE;
+                    bRet = sal_True;
                 }
 
                 aMsk.ReleaseAccess( pAcc );
@@ -1323,8 +1323,8 @@ BOOL GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
 
 // -----------------------------------------------------------------------------
 
-BOOL GraphicManager::ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
-                                              USHORT nRot10, const Size& /*rOutSzPix*/, const Size& rUnrotatedSzPix,
+sal_Bool GraphicManager::ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
+                                              sal_uInt16 nRot10, const Size& /*rOutSzPix*/, const Size& rUnrotatedSzPix,
                                               long* pMapIX, long* pMapFX, long* pMapIY, long* pMapFY,
                                               long nStartX, long nEndX, long nStartY, long nEndY,
                                               BitmapEx& rOutBmpEx )
@@ -1347,8 +1347,8 @@ BOOL GraphicManager::ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
     long*               pCosY = new long[ nDstH ];
     long*               pSinY = new long[ nDstH ];
     long                nX, nY, nTmpX, nTmpY, nTmpFX, nTmpFY, nUnRotX, nUnRotY, nSinY, nCosY;
-    BYTE                cR0, cG0, cB0, cR1, cG1, cB1;
-    BOOL                bRet = FALSE;
+    sal_uInt8               cR0, cG0, cB0, cR1, cG1, cB1;
+    sal_Bool                bRet = sal_False;
 
     // create horizontal mapping table
     for( nX = 0L, nTmpX = aNewBound.Left() + nStartX; nX < nDstW; nX++ )
@@ -1455,7 +1455,7 @@ BOOL GraphicManager::ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
             }
 
             aOutBmp.ReleaseAccess( pWAcc );
-            bRet = TRUE;
+            bRet = sal_True;
         }
 
         aBmp.ReleaseAccess( pAcc );
@@ -1464,7 +1464,7 @@ BOOL GraphicManager::ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
     // mask processing
     if( bRet && ( rBmpEx.IsTransparent() || ( nRot10 != 900 && nRot10 != 1800 && nRot10 != 2700 ) ) )
     {
-        bRet = FALSE;
+        bRet = sal_False;
 
         if( rBmpEx.IsAlpha() )
         {
@@ -1555,7 +1555,7 @@ BOOL GraphicManager::ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
                     }
 
                     aOutAlpha.ReleaseAccess( pWAcc );
-                    bRet = TRUE;
+                    bRet = sal_True;
                 }
 
                 aAlpha.ReleaseAccess( pAcc );
@@ -1628,7 +1628,7 @@ BOOL GraphicManager::ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
                     if( pMAcc )
                         aMsk.ReleaseAccess( pMAcc );
 
-                    bRet = TRUE;
+                    bRet = sal_True;
                 }
 
                 aOutMsk.ReleaseAccess( pWAcc );
@@ -1654,7 +1654,7 @@ BOOL GraphicManager::ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
 
 // -----------------------------------------------------------------------------
 
-void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, ULONG nAdjustmentFlags )
+void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, sal_uLong nAdjustmentFlags )
 {
     GraphicAttr aAttr( rAttr );
 
@@ -1702,7 +1702,7 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, ULO
     if( ( nAdjustmentFlags & ADJUSTMENT_TRANSPARENCY ) && aAttr.IsTransparent() )
     {
         AlphaMask   aAlpha;
-        BYTE        cTrans = aAttr.GetTransparency();
+        sal_uInt8       cTrans = aAttr.GetTransparency();
 
         if( !rBmpEx.IsTransparent() )
             aAlpha = AlphaMask( rBmpEx.GetSizePixel(), &cTrans );
@@ -1718,7 +1718,7 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, ULO
 
             if( pA )
             {
-                ULONG       nTrans = cTrans, nNewTrans;
+                sal_uLong       nTrans = cTrans, nNewTrans;
                 const long  nWidth = pA->Width(), nHeight = pA->Height();
 
                 if( pA->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
@@ -1730,7 +1730,7 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, ULO
                         for( long nX = 0; nX < nWidth; nX++ )
                         {
                             nNewTrans = nTrans + *pAScan;
-                            *pAScan++ = (BYTE) ( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans );
+                            *pAScan++ = (sal_uInt8) ( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans );
                         }
                     }
                 }
@@ -1743,7 +1743,7 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, ULO
                         for( long nX = 0; nX < nWidth; nX++ )
                         {
                             nNewTrans = nTrans + pA->GetPixel( nY, nX ).GetIndex();
-                            aAlphaValue.SetIndex( (BYTE) ( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans ) );
+                            aAlphaValue.SetIndex( (sal_uInt8) ( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans ) );
                             pA->SetPixel( nY, nX, aAlphaValue );
                         }
                     }
@@ -1759,7 +1759,7 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, ULO
 
 // -----------------------------------------------------------------------------
 
-void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, ULONG nAdjustmentFlags )
+void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, sal_uLong nAdjustmentFlags )
 {
     GraphicAttr aAttr( rAttr );
 
@@ -1812,7 +1812,7 @@ void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, UL
 
 // -----------------------------------------------------------------------------
 
-void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr, ULONG nAdjustmentFlags )
+void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr, sal_uLong nAdjustmentFlags )
 {
     GraphicAttr aAttr( rAttr );
 
@@ -1868,7 +1868,7 @@ void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr
 void GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                const GDIMetaFile& rMtf, const GraphicAttr& rAttr )
 {
-       USHORT   nRot10 = rAttr.GetRotation() % 3600;
+       sal_uInt16   nRot10 = rAttr.GetRotation() % 3600;
     Point   aOutPt( rPt );
     Size    aOutSz( rSz );
 
@@ -1926,7 +1926,7 @@ struct ImplTileInfo
 bool GraphicObject::ImplRenderTempTile( VirtualDevice& rVDev, int nExponent,
                                         int nNumTilesX, int nNumTilesY,
                                         const Size& rTileSizePixel,
-                                        const GraphicAttr* pAttr, ULONG nFlags )
+                                        const GraphicAttr* pAttr, sal_uLong nFlags )
 {
     if( nExponent <= 1 )
         return false;
@@ -1946,8 +1946,8 @@ bool GraphicObject::ImplRenderTempTile( VirtualDevice& rVDev, int nExponent,
 
     // #105229# Switch off mapping (converting to logic and back to
     // pixel might cause roundoff errors)
-    BOOL bOldMap( rVDev.IsMapModeEnabled() );
-    rVDev.EnableMapMode( FALSE );
+    sal_Bool bOldMap( rVDev.IsMapModeEnabled() );
+    rVDev.EnableMapMode( sal_False );
 
     bool bRet( ImplRenderTileRecursive( rVDev, nExponent, nMSBFactor, nNumTilesX, nNumTilesY,
                                         nNumTilesX, nNumTilesY, rTileSizePixel, pAttr, nFlags, aTileInfo ) );
@@ -1970,7 +1970,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
                                              int nNumOrigTilesX, int nNumOrigTilesY,
                                              int nRemainderTilesX, int nRemainderTilesY,
                                              const Size& rTileSizePixel, const GraphicAttr* pAttr,
-                                             ULONG nFlags, ImplTileInfo& rTileInfo )
+                                             sal_uLong nFlags, ImplTileInfo& rTileInfo )
 {
     // gets loaded with our tile bitmap
     GraphicObject aTmpGraphic;
@@ -2145,7 +2145,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
 // -----------------------------------------------------------------------------
 
 bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSizePixel,
-                                   const Size& rOffset, const GraphicAttr* pAttr, ULONG nFlags, int nTileCacheSize1D )
+                                   const Size& rOffset, const GraphicAttr* pAttr, sal_uLong nFlags, int nTileCacheSize1D )
 {
     // how many tiles to generate per recursion step
     enum{ SubdivisionExponent=2 };
@@ -2256,7 +2256,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
 
 bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
                                    int nNumTilesX, int nNumTilesY,
-                                   const Size& rTileSizePixel, const GraphicAttr* pAttr, ULONG nFlags )
+                                   const Size& rTileSizePixel, const GraphicAttr* pAttr, sal_uLong nFlags )
 {
     Point   aCurrPos( rPosPixel );
     Size    aTileSizeLogic( rOut.PixelToLogic( rTileSizePixel ) );
@@ -2264,14 +2264,14 @@ bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
 
     // #107607# Use logical coordinates for metafile playing, too
     bool    bDrawInPixel( rOut.GetConnectMetaFile() == NULL && GRAPHIC_BITMAP == GetType() );
-    BOOL    bRet( FALSE );
+    sal_Bool    bRet( sal_False );
 
     // #105229# Switch off mapping (converting to logic and back to
     // pixel might cause roundoff errors)
-    BOOL bOldMap( rOut.IsMapModeEnabled() );
+    sal_Bool bOldMap( rOut.IsMapModeEnabled() );
 
     if( bDrawInPixel )
-        rOut.EnableMapMode( FALSE );
+        rOut.EnableMapMode( sal_False );
 
     for( nY=0; nY < nNumTilesY; ++nY )
     {
@@ -2310,7 +2310,7 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
                                          const Size&        rCropRightBottom,
                                          const Rectangle&   rCropRect,
                                          const Size&        rDstSize,
-                                         BOOL               bEnlarge ) const
+                                         sal_Bool               bEnlarge ) const
 {
     // #107947# Extracted from svdograf.cxx
 

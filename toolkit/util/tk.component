@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--**********************************************************************
+*
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2000, 2010 Oracle and/or its affiliates.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+*
+**********************************************************************-->
+
+<component loader="com.sun.star.loader.SharedLibrary"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.awt.comp.AsyncCallback">
+    <service name="com.sun.star.awt.AsyncCallback"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.awt.Layout">
+    <service name="com.sun.star.awt.Layout"/>
+    <service name="com.sun.star.comp.awt.Layout"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlTabPage">
+    <service name="com.sun.star.awt.tab.UnoControlTabPage"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlTabPageModel">
+    <service name="com.sun.star.awt.tab.UnoControlTabPageModel"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlTabPageContainerModel">
+    <service name="com.sun.star.awt.tab.UnoControlTabPageContainerModel"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlTabPageContainer">
+    <service name="com.sun.star.awt.tab.UnoControlTabPageContainer"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.DefaultGridColumnModel">
+    <service name="com.sun.star.awt.grid.DefaultGridColumnModel"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.DefaultGridDataModel">
+    <service name="com.sun.star.awt.grid.DefaultGridDataModel"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.toolkit.GridColumn">
+    <service name="com.sun.star.awt.grid.GridColumn"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.toolkit.SortableGridDataModel">
+    <service name="com.sun.star.awt.grid.SortableGridDataModel"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.GridControl">
+    <service name="com.sun.star.awt.grid.UnoControlGrid"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.GridControlModel">
+    <service name="com.sun.star.awt.grid.UnoControlGridModel"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.MutableTreeDataModel">
+    <service name="com.sun.star.awt.tree.MutableTreeDataModel"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.StdTabController">
+    <service name="com.sun.star.awt.TabController"/>
+    <service name="stardiv.vcl.control.TabController"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.StdTabControllerModel">
+    <service name="com.sun.star.awt.TabControllerModel"/>
+    <service name="stardiv.vcl.controlmodel.TabController"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.TreeControl">
+    <service name="com.sun.star.awt.tree.TreeControl"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.TreeControlModel">
+    <service name="com.sun.star.awt.tree.TreeControlModel"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoButtonControl">
+    <service name="com.sun.star.awt.UnoControlButton"/>
+    <service name="stardiv.vcl.control.Button"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoCheckBoxControl">
+    <service name="com.sun.star.awt.UnoControlCheckBox"/>
+    <service name="stardiv.vcl.control.CheckBox"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoComboBoxControl">
+    <service name="com.sun.star.awt.UnoControlComboBox"/>
+    <service name="stardiv.vcl.control.ComboBox"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlButtonModel">
+    <service name="com.sun.star.awt.UnoControlButtonModel"/>
+    <service name="stardiv.vcl.controlmodel.Button"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlCheckBoxModel">
+    <service name="com.sun.star.awt.UnoControlCheckBoxModel"/>
+    <service name="stardiv.vcl.controlmodel.CheckBox"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlComboBoxModel">
+    <service name="com.sun.star.awt.UnoControlComboBoxModel"/>
+    <service name="stardiv.vcl.controlmodel.ComboBox"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlContainer">
+    <service name="com.sun.star.awt.UnoControlContainer"/>
+    <service name="stardiv.vcl.control.ControlContainer"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlContainerModel">
+    <service name="com.sun.star.awt.UnoControlContainerModel"/>
+    <service name="stardiv.vcl.controlmodel.ControlContainer"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlCurrencyFieldModel">
+    <service name="com.sun.star.awt.UnoControlCurrencyFieldModel"/>
+    <service name="stardiv.vcl.controlmodel.CurrencyField"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlDateFieldModel">
+    <service name="com.sun.star.awt.UnoControlDateFieldModel"/>
+    <service name="stardiv.vcl.controlmodel.DateField"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlDialogModel">
+    <service name="com.sun.star.awt.UnoControlDialogModel"/>
+    <service name="stardiv.vcl.controlmodel.Dialog"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlEditModel">
+    <service name="com.sun.star.awt.UnoControlEditModel"/>
+    <service name="stardiv.vcl.controlmodel.Edit"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlFileControlModel">
+    <service name="com.sun.star.awt.UnoControlFileControlModel"/>
+    <service name="stardiv.vcl.controlmodel.FileControl"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlFixedHyperlinkModel">
+    <service name="com.sun.star.awt.UnoControlFixedHyperlinkModel"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlFixedLineModel">
+    <service name="com.sun.star.awt.UnoControlFixedLineModel"/>
+    <service name="stardiv.vcl.controlmodel.FixedLine"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlFixedTextModel">
+    <service name="com.sun.star.awt.UnoControlFixedTextModel"/>
+    <service name="stardiv.vcl.controlmodel.FixedText"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlFormattedFieldModel">
+    <service name="com.sun.star.awt.UnoControlFormattedFieldModel"/>
+    <service name="stardiv.vcl.controlmodel.FormattedField"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlGroupBoxModel">
+    <service name="com.sun.star.awt.UnoControlGroupBoxModel"/>
+    <service name="stardiv.vcl.controlmodel.GroupBox"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlImageControlModel">
+    <service name="com.sun.star.awt.UnoControlImageButtonModel"/>
+    <service name="com.sun.star.awt.UnoControlImageControlModel"/>
+    <service name="stardiv.vcl.controlmodel.ImageButton"/>
+    <service name="stardiv.vcl.controlmodel.ImageControl"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlListBoxModel">
+    <service name="com.sun.star.awt.UnoControlListBoxModel"/>
+    <service name="stardiv.vcl.controlmodel.ListBox"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlNumericFieldModel">
+    <service name="com.sun.star.awt.UnoControlNumericFieldModel"/>
+    <service name="stardiv.vcl.controlmodel.NumericField"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlPatternFieldModel">
+    <service name="com.sun.star.awt.UnoControlPatternFieldModel"/>
+    <service name="stardiv.vcl.controlmodel.PatternField"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlProgressBarModel">
+    <service name="com.sun.star.awt.UnoControlProgressBarModel"/>
+    <service name="stardiv.vcl.controlmodel.ProgressBar"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlRadioButtonModel">
+    <service name="com.sun.star.awt.UnoControlRadioButtonModel"/>
+    <service name="stardiv.vcl.controlmodel.RadioButton"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlRoadmapModel">
+    <service name="com.sun.star.awt.UnoControlRoadmapModel"/>
+    <service name="stardiv.vcl.controlmodel.Roadmap"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlScrollBarModel">
+    <service name="com.sun.star.awt.UnoControlScrollBarModel"/>
+    <service name="stardiv.vcl.controlmodel.ScrollBar"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlTimeFieldModel">
+    <service name="com.sun.star.awt.UnoControlTimeFieldModel"/>
+    <service name="stardiv.vcl.controlmodel.TimeField"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoCurrencyFieldControl">
+    <service name="com.sun.star.awt.UnoControlCurrencyField"/>
+    <service name="stardiv.vcl.control.CurrencyField"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoDateFieldControl">
+    <service name="com.sun.star.awt.UnoControlDateField"/>
+    <service name="stardiv.vcl.control.DateField"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoDialogControl">
+    <service name="com.sun.star.awt.UnoControlDialog"/>
+    <service name="stardiv.vcl.control.Dialog"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoEditControl">
+    <service name="com.sun.star.awt.UnoControlEdit"/>
+    <service name="stardiv.vcl.control.Edit"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoFileControl">
+    <service name="com.sun.star.awt.UnoControlFileControl"/>
+    <service name="stardiv.vcl.control.FileControl"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoFixedHyperlinkControl">
+    <service name="com.sun.star.awt.UnoControlFixedHyperlink"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoFixedLineControl">
+    <service name="com.sun.star.awt.UnoControlFixedLine"/>
+    <service name="stardiv.vcl.control.FixedLine"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoFixedTextControl">
+    <service name="com.sun.star.awt.UnoControlFixedText"/>
+    <service name="stardiv.vcl.control.FixedText"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoFormattedFieldControl">
+    <service name="com.sun.star.awt.UnoControlFormattedField"/>
+    <service name="stardiv.vcl.control.FormattedField"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoGroupBoxControl">
+    <service name="com.sun.star.awt.UnoControlGroupBox"/>
+    <service name="stardiv.vcl.control.GroupBox"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoImageControlControl">
+    <service name="com.sun.star.awt.UnoControlImageButton"/>
+    <service name="com.sun.star.awt.UnoControlImageControl"/>
+    <service name="stardiv.vcl.control.ImageButton"/>
+    <service name="stardiv.vcl.control.ImageControl"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoListBoxControl">
+    <service name="com.sun.star.awt.UnoControlListBox"/>
+    <service name="stardiv.vcl.control.ListBox"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoNumericFieldControl">
+    <service name="com.sun.star.awt.UnoControlNumericField"/>
+    <service name="stardiv.vcl.control.NumericField"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoPatternFieldControl">
+    <service name="com.sun.star.awt.UnoControlPatternField"/>
+    <service name="stardiv.vcl.control.PatternField"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoProgressBarControl">
+    <service name="com.sun.star.awt.UnoControlProgressBar"/>
+    <service name="stardiv.vcl.control.ProgressBar"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoRadioButtonControl">
+    <service name="com.sun.star.awt.UnoControlRadioButton"/>
+    <service name="stardiv.vcl.control.RadioButton"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoRoadmapControl">
+    <service name="com.sun.star.awt.UnoControlRoadmap"/>
+    <service name="stardiv.vcl.control.Roadmap"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoScrollBarControl">
+    <service name="com.sun.star.awt.UnoControlScrollBar"/>
+    <service name="stardiv.vcl.control.ScrollBar"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoSimpleAnimationControl">
+    <service name="com.sun.star.awt.UnoControlSimpleAnimation"/>
+    <service name="com.sun.star.awt.UnoSimpleAnimationControl"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoSimpleAnimationControlModel">
+    <service name="com.sun.star.awt.UnoControlSimpleAnimationModel"/>
+    <service name="com.sun.star.awt.UnoSimpleAnimationControlModel"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.toolkit.SpinningProgressControlModel">
+    <service name="com.sun.star.awt.SpinningProgressControlModel"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.toolkit.AnimatedImagesControlModel">
+    <service name="com.sun.star.awt.AnimatedImagesControlModel"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.toolkit.AnimatedImagesControl">
+    <service name="com.sun.star.awt.AnimatedImagesControl"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoSpinButtonControl">
+    <service name="com.sun.star.awt.UnoControlSpinButton"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoSpinButtonModel">
+    <service name="com.sun.star.awt.UnoControlSpinButtonModel"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoThrobberControl">
+    <service name="com.sun.star.awt.UnoControlThrobber"/>
+    <service name="com.sun.star.awt.UnoThrobberControl"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoThrobberControlModel">
+    <service name="com.sun.star.awt.UnoControlThrobberModel"/>
+    <service name="com.sun.star.awt.UnoThrobberControlModel"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoTimeFieldControl">
+    <service name="com.sun.star.awt.UnoControlTimeField"/>
+    <service name="stardiv.vcl.control.TimeField"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.VCLXMenuBar">
+    <service name="com.sun.star.awt.MenuBar"/>
+    <service name="stardiv.vcl.MenuBar"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.VCLXPointer">
+    <service name="com.sun.star.awt.Pointer"/>
+    <service name="stardiv.vcl.Pointer"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.VCLXPopupMenu">
+    <service name="com.sun.star.awt.PopupMenu"/>
+    <service name="stardiv.vcl.PopupMenu"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.VCLXPrinterServer">
+    <service name="com.sun.star.awt.PrinterServer"/>
+    <service name="stardiv.vcl.PrinterServer"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.VCLXToolkit">
+    <service name="com.sun.star.awt.Toolkit"/>
+    <service name="stardiv.vcl.VclToolkit"/>
+  </implementation>
+</component>

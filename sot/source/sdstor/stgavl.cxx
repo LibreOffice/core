@@ -213,7 +213,7 @@ StgAvlNode* StgAvlNode::RotRL()
 
 // Remove a tree element. Return the removed element or NULL.
 
-StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, BOOL bPtrs )
+StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, sal_Bool bPtrs )
 {
     if( *p )
     {
@@ -280,21 +280,21 @@ void StgAvlNode::StgEnum( short& n )
 }
 
 // Add node to AVL tree.
-// Return FALSE if the element already exists.
+// Return sal_False if the element already exists.
 
-BOOL StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
+sal_Bool StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
 {
     StgAvlNode* pPivot, *pHeavy, *pNewRoot, *pParent, *pPrev;
     // special case - empty tree
     if( *pRoot == NULL )
     {
         *pRoot = pIns;
-        return TRUE;
+        return sal_True;
     }
     // find insertion point and return if already present
     short nRes = (*pRoot)->Locate( pIns, &pPivot, &pParent, &pPrev );
     if( !nRes )
-        return FALSE;
+        return sal_False;
     // add new node
     if( nRes < 0 )
         pPrev->pLeft = pIns;
@@ -324,19 +324,19 @@ BOOL StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
         else if( pPivot == pParent->pRight )
             pParent->pRight = pNewRoot;
     }
-    return TRUE;
+    return sal_True;
 }
 
-// Remove node from tree. Returns TRUE is found and removed.
+// Remove node from tree. Returns sal_True is found and removed.
 // Actually delete if bDel
 
-BOOL StgAvlNode::Remove( StgAvlNode** pRoot, StgAvlNode* pDel, BOOL bDel )
+sal_Bool StgAvlNode::Remove( StgAvlNode** pRoot, StgAvlNode* pDel, sal_Bool bDel )
 {
     // special case - empty tree
     if( *pRoot == NULL )
-        return FALSE;
+        return sal_False;
     // delete the element
-    pDel = Rem( pRoot, pDel, FALSE );
+    pDel = Rem( pRoot, pDel, sal_False );
     if( pDel )
     {
         if( bDel )
@@ -346,30 +346,30 @@ BOOL StgAvlNode::Remove( StgAvlNode** pRoot, StgAvlNode* pDel, BOOL bDel )
 /*      StgAvlNode* pNew = NULL;
         while( *pRoot )
         {
-            StgAvlNode* p = Rem( pRoot, *pRoot, FALSE );
+            StgAvlNode* p = Rem( pRoot, *pRoot, sal_False );
             Insert( &pNew, p );
         }
         *pRoot = pNew;*/
-        return TRUE;
+        return sal_True;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
-// Move node to a different tree. Returns TRUE is found and moved. This routine
+// Move node to a different tree. Returns sal_True is found and moved. This routine
 // may be called when the key has changed.
 
-BOOL StgAvlNode::Move
+sal_Bool StgAvlNode::Move
     ( StgAvlNode** pRoot1, StgAvlNode** pRoot2, StgAvlNode* pMove )
 {
     // special case - empty tree
     if( *pRoot1 == NULL )
-        return FALSE;
-    pMove = Rem( pRoot1, pMove, FALSE );
+        return sal_False;
+    pMove = Rem( pRoot1, pMove, sal_False );
     if( pMove )
         return Insert( pRoot2, pMove );
     else
-        return FALSE;
+        return sal_False;
 }
 
 ////////////////////////// class AvlIterator /////////////////////////

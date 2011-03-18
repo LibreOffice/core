@@ -36,17 +36,17 @@ import com.sun.star.task.XMasterPasswordHandling;
 
 import com.sun.star.uno.UnoRuntime;
 
-import share.LogWriter;
+// import share.LogWriter;
 
 public class Test01 implements PasswordContainerTest {
     XMultiServiceFactory m_xMSF = null;
     XPasswordContainer m_xPasswordContainer = null;
     TestHelper m_aTestHelper = null;
 
-    public Test01 ( XMultiServiceFactory xMSF, LogWriter aLogWriter )
+    public Test01 ( XMultiServiceFactory xMSF )
     {
         m_xMSF = xMSF;
-        m_aTestHelper = new TestHelper (aLogWriter, "Test01: ");
+        m_aTestHelper = new TestHelper ( "Test01: ");
     }
 
     public boolean test() {
@@ -68,9 +68,9 @@ public class Test01 implements PasswordContainerTest {
         }
         try {
             Object oPasswordContainer = m_xMSF.createInstance( "com.sun.star.task.PasswordContainer" );
-            XPasswordContainer xContainer = (XPasswordContainer)UnoRuntime.queryInterface(XPasswordContainer.class, oPasswordContainer);
+            XPasswordContainer xContainer = UnoRuntime.queryInterface(XPasswordContainer.class, oPasswordContainer);
             Object oHandler = m_xMSF.createInstance( "com.sun.star.task.InteractionHandler" );
-            XInteractionHandler xHandler = (XInteractionHandler)UnoRuntime.queryInterface(XInteractionHandler.class, oHandler);
+            XInteractionHandler xHandler = UnoRuntime.queryInterface(XInteractionHandler.class, oHandler);
             MasterPasswdHandler aMHandler = new MasterPasswdHandler( xHandler );
 
             // add a set of users and passwords for the same URL for runtime

@@ -119,9 +119,9 @@ struct ImplObjStack
     Point*          mpRefPoint;
     TextAlign       meTextAlign;
     RasterOp        meRasterOp;
-    ULONG           mnTextLayoutMode;
+    sal_uLong           mnTextLayoutMode;
     LanguageType    meTextLanguage;
-    USHORT          mnFlags;
+    sal_uInt16          mnFlags;
 };
 
 // -----------------------------------------------------------------------
@@ -199,10 +199,6 @@ bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGr
 {
     DBG_TESTSOLARMUTEX();
 
-    // TODO(Q3): Change from static to plain method - everybody's
-    // calling it with pOutDev=this!
-    // => done, but only with minimal changes for now => TODO
-    OutputDevice* const pOutDev = this;
     if( !pGraphics )
     {
         if( !mpGraphics )
@@ -211,91 +207,8 @@ bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGr
         pGraphics = mpGraphics;
     }
 
-    if( rRegion.HasPolyPolygon()
-    && pGraphics->supportsOperation( OutDevSupport_B2DClip ) )
-    {
-        const ::basegfx::B2DPolyPolygon& rB2DPolyPolygon = rRegion.GetB2DPolyPolygon();
-        pGraphics->BeginSetClipRegion( 0 );
-        pGraphics->UnionClipRegion( rB2DPolyPolygon, pOutDev );
-        pGraphics->EndSetClipRegion();
-        return true;
-    }
-
-    long                nX;
-    long                nY;
-    long                nWidth;
-    long                nHeight;
-    ULONG               nRectCount;
-    ImplRegionInfo      aInfo;
-    BOOL                bRegionRect;
-    BOOL                bClipRegion = TRUE;
-    const BOOL          bClipDeviceBounds( !pOutDev->GetPDFWriter()
-                                           && pOutDev->GetOutDevType() != OUTDEV_PRINTER );
-
-    nRectCount = rRegion.GetRectCount();
-    pGraphics->BeginSetClipRegion( nRectCount );
-    bRegionRect = rRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
-    if( bClipDeviceBounds )
-    {
-        // #b6520266# Perform actual rect clip against outdev
-        // dimensions, to generate empty clips whenever one of the
-        // values is completely off the device.
-        const long nOffX( pOutDev->mnOutOffX );
-        const long nOffY( pOutDev->mnOutOffY );
-        const long nDeviceWidth( pOutDev->GetOutputWidthPixel() );
-        const long nDeviceHeight( pOutDev->GetOutputHeightPixel() );
-        Rectangle aDeviceBounds( nOffX, nOffY,
-                                 nOffX+nDeviceWidth-1,
-                                 nOffY+nDeviceHeight-1 );
-        while ( bRegionRect )
-        {
-            // #i59315# Limit coordinates passed to sal layer to actual
-            // outdev dimensions - everything else bears the risk of
-            // overflowing internal coordinates (e.g. the 16 bit wire
-            // format of X11).
-            Rectangle aTmpRect(nX,nY,nX+nWidth-1,nY+nHeight-1);
-            aTmpRect.Intersection(aDeviceBounds);
-
-            if( !aTmpRect.IsEmpty() )
-            {
-                if ( !pGraphics->UnionClipRegion( aTmpRect.Left(),
-                                                  aTmpRect.Top(),
-                                                  aTmpRect.GetWidth(),
-                                                  aTmpRect.GetHeight(),
-                                                  pOutDev ) )
-                {
-                    bClipRegion = FALSE;
-                }
-            }
-            else
-            {
-                // #i79850# Fake off-screen clip
-                if ( !pGraphics->UnionClipRegion( nDeviceWidth+1,
-                                                  nDeviceHeight+1,
-                                                  1, 1,
-                                                  pOutDev ) )
-                {
-                    bClipRegion = FALSE;
-                }
-            }
-            DBG_ASSERT( bClipRegion, "OutputDevice::ImplSelectClipRegion() - can't create region" );
-            bRegionRect = rRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
-        }
-    }
-    else
-    {
-        // #i65720# Actually, _don't_ clip anything on printer or PDF
-        // export, since output might be visible outside the specified
-        // device boundaries.
-        while ( bRegionRect )
-        {
-            if ( !pGraphics->UnionClipRegion( nX, nY, nWidth, nHeight, pOutDev ) )
-                bClipRegion = FALSE;
-            DBG_ASSERT( bClipRegion, "OutputDevice::ImplSelectClipRegion() - can't cerate region" );
-            bRegionRect = rRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
-        }
-    }
-    pGraphics->EndSetClipRegion();
+    bool bClipRegion = pGraphics->SetClipRegion( rRegion, this );
+    OSL_ENSURE( bClipRegion, "OutputDevice::ImplSelectClipRegion() - can't cerate region" );
     return bClipRegion;
 }
 
@@ -316,7 +229,7 @@ Polygon ImplSubdivideBezier( const Polygon& rPoly )
 
 PolyPolygon ImplSubdivideBezier( const PolyPolygon& rPolyPoly )
 {
-    USHORT i, nPolys = rPolyPoly.Count();
+    sal_uInt16 i, nPolys = rPolyPoly.Count();
     PolyPolygon aPolyPoly( nPolys );
     for( i=0; i<nPolys; ++i )
         aPolyPoly.Insert( ImplSubdivideBezier( rPolyPoly.GetObject(i) ) );
@@ -327,7 +240,7 @@ PolyPolygon ImplSubdivideBezier( const PolyPolygon& rPolyPoly )
 // =======================================================================
 
 // #100127# Extracted from OutputDevice::DrawPolyPolygon()
-void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPoly )
+void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPolyPoly )
 {
     // AW: This crashes on empty PolyPolygons, avoid that
     if(!nPoly)
@@ -335,28 +248,28 @@ void OutputDevice::ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPo
 
     sal_uInt32          aStackAry1[OUTDEV_POLYPOLY_STACKBUF];
     PCONSTSALPOINT      aStackAry2[OUTDEV_POLYPOLY_STACKBUF];
-    BYTE*               aStackAry3[OUTDEV_POLYPOLY_STACKBUF];
+    sal_uInt8*              aStackAry3[OUTDEV_POLYPOLY_STACKBUF];
     sal_uInt32*         pPointAry;
     PCONSTSALPOINT*     pPointAryAry;
-    const BYTE**        pFlagAryAry;
-    USHORT              i = 0, j = 0, last = 0;
-    BOOL                bHaveBezier = sal_False;
+    const sal_uInt8**       pFlagAryAry;
+    sal_uInt16              i = 0, j = 0, last = 0;
+    sal_Bool                bHaveBezier = sal_False;
     if ( nPoly > OUTDEV_POLYPOLY_STACKBUF )
     {
         pPointAry       = new sal_uInt32[nPoly];
         pPointAryAry    = new PCONSTSALPOINT[nPoly];
-        pFlagAryAry     = new const BYTE*[nPoly];
+        pFlagAryAry     = new const sal_uInt8*[nPoly];
     }
     else
     {
         pPointAry       = aStackAry1;
         pPointAryAry    = aStackAry2;
-        pFlagAryAry     = (const BYTE**)aStackAry3;
+        pFlagAryAry     = (const sal_uInt8**)aStackAry3;
     }
     do
     {
         const Polygon&  rPoly = rPolyPoly.GetObject( i );
-        USHORT          nSize = rPoly.GetSize();
+        sal_uInt16          nSize = rPoly.GetSize();
         if ( nSize )
         {
             pPointAry[j]    = nSize;
@@ -460,33 +373,33 @@ OutputDevice::OutputDevice() :
         mnTextLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
     meOutDevType        = OUTDEV_DONTKNOW;
     meOutDevViewType    = OUTDEV_VIEWTYPE_DONTKNOW;
-    mbMap               = FALSE;
-    mbMapIsDefault      = TRUE;
-    mbClipRegion        = FALSE;
-    mbBackground        = FALSE;
-    mbOutput            = TRUE;
-    mbDevOutput         = FALSE;
-    mbOutputClipped     = FALSE;
+    mbMap               = sal_False;
+    mbMapIsDefault      = sal_True;
+    mbClipRegion        = sal_False;
+    mbBackground        = sal_False;
+    mbOutput            = sal_True;
+    mbDevOutput         = sal_False;
+    mbOutputClipped     = sal_False;
     maTextColor         = Color( COL_BLACK );
     maOverlineColor     = Color( COL_TRANSPARENT );
     meTextAlign         = maFont.GetAlign();
     meRasterOp          = ROP_OVERPAINT;
     mnAntialiasing      = 0;
     meTextLanguage      = 0;  // TODO: get default from configuration?
-    mbLineColor         = TRUE;
-    mbFillColor         = TRUE;
-    mbInitLineColor     = TRUE;
-    mbInitFillColor     = TRUE;
-    mbInitFont          = TRUE;
-    mbInitTextColor     = TRUE;
-    mbInitClipRegion    = TRUE;
-    mbClipRegionSet     = FALSE;
-    mbKerning           = FALSE;
-    mbNewFont           = TRUE;
-    mbTextLines         = FALSE;
-    mbTextSpecial       = FALSE;
-    mbRefPoint          = FALSE;
-    mbEnableRTL         = FALSE;    // mirroring must be explicitly allowed (typically for windows only)
+    mbLineColor         = sal_True;
+    mbFillColor         = sal_True;
+    mbInitLineColor     = sal_True;
+    mbInitFillColor     = sal_True;
+    mbInitFont          = sal_True;
+    mbInitTextColor     = sal_True;
+    mbInitClipRegion    = sal_True;
+    mbClipRegionSet     = sal_False;
+    mbKerning           = sal_False;
+    mbNewFont           = sal_True;
+    mbTextLines         = sal_False;
+    mbTextSpecial       = sal_False;
+    mbRefPoint          = sal_False;
+    mbEnableRTL         = sal_False;    // mirroring must be explicitly allowed (typically for windows only)
 
     // struct ImplMapRes
     maMapRes.mnMapOfsX          = 0;
@@ -510,7 +423,7 @@ OutputDevice::~OutputDevice()
 
     if ( GetUnoGraphicsList() )
     {
-        UnoWrapperBase* pWrapper = Application::GetUnoWrapper( FALSE );
+        UnoWrapperBase* pWrapper = Application::GetUnoWrapper( sal_False );
         if ( pWrapper )
             pWrapper->ReleaseAllGraphics( this );
         delete mpUnoGraphicsList;
@@ -577,7 +490,7 @@ bool OutputDevice::supportsOperation( OutDevSupportType eType ) const
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::EnableRTL( BOOL bEnable )
+void OutputDevice::EnableRTL( sal_Bool bEnable )
 {
     mbEnableRTL = (bEnable != 0);
     if( meOutDevType == OUTDEV_VIRDEV )
@@ -602,11 +515,11 @@ void OutputDevice::EnableRTL( BOOL bEnable )
         mpAlphaVDev->EnableRTL( bEnable );
 }
 
-BOOL OutputDevice::ImplHasMirroredGraphics()
+sal_Bool OutputDevice::ImplHasMirroredGraphics()
 {
    // HOTFIX for #i55719#
    if( meOutDevType == OUTDEV_PRINTER )
-       return FALSE;
+       return sal_False;
 
    return ( ImplGetGraphics() && (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) );
 }
@@ -635,7 +548,7 @@ void    OutputDevice::ImplReMirror( Region &rRegion ) const
     long                nWidth;
     long                nHeight;
     ImplRegionInfo      aInfo;
-    BOOL                bRegionRect;
+    sal_Bool                bRegionRect;
     Region              aMirroredRegion;
 
     bRegionRect = rRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
@@ -657,13 +570,13 @@ int OutputDevice::ImplGetGraphics() const
     DBG_TESTSOLARMUTEX();
 
     if ( mpGraphics )
-        return TRUE;
+        return sal_True;
 
-    mbInitLineColor     = TRUE;
-    mbInitFillColor     = TRUE;
-    mbInitFont          = TRUE;
-    mbInitTextColor     = TRUE;
-    mbInitClipRegion    = TRUE;
+    mbInitLineColor     = sal_True;
+    mbInitFillColor     = sal_True;
+    mbInitFont          = sal_True;
+    mbInitTextColor     = sal_True;
+    mbInitClipRegion    = sal_True;
 
     ImplSVData* pSVData = ImplGetSVData();
     if ( meOutDevType == OUTDEV_WINDOW )
@@ -687,7 +600,7 @@ int OutputDevice::ImplGetGraphics() const
             {
                 // steal the wingraphics from the other outdev
                 mpGraphics = pReleaseOutDev->mpGraphics;
-                pReleaseOutDev->ImplReleaseGraphics( FALSE );
+                pReleaseOutDev->ImplReleaseGraphics( sal_False );
             }
             else
             {
@@ -797,15 +710,15 @@ int OutputDevice::ImplGetGraphics() const
     {
         mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp), ROP_INVERT == meRasterOp );
         mpGraphics->setAntiAliasB2DDraw(mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW);
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::ImplReleaseGraphics( BOOL bRelease )
+void OutputDevice::ImplReleaseGraphics( sal_Bool bRelease )
 {
     DBG_TESTSOLARMUTEX();
 
@@ -961,7 +874,7 @@ void OutputDevice::ImplInvalidateViewTransform()
 
 // -----------------------------------------------------------------------
 
-BOOL OutputDevice::ImplIsRecordLayout() const
+sal_Bool OutputDevice::ImplIsRecordLayout() const
 {
     return mpOutDevData && mpOutDevData->mpRecordLayout;
 }
@@ -1002,7 +915,7 @@ void OutputDevice::ImplInitLineColor()
     else
         mpGraphics->SetLineColor();
 
-    mbInitLineColor = FALSE;
+    mbInitLineColor = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -1025,7 +938,7 @@ void OutputDevice::ImplInitFillColor()
     else
         mpGraphics->SetFillColor();
 
-    mbInitFillColor = FALSE;
+    mbInitFillColor = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -1055,43 +968,56 @@ void OutputDevice::ImplInitClipRegion()
         if ( mbClipRegion )
             aRegion.Intersect( ImplPixelToDevicePixel( maRegion ) );
         if ( aRegion.IsEmpty() )
-            mbOutputClipped = TRUE;
+            mbOutputClipped = sal_True;
         else
         {
-            mbOutputClipped = FALSE;
+            mbOutputClipped = sal_False;
             ImplSelectClipRegion( aRegion );
         }
-        mbClipRegionSet = TRUE;
+        mbClipRegionSet = sal_True;
     }
     else
     {
         if ( mbClipRegion )
         {
             if ( maRegion.IsEmpty() )
-                mbOutputClipped = TRUE;
+                mbOutputClipped = sal_True;
             else
             {
-                mbOutputClipped = FALSE;
-                ImplSelectClipRegion(
-                                      // #102532# Respect output offset also for clip region
-                                      ImplPixelToDevicePixel( maRegion ) );
+                mbOutputClipped = sal_False;
+
+                // #102532# Respect output offset also for clip region
+                Region aRegion( ImplPixelToDevicePixel( maRegion ) );
+                const bool bClipDeviceBounds( ! GetPDFWriter()
+                                              && GetOutDevType() != OUTDEV_PRINTER );
+                if( bClipDeviceBounds )
+                {
+                    // #b6520266# Perform actual rect clip against outdev
+                    // dimensions, to generate empty clips whenever one of the
+                    // values is completely off the device.
+                    Rectangle aDeviceBounds( mnOutOffX, mnOutOffY,
+                                             mnOutOffX+GetOutputWidthPixel()-1,
+                                             mnOutOffY+GetOutputHeightPixel()-1 );
+                    aRegion.Intersect( aDeviceBounds );
+                }
+                ImplSelectClipRegion( aRegion );
             }
 
-            mbClipRegionSet = TRUE;
+            mbClipRegionSet = sal_True;
         }
         else
         {
             if ( mbClipRegionSet )
             {
                 mpGraphics->ResetClipRegion();
-                mbClipRegionSet = FALSE;
+                mbClipRegionSet = sal_False;
             }
 
-            mbOutputClipped = FALSE;
+            mbOutputClipped = sal_False;
         }
     }
 
-    mbInitClipRegion = FALSE;
+    mbInitClipRegion = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -1105,699 +1031,16 @@ void OutputDevice::ImplSetClipRegion( const Region* pRegion )
         if ( mbClipRegion )
         {
             maRegion            = Region( REGION_NULL );
-            mbClipRegion        = FALSE;
-            mbInitClipRegion    = TRUE;
+            mbClipRegion        = sal_False;
+            mbInitClipRegion    = sal_True;
         }
     }
     else
     {
         maRegion            = *pRegion;
-        mbClipRegion        = TRUE;
-        mbInitClipRegion    = TRUE;
+        mbClipRegion        = sal_True;
+        mbInitClipRegion    = sal_True;
     }
-}
-
-// -----------------------------------------------------------------------
-
-namespace
-{
-    inline int iround( float x )
-    {
-        union
-        {
-            float f;
-            sal_Int32 i;
-        };
-        f = x;
-        sal_Int32 exponent = (127 + 31) - ((i >> 23) & 0xFF);
-        sal_Int32 r = ((sal_Int32(i) << 8) | (1U << 31)) >> exponent;
-        r &= ((exponent - 32) >> 31);
-        sal_Int32 sign = i >> 31;
-        return r = (r ^ sign) - sign;
-    }
-
-    inline int floorDiv(int a, int b)
-    {
-        if(b == 0)
-            return 0x80000000;
-        if(a >= 0)
-            return a / b;
-        int q = -(-a / b);  // quotient
-        int r = -a % b;     // remainder
-        if(r)
-            q--;
-        return q;
-    }
-
-    inline int floorMod( int a, int b )
-    {
-        if(b == 0)
-            return 0x80000000;
-        if(a >= 0)
-            return a % b;
-        int r = -a % b;     // remainder
-        if(r)
-            r = b - r;
-        return r;
-    }
-
-    inline int ceilDiv( int a, int b )
-    {
-        if(b == 0)
-            return 0x80000000;
-        a += - 1 + b;
-        if(a >= 0)
-            return a / b;
-        int q = -(-a / b);  // quotient
-        int r = -a % b;     // remainder
-        if(r)
-            q--;
-        return q;
-    }
-
-    inline int ceilMod( int a, int b )
-    {
-        if(b == 0)
-            return 0x80000000;
-        a += - 1 + b;
-        if(a >= 0)
-            return (a % b) + 1 - b;
-        int r = -a % b;
-        if(r)
-            r = b - r;
-        return r + 1 - b;
-    }
-
-    inline int ceilFix4(int x) { return (x + 0xF) & 0xFFFFFFF0; }
-
-    struct vertex
-    {
-        float x,y;
-        inline vertex( const Point &p )
-            : x((float)p.getX()),y((float)p.getY()) {}
-    };
-
-    template<class T> inline void swap(T &a, T &b) { T t=a; a=b; b=t; }
-
-    class SpanIterator
-    {
-        public:
-
-            SpanIterator( sal_Int32 *pTable, size_t dwPitch, sal_Int32 dwNumScanlines );
-            std::pair<sal_Int32,sal_Int32> GetNextSpan( void );
-            sal_Int32 GetNumRemainingScanlines( void );
-            sal_Int32 GetNumEqualScanlines( void );
-            SpanIterator &operator++ ();
-            SpanIterator &Skip( sal_Int32 dwNumScanlines );
-            sal_Int32 GetRemainingSpans( void ) const { return maNumSpans; }
-
-        private:
-
-            sal_Int32 *mpTable;
-            sal_Int32 *mpSpanArray;
-            sal_Int32 maNumSpans;
-            sal_Int32 maRemainingScanlines;
-            size_t maPitch;
-    };
-
-    inline SpanIterator::SpanIterator( sal_Int32 *pTable, size_t dwPitch, sal_Int32 dwNumScanlines )
-        : mpTable(pTable),maRemainingScanlines(dwNumScanlines),maPitch(dwPitch)
-    {
-        sal_Int32 *pNumSpans = mpTable;
-        mpSpanArray = reinterpret_cast<sal_Int32 *>(pNumSpans+2);
-        maNumSpans = *pNumSpans;
-    }
-
-    inline SpanIterator &SpanIterator::operator++ ()
-    {
-        --maRemainingScanlines;
-        mpTable += maPitch;
-        sal_Int32 *pNumSpans = mpTable;
-        mpSpanArray = reinterpret_cast<sal_Int32 *>(pNumSpans+2);
-        maNumSpans = *pNumSpans;
-        return (*this);
-    }
-
-    inline SpanIterator &SpanIterator::Skip( sal_Int32 dwNumScanlines )
-    {
-        // don't skip more scanlines than there are...
-        if(dwNumScanlines > maRemainingScanlines)
-            dwNumScanlines = maRemainingScanlines;
-
-        // skip in one fellow swoop...
-        maRemainingScanlines -= dwNumScanlines;
-        mpTable += maPitch * dwNumScanlines;
-
-        // initialize necessary query fields...
-        sal_Int32 *pNumSpans = mpTable;
-        mpSpanArray = reinterpret_cast<sal_Int32 *>(pNumSpans+2);
-        maNumSpans = *pNumSpans;
-        return (*this);
-    }
-
-    inline std::pair<sal_Int32,sal_Int32> SpanIterator::GetNextSpan( void )
-    {
-        sal_Int32 x(0);
-        sal_Int32 w(0);
-        if(maNumSpans)
-        {
-            x = *mpSpanArray++;
-            w = *mpSpanArray++;
-            --maNumSpans;
-        }
-        return std::pair<sal_Int32,sal_Int32>(x,w);
-    }
-
-    inline sal_Int32 SpanIterator::GetNumEqualScanlines( void )
-    {
-        return mpTable[1];
-    }
-
-    inline sal_Int32 SpanIterator::GetNumRemainingScanlines( void )
-    {
-        return maRemainingScanlines;
-    }
-
-    class ScanlineContainer
-    {
-
-        public:
-
-            ScanlineContainer( sal_uInt32 dwNumScanlines,
-                               sal_uInt32 dwNumSpansPerScanline );
-
-            ~ScanlineContainer( void );
-
-            void InsertSpan( sal_Int32 y, sal_Int32 lx, sal_Int32 rx );
-
-            SpanIterator Iterate( void ) const { return SpanIterator(mpTable,maPitch,maNumScanlines); }
-
-            inline sal_uInt32 GetNumSpans( void ) const { return maNumberOfSpans; }
-
-            void Consolidate( void );
-
-        private:
-
-            // the span table will assist in determinate exactly how many clipping
-            // regions [that is *spans*] we will end up with.
-            // the counter for this purpose is right ahead.
-            sal_uInt32 maNumberOfSpans;
-
-            struct span
-            {
-                sal_Int32 x;
-                sal_Int32 w;
-            };
-
-            sal_uInt32 maNumScanlines;
-            sal_uInt32 maNumSpansPerScanline;
-            sal_Int32 *mpTable;
-            size_t maPitch;
-    };
-
-    ScanlineContainer::ScanlineContainer( sal_uInt32 dwNumScanlines,
-                                          sal_uInt32 dwNumSpansPerScanline ) : maNumScanlines(dwNumScanlines),
-                                                                               maNumSpansPerScanline(dwNumSpansPerScanline)
-    {
-        // #128002# add one scanline buffer at the end, as
-        // SpanIterator::Skip reads two bytes past the end.
-        ++dwNumScanlines;
-
-        // since each triangle could possibly add another span
-        // we can calculate the upper limit by [num scanlines * num triangles].
-        const sal_uInt32 dwNumPossibleRegions = dwNumScanlines*dwNumSpansPerScanline;
-
-        // calculate the number of bytes the span table will consume
-        const size_t dwTableSize = dwNumPossibleRegions*sizeof(span)+dwNumScanlines*(sizeof(sal_Int32)<<1);
-
-        // allocate the span table [on the stack]
-        mpTable = static_cast<sal_Int32 *>(rtl_allocateMemory(dwTableSize));
-
-        // calculate the table pitch, that is how many int's do i need to get from a scanline to the next.
-        maPitch = (dwNumSpansPerScanline*sizeof(span)/sizeof(sal_Int32))+2;
-
-        // we need to initialize the table here.
-        // the first *int* on each scanline tells us how many spans are on it.
-        sal_Int32 *pNumSpans = mpTable;
-        for(unsigned int i=0; i<dwNumScanlines; ++i)
-        {
-            pNumSpans[0] = 0;
-            pNumSpans[1] = 0;
-            pNumSpans += maPitch;
-        }
-
-        maNumberOfSpans = 0;
-    }
-
-    ScanlineContainer::~ScanlineContainer( void )
-    {
-        rtl_freeMemory(mpTable);
-    }
-
-    void ScanlineContainer::InsertSpan( sal_Int32 y, sal_Int32 lx, sal_Int32 rx )
-    {
-        // there's new incoming span which we need to store in the table.
-        // first see if its width contributes a valid span.
-        if(sal_Int32 dwSpanWidth = rx-lx)
-        {
-            // first select the appropriate scanline the new span.
-            sal_Int32 *pNumSpans = mpTable+(y*maPitch);
-            span *pSpanArray = reinterpret_cast<span *>(pNumSpans+2);
-
-            // retrieve the number of already contained spans.
-            sal_Int32 dwNumSpan = *pNumSpans;
-
-            // since we need to sort the spans from top to bottom
-            // and left to right, we need to find the correct location
-            // in the table.
-            sal_Int32 dwIndex = 0;
-            while(dwIndex<dwNumSpan)
-            {
-                // since we would like to avoid unnecessary spans
-                // we try to consolidate them if possible.
-                // consolidate with right neighbour
-                if(pSpanArray[dwIndex].x == rx)
-                {
-                    pSpanArray[dwIndex].x = lx;
-                    pSpanArray[dwIndex].w += dwSpanWidth;
-                    return;
-                }
-
-                // consolidate with left neighbour
-                if((pSpanArray[dwIndex].x+pSpanArray[dwIndex].w) == lx)
-                {
-                    pSpanArray[dwIndex].w += rx-lx;
-                    return;
-                }
-
-                // no consolidation possible, either this is a completely
-                // seperate span or it is the first in the list.
-                if(pSpanArray[dwIndex].x > lx)
-                    break;
-
-                // forward to next element in the list.
-                ++dwIndex;
-            }
-
-            // if we reach here, the new span needs to be stored
-            // in the table, increase the number of spans in the
-            // current scanline.
-            *pNumSpans = dwNumSpan+1;
-
-            // keep the list of spans in sorted order. 'dwIndex'
-            // is where we want to store the new span. 'dwNumSpan'
-            // is the number of spans already there. now we need
-            // to move the offending spans out of the way.
-            while(dwIndex != dwNumSpan)
-            {
-                pSpanArray[dwNumSpan].x = pSpanArray[dwNumSpan-1].x;
-                pSpanArray[dwNumSpan].w = pSpanArray[dwNumSpan-1].w;
-                --dwNumSpan;
-            }
-
-            // insert the new span
-            pSpanArray[dwIndex].x = lx;
-            pSpanArray[dwIndex].w = rx-lx;
-
-            // remember the total number of spans in the table.
-            ++maNumberOfSpans;
-        }
-    }
-
-    void ScanlineContainer::Consolidate( void )
-    {
-        sal_Int32 *pScanline = mpTable;
-
-        sal_Int32 dwRemaining = maNumScanlines;
-        while(dwRemaining)
-        {
-            sal_Int32 dwNumSpans = pScanline[0];
-            sal_Int32 *pSpanArray = pScanline+2;
-
-            sal_Int32 dwRest = dwRemaining-1;
-            sal_Int32 *pNext = pScanline;
-            while(dwRest)
-            {
-                pNext += maPitch;
-                sal_Int32 dwNumNextSpans = pNext[0];
-                sal_Int32 *pSpanArrayNext = pNext+2;
-                if(dwNumSpans != dwNumNextSpans)
-                    break;
-
-                sal_Int32 dwCompare = dwNumSpans<<1;
-                while(dwCompare)
-                {
-                    if(pSpanArray[dwCompare-1] != pSpanArrayNext[dwCompare-1])
-                        break;
-                    --dwCompare;
-                }
-                if(dwCompare)
-                    break;
-
-                --dwRest;
-            }
-
-            const sal_Int32 dwNumEqualScanlines(dwRemaining-dwRest);
-            pScanline[1] = dwNumEqualScanlines;
-            pScanline += maPitch*dwNumEqualScanlines;
-            dwRemaining -= dwNumEqualScanlines;
-
-            // since we track the total number of spans to generate,
-            // we need to account for consolidated scanlines here.
-            if(dwNumEqualScanlines > 1)
-                maNumberOfSpans -= dwNumSpans * (dwNumEqualScanlines-1);
-        }
-    }
-}
-
-// TODO: we should consider passing a basegfx b2dpolypolygon here to
-// ensure that the signature isn't misleading.
-// if we could pass a b2dpolypolygon here, we could easily triangulate it.
-void OutputDevice::ImplSetTriangleClipRegion( const PolyPolygon &rPolyPolygon )
-{
-    DBG_TESTSOLARMUTEX();
-
-    if(!(IsDeviceOutputNecessary()))
-        return;
-    if(!(mpGraphics))
-        if(!(ImplGetGraphics()))
-            return;
-
-    if( mpGraphics->supportsOperation( OutDevSupport_B2DClip ) )
-    {
-         // getB2DPolyPolygon() "optimizes away" some points
-         // which prevents reliable undoing of the "triangle thingy" parameter
-         // so the toolspoly -> b2dpoly conversion has to be done manually
-        ::basegfx::B2DPolyPolygon aB2DPolyPolygon;
-        for( USHORT nPolyIdx = 0; nPolyIdx < rPolyPolygon.Count(); ++nPolyIdx )
-        {
-            const Polygon& rPolygon = rPolyPolygon[ nPolyIdx ];
-            ::basegfx::B2DPolygon aB2DPoly;
-              for( USHORT nPointIdx = 0; nPointIdx < rPolygon.GetSize(); ++nPointIdx )
-              {
-                  const Point& rPoint = rPolygon[ nPointIdx ];
-                  const ::basegfx::B2DPoint aB2DPoint( rPoint.X(), rPoint.Y() );
-                  aB2DPoly.append( aB2DPoint );
-              }
-              aB2DPolyPolygon.append( aB2DPoly );
-        }
-
-        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-        aB2DPolyPolygon.transform( aTransform );
-
-        // the rPolyPolygon argument is a "triangle thingy"
-        // so convert it to a normal polypolyon first
-        ::basegfx::B2DPolyPolygon aPolyTriangle;
-        const int nPolyCount = aB2DPolyPolygon.count();
-        for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
-        {
-            const ::basegfx::B2DPolygon rPolygon = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
-            const int nPointCount = rPolygon.count();
-            for( int nPointIdx = 0; nPointIdx+2 < nPointCount; nPointIdx +=3 )
-            {
-                ::basegfx::B2DPolygon aTriangle;
-                aTriangle.append( rPolygon.getB2DPoint( nPointIdx+0 ) );
-                aTriangle.append( rPolygon.getB2DPoint( nPointIdx+1 ) );
-                aTriangle.append( rPolygon.getB2DPoint( nPointIdx+2 ) );
-                aPolyTriangle.append( aTriangle );
-            }
-        }
-
-        // now set the clip region with the real polypolygon
-        mpGraphics->BeginSetClipRegion( 0 );
-        mpGraphics->UnionClipRegion( aPolyTriangle, this );
-        mpGraphics->EndSetClipRegion();
-
-        // and mark the clip status as ready
-        mbOutputClipped = FALSE;
-        mbClipRegion = TRUE;
-        mbClipRegionSet = TRUE;
-        mbInitClipRegion = FALSE;
-        return;
-    }
-
-    sal_Int32 offset_x = 0;
-    sal_Int32 offset_y = 0;
-    if ( GetOutDevType() == OUTDEV_WINDOW )
-    {
-        offset_x = mnOutOffX+mnOutOffOrigX;
-        offset_y = mnOutOffY+mnOutOffOrigY;
-    }
-
-    // first of all we need to know the upper limit
-    // of the amount of possible clipping regions.
-    sal_Int32 maxy = SAL_MIN_INT32;
-    sal_Int32 miny = SAL_MAX_INT32;
-    sal_uInt32 dwNumTriangles = 0;
-    for(USHORT i=0; i<rPolyPolygon.Count(); ++i)
-    {
-        const Polygon &rPoly = rPolyPolygon.GetObject(i);
-        const sal_Int32 dwNumVertices = rPoly.GetSize();
-        if(!(dwNumVertices % 3))
-        {
-            for(USHORT j=0; j<rPoly.GetSize(); ++j)
-            {
-                const Point &p = rPoly.GetPoint(j);
-                if(p.Y() < miny)
-                    miny = p.Y();
-                if(p.Y() > maxy)
-                    maxy = p.Y();
-            }
-            dwNumTriangles += dwNumVertices / 3;
-        }
-    }
-
-    const sal_uInt32 dwNumScanlines = (maxy-miny);
-    if(!(dwNumScanlines))
-    {
-        // indicates that no output needs to be produced
-        // since the clipping region did not provide any
-        // visible areas.
-        mbOutputClipped = TRUE;
-
-        // indicates that a clip region has been
-        // presented to the output device.
-        mbClipRegion = TRUE;
-
-        // indicates that the set clipping region
-        // has been processed.
-        mbClipRegionSet = TRUE;
-
-        // under 'normal' circumstances a new clipping region
-        // needs to be processed by ImplInitClipRegion(),
-        // which we need to circumvent.
-        mbInitClipRegion = FALSE;
-        return;
-    }
-
-    // this container provides all services we need to
-    // efficiently store/retrieve spans from the table.
-    const sal_uInt32 dwNumSpansPerScanline = dwNumTriangles;
-    ScanlineContainer container(dwNumScanlines,dwNumSpansPerScanline);
-
-    // convert the incoming polypolygon to spans, we assume that
-    // the polypolygon has already been triangulated since we don't
-    // want to use the basegfx-types here. this could be leveraged
-    // after the tools-types had been removed.
-    for(USHORT i=0; i<rPolyPolygon.Count(); ++i)
-    {
-        const Polygon &rPoly = rPolyPolygon.GetObject(i);
-        const USHORT dwNumVertices = rPoly.GetSize();
-        if(!(dwNumVertices % 3))
-        {
-            for(USHORT j=0; j<dwNumVertices; j+=3)
-            {
-                const Point &p0 = rPoly.GetPoint(j+0);
-                const Point &p1 = rPoly.GetPoint(j+1);
-                const Point &p2 = rPoly.GetPoint(j+2);
-
-                // what now follows is an extremely fast triangle
-                // rasterizer from which all tricky and interesting
-                // parts were forcibly amputated.
-                // note: top.left fill-convention
-                vertex v0(p0);
-                vertex v1(p1);
-                vertex v2(p2);
-
-                //sprintf(string,"[%f,%f] [%f,%f] [%f,%f]\n",v0.x,v0.y,v1.x,v1.y,v2.x,v2.y);
-                //OSL_TRACE(string);
-
-                if(v0.y > v2.y) ::swap(v0, v2);
-                if(v1.y > v2.y) ::swap(v1, v2);
-                if(v0.y > v1.y) ::swap(v0, v1);
-
-                const float float2fixed(16.0f);
-
-                // vertex coordinates of the triangle [28.4 fixed-point]
-                const int i4x0 = iround(float2fixed * (v0.x - 0.5f));
-                const int i4y0 = iround(float2fixed * (v0.y - 0.5f));
-                const int i4x1 = iround(float2fixed * (v1.x - 0.5f));
-                const int i4y1 = iround(float2fixed * (v1.y - 0.5f));
-                const int i4x2 = iround(float2fixed * (v2.x - 0.5f));
-                const int i4y2 = iround(float2fixed * (v2.y - 0.5f));
-
-                // vertex coordinate deltas [28.4 fixed-point]
-                const int i4dx12 = i4x1-i4x0;
-                const int i4dy12 = i4y1-i4y0;
-                const int i4dx13 = i4x2-i4x0;
-                const int i4dy13 = i4y2-i4y0;
-                const int i4dx23 = i4x2-i4x1;
-                const int i4dy23 = i4y2-i4y1;
-
-                // slope of edges [quotient,remainder]
-                const int mq12 = floorDiv(i4dx12 << 4, i4dy12 << 4);
-                const int mq13 = floorDiv(i4dx13 << 4, i4dy13 << 4);
-                const int mq23 = floorDiv(i4dx23 << 4, i4dy23 << 4);
-                const int mr12 = floorMod(i4dx12 << 4, i4dy12 << 4);
-                const int mr13 = floorMod(i4dx13 << 4, i4dy13 << 4);
-                const int mr23 = floorMod(i4dx23 << 4, i4dy23 << 4);
-
-                // convert the vertical coordinates back to integers.
-                // according to the top-left fillrule we need to step
-                // the coordinates to the ceiling.
-                const int y0 = (i4y0+15)>>4;
-                const int y1 = (i4y1+15)>>4;
-                const int y2 = (i4y2+15)>>4;
-
-                // calculate the value of the horizontal coordinate
-                // from the edge that 'spans' the triangle.
-                const int x = ceilDiv(i4dx13*i4dy12 + i4x0*i4dy13, i4dy13);
-
-                // this will hold the horizontal coordinates
-                // of the seperate spans during the rasterization process.
-                int lx,rx;
-
-                // this pair will serve as the error accumulator while
-                // we step along the edges.
-                int ld,rd,lD,rD;
-
-                // these are the edge and error stepping values that
-                // will be used while stepping.
-                int lQ,rQ,lR,rR;
-
-                if(i4x1 < x)
-                {
-                    lx = ceilDiv(i4dx12 * (ceilFix4(i4y0) - i4y0) + i4x0 * i4dy12, i4dy12 << 4);
-                    ld = ceilMod(i4dx12 * (ceilFix4(i4y0) - i4y0) + i4x0 * i4dy12, i4dy12 << 4);
-                    rx = ceilDiv(i4dx13 * (ceilFix4(i4y0) - i4y0) + i4x0 * i4dy13, i4dy13 << 4);
-                    rd = ceilMod(i4dx13 * (ceilFix4(i4y0) - i4y0) + i4x0 * i4dy13, i4dy13 << 4);
-                    lQ = mq12;
-                    rQ = mq13;
-                    lR = mr12;
-                    rR = mr13;
-                    lD = i4dy12 << 4;
-                    rD = i4dy13 << 4;
-                }
-                else
-                {
-                    lx = ceilDiv(i4dx13 * (ceilFix4(i4y0) - i4y0) + i4x0 * i4dy13, i4dy13 << 4);
-                    ld = ceilMod(i4dx13 * (ceilFix4(i4y0) - i4y0) + i4x0 * i4dy13, i4dy13 << 4);
-                    rx = ceilDiv(i4dx12 * (ceilFix4(i4y0) - i4y0) + i4x0 * i4dy12, i4dy12 << 4);
-                    rd = ceilMod(i4dx12 * (ceilFix4(i4y0) - i4y0) + i4x0 * i4dy12, i4dy12 << 4);
-                    lQ = mq13;
-                    rQ = mq12;
-                    lR = mr13;
-                    rR = mr12;
-                    lD = i4dy13 << 4;
-                    rD = i4dy12 << 4;
-                }
-
-                for(signed int y=y0; y<y1; y++)
-                {
-                    container.InsertSpan(y-miny,lx,rx);
-
-                    lx += lQ; ld += lR;
-                    if(ld > 0) { ld -= lD; lx += 1; }
-                    rx += rQ; rd += rR;
-                    if(rd > 0) { rd -= rD; rx += 1; }
-                }
-
-                if(i4x1 < x)
-                {
-                    lx = ceilDiv(i4dx23 * (ceilFix4(i4y1) - i4y1) + i4x1 * i4dy23, i4dy23 << 4);
-                    ld = ceilMod(i4dx23 * (ceilFix4(i4y1) - i4y1) + i4x1 * i4dy23, i4dy23 << 4);
-                    rx = ceilDiv(i4dx13 * (ceilFix4(i4y1) - i4y0) + i4x0 * i4dy13, i4dy13 << 4);
-                    rd = ceilMod(i4dx13 * (ceilFix4(i4y1) - i4y0) + i4x0 * i4dy13, i4dy13 << 4);
-                    lQ = mq23;
-                    lR = mr23;
-                    lD = i4dy23 << 4;
-                }
-                else
-                {
-                    rx = ceilDiv(i4dx23 * (ceilFix4(i4y1) - i4y1) + i4x1 * i4dy23, i4dy23 << 4);
-                    rd = ceilMod(i4dx23 * (ceilFix4(i4y1) - i4y1) + i4x1 * i4dy23, i4dy23 << 4);
-                    rQ = mq23;
-                    rR = mr23;
-                    rD = i4dy23 << 4;
-                }
-
-                for(signed int y=y1; y<y2; y++)
-                {
-                    container.InsertSpan(y-miny,lx,rx);
-
-                    lx += lQ; ld += lR;
-                    if(ld > 0) { ld -= lD; lx += 1; }
-                    rx += rQ; rd += rR;
-                    if(rd > 0) { rd -= rD; rx += 1; }
-                }
-            }
-        }
-    }
-
-    // now try to consolidate as many scanlines as possible.
-    // please note that this will probably change the number
-    // of spans [at least this is why we do all this hassle].
-    // so, if you use 'consolidate' you should *use* this
-    // information during iteration, because the 'graphics'
-    // object we tell all those regions about is a bit,
-    // hm, how to say, *picky* if you supply not correctly
-    // the amount of regions.
-    container.Consolidate();
-
-    // now forward the spantable to the graphics handler.
-    SpanIterator it(container.Iterate());
-    mpGraphics->BeginSetClipRegion( container.GetNumSpans() );
-    while(miny < maxy)
-    {
-        const sal_Int32 dwNumEqual(it.GetNumEqualScanlines());
-        while(it.GetRemainingSpans())
-        {
-            // retrieve the next span [x-coordinate, width] from the current scanline.
-            std::pair<sal_Int32,sal_Int32> span(it.GetNextSpan());
-
-            // now forward this to the graphics object.
-            // the only part that is worth noting is that we use
-            // the number of equal spanlines [the current is always the
-            // first one of the equal bunch] as the height of the region.
-            mpGraphics->UnionClipRegion( offset_x+span.first,
-                                         offset_y+miny,
-                                         span.second,
-                                         dwNumEqual,
-                                         this );
-        }
-        it.Skip(dwNumEqual);
-        miny += dwNumEqual;
-    }
-    mpGraphics->EndSetClipRegion();
-
-    // indicates that no output needs to be produced
-    // since the clipping region did not provide any
-    // visible areas. the clip covers the whole area
-    // if there's not a single region.
-    mbOutputClipped = (container.GetNumSpans() == 0);
-
-    // indicates that a clip region has been
-    // presented to the output device.
-    mbClipRegion = TRUE;
-
-    // indicates that the set clipping region
-    // has been processed.
-    mbClipRegionSet = TRUE;
-
-    // under 'normal' circumstances a new clipping region
-    // needs to be processed by ImplInitClipRegion(),
-    // which we need to circumvent.
-    mbInitClipRegion = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -1808,7 +1051,7 @@ void OutputDevice::SetClipRegion()
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaClipRegionAction( Region(), FALSE ) );
+        mpMetaFile->AddAction( new MetaClipRegionAction( Region(), sal_False ) );
 
     ImplSetClipRegion( NULL );
 
@@ -1825,7 +1068,7 @@ void OutputDevice::SetClipRegion( const Region& rRegion )
     DBG_CHKOBJ( &rRegion, Region, ImplDbgTestRegion );
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaClipRegionAction( rRegion, TRUE ) );
+        mpMetaFile->AddAction( new MetaClipRegionAction( rRegion, sal_True ) );
 
     if ( rRegion.GetType() == REGION_NULL )
         ImplSetClipRegion( NULL );
@@ -1837,42 +1080,6 @@ void OutputDevice::SetClipRegion( const Region& rRegion )
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetClipRegion( rRegion );
-}
-
-// -----------------------------------------------------------------------
-
-void OutputDevice::SetTriangleClipRegion( const PolyPolygon &rPolyPolygon )
-{
-    OSL_TRACE( "OutputDevice::SetTriangleClipRegion( rPolyPolygon )" );
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
-    // in case the passed polypolygon is empty, use the
-    // existing SetClipRegion() method which gracefully
-    // unsets any previously set clipping region.
-    if(!(rPolyPolygon.Count()))
-        SetClipRegion();
-
-    sal_Int32 offset_x = 0;
-    sal_Int32 offset_y = 0;
-    if ( GetOutDevType() == OUTDEV_WINDOW )
-    {
-        offset_x = mnOutOffX+mnOutOffOrigX;
-        offset_y = mnOutOffY+mnOutOffOrigY;
-    }
-
-    // play nice with the rest of the system and provide an old-style region.
-    // the rest of this method does not rely on this.
-    maRegion = Region::GetRegionFromPolyPolygon( LogicToPixel(rPolyPolygon) );
-    maRegion.Move(offset_x,offset_y);
-
-    // feed region to metafile
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaClipRegionAction( maRegion, TRUE ) );
-
-    ImplSetTriangleClipRegion( rPolyPolygon );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTriangleClipRegion( rPolyPolygon );
 }
 
 // -----------------------------------------------------------------------
@@ -1921,7 +1128,7 @@ void OutputDevice::MoveClipRegion( long nHorzMove, long nVertMove )
 
         maRegion.Move( ImplLogicWidthToDevicePixel( nHorzMove ),
                        ImplLogicHeightToDevicePixel( nVertMove ) );
-        mbInitClipRegion = TRUE;
+        mbInitClipRegion = sal_True;
     }
 
     if( mpAlphaVDev )
@@ -1940,8 +1147,8 @@ void OutputDevice::IntersectClipRegion( const Rectangle& rRect )
 
     Rectangle aRect = LogicToPixel( rRect );
     maRegion.Intersect( aRect );
-    mbClipRegion        = TRUE;
-    mbInitClipRegion    = TRUE;
+    mbClipRegion        = sal_True;
+    mbInitClipRegion    = sal_True;
 
     if( mpAlphaVDev )
         mpAlphaVDev->IntersectClipRegion( rRect );
@@ -1964,8 +1171,8 @@ void OutputDevice::IntersectClipRegion( const Region& rRegion )
 
         Region aRegion = LogicToPixel( rRegion );
         maRegion.Intersect( aRegion );
-        mbClipRegion        = TRUE;
-        mbInitClipRegion    = TRUE;
+        mbClipRegion        = sal_True;
+        mbInitClipRegion    = sal_True;
     }
 
     if( mpAlphaVDev )
@@ -1974,7 +1181,7 @@ void OutputDevice::IntersectClipRegion( const Region& rRegion )
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::SetDrawMode( ULONG nDrawMode )
+void OutputDevice::SetDrawMode( sal_uLong nDrawMode )
 {
     OSL_TRACE( "OutputDevice::SetDrawMode( %lx )", nDrawMode );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -1998,7 +1205,7 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
     if ( meRasterOp != eRasterOp )
     {
         meRasterOp = eRasterOp;
-        mbInitLineColor = mbInitFillColor = TRUE;
+        mbInitLineColor = mbInitFillColor = sal_True;
 
         if( mpGraphics || ImplGetGraphics() )
             mpGraphics->SetXORMode( (ROP_INVERT == meRasterOp) || (ROP_XOR == meRasterOp), ROP_INVERT == meRasterOp );
@@ -2016,12 +1223,12 @@ void OutputDevice::SetLineColor()
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLineColorAction( Color(), FALSE ) );
+        mpMetaFile->AddAction( new MetaLineColorAction( Color(), sal_False ) );
 
     if ( mbLineColor )
     {
-        mbInitLineColor = TRUE;
-        mbLineColor = FALSE;
+        mbInitLineColor = sal_True;
+        mbLineColor = sal_False;
         maLineColor = Color( COL_TRANSPARENT );
     }
 
@@ -2054,7 +1261,7 @@ void OutputDevice::SetLineColor( const Color& rColor )
             }
             else if( mnDrawMode & DRAWMODE_GRAYLINE )
             {
-                const UINT8 cLum = aColor.GetLuminance();
+                const sal_uInt8 cLum = aColor.GetLuminance();
                 aColor = Color( cLum, cLum, cLum );
             }
             else if( mnDrawMode & DRAWMODE_SETTINGSLINE )
@@ -2072,14 +1279,14 @@ void OutputDevice::SetLineColor( const Color& rColor )
     }
 
     if( mpMetaFile )
-        mpMetaFile->AddAction( new MetaLineColorAction( aColor, TRUE ) );
+        mpMetaFile->AddAction( new MetaLineColorAction( aColor, sal_True ) );
 
     if( ImplIsColorTransparent( aColor ) )
     {
         if ( mbLineColor )
         {
-            mbInitLineColor = TRUE;
-            mbLineColor = FALSE;
+            mbInitLineColor = sal_True;
+            mbLineColor = sal_False;
             maLineColor = Color( COL_TRANSPARENT );
         }
     }
@@ -2087,8 +1294,8 @@ void OutputDevice::SetLineColor( const Color& rColor )
     {
         if( maLineColor != aColor )
         {
-            mbInitLineColor = TRUE;
-            mbLineColor = TRUE;
+            mbInitLineColor = sal_True;
+            mbLineColor = sal_True;
             maLineColor = aColor;
         }
     }
@@ -2105,12 +1312,12 @@ void OutputDevice::SetFillColor()
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaFillColorAction( Color(), FALSE ) );
+        mpMetaFile->AddAction( new MetaFillColorAction( Color(), sal_False ) );
 
     if ( mbFillColor )
     {
-        mbInitFillColor = TRUE;
-        mbFillColor = FALSE;
+        mbInitFillColor = sal_True;
+        mbFillColor = sal_False;
         maFillColor = Color( COL_TRANSPARENT );
     }
 
@@ -2143,7 +1350,7 @@ void OutputDevice::SetFillColor( const Color& rColor )
             }
             else if( mnDrawMode & DRAWMODE_GRAYFILL )
             {
-                const UINT8 cLum = aColor.GetLuminance();
+                const sal_uInt8 cLum = aColor.GetLuminance();
                 aColor = Color( cLum, cLum, cLum );
             }
             else if( mnDrawMode & DRAWMODE_NOFILL )
@@ -2165,14 +1372,14 @@ void OutputDevice::SetFillColor( const Color& rColor )
     }
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaFillColorAction( aColor, TRUE ) );
+        mpMetaFile->AddAction( new MetaFillColorAction( aColor, sal_True ) );
 
     if ( ImplIsColorTransparent( aColor ) )
     {
         if ( mbFillColor )
         {
-            mbInitFillColor = TRUE;
-            mbFillColor = FALSE;
+            mbInitFillColor = sal_True;
+            mbFillColor = sal_False;
             maFillColor = Color( COL_TRANSPARENT );
         }
     }
@@ -2180,8 +1387,8 @@ void OutputDevice::SetFillColor( const Color& rColor )
     {
         if ( maFillColor != aColor )
         {
-            mbInitFillColor = TRUE;
-            mbFillColor = TRUE;
+            mbInitFillColor = sal_True;
+            mbFillColor = sal_True;
             maFillColor = aColor;
         }
     }
@@ -2198,7 +1405,7 @@ void OutputDevice::SetBackground()
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     maBackground = Wallpaper();
-    mbBackground = FALSE;
+    mbBackground = sal_False;
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetBackground();
@@ -2214,9 +1421,9 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
     maBackground = rBackground;
 
     if( rBackground.GetStyle() == WALLPAPER_NULL )
-        mbBackground = FALSE;
+        mbBackground = sal_False;
     else
-        mbBackground = TRUE;
+        mbBackground = sal_True;
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetBackground( rBackground );
@@ -2230,9 +1437,9 @@ void OutputDevice::SetRefPoint()
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaRefPointAction( Point(), FALSE ) );
+        mpMetaFile->AddAction( new MetaRefPointAction( Point(), sal_False ) );
 
-    mbRefPoint = FALSE;
+    mbRefPoint = sal_False;
     maRefPoint.X() = maRefPoint.Y() = 0L;
 
     if( mpAlphaVDev )
@@ -2247,9 +1454,9 @@ void OutputDevice::SetRefPoint( const Point& rRefPoint )
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaRefPointAction( rRefPoint, TRUE ) );
+        mpMetaFile->AddAction( new MetaRefPointAction( rRefPoint, sal_True ) );
 
-    mbRefPoint = TRUE;
+    mbRefPoint = sal_True;
     maRefPoint = rRefPoint;
 
     if( mpAlphaVDev )
@@ -2560,7 +1767,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyLineAction( rPoly ) );
 
-    USHORT nPoints = rPoly.GetSize();
+    sal_uInt16 nPoints = rPoly.GetSize();
 
     if ( !IsDeviceOutputNecessary() || !mbLineColor || (nPoints < 2) || ImplIsRecordLayout() )
         return;
@@ -2610,7 +1817,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
     // #100127# Forward beziers to sal, if any
     if( aPoly.HasFlags() )
     {
-        const BYTE* pFlgAry = aPoly.GetConstFlagAry();
+        const sal_uInt8* pFlgAry = aPoly.GetConstFlagAry();
         if( !mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry, this ) )
         {
             aPoly = ImplSubdivideBezier(aPoly);
@@ -2658,7 +1865,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
 
 void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo)
 {
-    USHORT nPoints(rPoly.GetSize());
+    sal_uInt16 nPoints(rPoly.GetSize());
 
     if ( !IsDeviceOutputNecessary() || !mbLineColor || ( nPoints < 2 ) || ( LINE_NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
         return;
@@ -2730,7 +1937,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
 
-    USHORT nPoints = rPoly.GetSize();
+    sal_uInt16 nPoints = rPoly.GetSize();
 
     if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || (nPoints < 2) || ImplIsRecordLayout() )
         return;
@@ -2793,7 +2000,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
     // #100127# Forward beziers to sal, if any
     if( aPoly.HasFlags() )
     {
-        const BYTE* pFlgAry = aPoly.GetConstFlagAry();
+        const sal_uInt8* pFlgAry = aPoly.GetConstFlagAry();
         if( !mpGraphics->DrawPolygonBezier( nPoints, pPtAry, pFlgAry, this ) )
         {
             aPoly = ImplSubdivideBezier(aPoly);
@@ -2820,7 +2027,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyPolygonAction( rPolyPoly ) );
 
-    USHORT nPoly = rPolyPoly.Count();
+    sal_uInt16 nPoly = rPolyPoly.Count();
 
     if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || !nPoly || ImplIsRecordLayout() )
         return;
@@ -3137,7 +2344,21 @@ void OutputDevice::DrawPolyLine(
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::Push( USHORT nFlags )
+sal_uInt32 OutputDevice::GetGCStackDepth() const
+{
+    const ImplObjStack* pData = mpObjStack;
+    sal_uInt32 nDepth = 0;
+    while( pData )
+    {
+        nDepth++;
+        pData = pData->mpPrev;
+    }
+    return nDepth;
+}
+
+// -----------------------------------------------------------------------
+
+void OutputDevice::Push( sal_uInt16 nFlags )
 {
     OSL_TRACE( "OutputDevice::Push()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -3327,7 +2548,7 @@ void OutputDevice::SetConnectMetaFile( GDIMetaFile* pMtf )
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::EnableOutput( BOOL bEnable )
+void OutputDevice::EnableOutput( sal_Bool bEnable )
 {
     mbOutput = (bEnable != 0);
 
@@ -3347,7 +2568,7 @@ void OutputDevice::SetSettings( const AllSettings& rSettings )
 
 // -----------------------------------------------------------------------
 
-USHORT OutputDevice::GetBitCount() const
+sal_uInt16 OutputDevice::GetBitCount() const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
@@ -3361,12 +2582,12 @@ USHORT OutputDevice::GetBitCount() const
             return 0;
     }
 
-    return (USHORT)mpGraphics->GetBitCount();
+    return (sal_uInt16)mpGraphics->GetBitCount();
 }
 
 // -----------------------------------------------------------------------
 
-USHORT OutputDevice::GetAlphaBitCount() const
+sal_uInt16 OutputDevice::GetAlphaBitCount() const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
@@ -3381,17 +2602,17 @@ USHORT OutputDevice::GetAlphaBitCount() const
 
 // -----------------------------------------------------------------------
 
-ULONG OutputDevice::GetColorCount() const
+sal_uLong OutputDevice::GetColorCount() const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    const USHORT nBitCount = GetBitCount();
-    return( ( nBitCount > 31 ) ? ULONG_MAX : ( ( (ULONG) 1 ) << nBitCount) );
+    const sal_uInt16 nBitCount = GetBitCount();
+    return( ( nBitCount > 31 ) ? ULONG_MAX : ( ( (sal_uLong) 1 ) << nBitCount) );
 }
 
 // -----------------------------------------------------------------------
 
-BOOL OutputDevice::HasAlpha()
+sal_Bool OutputDevice::HasAlpha()
 {
     return mpAlphaVDev != NULL;
 }

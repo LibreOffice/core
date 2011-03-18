@@ -136,64 +136,6 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------------
-    sal_Bool OModule::writeComponentInfos( void* pServiceManager, void* pRegistryKey )
-    {
-        Reference< XMultiServiceFactory > xFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) );
-        Reference< XRegistryKey > xRegistryKey( static_cast< XRegistryKey* >( pRegistryKey ) );
-        return writeComponentInfos( xFactory, xRegistryKey );
-    }
-
-    //--------------------------------------------------------------------------
-    sal_Bool OModule::writeComponentInfos(
-            const Reference< XMultiServiceFactory >& /*_rxServiceManager*/,
-            const Reference< XRegistryKey >& _rxRootKey )
-    {
-        OSL_ENSURE( _rxRootKey.is(), "OModule::writeComponentInfos: invalid argument!" );
-
-        ::rtl::OUString sRootKey( "/", 1, RTL_TEXTENCODING_ASCII_US );
-
-        for (   ComponentDescriptions::const_iterator component = m_pImpl->m_aRegisteredComponents.begin();
-                component != m_pImpl->m_aRegisteredComponents.end();
-                ++component
-            )
-        {
-            ::rtl::OUString sMainKeyName( sRootKey );
-            sMainKeyName += component->sImplementationName;
-            sMainKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-
-            try
-            {
-                Reference< XRegistryKey >  xNewKey( _rxRootKey->createKey( sMainKeyName ) );
-
-                const ::rtl::OUString* pService = component->aSupportedServices.getConstArray();
-                const ::rtl::OUString* pServiceEnd = component->aSupportedServices.getConstArray() + component->aSupportedServices.getLength();
-                for ( ; pService != pServiceEnd; ++pService )
-                    xNewKey->createKey( *pService );
-
-                if ( component->sSingletonName.getLength() )
-                {
-                    OSL_ENSURE( component->aSupportedServices.getLength() == 1, "OModule::writeComponentInfos: singletons should support exactly one service, shouldn't they?" );
-
-                    ::rtl::OUString sSingletonKeyName( sRootKey );
-                    sSingletonKeyName += component->sImplementationName;
-                    sSingletonKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SINGLETONS/"));
-                    sSingletonKeyName += component->sSingletonName;
-
-                    xNewKey = _rxRootKey->createKey( sSingletonKeyName );
-                    xNewKey->setStringValue( component->aSupportedServices[ 0 ] );
-                }
-            }
-            catch( Exception& )
-            {
-                OSL_FAIL( "OModule::writeComponentInfos: something went wrong while creating the keys!" );
-                return sal_False;
-            }
-        }
-
-        return sal_True;
-    }
-
-    //--------------------------------------------------------------------------
     void* OModule::getComponentFactory( const sal_Char* _pImplementationName, void* _pServiceManager, void* /*_pRegistryKey*/ )
     {
         Reference< XInterface > xFactory( getComponentFactory(

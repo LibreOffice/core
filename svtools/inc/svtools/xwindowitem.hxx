@@ -50,8 +50,8 @@ class SVT_DLLPUBLIC XWindowItem : public SfxPoolItem
 public:
     TYPEINFO();
     XWindowItem();
-    explicit XWindowItem( USHORT nWhich, Window * pWin );
-    XWindowItem( USHORT nWhich, com::sun::star::uno::Reference< com::sun::star::awt::XWindow > & rxWin );
+    explicit XWindowItem( sal_uInt16 nWhich, Window * pWin );
+    XWindowItem( sal_uInt16 nWhich, com::sun::star::uno::Reference< com::sun::star::awt::XWindow > & rxWin );
     XWindowItem( const XWindowItem &rItem );
     ~XWindowItem();
 

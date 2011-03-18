@@ -102,7 +102,7 @@ public:
     const String&   GetUIConfigPath() const;
     const String&   GetFingerprintPath() const;
 
-    BOOL            IsPathReadonly(Pathes ePath)const;
+    sal_Bool            IsPathReadonly(Pathes ePath)const;
     const String&   GetPath(Pathes ePath) const;
 
     // set the pathes
@@ -130,8 +130,9 @@ public:
     void            SetWorkPath( const String& rPath );
     void            SetPath( SvtPathOptions::Pathes ePath, const String& rNewPath );
 
-    String          SubstituteVariable( const String& rVar );
-    String          UseVariable( const String& rVar );
+    String          SubstituteVariable( const String& rVar ) const;
+    String          ExpandMacros( const String& rPath ) const;
+    String          UseVariable( const String& rVar ) const;
     sal_Bool        SearchFile( String& rIniFile, Pathes ePath = PATH_USERCONFIG );
     ::com::sun::star::lang::Locale GetLocale() const;
     sal_Bool        IsReadonly() const;

@@ -58,12 +58,12 @@ private:
     Point               maLastMousePos;
     Point               maCenter;
     Timer*              mpTimer;
-    ULONG               mnRepaintTime;
-    ULONG               mnTimeout;
-    ULONG               mnWheelMode;
-    ULONG               mnMaxWidth;
-    ULONG               mnActWidth;
-    ULONG               mnActDist;
+    sal_uLong               mnRepaintTime;
+    sal_uLong               mnTimeout;
+    sal_uLong               mnWheelMode;
+    sal_uLong               mnMaxWidth;
+    sal_uLong               mnActWidth;
+    sal_uLong               mnActDist;
     long                mnActDeltaX;
     long                mnActDeltaY;
 
@@ -88,8 +88,8 @@ public:
                         ~ImplWheelWindow();
 
     void                ImplStop();
-    void                ImplSetWheelMode( ULONG nWheelMode );
-    ULONG               ImplGetWheelMode() const { return mnWheelMode; }
+    void                ImplSetWheelMode( sal_uLong nWheelMode );
+    sal_uLong               ImplGetWheelMode() const { return mnWheelMode; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

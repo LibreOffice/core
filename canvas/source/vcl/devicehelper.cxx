@@ -231,7 +231,7 @@ namespace vclcanvas
             const ::Point aEmptyPoint;
             OutputDevice& rOutDev = mpOutDev->getOutDev();
             bool bOldMap( rOutDev.IsMapModeEnabled() );
-            rOutDev.EnableMapMode( FALSE );
+            rOutDev.EnableMapMode( sal_False );
             aStream << rOutDev.GetBitmap(aEmptyPoint,
                                          rOutDev.GetOutputSizePixel());
             rOutDev.EnableMapMode( bOldMap );

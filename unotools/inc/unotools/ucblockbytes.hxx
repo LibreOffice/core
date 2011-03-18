@@ -91,7 +91,7 @@ public:
                     {}
 
     virtual void    Handle( LoadHandlerItem nWhich, UcbLockBytesRef xLockBytes ) = 0;
-    void            Activate( BOOL bActivate = sal_True ) { m_bActive = bActivate; }
+    void            Activate( sal_Bool bActivate = sal_True ) { m_bActive = bActivate; }
     sal_Bool        IsActive() const { return m_bActive; }
 };
 
@@ -152,11 +152,11 @@ public:
     static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_IO::XStream >& xContent );
 
     // SvLockBytes
-    virtual void            SetSynchronMode (BOOL bSynchron);
-    virtual ErrCode         ReadAt ( ULONG nPos, void *pBuffer, ULONG nCount, ULONG *pRead) const;
-    virtual ErrCode         WriteAt ( ULONG, const void*, ULONG, ULONG *pWritten);
+    virtual void            SetSynchronMode (sal_Bool bSynchron);
+    virtual ErrCode         ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const;
+    virtual ErrCode         WriteAt ( sal_uLong, const void*, sal_uLong, sal_uLong *pWritten);
     virtual ErrCode         Flush (void) const;
-    virtual ErrCode         SetSize (ULONG);
+    virtual ErrCode         SetSize (sal_uLong);
     virtual ErrCode         Stat ( SvLockBytesStat *pStat, SvLockBytesStatFlag) const;
 
     void                    SetError( ErrCode nError )

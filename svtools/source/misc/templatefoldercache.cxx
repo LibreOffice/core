@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include "templatefoldercache.hxx"
+#include <svtools/templatefoldercache.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -117,8 +117,8 @@ namespace svt
     //=====================================================================
     struct TemplateContent;
     typedef ::std::vector< ::rtl::Reference< TemplateContent > >    TemplateFolderContent;
-        typedef TemplateFolderContent::const_iterator           ConstFolderIterator;
-        typedef TemplateFolderContent::iterator                 FolderIterator;
+    typedef TemplateFolderContent::const_iterator           ConstFolderIterator;
+    typedef TemplateFolderContent::iterator                 FolderIterator;
 
     /** a struct describing one content in one of the template dirs (or at least it's relevant aspects)
     */
@@ -706,15 +706,18 @@ namespace svt
         m_aCurrentState.swap( aTemplateFolderContent );
 
         // the template directories from the config
-        String      aDirs = SvtPathOptions().GetTemplatePath();
+        const SvtPathOptions aPathOptions;
+        String      aDirs = aPathOptions.GetTemplatePath();
         sal_uInt16  nDirs = aDirs.GetTokenCount( ';' );
 
         m_aCurrentState.reserve( nDirs );
         // loop through all the root-level template folders
         for ( sal_uInt16 i=0; i<nDirs; ++i)
         {
+            String sTemplatePath( aDirs.GetToken( i, ';' ) );
+            sTemplatePath = aPathOptions.ExpandMacros( sTemplatePath );
             // create a new entry
-            m_aCurrentState.push_back( new TemplateContent( INetURLObject( aDirs.GetToken( i, ';' ) ) ) );
+            m_aCurrentState.push_back( new TemplateContent( INetURLObject( sTemplatePath ) ) );
             TemplateFolderContent::iterator aCurrentRoot = m_aCurrentState.end();
             --aCurrentRoot;
 

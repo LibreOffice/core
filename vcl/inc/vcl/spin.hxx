@@ -45,13 +45,13 @@ private:
     Rectangle       maUpperRect;
     Rectangle       maLowerRect;
     Rectangle       maFocusRect;
-    BOOL            mbRepeat         : 1;
-    BOOL            mbUpperIn        : 1;
-    BOOL            mbLowerIn        : 1;
-    BOOL            mbInitialUp      : 1;
-    BOOL            mbInitialDown    : 1;
-    BOOL            mbHorz           : 1;
-    BOOL            mbUpperIsFocused : 1;
+    sal_Bool            mbRepeat         : 1;
+    sal_Bool            mbUpperIn        : 1;
+    sal_Bool            mbLowerIn        : 1;
+    sal_Bool            mbInitialUp      : 1;
+    sal_Bool            mbInitialDown    : 1;
+    sal_Bool            mbHorz           : 1;
+    sal_Bool            mbUpperIsFocused : 1;
     Link            maUpHdlLink;
     Link            maDownHdlLink;
     long            mnMinRange;
@@ -74,7 +74,7 @@ public:
 
     virtual void    Resize();
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
     virtual void    MouseMove( const MouseEvent& rMEvt );
@@ -101,15 +101,15 @@ public:
     const Link&     GetDownHdl() const { return maDownHdlLink; }
 
 private:
-    // moves the focus to the upper or lower rect. Return TRUE if the focus rect actually changed.
-    SAL_DLLPRIVATE BOOL        ImplMoveFocus( BOOL _bUpper );
-    SAL_DLLPRIVATE void        ImplCalcFocusRect( BOOL _bUpper );
+    // moves the focus to the upper or lower rect. Return sal_True if the focus rect actually changed.
+    SAL_DLLPRIVATE sal_Bool        ImplMoveFocus( sal_Bool _bUpper );
+    SAL_DLLPRIVATE void        ImplCalcFocusRect( sal_Bool _bUpper );
 
-    SAL_DLLPRIVATE inline BOOL ImplIsUpperEnabled( ) const
+    SAL_DLLPRIVATE inline sal_Bool ImplIsUpperEnabled( ) const
     {
         return mnValue + mnValueStep <= mnMaxRange;
     }
-    SAL_DLLPRIVATE inline BOOL ImplIsLowerEnabled( ) const
+    SAL_DLLPRIVATE inline sal_Bool ImplIsLowerEnabled( ) const
     {
         return mnValue >= mnMinRange + mnValueStep;
     }

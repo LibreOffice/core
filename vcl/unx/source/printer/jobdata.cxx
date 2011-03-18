@@ -51,6 +51,7 @@ JobData& JobData::operator=(const JobData& rRight)
     m_pParser               = rRight.m_pParser;
     m_aContext              = rRight.m_aContext;
     m_nPSLevel              = rRight.m_nPSLevel;
+    m_nPDFDevice            = rRight.m_nPDFDevice;
     m_nColorDevice          = rRight.m_nColorDevice;
 
     if( ! m_pParser && m_aPrinterName.getLength() )
@@ -81,6 +82,34 @@ void JobData::setCollate( bool bCollate )
             m_aContext.setValue( pKey, pVal );
         }
     }
+}
+
+bool JobData::setPaper( int i_nWidth, int i_nHeight )
+{
+    bool bSuccess = false;
+    if( m_pParser )
+    {
+        rtl::OUString aPaper( m_pParser->matchPaper( i_nWidth, i_nHeight ) );
+
+        const PPDKey*   pKey = m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+        const PPDValue* pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : NULL;
+
+        bSuccess = pKey && pValue && m_aContext.setValue( pKey, pValue, false );
+    }
+    return bSuccess;
+}
+
+bool JobData::setPaperBin( int i_nPaperBin )
+{
+    bool bSuccess = false;
+    if( m_pParser )
+    {
+        const PPDKey*   pKey = m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) );
+        const PPDValue* pValue = pKey ? pKey->getValue( i_nPaperBin ) : NULL;
+
+        bSuccess = pKey && pValue && m_aContext.setValue( pKey, pValue, false );
+    }
+    return bSuccess;
 }
 
 bool JobData::getStreamBuffer( void*& pData, int& bytes )
@@ -128,13 +157,17 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
     aLine += ByteString::CreateFromInt32( m_nPSLevel );
     aStream.WriteLine( aLine );
 
+    aLine = "pdfdevice=";
+    aLine += ByteString::CreateFromInt32( m_nPDFDevice );
+    aStream.WriteLine( aLine );
+
     aLine = "colordevice=";
     aLine += ByteString::CreateFromInt32( m_nColorDevice );
     aStream.WriteLine( aLine );
 
     // now append the PPDContext stream buffer
     aStream.WriteLine( "PPDContexData" );
-    ULONG nBytes;
+    sal_uLong nBytes;
     void* pContextBuffer = m_aContext.getStreamableBuffer( nBytes );
     if( nBytes )
         aStream.Write( pContextBuffer, nBytes );
@@ -158,6 +191,7 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
     bool bColorDepth    = false;
     bool bColorDevice   = false;
     bool bPSLevel       = false;
+    bool bPDFDevice     = false;
     while( ! aStream.IsEof() )
     {
         aStream.ReadLine( aLine );
@@ -202,6 +236,11 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
             bPSLevel = true;
             rJobData.m_nPSLevel = aLine.Copy( 8 ).ToInt32();
         }
+        else if( aLine.CompareTo( "pdfdevice=", 10 ) == COMPARE_EQUAL )
+        {
+            bPDFDevice = true;
+            rJobData.m_nPDFDevice = aLine.Copy( 10 ).ToInt32();
+        }
         else if( aLine.Equals( "PPDContexData" ) )
         {
             if( bPrinter )
@@ -222,7 +261,7 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
         }
     }
 
-    return bVersion && bPrinter && bOrientation && bCopies && bContext && bMargin && bPSLevel && bColorDevice && bColorDepth;
+    return bVersion && bPrinter && bOrientation && bCopies && bContext && bMargin && bPSLevel && bPDFDevice && bColorDevice && bColorDepth;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

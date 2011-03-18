@@ -40,6 +40,7 @@
 
 #include <memory>
 #include <algorithm>
+#include <vector>
 
 //........................................................................
 namespace comphelper
@@ -92,6 +93,11 @@ namespace comphelper
 
         ~NamedValueCollection();
 
+        inline void assign( const ::com::sun::star::uno::Any& i_rWrappedElements )
+        {
+            impl_assign( i_rWrappedElements );
+        }
+
         inline void assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments )
         {
             impl_assign( _rArguments );
@@ -117,6 +123,11 @@ namespace comphelper
 
         /// determines whether the collection is empty
         bool    empty() const;
+
+        /** returns the names of all elements in the collection
+        */
+        ::std::vector< ::rtl::OUString >
+                getNames() const;
 
         /** merges the content of another collection into |this|
             @param _rAdditionalValues
@@ -313,6 +324,7 @@ namespace comphelper
         }
 
     private:
+        void    impl_assign( const ::com::sun::star::uno::Any& i_rWrappedElements );
         void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments );
         void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments );
         void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rArguments );

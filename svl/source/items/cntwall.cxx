@@ -36,22 +36,22 @@
 
 #include <svl/cntwall.hxx>
 
-#define CNTWALLPAPERITEM_STREAM_MAGIC   ( (UINT32)0xfefefefe )
-#define CNTWALLPAPERITEM_STREAM_SEEKREL (-( (long)( sizeof( UINT32 ) ) ) )
+#define CNTWALLPAPERITEM_STREAM_MAGIC   ( (sal_uInt32)0xfefefefe )
+#define CNTWALLPAPERITEM_STREAM_SEEKREL (-( (long)( sizeof( sal_uInt32 ) ) ) )
 
 TYPEINIT1( CntWallpaperItem, SfxPoolItem );
 
 // -----------------------------------------------------------------------
-CntWallpaperItem::CntWallpaperItem( USHORT which )
+CntWallpaperItem::CntWallpaperItem( sal_uInt16 which )
     : SfxPoolItem( which ), _nColor( COL_TRANSPARENT ), _nStyle( 0 )
 {
 }
 
 // -----------------------------------------------------------------------
-CntWallpaperItem::CntWallpaperItem( USHORT which, SvStream& rStream, USHORT nVersion )
+CntWallpaperItem::CntWallpaperItem( sal_uInt16 which, SvStream& rStream, sal_uInt16 nVersion )
     : SfxPoolItem( which ), _nColor( COL_TRANSPARENT ), _nStyle( 0 )
 {
-    UINT32 nMagic = 0;
+    sal_uInt32 nMagic = 0;
     rStream >> nMagic;
     if ( nMagic == CNTWALLPAPERITEM_STREAM_MAGIC )
     {
@@ -60,7 +60,7 @@ CntWallpaperItem::CntWallpaperItem( USHORT which, SvStream& rStream, USHORT nVer
         readUnicodeString(rStream, _aURL, nVersion >= 1);
         // !!! Color stream operators do not work - they discard any
         // transparency info !!!
-        _nColor.Read( rStream, TRUE );
+        _nColor.Read( rStream, sal_True );
         rStream >> _nStyle;
     }
     else
@@ -111,33 +111,33 @@ int CntWallpaperItem::operator==( const SfxPoolItem& rItem ) const
     if( ( rWallItem._nStyle == _nStyle ) &&
         ( rWallItem._nColor == _nColor ) &&
         ( rWallItem._aURL == _aURL ) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 //============================================================================
 // virtual
-USHORT CntWallpaperItem::GetVersion(USHORT) const
+sal_uInt16 CntWallpaperItem::GetVersion(sal_uInt16) const
 {
     return 1; // because it uses SfxPoolItem::read/writeUnicodeString()
 }
 
 // -----------------------------------------------------------------------
-SfxPoolItem* CntWallpaperItem::Create( SvStream& rStream, USHORT nVersion) const
+SfxPoolItem* CntWallpaperItem::Create( SvStream& rStream, sal_uInt16 nVersion) const
 {
     return new CntWallpaperItem( Which(), rStream, nVersion );
 }
 
 // -----------------------------------------------------------------------
-SvStream& CntWallpaperItem::Store( SvStream& rStream, USHORT ) const
+SvStream& CntWallpaperItem::Store( SvStream& rStream, sal_uInt16 ) const
 {
     rStream << CNTWALLPAPERITEM_STREAM_MAGIC;
     writeUnicodeString(rStream, _aURL);
     // !!! Color stream operators do not work - they discard any
     // transparency info !!!
     // ??? Why the hell Color::Write(...) isn't const ???
-    SAL_CONST_CAST( CntWallpaperItem*, this )->_nColor.Write( rStream, TRUE );
+    SAL_CONST_CAST( CntWallpaperItem*, this )->_nColor.Write( rStream, sal_True );
     rStream << _nStyle;
 
     return rStream;
@@ -151,7 +151,7 @@ SfxPoolItem* CntWallpaperItem::Clone( SfxItemPool* ) const
 
 //----------------------------------------------------------------------------
 // virtual
-bool CntWallpaperItem::QueryValue( com::sun::star::uno::Any&,BYTE ) const
+bool CntWallpaperItem::QueryValue( com::sun::star::uno::Any&, sal_uInt8) const
 {
     OSL_FAIL("Not implemented!");
     return false;
@@ -159,7 +159,7 @@ bool CntWallpaperItem::QueryValue( com::sun::star::uno::Any&,BYTE ) const
 
 //----------------------------------------------------------------------------
 // virtual
-bool CntWallpaperItem::PutValue( const com::sun::star::uno::Any&,BYTE )
+bool CntWallpaperItem::PutValue( const com::sun::star::uno::Any&, sal_uInt8)
 {
     OSL_FAIL("Not implemented!");
     return false;

@@ -1,23 +1,3 @@
-sl	svl	:	l10n rsc offuh ucbhelper unotools cppu cppuhelper comphelper sal sot NULL
-sl	svl								usr1	-	all	svl_mkout NULL
-sl	svl\inc							nmake	-	all	svl_inc NULL
-sl	svl\unx\source\svdde			nmake	-	u	svl_usdde svl_inc NULL
-sl	svl\unx\source\svdde			nmake	-	p	svl_psdde svl_inc NULL
-sl	svl\source\config				nmake	-	all	svl_conf svl_inc NULL
-sl	svl\source\filepicker           nmake	-	all	svl_filepick svl_inc NULL
-sl	svl\source\filerec				nmake	-	all	svl_file svl_inc NULL
-sl	svl\source\items				nmake	-	all	svl__item svl_inc NULL
-sl	svl\source\memtools				nmake	-	all	svl_mem svl_inc NULL
-sl	svl\source\misc					nmake	-	all	svl__misc svl_inc NULL
-sl	svl\source\notify				nmake	-	all	svl_not svl_inc NULL
-sl	svl\source\numbers				nmake	-	all	svl_num svl_inc NULL
-sl	svl\source\svdde				nmake	-	all	svl__dde svl_inc NULL
-sl	svl\source\svsql				nmake	-	all	svl_sql svl_inc NULL
-sl	svl\source\undo					nmake	-	all	svl_undo svl_inc NULL
-sl	svl\source\uno					nmake	-	all	svl_uno svl_inc NULL
-sl  svl\util                        nmake   -   all svl_util svl_usdde.u svl_psdde.p svl_conf svl_filepick svl_file svl__item svl_mem svl__misc svl_not svl_num svl__dde svl_sql svl_undo svl_uno NULL
-sl	svl\source\fsstor				nmake	-	all	svl_fsstor svl_inc NULL
-sl	svl\source\passwordcontainer	nmake	-	all	svl_passcont svl_inc NULL
-sl	svl\qa\unit	nmake	-	all	svl_qa_cppunit svl_util NULL
-
-
+sl	svl	:	L10N:l10n rsc offuh ucbhelper unotools cppu cppuhelper comphelper sal sot  LIBXSLT:libxslt NULL
+sl	svl\prj	nmake	-	all	svl_prj NULL
+# sl	svl\qa\unit	nmake	-	all	svl_qa_cppunit svl_util NULL

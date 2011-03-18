@@ -1,7 +1,7 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include "filterutils.hxx"
+#include <svtools/filterutils.hxx>
 #include <rtl/ustrbuf.hxx>
 
 namespace svt

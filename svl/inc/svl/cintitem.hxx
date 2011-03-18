@@ -38,15 +38,15 @@ DBG_NAMEEX_VISIBILITY(CntByteItem, SVL_DLLPUBLIC)
 
 class SVL_DLLPUBLIC CntByteItem: public SfxPoolItem
 {
-    BYTE m_nValue;
+    sal_uInt8 m_nValue;
 
 public:
     TYPEINFO();
 
-    CntByteItem(USHORT which = 0, BYTE nTheValue = 0):
+    CntByteItem(sal_uInt16 which = 0, sal_uInt8 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue) { DBG_CTOR(CntByteItem, 0); }
 
-    CntByteItem(USHORT which, SvStream & rStream);
+    CntByteItem(sal_uInt16 which, SvStream & rStream);
 
     CntByteItem(const CntByteItem & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
@@ -66,29 +66,29 @@ public:
         const;
 
     virtual bool QueryValue(com::sun::star::uno::Any& rVal,
-                            BYTE nMemberId = 0) const;
+                            sal_uInt8 nMemberId = 0) const;
 
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
-                          BYTE nMemberId = 0);
+                          sal_uInt8 nMemberId = 0);
 
-    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
 
-    virtual SvStream & Store(SvStream & rStream, USHORT) const;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
 
-    virtual BYTE GetMin() const;
+    virtual sal_uInt8 GetMin() const;
 
-    virtual BYTE GetMax() const;
+    virtual sal_uInt8 GetMax() const;
 
     virtual SfxFieldUnit GetUnit() const;
 
-    BYTE GetValue() const { return m_nValue; }
+    sal_uInt8 GetValue() const { return m_nValue; }
 
-    inline void SetValue(BYTE nTheValue);
+    inline void SetValue(sal_uInt8 nTheValue);
 };
 
-inline void CntByteItem::SetValue(BYTE nTheValue)
+inline void CntByteItem::SetValue(sal_uInt8 nTheValue)
 {
     DBG_ASSERT(GetRefCount() == 0, "CntByteItem::SetValue(): Pooled item");
     m_nValue = nTheValue;
@@ -99,16 +99,16 @@ DBG_NAMEEX_VISIBILITY(CntUInt16Item, SVL_DLLPUBLIC)
 
 class SVL_DLLPUBLIC CntUInt16Item: public SfxPoolItem
 {
-    UINT16 m_nValue;
+    sal_uInt16 m_nValue;
 
 public:
     TYPEINFO();
 
-    CntUInt16Item(USHORT which = 0, UINT16 nTheValue = 0):
+    CntUInt16Item(sal_uInt16 which = 0, sal_uInt16 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue)
     { DBG_CTOR(CntUInt16Item, 0); }
 
-    CntUInt16Item(USHORT which, SvStream & rStream);
+    CntUInt16Item(sal_uInt16 which, SvStream & rStream);
 
     CntUInt16Item(const CntUInt16Item & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
@@ -128,29 +128,29 @@ public:
         const;
 
     virtual bool QueryValue(com::sun::star::uno::Any& rVal,
-                            BYTE nMemberId = 0) const;
+                            sal_uInt8 nMemberId = 0) const;
 
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
-                          BYTE nMemberId = 0);
+                          sal_uInt8 nMemberId = 0);
 
-    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
 
-    virtual SvStream & Store(SvStream & rStream, USHORT) const;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
 
-    virtual UINT16 GetMin() const;
+    virtual sal_uInt16 GetMin() const;
 
-    virtual UINT16 GetMax() const;
+    virtual sal_uInt16 GetMax() const;
 
     virtual SfxFieldUnit GetUnit() const;
 
-    INT16 GetValue() const { return m_nValue; }
+    sal_Int16 GetValue() const { return m_nValue; }
 
-    inline void SetValue(UINT16 nTheValue);
+    inline void SetValue(sal_uInt16 nTheValue);
 };
 
-inline void CntUInt16Item::SetValue(UINT16 nTheValue)
+inline void CntUInt16Item::SetValue(sal_uInt16 nTheValue)
 {
     DBG_ASSERT(GetRefCount() == 0, "CntUInt16Item::SetValue(): Pooled item");
     m_nValue = nTheValue;
@@ -161,16 +161,16 @@ DBG_NAMEEX_VISIBILITY(CntInt32Item, SVL_DLLPUBLIC)
 
 class SVL_DLLPUBLIC CntInt32Item: public SfxPoolItem
 {
-    INT32 m_nValue;
+    sal_Int32 m_nValue;
 
 public:
     TYPEINFO();
 
-    CntInt32Item(USHORT which = 0, INT32 nTheValue = 0):
+    CntInt32Item(sal_uInt16 which = 0, sal_Int32 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue)
     { DBG_CTOR(CntInt32Item, 0); }
 
-    CntInt32Item(USHORT which, SvStream & rStream);
+    CntInt32Item(sal_uInt16 which, SvStream & rStream);
 
     CntInt32Item(const CntInt32Item & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
@@ -190,29 +190,29 @@ public:
         const;
 
     virtual bool QueryValue(com::sun::star::uno::Any& rVal,
-                            BYTE nMemberId = 0) const;
+                            sal_uInt8 nMemberId = 0) const;
 
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
-                          BYTE nMemberId = 0);
+                          sal_uInt8 nMemberId = 0);
 
-    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
 
-    virtual SvStream & Store(SvStream &, USHORT) const;
+    virtual SvStream & Store(SvStream &, sal_uInt16) const;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
 
-    virtual INT32 GetMin() const;
+    virtual sal_Int32 GetMin() const;
 
-    virtual INT32 GetMax() const;
+    virtual sal_Int32 GetMax() const;
 
     virtual SfxFieldUnit GetUnit() const;
 
-    INT32 GetValue() const { return m_nValue; }
+    sal_Int32 GetValue() const { return m_nValue; }
 
-    inline void SetValue(INT32 nTheValue);
+    inline void SetValue(sal_Int32 nTheValue);
 };
 
-inline void CntInt32Item::SetValue(INT32 nTheValue)
+inline void CntInt32Item::SetValue(sal_Int32 nTheValue)
 {
     DBG_ASSERT(GetRefCount() == 0, "CntInt32Item::SetValue(): Pooled item");
     m_nValue = nTheValue;
@@ -223,16 +223,16 @@ DBG_NAMEEX_VISIBILITY(CntUInt32Item, SVL_DLLPUBLIC)
 
 class SVL_DLLPUBLIC CntUInt32Item: public SfxPoolItem
 {
-    UINT32 m_nValue;
+    sal_uInt32 m_nValue;
 
 public:
     TYPEINFO();
 
-    CntUInt32Item(USHORT which = 0, UINT32 nTheValue = 0):
+    CntUInt32Item(sal_uInt16 which = 0, sal_uInt32 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue)
     { DBG_CTOR(CntUInt32Item, 0); }
 
-    CntUInt32Item(USHORT nWhich, SvStream & rStream);
+    CntUInt32Item(sal_uInt16 nWhich, SvStream & rStream);
 
     CntUInt32Item(const CntUInt32Item & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
@@ -252,29 +252,29 @@ public:
         const;
 
     virtual bool QueryValue(com::sun::star::uno::Any& rVal,
-                            BYTE nMemberId = 0) const;
+                            sal_uInt8 nMemberId = 0) const;
 
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
-                          BYTE nMemberId = 0);
+                          sal_uInt8 nMemberId = 0);
 
-    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
 
-    virtual SvStream & Store(SvStream & rStream, USHORT) const;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
 
-    virtual UINT32 GetMin() const;
+    virtual sal_uInt32 GetMin() const;
 
-    virtual UINT32 GetMax() const;
+    virtual sal_uInt32 GetMax() const;
 
     virtual SfxFieldUnit GetUnit() const;
 
-    UINT32 GetValue() const { return m_nValue; }
+    sal_uInt32 GetValue() const { return m_nValue; }
 
-    inline void SetValue(UINT32 nTheValue);
+    inline void SetValue(sal_uInt32 nTheValue);
 };
 
-inline void CntUInt32Item::SetValue(UINT32 nTheValue)
+inline void CntUInt32Item::SetValue(sal_uInt32 nTheValue)
 {
     DBG_ASSERT(GetRefCount() == 0, "CntUInt32Item::SetValue(): Pooled item");
     m_nValue = nTheValue;

@@ -40,7 +40,7 @@ class SVL_DLLPUBLIC SfxItemIter
 {
     // Item-Feld - Start & Ende
     const SfxItemSet&   _rSet;
-    USHORT              _nStt, _nEnd, _nAkt;
+    sal_uInt16              _nStt, _nEnd, _nAkt;
 
 public:
     SfxItemIter( const SfxItemSet& rSet );
@@ -58,12 +58,12 @@ public:
     const SfxPoolItem* NextItem();
     const SfxPoolItem* PrevItem();
 
-    BOOL               IsAtStart() const { return _nAkt == _nStt; }
-    BOOL               IsAtEnd() const   { return _nAkt == _nEnd; }
+    sal_Bool               IsAtStart() const { return _nAkt == _nStt; }
+    sal_Bool               IsAtEnd() const   { return _nAkt == _nEnd; }
 
-    USHORT             GetCurPos() const { return _nAkt; }
-    USHORT             GetFirstPos() const { return _nStt; }
-    USHORT             GetLastPos() const { return _nEnd; }
+    sal_uInt16             GetCurPos() const { return _nAkt; }
+    sal_uInt16             GetFirstPos() const { return _nStt; }
+    sal_uInt16             GetLastPos() const { return _nEnd; }
 };
 
 #endif

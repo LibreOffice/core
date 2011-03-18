@@ -87,7 +87,7 @@ ERRTYPE RscFlag::SetNotConst( const RSCINST & rInst, Atom nConst )
 |*    RscFlag::SetConst()
 |*
 *************************************************************************/
-ERRTYPE RscFlag::SetConst( const RSCINST & rInst, Atom nConst, INT32 /*nVal*/ )
+ERRTYPE RscFlag::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*/ )
 {
     sal_uInt32 i = 0, nFlag = 0;
 
@@ -126,7 +126,7 @@ RSCINST RscFlag::CreateBasic( RSCINST * pInst )
 |*    RscFlag::Create()
 |*
 *************************************************************************/
-RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass )
+RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnClass )
 {
     RSCINST aInst = CreateBasic( pInst );
     sal_uInt32  i = 0;
@@ -154,7 +154,7 @@ RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass 
 |*
 *************************************************************************/
 RSCINST RscFlag::CreateClient( RSCINST * pInst, const RSCINST & rDfltI,
-                               BOOL bOwnClass, Atom nConstId )
+                               sal_Bool bOwnClass, Atom nConstId )
 {
     RSCINST aInst = CreateBasic( pInst );
     sal_uInt32 i = 0, nFlag = 0;
@@ -198,17 +198,17 @@ void RscFlag::SetToDefault( const RSCINST & rInst )
 |*    RscFlag::IsDlft()
 |*
 *************************************************************************/
-BOOL RscFlag::IsDefault( const RSCINST & rInst )
+sal_Bool RscFlag::IsDefault( const RSCINST & rInst )
 {
     sal_uInt32 i = 0;
 
     for( i = 0; i < Size() / sizeof( RscFlagInst ); i++ )
         if( ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags != 0xFFFFFFFF )
-            return( FALSE );
-    return( TRUE );
+            return( sal_False );
+    return( sal_True );
 }
 
-BOOL RscFlag::IsDefault( const RSCINST & rInst, Atom nConstId )
+sal_Bool RscFlag::IsDefault( const RSCINST & rInst, Atom nConstId )
 {
     sal_uInt32 i = 0, nFlag = 0;
 
@@ -216,11 +216,11 @@ BOOL RscFlag::IsDefault( const RSCINST & rInst, Atom nConstId )
         nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
         i = i / (sizeof( sal_uInt32 ) * 8);
         if( ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags & nFlag )
-            return( TRUE );
+            return( sal_True );
         else
-            return( FALSE );
+            return( sal_False );
     };
-    return( TRUE );
+    return( sal_True );
 }
 
 /*************************************************************************
@@ -228,7 +228,7 @@ BOOL RscFlag::IsDefault( const RSCINST & rInst, Atom nConstId )
 |*    RscFlag::IsValueDefault()
 |*
 *************************************************************************/
-BOOL RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef,
+sal_Bool RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef,
                               Atom nConstId )
 {
     sal_uInt32 i = 0, nFlag = 0;
@@ -241,15 +241,15 @@ BOOL RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef,
             if( (((RscFlagInst *)rInst.pData)[ i ].nFlags & nFlag)
               == (((RscFlagInst *)pDef)[ i ].nFlags & nFlag) )
             {
-                return TRUE;
+                return sal_True;
             }
         }
     };
 
-    return FALSE;
+    return sal_False;
 }
 
-BOOL RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
+sal_Bool RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
     sal_uInt32 i = 0;
 
@@ -262,7 +262,7 @@ BOOL RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
             if( (((RscFlagInst *)rInst.pData)[ nIndex ].nFlags & Flag)
               != (((RscFlagInst *)pDef)[ nIndex ].nFlags & Flag)  )
             {
-                return FALSE;
+                return sal_False;
             }
             Flag <<= 1;
             if( !Flag )
@@ -270,9 +270,9 @@ BOOL RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
         };
     }
     else
-        return FALSE;
+        return sal_False;
 
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -280,7 +280,7 @@ BOOL RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 |*    RscFlag::IsSet()
 |*
 *************************************************************************/
-BOOL RscFlag::IsSet( const RSCINST & rInst, Atom nConstId )
+sal_Bool RscFlag::IsSet( const RSCINST & rInst, Atom nConstId )
 {
     sal_uInt32 i = 0, nFlag = 0;
 
@@ -288,11 +288,11 @@ BOOL RscFlag::IsSet( const RSCINST & rInst, Atom nConstId )
         nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
         i = i / (sizeof( sal_uInt32 ) * 8);
         if( ((RscFlagInst *)rInst.pData)[ i ].nFlags & nFlag )
-            return( TRUE );
+            return( sal_True );
         else
-            return( FALSE );
+            return( sal_False );
     };
-    return( TRUE );
+    return( sal_True );
 }
 
 /*************************************************************************
@@ -304,7 +304,7 @@ void RscFlag::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                         RscTypCont *, sal_uInt32, const char * )
 {
     sal_uInt32  i = 0, Flag = 0, nIndex = 0;
-    BOOL    bComma = FALSE;
+    sal_Bool    bComma = sal_False;
 
     Flag = 1;
     for( i = 0; i < nEntries; i++ ){
@@ -318,7 +318,7 @@ void RscFlag::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                 fprintf( fOutput, "not " );
                 fprintf( fOutput, "%s", pHS->getString( pVarArray[ i ].nId ).getStr() );
             }
-            bComma = TRUE;
+            bComma = sal_True;
         }
         Flag <<= 1;
         if( !Flag )
@@ -332,9 +332,9 @@ void RscFlag::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*
 *************************************************************************/
 ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                          RscTypCont *, sal_uInt32, BOOL )
+                          RscTypCont *, sal_uInt32, sal_Bool )
 {
-    INT32   lVal = 0;
+    sal_Int32   lVal = 0;
     sal_uInt32  i = 0, Flag = 0, nIndex = 0;
 
     Flag = 1;
@@ -348,7 +348,7 @@ ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
             Flag = 1;
     };
 
-    aMem.Put( (INT32)lVal );
+    aMem.Put( (sal_Int32)lVal );
     return( ERR_OK );
 }
 
@@ -395,7 +395,7 @@ void RscClient::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*
 *************************************************************************/
 RSCINST RscClient::Create( RSCINST * pInst, const RSCINST & rDflt,
-                           BOOL bOwnClass )
+                           sal_Bool bOwnClass )
 {
     RSCINST aTmpI, aDfltI;
 

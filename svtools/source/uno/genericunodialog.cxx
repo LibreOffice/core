@@ -35,7 +35,7 @@
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 
 #include <toolkit/awt/vclxwindow.hxx>
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <osl/diagnose.h>

@@ -50,13 +50,13 @@ DBG_NAME( Animation )
 // - statics -
 // -----------
 
-ULONG Animation::mnAnimCount = 0UL;
+sal_uLong Animation::mnAnimCount = 0UL;
 
 // -------------------
 // - AnimationBitmap -
 // -------------------
 
-ULONG AnimationBitmap::GetChecksum() const
+sal_uLong AnimationBitmap::GetChecksum() const
 {
     sal_uInt32  nCrc = aBmpEx.GetChecksum();
     SVBT32      aBT32;
@@ -94,9 +94,9 @@ Animation::Animation() :
     mnLoops             ( 0 ),
     mnPos               ( 0 ),
     meCycleMode         ( CYCLE_NORMAL ),
-    mbIsInAnimation     ( FALSE ),
-    mbLoopTerminated    ( FALSE ),
-    mbIsWaiting         ( FALSE )
+    mbIsInAnimation     ( sal_False ),
+    mbLoopTerminated    ( sal_False ),
+    mbIsWaiting         ( sal_False )
 {
     DBG_CTOR( Animation, NULL );
     maTimer.SetTimeoutHdl( LINK( this, Animation, ImplTimeoutHdl ) );
@@ -111,7 +111,7 @@ Animation::Animation( const Animation& rAnimation ) :
     mnLoopCount         ( rAnimation.mnLoopCount ),
     mnPos               ( rAnimation.mnPos ),
     meCycleMode         ( rAnimation.meCycleMode ),
-    mbIsInAnimation     ( FALSE ),
+    mbIsInAnimation     ( sal_False ),
     mbLoopTerminated    ( rAnimation.mbLoopTerminated ),
     mbIsWaiting         ( rAnimation.mbIsWaiting )
 {
@@ -166,24 +166,24 @@ Animation& Animation::operator=( const Animation& rAnimation )
 
 // -----------------------------------------------------------------------
 
-BOOL Animation::operator==( const Animation& rAnimation ) const
+sal_Bool Animation::operator==( const Animation& rAnimation ) const
 {
-    const ULONG nCount = maList.Count();
-    BOOL        bRet = FALSE;
+    const sal_uLong nCount = maList.Count();
+    sal_Bool        bRet = sal_False;
 
     if( rAnimation.maList.Count() == nCount &&
         rAnimation.maBitmapEx == maBitmapEx &&
         rAnimation.maGlobalSize == maGlobalSize &&
         rAnimation.meCycleMode == meCycleMode )
     {
-        bRet = TRUE;
+        bRet = sal_True;
 
-        for( ULONG n = 0; n < nCount; n++ )
+        for( sal_uLong n = 0; n < nCount; n++ )
         {
             if( ( *(AnimationBitmap*) maList.GetObject( n ) ) !=
                 ( *(AnimationBitmap*) rAnimation.maList.GetObject( n ) ) )
             {
-                bRet = FALSE;
+                bRet = sal_False;
                 break;
             }
         }
@@ -194,19 +194,19 @@ BOOL Animation::operator==( const Animation& rAnimation ) const
 
 // ------------------------------------------------------------------
 
-BOOL Animation::IsEqual( const Animation& rAnimation ) const
+sal_Bool Animation::IsEqual( const Animation& rAnimation ) const
 {
-    const ULONG nCount = maList.Count();
-    BOOL        bRet = FALSE;
+    const sal_uLong nCount = maList.Count();
+    sal_Bool        bRet = sal_False;
 
     if( rAnimation.maList.Count() == nCount &&
         rAnimation.maBitmapEx.IsEqual( maBitmapEx ) &&
         rAnimation.maGlobalSize == maGlobalSize &&
         rAnimation.meCycleMode == meCycleMode )
     {
-        for( ULONG n = 0; ( n < nCount ) && !bRet; n++ )
+        for( sal_uLong n = 0; ( n < nCount ) && !bRet; n++ )
             if( ( (AnimationBitmap*) maList.GetObject( n ) )->IsEqual( *(AnimationBitmap*) rAnimation.maList.GetObject( n ) ) )
-                bRet = TRUE;
+                bRet = sal_True;
     }
 
     return bRet;
@@ -214,7 +214,7 @@ BOOL Animation::IsEqual( const Animation& rAnimation ) const
 
 // ------------------------------------------------------------------
 
-BOOL Animation::IsEmpty() const
+sal_Bool Animation::IsEmpty() const
 {
     return( maBitmapEx.IsEmpty() && !maList.Count() );
 }
@@ -224,7 +224,7 @@ BOOL Animation::IsEmpty() const
 void Animation::SetEmpty()
 {
     maTimer.Stop();
-    mbIsInAnimation = FALSE;
+    mbIsInAnimation = sal_False;
     maGlobalSize = Size();
     maBitmapEx.SetEmpty();
 
@@ -246,11 +246,11 @@ void Animation::Clear()
 
 // -----------------------------------------------------------------------
 
-BOOL Animation::IsTransparent() const
+sal_Bool Animation::IsTransparent() const
 {
     Point       aPoint;
     Rectangle   aRect( aPoint, maGlobalSize );
-    BOOL        bRet = FALSE;
+    sal_Bool        bRet = sal_False;
 
     // Falls irgendein 'kleines' Bildchen durch den Hintergrund
     // ersetzt werden soll, muessen wir 'transparent' sein, um
@@ -262,7 +262,7 @@ BOOL Animation::IsTransparent() const
 
         if( DISPOSE_BACK == pAnimBmp->eDisposal && Rectangle( pAnimBmp->aPosPix, pAnimBmp->aSizePix ) != aRect )
         {
-            bRet = TRUE;
+            bRet = sal_True;
             break;
         }
     }
@@ -275,9 +275,9 @@ BOOL Animation::IsTransparent() const
 
 // -----------------------------------------------------------------------
 
-ULONG Animation::GetSizeBytes() const
+sal_uLong Animation::GetSizeBytes() const
 {
-    ULONG nSizeBytes = GetBitmapEx().GetSizeBytes();
+    sal_uLong nSizeBytes = GetBitmapEx().GetSizeBytes();
 
     for( long i = 0, nCount = maList.Count(); i < nCount; i++ )
     {
@@ -290,7 +290,7 @@ ULONG Animation::GetSizeBytes() const
 
 // -----------------------------------------------------------------------
 
-ULONG Animation::GetChecksum() const
+sal_uLong Animation::GetChecksum() const
 {
     SVBT32      aBT32;
     sal_uInt32  nCrc = GetBitmapEx().GetChecksum();
@@ -318,7 +318,7 @@ ULONG Animation::GetChecksum() const
 
 // -----------------------------------------------------------------------
 
-BOOL Animation::Start( OutputDevice* pOut, const Point& rDestPt, long nExtraData,
+sal_Bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, long nExtraData,
                        OutputDevice* pFirstFrameOutDev )
 {
     return Start( pOut, rDestPt, pOut->PixelToLogic( maGlobalSize ), nExtraData, pFirstFrameOutDev );
@@ -326,10 +326,10 @@ BOOL Animation::Start( OutputDevice* pOut, const Point& rDestPt, long nExtraData
 
 // -----------------------------------------------------------------------
 
-BOOL Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz, long nExtraData,
+sal_Bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz, long nExtraData,
                        OutputDevice* pFirstFrameOutDev )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( maList.Count() )
     {
@@ -362,7 +362,7 @@ BOOL Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size& rDe
             if( !mpViewList->Count() )
             {
                 maTimer.Stop();
-                mbIsInAnimation = FALSE;
+                mbIsInAnimation = sal_False;
                 mnPos = 0UL;
             }
 
@@ -372,13 +372,13 @@ BOOL Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size& rDe
             if( !mbIsInAnimation )
             {
                 ImplRestartTimer( ( (AnimationBitmap*) maList.GetObject( mnPos ) )->nWait );
-                mbIsInAnimation = TRUE;
+                mbIsInAnimation = sal_True;
             }
         }
         else
             Draw( pOut, rDestPt, rDestSz );
 
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     return bRet;
@@ -404,7 +404,7 @@ void Animation::Stop( OutputDevice* pOut, long nExtraData )
     if( !mpViewList->Count() )
     {
         maTimer.Stop();
-        mbIsInAnimation = FALSE;
+        mbIsInAnimation = sal_False;
     }
 }
 
@@ -419,7 +419,7 @@ void Animation::Draw( OutputDevice* pOut, const Point& rDestPt ) const
 
 void Animation::Draw( OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz ) const
 {
-    const ULONG nCount = maList.Count();
+    const sal_uLong nCount = maList.Count();
 
     if( nCount )
     {
@@ -431,7 +431,7 @@ void Animation::Draw( OutputDevice* pOut, const Point& rDestPt, const Size& rDes
             pObj->aBmpEx.Draw( pOut, rDestPt, rDestSz );
         else
         {
-            const ULONG nOldPos = mnPos;
+            const sal_uLong nOldPos = mnPos;
             ( (Animation*) this )->mnPos = mbLoopTerminated ? ( nCount - 1UL ) : mnPos;
             delete new ImplAnimView( (Animation*) this, pOut, rDestPt, rDestSz, 0 );
             ( (Animation*) this )->mnPos = nOldPos;
@@ -441,9 +441,9 @@ void Animation::Draw( OutputDevice* pOut, const Point& rDestPt, const Size& rDes
 
 // -----------------------------------------------------------------------
 
-void Animation::ImplRestartTimer( ULONG nTimeout )
+void Animation::ImplRestartTimer( sal_uLong nTimeout )
 {
-    maTimer.SetTimeout( Max( nTimeout, (ULONG)(MIN_TIMEOUT + ( mnAnimCount - 1 ) * INC_TIMEOUT) ) * 10L );
+    maTimer.SetTimeout( Max( nTimeout, (sal_uLong)(MIN_TIMEOUT + ( mnAnimCount - 1 ) * INC_TIMEOUT) ) * 10L );
     maTimer.Start();
 }
 
@@ -451,12 +451,12 @@ void Animation::ImplRestartTimer( ULONG nTimeout )
 
 IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
 {
-    const ULONG nAnimCount = maList.Count();
+    const sal_uLong nAnimCount = maList.Count();
 
     if( nAnimCount )
     {
         ImplAnimView*   pView;
-        BOOL            bGlobalPause = TRUE;
+        sal_Bool            bGlobalPause = sal_True;
 
         if( maNotifyLink.IsSet() )
         {
@@ -482,7 +482,7 @@ IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
                     pView = (ImplAnimView*) pAInfo->pViewData;
 
                 pView->ImplPause( pAInfo->bPause );
-                pView->ImplSetMarked( TRUE );
+                pView->ImplSetMarked( sal_True );
             }
 
             // delete AInfo structures
@@ -502,15 +502,15 @@ IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
                 else
                 {
                     if( !pView->ImplIsPause() )
-                        bGlobalPause = FALSE;
+                        bGlobalPause = sal_False;
 
-                    pView->ImplSetMarked( FALSE );
+                    pView->ImplSetMarked( sal_False );
                     pView = (ImplAnimView*) mpViewList->Next();
                 }
             }
         }
         else
-            bGlobalPause = FALSE;
+            bGlobalPause = sal_False;
 
         if( !mpViewList->Count() )
             Stop();
@@ -525,7 +525,7 @@ IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
                 if( mnLoops == 1 )
                 {
                     Stop();
-                    mbLoopTerminated = TRUE;
+                    mbLoopTerminated = sal_True;
                     mnPos = nAnimCount - 1UL;
                     maBitmapEx = ( (AnimationBitmap*) maList.GetObject( mnPos ) )->aBmpEx;
                     return 0L;
@@ -573,9 +573,9 @@ IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-BOOL Animation::Insert( const AnimationBitmap& rStepBmp )
+sal_Bool Animation::Insert( const AnimationBitmap& rStepBmp )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( !IsInAnimation() )
     {
@@ -589,7 +589,7 @@ BOOL Animation::Insert( const AnimationBitmap& rStepBmp )
         if( maList.Count() == 1 )
             maBitmapEx = rStepBmp.aBmpEx;
 
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     return bRet;
@@ -597,7 +597,7 @@ BOOL Animation::Insert( const AnimationBitmap& rStepBmp )
 
 // -----------------------------------------------------------------------
 
-const AnimationBitmap& Animation::Get( USHORT nAnimation ) const
+const AnimationBitmap& Animation::Get( sal_uInt16 nAnimation ) const
 {
     DBG_ASSERT( ( nAnimation < maList.Count() ), "No object at this position" );
     return *(AnimationBitmap*) maList.GetObject( nAnimation );
@@ -605,7 +605,7 @@ const AnimationBitmap& Animation::Get( USHORT nAnimation ) const
 
 // -----------------------------------------------------------------------
 
-void Animation::Replace( const AnimationBitmap& rNewAnimationBitmap, USHORT nAnimation )
+void Animation::Replace( const AnimationBitmap& rNewAnimationBitmap, sal_uInt16 nAnimation )
 {
     DBG_ASSERT( ( nAnimation < maList.Count() ), "No object at this position" );
 
@@ -624,7 +624,7 @@ void Animation::Replace( const AnimationBitmap& rNewAnimationBitmap, USHORT nAni
 
 // -----------------------------------------------------------------------
 
-void Animation::SetLoopCount( const ULONG nLoopCount )
+void Animation::SetLoopCount( const sal_uLong nLoopCount )
 {
     mnLoopCount = nLoopCount;
     ResetLoopCount();
@@ -635,20 +635,20 @@ void Animation::SetLoopCount( const ULONG nLoopCount )
 void Animation::ResetLoopCount()
 {
     mnLoops = mnLoopCount;
-    mbLoopTerminated = FALSE;
+    mbLoopTerminated = sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Animation::Convert( BmpConversion eConversion )
+sal_Bool Animation::Convert( BmpConversion eConversion )
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
 
-    BOOL bRet;
+    sal_Bool bRet;
 
     if( !IsInAnimation() && maList.Count() )
     {
-        bRet = TRUE;
+        bRet = sal_True;
 
         for( void* pStepBmp = maList.First(); pStepBmp && bRet; pStepBmp = maList.Next() )
             bRet = ( ( AnimationBitmap*) pStepBmp )->aBmpEx.Convert( eConversion );
@@ -656,22 +656,22 @@ BOOL Animation::Convert( BmpConversion eConversion )
         maBitmapEx.Convert( eConversion );
     }
     else
-        bRet = FALSE;
+        bRet = sal_False;
 
     return bRet;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Animation::ReduceColors( USHORT nNewColorCount, BmpReduce eReduce )
+sal_Bool Animation::ReduceColors( sal_uInt16 nNewColorCount, BmpReduce eReduce )
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
 
-    BOOL bRet;
+    sal_Bool bRet;
 
     if( !IsInAnimation() && maList.Count() )
     {
-        bRet = TRUE;
+        bRet = sal_True;
 
         for( void* pStepBmp = maList.First(); pStepBmp && bRet; pStepBmp = maList.Next() )
             bRet = ( ( AnimationBitmap*) pStepBmp )->aBmpEx.ReduceColors( nNewColorCount, eReduce );
@@ -679,22 +679,22 @@ BOOL Animation::ReduceColors( USHORT nNewColorCount, BmpReduce eReduce )
         maBitmapEx.ReduceColors( nNewColorCount, eReduce );
     }
     else
-        bRet = FALSE;
+        bRet = sal_False;
 
     return bRet;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Animation::Invert()
+sal_Bool Animation::Invert()
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
 
-    BOOL bRet;
+    sal_Bool bRet;
 
     if( !IsInAnimation() && maList.Count() )
     {
-        bRet = TRUE;
+        bRet = sal_True;
 
         for( void* pStepBmp = maList.First(); pStepBmp && bRet; pStepBmp = maList.Next() )
             bRet = ( ( AnimationBitmap*) pStepBmp )->aBmpEx.Invert();
@@ -702,22 +702,22 @@ BOOL Animation::Invert()
         maBitmapEx.Invert();
     }
     else
-        bRet = FALSE;
+        bRet = sal_False;
 
     return bRet;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Animation::Mirror( ULONG nMirrorFlags )
+sal_Bool Animation::Mirror( sal_uLong nMirrorFlags )
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
 
-    BOOL    bRet;
+    sal_Bool    bRet;
 
     if( !IsInAnimation() && maList.Count() )
     {
-        bRet = TRUE;
+        bRet = sal_True;
 
         if( nMirrorFlags )
         {
@@ -725,7 +725,7 @@ BOOL Animation::Mirror( ULONG nMirrorFlags )
                  pStepBmp && bRet;
                  pStepBmp = (AnimationBitmap*) maList.Next() )
             {
-                if( ( bRet = pStepBmp->aBmpEx.Mirror( nMirrorFlags ) ) == TRUE )
+                if( ( bRet = pStepBmp->aBmpEx.Mirror( nMirrorFlags ) ) == sal_True )
                 {
                     if( nMirrorFlags & BMP_MIRROR_HORZ )
                         pStepBmp->aPosPix.X() = maGlobalSize.Width() - pStepBmp->aPosPix.X() - pStepBmp->aSizePix.Width();
@@ -739,22 +739,22 @@ BOOL Animation::Mirror( ULONG nMirrorFlags )
         }
     }
     else
-        bRet = FALSE;
+        bRet = sal_False;
 
     return bRet;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Animation::Dither( ULONG nDitherFlags )
+sal_Bool Animation::Dither( sal_uLong nDitherFlags )
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
 
-    BOOL bRet;
+    sal_Bool bRet;
 
     if( !IsInAnimation() && maList.Count() )
     {
-        bRet = TRUE;
+        bRet = sal_True;
 
         for( void* pStepBmp = maList.First(); pStepBmp && bRet; pStepBmp = maList.Next() )
             bRet = ( ( AnimationBitmap*) pStepBmp )->aBmpEx.Dither( nDitherFlags );
@@ -762,24 +762,24 @@ BOOL Animation::Dither( ULONG nDitherFlags )
         maBitmapEx.Dither( nDitherFlags );
     }
     else
-        bRet = FALSE;
+        bRet = sal_False;
 
     return bRet;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Animation::Adjust( short nLuminancePercent, short nContrastPercent,
+sal_Bool Animation::Adjust( short nLuminancePercent, short nContrastPercent,
              short nChannelRPercent, short nChannelGPercent, short nChannelBPercent,
-             double fGamma, BOOL bInvert )
+             double fGamma, sal_Bool bInvert )
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
 
-    BOOL bRet;
+    sal_Bool bRet;
 
     if( !IsInAnimation() && maList.Count() )
     {
-        bRet = TRUE;
+        bRet = sal_True;
 
         for( void* pStepBmp = maList.First(); pStepBmp && bRet; pStepBmp = maList.Next() )
         {
@@ -793,22 +793,22 @@ BOOL Animation::Adjust( short nLuminancePercent, short nContrastPercent,
                            fGamma, bInvert );
     }
     else
-        bRet = FALSE;
+        bRet = sal_False;
 
     return bRet;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link* pProgress )
+sal_Bool Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link* pProgress )
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
 
-    BOOL bRet;
+    sal_Bool bRet;
 
     if( !IsInAnimation() && maList.Count() )
     {
-        bRet = TRUE;
+        bRet = sal_True;
 
         for( void* pStepBmp = maList.First(); pStepBmp && bRet; pStepBmp = maList.Next() )
             bRet = ( ( AnimationBitmap*) pStepBmp )->aBmpEx.Filter( eFilter, pFilterParam, pProgress );
@@ -816,7 +816,7 @@ BOOL Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, c
         maBitmapEx.Filter( eFilter, pFilterParam, pProgress );
     }
     else
-        bRet = FALSE;
+        bRet = sal_False;
 
     return bRet;
 }
@@ -825,12 +825,12 @@ BOOL Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, c
 
 SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
 {
-    const USHORT nCount = rAnimation.Count();
+    const sal_uInt16 nCount = rAnimation.Count();
 
     if( nCount )
     {
         const ByteString    aDummyStr;
-        const UINT32        nDummy32 = 0UL;
+        const sal_uInt32        nDummy32 = 0UL;
 
         // Falls keine BitmapEx gesetzt wurde, schreiben wir
         // einfach die erste Bitmap der Animation
@@ -840,22 +840,22 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
             rOStm << rAnimation.GetBitmapEx();
 
         // Kennung schreiben ( SDANIMA1 )
-        rOStm << (UINT32) 0x5344414e << (UINT32) 0x494d4931;
+        rOStm << (sal_uInt32) 0x5344414e << (sal_uInt32) 0x494d4931;
 
-        for( USHORT i = 0; i < nCount; i++ )
+        for( sal_uInt16 i = 0; i < nCount; i++ )
         {
             const AnimationBitmap&  rAnimBmp = rAnimation.Get( i );
-            const UINT16            nRest = nCount - i - 1;
+            const sal_uInt16            nRest = nCount - i - 1;
 
             // AnimationBitmap schreiben
             rOStm << rAnimBmp.aBmpEx;
             rOStm << rAnimBmp.aPosPix;
             rOStm << rAnimBmp.aSizePix;
             rOStm << rAnimation.maGlobalSize;
-            rOStm << (UINT16) ( ( ANIMATION_TIMEOUT_ON_CLICK == rAnimBmp.nWait ) ? 65535 : rAnimBmp.nWait );
-            rOStm << (UINT16) rAnimBmp.eDisposal;
-            rOStm << (BYTE) rAnimBmp.bUserInput;
-            rOStm << (UINT32) rAnimation.mnLoopCount;
+            rOStm << (sal_uInt16) ( ( ANIMATION_TIMEOUT_ON_CLICK == rAnimBmp.nWait ) ? 65535 : rAnimBmp.nWait );
+            rOStm << (sal_uInt16) rAnimBmp.eDisposal;
+            rOStm << (sal_uInt8) rAnimBmp.bUserInput;
+            rOStm << (sal_uInt32) rAnimation.mnLoopCount;
             rOStm << nDummy32;  // unbenutzt
             rOStm << nDummy32;  // unbenutzt
             rOStm << nDummy32;  // unbenutzt
@@ -872,10 +872,10 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
 SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
 {
     Bitmap  aBmp;
-    ULONG   nStmPos = rIStm.Tell();
-    UINT32  nAnimMagic1, nAnimMagic2;
-    USHORT  nOldFormat = rIStm.GetNumberFormatInt();
-    BOOL    bReadAnimations = FALSE;
+    sal_uLong   nStmPos = rIStm.Tell();
+    sal_uInt32  nAnimMagic1, nAnimMagic2;
+    sal_uInt16  nOldFormat = rIStm.GetNumberFormatInt();
+    sal_Bool    bReadAnimations = sal_False;
 
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nStmPos = rIStm.Tell();
@@ -886,7 +886,7 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
     // Wenn die BitmapEx am Anfang schon gelesen
     // wurde ( von Graphic ), koennen wir direkt die Animationsbitmaps einlesen
     if( ( nAnimMagic1 == 0x5344414e ) && ( nAnimMagic2 == 0x494d4931 ) && !rIStm.GetError() )
-        bReadAnimations = TRUE;
+        bReadAnimations = sal_True;
     // ansonsten versuchen wir erstmal die Bitmap(-Ex) zu lesen
     else
     {
@@ -896,7 +896,7 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
         rIStm >> nAnimMagic1 >> nAnimMagic2;
 
         if( ( nAnimMagic1 == 0x5344414e ) && ( nAnimMagic2 == 0x494d4931 ) && !rIStm.GetError() )
-            bReadAnimations = TRUE;
+            bReadAnimations = sal_True;
         else
             rIStm.Seek( nStmPos );
     }
@@ -907,9 +907,9 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
         AnimationBitmap aAnimBmp;
         BitmapEx        aBmpEx;
         ByteString      aDummyStr;
-        UINT32          nTmp32;
-        UINT16          nTmp16;
-        BYTE            cTmp;
+        sal_uInt32          nTmp32;
+        sal_uInt16          nTmp16;
+        sal_uInt8           cTmp;
 
         do
         {
@@ -919,8 +919,8 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
             rIStm >> rAnimation.maGlobalSize;
             rIStm >> nTmp16; aAnimBmp.nWait = ( ( 65535 == nTmp16 ) ? ANIMATION_TIMEOUT_ON_CLICK : nTmp16 );
             rIStm >> nTmp16; aAnimBmp.eDisposal = ( Disposal) nTmp16;
-            rIStm >> cTmp; aAnimBmp.bUserInput = (BOOL) cTmp;
-            rIStm >> nTmp32; rAnimation.mnLoopCount = (USHORT) nTmp32;
+            rIStm >> cTmp; aAnimBmp.bUserInput = (sal_Bool) cTmp;
+            rIStm >> nTmp32; rAnimation.mnLoopCount = (sal_uInt16) nTmp32;
             rIStm >> nTmp32;    // unbenutzt
             rIStm >> nTmp32;    // unbenutzt
             rIStm >> nTmp32;    // unbenutzt

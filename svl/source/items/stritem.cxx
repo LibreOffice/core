@@ -40,7 +40,7 @@ TYPEINIT1_AUTOFACTORY(SfxStringItem, CntUnencodedStringItem)
 
 //============================================================================
 // virtual
-SfxStringItem::SfxStringItem(USHORT which, SvStream & rStream):
+SfxStringItem::SfxStringItem(sal_uInt16 which, SvStream & rStream):
     CntUnencodedStringItem(which)
 {
     UniString aValue;
@@ -51,14 +51,14 @@ SfxStringItem::SfxStringItem(USHORT which, SvStream & rStream):
 
 //============================================================================
 // virtual
-SfxPoolItem * SfxStringItem::Create(SvStream & rStream, USHORT) const
+SfxPoolItem * SfxStringItem::Create(SvStream & rStream, sal_uInt16) const
 {
     return new SfxStringItem(Which(), rStream);
 }
 
 //============================================================================
 // virtual
-SvStream & SfxStringItem::Store(SvStream & rStream, USHORT) const
+SvStream & SfxStringItem::Store(SvStream & rStream, sal_uInt16) const
 {
     writeByteString(rStream, GetValue());
     return rStream;

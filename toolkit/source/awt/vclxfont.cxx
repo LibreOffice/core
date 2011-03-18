@@ -63,7 +63,7 @@ void VCLXFont::Init( ::com::sun::star::awt::XDevice& rxDev, const Font& rFont )
     maFont = rFont;
 }
 
-BOOL VCLXFont::ImplAssertValidFontMetric()
+sal_Bool VCLXFont::ImplAssertValidFontMetric()
 {
     if ( !mpFontMetric && mxDevice.is() )
     {
@@ -76,7 +76,7 @@ BOOL VCLXFont::ImplAssertValidFontMetric()
             pOutDev->SetFont( aOldFont );
         }
     }
-    return mpFontMetric ? TRUE : FALSE;
+    return mpFontMetric ? sal_True : sal_False;
 }
 
 
@@ -150,7 +150,7 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
 
         sal_Int16 nCount = nLast-nFirst + 1;
         aSeq = ::com::sun::star::uno::Sequence<sal_Int16>( nCount );
-        for ( USHORT n = 0; n < nCount; n++ )
+        for ( sal_uInt16 n = 0; n < nCount; n++ )
         {
             aSeq.getArray()[n] = sal::static_int_cast< sal_Int16 >(
                 pOutDev->GetTextWidth(
@@ -205,7 +205,7 @@ void VCLXFont::getKernPairs( ::com::sun::star::uno::Sequence< sal_Unicode >& rnC
         Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
 
-        ULONG nPairs = pOutDev->GetKerningPairCount();
+        sal_uLong nPairs = pOutDev->GetKerningPairCount();
         if ( nPairs )
         {
             KerningPair* pData = new KerningPair[ nPairs ];
@@ -219,7 +219,7 @@ void VCLXFont::getKernPairs( ::com::sun::star::uno::Sequence< sal_Unicode >& rnC
             sal_Unicode* pChars2 = rnChars2.getArray();
             sal_Int16* pKerns = rnKerns.getArray();
 
-            for ( ULONG n = 0; n < nPairs; n++ )
+            for ( sal_uLong n = 0; n < nPairs; n++ )
             {
                 pChars1[n] = pData[n].nChar1;
                 pChars2[n] = pData[n].nChar2;

@@ -410,13 +410,16 @@ void SAL_CALL DialogStepChangedListener::propertyChange( const  beans::PropertyC
 //  ----------------------------------------------------
 //  class UnoControlContainer
 //  ----------------------------------------------------
-UnoControlContainer::UnoControlContainer() : maCListeners( *this )
+UnoControlContainer::UnoControlContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
+    :UnoControlContainer_Base( i_factory )
+    ,maCListeners( *this )
 {
     mpControls = new UnoControlHolderList;
 }
 
-UnoControlContainer::UnoControlContainer( uno::Reference< awt::XWindowPeer >  xP )
-    :   maCListeners( *this )
+UnoControlContainer::UnoControlContainer( const uno::Reference< lang::XMultiServiceFactory >& i_factory, const uno::Reference< awt::XWindowPeer >& xP )
+    :UnoControlContainer_Base( i_factory )
+    ,maCListeners( *this )
 {
     setPeer( xP );
     mbDisposePeer = sal_False;

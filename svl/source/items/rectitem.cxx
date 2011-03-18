@@ -55,7 +55,7 @@ SfxRectangleItem::SfxRectangleItem()
 
 // -----------------------------------------------------------------------
 
-SfxRectangleItem::SfxRectangleItem( USHORT nW, const Rectangle& rVal ) :
+SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, const Rectangle& rVal ) :
     SfxPoolItem( nW ),
     aVal( rVal )
 {
@@ -64,7 +64,7 @@ SfxRectangleItem::SfxRectangleItem( USHORT nW, const Rectangle& rVal ) :
 
 // -----------------------------------------------------------------------
 
-SfxRectangleItem::SfxRectangleItem( USHORT nW, SvStream &rStream ) :
+SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, SvStream &rStream ) :
     SfxPoolItem( nW )
 {
     DBG_CTOR(SfxRectangleItem, 0);
@@ -121,7 +121,7 @@ SfxPoolItem* SfxRectangleItem::Clone(SfxItemPool *) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, USHORT ) const
+SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxRectangleItem, 0);
     Rectangle aStr;
@@ -131,7 +131,7 @@ SfxPoolItem* SfxRectangleItem::Create(SvStream &rStream, USHORT ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxRectangleItem::Store(SvStream &rStream, USHORT ) const
+SvStream& SfxRectangleItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxRectangleItem, 0);
     rStream << aVal;
@@ -141,7 +141,7 @@ SvStream& SfxRectangleItem::Store(SvStream &rStream, USHORT ) const
 
 // -----------------------------------------------------------------------
 bool SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                   BYTE nMemberId) const
+                                   sal_uInt8 nMemberId) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -166,7 +166,7 @@ bool SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
 
 // -----------------------------------------------------------------------
 bool SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                 BYTE nMemberId  )
+                                 sal_uInt8 nMemberId  )
 {
     bool bRet = false;
     nMemberId &= ~CONVERT_TWIPS;

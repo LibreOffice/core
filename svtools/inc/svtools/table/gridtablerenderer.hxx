@@ -30,6 +30,8 @@
 
 #include <svtools/table/tablemodel.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 //........................................................................
 namespace svt { namespace table
 {
@@ -44,14 +46,11 @@ namespace svt { namespace table
 
         This class is able to paint a table grid, table headers, and cell
         backgrounds according to the selected/active state of cells.
-
-        TODO update the documentation when it's decided whether this renderer
-        also does value handling
     */
     class GridTableRenderer : public ITableRenderer
     {
     private:
-        GridTableRenderer_Impl*     m_pImpl;
+        ::boost::scoped_ptr< GridTableRenderer_Impl >   m_pImpl;
 
     public:
         /** creates a table renderer associated with the given model
@@ -73,9 +72,17 @@ namespace svt { namespace table
 
             This method returns the index of the last row which has been prepared
         */
-        RowPos  getCurrentRow();
+        RowPos  getCurrentRow() const;
 
-    protected:
+        /** determines whether or not to paint grid lines
+        */
+        bool    useGridLines() const;
+
+        /** controls whether or not to paint grid lines
+        */
+        void    useGridLines( bool const i_use );
+
+    public:
         // ITableRenderer overridables
         virtual void    PaintHeaderArea(
                             OutputDevice& _rDevice, const Rectangle& _rArea,
@@ -90,17 +97,34 @@ namespace svt { namespace table
         virtual void    PaintRowHeader(
                             bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                            const StyleSettings& _rStyle, rtl::OUString& _rText );
-        virtual void    PaintCellImage( ColPos _nColumn,
+                            const StyleSettings& _rStyle );
+        virtual void    PaintCell( ColPos const i_col,
                             bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                const StyleSettings& _rStyle, Image* _pCellData );
-    virtual void    PaintCellString( ColPos _nColumn,
-                            bool _bActive, bool _bSelected,
-                            OutputDevice& _rDevice, const Rectangle& _rArea,
-                const StyleSettings& _rStyle, rtl::OUString& _rText );
+                            const StyleSettings& _rStyle );
         virtual void    ShowCellCursor( Window& _rView, const Rectangle& _rCursorRect);
         virtual void    HideCellCursor( Window& _rView, const Rectangle& _rCursorRect);
+        virtual bool    FitsIntoCell(
+                            ::com::sun::star::uno::Any const & i_cellContent,
+                            ColPos const i_colPos, RowPos const i_rowPos,
+                            bool const i_active, bool const i_selected,
+                            OutputDevice& i_targetDevice, Rectangle const & i_targetArea
+                        );
+
+    private:
+        struct CellRenderContext;
+
+        void    impl_paintCellContent(
+                        CellRenderContext const & i_context
+                   );
+        void    impl_paintCellImage(
+                        CellRenderContext const & i_context,
+                        Image const & i_image
+                   );
+        void    impl_paintCellText(
+                        CellRenderContext const & i_context,
+                        ::rtl::OUString const & i_text
+                   );
     };
 //........................................................................
 } } // namespace svt::table

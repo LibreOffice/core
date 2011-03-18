@@ -249,9 +249,9 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         {
             Window* pWindow = (Window*) rVclWindowEvent.GetData();
             DBG_ASSERT( pWindow, "VCLEVENT_WINDOW_CHILDDESTROYED - Window=?" );
-            if ( pWindow->GetAccessible( FALSE ).is() )
+            if ( pWindow->GetAccessible( sal_False ).is() )
             {
-                aOldValue <<= pWindow->GetAccessible( FALSE );
+                aOldValue <<= pWindow->GetAccessible( sal_False );
                 NotifyAccessibleEvent( accessibility::AccessibleEventId::CHILD, aOldValue, aNewValue );
             }
         }
@@ -446,7 +446,7 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
     Window* pWindow = GetWindow();
     if ( pWindow )
     {
-        Window *pLabeledBy = pWindow->GetLabeledBy();
+        Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
         if ( pLabeledBy && pLabeledBy != pWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
@@ -454,7 +454,7 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
             rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
         }
 
-        Window* pLabelFor = pWindow->GetLabelFor();
+        Window* pLabelFor = pWindow->GetAccessibleRelationLabelFor();
         if ( pLabelFor && pLabelFor != pWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
@@ -569,7 +569,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
     uno::Reference< accessibility::XAccessible > xAcc;
     if ( GetWindow() )
     {
-        Window* pChild = GetWindow()->GetAccessibleChildWindow( (USHORT)i );
+        Window* pChild = GetWindow()->GetAccessibleChildWindow( (sal_uInt16)i );
         if ( pChild )
             xAcc = pChild->GetAccessible();
     }
@@ -621,7 +621,7 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (uno::Ru
             if ( pParent )
             {
                 /*
-                for ( USHORT n = pParent->GetAccessibleChildWindowCount(); n; )
+                for ( sal_uInt16 n = pParent->GetAccessibleChildWindowCount(); n; )
                 {
                     Window* pChild = pParent->GetAccessibleChildWindow( --n );
                     if ( pChild == GetWindow() )

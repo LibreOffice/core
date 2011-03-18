@@ -61,7 +61,7 @@ class MyApp : public Application
 {
 public:
     int Main();
-    virtual USHORT  Exception( USHORT nError );
+    virtual sal_uInt16  Exception( sal_uInt16 nError );
 
     static void ReadStringHook( String& );
 };
@@ -84,7 +84,7 @@ void MyApp::ReadStringHook( String& rStr )
 
 // -----------------------------------------------------------------------
 
-USHORT MyApp::Exception( USHORT nError )
+sal_uInt16 MyApp::Exception( sal_uInt16 nError )
 {
     switch( nError & EXC_MAJORTYPE )
     {
@@ -151,7 +151,7 @@ int MyApp::Main()
 
     if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
     {
-        BOOL bQuitApp;
+        sal_Bool bQuitApp;
         if( !InitAccessBridge( true, bQuitApp ) )
             if( bQuitApp )
                 return EXIT_FAILURE;
@@ -162,7 +162,7 @@ int MyApp::Main()
 
     ResMgr::SetReadStringHook( MyApp::ReadStringHook );
 
-    pPADialog = PADialog::Create( NULL , FALSE );
+    pPADialog = PADialog::Create( NULL , sal_False );
     Application::SetDisplayName( pPADialog->GetText() );
     pPADialog->SetIcon(501);
     pPADialog->Execute();

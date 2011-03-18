@@ -41,29 +41,29 @@ using ::rtl::OUString;
 /*
  * IsNativeControlSupported()
  *
- *  Returns TRUE if the platform supports native
+ *  Returns sal_True if the platform supports native
  *  drawing of the control defined by nPart
  */
-BOOL SalGraphics::IsNativeControlSupported( ControlType, ControlPart )
+sal_Bool SalGraphics::IsNativeControlSupported( ControlType, ControlPart )
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 
 /*
  * HitTestNativeControl()
  *
- *  If the return value is TRUE, bIsInside contains information whether
+ *  If the return value is sal_True, bIsInside contains information whether
  *  aPos was or was not inside the native widget specified by the
  *  nType/nPart combination.
  */
-BOOL SalGraphics::hitTestNativeControl( ControlType,
+sal_Bool SalGraphics::hitTestNativeControl( ControlType,
                               ControlPart,
                               const Rectangle&,
                               const Point&,
-                              BOOL& )
+                              sal_Bool& )
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 
@@ -76,14 +76,14 @@ BOOL SalGraphics::hitTestNativeControl( ControlType,
  *  aValue:         An optional value (tristate/numerical/string)
  *  aCaption:   A caption or title string (like button text etc)
  */
-BOOL SalGraphics::drawNativeControl(    ControlType,
+sal_Bool SalGraphics::drawNativeControl(    ControlType,
                             ControlPart,
                             const Rectangle&,
                             ControlState,
                             const ImplControlValue&,
                             const OUString& )
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 
@@ -97,22 +97,22 @@ BOOL SalGraphics::drawNativeControl(    ControlType,
  *  aValue:         An optional value (tristate/numerical/string)
  *  aCaption:   A caption or title string (like button text etc)
  */
-BOOL SalGraphics::drawNativeControlText(    ControlType,
+sal_Bool SalGraphics::drawNativeControlText(    ControlType,
                                 ControlPart,
                                 const Rectangle&,
                                 ControlState,
                                 const ImplControlValue&,
                                 const OUString& )
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 
 /*
  * GetNativeControlRegion()
  *
- *  If the return value is TRUE, rNativeBoundingRegion
- *  contains the TRUE bounding region covered by the control
+ *  If the return value is sal_True, rNativeBoundingRegion
+ *  contains the sal_True bounding region covered by the control
  *  including any adornment, while rNativeContentRegion contains the area
  *  within the control that can be safely drawn into without drawing over
  *  the borders of the control.
@@ -121,7 +121,7 @@ BOOL SalGraphics::drawNativeControlText(    ControlType,
  *  aValue:     An optional value (tristate/numerical/string)
  *  aCaption:       A caption or title string (like button text etc)
  */
-BOOL SalGraphics::getNativeControlRegion(  ControlType,
+sal_Bool SalGraphics::getNativeControlRegion(  ControlType,
                                 ControlPart,
                                 const Rectangle&,
                                 ControlState,
@@ -130,7 +130,7 @@ BOOL SalGraphics::getNativeControlRegion(  ControlType,
                                 Rectangle &,
                                 Rectangle & )
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

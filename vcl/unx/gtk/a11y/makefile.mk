@@ -31,10 +31,6 @@ PRJNAME=vcl
 TARGET=gtka11y
 ENABLE_EXCEPTIONS=TRUE
 
-# workaround for makedepend hang
-MKDEPENDSOLVER=
-NO_DEFAULT_STL=YES
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk

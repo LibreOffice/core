@@ -25,58 +25,73 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..
-TARGET  = Toolkit
-PRJNAME = $(TARGET)
-PACKAGE = complex$/toolkit
+.IF "$(OOO_JUNIT_JAR)" == ""
+nothing .PHONY:
+    @echo -----------------------------------------------------
+    @echo - JUnit not available, not building anything
+    @echo -----------------------------------------------------
+.ELSE   # IF "$(OOO_JUNIT_JAR)" != ""
+
+PRJ = ../../..
+PRJNAME = toolkit
+TARGET = qa_complex_toolkit
+PACKAGE = complex/toolkit
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
 
-
 #----- compile .java files -----------------------------------------
 
-JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar 
-JAVAFILES       = CheckAccessibleStatusBar.java CheckAccessibleStatusBarItem.java CheckAsyncCallback.java CallbackClass.java
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-SUBDIRS		= interface_tests
+JARFILES = OOoRunnerLight.jar ridl.jar test.jar unoil.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
 
-#----- make a jar from compiled files ------------------------------
+JAVAFILES = \
+    $(JAVATESTFILES) \
+    accessibility/_XAccessibleComponent.java \
+    accessibility/_XAccessibleContext.java \
+    accessibility/_XAccessibleEventBroadcaster.java \
+    accessibility/_XAccessibleExtendedComponent.java \
+    accessibility/_XAccessibleText.java \
+    Assert.java \
+    awtgrid/GridDataListener.java \
+    awtgrid/TMutableGridDataModel.java \
+    awtgrid/DummyColumn.java \
 
-MAXLINELENGTH = 100000
+#----- create a jar from compiled files ----------------------------
 
-JARCLASSDIRS    = $(PACKAGE)
 JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
 
-# --- Parameters for the test --------------------------------------
+#----- JUnit tests class -------------------------------------------
 
-# start an office if the parameter is set for the makefile
-.IF "$(OFFICE)" == ""
-CT_APPEXECCOMMAND =
-.ELSE
-CT_APPEXECCOMMAND = -AppExecutionCommand "$(OFFICE)$/soffice -accept=socket,host=localhost,port=8100;urp;"
-.ENDIF
+JAVATESTFILES = \
+    GridControl.java \
+    UnitConversion.java \
 
-# test base is java complex
-CT_TESTBASE = -tb java_complex
 
-# build up package name with "." instead of $/
-CT_PACKAGE     = -o $(PACKAGE:s\$/\.\)
+# disabled for now - the tests fail on at least one platform
+# no issue, yet (not sure this is worth it. Don't know who to give the issue to, and don't know whether the test really makes sense)
+DISABLED_JAVA_TEST_FILES=\
+    AccessibleStatusBar.java\
+    AccessibleStatusBarItem.java
 
-# start the runner application
-CT_APP      = org.openoffice.Runner
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :  target.mk
+.INCLUDE: target.mk
 
-run: \
-    CheckAccessibleStatusBarItem
+ALL :   ALLTAR
 
-CheckAccessibleStatusBar:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_APPEXECCOMMAND) $(CT_TESTBASE) $(CT_PACKAGE).CheckAccessibleStatusBar
+# --- subsequent tests ---------------------------------------------
 
-CheckAccessibleStatusBarItem:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_APPEXECCOMMAND) $(CT_TESTBASE) $(CT_PACKAGE).CheckAccessibleStatusBarItem
+.IF "$(OOO_SUBSEQUENT_TESTS)" != ""
 
+.INCLUDE: installationtest.mk
+
+ALLTAR : javatest
+
+    # Sample how to debug
+    # JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
+
+.END    # "$(OOO_SUBSEQUENT_TESTS)" == ""
+
+.END    # ELSE "$(OOO_JUNIT_JAR)" != ""

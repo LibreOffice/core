@@ -34,13 +34,14 @@
 #include "salgdi.h"
 #include "saldata.hxx"
 #include "salframe.h"
+#include <vcl/svapp.hxx>
 
 #include "vcl/sysdata.hxx"
 
 // -----------------------------------------------------------------------
 
 SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
-    long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData )
+    long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
 {
     // #i92075# can be called first in a thread
     SalData::ensureThreadAutoreleasePool();
@@ -57,7 +58,7 @@ void AquaSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 
 // =======================================================================
 
-AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData )
+AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
 :   mbGraphicsUsed( false )
 ,   mxBitmapContext( NULL )
 ,   mnBitmapDepth( 0 )
@@ -156,7 +157,7 @@ void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics *pGraphics )
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalVirtualDevice::SetSize( long nDX, long nDY )
+sal_Bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 {
     if( mbForeignContext )
     {
@@ -198,9 +199,27 @@ BOOL AquaSalVirtualDevice::SetSize( long nDX, long nDY )
             pSalFrame = *GetSalData()->maFrames.begin();
         if( pSalFrame )
         {
-            NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pSalFrame->getWindow()];
-            if( pNSContext )
-                xCGContext = reinterpret_cast<CGContextRef>([pNSContext graphicsPort]);
+            // #i91990#
+            NSWindow* pWindow = pSalFrame->getWindow();
+            if ( pWindow )
+            {
+                NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pWindow];
+                if( pNSContext )
+                    xCGContext = reinterpret_cast<CGContextRef>([pNSContext graphicsPort]);
+            }
+            else
+            {
+                // fall back to a bitmap context
+                mnBitmapDepth = 32;
+                const CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
+                const CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
+                const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
+
+                void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
+                mxBitmapContext = ::CGBitmapContextCreate( pRawData, nDX, nDY,
+                                                           8, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
+                xCGContext = mxBitmapContext;
+            }
         }
     }
 

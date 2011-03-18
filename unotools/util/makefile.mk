@@ -93,3 +93,11 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo UpdateToConfig				>> $@
         @echo _Impl >> $@
 
+
+ALLTAR : $(MISC)/utl.component
+
+$(MISC)/utl.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        utl.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt utl.component

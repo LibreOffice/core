@@ -57,7 +57,7 @@ struct ImplKeyData
     ImplKeyData*    mpNext;
     ByteString      maKey;
     ByteString      maValue;
-    BOOL            mbIsComment;
+    sal_Bool            mbIsComment;
 };
 
 struct ImplGroupData
@@ -65,20 +65,20 @@ struct ImplGroupData
     ImplGroupData*  mpNext;
     ImplKeyData*    mpFirstKey;
     ByteString      maGroupName;
-    USHORT          mnEmptyLines;
+    sal_uInt16          mnEmptyLines;
 };
 
 struct ImplConfigData
 {
     ImplGroupData*  mpFirstGroup;
     XubString       maFileName;
-    ULONG           mnDataUpdateId;
-    ULONG           mnTimeStamp;
+    sal_uIntPtr         mnDataUpdateId;
+    sal_uIntPtr         mnTimeStamp;
     LineEnd         meLineEnd;
-    USHORT          mnRefCount;
-    BOOL            mbModified;
-    BOOL            mbRead;
-    BOOL            mbIsUTF8BOM;
+    sal_uInt16          mnRefCount;
+    sal_Bool            mbModified;
+    sal_Bool            mbRead;
+    sal_Bool            mbIsUTF8BOM;
 };
 
 // =======================================================================
@@ -104,9 +104,9 @@ static String toUncPath( const String& rPath )
     return aFileURL;
 }
 
-static ULONG ImplSysGetConfigTimeStamp( const XubString& rFileName )
+static sal_uIntPtr ImplSysGetConfigTimeStamp( const XubString& rFileName )
 {
-    ULONG nTimeStamp = 0;
+    sal_uIntPtr nTimeStamp = 0;
     ::osl::DirectoryItem aItem;
     ::osl::FileStatus aStatus( osl_FileStatus_Mask_ModifyTime );
 
@@ -122,10 +122,10 @@ static ULONG ImplSysGetConfigTimeStamp( const XubString& rFileName )
 
 // -----------------------------------------------------------------------
 
-static BYTE* ImplSysReadConfig( const XubString& rFileName,
-                                sal_uInt64& rRead, BOOL& rbRead, BOOL& rbIsUTF8BOM, ULONG& rTimeStamp )
+static sal_uInt8* ImplSysReadConfig( const XubString& rFileName,
+                                sal_uInt64& rRead, sal_Bool& rbRead, sal_Bool& rbIsUTF8BOM, sal_uIntPtr& rTimeStamp )
 {
-    BYTE*           pBuf = NULL;
+    sal_uInt8*          pBuf = NULL;
     ::osl::File aFile( rFileName );
 
     if( aFile.open( osl_File_OpenFlag_Read ) == ::osl::FileBase::E_None )
@@ -137,7 +137,7 @@ static BYTE* ImplSysReadConfig( const XubString& rFileName,
                 aFile.close();
                 return 0;
             }
-            pBuf = new BYTE[static_cast< std::size_t >(nPos)];
+            pBuf = new sal_uInt8[static_cast< std::size_t >(nPos)];
             sal_uInt64 nRead = 0;
             if( aFile.read( pBuf, nPos, nRead ) == ::osl::FileBase::E_None && nRead == nPos )
             {
@@ -146,12 +146,12 @@ static BYTE* ImplSysReadConfig( const XubString& rFileName,
                 if (nRead > 2 && memcmp(pBuf, BOM, 3) == 0)
                 {
                     nRead -= 3;
-                    rtl_moveMemory(pBuf, pBuf + 3, sal::static_int_cast<sal_Size>(nRead * sizeof(BYTE)) );
-                    rbIsUTF8BOM = TRUE;
+                    rtl_moveMemory(pBuf, pBuf + 3, sal::static_int_cast<sal_Size>(nRead * sizeof(sal_uInt8)) );
+                    rbIsUTF8BOM = sal_True;
                 }
 
                 rTimeStamp = ImplSysGetConfigTimeStamp( rFileName );
-                rbRead = TRUE;
+                rbRead = sal_True;
                 rRead = nRead;
             }
             else
@@ -168,11 +168,11 @@ static BYTE* ImplSysReadConfig( const XubString& rFileName,
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplSysWriteConfig( const XubString& rFileName,
-                                const BYTE* pBuf, ULONG nBufLen, BOOL rbIsUTF8BOM, ULONG& rTimeStamp )
+static sal_Bool ImplSysWriteConfig( const XubString& rFileName,
+                                const sal_uInt8* pBuf, sal_uIntPtr nBufLen, sal_Bool rbIsUTF8BOM, sal_uIntPtr& rTimeStamp )
 {
-    BOOL bSuccess = FALSE;
-    BOOL bUTF8BOMSuccess = FALSE;
+    sal_Bool bSuccess = sal_False;
+    sal_Bool bUTF8BOMSuccess = sal_False;
 
     ::osl::File aFile( rFileName );
     ::osl::FileBase::RC eError = aFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
@@ -191,13 +191,13 @@ static BOOL ImplSysWriteConfig( const XubString& rFileName,
             sal_uInt64 nUTF8BOMWritten;
             if( aFile.write( BOM, 3, nUTF8BOMWritten ) == ::osl::FileBase::E_None && 3 == nUTF8BOMWritten )
             {
-                bUTF8BOMSuccess = TRUE;
+                bUTF8BOMSuccess = sal_True;
             }
         }
 
         if( aFile.write( pBuf, nBufLen, nWritten ) == ::osl::FileBase::E_None && nWritten == nBufLen )
         {
-            bSuccess = TRUE;
+            bSuccess = sal_True;
         }
         if ( rbIsUTF8BOM ? bSuccess && bUTF8BOMSuccess : bSuccess )
         {
@@ -260,7 +260,7 @@ static String ImplMakeConfigName( const XubString* pFileName,
 
 namespace {
 
-ByteString makeByteString(BYTE const * p, sal_uInt64 n) {
+ByteString makeByteString(sal_uInt8 const * p, sal_uInt64 n) {
     if (n > STRING_MAXLEN) {
         #ifdef WNT
         abort();
@@ -276,7 +276,7 @@ ByteString makeByteString(BYTE const * p, sal_uInt64 n) {
 }
 
 static void ImplMakeConfigList( ImplConfigData* pData,
-                                const BYTE* pBuf, sal_uInt64 nLen )
+                                const sal_uInt8* pBuf, sal_uInt64 nLen )
 {
     // kein Buffer, keine Daten
     if ( !nLen )
@@ -288,7 +288,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
     xub_StrLen      nNameLen;
     xub_StrLen      nKeyLen;
     sal_uInt64 i;
-    const BYTE*     pLine;
+    const sal_uInt8*    pLine;
     ImplKeyData*    pPrevKey = NULL;
     ImplKeyData*    pKey;
     ImplGroupData*  pPrevGroup = NULL;
@@ -382,7 +382,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                     while ( pGroup->mnEmptyLines )
                     {
                         pKey                = new ImplKeyData;
-                        pKey->mbIsComment   = TRUE;
+                        pKey->mbIsComment   = sal_True;
                         pPrevKey->mpNext    = pKey;
                         pPrevKey            = pKey;
                         pGroup->mnEmptyLines--;
@@ -400,11 +400,11 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                 if ( pLine[0] == ';' )
                 {
                     pKey->maValue = makeByteString(pLine, nLineLen);
-                    pKey->mbIsComment = TRUE;
+                    pKey->mbIsComment = sal_True;
                 }
                 else
                 {
-                    pKey->mbIsComment = FALSE;
+                    pKey->mbIsComment = sal_False;
                     nNameLen = 0;
                     while ( (nNameLen < nLineLen) && (pLine[nNameLen] != '=') )
                         nNameLen++;
@@ -451,17 +451,17 @@ static void ImplMakeConfigList( ImplConfigData* pData,
 
 // -----------------------------------------------------------------------
 
-static BYTE* ImplGetConfigBuffer( const ImplConfigData* pData, ULONG& rLen )
+static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr& rLen )
 {
-    BYTE*           pWriteBuf;
-    BYTE*           pBuf;
-    BYTE            aLineEndBuf[2] = {0, 0};
+    sal_uInt8*          pWriteBuf;
+    sal_uInt8*          pBuf;
+    sal_uInt8           aLineEndBuf[2] = {0, 0};
     ImplKeyData*    pKey;
     ImplGroupData*  pGroup;
     unsigned int    nBufLen;
-    USHORT          nValueLen;
-    USHORT          nKeyLen;
-    USHORT          nLineEndLen;
+    sal_uInt16          nValueLen;
+    sal_uInt16          nKeyLen;
+    sal_uInt16          nLineEndLen;
 
     if ( pData->meLineEnd == LINEEND_CR )
     {
@@ -514,7 +514,7 @@ static BYTE* ImplGetConfigBuffer( const ImplConfigData* pData, ULONG& rLen )
     rLen = nBufLen;
     if ( !nBufLen )
     {
-        pWriteBuf = new BYTE[nLineEndLen];
+        pWriteBuf = new sal_uInt8[nLineEndLen];
         if ( pWriteBuf )
         {
             pWriteBuf[0] = aLineEndBuf[0];
@@ -527,7 +527,7 @@ static BYTE* ImplGetConfigBuffer( const ImplConfigData* pData, ULONG& rLen )
     }
 
     // Schreibbuffer anlegen (wird vom Aufrufer zerstoert)
-    pWriteBuf = new BYTE[nBufLen];
+    pWriteBuf = new sal_uInt8[nBufLen];
     if ( !pWriteBuf )
         return 0;
 
@@ -584,7 +584,7 @@ static BYTE* ImplGetConfigBuffer( const ImplConfigData* pData, ULONG& rLen )
             }
 
             // Leerzeile nach jeder Gruppe auch wieder speichern
-            USHORT nEmptyLines = pGroup->mnEmptyLines;
+            sal_uInt16 nEmptyLines = pGroup->mnEmptyLines;
             while ( nEmptyLines )
             {
                 *pBuf = aLineEndBuf[0]; pBuf++;
@@ -606,11 +606,11 @@ static BYTE* ImplGetConfigBuffer( const ImplConfigData* pData, ULONG& rLen )
 
 static void ImplReadConfig( ImplConfigData* pData )
 {
-    ULONG           nTimeStamp = 0;
+    sal_uIntPtr         nTimeStamp = 0;
     sal_uInt64 nRead = 0;
-    BOOL            bRead = FALSE;
-    BOOL                bIsUTF8BOM =FALSE;
-    BYTE*           pBuf = ImplSysReadConfig( pData->maFileName, nRead, bRead, bIsUTF8BOM, nTimeStamp );
+    sal_Bool            bRead = sal_False;
+    sal_Bool                bIsUTF8BOM =sal_False;
+    sal_uInt8*          pBuf = ImplSysReadConfig( pData->maFileName, nRead, bRead, bIsUTF8BOM, nTimeStamp );
 
     // Aus dem Buffer die Config-Verwaltungsliste aufbauen
     if ( pBuf )
@@ -619,11 +619,11 @@ static void ImplReadConfig( ImplConfigData* pData )
         delete[] pBuf;
     }
     pData->mnTimeStamp = nTimeStamp;
-    pData->mbModified  = FALSE;
+    pData->mbModified  = sal_False;
     if ( bRead )
-        pData->mbRead = TRUE;
+        pData->mbRead = sal_True;
     if ( bIsUTF8BOM )
-        pData->mbIsUTF8BOM = TRUE;
+        pData->mbIsUTF8BOM = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -641,16 +641,16 @@ static void ImplWriteConfig( ImplConfigData* pData )
 #endif
 
     // Aus der Config-Liste einen Buffer zusammenbauen
-    ULONG   nBufLen;
-    BYTE*   pBuf = ImplGetConfigBuffer( pData, nBufLen );
+    sal_uIntPtr nBufLen;
+    sal_uInt8*  pBuf = ImplGetConfigBuffer( pData, nBufLen );
     if ( pBuf )
     {
         if ( ImplSysWriteConfig( pData->maFileName, pBuf, nBufLen, pData->mbIsUTF8BOM, pData->mnTimeStamp ) )
-            pData->mbModified = FALSE;
+            pData->mbModified = sal_False;
         delete[] pBuf;
     }
     else
-        pData->mbModified = FALSE;
+        pData->mbModified = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -694,8 +694,8 @@ static ImplConfigData* ImplGetConfigData( const XubString& rFileName )
     pData->mnDataUpdateId   = 0;
     pData->meLineEnd        = LINEEND_CRLF;
     pData->mnRefCount       = 0;
-    pData->mbRead           = FALSE;
-    pData->mbIsUTF8BOM      = FALSE;
+    pData->mbRead           = sal_False;
+    pData->mbIsUTF8BOM      = sal_False;
     ImplReadConfig( pData );
 
     return pData;
@@ -711,7 +711,7 @@ static void ImplFreeConfigData( ImplConfigData* pDelData )
 
 // =======================================================================
 
-BOOL Config::ImplUpdateConfig() const
+sal_Bool Config::ImplUpdateConfig() const
 {
     // Wenn sich TimeStamp unterscheidet, dann Datei neu einlesen
     if ( mpData->mnTimeStamp != ImplSysGetConfigTimeStamp( maFileName ) )
@@ -719,10 +719,10 @@ BOOL Config::ImplUpdateConfig() const
         ImplDeleteConfigData( mpData );
         ImplReadConfig( mpData );
         mpData->mnDataUpdateId++;
-        return TRUE;
+        return sal_True;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -776,7 +776,7 @@ Config::Config()
     mpActGroup      = NULL;
     mnDataUpdateId  = 0;
     mnLockCount     = 1;
-    mbPersistence   = TRUE;
+    mbPersistence   = sal_True;
 
 #ifdef DBG_UTIL
     OSL_TRACE( "Config::Config()" );
@@ -793,7 +793,7 @@ Config::Config( const XubString& rFileName )
     mpActGroup      = NULL;
     mnDataUpdateId  = 0;
     mnLockCount     = 1;
-    mbPersistence   = TRUE;
+    mbPersistence   = sal_True;
 
 #ifdef DBG_UTIL
     ByteString aTraceStr( "Config::Config( " );
@@ -856,7 +856,7 @@ void Config::DeleteGroup( const ByteString& rGroup )
     if ( !mnLockCount || !mpData->mbRead )
     {
         ImplUpdateConfig();
-        mpData->mbRead = TRUE;
+        mpData->mbRead = sal_True;
     }
 
     ImplGroupData* pPrevGroup = NULL;
@@ -894,7 +894,7 @@ void Config::DeleteGroup( const ByteString& rGroup )
             ImplWriteConfig( mpData );
         else
         {
-            mpData->mbModified = TRUE;
+            mpData->mbModified = sal_True;
         }
 
         // Gruppen auf ungluetig setzen
@@ -905,14 +905,14 @@ void Config::DeleteGroup( const ByteString& rGroup )
 
 // -----------------------------------------------------------------------
 
-ByteString Config::GetGroupName( USHORT nGroup ) const
+ByteString Config::GetGroupName( sal_uInt16 nGroup ) const
 {
     // Config-Daten evt. updaten
     if ( !mnLockCount )
         ImplUpdateConfig();
 
     ImplGroupData*  pGroup = mpData->mpFirstGroup;
-    USHORT          nGroupCount = 0;
+    sal_uInt16          nGroupCount = 0;
     ByteString      aGroupName;
     while ( pGroup )
     {
@@ -931,14 +931,14 @@ ByteString Config::GetGroupName( USHORT nGroup ) const
 
 // -----------------------------------------------------------------------
 
-USHORT Config::GetGroupCount() const
+sal_uInt16 Config::GetGroupCount() const
 {
     // Config-Daten evt. updaten
     if ( !mnLockCount )
         ImplUpdateConfig();
 
     ImplGroupData*  pGroup = mpData->mpFirstGroup;
-    USHORT          nGroupCount = 0;
+    sal_uInt16          nGroupCount = 0;
     while ( pGroup )
     {
         nGroupCount++;
@@ -950,20 +950,20 @@ USHORT Config::GetGroupCount() const
 
 // -----------------------------------------------------------------------
 
-BOOL Config::HasGroup( const ByteString& rGroup ) const
+sal_Bool Config::HasGroup( const ByteString& rGroup ) const
 {
     // Config-Daten evt. updaten
     if ( !mnLockCount )
         ImplUpdateConfig();
 
     ImplGroupData*  pGroup = mpData->mpFirstGroup;
-    BOOL            bRet = FALSE;
+    sal_Bool            bRet = sal_False;
 
     while( pGroup )
     {
         if( pGroup->maGroupName.EqualsIgnoreCaseAscii( rGroup ) )
         {
-            bRet = TRUE;
+            bRet = sal_True;
             break;
         }
 
@@ -1045,7 +1045,7 @@ void Config::WriteKey( const ByteString& rKey, const ByteString& rStr )
     if ( !mnLockCount || !mpData->mbRead )
     {
         ImplUpdateConfig();
-        mpData->mbRead = TRUE;
+        mpData->mbRead = sal_True;
     }
 
     // Key suchen und Value setzen
@@ -1063,18 +1063,18 @@ void Config::WriteKey( const ByteString& rKey, const ByteString& rStr )
             pKey = pKey->mpNext;
         }
 
-        BOOL bNewValue;
+        sal_Bool bNewValue;
         if ( !pKey )
         {
             pKey              = new ImplKeyData;
             pKey->mpNext      = NULL;
             pKey->maKey       = rKey;
-            pKey->mbIsComment = FALSE;
+            pKey->mbIsComment = sal_False;
             if ( pPrevKey )
                 pPrevKey->mpNext = pKey;
             else
                 pGroup->mpFirstKey = pKey;
-            bNewValue = TRUE;
+            bNewValue = sal_True;
         }
         else
             bNewValue = pKey->maValue != rStr;
@@ -1087,7 +1087,7 @@ void Config::WriteKey( const ByteString& rKey, const ByteString& rStr )
                 ImplWriteConfig( mpData );
             else
             {
-                mpData->mbModified = TRUE;
+                mpData->mbModified = sal_True;
             }
         }
     }
@@ -1110,7 +1110,7 @@ void Config::DeleteKey( const ByteString& rKey )
     if ( !mnLockCount || !mpData->mbRead )
     {
         ImplUpdateConfig();
-        mpData->mbRead = TRUE;
+        mpData->mbRead = sal_True;
     }
 
     // Key suchen und Value setzen
@@ -1142,7 +1142,7 @@ void Config::DeleteKey( const ByteString& rKey )
                 ImplWriteConfig( mpData );
             else
             {
-                mpData->mbModified = TRUE;
+                mpData->mbModified = sal_True;
             }
         }
     }
@@ -1150,7 +1150,7 @@ void Config::DeleteKey( const ByteString& rKey )
 
 // -----------------------------------------------------------------------
 
-USHORT Config::GetKeyCount() const
+sal_uInt16 Config::GetKeyCount() const
 {
 #ifdef DBG_UTIL
     ByteString aTraceStr( "Config::GetKeyCount()" );
@@ -1166,7 +1166,7 @@ USHORT Config::GetKeyCount() const
         ImplUpdateConfig();
 
     // Key suchen und Value zurueckgeben
-    USHORT nCount = 0;
+    sal_uInt16 nCount = 0;
     ImplGroupData* pGroup = ImplGetGroup();
     if ( pGroup )
     {
@@ -1185,7 +1185,7 @@ USHORT Config::GetKeyCount() const
 
 // -----------------------------------------------------------------------
 
-ByteString Config::GetKeyName( USHORT nKey ) const
+ByteString Config::GetKeyName( sal_uInt16 nKey ) const
 {
 #ifdef DBG_UTIL
     ByteString aTraceStr( "Config::GetKeyName( " );
@@ -1220,7 +1220,7 @@ ByteString Config::GetKeyName( USHORT nKey ) const
 
 // -----------------------------------------------------------------------
 
-ByteString Config::ReadKey( USHORT nKey ) const
+ByteString Config::ReadKey( sal_uInt16 nKey ) const
 {
 #ifdef DBG_UTIL
     ByteString aTraceStr( "Config::ReadKey( " );
@@ -1277,7 +1277,7 @@ void Config::LeaveLock()
 
 // -----------------------------------------------------------------------
 
-BOOL Config::Update()
+sal_Bool Config::Update()
 {
     return ImplUpdateConfig();
 }

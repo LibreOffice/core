@@ -43,20 +43,20 @@
 struct SvLBoxButtonData_Impl
 {
     SvLBoxEntry*    pEntry;
-    BOOL            bDefaultImages;
-    BOOL            bShowRadioButton;
+    sal_Bool            bDefaultImages;
+    sal_Bool            bShowRadioButton;
 
-    SvLBoxButtonData_Impl() : pEntry( NULL ), bDefaultImages( FALSE ), bShowRadioButton( FALSE ) {}
+    SvLBoxButtonData_Impl() : pEntry( NULL ), bDefaultImages( sal_False ), bShowRadioButton( sal_False ) {}
 };
 
 
 DBG_NAME(SvLBoxButtonData)
 
-void SvLBoxButtonData::InitData( BOOL bImagesFromDefault, bool _bRadioBtn, const Control* pCtrl )
+void SvLBoxButtonData::InitData( sal_Bool bImagesFromDefault, bool _bRadioBtn, const Control* pCtrl )
 {
     pImpl = new SvLBoxButtonData_Impl;
 
-    bDataOk = FALSE;
+    bDataOk = sal_False;
     eState = SV_BUTTON_UNCHECKED;
     pImpl->bDefaultImages = bImagesFromDefault;
     pImpl->bShowRadioButton = ( _bRadioBtn != false );
@@ -69,21 +69,21 @@ SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings )
 {
     DBG_CTOR(SvLBoxButtonData,0);
 
-    InitData( TRUE, false, pControlForSettings );
+    InitData( sal_True, false, pControlForSettings );
 }
 
 SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings, bool _bRadioBtn )
 {
     DBG_CTOR(SvLBoxButtonData,0);
 
-    InitData( TRUE, _bRadioBtn, pControlForSettings );
+    InitData( sal_True, _bRadioBtn, pControlForSettings );
 }
 
 SvLBoxButtonData::SvLBoxButtonData()
 {
     DBG_CTOR(SvLBoxButtonData,0);
 
-    InitData( FALSE, false );
+    InitData( sal_False, false );
 }
 
 SvLBoxButtonData::~SvLBoxButtonData()
@@ -102,11 +102,11 @@ void SvLBoxButtonData::CallLink()
     aLink.Call( this );
 }
 
-USHORT SvLBoxButtonData::GetIndex( USHORT nItemState )
+sal_uInt16 SvLBoxButtonData::GetIndex( sal_uInt16 nItemState )
 {
     DBG_CHKTHIS(SvLBoxButtonData,0);
     nItemState &= 0x000F;
-    USHORT nIdx;
+    sal_uInt16 nIdx;
     switch( nItemState )
     {
         case SV_ITEMSTATE_UNCHECKED:
@@ -133,18 +133,18 @@ void SvLBoxButtonData::SetWidthAndHeight()
     Size aSize = aBmps[0].GetSizePixel();
     nWidth = aSize.Width();
     nHeight = aSize.Height();
-    bDataOk = TRUE;
+    bDataOk = sal_True;
 }
 
 
-void SvLBoxButtonData::StoreButtonState( SvLBoxEntry* pActEntry, USHORT nItemFlags )
+void SvLBoxButtonData::StoreButtonState( SvLBoxEntry* pActEntry, sal_uInt16 nItemFlags )
 {
     DBG_CHKTHIS(SvLBoxButtonData,0);
     pImpl->pEntry = pActEntry;
     eState = ConvertToButtonState( nItemFlags );
 }
 
-SvButtonState SvLBoxButtonData::ConvertToButtonState( USHORT nItemFlags ) const
+SvButtonState SvLBoxButtonData::ConvertToButtonState( sal_uInt16 nItemFlags ) const
 {
     DBG_CHKTHIS(SvLBoxButtonData,0);
     nItemFlags &= (SV_ITEMSTATE_UNCHECKED |
@@ -195,12 +195,12 @@ void SvLBoxButtonData::SetDefaultImages( const Control* pCtrl )
     }
 }
 
-BOOL SvLBoxButtonData::HasDefaultImages( void ) const
+sal_Bool SvLBoxButtonData::HasDefaultImages( void ) const
 {
     return pImpl->bDefaultImages;
 }
 
-BOOL SvLBoxButtonData::IsRadio() {
+sal_Bool SvLBoxButtonData::IsRadio() {
     return pImpl->bShowRadioButton;
 }
 
@@ -210,7 +210,7 @@ BOOL SvLBoxButtonData::IsRadio() {
 
 DBG_NAME(SvLBoxString);
 
-SvLBoxString::SvLBoxString( SvLBoxEntry* pEntry,USHORT nFlags,const XubString& rStr) :
+SvLBoxString::SvLBoxString( SvLBoxEntry* pEntry,sal_uInt16 nFlags,const XubString& rStr) :
         SvLBoxItem( pEntry, nFlags )
 {
     DBG_CTOR(SvLBoxString,0);
@@ -227,19 +227,19 @@ SvLBoxString::~SvLBoxString()
     DBG_DTOR(SvLBoxString,0);
 }
 
-USHORT SvLBoxString::IsA()
+sal_uInt16 SvLBoxString::IsA()
 {
     DBG_CHKTHIS(SvLBoxString,0);
     return SV_ITEM_ID_LBOXSTRING;
 }
 
-void SvLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
+void SvLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /* nFlags */,
     SvLBoxEntry* _pEntry)
 {
     DBG_CHKTHIS(SvLBoxString,0);
     if ( _pEntry )
     {
-        USHORT nStyle = rDev.IsEnabled() ? 0 : TEXT_DRAW_DISABLE;
+        sal_uInt16 nStyle = rDev.IsEnabled() ? 0 : TEXT_DRAW_DISABLE;
         if ( rDev.IsEntryMnemonicsEnabled() )
             nStyle |= TEXT_DRAW_MNEMONIC;
         rDev.DrawText( Rectangle(rPos,GetSize(&rDev,_pEntry)),aStr,nStyle);
@@ -282,7 +282,7 @@ void SvLBoxString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
 
 DBG_NAME(SvLBoxBmp);
 
-SvLBoxBmp::SvLBoxBmp( SvLBoxEntry* pEntry, USHORT nFlags, Image aBitmap ) :
+SvLBoxBmp::SvLBoxBmp( SvLBoxEntry* pEntry, sal_uInt16 nFlags, Image aBitmap ) :
     SvLBoxItem( pEntry, nFlags )
 {
     DBG_CTOR(SvLBoxBmp,0);
@@ -299,7 +299,7 @@ SvLBoxBmp::~SvLBoxBmp()
     DBG_DTOR(SvLBoxBmp,0);
 }
 
-USHORT SvLBoxBmp::IsA()
+sal_uInt16 SvLBoxBmp::IsA()
 {
     DBG_CHKTHIS(SvLBoxBmp,0);
     return SV_ITEM_ID_LBOXBMP;
@@ -320,11 +320,11 @@ void SvLBoxBmp::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
     pViewData->aSize = aBmp.GetSizePixel();
 }
 
-void SvLBoxBmp::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
+void SvLBoxBmp::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /* nFlags */,
                         SvLBoxEntry* )
 {
     DBG_CHKTHIS(SvLBoxBmp,0);
-    USHORT nStyle = rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
+    sal_uInt16 nStyle = rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
     rDev.DrawImage( rPos, aBmp ,nStyle);
 }
 
@@ -347,7 +347,7 @@ void SvLBoxBmp::Clone( SvLBoxItem* pSource )
 DBG_NAME(SvLBoxButton);
 
 SvLBoxButton::SvLBoxButton( SvLBoxEntry* pEntry, SvLBoxButtonKind eTheKind,
-                            USHORT nFlags, SvLBoxButtonData* pBData )
+                            sal_uInt16 nFlags, SvLBoxButtonData* pBData )
     : SvLBoxItem( pEntry, nFlags )
 {
     DBG_CTOR(SvLBoxButton,0);
@@ -371,13 +371,13 @@ SvLBoxButton::~SvLBoxButton()
     DBG_DTOR(SvLBoxButton,0);
 }
 
-USHORT SvLBoxButton::IsA()
+sal_uInt16 SvLBoxButton::IsA()
 {
     DBG_CHKTHIS(SvLBoxButton,0);
     return SV_ITEM_ID_LBOXBUTTON;
 }
 
-void SvLBoxButton::Check(SvLBox*, SvLBoxEntry*, BOOL bOn)
+void SvLBoxButton::Check(SvLBox*, SvLBoxEntry*, sal_Bool bOn)
 {
     DBG_CHKTHIS(SvLBoxButton,0);
     if ( bOn != IsStateChecked() )
@@ -389,7 +389,7 @@ void SvLBoxButton::Check(SvLBox*, SvLBoxEntry*, BOOL bOn)
     }
 }
 
-BOOL SvLBoxButton::ClickHdl( SvLBox*, SvLBoxEntry* pEntry )
+sal_Bool SvLBoxButton::ClickHdl( SvLBox*, SvLBoxEntry* pEntry )
 {
     DBG_CHKTHIS(SvLBoxButton,0);
     if ( CheckModification() )
@@ -401,30 +401,30 @@ BOOL SvLBoxButton::ClickHdl( SvLBox*, SvLBoxEntry* pEntry )
         pData->StoreButtonState( pEntry, nItemFlags );
         pData->CallLink();
     }
-    return FALSE;
+    return sal_False;
 }
 
-void SvLBoxButton::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
-                            SvLBoxEntry* )
+void SvLBoxButton::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /* nFlags */,
+                            SvLBoxEntry* /*pEntry*/ )
 {
     DBG_CHKTHIS(SvLBoxButton,0);
-    USHORT nIndex = eKind == SvLBoxButtonKind_staticImage
+    sal_uInt16 nIndex = eKind == SvLBoxButtonKind_staticImage
         ? SV_BMP_STATICIMAGE : pData->GetIndex( nItemFlags );
-    USHORT nStyle = eKind != SvLBoxButtonKind_disabledCheckbox &&
+    sal_uInt16 nStyle = eKind != SvLBoxButtonKind_disabledCheckbox &&
         rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
 
 ///
 //Native drawing
 ///
-    BOOL bNativeOK = FALSE;
-    Window *pWin = NULL;
-    if( rDev.GetOutDevType() == OUTDEV_WINDOW )
-        pWin = (Window*) &rDev;
+    sal_Bool bNativeOK = sal_False;
+    ControlType eCtrlType = (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX;
+    if ( nIndex != SV_BMP_STATICIMAGE && rDev.IsNativeControlSupported( eCtrlType, PART_ENTIRE_CONTROL) )
 
-    if ( nIndex != SV_BMP_STATICIMAGE && pWin && pWin->IsNativeControlSupported( (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX, PART_ENTIRE_CONTROL) )
     {
+        Size aSize(pData->Width(), pData->Height());
+        ImplAdjustBoxSize( aSize, eCtrlType, &rDev );
         ImplControlValue    aControlValue;
-        Rectangle           aCtrlRegion( rPos, Size(pData->Width(), pData->Height()) );
+        Rectangle           aCtrlRegion( rPos, aSize );
         ControlState        nState = 0;
 
         //states CTRL_STATE_DEFAULT, CTRL_STATE_PRESSED and CTRL_STATE_ROLLOVER are not implemented
@@ -438,8 +438,8 @@ void SvLBoxButton::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
         else if ( IsStateTristate() )
             aControlValue.setTristateVal( BUTTONVALUE_MIXED );
 
-        bNativeOK = pWin->DrawNativeControl( (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX, PART_ENTIRE_CONTROL,
-                                             aCtrlRegion, nState, aControlValue, rtl::OUString() );
+        bNativeOK = rDev.DrawNativeControl( eCtrlType, PART_ENTIRE_CONTROL,
+                                aCtrlRegion, nState, aControlValue, rtl::OUString() );
     }
 
     if( !bNativeOK)
@@ -458,13 +458,47 @@ void SvLBoxButton::Clone( SvLBoxItem* pSource )
     pData = ((SvLBoxButton*)pSource)->pData;
 }
 
+void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, Window* i_pParent )
+{
+    if ( i_pParent->IsNativeControlSupported( i_eType, PART_ENTIRE_CONTROL) )
+    {
+        ImplControlValue    aControlValue;
+        Rectangle           aCtrlRegion( Point( 0, 0 ), io_rSize );
+        ControlState        nState = CTRL_STATE_ENABLED;
+
+        aControlValue.setTristateVal( BUTTONVALUE_ON );
+
+        Rectangle aNativeBounds, aNativeContent;
+        bool bNativeOK = i_pParent->GetNativeControlRegion( i_eType,
+                                                            PART_ENTIRE_CONTROL,
+                                                            aCtrlRegion,
+                                                            nState,
+                                                            aControlValue,
+                                                            rtl::OUString(),
+                                                            aNativeBounds,
+                                                            aNativeContent );
+        if( bNativeOK )
+        {
+            Size aContentSize( aNativeContent.GetSize() );
+            // leave a little space around the box image (looks better
+            if( aContentSize.Height() + 2 > io_rSize.Height() )
+                io_rSize.Height() = aContentSize.Height() + 2;
+        }
+    }
+}
+
 void SvLBoxButton::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
     SvViewDataItem* pViewData )
 {
     DBG_CHKTHIS(SvLBoxButton,0);
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
-    pViewData->aSize = Size( pData->Width(), pData->Height() );
+    Size aSize( pData->Width(), pData->Height() );
+
+    ControlType eCtrlType = (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX;
+    if ( eKind != SvLBoxButtonKind_staticImage && pView )
+        ImplAdjustBoxSize( aSize, eCtrlType, pView );
+    pViewData->aSize = aSize;
 }
 
 bool SvLBoxButton::CheckModification() const
@@ -483,14 +517,14 @@ struct SvLBoxContextBmp_Impl
     Image       m_aImage1;
     Image       m_aImage2;
 
-    USHORT      m_nB2IndicatorFlags;
+    sal_uInt16      m_nB2IndicatorFlags;
 };
 
 // ***************************************************************
 DBG_NAME(SvLBoxContextBmp)
 
-SvLBoxContextBmp::SvLBoxContextBmp( SvLBoxEntry* pEntry, USHORT nItemFlags,
-    Image aBmp1, Image aBmp2, USHORT nEntryFlags )
+SvLBoxContextBmp::SvLBoxContextBmp( SvLBoxEntry* pEntry, sal_uInt16 nItemFlags,
+    Image aBmp1, Image aBmp2, sal_uInt16 nEntryFlags )
     :SvLBoxItem( pEntry, nItemFlags )
     ,m_pImpl( new SvLBoxContextBmp_Impl )
 {
@@ -514,13 +548,13 @@ SvLBoxContextBmp::~SvLBoxContextBmp()
     DBG_DTOR(SvLBoxContextBmp,0);
 }
 
-USHORT SvLBoxContextBmp::IsA()
+sal_uInt16 SvLBoxContextBmp::IsA()
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
     return SV_ITEM_ID_LBOXCONTEXTBMP;
 }
 
-BOOL SvLBoxContextBmp::SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2 )
+sal_Bool SvLBoxContextBmp::SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2 )
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
 
@@ -548,7 +582,7 @@ void SvLBoxContextBmp::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
 }
 
 void SvLBoxContextBmp::Paint( const Point& _rPos, SvLBox& _rDev,
-    USHORT _nViewDataEntryFlags, SvLBoxEntry* _pEntry )
+    sal_uInt16 _nViewDataEntryFlags, SvLBoxEntry* _pEntry )
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
 
@@ -557,7 +591,7 @@ void SvLBoxContextBmp::Paint( const Point& _rPos, SvLBox& _rDev,
 
     sal_Bool _bSemiTransparent = _pEntry && ( 0 != ( SV_ENTRYFLAG_SEMITRANSPARENT  & _pEntry->GetFlags( ) ) );
     // draw
-    USHORT nStyle = _rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
+    sal_uInt16 nStyle = _rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
     if ( _bSemiTransparent )
         nStyle |= IMAGE_DRAW_SEMITRANSPARENT;
     _rDev.DrawImage( _rPos, rImage, nStyle);

@@ -43,8 +43,8 @@ class CBlock
 private:
     CBlock*         pPrev;              // Vorheriger Block
     CBlock*         pNext;              // Naechster Block
-    USHORT          nSize;              // Groesse des Blocks
-    USHORT          nCount;             // Anzahl Pointer
+    sal_uInt16          nSize;              // Groesse des Blocks
+    sal_uInt16          nCount;             // Anzahl Pointer
     void**          pNodes;             // Pointer auf die Daten
 
 #if defined DBG_UTIL
@@ -53,26 +53,26 @@ private:
 
 public:
                     // Fuer List-Container
-                    CBlock( USHORT nSize, CBlock* pPrev, CBlock* pNext );
+                    CBlock( sal_uInt16 nSize, CBlock* pPrev, CBlock* pNext );
                     // Fuer Array-Container
-                    CBlock( USHORT nSize, CBlock* pPrev );
+                    CBlock( sal_uInt16 nSize, CBlock* pPrev );
                     // Copy-Ctor
                     CBlock( const CBlock& r, CBlock* pPrev );
                     ~CBlock();
 
-    void            Insert( void* p, USHORT nIndex, USHORT nReSize );
-    CBlock*         Split( void* p, USHORT nIndex, USHORT nReSize );
-    void*           Remove( USHORT nIndex, USHORT nReSize );
-    void*           Replace( void* pNew, USHORT nIndex );
+    void            Insert( void* p, sal_uInt16 nIndex, sal_uInt16 nReSize );
+    CBlock*         Split( void* p, sal_uInt16 nIndex, sal_uInt16 nReSize );
+    void*           Remove( sal_uInt16 nIndex, sal_uInt16 nReSize );
+    void*           Replace( void* pNew, sal_uInt16 nIndex );
 
     void**          GetNodes() const { return pNodes; }
-    void**          GetObjectPtr( USHORT nIndex );
-    void*           GetObject( USHORT nIndex ) const;
+    void**          GetObjectPtr( sal_uInt16 nIndex );
+    void*           GetObject( sal_uInt16 nIndex ) const;
 
-    void            SetSize( USHORT nNewSize );
+    void            SetSize( sal_uInt16 nNewSize );
 
-    USHORT          GetSize() const               { return nCount; }
-    USHORT          Count() const                 { return nCount; }
+    sal_uInt16          GetSize() const               { return nCount; }
+    sal_uInt16          Count() const                 { return nCount; }
     void            SetPrevBlock( CBlock* p )     { pPrev = p;     }
     void            SetNextBlock( CBlock* p )     { pNext = p;     }
     CBlock*         GetPrevBlock() const          { return pPrev;  }
@@ -93,7 +93,7 @@ private:
 |*
 *************************************************************************/
 
-inline void* CBlock::GetObject( USHORT nIndex ) const
+inline void* CBlock::GetObject( sal_uInt16 nIndex ) const
 {
     return pNodes[nIndex];
 }
@@ -108,11 +108,11 @@ inline void* CBlock::GetObject( USHORT nIndex ) const
 |*
 *************************************************************************/
 
-inline void* Container::ImpGetObject( ULONG nIndex ) const
+inline void* Container::ImpGetObject( sal_uIntPtr nIndex ) const
 {
     if ( pFirstBlock && (nIndex < pFirstBlock->Count()) )
         // Item innerhalb des gefundenen Blocks zurueckgeben
-        return pFirstBlock->GetObject( (USHORT)nIndex );
+        return pFirstBlock->GetObject( (sal_uInt16)nIndex );
     else
         return GetObject( nIndex );
 }

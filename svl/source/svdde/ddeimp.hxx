@@ -33,11 +33,11 @@
 
 #include "ddemlos2.h"
 
-#define WORD USHORT
-#define DWORD ULONG
-#define LPBYTE BYTE*
-#define LPWORD USHORT*
-#define LPDWORD ULONG*
+#define WORD sal_uInt16
+#define DWORD sal_uLong
+#define LPBYTE sal_uInt8*
+#define LPWORD sal_uInt16*
+#define LPDWORD sal_uLong*
 #define LPCTSTR PCSZ
 
 #else
@@ -136,7 +136,7 @@ struct DdeDataImp
     HDDEDATA        hData;
     LPBYTE          pData;
     long            nData;
-    ULONG           nFmt;
+    sal_uLong           nFmt;
 };
 
 class DdeConnections;
@@ -144,7 +144,7 @@ class DdeServices;
 
 struct DdeInstData
 {
-    USHORT          nRefCount;
+    sal_uInt16          nRefCount;
     DdeConnections* pConnections;
     // Server
     long            hCurConvSvr;

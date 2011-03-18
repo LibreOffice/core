@@ -44,7 +44,6 @@
 #include "vcl/event.hxx"
 #include "vcl/vclevent.hxx"
 #include "vcl/virdev.hxx"
-#include "vcl/windata.hxx"
 #include "vcl/window.h"
 #include "vcl/wrkwin.hxx"
 #include "vcl/idlemgr.hxx"
@@ -82,12 +81,12 @@ using namespace ::com::sun::star::uno;
 class ImplReservedKey
 {
 public:
-    ImplReservedKey( KeyCode aKeyCode, USHORT nResId ) :
+    ImplReservedKey( KeyCode aKeyCode, sal_uInt16 nResId ) :
       mKeyCode(aKeyCode), mnResId( nResId)
      {}
 
     KeyCode mKeyCode;
-    USHORT  mnResId;
+    sal_uInt16  mnResId;
 };
 
 typedef std::pair<ImplReservedKey*, size_t> ReservedKeys;
@@ -183,16 +182,16 @@ struct ImplEventHook
 
 struct ImplPostEventData
 {
-    ULONG           mnEvent;
+    sal_uLong           mnEvent;
     const Window*   mpWin;
-    ULONG           mnEventId;
+    sal_uLong           mnEventId;
     KeyEvent        maKeyEvent;
     MouseEvent      maMouseEvent;
 
 
-       ImplPostEventData( ULONG nEvent, const Window* pWin, const KeyEvent& rKeyEvent ) :
+       ImplPostEventData( sal_uLong nEvent, const Window* pWin, const KeyEvent& rKeyEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maKeyEvent( rKeyEvent ) {}
-       ImplPostEventData( ULONG nEvent, const Window* pWin, const MouseEvent& rMouseEvent ) :
+       ImplPostEventData( sal_uLong nEvent, const Window* pWin, const MouseEvent& rMouseEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maMouseEvent( rMouseEvent ) {}
 
     ~ImplPostEventData() {}
@@ -241,7 +240,7 @@ void Application::InitAppRes( const ResId& )
 
 // -----------------------------------------------------------------------
 
-BOOL Application::QueryExit()
+sal_Bool Application::QueryExit()
 {
     WorkWindow* pAppWin = ImplGetSVData()->maWinData.mpAppWin;
 
@@ -249,12 +248,12 @@ BOOL Application::QueryExit()
     if ( pAppWin )
         return pAppWin->Close();
     else
-        return TRUE;
+        return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-void Application::UserEvent( ULONG, void* )
+void Application::UserEvent( sal_uLong, void* )
 {
 }
 
@@ -319,7 +318,7 @@ sal_uInt16 Application::GetCommandLineParamCount()
 
 // -----------------------------------------------------------------------
 
-XubString Application::GetCommandLineParam( USHORT nParam )
+XubString Application::GetCommandLineParam( sal_uInt16 nParam )
 {
     rtl::OUString aParam;
     osl_getCommandArg( nParam, &aParam.pData );
@@ -356,7 +355,7 @@ const XubString& Application::GetAppFileName()
 
 // -----------------------------------------------------------------------
 
-USHORT Application::Exception( USHORT nError )
+sal_uInt16 Application::Exception( sal_uInt16 nError )
 {
     switch ( nError & EXC_MAJORTYPE )
     {
@@ -398,12 +397,12 @@ void Application::Abort( const XubString& rErrorText )
 
 // -----------------------------------------------------------------------
 
-ULONG   Application::GetReservedKeyCodeCount()
+sal_uLong   Application::GetReservedKeyCodeCount()
 {
     return ImplReservedKeys::get()->second;
 }
 
-const KeyCode*  Application::GetReservedKeyCode( ULONG i )
+const KeyCode*  Application::GetReservedKeyCode( sal_uLong i )
 {
     if( i >= GetReservedKeyCodeCount() )
         return NULL;
@@ -411,7 +410,7 @@ const KeyCode*  Application::GetReservedKeyCode( ULONG i )
         return &ImplReservedKeys::get()->first[i].mKeyCode;
 }
 
-String Application::GetReservedKeyCodeDescription( ULONG i )
+String Application::GetReservedKeyCodeDescription( sal_uLong i )
 {
     ResMgr* pResMgr = ImplGetResMgr();
     if( ! pResMgr )
@@ -430,12 +429,12 @@ void Application::Execute()
     DBG_STARTAPPEXECUTE();
 
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->maAppData.mbInAppExecute = TRUE;
+    pSVData->maAppData.mbInAppExecute = sal_True;
 
     while ( !pSVData->maAppData.mbAppQuit )
         Application::Yield();
 
-    pSVData->maAppData.mbInAppExecute = FALSE;
+    pSVData->maAppData.mbInAppExecute = sal_False;
 
     DBG_ENDAPPEXECUTE();
 }
@@ -497,7 +496,7 @@ void Application::Yield( bool i_bAllEvents )
 
 IMPL_STATIC_LINK_NOINSTANCE( ImplSVAppData, ImplQuitMsg, void*, EMPTYARG )
 {
-    ImplGetSVData()->maAppData.mbAppQuit = TRUE;
+    ImplGetSVData()->maAppData.mbAppQuit = sal_True;
     return 0;
 }
 
@@ -525,7 +524,7 @@ oslThreadIdentifier Application::GetMainThreadIdentifier()
 
 // -----------------------------------------------------------------------
 
-ULONG Application::ReleaseSolarMutex()
+sal_uLong Application::ReleaseSolarMutex()
 {
     ImplSVData* pSVData = ImplGetSVData();
     return pSVData->mpDefInst->ReleaseYieldMutex();
@@ -533,7 +532,7 @@ ULONG Application::ReleaseSolarMutex()
 
 // -----------------------------------------------------------------------
 
-void Application::AcquireSolarMutex( ULONG nCount )
+void Application::AcquireSolarMutex( sal_uLong nCount )
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->mpDefInst->AcquireYieldMutex( nCount );
@@ -541,56 +540,56 @@ void Application::AcquireSolarMutex( ULONG nCount )
 
 // -----------------------------------------------------------------------
 
-BOOL Application::IsInMain()
+sal_Bool Application::IsInMain()
 {
     return ImplGetSVData()->maAppData.mbInAppMain;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Application::IsInExecute()
+sal_Bool Application::IsInExecute()
 {
     return ImplGetSVData()->maAppData.mbInAppExecute;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Application::IsShutDown()
+sal_Bool Application::IsShutDown()
 {
     return ImplGetSVData()->maAppData.mbAppQuit;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Application::IsInModalMode()
+sal_Bool Application::IsInModalMode()
 {
     return (ImplGetSVData()->maAppData.mnModalMode != 0);
 }
 
 // -----------------------------------------------------------------------
 
-USHORT Application::GetModalModeCount()
+sal_uInt16 Application::GetModalModeCount()
 {
     return ImplGetSVData()->maAppData.mnModalMode;
 }
 
 // -----------------------------------------------------------------------
 
-USHORT Application::GetDispatchLevel()
+sal_uInt16 Application::GetDispatchLevel()
 {
     return ImplGetSVData()->maAppData.mnDispatchLevel;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Application::AnyInput( USHORT nType )
+sal_Bool Application::AnyInput( sal_uInt16 nType )
 {
-    return (BOOL)ImplGetSVData()->mpDefInst->AnyInput( nType );
+    return (sal_Bool)ImplGetSVData()->mpDefInst->AnyInput( nType );
 }
 
 // -----------------------------------------------------------------------
 
-ULONG Application::GetLastInputInterval()
+sal_uLong Application::GetLastInputInterval()
 {
     return (Time::GetSystemTicks()-ImplGetSVData()->maAppData.mnLastInputTime);
 }
@@ -599,7 +598,7 @@ ULONG Application::GetLastInputInterval()
 
 extern int nImplSysDialog;
 
-BOOL Application::IsUICaptured()
+sal_Bool Application::IsUICaptured()
 {
     ImplSVData* pSVData = ImplGetSVData();
     // Wenn Mouse gecaptured, oder im TrackingModus oder im Auswahlmodus
@@ -608,37 +607,37 @@ BOOL Application::IsUICaptured()
     // D&D aktive !!!
     if ( pSVData->maWinData.mpCaptureWin || pSVData->maWinData.mpTrackWin ||
          pSVData->maWinData.mpFirstFloat || nImplSysDialog )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Application::IsUserActive( USHORT nTest )
+sal_Bool Application::IsUserActive( sal_uInt16 nTest )
 {
     if ( nTest & (USERACTIVE_MOUSEDRAG | USERACTIVE_INPUT) )
     {
         if ( IsUICaptured() )
-            return TRUE;
+            return sal_True;
     }
 
     if ( nTest & USERACTIVE_INPUT )
     {
         if ( GetLastInputInterval() < 500 )
-            return TRUE;
+            return sal_True;
 
         if ( AnyInput( INPUT_KEYBOARD ) )
-            return TRUE;
+            return sal_True;
     }
 
     if ( nTest & USERACTIVE_MODALDIALOG )
     {
         if ( ImplGetSVData()->maAppData.mnModalDialog )
-            return TRUE;
+            return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -662,10 +661,10 @@ void Application::MergeSystemSettings( AllSettings& rSettings )
         {
             // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
             pWindow->ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
-            pSVData->maAppData.mbSettingsInit = TRUE;
+            pSVData->maAppData.mbSettingsInit = sal_True;
         }
         // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
-        pWindow->ImplUpdateGlobalSettings( rSettings, FALSE );
+        pWindow->ImplUpdateGlobalSettings( rSettings, sal_False );
     }
 }
 
@@ -707,7 +706,7 @@ void Application::SetSettings( const AllSettings& rSettings )
         }
         ResMgr::SetDefaultLocale( rSettings.GetUILocale() );
         *pSVData->maAppData.mpSettings = rSettings;
-        ULONG nChangeFlags = aOldSettings.GetChangeFlags( *pSVData->maAppData.mpSettings );
+        sal_uLong nChangeFlags = aOldSettings.GetChangeFlags( *pSVData->maAppData.mpSettings );
         if ( nChangeFlags )
         {
             DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, &aOldSettings, nChangeFlags );
@@ -738,7 +737,7 @@ void Application::SetSettings( const AllSettings& rSettings )
                 Window* pClientWin = pFrame;
                 while ( pClientWin->ImplGetClientWindow() )
                     pClientWin = pClientWin->ImplGetClientWindow();
-                pClientWin->UpdateSettings( rSettings, TRUE );
+                pClientWin->UpdateSettings( rSettings, sal_True );
 
                 Window* pTempWin = pFrame->mpWindowImpl->mpFrameData->mpFirstOverlap;
                 while ( pTempWin )
@@ -748,7 +747,7 @@ void Application::SetSettings( const AllSettings& rSettings )
                     pClientWin = pTempWin;
                     while ( pClientWin->ImplGetClientWindow() )
                         pClientWin = pClientWin->ImplGetClientWindow();
-                    pClientWin->UpdateSettings( rSettings, TRUE );
+                    pClientWin->UpdateSettings( rSettings, sal_True );
                     pTempWin = pTempWin->mpWindowImpl->mpNextOverlap;
                 }
 
@@ -827,7 +826,7 @@ void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-void Application::ImplCallEventListeners( ULONG nEvent, Window *pWin, void* pData )
+void Application::ImplCallEventListeners( sal_uLong nEvent, Window *pWin, void* pData )
 {
     ImplSVData* pSVData = ImplGetSVData();
     VclWindowEvent aEvent( pWin, nEvent, pData );
@@ -885,13 +884,13 @@ void Application::RemoveKeyListener( const Link& rKeyListener )
 
 // -----------------------------------------------------------------------
 
-BOOL Application::HandleKey( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent )
+sal_Bool Application::HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent )
 {
     // let listeners process the key event
     VclWindowEvent aEvent( pWin, nEvent, (void *) pKeyEvent );
 
     ImplSVData* pSVData = ImplGetSVData();
-    BOOL bProcessed = FALSE;
+    sal_Bool bProcessed = sal_False;
 
     if ( pSVData->maAppData.mpKeyListeners )
         bProcessed = pSVData->maAppData.mpKeyListeners->Process( &aEvent );
@@ -901,10 +900,10 @@ BOOL Application::HandleKey( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent )
 
 // -----------------------------------------------------------------------------
 
-ULONG Application::PostKeyEvent( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent )
+sal_uLong Application::PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent )
 {
     const SolarMutexGuard aGuard;
-    ULONG               nEventId = 0;
+    sal_uLong               nEventId = 0;
 
     if( pWin && pKeyEvent )
     {
@@ -928,10 +927,10 @@ ULONG Application::PostKeyEvent( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent
 
 // -----------------------------------------------------------------------------
 
-ULONG Application::PostMouseEvent( ULONG nEvent, Window *pWin, MouseEvent* pMouseEvent )
+sal_uLong Application::PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent )
 {
     const SolarMutexGuard aGuard;
-    ULONG               nEventId = 0;
+    sal_uLong               nEventId = 0;
 
     if( pWin && pMouseEvent )
     {
@@ -968,8 +967,8 @@ IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
     const SolarMutexGuard aGuard;
     ImplPostEventData*  pData = static_cast< ImplPostEventData * >( pCallData );
     const void*         pEventData;
-    ULONG               nEvent;
-    const ULONG         nEventId = pData->mnEventId;
+    sal_uLong               nEvent;
+    const sal_uLong         nEventId = pData->mnEventId;
 
     switch( pData->mnEvent )
     {
@@ -1005,7 +1004,7 @@ IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
     };
 
     if( pData->mpWin && pData->mpWin->mpWindowImpl->mpFrameWindow && pEventData )
-        ImplWindowFrameProc( pData->mpWin->mpWindowImpl->mpFrameWindow, NULL, (USHORT) nEvent, pEventData );
+        ImplWindowFrameProc( pData->mpWin->mpWindowImpl->mpFrameWindow, NULL, (sal_uInt16) nEvent, pEventData );
 
     // remove this event from list of posted events, watch for destruction of internal data
     ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
@@ -1050,7 +1049,7 @@ void Application::RemoveMouseAndKeyEvents( Window* pWin )
 
 // -----------------------------------------------------------------------
 
-BOOL Application::IsProcessedMouseOrKeyEvent( ULONG nEventId )
+sal_Bool Application::IsProcessedMouseOrKeyEvent( sal_uLong nEventId )
 {
     const SolarMutexGuard aGuard;
 
@@ -1060,79 +1059,79 @@ BOOL Application::IsProcessedMouseOrKeyEvent( ULONG nEventId )
     while( aIter != aPostedEventList.end() )
     {
         if( (*aIter).second->mnEventId == nEventId )
-            return FALSE;
+            return sal_False;
 
         else
             ++aIter;
     }
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-ULONG Application::PostUserEvent( ULONG nEvent, void* pEventData )
+sal_uLong Application::PostUserEvent( sal_uLong nEvent, void* pEventData )
 {
-    ULONG nEventId;
+    sal_uLong nEventId;
     PostUserEvent( nEventId, nEvent, pEventData );
     return nEventId;
 }
 
 // -----------------------------------------------------------------------
 
-ULONG Application::PostUserEvent( const Link& rLink, void* pCaller )
+sal_uLong Application::PostUserEvent( const Link& rLink, void* pCaller )
 {
-    ULONG nEventId;
+    sal_uLong nEventId;
     PostUserEvent( nEventId, rLink, pCaller );
     return nEventId;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Application::PostUserEvent( ULONG& rEventId, ULONG nEvent, void* pEventData )
+sal_Bool Application::PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData )
 {
     ImplSVEvent* pSVEvent = new ImplSVEvent;
     pSVEvent->mnEvent   = nEvent;
     pSVEvent->mpData    = pEventData;
     pSVEvent->mpLink    = NULL;
     pSVEvent->mpWindow  = NULL;
-    pSVEvent->mbCall    = TRUE;
-    rEventId = (ULONG)pSVEvent;
+    pSVEvent->mbCall    = sal_True;
+    rEventId = (sal_uLong)pSVEvent;
     Window* pDefWindow = ImplGetDefaultWindow();
     if ( pDefWindow && pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
-        return TRUE;
+        return sal_True;
     else
     {
         rEventId = 0;
         delete pSVEvent;
-        return FALSE;
+        return sal_False;
     }
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Application::PostUserEvent( ULONG& rEventId, const Link& rLink, void* pCaller )
+sal_Bool Application::PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller )
 {
     ImplSVEvent* pSVEvent = new ImplSVEvent;
     pSVEvent->mnEvent   = 0;
     pSVEvent->mpData    = pCaller;
     pSVEvent->mpLink    = new Link( rLink );
     pSVEvent->mpWindow  = NULL;
-    pSVEvent->mbCall    = TRUE;
-    rEventId = (ULONG)pSVEvent;
+    pSVEvent->mbCall    = sal_True;
+    rEventId = (sal_uLong)pSVEvent;
     Window* pDefWindow = ImplGetDefaultWindow();
     if ( pDefWindow && pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
-        return TRUE;
+        return sal_True;
     else
     {
         rEventId = 0;
         delete pSVEvent;
-        return FALSE;
+        return sal_False;
     }
 }
 
 // -----------------------------------------------------------------------
 
-void Application::RemoveUserEvent( ULONG nUserEvent )
+void Application::RemoveUserEvent( sal_uLong nUserEvent )
 {
     if(nUserEvent)
     {
@@ -1150,13 +1149,13 @@ void Application::RemoveUserEvent( ULONG nUserEvent )
             pSVEvent->mpWindow = NULL;
         }
 
-        pSVEvent->mbCall = FALSE;
+        pSVEvent->mbCall = sal_False;
     }
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Application::InsertIdleHdl( const Link& rLink, USHORT nPrio )
+sal_Bool Application::InsertIdleHdl( const Link& rLink, sal_uInt16 nPrio )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -1438,7 +1437,7 @@ unsigned int Application::GetBestScreen( const Rectangle& i_rRect )
 
 // -----------------------------------------------------------------------
 
-BOOL Application::InsertAccel( Accelerator* pAccel )
+sal_Bool Application::InsertAccel( Accelerator* pAccel )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -1469,17 +1468,17 @@ void Application::FlushAccel()
 
 // -----------------------------------------------------------------------
 
-BOOL Application::CallAccel( const KeyCode& rKeyCode, USHORT nRepeat )
+sal_Bool Application::CallAccel( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( pSVData->maAppData.mpAccelMgr )
     {
         if ( pSVData->maAppData.mpAccelMgr->IsAccelKey( rKeyCode, nRepeat ) )
-            return TRUE;
+            return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -1498,21 +1497,21 @@ Help* Application::GetHelp()
 
 // -----------------------------------------------------------------------
 
-void Application::EnableAutoHelpId( BOOL bEnabled )
+void Application::EnableAutoHelpId( sal_Bool bEnabled )
 {
     ImplGetSVData()->maHelpData.mbAutoHelpId = bEnabled;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Application::IsAutoHelpIdEnabled()
+sal_Bool Application::IsAutoHelpIdEnabled()
 {
     return ImplGetSVData()->maHelpData.mbAutoHelpId;
 }
 
 // -----------------------------------------------------------------------
 
-void Application::EnableAutoMnemonic( BOOL bEnabled )
+void Application::EnableAutoMnemonic( sal_Bool bEnabled )
 {
     AllSettings aSettings = GetSettings();
     StyleSettings aStyle = aSettings.GetStyleSettings();
@@ -1523,7 +1522,7 @@ void Application::EnableAutoMnemonic( BOOL bEnabled )
 
 // -----------------------------------------------------------------------
 
-BOOL Application::IsAutoMnemonicEnabled()
+sal_Bool Application::IsAutoMnemonicEnabled()
 {
     return GetSettings().GetStyleSettings().GetAutoMnemonic();
 }
@@ -1561,7 +1560,7 @@ Window* Application::GetDefDialogParent()
     // #103442# find some useful dialog parent if there
     // was no default set
     // NOTE: currently even the default is not used
-    if( FALSE && pSVData->maWinData.mpDefDialogParent != NULL )
+    if( sal_False && pSVData->maWinData.mpDefDialogParent != NULL )
         return pSVData->maWinData.mpDefDialogParent;
     else
     {
@@ -1625,28 +1624,28 @@ Window* Application::GetDefDialogParent()
 
 // -----------------------------------------------------------------------
 
-void Application::EnableDialogCancel( BOOL bDialogCancel )
+void Application::EnableDialogCancel( sal_Bool bDialogCancel )
 {
     ImplGetSVData()->maAppData.mbDialogCancel = bDialogCancel;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Application::IsDialogCancelEnabled()
+sal_Bool Application::IsDialogCancelEnabled()
 {
     return ImplGetSVData()->maAppData.mbDialogCancel;
 }
 
 // -----------------------------------------------------------------------
 
-void Application::SetSystemWindowMode( USHORT nMode )
+void Application::SetSystemWindowMode( sal_uInt16 nMode )
 {
     ImplGetSVData()->maAppData.mnSysWinMode = nMode;
 }
 
 // -----------------------------------------------------------------------
 
-USHORT Application::GetSystemWindowMode()
+sal_uInt16 Application::GetSystemWindowMode()
 {
     return ImplGetSVData()->maAppData.mnSysWinMode;
 }
@@ -1696,7 +1695,7 @@ UniqueItemId Application::CreateUniqueId()
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > Application::GetVCLToolkit()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > xT;
-    UnoWrapperBase* pWrapper = Application::GetUnoWrapper( TRUE );
+    UnoWrapperBase* pWrapper = Application::GetUnoWrapper( sal_True );
     if ( pWrapper )
         xT = pWrapper->GetVCLToolkit();
     return xT;
@@ -1706,13 +1705,13 @@ UniqueItemId Application::CreateUniqueId()
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
-UnoWrapperBase* Application::GetUnoWrapper( BOOL bCreateIfNotExist )
+UnoWrapperBase* Application::GetUnoWrapper( sal_Bool bCreateIfNotExist )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    static BOOL bAlreadyTriedToCreate = FALSE;
+    static sal_Bool bAlreadyTriedToCreate = sal_False;
     if ( !pSVData->mpUnoWrapper && bCreateIfNotExist && !bAlreadyTriedToCreate )
     {
-        ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "tk", TRUE );
+        ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "tk", sal_True );
         oslModule hTkLib = osl_loadModuleRelative(
             &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( hTkLib )
@@ -1725,7 +1724,7 @@ UnoWrapperBase* Application::GetUnoWrapper( BOOL bCreateIfNotExist )
             }
         }
         DBG_ASSERT( pSVData->mpUnoWrapper, "UnoWrapper could not be created!" );
-        bAlreadyTriedToCreate = TRUE;
+        bAlreadyTriedToCreate = sal_True;
     }
     return pSVData->mpUnoWrapper;
 }
@@ -1746,9 +1745,12 @@ void Application::SetUnoWrapper( UnoWrapperBase* pWrapper )
     ImplSVData* pSVData = ImplGetSVData();
 
     if( !pSVData->mxDisplayConnection.is() )
+    {
         pSVData->mxDisplayConnection.set( new ::vcl::DisplayConnection );
+        pSVData->mxDisplayConnection->start();
+    }
 
-    return pSVData->mxDisplayConnection;
+    return pSVData->mxDisplayConnection.get();
 }
 
 // -----------------------------------------------------------------------
@@ -1767,7 +1769,7 @@ const Link& Application::GetFilterHdl()
 
 // -----------------------------------------------------------------------
 
-BOOL ImplCallHotKey( const KeyCode& rKeyCode )
+sal_Bool ImplCallHotKey( const KeyCode& rKeyCode )
 {
     ImplSVData*     pSVData = ImplGetSVData();
     ImplHotKey*     pHotKeyData = pSVData->maAppData.mpFirstHotKey;
@@ -1776,13 +1778,13 @@ BOOL ImplCallHotKey( const KeyCode& rKeyCode )
         if ( pHotKeyData->maKeyCode.IsDefinedKeyCodeEqual( rKeyCode ) )
         {
             pHotKeyData->maLink.Call( pHotKeyData->mpUserData );
-            return TRUE;
+            return sal_True;
         }
 
         pHotKeyData = pHotKeyData->mpNext;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -1804,7 +1806,7 @@ void ImplFreeHotKeyData()
 
 // -----------------------------------------------------------------------
 
-ULONG Application::AddHotKey( const KeyCode& rKeyCode, const Link& rLink, void* pData )
+sal_uIntPtr Application::AddHotKey( const KeyCode& rKeyCode, const Link& rLink, void* pData )
 {
     ImplSVData*     pSVData = ImplGetSVData();
     ImplHotKey*     pHotKeyData = new ImplHotKey;
@@ -1813,12 +1815,12 @@ ULONG Application::AddHotKey( const KeyCode& rKeyCode, const Link& rLink, void* 
     pHotKeyData->maLink     = rLink;
     pHotKeyData->mpNext     = pSVData->maAppData.mpFirstHotKey;
     pSVData->maAppData.mpFirstHotKey = pHotKeyData;
-    return (ULONG)pHotKeyData;
+    return (sal_uIntPtr)pHotKeyData;
 }
 
 // -----------------------------------------------------------------------
 
-void Application::RemoveHotKey( ULONG nId )
+void Application::RemoveHotKey( sal_uIntPtr nId )
 {
     ImplSVData*     pSVData = ImplGetSVData();
     ImplHotKey*     pFindHotKeyData = (ImplHotKey*)nId;
@@ -1862,7 +1864,7 @@ void ImplFreeEventHookData()
 
 // -----------------------------------------------------------------------
 
-ULONG Application::AddEventHook( VCLEventHookProc pProc, void* pData )
+sal_uIntPtr Application::AddEventHook( VCLEventHookProc pProc, void* pData )
 {
     ImplSVData*     pSVData = ImplGetSVData();
     ImplEventHook*  pEventHookData = new ImplEventHook;
@@ -1870,12 +1872,12 @@ ULONG Application::AddEventHook( VCLEventHookProc pProc, void* pData )
     pEventHookData->mpProc     = pProc;
     pEventHookData->mpNext     = pSVData->maAppData.mpFirstEventHook;
     pSVData->maAppData.mpFirstEventHook = pEventHookData;
-    return (ULONG)pEventHookData;
+    return (sal_uIntPtr)pEventHookData;
 }
 
 // -----------------------------------------------------------------------
 
-void Application::RemoveEventHook( ULONG nId )
+void Application::RemoveEventHook( sal_uIntPtr nId )
 {
     ImplSVData*     pSVData = ImplGetSVData();
     ImplEventHook*  pFindEventHookData = (ImplEventHook*)nId;
@@ -1943,14 +1945,14 @@ const LocaleDataWrapper& Application::GetAppLocaleDataWrapper()
 
 // -----------------------------------------------------------------------
 
-void Application::EnableHeadlessMode( BOOL bEnable )
+void Application::EnableHeadlessMode( sal_Bool bEnable )
 {
     EnableDialogCancel( bEnable );
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Application::IsHeadlessModeEnabled()
+sal_Bool Application::IsHeadlessModeEnabled()
 {
     return IsDialogCancelEnabled();
 }
@@ -2011,14 +2013,14 @@ void Application::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
     pSVData->mpDefInst->AddToRecentDocumentList(rFileUrl, rMimeType);
 }
 
-BOOL Application::IsAccessibilityEnabled()
+sal_Bool Application::IsAccessibilityEnabled()
 {
-    return FALSE;
+    return sal_False;
 }
 
-BOOL InitAccessBridge( BOOL bShowCancel, BOOL &rCancelled )
+sal_Bool InitAccessBridge( sal_Bool bShowCancel, sal_Bool &rCancelled )
 {
-    BOOL bRet = true;
+    sal_Bool bRet = true;
 
 // Disable Java bridge on UNIX
 #if defined UNX
@@ -2032,7 +2034,7 @@ BOOL InitAccessBridge( BOOL bShowCancel, BOOL &rCancelled )
         // disable accessibility if the user chooses to continue
         AllSettings aSettings = Application::GetSettings();
         MiscSettings aMisc = aSettings.GetMiscSettings();
-        aMisc.SetEnableATToolSupport( FALSE );
+        aMisc.SetEnableATToolSupport( sal_False );
         aSettings.SetMiscSettings( aMisc );
         Application::SetSettings( aSettings );
     }

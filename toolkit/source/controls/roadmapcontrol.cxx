@@ -65,7 +65,9 @@ static void lcl_throwIndexOutOfBoundsException( )
     // = UnoControlRoadmapModel
     // ===================================================================
     // -------------------------------------------------------------------
-    UnoControlRoadmapModel::UnoControlRoadmapModel() : maContainerListeners( *this )
+    UnoControlRoadmapModel::UnoControlRoadmapModel( const Reference< XMultiServiceFactory >& i_factory )
+        :UnoControlRoadmapModel_Base( i_factory )
+        ,maContainerListeners( *this )
     {
         ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
         ImplRegisterProperty( BASEPROPERTY_BORDER );
@@ -367,7 +369,9 @@ static void lcl_throwIndexOutOfBoundsException( )
     // = UnoRoadmapControl
     // ===================================================================
     // -------------------------------------------------------------------
-    UnoRoadmapControl::UnoRoadmapControl(): maItemListeners( *this )
+    UnoRoadmapControl::UnoRoadmapControl( const Reference< XMultiServiceFactory >& i_factory )
+        :UnoControlRoadmap_Base( i_factory )
+        ,maItemListeners( *this )
     {
     }
 

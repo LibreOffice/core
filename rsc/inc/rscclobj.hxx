@@ -36,23 +36,23 @@
 class ObjNode : public IdNode{
     RscId       aRscId; // Id der Resource
     CLASS_DATA  pRscObj;// pointer to a resourceobject
-    ULONG       lFileKey;// Dateischluessel
+    sal_uLong       lFileKey;// Dateischluessel
 protected:
     using NameNode::Search;
 
 public:
     using NameNode::Insert;
 
-                ObjNode( const RscId & rId, CLASS_DATA pData, ULONG lKey );
-    ObjNode *   DelObjNode( RscTop * pClass, ULONG lFileKey );
+                ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey );
+    ObjNode *   DelObjNode( RscTop * pClass, sal_uLong lFileKey );
     sal_uInt32      GetId() const;
     RscId       GetRscId(){ return( aRscId ); }
-    ULONG       GetFileKey(){ return lFileKey; };
+    sal_uLong       GetFileKey(){ return lFileKey; };
     ObjNode*    Search( const RscId &rName ) const{
                     // search the index in the b-tree
                     return( (ObjNode *)IdNode::Search( rName ) );
                 }
-    BOOL        Insert( ObjNode* pTN ){
+    sal_Bool        Insert( ObjNode* pTN ){
                     // insert a new node in the b-tree
                     return( IdNode::Insert( (IdNode *)pTN ) );
                 }
@@ -60,7 +60,7 @@ public:
                     // get the Object from this Node
                     return( pRscObj );
                 }
-    BOOL        IsConsistent();
+    sal_Bool        IsConsistent();
 };
 
 /******************* R e f N o d e ***************************************/
@@ -79,11 +79,11 @@ public:
                     // search the index in the b-tree
                     return( (RefNode *)IdNode::Search( typ ) );
                 };
-    BOOL        Insert( RefNode* pTN ){
+    sal_Bool        Insert( RefNode* pTN ){
                     // insert a new node in the b-tree
                     return( IdNode::Insert( (IdNode *)pTN ) );
                 };
-    BOOL        PutObjNode( ObjNode * pPutObject );
+    sal_Bool        PutObjNode( ObjNode * pPutObject );
 
                 // insert new node in b-tree pObjBiTree
     ObjNode *   GetObjNode( const RscId &rRscId );

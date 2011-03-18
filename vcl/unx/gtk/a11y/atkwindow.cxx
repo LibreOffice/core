@@ -79,7 +79,7 @@ init_from_window( AtkObject *accessible, Window *pWindow )
          */
         case AccessibleRole::WINDOW:
         {
-            USHORT type = WINDOW_WINDOW;
+            sal_uInt16 type = WINDOW_WINDOW;
             bool parentIsMenuFloatingWindow = false;
 
             Window *pParent = pWindow->GetParent();

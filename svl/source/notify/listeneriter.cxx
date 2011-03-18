@@ -31,9 +31,9 @@
 #include <tools/debug.hxx>
 
 #include "listenerbase.hxx"
-#include "listeneriter.hxx"
-#include "broadcast.hxx"
-#include "listener.hxx"
+#include <svl/listeneriter.hxx>
+#include <svl/broadcast.hxx>
+#include <svl/listener.hxx>
 
 SvtListenerIter* SvtListenerIter::pListenerIters = 0;
 

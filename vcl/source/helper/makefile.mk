@@ -46,7 +46,6 @@ SLOFILES=\
     $(SLO)$/canvastools.obj		\
     $(SLO)$/xconnection.obj		\
     $(SLO)$/threadex.obj		\
-    $(SLO)$/smartid.obj         \
     $(SLO)$/lazydelete.obj
 
 # --- Targets ------------------------------------------------------

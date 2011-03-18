@@ -202,13 +202,13 @@ void VCLXDialog::setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star
         pWindow->SetText( Title );
 }
 
-void VCLXDialog::setHelpId( sal_Int32 id ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXDialog::setHelpId( const rtl::OUString& rId ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
-        pWindow->SetHelpId( id );
+        pWindow->SetHelpId( rtl::OUStringToOString( rId, RTL_TEXTENCODING_UTF8 ) );
 }
 
 ::rtl::OUString VCLXDialog::getTitle() throw(::com::sun::star::uno::RuntimeException)

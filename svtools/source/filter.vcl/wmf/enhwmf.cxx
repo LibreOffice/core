@@ -272,8 +272,8 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
     length -= 4;
 
     while (length > 0) {
-        UINT16 type, flags;
-        UINT32 size, dataSize;
+        sal_uInt16 type, flags;
+        sal_uInt32 size, dataSize;
         sal_uInt32 next;
 
         *pWMF >> type >> flags >> size >> dataSize;
@@ -332,7 +332,7 @@ void EnhWMFReader::ReadGDIComment()
     }
 }
 
-BOOL EnhWMFReader::ReadEnhWMF()
+sal_Bool EnhWMFReader::ReadEnhWMF()
 {
     sal_uInt32  nStretchBltMode = 0;
     sal_uInt32  nRecType, nRecSize, nNextPos,
@@ -357,7 +357,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
         if ( ( nRecSize < 8 ) || ( nRecSize & 3 ) )     // Parameter sind immer durch 4 teilbar
         {
-            bStatus = FALSE;
+            bStatus = sal_False;
             break;
         }
 
@@ -365,7 +365,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
         if ( nNextPos > nEndPos )
         {
-            bStatus = FALSE;
+            bStatus = sal_False;
             break;
         }
 
@@ -384,7 +384,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
             EMFP_DEBUG(printf ("\tGDI comment\n\t\tlength: %d\n", length));
 
             if( length >= 4 ) {
-                UINT32 id;
+                sal_uInt32 id;
 
                 *pWMF >> id;
 
@@ -430,8 +430,8 @@ BOOL EnhWMFReader::ReadEnhWMF()
             {
                 pWMF->SeekRel( 16 );
                 *pWMF >> nPoints;
-                Polygon aPoly( (UINT16)nPoints );
-                for( UINT16 k = 0; k < (UINT16)nPoints; k++ )
+                Polygon aPoly( (sal_uInt16)nPoints );
+                for( sal_uInt16 k = 0; k < (sal_uInt16)nPoints; k++ )
                 {
                     *pWMF >> nX32 >> nY32;
                     aPoly[ k ] = Point( nX32, nY32 );
@@ -446,14 +446,14 @@ BOOL EnhWMFReader::ReadEnhWMF()
             {
                 pWMF->SeekRel( 0x10 );
                 *pWMF >> nPoints;
-                UINT16 i = 0;
+                sal_uInt16 i = 0;
                 if ( bFlag )
                 {
                     i++;
                     nPoints++;
                 }
-                Polygon aPolygon( (UINT16)nPoints );
-                for ( ; i < (UINT16)nPoints; i++ )
+                Polygon aPolygon( (sal_uInt16)nPoints );
+                for ( ; i < (sal_uInt16)nPoints; i++ )
                 {
                     *pWMF >> nX32 >> nY32;
                     aPolygon[ i ] = Point( nX32, nY32 );
@@ -464,25 +464,25 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
             case EMR_POLYPOLYLINE :
             {
-                UINT16* pnPoints;
+                sal_uInt16* pnPoints;
 
-                INT32   i, nPoly;
+                sal_Int32   i, nPoly;
                 pWMF->SeekRel( 0x10 );
 
                 // Anzahl der Polygone:
                 *pWMF >> nPoly >> i;
 
                 // taking the amount of points of each polygon, retrieving the total number of points
-                if ( static_cast< sal_uInt32 >(nPoly) < SAL_MAX_UINT32 / sizeof(UINT16) )
+                if ( static_cast< sal_uInt32 >(nPoly) < SAL_MAX_UINT32 / sizeof(sal_uInt16) )
                 {
-                    if ( ( static_cast< sal_uInt32 >( nPoly ) * sizeof(UINT16) ) <= ( nEndPos - pWMF->Tell() ) )
+                    if ( ( static_cast< sal_uInt32 >( nPoly ) * sizeof(sal_uInt16) ) <= ( nEndPos - pWMF->Tell() ) )
                     {
-                        pnPoints = new UINT16[ nPoly ];
+                        pnPoints = new sal_uInt16[ nPoly ];
 
                         for ( i = 0; i < nPoly; i++ )
                         {
                             *pWMF >> nPoints;
-                            pnPoints[ i ] = (UINT16)nPoints;
+                            pnPoints[ i ] = (sal_uInt16)nPoints;
                         }
 
                         // Polygonpunkte holen:
@@ -490,7 +490,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
                         for ( i = 0; ( i < nPoly ) && !pWMF->IsEof(); i++ )
                         {
                             Polygon aPoly( pnPoints[ i ] );
-                            for( UINT16 k = 0; k < pnPoints[ i ]; k++ )
+                            for( sal_uInt16 k = 0; k < pnPoints[ i ]; k++ )
                             {
                                 *pWMF >> nX32 >> nY32;
                                 aPoly[ k ] = Point( nX32, nY32 );
@@ -505,25 +505,25 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
             case EMR_POLYPOLYGON :
             {
-                UINT16* pnPoints;
+                sal_uInt16* pnPoints;
                 Point*  pPtAry;
 
-                UINT32  i, nPoly, nGesPoints;
+                sal_uInt32  i, nPoly, nGesPoints;
                 pWMF->SeekRel( 0x10 );
 
                 // Anzahl der Polygone:
                 *pWMF >> nPoly >> nGesPoints;
 
-                if ( ( nGesPoints < SAL_MAX_UINT32 / sizeof(Point) ) && ( nPoly < SAL_MAX_UINT32 / sizeof(UINT16) ) )
+                if ( ( nGesPoints < SAL_MAX_UINT32 / sizeof(Point) ) && ( nPoly < SAL_MAX_UINT32 / sizeof(sal_uInt16) ) )
                 {
-                    if ( ( nPoly * sizeof(UINT16) ) <= ( nEndPos - pWMF->Tell() ) )
+                    if ( ( nPoly * sizeof(sal_uInt16) ) <= ( nEndPos - pWMF->Tell() ) )
                     {
-                        pnPoints = new UINT16[ nPoly ];
+                        pnPoints = new sal_uInt16[ nPoly ];
 
                         for ( i = 0; i < nPoly; i++ )
                         {
                             *pWMF >> nPoints;
-                            pnPoints[ i ] = (UINT16)nPoints;
+                            pnPoints[ i ] = (sal_uInt16)nPoints;
                         }
 
                         if ( ( nGesPoints * (sizeof(sal_uInt32)+sizeof(sal_uInt32)) ) <= ( nEndPos - pWMF->Tell() ) )
@@ -537,7 +537,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
                                 pPtAry[ i ] = Point( nX32, nY32 );
                             }
                             // PolyPolygon Actions erzeugen
-                            PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
+                            PolyPolygon aPolyPoly( (sal_uInt16)nPoly, pnPoints, pPtAry );
                             pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
                             delete[] pPtAry;
                         }
@@ -693,7 +693,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
             case EMR_MODIFYWORLDTRANSFORM :
             {
-                UINT32  nMode;
+                sal_uInt32  nMode;
                 XForm   aTempXForm;
                 *pWMF >> aTempXForm >> nMode;
                 pOut->ModifyWorldTransform( aTempXForm, nMode );
@@ -714,7 +714,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
                 {
 
                     LineInfo    aLineInfo;
-                    UINT32      nStyle;
+                    sal_uInt32      nStyle;
                     Size        aSize;
 
                     *pWMF >> nStyle >> aSize.Width() >> aSize.Height();
@@ -722,9 +722,9 @@ BOOL EnhWMFReader::ReadEnhWMF()
                     if ( aSize.Width() )
                         aLineInfo.SetWidth( aSize.Width() );
 
-                    BOOL bTransparent = FALSE;
-                    UINT16 nDashCount = 0;
-                    UINT16 nDotCount = 0;
+                    sal_Bool bTransparent = sal_False;
+                    sal_uInt16 nDashCount = 0;
+                    sal_uInt16 nDotCount = 0;
                     switch( nStyle )
                     {
                         case PS_DASHDOTDOT :
@@ -738,7 +738,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
                             nDashCount++;
                         break;
                         case PS_NULL :
-                            bTransparent = TRUE;
+                            bTransparent = sal_True;
                             aLineInfo.SetStyle( LINE_NONE );
                         break;
                         default :
@@ -813,12 +813,12 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
             case EMR_CREATEBRUSHINDIRECT :
             {
-                UINT32  nStyle;
+                sal_uInt32  nStyle;
                 *pWMF >> nIndex;
                 if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                 {
                     *pWMF >> nStyle;
-                    pOut->CreateObject( nIndex, GDI_BRUSH, new WinMtfFillStyle( ReadColor(), ( nStyle == BS_HOLLOW ) ? TRUE : FALSE ) );
+                    pOut->CreateObject( nIndex, GDI_BRUSH, new WinMtfFillStyle( ReadColor(), ( nStyle == BS_HOLLOW ) ? sal_True : sal_False ) );
                 }
             }
             break;
@@ -855,7 +855,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
             case EMR_ARC :
             {
-                UINT32 nStartX, nStartY, nEndX, nEndY;
+                sal_uInt32 nStartX, nStartY, nEndX, nEndY;
                 *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
                 pOut->DrawArc( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ) );
             }
@@ -863,7 +863,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
             case EMR_CHORD :
             {
-                UINT32 nStartX, nStartY, nEndX, nEndY;
+                sal_uInt32 nStartX, nStartY, nEndX, nEndY;
                 *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
                 pOut->DrawChord( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ) );
             }
@@ -871,7 +871,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
             case EMR_PIE :
             {
-                UINT32 nStartX, nStartY, nEndX, nEndY;
+                sal_uInt32 nStartX, nStartY, nEndX, nEndY;
                 *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
                 const Rectangle aRect( ReadRectangle( nX32, nY32, nx32, ny32 ));
 
@@ -893,9 +893,9 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
             case EMR_ARCTO :
             {
-                UINT32 nStartX, nStartY, nEndX, nEndY;
+                sal_uInt32 nStartX, nStartY, nEndX, nEndY;
                 *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
-                pOut->DrawArc( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), TRUE );
+                pOut->DrawArc( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), sal_True );
             }
             break;
 
@@ -952,11 +952,11 @@ BOOL EnhWMFReader::ReadEnhWMF()
             case EMR_BITBLT :   // PASSTHROUGH INTENDED
             case EMR_STRETCHBLT :
             {
-                INT32   xDest, yDest, cxDest, cyDest, xSrc, ySrc, cxSrc, cySrc;
-                UINT32  dwRop, iUsageSrc, offBmiSrc, cbBmiSrc, offBitsSrc, cbBitsSrc;
+                sal_Int32   xDest, yDest, cxDest, cyDest, xSrc, ySrc, cxSrc, cySrc;
+                sal_uInt32  dwRop, iUsageSrc, offBmiSrc, cbBmiSrc, offBitsSrc, cbBitsSrc;
                 XForm   xformSrc;
 
-                UINT32  nStart = pWMF->Tell() - 8;
+                sal_uInt32  nStart = pWMF->Tell() - 8;
 
                 pWMF->SeekRel( 0x10 );
                 *pWMF >> xDest >> yDest >> cxDest >> cyDest >> dwRop >> xSrc >> ySrc
@@ -975,27 +975,27 @@ BOOL EnhWMFReader::ReadEnhWMF()
                 cyDest = abs( (int)cyDest );        // and also 122889
 
                 if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
-                    bStatus = FALSE;
+                    bStatus = sal_False;
                 else
                 {
-                    UINT32 nSize = cbBmiSrc + cbBitsSrc + 14;
+                    sal_uInt32 nSize = cbBmiSrc + cbBitsSrc + 14;
                     if ( nSize <= ( nEndPos - nStartPos ) )
                     {
                         char* pBuf = new char[ nSize ];
                         SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
-                        aTmp.ObjectOwnsMemory( TRUE );
-                        aTmp << (BYTE)'B'
-                             << (BYTE)'M'
-                             << (UINT32)cbBitsSrc
-                             << (UINT16)0
-                             << (UINT16)0
-                             << (UINT32)cbBmiSrc + 14;
+                        aTmp.ObjectOwnsMemory( sal_True );
+                        aTmp << (sal_uInt8)'B'
+                             << (sal_uInt8)'M'
+                             << (sal_uInt32)cbBitsSrc
+                             << (sal_uInt16)0
+                             << (sal_uInt16)0
+                             << (sal_uInt32)cbBmiSrc + 14;
                         pWMF->Seek( nStart + offBmiSrc );
                         pWMF->Read( pBuf + 14, cbBmiSrc );
                         pWMF->Seek( nStart + offBitsSrc );
                         pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
                         aTmp.Seek( 0 );
-                        aBitmap.Read( aTmp, TRUE );
+                        aBitmap.Read( aTmp, sal_True );
 
                         // test if it is sensible to crop
                         if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
@@ -1017,9 +1017,9 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
             case EMR_STRETCHDIBITS :
             {
-                INT32   xDest, yDest, xSrc, ySrc, cxSrc, cySrc, cxDest, cyDest;
-                UINT32  offBmiSrc, cbBmiSrc, offBitsSrc, cbBitsSrc, iUsageSrc, dwRop;
-                UINT32  nStart = pWMF->Tell() - 8;
+                sal_Int32   xDest, yDest, xSrc, ySrc, cxSrc, cySrc, cxDest, cyDest;
+                sal_uInt32  offBmiSrc, cbBmiSrc, offBitsSrc, cbBitsSrc, iUsageSrc, dwRop;
+                sal_uInt32  nStart = pWMF->Tell() - 8;
 
                 pWMF->SeekRel( 0x10 );
                 *pWMF >> xDest >> yDest >> xSrc >> ySrc >> cxSrc >> cySrc >> offBmiSrc >> cbBmiSrc >> offBitsSrc
@@ -1032,27 +1032,27 @@ BOOL EnhWMFReader::ReadEnhWMF()
                 cyDest = abs( (int)cyDest );        // and also 122889
 
                 if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
-                    bStatus = FALSE;
+                    bStatus = sal_False;
                 else
                 {
-                    UINT32 nSize = cbBmiSrc + cbBitsSrc + 14;
+                    sal_uInt32 nSize = cbBmiSrc + cbBitsSrc + 14;
                     if ( nSize <= ( nEndPos - nStartPos ) )
                     {
                         char* pBuf = new char[ nSize ];
                         SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
-                        aTmp.ObjectOwnsMemory( TRUE );
-                        aTmp << (BYTE)'B'
-                            << (BYTE)'M'
-                            << (UINT32)cbBitsSrc
-                            << (UINT16)0
-                            << (UINT16)0
-                            << (UINT32)cbBmiSrc + 14;
+                        aTmp.ObjectOwnsMemory( sal_True );
+                        aTmp << (sal_uInt8)'B'
+                            << (sal_uInt8)'M'
+                            << (sal_uInt32)cbBitsSrc
+                            << (sal_uInt16)0
+                            << (sal_uInt16)0
+                            << (sal_uInt32)cbBmiSrc + 14;
                         pWMF->Seek( nStart + offBmiSrc );
                         pWMF->Read( pBuf + 14, cbBmiSrc );
                         pWMF->Seek( nStart + offBitsSrc );
                         pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
                         aTmp.Seek( 0 );
-                        aBitmap.Read( aTmp, TRUE );
+                        aBitmap.Read( aTmp, sal_True );
 
                         // test if it is sensible to crop
                         if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
@@ -1084,7 +1084,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
                     for ( int i = 0; i < LF_FACESIZE; i++ )
                     {
-                        UINT16 nChar;
+                        sal_uInt16 nChar;
                         *pWMF >> nChar;
                         lfFaceName[ i ] = nChar;
                     }
@@ -1188,14 +1188,14 @@ BOOL EnhWMFReader::ReadEnhWMF()
             {
                 pWMF->SeekRel( 16 );
                 *pWMF >> nPoints;
-                UINT16 i = 0;
+                sal_uInt16 i = 0;
                 if ( bFlag )
                 {
                     i++;
                     nPoints++;
                 }
-                Polygon aPoly( (UINT16)nPoints );
-                for( ; i < (UINT16)nPoints; i++ )
+                Polygon aPoly( (sal_uInt16)nPoints );
+                for( ; i < (sal_uInt16)nPoints; i++ )
                 {
                     *pWMF >> nX16 >> nY16;
                     aPoly[ i ] = Point( nX16, nY16 );
@@ -1208,8 +1208,8 @@ BOOL EnhWMFReader::ReadEnhWMF()
             {
                 pWMF->SeekRel( 16 );
                 *pWMF >> nPoints;
-                Polygon aPoly( (UINT16)nPoints );
-                for( UINT16 k = 0; k < (UINT16)nPoints; k++ )
+                Polygon aPoly( (sal_uInt16)nPoints );
+                for( sal_uInt16 k = 0; k < (sal_uInt16)nPoints; k++ )
                 {
                     *pWMF >> nX16 >> nY16;
                     aPoly[ k ] = Point( nX16, nY16 );
@@ -1224,15 +1224,15 @@ BOOL EnhWMFReader::ReadEnhWMF()
             {
                 pWMF->SeekRel( 16 );
                 *pWMF >> nPoints;
-                UINT16 i = 0;
+                sal_uInt16 i = 0;
                 if ( bFlag )
                 {
                     i++;
                     nPoints++;
                 }
 
-                Polygon aPoly( (UINT16)nPoints );
-                for( ; i < (UINT16)nPoints; i++ )
+                Polygon aPoly( (sal_uInt16)nPoints );
+                for( ; i < (sal_uInt16)nPoints; i++ )
                 {
                     *pWMF >> nX16 >> nY16;
                     aPoly[ i ] = Point( nX16, nY16 );
@@ -1243,29 +1243,29 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
             case EMR_POLYPOLYLINE16 :
             {
-                UINT16* pnPoints;
+                sal_uInt16* pnPoints;
 
-                INT32   i, nPoly, nGesPoints;
+                sal_Int32   i, nPoly, nGesPoints;
                 pWMF->SeekRel( 0x10 );
                 // Anzahl der Polygone:
                 *pWMF >> nPoly >> nGesPoints;
 
                 // taking the amount of points of each polygon, retrieving the total number of points
-                if ( static_cast< sal_uInt32 >(nPoly) < SAL_MAX_UINT32 / sizeof(UINT16) )
+                if ( static_cast< sal_uInt32 >(nPoly) < SAL_MAX_UINT32 / sizeof(sal_uInt16) )
                 {
-                    if ( ( static_cast< sal_uInt32 >( nPoly ) * sizeof(UINT16) ) <= ( nEndPos - pWMF->Tell() ) )
+                    if ( ( static_cast< sal_uInt32 >( nPoly ) * sizeof(sal_uInt16) ) <= ( nEndPos - pWMF->Tell() ) )
                     {
-                        pnPoints = new UINT16[ nPoly ];
+                        pnPoints = new sal_uInt16[ nPoly ];
                         for ( i = 0; i < nPoly; i++ )
                         {
                             *pWMF >> nPoints;
-                            pnPoints[ i ] = (UINT16)nPoints;
+                            pnPoints[ i ] = (sal_uInt16)nPoints;
                         }
                         // Polygonpunkte holen:
                         for ( i = 0; ( i < nPoly ) && !pWMF->IsEof(); i++ )
                         {
                             Polygon aPolygon( pnPoints[ i ] );
-                            for ( UINT16 k = 0; k < pnPoints[ i ]; k++ )
+                            for ( sal_uInt16 k = 0; k < pnPoints[ i ]; k++ )
                             {
                                 *pWMF >> nX16 >> nY16;
                                 aPolygon[ k ] = Point( nX16, nY16 );
@@ -1280,22 +1280,22 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
             case EMR_POLYPOLYGON16 :
             {
-                UINT16* pnPoints;
+                sal_uInt16* pnPoints;
                 Point*  pPtAry;
 
-                UINT32  i, nPoly, nGesPoints;
+                sal_uInt32  i, nPoly, nGesPoints;
                 pWMF->SeekRel( 0x10 );
                 // Anzahl der Polygone:
                 *pWMF >> nPoly >> nGesPoints;
-                if ( ( nGesPoints < SAL_MAX_UINT32 / sizeof(Point) ) && ( nPoly < SAL_MAX_UINT32 / sizeof(UINT16) ) )
+                if ( ( nGesPoints < SAL_MAX_UINT32 / sizeof(Point) ) && ( nPoly < SAL_MAX_UINT32 / sizeof(sal_uInt16) ) )
                 {
-                    if ( ( static_cast< sal_uInt32 >( nPoly ) * sizeof( UINT16 ) ) <= ( nEndPos - pWMF->Tell() ) )
+                    if ( ( static_cast< sal_uInt32 >( nPoly ) * sizeof( sal_uInt16 ) ) <= ( nEndPos - pWMF->Tell() ) )
                     {
-                        pnPoints = new UINT16[ nPoly ];
+                        pnPoints = new sal_uInt16[ nPoly ];
                         for ( i = 0; i < nPoly; i++ )
                         {
                             *pWMF >> nPoints;
-                            pnPoints[ i ] = (UINT16)nPoints;
+                            pnPoints[ i ] = (sal_uInt16)nPoints;
                         }
                         if ( ( nGesPoints * (sizeof(sal_uInt16)+sizeof(sal_uInt16)) ) <= ( nEndPos - pWMF->Tell() ) )
                         {
@@ -1308,7 +1308,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
                             }
 
                             // PolyPolygon Actions erzeugen
-                            PolyPolygon aPolyPoly( (UINT16)nPoly, pnPoints, pPtAry );
+                            PolyPolygon aPolyPoly( (sal_uInt16)nPoly, pnPoints, pPtAry );
                             pOut->DrawPolyPolygon( aPolyPoly, bRecordPath );
                             delete[] pPtAry;
                         }
@@ -1337,14 +1337,14 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
             case EMR_CREATEDIBPATTERNBRUSHPT :
             {
-                UINT32  nStart = pWMF->Tell() - 8;
+                sal_uInt32  nStart = pWMF->Tell() - 8;
                 Bitmap aBitmap;
 
                 *pWMF >> nIndex;
 
                 if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                 {
-                    UINT32 usage, offBmi, cbBmi, offBits, cbBits;
+                    sal_uInt32 usage, offBmi, cbBmi, offBits, cbBits;
 
                     *pWMF >> usage;
                     *pWMF >> offBmi;
@@ -1353,28 +1353,28 @@ BOOL EnhWMFReader::ReadEnhWMF()
                     *pWMF >> cbBits;
 
                     if ( (cbBits > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBits < cbBmi) )
-                       bStatus = FALSE;
+                       bStatus = sal_False;
                     else if ( offBmi )
                     {
-                        UINT32  nSize = cbBmi + cbBits + 14;
+                        sal_uInt32  nSize = cbBmi + cbBits + 14;
                         if ( nSize <= ( nEndPos - nStartPos ) )
                         {
                             char*   pBuf = new char[ nSize ];
 
                             SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
-                            aTmp.ObjectOwnsMemory( TRUE );
-                            aTmp << (BYTE)'B'
-                                 << (BYTE)'M'
-                                 << (UINT32)cbBits
-                                 << (UINT16)0
-                                 << (UINT16)0
-                                 << (UINT32)cbBmi + 14;
+                            aTmp.ObjectOwnsMemory( sal_True );
+                            aTmp << (sal_uInt8)'B'
+                                 << (sal_uInt8)'M'
+                                 << (sal_uInt32)cbBits
+                                 << (sal_uInt16)0
+                                 << (sal_uInt16)0
+                                 << (sal_uInt32)cbBmi + 14;
                             pWMF->Seek( nStart + offBmi );
                             pWMF->Read( pBuf + 14, cbBmi );
                             pWMF->Seek( nStart + offBits );
                             pWMF->Read( pBuf + 14 + cbBmi, cbBits );
                             aTmp.Seek( 0 );
-                            aBitmap.Read( aTmp, TRUE );
+                            aBitmap.Read( aTmp, sal_True );
                         }
                     }
                 }
@@ -1455,16 +1455,16 @@ BOOL EnhWMFReader::ReadEnhWMF()
 
 //-----------------------------------------------------------------------------------
 
-BOOL EnhWMFReader::ReadHeader()
+sal_Bool EnhWMFReader::ReadHeader()
 {
-    UINT32      nUINT32, nHeaderSize, nPalEntries;
-    INT32       nLeft, nTop, nRight, nBottom;
+    sal_uInt32      nsal_uInt32, nHeaderSize, nPalEntries;
+    sal_Int32       nLeft, nTop, nRight, nBottom;
 
     // METAFILEHEADER SPARE ICH MIR HIER
     // Einlesen des METAHEADER
-    *pWMF >> nUINT32 >> nHeaderSize;
-    if ( nUINT32 != 1 )         // Typ
-        return FALSE;
+    *pWMF >> nsal_uInt32 >> nHeaderSize;
+    if ( nsal_uInt32 != 1 )         // Typ
+        return sal_False;
 
     // bound size
     Rectangle rclBounds;    // rectangle in logical units 1/100th mm
@@ -1482,12 +1482,12 @@ BOOL EnhWMFReader::ReadHeader()
     rclFrame.Right() = nRight;
     rclFrame.Bottom() = nBottom;
 
-    *pWMF >> nUINT32;                                   // signature
+    *pWMF >> nsal_uInt32;                                   // signature
 
-    if ( nUINT32 != 0x464d4520 )
-        return FALSE;
+    if ( nsal_uInt32 != 0x464d4520 )
+        return sal_False;
 
-    *pWMF >> nUINT32;                                   // nVersion
+    *pWMF >> nsal_uInt32;                                   // nVersion
     *pWMF >> nEndPos;                                   // size of metafile
     nEndPos += nStartPos;
 
@@ -1500,7 +1500,7 @@ BOOL EnhWMFReader::ReadHeader()
     *pWMF >> nRecordCount;
 
     if ( !nRecordCount )
-        return FALSE;
+        return sal_False;
 
     pWMF->SeekRel( 0xc );
 
@@ -1513,12 +1513,12 @@ BOOL EnhWMFReader::ReadHeader()
     pOut->SetRefMill( Size( nMillX, nMillY ) );
 
     pWMF->Seek( nStartPos + nHeaderSize );
-    return TRUE;
+    return sal_True;
 }
 
 //-----------------------------------------------------------------------------------
 
-Rectangle EnhWMFReader::ReadRectangle( INT32 x1, INT32 y1, INT32 x2, INT32 y2 )
+Rectangle EnhWMFReader::ReadRectangle( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 )
 {
     Point aTL ( Point( x1, y1 ) );
     Point aBR( Point( --x2, --y2 ) );

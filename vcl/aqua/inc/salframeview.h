@@ -37,7 +37,8 @@
     id mDraggingDestinationHandler;
 }
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
--(MacOSBOOL)canBecomeKeyWindow;
+-(BOOL)canBecomeKeyWindow;
+-(void)displayIfNeeded;
 -(void)windowDidBecomeKey: (NSNotification*)pNotification;
 -(void)windowDidResignKey: (NSNotification*)pNotification;
 -(void)windowDidChangeScreen: (NSNotification*)pNotification;
@@ -45,10 +46,10 @@
 -(void)windowDidResize: (NSNotification*)pNotification;
 -(void)windowDidMiniaturize: (NSNotification*)pNotification;
 -(void)windowDidDeminiaturize: (NSNotification*)pNotification;
--(MacOSBOOL)windowShouldClose: (NSNotification*)pNotification;
+-(BOOL)windowShouldClose: (NSNotification*)pNotification;
 -(void)dockMenuItemTriggered: (id)sender;
 -(AquaSalFrame*)getSalFrame;
--(MacOSBOOL)containsMouse;
+-(BOOL)containsMouse;
 -(::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >)accessibleContext;
 
 /* NSDraggingDestination protocol methods
@@ -56,8 +57,8 @@
 -(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender;
 -(NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender;
 -(void)draggingExited:(id <NSDraggingInfo>)sender;
--(MacOSBOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender;
--(MacOSBOOL)performDragOperation:(id <NSDraggingInfo>)sender;
+-(BOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender;
+-(BOOL)performDragOperation:(id <NSDraggingInfo>)sender;
 -(void)concludeDragOperation:(id <NSDraggingInfo>)sender;
 
 -(void)registerDraggingDestinationHandler:(id)theHandler;
@@ -85,9 +86,9 @@
 }
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame;
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
--(MacOSBOOL)acceptsFirstResponder;
--(MacOSBOOL)acceptsFirstMouse: (NSEvent *)pEvent;
--(MacOSBOOL)isOpaque;
+-(BOOL)acceptsFirstResponder;
+-(BOOL)acceptsFirstMouse: (NSEvent *)pEvent;
+-(BOOL)isOpaque;
 -(void)drawRect: (NSRect)aRect;
 -(void)mouseDown: (NSEvent*)pEvent;
 -(void)mouseDragged: (NSEvent*)pEvent;
@@ -107,12 +108,12 @@
 -(void)swipeWithEvent: (NSEvent*)pEvent;
 -(void)keyDown: (NSEvent*)pEvent;
 -(void)flagsChanged: (NSEvent*)pEvent;
--(void)sendMouseEventToFrame:(NSEvent*)pEvent button:(USHORT)nButton eventtype:(USHORT)nEvent;
--(MacOSBOOL)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar;
--(MacOSBOOL)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar modifiers: (unsigned int)nMod;
--(MacOSBOOL)sendKeyToFrameDirect: (USHORT)nKeyCode character: (sal_Unicode)aChar modifiers: (unsigned int)nMod;
--(MacOSBOOL)sendSingleCharacter:(NSEvent*)pEvent;
--(MacOSBOOL)handleKeyDownException:(NSEvent*)pEvent;
+-(void)sendMouseEventToFrame:(NSEvent*)pEvent button:(sal_uInt16)nButton eventtype:(sal_uInt16)nEvent;
+-(BOOL)sendKeyInputAndReleaseToFrame: (sal_uInt16)nKeyCode character: (sal_Unicode)aChar;
+-(BOOL)sendKeyInputAndReleaseToFrame: (sal_uInt16)nKeyCode character: (sal_Unicode)aChar modifiers: (unsigned int)nMod;
+-(BOOL)sendKeyToFrameDirect: (sal_uInt16)nKeyCode character: (sal_Unicode)aChar modifiers: (unsigned int)nMod;
+-(BOOL)sendSingleCharacter:(NSEvent*)pEvent;
+-(BOOL)handleKeyDownException:(NSEvent*)pEvent;
 -(void)clearLastEvent;
 /*
     text action methods
@@ -201,8 +202,8 @@
 -(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender;
 -(NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender;
 -(void)draggingExited:(id <NSDraggingInfo>)sender;
--(MacOSBOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender;
--(MacOSBOOL)performDragOperation:(id <NSDraggingInfo>)sender;
+-(BOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender;
+-(BOOL)performDragOperation:(id <NSDraggingInfo>)sender;
 -(void)concludeDragOperation:(id <NSDraggingInfo>)sender;
 
 -(void)registerDraggingDestinationHandler:(id)theHandler;

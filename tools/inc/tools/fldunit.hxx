@@ -33,7 +33,6 @@
 // - FieldTypes -
 // --------------
 
-// By changes you must also change: rsc/vclrsc.hxx
 enum FieldUnit { FUNIT_NONE, FUNIT_MM, FUNIT_CM, FUNIT_M, FUNIT_KM,
                  FUNIT_TWIP, FUNIT_POINT, FUNIT_PICA,
                  FUNIT_INCH, FUNIT_FOOT, FUNIT_MILE, FUNIT_CHAR, FUNIT_LINE, FUNIT_CUSTOM,

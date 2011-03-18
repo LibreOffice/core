@@ -108,7 +108,7 @@ VCLXMenu::~VCLXMenu()
     }
 }
 
-BOOL VCLXMenu::IsPopupMenu() const
+sal_Bool VCLXMenu::IsPopupMenu() const
 {
     return (mpMenu && ! mpMenu->IsMenuBar());
 }
@@ -721,7 +721,7 @@ namespace
         sal_Bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
         sal_Bool bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
         sal_Bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
-        USHORT   nKey   = (USHORT)aAWTKey.KeyCode;
+        sal_uInt16   nKey   = (sal_uInt16)aAWTKey.KeyCode;
 
         return KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
     }
@@ -1089,7 +1089,7 @@ DBG_NAME(VCLXMenuBar);
 VCLXMenuBar::VCLXMenuBar()
 {
     DBG_CTOR( VCLXMenuBar, 0 );
-    ImplCreateMenu( FALSE );
+    ImplCreateMenu( sal_False );
 }
 
 VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( (Menu *)pMenuBar )
@@ -1106,7 +1106,7 @@ DBG_NAME(VCLXPopupMenu);
 VCLXPopupMenu::VCLXPopupMenu()
 {
     DBG_CTOR( VCLXPopupMenu, 0 );
-    ImplCreateMenu( TRUE );
+    ImplCreateMenu( sal_True );
 }
 
 VCLXPopupMenu::VCLXPopupMenu( PopupMenu* pPopMenu ) : VCLXMenu( (Menu *)pPopMenu )

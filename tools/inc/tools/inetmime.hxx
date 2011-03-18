@@ -1425,7 +1425,7 @@ public:
 
     void Clear();
 
-    void Insert(INetContentTypeParameter * pParameter, ULONG nIndex)
+    void Insert(INetContentTypeParameter * pParameter, sal_uIntPtr nIndex)
     {
         maEntries.insert(maEntries.begin()+nIndex,pParameter);
     }
@@ -1435,7 +1435,7 @@ public:
         maEntries.push_back(pParameter);
     }
 
-    inline const INetContentTypeParameter * GetObject(ULONG nIndex) const
+    inline const INetContentTypeParameter * GetObject(sal_uIntPtr nIndex) const
     {
         return &(maEntries[nIndex]);
     }

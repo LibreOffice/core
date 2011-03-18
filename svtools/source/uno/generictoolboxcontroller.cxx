@@ -71,7 +71,7 @@ struct ExecuteInfo
 GenericToolboxController::GenericToolboxController( const Reference< XMultiServiceFactory >& rServiceManager,
                                                     const Reference< XFrame >&               rFrame,
                                                     ToolBox*                                 pToolbox,
-                                                    USHORT                                   nID,
+                                                    sal_uInt16                                   nID,
                                                     const ::rtl::OUString&                          aCommand ) :
     svt::ToolboxController( rServiceManager, rFrame, aCommand )
     ,   m_pToolbox( pToolbox )
@@ -158,7 +158,7 @@ throw ( RuntimeException )
     {
         m_pToolbox->EnableItem( m_nID, Event.IsEnabled );
 
-        USHORT nItemBits = m_pToolbox->GetItemBits( m_nID );
+        sal_uInt16 nItemBits = m_pToolbox->GetItemBits( m_nID );
         nItemBits &= ~TIB_CHECKABLE;
         TriState eTri = STATE_NOCHECK;
 

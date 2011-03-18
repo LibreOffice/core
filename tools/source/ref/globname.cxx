@@ -53,7 +53,7 @@ ImpSvGlobalName::ImpSvGlobalName( int )
 /*************************************************************************
 |*    ImpSvGlobalName::operator ==()
 *************************************************************************/
-BOOL ImpSvGlobalName::operator == ( const ImpSvGlobalName & rObj ) const
+sal_Bool ImpSvGlobalName::operator == ( const ImpSvGlobalName & rObj ) const
 {
     return !memcmp( szData, rObj.szData, sizeof( szData ) );
 }
@@ -76,10 +76,10 @@ struct _GUID
 struct GUID
 #endif
 {
-    UINT32 Data1;
-    UINT16 Data2;
-    UINT16 Data3;
-    BYTE   Data4[8];
+    sal_uInt32 Data1;
+    sal_uInt16 Data2;
+    sal_uInt16 Data3;
+    sal_uInt8  Data4[8];
 };
 SvGlobalName::SvGlobalName( const CLSID & rId )
 {
@@ -88,9 +88,9 @@ SvGlobalName::SvGlobalName( const CLSID & rId )
     memcpy( pImp->szData, &rId, sizeof( pImp->szData ) );
 }
 
-SvGlobalName::SvGlobalName( UINT32 n1, USHORT n2, USHORT n3,
-                            BYTE b8, BYTE b9, BYTE b10, BYTE b11,
-                            BYTE b12, BYTE b13, BYTE b14, BYTE b15 )
+SvGlobalName::SvGlobalName( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
+                            sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
+                            sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
 {
     pImp = new ImpSvGlobalName();
     pImp->nRefCount++;
@@ -188,14 +188,14 @@ SvStream& operator >> ( SvStream& rStr, SvGlobalName & rObj )
 /*************************************************************************
 |*    SvGlobalName::operator < ()
 *************************************************************************/
-BOOL SvGlobalName::operator < ( const SvGlobalName & rObj ) const
+sal_Bool SvGlobalName::operator < ( const SvGlobalName & rObj ) const
 {
     int n = memcmp( pImp->szData +6, rObj.pImp->szData +6,
                     sizeof( pImp->szData ) -6);
     if( n < 0 )
-        return TRUE;
+        return sal_True;
     else if( n > 0 )
-        return FALSE;
+        return sal_False;
 
     sal_uInt16 Data2_a;
     memcpy(&Data2_a, pImp->szData+4, sizeof(sal_uInt16));
@@ -204,7 +204,7 @@ BOOL SvGlobalName::operator < ( const SvGlobalName & rObj ) const
     memcpy(&Data2_b, rObj.pImp->szData+4, sizeof(sal_uInt16));
 
     if( Data2_a < Data2_b )
-        return TRUE;
+        return sal_True;
     else if( Data2_a == Data2_b )
     {
         sal_uInt32 Data1_a;
@@ -216,14 +216,14 @@ BOOL SvGlobalName::operator < ( const SvGlobalName & rObj ) const
         return Data1_a  < Data1_b;
     }
     else
-        return FALSE;
+        return sal_False;
 
 }
 
 /*************************************************************************
 |*    SvGlobalName::operator +=()
 *************************************************************************/
-SvGlobalName & SvGlobalName::operator += ( UINT32 n )
+SvGlobalName & SvGlobalName::operator += ( sal_uInt32 n )
 {
     NewImp();
 
@@ -246,7 +246,7 @@ SvGlobalName & SvGlobalName::operator += ( UINT32 n )
 /*************************************************************************
 |*    SvGlobalName::operator ==()
 *************************************************************************/
-BOOL SvGlobalName::operator == ( const SvGlobalName & rObj ) const
+sal_Bool SvGlobalName::operator == ( const SvGlobalName & rObj ) const
 {
     return *pImp == *rObj.pImp;
 }
@@ -260,7 +260,7 @@ void SvGlobalName::MakeFromMemory( void * pData )
 /*************************************************************************
 |*    SvGlobalName::MakeId()
 *************************************************************************/
-BOOL SvGlobalName::MakeId( const String & rIdStr )
+sal_Bool SvGlobalName::MakeId( const String & rIdStr )
 {
     ByteString  aStr( rIdStr, RTL_TEXTENCODING_ASCII_US );
     sal_Char * pStr = (sal_Char *)aStr.GetBuffer();
@@ -268,7 +268,7 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
       && '-' == pStr[ 8 ]  && '-' == pStr[ 13 ]
       && '-' == pStr[ 18 ] && '-' == pStr[ 23 ] )
     {
-        UINT32 nFirst = 0;
+        sal_uInt32 nFirst = 0;
         int i = 0;
         for( i = 0; i < 8; i++ )
         {
@@ -278,11 +278,11 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
                 else
                     nFirst = nFirst * 16 + (toupper( *pStr ) - 'A' + 10 );
             else
-                return FALSE;
+                return sal_False;
             pStr++;
         }
 
-        UINT16 nSec = 0;
+        sal_uInt16 nSec = 0;
         pStr++;
         for( i = 0; i < 4; i++ )
         {
@@ -290,13 +290,13 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
                 if( isdigit( *pStr ) )
                     nSec = nSec * 16 + (*pStr - '0');
                 else
-                    nSec = nSec * 16 + (UINT16)(toupper( *pStr ) - 'A' + 10 );
+                    nSec = nSec * 16 + (sal_uInt16)(toupper( *pStr ) - 'A' + 10 );
             else
-                return FALSE;
+                return sal_False;
             pStr++;
         }
 
-        UINT16 nThird = 0;
+        sal_uInt16 nThird = 0;
         pStr++;
         for( i = 0; i < 4; i++ )
         {
@@ -304,13 +304,13 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
                 if( isdigit( *pStr ) )
                     nThird = nThird * 16 + (*pStr - '0');
                 else
-                    nThird = nThird * 16 + (UINT16)(toupper( *pStr ) - 'A' + 10 );
+                    nThird = nThird * 16 + (sal_uInt16)(toupper( *pStr ) - 'A' + 10 );
             else
-                return FALSE;
+                return sal_False;
             pStr++;
         }
 
-        BYTE szRemain[ 8 ];
+        sal_Int8 szRemain[ 8 ];
         memset( szRemain, 0, sizeof( szRemain ) );
         pStr++;
         for( i = 0; i < 16; i++ )
@@ -319,9 +319,9 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
                 if( isdigit( *pStr ) )
                     szRemain[i/2] = szRemain[i/2] * 16 + (*pStr - '0');
                 else
-                    szRemain[i/2] = szRemain[i/2] * 16 + (BYTE)(toupper( *pStr ) - 'A' + 10 );
+                    szRemain[i/2] = szRemain[i/2] * 16 + (sal_Int8)(toupper( *pStr ) - 'A' + 10 );
             else
-                return FALSE;
+                return sal_False;
             pStr++;
             if( i == 3 )
                 pStr++;
@@ -332,9 +332,9 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
         memcpy(&pImp->szData[4], &nSec, sizeof(nSec));
         memcpy(&pImp->szData[6], &nThird, sizeof(nThird));
         memcpy(&pImp->szData[ 8 ], szRemain, 8);
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -349,7 +349,7 @@ String SvGlobalName::GetctorName() const
     memcpy(&Data1, pImp->szData, sizeof(sal_uInt32));
     sprintf( buf, "0x%8.8" SAL_PRIXUINT32, Data1 );
     aRet += buf;
-    USHORT i;
+    sal_uInt16 i;
     for( i = 4; i < 8; i += 2 )
     {
         aRet += ',';
@@ -380,7 +380,7 @@ String SvGlobalName::GetHexName() const
     sprintf( buf, "%8.8" SAL_PRIXUINT32, Data1 );
     aRet += buf;
     aRet += '-';
-    USHORT i ;
+    sal_uInt16 i ;
     for( i = 4; i < 8; i += 2 )
     {
         sal_uInt16 Data2;
@@ -442,7 +442,7 @@ void SvGlobalNameList::Append( const SvGlobalName & rName )
 /*************************************************************************
 |*    SvGlobalNameList::GetObject()
 *************************************************************************/
-SvGlobalName SvGlobalNameList::GetObject( ULONG nPos )
+SvGlobalName SvGlobalNameList::GetObject( sal_uLong nPos )
 {
     return SvGlobalName(nPos < aList.size() ? aList[nPos] : NULL);
 }
@@ -450,16 +450,16 @@ SvGlobalName SvGlobalNameList::GetObject( ULONG nPos )
 /*************************************************************************
 |*    SvGlobalNameList::IsEntry()
 *************************************************************************/
-BOOL SvGlobalNameList::IsEntry( const SvGlobalName & rName )
+sal_Bool SvGlobalNameList::IsEntry( const SvGlobalName & rName )
 {
     std::vector<ImpSvGlobalName*>::iterator piter;
     for (piter = aList.begin(); piter != aList.end(); ++piter)
     {
         if (*rName.pImp == *(*piter))
-            return true;
+            return sal_True;
     }
 
-    return false;
+    return sal_False;
 }
 
 com::sun::star::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const

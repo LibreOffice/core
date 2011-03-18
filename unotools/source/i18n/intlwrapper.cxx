@@ -95,7 +95,7 @@ void IntlWrapper::ImplNewCalendar() const
 }
 
 
-void IntlWrapper::ImplNewCollator( BOOL bCaseSensitive ) const
+void IntlWrapper::ImplNewCollator( sal_Bool bCaseSensitive ) const
 {
     CollatorWrapper* p = new CollatorWrapper( xSMgr );
     if ( bCaseSensitive )

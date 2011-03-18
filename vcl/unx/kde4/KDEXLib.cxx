@@ -131,7 +131,7 @@ void KDEXLib::Init()
     //kAboutData->setProgramIconName("OpenOffice");
 
     m_nFakeCmdLineArgs = 2;
-    USHORT nIdx;
+    sal_uInt16 nIdx;
 
     int nParams = osl_getCommandArgCount();
     rtl::OString aDisplay;
@@ -345,7 +345,7 @@ bool KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
     return wasEvent;
 }
 
-void KDEXLib::StartTimer( ULONG nMS )
+void KDEXLib::StartTimer( sal_uLong nMS )
 {
     if( eventLoopType == LibreOfficeEventLoop )
         return SalXLib::StartTimer( nMS );

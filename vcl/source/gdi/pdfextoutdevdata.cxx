@@ -783,7 +783,7 @@ void PDFExtOutDevData::EndGroup()
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::EndGroup );
 }
 void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
-                                 BYTE               nTransparency,
+                                 sal_uInt8              nTransparency,
                                  const Rectangle&   rOutputRect,
                                  const Rectangle&   rVisibleOutputRect )
 {

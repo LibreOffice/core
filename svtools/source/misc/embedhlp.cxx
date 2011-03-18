@@ -236,7 +236,7 @@ struct EmbeddedObjectRef_Impl
     comphelper::EmbeddedObjectContainer*        pContainer;
     Graphic*                                    pGraphic;
     sal_Int64                                   nViewAspect;
-    BOOL                                        bIsLocked;
+    sal_Bool                                        bIsLocked;
     sal_Bool                                    bNeedUpdate;
 
     // #i104867#
@@ -250,7 +250,7 @@ void EmbeddedObjectRef::Construct_Impl()
     mpImp->pContainer = 0;
     mpImp->pGraphic = 0;
     mpImp->nViewAspect = embed::Aspects::MSOLE_CONTENT;
-    mpImp->bIsLocked = FALSE;
+    mpImp->bIsLocked = sal_False;
     mpImp->bNeedUpdate = sal_False;
     mpImp->mnGraphicVersion = 0;
     mpImp->aDefaultSizeForChart_In_100TH_MM = awt::Size(8000,7000);
@@ -306,6 +306,7 @@ void EmbeddedObjectRef::Assign( const NS_UNO::Reference < NS_EMBED::XEmbeddedObj
     mpImp->xListener = EmbedEventListener_Impl::Create( this );
 
     //#i103460#
+    if ( IsChart() )
     {
         ::com::sun::star::uno::Reference < ::com::sun::star::chart2::XDefaultSizeTransmitter > xSizeTransmitter( xObj, uno::UNO_QUERY );
         DBG_ASSERT( xSizeTransmitter.is(), "Object does not support XDefaultSizeTransmitter -> will cause #i103460#!" );
@@ -360,7 +361,7 @@ void EmbeddedObjectRef::Clear()
     }
 
     mpImp->pContainer = 0;
-    mpImp->bIsLocked = FALSE;
+    mpImp->bIsLocked = sal_False;
     mpImp->bNeedUpdate = sal_False;
 }
 
@@ -402,17 +403,17 @@ void EmbeddedObjectRef::SetViewAspect( sal_Int64 nAspect )
     mpImp->nViewAspect = nAspect;
 }
 
-void EmbeddedObjectRef::Lock( BOOL bLock )
+void EmbeddedObjectRef::Lock( sal_Bool bLock )
 {
     mpImp->bIsLocked = bLock;
 }
 
-BOOL EmbeddedObjectRef::IsLocked() const
+sal_Bool EmbeddedObjectRef::IsLocked() const
 {
     return mpImp->bIsLocked;
 }
 
-void EmbeddedObjectRef::GetReplacement( BOOL bUpdate )
+void EmbeddedObjectRef::GetReplacement( sal_Bool bUpdate )
 {
     if ( bUpdate )
     {
@@ -449,7 +450,7 @@ Graphic* EmbeddedObjectRef::GetGraphic( ::rtl::OUString* pMediaType ) const
         // bNeedUpdate will be set to false while retrieving new replacement
         const_cast < EmbeddedObjectRef* >(this)->GetReplacement( sal_True );
     else if ( !mpImp->pGraphic )
-        const_cast < EmbeddedObjectRef* >(this)->GetReplacement( FALSE );
+        const_cast < EmbeddedObjectRef* >(this)->GetReplacement( sal_False );
 
     if ( mpImp->pGraphic && pMediaType )
         *pMediaType = mpImp->aMediaType;
@@ -561,7 +562,7 @@ void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const ::rtl::OUStri
     mpImp->bNeedUpdate = sal_False;
 }
 
-SvStream* EmbeddedObjectRef::GetGraphicStream( BOOL bUpdate ) const
+SvStream* EmbeddedObjectRef::GetGraphicStream( sal_Bool bUpdate ) const
 {
     RTL_LOGFILE_CONTEXT( aLog, "svtools (mv76033) svt::EmbeddedObjectRef::GetGraphicStream" );
     DBG_ASSERT( bUpdate || mpImp->pContainer, "Can't retrieve current graphic!" );
@@ -615,7 +616,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const Stri
     MapMode aMM( MAP_APPFONT );
     Size aAppFontSz = pOut->LogicToLogic( Size( 0, 8 ), &aMM, NULL );
     Font aFnt( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Helvetica" ) ), aAppFontSz );
-    aFnt.SetTransparent( TRUE );
+    aFnt.SetTransparent( sal_True );
     aFnt.SetColor( Color( COL_LIGHTRED ) );
     aFnt.SetWeight( WEIGHT_BOLD );
     aFnt.SetFamily( FAMILY_SWISS );
@@ -627,14 +628,14 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const Stri
     Point aPt;
     // Nun den Text so skalieren, dass er in das Rect passt.
     // Wir fangen mit der Defaultsize an und gehen 1-AppFont runter
-    for( USHORT i = 8; i > 2; i-- )
+    for( sal_uInt16 i = 8; i > 2; i-- )
     {
         aPt.X() = (rRect.GetWidth()  - pOut->GetTextWidth( rText )) / 2;
         aPt.Y() = (rRect.GetHeight() - pOut->GetTextHeight()) / 2;
 
-        BOOL bTiny = FALSE;
-        if( aPt.X() < 0 ) bTiny = TRUE, aPt.X() = 0;
-        if( aPt.Y() < 0 ) bTiny = TRUE, aPt.Y() = 0;
+        sal_Bool bTiny = sal_False;
+        if( aPt.X() < 0 ) bTiny = sal_True, aPt.X() = 0;
+        if( aPt.Y() < 0 ) bTiny = sal_True, aPt.Y() = 0;
         if( bTiny )
         {
             // heruntergehen bei kleinen Bildern
@@ -696,8 +697,8 @@ void EmbeddedObjectRef::DrawShading( const Rectangle &rRect, OutputDevice *pOut 
     aPixSize.Width() -= 1;
     aPixSize.Height() -= 1;
     Point aPixViewPos = pOut->LogicToPixel( rRect.TopLeft() );
-    INT32 nMax = aPixSize.Width() + aPixSize.Height();
-    for( INT32 i = 5; i < nMax; i += 5 )
+    sal_Int32 nMax = aPixSize.Width() + aPixSize.Height();
+    for( sal_Int32 i = 5; i < nMax; i += 5 )
     {
         Point a1( aPixViewPos ), a2( aPixViewPos );
         if( i > aPixSize.Width() )
@@ -716,15 +717,15 @@ void EmbeddedObjectRef::DrawShading( const Rectangle &rRect, OutputDevice *pOut 
 
 }
 
-BOOL EmbeddedObjectRef::TryRunningState()
+sal_Bool EmbeddedObjectRef::TryRunningState()
 {
     return TryRunningState( mxObj );
 }
 
-BOOL EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbeddedObject >& xEmbObj )
+sal_Bool EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbeddedObject >& xEmbObj )
 {
     if ( !xEmbObj.is() )
-        return FALSE;
+        return sal_False;
 
     try
     {
@@ -733,10 +734,10 @@ BOOL EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbedded
     }
     catch ( uno::Exception& )
     {
-        return FALSE;
+        return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 void EmbeddedObjectRef::SetGraphicToContainer( const Graphic& rGraphic,
@@ -797,7 +798,7 @@ void EmbeddedObjectRef::UpdateReplacementOnDemand()
     }
 }
 
-BOOL EmbeddedObjectRef::IsChart() const
+sal_Bool EmbeddedObjectRef::IsChart() const
 {
     //todo maybe for 3.0:
     //if the changes work good for chart

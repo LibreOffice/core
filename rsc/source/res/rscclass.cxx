@@ -113,7 +113,7 @@ RSCINST RscClass::GetInstData
 (
     CLASS_DATA pData,
     sal_uInt32 nEle,
-    BOOL bGetCopy
+    sal_Bool bGetCopy
 )
 {
     RSCINST aInst;
@@ -174,15 +174,15 @@ CLASS_DATA RscClass::GetDfltData( sal_uInt32 nEle )
 |*    RscClass::SetVarDflt()
 |*
 *************************************************************************/
-void RscClass::SetVarDflt( CLASS_DATA pData, sal_uInt32 nEle, BOOL bSet )
+void RscClass::SetVarDflt( CLASS_DATA pData, sal_uInt32 nEle, sal_Bool bSet )
 {
     RscClassInst * pClass;
 
     pClass = (RscClassInst *)(pData + nSuperSize );
     if( bSet )
-        pClass->nVarDflt |= ((ULONG)1 << nEle);
+        pClass->nVarDflt |= ((sal_uLong)1 << nEle);
     else
-        pClass->nVarDflt &= ~((ULONG)1 << nEle);
+        pClass->nVarDflt &= ~((sal_uLong)1 << nEle);
 }
 
 /*************************************************************************
@@ -190,16 +190,16 @@ void RscClass::SetVarDflt( CLASS_DATA pData, sal_uInt32 nEle, BOOL bSet )
 |*    RscClass::IsDflt()
 |*
 *************************************************************************/
-BOOL RscClass::IsDflt( CLASS_DATA pData, sal_uInt32 nEle )
+sal_Bool RscClass::IsDflt( CLASS_DATA pData, sal_uInt32 nEle )
 {
     RscClassInst *  pClass;
-    BOOL            bRet;
+    sal_Bool            bRet;
 
     pClass = (RscClassInst *)(pData + nSuperSize );
-    if( pClass->nVarDflt & ((ULONG)1 << nEle) )
-        bRet = TRUE;
+    if( pClass->nVarDflt & ((sal_uLong)1 << nEle) )
+        bRet = sal_True;
     else
-        bRet = FALSE;
+        bRet = sal_False;
     return bRet;
 }
 
@@ -212,7 +212,7 @@ RSCINST RscClass::Create
 (
     RSCINST * pInst,
     const RSCINST & rDflt,
-    BOOL bOwnClass
+    sal_Bool bOwnClass
 )
 {
     sal_uInt32  i;
@@ -236,11 +236,11 @@ RSCINST RscClass::Create
         ((RscClassInst *)(aInst.pData + nSuperSize))->nVarDflt =
             ((RscClassInst *)(rDflt.pData + nSuperSize))->nVarDflt;
     else
-        ((RscClassInst *)(aInst.pData + nSuperSize))->nVarDflt = ~((ULONG)0);
+        ((RscClassInst *)(aInst.pData + nSuperSize))->nVarDflt = ~((sal_uLong)0);
 
     for( i = 0; i < nEntries; i++ )
     {
-        aDfltI = GetInstData( bOwnClass ? rDflt.pData : NULL, i, TRUE );
+        aDfltI = GetInstData( bOwnClass ? rDflt.pData : NULL, i, sal_True );
 
         if( (VAR_POINTER & pVarTypeList[ i ].nVarType)
           && !(VAR_NODATAINST & pVarTypeList[ i ].nVarType) )
@@ -264,7 +264,7 @@ RSCINST RscClass::Create
         }
         else
         {
-            aMemInst = GetInstData( aInst.pData, i, TRUE );
+            aMemInst = GetInstData( aInst.pData, i, sal_True );
             aMemInst = aMemInst.pClass->Create( &aMemInst, aDfltI );
         };
     }
@@ -291,7 +291,7 @@ void RscClass::Destroy( const RSCINST & rInst )
         {
             RSCINST aTmpI;
 
-            aTmpI = GetInstData( rInst.pData, i, TRUE );
+            aTmpI = GetInstData( rInst.pData, i, sal_True );
             if( aTmpI.IsInst() )
             {
                 // Objekt loeschen
@@ -360,7 +360,7 @@ ERRTYPE RscClass::SetVariable
     }
 
     nEntries++;
-    if( nEntries > (sizeof( ULONG ) * 8) )
+    if( nEntries > (sizeof( sal_uLong ) * 8) )
     {
         // Bereich fuer Default zu klein
         RscExit( 16 );
@@ -400,7 +400,7 @@ RSCINST RscClass::GetVariable
     const RSCINST & rInst,
     Atom nVarName,
     const RSCINST & rInitInst,
-    BOOL bInitDflt,
+    sal_Bool bInitDflt,
     RscTop * pCreateClass
 )
 {
@@ -460,7 +460,7 @@ RSCINST RscClass::GetVariable
             }
         };
         // auf nicht Default setzen
-        SetVarDflt( rInst.pData, i, FALSE );
+        SetVarDflt( rInst.pData, i, sal_False );
         return( aTmpI );
     };
 
@@ -499,11 +499,11 @@ RSCINST RscClass::GetCopyVar
             if( IsDflt( rInst.pData, i ) )
             {
                 // mit Variablen Default initialiaieren
-                aVarI = GetVariable( rInst, nVarName, RSCINST(), TRUE );
-                SetVarDflt( rInst.pData, i, TRUE );
+                aVarI = GetVariable( rInst, nVarName, RSCINST(), sal_True );
+                SetVarDflt( rInst.pData, i, sal_True );
             }
             else
-                aVarI = GetInstData( rInst.pData, i, TRUE );
+                aVarI = GetInstData( rInst.pData, i, sal_True );
 
         };
         return aVarI ;
@@ -519,11 +519,11 @@ RSCINST RscClass::GetCopyVar
 |*    Beschreibung
 |*
 *************************************************************************/
-BOOL RscClass::IsConsistent( const RSCINST & rInst )
+sal_Bool RscClass::IsConsistent( const RSCINST & rInst )
 {
     sal_uInt32  i = 0;
     RSCINST aTmpI;
-    BOOL    bRet;
+    sal_Bool    bRet;
 
     bRet = RscTop::IsConsistent( rInst );
 
@@ -531,11 +531,11 @@ BOOL RscClass::IsConsistent( const RSCINST & rInst )
     {
         if( !(VAR_NODATAINST & pVarTypeList[ i ].nVarType) )
         {
-            aTmpI = GetInstData( rInst.pData, i, TRUE );
+            aTmpI = GetInstData( rInst.pData, i, sal_True );
 
             if( aTmpI.IsInst() )
                 if( ! aTmpI.pClass->IsConsistent( aTmpI ) )
-                    bRet = FALSE;
+                    bRet = sal_False;
         }
     };
 
@@ -563,12 +563,12 @@ void RscClass::SetToDefault( const RSCINST & rInst )
         // auf Default gesetzt
         if( !(VAR_NODATAINST & pVarTypeList[ i ].nVarType) )
         {
-            aTmpI = GetInstData( rInst.pData, i, TRUE );
+            aTmpI = GetInstData( rInst.pData, i, sal_True );
             if( aTmpI.IsInst() )
                 aTmpI.pClass->SetToDefault( aTmpI );
         }
     }
-    pClass->nVarDflt = ~((ULONG)0); // alles auf Default
+    pClass->nVarDflt = ~((sal_uLong)0); // alles auf Default
 
     RscTop::SetToDefault( rInst );
 }
@@ -580,7 +580,7 @@ void RscClass::SetToDefault( const RSCINST & rInst )
 |*    Beschreibung
 |*
 *************************************************************************/
-BOOL RscClass::IsDefault( const RSCINST & rInst )
+sal_Bool RscClass::IsDefault( const RSCINST & rInst )
 {
     sal_uInt32  i;
     RSCINST aTmpI;
@@ -591,7 +591,7 @@ BOOL RscClass::IsDefault( const RSCINST & rInst )
         // auf Default untersucht
         if( !(VAR_NODATAINST & pVarTypeList[ i ].nVarType) )
             if( !IsDflt( rInst.pData, i ) )
-                return( FALSE );
+                return( sal_False );
     };
 
     return( RscTop::IsDefault( rInst ) );
@@ -630,24 +630,24 @@ RSCINST RscClass::GetDefault( Atom nVarId )
 |*    Beschreibung
 |*
 *************************************************************************/
-BOOL RscClass::IsValueDflt( CLASS_DATA pData, sal_uInt32 nEle )
+sal_Bool RscClass::IsValueDflt( CLASS_DATA pData, sal_uInt32 nEle )
 {
     RSCINST aTmpI;
 
-    aTmpI = GetInstData( pData, nEle, TRUE );
+    aTmpI = GetInstData( pData, nEle, sal_True );
 
     if( aTmpI.IsInst() )
     {
         if( VAR_SVDYNAMIC & pVarTypeList[ nEle ].nVarType )
-            return FALSE;
+            return sal_False;
 
         if( aTmpI.pClass == pVarTypeList[ nEle ].pClass )
             //sie haben auch die gleiche Klasse
             return aTmpI.pClass->IsValueDefault( aTmpI, GetDfltData( nEle ) );
         else
-            return FALSE;
+            return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -657,39 +657,39 @@ BOOL RscClass::IsValueDflt( CLASS_DATA pData, sal_uInt32 nEle )
 |*    Beschreibung
 |*
 *************************************************************************/
-BOOL RscClass::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
+sal_Bool RscClass::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
     sal_uInt32  i = 0;
     RSCINST aTmpI;
     RSCINST aDfltI;
 
     if( !RscTop::IsValueDefault( rInst, pDef ) )
-        return FALSE;
+        return sal_False;
 
     if( pDef )
     {
         for( i = 0; i < nEntries; i++ )
         {
-            aTmpI = GetInstData( rInst.pData, i, TRUE );
+            aTmpI = GetInstData( rInst.pData, i, sal_True );
             if( aTmpI.IsInst() )
             {
                 if( aTmpI.pClass != pVarTypeList[ i ].pClass )
                     //sie haben nicht die gleiche Klasse
-                    return FALSE;
+                    return sal_False;
 
-                aDfltI = GetInstData( pDef, i, TRUE );
+                aDfltI = GetInstData( pDef, i, sal_True );
                 if( !aDfltI.IsInst() )
                     aDfltI.pData = GetDfltData( i );
 
                 if( !aTmpI.pClass->IsValueDefault( aTmpI, aDfltI.pData ) )
-                    return FALSE;
+                    return sal_False;
             }
         }
     }
     else
-        return FALSE;
+        return sal_False;
 
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -709,12 +709,12 @@ void RscClass::SetDefault( const RSCINST & rInst, Atom nVarName )
 
     if( i < nEntries )
     {
-        aTmpI = GetInstData( rInst.pData, i, TRUE );
+        aTmpI = GetInstData( rInst.pData, i, sal_True );
         if( aTmpI.IsInst() )
         {
             aTmpI.pClass->Destroy( aTmpI );
             aTmpI.pClass->Create( &aTmpI, RSCINST() );
-            SetVarDflt( rInst.pData, i, TRUE );
+            SetVarDflt( rInst.pData, i, sal_True );
         }
     }
     else //In Superklasse nach Variable suchen
@@ -765,20 +765,20 @@ void RscClass::WriteSrc
 
                     if( !IsDflt( rInst.pData, i ) )
                     {
-                        aTmpI = GetInstData( rInst.pData, i, TRUE );
+                        aTmpI = GetInstData( rInst.pData, i, sal_True );
                         aTmpI.pClass->WriteSrcHeader(
                               aTmpI, fOutput, pTC, nTab, RscId(), pVarName );
                     }
 
                     fprintf( fOutput, "( " );
-                    aTmpI = GetInstData( rInst.pData, i+1, TRUE );
+                    aTmpI = GetInstData( rInst.pData, i+1, sal_True );
                     if( !aTmpI.IsInst() )
                         aTmpI.pData = GetDfltData( i+1 );
                     aTmpI.pClass->WriteSrcHeader(
                               aTmpI, fOutput, pTC, nTab, RscId(), pVarName );
 
                     fprintf( fOutput, ", " );
-                    aTmpI = GetInstData( rInst.pData, i+2, TRUE );
+                    aTmpI = GetInstData( rInst.pData, i+2, sal_True );
                     if( !aTmpI.IsInst() )
                         aTmpI.pData = GetDfltData( i+2 );
                     aTmpI.pClass->WriteSrcHeader(
@@ -790,7 +790,7 @@ void RscClass::WriteSrc
             else if( !IsDflt( rInst.pData, i )
               && !IsValueDflt( rInst.pData, i ) )
             {
-                aTmpI = GetInstData( rInst.pData, i, TRUE );
+                aTmpI = GetInstData( rInst.pData, i, sal_True );
 
                 if( aTmpI.IsInst() )
                 {
@@ -818,7 +818,7 @@ void RscClass::WriteSrc
 |*    Beschreibung
 |*
 *************************************************************************/
-INT32 RscClass::GetCorrectValues
+sal_Int32 RscClass::GetCorrectValues
 (
     const RSCINST & rInst,
     sal_uInt32 nVarPos,
@@ -826,11 +826,11 @@ INT32 RscClass::GetCorrectValues
     RscTypCont * pTC
 )
 {
-    INT32 nLang = 0;
-    INT32 nBaseValue;
+    sal_Int32 nLang = 0;
+    sal_Int32 nBaseValue;
 
     // Basiswert holen
-    RSCINST aTmpI = GetInstData( rInst.pData, nVarPos, TRUE );
+    RSCINST aTmpI = GetInstData( rInst.pData, nVarPos, sal_True );
     aTmpI.pClass->GetNumber( aTmpI, &nBaseValue );
 
     // Sprach Delta holen
@@ -838,8 +838,8 @@ INT32 RscClass::GetCorrectValues
     if( aTmpI.IsInst() )
     {
         RscWriteRc aMem;
-        aTmpI.pClass->WriteRc( aTmpI, aMem, pTC, 0, FALSE );
-        nLang = (INT32)aMem.GetShort( nTupelIdx * sizeof(sal_uInt16) );
+        aTmpI.pClass->WriteRc( aTmpI, aMem, pTC, 0, sal_False );
+        nLang = (sal_Int32)aMem.GetShort( nTupelIdx * sizeof(sal_uInt16) );
     }
 
     return nLang + nBaseValue;
@@ -851,7 +851,7 @@ ERRTYPE RscClass::WriteInstRc
     RscWriteRc & rMem,
     RscTypCont * pTC,
     sal_uInt32 nDeep,
-    BOOL bExtra
+    sal_Bool bExtra
 )
 {
     sal_uInt32 i = 0;
@@ -880,35 +880,35 @@ ERRTYPE RscClass::WriteInstRc
                 {
                     if( nRsc_X == pVarTypeList[ i ].nVarName )
                     {
-                        INT32 nVal = GetCorrectValues( rInst, i, 0, pTC );
+                        sal_Int32 nVal = GetCorrectValues( rInst, i, 0, pTC );
                         rMem.Put( nVal );
                     }
                     else if( nRsc_Y == pVarTypeList[ i ].nVarName )
                     {
-                        INT32 nVal = GetCorrectValues( rInst, i, 1, pTC );
+                        sal_Int32 nVal = GetCorrectValues( rInst, i, 1, pTC );
                         rMem.Put( nVal );
                     }
                     else if( nRsc_WIDTH == pVarTypeList[ i ].nVarName )
                     {
-                        INT32 nVal = GetCorrectValues( rInst, i, 2, pTC );
+                        sal_Int32 nVal = GetCorrectValues( rInst, i, 2, pTC );
                         rMem.Put( nVal );
                     }
                     else if( nRsc_HEIGHT == pVarTypeList[ i ].nVarName )
                     {
-                        INT32 nVal = GetCorrectValues( rInst, i, 3, pTC );
+                        sal_Int32 nVal = GetCorrectValues( rInst, i, 3, pTC );
                         rMem.Put( nVal );
                     }
                     else
                     {
-                        aTmpI = GetInstData( rInst.pData, i, TRUE );
-                        // Nur an Variable Extradata bExtra nicht auf FALSE
+                        aTmpI = GetInstData( rInst.pData, i, sal_True );
+                        // Nur an Variable Extradata bExtra nicht auf sal_False
                         // setzen
                         aError = aTmpI.pClass->
                             WriteRcHeader( aTmpI, rMem, pTC,
                                         RscId(), nDeep,
                                         (nRsc_EXTRADATA
                                         == pVarTypeList[ i ].nVarName)
-                                        ? bExtra : FALSE );
+                                        ? bExtra : sal_False );
                     }
                     sal_uInt32 nMask = rMem.GetLong( nMaskOff );
                     nMask |= pVarTypeList[ i ].nMask;
@@ -922,15 +922,15 @@ ERRTYPE RscClass::WriteInstRc
                     aTmpI.pData  = GetDfltData( i );
                 }
                 else
-                    aTmpI = GetInstData( rInst.pData, i, TRUE );
-                // Nur an Variable Extradata bExtra nicht auf FALSE
+                    aTmpI = GetInstData( rInst.pData, i, sal_True );
+                // Nur an Variable Extradata bExtra nicht auf sal_False
                 // setzen
                 aError = aTmpI.pClass->
                             WriteRcHeader( aTmpI, rMem, pTC,
                                         RscId(), nDeep,
                                         (nRsc_EXTRADATA
                                         == pVarTypeList[ i ].nVarName)
-                                        ? bExtra : FALSE );
+                                        ? bExtra : sal_False );
             }
         }
     }
@@ -951,7 +951,7 @@ ERRTYPE RscClass::WriteRc
     RscWriteRc & rMem,
     RscTypCont * pTC,
     sal_uInt32 nDeep,
-    BOOL bExtra
+    sal_Bool bExtra
 )
 {
     ERRTYPE aError;
@@ -1027,7 +1027,7 @@ void RscClass::WriteRcCtor( FILE * fOutput, RscTypCont * pTC )
         fprintf( fOutput, "\tsal_uInt32\tnObjMask;\n" );
         fprintf( fOutput, "\tsal_uInt32\tnOffset = 0;\n" );
         fprintf( fOutput, "\tBYTE *\tpResData;\n\n" );
-        fprintf( fOutput, "\tpResData = (BYTE *)GetClassRes();\n\n" );
+        fprintf( fOutput, "\tpResData = (tBYTE *)GetClassRes();\n\n" );
         fprintf( fOutput, "\tnObjMask = *(sal_uInt32*)pResData;\n" );
         fprintf( fOutput, "\tnOffset += 4;\n\n" );
 
@@ -1071,7 +1071,7 @@ RscSysDepend::RscSysDepend( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper )
 |*
 *************************************************************************/
 ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem,
-                RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra, BOOL bFirst )
+                RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra, sal_Bool bFirst )
 {
     sal_uInt32  nId = 0xFFFFFFFF;
     ERRTYPE     aError;
@@ -1112,7 +1112,7 @@ ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem
 |*
 *************************************************************************/
 ERRTYPE RscSysDepend::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                            RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
+                            RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {
     ERRTYPE     aError = RscClass::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
 
@@ -1142,10 +1142,10 @@ RscFirstSysDepend::RscFirstSysDepend( Atom nId, sal_uInt32 nTypeId,
 |*
 *************************************************************************/
 ERRTYPE RscFirstSysDepend::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                            RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
+                            RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {
     ERRTYPE aError = RscClass::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
-    aError = WriteSysDependRc( rInst, rMem, pTC, nDeep, bExtra, TRUE );
+    aError = WriteSysDependRc( rInst, rMem, pTC, nDeep, bExtra, sal_True );
     return aError;
 }
 
@@ -1202,7 +1202,7 @@ void RscTupel::WriteSrc( const RSCINST & rInst, FILE * fOutput,
             if( !IsDflt( rInst.pData, i )
               && !IsValueDflt( rInst.pData, i ) )
             {
-                aTmpI = GetInstData( rInst.pData, i, TRUE );
+                aTmpI = GetInstData( rInst.pData, i, sal_True );
 
                 if( aTmpI.IsInst() )
                     aTmpI.pClass->WriteSrcHeader(

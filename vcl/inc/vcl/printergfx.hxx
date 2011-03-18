@@ -365,14 +365,14 @@ public:
                                      const Point** pPolygonList);
     void            DrawPolyLineBezier (sal_uInt32 nPoints,
                                      const Point* pPath,
-                                     const BYTE* pFlgAry );
+                                     const sal_uInt8* pFlgAry );
     void            DrawPolygonBezier  (sal_uInt32 nPoints,
                                      const Point* pPath,
-                                     const BYTE* pFlgAry);
+                                     const sal_uInt8* pFlgAry);
     void            DrawPolyPolygonBezier  (sal_uInt32 nPoly,
                                      const sal_uInt32* pPoints,
                                      const Point* const* pPtAry,
-                                     const BYTE* const* pFlgAry);
+                                     const sal_uInt8* const* pFlgAry);
 
     // eps
     sal_Bool        DrawEPS ( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize);

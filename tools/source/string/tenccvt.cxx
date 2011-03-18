@@ -85,14 +85,14 @@ rtl_TextEncoding GetOneByteTextEncoding( rtl_TextEncoding eEncoding )
 
 // -----------------------------------------------------------------------
 
-rtl_TextEncoding GetSOLoadTextEncoding( rtl_TextEncoding eEncoding, USHORT /* nVersion = SOFFICE_FILEFORMAT_50 */ )
+rtl_TextEncoding GetSOLoadTextEncoding( rtl_TextEncoding eEncoding, sal_uInt16 /* nVersion = SOFFICE_FILEFORMAT_50 */ )
 {
     return GetExtendedCompatibilityTextEncoding( GetOneByteTextEncoding( eEncoding ) );
 }
 
 // -----------------------------------------------------------------------
 
-rtl_TextEncoding GetSOStoreTextEncoding( rtl_TextEncoding eEncoding, USHORT /* nVersion = SOFFICE_FILEFORMAT_50 */ )
+rtl_TextEncoding GetSOStoreTextEncoding( rtl_TextEncoding eEncoding, sal_uInt16 /* nVersion = SOFFICE_FILEFORMAT_50 */ )
 {
     return GetExtendedTextEncoding( GetOneByteTextEncoding( eEncoding ) );
 }

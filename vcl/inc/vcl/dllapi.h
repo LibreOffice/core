@@ -38,6 +38,12 @@
 #define VCL_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 
+#if defined UNX && ! defined MACOS
+#define VCL_PLUGIN_PUBLIC VCL_DLLPUBLIC
+#else
+#define VCL_PLUGIN_PUBLIC SAL_DLLPRIVATE
+#endif
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

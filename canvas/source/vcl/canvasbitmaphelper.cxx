@@ -267,7 +267,7 @@ namespace vclcanvas
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
-                                *pScan++ = (BYTE)pWriteAccess->GetBestPaletteIndex(
+                                *pScan++ = (sal_uInt8)pWriteAccess->GetBestPaletteIndex(
                                     BitmapColor( data[ nCurrPos   ],
                                                  data[ nCurrPos+1 ],
                                                  data[ nCurrPos+2 ] ) );
@@ -275,7 +275,7 @@ namespace vclcanvas
                                 nCurrPos += 3;
 
                                 // cast to unsigned byte, for correct subtraction result
-                                *pAScan++ = static_cast<BYTE>(255 -
+                                *pAScan++ = static_cast<sal_uInt8>(255 -
                                                               static_cast<sal_uInt8>(data[ nCurrPos++ ]));
                             }
                         }
@@ -297,7 +297,7 @@ namespace vclcanvas
                                 nCurrPos += 3;
 
                                 // cast to unsigned byte, for correct subtraction result
-                                *pAScan++ = static_cast<BYTE>(255 -
+                                *pAScan++ = static_cast<sal_uInt8>(255 -
                                                               static_cast<sal_uInt8>(data[ nCurrPos++ ]));
                             }
                         }
@@ -319,7 +319,7 @@ namespace vclcanvas
                                 nCurrPos += 3;
 
                                 // cast to unsigned byte, for correct subtraction result
-                                *pAScan++ = static_cast<BYTE>(255 -
+                                *pAScan++ = static_cast<sal_uInt8>(255 -
                                                               static_cast<sal_uInt8>(data[ nCurrPos++ ]));
                             }
                         }
@@ -339,7 +339,7 @@ namespace vclcanvas
                                 // cast to unsigned byte, for correct subtraction result
                                 pAlphaWriteAccess->SetPixel( y, x,
                                                              BitmapColor(
-                                                                 static_cast<BYTE>(255 -
+                                                                 static_cast<sal_uInt8>(255 -
                                                                                    static_cast<sal_uInt8>(data[ nCurrPos++ ])) ) );
                             }
                         }
@@ -360,7 +360,7 @@ namespace vclcanvas
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
-                                *pScan++ = (BYTE)pWriteAccess->GetBestPaletteIndex(
+                                *pScan++ = (sal_uInt8)pWriteAccess->GetBestPaletteIndex(
                                     BitmapColor( data[ nCurrPos   ],
                                                  data[ nCurrPos+1 ],
                                                  data[ nCurrPos+2 ] ) );

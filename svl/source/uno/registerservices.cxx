@@ -61,37 +61,6 @@ SVL_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment (
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-SVL_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo (
-    void * /* _pServiceManager */, void * _pRegistryKey)
-{
-    if (_pRegistryKey)
-    {
-        Reference< css::registry::XRegistryKey > xRegistryKey (
-            reinterpret_cast< css::registry::XRegistryKey* >(_pRegistryKey));
-        Reference< css::registry::XRegistryKey > xNewKey;
-
-        xNewKey = xRegistryKey->createKey (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "/com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject/UNO/SERVICES" )) );
-        xNewKey->createKey (
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier")) );
-
-        xNewKey = xRegistryKey->createKey (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "/com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject/UNO/SERVICES" )) );
-        xNewKey->createKey (
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter")) );
-
-        xNewKey = xRegistryKey->createKey(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("/com.sun.star.comp.svl.PathService/UNO/SERVICES")) );
-        xNewKey->createKey (
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.config.SpecialConfigManager")) );
-
-        return sal_True;
-    }
-    return sal_False;
-}
-
 SVL_DLLPUBLIC void* SAL_CALL component_getFactory (
     const sal_Char * pImplementationName, void * _pServiceManager, void * /* _pRegistryKey*/)
 {

@@ -40,7 +40,7 @@
 +(id)minValueAttributeForElement:(AquaA11yWrapper *)wrapper;
 +(id)maxValueAttributeForElement:(AquaA11yWrapper *)wrapper;
 +(void)addAttributeNamesTo:(NSMutableArray *)attributeNames;
-+(MacOSBOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper;
++(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper;
 +(void)setValueAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
 @end
 

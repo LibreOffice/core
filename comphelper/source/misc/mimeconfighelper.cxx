@@ -36,6 +36,7 @@
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/documentconstants.hxx>
 
 
 using namespace ::com::sun::star;
@@ -188,6 +189,46 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetMediaTypeCo
 
     return m_xMediaTypeConfig;
 }
+
+//-----------------------------------------------------------------------
+uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetFilterFactory()
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    if ( !m_xFilterFactory.is() )
+        m_xFilterFactory.set(
+            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+            uno::UNO_QUERY );
+
+    return m_xFilterFactory;
+}
+
+//-----------------------------------------------------------------------
+sal_Int32 MimeConfigurationHelper::GetFilterFlags( const ::rtl::OUString& aFilterName )
+{
+    sal_Int32 nFlags = 0;
+    try
+    {
+        if ( aFilterName.getLength() )
+        {
+            uno::Reference< container::XNameAccess > xFilterFactory(
+                GetFilterFactory(),
+                uno::UNO_SET_THROW );
+
+            uno::Any aFilterAny = xFilterFactory->getByName( aFilterName );
+            uno::Sequence< beans::PropertyValue > aData;
+            if ( aFilterAny >>= aData )
+            {
+                SequenceAsHashMap aFilterHM( aData );
+                nFlags = aFilterHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Flags" ), (sal_Int32)0 );
+            }
+        }
+    } catch( uno::Exception& )
+    {}
+
+    return nFlags;
+}
+
 //-------------------------------------------------------------------------
 ::rtl::OUString MimeConfigurationHelper::GetDocServiceNameFromFilter( const ::rtl::OUString& aFilterName )
 {
@@ -196,8 +237,8 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetMediaTypeCo
     try
     {
         uno::Reference< container::XNameAccess > xFilterFactory(
-            m_xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ),
-            uno::UNO_QUERY_THROW );
+            GetFilterFactory(),
+            uno::UNO_SET_THROW );
 
         uno::Any aFilterAnyData = xFilterFactory->getByName( aFilterName );
         uno::Sequence< beans::PropertyValue > aFilterData;
@@ -669,36 +710,17 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
 sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
                         uno::Sequence< beans::PropertyValue >& aMediaDescr )
 {
+    sal_Bool bResult = sal_False;
+
     ::rtl::OUString aFilterName = UpdateMediaDescriptorWithFilterName( aMediaDescr, sal_False );
     if ( aFilterName.getLength() )
     {
-        try
-        {
-            uno::Reference< container::XNameAccess > xFilterFactory(
-                m_xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ),
-                uno::UNO_QUERY_THROW );
-
-            uno::Any aFilterAnyData = xFilterFactory->getByName( aFilterName );
-            uno::Sequence< beans::PropertyValue > aFilterData;
-            if ( aFilterAnyData >>= aFilterData )
-            {
-                for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
-                    if ( aFilterData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Flags" ) ) )
-                    {
-                        uno::Any aVal = aFilterData[nInd].Value;
-                        sal_Int32 nFlags = 0;
-                        // check the OWN flag
-                        if ( ( aFilterData[nInd].Value >>= nFlags ) && ( nFlags & 0x20 ) )
-                            return sal_True;
-                        break;
-                    }
-            }
-        }
-        catch( uno::Exception& )
-        {}
+        sal_Int32 nFlags = GetFilterFlags( aFilterName );
+        // check the OWN flag
+        bResult = ( nFlags & SFX_FILTER_OWN );
     }
 
-    return sal_False;
+    return bResult;
 }
 
 //-----------------------------------------------------------
@@ -710,7 +732,7 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
         try
         {
             uno::Reference< container::XContainerQuery > xFilterQuery(
-                m_xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ),
+                GetFilterFactory(),
                 uno::UNO_QUERY_THROW );
 
             uno::Sequence< beans::NamedValue > aSearchRequest( 2 );
@@ -735,14 +757,15 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
                                                                                 (sal_Int32)0 );
 
                         // that should be import, export, own filter and not a template filter ( TemplatePath flag )
-                        if ( ( ( nFlags & 0x23L ) == 0x23L ) && !( nFlags & 0x10 ) )
+                        sal_Int32 nRequired = ( SFX_FILTER_OWN | SFX_FILTER_EXPORT | SFX_FILTER_IMPORT );
+                        if ( ( ( nFlags & nRequired ) == nRequired ) && !( nFlags & SFX_FILTER_TEMPLATEPATH ) )
                         {
                             // if there are more than one filter the preffered one should be used
                             // if there is no preffered filter the first one will be used
-                            if ( !aResult.getLength() || ( nFlags & 0x10000000L ) )
+                            if ( !aResult.getLength() || ( nFlags & SFX_FILTER_PREFERED ) )
                                 aResult = aPropsHM.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" )),
                                                                                 ::rtl::OUString() );
-                            if ( nFlags & 0x10000000L )
+                            if ( nFlags & SFX_FILTER_PREFERED )
                                 break; // the preffered filter was found
                         }
                     }
@@ -753,6 +776,116 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
 
     return aResult;
 }
+
+//-------------------------------------------------------------------------
+::rtl::OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const ::rtl::OUString& aImportFilterName )
+{
+    ::rtl::OUString aExportFilterName;
+
+    try
+    {
+        if ( aImportFilterName.getLength() )
+        {
+            uno::Reference< container::XNameAccess > xFilterFactory(
+                GetFilterFactory(),
+                uno::UNO_SET_THROW );
+
+            uno::Any aImpFilterAny = xFilterFactory->getByName( aImportFilterName );
+            uno::Sequence< beans::PropertyValue > aImpData;
+            if ( aImpFilterAny >>= aImpData )
+            {
+                SequenceAsHashMap aImpFilterHM( aImpData );
+                sal_Int32 nFlags = aImpFilterHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Flags" ),
+                                                                        (sal_Int32)0 );
+
+                if ( !( nFlags & SFX_FILTER_IMPORT ) )
+                {
+                    OSL_ENSURE( sal_False, "This is no import filter!" );
+                    throw uno::Exception();
+                }
+
+                if ( nFlags & SFX_FILTER_EXPORT )
+                {
+                    aExportFilterName = aImportFilterName;
+                }
+                else
+                {
+                    ::rtl::OUString aDocumentServiceName = aImpFilterHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "DocumentService" ), ::rtl::OUString() );
+                    ::rtl::OUString aTypeName = aImpFilterHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Type" ), ::rtl::OUString() );
+
+                    OSL_ENSURE( aDocumentServiceName.getLength() && aTypeName.getLength(), "Incomplete filter data!" );
+                    if ( aDocumentServiceName.getLength() && aTypeName.getLength() )
+                    {
+                        uno::Sequence< beans::NamedValue > aSearchRequest( 2 );
+                        aSearchRequest[0].Name = ::rtl::OUString::createFromAscii( "Type" );
+                        aSearchRequest[0].Value <<= aTypeName;
+                        aSearchRequest[1].Name = ::rtl::OUString::createFromAscii( "DocumentService" );
+                        aSearchRequest[1].Value <<= aDocumentServiceName;
+
+                        uno::Sequence< beans::PropertyValue > aExportFilterProps = SearchForFilter(
+                            uno::Reference< container::XContainerQuery >( xFilterFactory, uno::UNO_QUERY_THROW ),
+                            aSearchRequest,
+                            SFX_FILTER_EXPORT,
+                            SFX_FILTER_INTERNAL );
+
+                        if ( aExportFilterProps.getLength() )
+                        {
+                            SequenceAsHashMap aExpPropsHM( aExportFilterProps );
+                            aExportFilterName = aExpPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Name" ), ::rtl::OUString() );
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch( uno::Exception& )
+    {}
+
+    return aExportFilterName;
+}
+
+//-------------------------------------------------------------------------
+// static
+uno::Sequence< beans::PropertyValue > MimeConfigurationHelper::SearchForFilter(
+                                                        const uno::Reference< container::XContainerQuery >& xFilterQuery,
+                                                        const uno::Sequence< beans::NamedValue >& aSearchRequest,
+                                                        sal_Int32 nMustFlags,
+                                                        sal_Int32 nDontFlags )
+{
+    uno::Sequence< beans::PropertyValue > aFilterProps;
+    uno::Reference< container::XEnumeration > xFilterEnum =
+                                            xFilterQuery->createSubSetEnumerationByProperties( aSearchRequest );
+
+    // the first default filter will be taken,
+    // if there is no filter with flag default the first acceptable filter will be taken
+    if ( xFilterEnum.is() )
+    {
+        while ( xFilterEnum->hasMoreElements() )
+        {
+            uno::Sequence< beans::PropertyValue > aProps;
+            if ( xFilterEnum->nextElement() >>= aProps )
+            {
+                SequenceAsHashMap aPropsHM( aProps );
+                sal_Int32 nFlags = aPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Flags" ),
+                                                                        (sal_Int32)0 );
+                if ( ( ( nFlags & nMustFlags ) == nMustFlags ) && !( nFlags & nDontFlags ) )
+                {
+                    if ( ( nFlags & SFX_FILTER_DEFAULT ) == SFX_FILTER_DEFAULT )
+                    {
+                        aFilterProps = aProps;
+                        break;
+                    }
+                    else if ( !aFilterProps.getLength() )
+                        aFilterProps = aProps;
+                }
+            }
+        }
+    }
+
+    return aFilterProps;
+}
+
+
 //-------------------------------------------------------------------------
 sal_Bool MimeConfigurationHelper::ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 )
 {
@@ -765,7 +898,8 @@ sal_Bool MimeConfigurationHelper::ClassIDsEqual( const uno::Sequence< sal_Int8 >
 
     return sal_True;
 }
-//----------------------------------------------
+
+//-------------------------------------------------------------------------
 uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                                                 sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                                                 sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
@@ -790,6 +924,8 @@ uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassID( sal_uInt3
 
     return aResult;
 }
+
+//-------------------------------------------------------------------------
 uno::Sequence<sal_Int8> MimeConfigurationHelper::GetSequenceClassIDFromObjectName(const ::rtl::OUString& _sObjectName)
 {
     uno::Sequence<sal_Int8> aClassId;

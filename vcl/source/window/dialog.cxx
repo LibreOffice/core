@@ -73,24 +73,24 @@ static ByteString ImplGetDialogText( Dialog* pDialog )
 
 // =======================================================================
 
-static BOOL ImplIsMnemonicCtrl( Window* pWindow )
+static sal_Bool ImplIsMnemonicCtrl( Window* pWindow )
 {
     if( ! pWindow->GetSettings().GetStyleSettings().GetAutoMnemonic() )
-        return FALSE;
+        return sal_False;
 
     if ( (pWindow->GetType() == WINDOW_RADIOBUTTON) ||
          (pWindow->GetType() == WINDOW_CHECKBOX) ||
          (pWindow->GetType() == WINDOW_TRISTATEBOX) ||
          (pWindow->GetType() == WINDOW_PUSHBUTTON) )
-        return TRUE;
+        return sal_True;
 
     if ( pWindow->GetType() == WINDOW_FIXEDTEXT )
     {
         if ( pWindow->GetStyle() & (WB_INFO | WB_NOLABEL) )
-            return FALSE;
+            return sal_False;
         Window* pNextWindow = pWindow->GetWindow( WINDOW_NEXT );
         if ( !pNextWindow )
-            return FALSE;
+            return sal_False;
         pNextWindow = pNextWindow->GetWindow( WINDOW_CLIENT );
         if ( !(pNextWindow->GetStyle() & WB_TABSTOP) ||
              (pNextWindow->GetType() == WINDOW_FIXEDTEXT) ||
@@ -99,12 +99,12 @@ static BOOL ImplIsMnemonicCtrl( Window* pWindow )
              (pNextWindow->GetType() == WINDOW_CHECKBOX) ||
              (pNextWindow->GetType() == WINDOW_TRISTATEBOX) ||
              (pNextWindow->GetType() == WINDOW_PUSHBUTTON) )
-            return FALSE;
+            return sal_False;
 
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -215,7 +215,7 @@ static PushButton* ImplGetCancelButton( Dialog* pDialog )
 
 static void ImplMouseAutoPos( Dialog* pDialog )
 {
-    ULONG nMouseOptions = pDialog->GetSettings().GetMouseSettings().GetOptions();
+    sal_uLong nMouseOptions = pDialog->GetSettings().GetMouseSettings().GetOptions();
     if ( nMouseOptions & MOUSE_OPTION_AUTOCENTERPOS )
     {
         Size aSize = pDialog->GetOutputSizePixel();
@@ -250,13 +250,13 @@ struct DialogImpl
 
 void Dialog::ImplInitDialogData()
 {
-    mpWindowImpl->mbDialog  = TRUE;
+    mpWindowImpl->mbDialog  = sal_True;
     mpDialogParent          = NULL;
     mpPrevExecuteDlg        = NULL;
-    mbInExecute             = FALSE;
-    mbOldSaveBack           = FALSE;
-    mbInClose               = FALSE;
-    mbModalMode             = FALSE;
+    mbInExecute             = sal_False;
+    mbOldSaveBack           = sal_False;
+    mbInClose               = sal_False;
+    mbModalMode             = sal_False;
     mnMousePositioned       = 0;
     mpDialogImpl            = new DialogImpl;
 }
@@ -265,7 +265,7 @@ void Dialog::ImplInitDialogData()
 
 void Dialog::ImplInit( Window* pParent, WinBits nStyle )
 {
-    USHORT nSysWinMode = Application::GetSystemWindowMode();
+    sal_uInt16 nSysWinMode = Application::GetSystemWindowMode();
 
     if ( !(nStyle & WB_NODIALOGCONTROL) )
         nStyle |= WB_DIALOGCONTROL;
@@ -291,7 +291,7 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
             while ( pExeDlg )
             {
                 // Nur wenn er sichtbar und enabled ist
-                if ( pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild( pExeDlg, TRUE ) &&
+                if ( pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild( pExeDlg, sal_True ) &&
                      pExeDlg->IsReallyVisible() &&
                      pExeDlg->IsEnabled() && pExeDlg->IsInputEnabled() && !pExeDlg->IsInModalMode() )
                 {
@@ -341,8 +341,8 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
         }
         else
         {
-            mpWindowImpl->mbFrame         = TRUE;
-            mpWindowImpl->mbOverlapWin    = TRUE;
+            mpWindowImpl->mbFrame         = sal_True;
+            mpWindowImpl->mbOverlapWin    = sal_True;
             SystemWindow::ImplInit( pParent, (nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE)) | WB_CLOSEABLE, NULL );
             // Now set all style bits
             mpWindowImpl->mnStyle = nStyle;
@@ -374,7 +374,7 @@ void Dialog::ImplInitSettings()
     else if( IsNativeControlSupported( CTRL_WINDOW_BACKGROUND, PART_BACKGROUND_DIALOG ) )
     {
         mpWindowImpl->mnNativeBackground = PART_BACKGROUND_DIALOG;
-        EnableChildTransparentMode( TRUE );
+        EnableChildTransparentMode( sal_True );
     }
     // fallback to settings color
     else
@@ -467,7 +467,7 @@ long Dialog::Notify( NotifyEvent& rNEvt )
         {
             const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
             KeyCode         aKeyCode = pKEvt->GetKeyCode();
-            USHORT          nKeyCode = aKeyCode.GetCode();
+            sal_uInt16          nKeyCode = aKeyCode.GetCode();
 
             if ( (nKeyCode == KEY_ESCAPE) &&
                  ((GetStyle() & WB_CLOSEABLE) || ImplGetCancelButton( this ) || ImplGetOKButton( this )) )
@@ -477,7 +477,7 @@ long Dialog::Notify( NotifyEvent& rNEvt )
                 // post this Close asynchronous so we can leave our key handler before
                 // we get destroyed
                 PostUserEvent( LINK( this, Dialog, ImplAsyncCloseHdl ), this );
-                return TRUE;
+                return sal_True;
             }
         }
         else if ( rNEvt.GetType() == EVENT_GETFOCUS )
@@ -488,8 +488,8 @@ long Dialog::Notify( NotifyEvent& rNEvt )
             if( mbInExecute && mbModalMode )
             {
                 // do not change modal counter (pSVData->maAppData.mnModalDialog)
-                SetModalInputMode( FALSE );
-                SetModalInputMode( TRUE );
+                SetModalInputMode( sal_False );
+                SetModalInputMode( sal_True );
 
                 // #93022# def-button might have changed after show
                 if( !mnMousePositioned )
@@ -554,7 +554,7 @@ void Dialog::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-BOOL Dialog::Close()
+sal_Bool Dialog::Close()
 {
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
@@ -567,21 +567,21 @@ BOOL Dialog::Close()
     // ( Note: ) this used to work ( something changes somewhere )
     if (mnCancelClose != 0)
     {
-        return FALSE;
+        return sal_False;
     }
     //liuchen 2009-7-22
     if ( aDelData.IsDelete() )
-        return FALSE;
+        return sal_False;
     ImplRemoveDel( &aDelData );
 
     if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() && !IsInExecute() )
-        return FALSE;
+        return sal_False;
 
-    mbInClose = TRUE;
+    mbInClose = sal_True;
 
     if ( !(GetStyle() & WB_CLOSEABLE) )
     {
-        BOOL bRet = TRUE;
+        sal_Bool bRet = sal_True;
         ImplAddDel( &aDelData );
         PushButton* pButton = ImplGetCancelButton( this );
         if ( pButton )
@@ -592,30 +592,30 @@ BOOL Dialog::Close()
             if ( pButton )
                 pButton->Click();
             else
-                bRet = FALSE;
+                bRet = sal_False;
         }
         if ( aDelData.IsDelete() )
-            return TRUE;
+            return sal_True;
         ImplRemoveDel( &aDelData );
         return bRet;
     }
 
     if ( IsInExecute() )
     {
-        EndDialog( FALSE );
-        mbInClose = FALSE;
-        return TRUE;
+        EndDialog( sal_False );
+        mbInClose = sal_False;
+        return sal_True;
     }
     else
     {
-        mbInClose = FALSE;
+        mbInClose = sal_False;
         return SystemWindow::Close();
     }
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Dialog::ImplStartExecuteModal()
+sal_Bool Dialog::ImplStartExecuteModal()
 {
     if ( mbInExecute )
     {
@@ -624,7 +624,7 @@ BOOL Dialog::ImplStartExecuteModal()
         aErrorStr += ImplGetDialogText( this );
         OSL_FAIL( aErrorStr.GetBuffer() );
 #endif
-        return FALSE;
+        return sal_False;
     }
 
     if ( Application::IsDialogCancelEnabled() )
@@ -634,7 +634,7 @@ BOOL Dialog::ImplStartExecuteModal()
         aErrorStr += ImplGetDialogText( this );
         OSL_FAIL( aErrorStr.GetBuffer() );
 #endif
-        return FALSE;
+        return sal_False;
     }
 
 #ifdef DBG_UTIL
@@ -663,15 +663,15 @@ BOOL Dialog::ImplStartExecuteModal()
         pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
     if ( pSVData->maWinData.mpCaptureWin )
         pSVData->maWinData.mpCaptureWin->ReleaseMouse();
-    EnableInput( TRUE, TRUE );
+    EnableInput( sal_True, sal_True );
 
     if ( GetParent() )
     {
         NotifyEvent aNEvt( EVENT_EXECUTEDIALOG, this );
         GetParent()->Notify( aNEvt );
     }
-    mbInExecute = TRUE;
-    SetModalInputMode( TRUE );
+    mbInExecute = sal_True;
+    SetModalInputMode( sal_True );
     mbOldSaveBack = IsSaveBackgroundEnabled();
     EnableSaveBackground();
 
@@ -681,7 +681,7 @@ BOOL Dialog::ImplStartExecuteModal()
     Show();
 
     pSVData->maAppData.mnModalMode++;
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -753,7 +753,7 @@ void Dialog::StartExecuteModal( const Link& rEndDialogHdl )
 
 // -----------------------------------------------------------------------
 
-BOOL Dialog::IsStartedModal() const
+sal_Bool Dialog::IsStartedModal() const
 {
     return mpDialogImpl->mbStartedModal;
 }
@@ -764,7 +764,7 @@ void Dialog::EndDialog( long nResult )
 {
     if ( mbInExecute )
     {
-        SetModalInputMode( FALSE );
+        SetModalInputMode( sal_False );
 
         // Dialog aus der Kette der Dialoge die in Execute stehen entfernen
         ImplSVData* pSVData = ImplGetSVData();
@@ -812,7 +812,7 @@ void Dialog::EndDialog( long nResult )
             mpDialogImpl->mbStartedModal = false;
             mpDialogImpl->mnResult = -1;
         }
-        mbInExecute = FALSE;
+        mbInExecute = sal_False;
     }
 }
 
@@ -833,9 +833,9 @@ void Dialog::EndAllDialogs( Window* pParent )
    while ( pModDialog )
    {
      pTempModDialog = pModDialog->mpPrevExecuteDlg;
-     if( !pParent || ( pParent && pParent->IsWindowOrChild( pModDialog, TRUE ) ) )
+     if( !pParent || ( pParent && pParent->IsWindowOrChild( pModDialog, sal_True ) ) )
      {
-        pModDialog->EndDialog( FALSE );
+        pModDialog->EndDialog( sal_False );
         pModDialog->PostUserEvent( Link() );
      }
      pModDialog = pTempModDialog;
@@ -844,7 +844,7 @@ void Dialog::EndAllDialogs( Window* pParent )
 
 // -----------------------------------------------------------------------
 
-void Dialog::SetModalInputMode( BOOL bModal )
+void Dialog::SetModalInputMode( sal_Bool bModal )
 {
     if ( bModal == mbModalMode )
         return;
@@ -858,8 +858,8 @@ void Dialog::SetModalInputMode( BOOL bModal )
         // Diable the prev Modal Dialog, because our dialog must close at first,
         // before the other dialog can be closed (because the other dialog
         // is on stack since our dialog returns)
-        if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, TRUE ) )
-            mpPrevExecuteDlg->EnableInput( FALSE, TRUE, TRUE, this );
+        if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, sal_True ) )
+            mpPrevExecuteDlg->EnableInput( sal_False, sal_True, sal_True, this );
 
         // determine next overlap dialog parent
         Window* pParent = GetParent();
@@ -886,20 +886,20 @@ void Dialog::SetModalInputMode( BOOL bModal )
         }
 
         // Enable the prev Modal Dialog
-        if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, TRUE ) )
+        if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, sal_True ) )
         {
-            mpPrevExecuteDlg->EnableInput( TRUE, TRUE, TRUE, this );
+            mpPrevExecuteDlg->EnableInput( sal_True, sal_True, sal_True, this );
             // ensure continued modality of prev dialog
             // do not change modality counter
-            mpPrevExecuteDlg->SetModalInputMode( FALSE );
-            mpPrevExecuteDlg->SetModalInputMode( TRUE );
+            mpPrevExecuteDlg->SetModalInputMode( sal_False );
+            mpPrevExecuteDlg->SetModalInputMode( sal_True );
         }
     }
 }
 
 // -----------------------------------------------------------------------
 
-void Dialog::SetModalInputMode( BOOL bModal, BOOL bSubModalDialogs )
+void Dialog::SetModalInputMode( sal_Bool bModal, sal_Bool bSubModalDialogs )
 {
     if ( bSubModalDialogs )
     {
@@ -908,7 +908,7 @@ void Dialog::SetModalInputMode( BOOL bModal, BOOL bSubModalDialogs )
         while ( pOverlap )
         {
             if ( pOverlap->IsDialog() )
-                ((Dialog*)pOverlap)->SetModalInputMode( bModal, TRUE );
+                ((Dialog*)pOverlap)->SetModalInputMode( bModal, sal_True );
             pOverlap = pOverlap->mpWindowImpl->mpNext;
         }
     }
@@ -943,7 +943,7 @@ void Dialog::GrabFocusToFirstControl()
          !pFocusControl->IsVisible() ||
          !pFocusControl->IsEnabled() || !pFocusControl->IsInputEnabled() )
     {
-        USHORT n = 0;
+        sal_uInt16 n = 0;
         pFocusControl = ImplGetDlgWindow( n, DLGWINDOW_FIRST );
     }
     if ( pFocusControl )
@@ -955,13 +955,13 @@ void Dialog::GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
     ImplBorderWindow aImplWin( (Window*)this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
 //  aImplWin.SetText( GetText() );
 //  aImplWin.SetPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
-//  aImplWin.SetDisplayActive( TRUE );
+//  aImplWin.SetDisplayActive( sal_True );
 //  aImplWin.InitView();
     aImplWin.GetBorder( rLeftBorder, rTopBorder, rRightBorder, rBottomBorder );
 }
 
 
-void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG )
+void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong )
 {
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
@@ -987,7 +987,7 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULO
         ImplBorderWindow aImplWin( this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP );
         aImplWin.SetText( GetText() );
         aImplWin.SetPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
-        aImplWin.SetDisplayActive( TRUE );
+        aImplWin.SetDisplayActive( sal_True );
         aImplWin.InitView();
 
         aImplWin.Draw( Rectangle( aPos, aSize ), pDev, aPos );

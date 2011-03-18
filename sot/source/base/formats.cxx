@@ -35,8 +35,8 @@
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include "filelist.hxx"
-#include "clsids.hxx"
+#include "sot/filelist.hxx"
+#include "sot/clsids.hxx"
 
 #include <tools/globname.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -47,9 +47,9 @@ using namespace::com::sun::star::datatransfer;
 
 struct SotAction_Impl
 {
-    ULONG   nFormatId;          // Clipboard Id
-    USHORT  nAction;            // Action Id
-    BYTE    nContextCheckId;    // additional check of content in clipboard
+    sal_uLong   nFormatId;          // Clipboard Id
+    sal_uInt16  nAction;            // Action Id
+    sal_uInt8   nContextCheckId;    // additional check of content in clipboard
 };
 
 
@@ -69,7 +69,7 @@ struct SotAction_Impl
 
 struct SotDestinationEntry_Impl
 {
-    USHORT                  nDestination;
+    sal_uInt16                  nDestination;
     const SotAction_Impl*   aDefaultActions;
     const SotAction_Impl*   aMoveActions;
     const SotAction_Impl*   aCopyActions;
@@ -1284,7 +1284,7 @@ static SotDestinationEntry_Impl const aDestinationArray[] =     \
 // - new style GetExchange methods -
 // ---------------------------------
 
-sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, ULONG nId )
+sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, sal_uLong nId )
 {
     DataFlavorExVector::iterator    aIter( ( (DataFlavorExVector&) rDataFlavorExVector ).begin() );
     DataFlavorExVector::iterator    aEnd( ( (DataFlavorExVector&) rDataFlavorExVector ).end() );
@@ -1304,14 +1304,14 @@ sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, ULONG
 
 // -----------------------------------------------------------------------------
 
-static BOOL CheckTransferableContext_Impl( const Reference< XTransferable >* pxTransferable, const SotAction_Impl&
+static sal_Bool CheckTransferableContext_Impl( const Reference< XTransferable >* pxTransferable, const SotAction_Impl&
 #ifdef WNT
 rEntry
 #endif
 )
 {
     DataFlavor  aFlavor;
-    BOOL        bRet = TRUE;
+    sal_Bool        bRet = sal_True;
 
     try
     {
@@ -1324,7 +1324,7 @@ rEntry
             {
                 case FILEGRPDSC_ONLY_URL:
                 {
-                    bRet = FALSE;
+                    bRet = sal_False;
 
                     if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_FILECONTENT, aFlavor ) &&
                         (*pxTransferable)->isDataFlavorSupported( aFlavor ) &&
@@ -1368,11 +1368,11 @@ rEntry
 
 // -----------------------------------------------------------------------------
 
-static USHORT GetTransferableAction_Impl(
+static sal_uInt16 GetTransferableAction_Impl(
                             const DataFlavorExVector& rDataFlavorExVector,
                              const SotAction_Impl* pArray,
-                            ULONG& rFormat,
-                            ULONG nOnlyTestFormat,
+                            sal_uLong& rFormat,
+                            sal_uLong nOnlyTestFormat,
                             const Reference< XTransferable >* pxTransferable )
 {
     try
@@ -1381,11 +1381,11 @@ static USHORT GetTransferableAction_Impl(
         {
             DataFlavor              aFlavor;
             const SotAction_Impl*   pArrayStart = pArray;
-            ULONG                   nId = pArray->nFormatId;
+            sal_uLong                   nId = pArray->nFormatId;
 
 #if OSL_DEBUG_LEVEL > 1
 // used for testing a specific format - change in the debugger the value
-    static ULONG nChkFormat = 0;
+    static sal_uLong nChkFormat = 0;
     if( nChkFormat )
     {
         for( ; 0xffff != pArray->nFormatId &&
@@ -1455,13 +1455,13 @@ static USHORT GetTransferableAction_Impl(
 
 // -----------------------------------------------------------------------------
 
-USHORT SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorExVector,
-                                       USHORT nDestination,
-                                       USHORT nSourceOptions,
-                                       USHORT nUserAction,
-                                       ULONG& rFormat,
-                                       USHORT& rDefaultAction,
-                                       ULONG nOnlyTestFormat,
+sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorExVector,
+                                       sal_uInt16 nDestination,
+                                       sal_uInt16 nSourceOptions,
+                                       sal_uInt16 nUserAction,
+                                       sal_uLong& rFormat,
+                                       sal_uInt16& rDefaultAction,
+                                       sal_uLong nOnlyTestFormat,
                                        const Reference< XTransferable >* pxTransferable )
 {
     // hier wird jetzt die oben definierte Tabelle "implementiert"
@@ -1569,11 +1569,11 @@ USHORT SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorExVe
 
 // -----------------------------------------------------------------------------
 
-USHORT SotExchange::GetExchangeAction(
+sal_uInt16 SotExchange::GetExchangeAction(
                         const Reference< XTransferable >& rxTransferable,
-                        USHORT nDestination, USHORT nSourceOptions,
-                        USHORT nUserAction, ULONG& rFormat,
-                        USHORT& rDefaultAction, ULONG nOnlyTestFormat )
+                        sal_uInt16 nDestination, sal_uInt16 nSourceOptions,
+                        sal_uInt16 nUserAction, sal_uLong& rFormat,
+                        sal_uInt16& rDefaultAction, sal_uLong nOnlyTestFormat )
 {
     DataFlavorExVector aVector;
 
@@ -1626,9 +1626,9 @@ USHORT SotExchange::GetExchangeAction(
                                             nOnlyTestFormat, &rxTransferable ) );
 }
 
-USHORT SotExchange::IsChart(  const SvGlobalName& rName )
+sal_uInt16 SotExchange::IsChart(  const SvGlobalName& rName )
 {
-    USHORT nRet=0;
+    sal_uInt16 nRet=0;
 //  if ( rName == SvGlobalName( SO3_SCH_CLASSID_8 ) )
 //      nRet = SOFFICE_FILEFORMAT_8;
 //  else
@@ -1644,9 +1644,9 @@ USHORT SotExchange::IsChart(  const SvGlobalName& rName )
     return nRet;
 }
 
-USHORT SotExchange::IsMath(  const SvGlobalName& rName )
+sal_uInt16 SotExchange::IsMath(  const SvGlobalName& rName )
 {
-    USHORT nRet=0;
+    sal_uInt16 nRet=0;
 //  if ( rName == SvGlobalName( SO3_SM_CLASSID_8 ) )
 //      nRet = SOFFICE_FILEFORMAT_8;
 //  else

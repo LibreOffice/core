@@ -36,22 +36,22 @@
 #include <tools/stream.hxx>
 #include <svl/svarray.hxx>
 
-SV_DECL_VARARR( SfxUINT32s, UINT32, 8, 8 )
+SV_DECL_VARARR( SfxUINT32s, sal_uInt32, 8, 8 )
 
 //------------------------------------------------------------------------
 
-#define SFX_REC_PRETAG_EXT              BYTE(0x00)  // Pre-Tag f"ur Extended-Records
-#define SFX_REC_PRETAG_EOR              BYTE(0xFF)  // Pre-Tag f"ur End-Of-Records
+#define SFX_REC_PRETAG_EXT              sal_uInt8(0x00) // Pre-Tag f"ur Extended-Records
+#define SFX_REC_PRETAG_EOR              sal_uInt8(0xFF) // Pre-Tag f"ur End-Of-Records
 
-#define SFX_REC_TYPE_NONE               BYTE(0x00)  // unbekannter Record-Typ
-#define SFX_REC_TYPE_FIRST              BYTE(0x01)
-#define SFX_REC_TYPE_SINGLE             BYTE(0x01)  // Single-Content-Record
-#define SFX_REC_TYPE_FIXSIZE            BYTE(0x02)  // Fix-Size-Multi-Content-Record
-#define SFX_REC_TYPE_VARSIZE_RELOC      BYTE(0x03)  // variable Rec-Size
-#define SFX_REC_TYPE_VARSIZE            BYTE(0x04)  // alt (nicht verschiebbar)
-#define SFX_REC_TYPE_MIXTAGS_RELOC      BYTE(0x07)  // Mixed Tag Content-Record
-#define SFX_REC_TYPE_MIXTAGS            BYTE(0x08)  // alt (nicht verschiebbar)
-#define SFX_REC_TYPE_LAST               BYTE(0x08)
+#define SFX_REC_TYPE_NONE               sal_uInt8(0x00) // unbekannter Record-Typ
+#define SFX_REC_TYPE_FIRST              sal_uInt8(0x01)
+#define SFX_REC_TYPE_SINGLE             sal_uInt8(0x01) // Single-Content-Record
+#define SFX_REC_TYPE_FIXSIZE            sal_uInt8(0x02) // Fix-Size-Multi-Content-Record
+#define SFX_REC_TYPE_VARSIZE_RELOC      sal_uInt8(0x03) // variable Rec-Size
+#define SFX_REC_TYPE_VARSIZE            sal_uInt8(0x04) // alt (nicht verschiebbar)
+#define SFX_REC_TYPE_MIXTAGS_RELOC      sal_uInt8(0x07) // Mixed Tag Content-Record
+#define SFX_REC_TYPE_MIXTAGS            sal_uInt8(0x08) // alt (nicht verschiebbar)
+#define SFX_REC_TYPE_LAST               sal_uInt8(0x08)
 #define SFX_REC_TYPE_MINI                   0x100   // Mini-Record
 #define SFX_REC_TYPE_DRAWENG                0x400   // Drawing-Engine-Record
 #define SFX_REC_TYPE_EOR                    0xF00   // End-Of-Records
@@ -123,9 +123,9 @@ SV_DECL_VARARR( SfxUINT32s, UINT32, 8, 8 )
 
         Struktur des Mini-Records:
 
-                            1 BYTE          Pre-Tag
-                            3 BYTE          OffsetToEndOfRec
-        OffsetToEndOfRec*   1 BYTE          Content
+                            1 sal_uInt8         Pre-Tag
+                            3 sal_uInt8         OffsetToEndOfRec
+        OffsetToEndOfRec*   1 sal_uInt8         Content
 
     Bei den Extended-Reords folgt auf diesen 4-Byte-Header ein erweiterter
     Header, der zun"achst den o.g. Record-Typ, dann eine Versions-Kennung
@@ -133,13 +133,13 @@ SV_DECL_VARARR( SfxUINT32s, UINT32, 8, 8 )
 
         Struktur des Extended-Records:
 
-                            1 BYTE          Pre-Tag (==0x00)
-                            3 BYTE          OffsetToEndOfRec
-        OffsetToEndOfRec*   1 BYTE          Content
-                            1 BYTE          Record-Type
-                            1 BYTE          Version
-                            2 BYTE          Tag
-        ContentSize*        1 BYTE          Content
+                            1 sal_uInt8         Pre-Tag (==0x00)
+                            3 sal_uInt8         OffsetToEndOfRec
+        OffsetToEndOfRec*   1 sal_uInt8         Content
+                            1 sal_uInt8         Record-Type
+                            1 sal_uInt8         Version
+                            2 sal_uInt8         Tag
+        ContentSize*        1 sal_uInt8         Content
 
         (ContentSize = OffsetToEndOfRec - 8)
 
@@ -159,7 +159,7 @@ SV_DECL_VARARR( SfxUINT32s, UINT32, 8, 8 )
     m"ussen.
     =>  die Bytes 2-4 werden bei allen Records als Offset zum Ende des
         Records interpretiert, so da\s die Gesamt-Recors-Size sich wie
-        folgt berechnet: sizeof(UINT32) + OffsetToEndOfRec
+        folgt berechnet: sizeof(sal_uInt32) + OffsetToEndOfRec
 
     Die Records sollten einfach zu parsen un einheitlich aufgebaut sein.
     =>  Sie bauen aufeinander auf, so ist z.B. der SfxMiniRecord in jedem
@@ -190,7 +190,7 @@ class SVL_DLLPUBLIC SfxMiniRecordWriter
 /*  [Beschreibung]
 
     Mit Instanzen dieser Klasse kann ein einfacher Record in einen Stream
-    geschrieben werden, der sich durch ein BYTE-Tag identifiziert, sowie
+    geschrieben werden, der sich durch ein sal_uInt8-Tag identifiziert, sowie
     seine eigene L"ange speichert und somit auch von "alteren Versionen
     bzw. Readern, die diesen Record-Type (Tag) nicht kennen, "ubersprungen
     werden kann. Es wird keine Version-Nummer gespeichert.
@@ -205,9 +205,9 @@ class SVL_DLLPUBLIC SfxMiniRecordWriter
 
     [Fileformat]
 
-    1*              BYTE        Content-Tag (!= 0)
-    1*              3-BYTE      OffsetToEndOfRec in Bytes
-    SizeOfContent*  BYTE        Content
+    1*              sal_uInt8       Content-Tag (!= 0)
+    1*              3-sal_uInt8     OffsetToEndOfRec in Bytes
+    SizeOfContent*  sal_uInt8       Content
 
     [Beispiel]
 
@@ -221,15 +221,15 @@ class SVL_DLLPUBLIC SfxMiniRecordWriter
 {
 protected:
     SvStream*       _pStream;   //  <SvStream>, in dem der Record liegt
-    UINT32          _nStartPos; //  Start-Position des Gesamt-Records im Stream
+    sal_uInt32          _nStartPos; //  Start-Position des Gesamt-Records im Stream
     bool             _bHeaderOk; /* TRUE, wenn der Header schon geschrieben ist; */
-    BYTE            _nPreTag;   //  in den Header zu schreibendes 'Pre-Tag'
+    sal_uInt8           _nPreTag;   //  in den Header zu schreibendes 'Pre-Tag'
 
 public:
     inline          SfxMiniRecordWriter( SvStream *pStream,
-                                         BYTE nTag );
-    inline          SfxMiniRecordWriter( SvStream *pStream, BYTE nTag,
-                                         UINT32 nSize );
+                                         sal_uInt8 nTag );
+    inline          SfxMiniRecordWriter( SvStream *pStream, sal_uInt8 nTag,
+                                         sal_uInt32 nSize );
 
     inline          ~SfxMiniRecordWriter();
 
@@ -237,7 +237,7 @@ public:
 
     inline void     Reset();
 
-    UINT32          Close( bool bSeekToEndOfRec = true );
+    sal_uInt32          Close( bool bSeekToEndOfRec = true );
 
 private:
                     // not implementend, not allowed
@@ -276,35 +276,35 @@ class SVL_DLLPUBLIC SfxMiniRecordReader
 {
 protected:
     SvStream*           _pStream;   //  <SvStream>, aus dem gelesen wird
-    UINT32              _nEofRec;   //  Position direkt hinter dem Record
+    sal_uInt32              _nEofRec;   //  Position direkt hinter dem Record
     bool                _bSkipped;  //  TRUE: der Record wurde explizit geskippt
-    BYTE                _nPreTag;   //  aus dem Header gelesenes Pre-Tag
+    sal_uInt8               _nPreTag;   //  aus dem Header gelesenes Pre-Tag
 
                         // Drei-Phasen-Ctor f"ur Subklassen
                         SfxMiniRecordReader() {}
-   void                 Construct_Impl( SvStream *pStream, BYTE nTag )
+   void                 Construct_Impl( SvStream *pStream, sal_uInt8 nTag )
                         {
                             _pStream = pStream;
-                            _bSkipped = FALSE;
+                            _bSkipped = sal_False;
                             _nPreTag = nTag;
                         }
-    inline bool         SetHeader_Impl( UINT32 nHeader );
+    inline bool         SetHeader_Impl( sal_uInt32 nHeader );
 
                         // als ung"ultig markieren und zur"uck-seeken
-    void                SetInvalid_Impl( UINT32 nRecordStartPos )
+    void                SetInvalid_Impl( sal_uInt32 nRecordStartPos )
                         {
                             _nPreTag = SFX_REC_PRETAG_EOR;
                             _pStream->Seek( nRecordStartPos );
                         }
 
 public:
-    static USHORT       ScanRecordType( SvStream *pStream );
+    static sal_uInt16       ScanRecordType( SvStream *pStream );
 
                         SfxMiniRecordReader( SvStream *pStream );
-                        SfxMiniRecordReader( SvStream *pStream, BYTE nTag );
+                        SfxMiniRecordReader( SvStream *pStream, sal_uInt8 nTag );
     inline              ~SfxMiniRecordReader();
 
-    inline BYTE         GetTag() const;
+    inline sal_uInt8        GetTag() const;
     inline bool         IsValid() const;
 
     inline SvStream&    operator*() const;
@@ -324,8 +324,8 @@ class SVL_DLLPUBLIC SfxSingleRecordWriter: public SfxMiniRecordWriter
 /*  [Beschreibung]
 
     Mit Instanzen dieser Klasse kann ein Record in einen Stream geschrieben
-    werden, dessen einziger Inhalt sich durch ein UINT16-Tag und eine
-    BYTE-Versions-Nummer identifiziert, sowie seine eigene L"ange speichert
+    werden, dessen einziger Inhalt sich durch ein sal_uInt16-Tag und eine
+    sal_uInt8-Versions-Nummer identifiziert, sowie seine eigene L"ange speichert
     und somit auch von "alteren Versionen bzw. Readern, die diesen
     Record-Type (Tag) nicht kennen, "ubersprungen werden kann.
 
@@ -339,12 +339,12 @@ class SVL_DLLPUBLIC SfxSingleRecordWriter: public SfxMiniRecordWriter
 
     [Fileformat]
 
-    1*              BYTE        Pre-Tag (!= 0)
-    1*              3-BYTE      OffsetToEndOfRec in Bytes
-    1*              BYTE        Record-Type (==SFX_REC_TYPE_SINGLE)
-    1*              BYTE        Content-Version
-    1*              USHORT      Content-Tag
-    SizeOfContent*  BYTE        Content
+    1*              sal_uInt8       Pre-Tag (!= 0)
+    1*              3-sal_uInt8     OffsetToEndOfRec in Bytes
+    1*              sal_uInt8       Record-Type (==SFX_REC_TYPE_SINGLE)
+    1*              sal_uInt8       Content-Version
+    1*              sal_uInt16      Content-Tag
+    SizeOfContent*  sal_uInt8       Content
 
     [Beispiel]
 
@@ -357,20 +357,20 @@ class SVL_DLLPUBLIC SfxSingleRecordWriter: public SfxMiniRecordWriter
 
 {
 protected:
-                    SfxSingleRecordWriter( BYTE nRecordType,
+                    SfxSingleRecordWriter( sal_uInt8 nRecordType,
                                            SvStream *pStream,
-                                           UINT16 nTag, BYTE nCurVer );
+                                           sal_uInt16 nTag, sal_uInt8 nCurVer );
 
 public:
                     SfxSingleRecordWriter( SvStream *pStream,
-                                           UINT16 nTag, BYTE nCurVer );
+                                           sal_uInt16 nTag, sal_uInt8 nCurVer );
                     SfxSingleRecordWriter( SvStream *pStream,
-                                           UINT16 nTag, BYTE nCurVer,
-                                           UINT32 nSize );
+                                           sal_uInt16 nTag, sal_uInt8 nCurVer,
+                                           sal_uInt32 nSize );
 
     inline void     Reset();
 
-    UINT32          Close( bool bSeekToEndOfRec = true );
+    sal_uInt32          Close( bool bSeekToEndOfRec = true );
 };
 
 //------------------------------------------------------------------------
@@ -405,9 +405,9 @@ class SVL_DLLPUBLIC SfxSingleRecordReader: public SfxMiniRecordReader
 
 {
 protected:
-    UINT16              _nRecordTag;    // Art des Gesamt-Inhalts
-    BYTE                _nRecordVer;    // Version des Gesamt-Inhalts
-    BYTE                _nRecordType;   // Record Type aus dem Header
+    sal_uInt16              _nRecordTag;    // Art des Gesamt-Inhalts
+    sal_uInt8               _nRecordVer;    // Version des Gesamt-Inhalts
+    sal_uInt8               _nRecordType;   // Record Type aus dem Header
 
                         // Drei-Phasen-Ctor f"ur Subklassen
                         SfxSingleRecordReader() {}
@@ -416,17 +416,17 @@ protected:
                             SfxMiniRecordReader::Construct_Impl(
                                     pStream, SFX_REC_PRETAG_EXT );
                         }
-    bool                FindHeader_Impl( UINT16 nTypes, UINT16 nTag );
-    bool                ReadHeader_Impl( USHORT nTypes );
+    bool                FindHeader_Impl( sal_uInt16 nTypes, sal_uInt16 nTag );
+    bool                ReadHeader_Impl( sal_uInt16 nTypes );
 
 public:
                         SfxSingleRecordReader( SvStream *pStream );
-                        SfxSingleRecordReader( SvStream *pStream, USHORT nTag );
+                        SfxSingleRecordReader( SvStream *pStream, sal_uInt16 nTag );
 
-    inline UINT16       GetTag() const;
+    inline sal_uInt16       GetTag() const;
 
-    inline BYTE         GetVersion() const;
-    inline bool         HasVersion( USHORT nVersion ) const;
+    inline sal_uInt8        GetVersion() const;
+    inline bool         HasVersion( sal_uInt16 nVersion ) const;
 };
 
 //------------------------------------------------------------------------
@@ -454,22 +454,22 @@ class SVL_DLLPUBLIC SfxMultiFixRecordWriter: public SfxSingleRecordWriter
 
     [Fileformat]
 
-    1*                  BYTE        Pre-Tag (==0)
-    1*                  3-BYTE      OffsetToEndOfRec in Bytes
-    1*                  BYTE        Record-Type (==SFX_REC_TYPE_FIXSIZE)
-    1*                  BYTE        Content-Version
-    1*                  UINT16      Content-Tag
-    1*                  UINT16      NumberOfContents
-    1*                  UINT32      SizeOfEachContent
+    1*                  sal_uInt8       Pre-Tag (==0)
+    1*                  3-sal_uInt8     OffsetToEndOfRec in Bytes
+    1*                  sal_uInt8       Record-Type (==SFX_REC_TYPE_FIXSIZE)
+    1*                  sal_uInt8       Content-Version
+    1*                  sal_uInt16      Content-Tag
+    1*                  sal_uInt16      NumberOfContents
+    1*                  sal_uInt32      SizeOfEachContent
     NumberOfContents*   (
-    SizeOfEachContent   BYTE        Content
+    SizeOfEachContent   sal_uInt8       Content
                         )
 
     [Beispiel]
 
     {
         SfxMultiFixRecordWriter aRecord( pStream, MY_TAG_X, MY_VERSION );
-        for ( USHORT n = 0; n < Count(); ++n )
+        for ( sal_uInt16 n = 0; n < Count(); ++n )
         {
             aRecord.NewContent();
             *aRecord << aMember1[n];
@@ -480,28 +480,28 @@ class SVL_DLLPUBLIC SfxMultiFixRecordWriter: public SfxSingleRecordWriter
 
 {
 protected:
-    UINT32          _nContentStartPos;  /*  Startposition des jeweiligen
+    sal_uInt32          _nContentStartPos;  /*  Startposition des jeweiligen
                                             Contents - nur bei DBG_UTIL
                                             und f"ur Subklassen */
-    UINT32          _nContentSize;      //  Gr"o\se jedes Contents
-    UINT16          _nContentCount;     //  jeweilige Anzahl der Contents
+    sal_uInt32          _nContentSize;      //  Gr"o\se jedes Contents
+    sal_uInt16          _nContentCount;     //  jeweilige Anzahl der Contents
 
-                    SfxMultiFixRecordWriter( BYTE nRecordType,
+                    SfxMultiFixRecordWriter( sal_uInt8 nRecordType,
                                              SvStream *pStream,
-                                             UINT16 nTag, BYTE nCurVer,
-                                             UINT32 nContentSize );
+                                             sal_uInt16 nTag, sal_uInt8 nCurVer,
+                                             sal_uInt32 nContentSize );
 
 public:
                     SfxMultiFixRecordWriter( SvStream *pStream,
-                                             UINT16 nTag, BYTE nCurVer,
-                                             UINT32 nContentSize );
+                                             sal_uInt16 nTag, sal_uInt8 nCurVer,
+                                             sal_uInt32 nContentSize );
     inline          ~SfxMultiFixRecordWriter();
 
     inline void     NewContent();
 
     inline void     Reset();
 
-    UINT32          Close( bool bSeekToEndOfRec = true );
+    sal_uInt32          Close( bool bSeekToEndOfRec = true );
 };
 
 //------------------------------------------------------------------------
@@ -527,23 +527,23 @@ class SVL_DLLPUBLIC SfxMultiVarRecordWriter: public SfxMultiFixRecordWriter
 
     [Fileformat]
 
-    1*                  BYTE        Pre-Tag (==0)
-    1*                  3-BYTE      OffsetToEndOfRec in Bytes
-    1*                  BYTE        Record-Type (==SFX_FILETYPE_TYPE_VARSIZE)
-    1*                  BYTE        Content-Version
-    1*                  USHORT      Content-Tag
-    1*                  UINT16      NumberOfContents
-    1*                  UINT32      OffsetToOfsTable
+    1*                  sal_uInt8       Pre-Tag (==0)
+    1*                  3-sal_uInt8     OffsetToEndOfRec in Bytes
+    1*                  sal_uInt8       Record-Type (==SFX_FILETYPE_TYPE_VARSIZE)
+    1*                  sal_uInt8       Content-Version
+    1*                  sal_uInt16      Content-Tag
+    1*                  sal_uInt16      NumberOfContents
+    1*                  sal_uInt32      OffsetToOfsTable
     NumberOfContents*   (
-    ContentSize*        BYTE        Content
+    ContentSize*        sal_uInt8       Content
                         )
-    NumberOfContents*   UINT32      ContentOfs (je per <<8 verschoben)
+    NumberOfContents*   sal_uInt32      ContentOfs (je per <<8 verschoben)
 
     [Beispiel]
 
     {
         SfxMultiVarRecordWriter aRecord( pStream, MY_TAG_X, MY_VERSION );
-        for ( USHORT n = 0; n < Count(); ++n )
+        for ( sal_uInt16 n = 0; n < Count(); ++n )
         {
             aRecord.NewContent();
             *aRecord << aMember1[n];
@@ -555,24 +555,24 @@ class SVL_DLLPUBLIC SfxMultiVarRecordWriter: public SfxMultiFixRecordWriter
 {
 protected:
     SfxUINT32s          _aContentOfs;
-    USHORT              _nContentVer;   // nur f"ur SfxMultiMixRecordWriter
+    sal_uInt16              _nContentVer;   // nur f"ur SfxMultiMixRecordWriter
 
-                        SfxMultiVarRecordWriter( BYTE nRecordType,
+                        SfxMultiVarRecordWriter( sal_uInt8 nRecordType,
                                                  SvStream *pStream,
-                                                 USHORT nRecordTag,
-                                                 BYTE nRecordVer );
+                                                 sal_uInt16 nRecordTag,
+                                                 sal_uInt8 nRecordVer );
 
     void                FlushContent_Impl();
 
 public:
                         SfxMultiVarRecordWriter( SvStream *pStream,
-                                                 USHORT nRecordTag,
-                                                 BYTE nRecordVer );
+                                                 sal_uInt16 nRecordTag,
+                                                 sal_uInt8 nRecordVer );
     virtual             ~SfxMultiVarRecordWriter();
 
     void                NewContent();
 
-    virtual UINT32      Close( bool bSeekToEndOfRec = true );
+    virtual sal_uInt32      Close( bool bSeekToEndOfRec = true );
 };
 
 //------------------------------------------------------------------------
@@ -597,27 +597,27 @@ class SVL_DLLPUBLIC SfxMultiMixRecordWriter: public SfxMultiVarRecordWriter
 
     [Fileformat]
 
-    1*                  BYTE        Pre-Tag (==0)
-    1*                  3-BYTE      OffsetToEndOfRec in Bytes
-    1*                  BYTE        Record-Type (==SFX_REC_TYPE_MIXTAGS)
-    1*                  BYTE        Content-Version
-    1*                  USHORT      Record-Tag
-    1*                  UINT16      NumberOfContents
-    1*                  UINT32      OffsetToOfsTable
+    1*                  sal_uInt8       Pre-Tag (==0)
+    1*                  3-sal_uInt8     OffsetToEndOfRec in Bytes
+    1*                  sal_uInt8       Record-Type (==SFX_REC_TYPE_MIXTAGS)
+    1*                  sal_uInt8       Content-Version
+    1*                  sal_uInt16      Record-Tag
+    1*                  sal_uInt16      NumberOfContents
+    1*                  sal_uInt32      OffsetToOfsTable
     NumberOfContents*   (
-    1*                  USHORT      Content-Tag
-    ContentSize*        BYTE        Content
+    1*                  sal_uInt16      Content-Tag
+    ContentSize*        sal_uInt8        Content
                         )
-    NumberOfContents*   UINT32      ( ContentOfs << 8 + Version )
+    NumberOfContents*   sal_uInt32      ( ContentOfs << 8 + Version )
 */
 
 {
 public:
     inline              SfxMultiMixRecordWriter( SvStream *pStream,
-                                                 USHORT nRecordTag,
-                                                 BYTE nRecordVer );
+                                                 sal_uInt16 nRecordTag,
+                                                 sal_uInt8 nRecordVer );
 
-    void                NewContent( USHORT nTag, BYTE nVersion );
+    void                NewContent( sal_uInt16 nTag, sal_uInt8 nVersion );
 
 // private: geht nicht, da einige Compiler dann auch vorherige privat machen
     void                NewContent()
@@ -642,7 +642,7 @@ class SVL_DLLPUBLIC SfxMultiRecordReader: public SfxSingleRecordReader
 
     {
         SfxMultiRecordReader aRecord( pStream );
-        for ( USHORT nRecNo = 0; aRecord.GetContent(); ++nRecNo )
+        for ( sal_uInt16 nRecNo = 0; aRecord.GetContent(); ++nRecNo )
         {
             switch ( aRecord.GetTag() )
             {
@@ -661,30 +661,30 @@ class SVL_DLLPUBLIC SfxMultiRecordReader: public SfxSingleRecordReader
 */
 
 {
-    UINT32              _nStartPos;     //  Start-Position des Records
-    UINT32*             _pContentOfs;   //  Offsets der Startpositionen
-    UINT32              _nContentSize;  //  Size jedes einzelnen / Tabellen-Pos
-    UINT16              _nContentCount; //  Anzahl der Contents im Record
-    UINT16              _nContentNo;    /*  der Index des aktuellen Contents
+    sal_uInt32              _nStartPos;     //  Start-Position des Records
+    sal_uInt32*             _pContentOfs;   //  Offsets der Startpositionen
+    sal_uInt32              _nContentSize;  //  Size jedes einzelnen / Tabellen-Pos
+    sal_uInt16              _nContentCount; //  Anzahl der Contents im Record
+    sal_uInt16              _nContentNo;    /*  der Index des aktuellen Contents
                                             enth"alt jeweils den Index des
                                             Contents, der beim n"achsten
                                             GetContent() geholt wird */
-    UINT16              _nContentTag;   //  Art-Kennung des aktuellen Contents
-    BYTE                _nContentVer;   //  Versions-Kennung des akt. Contents
+    sal_uInt16              _nContentTag;   //  Art-Kennung des aktuellen Contents
+    sal_uInt8               _nContentVer;   //  Versions-Kennung des akt. Contents
 
     bool                ReadHeader_Impl();
 
 public:
                         SfxMultiRecordReader( SvStream *pStream );
-                        SfxMultiRecordReader( SvStream *pStream, UINT16 nTag );
+                        SfxMultiRecordReader( SvStream *pStream, sal_uInt16 nTag );
                         ~SfxMultiRecordReader();
 
     bool                GetContent();
-    inline UINT16       GetContentTag();
-    inline BYTE         GetContentVersion() const;
-    inline bool         HasContentVersion( USHORT nVersion ) const;
+    inline sal_uInt16       GetContentTag();
+    inline sal_uInt8        GetContentVersion() const;
+    inline bool         HasContentVersion( sal_uInt16 nVersion ) const;
 
-    inline UINT32       ContentCount() const;
+    inline sal_uInt32       ContentCount() const;
 };
 
 //=========================================================================
@@ -692,7 +692,7 @@ public:
 inline SfxMiniRecordWriter::SfxMiniRecordWriter
 (
     SvStream*       pStream,        // Stream, in dem der Record angelegt wird
-    BYTE            nTag            // Record-Tag zwischen 0x01 und 0xFE
+    sal_uInt8            nTag            // Record-Tag zwischen 0x01 und 0xFE
 )
 
 /*  [Beschreibung]
@@ -718,8 +718,8 @@ inline SfxMiniRecordWriter::SfxMiniRecordWriter
 inline SfxMiniRecordWriter::SfxMiniRecordWriter
 (
     SvStream*       pStream,        // Stream, in dem der Record angelegt wird
-    BYTE            nTag,           // Record-Tag zwischen 0x01 und 0xFE
-    UINT32          nSize           // Gr"o\se der Daten in Bytes
+    sal_uInt8           nTag,           // Record-Tag zwischen 0x01 und 0xFE
+    sal_uInt32          nSize           // Gr"o\se der Daten in Bytes
 )
 
 /*  [Beschreibung]
@@ -809,12 +809,12 @@ inline void SfxMiniRecordReader::Skip()
 
 {
     _pStream->Seek(_nEofRec);
-    _bSkipped = TRUE;
+    _bSkipped = sal_True;
 }
 
 //-------------------------------------------------------------------------
 
-inline BYTE SfxMiniRecordReader::GetTag() const
+inline sal_uInt8 SfxMiniRecordReader::GetTag() const
 
 /*  [Beschreibung]
 
@@ -861,18 +861,18 @@ inline SvStream& SfxMiniRecordReader::operator*() const
 
 //=========================================================================
 
-inline UINT32 SfxSingleRecordWriter::Close( bool bSeekToEndOfRec )
+inline sal_uInt32 SfxSingleRecordWriter::Close( bool bSeekToEndOfRec )
 
 //  siehe <SfxMiniRecordWriter::Close(bool)>
 
 {
-    UINT32 nRet = 0;
+    sal_uInt32 nRet = 0;
 
     // wurde der Header noch nicht geschrieben?
     if ( !_bHeaderOk )
     {
         // Basisklassen-Header schreiben
-        UINT32 nEndPos = SfxMiniRecordWriter::Close( bSeekToEndOfRec );
+        sal_uInt32 nEndPos = SfxMiniRecordWriter::Close( bSeekToEndOfRec );
 
         // ggf. ans Ende des eigenen Headers seeken oder hinter Rec bleiben
         if ( !bSeekToEndOfRec )
@@ -901,7 +901,7 @@ inline void SfxSingleRecordWriter::Reset()
 
 //=========================================================================
 
-inline UINT16 SfxSingleRecordReader::GetTag() const
+inline sal_uInt16 SfxSingleRecordReader::GetTag() const
 
 /*  [Beschreibung]
 
@@ -914,7 +914,7 @@ inline UINT16 SfxSingleRecordReader::GetTag() const
 
 //-------------------------------------------------------------------------
 
-inline BYTE SfxSingleRecordReader::GetVersion() const
+inline sal_uInt8 SfxSingleRecordReader::GetVersion() const
 
 /*  [Beschreibung]
 
@@ -927,7 +927,7 @@ inline BYTE SfxSingleRecordReader::GetVersion() const
 
 //-------------------------------------------------------------------------
 
-inline bool SfxSingleRecordReader::HasVersion( USHORT nVersion ) const
+inline bool SfxSingleRecordReader::HasVersion( sal_uInt16 nVersion ) const
 
 /*  [Beschreibung]
 
@@ -969,7 +969,7 @@ inline void SfxMultiFixRecordWriter::NewContent()
 
 {
     #ifdef DBG_UTIL
-    ULONG nOldStartPos;
+    sal_uLong nOldStartPos;
     // Startposition des aktuellen Contents merken - Achtung Subklassen!
     nOldStartPos = _nContentStartPos;
     #endif
@@ -994,8 +994,8 @@ inline void SfxMultiFixRecordWriter::NewContent()
 inline SfxMultiMixRecordWriter::SfxMultiMixRecordWriter
 (
     SvStream*       pStream,    // Stream, in dem der Record angelegt wird
-    USHORT          nRecordTag, // Gesamt-Record-Art-Kennung
-    BYTE            nRecordVer  // Gesamt-Record-Versions-Kennung
+    sal_uInt16          nRecordTag, // Gesamt-Record-Art-Kennung
+    sal_uInt8           nRecordVer  // Gesamt-Record-Versions-Kennung
 )
 
 /*  [Beschreibung]
@@ -1022,7 +1022,7 @@ inline void SfxMultiFixRecordWriter::Reset()
 
 //=========================================================================
 
-inline UINT16 SfxMultiRecordReader::GetContentTag()
+inline sal_uInt16 SfxMultiRecordReader::GetContentTag()
 
 /*  [Beschreibung]
 
@@ -1036,7 +1036,7 @@ inline UINT16 SfxMultiRecordReader::GetContentTag()
 
 //-------------------------------------------------------------------------
 
-inline BYTE SfxMultiRecordReader::GetContentVersion() const
+inline sal_uInt8 SfxMultiRecordReader::GetContentVersion() const
 
 /*  [Beschreibung]
 
@@ -1050,7 +1050,7 @@ inline BYTE SfxMultiRecordReader::GetContentVersion() const
 
 //-------------------------------------------------------------------------
 
-inline bool SfxMultiRecordReader::HasContentVersion( USHORT nVersion ) const
+inline bool SfxMultiRecordReader::HasContentVersion( sal_uInt16 nVersion ) const
 
 /*  [Beschreibung]
 
@@ -1065,7 +1065,7 @@ inline bool SfxMultiRecordReader::HasContentVersion( USHORT nVersion ) const
 
 //-------------------------------------------------------------------------
 
-inline UINT32 SfxMultiRecordReader::ContentCount() const
+inline sal_uInt32 SfxMultiRecordReader::ContentCount() const
 
 /*  [Beschreibung]
 

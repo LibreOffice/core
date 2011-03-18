@@ -43,7 +43,7 @@ class TOOLS_DLLPUBLIC SvCacheStream : public SvStream
 {
 private:
     String          aFileName;
-    ULONG           nMaxSize;
+    sal_uIntPtr           nMaxSize;
     int             bPersistent;
 
     SvStream*       pSwapStream;
@@ -52,17 +52,17 @@ private:
 
     Link            aFilenameLinkHdl;
 
-    TOOLS_DLLPRIVATE virtual ULONG   GetData( void* pData, ULONG nSize );
-    TOOLS_DLLPRIVATE virtual ULONG   PutData( const void* pData, ULONG nSize );
-    TOOLS_DLLPRIVATE virtual ULONG   SeekPos( ULONG nPos );
+    TOOLS_DLLPRIVATE virtual sal_uIntPtr   GetData( void* pData, sal_uIntPtr nSize );
+    TOOLS_DLLPRIVATE virtual sal_uIntPtr   PutData( const void* pData, sal_uIntPtr nSize );
+    TOOLS_DLLPRIVATE virtual sal_uIntPtr   SeekPos( sal_uIntPtr nPos );
     TOOLS_DLLPRIVATE virtual void    FlushData();
-    TOOLS_DLLPRIVATE virtual void    SetSize( ULONG nSize );
+    TOOLS_DLLPRIVATE virtual void    SetSize( sal_uIntPtr nSize );
 
 public:
-                    SvCacheStream( ULONG nMaxMemSize = 0 );
+                    SvCacheStream( sal_uIntPtr nMaxMemSize = 0 );
                     SvCacheStream( const String &rFileName,
-                                   ULONG nExpectedSize = 0,
-                                   ULONG nMaxMemSize = 0 );
+                                   sal_uIntPtr nExpectedSize = 0,
+                                   sal_uIntPtr nMaxMemSize = 0 );
                     ~SvCacheStream();
 
     void            SetFilenameHdl( const Link& rLink);
@@ -73,10 +73,10 @@ public:
 
     void            SwapOut();
     const void*     GetBuffer();
-    ULONG           GetSize();
+    sal_uIntPtr           GetSize();
 
-    BOOL            IsPersistent() { return bPersistent != 0; }
-    void            SetPersistence( BOOL b = TRUE ) { bPersistent = b; }
+    sal_Bool            IsPersistent() { return bPersistent != 0; }
+    void            SetPersistence( sal_Bool b = sal_True ) { bPersistent = b; }
     void            SetSwapStream( SvStream *p )
                  { pSwapStream = p; } // darf nur vom FilenameHdl gerufen werden!
 };

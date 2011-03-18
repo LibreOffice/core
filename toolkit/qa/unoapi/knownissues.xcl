@@ -178,7 +178,6 @@ toolkit.UnoControlDialogModel::com::sun::star::lang::XComponent
 toolkit.UnoControlFileControlModel::com::sun::star::lang::XComponent
 toolkit.UnoControlGroupBox::com::sun::star::lang::XComponent
 toolkit.UnoControlContainer::com::sun::star::lang::XComponent
-toolkit.MutableTreeDataModel::com::sun::star::lang::XComponent
 toolkit.UnoControlFixedText::com::sun::star::lang::XComponent
 toolkit.UnoControlListBox::com::sun::star::lang::XComponent
 toolkit.UnoControlCheckBoxModel::com::sun::star::lang::XComponent
@@ -241,12 +240,21 @@ toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleValue
 toolkit.AccessibleMenuBar::com::sun::star::accessibility::XAccessibleEventBroadcaster
 toolkit.AccessibleMenuBar::com::sun::star::accessibility::XAccessibleSelection
 
-### i111076 ###
-toolkit.Toolkit::com::sun::star::awt::XDataTransferProviderAccess
-
 ### i111113 ###
 toolkit.AccessibleStatusBarItem::com::sun::star::accessibility::XAccessibleComponent
 toolkit.AccessibleStatusBarItem::com::sun::star::accessibility::XAccessibleContext
 
 ### i111195 ###
 toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleValue
+
+### i113489 ###
+toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleText
+toolkit.AccessibleMenuBar::com::sun::star::accessibility::XAccessibleComponent
+toolkit.AccessibleMenuSeparator::com::sun::star::accessibility::XAccessibleComponent
+
+### i114213 ###
+toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleSelection
+
+### i114636 ###
+toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleAction
+toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleContext

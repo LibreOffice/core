@@ -28,14 +28,10 @@
 
 /* nicht geschuetzt, darf nur einmal includet werden */
 
-// Konflíkt mit den Tools-Pair vermeiden
+// Konflï¿½kt mit den Tools-Pair vermeiden
 #define Pair StlPair
 
 #if defined WNT
-
-#define BOOL         WIN_BOOL
-#define BYTE         WIN_BYTE
-#define ULONG        WIN_ULONG
 
 #define Rectangle    BLA_Rectangle
 #define Polygon      BLA_Polygon

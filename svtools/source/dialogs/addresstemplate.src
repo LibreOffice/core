@@ -27,12 +27,13 @@
 
 #include <svtools/svtools.hrc>
 #include "addresstemplate.hrc"
-#include "controldims.hrc"
+#include <svtools/controldims.hrc>
 
 #define FIELD_ROW_HEIGHT    17
 
 ModalDialog DLG_ADDRESSBOOKSOURCE
 {
+    HelpID = "svtools:ModalDialog:DLG_ADDRESSBOOKSOURCE";
     SVLook = TRUE ;
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 300 , 88 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
@@ -58,6 +59,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     };
     ComboBox CB_DATASOURCE
     {
+        HelpID = "svtools:ComboBox:DLG_ADDRESSBOOKSOURCE:CB_DATASOURCE";
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 105, 13 ) ;
         Size = MAP_APPFONT ( 96, 55 ) ;
@@ -67,6 +69,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     };
     PushButton PB_ADMINISTATE_DATASOURCES
     {
+        HelpID = "svtools:PushButton:DLG_ADDRESSBOOKSOURCE:PB_ADMINISTATE_DATASOURCES";
         Text [ en-US ] = "~Address Data Source...";
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 204, 13 ) ;
@@ -84,6 +87,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     };
     ComboBox CB_TABLE
     {
+        HelpID = "svtools:ComboBox:DLG_ADDRESSBOOKSOURCE:CB_TABLE";
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 105, 30 ) ;
         Size = MAP_APPFONT ( 96, 55 ) ;

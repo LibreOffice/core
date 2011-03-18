@@ -338,7 +338,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const :
 
                         if( 0 < nImageId )
                         {
-                            const Image aImage( aImageList.GetImage( sal::static_int_cast< USHORT >(nImageId) ) );
+                            const Image aImage( aImageList.GetImage( sal::static_int_cast< sal_uInt16 >(nImageId) ) );
                             aBmpEx = aImage.GetBitmapEx();
                         }
                         else

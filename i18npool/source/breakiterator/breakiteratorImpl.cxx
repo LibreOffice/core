@@ -443,47 +443,39 @@ sal_Int16 SAL_CALL BreakIteratorImpl::getWordType( const OUString& /*Text*/,
         return 0;
 }
 
-static sal_Int16 scriptTypes[] = {
-    ScriptType::WEAK, ScriptType::WEAK, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX,
-    ScriptType::ASIAN, ScriptType::LATIN, ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::LATIN, ScriptType::LATIN,
-// 15
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::ASIAN, ScriptType::ASIAN, ScriptType::COMPLEX,
-    ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN,
-// 30
-    ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::LATIN, ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-// 45
-    ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN,
-    ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-// 60
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::ASIAN, ScriptType::ASIAN,
-// 75
-    ScriptType::COMPLEX, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::LATIN, ScriptType::LATIN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-// 90
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::WEAK, ScriptType::WEAK, ScriptType::COMPLEX,
-// 105
-    ScriptType::ASIAN, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::ASIAN,
-// 120
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::WEAK, ScriptType::WEAK,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-// 135
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX, ScriptType::COMPLEX,
-    ScriptType::COMPLEX,
-    ScriptType::WEAK};
+typedef struct {
+    UBlockCode from;
+    UBlockCode to;
+    sal_Int16 script;
+} UBlock2Script;
+
+// for a list of the UBLOCK_... values see:
+// http://icu-project.org/apiref/icu4c/uchar_8h.html
+// where enum UBlockCode is defined.
+// See also http://www.unicode.org/charts/ for general reference
+static UBlock2Script scriptList[] = {
+    {UBLOCK_NO_BLOCK, UBLOCK_NO_BLOCK, ScriptType::WEAK},
+    {UBLOCK_BASIC_LATIN, UBLOCK_ARMENIAN, ScriptType::LATIN},
+    {UBLOCK_HEBREW, UBLOCK_MYANMAR, ScriptType::COMPLEX},
+    {UBLOCK_GEORGIAN, UBLOCK_GEORGIAN, ScriptType::LATIN},
+    {UBLOCK_HANGUL_JAMO, UBLOCK_HANGUL_JAMO, ScriptType::ASIAN},
+    {UBLOCK_ETHIOPIC, UBLOCK_ETHIOPIC, ScriptType::COMPLEX},
+    {UBLOCK_CHEROKEE, UBLOCK_RUNIC, ScriptType::LATIN},
+    {UBLOCK_KHMER, UBLOCK_MONGOLIAN, ScriptType::COMPLEX},
+    {UBLOCK_LATIN_EXTENDED_ADDITIONAL, UBLOCK_GREEK_EXTENDED, ScriptType::LATIN},
+    {UBLOCK_GENERAL_PUNCTUATION, UBLOCK_GENERAL_PUNCTUATION, ScriptType::LATIN},
+    {UBLOCK_CJK_RADICALS_SUPPLEMENT, UBLOCK_HANGUL_SYLLABLES, ScriptType::ASIAN},
+    {UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS, ScriptType::ASIAN},
+    {UBLOCK_ARABIC_PRESENTATION_FORMS_A, UBLOCK_ARABIC_PRESENTATION_FORMS_A, ScriptType::COMPLEX},
+    {UBLOCK_CJK_COMPATIBILITY_FORMS, UBLOCK_CJK_COMPATIBILITY_FORMS, ScriptType::ASIAN},
+    {UBLOCK_ARABIC_PRESENTATION_FORMS_B, UBLOCK_ARABIC_PRESENTATION_FORMS_B, ScriptType::COMPLEX},
+    {UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS, UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS, ScriptType::ASIAN},
+    {UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT, ScriptType::ASIAN},
+    {UBLOCK_CJK_STROKES, UBLOCK_CJK_STROKES, ScriptType::ASIAN},
+    {UBLOCK_LATIN_EXTENDED_C, UBLOCK_LATIN_EXTENDED_D, ScriptType::LATIN}
+};
+
+#define scriptListCount SAL_N_ELEMENTS(scriptList)
 
 sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
 {
@@ -496,10 +488,21 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
             int32_t script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
             if (script < 0)
                 nRet = ScriptType::WEAK;
-            else if (static_cast<size_t>(script) >= SAL_N_ELEMENTS(scriptTypes))
-                nRet = ScriptType::COMPLEX;         // anything new is going to be pretty wild
-            else
-                nRet = scriptTypes[script];
+            // workaround for Coptic
+            else if ( 0x2C80 <= currentChar && 0x2CE3 >= currentChar)
+                nRet = ScriptType::LATIN;
+            // work-around for ligatures (see http://www.unicode.org/charts/PDF/UFB00.pdf)
+            else if ((0xFB00 <= currentChar && currentChar <= 0xFB06) ||
+                     (0xFB13 <= currentChar && currentChar <= 0xFB17))
+                nRet = ScriptType::LATIN;
+            else {
+                UBlockCode block=ublock_getCode(currentChar);
+                sal_uInt16 i;
+                for ( i = 0; i < scriptListCount; i++) {
+                    if (block <= scriptList[i].to) break;
+                }
+                nRet=(i < scriptListCount && block >= scriptList[i].from) ? scriptList[i].script : ScriptType::WEAK;
+            }
         }
         return nRet;
 }

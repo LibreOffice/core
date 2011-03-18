@@ -55,7 +55,7 @@ SfxSizeItem::SfxSizeItem()
 
 // -----------------------------------------------------------------------
 
-SfxSizeItem::SfxSizeItem( USHORT nW, const Size& rVal ) :
+SfxSizeItem::SfxSizeItem( sal_uInt16 nW, const Size& rVal ) :
     SfxPoolItem( nW ),
     aVal( rVal )
 {
@@ -64,7 +64,7 @@ SfxSizeItem::SfxSizeItem( USHORT nW, const Size& rVal ) :
 
 // -----------------------------------------------------------------------
 
-SfxSizeItem::SfxSizeItem( USHORT nW, SvStream &rStream ) :
+SfxSizeItem::SfxSizeItem( sal_uInt16 nW, SvStream &rStream ) :
     SfxPoolItem( nW )
 {
     DBG_CTOR(SfxSizeItem, 0);
@@ -118,7 +118,7 @@ SfxPoolItem* SfxSizeItem::Clone(SfxItemPool *) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, USHORT ) const
+SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxSizeItem, 0);
     Size aStr;
@@ -128,7 +128,7 @@ SfxPoolItem* SfxSizeItem::Create(SvStream &rStream, USHORT ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxSizeItem::Store(SvStream &rStream, USHORT ) const
+SvStream& SfxSizeItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxSizeItem, 0);
     rStream << aVal;
@@ -137,7 +137,7 @@ SvStream& SfxSizeItem::Store(SvStream &rStream, USHORT ) const
 
 // -----------------------------------------------------------------------
 bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
-                               BYTE nMemberId ) const
+                               sal_uInt8 nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -168,7 +168,7 @@ bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
 
 // -----------------------------------------------------------------------
 bool SfxSizeItem::PutValue( const com::sun::star::uno::Any& rVal,
-                            BYTE nMemberId )
+                            sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;

@@ -47,10 +47,10 @@ int VCL_DLLPUBLIC GetCommandLineTokenCount( const String& );
 int VCL_DLLPUBLIC GetCommandLineTokenCount( const ByteString& );
 // returns number of tokens (zero if empty or whitespace only)
 
-String VCL_DLLPUBLIC WhitespaceToSpace( const String&, BOOL bProtect = TRUE );
-ByteString VCL_DLLPUBLIC WhitespaceToSpace( const ByteString&, BOOL bProtect = TRUE );
+String VCL_DLLPUBLIC WhitespaceToSpace( const String&, sal_Bool bProtect = sal_True );
+ByteString VCL_DLLPUBLIC WhitespaceToSpace( const ByteString&, sal_Bool bProtect = sal_True );
 // returns a string with multiple adjacent occurrences of whitespace
-// converted to a single space. if bProtect is TRUE (nonzero), then
+// converted to a single space. if bProtect is sal_True (nonzero), then
 // doublequote, singlequote and singleleftquote protect their respective
 // contents
 

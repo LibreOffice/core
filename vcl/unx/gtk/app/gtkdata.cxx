@@ -246,14 +246,15 @@ extern "C"
 
 int GtkSalDisplay::GetDefaultMonitorNumber() const
 {
+    int n = 0;
     GdkScreen* pScreen = gdk_display_get_screen( m_pGdkDisplay, m_nDefaultScreen );
 #if GTK_CHECK_VERSION(2,20,0)
-    return m_aXineramaScreenIndexMap[gdk_screen_get_primary_monitor(pScreen)];
+    n = gdk_screen_get_primary_monitor(pScreen);
 #else
     static screen_get_primary_monitor sym_gdk_screen_get_primary_monitor =
         (screen_get_primary_monitor)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_screen_get_primary_monitor" );
     if (sym_gdk_screen_get_primary_monitor)
-        return m_aXineramaScreenIndexMap[sym_gdk_screen_get_primary_monitor(pScreen)];
+        n = sym_gdk_screen_get_primary_monitor( pScreen );
 #if GTK_CHECK_VERSION(2,14,0)
     //gdk_screen_get_primary_monitor unavailable, take the first laptop monitor
     //as the default
@@ -266,6 +267,9 @@ int GtkSalDisplay::GetDefaultMonitorNumber() const
 #endif
     return 0;
 #endif
+    if( n >= 0 && size_t(n) < m_aXineramaScreenIndexMap.size() )
+        n = m_aXineramaScreenIndexMap[n];
+    return n;
 }
 
 void GtkSalDisplay::initScreen( int nScreen ) const
@@ -539,7 +543,7 @@ public:
                             YieldFunc   handle );
     virtual void    Remove( int fd );
 
-    virtual void    StartTimer( ULONG nMS );
+    virtual void    StartTimer( sal_uLong nMS );
     virtual void    StopTimer();
     virtual void    Wakeup();
     virtual void    PostUserEvent();
@@ -739,7 +743,7 @@ gboolean GtkXLib::timeoutFn(gpointer data)
     return FALSE;
 }
 
-void GtkXLib::StartTimer( ULONG nMS )
+void GtkXLib::StartTimer( sal_uLong nMS )
 {
     m_nTimeoutMS = nMS; // for restarting
 

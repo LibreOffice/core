@@ -34,6 +34,8 @@
 #include "ipwin.hxx"
 
 #include <toolkit/helper/convert.hxx>
+#include <osl/mutex.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -51,6 +53,8 @@ void VCLXHatchWindow::initializeWindow( const uno::Reference< awt::XWindowPeer >
                 const awt::Rectangle& aBounds,
                 const awt::Size& aSize )
 {
+    SolarMutexGuard aGuard;
+
     Window* pParent = NULL;
     VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( xParent );
 
@@ -118,7 +122,7 @@ uno::Any SAL_CALL VCLXHatchWindow::queryInterface( const uno::Type & rType )
     throw( uno::RuntimeException )
 {
     // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
+    //    Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     uno::Any aReturn( ::cppu::queryInterface( rType,
                                            static_cast< embed::XHatchWindow* >( this ) ) );

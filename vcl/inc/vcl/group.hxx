@@ -44,8 +44,8 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void     ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits  ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void     ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
-    SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
+    SAL_DLLPRIVATE void     ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SAL_DLLPRIVATE void     ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                                       const Point& rPos, const Size& rSize, bool bLayout = false );
 
     virtual void    FillLayoutData() const;
@@ -59,7 +59,7 @@ public:
                     GroupBox( Window* pParent, const ResId& rResId );
 
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );

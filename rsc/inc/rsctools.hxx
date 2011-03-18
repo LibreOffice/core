@@ -49,8 +49,8 @@ enum RSCBYTEORDER_TYPE { RSC_BIGENDIAN, RSC_LITTLEENDIAN, RSC_SYSTEMENDIAN };
             (nSize + sizeof( void * ) -1) / sizeof( void * ) * sizeof( void * )
 /******************* F u n c t i o n   F o r w a r d s *******************/
 ByteString GetTmpFileName();
-BOOL Append( ByteString aDestFile, ByteString aSourceFile );
-BOOL Append( FILE * fDest, ByteString aSourceFile );
+sal_Bool Append( ByteString aDestFile, ByteString aSourceFile );
+sal_Bool Append( FILE * fDest, ByteString aSourceFile );
 ByteString InputFile ( const char * pInput, const char * pExt );
 ByteString OutputFile( ByteString aInput, const char * ext );
 char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv,
@@ -70,7 +70,7 @@ typedef ::std::vector< ByteString* > RscStrList;
 class RscChar
 {
 public:
-    static char * MakeUTF8( char * pStr, UINT16 nTextEncoding );
+    static char * MakeUTF8( char * pStr, sal_uInt16 nTextEncoding );
 };
 
 /****************** R s c P t r P t r ************************************/
@@ -95,7 +95,7 @@ public:
 class RscWriteRc
 {
     sal_uInt32              nLen;
-    BOOL                bSwap;
+    sal_Bool                bSwap;
     RSCBYTEORDER_TYPE   nByteOrder;
     char *              pMem;
     char *              GetPointer( sal_uInt32 nSize );
@@ -181,7 +181,7 @@ public:
                 { Put( (sal_uInt16)nValue ); }
     void        PutUTF8( char * pData );
 
-    void        PutAt( sal_uInt32 nPos, INT32 lVal )
+    void        PutAt( sal_uInt32 nPos, sal_Int32 lVal )
                 {
                     union
                     {
@@ -203,7 +203,7 @@ public:
                 }
     void        PutAt( sal_uInt32 nPos, sal_uInt32 lVal )
                 {
-                    PutAt( nPos, (INT32)lVal);
+                    PutAt( nPos, (sal_Int32)lVal);
                 }
     void        PutAt( sal_uInt32 nPos, short nVal )
                 {

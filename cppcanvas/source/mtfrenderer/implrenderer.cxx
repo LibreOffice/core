@@ -147,7 +147,7 @@ namespace
     }
 
     void pushState( ::cppcanvas::internal::VectorOfOutDevStates& rStates,
-                    USHORT nFlags                                           )
+                    sal_uInt16 nFlags                                           )
     {
         rStates.push_back( getState( rStates ) );
         getState( rStates ).pushFlags = nFlags;
@@ -451,7 +451,7 @@ namespace
                 // translate characters to local preference
                 sal_Unicode cChar = getLocalizedChar( *pBegin, eTextLanguage );
                 if( cChar != *pBegin )
-                    rStr.SetChar( sal::static_int_cast<USHORT>(pBegin - pBase), cChar );
+                    rStr.SetChar( sal::static_int_cast<sal_uInt16>(pBegin - pBase), cChar );
             }
         }
     }
@@ -526,7 +526,7 @@ namespace cppcanvas
 
         bool ImplRenderer::isActionContained( GDIMetaFile& rMtf,
                                               const char*  pCommentString,
-                                              USHORT       nType ) const
+                                              sal_uInt16       nType ) const
         {
             ENSURE_OR_THROW( pCommentString,
                               "ImplRenderer::isActionContained(): NULL string given" );
@@ -535,7 +535,7 @@ namespace cppcanvas
 
             // at least _one_ call to GDIMetaFile::NextAction() is
             // executed
-            ULONG nPos( 1 );
+            sal_uIntPtr nPos( 1 );
 
             MetaAction* pCurrAct;
             while( (pCurrAct=rMtf.NextAction()) != NULL )
@@ -586,7 +586,7 @@ namespace cppcanvas
             // decide, whether this gradient can be rendered natively
             // by the canvas, or must be emulated via VCL gradient
             // action extraction.
-            const USHORT nSteps( rGradient.GetSteps() );
+            const sal_uInt16 nSteps( rGradient.GetSteps() );
 
             if( // step count is infinite, can use native canvas
                 // gradients here
@@ -611,17 +611,17 @@ namespace cppcanvas
                     // ----------------------------
 
                     // scale color coefficients with gradient intensities
-                    const USHORT nStartIntensity( rGradient.GetStartIntensity() );
+                    const sal_uInt16 nStartIntensity( rGradient.GetStartIntensity() );
                     ::Color aVCLStartColor( rGradient.GetStartColor() );
-                    aVCLStartColor.SetRed( (UINT8)(aVCLStartColor.GetRed() * nStartIntensity / 100) );
-                    aVCLStartColor.SetGreen( (UINT8)(aVCLStartColor.GetGreen() * nStartIntensity / 100) );
-                    aVCLStartColor.SetBlue( (UINT8)(aVCLStartColor.GetBlue() * nStartIntensity / 100) );
+                    aVCLStartColor.SetRed( (sal_uInt8)(aVCLStartColor.GetRed() * nStartIntensity / 100) );
+                    aVCLStartColor.SetGreen( (sal_uInt8)(aVCLStartColor.GetGreen() * nStartIntensity / 100) );
+                    aVCLStartColor.SetBlue( (sal_uInt8)(aVCLStartColor.GetBlue() * nStartIntensity / 100) );
 
-                    const USHORT nEndIntensity( rGradient.GetEndIntensity() );
+                    const sal_uInt16 nEndIntensity( rGradient.GetEndIntensity() );
                     ::Color aVCLEndColor( rGradient.GetEndColor() );
-                    aVCLEndColor.SetRed( (UINT8)(aVCLEndColor.GetRed() * nEndIntensity / 100) );
-                    aVCLEndColor.SetGreen( (UINT8)(aVCLEndColor.GetGreen() * nEndIntensity / 100) );
-                    aVCLEndColor.SetBlue( (UINT8)(aVCLEndColor.GetBlue() * nEndIntensity / 100) );
+                    aVCLEndColor.SetRed( (sal_uInt8)(aVCLEndColor.GetRed() * nEndIntensity / 100) );
+                    aVCLEndColor.SetGreen( (sal_uInt8)(aVCLEndColor.GetGreen() * nEndIntensity / 100) );
+                    aVCLEndColor.SetBlue( (sal_uInt8)(aVCLEndColor.GetBlue() * nEndIntensity / 100) );
 
                     uno::Reference<rendering::XColorSpace> xColorSpace(
                         rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
@@ -848,8 +848,8 @@ namespace cppcanvas
         {
             rendering::FontRequest aFontRequest;
 
-            if( rParms.mrParms.maFontName.isValid() )
-                aFontRequest.FontDescription.FamilyName = rParms.mrParms.maFontName.getValue();
+            if( rParms.mrParms.maFontName.is_initialized() )
+                aFontRequest.FontDescription.FamilyName = *rParms.mrParms.maFontName;
             else
                 aFontRequest.FontDescription.FamilyName = rFont.GetName();
 
@@ -860,16 +860,16 @@ namespace cppcanvas
 
             // TODO(F2): improve vclenum->panose conversion
             aFontRequest.FontDescription.FontDescription.Weight =
-                rParms.mrParms.maFontWeight.isValid() ?
-                rParms.mrParms.maFontWeight.getValue() :
+                rParms.mrParms.maFontWeight.is_initialized() ?
+                *rParms.mrParms.maFontWeight :
                 ::canvas::tools::numeric_cast<sal_Int8>( ::basegfx::fround( rFont.GetWeight() ) );
             aFontRequest.FontDescription.FontDescription.Letterform =
-                rParms.mrParms.maFontLetterForm.isValid() ?
-                rParms.mrParms.maFontLetterForm.getValue() :
+                rParms.mrParms.maFontLetterForm.is_initialized() ?
+                *rParms.mrParms.maFontLetterForm :
                 (rFont.GetItalic() == ITALIC_NONE) ? 0 : 9;
             aFontRequest.FontDescription.FontDescription.Proportion =
-                rParms.mrParms.maFontProportion.isValid() ?
-                rParms.mrParms.maFontProportion.getValue() :
+                rParms.mrParms.maFontProportion.is_initialized() ?
+                *rParms.mrParms.maFontProportion :
                 (rFont.GetPitch() == PITCH_FIXED)
                     ? rendering::PanoseProportion::MONO_SPACED
                     : rendering::PanoseProportion::ANYTHING;
@@ -1468,7 +1468,7 @@ namespace cppcanvas
                         break;
 
                     case META_LINECOLOR_ACTION:
-                        if( !rParms.maLineColor.isValid() )
+                        if( !rParms.maLineColor.is_initialized() )
                         {
                             setStateColor( static_cast<MetaLineColorAction*>(pCurrAct),
                                            getState( rStates ).isLineColorSet,
@@ -1478,7 +1478,7 @@ namespace cppcanvas
                         break;
 
                     case META_FILLCOLOR_ACTION:
-                        if( !rParms.maFillColor.isValid() )
+                        if( !rParms.maFillColor.is_initialized() )
                         {
                             setStateColor( static_cast<MetaFillColorAction*>(pCurrAct),
                                            getState( rStates ).isFillColorSet,
@@ -1489,7 +1489,7 @@ namespace cppcanvas
 
                     case META_TEXTCOLOR_ACTION:
                     {
-                        if( !rParms.maTextColor.isValid() )
+                        if( !rParms.maTextColor.is_initialized() )
                         {
                             // Text color is set unconditionally, thus, no
                             // use of setStateColor here
@@ -1509,7 +1509,7 @@ namespace cppcanvas
                     break;
 
                     case META_TEXTFILLCOLOR_ACTION:
-                        if( !rParms.maTextColor.isValid() )
+                        if( !rParms.maTextColor.is_initialized() )
                         {
                             setStateColor( static_cast<MetaTextFillColorAction*>(pCurrAct),
                                            getState( rStates ).isTextFillColorSet,
@@ -1519,7 +1519,7 @@ namespace cppcanvas
                         break;
 
                     case META_TEXTLINECOLOR_ACTION:
-                        if( !rParms.maTextColor.isValid() )
+                        if( !rParms.maTextColor.is_initialized() )
                         {
                             setStateColor( static_cast<MetaTextLineColorAction*>(pCurrAct),
                                            getState( rStates ).isTextLineColorSet,
@@ -1549,14 +1549,14 @@ namespace cppcanvas
                         // TODO(Q2): define and use appropriate enumeration types
                         rState.textReliefStyle          = (sal_Int8)rFont.GetRelief();
                         rState.textOverlineStyle        = (sal_Int8)rFont.GetOverline();
-                        rState.textUnderlineStyle       = rParms.maFontUnderline.isValid() ?
-                            (rParms.maFontUnderline.getValue() ? (sal_Int8)UNDERLINE_SINGLE : (sal_Int8)UNDERLINE_NONE) :
+                        rState.textUnderlineStyle       = rParms.maFontUnderline.is_initialized() ?
+                            (*rParms.maFontUnderline ? (sal_Int8)UNDERLINE_SINGLE : (sal_Int8)UNDERLINE_NONE) :
                             (sal_Int8)rFont.GetUnderline();
                         rState.textStrikeoutStyle       = (sal_Int8)rFont.GetStrikeout();
                         rState.textEmphasisMarkStyle    = (sal_Int8)rFont.GetEmphasisMark();
-                        rState.isTextEffectShadowSet    = (rFont.IsShadow() != FALSE);
-                        rState.isTextWordUnderlineSet   = (rFont.IsWordLineMode() != FALSE);
-                        rState.isTextOutlineModeSet     = (rFont.IsOutline() != FALSE);
+                        rState.isTextEffectShadowSet    = (rFont.IsShadow() != sal_False);
+                        rState.isTextWordUnderlineSet   = (rFont.IsWordLineMode() != sal_False);
+                        rState.isTextOutlineModeSet     = (rFont.IsOutline() != sal_False);
                     }
                     break;
 
@@ -1718,7 +1718,7 @@ namespace cppcanvas
                         // Handle drawing layer fills
                         else if( pAct->GetComment().Equals( "XPATHFILL_SEQ_BEGIN" ) )
                         {
-                            const BYTE* pData = pAct->GetData();
+                            const sal_uInt8* pData = pAct->GetData();
                             if ( pData )
                             {
                                 SvMemoryStream  aMemStm( (void*)pData, pAct->GetDataSize(), STREAM_READ );
@@ -2546,7 +2546,7 @@ namespace cppcanvas
                             pAct->GetPoint(),
                             sText,
                             pAct->GetIndex(),
-                            pAct->GetLen() == (USHORT)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
+                            pAct->GetLen() == (sal_uInt16)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
                             NULL,
                             rFactoryParms,
                             bSubsettableActions );
@@ -2565,7 +2565,7 @@ namespace cppcanvas
                             pAct->GetPoint(),
                             sText,
                             pAct->GetIndex(),
-                            pAct->GetLen() == (USHORT)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
+                            pAct->GetLen() == (sal_uInt16)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
                             pAct->GetDXArray(),
                             rFactoryParms,
                             bSubsettableActions );
@@ -2640,7 +2640,7 @@ namespace cppcanvas
                         if( rVDev.GetDigitLanguage())
                             convertToLocalizedNumerals ( sText,rVDev.GetDigitLanguage() );
 
-                        const USHORT nLen( pAct->GetLen() == (USHORT)STRING_LEN ?
+                        const sal_uInt16 nLen( pAct->GetLen() == (sal_uInt16)STRING_LEN ?
                                            pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen() );
 
                         // #i70897# Nothing to do, actually...
@@ -2661,7 +2661,7 @@ namespace cppcanvas
 
                         // Last entry of pDXArray contains total width of the text
                         sal_Int32* p=pDXArray.get();
-                        for( USHORT i=1; i<=nLen; ++i )
+                        for( sal_uInt16 i=1; i<=nLen; ++i )
                         {
                             // calc ratio for every array entry, to
                             // distribute rounding errors 'evenly'
@@ -2676,7 +2676,7 @@ namespace cppcanvas
                             pAct->GetPoint(),
                             sText,
                             pAct->GetIndex(),
-                            pAct->GetLen() == (USHORT)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
+                            pAct->GetLen() == (sal_uInt16)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
                             pDXArray.get(),
                             rFactoryParms,
                             bSubsettableActions );
@@ -2950,7 +2950,7 @@ namespace cppcanvas
             VectorOfOutDevStates    aStateStack;
 
             VirtualDevice aVDev;
-            aVDev.EnableOutput( FALSE );
+            aVDev.EnableOutput( sal_False );
 
             // Setup VDev for state tracking and mapping
             // =========================================
@@ -2995,29 +2995,29 @@ namespace cppcanvas
                 getState( aStateStack ).textLineColor = pColor->getDeviceColor( 0x000000FF );
 
             // apply overrides from the Parameters struct
-            if( rParams.maFillColor.isValid() )
+            if( rParams.maFillColor.is_initialized() )
             {
                 getState( aStateStack ).isFillColorSet = true;
-                getState( aStateStack ).fillColor = pColor->getDeviceColor( rParams.maFillColor.getValue() );
+                getState( aStateStack ).fillColor = pColor->getDeviceColor( *rParams.maFillColor );
             }
-            if( rParams.maLineColor.isValid() )
+            if( rParams.maLineColor.is_initialized() )
             {
                 getState( aStateStack ).isLineColorSet = true;
-                getState( aStateStack ).lineColor = pColor->getDeviceColor( rParams.maLineColor.getValue() );
+                getState( aStateStack ).lineColor = pColor->getDeviceColor( *rParams.maLineColor );
             }
-            if( rParams.maTextColor.isValid() )
+            if( rParams.maTextColor.is_initialized() )
             {
                 getState( aStateStack ).isTextFillColorSet = true;
                 getState( aStateStack ).isTextLineColorSet = true;
                 getState( aStateStack ).textColor =
                     getState( aStateStack ).textFillColor =
-                    getState( aStateStack ).textLineColor = pColor->getDeviceColor( rParams.maTextColor.getValue() );
+                    getState( aStateStack ).textLineColor = pColor->getDeviceColor( *rParams.maTextColor );
             }
-            if( rParams.maFontName.isValid() ||
-                rParams.maFontWeight.isValid() ||
-                rParams.maFontLetterForm.isValid() ||
-                rParams.maFontUnderline.isValid() ||
-                rParams.maFontProportion.isValid() )
+            if( rParams.maFontName.is_initialized() ||
+                rParams.maFontWeight.is_initialized() ||
+                rParams.maFontLetterForm.is_initialized() ||
+                rParams.maFontUnderline.is_initialized() ||
+                rParams.maFontProportion.is_initialized() )
             {
                 ::cppcanvas::internal::OutDevState& rState = getState( aStateStack );
 

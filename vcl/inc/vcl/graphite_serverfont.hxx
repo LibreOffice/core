@@ -37,7 +37,7 @@
 
 // Modules
 
-class VCL_DLLPUBLIC GraphiteLayoutImpl : public GraphiteLayout
+class VCL_PLUGIN_PUBLIC GraphiteLayoutImpl : public GraphiteLayout
 {
 public:
     GraphiteLayoutImpl(const gr_face * pFace,
@@ -52,7 +52,7 @@ private:
 // This class implments the server font specific parts.
 // @author tse
 //
-class VCL_DLLPUBLIC GraphiteServerFontLayout : public ServerFontLayout
+class VCL_PLUGIN_PUBLIC GraphiteServerFontLayout : public ServerFontLayout
 {
 private:
         // mutable so that the DrawOffset/DrawBase can be set
@@ -101,8 +101,6 @@ public:
         int getMinCharPos() const { return mnMinCharPos; }
         int getMaxCharPos() const { return mnEndCharPos; }
 };
-
-
 
 #endif
 #endif //_SV_GRAPHITESERVERFONT_HXX

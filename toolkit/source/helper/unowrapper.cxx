@@ -70,7 +70,6 @@ using namespace ::com::sun::star;
         // instead of only a <VCLXWindow> instance, especially regarding its
         // corresponding accessibility API.
         case WINDOW_METRICBOX:
-        // <--
         case WINDOW_COMBOBOX:       return new VCLXComboBox;
         case WINDOW_SPINFIELD:
         case WINDOW_NUMERICFIELD:
@@ -270,7 +269,7 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
         Window* pClient = pChild->GetWindow( WINDOW_CLIENT );
         if ( pClient->GetWindowPeer() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( FALSE ), ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( sal_False ), ::com::sun::star::uno::UNO_QUERY );
             xComp->dispose();
         }
 
@@ -287,7 +286,7 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
 
         if ( pClient->GetWindowPeer() && lcl_ImplIsParent( pWindow, pClient ) )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( FALSE ), ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( sal_False ), ::com::sun::star::uno::UNO_QUERY );
             xComp->dispose();
         }
 
@@ -299,7 +298,7 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
         pParent->GetWindowPeer()->notifyWindowRemoved( *pWindow );
 
     VCLXWindow* pWindowPeer = pWindow->GetWindowPeer();
-    uno::Reference< lang::XComponent > xWindowPeerComp( pWindow->GetComponentInterface( FALSE ), uno::UNO_QUERY );
+    uno::Reference< lang::XComponent > xWindowPeerComp( pWindow->GetComponentInterface( sal_False ), uno::UNO_QUERY );
     OSL_ENSURE( ( pWindowPeer != NULL ) == ( xWindowPeerComp.is() == sal_True ),
         "UnoWrapper::WindowDestroyed: inconsistency in the window's peers!" );
     if ( pWindowPeer )

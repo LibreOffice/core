@@ -128,8 +128,8 @@ public:
     void              SetFathersName( const ::rtl::OUString& rNewToken );
     void              SetApartment( const ::rtl::OUString& rNewToken );
 
-    sal_Bool          IsTokenReadonly( USHORT nToken ) const;
-    ::rtl::OUString   GetToken(USHORT nToken) const;
+    sal_Bool          IsTokenReadonly( sal_uInt16 nToken ) const;
+    ::rtl::OUString   GetToken(sal_uInt16 nToken) const;
     void              Notify();
 
 private:
@@ -802,7 +802,7 @@ void SvtUserOptions_Impl::Notify()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvtUserOptions_Impl::IsTokenReadonly( USHORT nToken ) const
+sal_Bool SvtUserOptions_Impl::IsTokenReadonly( sal_uInt16 nToken ) const
 {
     css::uno::Reference< css::beans::XPropertySet >     xData(m_xCfg, css::uno::UNO_QUERY);
     css::uno::Reference< css::beans::XPropertySetInfo > xInfo = xData->getPropertySetInfo();
@@ -921,7 +921,7 @@ sal_Bool SvtUserOptions_Impl::IsTokenReadonly( USHORT nToken ) const
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString SvtUserOptions_Impl::GetToken(USHORT nToken) const
+::rtl::OUString SvtUserOptions_Impl::GetToken(sal_uInt16 nToken) const
 {
     ::rtl::OUString pRet;
     switch(nToken)
@@ -1312,13 +1312,13 @@ void SvtUserOptions::SetApartment( const ::rtl::OUString& rNewToken )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvtUserOptions::IsTokenReadonly( USHORT nToken ) const
+sal_Bool SvtUserOptions::IsTokenReadonly( sal_uInt16 nToken ) const
 {
     ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->IsTokenReadonly( nToken );
 }
 //------------------------------------------------------------------------
-::rtl::OUString   SvtUserOptions::GetToken(USHORT nToken) const
+::rtl::OUString   SvtUserOptions::GetToken(sal_uInt16 nToken) const
 {
     ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetToken( nToken );

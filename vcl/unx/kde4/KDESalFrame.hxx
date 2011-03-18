@@ -48,7 +48,7 @@ class KDESalFrame : public X11SalFrame
         GraphicsHolder m_aGraphics[ nMaxGraphics ];
 
     public:
-        KDESalFrame( SalFrame* pParent, ULONG nStyle );
+        KDESalFrame( SalFrame* pParent, sal_uLong nStyle );
         virtual ~KDESalFrame();
 
         virtual SalGraphics* GetGraphics();

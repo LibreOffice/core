@@ -241,30 +241,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
-    void * /* pServiceManager */, void * pRegistryKey)
-{
-    if (pRegistryKey)
-    {
-        uno::Reference< registry::XRegistryKey > xRegistryKey (
-            reinterpret_cast< registry::XRegistryKey*>(pRegistryKey));
-
-        uno::Reference< registry::XRegistryKey > xNewKey;
-        xNewKey = xRegistryKey->createKey(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-            FSStorageFactory::impl_staticGetImplementationName() +
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES")));
-
-        const uno::Sequence< ::rtl::OUString > aServices (
-            FSStorageFactory::impl_staticGetSupportedServiceNames());
-        for( sal_Int32 i = 0; i < aServices.getLength(); i++ )
-            xNewKey->createKey( aServices.getConstArray()[i] );
-
-        return sal_True;
-    }
-    return sal_False;
-}
-
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
     const sal_Char * pImplementationName, void * pServiceManager, void * /* pRegistryKey */)
 {

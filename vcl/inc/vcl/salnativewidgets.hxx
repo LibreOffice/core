@@ -177,6 +177,7 @@ typedef sal_uInt32      ControlPart;
 #define PART_MENU_ITEM              250
 #define PART_MENU_ITEM_CHECK_MARK   251
 #define PART_MENU_ITEM_RADIO_MARK   252
+#define PART_MENU_SEPARATOR         253
 
 /*  #i77549#
     HACK: for scrollbars in case of thumb rect, page up and page down rect we
@@ -308,7 +309,7 @@ class VCL_DLLPUBLIC ImplControlValue
  *
  *   Value container for scrollbars.
  */
- class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
+class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
 {
     public:
         long            mnMin;
@@ -374,12 +375,12 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
         };
         virtual ~TabitemValue();
 
-        BOOL isLeftAligned() const  { return (mnAlignment & TABITEM_LEFTALIGNED) != 0; }
-        BOOL isRightAligned() const { return (mnAlignment & TABITEM_RIGHTALIGNED) != 0; }
-        BOOL isBothAligned() const  { return isLeftAligned() && isRightAligned(); }
-        BOOL isNotAligned() const   { return (mnAlignment & (TABITEM_LEFTALIGNED | TABITEM_RIGHTALIGNED)) == 0; }
-        BOOL isFirst() const        { return (mnAlignment & TABITEM_FIRST_IN_GROUP) != 0; }
-        BOOL isLast() const         { return (mnAlignment & TABITEM_LAST_IN_GROUP) != 0; }
+        sal_Bool isLeftAligned() const  { return (mnAlignment & TABITEM_LEFTALIGNED) != 0; }
+        sal_Bool isRightAligned() const { return (mnAlignment & TABITEM_RIGHTALIGNED) != 0; }
+        sal_Bool isBothAligned() const  { return isLeftAligned() && isRightAligned(); }
+        sal_Bool isNotAligned() const   { return (mnAlignment & (TABITEM_LEFTALIGNED | TABITEM_RIGHTALIGNED)) == 0; }
+        sal_Bool isFirst() const        { return (mnAlignment & TABITEM_FIRST_IN_GROUP) != 0; }
+        sal_Bool isLast() const         { return (mnAlignment & TABITEM_LAST_IN_GROUP) != 0; }
 };
 
 /* SpinbuttonValue:
@@ -414,10 +415,10 @@ class ToolbarValue : public ImplControlValue
 {
 public:
     ToolbarValue() : ImplControlValue( CTRL_TOOLBAR, BUTTONVALUE_DONTKNOW, 0 )
-    { mbIsTopDockingArea = FALSE; }
+    { mbIsTopDockingArea = sal_False; }
     virtual ~ToolbarValue();
     Rectangle           maGripRect;
-    BOOL                mbIsTopDockingArea; // indicates that this is the top aligned dockingarea
+    sal_Bool                mbIsTopDockingArea; // indicates that this is the top aligned dockingarea
                                             // adjacent to the menubar
 };
 
@@ -432,6 +433,24 @@ public:
     { maTopDockingAreaHeight=0; }
     virtual ~MenubarValue();
     int             maTopDockingAreaHeight;
+};
+
+/* MenupopupValue:
+ *
+ * Value container for menu items; specifies the rectangle for the whole item which
+ * may be useful when drawing parts with a smaller rectangle.
+ */
+class MenupopupValue : public ImplControlValue
+{
+public:
+    MenupopupValue() : ImplControlValue( CTRL_MENU_POPUP, BUTTONVALUE_DONTKNOW, 0 )
+    {}
+    MenupopupValue( long i_nGutterWidth, const Rectangle& i_rItemRect )
+    : ImplControlValue( CTRL_MENU_POPUP, BUTTONVALUE_DONTKNOW, i_nGutterWidth )
+    , maItemRect( i_rItemRect )
+    {}
+    virtual ~MenupopupValue();
+    Rectangle       maItemRect;
 };
 
 /*  PushButtonValue:

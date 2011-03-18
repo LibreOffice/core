@@ -36,8 +36,8 @@
 struct ImplIdleData
 {
     Link        maIdleHdl;
-    USHORT      mnPriority;
-    BOOL        mbTimeout;
+    sal_uInt16      mnPriority;
+    sal_Bool        mbTimeout;
 };
 
 #define IMPL_IDLETIMEOUT         350
@@ -66,14 +66,14 @@ ImplIdleMgr::~ImplIdleMgr()
 
 // -----------------------------------------------------------------------
 
-BOOL ImplIdleMgr::InsertIdleHdl( const Link& rLink, USHORT nPriority )
+sal_Bool ImplIdleMgr::InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority )
 {
     size_t nPos = (size_t)-1;
     size_t n = mpIdleList->size();
     for ( size_t i = 0; i < n; ++i ) {
         // we need to check each element to verify that rLink isn't in the array
         if ( (*mpIdleList)[ i ]->maIdleHdl == rLink ) {
-            return FALSE;
+            return sal_False;
         }
         if ( nPriority <= (*mpIdleList)[ i ]->mnPriority ) {
             nPos = i;
@@ -83,7 +83,7 @@ BOOL ImplIdleMgr::InsertIdleHdl( const Link& rLink, USHORT nPriority )
     ImplIdleData* pIdleData = new ImplIdleData;
     pIdleData->maIdleHdl    = rLink;
     pIdleData->mnPriority   = nPriority;
-    pIdleData->mbTimeout    = FALSE;
+    pIdleData->mbTimeout    = sal_False;
 
     if ( nPos < mpIdleList->size() ) {
         ImplIdleList::iterator it = mpIdleList->begin();
@@ -97,7 +97,7 @@ BOOL ImplIdleMgr::InsertIdleHdl( const Link& rLink, USHORT nPriority )
     if ( !maTimer.IsActive() )
         maTimer.Start();
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -124,12 +124,12 @@ IMPL_LINK( ImplIdleMgr, TimeoutHdl, Timer*, EMPTYARG )
     for ( size_t i = 0; i < mpIdleList->size(); ++i ) {
         ImplIdleData* pIdleData = (*mpIdleList)[ i ];
         if ( !pIdleData->mbTimeout ) {
-            pIdleData->mbTimeout = TRUE;
+            pIdleData->mbTimeout = sal_True;
             pIdleData->maIdleHdl.Call( GetpApp() );
             // May have been removed in the handler
             for ( size_t j = 0; j < mpIdleList->size(); ++j ) {
                 if ( (*mpIdleList)[ j ] == pIdleData ) {
-                    pIdleData->mbTimeout = FALSE;
+                    pIdleData->mbTimeout = sal_False;
                     break;
                 }
             }

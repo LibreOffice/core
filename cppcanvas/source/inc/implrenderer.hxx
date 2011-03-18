@@ -245,7 +245,7 @@ static float GetSwapFloat( SvStream& rSt )
 
             bool isActionContained( GDIMetaFile& rMtf,
                                     const char*  pCommentString,
-                                    USHORT       nType ) const;
+                                    sal_uInt16       nType ) const;
 
             void createGradientAction( const ::PolyPolygon&           rPoly,
                                        const ::Gradient&              rGradient,
@@ -266,7 +266,7 @@ static float GetSwapFloat( SvStream& rSt )
                                    ActionVector::const_iterator& o_rRangeBegin,
                                    ActionVector::const_iterator& o_rRangeEnd ) const;
 
-            void processObjectRecord(SvMemoryStream& rObjectStream, UINT16 flags);
+            void processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags);
             void processEMFPlus( MetaCommentAction* pAct, const ActionFactoryParameters& rFactoryParms, OutDevState& rState, const CanvasSharedPtr& rCanvas );
             void EMFPPlusFillPolygon (::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms, OutDevState& rState, const CanvasSharedPtr& rCanvas, bool isColor, sal_uInt32 brushIndexOrColor);
 
@@ -293,7 +293,7 @@ static float GetSwapFloat( SvStream& rSt )
             sal_Int32       nMmY;
             /* multipart object data */
             bool            mbMultipart;
-            UINT16          mMFlags;
+            sal_uInt16      mMFlags;
             SvMemoryStream  mMStream;
         };
 

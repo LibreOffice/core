@@ -28,7 +28,7 @@
  // includes ------------------------------------------------------------------
 
 #include "templwin.hrc"
-#include "controldims.hrc"
+#include <svtools/controldims.hrc>
 #include <svtools/helpid.hrc>
 #include <svtools/svtools.hrc>
 
@@ -215,12 +215,14 @@ ModalDialog DLG_DOCTEMPLATE
     };
     PushButton BTN_DOCTEMPLATE_MANAGE
     {
+        HelpID = "svtools:PushButton:DLG_DOCTEMPLATE:BTN_DOCTEMPLATE_MANAGE";
         Pos = MAP_APPFONT( 6, 230 );
         Size = MAP_APPFONT( 50, 14 );
         Text [ en-US ] = "Organi~ze...";
     };
     PushButton BTN_DOCTEMPLATE_EDIT
     {
+        HelpID = "svtools:PushButton:DLG_DOCTEMPLATE:BTN_DOCTEMPLATE_EDIT";
         Pos = MAP_APPFONT( 59, 230 );
         Size = MAP_APPFONT( 50, 14 );
         Text [ en-US ] = "~Edit";

@@ -48,7 +48,7 @@
 #include <salobj.h>
 #include <vcl/salsys.hxx>
 #include <saltimer.h>
-#include <vcl/salatype.hxx>
+#include <vcl/apptypes.hxx>
 #include <salbmp.h>
 #include <vcl/salimestatus.hxx>
 #include <vcl/timer.hxx>
@@ -68,12 +68,10 @@
 #pragma warning( disable: 4917 )
 #endif
 
-#define ULONG WIN_ULONG
 #include <GdiPlus.h>
 #include <GdiPlusEnums.h>
 #include <GdiPlusColor.h>
 #include <Shlobj.h>
-#undef ULONG
 
 #if defined _MSC_VER
 #pragma warning(pop)
@@ -111,7 +109,7 @@ class SalYieldMutex : public vcl::SolarMutexObject
 {
 public: // for ImplSalYield()
     WinSalInstance*             mpInstData;
-    ULONG                       mnCount;
+    sal_uLong                       mnCount;
     DWORD                       mnThreadId;
 
 public:
@@ -121,7 +119,7 @@ public:
     virtual void SAL_CALL       release();
     virtual sal_Bool SAL_CALL   tryToAcquire();
 
-    ULONG                       GetAcquireCount( ULONG nThreadId );
+    sal_uLong                       GetAcquireCount( sal_uLong nThreadId );
 };
 
 // -----------------------------------------------------------------------
@@ -200,7 +198,7 @@ sal_Bool SAL_CALL SalYieldMutex::tryToAcquire()
 
 // -----------------------------------------------------------------------
 
-ULONG SalYieldMutex::GetAcquireCount( ULONG nThreadId )
+sal_uLong SalYieldMutex::GetAcquireCount( sal_uLong nThreadId )
 {
     if ( nThreadId == mnThreadId )
         return mnCount;
@@ -226,7 +224,7 @@ void ImplSalYieldMutexAcquireWithWait()
     {
         // Wenn wir den Mutex nicht bekommen, muessen wir solange
         // warten, bis wir Ihn bekommen
-        BOOL bAcquire = FALSE;
+        sal_Bool bAcquire = FALSE;
         do
         {
             if ( pInst->mpSalYieldMutex->tryToAcquire() )
@@ -259,7 +257,7 @@ void ImplSalYieldMutexAcquireWithWait()
 
 // -----------------------------------------------------------------------
 
-BOOL ImplSalYieldMutexTryToAcquire()
+sal_Bool ImplSalYieldMutexTryToAcquire()
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( pInst )
@@ -291,15 +289,15 @@ void ImplSalYieldMutexRelease()
 
 // -----------------------------------------------------------------------
 
-ULONG ImplSalReleaseYieldMutex()
+sal_uLong ImplSalReleaseYieldMutex()
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( !pInst )
         return 0;
 
     SalYieldMutex*  pYieldMutex = pInst->mpSalYieldMutex;
-    ULONG           nCount = pYieldMutex->GetAcquireCount( GetCurrentThreadId() );
-    ULONG           n = nCount;
+    sal_uLong           nCount = pYieldMutex->GetAcquireCount( GetCurrentThreadId() );
+    sal_uLong           n = nCount;
     while ( n )
     {
         pYieldMutex->release();
@@ -311,7 +309,7 @@ ULONG ImplSalReleaseYieldMutex()
 
 // -----------------------------------------------------------------------
 
-void ImplSalAcquireYieldMutex( ULONG nCount )
+void ImplSalAcquireYieldMutex( sal_uLong nCount )
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( !pInst )
@@ -327,10 +325,9 @@ void ImplSalAcquireYieldMutex( ULONG nCount )
 
 // -----------------------------------------------------------------------
 
-#ifdef DBG_UTIL
-
-void ImplDbgTestSolarMutex()
+bool WinSalInstance::CheckYieldMutex()
 {
+    bool bRet = true;
     SalData*    pSalData = GetSalData();
     DWORD       nCurThreadId = GetCurrentThreadId();
     if ( pSalData->mnAppThreadId != nCurThreadId )
@@ -340,7 +337,7 @@ void ImplDbgTestSolarMutex()
             SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
             if ( pYieldMutex->mnThreadId != nCurThreadId )
             {
-                OSL_FAIL( "SolarMutex not locked, and not thread save code in VCL is called from outside of the main thread" );
+                bRet = false;
             }
         }
     }
@@ -351,13 +348,12 @@ void ImplDbgTestSolarMutex()
             SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
             if ( pYieldMutex->mnThreadId != nCurThreadId )
             {
-                OSL_FAIL( "SolarMutex not locked in the main thread" );
+                bRet = false;
             }
         }
     }
+    return bRet;
 }
-
-#endif
 
 // =======================================================================
 
@@ -443,9 +439,12 @@ SalData::SalData()
     mpFirstIcon = 0;            // icon cache, points to first icon, NULL if none
     mpTempFontItem = 0;
     mbThemeChanged = FALSE;     // true if visual theme was changed: throw away theme handles
+    mbThemeMenuSupport = FALSE;
 
     // init with NULL
     gdiplusToken = 0;
+    maDwmLib     = 0;
+    mpDwmIsCompositionEnabled = 0;
 
     initKeyCodeMap();
 
@@ -569,8 +568,7 @@ SalInstance* CreateSalInstance()
             return NULL;
     }
 
-    HWND hComWnd;
-    hComWnd = CreateWindowExW( WS_EX_TOOLWINDOW, SAL_COM_CLASSNAMEW,
+    HWND hComWnd = CreateWindowExW( WS_EX_TOOLWINDOW, SAL_COM_CLASSNAMEW,
                                L"", WS_POPUP, 0, 0, 0, 0, 0, 0,
                                pSalData->mhInst, NULL );
     if ( !hComWnd )
@@ -638,14 +636,14 @@ osl::SolarMutex* WinSalInstance::GetYieldMutex()
 
 // -----------------------------------------------------------------------
 
-ULONG WinSalInstance::ReleaseYieldMutex()
+sal_uLong WinSalInstance::ReleaseYieldMutex()
 {
     return ImplSalReleaseYieldMutex();
 }
 
 // -----------------------------------------------------------------------
 
-void WinSalInstance::AcquireYieldMutex( ULONG nCount )
+void WinSalInstance::AcquireYieldMutex( sal_uLong nCount )
 {
     ImplSalAcquireYieldMutex( nCount );
 }
@@ -667,7 +665,7 @@ static void ImplSalDispatchMessage( MSG* pMsg )
 
 // -----------------------------------------------------------------------
 
-void ImplSalYield( BOOL bWait, BOOL bHandleAllCurrentEvents )
+void ImplSalYield( sal_Bool bWait, sal_Bool bHandleAllCurrentEvents )
 {
     MSG aMsg;
     bool bWasMsg = false, bOneEvent = false;
@@ -677,8 +675,12 @@ void ImplSalYield( BOOL bWait, BOOL bHandleAllCurrentEvents )
     {
         if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_REMOVE ) )
         {
-            TranslateMessage( &aMsg );
-            ImplSalDispatchMessage( &aMsg );
+            if ( !ImplInterceptChildWindowKeyDown( aMsg ) )
+            {
+                TranslateMessage( &aMsg );
+                ImplSalDispatchMessage( &aMsg );
+            }
+
             bOneEvent = bWasMsg = true;
         }
         else
@@ -689,8 +691,11 @@ void ImplSalYield( BOOL bWait, BOOL bHandleAllCurrentEvents )
     {
         if ( ImplGetMessage( &aMsg, 0, 0, 0 ) )
         {
-            TranslateMessage( &aMsg );
-            ImplSalDispatchMessage( &aMsg );
+            if ( !ImplInterceptChildWindowKeyDown( aMsg ) )
+            {
+                TranslateMessage( &aMsg );
+                ImplSalDispatchMessage( &aMsg );
+            }
         }
     }
 }
@@ -702,8 +707,8 @@ void WinSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     SalYieldMutex*  pYieldMutex = mpSalYieldMutex;
     SalData*        pSalData = GetSalData();
     DWORD           nCurThreadId = GetCurrentThreadId();
-    ULONG           nCount = pYieldMutex->GetAcquireCount( nCurThreadId );
-    ULONG           n = nCount;
+    sal_uLong           nCount = pYieldMutex->GetAcquireCount( nCurThreadId );
+    sal_uLong           n = nCount;
     while ( n )
     {
         pYieldMutex->release();
@@ -760,7 +765,7 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             rDef = FALSE;
             break;
         case SAL_MSG_THREADYIELD:
-            ImplSalYield( (BOOL)wParam, (BOOL)lParam );
+            ImplSalYield( (sal_Bool)wParam, (sal_Bool)lParam );
             rDef = FALSE;
             break;
         // If we get this message, because another GetMessage() call
@@ -775,11 +780,11 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             rDef = FALSE;
             break;
         case SAL_MSG_STARTTIMER:
-            ImplSalStartTimer( (ULONG) lParam, FALSE );
+            ImplSalStartTimer( (sal_uLong) lParam, FALSE );
             rDef = FALSE;
             break;
         case SAL_MSG_CREATEFRAME:
-            nRet = (LRESULT)ImplSalCreateFrame( GetSalData()->mpFirstInstance, (HWND)lParam, (ULONG)wParam );
+            nRet = (LRESULT)ImplSalCreateFrame( GetSalData()->mpFirstInstance, (HWND)lParam, (sal_uLong)wParam );
             rDef = FALSE;
             break;
         case SAL_MSG_RECREATEHWND:
@@ -894,7 +899,7 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 
 // -----------------------------------------------------------------------
 
-bool WinSalInstance::AnyInput( USHORT nType )
+bool WinSalInstance::AnyInput( sal_uInt16 nType )
 {
     MSG aMsg;
 
@@ -976,7 +981,7 @@ bool WinSalInstance::AnyInput( USHORT nType )
 
 // -----------------------------------------------------------------------
 
-void SalTimer::Start( ULONG nMS )
+void SalTimer::Start( sal_uLong nMS )
 {
     // Um auf Main-Thread umzuschalten
     SalData* pSalData = GetSalData();
@@ -993,7 +998,7 @@ void SalTimer::Start( ULONG nMS )
 
 // -----------------------------------------------------------------------
 
-SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, ULONG nSalFrameStyle )
+SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, sal_uLong nSalFrameStyle )
 {
     // Um auf Main-Thread umzuschalten
     return (SalFrame*)ImplSendMessage( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)pSystemParentData->hWnd );
@@ -1001,7 +1006,7 @@ SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData,
 
 // -----------------------------------------------------------------------
 
-SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
+SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameStyle )
 {
     // Um auf Main-Thread umzuschalten
     HWND hWndParent;
@@ -1023,7 +1028,7 @@ void WinSalInstance::DestroyFrame( SalFrame* pFrame )
 
 SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
                                          SystemWindowData* /*pWindowData*/, // SystemWindowData meaningless on Windows
-                                         BOOL /*bShow*/ )
+                                         sal_Bool /*bShow*/ )
 {
     // Um auf Main-Thread umzuschalten
     return (SalObject*)ImplSendMessage( mhComWnd, SAL_MSG_CREATEOBJECT, 0, (LPARAM)static_cast<WinSalFrame*>(pParent) );

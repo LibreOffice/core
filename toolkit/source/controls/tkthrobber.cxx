@@ -45,7 +45,8 @@ namespace toolkit
     //= UnoThrobberControlModel
     //====================================================================
     //--------------------------------------------------------------------
-    UnoThrobberControlModel::UnoThrobberControlModel()
+    UnoThrobberControlModel::UnoThrobberControlModel( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
+        :UnoControlModel( i_factory )
     {
         ImplRegisterProperty( BASEPROPERTY_BORDER );
         ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
@@ -118,7 +119,8 @@ namespace toolkit
     //= UnoThrobberControl
     //====================================================================
     //--------------------------------------------------------------------
-    UnoThrobberControl::UnoThrobberControl()
+    UnoThrobberControl::UnoThrobberControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
+        :UnoControlBase( i_factory )
     {
     }
 

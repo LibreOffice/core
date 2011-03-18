@@ -83,7 +83,7 @@ public:
 
 
     Menu*           GetMenu() const { return mpMenu; }
-    BOOL            IsPopupMenu() const;
+    sal_Bool            IsPopupMenu() const;
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

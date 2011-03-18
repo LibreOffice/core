@@ -1109,7 +1109,7 @@ namespace dxcanvas
                 const_cast<Window *>(&rWindow), 0) );
 
             // system child window must not receive mouse events
-            mpWindow->SetMouseTransparent( TRUE );
+            mpWindow->SetMouseTransparent( sal_True );
 
             // parent should receive paint messages as well
             // [PARENTCLIPMODE_NOCLIP], the argument is here
@@ -1118,11 +1118,11 @@ namespace dxcanvas
             mpWindow->SetParentClipMode(0x0002);
 
             // the system child window must not clear its background
-            mpWindow->EnableEraseBackground( FALSE );
+            mpWindow->EnableEraseBackground( sal_False );
 
             mpWindow->SetControlForeground();
             mpWindow->SetControlBackground();
-            mpWindow->EnablePaint(FALSE);
+            mpWindow->EnablePaint(sal_False);
 
             const SystemEnvData *pData = mpWindow->GetSystemData();
             const HWND hwnd(reinterpret_cast<HWND>(pData->hWnd));

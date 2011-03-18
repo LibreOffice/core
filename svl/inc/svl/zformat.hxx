@@ -79,16 +79,16 @@ struct ImpSvNumberformatInfo            // Struct for FormatInfo
 {
     String* sStrArray;                  // Array of symbols
     short* nTypeArray;                  // Array of infos
-    USHORT nThousand;                   // Count of group separator sequences
-    USHORT nCntPre;                     // Count of digits before decimal point
-    USHORT nCntPost;                    // Count of digits after decimal point
-    USHORT nCntExp;                     // Count of exponent digits, or AM/PM
+    sal_uInt16 nThousand;                   // Count of group separator sequences
+    sal_uInt16 nCntPre;                     // Count of digits before decimal point
+    sal_uInt16 nCntPost;                    // Count of digits after decimal point
+    sal_uInt16 nCntExp;                     // Count of exponent digits, or AM/PM
     short eScannedType;                 // Type determined by scan
-    BOOL bThousand;                     // Has group (AKA thousand) separator
+    sal_Bool bThousand;                     // Has group (AKA thousand) separator
 
-    void Copy( const ImpSvNumberformatInfo& rNumFor, USHORT nAnz );
-    void Load(SvStream& rStream, USHORT nAnz);
-    void Save(SvStream& rStream, USHORT nAnz) const;
+    void Copy( const ImpSvNumberformatInfo& rNumFor, sal_uInt16 nAnz );
+    void Load(SvStream& rStream, sal_uInt16 nAnz);
+    void Save(SvStream& rStream, sal_uInt16 nAnz) const;
 };
 
 // NativeNumber, represent numbers using CJK or other digits if nNum>0,
@@ -96,32 +96,32 @@ struct ImpSvNumberformatInfo            // Struct for FormatInfo
 class SvNumberNatNum
 {
     LanguageType    eLang;
-    BYTE            nNum;
-    BOOL            bDBNum  :1;     // DBNum, to be converted to NatNum
-    BOOL            bDate   :1;     // Used in date? (needed for DBNum/NatNum mapping)
-    BOOL            bSet    :1;     // If set, since NatNum0 is possible
+    sal_uInt8            nNum;
+    sal_Bool            bDBNum  :1;     // DBNum, to be converted to NatNum
+    sal_Bool            bDate   :1;     // Used in date? (needed for DBNum/NatNum mapping)
+    sal_Bool            bSet    :1;     // If set, since NatNum0 is possible
 
 public:
 
-    static  BYTE    MapDBNumToNatNum( BYTE nDBNum, LanguageType eLang, BOOL bDate );
-    static  BYTE    MapNatNumToDBNum( BYTE nNatNum, LanguageType eLang, BOOL bDate );
+    static  sal_uInt8    MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang, sal_Bool bDate );
+    static  sal_uInt8    MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLang, sal_Bool bDate );
 
                     SvNumberNatNum() : eLang( LANGUAGE_DONTKNOW ), nNum(0),
                                         bDBNum(0), bDate(0), bSet(0) {}
-    BOOL            IsComplete() const  { return bSet && eLang != LANGUAGE_DONTKNOW; }
-    BYTE            GetRawNum() const   { return nNum; }
-    BYTE            GetNatNum() const   { return bDBNum ? MapDBNumToNatNum( nNum, eLang, bDate ) : nNum; }
-    BYTE            GetDBNum() const    { return bDBNum ? nNum : MapNatNumToDBNum( nNum, eLang, bDate ); }
+    sal_Bool            IsComplete() const  { return bSet && eLang != LANGUAGE_DONTKNOW; }
+    sal_uInt8            GetRawNum() const   { return nNum; }
+    sal_uInt8            GetNatNum() const   { return bDBNum ? MapDBNumToNatNum( nNum, eLang, bDate ) : nNum; }
+    sal_uInt8            GetDBNum() const    { return bDBNum ? nNum : MapNatNumToDBNum( nNum, eLang, bDate ); }
     LanguageType    GetLang() const     { return eLang; }
     void            SetLang( LanguageType e ) { eLang = e; }
-    void            SetNum( BYTE nNumber, BOOL bDBNumber )
+    void            SetNum( sal_uInt8 nNumber, sal_Bool bDBNumber )
                         {
                             nNum = nNumber;
                             bDBNum = bDBNumber;
-                            bSet = TRUE;
+                            bSet = sal_True;
                         }
-    BOOL            IsSet() const       { return bSet; }
-    void            SetDate( BOOL bDateP )   { bDate = (bDateP != 0); }
+    sal_Bool            IsSet() const       { return bSet; }
+    void            SetDate( sal_Bool bDateP )   { bDate = (bDateP != 0); }
 };
 
 class CharClass;
@@ -132,7 +132,7 @@ public:
     ImpSvNumFor();                      // Ctor without filling the Info
     ~ImpSvNumFor();
 
-    void Enlarge(USHORT nAnz);          // Init of arrays to the right size
+    void Enlarge(sal_uInt16 nAnz);          // Init of arrays to the right size
     void Load( SvStream& rStream, ImpSvNumberformatScan& rSc,
                 String& rLoadedColorName);
     void Save( SvStream& rStream ) const;
@@ -145,7 +145,7 @@ public:
     const ImpSvNumberformatInfo& Info() const { return aI; }
 
     // Get count of substrings (symbols)
-    USHORT GetCount() const { return nAnzStrings;}
+    sal_uInt16 GetCount() const { return nAnzStrings;}
 
     Color* GetColor() const { return pColor; }
     void SetColor( Color* pCol, String& rName )
@@ -153,22 +153,22 @@ public:
     const String& GetColorName() const { return sColorName; }
 
     // new SYMBOLTYPE_CURRENCY in subformat?
-    BOOL HasNewCurrency() const;
-    BOOL GetNewCurrencySymbol( String& rSymbol, String& rExtension ) const;
+    sal_Bool HasNewCurrency() const;
+    sal_Bool GetNewCurrencySymbol( String& rSymbol, String& rExtension ) const;
     void SaveNewCurrencyMap( SvStream& rStream ) const;
     void LoadNewCurrencyMap( SvStream& rStream );
 
     // [NatNum1], [NatNum2], ...
-    void SetNatNumNum( BYTE nNum, BOOL bDBNum ) { aNatNum.SetNum( nNum, bDBNum ); }
+    void SetNatNumNum( sal_uInt8 nNum, sal_Bool bDBNum ) { aNatNum.SetNum( nNum, bDBNum ); }
     void SetNatNumLang( LanguageType eLang ) { aNatNum.SetLang( eLang ); }
-    void SetNatNumDate( BOOL bDate ) { aNatNum.SetDate( bDate ); }
+    void SetNatNumDate( sal_Bool bDate ) { aNatNum.SetDate( bDate ); }
     const SvNumberNatNum& GetNatNum() const { return aNatNum; }
 
 private:
     ImpSvNumberformatInfo aI;           // Hilfsstruct fuer die restlichen Infos
     String sColorName;                  // color name
     Color* pColor;                      // pointer to color of subformat
-    USHORT nAnzStrings;                 // count of symbols
+    sal_uInt16 nAnzStrings;                 // count of symbols
     SvNumberNatNum aNatNum;             // DoubleByteNumber
 
 };
@@ -197,7 +197,7 @@ public:
                    ImpSvNumberInputScan* pISc,
                    xub_StrLen& nCheckPos,
                    LanguageType& eLan,
-                   BOOL bStand = FALSE );
+                   sal_Bool bStand = sal_False );
 
     // Copy ctor
     SvNumberformat( SvNumberformat& rFormat );
@@ -215,16 +215,16 @@ public:
 
     void SetType(const short eSetType)          { eType = eSetType; }
     // Standard means the I18N defined standard format of this type
-    void SetStandard()                          { bStandard = TRUE; }
-    BOOL IsStandard() const                     { return bStandard; }
+    void SetStandard()                          { bStandard = sal_True; }
+    sal_Bool IsStandard() const                     { return bStandard; }
 
     // For versions before version nVer it is UserDefined, for newer versions
     // it is builtin. nVer of SV_NUMBERFORMATTER_VERSION_...
-    void SetNewStandardDefined( USHORT nVer )
+    void SetNewStandardDefined( sal_uInt16 nVer )
         { nNewStandardDefined = nVer; eType |= NUMBERFORMAT_DEFINED; }
 
-    USHORT GetNewStandardDefined() const        { return nNewStandardDefined; }
-    BOOL IsAdditionalStandardDefined() const
+    sal_uInt16 GetNewStandardDefined() const        { return nNewStandardDefined; }
+    sal_Bool IsAdditionalStandardDefined() const
         { return nNewStandardDefined == SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS; }
 
     LanguageType GetLanguage() const            { return maLocale.meLanguage;}
@@ -234,12 +234,12 @@ public:
     // Build a format string of application defined keywords
     String GetMappedFormatstring( const NfKeywordTable& rKeywords,
                                     const LocaleDataWrapper& rLoc,
-                                    BOOL bDontQuote = FALSE ) const;
+                                    sal_Bool bDontQuote = sal_False ) const;
 
-    void SetUsed(const BOOL b)                  { bIsUsed = b; }
-    BOOL GetUsed() const                        { return bIsUsed; }
-    BOOL IsStarFormatSupported() const          { return bStarFlag; }
-    void SetStarFormatSupport( BOOL b )         { bStarFlag = b; }
+    void SetUsed(const sal_Bool b)                  { bIsUsed = b; }
+    sal_Bool GetUsed() const                        { return bIsUsed; }
+    sal_Bool IsStarFormatSupported() const          { return bStarFlag; }
+    void SetStarFormatSupport( sal_Bool b )         { bStarFlag = b; }
 
     NfHackConversion Load( SvStream& rStream, ImpSvNumMultipleReadHeader& rHdr,
         SvNumberFormatter* pConverter, ImpSvNumberInputScan& rISc );
@@ -255,54 +255,54 @@ public:
      */
     bool GetOutputString( double fNumber, sal_uInt16 nCharCount, String& rOutString ) const;
 
-    BOOL GetOutputString( double fNumber, String& OutString, Color** ppColor );
-    BOOL GetOutputString( String& sString, String& OutString, Color** ppColor );
+    sal_Bool GetOutputString( double fNumber, String& OutString, Color** ppColor );
+    sal_Bool GetOutputString( String& sString, String& OutString, Color** ppColor );
 
     // True if type text
-    BOOL IsTextFormat() const { return (eType & NUMBERFORMAT_TEXT) != 0; }
+    sal_Bool IsTextFormat() const { return (eType & NUMBERFORMAT_TEXT) != 0; }
     // True if 4th subformat present
-    BOOL HasTextFormat() const
+    sal_Bool HasTextFormat() const
         {
             return (NumFor[3].GetCount() > 0) ||
                 (NumFor[3].Info().eScannedType == NUMBERFORMAT_TEXT);
         }
 
-    void GetFormatSpecialInfo(BOOL& bThousand,
-                              BOOL& IsRed,
-                              USHORT& nPrecision,
-                              USHORT& nAnzLeading) const;
+    void GetFormatSpecialInfo(sal_Bool& bThousand,
+                              sal_Bool& IsRed,
+                              sal_uInt16& nPrecision,
+                              sal_uInt16& nAnzLeading) const;
 
     /// Count of decimal precision
-    USHORT GetFormatPrecision() const   { return NumFor[0].Info().nCntPost; }
+    sal_uInt16 GetFormatPrecision() const   { return NumFor[0].Info().nCntPost; }
 
-    //! Read/write access on a special USHORT component, may only be used on the
+    //! Read/write access on a special sal_uInt16 component, may only be used on the
     //! standard format 0, 5000, ... and only by the number formatter!
-    USHORT GetLastInsertKey() const
+    sal_uInt16 GetLastInsertKey() const
         { return NumFor[0].Info().nThousand; }
-    void SetLastInsertKey(USHORT nKey)
+    void SetLastInsertKey(sal_uInt16 nKey)
         { NumFor[0].Info().nThousand = nKey; }
 
     //! Only onLoad: convert from stored to current system language/country
     void ConvertLanguage( SvNumberFormatter& rConverter,
-        LanguageType eConvertFrom, LanguageType eConvertTo, BOOL bSystem = FALSE );
+        LanguageType eConvertFrom, LanguageType eConvertTo, sal_Bool bSystem = sal_False );
 
     // Substring of a subformat code nNumFor (0..3)
     // nPos == 0xFFFF => last substring
-    // bString==TRUE: first/last SYMBOLTYPE_STRING or SYMBOLTYPE_CURRENCY
-    const String* GetNumForString( USHORT nNumFor, USHORT nPos,
-            BOOL bString = FALSE ) const;
+    // bString==sal_True: first/last SYMBOLTYPE_STRING or SYMBOLTYPE_CURRENCY
+    const String* GetNumForString( sal_uInt16 nNumFor, sal_uInt16 nPos,
+            sal_Bool bString = sal_False ) const;
 
     // Subtype of a subformat code nNumFor (0..3)
     // nPos == 0xFFFF => last substring
-    // bString==TRUE: first/last SYMBOLTYPE_STRING or SYMBOLTYPE_CURRENCY
-    short GetNumForType( USHORT nNumFor, USHORT nPos, BOOL bString = FALSE ) const;
+    // bString==sal_True: first/last SYMBOLTYPE_STRING or SYMBOLTYPE_CURRENCY
+    short GetNumForType( sal_uInt16 nNumFor, sal_uInt16 nPos, sal_Bool bString = sal_False ) const;
 
     /** If the count of string elements (substrings, ignoring [modifiers] and
         so on) in a subformat code nNumFor (0..3) is equal to the given number.
         Used by ImpSvNumberInputScan::IsNumberFormatMain() to detect a matched
         format.  */
-    BOOL IsNumForStringElementCountEqual( USHORT nNumFor, USHORT nAllCount,
-            USHORT nNumCount ) const
+    sal_Bool IsNumForStringElementCountEqual( sal_uInt16 nNumFor, sal_uInt16 nAllCount,
+            sal_uInt16 nNumCount ) const
         {
             if ( nNumFor < 4 )
             {
@@ -311,19 +311,19 @@ public:
                 // strings of the format were matched and not just the starting
                 // sequence, so we don't have to check if GetnAnz() includes
                 // [modifiers] or anything else if both counts are equal.
-                USHORT nCnt = NumFor[nNumFor].GetCount();
+                sal_uInt16 nCnt = NumFor[nNumFor].GetCount();
                 if ( nAllCount == nCnt )
-                    return TRUE;
+                    return sal_True;
                 if ( nAllCount < nCnt ) // check ignoring [modifiers] and so on
                     return ImpGetNumForStringElementCount( nNumFor ) ==
                         (nAllCount - nNumCount);
             }
-            return FALSE;
+            return sal_False;
         }
 
     // Whether the second subformat code is really for negative numbers
     // or another limit set.
-    BOOL IsNegativeRealNegative() const
+    sal_Bool IsNegativeRealNegative() const
         {
             return fLimit1 == 0.0 && fLimit2 == 0.0 &&
             ( (eOp1 == NUMBERFORMAT_OP_GE && eOp2 == NUMBERFORMAT_OP_NO) ||
@@ -332,41 +332,41 @@ public:
         }
 
     // Whether the negative format is without a sign or not
-    BOOL IsNegativeWithoutSign() const;
+    sal_Bool IsNegativeWithoutSign() const;
 
-    BOOL IsNegativeInBracket() const;
+    sal_Bool IsNegativeInBracket() const;
 
-    BOOL HasPositiveBracketPlaceholder() const;
+    sal_Bool HasPositiveBracketPlaceholder() const;
 
     // Whether a new SYMBOLTYPE_CURRENCY is contained in the format
-    BOOL HasNewCurrency() const;
+    sal_Bool HasNewCurrency() const;
 
     // Build string from NewCurrency for saving it SO50 compatible
     void Build50Formatstring( String& rStr ) const;
 
     // strip [$-yyy] from all [$xxx-yyy] leaving only xxx's,
-    // if bQuoteSymbol==TRUE the xxx will become "xxx"
+    // if bQuoteSymbol==sal_True the xxx will become "xxx"
     static String StripNewCurrencyDelimiters( const String& rStr,
-        BOOL bQuoteSymbol );
+        sal_Bool bQuoteSymbol );
 
     // If a new SYMBOLTYPE_CURRENCY is contained if the format is of type
     // NUMBERFORMAT_CURRENCY, and if so the symbol xxx and the extension nnn
     // of [$xxx-nnn] are returned
-    BOOL GetNewCurrencySymbol( String& rSymbol, String& rExtension ) const;
+    sal_Bool GetNewCurrencySymbol( String& rSymbol, String& rExtension ) const;
 
-    static BOOL HasStringNegativeSign( const String& rStr );
+    static sal_Bool HasStringNegativeSign( const String& rStr );
 
     /**
         Whether a character at position nPos is somewhere between two matching
         cQuote or not.
-        If nPos points to a cQuote, a TRUE is returned on an opening cQuote,
-        a FALSE is returned on a closing cQuote.
+        If nPos points to a cQuote, a sal_True is returned on an opening cQuote,
+        a sal_False is returned on a closing cQuote.
         A cQuote between quotes may be escaped by a cEscIn, a cQuote outside of
         quotes may be escaped by a cEscOut.
         The default '\0' results in no escapement possible.
         Defaults are set right according to the "unlogic" of the Numberformatter
      */
-    static BOOL IsInQuote( const String& rString, xub_StrLen nPos,
+    static sal_Bool IsInQuote( const String& rString, xub_StrLen nPos,
             sal_Unicode cQuote = '"',
             sal_Unicode cEscIn = '\0', sal_Unicode cEscOut = '\\' );
 
@@ -418,23 +418,23 @@ public:
     // used in XML export
     void GetConditions( SvNumberformatLimitOps& rOper1, double& rVal1,
                         SvNumberformatLimitOps& rOper2, double& rVal2 ) const;
-    Color* GetColor( USHORT nNumFor ) const;
-    void GetNumForInfo( USHORT nNumFor, short& rScannedType,
-                    BOOL& bThousand, USHORT& nPrecision, USHORT& nAnzLeading ) const;
+    Color* GetColor( sal_uInt16 nNumFor ) const;
+    void GetNumForInfo( sal_uInt16 nNumFor, short& rScannedType,
+                    sal_Bool& bThousand, sal_uInt16& nPrecision, sal_uInt16& nAnzLeading ) const;
 
     // rAttr.Number not empty if NatNum attributes are to be stored
     void GetNatNumXml(
             ::com::sun::star::i18n::NativeNumberXmlAttributes& rAttr,
-            USHORT nNumFor ) const;
+            sal_uInt16 nNumFor ) const;
 
     /** @returns <TRUE/> if E,EE,R,RR,AAA,AAAA in format code of subformat
         nNumFor (0..3) and <b>no</b> preceding calendar was specified and the
         currently loaded calendar is "gregorian". */
-    BOOL IsOtherCalendar( USHORT nNumFor ) const
+    sal_Bool IsOtherCalendar( sal_uInt16 nNumFor ) const
         {
             if ( nNumFor < 4 )
                 return ImpIsOtherCalendar( NumFor[nNumFor] );
-            return FALSE;
+            return sal_False;
         }
 
     /** Switches to the first non-"gregorian" calendar, but only if the current
@@ -456,13 +456,13 @@ public:
             <TRUE/> if a calendar was specified and switched to,
             <FALSE/> else.
      */
-    BOOL SwitchToSpecifiedCalendar( String& rOrgCalendar, double& fOrgDateTime,
-            USHORT nNumFor ) const
+    sal_Bool SwitchToSpecifiedCalendar( String& rOrgCalendar, double& fOrgDateTime,
+            sal_uInt16 nNumFor ) const
         {
             if ( nNumFor < 4 )
                 return ImpSwitchToSpecifiedCalendar( rOrgCalendar,
                         fOrgDateTime, NumFor[nNumFor] );
-            return FALSE;
+            return sal_False;
         }
 
 private:
@@ -475,17 +475,17 @@ private:
     LocaleType maLocale;            // Language/country of the format, numeral shape and calendar type from Excel.
     SvNumberformatLimitOps eOp1;    // Operator for first condition
     SvNumberformatLimitOps eOp2;    // Operator for second condition
-    USHORT nNewStandardDefined;     // new builtin formats as of version 6
+    sal_uInt16 nNewStandardDefined;     // new builtin formats as of version 6
     short eType;                    // Type of format
-    BOOL bStarFlag;                 // Take *n format as ESC n
-    BOOL bStandard;                 // If this is a default standard format
-    BOOL bIsUsed;                   // Flag as used for storing
+    sal_Bool bStarFlag;                 // Take *n format as ESC n
+    sal_Bool bStandard;                 // If this is a default standard format
+    sal_Bool bIsUsed;                   // Flag as used for storing
 
-    SVL_DLLPRIVATE USHORT ImpGetNumForStringElementCount( USHORT nNumFor ) const;
+    SVL_DLLPRIVATE sal_uInt16 ImpGetNumForStringElementCount( sal_uInt16 nNumFor ) const;
 
-    SVL_DLLPRIVATE BOOL ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const;
+    SVL_DLLPRIVATE sal_Bool ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const;
 
-    SVL_DLLPRIVATE BOOL ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
+    SVL_DLLPRIVATE sal_Bool ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
             double& fOrgDateTime, const ImpSvNumFor& rNumFor ) const;
 
 #ifdef _ZFORMAT_CXX     // ----- private implementation methods -----
@@ -542,25 +542,25 @@ private:
                          double& fLimit,
                          SvNumberformatLimitOps eOp);
 
-    SVL_DLLPRIVATE ULONG ImpGGT(ULONG x, ULONG y);
-    SVL_DLLPRIVATE ULONG ImpGGTRound(ULONG x, ULONG y);
+    SVL_DLLPRIVATE sal_uLong ImpGGT(sal_uLong x, sal_uLong y);
+    SVL_DLLPRIVATE sal_uLong ImpGGTRound(sal_uLong x, sal_uLong y);
 
     // Helper function for number strings
     // append string symbols, insert leading 0 or ' ', or ...
-    SVL_DLLPRIVATE BOOL ImpNumberFill( String& sStr,
+    SVL_DLLPRIVATE sal_Bool ImpNumberFill( String& sStr,
                     double& rNumber,
                     xub_StrLen& k,
-                    USHORT& j,
-                    USHORT nIx,
+                    sal_uInt16& j,
+                    sal_uInt16 nIx,
                     short eSymbolType );
 
     // Helper function to fill in the integer part and the group (AKA thousand) separators
-    SVL_DLLPRIVATE BOOL ImpNumberFillWithThousands( String& sStr,
+    SVL_DLLPRIVATE sal_Bool ImpNumberFillWithThousands( String& sStr,
                                  double& rNumber,
                                  xub_StrLen k,
-                                 USHORT j,
-                                 USHORT nIx,
-                                 USHORT nDigCnt );
+                                 sal_uInt16 j,
+                                 sal_uInt16 nIx,
+                                 sal_uInt16 nDigCnt );
                                     // Hilfsfunktion zum Auffuellen der Vor-
                                     // kommazahl auch mit Tausenderpunkt
 
@@ -569,18 +569,18 @@ private:
     SVL_DLLPRIVATE void ImpDigitFill( String& sStr,
                     xub_StrLen nStart,
                     xub_StrLen& k,
-                    USHORT nIx,
+                    sal_uInt16 nIx,
                     xub_StrLen & nDigitCount,
                     utl::DigitGroupingIterator & );
 
-    SVL_DLLPRIVATE BOOL ImpGetDateOutput( double fNumber,
-                       USHORT nIx,
+    SVL_DLLPRIVATE sal_Bool ImpGetDateOutput( double fNumber,
+                       sal_uInt16 nIx,
                        String& OutString );
-    SVL_DLLPRIVATE BOOL ImpGetTimeOutput( double fNumber,
-                       USHORT nIx,
+    SVL_DLLPRIVATE sal_Bool ImpGetTimeOutput( double fNumber,
+                       sal_uInt16 nIx,
                        String& OutString );
-    SVL_DLLPRIVATE BOOL ImpGetDateTimeOutput( double fNumber,
-                           USHORT nIx,
+    SVL_DLLPRIVATE sal_Bool ImpGetDateTimeOutput( double fNumber,
+                           sal_uInt16 nIx,
                            String& OutString );
 
     // Switches to the "gregorian" calendar if the current calendar is
@@ -588,7 +588,7 @@ private:
     // know a "before" era (like zh_TW ROC or ja_JP Gengou). If switched and
     // rOrgCalendar was "gregorian" the string is emptied. If rOrgCalendar was
     // empty the previous calendar name and date/time are returned.
-    SVL_DLLPRIVATE BOOL ImpFallBackToGregorianCalendar( String& rOrgCalendar, double& fOrgDateTime );
+    SVL_DLLPRIVATE sal_Bool ImpFallBackToGregorianCalendar( String& rOrgCalendar, double& fOrgDateTime );
 
     // Append a "G" short era string of the given calendar. In the case of a
     // Gengou calendar this is a one character abbreviation, for other
@@ -596,8 +596,8 @@ private:
     SVL_DLLPRIVATE static void ImpAppendEraG( String& OutString, const CalendarWrapper& rCal,
             sal_Int16 nNatNum );
 
-    SVL_DLLPRIVATE BOOL ImpGetNumberOutput( double fNumber,
-                         USHORT nIx,
+    SVL_DLLPRIVATE sal_Bool ImpGetNumberOutput( double fNumber,
+                         sal_uInt16 nIx,
                          String& OutString );
 
     SVL_DLLPRIVATE void ImpCopyNumberformat( const SvNumberformat& rFormat );
@@ -605,9 +605,9 @@ private:
     // normal digits or other digits, depending on ImpSvNumFor.aNatNum,
     // [NatNum1], [NatNum2], ...
     SVL_DLLPRIVATE String ImpGetNatNumString( const SvNumberNatNum& rNum, sal_Int32 nVal,
-            USHORT nMinDigits = 0  ) const;
+            sal_uInt16 nMinDigits = 0  ) const;
 
-    String ImpIntToString( USHORT nIx, sal_Int32 nVal, USHORT nMinDigits = 0 ) const
+    String ImpIntToString( sal_uInt16 nIx, sal_Int32 nVal, sal_uInt16 nMinDigits = 0 ) const
         {
             const SvNumberNatNum& rNum = NumFor[nIx].GetNatNum();
             if ( nMinDigits || rNum.IsComplete() )

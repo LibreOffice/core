@@ -40,7 +40,7 @@ Source and Destination Dir is used. Otherwise ForceUpdate has to be used
 class IniManager
 {
 private:
-    BOOL bUpdate;
+    sal_Bool bUpdate;
 
     ByteString sGlobalDir;      /// holds the org. ini dir
     ByteString sLocalPath;      /// holds path of local ini dir

@@ -214,7 +214,7 @@ sal_Int32 SAL_CALL ToolbarMenuAcc::getAccessibleIndexInParent() throw (RuntimeEx
     Window* pParent = mpParent->mrMenu.GetParent();
     if( pParent )
     {
-        for( USHORT i = 0, nCount = pParent->GetChildCount(); i < nCount ; i++ )
+        for( sal_uInt16 i = 0, nCount = pParent->GetChildCount(); i < nCount ; i++ )
         {
             if( pParent->GetChild( i ) == &mpParent->mrMenu )
                 return i;
@@ -253,7 +253,7 @@ OUString SAL_CALL ToolbarMenuAcc::getAccessibleName() throw (RuntimeException)
 
     if( !aRet.getLength() )
     {
-        Window* pLabel = mpParent->mrMenu.GetLabeledBy();
+        Window* pLabel = mpParent->mrMenu.GetAccessibleRelationLabeledBy();
         if( pLabel && pLabel != &mpParent->mrMenu )
             aRet = OutputDevice::GetNonMnemonicString( pLabel->GetText() );
     }
@@ -474,7 +474,7 @@ Any SAL_CALL ToolbarMenuAcc::getAccessibleKeyBinding() throw (RuntimeException)
 sal_Int32 SAL_CALL ToolbarMenuAcc::getForeground() throw (RuntimeException)
 {
     ThrowIfDisposed();
-    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetMenuTextColor().GetColor();
+    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetMenuTextColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
 
@@ -483,7 +483,7 @@ sal_Int32 SAL_CALL ToolbarMenuAcc::getForeground() throw (RuntimeException)
 sal_Int32 SAL_CALL ToolbarMenuAcc::getBackground() throw (RuntimeException)
 {
     ThrowIfDisposed();
-    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetMenuColor().GetColor();
+    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetMenuColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
 

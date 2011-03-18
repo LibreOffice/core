@@ -47,7 +47,7 @@ namespace com { namespace sun { namespace star { namespace datatransfer {
 // - SotFormatStringId -
 // ---------------------
 
-typedef ULONG SotFormatStringId;
+typedef sal_uLong SotFormatStringId;
 
 // ----------------
 // - DataFlavorEx -
@@ -72,14 +72,14 @@ typedef ::std::list< ::com::sun::star::datatransfer::DataFlavor >   DataFlavorLi
 typedef ::std::list< DataFlavorEx >                                 DataFlavorExList;
 
 SOT_DLLPUBLIC sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector,
-                            ULONG nId );
+                            sal_uLong nId );
 
 // -------------------------
 // - Vordefinierte Formate -
 // -------------------------
 
-// Die Reihenfolge und die Werte dürfen nicht geändert werden,
-// da die Implementation sich darauf verläßt.
+// Die Reihenfolge und die Werte dï¿½rfen nicht geï¿½ndert werden,
+// da die Implementation sich darauf verlï¿½ï¿½t.
 // Standard-Formate fuer die es auch Copy/Paste-Methoden gibt
 #define FORMAT_STRING           1
 #define FORMAT_BITMAP           2
@@ -92,70 +92,70 @@ SOT_DLLPUBLIC sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorE
 #define FORMAT_RTF              10
 
 // Source-Options
-#define EXCHG_SOURCE_MOVEABLE       ((USHORT)0x0001)
-#define EXCHG_SOURCE_COPYABLE       ((USHORT)0x0002)
-#define EXCHG_SOURCE_LINKABLE       ((USHORT)0x0004)
-#define EXCHG_SOURCE_PRINTABLE      ((USHORT)0x0008)
-#define EXCHG_SOURCE_DISCARDABLE    ((USHORT)0x0010)
-#define EXCHG_SOURCE_ALL            ((USHORT)0x001F)
-#define EXCHG_SOURCE_DEF_COPYABLE   ((USHORT)0x0020)
+#define EXCHG_SOURCE_MOVEABLE       ((sal_uInt16)0x0001)
+#define EXCHG_SOURCE_COPYABLE       ((sal_uInt16)0x0002)
+#define EXCHG_SOURCE_LINKABLE       ((sal_uInt16)0x0004)
+#define EXCHG_SOURCE_PRINTABLE      ((sal_uInt16)0x0008)
+#define EXCHG_SOURCE_DISCARDABLE    ((sal_uInt16)0x0010)
+#define EXCHG_SOURCE_ALL            ((sal_uInt16)0x001F)
+#define EXCHG_SOURCE_DEF_COPYABLE   ((sal_uInt16)0x0020)
 
 // Aktionen
-#define EXCHG_ACTION_MASK                       ((USHORT)0x00FF)
-#define EXCHG_INOUT_ACTION_NONE                 ((USHORT)com::sun::star::datatransfer::dnd::DNDConstants::ACTION_NONE)
+#define EXCHG_ACTION_MASK                       ((sal_uInt16)0x00FF)
+#define EXCHG_INOUT_ACTION_NONE                 ((sal_uInt16)com::sun::star::datatransfer::dnd::DNDConstants::ACTION_NONE)
 #define EXCHG_IN_ACTION_DEFAULT                 EXCHG_INOUT_ACTION_NONE
-#define EXCHG_IN_ACTION_MOVE                    ((USHORT)com::sun::star::datatransfer::dnd::DNDConstants::ACTION_MOVE)
-#define EXCHG_IN_ACTION_COPY                    ((USHORT)com::sun::star::datatransfer::dnd::DNDConstants::ACTION_COPY)
-#define EXCHG_IN_ACTION_LINK                    ((USHORT)com::sun::star::datatransfer::dnd::DNDConstants::ACTION_LINK)
-#define EXCHG_INOUT_ACTION_PRINT                ((USHORT)8)
-#define EXCHG_INOUT_ACTION_DISCARD              ((USHORT)16)
-#define EXCHG_OUT_ACTION_INSERT_OBJ             ((USHORT)17)
-#define EXCHG_OUT_ACTION_INSERT_BOOKMARK        ((USHORT)18)
-#define EXCHG_OUT_ACTION_INSERT_FILELINK        ((USHORT)19)
-#define EXCHG_OUT_ACTION_INSERT_FILE            ((USHORT)20)
-#define EXCHG_OUT_ACTION_INSERT_FILELIST        ((USHORT)21)
-#define EXCHG_OUT_ACTION_INSERT_IMAGEMAP        ((USHORT)22)
-#define EXCHG_OUT_ACTION_INSERT_OLE             ((USHORT)23)
-#define EXCHG_OUT_ACTION_INSERT_INTERACTIVE     ((USHORT)24)
-#define EXCHG_OUT_ACTION_INSERT_URLBUTTON       ((USHORT)25)
-#define EXCHG_OUT_ACTION_INSERT_CHAOSOBJ        ((USHORT)26) // OBSOLET ab 500.b  ?
-#define EXCHG_OUT_ACTION_REPLACE_OBJ            ((USHORT)27)
-#define EXCHG_OUT_ACTION_REPLACE_LINK           ((USHORT)28)
-#define EXCHG_OUT_ACTION_REPLACE_IMAGEMAP       ((USHORT)29)
-#define EXCHG_OUT_ACTION_GET_ATTRIBUTES         ((USHORT)30)
-#define EXCHG_OUT_ACTION_UPLOAD                 ((USHORT)31)  // OBSOLET ab 500.b ?
-#define EXCHG_OUT_ACTION_MOVE_FILE              ((USHORT)32)
-#define EXCHG_OUT_ACTION_MOVE_FILELIST          ((USHORT)33)
-#define EXCHG_OUT_ACTION_UPDATE_RANGE           ((USHORT)34)
-#define EXCHG_OUT_ACTION_INSERT_PRIVATE         ((USHORT)35)
-#define EXCHG_OUT_ACTION_INSERT_HTML            ((USHORT)36)
-#define EXCHG_OUT_ACTION_MOVE_PRIVATE           ((USHORT)37)
-#define EXCHG_OUT_ACTION_INSERT_STRING          ((USHORT)38)
-#define EXCHG_OUT_ACTION_INSERT_DRAWOBJ         ((USHORT)39)
-#define EXCHG_OUT_ACTION_INSERT_SVXB            ((USHORT)40)
-#define EXCHG_OUT_ACTION_INSERT_GDIMETAFILE     ((USHORT)41)
-#define EXCHG_OUT_ACTION_INSERT_BITMAP          ((USHORT)42)
-#define EXCHG_OUT_ACTION_INSERT_DDE             ((USHORT)43)
-#define EXCHG_OUT_ACTION_INSERT_HYPERLINK       ((USHORT)44)
-#define EXCHG_OUT_ACTION_REPLACE_DRAWOBJ        ((USHORT)45)
-#define EXCHG_OUT_ACTION_REPLACE_SVXB           ((USHORT)46)
-#define EXCHG_OUT_ACTION_REPLACE_GDIMETAFILE    ((USHORT)47)
-#define EXCHG_OUT_ACTION_REPLACE_BITMAP         ((USHORT)48)
-#define EXCHG_OUT_ACTION_REPLACE_GRAPH          ((USHORT)49)
-#define EXCHG_OUT_ACTION_INSERT_GRAPH           ((USHORT)50)
-#define EXCHG_OUT_ACTION_INSERT_MSGATTACH       ((USHORT)51)  // obsolet ab 500.b ?
-#define EXCHG_OUT_ACTION_COPY_CHAOSOBJ          ((USHORT)52)
-#define EXCHG_OUT_ACTION_MOVE_CHAOSOBJ          ((USHORT)53)
-#define EXCHG_OUT_ACTION_COPY_MSGATTACH         ((USHORT)54)
-#define EXCHG_OUT_ACTION_COPY_BOOKMARK          ((USHORT)55)
-#define EXCHG_OUT_ACTION_COPY_FILE              ((USHORT)56)
+#define EXCHG_IN_ACTION_MOVE                    ((sal_uInt16)com::sun::star::datatransfer::dnd::DNDConstants::ACTION_MOVE)
+#define EXCHG_IN_ACTION_COPY                    ((sal_uInt16)com::sun::star::datatransfer::dnd::DNDConstants::ACTION_COPY)
+#define EXCHG_IN_ACTION_LINK                    ((sal_uInt16)com::sun::star::datatransfer::dnd::DNDConstants::ACTION_LINK)
+#define EXCHG_INOUT_ACTION_PRINT                ((sal_uInt16)8)
+#define EXCHG_INOUT_ACTION_DISCARD              ((sal_uInt16)16)
+#define EXCHG_OUT_ACTION_INSERT_OBJ             ((sal_uInt16)17)
+#define EXCHG_OUT_ACTION_INSERT_BOOKMARK        ((sal_uInt16)18)
+#define EXCHG_OUT_ACTION_INSERT_FILELINK        ((sal_uInt16)19)
+#define EXCHG_OUT_ACTION_INSERT_FILE            ((sal_uInt16)20)
+#define EXCHG_OUT_ACTION_INSERT_FILELIST        ((sal_uInt16)21)
+#define EXCHG_OUT_ACTION_INSERT_IMAGEMAP        ((sal_uInt16)22)
+#define EXCHG_OUT_ACTION_INSERT_OLE             ((sal_uInt16)23)
+#define EXCHG_OUT_ACTION_INSERT_INTERACTIVE     ((sal_uInt16)24)
+#define EXCHG_OUT_ACTION_INSERT_URLBUTTON       ((sal_uInt16)25)
+#define EXCHG_OUT_ACTION_INSERT_CHAOSOBJ        ((sal_uInt16)26) // OBSOLET ab 500.b  ?
+#define EXCHG_OUT_ACTION_REPLACE_OBJ            ((sal_uInt16)27)
+#define EXCHG_OUT_ACTION_REPLACE_LINK           ((sal_uInt16)28)
+#define EXCHG_OUT_ACTION_REPLACE_IMAGEMAP       ((sal_uInt16)29)
+#define EXCHG_OUT_ACTION_GET_ATTRIBUTES         ((sal_uInt16)30)
+#define EXCHG_OUT_ACTION_UPLOAD                 ((sal_uInt16)31)  // OBSOLET ab 500.b ?
+#define EXCHG_OUT_ACTION_MOVE_FILE              ((sal_uInt16)32)
+#define EXCHG_OUT_ACTION_MOVE_FILELIST          ((sal_uInt16)33)
+#define EXCHG_OUT_ACTION_UPDATE_RANGE           ((sal_uInt16)34)
+#define EXCHG_OUT_ACTION_INSERT_PRIVATE         ((sal_uInt16)35)
+#define EXCHG_OUT_ACTION_INSERT_HTML            ((sal_uInt16)36)
+#define EXCHG_OUT_ACTION_MOVE_PRIVATE           ((sal_uInt16)37)
+#define EXCHG_OUT_ACTION_INSERT_STRING          ((sal_uInt16)38)
+#define EXCHG_OUT_ACTION_INSERT_DRAWOBJ         ((sal_uInt16)39)
+#define EXCHG_OUT_ACTION_INSERT_SVXB            ((sal_uInt16)40)
+#define EXCHG_OUT_ACTION_INSERT_GDIMETAFILE     ((sal_uInt16)41)
+#define EXCHG_OUT_ACTION_INSERT_BITMAP          ((sal_uInt16)42)
+#define EXCHG_OUT_ACTION_INSERT_DDE             ((sal_uInt16)43)
+#define EXCHG_OUT_ACTION_INSERT_HYPERLINK       ((sal_uInt16)44)
+#define EXCHG_OUT_ACTION_REPLACE_DRAWOBJ        ((sal_uInt16)45)
+#define EXCHG_OUT_ACTION_REPLACE_SVXB           ((sal_uInt16)46)
+#define EXCHG_OUT_ACTION_REPLACE_GDIMETAFILE    ((sal_uInt16)47)
+#define EXCHG_OUT_ACTION_REPLACE_BITMAP         ((sal_uInt16)48)
+#define EXCHG_OUT_ACTION_REPLACE_GRAPH          ((sal_uInt16)49)
+#define EXCHG_OUT_ACTION_INSERT_GRAPH           ((sal_uInt16)50)
+#define EXCHG_OUT_ACTION_INSERT_MSGATTACH       ((sal_uInt16)51)  // obsolet ab 500.b ?
+#define EXCHG_OUT_ACTION_COPY_CHAOSOBJ          ((sal_uInt16)52)
+#define EXCHG_OUT_ACTION_MOVE_CHAOSOBJ          ((sal_uInt16)53)
+#define EXCHG_OUT_ACTION_COPY_MSGATTACH         ((sal_uInt16)54)
+#define EXCHG_OUT_ACTION_COPY_BOOKMARK          ((sal_uInt16)55)
+#define EXCHG_OUT_ACTION_COPY_FILE              ((sal_uInt16)56)
 
-#define EXCHG_OUT_ACTION_FLAG_CREATE_THEME      ((USHORT)0x0100)
-#define EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE      ((USHORT)0x0200)
-#define EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP   ((USHORT)0x0400)
-#define EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP  ((USHORT)0x0800)
-#define EXCHG_OUT_ACTION_FLAG_FILL              ((USHORT)0x1000)
-#define EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL  ((USHORT)0x2000)
+#define EXCHG_OUT_ACTION_FLAG_CREATE_THEME      ((sal_uInt16)0x0100)
+#define EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE      ((sal_uInt16)0x0200)
+#define EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP   ((sal_uInt16)0x0400)
+#define EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP  ((sal_uInt16)0x0800)
+#define EXCHG_OUT_ACTION_FLAG_FILL              ((sal_uInt16)0x1000)
+#define EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL  ((sal_uInt16)0x2000)
 
 // Ziele
 #define EXCHG_DEST_DOC_OLEOBJ               1
@@ -183,66 +183,66 @@ class SvGlobalName;
 class SOT_DLLPUBLIC SotExchange
 {
 public:
-    static ULONG    RegisterFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    static ULONG    RegisterFormatName( const String& rName );
-    static ULONG    RegisterFormatMimeType( const String& rMimeType );
+    static sal_uLong    RegisterFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    static sal_uLong    RegisterFormatName( const String& rName );
+    static sal_uLong    RegisterFormatMimeType( const String& rMimeType );
 
-    static ULONG    GetFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    static String   GetFormatName( ULONG nFormat );
-    static sal_Bool GetFormatDataFlavor( ULONG nFormat, ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    static String   GetFormatMimeType( ULONG nFormat );
-    static BOOL     IsInternal( const SvGlobalName& );
-    static ULONG    GetFormatIdFromMimeType( const String& rMimeType );
+    static sal_uLong    GetFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    static String   GetFormatName( sal_uLong nFormat );
+    static sal_Bool GetFormatDataFlavor( sal_uLong nFormat, ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    static String   GetFormatMimeType( sal_uLong nFormat );
+    static sal_Bool     IsInternal( const SvGlobalName& );
+    static sal_uLong    GetFormatIdFromMimeType( const String& rMimeType );
 
     // bestimme die SotFormatStringId von dem registrierten Format
     //JP 12.11.98: diese 3 Methoden sind ab sofort ueberfluessig, da
     //              die ClipboardIds statisch sind und aequivalent zur
     //              SotFormatStringId ist!
-    static SotFormatStringId GetFormatStringId( ULONG nFormat )
+    static SotFormatStringId GetFormatStringId( sal_uLong nFormat )
         { return nFormat; }
     static SotFormatStringId GetFormatStringId( const String& rName )
         { return SotExchange::RegisterFormatMimeType( rName ); }
-    static ULONG RegisterSotFormatName( SotFormatStringId nId )
+    static sal_uLong RegisterSotFormatName( SotFormatStringId nId )
         { return nId; }
 
     // same for XTransferable interface
-    static USHORT   GetExchangeAction(
+    static sal_uInt16   GetExchangeAction(
         // XTransferable
         const DataFlavorExVector& rDataFlavorExVector,
         // Ziel der Aktion (EXCHG_DEST_*)
-        USHORT nDestination,
+        sal_uInt16 nDestination,
         // Aktionen, die Quelle unterstuetzt (EXCHG_SOURCE_...)
-        USHORT nSourceOptions,
+        sal_uInt16 nSourceOptions,
         // vom Anwender gewaehlte Aktion (EXCHG_IN_*, EXCHG_INOUT_*)
-        USHORT nUserAction,
+        sal_uInt16 nUserAction,
         // In:- Out: Zu benutzendes Format
-        ULONG& rFormat,
+        sal_uLong& rFormat,
         // In:- Out: Default-Action (EXCHG_IN_*, EXCHG_INOUT_*)
-        USHORT& rDefaultAction,
+        sal_uInt16& rDefaultAction,
         // In:- optional - check only for this specific format
-        ULONG nOnlyTestFormat = 0,
+        sal_uLong nOnlyTestFormat = 0,
         // In:- optional - check the contents of Xtransferable
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >* pxTransferable = NULL );
 
     // same for XTransferable interface
-    static USHORT   GetExchangeAction(
+    static sal_uInt16   GetExchangeAction(
         // XTransferable
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
         // Ziel der Aktion (EXCHG_DEST_*)
-        USHORT nDestination,
+        sal_uInt16 nDestination,
         // Aktionen, die Quelle unterstuetzt (EXCHG_SOURCE_...)
-        USHORT nSourceOptions,
+        sal_uInt16 nSourceOptions,
         // vom Anwender gewaehlte Aktion (EXCHG_IN_*, EXCHG_INOUT_*)
-        USHORT nUserAction,
+        sal_uInt16 nUserAction,
         // In:- Out: Zu benutzendes Format
-        ULONG& rFormat,
+        sal_uLong& rFormat,
         // In:- Out: Default-Action (EXCHG_IN_*, EXCHG_INOUT_*)
-        USHORT& rDefaultAction,
+        sal_uInt16& rDefaultAction,
         // In:- optional - check only for this specific format
-        ULONG nOnlyTestFormat = 0 );
+        sal_uLong nOnlyTestFormat = 0 );
 
-    static USHORT IsChart( const SvGlobalName& rName );
-    static USHORT IsMath( const SvGlobalName& rName );
+    static sal_uInt16 IsChart( const SvGlobalName& rName );
+    static sal_uInt16 IsMath( const SvGlobalName& rName );
 };
 
 #endif // _EXCHANGE_HXX

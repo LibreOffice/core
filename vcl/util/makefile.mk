@@ -125,7 +125,6 @@ HXXDEPNLST= $(INC)$/vcl$/accel.hxx       \
             $(INC)$/vcl$/virdev.hxx      \
             $(INC)$/vcl$/wall.hxx        \
             $(INC)$/vcl$/waitobj.hxx     \
-            $(INC)$/vcl$/wintypes.hxx    \
             $(INC)$/vcl$/window.hxx      \
             $(INC)$/vcl$/wrkwin.hxx
 
@@ -306,7 +305,7 @@ SHL2STDLIBS=\
 # prepare linking of Xinerama
 .IF "$(USE_XINERAMA)" != "NO"
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)"=="MACOSX" || "$(OS)$(CPU)" == "LINUXX"
 XINERAMALIBS=-lXinerama
 .ELSE
 .IF "$(OS)" != "SOLARIS" || "$(USE_XINERAMA_VERSION)" == "Xorg"
@@ -391,6 +390,9 @@ SHL4STDLIBS+= $(XRANDR_LIBS)
 .IF "$(ENABLE_KDE)" != ""
 .IF "$(KDE_ROOT)"!=""
 EXTRALIBPATHS+=-L$(KDE_ROOT)$/lib
+.IF "$(OS)$(CPU)" == "LINUXX"
+EXTRALIBPATHS+=-L$(KDE_ROOT)$/lib64
+.ENDIF
 .ENDIF
 LIB5TARGET=$(SLB)$/ikde_plug_
 LIB5FILES=$(SLB)$/kdeplug.lib
@@ -452,3 +454,16 @@ SHL6STDLIBS+=$(KDE4_LIBS) $(KDE_GLIB_LIBS)
 
 .INCLUDE :  target.mk
 
+ALLTAR : $(MISC)/vcl.component
+
+.IF "$(OS)" == "MACOSX"
+my_platform = .macosx
+.ELIF "$(OS)" == "WNT"
+my_platform = .windows
+.END
+
+$(MISC)/vcl.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        vcl.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt vcl$(my_platform).component

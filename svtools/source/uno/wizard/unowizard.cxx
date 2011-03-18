@@ -43,6 +43,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/urlobj.hxx>
 
 //......................................................................................................................
 namespace svt { namespace uno
@@ -207,11 +208,32 @@ namespace svt { namespace uno
         m_bInitialized = true;
     }
 
+    static rtl::OString lcl_getHelpId( const ::rtl::OUString& _rHelpURL )
+    {
+        INetURLObject aHID( _rHelpURL );
+        if ( aHID.GetProtocol() == INET_PROT_HID )
+            return rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
+        else
+            return rtl::OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
+    }
+
+    //------------------------------------------------------------------------
+    static ::rtl::OUString lcl_getHelpURL( const rtl::OString& sHelpId )
+    {
+        ::rtl::OUStringBuffer aBuffer;
+        ::rtl::OUString aTmp( sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8 );
+        INetURLObject aHID( aTmp );
+        if ( aHID.GetProtocol() == INET_PROT_NOT_VALID )
+            aBuffer.appendAscii( INET_HID_SCHEME );
+        aBuffer.append( aTmp.getStr() );
+        return aBuffer.makeStringAndClear();
+    }
+
     //--------------------------------------------------------------------
     Dialog* Wizard::createDialog( Window* i_pParent )
     {
         WizardShell* pDialog( new WizardShell( i_pParent, this, m_xController, m_aWizardSteps ) );
-        pDialog->SetSmartHelpId( SmartId( m_sHelpURL ) );
+        pDialog->SetHelpId(  lcl_getHelpId( m_sHelpURL ) );
         pDialog->setTitleBase( m_sTitle );
         return pDialog;
     }
@@ -220,7 +242,7 @@ namespace svt { namespace uno
     void Wizard::destroyDialog()
     {
         if ( m_pDialog )
-            m_sHelpURL = m_pDialog->GetSmartHelpId().GetStr();
+            m_sHelpURL = lcl_getHelpURL( m_pDialog->GetHelpId() );
 
         Wizard_Base::destroyDialog();
     }
@@ -280,8 +302,7 @@ namespace svt { namespace uno
         if ( !m_pDialog )
             return m_sHelpURL;
 
-        const SmartId aSmartId( m_pDialog->GetSmartHelpId() );
-        return aSmartId.GetStr();
+        return lcl_getHelpURL( m_pDialog->GetHelpId() );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -293,7 +314,7 @@ namespace svt { namespace uno
         if ( !m_pDialog )
             m_sHelpURL = i_HelpURL;
         else
-            m_pDialog->SetSmartHelpId( SmartId( i_HelpURL ) );
+            m_pDialog->SetHelpId( lcl_getHelpId( i_HelpURL ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------

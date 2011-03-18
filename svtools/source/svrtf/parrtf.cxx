@@ -33,8 +33,8 @@
 #include <rtl/tencinfo.h>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
-#include "rtftoken.h"
-#include "rtfkeywd.hxx"
+#include <svtools/rtftoken.h>
+#include <svtools/rtfkeywd.hxx>
 #include <svtools/parrtf.hxx>
 
 const int MAX_STRING_LEN = 1024;
@@ -43,9 +43,7 @@ const int MAX_TOKEN_LEN = 128;
 #define RTF_ISDIGIT( c ) (c >= '0' && c <= '9')
 #define RTF_ISALPHA( c ) ( (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') )
 
-SV_IMPL_VARARR( RtfParserStates_Impl, RtfParserState_Impl )
-
-SvRTFParser::SvRTFParser( SvStream& rIn, BYTE nStackSize )
+SvRTFParser::SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize )
     : SvParser( rIn, nStackSize ),
     eUNICodeSet( RTL_TEXTENCODING_MS_1252 ),    // default ist ANSI-CodeSet
     nUCharOverread( 1 )
@@ -171,17 +169,16 @@ int SvRTFParser::_GetNextToken()
                         case RTF_UC:
                             if( 0 <= nTokenValue )
                             {
-                                nUCharOverread = (BYTE)nTokenValue;
+                                nUCharOverread = (sal_uInt8)nTokenValue;
 #if 1
                                 //cmc: other ifdef breaks #i3584
-                                aParserStates[ aParserStates.Count()-1].
+                                aParserStates.top().
                                     nUCharOverread = nUCharOverread;
 #else
                                 if( !nUCharOverread )
-                                    nUCharOverread = aParserStates[
-                                        aParserStates.Count()-1].nUCharOverread;
+                                    nUCharOverread = aParserStates.top().nUCharOverread;
                                 else
-                                    aParserStates[ aParserStates.Count()-1].
+                                    aParserStates.top().
                                         nUCharOverread = nUCharOverread;
 #endif
                             }
@@ -210,7 +207,7 @@ int SvRTFParser::_GetNextToken()
 
                                 // overread the next n "RTF" characters. This
                                 // can be also \{, \}, \'88
-                                for( BYTE m = 0; m < nUCharOverread; ++m )
+                                for( sal_uInt8 m = 0; m < nUCharOverread; ++m )
                                 {
                                     sal_Unicode cAnsi = nNextCh;
                                     while( 0xD == cAnsi )
@@ -251,12 +248,12 @@ int SvRTFParser::_GetNextToken()
                 if( 0 <= nOpenBrakets )
                 {
                     RtfParserState_Impl aState( nUCharOverread, GetSrcEncoding() );
-                    aParserStates.Insert(
-                        aState, sal::static_int_cast< USHORT >(nOpenBrakets) );
+                    aParserStates.push( aState );
                 }
                 ++nOpenBrakets;
-                DBG_ASSERT( nOpenBrakets == aParserStates.Count(),
-                            "ParserStateStack unequal to bracket count" );
+                DBG_ASSERT(
+                    static_cast<size_t>(nOpenBrakets) == aParserStates.size(),
+                    "ParserStateStack unequal to bracket count" );
                 nRet = nNextCh;
             }
             break;
@@ -265,12 +262,11 @@ int SvRTFParser::_GetNextToken()
             --nOpenBrakets;
             if( 0 <= nOpenBrakets )
             {
-                aParserStates.Remove(
-                    sal::static_int_cast< USHORT >(nOpenBrakets) );
-                if( aParserStates.Count() )
+                aParserStates.pop();
+                if( !aParserStates.empty() )
                 {
                     const RtfParserState_Impl& rRPS =
-                            aParserStates[ aParserStates.Count() - 1 ];
+                            aParserStates.top();
                     nUCharOverread = rRPS.nUCharOverread;
                     SetSrcEncoding( rRPS.eCodeSet );
                 }
@@ -280,8 +276,9 @@ int SvRTFParser::_GetNextToken()
                     SetSrcEncoding( GetCodeSet() );
                 }
             }
-            DBG_ASSERT( nOpenBrakets == aParserStates.Count(),
-                        "ParserStateStack unequal to bracket count" );
+            DBG_ASSERT(
+                static_cast<size_t>(nOpenBrakets) == aParserStates.size(),
+                "ParserStateStack unequal to bracket count" );
             nRet = nNextCh;
             break;
 
@@ -432,7 +429,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
 
                             // overread the next n "RTF" characters. This
                             // can be also \{, \}, \'88
-                            for( BYTE m = 0; m < nUCharOverread; ++m )
+                            for( sal_uInt8 m = 0; m < nUCharOverread; ++m )
                             {
                                 sal_Unicode cAnsi = nNextCh;
                                 while( 0xD == cAnsi )
@@ -682,8 +679,8 @@ void SvRTFParser::SetEncoding( rtl_TextEncoding eEnc )
     if (eEnc == RTL_TEXTENCODING_DONTKNOW)
         eEnc = GetCodeSet();
 
-    if (aParserStates.Count())
-        aParserStates[aParserStates.Count() - 1].eCodeSet = eEnc;
+    if (!aParserStates.empty())
+        aParserStates.top().eCodeSet = eEnc;
     SetSrcEncoding(eEnc);
 }
 

@@ -35,8 +35,8 @@
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 #include <tools/stream.hxx>
-#include <strmadpt.hxx>
-#include "instrm.hxx"
+#include <svl/strmadpt.hxx>
+#include <svl/instrm.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

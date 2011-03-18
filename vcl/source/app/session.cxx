@@ -40,6 +40,12 @@
 
 #include <list>
 
+namespace {
+
+namespace css = com::sun::star;
+
+}
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
@@ -54,12 +60,12 @@ class VCLSession : public cppu::WeakComponentImplHelper1 < XSessionManagerClient
 {
     struct Listener
     {
-        Reference< XSessionManagerListener >        m_xListener;
+        css::uno::Reference< XSessionManagerListener >      m_xListener;
         bool                                        m_bInteractionRequested;
         bool                                        m_bInteractionDone;
         bool                                        m_bSaveDone;
 
-        Listener( const Reference< XSessionManagerListener >& xListener )
+        Listener( const css::uno::Reference< XSessionManagerListener >& xListener )
                 : m_xListener( xListener ),
                   m_bInteractionRequested( false ),
                   m_bInteractionDone( false ),
@@ -86,11 +92,11 @@ public:
     VCLSession();
     virtual ~VCLSession();
 
-    virtual void SAL_CALL addSessionManagerListener( const Reference< XSessionManagerListener >& xListener ) throw( RuntimeException );
-    virtual void SAL_CALL removeSessionManagerListener( const Reference< XSessionManagerListener>& xListener ) throw( RuntimeException );
-    virtual void SAL_CALL queryInteraction( const Reference< XSessionManagerListener >& xListener ) throw( RuntimeException );
-    virtual void SAL_CALL interactionDone( const Reference< XSessionManagerListener >& xListener ) throw( RuntimeException );
-    virtual void SAL_CALL saveDone( const Reference< XSessionManagerListener >& xListener ) throw( RuntimeException );
+    virtual void SAL_CALL addSessionManagerListener( const css::uno::Reference< XSessionManagerListener >& xListener ) throw( RuntimeException );
+    virtual void SAL_CALL removeSessionManagerListener( const css::uno::Reference< XSessionManagerListener>& xListener ) throw( RuntimeException );
+    virtual void SAL_CALL queryInteraction( const css::uno::Reference< XSessionManagerListener >& xListener ) throw( RuntimeException );
+    virtual void SAL_CALL interactionDone( const css::uno::Reference< XSessionManagerListener >& xListener ) throw( RuntimeException );
+    virtual void SAL_CALL saveDone( const css::uno::Reference< XSessionManagerListener >& xListener ) throw( RuntimeException );
     virtual sal_Bool SAL_CALL cancelShutdown() throw( RuntimeException );
 };
 
@@ -148,7 +154,7 @@ void VCLSession::callSaveRequested( bool bShutdown, bool bCancelable )
         }
     }
 
-    ULONG nAcquireCount = Application::ReleaseSolarMutex();
+    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
     for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
         it->m_xListener->doSave( bShutdown, bCancelable );
     Application::AcquireSolarMutex( nAcquireCount );
@@ -176,7 +182,7 @@ void VCLSession::callInteractionGranted( bool bInteractionGranted )
         }
     }
 
-    ULONG nAcquireCount = Application::ReleaseSolarMutex();
+    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
     for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
         it->m_xListener->approveInteraction( bInteractionGranted );
 
@@ -194,7 +200,7 @@ void VCLSession::callShutdownCancelled()
         m_bInteractionRequested = m_bInteractionDone = m_bInteractionGranted = false;
     }
 
-    ULONG nAcquireCount = Application::ReleaseSolarMutex();
+    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
     for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
         it->m_xListener->shutdownCanceled();
     Application::AcquireSolarMutex( nAcquireCount );
@@ -211,10 +217,10 @@ void VCLSession::callQuit()
         m_bInteractionRequested = m_bInteractionDone = m_bInteractionGranted = false;
     }
 
-    ULONG nAcquireCount = Application::ReleaseSolarMutex();
+    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
     for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
     {
-        Reference< XSessionManagerListener2 > xListener2( it->m_xListener, UNO_QUERY );
+        css::uno::Reference< XSessionManagerListener2 > xListener2( it->m_xListener, UNO_QUERY );
         if( xListener2.is() )
             xListener2->doQuit();
     }
@@ -246,14 +252,14 @@ void VCLSession::SalSessionEventProc( SalSessionEvent* pEvent )
     }
 }
 
-void SAL_CALL VCLSession::addSessionManagerListener( const Reference<XSessionManagerListener>& xListener ) throw( RuntimeException )
+void SAL_CALL VCLSession::addSessionManagerListener( const css::uno::Reference<XSessionManagerListener>& xListener ) throw( RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
     m_aListeners.push_back( Listener( xListener ) );
 }
 
-void SAL_CALL VCLSession::removeSessionManagerListener( const Reference<XSessionManagerListener>& xListener ) throw( RuntimeException )
+void SAL_CALL VCLSession::removeSessionManagerListener( const css::uno::Reference<XSessionManagerListener>& xListener ) throw( RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -270,7 +276,7 @@ void SAL_CALL VCLSession::removeSessionManagerListener( const Reference<XSession
     }
 }
 
-void SAL_CALL VCLSession::queryInteraction( const Reference<XSessionManagerListener>& xListener ) throw( RuntimeException )
+void SAL_CALL VCLSession::queryInteraction( const css::uno::Reference<XSessionManagerListener>& xListener ) throw( RuntimeException )
 {
     if( m_bInteractionGranted )
     {
@@ -297,7 +303,7 @@ void SAL_CALL VCLSession::queryInteraction( const Reference<XSessionManagerListe
     }
 }
 
-void SAL_CALL VCLSession::interactionDone( const Reference< XSessionManagerListener >& xListener ) throw( RuntimeException )
+void SAL_CALL VCLSession::interactionDone( const css::uno::Reference< XSessionManagerListener >& xListener ) throw( RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
     int nRequested = 0, nDone = 0;
@@ -320,7 +326,7 @@ void SAL_CALL VCLSession::interactionDone( const Reference< XSessionManagerListe
     }
 }
 
-void SAL_CALL VCLSession::saveDone( const Reference< XSessionManagerListener >& xListener ) throw( RuntimeException )
+void SAL_CALL VCLSession::saveDone( const css::uno::Reference< XSessionManagerListener >& xListener ) throw( RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -361,13 +367,13 @@ Sequence< rtl::OUString > SAL_CALL vcl_session_getSupportedServiceNames()
     return aRet;
 }
 
-Reference< XInterface > SAL_CALL vcl_session_createInstance( const Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/ )
+css::uno::Reference< XInterface > SAL_CALL vcl_session_createInstance( const css::uno::Reference< XMultiServiceFactory > & /*xMultiServiceFactory*/ )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->xSMClient.is() )
         pSVData->xSMClient = new VCLSession();
 
-    return Reference< XInterface >(pSVData->xSMClient, UNO_QUERY );
+    return css::uno::Reference< XInterface >(pSVData->xSMClient, UNO_QUERY );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

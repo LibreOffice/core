@@ -33,8 +33,8 @@
 #include <tools/string.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtfkeywd.hxx>
-#include <rtfout.hxx>
+#include <svtools/rtfkeywd.hxx>
+#include <svtools/rtfout.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OString;
@@ -47,7 +47,7 @@ const sal_Char RTFOutFuncs::sNewLine[] = "\015\012";
 
 
 SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
-    int *pUCMode, rtl_TextEncoding eDestEnc, BOOL bWriteHelpFile)
+    int *pUCMode, rtl_TextEncoding eDestEnc, sal_Bool bWriteHelpFile)
 {
     const sal_Char* pStr = 0;
     switch (c)
@@ -166,7 +166,7 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
 }
 
 SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const String& rStr,
-    rtl_TextEncoding eDestEnc, BOOL bWriteHelpFile)
+    rtl_TextEncoding eDestEnc, sal_Bool bWriteHelpFile)
 {
     int nUCMode = 1;
     for (xub_StrLen n = 0; n < rStr.Len(); ++n)
@@ -177,7 +177,7 @@ SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const String& rStr,
 }
 
 SvStream& RTFOutFuncs::Out_Fontname(SvStream& rStream, const String& rStr,
-    rtl_TextEncoding eDestEnc, BOOL bWriteHelpFile)
+    rtl_TextEncoding eDestEnc, sal_Bool bWriteHelpFile)
 {
     //Fontnames in word have a quirk in that \uc and usage of ansi replacement
     //chars after a \u don't work and in wordpad \u doesn't work, so we are
@@ -187,7 +187,7 @@ SvStream& RTFOutFuncs::Out_Fontname(SvStream& rStream, const String& rStr,
     return rStream;
 }
 
-SvStream& RTFOutFuncs::Out_Hex( SvStream& rStream, ULONG nHex, BYTE nLen )
+SvStream& RTFOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
 {
     sal_Char aNToABuf[] = "0000000000000000";
 
@@ -197,7 +197,7 @@ SvStream& RTFOutFuncs::Out_Hex( SvStream& rStream, ULONG nHex, BYTE nLen )
 
     // Pointer an das Bufferende setzen
     sal_Char* pStr = aNToABuf + (sizeof(aNToABuf)-1);
-    for( BYTE n = 0; n < nLen; ++n )
+    for( sal_uInt8 n = 0; n < nLen; ++n )
     {
         *(--pStr) = (sal_Char)(nHex & 0xf ) + 48;
         if( *pStr > '9' )

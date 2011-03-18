@@ -44,7 +44,7 @@ DBG_NAME(SfxVisibilityItem)
 TYPEINIT1_AUTOFACTORY(SfxVisibilityItem, SfxPoolItem);
 
 //============================================================================
-SfxVisibilityItem::SfxVisibilityItem(USHORT which, SvStream & rStream):
+SfxVisibilityItem::SfxVisibilityItem(sal_uInt16 which, SvStream & rStream):
     SfxPoolItem(which)
 {
     DBG_CTOR(SfxVisibilityItem, 0);
@@ -86,7 +86,7 @@ SfxItemPresentation SfxVisibilityItem::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-bool SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
+bool SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
     rVal <<= m_nValue;
     return true;
@@ -94,7 +94,7 @@ bool SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal,BYTE) const
 
 //============================================================================
 // virtual
-bool SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
+bool SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
     if (rVal >>= m_nValue)
         return true;
@@ -105,7 +105,7 @@ bool SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal,BYTE)
 
 //============================================================================
 // virtual
-SfxPoolItem * SfxVisibilityItem::Create(SvStream & rStream, USHORT) const
+SfxPoolItem * SfxVisibilityItem::Create(SvStream & rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(SfxVisibilityItem, 0);
     return new SfxVisibilityItem(Which(), rStream);
@@ -113,7 +113,7 @@ SfxPoolItem * SfxVisibilityItem::Create(SvStream & rStream, USHORT) const
 
 //============================================================================
 // virtual
-SvStream & SfxVisibilityItem::Store(SvStream & rStream, USHORT) const
+SvStream & SfxVisibilityItem::Store(SvStream & rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(SfxVisibilityItem, 0);
     rStream << m_nValue.bVisible;
@@ -130,19 +130,19 @@ SfxPoolItem * SfxVisibilityItem::Clone(SfxItemPool *) const
 
 //============================================================================
 // virtual
-USHORT SfxVisibilityItem::GetValueCount() const
+sal_uInt16 SfxVisibilityItem::GetValueCount() const
 {
     return 2;
 }
 
 //============================================================================
 // virtual
-UniString SfxVisibilityItem::GetValueTextByVal(BOOL bTheValue) const
+UniString SfxVisibilityItem::GetValueTextByVal(sal_Bool bTheValue) const
 {
     return
         bTheValue ?
-            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TRUE")) :
-            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("FALSE"));
+            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("sal_True")) :
+            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("sal_False"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

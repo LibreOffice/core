@@ -29,11 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#if defined( WIN)
-#include <stdio.h>
-#include <dos.h>
-#endif
-
 #ifdef UNX
 #include <errno.h>
 #endif
@@ -52,12 +47,12 @@
 
 FileStat::FileStat()
 :   // don't use Default-Ctors!
-    aDateCreated( ULONG(0) ),
-    aTimeCreated( ULONG(0) ),
-    aDateModified( ULONG(0) ),
-    aTimeModified( ULONG(0) ),
-    aDateAccessed( ULONG(0) ),
-    aTimeAccessed( ULONG(0) )
+    aDateCreated( sal_uIntPtr(0) ),
+    aTimeCreated( sal_uIntPtr(0) ),
+    aDateModified( sal_uIntPtr(0) ),
+    aTimeModified( sal_uIntPtr(0) ),
+    aDateAccessed( sal_uIntPtr(0) ),
+    aTimeAccessed( sal_uIntPtr(0) )
 {
     nSize = 0;
     nKindFlags = FSYS_KIND_UNKNOWN;
@@ -72,15 +67,15 @@ FileStat::FileStat()
 
 FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
 :   // don't use Default-Ctors!
-    aDateCreated( ULONG(0) ),
-    aTimeCreated( ULONG(0) ),
-    aDateModified( ULONG(0) ),
-    aTimeModified( ULONG(0) ),
-    aDateAccessed( ULONG(0) ),
-    aTimeAccessed( ULONG(0) )
+    aDateCreated( sal_uIntPtr(0) ),
+    aTimeCreated( sal_uIntPtr(0) ),
+    aDateModified( sal_uIntPtr(0) ),
+    aTimeModified( sal_uIntPtr(0) ),
+    aDateAccessed( sal_uIntPtr(0) ),
+    aTimeAccessed( sal_uIntPtr(0) )
 {
-    BOOL bCached = FSYS_ACCESS_CACHED == (nAccess & FSYS_ACCESS_CACHED);
-    BOOL bFloppy = FSYS_ACCESS_FLOPPY == (nAccess & FSYS_ACCESS_FLOPPY);
+    sal_Bool bCached = FSYS_ACCESS_CACHED == (nAccess & FSYS_ACCESS_CACHED);
+    sal_Bool bFloppy = FSYS_ACCESS_FLOPPY == (nAccess & FSYS_ACCESS_FLOPPY);
 
 #ifdef FEAT_FSYS_DOUBLESPEED
     const FileStat *pStatFromDir = bCached ? rDirEntry.ImpGetStat() : 0;
@@ -109,18 +104,18 @@ FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
 |*
 *************************************************************************/
 
-// TRUE  wenn die Instanz j"unger als rIsOlder ist.
-// FALSE wenn die Instanz "alter oder gleich alt wie rIsOlder ist.
+// sal_True  wenn die Instanz j"unger als rIsOlder ist.
+// sal_False wenn die Instanz "alter oder gleich alt wie rIsOlder ist.
 
-BOOL FileStat::IsYounger( const FileStat& rIsOlder ) const
+sal_Bool FileStat::IsYounger( const FileStat& rIsOlder ) const
 {
     if ( aDateModified > rIsOlder.aDateModified )
-        return TRUE;
+        return sal_True;
     if ( ( aDateModified == rIsOlder.aDateModified ) &&
          ( aTimeModified > rIsOlder.aTimeModified ) )
-        return TRUE;
+        return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -129,9 +124,9 @@ BOOL FileStat::IsYounger( const FileStat& rIsOlder ) const
 |*
 *************************************************************************/
 
-BOOL FileStat::IsKind( DirEntryKind nKind ) const
+sal_Bool FileStat::IsKind( DirEntryKind nKind ) const
 {
-    BOOL bRet = ( ( nKind == FSYS_KIND_UNKNOWN ) &&
+    sal_Bool bRet = ( ( nKind == FSYS_KIND_UNKNOWN ) &&
                   ( nKindFlags == FSYS_KIND_UNKNOWN ) ) ||
                    ( ( nKindFlags & nKind ) == nKind );
     return bRet;
@@ -143,12 +138,12 @@ BOOL FileStat::IsKind( DirEntryKind nKind ) const
 |*
 *************************************************************************/
 
-BOOL FileStat::HasReadOnlyFlag()
+sal_Bool FileStat::HasReadOnlyFlag()
 {
 #if defined WNT || defined UNX || defined OS2
-    return TRUE;
+    return sal_True;
 #else
-    return FALSE;
+    return sal_False;
 #endif
 }
 
@@ -158,7 +153,7 @@ BOOL FileStat::HasReadOnlyFlag()
 |*
 *************************************************************************/
 
-BOOL FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
+sal_Bool FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
 {
 
     ByteString aFPath(rEntry.GetFull(), osl_getThreadTextEncoding());
@@ -174,17 +169,17 @@ BOOL FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
         case NO_ERROR:
             return FILE_READONLY == ( aFileStat.attrFile & FILE_READONLY );
         default:
-            return FALSE;
+            return sal_False;
     }
 #elif defined UNX
     /* could we stat the object? */
     struct stat aBuf;
     if (stat(aFPath.GetBuffer(), &aBuf))
-        return FALSE;
+        return sal_False;
     /* jupp, is writable for user? */
     return((aBuf.st_mode & S_IWUSR) != S_IWUSR);
 #else
-    return FALSE;
+    return sal_False;
 #endif
 }
 
@@ -194,7 +189,7 @@ BOOL FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
 |*
 *************************************************************************/
 
-ULONG FileStat::SetReadOnlyFlag( const DirEntry &rEntry, BOOL bRO )
+sal_uIntPtr FileStat::SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO )
 {
 
     ByteString aFPath(rEntry.GetFull(), osl_getThreadTextEncoding());

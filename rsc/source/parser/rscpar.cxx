@@ -49,7 +49,7 @@ void RscFileInst::Init()
     *pLine = '\0';
     nScanPos = 0;
     cLastChar = '\0';
-    bEof = FALSE;
+    bEof = sal_False;
 };
 
 /*************************************************************************
@@ -57,8 +57,8 @@ void RscFileInst::Init()
 |*    RscFileInst::RscFileInst()
 |*
 *************************************************************************/
-RscFileInst::RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
-                          ULONG lFIndex, FILE * fFile )
+RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
+                          sal_uLong lFIndex, FILE * fFile )
 {
     pTypCont = pTC;
     Init();
@@ -72,8 +72,8 @@ RscFileInst::RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
     pInput    = (char *)rtl_allocateMemory( nInputBufLen );
 }
 
-RscFileInst::RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
-                          ULONG lFIndex, const ByteString& rBuf )
+RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
+                          sal_uLong lFIndex, const ByteString& rBuf )
 {
     pTypCont     = pTC;
     Init();
@@ -113,7 +113,7 @@ int RscFileInst::GetChar()
     else if( nInputPos >= nInputEndPos && nInputEndPos != nInputBufLen )
     {
         // Dateiende
-        bEof = TRUE;
+        bEof = sal_True;
         return 0;
     }
     else

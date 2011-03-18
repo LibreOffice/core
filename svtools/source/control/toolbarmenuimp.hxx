@@ -309,7 +309,7 @@ struct ToolbarMenu_Impl
     ToolbarMenuEntry* implGetEntry( int nEntry ) const;
     void notifyHighlightedEntry();
 
-    void implHighlightControl( USHORT nCode, Control* pControl );
+    void implHighlightControl( sal_uInt16 nCode, Control* pControl );
 };
 
 }

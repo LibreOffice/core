@@ -91,17 +91,17 @@ private:
     PushButton*         pHomeBtn;
     PushButton*         pNewDirBtn;
 
-    USHORT              nOwnChilds;
+    sal_uInt16              nOwnChilds;
 
     DirEntry            aPath;          // aktuell angewaehlter Pfad
-    USHORT              nDirCount;      // Anzahl der Verzeichnis-
+    sal_uInt16              nDirCount;      // Anzahl der Verzeichnis-
                                         // Verschachtelungen
 protected:
 
-    virtual void        UpdateEntries( const BOOL bWithDirs );
+    virtual void        UpdateEntries( const sal_Bool bWithDirs );
     void                UpdateDirs( const DirEntry& rTmpPath );
 
-    BOOL                IsFileOk( const DirEntry& rDirEntry );
+    sal_Bool                IsFileOk( const DirEntry& rDirEntry );
     void                InitControls();
 
     DECL_LINK(          SelectHdl, ListBox * );
@@ -109,7 +109,7 @@ protected:
     DECL_LINK(          ClickHdl, Button * );
 
 public:
-                        ImpPathDialog( PathDialog* pDlg, RESOURCE_TYPE nType, BOOL bCreateDir );
+                        ImpPathDialog( PathDialog* pDlg, RESOURCE_TYPE nType, sal_Bool bCreateDir );
     virtual             ~ImpPathDialog();
 
     virtual void        SetPath( const String& rPath );
@@ -138,9 +138,9 @@ private:
     WildCard            aMask;          // aktuelle Maske
 
     ImpFilterList       aFilterList;    // Filterliste
-    USHORT              nCurFilter;     // aktueller Filter
+    sal_uInt16              nCurFilter;     // aktueller Filter
 
-    BOOL                bOpen;          // TRUE = Open; FALSE = SAVEAS
+    sal_Bool                bOpen;          // sal_True = Open; sal_False = SAVEAS
 
 protected:
     void                InitControls();
@@ -151,8 +151,8 @@ protected:
     DECL_LINK(          DblClickHdl, ListBox * );
     DECL_LINK(          ClickHdl, Button * );
 
-    virtual void        UpdateEntries( const BOOL bWithDirs );
-    BOOL                IsFileOk( const DirEntry& rDirEntry );
+    virtual void        UpdateEntries( const sal_Bool bWithDirs );
+    sal_Bool                IsFileOk( const DirEntry& rDirEntry );
 
 public:
                         ImpFileDialog( PathDialog* pDlg, WinBits nStyle, RESOURCE_TYPE nType );
@@ -205,7 +205,7 @@ public:
                     ~ImpSvFileDlg()     { delete pDlg; }
 
     ImpPathDialog*  GetDialog() const   { return pDlg; }
-    void            CreateDialog( PathDialog* pCreateFrom, WinBits nStyle, RESOURCE_TYPE nType, BOOL bCreate );
+    void            CreateDialog( PathDialog* pCreateFrom, WinBits nStyle, RESOURCE_TYPE nType, sal_Bool bCreate );
 
     void            SetOkButtonText( const String& rText ) { pDlg->SetOkButtonText( rText ); }  // ihr habts ja nicht anders gewollt
     void            SetCancelButtonText( const String& rText ) { pDlg->SetCancelButtonText( rText ); }

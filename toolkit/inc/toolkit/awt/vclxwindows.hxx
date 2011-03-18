@@ -124,7 +124,7 @@ private:
     Image                       maImage;
 
 protected:
-    BitmapEx                    GetBitmap() const { return maImage.GetBitmapEx(); }
+    const Image&    GetImage() const { return maImage; }
 
 protected:
     // ::com::sun::star::awt::XWindow
@@ -295,7 +295,7 @@ private:
     ::rtl::OUString             maActionCommand;
 
 protected:
-    void            ImplClickedOrToggled( BOOL bToggled );
+    void            ImplClickedOrToggled( sal_Bool bToggled );
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
@@ -414,7 +414,7 @@ public:
 //  ----------------------------------------------------
 //  class VCLXDialog
 //  ----------------------------------------------------
-class VCLXDialog :  public ::com::sun::star::awt::XDialog2,
+class TOOLKIT_DLLPUBLIC VCLXDialog :    public ::com::sun::star::awt::XDialog2,
                         public ::com::sun::star::document::XVbaMethodParameter, //liuchen 2009-6-22, add the support of input/output parameters to VBA UserForm_QueryClose event
                     public VCLXTopWindow
 {
@@ -433,7 +433,7 @@ public:
 
     // ::com::sun::star::awt::XDialog2
     virtual void SAL_CALL endDialog( ::sal_Int32 Result ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setHelpId( ::sal_Int32 Id ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHelpId( const rtl::OUString& Id ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XDialog
     void SAL_CALL setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException);
@@ -536,7 +536,7 @@ public:
     virtual void SAL_CALL removeTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
     // C++
     TabControl*  getTabControl() const throw ( ::com::sun::star::uno::RuntimeException);
-    USHORT insertTab( TabPage*, rtl::OUString& sTitle );
+    sal_uInt16 insertTab( TabPage*, rtl::OUString& sTitle );
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };

@@ -33,7 +33,7 @@
 
 #include <tools/debug.hxx>
 #include <vcl/status.hxx>
-#include <prgsbar.hxx>
+#include <svtools/prgsbar.hxx>
 
 // =======================================================================
 
@@ -45,9 +45,9 @@
 void ProgressBar::ImplInit()
 {
     mnPercent   = 0;
-    mbCalcNew   = TRUE;
+    mbCalcNew   = sal_True;
 
-    ImplInitSettings( TRUE, TRUE, TRUE );
+    ImplInitSettings( sal_True, sal_True, sal_True );
 }
 
 static WinBits clearProgressBarBorder( Window* pParent, WinBits nOrgStyle )
@@ -86,8 +86,8 @@ ProgressBar::~ProgressBar()
 
 // -----------------------------------------------------------------------
 
-void ProgressBar::ImplInitSettings( BOOL bFont,
-                                    BOOL bForeground, BOOL bBackground )
+void ProgressBar::ImplInitSettings( sal_Bool bFont,
+                                    sal_Bool bForeground, sal_Bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -109,8 +109,8 @@ void ProgressBar::ImplInitSettings( BOOL bFont,
         {
             if( (GetStyle() & WB_BORDER) )
                 SetBorderStyle( WINDOW_BORDER_REMOVEBORDER );
-            EnableChildTransparentMode( TRUE );
-            SetPaintTransparent( TRUE );
+            EnableChildTransparentMode( sal_True );
+            SetPaintTransparent( sal_True );
             SetBackground();
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
         }
@@ -148,18 +148,18 @@ void ProgressBar::ImplInitSettings( BOOL bFont,
 
 // -----------------------------------------------------------------------
 
-void ProgressBar::ImplDrawProgress( USHORT nOldPerc, USHORT nNewPerc )
+void ProgressBar::ImplDrawProgress( sal_uInt16 nOldPerc, sal_uInt16 nNewPerc )
 {
     if ( mbCalcNew )
     {
-        mbCalcNew = FALSE;
+        mbCalcNew = sal_False;
 
         Size aSize = GetOutputSizePixel();
         mnPrgsHeight = aSize.Height()-(PROGRESSBAR_WIN_OFFSET*2);
         mnPrgsWidth = (mnPrgsHeight*2)/3;
         maPos.Y() = PROGRESSBAR_WIN_OFFSET;
         long nMaxWidth = (aSize.Width()-(PROGRESSBAR_WIN_OFFSET*2)+PROGRESSBAR_OFFSET);
-        USHORT nMaxCount = (USHORT)(nMaxWidth / (mnPrgsWidth+PROGRESSBAR_OFFSET));
+        sal_uInt16 nMaxCount = (sal_uInt16)(nMaxWidth / (mnPrgsWidth+PROGRESSBAR_OFFSET));
         if ( nMaxCount <= 1 )
             nMaxCount = 1;
         else
@@ -188,20 +188,20 @@ void ProgressBar::Paint( const Rectangle& )
 
 void ProgressBar::Resize()
 {
-    mbCalcNew = TRUE;
+    mbCalcNew = sal_True;
     if ( IsReallyVisible() )
         Invalidate();
 }
 
 // -----------------------------------------------------------------------
 
-void ProgressBar::SetValue( USHORT nNewPercent )
+void ProgressBar::SetValue( sal_uInt16 nNewPercent )
 {
     DBG_ASSERTWARNING( nNewPercent <= 100, "StatusBar::SetProgressValue(): nPercent > 100" );
 
     if ( nNewPercent < mnPercent )
     {
-        mbCalcNew = TRUE;
+        mbCalcNew = sal_True;
         mnPercent = nNewPercent;
         if ( IsReallyVisible() )
         {
@@ -224,19 +224,19 @@ void ProgressBar::StateChanged( StateChangedType nType )
     if ( (nType == STATE_CHANGE_ZOOM) ||
          (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( TRUE, FALSE, FALSE );
+        ImplInitSettings( sal_True, sal_False, sal_False );
         Invalidate();
     }
     else
 */
     if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( FALSE, TRUE, FALSE );
+        ImplInitSettings( sal_False, sal_True, sal_False );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( FALSE, FALSE, TRUE );
+        ImplInitSettings( sal_False, sal_False, sal_True );
         Invalidate();
     }
 
@@ -250,7 +250,7 @@ void ProgressBar::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings( TRUE, TRUE, TRUE );
+        ImplInitSettings( sal_True, sal_True, sal_True );
         Invalidate();
     }
 

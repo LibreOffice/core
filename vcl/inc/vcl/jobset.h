@@ -53,18 +53,18 @@
 
 struct ImplJobSetup
 {
-    USHORT          mnRefCount;         // RefCount (only independ data)
-    USHORT          mnSystem;           // Sytem - JOBSETUP_SYSTEM_xxxx
+    sal_uInt16          mnRefCount;         // RefCount (only independ data)
+    sal_uInt16          mnSystem;           // Sytem - JOBSETUP_SYSTEM_xxxx
     String          maPrinterName;      // Printer-Name
     String          maDriver;           // Driver-Name
     Orientation     meOrientation;      // Orientation
     DuplexMode      meDuplexMode;       // Duplex
-    USHORT          mnPaperBin;         // paper bin / in tray
+    sal_uInt16          mnPaperBin;         // paper bin / in tray
     Paper           mePaperFormat;      // paper format
     long            mnPaperWidth;       // paper width (100th mm)
     long            mnPaperHeight;      // paper height (100th mm)
-    ULONG           mnDriverDataLen;    // length of system specific data
-    BYTE*           mpDriverData;       // system specific data (will be streamed a byte block)
+    sal_uIntPtr         mnDriverDataLen;    // length of system specific data
+    sal_uInt8*          mpDriverData;       // system specific data (will be streamed a byte block)
     ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >         maValueMap;
 
                     ImplJobSetup();

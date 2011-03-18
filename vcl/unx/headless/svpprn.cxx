@@ -162,7 +162,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     if( rData.getStreamBuffer( pBuffer, nBytes ) )
     {
         pJobSetup->mnDriverDataLen = nBytes;
-        pJobSetup->mpDriverData = (BYTE*)pBuffer;
+        pJobSetup->mpDriverData = (sal_uInt8*)pBuffer;
     }
     else
     {
@@ -302,9 +302,9 @@ String SvpSalInstance::GetDefaultPrinter()
 
 // -----------------------------------------------------------------------
 
-BOOL SvpSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
+sal_Bool SvpSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
 {
-    return FALSE;
+    return sal_False;
 }
 
 /*

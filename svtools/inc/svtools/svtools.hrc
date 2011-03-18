@@ -32,24 +32,17 @@
 #define RID_SVTOOLS_BITMAP_START        (RID_SVTOOLS_START + 0)
 #define RID_SVTOOLS_IMAGELIST_START     (RID_SVTOOLS_START + 0)
 
+//#define ABOUT_STR_COPYRIGHT             (RID_SVTOOLS_START + 1)
+//#define ABOUT_STR_DEVELOPER_ARY         (RID_SVTOOLS_START + 2)
+
 //.............................................................................
 // various unsorted stuff
 
-#define DLG_EXPORT_PIX                  (RID_SVTOOLS_START+1)
-#define DLG_EXPORT_VEC                  (RID_SVTOOLS_START+2)
 #define DLG_TWAIN_SOURCE                (RID_SVTOOLS_START+3)
 
 #define DLG_SVT_EXPLORERFILE            (RID_SVTOOLS_START+4)
 #define DLG_SVT_QUERYFOLDERNAME         (RID_SVTOOLS_START+5)
 #define DLG_SVT_QUERYDELETE             (RID_SVTOOLS_START+6)
-
-#define EXPORT_DIALOG_TITLE             (RID_SVTOOLS_START+4)
-#define KEY_MODE                        (RID_SVTOOLS_START+5)
-#define KEY_RES                         (RID_SVTOOLS_START+6)
-#define KEY_SIZE                        (RID_SVTOOLS_START+7)
-
-#define KEY_COLORS                      (RID_SVTOOLS_START+9)
-#define KEY_RLE_CODING                  (RID_SVTOOLS_START+10)
 
 #define STR_SVT_AUTOMATIC_COLOR         (RID_SVTOOLS_START+16)
 
@@ -97,6 +90,10 @@
 #define STR_BASICKEY_FORMAT_TRUE        (RID_SVTOOLS_START+107)
 #define STR_BASICKEY_FORMAT_FALSE       (RID_SVTOOLS_START+108)
 #define CONFIG_BASIC_FORMAT_END         (RID_SVTOOLS_START+109)
+#define STR_UNDO                        (RID_SVTOOLS_START+110)
+#define STR_REDO                        (RID_SVTOOLS_START+111)
+#define STR_REPEAT                      (RID_SVTOOLS_START+112)
+
 
 #define STR_INVALIDTRYBUY               (RID_SVTOOLS_START+120)
 #define STR_OLDTRYBUY                   (RID_SVTOOLS_START+121)
@@ -253,6 +250,10 @@
 #define STR_SVT_ACC_DESC_FOLDER             (STR_SVT_ACC_BEGIN+4)
 #define STR_SVT_ACC_DESC_FILE               (STR_SVT_ACC_BEGIN+5)
 #define STR_SVT_ACC_EMPTY_FIELD             (STR_SVT_ACC_BEGIN+6)
+//IAccessible2 implementation
+#define STR_SVT_ACC_LISTENTRY_SELCTED_STATE     (STR_SVT_ACC_BEGIN+7)
+#define STR_SVT_ACC_RULER_VERT_NAME (STR_SVT_ACC_BEGIN+8)
+#define STR_SVT_ACC_RULER_HORZ_NAME (STR_SVT_ACC_BEGIN+9)
 #define STR_SVT_ACC_END                     (STR_SVT_ACC_EMPTY_FIELD)
 
 #define STR_SVT_INDEXENTRY_START            (STR_SVT_ACC_END + 1)
@@ -287,17 +288,16 @@
 
 //.............................................................................
 // dialogs
-
-#define DLG_EXPORT_JPG_START            (RID_SVTOOLS_START+110)
-#define DLG_EXPORT_JPG                  (RID_SVTOOLS_START+111)
-#define DLG_EXPORT_JPG_END              (RID_SVTOOLS_START+112)
+#define DLG_EXPORT_START                (STR_ARR_SVT_LANGUAGE_TABLE_END + 1)
+#define DLG_EXPORT                      (DLG_EXPORT_START)
+#define DLG_EXPORT_TITLE                (DLG_EXPORT_START+1)
+#define DLG_EXPORT_END                  (DLG_EXPORT_TITLE)
 
 #define DLG_LOGIN                       (RID_SVTOOLS_START+113)
 #define DLG_ADDRESSBOOKSOURCE           (RID_SVTOOLS_START+114)
 
 #define DLG_REGISTRATION_REQUEST        (RID_SVTOOLS_START+115)
 
-#define DLG_EXPORT_EPNG                 (RID_SVTOOLS_START+116)
 //.............................................................................
 // bitmaps
 
@@ -363,6 +363,11 @@
 
 #define RID_IMG_PRNDLG_COLLATE              (STR_SVT_PRNDLG_START + 29)
 #define RID_IMG_PRNDLG_NOCOLLATE            (STR_SVT_PRNDLG_START + 30)
+
+// IAccessible2 implementation in 2009
+#define STR_PARAGRAPH_START                 (STR_SVT_PRNDLG_START + 50)
+#define STR_PARAGRAPH                       (STR_PARAGRAPH_START + 0)
+#define STR_PARAGRAPH_END                   (STR_PARAGRAPH)
 
 #endif  // #ifndef _SVTOOLS_HRC
 

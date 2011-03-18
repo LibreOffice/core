@@ -78,8 +78,8 @@ VCL_DLLPUBLIC sal_UCS4 GetMirroredChar( sal_UCS4 );
 // - SystemWindowMode -
 // --------------------
 
-#define SYSTEMWINDOW_MODE_NOAUTOMODE    ((USHORT)0x0001)
-#define SYSTEMWINDOW_MODE_DIALOG        ((USHORT)0x0002)
+#define SYSTEMWINDOW_MODE_NOAUTOMODE    ((sal_uInt16)0x0001)
+#define SYSTEMWINDOW_MODE_DIALOG        ((sal_uInt16)0x0002)
 
 // -------------
 // - EventHook -
@@ -119,7 +119,7 @@ public:
     const UniString&    GetDomain() const   { return aDomainName; }
     int                 GetPID() const      { return nPID; }
 
-    BOOL                IsConnectToSame( const ApplicationAddress& rAdr ) const;
+    sal_Bool                IsConnectToSame( const ApplicationAddress& rAdr ) const;
 };
 
 inline ApplicationAddress::ApplicationAddress()
@@ -149,12 +149,12 @@ inline ApplicationAddress::ApplicationAddress( const UniString& rHost, int nPIDP
     nPID            = nPIDPar;
 }
 
-inline BOOL ApplicationAddress::IsConnectToSame( const ApplicationAddress& rAdr ) const
+inline sal_Bool ApplicationAddress::IsConnectToSame( const ApplicationAddress& rAdr ) const
 {
     if ( nPID && ((nPID == rAdr.nPID) && (aHostName.Equals( rAdr.aHostName))) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 #define APPEVENT_PARAM_DELIMITER        '\n'
@@ -184,12 +184,12 @@ public:
     const UniString&    GetData() const { return aData; }
     const ApplicationAddress& GetAppAddress() const { return aAppAddr; }
 
-    BOOL                IsOpenEvent() const;
-    BOOL                IsPrintEvent() const;
-    BOOL                IsDiskInsertEvent() const;
+    sal_Bool                IsOpenEvent() const;
+    sal_Bool                IsPrintEvent() const;
+    sal_Bool                IsDiskInsertEvent() const;
 
-    USHORT              GetParamCount() const { return aData.GetTokenCount( APPEVENT_PARAM_DELIMITER ); }
-    UniString           GetParam( USHORT nParam ) const { return aData.GetToken( nParam, APPEVENT_PARAM_DELIMITER ); }
+    sal_uInt16              GetParamCount() const { return aData.GetTokenCount( APPEVENT_PARAM_DELIMITER ); }
+    UniString           GetParam( sal_uInt16 nParam ) const { return aData.GetToken( nParam, APPEVENT_PARAM_DELIMITER ); }
 };
 
 inline ApplicationEvent::ApplicationEvent( const UniString& rSenderAppName,
@@ -203,28 +203,28 @@ inline ApplicationEvent::ApplicationEvent( const UniString& rSenderAppName,
 {
 }
 
-inline BOOL ApplicationEvent::IsOpenEvent() const
+inline sal_Bool ApplicationEvent::IsOpenEvent() const
 {
     if ( aEvent.Equals( APPEVENT_OPEN_STRING ))
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline BOOL ApplicationEvent::IsPrintEvent() const
+inline sal_Bool ApplicationEvent::IsPrintEvent() const
 {
     if ( aEvent.Equals( APPEVENT_PRINT_STRING ))
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline BOOL ApplicationEvent::IsDiskInsertEvent() const
+inline sal_Bool ApplicationEvent::IsDiskInsertEvent() const
 {
     if ( aEvent.Equals( APPEVENT_DISKINSERT_STRING ))
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 class VCL_DLLPUBLIC PropertyHandler
@@ -245,9 +245,9 @@ public:
 
     virtual int                 Main() = 0;
 
-    virtual BOOL                QueryExit();
+    virtual sal_Bool                QueryExit();
 
-    virtual void                UserEvent( ULONG nEvent, void* pEventData );
+    virtual void                UserEvent( sal_uLong nEvent, void* pEventData );
 
     virtual void                ActivateExtHelp();
     virtual void                DeactivateExtHelp();
@@ -264,11 +264,11 @@ public:
 
     static void                 InitAppRes( const ResId& rResId );
 
-    static USHORT               GetCommandLineParamCount();
-    static XubString            GetCommandLineParam( USHORT nParam );
+    static sal_uInt16               GetCommandLineParamCount();
+    static XubString            GetCommandLineParam( sal_uInt16 nParam );
     static const XubString&     GetAppFileName();
 
-    virtual USHORT              Exception( USHORT nError );
+    virtual sal_uInt16              Exception( sal_uInt16 nError );
     static void                 Abort( const XubString& rErrorText );
 
     static void                 Execute();
@@ -278,23 +278,23 @@ public:
     static void                 EndYield();
     static osl::SolarMutex&     GetSolarMutex();
     static oslThreadIdentifier  GetMainThreadIdentifier();
-    static ULONG                ReleaseSolarMutex();
-    static void                 AcquireSolarMutex( ULONG nCount );
+    static sal_uLong                ReleaseSolarMutex();
+    static void                 AcquireSolarMutex( sal_uLong nCount );
     static void                 EnableNoYieldMode( bool i_bNoYield );
     static void                 AddPostYieldListener( const Link& i_rListener );
     static void                 RemovePostYieldListener( const Link& i_rListener );
 
-    static BOOL                 IsInMain();
-    static BOOL                 IsInExecute();
-    static BOOL                 IsShutDown();
-    static BOOL                 IsInModalMode();
-    static USHORT               GetModalModeCount();
+    static sal_Bool                 IsInMain();
+    static sal_Bool                 IsInExecute();
+    static sal_Bool                 IsShutDown();
+    static sal_Bool                 IsInModalMode();
+    static sal_uInt16               GetModalModeCount();
 
-    static USHORT               GetDispatchLevel();
-    static BOOL                 AnyInput( USHORT nType = INPUT_ANY );
-    static ULONG                GetLastInputInterval();
-    static BOOL                 IsUICaptured();
-    static BOOL                 IsUserActive( USHORT nTest = USERACTIVE_ALL );
+    static sal_uInt16               GetDispatchLevel();
+    static sal_Bool                 AnyInput( sal_uInt16 nType = INPUT_ANY );
+    static sal_uLong                GetLastInputInterval();
+    static sal_Bool                 IsUICaptured();
+    static sal_Bool                 IsUserActive( sal_uInt16 nTest = USERACTIVE_ALL );
 
     virtual void                SystemSettingsChanging( AllSettings& rSettings,
                                                         Window* pFrame );
@@ -321,22 +321,22 @@ public:
     static void                 RemoveEventListener( const Link& rEventListener );
     static void                 AddKeyListener( const Link& rKeyListener );
     static void                 RemoveKeyListener( const Link& rKeyListener );
-    static void                 ImplCallEventListeners( ULONG nEvent, Window* pWin, void* pData );
+    static void                 ImplCallEventListeners( sal_uLong nEvent, Window* pWin, void* pData );
     static void                 ImplCallEventListeners( VclSimpleEvent* pEvent );
-    static BOOL                 HandleKey( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent );
+    static sal_Bool                 HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
 
-    static ULONG                PostKeyEvent( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent );
-    static ULONG                PostMouseEvent( ULONG nEvent, Window *pWin, MouseEvent* pMouseEvent );
+    static sal_uLong                PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent );
+    static sal_uLong                PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent );
     static void                 RemoveMouseAndKeyEvents( Window *pWin );
-    static BOOL                 IsProcessedMouseOrKeyEvent( ULONG nEventId );
+    static sal_Bool                 IsProcessedMouseOrKeyEvent( sal_uLong nEventId );
 
-    static ULONG                PostUserEvent( ULONG nEvent, void* pEventData = NULL );
-    static ULONG                PostUserEvent( const Link& rLink, void* pCaller = NULL );
-    static BOOL                 PostUserEvent( ULONG& rEventId, ULONG nEvent, void* pEventData = NULL );
-    static BOOL                 PostUserEvent( ULONG& rEventId, const Link& rLink, void* pCaller = NULL );
-    static void                 RemoveUserEvent( ULONG nUserEvent );
+    static sal_uLong                PostUserEvent( sal_uLong nEvent, void* pEventData = NULL );
+    static sal_uLong                PostUserEvent( const Link& rLink, void* pCaller = NULL );
+    static sal_Bool                 PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData = NULL );
+    static sal_Bool                 PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
+    static void                 RemoveUserEvent( sal_uLong nUserEvent );
 
-    static BOOL                 InsertIdleHdl( const Link& rLink, USHORT nPriority );
+    static sal_Bool                 InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
     static void                 RemoveIdleHdl( const Link& rLink );
 
     virtual void                AppEvent( const ApplicationEvent& rAppEvent );
@@ -385,15 +385,15 @@ public:
 
     static const LocaleDataWrapper& GetAppLocaleDataWrapper();
 
-    static BOOL                 InsertAccel( Accelerator* pAccel );
+    static sal_Bool                 InsertAccel( Accelerator* pAccel );
     static void                 RemoveAccel( Accelerator* pAccel );
     static void                 FlushAccel();
-    static BOOL                 CallAccel( const KeyCode& rKeyCode, USHORT nRepeat = 0 );
+    static sal_Bool                 CallAccel( const KeyCode& rKeyCode, sal_uInt16 nRepeat = 0 );
 
-    static ULONG                AddHotKey( const KeyCode& rKeyCode, const Link& rLink, void* pData = NULL );
-    static void                 RemoveHotKey( ULONG nId );
-    static ULONG                AddEventHook( VCLEventHookProc pProc, void* pData = NULL );
-    static void                 RemoveEventHook( ULONG nId );
+    static sal_uLong                AddHotKey( const KeyCode& rKeyCode, const Link& rLink, void* pData = NULL );
+    static void                 RemoveHotKey( sal_uLong nId );
+    static sal_uLong                AddEventHook( VCLEventHookProc pProc, void* pData = NULL );
+    static void                 RemoveEventHook( sal_uLong nId );
     static long                 CallEventHooks( NotifyEvent& rEvt );
     static long                 CallPreNotify( NotifyEvent& rEvt );
     static long                 CallEvent( NotifyEvent& rEvt );
@@ -401,24 +401,24 @@ public:
     static void                 SetHelp( Help* pHelp = NULL );
     static Help*                GetHelp();
 
-    static void                 EnableAutoHelpId( BOOL bEnabled = TRUE );
-    static BOOL                 IsAutoHelpIdEnabled();
+    static void                 EnableAutoHelpId( sal_Bool bEnabled = sal_True );
+    static sal_Bool                 IsAutoHelpIdEnabled();
 
-    static void                 EnableAutoMnemonic( BOOL bEnabled = TRUE );
-    static BOOL                 IsAutoMnemonicEnabled();
+    static void                 EnableAutoMnemonic( sal_Bool bEnabled = sal_True );
+    static sal_Bool                 IsAutoMnemonicEnabled();
 
-    static ULONG                GetReservedKeyCodeCount();
-    static const KeyCode*       GetReservedKeyCode( ULONG i );
-    static String               GetReservedKeyCodeDescription( ULONG i );
+    static sal_uLong                GetReservedKeyCodeCount();
+    static const KeyCode*       GetReservedKeyCode( sal_uLong i );
+    static String               GetReservedKeyCodeDescription( sal_uLong i );
 
     static void                 SetDefDialogParent( Window* pWindow );
     static Window*              GetDefDialogParent();
 
-    static void                 EnableDialogCancel( BOOL bDialogCancel = TRUE );
-    static BOOL                 IsDialogCancelEnabled();
+    static void                 EnableDialogCancel( sal_Bool bDialogCancel = sal_True );
+    static sal_Bool                 IsDialogCancelEnabled();
 
-    static void                 SetSystemWindowMode( USHORT nMode );
-    static USHORT               GetSystemWindowMode();
+    static void                 SetSystemWindowMode( sal_uInt16 nMode );
+    static sal_uInt16               GetSystemWindowMode();
 
     static void                 SetDialogScaleX( short nScale );
     static short                GetDialogScaleX();
@@ -432,16 +432,16 @@ public:
 
     // The global service manager has to be created before!
     static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > GetVCLToolkit();
-    static UnoWrapperBase*      GetUnoWrapper( BOOL bCreateIfNotExists = TRUE );
+    static UnoWrapperBase*      GetUnoWrapper( sal_Bool bCreateIfNotExists = sal_True );
     static void                 SetUnoWrapper( UnoWrapperBase* pWrapper );
 
     static void                 SetFilterHdl( const Link& rLink );
     static const Link&          GetFilterHdl();
 
-    static BOOL                 IsAccessibilityEnabled();
+    static sal_Bool                 IsAccessibilityEnabled();
 
-    static void                 EnableHeadlessMode( BOOL bEnable = TRUE );
-    static BOOL                 IsHeadlessModeEnabled();
+    static void                 EnableHeadlessMode( sal_Bool bEnable = sal_True );
+    static sal_Bool                 IsHeadlessModeEnabled();
 
     static void                 ShowNativeErrorBox(const String& sTitle  ,
                                                    const String& sMessage);
@@ -557,6 +557,52 @@ protected:
     osl::SolarMutex& m_solarMutex;
 };
 
+class VCL_DLLPUBLIC SolarMutexResettableGuard
+{
+    SolarMutexResettableGuard( const SolarMutexResettableGuard& );
+    const SolarMutexResettableGuard& operator = ( const SolarMutexResettableGuard& );
+    bool m_bCleared;
+public:
+    /** Acquires mutex
+        @param pMutex pointer to mutex which is to be acquired  */
+    SolarMutexResettableGuard()
+        : m_bCleared(false)
+        , m_solarMutex( Application::GetSolarMutex() )
+        {
+            m_solarMutex.acquire();
+        }
+
+    /** Releases mutex. */
+    virtual ~SolarMutexResettableGuard()
+        {
+            if( !m_bCleared )
+            {
+                m_solarMutex.release();
+            }
+        }
+
+    /** Releases mutex. */
+    void SAL_CALL clear()
+        {
+            if( !m_bCleared)
+            {
+                m_solarMutex.release();
+                m_bCleared = true;
+            }
+        }
+    /** Releases mutex. */
+    void SAL_CALL reset()
+        {
+            if( m_bCleared)
+            {
+                m_solarMutex.acquire();
+                m_bCleared = false;
+            }
+        }
+protected:
+    osl::SolarMutex& m_solarMutex;
+};
+
 
 /**
  A helper class that calls Application::ReleaseSolarMutex() in its constructor
@@ -564,7 +610,7 @@ protected:
 */
 class SolarMutexReleaser
 {
-    ULONG mnReleased;
+    sal_uLong mnReleased;
     const bool  mbRescheduleDuringAcquire;
 public:
     enum
@@ -596,10 +642,10 @@ public:
 
 VCL_DLLPUBLIC Application* GetpApp();
 
-VCL_DLLPUBLIC BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
+VCL_DLLPUBLIC sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
 VCL_DLLPUBLIC void DeInitVCL();
 
-VCL_DLLPUBLIC BOOL InitAccessBridge( BOOL bAllowCancel, BOOL &rCancelled );
+VCL_DLLPUBLIC sal_Bool InitAccessBridge( sal_Bool bAllowCancel, sal_Bool &rCancelled );
 
 // only allowed to call, if no thread is running. You must call JoinMainLoopThread to free all memory.
 VCL_DLLPUBLIC void CreateMainLoopThread( oslWorkerFunction pWorker, void * pThreadData );

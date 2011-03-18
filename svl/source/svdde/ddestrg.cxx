@@ -34,10 +34,6 @@
 #include "ddeimp.hxx"
 #include <svl/svdde.hxx>
 
-#if defined( WIN ) && defined( MSC )
-#pragma code_seg( "SVDDE_MISC_CODE" )
-#endif
-
 // --- DdeString::DdeString() --------------------------------------
 
 DdeString::DdeString( DWORD hDdeInst, const sal_Unicode* p ) :

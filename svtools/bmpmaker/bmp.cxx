@@ -40,7 +40,7 @@ using namespace std;
 #include <vcl/svapp.hxx>
 
 #include "svl/solar.hrc"
-#include "filedlg.hxx"
+#include <svtools/filedlg.hxx>
 #include "bmpcore.hxx"
 #include "bmp.hrc"
 
@@ -53,19 +53,19 @@ class BmpApp : public BmpCreator
 private:
 
     String          aOutputFileName;
-    BYTE            cExitCode;
+    sal_uInt8           cExitCode;
 
-    BOOL            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rSwitchParam );
-    BOOL            GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rSwitchParams );
+    sal_Bool            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rSwitchParam );
+    sal_Bool            GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rSwitchParams );
 
-    void            SetExitCode( BYTE cExit )
+    void            SetExitCode( sal_uInt8 cExit )
                     {
                         if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) )
                             cExitCode = cExit;
                     }
     void            ShowUsage();
 
-    virtual void    Message( const String& rText, BYTE cExitCode );
+    virtual void    Message( const String& rText, sal_uInt8 cExitCode );
 
 public:
 
@@ -89,9 +89,9 @@ BmpApp::~BmpApp()
 
 // -----------------------------------------------------------------------
 
-BOOL BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam )
+sal_Bool BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ) && !bRet; i++ )
     {
@@ -103,7 +103,7 @@ BOOL BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const Strin
 
             if( aTestStr.CompareIgnoreCaseToAscii( rArgs[ i ] ) == COMPARE_EQUAL )
             {
-                bRet = TRUE;
+                bRet = sal_True;
 
                 if( i < ( nCount - 1 ) )
                     rParam = rArgs[ i + 1 ];
@@ -121,9 +121,9 @@ BOOL BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const Strin
 
 // -----------------------------------------------------------------------
 
-BOOL BmpApp::GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rParams )
+sal_Bool BmpApp::GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rParams )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ); i++ )
     {
@@ -153,7 +153,7 @@ BOOL BmpApp::GetCommandOptions( const ::std::vector< String >& rArgs, const Stri
 
 // -----------------------------------------------------------------------
 
-void BmpApp::Message( const String& rText, BYTE cExit )
+void BmpApp::Message( const String& rText, sal_uInt8 cExit )
 {
     if( EXIT_NOERROR != cExit )
         SetExitCode( cExit );
@@ -187,7 +187,7 @@ int BmpApp::Start( const ::std::vector< String >& rArgs )
     if( rArgs.size() >= 6 )
     {
         LangInfo                aLangInfo;
-        USHORT                  nCurCmd = 0;
+        sal_uInt16                  nCurCmd = 0;
         const String            aSrsName( rArgs[ nCurCmd++ ] );
         ::std::vector< String > aInDirVector;
         ByteString              aLangDir;

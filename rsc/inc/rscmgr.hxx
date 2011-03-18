@@ -38,8 +38,8 @@
 class RscMgr : public RscClass {
     struct RscMgrInst {
         RscId   aRefId; // nRefId = Referenz Identifier
-        BOOL    bDflt;  // Ist Default
-        void Create(){ aRefId.Create(); bDflt = TRUE; }
+        sal_Bool    bDflt;  // Ist Default
+        void Create(){ aRefId.Create(); bDflt = sal_True; }
         void Destroy(){ aRefId.Destroy(); }
     };
     ERRTYPE         IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep = 0 );
@@ -47,10 +47,10 @@ public:
                     RscMgr( Atom nId, sal_uInt32 nTypId, RscTop * pSuperCl );
 
     void            SetToDefault( const RSCINST & rInst );
-    BOOL            IsDefault( const RSCINST & rInst );
-    BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    sal_Bool            IsDefault( const RSCINST & rInst );
+    sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
 
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, BOOL );
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool );
     void            Destroy( const RSCINST & rInst );
     sal_uInt32          Size();
     void            WriteSrcHeader( const RSCINST & aInst, FILE * fOutput,
@@ -61,9 +61,9 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
                                    RscTypCont * pTC, const RscId & rId,
-                                   sal_uInt32, BOOL bExtra );
+                                   sal_uInt32, sal_Bool bExtra );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
     ERRTYPE         WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
                                     RscTypCont * pTC, const RscId & rId );
     ERRTYPE         WriteHxx( const RSCINST & rInst, FILE * fOutput,
@@ -72,7 +72,7 @@ public:
                                     RscTypCont * pTC, const RscId & rId );
     ERRTYPE         WriteCxx( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, const RscId & rId );
-    BOOL            IsConsistent( const RSCINST & rInst );
+    sal_Bool        IsConsistent( const RSCINST & rInst );
     ERRTYPE         GetRef( const RSCINST & rInst, RscId * );
     ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId );
 };

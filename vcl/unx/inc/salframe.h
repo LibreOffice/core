@@ -88,23 +88,23 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     X11SalGraphics  *pFreeGraphics_;        // first free frame graphics
 
     XLIB_Time       nReleaseTime_;      // timestamp of last key release
-    USHORT          nKeyCode_;          // last key code
-    USHORT          nKeyState_;         // last key state
+    sal_uInt16          nKeyCode_;          // last key code
+    sal_uInt16          nKeyState_;         // last key state
     int             nCompose_;          // compose state
     bool            mbSendExtKeyModChange;
-    USHORT          mnExtKeyMod;
+    sal_uInt16          mnExtKeyMod;
 
     int             nShowState_;        // show state
     int             nWidth_;            // client width
     int             nHeight_;           // client height
     Rectangle       maRestorePosSize;
-    ULONG           nStyle_;
+    sal_uIntPtr         nStyle_;
     SalExtStyle     mnExtStyle;
-    BOOL            bAlwaysOnTop_;
-    BOOL            bViewable_;
-    BOOL            bMapped_;
-    BOOL            mbInShow;
-    BOOL            bDefaultPosition_;  // client is centered initially
+    sal_Bool            bAlwaysOnTop_;
+    sal_Bool            bViewable_;
+    sal_Bool            bMapped_;
+    sal_Bool            mbInShow;
+    sal_Bool            bDefaultPosition_;  // client is centered initially
     bool            m_bXEmbed;
     int             nVisibility_;
     int             m_nWorkArea;
@@ -177,11 +177,11 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
 
     void            updateWMClass();
 public:
-    X11SalFrame( SalFrame* pParent, ULONG nSalFrameStyle, SystemParentData* pSystemParent = NULL );
+    X11SalFrame( SalFrame* pParent, sal_uIntPtr nSalFrameStyle, SystemParentData* pSystemParent = NULL );
     virtual ~X11SalFrame();
 
     long            Dispatch( XEvent *pEvent );
-    void            Init( ULONG nSalFrameStyle, int nScreen = -1,
+    void            Init( sal_uIntPtr nSalFrameStyle, int nScreen = -1,
                           SystemParentData* pParentData = NULL, bool bUseGeometry = false );
 
     SalDisplay*             GetDisplay() const { return pDisplay_; }
@@ -194,10 +194,10 @@ public:
     XLIB_Window             GetStackingWindow() const { return mhStackingWindow; }
     long                    ShutDown() const { return CallCallback( SALEVENT_SHUTDOWN, 0 ); }
     long                    Close() const { return CallCallback( SALEVENT_CLOSE, 0 ); }
-              ULONG           GetStyle() const { return nStyle_; }
+              sal_uIntPtr           GetStyle() const { return nStyle_; }
 
     inline  XLIB_Cursor     GetCursor() const { return hCursor_; }
-    inline  BOOL            IsCaptured() const { return nCaptured_ == 1; }
+    inline  sal_Bool            IsCaptured() const { return nCaptured_ == 1; }
 #if !defined(__synchronous_extinput__)
     void            HandleExtTextEvent (XClientMessageEvent *pEvent);
     void            PostExtTextEvent (sal_uInt16 nExtTextEventType,
@@ -213,6 +213,10 @@ public:
     bool                    isMapped() const { return bMapped_; }
     bool                    hasFocus() const { return mbInputFocus; }
 
+    void                    beginUnicodeSequence();
+    bool                    appendUnicodeSequence( sal_Unicode );
+    bool                    endUnicodeSequence();
+
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
 
@@ -220,39 +224,39 @@ public:
     // call with false to setup graphics with window (GetWindow())
     virtual void                updateGraphics( bool bClear );
 
-    virtual BOOL                PostEvent( void* pData );
+    virtual sal_Bool                PostEvent( void* pData );
 
     virtual void                SetTitle( const XubString& rTitle );
-    virtual void                SetIcon( USHORT nIcon );
+    virtual void                SetIcon( sal_uInt16 nIcon );
     virtual void                SetMenu( SalMenu* pMenu );
     virtual void                                DrawMenuBar();
 
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
-    virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
-    virtual void                Enable( BOOL bEnable );
+    virtual void                Show( sal_Bool bVisible, sal_Bool bNoActivate = sal_False );
+    virtual void                Enable( sal_Bool bEnable );
     virtual void              SetMinClientSize( long nWidth, long nHeight );
     virtual void              SetMaxClientSize( long nWidth, long nHeight );
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags );
+    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
     virtual void                GetClientSize( long& rWidth, long& rHeight );
     virtual void                GetWorkArea( Rectangle& rRect );
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
-    virtual BOOL                GetWindowState( SalFrameState* pState );
-    virtual void                ShowFullScreen( BOOL bFullScreen, sal_Int32 nMonitor );
-    virtual void                StartPresentation( BOOL bStart );
-    virtual void                SetAlwaysOnTop( BOOL bOnTop );
-    virtual void                ToTop( USHORT nFlags );
+    virtual sal_Bool                GetWindowState( SalFrameState* pState );
+    virtual void                ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nMonitor );
+    virtual void                StartPresentation( sal_Bool bStart );
+    virtual void                SetAlwaysOnTop( sal_Bool bOnTop );
+    virtual void                ToTop( sal_uInt16 nFlags );
     virtual void                SetPointer( PointerStyle ePointerStyle );
-    virtual void                CaptureMouse( BOOL bMouse );
+    virtual void                CaptureMouse( sal_Bool bMouse );
     virtual void                SetPointerPos( long nX, long nY );
     using SalFrame::Flush;
     virtual void                Flush();
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );
-    virtual void                EndExtTextInput( USHORT nFlags );
-    virtual String              GetKeyName( USHORT nKeyCode );
-    virtual String              GetSymbolKeyName( const XubString& rFontName, USHORT nKeyCode );
-    virtual BOOL                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
+    virtual void                EndExtTextInput( sal_uInt16 nFlags );
+    virtual String              GetKeyName( sal_uInt16 nKeyCode );
+    virtual String              GetSymbolKeyName( const XubString& rFontName, sal_uInt16 nKeyCode );
+    virtual sal_Bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual SalBitmap*          SnapShot();
     virtual void                UpdateSettings( AllSettings& rSettings );
@@ -260,7 +264,7 @@ public:
     virtual const SystemEnvData*    GetSystemData() const;
     virtual SalPointerState     GetPointerState();
     virtual SalIndicatorState   GetIndicatorState();
-    virtual void                SimulateKeyPress( USHORT nKeyCode );
+    virtual void                SimulateKeyPress( sal_uInt16 nKeyCode );
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetBackgroundBitmap( SalBitmap* pBitmap );
@@ -272,7 +276,7 @@ public:
     // set clip region to none (-> rectangular windows, normal state)
     virtual void                    ResetClipRegion();
     // start setting the clipregion consisting of nRects rectangles
-    virtual void                    BeginSetClipRegion( ULONG nRects );
+    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects );
     // add a rectangle to the clip region
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     // done setting up the clipregion

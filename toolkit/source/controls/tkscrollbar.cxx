@@ -48,7 +48,8 @@ namespace toolkit
     //= UnoControlScrollBarModel
     //====================================================================
     //--------------------------------------------------------------------
-    UnoControlScrollBarModel::UnoControlScrollBarModel()
+    UnoControlScrollBarModel::UnoControlScrollBarModel( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
+        :UnoControlModel( i_factory )
     {
         UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXScrollBar );
     }
@@ -97,8 +98,9 @@ namespace toolkit
     //====================================================================
     //= UnoControlScrollBarModel
     //====================================================================
-    UnoScrollBarControl::UnoScrollBarControl()
-        : maAdjustmentListeners( *this )
+    UnoScrollBarControl::UnoScrollBarControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
+        :UnoControlBase( i_factory )
+        ,maAdjustmentListeners( *this )
     {
     }
 

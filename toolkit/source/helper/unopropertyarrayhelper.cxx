@@ -100,7 +100,7 @@ sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( ::rtl::OUString * 
 
     for ( sal_uInt32 n = 0; n < nProps; n++ )
     {
-        sal_uInt16 nId = (sal_uInt16)(sal_uIntPtr)aSortedPropsIds.GetObject( n );
+        sal_uInt16 nId = (sal_uInt16)(sal_uLong)aSortedPropsIds.GetObject( n );
         pProps[n].Name = GetPropertyName( nId );
         pProps[n].Handle = nId;
         pProps[n].Type = *GetPropertyType( nId );

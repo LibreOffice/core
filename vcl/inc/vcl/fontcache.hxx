@@ -39,7 +39,7 @@
 namespace psp
 {
 
-class VCL_DLLPUBLIC FontCache
+class VCL_PLUGIN_PUBLIC FontCache
 {
     struct FontDir;
     friend class FontDir;

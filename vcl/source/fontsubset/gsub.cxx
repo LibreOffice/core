@@ -42,12 +42,10 @@
 namespace vcl
 {
 
-typedef sal_uInt32 ULONG;
-typedef sal_uInt32 UINT32;
-typedef sal_uInt16 USHORT;
+typedef sal_uIntPtr sal_uLong;
 typedef sal_uInt8 FT_Byte;
 
-typedef std::map<USHORT,USHORT> GlyphSubstitution;
+typedef std::map<sal_uInt16,sal_uInt16> GlyphSubstitution;
 
 
 inline sal_uInt32 NEXT_Long( const unsigned char* &p )
@@ -57,9 +55,9 @@ inline sal_uInt32 NEXT_Long( const unsigned char* &p )
     return nVal;
 }
 
-inline USHORT NEXT_UShort( const unsigned char* &p )
+inline sal_uInt16 NEXT_UShort( const unsigned char* &p )
 {
-    USHORT nVal = (p[0]<<8) + p[1];
+    sal_uInt16 nVal = (p[0]<<8) + p[1];
     p += 2;
     return nVal;
 }
@@ -78,50 +76,50 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
 
     // parse GSUB header
     const FT_Byte* pGsubHeader = pGsubBase;
-    const ULONG nVersion            = NEXT_Long( pGsubHeader );
-    const USHORT nOfsScriptList     = NEXT_UShort( pGsubHeader );
-    const USHORT nOfsFeatureTable   = NEXT_UShort( pGsubHeader );
-    const USHORT nOfsLookupList     = NEXT_UShort( pGsubHeader );
+    const sal_uLong nVersion            = NEXT_Long( pGsubHeader );
+    const sal_uInt16 nOfsScriptList     = NEXT_UShort( pGsubHeader );
+    const sal_uInt16 nOfsFeatureTable   = NEXT_UShort( pGsubHeader );
+    const sal_uInt16 nOfsLookupList     = NEXT_UShort( pGsubHeader );
 
     // sanity check the GSUB header
     if( nVersion != 0x00010000 )
         if( nVersion != 0x00001000 )    // workaround for SunBatang etc.
             return -1;                  // unknown format or broken
 
-    typedef std::vector<ULONG> ReqFeatureTagList;
+    typedef std::vector<sal_uLong> ReqFeatureTagList;
     ReqFeatureTagList aReqFeatureTagList;
 
     aReqFeatureTagList.push_back( MKTAG("vert") );
 
-    typedef std::vector<USHORT> UshortList;
+    typedef std::vector<sal_uInt16> UshortList;
     UshortList aFeatureIndexList;
     UshortList aFeatureOffsetList;
 
     // parse Script Table
     const FT_Byte* pScriptHeader = pGsubBase + nOfsScriptList;
-    const USHORT nCntScript = NEXT_UShort( pScriptHeader );
+    const sal_uInt16 nCntScript = NEXT_UShort( pScriptHeader );
     if( pGsubLimit < pScriptHeader + 6 * nCntScript )
         return false;
-    for( USHORT nScriptIndex = 0; nScriptIndex < nCntScript; ++nScriptIndex )
+    for( sal_uInt16 nScriptIndex = 0; nScriptIndex < nCntScript; ++nScriptIndex )
     {
-        const ULONG nTag            = NEXT_Long( pScriptHeader ); // e.g. hani/arab/kana/hang
-        const USHORT nOfsScriptTable= NEXT_UShort( pScriptHeader );
-        if( (nTag != (USHORT)nRequestedScript) && (nRequestedScript != 0) )
+        const sal_uLong nTag            = NEXT_Long( pScriptHeader ); // e.g. hani/arab/kana/hang
+        const sal_uInt16 nOfsScriptTable= NEXT_UShort( pScriptHeader );
+        if( (nTag != (sal_uInt16)nRequestedScript) && (nRequestedScript != 0) )
             continue;
 
         const FT_Byte* pScriptTable     = pGsubBase + nOfsScriptList + nOfsScriptTable;
         if( pGsubLimit < pScriptTable + 4 )
             return false;
-        const USHORT nDefaultLangsysOfs = NEXT_UShort( pScriptTable );
-        const USHORT nCntLangSystem     = NEXT_UShort( pScriptTable );
-        USHORT nLangsysOffset = 0;
+        const sal_uInt16 nDefaultLangsysOfs = NEXT_UShort( pScriptTable );
+        const sal_uInt16 nCntLangSystem     = NEXT_UShort( pScriptTable );
+        sal_uInt16 nLangsysOffset = 0;
         if( pGsubLimit < pScriptTable + 6 * nCntLangSystem )
             return false;
-        for( USHORT nLangsysIndex = 0; nLangsysIndex < nCntLangSystem; ++nLangsysIndex )
+        for( sal_uInt16 nLangsysIndex = 0; nLangsysIndex < nCntLangSystem; ++nLangsysIndex )
         {
-            const ULONG nInnerTag = NEXT_Long( pScriptTable );    // e.g. KOR/ZHS/ZHT/JAN
-            const USHORT nOffset= NEXT_UShort( pScriptTable );
-            if( (nInnerTag != (USHORT)nRequestedLangsys) && (nRequestedLangsys != 0) )
+            const sal_uLong nInnerTag = NEXT_Long( pScriptTable );    // e.g. KOR/ZHS/ZHT/JAN
+            const sal_uInt16 nOffset= NEXT_UShort( pScriptTable );
+            if( (nInnerTag != (sal_uInt16)nRequestedLangsys) && (nRequestedLangsys != 0) )
                 continue;
             nLangsysOffset = nOffset;
             break;
@@ -132,15 +130,15 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
             const FT_Byte* pLangSys = pGsubBase + nOfsScriptList + nOfsScriptTable + nDefaultLangsysOfs;
             if( pGsubLimit < pLangSys + 6 )
                 return false;
-            /*const USHORT nLookupOrder   =*/ NEXT_UShort( pLangSys );
-            const USHORT nReqFeatureIdx = NEXT_UShort( pLangSys );
-            const USHORT nCntFeature    = NEXT_UShort( pLangSys );
+            /*const sal_uInt16 nLookupOrder   =*/ NEXT_UShort( pLangSys );
+            const sal_uInt16 nReqFeatureIdx = NEXT_UShort( pLangSys );
+            const sal_uInt16 nCntFeature    = NEXT_UShort( pLangSys );
             if( pGsubLimit < pLangSys + 2 * nCntFeature )
                 return false;
             aFeatureIndexList.push_back( nReqFeatureIdx );
-            for( USHORT i = 0; i < nCntFeature; ++i )
+            for( sal_uInt16 i = 0; i < nCntFeature; ++i )
             {
-                const USHORT nFeatureIndex = NEXT_UShort( pLangSys );
+                const sal_uInt16 nFeatureIndex = NEXT_UShort( pLangSys );
                 aFeatureIndexList.push_back( nFeatureIndex );
             }
         }
@@ -150,15 +148,15 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
             const FT_Byte* pLangSys = pGsubBase + nOfsScriptList + nOfsScriptTable + nLangsysOffset;
             if( pGsubLimit < pLangSys + 6 )
                 return false;
-            /*const USHORT nLookupOrder   =*/ NEXT_UShort( pLangSys );
-            const USHORT nReqFeatureIdx = NEXT_UShort( pLangSys );
-            const USHORT nCntFeature    = NEXT_UShort( pLangSys );
+            /*const sal_uInt16 nLookupOrder   =*/ NEXT_UShort( pLangSys );
+            const sal_uInt16 nReqFeatureIdx = NEXT_UShort( pLangSys );
+            const sal_uInt16 nCntFeature    = NEXT_UShort( pLangSys );
             if( pGsubLimit < pLangSys + 2 * nCntFeature )
                 return false;
             aFeatureIndexList.push_back( nReqFeatureIdx );
-            for( USHORT i = 0; i < nCntFeature; ++i )
+            for( sal_uInt16 i = 0; i < nCntFeature; ++i )
             {
-                const USHORT nFeatureIndex = NEXT_UShort( pLangSys );
+                const sal_uInt16 nFeatureIndex = NEXT_UShort( pLangSys );
                 aFeatureIndexList.push_back( nFeatureIndex );
             }
         }
@@ -174,13 +172,13 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
     const FT_Byte* pFeatureHeader = pGsubBase + nOfsFeatureTable;
     if( pGsubLimit < pFeatureHeader + 2 )
           return false;
-    const USHORT nCntFeature = NEXT_UShort( pFeatureHeader );
+    const sal_uInt16 nCntFeature = NEXT_UShort( pFeatureHeader );
     if( pGsubLimit < pFeatureHeader + 6 * nCntFeature )
           return false;
-    for( USHORT nFeatureIndex = 0; nFeatureIndex < nCntFeature; ++nFeatureIndex )
+    for( sal_uInt16 nFeatureIndex = 0; nFeatureIndex < nCntFeature; ++nFeatureIndex )
     {
-        const ULONG nTag    = NEXT_Long( pFeatureHeader ); // e.g. locl/vert/trad/smpl/liga/fina/...
-        const USHORT nOffset= NEXT_UShort( pFeatureHeader );
+        const sal_uLong nTag    = NEXT_Long( pFeatureHeader ); // e.g. locl/vert/trad/smpl/liga/fina/...
+        const sal_uInt16 nOffset= NEXT_UShort( pFeatureHeader );
 
         // ignore unneeded feature lookups
         if( aFeatureIndexList[0] != nFeatureIndex ) // do not ignore the required feature
@@ -196,12 +194,12 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
         const FT_Byte* pFeatureTable = pGsubBase + nOfsFeatureTable + nOffset;
         if( pGsubLimit < pFeatureTable + 2 )
             return false;
-        const USHORT nCntLookups = NEXT_UShort( pFeatureTable );
+        const sal_uInt16 nCntLookups = NEXT_UShort( pFeatureTable );
         if( pGsubLimit < pFeatureTable + 2 * nCntLookups )
             return false;
-        for( USHORT i = 0; i < nCntLookups; ++i )
+        for( sal_uInt16 i = 0; i < nCntLookups; ++i )
         {
-            const USHORT nLookupIndex = NEXT_UShort( pFeatureTable );
+            const sal_uInt16 nLookupIndex = NEXT_UShort( pFeatureTable );
             aLookupIndexList.push_back( nLookupIndex );
         }
         if( nCntLookups == 0 ) //### hack needed by Mincho/Gothic/Mingliu/Simsun/...
@@ -212,12 +210,12 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
     const FT_Byte* pLookupHeader = pGsubBase + nOfsLookupList;
     if( pGsubLimit < pLookupHeader + 2 )
         return false;
-    const USHORT nCntLookupTable = NEXT_UShort( pLookupHeader );
+    const sal_uInt16 nCntLookupTable = NEXT_UShort( pLookupHeader );
     if( pGsubLimit < pLookupHeader + 2 * nCntLookupTable )
         return false;
-    for( USHORT nLookupIdx = 0; nLookupIdx < nCntLookupTable; ++nLookupIdx )
+    for( sal_uInt16 nLookupIdx = 0; nLookupIdx < nCntLookupTable; ++nLookupIdx )
     {
-        const USHORT nOffset = NEXT_UShort( pLookupHeader );
+        const sal_uInt16 nOffset = NEXT_UShort( pLookupHeader );
         if( std::count( aLookupIndexList.begin(), aLookupIndexList.end(), nLookupIdx ) )
             aLookupOffsetList.push_back( nOffset );
     }
@@ -225,13 +223,13 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
     UshortList::const_iterator it = aLookupOffsetList.begin();
     for(; it != aLookupOffsetList.end(); ++it )
     {
-        const USHORT nOfsLookupTable = *it;
+        const sal_uInt16 nOfsLookupTable = *it;
         const FT_Byte* pLookupTable = pGsubBase + nOfsLookupList + nOfsLookupTable;
         if( pGsubLimit < pLookupTable + 6 )
             return false;
-        const USHORT eLookupType        = NEXT_UShort( pLookupTable );
-        /*const USHORT eLookupFlag        =*/ NEXT_UShort( pLookupTable );
-        const USHORT nCntLookupSubtable = NEXT_UShort( pLookupTable );
+        const sal_uInt16 eLookupType        = NEXT_UShort( pLookupTable );
+        /*const sal_uInt16 eLookupFlag        =*/ NEXT_UShort( pLookupTable );
+        const sal_uInt16 nCntLookupSubtable = NEXT_UShort( pLookupTable );
 
         // TODO: switch( eLookupType )
         if( eLookupType != 1 )  // TODO: once we go beyond SingleSubst
@@ -239,16 +237,16 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
 
         if( pGsubLimit < pLookupTable + 2 * nCntLookupSubtable )
             return false;
-        for( USHORT nSubTableIdx = 0; nSubTableIdx < nCntLookupSubtable; ++nSubTableIdx )
+        for( sal_uInt16 nSubTableIdx = 0; nSubTableIdx < nCntLookupSubtable; ++nSubTableIdx )
         {
-            const USHORT nOfsSubLookupTable = NEXT_UShort( pLookupTable );
+            const sal_uInt16 nOfsSubLookupTable = NEXT_UShort( pLookupTable );
             const FT_Byte* pSubLookup = pGsubBase + nOfsLookupList + nOfsLookupTable + nOfsSubLookupTable;
             if( pGsubLimit < pSubLookup + 6 )
                 return false;
-            const USHORT nFmtSubstitution   = NEXT_UShort( pSubLookup );
-            const USHORT nOfsCoverage       = NEXT_UShort( pSubLookup );
+            const sal_uInt16 nFmtSubstitution   = NEXT_UShort( pSubLookup );
+            const sal_uInt16 nOfsCoverage       = NEXT_UShort( pSubLookup );
 
-            typedef std::pair<USHORT,USHORT> GlyphSubst;
+            typedef std::pair<sal_uInt16,sal_uInt16> GlyphSubst;
             typedef std::vector<GlyphSubst> SubstVector;
             SubstVector aSubstVector;
 
@@ -256,19 +254,19 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
                 + nOfsLookupList + nOfsLookupTable + nOfsSubLookupTable + nOfsCoverage;
             if( pGsubLimit < pCoverage + 4 )
                 return false;
-            const USHORT nFmtCoverage   = NEXT_UShort( pCoverage );
+            const sal_uInt16 nFmtCoverage   = NEXT_UShort( pCoverage );
             switch( nFmtCoverage )
             {
                 case 1:         // Coverage Format 1
                 {
-                    const USHORT nCntGlyph = NEXT_UShort( pCoverage );
+                    const sal_uInt16 nCntGlyph = NEXT_UShort( pCoverage );
                     if( pGsubLimit < pCoverage + 2 * nCntGlyph )
                         // TODO? nCntGlyph = (pGsubLimit - pCoverage) / 2;
                         return false;
                     aSubstVector.reserve( nCntGlyph );
-                    for( USHORT i = 0; i < nCntGlyph; ++i )
+                    for( sal_uInt16 i = 0; i < nCntGlyph; ++i )
                     {
-                        const USHORT nGlyphId = NEXT_UShort( pCoverage );
+                        const sal_uInt16 nGlyphId = NEXT_UShort( pCoverage );
                         aSubstVector.push_back( GlyphSubst( nGlyphId, 0 ) );
                     }
                 }
@@ -276,17 +274,17 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
 
                 case 2:         // Coverage Format 2
                 {
-                    const USHORT nCntRange = NEXT_UShort( pCoverage );
+                    const sal_uInt16 nCntRange = NEXT_UShort( pCoverage );
                     if( pGsubLimit < pCoverage + 6 * nCntRange )
                         // TODO? nCntGlyph = (pGsubLimit - pCoverage) / 6;
                         return false;
                     for( int i = nCntRange; --i >= 0; )
                     {
-                        const UINT32 nGlyph0 = NEXT_UShort( pCoverage );
-                        const UINT32 nGlyph1 = NEXT_UShort( pCoverage );
-                        const USHORT nCovIdx = NEXT_UShort( pCoverage );
-                        for( UINT32 j = nGlyph0; j <= nGlyph1; ++j )
-                            aSubstVector.push_back( GlyphSubst( static_cast<USHORT>(j + nCovIdx), 0 ) );
+                        const sal_uInt32 nGlyph0 = NEXT_UShort( pCoverage );
+                        const sal_uInt32 nGlyph1 = NEXT_UShort( pCoverage );
+                        const sal_uInt16 nCovIdx = NEXT_UShort( pCoverage );
+                        for( sal_uInt32 j = nGlyph0; j <= nGlyph1; ++j )
+                            aSubstVector.push_back( GlyphSubst( static_cast<sal_uInt16>(j + nCovIdx), 0 ) );
                     }
                 }
                 break;
@@ -298,7 +296,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
             {
                 case 1:     // Single Substitution Format 1
                 {
-                    const USHORT nDeltaGlyphId = NEXT_UShort( pSubLookup );
+                    const sal_uInt16 nDeltaGlyphId = NEXT_UShort( pSubLookup );
 
                     for(; subst_it != aSubstVector.end(); ++subst_it )
                         (*subst_it).second = (*subst_it).first + nDeltaGlyphId;
@@ -307,12 +305,12 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
 
                 case 2:     // Single Substitution Format 2
                 {
-                    const USHORT nCntGlyph = NEXT_UShort( pSubLookup );
+                    const sal_uInt16 nCntGlyph = NEXT_UShort( pSubLookup );
                     for( int i = nCntGlyph; (subst_it != aSubstVector.end()) && (--i>=0); ++subst_it )
                     {
                         if( pGsubLimit < pSubLookup + 2 )
                             return false;
-                        const USHORT nGlyphId = NEXT_UShort( pSubLookup );
+                        const sal_uInt16 nGlyphId = NEXT_UShort( pSubLookup );
                         (*subst_it).second = nGlyphId;
                     }
                 }
@@ -344,7 +342,7 @@ int UseGSUB( struct _TrueTypeFont* pTTFile, int nGlyph, int /*wmode*/ )
     GlyphSubstitution* pGlyphSubstitution = (GlyphSubstitution*)pTTFile->pGSubstitution;
     if( pGlyphSubstitution != 0 )
     {
-        GlyphSubstitution::const_iterator it( pGlyphSubstitution->find( sal::static_int_cast<USHORT>(nGlyph) ) );
+        GlyphSubstitution::const_iterator it( pGlyphSubstitution->find( sal::static_int_cast<sal_uInt16>(nGlyph) ) );
         if( it != pGlyphSubstitution->end() )
             nGlyph = (*it).second;
     }

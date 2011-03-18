@@ -25,11 +25,11 @@
  *
 ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 
 #include "comphelper_module.hxx"
 #include "comphelper/anytostring.hxx"
+#include "comphelper/anycompare.hxx"
 #include "comphelper/componentbase.hxx"
 #include "comphelper/componentcontext.hxx"
 #include "comphelper/extract.hxx"
@@ -48,9 +48,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <typelib/typedescription.hxx>
 
-#include <functional>
 #include <map>
-#include <memory>
 #include <boost/shared_ptr.hpp>
 
 //........................................................................
@@ -80,26 +78,14 @@ namespace comphelper
     using ::com::sun::star::beans::Pair;
     using ::com::sun::star::uno::TypeClass;
     using ::com::sun::star::uno::TypeClass_VOID;
-    using ::com::sun::star::uno::TypeClass_CHAR;
-    using ::com::sun::star::uno::TypeClass_BOOLEAN;
-    using ::com::sun::star::uno::TypeClass_BYTE;
-    using ::com::sun::star::uno::TypeClass_SHORT;
-    using ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT;
-    using ::com::sun::star::uno::TypeClass_LONG;
-    using ::com::sun::star::uno::TypeClass_UNSIGNED_LONG;
-    using ::com::sun::star::uno::TypeClass_HYPER;
-    using ::com::sun::star::uno::TypeClass_UNSIGNED_HYPER;
-    using ::com::sun::star::uno::TypeClass_FLOAT;
-    using ::com::sun::star::uno::TypeClass_DOUBLE;
-    using ::com::sun::star::uno::TypeClass_STRING;
-    using ::com::sun::star::uno::TypeClass_TYPE;
-    using ::com::sun::star::uno::TypeClass_ENUM;
-    using ::com::sun::star::uno::TypeClass_INTERFACE;
     using ::com::sun::star::uno::TypeClass_UNKNOWN;
     using ::com::sun::star::uno::TypeClass_ANY;
     using ::com::sun::star::uno::TypeClass_EXCEPTION;
     using ::com::sun::star::uno::TypeClass_STRUCT;
     using ::com::sun::star::uno::TypeClass_UNION;
+    using ::com::sun::star::uno::TypeClass_FLOAT;
+    using ::com::sun::star::uno::TypeClass_DOUBLE;
+    using ::com::sun::star::uno::TypeClass_INTERFACE;
     using ::com::sun::star::lang::XServiceInfo;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::container::XEnumeration;
@@ -107,136 +93,6 @@ namespace comphelper
     using ::com::sun::star::lang::WrappedTargetException;
     using ::com::sun::star::lang::DisposedException;
     /** === end UNO using === **/
-
-    //====================================================================
-    //= IKeyPredicateLess
-    //====================================================================
-    class SAL_NO_VTABLE IKeyPredicateLess
-    {
-    public:
-        virtual bool isLess( const Any& _lhs, const Any& _rhs ) const = 0;
-        virtual ~IKeyPredicateLess() {}
-    };
-
-    //====================================================================
-    //= LessPredicateAdapter
-    //====================================================================
-    struct LessPredicateAdapter : public ::std::binary_function< Any, Any, bool >
-    {
-        LessPredicateAdapter( const IKeyPredicateLess& _predicate )
-            :m_predicate( _predicate )
-        {
-        }
-
-        bool operator()( const Any& _lhs, const Any& _rhs ) const
-        {
-            return m_predicate.isLess( _lhs, _rhs );
-        }
-
-    private:
-        const IKeyPredicateLess&    m_predicate;
-
-    private:
-        LessPredicateAdapter(); // never implemented
-    };
-
-    //====================================================================
-    //= ScalarPredicateLess
-    //====================================================================
-    template< typename SCALAR >
-    class ScalarPredicateLess : public IKeyPredicateLess
-    {
-    public:
-        virtual bool isLess( const Any& _lhs, const Any& _rhs ) const
-        {
-            SCALAR lhs(0), rhs(0);
-            if  (   !( _lhs >>= lhs )
-                ||  !( _rhs >>= rhs )
-                )
-                throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported key type." ) ), NULL, 1 );
-            return lhs < rhs;
-        }
-    };
-
-    //====================================================================
-    //= StringPredicateLess
-    //====================================================================
-    class StringPredicateLess : public IKeyPredicateLess
-    {
-    public:
-        virtual bool isLess( const Any& _lhs, const Any& _rhs ) const
-        {
-            ::rtl::OUString lhs, rhs;
-            if  (   !( _lhs >>= lhs )
-                ||  !( _rhs >>= rhs )
-                )
-                throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported key type." ) ), NULL, 1 );
-            return lhs < rhs;
-        }
-    };
-
-    //====================================================================
-    //= TypePredicateLess
-    //====================================================================
-    class TypePredicateLess : public IKeyPredicateLess
-    {
-    public:
-        virtual bool isLess( const Any& _lhs, const Any& _rhs ) const
-        {
-            Type lhs, rhs;
-            if  (   !( _lhs >>= lhs )
-                ||  !( _rhs >>= rhs )
-                )
-                throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported key type." ) ), NULL, 1 );
-            return lhs.getTypeName() < rhs.getTypeName();
-        }
-    };
-
-    //====================================================================
-    //= EnumPredicateLess
-    //====================================================================
-    class EnumPredicateLess : public IKeyPredicateLess
-    {
-    public:
-        EnumPredicateLess( const Type& _enumType )
-            :m_enumType( _enumType )
-        {
-        }
-
-        virtual bool isLess( const Any& _lhs, const Any& _rhs ) const
-        {
-            sal_Int32 lhs(0), rhs(0);
-            if  (   !::cppu::enum2int( lhs, _lhs )
-                ||  !::cppu::enum2int( rhs, _rhs )
-                ||  !_lhs.getValueType().equals( m_enumType )
-                ||  !_rhs.getValueType().equals( m_enumType )
-                )
-                throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported key type." ) ), NULL, 1 );
-            return lhs < rhs;
-        }
-
-    private:
-        const Type  m_enumType;
-    };
-
-    //====================================================================
-    //= InterfacePredicateLess
-    //====================================================================
-    class InterfacePredicateLess : public IKeyPredicateLess
-    {
-    public:
-        virtual bool isLess( const Any& _lhs, const Any& _rhs ) const
-        {
-            if  (   ( _lhs.getValueTypeClass() != TypeClass_INTERFACE )
-                ||  ( _rhs.getValueTypeClass() != TypeClass_INTERFACE )
-                )
-                throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported key type." ) ), NULL, 1 );
-
-            Reference< XInterface > lhs( _lhs, UNO_QUERY );
-            Reference< XInterface > rhs( _rhs, UNO_QUERY );
-            return lhs.get() < rhs.get();
-        }
-    };
 
     //====================================================================
     //= MapData
@@ -550,58 +406,9 @@ namespace comphelper
             throw IllegalTypeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported value type." ) ), *this );
 
         // create the comparator for the KeyType, and throw if the type is not supported
-        TypeClass eKeyTypeClass = aKeyType.getTypeClass();
-        ::std::auto_ptr< IKeyPredicateLess > pComparator;
-        switch ( eKeyTypeClass )
-        {
-        case TypeClass_CHAR:
-            pComparator.reset( new ScalarPredicateLess< sal_Unicode >() );
-            break;
-        case TypeClass_BOOLEAN:
-            pComparator.reset( new ScalarPredicateLess< sal_Bool >() );
-            break;
-        case TypeClass_BYTE:
-            pComparator.reset( new ScalarPredicateLess< sal_Int8 >() );
-            break;
-        case TypeClass_SHORT:
-            pComparator.reset( new ScalarPredicateLess< sal_Int16 >() );
-            break;
-        case TypeClass_UNSIGNED_SHORT:
-            pComparator.reset( new ScalarPredicateLess< sal_uInt16 >() );
-            break;
-        case TypeClass_LONG:
-            pComparator.reset( new ScalarPredicateLess< sal_Int32 >() );
-            break;
-        case TypeClass_UNSIGNED_LONG:
-            pComparator.reset( new ScalarPredicateLess< sal_uInt32 >() );
-            break;
-        case TypeClass_HYPER:
-            pComparator.reset( new ScalarPredicateLess< sal_Int64 >() );
-            break;
-        case TypeClass_UNSIGNED_HYPER:
-            pComparator.reset( new ScalarPredicateLess< sal_uInt64 >() );
-            break;
-        case TypeClass_FLOAT:
-            pComparator.reset( new ScalarPredicateLess< float >() );
-            break;
-        case TypeClass_DOUBLE:
-            pComparator.reset( new ScalarPredicateLess< double >() );
-            break;
-        case TypeClass_STRING:
-            pComparator.reset( new StringPredicateLess() );
-            break;
-        case TypeClass_TYPE:
-            pComparator.reset( new TypePredicateLess() );
-            break;
-        case TypeClass_ENUM:
-            pComparator.reset( new EnumPredicateLess( aKeyType ) );
-            break;
-        case TypeClass_INTERFACE:
-            pComparator.reset( new InterfacePredicateLess() );
-            break;
-        default:
+        ::std::auto_ptr< IKeyPredicateLess > pComparator( getStandardLessPredicate( aKeyType, NULL ) );
+        if ( !pComparator.get() )
             throw IllegalTypeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported key type." ) ), *this );
-        }
 
         // init members
         m_aData.m_aKeyType = aKeyType;

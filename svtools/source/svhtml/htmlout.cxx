@@ -37,7 +37,7 @@
 #include <svl/zforlist.hxx>
 
 #include <svtools/htmlout.hxx>
-#include "htmlkywd.hxx"
+#include <svtools/htmlkywd.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>
@@ -529,7 +529,7 @@ void HTMLOutFuncs::ConvertStringToHTML( const String& rSrc,
 }
 
 SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const sal_Char *pStr,
-                                      BOOL bOn, rtl_TextEncoding )
+                                      sal_Bool bOn, rtl_TextEncoding )
 {
     sal_Char sStt[3] = "</";
     if( bOn )
@@ -570,7 +570,7 @@ SvStream& HTMLOutFuncs::FlushToAscii( SvStream& rStream,
     return rStream;
 }
 
-SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, ULONG nHex, BYTE nLen,
+SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen,
                                    rtl_TextEncoding )
 {                                                  // in einen Stream aus
     sal_Char aNToABuf[] = "0000000000000000";
@@ -581,7 +581,7 @@ SvStream& HTMLOutFuncs::Out_Hex( SvStream& rStream, ULONG nHex, BYTE nLen,
 
     // Pointer an das Bufferende setzen
     sal_Char *pStr = aNToABuf + (sizeof(aNToABuf)-1);
-    for( BYTE n = 0; n < nLen; ++n )
+    for( sal_uInt8 n = 0; n < nLen; ++n )
     {
         *(--pStr) = (sal_Char)(nHex & 0xf ) + 48;
         if( *pStr > '9' )
@@ -616,7 +616,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                                       const ImageMap& rIMap,
                                       const String& rName,
                                       const HTMLOutEvent *pEventTable,
-                                      BOOL bOutStarBasic,
+                                      sal_Bool bOutStarBasic,
                                       const sal_Char *pDelim,
                                       const sal_Char *pIndentArea,
                                       const sal_Char *pIndentMap,
@@ -641,7 +641,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
     Out_String( rStream, rOutName, eDestEnc, pNonConvertableChars );
     rStream << "\">";
 
-    for( USHORT i=0U; i<rIMap.GetIMapObjectCount(); i++ )
+    for( sal_uInt16 i=0U; i<rIMap.GetIMapObjectCount(); i++ )
     {
         const IMapObject* pObj = rIMap.GetIMapObject( i );
         DBG_ASSERT( pObj, "Wo ist das ImageMap-Object?" );
@@ -684,7 +684,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                         (const IMapPolygonObject *)pObj;
                     pShape= OOO_STRING_SVTOOLS_HTML_SH_poly;
                     Polygon aPoly( pPolyObj->GetPolygon() );
-                    USHORT nCount = aPoly.GetSize();
+                    sal_uInt16 nCount = aPoly.GetSize();
                     if( nCount>0 )
                     {
                         const Point& rPoint = aPoly[0];
@@ -692,7 +692,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                             ByteString::CreateFromInt32(rPoint.X())) += ',')
                             += ByteString::CreateFromInt32(rPoint.Y());
                     }
-                    for( USHORT j=1; j<nCount; j++ )
+                    for( sal_uInt16 j=1; j<nCount; j++ )
                     {
                         const Point& rPoint = aPoly[j];
                         (((aCoords += ',')
@@ -772,7 +772,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
         rStream << pDelim;
     if( pIndentMap )
         rStream << pIndentMap;
-    Out_AsciiTag( rStream, OOO_STRING_SVTOOLS_HTML_map, FALSE );
+    Out_AsciiTag( rStream, OOO_STRING_SVTOOLS_HTML_map, sal_False );
 
     return rStream;
 }
@@ -886,7 +886,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
         }
     }
 
-    HTMLOutFuncs::Out_AsciiTag( rStrm, OOO_STRING_SVTOOLS_HTML_script, FALSE );
+    HTMLOutFuncs::Out_AsciiTag( rStrm, OOO_STRING_SVTOOLS_HTML_script, sal_False );
 
     return rStrm;
 }
@@ -895,11 +895,11 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
                                     const SvxMacroTableDtor& rMacroTable,
                                     const HTMLOutEvent *pEventTable,
-                                    BOOL bOutStarBasic,
+                                    sal_Bool bOutStarBasic,
                                     rtl_TextEncoding eDestEnc,
                                     String *pNonConvertableChars )
 {
-    USHORT i=0;
+    sal_uInt16 i=0;
     while( pEventTable[i].pBasicName || pEventTable[i].pJavaName )
     {
         const SvxMacro *pMacro =
@@ -928,8 +928,8 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
 }
 
 ByteString& HTMLOutFuncs::CreateTableDataOptionsValNum( ByteString& aStrTD,
-            BOOL bValue,
-            double fVal, ULONG nFormat, SvNumberFormatter& rFormatter,
+            sal_Bool bValue,
+            double fVal, sal_uLong nFormat, SvNumberFormatter& rFormatter,
             rtl_TextEncoding eDestEnc, String* pNonConvertableChars )
 {
     if ( bValue )
@@ -966,16 +966,16 @@ ByteString& HTMLOutFuncs::CreateTableDataOptionsValNum( ByteString& aStrTD,
     return aStrTD;
 }
 
-BOOL HTMLOutFuncs::PrivateURLToInternalImg( String& rURL )
+sal_Bool HTMLOutFuncs::PrivateURLToInternalImg( String& rURL )
 {
     if( rURL.Len() > 14UL &&
         rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_private_image, 14UL ) == COMPARE_EQUAL )
     {
         rURL.Erase( 0UL, 14UL );
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 

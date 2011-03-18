@@ -252,7 +252,7 @@ bool HelpParser::CreateSDF(
         DirEntry aTempFile( sUsedTempFile );
         aTempFile.Kill();
     }
-    return TRUE;
+    return sal_True;
 }
 
 ByteString HelpParser::makeAbsolutePath( const ByteString& sHelpFile , const ByteString& rRoot_in )
@@ -564,9 +564,9 @@ void HelpParser::MakeDir( const ByteString& sPath ){
     ByteString sTPath( sPath );
     ByteString sDelimiter( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
     sTPath.SearchAndReplaceAll( sDelimiter , '/' );
-    USHORT cnt = sTPath.GetTokenCount( '/' );
+    sal_uInt16 cnt = sTPath.GetTokenCount( '/' );
     ByteString sCreateDir;
-    for( USHORT i = 0 ; i < cnt ; i++ )
+    for( sal_uInt16 i = 0 ; i < cnt ; i++ )
     {
         sCreateDir += sTPath.GetToken( i , '/' );
         sCreateDir += sDelimiter;

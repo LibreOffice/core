@@ -920,7 +920,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
                 assert((nChar2BaseJ >= -1) && (nChar2BaseJ < (signed)mvGlyphs.size()));
                 if (nChar2BaseJ != -1 )
                 {
-                    nLastGlyph = nChar2BaseJ + ((bRtl)? 1 : -1);
+                    nLastGlyph = nChar2BaseJ + ((bRtl)? +1 : -1);
                     nLastChar = j - 1;
                     break;
                 }

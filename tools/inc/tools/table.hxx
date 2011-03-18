@@ -41,34 +41,34 @@
 class TOOLS_DLLPUBLIC Table : private Container
 {
 private:
-    ULONG   nCount;
-    TOOLS_DLLPRIVATE ULONG  ImplGetIndex( ULONG nKey, ULONG* pIndex = NULL ) const;
+    sal_uIntPtr nCount;
+    TOOLS_DLLPRIVATE sal_uIntPtr    ImplGetIndex( sal_uIntPtr nKey, sal_uIntPtr* pIndex = NULL ) const;
 public:
-            Table( USHORT nInitSize = 16, USHORT nReSize = 16 );
+            Table( sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16 );
             Table( const Table& rTable ) : Container( rTable )
                 { nCount = rTable.nCount; }
 
-    BOOL    Insert( ULONG nKey, void* p );
-    void*   Remove( ULONG nKey );
-    void*   Replace( ULONG nKey, void* p );
-    void*   Get( ULONG nKey ) const;
+    sal_Bool    Insert( sal_uIntPtr nKey, void* p );
+    void*   Remove( sal_uIntPtr nKey );
+    void*   Replace( sal_uIntPtr nKey, void* p );
+    void*   Get( sal_uIntPtr nKey ) const;
 
     void    Clear() { Container::Clear(); nCount = 0; }
-    ULONG   Count() const { return( nCount ); }
+    sal_uIntPtr Count() const { return( nCount ); }
 
     void*   GetCurObject() const;
-    ULONG   GetCurKey() const { return (ULONG)Container::GetCurObject(); }
-    ULONG   GetKey( const void* p ) const;
-    BOOL    IsKeyValid( ULONG nKey ) const;
+    sal_uIntPtr GetCurKey() const { return (sal_uIntPtr)Container::GetCurObject(); }
+    sal_uIntPtr GetKey( const void* p ) const;
+    sal_Bool    IsKeyValid( sal_uIntPtr nKey ) const;
 
-    void*   GetObject( ULONG nPos ) const
+    void*   GetObject( sal_uIntPtr nPos ) const
                 { return Container::GetObject( (nPos*2)+1 ); }
-    ULONG   GetObjectKey( ULONG nPos ) const
-                { return (ULONG)Container::GetObject( nPos*2 ); }
-    ULONG   GetUniqueKey( ULONG nStartKey = 1 ) const;
-    ULONG   SearchKey( ULONG nKey, ULONG* pPos = NULL ) const;
+    sal_uIntPtr GetObjectKey( sal_uIntPtr nPos ) const
+                { return (sal_uIntPtr)Container::GetObject( nPos*2 ); }
+    sal_uIntPtr GetUniqueKey( sal_uIntPtr nStartKey = 1 ) const;
+    sal_uIntPtr SearchKey( sal_uIntPtr nKey, sal_uIntPtr* pPos = NULL ) const;
 
-    void*   Seek( ULONG nKey );
+    void*   Seek( sal_uIntPtr nKey );
     void*   Seek( void* p );
     void*   First();
     void*   Last();
@@ -77,9 +77,9 @@ public:
 
     Table&  operator =( const Table& rTable );
 
-    BOOL    operator ==( const Table& rTable ) const
+    sal_Bool    operator ==( const Table& rTable ) const
                 { return Container::operator ==( rTable ); }
-    BOOL    operator !=( const Table& rTable ) const
+    sal_Bool    operator !=( const Table& rTable ) const
                 { return Container::operator !=( rTable ); }
 };
 
@@ -106,30 +106,30 @@ public:                                                                 \
                 using Table::SearchKey;                                 \
                 using Table::IsKeyValid;                                \
                                                                         \
-                ClassName( USHORT _nInitSize = 16,                      \
-                           USHORT _nReSize = 16 ) :                     \
+                ClassName( sal_uInt16 _nInitSize = 16,                      \
+                           sal_uInt16 _nReSize = 16 ) :                     \
                     Table( _nInitSize, _nReSize ) {}                    \
                 ClassName( const ClassName& rClassName ) :              \
                     Table( rClassName ) {}                              \
                                                                         \
-    BOOL        Insert( ULONG nKey, Type p )                            \
+    sal_Bool        Insert( sal_uIntPtr nKey, Type p )                          \
                     { return Table::Insert( nKey, (void*)p ); }         \
-    Type        Remove( ULONG nKey )                                    \
+    Type        Remove( sal_uIntPtr nKey )                                  \
                     { return (Type)Table::Remove( nKey ); }             \
-    Type        Replace( ULONG nKey, Type p )                           \
+    Type        Replace( sal_uIntPtr nKey, Type p )                         \
                     { return (Type)Table::Replace( nKey, (void*)p ); }  \
-    Type        Get( ULONG nKey ) const                                 \
+    Type        Get( sal_uIntPtr nKey ) const                               \
                     { return (Type)Table::Get( nKey ); }                \
                                                                         \
     Type        GetCurObject() const                                    \
                     { return (Type)Table::GetCurObject(); }             \
-    ULONG       GetKey( const Type p ) const                            \
+    sal_uIntPtr     GetKey( const Type p ) const                            \
                     { return Table::GetKey( (const void*)p ); }         \
                                                                         \
-    Type        GetObject( ULONG nPos ) const                           \
+    Type        GetObject( sal_uIntPtr nPos ) const                         \
                     { return (Type)Table::GetObject( nPos ); }          \
                                                                         \
-    Type        Seek( ULONG nKey )                                      \
+    Type        Seek( sal_uIntPtr nKey )                                        \
                     { return (Type)Table::Seek( nKey ); }               \
     Type        Seek( Type p )                                          \
                     { return (Type)Table::Seek( (void*)p ); }           \
@@ -142,9 +142,9 @@ public:                                                                 \
                     { Table::operator =( rClassName );                  \
                       return *this; }                                   \
                                                                         \
-    BOOL        operator ==( const ClassName& rTable ) const            \
+    sal_Bool        operator ==( const ClassName& rTable ) const            \
                     { return Table::operator ==( rTable ); }            \
-    BOOL        operator !=( const ClassName& rTable ) const            \
+    sal_Bool        operator !=( const ClassName& rTable ) const            \
                     { return Table::operator !=( rTable ); }            \
 };
 

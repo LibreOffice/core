@@ -36,9 +36,8 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <imgdef.hxx>
+#include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
-
 #include <toolkit/unohlp.hxx>
 #include <vcl/toolbox.hxx>
 //shizhobo
@@ -789,7 +788,7 @@ sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( com::sun::star::u
     {
         case TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE:
         {
-            sal_Bool aNewValue;
+            sal_Bool aNewValue(sal_False);
             aValue >>= aNewValue;
             if (aNewValue != m_bSupportVisiable)
             {
@@ -832,7 +831,7 @@ void ToolboxController::enable( bool bEnable )
     sal_uInt16 nItemId = 0;
     if( getToolboxId( nItemId, &pToolBox ) )
     {
-        pToolBox->EnableItem( nItemId, bEnable ? TRUE : FALSE );
+        pToolBox->EnableItem( nItemId, bEnable ? sal_True : sal_False );
     }
 }
 

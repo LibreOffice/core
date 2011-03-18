@@ -81,7 +81,7 @@ namespace cairocanvas
                               sal_Int8      nTextDirection )
         {
             // TODO(P3): avoid if already correctly set
-            ULONG nLayoutMode;
+            sal_uLong nLayoutMode;
             switch( nTextDirection )
             {
                 default:
@@ -214,8 +214,8 @@ namespace cairocanvas
             return geometry::RealRectangle2D( 0, nAboveBaseline,
                                               aVDev.GetTextWidth(
                                                   maText.Text,
-                                                  ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
-                                                  ::canvas::tools::numeric_cast<USHORT>(maText.Length) ),
+                                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) ),
                                               nBelowBaseline );
         }
     }
@@ -404,8 +404,8 @@ namespace cairocanvas
         }
 
         aSysLayoutData = rOutDev.GetSysTextLayoutData(rOutpos, maText.Text,
-                                                      ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
-                                                      ::canvas::tools::numeric_cast<USHORT>(maText.Length),
+                                                      ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                                                      ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length),
                                                       maLogicalAdvancements.getLength() ? aOffsets.get() : NULL);
 
         // Sort them so that all glyphs on the same glyph fallback level are consecutive
@@ -416,14 +416,14 @@ namespace cairocanvas
         typedef std::pair<SystemFontData,int> FontLevel;
         typedef std::vector<FontLevel> FontLevelVector;
         FontLevelVector aFontData;
-        SystemGlyphDataVector::const_iterator aGlyphIter=aSysLayoutData.rGlyphData.begin();
-        const SystemGlyphDataVector::const_iterator aGlyphEnd=aSysLayoutData.rGlyphData.end();
-        for( ; aGlyphIter != aGlyphEnd; ++aGlyphIter )
+        SystemGlyphDataVector::const_iterator aIter=aSysLayoutData.rGlyphData.begin();
+        const SystemGlyphDataVector::const_iterator aEnd=aSysLayoutData.rGlyphData.end();
+        for( ; aIter != aEnd; ++aIter )
         {
-            if( aFontData.empty() || aGlyphIter->fallbacklevel != aFontData.back().second )
+            if( aFontData.empty() || aIter->fallbacklevel != aFontData.back().second )
             {
-                aFontData.push_back(FontLevel(rOutDev.GetSysFontData(aGlyphIter->fallbacklevel),
-                                              aGlyphIter->fallbacklevel));
+                aFontData.push_back(FontLevel(rOutDev.GetSysFontData(aIter->fallbacklevel),
+                                              aIter->fallbacklevel));
                 if( !isCairoRenderable(aFontData.back().first) )
                 {
                     bCairoRenderable = false;
@@ -446,15 +446,15 @@ namespace cairocanvas
             if (maLogicalAdvancements.getLength())        // VCL FALLBACK - with glyph advances
             {
                 rOutDev.DrawTextArray( rOutpos, maText.Text, aOffsets.get(),
-                                       ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
-                                       ::canvas::tools::numeric_cast<USHORT>(maText.Length) );
+                                       ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                                       ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
                 return true;
             }
             else                                               // VCL FALLBACK - without advances
             {
                 rOutDev.DrawText( rOutpos, maText.Text,
-                                  ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
-                                  ::canvas::tools::numeric_cast<USHORT>(maText.Length) );
+                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
                 return true;
             }
         }
@@ -476,10 +476,11 @@ namespace cairocanvas
             std::vector<cairo_glyph_t> cairo_glyphs;
             cairo_glyphs.reserve( 256 );
 
-            aGlyphIter=aSysLayoutData.rGlyphData.begin();
-            for( ; aGlyphIter != aGlyphEnd; ++aGlyphIter )
+            SystemGlyphDataVector::const_iterator aIter=aSysLayoutData.rGlyphData.begin();
+            const SystemGlyphDataVector::const_iterator aEnd=aSysLayoutData.rGlyphData.end();
+            for( ; aIter != aEnd; ++aIter )
             {
-                SystemGlyphData systemGlyph = *aGlyphIter;
+                SystemGlyphData systemGlyph = *aIter;
                 if( systemGlyph.fallbacklevel != aFontDataIter->second )
                     continue;
 

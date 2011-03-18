@@ -29,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "rtfkeywd.hxx"
-#include "rtftoken.h"
+#include <svtools/rtfkeywd.hxx>
+#include <svtools/rtftoken.h>
 #include "tools/string.hxx"
 
 #include <string.h>
@@ -48,7 +48,7 @@ struct RTF_TokenEntry
 };
 
 // Flag: RTF-Token Tabelle wurde schon sortiert
-static int bSortKeyWords = FALSE;
+static int bSortKeyWords = sal_False;
 
 static RTF_TokenEntry aRTFTokenTab[] = {
 {{OOO_STRING_SVTOOLS_RTF_IGNORE},        RTF_IGNOREFLAG},
@@ -1227,7 +1227,7 @@ int GetRTFToken( const String& rSearch )
                 sizeof( aRTFTokenTab ) / sizeof( RTF_TokenEntry ),
                 sizeof( RTF_TokenEntry ),
                 RTFKeyCompare );
-        bSortKeyWords = TRUE;
+        bSortKeyWords = sal_True;
     }
 
     int nRet = 0;

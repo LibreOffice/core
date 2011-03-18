@@ -48,50 +48,50 @@ double Line::GetLength() const
 
 // ------------------------------------------------------------------------
 
-BOOL Line::Intersection( const Line& rLine, Point& rIntersection ) const
+sal_Bool Line::Intersection( const Line& rLine, Point& rIntersection ) const
 {
     double  fX, fY;
-    BOOL    bRet;
+    sal_Bool    bRet;
 
     if( Intersection( rLine, fX, fY ) )
     {
         rIntersection.X() = FRound( fX );
         rIntersection.Y() = FRound( fY );
-        bRet = TRUE;
+        bRet = sal_True;
     }
     else
-        bRet = FALSE;
+        bRet = sal_False;
 
     return bRet;
 }
 
 // ------------------------------------------------------------------------
 
-BOOL Line::Intersection( const Line& rLine, double& rIntersectionX, double& rIntersectionY ) const
+sal_Bool Line::Intersection( const Line& rLine, double& rIntersectionX, double& rIntersectionY ) const
 {
     const double    fAx = maEnd.X() - maStart.X();
     const double    fAy = maEnd.Y() - maStart.Y();
     const double    fBx = rLine.maStart.X() - rLine.maEnd.X();
     const double    fBy = rLine.maStart.Y() - rLine.maEnd.Y();
     const double    fDen = fAy * fBx - fAx * fBy;
-    BOOL            bOk = FALSE;
+    sal_Bool            bOk = sal_False;
 
     if( fDen != 0. )
     {
         const double    fCx = maStart.X() - rLine.maStart.X();
         const double    fCy = maStart.Y() - rLine.maStart.Y();
         const double    fA = fBy * fCx - fBx * fCy;
-        const BOOL      bGreater = ( fDen > 0. );
+        const sal_Bool      bGreater = ( fDen > 0. );
 
-        bOk = TRUE;
+        bOk = sal_True;
 
         if ( bGreater )
         {
             if ( ( fA < 0. ) || ( fA > fDen ) )
-                bOk = FALSE;
+                bOk = sal_False;
         }
         else if ( ( fA > 0. ) || ( fA < fDen ) )
-            bOk = FALSE;
+            bOk = sal_False;
 
         if ( bOk )
         {
@@ -100,10 +100,10 @@ BOOL Line::Intersection( const Line& rLine, double& rIntersectionX, double& rInt
             if ( bGreater )
             {
                 if ( ( fB < 0. ) || ( fB > fDen ) )
-                    bOk = FALSE;
+                    bOk = sal_False;
             }
             else if ( ( fB > 0. ) || ( fB < fDen ) )
-                bOk = FALSE;
+                bOk = sal_False;
 
             if( bOk )
             {
@@ -120,11 +120,11 @@ BOOL Line::Intersection( const Line& rLine, double& rIntersectionX, double& rInt
 
 // ------------------------------------------------------------------------
 
-BOOL Line::Intersection( const Rectangle& rRect, Line& rIntersection ) const
+sal_Bool Line::Intersection( const Rectangle& rRect, Line& rIntersection ) const
 {
-    const BOOL  bStartInside = rRect.IsInside( maStart );
-    const BOOL  bEndInside = rRect.IsInside( maEnd );
-    BOOL        bRet = TRUE;
+    const sal_Bool  bStartInside = rRect.IsInside( maStart );
+    const sal_Bool  bEndInside = rRect.IsInside( maEnd );
+    sal_Bool        bRet = sal_True;
 
     if( bStartInside && bEndInside )
     {
@@ -171,7 +171,7 @@ BOOL Line::Intersection( const Rectangle& rRect, Line& rIntersection ) const
                 rIntersection.maEnd = rIntersection.maStart;
         }
         else
-            bRet = FALSE;
+            bRet = sal_False;
     }
 
     return bRet;

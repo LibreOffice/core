@@ -40,7 +40,7 @@
 #include <tools/debug.hxx>
 
 #include <salids.hrc>
-#include <vcl/salatype.hxx>
+#include <vcl/apptypes.hxx>
 #include <saldata.hxx>
 #include <salinst.h>
 #include <salframe.h>
@@ -295,10 +295,9 @@ void ImplSalAcquireYieldMutex( ULONG nCount )
 
 // -----------------------------------------------------------------------
 
-#ifdef DBG_UTIL
-
-void ImplDbgTestSolarMutex()
+bool Os2SalInstance::CheckYieldMutex()
 {
+    bool bRet = true;
     SalData*    pSalData = GetSalData();
     ULONG       nCurThreadId = GetCurrentThreadId();
     if ( pSalData->mnAppThreadId != nCurThreadId )
@@ -308,7 +307,7 @@ void ImplDbgTestSolarMutex()
             SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
             if ( pYieldMutex->mnThreadId != nCurThreadId )
             {
-                OSL_FAIL( "SolarMutex not locked, and not thread save code in VCL is called from outside of the main thread" );
+                bRet = false;
             }
         }
     }
@@ -319,13 +318,12 @@ void ImplDbgTestSolarMutex()
             SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
             if ( pYieldMutex->mnThreadId != nCurThreadId )
             {
-                OSL_FAIL( "SolarMutex not locked in the main thread" );
+                bRet = false;
             }
         }
     }
+    return bRet;
 }
-
-#endif
 
 // =======================================================================
 

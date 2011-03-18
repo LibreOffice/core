@@ -859,7 +859,7 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             if( part == PART_BORDER )
             {
                 int nFrameWidth = getFrameWidth();
-                USHORT nStyle = val.getNumericVal();
+                sal_uInt16 nStyle = val.getNumericVal();
                 if( nStyle & FRAME_DRAW_NODRAW )
                 {
                     // in this case the question is: how thick would a frame be

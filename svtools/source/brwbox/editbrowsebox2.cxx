@@ -43,7 +43,7 @@ namespace svt
     using namespace ::com::sun::star::accessibility::AccessibleEventId;
 
 // -----------------------------------------------------------------------------
-Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(long _nRow, USHORT _nColumnPos,const TriState& eState,sal_Bool _bEnabled)
+Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(long _nRow, sal_uInt16 _nColumnPos,const TriState& eState,sal_Bool _bEnabled)
 {
     Reference< XAccessible > xAccessible( GetAccessible() );
     Reference< XAccessibleContext > xAccContext;
@@ -164,7 +164,7 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
                 )
             {
                 long nRows = GetRowCount();
-                USHORT nCols = ColCount();
+                sal_uInt16 nCols = ColCount();
 
                 if ( ( nRows > 0 ) && ( nCols > 0 ) )
                 {
@@ -196,7 +196,7 @@ Rectangle EditBrowseBox::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nCol
     if ( SeekRow(_nRow) )
     {
         CellController* pController = GetController(
-            _nRow, GetColumnId( sal::static_int_cast< USHORT >(_nColumnPos) ) );
+            _nRow, GetColumnId( sal::static_int_cast< sal_uInt16 >(_nColumnPos) ) );
         if ( pController )
             aRect = pController->GetWindow().GetCharacterBounds(_nIndex);
     }
@@ -209,7 +209,7 @@ sal_Int32 EditBrowseBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumn
     if ( SeekRow(_nRow) )
     {
         CellController* pController = GetController(
-            _nRow, GetColumnId( sal::static_int_cast< USHORT >(_nColumnPos) ) );
+            _nRow, GetColumnId( sal::static_int_cast< sal_uInt16 >(_nColumnPos) ) );
         if ( pController )
             nRet = pController->GetWindow().GetIndexForPoint(_rPoint);
     }

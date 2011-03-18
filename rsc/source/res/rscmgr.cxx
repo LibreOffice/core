@@ -67,7 +67,7 @@ sal_uInt32 RscMgr::Size()
 |*    RscMgr::Create()
 |*
 *************************************************************************/
-RSCINST RscMgr::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass ){
+RSCINST RscMgr::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnClass ){
     RSCINST aInst;
     RscMgrInst * pClassData;
 
@@ -117,7 +117,7 @@ void RscMgr::SetToDefault( const RSCINST & rInst )
     RscMgrInst * pClassData;
 
     pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
-    pClassData->bDflt = TRUE;
+    pClassData->bDflt = sal_True;
 
     RscClass::SetToDefault( rInst );
 }
@@ -127,12 +127,12 @@ void RscMgr::SetToDefault( const RSCINST & rInst )
 |*    RscMgr::IsDefault()
 |*
 *************************************************************************/
-BOOL RscMgr::IsDefault( const RSCINST & rInst ){
+sal_Bool RscMgr::IsDefault( const RSCINST & rInst ){
     RscMgrInst * pClassData;
 
     pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
     if( !pClassData->bDflt )
-        return( FALSE );
+        return( sal_False );
 
     return( RscClass::IsDefault( rInst ) );
 }
@@ -142,23 +142,23 @@ BOOL RscMgr::IsDefault( const RSCINST & rInst ){
 |*    RscMgr::IsValueDefault()
 |*
 *************************************************************************/
-BOOL RscMgr::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
+sal_Bool RscMgr::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
     RscMgrInst * pClassData;
     RscMgrInst * pDfltData;
 
     if( !RscClass::IsValueDefault( rInst, pDef ) )
-        return FALSE;
+        return sal_False;
 
     if( pDef ){
         pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
         pDfltData  = (RscMgrInst *)(pDef + RscClass::Size());
 
         if( !pClassData->aRefId.IsId() && !pDfltData->aRefId.IsId() ){
-            return TRUE;
+            return sal_True;
         }
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -215,7 +215,7 @@ void RscMgr::WriteSrc( const RSCINST &, FILE *, RscTypCont *, sal_uInt32,
 *************************************************************************/
 ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
                                RscTypCont * pTC, const RscId &rId,
-                               sal_uInt32 nDeep, BOOL bExtra )
+                               sal_uInt32 nDeep, sal_Bool bExtra )
 {
     RscMgrInst *    pClassData;
     ERRTYPE         aError;
@@ -307,7 +307,7 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
 |*
 *************************************************************************/
 ERRTYPE RscMgr::WriteRc( const RSCINST &, RscWriteRc &,
-                         RscTypCont *, sal_uInt32, BOOL )
+                         RscTypCont *, sal_uInt32, sal_Bool )
 
 {
     return( ERR_OK );
@@ -530,9 +530,9 @@ ERRTYPE RscMgr::WriteCxx( const RSCINST & rInst, FILE * fOutput,
 |*    RscArray::IsConsistent()
 |*
 *************************************************************************/
-BOOL RscMgr::IsConsistent( const RSCINST & rInst )
+sal_Bool RscMgr::IsConsistent( const RSCINST & rInst )
 {
-    BOOL    bRet;
+    sal_Bool    bRet;
     RscMgrInst * pClassData;
 
     bRet = RscClass::IsConsistent( rInst );
@@ -543,7 +543,7 @@ BOOL RscMgr::IsConsistent( const RSCINST & rInst )
         || (pClassData->aRefId.GetNumber() > 0x7FFF)
         || IsToDeep( rInst ).IsError()) )
     {
-        bRet = FALSE;
+        bRet = sal_False;
     }
 
     return( bRet );
@@ -589,7 +589,7 @@ ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep )
             aTmpI.pData = pObjNode->GetRscObj();
             nDeep++;
         }
-        else //aTmpI.IsInst() wird FALSE, Schleife beenden
+        else //aTmpI.IsInst() wird sal_False, Schleife beenden
             aTmpI.pData = NULL;
     }
 
@@ -628,7 +628,7 @@ ERRTYPE RscMgr::SetRef( const RSCINST & rInst, const RscId & rRefId )
 
         aError = IsToDeep( rInst );
         if( aError.IsOk() )
-            pClassData->bDflt  = FALSE;
+            pClassData->bDflt  = sal_False;
         else
             pClassData->aRefId = aOldId;
     }

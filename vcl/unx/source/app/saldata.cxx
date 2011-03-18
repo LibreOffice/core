@@ -410,7 +410,7 @@ void SalXLib::Init()
     sal_uInt32 nParams = osl_getCommandArgCount();
     rtl::OUString aParam;
     rtl::OString aDisplay;
-    for (USHORT i=0; i<nParams; i++)
+    for (sal_uInt16 i=0; i<nParams; i++)
     {
         osl_getCommandArg(i, &aParam.pData);
         if (aParam.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("-display")))
@@ -427,8 +427,8 @@ void SalXLib::Init()
                  * the clipboard build another connection
                  * to the xserver using $DISPLAY
                  */
-                 rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("DISPLAY"));
-                 osl_setEnvironment(envVar.pData, aParam.pData);
+                rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("DISPLAY"));
+                osl_setEnvironment(envVar.pData, aParam.pData);
             }
             break;
         }

@@ -71,7 +71,7 @@ int KeyCompare( const void * pFirst, const void * pSecond ){
 |*
 *************************************************************************/
 RscNameTable::RscNameTable() {
-    bSort    = TRUE;
+    bSort    = sal_True;
     nEntries = 0;
     pTable   = NULL;
 };
@@ -92,7 +92,7 @@ RscNameTable::~RscNameTable() {
 |*    RscNameTable::SetSort()
 |*
 *************************************************************************/
-void RscNameTable::SetSort( BOOL bSorted ){
+void RscNameTable::SetSort( sal_Bool bSorted ){
     bSort = bSorted;
     if( bSort && pTable){
         // Schluesselwort Feld sortieren
@@ -157,7 +157,7 @@ Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp, RscTop * pClass )
 |*    RscNameTable::Get()
 |*
 *************************************************************************/
-BOOL RscNameTable::Get( Atom nName, KEY_STRUCT * pEle ){
+sal_Bool RscNameTable::Get( Atom nName, KEY_STRUCT * pEle ){
     KEY_STRUCT * pKey = NULL;
     KEY_STRUCT  aSearchName;
     sal_uInt32  i;
@@ -184,9 +184,9 @@ BOOL RscNameTable::Get( Atom nName, KEY_STRUCT * pEle ){
 
     if( pKey ){ // Schluesselwort gefunden
         *pEle = *pKey;
-        return( TRUE );
+        return( sal_True );
     };
-    return( FALSE );
+    return( sal_False );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

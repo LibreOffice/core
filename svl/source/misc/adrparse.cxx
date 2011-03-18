@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 #include <tools/inetmime.hxx>
-#include <adrparse.hxx>
+#include <svl/adrparse.hxx>
 
 namespace unnamed_svl_adrparse {}
 using namespace unnamed_svl_adrparse;

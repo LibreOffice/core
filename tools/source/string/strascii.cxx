@@ -32,17 +32,17 @@
 
 #ifdef DBG_UTIL
 
-static BOOL ImplDbgCheckAsciiStr( const sal_Char* pAsciiStr, sal_Int32 nLen )
+static sal_Bool ImplDbgCheckAsciiStr( const sal_Char* pAsciiStr, sal_Int32 nLen )
 {
     while ( nLen && *pAsciiStr )
     {
         if ( ((unsigned char)*pAsciiStr) > 127 )
-            return FALSE;
+            return sal_False;
         ++pAsciiStr,
         --nLen;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 #endif
@@ -505,7 +505,7 @@ StringCompare UniString::CompareIgnoreCaseToAscii( const sal_Char* pAsciiStr,
 
 // -----------------------------------------------------------------------
 
-BOOL UniString::EqualsAscii( const sal_Char* pAsciiStr ) const
+sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr ) const
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
     DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
@@ -516,7 +516,7 @@ BOOL UniString::EqualsAscii( const sal_Char* pAsciiStr ) const
 
 // -----------------------------------------------------------------------
 
-BOOL UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const
+sal_Bool UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
     DBG_ASSERT( ImplDbgCheckAsciiStr( pAsciiStr, STRING_LEN ),
@@ -527,7 +527,7 @@ BOOL UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const
 
 // -----------------------------------------------------------------------
 
-BOOL UniString::EqualsAscii( const sal_Char* pAsciiStr,
+sal_Bool UniString::EqualsAscii( const sal_Char* pAsciiStr,
                              xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
@@ -543,7 +543,7 @@ BOOL UniString::EqualsAscii( const sal_Char* pAsciiStr,
 
 // -----------------------------------------------------------------------
 
-BOOL UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
+sal_Bool UniString::EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
                                        xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );

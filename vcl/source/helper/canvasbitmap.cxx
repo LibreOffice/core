@@ -66,7 +66,7 @@ namespace
     }
 }
 
-void VclCanvasBitmap::setComponentInfo( ULONG redShift, ULONG greenShift, ULONG blueShift )
+void VclCanvasBitmap::setComponentInfo( sal_uLong redShift, sal_uLong greenShift, sal_uLong blueShift )
 {
     // sort channels in increasing order of appearance in the pixel
     // (starting with the least significant bits)
@@ -683,14 +683,14 @@ sal_Bool SAL_CALL VclCanvasBitmap::getIndex( uno::Sequence< double >& o_entry, s
 {
     SolarMutexGuard aGuard;
 
-    const USHORT nCount( m_pBmpAcc ?
+    const sal_uInt16 nCount( m_pBmpAcc ?
                          (m_pBmpAcc->HasPalette() ? m_pBmpAcc->GetPaletteEntryCount() : 0 ) : 0 );
     OSL_ENSURE(nIndex >= 0 && nIndex < nCount,"Palette index out of range");
     if( nIndex < 0 || nIndex >= nCount )
         throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Palette index out of range")),
                                               static_cast<rendering::XBitmapPalette*>(this));
 
-    const BitmapColor aCol = m_pBmpAcc->GetPaletteColor(sal::static_int_cast<USHORT>(nIndex));
+    const BitmapColor aCol = m_pBmpAcc->GetPaletteColor(sal::static_int_cast<sal_uInt16>(nIndex));
     o_entry.realloc(3);
     double* pColor=o_entry.getArray();
     pColor[0] = aCol.GetRed();
@@ -704,7 +704,7 @@ sal_Bool SAL_CALL VclCanvasBitmap::setIndex( const uno::Sequence< double >&, sal
 {
     SolarMutexGuard aGuard;
 
-    const USHORT nCount( m_pBmpAcc ?
+    const sal_uInt16 nCount( m_pBmpAcc ?
                          (m_pBmpAcc->HasPalette() ? m_pBmpAcc->GetPaletteEntryCount() : 0 ) : 0 );
 
     OSL_ENSURE(nIndex >= 0 && nIndex < nCount,"Palette index out of range");
@@ -788,7 +788,7 @@ uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertToRGB( const
         for( sal_Size i=0; i<nLen; i+=nComponentsPerPixel )
         {
             const BitmapColor aCol = m_pBmpAcc->GetPaletteColor(
-                sal::static_int_cast<USHORT>(deviceColor[i+m_nIndexIndex]));
+                sal::static_int_cast<sal_uInt16>(deviceColor[i+m_nIndexIndex]));
 
             // TODO(F3): Convert result to sRGB color space
             *pOut++ = rendering::RGBColor(toDoubleColor(aCol.GetRed()),
@@ -837,7 +837,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToARGB( con
         for( sal_Size i=0; i<nLen; i+=nComponentsPerPixel )
         {
             const BitmapColor aCol = m_pBmpAcc->GetPaletteColor(
-                sal::static_int_cast<USHORT>(deviceColor[i+m_nIndexIndex]));
+                sal::static_int_cast<sal_uInt16>(deviceColor[i+m_nIndexIndex]));
 
             // TODO(F3): Convert result to sRGB color space
             const double nAlpha( m_nAlphaIndex != -1 ? 1.0 - deviceColor[i+m_nAlphaIndex] : 1.0 );
@@ -890,7 +890,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToPARGB( co
         for( sal_Size i=0; i<nLen; i+=nComponentsPerPixel )
         {
             const BitmapColor aCol = m_pBmpAcc->GetPaletteColor(
-                sal::static_int_cast<USHORT>(deviceColor[i+m_nIndexIndex]));
+                sal::static_int_cast<sal_uInt16>(deviceColor[i+m_nIndexIndex]));
 
             // TODO(F3): Convert result to sRGB color space
             const double nAlpha( m_nAlphaIndex != -1 ? 1.0 - deviceColor[i+m_nAlphaIndex] : 1.0 );
@@ -1086,7 +1086,7 @@ uno::Sequence<double> SAL_CALL VclCanvasBitmap::convertFromIntegerColorSpace( co
             for( sal_Size i=0; i<nLen; i+=nComponentsPerPixel )
             {
                 const BitmapColor aCol = m_pBmpAcc->GetPaletteColor(
-                    sal::static_int_cast<USHORT>(deviceColor[i+m_nIndexIndex]));
+                    sal::static_int_cast<sal_uInt16>(deviceColor[i+m_nIndexIndex]));
 
                 // TODO(F3): Convert result to sRGB color space
                 const double nAlpha( m_nAlphaIndex != -1 ? 1.0 - deviceColor[i+m_nAlphaIndex] : 1.0 );
@@ -1146,7 +1146,7 @@ uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToRGB
 {
     SolarMutexGuard aGuard;
 
-    const BYTE*     pIn( reinterpret_cast<const BYTE*>(deviceColor.getConstArray()) );
+    const sal_uInt8*     pIn( reinterpret_cast<const sal_uInt8*>(deviceColor.getConstArray()) );
     const sal_Size  nLen( deviceColor.getLength() );
     const sal_Int32 nNumColors((nLen*8 + m_nBitsPerOutputPixel-1)/m_nBitsPerOutputPixel);
 
@@ -1182,7 +1182,7 @@ uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToRGB
             const BitmapColor aCol =
                 m_bPalette ?
                 m_pBmpAcc->GetPaletteColor(
-                    sal::static_int_cast<USHORT>(
+                    sal::static_int_cast<sal_uInt16>(
                         m_pBmpAcc->GetPixelFromData(
                             pIn, i ))) :
                 m_pBmpAcc->GetPixelFromData(pIn, i);
@@ -1201,7 +1201,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToAR
 {
     SolarMutexGuard aGuard;
 
-    const BYTE*     pIn( reinterpret_cast<const BYTE*>(deviceColor.getConstArray()) );
+    const sal_uInt8*     pIn( reinterpret_cast<const sal_uInt8*>(deviceColor.getConstArray()) );
     const sal_Size  nLen( deviceColor.getLength() );
     const sal_Int32 nNumColors((nLen*8 + m_nBitsPerOutputPixel-1)/m_nBitsPerOutputPixel);
 
@@ -1239,7 +1239,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToAR
             const BitmapColor aCol =
                 m_bPalette ?
                 m_pBmpAcc->GetPaletteColor(
-                    sal::static_int_cast<USHORT>(
+                    sal::static_int_cast<sal_uInt16>(
                         m_pBmpAcc->GetPixelFromData(
                             pIn, i ))) :
                 m_pBmpAcc->GetPixelFromData(pIn, i);
@@ -1259,7 +1259,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToPA
 {
     SolarMutexGuard aGuard;
 
-    const BYTE*     pIn( reinterpret_cast<const BYTE*>(deviceColor.getConstArray()) );
+    const sal_uInt8*     pIn( reinterpret_cast<const sal_uInt8*>(deviceColor.getConstArray()) );
     const sal_Size  nLen( deviceColor.getLength() );
     const sal_Int32 nNumColors((nLen*8 + m_nBitsPerOutputPixel-1)/m_nBitsPerOutputPixel);
 
@@ -1298,7 +1298,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToPA
             const BitmapColor aCol =
                 m_bPalette ?
                 m_pBmpAcc->GetPaletteColor(
-                    sal::static_int_cast<USHORT>(
+                    sal::static_int_cast<sal_uInt16>(
                         m_pBmpAcc->GetPixelFromData(
                             pIn, i ))) :
                 m_pBmpAcc->GetPixelFromData(pIn, i);
@@ -1322,7 +1322,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromRGB( con
     const sal_Int32 nNumBytes((nLen*m_nBitsPerOutputPixel+7)/8);
 
     uno::Sequence< sal_Int8 > aRes(nNumBytes);
-    BYTE* pColors=reinterpret_cast<BYTE*>(aRes.getArray());
+    sal_uInt8* pColors=reinterpret_cast<sal_uInt8*>(aRes.getArray());
 
     if( m_aBmpEx.IsTransparent() )
     {
@@ -1335,12 +1335,12 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromRGB( con
             const BitmapColor aCol2 =
                 m_bPalette ?
                 BitmapColor(
-                    sal::static_int_cast<BYTE>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
+                    sal::static_int_cast<sal_uInt8>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
                 aCol;
 
             m_pBmpAcc->SetPixelOnData(pColors,0,aCol2);
             pColors   += nNonAlphaBytes;
-            *pColors++ = BYTE(255);
+            *pColors++ = sal_uInt8(255);
         }
     }
     else
@@ -1353,7 +1353,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromRGB( con
             const BitmapColor aCol2 =
                 m_bPalette ?
                 BitmapColor(
-                    sal::static_int_cast<BYTE>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
+                    sal::static_int_cast<sal_uInt8>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
                 aCol;
 
             m_pBmpAcc->SetPixelOnData(pColors,i,aCol2);
@@ -1371,7 +1371,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromARGB( co
     const sal_Int32 nNumBytes((nLen*m_nBitsPerOutputPixel+7)/8);
 
     uno::Sequence< sal_Int8 > aRes(nNumBytes);
-    BYTE* pColors=reinterpret_cast<BYTE*>(aRes.getArray());
+    sal_uInt8* pColors=reinterpret_cast<sal_uInt8*>(aRes.getArray());
 
     if( m_aBmpEx.IsTransparent() )
     {
@@ -1384,7 +1384,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromARGB( co
             const BitmapColor aCol2 =
                 m_bPalette ?
                 BitmapColor(
-                    sal::static_int_cast<BYTE>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
+                    sal::static_int_cast<sal_uInt8>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
                 aCol;
 
             m_pBmpAcc->SetPixelOnData(pColors,0,aCol2);
@@ -1402,7 +1402,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromARGB( co
             const BitmapColor aCol2 =
                 m_bPalette ?
                 BitmapColor(
-                    sal::static_int_cast<BYTE>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
+                    sal::static_int_cast<sal_uInt8>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
                 aCol;
 
             m_pBmpAcc->SetPixelOnData(pColors,i,aCol2);
@@ -1420,7 +1420,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromPARGB( c
     const sal_Int32 nNumBytes((nLen*m_nBitsPerOutputPixel+7)/8);
 
     uno::Sequence< sal_Int8 > aRes(nNumBytes);
-    BYTE* pColors=reinterpret_cast<BYTE*>(aRes.getArray());
+    sal_uInt8* pColors=reinterpret_cast<sal_uInt8*>(aRes.getArray());
 
     if( m_aBmpEx.IsTransparent() )
     {
@@ -1434,7 +1434,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromPARGB( c
             const BitmapColor aCol2 =
                 m_bPalette ?
                 BitmapColor(
-                    sal::static_int_cast<BYTE>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
+                    sal::static_int_cast<sal_uInt8>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
                 aCol;
 
             m_pBmpAcc->SetPixelOnData(pColors,0,aCol2);
@@ -1452,7 +1452,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromPARGB( c
             const BitmapColor aCol2 =
                 m_bPalette ?
                 BitmapColor(
-                    sal::static_int_cast<BYTE>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
+                    sal::static_int_cast<sal_uInt8>(m_pBmpAcc->GetBestPaletteIndex( aCol ))) :
                 aCol;
 
             m_pBmpAcc->SetPixelOnData(pColors,i,aCol2);

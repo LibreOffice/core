@@ -33,7 +33,7 @@
 // C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
-#if defined ( DOS ) || defined ( WIN ) || defined (WNT )
+#if defined (WNT )
 #include <direct.h>
 #endif
 #if defined ( OS2 ) && !defined ( GCC )
@@ -51,10 +51,6 @@
 #include <osl/file.h>
 #include <rtl/alloc.h>
 #include <rtl/memory.h>
-
-#if defined (WIN)
-#define ONLY_NEW
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
@@ -144,7 +140,7 @@ ByteString GetTmpFileName()
 /*                                                                  */
 /*  Description :   appends text files                              */
 /********************************************************************/
-BOOL Append( FILE * fDest, ByteString aTmpFile )
+sal_Bool Append( FILE * fDest, ByteString aTmpFile )
 {
 #define MAX_BUF 4096
     FILE *fSource = fopen( aTmpFile.GetBuffer(), "rb" );
@@ -152,7 +148,7 @@ BOOL Append( FILE * fDest, ByteString aTmpFile )
     {
         if( fSource )
             fclose( fSource );
-        return FALSE;
+        return sal_False;
     }
     else
     {
@@ -167,14 +163,14 @@ BOOL Append( FILE * fDest, ByteString aTmpFile )
 
         fclose( fSource );
     };
-    return TRUE;
+    return sal_True;
 }
 
-BOOL Append( ByteString aOutputSrs, ByteString aTmpFile )
+sal_Bool Append( ByteString aOutputSrs, ByteString aTmpFile )
 {
     FILE * fDest   = fopen( aOutputSrs.GetBuffer(), "ab" );
 
-    BOOL bRet = Append( fDest, aTmpFile );
+    sal_Bool bRet = Append( fDest, aTmpFile );
 
     if( fDest )
         fclose( fDest );
@@ -370,10 +366,10 @@ RscWriteRc::RscWriteRc( RSCBYTEORDER_TYPE nOrder )
     short               nSwapTest = 1;
     RSCBYTEORDER_TYPE   nMachineOrder;
 
-    bSwap = FALSE;
+    bSwap = sal_False;
     if( nOrder != RSC_SYSTEMENDIAN )
     {
-        if( (BYTE)*(BYTE *)&nSwapTest )
+        if( (sal_uInt8)*(sal_uInt8 *)&nSwapTest )
             nMachineOrder = RSC_LITTLEENDIAN;
         else
             nMachineOrder = RSC_BIGENDIAN;

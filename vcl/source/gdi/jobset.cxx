@@ -39,8 +39,8 @@
 DBG_NAME( JobSetup )
 
 #define JOBSET_FILEFORMAT2      3780
-#define JOBSET_FILE364_SYSTEM   ((USHORT)0xFFFF)
-#define JOBSET_FILE605_SYSTEM   ((USHORT)0xFFFE)
+#define JOBSET_FILE364_SYSTEM   ((sal_uInt16)0xFFFF)
+#define JOBSET_FILE605_SYSTEM   ((sal_uInt16)0xFFFE)
 
 struct ImplOldJobSetupData
 {
@@ -95,7 +95,7 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
     mnDriverDataLen     = rJobSetup.mnDriverDataLen;
     if ( rJobSetup.mpDriverData )
     {
-        mpDriverData = (BYTE*)rtl_allocateMemory( mnDriverDataLen );
+        mpDriverData = (sal_uInt8*)rtl_allocateMemory( mnDriverDataLen );
         memcpy( mpDriverData, rJobSetup.mpDriverData, mnDriverDataLen );
     }
     else
@@ -258,16 +258,16 @@ JobSetup& JobSetup::operator=( const JobSetup& rJobSetup )
 
 // -----------------------------------------------------------------------
 
-BOOL JobSetup::operator==( const JobSetup& rJobSetup ) const
+sal_Bool JobSetup::operator==( const JobSetup& rJobSetup ) const
 {
     DBG_CHKTHIS( JobSetup, NULL );
     DBG_CHKOBJ( &rJobSetup, JobSetup, NULL );
 
     if ( mpData == rJobSetup.mpData )
-        return TRUE;
+        return sal_True;
 
     if ( !mpData || !rJobSetup.mpData )
-        return FALSE;
+        return sal_False;
 
     ImplJobSetup* pData1 = mpData;
     ImplJobSetup* pData2 = rJobSetup.mpData;
@@ -284,9 +284,9 @@ BOOL JobSetup::operator==( const JobSetup& rJobSetup ) const
          (memcmp( pData1->mpDriverData, pData2->mpDriverData, pData1->mnDriverDataLen ) == 0)                                                           &&
          (pData1->maValueMap        == pData2->maValueMap)
          )
-        return TRUE;
+        return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -296,8 +296,8 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
     DBG_ASSERTWARNING( rIStream.GetVersion(), "JobSetup::>> - Solar-Version not set on rOStream" );
 
     {
-        USHORT nLen(0);
-        USHORT nSystem;
+        sal_uInt16 nLen(0);
+        sal_uInt16 nSystem;
         sal_Size nFirstPos = rIStream.Tell();
         rIStream >> nLen;
         if ( !nLen )
@@ -330,7 +330,7 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
                  nSystem == JOBSET_FILE605_SYSTEM )
             {
                 Impl364JobSetupData* pOldJobData    = (Impl364JobSetupData*)(pTempBuf + sizeof( ImplOldJobSetupData ));
-                USHORT nOldJobDataSize              = SVBT16ToShort( pOldJobData->nSize );
+                sal_uInt16 nOldJobDataSize              = SVBT16ToShort( pOldJobData->nSize );
                 pJobData->mnSystem                  = SVBT16ToShort( pOldJobData->nSystem );
                 pJobData->mnDriverDataLen           = SVBT32ToUInt32( pOldJobData->nDriverDataLen );
                 pJobData->meOrientation             = (Orientation)SVBT16ToShort( pOldJobData->nOrientation );
@@ -341,8 +341,8 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
                 pJobData->mnPaperHeight             = (long)SVBT32ToUInt32( pOldJobData->nPaperHeight );
                 if ( pJobData->mnDriverDataLen )
                 {
-                    BYTE* pDriverData = ((BYTE*)pOldJobData) + nOldJobDataSize;
-                    pJobData->mpDriverData = (BYTE*)rtl_allocateMemory( pJobData->mnDriverDataLen );
+                    sal_uInt8* pDriverData = ((sal_uInt8*)pOldJobData) + nOldJobDataSize;
+                    pJobData->mpDriverData = (sal_uInt8*)rtl_allocateMemory( pJobData->mnDriverDataLen );
                     memcpy( pJobData->mpDriverData, pDriverData, pJobData->mnDriverDataLen );
                 }
                 if( nSystem == JOBSET_FILE605_SYSTEM )
@@ -388,24 +388,24 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
     // Zur Zeit haben wir noch kein neues FileFormat
 //    if ( rOStream.GetVersion() < JOBSET_FILEFORMAT2 )
     {
-        USHORT nLen = 0;
+        sal_uInt16 nLen = 0;
         if ( !rJobSetup.mpData )
             rOStream << nLen;
         else
         {
-            USHORT nSystem = JOBSET_FILE605_SYSTEM;
+            sal_uInt16 nSystem = JOBSET_FILE605_SYSTEM;
 
             const ImplJobSetup* pJobData = rJobSetup.ImplGetConstData();
             Impl364JobSetupData aOldJobData;
-            USHORT              nOldJobDataSize = sizeof( aOldJobData );
+            sal_uInt16              nOldJobDataSize = sizeof( aOldJobData );
             ShortToSVBT16( nOldJobDataSize, aOldJobData.nSize );
             ShortToSVBT16( pJobData->mnSystem, aOldJobData.nSystem );
             UInt32ToSVBT32( pJobData->mnDriverDataLen, aOldJobData.nDriverDataLen );
-            ShortToSVBT16( (USHORT)(pJobData->meOrientation), aOldJobData.nOrientation );
+            ShortToSVBT16( (sal_uInt16)(pJobData->meOrientation), aOldJobData.nOrientation );
             ShortToSVBT16( pJobData->mnPaperBin, aOldJobData.nPaperBin );
-            ShortToSVBT16( (USHORT)(pJobData->mePaperFormat), aOldJobData.nPaperFormat );
-            UInt32ToSVBT32( (ULONG)(pJobData->mnPaperWidth), aOldJobData.nPaperWidth );
-            UInt32ToSVBT32( (ULONG)(pJobData->mnPaperHeight), aOldJobData.nPaperHeight );
+            ShortToSVBT16( (sal_uInt16)(pJobData->mePaperFormat), aOldJobData.nPaperFormat );
+            UInt32ToSVBT32( (sal_uLong)(pJobData->mnPaperWidth), aOldJobData.nPaperWidth );
+            UInt32ToSVBT32( (sal_uLong)(pJobData->mnPaperHeight), aOldJobData.nPaperHeight );
 
             ImplOldJobSetupData aOldData;
             memset( &aOldData, 0, sizeof( aOldData ) );
@@ -434,7 +434,7 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             case DUPLEX_SHORTEDGE: rOStream.WriteByteString( "DUPLEX_SHORTEDGE" );break;
             case DUPLEX_LONGEDGE: rOStream.WriteByteString( "DUPLEX_LONGEDGE" );break;
             }
-            nLen = sal::static_int_cast<USHORT>(rOStream.Tell() - nPos);
+            nLen = sal::static_int_cast<sal_uInt16>(rOStream.Tell() - nPos);
             rOStream.Seek( nPos );
             rOStream << nLen;
             rOStream.Seek( nPos + nLen );

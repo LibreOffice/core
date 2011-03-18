@@ -98,7 +98,7 @@ void SvXPropertyEdit::SetCtrSize(const Size& rSize)
     aEdit.SetSizePixel(aSize);
 }
 
-void SvXPropertyEdit::SetLocked(BOOL bLocked)
+void SvXPropertyEdit::SetLocked(sal_Bool bLocked)
 {
     if(bLocked)
         Disable();
@@ -116,9 +116,9 @@ String SvXPropertyEdit::GetProperty() const
     return aEdit.GetText();
 }
 
-BOOL SvXPropertyEdit::HasList()
+sal_Bool SvXPropertyEdit::HasList()
 {
-    return FALSE;
+    return sal_False;
 };
 
 
@@ -126,7 +126,7 @@ void SvXPropertyEdit::ClearList()
 {
     return;
 }
-void SvXPropertyEdit::InsertEntry( const String&,USHORT )
+void SvXPropertyEdit::InsertEntry( const String&,sal_uInt16 )
 {
     return;
 }
@@ -226,7 +226,7 @@ void SvXPropertyListBox::SetCtrSize(const Size& rSize)
     aListBox.SetSizePixel(aSize);
 }
 
-void SvXPropertyListBox::SetLocked(BOOL bLocked)
+void SvXPropertyListBox::SetLocked(sal_Bool bLocked)
 {
     if(bLocked)
         Disable();
@@ -244,9 +244,9 @@ String SvXPropertyListBox::GetProperty()const
     return aListBox.GetSelectEntry();
 }
 
-BOOL SvXPropertyListBox::HasList()
+sal_Bool SvXPropertyListBox::HasList()
 {
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -255,7 +255,7 @@ void SvXPropertyListBox::ClearList()
     aListBox.Clear();
 }
 
-void SvXPropertyListBox::InsertEntry( const String& rString,USHORT nPos)
+void SvXPropertyListBox::InsertEntry( const String& rString,sal_uInt16 nPos)
 {
     aListBox.InsertEntry(rString,nPos);
 }
@@ -335,7 +335,7 @@ SvXPropertyComboBox::SvXPropertyComboBox( Window* pParent, const ResId& rResId)
     aComboBox.Show();
 }
 
-void SvXPropertyComboBox::SetLocked(BOOL bLocked)
+void SvXPropertyComboBox::SetLocked(sal_Bool bLocked)
 {
     if(bLocked)
         Disable();
@@ -374,9 +374,9 @@ String SvXPropertyComboBox::GetProperty()   const
     return aComboBox.GetText();
 }
 
-BOOL SvXPropertyComboBox::HasList()
+sal_Bool SvXPropertyComboBox::HasList()
 {
-    return TRUE;
+    return sal_True;
 }
 
 void SvXPropertyComboBox::ClearList()
@@ -384,7 +384,7 @@ void SvXPropertyComboBox::ClearList()
     aComboBox.Clear();
 }
 
-void SvXPropertyComboBox::InsertEntry( const String& rString,USHORT nPos)
+void SvXPropertyComboBox::InsertEntry( const String& rString,sal_uInt16 nPos)
 {
     aComboBox.InsertEntry(rString,nPos);
 }
@@ -436,11 +436,11 @@ SvPropertyLine::SvPropertyLine( Window* pParent,WinBits nWinStyle)
             aName(this,WB_BORDER),
             pSvXPropertyControl(NULL),
             aXButton(this,WB_BORDER),
-            bIsLocked(FALSE),
-            bIsHyperlink(FALSE)
+            bIsLocked(sal_False),
+            bIsHyperlink(sal_False)
 {
-    bNeedsRepaint = TRUE;
-    bHasXButton = FALSE;
+    bNeedsRepaint = sal_True;
+    bHasXButton = sal_False;
     aXButton.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "..." ) ) );
     aName.Show();
     aXButton.Show();
@@ -455,11 +455,11 @@ SvPropertyLine::SvPropertyLine( Window* pParent,const ResId& rResId )
             aName       (this,WB_BORDER),
             pSvXPropertyControl(NULL),
             aXButton    (this,WB_BORDER),
-            bIsLocked(FALSE),
-            bIsHyperlink(FALSE)
+            bIsLocked(sal_False),
+            bIsHyperlink(sal_False)
 {
-    bNeedsRepaint = TRUE;
-    bHasXButton = FALSE;
+    bNeedsRepaint = sal_True;
+    bHasXButton = sal_False;
     eKindOfCtr = KOC_UNDEFINED;
     aXButton.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "..." ) ) );
     aName.Show();
@@ -494,11 +494,11 @@ void SvPropertyLine::Resize()
     aName.SetPosPixel(aPos);
     aName.SetSizePixel(aSize);
 
-    USHORT nXButtonWidth=0;
+    sal_uInt16 nXButtonWidth=0;
 
     if(bHasXButton)
     {
-        nXButtonWidth=(USHORT)aSize.Height();
+        nXButtonWidth=(sal_uInt16)aSize.Height();
     }
     a2Size.Width()=a2Size.Width()-nXButtonWidth;
 
@@ -520,12 +520,12 @@ void SvPropertyLine::Resize()
     }
 }
 
-void SvPropertyLine::SetNeedsRepaint(BOOL bFlag)
+void SvPropertyLine::SetNeedsRepaint(sal_Bool bFlag)
 {
     bNeedsRepaint=bFlag;
 }
 
-BOOL SvPropertyLine::NeedsRepaint()
+sal_Bool SvPropertyLine::NeedsRepaint()
 {
     return bNeedsRepaint;
 }
@@ -553,22 +553,22 @@ eKindOfControl SvPropertyLine::GetKindOfControl()
 
 void SvPropertyLine::ShowXButton()
 {
-    bHasXButton=TRUE;
+    bHasXButton=sal_True;
     aXButton.Show();
     Resize();
 }
 void SvPropertyLine::HideXButton()
 {
-    bHasXButton=FALSE;
+    bHasXButton=sal_False;
     aXButton.Hide();
     Resize();
 }
-BOOL SvPropertyLine::IsVisibleXButton()
+sal_Bool SvPropertyLine::IsVisibleXButton()
 {
     return bHasXButton;
 }
 
-void SvPropertyLine::ShowAsHyperLink(BOOL nFlag)
+void SvPropertyLine::ShowAsHyperLink(sal_Bool nFlag)
 {
     bIsHyperlink=nFlag;
     if(nFlag)
@@ -585,24 +585,24 @@ void SvPropertyLine::ShowAsHyperLink(BOOL nFlag)
     }
 }
 
-BOOL SvPropertyLine::IsShownAsHyperlink()
+sal_Bool SvPropertyLine::IsShownAsHyperlink()
 {
     return bIsHyperlink;
 }
 
-void SvPropertyLine::Locked(BOOL nFlag)
+void SvPropertyLine::Locked(sal_Bool nFlag)
 {
     bIsLocked=nFlag;
     if(pSvXPropertyControl!=NULL)
         pSvXPropertyControl->SetLocked(nFlag);
 }
 
-BOOL SvPropertyLine::IsLineLocked()
+sal_Bool SvPropertyLine::IsLineLocked()
 {
     return bIsLocked;
 }
 
-void SvPropertyLine::SetNameWidth(USHORT nWidth)
+void SvPropertyLine::SetNameWidth(sal_uInt16 nWidth)
 {
     nNameWidth=nWidth;
     Resize();
@@ -677,7 +677,7 @@ SvListBoxForProperties::SvListBoxForProperties( Window* pParent, WinBits nWinSty
     nTheNameSize=0;
     ListBox aListBox(this,WB_DROPDOWN);
     aListBox.SetPosSizePixel(Point(0,0),Size(100,100));
-    nRowHeight=(USHORT)aListBox.GetSizePixel().Height();
+    nRowHeight=(sal_uInt16)aListBox.GetSizePixel().Height();
     Wallpaper aWall = aPlayGround.GetBackground();
     aWall.SetColor( Color( COL_TRANSPARENT ) );
     aPlayGround.SetBackground( aWall );
@@ -699,7 +699,7 @@ SvListBoxForProperties::SvListBoxForProperties( Window* pParent, const ResId& rR
     nYOffset=0;
     ListBox aListBox(this,WB_DROPDOWN);
     aListBox.SetPosSizePixel(Point(0,0),Size(100,100));
-    nRowHeight=(USHORT)aListBox.GetSizePixel().Height();
+    nRowHeight=(sal_uInt16)aListBox.GetSizePixel().Height();
     Wallpaper aWall = aPlayGround.GetBackground();
     aWall.SetColor( Color( COL_TRANSPARENT ) );
     aPlayGround.SetBackground( aWall );
@@ -717,7 +717,7 @@ SvListBoxForProperties::~SvListBoxForProperties()
 
 void SvListBoxForProperties::Clear()
 {
-    for(USHORT i=0;i<PLineArray.Count();i++)
+    for(sal_uInt16 i=0;i<PLineArray.Count();i++)
     {
         SvPropertyLine* pPropLine=PLineArray[i];
 
@@ -763,19 +763,19 @@ void SvListBoxForProperties::SetController( SvPropertyDataControl *pPDC)
     pPropDataControl=pPDC;
 }
 
-USHORT SvListBoxForProperties::CalcVisibleLines()
+sal_uInt16 SvListBoxForProperties::CalcVisibleLines()
 {
     Size aSize=aPlayGround.GetOutputSizePixel();
-    USHORT nResult=0;
+    sal_uInt16 nResult=0;
     if(nRowHeight!=0)
-        nResult=(USHORT) aSize.Height()/nRowHeight;
+        nResult=(sal_uInt16) aSize.Height()/nRowHeight;
 
     return nResult;
 }
 
 void SvListBoxForProperties::UpdateVScroll()
 {
-    USHORT nLines=CalcVisibleLines();
+    sal_uInt16 nLines=CalcVisibleLines();
     aVScroll.SetPageSize(nLines-1);
     aVScroll.SetVisibleSize(nLines-1);
     aVScroll.SetRange(Range(0,PLineArray.Count()-1));
@@ -785,7 +785,7 @@ void SvListBoxForProperties::UpdateVScroll()
     }
     else
     {
-        BOOL bFlag=aVScroll.IsVisible();
+        sal_Bool bFlag=aVScroll.IsVisible();
         aVScroll.Show();
         if(!bFlag)Resize();
     }
@@ -797,7 +797,7 @@ void SvListBoxForProperties::UpdatePosNSize()
 {
     Point aPos(0,nYOffset);
 
-    for(USHORT i=0; i<PLineArray.Count();i++)
+    for(sal_uInt16 i=0; i<PLineArray.Count();i++)
     {
         if((PLineArray[i])->NeedsRepaint())
         {
@@ -809,7 +809,7 @@ void SvListBoxForProperties::UpdatePosNSize()
             (PLineArray[i])->Invalidate();
             (PLineArray[i])->Update();
             (PLineArray[i])->Show();
-            (PLineArray[i])->SetNeedsRepaint(FALSE);
+            (PLineArray[i])->SetNeedsRepaint(sal_False);
         }
         else
         {
@@ -836,21 +836,21 @@ void SvListBoxForProperties::UpdatePlayGround()
     long nLines=aVScroll.GetPageSize();
     long nDelta=aVScroll.GetDelta();
 
-    USHORT nStart,nEnd;
+    sal_uInt16 nStart,nEnd;
     Size aSize=aPlayGround.GetOutputSizePixel();
     Point aPEnd;
     aPEnd.X()=aSize.Width();
 
     if(nDelta>0)
     {
-        nStart=(USHORT)(nThumbPos+nLines+1-nDelta);
-        nEnd=(USHORT)(nThumbPos+nLines);
+        nStart=(sal_uInt16)(nThumbPos+nLines+1-nDelta);
+        nEnd=(sal_uInt16)(nThumbPos+nLines);
         aPos.Y()=(nLines+1-nDelta)*nRowHeight;
     }
     else
     {
-        nStart=(USHORT)nThumbPos;
-        nEnd=(USHORT)(nThumbPos-nDelta);
+        nStart=(sal_uInt16)nThumbPos;
+        nEnd=(sal_uInt16)(nThumbPos-nDelta);
         aPEnd.Y()=(nThumbPos-nDelta)*nRowHeight;;
     }
 
@@ -860,7 +860,7 @@ void SvListBoxForProperties::UpdatePlayGround()
 
     aPlayGround.Scroll(0,nDelta,SCROLL_CHILDREN);
 
-    for(USHORT i=nStart; i<=nEnd;i++)
+    for(sal_uInt16 i=nStart; i<=nEnd;i++)
     {
         (PLineArray[i])->SetPosSizePixel(aPos,aSize);
         (PLineArray[i])->SetNameWidth(nTheNameSize+2*FRAME_OFFSET);
@@ -879,18 +879,18 @@ void SvListBoxForProperties::UpdateAll()
 
 void SvListBoxForProperties::DisableUpdate()
 {
-    bUpdate=FALSE;
+    bUpdate=sal_False;
 }
 
 void SvListBoxForProperties::EnableUpdate()
 {
-    bUpdate=TRUE;
+    bUpdate=sal_True;
     UpdateAll();
 }
 
 void SvListBoxForProperties::SetPropertyValue( const String & rEntryName, const String & rValue )
 {
-    USHORT i, iEnd = PLineArray.Count();
+    sal_uInt16 i, iEnd = PLineArray.Count();
     for( i = 0 ; i < iEnd ; i++ )
     {
         SvPropertyLine* pPropLine = PLineArray[ i ];
@@ -902,14 +902,14 @@ void SvListBoxForProperties::SetPropertyValue( const String & rEntryName, const 
     }
 }
 
-USHORT SvListBoxForProperties::AppendEntry( const SvPropertyData& aPropData)
+sal_uInt16 SvListBoxForProperties::AppendEntry( const SvPropertyData& aPropData)
 {
     return InsertEntry(aPropData);
 }
 
-USHORT SvListBoxForProperties::InsertEntry( const SvPropertyData& aPropData, USHORT nPos)
+sal_uInt16 SvListBoxForProperties::InsertEntry( const SvPropertyData& aPropData, sal_uInt16 nPos)
 {
-    USHORT nInsPos=nPos;
+    sal_uInt16 nInsPos=nPos;
     SvPropertyLine* pPropLine=new SvPropertyLine(&aPlayGround,WB_TABSTOP | WB_DIALOGCONTROL);
 
     if(nPos==LISTBOX_APPEND)
@@ -928,7 +928,7 @@ USHORT SvListBoxForProperties::InsertEntry( const SvPropertyData& aPropData, USH
     return nInsPos;
 }
 
-void SvListBoxForProperties::ChangeEntry( const SvPropertyData& aPropData, USHORT nPos)
+void SvListBoxForProperties::ChangeEntry( const SvPropertyData& aPropData, sal_uInt16 nPos)
 {
     if(nPos<PLineArray.Count())
     {
@@ -983,7 +983,7 @@ void SvListBoxForProperties::ChangeEntry( const SvPropertyData& aPropData, USHOR
 
             if(pSvXPCtr->HasList())
             {
-                for(USHORT i=0;i<aPropData.theValues.Count();i++)
+                for(sal_uInt16 i=0;i<aPropData.theValues.Count();i++)
                 {
                     pSvXPCtr->InsertEntry(*(aPropData.theValues[i]));
                 }
@@ -992,7 +992,7 @@ void SvListBoxForProperties::ChangeEntry( const SvPropertyData& aPropData, USHOR
 
         pPropLine->SetName(aPropData.aName);
 
-        USHORT nTextWidth=(USHORT)aPlayGround.GetTextWidth(aPropData.aName);
+        sal_uInt16 nTextWidth=(sal_uInt16)aPlayGround.GetTextWidth(aPropData.aName);
 
         if ( nTheNameSize < nTextWidth )
             nTheNameSize = nTextWidth;
@@ -1012,21 +1012,21 @@ void SvListBoxForProperties::ChangeEntry( const SvPropertyData& aPropData, USHOR
     }
 }
 
-USHORT SvListBoxForProperties::GetFirstVisibleEntry()
+sal_uInt16 SvListBoxForProperties::GetFirstVisibleEntry()
 {
     return 0;
 }
-void SvListBoxForProperties::SetFirstVisibleEntry(USHORT)
+void SvListBoxForProperties::SetFirstVisibleEntry(sal_uInt16)
 {
     return;
 }
 
-void SvListBoxForProperties::SetSelectedEntry(USHORT)
+void SvListBoxForProperties::SetSelectedEntry(sal_uInt16)
 {
     return;
 }
 
-USHORT SvListBoxForProperties::GetSelectedEntry()
+sal_uInt16 SvListBoxForProperties::GetSelectedEntry()
 {
     return 0;
 }
@@ -1037,7 +1037,7 @@ IMPL_LINK( SvListBoxForProperties, ScrollHdl, ScrollBar*, pSB )
     {
         long nDelta=aVScroll.GetDelta();
         nYOffset=-aVScroll.GetThumbPos()*nRowHeight;
-        //aPlayGround.SetUpdateMode(FALSE);
+        //aPlayGround.SetUpdateMode(sal_False);
 
         long nThumbPos=aVScroll.GetThumbPos();
         long nLines=aVScroll.GetPageSize();
@@ -1048,14 +1048,14 @@ IMPL_LINK( SvListBoxForProperties, ScrollHdl, ScrollBar*, pSB )
         {
             if(i>=nThumbPos && i<=nThumbPos+nLines)
             {
-                (PLineArray[sal::static_int_cast< USHORT >(i)])->
-                    SetNeedsRepaint(TRUE);
+                (PLineArray[sal::static_int_cast< sal_uInt16 >(i)])->
+                    SetNeedsRepaint(sal_True);
             }
             else
             {
-                (PLineArray[sal::static_int_cast< USHORT >(i)])->Hide();
-                (PLineArray[sal::static_int_cast< USHORT >(i)])->
-                    SetNeedsRepaint(FALSE);
+                (PLineArray[sal::static_int_cast< sal_uInt16 >(i)])->Hide();
+                (PLineArray[sal::static_int_cast< sal_uInt16 >(i)])->
+                    SetNeedsRepaint(sal_False);
             }
         }
     }
@@ -1176,9 +1176,9 @@ SvPropertyBox::~SvPropertyBox()
 
 void SvPropertyBox::ClearAll()
 {
-    USHORT nCount=aTabControl.GetPageCount();
+    sal_uInt16 nCount=aTabControl.GetPageCount();
 
-    for(USHORT i=nCount;i>=1;i--)
+    for(sal_uInt16 i=nCount;i>=1;i--)
     {
         SvTabPageForProperties* pPage=(SvTabPageForProperties*)
                                     aTabControl.GetTabPage(i);
@@ -1197,10 +1197,10 @@ void SvPropertyBox::Resize()
 
     aTabControl.SetPosSizePixel(aPos,aSize);
 
-    USHORT nCount=aTabControl.GetPageCount();
+    sal_uInt16 nCount=aTabControl.GetPageCount();
 
     aSize=aTabControl.GetTabPageSizePixel();
-    for(USHORT i=1;i<=nCount;i++)
+    for(sal_uInt16 i=1;i<=nCount;i++)
     {
         SvTabPageForProperties* pPage=(SvTabPageForProperties*)
                                     aTabControl.GetTabPage(i);
@@ -1210,9 +1210,9 @@ void SvPropertyBox::Resize()
 }
 
 
-USHORT SvPropertyBox::AppendPage( const String & rText )
+sal_uInt16 SvPropertyBox::AppendPage( const String & rText )
 {
-    USHORT nId=aTabControl.GetPageCount()+1;
+    sal_uInt16 nId=aTabControl.GetPageCount()+1;
     aTabControl.InsertPage( nId,rText);
     SvTabPageForProperties* pPage=new SvTabPageForProperties(&aTabControl);
     pPage->SetSizePixel(aTabControl.GetTabPageSizePixel());
@@ -1222,17 +1222,17 @@ USHORT SvPropertyBox::AppendPage( const String & rText )
     return nId;
 }
 
-void SvPropertyBox::SetPage( USHORT nId)
+void SvPropertyBox::SetPage( sal_uInt16 nId)
 {
     aTabControl.SetCurPageId(nId);
 }
 
-USHORT SvPropertyBox::GetCurPage()
+sal_uInt16 SvPropertyBox::GetCurPage()
 {
     return aTabControl.GetCurPageId();
 }
 
-USHORT SvPropertyBox::CalcVisibleLines()
+sal_uInt16 SvPropertyBox::CalcVisibleLines()
 {
     SvTabPageForProperties* pPage=(SvTabPageForProperties*)
                 aTabControl.GetTabPage(aTabControl.GetCurPageId());
@@ -1255,9 +1255,9 @@ void SvPropertyBox::DisableUpdate()
 void SvPropertyBox::SetController(SvPropertyDataControl *pDataCtr)
 {
     pThePropDataCtr=pDataCtr;
-    USHORT nCount=aTabControl.GetPageCount();
+    sal_uInt16 nCount=aTabControl.GetPageCount();
 
-    for(USHORT i=1;i<=nCount;i++)
+    for(sal_uInt16 i=1;i<=nCount;i++)
     {
         SvTabPageForProperties* pPage=(SvTabPageForProperties*)
                                     aTabControl.GetTabPage(i);
@@ -1267,21 +1267,21 @@ void SvPropertyBox::SetController(SvPropertyDataControl *pDataCtr)
 
 }
 
-USHORT SvPropertyBox::InsertEntry( const SvPropertyData& rData, USHORT nPos)
+sal_uInt16 SvPropertyBox::InsertEntry( const SvPropertyData& rData, sal_uInt16 nPos)
 {
     SvTabPageForProperties* pPage=(SvTabPageForProperties*)
                 aTabControl.GetTabPage(aTabControl.GetCurPageId());
     return pPage->GetTheListBox()->InsertEntry(rData,nPos);
 }
 
-void SvPropertyBox::ChangeEntry( const SvPropertyData& rData, USHORT nPos)
+void SvPropertyBox::ChangeEntry( const SvPropertyData& rData, sal_uInt16 nPos)
 {
     SvTabPageForProperties* pPage=(SvTabPageForProperties*)
                 aTabControl.GetTabPage(aTabControl.GetCurPageId());
     pPage->GetTheListBox()->ChangeEntry(rData,nPos);
 }
 
-USHORT SvPropertyBox::AppendEntry( const SvPropertyData& rData)
+sal_uInt16 SvPropertyBox::AppendEntry( const SvPropertyData& rData)
 {
     SvTabPageForProperties* pPage=(SvTabPageForProperties*)
                 aTabControl.GetTabPage(aTabControl.GetCurPageId());
@@ -1295,26 +1295,26 @@ void SvPropertyBox::SetPropertyValue( const String & rEntryName, const String & 
     pPage->GetTheListBox()->SetPropertyValue( rEntryName, rValue );
 }
 
-void SvPropertyBox::SetFirstVisibleEntry(USHORT nPos)
+void SvPropertyBox::SetFirstVisibleEntry(sal_uInt16 nPos)
 {
     SvTabPageForProperties* pPage=(SvTabPageForProperties*)
                 aTabControl.GetTabPage(aTabControl.GetCurPageId());
     pPage->GetTheListBox()->SetFirstVisibleEntry(nPos);
 }
-USHORT SvPropertyBox::GetFirstVisibleEntry()
+sal_uInt16 SvPropertyBox::GetFirstVisibleEntry()
 {
     SvTabPageForProperties* pPage=(SvTabPageForProperties*)
                 aTabControl.GetTabPage(aTabControl.GetCurPageId());
     return pPage->GetTheListBox()->GetFirstVisibleEntry();
 }
 
-void SvPropertyBox::SetSelectedEntry(USHORT nPos)
+void SvPropertyBox::SetSelectedEntry(sal_uInt16 nPos)
 {
     SvTabPageForProperties* pPage=(SvTabPageForProperties*)
                 aTabControl.GetTabPage(aTabControl.GetCurPageId());
     pPage->GetTheListBox()->SetSelectedEntry(nPos);
 }
-USHORT SvPropertyBox::GetSelectedEntry()
+sal_uInt16 SvPropertyBox::GetSelectedEntry()
 {
     SvTabPageForProperties* pPage=(SvTabPageForProperties*)
                 aTabControl.GetTabPage(aTabControl.GetCurPageId());
@@ -1401,7 +1401,7 @@ void SvBasicPropertyDataControl::SetTheCorrectProperty(const String& aString)
     aCorrectProperty=aString;
 }
 
-void SvBasicPropertyDataControl::SetIsCorrect(BOOL nFlag)
+void SvBasicPropertyDataControl::SetIsCorrect(sal_Bool nFlag)
 {
     bCorrectness=nFlag;
 }

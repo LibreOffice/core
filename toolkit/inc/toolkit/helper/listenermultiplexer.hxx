@@ -57,6 +57,7 @@
 #include <toolkit/helper/mutexhelper.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <com/sun/star/awt/grid/XGridSelectionListener.hpp>
+#include <com/sun/star/awt/tab/XTabPageContainerListener.hpp>
 //  ----------------------------------------------------
 //  class ListenerMultiplexerBase
 //  ----------------------------------------------------
@@ -262,6 +263,13 @@ DECL_LISTENERMULTIPLEXER_END
 //  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START_DLLPUB( SelectionListenerMultiplexer, ::com::sun::star::awt::grid::XGridSelectionListener )
     void SAL_CALL selectionChanged( const ::com::sun::star::awt::grid::GridSelectionEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+DECL_LISTENERMULTIPLEXER_END
+
+//  ----------------------------------------------------
+//  class TabPageListenerMultiplexer
+//  ----------------------------------------------------
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( TabPageListenerMultiplexer, ::com::sun::star::awt::tab::XTabPageContainerListener )
+    void SAL_CALL tabPageActivated( const ::com::sun::star::awt::tab::TabPageActivatedEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
 #endif // _TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX_

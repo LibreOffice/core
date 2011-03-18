@@ -164,6 +164,8 @@ protected:
     bool                    m_bLegacyPartialFullscreen;
     int                     m_nWinGravity;
     int                     m_nInitWinGravity;
+    bool                    m_bWMshouldSwitchWorkspace;
+    bool                    m_bWMshouldSwitchWorkspaceInit;
 
     WMAdaptor( SalDisplay * )
 ;
@@ -176,6 +178,7 @@ protected:
      */
     virtual bool isValid() const;
 
+    bool getWMshouldSwitchWorkspace() const;
 public:
     virtual ~WMAdaptor();
 
@@ -213,8 +216,9 @@ public:
 
     /*
      * attemp to switch the desktop to a certain workarea
+     * if bConsiderWM is true, then on some WMs the call will not result in any action
      */
-    void switchToWorkArea( int nWorkArea ) const;
+    void switchToWorkArea( int nWorkArea, bool bConsiderWM = true ) const;
 
     /*
      *  sets window title

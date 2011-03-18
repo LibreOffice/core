@@ -30,7 +30,7 @@
 #include "precompiled_vcl.hxx"
 
 #define _SV_SALDATA_CXX
-#include <shell/kde_headers.h>
+#include <kde_headers.h>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -135,7 +135,7 @@ void KDEXLib::Init()
             "http://artax.karlin.mff.cuni.cz/~kendy" );
 
     m_nFakeCmdLineArgs = 1;
-    USHORT nIdx;
+    sal_uInt16 nIdx;
     int nParams = osl_getCommandArgCount();
     rtl::OString aDisplay;
     rtl::OUString aParam, aBin;

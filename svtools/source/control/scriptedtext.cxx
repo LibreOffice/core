@@ -28,8 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include "scriptedtext.hxx"
-
+#include <svtools/scriptedtext.hxx>
 #include <vector>
 #include <rtl/ustring.hxx>
 #include <vcl/outdev.hxx>
@@ -235,7 +234,7 @@ void SvtScriptedTextHelper_Impl::CalculateBreaks( const uno::Reference< i18n::XB
                                 nScript = i18n::ScriptType::LATIN;
                                 while( (nScript != i18n::ScriptType::WEAK) && (nCharIx == nNextCharIx) )
                                 {
-                                    nNextCharIx = mrOutDevice.HasGlyphs( GetFont( nScript ), maText, sal::static_int_cast< USHORT >(nCharIx), sal::static_int_cast< USHORT >(nNextPos - nCharIx) );
+                                    nNextCharIx = mrOutDevice.HasGlyphs( GetFont( nScript ), maText, sal::static_int_cast< sal_uInt16 >(nCharIx), sal::static_int_cast< sal_uInt16 >(nNextPos - nCharIx) );
                                     if( nCharIx == nNextCharIx )
                                         ++nScript;
                                 }

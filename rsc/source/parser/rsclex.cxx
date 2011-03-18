@@ -68,7 +68,7 @@ const char* StringContainer::putString( const char* pString )
 
 /*************************************************************************/
 int             c;
-BOOL            bLastInclude;// War letztes Symbol INCLUDE
+sal_Bool            bLastInclude;// War letztes Symbol INCLUDE
 RscFileInst*    pFI;
 RscTypCont*     pTC;
 RscExpression * pExp;
@@ -76,15 +76,15 @@ struct KeyVal {
     int     nKeyWord;
     YYSTYPE aYYSType;
 } aKeyVal[ 1 ];
-BOOL bTargetDefined;
+sal_Bool bTargetDefined;
 
 StringContainer* pStringContainer = NULL;
 
 
 /****************** C O D E **********************************************/
-UINT32 GetNumber(){
-    UINT32  l = 0;
-    UINT32  nLog = 10;
+sal_uInt32 GetNumber(){
+    sal_uInt32  l = 0;
+    sal_uInt32  nLog = 10;
 
     if( '0' == c ){
         c = pFI->GetFastChar();
@@ -122,7 +122,7 @@ UINT32 GetNumber(){
 int MakeToken( YYSTYPE * pTokenVal ){
     int             c1;
 
-    while( TRUE ){  // Kommentare und Leerzeichen ueberlesen
+    while( sal_True ){  // Kommentare und Leerzeichen ueberlesen
         while( isspace( c ) )
             c = pFI->GetFastChar();
         if( '/' == c ){
@@ -154,7 +154,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
     }
 
     if( bLastInclude ){
-        bLastInclude = FALSE; //Zuruecksetzten
+        bLastInclude = sal_False; //Zuruecksetzten
         if( '<' == c ){
             OStringBuffer aBuf( 256 );
             c = pFI->GetFastChar();
@@ -172,20 +172,25 @@ int MakeToken( YYSTYPE * pTokenVal ){
     if( c == '"' )
     {
         OStringBuffer aBuf( 256 );
-        BOOL bDone = FALSE;
+        sal_Bool bDone = sal_False;
         while( !bDone && !pFI->IsEof() && c )
         {
             c = pFI->GetFastChar();
             if( c == '"' )
             {
-                c = pFI->GetFastChar();
+                do
+                {
+                    c = pFI->GetFastChar();
+                }
+                while(  c == ' ' || c == '\t' );
                 if( c == '"' )
                 {
-                    aBuf.append( '"' );
-                    aBuf.append( '"' );
+                    // this is a continued string
+                    // note: multiline string continuations are handled by the parser
+                    // see rscyacc.y
                 }
                 else
-                    bDone = TRUE;
+                    bDone = sal_True;
             }
             else if( c == '\\' )
             {
@@ -238,10 +243,10 @@ int MakeToken( YYSTYPE * pTokenVal ){
                         pTokenVal->constname.nValue = aKey.yylval;
                         break;
                     case BOOLEAN:
-                        pTokenVal->svbool = (BOOL)aKey.yylval;
+                        pTokenVal->svbool = (sal_Bool)aKey.yylval;
                         break;
                     case INCLUDE:
-                        bLastInclude = TRUE;
+                        bLastInclude = sal_True;
                     default:
                         pTokenVal->value = aKey.yylval;
                 };
@@ -305,7 +310,7 @@ int yylex()
 #endif
 {
     if( bTargetDefined )
-        bTargetDefined = FALSE;
+        bTargetDefined = sal_False;
     else
         aKeyVal[ 0 ].nKeyWord =
                      MakeToken( &aKeyVal[ 0 ].aYYSType );
@@ -333,10 +338,10 @@ void InitParser( RscFileInst * pFileInst )
     pFI = pFileInst;
     pStringContainer = new StringContainer();
     pExp = NULL;                //fuer MacroParser
-    bTargetDefined = FALSE;
+    bTargetDefined = sal_False;
 
     // Anfangszeichen initialisieren
-    bLastInclude = FALSE;
+    bLastInclude = sal_False;
     c = pFI->GetFastChar();
 }
 
@@ -362,7 +367,7 @@ void IncludeParser( RscFileInst * pFileInst )
     int           nToken;   // Wert des Tokens
     YYSTYPE       aYYSType; // Daten des Tokens
     RscFile     * pFName;   // Filestruktur
-    ULONG         lKey;     // Fileschluessel
+    sal_uLong         lKey;     // Fileschluessel
     RscTypCont  * pTypCon  = pFileInst->pTypCont;
 
     pFName = pTypCon->aFileTab.Get( pFileInst->GetFileIndex() );
@@ -418,7 +423,7 @@ RscExpression * MacroParser( RscFileInst & rFileInst )
 
     //Ziel auf macro_expression setzen
     aKeyVal[ 0 ].nKeyWord = MACROTARGET;
-    bTargetDefined = TRUE;
+    bTargetDefined = sal_True;
     aError = yyparse();
 
     pExpression = pExp;

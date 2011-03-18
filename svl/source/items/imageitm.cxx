@@ -38,27 +38,27 @@ struct SfxImageItem_Impl
 {
     String  aURL;
     long    nAngle;
-    BOOL    bMirrored;
+    sal_Bool    bMirrored;
     int     operator == ( const SfxImageItem_Impl& rOther ) const
             { return nAngle == rOther.nAngle && bMirrored == rOther.bMirrored; }
 };
 
 //---------------------------------------------------------
 
-SfxImageItem::SfxImageItem( USHORT which, UINT16 nImage )
+SfxImageItem::SfxImageItem( sal_uInt16 which, sal_uInt16 nImage )
     : SfxInt16Item( which, nImage )
 {
     pImp = new SfxImageItem_Impl;
     pImp->nAngle = 0;
-    pImp->bMirrored = FALSE;
+    pImp->bMirrored = sal_False;
 }
 
-SfxImageItem::SfxImageItem( USHORT which, const String& rURL )
+SfxImageItem::SfxImageItem( sal_uInt16 which, const String& rURL )
     : SfxInt16Item( which, 0 )
 {
     pImp = new SfxImageItem_Impl;
     pImp->nAngle = 0;
-    pImp->bMirrored = FALSE;
+    pImp->bMirrored = sal_False;
     pImp->aURL = rURL;
 }
 
@@ -88,7 +88,7 @@ int SfxImageItem::operator==( const SfxPoolItem& rItem ) const
     return( ((SfxImageItem&) rItem).GetValue() == GetValue() && (*pImp == *(((SfxImageItem&)rItem).pImp) ) );
 }
 
-bool SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
+bool SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq( 4 );
     aSeq[0] = ::com::sun::star::uno::makeAny( GetValue() );
@@ -100,7 +100,7 @@ bool SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
     return true;
 }
 
-bool SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
+bool SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq;
     if (( rVal >>= aSeq ) && ( aSeq.getLength() == 4 ))
@@ -129,12 +129,12 @@ long SfxImageItem::GetRotation() const
     return pImp->nAngle;
 }
 
-void SfxImageItem::SetMirrored( BOOL bSet )
+void SfxImageItem::SetMirrored( sal_Bool bSet )
 {
     pImp->bMirrored = bSet;
 }
 
-BOOL SfxImageItem::IsMirrored() const
+sal_Bool SfxImageItem::IsMirrored() const
 {
     return pImp->bMirrored;
 }

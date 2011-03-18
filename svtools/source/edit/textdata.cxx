@@ -38,7 +38,7 @@ SV_IMPL_PTRARR( TextLines, TextLinePtr );
 SV_IMPL_VARARR( TEWritingDirectionInfos, TEWritingDirectionInfo );
 
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // (+) class TextSelection
 // -------------------------------------------------------------------------
 
@@ -67,7 +67,7 @@ void TextSelection::Justify()
 }
 
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // (+) class TETextPortionList
 // -------------------------------------------------------------------------
 TETextPortionList::TETextPortionList()
@@ -81,24 +81,24 @@ TETextPortionList::~TETextPortionList()
 
 void TETextPortionList::Reset()
 {
-    for ( USHORT nPortion = 0; nPortion < Count(); nPortion++ )
+    for ( sal_uInt16 nPortion = 0; nPortion < Count(); nPortion++ )
         delete GetObject( nPortion );
     Remove( 0, Count() );
 }
 
-void TETextPortionList::DeleteFromPortion( USHORT nDelFrom )
+void TETextPortionList::DeleteFromPortion( sal_uInt16 nDelFrom )
 {
     DBG_ASSERT( ( nDelFrom < Count() ) || ( (nDelFrom == 0) && (Count() == 0) ), "DeleteFromPortion: Out of range" );
-    for ( USHORT nP = nDelFrom; nP < Count(); nP++ )
+    for ( sal_uInt16 nP = nDelFrom; nP < Count(); nP++ )
         delete GetObject( nP );
     Remove( nDelFrom, Count()-nDelFrom );
 }
 
-USHORT TETextPortionList::FindPortion( USHORT nCharPos, USHORT& nPortionStart, BOOL bPreferStartingPortion )
+sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPortionStart, sal_Bool bPreferStartingPortion )
 {
     // Bei nCharPos an Portion-Grenze wird die linke Portion gefunden
-    USHORT nTmpPos = 0;
-    for ( USHORT nPortion = 0; nPortion < Count(); nPortion++ )
+    sal_uInt16 nTmpPos = 0;
+    for ( sal_uInt16 nPortion = 0; nPortion < Count(); nPortion++ )
     {
         TETextPortion* pPortion = GetObject( nPortion );
         nTmpPos = nTmpPos + pPortion->GetLen();
@@ -117,10 +117,10 @@ USHORT TETextPortionList::FindPortion( USHORT nCharPos, USHORT& nPortionStart, B
 }
 
 /*
-USHORT TETextPortionList::GetPortionStartIndex( USHORT nPortion )
+sal_uInt16 TETextPortionList::GetPortionStartIndex( sal_uInt16 nPortion )
 {
-    USHORT nPos = 0;
-    for ( USHORT nP = 0; nP < nPortion; nP++ )
+    sal_uInt16 nPos = 0;
+    for ( sal_uInt16 nP = 0; nP < nPortion; nP++ )
     {
         TETextPortion* pPortion = GetObject( nP );
         nPos += pPortion->GetLen();
@@ -130,24 +130,24 @@ USHORT TETextPortionList::GetPortionStartIndex( USHORT nPortion )
 */
 
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // (+) class TEParaPortion
 // -------------------------------------------------------------------------
 TEParaPortion::TEParaPortion( TextNode* pN )
 {
     mpNode = pN;
     mnInvalidPosStart = mnInvalidDiff = 0;
-    mbInvalid = TRUE;
-    mbSimple = FALSE;
+    mbInvalid = sal_True;
+    mbSimple = sal_False;
 }
 
 TEParaPortion::~TEParaPortion()
 {
 }
 
-void TEParaPortion::MarkInvalid( USHORT nStart, short nDiff )
+void TEParaPortion::MarkInvalid( sal_uInt16 nStart, short nDiff )
 {
-    if ( mbInvalid == FALSE )
+    if ( mbInvalid == sal_False )
     {
         mnInvalidPosStart = ( nDiff >= 0 ) ? nStart : ( nStart + nDiff );
         mnInvalidDiff = nDiff;
@@ -169,20 +169,20 @@ void TEParaPortion::MarkInvalid( USHORT nStart, short nDiff )
         else
         {
             DBG_ASSERT( ( nDiff >= 0 ) || ( (nStart+nDiff) >= 0 ), "MarkInvalid: Diff out of Range" );
-            mnInvalidPosStart = Min( mnInvalidPosStart, (USHORT) ( (nDiff < 0) ? nStart+nDiff : nDiff ) );
+            mnInvalidPosStart = Min( mnInvalidPosStart, (sal_uInt16) ( (nDiff < 0) ? nStart+nDiff : nDiff ) );
             mnInvalidDiff = 0;
-            mbSimple = FALSE;
+            mbSimple = sal_False;
         }
     }
 
     maWritingDirectionInfos.Remove( 0, maWritingDirectionInfos.Count() );
 
-    mbInvalid = TRUE;
+    mbInvalid = sal_True;
 }
 
-void TEParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT /*nEnd*/ )
+void TEParaPortion::MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 /*nEnd*/ )
 {
-    if ( mbInvalid == FALSE )
+    if ( mbInvalid == sal_False )
     {
         mnInvalidPosStart = nStart;
 //      nInvalidPosEnd = nEnd;
@@ -196,13 +196,13 @@ void TEParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT /*nEnd*/ )
     maWritingDirectionInfos.Remove( 0, maWritingDirectionInfos.Count() );
 
     mnInvalidDiff = 0;
-    mbInvalid = TRUE;
-    mbSimple = FALSE;
+    mbInvalid = sal_True;
+    mbSimple = sal_False;
 }
 
-USHORT TEParaPortion::GetLineNumber( USHORT nChar, BOOL bInclEnd )
+sal_uInt16 TEParaPortion::GetLineNumber( sal_uInt16 nChar, sal_Bool bInclEnd )
 {
-    for ( USHORT nLine = 0; nLine < maLines.Count(); nLine++ )
+    for ( sal_uInt16 nLine = 0; nLine < maLines.Count(); nLine++ )
     {
         TextLine* pLine = maLines.GetObject( nLine );
         if ( ( bInclEnd && ( pLine->GetEnd() >= nChar ) ) ||
@@ -219,9 +219,9 @@ USHORT TEParaPortion::GetLineNumber( USHORT nChar, BOOL bInclEnd )
 }
 
 
-void TEParaPortion::CorrectValuesBehindLastFormattedLine( USHORT nLastFormattedLine )
+void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormattedLine )
 {
-    USHORT nLines = maLines.Count();
+    sal_uInt16 nLines = maLines.Count();
     DBG_ASSERT( nLines, "CorrectPortionNumbersFromLine: Leere Portion?" );
     if ( nLastFormattedLine < ( nLines - 1 ) )
     {
@@ -239,7 +239,7 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( USHORT nLastFormattedL
         short nTDiff = sal::static_int_cast< short >(-( nTextDiff-1 ));
         if ( nPDiff || nTDiff )
         {
-            for ( USHORT nL = nLastFormattedLine+1; nL < nLines; nL++ )
+            for ( sal_uInt16 nL = nLastFormattedLine+1; nL < nLines; nL++ )
             {
                 TextLine* pLine = maLines[ nL ];
 
@@ -255,7 +255,7 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( USHORT nLastFormattedL
     }
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // (+) class TEParaPortions
 // -------------------------------------------------------------------------
 TEParaPortions::TEParaPortions()
@@ -275,7 +275,7 @@ void TEParaPortions::Reset()
     clear();
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // (+) class IdleFormatter
 // -------------------------------------------------------------------------
 IdleFormatter::IdleFormatter()
@@ -289,7 +289,7 @@ IdleFormatter::~IdleFormatter()
     mpView = 0;
 }
 
-void IdleFormatter::DoIdleFormat( TextView* pV, USHORT nMaxRestarts )
+void IdleFormatter::DoIdleFormat( TextView* pV, sal_uInt16 nMaxRestarts )
 {
     mpView = pV;
 
@@ -319,12 +319,12 @@ void IdleFormatter::ForceTimeout()
 
 TYPEINIT1( TextHint, SfxSimpleHint );
 
-TextHint::TextHint( ULONG Id ) : SfxSimpleHint( Id )
+TextHint::TextHint( sal_uLong Id ) : SfxSimpleHint( Id )
 {
     mnValue = 0;
 }
 
-TextHint::TextHint( ULONG Id, ULONG nValue ) : SfxSimpleHint( Id )
+TextHint::TextHint( sal_uLong Id, sal_uLong nValue ) : SfxSimpleHint( Id )
 {
     mnValue = nValue;
 }
@@ -334,9 +334,9 @@ TEIMEInfos::TEIMEInfos( const TextPaM& rPos, const String& rOldTextAfterStartPos
 {
     aPos = rPos;
     nLen = 0;
-    bCursor = TRUE;
+    bCursor = sal_True;
     pAttribs = NULL;
-    bWasCursorOverwrite = FALSE;
+    bWasCursorOverwrite = sal_False;
 }
 
 TEIMEInfos::~TEIMEInfos()
@@ -344,12 +344,12 @@ TEIMEInfos::~TEIMEInfos()
     delete[] pAttribs;
 }
 
-void TEIMEInfos::CopyAttribs( const USHORT* pA, USHORT nL )
+void TEIMEInfos::CopyAttribs( const sal_uInt16* pA, sal_uInt16 nL )
 {
     nLen = nL;
     delete pAttribs;
-    pAttribs = new USHORT[ nL ];
-    memcpy( pAttribs, pA, nL*sizeof(USHORT) );
+    pAttribs = new sal_uInt16[ nL ];
+    memcpy( pAttribs, pA, nL*sizeof(sal_uInt16) );
 }
 
 void TEIMEInfos::DestroyAttribs()

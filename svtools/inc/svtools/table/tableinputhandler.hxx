@@ -41,7 +41,7 @@ namespace svt { namespace table
 {
 //........................................................................
 
-    class IAbstractTableControl;
+    class ITableControl;
 
     //====================================================================
     //= ITableInputHandler
@@ -57,16 +57,16 @@ namespace svt { namespace table
         // or whether it has been sufficiently handled by the ->ITableInputHandler instance
         // (<FALSE/>).
 
-        virtual bool    MouseMove       ( IAbstractTableControl& _rControl, const MouseEvent& rMEvt ) = 0;
-        virtual bool    MouseButtonDown ( IAbstractTableControl& _rControl, const MouseEvent& rMEvt ) = 0;
-        virtual bool    MouseButtonUp   ( IAbstractTableControl& _rControl, const MouseEvent& rMEvt ) = 0;
-        virtual bool    KeyInput        ( IAbstractTableControl& _rControl, const KeyEvent& rKEvt ) = 0;
-        virtual bool    GetFocus        ( IAbstractTableControl& _rControl ) = 0;
-        virtual bool    LoseFocus       ( IAbstractTableControl& _rControl ) = 0;
-        virtual bool    RequestHelp     ( IAbstractTableControl& _rControl, const HelpEvent& rHEvt ) = 0;
-        virtual bool    Command         ( IAbstractTableControl& _rControl, const CommandEvent& rCEvt ) = 0;
-        virtual bool    PreNotify       ( IAbstractTableControl& _rControl, NotifyEvent& rNEvt ) = 0;
-        virtual bool    Notify          ( IAbstractTableControl& _rControl, NotifyEvent& rNEvt ) = 0;
+        virtual bool    MouseMove       ( ITableControl& _rControl, const MouseEvent& rMEvt ) = 0;
+        virtual bool    MouseButtonDown ( ITableControl& _rControl, const MouseEvent& rMEvt ) = 0;
+        virtual bool    MouseButtonUp   ( ITableControl& _rControl, const MouseEvent& rMEvt ) = 0;
+        virtual bool    KeyInput        ( ITableControl& _rControl, const KeyEvent& rKEvt ) = 0;
+        virtual bool    GetFocus        ( ITableControl& _rControl ) = 0;
+        virtual bool    LoseFocus       ( ITableControl& _rControl ) = 0;
+        virtual bool    RequestHelp     ( ITableControl& _rControl, const HelpEvent& rHEvt ) = 0;
+        virtual bool    Command         ( ITableControl& _rControl, const CommandEvent& rCEvt ) = 0;
+        virtual bool    PreNotify       ( ITableControl& _rControl, NotifyEvent& rNEvt ) = 0;
+        virtual bool    Notify          ( ITableControl& _rControl, NotifyEvent& rNEvt ) = 0;
 
         virtual ~ITableInputHandler() { }
     };

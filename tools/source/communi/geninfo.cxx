@@ -56,7 +56,7 @@ GenericInformation::GenericInformation( const ByteString &rKey,
 
 /*****************************************************************************/
 GenericInformation::GenericInformation( const GenericInformation& rInf,
-                                        BOOL bCopySubs)
+                                        sal_Bool bCopySubs)
 /*****************************************************************************/
                 : ByteString( rInf ),
                 sValue( rInf.sValue ),
@@ -81,15 +81,15 @@ GenericInformation::~GenericInformation()
 }
 
 /*****************************************************************************/
-BOOL GenericInformation::InsertSubInfo( GenericInformation *pInfo )
+sal_Bool GenericInformation::InsertSubInfo( GenericInformation *pInfo )
 /*****************************************************************************/
 {
     return ( pInfoList && pInfoList->InsertInfo( pInfo ));
 }
 
 /*****************************************************************************/
-BOOL GenericInformation::InsertSubInfo( const ByteString &rPathKey, const ByteString &rValue,
-                    BOOL bSearchByPath, BOOL bNewPath )
+sal_Bool GenericInformation::InsertSubInfo( const ByteString &rPathKey, const ByteString &rValue,
+                    sal_Bool bSearchByPath, sal_Bool bNewPath )
 /*****************************************************************************/
 {
   return (pInfoList && pInfoList->InsertInfo( rPathKey, rValue, bSearchByPath, bNewPath ));
@@ -97,7 +97,7 @@ BOOL GenericInformation::InsertSubInfo( const ByteString &rPathKey, const ByteSt
 
 /*****************************************************************************/
 void GenericInformation::RemoveSubInfo( GenericInformation *pInfo,
-                            BOOL bDelete )
+                            sal_Bool bDelete )
 /*****************************************************************************/
 {
     pInfoList->RemoveInfo( pInfo, bDelete );
@@ -105,8 +105,8 @@ void GenericInformation::RemoveSubInfo( GenericInformation *pInfo,
 
 /*****************************************************************************/
 GenericInformation *GenericInformation::GetSubInfo( ByteString &rKey,
-                        BOOL bSearchByPath,
-                            BOOL bCreatePath )
+                        sal_Bool bSearchByPath,
+                            sal_Bool bCreatePath )
 /*****************************************************************************/
 {
   if ( !pInfoList && bCreatePath )
@@ -142,7 +142,7 @@ GenericInformationList::GenericInformationList(
     for( size_t i = 0; i < rList.size(); i++ )
     {
         pTemp = rList[ i ];
-        pWork = new GenericInformation( *pTemp, TRUE );
+        pWork = new GenericInformation(*pTemp,sal_True);
 
         maList.push_back( pWork );
     }
@@ -203,8 +203,8 @@ GenericInformation *GenericInformationList::Search(
 
 /*****************************************************************************/
 GenericInformation *GenericInformationList::GetInfo( ByteString &rKey,
-                             BOOL bSearchByPath,
-                             BOOL bCreatePath )
+                             sal_Bool bSearchByPath,
+                             sal_Bool bCreatePath )
 /*****************************************************************************/
 {
 
@@ -226,7 +226,7 @@ GenericInformation *GenericInformationList::GetInfo( ByteString &rKey,
      * wenn searchpath gesetzt kein returninfo vorhanden und newpath gesetzt,
      *   mache neues Verzeichniss
      */
-    USHORT nTokenCount = rKey.GetTokenCount('/');
+    sal_uInt16 nTokenCount = rKey.GetTokenCount('/');
     // search for next key of path in next level of tree
     if ( bSearchByPath && (nTokenCount > 1)) {
       ByteString sPath = ByteString(rKey.Copy( sKey.Len() + 1 ));
@@ -236,7 +236,7 @@ GenericInformation *GenericInformationList::GetInfo( ByteString &rKey,
         pReturnInfo = new GenericInformation( sKey, "", this, NULL);
         pReturnInfo->SetSubList( new GenericInformationList( pReturnInfo ));
       }
-      return pReturnInfo->GetSubInfo( sPath, TRUE, bCreatePath );
+      return pReturnInfo->GetSubInfo( sPath, sal_True, bCreatePath );
     }
     if ( !pReturnInfo && bCreatePath ) {
       pReturnInfo = new GenericInformation ( sKey, "", this, NULL);
@@ -248,7 +248,7 @@ GenericInformation *GenericInformationList::GetInfo( ByteString &rKey,
 /*****************************************************************************/
 size_t GenericInformationList::InsertSorted(
     GenericInformation *pInfo,
-    BOOL bOverwrite,
+    sal_Bool bOverwrite,
     size_t nStart,
     size_t nEnd
 )
@@ -346,21 +346,21 @@ size_t GenericInformationList::InsertSorted(
 }
 
 /*****************************************************************************/
-BOOL GenericInformationList::InsertInfo( GenericInformation *pInfo,
-                                BOOL bOverwrite )
+sal_Bool GenericInformationList::InsertInfo( GenericInformation *pInfo,
+                                sal_Bool bOverwrite )
 /*****************************************************************************/
 {
     if ( !pInfo->Len())
-        return FALSE;
+        return sal_False;
 
     InsertSorted( pInfo, bOverwrite, 0, maList.size() - 1 );
-    return TRUE;
+    return sal_True;
 }
 
 
 /*****************************************************************************/
-BOOL GenericInformationList::InsertInfo( const ByteString &rPathKey, const ByteString &rValue,
-                     BOOL bSearchByPath, BOOL bNewPath )
+sal_Bool GenericInformationList::InsertInfo( const ByteString &rPathKey, const ByteString &rValue,
+                     sal_Bool bSearchByPath, sal_Bool bNewPath )
 /*****************************************************************************/
 {
   GenericInformation *pInfo;
@@ -372,14 +372,14 @@ BOOL GenericInformationList::InsertInfo( const ByteString &rPathKey, const ByteS
 
   if ( pInfo ) {
     pInfo->SetValue( rValue );
-    return TRUE;
+    return sal_True;
   }
-  return FALSE;
+  return sal_False;
 }
 
 /*****************************************************************************/
 void GenericInformationList::RemoveInfo( GenericInformation *pInfo,
-                                BOOL bDelete )
+                                sal_Bool bDelete )
 /*****************************************************************************/
 {
     for (

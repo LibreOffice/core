@@ -28,6 +28,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_i18npool.hxx"
+
+#include <osl/diagnose.h>
 #include <sal/config.h>
 #include <sal/macros.h>
 #include <rtl/ustring.hxx>
@@ -130,7 +132,6 @@ static PageDesc aDinTab[] =
     { MM2MM100( 220 ),   MM2MM100( 220 ),    "EnvInvite",  NULL },
     { MM2MM100( 227 ),   MM2MM100( 356 ),    "SuperA",  NULL },
     { MM2MM100( 305 ),   MM2MM100( 487 ),    "SuperB",  NULL },
-    { IN2MM100( 8.5 ),   IN2MM100( 12.69 ),  "LetterPlus",  NULL },
     { IN2MM100( 8.5 ),   IN2MM100( 12.69 ),  "LetterPlus",  NULL },
     { MM2MM100( 210 ),   MM2MM100( 330 ),    "A4Plus",  NULL },
     { MM2MM100( 200 ),   MM2MM100( 148 ),    "DoublePostcard",  NULL },
@@ -392,6 +393,9 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
 PaperInfo::PaperInfo(Paper eType) : m_eType(eType)
 {
+    OSL_ENSURE( sizeof(aDinTab) / sizeof(aDinTab[0]) == NUM_PAPER_ENTRIES,
+            "mismatch between array entries and enum values" );
+
     m_nPaperWidth = aDinTab[m_eType].m_nWidth;
     m_nPaperHeight = aDinTab[m_eType].m_nHeight;
 }

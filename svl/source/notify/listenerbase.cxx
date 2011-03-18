@@ -30,11 +30,10 @@
 #include "precompiled_svl.hxx"
 
 #include <tools/debug.hxx>
-
 #include "listenerbase.hxx"
-#include "listeneriter.hxx"
-#include "listener.hxx"
-#include "broadcast.hxx"
+#include <svl/listeneriter.hxx>
+#include <svl/listener.hxx>
+#include <svl/broadcast.hxx>
 
 
 SvtListenerBase::SvtListenerBase( SvtListener& rLst,

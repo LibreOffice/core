@@ -29,10 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <filedlg.hxx>
+#include <svtools/filedlg.hxx>
 #include <filedlg2.hxx>
 
-PathDialog::PathDialog( Window* _pParent, WinBits nStyle, BOOL bCreateDir ) :
+PathDialog::PathDialog( Window* _pParent, WinBits nStyle, sal_Bool bCreateDir ) :
     ModalDialog( _pParent, WB_STDMODAL | nStyle )
 {
     pImpFileDlg = new ImpSvFileDlg;
@@ -71,7 +71,7 @@ long PathDialog::OK()
     if( aOKHdlLink.IsSet() )
         return aOKHdlLink.Call( this );
     else
-        return TRUE;
+        return sal_True;
 }
 
 
@@ -81,7 +81,7 @@ FileDialog::FileDialog( Window* _pParent, WinBits nStyle ) :
     // Dadurch dass hier bei VCL nicht der CTOR mit ResType verwendet wird,
     // wurde im PathDialog-CTOR leider ein ImpPathDialog angelegt...
     // So zwar scheisse, aber der Dialog ist eh' nur ein Hack:
-    pImpFileDlg->CreateDialog( this, nStyle, WINDOW_FILEDIALOG, FALSE );
+    pImpFileDlg->CreateDialog( this, nStyle, WINDOW_FILEDIALOG, sal_False );
 }
 
 FileDialog::~FileDialog()
@@ -123,17 +123,17 @@ void FileDialog::FilterSelect()
     aFilterHdlLink.Call( this );
 }
 
-USHORT FileDialog::GetFilterCount() const
+sal_uInt16 FileDialog::GetFilterCount() const
 {
   return ((ImpFileDialog*)pImpFileDlg->GetDialog())->GetFilterCount();
 }
 
-UniString FileDialog::GetFilterName( USHORT nPos ) const
+UniString FileDialog::GetFilterName( sal_uInt16 nPos ) const
 {
   return ((ImpFileDialog*)pImpFileDlg->GetDialog())->GetFilterName( nPos );
 }
 
-UniString FileDialog::GetFilterType( USHORT nPos ) const
+UniString FileDialog::GetFilterType( sal_uInt16 nPos ) const
 {
   return ((ImpFileDialog*)pImpFileDlg->GetDialog())->GetFilterType( nPos );
 }

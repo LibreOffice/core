@@ -1142,7 +1142,7 @@ STRING& STRING::ConvertLineEnd( LineEnd eLineEnd )
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
     // Zeilenumbrueche ermitteln und neue Laenge berechnen
-    BOOL            bConvert    = FALSE;            // Muss konvertiert werden
+    sal_Bool            bConvert    = sal_False;            // Muss konvertiert werden
     const STRCODE*  pStr        = mpData->maStr;    // damit es schneller geht
     xub_StrLen      nLineEndLen = (eLineEnd == LINEEND_CRLF) ? 2 : 1;
     xub_StrLen      nLen        = 0;                // Ziel-Laenge
@@ -1165,7 +1165,7 @@ STRING& STRING::ConvertLineEnd( LineEnd eLineEnd )
                       ((pStr[i] == _CR) || (pStr[i+1] == _CR))) ||
                      ((eLineEnd == LINEEND_CR) &&
                       ((pStr[i] == _LF) || (pStr[i+1] == _LF))) )
-                    bConvert = TRUE;
+                    bConvert = sal_True;
             }
 
             // \r\n oder \n\r, dann Zeichen ueberspringen
@@ -1328,18 +1328,18 @@ StringCompare STRING::CompareIgnoreCaseToAscii( const STRCODE* pCharStr,
 
 // -----------------------------------------------------------------------
 
-BOOL STRING::Equals( const STRING& rStr ) const
+sal_Bool STRING::Equals( const STRING& rStr ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
     // Sind die Daten gleich
     if ( mpData == rStr.mpData )
-        return TRUE;
+        return sal_True;
 
     // Gleiche Laenge
     if ( mpData->mnLen != rStr.mpData->mnLen )
-        return FALSE;
+        return sal_False;
 
     // String vergleichen
     return (ImplStringCompareWithoutZero( mpData->maStr, rStr.mpData->maStr, mpData->mnLen ) == 0);
@@ -1347,7 +1347,7 @@ BOOL STRING::Equals( const STRING& rStr ) const
 
 // -----------------------------------------------------------------------
 
-BOOL STRING::Equals( const STRCODE* pCharStr ) const
+sal_Bool STRING::Equals( const STRCODE* pCharStr ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
@@ -1356,18 +1356,18 @@ BOOL STRING::Equals( const STRCODE* pCharStr ) const
 
 // -----------------------------------------------------------------------
 
-BOOL STRING::EqualsIgnoreCaseAscii( const STRING& rStr ) const
+sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
     // Sind die Daten gleich
     if ( mpData == rStr.mpData )
-        return TRUE;
+        return sal_True;
 
     // Gleiche Laenge
     if ( mpData->mnLen != rStr.mpData->mnLen )
-        return FALSE;
+        return sal_False;
 
     // String vergleichen
     return (ImplStringICompareWithoutZero( mpData->maStr, rStr.mpData->maStr, mpData->mnLen ) == 0);
@@ -1375,7 +1375,7 @@ BOOL STRING::EqualsIgnoreCaseAscii( const STRING& rStr ) const
 
 // -----------------------------------------------------------------------
 
-BOOL STRING::EqualsIgnoreCaseAscii( const STRCODE* pCharStr ) const
+sal_Bool STRING::EqualsIgnoreCaseAscii( const STRCODE* pCharStr ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
@@ -1384,7 +1384,7 @@ BOOL STRING::EqualsIgnoreCaseAscii( const STRCODE* pCharStr ) const
 
 // -----------------------------------------------------------------------
 
-BOOL STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
+sal_Bool STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
@@ -1396,7 +1396,7 @@ BOOL STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) co
     if ( nMaxLen < nLen )
     {
         if ( rStr.mpData->mnLen != nMaxLen )
-            return FALSE;
+            return sal_False;
         nLen = static_cast< xub_StrLen >(nMaxLen);
     }
 
@@ -1406,7 +1406,7 @@ BOOL STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) co
 
 // -----------------------------------------------------------------------
 
-BOOL STRING::Equals( const STRCODE* pCharStr, xub_StrLen nIndex, xub_StrLen nLen ) const
+sal_Bool STRING::Equals( const STRCODE* pCharStr, xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
@@ -1419,7 +1419,7 @@ BOOL STRING::Equals( const STRCODE* pCharStr, xub_StrLen nIndex, xub_StrLen nLen
 
 // -----------------------------------------------------------------------
 
-BOOL STRING::EqualsIgnoreCaseAscii( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
+sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
@@ -1431,7 +1431,7 @@ BOOL STRING::EqualsIgnoreCaseAscii( const STRING& rStr, xub_StrLen nIndex, xub_S
     if ( nMaxLen < nLen )
     {
         if ( rStr.mpData->mnLen != nMaxLen )
-            return FALSE;
+            return sal_False;
         nLen = static_cast< xub_StrLen >(nMaxLen);
     }
 
@@ -1441,7 +1441,7 @@ BOOL STRING::EqualsIgnoreCaseAscii( const STRING& rStr, xub_StrLen nIndex, xub_S
 
 // -----------------------------------------------------------------------
 
-BOOL STRING::EqualsIgnoreCaseAscii( const STRCODE* pCharStr, xub_StrLen nIndex, xub_StrLen nLen ) const
+sal_Bool STRING::EqualsIgnoreCaseAscii( const STRCODE* pCharStr, xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 

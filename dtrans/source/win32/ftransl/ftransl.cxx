@@ -278,6 +278,7 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable()
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-dif;windows_formatname=\"DIF\"", "DIF", "DIF", CF_DIF, CPPUTYPE_DEFAULT));
     // SOT_FORMAT_BITMAP
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", "Bitmap", CF_DIB, CPPUTYPE_DEFAULT));
+    m_TranslTable.push_back(FormatEntry("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", "Bitmap", CF_BITMAP, CPPUTYPE_DEFAULT));
     // SOT_FORMAT_STRING
     m_TranslTable.push_back(FormatEntry("text/plain;charset=utf-16", "Unicode-Text", "", CF_UNICODETEXT, CppuType_String));
     // Format Locale - for internal use

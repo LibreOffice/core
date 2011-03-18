@@ -37,7 +37,7 @@
 
 DBG_NAME(SfxFlagItem)
 
-USHORT nSfxFlagVal[16] =
+sal_uInt16 nSfxFlagVal[16] =
 {
     0x0001, 0x0002, 0x0004, 0x0008,
     0x0010, 0x0020, 0x0040, 0x0080,
@@ -52,7 +52,7 @@ TYPEINIT1(SfxFlagItem, SfxPoolItem);
 
 // -----------------------------------------------------------------------
 
-SfxFlagItem::SfxFlagItem( USHORT nW, USHORT nV ) :
+SfxFlagItem::SfxFlagItem( sal_uInt16 nW, sal_uInt16 nV ) :
     SfxPoolItem( nW ),
     nVal(nV)
 {
@@ -61,7 +61,7 @@ SfxFlagItem::SfxFlagItem( USHORT nW, USHORT nV ) :
 
 // -----------------------------------------------------------------------
 
-SfxFlagItem::SfxFlagItem( USHORT nW, SvStream &rStream) :
+SfxFlagItem::SfxFlagItem( sal_uInt16 nW, SvStream &rStream) :
     SfxPoolItem( nW )
 {
     DBG_CTOR(SfxFlagItem, 0);
@@ -79,7 +79,7 @@ SfxFlagItem::SfxFlagItem( const SfxFlagItem& rItem ) :
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxFlagItem::Store(SvStream &rStream, USHORT) const
+SvStream& SfxFlagItem::Store(SvStream &rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
     rStream << nVal;
@@ -99,32 +99,32 @@ SfxItemPresentation SfxFlagItem::GetPresentation
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
     rText.Erase();
-    for ( BYTE nFlag = 0; nFlag < GetFlagCount(); ++nFlag )
+    for ( sal_uInt8 nFlag = 0; nFlag < GetFlagCount(); ++nFlag )
         rText += XubString::CreateFromInt32( GetFlag(nFlag) );
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
 // -----------------------------------------------------------------------
 
-XubString SfxFlagItem::GetFlagText( BYTE ) const
+XubString SfxFlagItem::GetFlagText( sal_uInt8 ) const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
-    DBG_WARNING( "calling GetValueText(USHORT) on SfxFlagItem -- overload!" );
+    DBG_WARNING( "calling GetValueText(sal_uInt16) on SfxFlagItem -- overload!" );
     return XubString();
 }
 
 // -----------------------------------------------------------------------
 
-BYTE SfxFlagItem::GetFlagCount() const
+sal_uInt8 SfxFlagItem::GetFlagCount() const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
-    DBG_WARNING( "calling GetValueText(USHORT) on SfxFlagItem -- overload!" );
+    DBG_WARNING( "calling GetValueText(sal_uInt16) on SfxFlagItem -- overload!" );
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxFlagItem::Create(SvStream &, USHORT) const
+SfxPoolItem* SfxFlagItem::Create(SvStream &, sal_uInt16) const
 {
     DBG_CHKTHIS(SfxFlagItem, 0);
     DBG_WARNING( "calling Create() on SfxFlagItem -- overload!" );
@@ -142,7 +142,7 @@ int SfxFlagItem::operator==( const SfxPoolItem& rItem ) const
 
 // -----------------------------------------------------------------------
 
-void SfxFlagItem::SetFlag( BYTE nFlag, int bVal )
+void SfxFlagItem::SetFlag( sal_uInt8 nFlag, int bVal )
 {
     if ( bVal )
         nVal |= nSfxFlagVal[nFlag];

@@ -73,25 +73,25 @@ static osl::Mutex &  GetOwnMutex()
 ///////////////////////////////////////////////////////////////////////////
 
 
-static BOOL lcl_SetLocale( INT16 &rLanguage, const uno::Any &rVal )
+static sal_Bool lcl_SetLocale( sal_Int16 &rLanguage, const uno::Any &rVal )
 {
-    BOOL bSucc = FALSE;
+    sal_Bool bSucc = sal_False;
 
     lang::Locale aNew;
     if (rVal >>= aNew)  // conversion successful?
     {
-        INT16 nNew = MsLangId::convertLocaleToLanguage( aNew );
+        sal_Int16 nNew = MsLangId::convertLocaleToLanguage( aNew );
         if (nNew != rLanguage)
         {
             rLanguage = nNew;
-            bSucc = TRUE;
+            bSucc = sal_True;
         }
     }
     return bSucc;
 }
 
 
-static inline const OUString lcl_LanguageToCfgLocaleStr( INT16 nLanguage )
+static inline const OUString lcl_LanguageToCfgLocaleStr( sal_Int16 nLanguage )
 {
     OUString aRes;
     if (LANGUAGE_SYSTEM != nLanguage)
@@ -100,7 +100,7 @@ static inline const OUString lcl_LanguageToCfgLocaleStr( INT16 nLanguage )
 }
 
 
-static INT16 lcl_CfgAnyToLanguage( const uno::Any &rVal )
+static sal_Int16 lcl_CfgAnyToLanguage( const uno::Any &rVal )
 {
     OUString aTmp;
     rVal >>= aTmp;
@@ -118,34 +118,34 @@ SvtLinguOptions::SvtLinguOptions()
 
     // general options
     bIsUseDictionaryList    =
-    bIsIgnoreControlCharacters  = TRUE;
+    bIsIgnoreControlCharacters  = sal_True;
 
     // spelling options
     bIsSpellCapitalization  =
-    bIsSpellSpecial         = TRUE;
+    bIsSpellSpecial         = sal_True;
     bIsSpellAuto            =
     bIsSpellReverse         =
     bIsSpellWithDigits      =
-    bIsSpellUpperCase       = FALSE;
+    bIsSpellUpperCase       = sal_False;
 
     // text conversion options
-    bIsIgnorePostPositionalWord     = TRUE;
+    bIsIgnorePostPositionalWord     = sal_True;
     bIsAutoCloseDialog              =
     bIsShowEntriesRecentlyUsedFirst =
-    bIsAutoReplaceUniqueEntries     = FALSE;
-    bIsDirectionToSimplified        = TRUE;
+    bIsAutoReplaceUniqueEntries     = sal_False;
+    bIsDirectionToSimplified        = sal_True;
     bIsUseCharacterVariants         =
     bIsTranslateCommonTerms         =
-    bIsReverseMapping               = FALSE;
+    bIsReverseMapping               = sal_False;
 
     bROIsDirectionToSimplified      =
     bROIsUseCharacterVariants       =
     bROIsTranslateCommonTerms       =
-    bROIsReverseMapping             = FALSE;
+    bROIsReverseMapping             = sal_False;
 
     // hyphenation options
-    bIsHyphSpecial          = TRUE;
-    bIsHyphAuto             = FALSE;
+    bIsHyphSpecial          = sal_True;
+    bIsHyphAuto             = sal_False;
     nHyphMinLeading         =
     nHyphMinTrailing        = 2;
     nHyphMinWordLength      = 0;
@@ -170,10 +170,10 @@ class SvtLinguConfigItem : public utl::ConfigItem
     SvtLinguConfigItem( const SvtLinguConfigItem & );
     SvtLinguConfigItem & operator = ( const SvtLinguConfigItem & );
 
-    static BOOL GetHdlByName( INT32 &rnHdl, const OUString &rPropertyName, sal_Bool bFullPropName = sal_False );
+    static sal_Bool GetHdlByName( sal_Int32 &rnHdl, const OUString &rPropertyName, sal_Bool bFullPropName = sal_False );
     static const uno::Sequence< OUString > & GetPropertyNames();
-    BOOL                LoadOptions( const uno::Sequence< OUString > &rProperyNames );
-    BOOL                SaveOptions( const uno::Sequence< OUString > &rProperyNames );
+    sal_Bool                LoadOptions( const uno::Sequence< OUString > &rProperyNames );
+    sal_Bool                SaveOptions( const uno::Sequence< OUString > &rProperyNames );
 
 public:
     SvtLinguConfigItem();
@@ -195,18 +195,18 @@ public:
     com::sun::star::uno::Any
             GetProperty( const rtl::OUString &rPropertyName ) const;
     com::sun::star::uno::Any
-            GetProperty( INT32 nPropertyHandle ) const;
+            GetProperty( sal_Int32 nPropertyHandle ) const;
 
-    BOOL    SetProperty( const rtl::OUString &rPropertyName,
+    sal_Bool    SetProperty( const rtl::OUString &rPropertyName,
                          const com::sun::star::uno::Any &rValue );
-    BOOL    SetProperty( INT32 nPropertyHandle,
+    sal_Bool    SetProperty( sal_Int32 nPropertyHandle,
                          const com::sun::star::uno::Any &rValue );
 
-    BOOL    GetOptions( SvtLinguOptions &rOptions ) const;
-    BOOL    SetOptions( const SvtLinguOptions &rOptions );
+    sal_Bool    GetOptions( SvtLinguOptions &rOptions ) const;
+    sal_Bool    SetOptions( const SvtLinguOptions &rOptions );
 
-    BOOL    IsReadOnly( const rtl::OUString &rPropertyName ) const;
-    BOOL    IsReadOnly( INT32 nPropertyHandle ) const;
+    sal_Bool    IsReadOnly( const rtl::OUString &rPropertyName ) const;
+    sal_Bool    IsReadOnly( sal_Int32 nPropertyHandle ) const;
 };
 
 
@@ -244,7 +244,7 @@ static struct NamesToHdl
 {
     const char   *pFullPropName;      // full qualified name as used in configuration
     const char   *pPropName;          // property name only (atom) of above
-    INT32   nHdl;               // numeric handle representing the property
+    sal_Int32   nHdl;               // numeric handle representing the property
 }aNamesToHdl[] =
 {
 {/*  0 */    "General/DefaultLocale",                         UPN_DEFAULT_LOCALE,                    UPH_DEFAULT_LOCALE},
@@ -296,12 +296,12 @@ const uno::Sequence< OUString > & SvtLinguConfigItem::GetPropertyNames()
 
     if (!bInitialized)
     {
-        INT32 nMax = SAL_N_ELEMENTS(aNamesToHdl);
+        sal_Int32 nMax = SAL_N_ELEMENTS(aNamesToHdl);
 
         aNames.realloc( nMax );
         OUString *pNames = aNames.getArray();
-        INT32 nIdx = 0;
-        for (INT32 i = 0; i < nMax;  ++i)
+        sal_Int32 nIdx = 0;
+        for (sal_Int32 i = 0; i < nMax;  ++i)
         {
             const sal_Char *pFullPropName = aNamesToHdl[i].pFullPropName;
             if (pFullPropName)
@@ -314,8 +314,8 @@ const uno::Sequence< OUString > & SvtLinguConfigItem::GetPropertyNames()
 }
 
 
-BOOL SvtLinguConfigItem::GetHdlByName(
-    INT32 &rnHdl,
+sal_Bool SvtLinguConfigItem::GetHdlByName(
+    sal_Int32 &rnHdl,
     const OUString &rPropertyName,
     sal_Bool bFullPropName )
 {
@@ -354,20 +354,20 @@ uno::Any SvtLinguConfigItem::GetProperty( const OUString &rPropertyName ) const
 {
     osl::MutexGuard aGuard( GetOwnMutex() );
 
-    INT32 nHdl;
+    sal_Int32 nHdl;
     return GetHdlByName( nHdl, rPropertyName ) ? GetProperty( nHdl ) : uno::Any();
 }
 
 
-uno::Any SvtLinguConfigItem::GetProperty( INT32 nPropertyHandle ) const
+uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
 {
     osl::MutexGuard aGuard( GetOwnMutex() );
 
     uno::Any aRes;
 
-    const INT16 *pnVal = 0;
-    const BOOL  *pbVal = 0;
-    const INT32 *pnInt32Val = 0;
+    const sal_Int16 *pnVal = 0;
+    const sal_Bool  *pbVal = 0;
+    const sal_Int32 *pnInt32Val = 0;
 
     const SvtLinguOptions &rOpt = const_cast< SvtLinguConfigItem * >(this)->aOpt;
     switch (nPropertyHandle)
@@ -442,31 +442,31 @@ uno::Any SvtLinguConfigItem::GetProperty( INT32 nPropertyHandle ) const
 }
 
 
-BOOL SvtLinguConfigItem::SetProperty( const OUString &rPropertyName, const uno::Any &rValue )
+sal_Bool SvtLinguConfigItem::SetProperty( const OUString &rPropertyName, const uno::Any &rValue )
 {
     osl::MutexGuard aGuard( GetOwnMutex() );
 
-    BOOL bSucc = FALSE;
-    INT32 nHdl;
+    sal_Bool bSucc = sal_False;
+    sal_Int32 nHdl;
     if (GetHdlByName( nHdl, rPropertyName ))
         bSucc = SetProperty( nHdl, rValue );
     return bSucc;
 }
 
 
-BOOL SvtLinguConfigItem::SetProperty( INT32 nPropertyHandle, const uno::Any &rValue )
+sal_Bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any &rValue )
 {
     osl::MutexGuard aGuard( GetOwnMutex() );
 
-    BOOL bSucc = FALSE;
+    sal_Bool bSucc = sal_False;
     if (!rValue.hasValue())
         return bSucc;
 
-    BOOL bMod = FALSE;
+    sal_Bool bMod = sal_False;
 
-    INT16 *pnVal = 0;
-    BOOL  *pbVal = 0;
-    INT32 *pnInt32Val = 0;
+    sal_Int16 *pnVal = 0;
+    sal_Bool  *pbVal = 0;
+    sal_Int32 *pnInt32Val = 0;
 
     SvtLinguOptions &rOpt = aOpt;
     switch (nPropertyHandle)
@@ -488,13 +488,13 @@ BOOL SvtLinguConfigItem::SetProperty( INT32 nPropertyHandle, const uno::Any &rVa
         case UPH_ACTIVE_DICTIONARIES :
         {
             rValue >>= rOpt.aActiveDics;
-            bMod = TRUE;
+            bMod = sal_True;
             break;
         }
         case UPH_ACTIVE_CONVERSION_DICTIONARIES :
         {
             rValue >>= rOpt.aActiveConvDics;
-            bMod = TRUE;
+            bMod = sal_True;
             break;
         }
         case UPH_DEFAULT_LOCALE :
@@ -534,41 +534,41 @@ BOOL SvtLinguConfigItem::SetProperty( INT32 nPropertyHandle, const uno::Any &rVa
 
     if (pbVal)
     {
-        BOOL bNew = BOOL();
+        sal_Bool bNew = sal_Bool();
         if (rValue >>= bNew)
         {
             if (bNew != *pbVal)
             {
                 *pbVal = bNew;
-                bMod = TRUE;
+                bMod = sal_True;
             }
-            bSucc = TRUE;
+            bSucc = sal_True;
         }
     }
     else if (pnVal)
     {
-        INT16 nNew = INT16();
+        sal_Int16 nNew = sal_Int16();
         if (rValue >>= nNew)
         {
             if (nNew != *pnVal)
             {
                 *pnVal = nNew;
-                bMod = TRUE;
+                bMod = sal_True;
             }
-            bSucc = TRUE;
+            bSucc = sal_True;
         }
     }
     else if (pnInt32Val)
     {
-        INT32 nNew = INT32();
+        sal_Int32 nNew = sal_Int32();
         if (rValue >>= nNew)
         {
             if (nNew != *pnInt32Val)
             {
                 *pnInt32Val = nNew;
-                bMod = TRUE;
+                bMod = sal_True;
             }
-            bSucc = TRUE;
+            bSucc = sal_True;
         }
     }
 
@@ -580,34 +580,34 @@ BOOL SvtLinguConfigItem::SetProperty( INT32 nPropertyHandle, const uno::Any &rVa
 }
 
 
-BOOL SvtLinguConfigItem::GetOptions( SvtLinguOptions &rOptions ) const
+sal_Bool SvtLinguConfigItem::GetOptions( SvtLinguOptions &rOptions ) const
 {
     osl::MutexGuard aGuard( GetOwnMutex() );
 
     rOptions = aOpt;
-    return TRUE;
+    return sal_True;
 }
 
 
-BOOL SvtLinguConfigItem::SetOptions( const SvtLinguOptions &rOptions )
+sal_Bool SvtLinguConfigItem::SetOptions( const SvtLinguOptions &rOptions )
 {
     osl::MutexGuard aGuard( GetOwnMutex() );
 
     aOpt = rOptions;
     SetModified();
     NotifyListeners(0);
-    return TRUE;
+    return sal_True;
 }
 
 
-BOOL SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyNames )
+sal_Bool SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyNames )
 {
     osl::MutexGuard aGuard( GetOwnMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
 
     const OUString *pProperyNames = rProperyNames.getConstArray();
-    INT32 nProps = rProperyNames.getLength();
+    sal_Int32 nProps = rProperyNames.getLength();
 
     const uno::Sequence< uno::Any > aValues = GetProperties( rProperyNames );
     const uno::Sequence< sal_Bool > aROStates = GetReadOnlyStates( rProperyNames );
@@ -618,10 +618,10 @@ BOOL SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
 
         const uno::Any *pValue = aValues.getConstArray();
         const sal_Bool *pROStates = aROStates.getConstArray();
-        for (INT32 i = 0;  i < nProps;  ++i)
+        for (sal_Int32 i = 0;  i < nProps;  ++i)
         {
             const uno::Any &rVal = pValue[i];
-            INT32 nPropertyHandle;
+            sal_Int32 nPropertyHandle;
             GetHdlByName( nPropertyHandle, pProperyNames[i], sal_True );
             switch ( nPropertyHandle )
             {
@@ -682,11 +682,11 @@ BOOL SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
                                   || rOpt.nDefaultLanguage_CJK == LANGUAGE_CHINESE_MACAU
                                   || rOpt.nDefaultLanguage_CJK == LANGUAGE_CHINESE_TRADITIONAL )
                                 {
-                                    rOpt.bIsDirectionToSimplified = FALSE;
+                                    rOpt.bIsDirectionToSimplified = sal_False;
                                 }
                                 else
                                 {
-                                    rOpt.bIsDirectionToSimplified = TRUE;
+                                    rOpt.bIsDirectionToSimplified = sal_True;
                                 }
                             }
                     } break;
@@ -712,7 +712,7 @@ BOOL SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
             }
         }
 
-        bRes = TRUE;
+        bRes = sal_True;
     }
     DBG_ASSERT( bRes, "LoadOptions failed" );
 
@@ -720,19 +720,19 @@ BOOL SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
 }
 
 
-BOOL SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyNames )
+sal_Bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyNames )
 {
     if (!IsModified())
-        return TRUE;
+        return sal_True;
 
     osl::MutexGuard aGuard( GetOwnMutex() );
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     const uno::Type &rBOOL     = ::getBooleanCppuType();
-    const uno::Type &rINT16    = ::getCppuType( (INT16 *) NULL );
-    const uno::Type &rINT32    = ::getCppuType( (INT32 *) NULL );
+    const uno::Type &rINT16    = ::getCppuType( (sal_Int16 *) NULL );
+    const uno::Type &rINT32    = ::getCppuType( (sal_Int32 *) NULL );
 
-    INT32 nProps = rProperyNames.getLength();
+    sal_Int32 nProps = rProperyNames.getLength();
     uno::Sequence< uno::Any > aValues( nProps );
     uno::Any *pValue = aValues.getArray();
 
@@ -788,22 +788,22 @@ BOOL SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
     return bRet;
 }
 
-BOOL SvtLinguConfigItem::IsReadOnly( const rtl::OUString &rPropertyName ) const
+sal_Bool SvtLinguConfigItem::IsReadOnly( const rtl::OUString &rPropertyName ) const
 {
     osl::MutexGuard aGuard( GetOwnMutex() );
 
-    BOOL bReadOnly = FALSE;
-    INT32 nHdl;
+    sal_Bool bReadOnly = sal_False;
+    sal_Int32 nHdl;
     if (GetHdlByName( nHdl, rPropertyName ))
         bReadOnly = IsReadOnly( nHdl );
     return bReadOnly;
 }
 
-BOOL SvtLinguConfigItem::IsReadOnly( INT32 nPropertyHandle ) const
+sal_Bool SvtLinguConfigItem::IsReadOnly( sal_Int32 nPropertyHandle ) const
 {
     osl::MutexGuard aGuard( GetOwnMutex() );
 
-    BOOL bReadOnly = FALSE;
+    sal_Bool bReadOnly = sal_False;
 
     const SvtLinguOptions &rOpt = const_cast< SvtLinguConfigItem * >(this)->aOpt;
     switch(nPropertyHandle)
@@ -919,47 +919,47 @@ uno::Any SvtLinguConfig::GetProperty( const OUString &rPropertyName ) const
 }
 
 
-uno::Any SvtLinguConfig::GetProperty( INT32 nPropertyHandle ) const
+uno::Any SvtLinguConfig::GetProperty( sal_Int32 nPropertyHandle ) const
 {
     return GetConfigItem().GetProperty( nPropertyHandle );
 }
 
 
-BOOL SvtLinguConfig::SetProperty( const OUString &rPropertyName, const uno::Any &rValue )
+sal_Bool SvtLinguConfig::SetProperty( const OUString &rPropertyName, const uno::Any &rValue )
 {
     return GetConfigItem().SetProperty( rPropertyName, rValue );
 }
 
 
-BOOL SvtLinguConfig::SetProperty( INT32 nPropertyHandle, const uno::Any &rValue )
+sal_Bool SvtLinguConfig::SetProperty( sal_Int32 nPropertyHandle, const uno::Any &rValue )
 {
     return GetConfigItem().SetProperty( nPropertyHandle, rValue );
 }
 
 
-BOOL SvtLinguConfig::GetOptions( SvtLinguOptions &rOptions ) const
+sal_Bool SvtLinguConfig::GetOptions( SvtLinguOptions &rOptions ) const
 {
     return GetConfigItem().GetOptions( rOptions );
 }
 
 
-BOOL SvtLinguConfig::SetOptions( const SvtLinguOptions &rOptions )
+sal_Bool SvtLinguConfig::SetOptions( const SvtLinguOptions &rOptions )
 {
     return GetConfigItem().SetOptions( rOptions );
 }
 
 
-BOOL SvtLinguConfig::IsReadOnly( const rtl::OUString &rPropertyName ) const
+sal_Bool SvtLinguConfig::IsReadOnly( const rtl::OUString &rPropertyName ) const
 {
     return GetConfigItem().IsReadOnly( rPropertyName );
 }
 
-BOOL SvtLinguConfig::IsReadOnly( INT32 nPropertyHandle ) const
+sal_Bool SvtLinguConfig::IsReadOnly( sal_Int32 nPropertyHandle ) const
 {
     return GetConfigItem().IsReadOnly( nPropertyHandle );
 }
 
-BOOL SvtLinguConfig::GetElementNamesFor(
+sal_Bool SvtLinguConfig::GetElementNamesFor(
      const rtl::OUString &rNodeName,
      uno::Sequence< rtl::OUString > &rElementNames ) const
 {
@@ -1000,7 +1000,7 @@ static uno::Reference< container::XNameAccess > GetOrCreateSetEntry_Impl(
     return xResult;
 }
 
-BOOL SvtLinguConfig::GetSupportedDictionaryFormatsFor(
+sal_Bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
     const rtl::OUString &rSetName,
     const rtl::OUString &rSetEntry,
     uno::Sequence< rtl::OUString > &rFormatList ) const
@@ -1117,7 +1117,7 @@ static bool lcl_GetFileUrlFromOrigin(
 }
 
 
-BOOL SvtLinguConfig::GetDictionaryEntry(
+sal_Bool SvtLinguConfig::GetDictionaryEntry(
     const rtl::OUString &rNodeName,
     SvtLinguConfigDictionaryEntry &rDicEntry ) const
 {

@@ -40,41 +40,41 @@
 #define TEST_INVARIANT
 #ifdef TEST_INVARIANT
 #define SO2_DECL_INVARIANT()                                            \
-        virtual void TestObjRef( BOOL bFree );                          \
-        void         TestMemberObjRef( BOOL bFree );                    \
-        virtual void TestInvariant( BOOL bPrint );                      \
-        void         TestMemberInvariant( BOOL bPrint );
+        virtual void TestObjRef( sal_Bool bFree );                          \
+        void         TestMemberObjRef( sal_Bool bFree );                    \
+        virtual void TestInvariant( sal_Bool bPrint );                      \
+        void         TestMemberInvariant( sal_Bool bPrint );
 
 #define SO2_IMPL_INVARIANT(ClassName)                                   \
-void ClassName::TestObjRef( BOOL bFree )                       \
+void ClassName::TestObjRef( sal_Bool bFree )                       \
 {                                                                       \
     TestMemberObjRef( bFree );                                          \
 }                                                                       \
-void ClassName::TestInvariant( BOOL bPrint )                   \
+void ClassName::TestInvariant( sal_Bool bPrint )                   \
 {                                                                       \
     TestMemberInvariant( bPrint );                                      \
 }
 
 #define SO2_IMPL_INVARIANT1(ClassName,Super1)                           \
-void ClassName::TestObjRef( BOOL bFree )                       \
+void ClassName::TestObjRef( sal_Bool bFree )                       \
 {                                                                       \
     TestMemberObjRef( bFree );                                          \
     Super1::TestObjRef( bFree );                                        \
 }                                                                       \
-void ClassName::TestInvariant( BOOL bPrint )                   \
+void ClassName::TestInvariant( sal_Bool bPrint )                   \
 {                                                                       \
     TestMemberInvariant( bPrint );                                      \
     Super1::TestInvariant( bPrint );                                    \
 }
 
 #define SO2_IMPL_INVARIANT2(ClassName,Super1,Super2)                    \
-void ClassName::TestObjRef( BOOL bFree )                       \
+void ClassName::TestObjRef( sal_Bool bFree )                       \
 {                                                                       \
     TestMemberObjRef( bFree );                                          \
     Super1::TestObjRef( bFree );                                        \
     Super2::TestObjRef( bFree );                                        \
 }                                                                       \
-void ClassName::TestInvariant( BOOL bPrint )                   \
+void ClassName::TestInvariant( sal_Bool bPrint )                   \
 {                                                                       \
     TestMemberInvariant( bPrint );                                      \
     Super1::TestInvariant( bPrint );                                    \
@@ -82,14 +82,14 @@ void ClassName::TestInvariant( BOOL bPrint )                   \
 }
 
 #define SO2_IMPL_INVARIANT3(ClassName,Super1,Super2,Super3)             \
-void ClassName::TestObjRef( BOOL bFree )                       \
+void ClassName::TestObjRef( sal_Bool bFree )                       \
 {                                                                       \
     TestMemberObjRef( bFree );                                          \
     Super1::TestObjRef( bFree );                                        \
     Super2::TestObjRef( bFree );                                        \
     Super3::TestObjRef( bFree );                                        \
 }                                                                       \
-void ClassName::TestInvariant( BOOL bPrint )                   \
+void ClassName::TestInvariant( sal_Bool bPrint )                   \
 {                                                                       \
     TestMemberInvariant( bPrint );                                      \
     Super1::TestInvariant( bPrint );                                    \
@@ -98,7 +98,7 @@ void ClassName::TestInvariant( BOOL bPrint )                   \
 }
 
 #define SO2_IMPL_INVARIANT4(ClassName,Super1,Super2,Super3,Super4)      \
-void ClassName::TestObjRef( BOOL bFree )                       \
+void ClassName::TestObjRef( sal_Bool bFree )                       \
 {                                                                       \
     TestMemberObjRef( bFree );                                          \
     Super1::TestObjRef( bFree );                                        \
@@ -106,7 +106,7 @@ void ClassName::TestObjRef( BOOL bFree )                       \
     Super3::TestObjRef( bFree );                                        \
     Super4::TestObjRef( bFree );                                        \
 }                                                                       \
-void ClassName::TestInvariant( BOOL bPrint )                   \
+void ClassName::TestInvariant( sal_Bool bPrint )                   \
 {                                                                       \
     TestMemberInvariant( bPrint );                                      \
     Super1::TestInvariant( bPrint );                                    \
@@ -378,30 +378,25 @@ SotFactory * ClassName::pFactory = NULL;                                   \
 #pragma warning(disable: 4250)
 #endif
 
-class SvAggregateMemberList;
 struct IUnknown;
 class SOT_DLLPUBLIC SotObject : virtual public SvRefBase
 {
 friend class SotFactory;
 friend class SvObject;
-    SvAggregateMemberList * pAggList; // fuer Aggregation, erstes ist das MainObj
-    USHORT      nStrongLockCount;
-    USHORT      nOwnerLockCount;
-    BOOL        bOwner:1,
+    sal_uInt16  nStrongLockCount;
+    sal_uInt16  nOwnerLockCount;
+    sal_Bool    bOwner:1,
                 bSVObject:1,        // Ist Proxy, dann TRUE wenn andere Seite SV ist
                 bInClose:1;         // TRUE, im DoClose
 
-    void *      DownAggCast( const SotFactory * pFact );
-    void        RemoveInterface( ULONG );
-    void        RemoveInterface( SotObject * );
 #if defined (GCC) && (defined (C281) || defined (C290) || defined (C291))
 public:
 #else
 protected:
 #endif
     virtual             ~SotObject();
-    void                SetExtern() { bOwner = FALSE; }
-    virtual BOOL        Close();
+    void                SetExtern() { bOwner = sal_False; }
+    virtual sal_Bool        Close();
 public:
                         SotObject();
                         SO2_DECL_BASIC_CLASS_DLL(SotObject,SOTDATA())
@@ -410,33 +405,18 @@ public:
                         // Nur damit die Makros in So3 nicht ganz ausufern
     virtual IUnknown *  GetInterface( const SvGlobalName & );
 
-    BOOL                Owner() const { return bOwner; }
-    BOOL                IsSvObject() const;
+    sal_Bool                Owner() const { return bOwner; }
 
-    // Methoden fuer die Aggregation (siehe OLE2-Spec)
-    BOOL                ShouldDelete();
-    virtual void        QueryDelete();
-    SvAggregateMemberList & GetAggList();
-    void                AddInterface( SotObject * );
-    void                AddInterface( SotFactory * );
-    virtual SotObjectRef CreateAggObj( const SotFactory * );
-    void *              AggCast( const SotFactory * pFact );
-    void *              CastAndAddRef( const SotFactory * pFact );
-    SotObject *         GetMainObj() const;
+    void*               CastAndAddRef( const SotFactory * pFact );
 
-                        // !!! Read the Manual !!!
-    virtual USHORT      FuzzyLock( BOOL bLock, BOOL bIntern, BOOL bClose );
-    void                Lock( BOOL bLock )
-                        {
-                            FuzzyLock( bLock, TRUE, TRUE );
-                        }
-    USHORT              GetOwnerLockCount() const { return nOwnerLockCount; }
-    USHORT              GetStrongLockCount() const { return nStrongLockCount; }
+    sal_uInt16              Lock( sal_Bool bLock ); // affects nStrongLockCount
+    sal_uInt16              GetOwnerLockCount() const { return nOwnerLockCount; }
+    sal_uInt16              GetStrongLockCount() const { return nStrongLockCount; }
 
-    void                OwnerLock( BOOL bLock );
+    void                OwnerLock( sal_Bool bLock );
     void                RemoveOwnerLock();
-    BOOL                DoClose();
-    BOOL                IsInClose() const { return bInClose; }
+    sal_Bool                DoClose();
+    sal_Bool                IsInClose() const { return bInClose; }
 
 private:
     // Kopieren und Zuweisen dieses Objekttyps ist nicht erlaubt
@@ -446,18 +426,6 @@ private:
 
 //==================class SotObjectRef======================================
 SV_IMPL_REF(SotObject)
-
-inline SotObjectRef::SotObjectRef( SotObject * pObjP, SvCastEnum )
-{
-    if( pObjP )
-    {
-        pObj = (SotObject *)pObjP->AggCast( SotObject::ClassFactory() );
-        if( pObj )
-            pObj->AddRef();
-    }
-    else
-        pObj = NULL;
-}
 
 //==================class SotObject*List====================================
 SV_DECL_REF_LIST(SotObject,SotObject*)

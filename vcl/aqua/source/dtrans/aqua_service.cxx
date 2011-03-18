@@ -60,28 +60,6 @@ void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
-{
-    sal_Bool bRetVal = sal_False;
-
-    if ( pRegistryKey )
-    {
-        try
-        {
-            Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
-            pXNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( AQUA_CLIPBOARD_REGKEY_NAME ) ) );
-            bRetVal = sal_True;
-        }
-        catch( InvalidRegistryException& )
-        {
-            OSL_ENSURE(sal_False, "InvalidRegistryException caught");
-            bRetVal = sal_False;
-        }
-    }
-
-    return bRetVal;
-}
-
 void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* pRegistryKey )
 {
     void* pRet = 0;

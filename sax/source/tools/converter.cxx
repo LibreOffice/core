@@ -67,7 +67,7 @@ bool Converter::convertMeasure( sal_Int32& rValue,
     bool bNeg = false;
     double nVal = 0;
 
-    sal_Int32 nPos = 0L;
+    sal_Int32 nPos = 0;
     sal_Int32 nLen = rString.getLength();
 
     // skip white space
@@ -393,7 +393,7 @@ bool Converter::convertNumber(  sal_Int32& rValue,
     bool bNeg = false;
     rValue = 0;
 
-    sal_Int32 nPos = 0L;
+    sal_Int32 nPos = 0;
     sal_Int32 nLen = rString.getLength();
 
     // skip white space

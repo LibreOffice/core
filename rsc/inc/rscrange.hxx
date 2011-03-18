@@ -39,36 +39,36 @@ class RscRange : public RscTop
 protected:
     struct RscRangeInst {
         sal_uInt16  nValue; // nValue = Ausgangswert - nMin
-        BOOL    bDflt;  // Ist Default
+        sal_Bool    bDflt;  // Ist Default
     };
-    INT32    nMin;   // Minimum des Bereiches
-    INT32    nMax;   // Maximum des Bereiches
+    sal_Int32    nMin;   // Minimum des Bereiches
+    sal_Int32    nMax;   // Maximum des Bereiches
     sal_uInt32  nSize;
 public:
                     RscRange( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const;
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, BOOL );
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, sal_Bool );
                     // Der zulaessige Bereich wird gesetzt
-    ERRTYPE         SetRange( INT32 nMinimum, INT32 nMaximum );
+    ERRTYPE         SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum );
                     // Gibt die Groesse der Klasse in Bytes
     sal_uInt32          Size(){ return nSize; }
                     // Eine Zuweisung an eine Variable
     virtual void    SetToDefault( const RSCINST & rInst )
                     {
-                        ((RscRangeInst*)rInst.pData)->bDflt = TRUE;
+                        ((RscRangeInst*)rInst.pData)->bDflt = sal_True;
                     }
-    BOOL            IsDefault( const RSCINST & rInst)
+    sal_Bool            IsDefault( const RSCINST & rInst)
                     {
                         return( ((RscRangeInst*)rInst.pData)->bDflt );
                     };
                     // Als Default setzen
-    BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
-    ERRTYPE         SetNumber( const RSCINST &, INT32 );
-    ERRTYPE         GetNumber( const RSCINST &, INT32 * );
+    sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    ERRTYPE         SetNumber( const RSCINST &, sal_Int32 );
+    ERRTYPE         GetNumber( const RSCINST &, sal_Int32 * );
     void            WriteSrc( const RSCINST &, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
     void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 };
@@ -79,37 +79,37 @@ class RscLongRange : public RscTop
 protected:
     struct RscLongRangeInst
     {
-        INT32    nValue; // nValue = Ausgangswert - nMin
-        BOOL    bDflt;  // Ist Default
+        sal_Int32    nValue; // nValue = Ausgangswert - nMin
+        sal_Bool    bDflt;  // Ist Default
     };
-    INT32    nMin;   // Minimum des Bereiches
-    INT32    nMax;   // Maximum des Bereiches
+    sal_Int32    nMin;   // Minimum des Bereiches
+    sal_Int32    nMax;   // Maximum des Bereiches
     sal_uInt32  nSize;
 public:
                     RscLongRange( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const;
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, BOOL );
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, sal_Bool );
                     // Der zulaessige Bereich wird gesetzt
-    ERRTYPE         SetRange( INT32 nMinimum, INT32 nMaximum );
+    ERRTYPE         SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum );
                     // Gibt die Groesse der Klasse in Bytes
     sal_uInt32          Size(){ return nSize; }
                     // Eine Zuweisung an eine Variable
     virtual void    SetToDefault( const RSCINST & rInst )
                     {
-                        ((RscLongRangeInst*)rInst.pData)->bDflt = TRUE;
+                        ((RscLongRangeInst*)rInst.pData)->bDflt = sal_True;
                     }
-    BOOL            IsDefault( const RSCINST & rInst)
+    sal_Bool            IsDefault( const RSCINST & rInst)
                     {
                         return( ((RscLongRangeInst*)rInst.pData)->bDflt );
                     };
                     // Als Default setzen
-    BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
-    ERRTYPE         SetNumber( const RSCINST &, INT32 );
-    ERRTYPE         GetNumber( const RSCINST &, INT32 * );
+    sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    ERRTYPE         SetNumber( const RSCINST &, sal_Int32 );
+    ERRTYPE         GetNumber( const RSCINST &, sal_Int32 * );
     void            WriteSrc( const RSCINST &, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
     void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 
@@ -122,7 +122,7 @@ public:
                     RscLongEnumRange( Atom nId, sal_uInt32 nTypId );
 
     ERRTYPE         SetConst( const RSCINST & rInst, Atom nValueId,
-                              INT32 nValue );
+                              sal_Int32 nValue );
 };
 
 /******************* R s c I d R a n g e ***********************************/
@@ -130,41 +130,41 @@ class RscIdRange : public RscTop
 {
     sal_uInt32  nSize;
 protected:
-    INT32    nMin;   // Minimum des Bereiches
-    INT32    nMax;   // Maximum des Bereiches
+    sal_Int32    nMin;   // Minimum des Bereiches
+    sal_Int32    nMax;   // Maximum des Bereiches
 public:
                     RscIdRange( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const;
                     // Der zulaessige Bereich wird gesetzt
-    ERRTYPE         SetRange( INT32 nMinimum, INT32 nMaximum ){
+    ERRTYPE         SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum ){
                         nMin = nMinimum;
                         nMax = nMaximum;
                         return ERR_OK;
                     }
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, BOOL );
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, sal_Bool );
     void            Destroy( const RSCINST & rInst );
     sal_uInt32          Size(){ return nSize; }
     virtual void    SetToDefault( const RSCINST & rInst )
                     {
-                        ((RscId*)rInst.pData)->aExp.cUnused = TRUE;
+                        ((RscId*)rInst.pData)->aExp.cUnused = sal_True;
                     }
-    BOOL            IsDefault( const RSCINST & rInst)
+    sal_Bool            IsDefault( const RSCINST & rInst)
                     {
                         //cUnused wird fuer Defaultkennung verwendet
                         return ((RscId*)rInst.pData)->aExp.cUnused
-                               ? TRUE : FALSE;
+                               ? sal_True : sal_False;
                     }
                     // Als Default setzen
-    BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
-    ERRTYPE         SetNumber( const RSCINST &, INT32 );
-    ERRTYPE         GetNumber( const RSCINST &, INT32 * );
+    sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    ERRTYPE         SetNumber( const RSCINST &, sal_Int32 );
+    ERRTYPE         GetNumber( const RSCINST &, sal_Int32 * );
     ERRTYPE         SetRef( const RSCINST &, const RscId & rRscId );
     ERRTYPE         GetRef( const RSCINST & rInst, RscId * );
     void            WriteSrc( const RSCINST &, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
-    BOOL            IsConsistent( const RSCINST & rInst );
+                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
+    sal_Bool        IsConsistent( const RSCINST & rInst );
     void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 
@@ -177,14 +177,14 @@ public:
                     RscBool( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const;
                     // Der zulaessige Bereich wird gesetzt
-    ERRTYPE         SetRange( INT32, INT32 ){
+    ERRTYPE         SetRange( sal_Int32, sal_Int32 ){
                         return( ERR_UNKNOWN_METHOD );
                     };
-    ERRTYPE         SetBool( const RSCINST & rInst, BOOL b ){
-                        return( SetNumber( rInst, (INT32)b ) );
+    ERRTYPE         SetBool( const RSCINST & rInst, sal_Bool b ){
+                        return( SetNumber( rInst, (sal_Int32)b ) );
                     };
-    ERRTYPE         GetBool( const RSCINST & rInst, BOOL * pB){
-                        INT32 l;
+    ERRTYPE         GetBool( const RSCINST & rInst, sal_Bool * pB){
+                        sal_Int32 l;
                         GetNumber( rInst, &l );
                         *pB = (0 != l);
                         return( ERR_OK );
@@ -197,14 +197,14 @@ public:
 };
 
 class RscBreakRange : public RscRange {
-    INT32    nOutRange;
+    sal_Int32    nOutRange;
 public:
                     RscBreakRange( Atom nId, sal_uInt32 nTypId );
-    void            SetOutRange( INT32 nNumber ){
+    void            SetOutRange( sal_Int32 nNumber ){
                         nOutRange = nNumber;
                     }
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, BOOL );
-    ERRTYPE         SetNumber( const RSCINST &, INT32 );
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, sal_Bool );
+    ERRTYPE         SetNumber( const RSCINST &, sal_Int32 );
 };
 
 #endif // _RSCRANGE_HXX

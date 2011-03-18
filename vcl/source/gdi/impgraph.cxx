@@ -69,7 +69,7 @@
 struct ImpSwapFile
 {
     INetURLObject   aSwapURL;
-    ULONG           nRefCount;
+    sal_uLong           nRefCount;
 };
 
 // -----------------
@@ -89,15 +89,15 @@ GraphicReader::~GraphicReader()
 
 // ------------------------------------------------------------------------
 
-BOOL GraphicReader::IsPreviewModeEnabled() const
+sal_Bool GraphicReader::IsPreviewModeEnabled() const
 {
     if( !mpReaderData )
-        return FALSE;
+        return sal_False;
     if( mpReaderData->maPreviewSize.Width() )
-        return TRUE;
+        return sal_True;
     if( mpReaderData->maPreviewSize.Height() )
-        return TRUE;
-    return FALSE;
+        return sal_True;
+    return sal_False;
 }
 
 // ------------------------------------------------------------------------
@@ -140,8 +140,8 @@ ImpGraphic::ImpGraphic() :
         mnDocFilePos    ( 0UL ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
-        mbSwapOut       ( FALSE ),
-        mbSwapUnderway  ( FALSE )
+        mbSwapOut       ( sal_False ),
+        mbSwapUnderway  ( sal_False )
 {
 }
 
@@ -158,7 +158,7 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         mnSizeBytes     ( rImpGraphic.mnSizeBytes ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( rImpGraphic.mbSwapOut ),
-        mbSwapUnderway  ( FALSE )
+        mbSwapUnderway  ( sal_False )
 {
     if( mpSwapFile )
         mpSwapFile->nRefCount++;
@@ -189,8 +189,8 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         mnDocFilePos    ( 0UL ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
-        mbSwapOut       ( FALSE ),
-        mbSwapUnderway  ( FALSE )
+        mbSwapOut       ( sal_False ),
+        mbSwapUnderway  ( sal_False )
 {
 }
 
@@ -206,8 +206,8 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         mnDocFilePos    ( 0UL ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
-        mbSwapOut       ( FALSE ),
-        mbSwapUnderway  ( FALSE )
+        mbSwapOut       ( sal_False ),
+        mbSwapUnderway  ( sal_False )
 {
 }
 
@@ -223,8 +223,8 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         mnDocFilePos    ( 0UL ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
-        mbSwapOut       ( FALSE ),
-        mbSwapUnderway  ( FALSE )
+        mbSwapOut       ( sal_False ),
+        mbSwapUnderway  ( sal_False )
 {
 }
 
@@ -240,8 +240,8 @@ ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         mnDocFilePos    ( 0UL ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
-        mbSwapOut       ( FALSE ),
-        mbSwapUnderway  ( FALSE )
+        mbSwapOut       ( sal_False ),
+        mbSwapUnderway  ( sal_False )
 {
 }
 
@@ -251,7 +251,7 @@ ImpGraphic::~ImpGraphic()
 {
     ImplClear();
 
-    if( (ULONG) mpContext > 1UL )
+    if( (sal_uLong) mpContext > 1UL )
         delete mpContext;
 }
 
@@ -305,24 +305,24 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
+sal_Bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( this == &rImpGraphic )
-        bRet = TRUE;
+        bRet = sal_True;
     else if( !ImplIsSwapOut() && ( rImpGraphic.meType == meType ) )
     {
         switch( meType )
         {
             case( GRAPHIC_NONE ):
-                bRet = TRUE;
+                bRet = sal_True;
             break;
 
             case( GRAPHIC_GDIMETAFILE ):
             {
                 if( rImpGraphic.maMetaFile == maMetaFile )
-                    bRet = TRUE;
+                    bRet = sal_True;
             }
             break;
 
@@ -331,10 +331,10 @@ BOOL ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
                 if( mpAnimation )
                 {
                     if( rImpGraphic.mpAnimation && ( *rImpGraphic.mpAnimation == *mpAnimation ) )
-                        bRet = TRUE;
+                        bRet = sal_True;
                 }
                 else if( !rImpGraphic.mpAnimation && ( rImpGraphic.maEx == maEx ) )
-                    bRet = TRUE;
+                    bRet = sal_True;
             }
             break;
 
@@ -348,7 +348,7 @@ BOOL ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
 
 // ------------------------------------------------------------------------
 
-void ImpGraphic::ImplClearGraphics( BOOL bCreateSwapInfo )
+void ImpGraphic::ImplClearGraphics( sal_Bool bCreateSwapInfo )
 {
     if( bCreateSwapInfo && !ImplIsSwapOut() )
     {
@@ -410,12 +410,12 @@ void ImpGraphic::ImplClear()
         mpSwapFile = NULL;
     }
 
-    mbSwapOut = FALSE;
+    mbSwapOut = sal_False;
     mnDocFilePos = 0UL;
     maDocFileURLStr.Erase();
 
     // cleanup
-    ImplClearGraphics( FALSE );
+    ImplClearGraphics( sal_False );
     meType = GRAPHIC_NONE;
     mnSizeBytes = 0;
 }
@@ -437,42 +437,42 @@ void ImpGraphic::ImplSetDefaultType()
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplIsSupportedGraphic() const
+sal_Bool ImpGraphic::ImplIsSupportedGraphic() const
 {
     return( meType != GRAPHIC_NONE );
 }
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplIsTransparent() const
+sal_Bool ImpGraphic::ImplIsTransparent() const
 {
-    BOOL bRet;
+    sal_Bool bRet;
 
     if( meType == GRAPHIC_BITMAP )
         bRet = ( mpAnimation ? mpAnimation->IsTransparent() : maEx.IsTransparent() );
     else
-        bRet = TRUE;
+        bRet = sal_True;
 
     return bRet;
 }
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplIsAlpha() const
+sal_Bool ImpGraphic::ImplIsAlpha() const
 {
-    BOOL bRet;
+    sal_Bool bRet;
 
     if( meType == GRAPHIC_BITMAP )
         bRet = ( NULL == mpAnimation ) && maEx.IsAlpha();
     else
-        bRet = FALSE;
+        bRet = sal_False;
 
     return bRet;
 }
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplIsAnimated() const
+sal_Bool ImpGraphic::ImplIsAnimated() const
 {
     return( mpAnimation != NULL );
 }
@@ -728,7 +728,7 @@ void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
 
 // ------------------------------------------------------------------------
 
-ULONG ImpGraphic::ImplGetSizeBytes() const
+sal_uLong ImpGraphic::ImplGetSizeBytes() const
 {
     if( 0 == mnSizeBytes )
     {
@@ -855,7 +855,7 @@ Link ImpGraphic::ImplGetAnimationNotifyHdl() const
 
 // ------------------------------------------------------------------------
 
-ULONG ImpGraphic::ImplGetAnimationLoopCount() const
+sal_uLong ImpGraphic::ImplGetAnimationLoopCount() const
 {
     return( mpAnimation ? mpAnimation->GetLoopCount() : 0UL );
 }
@@ -891,7 +891,7 @@ void ImpGraphic::ImplSetContext( GraphicReader* pReader )
 
 // ------------------------------------------------------------------------
 
-void ImpGraphic::ImplSetDocFileName( const String& rName, ULONG nFilePos )
+void ImpGraphic::ImplSetDocFileName( const String& rName, sal_uLong nFilePos )
 {
     const INetURLObject aURL( rName );
 
@@ -910,29 +910,29 @@ const String& ImpGraphic::ImplGetDocFileName() const
 
 // ------------------------------------------------------------------------
 
-ULONG ImpGraphic::ImplGetDocFilePos() const
+sal_uLong ImpGraphic::ImplGetDocFilePos() const
 {
     return mnDocFilePos;
 }
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
+sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
 {
     MapMode         aMapMode;
     Size            aSize;
-    const ULONG     nStartPos = rIStm.Tell();
+    const sal_uLong     nStartPos = rIStm.Tell();
     sal_uInt32      nId;
-    ULONG           nHeaderLen;
+    sal_uLong           nHeaderLen;
     long            nType;
     long            nLen;
-    const USHORT    nOldFormat = rIStm.GetNumberFormatInt();
-    BOOL            bRet = FALSE;
+    const sal_uInt16    nOldFormat = rIStm.GetNumberFormatInt();
+    sal_Bool            bRet = sal_False;
 
     if( !mbSwapUnderway )
     {
         const String        aTempURLStr( maDocFileURLStr );
-        const ULONG         nTempPos = mnDocFilePos;
+        const sal_uLong         nTempPos = mnDocFilePos;
 
         ImplClear();
 
@@ -1017,7 +1017,7 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
             if( maDocFileURLStr.Len() )
             {
                 rIStm.Seek( nStartPos + nHeaderLen + nLen );
-                bRet = mbSwapOut = TRUE;
+                bRet = mbSwapOut = sal_True;
             }
             else
             {
@@ -1030,9 +1030,9 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
 
                     if( pOStm )
                     {
-                        ULONG   nFullLen = nHeaderLen + nLen;
-                        ULONG   nPartLen = Min( nFullLen, (ULONG) GRAPHIC_MAXPARTLEN );
-                        BYTE*   pBuffer = (BYTE*) rtl_allocateMemory( nPartLen );
+                        sal_uLong   nFullLen = nHeaderLen + nLen;
+                        sal_uLong   nPartLen = Min( nFullLen, (sal_uLong) GRAPHIC_MAXPARTLEN );
+                        sal_uInt8*  pBuffer = (sal_uInt8*) rtl_allocateMemory( nPartLen );
 
                           pOStm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
@@ -1052,12 +1052,12 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
                             }
 
                             rtl_freeMemory( pBuffer );
-                            ULONG nReadErr = rIStm.GetError(), nWriteErr = pOStm->GetError();
+                            sal_uLong nReadErr = rIStm.GetError(), nWriteErr = pOStm->GetError();
                             delete pOStm, pOStm = NULL;
 
                             if( !nReadErr && !nWriteErr )
                             {
-                                bRet = mbSwapOut = TRUE;
+                                bRet = mbSwapOut = sal_True;
                                 mpSwapFile = new ImpSwapFile;
                                 mpSwapFile->nRefCount = 1;
                                 mpSwapFile->aSwapURL = aTmpURL;
@@ -1100,9 +1100,9 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
         else if( meType >= SYS_WINMETAFILE && meType <= SYS_MACMETAFILE )
         {
             Graphic aSysGraphic;
-            ULONG   nCvtType;
+            sal_uLong   nCvtType;
 
-            switch( sal::static_int_cast<ULONG>(meType) )
+            switch( sal::static_int_cast<sal_uLong>(meType) )
             {
                 case( SYS_WINMETAFILE ):
                 case( SYS_WNTMETAFILE ): nCvtType = CVT_WMF; break;
@@ -1130,7 +1130,7 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
         }
     }
     else
-        bRet = TRUE;
+        bRet = sal_True;
 
     rIStm.SetNumberFormatInt( nOldFormat );
 
@@ -1139,16 +1139,16 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
+sal_Bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( ( meType != GRAPHIC_NONE ) && ( meType != GRAPHIC_DEFAULT ) && !ImplIsSwapOut() )
     {
         const MapMode   aMapMode( ImplGetPrefMapMode() );
         const Size      aSize( ImplGetPrefSize() );
-        const USHORT    nOldFormat = rOStm.GetNumberFormatInt();
-        ULONG           nDataFieldPos;
+        const sal_uInt16    nOldFormat = rOStm.GetNumberFormatInt();
+        sal_uLong           nDataFieldPos;
 
         rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
@@ -1195,18 +1195,18 @@ BOOL ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
         // write data block
         if( !rOStm.GetError() )
         {
-            const ULONG nDataStart = rOStm.Tell();
+            const sal_uLong nDataStart = rOStm.Tell();
 
             if( ImplIsSupportedGraphic() )
                 rOStm << *this;
 
             if( !rOStm.GetError() )
             {
-                const ULONG nStmPos2 = rOStm.Tell();
+                const sal_uLong nStmPos2 = rOStm.Tell();
                 rOStm.Seek( nDataFieldPos );
                 rOStm << (long) ( nStmPos2 - nDataStart );
                 rOStm.Seek( nStmPos2 );
-                bRet = TRUE;
+                bRet = sal_True;
             }
         }
 
@@ -1218,9 +1218,9 @@ BOOL ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplSwapOut()
+sal_Bool ImpGraphic::ImplSwapOut()
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( !ImplIsSwapOut() )
     {
@@ -1238,7 +1238,7 @@ BOOL ImpGraphic::ImplSwapOut()
                     pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
                     pOStm->SetCompressMode( COMPRESSMODE_NATIVE );
 
-                    if( ( bRet = ImplSwapOut( pOStm ) ) == TRUE )
+                    if( ( bRet = ImplSwapOut( pOStm ) ) == sal_True )
                     {
                         mpSwapFile = new ImpSwapFile;
                         mpSwapFile->nRefCount = 1;
@@ -1276,8 +1276,8 @@ BOOL ImpGraphic::ImplSwapOut()
         }
         else
         {
-            ImplClearGraphics( TRUE );
-            bRet = mbSwapOut = TRUE;
+            ImplClearGraphics( sal_True );
+            bRet = mbSwapOut = sal_True;
         }
     }
 
@@ -1286,9 +1286,9 @@ BOOL ImpGraphic::ImplSwapOut()
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplSwapOut( SvStream* pOStm )
+sal_Bool ImpGraphic::ImplSwapOut( SvStream* pOStm )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( pOStm )
     {
@@ -1300,15 +1300,15 @@ BOOL ImpGraphic::ImplSwapOut( SvStream* pOStm )
 
             if( !pOStm->GetError() )
             {
-                ImplClearGraphics( TRUE );
-                bRet = mbSwapOut = TRUE;
+                ImplClearGraphics( sal_True );
+                bRet = mbSwapOut = sal_True;
             }
         }
     }
     else
     {
-        ImplClearGraphics( TRUE );
-        bRet = mbSwapOut = TRUE;
+        ImplClearGraphics( sal_True );
+        bRet = mbSwapOut = sal_True;
     }
 
     return bRet;
@@ -1316,9 +1316,9 @@ BOOL ImpGraphic::ImplSwapOut( SvStream* pOStm )
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplSwapIn()
+sal_Bool ImpGraphic::ImplSwapIn()
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( ImplIsSwapOut() )
     {
@@ -1385,9 +1385,9 @@ BOOL ImpGraphic::ImplSwapIn()
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplSwapIn( SvStream* pIStm )
+sal_Bool ImpGraphic::ImplSwapIn( SvStream* pIStm )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( pIStm )
     {
@@ -1395,14 +1395,14 @@ BOOL ImpGraphic::ImplSwapIn( SvStream* pIStm )
 
         if( !pIStm->GetError() )
         {
-            mbSwapUnderway = TRUE;
+            mbSwapUnderway = sal_True;
             bRet = ImplReadEmbedded( *pIStm );
-            mbSwapUnderway = FALSE;
+            mbSwapUnderway = sal_False;
 
             if( !bRet )
                 ImplClear();
             else
-                mbSwapOut = FALSE;
+                mbSwapOut = sal_False;
         }
     }
 
@@ -1411,7 +1411,7 @@ BOOL ImpGraphic::ImplSwapIn( SvStream* pIStm )
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplIsSwapOut() const
+sal_Bool ImpGraphic::ImplIsSwapOut() const
 {
     return mbSwapOut;
 }
@@ -1436,16 +1436,16 @@ GfxLink ImpGraphic::ImplGetLink()
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplIsLink() const
+sal_Bool ImpGraphic::ImplIsLink() const
 {
-    return ( mpGfxLink != NULL ) ? TRUE : FALSE;
+    return ( mpGfxLink != NULL ) ? sal_True : sal_False;
 }
 
 // ------------------------------------------------------------------------
 
-ULONG ImpGraphic::ImplGetChecksum() const
+sal_uLong ImpGraphic::ImplGetChecksum() const
 {
-    ULONG nRet = 0;
+    sal_uLong nRet = 0;
 
     if( ImplIsSupportedGraphic() && !ImplIsSwapOut() )
     {
@@ -1474,9 +1474,9 @@ ULONG ImpGraphic::ImplGetChecksum() const
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplExportNative( SvStream& rOStm ) const
+sal_Bool ImpGraphic::ImplExportNative( SvStream& rOStm ) const
 {
-    BOOL bResult = FALSE;
+    sal_Bool bResult = sal_False;
 
     if( !rOStm.GetError() )
     {
@@ -1503,7 +1503,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
 {
     if( !rIStm.GetError() )
     {
-        const ULONG nStmPos1 = rIStm.Tell();
+        const sal_uLong nStmPos1 = rIStm.Tell();
         sal_uInt32 nTmp;
 
         if ( !rImpGraphic.mbSwapUnderway )
@@ -1537,7 +1537,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
                 if( !rIStm.GetError() && aLink.LoadNative( aGraphic ) )
                 {
                     // set link only, if no other link was set
-                    const BOOL bSetLink = ( rImpGraphic.mpGfxLink == NULL );
+                    const sal_Bool bSetLink = ( rImpGraphic.mpGfxLink == NULL );
 
                     // assign graphic
                     rImpGraphic = *aGraphic.ImplGetImpGraphic();
@@ -1560,7 +1560,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
             else
             {
                 BitmapEx        aBmpEx;
-                const USHORT    nOldFormat = rIStm.GetNumberFormatInt();
+                const sal_uInt16    nOldFormat = rIStm.GetNumberFormatInt();
 
                 rIStm.SeekRel( -4 );
                 rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -1568,8 +1568,8 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
                 if( !rIStm.GetError() )
                 {
-                    UINT32  nMagic1(0), nMagic2(0);
-                    ULONG   nActPos = rIStm.Tell();
+                    sal_uInt32  nMagic1(0), nMagic2(0);
+                    sal_uLong   nActPos = rIStm.Tell();
 
                     rIStm >> nMagic1 >> nMagic2;
                     rIStm.Seek( nActPos );
@@ -1639,7 +1639,7 @@ SvStream& operator<<( SvStream& rOStm, const ImpGraphic& rImpGraphic )
             else
             {
                 // own format
-                const USHORT nOldFormat = rOStm.GetNumberFormatInt();
+                const sal_uInt16 nOldFormat = rOStm.GetNumberFormatInt();
                 rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
                 switch( rImpGraphic.ImplGetType() )

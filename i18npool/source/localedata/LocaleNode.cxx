@@ -163,9 +163,11 @@ LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttr
 //   printf(" name: '%s'\n", p->getName().pData->buffer );
 //   printf("value: '%s'\n", p->getValue().pData->buffer );
 
+#define OSTR(s) (OUStringToOString( (s), RTL_TEXTENCODING_UTF8).getStr())
+
 void print_OUString( const OUString& s )
 {
-    printf( "%s", OUStringToOString( s, RTL_TEXTENCODING_UTF8).getStr());
+    printf( "%s", OSTR(s));
 }
 
 bool is_empty_string( const OUString& s )
@@ -266,16 +268,16 @@ void LocaleNode :: generateCode (const OFileWriter &of) const
         fprintf( stderr, "Error: less than %ld character%s (%ld) in %s '%s'.\n",
                 sal::static_int_cast< long >(nMinLen), (nMinLen > 1 ? "s" : ""),
                 sal::static_int_cast< long >(nLen),
-                (pNode ? OUStringToOString( pNode->getName(), RTL_TEXTENCODING_UTF8).getStr() : ""),
-                OUStringToOString( aVal, RTL_TEXTENCODING_UTF8).getStr());
+                (pNode ? OSTR( pNode->getName()) : ""),
+                OSTR( aVal));
     }
     else if (nLen > nMaxLen && nMaxLen >= 0)
         fprintf( stderr,
                 "Warning: more than %ld character%s (%ld) in %s %s not supported by application.\n",
                 sal::static_int_cast< long >(nMaxLen), (nMaxLen > 1 ? "s" : ""),
                 sal::static_int_cast< long >(nLen),
-                (pNode ? OUStringToOString( pNode->getName(), RTL_TEXTENCODING_UTF8).getStr() : ""),
-                OUStringToOString( aVal, RTL_TEXTENCODING_UTF8).getStr());
+                (pNode ? OSTR( pNode->getName()) : ""),
+                OSTR( aVal));
     return aVal;
 }
 
@@ -306,7 +308,7 @@ void LocaleNode::incError( const char* pStr ) const
 
 void LocaleNode::incError( const ::rtl::OUString& rStr ) const
 {
-    incError( OUStringToOString( rStr, RTL_TEXTENCODING_UTF8).getStr());
+    incError( OSTR( rStr));
 }
 
 char* LocaleNode::prepareErrorFormat( const char* pFormat, const char* pDefaultConversion ) const
@@ -332,8 +334,7 @@ void LocaleNode::incErrorInt( const char* pStr, int nVal ) const
 void LocaleNode::incErrorStr( const char* pStr, const ::rtl::OUString& rVal ) const
 {
     ++nError;
-    fprintf( stderr, prepareErrorFormat( pStr, ": %s"), OUStringToOString(
-                rVal, RTL_TEXTENCODING_UTF8).getStr());
+    fprintf( stderr, prepareErrorFormat( pStr, ": %s"), OSTR( rVal));
 }
 
 void LCInfoNode::generateCode (const OFileWriter &of) const
@@ -501,6 +502,64 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     if (aQuoteEnd == aDoubleQuoteEnd)
         fprintf( stderr, "Warning: %s\n",
                 "QuotationEnd equals DoubleQuotationEnd. Not necessarily an error, but unusual.");
+    // Known good values, exclude ASCII single (U+0027, ') and double (U+0022, ") quotes.
+    int ic;
+    switch (ic = aQuoteStart.toChar())
+    {
+        case 0x2018:    // LEFT SINGLE QUOTATION MARK
+        case 0x201a:    // SINGLE LOW-9 QUOTATION MARK
+        case 0x201b:    // SINGLE HIGH-REVERSED-9 QUOTATION MARK
+        case 0x2039:    // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
+        case 0x203a:    // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
+        case 0x300c:    // LEFT CORNER BRACKET (Chinese)
+            ;
+            break;
+        default:
+            fprintf( stderr, "Warning: %s U+%04X %s\n",
+                    "QuotationStart may be wrong:", ic, OSTR( aQuoteStart));
+    }
+    switch (ic = aQuoteEnd.toChar())
+    {
+        case 0x2019:    // RIGHT SINGLE QUOTATION MARK
+        case 0x201a:    // SINGLE LOW-9 QUOTATION MARK
+        case 0x201b:    // SINGLE HIGH-REVERSED-9 QUOTATION MARK
+        case 0x2039:    // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
+        case 0x203a:    // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
+        case 0x300d:    // RIGHT CORNER BRACKET (Chinese)
+            ;
+            break;
+        default:
+            fprintf( stderr, "Warning: %s U+%04X %s\n",
+                    "QuotationEnd may be wrong:", ic, OSTR( aQuoteEnd));
+    }
+    switch (ic = aDoubleQuoteStart.toChar())
+    {
+        case 0x00ab:    // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
+        case 0x00bb:    // RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
+        case 0x201c:    // LEFT DOUBLE QUOTATION MARK
+        case 0x201e:    // DOUBLE LOW-9 QUOTATION MARK
+        case 0x201f:    // DOUBLE HIGH-REVERSED-9 QUOTATION MARK
+        case 0x300e:    // LEFT WHITE CORNER BRACKET (Chinese)
+            ;
+            break;
+        default:
+            fprintf( stderr, "Warning: %s U+%04X %s\n",
+                    "DoubleQuotationStart may be wrong:", ic, OSTR( aDoubleQuoteStart));
+    }
+    switch (ic = aDoubleQuoteEnd.toChar())
+    {
+        case 0x00ab:    // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
+        case 0x00bb:    // RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
+        case 0x201d:    // RIGHT DOUBLE QUOTATION MARK
+        case 0x201e:    // DOUBLE LOW-9 QUOTATION MARK
+        case 0x201f:    // DOUBLE HIGH-REVERSED-9 QUOTATION MARK
+        case 0x300f:    // RIGHT WHITE CORNER BRACKET (Chinese)
+            ;
+            break;
+        default:
+            fprintf( stderr, "Warning: %s U+%04X %s\n",
+                    "DoubleQuotationEnd may be wrong:", ic, OSTR( aDoubleQuoteEnd));
+    }
 
     writeParameterCheckLen( of, "TimeAM", "timeAM", 1, -1);
     writeParameterCheckLen( of, "TimePM", "timePM", 1, -1);
@@ -640,7 +699,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                                         fprintf( stderr,
                                                 "Warning: Can't check separators used in FormatCode due to LC_CTYPE ref=\"%s\".\n"
                                                 "If these two locales use identical format codes, you should consider to use the ref= mechanism also for the LC_FORMAT element, together with replaceFrom= and replaceTo= for the currency.\n",
-                                                OUStringToOString( aRef, RTL_TEXTENCODING_UTF8).getStr());
+                                                OSTR( aRef));
                                     bCtypeIsRef = true;
                                     pCtype = 0;
                                 }

@@ -81,7 +81,7 @@ class ResId
         ImplInit( nId, rMgr, NULL );
     }
     // backwards compatibility; avoid ambiguities
-    ResId( USHORT nId, ResMgr& rMgr )
+    ResId( sal_uInt16 nId, ResMgr& rMgr )
     {
         ImplInit( sal_uInt32(nId), rMgr, NULL );
     }
@@ -149,7 +149,7 @@ class ResId
         return *this;
     }
 
-    const ResId &  SetAutoRelease(BOOL bRelease) const
+    const ResId &  SetAutoRelease(sal_Bool bRelease) const
     {
         if( bRelease )
             m_nResId &= ~RSC_DONTRELEASE;
@@ -158,7 +158,7 @@ class ResId
         return *this;
     }
 
-    BOOL           IsAutoRelease()  const
+    sal_Bool           IsAutoRelease()  const
     { return !(m_nResId & RSC_DONTRELEASE); }
 
     sal_uInt32     GetId()          const { return m_nResId & ~RSC_DONTRELEASE; }

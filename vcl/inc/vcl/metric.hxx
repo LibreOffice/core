@@ -54,14 +54,14 @@ public:
                         ~FontInfo();
 
     FontType            GetType() const;
-    BOOL                IsDeviceFont() const;
-    BOOL                SupportsLatin() const;
-    BOOL                SupportsCJK() const;
-    BOOL                SupportsCTL() const;
+    sal_Bool                IsDeviceFont() const;
+    sal_Bool                SupportsLatin() const;
+    sal_Bool                SupportsCJK() const;
+    sal_Bool                SupportsCTL() const;
 
     FontInfo&           operator=( const FontInfo& );
-    BOOL                operator==( const FontInfo& ) const;
-    BOOL                operator!=( const FontInfo& rInfo ) const
+    sal_Bool                operator==( const FontInfo& ) const;
+    sal_Bool                operator!=( const FontInfo& rInfo ) const
                             { return !operator==( rInfo ); }
 };
 
@@ -84,8 +84,8 @@ public:
     long                GetSlant() const;
 
     FontMetric&         operator=( const FontMetric& rMetric );
-    BOOL                operator==( const FontMetric& rMetric ) const;
-    BOOL                operator!=( const FontMetric& rMetric ) const
+    sal_Bool                operator==( const FontMetric& rMetric ) const;
+    sal_Bool                operator!=( const FontMetric& rMetric ) const
                             { return !operator==( rMetric ); }
 };
 
@@ -96,14 +96,14 @@ public:
 class VCL_DLLPUBLIC FontCharMap
 {
 private:
-    ImplFontCharMap*    mpImpl;
+    const ImplFontCharMap* mpImpl;
 
 public:
                         FontCharMap();
                         ~FontCharMap();
 
-    BOOL                IsDefaultMap() const;
-    BOOL                HasChar( sal_uInt32 ) const;
+    sal_Bool                IsDefaultMap() const;
+    sal_Bool                HasChar( sal_uInt32 ) const;
     int                 CountCharsInRange( sal_uInt32 cMin, sal_uInt32 cMax ) const;
     int                 GetCharCount() const;
 
@@ -119,7 +119,7 @@ public:
 
 private:
     friend class OutputDevice;
-    void                Reset( ImplFontCharMap* pNewMap = NULL );
+    void                Reset( const ImplFontCharMap* pNewMap = NULL );
 
     // prevent assignment and copy construction
                         FontCharMap( const FontCharMap& );
@@ -136,21 +136,21 @@ class VCL_DLLPUBLIC TextRectInfo
 
 private:
     long            mnMaxWidth;
-    USHORT          mnLineCount;
-    BOOL            mbEllipsis;
+    sal_uInt16          mnLineCount;
+    sal_Bool            mbEllipsis;
 
 public:
                     TextRectInfo();
 
-    USHORT          GetLineCount() const { return mnLineCount; }
+    sal_uInt16          GetLineCount() const { return mnLineCount; }
     long            GetMaxLineWidth() const { return mnMaxWidth; }
-    BOOL            IsEllipses() const { return mbEllipsis; }
+    sal_Bool            IsEllipses() const { return mbEllipsis; }
 
-    BOOL            operator ==( const TextRectInfo& rInfo ) const
+    sal_Bool            operator ==( const TextRectInfo& rInfo ) const
                         { return ((mnMaxWidth   == rInfo.mnMaxWidth)    &&
                                   (mnLineCount  == rInfo.mnLineCount)   &&
                                   (mbEllipsis   == rInfo.mbEllipsis)); }
-    BOOL            operator !=( const TextRectInfo& rInfo ) const
+    sal_Bool            operator !=( const TextRectInfo& rInfo ) const
                         { return !(TextRectInfo::operator==( rInfo )); }
 };
 
@@ -158,7 +158,7 @@ inline TextRectInfo::TextRectInfo()
 {
     mnMaxWidth      = 0;
     mnLineCount     = 0;
-    mbEllipsis      = FALSE;
+    mbEllipsis      = sal_False;
 }
 
 #endif // _SV_METRIC_HXX

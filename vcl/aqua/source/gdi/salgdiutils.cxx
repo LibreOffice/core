@@ -254,12 +254,12 @@ void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeigh
     }
 }
 
-CGPoint* AquaSalGraphics::makeCGptArray(ULONG nPoints, const SalPoint*  pPtAry)
+CGPoint* AquaSalGraphics::makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtAry)
 {
     CGPoint *CGpoints = new (CGPoint[nPoints]);
     if ( CGpoints )
       {
-        for(ULONG i=0;i<nPoints;i++)
+        for(sal_uLong i=0;i<nPoints;i++)
           {
             CGpoints[i].x = (float)(pPtAry[i].mnX);
             CGpoints[i].y = (float)(pPtAry[i].mnY);

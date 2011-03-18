@@ -51,7 +51,7 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
         return;
 
     const PPDValue* pValue = NULL;
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
     String aOptionText;
 
     for( int i = 0; i < pKey->countValues(); i++ )
@@ -154,7 +154,7 @@ IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
     if( pTabCtrl != &m_aTabControl )
         return 0;
 
-    USHORT nId = m_aTabControl.GetCurPageId();
+    sal_uInt16 nId = m_aTabControl.GetCurPageId();
 
     if ( ! m_aTabControl.GetTabPage( nId ) )
     {
@@ -202,6 +202,7 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
             m_aJobData.m_nColorDepth    = m_pDevicePage->getDepth();
             m_aJobData.m_nColorDevice   = m_pDevicePage->getColorDevice();
             m_aJobData.m_nPSLevel       = m_pDevicePage->getLevel();
+            m_aJobData.m_nPDFDevice     = m_pDevicePage->getPDFDevice();
         }
         if( m_pOtherPage )
             // write other settings
@@ -245,7 +246,7 @@ RTSPaperPage::RTSPaperPage( RTSDialog* pParent ) :
 
     FreeResource();
 
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
 
     m_aOrientBox.InsertEntry( PORTRAIT_STRING );
     m_aOrientBox.InsertEntry( LSCAPE_STRING );
@@ -287,8 +288,8 @@ void RTSPaperPage::update()
     }
     else
     {
-        m_aDuplexText.Enable( FALSE );
-        m_aDuplexBox.Enable( FALSE );
+        m_aDuplexText.Enable( sal_False );
+        m_aDuplexBox.Enable( sal_False );
     }
 
     // paper
@@ -299,8 +300,8 @@ void RTSPaperPage::update()
     }
     else
     {
-        m_aPaperText.Enable( FALSE );
-        m_aPaperBox.Enable( FALSE );
+        m_aPaperText.Enable( sal_False );
+        m_aPaperBox.Enable( sal_False );
     }
 
     // input slots
@@ -311,8 +312,8 @@ void RTSPaperPage::update()
     }
     else
     {
-        m_aSlotText.Enable( FALSE );
-        m_aSlotBox.Enable( FALSE );
+        m_aSlotText.Enable( sal_False );
+        m_aSlotBox.Enable( sal_False );
     }
 }
 
@@ -367,8 +368,8 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent ) :
         m_aPPDKeyBox( this, PaResId( RID_RTS_DEVICE_PPDKEY_BOX ) ),
         m_aPPDValueText( this, PaResId( RID_RTS_DEVICE_PPDVALUE_TXT ) ),
         m_aPPDValueBox( this, PaResId( RID_RTS_DEVICE_PPDVALUE_BOX ) ),
-        m_aLevelText( this, PaResId( RID_RTS_DEVICE_LEVEL_TXT ) ),
-        m_aLevelBox( this, PaResId( RID_RTS_DEVICE_LEVEL_BOX ) ),
+        m_aLevelText( this, PaResId( RID_RTS_DEVICE_PRINTLANG_TXT ) ),
+        m_aLevelBox( this, PaResId( RID_RTS_DEVICE_PRINTLANG_BOX ) ),
         m_aSpaceText( this, PaResId( RID_RTS_DEVICE_SPACE_TXT ) ),
         m_aSpaceBox( this, PaResId( RID_RTS_DEVICE_SPACE_BOX ) ),
         m_aDepthText( this, PaResId( RID_RTS_DEVICE_DEPTH_TXT ) ),
@@ -389,13 +390,19 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent ) :
         case  1: m_aSpaceBox.SelectEntry( m_aSpaceColor );break;
     }
 
-    m_aLevelBox.InsertEntry( m_pParent->m_aFromDriverString );
-    m_aLevelBox.InsertEntry( String( RTL_CONSTASCII_USTRINGPARAM( "1" ) ) );
-    m_aLevelBox.InsertEntry( String( RTL_CONSTASCII_USTRINGPARAM( "2" ) ) );
-    if( m_pParent->m_aJobData.m_nPSLevel == 0 )
-        m_aLevelBox.SelectEntry( m_pParent->m_aFromDriverString );
+    sal_uLong nLevelEntryData = 0;
+    if( m_pParent->m_aJobData.m_nPDFDevice > 0 )
+        nLevelEntryData = 10;
     else
-        m_aLevelBox.SelectEntry( String::CreateFromInt32( m_pParent->m_aJobData.m_nPSLevel ) );
+        nLevelEntryData = m_pParent->m_aJobData.m_nPSLevel+1;
+    for( sal_uInt16 i = 0; i < m_aLevelBox.GetEntryCount(); i++ )
+    {
+        if( (sal_uLong)m_aLevelBox.GetEntryData( i ) == nLevelEntryData )
+        {
+            m_aLevelBox.SelectEntryPos( i );
+            break;
+        }
+    }
 
     m_aDepthBox.SelectEntry( String::CreateFromInt32( m_pParent->m_aJobData.m_nColorDepth ).AppendAscii( " Bit" ) );
 
@@ -413,7 +420,7 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent ) :
                 )
             {
                 String aEntry( m_pParent->m_aJobData.m_pParser->translateKey( pKey->getKey() ) );
-                USHORT nPos = m_aPPDKeyBox.InsertEntry( aEntry );
+                sal_uInt16 nPos = m_aPPDKeyBox.InsertEntry( aEntry );
                 m_aPPDKeyBox.SetEntryData( nPos, (void*)pKey );
             }
         }
@@ -430,6 +437,22 @@ RTSDevicePage::~RTSDevicePage()
 
 void RTSDevicePage::update()
 {
+}
+
+// ------------------------------------------------------------------
+
+sal_uLong RTSDevicePage::getLevel()
+{
+    sal_uLong nLevel = (sal_uLong)m_aLevelBox.GetEntryData( m_aLevelBox.GetSelectEntryPos() );
+    return nLevel < 10 ? nLevel-1 : 0;
+}
+
+// ------------------------------------------------------------------
+
+sal_uLong RTSDevicePage::getPDFDevice()
+{
+    sal_uLong nLevel = (sal_uLong)m_aLevelBox.GetEntryData( m_aLevelBox.GetSelectEntryPos() );
+    return nLevel > 9 ? 1 : 0;
 }
 
 // ------------------------------------------------------------------
@@ -471,7 +494,7 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
             m_pParent->m_aJobData.m_pParser )
         {
             String aEntry( m_pParent->m_aJobData.m_pParser->translateOption( pKey->getKey(), pValue->m_aOption ) );
-            USHORT nPos = m_aPPDValueBox.InsertEntry( aEntry );
+            sal_uInt16 nPos = m_aPPDValueBox.InsertEntry( aEntry );
             m_aPPDValueBox.SetEntryData( nPos, (void*)pValue );
         }
     }
@@ -502,10 +525,10 @@ RTSOtherPage::RTSOtherPage( RTSDialog* pParent ) :
 {
     FreeResource();
 
-    m_aTopLB.EnableEmptyFieldValue( TRUE );
-    m_aBottomLB.EnableEmptyFieldValue( TRUE );
-    m_aLeftLB.EnableEmptyFieldValue( TRUE );
-    m_aRightLB.EnableEmptyFieldValue( TRUE );
+    m_aTopLB.EnableEmptyFieldValue( sal_True );
+    m_aBottomLB.EnableEmptyFieldValue( sal_True );
+    m_aLeftLB.EnableEmptyFieldValue( sal_True );
+    m_aRightLB.EnableEmptyFieldValue( sal_True );
 
     m_aDefaultBtn.SetClickHdl( LINK( this, RTSOtherPage, ClickBtnHdl ) );
 
@@ -639,16 +662,16 @@ RTSFontSubstPage::RTSFontSubstPage( RTSDialog* pParent ) :
     }
 
     m_aEnableBox.Check( m_pParent->m_aJobData.m_bPerformFontSubstitution );
-    m_aRemoveButton.Enable( FALSE );
+    m_aRemoveButton.Enable( sal_False );
     if( ! m_pParent->m_aJobData.m_bPerformFontSubstitution )
     {
-        m_aSubstitutionsBox.Enable( FALSE );
-        m_aSubstitutionsText.Enable( FALSE );
-        m_aAddButton.Enable( FALSE );
-        m_aToFontBox.Enable( FALSE );
-        m_aToFontText.Enable( FALSE );
-        m_aFromFontBox.Enable( FALSE );
-        m_aFromFontText.Enable( FALSE );
+        m_aSubstitutionsBox.Enable( sal_False );
+        m_aSubstitutionsText.Enable( sal_False );
+        m_aAddButton.Enable( sal_False );
+        m_aToFontBox.Enable( sal_False );
+        m_aToFontText.Enable( sal_False );
+        m_aFromFontBox.Enable( sal_False );
+        m_aFromFontText.Enable( sal_False );
     }
 
     update();
@@ -667,7 +690,7 @@ RTSFontSubstPage::~RTSFontSubstPage()
 void RTSFontSubstPage::update()
 {
     m_aSubstitutionsBox.Clear();
-    m_aRemoveButton.Enable( FALSE );
+    m_aRemoveButton.Enable( sal_False );
     // fill substitutions box
     ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
     for( it = m_pParent->m_aJobData.m_aFontSubstitutes.begin();
@@ -709,7 +732,7 @@ IMPL_LINK( RTSFontSubstPage, ClickBtnHdl, Button*, pButton )
         for( int i = 0; i < m_aSubstitutionsBox.GetSelectEntryCount(); i++ )
         {
             String aEntry( m_aSubstitutionsBox.GetSelectEntry( i ) );
-            USHORT nPos = aEntry.SearchAscii( " -> " );
+            sal_uInt16 nPos = aEntry.SearchAscii( " -> " );
             aEntry.Erase( nPos );
             m_pParent->m_aJobData.m_aFontSubstitutes.erase( aEntry );
         }
@@ -783,7 +806,7 @@ OString RTSPWDialog::getPassword() const
 
 extern "C" {
 
-    int Sal_SetupPrinterDriver( ::psp::PrinterInfo& rJobData )
+    int SPA_DLLPUBLIC Sal_SetupPrinterDriver( ::psp::PrinterInfo& rJobData )
     {
         int nRet = 0;
         RTSDialog aDialog( rJobData, rJobData.m_aPrinterName, false );
@@ -797,14 +820,14 @@ extern "C" {
         return nRet;
     }
 
-    int Sal_queryFaxNumber( String& rNumber )
+    int SPA_DLLPUBLIC Sal_queryFaxNumber( String& rNumber )
     {
         String aTmpString( PaResId( RID_TXT_QUERYFAXNUMBER ) );
         QueryString aQuery( NULL, aTmpString, rNumber );
         return aQuery.Execute();
     }
 
-    bool Sal_authenticateQuery( const OString& rServer, OString& rUserName, OString& rPassword )
+    bool SPA_DLLPUBLIC Sal_authenticateQuery( const OString& rServer, OString& rUserName, OString& rPassword )
     {
         bool bRet = false;
 

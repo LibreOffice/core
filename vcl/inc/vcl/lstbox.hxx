@@ -50,12 +50,12 @@ private:
     ImplListBoxFloatingWindow*  mpFloatWin;
     ImplWin*                    mpImplWin;
     ImplBtn*                    mpBtn;
-    USHORT                      mnDDHeight;
-    USHORT                      mnSaveValue;
-    BOOL                        mbDDAutoSize;
+    sal_uInt16                      mnDDHeight;
+    sal_uInt16                      mnSaveValue;
+    sal_Bool                        mbDDAutoSize;
     Link                        maSelectHdl;
     Link                        maDoubleClickHdl;
-    USHORT mnLineCount;
+    sal_uInt16 mnLineCount;
 
 private:
     SAL_DLLPRIVATE void    ImplInitListBoxData();
@@ -74,7 +74,7 @@ protected:
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
-    BOOL                IsDropDownBox() const { return mpFloatWin ? TRUE : FALSE; }
+    sal_Bool                IsDropDownBox() const { return mpFloatWin ? sal_True : sal_False; }
 
 protected:
                         ListBox( WindowType nType );
@@ -86,7 +86,7 @@ public:
                         ListBox( Window* pParent, const ResId& rResId );
                         ~ListBox();
 
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void        Resize();
     virtual long        PreNotify( NotifyEvent& rNEvt );
     virtual void        StateChanged( StateChangedType nType );
@@ -102,7 +102,7 @@ public:
     virtual const Wallpaper& GetDisplayBackground() const;
 
     virtual void        SetPosSizePixel( long nX, long nY,
-                                         long nWidth, long nHeight, USHORT nFlags = WINDOW_POSSIZE_ALL );
+                                         long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
     void                SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
                         { Control::SetPosSizePixel( rNewPos, rNewSize ); }
     void                SetDropDownSizePixel( const Size& rNewSize )
@@ -110,42 +110,42 @@ public:
 
     Rectangle           GetDropDownPosSizePixel() const;
 
-    void                SetDropDownLineCount( USHORT nLines );
-    USHORT              GetDropDownLineCount() const;
+    void                SetDropDownLineCount( sal_uInt16 nLines );
+    sal_uInt16              GetDropDownLineCount() const;
 
-    void                EnableAutoSize( BOOL bAuto );
-    BOOL                IsAutoSizeEnabled() const { return mbDDAutoSize; }
+    void                EnableAutoSize( sal_Bool bAuto );
+    sal_Bool                IsAutoSizeEnabled() const { return mbDDAutoSize; }
 
-    void                EnableDDAutoWidth( BOOL b );
-    BOOL                IsDDAutoWidthEnabled() const;
+    void                EnableDDAutoWidth( sal_Bool b );
+    sal_Bool                IsDDAutoWidthEnabled() const;
 
-    virtual USHORT      InsertEntry( const XubString& rStr, USHORT nPos = LISTBOX_APPEND );
-    virtual USHORT      InsertEntry( const Image& rImage, USHORT nPos = LISTBOX_APPEND );
-    virtual USHORT      InsertEntry( const XubString& rStr, const Image& rImage, USHORT nPos = LISTBOX_APPEND );
+    virtual sal_uInt16      InsertEntry( const XubString& rStr, sal_uInt16 nPos = LISTBOX_APPEND );
+    virtual sal_uInt16      InsertEntry( const Image& rImage, sal_uInt16 nPos = LISTBOX_APPEND );
+    virtual sal_uInt16      InsertEntry( const XubString& rStr, const Image& rImage, sal_uInt16 nPos = LISTBOX_APPEND );
     virtual void        RemoveEntry( const XubString& rStr );
-    virtual void        RemoveEntry( USHORT nPos );
+    virtual void        RemoveEntry( sal_uInt16 nPos );
 
     virtual void        Clear();
 
-    virtual USHORT      GetEntryPos( const XubString& rStr ) const;
-    virtual USHORT      GetEntryPos( const void* pData ) const;
-            Image       GetEntryImage( USHORT nPos ) const;
-    virtual XubString   GetEntry( USHORT nPos ) const;
-    virtual USHORT      GetEntryCount() const;
+    virtual sal_uInt16      GetEntryPos( const XubString& rStr ) const;
+    virtual sal_uInt16      GetEntryPos( const void* pData ) const;
+            Image       GetEntryImage( sal_uInt16 nPos ) const;
+    virtual XubString   GetEntry( sal_uInt16 nPos ) const;
+    virtual sal_uInt16      GetEntryCount() const;
 
-    virtual void        SelectEntry( const XubString& rStr, BOOL bSelect = TRUE );
-    virtual void        SelectEntryPos( USHORT nPos, BOOL bSelect = TRUE );
+    virtual void        SelectEntry( const XubString& rStr, sal_Bool bSelect = sal_True );
+    virtual void        SelectEntryPos( sal_uInt16 nPos, sal_Bool bSelect = sal_True );
 
-    virtual USHORT      GetSelectEntryCount() const;
-    virtual XubString   GetSelectEntry( USHORT nSelIndex = 0 ) const;
-    virtual USHORT      GetSelectEntryPos( USHORT nSelIndex = 0 ) const;
+    virtual sal_uInt16      GetSelectEntryCount() const;
+    virtual XubString   GetSelectEntry( sal_uInt16 nSelIndex = 0 ) const;
+    virtual sal_uInt16      GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const;
 
-    virtual BOOL        IsEntrySelected( const XubString& rStr ) const;
-    virtual BOOL        IsEntryPosSelected( USHORT nPos ) const;
+    virtual sal_Bool        IsEntrySelected( const XubString& rStr ) const;
+    virtual sal_Bool        IsEntryPosSelected( sal_uInt16 nPos ) const;
     virtual void        SetNoSelection();
 
-    void                SetEntryData( USHORT nPos, void* pNewData );
-    void*               GetEntryData( USHORT nPos ) const;
+    void                SetEntryData( sal_uInt16 nPos, void* pNewData );
+    void*               GetEntryData( sal_uInt16 nPos ) const;
 
     /** this methods stores a combination of flags from the
         LISTBOX_ENTRY_FLAG_* defines at the given entry.
@@ -155,51 +155,51 @@ public:
         to change the internal behaviour of the ListBox implementation
         for specific entries.
     */
-    void            SetEntryFlags( USHORT nPos, long nFlags );
+    void            SetEntryFlags( sal_uInt16 nPos, long nFlags );
 
     /** this methods gets the current combination of flags from the
         LISTBOX_ENTRY_FLAG_* defines from the given entry.
         See description of the possible LISTBOX_ENTRY_FLAG_* flags
         for details.
     */
-    long            GetEntryFlags( USHORT nPos ) const;
+    long            GetEntryFlags( sal_uInt16 nPos ) const;
 
-    void            SetTopEntry( USHORT nPos );
-    void            ShowProminentEntry( USHORT nPos );
+    void            SetTopEntry( sal_uInt16 nPos );
+    void            ShowProminentEntry( sal_uInt16 nPos );
     void            SetTopEntryStr( const XubString& rStr );
-    USHORT          GetTopEntry() const;
+    sal_uInt16          GetTopEntry() const;
 
     void            SetProminentEntryType( ProminentEntry eType );
     ProminentEntry  GetProminentEntryType() const;
 
     void            SaveValue() { mnSaveValue = GetSelectEntryPos(); }
-    USHORT          GetSavedValue() const { return mnSaveValue; }
+    sal_uInt16          GetSavedValue() const { return mnSaveValue; }
 
-    void            SetSeparatorPos( USHORT n );
+    void            SetSeparatorPos( sal_uInt16 n );
     void            SetSeparatorPos();
-    USHORT          GetSeparatorPos() const;
+    sal_uInt16          GetSeparatorPos() const;
 
-    BOOL            IsTravelSelect() const;
-    BOOL            IsInDropDown() const;
+    sal_Bool            IsTravelSelect() const;
+    sal_Bool            IsInDropDown() const;
     void            ToggleDropDown();
 
-    void            EnableMultiSelection( BOOL bMulti, BOOL bStackSelection );
-    void            EnableMultiSelection( BOOL bMulti );
-    BOOL            IsMultiSelectionEnabled() const;
+    void            EnableMultiSelection( sal_Bool bMulti, sal_Bool bStackSelection );
+    void            EnableMultiSelection( sal_Bool bMulti );
+    sal_Bool            IsMultiSelectionEnabled() const;
 
-    void            SetReadOnly( BOOL bReadOnly = TRUE );
-    BOOL            IsReadOnly() const;
+    void            SetReadOnly( sal_Bool bReadOnly = sal_True );
+    sal_Bool            IsReadOnly() const;
 
-    long            CalcWindowSizePixel( USHORT nLines ) const;
-    Rectangle       GetBoundingRectangle( USHORT nItem ) const;
+    long            CalcWindowSizePixel( sal_uInt16 nLines ) const;
+    Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const;
 
     void            SetUserItemSize( const Size& rSz );
     const Size&     GetUserItemSize() const;
 
-    void            EnableUserDraw( BOOL bUserDraw );
-    BOOL            IsUserDrawEnabled() const;
+    void            EnableUserDraw( sal_Bool bUserDraw );
+    sal_Bool            IsUserDrawEnabled() const;
 
-    void            DrawEntry( const UserDrawEvent& rEvt, BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImagePos = FALSE );
+    void            DrawEntry( const UserDrawEvent& rEvt, sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDrawTextAtImagePos = sal_False );
 
     void            SetSelectHdl( const Link& rLink )       { maSelectHdl = rLink; }
     const Link&     GetSelectHdl() const                    { return maSelectHdl; }
@@ -209,15 +209,15 @@ public:
     Size            CalcMinimumSize() const;
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
     Size            CalcAdjustedSize( const Size& rPrefSize ) const;
-    Size            CalcSize( USHORT nColumns, USHORT nLines ) const;
-    void            GetMaxVisColumnsAndLines( USHORT& rnCols, USHORT& rnLines ) const;
+    Size            CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
+    void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
     void            SetMRUEntries( const XubString& rEntries, xub_Unicode cSep = ';' );
     XubString       GetMRUEntries( xub_Unicode cSep = ';' ) const;
-    void            SetMaxMRUCount( USHORT n );
-    USHORT          GetMaxMRUCount() const;
+    void            SetMaxMRUCount( sal_uInt16 n );
+    sal_uInt16          GetMaxMRUCount() const;
 
-    USHORT          GetDisplayLineCount() const;
+    sal_uInt16          GetDisplayLineCount() const;
 
     void            EnableMirroring();
 
@@ -240,7 +240,7 @@ public:
         if no item is at that point.
      */
     using Control::GetIndexForPoint;
-    long GetIndexForPoint( const Point& rPoint, USHORT& rPos ) const;
+    long GetIndexForPoint( const Point& rPoint, sal_uInt16& rPos ) const;
 };
 
 // ----------------
@@ -255,7 +255,7 @@ public:
 private:
     // Bei MultiListBox nicht erlaubt...
     void            SaveValue();
-    USHORT          GetSavedValue();
+    sal_uInt16          GetSavedValue();
 
 public:
                     MultiListBox( Window* pParent, WinBits nStyle = 0 );

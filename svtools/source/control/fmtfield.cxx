@@ -306,7 +306,7 @@ namespace validation
 
 //==============================================================================
 SvNumberFormatter* FormattedField::StaticFormatter::s_cFormatter = NULL;
-ULONG FormattedField::StaticFormatter::s_nReferences = 0;
+sal_uLong FormattedField::StaticFormatter::s_nReferences = 0;
 
 //------------------------------------------------------------------------------
 SvNumberFormatter* FormattedField::StaticFormatter::GetFormatter()
@@ -346,13 +346,13 @@ DBG_NAME(FormattedField);
      m_aLastSelection(0,0)          \
     ,m_dMinValue(0)                 \
     ,m_dMaxValue(0)                 \
-    ,m_bHasMin(FALSE)               \
-    ,m_bHasMax(FALSE)               \
-    ,m_bStrictFormat(TRUE)          \
-    ,m_bValueDirty(TRUE)            \
-    ,m_bEnableEmptyField(TRUE)      \
-    ,m_bAutoColor(FALSE)            \
-    ,m_bEnableNaN(FALSE)            \
+    ,m_bHasMin(sal_False)               \
+    ,m_bHasMax(sal_False)               \
+    ,m_bStrictFormat(sal_True)          \
+    ,m_bValueDirty(sal_True)            \
+    ,m_bEnableEmptyField(sal_True)      \
+    ,m_bAutoColor(sal_False)            \
+    ,m_bEnableNaN(sal_False)            \
     ,m_dCurrentValue(0)             \
     ,m_dDefaultValue(0)             \
     ,m_nFormatKey(0)                \
@@ -360,12 +360,12 @@ DBG_NAME(FormattedField);
     ,m_dSpinSize(1)                 \
     ,m_dSpinFirst(-1000000)         \
     ,m_dSpinLast(1000000)           \
-    ,m_bTreatAsNumber(TRUE)         \
+    ,m_bTreatAsNumber(sal_True)         \
     ,m_pLastOutputColor(NULL)       \
     ,m_bUseInputStringForFormatting(false)
 
 //------------------------------------------------------------------------------
-FormattedField::FormattedField(Window* pParent, WinBits nStyle, SvNumberFormatter* pInitialFormatter, INT32 nFormatKey)
+FormattedField::FormattedField(Window* pParent, WinBits nStyle, SvNumberFormatter* pInitialFormatter, sal_Int32 nFormatKey)
     :SpinField(pParent, nStyle)
     ,INIT_MEMBERS()
 {
@@ -379,7 +379,7 @@ FormattedField::FormattedField(Window* pParent, WinBits nStyle, SvNumberFormatte
 }
 
 //------------------------------------------------------------------------------
-FormattedField::FormattedField(Window* pParent, const ResId& rResId, SvNumberFormatter* pInitialFormatter, INT32 nFormatKey)
+FormattedField::FormattedField(Window* pParent, const ResId& rResId, SvNumberFormatter* pInitialFormatter, sal_Int32 nFormatKey)
     :SpinField(pParent, rResId)
     ,INIT_MEMBERS()
 {
@@ -409,7 +409,7 @@ void FormattedField::SetValidateText(const XubString& rText, const String* pErro
         if (pErrorText)
             ImplSetTextImpl(*pErrorText, NULL);
         else
-            ImplSetValue(m_dDefaultValue, TRUE);
+            ImplSetValue(m_dDefaultValue, sal_True);
 }
 
 //------------------------------------------------------------------------------
@@ -418,7 +418,7 @@ void FormattedField::SetText(const XubString& rStr)
     DBG_CHKTHIS(FormattedField, NULL);
 
     SpinField::SetText(rStr);
-    m_bValueDirty = TRUE;
+    m_bValueDirty = sal_True;
 }
 
 //------------------------------------------------------------------------------
@@ -427,7 +427,7 @@ void FormattedField::SetText( const XubString& rStr, const Selection& rNewSelect
     DBG_CHKTHIS(FormattedField, NULL);
 
     SpinField::SetText( rStr, rNewSelection );
-    m_bValueDirty = TRUE;
+    m_bValueDirty = sal_True;
 }
 
 //------------------------------------------------------------------------------
@@ -456,8 +456,8 @@ void FormattedField::SetTextFormatted(const XubString& rStr)
     Selection aSel(GetSelection());
     Selection aNewSel(aSel);
     aNewSel.Justify();
-    USHORT nNewLen = sFormatted.Len();
-    USHORT nCurrentLen = GetText().Len();
+    sal_uInt16 nNewLen = sFormatted.Len();
+    sal_uInt16 nCurrentLen = GetText().Len();
     if ((nNewLen > nCurrentLen) && (aNewSel.Max() == nCurrentLen))
     {   // the new text is longer and the cursor was behind the last char (of the old text)
         if (aNewSel.Min() == 0)
@@ -465,7 +465,7 @@ void FormattedField::SetTextFormatted(const XubString& rStr)
             aNewSel.Max() = nNewLen;
             if (!nCurrentLen)
             {   // there wasn't really a previous selection (as there was no previous text), we're setting a new one -> check the selection options
-                ULONG nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
+                sal_uLong nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
                 if (nSelOptions & SELECTION_OPTION_SHOWFIRST)
                 {   // selection should be from right to left -> swap min and max
                     aNewSel.Min() = aNewSel.Max();
@@ -484,7 +484,7 @@ void FormattedField::SetTextFormatted(const XubString& rStr)
     else
         aNewSel = aSel; // don't use the justified version
     SpinField::SetText(sFormatted, aNewSel);
-    m_bValueDirty = FALSE;
+    m_bValueDirty = sal_False;
 }
 
 //------------------------------------------------------------------------------
@@ -493,13 +493,13 @@ String FormattedField::GetTextValue() const
     if (m_bValueDirty)
     {
         ((FormattedField*)this)->m_sCurrentTextValue = GetText();
-        ((FormattedField*)this)->m_bValueDirty = FALSE;
+        ((FormattedField*)this)->m_bValueDirty = sal_False;
     }
     return m_sCurrentTextValue;
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::EnableNotANumber( BOOL _bEnable )
+void FormattedField::EnableNotANumber( sal_Bool _bEnable )
 {
     if ( m_bEnableNaN == _bEnable )
         return;
@@ -508,7 +508,7 @@ void FormattedField::EnableNotANumber( BOOL _bEnable )
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::SetAutoColor(BOOL _bAutomatic)
+void FormattedField::SetAutoColor(sal_Bool _bAutomatic)
 {
     if (_bAutomatic == m_bAutoColor)
         return;
@@ -530,7 +530,7 @@ void FormattedField::Modify()
 
     if (!IsStrictFormat())
     {
-        m_bValueDirty = TRUE;
+        m_bValueDirty = sal_True;
         SpinField::Modify();
         return;
     }
@@ -540,7 +540,7 @@ void FormattedField::Modify()
     {
         m_sLastValidText = sCheck;
         m_aLastSelection = GetSelection();
-        m_bValueDirty = TRUE;
+        m_bValueDirty = sal_True;
     }
     else
     {
@@ -570,8 +570,8 @@ void FormattedField::ImplSetTextImpl(const XubString& rNew, Selection* pNewSel)
         Selection aSel(GetSelection());
         aSel.Justify();
 
-        USHORT nNewLen = rNew.Len();
-        USHORT nCurrentLen = GetText().Len();
+        sal_uInt16 nNewLen = rNew.Len();
+        sal_uInt16 nCurrentLen = GetText().Len();
 
         if ((nNewLen > nCurrentLen) && (aSel.Max() == nCurrentLen))
         {   // new new text is longer and the cursor is behind the last char
@@ -580,7 +580,7 @@ void FormattedField::ImplSetTextImpl(const XubString& rNew, Selection* pNewSel)
                 aSel.Max() = nNewLen;
                 if (!nCurrentLen)
                 {   // there wasn't really a previous selection (as there was no previous text), we're setting a new one -> check the selection options
-                    ULONG nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
+                    sal_uLong nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
                     if (nSelOptions & SELECTION_OPTION_SHOWFIRST)
                     {   // selection should be from right to left -> swap min and max
                         aSel.Min() = aSel.Max();
@@ -599,7 +599,7 @@ void FormattedField::ImplSetTextImpl(const XubString& rNew, Selection* pNewSel)
         SpinField::SetText(rNew, aSel);
     }
 
-    m_bValueDirty = TRUE;
+    m_bValueDirty = sal_True;
         // muss nicht stimmen, aber sicherheitshalber ...
 }
 
@@ -613,12 +613,12 @@ long FormattedField::PreNotify(NotifyEvent& rNEvt)
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::ImplSetFormatKey(ULONG nFormatKey)
+void FormattedField::ImplSetFormatKey(sal_uLong nFormatKey)
 {
     DBG_CHKTHIS(FormattedField, NULL);
 
     m_nFormatKey = nFormatKey;
-    BOOL bNeedFormatter = (m_pFormatter == NULL) && (nFormatKey != 0);
+    sal_Bool bNeedFormatter = (m_pFormatter == NULL) && (nFormatKey != 0);
     if (bNeedFormatter)
     {
         ImplGetFormatter();     // damit wird ein Standard-Formatter angelegt
@@ -633,16 +633,16 @@ void FormattedField::ImplSetFormatKey(ULONG nFormatKey)
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::SetFormatKey(ULONG nFormatKey)
+void FormattedField::SetFormatKey(sal_uLong nFormatKey)
 {
     DBG_CHKTHIS(FormattedField, NULL);
-    BOOL bNoFormatter = (m_pFormatter == NULL);
+    sal_Bool bNoFormatter = (m_pFormatter == NULL);
     ImplSetFormatKey(nFormatKey);
     FormatChanged((bNoFormatter && (m_pFormatter != NULL)) ? FCT_FORMATTER : FCT_KEYONLY);
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, BOOL bResetFormat)
+void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, sal_Bool bResetFormat)
 {
     DBG_CHKTHIS(FormattedField, NULL);
 
@@ -676,7 +676,7 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, BOOL bResetForm
             LanguageType aNewLang = pDefaultEntry ? pDefaultEntry->GetLanguage() : LANGUAGE_DONTKNOW;
 
             // den alten Format-String in die neue Sprache konvertieren
-            USHORT nCheckPos;
+            sal_uInt16 nCheckPos;
             short nType;
             pFormatter->PutandConvertEntry(sOldFormat, nCheckPos, nType, nDestKey, aOldLang, aNewLang);
             m_nFormatKey = nDestKey;
@@ -698,47 +698,47 @@ void FormattedField::GetFormat(XubString& rFormatString, LanguageType& eLang) co
 }
 
 //------------------------------------------------------------------------------
-BOOL FormattedField::SetFormat(const XubString& rFormatString, LanguageType eLang)
+sal_Bool FormattedField::SetFormat(const XubString& rFormatString, LanguageType eLang)
 {
     DBG_CHKTHIS(FormattedField, NULL);
     sal_uInt32 nNewKey = ImplGetFormatter()->TestNewString(rFormatString, eLang);
     if (nNewKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
-        USHORT nCheckPos;
+        sal_uInt16 nCheckPos;
         short nType;
         XubString rFormat(rFormatString);
         if (!ImplGetFormatter()->PutEntry(rFormat, nCheckPos, nType, nNewKey, eLang))
-            return FALSE;
+            return sal_False;
         DBG_ASSERT(nNewKey != NUMBERFORMAT_ENTRY_NOT_FOUND, "FormattedField::SetFormatString : PutEntry returned an invalid key !");
     }
 
     if (nNewKey != m_nFormatKey)
         SetFormatKey(nNewKey);
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------------
-BOOL FormattedField::GetThousandsSep() const
+sal_Bool FormattedField::GetThousandsSep() const
 {
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
         "FormattedField::GetThousandsSep : your'e sure what your'e doing when setting the precision of a text format ?");
 
-    BOOL bThousand, IsRed;
-    USHORT nPrecision, nAnzLeading;
+    sal_Bool bThousand, IsRed;
+    sal_uInt16 nPrecision, nAnzLeading;
     ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nAnzLeading);
 
     return bThousand;
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::SetThousandsSep(BOOL _bUseSeparator)
+void FormattedField::SetThousandsSep(sal_Bool _bUseSeparator)
 {
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
         "FormattedField::SetThousandsSep : your'e sure what your'e doing when setting the precision of a text format ?");
 
     // get the current settings
-    BOOL bThousand, IsRed;
-    USHORT nPrecision, nAnzLeading;
+    sal_Bool bThousand, IsRed;
+    sal_uInt16 nPrecision, nAnzLeading;
     ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nAnzLeading);
     if (bThousand == _bUseSeparator)
         return;
@@ -751,7 +751,7 @@ void FormattedField::SetThousandsSep(BOOL _bUseSeparator)
     // generate a new format ...
     ImplGetFormatter()->GenerateFormat(sFmtDescription, m_nFormatKey, eLang, _bUseSeparator, IsRed, nPrecision, nAnzLeading);
     // ... and introduce it to the formatter
-    USHORT nCheckPos;
+    sal_uInt16 nCheckPos;
     sal_uInt32  nNewKey;
     short nType;
     ImplGetFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);
@@ -762,27 +762,27 @@ void FormattedField::SetThousandsSep(BOOL _bUseSeparator)
 }
 
 //------------------------------------------------------------------------------
-USHORT FormattedField::GetDecimalDigits() const
+sal_uInt16 FormattedField::GetDecimalDigits() const
 {
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
         "FormattedField::GetDecimalDigits : your'e sure what your'e doing when setting the precision of a text format ?");
 
-    BOOL bThousand, IsRed;
-    USHORT nPrecision, nAnzLeading;
+    sal_Bool bThousand, IsRed;
+    sal_uInt16 nPrecision, nAnzLeading;
     ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nAnzLeading);
 
     return nPrecision;
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::SetDecimalDigits(USHORT _nPrecision)
+void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
 {
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
         "FormattedField::SetDecimalDigits : your'e sure what your'e doing when setting the precision of a text format ?");
 
     // get the current settings
-    BOOL bThousand, IsRed;
-    USHORT nPrecision, nAnzLeading;
+    sal_Bool bThousand, IsRed;
+    sal_uInt16 nPrecision, nAnzLeading;
     ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nAnzLeading);
     if (nPrecision == _nPrecision)
         return;
@@ -795,7 +795,7 @@ void FormattedField::SetDecimalDigits(USHORT _nPrecision)
     // generate a new format ...
     ImplGetFormatter()->GenerateFormat(sFmtDescription, m_nFormatKey, eLang, bThousand, IsRed, _nPrecision, nAnzLeading);
     // ... and introduce it to the formatter
-    USHORT nCheckPos;
+    sal_uInt16 nCheckPos;
     sal_uInt32 nNewKey;
     short nType;
     ImplGetFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);
@@ -831,7 +831,7 @@ void FormattedField::Commit()
     {   // consider the field as modified
         Modify();
         // but we have the most recent value now
-        m_bValueDirty = FALSE;
+        m_bValueDirty = sal_False;
     }
 }
 
@@ -845,7 +845,7 @@ void FormattedField::ReFormat()
             double dValue = GetValue();
             if ( m_bEnableNaN && ::rtl::math::isNan( dValue ) )
                 return;
-            ImplSetValue( dValue, TRUE );
+            ImplSetValue( dValue, sal_True );
         }
         else
             SetTextFormatted(GetTextValue());
@@ -860,7 +860,7 @@ long FormattedField::Notify(NotifyEvent& rNEvt)
     if ((rNEvt.GetType() == EVENT_KEYINPUT) && !IsReadOnly())
     {
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
-        USHORT nMod = rKEvt.GetKeyCode().GetModifier();
+        sal_uInt16 nMod = rKEvt.GetKeyCode().GetModifier();
         switch ( rKEvt.GetKeyCode().GetCode() )
         {
             case KEY_UP:
@@ -901,7 +901,7 @@ long FormattedField::Notify(NotifyEvent& rNEvt)
             {
                 if (TreatingAsNumber())
                 {
-                    ImplSetValue(m_dCurrentValue, TRUE);
+                    ImplSetValue(m_dCurrentValue, sal_True);
                     Modify();
                 }
                 else
@@ -912,7 +912,7 @@ long FormattedField::Notify(NotifyEvent& rNEvt)
                     else
                         SetTextFormatted(m_sDefaultText);
                 }
-                m_bValueDirty = FALSE;
+                m_bValueDirty = sal_False;
             }
         }
         else
@@ -931,7 +931,7 @@ void FormattedField::SetMinValue(double dMin)
     DBG_ASSERT(m_bTreatAsNumber, "FormattedField::SetMinValue : only to be used in numeric mode !");
 
     m_dMinValue = dMin;
-    m_bHasMin = TRUE;
+    m_bHasMin = sal_True;
     // fuer die Ueberpruefung des aktuellen Wertes an der neuen Grenze -> ImplSetValue
     ReFormat();
 }
@@ -943,7 +943,7 @@ void FormattedField::SetMaxValue(double dMax)
     DBG_ASSERT(m_bTreatAsNumber, "FormattedField::SetMaxValue : only to be used in numeric mode !");
 
     m_dMaxValue = dMax;
-    m_bHasMax = TRUE;
+    m_bHasMax = sal_True;
     // fuer die Ueberpruefung des aktuellen Wertes an der neuen Grenze -> ImplSetValue
     ReFormat();
 }
@@ -957,7 +957,7 @@ void FormattedField::SetTextValue(const XubString& rText)
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::EnableEmptyField(BOOL bEnable)
+void FormattedField::EnableEmptyField(sal_Bool bEnable)
 {
     DBG_CHKTHIS(FormattedField, NULL);
     if (bEnable == m_bEnableEmptyField)
@@ -965,11 +965,11 @@ void FormattedField::EnableEmptyField(BOOL bEnable)
 
     m_bEnableEmptyField = bEnable;
     if (!m_bEnableEmptyField && GetText().Len()==0)
-        ImplSetValue(m_dCurrentValue, TRUE);
+        ImplSetValue(m_dCurrentValue, sal_True);
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::ImplSetValue(double dVal, BOOL bForce)
+void FormattedField::ImplSetValue(double dVal, sal_Bool bForce)
 {
     DBG_CHKTHIS(FormattedField, NULL);
 
@@ -982,7 +982,7 @@ void FormattedField::ImplSetValue(double dVal, BOOL bForce)
 
     DBG_ASSERT(ImplGetFormatter() != NULL, "FormattedField::ImplSetValue : can't set a value without a formatter !");
 
-    m_bValueDirty = FALSE;
+    m_bValueDirty = sal_False;
     m_dCurrentValue = dVal;
 
     String sNewText;
@@ -1003,23 +1003,23 @@ void FormattedField::ImplSetValue(double dVal, BOOL bForce)
     }
 
     ImplSetTextImpl(sNewText, NULL);
-    m_bValueDirty = FALSE;
+    m_bValueDirty = sal_False;
     DBG_ASSERT(CheckText(sNewText), "FormattedField::ImplSetValue : formatted string doesn't match the criteria !");
 }
 
 //------------------------------------------------------------------------------
-BOOL FormattedField::ImplGetValue(double& dNewVal)
+sal_Bool FormattedField::ImplGetValue(double& dNewVal)
 {
     DBG_CHKTHIS(FormattedField, NULL);
 
     dNewVal = m_dCurrentValue;
     if (!m_bValueDirty)
-        return TRUE;
+        return sal_True;
 
     dNewVal = m_dDefaultValue;
     String sText(GetText());
     if (!sText.Len())
-        return TRUE;
+        return sal_True;
 
     DBG_ASSERT(ImplGetFormatter() != NULL, "FormattedField::ImplGetValue : can't give you a current value without a formatter !");
 
@@ -1035,7 +1035,7 @@ BOOL FormattedField::ImplGetValue(double& dNewVal)
         // the language of our format
         LanguageType eLanguage = m_pFormatter->GetEntry(m_nFormatKey)->GetLanguage();
         // the default number format for this language
-        ULONG nStandardNumericFormat = m_pFormatter->GetStandardFormat(NUMBERFORMAT_NUMBER, eLanguage);
+        sal_uLong nStandardNumericFormat = m_pFormatter->GetStandardFormat(NUMBERFORMAT_NUMBER, eLanguage);
 
         sal_uInt32 nTempFormat = nStandardNumericFormat;
         double dTemp;
@@ -1049,14 +1049,14 @@ BOOL FormattedField::ImplGetValue(double& dNewVal)
         // which equals 300 percent.
     }
     if (!ImplGetFormatter()->IsNumberFormat(sText, nFormatKey, dNewVal))
-        return FALSE;
+        return sal_False;
 
 
     if (m_bHasMin && (dNewVal<m_dMinValue))
         dNewVal = m_dMinValue;
     if (m_bHasMax && (dNewVal>m_dMaxValue))
         dNewVal = m_dMaxValue;
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------------
@@ -1079,7 +1079,7 @@ double FormattedField::GetValue()
             m_dCurrentValue = m_dDefaultValue;
     }
 
-    m_bValueDirty = FALSE;
+    m_bValueDirty = sal_False;
     return m_dCurrentValue;
 }
 
@@ -1166,7 +1166,7 @@ void DoubleNumericField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
 }
 
 //------------------------------------------------------------------------------
-BOOL DoubleNumericField::CheckText(const XubString& sText) const
+sal_Bool DoubleNumericField::CheckText(const XubString& sText) const
 {
     // We'd like to implement this using the NumberFormatter::IsNumberFormat, but unfortunately, this doesn't
     // recognize fragments of numbers (like, for instance "1e", which happens during entering e.g. "1e10")
@@ -1174,19 +1174,19 @@ BOOL DoubleNumericField::CheckText(const XubString& sText) const
 
 #ifdef REGEXP_SUPPORT
     if (!sText.Len())
-        return TRUE;
+        return sal_True;
 
     String sForceComplete = '_';
     sForceComplete += sText;
     sForceComplete += '_';
 
-    USHORT nStart = 0, nEnd = sForceComplete.Len();
-    BOOL bFound = m_pConformanceTester->SearchFrwrd(sForceComplete, &nStart, &nEnd);
+    sal_uInt16 nStart = 0, nEnd = sForceComplete.Len();
+    sal_Bool bFound = m_pConformanceTester->SearchFrwrd(sForceComplete, &nStart, &nEnd);
 
     if (bFound && (nStart == 0) && (nEnd == sForceComplete.Len()))
-        return TRUE;
+        return sal_True;
 
-    return FALSE;
+    return sal_False;
 #else
     return m_pNumberValidator->isValidNumericFragment( sText );
 #endif
@@ -1252,9 +1252,9 @@ void DoubleNumericField::ResetConformanceTester()
 //------------------------------------------------------------------------------
 DoubleCurrencyField::DoubleCurrencyField(Window* pParent, WinBits nStyle)
     :FormattedField(pParent, nStyle)
-    ,m_bChangingFormat(FALSE)
+    ,m_bChangingFormat(sal_False)
 {
-    m_bPrependCurrSym = FALSE;
+    m_bPrependCurrSym = sal_False;
 
     // initialize with a system currency format
     m_sCurrencySymbol = SvtSysLocale().GetLocaleData().getCurrSymbol();
@@ -1264,9 +1264,9 @@ DoubleCurrencyField::DoubleCurrencyField(Window* pParent, WinBits nStyle)
 //------------------------------------------------------------------------------
 DoubleCurrencyField::DoubleCurrencyField(Window* pParent, const ResId& rResId)
     :FormattedField(pParent, rResId)
-    ,m_bChangingFormat(FALSE)
+    ,m_bChangingFormat(sal_False)
 {
-    m_bPrependCurrSym = FALSE;
+    m_bPrependCurrSym = sal_False;
 
     // initialize with a system currency format
     m_sCurrencySymbol = SvtSysLocale().GetLocaleData().getCurrSymbol();
@@ -1313,7 +1313,7 @@ void DoubleCurrencyField::setCurrencySymbol(const String& _sSymbol)
 }
 
 //------------------------------------------------------------------------------
-void DoubleCurrencyField::setPrependCurrSym(BOOL _bPrepend)
+void DoubleCurrencyField::setPrependCurrSym(sal_Bool _bPrepend)
 {
     if (m_bPrependCurrSym == _bPrepend)
          return;
@@ -1330,8 +1330,8 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     XubString sOldFormat;
     LanguageType eLanguage;
     GetFormat(sOldFormat, eLanguage);
-    BOOL bThSep = GetThousandsSep();
-    USHORT nDigits = GetDecimalDigits();
+    sal_Bool bThSep = GetThousandsSep();
+    sal_uInt16 nDigits = GetDecimalDigits();
 
     // build a new format string with the base class' and my own settings
     Locale aLocale;
@@ -1391,9 +1391,9 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     }
 
     // set this new basic format
-    m_bChangingFormat = TRUE;
+    m_bChangingFormat = sal_True;
     SetFormat(sNewFormat, eLanguage);
-    m_bChangingFormat = FALSE;
+    m_bChangingFormat = sal_False;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

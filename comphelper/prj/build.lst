@@ -1,15 +1,2 @@
-ph	comphelper	:	cppuhelper ucbhelper offuh salhelper NULL
-ph	comphelper								usr1	-	all	ph_mkout NULL
-ph	comphelper\inc							nmake	-	all	ph_inc NULL
-ph	comphelper\source\container				nmake	-	all	ph_container ph_inc NULL
-ph	comphelper\source\eventattachermgr		nmake	-	all	ph_evtatmgr ph_inc NULL
-ph	comphelper\source\misc					nmake	-	all	ph_misc ph_inc NULL
-ph	comphelper\source\processfactory		nmake	-	all	ph_procfact ph_inc NULL
-ph	comphelper\source\property				nmake	-	all	ph_property ph_inc NULL
-ph	comphelper\source\streaming				nmake	-	all	ph_streaming ph_inc NULL
-ph	comphelper\source\compare				nmake	-	all	ph_compare ph_inc NULL
-ph  comphelper\source\officeinstdir         nmake   -   all ph_officeinstdir ph_inc NULL
-ph  comphelper\source\xml                   nmake   -   all ph_xml NULL
-ph  comphelper\util                         nmake   -   all ph_util ph_container ph_evtatmgr ph_misc ph_procfact ph_property ph_streaming ph_compare ph_officeinstdir ph_xml NULL
-ph	comphelper\qa\weakbag					nmake	-	all	qa_weakbag ph_util NULL
-ph	comphelper\qa\string					nmake	-	all	qa_string ph_util NULL
+ph	comphelper	:	cppuhelper ucbhelper offuh salhelper LIBXSLT:libxslt NULL
+ch comphelper\prj nmake - all ch_all NULL

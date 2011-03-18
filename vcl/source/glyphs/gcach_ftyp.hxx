@@ -82,7 +82,7 @@ public:
                                 const ExtraKernInfo* );
                           ~FtFontInfo();
 
-    const unsigned char*  GetTable( const char*, ULONG* pLength=0 ) const;
+    const unsigned char*  GetTable( const char*, sal_uLong* pLength=0 ) const;
 
     FT_FaceRec_*          GetFaceFT();
 #ifdef ENABLE_GRAPHITE
@@ -102,6 +102,9 @@ public:
     int                   GetGlyphIndex( sal_UCS4 cChar ) const;
     void                  CacheGlyphIndex( sal_UCS4 cChar, int nGI ) const;
 
+    bool                  GetFontCodeRanges( CmapResult& ) const;
+    const ImplFontCharMap* GetImplFontCharMap( void );
+
     bool                  HasExtraKerning() const;
     int                   GetExtraKernPairs( ImplKernPairData** ) const;
     int                   GetExtraGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const;
@@ -118,6 +121,8 @@ private:
 #endif
     sal_IntPtr      mnFontId;
     ImplDevFontAttributes maDevFontAttributes;
+
+    const ImplFontCharMap* mpFontCharMap;
 
     // cache unicode->glyphid mapping because looking it up is expensive
     // TODO: change to boost::unordered_multimap when a use case requires a m:n mapping
@@ -193,6 +198,7 @@ public:
     virtual bool                NeedsArtificialItalic() const { return mbArtItalic; }
 
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
+    virtual const ImplFontCharMap* GetImplFontCharMap( void ) const;
 
     virtual int                 GetGlyphIndex( sal_UCS4 ) const;
     int                         GetRawGlyphIndex( sal_UCS4 ) const;
@@ -203,9 +209,9 @@ public:
     virtual bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
     virtual bool                GetGlyphOutline( int nGlyphIndex, ::basegfx::B2DPolyPolygon& ) const;
     virtual int                 GetGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const;
-    virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
+    virtual sal_uLong               GetKernPairs( ImplKernPairData** ) const;
 
-    const unsigned char*        GetTable( const char* pName, ULONG* pLength )
+    const unsigned char*        GetTable( const char* pName, sal_uLong* pLength )
                                 { return mpFontInfo->GetTable( pName, pLength ); }
     int                         GetEmUnits() const;
     const FT_Size_Metrics&      GetMetricsFT() const { return maSizeFT->metrics; }
@@ -218,7 +224,6 @@ protected:
 
     int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_*, bool ) const;
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
-    virtual bool                GetFontCodeRanges( CmapResult& ) const;
     virtual bool                GetFontCapabilities(vcl::FontCapabilities &) const;
     bool                        ApplyGSUB( const ImplFontSelectData& );
     virtual ServerFontLayoutEngine* GetLayoutEngine();

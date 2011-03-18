@@ -93,7 +93,7 @@ private:
 // This class uses the SIL Graphite engine to provide complex text layout services to the VCL
 // @author tse
 //
-class VCL_DLLPUBLIC GraphiteLayout : public SalLayout
+class VCL_PLUGIN_PUBLIC GraphiteLayout : public SalLayout
 {
 public:
 
@@ -169,8 +169,6 @@ private:
                 float nextGlyphOrigin, float fScaling,
                 long & rDXOffset, bool bIsBase, int baseChar);
 };
-
-
 
 #endif // _SV_GRAPHITELAYOUT_HXX
 
