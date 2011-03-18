@@ -54,9 +54,9 @@
 #include <swtblfmt.hxx>
 #include <UndoTable.hxx>
 #include <mvsave.hxx>
-// OD 26.08.2003 #i18103#
 #include <sectfrm.hxx>
 #include <frmtool.hxx>
+#include <switerator.hxx>
 #include <deque>
 
 //siehe auch swtable.cxx
@@ -196,7 +196,7 @@ void GetTblSelCrs( const SwTableCursor& rTblCrsr, SwSelBoxes& rBoxes )
     if( rTblCrsr.IsChgd() || !rTblCrsr.GetBoxesCount() )
     {
         SwTableCursor* pTCrsr = (SwTableCursor*)&rTblCrsr;
-        pTCrsr->GetDoc()->GetRootFrm()->MakeTblCrsrs( *pTCrsr );
+        pTCrsr->GetDoc()->GetCurrentLayout()->MakeTblCrsrs( *pTCrsr );  //swmod 080218
     }
 
     if( rTblCrsr.GetBoxesCount() )
@@ -291,10 +291,10 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
         }
         const SwCntntNode *pCntNd = rCrsr.GetCntntNode();
         const SwLayoutFrm *pStart = pCntNd ?
-            pCntNd->GetFrm( &aPtPos )->GetUpper() : 0;
+            pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &aPtPos )->GetUpper() : 0;
         pCntNd = rCrsr.GetCntntNode(sal_False);
         const SwLayoutFrm *pEnd = pCntNd ?
-            pCntNd->GetFrm( &aMkPos )->GetUpper() : 0;
+            pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &aMkPos )->GetUpper() : 0;
         if( pStart && pEnd )
             GetTblSel( pStart, pEnd, rBoxes, 0, eSearchType );
     }
@@ -503,10 +503,10 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
     // OD 07.11.2003 #i22135# - Also the content of the table could be
     //                          invisible - e.g. in a hidden section
     // Robust: check, if content was found (e.g. empty table cells)
-    if ( !pCNd || pCNd->GetFrm() == NULL )
+    if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) == NULL )
             return sal_False;
 
-    const SwLayoutFrm *pStart = pCNd ? pCNd->GetFrm( &aNullPos )->GetUpper() : 0;
+    const SwLayoutFrm *pStart = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper() : 0;
     ASSERT( pStart, "ohne Frame geht gar nichts" );
 
     aIdx = rEndNd;
@@ -515,12 +515,12 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
         pCNd = aIdx.GetNodes().GoNextSection( &aIdx, sal_False, sal_False );
 
     // OD 07.11.2003 #i22135# - Robust: check, if content was found and if it's visible
-    if ( !pCNd || pCNd->GetFrm() == NULL )
+    if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) == NULL )
     {
         return sal_False;
     }
 
-    const SwLayoutFrm *pEnd = pCNd ? pCNd->GetFrm( &aNullPos )->GetUpper() : 0;
+    const SwLayoutFrm *pEnd = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper() : 0;
     ASSERT( pEnd, "ohne Frame geht gar nichts" );
 
 
@@ -775,9 +775,9 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
     if ( rShell.IsTableMode() )
         pCrsr = rShell.pTblCrsr;
 
-    const SwLayoutFrm *pStart = pCrsr->GetCntntNode()->GetFrm(
+    const SwLayoutFrm *pStart = pCrsr->GetCntntNode()->getLayoutFrm( rShell.GetLayout(),
                       &pCrsr->GetPtPos() )->GetUpper(),
-                      *pEnd   = pCrsr->GetCntntNode(sal_False)->GetFrm(
+                      *pEnd   = pCrsr->GetCntntNode(sal_False)->getLayoutFrm( rShell.GetLayout(),
                       &pCrsr->GetMkPos() )->GetUpper();
 
     const SwLayoutFrm* pSttCell = pStart;
@@ -1015,9 +1015,12 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 //              das die 1. Headline mit drin ist.
 //  Point aPt( rShell.GetCharRect().Pos() );
     Point aPt( 0, 0 );
-    const SwLayoutFrm *pStart = rPam.GetCntntNode()->GetFrm(
-                                                        &aPt )->GetUpper(),
-                      *pEnd = rPam.GetCntntNode(sal_False)->GetFrm(
+
+    const SwCntntNode* pCntNd = rPam.GetCntntNode();
+    const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
+                                                        &aPt )->GetUpper();
+    pCntNd = rPam.GetCntntNode(sal_False);
+    const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                         &aPt )->GetUpper();
 
     SwSelUnions aUnions;
@@ -1531,9 +1534,11 @@ sal_uInt16 CheckMergeSel( const SwPaM& rPam )
 //              richtig. Warum nicht Point 0,0 benutzen? Dann ist garantiert,
 //              das die 1. Headline mit drin ist.
     Point aPt;
-    const SwLayoutFrm *pStart = rPam.GetCntntNode()->GetFrm(
-                                                    &aPt )->GetUpper(),
-                        *pEnd = rPam.GetCntntNode(sal_False)->GetFrm(
+    const SwCntntNode* pCntNd = rPam.GetCntntNode();
+    const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
+                                                        &aPt )->GetUpper();
+    pCntNd = rPam.GetCntntNode(sal_False);
+    const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                     &aPt )->GetUpper();
     GetTblSel( pStart, pEnd, aBoxes, 0 );
     return CheckMergeSel( aBoxes );
@@ -1607,31 +1612,6 @@ SwTwips lcl_CalcWish( const SwLayoutFrm *pCell, long nWish,
     }
     return nRet;
 }
-
-/*  MA: 20. Sep. 93 wird nicht mehr gebraucht.
-static const SwLayoutFrm *GetPrevCell( const SwLayoutFrm *pCell )
-{
-    const SwLayoutFrm *pLay = pCell->GetPrevLayoutLeaf();
-    if ( pLay && pLay->IsLayoutFrm() && !pLay->IsTab() )
-    {
-        //GetPrevLayoutLeaf() liefert ggf. auch die Umgebung einer Tab zurueck
-        //(naehmlich genau dann, wenn die Zelle noch Vorgaenger hat).
-        const SwFrm *pFrm = pLay->Lower();
-        while ( pFrm->GetNext() )
-            pFrm = pFrm->GetNext();
-        pLay = pFrm->IsTabFrm() ? (SwLayoutFrm*)pFrm : 0;
-    }
-    if ( pLay && pLay->IsTabFrm() )
-    {
-        //GetPrevLayoutLeaf() liefert ggf. auch Tabellen zurueck die letzte
-        //Zelle dieser Tabelle ist das das gesuchte Blatt.
-        pLay = ((SwTabFrm*)pLay)->FindLastCntnt()->GetUpper();
-        while ( !pLay->IsCellFrm() )
-            pLay = pLay->GetUpper();
-    }
-    return pLay;
-}
-*/
 
 void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
                              const SwLayoutFrm *&rpEnd,
@@ -2088,9 +2068,12 @@ sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
         aPtPos = pShCrsr->GetPtPos();
         aMkPos = pShCrsr->GetMkPos();
     }
-    const SwLayoutFrm *pStart = rCrsr.GetCntntNode()->GetFrm(
-                                &aPtPos )->GetUpper(),
-                      *pEnd   = rCrsr.GetCntntNode(sal_False)->GetFrm(
+
+    const SwCntntNode* pCntNd = rCrsr.GetCntntNode();
+    const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
+                                                        &aPtPos )->GetUpper();
+    pCntNd = rCrsr.GetCntntNode(sal_False);
+    const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                 &aMkPos )->GetUpper();
 
     SWRECTFN( pStart->GetUpper() )
@@ -2149,7 +2132,7 @@ sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
 
 void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrm *pUpper, SwFrm *pSibling )
 {
-    SwRowFrm *pRow = new SwRowFrm( rLine );
+    SwRowFrm *pRow = new SwRowFrm( rLine, pUpper );
     if ( pUpper->IsTabFrm() && ((SwTabFrm*)pUpper)->IsFollow() )
     {
         SwTabFrm* pTabFrm = (SwTabFrm*)pUpper;
@@ -2307,14 +2290,10 @@ void _FndBox::DelFrms( SwTable &rTable )
     for ( sal_uInt16 i = nStPos; i <= nEndPos; ++i)
     {
         SwFrmFmt *pFmt = rTable.GetTabLines()[i]->GetFrmFmt();
-        SwClientIter aIter( *pFmt );
-        SwClient* pLast = aIter.GoStart();
-        if( pLast )
+        SwIterator<SwRowFrm,SwFmt> aIter( *pFmt );
+        for ( SwRowFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
         {
-            do {
-                SwFrm *pFrm = PTR_CAST( SwFrm, pLast );
-                if ( pFrm &&
-                     ((SwRowFrm*)pFrm)->GetTabLine() == rTable.GetTabLines()[i] )
+                if ( pFrm->GetTabLine() == rTable.GetTabLines()[i] )
                 {
                     sal_Bool bDel = sal_True;
                     SwTabFrm *pUp = !pFrm->GetPrev() && !pFrm->GetNext() ?
@@ -2402,7 +2381,6 @@ void _FndBox::DelFrms( SwTable &rTable )
                         delete pFrm;
                     }
                 }
-            } while( 0 != ( pLast = aIter++ ));
         }
     }
 }
@@ -2436,8 +2414,7 @@ void lcl_UpdateRepeatedHeadlines( SwTabFrm& rTabFrm, bool bCalcLowers )
     const sal_uInt16 nRepeat = rTable.GetRowsToRepeat();
     for ( sal_uInt16 nIdx = 0; nIdx < nRepeat; ++nIdx )
     {
-        SwRowFrm* pHeadline = new SwRowFrm(
-                                *rTable.GetTabLines()[ nIdx ] );
+        SwRowFrm* pHeadline = new SwRowFrm( *rTable.GetTabLines()[ nIdx ], &rTabFrm );
         pHeadline->SetRepeatedHeadline( true );
         pHeadline->Paste( &rTabFrm, pLower );
         pHeadline->RegistFlys();
@@ -2471,13 +2448,12 @@ void _FndBox::MakeFrms( SwTable &rTable )
         --nEndPos;
     }
     //Jetzt die grosse Einfuegeoperation fuer alle Tabllen.
-    SwClientIter aTabIter( *rTable.GetFrmFmt() );
-    for ( SwTabFrm *pTable = (SwTabFrm*)aTabIter.First( TYPE(SwFrm) ); pTable;
-          pTable = (SwTabFrm*)aTabIter.Next() )
+    SwIterator<SwTabFrm,SwFmt> aTabIter( *rTable.GetFrmFmt() );
+    for ( SwTabFrm *pTable = aTabIter.First(); pTable; pTable = aTabIter.Next() )
     {
         if ( !pTable->IsFollow() )
         {
-            SwFrm  *pSibling = 0;
+            SwRowFrm  *pSibling = 0;
             SwFrm  *pUpperFrm  = 0;
             int i;
             for ( i = rTable.GetTabLines().Count()-1;
@@ -2485,19 +2461,19 @@ void _FndBox::MakeFrms( SwTable &rTable )
             {
                 SwTableLine *pLine = pLineBehind ? pLineBehind :
                                                     rTable.GetTabLines()[static_cast<sal_uInt16>(i)];
-                SwClientIter aIter( *pLine->GetFrmFmt() );
-                pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
+                SwIterator<SwRowFrm,SwFmt> aIter( *pLine->GetFrmFmt() );
+                pSibling = aIter.First();
                 while ( pSibling && (
-                            static_cast<SwRowFrm*>(pSibling)->GetTabLine() != pLine ||
+                            pSibling->GetTabLine() != pLine ||
                             !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
-                            static_cast<SwRowFrm*>(pSibling)->IsRepeatedHeadline() ||
+                            pSibling->IsRepeatedHeadline() ||
                             // --> FME 2005-08-24 #i53647# If !pLineBehind,
                             // IsInSplitTableRow() should be checked.
                             ( pLineBehind && pSibling->IsInFollowFlowRow() ) ||
                             (!pLineBehind && pSibling->IsInSplitTableRow() ) ) )
                             // <--
                 {
-                    pSibling = (SwFrm*)aIter.Next();
+                    pSibling = aIter.Next();
                 }
             }
             if ( pSibling )
@@ -2545,32 +2521,31 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
          (nBfPos != USHRT_MAX ? nBfPos + 1 : 0)) / (nNumber + 1);
 
     //Den Master-TabFrm suchen
-    SwClientIter aTabIter( *rTable.GetFrmFmt() );
+    SwIterator<SwTabFrm,SwFmt> aTabIter( *rTable.GetFrmFmt() );
     SwTabFrm *pTable;
-    for ( pTable = (SwTabFrm*)aTabIter.First( TYPE(SwFrm) ); pTable;
-          pTable = (SwTabFrm*)aTabIter.Next() )
+    for ( pTable = aTabIter.First(); pTable; pTable = aTabIter.Next() )
     {
         if( !pTable->IsFollow() )
         {
-            SwFrm       *pSibling = 0;
+            SwRowFrm* pSibling = 0;
             SwLayoutFrm *pUpperFrm   = 0;
             if ( bBehind )
             {
                 if ( pLineBehind )
                 {
-                    SwClientIter aIter( *pLineBehind->GetFrmFmt() );
-                    pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
+                    SwIterator<SwRowFrm,SwFmt> aIter( *pLineBehind->GetFrmFmt() );
+                    pSibling = aIter.First();
                     while ( pSibling && (
                                 // only consider row frames associated with pLineBehind:
-                                static_cast<SwRowFrm*>(pSibling)->GetTabLine() != pLineBehind ||
+                                pSibling->GetTabLine() != pLineBehind ||
                                 // only consider row frames that are in pTables Master-Follow chain:
                                 !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
                                 // only consider row frames that are not repeated headlines:
-                                static_cast<SwRowFrm*>(pSibling)->IsRepeatedHeadline() ||
+                                pSibling->IsRepeatedHeadline() ||
                                 // only consider row frames that are not follow flow rows
                                 pSibling->IsInFollowFlowRow() ) )
                     {
-                          pSibling = (SwFrm*)aIter.Next();
+                          pSibling = aIter.Next();
                     }
                 }
                 if ( pSibling )
@@ -2601,16 +2576,16 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
                 {
                     SwTableLine* pLine = pLineBefore ? pLineBefore : rTable.GetTabLines()[i];
 
-                    SwClientIter aIter( *pLine->GetFrmFmt() );
-                    pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
+                    SwIterator<SwRowFrm,SwFmt> aIter( *pLine->GetFrmFmt() );
+                    pSibling = aIter.First();
 
                     while ( pSibling && (
                             // only consider row frames associated with pLineBefore:
-                            static_cast<SwRowFrm*>(pSibling)->GetTabLine() != pLine ||
+                            pSibling->GetTabLine() != pLine ||
                             // only consider row frames that are in pTables Master-Follow chain:
                             !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
                             // only consider row frames that are not repeated headlines:
-                            static_cast<SwRowFrm*>(pSibling)->IsRepeatedHeadline() ||
+                            pSibling->IsRepeatedHeadline() ||
                             // 1. case: pLineBefore == 0:
                             // only consider row frames that are not follow flow rows
                             // 2. case: pLineBefore != 0:
@@ -2621,13 +2596,13 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
                               (  pLineBefore && pSibling->IsInSplitTableRow() ) ) ) )
                             // <--
                     {
-                        pSibling = (SwFrm*)aIter.Next();
+                        pSibling = aIter.Next();
                     }
                 }
 
                 pUpperFrm = pSibling->GetUpper();
                 if ( pLineBefore )
-                    pSibling = pSibling->GetNext();
+                    pSibling = (SwRowFrm*) pSibling->GetNext();
 
                 sal_uInt16 nMax = nBhPos != USHRT_MAX ?
                                     nBhPos - nCnt :
@@ -2650,8 +2625,7 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
          ( ( !bBehind && ( nBfPos == USHRT_MAX || nBfPos + 1 < nRowsToRepeat ) ) ||
            (  bBehind && ( ( nBfPos == USHRT_MAX && nRowsToRepeat > 1 ) || nBfPos + 2 < nRowsToRepeat ) ) ) )
     {
-        for ( pTable = (SwTabFrm*)aTabIter.First( TYPE(SwFrm) ); pTable;
-              pTable = (SwTabFrm*)aTabIter.Next() )
+        for ( pTable = aTabIter.First(); pTable; pTable = aTabIter.Next() )
         {
             if ( pTable->Lower() )
             {
@@ -2702,9 +2676,8 @@ sal_Bool _FndBox::AreLinesToRestore( const SwTable &rTable ) const
     {
         // ups. sollte unsere zu wiederholende Kopfzeile geloescht worden
         // sein??
-        SwClientIter aIter( *rTable.GetFrmFmt() );
-        for( SwTabFrm* pTable = (SwTabFrm*)aIter.First( TYPE( SwFrm ));
-             pTable; pTable = (SwTabFrm*)aIter.Next() )
+        SwIterator<SwTabFrm,SwFmt> aIter( *rTable.GetFrmFmt() );
+        for( SwTabFrm* pTable = aIter.First(); pTable; pTable = aIter.Next() )
         {
             if( pTable->IsFollow() )
             {

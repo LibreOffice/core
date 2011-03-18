@@ -1595,7 +1595,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames
 }
 
 
-void SwChartDataProvider::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwChartDataProvider::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     // actually this function should be superfluous (need to check later)
     ClientModify(this, pOld, pNew );
@@ -2496,7 +2496,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getSupportedServiceNames
 }
 
 
-void SwChartDataSequence::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwChartDataSequence::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew );
 

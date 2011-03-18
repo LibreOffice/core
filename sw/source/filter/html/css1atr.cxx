@@ -57,6 +57,7 @@
 #include <editeng/spltitem.hxx>
 #include <editeng/orphitem.hxx>
 #include <svx/xoutbmp.hxx>
+#include <svx/svdobj.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svtools/htmlout.hxx>
@@ -86,8 +87,6 @@
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 // FOOTNOTES
-#include <dcontact.hxx>
-
 #include "doc.hxx"
 #include "swerror.h"
 #include "charatr.hxx"

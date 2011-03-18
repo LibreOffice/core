@@ -54,6 +54,9 @@ PATCH_FILES=libxml2-configure.patch \
             libxml2-xpath.patch \
             libxml2-global-symbols.patch \
 
+.IF "$(OS)" == "WNT"
+PATCH_FILES+= libxml2-long-path.patch
+.ENDIF
 
 # This is only for UNX environment now
 

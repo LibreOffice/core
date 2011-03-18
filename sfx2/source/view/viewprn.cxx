@@ -80,13 +80,15 @@ class SfxPrinterController : public vcl::PrinterController, public SfxListener
     sal_Bool        m_bOrigStatus;
     sal_Bool        m_bNeedsChange;
     sal_Bool        m_bApi;
+    sal_Bool        m_bTempPrinter;
     util::DateTime  m_aLastPrinted;
     ::rtl::OUString m_aLastPrintedBy;
 
     Sequence< beans::PropertyValue > getMergedOptions() const;
     const Any& getSelectionObject() const;
 public:
-    SfxPrinterController( const Any& i_rComplete,
+    SfxPrinterController( const boost::shared_ptr<Printer>& i_rPrinter,
+                          const Any& i_rComplete,
                           const Any& i_rSelection,
                           const Any& i_rViewProp,
                           const Reference< view::XRenderable >& i_xRender,
@@ -105,7 +107,8 @@ public:
     virtual void jobFinished( com::sun::star::view::PrintableState );
 };
 
-SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
+SfxPrinterController::SfxPrinterController( const boost::shared_ptr<Printer>& i_rPrinter,
+                                            const Any& i_rComplete,
                                             const Any& i_rSelection,
                                             const Any& i_rViewProp,
                                             const Reference< view::XRenderable >& i_xRender,
@@ -113,7 +116,8 @@ SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
                                             SfxViewShell* pView,
                                             const uno::Sequence< beans::PropertyValue >& rProps
                                           )
-    : maCompleteSelection( i_rComplete )
+    : PrinterController( i_rPrinter)
+    , maCompleteSelection( i_rComplete )
     , maSelection( i_rSelection )
     , mxRenderable( i_xRender )
     , mpLastPrinter( NULL )
@@ -122,6 +126,7 @@ SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
     , m_bOrigStatus( sal_False )
     , m_bNeedsChange( sal_False )
     , m_bApi(i_bApi)
+    , m_bTempPrinter( i_rPrinter.get() != NULL )
 {
     if ( mpViewShell )
     {
@@ -339,7 +344,7 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
                 rBind.Invalidate( SID_PRINTDOC );
                 rBind.Invalidate( SID_PRINTDOCDIRECT );
                 rBind.Invalidate( SID_SETUPPRINTER );
-                bCopyJobSetup = true;
+                bCopyJobSetup = ! m_bTempPrinter;
                 break;
             }
 
@@ -349,7 +354,12 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
 
         if( bCopyJobSetup && mpViewShell )
         {
-            SfxPrinter* pDocPrt = mpViewShell->GetPrinter(sal_False);
+            // #i114306#
+            // Note: this possibly creates a printer that gets immediately replaced
+            // by a new one. The reason for this is that otherwise we would not get
+            // the printer's SfxItemSet here to copy. Awkward, but at the moment there is no
+            // other way here to get the item set.
+            SfxPrinter* pDocPrt = mpViewShell->GetPrinter(sal_True);
             if( pDocPrt )
             {
                 if( pDocPrt->GetName() == getPrinter()->GetName() )
@@ -608,8 +618,23 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
         aSelection <<= GetObjectShell()->GetModel();
     Any aComplete( makeAny( GetObjectShell()->GetModel() ) );
     Any aViewProp( makeAny( xController ) );
+    boost::shared_ptr<Printer> aPrt;
 
-    boost::shared_ptr<vcl::PrinterController> pController( new SfxPrinterController( aComplete,
+    const beans::PropertyValue* pVal = rProps.getConstArray();
+    for( sal_Int32 i = 0; i < rProps.getLength(); i++ )
+    {
+        if( pVal[i].Name.equalsAscii( "PrinterName" ) )
+        {
+            rtl::OUString aPrinterName;
+            pVal[i].Value >>= aPrinterName;
+            aPrt.reset( new Printer( aPrinterName ) );
+            break;
+        }
+    }
+
+    boost::shared_ptr<vcl::PrinterController> pController( new SfxPrinterController(
+                                                                               aPrt,
+                                                                               aComplete,
                                                                                aSelection,
                                                                                aViewProp,
                                                                                GetRenderable(),

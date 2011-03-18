@@ -66,7 +66,7 @@
 #include <redline.hxx>
 #include <section.hxx>
 #include <charfmt.hxx>
-
+#include <switerator.hxx>
 
 
 // -----------------------------------------------------
@@ -78,49 +78,52 @@ SwUndoFmtAttrHelper::SwUndoFmtAttrHelper( SwFmt& rFmt, bool bSvDrwPt )
 {
 }
 
-void SwUndoFmtAttrHelper::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwUndoFmtAttrHelper::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    if( pOld && pNew )
+    if( pOld )
     {
-        if( POOLATTR_END >= pOld->Which() )
+        if ( pOld->Which() == RES_OBJECTDYING )
         {
-            if ( GetUndo() )
-            {
-                m_pUndo->PutAttr( *pOld );
-            }
-            else
-            {
-                m_pUndo.reset( new SwUndoFmtAttr( *pOld,
-                        *static_cast<SwFmt*>(pRegisteredIn), m_bSaveDrawPt ) );
-            }
+            CheckRegistration( pOld, pNew );
         }
-        else if ( RES_ATTRSET_CHG == pOld->Which() )
+        else if ( pNew )
         {
-            if ( GetUndo() )
+            if( POOLATTR_END >= pOld->Which() )
             {
-                SfxItemIter aIter(
-                        *(static_cast<SwAttrSetChg*>(pOld))->GetChgSet() );
-                const SfxPoolItem* pItem = aIter.GetCurItem();
-                while ( pItem )
+                if ( GetUndo() )
                 {
-                    m_pUndo->PutAttr( *pItem );
-                    if( aIter.IsAtEnd() )
-                        break;
-                    pItem = aIter.NextItem();
+                    m_pUndo->PutAttr( *pOld );
+                }
+                else
+                {
+                    m_pUndo.reset( new SwUndoFmtAttr( *pOld,
+                            *static_cast<SwFmt*>(GetRegisteredInNonConst()), m_bSaveDrawPt ) );
                 }
             }
-            else
+            else if ( RES_ATTRSET_CHG == pOld->Which() )
             {
-                m_pUndo.reset( new SwUndoFmtAttr(
-                        *static_cast<SwAttrSetChg*>(pOld)->GetChgSet(),
-                        *static_cast<SwFmt*>(pRegisteredIn), m_bSaveDrawPt ) );
+                if ( GetUndo() )
+                {
+                    SfxItemIter aIter(
+                            *(static_cast<const SwAttrSetChg*>(pOld))->GetChgSet() );
+                    const SfxPoolItem* pItem = aIter.GetCurItem();
+                    while ( pItem )
+                    {
+                        m_pUndo->PutAttr( *pItem );
+                        if( aIter.IsAtEnd() )
+                            break;
+                        pItem = aIter.NextItem();
+                    }
+                }
+                else
+                {
+                    m_pUndo.reset( new SwUndoFmtAttr(
+                            *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet(),
+                            *static_cast<SwFmt*>(GetRegisteredInNonConst()), m_bSaveDrawPt ) );
+                }
             }
         }
-        else
-            SwClient::Modify( pOld, pNew );
     }
-    else
-        SwClient::Modify( pOld, pNew );
 }
 
 // -----------------------------------------------------
@@ -167,8 +170,7 @@ void SwUndoFmtAttr::Init()
                             static_cast<const SwFrmFmtPtr>(m_pFmt)))
         {
             // Table Format: save table position, table formats are volatile!
-            SwTable * pTbl = static_cast<SwTable*>(
-                    SwClientIter( *m_pFmt ).First( TYPE( SwTable )) );
+            SwTable * pTbl = SwIterator<SwTable,SwFmt>::FirstElement( *m_pFmt );
             if ( pTbl )
             {
                 m_nNodeIndex = pTbl->GetTabSortBoxes()[ 0 ]->GetSttNd()
@@ -182,8 +184,7 @@ void SwUndoFmtAttr::Init()
         }
         else if ( 0 != dynamic_cast< SwTableBoxFmt* >( m_pFmt ) )
         {
-            SwTableBox* pTblBox = static_cast< SwTableBox* >(
-                    SwClientIter( *m_pFmt ).First( TYPE( SwTableBox )));
+            SwTableBox * pTblBox = SwIterator<SwTableBox,SwFmt>::FirstElement( *m_pFmt );
             if ( pTblBox )
             {
                 m_nNodeIndex = pTblBox->GetSttIdx();
@@ -515,7 +516,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         aNewAnchor.SetPageNum( rAnchor.GetPageNum() );
 
     Point aDrawSavePt, aDrawOldPt;
-    if( pDoc->GetRootFrm() )
+    if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
     {
         if( RES_DRAWFRMFMT == pFrmFmt->Which() )
         {

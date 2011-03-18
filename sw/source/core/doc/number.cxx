@@ -209,7 +209,7 @@ SwNumFmt::SwNumFmt() :
  ---------------------------------------------------------------------------*/
 SwNumFmt::SwNumFmt( const SwNumFmt& rFmt) :
     SvxNumberFormat(rFmt),
-    SwClient( rFmt.pRegisteredIn ),
+    SwClient( rFmt.GetRegisteredInNonConst() ),
     pVertOrient(new SwFmtVertOrient( 0, rFmt.GetVertOrient()))
 {
     sal_Int16 eMyVertOrient = rFmt.GetVertOrient();
@@ -241,7 +241,7 @@ SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc) :
         pCFmt->Add( this );
     }
     else if( GetRegisteredIn() )
-        pRegisteredIn->Remove( this );
+        GetRegisteredInNonConst()->Remove( this );
 
 }
 /* -----------------------------22.02.01 13:42--------------------------------
@@ -323,9 +323,9 @@ SwNumFmt& SwNumFmt::operator=( const SwNumFmt& rNumFmt)
 {
     SvxNumberFormat::operator=(rNumFmt);
     if( rNumFmt.GetRegisteredIn() )
-        rNumFmt.pRegisteredIn->Add( this );
+        rNumFmt.GetRegisteredInNonConst()->Add( this );
     else if( GetRegisteredIn() )
-        pRegisteredIn->Remove( this );
+        GetRegisteredInNonConst()->Remove( this );
     return *this;
 }
 /* -----------------------------23.02.01 09:28--------------------------------
@@ -334,7 +334,7 @@ SwNumFmt& SwNumFmt::operator=( const SwNumFmt& rNumFmt)
 sal_Bool SwNumFmt::operator==( const SwNumFmt& rNumFmt) const
 {
     sal_Bool bRet = SvxNumberFormat::operator==(rNumFmt) &&
-        pRegisteredIn == rNumFmt.pRegisteredIn;
+        GetRegisteredIn() == rNumFmt.GetRegisteredIn();
     return bRet;
 }
 
@@ -346,17 +346,18 @@ void SwNumFmt::SetCharFmt( SwCharFmt* pChFmt)
     if( pChFmt )
         pChFmt->Add( this );
     else if( GetRegisteredIn() )
-        pRegisteredIn->Remove( this );
+        GetRegisteredInNonConst()->Remove( this );
 }
 /* -----------------------------22.02.01 13:45--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwNumFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwNumFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     // dann suche mal in dem Doc nach dem NumRules-Object, in dem dieses
     // NumFormat gesetzt ist. Das Format muss es nicht geben!
     const SwCharFmt* pFmt = 0;
-    switch( pOld ? pOld->Which() : pNew ? pNew->Which() : 0 )
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    switch( nWhich )
     {
     case RES_ATTRSET_CHG:
     case RES_FMT_CHG:
@@ -367,7 +368,7 @@ void SwNumFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     if( pFmt && !pFmt->GetDoc()->IsInDtor() )
         UpdateNumNodes( (SwDoc*)pFmt->GetDoc() );
     else
-        SwClient::Modify( pOld, pNew );
+        CheckRegistration( pOld, pNew );
 }
 /* -----------------------------23.02.01 11:08--------------------------------
 
@@ -381,11 +382,18 @@ void SwNumFmt::SetCharFmtName(const String& rSet)
  ---------------------------------------------------------------------------*/
 const String&   SwNumFmt::GetCharFmtName() const
 {
-    if((SwCharFmt*)pRegisteredIn)
-        return ((SwCharFmt*)pRegisteredIn)->GetName();
+    if((SwCharFmt*)GetRegisteredIn())
+        return ((SwCharFmt*)GetRegisteredIn())->GetName();
     else
         return aEmptyStr;
 }
+
+void SwNumFmt::ForgetCharFmt()
+{
+    if ( GetRegisteredIn() )
+        GetRegisteredInNonConst()->Remove( this );
+}
+
 /* -----------------------------22.02.01 16:05--------------------------------
 
  ---------------------------------------------------------------------------*/

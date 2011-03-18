@@ -44,15 +44,11 @@
 #include <vector>
 #include <set>
 
-
+class SfxHint;
 class SwNumRule;
 class SwNodeNum;
-// --> OD 2008-05-06 #refactorlists#
 class SwList;
-// <--
-// --> OD 2008-12-02 #i96772#
 class SvxLRSpaceItem;
-// <--
 
 namespace utl {
     class TransliterationWrapper;
@@ -228,6 +224,10 @@ public:
     //
     // End: Data collected during idle time
     //
+protected:
+    // fuers Umhaengen der TxtFmtCollections (Outline-Nummerierung!!)
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+    virtual void SwClientNotify( const SwModify&, const SfxHint& );
 
 public:
     using SwCntntNode::GetAttr;
@@ -356,7 +356,7 @@ public:
                     const ::com::sun::star::uno::Sequence<sal_Int32>& rOffsets );
 
     // virtuelle Methoden aus dem CntntNode
-    virtual SwCntntFrm *MakeFrm();
+    virtual SwCntntFrm *MakeFrm( SwFrm* );
     virtual SwCntntNode *SplitCntntNode( const SwPosition & );
     virtual SwCntntNode *JoinNext();
     virtual SwCntntNode *JoinPrev();
@@ -793,9 +793,6 @@ public:
 // <--
 
     TYPEINFO(); // fuer rtti
-
-    // fuers Umhaengen der TxtFmtCollections (Outline-Nummerierung!!)
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
     // override SwIndexReg
     virtual void Update( SwIndex const & rPos, const xub_StrLen nChangeLen,

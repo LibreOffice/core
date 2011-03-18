@@ -161,12 +161,12 @@ protected:
                     ::com::sun::star::rdf::XMetadatable> const& xMeta)
             { m_wXMeta = xMeta; }
 
+    // SwClient
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+
 public:
     explicit Meta(SwFmtMeta * const i_pFmt = 0);
     virtual ~Meta();
-
-    // SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
     // sfx2::Metadatable
     virtual ::sfx2::IXmlIdRegistry& GetRegistry();

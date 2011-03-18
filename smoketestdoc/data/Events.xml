@@ -28,6 +28,8 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Events" script:language="StarBasic">REM  *****  BASIC  *****
 
+Global s_CloseListenerCalled As Boolean
+
 Sub PressCancel
     gDlgState = cDlgCancel
 end Sub
@@ -40,4 +42,25 @@ Sub PressTest
     gOptionsDialog.EndExecute()
     gDlgState = cDlgStartTest
 end Sub
+
+Sub closeListener_queryClosing
+  &apos; not interested in
+  closeListener_queryClosing = TRUE
+End Sub
+
+Sub closeListener_notifyClosing
+  s_CloseListenerCalled = TRUE
+End Sub
+
+Sub closeListener_disposing
+  &apos; not interested in
+End Sub
+
+Sub ResetCloseListenerFlag
+  s_CloseListenerCalled = FALSE
+End Sub
+
+Function HasCloseListenerBeenCalled As Boolean
+  HasCloseListenerBeenCalled = s_CloseListenerCalled
+End Function
 </script:module>

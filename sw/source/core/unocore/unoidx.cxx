@@ -147,8 +147,8 @@ lcl_ReAssignTOXType(SwDoc* pDoc, SwTOXBase& rTOXBase, const OUString& rNewName)
         SwTOXType aNewType(TOX_USER, rNewName);
         pNewType = pDoc->InsertTOXType( aNewType );
     }
-    //has to be non-const-casted
-    ((SwTOXType*)pNewType)->Add(&rTOXBase);
+
+    rTOXBase.RegisterToTOXType( *((SwTOXType*)pNewType) );
 }
 //-----------------------------------------------------------------------------
 static const char cUserDefined[] = "User-Defined";
@@ -404,16 +404,16 @@ public:
             ? SwForm::GetFormMaxLevel(m_eTOXType)
             : rSection.GetTOXForm().GetFormMax();
     }
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
 /*-- 14.12.98 09:35:07---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXDocumentIndex::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXDocumentIndex::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 
@@ -1247,25 +1247,13 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case WID_INDEX_MARKS:
             {
                 SwTOXMarks aMarks;
-                SwTOXType const*const pType = pTOXBase->GetTOXType();
-                SwClientIter aIter(*pType);
-                SwTOXMark * pMark =
-                    static_cast<SwTOXMark*>(aIter.First(TYPE(SwTOXMark)));
-                while( pMark )
-                {
-                    if(pMark->GetTxtTOXMark())
-                    {
-                        aMarks.C40_INSERT(SwTOXMark, pMark, aMarks.Count());
-                    }
-                    pMark = static_cast<SwTOXMark*>(aIter.Next());
-                }
-                uno::Sequence< uno::Reference<text::XDocumentIndexMark> >
-                    aXMarks(aMarks.Count());
-                uno::Reference<text::XDocumentIndexMark>* pxMarks =
-                    aXMarks.getArray();
+                const SwTOXType* pType = pTOXBase->GetTOXType();
+                SwTOXMark::InsertTOXMarks( aMarks, *pType );
+                uno::Sequence< uno::Reference<text::XDocumentIndexMark> > aXMarks(aMarks.Count());
+                uno::Reference<text::XDocumentIndexMark>* pxMarks = aXMarks.getArray();
                 for(sal_uInt16 i = 0; i < aMarks.Count(); i++)
                 {
-                    pMark = aMarks.GetObject(i);
+                     SwTOXMark* pMark = aMarks.GetObject(i);
                     pxMarks[i] = SwXDocumentIndexMark::CreateXDocumentIndexMark(
                         *m_pImpl->m_pDoc,
                         *const_cast<SwTOXType*>(pType), *pMark);
@@ -1666,9 +1654,9 @@ public:
     }
 
     void    Invalidate();
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 };
 
 /* -----------------------------16.10.00 11:24--------------------------------
@@ -1696,7 +1684,7 @@ void SwXDocumentIndexMark::Impl::Invalidate()
 /*-- 14.12.98 10:25:47---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXDocumentIndexMark::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXDocumentIndexMark::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 

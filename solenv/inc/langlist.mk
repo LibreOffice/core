@@ -59,6 +59,7 @@ eu \
 fa \
 fi \
 fr \
+fur \
 ga \
 gd \
 gl \
@@ -73,6 +74,7 @@ hu \
 is \
 it \
 ja \
+jbo \
 kid \
 ky \
 ka \
@@ -104,6 +106,7 @@ nn \
 nr \
 ns \
 nso \
+ny \
 om \
 oms \
 oc \
@@ -131,7 +134,7 @@ sq \
 sk \
 sl \
 sh \
-son \
+so \
 sr \
 ss \
 st \

@@ -3911,7 +3911,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
                 if( bTstShdwCrsr && bInsWin && !bIsDocReadOnly &&
                     !bInsFrm &&
-                    !rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+                    !rSh.GetViewOptions()->getBrowseMode() &&
                     rSh.GetViewOptions()->IsShadowCursor() &&
                     !(rMEvt.GetModifier() + rMEvt.GetButtons()) &&
                     !rSh.HasSelection() && !GetConnectMetaFile() )

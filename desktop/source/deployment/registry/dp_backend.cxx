@@ -45,6 +45,7 @@
 #include "com/sun/star/beans/StringPair.hpp"
 #include "com/sun/star/sdbc/XResultSet.hpp"
 #include "com/sun/star/sdbc/XRow.hpp"
+#include "unotools/tempfile.hxx"
 
 
 using namespace ::dp_misc;
@@ -225,42 +226,43 @@ OUString PackageRegistryBackend::createFolder(
     OUString const & relUrl,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
-    OUString sDataFolder = makeURL(getCachePath(), relUrl);
+    const OUString sDataFolder = makeURL(getCachePath(), relUrl);
     //make sure the folder exist
     ucbhelper::Content dataContent;
     ::dp_misc::create_folder(&dataContent, sDataFolder, xCmdEnv);
 
-    OUString sDataFolderURL = dp_misc::expandUnoRcUrl(sDataFolder);
-
-    OUString tempEntry;
-    if (::osl::File::createTempFile(
-            &sDataFolderURL, 0, &tempEntry ) != ::osl::File::E_None)
-        throw RuntimeException(
-            OUSTR("::osl::File::createTempFile() failed!"), 0 );
-    tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
-    OUString destFolder= makeURL(sDataFolder, tempEntry) + OUSTR("_");
-    ::ucbhelper::Content destFolderContent;
-    dp_misc::create_folder( &destFolderContent, destFolder, xCmdEnv );
-
-    return destFolder;
+    const OUString sDataFolderURL = dp_misc::expandUnoRcUrl(sDataFolder);
+    const String baseDir(sDataFolder);
+    const ::utl::TempFile aTemp(&baseDir, sal_True);
+    const OUString url = aTemp.GetURL();
+    return sDataFolder + url.copy(url.lastIndexOf('/'));
 }
 
+//folderURL can have the extension .tmp or .tmp_
+//Before OOo 3.4 the created a tmp file with osl_createTempFile and
+//then created a Folder with a same name and a trailing '_'
+//If the folderURL has no '_' then there is no corresponding tmp file.
 void PackageRegistryBackend::deleteTempFolder(
     OUString const & folderUrl)
 {
-    OSL_ASSERT(folderUrl.getLength()
-               && folderUrl[folderUrl.getLength() - 1] == '_');
-    if (folderUrl.getLength()
-               && folderUrl[folderUrl.getLength() - 1] == '_')
+    if (folderUrl.getLength())
     {
-        const OUString  tempFile = folderUrl.copy(0, folderUrl.getLength() - 1);
         erase_path( folderUrl, Reference<XCommandEnvironment>(),
                     false /* no throw: ignore errors */ );
-        erase_path( tempFile, Reference<XCommandEnvironment>(),
-                    false /* no throw: ignore errors */ );
+
+        if (folderUrl[folderUrl.getLength() - 1] == '_')
+        {
+            const OUString  tempFile = folderUrl.copy(0, folderUrl.getLength() - 1);
+            erase_path( tempFile, Reference<XCommandEnvironment>(),
+                        false /* no throw: ignore errors */ );
+        }
     }
 }
 
+//usedFolders can contain folder names which have the extension .tmp or .tmp_
+//Before OOo 3.4 we created a tmp file with osl_createTempFile and
+//then created a Folder with a same name and a trailing '_'
+//If the folderURL has no '_' then there is no corresponding tmp file.
 void PackageRegistryBackend::deleteUnusedFolders(
     OUString const & relUrl,
     ::std::list< OUString> const & usedFolders)
@@ -273,12 +275,14 @@ void PackageRegistryBackend::deleteUnusedFolders(
         Reference<sdbc::XResultSet> xResultSet(
             tempFolder.createCursor(
                 Sequence<OUString>( &StrTitle::get(), 1 ),
-                ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
+                ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
         // get all temp directories:
         ::std::vector<OUString> tempEntries;
 
         char tmp[] = ".tmp";
 
+        //Check for ".tmp_" can be removed after OOo 4.0
+        char tmp_[] = ".tmp_";
         while (xResultSet->next())
         {
             OUString title(
@@ -286,21 +290,18 @@ void PackageRegistryBackend::deleteUnusedFolders(
                     xResultSet, UNO_QUERY_THROW )->getString(
                         1 /* Title */ ) );
 
-            if (title.endsWithAsciiL(tmp, sizeof(tmp) - 1))
+            if (title.endsWithAsciiL(tmp, sizeof(tmp) - 1)
+                || title.endsWithAsciiL(tmp_, sizeof(tmp_) - 1))
                 tempEntries.push_back(
                     makeURLAppendSysPathSegment(sDataFolder, title));
         }
 
         for ( ::std::size_t pos = 0; pos < tempEntries.size(); ++pos )
         {
-            //usedFolders contains the urls to the folders which have
-            //a trailing underscore
-            const OUString tempFolderName = tempEntries[ pos ] + OUSTR("_");
-
-            if (::std::find( usedFolders.begin(), usedFolders.end(), tempFolderName ) ==
+            if (::std::find( usedFolders.begin(), usedFolders.end(), tempEntries[pos] ) ==
                 usedFolders.end())
             {
-                deleteTempFolder(tempFolderName);
+                deleteTempFolder(tempEntries[pos]);
             }
         }
     }

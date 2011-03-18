@@ -68,6 +68,7 @@
 #include <fmtanchr.hxx>
 #include <comcore.hrc>
 #include <unochart.hxx>
+#include <switerator.hxx>
 
 #ifndef DBG_UTIL
 #define CHECK_TABLE(t)
@@ -139,7 +140,7 @@ public:
     ~_SaveTable();
 
     sal_uInt16 AddFmt( SwFrmFmt* pFmt, bool bIsLine );
-    void NewFrmFmt( const SwClient* pLnBx, sal_Bool bIsLine, sal_uInt16 nFmtPos,
+    void NewFrmFmt( const SwTableLine* , const SwTableBox*, sal_uInt16 nFmtPos,
                     SwFrmFmt* pOldFmt );
 
     void RestoreAttr( SwTable& rTbl, sal_Bool bModifyBox = sal_False );
@@ -498,7 +499,7 @@ void SwUndoTblToTxt::UndoImpl(::sw::UndoRedoContext & rContext)
     SwTableNode* pTblNd = rDoc.GetNodes().UndoTableToText( nSttNd, nEndNd, *pBoxSaves );
     pTblNd->GetTable().SetTableModel( pTblSave->IsNewModel() );
     SwTableFmt* pTableFmt = rDoc.MakeTblFrmFmt( sTblNm, rDoc.GetDfltFrmFmt() );
-    pTableFmt->Add( &pTblNd->GetTable() );      // das Frame-Format setzen
+    pTblNd->GetTable().RegisterToFormat( *pTableFmt );
     pTblNd->GetTable().SetRowsToRepeat( nHdlnRpt );
 
     // erzeuge die alte Tabellen Struktur
@@ -990,12 +991,12 @@ void _SaveTable::RestoreAttr( SwTable& rTbl, sal_Bool bMdfyBox )
     }
 
     // zur Sicherheit alle Tableframes invalidieren
-    SwClientIter aIter( *pFmt );
-    for( SwClient* pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
-        if( ((SwTabFrm*)pLast)->GetTable() == &rTbl )
+    SwIterator<SwTabFrm,SwFmt> aIter( *pFmt );
+    for( SwTabFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+        if( pLast->GetTable() == &rTbl )
         {
-            ((SwTabFrm*)pLast)->InvalidateAll();
-            ((SwTabFrm*)pLast)->SetCompletePaint();
+            pLast->InvalidateAll();
+            pLast->SetCompletePaint();
         }
 
     // FrmFmts mit Defaults (0) fuellen
@@ -1127,7 +1128,7 @@ void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
 }
 
 
-void _SaveTable::NewFrmFmt( const SwClient* pLnBx, sal_Bool bIsLine,
+void _SaveTable::NewFrmFmt( const SwTableLine* pTblLn, const SwTableBox* pTblBx,
                             sal_uInt16 nFmtPos, SwFrmFmt* pOldFmt )
 {
     SwDoc* pDoc = pOldFmt->GetDoc();
@@ -1135,7 +1136,7 @@ void _SaveTable::NewFrmFmt( const SwClient* pLnBx, sal_Bool bIsLine,
     SwFrmFmt* pFmt = aFrmFmts[ nFmtPos ];
     if( !pFmt )
     {
-        if( bIsLine )
+        if( pTblLn )
             pFmt = pDoc->MakeTableLineFmt();
         else
             pFmt = pDoc->MakeTableBoxFmt();
@@ -1144,16 +1145,16 @@ void _SaveTable::NewFrmFmt( const SwClient* pLnBx, sal_Bool bIsLine,
     }
 
     //Erstmal die Frms ummelden.
-    SwClientIter aIter( *pOldFmt );
-    for( SwClient* pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
+    SwIterator<SwTabFrm,SwFmt> aIter( *pOldFmt );
+    for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
-        if( bIsLine ? pLnBx == ((SwRowFrm*)pLast)->GetTabLine()
-                    : pLnBx == ((SwCellFrm*)pLast)->GetTabBox() )
+        if( pTblLn ? ((SwRowFrm*)pLast)->GetTabLine() == pTblLn
+                    : ((SwCellFrm*)pLast)->GetTabBox() == pTblBx )
         {
-            pFmt->Add( pLast );
-            ((SwFrm*)pLast)->InvalidateAll();
-            ((SwFrm*)pLast)->ReinitializeFrmSizeAttrFlags();
-            if ( !bIsLine )
+            pLast->RegisterToFormat(*pFmt);
+            pLast->InvalidateAll();
+            pLast->ReinitializeFrmSizeAttrFlags();
+            if ( !pTblLn )
             {
                 ((SwCellFrm*)pLast)->SetDerivedVert( sal_False );
                 ((SwCellFrm*)pLast)->CheckDirChange();
@@ -1162,14 +1163,17 @@ void _SaveTable::NewFrmFmt( const SwClient* pLnBx, sal_Bool bIsLine,
     }
 
     //Jetzt noch mich selbst ummelden.
-    pFmt->Add( (SwClient*)pLnBx );
+    if ( pTblLn )
+        const_cast<SwTableLine*>(pTblLn)->RegisterToFormat( *pFmt );
+    else if ( pTblBx )
+        const_cast<SwTableBox*>(pTblBx)->RegisterToFormat( *pFmt );
 
-    if( bModifyBox && !bIsLine )
+    if( bModifyBox && !pTblLn )
     {
         const SfxPoolItem& rOld = pOldFmt->GetFmtAttr( RES_BOXATR_FORMAT ),
                          & rNew = pFmt->GetFmtAttr( RES_BOXATR_FORMAT );
         if( rOld != rNew )
-            pFmt->Modify( (SfxPoolItem*)&rOld, (SfxPoolItem*)&rNew );
+            pFmt->ModifyNotification( (SfxPoolItem*)&rOld, (SfxPoolItem*)&rNew );
     }
 
     if( !pOldFmt->GetDepends() )
@@ -1202,7 +1206,7 @@ _SaveLine::~_SaveLine()
 
 void _SaveLine::RestoreAttr( SwTableLine& rLine, _SaveTable& rSTbl )
 {
-    rSTbl.NewFrmFmt( &rLine, sal_True, nItemSet, rLine.GetFrmFmt() );
+    rSTbl.NewFrmFmt( &rLine, 0, nItemSet, rLine.GetFrmFmt() );
 
     _SaveBox* pBx = pBox;
     for( sal_uInt16 n = 0; n < rLine.GetTabBoxes().Count(); ++n, pBx = pBx->pNext )
@@ -1292,7 +1296,7 @@ _SaveBox::~_SaveBox()
 
 void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
 {
-    rSTbl.NewFrmFmt( &rBox, sal_False, nItemSet, rBox.GetFrmFmt() );
+    rSTbl.NewFrmFmt( 0, &rBox, nItemSet, rBox.GetFrmFmt() );
 
     if( ULONG_MAX == nSttNode )     // keine EndBox
     {
@@ -1409,7 +1413,7 @@ void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl
         ASSERT( pBox, "Wo ist meine TabellenBox geblieben?" );
 
         SwFrmFmt* pOld = pBox->GetFrmFmt();
-        pFmt->Add( pBox );
+        pBox->RegisterToFormat( *pFmt );
         if( !pOld->GetDepends() )
             delete pOld;
 

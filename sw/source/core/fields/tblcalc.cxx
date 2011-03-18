@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <switerator.hxx>
 #include <cntfrm.hxx>
 #include <doc.hxx>
 #include <pam.hxx>      // fuer GetBodyTxtNode
@@ -38,7 +38,6 @@
 #include <expfld.hxx>
 #include <docfld.hxx>   // fuer _SetGetExpFld
 #include <unofldmid.h>
-
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -104,15 +103,10 @@ const SwNode* SwTblField::GetNodeOfFormula() const
     if( !GetTyp()->GetDepends() )
         return 0;
 
-    SwClientIter aIter( *GetTyp() );
-    SwClient * pLast = aIter.GoStart();
-    if( pLast )     // konnte zum Anfang gesprungen werden ??
-        do {
-            const SwFmtFld* pFmtFld = (SwFmtFld*)pLast;
+    SwIterator<SwFmtFld,SwFieldType> aIter( *GetTyp() );
+    for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
             if( this == pFmtFld->GetFld() )
                 return (SwTxtNode*)&pFmtFld->GetTxtFld()->GetTxtNode();
-
-        } while( 0 != ( pLast = aIter++ ));
     return 0;
 }
 
@@ -187,9 +181,6 @@ void SwTblField::SetPar2(const String& rStr)
 }
 
 
-/*-----------------04.03.98 10:33-------------------
-
---------------------------------------------------*/
 sal_Bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     sal_Bool bRet = sal_True;
@@ -221,9 +212,7 @@ sal_Bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     }
     return bRet;
 }
-/*-----------------04.03.98 10:33-------------------
 
---------------------------------------------------*/
 sal_Bool SwTblField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     sal_Bool bRet = sal_True;

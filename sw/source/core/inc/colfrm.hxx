@@ -33,7 +33,7 @@
 class SwColumnFrm: public SwFtnBossFrm
 {
 public:
-    SwColumnFrm( SwFrmFmt* );
+    SwColumnFrm( SwFrmFmt*, SwFrm* );
     ~SwColumnFrm();
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwColumnFrm)

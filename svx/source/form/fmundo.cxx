@@ -66,6 +66,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/componentcontext.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -88,7 +89,9 @@ typedef cppu::WeakImplHelper1< XScriptListener > ScriptEventListener_BASE;
 class ScriptEventListenerWrapper : public ScriptEventListener_BASE
 {
 public:
-    ScriptEventListenerWrapper( FmFormModel& _rModel) throw ( RuntimeException ) : pModel(&_rModel)
+    ScriptEventListenerWrapper( FmFormModel& _rModel) throw ( RuntimeException )
+        :m_rModel( _rModel )
+        ,m_attemptedListenerCreation( false )
     {
 
     }
@@ -98,7 +101,7 @@ public:
     // XScriptListener
     virtual void SAL_CALL firing(const  ScriptEvent& evt) throw(RuntimeException)
     {
-        setModel();
+        attemptListenerCreation();
         if ( m_vbaListener.is() )
         {
             m_vbaListener->firing( evt );
@@ -107,7 +110,7 @@ public:
 
     virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw( com::sun::star::reflection::InvocationTargetException, RuntimeException)
     {
-        setModel();
+        attemptListenerCreation();
         if ( m_vbaListener.is() )
         {
             return m_vbaListener->approveFiring( evt );
@@ -116,61 +119,32 @@ public:
     }
 
 private:
-    void setModel()
+    void attemptListenerCreation()
     {
-        if ( !m_vbaListener.is() )
-                {
-            Reference < XPropertySet > xProps(
-            ::comphelper::getProcessServiceFactory(), UNO_QUERY );
-            if ( xProps.is() )
-            {
-                Reference< XComponentContext > xCtx( xProps->getPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY );
-                if ( xCtx.is() )
-                {
-                    Reference< XMultiComponentFactory > xMFac(
-                    xCtx->getServiceManager(), UNO_QUERY );
+        if ( m_attemptedListenerCreation )
+            return;
+        m_attemptedListenerCreation = true;
 
-                    // SfxObjectShellRef is good here since the model controls the lifetime of the shell
-                    SfxObjectShellRef xObjSh = pModel->GetObjectShell();
-                    Reference< XMultiServiceFactory > xDocFac;
-                    if ( xObjSh.Is() )
-                        xDocFac.set( xObjSh->GetModel(), UNO_QUERY );
-
-                    if ( xMFac.is() )
-                    {
-                        m_vbaListener.set( xMFac->createInstanceWithContext(
-                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                "ooo.vba.EventListener"  ) ), xCtx ),
-                                    UNO_QUERY_THROW );
-                    }
-                }
-            }
-        }
-        Reference< XPropertySet > xProps( m_vbaListener, UNO_QUERY );
-        if ( xProps.is() )
+        try
         {
-            try
-            {
-                // SfxObjectShellRef is good here since the model controls the lifetime of the shell
-                SfxObjectShellRef xObjSh = pModel->GetObjectShell();
-                if ( xObjSh.Is() && m_vbaListener.is() )
-                {
-                    Any aVal;
-                    aVal <<= xObjSh->GetModel();
-                    xProps->setPropertyValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) ),
-                        aVal );
-                }
-            }
-            catch( Exception& )
-            {
-                //swallow any errors
-            }
+            ::comphelper::ComponentContext const aContext( ::comphelper::getProcessServiceFactory() );
+            Reference< XScriptListener > const xScriptListener( aContext.createComponent( "ooo.vba.EventListener" ), UNO_QUERY_THROW );
+            Reference< XPropertySet > const xListenerProps( xScriptListener, UNO_QUERY_THROW );
+            // SfxObjectShellRef is good here since the model controls the lifetime of the shell
+            SfxObjectShellRef const xObjectShell = m_rModel.GetObjectShell();
+            ENSURE_OR_THROW( xObjectShell.Is(), "no object shell!" );
+            xListenerProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) ), makeAny( xObjectShell->GetModel() ) );
+
+            m_vbaListener = xScriptListener;
+        }
+        catch( Exception const & )
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
-    FmFormModel* pModel;
-    Reference< XScriptListener > m_vbaListener;
+    FmFormModel&                    m_rModel;
+    Reference< XScriptListener >    m_vbaListener;
+    bool                            m_attemptedListenerCreation;
 
 
 };

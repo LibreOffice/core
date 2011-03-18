@@ -2684,16 +2684,16 @@ public:
         }
         return *pFmt;
     }
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
 /*-- 11.12.98 10:14:51---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXHeadFootText::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXHeadFootText::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }

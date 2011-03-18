@@ -30,6 +30,7 @@
 #include "viewsh.hxx"
 #include "doc.hxx"
 #include "pagefrm.hxx"
+#include "rootfrm.hxx"
 #include "ndtxt.hxx"
 #include "txtatr.hxx"
 #include <SwPortionHandler.hxx>
@@ -692,7 +693,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
         {
             if( !pSrcFrm )
             {
-                SwFtnFrm *pNew = new SwFtnFrm(pDoc->GetDfltFrmFmt(),this,pFtn);
+                SwFtnFrm *pNew = new SwFtnFrm(pDoc->GetDfltFrmFmt(),this,this,pFtn);
                  SwNodeIndex aIdx( *pFtn->GetStartNode(), 1 );
                  ::_InsertCnt( pNew, pDoc, aIdx.GetIndex() );
                 GetNode()->getIDocumentLayoutAccess()->GetLayouter()->CollectEndnote( pNew );
@@ -757,7 +758,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                     pBoss->RearrangeFtns( nDeadLine, sal_False, pFtn );
                     ValidateBodyFrm();
                     ValidateFrm();
-                    ViewShell *pSh = GetShell();
+                    ViewShell *pSh = getRootFrm()->GetCurrShell();
                     if ( pSh && nHeight == (pCont->Frm().*fnRect->fnGetHeight)() )
                         //Damit uns nix durch die Lappen geht.
                         pSh->InvalidateWindows( pCont->Frm() );

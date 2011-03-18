@@ -53,6 +53,7 @@
 #include <cmdid.h>
 #include <globals.hrc>
 #include <sfx2/bindings.hxx>
+#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 
@@ -249,14 +250,13 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const Str
                 SwDBFieldType* pTyp = (SwDBFieldType*)pSh->InsertFldType(
                         SwDBFieldType(pSh->GetDoc(), sColumn, aData));
 
-                SwClientIter aIter( *pOldTyp );
+                SwIterator<SwFmtFld,SwFieldType> aIter( *pOldTyp );
 
-                for( SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
-                    pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
+                for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
                 {
                     if( pFmtFld->GetFld() == m_pCurFld)
                     {
-                        pTyp->Add(pFmtFld); // Feld auf neuen Typ umhaengen
+                        pFmtFld->RegisterToFieldType(*pTyp);
                         pTmpFld->ChgTyp(pTyp);
                         break;
                     }
@@ -411,9 +411,7 @@ IMPL_LINK( SwFldPage, NumFormatHdl, ListBox *, EMPTYARG )
 
     return 0;
 }
-/*-- 19.12.2005 14:05:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwFldPage::SetWrtShell( SwWrtShell* pShell )
 {
     m_pWrtShell = pShell;

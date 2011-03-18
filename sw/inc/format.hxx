@@ -44,9 +44,6 @@ class SwDoc;
 
 class SW_DLLPUBLIC SwFmt : public SwModify
 {
-//  friend class SwSwgReader;
-//  friend class SwSwgWriter;
-
     String aFmtName;
     SwAttrSet aSet;
 
@@ -70,6 +67,7 @@ protected:
     SwFmt( SwAttrPool& rPool, const String &rFmtNm, const sal_uInt16* pWhichRanges,
             SwFmt *pDrvdFrm, sal_uInt16 nFmtWhich );
     SwFmt( const SwFmt& rFmt );
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
 
 public:
     TYPEINFO();     //Bereits in Basisklasse Client drin.
@@ -80,7 +78,6 @@ public:
     // fuer die Abfrage der Writer-Funktionen
     sal_uInt16 Which() const { return nWhichId; }
 
-    virtual void Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue );
         // erfrage vom Format Informationen
     virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 
@@ -114,7 +111,7 @@ public:
     virtual sal_uInt16 ResetAllFmtAttr();
     // <--
 
-    inline SwFmt* DerivedFrom() const { return (SwFmt*)pRegisteredIn; }
+    inline SwFmt* DerivedFrom() const { return (SwFmt*)GetRegisteredIn(); }
     inline sal_Bool IsDefault() const { return DerivedFrom() == 0; }
 
     inline const String& GetName() const        { return aFmtName; }

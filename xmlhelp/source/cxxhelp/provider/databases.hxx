@@ -506,7 +506,7 @@ namespace chelp {
             Databases& rDatabases, const rtl::OUString& aInitialModule, const rtl::OUString& aLanguage )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
         {}
-
+        //Returns a file URL
         rtl::OUString nextDbFile( bool& o_rbExtension );
 
     private:

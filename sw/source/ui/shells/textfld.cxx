@@ -81,6 +81,7 @@
 #include <app.hrc>
 
 #include <PostItMgr.hxx>
+#include <switerator.hxx>
 
 using namespace nsSwDocInfoSubType;
 
@@ -377,17 +378,16 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 if (pPostIt)
                 {
                     SwFieldType* pType = rSh.GetDoc()->GetFldType(RES_POSTITFLD, aEmptyStr,false);
-                    SwClientIter aIter( *pType );
-                    SwClient* pFirst = aIter.GoStart();
-                    while( pFirst )
+                    SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
+                    SwFmtFld* pSwFmtFld = aIter.First();
+                    while( pSwFmtFld )
                     {
-                        SwFmtFld* pSwFmtFld = static_cast<SwFmtFld*>(pFirst);
                         if ( pSwFmtFld->GetFld() == pPostIt )
                         {
                             pSwFmtFld->Broadcast( SwFmtFldHint( 0, SWFMTFLD_FOCUS, &GetView() ) );
                             break;
                         }
-                        pFirst = aIter++;
+                        pSwFmtFld = aIter.Next();
                     }
                 }
             }

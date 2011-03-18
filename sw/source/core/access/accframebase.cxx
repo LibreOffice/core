@@ -216,7 +216,7 @@ SwAccessibleFrameBase::~SwAccessibleFrameBase()
 {
 }
 
-void SwAccessibleFrameBase::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
     const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm * >( GetFrm() );
@@ -230,13 +230,13 @@ void SwAccessibleFrameBase::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 
             OUString sOldName( GetName() );
             ASSERT( !pOld ||
-                    static_cast < SwStringMsgPoolItem * >( pOld )->GetString() == String( sOldName ),
+                    static_cast < const SwStringMsgPoolItem * >( pOld )->GetString() == String( sOldName ),
                     "invalid old name" );
 
             const String& rNewName = pFrmFmt->GetName();
             SetName( rNewName );
             ASSERT( !pNew ||
-                    static_cast < SwStringMsgPoolItem * >( pNew )->GetString() == rNewName,
+                    static_cast < const SwStringMsgPoolItem * >( pNew )->GetString() == rNewName,
                     "invalid new name" );
 
             if( sOldName != GetName() )
@@ -250,18 +250,20 @@ void SwAccessibleFrameBase::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
         }
         break;
     case RES_OBJECTDYING:
+        // mba: it seems that this class intentionally does not call code in base class SwClient
         if( GetRegisteredIn() ==
-                static_cast< SwModify *>( static_cast< SwPtrMsgPoolItem * >( pOld )->pObject ) )
-            pRegisteredIn->Remove( this );
+                static_cast< SwModify *>( static_cast< const SwPtrMsgPoolItem * >( pOld )->pObject ) )
+            GetRegisteredInNonConst()->Remove( this );
         break;
 
     case RES_FMT_CHG:
-        if( static_cast< SwFmtChg * >(pNew)->pChangedFmt == GetRegisteredIn() &&
-            static_cast< SwFmtChg * >(pOld)->pChangedFmt->IsFmtInDTOR() )
-            pRegisteredIn->Remove( this );
+        if( static_cast< const SwFmtChg * >(pNew)->pChangedFmt == GetRegisteredIn() &&
+            static_cast< const SwFmtChg * >(pOld)->pChangedFmt->IsFmtInDTOR() )
+            GetRegisteredInNonConst()->Remove( this );
         break;
+
     default:
-        SwClient::Modify( pOld, pNew );
+        // mba: former call to base class method removed as it is meant to handle only RES_OBJECTDYING
         break;
     }
 }
@@ -271,7 +273,7 @@ void SwAccessibleFrameBase::Dispose( sal_Bool bRecursive )
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     if( GetRegisteredIn() )
-        pRegisteredIn->Remove( this );
+        GetRegisteredInNonConst()->Remove( this );
 
     SwAccessibleContext::Dispose( bRecursive );
 }

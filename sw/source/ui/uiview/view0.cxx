@@ -49,15 +49,17 @@
 #include <sfx2/bindings.hxx>
 #include <uivwimp.hxx>
 #include <avmedia/mediaplayer.hxx>
+//#include <swlinguconfig.hxx>
 #include <swmodule.hxx>
 
 #include <sfx2/objface.hxx>
 #include <navipi.hxx>
 #include <wrtsh.hxx>
-#include "doc.hxx"
+#include <edtwin.hxx>
 #include "view.hxx"
 #include "basesh.hxx"
 #include "docsh.hxx"
+#include "doc.hxx"
 #include "globals.hrc"
 #include "cmdid.h"          // FN_       ...
 #include "globdoc.hxx"
@@ -219,6 +221,46 @@ void lcl_SetViewMetaChars( SwViewOption& rVOpt, sal_Bool bOn)
     }
 }
 
+void SwView::RecheckBrowseMode()
+{
+    // OS: numerische Reihenfolge beachten!
+    static sal_uInt16 __READONLY_DATA aInva[] =
+        {
+            //SID_NEWWINDOW,/*5620*/
+            SID_BROWSER_MODE, /*6313*/
+            SID_RULER_BORDERS, SID_RULER_PAGE_POS,
+            //SID_ATTR_LONG_LRSPACE,
+            SID_HTML_MODE,
+            SID_RULER_PROTECT,
+            //SID_AUTOSPELL_CHECK,
+            //SID_AUTOSPELL_MARKOFF,
+            FN_RULER,       /*20211*/
+            FN_VIEW_GRAPHIC,    /*20213*/
+            FN_VIEW_BOUNDS,     /**/
+            FN_VIEW_FIELDS,     /*20215*/
+            FN_VLINEAL,             /*20216*/
+            FN_VSCROLLBAR,      /*20217*/
+            FN_HSCROLLBAR,      /*20218*/
+            FN_VIEW_META_CHARS, /**/
+            FN_VIEW_MARKS,      /**/
+            //FN_VIEW_FIELDNAME,    /**/
+            FN_VIEW_TABLEGRID,  /*20227*/
+            FN_PRINT_LAYOUT, /*20237*/
+            FN_QRY_MERGE,   /*20364*/
+            FN_SHADOWCURSOR, /**/
+            0
+        };
+    // the view must not exist!
+    GetViewFrame()->GetBindings().Invalidate(aInva);
+    CheckVisArea();
+
+    SvxZoomType eType;
+    if( GetWrtShell().GetViewOptions()->getBrowseMode() && SVX_ZOOM_PERCENT != (eType = (SvxZoomType)
+        GetWrtShell().GetViewOptions()->GetZoomType()) )
+        SetZoom( eType );
+    InvalidateBorder();
+}
+
 /*--------------------------------------------------------------------
     State of view options
  --------------------------------------------------------------------*/
@@ -233,7 +275,6 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
     while(nWhich)
     {
         sal_Bool bReadonly = GetDocShell()->IsReadOnly();
-        sal_Bool bBrowse = pIDSA ? pIDSA->get( IDocumentSettingAccess::BROWSE_MODE ) : sal_False;
         if ( bReadonly && nWhich != FN_VIEW_GRAPHIC )
         {
             rSet.DisableItem(nWhich);
@@ -250,6 +291,15 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                 }
                 else
                     aBool.SetValue( pOpt->IsViewAnyRuler());
+            }
+            break;
+            case SID_BROWSER_MODE:
+            case FN_PRINT_LAYOUT:
+            {
+                sal_Bool bState = pOpt->getBrowseMode();
+                if(FN_PRINT_LAYOUT == nWhich)
+                    bState = !bState;
+                aBool.SetValue( bState );
             }
             break;
             case FN_VIEW_BOUNDS:
@@ -291,7 +341,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case FN_VLINEAL:
                 aBool.SetValue( 0 != StatVLineal() ); break;
             case FN_HSCROLLBAR:
-                if(bBrowse)
+                if( pOpt->getBrowseMode() )
                 {
                     rSet.DisableItem(nWhich);
                     nWhich = 0;
@@ -304,7 +354,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                 aBool.SetValue( pOpt->IsOnlineSpell() );
             break;
             case FN_SHADOWCURSOR:
-                if (pIDSA == 0 || pIDSA->get( IDocumentSettingAccess::BROWSE_MODE ))
+                if (pIDSA == 0 || pOpt->getBrowseMode() )
                 {
                     rSet.DisableItem( nWhich );
                     nWhich = 0;
@@ -334,6 +384,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
     int eState = STATE_TOGGLE;
     sal_Bool bSet = sal_False;
+    bool bBrowseModeChanged = false;
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -388,6 +439,19 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
                     bFlag = !pOpt->IsCrossHair();
 
                 pOpt->SetCrossHair( bFlag );
+                break;
+
+        case SID_BROWSER_MODE:
+        case FN_PRINT_LAYOUT:
+                if( STATE_TOGGLE == eState )
+                    bFlag = !pOpt->getBrowseMode();
+                else if( nSlot == FN_PRINT_LAYOUT )
+                    bFlag = !bFlag;
+                bBrowseModeChanged = bFlag != pOpt->getBrowseMode();
+                // Disable "multiple layout"
+                GetDocShell()->ToggleBrowserMode( bFlag, this );
+
+                pOpt->setBrowseMode( bFlag );
                 break;
 
     case FN_VIEW_NOTES:
@@ -518,6 +582,11 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     if( !(*rSh.GetViewOptions() == *pOpt ))
     {
         rSh.ApplyViewOptions( *pOpt );
+        if( bBrowseModeChanged )
+        {
+            RecheckBrowseMode();
+            CheckVisArea();
+        }
 
         //Die UsrPref muessen als Modified gekennzeichnet werden.
         //call for initialization
@@ -538,6 +607,8 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     const sal_Bool bLockedView = rSh.IsViewLocked();
     rSh.LockView( sal_True );    //lock visible section
     GetWrtShell().EndAction();
+    if( bBrowseModeChanged && !bFlag )
+        CalcVisArea( GetEditWin().GetOutputSizePixel() );
     rSh.LockView( bLockedView );
 
     delete pOpt;

@@ -2198,12 +2198,9 @@ std::auto_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
     }
 
     uno::Reference< XTitle > xTitle( TitleHelper::getTitle( eType, xChartModel ) );
-    if(xTitle.is())
+    rtl::OUString aCompleteString( TitleHelper::getCompleteString( xTitle ) );
+    if( aCompleteString.getLength() != 0 )
     {
-        rtl::OUString aCompleteString( TitleHelper::getCompleteString( xTitle ) );
-        if ( aCompleteString.getLength() == 0 )
-            return apVTitle;//don't create empty titles as the resulting diagram position is wrong then
-
         //create title
         apVTitle = std::auto_ptr<VTitle>(new VTitle(xTitle));
         rtl::OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, xChartModel ) );

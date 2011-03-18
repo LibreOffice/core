@@ -926,15 +926,15 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
 #endif
 }
 
-void SwHTMLParser::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwHTMLParser::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     switch( pOld ? pOld->Which() : pNew ? pNew->Which() : 0 )
     {
     case RES_OBJECTDYING:
-        if( ((SwPtrMsgPoolItem *)pOld)->pObject == pRegisteredIn )
+        if( ((SwPtrMsgPoolItem *)pOld)->pObject == GetRegisteredIn() )
         {
             // dann uns selbst beenden
-            pRegisteredIn->Remove( this );
+            GetRegisteredInNonConst()->Remove( this );
             ReleaseRef();                   // ansonsten sind wir fertig!
         }
         break;

@@ -132,7 +132,7 @@ IMPL_LINK( SwDoc, DoUpdateAllCharts, Timer *, EMPTYARG )
     return 0;
 }
 
-void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& /*rVSh*/ ) const
+void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const
 {
     String aName( rTbl.GetFrmFmt()->GetName() );
     SwOLENode *pONd;
@@ -144,7 +144,7 @@ void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& /*rVSh*/ ) const
         SwFrm* pFrm;
         if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
             aName.Equals( pONd->GetChartTblName() ) &&
-            0 != ( pFrm = pONd->GetFrm() ) )
+            0 != ( pFrm = pONd->getLayoutFrm( rVSh.GetLayout() ) ) )
         {
             SwChartDataProvider *pPCD = GetChartDataProvider();
             if (pPCD)
@@ -248,7 +248,7 @@ void SwDoc::CreateChartInternalDataProviders( const SwTable *pTable )
             aIdx++;
             if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
                 aName.Equals( pONd->GetChartTblName() ) /* OLE node is chart? */ &&
-                0 != (pONd->GetFrm()) /* chart frame is not hidden */ )
+                0 != (pONd->getLayoutFrm( GetCurrentLayout() )) /* chart frame is not hidden */ )
             {
                 uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();
                 if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )

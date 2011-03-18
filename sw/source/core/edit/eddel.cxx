@@ -90,7 +90,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
             }
                 // geschuetze Boxen ueberspringen !
             if( !pNd->IsCntntNode() ||
-                !((SwCntntNode*)pNd)->GetFrm()->IsProtected() )
+                !((SwCntntNode*)pNd)->getLayoutFrm( GetLayout() )->IsProtected() )
             {
                 // alles loeschen
                 GetDoc()->DeleteAndJoin( aDelPam );

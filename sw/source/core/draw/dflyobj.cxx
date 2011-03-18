@@ -54,6 +54,7 @@
 #include "ndnotxt.hxx"
 #include "grfatr.hxx"
 #include "pagefrm.hxx"
+#include "rootfrm.hxx"
 
 
 using namespace ::com::sun::star;
@@ -474,7 +475,7 @@ SwFrmFmt *SwVirtFlyDrawObj::GetFmt()
 
 void SwVirtFlyDrawObj::wrap_DoPaintObject() const
 {
-    ViewShell* pShell = pFlyFrm->GetShell();
+    ViewShell* pShell = pFlyFrm->getRootFrm()->GetCurrShell();
 
     // Only paint when we have a current shell and a DrawingLayer paint is in progress.
     // This avcoids evtl. problems with renderers which do processing stuff,
@@ -843,9 +844,9 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             const SwFrm *pRel = GetFlyFrm()->IsFlyLayFrm() ?
                                 GetFlyFrm()->GetAnchorFrm() :
                                 GetFlyFrm()->GetAnchorFrm()->GetUpper();
-            const ViewShell *pSh = GetFlyFrm()->GetShell();
+            const ViewShell *pSh = GetFlyFrm()->getRootFrm()->GetCurrShell();
             if ( pSh && pRel->IsBodyFrm() &&
-                 pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+                 pSh->GetViewOptions()->getBrowseMode() &&
                  pSh->VisArea().HasArea() )
             {
                 nRelWidth  = pSh->GetBrowseWidth();

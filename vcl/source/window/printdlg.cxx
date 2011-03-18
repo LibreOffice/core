@@ -2107,6 +2107,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
         maPController->resetPrinterOptions( maOptionsPage.maToFileBox.IsChecked() );
         // update text fields
         updatePrinterText();
+        preparePreview( true, false );
     }
     else if( pBox == &maNUpPage.maNupOrientationBox || pBox == &maNUpPage.maNupOrderBox )
     {

@@ -1229,8 +1229,9 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 {
                     const SwViewOption* pVOpt = rShell.GetViewOptions();
                     SvxZoomType eZoom = (SvxZoomType) pVOpt->GetZoomType();
-                    SvxZoomItem aZoom(eZoom, pVOpt->GetZoom());
-                    if(pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
+                    SvxZoomItem aZoom(eZoom,
+                                        pVOpt->GetZoom());
+                    if( pVOpt->getBrowseMode() )
                     {
                         aZoom.SetValueSet(
                                 SVX_ZOOM_ENABLE_50|
@@ -1581,7 +1582,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     SfxItemSet aCoreSet(pShell->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM, SID_ATTR_VIEWLAYOUT, SID_ATTR_VIEWLAYOUT, 0 );
                     SvxZoomItem aZoom( (SvxZoomType)rViewOptions.GetZoomType(), rViewOptions.GetZoom() );
 
-                    const bool bBrowseMode = rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+                    const bool bBrowseMode = rSh.GetViewOptions()->getBrowseMode();
                     if( bBrowseMode )
                     {
                         aZoom.SetValueSet(

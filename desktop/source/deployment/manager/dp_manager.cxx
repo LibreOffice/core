@@ -63,6 +63,7 @@
 #include "com/sun/star/ucb/UnsupportedCommandException.hpp"
 #include "boost/bind.hpp"
 #include "tools/urlobj.hxx"
+#include "unotools/tempfile.hxx"
 
 #include "osl/file.hxx"
 #include <vector>
@@ -636,21 +637,12 @@ OUString PackageManagerImpl::insertToActivationLayer(
     ::ucbhelper::Content sourceContent(sourceContent_);
     Reference<XCommandEnvironment> xCmdEnv(
         sourceContent.getCommandEnvironment() );
-    OUString destFolder, tempEntry;
-    if (::osl::File::createTempFile(
-            m_activePackages_expanded.getLength() == 0
-            ? 0 : &m_activePackages_expanded,
-            0, &tempEntry ) != ::osl::File::E_None)
-        throw RuntimeException(
-            OUSTR("::osl::File::createTempFile() failed!"), 0 );
-    if (m_activePackages_expanded.getLength() == 0) {
-        destFolder = tempEntry;
-    }
-    else {
-        tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
-        // tweak user|share to macrofied url:
-        destFolder = makeURL( m_activePackages, tempEntry );
-    }
+
+    String baseDir(m_activePackages_expanded);
+    ::utl::TempFile aTemp(&baseDir, sal_False);
+    OUString tempEntry = aTemp.GetURL();
+    tempEntry = tempEntry.copy(tempEntry.lastIndexOf('/') + 1);
+    OUString destFolder = makeURL( m_activePackages, tempEntry);
     destFolder += OUSTR("_");
 
     // prepare activation folder:

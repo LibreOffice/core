@@ -36,6 +36,7 @@
 #include <osl/thread.h>
 #include <osl/file.h>
 #include <rtl/logfile.h>
+#include <vector>
 
 /*
     under WIN32, we use the void* oslModule
@@ -65,9 +66,31 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
         rtl_uString_assign(&Module, strModuleName);
 
     hInstance = LoadLibraryW(reinterpret_cast<LPCWSTR>(Module->buffer));
+
     if (hInstance == NULL)
         hInstance = LoadLibraryExW(reinterpret_cast<LPCWSTR>(Module->buffer), NULL,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
+
+    //In case of long path names (\\?\c:\...) try to shorten the filename.
+    //LoadLibrary cannot handle file names which exceed 260 letters.
+    //In case the path is to long, the function will fail. However, the error
+    //code can be different. For example, it returned  ERROR_FILENAME_EXCED_RANGE
+    //on Windows XP and ERROR_INSUFFICIENT_BUFFER on Windows 7 (64bit)
+    if (hInstance == NULL && Module->length > 260)
+    {
+        std::vector<sal_Unicode, rtl::Allocator<sal_Unicode> > vec(Module->length + 1);
+        DWORD len = GetShortPathNameW(reinterpret_cast<LPCWSTR>(Module->buffer),
+                                      &vec[0], Module->length + 1);
+        if (len )
+        {
+            hInstance = LoadLibraryW(&vec[0]);
+
+            if (hInstance == NULL)
+                hInstance = LoadLibraryExW(&vec[0], NULL,
+                                  LOAD_WITH_ALTERED_SEARCH_PATH);
+        }
+    }
+
 
     if (hInstance <= (HINSTANCE)HINSTANCE_ERROR)
         hInstance = 0;

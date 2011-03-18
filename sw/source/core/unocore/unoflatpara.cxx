@@ -308,7 +308,7 @@ SwXFlatParagraphIterator::~SwXFlatParagraphIterator()
 }
 
 
-void SwXFlatParagraphIterator::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwXFlatParagraphIterator::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     ClientModify( this, pOld, pNew );
     // check if document gets closed...
@@ -388,7 +388,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
             if ( !pCurrentPage && !pStopPage )
             {
                 pStopPage = pStartPage;
-                pCurrentPage = static_cast<SwPageFrm*>(mpDoc->GetRootFrm()->Lower());
+                pCurrentPage = static_cast<SwPageFrm*>(pViewShell->GetLayout()->Lower());
             }
         }
     }

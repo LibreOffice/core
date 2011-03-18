@@ -41,7 +41,7 @@ protected:
     ~SwBodyFrm();
 #endif
 public:
-    SwBodyFrm( SwFrmFmt* );
+    SwBodyFrm( SwFrmFmt*, SwFrm* );
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwBodyFrm)
 };

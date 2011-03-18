@@ -192,7 +192,7 @@ class SwUndoFmtAttrHelper : public SwClient
 public:
     SwUndoFmtAttrHelper( SwFmt& rFmt, bool bSaveDrawPt = true );
 
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
     SwUndoFmtAttr* GetUndo() const  { return m_pUndo.get(); }
     // release the undo object (so it is not deleted here), and return it

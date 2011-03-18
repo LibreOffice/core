@@ -133,9 +133,9 @@ private:
 
     SwFmtFld * GetFldFmt(bool bInit = false);
 
-protected:
+    void init(const SwUnoCrsr* pPortionCursor);
 
-    //SfxItemPropertySet& GetPropSet() { return aPropSet; }
+protected:
 
     void SAL_CALL SetPropertyValues_Impl(
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames,
@@ -145,9 +145,6 @@ protected:
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames )
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-//    ::com::sun::star::uno::Any  GetPropertyValue( const SfxItemPropertyMap *pEntry,
-//                                    SwUnoCrsr *pUnoCrsr,
-//                                    SfxItemSet *pSet );
     void        GetPropertyValues( const ::rtl::OUString *pPropertyNames,
                                     ::com::sun::star::uno::Any *pValues,
                                     sal_Int32 nLength );
@@ -160,6 +157,9 @@ protected:
         sal_Bool bDirectValuesOnly ) throw (::com::sun::star::uno::RuntimeException);
 
     virtual ~SwXTextPortion();
+
+    //SwClient
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
     SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwTextPortionType   eType   );
@@ -228,9 +228,6 @@ public:
     //XContentEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createContentEnumeration(const rtl::OUString& aServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getAvailableServiceNames() throw( ::com::sun::star::uno::RuntimeException );
-
-    //SwClient
-    virtual void                Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     void SetRefMark( ::com::sun::star::uno::Reference<
                         ::com::sun::star::text::XTextContent >  xMark)
@@ -317,9 +314,9 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
         getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException );
-
+protected:
     //SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
 
 #endif

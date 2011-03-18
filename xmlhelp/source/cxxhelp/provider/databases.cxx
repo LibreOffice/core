@@ -416,9 +416,6 @@ rtl::OUString Databases::getInstallPathAsSystemPath()
     return m_aInstallDirectoryAsSystemPath;
 }
 
-
-
-
 rtl::OUString Databases::getInstallPathAsURL()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -642,22 +639,18 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
     {
         Db* table = new Db();
 
-        rtl::OUString fileNameOU;
+        rtl::OUString fileURL;
         if( pExtensionPath )
-        {
-            rtl::OUString aExpandedURL = expandURL( *pExtensionPath );
-            aExpandedURL += Language + dbFileName;
-            osl::FileBase::getSystemPathFromFileURL( aExpandedURL, fileNameOU );
-        }
+            fileURL = expandURL(*pExtensionPath) + Language + dbFileName;
         else
-            fileNameOU = getInstallPathAsSystemPath() + key;
+            fileURL = getInstallPathAsURL() + key;
 
-
-        rtl::OString fileName( fileNameOU.getStr(),fileNameOU.getLength(),osl_getThreadTextEncoding() );
-
-        rtl::OUString fileNameDBHelp( fileNameOU );
+        rtl::OUString fileNameDBHelp( fileURL );
+        //Extensions always use the new format
         if( pExtensionPath != NULL )
             fileNameDBHelp += rtl::OUString::createFromAscii( "_" );
+        //SimpleFileAccess takes file URLs as arguments!!! Using filenames works accidentally but
+        //fails for example when using long path names on Windows (starting with \\?\)
         if( m_xSFA->exists( fileNameDBHelp ) )
         {
             DBHelp* pDBHelp = new DBHelp( fileNameDBHelp, m_xSFA );
@@ -666,13 +659,13 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
 #ifdef TEST_DBHELP
             bool bSuccess;
             bool bOldDbAccess = false;
-            bSuccess = pDBHelp->testAgainstDb( fileName, bOldDbAccess );
+            bSuccess = pDBHelp->testAgainstDb( fileURL, bOldDbAccess );
 
             bOldDbAccess = true;
-            bSuccess = pDBHelp->testAgainstDb( fileName, bOldDbAccess );
+            bSuccess = pDBHelp->testAgainstDb( fileURL, bOldDbAccess );
 #endif
         }
-        else if( table->open( 0,fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
+        else if( table->open( 0,fileURL, DB_BTREE,DB_RDONLY,0644 ) )
         {
             table->close( 0 );
             delete table;
@@ -950,17 +943,13 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
         std::vector<KeywordInfo::KeywordElement> aVector;
 
         KeyDataBaseFileIterator aDbFileIt( m_xContext, *this, Database, Language );
-        rtl::OUString fileNameOU;
+        rtl::OUString fileURL;
         bool bExtension = false;
-        while( (fileNameOU = aDbFileIt.nextDbFile( bExtension )).getLength() > 0 )
+        while( (fileURL = aDbFileIt.nextDbFile( bExtension )).getLength() > 0 )
         {
-            rtl::OString fileName( fileNameOU.getStr(),
-                                   fileNameOU.getLength(),
-                                   osl_getThreadTextEncoding() );
-
             Db table;
 
-            rtl::OUString fileNameDBHelp( fileNameOU );
+            rtl::OUString fileNameDBHelp( fileURL );
             if( bExtension )
                 fileNameDBHelp += rtl::OUString::createFromAscii( "_" );
             if( m_xSFA->exists( fileNameDBHelp ) )
@@ -1009,16 +998,16 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
 #ifdef TEST_DBHELP
                 bool bSuccess;
                 bool bOldDbAccess = false;
-                bSuccess = aDBHelp.testAgainstDb( fileName, bOldDbAccess );
+                bSuccess = aDBHelp.testAgainstDb( fileURL, bOldDbAccess );
 
                 bOldDbAccess = true;
-                bSuccess = aDBHelp.testAgainstDb( fileName, bOldDbAccess );
+                bSuccess = aDBHelp.testAgainstDb( fileURL, bOldDbAccess );
 
                 int nDummy = 0;
 #endif
             }
 
-            else if( 0 == table.open( 0,fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
+            else if( 0 == table.open( 0,fileURL,DB_BTREE,DB_RDONLY,0644 ) )
             {
                 Db* idmap = getBerkeley( Database,Language );
 
@@ -1867,6 +1856,7 @@ Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xP
 //===================================================================
 // class KeyDataBaseFileIterator
 
+//returns a file URL
 rtl::OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
 {
     rtl::OUString aRetFile;
@@ -1877,7 +1867,7 @@ rtl::OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
         {
             case INITIAL_MODULE:
                 aRetFile =
-                    m_rDatabases.getInstallPathAsSystemPath() +
+                    m_rDatabases.getInstallPathAsURL() +
                     m_rDatabases.processLang( m_aLanguage ) + aSlash + m_aInitialModule +
                     rtl::OUString::createFromAscii( ".key" );
 
@@ -1935,16 +1925,14 @@ rtl::OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
     return aRetFile;
 }
 
+//Returns a file URL, that does not contain macros
 rtl::OUString KeyDataBaseFileIterator::implGetDbFileFromPackage
     ( Reference< deployment::XPackage > xPackage )
 {
     rtl::OUString aExpandedURL =
         implGetFileFromPackage( rtl::OUString::createFromAscii( ".key" ), xPackage );
 
-    rtl::OUString aRetFile;
-    osl::FileBase::getSystemPathFromFileURL( aExpandedURL, aRetFile );
-
-    return aRetFile;
+    return aExpandedURL;
 }
 
 

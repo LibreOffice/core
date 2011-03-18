@@ -30,11 +30,13 @@
 #include "pam.hxx"
 #include "swtable.hxx"
 #include "frame.hxx"
+#include "rootfrm.hxx"
 #include "pagefrm.hxx"
 #include "flyfrm.hxx"
 #include "viewsh.hxx"
 #include "doc.hxx"
 #include "viewimp.hxx"
+#include "viewopt.hxx"
 #include "dflyobj.hxx"
 #include "frmtool.hxx"
 #include "dcontact.hxx"
@@ -49,7 +51,6 @@
 #include <fmtftn.hxx>
 #include <editeng/pgrditem.hxx>
 #include <paratr.hxx>
-
 #include "ftnfrm.hxx"
 #include "txtfrm.hxx"
 #include "tabfrm.hxx"
@@ -61,15 +62,11 @@
 #include "section.hxx"
 #include "dbg_lay.hxx"
 #include "lineinfo.hxx"
-// OD 2004-03-02 #106629#
 #include <fmtclbl.hxx>
-// --> OD 2004-06-23 #i28701#
 #include <sortedobjs.hxx>
 #include <layouter.hxx>
-// <--
-// --> OD 2004-10-15 #i26945#
 #include <fmtfollowtextflow.hxx>
-// <--
+#include <switerator.hxx>
 
 sal_Bool SwFlowFrm::bMoveBwdJump = sal_False;
 
@@ -604,7 +601,7 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
     ASSERT( rThis.GetUpper(), "Wo kommen wir denn her?" );
 
     //Sparsamer benachrichtigen wenn eine Action laeuft.
-    ViewShell *pSh = rThis.GetShell();
+    ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
     const SwViewImp *pImp = pSh ? pSh->Imp() : 0;
     const sal_Bool bComplete = pImp && pImp->IsAction() && pImp->GetLayAction().IsComplete();
 
@@ -737,20 +734,13 @@ SwSectionFrm* SwSectionFrm::FindMaster() const
 {
     ASSERT( IsFollow(), "SwSectionFrm::FindMaster(): !IsFollow" );
 
-    SwClientIter aIter( *pSection->GetFmt() );
-    SwClient *pLast = aIter.GoStart();
-
-    while ( pLast )
+    SwIterator<SwSectionFrm,SwFmt> aIter( *pSection->GetFmt() );
+    SwSectionFrm* pSect = aIter.First();
+    while ( pSect )
     {
-        if ( pLast->ISA( SwFrm ) )
-        {
-            ASSERT( ((SwFrm*)pLast)->IsSctFrm(),
-                    "Non-section frame registered in section format" )
-            SwSectionFrm* pSect = (SwSectionFrm*)pLast;
             if( pSect->GetFollow() == this )
                 return pSect;
-        }
-        pLast = aIter++;
+        pSect = aIter.Next();
     }
 
     ASSERT( sal_False, "Follow ist lost in Space." );
@@ -761,17 +751,10 @@ SwTabFrm* SwTabFrm::FindMaster( bool bFirstMaster ) const
 {
     ASSERT( IsFollow(), "SwTabFrm::FindMaster(): !IsFollow" );
 
-    SwClientIter aIter( *GetTable()->GetFrmFmt() );
-    SwClient* pLast = aIter.GoStart();
-
-    while ( pLast )
+    SwIterator<SwTabFrm,SwFmt> aIter( *GetTable()->GetFrmFmt() );
+    SwTabFrm* pTab = aIter.First();
+    while ( pTab )
     {
-        if ( pLast->ISA( SwFrm ) )
-        {
-            ASSERT( ((SwFrm*)pLast)->IsTabFrm(),
-                    "Non-table frame registered in table format" )
-            SwTabFrm* pTab = (SwTabFrm*)pLast;
-
             if ( bFirstMaster )
             {
                 //
@@ -795,8 +778,8 @@ SwTabFrm* SwTabFrm::FindMaster( bool bFirstMaster ) const
                 if ( pTab->GetFollow() == this )
                     return pTab;
             }
-        }
-        pLast = aIter++;
+
+        pTab = aIter.Next();
     }
 
     ASSERT( sal_False, "Follow ist lost in Space." );
@@ -1042,12 +1025,13 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
                 return pLayLeaf;
 
             SwPageFrm *pNew = pLayLeaf->FindPageFrm();
+            const ViewShell *pSh = getRootFrm()->GetCurrShell();
             // #111704# The pagedesc check does not make sense for frames in fly frames
             if ( pNew != FindPageFrm() && !bNewPg && !IsInFly() &&
                  // --> FME 2005-05-10 #i46683#
                  // Do not consider page descriptions in browse mode (since
                  // MoveBwd ignored them)
-                 !pNew->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+                 !(pSh && pSh->GetViewOptions()->getBrowseMode() ) )
                  // <--
             {
                 if( WrongPageDesc( pNew ) )
@@ -1173,7 +1157,8 @@ sal_Bool SwFlowFrm::IsPrevObjMove() const
     //     und fuer diesen ggf. Umbrechen.
 
     //!!!!!!!!!!!Hack!!!!!!!!!!!
-    if ( rThis.GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    const ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
+    if( pSh && pSh->GetViewOptions()->getBrowseMode() )
         return sal_False;
 
     SwFrm *pPre = rThis.FindPrev();
@@ -1252,9 +1237,11 @@ sal_Bool SwFlowFrm::IsPrevObjMove() const
 sal_Bool SwFlowFrm::IsPageBreak( sal_Bool bAct ) const
 {
     if ( !IsFollow() && rThis.IsInDocBody() &&
-         ( !rThis.IsInTab() || ( rThis.IsTabFrm() && !rThis.GetUpper()->IsInTab() ) ) && // i66968
-         !rThis.GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+         ( !rThis.IsInTab() || ( rThis.IsTabFrm() && !rThis.GetUpper()->IsInTab() ) ) ) // i66968
     {
+        const ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
+        if( pSh && pSh->GetViewOptions()->getBrowseMode() )
+            return sal_False;
         const SwAttrSet *pSet = rThis.GetAttrSet();
 
         //Vorgaenger ermitteln
@@ -2113,7 +2100,7 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
                 rThis.Prepare( PREP_BOSS_CHGD, 0, sal_False );
                 if( !bSamePage )
                 {
-                    ViewShell *pSh = rThis.GetShell();
+                    ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
                     if ( pSh && !pSh->Imp()->IsUpdateExpFlds() )
                         pSh->GetDoc()->SetNewFldLst(true);  //Wird von CalcLayout() hinterher erledigt!
 
@@ -2125,7 +2112,9 @@ sal_Bool SwFlowFrm::MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool b
             }
         }
         // OD 30.10.2002 #97265# - no <CheckPageDesc(..)> in online layout
-        if ( !pNewPage->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        const ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
+
+        if ( !( pSh && pSh->GetViewOptions()->getBrowseMode() ) )
         {
             // --> OD 2009-12-31 #i106452#
             // check page description not only in situation with sections.
@@ -2593,7 +2582,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         {
             //Kann sein, dass ich einen Container bekam.
             SwFtnFrm *pOld = rThis.FindFtnFrm();
-            SwFtnFrm *pNew = new SwFtnFrm( pOld->GetFmt(),
+            SwFtnFrm *pNew = new SwFtnFrm( pOld->GetFmt(), pOld,
                                            pOld->GetRef(), pOld->GetAttr() );
             if ( pOld->GetMaster() )
             {
@@ -2674,7 +2663,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         if( pNewPage != pOldPage )
         {
             rThis.Prepare( PREP_BOSS_CHGD, (const void*)pOldPage, sal_False );
-            ViewShell *pSh = rThis.GetShell();
+            ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
             if ( pSh && !pSh->Imp()->IsUpdateExpFlds() )
                 pSh->GetDoc()->SetNewFldLst(true);  //Wird von CalcLayout() hinterher eledigt!
 
@@ -2684,7 +2673,7 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
             pNewPage->InvalidateWordCount();
 
             // OD 30.10.2002 #97265# - no <CheckPageDesc(..)> in online layout
-            if ( !pNewPage->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+            if ( !( pSh && pSh->GetViewOptions()->getBrowseMode() ) )
             {
                 if ( bCheckPageDescs && pNewPage->GetNext() )
                 {

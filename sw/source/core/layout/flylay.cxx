@@ -74,8 +74,8 @@ using namespace ::com::sun::star;
 |*
 |*************************************************************************/
 
-SwFlyFreeFrm::SwFlyFreeFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
-    SwFlyFrm( pFmt, pAnch ),
+SwFlyFreeFrm::SwFlyFreeFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
+    SwFlyFrm( pFmt, pSib, pAnch ),
     pPage( 0 ),
     // --> OD 2004-11-15 #i34753#
     mbNoMakePos( false ),
@@ -548,8 +548,8 @@ bool SwFlyFreeFrm::IsFormatPossible() const
 |*
 |*************************************************************************/
 
-SwFlyLayFrm::SwFlyLayFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
-    SwFlyFreeFrm( pFmt, pAnch )
+SwFlyLayFrm::SwFlyLayFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
+    SwFlyFreeFrm( pFmt, pSib, pAnch )
 {
     bLayout = sal_True;
 }
@@ -566,7 +566,7 @@ TYPEINIT1(SwFlyLayFrm,SwFlyFreeFrm);
 |*
 |*************************************************************************/
 
-void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
 
@@ -600,7 +600,7 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         if ( FLY_AT_PAGE == pAnch->GetAnchorId() )
         {
             sal_uInt16 nPgNum = pAnch->GetPageNum();
-            SwRootFrm *pRoot = FindRootFrm();
+            SwRootFrm *pRoot = getRootFrm();
             SwPageFrm *pTmpPage = (SwPageFrm*)pRoot->Lower();
             for ( sal_uInt16 i = 1; (i <= nPgNum) && pTmpPage; ++i,
                                 pTmpPage = (SwPageFrm*)pTmpPage->GetNext() )
@@ -622,7 +622,7 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         {
             SwNodeIndex aIdx( pAnch->GetCntntAnchor()->nNode );
             SwCntntFrm *pCntnt = GetFmt()->GetDoc()->GetNodes().GoNext( &aIdx )->
-                         GetCntntNode()->GetFrm( 0, 0, sal_False );
+                         GetCntntNode()->getLayoutFrm( getRootFrm(), 0, 0, sal_False );
             if( pCntnt )
             {
                 SwFlyFrm *pTmp = pCntnt->FindFlyFrm();
@@ -653,7 +653,7 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 {
     if ( !pNew->GetVirtDrawObj()->IsInserted() )
-        FindRootFrm()->GetDrawPage()->InsertObject(
+        getRootFrm()->GetDrawPage()->InsertObject(
                 (SdrObject*)pNew->GetVirtDrawObj(),
                 pNew->GetVirtDrawObj()->GetReferencedObj().GetOrdNumDirect() );
 
@@ -765,7 +765,7 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
 {
     const sal_uInt32 nOrdNum = pToRemove->GetVirtDrawObj()->GetOrdNum();
-    FindRootFrm()->GetDrawPage()->RemoveObject( nOrdNum );
+    getRootFrm()->GetDrawPage()->RemoveObject( nOrdNum );
     pToRemove->GetVirtDrawObj()->ReferencedObj().SetOrdNum( nOrdNum );
 
     if ( GetUpper() )
@@ -1036,7 +1036,7 @@ void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
             AppendFly( pFly );
         else
         {   ASSERT( pFmt, ":-( kein Format fuer Fly uebergeben." );
-            pFly = new SwFlyLayFrm( (SwFlyFrmFmt*)pFmt, this );
+            pFly = new SwFlyLayFrm( (SwFlyFrmFmt*)pFmt, this, this );
             AppendFly( pFly );
             ::RegistFlys( this, pFly );
         }

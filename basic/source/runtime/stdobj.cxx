@@ -147,6 +147,8 @@ static Methods aMethods[] = {
   { "number",       SbxDOUBLE, 0,NULL,0 },
 { "CreateObject",   SbxOBJECT,    1 | _FUNCTION, RTLNAME( CreateObject ),0  },
   { "class",        SbxSTRING, 0,NULL,0 },
+{ "CaptureAssertions",  SbxNULL, 1 | _FUNCTION, RTLNAME(CaptureAssertions), 0 },
+  { "methodName",   SbxSTRING, 0, NULL, 0 },
 { "CreateUnoListener",SbxOBJECT,   1 | _FUNCTION, RTLNAME( CreateUnoListener ),0 },
   { "prefix",  SbxSTRING, 0,NULL,0 },
   { "typename",  SbxSTRING, 0,NULL,0 },

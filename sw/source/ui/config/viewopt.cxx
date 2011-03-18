@@ -109,7 +109,8 @@ sal_Bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && nPagePrevRow == rOpt.GetPagePrevRow()
             && nPagePrevCol == rOpt.GetPagePrevCol()
             && aRetoucheColor == rOpt.GetRetoucheColor()
-            && bFormView == rOpt.IsFormView()
+            && mbFormView == rOpt.IsFormView()
+            && mbBrowseMode == rOpt.getBrowseMode()
             && mbViewLayoutBookMode == rOpt.mbViewLayoutBookMode
             && bShowPlaceHolderFields == rOpt.bShowPlaceHolderFields
             && bIdle == rOpt.bIdle
@@ -214,10 +215,9 @@ SwViewOption::SwViewOption() :
     bStarOneSetting(sal_False),
     bIsPagePreview(sal_False),
     bSelectionInReadonly(sal_False),
-    // --> FME 2004-06-29 #114856# Formular view
-    bFormView(sal_False),
-    // <--
-    bBookview(sal_False),
+    mbFormView(sal_False),
+    mbBrowseMode(sal_False),
+    mbBookView(sal_False),
     mbViewLayoutBookMode(sal_False),
     bShowPlaceHolderFields( sal_True ),
 
@@ -258,7 +258,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     bReadonly = sal_False;
     bSelectionInReadonly = sal_False;
     // --> FME 2004-06-29 #114856# Formular view
-    bFormView       = rVOpt.bFormView;
+    mbFormView       = rVOpt.mbFormView;
     // <--
     nZoom           = rVOpt.nZoom       ;
     aSnapSize       = rVOpt.aSnapSize   ;
@@ -277,7 +277,8 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     sSymbolFont     = rVOpt.sSymbolFont;
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
     bStarOneSetting = rVOpt.bStarOneSetting;
-    bBookview       = rVOpt.bBookview;
+    mbBookView      = rVOpt.mbBookView;
+    mbBrowseMode    = rVOpt.mbBrowseMode;
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
     bIdle           = rVOpt.bIdle;
@@ -299,7 +300,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
 {
     // --> DVO FME 2004-06-29 #114856# Formular view
-    bFormView       = rVOpt.bFormView   ;
+    mbFormView       = rVOpt.mbFormView   ;
     // <--
     nZoom           = rVOpt.nZoom       ;
     aSnapSize       = rVOpt.aSnapSize   ;
@@ -318,7 +319,8 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     sSymbolFont     = rVOpt.sSymbolFont;
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
     bStarOneSetting = rVOpt.bStarOneSetting;
-    bBookview       = rVOpt.bBookview;
+    mbBookView      = rVOpt.mbBookView;
+    mbBrowseMode    = rVOpt.mbBrowseMode;
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
     bIdle           = rVOpt.bIdle;

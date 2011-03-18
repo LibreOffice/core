@@ -328,7 +328,7 @@ class SW_DLLPUBLIC SwDoc :
     SwTOXTypes      *pTOXTypes;         // Verzeichnisse
     SwDefTOXBase_Impl * pDefTOXBases;   // defaults of SwTOXBase's
 
-    SwRootFrm       *pLayout;           // Rootframe des spezifischen Layouts.
+    ViewShell       *pCurrentView;  // SwDoc should get a new member pCurrentView//swmod 071225
     SdrModel        *pDrawModel;        // StarView Drawing
 
     SwDocUpdtFld    *pUpdtFlds;         // Struktur zum Field-Update
@@ -458,7 +458,6 @@ private:
     bool mbNewFldLst             : 1;    // TRUE: Felder-Liste neu aufbauen
     bool mbCopyIsMove            : 1;    // TRUE: Copy ist ein verstecktes Move
     bool mbVisibleLinks          : 1;    // TRUE: Links werden sichtbar eingefuegt
-    bool mbBrowseMode            : 1;    // TRUE: Dokument im BrowseModus anzeigen
     bool mbInReading             : 1;    // TRUE: Dokument wird gerade gelesen
     bool mbInXMLImport           : 1;    // TRUE: During xml import, attribute portion building is not necessary
     bool mbUpdateTOX             : 1;    // TRUE: nach Dokument laden die TOX Updaten
@@ -589,6 +588,8 @@ private:
     bool mbTabRelativeToIndent                      : 1;   // #i24363# tab stops relative to indent
     bool mbProtectForm                              : 1;
     bool mbTabAtLeftIndentForParagraphsInList;             // OD 2008-06-05 #i89181# - see above
+
+    bool mbLastBrowseMode                           : 1;
 
     // #i78591#
     sal_uInt32  n32DummyCompatabilityOptions1;
@@ -948,15 +949,18 @@ public:
 
     /** IDocumentLayoutAccess
     */
-    virtual const SwRootFrm* GetRootFrm() const ;
-    virtual       SwRootFrm* GetRootFrm();
-    virtual void SetRootFrm( SwRootFrm* pNew );
+    virtual void SetCurrentViewShell( ViewShell* pNew );//swmod 071225
     virtual SwLayouter* GetLayouter();
     virtual const SwLayouter* GetLayouter() const;
     virtual void SetLayouter( SwLayouter* pNew );
     virtual SwFrmFmt* MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet );
     virtual void DelLayoutFmt( SwFrmFmt *pFmt );
     virtual SwFrmFmt* CopyLayoutFmt( const SwFrmFmt& rSrc, const SwFmtAnchor& rNewAnchor, bool bSetTxtFlyAtt, bool bMakeFrms );
+    virtual const ViewShell *GetCurrentViewShell() const;   //swmod 080219
+    virtual ViewShell *GetCurrentViewShell();//swmod 080219 It must be able to communicate to a ViewShell.This is going to be removerd later.
+    virtual const SwRootFrm *GetCurrentLayout() const;
+    virtual SwRootFrm *GetCurrentLayout();//swmod 080219
+    virtual bool HasLayout() const;
 
     /** IDocumentTimerAccess
     */
@@ -1158,6 +1162,8 @@ public:
     String GetUniqueOLEName() const;
     String GetUniqueFrameName() const;
 
+    std::set<SwRootFrm*> GetAllLayouts();//swmod 080225
+
     void SetFlyName( SwFlyFrmFmt& rFmt, const String& rName );
     const SwFlyFrmFmt* FindFlyByName( const String& rName, sal_Int8 nNdTyp = 0 ) const;
 
@@ -1326,15 +1332,12 @@ public:
 
     // get the set of printable pages for the XRenderable API by
     // evaluating the respective settings (see implementation)
-    void CalculatePagesForPrinting( SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
+    void CalculatePagesForPrinting( const SwRootFrm& rLayout, SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
             sal_Int32 nDocPageCount );
     void UpdatePagesForPrintingWithPostItData( SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
             sal_Int32 nDocPageCount );
-    void CalculatePagePairsForProspectPrinting( SwRenderData &rData, const SwPrintUIOptions &rOptions,
+    void CalculatePagePairsForProspectPrinting( const SwRootFrm& rLayout, SwRenderData &rData, const SwPrintUIOptions &rOptions,
             sal_Int32 nDocPageCount );
-
-    sal_uInt16 GetPageCount() const;
-    const Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;
 
         //PageDescriptor-Schnittstelle
     sal_uInt16 GetPageDescCnt() const { return aPageDescs.Count(); }
@@ -1898,7 +1901,7 @@ public:
     // update all modified OLE-Objects. The modification is called over the
     // StarOne - Interface              --> Bug 67026
     void SetOLEObjModified()
-    {   if( GetRootFrm() ) aOLEModifiedTimer.Start(); }
+    {   if( GetCurrentViewShell() ) aOLEModifiedTimer.Start(); }    //swmod 071107//swmod 071225
 
     // -------------------- Uno - Schnittstellen ---------------------------
     const SwUnoCrsrTbl& GetUnoCrsrTbl() const       { return *pUnoCrsrTbl; }

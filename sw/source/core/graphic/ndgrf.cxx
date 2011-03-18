@@ -213,10 +213,10 @@ sal_Bool SwGrfNode::ReRead(
 
             if( refLink.Is() )
             {
-                if( GetFrm() )
+                if( getLayoutFrm( GetDoc()->GetCurrentLayout() ) )
                 {
                     SwMsgPoolItem aMsgHint( RES_GRF_REREAD_AND_INCACHE );
-                    Modify( &aMsgHint, &aMsgHint );
+                    ModifyNotification( &aMsgHint, &aMsgHint );
                 }
                 // --> OD 2006-11-03 #i59688#
                 // do not load linked graphic, if it isn't a new linked graphic.
@@ -310,7 +310,7 @@ sal_Bool SwGrfNode::ReRead(
     if( bReadGrf && bNewGrf )
     {
         SwMsgPoolItem aMsgHint( RES_UPDATE_ATTR );
-        Modify( &aMsgHint, &aMsgHint );
+        ModifyNotification( &aMsgHint, &aMsgHint );
     }
 
     return bReadGrf;
@@ -438,7 +438,7 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
                 // keine default Bitmap mehr, also neu Painten!
                 aGrfObj.SetGraphic( Graphic() );
                 SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
-                Modify( &aMsgHint, &aMsgHint );
+                ModifyNotification( &aMsgHint, &aMsgHint );
             }
         }
         else if( aGrfObj.IsSwappedOut() ) {
@@ -488,7 +488,7 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
         if( 1 == nRet )
         {
             SwMsgPoolItem aMsg( RES_GRAPHIC_SWAPIN );
-            Modify( &aMsg, &aMsg );
+            ModifyNotification( &aMsg, &aMsg );
         }
     }
     else
@@ -597,7 +597,7 @@ sal_Bool SwGrfNode::RestorePersistentData()
         IDocumentLinksAdministration* pIDLA = getIDocumentLinksAdministration();
         refLink->SetVisible( pIDLA->IsVisibleLinks() );
         pIDLA->GetLinkManager().InsertDDELink( refLink );
-        if( getIDocumentLayoutAccess()->GetRootFrm() )
+        if( getIDocumentLayoutAccess()->GetCurrentLayout() )    //swmod 080218
             refLink->Update();
     }
     return sal_True;
@@ -1176,7 +1176,7 @@ void SwGrfNode::ApplyInputStream(
             mbIsStreamReadOnly = bIsStreamReadOnly;
             mbLinkedInputStreamReady = true;
             SwMsgPoolItem aMsgHint( RES_LINKED_GRAPHIC_STREAM_ARRIVED );
-            Modify( &aMsgHint, &aMsgHint );
+            ModifyNotification( &aMsgHint, &aMsgHint );
         }
     }
 }
@@ -1188,7 +1188,7 @@ void SwGrfNode::UpdateLinkWithInputStream()
         GetLink()->setStreamToLoadFrom( mxInputStream, mbIsStreamReadOnly );
         GetLink()->Update();
         SwMsgPoolItem aMsgHint( RES_GRAPHIC_ARRIVED );
-        Modify( &aMsgHint, &aMsgHint );
+        ModifyNotification( &aMsgHint, &aMsgHint );
 
         // --> OD 2008-06-18 #i88291#
         mxInputStream.clear();

@@ -159,7 +159,7 @@ static PageDesc aDinTab[] =
 
 static const size_t nTabSize = sizeof(aDinTab) / sizeof(aDinTab[0]);
 
-#define MAXSLOPPY 11
+#define MAXSLOPPY 21
 
 bool PaperInfo::doSloppyFit()
 {

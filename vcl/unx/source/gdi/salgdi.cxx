@@ -1217,6 +1217,7 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, double 
     aPolygon.transform( basegfx::tools::createTranslateB2DHomMatrix(+fHalfWidth,+fHalfWidth) );
 
     // shortcut for hairline drawing to improve performance
+    bool bDrawnOk = true;
     if( bIsHairline )
     {
         // hairlines can benefit from a simplified tesselation
@@ -1225,17 +1226,13 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, double 
         basegfx::tools::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, aPolygon, rLineWidth.getX() );
 
         // draw tesselation result
-        if( ! aB2DTrapVector.empty() )
-        {
-            const int nTrapCount = aB2DTrapVector.size();
-            const bool bDrawOk = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
+        const int nTrapCount = aB2DTrapVector.size();
+        if( nTrapCount > 0 )
+            bDrawnOk = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
 
-            // restore the original brush GC
-            nBrushColor_ = aKeepBrushColor;
-            return bDrawOk;
-        }
-        else
-            return true;
+        // restore the original brush GC
+        nBrushColor_ = aKeepBrushColor;
+        return bDrawnOk;
     }
 
     // get the area polygon for the line polygon
@@ -1258,19 +1255,18 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, double 
 
     // draw each area polypolygon component individually
     // to emulate the polypolygon winding rule "non-zero"
-    bool bDrawOk = true;
     const int nPolyCount = aAreaPolyPoly.count();
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
         const ::basegfx::B2DPolyPolygon aOnePoly( aAreaPolyPoly.getB2DPolygon( nPolyIdx ) );
-        bDrawOk = drawPolyPolygon( aOnePoly, fTransparency );
-        if( !bDrawOk )
+        bDrawnOk = drawPolyPolygon( aOnePoly, fTransparency );
+        if( !bDrawnOk )
             break;
     }
 
     // restore the original brush GC
     nBrushColor_ = aKeepBrushColor;
-    return bDrawOk;
+    return bDrawnOk;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -48,7 +48,7 @@
 #include <expfld.hxx>
 #include <txtatr.hxx>
 #include <unofldmid.h>
-
+#include <switerator.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star;
@@ -123,9 +123,6 @@ void SwDBFieldType::ReleaseRef()
     }
 }
 
-/* -----------------24.02.99 14:51-------------------
- *
- * --------------------------------------------------*/
 sal_Bool SwDBFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
@@ -147,9 +144,7 @@ sal_Bool SwDBFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     }
     return sal_True;
 }
-/* -----------------24.02.99 14:51-------------------
- *
- * --------------------------------------------------*/
+
 sal_Bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
@@ -167,8 +162,8 @@ sal_Bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             if( sTmp != sColumn )
             {
                 sColumn = sTmp;
-                SwClientIter aIter( *this );
-                SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+                SwIterator<SwFmtFld,SwFieldType> aIter( *this );
+                SwFmtFld* pFld = aIter.First();
                 while(pFld)
                 {
                     // Feld im Undo?
@@ -179,7 +174,7 @@ sal_Bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
                         pDBField->ClearInitialized();
                         pDBField->InitContent();
                      }
-                    pFld = (SwFmtFld*)aIter.Next();
+                    pFld = aIter.Next();
                 }
             }
         }
@@ -411,9 +406,7 @@ void SwDBField::SetSubType(sal_uInt16 nType)
     nSubType = nType;
 }
 
-/*-----------------06.03.98 16:15-------------------
 
---------------------------------------------------*/
 sal_Bool SwDBField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
@@ -445,9 +438,7 @@ sal_Bool SwDBField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return sal_True;
 
 }
-/*-----------------06.03.98 16:15-------------------
 
---------------------------------------------------*/
 sal_Bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
@@ -472,8 +463,8 @@ sal_Bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         //invalidate text node
         if(GetTyp())
         {
-            SwClientIter aIter( *GetTyp() );
-            SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+            SwIterator<SwFmtFld,SwFieldType> aIter( *GetTyp() );
+            SwFmtFld* pFld = aIter.First();
             while(pFld)
             {
                 SwTxtFld *pTxtFld = pFld->GetTxtFld();
@@ -483,7 +474,7 @@ sal_Bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
                     pTxtFld->NotifyContentChange(*pFld);
                     break;
                 }
-                pFld = (SwFmtFld*)aIter.Next();
+                pFld = aIter.Next();
             }
         }
     }
@@ -551,9 +542,6 @@ String SwDBNameInfField::GetFieldName() const
     return lcl_DBTrennConv(sStr);
 }
 
-/*-----------------06.03.98 16:55-------------------
-
---------------------------------------------------*/
 sal_Bool SwDBNameInfField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
@@ -578,9 +566,7 @@ sal_Bool SwDBNameInfField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) con
     }
     return sal_True;
 }
-/*-----------------06.03.98 16:55-------------------
 
---------------------------------------------------*/
 sal_Bool SwDBNameInfField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
@@ -612,16 +598,12 @@ sal_Bool SwDBNameInfField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return sal_True;
 }
-/* -----------------4/10/2003 15:03------------------
 
- --------------------------------------------------*/
 sal_uInt16 SwDBNameInfField::GetSubType() const
 {
     return nSubType;
 }
-/* -----------------4/10/2003 15:03------------------
 
- --------------------------------------------------*/
 void SwDBNameInfField::SetSubType(sal_uInt16 nType)
 {
     nSubType = nType;
@@ -696,9 +678,7 @@ void SwDBNextSetField::SetPar1(const String& rStr)
 {
     aCond = rStr;
 }
-/*-----------------06.03.98 16:16-------------------
 
---------------------------------------------------*/
 sal_Bool SwDBNextSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     sal_Bool bRet = sal_True;
@@ -712,9 +692,7 @@ sal_Bool SwDBNextSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) con
     }
     return bRet;
 }
-/*-----------------06.03.98 16:16-------------------
 
---------------------------------------------------*/
 sal_Bool SwDBNextSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     sal_Bool bRet = sal_True;
@@ -728,21 +706,6 @@ sal_Bool SwDBNextSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return bRet;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-/*
-String SwDBNextSetField::GetPar2() const
-{
-    return GetDBName();
-}
-
-void SwDBNextSetField::SetPar2(const String& rStr)
-{
-    GetDBName() = rStr;
-}
-*/
 
 /*--------------------------------------------------------------------
     Beschreibung: Datensatz mit bestimmter ID
@@ -832,9 +795,7 @@ void SwDBNumSetField::SetPar2(const String& rStr)
 {
     aPar2 = rStr;
 }
-/*-----------------06.03.98 16:16-------------------
 
---------------------------------------------------*/
 sal_Bool SwDBNumSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     sal_Bool bRet = sal_True;
@@ -851,9 +812,7 @@ sal_Bool SwDBNumSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) cons
     }
     return bRet;
 }
-/*-----------------06.03.98 16:16-------------------
 
---------------------------------------------------*/
 sal_Bool    SwDBNumSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     sal_Bool bRet = sal_True;
@@ -933,16 +892,12 @@ SwField* SwDBNameField::Copy() const
     return pTmp;
 }
 
-/*-----------------06.03.98 16:16-------------------
 
---------------------------------------------------*/
 sal_Bool SwDBNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     return SwDBNameInfField::QueryValue(rAny, nWhichId );
 }
-/*-----------------06.03.98 16:16-------------------
 
---------------------------------------------------*/
 sal_Bool SwDBNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     return SwDBNameInfField::PutValue(rAny, nWhichId );
@@ -984,7 +939,6 @@ String SwDBSetNumberField::Expand() const
         return aEmptyStr;
     else
         return FormatNumber((sal_uInt16)nNumber, GetFormat());
-    //return(nNumber == 0 ? aEmptyStr : FormatNumber(nNumber, GetFormat()));
 }
 
 //------------------------------------------------------------------------------
@@ -1012,9 +966,7 @@ SwField* SwDBSetNumberField::Copy() const
     pTmp->SetSubType(GetSubType());
     return pTmp;
 }
-/*-----------------06.03.98 16:15-------------------
 
---------------------------------------------------*/
 sal_Bool SwDBSetNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     sal_Bool bRet = sal_True;
@@ -1031,9 +983,7 @@ sal_Bool SwDBSetNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) c
     }
     return bRet;
 }
-/*-----------------06.03.98 16:15-------------------
 
---------------------------------------------------*/
 sal_Bool SwDBSetNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     sal_Bool bRet = sal_True;

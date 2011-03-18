@@ -69,13 +69,7 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
         SwFrmFmt* pHeaderFmt = rHead.GetHeaderFmt();
         if( pHeaderFmt )
         {
-            SwClientIter aIter( *pHeaderFmt );
-            SwClient *pLast = aIter.GoStart();
-            if( pLast )
-                do
-                {
-                    ++nHeaderCount;
-                } while( 0 != ( pLast = aIter++ ));
+            nHeaderCount = pHeaderFmt->GetClientCount();
             const SwFmtCntnt* pCntnt = &pHeaderFmt->GetCntnt();
             if( pCntnt->GetCntntIdx() )
                 nHeaderMaster = pCntnt->GetCntntIdx()->GetIndex();
@@ -86,13 +80,7 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
         SwFrmFmt* pLeftHeaderFmt = rLeftHead.GetHeaderFmt();
         if( pLeftHeaderFmt )
         {
-            SwClientIter aIter( *pLeftHeaderFmt );
-            SwClient *pLast = aIter.GoStart();
-            if( pLast )
-                do
-                {
-                    ++nLeftHeaderCount;
-                } while( 0 != ( pLast = aIter++ ));
+            nLeftHeaderCount = pLeftHeaderFmt->GetClientCount();
             const SwFmtCntnt* pLeftCntnt = &pLeftHeaderFmt->GetCntnt();
             if( pLeftCntnt->GetCntntIdx() )
                 nHeaderLeft = pLeftCntnt->GetCntntIdx()->GetIndex();
@@ -105,13 +93,7 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
         SwFrmFmt* pFooterFmt = rFoot.GetFooterFmt();
         if( pFooterFmt )
         {
-            SwClientIter aIter( *pFooterFmt );
-            SwClient *pLast = aIter.GoStart();
-            if( pLast )
-                do
-                {
-                    ++nFooterCount;
-                } while( 0 != ( pLast = aIter++ ));
+            nFooterCount = pFooterFmt->GetClientCount();
             const SwFmtCntnt* pCntnt = &pFooterFmt->GetCntnt();
             if( pCntnt->GetCntntIdx() )
                 nFooterMaster = pCntnt->GetCntntIdx()->GetIndex();
@@ -122,13 +104,7 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
         SwFrmFmt* pLeftFooterFmt = rLeftFoot.GetFooterFmt();
         if( pLeftFooterFmt )
         {
-            SwClientIter aIter( *pLeftFooterFmt );
-            SwClient *pLast = aIter.GoStart();
-            if( pLast )
-                do
-                {
-                    ++nLeftFooterCount;
-                } while( 0 != ( pLast = aIter++ ));
+            nLeftFooterCount = pLeftFooterFmt->GetClientCount();
             const SwFmtCntnt* pLeftCntnt = &pLeftFooterFmt->GetCntnt();
             if( pLeftCntnt->GetCntntIdx() )
                 nFooterLeft = pLeftCntnt->GetCntntIdx()->GetIndex();

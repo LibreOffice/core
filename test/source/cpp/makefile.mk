@@ -33,14 +33,11 @@ VISIBILITY_HIDDEN = TRUE
 .INCLUDE: settings.mk
 
 CDEFS += -DOOO_DLLIMPLEMENTATION_TEST
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-#building with stlport, but cppunit was not built with stlport
-.IF "$(USE_SYSTEM_STL)"!="YES"
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CFLAGSCXX+=-DADAPT_EXT_STL
-.ENDIF
-.ENDIF
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+.IF "$(USE_SYSTEM_STL)" != "YES" && "$(SYSTEM_CPPUNIT)" == "YES"
+CFLAGSCXX += -DADAPT_EXT_STL
+.END
 
 SLOFILES = \
     $(SLO)/getargument.obj \

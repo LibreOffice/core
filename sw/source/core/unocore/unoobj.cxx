@@ -396,7 +396,7 @@ SwUnoCursorHelper::SetPageDesc(
             {
                 throw lang::IllegalArgumentException();
             }
-            pPageDesc->Add( pNewDesc.get() );
+            pNewDesc.get()->RegisterToPageDesc( *pPageDesc );
             bPut = sal_True;
         }
         if(!bPut)
@@ -827,13 +827,13 @@ public:
         m_bIsDisposed = true;
         m_ListenerContainer.Disposing();
     }
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
-void SwXTextCursor::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXTextCursor::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 

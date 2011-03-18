@@ -28,10 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifdef WTC
-#define private public
-#endif
-
 #include <ctype.h>
 #include <float.h>
 #include <hintids.hxx>
@@ -42,8 +38,6 @@
 #include <editeng/colritem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/boxitem.hxx>
-
-
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
@@ -72,6 +66,7 @@
 #include <viewsh.hxx>
 #include <redline.hxx>
 #include <list>
+#include <switerator.hxx>
 
 #ifndef DBG_UTIL
 #define CHECK_TABLE(t)
@@ -267,9 +262,6 @@ void _InsTblBox( SwDoc* pDoc, SwTableNode* pTblNd,
 |*
 |*  SwTable::SwTable()
 |*
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 05. May. 93
-|*
 |*************************************************************************/
 SwTable::SwTable( SwTableFmt* pFmt )
     : SwClient( pFmt ),
@@ -331,13 +323,9 @@ SwTable::~SwTable()
     delete pHTMLLayout;
 }
 
-
 /*************************************************************************
 |*
 |*  SwTable::Modify()
-|*
-|*  Ersterstellung      JP ??
-|*  Letzte Aenderung    MA 06. May. 93
 |*
 |*************************************************************************/
 inline void FmtInArr( SvPtrarr& rFmtArr, SwFmt* pBoxFmt )
@@ -415,7 +403,7 @@ void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
     }
 }
 
-void SwTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     // fange SSize Aenderungen ab, um die Lines/Boxen anzupassen
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
@@ -432,6 +420,8 @@ void SwTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         pOldSize = (const SwFmtFrmSize*)pOld;
         pNewSize = (const SwFmtFrmSize*)pNew;
     }
+    else
+        CheckRegistration( pOld, pNew );
 
     if( pOldSize || pNewSize )
     {
@@ -443,8 +433,6 @@ void SwTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             AdjustWidths( pOldSize->GetWidth(), pNewSize->GetWidth() );
         }
     }
-    else
-        SwClient::Modify( pOld, pNew );         // fuers ObjectDying
 }
 
 void SwTable::AdjustWidths( const long nOld, const long nNew )
@@ -456,9 +444,6 @@ void SwTable::AdjustWidths( const long nOld, const long nNew )
 /*************************************************************************
 |*
 |*  SwTable::GetTabCols()
-|*
-|*  Ersterstellung      MA 04. May. 93
-|*  Letzte Aenderung    MA 30. Nov. 95
 |*
 |*************************************************************************/
 void lcl_RefreshHidden( SwTabCols &rToFill, sal_uInt16 nPos )
@@ -710,9 +695,6 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
 /*************************************************************************
 |*
 |*  SwTable::SetTabCols()
-|*
-|*  Ersterstellung      MA 04. May. 93
-|*  Letzte Aenderung    MA 26. Aug. 98
 |*
 |*************************************************************************/
 //Struktur zur Parameteruebergabe
@@ -1407,9 +1389,6 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
 |*  const SwTableBox* SwTable::GetTblBox( const Strn?ng& rName ) const
 |*      gebe den Pointer auf die benannte Box zurueck.
 |*
-|*  Ersterstellung      JP 30. Jun. 93
-|*  Letzte Aenderung    JP 30. Jun. 93
-|*
 |*************************************************************************/
 
 sal_Bool IsValidRowName( const String& rStr )
@@ -1560,8 +1539,7 @@ SwTableBox* SwTable::GetTblBox( sal_uLong nSttIdx )
             pModify = pTblNd->GetTable().GetFrmFmt();
         // <--
 
-        SwClientIter aIter( *pModify );
-        SwFrm *pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
+        SwFrm* pFrm = SwIterator<SwFrm,SwModify>::FirstElement( *pModify );
         while ( pFrm && !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
         if ( pFrm )
@@ -1595,9 +1573,6 @@ sal_Bool SwTable::IsTblComplex() const
 |*
 |*  SwTableLine::SwTableLine()
 |*
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 09. Mar. 93
-|*
 |*************************************************************************/
 SwTableLine::SwTableLine( SwTableLineFmt *pFmt, sal_uInt16 nBoxes,
                             SwTableBox *pUp )
@@ -1621,55 +1596,51 @@ SwTableLine::~SwTableLine()
 |*
 |*  SwTableLine::ClaimFrmFmt(), ChgFrmFmt()
 |*
-|*  Ersterstellung      MA 03. May. 93
-|*  Letzte Aenderung    MA 07. Feb. 96
-|*
 |*************************************************************************/
 SwFrmFmt* SwTableLine::ClaimFrmFmt()
 {
-    //Wenn noch andere TableLines ausser mir selbst an dem FrmFmt haengen,
-    //sehe ich mich leider gezwungen mir ein eingenes zu machen und mich
-    //bei diesem anzumelden.
-    SwTableLineFmt *pOld = (SwTableLineFmt*)GetFrmFmt();
-    SwClientIter aIter( *pOld );
-
-    SwClient* pLast;
-
-    for( pLast = aIter.First( TYPE( SwTableLine )); pLast && pLast == this;
-        pLast = aIter.Next() )
-        ;
-
-    if( pLast )
+    // This method makes sure that this object is an exclusive SwTableLine client
+    // of an SwTableLineFmt object
+    // If other SwTableLine objects currently listen to the same SwTableLineFmt as
+    // this one, something needs to be done
+    SwTableLineFmt *pRet = (SwTableLineFmt*)GetFrmFmt();
+    SwIterator<SwTableLine,SwFmt> aIter( *pRet );
+    for( SwTableLine* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
-        SwTableLineFmt *pNewFmt = pOld->GetDoc()->MakeTableLineFmt();
-        *pNewFmt = *pOld;
+        if ( pLast != this )
+        {
+            // found another SwTableLine that is a client of the current Fmt
+            // create a new Fmt as a copy and use it for this object
+            SwTableLineFmt *pNewFmt = pRet->GetDoc()->MakeTableLineFmt();
+            *pNewFmt = *pRet;
 
-        //Erstmal die Frms ummelden.
-        for( pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
-            if( ((SwRowFrm*)pLast)->GetTabLine() == this )
-                pNewFmt->Add( pLast );
+            // register SwRowFrms that know me as clients at the new Fmt
+            SwIterator<SwRowFrm,SwFmt> aFrmIter( *pRet );
+            for( SwRowFrm* pFrm = aFrmIter.First(); pFrm; pFrm = aFrmIter.Next() )
+                if( pFrm->GetTabLine() == this )
+                    pFrm->RegisterToFormat( *pNewFmt );
 
-        //Jetzt noch mich selbst ummelden.
-        pNewFmt->Add( this );
-        pOld = pNewFmt;
+            // register myself
+            pNewFmt->Add( this );
+            pRet = pNewFmt;
+            break;
+        }
     }
 
-    return pOld;
+    return pRet;
 }
 
 void SwTableLine::ChgFrmFmt( SwTableLineFmt *pNewFmt )
 {
     SwFrmFmt *pOld = GetFrmFmt();
-    SwClientIter aIter( *pOld );
-    SwClient* pLast;
+    SwIterator<SwRowFrm,SwFmt> aIter( *pOld );
 
     //Erstmal die Frms ummelden.
-    for( pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
+    for( SwRowFrm* pRow = aIter.First(); pRow; pRow = aIter.Next() )
     {
-        SwRowFrm *pRow = (SwRowFrm*)pLast;
         if( pRow->GetTabLine() == this )
         {
-            pNewFmt->Add( pLast );
+            pRow->RegisterToFormat( *pNewFmt );
 
             pRow->InvalidateSize();
             pRow->_InvalidatePrt();
@@ -1700,7 +1671,7 @@ void SwTableLine::ChgFrmFmt( SwTableLineFmt *pNewFmt )
     //Jetzt noch mich selbst ummelden.
     pNewFmt->Add( this );
 
-    if ( !aIter.GoStart() )
+    if ( !pOld->GetDepends() )
         delete pOld;
 }
 
@@ -1708,16 +1679,15 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
 {
     SwTwips nRet = 0;
     bLayoutAvailable = false;
-    SwClientIter aIter( *GetFrmFmt() );
+    SwIterator<SwRowFrm,SwFmt> aIter( *GetFrmFmt() );
     // A row could appear several times in headers/footers so only one chain of master/follow tables
     // will be accepted...
     const SwTabFrm* pChain = NULL; // My chain
-    for( SwClient* pLast = aIter.First( TYPE( SwFrm ) ); pLast;
-            pLast = aIter.Next() )
+    for( SwRowFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
-        if( ((SwRowFrm*)pLast)->GetTabLine() == this )
+        if( pLast->GetTabLine() == this )
         {
-            const SwTabFrm* pTab = static_cast<SwRowFrm*>(pLast)->FindTabFrm();
+            const SwTabFrm* pTab = pLast->FindTabFrm();
             bLayoutAvailable = ( pTab && pTab->IsVertical() ) ?
                                ( 0 < pTab->Frm().Height() ) :
                                ( 0 < pTab->Frm().Width() );
@@ -1728,15 +1698,15 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
             {
                 pChain = pTab; // defines my chain (even it is already)
                 if( pTab->IsVertical() )
-                    nRet += static_cast<SwRowFrm*>(pLast)->Frm().Width();
+                    nRet += pLast->Frm().Width();
                 else
-                    nRet += static_cast<SwRowFrm*>(pLast)->Frm().Height();
+                    nRet += pLast->Frm().Height();
                 // Optimization, if there are no master/follows in my chain, nothing more to add
                 if( !pTab->HasFollow() && !pTab->IsFollow() )
                     break;
                 // This is not an optimization, this is necessary to avoid double additions of
                 // repeating rows
-                if( pTab->IsInHeadline( *static_cast<SwRowFrm*>(pLast) ) )
+                if( pTab->IsInHeadline(*pLast) )
                     break;
             }
         }
@@ -1747,9 +1717,6 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
 /*************************************************************************
 |*
 |*  SwTableBox::SwTableBox()
-|*
-|*  Ersterstellung      MA 04. May. 93
-|*  Letzte Aenderung    MA 04. May. 93
 |*
 |*************************************************************************/
 SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, sal_uInt16 nLines, SwTableLine *pUp )
@@ -1831,7 +1798,7 @@ SwTableBoxFmt* SwTableBox::CheckBoxFmt( SwTableBoxFmt* pFmt )
     if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_VALUE, sal_False ) ||
         SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMULA, sal_False ) )
     {
-        SwClient* pOther = SwClientIter( *pFmt ).First( TYPE( SwTableBox ));
+        SwTableBox* pOther = SwIterator<SwTableBox,SwFmt>::FirstElement( *pFmt );
         if( pOther )
         {
             SwTableBoxFmt* pNewFmt = pFmt->GetDoc()->MakeTableBoxFmt();
@@ -1852,59 +1819,54 @@ SwTableBoxFmt* SwTableBox::CheckBoxFmt( SwTableBoxFmt* pFmt )
 |*
 |*  SwTableBox::ClaimFrmFmt(), ChgFrmFmt()
 |*
-|*  Ersterstellung      MA 04. May. 93
-|*  Letzte Aenderung    MA 07. Feb. 96
-|*
 |*************************************************************************/
 SwFrmFmt* SwTableBox::ClaimFrmFmt()
 {
-    //Wenn noch andere TableBoxen ausser mir selbst an dem FrmFmt haengen,
-    //sehe ich mich leider gezwungen mir ein eingenes zu machen und mich
-    //bei diesem anzumelden.
-    SwTableBoxFmt *pOld = (SwTableBoxFmt*)GetFrmFmt();
-    SwClientIter aIter( *pOld );
-    SwClient* pLast;
-
-    for( pLast = aIter.First( TYPE( SwTableBox )); pLast && pLast == this;
-        pLast = aIter.Next() )
-        ;
-
-    if( pLast )
+    // This method makes sure that this object is an exclusive SwTableBox client
+    // of an SwTableBoxFmt object
+    // If other SwTableBox objects currently listen to the same SwTableBoxFmt as
+    // this one, something needs to be done
+    SwTableBoxFmt *pRet = (SwTableBoxFmt*)GetFrmFmt();
+    SwIterator<SwTableBox,SwFmt> aIter( *pRet );
+    for( SwTableBox* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
-        SwTableBoxFmt* pNewFmt = pOld->GetDoc()->MakeTableBoxFmt();
+        if ( pLast != this )
+        {
+            // Found another SwTableBox object
+            // create a new Fmt as a copy and assign me to it
+            // don't copy values and formulas
+            SwTableBoxFmt* pNewFmt = pRet->GetDoc()->MakeTableBoxFmt();
+            pNewFmt->LockModify();
+            *pNewFmt = *pRet;
+            pNewFmt->ResetFmtAttr( RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
+            pNewFmt->UnlockModify();
 
-        pNewFmt->LockModify();
-        *pNewFmt = *pOld;
+            // re-register SwCellFrm objects that know me
+            SwIterator<SwCellFrm,SwFmt> aFrmIter( *pRet );
+            for( SwCellFrm* pCell = aFrmIter.First(); pCell; pCell = aFrmIter.Next() )
+                if( pCell->GetTabBox() == this )
+                    pCell->RegisterToFormat( *pNewFmt );
 
-        // Values und Formeln nie kopieren
-        pNewFmt->ResetFmtAttr( RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
-        pNewFmt->UnlockModify();
-
-        //Erstmal die Frms ummelden.
-        for( pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
-            if( ((SwCellFrm*)pLast)->GetTabBox() == this )
-                pNewFmt->Add( pLast );
-
-        //Jetzt noch mich selbst ummelden.
-        pNewFmt->Add( this );
-        pOld = pNewFmt;
+            // re-register myself
+            pNewFmt->Add( this );
+            pRet = pNewFmt;
+            break;
+        }
     }
-    return pOld;
+    return pRet;
 }
 
 void SwTableBox::ChgFrmFmt( SwTableBoxFmt* pNewFmt )
 {
     SwFrmFmt *pOld = GetFrmFmt();
-    SwClientIter aIter( *pOld );
-    SwClient* pLast;
+    SwIterator<SwCellFrm,SwFmt> aIter( *pOld );
 
     //Erstmal die Frms ummelden.
-    for( pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
+    for( SwCellFrm* pCell = aIter.First(); pCell; pCell = aIter.Next() )
     {
-        SwCellFrm *pCell = (SwCellFrm*)pLast;
         if( pCell->GetTabBox() == this )
         {
-            pNewFmt->Add( pLast );
+            pCell->RegisterToFormat( *pNewFmt );
             pCell->InvalidateSize();
             pCell->_InvalidatePrt();
             pCell->SetCompletePaint();
@@ -1929,7 +1891,7 @@ void SwTableBox::ChgFrmFmt( SwTableBoxFmt* pNewFmt )
     //Jetzt noch mich selbst ummelden.
     pNewFmt->Add( this );
 
-    if( !aIter.GoStart() )
+    if( !pOld->GetDepends() )
         delete pOld;
 }
 
@@ -1938,9 +1900,6 @@ void SwTableBox::ChgFrmFmt( SwTableBoxFmt* pNewFmt )
 |*  String SwTableBox::GetName() const
 |*      gebe den Namen dieser Box zurueck. Dieser wird dynamisch bestimmt
 |*      und ergibt sich aus der Position in den Lines/Boxen/Tabelle
-|*
-|*  Ersterstellung      JP 30. Jun. 93
-|*  Letzte Aenderung    JP 30. Jun. 93
 |*
 |*************************************************************************/
 void lcl_GetTblBoxColStr( sal_uInt16 nCol, String& rNm )
@@ -2052,8 +2011,7 @@ sal_Bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
 
     case RES_CONTENT_VISIBLE:
         {
-            ((SwPtrMsgPoolItem&)rInfo).pObject =
-                SwClientIter( *GetFrmFmt() ).First( TYPE(SwFrm) );
+            ((SwPtrMsgPoolItem&)rInfo).pObject = SwIterator<SwFrm,SwFmt>::FirstElement( *GetFrmFmt() );
         }
         return sal_False;
     }
@@ -2063,7 +2021,7 @@ sal_Bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
 SwTable * SwTable::FindTable( SwFrmFmt const*const pFmt )
 {
     return (pFmt)
-        ? static_cast<SwTable*>(SwClientIter(*pFmt).First( TYPE(SwTable) ))
+        ? SwIterator<SwTable,SwFmt>::FirstElement(*pFmt)
         : 0;
 }
 
@@ -2302,7 +2260,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
 }
 
 // zum Erkennen von Veraenderungen (haupts. TableBoxAttribute)
-void SwTableBoxFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( !IsModifyLocked() && !IsInDocDTOR() )
     {
@@ -2354,8 +2312,8 @@ void SwTableBoxFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                 SFX_ITEM_SET == GetItemState( RES_BOXATR_FORMULA, sal_False ) )
             {
                 // die Box holen
-                SwClientIter aIter( *this );
-                SwTableBox* pBox = (SwTableBox*)aIter.First( TYPE( SwTableBox ) );
+                SwIterator<SwTableBox,SwFmt> aIter( *this );
+                SwTableBox* pBox = aIter.First();
                 if( pBox )
                 {
                     ASSERT( !aIter.Next(), "keine Box oder mehrere am Format" );
@@ -2540,21 +2498,6 @@ sal_Bool SwTableBox::HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
             rFmtIndex = 0;
 
         bRet = pNumFmtr->IsNumberFormat( aTxt, rFmtIndex, rNum );
-
-/*
-// wie bekommt man aus dem neuen String den neuen Wert?
-// denn der Numberformater erkennt aus "123.--DM" kein Zahlenformat!
-        if( !bRet && rFmtIndex && !pNumFmtr->IsTextFormat( rFmtIndex ) &&
-            SFX_ITEM_SET == GetFrmFmt()->GetItemState( RES_BOXATR_VALUE,
-            sal_False, &pItem ))
-        {
-            Color* pCol;
-            String sNewTxt;
-            pNumFmtr->GetOutputString( ((SwTblBoxValue*)pItem)->GetValue(),
-                                        rFmtIndex, sNewTxt, &pCol );
-            bRet = aTxt == sNewTxt;
-        }
-*/
     }
     else
         rIsEmptyTxtNd = sal_False;
@@ -2744,11 +2687,7 @@ public:
     void setTable(const SwTable * pTable) {
         m_pTable = pTable;
         SwFrmFmt * pFrmFmt = m_pTable->GetFrmFmt();
-        SwClientIter aIter(*pFrmFmt);
-
-        m_pTabFrm =
-            static_cast<const SwTabFrm *>(aIter.First(TYPE(SwTabFrm)));
-
+        m_pTabFrm = SwIterator<SwTabFrm,SwFmt>::FirstElement(*pFrmFmt);
         if (m_pTabFrm->IsFollow())
             m_pTabFrm = m_pTabFrm->FindMaster(true);
     }
@@ -2882,3 +2821,26 @@ const SwTableBox * SwTableCellInfo::getTableBox() const
 
     return pRet;
 }
+
+void SwTable::RegisterToFormat( SwFmt& rFmt )
+{
+    rFmt.Add( this );
+}
+
+void SwTableLine::RegisterToFormat( SwFmt& rFmt )
+{
+    rFmt.Add( this );
+}
+
+void SwTableBox::RegisterToFormat( SwFmt& rFmt )
+{
+    rFmt.Add( this );
+}
+
+void SwTableBox::ForgetFrmFmt()
+{
+    if ( GetRegisteredIn() )
+        GetRegisteredInNonConst()->Remove(this);
+}
+
+

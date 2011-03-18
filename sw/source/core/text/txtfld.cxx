@@ -170,7 +170,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
 
         case RES_PAGENUMBERFLD:
         {
-            if( !bName && pSh && !pSh->Imp()->IsUpdateExpFlds() )
+            if( !bName && pSh && pSh->GetLayout() && !pSh->Imp()->IsUpdateExpFlds() )//swmod 080122
             {
                 SwPageNumberFieldType *pPageNr = (SwPageNumberFieldType *)pFld->GetTyp();
 

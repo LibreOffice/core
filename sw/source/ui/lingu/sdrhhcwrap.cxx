@@ -72,7 +72,6 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     pView( pVw ),
     pTextObj( NULL ),
     pOutlView( NULL ),
-    pListIter( NULL ),
     nOptions( nConvOptions ),
     nDocIndex( 0 ),
     nSourceLang( nSourceLanguage ),
@@ -146,51 +145,14 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
 
     sal_uInt16 n = nDocIndex;
 
-    while( !bNextDoc && ( pListIter ||
-         n < pView->GetDocShell()->GetDoc()->GetSpzFrmFmts()->Count() ) )
+    std::list<SdrTextObj*> aTextObjs;
+    SwDrawContact::GetTextObjectsFromFmt( aTextObjs, pView->GetDocShell()->GetDoc() );
+    for ( std::list<SdrTextObj*>::iterator aIt = aTextObjs.begin(); aIt != aTextObjs.end(); aIt++ )
     {
-        while( !pTextObj && pListIter )
-        {
-            if( pListIter->IsMore() )
-            {
-                SdrObject* pSdrO = pListIter->Next();
-                if( pSdrO && pSdrO->IsA( TYPE(SdrTextObj) ) &&
-                    ( (SdrTextObj*) pSdrO )->HasText() )
-                    pTextObj = (SdrTextObj*) pSdrO;
-            }
-            else
-            {
-                delete pListIter;
-                pListIter = NULL;
-            }
-        }
-
-        if ( !pTextObj &&
-             n < pView->GetDocShell()->GetDoc()->GetSpzFrmFmts()->Count() )
-        {
-            SwFrmFmt* pFly = (*pView->GetDocShell()->GetDoc()->GetSpzFrmFmts())[ n ];
-            if( pFly->IsA( TYPE(SwDrawFrmFmt) ) )
-            {
-                SwClientIter aIter( (SwFmt&) *pFly );
-                if( aIter.First( TYPE(SwDrawContact) ) )
-                {
-                    SdrObject* pSdrO = ((SwDrawContact*)aIter())->GetMaster();
-                    if ( pSdrO )
-                    {
-                        if ( pSdrO->IsA( TYPE(SdrObjGroup) ) )
-                            pListIter = new SdrObjListIter( *pSdrO, IM_DEEPNOGROUPS );
-                        else if( pSdrO->IsA( TYPE(SdrTextObj) ) &&
-                                ( (SdrTextObj*) pSdrO )->HasText() )
-                            pTextObj = (SdrTextObj*) pSdrO;
-                    }
-                }
-            }
-            ++n;
-        }
+        pTextObj = (*aIt);
         if ( pTextObj )
         {
             OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
-
             if ( pParaObj )
             {
                 SetPaperSize( pTextObj->GetLogicRect().GetSize() );
@@ -221,8 +183,11 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
                 else
                     SetUpdateMode(sal_False);
             }
+
             if ( !bNextDoc )
                 pTextObj = NULL;
+            else
+                break;
         }
     }
 

@@ -425,14 +425,15 @@ private:
 
     void _MakeSetWhichIds();
 
+protected:
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
+
 public:
     // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
     SwRegHistory( SwHistory* pHst );
     // <--
     SwRegHistory( const SwNode& rNd, SwHistory* pHst );
     SwRegHistory( SwModify* pRegIn, const SwNode& rNd, SwHistory* pHst );
-
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
 
     /// @return true iff at least 1 item was inserted
     bool InsertItems( const SfxItemSet& rSet,

@@ -29,9 +29,7 @@
 #include "precompiled_sw.hxx"
 #include <editsh.hxx>
 #include <dbfld.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -42,13 +40,11 @@
 #include <fmtfld.hxx>
 #include <edimp.hxx>
 #include <flddat.hxx>
+#include <switerator.hxx>
 
 using namespace com::sun::star;
 using ::rtl::OUString;
 
-/* -----------------28.11.2002 17:53-----------------
- *
- * --------------------------------------------------*/
 sal_Bool SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
 {
     const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
@@ -70,8 +66,8 @@ sal_Bool SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
             {
                 case RES_DBFLD:
                 {
-                    SwClientIter aIter( rFldType );
-                    SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+                    SwIterator<SwFmtFld,SwFieldType> aIter( rFldType );
+                    SwFmtFld* pFld = aIter.First();
                     while(pFld)
                     {
                         if(pFld->IsFldInDoc())
@@ -88,7 +84,7 @@ sal_Bool SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
                                 return sal_False;
                             }
                         }
-                        pFld = (SwFmtFld*)aIter.Next();
+                        pFld = aIter.Next();
                     }
                 }
                 break;

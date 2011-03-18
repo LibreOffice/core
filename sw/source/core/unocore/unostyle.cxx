@@ -1478,7 +1478,7 @@ SwXStyle::~SwXStyle()
 /*-- 17.12.98 08:26:51---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXStyle::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXStyle::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
@@ -2006,7 +2006,7 @@ void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     SwPageDesc* pPageDesc = ::GetPageDescByName_Impl(*pDoc, sDescName);
                     if(pPageDesc)
                     {
-                        pPageDesc->Add( pNewDesc );
+                        pNewDesc->RegisterToPageDesc( *pPageDesc );
                         bPut = sal_True;
                     }
                     else
@@ -3890,7 +3890,7 @@ SwXAutoStyleFamily::~SwXAutoStyleFamily()
 {
 }
 
-void SwXAutoStyleFamily::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXAutoStyleFamily::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
@@ -4035,7 +4035,7 @@ SwXAutoStylesEnumerator::~SwXAutoStylesEnumerator()
     delete pImpl;
 }
 
-void SwXAutoStylesEnumerator::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXAutoStylesEnumerator::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
@@ -4091,7 +4091,7 @@ SwXAutoStyle::~SwXAutoStyle()
 {
 }
 
-void SwXAutoStyle::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXAutoStyle::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())

@@ -65,19 +65,14 @@
 #include <UndoAttribute.hxx>
 #include <fmtcnct.hxx>
 #include <dflyobj.hxx>
-
-// --> OD 2009-07-20 #i73249#
 #include <undoflystrattr.hxx>
-// <--
+#include <switerator.hxx>
 
 extern sal_uInt16 GetHtmlMode( const SwDocShell* );
 
 
 using namespace ::com::sun::star;
 
-/*-----------------17.02.98 08:35-------------------
-
---------------------------------------------------*/
 sal_uInt16 SwDoc::GetFlyCount( FlyCntType eType ) const
 {
     const SwSpzFrmFmts& rFmts = *GetSpzFrmFmts();
@@ -119,9 +114,6 @@ sal_uInt16 SwDoc::GetFlyCount( FlyCntType eType ) const
     return nCount;
 }
 
-/*-----------------17.02.98 08:35-------------------
-
---------------------------------------------------*/
 // If you change this, also update SwXFrameEnumeration in unocoll.
 SwFrmFmt* SwDoc::GetFlyNum( sal_uInt16 nIdx, FlyCntType eType )
 {
@@ -162,21 +154,11 @@ SwFrmFmt* SwDoc::GetFlyNum( sal_uInt16 nIdx, FlyCntType eType )
     return pRetFmt;
 }
 
-/*  */
-
-/***********************************************************************
-#*  Class       :  SwDoc
-#*  Methode     :  SetFlyFrmAnchor
-#*  Beschreibung:  Das Ankerattribut des FlyFrms aendert sich.
-#*  Datum       :  MA 01. Feb. 94
-#*  Update      :  JP 09.03.98
-#***********************************************************************/
-
 Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
                             const SwFrmFmt* pFlyFmt )
 {
     Point aRet;
-    if( rDoc.GetRootFrm() )
+    if( rDoc.GetCurrentViewShell() )    //swmod 071107//swmod 071225
         switch( rAnch.GetAnchorId() )
         {
         case FLY_AS_CHAR:
@@ -194,7 +176,7 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
             {
                 const SwPosition *pPos = rAnch.GetCntntAnchor();
                 const SwCntntNode* pNd = pPos->nNode.GetNode().GetCntntNode();
-                const SwFrm* pOld = pNd ? pNd->GetFrm( &aRet, 0, sal_False ) : 0;
+                const SwFrm* pOld = pNd ? pNd->getLayoutFrm( rDoc.GetCurrentLayout(), &aRet, 0, sal_False ) : 0;
                 if( pOld )
                     aRet = pOld->Frm().Pos();
             }
@@ -214,7 +196,7 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
         case FLY_AT_PAGE:
             {
                 sal_uInt16 nPgNum = rAnch.GetPageNum();
-                const SwPageFrm *pPage = (SwPageFrm*)rDoc.GetRootFrm()->Lower();
+                const SwPageFrm *pPage = (SwPageFrm*)rDoc.GetCurrentLayout()->Lower();
                 for( sal_uInt16 i = 1; (i <= nPgNum) && pPage; ++i,
                                     pPage = (const SwPageFrm*)pPage->GetNext() )
                     if( i == nPgNum )
@@ -527,13 +509,6 @@ void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
 }
 // <--
 
-/***************************************************************************
- *  Methode     :   sal_Bool SwDoc::SetFrmFmtToFly( SwFlyFrm&, SwFrmFmt& )
- *  Beschreibung:
- *  Erstellt    :   OK 14.04.94 15:40
- *  Aenderung   :   JP 23.04.98
- ***************************************************************************/
-
 sal_Bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
                             SfxItemSet* pSet, sal_Bool bKeepOrient )
 {
@@ -617,7 +592,7 @@ sal_Bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
         rFmt.MakeFrms();
 
     if( pUndo )
-        rFmt.Remove( pUndo );
+        pUndo->DeRegisterFromFormat( rFmt );
 
     SetModified();
 
@@ -633,21 +608,12 @@ void SwDoc::GetGrfNms( const SwFlyFrmFmt& rFmt, String* pGrfName,
         pGrfNd->GetFileFilterNms( pGrfName, pFltName );
 }
 
-/*************************************************************************
-|*
-|*  SwDoc::ChgAnchor()
-|*
-|*  Ersterstellung      MA 10. Jan. 95
-|*  Letzte Aenderung    JP 08.07.98
-|*
-*************************************************************************/
-
 sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                            RndStdIds _eAnchorType,
                            const sal_Bool _bSameOnly,
                            const sal_Bool _bPosCorr )
 {
-    ASSERT( GetRootFrm(), "Ohne Layout geht gar nichts" );
+    ASSERT( GetCurrentLayout(), "Ohne Layout geht gar nichts" );    //swmod 080218
 
     if ( !_rMrkList.GetMarkCount() ||
          _rMrkList.GetMark( 0 )->GetMarkedSdrObj()->GetUpGroup() )
@@ -745,11 +711,11 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                         SwPosition aPos( GetNodes() );
                         Point aPoint( aPt );
                         aPoint.X() -= 1;
-                        GetRootFrm()->GetCrsrOfst( &aPos, aPoint, &aState );
+                        GetCurrentLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
                         // OD 20.06.2003 #108784# - consider that drawing objects
                         // can be in header/footer. Thus, <GetFrm()> by left-top-corner
                         pTxtFrm = aPos.nNode.GetNode().
-                                        GetCntntNode()->GetFrm( &aPt, 0, sal_False );
+                                        GetCntntNode()->getLayoutFrm( GetCurrentLayout(), &aPt, 0, sal_False );
                     }
                     const SwFrm *pTmp = ::FindAnchor( pTxtFrm, aPt );
                     pNewAnchorFrm = pTmp->FindFlyFrm();
@@ -767,7 +733,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 }
             case FLY_AT_PAGE:
                 {
-                    pNewAnchorFrm = GetRootFrm()->Lower();
+                    pNewAnchorFrm = GetCurrentLayout()->Lower();
                     while ( pNewAnchorFrm && !pNewAnchorFrm->Frm().IsInside( aPt ) )
                         pNewAnchorFrm = pNewAnchorFrm->GetNext();
                     if ( !pNewAnchorFrm )
@@ -806,7 +772,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     // es muss ein TextNode gefunden werden, denn nur dort
                     // ist ein inhaltsgebundenes DrawObjekt zu verankern
                         SwCrsrMoveState aState( MV_SETONLYTEXT );
-                        GetRootFrm()->GetCrsrOfst( &aPos, aPoint, &aState );
+                        GetCurrentLayout()->GetCrsrOfst( &aPos, aPoint, &aState );  //swmod 080218
                     }
                     else
                     {
@@ -893,9 +859,6 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 }
 
 
-/* -----------------23.07.98 13:56-------------------
- *
- * --------------------------------------------------*/
 int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
 {
     //Die Source darf noch keinen Follow haben.
@@ -994,9 +957,7 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
 
     return bAllowed ? SW_CHAIN_OK : SW_CHAIN_WRONG_AREA;
 }
-/* -----------------23.07.98 13:56-------------------
- *
- * --------------------------------------------------*/
+
 int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
 {
     int nErr = Chainable( rSource, rDest );
@@ -1027,8 +988,7 @@ int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
         SwFmtFrmSize aSize( rSource.GetFrmSize() );
         if ( aSize.GetHeightSizeType() != ATT_FIX_SIZE )
         {
-            SwClientIter aIter( rSource );
-            SwFlyFrm *pFly = (SwFlyFrm*)aIter.First( TYPE(SwFlyFrm) );
+            SwFlyFrm *pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement( rSource );
             if ( pFly )
                 aSize.SetHeight( pFly->Frm().Height() );
             aSize.SetHeightSizeType( ATT_FIX_SIZE );
@@ -1040,9 +1000,7 @@ int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
     }
     return nErr;
 }
-/* -----------------23.07.98 13:56-------------------
- *
- * --------------------------------------------------*/
+
 void SwDoc::Unchain( SwFrmFmt &rFmt )
 {
     SwFmtChain aChain( rFmt.GetChain() );

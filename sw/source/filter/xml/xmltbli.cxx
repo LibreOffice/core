@@ -2849,7 +2849,7 @@ void SwXMLTableContext::MakeTable()
     }
 
     // ??? this is always false: root frame is only created in ViewShell::Init
-    if( pTableNode->GetDoc()->GetRootFrm() )
+    if( pTableNode->GetDoc()->GetCurrentViewShell() )   //swmod 071108//swmod 071225
     {
         pTableNode->DelFrms();
         SwNodeIndex aIdx( *pTableNode->EndOfSectionNode(), 1 );

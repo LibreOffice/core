@@ -96,10 +96,11 @@ protected:
           //nOutlineLevel( NO_NUMBERING )   //<-#outline level,removed by zhaojianwei
           mbAssignedToOutlineStyle(false)   //<-#outline level,added by zhaojianwei
     { pNextTxtFmtColl = this; }
-public:
 
     // zum "abfischen" von UL-/LR-/FontHeight Aenderungen
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+
+public:
 
     TYPEINFO();     //Bereits in Basisklasse Client drin.
 
@@ -255,6 +256,7 @@ public:
 
     void SetCondition( sal_uLong nCond, sal_uLong nSubCond );
     SwTxtFmtColl* GetTxtFmtColl() const     { return (SwTxtFmtColl*)GetRegisteredIn(); }
+    void RegisterToFormat( SwFmt& );
 };
 
 
@@ -280,9 +282,6 @@ public:
     TYPEINFO();     //Bereits in Basisklasse Client drin.
 
     virtual ~SwConditionTxtFmtColl();
-
-    // zum "abfischen" von Aenderungen
-//  virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
     const SwCollCondition* HasCondition( const SwCollCondition& rCond ) const;
     const SwFmtCollConditions& GetCondColls() const     { return aCondColls; }

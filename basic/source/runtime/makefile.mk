@@ -54,7 +54,8 @@ SLOFILES=	\
     $(SLO)$/methods1.obj	\
     $(SLO)$/props.obj	\
     $(SLO)$/ddectrl.obj	\
-    $(SLO)$/dllmgr.obj
+    $(SLO)$/dllmgr.obj \
+    $(SLO)$/sbdiagnose.obj
 
 .IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
 SLOFILES+=	$(SLO)$/wnt.obj

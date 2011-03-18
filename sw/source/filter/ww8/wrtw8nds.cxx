@@ -2027,8 +2027,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         if (pTextNodeInfoInner->isFirstInTable())
         {
             const SwTable * pTable = pTextNodeInfoInner->getTable();
-            const SwTableFmt * pTabFmt =
-                dynamic_cast<const SwTableFmt *>(pTable->GetRegisteredIn());
+
+            const SwTableFmt * pTabFmt = pTable->GetTableFmt();
             if (pTabFmt != NULL)
             {
                 if (pTabFmt->GetBreak().GetBreak() == SVX_BREAK_PAGE_BEFORE)
@@ -2242,7 +2242,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 // this has to be overruled.
                 const SwFmtPageDesc& rPageDescAtParaStyle =
                     ItemGet<SwFmtPageDesc>( rNode, RES_PAGEDESC );
-                if( rPageDescAtParaStyle.GetRegisteredIn() )
+                if( rPageDescAtParaStyle.KnowsPageDesc() )
                     pTmpSet->ClearItem( RES_BREAK );
             }
         }

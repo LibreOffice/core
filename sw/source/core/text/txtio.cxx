@@ -36,6 +36,7 @@
 #include "errhdl.hxx"
 #include "txtcfg.hxx"
 #include "txtfrm.hxx"       // IsDbg()
+#include "rootfrm.hxx"
 #include "flyfrms.hxx"
 #include "inftxt.hxx"
 #include "porexp.hxx"
@@ -283,8 +284,8 @@ SvStream &operator<<( SvStream &rOs, const SwpHints & ) //$ ostream
 
 sal_Bool IsDbg( const SwTxtFrm *pFrm )
 {
-    if( pFrm && pFrm->GetShell() )
-        return pFrm->GetShell()->GetViewOptions()->IsTest4();
+    if( pFrm && pFrm->getRootFrm()->GetCurrShell() )
+        return pFrm->getRootFrm()->GetCurrShell()->GetViewOptions()->IsTest4();
     else
         return sal_False;
 }

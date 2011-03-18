@@ -36,6 +36,7 @@
 #include <svl/brdcst.hxx>
 #include <tools/shl.hxx>
 #include <basic/sbx.hxx>
+#include "sbdiagnose.hxx"
 #include "sb.hxx"
 #include <sbjsmeth.hxx>
 #include "sbjsmod.hxx"
@@ -1177,6 +1178,10 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
                 SendHint( GetParent(), SBX_HINT_BASICSTOP, pMeth );
 
                 GlobalRunDeInit();
+
+#ifdef DBG_UTIL
+                ResetCapturedAssertions();
+#endif
 
                 // VBA always ensures screenupdating is enabled after completing
                 if ( mbVBACompat )

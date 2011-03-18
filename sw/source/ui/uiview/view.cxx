@@ -214,6 +214,13 @@ void SwView::GotFocus() const
             const_cast< SwView* >( this )->AttrChangedNotify( pWrtShell );
         }
     }
+    if( GetWrtShellPtr() )
+    {
+        SwWrtShell& rWrtShell = GetWrtShell();
+        rWrtShell.GetDoc()->SetCurrentViewShell( GetWrtShellPtr() );
+        rWrtShell.GetDoc()->set( IDocumentSettingAccess::BROWSE_MODE,
+                                 rWrtShell.GetViewOptions()->getBrowseMode() );
+    }
 }
 
 /*--------------------------------------------------------------------
@@ -739,7 +746,6 @@ void SwView::_CheckReadonlySelection()
 
 SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     : SfxViewShell( _pFrame, SWVIEWFLAGS ),
-
     aPageStr( SW_RES( STR_PAGE )),
     nNewPage(USHRT_MAX),
     pNumRuleNodeFromDoc(0), // #i23726#
@@ -820,9 +826,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     //! get lingu options without loading lingu DLL
     SvtLinguOptions aLinguOpt;
-
     SvtLinguConfig().GetOptions( aLinguOpt );
-
     aUsrPref.SetOnlineSpell( aLinguOpt.bIsSpellAuto );
 
     sal_Bool bOldShellWasSrcView = sal_False;
@@ -831,46 +835,42 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     // document
     SfxViewShell* pExistingSh = 0;
     if ( pOldSh )
+    {
         pExistingSh = pOldSh;
-    else
-    {
-        SfxViewFrame *pF = SfxViewFrame::GetFirst( pDocSh );
-        if( pF == _pFrame )
-            pF = SfxViewFrame::GetNext( *pF, pDocSh );
-        if( pF )
-            pExistingSh = pF->GetViewShell();
+        // determine type of existing view
+        if( pExistingSh->IsA( TYPE( SwPagePreView ) ) )
+        {
+            sSwViewData = ((SwPagePreView*)pExistingSh)->GetPrevSwViewData();
+            sNewCrsrPos = ((SwPagePreView*)pExistingSh)->GetNewCrsrPos();
+            nNewPage = ((SwPagePreView*)pExistingSh)->GetNewPage();
+            bOldShellWasPagePreView = sal_True;
+        }
+        else if( pExistingSh->IsA( TYPE( SwSrcView ) ) )
+            bOldShellWasSrcView = sal_True;
     }
-
-    // determine type of existing view
-    if( pExistingSh &&
-        pExistingSh->IsA( TYPE( SwPagePreView ) ) )
-    {
-        sSwViewData = ((SwPagePreView*)pExistingSh)->GetPrevSwViewData();
-        sNewCrsrPos = ((SwPagePreView*)pExistingSh)->GetNewCrsrPos();
-        nNewPage = ((SwPagePreView*)pExistingSh)->GetNewPage();
-        bOldShellWasPagePreView = sal_True;
-    }
-    else if( pExistingSh &&
-             pExistingSh->IsA( TYPE( SwSrcView ) ) )
-        bOldShellWasSrcView = sal_True;
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create WrtShell" );
     if(PTR_CAST( SwView, pExistingSh))
     {
         pWrtShell = new SwWrtShell( *((SwView*)pExistingSh)->pWrtShell,
                                     pEditWin, *this);
-//MA: Das kann doch nur zu einem GPF fuehren!
-//      nSelectionType = ((SwView*)pOldSh)->nSelectionType;
+    }
+    else if( dynamic_cast<SwWrtShell*>( pDocSh->GetDoc()->GetCurrentViewShell() ) )
+    {
+        pWrtShell = new SwWrtShell( *(SwWrtShell*)pDocSh->GetDoc()->GetCurrentViewShell(),
+                                    pEditWin, *this);
     }
     else
     {
         SwDoc& rDoc = *((SwDocShell*)pDocSh)->GetDoc();
 
         if( !bOldShellWasSrcView && pWebDShell && !bOldShellWasPagePreView )
-            rDoc.set(IDocumentSettingAccess::BROWSE_MODE, true);
+            aUsrPref.setBrowseMode( sal_True );
+        else if( rDoc.IsLoaded() )
+            aUsrPref.setBrowseMode( rDoc.get(IDocumentSettingAccess::BROWSE_MODE) );
 
         //Fuer den BrowseMode wollen wir keinen Factor uebernehmen.
-        if( rDoc.get(IDocumentSettingAccess::BROWSE_MODE) && aUsrPref.GetZoomType() != SVX_ZOOM_PERCENT )
+        if( aUsrPref.getBrowseMode() && aUsrPref.GetZoomType() != SVX_ZOOM_PERCENT )
         {
             aUsrPref.SetZoomType( SVX_ZOOM_PERCENT );
             aUsrPref.SetZoom( 100 );
@@ -975,8 +975,10 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     pWrtShell->DoUndo( 0 != SW_MOD()->GetUndoOptions().GetUndoCount() );
 
-    const sal_Bool bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const sal_Bool bBrowse = pWrtShell->GetViewOptions()->getBrowseMode();
+    // Disable "multiple window"
     SetNewWindowAllowed(!bBrowse);
+    // End of disabled multiple window
 
     ShowVScrollbar(aUsrPref.IsViewVScrollBar());
     ShowHScrollbar(aUsrPref.IsViewHScrollBar());
@@ -1037,10 +1039,6 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     }
 
 
-    /*uno::Reference< awt::XWindow >  aTmpRef;
-    _pFrame->GetFrame().GetFrameInterface()->setComponent( aTmpRef,
-                                            pViewImpl->GetUNOObject_Impl());*/
-
    uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame().GetFrameInterface();
 
     uno::Reference< frame::XFrame >  xBeamerFrame = xFrame->findFrame(
@@ -1064,13 +1062,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     if(bOldModifyFlag)
         pDocSh->EnableSetModified( sal_True );
     InvalidateBorder();
-
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 SwView::~SwView()
 {
@@ -1118,11 +1110,6 @@ SwView::~SwView()
     delete pEditWin;
     delete pFormatClipboard;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:   DocShell rausgrabbeln ueber das FrameWindow
- --------------------------------------------------------------------*/
-
 
 SwDocShell* SwView::GetDocShell()
 {
@@ -1187,7 +1174,7 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
     if ( rUserData.GetTokenCount() > 1 &&
         //Fuer Dokumente ohne Layout nur im OnlineLayout oder beim
         //Forward/Backward
-         (!pWrtShell->IsNewLayout() || pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) || bBrowse) )
+         (!pWrtShell->IsNewLayout() || pWrtShell->GetViewOptions()->getBrowseMode() || bBrowse) )
     {
         //#i43146# go to the last editing position when opening own files
         bool bIsOwnDocument = lcl_IsOwnDocument( *this );
@@ -1210,7 +1197,7 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
              nRight = rUserData.GetToken(0, ';', nPos ).ToInt32(),
              nBottom= rUserData.GetToken(0, ';', nPos ).ToInt32();
 
-        const long nAdd = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ? DOCUMENTBORDER : DOCUMENTBORDER*2;
+        const long nAdd = pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
         if ( nBottom <= (pWrtShell->GetDocSize().Height()+nAdd) )
         {
             pWrtShell->EnableSmooth( sal_False );
@@ -1219,7 +1206,7 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
 
             sal_uInt16 nOff = 0;
             SvxZoomType eZoom;
-            if( !pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+            if( !pWrtShell->GetViewOptions()->getBrowseMode() )
                 eZoom = (SvxZoomType) (sal_uInt16)rUserData.GetToken(nOff, ';', nPos ).ToInt32();
             else
             {
@@ -1310,7 +1297,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
     //#i43146# go to the last editing position when opening own files
     bool bIsOwnDocument = lcl_IsOwnDocument( *this );
     sal_Int32 nLength = rSequence.getLength();
-    if (nLength && (!pWrtShell->IsNewLayout() || pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) || bBrowse) )
+    if (nLength && (!pWrtShell->IsNewLayout() || pWrtShell->GetViewOptions()->getBrowseMode() || bBrowse) )
     {
         SET_CURR_SHELL(pWrtShell);
         const beans::PropertyValue *pValue = rSequence.getConstArray();
@@ -1400,7 +1387,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         if (bGotVisibleBottom)
         {
             Point aCrsrPos( nX, nY );
-            const long nAdd = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ? DOCUMENTBORDER : DOCUMENTBORDER*2;
+            const long nAdd = pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
             if (nBottom <= (pWrtShell->GetDocSize().Height()+nAdd) )
             {
                 pWrtShell->EnableSmooth( sal_False );
@@ -1408,7 +1395,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
 
                 sal_uInt16 nOff = 0;
                 SvxZoomType eZoom;
-                if ( !pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+                if ( !pWrtShell->GetViewOptions()->getBrowseMode() )
                     eZoom = static_cast < SvxZoomType > ( nZoomType );
                 else
                 {

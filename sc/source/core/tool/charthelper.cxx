@@ -309,6 +309,7 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
             if ( xEmbeddedObj.is() )
             {
                 bool bDisableDataTableDialog = false;
+                sal_Int32 nOldState = xEmbeddedObj->getCurrentState();
                 svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
                 uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
                 if ( xProps.is() &&
@@ -332,6 +333,10 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
                             }
                         }
                     }
+                }
+                if ( xEmbeddedObj->getCurrentState() != nOldState )
+                {
+                    xEmbeddedObj->changeState( nOldState );
                 }
             }
         }

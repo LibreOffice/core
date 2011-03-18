@@ -165,7 +165,7 @@ Reference< XPropertySetInfo > UnoControlDialogModel::getPropertySetInfo(  ) thro
 // ============================================================================
 
 UnoDialogControl::UnoDialogControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
-    :ControlContainerBase( i_factory )
+    :UnoDialogControl_Base( i_factory )
     ,maTopWindowListeners( *this )
     ,mbWindowListener(false)
 {
@@ -187,25 +187,6 @@ UnoDialogControl::~UnoDialogControl()
     else
         return ::rtl::OUString::createFromAscii( "TabPage" );
 }
-
-// XInterface
-Any UnoDialogControl::queryAggregation( const Type & rType ) throw(RuntimeException)
-{
-        uno::Any aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::XTopWindow*, this ) );
-        if ( !aRet.hasValue() )
-            aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::XDialog*, this ) );
-        if ( !aRet.hasValue() )
-            aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::XWindowListener*, this ) );
-    return (aRet.hasValue() ? aRet : ControlContainerBase::queryAggregation( rType ));
-}
-
- //lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoDialogControl)
-    getCppuType( ( uno::Reference< awt::XTopWindow>* ) NULL ),
-    getCppuType( ( uno::Reference< awt::XDialog>* ) NULL ),
-    getCppuType( ( uno::Reference< awt::XWindowListener>* ) NULL ),
-    ControlContainerBase::getTypes()
-IMPL_XTYPEPROVIDER_END
 
 void UnoDialogControl::dispose() throw(RuntimeException)
 {
@@ -409,16 +390,28 @@ throw (::com::sun::star::uno::RuntimeException)
     }
 }
 
-void SAL_CALL UnoDialogControl::windowShown( const ::com::sun::star::lang::EventObject& e )
-throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UnoDialogControl::windowShown( const EventObject& e ) throw (RuntimeException)
 {
     (void)e;
 }
 
-void SAL_CALL UnoDialogControl::windowHidden( const ::com::sun::star::lang::EventObject& e )
-throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UnoDialogControl::windowHidden( const EventObject& e ) throw (RuntimeException)
 {
     (void)e;
+}
+
+void SAL_CALL UnoDialogControl::endDialog( ::sal_Int32 i_result ) throw (RuntimeException)
+{
+    Reference< XDialog2 > xPeerDialog( getPeer(), UNO_QUERY );
+    if ( xPeerDialog.is() )
+        xPeerDialog->endDialog( i_result );
+}
+
+void SAL_CALL UnoDialogControl::setHelpId( const rtl::OUString& i_id ) throw (RuntimeException)
+{
+    Reference< XDialog2 > xPeerDialog( getPeer(), UNO_QUERY );
+    if ( xPeerDialog.is() )
+        xPeerDialog->setHelpId( i_id );
 }
 
 void UnoDialogControl::setTitle( const ::rtl::OUString& Title ) throw(RuntimeException)

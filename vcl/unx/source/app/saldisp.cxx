@@ -912,7 +912,7 @@ void SalDisplay::Init()
             // carefully. if we are running linux (i.e. not netbsd) on an xfree
             // display, fvwm is most probable the wm to choose, confusing with mwm
             // doesn't harm. #57791# start maximized if possible
-            if(    (otherwm == eWindowManager_)
+                    if(    (otherwm == eWindowManager_)
                 || (olwm    == eWindowManager_ ))
             {
                 eWindowManager_ = fvwm; // ???
@@ -2790,44 +2790,44 @@ SalVisual::SalVisual( const XVisualInfo* pXVI )
                     if( blue_mask  == 0xFF )
                         eRGBMode_ = RGB;
                     else
-                        eRGBMode_ = other;
+                        eRGBMode_ = otherSalRGB;
                 else if( blue_mask  == 0xFF00 )
                     if( green_mask == 0xFF )
                         eRGBMode_ = RBG;
                     else
-                        eRGBMode_ = other;
+                        eRGBMode_ = otherSalRGB;
                 else
-                    eRGBMode_ = other;
+                    eRGBMode_ = otherSalRGB;
             else if( green_mask == 0xFF0000 )
                 if( red_mask == 0xFF00 )
                     if( blue_mask  == 0xFF )
                         eRGBMode_ = GRB;
                     else
-                        eRGBMode_ = other;
+                        eRGBMode_ = otherSalRGB;
                 else if( blue_mask == 0xFF00 )
                     if( red_mask  == 0xFF )
                         eRGBMode_ = GBR;
                     else
-                        eRGBMode_ = other;
+                        eRGBMode_ = otherSalRGB;
                 else
-                    eRGBMode_ = other;
+                    eRGBMode_ = otherSalRGB;
             else if( blue_mask == 0xFF0000 )
                 if( red_mask == 0xFF00 )
                     if( green_mask  == 0xFF )
                         eRGBMode_ = BRG;
                     else
-                        eRGBMode_ = other;
+                        eRGBMode_ = otherSalRGB;
                 else if( green_mask == 0xFF00 )
                     if( red_mask == 0xFF )
                         eRGBMode_ = BGR;
                     else
-                        eRGBMode_ = other;
+                        eRGBMode_ = otherSalRGB;
                 else
-                    eRGBMode_ = other;
+                    eRGBMode_ = otherSalRGB;
             else
-                eRGBMode_ = other;
+                eRGBMode_ = otherSalRGB;
         else
-            eRGBMode_ = other;
+            eRGBMode_ = otherSalRGB;
     }
 }
 
@@ -2851,7 +2851,7 @@ sal_Bool SalVisual::Convert( int &n0, int &n1, int &n2, int &n3 )
 
     switch( GetMode() )
     {
-        case other:
+        case otherSalRGB:
             return sal_False;
         case SALCOLOR:
             break;
@@ -2886,7 +2886,7 @@ sal_Bool SalVisual::Convert( int &n0, int &n1, int &n2 )
 
     switch( GetMode() )
     {
-        case other:
+        case otherSalRGB:
             return sal_False;
         case SALCOLOR:
             break;
@@ -2939,7 +2939,7 @@ SalColor SalVisual::GetTCColor( Pixel nPixel ) const
     Pixel g = nPixel & green_mask;
     Pixel b = nPixel & blue_mask;
 
-    if( other != eRGBMode_ ) // 8+8+8=24
+    if( otherSalRGB != eRGBMode_ ) // 8+8+8=24
         return MAKE_SALCOLOR( r >> nRedShift_,
                               g >> nGreenShift_,
                               b >> nBlueShift_ );
@@ -2970,7 +2970,7 @@ Pixel SalVisual::GetTCPixel( SalColor nSalColor ) const
     if( SALCOLORREVERSE == eRGBMode_ )
         return (b << 16) | (g << 8) | (r);
 
-    if( other != eRGBMode_ ) // 8+8+8=24
+    if( otherSalRGB != eRGBMode_ ) // 8+8+8=24
         return (r << nRedShift_) | (g << nGreenShift_) | (b << nBlueShift_);
 
     if( nRedShift_ > 0 )   r <<= nRedShift_;   else r >>= -nRedShift_;

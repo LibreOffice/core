@@ -36,19 +36,22 @@
 #include "poolfmt.hxx"
 #include "rootfrm.hxx"
 #include "viewsh.hxx"
-
+#include <set>
 void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
 {
-    if ( GetRootFrm() &&
+    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
+    if (  pTmpRoot &&
          (rNew.IsCountBlankLines() != pLineNumberInfo->IsCountBlankLines() ||
           rNew.IsRestartEachPage() != pLineNumberInfo->IsRestartEachPage()) )
     {
-        GetRootFrm()->StartAllAction();
+        std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080225
+        pTmpRoot->StartAllAction();
         // FME 2007-08-14 #i80120# Invalidate size, because ChgThisLines()
         // is only (onny may only be) called by the formatting routines
-        GetRootFrm()->InvalidateAllCntnt( INV_LINENUM | INV_SIZE );
-        GetRootFrm()->EndAllAction();
-    }
+        //pTmpRoot->InvalidateAllCntnt( INV_LINENUM | INV_SIZE );
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_LINENUM | INV_SIZE));//swmod 080226
+         pTmpRoot->EndAllAction();
+    }   //swmod 080219
     *pLineNumberInfo = rNew;
     SetModified();
 }
@@ -91,7 +94,7 @@ SwLineNumberInfo& SwLineNumberInfo::operator=(const SwLineNumberInfo &rCpy)
     if ( rCpy.GetRegisteredIn() )
         ((SwModify*)rCpy.GetRegisteredIn())->Add( this );
     else if ( GetRegisteredIn() )
-        pRegisteredIn->Remove( this );
+        GetRegisteredInNonConst()->Remove( this );
 
     aType = rCpy.GetNumType();
     aDivider = rCpy.GetDivider();
@@ -139,15 +142,17 @@ void SwLineNumberInfo::SetCharFmt( SwCharFmt *pChFmt )
     pChFmt->Add( this );
 }
 
-void SwLineNumberInfo::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwLineNumberInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    SwClient::Modify( pOld, pNew );
+    CheckRegistration( pOld, pNew );
     SwDoc *pDoc = ((SwCharFmt*)GetRegisteredIn())->GetDoc();
-    SwRootFrm* pRoot = pDoc->GetRootFrm();
-    if( pRoot && pRoot->GetCurrShell() )
+    SwRootFrm* pRoot = pDoc->GetCurrentLayout();
+    if( pRoot )
     {
         pRoot->StartAllAction();
-        pRoot->GetCurrShell()->AddPaintRect( pRoot->Frm() );
+        std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllAddPaintRect));//swmod 080305
+        //pRoot->GetCurrShell()->AddPaintRect( pRoot->Frm() );
         pRoot->EndAllAction();
     }
 }

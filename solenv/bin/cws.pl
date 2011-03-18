@@ -407,16 +407,9 @@ sub hg_clone_cws_or_milestone
 
     my $masterws = $cws->master();
     my ($master_local_source, $master_lan_source);
-    if ($rep_type eq "ooo" || $rep_type eq "so")
-    {
-        $master_local_source = "$hg_local_source/" . $masterws;
-        $master_lan_source = "$hg_lan_source/" . $masterws;
-    }
-    else
-    {
-        $master_local_source = "$hg_local_source/master_".$rep_type."/".$masterws;
-        $master_lan_source = "$hg_lan_source/master_".$rep_type."/".$masterws;
-    }
+
+    $master_local_source = "$hg_local_source/" . $masterws;
+    $master_lan_source = "$hg_lan_source/" . $masterws;
 
     my $milestone_tag;
     if ( $clone_milestone_only ) {

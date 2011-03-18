@@ -299,7 +299,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     pFrm = pFrame;
     CtorInitTxtInfo( pFrm );
     const SwTxtNode *pNd = pFrm->GetTxtNode();
-    pVsh = pFrm->GetShell();
+    pVsh = pFrm->getRootFrm()->GetCurrShell();
 
     // Get the output and reference device
     if ( pVsh )
@@ -311,7 +311,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     else
     {
         //Zugriff ueber StarONE, es muss keine Shell existieren oder aktiv sein.
-        if ( pNd->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        if ( pNd->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) )
         {
             //in Ermangelung eines Besseren kann hier ja wohl nur noch das
             //AppWin genommen werden?
@@ -661,7 +661,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     if( GetFont()->IsBlink() && OnWin() && rPor.Width() )
     {
         // check if accessibility options allow blinking portions:
-        const ViewShell* pSh = GetTxtFrm()->GetShell();
+        const ViewShell* pSh = GetTxtFrm()->getRootFrm()->GetCurrShell();
         if ( pSh && ! pSh->GetAccessibilityOptions()->IsStopAnimatedText() &&
              ! pSh->IsPreView() )
         {
@@ -710,7 +710,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     const sal_Bool bTmpSmart = bSmartTag && OnWin() && !GetOpt().IsPagePreview() && SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
 
     ASSERT( GetParaPortion(), "No paragraph!");
-    SwDrawTextInfo aDrawInf( pFrm->GetShell(), *pOut, pSI, rText, nStart, nLength,
+    SwDrawTextInfo aDrawInf( pFrm->getRootFrm()->GetCurrShell(), *pOut, pSI, rText, nStart, nLength,
                              rPor.Width(), bBullet );
 
     aDrawInf.SetLeft( GetPaintRect().Left() );

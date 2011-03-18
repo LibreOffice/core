@@ -43,7 +43,7 @@
 #include "calc.hxx"         // Update fuer UserFields
 #include "hints.hxx"
 #include <IDocumentFieldsAccess.hxx>
-
+#include <fieldhint.hxx>
 #include <svl/smplhint.hxx>
 
 TYPEINIT3( SwFmtFld, SfxPoolItem, SwClient,SfxBroadcaster)
@@ -126,6 +126,12 @@ SwFmtFld::~SwFmtFld()
     }
 }
 
+void SwFmtFld::RegisterToFieldType( SwFieldType& rType )
+{
+    rType.Add(this);
+}
+
+
 // #111840#
 void SwFmtFld::SetFld(SwField * _pField)
 {
@@ -153,7 +159,30 @@ SfxPoolItem* SwFmtFld::Clone( SfxItemPool* ) const
     return new SwFmtFld( *this );
 }
 
-void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwFmtFld::SwClientNotify( const SwModify&, const SfxHint& rHint )
+{
+    if( !pTxtAttr )
+        return;
+
+    const SwFieldHint* pHint = dynamic_cast<const SwFieldHint*>( &rHint );
+    if ( pHint )
+    {
+        // replace field content by text
+        SwPaM* pPaM = pHint->GetPaM();
+        SwDoc* pDoc = pPaM->GetDoc();
+        const SwTxtNode& rTxtNode = pTxtAttr->GetTxtNode();
+        pPaM->GetPoint()->nNode = rTxtNode;
+        pPaM->GetPoint()->nContent.Assign( (SwTxtNode*)&rTxtNode, *pTxtAttr->GetStart() );
+
+        String const aEntry( GetFld()->ExpandField( pDoc->IsClipBoard() ) );
+        pPaM->SetMark();
+        pPaM->Move( fnMoveForward );
+        pDoc->DeleteRange( *pPaM );
+        pDoc->InsertString( *pPaM, aEntry );
+    }
+}
+
+void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( !pTxtAttr )
         return;
@@ -171,7 +200,7 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         case RES_TXTATR_FLDCHG:
                 // "Farbe hat sich geaendert !"
                 // this, this fuer "nur Painten"
-                pTxtNd->Modify( this, this );
+                pTxtNd->ModifyNotification( this, this );
                 return;
         case RES_REFMARKFLD_UPDATE:
                 // GetReferenz-Felder aktualisieren
@@ -185,12 +214,12 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                 break;
         case RES_DOCPOS_UPDATE:
                 // Je nach DocPos aktualisieren (SwTxtFrm::Modify())
-                pTxtNd->Modify( pNew, this );
+                pTxtNd->ModifyNotification( pNew, this );
                 return;
 
         case RES_ATTRSET_CHG:
         case RES_FMT_CHG:
-                pTxtNd->Modify( pOld, pNew );
+                pTxtNd->ModifyNotification( pOld, pNew );
                 return;
         default:
                 break;
@@ -206,7 +235,7 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         case RES_DBNUMSETFLD:
         case RES_DBNEXTSETFLD:
         case RES_DBNAMEFLD:
-            pTxtNd->Modify( 0, pNew);
+            pTxtNd->ModifyNotification( 0, pNew);
             return;
     }
 
@@ -314,7 +343,7 @@ void SwTxtFld::Expand() const
             //              aenderung an die Frames posten
             if( m_pTxtNode->CalcHiddenParaField() )
             {
-                m_pTxtNode->Modify( 0, 0 );
+                m_pTxtNode->ModifyNotification( 0, 0 );
             }
             return;
         }
@@ -323,7 +352,7 @@ void SwTxtFld::Expand() const
     m_aExpand = aNewExpand;
 
     // 0, this for formatting
-    m_pTxtNode->Modify( 0, const_cast<SwFmtFld*>( &GetFld() ) );
+    m_pTxtNode->ModifyNotification( 0, const_cast<SwFmtFld*>( &GetFld() ) );
 }
 
 /*************************************************************************
@@ -393,7 +422,7 @@ void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
     //if not in undo section notify the change
     if (m_pTxtNode && m_pTxtNode->GetNodes().IsDocNodes())
     {
-        m_pTxtNode->Modify(0, &rFmtFld);
+        m_pTxtNode->ModifyNotification(0, &rFmtFld);
     }
 }
 

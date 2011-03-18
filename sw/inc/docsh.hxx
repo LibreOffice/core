@@ -278,7 +278,7 @@ public:
     void EnterWait( sal_Bool bLockDispatcher );
     void LeaveWait( sal_Bool bLockDispatcher );
 
-    void ToggleBrowserMode(sal_Bool bOn, SwView* pView = 0);
+    void ToggleBrowserMode(sal_Bool bOn, SwView* pView);
 
     sal_uLong LoadStylesFromFile( const String& rURL, SwgReaderOption& rOpt,
                                 sal_Bool bUnoCall );
