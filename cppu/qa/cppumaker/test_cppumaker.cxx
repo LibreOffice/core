@@ -444,7 +444,9 @@ void Test::testBigStruct() {
     CPPUNIT_ASSERT_EQUAL(guard.p->m22.getLength(), static_cast< sal_Int32 >(0));
     CPPUNIT_ASSERT_EQUAL(guard.p->m23.getLength(), static_cast< sal_Int32 >(0));
 
+//This is a very platform specific test.
 #if defined __GNUC__ && __GNUC__ >= 3 // see CPPU_GCC3_ALIGN
+#if defined(LINUX) && (defined (X86_64) || defined(X86) || defined(PPC))
     CPPUNIT_ASSERT_EQUAL(
 #if defined X86_64 || defined PPC
         static_cast< std::size_t >(24),
@@ -452,6 +454,7 @@ void Test::testBigStruct() {
         static_cast< std::size_t >(16),
 #endif
         sizeof (test::codemaker::cppumaker::AlignmentDerivedStruct));
+#endif
 #endif
 
     com::sun::star::uno::Type t(
