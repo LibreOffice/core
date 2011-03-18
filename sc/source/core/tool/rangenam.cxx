@@ -729,7 +729,8 @@ void ScRangeName::copyLocalNames(const TabNameMap& rNames, TabNameCopyMap& rCopy
     }
 }
 
-ScRangeName::ScRangeName() {}
+ScRangeName::ScRangeName() :
+    mnSharedMaxIndex(0) {}
 
 ScRangeName::ScRangeName(const ScRangeName& r) :
     maData(r.maData), mnSharedMaxIndex(r.mnSharedMaxIndex) {}
