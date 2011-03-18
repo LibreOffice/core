@@ -39,7 +39,7 @@ class SwAttrSet;
 class IDocumentSettingAccess;
 class ViewShell;
 class SfxPoolItem;
-extern const BYTE StackPos[];
+extern const sal_uInt8 StackPos[];
 
 /*************************************************************************
  *                      class SwAttrHandler
@@ -63,8 +63,8 @@ private:
     private:
         SwTxtAttr* pInitialArray[ INITIAL_NUM_ATTR ];
         SwTxtAttr** pArray;
-        USHORT nCount; // number of elements on stack
-        USHORT nSize;    // number of positions in Array
+        sal_uInt16 nCount; // number of elements on stack
+        sal_uInt16 nSize;    // number of positions in Array
 
     public:
         // Ctor, Dtor
@@ -79,7 +79,7 @@ private:
         inline void Push( const SwTxtAttr& rAttr ) { Insert( rAttr, nCount ); };
         // insert at specified position, take care for not inserting behind
         // the value returned by Count()
-        void Insert( const SwTxtAttr& rAttr, const USHORT nPos );
+        void Insert( const SwTxtAttr& rAttr, const sal_uInt16 nPos );
 
         // remove specified attribute
         void Remove( const SwTxtAttr& rAttr );
@@ -88,11 +88,11 @@ private:
         const SwTxtAttr* Top() const;
 
         // number of elements on stack
-        inline USHORT Count() const { return nCount; };
+        inline sal_uInt16 Count() const { return nCount; };
 
         // returns position of rAttr on Stack if found, otherwise USHRT_MAX
         // can be used for Remove of an attribute
-        USHORT Pos( const SwTxtAttr& rAttr ) const;
+        sal_uInt16 Pos( const SwTxtAttr& rAttr ) const;
     };
 
     SwAttrStack aAttrStack[ NUM_ATTRIBUTE_STACKS ]; // stack collection
@@ -115,7 +115,7 @@ private:
     sal_Bool Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem );
 
     // apply top attribute on stack to font
-    void ActivateTop( SwFont& rFnt, USHORT nStackPos );
+    void ActivateTop( SwFont& rFnt, sal_uInt16 nStackPos );
 
 public:
     // Ctor
@@ -142,21 +142,21 @@ public:
     void Pop( const SwTxtAttr& rAttr );
 
     // apply script dependent attributes
-//    void ChangeScript( SwFont& rFnt, const BYTE nScr );
+//    void ChangeScript( SwFont& rFnt, const sal_uInt8 nScr );
 
     // returns the default value for stack nStack
-    inline const SfxPoolItem& GetDefault( const USHORT nAttribID ) const;
+    inline const SfxPoolItem& GetDefault( const sal_uInt16 nAttribID ) const;
     // do not call these if you only used the small init function
     inline void ResetFont( SwFont& rFnt ) const;
     inline const SwFont* GetFont() const;
 
     void GetDefaultAscentAndHeight(ViewShell* pShell,
                                    OutputDevice& rOut,
-                                   USHORT& nAscent,
-                                   USHORT& nHeight) const;
+                                   sal_uInt16& nAscent,
+                                   sal_uInt16& nHeight) const;
 };
 
-inline const SfxPoolItem& SwAttrHandler::GetDefault( const USHORT nAttribID ) const
+inline const SfxPoolItem& SwAttrHandler::GetDefault( const sal_uInt16 nAttribID ) const
 {
     OSL_ENSURE( nAttribID < RES_TXTATR_END,
             "this attrib does not ex."

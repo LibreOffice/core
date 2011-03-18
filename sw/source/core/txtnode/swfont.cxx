@@ -70,11 +70,11 @@
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <scriptinfo.hxx>
 
-#if defined(WIN) || defined(WNT) || defined(PM2)
+#if defined(WNT) || defined(PM2)
 #define FNT_LEADING_HACK
 #endif
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 #define FNT_ATM_HACK
 #endif
 
@@ -93,12 +93,12 @@ void SwFont::SetBackColor( Color* pNewColor )
 {
     delete pBackColor;
     pBackColor = pNewColor;
-    bFntChg = TRUE;
+    bFntChg = sal_True;
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
 }
 
 // maps directions for vertical layout
-USHORT MapDirection( USHORT nDir, const BOOL bVertFormat )
+sal_uInt16 MapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat )
 {
     if ( bVertFormat )
     {
@@ -125,7 +125,7 @@ USHORT MapDirection( USHORT nDir, const BOOL bVertFormat )
 
 // maps the absolute direction set at the font to its logical conterpart
 // in the rotated environment
-USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat )
+sal_uInt16 UnMapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat )
 {
     if ( bVertFormat )
     {
@@ -150,19 +150,19 @@ USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat )
     return nDir;
 }
 
-USHORT SwFont::GetOrientation( const BOOL bVertFormat ) const
+sal_uInt16 SwFont::GetOrientation( const sal_Bool bVertFormat ) const
 {
     return UnMapDirection( aSub[nActual].GetOrientation(), bVertFormat );
 }
 
-void SwFont::SetVertical( USHORT nDir, const BOOL bVertFormat )
+void SwFont::SetVertical( sal_uInt16 nDir, const sal_Bool bVertFormat )
 {
     // map direction if frame has vertical layout
     nDir = MapDirection( nDir, bVertFormat );
 
     if( nDir != aSub[0].GetOrientation() )
     {
-        bFntChg = TRUE;
+        bFntChg = sal_True;
         aSub[0].SetVertical( nDir, bVertFormat );
         aSub[1].SetVertical( nDir, bVertFormat || nDir > 1000 );
         aSub[2].SetVertical( nDir, bVertFormat );
@@ -198,11 +198,11 @@ void SwFont::SetVertical( USHORT nDir, const BOOL bVertFormat )
 *************************************************************************/
 
 /*************************************************************************
- *                  SwSubFont::CalcEscAscent( const USHORT nOldAscent )
+ *                  SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent )
  *************************************************************************/
 
 // nEsc ist der Prozentwert
-USHORT SwSubFont::CalcEscAscent( const USHORT nOldAscent ) const
+sal_uInt16 SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent ) const
 {
     if( DFLT_ESC_AUTO_SUPER != GetEscapement() &&
         DFLT_ESC_AUTO_SUB != GetEscapement() )
@@ -210,7 +210,7 @@ USHORT SwSubFont::CalcEscAscent( const USHORT nOldAscent ) const
         const long nAscent = nOldAscent +
                              ( (long) nOrgHeight * GetEscapement() ) / 100L;
         if ( nAscent>0 )
-            return ( Max( USHORT (nAscent), nOrgAscent ));
+            return ( Max( sal_uInt16 (nAscent), nOrgAscent ));
     }
     return nOrgAscent;
 }
@@ -229,7 +229,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
     {
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_FONT,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
         {
             const SvxFontItem *pFont = (const SvxFontItem *)pItem;
             aSub[SW_LATIN].SetFamily( pFont->GetFamily() );
@@ -239,7 +239,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             aSub[SW_LATIN].Font::SetCharSet( pFont->GetCharSet() );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_FONTSIZE,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
         {
             const SvxFontHeightItem *pHeight = (const SvxFontHeightItem *)pItem;
             aSub[SW_LATIN].SvxFont::SetPropr( 100 );
@@ -249,17 +249,17 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             aSub[SW_LATIN].SetSize( aTmpSize );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_POSTURE,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             aSub[SW_LATIN].Font::SetItalic( ((SvxPostureItem*)pItem)->GetPosture() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_WEIGHT,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             aSub[SW_LATIN].Font::SetWeight( ((SvxWeightItem*)pItem)->GetWeight() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_LANGUAGE,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             aSub[SW_LATIN].SetLanguage( ((SvxLanguageItem*)pItem)->GetLanguage() );
 
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CJK_FONT,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
         {
             const SvxFontItem *pFont = (const SvxFontItem *)pItem;
             aSub[SW_CJK].SetFamily( pFont->GetFamily() );
@@ -269,7 +269,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             aSub[SW_CJK].Font::SetCharSet( pFont->GetCharSet() );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CJK_FONTSIZE,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
         {
             const SvxFontHeightItem *pHeight = (const SvxFontHeightItem *)pItem;
             aSub[SW_CJK].SvxFont::SetPropr( 100 );
@@ -279,13 +279,13 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             aSub[SW_CJK].SetSize( aTmpSize );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CJK_POSTURE,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             aSub[SW_CJK].Font::SetItalic( ((SvxPostureItem*)pItem)->GetPosture() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CJK_WEIGHT,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             aSub[SW_CJK].Font::SetWeight( ((SvxWeightItem*)pItem)->GetWeight() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CJK_LANGUAGE,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
         {
             LanguageType eNewLang = ((SvxLanguageItem*)pItem)->GetLanguage();
             aSub[SW_CJK].SetLanguage( eNewLang );
@@ -295,7 +295,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         }
 
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CTL_FONT,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
         {
             const SvxFontItem *pFont = (const SvxFontItem *)pItem;
             aSub[SW_CTL].SetFamily( pFont->GetFamily() );
@@ -305,7 +305,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             aSub[SW_CTL].Font::SetCharSet( pFont->GetCharSet() );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CTL_FONTSIZE,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
         {
             const SvxFontHeightItem *pHeight = (const SvxFontHeightItem *)pItem;
             aSub[SW_CTL].SvxFont::SetPropr( 100 );
@@ -315,53 +315,53 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             aSub[SW_CTL].SetSize( aTmpSize );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CTL_POSTURE,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             aSub[SW_CTL].Font::SetItalic( ((SvxPostureItem*)pItem)->GetPosture() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CTL_WEIGHT,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             aSub[SW_CTL].Font::SetWeight( ((SvxWeightItem*)pItem)->GetWeight() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CTL_LANGUAGE,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             aSub[SW_CTL].SetLanguage( ((SvxLanguageItem*)pItem)->GetLanguage() );
 
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_UNDERLINE,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
         {
             SetUnderline( ((SvxUnderlineItem*)pItem)->GetLineStyle() );
             SetUnderColor( ((SvxUnderlineItem*)pItem)->GetColor() );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_OVERLINE,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
         {
             SetOverline( ((SvxOverlineItem*)pItem)->GetLineStyle() );
             SetOverColor( ((SvxOverlineItem*)pItem)->GetColor() );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CROSSEDOUT,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             SetStrikeout( ((SvxCrossedOutItem*)pItem)->GetStrikeout() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_COLOR,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             SetColor( ((SvxColorItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_EMPHASIS_MARK,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             SetEmphasisMark( ((SvxEmphasisMarkItem*)pItem)->GetEmphasisMark() );
 
-        SetTransparent( TRUE );
+        SetTransparent( sal_True );
         SetAlign( ALIGN_BASELINE );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CONTOUR,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             SetOutline( ((SvxContourItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_SHADOWED,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             SetShadow( ((SvxShadowedItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_RELIEF,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             SetRelief( (FontRelief)((SvxCharReliefItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_SHADOWED,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             SetPropWidth(((SvxShadowedItem*)pItem)->GetValue() ? 50 : 100 );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_AUTOKERN,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
         {
             if( ((SvxAutoKernItem*)pItem)->GetValue() )
             {
@@ -374,11 +374,11 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
                 SetAutoKern( 0 );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_WORDLINEMODE,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             SetWordLineMode( ((SvxWordLineModeItem*)pItem)->GetValue() );
 
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_ESCAPEMENT,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
         {
             const SvxEscapementItem *pEsc = (const SvxEscapementItem *)pItem;
             SetEscapement( pEsc->GetEsc() );
@@ -386,39 +386,39 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
                 SetProportion( pEsc->GetProp() );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CASEMAP,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             SetCaseMap( ((SvxCaseMapItem*)pItem)->GetCaseMap() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_KERNING,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             SetFixKerning( ((SvxKerningItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_NOHYPHEN,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             SetNoHyph( ((SvxNoHyphenItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BLINK,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             SetBlink( ((SvxBlinkItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_ROTATE,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             SetVertical( ((SvxCharRotateItem*)pItem)->GetValue() );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BACKGROUND,
-            TRUE, &pItem ))
+            sal_True, &pItem ))
             pBackColor = new Color( ((SvxBrushItem*)pItem)->GetColor() );
         else
             pBackColor = NULL;
         const SfxPoolItem* pTwoLinesItem = 0;
         if( SFX_ITEM_SET ==
-                pAttrSet->GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pTwoLinesItem ))
+                pAttrSet->GetItemState( RES_CHRATR_TWO_LINES, sal_True, &pTwoLinesItem ))
             if ( ((SvxTwoLinesItem*)pTwoLinesItem)->GetValue() )
                 SetVertical( 0 );
     }
     else
     {
         Invalidate();
-        bNoHyph = FALSE;
-        bBlink = FALSE;
+        bNoHyph = sal_False;
+        bBlink = sal_False;
     }
-    bPaintBlank = FALSE;
-    bPaintWrong = FALSE;
+    bPaintBlank = sal_False;
+    bPaintWrong = sal_False;
     OSL_ENSURE( aSub[SW_LATIN].IsTransparent(), "SwFont: Transparent revolution" );
 }
 
@@ -441,7 +441,7 @@ SwFont::SwFont( const SwFont &rFont )
     bFntChg = rFont.bFntChg;
     bOrgChg = rFont.bOrgChg;
     bPaintBlank = rFont.bPaintBlank;
-    bPaintWrong = FALSE;
+    bPaintWrong = sal_False;
     bURL = rFont.bURL;
     bGreyWave = rFont.bGreyWave;
     bNoColReplace = rFont.bNoColReplace;
@@ -456,14 +456,14 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     nToxCnt = 0;
     nRefCnt = 0;
     m_nMetaCount = 0;
-    bPaintBlank = FALSE;
-    bPaintWrong = FALSE;
-    bURL = FALSE;
-    bGreyWave = FALSE;
-    bNoColReplace = FALSE;
+    bPaintBlank = sal_False;
+    bPaintWrong = sal_False;
+    bURL = sal_False;
+    bGreyWave = sal_False;
+    bNoColReplace = sal_False;
     bNoHyph = pAttrSet->GetNoHyphenHere().GetValue();
     bBlink = pAttrSet->GetBlink().GetValue();
-    bOrgChg = TRUE;
+    bOrgChg = sal_True;
     {
         const SvxFontItem& rFont = pAttrSet->GetFont();
         aSub[SW_LATIN].SetFamily( rFont.GetFamily() );
@@ -527,7 +527,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     SetEmphasisMark( pAttrSet->GetEmphasisMark().GetEmphasisMark() );
     SetStrikeout( pAttrSet->GetCrossedOut().GetStrikeout() );
     SetColor( pAttrSet->GetColor().GetValue() );
-    SetTransparent( TRUE );
+    SetTransparent( sal_True );
     SetAlign( ALIGN_BASELINE );
     SetOutline( pAttrSet->GetContour().GetValue() );
     SetShadow( pAttrSet->GetShadowed().GetValue() );
@@ -551,7 +551,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     SetFixKerning( pAttrSet->GetKerning().GetValue() );
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BACKGROUND,
-        TRUE, &pItem ))
+        sal_True, &pItem ))
         pBackColor = new Color( ((SvxBrushItem*)pItem)->GetColor() );
     else
         pBackColor = NULL;
@@ -590,7 +590,7 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     bFntChg = rFont.bFntChg;
     bOrgChg = rFont.bOrgChg;
     bPaintBlank = rFont.bPaintBlank;
-    bPaintWrong = FALSE;
+    bPaintWrong = sal_False;
     bURL = rFont.bURL;
     bGreyWave = rFont.bGreyWave;
     bNoColReplace = rFont.bNoColReplace;
@@ -603,19 +603,19 @@ SwFont& SwFont::operator=( const SwFont &rFont )
  *                      SwFont::GoMagic()
  *************************************************************************/
 
-void SwFont::GoMagic( ViewShell *pSh, BYTE nWhich )
+void SwFont::GoMagic( ViewShell *pSh, sal_uInt8 nWhich )
 {
     SwFntAccess aFntAccess( aSub[nWhich].pMagic, aSub[nWhich].nFntIndex,
-                            &aSub[nWhich], pSh, TRUE );
+                            &aSub[nWhich], pSh, sal_True );
 }
 
 /*************************************************************************
  *                      SwSubFont::IsSymbol()
  *************************************************************************/
 
-BOOL SwSubFont::IsSymbol( ViewShell *pSh )
+sal_Bool SwSubFont::IsSymbol( ViewShell *pSh )
 {
-    SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh, FALSE );
+    SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh, sal_False );
     return aFntAccess.Get()->IsSymbol();
 }
 
@@ -623,11 +623,11 @@ BOOL SwSubFont::IsSymbol( ViewShell *pSh )
  *                      SwSubFont::ChgFnt()
  *************************************************************************/
 
-BOOL SwSubFont::ChgFnt( ViewShell *pSh, OutputDevice& rOut )
+sal_Bool SwSubFont::ChgFnt( ViewShell *pSh, OutputDevice& rOut )
 {
     if ( pLastFont )
         pLastFont->Unlock();
-    SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh, TRUE );
+    SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh, sal_True );
     SV_STAT( nChangeFont );
 
     pLastFont = aFntAccess.Get();
@@ -648,7 +648,7 @@ void SwFont::ChgPhysFnt( ViewShell *pSh, OutputDevice& rOut )
 {
     if( bOrgChg && aSub[nActual].IsEsc() )
     {
-        const BYTE nOldProp = aSub[nActual].GetPropr();
+        const sal_uInt8 nOldProp = aSub[nActual].GetPropr();
         SetProportion( 100 );
         ChgFnt( pSh, rOut );
         SwFntAccess aFntAccess( aSub[nActual].pMagic, aSub[nActual].nFntIndex,
@@ -656,7 +656,7 @@ void SwFont::ChgPhysFnt( ViewShell *pSh, OutputDevice& rOut )
         aSub[nActual].nOrgHeight = aFntAccess.Get()->GetFontHeight( pSh, rOut );
         aSub[nActual].nOrgAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );
         SetProportion( nOldProp );
-        bOrgChg = FALSE;
+        bOrgChg = sal_False;
     }
 
     if( bFntChg )
@@ -678,16 +678,16 @@ void SwFont::ChgPhysFnt( ViewShell *pSh, OutputDevice& rOut )
  *                       T2_height-T2_ascent - (Esc * T1_height)
  *************************************************************************/
 
-USHORT SwSubFont::CalcEscHeight( const USHORT nOldHeight,
-                              const USHORT nOldAscent  ) const
+sal_uInt16 SwSubFont::CalcEscHeight( const sal_uInt16 nOldHeight,
+                              const sal_uInt16 nOldAscent  ) const
 {
     if( DFLT_ESC_AUTO_SUPER != GetEscapement() &&
         DFLT_ESC_AUTO_SUB != GetEscapement() )
     {
         long nDescent = nOldHeight - nOldAscent -
                              ( (long) nOrgHeight * GetEscapement() ) / 100L;
-        const USHORT nDesc = ( nDescent>0 ) ? Max ( USHORT(nDescent),
-                   USHORT(nOrgHeight - nOrgAscent) ) : nOrgHeight - nOrgAscent;
+        const sal_uInt16 nDesc = ( nDescent>0 ) ? Max ( sal_uInt16(nDescent),
+                   sal_uInt16(nOrgHeight - nOrgAscent) ) : nOrgHeight - nOrgAscent;
         return ( nDesc + CalcEscAscent( nOldAscent ) );
     }
     return nOrgHeight;
@@ -706,9 +706,9 @@ short SwSubFont::_CheckKerning( )
  *                    SwSubFont::GetAscent()
  *************************************************************************/
 
-USHORT SwSubFont::GetAscent( ViewShell *pSh, const OutputDevice& rOut )
+sal_uInt16 SwSubFont::GetAscent( ViewShell *pSh, const OutputDevice& rOut )
 {
-    USHORT nAscent;
+    sal_uInt16 nAscent;
     SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh );
     nAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );
     if( GetEscapement() )
@@ -720,14 +720,14 @@ USHORT SwSubFont::GetAscent( ViewShell *pSh, const OutputDevice& rOut )
  *                    SwSubFont::GetHeight()
  *************************************************************************/
 
-USHORT SwSubFont::GetHeight( ViewShell *pSh, const OutputDevice& rOut )
+sal_uInt16 SwSubFont::GetHeight( ViewShell *pSh, const OutputDevice& rOut )
 {
     SV_STAT( nGetTextSize );
     SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh );
-    const USHORT nHeight = aFntAccess.Get()->GetFontHeight( pSh, rOut );
+    const sal_uInt16 nHeight = aFntAccess.Get()->GetFontHeight( pSh, rOut );
     if ( GetEscapement() )
     {
-        const USHORT nAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );
+        const sal_uInt16 nAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );
         return CalcEscHeight( nHeight, nAscent ); // + nLeading;
     }
     return nHeight; // + nLeading;
@@ -800,10 +800,10 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
         //        hochgestellt, muss seine effektive Hoehe melden.
         if( GetEscapement() )
         {
-            const USHORT nAscent = pLastFont->GetFontAscent( rInf.GetShell(),
+            const sal_uInt16 nAscent = pLastFont->GetFontAscent( rInf.GetShell(),
                                                              rInf.GetOut() );
             aTxtSize.Height() =
-                (long)CalcEscHeight( (USHORT)aTxtSize.Height(), nAscent);
+                (long)CalcEscHeight( (sal_uInt16)aTxtSize.Height(), nAscent);
         }
     }
 
@@ -839,7 +839,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
  *                    SwSubFont::_DrawText()
  *************************************************************************/
 
-void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
+void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
 {
     rInf.SetGreyWave( bGrey );
     xub_StrLen nLn = rInf.GetText().Len();
@@ -951,7 +951,7 @@ static sal_Char const sDoubleSpace[] = "  ";
             nSpace *= rInf.GetSpace() / SPACING_PRECISION_FACTOR;
         }
 
-        rInf.SetWidth( USHORT(aFontSize.Width() + nSpace) );
+        rInf.SetWidth( sal_uInt16(aFontSize.Width() + nSpace) );
         rInf.SetText( aStr );
         rInf.SetIdx( 0 );
         rInf.SetLen( 2 );
@@ -1098,7 +1098,7 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
 {
     long nOfst;
 
-    USHORT nDir = UnMapDirection(
+    sal_uInt16 nDir = UnMapDirection(
                 GetOrientation(), rInf.GetFrm() && rInf.GetFrm()->IsVertical() );
 
     switch ( GetEscapement() )
@@ -1160,14 +1160,14 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
 }
 
 // used during painting of small capitals
-void SwDrawTextInfo::Shift( USHORT nDir )
+void SwDrawTextInfo::Shift( sal_uInt16 nDir )
 {
 #if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE( bPos, "DrawTextInfo: Undefined Position" );
     OSL_ENSURE( bSize, "DrawTextInfo: Undefined Width" );
 #endif
 
-    const BOOL bBidiPor = ( GetFrm() && GetFrm()->IsRightToLeft() ) !=
+    const sal_Bool bBidiPor = ( GetFrm() && GetFrm()->IsRightToLeft() ) !=
                           ( 0 != ( TEXT_LAYOUT_BIDI_RTL & GetpOut()->GetLayoutMode() ) );
 
     nDir = bBidiPor ?
@@ -1214,7 +1214,7 @@ long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
                           const OutputDevice &rOut, sal_Int16 nScript)
 {
     SwFont aFont(&rSet, &rIDocumentSettingAccess);
-    BYTE nActual;
+    sal_uInt8 nActual;
     switch (nScript)
     {
         default:

@@ -49,10 +49,10 @@
 
 class SwLooping
 {
-    USHORT nMinPage;
-    USHORT nMaxPage;
-    USHORT nCount;
-    USHORT mnLoopControlStage;
+    sal_uInt16 nMinPage;
+    sal_uInt16 nMaxPage;
+    sal_uInt16 nCount;
+    sal_uInt16 mnLoopControlStage;
 public:
     SwLooping( SwPageFrm* pPage );
     void Control( SwPageFrm* pPage );
@@ -73,7 +73,7 @@ public:
     void CollectEndnote( SwFtnFrm* pFtn );
     const SwSectionFrm* GetSect() const { return pSect; }
     void InsertEndnotes();
-    BOOL HasEndnotes() const { return pEndArr && pEndArr->Count(); }
+    sal_Bool HasEndnotes() const { return pEndArr && pEndArr->Count(); }
 };
 
 void SwEndnoter::CollectEndnotes( SwSectionFrm* pSct )
@@ -121,7 +121,7 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
     }
     else if( pEndArr )
     {
-        for ( USHORT i = 0; i < pEndArr->Count(); ++i )
+        for ( sal_uInt16 i = 0; i < pEndArr->Count(); ++i )
         {
             SwFtnFrm *pEndFtn = (SwFtnFrm*)((*pEndArr)[i]);
             if( pEndFtn->GetAttr() == pFtn->GetAttr() )
@@ -178,7 +178,7 @@ void SwLooping::Control( SwPageFrm* pPage )
 {
     if( !pPage )
         return;
-    USHORT nNew = pPage->GetPhyPageNum();
+    sal_uInt16 nNew = pPage->GetPhyPageNum();
     if( nNew > nMaxPage )
         nMaxPage = nNew;
     if( nNew < nMinPage )
@@ -198,7 +198,7 @@ void SwLooping::Control( SwPageFrm* pPage )
     else if( ++nCount > LOOP_DETECT )
     {
 #if OSL_DEBUG_LEVEL > 1
-        static BOOL bNoLouie = FALSE;
+        static sal_Bool bNoLouie = sal_False;
         if( bNoLouie )
             return;
 
@@ -258,7 +258,7 @@ void SwLayouter::_CollectEndnotes( SwSectionFrm* pSect )
     pEndnoter->CollectEndnotes( pSect );
 }
 
-BOOL SwLayouter::HasEndnotes() const
+sal_Bool SwLayouter::HasEndnotes() const
 {
     return pEndnoter->HasEndnotes();
 }
@@ -275,7 +275,7 @@ void SwLayouter::InsertEndnotes( SwSectionFrm* pSect )
     pEndnoter->InsertEndnotes();
 }
 
-void SwLayouter::LoopControl( SwPageFrm* pPage, BYTE )
+void SwLayouter::LoopControl( SwPageFrm* pPage, sal_uInt8 )
 {
     OSL_ENSURE( pLooping, "Looping: Lost control" );
     pLooping->Control( pPage );
@@ -292,12 +292,12 @@ void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTxtFrm& rFrm )
     }
 }
 
-BOOL SwLayouter::StartLooping( SwPageFrm* pPage )
+sal_Bool SwLayouter::StartLooping( SwPageFrm* pPage )
 {
     if( pLooping )
-        return FALSE;
+        return sal_False;
     pLooping = new SwLooping( pPage );
-    return TRUE;
+    return sal_True;
 }
 
 void SwLayouter::EndLoopControl()
@@ -314,10 +314,10 @@ void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect )
     pDoc->GetLayouter()->_CollectEndnotes( pSect );
 }
 
-BOOL SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn )
+sal_Bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn )
 {
     if( !pDoc->GetLayouter() )
-        return FALSE;
+        return sal_False;
     SwLayouter *pLayouter = pDoc->GetLayouter();
     if( pLayouter->pEndnoter && pLayouter->pEndnoter->GetSect() && pSect &&
         ( pLayouter->pEndnoter->GetSect()->IsAnFollow( pSect ) ||
@@ -325,12 +325,12 @@ BOOL SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn )
     {
         if( pFtn )
             pLayouter->CollectEndnote( pFtn );
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
+sal_Bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
 {
     OSL_ENSURE( pDoc, "No doc, no fun" );
     if( !pDoc->GetLayouter() )

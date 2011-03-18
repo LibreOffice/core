@@ -31,6 +31,7 @@
 
 ModalDialog DLG_DBSELECTION
 {
+    HelpID = "sw:ModalDialog:DLG_DBSELECTION";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 168 , 132 ) ;

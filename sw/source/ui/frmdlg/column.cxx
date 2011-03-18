@@ -70,6 +70,8 @@
 #include <docary.hxx>
 #include <pagedesc.hxx>
 
+#include "access.hrc"
+
 #define FRAME_FORMAT_WIDTH 1000
 
 // sw/inc/fmtclds.hxx
@@ -78,7 +80,7 @@ SV_IMPL_PTRARR( SwColumns, SwColumnPtr )
 /*--------------------------------------------------------------------
     Beschreibung:  Statische Daten
  --------------------------------------------------------------------*/
-static const USHORT nLines[] = {
+static const sal_uInt16 nLines[] = {
     DEF_LINE_WIDTH_0,
     DEF_LINE_WIDTH_1,
     DEF_LINE_WIDTH_2,
@@ -86,13 +88,13 @@ static const USHORT nLines[] = {
     DEF_LINE_WIDTH_4
 };
 
-static const USHORT nLineCount = SAL_N_ELEMENTS(nLines);
-static const USHORT nVisCols = 3;
+static const sal_uInt16 nLineCount = SAL_N_ELEMENTS(nLines);
+static const sal_uInt16 nVisCols = 3;
 
-inline BOOL IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
+inline sal_Bool IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
 {
     rWrtSh.SwapPam();
-    BOOL bRet = pSect == rWrtSh.GetCurrSection();
+    sal_Bool bRet = pSect == rWrtSh.GetCurrSection();
     rWrtSh.SwapPam();
     return bRet;
 }
@@ -111,10 +113,10 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     pFrameSet(0),
     nOldSelection(0),
     nSelectionWidth(0),
-    bPageChanged(FALSE),
-    bSectionChanged(FALSE),
-    bSelSectionChanged(FALSE),
-    bFrameChanged(FALSE)
+    bPageChanged(sal_False),
+    bSectionChanged(sal_False),
+    bSelSectionChanged(sal_False),
+    bFrameChanged(sal_False)
 {
     FreeResource();
 
@@ -124,13 +126,13 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     nSelectionWidth = aRect.Width();
 
     SfxItemSet* pColPgSet = 0;
-    static USHORT const aSectIds[] = { RES_COL, RES_COL,
+    static sal_uInt16 const aSectIds[] = { RES_COL, RES_COL,
                                                 RES_FRM_SIZE, RES_FRM_SIZE,
                                                 RES_COLUMNBALANCE, RES_FRAMEDIR,
                                                 0 };
 
     const SwSection* pCurrSection = rWrtShell.GetCurrSection();
-    USHORT nFullSectCnt = rWrtShell.GetFullSelectedSectionCount();
+    sal_uInt16 nFullSectCnt = rWrtShell.GetFullSelectedSectionCount();
     if( pCurrSection && ( !rWrtShell.HasSelection() || 0 != nFullSectCnt ))
     {
         nSelectionWidth = rSh.GetSectionWidth(*pCurrSection->GetFmt());
@@ -172,7 +174,7 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
         aApplyToLB.RemoveEntry(aApplyToLB.GetEntryPos( (void*) LISTBOX_FRAME ));
 
 
-    USHORT nPagePos = aApplyToLB.GetEntryPos( (void*) LISTBOX_PAGE );
+    sal_uInt16 nPagePos = aApplyToLB.GetEntryPos( (void*) LISTBOX_PAGE );
     const SwPageDesc* pPageDesc = rWrtShell.GetSelectedPageDescs();
     if( pPageDesc )
     {
@@ -245,19 +247,19 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
         break;
         case LISTBOX_SECTION    :
             pSet = pSectionSet;
-            bSectionChanged = TRUE;
+            bSectionChanged = sal_True;
         break;
         case LISTBOX_SECTIONS   :
             pSet = pSectionSet;
-            bSelSectionChanged = TRUE;
+            bSelSectionChanged = sal_True;
         break;
         case LISTBOX_PAGE       :
             pSet = pPageSet;
-            bPageChanged = TRUE;
+            bPageChanged = sal_True;
         break;
         case LISTBOX_FRAME:
             pSet = pFrameSet;
-            bFrameChanged = TRUE;
+            bFrameChanged = sal_True;
         break;
     }
     if(pBox)
@@ -288,10 +290,10 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
         break;
     }
 
-    BOOL bIsSection = pSet == pSectionSet || pSet == pSelectionSet;
+    sal_Bool bIsSection = pSet == pSectionSet || pSet == pSelectionSet;
     pTabPage->ShowBalance(bIsSection);
     pTabPage->SetInSection(bIsSection);
-    pTabPage->SetFrmMode(TRUE);
+    pTabPage->SetFrmMode(sal_True);
     pTabPage->SetPageWidth(nWidth);
     if( pSet )
         pTabPage->Reset(*pSet);
@@ -309,19 +311,19 @@ IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
         break;
         case LISTBOX_SECTION    :
             pSet = pSectionSet;
-            bSectionChanged = TRUE;
+            bSectionChanged = sal_True;
         break;
         case LISTBOX_SECTIONS   :
             pSet = pSectionSet;
-            bSelSectionChanged = TRUE;
+            bSelSectionChanged = sal_True;
         break;
         case LISTBOX_PAGE       :
             pSet = pPageSet;
-            bPageChanged = TRUE;
+            bPageChanged = sal_True;
         break;
         case LISTBOX_FRAME:
             pSet = pFrameSet;
-            bFrameChanged = TRUE;
+            bFrameChanged = sal_True;
         break;
     }
     pTabPage->FillItemSet(*pSet);
@@ -340,7 +342,7 @@ IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
     {
         const SwSection* pCurrSection = rWrtShell.GetCurrSection();
         const SwSectionFmt* pFmt = pCurrSection->GetFmt();
-        USHORT nNewPos = rWrtShell.GetSectionFmtPos( *pFmt );
+        sal_uInt16 nNewPos = rWrtShell.GetSectionFmtPos( *pFmt );
         SwSectionData aData(*pCurrSection);
         rWrtShell.UpdateSection( nNewPos, aData, pSectionSet );
     }
@@ -353,7 +355,7 @@ IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
     if(pPageSet && SFX_ITEM_SET == pPageSet->GetItemState(RES_COL) && bPageChanged)
     {
         // aktuellen PageDescriptor ermitteln und damit den Set fuellen
-        const USHORT nCurIdx = rWrtShell.GetCurPageDesc();
+        const sal_uInt16 nCurIdx = rWrtShell.GetCurPageDesc();
         SwPageDesc aPageDesc(rWrtShell.GetPageDesc(nCurIdx));
         SwFrmFmt &rFmt = aPageDesc.GetMaster();
         rFmt.SetFmtAttr(pPageSet->Get(RES_COL));
@@ -382,25 +384,25 @@ IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
 #if OSL_DEBUG_LEVEL < 2
 inline
 #endif
-USHORT GetMaxWidth( SwColMgr* pColMgr, USHORT nCols )
+sal_uInt16 GetMaxWidth( SwColMgr* pColMgr, sal_uInt16 nCols )
 {
-    USHORT nMax = pColMgr->GetActualSize();
+    sal_uInt16 nMax = pColMgr->GetActualSize();
     if( --nCols )
         nMax -= pColMgr->GetGutterWidth() * nCols;
     return nMax;
 }
 
-static USHORT aPageRg[] = {
+static sal_uInt16 aPageRg[] = {
     RES_COL, RES_COL,
     0
 };
 
 DBG_NAME(columnhdl)
 
-USHORT lcl_LineWidthToPos(ULONG nWidth)
+sal_uInt16 lcl_LineWidthToPos(sal_uLong nWidth)
 {
-    const USHORT nUShortWidth = (USHORT)nWidth;
-    for(USHORT i = 0; i < nLineCount; ++i)
+    const sal_uInt16 nUShortWidth = (sal_uInt16)nWidth;
+    for(sal_uInt16 i = 0; i < nLineCount; ++i)
         if(nUShortWidth == nLines[i])
             return i;
     return 0;
@@ -410,10 +412,10 @@ void SwColumnPage::ResetColWidth()
 {
     if( nCols )
     {
-        USHORT nWidth = GetMaxWidth( pColMgr, nCols );
+        sal_uInt16 nWidth = GetMaxWidth( pColMgr, nCols );
         nWidth = nWidth / nCols;
 
-        for(USHORT i = 0; i < nCols; ++i)
+        for(sal_uInt16 i = 0; i < nCols; ++i)
             nColWidth[i] = (long) nWidth;
     }
 
@@ -426,12 +428,13 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     : SfxTabPage(pParent, SW_RES(TP_COLUMN), rSet),
 
+    aFLGroup(this,          SW_RES(FL_COLUMNS )),
     aClNrLbl(this,          SW_RES(FT_NUMBER  )),
     aCLNrEdt(this,          SW_RES(ED_NUMBER  )),
     aDefaultVS(this,        SW_RES(VS_DEFAULTS)),
     aBalanceColsCB(this,    SW_RES(CB_BALANCECOLS)),
-    aFLGroup(this,          SW_RES(FL_COLUMNS )),
 
+    aFLLayout(this,         SW_RES(FL_LAYOUT)),
     aBtnUp(this,            SW_RES(BTN_DOWN)),
     aColumnFT(this,         SW_RES(FT_COLUMN)),
     aWidthFT(this,          SW_RES(FT_WIDTH)),
@@ -447,15 +450,13 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aBtnDown(this,          SW_RES(BTN_UP)),
     aAutoWidthBox(this,     SW_RES(CB_AUTO_WIDTH)),
 
-    aFLLayout(this,         SW_RES(FL_LAYOUT)),
-
+    aFLLineType(this,       SW_RES(FL_LINETYPE)),
     aLineTypeLbl(this,      SW_RES(FT_STYLE)),
     aLineTypeDLB(this,      SW_RES(LB_STYLE)),
     aLineHeightLbl(this,    SW_RES(FT_HEIGHT)),
     aLineHeightEdit(this,   SW_RES(ED_HEIGHT)),
     aLinePosLbl(this,       SW_RES(FT_POSITION)),
     aLinePosDLB(this,       SW_RES(LB_POSITION)),
-    aFLLineType(this,       SW_RES(FL_LINETYPE)),
 
     aVertFL(this,         SW_RES(FL_VERT)),
     aPropertiesFL(  this,    SW_RES( FL_PROPERTIES    )),
@@ -470,15 +471,24 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     nFirstVis(0),
     nMinWidth(MINLAY),
     pModifiedField(0),
-    bFormat(FALSE),
-    bFrm(FALSE),
-    bHtmlMode(FALSE),
-    bLockUpdate(FALSE)
+    bFormat(sal_False),
+    bFrm(sal_False),
+    bHtmlMode(sal_False),
+    bLockUpdate(sal_False)
 {
-    USHORT i;
+    sal_uInt16 i;
 
     FreeResource();
     SetExchangeSupport();
+
+    aBtnDown.SetAccessibleRelationMemberOf(&aFLLayout);
+    aEd1.SetAccessibleRelationLabeledBy(&aWidthFT);
+    aEd2.SetAccessibleRelationLabeledBy(&aWidthFT);
+    aEd3.SetAccessibleRelationLabeledBy(&aWidthFT);
+    aDistEd1.SetAccessibleRelationLabeledBy(&aDistFT);
+    aDistEd2.SetAccessibleRelationLabeledBy(&aDistFT);
+    aBtnUp.SetAccessibleRelationLabeledBy(&aColumnFT);
+    aBtnDown.SetAccessibleRelationLabeledBy(&aColumnFT);
 
     aDefaultVS.SetHelpId(HID_COLUMN_VALUESET);
     aDefaultVS.SetColCount( 5 );
@@ -552,11 +562,11 @@ void SwColumnPage::SetPageWidth(long nPageWidth)
 
 void SwColumnPage::Reset(const SfxItemSet &rSet)
 {
-    USHORT nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
+    sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
     if(nHtmlMode & HTMLMODE_ON)
     {
-        bHtmlMode = TRUE;
-        aAutoWidthBox.Enable(FALSE);
+        bHtmlMode = sal_True;
+        aAutoWidthBox.Enable(sal_False);
     }
     FieldUnit aMetric = ::GetDfltMetric(bHtmlMode);
     SetMetric(aEd1, aMetric);
@@ -568,8 +578,8 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
     delete pColMgr;
     pColMgr = new SwColMgr(rSet);
     nCols   = pColMgr->GetCount() ;
-    aCLNrEdt.SetMax(Max((USHORT)aCLNrEdt.GetMax(), (USHORT)nCols));
-    aCLNrEdt.SetLast(Max(nCols,(USHORT)aCLNrEdt.GetMax()));
+    aCLNrEdt.SetMax(Max((sal_uInt16)aCLNrEdt.GetMax(), (sal_uInt16)nCols));
+    aCLNrEdt.SetLast(Max(nCols,(sal_uInt16)aCLNrEdt.GetMax()));
 
     if(bFrm)
     {
@@ -579,16 +589,16 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
         {
             const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE);
             const SvxBoxItem& rBox = (const SvxBoxItem&) rSet.Get(RES_BOX);
-            pColMgr->SetActualWidth((USHORT)rSize.GetSize().Width() - rBox.GetDistance());
+            pColMgr->SetActualWidth((sal_uInt16)rSize.GetSize().Width() - rBox.GetDistance());
         }
     }
     if(aBalanceColsCB.IsVisible())
     {
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_COLUMNBALANCE, FALSE, &pItem ))
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_COLUMNBALANCE, sal_False, &pItem ))
             aBalanceColsCB.Check(!((const SwFmtNoBalancedColumns*)pItem)->GetValue());
         else
-            aBalanceColsCB.Check( TRUE );
+            aBalanceColsCB.Check( sal_True );
     }
 
     //text direction
@@ -596,7 +606,7 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
     {
         const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR);
         sal_uIntPtr nVal  = rItem.GetValue();
-        USHORT nPos = aTextDirectionLB.GetEntryPos( (void*)nVal );
+        sal_uInt16 nPos = aTextDirectionLB.GetEntryPos( (void*) nVal );
         aTextDirectionLB.SelectEntryPos( nPos );
         aTextDirectionLB.SaveValue();
     }
@@ -616,7 +626,7 @@ SfxTabPage* SwColumnPage::Create(Window *pParent, const SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Attribute in den Set stopfen bei OK
  --------------------------------------------------------------------*/
-BOOL SwColumnPage::FillItemSet(SfxItemSet &rSet)
+sal_Bool SwColumnPage::FillItemSet(SfxItemSet &rSet)
 {
     if(aCLNrEdt.HasChildPathFocus())
         aCLNrEdt.GetDownHdl().Call(&aCLNrEdt);
@@ -634,7 +644,7 @@ BOOL SwColumnPage::FillItemSet(SfxItemSet &rSet)
     {
         rSet.Put(SwFmtNoBalancedColumns(!aBalanceColsCB.IsChecked() ));
     }
-    USHORT nPos;
+    sal_uInt16 nPos;
     if( aTextDirectionLB.IsVisible() &&
         ( nPos = aTextDirectionLB.GetSelectEntryPos() ) !=
                                             aTextDirectionLB.GetSavedValue() )
@@ -642,7 +652,7 @@ BOOL SwColumnPage::FillItemSet(SfxItemSet &rSet)
         sal_uInt32 nDirection = (sal_uInt32)(sal_IntPtr)aTextDirectionLB.GetEntryData( nPos );
         rSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));
     }
-    return TRUE;
+    return sal_True;
 }
 
 /*--------------------------------------------------------------------
@@ -656,15 +666,15 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
             // Ermitteln, ob die schmalste Spalte zu schmal ist
             // fuer den eingestellten Spaltenabstand
         long nMin = nColWidth[0];
-        USHORT i;
+        sal_uInt16 i;
 
         for( i = 1; i < nCols; ++i)
             nMin = Min(nMin, nColWidth[i]);
 
-        BOOL bAutoWidth = aAutoWidthBox.IsChecked();
+        sal_Bool bAutoWidth = aAutoWidthBox.IsChecked();
         if(!bAutoWidth)
         {
-            pColMgr->SetAutoWidth(FALSE);
+            pColMgr->SetAutoWidth(sal_False);
                 // falls der Benutzer nicht die Gesamtbreite vergeben hat,
                 // den fehlenden Betrag auf die letzte Spalte addieren.
             long nSum = 0;
@@ -680,19 +690,19 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
             if( nSum < nMaxW  )
                 nColWidth[nCols - 1] += nMaxW - nSum;
 
-            pColMgr->SetColWidth( 0, static_cast< USHORT >(nColWidth[0] + (USHORT)nColDist[0]/2) );
+            pColMgr->SetColWidth( 0, static_cast< sal_uInt16 >(nColWidth[0] + (sal_uInt16)nColDist[0]/2) );
             for( i = 1; i < nCols-1; ++i )
             {
                 long nActDist = (nColDist[i] + nColDist[i - 1]) / 2;
-                pColMgr->SetColWidth( i, (USHORT)nColWidth[i] + (USHORT)nActDist );
+                pColMgr->SetColWidth( i, (sal_uInt16)nColWidth[i] + (sal_uInt16)nActDist );
             }
-            pColMgr->SetColWidth( nCols-1, static_cast< USHORT >(nColWidth[nCols-1] + nColDist[nCols -2]/2) );
+            pColMgr->SetColWidth( nCols-1, static_cast< sal_uInt16 >(nColWidth[nCols-1] + nColDist[nCols -2]/2) );
 
         }
 
             // keins ist ausgeschaltet
-        const USHORT nPos = aLineTypeDLB.GetSelectEntryPos();
-        BOOL bEnable = 0 != nPos;
+        const sal_uInt16 nPos = aLineTypeDLB.GetSelectEntryPos();
+        sal_Bool bEnable = 0 != nPos;
         aLineHeightEdit.Enable( bEnable );
         aLineHeightLbl.Enable( bEnable );
         if( !bEnable )
@@ -742,12 +752,12 @@ void SwColumnPage::Init()
 {
     aCLNrEdt.SetValue(nCols);
 
-    BOOL bAutoWidth = pColMgr->IsAutoWidth() || bHtmlMode;
+    sal_Bool bAutoWidth = pColMgr->IsAutoWidth() || bHtmlMode;
     aAutoWidthBox.Check( bAutoWidth );
 
     sal_Int32 nColumnWidthSum = 0;
     // Setzen der Breiten
-    USHORT i;
+    sal_uInt16 i;
     for(i = 0; i < nCols; ++i)
     {
         nColWidth[i] = pColMgr->GetColWidth(i);
@@ -778,7 +788,7 @@ void SwColumnPage::Init()
             aLineTypeDLB.SelectEntryPos( lcl_LineWidthToPos(( pColMgr->GetLineWidth() )) + 1);
             aLineHeightEdit.SetValue( pColMgr->GetLineHeightPercent() );
         }
-        aLinePosDLB.SelectEntryPos( static_cast< USHORT >(eAdj - 1) );
+        aLinePosDLB.SelectEntryPos( static_cast< sal_uInt16 >(eAdj - 1) );
     }
     else
     {
@@ -808,13 +818,13 @@ void SwColumnPage::Init()
 ------------------------------------------------------------------------*/
 void SwColumnPage::UpdateCols()
 {
-    BOOL bEnableBtns= FALSE;
-    BOOL bEnable12  = FALSE;
-    BOOL bEnable3   = FALSE;
-    const BOOL bEdit = !aAutoWidthBox.IsChecked();
+    sal_Bool bEnableBtns= sal_False;
+    sal_Bool bEnable12  = sal_False;
+    sal_Bool bEnable3   = sal_False;
+    const sal_Bool bEdit = !aAutoWidthBox.IsChecked();
     if ( nCols > nVisCols )
     {
-        bEnableBtns = TRUE && !bHtmlMode;
+        bEnableBtns = sal_True && !bHtmlMode;
         bEnable12 = bEnable3 = bEdit;
     }
     else if( bEdit )
@@ -822,8 +832,8 @@ void SwColumnPage::UpdateCols()
         // hier gibt es absichtlich kaum noch breaks
         switch(nCols)
         {
-            case 3: bEnable3 = TRUE;
-            case 2: bEnable12= TRUE; break;
+            case 3: bEnable3 = sal_True;
+            case 2: bEnable12= sal_True; break;
             default: /* do nothing */;
         }
     }
@@ -838,11 +848,11 @@ void SwColumnPage::UpdateCols()
     aBtnUp.Enable( bEnableBtns );
     aBtnDown.Enable( bEnableBtns );
 
-    const BOOL bEnable = nCols > 1;
+    const sal_Bool bEnable = nCols > 1;
     if( !bEnable )
     {
-        aLinePosDLB.Enable( FALSE );
-        aLinePosLbl.Enable( FALSE );
+        aLinePosDLB.Enable( sal_False );
+        aLinePosLbl.Enable( sal_False );
     }
     aLineHeightEdit.Enable( bEnable );
     aLineHeightLbl.Enable( bEnable );
@@ -851,21 +861,46 @@ void SwColumnPage::UpdateCols()
     aAutoWidthBox.Enable( bEnable && !bHtmlMode );
 }
 
-void SwColumnPage::SetLabels( USHORT nVis )
+void SwColumnPage::SetLabels( sal_uInt16 nVis )
 {
     String sLbl( '~' );
 
     String sLbl2( String::CreateFromInt32( nVis + 1 ));
+    String tmp1(sLbl2);
     sLbl2.Insert(sLbl, sLbl2.Len() - 1);
     aLbl1.SetText(sLbl2);
 
     sLbl2 = String::CreateFromInt32( nVis + 2 );
+    String tmp2(sLbl2);
     sLbl2.Insert(sLbl, sLbl2.Len() - 1);
     aLbl2.SetText(sLbl2);
 
     sLbl2 = String::CreateFromInt32( nVis + 3 );
+    String tmp3(sLbl2);
     sLbl2.Insert(sLbl, sLbl2.Len() - 1);
     aLbl3.SetText(sLbl2);
+    String sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
+    sColumnWidth.SearchAndReplaceAscii("%1", tmp1);
+    aEd1.SetAccessibleName(sColumnWidth);
+
+    sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
+    sColumnWidth.SearchAndReplaceAscii("%1", tmp2);
+    aEd2.SetAccessibleName(sColumnWidth);
+
+    sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
+    sColumnWidth.SearchAndReplaceAscii("%1", tmp3);
+    aEd3.SetAccessibleName(sColumnWidth);
+
+    String sDist = SW_RESSTR( STR_ACCESS_PAGESETUP_SPACING ) ;
+    String sDist1 = sDist;
+    sDist1.SearchAndReplaceAscii("%1", tmp1);
+    sDist1.SearchAndReplaceAscii("%2", tmp2);
+    aDistEd1.SetAccessibleName(sDist1);
+
+    String sDist2 = sDist;
+    sDist2.SearchAndReplaceAscii("%1", tmp2);
+    sDist2.SearchAndReplaceAscii("%2", tmp3);
+    aDistEd2.SetAccessibleName(sDist2);
 }
 
 /*------------------------------------------------------------------------
@@ -877,7 +912,7 @@ void SwColumnPage::SetLabels( USHORT nVis )
 ------------------------------------------------------------------------*/
 IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
 {
-    nCols = (USHORT)aCLNrEdt.GetValue();
+    nCols = (sal_uInt16)aCLNrEdt.GetValue();
     //#107890# the handler is also called from LoseFocus()
     //then no change has been made and thus no action should be taken
     // #i17816# changing the displayed types within the ValueSet
@@ -888,8 +923,8 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
         if(pNF)
             aDefaultVS.SetNoSelection();
         long nDist = static_cast< long >(aDistEd1.DenormalizePercent(aDistEd1.GetValue(FUNIT_TWIP)));
-        pColMgr->SetCount(nCols, (USHORT)nDist);
-        for(USHORT i = 0; i < nCols; i++)
+        pColMgr->SetCount(nCols, (sal_uInt16)nDist);
+        for(sal_uInt16 i = 0; i < nCols; i++)
             nColDist[i] = nDist;
         nFirstVis = 0;
         SetLabels( nFirstVis );
@@ -917,7 +952,7 @@ IMPL_LINK( SwColumnPage, GapModify, PercentField *, pFld )
         return 0;
     if(aAutoWidthBox.IsChecked())
     {
-        USHORT nMaxGap = pColMgr->GetActualSize() - nCols * MINLAY;
+        sal_uInt16 nMaxGap = pColMgr->GetActualSize() - nCols * MINLAY;
         OSL_ENSURE(nCols, "Abstand kann nicht ohne Spalten eingestellt werden");
         nMaxGap /= nCols - 1;
         if(nActValue > nMaxGap)
@@ -925,8 +960,8 @@ IMPL_LINK( SwColumnPage, GapModify, PercentField *, pFld )
             nActValue = nMaxGap;
             aDistEd1.SetPrcntValue(aDistEd1.NormalizePercent(nMaxGap), FUNIT_TWIP);
         }
-        pColMgr->SetGutterWidth((USHORT)nActValue);
-        for(USHORT i = 0; i < nCols; i++)
+        pColMgr->SetGutterWidth((sal_uInt16)nActValue);
+        for(sal_uInt16 i = 0; i < nCols; i++)
             nColDist[i] = nActValue;
 
         ResetColWidth();
@@ -935,7 +970,7 @@ IMPL_LINK( SwColumnPage, GapModify, PercentField *, pFld )
     else
 
     {
-        USHORT nOffset = 0;
+        sal_uInt16 nOffset = 0;
         if(pFld == &aDistEd2)
         {
             nOffset = 1;
@@ -971,9 +1006,9 @@ IMPL_LINK( SwColumnPage, GapModify, PercentField *, pFld )
             nColWidth[nFirstVis + nOffset + 1] = nRight;
             nColDist[nFirstVis + nOffset] += nDiff;
 
-            pColMgr->SetColWidth( nFirstVis + nOffset, USHORT(nLeft) );
-            pColMgr->SetColWidth( nFirstVis + nOffset + 1, USHORT(nRight) );
-            pColMgr->SetGutterWidth( USHORT(nColDist[nFirstVis + nOffset]), nFirstVis + nOffset );
+            pColMgr->SetColWidth( nFirstVis + nOffset, sal_uInt16(nLeft) );
+            pColMgr->SetColWidth( nFirstVis + nOffset + 1, sal_uInt16(nRight) );
+            pColMgr->SetGutterWidth( sal_uInt16(nColDist[nFirstVis + nOffset]), nFirstVis + nOffset );
         }
 
     }
@@ -996,15 +1031,15 @@ IMPL_LINK( SwColumnPage, EdModify, PercentField *, pField )
 IMPL_LINK( SwColumnPage, AutoWidthHdl, CheckBox *, pBox )
 {
     long nDist = static_cast< long >(aDistEd1.DenormalizePercent(aDistEd1.GetValue(FUNIT_TWIP)));
-    pColMgr->SetCount(nCols, (USHORT)nDist);
-    for(USHORT i = 0; i < nCols; i++)
+    pColMgr->SetCount(nCols, (sal_uInt16)nDist);
+    for(sal_uInt16 i = 0; i < nCols; i++)
         nColDist[i] = nDist;
     if(pBox->IsChecked())
     {
-        pColMgr->SetGutterWidth(USHORT(nDist));
+        pColMgr->SetGutterWidth(sal_uInt16(nDist));
         ResetColWidth();
     }
-    pColMgr->SetAutoWidth(pBox->IsChecked(), USHORT(nDist));
+    pColMgr->SetAutoWidth(pBox->IsChecked(), sal_uInt16(nDist));
     UpdateCols();
     Update();
     return 0;
@@ -1049,13 +1084,13 @@ IMPL_LINK( SwColumnPage, Timeout, Timer *, EMPTYARG )
     if(pModifiedField)
     {
             // Finden der veraenderten Spalte
-        USHORT nChanged = nFirstVis;
+        sal_uInt16 nChanged = nFirstVis;
         if(pModifiedField == &aEd2)
             ++nChanged;
         else if(pModifiedField == &aEd3)
             nChanged += 2;
 
-        long nNewWidth = (USHORT)
+        long nNewWidth = (sal_uInt16)
             pModifiedField->DenormalizePercent(pModifiedField->GetValue(FUNIT_TWIP));
         long nDiff = nNewWidth - nColWidth[nChanged];
 
@@ -1134,7 +1169,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
             const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rSet.Get(
                                                                 RES_LR_SPACE );
             const SvxBoxItem& rBox = (const SvxBoxItem&) rSet.Get(RES_BOX);
-            USHORT nActWidth = static_cast< USHORT >(rSize.GetSize().Width()
+            sal_uInt16 nActWidth = static_cast< sal_uInt16 >(rSize.GetSize().Width()
                             - rLRSpace.GetLeft() - rLRSpace.GetRight() - rBox.GetDistance());
 
             if( pColMgr->GetActualSize() != nActWidth)
@@ -1159,7 +1194,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
         const SvxBoxItem& rBox = (const SvxBoxItem&) rSet.Get(RES_BOX);
 
         long nDistance = rBox.GetDistance();
-        const USHORT nTotalWish = bFormat ? FRAME_FORMAT_WIDTH : USHORT(rSize.GetWidth() - 2 * nDistance);
+        const sal_uInt16 nTotalWish = bFormat ? FRAME_FORMAT_WIDTH : sal_uInt16(rSize.GetWidth() - 2 * nDistance);
 
         // Maximalwerte der Spaltenbreiten setzen
         SetPageWidth(nTotalWish);
@@ -1169,7 +1204,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
             pColMgr->SetActualWidth(nTotalWish);
             Init();
         }
-        BOOL bPercent;
+        sal_Bool bPercent;
         // im Rahmenformat nur relative Angaben
         if ( bFormat || (rSize.GetWidthPercent() && rSize.GetWidthPercent() != 0xff) )
         {
@@ -1181,10 +1216,10 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
             aDistEd2.SetRefValue(nTotalWish);
 
             // Auf %-Darstellung umschalten
-            bPercent = TRUE;
+            bPercent = sal_True;
         }
         else
-            bPercent = FALSE;
+            bPercent = sal_False;
 
         aEd1.ShowPercent(bPercent);
         aEd2.ShowPercent(bPercent);
@@ -1202,17 +1237,17 @@ int SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
     if(_pSet)
         FillItemSet(*_pSet);
 
-    return TRUE;
+    return sal_True;
 }
 
-USHORT* SwColumnPage::GetRanges()
+sal_uInt16* SwColumnPage::GetRanges()
 {
     return aPageRg;
 }
 
 IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
 {
-    USHORT nItem = pVS->GetSelectItemId();
+    sal_uInt16 nItem = pVS->GetSelectItemId();
     if( nItem < 4 )
     {
         aCLNrEdt.SetValue( nItem );
@@ -1222,13 +1257,13 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
     }
     else
     {
-        bLockUpdate = TRUE;
+        bLockUpdate = sal_True;
         aCLNrEdt.SetValue( 2 );
-        aAutoWidthBox.Check(FALSE);
+        aAutoWidthBox.Check(sal_False);
         aDistEd1.SetPrcntValue(0);
         ColModify(0);
         // jetzt noch das Breitenverhaeltnisse auf 2 : 1 bzw. 1 : 2 stellen
-        USHORT nSmall = pColMgr->GetActualSize()  / 3;
+        sal_uInt16 nSmall = pColMgr->GetActualSize()  / 3;
         if(nItem == 4)
         {
             aEd2.SetPrcntValue(aEd2.NormalizePercent(long(nSmall)), FUNIT_TWIP);
@@ -1239,19 +1274,19 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
             aEd1.SetPrcntValue(aEd1.NormalizePercent(long(nSmall)), FUNIT_TWIP);
             pModifiedField = &aEd1;
         }
-        bLockUpdate = FALSE;
+        bLockUpdate = sal_False;
         Timeout(0);
 
     }
     return 0;
 }
 
-void SwColumnPage::SetFrmMode(BOOL bMod)
+void SwColumnPage::SetFrmMode(sal_Bool bMod)
 {
     bFrm = bMod;
 }
 
-void SwColumnPage::SetInSection(BOOL bSet)
+void SwColumnPage::SetInSection(sal_Bool bSet)
 {
     if(!SW_MOD()->GetCTLOptions().IsCTLFontEnabled())
         return;
@@ -1283,7 +1318,7 @@ void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     Rectangle aRect = rUDEvt.GetRect();
-    USHORT  nItemId = rUDEvt.GetItemId();
+    sal_uInt16  nItemId = rUDEvt.GetItemId();
     long nRectWidth = aRect.GetWidth();
     long nRectHeight = aRect.GetHeight();
 
@@ -1295,7 +1330,7 @@ void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
     long nStep = Abs(Abs(nRectHeight * 95 /100) / 11);
     long nTop = (nRectHeight - 11 * nStep ) / 2;
-    USHORT nCols = 0;
+    sal_uInt16 nCols = 0;
     long nStarts[3];
     long nEnds[3];
     nStarts[0] = nRectWidth * 10 / 100;
@@ -1328,11 +1363,11 @@ void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             nEnds[1] = nRectWidth * 9 / 10;
         break;
     }
-    for(USHORT j = 0; j < nCols; j++ )
+    for(sal_uInt16 j = 0; j < nCols; j++ )
     {
         Point aStart(aBLPos.X() + nStarts[j], 0);
         Point aEnd(aBLPos.X() + nEnds[j], 0);
-        for( USHORT i = 0; i < 12; i ++)
+        for( sal_uInt16 i = 0; i < 12; i ++)
         {
             aStart.Y() = aEnd.Y() = aBLPos.Y() + nTop + i * nStep;
             pDev->DrawLine(aStart, aEnd);

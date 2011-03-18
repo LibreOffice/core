@@ -48,7 +48,7 @@
 #include "sectfrm.hxx"   // wg. FtnAtEnd-Flag
 
 // ftnfrm.cxx:
-void lcl_RemoveFtns( SwFtnBossFrm* pBoss, BOOL bPageOnly, BOOL bEndNotes );
+void lcl_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes );
 
 
 /*************************************************************************
@@ -84,20 +84,20 @@ SwColumnFrm::~SwColumnFrm()
 |*
 |*************************************************************************/
 
-void MA_FASTCALL lcl_RemoveColumns( SwLayoutFrm *pCont, USHORT nCnt )
+void MA_FASTCALL lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
 {
     OSL_ENSURE( pCont && pCont->Lower() && pCont->Lower()->IsColumnFrm(),
             "Keine Spalten zu entfernen." );
 
     SwColumnFrm *pColumn = (SwColumnFrm*)pCont->Lower();
-    ::lcl_RemoveFtns( pColumn, TRUE, TRUE );
+    ::lcl_RemoveFtns( pColumn, sal_True, sal_True );
     while ( pColumn->GetNext() )
     {
         OSL_ENSURE( pColumn->GetNext()->IsColumnFrm(),
                 "Nachbar von ColFrm kein ColFrm." );
         pColumn = (SwColumnFrm*)pColumn->GetNext();
     }
-    for ( USHORT i = 0; i < nCnt; ++i )
+    for ( sal_uInt16 i = 0; i < nCnt; ++i )
     {
         SwColumnFrm *pTmp = (SwColumnFrm*)pColumn->GetPrev();
         pColumn->Cut();
@@ -106,7 +106,7 @@ void MA_FASTCALL lcl_RemoveColumns( SwLayoutFrm *pCont, USHORT nCnt )
     }
 }
 
-SwLayoutFrm * MA_FASTCALL lcl_FindColumns( SwLayoutFrm *pLay, USHORT nCount )
+SwLayoutFrm * MA_FASTCALL lcl_FindColumns( SwLayoutFrm *pLay, sal_uInt16 nCount )
 {
     SwFrm *pCol = pLay->Lower();
     if ( pLay->IsPageFrm() )
@@ -115,7 +115,7 @@ SwLayoutFrm * MA_FASTCALL lcl_FindColumns( SwLayoutFrm *pLay, USHORT nCount )
     if ( pCol && pCol->IsColumnFrm() )
     {
         SwFrm *pTmp = pCol;
-        USHORT i;
+        sal_uInt16 i;
         for ( i = 0; pTmp; pTmp = pTmp->GetNext(), ++i )
             /* do nothing */;
         return i == nCount ? (SwLayoutFrm*)pCol : 0;
@@ -124,10 +124,10 @@ SwLayoutFrm * MA_FASTCALL lcl_FindColumns( SwLayoutFrm *pLay, USHORT nCount )
 }
 
 
-static BOOL lcl_AddColumns( SwLayoutFrm *pCont, USHORT nCount )
+static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
 {
     SwDoc *pDoc = pCont->GetFmt()->GetDoc();
-    const BOOL bMod = pDoc->IsModified();
+    const sal_Bool bMod = pDoc->IsModified();
 
     //Format sollen soweit moeglich geshared werden. Wenn es also schon einen
     //Nachbarn mit den selben Spalteneinstellungen gibt, so koennen die
@@ -141,7 +141,7 @@ static BOOL lcl_AddColumns( SwLayoutFrm *pCont, USHORT nCount )
     SwClientIter aIter( *pAttrOwner->GetFmt() );
     SwLayoutFrm *pNeighbour = (SwLayoutFrm*)aIter.First( TYPE(SwLayoutFrm) );
 
-    USHORT nAdd = 0;
+    sal_uInt16 nAdd = 0;
     SwFrm *pCol = pCont->Lower();
     if ( pCol && pCol->IsColumnFrm() )
         for ( nAdd = 1; pCol; pCol = pCol->GetNext(), ++nAdd )
@@ -155,19 +155,19 @@ static BOOL lcl_AddColumns( SwLayoutFrm *pCont, USHORT nCount )
         pNeighbour = (SwLayoutFrm*)aIter.Next();
     }
 
-    BOOL bRet;
+    sal_Bool bRet;
     SwTwips nMax = pCont->IsPageBodyFrm() ?
                    pCont->FindPageFrm()->GetMaxFtnHeight() : LONG_MAX;
     if ( pNeighbourCol )
     {
-        bRet = FALSE;
+        bRet = sal_False;
         SwFrm *pTmp = pCont->Lower();
         while ( pTmp )
         {
             pTmp = pTmp->GetNext();
             pNeighbourCol = (SwLayoutFrm*)pNeighbourCol->GetNext();
         }
-        for ( USHORT i = 0; i < nCount; ++i )
+        for ( sal_uInt16 i = 0; i < nCount; ++i )
         {
             SwColumnFrm *pTmpCol = new SwColumnFrm( pNeighbourCol->GetFmt() );
             pTmpCol->SetMaxFtnHeight( nMax );
@@ -177,8 +177,8 @@ static BOOL lcl_AddColumns( SwLayoutFrm *pCont, USHORT nCount )
     }
     else
     {
-        bRet = TRUE;
-        for ( USHORT i = 0; i < nCount; ++i )
+        bRet = sal_True;
+        for ( sal_uInt16 i = 0; i < nCount; ++i )
         {
             SwFrmFmt *pFmt = pDoc->MakeFrmFmt( aEmptyStr, pDoc->GetDfltFrmFmt());
             SwColumnFrm *pTmp = new SwColumnFrm( pFmt );
@@ -201,7 +201,7 @@ static BOOL lcl_AddColumns( SwLayoutFrm *pCont, USHORT nCount )
  * --------------------------------------------------*/
 
 void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
-    const BOOL bChgFtn )
+    const sal_Bool bChgFtn )
 {
     if ( rOld.GetNumCols() <= 1 && rNew.GetNumCols() <= 1 && !bChgFtn )
         return;
@@ -214,7 +214,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
     }
     // <--
 
-    USHORT nNewNum, nOldNum = 1;
+    sal_uInt16 nNewNum, nOldNum = 1;
     if( Lower() && Lower()->IsColumnFrm() )
     {
         SwFrm* pCol = Lower();
@@ -224,14 +224,14 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
     nNewNum = rNew.GetNumCols();
     if( !nNewNum )
         ++nNewNum;
-    BOOL bAtEnd;
+    sal_Bool bAtEnd;
     if( IsSctFrm() )
         bAtEnd = ((SwSectionFrm*)this)->IsAnyNoteAtEnd();
     else
-        bAtEnd = FALSE;
+        bAtEnd = sal_False;
 
     //Einstellung der Spaltenbreiten ist nur bei neuen Formaten notwendig.
-    BOOL bAdjustAttributes = nOldNum != rOld.GetNumCols();
+    sal_Bool bAdjustAttributes = nOldNum != rOld.GetNumCols();
 
     //Wenn die Spaltenanzahl unterschiedlich ist, wird der Inhalt
     //gesichert und restored.
@@ -243,7 +243,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         // SaveCntnt wuerde auch den Inhalt der Fussnotencontainer aufsaugen
         // und im normalen Textfluss unterbringen.
         if( IsPageBodyFrm() )
-            pDoc->GetRootFrm()->RemoveFtns( (SwPageFrm*)GetUpper(), TRUE, FALSE );
+            pDoc->GetRootFrm()->RemoveFtns( (SwPageFrm*)GetUpper(), sal_True, sal_False );
         pSave = ::SaveCntnt( this );
 
         //Wenn Spalten existieren, jetzt aber eine Spaltenanzahl von
@@ -271,11 +271,11 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         if ( nOldNum > nNewNum )
         {
             ::lcl_RemoveColumns( this, nOldNum - nNewNum );
-            bAdjustAttributes = TRUE;
+            bAdjustAttributes = sal_True;
         }
         else if( nOldNum < nNewNum )
         {
-            USHORT nAdd = nNewNum - nOldNum;
+            sal_uInt16 nAdd = nNewNum - nOldNum;
             bAdjustAttributes = lcl_AddColumns( this, nAdd );
         }
     }
@@ -285,14 +285,14 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         if ( rOld.GetLineWidth()    != rNew.GetLineWidth() ||
              rOld.GetWishWidth()    != rNew.GetWishWidth() ||
              rOld.IsOrtho()         != rNew.IsOrtho() )
-            bAdjustAttributes = TRUE;
+            bAdjustAttributes = sal_True;
         else
         {
-            USHORT nCount = Min( rNew.GetColumns().Count(), rOld.GetColumns().Count() );
-            for ( USHORT i = 0; i < nCount; ++i )
+            sal_uInt16 nCount = Min( rNew.GetColumns().Count(), rOld.GetColumns().Count() );
+            for ( sal_uInt16 i = 0; i < nCount; ++i )
                 if ( !(*rOld.GetColumns()[i] == *rNew.GetColumns()[i]) )
                 {
-                    bAdjustAttributes = TRUE;
+                    bAdjustAttributes = sal_True;
                     break;
                 }
         }
@@ -319,7 +319,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
 |*
 |*************************************************************************/
 
-void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
+void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttributes )
 {
     if( !Lower()->GetNext() )
     {
@@ -327,8 +327,9 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
         return;
     }
 
-    const BOOL bVert = IsVertical();
-    SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
+    const sal_Bool bVert = IsVertical();
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
 
     //Ist ein Pointer da, oder sollen wir die Attribute einstellen,
     //so stellen wir auf jeden Fall die Spaltenbreiten ein. Andernfalls
@@ -352,26 +353,26 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
     //Die Breiten werden mitgezaehlt, damit wir dem letzten den Rest geben
     //koennen.
     SwTwips nAvail = (Prt().*fnRect->fnGetWidth)();
-    const BOOL bLine = pAttr->GetLineAdj() != COLADJ_NONE;
-    const USHORT nMin = bLine ? USHORT( 20 + ( pAttr->GetLineWidth() / 2) ) : 0;
+    const sal_Bool bLine = pAttr->GetLineAdj() != COLADJ_NONE;
+    const sal_uInt16 nMin = bLine ? sal_uInt16( 20 + ( pAttr->GetLineWidth() / 2) ) : 0;
 
-    const BOOL bR2L = IsRightToLeft();
+    const sal_Bool bR2L = IsRightToLeft();
     SwFrm *pCol = bR2L ? GetLastLower() : Lower();
 
     // --> FME 2004-07-16 #i27399#
     // bOrtho means we have to adjust the column frames manually. Otherwise
     // we may use the values returned by CalcColWidth:
-    const BOOL bOrtho = pAttr->IsOrtho() && pAttr->GetNumCols() > 0;
+    const sal_Bool bOrtho = pAttr->IsOrtho() && pAttr->GetNumCols() > 0;
     long nGutter = 0;
     // <--
 
-    for ( USHORT i = 0; i < pAttr->GetNumCols(); ++i )
+    for ( sal_uInt16 i = 0; i < pAttr->GetNumCols(); ++i )
     {
         if( !bOrtho )
         {
             const SwTwips nWidth = i == (pAttr->GetNumCols() - 1) ?
                                    nAvail :
-                                   pAttr->CalcColWidth( i, USHORT( (Prt().*fnRect->fnGetWidth)() ) );
+                                   pAttr->CalcColWidth( i, sal_uInt16( (Prt().*fnRect->fnGetWidth)() ) );
 
             const Size aColSz = bVert ?
                                 Size( Prt().Width(), nWidth ) :
@@ -399,8 +400,8 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
             //Beruecksichtigung finden. Ueberall wo zwei Spalten aufeinanderstossen
             //wird jeweils rechts bzw. links ein Sicherheitsabstand von 20 plus
             //der halben Penbreite einkalkuliert.
-            const USHORT nLeft = pC->GetLeft();
-            const USHORT nRight = pC->GetRight();
+            const sal_uInt16 nLeft = pC->GetLeft();
+            const sal_uInt16 nRight = pC->GetRight();
 
             aLR.SetLeft ( nLeft );
             aLR.SetRight( nRight );
@@ -442,7 +443,7 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
     {
         long nInnerWidth = ( nAvail - nGutter ) / pAttr->GetNumCols();
         pCol = Lower();
-        for( USHORT i = 0; i < pAttr->GetNumCols(); pCol = pCol->GetNext(), ++i )
+        for( sal_uInt16 i = 0; i < pAttr->GetNumCols(); pCol = pCol->GetNext(), ++i )
         {
             SwTwips nWidth;
             if ( i == pAttr->GetNumCols() - 1 )

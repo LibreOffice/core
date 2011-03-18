@@ -83,7 +83,7 @@ class SwXMLTableColumn_Impl : public SwWriteTableCol
 public:
 
 
-    SwXMLTableColumn_Impl( sal_uInt16 nPosition ) :
+    SwXMLTableColumn_Impl( sal_uInt32 nPosition ) :
         SwWriteTableCol( nPosition ),
         nRelWidth( 0UL )
     {};
@@ -138,7 +138,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
     nWidth( 0UL )
 {
 #if OSL_DEBUG_LEVEL > 1
-    sal_uInt16 nEndCPos = 0U;
+    sal_uInt32 nEndCPos = 0U;
 #endif
     sal_uInt16 nLines = rLines.Count();
     sal_uInt16 nLine;
@@ -148,14 +148,14 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         sal_uInt16 nBoxes = rBoxes.Count();
 
-        sal_uInt16 nCPos = 0U;
+        sal_uInt32 nCPos = 0U;
         for( sal_uInt16 nBox=0U; nBox<nBoxes; nBox++ )
         {
             const SwTableBox *pBox = rBoxes[nBox];
 
             if( nBox < nBoxes-1U || nWidth==0UL )
             {
-                nCPos = nCPos + (sal_uInt16)SwWriteTable::GetBoxWidth( pBox );
+                nCPos = nCPos + SwWriteTable::GetBoxWidth( pBox );
                 SwXMLTableColumn_Impl *pCol =
                     new SwXMLTableColumn_Impl( nCPos );
 
@@ -172,16 +172,16 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
             else
             {
 #if OSL_DEBUG_LEVEL > 1
-                sal_uInt16 nCheckPos =
-                    nCPos + (sal_uInt16)SwWriteTable::GetBoxWidth( pBox );
+                sal_uInt32 nCheckPos =
+                    nCPos + SwWriteTable::GetBoxWidth( pBox );
                 if( !nEndCPos )
                 {
                     nEndCPos = nCheckPos;
                 }
 #endif
-                nCPos = (sal_uInt16)nWidth;
+                nCPos = nWidth;
 #if OSL_DEBUG_LEVEL > 1
-                SwXMLTableColumn_Impl aCol( (sal_uInt16)nWidth );
+                SwXMLTableColumn_Impl aCol( nWidth );
                 OSL_ENSURE( aCols.Seek_Entry(&aCol), "couldn't find last column" );
                 OSL_ENSURE( SwXMLTableColumn_Impl(nCheckPos) ==
                                             SwXMLTableColumn_Impl(nCPos),
@@ -593,13 +593,13 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
     // pass 2: export column styles
     {
         const SwXMLTableColumns_Impl& rCols = pLines->GetColumns();
-        sal_uInt16 nCPos = 0U;
+        sal_uInt32 nCPos = 0U;
         sal_uInt16 nColumns = rCols.Count();
         for( sal_uInt16 nColumn=0U; nColumn<nColumns; nColumn++ )
         {
             SwXMLTableColumn_Impl *pColumn = rCols[nColumn];
 
-            sal_uInt16 nOldCPos = nCPos;
+            sal_uInt32 nOldCPos = nCPos;
             nCPos = pColumn->GetPos();
 
             sal_uInt32 nWidth = nCPos - nOldCPos;
@@ -625,10 +625,10 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                     nColAbsWidth += (nBaseWidth/2UL);
                     nColAbsWidth /= nBaseWidth;
                 }
-                pColumn->SetWidthOpt( (sal_uInt16)nColAbsWidth, sal_False );
+                pColumn->SetWidthOpt( nColAbsWidth, sal_False );
             }
 
-            ULONG nExpPos = 0;
+            sal_uLong nExpPos = 0;
             if( rExpCols.Seek_Entry( pColumn, &nExpPos ) )
             {
                 pColumn->SetStyleName(
@@ -669,16 +669,16 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         sal_uInt16 nBoxes = rBoxes.Count();
 
-        sal_uInt16 nCPos = 0U;
+        sal_uInt32 nCPos = 0U;
         sal_uInt16 nCol = 0U;
         for( sal_uInt16 nBox=0U; nBox<nBoxes; nBox++ )
         {
             SwTableBox *pBox = rBoxes[nBox];
 
             if( nBox < nBoxes-1U )
-                nCPos = nCPos + (sal_uInt16)SwWriteTable::GetBoxWidth( pBox );
+                nCPos = nCPos + SwWriteTable::GetBoxWidth( pBox );
             else
-                nCPos = (sal_uInt16)pLines->GetWidth();
+                nCPos = pLines->GetWidth();
 
 
             // Und ihren Index
@@ -951,7 +951,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
         const SwTableBoxes& rBoxes = rLine.GetTabBoxes();
         sal_uInt16 nBoxes = rBoxes.Count();
 
-        sal_uInt16 nCPos = 0U;
+        sal_uInt32 nCPos = 0U;
         sal_uInt16 nCol = 0U;
         for( sal_uInt16 nBox=0U; nBox<nBoxes; nBox++ )
         {
@@ -967,9 +967,9 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             }
 
             if( nBox < nBoxes-1U )
-                nCPos = nCPos + (sal_uInt16)SwWriteTable::GetBoxWidth( pBox );
+                nCPos = nCPos + SwWriteTable::GetBoxWidth( pBox );
             else
-                nCPos = (sal_uInt16)rLines.GetWidth();
+                nCPos = rLines.GetWidth();
 
             // Und ihren Index
             const sal_uInt16 nOldCol = nCol;
@@ -1018,7 +1018,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
 
 void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
                                     SwXMLTableInfo_Impl& rTblInfo,
-                                    USHORT nHeaderRows )
+                                    sal_uInt16 nHeaderRows )
 {
     OSL_ENSURE( pTableLines && !pTableLines->empty(),
             "SwXMLExport::ExportTableLines: table columns infos missing" );

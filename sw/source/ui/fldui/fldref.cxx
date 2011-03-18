@@ -65,7 +65,7 @@ SV_IMPL_PTRARR( _SwSeqFldList, _SeqFldLstElem* )
 #define REFFLDFLAG_NUMITEM  0x7200
 // <--
 
-USHORT  nFldDlgFmtSel       = 0;
+sal_uInt16  nFldDlgFmtSel       = 0;
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
@@ -112,7 +112,7 @@ SwFldRefPage::SwFldRefPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     // --> OD 2007-11-21 #i83479#
     aSelectionToolTipLB.SetSelectHdl( LINK(this, SwFldRefPage, SubTypeHdl) );
     aSelectionToolTipLB.SetDoubleClickHdl( LINK(this, SwFldRefPage, InsertHdl) );
-    aSelectionToolTipLB.SetWindowBits( aSelectionToolTipLB.GetWindowBits() | WB_HSCROLL );
+    aSelectionToolTipLB.SetStyle( aSelectionToolTipLB.GetStyle() | WB_HSCROLL );
     aSelectionToolTipLB.SetSpaceBetweenEntries(1);
     aSelectionToolTipLB.SetHighlightRange();
     // <--
@@ -132,7 +132,7 @@ void SwFldRefPage::SaveSelectedTxtNode()
         SvLBoxEntry* pEntry = aSelectionToolTipLB.GetCurEntry();
         if ( pEntry )
         {
-            const USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+            const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
             SwWrtShell *pSh = GetWrtShell();
             if ( !pSh )
             {
@@ -140,7 +140,7 @@ void SwFldRefPage::SaveSelectedTxtNode()
             }
             if ( nTypeId == REFFLDFLAG_HEADING )
             {
-                mnSavedSelectedPos = static_cast<sal_uInt16>(reinterpret_cast<ULONG>(pEntry->GetUserData()));
+                mnSavedSelectedPos = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pEntry->GetUserData()));
                 if ( mnSavedSelectedPos < maOutlineNodes.size() )
                 {
                     mpSavedSelectedTxtNode = maOutlineNodes[mnSavedSelectedPos];
@@ -148,7 +148,7 @@ void SwFldRefPage::SaveSelectedTxtNode()
             }
             else if ( nTypeId == REFFLDFLAG_NUMITEM )
             {
-                mnSavedSelectedPos = static_cast<sal_uInt16>(reinterpret_cast<ULONG>(pEntry->GetUserData()));
+                mnSavedSelectedPos = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pEntry->GetUserData()));
                 if ( mnSavedSelectedPos < maNumItems.size() )
                 {
                     mpSavedSelectedTxtNode = maNumItems[mnSavedSelectedPos]->GetTxtNode();
@@ -184,18 +184,18 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     Init(); // general initialisation
 
     // initialise TypeListBox
-    aTypeLB.SetUpdateMode(FALSE);
+    aTypeLB.SetUpdateMode(sal_False);
     aTypeLB.Clear();
 
     // fill Type-Listbox
 
-    USHORT nPos;
+    sal_uInt16 nPos;
     // set/insert reference
     const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
     for (short i = rRg.nStart; i < rRg.nEnd; ++i)
     {
-        const USHORT nTypeId = GetFldMgr().GetTypeId(i);
+        const sal_uInt16 nTypeId = GetFldMgr().GetTypeId(i);
 
         if (!IsFldEdit() || nTypeId != TYP_SETREFFLD)
         {
@@ -217,9 +217,9 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     if(!pSh)
         pSh = ::GetActiveWrtShell();
 
-    USHORT nFldTypeCnt = pSh->GetFldTypeCount(RES_SETEXPFLD);
+    sal_uInt16 nFldTypeCnt = pSh->GetFldTypeCount(RES_SETEXPFLD);
 
-    for (USHORT n = 0; n < nFldTypeCnt; ++n)
+    for (sal_uInt16 n = 0; n < nFldTypeCnt; ++n)
     {
         SwSetExpFieldType* pType = (SwSetExpFieldType*)pSh->GetFldType(n, RES_SETEXPFLD);
 
@@ -252,7 +252,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     if (!IsFldEdit())
         RestorePos(&aTypeLB);
 
-    aTypeLB.SetUpdateMode(TRUE);
+    aTypeLB.SetUpdateMode(sal_True);
 
     nFldDlgFmtSel = 0;
 
@@ -263,11 +263,11 @@ void SwFldRefPage::Reset(const SfxItemSet& )
                                 EqualsIgnoreCaseAscii(USER_DATA_VERSION_1))
         {
             String sVal = sUserData.GetToken(1, ';');
-            USHORT nVal = static_cast< USHORT >(sVal.ToInt32());
+            sal_uInt16 nVal = static_cast< sal_uInt16 >(sVal.ToInt32());
             if(nVal != USHRT_MAX)
             {
-                for(USHORT i = 0; i < aTypeLB.GetEntryCount(); i++)
-                    if(nVal == (USHORT)(ULONG)aTypeLB.GetEntryData(i))
+                for(sal_uInt16 i = 0; i < aTypeLB.GetEntryCount(); i++)
+                    if(nVal == (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(i))
                     {
                         aTypeLB.SelectEntryPos(i);
                         break;
@@ -290,7 +290,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
 IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
 {
     // save old ListBoxPos
-    const USHORT nOld = GetTypeSel();
+    const sal_uInt16 nOld = GetTypeSel();
 
     // current ListBoxPos
     SetTypeSel(aTypeLB.GetSelectEntryPos());
@@ -301,7 +301,7 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
         {
             // select positions
             String sName;
-            USHORT nFlag = 0;
+            sal_uInt16 nFlag = 0;
 
             switch( GetCurField()->GetSubType() )
             {
@@ -353,7 +353,7 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
 
             if (aTypeLB.GetEntryPos(sName) == LISTBOX_ENTRY_NOTFOUND)   // reference to deleted mark
             {
-                USHORT nPos = aTypeLB.InsertEntry(sName);
+                sal_uInt16 nPos = aTypeLB.InsertEntry(sName);
                 aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nFlag));
             }
 
@@ -369,12 +369,12 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
 
     if (nOld != GetTypeSel())
     {
-        USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
         // fill selection-ListBox
         UpdateSubType();
 
-        BOOL bName = FALSE;     nFldDlgFmtSel = 0;
+        sal_Bool bName = sal_False;     nFldDlgFmtSel = 0;
 
         if ( ( !IsFldEdit() || aSelectionLB.GetEntryCount() ) &&
              nOld != LISTBOX_ENTRY_NOTFOUND )
@@ -386,23 +386,23 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
         switch (nTypeId)
         {
             case TYP_GETREFFLD:
-                if (REFFLDFLAG & (USHORT)(ULONG)aTypeLB.GetEntryData(nOld))
+                if (REFFLDFLAG & (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(nOld))
                     // the the old one stays
                     nFldDlgFmtSel = aFormatLB.GetSelectEntryPos();
-                bName = TRUE;
+                bName = sal_True;
                 break;
 
             case TYP_SETREFFLD:
-                bName = TRUE;
+                bName = sal_True;
                 break;
 
             case REFFLDFLAG_BOOKMARK:
-                bName = TRUE;
+                bName = sal_True;
                 // no break!!!
             default:
                 if( REFFLDFLAG & nTypeId )
                 {
-                    USHORT nOldId = (USHORT)(ULONG)aTypeLB.GetEntryData(nOld);
+                    sal_uInt16 nOldId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(nOld);
                     if( nOldId & REFFLDFLAG || nOldId == TYP_GETREFFLD )
                         // then the old one stays
                         nFldDlgFmtSel = aFormatLB.GetSelectEntryPos();
@@ -414,8 +414,8 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
         aNameFT.Enable(bName);
 
         // fill Format-Listbox
-        USHORT nSize = FillFormatLB(nTypeId);
-        BOOL bFormat = nSize != 0;
+        sal_uInt16 nSize = FillFormatLB(nTypeId);
+        sal_Bool bFormat = nSize != 0;
         aFormatLB.Enable(bFormat);
         aFormatFT.Enable(bFormat);
 
@@ -428,7 +428,7 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
 
 IMPL_LINK( SwFldRefPage, SubTypeHdl, ListBox *, EMPTYARG )
 {
-    USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
     switch(nTypeId)
     {
@@ -484,13 +484,13 @@ void SwFldRefPage::UpdateSubType()
     if(!pSh)
         pSh = ::GetActiveWrtShell();
     SwGetRefField* pRefFld = (SwGetRefField*)GetCurField();
-    const USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
     String sOldSel;
     // --> OD 2007-11-22 #i83479#
     if ( aSelectionLB.IsVisible() )
     {
-        const USHORT nSelectionSel = aSelectionLB.GetSelectEntryPos();
+        const sal_uInt16 nSelectionSel = aSelectionLB.GetSelectEntryPos();
         if (nSelectionSel != LISTBOX_ENTRY_NOTFOUND)
         {
             sOldSel = aSelectionLB.GetEntry(nSelectionSel);
@@ -500,10 +500,10 @@ void SwFldRefPage::UpdateSubType()
     if (IsFldEdit() && !sOldSel.Len())
         sOldSel = String::CreateFromInt32( pRefFld->GetSeqNo() + 1 );
 
-    aSelectionLB.SetUpdateMode(FALSE);
+    aSelectionLB.SetUpdateMode(sal_False);
     aSelectionLB.Clear();
     // --> OD 2007-11-21 #i83479#
-    aSelectionToolTipLB.SetUpdateMode(FALSE);
+    aSelectionToolTipLB.SetUpdateMode(sal_False);
     aSelectionToolTipLB.Clear();
     bool bShowSelectionToolTipLB( false );
     // <--
@@ -530,9 +530,9 @@ void SwFldRefPage::UpdateSubType()
         {
             aSelectionLB.SetStyle(aSelectionLB.GetStyle() & ~WB_SORT);
             SwSeqFldList aArr;
-            USHORT nCnt = pSh->GetSeqFtnList( aArr );
+            sal_uInt16 nCnt = pSh->GetSeqFtnList( aArr );
 
-            for( USHORT n = 0; n < nCnt; ++n )
+            for( sal_uInt16 n = 0; n < nCnt; ++n )
             {
                 aSelectionLB.InsertEntry( aArr[ n ]->sDlgEntry );
                 if (IsFldEdit() && pRefFld->GetSeqNo() == aArr[ n ]->nSeqNo)
@@ -543,9 +543,9 @@ void SwFldRefPage::UpdateSubType()
         {
             aSelectionLB.SetStyle(aSelectionLB.GetStyle() & ~WB_SORT);
             SwSeqFldList aArr;
-            USHORT nCnt = pSh->GetSeqFtnList( aArr, true );
+            sal_uInt16 nCnt = pSh->GetSeqFtnList( aArr, true );
 
-            for( USHORT n = 0; n < nCnt; ++n )
+            for( sal_uInt16 n = 0; n < nCnt; ++n )
             {
                 aSelectionLB.InsertEntry( aArr[ n ]->sDlgEntry );
                 if (IsFldEdit() && pRefFld->GetSeqNo() == aArr[ n ]->nSeqNo)
@@ -628,8 +628,8 @@ void SwFldRefPage::UpdateSubType()
                 if(IsFldEdit())
                     sOldSel.Erase();
 
-                USHORT nCnt = pType->GetSeqFldList( aArr );
-                for( USHORT n = 0; n < nCnt; ++n )
+                sal_uInt16 nCnt = pType->GetSeqFldList( aArr );
+                for( sal_uInt16 n = 0; n < nCnt; ++n )
                 {
                     aSelectionLB.InsertEntry( aArr[ n ]->sDlgEntry );
                     if (IsFldEdit() && !sOldSel.Len() &&
@@ -646,7 +646,7 @@ void SwFldRefPage::UpdateSubType()
     {
         SvStringsDtor aLst;
         GetFldMgr().GetSubTypes(nTypeId, aLst);
-        for (USHORT i = 0; i < aLst.Count(); ++i)
+        for (sal_uInt16 i = 0; i < aLst.Count(); ++i)
             aSelectionLB.InsertEntry(*aLst[i]);
 
         if (IsFldEdit())
@@ -658,9 +658,9 @@ void SwFldRefPage::UpdateSubType()
     aSelectionLB.Show( !bShowSelectionToolTipLB );
     if ( bShowSelectionToolTipLB )
     {
-        aSelectionToolTipLB.SetUpdateMode(TRUE);
+        aSelectionToolTipLB.SetUpdateMode(sal_True);
 
-        BOOL bEnable = aSelectionToolTipLB.GetEntryCount() != 0;
+        sal_Bool bEnable = aSelectionToolTipLB.GetEntryCount() != 0;
         aSelectionToolTipLB.Enable( bEnable );
         aSelectionFT.Enable( bEnable );
 
@@ -676,10 +676,10 @@ void SwFldRefPage::UpdateSubType()
     }
     else
     {
-        aSelectionLB.SetUpdateMode(TRUE);
+        aSelectionLB.SetUpdateMode(sal_True);
 
         // enable or disable
-        BOOL bEnable = aSelectionLB.GetEntryCount() != 0;
+        sal_Bool bEnable = aSelectionLB.GetEntryCount() != 0;
         aSelectionLB.Enable( bEnable );
         aSelectionFT.Enable( bEnable );
 
@@ -696,11 +696,11 @@ void SwFldRefPage::UpdateSubType()
     // <--
 }
 
-USHORT SwFldRefPage::FillFormatLB(USHORT nTypeId)
+sal_uInt16 SwFldRefPage::FillFormatLB(sal_uInt16 nTypeId)
 {
     String sOldSel;
 
-    USHORT nFormatSel = aFormatLB.GetSelectEntryPos();
+    sal_uInt16 nFormatSel = aFormatLB.GetSelectEntryPos();
     if (nFormatSel != LISTBOX_ENTRY_NOTFOUND)
         sOldSel = aFormatLB.GetEntry(nFormatSel);
 
@@ -708,7 +708,7 @@ USHORT SwFldRefPage::FillFormatLB(USHORT nTypeId)
     aFormatLB.Clear();
 
     // refernce has less that the annotation
-    USHORT nSize( 0 );
+    sal_uInt16 nSize( 0 );
     bool bAddCrossRefFormats( false );
     switch (nTypeId)
     {
@@ -735,7 +735,7 @@ USHORT SwFldRefPage::FillFormatLB(USHORT nTypeId)
             }
             else
             {
-                nSize = GetFldMgr().GetFormatCount( nTypeId, FALSE, IsFldDlgHtmlMode() );
+                nSize = GetFldMgr().GetFormatCount( nTypeId, sal_False, IsFldDlgHtmlMode() );
             }
             break;
     }
@@ -743,16 +743,16 @@ USHORT SwFldRefPage::FillFormatLB(USHORT nTypeId)
     if (REFFLDFLAG & nTypeId)
         nTypeId = TYP_GETREFFLD;
 
-    for (USHORT i = 0; i < nSize; i++)
+    for (sal_uInt16 i = 0; i < nSize; i++)
     {
-        USHORT nPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr( nTypeId, i ));
+        sal_uInt16 nPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr( nTypeId, i ));
         aFormatLB.SetEntryData( nPos, reinterpret_cast<void*>(GetFldMgr().GetFormatId( nTypeId, i )));
     }
     // --> OD 2007-11-16 #i83479#
     if ( bAddCrossRefFormats )
     {
-        USHORT nFormat = FMT_REF_NUMBER - FMT_REF_BEGIN;
-        USHORT nPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr( nTypeId, nFormat ));
+        sal_uInt16 nFormat = FMT_REF_NUMBER - FMT_REF_BEGIN;
+        sal_uInt16 nPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr( nTypeId, nFormat ));
         aFormatLB.SetEntryData( nPos, reinterpret_cast<void*>(GetFldMgr().GetFormatId( nTypeId, nFormat )));
         nFormat = FMT_REF_NUMBER_NO_CONTEXT - FMT_REF_BEGIN;
         nPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr( nTypeId, nFormat ));
@@ -770,7 +770,7 @@ USHORT SwFldRefPage::FillFormatLB(USHORT nTypeId)
         if (!IsFldEdit())
             aFormatLB.SelectEntry(sOldSel);
         else
-            aFormatLB.SelectEntry(SW_RESSTR(FMT_REF_BEGIN + (USHORT)GetCurField()->GetFormat()));
+            aFormatLB.SelectEntry(SW_RESSTR(FMT_REF_BEGIN + (sal_uInt16)GetCurField()->GetFormat()));
 
         if (!aFormatLB.GetSelectEntryCount())
         {
@@ -790,15 +790,15 @@ USHORT SwFldRefPage::FillFormatLB(USHORT nTypeId)
 IMPL_LINK( SwFldRefPage, ModifyHdl, Edit *, EMPTYARG )
 {
     String aName(aNameED.GetText());
-    const USHORT nLen = aName.Len();
+    const sal_uInt16 nLen = aName.Len();
 
-    BOOL bEnable = TRUE;
-    USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+    sal_Bool bEnable = sal_True;
+    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
     if ((nTypeId == TYP_SETREFFLD && !GetFldMgr().CanInsertRefMark(aName)) ||
         (nLen == 0 && (nTypeId == TYP_GETREFFLD || nTypeId == TYP_SETREFFLD ||
                        nTypeId == REFFLDFLAG_BOOKMARK)))
-        bEnable = FALSE;
+        bEnable = sal_False;
 
     EnableInsert(bEnable);
 
@@ -807,20 +807,20 @@ IMPL_LINK( SwFldRefPage, ModifyHdl, Edit *, EMPTYARG )
     return 0;
 }
 
-BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
+sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
 {
-    BOOL bModified = FALSE;
-    USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+    sal_Bool bModified = sal_False;
+    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
-    USHORT nSubType = 0;
-    ULONG nFormat;
+    sal_uInt16 nSubType = 0;
+    sal_uLong nFormat;
 
     nFormat = aFormatLB.GetSelectEntryPos();
 
     if(nFormat == LISTBOX_ENTRY_NOTFOUND)
         nFormat = 0;
     else
-        nFormat = (ULONG)aFormatLB.GetEntryData((USHORT)nFormat);
+        nFormat = (sal_uLong)aFormatLB.GetEntryData((sal_uInt16)nFormat);
 
     String aVal(aValueED.GetText());
     String aName(aNameED.GetText());
@@ -865,7 +865,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
             SwSeqFldList aArr;
             _SeqFldLstElem aElem( aSelectionLB.GetSelectEntry(), 0 );
 
-            USHORT nPos;
+            sal_uInt16 nPos;
 
             nTypeId = TYP_GETREFFLD;
             nSubType = REF_FOOTNOTE;
@@ -876,7 +876,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
                 aVal = String::CreateFromInt32( aArr[nPos]->nSeqNo );
 
                 if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
-                    bModified = TRUE; // can happen with fields of which the references were deleted
+                    bModified = sal_True; // can happen with fields of which the references were deleted
             }
             else if (IsFldEdit())
                 aVal = String::CreateFromInt32( pRefFld->GetSeqNo() );
@@ -886,7 +886,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
             SwSeqFldList aArr;
             _SeqFldLstElem aElem( aSelectionLB.GetSelectEntry(), 0 );
 
-            USHORT nPos;
+            sal_uInt16 nPos;
 
             nTypeId = TYP_GETREFFLD;
             nSubType = REF_ENDNOTE;
@@ -897,7 +897,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
                 aVal = String::CreateFromInt32( aArr[nPos]->nSeqNo );
 
                 if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
-                    bModified = TRUE; // can happen with fields of which the reference was deleted
+                    bModified = sal_True; // can happen with fields of which the reference was deleted
             }
             else if (IsFldEdit())
                 aVal = String::CreateFromInt32( pRefFld->GetSeqNo() );
@@ -910,7 +910,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
                     "<SwFldRefPage::FillItemSet(..)> - no entry selected in selection tool tip listbox!" );
             if ( pEntry )
             {
-                const sal_uInt16 nOutlIdx( static_cast<sal_uInt16>(reinterpret_cast<ULONG>(pEntry->GetUserData())) );
+                const sal_uInt16 nOutlIdx( static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pEntry->GetUserData())) );
                 pSh->getIDocumentOutlineNodesAccess()->getOutlineNodes( maOutlineNodes );
                 if ( nOutlIdx < maOutlineNodes.size() )
                 {
@@ -930,7 +930,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
                     "<SwFldRefPage::FillItemSet(..)> - no entry selected in selection tool tip listbox!" );
             if ( pEntry )
             {
-                const sal_uInt16 nNumItemIdx( static_cast<sal_uInt16>(reinterpret_cast<ULONG>(pEntry->GetUserData())) );
+                const sal_uInt16 nNumItemIdx( static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(pEntry->GetUserData())) );
                 pSh->getIDocumentListItemsAccess()->getNumItems( maNumItems );
                 if ( nNumItemIdx < maNumItems.size() )
                 {
@@ -954,7 +954,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
                 SwSeqFldList aArr;
                 _SeqFldLstElem aElem( aSelectionLB.GetSelectEntry(), 0 );
 
-                USHORT nPos;
+                sal_uInt16 nPos;
 
                 nTypeId = TYP_GETREFFLD;
                 nSubType = REF_SEQUENCEFLD;
@@ -965,7 +965,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
                     aVal = String::CreateFromInt32( aArr[nPos]->nSeqNo );
 
                     if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
-                        bModified = TRUE; // can happen with fields of which the reference was deleted
+                        bModified = sal_True; // can happen with fields of which the reference was deleted
                 }
                 else if (IsFldEdit())
                     aVal = String::CreateFromInt32( pRefFld->GetSeqNo() );
@@ -991,7 +991,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
 
     ModifyHdl();    // enable/disable insert if applicable
 
-    return FALSE;
+    return sal_False;
 }
 
 SfxTabPage* SwFldRefPage::Create(   Window* pParent,
@@ -1000,7 +1000,7 @@ SfxTabPage* SwFldRefPage::Create(   Window* pParent,
     return ( new SwFldRefPage( pParent, rAttrSet ) );
 }
 
-USHORT SwFldRefPage::GetGroup()
+sal_uInt16 SwFldRefPage::GetGroup()
 {
     return GRP_REF;
 }
@@ -1010,11 +1010,11 @@ void    SwFldRefPage::FillUserData()
     String sData( String::CreateFromAscii(
                     RTL_CONSTASCII_STRINGPARAM( USER_DATA_VERSION )));
     sData += ';';
-    USHORT nTypeSel = aTypeLB.GetSelectEntryPos();
+    sal_uInt16 nTypeSel = aTypeLB.GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;
     else
-        nTypeSel = sal::static_int_cast< USHORT >(reinterpret_cast< sal_uIntPtr >(aTypeLB.GetEntryData( nTypeSel )));
+        nTypeSel = sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(aTypeLB.GetEntryData( nTypeSel )));
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
 }

@@ -45,7 +45,7 @@ long NumEditAction::Notify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const KeyCode aKeyCode = pKEvt->GetKeyCode();
-        const USHORT nModifier = aKeyCode.GetModifier();
+        const sal_uInt16 nModifier = aKeyCode.GetModifier();
         if( aKeyCode.GetCode() == KEY_RETURN &&
                 !nModifier)
         {
@@ -71,12 +71,12 @@ NoSpaceEdit::~NoSpaceEdit()
 
 void NoSpaceEdit::KeyInput(const KeyEvent& rEvt)
 {
-    BOOL bCallParent = TRUE;
+    sal_Bool bCallParent = sal_True;
     if(rEvt.GetCharCode())
     {
         String sKey = rEvt.GetCharCode();
         if( STRING_NOTFOUND != sForbiddenChars.Search(sKey))
-            bCallParent = FALSE;
+            bCallParent = sal_False;
     }
     if(bCallParent)
         Edit::KeyInput(rEvt);
@@ -86,11 +86,11 @@ void NoSpaceEdit::Modify()
 {
     Selection aSel = GetSelection();
     String sTemp = GetText();
-    for(USHORT i = 0; i < sForbiddenChars.Len(); i++)
+    for(sal_uInt16 i = 0; i < sForbiddenChars.Len(); i++)
     {
         sTemp.EraseAllChars( sForbiddenChars.GetChar(i) );
     }
-    USHORT nDiff = GetText().Len() - sTemp.Len();
+    sal_uInt16 nDiff = GetText().Len() - sTemp.Len();
     if(nDiff)
     {
         aSel.setMin(aSel.getMin() - nDiff);
@@ -109,7 +109,7 @@ ReturnActionEdit::~ReturnActionEdit()
 void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
 {
     const KeyCode aKeyCode = rEvt.GetKeyCode();
-    const USHORT nModifier = aKeyCode.GetModifier();
+    const sal_uInt16 nModifier = aKeyCode.GetModifier();
     if( aKeyCode.GetCode() == KEY_RETURN &&
             !nModifier)
     {

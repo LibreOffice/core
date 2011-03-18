@@ -31,7 +31,6 @@
 
 #include <fmtftn.hxx>
 
-#include <oox/core/tokens.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sax/fshelper.hxx>

@@ -29,7 +29,6 @@
 #ifndef _SWPARRTF_HXX
 #define _SWPARRTF_HXX
 
-#include <map>
 #include <deque>
 #include <vector>
 
@@ -37,15 +36,15 @@
 #include <editeng/numitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <redline.hxx>
-#include <algorithm>
+
 #include <fltshell.hxx>         // fuer den Attribut Stack
 #include <ndindex.hxx>
 #include "../inc/msfilter.hxx"
 #include <svx/svdobj.hxx>
 
 
-extern void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, BYTE nCol, short nIdx,
-    USHORT nOOIndex, USHORT nWWIndex, short *pSize);
+extern void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt8 nCol, short nIdx,
+    sal_uInt16 nOOIndex, sal_uInt16 nWWIndex, short *pSize);
 
 class Font;
 class Graphic;
@@ -68,9 +67,9 @@ struct SvxRTFPictureType;
 
 class RtfReader: public Reader
 {
-    virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual sal_uLong Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 public:
-    virtual ULONG Read( SvStream* pStrm, SwDoc &, const String& rBaseURL, SwPaM &);
+    virtual sal_uLong Read( SvStream* pStrm, SwDoc &, const String& rBaseURL, SwPaM &);
 };
 
 class SwNodeIdx : public SvxNodeIdx
@@ -78,7 +77,7 @@ class SwNodeIdx : public SvxNodeIdx
     SwNodeIndex aIdx;
 public:
     SwNodeIdx( const SwNodeIndex& rIdx ) : aIdx( rIdx ) {}
-    virtual ULONG   GetIdx() const;
+    virtual sal_uLong   GetIdx() const;
     virtual SvxNodeIdx* Clone() const;
 };
 
@@ -103,7 +102,7 @@ class SwxPosition : public SvxPosition
 public:
     SwxPosition( SwPaM* pCrsr ) : pPam( pCrsr ) {}
 
-    virtual ULONG   GetNodeIdx() const;
+    virtual sal_uLong   GetNodeIdx() const;
     virtual xub_StrLen GetCntIdx() const;
 
     // erzeuge von sich selbst eine Kopie
@@ -120,7 +119,7 @@ struct SwFlySave
     SwNodeIndex nSttNd, nEndNd;
     xub_StrLen  nEndCnt;
     SwTwips     nPageWidth;
-    USHORT      nDropLines, nDropAnchor;
+    sal_uInt16      nDropLines, nDropAnchor;
 
     SwFlySave( const SwPaM& rPam, SfxItemSet& rSet );
     int IsEqualFly( const SwPaM& rPos, SfxItemSet& rSet );
@@ -130,27 +129,27 @@ struct SwFlySave
 struct SwListEntry
 {
     long nListId, nListTemplateId, nListNo;
-    USHORT nListDocPos;
-    BOOL bRuleUsed;
+    sal_uInt16 nListDocPos;
+    sal_Bool bRuleUsed;
 
     SwListEntry()
         : nListId( 0 ), nListTemplateId( 0 ), nListNo( 0 ), nListDocPos( 0 ),
-        bRuleUsed( FALSE )
+        bRuleUsed( sal_False )
     {}
-    SwListEntry( long nLstId, long nLstTmplId, USHORT nLstDocPos )
+    SwListEntry( long nLstId, long nLstTmplId, sal_uInt16 nLstDocPos )
         : nListId( nLstId ), nListTemplateId( nLstTmplId ), nListNo( 0 ),
-        nListDocPos( nLstDocPos ), bRuleUsed( FALSE )
+        nListDocPos( nLstDocPos ), bRuleUsed( sal_False )
     {}
 
     void Clear() { nListId = nListTemplateId = nListNo = 0, nListDocPos = 0;
-                    bRuleUsed = FALSE; }
+                    bRuleUsed = sal_False; }
 };
 
 DECLARE_TABLE( SwRTFStyleTbl, SwTxtFmtColl* )
 DECLARE_TABLE( SwRTFCharStyleTbl, SwCharFmt* )
 typedef SwFlySave* SwFlySavePtr;
 SV_DECL_PTRARR_DEL( SwFlySaveArr, SwFlySavePtr, 0, 20 )
-SV_DECL_VARARR( SwListArr, SwListEntry, 0, 20 )
+typedef std::deque< SwListEntry > SwListArr;
 
 struct DocPageInformation
 {
@@ -250,7 +249,7 @@ private:
         wwULSpaceData& rData);
     void SetPageULSpaceItems(SwFrmFmt &rFmt, wwULSpaceData& rData);
     bool SetCols(SwFrmFmt &rFmt, const rtfSection &rSection,
-        USHORT nNettoWidth);
+        sal_uInt16 nNettoWidth);
     void SetHdFt(rtfSection &rSection);
     void CopyFrom(const SwPageDesc &rFrom, SwPageDesc &rDest);
     void MoveFrom(SwPageDesc &rFrom, SwPageDesc &rDest);
@@ -312,11 +311,11 @@ class SwRTFParser : public SvxRTFParser
 
     String sBaseURL;
 
-    USHORT nAktPageDesc, nAktFirstPageDesc;
-    USHORT nAktBox;         // akt. Box
-    USHORT nInsTblRow;      // beim nach \row kein \pard -> neue Line anlegen
-    USHORT nNewNumSectDef;  // jeder SectionWechsel kann neue Rules definieren
-    USHORT nRowsToRepeat;
+    sal_uInt16 nAktPageDesc, nAktFirstPageDesc;
+    sal_uInt16 m_nCurrentBox;
+    sal_uInt16 nInsTblRow;      // beim nach \row kein \pard -> neue Line anlegen
+    sal_uInt16 nNewNumSectDef;  // jeder SectionWechsel kann neue Rules definieren
+    sal_uInt16 nRowsToRepeat;
 
     bool bSwPageDesc;
     bool bReadSwFly;        // lese Swg-Fly (wichtig fuer Bitmaps!)
@@ -345,7 +344,7 @@ class SwRTFParser : public SvxRTFParser
 
     virtual void InsertPara();
     virtual void InsertText();
-    virtual void MovePos( int bForward = TRUE );
+    virtual void MovePos( int bForward = sal_True );
     virtual void SetEndPrevPara( SvxNodeIdx*& rpNodePos, xub_StrLen& rCntPos );
     void EnterEnvironment();
     void LeaveEnvironment();
@@ -360,10 +359,10 @@ class SwRTFParser : public SvxRTFParser
 
     void ReadUserProperties();
 
-    void ReadListLevel( SwNumRule& rRule, BYTE nLvl );
+    void ReadListLevel( SwNumRule& rRule, sal_uInt8 nLvl );
     void SetBorderLine(SvxBoxItem& rBox, sal_uInt16 nLine);
     void ReadListTable();
-    USHORT ReadRevTbl();
+    sal_uInt16 ReadRevTbl();
     void ReadShpRslt();
     void ReadShpTxt(String &shpTxt);
     void ReadDrawingObject();
@@ -372,21 +371,21 @@ class SwRTFParser : public SvxRTFParser
     void ReadListOverrideTable();
     SwNumRule *ReadNumSecLevel( int nToken );
     SwNumRule* GetNumRuleOfListNo( long nListNo,
-                                    BOOL bRemoveFromList = FALSE );
+                                    sal_Bool bRemoveFromList = sal_False );
     void RemoveUnusedNumRule( SwNumRule* );
     void RemoveUnusedNumRules();
     const Font* FindFontOfItem( const SvxFontItem& rItem ) const;
 
     // 3 Methoden zum Aufbauen der Styles
-    SwTxtFmtColl* MakeColl( const String&, USHORT nPos, BYTE nOutlineLevel,
+    SwTxtFmtColl* MakeColl( const String&, sal_uInt16 nPos, sal_uInt8 nOutlineLevel,
                             bool& rbCollExist );
-    SwCharFmt* MakeCharFmt( const String& rName, USHORT nPos,
+    SwCharFmt* MakeCharFmt( const String& rName, sal_uInt16 nPos,
                             int& rbCollExist );
     void SetStyleAttr( SfxItemSet& rCollSet,
                         const SfxItemSet& rStyleSet,
                         const SfxItemSet& rDerivedSet );
-    SwTxtFmtColl* MakeStyle( USHORT nNo, const SvxRTFStyleType& rStyle );
-    SwCharFmt* MakeCharStyle( USHORT nNo, const SvxRTFStyleType& rStyle );
+    SwTxtFmtColl* MakeStyle( sal_uInt16 nNo, const SvxRTFStyleType& rStyle );
+    SwCharFmt* MakeCharStyle( sal_uInt16 nNo, const SvxRTFStyleType& rStyle );
     void MakeStyleTab();
 
     int MakeFieldInst( String& rFieldStr );
@@ -452,7 +451,7 @@ public:
             ::com::sun::star::document::XDocumentProperties> i_xDocProps,
         const SwPaM& rCrsr, SvStream& rIn,
         const String& rBaseURL,
-        int bReadNewDoc = TRUE );
+        int bReadNewDoc = sal_True );
 
     virtual SvParserState CallParser(); // Aufruf des Parsers
     virtual int IsEndPara( SvxNodeIdx* pNd, xub_StrLen nCnt ) const;

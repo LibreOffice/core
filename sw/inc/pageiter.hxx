@@ -42,11 +42,11 @@ class SwPageIter {
 public:
     SwPageIter( const SwDoc &rDoc, const SwPosition &rStartPos );
 
-    BOOL IsEnd() const { return 0 == pPage; }
-    BOOL NextPage();
+    sal_Bool IsEnd() const { return 0 == pPage; }
+    sal_Bool NextPage();
     const SwPageDesc* GetPageDesc() const;
-    BOOL Seek( const SwPosition &rPos );
-    BOOL GetPosition( SwPosition &rPos ) const;
+    sal_Bool Seek( const SwPosition &rPos );
+    sal_Bool GetPosition( SwPosition &rPos ) const;
 };
 
 

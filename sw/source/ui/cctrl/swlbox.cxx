@@ -42,15 +42,15 @@ SV_IMPL_PTRARR(SwEntryLst, SwBoxEntry*)
 
 //     Description: ListboxElement
 SwBoxEntry::SwBoxEntry() :
-    bModified(FALSE),
-    bNew(FALSE),
+    bModified(sal_False),
+    bNew(sal_False),
     nId(LISTBOX_APPEND)
 {
 }
 
-SwBoxEntry::SwBoxEntry(const String& aNam, USHORT nIdx) :
-    bModified(FALSE),
-    bNew(FALSE),
+SwBoxEntry::SwBoxEntry(const String& aNam, sal_uInt16 nIdx) :
+    bModified(sal_False),
+    bNew(sal_False),
     aName(aNam),
     nId(nIdx)
 {
@@ -64,13 +64,13 @@ SwBoxEntry::SwBoxEntry(const SwBoxEntry& rOld) :
 {
 }
 
-SwComboBox::SwComboBox(Window* pParent, const ResId& rId, USHORT nStyleBits ):
+SwComboBox::SwComboBox(Window* pParent, const ResId& rId, sal_uInt16 nStyleBits ):
     ComboBox(pParent, rId),
     nStyle(nStyleBits)
 {
     // create administration for the resource's Stringlist
-    USHORT nSize = GetEntryCount();
-    for( USHORT i=0; i < nSize; ++i )
+    sal_uInt16 nSize = GetEntryCount();
+    for( sal_uInt16 i=0; i < nSize; ++i )
     {
         const SwBoxEntry* pTmp = new SwBoxEntry(ComboBox::GetEntry(i), i);
         aEntryLst.Insert(pTmp, aEntryLst.Count() );
@@ -87,7 +87,7 @@ void SwComboBox::InsertEntry(const SwBoxEntry& rEntry)
     InsertSorted(new SwBoxEntry(rEntry));
 }
 
-void SwComboBox::RemoveEntry(USHORT nPos)
+void SwComboBox::RemoveEntry(sal_uInt16 nPos)
 {
     if(nPos >= aEntryLst.Count())
         return;
@@ -105,12 +105,12 @@ void SwComboBox::RemoveEntry(USHORT nPos)
     aDelEntryLst.C40_INSERT(SwBoxEntry, pEntry, aDelEntryLst.Count());
 }
 
-USHORT SwComboBox::GetEntryPos(const SwBoxEntry& rEntry) const
+sal_uInt16 SwComboBox::GetEntryPos(const SwBoxEntry& rEntry) const
 {
     return ComboBox::GetEntryPos(rEntry.aName);
 }
 
-const SwBoxEntry& SwComboBox::GetEntry(USHORT nPos) const
+const SwBoxEntry& SwComboBox::GetEntry(sal_uInt16 nPos) const
 {
     if(nPos < aEntryLst.Count())
         return *aEntryLst[nPos];
@@ -118,12 +118,12 @@ const SwBoxEntry& SwComboBox::GetEntry(USHORT nPos) const
     return aDefault;
 }
 
-USHORT SwComboBox::GetRemovedCount() const
+sal_uInt16 SwComboBox::GetRemovedCount() const
 {
     return aDelEntryLst.Count();
 }
 
-const SwBoxEntry& SwComboBox::GetRemovedEntry(USHORT nPos) const
+const SwBoxEntry& SwComboBox::GetRemovedEntry(sal_uInt16 nPos) const
 {
     if(nPos < aDelEntryLst.Count())
         return *aDelEntryLst[nPos];
@@ -134,13 +134,13 @@ const SwBoxEntry& SwComboBox::GetRemovedEntry(USHORT nPos) const
 void SwComboBox::InsertSorted(SwBoxEntry* pEntry)
 {
     ComboBox::InsertEntry(pEntry->aName);
-    USHORT nPos = ComboBox::GetEntryPos(pEntry->aName);
+    sal_uInt16 nPos = ComboBox::GetEntryPos(pEntry->aName);
     aEntryLst.C40_INSERT(SwBoxEntry, pEntry, nPos);
 }
 
 void SwComboBox::KeyInput( const KeyEvent& rKEvt )
 {
-    USHORT nChar = rKEvt.GetCharCode();
+    sal_uInt16 nChar = rKEvt.GetCharCode();
 
     if(nStyle & CBS_FILENAME)
     {

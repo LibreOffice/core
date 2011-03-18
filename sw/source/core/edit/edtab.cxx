@@ -44,6 +44,7 @@
 #include <frmatr.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -66,14 +67,14 @@ using namespace ::com::sun::star::uno;
 extern void ClearFEShellTabCols();
 
 const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts,
-                                         USHORT nRows, USHORT nCols,
+                                         sal_uInt16 nRows, sal_uInt16 nCols,
                                          sal_Int16 eAdj,
                                          const SwTableAutoFmt* pTAFmt )
 {
     StartAllAction();
     SwPosition* pPos = GetCrsr()->GetPoint();
 
-    BOOL bEndUndo = 0 != pPos->nContent.GetIndex();
+    sal_Bool bEndUndo = 0 != pPos->nContent.GetIndex();
     if( bEndUndo )
     {
         StartUndo( UNDO_START );
@@ -86,7 +87,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts
     const SwTable *pTable = GetDoc()->InsertTable( rInsTblOpts, *pPos,
                                                    nRows, nCols,
                                                    eAdj, pTAFmt,
-                                                   0, TRUE );
+                                                   0, sal_True );
     if( bEndUndo )
         EndUndo( UNDO_END );
 
@@ -94,13 +95,13 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts
     return *pTable;
 }
 
-BOOL SwEditShell::TextToTable( const SwInsertTableOptions& rInsTblOpts,
+sal_Bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTblOpts,
                                sal_Unicode cCh,
                                sal_Int16 eAdj,
                                const SwTableAutoFmt* pTAFmt )
 {
-    SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
-    BOOL bRet = FALSE;
+    SwWait aWait( *GetDoc()->GetDocShell(), sal_True );
+    sal_Bool bRet = sal_False;
     StartAllAction();
     FOREACHPAM_START(this)
         if( PCURCRSR->HasMark() )
@@ -111,10 +112,10 @@ BOOL SwEditShell::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     return bRet;
 }
 
-BOOL SwEditShell::TableToText( sal_Unicode cCh )
+sal_Bool SwEditShell::TableToText( sal_Unicode cCh )
 {
-    SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
-    BOOL bRet = FALSE;
+    SwWait aWait( *GetDoc()->GetDocShell(), sal_True );
+    sal_Bool bRet = sal_False;
     SwPaM* pCrsr = GetCrsr();
     const SwTableNode* pTblNd =
             GetDoc()->IsIdxInTbl( pCrsr->GetPoint()->nNode );
@@ -155,23 +156,23 @@ BOOL SwEditShell::TableToText( sal_Unicode cCh )
     return bRet;
 }
 
-BOOL SwEditShell::IsTextToTableAvailable() const
+sal_Bool SwEditShell::IsTextToTableAvailable() const
 {
-    BOOL bOnlyText = FALSE;
+    sal_Bool bOnlyText = sal_False;
     FOREACHPAM_START(this)
         if( PCURCRSR->HasMark() && *PCURCRSR->GetPoint() != *PCURCRSR->GetMark() )
         {
-            bOnlyText = TRUE;
+            bOnlyText = sal_True;
 
             // pruefe ob in der Selection eine Tabelle liegt
-            ULONG nStt = PCURCRSR->GetMark()->nNode.GetIndex(),
+            sal_uLong nStt = PCURCRSR->GetMark()->nNode.GetIndex(),
                   nEnd = PCURCRSR->GetPoint()->nNode.GetIndex();
-            if( nStt > nEnd )   { ULONG n = nStt; nStt = nEnd; nEnd = n; }
+            if( nStt > nEnd )   { sal_uLong n = nStt; nStt = nEnd; nEnd = n; }
 
             for( ; nStt <= nEnd; ++nStt )
                 if( !GetDoc()->GetNodes()[ nStt ]->IsTxtNode() )
                 {
-                    bOnlyText = FALSE;
+                    bOnlyText = sal_False;
                     break;
                 }
 
@@ -185,14 +186,14 @@ BOOL SwEditShell::IsTextToTableAvailable() const
 
 void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTblOpts,
                                   SwDDEFieldType* pDDEType,
-                                  USHORT nRows, USHORT nCols,
+                                  sal_uInt16 nRows, sal_uInt16 nCols,
                                   sal_Int16 eAdj )
 {
     SwPosition* pPos = GetCrsr()->GetPoint();
 
     StartAllAction();
 
-    BOOL bEndUndo = 0 != pPos->nContent.GetIndex();
+    sal_Bool bEndUndo = 0 != pPos->nContent.GetIndex();
     if( bEndUndo )
     {
         StartUndo( UNDO_START );
@@ -258,12 +259,14 @@ void SwEditShell::SetTblChgMode( TblChgMode eMode )
     {
         ((SwTable&)pTblNd->GetTable()).SetTblChgMode( eMode );
         if( !GetDoc()->IsModified() )   // Bug 57028
-            GetDoc()->SetUndoNoResetModified();
+        {
+            GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
+        }
         GetDoc()->SetModified();
     }
 }
 
-BOOL SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
+sal_Bool SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
 {
     SwSelBoxes aBoxes;
     if( IsTableMode() )
@@ -280,10 +283,10 @@ BOOL SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
                 SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
                 aBoxes.Insert( pBox );
             }
-        } while( FALSE );
+        } while( sal_False );
     }
 
-    for( USHORT n = 0; n < aBoxes.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aBoxes.Count(); ++n )
     {
         const SwTableBox* pSelBox = aBoxes[ n ];
         const SwTableBoxFmt* pTblFmt = (SwTableBoxFmt*)pSelBox->GetFrmFmt();
@@ -322,7 +325,7 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
                 SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
                 aBoxes.Insert( pBox );
             }
-        } while( FALSE );
+        } while( sal_False );
     }
 
     // beim setzen einer Formel keine Ueberpruefung mehr vornehmen!
@@ -330,17 +333,17 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
         ClearTblBoxCntnt();
 
     StartAllAction();
-    GetDoc()->StartUndo( UNDO_START, NULL );
-    for( USHORT n = 0; n < aBoxes.Count(); ++n )
+    GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+    for( sal_uInt16 n = 0; n < aBoxes.Count(); ++n )
         GetDoc()->SetTblBoxFormulaAttrs( *aBoxes[ n ], rSet );
-    GetDoc()->EndUndo( UNDO_END, NULL );
+    GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     EndAllAction();
 }
 
-BOOL SwEditShell::IsTableBoxTextFormat() const
+sal_Bool SwEditShell::IsTableBoxTextFormat() const
 {
     if( IsTableMode() )
-        return FALSE;
+        return sal_False;
 
     SwTableBox *pBox = 0;
     {
@@ -353,25 +356,25 @@ BOOL SwEditShell::IsTableBoxTextFormat() const
     }
 
     if( !pBox )
-        return FALSE;
+        return sal_False;
 
     sal_uInt32 nFmt;
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == pBox->GetFrmFmt()->GetAttrSet().GetItemState(
-        RES_BOXATR_FORMAT, TRUE, &pItem ))
+        RES_BOXATR_FORMAT, sal_True, &pItem ))
     {
         nFmt = ((SwTblBoxNumFormat*)pItem)->GetValue();
         return GetDoc()->GetNumberFormatter()->IsTextFormat( nFmt ) ||
                 NUMBERFORMAT_TEXT == nFmt;
     }
 
-    ULONG nNd = pBox->IsValidNumTxtNd();
+    sal_uLong nNd = pBox->IsValidNumTxtNd();
     if( ULONG_MAX == nNd )
-        return TRUE;
+        return sal_True;
 
     const String& rTxt = GetDoc()->GetNodes()[ nNd ]->GetTxtNode()->GetTxt();
     if( !rTxt.Len() )
-        return FALSE;
+        return sal_False;
 
     double fVal;
     return !GetDoc()->GetNumberFormatter()->IsNumberFormat( rTxt, nFmt, fVal );
@@ -392,57 +395,57 @@ String SwEditShell::GetTableBoxText() const
                 pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
         }
 
-        ULONG nNd;
+        sal_uLong nNd;
         if( pBox && ULONG_MAX != ( nNd = pBox->IsValidNumTxtNd() ) )
             sRet = GetDoc()->GetNodes()[ nNd ]->GetTxtNode()->GetTxt();
     }
     return sRet;
 }
 
-BOOL SwEditShell::SplitTable( USHORT eMode )
+sal_Bool SwEditShell::SplitTable( sal_uInt16 eMode )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     SwPaM *pCrsr = GetCrsr();
     if( pCrsr->GetNode()->FindTableNode() )
     {
         StartAllAction();
-        GetDoc()->StartUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
-        bRet = GetDoc()->SplitTable( *pCrsr->GetPoint(), eMode, TRUE );
+        bRet = GetDoc()->SplitTable( *pCrsr->GetPoint(), eMode, sal_True );
 
-        GetDoc()->EndUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
         ClearFEShellTabCols();
         EndAllAction();
     }
     return bRet;
 }
 
-BOOL SwEditShell::MergeTable( BOOL bWithPrev, USHORT nMode )
+sal_Bool SwEditShell::MergeTable( sal_Bool bWithPrev, sal_uInt16 nMode )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     SwPaM *pCrsr = GetCrsr();
     if( pCrsr->GetNode()->FindTableNode() )
     {
         StartAllAction();
-        GetDoc()->StartUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
         bRet = GetDoc()->MergeTable( *pCrsr->GetPoint(), bWithPrev, nMode );
 
-        GetDoc()->EndUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
         ClearFEShellTabCols();
         EndAllAction();
     }
     return bRet;
 }
 
-BOOL SwEditShell::CanMergeTable( BOOL bWithPrev, BOOL* pChkNxtPrv ) const
+sal_Bool SwEditShell::CanMergeTable( sal_Bool bWithPrev, sal_Bool* pChkNxtPrv ) const
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     const SwPaM *pCrsr = GetCrsr();
     const SwTableNode* pTblNd = pCrsr->GetNode()->FindTableNode();
     if( pTblNd && !pTblNd->GetTable().ISA( SwDDETable ))
     {
-        BOOL bNew = pTblNd->GetTable().IsNewModel();
+        sal_Bool bNew = pTblNd->GetTable().IsNewModel();
         const SwNodes& rNds = GetDoc()->GetNodes();
         if( pChkNxtPrv )
         {
@@ -451,13 +454,13 @@ BOOL SwEditShell::CanMergeTable( BOOL bWithPrev, BOOL* pChkNxtPrv ) const
                 bNew == pChkNd->GetTable().IsNewModel() &&
                 // Consider table in table case
                 pChkNd->EndOfSectionIndex() == pTblNd->GetIndex() - 1 )
-                *pChkNxtPrv = TRUE, bRet = TRUE;        // mit Prev ist moeglich
+                *pChkNxtPrv = sal_True, bRet = sal_True;        // mit Prev ist moeglich
             else
             {
                 pChkNd = rNds[ pTblNd->EndOfSectionIndex() + 1 ]->GetTableNode();
                 if( pChkNd && !pChkNd->GetTable().ISA( SwDDETable ) &&
                     bNew == pChkNd->GetTable().IsNewModel() )
-                    *pChkNxtPrv = FALSE, bRet = TRUE;       // mit Next ist moeglich
+                    *pChkNxtPrv = sal_False, bRet = sal_True;       // mit Next ist moeglich
             }
         }
         else
@@ -482,7 +485,7 @@ BOOL SwEditShell::CanMergeTable( BOOL bWithPrev, BOOL* pChkNxtPrv ) const
 }
 
         // setze das InsertDB als Tabelle Undo auf:
-void SwEditShell::AppendUndoForInsertFromDB( BOOL bIsTable )
+void SwEditShell::AppendUndoForInsertFromDB( sal_Bool bIsTable )
 {
     GetDoc()->AppendUndoForInsertFromDB( *GetCrsr(), bIsTable );
 }

@@ -58,8 +58,8 @@ long SwHelpToolBox::DoubleClick( ToolBox* pCaller )
 {
     // No doubleclick on button
     if( 0 == pCaller->GetCurItemId() && aDoubleClickLink.Call(0) )
-        return TRUE;
-    return FALSE;
+        return sal_True;
+    return sal_False;
 }
 
 SwHelpToolBox::~SwHelpToolBox() {}

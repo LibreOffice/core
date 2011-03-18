@@ -83,24 +83,24 @@ private:
     String              m_aName;
     String              m_aExportName;
     String              m_aSetName;
-    sal_Unicode         m_cChar;
+    sal_UCS4            m_cChar;
     bool                m_bPredefined;
     bool                m_bDocSymbol;
 
 public:
     SmSym();
-    SmSym(const String& rName, const Font& rFont, sal_Unicode cChar,
+    SmSym(const String& rName, const Font& rFont, sal_UCS4 cChar,
           const String& rSet, bool bIsPredefined = false);
     SmSym(const SmSym& rSymbol);
 
     SmSym&      operator = (const SmSym& rSymbol);
 
     const Font&     GetFace() const { return m_aFace; }
-    sal_Unicode     GetCharacter() const { return m_cChar; }
+    sal_UCS4        GetCharacter() const { return m_cChar; }
     const String&   GetName() const { return m_aName; }
 
     void            SetFace( const Font& rFont )        { m_aFace = rFont; }
-    void            SetCharacter( sal_Unicode cChar )   { m_cChar = cChar; }
+    void            SetCharacter( sal_UCS4 cChar )   { m_cChar = cChar; }
 
 //! since the symbol name is also used as key in the map it should not be possible to change the name
 //! because ten the key would not be the same as its supposed copy here
@@ -169,7 +169,7 @@ public:
     std::set< String >      GetSymbolSetNames() const;
     const SymbolPtrVec_t    GetSymbolSet(  const String& rSymbolSetName );
 
-    USHORT                  GetSymbolCount() const  { return static_cast< USHORT >(m_aSymbols.size()); }
+    sal_uInt16                  GetSymbolCount() const  { return static_cast< sal_uInt16 >(m_aSymbols.size()); }
     const SymbolPtrVec_t    GetSymbols() const;
     bool                    AddOrReplaceSymbol( const SmSym & rSymbol, bool bForceChange = false );
     void                    RemoveSymbol( const String & rSymbolName );

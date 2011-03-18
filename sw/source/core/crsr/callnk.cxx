@@ -52,8 +52,8 @@
 #include<vcl/window.hxx>
 
 
-SwCallLink::SwCallLink( SwCrsrShell & rSh, ULONG nAktNode, xub_StrLen nAktCntnt,
-                        BYTE nAktNdTyp, long nLRPos, bool bAktSelection )
+SwCallLink::SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, xub_StrLen nAktCntnt,
+                        sal_uInt8 nAktNdTyp, long nLRPos, bool bAktSelection )
     : rShell( rSh ), nNode( nAktNode ), nCntnt( nAktCntnt ),
       nNdTyp( nAktNdTyp ), nLeftFrmPos( nLRPos ),
       bHasSelection( bAktSelection )
@@ -140,8 +140,8 @@ SwCallLink::~SwCallLink()
     }
 
     xub_StrLen nCmp, nAktCntnt = pCurCrsr->GetPoint()->nContent.GetIndex();
-    USHORT nNdWhich = pCNd->GetNodeType();
-    ULONG nAktNode = pCurCrsr->GetPoint()->nNode.GetIndex();
+    sal_uInt16 nNdWhich = pCNd->GetNodeType();
+    sal_uLong nAktNode = pCurCrsr->GetPoint()->nNode.GetIndex();
 
     // Register the Shell as dependent at the current Node. By doing this all
     // attribute changes can be signaled over the link.
@@ -176,7 +176,7 @@ SwCallLink::~SwCallLink()
             {
 
                 const SwpHints &rHts = ((SwTxtNode*)pCNd)->GetSwpHints();
-                USHORT n;
+                sal_uInt16 n;
                 xub_StrLen nStart;
                 const xub_StrLen *pEnd;
 
@@ -230,7 +230,7 @@ SwCallLink::~SwCallLink()
 
     const SwFrm* pFrm;
     const SwFlyFrm *pFlyFrm;
-    if( !rShell.ActionPend() && 0 != ( pFrm = pCNd->GetFrm(0,0,FALSE) ) &&
+    if( !rShell.ActionPend() && 0 != ( pFrm = pCNd->GetFrm(0,0,sal_False) ) &&
         0 != ( pFlyFrm = pFrm->FindFlyFrm() ) && !rShell.IsTableMode() )
     {
         const SwNodeIndex* pIndex = pFlyFrm->GetFmt()->GetCntnt().GetCntntIdx();
@@ -247,7 +247,7 @@ SwCallLink::~SwCallLink()
     }
 }
 
-long SwCallLink::GetFrm( SwTxtNode& rNd, xub_StrLen nCntPos, BOOL bCalcFrm )
+long SwCallLink::GetFrm( SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm )
 {
     SwTxtFrm* pFrm = (SwTxtFrm*)rNd.GetFrm(0,0,bCalcFrm), *pNext = pFrm;
     if ( pFrm && !pFrm->IsHiddenNow() )

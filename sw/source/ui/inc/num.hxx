@@ -48,7 +48,7 @@ class SwOutlineTabDialog;
 struct SwBmpItemInfo
 {
     SvxBrushItem*   pBrushItem;
-    USHORT          nItemId;
+    sal_uInt16          nItemId;
 };
 
 #define NUM_PAGETYPE_BULLET         0
@@ -59,12 +59,12 @@ struct SwBmpItemInfo
 
 class SwNumPositionTabPage : public SfxTabPage
 {
-    FixedLine       aPositionFL;
-    FixedLine       aLevelFL;
+        FixedLine       aLevelFL;
     MultiListBox    aLevelLB;
 
     // former set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
+    FixedLine       aPositionFL;
     FixedText           aDistBorderFT;
     MetricField         aDistBorderMF;
     CheckBox            aRelativeCB;
@@ -97,11 +97,11 @@ class SwNumPositionTabPage : public SfxTabPage
     SwWrtShell*         pWrtSh;
 
     SwOutlineTabDialog* pOutlineDlg;
-    USHORT              nActNumLvl;
+    sal_uInt16              nActNumLvl;
 
-    BOOL                bModified           : 1;
-    BOOL                bPreset             : 1;
-    BOOL                bInInintControl     : 1;  //Modify-Fehler umgehen, soll ab 391 behoben sein
+    sal_Bool                bModified           : 1;
+    sal_Bool                bPreset             : 1;
+    sal_Bool                bInInintControl     : 1;  //Modify-Fehler umgehen, soll ab 391 behoben sein
     bool                bLabelAlignmentPosAndSpaceModeActive;
 
     void                InitControls();
@@ -131,7 +131,7 @@ public:
 
     virtual void        ActivatePage(const SfxItemSet& rSet);
     virtual int         DeactivatePage(SfxItemSet *pSet);
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     static SfxTabPage*  Create( Window* pParent,
@@ -140,10 +140,10 @@ public:
     void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}
     void                SetWrtShell(SwWrtShell* pSh);
 #if OSL_DEBUG_LEVEL > 1
-    void                SetModified(BOOL bRepaint = TRUE);
+    void                SetModified(sal_Bool bRepaint = sal_True);
 #else
-    void                SetModified(BOOL bRepaint = TRUE)
-                            {   bModified = TRUE;
+    void                SetModified(sal_Bool bRepaint = sal_True)
+                            {   bModified = sal_True;
                                 if(bRepaint)
                                 {
                                     aPreviewWIN.SetLevel(nActNumLvl);
@@ -162,7 +162,7 @@ class SwSvxNumBulletTabDialog : public SfxTabDialog
 
     protected:
         virtual short   Ok();
-        virtual void    PageCreated(USHORT nPageId, SfxTabPage& rPage);
+        virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage);
         DECL_LINK(RemoveNumberingHdl, PushButton*);
     public:
         SwSvxNumBulletTabDialog(Window* pParent,

@@ -73,7 +73,7 @@
 SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MOD_REDLINE_ACCEPT))
 {
-    pImplDlg = new SwRedlineAcceptDlg(this, TRUE);
+    pImplDlg = new SwRedlineAcceptDlg(this, sal_True);
 
     pImplDlg->Initialize(GetExtraData());
     pImplDlg->Activate();   // Zur Initialisierung der Daten
@@ -83,7 +83,7 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent) :
 
 SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
 {
-    AcceptAll(FALSE);   // Alles uebriggebliebene ablehnen
+    AcceptAll(sal_False);   // Alles uebriggebliebene ablehnen
     pImplDlg->FillInfo(GetExtraData());
 
     delete pImplDlg;
@@ -99,21 +99,21 @@ void SwModalRedlineAcceptDlg::Resize()
     SfxModalDialog::Resize();
 }
 
-void SwModalRedlineAcceptDlg::AcceptAll( BOOL bAccept )
+void SwModalRedlineAcceptDlg::AcceptAll( sal_Bool bAccept )
 {
     SvxTPFilter* pFilterTP = pImplDlg->GetChgCtrl()->GetFilterPage();
 
     if (pFilterTP->IsDate() || pFilterTP->IsAuthor() ||
         pFilterTP->IsRange() || pFilterTP->IsAction())
     {
-        pFilterTP->CheckDate(FALSE);    // Alle Filter abschalten
-        pFilterTP->CheckAuthor(FALSE);
-        pFilterTP->CheckRange(FALSE);
-        pFilterTP->CheckAction(FALSE);
+        pFilterTP->CheckDate(sal_False);    // Alle Filter abschalten
+        pFilterTP->CheckAuthor(sal_False);
+        pFilterTP->CheckRange(sal_False);
+        pFilterTP->CheckAction(sal_False);
         pImplDlg->FilterChangedHdl();
     }
 
-    pImplDlg->CallAcceptReject( FALSE, bAccept );
+    pImplDlg->CallAcceptReject( sal_False, bAccept );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

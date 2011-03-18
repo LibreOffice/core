@@ -41,26 +41,26 @@ class ViewShell;
 class SwDoc;
 class SwDocShell;
 
-extern void ScrollMDI(ViewShell* pVwSh, const SwRect &, USHORT nRangeX, USHORT nRangeY);
-extern BOOL IsScrollMDI(ViewShell* pVwSh, const SwRect &);
+extern void ScrollMDI(ViewShell* pVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY);
+extern sal_Bool IsScrollMDI(ViewShell* pVwSh, const SwRect &);
 extern void SizeNotify(ViewShell* pVwSh, const Size &);
 
 // Update of status bar during an action.
 extern void PageNumNotify( ViewShell* pVwSh,
-                            USHORT nPhyNum,
-                            USHORT nVirtNum,
+                            sal_uInt16 nPhyNum,
+                            sal_uInt16 nVirtNum,
                            const UniString& rPg );
 
 enum FlyMode { FLY_DRAG_START, FLY_DRAG, FLY_DRAG_END };
 extern void FrameNotify( ViewShell* pVwSh, FlyMode eMode = FLY_DRAG );
 
-SW_DLLPUBLIC void StartProgress    ( USHORT nMessId, long nStartVal, long nEndVal, SwDocShell *pDocSh = 0 );
+SW_DLLPUBLIC void StartProgress    ( sal_uInt16 nMessId, long nStartVal, long nEndVal, SwDocShell *pDocSh = 0 );
 SW_DLLPUBLIC void EndProgress      ( SwDocShell *pDocSh = 0 );
 SW_DLLPUBLIC void SetProgressState  ( long nPosition, SwDocShell *pDocShell );
-void SetProgressText   ( USHORT nMessId, SwDocShell *pDocShell );
+void SetProgressText   ( sal_uInt16 nMessId, SwDocShell *pDocShell );
 void RescheduleProgress( SwDocShell *pDocShell );
 
-void EnableCmdInterface(BOOL bEnable = TRUE);
+void EnableCmdInterface(sal_Bool bEnable = sal_True);
 
 LAYOUT_NS Dialog* GetSearchDialog();
 
@@ -73,7 +73,7 @@ void DelAllGrfCacheEntries( SwDoc* pDoc );
 // Read ChgMode for tables from configuration.
 TblChgMode GetTblChgDefaultMode();
 
-BOOL JumpToSwMark( ViewShell* pVwSh, const UniString& rMark );
+sal_Bool JumpToSwMark( ViewShell* pVwSh, const UniString& rMark );
 
 
 #endif

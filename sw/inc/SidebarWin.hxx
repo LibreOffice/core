@@ -98,7 +98,7 @@ class SwSidebarWin : public Window
 
         long            GetPostItTextHeight();
 
-        void            SwitchToPostIt(USHORT aDirection);
+        void            SwitchToPostIt(sal_uInt16 aDirection);
         virtual void    SwitchToFieldPos();
 
         virtual sal_uInt32 MoveCaret() = 0;
@@ -112,7 +112,7 @@ class SwSidebarWin : public Window
         virtual Date    GetDate() = 0;
         virtual Time    GetTime() = 0;
 
-        void            ExecuteCommand(USHORT nSlot);
+        void            ExecuteCommand(sal_uInt16 nSlot);
         void            InitControls();
         void            HidePostIt();
         void            DoResize();
@@ -130,8 +130,8 @@ class SwSidebarWin : public Window
         void            ResetAttributes();
 
         void            SetSidebarPosition(sw::sidebarwindows::SidebarPosition eSidebarPosition);
-        void            SetReadonly(BOOL bSet);
-        BOOL            IsReadOnly()        { return mbReadonly;}
+        void            SetReadonly(sal_Bool bSet);
+        sal_Bool            IsReadOnly()        { return mbReadonly;}
         bool            IsPreview()         { return nFlags & PB_Preview;}
 
         void            SetColor(Color aColorDark,Color aColorLight, Color aColorAnchor);
@@ -201,7 +201,7 @@ class SwSidebarWin : public Window
         SwView&         mrView;
         const SwPostItBits nFlags;
 
-        ULONG           mnEventId;
+        sal_uLong           mnEventId;
 
         OutlinerView*   mpOutlinerView;
         Outliner*       mpOutliner;

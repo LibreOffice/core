@@ -86,24 +86,24 @@ static void lcl_CreatePortions(
 
 namespace
 {
-    static const BYTE BKM_TYPE_START = 0;
-    static const BYTE BKM_TYPE_END = 1;
-    static const BYTE BKM_TYPE_START_END = 2;
+    static const sal_uInt8 BKM_TYPE_START = 0;
+    static const sal_uInt8 BKM_TYPE_END = 1;
+    static const sal_uInt8 BKM_TYPE_START_END = 2;
 
     struct SwXBookmarkPortion_Impl
     {
         Reference<XTextContent>     xBookmark;
-        BYTE                        nBkmType;
+        sal_uInt8                       nBkmType;
         const SwPosition            aPosition;
 
         SwXBookmarkPortion_Impl(uno::Reference<text::XTextContent> const& xMark,
-                const BYTE nType, SwPosition const& rPosition)
+                const sal_uInt8 nType, SwPosition const& rPosition)
         : xBookmark ( xMark )
         , nBkmType  ( nType )
         , aPosition ( rPosition )
         {
         }
-        ULONG getIndex ()
+        sal_uLong getIndex ()
         {
             return aPosition.nContent.GetIndex();
         }
@@ -160,7 +160,7 @@ namespace
             const SwPosition& rStartPos = pBkmk->GetMarkStart();
             if(rStartPos.nNode == nOwnNode)
             {
-                const BYTE nType = hasOther ? BKM_TYPE_START : BKM_TYPE_START_END;
+                const sal_uInt8 nType = hasOther ? BKM_TYPE_START : BKM_TYPE_START_END;
                 rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
                     new SwXBookmarkPortion_Impl(
                             SwXBookmark::CreateXBookmark(rDoc, *pBkmk),
@@ -332,7 +332,7 @@ lcl_ExportFieldMark(
     OSL_ENSURE(pUnoCrsr->End()->nContent.GetIndex() == start,
                "hmm --- why is this different");
 
-    pUnoCrsr->Right(1, CRSR_SKIP_CHARS, FALSE, FALSE);
+    pUnoCrsr->Right(1, CRSR_SKIP_CHARS, sal_False, sal_False);
     if ( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
     {
         OSL_FAIL("cannot move cursor?");
@@ -492,7 +492,7 @@ lcl_ExportBookmark(
     TextRangeList_t & rPortions,
     Reference<XText> const& xParent,
     const SwUnoCrsr * const pUnoCrsr,
-    SwXBookmarkPortion_ImplList& rBkmArr, const ULONG nIndex)
+    SwXBookmarkPortion_ImplList& rBkmArr, const sal_uLong nIndex)
 {
     for ( SwXBookmarkPortion_ImplList::iterator aIter = rBkmArr.begin(), aEnd = rBkmArr.end();
           aIter != aEnd; )
@@ -534,7 +534,7 @@ lcl_ExportSoftPageBreak(
     TextRangeList_t & rPortions,
     Reference<XText> const& xParent,
     const SwUnoCrsr * const pUnoCrsr,
-    SwSoftPageBreakList& rBreakArr, const ULONG nIndex)
+    SwSoftPageBreakList& rBreakArr, const sal_uLong nIndex)
 {
     for ( SwSoftPageBreakList::iterator aIter = rBreakArr.begin(),
           aEnd = rBreakArr.end();
@@ -571,7 +571,7 @@ struct SwXRedlinePortion_Impl
     {
     }
 
-    ULONG getRealIndex ()
+    sal_uLong getRealIndex ()
     {
         return m_bStart ? m_pRedline->Start()->nContent.GetIndex()
                         : m_pRedline->End()  ->nContent.GetIndex();
@@ -627,7 +627,7 @@ lcl_ExportHints(
             SwTxtAttr * const pAttr = pHints->GetEnd(nEndIndex);
             if (nNextEnd == nCurrentIndex)
             {
-                const USHORT nWhich( pAttr->Which() );
+                const sal_uInt16 nWhich( pAttr->Which() );
                 switch (nWhich)
                 {
                     case RES_TXTATR_TOXMARK:
@@ -703,7 +703,7 @@ lcl_ExportHints(
         nCurrentIndex >= (nNextStart = (*pHints->GetStart(nStartIndex)->GetStart())))
     {
         SwTxtAttr * const pAttr = pHints->GetStart(nStartIndex);
-        USHORT nAttrWhich = pAttr->Which();
+        sal_uInt16 nAttrWhich = pAttr->Which();
         if (nNextStart == nCurrentIndex)
         {
             switch( nAttrWhich )
@@ -711,7 +711,7 @@ lcl_ExportHints(
                 case RES_TXTATR_FIELD:
                     if(!bRightMoveForbidden)
                     {
-                        pUnoCrsr->Right(1,CRSR_SKIP_CHARS,FALSE,FALSE);
+                        pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
                         if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
                             break;
                         SwXTextPortion* pPortion;
@@ -725,7 +725,7 @@ lcl_ExportHints(
                 case RES_TXTATR_FLYCNT   :
                     if(!bRightMoveForbidden)
                     {
-                        pUnoCrsr->Right(1,CRSR_SKIP_CHARS,FALSE,FALSE);
+                        pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
                         if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
                             break; // Robust #i81708 content in covered cells
                         pUnoCrsr->Exchange();
@@ -737,7 +737,7 @@ lcl_ExportHints(
                 {
                     if(!bRightMoveForbidden)
                     {
-                        pUnoCrsr->Right(1,CRSR_SKIP_CHARS,FALSE,FALSE);
+                        pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
                         if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
                             break;
                         SwXTextPortion* pPortion;
@@ -757,7 +757,7 @@ lcl_ExportHints(
                     {
                         if (bIsPoint)
                         {
-                            pUnoCrsr->Right(1,CRSR_SKIP_CHARS,FALSE,FALSE);
+                            pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
                         }
                         Reference<XTextRange> xTmp =
                                 (RES_TXTATR_REFMARK == nAttrWhich)
@@ -767,7 +767,7 @@ lcl_ExportHints(
                                 xParent, pUnoCrsr, *pAttr, false);
                         if (bIsPoint) // consume CH_TXTATR!
                         {
-                            pUnoCrsr->Normalize(FALSE);
+                            pUnoCrsr->Normalize(sal_False);
                             pUnoCrsr->DeleteMark();
                             xRef = xTmp;
                         }
@@ -792,7 +792,7 @@ lcl_ExportHints(
                     {
                         if (!bRightMoveForbidden)
                         {
-                            pUnoCrsr->Right(1,CRSR_SKIP_CHARS,FALSE,FALSE);
+                            pUnoCrsr->Right(1,CRSR_SKIP_CHARS,sal_False,sal_False);
                             o_rbCursorMoved = true;
                             // only if the end is included in selection!
                             if ((i_nEndPos < 0) ||
@@ -884,7 +884,7 @@ void lcl_MoveCursor( SwUnoCrsr * const pUnoCrsr,
     if (nMovePos > nCurrentIndex)
     {
 //          pUnoCrsr->Right(nMovePos - nCurrentIndex);
-        pUnoCrsr->GetPoint()->nContent = static_cast<USHORT>(nMovePos);
+        pUnoCrsr->GetPoint()->nContent = static_cast<sal_uInt16>(nMovePos);
     }
 }
 
@@ -893,14 +893,14 @@ lcl_FillRedlineArray(SwDoc const & rDoc, SwUnoCrsr const & rUnoCrsr,
         SwXRedlinePortion_ImplList& rRedArr )
 {
     const SwRedlineTbl& rRedTbl = rDoc.GetRedlineTbl();
-    USHORT nRedTblCount = rRedTbl.Count();
+    sal_uInt16 nRedTblCount = rRedTbl.Count();
 
     if ( nRedTblCount > 0 )
     {
         const SwPosition* pStart = rUnoCrsr.GetPoint();
         const SwNodeIndex nOwnNode = pStart->nNode;
 
-        for(USHORT nRed = 0; nRed < nRedTblCount; nRed++)
+        for(sal_uInt16 nRed = 0; nRed < nRedTblCount; nRed++)
         {
             const SwRedline* pRedline = rRedTbl[nRed];
             const SwPosition* pRedStart = pRedline->Start();
@@ -930,7 +930,7 @@ lcl_ExportRedline(
     TextRangeList_t & rPortions,
     Reference<XText> const& xParent,
     const SwUnoCrsr * const pUnoCrsr,
-    SwXRedlinePortion_ImplList& rRedlineArr, const ULONG nIndex)
+    SwXRedlinePortion_ImplList& rRedlineArr, const sal_uLong nIndex)
 {
 
     // MTG: 23/11/05: We want this loop to iterate over all red lines in this
@@ -939,7 +939,7 @@ lcl_ExportRedline(
           aIter != aEnd; )
     {
         SwXRedlinePortion_ImplSharedPtr pPtr = (*aIter );
-        ULONG nRealIndex = pPtr->getRealIndex();
+        sal_uLong nRealIndex = pPtr->getRealIndex();
         // MTG: 23/11/05: If there are elements before nIndex, remove them
         if ( nIndex > nRealIndex )
             rRedlineArr.erase ( aIter++ );
@@ -964,7 +964,7 @@ lcl_ExportBkmAndRedline(
     SwXBookmarkPortion_ImplList& rBkmArr,
     SwXRedlinePortion_ImplList& rRedlineArr,
     SwSoftPageBreakList& rBreakArr,
-    const ULONG nIndex)
+    const sal_uLong nIndex)
 {
     if (rBkmArr.size())
         lcl_ExportBookmark(rPortions, xParent, pUnoCrsr, rBkmArr, nIndex);
@@ -1051,7 +1051,7 @@ lcl_CreatePortions(
                                 GetTxt().Len()), "Incorrect start position" );
         // ??? should this be i_nStartPos - current position ?
         pUnoCrsr->Right(static_cast<xub_StrLen>(i_nStartPos),
-                CRSR_SKIP_CHARS, FALSE, FALSE);
+                CRSR_SKIP_CHARS, sal_False, sal_False);
     }
 
     FieldMarks_t FieldMarks;
@@ -1073,7 +1073,7 @@ lcl_CreatePortions(
     {
         if (pUnoCrsr->HasMark())
         {
-            pUnoCrsr->Normalize(FALSE);
+            pUnoCrsr->Normalize(sal_False);
             pUnoCrsr->DeleteMark();
         }
 

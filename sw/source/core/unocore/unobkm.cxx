@@ -41,10 +41,11 @@
 #include <IMark.hxx>
 #include <crossrefbookmark.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <comcore.hrc>
-#include <undobj.hxx>
+#include <SwRewriter.hxx>
 #include <docsh.hxx>
 #include <xmloff/odffields.hxx>
 
@@ -379,9 +380,11 @@ throw (uno::RuntimeException)
     aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
     aRewriter.AddRule(UNDO_ARG3, lcl_QuoteName(rName));
 
-    m_pImpl->m_pDoc->StartUndo(UNDO_BOOKMARK_RENAME, &aRewriter);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(
+            UNDO_BOOKMARK_RENAME, &aRewriter);
     pMarkAccess->renameMark(m_pImpl->m_pRegisteredBookmark, rName);
-    m_pImpl->m_pDoc->EndUndo(UNDO_BOOKMARK_RENAME, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(
+            UNDO_BOOKMARK_RENAME, &aRewriter);
 }
 
 OUString SAL_CALL

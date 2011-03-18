@@ -52,8 +52,8 @@ class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
     Size      aSize;
     SwFrmSize eFrmHeightType;
     SwFrmSize eFrmWidthType;
-    BYTE      nWidthPercent;
-    BYTE      nHeightPercent;
+    sal_uInt8     nWidthPercent;    //Fuer Tabellen kann die Breite in Prozent
+    sal_uInt8     nHeightPercent;   //angegeben sein.
 
     // For tables: width can be given in percent.
 
@@ -81,8 +81,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     SwFrmSize GetHeightSizeType() const { return eFrmHeightType; }
     void SetHeightSizeType( SwFrmSize eSize ) { eFrmHeightType = eSize; }
@@ -98,16 +98,16 @@ public:
     void    SetHeight( const SwTwips nNew ) { aSize.Height() = nNew; }
     void    SetWidth ( const SwTwips nNew ) { aSize.Width()  = nNew; }
 
-    BYTE    GetHeightPercent() const{ return nHeightPercent; }
-    BYTE    GetWidthPercent() const { return nWidthPercent;  }
-    void    SetHeightPercent( BYTE n ) { nHeightPercent = n; }
-    void    SetWidthPercent ( BYTE n ) { nWidthPercent  = n; }
+    sal_uInt8    GetHeightPercent() const{ return nHeightPercent; }
+    sal_uInt8   GetWidthPercent() const { return nWidthPercent;  }
+    void    SetHeightPercent( sal_uInt8 n ) { nHeightPercent = n; }
+    void    SetWidthPercent ( sal_uInt8 n ) { nWidthPercent  = n; }
 };
 
-inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(BOOL bInP) const
+inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(sal_Bool bInP) const
     { return (const SwFmtFrmSize&)Get( RES_FRM_SIZE,bInP); }
 
-inline const SwFmtFrmSize &SwFmt::GetFrmSize(BOOL bInP) const
+inline const SwFmtFrmSize &SwFmt::GetFrmSize(sal_Bool bInP) const
     { return aSet.GetFrmSize(bInP); }
 
 #endif

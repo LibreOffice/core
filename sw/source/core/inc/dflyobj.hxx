@@ -33,12 +33,12 @@ class SwFlyFrm;
 class SwFrmFmt;
 class SdrObjMacroHitRec;
 
-const UINT32 SWGInventor =  UINT32('S')*0x00000001+
-                            UINT32('W')*0x00000100+
-                            UINT32('G')*0x00010000;
+const sal_uInt32 SWGInventor =  sal_uInt32('S')*0x00000001+
+                            sal_uInt32('W')*0x00000100+
+                            sal_uInt32('G')*0x00010000;
 
-const UINT16 SwFlyDrawObjIdentifier = 0x0001;
-const UINT16 SwDrawFirst            = 0x0001;
+const sal_uInt16 SwFlyDrawObjIdentifier = 0x0001;
+const sal_uInt16 SwDrawFirst            = 0x0001;
 
 //---------------------------------------
 //SwFlyDrawObj, Die DrawObjekte fuer Flys.
@@ -61,9 +61,9 @@ public:
 
     //Damit eine Instanz dieser Klasse beim laden erzeugt werden kann
     //(per Factory).
-    virtual UINT32 GetObjInventor()     const;
-    virtual UINT16 GetObjIdentifier()   const;
-    virtual UINT16 GetObjVersion()      const;
+    virtual sal_uInt32 GetObjInventor()     const;
+    virtual sal_uInt16 GetObjIdentifier()   const;
+    virtual sal_uInt16 GetObjVersion()      const;
 };
 
 //---------------------------------------

@@ -50,12 +50,14 @@ ModelessDialog DLG_INSERT_CHART
     };
     Edit ED_RANGE
     {
+        HelpID = "sw:Edit:DLG_INSERT_CHART:ED_RANGE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 14 ) ;
         Size = MAP_APPFONT ( 229 , 12 ) ;
     };
     CheckBox CB_FIRST_ROW
     {
+        HelpID = "sw:CheckBox:DLG_INSERT_CHART:CB_FIRST_ROW";
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         TabStop = TRUE ;
@@ -64,6 +66,7 @@ ModelessDialog DLG_INSERT_CHART
     };
     CheckBox CB_FIRST_COL
     {
+        HelpID = "sw:CheckBox:DLG_INSERT_CHART:CB_FIRST_COL";
         Pos = MAP_APPFONT ( 12 , 46 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         TabStop = TRUE ;
@@ -96,6 +99,7 @@ ModelessDialog DLG_INSERT_CHART
     };
     PushButton BT_PREV
     {
+        HelpID = "sw:PushButton:DLG_INSERT_CHART:BT_PREV";
         Pos = MAP_APPFONT ( 130 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -104,6 +108,7 @@ ModelessDialog DLG_INSERT_CHART
     };
     PushButton BT_NEXT
     {
+        HelpID = "sw:PushButton:DLG_INSERT_CHART:BT_NEXT";
         Pos = MAP_APPFONT ( 185 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
@@ -112,6 +117,7 @@ ModelessDialog DLG_INSERT_CHART
     };
     PushButton BT_FINISH
     {
+        HelpID = "sw:PushButton:DLG_INSERT_CHART:BT_FINISH";
         Pos = MAP_APPFONT ( 240 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;

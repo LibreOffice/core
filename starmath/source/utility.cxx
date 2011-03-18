@@ -46,6 +46,8 @@
 #include "smdll.hxx"
 
 
+////////////////////////////////////////////////////////////
+
 // return pointer to active SmViewShell, if this is not possible
 // return 0 instead.
 //!! Since this method is based on the current focus it is somewhat
@@ -62,8 +64,8 @@ SmViewShell * SmGetActiveView()
 
 /**************************************************************************/
 
-SmPickList::SmPickList(USHORT nInitSize, USHORT nMaxSize) :
-    SfxPtrArr((BYTE) nInitSize, 1)
+SmPickList::SmPickList(sal_uInt16 nInitSize, sal_uInt16 nMaxSize) :
+    SfxPtrArr((sal_uInt8) nInitSize, 1)
 {
     nSize = nMaxSize;
 }
@@ -77,7 +79,7 @@ SmPickList::~SmPickList()
 
 SmPickList& SmPickList::operator=(const SmPickList& rList)
 {
-    USHORT  nPos;
+    sal_uInt16  nPos;
 
     Clear();
     nSize = rList.nSize;
@@ -103,7 +105,7 @@ void SmPickList::Insert(const void *pItem)
 
 void SmPickList::Update(const void *pItem, const void *pNewItem)
 {
-    USHORT  nPos;
+    sal_uInt16  nPos;
 
     for (nPos = 0; nPos < Count(); nPos++)
         if (CompareItem(GetPtr(nPos), pItem))
@@ -116,7 +118,7 @@ void SmPickList::Update(const void *pItem, const void *pNewItem)
 
 void SmPickList::Remove(const void *pItem)
 {
-    USHORT  nPos;
+    sal_uInt16  nPos;
 
     for (nPos = 0; nPos < Count(); nPos++)
         if (CompareItem(GetPtr(nPos), pItem))
@@ -129,7 +131,7 @@ void SmPickList::Remove(const void *pItem)
 
 void SmPickList::Clear()
 {
-    USHORT  nPos;
+    sal_uInt16  nPos;
 
     for (nPos = 0; nPos < Count(); nPos++)
         DestroyItem(GetPtr(nPos));
@@ -228,7 +230,7 @@ void SmFontPickList::WriteTo(SmFontDialog& rDialog) const
 
 IMPL_LINK( SmFontPickListBox, SelectHdl, ListBox *, /*pListBox*/ )
 {
-    USHORT  nPos;
+    sal_uInt16  nPos;
     String  aString;
 
     nPos = GetSelectEntryPos();
@@ -247,7 +249,7 @@ IMPL_LINK( SmFontPickListBox, SelectHdl, ListBox *, /*pListBox*/ )
 }
 
 
-SmFontPickListBox::SmFontPickListBox(Window* pParent, const ResId& rResId, USHORT nMax) :
+SmFontPickListBox::SmFontPickListBox(Window* pParent, const ResId& rResId, sal_uInt16 nMax) :
     SmFontPickList(nMax, nMax),
     ListBox(pParent, rResId)
 {
@@ -257,7 +259,7 @@ SmFontPickListBox::SmFontPickListBox(Window* pParent, const ResId& rResId, USHOR
 
 SmFontPickListBox& SmFontPickListBox::operator=(const SmFontPickList& rList)
 {
-    USHORT nPos;
+    sal_uInt16 nPos;
 
     *(SmFontPickList *)this = rList;
 

@@ -37,7 +37,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svtools/valueset.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -71,10 +71,10 @@ class SwColumnDlg : public SfxModalDialog
     long                nSelectionWidth;
     long                nPageWidth;
 
-    BOOL                bPageChanged : 1;
-    BOOL                bSectionChanged : 1;
-    BOOL                bSelSectionChanged : 1;
-    BOOL                bFrameChanged : 1;
+    sal_Bool                bPageChanged : 1;
+    sal_Bool                bSectionChanged : 1;
+    sal_Bool                bSelSectionChanged : 1;
+    sal_Bool                bFrameChanged : 1;
 
 
     DECL_LINK(ObjectHdl, ListBox*);
@@ -103,13 +103,14 @@ class ColumnValueSet : public ValueSet
  --------------------------------------------------------------------*/
 class SwColumnPage : public SfxTabPage
 {
+    FixedLine       aFLGroup;
     FixedText       aClNrLbl;
     NumericField    aCLNrEdt;
     ColumnValueSet  aDefaultVS;
     ImageList       aPreColsIL;
     CheckBox        aBalanceColsCB;
-    FixedLine       aFLGroup;
 
+    FixedLine       aFLLayout;
     ImageButton     aBtnUp;
     FixedText       aColumnFT;
     FixedText       aWidthFT;
@@ -125,15 +126,14 @@ class SwColumnPage : public SfxTabPage
     ImageButton     aBtnDown;
     CheckBox        aAutoWidthBox;
 
-    FixedLine       aFLLayout;
 
+    FixedLine       aFLLineType;
     FixedText       aLineTypeLbl;
     LineListBox     aLineTypeDLB;
     FixedText       aLineHeightLbl;
     MetricField     aLineHeightEdit;
     FixedText       aLinePosLbl;
     ListBox         aLinePosDLB;
-    FixedLine       aFLLineType;
 
     FixedLine       aVertFL;
     FixedLine       aPropertiesFL;
@@ -146,16 +146,16 @@ class SwColumnPage : public SfxTabPage
 
     SwColMgr*       pColMgr;
 
-    USHORT          nFirstVis;
-    USHORT          nCols;
+    sal_uInt16          nFirstVis;
+    sal_uInt16          nCols;
     long            nColWidth[nMaxCols];
     long            nColDist[nMaxCols];
-    USHORT          nMinWidth;
+    sal_uInt16          nMinWidth;
     PercentField    *pModifiedField;
-    BOOL            bFormat;
-    BOOL            bFrm;
-    BOOL            bHtmlMode;
-    BOOL            bLockUpdate;
+    sal_Bool            bFormat;
+    sal_Bool            bFrm;
+    sal_Bool            bHtmlMode;
+    sal_Bool            bLockUpdate;
 
     // Handler
     DECL_LINK( ColModify, NumericField * );
@@ -174,7 +174,7 @@ class SwColumnPage : public SfxTabPage
     void            UpdateCols();
     void            Init();
     void            ResetColWidth();
-    void            SetLabels( USHORT nVis );
+    void            SetLabels( sal_uInt16 nVis );
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
@@ -188,18 +188,18 @@ public:
     virtual ~SwColumnPage();
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
-    static USHORT* GetRanges();
+    static sal_uInt16* GetRanges();
 
-    virtual BOOL    FillItemSet(SfxItemSet &rSet);
+    virtual sal_Bool    FillItemSet(SfxItemSet &rSet);
     virtual void    Reset(const SfxItemSet &rSet);
 
-    void SetFrmMode(BOOL bMod);
+    void SetFrmMode(sal_Bool bMod);
     void SetPageWidth(long nPageWidth);
 
-    void SetFormatUsed(BOOL bFmt) { bFormat = bFmt; }
+    void SetFormatUsed(sal_Bool bFmt) { bFormat = bFmt; }
 
-    void ShowBalance(BOOL bShow) {aBalanceColsCB.Show(bShow);}
-    void SetInSection(BOOL bSet);
+    void ShowBalance(sal_Bool bShow) {aBalanceColsCB.Show(bShow);}
+    void SetInSection(sal_Bool bSet);
 
     void ActivateColumnControl() {aCLNrEdt.GrabFocus();}
 };

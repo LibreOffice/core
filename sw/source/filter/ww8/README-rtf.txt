@@ -35,7 +35,7 @@ Table of Contents
 
 ---------------------------------------------------------------------
 
-1. Introduction
+1.ï¿½Introduction
 
 ---------------------------------------------------------------------
 
@@ -45,7 +45,7 @@ this way much less code can achieve the same set of features,
 reducing the amount of duplicated code.
 
 
-1.1. Terminology
+1.1.ï¿½Terminology
 
 --------------
 
@@ -56,7 +56,7 @@ reducing the amount of duplicated code.
     to the old built-in one.
 
 
-1.2. General
+1.2.ï¿½General
 
 --------------
 
@@ -72,7 +72,7 @@ the bug will pop up less frequently.
 
 ---------------------------------------------------------------------
 
-2. List if fixed bugs
+2.ï¿½List if fixed bugs
 
 ---------------------------------------------------------------------
 
@@ -101,12 +101,12 @@ the bug will pop up less frequently.
 
 ---------------------------------------------------------------------
 
-3. List of new features
+3.ï¿½List of new features
 
 ---------------------------------------------------------------------
 
 
-3.1. Nested tables
+3.1.ï¿½Nested tables
 
 --------------
 
@@ -114,7 +114,7 @@ This was new in Word2000 and it?s now supported by RtfExport (MSO OK,
 OOo KO)
 
 
-3.2. Character properties
+3.2.ï¿½Character properties
 
 --------------
 
@@ -125,7 +125,7 @@ The followings are now supported:
   * pair kerning (MSO OK, OOo OK)
 
 
-3.3. Sections
+3.3.ï¿½Sections
 
 --------------
 
@@ -141,7 +141,7 @@ RtfExport writes:
   * line numbering (MSO OK, OOo KO)
 
 
-3.4. Graphics
+3.4.ï¿½Graphics
 
 --------------
 
@@ -150,7 +150,7 @@ and OOo can display graphics from the output document, but Wordpad as
 well.
 
 
-3.5. Bookmarks
+3.5.ï¿½Bookmarks
 
 --------------
 
@@ -160,7 +160,7 @@ the result), this now works as expected. (MSO OK - the importer
 previously autocorrected this as well, OO OK)
 
 
-3.6. Fields
+3.6.ï¿½Fields
 
 --------------
 
@@ -169,7 +169,7 @@ previously autocorrected this as well, OO OK)
   * Postit comments are now exported. (MSO OK, OOo KO)
 
 
-3.7. Drawing
+3.7.ï¿½Drawing
 
 --------------
 
@@ -184,7 +184,7 @@ implemented:
 (MSO OK, OOo KO)
 
 
-3.8. Form fields
+3.8.ï¿½Form fields
 
 --------------
 
@@ -197,7 +197,7 @@ All types supported by the RTF format are exported, namely:
 (MSO OK, OOo KO)
 
 
-3.9. OLE objects
+3.9.ï¿½OLE objects
 
 --------------
 
@@ -210,7 +210,7 @@ object, too. (MSO OK, OOo KO)
 
 ---------------------------------------------------------------------
 
-4. Changes in the source code outside RTF
+4.ï¿½Changes in the source code outside RTF
 
 ---------------------------------------------------------------------
 
@@ -224,3 +224,4 @@ not change the output of other filters from a user?s point of view.
   * wwFontHelper::InitFontTable can really load all fonts
   * An obvious typo in WW8AttributeOutput::CharTwoLines has been
     fixed
+

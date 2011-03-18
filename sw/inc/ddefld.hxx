@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _DDEFLD_HXX
-#define _DDEFLD_HXX
+#ifndef SW_DDEFLD_HXX
+#define SW_DDEFLD_HXX
 
 #include <sfx2/lnkbase.hxx>
 #include "swdllapi.h"
@@ -46,35 +46,35 @@ class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
     ::sfx2::SvBaseLinkRef refLink;
     SwDoc* pDoc;
 
-    USHORT nRefCnt;
-    BOOL bCRLFFlag : 1;
-    BOOL bDeleted : 1;
+    sal_uInt16 nRefCnt;
+    sal_Bool bCRLFFlag : 1;
+    sal_Bool bDeleted : 1;
 
     SW_DLLPRIVATE void _RefCntChgd();
 
 public:
     SwDDEFieldType( const String& rName, const String& rCmd,
-                    USHORT = sfx2::LINKUPDATE_ONCALL );
+                    sal_uInt16 = sfx2::LINKUPDATE_ONCALL );
     ~SwDDEFieldType();
 
     const String& GetExpansion() const          { return aExpansion; }
     void SetExpansion( const String& rStr )     { aExpansion = rStr,
-                                                  bCRLFFlag = FALSE; }
+                                                  bCRLFFlag = sal_False; }
 
     virtual SwFieldType* Copy() const;
     virtual const String& GetName() const;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 
     String GetCmd() const;
     void SetCmd( const String& rStr );
 
-    USHORT GetType() const          { return refLink->GetUpdateMode();  }
-    void SetType( USHORT nType )    { refLink->SetUpdateMode( nType );  }
+    sal_uInt16 GetType() const          { return refLink->GetUpdateMode();  }
+    void SetType( sal_uInt16 nType )    { refLink->SetUpdateMode( nType );  }
 
-    BOOL IsDeleted() const          { return bDeleted; }
-    void SetDeleted( BOOL b )       { bDeleted = b; }
+    sal_Bool IsDeleted() const          { return bDeleted; }
+    void SetDeleted( sal_Bool b )       { bDeleted = b; }
 
     void UpdateNow()                { refLink->Update(); }
     void Disconnect()               { refLink->Disconnect(); }
@@ -89,7 +89,7 @@ public:
     void IncRefCnt() {  if( !nRefCnt++ && pDoc ) _RefCntChgd(); }
     void DecRefCnt() {  if( !--nRefCnt && pDoc ) _RefCntChgd(); }
 
-    void SetCRLFDelFlag( BOOL bFlag = TRUE )    { bCRLFFlag = bFlag; }
+    void SetCRLFDelFlag( sal_Bool bFlag = sal_True )    { bCRLFFlag = bFlag; }
 };
 
 /*--------------------------------------------------------------------
@@ -98,12 +98,13 @@ public:
 
 class SwDDEField : public SwField
 {
+private:
+    virtual String   Expand() const;
+    virtual SwField* Copy() const;
+
 public:
     SwDDEField(SwDDEFieldType*);
     ~SwDDEField();
-
-    virtual String   Expand() const;
-    virtual SwField* Copy() const;
 
     // Get parameter via types.
     // Name cannot be changed.
@@ -115,6 +116,6 @@ public:
 };
 
 
-#endif // _DDEFLD_HXX
+#endif // SW_DDEFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

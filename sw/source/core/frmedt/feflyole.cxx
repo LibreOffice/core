@@ -67,9 +67,9 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
     if ( !pFly )
     {
         //Kein Fly oder der falsche selektiert. Ergo muessen wir leider suchen.
-        BOOL bExist = FALSE;
+        sal_Bool bExist = sal_False;
         SwStartNode *pStNd;
-        ULONG nSttIdx = GetNodes().GetEndOfAutotext().StartOfSectionIndex() + 1,
+        sal_uLong nSttIdx = GetNodes().GetEndOfAutotext().StartOfSectionIndex() + 1,
               nEndIdx = GetNodes().GetEndOfAutotext().GetIndex();
         while( nSttIdx < nEndIdx &&
                 0 != (pStNd = GetNodes()[ nSttIdx ]->GetStartNode()) )
@@ -78,7 +78,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
             if ( pNd->IsOLENode() &&
                  ((SwOLENode*)pNd)->GetOLEObj().GetOleRef() == xObj )
             {
-                bExist = TRUE;
+                bExist = sal_True;
                 SwFrm *pFrm = ((SwOLENode*)pNd)->GetFrm();
                 if ( pFrm )
                     pFly = pFrm->FindFlyFrm();
@@ -122,13 +122,13 @@ void SwFEShell::MakeObjVisible( const uno::Reference < embed::XEmbeddedObject >&
     }
 }
 
-BOOL SwFEShell::FinishOLEObj()                      // Server wird beendet
+sal_Bool SwFEShell::FinishOLEObj()                      // Server wird beendet
 {
     SfxInPlaceClient* pIPClient = GetSfxViewShell()->GetIPClient();
     if ( !pIPClient )
-        return FALSE;
+        return sal_False;
 
-    BOOL bRet = pIPClient->IsObjectInPlaceActive();
+    sal_Bool bRet = pIPClient->IsObjectInPlaceActive();
     if( bRet )
     {
         uno::Reference < embed::XEmbeddedObject > xObj = pIPClient->GetObject();

@@ -33,18 +33,18 @@
 #include <unotools/configitem.hxx>
 #include <fldupde.hxx>
 #include "viewopt.hxx"
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 
 class SwMasterUsrPref;
 
 class SwContentViewConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&        rParent;
-    BOOL                    bWeb;
+    sal_Bool                    bWeb;
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
     public:
-        SwContentViewConfig(BOOL bWeb, SwMasterUsrPref& rParent);
+        SwContentViewConfig(sal_Bool bWeb, SwMasterUsrPref& rParent);
         ~SwContentViewConfig();
 
     // utl::ConfigItem
@@ -58,11 +58,11 @@ class SwContentViewConfig : public utl::ConfigItem
 class SwLayoutViewConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&    rParent;
-    BOOL                bWeb;
+    sal_Bool                bWeb;
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
     public:
-        SwLayoutViewConfig(BOOL bWeb, SwMasterUsrPref& rParent);
+        SwLayoutViewConfig(sal_Bool bWeb, SwMasterUsrPref& rParent);
         ~SwLayoutViewConfig();
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
@@ -74,11 +74,11 @@ class SwLayoutViewConfig : public utl::ConfigItem
 class SwGridConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&    rParent;
-    BOOL                bWeb;
+    sal_Bool                bWeb;
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
     public:
-        SwGridConfig(BOOL bWeb, SwMasterUsrPref& rParent);
+        SwGridConfig(sal_Bool bWeb, SwMasterUsrPref& rParent);
         ~SwGridConfig();
 
     virtual void Commit();
@@ -136,6 +136,8 @@ class SwMasterUsrPref : public SwViewOption
     sal_Int32   nDefTab;            //default tab stop distance
 
     sal_Bool    bIsSquaredPageMode; //default page mode for text grid
+    sal_Bool    bIsAlignMathObjectsToBaseline;
+
     SwContentViewConfig aContentConfig;
     SwLayoutViewConfig  aLayoutConfig;
     SwGridConfig        aGridConfig;
@@ -144,7 +146,7 @@ class SwMasterUsrPref : public SwViewOption
 
     sal_Bool bApplyCharUnit; // apply_char_unit
 public:
-    SwMasterUsrPref(BOOL bWeb);
+    SwMasterUsrPref(sal_Bool bWeb);
     ~SwMasterUsrPref();
 
     void SetUsrPref(const SwViewOption &rCopy);
@@ -176,7 +178,7 @@ public:
         }
     sal_Int32 GetUpdateLinkMode() const {return nLinkUpdateMode; }
 
-    void SetUpdateFields(BOOL bSet, sal_Bool bNoModify = sal_False)
+    void SetUpdateFields(sal_Bool bSet, sal_Bool bNoModify = sal_False)
         {
             if(bSet && eFldUpdateFlags == AUTOUPD_OFF)
             {
@@ -201,7 +203,7 @@ public:
                 aContentConfig.SetModified();
         }
 
-    void SetUpdateCharts(BOOL bSet, sal_Bool bNoModify = sal_False)
+    void SetUpdateCharts(sal_Bool bSet, sal_Bool bNoModify = sal_False)
         {
             if(bSet)
             {
@@ -248,7 +250,7 @@ public:
     {
         return bApplyCharUnit;
     }
-    void   SetApplyCharUnit(BOOL bSet, sal_Bool bNoModify = sal_False)
+    void   SetApplyCharUnit(sal_Bool bSet, sal_Bool bNoModify = sal_False)
     {
         bApplyCharUnit = bSet;
         if(!bNoModify)
@@ -272,6 +274,13 @@ public:
                         aLayoutConfig.SetModified();
                 }
 
+    sal_Bool    IsAlignMathObjectsToBaseline() const { return bIsAlignMathObjectsToBaseline; }
+    void        SetAlignMathObjectsToBaseline( sal_Bool bVal, sal_Bool bNoModify = sal_False )
+                {
+                    bIsAlignMathObjectsToBaseline = bVal;
+                    if(!bNoModify)
+                        aLayoutConfig.SetModified();
+                }
 };
 
 #endif

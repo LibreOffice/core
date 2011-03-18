@@ -70,13 +70,13 @@ SwAttrPool::~SwAttrPool()
 {
 }
 
-SwAttrSet::SwAttrSet( SwAttrPool& rPool, USHORT nWh1, USHORT nWh2 )
+SwAttrSet::SwAttrSet( SwAttrPool& rPool, sal_uInt16 nWh1, sal_uInt16 nWh2 )
     : SfxItemSet( rPool, nWh1, nWh2 ), pOldSet( 0 ), pNewSet( 0 )
 {
 }
 
 
-SwAttrSet::SwAttrSet( SwAttrPool& rPool, const USHORT* nWhichPairTable )
+SwAttrSet::SwAttrSet( SwAttrPool& rPool, const sal_uInt16* nWhichPairTable )
     : SfxItemSet( rPool, nWhichPairTable ), pOldSet( 0 ), pNewSet( 0 )
 {
 }
@@ -87,7 +87,7 @@ SwAttrSet::SwAttrSet( const SwAttrSet& rSet )
 {
 }
 
-SfxItemSet* SwAttrSet::Clone( BOOL bItems, SfxItemPool *pToPool ) const
+SfxItemSet* SwAttrSet::Clone( sal_Bool bItems, SfxItemPool *pToPool ) const
 {
     if ( pToPool && pToPool != GetPool() )
     {
@@ -101,11 +101,11 @@ SfxItemSet* SwAttrSet::Clone( BOOL bItems, SfxItemPool *pToPool ) const
             if ( bItems )
             {
                 SfxWhichIter aIter(*pTmpSet);
-                USHORT nWhich = aIter.FirstWhich();
+                sal_uInt16 nWhich = aIter.FirstWhich();
                 while ( nWhich )
                 {
                     const SfxPoolItem* pItem;
-                    if ( SFX_ITEM_SET == GetItemState( nWhich, FALSE, &pItem ) )
+                    if ( SFX_ITEM_SET == GetItemState( nWhich, sal_False, &pItem ) )
                         pTmpSet->Put( *pItem, pItem->Which() );
                     nWhich = aIter.NextWhich();
                 }
@@ -142,24 +142,24 @@ int SwAttrSet::Put_BC( const SfxItemSet& rSet,
 
 
 
-USHORT SwAttrSet::ClearItem_BC( USHORT nWhich,
+sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich,
                         SwAttrSet* pOld, SwAttrSet* pNew )
 {
     pNewSet = pNew;
     pOldSet = pOld;
-    USHORT nRet = SfxItemSet::ClearItem( nWhich );
+    sal_uInt16 nRet = SfxItemSet::ClearItem( nWhich );
     pOldSet = pNewSet = 0;
     return nRet;
 }
 
 
-USHORT SwAttrSet::ClearItem_BC( USHORT nWhich1, USHORT nWhich2,
+sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich1, sal_uInt16 nWhich2,
                         SwAttrSet* pOld, SwAttrSet* pNew )
 {
     OSL_ENSURE( nWhich1 <= nWhich2, "kein gueltiger Bereich" );
     pNewSet = pNew;
     pOldSet = pOld;
-    USHORT nRet = 0;
+    sal_uInt16 nRet = 0;
     for( ; nWhich1 <= nWhich2; ++nWhich1 )
         nRet = nRet + SfxItemSet::ClearItem( nWhich1 );
     pOldSet = pNewSet = 0;
@@ -203,14 +203,14 @@ bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
     bool bSet = false;
 
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == GetItemState( RES_PAGEDESC, FALSE, &pItem ) &&
+    if( SFX_ITEM_SET == GetItemState( RES_PAGEDESC, sal_False, &pItem ) &&
         ((SwFmtPageDesc*)pItem)->GetDefinedIn() != pModify  )
     {
         ((SwFmtPageDesc*)pItem)->ChgDefinedIn( pModify );
         bSet = true;
     }
 
-    if( SFX_ITEM_SET == GetItemState( RES_PARATR_DROP, FALSE, &pItem ) &&
+    if( SFX_ITEM_SET == GetItemState( RES_PARATR_DROP, sal_False, &pItem ) &&
         ((SwFmtDrop*)pItem)->GetDefinedIn() != pModify )
     {
         // CharFormat gesetzt und dann noch in unterschiedlichen
@@ -226,7 +226,7 @@ bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
         bSet = true;
     }
 
-    if( SFX_ITEM_SET == GetItemState( RES_BOXATR_FORMULA, FALSE, &pItem ) &&
+    if( SFX_ITEM_SET == GetItemState( RES_BOXATR_FORMULA, sal_False, &pItem ) &&
         ((SwTblBoxFormula*)pItem)->GetDefinedIn() != pModify )
     {
         ((SwTblBoxFormula*)pItem)->ChgDefinedIn( pModify );
@@ -255,14 +255,14 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
 
             // muss die NumRule kopiert werden?
             if( pSrcDoc != pDstDoc && SFX_ITEM_SET == GetItemState(
-                                    RES_PARATR_NUMRULE, FALSE, &pItem ) )
+                                    RES_PARATR_NUMRULE, sal_False, &pItem ) )
             {
                 const String& rNm = ((SwNumRuleItem*)pItem)->GetValue();
                 if( rNm.Len() )
                 {
                     SwNumRule* pDestRule = pDstDoc->FindNumRulePtr( rNm );
                     if( pDestRule )
-                        pDestRule->SetInvalidRule( TRUE );
+                        pDestRule->SetInvalidRule( sal_True );
                     else
                         pDstDoc->MakeNumRule( rNm,
                                             pSrcDoc->FindNumRulePtr( rNm ) );
@@ -273,7 +273,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             // for text nodes
             if ( pSrcDoc != pDstDoc &&
                  pCNd && pCNd->IsTxtNode() &&
-                 GetItemState( RES_PARATR_LIST_ID, FALSE, &pItem ) == SFX_ITEM_SET )
+                 GetItemState( RES_PARATR_LIST_ID, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 const String& sListId =
                         dynamic_cast<const SfxStringItem*>(pItem)->GetValue();
@@ -322,7 +322,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             // Verhalten, sie zu entfernen
             const SwPageDesc* pPgDesc;
             if( pSrcDoc != pDstDoc && SFX_ITEM_SET == GetItemState(
-                                            RES_PAGEDESC, FALSE, &pItem ) &&
+                                            RES_PAGEDESC, sal_False, &pItem ) &&
                 0 != ( pPgDesc = ((SwFmtPageDesc*)pItem)->GetPageDesc()) )
             {
                 SfxItemSet aTmpSet( *this );
@@ -381,15 +381,15 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
 }
 
 // check if ID is InRange of AttrSet-Ids
-BOOL IsInRange( const USHORT* pRange, const USHORT nId )
+sal_Bool IsInRange( const sal_uInt16* pRange, const sal_uInt16 nId )
 {
     while( *pRange )
     {
         if( *pRange <= nId && nId <= *(pRange+1) )
-            return TRUE;
+            return sal_True;
         pRange += 2;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,7 +57,7 @@ SwFieldType* SwScriptFieldType::Copy() const
 
 SwScriptField::SwScriptField( SwScriptFieldType* pInitType,
                                 const String& rType, const String& rCode,
-                                BOOL bURL )
+                                sal_Bool bURL )
     : SwField( pInitType ), sType( rType ), sCode( rCode ), bCodeURL( bURL )
 {
 }
@@ -106,7 +106,7 @@ String SwScriptField::GetPar2() const
     return sCode;
 }
 
-bool SwScriptField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwScriptField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -125,7 +125,7 @@ bool SwScriptField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     return true;
 }
 
-bool SwScriptField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwScriptField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {

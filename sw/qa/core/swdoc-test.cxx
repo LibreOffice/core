@@ -69,7 +69,7 @@ SO2_IMPL_REF(SwDocShell)
 
 using namespace ::com::sun::star;
 
-static USHORT aWndFunc(Window *, USHORT, const String &, const String &)
+static sal_uInt16 aWndFunc(Window *, sal_uInt16, const String &, const String &)
 {
     return ERRCODE_BUTTON_OK;
 }

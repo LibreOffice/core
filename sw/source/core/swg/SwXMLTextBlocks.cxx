@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <tools/urlobj.hxx>
@@ -40,6 +39,7 @@
 
 #include <comphelper/storagehelper.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docsh.hxx>
 #include <pam.hxx>
 #include <swblocks.hxx>
@@ -47,6 +47,7 @@
 #include <shellio.hxx>
 #include <poolfmt.hxx>
 #include <SwXMLTextBlocks.hxx>
+#include <errhdl.hxx>
 #include <SwXMLBlockImport.hxx>
 #include <SwXMLBlockExport.hxx>
 #include <swerror.h>
@@ -70,16 +71,16 @@ void SwXMLTextBlocks::ResetBlockMode ( )
 }
 
 SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
-: SwImpBlocks( rFile ), bAutocorrBlock( FALSE ), nFlags ( 0 )
+: SwImpBlocks( rFile ), bAutocorrBlock( sal_False ), nFlags ( 0 )
 {
     SwDocShell* pDocSh = new SwDocShell ( SFX_CREATE_MODE_INTERNAL );
     if( !pDocSh->DoInitNew( 0 ) )
         return;
-    bReadOnly = TRUE;
+    bReadOnly = sal_True;
     pDoc = pDocSh->GetDoc();
     xDocShellRef = pDocSh;
     pDoc->SetOle2Link( Link() );
-    pDoc->DoUndo( FALSE );      // always FALSE
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
     pDoc->acquire();
     uno::Reference< embed::XStorage > refStg;
     if( !aDateModified.GetDate() || !aTimeModified.GetTime() )
@@ -87,7 +88,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
     try
     {
         refStg  = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READWRITE );
-        bReadOnly = FALSE;
+        bReadOnly = sal_False;
     }
     catch( const uno::Exception& )
     {
@@ -107,27 +108,27 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
     InitBlockMode ( refStg );
     ReadInfo();
     ResetBlockMode ();
-    bInfoChanged = FALSE;
+    bInfoChanged = sal_False;
 }
 
 SwXMLTextBlocks::SwXMLTextBlocks( const uno::Reference < embed::XStorage >& rStg, const String& rName )
 : SwImpBlocks( rName )
-, bAutocorrBlock( TRUE )
+, bAutocorrBlock( sal_True )
 , nFlags ( 0 )
 {
     SwDocShell* pDocSh = new SwDocShell ( SFX_CREATE_MODE_INTERNAL );
     if( !pDocSh->DoInitNew( 0 ) )
         return;
-    bReadOnly = FALSE;
+    bReadOnly = sal_False;
     pDoc = pDocSh->GetDoc();
     xDocShellRef = pDocSh;
     pDoc->SetOle2Link( Link() );
-    pDoc->DoUndo( FALSE );
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
     pDoc->acquire();
 
     InitBlockMode ( rStg );
     ReadInfo();
-    bInfoChanged = FALSE;
+    bInfoChanged = sal_False;
 }
 
 SwXMLTextBlocks::~SwXMLTextBlocks()
@@ -151,35 +152,35 @@ void SwXMLTextBlocks::ClearDoc()
     pDoc->ClearDoc();
     pDocShell->ClearEmbeddedObjects();
 }
-void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong, BOOL bOnlyTxt )
+void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong, sal_Bool bOnlyTxt )
 {
-    USHORT nIdx = GetIndex( rShort );
+    sal_uInt16 nIdx = GetIndex( rShort );
     SwBlockName* pNew = NULL;
-    if( nIdx != (USHORT) -1 )
+    if( nIdx != (sal_uInt16) -1 )
         aNames.DeleteAndDestroy( nIdx );
 
     GeneratePackageName( rShort, aPackageName );
     pNew = new SwBlockName( rShort, rLong, aPackageName );
 
-    pNew->bIsOnlyTxtFlagInit = TRUE;
+    pNew->bIsOnlyTxtFlagInit = sal_True;
     pNew->bIsOnlyTxt = bOnlyTxt;
     aNames.C40_PTR_INSERT( SwBlockName, pNew );
-    bInfoChanged = TRUE;
+    bInfoChanged = sal_True;
 }
 void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong,
-                           const String& rPackageName, BOOL bOnlyTxt )
+                           const String& rPackageName, sal_Bool bOnlyTxt )
 {
-    USHORT nIdx = GetIndex( rShort );
-    if( nIdx != (USHORT) -1 )
+    sal_uInt16 nIdx = GetIndex( rShort );
+    if( nIdx != (sal_uInt16) -1 )
         aNames.DeleteAndDestroy( nIdx );
     SwBlockName* pNew = new SwBlockName( rShort, rLong, rPackageName );
-    pNew->bIsOnlyTxtFlagInit = TRUE;
+    pNew->bIsOnlyTxtFlagInit = sal_True;
     pNew->bIsOnlyTxt = bOnlyTxt;
     aNames.C40_PTR_INSERT( SwBlockName, pNew );
-    bInfoChanged = TRUE;
+    bInfoChanged = sal_True;
 }
 
-ULONG SwXMLTextBlocks::Delete( USHORT n )
+sal_uLong SwXMLTextBlocks::Delete( sal_uInt16 n )
 {
     String aPckName (aNames[ n ]->aPackageName);
     uno::Reference < container::XNameAccess > xAccess( xBlkRoot, uno::UNO_QUERY );
@@ -202,7 +203,7 @@ ULONG SwXMLTextBlocks::Delete( USHORT n )
     return 0;
 }
 
-ULONG SwXMLTextBlocks::Rename( USHORT nIdx, const String& rNewShort, const String& )
+sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const String& rNewShort, const String& )
 {
     DBG_ASSERT( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
@@ -243,17 +244,17 @@ ULONG SwXMLTextBlocks::Rename( USHORT nIdx, const String& rNewShort, const Strin
     return 0;
 }
 
-ULONG SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
+sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
                                                     const String& rLong)
 {
-    ULONG nError = 0;
-    OpenFile(TRUE);
-    rDestImp.OpenFile(FALSE);
+    sal_uLong nError = 0;
+    OpenFile(sal_True);
+    rDestImp.OpenFile(sal_False);
     String aGroup( rShort );
-    BOOL bTextOnly = IsOnlyTextBlock ( rShort ) ;//pImp->pBlkRoot->IsStream( aGroup );
-    USHORT nIndex = GetIndex ( rShort );
+    sal_Bool bTextOnly = IsOnlyTextBlock ( rShort ) ;//pImp->pBlkRoot->IsStream( aGroup );
+    sal_uInt16 nIndex = GetIndex ( rShort );
     String sDestShortName( GetPackageName (nIndex) );
-    USHORT nIdx = 0;
+    sal_uInt16 nIdx = 0;
 
     DBG_ASSERT( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
@@ -296,7 +297,7 @@ ULONG SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
 }
 
 
-ULONG SwXMLTextBlocks::StartPutBlock( const String& rShort, const String& rPackageName )
+sal_uLong SwXMLTextBlocks::StartPutBlock( const String& rShort, const String& rPackageName )
 {
     DBG_ASSERT( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
@@ -316,20 +317,20 @@ ULONG SwXMLTextBlocks::StartPutBlock( const String& rShort, const String& rPacka
     }
     return 0;
 }
-ULONG SwXMLTextBlocks::BeginPutDoc( const String& rShort, const String& rLong )
+sal_uLong SwXMLTextBlocks::BeginPutDoc( const String& rShort, const String& rLong )
 {
     // In der Basisklasse ablegen!
     aShort = rShort;
     aLong = rLong;
     GeneratePackageName( rShort, aPackageName );
-    SetIsTextOnly( rShort, FALSE);
+    SetIsTextOnly( rShort, sal_False);
     return StartPutBlock (rShort, aPackageName);
 }
 
-ULONG SwXMLTextBlocks::PutBlock( SwPaM& , const String& )
+sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const String& )
 {
-    ULONG nRes = 0;
-    USHORT nCommitFlags = nFlags & (SWXML_CONVBLOCK|SWXML_NOROOTCOMMIT);
+    sal_uLong nRes = 0;
+    sal_uInt16 nCommitFlags = nFlags & (SWXML_CONVBLOCK|SWXML_NOROOTCOMMIT);
 
     nFlags |= nCommitFlags;
 
@@ -405,34 +406,34 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& , const String& )
     return 0;
 }
 
-ULONG SwXMLTextBlocks::PutDoc()
+sal_uLong SwXMLTextBlocks::PutDoc()
 {
     SwPaM* pPaM = MakePaM();
-    ULONG nErr = PutBlock(*pPaM, aLong);
+    sal_uLong nErr = PutBlock(*pPaM, aLong);
     delete pPaM;
     return nErr;
 }
 
-ULONG SwXMLTextBlocks::GetText( USHORT nIdx, String& rText )
+sal_uLong SwXMLTextBlocks::GetText( sal_uInt16 nIdx, String& rText )
 {
     return GetBlockText( aNames[ nIdx ]->aShort, rText );
 }
 
-ULONG SwXMLTextBlocks::GetText( const String& rShort, String& rText )
+sal_uLong SwXMLTextBlocks::GetText( const String& rShort, String& rText )
 {
     return GetBlockText( rShort, rText );
 }
 
 
-ULONG SwXMLTextBlocks::MakeBlockList()
+sal_uLong SwXMLTextBlocks::MakeBlockList()
 {
     WriteInfo();
     return 0;
 }
 
-BOOL SwXMLTextBlocks::PutMuchEntries( BOOL bOn )
+sal_Bool SwXMLTextBlocks::PutMuchEntries( sal_Bool bOn )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if( bOn )
     {
         if( bInPutMuchBlocks )
@@ -441,11 +442,11 @@ BOOL SwXMLTextBlocks::PutMuchEntries( BOOL bOn )
         }
         else if( !IsFileChanged() )
         {
-            bRet = 0 == OpenFile( FALSE );
+            bRet = 0 == OpenFile( sal_False );
             if( bRet )
             {
                 nFlags |= SWXML_NOROOTCOMMIT;
-                bInPutMuchBlocks = TRUE;
+                bInPutMuchBlocks = sal_True;
             }
         }
     }
@@ -462,8 +463,8 @@ BOOL SwXMLTextBlocks::PutMuchEntries( BOOL bOn )
                 MakeBlockList();
                 CloseFile();
                 Touch();
-                bInPutMuchBlocks = FALSE;
-                bRet = TRUE;
+                bInPutMuchBlocks = sal_False;
+                bRet = sal_True;
             }
             catch (uno::Exception&)
             {
@@ -473,11 +474,11 @@ BOOL SwXMLTextBlocks::PutMuchEntries( BOOL bOn )
     return bRet;
 }
 
-ULONG SwXMLTextBlocks::OpenFile( BOOL bRdOnly )
+sal_uLong SwXMLTextBlocks::OpenFile( sal_Bool bRdOnly )
 {
     if( bAutocorrBlock )
         return 0;
-    ULONG nRet = 0;
+    sal_uLong nRet = 0;
     try
     {
         uno::Reference < embed::XStorage > refStg  = comphelper::OStorageHelper::GetStorageFromURL( aFile,
@@ -503,34 +504,34 @@ void SwXMLTextBlocks::CloseFile()
     }
 }
 
-void SwXMLTextBlocks::SetIsTextOnly( const String& rShort, BOOL bNewValue )
+void SwXMLTextBlocks::SetIsTextOnly( const String& rShort, sal_Bool bNewValue )
 {
-    USHORT nIdx = GetIndex ( rShort );
-    if (nIdx != (USHORT) -1  && nIdx != USHRT_MAX)
+    sal_uInt16 nIdx = GetIndex ( rShort );
+    if (nIdx != (sal_uInt16) -1  && nIdx != USHRT_MAX)
         aNames[nIdx]->bIsOnlyTxt = bNewValue;
 }
 
-void SwXMLTextBlocks::SetIsTextOnly( USHORT nIdx, BOOL bNewValue )
+void SwXMLTextBlocks::SetIsTextOnly( sal_uInt16 nIdx, sal_Bool bNewValue )
 {
     aNames[nIdx]->bIsOnlyTxt = bNewValue;
 }
 
-BOOL SwXMLTextBlocks::IsOnlyTextBlock( const String& rShort ) const
+sal_Bool SwXMLTextBlocks::IsOnlyTextBlock( const String& rShort ) const
 {
-    USHORT nIdx = GetIndex ( rShort );
-    BOOL bRet = FALSE;
-    if (nIdx != (USHORT) -1  && nIdx != USHRT_MAX)
+    sal_uInt16 nIdx = GetIndex ( rShort );
+    sal_Bool bRet = sal_False;
+    if (nIdx != (sal_uInt16) -1  && nIdx != USHRT_MAX)
     {
         bRet = aNames[nIdx]->bIsOnlyTxt;
     }
     return bRet;
 }
-BOOL SwXMLTextBlocks::IsOnlyTextBlock( USHORT nIdx ) const
+sal_Bool SwXMLTextBlocks::IsOnlyTextBlock( sal_uInt16 nIdx ) const
 {
     return aNames[nIdx]->bIsOnlyTxt;
 }
 
-BOOL SwXMLTextBlocks::IsFileUCBStorage( const String & rFileName)
+sal_Bool SwXMLTextBlocks::IsFileUCBStorage( const String & rFileName)
 {
     String aName( rFileName );
     INetURLObject aObj( aName );
@@ -543,7 +544,7 @@ BOOL SwXMLTextBlocks::IsFileUCBStorage( const String & rFileName)
     }
 
     SvStream * pStm = ::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READ );
-    BOOL bRet = UCBStorage::IsStorageFile( pStm );
+    sal_Bool bRet = UCBStorage::IsStorageFile( pStm );
     delete pStm;
     return bRet;
 }
@@ -569,14 +570,14 @@ void SwXMLTextBlocks::GeneratePackageName ( const String& rShort, String& rPacka
     }
 }
 
-ULONG SwXMLTextBlocks::PutText( const String& rShort, const String& rName,
+sal_uLong SwXMLTextBlocks::PutText( const String& rShort, const String& rName,
                                 const String& rText )
 {
-    ULONG nRes = 0;
+    sal_uLong nRes = 0;
     aShort = rShort;
     aLong = rName;
     aCur = rText;
-    SetIsTextOnly( aShort, TRUE );
+    SetIsTextOnly( aShort, sal_True );
     GeneratePackageName( rShort, aPackageName );
     ClearDoc();
     nRes = PutBlockText( rShort, rName, rText, aPackageName );

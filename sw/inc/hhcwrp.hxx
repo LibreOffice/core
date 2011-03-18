@@ -52,8 +52,8 @@ class SwHHCWrapper : public editeng::HangulHanjaConversion
                                 // SwPaM or SwPosition by replace operations!)
     sal_Int32       nUnitOffset;
 
-    USHORT      nPageCount;     // page count for progress bar
-    USHORT      nPageStart;     // first checked page
+    sal_uInt16      nPageCount;     // page count for progress bar
+    sal_uInt16      nPageStart;     // first checked page
 
     sal_Bool    bIsDrawObj;
     sal_Bool    bIsStart;
@@ -83,8 +83,8 @@ class SwHHCWrapper : public editeng::HangulHanjaConversion
                             SwPaM *pCrsr );
     void        ChangeText_impl( const String &rNewText, sal_Bool bKeepAttributes );
 
-    inline BOOL IsDrawObj()             { return bIsDrawObj; }
-    inline void SetDrawObj( BOOL bNew ) { bIsDrawObj = bNew; }
+    inline sal_Bool IsDrawObj()             { return bIsDrawObj; }
+    inline void SetDrawObj( sal_Bool bNew ) { bIsDrawObj = bNew; }
 
 protected:
     virtual void    GetNextPortion( ::rtl::OUString& rNextPortion,

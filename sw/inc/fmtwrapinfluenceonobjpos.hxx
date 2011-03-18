@@ -56,8 +56,8 @@ public:
     virtual int operator==( const SfxPoolItem& _rAttr ) const;
     virtual SfxPoolItem* Clone( SfxItemPool* pPool = 0 ) const;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     // direct accessors to data
     void SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition );
@@ -67,10 +67,10 @@ public:
                         const bool _bIterativeAsOnceConcurrent = false ) const;
 };
 
-inline const SwFmtWrapInfluenceOnObjPos& SwAttrSet::GetWrapInfluenceOnObjPos(BOOL bInP) const
+inline const SwFmtWrapInfluenceOnObjPos& SwAttrSet::GetWrapInfluenceOnObjPos(sal_Bool bInP) const
     { return (const SwFmtWrapInfluenceOnObjPos&)Get( RES_WRAP_INFLUENCE_ON_OBJPOS,bInP); }
 
- inline const SwFmtWrapInfluenceOnObjPos& SwFmt::GetWrapInfluenceOnObjPos(BOOL bInP) const
+ inline const SwFmtWrapInfluenceOnObjPos& SwFmt::GetWrapInfluenceOnObjPos(sal_Bool bInP) const
     { return aSet.GetWrapInfluenceOnObjPos(bInP); }
 
 #endif

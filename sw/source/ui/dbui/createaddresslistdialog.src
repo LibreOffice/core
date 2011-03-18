@@ -67,24 +67,28 @@ ModalDialog DLG_MM_CREATEADDRESSLIST
     };
     PushButton              PB_NEW
     {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_NEW";
         Pos = MAP_APPFONT ( 262 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~New";
     };
     PushButton              PB_DELETE
     {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_DELETE";
         Pos = MAP_APPFONT ( 262 , 32 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete";
     };
     PushButton              PB_FIND
     {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_FIND";
         Pos = MAP_APPFONT ( 262 , 50 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Find...";
     };
     PushButton              PB_CUSTOMIZE
     {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_CUSTOMIZE";
         Pos = MAP_APPFONT ( 262 , 68 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "C~ustomize...";
@@ -97,18 +101,21 @@ ModalDialog DLG_MM_CREATEADDRESSLIST
     };
     PushButton              PB_START
     {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_START";
         Pos = MAP_APPFONT ( 100 , 180 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = "|<";
     };
     PushButton              PB_PREV
     {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_PREV";
         Pos = MAP_APPFONT ( 123 , 180 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = "<";
     };
     NumericField            NF_SETNO
     {
+        HelpID = "sw:NumericField:DLG_MM_CREATEADDRESSLIST:NF_SETNO";
         Pos = MAP_APPFONT ( 146 , 180 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Border = TRUE;
@@ -122,12 +129,14 @@ ModalDialog DLG_MM_CREATEADDRESSLIST
     };
     PushButton              PB_NEXT
     {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_NEXT";
         Pos = MAP_APPFONT ( 169 , 180 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = ">";
     };
     PushButton              PB_END
     {
+        HelpID = "sw:PushButton:DLG_MM_CREATEADDRESSLIST:PB_END";
         Pos = MAP_APPFONT ( 192 , 180 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = ">|";
@@ -179,18 +188,21 @@ ModelessDialog DLG_MM_FIND_ENTRY
     };
     Edit      ED_FIND
     {
+        HelpID = "sw:Edit:DLG_MM_FIND_ENTRY:ED_FIND";
         Pos = MAP_APPFONT ( 6 ,  14) ;
         Size = MAP_APPFONT ( 120 , 12 ) ;
         Border = TRUE;
     };
     CheckBox  CB_FINDONLY
     {
+        HelpID = "sw:CheckBox:DLG_MM_FIND_ENTRY:CB_FINDONLY";
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Text [ en-US ] = "Find ~only in";
     };
     ListBox   LB_FINDONLY
     {
+        HelpID = "sw:ListBox:DLG_MM_FIND_ENTRY:LB_FINDONLY";
         Pos = MAP_APPFONT ( 12 , 45 ) ;
         Size = MAP_APPFONT ( 114 , 50 ) ;
         Border = TRUE;
@@ -198,6 +210,7 @@ ModelessDialog DLG_MM_FIND_ENTRY
     };
     PushButton  PB_FIND
     {
+        HelpID = "sw:PushButton:DLG_MM_FIND_ENTRY:PB_FIND";
         Pos = MAP_APPFONT ( 132 , 3 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE;

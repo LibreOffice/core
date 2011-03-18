@@ -537,7 +537,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
         if( bForced )
         {
             pCurr->SetForcedLeftMargin( sal_True );
-            rInf.ForcedLeftMargin( (USHORT)aInter.Width() );
+            rInf.ForcedLeftMargin( (sal_uInt16)aInter.Width() );
         }
 
         if( bFullLine )
@@ -610,7 +610,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
                                     (pPageFrm->*fnRect->fnGetPrtLeft)();
 
             const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
-            const USHORT nGridWidth = GETGRIDWIDTH( pGrid, pDoc);   //for textgrid refactor
+            const sal_uInt16 nGridWidth = GETGRIDWIDTH( pGrid, pDoc);   //for textgrid refactor
 
             SwTwips nStartX = GetLeftMargin();
             if ( bVert )
@@ -623,11 +623,11 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             const SwTwips nOfst = nStartX - nGridOrigin;
             const SwTwips nTmpWidth = rInf.Width() + nOfst;
 
-            const ULONG i = nTmpWidth / nGridWidth + 1;
+            const sal_uLong i = nTmpWidth / nGridWidth + 1;
 
             const long nNewWidth = ( i - 1 ) * nGridWidth - nOfst;
             if ( nNewWidth > 0 )
-                rInf.Width( (USHORT)nNewWidth );
+                rInf.Width( (sal_uInt16)nNewWidth );
             else
                 rInf.Width( 0 );
         }
@@ -678,7 +678,7 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
                                       pFly->GetRefPoint().Y() );
 
     if ( bUseFlyAscent )
-         nAscent = static_cast<USHORT>( Abs( int( bTxtFrmVertical ?
+         nAscent = static_cast<sal_uInt16>( Abs( int( bTxtFrmVertical ?
                                                   pFly->GetRelPos().X() :
                                                   pFly->GetRelPos().Y() ) ) );
 
@@ -944,7 +944,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
 
     sal_Bool bOpaque = sal_False;
     // --> OD 2006-08-15 #i68520#
-    const UINT32 nCurrOrd = mpCurrAnchoredObj
+    const sal_uInt32 nCurrOrd = mpCurrAnchoredObj
                             ? mpCurrAnchoredObj->GetDrawObj()->GetOrdNum()
                             : SAL_MAX_UINT32;
     // <--
@@ -1139,8 +1139,8 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         // #102344# Ignore connectors which have one or more connections
         if(pNew && pNew->ISA(SdrEdgeObj))
         {
-            if(((SdrEdgeObj*)pNew)->GetConnectedNode(TRUE)
-                || ((SdrEdgeObj*)pNew)->GetConnectedNode(FALSE))
+            if(((SdrEdgeObj*)pNew)->GetConnectedNode(sal_True)
+                || ((SdrEdgeObj*)pNew)->GetConnectedNode(sal_False))
             {
                 return sal_False;
             }
@@ -1160,7 +1160,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                 if ( bInFooterOrHeader )
                 {
                     SwFmtVertOrient aVert( rFrmFmt.GetVertOrient() );
-                    BOOL bVertPrt = aVert.GetRelationOrient() == text::RelOrientation::PRINT_AREA ||
+                    sal_Bool bVertPrt = aVert.GetRelationOrient() == text::RelOrientation::PRINT_AREA ||
                             aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA;
                     if( bVertPrt )
                         return sal_False;
@@ -1330,7 +1330,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
 
                 // Compare indices:
                 // Den Index des anderen erhalten wir immer ueber das Ankerattr.
-                ULONG nTmpIndex = rNewA.GetCntntAnchor()->nNode.GetIndex();
+                sal_uLong nTmpIndex = rNewA.GetCntntAnchor()->nNode.GetIndex();
                 // Jetzt wird noch ueberprueft, ob der aktuelle Absatz vor dem
                 // Anker des verdraengenden Objekts im Text steht, dann wird
                 // nicht ausgewichen.
@@ -1789,7 +1789,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         pSdrObj[ 0 ] = pObj; // Wg. #37347 darf das Object erst nach dem
                              // GetContour() eingetragen werden.
         pTextRanger[ 0 ] = new TextRanger( aPolyPolygon, pPolyPolygon, 20,
-            (USHORT)rLRSpace.GetLeft(), (USHORT)rLRSpace.GetRight(),
+            (sal_uInt16)rLRSpace.GetLeft(), (sal_uInt16)rLRSpace.GetRight(),
             pFmt->GetSurround().IsOutside(), sal_False, pFrm->IsVertical() );
         pTextRanger[ 0 ]->SetUpper( rULSpace.GetUpper() );
         pTextRanger[ 0 ]->SetLower( rULSpace.GetLower() );
@@ -1923,7 +1923,7 @@ void SwContourCache::ShowContour( OutputDevice* pOut, const SdrObject* pObj,
 void SwTxtFly::ShowContour( OutputDevice* pOut )
 {
     MSHORT nFlyCount;
-    if( bOn && ( 0 != ( nFlyCount = static_cast<USHORT>(GetAnchoredObjList()->size() ) ) ) )
+    if( bOn && ( 0 != ( nFlyCount = static_cast<sal_uInt16>(GetAnchoredObjList()->size() ) ) ) )
     {
         Color aRedColor( COL_LIGHTRED );
         Color aGreenColor( COL_LIGHTGREEN );

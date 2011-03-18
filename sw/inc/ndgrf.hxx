@@ -51,15 +51,15 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     String aNewStrmName;        // SW3/XML: new stream name (either SW3 stream
                                 // name or package url)
     String aLowResGrf;          // HTML: LowRes graphics (substitute until regular HighRes graphics is loaded).
-    BOOL bTransparentFlagValid  :1;
-    BOOL bInSwapIn              :1;
+    sal_Bool bTransparentFlagValid  :1;
+    sal_Bool bInSwapIn              :1;
 
-    BOOL bGrafikArrived         :1;
-    BOOL bChgTwipSize           :1;
-    BOOL bChgTwipSizeFromPixel  :1;
-    BOOL bLoadLowResGrf         :1;
-    BOOL bFrameInPaint          :1; // To avoid Start-/EndActions in Paint via SwapIn.
-    BOOL bScaleImageMap         :1; // Scale image map in SetTwipSize.
+    sal_Bool bGrafikArrived         :1;
+    sal_Bool bChgTwipSize           :1;
+    sal_Bool bChgTwipSizeFromPixel  :1;
+    sal_Bool bLoadLowResGrf         :1;
+    sal_Bool bFrameInPaint          :1; // To avoid Start-/EndActions in Paint via SwapIn.
+    sal_Bool bScaleImageMap         :1; // Scale image map in SetTwipSize.
 
     boost::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
     bool mbLinkedInputStreamReady;
@@ -82,8 +82,8 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
                SwAttrSet* pAutoAttr = 0 );
 
     void InsertLink( const String& rGrfName, const String& rFltName );
-    BOOL ImportGraphic( SvStream& rStrm );
-    BOOL HasStreamName() const { return aGrfObj.HasUserData(); }
+    sal_Bool ImportGraphic( SvStream& rStrm );
+    sal_Bool HasStreamName() const { return aGrfObj.HasUserData(); }
     // adjust return type and rename method to
     // indicate that its an private one.
 
@@ -145,22 +145,22 @@ public:
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
     void SetTwipSize( const Size& rSz );
 
-    BOOL IsTransparent() const;
+    sal_Bool IsTransparent() const;
 
-    inline BOOL IsAnimated() const              { return aGrfObj.IsAnimated(); }
+    inline sal_Bool IsAnimated() const              { return aGrfObj.IsAnimated(); }
 
-    inline BOOL IsChgTwipSize() const           { return bChgTwipSize; }
-    inline BOOL IsChgTwipSizeFromPixel() const  { return bChgTwipSizeFromPixel; }
-    inline void SetChgTwipSize( BOOL b, BOOL bFromPx=FALSE )        { bChgTwipSize = b; bChgTwipSizeFromPixel = bFromPx; }
+    inline sal_Bool IsChgTwipSize() const           { return bChgTwipSize; }
+    inline sal_Bool IsChgTwipSizeFromPixel() const  { return bChgTwipSizeFromPixel; }
+    inline void SetChgTwipSize( sal_Bool b, sal_Bool bFromPx=sal_False )        { bChgTwipSize = b; bChgTwipSizeFromPixel = bFromPx; }
 
-    inline BOOL IsGrafikArrived() const         { return bGrafikArrived; }
-    inline void SetGrafikArrived( BOOL b )      { bGrafikArrived = b; }
+    inline sal_Bool IsGrafikArrived() const         { return bGrafikArrived; }
+    inline void SetGrafikArrived( sal_Bool b )      { bGrafikArrived = b; }
 
-    inline BOOL IsFrameInPaint() const          { return bFrameInPaint; }
-    inline void SetFrameInPaint( BOOL b )       { bFrameInPaint = b; }
+    inline sal_Bool IsFrameInPaint() const          { return bFrameInPaint; }
+    inline void SetFrameInPaint( sal_Bool b )       { bFrameInPaint = b; }
 
-    inline BOOL IsScaleImageMap() const         { return bScaleImageMap; }
-    inline void SetScaleImageMap( BOOL b )      { bScaleImageMap = b; }
+    inline sal_Bool IsScaleImageMap() const         { return bScaleImageMap; }
+    inline void SetScaleImageMap( sal_Bool b )      { bScaleImageMap = b; }
 #endif
         // in ndcopy.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
@@ -168,33 +168,33 @@ public:
 
     // Re-read in case graphic was not OK. The current one
     // gets replaced by the new one.
-    BOOL ReRead( const String& rGrfName, const String& rFltName,
+    sal_Bool ReRead( const String& rGrfName, const String& rFltName,
                  const Graphic* pGraphic = 0,
                  const GraphicObject* pGrfObj = 0,
-                 BOOL bModify = TRUE );
+                 sal_Bool bModify = sal_True );
     // Loading of graphic immediately before displaying.
-    short SwapIn( BOOL bWaitForData = FALSE );
+    short SwapIn( sal_Bool bWaitForData = sal_False );
     // Remove graphic in order to free memory.
     short SwapOut();
     // Access to storage stream-name.
     void SetStreamName( const String& r ) { aGrfObj.SetUserData( r ); }
     void SetNewStreamName( const String& r ) { aNewStrmName = r; }
     // Is this node selected by any shell?
-    BOOL IsSelected() const;
+    sal_Bool IsSelected() const;
 #endif
 
     // Communicate to graphic that node is in Undo-range.
-    virtual BOOL SavePersistentData();
-    virtual BOOL RestorePersistentData();
+    virtual sal_Bool SavePersistentData();
+    virtual sal_Bool RestorePersistentData();
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
 
     // Query link-data.
-    BOOL IsGrfLink() const                  { return refLink.Is(); }
-    inline BOOL IsLinkedFile() const;
-    inline BOOL IsLinkedDDE() const;
+    sal_Bool IsGrfLink() const                  { return refLink.Is(); }
+    inline sal_Bool IsLinkedFile() const;
+    inline sal_Bool IsLinkedDDE() const;
     ::sfx2::SvBaseLinkRef GetLink() const    { return refLink; }
-    BOOL GetFileFilterNms( String* pFileNm, String* pFilterNm ) const;
+    sal_Bool GetFileFilterNms( String* pFileNm, String* pFilterNm ) const;
     void ReleaseLink();
 
     // Scale an image-map: the image-map becomes zoomed in / out by
@@ -227,11 +227,11 @@ inline const SwGrfNode   *SwNode::GetGrfNode() const
 }
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
-inline BOOL SwGrfNode::IsLinkedFile() const
+inline sal_Bool SwGrfNode::IsLinkedFile() const
 {
     return refLink.Is() && OBJECT_CLIENT_GRF == refLink->GetObjType();
 }
-inline BOOL SwGrfNode::IsLinkedDDE() const
+inline sal_Bool SwGrfNode::IsLinkedDDE() const
 {
     return refLink.Is() && OBJECT_CLIENT_DDE == refLink->GetObjType();
 }

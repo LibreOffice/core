@@ -42,7 +42,7 @@ typedef FnAttrOut SwAttrFnTab[ POOLATTR_END - POOLATTR_BEGIN ];
 
 SW_DLLPUBLIC Writer& Out( const SwAttrFnTab, const SfxPoolItem&, Writer& );
 SW_DLLPUBLIC Writer& Out_SfxItemSet( const SwAttrFnTab, Writer&, const SfxItemSet&,
-                         BOOL bDeep, BOOL bTstForDefault = TRUE );
+                         sal_Bool bDeep, sal_Bool bTstForDefault = sal_True );
 
 
 /* Funktionspointer auf die Node-Write-Funktionen */

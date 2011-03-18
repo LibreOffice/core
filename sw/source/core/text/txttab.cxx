@@ -74,7 +74,7 @@ const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nSearchPos,
  *                    SwLineInfo::NumberOfTabStops()
  *************************************************************************/
 
-USHORT SwLineInfo::NumberOfTabStops() const
+sal_uInt16 SwLineInfo::NumberOfTabStops() const
 {
     return pRuler->Count();
 }
@@ -138,7 +138,12 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
                                        nLinePos - nTabPos :
                                        nLinePos + nTabPos;
 
-        SwTwips nMyRight = Right();
+       //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        SwTwips nMyRight;
+        if ( pFrm->IsVertLR() )
+           nMyRight = Left();
+        else
+           nMyRight = Right();
 
         if ( pFrm->IsVertical() )
         {
@@ -373,14 +378,14 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
     OSL_ENSURE( rInf.X() <= GetTabPos(), "SwTabPortion::PreFormat: rush hour" );
 
     // Hier lassen wir uns nieder...
-    Fix( static_cast<USHORT>(rInf.X()) );
+    Fix( static_cast<sal_uInt16>(rInf.X()) );
 
     const bool bTabCompat = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
 
     // Die Mindestbreite eines Tabs ist immer mindestens ein Blank
     // --> FME 2004-11-25 #i37686# In compatibility mode, the minimum width
     // should be 1, even for non-left tab stops.
-    USHORT nMinimumTabWidth = 1;
+    sal_uInt16 nMinimumTabWidth = 1;
     // <--
     if ( !bTabCompat )
     {
@@ -410,7 +415,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
                        rInf.Width() <= rInf.X() + PrtWidth();
 
     // #95477# Rotated tab stops get the width of one blank
-    const USHORT nDir = rInf.GetFont()->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
+    const sal_uInt16 nDir = rInf.GetFont()->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
 
     if( ! bFull && 0 == nDir )
     {
@@ -429,7 +434,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
             }
             case POR_TABLEFT:
             {
-                PrtWidth( static_cast<USHORT>(GetTabPos() - rInf.X()) );
+                PrtWidth( static_cast<sal_uInt16>(GetTabPos() - rInf.X()) );
                 bFull = rInf.Width() <= rInf.X() + PrtWidth();
 
                 // In tabulator compatibility mode, we reset the bFull flag
@@ -456,7 +461,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
             !rInf.GetFly() )
             // <--
         {
-            PrtWidth( static_cast<USHORT>(rInf.Width() - rInf.X()) );
+            PrtWidth( static_cast<sal_uInt16>(rInf.Width() - rInf.X()) );
             SetFixWidth( PrtWidth() );
         }
         else

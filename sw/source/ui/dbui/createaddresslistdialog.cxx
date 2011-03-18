@@ -212,11 +212,11 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
         if(nContentHeight < m_aScrollBar.GetSizePixel().Height())
         {
             nContentHeight = m_aScrollBar.GetSizePixel().Height();
-            m_aScrollBar.Enable(FALSE);
+            m_aScrollBar.Enable(sal_False);
         }
         else
         {
-            m_aScrollBar.Enable(TRUE);
+            m_aScrollBar.Enable(sal_True);
             m_aScrollBar.SetRange(Range(0, nLines));
             m_aScrollBar.SetThumbPos(0);
             m_aScrollBar.SetVisibleSize(nVisibleLines);
@@ -339,7 +339,7 @@ long SwAddressControl_Impl::PreNotify( NotifyEvent& rNEvt )
     if(rNEvt.GetType() == EVENT_COMMAND)
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
-        USHORT nCmd = pCEvt->GetCommand();
+        sal_uInt16 nCmd = pCEvt->GetCommand();
         if( COMMAND_WHEEL == nCmd )
         {
             Command(*pCEvt);
@@ -399,7 +399,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
     if(m_sURL.Len())
     {
         //file exists, has to be loaded here
-        SfxMedium aMedium( m_sURL, STREAM_READ, TRUE );
+        SfxMedium aMedium( m_sURL, STREAM_READ, sal_True );
         SvStream* pStream = aMedium.GetInStream();
         if(pStream)
         {
@@ -413,7 +413,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             OUString sMiddle(sTempMiddle);
 
             String sLine;
-            BOOL bRead = pStream->ReadUniOrByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
+            sal_Bool bRead = pStream->ReadUniOrByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
 
             if(bRead)
             {
@@ -458,7 +458,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
         //database has to be created
         const ResStringArray& rAddressHeader = rConfig.GetDefaultAddressHeaders();
         sal_uInt32 nCount = rAddressHeader.Count();
-        for(USHORT nHeader = 0; nHeader < nCount; ++nHeader)
+        for(sal_uInt16 nHeader = 0; nHeader < nCount; ++nHeader)
             m_pCSVData->aDBColumnHeaders.push_back( rAddressHeader.GetString(nHeader));
         ::std::vector<OUString> aNewData;
         String sTemp;
@@ -509,7 +509,7 @@ IMPL_LINK(SwCreateAddressListDialog, DeleteHdl_Impl, PushButton*, EMPTYARG)
         // if only one set is available then clear the data
         String sTemp;
         m_pCSVData->aDBData[0].assign(m_pCSVData->aDBData[0].size(), sTemp);
-        m_aDeletePB.Enable(FALSE);
+        m_aDeletePB.Enable(sal_False);
     }
     m_pAddressControl->SetCurrentDataSet(nCurrent);
     m_aSetNoNF.SetMax(m_pCSVData->aDBData.size());
@@ -586,7 +586,7 @@ IMPL_LINK(SwCreateAddressListDialog, OkHdl_Impl, PushButton*, EMPTYARG)
     }
     if(m_sURL.Len())
     {
-        SfxMedium aMedium( m_sURL, STREAM_READWRITE|STREAM_TRUNC, TRUE );
+        SfxMedium aMedium( m_sURL, STREAM_READWRITE|STREAM_TRUNC, sal_True );
         SvStream* pStream = aMedium.GetOutStream();
         pStream->SetLineDelimiter( LINEEND_LF );
         pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
@@ -769,7 +769,7 @@ IMPL_LINK(SwFindEntryDialog, FindEnableHdl_Impl, Edit*, EMPTYARG)
 
 IMPL_LINK(SwFindEntryDialog, CloseHdl_Impl, PushButton*, EMPTYARG)
 {
-    Show(FALSE);
+    Show(sal_False);
     return 0;
 }
 

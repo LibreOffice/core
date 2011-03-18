@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _INETFLD_HXX
-#define _INETFLD_HXX
+#ifndef SW_INETFLD_HXX
+#define SW_INETFLD_HXX
 
 
 #include "fldbas.hxx"
@@ -67,15 +67,16 @@ class SwINetField : public SwField
     String  sText;
     SvxMacroTableDtor* pMacroTbl;
 
+    virtual String   Expand() const;
+    virtual SwField* Copy() const;
+
 public:
     // Direct input, delete old value.
-    SwINetField( SwINetFieldType* pTyp, USHORT nFmt,
+    SwINetField( SwINetFieldType* pTyp, sal_uInt16 nFmt,
                   const String& rURL, const String& rText );
     virtual ~SwINetField();
 
-    virtual String   GetCntnt(BOOL bName = FALSE) const;
-    virtual String   Expand() const;
-    virtual SwField* Copy() const;
+    virtual String   GetFieldName() const;
 
     // URL
     virtual const String& GetPar1() const;
@@ -97,11 +98,11 @@ public:
     void SetMacroTbl( const SvxMacroTableDtor* pTbl = 0 );
     const SvxMacroTableDtor* GetMacroTbl() const    { return pMacroTbl; }
 
-    void SetMacro( USHORT nEvent, const SvxMacro& rMacro );
-    const SvxMacro* GetMacro( USHORT nEvent ) const;
+    void SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro );
+    const SvxMacro* GetMacro( sal_uInt16 nEvent ) const;
 };
 
 
-#endif // _INETFLD_HXX
+#endif // SW_INETFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

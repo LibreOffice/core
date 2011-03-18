@@ -43,7 +43,7 @@ public:
     static void Init();
     static void Exit();
 
-    static ULONG DetectFilter( SfxMedium& rMedium, const SfxFilter **ppFilter,
+    static sal_uLong DetectFilter( SfxMedium& rMedium, const SfxFilter **ppFilter,
                                SfxFilterFlags nMust, SfxFilterFlags nDont );
 };
 

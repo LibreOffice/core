@@ -181,7 +181,7 @@ SwTableBox* SwVbaTableHelper::GetTabBox( sal_Int32 nCol, sal_Int32 nRow ) throw 
     return pStart;
 }
 
-void SwVbaTableHelper::InitTabCols( SwTabCols& rCols, const SwTableBox *pStart, BOOL /*bCurRowOnly*/ )
+void SwVbaTableHelper::InitTabCols( SwTabCols& rCols, const SwTableBox *pStart, sal_Bool /*bCurRowOnly*/ )
 {
     rCols.SetLeftMin ( 0 );
     rCols.SetLeft    ( 0 );
@@ -205,7 +205,7 @@ sal_Int32 SwVbaTableHelper::GetRightSeparator( SwTabCols& rCols, sal_Int32 nNum)
     sal_Int32 i = 0;
     while( nNum >= 0 )
     {
-        if( !rCols.IsHidden( static_cast< USHORT >(i)) )
+        if( !rCols.IsHidden( static_cast< sal_uInt16 >(i)) )
             nNum--;
         i++;
     }
@@ -240,10 +240,10 @@ sal_Int32 SwVbaTableHelper::GetColWidth( SwTabCols& rCols, sal_Int32 nNum ) thro
         else
         {
             SwTwips nRValid = nNum < GetColCount( rCols ) ?
-                            rCols[(USHORT)GetRightSeparator( rCols, nNum)]:
+                            rCols[(sal_uInt16)GetRightSeparator( rCols, nNum)]:
                                     rCols.GetRight();
             SwTwips nLValid = nNum ?
-                            rCols[(USHORT)GetRightSeparator( rCols, nNum - 1)]:
+                            rCols[(sal_uInt16)GetRightSeparator( rCols, nNum - 1)]:
                                     rCols.GetLeft();
             nWidth = nRValid - nLValid;
         }
@@ -271,20 +271,20 @@ void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 
 
         int nDiff = (int)(nNewWidth - nWidth);
         if( !nCol )
-            aCols[ static_cast< USHORT >(GetRightSeparator(aCols, 0)) ] += nDiff;
+            aCols[ static_cast< sal_uInt16 >(GetRightSeparator(aCols, 0)) ] += nDiff;
         else if( nCol < GetColCount( aCols )  )
         {
             if(nDiff < GetColWidth( aCols, nCol + 1) - MINLAY)
-                aCols[ static_cast< USHORT >(GetRightSeparator( aCols, nCol)) ] += nDiff;
+                aCols[ static_cast< sal_uInt16 >(GetRightSeparator( aCols, nCol)) ] += nDiff;
             else
             {
                 int nDiffLeft = nDiff - (int)GetColWidth( aCols, nCol + 1) + (int)MINLAY;
-                aCols[ static_cast< USHORT >(GetRightSeparator( aCols, nCol)) ] += (nDiff - nDiffLeft);
-                aCols[ static_cast< USHORT >(GetRightSeparator( aCols, nCol - 1)) ] -= nDiffLeft;
+                aCols[ static_cast< sal_uInt16 >(GetRightSeparator( aCols, nCol)) ] += (nDiff - nDiffLeft);
+                aCols[ static_cast< sal_uInt16 >(GetRightSeparator( aCols, nCol - 1)) ] -= nDiffLeft;
             }
         }
         else
-            aCols[ static_cast< USHORT >(GetRightSeparator( aCols, nCol-1)) ] -= nDiff;
+            aCols[ static_cast< sal_uInt16 >(GetRightSeparator( aCols, nCol-1)) ] -= nDiff;
     }
     else
         aCols.SetRight( Min( (long)nNewWidth, aCols.GetRightMax()) );

@@ -63,9 +63,9 @@ class SwRedlineExtraData_FmtColl : public SwRedlineExtraData
 {
     String sFmtNm;
     SfxItemSet* pSet;
-    USHORT nPoolId;
+    sal_uInt16 nPoolId;
 public:
-    SwRedlineExtraData_FmtColl( const String& rColl, USHORT nPoolFmtId,
+    SwRedlineExtraData_FmtColl( const String& rColl, sal_uInt16 nPoolFmtId,
                                 const SfxItemSet* pSet = 0 );
     virtual ~SwRedlineExtraData_FmtColl();
     virtual SwRedlineExtraData* CreateNew() const;
@@ -99,14 +99,14 @@ class SW_DLLPUBLIC SwRedlineData
     String sComment;
     DateTime aStamp;
     RedlineType_t eType;
-    USHORT nAuthor, nSeqNo;
+    sal_uInt16 nAuthor, nSeqNo;
 
 public:
-    SwRedlineData( RedlineType_t eT, USHORT nAut );
-    SwRedlineData( const SwRedlineData& rCpy, BOOL bCpyNext = TRUE );
+    SwRedlineData( RedlineType_t eT, sal_uInt16 nAut );
+    SwRedlineData( const SwRedlineData& rCpy, sal_Bool bCpyNext = sal_True );
 
     // fuer sw3io: pNext/pExtraData gehen in eigenen Besitz ueber!
-    SwRedlineData( RedlineType_t eT, USHORT nAut, const DateTime& rDT,
+    SwRedlineData( RedlineType_t eT, sal_uInt16 nAut, const DateTime& rDT,
                    const String& rCmnt, SwRedlineData* pNxt,
                     SwRedlineExtraData* pExtraData = 0 );
 
@@ -129,7 +129,7 @@ public:
     RedlineType_t GetType() const
   { return ((RedlineType_t)(eType & nsRedlineType_t::REDLINE_NO_FLAG_MASK)); }
     RedlineType_t GetRealType() const { return eType; }
-    USHORT GetAuthor() const                { return nAuthor; }
+    sal_uInt16 GetAuthor() const                { return nAuthor; }
     const String& GetComment() const        { return sComment; }
     const DateTime& GetTimeStamp() const    { return aStamp; }
     inline const SwRedlineData* Next() const{ return pNext; }
@@ -161,8 +161,8 @@ public:
     // fuers UI-seitige zusammenfassen von Redline-Actionen. Wird z.Z. nur
     // fuers Autoformat mit Redline benoetigt. Der Wert != 0 bedeutet dabei,
     // das es noch weitere geben kann!
-    USHORT GetSeqNo() const                     { return nSeqNo; }
-    void SetSeqNo( USHORT nNo )                 { nSeqNo = nNo; }
+    sal_uInt16 GetSeqNo() const                     { return nSeqNo; }
+    void SetSeqNo( sal_uInt16 nNo )                 { nSeqNo = nNo; }
 
     String GetDescr() const;
 };
@@ -172,9 +172,9 @@ class SW_DLLPUBLIC SwRedline : public SwPaM
 {
     SwRedlineData* pRedlineData;
     SwNodeIndex* pCntntSect;
-    BOOL bDelLastPara : 1;
-    BOOL bIsLastParaDelete : 1;
-    BOOL bIsVisible : 1;
+    sal_Bool bDelLastPara : 1;
+    sal_Bool bIsLastParaDelete : 1;
+    sal_Bool bIsVisible : 1;
 
     void MoveToSection();
     void CopyToSection();
@@ -186,8 +186,8 @@ public:
     SwRedline( const SwRedlineData& rData, const SwPaM& rPam );
     SwRedline( const SwRedlineData& rData, const SwPosition& rPos );
     // fuer sw3io: pData geht in eigenen Besitz ueber!
-    SwRedline(SwRedlineData* pData, const SwPosition& rPos, BOOL bVsbl,
-               BOOL bDelLP, BOOL bIsPD) :
+    SwRedline(SwRedlineData* pData, const SwPosition& rPos, sal_Bool bVsbl,
+               sal_Bool bDelLP, sal_Bool bIsPD) :
         SwPaM( rPos ), pRedlineData( pData ), pCntntSect( 0 ),
         bDelLastPara( bDelLP ), bIsLastParaDelete( bIsPD ), bIsVisible( bVsbl )
     {}
@@ -198,11 +198,11 @@ public:
     // fuers Undo
     void SetContentIdx( const SwNodeIndex* );
 
-    BOOL IsVisible() const { return bIsVisible; }
-    BOOL IsDelLastPara() const { return bDelLastPara; }
+    sal_Bool IsVisible() const { return bIsVisible; }
+    sal_Bool IsDelLastPara() const { return bDelLastPara; }
 
-    // das BOOL besagt, ob nach dem setzen der Pos kein Bereich mehr
-    // aufgespannt ist. -> TRUE, ansonten Bereich und FALSE
+    // das sal_Bool besagt, ob nach dem setzen der Pos kein Bereich mehr
+    // aufgespannt ist. -> sal_True, ansonten Bereich und sal_False
     void SetStart( const SwPosition& rPos, SwPosition* pSttPtr = 0 )
     {
         if( !pSttPtr ) pSttPtr = Start();
@@ -214,23 +214,23 @@ public:
         *pEndPtr = rPos;
     }
     // liegt eine gueltige Selektion vor?
-    BOOL HasValidRange() const;
+    sal_Bool HasValidRange() const;
 
-    const SwRedlineData& GetRedlineData(USHORT nPos = 0) const;
+    const SwRedlineData& GetRedlineData(sal_uInt16 nPos = 0) const;
     int operator==( const SwRedlineData& rCmp ) const
         { return *pRedlineData == rCmp; }
     int operator!=( const SwRedlineData& rCmp ) const
         { return *pRedlineData != rCmp; }
     void SetAutoFmtFlag()               { pRedlineData->SetAutoFmtFlag(); }
 
-    USHORT GetStackCount() const;
-    USHORT GetAuthor( USHORT nPos = 0) const;
-    const String& GetAuthorString( USHORT nPos = 0 ) const;
-    const DateTime& GetTimeStamp( USHORT nPos = 0) const;
-    RedlineType_t GetRealType( USHORT nPos = 0 ) const;
-    RedlineType_t GetType( USHORT nPos = 0) const
+    sal_uInt16 GetStackCount() const;
+    sal_uInt16 GetAuthor( sal_uInt16 nPos = 0) const;
+    const String& GetAuthorString( sal_uInt16 nPos = 0 ) const;
+    const DateTime& GetTimeStamp( sal_uInt16 nPos = 0) const;
+    RedlineType_t GetRealType( sal_uInt16 nPos = 0 ) const;
+    RedlineType_t GetType( sal_uInt16 nPos = 0) const
   { return ( (RedlineType_t)(GetRealType( nPos ) & nsRedlineType_t::REDLINE_NO_FLAG_MASK)); }
-    const String& GetComment( USHORT nPos = 0 ) const;
+    const String& GetComment( sal_uInt16 nPos = 0 ) const;
 
     void SetComment( const String& rS ) { pRedlineData->SetComment( rS ); }
 
@@ -244,29 +244,29 @@ public:
     // fuers UI-seitige zusammenfassen von Redline-Actionen. Wird z.Z. nur
     // fuers Autoformat mit Redline benoetigt. Der Wert != 0 bedeutet dabei,
     // das es noch weitere geben kann!
-    USHORT GetSeqNo() const             { return pRedlineData->GetSeqNo(); }
-    void SetSeqNo( USHORT nNo )         { pRedlineData->SetSeqNo( nNo ); }
+    sal_uInt16 GetSeqNo() const             { return pRedlineData->GetSeqNo(); }
+    void SetSeqNo( sal_uInt16 nNo )         { pRedlineData->SetSeqNo( nNo ); }
 
     // Beim Hide/ShowOriginal wird 2 mal ueber die Liste gelaufen, damit
     //  die Del-Redlines per Copy und Delete versteckt werden. Beim Move
     //  wird sonst die Attributierung falsch behandelt.
     // Alle anderen Aufrufer muessen immer 0 angeben.
-    void CallDisplayFunc( USHORT nLoop = 0 );
-    void Show( USHORT nLoop = 0 );
-    void Hide( USHORT nLoop = 0 );
-    void ShowOriginal( USHORT nLoop = 0 );
+    void CallDisplayFunc( sal_uInt16 nLoop = 0 );
+    void Show( sal_uInt16 nLoop = 0 );
+    void Hide( sal_uInt16 nLoop = 0 );
+    void ShowOriginal( sal_uInt16 nLoop = 0 );
 
     // calculates the intersection with text node number nNdIdx
-    void CalcStartEnd( ULONG nNdIdx, USHORT& nStart, USHORT& nEnd ) const;
+    void CalcStartEnd( sal_uLong nNdIdx, sal_uInt16& nStart, sal_uInt16& nEnd ) const;
 
     void InvalidateRange();     // das Layout anstossen
 
-    BOOL IsOwnRedline( const SwRedline& rRedl ) const
+    sal_Bool IsOwnRedline( const SwRedline& rRedl ) const
         { return GetAuthor() == rRedl.GetAuthor(); }
-    BOOL CanCombine( const SwRedline& rRedl ) const;
+    sal_Bool CanCombine( const SwRedline& rRedl ) const;
 
-    void PushData( const SwRedline& rRedl, BOOL bOwnAsNext = TRUE );
-    BOOL PopData();
+    void PushData( const SwRedline& rRedl, sal_Bool bOwnAsNext = sal_True );
+    sal_Bool PopData();
 
     /**
        Returns textual description of this a redline data element of
@@ -279,7 +279,7 @@ public:
 
        @return textual description of the selected redline data element
      */
-    String GetDescr(USHORT nPos = 0);
+    String GetDescr(sal_uInt16 nPos = 0);
 
     int operator==( const SwRedline& ) const;
     int operator<( const SwRedline& ) const;

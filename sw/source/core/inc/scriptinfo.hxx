@@ -63,20 +63,20 @@ class SwScanner
     xub_StrLen nBegin;
     xub_StrLen nLen;
     LanguageType aCurrLang;
-    USHORT nWordType;
-    BOOL bClip;
+    sal_uInt16 nWordType;
+    sal_Bool bClip;
 
 public:
     SwScanner( const SwTxtNode& rNd, const String& rTxt, const LanguageType* pLang,
                const ModelToViewHelper::ConversionMap* pConvMap,
-               USHORT nWordType,
-               xub_StrLen nStart, xub_StrLen nEnde, BOOL bClip = FALSE );
+               sal_uInt16 nWordType,
+               xub_StrLen nStart, xub_StrLen nEnde, sal_Bool bClip = sal_False );
 
 
     // This next word function tries to find the language for the next word
     // It should currently _not_ be used for spell checking, and works only for
     // ! bReverse
-    BOOL NextWord();
+    sal_Bool NextWord();
 
     const XubString& GetWord() const    { return aWord; }
 
@@ -100,8 +100,8 @@ private:
     struct ScriptChangeInfo
     {
         xub_StrLen position; //!< Character position at which we change script
-        BYTE       type;     //!< Script type (Latin/Asian/Complex) that we change to.
-        inline ScriptChangeInfo(xub_StrLen pos, BYTE typ) : position(pos), type(typ) {};
+        sal_uInt8       type;     //!< Script type (Latin/Asian/Complex) that we change to.
+        inline ScriptChangeInfo(xub_StrLen pos, sal_uInt8 typ) : position(pos), type(typ) {};
     };
     //TODO - This is sorted, so should probably be a std::set rather than vector.
     //       But we also use random access (probably unnecessarily).
@@ -110,8 +110,8 @@ private:
     struct DirectionChangeInfo
     {
         xub_StrLen position; //!< Character position at which we change direction.
-        BYTE       type;     //!< Direction that we change to.
-        inline DirectionChangeInfo(xub_StrLen pos, BYTE typ) : position(pos), type(typ) {};
+        sal_uInt8       type;     //!< Direction that we change to.
+        inline DirectionChangeInfo(xub_StrLen pos, sal_uInt8 typ) : position(pos), type(typ) {};
     };
     std::vector<DirectionChangeInfo> aDirectionChanges;
     SvXub_StrLens aKashida;
@@ -124,12 +124,12 @@ private:
     {
         xub_StrLen position; //!< Character position where the change occurs.
         xub_StrLen length;   //!< Length of the segment.
-        BYTE       type;     //!< Type of compression that we change to.
-        inline CompressionChangeInfo(xub_StrLen pos, xub_StrLen len, BYTE typ) : position(pos), length(len), type(typ) {};
+        sal_uInt8       type;     //!< Type of compression that we change to.
+        inline CompressionChangeInfo(xub_StrLen pos, xub_StrLen len, sal_uInt8 typ) : position(pos), length(len), type(typ) {};
     };
     std::vector<CompressionChangeInfo> aCompressionChanges;
     xub_StrLen nInvalidityPos;
-    BYTE nDefaultDir;
+    sal_uInt8 nDefaultDir;
 
     void UpdateBidiInfo( const String& rTxt );
 
@@ -154,44 +154,44 @@ public:
     inline xub_StrLen GetInvalidity() const { return nInvalidityPos; };
 
     // get default direction for paragraph
-    inline BYTE GetDefaultDir() const { return nDefaultDir; };
+    inline sal_uInt8 GetDefaultDir() const { return nDefaultDir; };
 
     // array operations, nCnt refers to array position
-    inline USHORT CountScriptChg() const;
-    inline xub_StrLen GetScriptChg( const USHORT nCnt ) const;
-    inline BYTE GetScriptType( const USHORT nCnt ) const;
+    inline size_t CountScriptChg() const;
+    inline xub_StrLen GetScriptChg( const size_t nCnt ) const;
+    inline sal_uInt8 GetScriptType( const sal_uInt16 nCnt ) const;
 
-    inline USHORT CountDirChg() const;
-    inline xub_StrLen GetDirChg( const USHORT nCnt ) const;
-    inline BYTE GetDirType( const USHORT nCnt ) const;
+    inline size_t CountDirChg() const;
+    inline xub_StrLen GetDirChg( const size_t nCnt ) const;
+    inline sal_uInt8 GetDirType( const size_t nCnt ) const;
 
-    inline USHORT CountKashida() const;
-    inline xub_StrLen GetKashida( const USHORT nCnt ) const;
+    inline size_t CountKashida() const;
+    inline xub_StrLen GetKashida( const size_t nCnt ) const;
 
-    inline USHORT CountCompChg() const;
-    inline xub_StrLen GetCompStart( const USHORT nCnt ) const;
-    inline xub_StrLen GetCompLen( const USHORT nCnt ) const;
-    inline BYTE GetCompType( const USHORT nCnt ) const;
+    inline size_t CountCompChg() const;
+    inline xub_StrLen GetCompStart( const size_t nCnt ) const;
+    inline xub_StrLen GetCompLen( const size_t nCnt ) const;
+    inline sal_uInt8 GetCompType( const size_t nCnt ) const;
 
-    inline USHORT CountHiddenChg() const;
-    inline xub_StrLen GetHiddenChg( const USHORT nCnt ) const;
+    inline size_t CountHiddenChg() const;
+    inline xub_StrLen GetHiddenChg( const size_t nCnt ) const;
     static void CalcHiddenRanges( const SwTxtNode& rNode,
                                                 MultiSelection& rHiddenMulti );
 
     // "high" level operations, nPos refers to string position
     xub_StrLen NextScriptChg( const xub_StrLen nPos ) const;
-    BYTE ScriptType( const xub_StrLen nPos ) const;
+    sal_uInt8 ScriptType( const xub_StrLen nPos ) const;
 
     // Returns the position of the next direction level change.
     // If bLevel is set, the position of the next level which is smaller
     // than the level at position nPos is returned. This is required to
     // obtain the end of a SwBidiPortion
     xub_StrLen NextDirChg( const xub_StrLen nPos,
-                           const BYTE* pLevel = 0 ) const;
-    BYTE DirType( const xub_StrLen nPos ) const;
+                           const sal_uInt8* pLevel = 0 ) const;
+    sal_uInt8 DirType( const xub_StrLen nPos ) const;
 
 #if OSL_DEBUG_LEVEL > 1
-    BYTE CompType( const xub_StrLen nPos ) const;
+    sal_uInt8 CompType( const xub_StrLen nPos ) const;
 #endif
 
     //
@@ -244,7 +244,7 @@ public:
     @param  bDel
                 If set, the hidden ranges will be deleted from the text node.
  */
-    static USHORT MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
+    static sal_uInt16 MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
                                     const xub_StrLen nStt, const xub_StrLen nEnd,
                                     const xub_Unicode cChar );
 
@@ -263,11 +263,11 @@ public:
 
     // examines the range [ nStart, nStart + nEnd ] if there are kanas
     // returns start index of kana entry in array, otherwise USHRT_MAX
-    USHORT HasKana( xub_StrLen nStart, const xub_StrLen nEnd ) const;
+    sal_uInt16 HasKana( xub_StrLen nStart, const xub_StrLen nEnd ) const;
 
     // modifies the kerning array according to a given compress value
     long Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
-                   const USHORT nCompress, const USHORT nFontHeight,
+                   const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
                    Point* pPoint = NULL ) const;
 
 /** Performes a kashida justification on the kerning array
@@ -286,7 +286,7 @@ public:
                 The value which has to be added to a kashida opportunity.
     @return The number of kashida opportunities in the given range
 */
-    USHORT KashidaJustify( sal_Int32* pKernArray, sal_Int32* pScrArray,
+    sal_uInt16 KashidaJustify( sal_Int32* pKernArray, sal_Int32* pScrArray,
                            xub_StrLen nStt, xub_StrLen nLen,
                            long nSpaceAdd = 0) const;
 
@@ -311,7 +311,7 @@ public:
    pKashidaPositions: buffer to reveive the char indices of the
                       kashida opportunties relative to the paragraph
 */
-   USHORT GetKashidaPositions ( xub_StrLen nStt, xub_StrLen nLen,
+   sal_uInt16 GetKashidaPositions ( xub_StrLen nStt, xub_StrLen nLen,
                              xub_StrLen* pKashidaPosition );
 
 
@@ -358,7 +358,7 @@ public:
                 The value which has to be added to the cells.
     @return The number of extra spaces in the given range
 */
-    static USHORT ThaiJustify( const XubString& rTxt, sal_Int32* pKernArray,
+    static sal_uInt16 ThaiJustify( const XubString& rTxt, sal_Int32* pKernArray,
                                sal_Int32* pScrArray, xub_StrLen nIdx,
                                xub_StrLen nLen, xub_StrLen nNumberOfBlanks = 0,
                                long nSpaceAdd = 0 );
@@ -366,7 +366,7 @@ public:
     static SwScriptInfo* GetScriptInfo( const SwTxtNode& rNode,
                                         sal_Bool bAllowInvalid = sal_False );
 
-    static BYTE WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI );
+    static sal_uInt8 WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI );
 };
 
 inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )
@@ -374,60 +374,59 @@ inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )
     if ( nPos < nInvalidityPos )
         nInvalidityPos = nPos;
 };
-
-inline USHORT SwScriptInfo::CountScriptChg() const { return aScriptChanges.size(); }
-inline xub_StrLen SwScriptInfo::GetScriptChg( const USHORT nCnt ) const
+inline size_t SwScriptInfo::CountScriptChg() const { return aScriptChanges.size(); }
+inline xub_StrLen SwScriptInfo::GetScriptChg( const size_t nCnt ) const
 {
     OSL_ENSURE( nCnt < aScriptChanges.size(),"No ScriptChange today!");
     return aScriptChanges[nCnt].position;
 }
-inline BYTE SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
+inline sal_uInt8 SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
 {
     OSL_ENSURE( nCnt < aScriptChanges.size(),"No ScriptType today!");
     return aScriptChanges[nCnt].type;
 }
 
-inline USHORT SwScriptInfo::CountDirChg() const { return aDirectionChanges.size(); }
-inline xub_StrLen SwScriptInfo::GetDirChg( const USHORT nCnt ) const
+inline size_t SwScriptInfo::CountDirChg() const { return aDirectionChanges.size(); }
+inline xub_StrLen SwScriptInfo::GetDirChg( const size_t nCnt ) const
 {
     OSL_ENSURE( nCnt < aDirectionChanges.size(),"No DirChange today!");
     return aDirectionChanges[ nCnt ].position;
 }
-inline BYTE SwScriptInfo::GetDirType( const xub_StrLen nCnt ) const
+inline sal_uInt8 SwScriptInfo::GetDirType( const size_t nCnt ) const
 {
     OSL_ENSURE( nCnt < aDirectionChanges.size(),"No DirType today!");
     return aDirectionChanges[ nCnt ].type;
 }
 
-inline USHORT SwScriptInfo::CountKashida() const { return aKashida.Count(); }
-inline xub_StrLen SwScriptInfo::GetKashida( const USHORT nCnt ) const
+inline size_t SwScriptInfo::CountKashida() const { return aKashida.size(); }
+inline xub_StrLen SwScriptInfo::GetKashida( const size_t nCnt ) const
 {
-    OSL_ENSURE( nCnt < aKashida.Count(),"No Kashidas today!");
+    OSL_ENSURE( nCnt < aKashida.size(),"No Kashidas today!");
     return aKashida[ nCnt ];
 }
 
-inline USHORT SwScriptInfo::CountCompChg() const { return aCompressionChanges.size(); };
-inline xub_StrLen SwScriptInfo::GetCompStart( const USHORT nCnt ) const
+inline size_t SwScriptInfo::CountCompChg() const { return aCompressionChanges.size(); };
+inline xub_StrLen SwScriptInfo::GetCompStart( const size_t nCnt ) const
 {
     OSL_ENSURE( nCnt < aCompressionChanges.size(),"No CompressionStart today!");
     return aCompressionChanges[ nCnt ].position;
 }
-inline xub_StrLen SwScriptInfo::GetCompLen( const USHORT nCnt ) const
+inline xub_StrLen SwScriptInfo::GetCompLen( const size_t nCnt ) const
 {
     OSL_ENSURE( nCnt < aCompressionChanges.size(),"No CompressionLen today!");
     return aCompressionChanges[ nCnt ].length;
 }
 
-inline BYTE SwScriptInfo::GetCompType( const USHORT nCnt ) const
+inline sal_uInt8 SwScriptInfo::GetCompType( const size_t nCnt ) const
 {
     OSL_ENSURE( nCnt < aCompressionChanges.size(),"No CompressionType today!");
     return aCompressionChanges[ nCnt ].type;
 }
 
-inline USHORT SwScriptInfo::CountHiddenChg() const { return aHiddenChg.Count(); };
-inline xub_StrLen SwScriptInfo::GetHiddenChg( const USHORT nCnt ) const
+inline size_t SwScriptInfo::CountHiddenChg() const { return aHiddenChg.size(); };
+inline xub_StrLen SwScriptInfo::GetHiddenChg( const size_t nCnt ) const
 {
-    OSL_ENSURE( nCnt < aHiddenChg.Count(),"No HiddenChg today!");
+    OSL_ENSURE( nCnt < aHiddenChg.size(),"No HiddenChg today!");
     return aHiddenChg[ nCnt ];
 }
 

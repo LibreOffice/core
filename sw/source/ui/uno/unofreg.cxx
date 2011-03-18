@@ -156,99 +156,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-static void lcl_uno_writeInfo(
-        registry::XRegistryKey * pRegistryKey,
-        const OUString& rImplementationName,
-        const uno::Sequence< OUString >& rServices )
-{
-    uno::Reference< registry::XRegistryKey > xNewKey(
-        pRegistryKey->createKey(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + rImplementationName + OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) ) );
-
-    for( sal_Int32 i = 0; i < rServices.getLength(); i++ )
-        xNewKey->createKey( rServices.getConstArray()[i]);
-}
-
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-        void * /*pServiceManager*/,
-        void * pRegistryKey )
-{
-    if( pRegistryKey )
-    {
-        try
-        {
-            registry::XRegistryKey *pKey =
-                reinterpret_cast< registry::XRegistryKey * >( pRegistryKey );
-
-
-            // xml filter
-            lcl_uno_writeInfo( pKey, SwXMLImport_getImplementationName(),
-                               SwXMLImport_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey, SwXMLImportStyles_getImplementationName(),
-                               SwXMLImportStyles_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey,SwXMLImportContent_getImplementationName(),
-                               SwXMLImportContent_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey, SwXMLImportMeta_getImplementationName(),
-                               SwXMLImportMeta_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey, SwXMLImportSettings_getImplementationName(),
-                               SwXMLImportSettings_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey, SwXMLExportOOO_getImplementationName(),
-                               SwXMLExportOOO_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey, SwXMLExportStylesOOO_getImplementationName(),
-                               SwXMLExportStylesOOO_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey,SwXMLExportContentOOO_getImplementationName(),
-                               SwXMLExportContentOOO_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey, SwXMLExportMetaOOO_getImplementationName(),
-                               SwXMLExportMetaOOO_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey, SwXMLExportSettingsOOO_getImplementationName(),
-                               SwXMLExportSettingsOOO_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey, SwXMLExport_getImplementationName(),
-                               SwXMLExport_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey, SwXMLExportStyles_getImplementationName(),
-                               SwXMLExportStyles_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey,SwXMLExportContent_getImplementationName(),
-                               SwXMLExportContent_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey, SwXMLExportMeta_getImplementationName(),
-                               SwXMLExportMeta_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey, SwXMLExportSettings_getImplementationName(),
-                               SwXMLExportSettings_getSupportedServiceNames() );
-            //API objects
-            lcl_uno_writeInfo( pKey, SwXAutoTextContainer_getImplementationName(),
-                               SwXAutoTextContainer_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey, SwXModule_getImplementationName(),
-                               SwXModule_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey, SwXMailMerge_getImplementationName(),
-                               SwXMailMerge_getSupportedServiceNames() );
-            //Filter options
-            lcl_uno_writeInfo( pKey, SwXFilterOptions::getImplementationName_Static(),
-                               SwXFilterOptions::getSupportedServiceNames_Static() );
-
-            // documents
-            lcl_uno_writeInfo( pKey, SwTextDocument_getImplementationName(),
-                               SwTextDocument_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey, SwWebDocument_getImplementationName(),
-                               SwWebDocument_getSupportedServiceNames() );
-            lcl_uno_writeInfo( pKey,SwGlobalDocument_getImplementationName(),
-                               SwGlobalDocument_getSupportedServiceNames() );
-
-            // module
-            lcl_uno_writeInfo( pKey, SwUnoModule_getImplementationName(),
-                               SwUnoModule_getSupportedServiceNames() );
-            // --> OD 2007-05-24 #i73788#
-            lcl_uno_writeInfo( pKey,
-                               comp_FinalThreadManager::_getImplementationName(),
-                               comp_FinalThreadManager::_getSupportedServiceNames() );
-            // <--
-
-        }
-        catch (registry::InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_True;
-}
-
 static ::cppu::ImplementationEntry const entries[] = {
     { &comp_FinalThreadManager::_create,
       &comp_FinalThreadManager::_getImplementationName,
@@ -455,14 +362,12 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                 SwUnoModule_createInstance,
                 SwUnoModule_getSupportedServiceNames() );
         }
-        // --> OD 2007-05-24 #i73788#
         else if( comp_FinalThreadManager::_getImplementationName().equalsAsciiL(
                                                     pImplName, nImplNameLen ) )
         {
             pRet = ::cppu::component_getFactoryHelper(
                         pImplName, pServiceManager, pRegistryKey, entries);
         }
-        // <--
 
         if( xFactory.is())
         {

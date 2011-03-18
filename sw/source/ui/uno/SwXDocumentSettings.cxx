@@ -32,7 +32,6 @@
 #include <osl/mutex.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <SwXDocumentSettings.hxx>
-#include <SwXPrintPreviewSettings.hxx>
 #include <comphelper/MasterPropertySetInfo.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
@@ -121,6 +120,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
     // <--
     HANDLE_MODIFYPASSWORDINFO,
+    HANDLE_MATH_BASELINE_ALIGNMENT,
     HANDLE_INVERT_BORDER_SPACING,
     HANDLE_COLLAPSE_EMPTY_CELL_PARA
 };
@@ -177,6 +177,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         // --> OD 2008-06-05 #i89181#
         { RTL_CONSTASCII_STRINGPARAM("TabAtLeftIndentForParagraphsInList"), HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("ModifyPasswordInfo"), HANDLE_MODIFYPASSWORDINFO, CPPUTYPE_PROPERTYVALUE, 0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("MathBaselineAlignment"), HANDLE_MATH_BASELINE_ALIGNMENT, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("InvertBorderSpacing"), HANDLE_INVERT_BORDER_SPACING, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("CollapseEmptyCellPara"), HANDLE_COLLAPSE_EMPTY_CELL_PARA, CPPUTYPE_BOOLEAN, 0, 0},
 /*
@@ -220,7 +221,6 @@ SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
 , mpPrinter( NULL )
 {
     registerSlave ( new SwXPrintSettings ( PRINT_SETTINGS_DOCUMENT, mpModel->GetDocShell()->GetDoc() ) );
-    registerSlave ( new SwXPrintPreviewSettings ( mpModel->GetDocShell()->GetDoc() ) );
 }
 
 SwXDocumentSettings::~SwXDocumentSettings()
@@ -687,12 +687,18 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     uno::Reference< uno::XInterface >() );
         }
         break;
-    case HANDLE_INVERT_BORDER_SPACING:
-    {
+        case HANDLE_MATH_BASELINE_ALIGNMENT:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT, bTmp );
+        }
+        break;
+        case HANDLE_INVERT_BORDER_SPACING:
+        {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::INVERT_BORDER_SPACING, bTmp);
-    }
-    break;
+        }
+        break;
         case HANDLE_COLLAPSE_EMPTY_CELL_PARA:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
@@ -713,11 +719,7 @@ void SwXDocumentSettings::_postSetValues ()
         // #i86352# the printer is also used as container for options by sfx
         // when setting a printer it should have decent default options
         SfxItemSet aOptions( mpPrinter->GetOptions() );
-        SwPrintData aPrtData;
-        if( mpDoc->getPrintData() )
-            aPrtData = *mpDoc->getPrintData();
-        else
-            aPrtData = *SW_MOD()->GetPrtOptions(false);
+        SwPrintData aPrtData( mpDoc->getPrintData() );
         SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, aPrtData);
         aOptions.Put(aAddPrinterItem);
         mpPrinter->SetOptions( aOptions );
@@ -758,14 +760,14 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_FIELD_AUTO_UPDATE:
         {
             SwFldUpdateFlags nFlags = mpDoc->getFieldUpdateFlags(true);
-            BOOL bFieldUpd = (nFlags == AUTOUPD_FIELD_ONLY || nFlags == AUTOUPD_FIELD_AND_CHARTS );
+            sal_Bool bFieldUpd = (nFlags == AUTOUPD_FIELD_ONLY || nFlags == AUTOUPD_FIELD_AND_CHARTS );
             rValue.setValue(&bFieldUpd, ::getBooleanCppuType());
         }
         break;
         case HANDLE_CHART_AUTO_UPDATE:
         {
             SwFldUpdateFlags nFlags = mpDoc->getFieldUpdateFlags(true);
-            BOOL bChartUpd = nFlags == AUTOUPD_FIELD_AND_CHARTS;
+            sal_Bool bChartUpd = nFlags == AUTOUPD_FIELD_AND_CHARTS;
             rValue.setValue(&bChartUpd, ::getBooleanCppuType());
         }
         break;
@@ -1028,6 +1030,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_MODIFYPASSWORDINFO:
         {
             rValue <<= mpDocSh->GetModifyPasswordInfo();
+        }
+        break;
+        case HANDLE_MATH_BASELINE_ALIGNMENT:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
     case HANDLE_INVERT_BORDER_SPACING:

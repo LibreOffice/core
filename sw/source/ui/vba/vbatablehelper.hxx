@@ -43,7 +43,7 @@ private:
 
 private:
     SwTableBox* GetTabBox( sal_Int32 nCol, sal_Int32 nRow ) throw (css::uno::RuntimeException);
-    void    InitTabCols( SwTabCols& rCols, const SwTableBox *pStart, sal_Bool bCurRowOnly  = FALSE );
+    void    InitTabCols( SwTabCols& rCols, const SwTableBox *pStart, sal_Bool bCurRowOnly  = sal_False );
     sal_Int32 GetRightSeparator( SwTabCols& rCols, sal_Int32 nNum) const;
     sal_Int32 GetColCount( SwTabCols& rCols ) const;
     sal_Int32 GetColWidth( SwTabCols& rCols, sal_Int32 nNum ) throw (css::uno::RuntimeException);
@@ -58,8 +58,8 @@ public:
     sal_Int32 getTableWidth( ) throw (css::uno::RuntimeException);
     void  setTableWidth( sal_Int32 _width ) throw (css::uno::RuntimeException);
 
-    sal_Int32 GetColWidth( sal_Int32 nCol, sal_Int32 nRow = 0, sal_Bool bCurRowOnly  = FALSE ) throw (css::uno::RuntimeException);
-    void SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 nRow = 0, sal_Bool bCurRowOnly  = FALSE ) throw (css::uno::RuntimeException);
+    sal_Int32 GetColWidth( sal_Int32 nCol, sal_Int32 nRow = 0, sal_Bool bCurRowOnly  = sal_False ) throw (css::uno::RuntimeException);
+    void SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 nRow = 0, sal_Bool bCurRowOnly  = sal_False ) throw (css::uno::RuntimeException);
 
     static SwTable* GetSwTable( const css::uno::Reference< css::text::XTextTable >& xTextTable ) throw (css::uno::RuntimeException);
     static rtl::OUString getColumnStr( sal_Int32 nCol );

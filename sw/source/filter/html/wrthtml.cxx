@@ -124,7 +124,7 @@ SwHTMLWriter::~SwHTMLWriter()
     delete pNumRuleInfo;
 }
 
-ULONG SwHTMLWriter::WriteStream()
+sal_uLong SwHTMLWriter::WriteStream()
 {
     // neue Konfiguration setzen
     SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
@@ -486,7 +486,7 @@ const SwFmtCol *lcl_html_GetFmtCol( const SwHTMLWriter& rHTMLWrt,
     return pCol;
 }
 
-sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, ULONG nIndex )
+sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
 {
     sal_Bool bRet = sal_False;
     const SwSectionNode *pSectNd =
@@ -502,7 +502,7 @@ sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, ULONG nIndex )
     return bRet;
 }
 
-sal_Bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, ULONG nIndex )
+sal_Bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
 {
     sal_Bool bRet = sal_False;
     const SwEndNode *pEndNd = rHTMLWrt.pDoc->GetNodes()[nIndex]->GetEndNode();
@@ -865,8 +865,8 @@ static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
 
 sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
 {
-    ULONG nIdx = pCurPam->GetPoint()->nNode.GetIndex();
-    ULONG nEndIdx = pCurPam->GetMark()->nNode.GetIndex();
+    sal_uLong nIdx = pCurPam->GetPoint()->nNode.GetIndex();
+    sal_uLong nEndIdx = pCurPam->GetMark()->nNode.GetIndex();
 
     SwTxtNode *pTxtNd = 0;
     while( nIdx<=nEndIdx &&
@@ -948,7 +948,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
         // In Nicht-HTML-Dokumenten wird die erste gesetzte Seitenvorlage
         // exportiert und wenn keine gesetzt ist die Standard-Vorlage
-        ULONG nNodeIdx = pCurPam->GetPoint()->nNode.GetIndex();
+        sal_uLong nNodeIdx = pCurPam->GetPoint()->nNode.GetIndex();
 
         while( nNodeIdx < pDoc->GetNodes().Count() )
         {
@@ -1325,8 +1325,8 @@ sal_uInt16 SwHTMLWriter::GetHTMLFontSize( sal_uInt32 nHeight ) const
 
 // Struktur speichert die aktuellen Daten des Writers zwischen, um
 // einen anderen Dokument-Teil auszugeben, wie z.B. Header/Footer
-HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, ULONG nStt,
-                            ULONG nEnd, sal_Bool bSaveNum,
+HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, sal_uLong nStt,
+                            sal_uLong nEnd, sal_Bool bSaveNum,
                                 const SwFrmFmt *pFrmFmt ) :
     rWrt( rWriter ),
     pOldPam( rWrt.pCurPam ),

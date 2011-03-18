@@ -33,7 +33,7 @@
 
 #include "cmdid.h"
 #include <svx/svdview.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svdopath.hxx>
@@ -77,13 +77,13 @@ void SwNavigationShell::Execute(SfxRequest &rReq)
     SwWrtShell *pSh = &GetShell();
     SdrView*    pSdrView = pSh->GetDrawView();
     const SfxItemSet *pArgs = rReq.GetArgs();
-    USHORT      nSlotId = rReq.GetSlot();
-    BOOL        bChanged = pSdrView->GetModel()->IsChanged();
-    pSdrView->GetModel()->SetChanged(FALSE);
+    sal_uInt16      nSlotId = rReq.GetSlot();
+    sal_Bool        bChanged = pSdrView->GetModel()->IsChanged();
+    pSdrView->GetModel()->SetChanged(sal_False);
     SwNavigationMgr& aSwNavigationMgr = pSh->GetNavigationMgr();
     const SfxPoolItem* pItem;
     if(pArgs)
-        pArgs->GetItemState(nSlotId, FALSE, &pItem);
+        pArgs->GetItemState(nSlotId, sal_False, &pItem);
     switch (nSlotId)
         {
         case FN_NAVIGATION_BACK:
@@ -99,7 +99,7 @@ void SwNavigationShell::Execute(SfxRequest &rReq)
     if (pSdrView->GetModel()->IsChanged())
         GetShell().SetModified();
     else if (bChanged)
-        pSdrView->GetModel()->SetChanged(TRUE);
+        pSdrView->GetModel()->SetChanged(sal_True);
 }
 
 /*--------------------------------------------------------------------
@@ -111,7 +111,7 @@ void SwNavigationShell::GetState(SfxItemSet &rSet)
 {
   SwWrtShell *pSh = &GetShell();
   SfxWhichIter aIter( rSet );
-  USHORT nWhich = aIter.FirstWhich();
+  sal_uInt16 nWhich = aIter.FirstWhich();
   SwNavigationMgr& aNavigationMgr = pSh->GetNavigationMgr();
   while( nWhich )
     {

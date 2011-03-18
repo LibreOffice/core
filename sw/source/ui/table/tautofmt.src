@@ -43,6 +43,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     };
     ListBox LB_FORMAT
     {
+        HelpID = "sw:ListBox:DLG_AUTOFMT_TABLE:LB_FORMAT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 65 , 100 ) ;
@@ -56,6 +57,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     };
     CheckBox BTN_NUMFORMAT
     {
+        HelpID = "sw:CheckBox:DLG_AUTOFMT_TABLE:BTN_NUMFORMAT";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 131 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
@@ -64,6 +66,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     };
     CheckBox BTN_BORDER
     {
+        HelpID = "sw:CheckBox:DLG_AUTOFMT_TABLE:BTN_BORDER";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 147 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
@@ -72,6 +75,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     };
     CheckBox BTN_FONT
     {
+        HelpID = "sw:CheckBox:DLG_AUTOFMT_TABLE:BTN_FONT";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 85 , 131 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
@@ -80,6 +84,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     };
     CheckBox BTN_PATTERN
     {
+        HelpID = "sw:CheckBox:DLG_AUTOFMT_TABLE:BTN_PATTERN";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 85 , 147 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
@@ -88,6 +93,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     };
     CheckBox BTN_ALIGNMENT
     {
+        HelpID = "sw:CheckBox:DLG_AUTOFMT_TABLE:BTN_ALIGNMENT";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 150 , 131 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
@@ -116,6 +122,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     };
     MoreButton BTN_MORE
     {
+        HelpID = "sw:MoreButton:DLG_AUTOFMT_TABLE:BTN_MORE";
         Pos = MAP_APPFONT ( 255 , 101 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~More" ;
@@ -125,6 +132,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     };
     PushButton BTN_ADD
     {
+        HelpID = "sw:PushButton:DLG_AUTOFMT_TABLE:BTN_ADD";
         Pos = MAP_APPFONT ( 255 , 64 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Add" ;
@@ -132,6 +140,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     };
     PushButton BTN_REMOVE
     {
+        HelpID = "sw:PushButton:DLG_AUTOFMT_TABLE:BTN_REMOVE";
         Pos = MAP_APPFONT ( 255 , 81 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete" ;
@@ -139,6 +148,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     };
     PushButton BTN_RENAME
     {
+        HelpID = "sw:PushButton:DLG_AUTOFMT_TABLE:BTN_RENAME";
         Pos = MAP_APPFONT ( 255 , 123 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -217,6 +227,7 @@ ModalDialog DLG_SWDLG_STRINPUT
     HelpID = HID_SWDLG_STRINPUT ;
     Edit ED_INPUT
     {
+        HelpID = "sw:Edit:DLG_SWDLG_STRINPUT:ED_INPUT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 24 ) ;
         Size = MAP_APPFONT ( 104 , 12 ) ;

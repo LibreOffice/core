@@ -67,7 +67,7 @@ class SwLabPreview : public Window
 
     void Paint(const Rectangle&);
 
-    void DrawArrow(const Point& rP1, const Point& rP2, BOOL bArrow);
+    void DrawArrow(const Point& rP1, const Point& rP2, sal_Bool bArrow);
 
     using Window::GetParent;
     SwLabFmtPage* GetParent() {return (SwLabFmtPage*) Window::GetParent();}
@@ -108,7 +108,7 @@ class SwLabFmtPage : public SfxTabPage
     PushButton   aSavePB;
 
     Timer aPreviewTimer;
-    BOOL  bModified;
+    sal_Bool  bModified;
 
     SwLabItem    aItem;
 
@@ -133,7 +133,7 @@ public:
     virtual void ActivatePage(const SfxItemSet& rSet);
     virtual int  DeactivatePage(SfxItemSet* pSet = 0);
             void FillItem(SwLabItem& rItem);
-    virtual BOOL FillItemSet(SfxItemSet& rSet);
+    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 
     SwLabDlg* GetParent() {return (SwLabDlg*) SfxTabPage::GetParent()->GetParent();}

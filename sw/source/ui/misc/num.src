@@ -53,6 +53,7 @@ TabPage TP_NUM_POSITION
     };
     MultiListBox LB_LEVEL
     {
+        HelpID = "sw:MultiListBox:TP_NUM_POSITION:LB_LEVEL";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 26 , 163 ) ;
         TabStop = TRUE ;
@@ -75,6 +76,7 @@ TabPage TP_NUM_POSITION
     };
     MetricField MF_BORDERDIST
     {
+        HelpID = "sw:MetricField:TP_NUM_POSITION:MF_BORDERDIST";
         Pos = MAP_APPFONT ( 198 , 25 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
@@ -93,6 +95,7 @@ TabPage TP_NUM_POSITION
     };
     CheckBox CB_RELATIVE
     {
+        HelpID = "sw:CheckBox:TP_NUM_POSITION:CB_RELATIVE";
         Pos = MAP_APPFONT ( 198 , 41 ) ;
         Size = MAP_APPFONT ( 52 , 10 ) ;
         Text [ en-US ] = "Relati~ve" ;
@@ -105,6 +108,7 @@ TabPage TP_NUM_POSITION
     };
     MetricField MF_INDENT
     {
+        HelpID = "sw:MetricField:TP_NUM_POSITION:MF_INDENT";
         Pos = MAP_APPFONT ( 198 , 57 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
@@ -129,6 +133,7 @@ TabPage TP_NUM_POSITION
     };
     MetricField MF_NUMDIST
     {
+        HelpID = "sw:MetricField:TP_NUM_POSITION:MF_NUMDIST";
         Pos = MAP_APPFONT ( 198 , 73 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
@@ -153,6 +158,7 @@ TabPage TP_NUM_POSITION
     };
     ListBox LB_ALIGN
     {
+        HelpID = "sw:ListBox:TP_NUM_POSITION:LB_ALIGN";
         Pos = MAP_APPFONT ( 198 , 89 ) ;
         Size = MAP_APPFONT ( 40 , 40 ) ;
         TabStop = TRUE ;
@@ -172,6 +178,7 @@ TabPage TP_NUM_POSITION
     };
     ListBox LB_LABEL_FOLLOWED_BY
     {
+        HelpID = "sw:ListBox:TP_NUM_POSITION:LB_LABEL_FOLLOWED_BY";
         Pos = MAP_APPFONT ( 198 , 25 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
@@ -192,6 +199,7 @@ TabPage TP_NUM_POSITION
     };
     MetricField MF_LISTTAB
     {
+        HelpID = "sw:MetricField:TP_NUM_POSITION:MF_LISTTAB";
         Pos = MAP_APPFONT ( 198 , 41 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
@@ -215,6 +223,7 @@ TabPage TP_NUM_POSITION
     };
     ListBox LB_ALIGN_2
     {
+        HelpID = "sw:ListBox:TP_NUM_POSITION:LB_ALIGN_2";
         Pos = MAP_APPFONT ( 198 , 57 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
@@ -228,6 +237,7 @@ TabPage TP_NUM_POSITION
     };
     MetricField MF_ALIGNED_AT
     {
+        HelpID = "sw:MetricField:TP_NUM_POSITION:MF_ALIGNED_AT";
         Pos = MAP_APPFONT ( 198 , 73 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
@@ -252,6 +262,7 @@ TabPage TP_NUM_POSITION
     };
     MetricField MF_INDENT_AT
     {
+        HelpID = "sw:MetricField:TP_NUM_POSITION:MF_INDENT_AT";
         Pos = MAP_APPFONT ( 198 , 89 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
@@ -270,6 +281,7 @@ TabPage TP_NUM_POSITION
     };
     PushButton PB_STANDARD
     {
+        HelpID = "sw:PushButton:TP_NUM_POSITION:PB_STANDARD";
         Pos = MAP_APPFONT ( 198 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Default" ;

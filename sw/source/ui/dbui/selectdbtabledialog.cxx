@@ -107,11 +107,11 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
     static long nTabs[] = {3, 0, aSz.Width()/2, aSz.Width() };
     m_aTableLB.SetTabs(&nTabs[0], MAP_PIXEL);
     m_aTableLB.SetHelpId(HID_MM_SELECTDBTABLEDDIALOG_LISTBOX);
-    m_aTableLB.SetWindowBits( WB_CLIPCHILDREN );
+    m_aTableLB.SetStyle( m_aTableLB.GetStyle() | WB_CLIPCHILDREN );
     m_aTableLB.SetSpaceBetweenEntries(3);
     m_aTableLB.SetSelectionMode( SINGLE_SELECTION );
     m_aTableLB.SetDragDropMode(   0 );
-    m_aTableLB.EnableAsyncDrag(FALSE);
+    m_aTableLB.EnableAsyncDrag(sal_False);
 
     m_aPreviewPB.SetClickHdl(LINK(this, SwSelectDBTableDialog, PreviewHdl));
 

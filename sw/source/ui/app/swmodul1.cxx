@@ -145,7 +145,7 @@ SwView* SwModule::GetNextView(SwView* pView)
 {
     OSL_ENSURE(PTR_CAST(SwView, pView),"return no SwView");
     const TypeId aTypeId = TYPE(SwView);
-    SwView* pNView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId, TRUE);
+    SwView* pNView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId, sal_True);
     return pNView;
 }
 
@@ -222,7 +222,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     pPref->SetIdle(sal_True);
 }
 
-void SwModule::ApplyUserMetric( FieldUnit eMetric, BOOL bWeb )
+void SwModule::ApplyUserMetric( FieldUnit eMetric, sal_Bool bWeb )
 {
         SwMasterUsrPref* pPref;
         if(bWeb)
@@ -258,7 +258,7 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, BOOL bWeb )
         }
 }
 
-void SwModule::ApplyRulerMetric( FieldUnit eMetric, BOOL bHorizontal, BOOL bWeb )
+void SwModule::ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, sal_Bool bWeb )
 {
     SwMasterUsrPref* pPref;
     if(bWeb)
@@ -297,7 +297,7 @@ void SwModule::ApplyRulerMetric( FieldUnit eMetric, BOOL bHorizontal, BOOL bWeb 
 set the usrpref 's char unit attribute and set ruler
 's unit as char if the "apply char unit" is checked
 --------------------------------------------------*/
-void SwModule::ApplyUserCharUnit(BOOL bApplyChar, BOOL bWeb)
+void SwModule::ApplyUserCharUnit(sal_Bool bApplyChar, sal_Bool bWeb)
 {
     SwMasterUsrPref* pPref;
     if(bWeb)
@@ -312,12 +312,12 @@ void SwModule::ApplyUserCharUnit(BOOL bApplyChar, BOOL bWeb)
         GetUsrPref(sal_False);
         pPref = pUsrPref;
     }
-    BOOL  bOldApplyCharUnit = pPref->IsApplyCharUnit();
-    BOOL    bHasChanged = FALSE;
+    sal_Bool bOldApplyCharUnit = pPref->IsApplyCharUnit();
+    sal_Bool bHasChanged = sal_False;
     if(bOldApplyCharUnit != bApplyChar)
     {
         pPref->SetApplyCharUnit(bApplyChar);
-        bHasChanged = TRUE;
+        bHasChanged = sal_True;
     }
 
     if( !bHasChanged )
@@ -369,11 +369,11 @@ SwPrintOptions*     SwModule::GetPrtOptions(sal_Bool bWeb)
 {
     if(bWeb && !pWebPrtOpt)
     {
-        pWebPrtOpt = new SwPrintOptions(TRUE);
+        pWebPrtOpt = new SwPrintOptions(sal_True);
     }
     else if(!bWeb && !pPrtOpt)
     {
-        pPrtOpt = new SwPrintOptions(FALSE);
+        pPrtOpt = new SwPrintOptions(sal_False);
     }
 
     return bWeb ? pWebPrtOpt : pPrtOpt;
@@ -386,7 +386,7 @@ SwChapterNumRules*  SwModule::GetChapterNumRules()
     return pChapterNumRules;
 }
 
-void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, BOOL /*bOnlyIfAvailable*/)
+void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, sal_Bool /*bOnlyIfAvailable*/)
 {
     Reference<XFrame> xFrame = rView.GetViewFrame()->GetFrame().GetFrameInterface();
     Reference<XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);

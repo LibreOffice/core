@@ -25,17 +25,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _FLDDROPDOWN_HXX
-#define _FLDDROPDOWN_HXX
+#ifndef SW_FLDDROPDOWN_HXX
+#define SW_FLDDROPDOWN_HXX
 
 #include "com/sun/star/uno/Sequence.hxx"
 #include "swdllapi.h"
 #include "fldbas.hxx"
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 /**
     Field type for dropdown boxes.
@@ -94,6 +91,23 @@ class SW_DLLPUBLIC SwDropDownField : public SwField
      */
     String aToolTip;
 
+    /**
+       Expands the field.
+
+       The expanded value of the field is the value of the selected
+       item. If no item is selected, an empty string is returned.
+
+       @return the expanded value of the field
+    */
+    virtual String Expand() const;
+
+    /**
+       Creates a copy of this field.
+
+       @return the copy of this field
+    */
+    virtual SwField * Copy() const;
+
 public:
     /**
        Constructor
@@ -113,23 +127,6 @@ public:
        Destructor
     */
     virtual ~SwDropDownField();
-
-    /**
-       Expands the field.
-
-       The expanded value of the field is the value of the selected
-       item. If no item is selected, an empty string is returned.
-
-       @return the expanded value of the field
-    */
-    virtual String Expand() const;
-
-    /**
-       Creates a copy of this field.
-
-       @return the copy of this field
-    */
-    virtual SwField * Copy() const;
 
     /**
        Returns the selected value.
@@ -224,10 +221,10 @@ public:
 
        @param rItem the item to be set
 
-       @retval TRUE the selected item was successfully set
-       @retval TRUE failure (empty selection)
+       @retval sal_True the selected item was successfully set
+       @retval sal_True failure (empty selection)
     */
-    BOOL SetSelectedItem(const String & rItem);
+    sal_Bool SetSelectedItem(const String & rItem);
 
     /**
        Sets the name of the field.
@@ -260,7 +257,7 @@ public:
           - FIELD_PROP_PAR3 Get the help text of the field.
           - FIELD_PROP_PAR4 Get the tool tip of the field.
     */
-    virtual bool QueryValue(com::sun::star::uno::Any &rVal, USHORT nWhichId) const;
+    virtual bool QueryValue(com::sun::star::uno::Any &rVal, sal_uInt16 nWhichId) const;
 
     /**
        API: Sets a property value on the dropdown field.
@@ -272,7 +269,7 @@ public:
           - FIELD_PROP_PAR3  Set the help text of the field.
           - FIELD_PROP_PAR4  Set the tool tip of the field.
     */
-    virtual bool PutValue(const com::sun::star::uno::Any &rVal, USHORT nWhichId);
+    virtual bool PutValue(const com::sun::star::uno::Any &rVal, sal_uInt16 nWhichId);
 };
 
 #endif

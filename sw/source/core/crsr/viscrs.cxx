@@ -77,11 +77,11 @@ SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
 {
     pCShell->GetWin()->SetCursor( &aTxtCrsr );
     bIsVisible = aTxtCrsr.IsVisible();
-    bIsDragCrsr = FALSE;
+    bIsDragCrsr = sal_False;
     aTxtCrsr.SetWidth( 0 );
 
 #ifdef SW_CRSR_TIMER
-    bTimerOn = TRUE;
+    bTimerOn = sal_True;
     SetTimeout( 50 );       // 50 millisecond delay
 #endif
 }
@@ -108,7 +108,7 @@ void SwVisCrsr::Show()
 {
     if( !bIsVisible )
     {
-        bIsVisible = TRUE;
+        bIsVisible = sal_True;
 
         // display at all?
         if( pCrsrShell->VisArea().IsOver( pCrsrShell->aCharRect ) )
@@ -136,7 +136,7 @@ void SwVisCrsr::Hide()
 {
     if( bIsVisible )
     {
-        bIsVisible = FALSE;
+        bIsVisible = sal_False;
 
 #ifdef SW_CRSR_TIMER
         if( IsActive() )
@@ -162,13 +162,13 @@ void SwVisCrsr::Timeout()
     }
 }
 
-BOOL SwCrsrShell::ChgCrsrTimerFlag( BOOL bTimerOn )
+sal_Bool SwCrsrShell::ChgCrsrTimerFlag( sal_Bool bTimerOn )
 {
     return pVisCrsr->ChgTimerFlag( bTimerOn );
 }
 
 
-BOOL SwVisCrsr::ChgTimerFlag( BOOL bFlag )
+sal_Bool SwVisCrsr::ChgTimerFlag( sal_Bool bFlag )
 {
     bOld = bTimerOn;
     if( !bFlag && bIsVisible && IsActive() )
@@ -215,7 +215,7 @@ void SwVisCrsr::_SetPosAndShow()
         if( rNode.IsTxtNode() )
         {
             const SwTxtNode& rTNd = *rNode.GetTxtNode();
-            const SwFrm* pFrm = rTNd.GetFrm( 0, 0, FALSE );
+            const SwFrm* pFrm = rTNd.GetFrm( 0, 0, sal_False );
             if ( pFrm )
             {
                 const SwScriptInfo* pSI = ((SwTxtFrm*)pFrm)->GetScriptInfo();
@@ -261,7 +261,7 @@ void SwVisCrsr::_SetPosAndShow()
             ((SwDrawView*)pCrsrShell->GetDrawView())->SetAnimationEnabled(
                     !pCrsrShell->IsSelection() );
 
-        USHORT nStyle = bIsDragCrsr ? CURSOR_SHADOW : 0;
+        sal_uInt16 nStyle = bIsDragCrsr ? CURSOR_SHADOW : 0;
         if( nStyle != aTxtCrsr.GetStyle() )
         {
             aTxtCrsr.SetStyle( nStyle );
@@ -392,7 +392,7 @@ void SwSelPaintRects::Show()
 
 void SwSelPaintRects::Invalidate( const SwRect& rRect )
 {
-    USHORT nSz = Count();
+    sal_uInt16 nSz = Count();
     if( !nSz )
         return;
 
@@ -562,7 +562,7 @@ short SwShellCrsr::MaxReplaceArived()
         // Terminate old actions. The table-frames get constructed and
         // a SSelection can be created.
         SvUShorts aArr;
-        USHORT nActCnt;
+        sal_uInt16 nActCnt;
         ViewShell *pShell = GetDoc()->GetRootFrm()->GetCurrShell(),
                   *pSh = pShell;
         do {
@@ -575,7 +575,7 @@ short SwShellCrsr::MaxReplaceArived()
             nRet = QueryBox( pDlg, SW_RES( MSG_COMCORE_ASKSEARCH )).Execute();
         }
 
-        for( USHORT n = 0; n < aArr.Count(); ++n )
+        for( sal_uInt16 n = 0; n < aArr.Count(); ++n )
         {
             for( nActCnt = aArr[n]; nActCnt--; )
                 pSh->StartAction();
@@ -594,7 +594,7 @@ void SwShellCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
     ((SwCrsrShell*)GetShell())->SaveTblBoxCntnt( pPos );
 }
 
-BOOL SwShellCrsr::UpDown( BOOL bUp, USHORT nCnt )
+sal_Bool SwShellCrsr::UpDown( sal_Bool bUp, sal_uInt16 nCnt )
 {
     return SwCursor::UpDown( bUp, nCnt,
                             &GetPtPos(), GetShell()->GetUpDownX() );
@@ -605,7 +605,7 @@ BOOL SwShellCrsr::UpDown( BOOL bUp, USHORT nCnt )
 // JP 05.03.98: To test the UNO-Crsr behavior here the implementation on the
 //              visible cursor.
 
-BOOL SwShellCrsr::IsSelOvr( int eFlags )
+sal_Bool SwShellCrsr::IsSelOvr( int eFlags )
 {
     return SwCursor::IsSelOvr( eFlags );
 }
@@ -613,13 +613,13 @@ BOOL SwShellCrsr::IsSelOvr( int eFlags )
 #endif
 
 // TRUE: The cursor can be set to the position.
-BOOL SwShellCrsr::IsAtValidPos( BOOL bPoint ) const
+sal_Bool SwShellCrsr::IsAtValidPos( sal_Bool bPoint ) const
 {
     if( GetShell() && ( GetShell()->IsAllProtect() ||
         GetShell()->GetViewOptions()->IsReadonly() ||
         ( GetShell()->Imp()->GetDrawView() &&
           GetShell()->Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() )))
-        return TRUE;
+        return sal_True;
 
     return SwCursor::IsAtValidPos( bPoint );
 }
@@ -671,13 +671,13 @@ void SwShellTableCrsr::FillRects()
 
     SwRegionRects aReg( GetShell()->VisArea() );
     SwNodes& rNds = GetDoc()->GetNodes();
-    for( USHORT n = 0; n < aSelBoxes.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aSelBoxes.Count(); ++n )
     {
         const SwStartNode* pSttNd = (*(aSelBoxes.GetData() + n ))->GetSttNd();
         const SwTableNode* pSelTblNd = pSttNd->FindTableNode();
 
         SwNodeIndex aIdx( *pSttNd );
-           SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, TRUE, FALSE );
+           SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
 
         // TABLE IN TABLE
         // (see also lcl_FindTopLevelTable in unoobj2.cxx for a different
@@ -686,7 +686,7 @@ void SwShellTableCrsr::FillRects()
         while ( pSelTblNd != pCurTblNd && pCurTblNd )
         {
             aIdx = pCurTblNd->EndOfSectionIndex();
-            pCNd = rNds.GoNextSection( &aIdx, TRUE, FALSE );
+            pCNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
             pCurTblNd = pCNd->FindTableNode();
         }
 
@@ -713,19 +713,19 @@ void SwShellTableCrsr::FillRects()
 
 
 // Check if the SPoint is within the Table-SSelection.
-BOOL SwShellTableCrsr::IsInside( const Point& rPt ) const
+sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const
 {
     // Calculate the new rectangles.
     // JP 16.01.98: If the cursor is still "parked" do nothing!!
     if( !aSelBoxes.Count() || bParked ||
         !GetPoint()->nNode.GetIndex()  )
-        return FALSE;
+        return sal_False;
 
     SwNodes& rNds = GetDoc()->GetNodes();
-    for( USHORT n = 0; n < aSelBoxes.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aSelBoxes.Count(); ++n )
     {
         SwNodeIndex aIdx( *(*(aSelBoxes.GetData() + n ))->GetSttNd() );
-        SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, TRUE, FALSE );
+        SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
         if( !pCNd )
             continue;
 
@@ -734,23 +734,23 @@ BOOL SwShellTableCrsr::IsInside( const Point& rPt ) const
             pFrm = pFrm->GetUpper();
         OSL_ENSURE( pFrm, "Node nicht in einer Tabelle" );
         if( pFrm && pFrm->Frm().IsInside( rPt ) )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 #if OSL_DEBUG_LEVEL > 1
 
 // JP 05.03.98: To test the UNO-Crsr behavior here the implementation on the
 //              visible cursor.
-BOOL SwShellTableCrsr::IsSelOvr( int eFlags )
+sal_Bool SwShellTableCrsr::IsSelOvr( int eFlags )
 {
     return SwShellCrsr::IsSelOvr( eFlags );
 }
 
 #endif
 
-BOOL SwShellTableCrsr::IsAtValidPos( BOOL bPoint ) const
+sal_Bool SwShellTableCrsr::IsAtValidPos( sal_Bool bPoint ) const
 {
     return SwShellCrsr::IsAtValidPos( bPoint );
 }

@@ -54,8 +54,8 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
     SwWrtShell*     pSh     = &GetShell();
     SdrView*        pView   = pSh->GetDrawView();
     SdrModel*       pDoc    = pView->GetModel();
-    BOOL            bChanged = pDoc->IsChanged();
-    pDoc->SetChanged(FALSE);
+    sal_Bool            bChanged = pDoc->IsChanged();
+    pDoc->SetChanged(sal_False);
 
     SfxItemSet aNewAttr( pDoc->GetItemPool() );
     pView->GetAttributes( aNewAttr );
@@ -70,7 +70,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             if ( pFact )
             {
                 SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( NULL, &aNewAttr, pView );
-                USHORT nResult = pDlg->Execute();
+                sal_uInt16 nResult = pDlg->Execute();
 
                 if (nResult == RET_OK)
                 {
@@ -90,7 +90,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
         case SID_ATTRIBUTES_AREA:
         {
-            BOOL bHasMarked = pView->AreObjectsMarked();
+            sal_Bool bHasMarked = pView->AreObjectsMarked();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
@@ -109,10 +109,10 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                 if (bHasMarked)
                     pView->SetAttributes(*pDlg->GetOutputItemSet());
                 else
-                    pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), FALSE);
+                    pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), sal_False);
                 pSh->EndAction();
 
-                static USHORT const aInval[] =
+                static sal_uInt16 aInval[] =
                 {
                     SID_ATTR_FILL_STYLE, SID_ATTR_FILL_COLOR, 0
                 };
@@ -127,7 +127,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
         case SID_ATTRIBUTES_LINE:
         {
-            BOOL bHasMarked = pView->AreObjectsMarked();
+            sal_Bool bHasMarked = pView->AreObjectsMarked();
 
             const SdrObject* pObj = NULL;
             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -146,12 +146,12 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             {
                 pSh->StartAction();
                 if(bHasMarked)
-                    pView->SetAttrToMarked(*pDlg->GetOutputItemSet(), FALSE);
+                    pView->SetAttrToMarked(*pDlg->GetOutputItemSet(), sal_False);
                 else
-                    pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), FALSE);
+                    pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), sal_False);
                 pSh->EndAction();
 
-                static USHORT const aInval[] =
+                static sal_uInt16 aInval[] =
                 {
                     SID_ATTR_LINE_STYLE, SID_ATTR_LINE_WIDTH,
                     SID_ATTR_LINE_COLOR, 0
@@ -172,7 +172,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
         GetShell().SetModified();
     else
         if (bChanged)
-            pDoc->SetChanged(TRUE);
+            pDoc->SetChanged(sal_True);
 }
 
 void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
@@ -180,17 +180,17 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
     SwWrtShell* pSh   = &GetShell();
     SdrView*    pView = pSh->GetDrawView();
     const SfxItemSet* pArgs = rReq.GetArgs();
-    BOOL        bChanged = pView->GetModel()->IsChanged();
-    pView->GetModel()->SetChanged(FALSE);
+    sal_Bool        bChanged = pView->GetModel()->IsChanged();
+    pView->GetModel()->SetChanged(sal_False);
 
     GetView().NoRotate();
 
     if (pArgs)
     {
         if(pView->AreObjectsMarked())
-            pView->SetAttrToMarked(*rReq.GetArgs(), FALSE);
+            pView->SetAttrToMarked(*rReq.GetArgs(), sal_False);
         else
-            pView->SetDefaultAttr(*rReq.GetArgs(), FALSE);
+            pView->SetDefaultAttr(*rReq.GetArgs(), sal_False);
     }
     else
     {
@@ -202,13 +202,13 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
             case SID_ATTR_FILL_GRADIENT:
             case SID_ATTR_FILL_HATCH:
             case SID_ATTR_FILL_BITMAP:
-                pDis->Execute(SID_ATTRIBUTES_AREA, FALSE);
+                pDis->Execute(SID_ATTRIBUTES_AREA, sal_False);
                 break;
             case SID_ATTR_LINE_STYLE:
             case SID_ATTR_LINE_DASH:
             case SID_ATTR_LINE_WIDTH:
             case SID_ATTR_LINE_COLOR:
-                pDis->Execute(SID_ATTRIBUTES_LINE, FALSE);
+                pDis->Execute(SID_ATTRIBUTES_LINE, sal_False);
                 break;
         }
     }
@@ -216,7 +216,7 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
         GetShell().SetModified();
     else
         if (bChanged)
-            pView->GetModel()->SetChanged(TRUE);
+            pView->GetModel()->SetChanged(sal_True);
 }
 
 void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
@@ -225,7 +225,7 @@ void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
 
     if (pSdrView->AreObjectsMarked())
     {
-        BOOL bDisable = Disable( rSet );
+        sal_Bool bDisable = Disable( rSet );
 
         if( !bDisable )
             pSdrView->GetAttributes( rSet );

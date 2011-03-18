@@ -135,11 +135,11 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
             do {
                 if( pONd && pONd->GetTxtColl() )
                 {
-                    BYTE nPrevLvl = nLevel;
+                    sal_uInt8 nPrevLvl = nLevel;
 
                     OSL_ENSURE( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,
                             "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
-                    nLevel = static_cast<BYTE>(pONd->GetAttrOutlineLevel());
+                    nLevel = static_cast<sal_uInt8>(pONd->GetAttrOutlineLevel());
 
                     if( nPrevLvl < nLevel )
                         nLevel = nPrevLvl;
@@ -171,7 +171,7 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
             SwNumRule* pRule( pTxtNd->GetNumRule() );
             if ( pTxtNd->IsCountedInList() && pRule )
             {
-                const SwNumFmt& rNFmt = pRule->Get( static_cast<USHORT>(pTxtNd->GetActualListLevel()) );
+                const SwNumFmt& rNFmt = pRule->Get( static_cast<sal_uInt16>(pTxtNd->GetActualListLevel()) );
                 sPost = rNFmt.GetSuffix();
                 sPre = rNFmt.GetPrefix();
             }
@@ -200,7 +200,7 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
     }
 }
 
-bool SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwChapterField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -234,9 +234,9 @@ bool SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     return true;
 }
 
-bool SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwChapterField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
     switch( nWhichId )
     {
     case FIELD_PROP_BYTE1:
@@ -272,7 +272,7 @@ bool SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 
     default:
         OSL_FAIL("illegal property");
-        bRet = false;
+                bRet = false;
     }
     return bRet;
 }

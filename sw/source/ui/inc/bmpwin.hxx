@@ -42,22 +42,22 @@ private:
     Graphic     aGraphic;
     BitmapEx    aBmp;
 
-    BOOL        bHorz : 1;
-    BOOL        bVert : 1;
-    BOOL        bGraphic : 1;
-    BOOL        bLeftAlign : 1;
+    sal_Bool        bHorz : 1;
+    sal_Bool        bVert : 1;
+    sal_Bool        bGraphic : 1;
+    sal_Bool        bLeftAlign : 1;
 
     void Paint(const Rectangle& rRect);
 
 public:
-    BmpWindow(Window* pPar, USHORT nId,
+    BmpWindow(Window* pPar, sal_uInt16 nId,
                 const Graphic& rGraphic, const BitmapEx& rBmp);
     BmpWindow(Window* pParent, const ResId rResId) :
         Window(pParent, rResId),
-        bHorz(FALSE), bVert(FALSE),bGraphic(FALSE), bLeftAlign(TRUE) {}
+        bHorz(sal_False), bVert(sal_False),bGraphic(sal_False), bLeftAlign(sal_True) {}
     ~BmpWindow();
-    void MirrorVert(BOOL bMirror) { bVert = bMirror; Invalidate(); }
-    void MirrorHorz(BOOL bMirror) { bHorz = bMirror; Invalidate(); }
+    void MirrorVert(sal_Bool bMirror) { bVert = bMirror; Invalidate(); }
+    void MirrorHorz(sal_Bool bMirror) { bHorz = bMirror; Invalidate(); }
     void SetGraphic(const Graphic& rGrf);
 };
 

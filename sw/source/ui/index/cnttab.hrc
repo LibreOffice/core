@@ -173,6 +173,7 @@
 #define STR_TOKEN_HELP_AUTHORITY     (STR_BUTTON_HELP_TEXT_START + 9)
 
 #define STR_CHARSTYLE               (STR_TOKEN_HELP_AUTHORITY + 1)
+
 #define TLB_STYLES              100
 #define FL_STYLES                   101
 #define PB_OK                   102

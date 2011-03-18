@@ -100,28 +100,28 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     SW_DLLPRIVATE virtual sal_Bool SaveAs( SfxMedium& rMedium );
     SW_DLLPRIVATE virtual sal_Bool SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
-    SW_DLLPRIVATE virtual USHORT            PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
+    SW_DLLPRIVATE virtual sal_uInt16            PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
 
 
     // Make DocInfo known to the Doc.
     SW_DLLPRIVATE virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
                                     Window *pParent, const SfxItemSet &);
     // OLE-stuff
-    SW_DLLPRIVATE virtual void          Draw( OutputDevice*, const JobSetup&, USHORT);
+    SW_DLLPRIVATE virtual void          Draw( OutputDevice*, const JobSetup&, sal_uInt16);
 
     // Methods for StyleSheets
-    SW_DLLPRIVATE USHORT                    Edit( const String &rName, const String& rParent, USHORT nFamily,
-                                    USHORT nMask, BOOL bNew,
-                                    BOOL bColumn = FALSE,
+    SW_DLLPRIVATE sal_uInt16                    Edit( const String &rName, const String& rParent, sal_uInt16 nFamily,
+                                    sal_uInt16 nMask, sal_Bool bNew,
+                                    sal_Bool bColumn = sal_False,
                                     SwWrtShell* pActShell = 0,
-                                    BOOL bBasic = FALSE );
-    SW_DLLPRIVATE USHORT                    Delete(const String &rName, USHORT nFamily);
-    SW_DLLPRIVATE USHORT                    ApplyStyles(const String &rName, USHORT nFamily, SwWrtShell* pShell = 0,
-                                        USHORT nMode = 0 );
-    SW_DLLPRIVATE USHORT                    DoWaterCan( const String &rName, USHORT nFamily);
-    SW_DLLPRIVATE USHORT                    UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* pShell = 0);
-    SW_DLLPRIVATE USHORT                    MakeByExample(const String &rName,
-                                            USHORT nFamily, USHORT nMask, SwWrtShell* pShell = 0);
+                                    sal_Bool bBasic = sal_False );
+    SW_DLLPRIVATE sal_uInt16                    Delete(const String &rName, sal_uInt16 nFamily);
+    SW_DLLPRIVATE sal_uInt16                    ApplyStyles(const String &rName, sal_uInt16 nFamily, SwWrtShell* pShell = 0,
+                                        sal_uInt16 nMode = 0 );
+    SW_DLLPRIVATE sal_uInt16                    DoWaterCan( const String &rName, sal_uInt16 nFamily);
+    SW_DLLPRIVATE sal_uInt16                    UpdateStyle(const String &rName, sal_uInt16 nFamily, SwWrtShell* pShell = 0);
+    SW_DLLPRIVATE sal_uInt16                    MakeByExample(const String &rName,
+                                            sal_uInt16 nFamily, sal_uInt16 nMask, SwWrtShell* pShell = 0);
 
     SW_DLLPRIVATE void                  InitDraw();
     SW_DLLPRIVATE void                  SubInitNew();   // for InitNew and HtmlSourceMode.
@@ -163,14 +163,14 @@ public:
 
     // OLE-stuff.
     virtual void      SetVisArea( const Rectangle &rRect );
-    virtual Rectangle GetVisArea( USHORT nAspect ) const;
+    virtual Rectangle GetVisArea( sal_uInt16 nAspect ) const;
     virtual Printer  *GetDocumentPrinter();
     virtual OutputDevice* GetDocumentRefDev();
     virtual void      OnDocumentPrinterChanged( Printer * pNewPrinter );
-    virtual ULONG     GetMiscStatus() const;
+    virtual sal_uLong     GetMiscStatus() const;
 
     virtual void            PrepareReload();
-    virtual void            SetModified( BOOL = TRUE );
+    virtual void            SetModified( sal_Bool = sal_True );
 
     // Dispatcher
     void                    Execute(SfxRequest &);
@@ -193,24 +193,24 @@ public:
     void                    UpdateChildWindows();
 
     // global IO.
-    virtual BOOL            Save();
+    virtual sal_Bool            Save();
 
     // For Style PI.
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
 
     // For Organizer.
-    virtual BOOL Insert(SfxObjectShell &rSource,
-                        USHORT  nSourceIdx1,
-                        USHORT  nSourceIdx2,
-                        USHORT  nSourceIdx3,
-                        USHORT& nIdx1,
-                        USHORT& nIdx2,
-                        USHORT& nIdx3,
-                        USHORT& nRemovedIdx);
+    virtual sal_Bool Insert(SfxObjectShell &rSource,
+                        sal_uInt16  nSourceIdx1,
+                        sal_uInt16  nSourceIdx2,
+                        sal_uInt16  nSourceIdx3,
+                        sal_uInt16& nIdx1,
+                        sal_uInt16& nIdx2,
+                        sal_uInt16& nIdx3,
+                        sal_uInt16& nRemovedIdx);
 
-    virtual BOOL Remove(USHORT nIdx1,
-                        USHORT nIdx2 = INDEX_IGNORE,
-                        USHORT nIdx3 = INDEX_IGNORE);
+    virtual sal_Bool Remove(sal_uInt16 nIdx1,
+                        sal_uInt16 nIdx2 = INDEX_IGNORE,
+                        sal_uInt16 nIdx3 = INDEX_IGNORE);
 
     virtual Bitmap      GetStyleFamilyBitmap( SfxStyleFamily eFamily );
 
@@ -250,11 +250,11 @@ public:
 
     virtual void LoadStyles( SfxObjectShell& rSource );
 
-    void _LoadStyles( SfxObjectShell& rSource, BOOL bPreserveCurrentDocument );
+    void _LoadStyles( SfxObjectShell& rSource, sal_Bool bPreserveCurrentDocument );
 
     // Display dialog for page style. If required display column page.
     void FormatPage( const String& rPage,
-                        BOOL bColumn = FALSE,
+                        sal_Bool bColumn = sal_False,
                         SwWrtShell*     pActShell = 0 );
 
     // #i59688#
@@ -275,13 +275,13 @@ public:
     //Activate wait cursor for all windows of this document
     //Optionally all dispatcher could be Locked
     //Usually locking should be done using the class: SwWaitObject!
-    void EnterWait( BOOL bLockDispatcher );
-    void LeaveWait( BOOL bLockDispatcher );
+    void EnterWait( sal_Bool bLockDispatcher );
+    void LeaveWait( sal_Bool bLockDispatcher );
 
-    void ToggleBrowserMode(BOOL bOn, SwView* pView = 0);
+    void ToggleBrowserMode(sal_Bool bOn, SwView* pView = 0);
 
-    ULONG LoadStylesFromFile( const String& rURL, SwgReaderOption& rOpt,
-                                BOOL bUnoCall );
+    sal_uLong LoadStylesFromFile( const String& rURL, SwgReaderOption& rOpt,
+                                sal_Bool bUnoCall );
     void InvalidateModel();
     void ReactivateModel();
 

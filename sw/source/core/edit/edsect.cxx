@@ -29,9 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#include <doc.hxx>
 #include <editsh.hxx>
+#include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>       // fuer die UndoIds
@@ -51,7 +51,7 @@ SwEditShell::InsertSection(
     if( !IsTableMode() )
     {
         StartAllAction();
-        GetDoc()->StartUndo( UNDO_INSSECTION, NULL );
+        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_INSSECTION, NULL );
 
         FOREACHPAM_START(this)
             SwSection const*const pNew =
@@ -60,25 +60,24 @@ SwEditShell::InsertSection(
                 pRet = pNew;
         FOREACHPAM_END()
 
-        // Undo-Klammerung hier beenden
-        GetDoc()->EndUndo( UNDO_INSSECTION, NULL );
+        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, NULL );
         EndAllAction();
     }
     return pRet;
 }
 
 
-BOOL SwEditShell::IsInsRegionAvailable() const
+sal_Bool SwEditShell::IsInsRegionAvailable() const
 {
     if( IsTableMode() )
-        return FALSE;
+        return sal_False;
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )
-        return FALSE;
+        return sal_False;
     if( pCrsr->HasMark() )
         return 0 != GetDoc()->IsInsRegionAvailable( *pCrsr );
 
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -96,7 +95,7 @@ const SwSection* SwEditShell::GetCurrSection() const
  * Bereich innerhalb der Fussnote sein.
  * --------------------------------------------------*/
 
-const SwSection* SwEditShell::GetAnySection( BOOL bOutOfTab, const Point* pPt ) const
+const SwSection* SwEditShell::GetAnySection( sal_Bool bOutOfTab, const Point* pPt ) const
 {
     SwFrm *pFrm;
     if ( pPt )
@@ -108,7 +107,7 @@ const SwSection* SwEditShell::GetAnySection( BOOL bOutOfTab, const Point* pPt ) 
         pFrm = pNd->GetFrm( pPt );
     }
     else
-        pFrm = GetCurrFrm( FALSE );
+        pFrm = GetCurrFrm( sal_False );
 
     if( bOutOfTab && pFrm )
         pFrm = pFrm->FindTabFrm();
@@ -126,17 +125,17 @@ const SwSection* SwEditShell::GetAnySection( BOOL bOutOfTab, const Point* pPt ) 
     return NULL;
 }
 
-USHORT SwEditShell::GetSectionFmtCount() const
+sal_uInt16 SwEditShell::GetSectionFmtCount() const
 {
     return GetDoc()->GetSections().Count();
 }
 
 
-BOOL SwEditShell::IsAnySectionInDoc( BOOL bChkReadOnly, BOOL bChkHidden, BOOL bChkTOX ) const
+sal_Bool SwEditShell::IsAnySectionInDoc( sal_Bool bChkReadOnly, sal_Bool bChkHidden, sal_Bool bChkTOX ) const
 {
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    USHORT nCnt = rFmts.Count();
-    USHORT n;
+    sal_uInt16 nCnt = rFmts.Count();
+    sal_uInt16 n;
 
     for( n = 0; n < nCnt; ++n )
     {
@@ -144,8 +143,8 @@ BOOL SwEditShell::IsAnySectionInDoc( BOOL bChkReadOnly, BOOL bChkHidden, BOOL bC
         const SwSectionFmt* pFmt = rFmts[ n ];
         if( pFmt->IsInNodesArr() &&
             (bChkTOX  ||
-                ((eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
-                && TOX_HEADER_SECTION != eTmpType )))
+                ( (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
+                  && TOX_HEADER_SECTION != eTmpType ) ) )
         {
             const SwSection& rSect = *rFmts[ n ]->GetSection();
             if( (!bChkReadOnly && !bChkHidden ) ||
@@ -157,19 +156,19 @@ BOOL SwEditShell::IsAnySectionInDoc( BOOL bChkReadOnly, BOOL bChkHidden, BOOL bC
     return n != nCnt;
 }
 
-USHORT SwEditShell::GetSectionFmtPos( const SwSectionFmt& rFmt ) const
+sal_uInt16 SwEditShell::GetSectionFmtPos( const SwSectionFmt& rFmt ) const
 {
     SwSectionFmt* pFmt = (SwSectionFmt*)&rFmt;
     return GetDoc()->GetSections().GetPos( pFmt );
 }
 
-const SwSectionFmt& SwEditShell::GetSectionFmt( USHORT nFmt ) const
+const SwSectionFmt& SwEditShell::GetSectionFmt( sal_uInt16 nFmt ) const
 {
     return *GetDoc()->GetSections()[ nFmt ];
 }
 
 
-void SwEditShell::DelSectionFmt( USHORT nFmt )
+void SwEditShell::DelSectionFmt( sal_uInt16 nFmt )
 {
     StartAllAction();
     GetDoc()->DelSectionFmt( GetDoc()->GetSections()[ nFmt ] );
@@ -252,7 +251,7 @@ void SwEditShell::_SetSectionAttr( SwSectionFmt& rSectFmt,
                                     const SfxItemSet& rSet )
 {
     StartAllAction();
-    if(SFX_ITEM_SET == rSet.GetItemState(RES_CNTNT, FALSE))
+    if(SFX_ITEM_SET == rSet.GetItemState(RES_CNTNT, sal_False))
     {
         SfxItemSet aSet(rSet);
         aSet.ClearItem(RES_CNTNT);
@@ -269,9 +268,9 @@ void SwEditShell::_SetSectionAttr( SwSectionFmt& rSectFmt,
 // search inside the cursor selection for full selected sections.
 // if any part of section in the selection return 0.
 // if more than one in the selection return the count
-USHORT SwEditShell::GetFullSelectedSectionCount() const
+sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
 {
-    USHORT nRet = 0;
+    sal_uInt16 nRet = 0;
     FOREACHPAM_START(this)
 
         const SwPosition* pStt = PCURCRSR->Start(),

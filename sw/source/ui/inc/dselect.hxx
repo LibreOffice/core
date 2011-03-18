@@ -42,9 +42,9 @@ class DrawSelection : public SwDrawBase
     DrawSelection(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
 
                                        // Mouse- & Key-Events
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
 
-    virtual void Activate(const USHORT nSlotId);    // Function aktivieren
+    virtual void Activate(const sal_uInt16 nSlotId);    // Function aktivieren
 };
 
 

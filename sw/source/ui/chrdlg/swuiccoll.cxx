@@ -56,7 +56,7 @@
 
 #include "swuiccoll.hxx"
 
-static USHORT aPageRg[] = {
+static sal_uInt16 aPageRg[] = {
     FN_COND_COLL, FN_COND_COLL,
     0
 };
@@ -86,10 +86,14 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     pCmds( SwCondCollItem::GetCmds() ),
     pFmt(0),
 
-    bNewTemplate(FALSE)
+    bNewTemplate(sal_False)
 {
     FreeResource();
     SetExchangeSupport();
+
+    aRemovePB.SetAccessibleRelationMemberOf(&aConditionFL);
+    aAssignPB.SetAccessibleRelationMemberOf(&aConditionFL);
+    aTbLinks.SetAccessibleRelationLabeledBy(&aConditionCB);
 
     // Install handlers
     aConditionCB.SetClickHdl(   LINK(this, SwCondCollPage, OnOffHdl));
@@ -101,7 +105,7 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     aStyleLB.SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
     aFilterLB.SetSelectHdl(     LINK(this, SwCondCollPage, SelectHdl));
 
-    aTbLinks.SetWindowBits(WB_HSCROLL|WB_CLIPCHILDREN);
+    aTbLinks.SetStyle(aTbLinks.GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
     aTbLinks.SetSelectionMode( SINGLE_SELECTION );
     aTbLinks.SetTabs( &nTabs[0], MAP_APPFONT );
     aTbLinks.Resize();  // OS: Hack for the right selection
@@ -114,7 +118,7 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     size_t nCount = aFamilies.size();
     for( size_t i = 0; i < nCount; ++i )
     {
-        if(SFX_STYLE_FAMILY_PARA == (USHORT)(pFamilyItem = aFamilies.at( i ))->GetFamily())
+        if(SFX_STYLE_FAMILY_PARA == (sal_uInt16)(pFamilyItem = aFamilies.at( i ))->GetFamily())
             break;
     }
 
@@ -122,7 +126,7 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     for( size_t i = 0; i < rFilterList.size(); ++i )
     {
         aFilterLB.InsertEntry( rFilterList[ i ]->aName);
-        USHORT* pFilter = new USHORT( rFilterList[ i ]->nFlags);
+        sal_uInt16* pFilter = new sal_uInt16(rFilterList[i]->nFlags);
         aFilterLB.SetEntryData(i, pFilter);
     }
     aFilterLB.SelectEntryPos(1);
@@ -138,8 +142,8 @@ Page: Dtor
 
 SwCondCollPage::~SwCondCollPage()
 {
-    for(USHORT i = 0; i < aFilterLB.GetEntryCount(); ++i)
-        delete (USHORT*)aFilterLB.GetEntryData(i);
+    for(sal_uInt16 i = 0; i < aFilterLB.GetEntryCount(); ++i)
+        delete (sal_uInt16*)aFilterLB.GetEntryData(i);
 
 }
 
@@ -167,11 +171,11 @@ Page: FillItemSet-Overload
 ****************************************************************************/
 
 
-BOOL SwCondCollPage::FillItemSet(SfxItemSet &rSet)
+sal_Bool SwCondCollPage::FillItemSet(SfxItemSet &rSet)
 {
-    BOOL bModified = TRUE;
+    sal_Bool bModified = sal_True;
     SwCondCollItem aCondItem;
-    for(USHORT i = 0; i < aStrArr.Count(); i++)
+    for(sal_uInt16 i = 0; i < aStrArr.Count(); i++)
     {
         String sEntry = aTbLinks.GetEntryText(i, 1);
         aCondItem.SetStyle( &sEntry, i);
@@ -207,7 +211,7 @@ void SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
     }
     aStyleLB.SelectEntryPos(0);
 
-    for( USHORT n = 0; n < aStrArr.Count(); n++)
+    for( sal_uInt16 n = 0; n < aStrArr.Count(); n++)
     {
         String aEntry( aStrArr.GetString(n) );
         aEntry += '\t';
@@ -228,17 +232,17 @@ void SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
 
 }
 
-USHORT* SwCondCollPage::GetRanges()
+sal_uInt16* SwCondCollPage::GetRanges()
 {
     return aPageRg;
 }
 
 IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
 {
-    const BOOL bEnable = pBox->IsChecked();
+    const sal_Bool bEnable = pBox->IsChecked();
     aContextFT.Enable( bEnable );
     aUsedFT   .Enable( bEnable );
-    aTbLinks  .EnableList( bEnable != FALSE );
+    aTbLinks  .EnableList( bEnable != sal_False );
     aStyleFT  .Enable( bEnable );
     aStyleLB  .Enable( bEnable );
     aFilterLB .Enable( bEnable );
@@ -252,7 +256,7 @@ IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
 IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
 {
     SvLBoxEntry* pE = aTbLinks.FirstSelected();
-    ULONG nPos;
+    sal_uLong nPos;
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = aTbLinks.GetModel()->GetAbsPos( pE ) ) )
     {
@@ -260,21 +264,21 @@ IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
         return 0;
     }
 
-    String sSel = aStrArr.GetString( USHORT(nPos) );
+    String sSel = aStrArr.GetString( sal_uInt16(nPos) );
     sSel += '\t';
 
-    const BOOL bAssEnabled = pBtn != &aRemovePB && aAssignPB.IsEnabled();
+    const sal_Bool bAssEnabled = pBtn != &aRemovePB && aAssignPB.IsEnabled();
     aAssignPB.Enable( !bAssEnabled );
     aRemovePB.Enable(  bAssEnabled );
     if ( bAssEnabled )
         sSel += aStyleLB.GetSelectEntry();
 
-    aTbLinks.SetUpdateMode(FALSE);
+    aTbLinks.SetUpdateMode(sal_False);
     aTbLinks.GetModel()->Remove(pE);
     pE = aTbLinks.InsertEntryToColumn(sSel, nPos);
     aTbLinks.Select(pE);
     aTbLinks.MakeVisible(pE);
-    aTbLinks.SetUpdateMode(TRUE);
+    aTbLinks.SetUpdateMode(sal_True);
     return 0;
 }
 
@@ -283,8 +287,8 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
     if(pBox == &aFilterLB)
     {
         aStyleLB.Clear();
-        USHORT nSearchFlags = pBox->GetSelectEntryPos();
-        nSearchFlags = *(USHORT*)aFilterLB.GetEntryData(nSearchFlags);
+        sal_uInt16 nSearchFlags = pBox->GetSelectEntryPos();
+        nSearchFlags = *(sal_uInt16*)aFilterLB.GetEntryData(nSearchFlags);
         SfxStyleSheetBasePool* pPool = rSh.GetView().GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, nSearchFlags);
         const SfxStyleSheetBase* pBase = pPool->First();
@@ -316,7 +320,7 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
     return 0;
 }
 
-void SwCondCollPage::SetCollection( SwFmt* pFormat, BOOL bNew )
+void SwCondCollPage::SetCollection( SwFmt* pFormat, sal_Bool bNew )
 {
     pFmt = pFormat;
     bNewTemplate = bNew;

@@ -78,14 +78,14 @@ public:
 //public:
 //    SwCrsrOszControl() : pStk1( 0 ), pStk2( 0 ) {}; // ; <- ????
 
-    BOOL ChkOsz( const SwFlyFrm *pFly )
+    sal_Bool ChkOsz( const SwFlyFrm *pFly )
         {
-            BOOL bRet = TRUE;
+            sal_Bool bRet = sal_True;
             if ( pFly != pStk1 && pFly != pStk2 )
             {
                 pStk1 = pStk2;
                 pStk2 = pFly;
-                bRet  = FALSE;
+                bRet  = sal_False;
             }
             return bRet;
         }
@@ -111,10 +111,10 @@ static SwCrsrOszControl aOszCtrl = { 0, 0, 0 };
 |*                      PrtArea der Point liegt.
 |*
 |*************************************************************************/
-BOOL SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
+sal_Bool SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                                SwCrsrMoveState* pCMS ) const
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     const SwFrm *pFrm = Lower();
     while ( !bRet && pFrm )
     {
@@ -129,11 +129,11 @@ BOOL SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 
         if ( aPaintRect.IsInside( rPoint ) &&
              ( bCntntCheck || pFrm->GetCrsrOfst( pPos, rPoint, pCMS ) ) )
-            bRet = TRUE;
+            bRet = sal_True;
         else
             pFrm = pFrm->GetNext();
         if ( pCMS && pCMS->bStop )
-            return FALSE;
+            return sal_False;
     }
     return bRet;
 }
@@ -147,10 +147,10 @@ BOOL SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 |*
 |*************************************************************************/
 
-BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
+sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                              SwCrsrMoveState* pCMS ) const
 {
-    BOOL bRet     = FALSE;
+    sal_Bool bRet     = sal_False;
     Point aPoint( rPoint );
 
     // check, if we have to adjust the point
@@ -175,16 +175,16 @@ BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                                 static_cast<const SwVirtFlyDrawObj*>(aIter());
             const SwFlyFrm* pFly = pObj ? pObj->GetFlyFrm() : 0;
             if ( pFly &&
-                 ( ( pCMS ? pCMS->bSetInReadOnly : FALSE ) ||
+                 ( ( pCMS ? pCMS->bSetInReadOnly : sal_False ) ||
                    !pFly->IsProtected() ) &&
                  pFly->GetCrsrOfst( pPos, aPoint, pCMS ) )
             {
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             }
 
             if ( pCMS && pCMS->bStop )
-                return FALSE;
+                return sal_False;
             aIter.Prev();
         }
     }
@@ -195,17 +195,17 @@ BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         //wir den StartPoint und fangen nochmal eine Seite vor der
         //aktuellen an. Mit Flys ist es dann allerdings vorbei.
         if ( SwLayoutFrm::GetCrsrOfst( pPos, aPoint, pCMS ) )
-            bRet = TRUE;
+            bRet = sal_True;
         else
         {
             if ( pCMS && (pCMS->bStop || pCMS->bExactOnly) )
             {
-                ((SwCrsrMoveState*)pCMS)->bStop = TRUE;
-                return FALSE;
+                ((SwCrsrMoveState*)pCMS)->bStop = sal_True;
+                return sal_False;
             }
-            const SwCntntFrm *pCnt = GetCntntPos( aPoint, FALSE, FALSE, FALSE, pCMS, FALSE );
+            const SwCntntFrm *pCnt = GetCntntPos( aPoint, sal_False, sal_False, sal_False, pCMS, sal_False );
             if ( pCMS && pCMS->bStop )
-                return FALSE;
+                return sal_False;
 
             OSL_ENSURE( pCnt, "Crsr is gone to a Black hole" );
             if( pCMS && pCMS->pFill && pCnt->IsTxtFrm() )
@@ -218,7 +218,7 @@ BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                 // Set point to pCnt, delete mark
                 // this may happen, if pCnt is hidden
                 *pPos = SwPosition( *pCnt->GetNode(), SwIndex( (SwTxtNode*)pCnt->GetNode(), 0 ) );
-                bRet = TRUE;
+                bRet = sal_True;
             }
         }
     }
@@ -253,7 +253,7 @@ bool SwPageFrm::FillSelection( SwSelectionList& rList, const SwRect& rRect ) con
         if( GetSortedObjs() )
         {
             const SwSortedObjs &rObjs = *GetSortedObjs();
-            for ( USHORT i = 0; i < rObjs.Count(); ++i )
+            for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
             {
                 const SwAnchoredObject* pAnchoredObj = rObjs[i];
                 if( !pAnchoredObj->ISA(SwFlyFrm) )
@@ -291,17 +291,17 @@ bool SwRootFrm::FillSelection( SwSelectionList& aSelList, const SwRect& rRect) c
 |*
 |*  Beschreibung:       Reicht Primaer den Aufruf an die erste Seite weiter.
 |*                      Wenn der 'reingereichte Point veraendert wird,
-|*                      so wird FALSE zurueckgegeben.
+|*                      so wird sal_False zurueckgegeben.
 |*
 |*************************************************************************/
-BOOL SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
+sal_Bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                              SwCrsrMoveState* pCMS ) const
 {
     sal_Bool bOldAction = IsCallbackActionEnabled();
-    ((SwRootFrm*)this)->SetCallbackActionEnabled( FALSE );
+    ((SwRootFrm*)this)->SetCallbackActionEnabled( sal_False );
     OSL_ENSURE( (Lower() && Lower()->IsPageFrm()), "Keinen PageFrm gefunden." );
     if( pCMS && pCMS->pFill )
-        ((SwCrsrMoveState*)pCMS)->bFillRet = FALSE;
+        ((SwCrsrMoveState*)pCMS)->bFillRet = sal_False;
     Point aOldPoint = rPoint;
 
     // PAGES01
@@ -330,7 +330,7 @@ BOOL SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     if( pCMS )
     {
         if( pCMS->bStop )
-            return FALSE;
+            return sal_False;
         if( pCMS->pFill )
             return pCMS->bFillRet;
     }
@@ -347,24 +347,24 @@ BOOL SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 |*                      In geschuetzte Zellen gibt es hier keinen Eingang.
 |*
 |*************************************************************************/
-BOOL SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
+sal_Bool SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                              SwCrsrMoveState* pCMS ) const
 {
     // cell frame does not necessarily have a lower (split table cell)
     if ( !Lower() )
-        return FALSE;
+        return sal_False;
 
-    if ( !(pCMS?pCMS->bSetInReadOnly:FALSE) &&
+    if ( !(pCMS?pCMS->bSetInReadOnly:sal_False) &&
          GetFmt()->GetProtect().IsCntntProtected() )
-        return FALSE;
+        return sal_False;
 
     if ( pCMS && pCMS->eState == MV_TBLSEL )
     {
         const SwTabFrm *pTab = FindTabFrm();
         if ( pTab->IsFollow() && pTab->IsInHeadline( *this ) )
         {
-            ((SwCrsrMoveState*)pCMS)->bStop = TRUE;
-            return FALSE;
+            ((SwCrsrMoveState*)pCMS)->bStop = sal_True;
+            return sal_False;
         }
     }
 
@@ -375,7 +375,7 @@ BOOL SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         else
         {
             Calc();
-            BOOL bRet = FALSE;
+            sal_Bool bRet = sal_False;
 
             const SwFrm *pFrm = Lower();
             while ( pFrm && !bRet )
@@ -385,14 +385,14 @@ BOOL SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                 {
                     bRet = pFrm->GetCrsrOfst( pPos, rPoint, pCMS );
                     if ( pCMS && pCMS->bStop )
-                        return FALSE;
+                        return sal_False;
                 }
                 pFrm = pFrm->GetNext();
             }
             if ( !bRet )
             {
                 Point *pPoint = pCMS && pCMS->pFill ? new Point( rPoint ) : NULL;
-                const SwCntntFrm *pCnt = GetCntntPos( rPoint, TRUE );
+                const SwCntntFrm *pCnt = GetCntntPos( rPoint, sal_True );
                 if( pPoint && pCnt->IsTxtFrm() )
                 {
                     pCnt->GetCrsrOfst( pPos, *pPoint, pCMS );
@@ -402,11 +402,11 @@ BOOL SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                     pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
                 delete pPoint;
             }
-            return TRUE;
+            return sal_True;
         }
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -424,7 +424,7 @@ BOOL SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 //GetCrsrOfst entscheidet sich bei einer Rekursion fuer denjenigen der
 //am weitesten oben liegt.
 
-BOOL SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
+sal_Bool SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                             SwCrsrMoveState* pCMS ) const
 {
     aOszCtrl.Entry( this );
@@ -435,14 +435,14 @@ BOOL SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     //innerhalb des aktuellen befindet, so wird fuer diesen das
     //GetCrsrOfst gerufen.
     Calc();
-    BOOL bInside = Frm().IsInside( rPoint ) && Lower(),
-         bRet = FALSE;
+    sal_Bool bInside = Frm().IsInside( rPoint ) && Lower(),
+         bRet = sal_False;
 
     //Wenn der Frm eine Grafik enthaelt, aber nur Text gewuenscht ist, so
     //nimmt er den Crsr grundsaetzlich nicht an.
     if ( bInside && pCMS && pCMS->eState == MV_SETONLYTEXT &&
          (!Lower() || Lower()->IsNoTxtFrm()) )
-        bInside = FALSE;
+        bInside = sal_False;
 
     const SwPageFrm *pPage = FindPageFrm();
     if ( bInside && pPage && pPage->GetSortedObjs() )
@@ -457,10 +457,10 @@ BOOL SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                  Frm().IsInside( pFly->Frm() ) )
             {
                 if ( aOszCtrl.ChkOsz( pFly ) ||
-                     TRUE == (bRet = pFly->GetCrsrOfst( pPos, rPoint, pCMS )))
+                     sal_True == (bRet = pFly->GetCrsrOfst( pPos, rPoint, pCMS )))
                     break;
                 if ( pCMS && pCMS->bStop )
-                    return FALSE;
+                    return sal_False;
             }
             aIter.Next();
         }
@@ -476,7 +476,7 @@ BOOL SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             {
                 bRet = pFrm->GetCrsrOfst( pPos, rPoint, pCMS );
                 if ( pCMS && pCMS->bStop )
-                    return FALSE;
+                    return sal_False;
             }
             pFrm = pFrm->GetNext();
         }
@@ -484,9 +484,9 @@ BOOL SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         {
             Point *pPoint = pCMS && pCMS->pFill ? new Point( rPoint ) : NULL;
             const SwCntntFrm *pCnt = GetCntntPos(
-                                            rPoint, TRUE, FALSE, FALSE, pCMS );
+                                            rPoint, sal_True, sal_False, sal_False, pCMS );
             if ( pCMS && pCMS->bStop )
-                return FALSE;
+                return sal_False;
             if( pPoint && pCnt->IsTxtFrm() )
             {
                 pCnt->GetCrsrOfst( pPos, *pPoint, pCMS );
@@ -495,7 +495,7 @@ BOOL SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             else
                 pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
             delete pPoint;
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
     aOszCtrl.Exit( this );
@@ -507,22 +507,22 @@ BOOL SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 |*    Beschreibung      Layoutabhaengiges Cursortravelling
 |*
 |*************************************************************************/
-BOOL SwCntntFrm::LeftMargin(SwPaM *pPam) const
+sal_Bool SwCntntFrm::LeftMargin(SwPaM *pPam) const
 {
     if( pPam->GetNode() != (SwCntntNode*)GetNode() )
-        return FALSE;
+        return sal_False;
     ((SwCntntNode*)GetNode())->
         MakeStartIndex((SwIndex *) &pPam->GetPoint()->nContent);
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SwCntntFrm::RightMargin(SwPaM *pPam, BOOL) const
+sal_Bool SwCntntFrm::RightMargin(SwPaM *pPam, sal_Bool) const
 {
     if( pPam->GetNode() != (SwCntntNode*)GetNode() )
-        return FALSE;
+        return sal_False;
     ((SwCntntNode*)GetNode())->
         MakeEndIndex((SwIndex *) &pPam->GetPoint()->nContent);
-    return TRUE;
+    return sal_True;
 }
 
 const SwCntntFrm *lcl_GetNxtCnt( const SwCntntFrm* pCnt )
@@ -538,7 +538,7 @@ const SwCntntFrm *lcl_GetPrvCnt( const SwCntntFrm* pCnt )
 typedef const SwCntntFrm *(*GetNxtPrvCnt)( const SwCntntFrm* );
 
 //Frame in wiederholter Headline?
-BOOL lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
+sal_Bool lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
                                     const SwTabFrm** ppTFrm = 0 )
 {
     const SwTabFrm *pTab = pFrm->FindTabFrm();
@@ -554,13 +554,13 @@ BOOL lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
 // FME: Skip follow flow cells
 const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
                                                        GetNxtPrvCnt fnNxtPrv,
-                                                       BOOL bMissHeadline,
-                                                       BOOL bInReadOnly,
-                                                       BOOL bMissFollowFlowLine )
+                                                       sal_Bool bMissHeadline,
+                                                       sal_Bool bInReadOnly,
+                                                       sal_Bool bMissFollowFlowLine )
 {
     if ( pCnt && pCnt->IsInTab() )
     {
-        BOOL bProtect = TRUE;
+        sal_Bool bProtect = sal_True;
         while ( pCnt && bProtect )
         {
             const SwLayoutFrm *pCell = pCnt->GetUpper();
@@ -569,9 +569,9 @@ const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
             if ( !pCell ||
                     (( ( bInReadOnly || !pCell->GetFmt()->GetProtect().IsCntntProtected() ) &&
                       ( !bMissHeadline || !lcl_IsInRepeatedHeadline( pCell ) ) &&
-                      ( !bMissFollowFlowLine || !pCell->IsInFollowFlowRow() ) ) &&
-                        !pCell->IsCoveredCell()) )
-                bProtect = FALSE;
+                      ( !bMissFollowFlowLine || !pCell->IsInFollowFlowRow() ) &&
+                       !pCell->IsCoveredCell()) ) )
+                bProtect = sal_False;
             else
                 pCnt = (*fnNxtPrv)( pCnt );
         }
@@ -583,8 +583,8 @@ const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
     return pCnt;
 }
 
-BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
-                    GetNxtPrvCnt fnNxtPrv, BOOL bInReadOnly )
+sal_Bool MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
+                    GetNxtPrvCnt fnNxtPrv, sal_Bool bInReadOnly )
 {
     OSL_ENSURE( pPam->GetNode() == (SwCntntNode*)pStart->GetNode(),
             "lcl_UpDown arbeitet nicht fuer andere." );
@@ -594,10 +594,10 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
     //Wenn gerade eine Tabellenselection laeuft muss ein bischen getricktst
     //werden: Beim hochlaufen an den Anfang der Zelle gehen, beim runterlaufen
     //an das Ende der Zelle gehen.
-    BOOL bTblSel = false;
+    sal_Bool bTblSel = false;
     if ( pStart->IsInTab() &&
-        pPam->GetNode( TRUE )->StartOfSectionNode() !=
-        pPam->GetNode( FALSE )->StartOfSectionNode() )
+        pPam->GetNode( sal_True )->StartOfSectionNode() !=
+        pPam->GetNode( sal_False )->StartOfSectionNode() )
     {
         bTblSel = true;
         const SwLayoutFrm  *pCell = pStart->GetUpper();
@@ -630,13 +630,13 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
     }
 
     pCnt = (*fnNxtPrv)( pCnt ? pCnt : pStart );
-    pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
+    pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, sal_True, bInReadOnly, bTblSel );
 
 
     const SwTabFrm *pStTab = pStart->FindTabFrm();
     const SwTabFrm *pTable = 0;
-    const BOOL bTab = pStTab || (pCnt && pCnt->IsInTab()) ? TRUE : FALSE;
-    BOOL bEnd = bTab ? FALSE : TRUE;
+    const sal_Bool bTab = pStTab || (pCnt && pCnt->IsInTab()) ? sal_True : sal_False;
+    sal_Bool bEnd = bTab ? sal_False : sal_True;
 
     const SwFrm* pVertRefFrm = pStart;
     if ( bTblSel && pStTab )
@@ -711,7 +711,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                              (pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow())))
             {
                 pCnt = (*fnNxtPrv)( pCnt );
-                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
+                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, sal_True, bInReadOnly, bTblSel );
             }
         }
 
@@ -723,7 +723,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                             (pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow())))
             {
                 pCnt = (*fnNxtPrv)( pCnt );
-                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
+                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, sal_True, bInReadOnly, bTblSel );
             }
         }
 
@@ -734,7 +734,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             if ( pCnt && pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow() )
             {
                 pCnt = (*fnNxtPrv)( pCnt );
-                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
+                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, sal_True, bInReadOnly, bTblSel );
             }
         }
 
@@ -745,11 +745,11 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             const SwFrm *pUp = pStart->GetUpper();               //Head/Foot
             while ( pUp && pUp->GetUpper() && !(pUp->GetType() & 0x0018 ) )
                 pUp = pUp->GetUpper();
-            BOOL bSame = FALSE;
+            sal_Bool bSame = sal_False;
             const SwFrm *pCntUp = pCnt->GetUpper();
             while ( pCntUp && !bSame )
             {   if ( pUp == pCntUp )
-                    bSame = TRUE;
+                    bSame = sal_True;
                 else
                     pCntUp = pCntUp->GetUpper();
             }
@@ -758,18 +758,18 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             else if ( pCnt && pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow() ) // i73332
             {
                 pCnt = (*fnNxtPrv)( pCnt );
-                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
+                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, sal_True, bInReadOnly, bTblSel );
             }
         }
 
         if ( bTab )
         {
             if ( !pCnt )
-                bEnd = TRUE;
+                bEnd = sal_True;
             else
             {   const SwTabFrm *pTab = pCnt->FindTabFrm();
                 if( !pTab )
-                    bEnd = TRUE;
+                    bEnd = sal_True;
                 else
                 {
                     if ( pTab != pTable )
@@ -816,7 +816,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
 
                     if ( pCell && pCell->Frm().IsInside( aInsideCell ) )
                     {
-                        bEnd = TRUE;
+                        bEnd = sal_True;
                         //Jetzt noch schnell den richtigen Cntnt in der Zelle
                         //greifen.
                         if ( !pCnt->Frm().IsInside( aInsideCnt ) )
@@ -828,13 +828,13 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                         }
                     }
                     else if ( pCnt->Frm().IsInside( aInsideCnt ) )
-                        bEnd = TRUE;
+                        bEnd = sal_True;
                 }
             }
             if ( !bEnd )
             {
                 pCnt = (*fnNxtPrv)( pCnt );
-                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
+                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, sal_True, bInReadOnly, bTblSel );
             }
         }
 
@@ -849,17 +849,17 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             pCNd->MakeEndIndex( (SwIndex*)&pPam->GetPoint()->nContent );
         else
             pCNd->MakeStartIndex( (SwIndex*)&pPam->GetPoint()->nContent );
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SwCntntFrm::UnitUp( SwPaM* pPam, const SwTwips, BOOL bInReadOnly ) const
+sal_Bool SwCntntFrm::UnitUp( SwPaM* pPam, const SwTwips, sal_Bool bInReadOnly ) const
 {
     return ::lcl_UpDown( pPam, this, lcl_GetPrvCnt, bInReadOnly );
 }
 
-BOOL SwCntntFrm::UnitDown( SwPaM* pPam, const SwTwips, BOOL bInReadOnly ) const
+sal_Bool SwCntntFrm::UnitDown( SwPaM* pPam, const SwTwips, sal_Bool bInReadOnly ) const
 {
     return ::lcl_UpDown( pPam, this, lcl_GetNxtCnt, bInReadOnly );
 }
@@ -875,13 +875,13 @@ BOOL SwCntntFrm::UnitDown( SwPaM* pPam, const SwTwips, BOOL bInReadOnly ) const
 |*          Es wird nur auf den vorhandenen Seiten gearbeitet!
 |*
 |*************************************************************************/
-USHORT SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
+sal_uInt16 SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
 {
     OSL_ENSURE( pActualCrsr, "Welche Seite soll's denn sein?" );
-    const SwFrm *pActFrm = GetFmt()->GetDoc()->GetNodes()[pActualCrsr->GetPoint()->nNode]->
+    SwFrm const*const pActFrm = pActualCrsr->GetPoint()->nNode.GetNode().
                                     GetCntntNode()->GetFrm( 0,
                                                     pActualCrsr->GetPoint(),
-                                                    FALSE );
+                                                    sal_False );
     return pActFrm->FindPageFrm()->GetPhyPageNum();
 }
 
@@ -897,12 +897,12 @@ USHORT SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
 |*          gewaehlt wurde.
 |*
 |*************************************************************************/
-USHORT SwRootFrm::SetCurrPage( SwCursor* pToSet, USHORT nPageNum )
+sal_uInt16 SwRootFrm::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
 {
     OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "Keine Seite vorhanden." );
 
     SwPageFrm *pPage = (SwPageFrm*)Lower();
-    BOOL bEnd =FALSE;
+    sal_Bool bEnd =sal_False;
     while ( !bEnd && pPage->GetPhyPageNum() != nPageNum )
     {   if ( pPage->GetNext() )
             pPage = (SwPageFrm*)pPage->GetNext();
@@ -921,7 +921,7 @@ USHORT SwRootFrm::SetCurrPage( SwCursor* pToSet, USHORT nPageNum )
             if ( pPage->GetNext() )
                 pPage = (SwPageFrm*)pPage->GetNext();
             else
-                bEnd = TRUE;
+                bEnd = sal_True;
         }
     }
     //pPage zeigt jetzt auf die 'gewuenschte' Seite. Jetzt muss noch der
@@ -1018,18 +1018,18 @@ SwWhichPage fnPageNext = GetNextFrm;
 //den Parameter fnPosPage) in der
 //aktuellen/vorhergehenden/folgenden Seite (gesteuert durch den
 //Parameter fnWhichPage).
-BOOL GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
+sal_Bool GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
                    SwPosPage fnPosPage, SwPaM *pPam )
 {
     //Erstmal die gewuenschte Seite besorgen, anfangs die aktuelle, dann
     //die die per fnWichPage gewuenscht wurde
     const SwLayoutFrm *pLayoutFrm = pCnt->FindPageFrm();
     if ( !pLayoutFrm || (0 == (pLayoutFrm = (*fnWhichPage)(pLayoutFrm))) )
-        return FALSE;
+        return sal_False;
 
     //Jetzt den gewuenschen CntntFrm unterhalb der Seite
     if( 0 == (pCnt = (*fnPosPage)(pLayoutFrm)) )
-        return FALSE;
+        return sal_False;
     else
     {
         // repeated headlines in tables
@@ -1049,7 +1049,7 @@ BOOL GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
                         // of the next row
                         pCnt = pRow->ContainsCntnt();
                         if ( ! pCnt )
-                            return FALSE;
+                            return sal_False;
                     }
                 }
             }
@@ -1064,7 +1064,7 @@ BOOL GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
             nIdx = pCnt->GetFollow() ?
                     ((SwTxtFrm*)pCnt)->GetFollow()->GetOfst()-1 : pCNd->Len();
         pPam->GetPoint()->nContent.Assign( pCNd, nIdx );
-        return TRUE;
+        return sal_True;
     }
 }
 
@@ -1081,7 +1081,7 @@ BOOL GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
 |*                      innerhalb der PrtArea des gefundenen CntntFrm
 |*
 |*************************************************************************/
-ULONG CalcDiff( const Point &rPt1, const Point &rPt2 )
+sal_uLong CalcDiff( const Point &rPt1, const Point &rPt2 )
 {
     //Jetzt die Entfernung zwischen den beiden Punkten berechnen.
     //'Delta' X^2 + 'Delta'Y^2 = 'Entfernung'^2
@@ -1120,11 +1120,11 @@ const SwLayoutFrm* lcl_Inside( const SwCntntFrm *pCnt, Point& rPt )
 }
 
 const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
-                                            const BOOL bDontLeave,
-                                            const BOOL bBodyOnly,
-                                            const BOOL bCalc,
+                                            const sal_Bool bDontLeave,
+                                            const sal_Bool bBodyOnly,
+                                            const sal_Bool bCalc,
                                             const SwCrsrMoveState *pCMS,
-                                            const BOOL bDefaultExpand ) const
+                                            const sal_Bool bDefaultExpand ) const
 {
     //Ersten CntntFrm ermitteln.
     const SwLayoutFrm *pStart = (!bDontLeave && bDefaultExpand && GetPrev()) ?
@@ -1140,11 +1140,11 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
 
     const SwCntntFrm *pActual= pCntnt;
     const SwLayoutFrm *pInside = NULL;
-    USHORT nMaxPage = GetPhyPageNum() + (bDefaultExpand ? 1 : 0);
+    sal_uInt16 nMaxPage = GetPhyPageNum() + (bDefaultExpand ? 1 : 0);
     Point aPoint = rPoint;
-    ULONG nDistance = ULONG_MAX;
+    sal_uLong nDistance = ULONG_MAX;
 
-    while ( TRUE )  //Sicherheitsschleifchen, damit immer einer gefunden wird.
+    while ( sal_True )  //Sicherheitsschleifchen, damit immer einer gefunden wird.
     {
         while ( pCntnt &&
                 ((!bDontLeave || IsAnLower( pCntnt )) &&
@@ -1156,8 +1156,8 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
                 //Wenn der Cntnt in einem geschuetzen Bereich (Zelle, Ftn, Section)
                 //liegt, wird der nachste Cntnt der nicht geschuetzt ist gesucht.
                 const SwCntntFrm *pComp = pCntnt;
-                pCntnt = ::lcl_MissProtectedFrames( pCntnt, lcl_GetNxtCnt, FALSE,
-                                        pCMS ? pCMS->bSetInReadOnly : FALSE, FALSE );
+                pCntnt = ::lcl_MissProtectedFrames( pCntnt, lcl_GetNxtCnt, sal_False,
+                                        pCMS ? pCMS->bSetInReadOnly : sal_False, sal_False );
                 if ( pComp != pCntnt )
                     continue;
 
@@ -1195,13 +1195,13 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
                     if( !pInside || ( pInside->IsAnLower( pCntnt ) &&
                         ( !pCntnt->IsInFtn() || pInside->IsFtnContFrm() ) ) )
                     {
-                        const ULONG nDiff = ::CalcDiff( aCntntPoint, rPoint );
-                        BOOL bBetter = nDiff < nDistance;  // Dichter dran
+                        const sal_uLong nDiff = ::CalcDiff( aCntntPoint, rPoint );
+                        sal_Bool bBetter = nDiff < nDistance;  // Dichter dran
                         if( !pInside )
                         {
                             pInside = lcl_Inside( pCntnt, rPoint );
                             if( pInside )  // Im "richtigen" Seitenteil
-                                bBetter = TRUE;
+                                bBetter = sal_True;
                         }
                         if( bBetter )
                         {
@@ -1276,7 +1276,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
         const SwTabFrm *pTab = pActual->FindTabFrm();
         if ( pTab->IsFollow() && pTab->IsInHeadline( *pActual ) )
         {
-            ((SwCrsrMoveState*)pCMS)->bStop = TRUE;
+            ((SwCrsrMoveState*)pCMS)->bStop = sal_True;
             return 0;
         }
     }
@@ -1351,7 +1351,7 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
 
     const SwCntntFrm *pAct = pCntnt;
     Point aAct       = rPt;
-    ULONG nDist      = ULONG_MAX;
+    sal_uLong nDist      = ULONG_MAX;
 
     while ( pCntnt )
     {
@@ -1378,7 +1378,7 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
         else if ( aCntFrm.Right() < rPt.X() )
             aPoint.X() = aCntFrm.Right();
 
-        const ULONG nDiff = ::CalcDiff( aPoint, rPt );
+        const sal_uLong nDiff = ::CalcDiff( aPoint, rPt );
         if ( nDiff < nDist )
         {
             aAct    = aPoint;
@@ -1435,14 +1435,14 @@ class DisableCallbackAction
 {
     private:
         SwRootFrm& mrRootFrm;
-        BOOL mbOldCallbackActionState;
+        sal_Bool mbOldCallbackActionState;
 
     public:
         DisableCallbackAction( const SwRootFrm& _rRootFrm ) :
             mrRootFrm( const_cast<SwRootFrm&>(_rRootFrm) ),
             mbOldCallbackActionState( _rRootFrm.IsCallbackActionEnabled() )
         {
-            mrRootFrm.SetCallbackActionEnabled( FALSE );
+            mrRootFrm.SetCallbackActionEnabled( sal_False );
         }
 
         ~DisableCallbackAction()
@@ -1454,7 +1454,7 @@ class DisableCallbackAction
 
 //!!!!! Es wird nur der vertikal naechstliegende gesucht.
 //JP 11.10.2001: only in tables we try to find the right column - Bug 72294
-Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, BOOL bNext ) const
+Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, sal_Bool bNext ) const
 {
     // --> OD 2005-05-25 #123110# - disable creation of an action by a callback
     // event during processing of this method. Needed because formatting is
@@ -1542,18 +1542,18 @@ Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, BOOL bNext ) const
 |*
 |*  Beschreibung:   Liefert die absolute Dokumentpositon der gewuenschten
 |*          Seite.
-|*          Formatiert wird nur soweit notwendig und nur dann wenn bFormat=TRUE
+|*          Formatiert wird nur soweit notwendig und nur dann wenn bFormat=sal_True
 |*          Liefert Null, wenn die Operation nicht moeglich ist.
 |*          Die Pos ist die der letzten Seite, wenn die Seitenzahl zu gross
 |*          gewaehlt wurde.
 |*
 |*************************************************************************/
-Point SwRootFrm::GetPagePos( USHORT nPageNum ) const
+Point SwRootFrm::GetPagePos( sal_uInt16 nPageNum ) const
 {
     OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "Keine Seite vorhanden." );
 
     const SwPageFrm *pPage = (const SwPageFrm*)Lower();
-    while ( TRUE )
+    while ( sal_True )
     {
         if ( pPage->GetPhyPageNum() >= nPageNum || !pPage->GetNext() )
             break;
@@ -1588,20 +1588,20 @@ SwPageFrm* SwRootFrm::GetPageByPageNum( sal_uInt16 _nPageNum ) const
 
 /*************************************************************************
 |*
-|*  SwRootFrm::IsDummyPage(USHORT)
+|*  SwRootFrm::IsDummyPage(sal_uInt16)
 |*
-|*  Description: Returns TRUE, when the given physical pagenumber does't exist
+|*  Description: Returns sal_True, when the given physical pagenumber does't exist
 |*               or this page is an empty page.
 |*************************************************************************/
-BOOL SwRootFrm::IsDummyPage( USHORT nPageNum ) const
+sal_Bool SwRootFrm::IsDummyPage( sal_uInt16 nPageNum ) const
 {
     if( !Lower() || !nPageNum || nPageNum > GetPageNum() )
-        return TRUE;
+        return sal_True;
 
     const SwPageFrm *pPage = (const SwPageFrm*)Lower();
     while( pPage && nPageNum < pPage->GetPhyPageNum() )
         pPage = (const SwPageFrm*)pPage->GetNext();
-    return pPage ? pPage->IsEmptyPage() : TRUE;
+    return pPage ? pPage->IsEmptyPage() : sal_True;
 }
 
 
@@ -1615,7 +1615,7 @@ BOOL SwRootFrm::IsDummyPage( USHORT nPageNum ) const
 |*
 |*
 |*************************************************************************/
-BOOL SwFrm::IsProtected() const
+sal_Bool SwFrm::IsProtected() const
 {
     if (this->IsCntntFrm() && ((SwCntntFrm*)this)->GetNode())
     {
@@ -1623,7 +1623,7 @@ BOOL SwFrm::IsProtected() const
         bool isFormProtected=pDoc->get(IDocumentSettingAccess::PROTECT_FORM );
         if (isFormProtected)
         {
-            return FALSE; // TODO a hack for now, well deal with it laster, I we return true here we have a "double" locking
+            return sal_False; // TODO a hack for now, well deal with it laster, I we return true here we have a "double" locking
         }
     }
     //Der Frm kann in Rahmen, Zellen oder Bereichen geschuetzt sein.
@@ -1635,16 +1635,16 @@ BOOL SwFrm::IsProtected() const
         {
             if ( ((SwCntntFrm*)pFrm)->GetNode() &&
                  ((SwCntntFrm*)pFrm)->GetNode()->IsInProtectSect() )
-                return TRUE;
+                return sal_True;
         }
         else
         {
             if ( ((SwLayoutFrm*)pFrm)->GetFmt() &&
                  ((SwLayoutFrm*)pFrm)->GetFmt()->
                  GetProtect().IsCntntProtected() )
-                return TRUE;
+                return sal_True;
             if ( pFrm->IsCoveredCell() )
-                return TRUE;
+                return sal_True;
         }
         if ( pFrm->IsFlyFrm() )
         {
@@ -1657,7 +1657,7 @@ BOOL SwFrm::IsProtected() const
                 {   pMaster = pMaster->GetPrevLink();
                 } while ( pMaster->GetPrevLink() );
                 if ( pMaster->IsProtected() )
-                    return TRUE;
+                    return sal_True;
             }
             pFrm = ((SwFlyFrm*)pFrm)->GetAnchorFrm();
         }
@@ -1668,7 +1668,7 @@ BOOL SwFrm::IsProtected() const
 
     } while ( pFrm );
 
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -1678,7 +1678,7 @@ BOOL SwFrm::IsProtected() const
 |*
 |*
 |*************************************************************************/
-USHORT SwFrm::GetPhyPageNum() const
+sal_uInt16 SwFrm::GetPhyPageNum() const
 {
     const SwPageFrm *pPage = FindPageFrm();
     return pPage ? pPage->GetPhyPageNum() : 0;
@@ -1698,15 +1698,15 @@ USHORT SwFrm::GetPhyPageNum() const
  * but a previous empty page don't count.
  * --------------------------------------------------*/
 
-BOOL SwFrm::WannaRightPage() const
+sal_Bool SwFrm::WannaRightPage() const
 {
     const SwPageFrm *pPage = FindPageFrm();
     if ( !pPage || !pPage->GetUpper() )
-        return TRUE;
+        return sal_True;
 
     const SwFrm *pFlow = pPage->FindFirstBodyCntnt();
     SwPageDesc *pDesc = 0;
-    USHORT nPgNum = 0;
+    sal_uInt16 nPgNum = 0;
     if ( pFlow )
     {
         if ( pFlow->IsInTab() )
@@ -1733,9 +1733,9 @@ BOOL SwFrm::WannaRightPage() const
         }
     }
     OSL_ENSURE( pDesc, "No pagedescriptor" );
-    BOOL bOdd;
+    sal_Bool bOdd;
     if( nPgNum )
-        bOdd = nPgNum % 2 ? TRUE : FALSE;
+        bOdd = nPgNum % 2 ? sal_True : sal_False;
     else
     {
         bOdd = pPage->OnRightPage();
@@ -1745,9 +1745,9 @@ BOOL SwFrm::WannaRightPage() const
     if( !pPage->IsEmptyPage() )
     {
         if( !pDesc->GetRightFmt() )
-            bOdd = FALSE;
+            bOdd = sal_False;
         else if( !pDesc->GetLeftFmt() )
-            bOdd = TRUE;
+            bOdd = sal_True;
     }
     return bOdd;
 }
@@ -1758,13 +1758,13 @@ BOOL SwFrm::WannaRightPage() const
 |*    Beschreibung:     Liefert die virtuelle Seitennummer mit Offset
 |*
 |*************************************************************************/
-USHORT SwFrm::GetVirtPageNum() const
+sal_uInt16 SwFrm::GetVirtPageNum() const
 {
     const SwPageFrm *pPage = FindPageFrm();
     if ( !pPage || !pPage->GetUpper() )
         return 0;
 
-    USHORT nPhyPage = pPage->GetPhyPageNum();
+    sal_uInt16 nPhyPage = pPage->GetPhyPageNum();
     if ( !((SwRootFrm*)pPage->GetUpper())->IsVirtPageNum() )
         return nPhyPage;
 
@@ -1777,10 +1777,10 @@ USHORT SwFrm::GetVirtPageNum() const
     const SwFrm *pFrm = 0;
     const SfxItemPool &rPool = pPage->GetFmt()->GetDoc()->GetAttrPool();
     const SfxPoolItem* pItem;
-    USHORT nMaxItems = rPool.GetItemCount( RES_PAGEDESC );
-    for( USHORT n = 0; n < nMaxItems; ++n )
+    sal_uInt32 nMaxItems = rPool.GetItemCount2( RES_PAGEDESC );
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
-        if( 0 == (pItem = rPool.GetItem( RES_PAGEDESC, n ) ))
+        if( 0 == (pItem = rPool.GetItem2( RES_PAGEDESC, n ) ))
             continue;
 
         const SwFmtPageDesc *pDesc = (SwFmtPageDesc*)pItem;
@@ -1817,7 +1817,7 @@ USHORT SwFrm::GetVirtPageNum() const
 bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 {
     //Union-Rects und Tabellen (Follows) der Selektion besorgen.
-    OSL_ENSURE( rTblCrsr.GetCntntNode() && rTblCrsr.GetCntntNode( FALSE ),
+    OSL_ENSURE( rTblCrsr.GetCntntNode() && rTblCrsr.GetCntntNode( sal_False ),
             "Tabselection nicht auf Cnt." );
 
     bool bRet = false;
@@ -1839,10 +1839,10 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 
     // --> FME 2008-01-14 #151012# Made code robust here:
     const SwCntntNode* pTmpStartNode = rTblCrsr.GetCntntNode();
-    const SwCntntNode* pTmpEndNode   = rTblCrsr.GetCntntNode(FALSE);
+    const SwCntntNode* pTmpEndNode   = rTblCrsr.GetCntntNode(sal_False);
 
-    const SwFrm* pTmpStartFrm = pTmpStartNode ? pTmpStartNode->GetFrm( &aPtPt, 0, FALSE ) : 0;
-    const SwFrm* pTmpEndFrm   = pTmpEndNode   ?   pTmpEndNode->GetFrm( &aMkPt, 0, FALSE ) : 0;
+    const SwFrm* pTmpStartFrm = pTmpStartNode ? pTmpStartNode->GetFrm( &aPtPt, 0, sal_False ) : 0;
+    const SwFrm* pTmpEndFrm   = pTmpEndNode   ?   pTmpEndNode->GetFrm( &aMkPt, 0, sal_False ) : 0;
 
     const SwLayoutFrm* pStart = pTmpStartFrm ? pTmpStartFrm->GetUpper() : 0;
     const SwLayoutFrm* pEnd   = pTmpEndFrm   ? pTmpEndFrm->GetUpper() : 0;
@@ -1860,9 +1860,9 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 
         SwSelBoxes aNew;
 
-        const BOOL bReadOnlyAvailable = rTblCrsr.IsReadOnlyAvailable();
+        const sal_Bool bReadOnlyAvailable = rTblCrsr.IsReadOnlyAvailable();
 
-        for ( USHORT i = 0; i < aUnions.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < aUnions.Count(); ++i )
         {
             SwSelUnion *pUnion = aUnions[i];
             const SwTabFrm *pTable = pUnion->GetTable();
@@ -1969,9 +1969,8 @@ inline void Sub( SwRegionRects& rRegion, const SwRect& rRect )
         rRegion -= rRect;
 }
 
-void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
+void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
 {
-    const SwNodes &rNds = GetFmt()->GetDoc()->GetNodes();
     SwPosition *pStartPos = rCrsr.Start(),
                *pEndPos   = rCrsr.GetPoint() == pStartPos ?
                             rCrsr.GetMark() : rCrsr.GetPoint();
@@ -1994,10 +1993,10 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
 
     //Erstmal die CntntFrms zum Start und End besorgen, die brauch ich auf
     //jedenfall.
-    const SwCntntFrm *pStartFrm = rNds[ pStartPos->nNode ]->
+    SwCntntFrm const* pStartFrm = pStartPos->nNode.GetNode().
         GetCntntNode()->GetFrm( &rCrsr.GetSttPos(), pStartPos );
 
-    const SwCntntFrm *pEndFrm   = rNds[ pEndPos->nNode ]->
+    SwCntntFrm const* pEndFrm   = pEndPos->nNode.GetNode().
         GetCntntNode()->GetFrm( &rCrsr.GetEndPos(), pEndPos );
 
     OSL_ENSURE( (pStartFrm && pEndFrm), "Keine CntntFrms gefunden." );
@@ -2033,7 +2032,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
         // nicht erlaubt ist Header/Footer/TableHeadline ueber 2 Seiten
         do {    // middle check loop
             const SwLayoutFrm* pSttLFrm = pStartFrm->GetUpper();
-            const USHORT cHdFtTblHd = FRM_HEADER | FRM_FOOTER | FRM_TAB;
+            const sal_uInt16 cHdFtTblHd = FRM_HEADER | FRM_FOOTER | FRM_TAB;
             while( pSttLFrm &&
                 ! (cHdFtTblHd & pSttLFrm->GetType() ))
                 pSttLFrm = pSttLFrm->GetUpper();
@@ -2085,7 +2084,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                 }
                 break;
             }
-        } while( FALSE );
+        } while( sal_False );
 
         SwCrsrMoveState aTmpState( MV_NONE );
         aTmpState.b2Lines = sal_True;
@@ -2109,8 +2108,8 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
         if( pStartFrm != pEndFrm )
             aEndFrm.Intersection( pEndFrm->PaintArea() );
         SWRECTFN( pStartFrm )
-        const BOOL bR2L = pStartFrm->IsRightToLeft();
-        const BOOL bEndR2L = pEndFrm->IsRightToLeft();
+        const sal_Bool bR2L = pStartFrm->IsRightToLeft();
+        const sal_Bool bEndR2L = pEndFrm->IsRightToLeft();
 
         // If there's no doubleline portion involved or start and end are both
         // in the same doubleline portion, all works fine, but otherwise
@@ -2454,7 +2453,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             }
 
             //Now the frames between, if there are any
-            BOOL bBody = pStartFrm->IsInDocBody();
+            sal_Bool bBody = pStartFrm->IsInDocBody();
             const SwTableBox* pCellBox = pStartFrm->GetUpper()->IsCellFrm() ?
                                          ((SwCellFrm*)pStartFrm->GetUpper())->GetTabBox() : 0;
             const SwCntntFrm *pCntnt = pStartFrm->GetNextCntntFrm();
@@ -2514,7 +2513,8 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             //At least the endframe...
             bVert = pEndFrm->IsVertical();
             bRev = pEndFrm->IsReverse();
-            fnRect = bVert ? ( bRev ? fnRectVL2R : fnRectVert ) :
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            fnRect = bVert ? ( bRev ? fnRectVL2R : ( pEndFrm->IsVertLR() ? fnRectVertL2R : fnRectVert ) ) :
                              ( bRev ? fnRectB2T : fnRectHori );
             nTmpTwips = (aEndRect.*fnRect->fnGetTop)();
             if( (aEndFrm.*fnRect->fnGetTop)() != nTmpTwips )
@@ -2531,7 +2531,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             Sub( aRegion, aSubRect );
         }
 
-//      aRegion.Compress( FALSE );
+//      aRegion.Compress( sal_False );
         aRegion.Invert();
         delete pSt2Pos;
         delete pEnd2Pos;
@@ -2550,7 +2550,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
         if ( pPage->GetSortedObjs() )
         {
             const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-            for ( USHORT i = 0; i < rObjs.Count(); ++i )
+            for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 if ( !pAnchoredObj->ISA(SwFlyFrm) )
@@ -2565,16 +2565,16 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                     if ( aSortObjs.Contains( *pAnchoredObj ) )
                         continue;
 
-                    BOOL bSub = TRUE;
-                    const UINT32 nPos = pObj->GetOrdNum();
-                    for ( USHORT k = 0; bSub && k < aSortObjs.Count(); ++k )
+                    sal_Bool bSub = sal_True;
+                    const sal_uInt32 nPos = pObj->GetOrdNum();
+                    for ( sal_uInt16 k = 0; bSub && k < aSortObjs.Count(); ++k )
                     {
                         OSL_ENSURE( aSortObjs[k]->ISA(SwFlyFrm),
                                 "<SwRootFrm::CalcFrmRects(..)> - object in <aSortObjs> of unexcepted type" );
                         const SwFlyFrm* pTmp = static_cast<SwFlyFrm*>(aSortObjs[k]);
                         do
                         {   if ( nPos < pTmp->GetVirtDrawObj()->GetOrdNumDirect() )
-                                bSub = FALSE;
+                                bSub = sal_False;
                             else
                                 pTmp = pTmp->GetAnchorFrm()->FindFlyFrm();
                         } while ( bSub && pTmp );

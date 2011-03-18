@@ -132,7 +132,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
     {
         m_aLoadTemplateRB.Check();
         SfxNewFileDialog* pNewFileDlg = new SfxNewFileDialog(this, 0);
-        USHORT nRet = pNewFileDlg->Execute();
+        sal_uInt16 nRet = pNewFileDlg->Execute();
         if(RET_TEMPLATE_LOAD == nRet)
             bTemplate = false;
         else if(RET_CANCEL != nRet)

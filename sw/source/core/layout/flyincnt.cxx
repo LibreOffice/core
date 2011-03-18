@@ -53,7 +53,7 @@ void DeepCalc( const SwFrm *pFrm );
 SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     SwFlyFrm( pFmt, pAnch )
 {
-    bInCnt = bInvalidLayout = bInvalidCntnt = TRUE;
+    bInCnt = bInvalidLayout = bInvalidCntnt = sal_True;
     SwTwips nRel = pFmt->GetVertOrient().GetPos();
     // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
     Point aRelPos;
@@ -103,8 +103,8 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
     if( pNotify )
     {
         InvalidatePage();
-        bValidPos = FALSE;
-        bInvalid  = TRUE;
+        bValidPos = sal_False;
+        bInvalid  = sal_True;
         Calc();
         delete pNotify;
     }
@@ -117,14 +117,14 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
 |*************************************************************************/
 void SwFlyInCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
-    BOOL bCallPrepare = FALSE;
-    USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    sal_Bool bCallPrepare = sal_False;
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     if( RES_ATTRSET_CHG == nWhich )
     {
         if( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
-            GetItemState( RES_SURROUND, FALSE ) ||
+            GetItemState( RES_SURROUND, sal_False ) ||
             SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
-            GetItemState( RES_FRMMACRO, FALSE ) )
+            GetItemState( RES_FRMMACRO, sal_False ) )
         {
             SwAttrSetChg aOld( *(SwAttrSetChg*)pOld );
             SwAttrSetChg aNew( *(SwAttrSetChg*)pNew );
@@ -136,19 +136,19 @@ void SwFlyInCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             if( aNew.Count() )
             {
                 SwFlyFrm::Modify( &aOld, &aNew );
-                bCallPrepare = TRUE;
+                bCallPrepare = sal_True;
             }
         }
         else if( ((SwAttrSetChg*)pNew)->GetChgSet()->Count())
         {
             SwFlyFrm::Modify( pOld, pNew );
-            bCallPrepare = TRUE;
+            bCallPrepare = sal_True;
         }
     }
     else if( nWhich != RES_SURROUND && RES_FRMMACRO != nWhich )
     {
         SwFlyFrm::Modify( pOld, pNew );
-        bCallPrepare = TRUE;
+        bCallPrepare = sal_True;
     }
 
     if ( bCallPrepare && GetAnchorFrm() )
@@ -190,7 +190,7 @@ void SwFlyInCntFrm::MakeObjPos()
 {
     if ( !bValidPos )
     {
-        bValidPos = TRUE;
+        bValidPos = sal_True;
         SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
         const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
         //Und ggf. noch die aktuellen Werte im Format updaten, dabei darf
@@ -281,14 +281,14 @@ void SwFlyInCntFrm::MakeAll()
     const SwBorderAttrs &rAttrs = *aAccess.Get();
 
     if ( IsClipped() )
-        bValidSize = bHeightClipped = bWidthClipped = FALSE;
+        bValidSize = bHeightClipped = bWidthClipped = sal_False;
 
     while ( !bValidPos || !bValidSize || !bValidPrtArea )
     {
         //Nur einstellen wenn das Flag gesetzt ist!!
         if ( !bValidSize )
         {
-            bValidPrtArea = FALSE;
+            bValidPrtArea = sal_False;
 /*
             // This is also done in the Format function, so I think
             // this code is not necessary anymore:
@@ -326,8 +326,8 @@ void SwFlyInCntFrm::MakeAll()
                  Frm().Width() > pFrm->Prt().Width() )
             {
                 Frm().Width( pFrm->Prt().Width() );
-                bValidPrtArea = FALSE;
-                bWidthClipped = TRUE;
+                bValidPrtArea = sal_False;
+                bWidthClipped = sal_True;
             }
         }
         // <--

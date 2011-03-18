@@ -507,17 +507,17 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     return 0;
 }
 
-ULONG SwXMLWriter::WriteStorage()
+sal_uLong SwXMLWriter::WriteStorage()
 {
     return _Write();
 }
 
-ULONG SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
+sal_uLong SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
 {
     return _Write( &aTargetMedium );
 }
 
-ULONG SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
+sal_uLong SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
                                const String* pFileName )
 {
     return IsStgWriter()

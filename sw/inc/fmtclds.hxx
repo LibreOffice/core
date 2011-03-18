@@ -37,31 +37,31 @@
 // ColumnDescriptor
 class SwColumn
 {
-    USHORT nWish;   // Desired width, borders included.
+    sal_uInt16 nWish;   // Desired width, borders included.
                     // It is inversely proportional to the ratio of
                     // desired width environment / current width column.
-    USHORT nUpper;  // Top border.
-    USHORT nLower;  // Bottom border.
-    USHORT nLeft;   // Left border.
-    USHORT nRight;  // Right border.
+    sal_uInt16 nUpper;  // Top border.
+    sal_uInt16 nLower;  // Bottom border.
+    sal_uInt16 nLeft;   // Left border.
+    sal_uInt16 nRight;  // Right border.
 
 public:
     SwColumn();
 
-    BOOL operator==( const SwColumn & );
+    sal_Bool operator==( const SwColumn & );
 
 
-    void SetWishWidth( USHORT nNew ) { nWish  = nNew; }
-    void SetUpper( USHORT  nNew ) { nUpper = nNew; }
-    void SetLower( USHORT  nNew ) { nLower = nNew; }
-    void SetLeft ( USHORT  nNew ) { nLeft  = nNew; }
-    void SetRight( USHORT  nNew ) { nRight = nNew; }
+    void SetWishWidth( sal_uInt16 nNew ) { nWish  = nNew; }
+    void SetUpper( sal_uInt16  nNew ) { nUpper = nNew; }
+    void SetLower( sal_uInt16  nNew ) { nLower = nNew; }
+    void SetLeft ( sal_uInt16  nNew ) { nLeft  = nNew; }
+    void SetRight( sal_uInt16  nNew ) { nRight = nNew; }
 
-    USHORT GetWishWidth() const { return nWish;  }
-    USHORT GetUpper() const { return nUpper; }
-    USHORT GetLower() const { return nLower; }
-    USHORT GetLeft () const { return nLeft; }
-    USHORT GetRight() const { return nRight; }
+    sal_uInt16 GetWishWidth() const { return nWish;  }
+    sal_uInt16 GetUpper() const { return nUpper; }
+    sal_uInt16 GetLower() const { return nLower; }
+    sal_uInt16 GetLeft () const { return nLeft; }
+    sal_uInt16 GetRight() const { return nRight; }
 };
 
 typedef SwColumn* SwColumnPtr;
@@ -77,24 +77,24 @@ enum SwColLineAdj
 
 class SW_DLLPUBLIC SwFmtCol : public SfxPoolItem
 {
-    ULONG   nLineWidth;     // Width of the separator line.
-    Color   aLineColor;     // Color of the separator line.
+    sal_uLong   nLineWidth;     // Width of the separator line.
+    Color   aLineColor;     //color of the separator line
 
-    BYTE     nLineHeight;   // Percentile height of lines.
+    sal_uInt16   nLineHeight;   // Percentile height of lines.
                             // (Based on height of columns including UL).
 
     SwColLineAdj eAdj;      // Line will be adjusted top, centered or bottom.
 
     SwColumns   aColumns;   // Information concerning the columns.
-    USHORT      nWidth;     // Total desired width of all columns.
+    sal_uInt16      nWidth;     // Total desired width of all columns.
 
-    BOOL bOrtho;            // Only if this flag is set, the setting of GutterWidth will
+    sal_Bool bOrtho;            // Only if this flag is set, the setting of GutterWidth will
                             // be accompanied by a "visual rearrangement".
                             // The flag must be reset if widths of columns or borders are changed.
                             // When it is set (again) the visual arrangement is recalculated.
                             // The flag is initially set.
 
-    SW_DLLPRIVATE void Calc( USHORT nGutterWidth, USHORT nAct );
+    SW_DLLPRIVATE void Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct );
 
 public:
     SwFmtCol();
@@ -112,63 +112,63 @@ public:
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     const SwColumns &GetColumns() const { return aColumns; }
           SwColumns &GetColumns()       { return aColumns; }
-    USHORT           GetNumCols() const { return aColumns.Count(); }
+    sal_uInt16           GetNumCols() const { return aColumns.Count(); }
 
-    ULONG           GetLineWidth() const  { return nLineWidth;}
+    sal_uLong           GetLineWidth() const  { return nLineWidth;}
     const Color&    GetLineColor() const { return aLineColor;}
 
 
     SwColLineAdj     GetLineAdj() const { return eAdj; }
-    BOOL             IsOrtho()    const { return bOrtho; }
-    USHORT           GetWishWidth() const { return nWidth; }
-    BYTE             GetLineHeight()const { return nLineHeight; }
+    sal_Bool             IsOrtho()    const { return bOrtho; }
+    sal_uInt16           GetWishWidth() const { return nWidth; }
+    sal_uInt8            GetLineHeight()const { return nLineHeight; }
 
     // Return USHRT_MAX if ambiguous.
     // Return smallest width if bMin is true.
-    USHORT GetGutterWidth( BOOL bMin = FALSE ) const;
+    sal_uInt16 GetGutterWidth( sal_Bool bMin = sal_False ) const;
 
-    void SetLineWidth(ULONG nLWidth)        { nLineWidth = nLWidth;}
+    void SetLineWidth(sal_uLong nLWidth)        { nLineWidth = nLWidth;}
     void SetLineColor(const Color& rCol )   { aLineColor = rCol;}
-    void SetLineHeight( BYTE nNew )     { nLineHeight = nNew; }
+    void SetLineHeight( sal_uInt8 nNew )     { nLineHeight = nNew; }
     void SetLineAdj( SwColLineAdj eNew ){ eAdj = eNew; }
-    void SetWishWidth( USHORT nNew )    { nWidth = nNew; }
+    void SetWishWidth( sal_uInt16 nNew )    { nWidth = nNew; }
 
     // This function allows to (repeatedly) initialize the columns.
     // The Ortho flag is set automatically.
-    void Init( USHORT nNumCols, USHORT nGutterWidth, USHORT nAct );
+    void Init( sal_uInt16 nNumCols, sal_uInt16 nGutterWidth, sal_uInt16 nAct );
 
     // Adjusts borders for columns in aColumns.
     // If flag bOrtho is set, columns are visually re-arranged.
     // If the flag is not set, columns widths are not changed and
     // borders are adjusted.
-    void SetGutterWidth( USHORT nNew, USHORT nAct );
+    void SetGutterWidth( sal_uInt16 nNew, sal_uInt16 nAct );
 
     // This too re-arranges columns automatically if flag is set.
     // Only in this case the second parameter is needed and evaluated.
-    void SetOrtho( BOOL bNew, USHORT nGutterWidth, USHORT nAct );
+    void SetOrtho( sal_Bool bNew, sal_uInt16 nGutterWidth, sal_uInt16 nAct );
 
     //For the reader
-    void _SetOrtho( BOOL bNew ) { bOrtho = bNew; }
+    void _SetOrtho( sal_Bool bNew ) { bOrtho = bNew; }
 
     // Calculates current width of column nCol.
     // The ratio of desired width of this column to return value is
     // proportional to ratio of total desired value to nAct.
-    USHORT CalcColWidth( USHORT nCol, USHORT nAct ) const;
+    sal_uInt16 CalcColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) const;
 
     // As above except that it returns the width of PrtArea -
     // that corresponds to what constitutes the column for the user.
-    USHORT CalcPrtColWidth( USHORT nCol, USHORT nAct ) const;
+    sal_uInt16 CalcPrtColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) const;
 };
 
-inline const SwFmtCol &SwAttrSet::GetCol(BOOL bInP) const
+inline const SwFmtCol &SwAttrSet::GetCol(sal_Bool bInP) const
     { return (const SwFmtCol&)Get( RES_COL,bInP); }
 
-inline const SwFmtCol &SwFmt::GetCol(BOOL bInP) const
+inline const SwFmtCol &SwFmt::GetCol(sal_Bool bInP) const
     { return aSet.GetCol(bInP); }
 
 #endif

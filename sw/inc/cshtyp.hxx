@@ -49,19 +49,19 @@ extern SwPosPage fnPageStart, fnPageEnd;
 
 // Direction-parameter for MovePara (initialized in SwCntntFrm).
 typedef SwMoveFnCollection* SwPosPara;
-typedef BOOL (*SwWhichPara)( SwPaM&, SwPosPara );
+typedef sal_Bool (*SwWhichPara)( SwPaM&, SwPosPara );
 extern SwWhichPara fnParaPrev, fnParaCurr, fnParaNext;
 extern SwPosPara fnParaStart, fnParaEnd;
 
 // Direction-parameter for MoveSection.
 typedef SwMoveFnCollection* SwPosSection;
-typedef BOOL (*SwWhichSection)( SwPaM&, SwPosSection );
+typedef sal_Bool (*SwWhichSection)( SwPaM&, SwPosSection );
 extern SwWhichSection fnSectionPrev, fnSectionCurr, fnSectionNext;
 extern SwPosSection fnSectionStart, fnSectionEnd;
 
 // Direction-parameter for MoveTable
 typedef SwMoveFnCollection* SwPosTable;
-typedef BOOL (*SwWhichTable)( SwPaM&, SwPosTable, BOOL bInReadOnly );
+typedef sal_Bool (*SwWhichTable)( SwPaM&, SwPosTable, sal_Bool bInReadOnly );
 extern SwWhichTable fnTablePrev, fnTableCurr, fnTableNext;
 extern SwPosTable fnTableStart, fnTableEnd;
 
@@ -73,7 +73,7 @@ extern SwPosColumn fnColumnStart, fnColumnEnd;
 
 // Direction-parameter for MoveRegion (ranges!)
 typedef SwMoveFnCollection* SwPosRegion;
-typedef BOOL (*SwWhichRegion)( SwPaM&, SwPosRegion, BOOL bInReadOnly );
+typedef sal_Bool (*SwWhichRegion)( SwPaM&, SwPosRegion, sal_Bool bInReadOnly );
 extern SwWhichRegion fnRegionPrev, fnRegionCurr, fnRegionNext, fnRegionCurrAndSkip;
 extern SwPosRegion fnRegionStart, fnRegionEnd;
 

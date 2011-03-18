@@ -33,15 +33,14 @@
 #include "porlin.hxx"
 #include "porlay.hxx"
 #include "portxt.hxx"
+#include <libxml/xmlwriter.h>
 #include <SwPortionHandler.hxx>
-
-
 
 class XmlPortionDumper:public SwPortionHandler
 {
   private:
     xmlTextWriterPtr writer;
-    USHORT ofs;
+    sal_uInt16 ofs;
   public:
 
     XmlPortionDumper( xmlTextWriterPtr some_writer ):writer( some_writer ), ofs( 0 )
@@ -58,8 +57,8 @@ class XmlPortionDumper:public SwPortionHandler
         @param rText
                 text which is painted on-screen
       */
-    virtual void Text( USHORT nLength,
-                       USHORT nType )
+    virtual void Text( sal_uInt16 nLength,
+                       sal_uInt16 nType )
     {
         ofs += nLength;
         xmlTextWriterStartElement( writer, BAD_CAST( "Text" ) );
@@ -80,9 +79,9 @@ class XmlPortionDumper:public SwPortionHandler
         @param nType
                 type of this portion
       */
-    virtual void Special( USHORT nLength,
+    virtual void Special( sal_uInt16 nLength,
                           const String & rText,
-                          USHORT nType )
+                          sal_uInt16 nType )
     {
         xmlTextWriterStartElement( writer, BAD_CAST( "Special" ) );
         xmlTextWriterWriteFormatAttribute( writer,
@@ -111,7 +110,7 @@ class XmlPortionDumper:public SwPortionHandler
       * @param nLength
       *         number of 'model string' characters to be skipped
       */
-    virtual void Skip( USHORT nLength )
+    virtual void Skip( sal_uInt16 nLength )
     {
         xmlTextWriterStartElement( writer, BAD_CAST( "Skip" ) );
         xmlTextWriterWriteFormatAttribute( writer,
@@ -129,6 +128,7 @@ class XmlPortionDumper:public SwPortionHandler
 
 };
 
+#if OSL_DEBUG_LEVEL > 1
 
 void SwTxtPortion::dumpPortionAsXml( xub_StrLen ofs, XubString & /*aText */,
                                      xmlTextWriterPtr writer )
@@ -312,5 +312,7 @@ void SwTxtFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
     if ( HasFollow() )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%p", GetFollow() );
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -866,6 +866,12 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_NAVIGATION_FORWARD               (FN_EXTRA2 + 116)
 
 
+// #i972: bool items to be passed to SwFrmPage for evaluation
+#define FN_OLE_IS_MATH                      (FN_EXTRA2 + 114)
+#define FN_MATH_BASELINE_ALIGNMENT          (FN_EXTRA2 + 115)
+
+#define FN_EMBEDDED_OBJECT                  (FN_EXTRA2 + 116)
+
 /*------------------------------------------------ --------------------
     Area: Help
  -------------------------------------------------- ------------------*/
@@ -997,7 +1003,7 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_ENVELOP                  (FN_ENVELP    )
 
-#define FN_DELETE_NOTE              (FN_NOTES+0)
+
 #define FN_DELETE_NOTE_AUTHOR       (FN_NOTES+1)
 #define FN_DELETE_ALL_NOTES         (FN_NOTES+2)
 #define FN_HIDE_NOTE                (FN_NOTES+3)

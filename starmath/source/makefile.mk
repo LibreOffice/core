@@ -45,10 +45,13 @@ SMDLL=TRUE
 SRS2NAME =smres
 SRC2FILES = smres.src    \
             symbol.src   \
+            toolbox.src \
             commands.src
 
 SLO1FILES = \
         $(SLO)$/accessibility.obj \
+        $(SLO)$/caret.obj         \
+        $(SLO)$/cursor.obj        \
         $(SLO)$/edit.obj          \
         $(SLO)$/eqnolefilehdr.obj \
         $(SLO)$/mathmlexport.obj  \
@@ -62,21 +65,19 @@ SLO1FILES = \
         $(SLO)$/dialog.obj        \
         $(SLO)$/document.obj      \
         $(SLO)$/format.obj        \
-        $(SLO)$/mathtype.obj      \
-        $(SLO)$/node.obj          \
-        $(SLO)$/visitors.obj      \
-        $(SLO)$/caret.obj         \
-        $(SLO)$/cursor.obj        \
-        $(SLO)$/parse.obj         \
+        $(SLO)$/mathtype.obj \
+        $(SLO)$/node.obj \
+        $(SLO)$/parse.obj \
         $(SLO)$/register.obj      \
         $(SLO)$/smdll.obj         \
         $(SLO)$/toolbox.obj       \
         $(SLO)$/typemap.obj       \
         $(SLO)$/smmod.obj         \
-        $(SLO)$/utility.obj       \
+        $(SLO)$/utility.obj \
         $(SLO)$/rect.obj          \
         $(SLO)$/unomodel.obj      \
-        $(SLO)$/view.obj
+        $(SLO)$/view.obj          \
+        $(SLO)$/visitors.obj
 
 SLO2FILES = \
         $(SLO)$/register.obj \
@@ -94,9 +95,6 @@ LIB1OBJFILES = \
     $(SLO1FILES)
 
 # --- Targets -------------------------------------------------------
-
-LOCALIZE_ME =  menu_tmpl.src
-
 
 .INCLUDE :  target.mk
 

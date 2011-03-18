@@ -51,7 +51,7 @@ const long nImageHeight = 11;
 
 struct SwViewLayoutControl::SwViewLayoutControl_Impl
 {
-    USHORT      mnState; // 0 = single, 1 = auto, 2 = book, 3 = none
+    sal_uInt16      mnState; // 0 = single, 1 = auto, 2 = book, 3 = none
     Image       maImageSingleColumn;
     Image       maImageSingleColumn_Active;
     Image       maImageAutomatic;
@@ -62,7 +62,7 @@ struct SwViewLayoutControl::SwViewLayoutControl_Impl
 
 // class SwViewLayoutControl ------------------------------------------
 
-SwViewLayoutControl::SwViewLayoutControl( USHORT _nSlotId, USHORT _nId, StatusBar& rStb ) :
+SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
     mpImpl( new SwViewLayoutControl_Impl )
 {
@@ -81,14 +81,14 @@ SwViewLayoutControl::~SwViewLayoutControl()
     delete mpImpl;
 }
 
-void SwViewLayoutControl::StateChanged( USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
+void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE != eState || pState->ISA( SfxVoidItem ) )
         GetStatusBar().SetItemText( GetId(), String() );
     else
     {
         OSL_ENSURE( pState->ISA( SvxViewLayoutItem ), "invalid item type" );
-        const USHORT nColumns  = static_cast<const SvxViewLayoutItem*>( pState )->GetValue();
+        const sal_uInt16 nColumns  = static_cast<const SvxViewLayoutItem*>( pState )->GetValue();
         const bool   bBookMode = static_cast<const SvxViewLayoutItem*>( pState )->IsBookMode();
 
         // SingleColumn Mode
@@ -135,13 +135,13 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->DrawImage( aRect.TopLeft(), bBookMode ? mpImpl->maImageBookMode_Active         : mpImpl->maImageBookMode );
 }
 
-BOOL SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
+sal_Bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
 {
     const Rectangle aRect = getControlRect();
     const Point aPoint = rEvt.GetPosPixel();
     const long nXDiff = aPoint.X() - aRect.Left();
 
-    USHORT nColumns = 1;
+    sal_uInt16 nColumns = 1;
     bool bBookMode = false;
 
     const long nXOffset = (aRect.GetWidth() - nImageWidthSum)/2;
@@ -175,7 +175,7 @@ BOOL SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
 
     execute( aArgs );
 
-    return TRUE;
+    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

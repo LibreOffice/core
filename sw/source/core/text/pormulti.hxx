@@ -57,8 +57,8 @@ struct SwMultiCreator
 {
     const SwTxtAttr* pAttr;
     const SfxPoolItem* pItem;
-    BYTE nId;
-    BYTE nLevel;
+    sal_uInt8 nId;
+    sal_uInt8 nLevel;
 };
 
 /*--------------------------------------------------
@@ -75,8 +75,8 @@ struct SwBracket
     KSHORT nPostWidth;      // Width of the closing bracket
     sal_Unicode cPre;       // Initial character, e.g. '('
     sal_Unicode cPost;      // Final character, e.g. ')'
-    BYTE nPreScript;        // Script of the initial character
-    BYTE nPostScript;       // Script of the final character
+    sal_uInt8 nPreScript;       // Script of the initial character
+    sal_uInt8 nPostScript;       // Script of the final character
 };
 
 /*--------------------------------------------------
@@ -148,7 +148,7 @@ public:
     inline sal_Bool HasRotation() const { return 0 != (1 & nDirection); }
     inline sal_Bool IsRevers() const { return 0 != (2 & nDirection); }
     inline sal_uInt8 GetDirection() const { return nDirection; }
-    inline USHORT GetFontRotation() const
+    inline sal_uInt16 GetFontRotation() const
         { return ( HasRotation() ? ( IsRevers() ? 2700 : 900 ) : 0 ); }
 
     // Accessibility: pass information about this portion to the PortionHandler
@@ -195,7 +195,7 @@ public:
 class SwRubyPortion : public SwMultiPortion
 {
     xub_StrLen nRubyOffset;
-    USHORT nAdjustment;
+    sal_uInt16 nAdjustment;
     void _Adjust( SwTxtFormatInfo &rInf);
 public:
     SwRubyPortion( const SwRubyPortion& rRuby, xub_StrLen nEnd );
@@ -208,7 +208,7 @@ public:
     void CalcRubyOffset();
     inline void Adjust( SwTxtFormatInfo &rInf )
         { if(nAdjustment && GetRoot().GetNext()) _Adjust(rInf); }
-    inline USHORT GetAdjustment() const { return nAdjustment; }
+    inline sal_uInt16 GetAdjustment() const { return nAdjustment; }
     inline xub_StrLen GetRubyOffset() const { return nRubyOffset; }
 };
 
@@ -223,12 +223,12 @@ public:
 
 class SwBidiPortion : public SwMultiPortion
 {
-    BYTE nLevel;
+    sal_uInt8 nLevel;
 
 public:
-    SwBidiPortion( xub_StrLen nEnd, BYTE nLv );
+    SwBidiPortion( xub_StrLen nEnd, sal_uInt8 nLv );
 
-    inline BYTE GetLevel() const { return nLevel; }
+    inline sal_uInt8 GetLevel() const { return nLevel; }
     // Get number of blanks for justified alignment
     xub_StrLen GetSpaceCnt( const SwTxtSizeInfo &rInf ) const;
     // Calculates extra spacing based on number of blanks
@@ -245,11 +245,11 @@ class SwTxtCursorSave
     SwLineLayout* pCurr;
     SwTwips nWidth;
     xub_StrLen nStart;
-    BYTE nOldProp;
+    sal_uInt8 nOldProp;
     sal_Bool bSpaceChg;
 public:
     SwTxtCursorSave( SwTxtCursor* pTxtCursor, SwMultiPortion* pMulti,
-        SwTwips nY, USHORT& nX, xub_StrLen nCurrStart, long nSpaceAdd );
+        SwTwips nY, sal_uInt16& nX, xub_StrLen nCurrStart, long nSpaceAdd );
     ~SwTxtCursorSave();
 };
 

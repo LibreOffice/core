@@ -57,10 +57,10 @@ class BookmarkPopup_Impl : public PopupMenu
 public:
     BookmarkPopup_Impl();
 
-    USHORT          GetCurId() const { return nCurId; }
+    sal_uInt16          GetCurId() const { return nCurId; }
 
 private:
-    USHORT          nCurId;
+    sal_uInt16          nCurId;
 
     virtual void    Select();
 };
@@ -78,8 +78,8 @@ void BookmarkPopup_Impl::Select()
 
 // class SvxZoomStatusBarControl ------------------------------------------
 
-SwBookmarkControl::SwBookmarkControl( USHORT _nSlotId,
-                                      USHORT _nId,
+SwBookmarkControl::SwBookmarkControl( sal_uInt16 _nSlotId,
+                                      sal_uInt16 _nId,
                                       StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb )
 {
@@ -90,7 +90,7 @@ SwBookmarkControl::~SwBookmarkControl()
 }
 
 void SwBookmarkControl::StateChanged(
-    USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( eState != SFX_ITEM_AVAILABLE || pState->ISA( SfxVoidItem ) )
         GetStatusBar().SetItemText( GetId(), String() );
@@ -118,8 +118,8 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
         {
             IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
             IDocumentMarkAccess::const_iterator_t ppBookmarkStart = pMarkAccess->getBookmarksBegin();
-            USHORT nPopupId = 1;
-            ::std::map<sal_Int32, USHORT> aBookmarkIdx;
+            sal_uInt16 nPopupId = 1;
+            ::std::map<sal_Int32, sal_uInt16> aBookmarkIdx;
             for(IDocumentMarkAccess::const_iterator_t ppBookmark = ppBookmarkStart;
                 ppBookmark != pMarkAccess->getBookmarksEnd();
                 ppBookmark++)
@@ -127,12 +127,12 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
                 if(IDocumentMarkAccess::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
                 {
                     aPop.InsertItem( nPopupId, ppBookmark->get()->GetName() );
-                    aBookmarkIdx[nPopupId] = static_cast<USHORT>(ppBookmark - ppBookmarkStart);
+                    aBookmarkIdx[nPopupId] = static_cast<sal_uInt16>(ppBookmark - ppBookmarkStart);
                     nPopupId++;
                 }
             }
             aPop.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
-            USHORT nCurrId = aPop.GetCurId();
+            sal_uInt16 nCurrId = aPop.GetCurId();
             if( nCurrId != USHRT_MAX)
             {
                 SfxUInt16Item aBookmark( FN_STAT_BOOKMARK, aBookmarkIdx[nCurrId] );

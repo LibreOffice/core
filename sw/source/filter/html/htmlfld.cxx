@@ -206,9 +206,9 @@ static HTMLOptionEnum aHTMLFileNameFldFmtTable[] =
 
 /*  */
 
-USHORT SwHTMLParser::GetNumType( const String& rStr, USHORT nDfltType )
+sal_uInt16 SwHTMLParser::GetNumType( const String& rStr, sal_uInt16 nDfltType )
 {
-    USHORT nType = nDfltType;
+    sal_uInt16 nType = nDfltType;
     const HTMLOptionEnum *pOptEnums = aHTMLPageNumFldFmtTable;
     while( pOptEnums->pName )
         if( !rStr.EqualsIgnoreCaseAscii( pOptEnums->pName ) )
@@ -225,14 +225,14 @@ USHORT SwHTMLParser::GetNumType( const String& rStr, USHORT nDfltType )
 
 void SwHTMLParser::NewField()
 {
-    BOOL bKnownType = FALSE, bFixed = FALSE,
-         bHasNumFmt = FALSE, bHasNumValue = FALSE;
-    USHORT nType = 0;
+    sal_Bool bKnownType = sal_False, bFixed = sal_False,
+         bHasNumFmt = sal_False, bHasNumValue = sal_False;
+    sal_uInt16 nType = 0;
     String aValue, aNumFmt, aNumValue, aName;
     const HTMLOption *pSubOption=0, *pFmtOption=0;
 
     const HTMLOptions *pHTMLOptions = GetOptions();
-    USHORT i;
+    sal_uInt16 i;
 
     for( i = pHTMLOptions->Count(); i; )
     {
@@ -256,14 +256,14 @@ void SwHTMLParser::NewField()
             break;
         case HTML_O_SDNUM:
             aNumFmt = pOption->GetString();
-            bHasNumFmt = TRUE;
+            bHasNumFmt = sal_True;
             break;
         case HTML_O_SDVAL:
             aNumValue = pOption->GetString();
-            bHasNumValue = TRUE;
+            bHasNumValue = sal_True;
             break;
         case HTML_O_SDFIXED:
-            bFixed = TRUE;
+            bFixed = sal_True;
             break;
         }
     }
@@ -293,29 +293,29 @@ void SwHTMLParser::NewField()
             const String& rCreated = xDocProps->getAuthor();
             if( !rUser.Len() ||
                 (rChanged.Len() ? rUser != rChanged : rUser != rCreated) )
-                bFixed = TRUE;
+                bFixed = sal_True;
         }
     }
 
-    USHORT nWhich = nType;
+    sal_uInt16 nWhich = nType;
     if( RES_DATEFLD==nType || RES_TIMEFLD==nType )
         nWhich = RES_DATETIMEFLD;
 
     SwFieldType* pType = pDoc->GetSysFldType( nWhich );
     SwField *pFld = 0;
-    BOOL bInsOnEndTag = FALSE;
+    sal_Bool bInsOnEndTag = sal_False;
 
     switch( (RES_FIELDS)nType )
     {
     case RES_EXTUSERFLD:
         if( pSubOption )
         {
-            USHORT nSub;
-            ULONG nFmt = 0;
+            sal_uInt16 nSub;
+            sal_uLong nFmt = 0;
             if( bFixed )
             {
                 nFmt |= AF_FIXED;
-                bInsOnEndTag = TRUE;
+                bInsOnEndTag = sal_True;
             }
             if( pSubOption->GetEnum( nSub, aHTMLExtUsrFldSubTable ) )
                 pFld = new SwExtUserField( (SwExtUserFieldType*)pType,
@@ -325,13 +325,13 @@ void SwHTMLParser::NewField()
 
     case RES_AUTHORFLD:
         {
-            USHORT nFmt = AF_NAME;
+            sal_uInt16 nFmt = AF_NAME;
             if( pFmtOption )
                 pFmtOption->GetEnum( nFmt, aHTMLAuthorFldFmtTable );
             if( bFixed )
             {
                 nFmt |= AF_FIXED;
-                bInsOnEndTag = TRUE;
+                bInsOnEndTag = sal_True;
             }
 
             pFld = new SwAuthorField( (SwAuthorFieldType *)pType, nFmt );
@@ -341,10 +341,10 @@ void SwHTMLParser::NewField()
     case RES_DATEFLD:
     case RES_TIMEFLD:
         {
-            ULONG nNumFmt = 0;
-            ULONG nTime = Time().GetTime(), nDate = Date().GetDate();
-            USHORT nSub = 0;
-            BOOL bValidFmt = FALSE;
+            sal_uLong nNumFmt = 0;
+            sal_uLong nTime = Time().GetTime(), nDate = Date().GetDate();
+            sal_uInt16 nSub = 0;
+            sal_Bool bValidFmt = sal_False;
             HTMLNumFmtTblEntry * pFmtTbl;
 
             if( RES_DATEFLD==nType )
@@ -352,14 +352,14 @@ void SwHTMLParser::NewField()
                 nSub = DATEFLD;
                 pFmtTbl = aHTMLDateFldFmtTable;
                 if( aValue.Len() )
-                    nDate = (ULONG)aValue.ToInt32();
+                    nDate = (sal_uLong)aValue.ToInt32();
             }
             else
             {
                 nSub = TIMEFLD;
                 pFmtTbl = aHTMLTimeFldFmtTable;
                 if( aValue.Len() )
-                    nTime = (ULONG)aValue.ToInt32();
+                    nTime = (sal_uLong)aValue.ToInt32();
             }
             if( aValue.Len() )
                 nSub |= FIXEDFLD;
@@ -368,13 +368,13 @@ void SwHTMLParser::NewField()
             if( pFmtOption )
             {
                 const String& rFmt = pFmtOption->GetString();
-                for( USHORT k = 0; pFmtTbl[k].pName; k++ )
+                for( sal_uInt16 k = 0; pFmtTbl[k].pName; k++ )
                 {
                     if( rFmt.EqualsIgnoreCaseAscii( pFmtTbl[k].pName ) )
                     {
                         nNumFmt = pFormatter->GetFormatIndex(
                                         pFmtTbl[k].eFmt, LANGUAGE_SYSTEM);
-                        bValidFmt = TRUE;
+                        bValidFmt = sal_True;
                         break;
                     }
                 }
@@ -394,7 +394,7 @@ void SwHTMLParser::NewField()
     case RES_DATETIMEFLD:
         if( bHasNumFmt )
         {
-            USHORT nSub = 0;
+            sal_uInt16 nSub = 0;
 
             SvNumberFormatter *pFormatter = pDoc->GetNumberFormatter();
             sal_uInt32 nNumFmt;
@@ -425,10 +425,10 @@ void SwHTMLParser::NewField()
     case RES_PAGENUMBERFLD:
         if( pSubOption )
         {
-            USHORT nSub;
+            sal_uInt16 nSub;
             if( pSubOption->GetEnum( nSub, aHTMLPageNumFldSubTable ) )
             {
-                USHORT nFmt = SVX_NUM_PAGEDESC;
+                sal_uInt16 nFmt = SVX_NUM_PAGEDESC;
                 if( pFmtOption )
                     pFmtOption->GetEnum( nFmt, aHTMLPageNumFldFmtTable );
 
@@ -455,10 +455,10 @@ void SwHTMLParser::NewField()
     case RES_DOCINFOFLD:
         if( pSubOption )
         {
-            USHORT nSub;
+            sal_uInt16 nSub;
             if( pSubOption->GetEnum( nSub, aHTMLDocInfoFldSubTable ) )
             {
-                USHORT nExtSub = 0;
+                sal_uInt16 nExtSub = 0;
                 if( DI_CREATE==(SwDocInfoSubType)nSub ||
                     DI_CHANGE==(SwDocInfoSubType)nSub )
                 {
@@ -479,7 +479,7 @@ void SwHTMLParser::NewField()
                     bFixed &= bHasNumValue;
                 }
                 else
-                    bHasNumValue = FALSE;
+                    bHasNumValue = sal_False;
 
                 if( nSub >= DI_INFO1 && nSub <= DI_INFO4 && aName.Len() == 0 )
                 {
@@ -492,7 +492,7 @@ void SwHTMLParser::NewField()
                 if( bFixed )
                 {
                     nSub |= DI_SUB_FIXED;
-                    bInsOnEndTag = TRUE;
+                    bInsOnEndTag = sal_True;
                 }
 
                 pFld = new SwDocInfoField( (SwDocInfoFieldType *)pType,
@@ -506,10 +506,10 @@ void SwHTMLParser::NewField()
     case RES_DOCSTATFLD:
         if( pSubOption )
         {
-            USHORT nSub;
+            sal_uInt16 nSub;
             if( pSubOption->GetEnum( nSub, aHTMLDocStatFldSubTable ) )
             {
-                USHORT nFmt = SVX_NUM_ARABIC;
+                sal_uInt16 nFmt = SVX_NUM_ARABIC;
                 if( pFmtOption )
                     pFmtOption->GetEnum( nFmt, aHTMLPageNumFldFmtTable );
                 pFld = new SwDocStatField( (SwDocStatFieldType *)pType,
@@ -521,13 +521,13 @@ void SwHTMLParser::NewField()
 
     case RES_FILENAMEFLD:
         {
-            USHORT nFmt = FF_NAME;
+            sal_uInt16 nFmt = FF_NAME;
             if( pFmtOption )
                 pFmtOption->GetEnum( nFmt, aHTMLFileNameFldFmtTable );
             if( bFixed )
             {
                 nFmt |= FF_FIXED;
-                bInsOnEndTag = TRUE;
+                bInsOnEndTag = sal_True;
             }
 
             pFld = new SwFileNameField( (SwFileNameFieldType *)pType, nFmt );
@@ -548,7 +548,7 @@ void SwHTMLParser::NewField()
             pDoc->InsertPoolItem( *pPam, SwFmtFld(*pFld), 0 );
             delete pFld;
         }
-        bInField = TRUE;
+        bInField = sal_True;
     }
 }
 
@@ -588,7 +588,7 @@ void SwHTMLParser::EndField()
         pField = 0;
     }
 
-    bInField = FALSE;
+    bInField = sal_False;
     aContents.Erase();
 }
 
@@ -603,7 +603,7 @@ void SwHTMLParser::InsertFieldText()
 
 void SwHTMLParser::InsertCommentText( const sal_Char *pTag )
 {
-    BOOL bEmpty = aContents.Len() == 0;
+    sal_Bool bEmpty = aContents.Len() == 0;
     if( !bEmpty )
         aContents += '\n';
 
@@ -633,14 +633,14 @@ void SwHTMLParser::InsertComment( const String& rComment, const sal_Char *pTag )
     // weniger Probleme beim Formatieren (bug #40483#)
     xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
     SwTxtNode *pTxtNd = pPam->GetNode()->GetTxtNode();
-    BOOL bMoveFwd = FALSE;
+    sal_Bool bMoveFwd = sal_False;
     if( nPos>0 && pTxtNd && ' '==pTxtNd->GetTxt().GetChar(nPos-1) )
     {
-        bMoveFwd = TRUE;
+        bMoveFwd = sal_True;
 
-        ULONG nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
+        sal_uLong nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
         xub_StrLen nIdx = pPam->GetPoint()->nContent.GetIndex();
-        for( USHORT i = aSetAttrTab.Count(); i > 0; )
+        for( sal_uInt16 i = aSetAttrTab.Count(); i > 0; )
         {
             _HTMLAttr *pAttr = aSetAttrTab[--i];
             if( pAttr->GetSttParaIdx() != nNodeIdx ||
@@ -651,7 +651,7 @@ void SwHTMLParser::InsertComment( const String& rComment, const sal_Char *pTag )
                 RES_SCRIPTFLD == ((const SwFmtFld *)pAttr->pItem)->GetFld()
                                                         ->GetTyp()->Which() )
             {
-                bMoveFwd = FALSE;
+                bMoveFwd = sal_False;
                 break;
             }
         }

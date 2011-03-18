@@ -147,22 +147,22 @@ using namespace ::com::sun::star;
  --------------------------------------------------------------------*/
 
 static bool bInputLanguageSwitched = false;
-extern BOOL bNoInterrupt;       // in mainwn.cxx
+extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
 // Usually in MouseButtonUp a selection is revoked when the selection is
 // not currently being pulled open. Unfortunately in MouseButtonDown there
 // is being selected at double/triple click. That selection is completely
 // finished in the Handler and thus can't be distinguished in the Up.
 // To resolve this bHoldSelection is set in Down at evaluated in Up.
-static BOOL bHoldSelection      = FALSE;
+static sal_Bool bHoldSelection      = sal_False;
 
-BOOL bFrmDrag                   = FALSE;
-BOOL bValidCrsrPos              = FALSE;
-BOOL bModePushed                = FALSE;
-BOOL bDDTimerStarted            = FALSE;
-BOOL bFlushCharBuffer           = FALSE;
-BOOL SwEditWin::bReplaceQuote   = FALSE;
-BOOL bDDINetAttr                = FALSE;
+sal_Bool bFrmDrag                   = sal_False;
+sal_Bool bValidCrsrPos              = sal_False;
+sal_Bool bModePushed                = sal_False;
+sal_Bool bDDTimerStarted            = sal_False;
+sal_Bool bFlushCharBuffer           = sal_False;
+sal_Bool SwEditWin::bReplaceQuote   = sal_False;
+sal_Bool bDDINetAttr                = sal_False;
 SdrHdlKind eSdrMoveHdl          = HDL_USER;
 
 QuickHelpData* SwEditWin::pQuickHlpData = 0;
@@ -171,9 +171,9 @@ long    SwEditWin::nDDStartPosY = 0;
 long    SwEditWin::nDDStartPosX = 0;
 Color   SwEditWin::aTextBackColor(COL_YELLOW);
 Color   SwEditWin::aTextColor(COL_RED);
-BOOL    SwEditWin::bTransparentBackColor = FALSE; // background not transparent
+sal_Bool SwEditWin::bTransparentBackColor = sal_False; // background not transparent
 
-extern BOOL     bExecuteDrag;
+extern sal_Bool     bExecuteDrag;
 
 SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType );
 
@@ -226,27 +226,27 @@ public:
 struct QuickHelpData
 {
     SvStringsISortDtor aArr;
-    USHORT* pAttrs;
+    sal_uInt16* pAttrs;
     CommandExtTextInputData* pCETID;
-    ULONG nTipId;
-    USHORT nLen, nCurArrPos;
-    BOOL bClear : 1, bChkInsBlank : 1, bIsTip : 1, bIsAutoText : 1;
+    sal_uLong nTipId;
+    sal_uInt16 nLen, nCurArrPos;
+    sal_Bool bClear : 1, bChkInsBlank : 1, bIsTip : 1, bIsAutoText : 1;
 
     QuickHelpData() : pAttrs( 0 ), pCETID( 0 )  { ClearCntnt(); }
 
     void Move( QuickHelpData& rCpy );
     void ClearCntnt();
-    void Start( SwWrtShell& rSh, USHORT nWrdLen );
+    void Start( SwWrtShell& rSh, sal_uInt16 nWrdLen );
     void Stop( SwWrtShell& rSh );
 
-    BOOL HasCntnt() const       { return aArr.Count() && 0 != nLen; }
+    sal_Bool HasCntnt() const       { return aArr.Count() && 0 != nLen; }
 
-    void Inc( BOOL bEndLess )
+    void Inc( sal_Bool bEndLess )
         {
             if( ++nCurArrPos >= aArr.Count() )
                 nCurArrPos = (bEndLess && !bIsAutoText )? 0 : nCurArrPos-1;
         }
-    void Dec( BOOL bEndLess )
+    void Dec( sal_Bool bEndLess )
         {
             if( 0 == nCurArrPos-- )
                 nCurArrPos = (bEndLess && !bIsAutoText ) ? aArr.Count()-1 : 0;
@@ -261,7 +261,7 @@ struct QuickHelpData
 #define HIT_PIX  2 /* hit tolerance in pixel  */
 #define MIN_MOVE 4
 
-inline BOOL IsMinMove(const Point &rStartPos, const Point &rLPt)
+inline sal_Bool IsMinMove(const Point &rStartPos, const Point &rLPt)
 {
     return Abs(rStartPos.X() - rLPt.X()) > MIN_MOVE ||
            Abs(rStartPos.Y() - rLPt.Y()) > MIN_MOVE;
@@ -273,9 +273,9 @@ inline BOOL IsMinMove(const Point &rStartPos, const Point &rLPt)
                 in selecting, with DrawObjects; at SwgFlys to trigger
                 hyperlinks if applicable (DownLoad/NewWindow!)
  --------------------------------------------------------------------*/
-inline BOOL IsDrawObjSelectable( const SwWrtShell& rSh, const Point& rPt )
+inline sal_Bool IsDrawObjSelectable( const SwWrtShell& rSh, const Point& rPt )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
     SdrObject* pObj;
     switch( rSh.GetObjCntType( rPt, pObj ))
     {
@@ -283,7 +283,7 @@ inline BOOL IsDrawObjSelectable( const SwWrtShell& rSh, const Point& rPt )
     case OBJCNT_FLY:
     case OBJCNT_GRF:
     case OBJCNT_OLE:
-        bRet = FALSE;
+        bRet = sal_False;
         break;
     default:; //prevent warning
     }
@@ -294,7 +294,7 @@ inline BOOL IsDrawObjSelectable( const SwWrtShell& rSh, const Point& rPt )
     Description:   switch pointer
  --------------------------------------------------------------------*/
 
-void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
+void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     if( pApplyTempl )
@@ -377,43 +377,43 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
         return;
     }
 
-    BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
+    sal_Bool bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
     if ( !bExecHyperlinks )
     {
         SvtSecurityOptions aSecOpts;
-        const BOOL bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+        const sal_Bool bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
         if ( (  bSecureOption && nModifier == KEY_MOD1 ) ||
              ( !bSecureOption && nModifier != KEY_MOD1 ) )
-            bExecHyperlinks = TRUE;
+            bExecHyperlinks = sal_True;
     }
 
-    const BOOL bExecSmarttags  = nModifier == KEY_MOD1;
+    const sal_Bool bExecSmarttags  = nModifier == KEY_MOD1;
 
     SdrView *pSdrView = rSh.GetDrawView();
-    BOOL bPrefSdrPointer = FALSE;
-    BOOL bHitHandle = FALSE;
-    BOOL bCntAtPos = FALSE;
-    BOOL bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
+    sal_Bool bPrefSdrPointer = sal_False;
+    sal_Bool bHitHandle = sal_False;
+    sal_Bool bCntAtPos = sal_False;
+    sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
                           rSh.IsCrsrReadonly();
     aActHitType = SDRHIT_NONE;
     PointerStyle eStyle = POINTER_TEXT;
     if ( !pSdrView )
-        bCntAtPos = TRUE;
-    else if ( TRUE == (bHitHandle = pSdrView->PickHandle( rLPt ) != 0) )
+        bCntAtPos = sal_True;
+    else if ( sal_True == (bHitHandle = pSdrView->PickHandle( rLPt ) != 0) )
     {
         aActHitType = SDRHIT_OBJECT;
-        bPrefSdrPointer = TRUE;
+        bPrefSdrPointer = sal_True;
     }
     else
     {
-        const BOOL bNotInSelObj = !rSh.IsInsideSelectedObj( rLPt );
+        const sal_Bool bNotInSelObj = !rSh.IsInsideSelectedObj( rLPt );
         if ( rView.GetDrawFuncPtr() && !bInsDraw && bNotInSelObj )
         {
             aActHitType = SDRHIT_OBJECT;
             if (IsObjectSelect())
                 eStyle = POINTER_ARROW;
             else
-                bPrefSdrPointer = TRUE;
+                bPrefSdrPointer = sal_True;
         }
         else
         {
@@ -438,7 +438,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
                     if (pSdrView->IsTextEdit())
                     {
                         aActHitType = SDRHIT_NONE;
-                        bPrefSdrPointer = TRUE;
+                        bPrefSdrPointer = sal_True;
                     }
                     else
                     {
@@ -448,7 +448,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
                         if (eHit == SDRHIT_URLFIELD && bExecHyperlinks)
                         {
                             aActHitType = SDRHIT_OBJECT;
-                            bPrefSdrPointer = TRUE;
+                            bPrefSdrPointer = sal_True;
                         }
                         else
                         {
@@ -487,9 +487,9 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
                     else
                     {
                         if ( rView.GetDrawFuncPtr() )
-                            bPrefSdrPointer = TRUE;
+                            bPrefSdrPointer = sal_True;
                         else
-                            bCntAtPos = TRUE;
+                            bCntAtPos = sal_True;
                     }
                 }
             }
@@ -552,7 +552,7 @@ IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
     SwWrtShell &rSh = rView.GetWrtShell();
     Point aModPt( aMovePos );
     const SwRect aOldVis( rSh.VisArea() );
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
 
     if ( !rSh.VisArea().IsInside( aModPt ) )
     {
@@ -560,12 +560,12 @@ IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
         {
             const int nMaxScroll = 40;
             rView.Scroll( Rectangle(aModPt,Size(1,1)), nMaxScroll, nMaxScroll);
-            bDone = TRUE;
+            bDone = sal_True;
         }
         else if ( bFrmDrag )
         {
-            (rSh.*rSh.fnDrag)(&aModPt,FALSE);
-            bDone = TRUE;
+            (rSh.*rSh.fnDrag)(&aModPt,sal_False);
+            bDone = sal_True;
         }
         if ( !bDone )
             aModPt = rSh.GetCntntPos( aModPt,aModPt.Y() > rSh.VisArea().Bottom() );
@@ -578,7 +578,7 @@ IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
             rSh.SelectTableRowCol( *pRowColumnSelectionStart, &aPos, bIsRowDrag );
         }
         else
-            (rSh.*rSh.fnSetCrsr)( &aModPt, FALSE );
+            (rSh.*rSh.fnSetCrsr)( &aModPt, sal_False );
 
         // It can be that a "jump" over a table cannot be accomplished like
         // that. So we jump over the table by Up/Down here.
@@ -588,9 +588,9 @@ IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
             // take the center point of VisArea to
             // decide in which direction the user want.
             if( aModPt.Y() < ( rVisArea.Top() + rVisArea.Height() / 2 ) )
-                rSh.Up( TRUE, 1 );
+                rSh.Up( sal_True, 1 );
             else
-                rSh.Down( TRUE, 1 );
+                rSh.Down( sal_True, 1 );
         }
     }
 
@@ -634,14 +634,14 @@ inline void SwEditWin::EnterArea()
  Description:  insert mode for frames
 ------------------------------------------------------------------------*/
 
-void SwEditWin::InsFrm(USHORT nCols)
+void SwEditWin::InsFrm(sal_uInt16 nCols)
 {
-    StdDrawMode( OBJ_NONE, FALSE );
-    bInsFrm = TRUE;
+    StdDrawMode( OBJ_NONE, sal_False );
+    bInsFrm = sal_True;
     nInsFrmColCount = nCols;
 }
 
-void SwEditWin::StdDrawMode( SdrObjKind eSdrObjectKind, BOOL bObjSelect )
+void SwEditWin::StdDrawMode( SdrObjKind eSdrObjectKind, sal_Bool bObjSelect )
 {
     SetSdrDrawMode( eSdrObjectKind );
 
@@ -655,8 +655,8 @@ void SwEditWin::StdDrawMode( SdrObjKind eSdrObjectKind, BOOL bObjSelect )
     if (bObjSelect)
         rView.GetDrawFuncPtr()->Activate( SID_OBJECT_SELECT );
     else
-        rView.GetDrawFuncPtr()->Activate( sal::static_int_cast< USHORT >(eSdrObjectKind) );
-    bInsFrm = FALSE;
+        rView.GetDrawFuncPtr()->Activate( sal::static_int_cast< sal_uInt16 >(eSdrObjectKind) );
+    bInsFrm = sal_False;
     nInsFrmColCount = 1;
 }
 
@@ -668,22 +668,22 @@ void SwEditWin::StopInsFrm()
         rView.SetDrawFuncPtr(NULL);
     }
     rView.LeaveDrawCreate();    // leave construction mode
-    bInsFrm = FALSE;
+    bInsFrm = sal_False;
     nInsFrmColCount = 1;
 }
 
 
 
-BOOL SwEditWin::IsInputSequenceCheckingRequired( const String &rText, const SwPaM& rCrsr ) const
+sal_Bool SwEditWin::IsInputSequenceCheckingRequired( const String &rText, const SwPaM& rCrsr ) const
 {
     const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
     if ( !rCTLOptions.IsCTLFontEnabled() ||
          !rCTLOptions.IsCTLSequenceChecking() )
-         return FALSE;
+         return sal_False;
 
     const xub_StrLen nFirstPos = rCrsr.Start()->nContent.GetIndex();
     if ( 0 == nFirstPos ) /* first char needs not to be checked */
-        return FALSE;
+        return sal_False;
 
     SwBreakIt *pBreakIter = SwBreakIt::Get();
     uno::Reference < i18n::XBreakIterator > xBI = pBreakIter->GetBreakIter();
@@ -795,7 +795,7 @@ void SwEditWin::FlushInBuffer()
 
             // at this point now we will insert the buffer text 'normally' some lines below...
 
-            rSh.Pop( FALSE );  // pop old cursor from stack
+            rSh.Pop( sal_False );  // pop old cursor from stack
 
             if (!aInBuffer.Len())
                 return;
@@ -830,7 +830,7 @@ void SwEditWin::FlushInBuffer()
         sal_Bool bLang = true;
         if(eBufferLanguage != LANGUAGE_DONTKNOW)
         {
-            USHORT nWhich = 0;
+            sal_uInt16 nWhich = 0;
             switch( GetI18NScriptTypeOfLanguage( eBufferLanguage ))
             {
                 case  i18n::ScriptType::ASIAN:     nWhich = RES_CHRATR_CJK_LANGUAGE; break;
@@ -842,7 +842,7 @@ void SwEditWin::FlushInBuffer()
             {
                 SfxItemSet aLangSet(rView.GetPool(), nWhich, nWhich);
                 rSh.GetCurAttr(aLangSet);
-                if(SFX_ITEM_DEFAULT <= aLangSet.GetItemState(nWhich, TRUE))
+                if(SFX_ITEM_DEFAULT <= aLangSet.GetItemState(nWhich, sal_True))
                 {
                     LanguageType eLang = static_cast<const SvxLanguageItem&>(aLangSet.Get(nWhich)).GetLanguage();
                     if ( eLang == eBufferLanguage )
@@ -909,7 +909,7 @@ void SwEditWin::FlushInBuffer()
         rSh.Insert( aInBuffer );
         eBufferLanguage = LANGUAGE_DONTKNOW;
         aInBuffer.Erase();
-        bFlushCharBuffer = FALSE;
+        bFlushCharBuffer = sal_False;
     }
 }
 
@@ -922,7 +922,7 @@ void SwEditWin::FlushInBuffer()
 #define MOVE_RIGHT_SMALL    6
 #define MOVE_DOWN_SMALL     7
 
-void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
+void SwEditWin::ChangeFly( sal_uInt8 nDir, sal_Bool bWeb )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     SwRect aTmp = rSh.GetFlyRect();
@@ -951,10 +951,10 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
             aSnap = rSh.GetViewOptions()->GetSnapSize();
             short nDiv = rSh.GetViewOptions()->GetDivisionX();
             if ( nDiv > 0 )
-                aSnap.Width() = Max( (ULONG)1, (ULONG)aSnap.Width() / nDiv );
+                aSnap.Width() = Max( (sal_uLong)1, (sal_uLong)aSnap.Width() / nDiv );
             nDiv = rSh.GetViewOptions()->GetDivisionY();
             if ( nDiv > 0 )
-                aSnap.Height() = Max( (ULONG)1, (ULONG)aSnap.Height() / nDiv );
+                aSnap.Height() = Max( (sal_uLong)1, (sal_uLong)aSnap.Height() / nDiv );
         }
 
         SwRect aBoundRect;
@@ -990,7 +990,7 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
             case MOVE_DOWN_BIG: aTmp.Top( aTmp.Top() + nDown ); break;
             default: OSL_ENSURE(true, "ChangeFly: Unknown direction." );
         }
-        BOOL bSet = FALSE;
+        sal_Bool bSet = sal_False;
         if ((FLY_AS_CHAR == eAnchorId) && ( nDir % 2 ))
         {
             long aDiff = aTmp.Top() - aRefPoint.Y();
@@ -1003,7 +1003,7 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
             if( bWeb )
             {
                 eNew = aVert.GetVertOrient();
-                BOOL bDown = 0 != ( nDir & 0x02 );
+                sal_Bool bDown = 0 != ( nDir & 0x02 );
                 switch( eNew )
                 {
                     case text::VertOrientation::CHAR_TOP:
@@ -1034,7 +1034,7 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
             }
             aVert.SetVertOrient( eNew );
             aSet.Put( aVert );
-            bSet = TRUE;
+            bSet = sal_True;
         }
         if (bWeb && (FLY_AT_PARA == eAnchorId)
             && ( nDir==MOVE_LEFT_SMALL || nDir==MOVE_RIGHT_BIG ))
@@ -1058,23 +1058,23 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
             {
                 aHori.SetHoriOrient( eNew );
                 aSet.Put( aHori );
-                bSet = TRUE;
+                bSet = sal_True;
             }
         }
         rSh.StartAllAction();
         if( bSet )
             rSh.SetFlyFrmAttr( aSet );
-        BOOL bSetPos = (FLY_AS_CHAR != eAnchorId);
+        sal_Bool bSetPos = (FLY_AS_CHAR != eAnchorId);
         if(bSetPos && bWeb)
         {
             if (FLY_AT_PAGE != eAnchorId)
             {
-                bSetPos = FALSE;
+                bSetPos = sal_False;
             }
             else
             {
                 bSetPos = (::GetHtmlMode(rView.GetDocShell()) & HTMLMODE_SOME_ABS_POS) ?
-                    TRUE : FALSE;
+                    sal_True : sal_False;
             }
         }
         if( bSetPos )
@@ -1083,7 +1083,7 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
     }
 }
 
-void SwEditWin::ChangeDrawing( BYTE nDir )
+void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
 {
     // start undo action in order to get only one
     // undo action for this change.
@@ -1093,7 +1093,7 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
     long nX = 0;
     long nY = 0;
     sal_Bool bOnePixel = sal_False;
-    USHORT nAnchorDir = SW_MOVE_UP;
+    sal_uInt16 nAnchorDir = SW_MOVE_UP;
     switch(nDir)
     {
         case MOVE_LEFT_SMALL:
@@ -1127,14 +1127,14 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
 
     if(0 != nX || 0 != nY)
     {
-        BYTE nProtect = rSh.IsSelObjProtected( FLYPROTECT_POS|FLYPROTECT_SIZE );
+        sal_uInt8 nProtect = rSh.IsSelObjProtected( FLYPROTECT_POS|FLYPROTECT_SIZE );
         Size aSnap( rSh.GetViewOptions()->GetSnapSize() );
         short nDiv = rSh.GetViewOptions()->GetDivisionX();
         if ( nDiv > 0 )
-            aSnap.Width() = Max( (ULONG)1, (ULONG)aSnap.Width() / nDiv );
+            aSnap.Width() = Max( (sal_uLong)1, (sal_uLong)aSnap.Width() / nDiv );
         nDiv = rSh.GetViewOptions()->GetDivisionY();
         if ( nDiv > 0 )
-            aSnap.Height() = Max( (ULONG)1, (ULONG)aSnap.Height() / nDiv );
+            aSnap.Height() = Max( (sal_uLong)1, (sal_uLong)aSnap.Height() / nDiv );
 
         if(bOnePixel)
             aSnap = PixelToLogic(Size(1,1));
@@ -1153,8 +1153,8 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
             if(0 == (nProtect&FLYPROTECT_POS))
             {
                 // Check if object is anchored as character and move direction
-                BOOL bDummy;
-                bool bVertAnchor = rSh.IsFrmVertical( TRUE, bDummy );
+                sal_Bool bDummy1, bDummy2;
+                const bool bVertAnchor = rSh.IsFrmVertical( sal_True, bDummy1, bDummy2 );
                 bool bHoriMove = !bVertAnchor == !( nDir % 2 );
                 bool bMoveAllowed =
                     !bHoriMove || (rSh.GetAnchorId() != FLY_AS_CHAR);
@@ -1190,14 +1190,14 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
 
                     if(pSdrView->IsDragObj())
                     {
-                        BOOL bWasNoSnap = static_cast< BOOL >(rDragStat.IsNoSnap());
-                        BOOL bWasSnapEnabled = pSdrView->IsSnapEnabled();
+                        sal_Bool bWasNoSnap = static_cast< sal_Bool >(rDragStat.IsNoSnap());
+                        sal_Bool bWasSnapEnabled = pSdrView->IsSnapEnabled();
 
                         // switch snapping off
                         if(!bWasNoSnap)
-                            ((SdrDragStat&)rDragStat).SetNoSnap(TRUE);
+                            ((SdrDragStat&)rDragStat).SetNoSnap(sal_True);
                         if(bWasSnapEnabled)
-                            pSdrView->SetSnapEnabled(FALSE);
+                            pSdrView->SetSnapEnabled(sal_False);
 
                         pSdrView->MovAction(aEndPoint);
                         pSdrView->EndDragObj();
@@ -1243,7 +1243,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     aKeyInputFlushTimer.Stop();
 
     SwWrtShell &rSh = rView.GetWrtShell();
-    BOOL bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
+    sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
                           rSh.IsCrsrReadonly();
 
     //if the language changes the buffer must be flushed
@@ -1264,7 +1264,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     // OS:the DrawView also needs a readonly-Flag as well
     if ( !bIsDocReadOnly && rSh.GetDrawView() && rSh.GetDrawView()->KeyInput( rKEvt, this ) )
     {
-        rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll( FALSE );
+        rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll( sal_False );
         rSh.SetModified();
         return; // Event evaluated by SdrView
     }
@@ -1275,10 +1275,10 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         rSh.Edit();
     }
 
-    BOOL bFlushBuffer = FALSE;
-    BOOL bNormalChar = FALSE;
-    BOOL bChkInsBlank = pQuickHlpData->bChkInsBlank;
-    pQuickHlpData->bChkInsBlank = FALSE;
+    sal_Bool bFlushBuffer = sal_False;
+    sal_Bool bNormalChar = sal_False;
+    sal_Bool bChkInsBlank = pQuickHlpData->bChkInsBlank;
+    pQuickHlpData->bChkInsBlank = sal_False;
 
 #if OSL_DEBUG_LEVEL > 1
     if (rKEvt.GetKeyCode().GetCode() == KEY_F12)
@@ -1304,7 +1304,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         // must changed from switch to if, because the Linux
         // compiler has problem with the code. Has to remove if the new general
         // handler exist.
-        USHORT nKey = rKEvt.GetKeyCode().GetCode();
+        sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
 
         if( KEY_UP == nKey || KEY_DOWN == nKey ||
             KEY_LEFT == nKey || KEY_RIGHT == nKey )
@@ -1321,11 +1321,14 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             if( ( bVertText && ( !bTblCrsr || bVertTable ) ) ||
                 ( bTblCrsr && bVertTable ) )
             {
+                // Attempt to integrate cursor travelling for mongolian layout does not work.
+                // Thus, back to previous mapping of cursor keys to direction keys.
                 if( KEY_UP == nKey ) nKey = KEY_LEFT;
                 else if( KEY_DOWN == nKey ) nKey = KEY_RIGHT;
                 else if( KEY_LEFT == nKey ) nKey = KEY_DOWN;
                 else if( KEY_RIGHT == nKey ) nKey = KEY_UP;
             }
+
             if ( rSh.IsInRightToLeftText() )
             {
                 if( KEY_LEFT == nKey ) nKey = KEY_RIGHT;
@@ -1354,7 +1357,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     const SwFrmFmt* pFlyFmt = rSh.GetFlyFrmFmt();
     if( pFlyFmt )
     {
-        USHORT nEvent;
+        sal_uInt16 nEvent;
 
         if( 32 <= aCh &&
             0 == (( KEY_MOD1 | KEY_MOD2 ) & rKeyCode.GetModifier() ))
@@ -1415,8 +1418,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
     TblChgWidthHeightType eTblChgMode = nsTblChgWidthHeightType::WH_COL_LEFT;    // initialization just for warning-free code
-    USHORT nTblChgSize = 0;
-    BOOL bStopKeyInputTimer = TRUE;
+    sal_uInt16 nTblChgSize = 0;
+    sal_Bool bStopKeyInputTimer = sal_True;
     String sFmlEntry;
 
     enum SW_KeyState { KS_Start,
@@ -1463,7 +1466,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     SW_KeyState eKeyState = bIsDocReadOnly ? KS_CheckDocReadOnlyKeys
                                            : KS_CheckKey,
                 eNextKeyState = KS_Ende;
-    BYTE nDir = 0;
+    sal_uInt8 nDir = 0;
 
     if (nKS_NUMDOWN_Count > 0)
         nKS_NUMDOWN_Count--;
@@ -1507,12 +1510,12 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     else
                         rSh.SttSelect();
                     rSh.MoveSection( fnSectionCurr, fnSectionEnd );
-                    rSh.Pop( TRUE );
+                    rSh.Pop( sal_True );
                     rSh.EndSelect();
                     sFmlEntry = '=';
                 }
                 else
-                    rSh.Pop( FALSE );
+                    rSh.Pop( sal_False );
             }
             else
             {
@@ -1605,7 +1608,7 @@ KEYINPUT_CHECKTABLE:
                 case KEY_LEFT:
                 case KEY_LEFT | KEY_MOD1:
                 {
-                    BOOL bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
+                    sal_Bool bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
                     if(!bMod1)
                     {
                         eFlyState = KS_Fly_Change;
@@ -1627,7 +1630,7 @@ KEYINPUT_CHECKTABLE:
                 case KEY_UP:
                 case KEY_UP | KEY_MOD1:
                 {
-                    BOOL bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
+                    sal_Bool bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
                     if(!bMod1)
                     {
                         eFlyState = KS_Fly_Change;
@@ -1643,7 +1646,7 @@ KEYINPUT_CHECKTABLE:
                 case KEY_DOWN:
                 case KEY_DOWN | KEY_MOD1:
                 {
-                    BOOL bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
+                    sal_Bool bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
                     if(!bMod1)
                     {
                         eFlyState = KS_Fly_Change;
@@ -1660,7 +1663,7 @@ KEYINPUT_CHECKTABLE:
 KEYINPUT_CHECKTABLE_INSDEL:
                     if( rSh.IsTableMode() || !rSh.GetTableFmt() ||
                         !bTblInsDelMode ||
-                        FALSE /* table protected */
+                        sal_False /* table protected */
                             )
                     {
                         const int nSelectionType = rSh.GetSelectionType();
@@ -1687,7 +1690,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if ( !rSh.HasReadonlySel() )
                     {
                         if (rSh.IsInFrontOfLabel() &&
-                            rSh.NumOrNoNum(FALSE))
+                            rSh.NumOrNoNum(sal_False))
                             eKeyState = KS_NumOrNoNum;
                     }
                     else
@@ -1701,22 +1704,22 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if( !rSh.IsTableMode() && rSh.GetTableFmt() )
                     {
                         eKeyState = KS_Ende;
-                        bTblInsDelMode = TRUE;
-                        bTblIsInsMode = FALSE;
-                        bTblIsColMode = TRUE;
+                        bTblInsDelMode = sal_True;
+                        bTblIsInsMode = sal_False;
+                        bTblIsColMode = sal_True;
                         aKeyInputTimer.Start();
-                        bStopKeyInputTimer = FALSE;
+                        bStopKeyInputTimer = sal_False;
                     }
                     break;
                 case KEY_INSERT | KEY_MOD2:
                     if( !rSh.IsTableMode() && rSh.GetTableFmt() )
                     {
                         eKeyState = KS_Ende;
-                        bTblInsDelMode = TRUE;
-                        bTblIsInsMode = TRUE;
-                        bTblIsColMode = TRUE;
+                        bTblInsDelMode = sal_True;
+                        bTblIsInsMode = sal_True;
+                        bTblIsColMode = sal_True;
                         aKeyInputTimer.Start();
-                        bStopKeyInputTimer = FALSE;
+                        bStopKeyInputTimer = sal_False;
                     }
                     break;
 
@@ -1767,7 +1770,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_BACKSPACE | KEY_SHIFT:
                     if( !rSh.HasReadonlySel() )
                     {
-                        BOOL bDone = FALSE;
+                        sal_Bool bDone = sal_False;
                         // try to add comment for code snip:
                         // Remove the paragraph indent, if the cursor is at the
                         // beginning of a paragraph, there is no selection
@@ -1797,13 +1800,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 {
                                     eKeyState = KS_NumUp;
                                     nKS_NUMDOWN_Count = 2;
-                                    bDone = TRUE;
+                                    bDone = sal_True;
                                 }
                                 else if (nKS_NUMINDENTINC_Count > 0)
                                 {
                                     eKeyState = KS_NumIndentDec;
                                     nKS_NUMINDENTINC_Count = 2;
-                                    bDone = TRUE;
+                                    bDone = sal_True;
                                 }
                             }
 
@@ -1844,7 +1847,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 }
                             }
                             if ( bCallNumOrNoNum &&
-                                 rSh.NumOrNoNum( !bOnlyBackspaceKey, TRUE ) )
+                                 rSh.NumOrNoNum( !bOnlyBackspaceKey, sal_True ) )
                             {
                                 eKeyState = KS_NumOrNoNum;
                             }
@@ -1869,9 +1872,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 {
 
 #ifdef SW_CRSR_TIMER
-                    BOOL bOld = rSh.ChgCrsrTimerFlag( FALSE );
+                    sal_Bool bOld = rSh.ChgCrsrTimerFlag( sal_False );
 #endif
-                    if (rSh.IsFormProtected() || rSh.GetCurrentFieldmark() || rSh.GetChar(FALSE)==CH_TXT_ATR_FORMELEMENT)
+                    if (rSh.IsFormProtected() || rSh.GetCurrentFieldmark() || rSh.GetChar(sal_False)==CH_TXT_ATR_FORMELEMENT)
                     {
                         eKeyState=KS_GotoNextFieldMark;
                     }
@@ -1921,9 +1924,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_TAB | KEY_SHIFT:
                 {
 #ifdef SW_CRSR_TIMER
-                    BOOL bOld = rSh.ChgCrsrTimerFlag( FALSE );
+                    sal_Bool bOld = rSh.ChgCrsrTimerFlag( sal_False );
+                    sal_Bool bOld = rSh.ChgCrsrTimerFlag( sal_False );
 #endif
-                    if (rSh.IsFormProtected() || rSh.GetCurrentFieldmark()|| rSh.GetChar(FALSE)==CH_TXT_ATR_FORMELEMENT) {
+                    if (rSh.IsFormProtected() || rSh.GetCurrentFieldmark()|| rSh.GetChar(sal_False)==CH_TXT_ATR_FORMELEMENT) {
                         eKeyState=KS_GotoPrevFieldMark;
                     }
                     else if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
@@ -2027,7 +2031,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 {
                     case KEY_TAB:
                     case KEY_TAB | KEY_SHIFT:
-                        bNormalChar = FALSE;
+                        bNormalChar = sal_False;
                         eKeyState = KS_Ende;
                         if ( rSh.GetSelectionType() &
                                 (nsSelectionType::SEL_GRF |
@@ -2053,10 +2057,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         {
                             SfxItemSet aSet(rSh.GetAttrPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
                             rSh.GetCurAttr(aSet);
-                            if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, FALSE))
+                            if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, sal_False))
                             {
-                                const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, TRUE);
-                                bNormalChar = FALSE;
+                                const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, sal_True);
+                                bNormalChar = sal_False;
                                 eKeyState = KS_Ende;
                                 rSh.ClickToINetAttr((const SwFmtINetFmt&)rItem, URLLOAD_NOFILTER);
                             }
@@ -2073,12 +2077,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 switch ( rKeyCode.GetModifier() | rKeyCode.GetCode() )
                 {
                     case KEY_RIGHT | KEY_MOD2:
-                        rSh.Right( CRSR_SKIP_CHARS, FALSE, 1, FALSE );
+                        rSh.Right( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
                         eKeyState = KS_Ende;
                         FlushInBuffer();
                         break;
                     case KEY_LEFT | KEY_MOD2:
-                        rSh.Left( CRSR_SKIP_CHARS, FALSE, 1, FALSE );
+                        rSh.Left( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
                         eKeyState = KS_Ende;
                         FlushInBuffer();
                         break;
@@ -2097,14 +2101,14 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
                 if (bNormalChar && rSh.IsInFrontOfLabel())
                 {
-                    rSh.NumOrNoNum(FALSE);
+                    rSh.NumOrNoNum(sal_False);
                 }
 
                 if( aInBuffer.Len() && ( !bNormalChar || bIsDocReadOnly ))
                     FlushInBuffer();
 
                 if( rView.KeyInput( aKeyEvent ) )
-                    bFlushBuffer = TRUE, bNormalChar = FALSE;
+                    bFlushBuffer = sal_True, bNormalChar = sal_False;
                 else
                 {
                     // Because Sfx accelerators are only called when they were
@@ -2140,7 +2144,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else
                     {
-                        bNormalChar = FALSE;
+                        bNormalChar = sal_False;
                         Window::KeyInput( aKeyEvent );
                     }
                 }
@@ -2189,7 +2193,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             aCh = '\t';
             // no break!
         case KS_InsChar:
-            if (rSh.GetChar(FALSE)==CH_TXT_ATR_FORMELEMENT)
+            if (rSh.GetChar(sal_False)==CH_TXT_ATR_FORMELEMENT)
             {
                 ::sw::mark::ICheckboxFieldmark* pFieldmark =
                     dynamic_cast< ::sw::mark::ICheckboxFieldmark* >
@@ -2222,7 +2226,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             }
             else if(!rSh.HasReadonlySel())
             {
-                BOOL bIsNormalChar = GetAppCharClass().isLetterNumeric(
+                sal_Bool bIsNormalChar = GetAppCharClass().isLetterNumeric(
                                                             String( aCh ), 0 );
                 if( bChkInsBlank && bIsNormalChar &&
                     (aInBuffer.Len() || !rSh.IsSttPara() || !rSh.IsEndPara() ))
@@ -2232,8 +2236,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     aInBuffer.Expand( aInBuffer.Len() + 1, ' ' );
                 }
 
-                BOOL bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
-                BOOL bRunNext = pACorr && pACorr->HasRunNext();
+                sal_Bool bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
+                sal_Bool bRunNext = pACorr && pACorr->HasRunNext();
                 if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || bRunNext ) &&
                         pACfg->IsAutoFmtByInput() &&
                     (( pACorr->IsAutoCorrFlag( ChgWeightUnderl ) &&
@@ -2293,7 +2297,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
         default:
         {
-            USHORT nSlotId = 0;
+            sal_uInt16 nSlotId = 0;
             FlushInBuffer();
             switch( eKeyState )
             {
@@ -2314,11 +2318,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
 
             case KS_NumDown:
-                rSh.NumUpDown( TRUE );
+                rSh.NumUpDown( sal_True );
                 nKS_NUMDOWN_Count = 2;
                 break;
             case KS_NumUp:
-                rSh.NumUpDown( FALSE );
+                rSh.NumUpDown( sal_False );
                 break;
 
             case KS_NumIndentInc:
@@ -2361,7 +2365,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 nSlotId = FN_GOTO_PREV_CELL;
                 break;
             case KS_AutoFmtByInput:
-                rSh.SplitNode( TRUE );
+                rSh.SplitNode( sal_True );
                 break;
 
             case KS_NextObject:
@@ -2394,11 +2398,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if(pList->GetShortName( sFnd, sShrtNm, sGroup))
                     {
                         rSh.SttSelect();
-                        rSh.ExtendSelection( FALSE, aTmpQHD.nLen );
+                        rSh.ExtendSelection( sal_False, aTmpQHD.nLen );
                         SwGlossaryHdl* pGlosHdl = GetView().GetGlosHdl();
-                        pGlosHdl->SetCurGroup(sGroup, TRUE);
+                        pGlosHdl->SetCurGroup(sGroup, sal_True);
                         pGlosHdl->InsertGlossary( sShrtNm);
-                        pQuickHlpData->bChkInsBlank = TRUE;
+                        pQuickHlpData->bChkInsBlank = sal_True;
                     }
                 }
                 else
@@ -2418,7 +2422,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
             case KS_EditFormula:
             {
-                const USHORT nId = SwInputChild::GetChildWindowId();
+                const sal_uInt16 nId = SwInputChild::GetChildWindowId();
 
                 SfxViewFrame* pVFrame = GetView().GetViewFrame();
                 pVFrame->ToggleChildWindow( nId );
@@ -2493,7 +2497,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
     if( bStopKeyInputTimer )
     {
         aKeyInputTimer.Stop();
-        bTblInsDelMode = FALSE;
+        bTblInsDelMode = sal_False;
     }
 
     // in case the buffered characters are inserted
@@ -2501,7 +2505,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
     {
         // bFlushCharBuffer was not resetted here
         // why not?
-        BOOL bSave = bFlushCharBuffer;
+        sal_Bool bSave = bFlushCharBuffer;
         FlushInBuffer();
         bFlushCharBuffer = bSave;
 
@@ -2527,7 +2531,7 @@ void SwEditWin::RstMBDownFlags()
     // of the modal dialog (like on WINDOWS).
     // So reset the statuses here and release the mouse
     // for the dialog.
-    bMBPressed = bNoInterrupt = FALSE;
+    bMBPressed = bNoInterrupt = sal_False;
     EnterArea();
     ReleaseMouse();
 }
@@ -2543,7 +2547,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     // the contex menu is closed by VCL asynchronously which in the end
     // would work on deleted objects or the context menu has no parent anymore)
     SfxInPlaceClient* pIPClient = rSh.GetSfxViewShell()->GetIPClient();
-    BOOL bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
+    sal_Bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
 
     if ( bIsOleActive && PopupMenu::IsInExecute() )
         return;
@@ -2559,7 +2563,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
     //ignore key modifiers for format paintbrush
     {
-        BOOL bExecFormatPaintbrush = pApplyTempl && pApplyTempl->pFormatClipboard
+        sal_Bool bExecFormatPaintbrush = pApplyTempl && pApplyTempl->pFormatClipboard
                                 &&  pApplyTempl->pFormatClipboard->HasContent();
         if( bExecFormatPaintbrush )
             rMEvt = MouseEvent( _rMEvt.GetPosPixel(), _rMEvt.GetClicks(),
@@ -2574,7 +2578,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
     if ( IsChainMode() )
     {
-        SetChainMode( FALSE );
+        SetChainMode( sal_False );
         SwRect aDummy;
         SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)rSh.GetFlyFrmFmt();
         if ( !rSh.Chainable( aDummy, *pFmt, aDocPos ) )
@@ -2587,12 +2591,12 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     // work but in practice ...
     lcl_SelectShellForDrop( rView );
 
-    BOOL bIsDocReadOnly = rView.GetDocShell()->IsReadOnly();
-    BOOL bCallBase = TRUE;
+    sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly();
+    sal_Bool bCallBase = sal_True;
 
     if( pQuickHlpData->bClear )
         pQuickHlpData->Stop( rSh );
-    pQuickHlpData->bChkInsBlank = FALSE;
+    pQuickHlpData->bChkInsBlank = sal_False;
 
     if( rSh.FinishOLEObj() )
         return; // end InPlace and the click doesn't count anymore
@@ -2604,17 +2608,17 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     {
         if (pSdrView->MouseButtonDown( rMEvt, this ) )
         {
-            rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+            rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
             return; // SdrView's event evaluated
         }
     }
 
-    bIsInMove = FALSE;
+    bIsInMove = sal_False;
     aStartPos = rMEvt.GetPosPixel();
     aRszMvHdlPt.X() = 0, aRszMvHdlPt.Y() = 0;
 
-    BYTE nMouseTabCol = 0;
-    const BOOL bTmp = !rSh.IsDrawCreate() && !pApplyTempl && !rSh.IsInSelect() &&
+    sal_uInt8 nMouseTabCol = 0;
+    const sal_Bool bTmp = !rSh.IsDrawCreate() && !pApplyTempl && !rSh.IsInSelect() &&
          rMEvt.GetClicks() == 1 && MOUSE_LEFT == rMEvt.GetButtons();
     if (  bTmp &&
          0 != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPos ) ) &&
@@ -2630,7 +2634,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 bIsRowDrag = SW_TABROWSEL_HORI == nMouseTabCol||
                             SW_TABROWSEL_HORI_RTL == nMouseTabCol ||
                             SW_TABCOLSEL_VERT == nMouseTabCol;
-                bMBPressed = TRUE;
+                bMBPressed = sal_True;
                 CaptureMouse();
             }
             return;
@@ -2640,9 +2644,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         {
             // comes from table columns out of the document.
             if(SW_TABCOL_VERT == nMouseTabCol || SW_TABCOL_HORI == nMouseTabCol)
-                rView.SetTabColFromDoc( TRUE );
+                rView.SetTabColFromDoc( sal_True );
             else
-                rView.SetTabRowFromDoc( TRUE );
+                rView.SetTabRowFromDoc( sal_True );
 
             rView.SetTabColFromDocPos( aDocPos );
             rView.InvalidateRulerPos();
@@ -2651,11 +2655,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             if ( RulerColumnDrag( rMEvt,
                     (SW_TABCOL_VERT == nMouseTabCol || SW_TABROW_HORI == nMouseTabCol)) )
             {
-                rView.SetTabColFromDoc( FALSE );
-                rView.SetTabRowFromDoc( FALSE );
+                rView.SetTabColFromDoc( sal_False );
+                rView.SetTabRowFromDoc( sal_False );
                 rView.InvalidateRulerPos();
                 rBind.Update();
-                bCallBase = FALSE;
+                bCallBase = sal_False;
             }
             else
             {
@@ -2678,7 +2682,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             rView.SetNumRuleNodeFromDoc( NULL );
             rView.InvalidateRulerPos();
             rBind.Update();
-            bCallBase = FALSE;
+            bCallBase = sal_False;
         }
         else
         {
@@ -2702,8 +2706,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     // click releases the selection.
     if ( MOUSE_LEFT == rMEvt.GetButtons() )
     {
-        BOOL bOnlyText = FALSE;
-        bMBPressed = bNoInterrupt = TRUE;
+        sal_Bool bOnlyText = sal_False;
+        bMBPressed = bNoInterrupt = sal_True;
         nKS_NUMDOWN_Count = 0;
 
         CaptureMouse();
@@ -2732,7 +2736,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 }
                 if ( EnterDrawMode( rMEvt, aDocPos ) )
                 {
-                    bNoInterrupt = FALSE;
+                    bNoInterrupt = sal_False;
                     return;
                 }
                 else  if ( rView.GetDrawFuncPtr() && bInsFrm )
@@ -2747,7 +2751,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     if ( rSh.IsSelFrmMode())
                     {
                         SdrHdl* pHdl = rSh.GetDrawView()->PickHandle(aDocPos);
-                        BOOL bHitHandle = pHdl && pHdl->GetKind() != HDL_ANCHOR &&
+                        sal_Bool bHitHandle = pHdl && pHdl->GetKind() != HDL_ANCHOR &&
                                                   pHdl->GetKind() != HDL_ANCHOR_TR;
 
                         if ((rSh.IsInsideSelectedObj(aDocPos) || bHitHandle) &&
@@ -2763,30 +2767,30 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     SwEditWin::nDDStartPosY = aDocPos.Y();
                                     SwEditWin::nDDStartPosX = aDocPos.X();
                                 }
-                                bFrmDrag = TRUE;
+                                bFrmDrag = sal_True;
                             }
-                            bNoInterrupt = FALSE;
+                            bNoInterrupt = sal_False;
                             return;
                         }
                     }
                 }
         }
 
-        BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
+        sal_Bool bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
         if ( !bExecHyperlinks )
         {
             SvtSecurityOptions aSecOpts;
-            const BOOL bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+            const sal_Bool bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
             if ( (  bSecureOption && rMEvt.GetModifier() == KEY_MOD1 ) ||
                  ( !bSecureOption && rMEvt.GetModifier() != KEY_MOD1 ) )
-                bExecHyperlinks = TRUE;
+                bExecHyperlinks = sal_True;
         }
 
-        BYTE nNumberOfClicks = static_cast< BYTE >(rMEvt.GetClicks() % 4);
+        sal_uInt8 nNumberOfClicks = static_cast< sal_uInt8 >(rMEvt.GetClicks() % 4);
         if ( 0 == nNumberOfClicks && 0 < rMEvt.GetClicks() )
             nNumberOfClicks = 4;
 
-        BOOL bExecDrawTextLink = FALSE;
+        sal_Bool bExecDrawTextLink = sal_False;
 
         switch ( rMEvt.GetModifier() + rMEvt.GetButtons() )
         {
@@ -2808,7 +2812,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             pSdrView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
                             if (aVEvt.eEvent == SDREVENT_EXECUTEURL)
-                                bExecDrawTextLink = TRUE;
+                                bExecDrawTextLink = sal_True;
                         }
 
                         // only try to select frame, if pointer already was
@@ -2825,12 +2829,12 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 rView.NoRotate();
                                 rSh.HideCrsr();
 
-                                BOOL bUnLockView = !rSh.IsViewLocked();
-                                rSh.LockView( TRUE );
-                                BOOL bSelObj = rSh.SelectObj( aDocPos,
+                                sal_Bool bUnLockView = !rSh.IsViewLocked();
+                                rSh.LockView( sal_True );
+                                sal_Bool bSelObj = rSh.SelectObj( aDocPos,
                                                rMEvt.IsMod1() ? SW_ENTER_GROUP : 0);
                                 if( bUnLockView )
-                                    rSh.LockView( FALSE );
+                                    rSh.LockView( sal_False );
 
                                 if( bSelObj )
                                 {
@@ -2849,13 +2853,13 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                         }
 
                                         rSh.EnterSelFrmMode( &aDocPos );
-                                        bFrmDrag = TRUE;
+                                        bFrmDrag = sal_True;
                                         UpdatePointer( aDocPos, rMEvt.GetModifier() );
                                     }
                                     return;
                                 }
                                 else
-                                    bOnlyText = static_cast< BOOL >(rSh.IsObjSelectable( aDocPos ));
+                                    bOnlyText = static_cast< sal_Bool >(rSh.IsObjSelectable( aDocPos ));
 
                                 if (!rView.GetDrawFuncPtr())
                                     rSh.ShowCrsr();
@@ -2880,9 +2884,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             }
                             else
                             {
-                                BOOL bUnLockView = !rSh.IsViewLocked();
-                                rSh.LockView( TRUE );
-                                BYTE nFlag = rMEvt.IsShift() ? SW_ADD_SELECT :0;
+                                sal_Bool bUnLockView = !rSh.IsViewLocked();
+                                rSh.LockView( sal_True );
+                                sal_uInt8 nFlag = rMEvt.IsShift() ? SW_ADD_SELECT :0;
                                 if( rMEvt.IsMod1() )
                                     nFlag = nFlag | SW_ENTER_GROUP;
 
@@ -2893,18 +2897,18 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     rView.AttrChangedNotify(&rSh);
                                 }
 
-                                BOOL bSelObj = rSh.SelectObj( aDocPos, nFlag );
+                                sal_Bool bSelObj = rSh.SelectObj( aDocPos, nFlag );
                                 if( bUnLockView )
-                                    rSh.LockView( FALSE );
+                                    rSh.LockView( sal_False );
 
                                 if( !bSelObj )
                                 {
                                     // move cursor here so that it is not drawn in the
                                     // frame first; ShowCrsr() happens in LeaveSelFrmMode()
-                                    bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,FALSE));
+                                    bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,sal_False));
                                     rSh.LeaveSelFrmMode();
                                     rView.AttrChangedNotify( &rSh );
-                                    bCallBase = FALSE;
+                                    bCallBase = sal_False;
                                 }
                                 else
                                 {
@@ -2912,7 +2916,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     rSh.EnterSelFrmMode( &aDocPos );
                                     rSh.SelFlyGrabCrsr();
                                     rSh.MakeSelVisible();
-                                    bFrmDrag = TRUE;
+                                    bFrmDrag = sal_True;
                                     if( rSh.IsFrmSelected() &&
                                         rView.GetDrawFuncPtr() )
                                     {
@@ -2931,7 +2935,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     }
                     case 2:
                     {
-                        bFrmDrag = FALSE;
+                        bFrmDrag = sal_False;
                         if ( !bIsDocReadOnly && rSh.IsInsideSelectedObj(aDocPos) &&
                              0 == rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) )
 
@@ -2977,7 +2981,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             return;
 
                         SwField *pFld;
-                        BOOL bFtn = FALSE;
+                        sal_Bool bFtn = sal_False;
 
                         if( !bIsDocReadOnly &&
                             ( 0 != ( pFld = rSh.GetCurFld() ) ||
@@ -2988,7 +2992,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 GetView().GetViewFrame()->GetBindings().Execute( FN_EDIT_FOOTNOTE );
                             else
                             {
-                                USHORT nTypeId = pFld->GetTypeId();
+                                sal_uInt16 nTypeId = pFld->GetTypeId();
                                 SfxViewFrame* pVFrame = GetView().GetViewFrame();
                                 switch( nTypeId )
                                 {
@@ -2996,8 +3000,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 case TYP_SCRIPTFLD:
                                 {
                                     // if it's a Readonly region, status has to be enabled
-                                    USHORT nSlot = TYP_POSTITFLD == nTypeId ? FN_POSTIT : FN_JAVAEDIT;
-                                    SfxBoolItem aItem(nSlot, TRUE);
+                                    sal_uInt16 nSlot = TYP_POSTITFLD == nTypeId ? FN_POSTIT : FN_JAVAEDIT;
+                                    SfxBoolItem aItem(nSlot, sal_True);
                                     pVFrame->GetBindings().SetState(aItem);
                                     pVFrame->GetBindings().Execute(nSlot);
                                     break;
@@ -3025,13 +3029,13 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         }
                         else
                             rSh.SelWrd( &aDocPos );
-                        bHoldSelection = TRUE;
+                        bHoldSelection = sal_True;
                         return;
                     }
                     case 3:
                     case 4:
                     {
-                        bFrmDrag = FALSE;
+                        bFrmDrag = sal_False;
                         // in extended mode double and triple
                         // click has no effect.
                         if ( rSh.IsExtMode() )
@@ -3057,7 +3061,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         if ( bMod )
                             rSh.LeaveAddMode();
 
-                        bHoldSelection = TRUE;
+                        bHoldSelection = sal_True;
                         return;
                     }
 
@@ -3068,7 +3072,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             case MOUSE_LEFT + KEY_SHIFT:
             case MOUSE_LEFT + KEY_SHIFT + KEY_MOD1:
             {
-                BOOL bLockView = bWasShdwCrsr;
+                sal_Bool bLockView = bWasShdwCrsr;
 
                 switch ( rMEvt.GetModifier() )
                 {
@@ -3086,7 +3090,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     rSh.EnterSelFrmMode( &aDocPos );
                                     SwEditWin::nDDStartPosY = aDocPos.Y();
                                     SwEditWin::nDDStartPosX = aDocPos.X();
-                                    bFrmDrag = TRUE;
+                                    bFrmDrag = sal_True;
                                     return;
                                 }
                             }
@@ -3094,8 +3098,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         else if( rSh.IsSelFrmMode() &&
                                  rSh.GetDrawView()->PickHandle( aDocPos ))
                         {
-                            bFrmDrag = TRUE;
-                            bNoInterrupt = FALSE;
+                            bFrmDrag = sal_True;
+                            bNoInterrupt = sal_False;
                             return;
                         }
                     }
@@ -3115,7 +3119,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     rSh.EnterSelFrmMode( &aDocPos );
                                     SwEditWin::nDDStartPosY = aDocPos.Y();
                                     SwEditWin::nDDStartPosX = aDocPos.X();
-                                    bFrmDrag = TRUE;
+                                    bFrmDrag = sal_True;
                                     return;
                                 }
                             }
@@ -3123,8 +3127,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         else if( rSh.IsSelFrmMode() &&
                                  rSh.GetDrawView()->PickHandle( aDocPos ))
                         {
-                            bFrmDrag = TRUE;
-                            bNoInterrupt = FALSE;
+                            bFrmDrag = sal_True;
+                            bNoInterrupt = sal_False;
                             return;
                         }
                         else
@@ -3132,15 +3136,15 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             if ( !rSh.IsAddMode() && !rSh.IsExtMode() && !rSh.IsBlockMode() )
                             {
                                 rSh.PushMode();
-                                bModePushed = TRUE;
+                                bModePushed = sal_True;
 
-                                BOOL bUnLockView = !rSh.IsViewLocked();
-                                rSh.LockView( TRUE );
+                                sal_Bool bUnLockView = !rSh.IsViewLocked();
+                                rSh.LockView( sal_True );
                                 rSh.EnterAddMode();
                                 if( bUnLockView )
-                                    rSh.LockView( FALSE );
+                                    rSh.LockView( sal_False );
                             }
-                            bCallBase = FALSE;
+                            bCallBase = sal_False;
                         }
                     }
                     break;
@@ -3149,14 +3153,14 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         if ( !rSh.IsAddMode() && !rSh.IsExtMode() && !rSh.IsBlockMode() )
                         {
                             rSh.PushMode();
-                            bModePushed = TRUE;
-                            BOOL bUnLockView = !rSh.IsViewLocked();
-                            rSh.LockView( TRUE );
+                            bModePushed = sal_True;
+                            sal_Bool bUnLockView = !rSh.IsViewLocked();
+                            rSh.LockView( sal_True );
                             rSh.EnterBlockMode();
                             if( bUnLockView )
-                                rSh.LockView( FALSE );
+                                rSh.LockView( sal_False );
                         }
-                        bCallBase = FALSE;
+                        bCallBase = sal_False;
                     }
                     break;
                     case KEY_SHIFT:
@@ -3174,7 +3178,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 {
                                     rSh.LeaveSelFrmMode();
                                     rView.AttrChangedNotify(&rSh);
-                                    bFrmDrag = FALSE;
+                                    bFrmDrag = sal_False;
                                 }
                             }
                             else
@@ -3183,7 +3187,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     rSh.EnterSelFrmMode( &aDocPos );
                                     SwEditWin::nDDStartPosY = aDocPos.Y();
                                     SwEditWin::nDDStartPosX = aDocPos.X();
-                                    bFrmDrag = TRUE;
+                                    bFrmDrag = sal_True;
                                     return;
                                 }
                             }
@@ -3196,7 +3200,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 rSh.EnterSelFrmMode( &aDocPos );
                                 SwEditWin::nDDStartPosY = aDocPos.Y();
                                 SwEditWin::nDDStartPosX = aDocPos.X();
-                                bFrmDrag = TRUE;
+                                bFrmDrag = sal_True;
                                 return;
                             }
                             if ( rSh.IsSelFrmMode() )
@@ -3204,18 +3208,18 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 rSh.UnSelectFrm();
                                 rSh.LeaveSelFrmMode();
                                 rView.AttrChangedNotify(&rSh);
-                                bFrmDrag = FALSE;
+                                bFrmDrag = sal_False;
                             }
                             if ( !rSh.IsExtMode() )
                             {
                                 // don't start a selection when an
                                 // URL field or a graphic is clicked
-                                BOOL bSttSelect = rSh.HasSelection() ||
+                                sal_Bool bSttSelect = rSh.HasSelection() ||
                                                 Pointer(POINTER_REFHAND) != GetPointer();
 
                                 if( !bSttSelect )
                                 {
-                                    bSttSelect = TRUE;
+                                    bSttSelect = sal_True;
                                     if( bExecHyperlinks )
                                     {
                                         SwContentAtPos aCntntAtPos(
@@ -3227,12 +3231,12 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                             if( !rSh.IsViewLocked() &&
                                                 !rSh.IsReadOnlyAvailable() &&
                                                 aCntntAtPos.IsInProtectSect() )
-                                                    bLockView = TRUE;
+                                                    bLockView = sal_True;
 
-                                            bSttSelect = FALSE;
+                                            bSttSelect = sal_False;
                                         }
                                         else if( rSh.IsURLGrfAtPos( aDocPos ))
-                                            bSttSelect = FALSE;
+                                            bSttSelect = sal_False;
                                     }
                                 }
 
@@ -3240,7 +3244,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     rSh.SttSelect();
                             }
                         }
-                        bCallBase = FALSE;
+                        bCallBase = sal_False;
                         break;
                     }
                     default:
@@ -3248,10 +3252,10 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         {
                             SwContentAtPos aCntntAtPos( SwContentAtPos::SW_CLICKFIELD |
                                                         SwContentAtPos::SW_INETATTR );
-                            if( rSh.GetContentAtPos( aDocPos, aCntntAtPos, FALSE ) &&
+                            if( rSh.GetContentAtPos( aDocPos, aCntntAtPos, sal_False ) &&
                                 !rSh.IsReadOnlyAvailable() &&
                                 aCntntAtPos.IsInProtectSect() )
-                                bLockView = TRUE;
+                                bLockView = sal_True;
                         }
                 }
 
@@ -3261,19 +3265,19 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     rSh.ClearGCAttr();
                 }
 
-                BOOL bOverSelect = rSh.ChgCurrPam( aDocPos ), bOverURLGrf = FALSE;
+                sal_Bool bOverSelect = rSh.ChgCurrPam( aDocPos ), bOverURLGrf = sal_False;
                 if( !bOverSelect )
                     bOverURLGrf = bOverSelect = 0 != rSh.IsURLGrfAtPos( aDocPos );
 
                 if ( !bOverSelect )
                 {
-                    const BOOL bTmpNoInterrupt = bNoInterrupt;
-                    bNoInterrupt = FALSE;
+                    const sal_Bool bTmpNoInterrupt = bNoInterrupt;
+                    bNoInterrupt = sal_False;
 
                     if( !rSh.IsViewLocked() && bLockView )
-                        rSh.LockView( TRUE );
+                        rSh.LockView( sal_True );
                     else
-                        bLockView = FALSE;
+                        bLockView = sal_False;
 
                     int nTmpSetCrsr = 0;
 
@@ -3282,7 +3286,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         MV_KONTEXT( &rSh );
                         nTmpSetCrsr = (rSh.*rSh.fnSetCrsr)(&aDocPos,bOnlyText);
                         bValidCrsrPos = !(CRSR_POSCHG & nTmpSetCrsr);
-                        bCallBase = FALSE;
+                        bCallBase = sal_False;
                     }
 
                     // notify the edit window that from now on we do not use the input language
@@ -3290,7 +3294,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         SetUseInputLanguage( sal_False );
 
                     if( bLockView )
-                        rSh.LockView( FALSE );
+                        rSh.LockView( sal_False );
 
                     bNoInterrupt = bTmpNoInterrupt;
                 }
@@ -3307,7 +3311,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         if( !rSh.IsFrmSelected() )
                             rSh.GotoNextFly();
                         rSh.EnterSelFrmMode();
-                        bCallBase = FALSE;
+                        bCallBase = sal_False;
                     }
                 }
                 // don't reset here any longer so that, in case through MouseMove
@@ -3331,7 +3335,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
     //ignore key modifiers for format paintbrush
     {
-        BOOL bExecFormatPaintbrush = pApplyTempl && pApplyTempl->pFormatClipboard
+        sal_Bool bExecFormatPaintbrush = pApplyTempl && pApplyTempl->pFormatClipboard
                                 &&  pApplyTempl->pFormatClipboard->HasContent();
         if( bExecFormatPaintbrush )
             rMEvt = MouseEvent( _rMEvt.GetPosPixel(), _rMEvt.GetClicks(),
@@ -3347,7 +3351,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     if( pShadCrsr && 0 != (rMEvt.GetModifier() + rMEvt.GetButtons() ) )
         delete pShadCrsr, pShadCrsr = 0;
 
-    BOOL bIsDocReadOnly = rView.GetDocShell()->IsReadOnly();
+    sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly();
 
     SET_CURR_SHELL( &rSh );
 
@@ -3376,7 +3380,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     }
 
     const Point aOldPt( rSh.VisArea().Pos() );
-    const BOOL bInsWin = rSh.VisArea().IsInside( aDocPt );
+    const sal_Bool bInsWin = rSh.VisArea().IsInside( aDocPt );
 
     if( pShadCrsr && !bInsWin )
         delete pShadCrsr, pShadCrsr = 0;
@@ -3436,13 +3440,13 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         }
     }
 
-    BYTE nMouseTabCol;
+    sal_uInt8 nMouseTabCol;
     if( !bIsDocReadOnly && bInsWin && !pApplyTempl && !rSh.IsInSelect() )
     {
         if ( SW_TABCOL_NONE != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPt ) ) &&
              !rSh.IsObjSelectable( aDocPt ) )
         {
-            USHORT nPointer = USHRT_MAX;
+            sal_uInt16 nPointer = USHRT_MAX;
             bool bChkTblSel = false;
 
             switch ( nMouseTabCol )
@@ -3490,7 +3494,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         {
             // i#42921 - consider vertical mode
             SwTxtNode* pNodeAtPos = rSh.GetNumRuleNodeAtPos( aDocPt );
-            const USHORT nPointer =
+            const sal_uInt16 nPointer =
                     rSh.IsVerticalModeAtNdAndPos( *pNodeAtPos, aDocPt )
                     ? POINTER_VSIZEBAR
                     : POINTER_HSIZEBAR;
@@ -3500,7 +3504,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         }
     }
 
-    BOOL bDelShadCrsr = TRUE;
+    sal_Bool bDelShadCrsr = sal_True;
 
     switch ( rMEvt.GetModifier() + rMEvt.GetButtons() )
     {
@@ -3550,10 +3554,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                         EnterArea();
                     if ( rView.GetDrawFuncPtr() )
                     {
-                        pSdrView->SetOrtho(FALSE);
+                        pSdrView->SetOrtho(sal_False);
                         rView.GetDrawFuncPtr()->MouseMove( rMEvt );
                     }
-                    bIsInMove = TRUE;
+                    bIsInMove = sal_True;
                 }
                 return;
             }
@@ -3584,7 +3588,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             eSdrMoveHdl = pHdl ? pHdl->GetKind() : HDL_MOVE;
                         }
 
-                        USHORT nEvent = HDL_MOVE == eSdrMoveHdl
+                        sal_uInt16 nEvent = HDL_MOVE == eSdrMoveHdl
                                             ? SW_EVENT_FRM_MOVE
                                             : SW_EVENT_FRM_RESIZE;
 
@@ -3595,7 +3599,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             aRszMvHdlPt != aDocPt )
                         {
                             aRszMvHdlPt = aDocPt;
-                            USHORT nPos = 0;
+                            sal_uInt16 nPos = 0;
                             String sRet;
                             SbxArrayRef xArgs = new SbxArray;
                             SbxVariableRef xVar = new SbxVariable;
@@ -3605,7 +3609,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             if( SW_EVENT_FRM_RESIZE == nEvent )
                             {
                                 xVar = new SbxVariable;
-                                xVar->PutUShort( static_cast< UINT16 >(eSdrMoveHdl) );
+                                xVar->PutUShort( static_cast< sal_uInt16 >(eSdrMoveHdl) );
                                 xArgs->Put( &xVar, ++nPos );
                             }
 
@@ -3633,17 +3637,17 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
                     if ( rMEvt.IsShift() )
                     {
-                        pSdrView->SetOrtho(TRUE);
-                        pSdrView->SetAngleSnapEnabled(TRUE);
+                        pSdrView->SetOrtho(sal_True);
+                        pSdrView->SetAngleSnapEnabled(sal_True);
                     }
                     else
                     {
-                        pSdrView->SetOrtho(FALSE);
-                        pSdrView->SetAngleSnapEnabled(FALSE);
+                        pSdrView->SetOrtho(sal_False);
+                        pSdrView->SetAngleSnapEnabled(sal_False);
                     }
 
                     (rSh.*rSh.fnDrag)( &aDocPt, rMEvt.IsShift() );
-                    bIsInMove = TRUE;
+                    bIsInMove = sal_True;
                 }
                 else if( bIsDocReadOnly )
                     break;
@@ -3665,9 +3669,9 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 if ( pSdrView )
                 {
                     if ( rMEvt.IsShift() )
-                        pSdrView->SetOrtho(TRUE);
+                        pSdrView->SetOrtho(sal_True);
                     else
-                        pSdrView->SetOrtho(FALSE);
+                        pSdrView->SetOrtho(sal_False);
                 }
                 if ( !bInsWin )
                 {
@@ -3682,14 +3686,14 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             rMEvt.GetModifier() + rMEvt.GetButtons() ) &&
                             rSh.Is_FnDragEQBeginDrag() && !rSh.IsAddMode() ))
                     {
-                        (rSh.*rSh.fnDrag)( &aDocPt,FALSE );
+                        (rSh.*rSh.fnDrag)( &aDocPt,sal_False );
 
-                        bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPt,FALSE));
+                        bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPt,sal_False));
                         EnterArea();
                     }
                 }
             }
-            bDDINetAttr = FALSE;
+            bDDINetAttr = sal_False;
             break;
         case 0:
         {
@@ -3702,7 +3706,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             // TODO: do the same thing for redlines SW_REDLINE
             SwRect aFldRect;
             SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD);
-            if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, FALSE, &aFldRect ) )
+            if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, sal_False, &aFldRect ) )
             {
                 const SwField* pFld = aCntntAtPos.aFnd.pFld;
                 if (pFld->Which()== RES_POSTITFLD)
@@ -3721,7 +3725,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         case KEY_MOD1:
             if ( !bInsDraw )
             {
-                BOOL bTstShdwCrsr = TRUE;
+                sal_Bool bTstShdwCrsr = sal_True;
 
                 UpdatePointer( aDocPt, rMEvt.GetModifier() );
 
@@ -3736,7 +3740,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 if( pINet ||
                     0 != ( pTmp = pFmt = rSh.GetFmtFromAnyObj( aDocPt )))
                 {
-                    bTstShdwCrsr = FALSE;
+                    bTstShdwCrsr = sal_False;
                     if( pTmp == pINet )
                         aSaveCallEvent.Set( pINet );
                     else
@@ -3754,7 +3758,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     {
                         if( aLastCallEvent.HasEvent() )
                             rSh.CallEvent( SFX_EVENT_MOUSEOUT_OBJECT,
-                                            aLastCallEvent, TRUE );
+                                            aLastCallEvent, sal_True );
                         // 0 says that the object doesn't have any table
                         if( !rSh.CallEvent( SFX_EVENT_MOUSEOVER_OBJECT,
                                         aSaveCallEvent ))
@@ -3765,7 +3769,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 {
                     // cursor was on an object
                     rSh.CallEvent( SFX_EVENT_MOUSEOUT_OBJECT,
-                                    aLastCallEvent, TRUE );
+                                    aLastCallEvent, sal_True );
                 }
 
                 if( bTstShdwCrsr && bInsWin && !bIsDocReadOnly &&
@@ -3785,8 +3789,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                                 SwViewOption::GetDirectCursorColor() );
                         if( text::HoriOrientation::RIGHT != eOrient && text::HoriOrientation::CENTER != eOrient )
                             eOrient = text::HoriOrientation::LEFT;
-                        pShadCrsr->SetPos( aRect.Pos(), aRect.Height(), static_cast< USHORT >(eOrient) );
-                        bDelShadCrsr = FALSE;
+                        pShadCrsr->SetPos( aRect.Pos(), aRect.Height(), static_cast< sal_uInt16 >(eOrient) );
+                        bDelShadCrsr = sal_False;
                     }
                 }
             }
@@ -3794,8 +3798,8 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         case MOUSE_LEFT + KEY_MOD2:
             if( rSh.IsBlockMode() && !rMEvt.IsSynthetic() )
             {
-                (rSh.*rSh.fnDrag)( &aDocPt,FALSE );
-                bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPt,FALSE));
+                (rSh.*rSh.fnDrag)( &aDocPt,sal_False );
+                bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPt,sal_False));
                 EnterArea();
             }
         break;
@@ -3803,7 +3807,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
     if( bDelShadCrsr && pShadCrsr )
         delete pShadCrsr, pShadCrsr = 0;
-    bWasShdwCrsr = FALSE;
+    bWasShdwCrsr = sal_False;
 }
 
 /*--------------------------------------------------------------------
@@ -3812,10 +3816,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
 void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    BOOL bCallBase = TRUE;
+    sal_Bool bCallBase = sal_True;
 
-    BOOL bCallShadowCrsr = bWasShdwCrsr;
-    bWasShdwCrsr = FALSE;
+    sal_Bool bCallShadowCrsr = bWasShdwCrsr;
+    bWasShdwCrsr = sal_False;
     if( pShadCrsr )
         delete pShadCrsr, pShadCrsr = 0;
 
@@ -3826,7 +3830,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     eSdrMoveHdl = HDL_USER;     // for MoveEvents - reset again
 
     // preventively reset
-    rView.SetTabColFromDoc( FALSE );
+    rView.SetTabColFromDoc( sal_False );
     rView.SetNumRuleNodeFromDoc(NULL);
 
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -3834,11 +3838,11 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     SdrView *pSdrView = rSh.GetDrawView();
     if ( pSdrView )
     {
-        pSdrView->SetOrtho(FALSE);
+        pSdrView->SetOrtho(sal_False);
 
         if ( pSdrView->MouseButtonUp( rMEvt,this ) )
         {
-            rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+            rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
             return; // SdrView's event evaluated
         }
     }
@@ -3856,13 +3860,13 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     if ( bDDTimerStarted )
     {
         StopDDTimer( &rSh, aDocPt );
-        bMBPressed = FALSE;
+        bMBPressed = sal_False;
         if ( rSh.IsSelFrmMode() )
         {
-            (rSh.*rSh.fnEndDrag)( &aDocPt, FALSE );
-            bFrmDrag = FALSE;
+            (rSh.*rSh.fnEndDrag)( &aDocPt, sal_False );
+            bFrmDrag = sal_False;
         }
-        bNoInterrupt = FALSE;
+        bNoInterrupt = sal_False;
         ReleaseMouse();
         return;
     }
@@ -3872,7 +3876,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         Point aPnt( pAnchorMarker->GetLastPos() );
         DELETEZ( pAnchorMarker );
         if( aPnt.X() || aPnt.Y() )
-            rSh.FindAnchorPos( aPnt, TRUE );
+            rSh.FindAnchorPos( aPnt, sal_True );
     }
     if ( bInsDraw && rView.GetDrawFuncPtr() )
     {
@@ -3895,7 +3899,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 rSh.EnterSelFrmMode();
                 if (!rView.GetDrawFuncPtr())
-                    StdDrawMode( OBJ_NONE, TRUE );
+                    StdDrawMode( OBJ_NONE, sal_True );
             }
             else if ( rSh.IsFrmSelected() )
             {
@@ -3905,7 +3909,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             else
             {
                 const Point aDocPos( PixelToLogic( aStartPos ) );
-                bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,FALSE));
+                bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,sal_False));
                 rSh.Edit();
             }
 
@@ -3914,17 +3918,17 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         else if (rMEvt.GetButtons() == MOUSE_RIGHT && rSh.IsDrawCreate())
             rView.GetDrawFuncPtr()->BreakCreate();   // abort drawing
 
-        bNoInterrupt = FALSE;
+        bNoInterrupt = sal_False;
         ReleaseMouse();
         return;
     }
-    BOOL bPopMode = FALSE;
+    sal_Bool bPopMode = sal_False;
     switch ( rMEvt.GetModifier() + rMEvt.GetButtons() )
     {
         case MOUSE_LEFT:
             if ( bInsDraw && rSh.IsDrawCreate() )
             {
-                if ( rView.GetDrawFuncPtr() && rView.GetDrawFuncPtr()->MouseButtonUp(rMEvt) == TRUE )
+                if ( rView.GetDrawFuncPtr() && rView.GetDrawFuncPtr()->MouseButtonUp(rMEvt) == sal_True )
                 {
                     rView.GetDrawFuncPtr()->Deactivate();
                     rView.AttrChangedNotify( &rSh );
@@ -3933,7 +3937,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     if ( rView.GetDrawFuncPtr() && bInsFrm )
                         StopInsFrm();
                 }
-                bCallBase = FALSE;
+                bCallBase = sal_False;
                 break;
             }
         case MOUSE_LEFT + KEY_MOD1:
@@ -3963,12 +3967,12 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         if ( aSttPt != aEndPt )
                         {
                             rSh.StartUndo( UNDO_UI_DRAG_AND_COPY );
-                            rSh.Copy(&rSh, aSttPt, aEndPt, FALSE);
+                            rSh.Copy(&rSh, aSttPt, aEndPt, sal_False);
                             rSh.EndUndo( UNDO_UI_DRAG_AND_COPY );
                         }
                     }
                     else
-                        (rSh.*rSh.fnEndDrag)( &aDocPt,FALSE );
+                        (rSh.*rSh.fnEndDrag)( &aDocPt,sal_False );
                 }
                 else
                 {
@@ -3976,7 +3980,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         const SwFrmFmt* pFlyFmt;
                         const SvxMacro* pMacro;
 
-                        USHORT nEvent = HDL_MOVE == eOldSdrMoveHdl
+                        sal_uInt16 nEvent = HDL_MOVE == eOldSdrMoveHdl
                                             ? SW_EVENT_FRM_MOVE
                                             : SW_EVENT_FRM_RESIZE;
 
@@ -3986,7 +3990,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         {
                             const Point aSttPt( PixelToLogic( aStartPos ) );
                             aRszMvHdlPt = aDocPt;
-                            USHORT nPos = 0;
+                            sal_uInt16 nPos = 0;
                             SbxArrayRef xArgs = new SbxArray;
                             SbxVariableRef xVar = new SbxVariable;
                             xVar->PutString( pFlyFmt->GetName() );
@@ -3995,7 +3999,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             if( SW_EVENT_FRM_RESIZE == nEvent )
                             {
                                 xVar = new SbxVariable;
-                                xVar->PutUShort( static_cast< UINT16 >(eOldSdrMoveHdl) );
+                                xVar->PutUShort( static_cast< sal_uInt16 >(eOldSdrMoveHdl) );
                                 xArgs->Put( &xVar, ++nPos );
                             }
 
@@ -4017,82 +4021,82 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             CaptureMouse();
                         }
                     }
-                    (rSh.*rSh.fnEndDrag)( &aDocPt,FALSE );
+                    (rSh.*rSh.fnEndDrag)( &aDocPt,sal_False );
                 }
-                bFrmDrag = FALSE;
-                bCallBase = FALSE;
+                bFrmDrag = sal_False;
+                bCallBase = sal_False;
                 break;
             }
-            bPopMode = TRUE;
+            bPopMode = sal_True;
             // no break
         case MOUSE_LEFT + KEY_SHIFT:
             if (rSh.IsSelFrmMode())
             {
 
-                (rSh.*rSh.fnEndDrag)( &aDocPt, FALSE );
-                bFrmDrag = FALSE;
-                bCallBase = FALSE;
+                (rSh.*rSh.fnEndDrag)( &aDocPt, sal_False );
+                bFrmDrag = sal_False;
+                bCallBase = sal_False;
                 break;
             }
 
             if( bHoldSelection )
             {
                 // the EndDrag should be called in any case
-                bHoldSelection = FALSE;
-                (rSh.*rSh.fnEndDrag)( &aDocPt, FALSE );
+                bHoldSelection = sal_False;
+                (rSh.*rSh.fnEndDrag)( &aDocPt, sal_False );
             }
             else
             {
                 if ( !rSh.IsInSelect() && rSh.ChgCurrPam( aDocPt ) )
                 {
-                    const BOOL bTmpNoInterrupt = bNoInterrupt;
-                    bNoInterrupt = FALSE;
+                    const sal_Bool bTmpNoInterrupt = bNoInterrupt;
+                    bNoInterrupt = sal_False;
                     {   // create only temporary move context because otherwise
                         // the query to the content form doesn't work!!!
                         MV_KONTEXT( &rSh );
                         const Point aDocPos( PixelToLogic( aStartPos ) );
-                        bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,FALSE));
+                        bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,sal_False));
                     }
                     bNoInterrupt = bTmpNoInterrupt;
 
                 }
                 else
                 {
-                    BOOL bInSel = rSh.IsInSelect();
-                    (rSh.*rSh.fnEndDrag)( &aDocPt, FALSE );
+                    sal_Bool bInSel = rSh.IsInSelect();
+                    (rSh.*rSh.fnEndDrag)( &aDocPt, sal_False );
 
                     // Internetfield? --> call link (load doc!!)
                     if( !bInSel )
                     {
-                        USHORT nFilter = URLLOAD_NOFILTER;
+                        sal_uInt16 nFilter = URLLOAD_NOFILTER;
                         if( KEY_MOD1 == rMEvt.GetModifier() )
                             nFilter |= URLLOAD_NEWVIEW;
 
-                        BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
+                        sal_Bool bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
                         if ( !bExecHyperlinks )
                         {
                             SvtSecurityOptions aSecOpts;
-                            const BOOL bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+                            const sal_Bool bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
                             if ( (  bSecureOption && rMEvt.GetModifier() == KEY_MOD1 ) ||
                                  ( !bSecureOption && rMEvt.GetModifier() != KEY_MOD1 ) )
-                                bExecHyperlinks = TRUE;
+                                bExecHyperlinks = sal_True;
                         }
 
-                        const BOOL bExecSmarttags = rMEvt.GetModifier() == KEY_MOD1;
+                        const sal_Bool bExecSmarttags = rMEvt.GetModifier() == KEY_MOD1;
 
                         if(pApplyTempl)
-                            bExecHyperlinks = FALSE;
+                            bExecHyperlinks = sal_False;
 
                         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_CLICKFIELD |
                                                     SwContentAtPos::SW_INETATTR |
                                                     SwContentAtPos::SW_SMARTTAG  | SwContentAtPos::SW_FORMCTRL);
 
-                        if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, TRUE ) )
+                        if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, sal_True ) )
                         {
-                            BOOL bViewLocked = rSh.IsViewLocked();
+                            sal_Bool bViewLocked = rSh.IsViewLocked();
                             if( !bViewLocked && !rSh.IsReadOnlyAvailable() &&
                                 aCntntAtPos.IsInProtectSect() )
-                                rSh.LockView( TRUE );
+                                rSh.LockView( sal_True );
 
                             ReleaseMouse();
 
@@ -4134,12 +4138,12 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             }
 
                             rSh.LockView( bViewLocked );
-                            bCallShadowCrsr = FALSE;
+                            bCallShadowCrsr = sal_False;
                         }
                         else
                         {
                             aCntntAtPos = SwContentAtPos( SwContentAtPos::SW_FTN );
-                            if( !rSh.GetContentAtPos( aDocPt, aCntntAtPos, TRUE ) && bExecHyperlinks )
+                            if( !rSh.GetContentAtPos( aDocPt, aCntntAtPos, sal_True ) && bExecHyperlinks )
                             {
                                 SdrViewEvent aVEvt;
 
@@ -4156,14 +4160,14 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                         String sTarget(pField->GetTargetFrame());
                                         ::LoadURL( sURL, &rSh, nFilter, &sTarget);
                                     }
-                                    bCallShadowCrsr = FALSE;
+                                    bCallShadowCrsr = sal_False;
                                 }
                                 else
                                 {
                                     // hit graphic
                                     ReleaseMouse();
                                     if( rSh.ClickToINetGrf( aDocPt, nFilter ))
-                                        bCallShadowCrsr = FALSE;
+                                        bCallShadowCrsr = sal_False;
                                 }
                             }
                         }
@@ -4175,14 +4179,20 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             !GetConnectMetaFile() &&
                             rSh.VisArea().IsInside( aDocPt ))
                         {
-                            if( UNDO_INS_FROM_SHADOWCRSR == rSh.GetUndoIds() )
-                                rSh.Undo();
+                            SwUndoId nLastUndoId(UNDO_EMPTY);
+                            if (rSh.GetLastUndoInfo(0, & nLastUndoId))
+                            {
+                                if (UNDO_INS_FROM_SHADOWCRSR == nLastUndoId)
+                                {
+                                    rSh.Undo();
+                                }
+                            }
                             SwFillMode eMode = (SwFillMode)rSh.GetViewOptions()->GetShdwCrsrFillMode();
                             rSh.SetShadowCrsrPos( aDocPt, eMode );
                         }
                     }
                 }
-                bCallBase = FALSE;
+                bCallBase = sal_False;
 
             }
 
@@ -4190,8 +4200,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             if ( bPopMode && bModePushed )
             {
                 rSh.PopMode();
-                bModePushed = FALSE;
-                bCallBase = FALSE;
+                bModePushed = sal_False;
+                bCallBase = sal_False;
             }
             break;
 
@@ -4229,7 +4239,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         }
         else if( pApplyTempl->nColor )
         {
-            USHORT nId = 0;
+            sal_uInt16 nId = 0;
             switch( pApplyTempl->nColor )
             {
                 case SID_ATTR_CHAR_COLOR_EXT:
@@ -4256,8 +4266,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     rSh.EnterStdMode();
                     rSh.SetVisCrsr(aDocPt);
 
-                    pApplyTempl->bUndo = TRUE;
-                    bCallBase = FALSE;
+                    pApplyTempl->bUndo = sal_True;
+                    bCallBase = sal_False;
                     aTemplateTimer.Stop();
                 }
                 else if(rMEvt.GetClicks() == 1)
@@ -4277,8 +4287,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                          & eSelection ) && !rSh.HasReadonlySel() )
                     {
                         rSh.SetTxtFmtColl( pApplyTempl->aColl.pTxtColl );
-                        pApplyTempl->bUndo = TRUE;
-                        bCallBase = FALSE;
+                        pApplyTempl->bUndo = sal_True;
+                        bCallBase = sal_False;
                         if ( pApplyTempl->aColl.pTxtColl )
                             aStyleName = pApplyTempl->aColl.pTxtColl->GetName();
                     }
@@ -4291,8 +4301,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         rSh.UnSetVisCrsr();
                         rSh.EnterStdMode();
                         rSh.SetVisCrsr(aDocPt);
-                        pApplyTempl->bUndo = TRUE;
-                        bCallBase = FALSE;
+                        pApplyTempl->bUndo = sal_True;
+                        bCallBase = sal_False;
                         if ( pApplyTempl->aColl.pCharFmt )
                             aStyleName = pApplyTempl->aColl.pCharFmt->GetName();
                     }
@@ -4302,9 +4312,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     const SwFrmFmt* pFmt = rSh.GetFmtFromObj( aDocPt );
                     if(PTR_CAST(SwFlyFrmFmt, pFmt))
                     {
-                        rSh.SetFrmFmt( pApplyTempl->aColl.pFrmFmt, FALSE, &aDocPt );
-                        pApplyTempl->bUndo = TRUE;
-                        bCallBase = FALSE;
+                        rSh.SetFrmFmt( pApplyTempl->aColl.pFrmFmt, sal_False, &aDocPt );
+                        pApplyTempl->bUndo = sal_True;
+                        bCallBase = sal_False;
                         if( pApplyTempl->aColl.pFrmFmt )
                             aStyleName = pApplyTempl->aColl.pFrmFmt->GetName();
                     }
@@ -4315,7 +4325,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     rSh.ChgCurPageDesc( *pApplyTempl->aColl.pPageDesc );
                     if ( pApplyTempl->aColl.pPageDesc )
                         aStyleName = pApplyTempl->aColl.pPageDesc->GetName();
-                    bCallBase = FALSE;
+                    bCallBase = sal_False;
                     break;
                 case SFX_STYLE_FAMILY_PSEUDO:
                     if( !rSh.HasReadonlySel() )
@@ -4323,8 +4333,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         rSh.SetCurNumRule( *pApplyTempl->aColl.pNumRule,
                                            false,
                                            pApplyTempl->aColl.pNumRule->GetDefaultListId() );
-                        bCallBase = FALSE;
-                        pApplyTempl->bUndo = TRUE;
+                        bCallBase = sal_False;
+                        pApplyTempl->bUndo = sal_True;
                         if( pApplyTempl->aColl.pNumRule )
                             aStyleName = pApplyTempl->aColl.pNumRule->GetName();
                     }
@@ -4340,7 +4350,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     SfxRequest aReq( rView.GetViewFrame(), SID_STYLE_APPLY );
                     aReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aStyleName ) );
-                    aReq.AppendItem( SfxUInt16Item( SID_STYLE_FAMILY, (USHORT) pApplyTempl->eType ) );
+                    aReq.AppendItem( SfxUInt16Item( SID_STYLE_FAMILY, (sal_uInt16) pApplyTempl->eType ) );
                     aReq.Done();
                 }
             }
@@ -4350,12 +4360,12 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     ReleaseMouse();
     // Only processed MouseEvents arrive here; only at these the moduses can
     // be resetted.
-    bMBPressed = FALSE;
+    bMBPressed = sal_False;
 
     //sicherheitshalber aufrufen, da jetzt das Selektieren bestimmt zu Ende ist.
     //Andernfalls koennte der Timeout des Timers Kummer machen.
     EnterArea();
-    bNoInterrupt = FALSE;
+    bNoInterrupt = sal_False;
 
     if (bCallBase)
         Window::MouseButtonUp(rMEvt);
@@ -4367,7 +4377,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
 void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
 {
-    static BOOL bIdle = FALSE;
+    static sal_Bool bIdle = sal_False;
     DELETEZ(pApplyTempl);
     SwWrtShell &rSh = rView.GetWrtShell();
 
@@ -4375,25 +4385,25 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
     {
         pApplyTempl = new SwApplyTemplate( rTempl );
               SetPointer( POINTER_FILL );//@todo #i20119# maybe better a new brush pointer here in future
-              rSh.NoEdit( FALSE );
+              rSh.NoEdit( sal_False );
               bIdle = rSh.GetViewOptions()->IsIdle();
-              ((SwViewOption *)rSh.GetViewOptions())->SetIdle( FALSE );
+              ((SwViewOption *)rSh.GetViewOptions())->SetIdle( sal_False );
     }
     else if(rTempl.nColor)
     {
         pApplyTempl = new SwApplyTemplate( rTempl );
         SetPointer( POINTER_FILL );
-        rSh.NoEdit( FALSE );
+        rSh.NoEdit( sal_False );
         bIdle = rSh.GetViewOptions()->IsIdle();
-        ((SwViewOption *)rSh.GetViewOptions())->SetIdle( FALSE );
+        ((SwViewOption *)rSh.GetViewOptions())->SetIdle( sal_False );
     }
     else if( rTempl.eType )
     {
         pApplyTempl = new SwApplyTemplate( rTempl );
         SetPointer( POINTER_FILL  );
-        rSh.NoEdit( FALSE );
+        rSh.NoEdit( sal_False );
         bIdle = rSh.GetViewOptions()->IsIdle();
-        ((SwViewOption *)rSh.GetViewOptions())->SetIdle( FALSE );
+        ((SwViewOption *)rSh.GetViewOptions())->SetIdle( sal_False );
     }
     else
     {
@@ -4405,7 +4415,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
             rSh.Edit();
     }
 
-    static USHORT const aInva[] =
+    static sal_uInt16 aInva[] =
     {
         SID_STYLE_WATERCAN,
         SID_ATTR_CHAR_COLOR_EXT,
@@ -4442,8 +4452,8 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     nInsFrmColCount( 1 ),
     eDrawMode(OBJ_NONE),
 
-    bLockInput(FALSE),
-    bObjectSelect( FALSE ),
+    bLockInput(sal_False),
+    bObjectSelect( sal_False ),
     nKS_NUMDOWN_Count(0),
     nKS_NUMINDENTINC_Count(0)
 {
@@ -4452,7 +4462,7 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     SetDialogControlFlags( WINDOW_DLGCTRL_RETURN | WINDOW_DLGCTRL_WANTFOCUS );
 
     bLinkRemoved = bMBPressed = bInsDraw = bInsFrm =
-    bIsInDrag = bOldIdle = bOldIdleSet = bChainMode = bWasShdwCrsr = FALSE;
+    bIsInDrag = bOldIdle = bOldIdleSet = bChainMode = bWasShdwCrsr = sal_False;
     // initially use the input language
     bUseInputLanguage = sal_True;
 
@@ -4461,7 +4471,7 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     SetPointer( POINTER_TEXT );
     aTimer.SetTimeoutHdl(LINK(this, SwEditWin, TimerHandler));
 
-    bTblInsDelMode = FALSE;
+    bTblInsDelMode = sal_False;
     aKeyInputTimer.SetTimeout( 3000 );
     aKeyInputTimer.SetTimeoutHdl(LINK(this, SwEditWin, KeyInputTimerHandler));
 
@@ -4490,7 +4500,7 @@ SwEditWin::~SwEditWin()
     delete pRowColumnSelectionStart;
     if( pQuickHlpData->bClear && rView.GetWrtShellPtr() )
         pQuickHlpData->Stop( rView.GetWrtShell() );
-    bExecuteDrag = FALSE;
+    bExecuteDrag = sal_False;
     delete pApplyTempl;
     rView.SetDrawFuncPtr(NULL);
 
@@ -4508,7 +4518,7 @@ SwEditWin::~SwEditWin()
 
 void SwEditWin::EnterDrawTextMode( const Point& aDocPos )
 {
-    if ( rView.EnterDrawTextMode(aDocPos) == TRUE )
+    if ( rView.EnterDrawTextMode(aDocPos) == sal_True )
     {
         if (rView.GetDrawFuncPtr())
         {
@@ -4525,7 +4535,7 @@ void SwEditWin::EnterDrawTextMode( const Point& aDocPos )
  *  Description: turn on DrawMode
  ******************************************************************************/
 
-BOOL SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
+sal_Bool SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     SdrView *pSdrView = rSh.GetDrawView();
@@ -4533,17 +4543,17 @@ BOOL SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
     if ( rView.GetDrawFuncPtr() )
     {
         if (rSh.IsDrawCreate())
-            return TRUE;
+            return sal_True;
 
-        BOOL bRet = rView.GetDrawFuncPtr()->MouseButtonDown( rMEvt );
+        sal_Bool bRet = rView.GetDrawFuncPtr()->MouseButtonDown( rMEvt );
         rView.AttrChangedNotify( &rSh );
         return bRet;
     }
 
     if ( pSdrView && pSdrView->IsTextEdit() )
     {
-        BOOL bUnLockView = !rSh.IsViewLocked();
-        rSh.LockView( TRUE );
+        sal_Bool bUnLockView = !rSh.IsViewLocked();
+        rSh.LockView( sal_True );
 
         rSh.EndTextEdit(); // clicked aside, end Edit
         rSh.SelectObj( aDocPos );
@@ -4553,17 +4563,17 @@ BOOL SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
         {
             SwEditWin::nDDStartPosY = aDocPos.Y();
             SwEditWin::nDDStartPosX = aDocPos.X();
-            bFrmDrag = TRUE;
+            bFrmDrag = sal_True;
         }
         if( bUnLockView )
-            rSh.LockView( FALSE );
+            rSh.LockView( sal_False );
         rView.AttrChangedNotify( &rSh );
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SwEditWin::IsDrawSelMode()
+sal_Bool SwEditWin::IsDrawSelMode()
 {
     return IsObjectSelect();
 }
@@ -4607,20 +4617,20 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
     // to deactivate the inplace client without any problem regarding parent
     // windows and code on the stack.
     SfxInPlaceClient* pIPClient = rSh.GetSfxViewShell()->GetIPClient();
-    BOOL bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
+    sal_Bool bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
     if ( bIsOleActive && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ))
     {
         rSh.FinishOLEObj();
         return;
     }
 
-    BOOL bCallBase      = TRUE;
+    sal_Bool bCallBase      = sal_True;
 
     switch ( rCEvt.GetCommand() )
     {
         case COMMAND_CONTEXTMENU:
         {
-            const USHORT nId = SwInputChild::GetChildWindowId();
+            const sal_uInt16 nId = SwInputChild::GetChildWindowId();
             SwInputChild* pChildWin = (SwInputChild*)GetView().GetViewFrame()->
                                                 GetChildWindow( nId );
 
@@ -4633,11 +4643,11 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 SET_CURR_SHELL( &rSh );
                 if (!pApplyTempl)
                 {
-                    if (bNoInterrupt == TRUE)
+                    if (bNoInterrupt == sal_True)
                     {
                         ReleaseMouse();
-                        bNoInterrupt = FALSE;
-                        bMBPressed = FALSE;
+                        bNoInterrupt = sal_False;
+                        bMBPressed = sal_False;
                     }
                     Point aDocPos( PixelToLogic( rCEvt.GetMousePosPixel() ) );
                     if ( !rCEvt.IsMouseEvent() )
@@ -4664,7 +4674,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         {
                             if ( pMenu )
                             {
-                                USHORT nExecId = ((PopupMenu*)pMenu)->Execute(this, aPixPos);
+                                sal_uInt16 nExecId = ((PopupMenu*)pMenu)->Execute(this, aPixPos);
                                 if( !::ExecuteMenuCommand( *static_cast<PopupMenu*>(pMenu), *rView.GetViewFrame(), nExecId ))
                                     pROPopup->Execute(this, nExecId);
                             }
@@ -4678,7 +4688,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 }
                 else if (pApplyTempl->bUndo)
                     rSh.Do(SwWrtShell::UNDO);
-                bCallBase = FALSE;
+                bCallBase = sal_False;
             }
         }
         break;
@@ -4696,7 +4706,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 // forward to Outliner if applicable
                 if ( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
                 {
-                    bCallBase = FALSE;
+                    bCallBase = sal_False;
                     rSh.GetDrawView()->GetTextEditOutlinerView()->Command( rCEvt );
                     break;
                 }
@@ -4705,7 +4715,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 if ( VOICECOMMANDTYPE_CONTROL == pCData->GetType() )
                     break;
 
-                USHORT nSlotId = 0;
+                sal_uInt16 nSlotId = 0;
                 SfxPoolItem *pItem = 0;
 
                 switch ( pCData->GetCommand() )
@@ -4764,7 +4774,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 }
                 if ( nSlotId )
                 {
-                    bCallBase = FALSE;
+                    bCallBase = sal_False;
                     if ( pItem )
                     {
                         const SfxPoolItem* aArgs[2];
@@ -4782,13 +4792,13 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
     case COMMAND_STARTEXTTEXTINPUT:
     {
-        BOOL bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
+        sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
                               rSh.IsCrsrReadonly();
         if(!bIsDocReadOnly)
         {
             if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
             {
-                bCallBase = FALSE;
+                bCallBase = sal_False;
                 rSh.GetDrawView()->GetTextEditOutlinerView()->Command( rCEvt );
             }
             else
@@ -4796,7 +4806,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 if( rSh.HasSelection() )
                     rSh.DelRight();
 
-                bCallBase = FALSE;
+                bCallBase = sal_False;
                 LanguageType eInputLanguage = GetInputLanguage();
                 rSh.CreateExtTextInput(eInputLanguage);
             }
@@ -4805,18 +4815,18 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
     }
     case COMMAND_ENDEXTTEXTINPUT:
     {
-        BOOL bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
+        sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
                               rSh.IsCrsrReadonly();
         if(!bIsDocReadOnly)
         {
             if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
             {
-                bCallBase = FALSE;
+                bCallBase = sal_False;
                 rSh.GetDrawView()->GetTextEditOutlinerView()->Command( rCEvt );
             }
             else
             {
-                bCallBase = FALSE;
+                bCallBase = sal_False;
                 String sRecord = rSh.DeleteExtTextInput();
                 uno::Reference< frame::XDispatchRecorder > xRecorder =
                         rView.GetViewFrame()->GetBindings().GetRecorder();
@@ -4856,7 +4866,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
     break;
     case COMMAND_EXTTEXTINPUT:
     {
-        BOOL bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
+        sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
                               rSh.IsCrsrReadonly();
         if(!bIsDocReadOnly)
         {
@@ -4869,7 +4879,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             String sWord;
             if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
             {
-                bCallBase = FALSE;
+                bCallBase = sal_False;
                 rSh.GetDrawView()->GetTextEditOutlinerView()->Command( rCEvt );
             }
             else
@@ -4878,7 +4888,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 if( pData )
                 {
                     sWord = pData->GetText();
-                    bCallBase = FALSE;
+                    bCallBase = sal_False;
                     rSh.SetExtTextInputData( *pData );
                 }
             }
@@ -4911,8 +4921,8 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             if( !aDataHelper.GetXTransferable().is() )
                 break;
 
-            ULONG nDropFormat;
-            USHORT nEventAction, nDropAction, nDropDestination;
+            sal_uLong nDropFormat;
+            sal_uInt16 nEventAction, nDropAction, nDropDestination;
             nDropDestination = GetDropDestination( rCEvt.GetMousePosPixel() );
             if( !nDropDestination )
                 break;
@@ -4926,9 +4936,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             {
                 const Point aDocPt( PixelToLogic( rCEvt.GetMousePosPixel() ) );
                 SwTransferable::PasteData( aDataHelper, rSh, nDropAction,
-                                    nDropFormat, nDropDestination, FALSE,
-                                    FALSE, &aDocPt, EXCHG_IN_ACTION_COPY,
-                                    TRUE );
+                                    nDropFormat, nDropDestination, sal_False,
+                                    sal_False, &aDocPt, EXCHG_IN_ACTION_COPY,
+                                    sal_True );
             }
         }
         break;
@@ -4937,7 +4947,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             const CommandModKeyData* pCommandData = (const CommandModKeyData*)rCEvt.GetData();
             if(pCommandData->IsMod1() && !pCommandData->IsMod2())
             {
-                USHORT nSlot = 0;
+                sal_uInt16 nSlot = 0;
                 if(pCommandData->IsLeftShift() && !pCommandData->IsRightShift())
                     nSlot = SID_ATTR_PARA_LEFT_TO_RIGHT;
                 else if(!pCommandData->IsLeftShift() && pCommandData->IsRightShift())
@@ -4960,10 +4970,10 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             const CommandSelectionChangeData *pData = rCEvt.GetSelectionChangeData();
             rSh.SttCrsrMove();
             rSh.GoStartSentence();
-            rSh.GetCrsr()->GetPoint()->nContent += sal::static_int_cast<sal_uInt16, ULONG>(pData->GetStart());
+            rSh.GetCrsr()->GetPoint()->nContent += sal::static_int_cast<sal_uInt16, sal_uLong>(pData->GetStart());
             rSh.SetMark();
-            rSh.GetCrsr()->GetMark()->nContent += sal::static_int_cast<sal_uInt16, ULONG>(pData->GetEnd() - pData->GetStart());
-            rSh.EndCrsrMove( TRUE );
+            rSh.GetCrsr()->GetMark()->nContent += sal::static_int_cast<sal_uInt16, sal_uLong>(pData->GetEnd() - pData->GetStart());
+            rSh.EndCrsrMove( sal_True );
         }
         break;
         case COMMAND_PREPARERECONVERSION:
@@ -4987,9 +4997,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
             if( pCrsr )
             {
-                ULONG nPosNodeIdx = pCrsr->GetPoint()->nNode.GetIndex();
+                sal_uLong nPosNodeIdx = pCrsr->GetPoint()->nNode.GetIndex();
                 xub_StrLen nPosIdx = pCrsr->GetPoint()->nContent.GetIndex();
-                ULONG nMarkNodeIdx = pCrsr->GetMark()->nNode.GetIndex();
+                sal_uLong nMarkNodeIdx = pCrsr->GetMark()->nNode.GetIndex();
                 xub_StrLen nMarkIdx = pCrsr->GetMark()->nContent.GetIndex();
 
                 if( !rSh.GetCrsr()->HasMark() )
@@ -5003,7 +5013,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 rSh.GetCrsr()->GetPoint()->nContent = nPosIdx;
                 rSh.GetCrsr()->GetMark()->nNode = nPosNodeIdx;
                 rSh.GetCrsr()->GetMark()->nContent =
-                    rSh.GetCrsr()->GetCntntNode( TRUE )->Len();
+                    rSh.GetCrsr()->GetCntntNode( sal_True )->Len();
                 }
                 else if( nPosNodeIdx == nMarkNodeIdx )
                 {
@@ -5018,10 +5028,10 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 rSh.GetCrsr()->GetMark()->nContent = nMarkIdx;
                 rSh.GetCrsr()->GetPoint()->nNode = nMarkNodeIdx;
                 rSh.GetCrsr()->GetPoint()->nContent =
-                    rSh.GetCrsr()->GetCntntNode( FALSE )->Len();
+                    rSh.GetCrsr()->GetCntntNode( sal_False )->Len();
                 }
 
-                rSh.EndCrsrMove( TRUE );
+                rSh.EndCrsrMove( sal_True );
             }
         }
         break;
@@ -5036,9 +5046,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
 /*  i#18686 select the object/cursor at the mouse
     position of the context menu request */
-BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
+sal_Bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     const Point aDocPos( PixelToLogic( rMousePos ) );
     const bool bIsInsideSelectedObj( rSh.IsInsideSelectedObj( aDocPos ) );
     //create a synthetic mouse event out of the coordinates
@@ -5068,7 +5078,7 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
             if(!aSelection.IsZero())
             {
                 SdrOutliner* pOutliner = pSdrView->GetTextEditOutliner();
-                BOOL bVertical = pOutliner->IsVertical();
+                sal_Bool bVertical = pOutliner->IsVertical();
                 const EditEngine& rEditEng = pOutliner->GetEditEngine();
                 Point aEEPos(aDocPos);
                 const Rectangle& rOutputArea = pOLV->GetOutputArea();
@@ -5090,7 +5100,7 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                 aSelection.Adjust();
                 if(!aCompare.IsLess(aSelection)  && !aCompare.IsGreater(aSelection))
                 {
-                    return FALSE;
+                    return sal_False;
                 }
             }
 
@@ -5099,15 +5109,15 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         if (pSdrView->MouseButtonDown( aMEvt, this ) )
         {
             pSdrView->MouseButtonUp( aMEvt, this );
-            rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(FALSE);
-            return TRUE;
+            rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+            return sal_True;
         }
     }
     rSh.ResetCursorStack();
 
     if ( EnterDrawMode( aMEvt, aDocPos ) )
     {
-        return TRUE;
+        return sal_True;
     }
     if ( rView.GetDrawFuncPtr() && bInsFrm )
     {
@@ -5128,15 +5138,15 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
             rView.NoRotate();
             rSh.HideCrsr();
 
-            BOOL bUnLockView = !rSh.IsViewLocked();
-            rSh.LockView( TRUE );
-            BOOL bSelObj = rSh.SelectObj( aDocPos, 0);
+            sal_Bool bUnLockView = !rSh.IsViewLocked();
+            rSh.LockView( sal_True );
+            sal_Bool bSelObj = rSh.SelectObj( aDocPos, 0);
             if( bUnLockView )
-                rSh.LockView( FALSE );
+                rSh.LockView( sal_False );
 
             if( bSelObj )
             {
-                bRet = TRUE;
+                bRet = sal_True;
                 // in case the frame was deselected in the macro
                 // just the cursor has to be displayed again.
                 if( FRMTYPE_NONE == rSh.GetSelFrmType() )
@@ -5152,7 +5162,7 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                     }
 
                     rSh.EnterSelFrmMode( &aDocPos );
-                    bFrmDrag = TRUE;
+                    bFrmDrag = sal_True;
                     UpdatePointer( aDocPos, 0 );
                     return bRet;
                 }
@@ -5167,31 +5177,31 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                !bIsInsideSelectedObj))
     {
         rView.NoRotate();
-        BOOL bUnLockView = !rSh.IsViewLocked();
-        rSh.LockView( TRUE );
-        BYTE nFlag = 0;
+        sal_Bool bUnLockView = !rSh.IsViewLocked();
+        rSh.LockView( sal_True );
+        sal_uInt8 nFlag = 0;
 
         if ( rSh.IsSelFrmMode() )
         {
             rSh.UnSelectFrm();
             rSh.LeaveSelFrmMode();
             rView.AttrChangedNotify(&rSh);
-            bRet = TRUE;
+            bRet = sal_True;
         }
 
-        BOOL bSelObj = rSh.SelectObj( aDocPos, nFlag );
+        sal_Bool bSelObj = rSh.SelectObj( aDocPos, nFlag );
         if( bUnLockView )
-            rSh.LockView( FALSE );
+            rSh.LockView( sal_False );
 
         if( !bSelObj )
         {
             // move cursor here so that it is not drawn in the
             // frame at first; ShowCrsr() happens in LeaveSelFrmMode()
-            bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,FALSE));
+            bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,sal_False));
             rSh.LeaveSelFrmMode();
             rView.LeaveDrawCreate();
             rView.AttrChangedNotify( &rSh );
-            bRet = TRUE;
+            bRet = sal_True;
         }
         else
         {
@@ -5199,7 +5209,7 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
             rSh.EnterSelFrmMode( &aDocPos );
             rSh.SelFlyGrabCrsr();
             rSh.MakeSelVisible();
-            bFrmDrag = TRUE;
+            bFrmDrag = sal_True;
             if( rSh.IsFrmSelected() &&
                 rView.GetDrawFuncPtr() )
             {
@@ -5209,13 +5219,13 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                 rView.AttrChangedNotify( &rSh );
             }
             UpdatePointer( aDocPos, 0 );
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
     else if ( rSh.IsSelFrmMode() && bIsInsideSelectedObj )
     {
         // ## object at the mouse cursor is already selected - do nothing
-        return FALSE;
+        return sal_False;
     }
 
     if ( rSh.IsGCAttr() )
@@ -5224,7 +5234,7 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         rSh.ClearGCAttr();
     }
 
-    BOOL bOverSelect = rSh.ChgCurrPam( aDocPos ), bOverURLGrf = FALSE;
+    sal_Bool bOverSelect = rSh.ChgCurrPam( aDocPos ), bOverURLGrf = sal_False;
     if( !bOverSelect )
         bOverURLGrf = bOverSelect = 0 != rSh.IsURLGrfAtPos( aDocPos );
 
@@ -5233,8 +5243,8 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         {   // create only temporary move context because otherwise
             // the query against the content form doesn't work!!!
             MV_KONTEXT( &rSh );
-            (rSh.*rSh.fnSetCrsr)(&aDocPos, FALSE);
-            bRet = TRUE;
+            (rSh.*rSh.fnSetCrsr)(&aDocPos, sal_False);
+            bRet = sal_True;
         }
     }
     if( !bOverURLGrf )
@@ -5247,7 +5257,7 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
             if( !rSh.IsFrmSelected() )
                 rSh.GotoNextFly();
             rSh.EnterSelFrmMode();
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
     return bRet;
@@ -5258,7 +5268,7 @@ SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType )
     // determine Shell
     SfxShell* pShell;
     SfxDispatcher* pDispatcher = rView.GetViewFrame()->GetDispatcher();
-    for(USHORT  i = 0; TRUE; ++i )
+    for(sal_uInt16  i = 0; sal_True; ++i )
     {
         pShell = pDispatcher->GetShell( i );
         if( !pShell || pShell->IsA( nType ) )
@@ -5279,7 +5289,7 @@ IMPL_LINK( SwEditWin, KeyInputFlushHandler, Timer *, EMPTYARG )
 
 IMPL_LINK( SwEditWin, KeyInputTimerHandler, Timer *, EMPTYARG )
 {
-    bTblInsDelMode = FALSE;
+    bTblInsDelMode = sal_False;
     return 0;
 }
 
@@ -5306,7 +5316,7 @@ IMPL_LINK(SwEditWin, TemplateTimerHdl, Timer*, EMPTYARG)
     return 0;
 }
 
-void SwEditWin::SetChainMode( BOOL bOn )
+void SwEditWin::SetChainMode( sal_Bool bOn )
 {
     if ( !bChainMode )
         StopInsFrm();
@@ -5321,7 +5331,7 @@ void SwEditWin::SetChainMode( BOOL bOn )
     if ( !bChainMode )
         rView.GetViewFrame()->HideStatusText();
 
-    static USHORT const aInva[] =
+    static sal_uInt16 aInva[] =
     {
         FN_FRAME_CHAIN, FN_FRAME_UNCHAIN, 0
     };
@@ -5347,7 +5357,7 @@ void QuickHelpData::Move( QuickHelpData& rCpy )
 {
     // move pointer
     aArr.Insert( &rCpy.aArr );
-    rCpy.aArr.Remove( (USHORT)0, rCpy.aArr.Count() );
+    rCpy.aArr.Remove( (sal_uInt16)0, rCpy.aArr.Count() );
     bClear = rCpy.bClear;
     nLen = rCpy.nLen;
     nCurArrPos = rCpy.nCurArrPos;
@@ -5368,16 +5378,16 @@ void QuickHelpData::Move( QuickHelpData& rCpy )
 void QuickHelpData::ClearCntnt()
 {
     nLen = nCurArrPos = 0;
-    bClear = bChkInsBlank = FALSE;
+    bClear = bChkInsBlank = sal_False;
     nTipId = 0;
     aArr.DeleteAndDestroy( 0 , aArr.Count() );
-    bIsTip = TRUE;
-    bIsAutoText = TRUE;
+    bIsTip = sal_True;
+    bIsAutoText = sal_True;
     delete pCETID, pCETID = 0;
     delete[] pAttrs, pAttrs = 0;
 }
 
-void QuickHelpData::Start( SwWrtShell& rSh, USHORT nWrdLen )
+void QuickHelpData::Start( SwWrtShell& rSh, sal_uInt16 nWrdLen )
 {
     if( pCETID ) delete pCETID, pCETID = 0;
     if( pAttrs ) delete[] pAttrs, pAttrs = 0;
@@ -5387,7 +5397,7 @@ void QuickHelpData::Start( SwWrtShell& rSh, USHORT nWrdLen )
         nLen = nWrdLen;
         nCurArrPos = 0;
     }
-    bClear = TRUE;
+    bClear = sal_True;
 
     Window& rWin = rSh.GetView().GetEditWin();
     if( bIsTip )
@@ -5403,13 +5413,13 @@ void QuickHelpData::Start( SwWrtShell& rSh, USHORT nWrdLen )
     {
         String sStr( *aArr[ nCurArrPos ] );
         sStr.Erase( 0, nLen );
-        USHORT nL = sStr.Len();
-        pAttrs = new USHORT[ nL ];
-        for( USHORT n = nL; n;  )
+        sal_uInt16 nL = sStr.Len();
+        pAttrs = new sal_uInt16[ nL ];
+        for( sal_uInt16 n = nL; n;  )
             *(pAttrs + --n ) = EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE |
                                 EXTTEXTINPUT_ATTR_HIGHLIGHT;
         pCETID = new CommandExtTextInputData( sStr, pAttrs, nL,
-                                                0, 0, 0, FALSE );
+                                                0, 0, 0, sal_False );
         rSh.CreateExtTextInput(rWin.GetInputLanguage());
         rSh.SetExtTextInputData( *pCETID );
     }
@@ -5418,7 +5428,7 @@ void QuickHelpData::Start( SwWrtShell& rSh, USHORT nWrdLen )
 void QuickHelpData::Stop( SwWrtShell& rSh )
 {
     if( !bIsTip )
-        rSh.DeleteExtTextInput( 0, FALSE );
+        rSh.DeleteExtTextInput( 0, sal_False );
     else if( nTipId )
         Help::HideTip( nTipId );
     ClearCntnt();
@@ -5455,7 +5465,7 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
 
     // and than add all words from the AutoCompleteWord-List
     const SwAutoCompleteWord& rACLst = rSh.GetAutoCompleteWords();
-    USHORT nStt, nEnd;
+    sal_uInt16 nStt, nEnd;
     if( rACLst.GetRange( rWord, nStt, nEnd ) )
     {
         while( nStt < nEnd )
@@ -5509,12 +5519,12 @@ void SwEditWin::ShowAutoTextCorrectQuickHelp(
 
     if( pQuickHlpData->aArr.Count() )
     {
-        pQuickHlpData->bIsTip = TRUE;
-        pQuickHlpData->bIsAutoText = TRUE;
+        pQuickHlpData->bIsTip = sal_True;
+        pQuickHlpData->bIsAutoText = sal_True;
     }
     else if( pACorr->GetSwFlags().bAutoCompleteWords )
     {
-        pQuickHlpData->bIsAutoText = FALSE;
+        pQuickHlpData->bIsAutoText = sal_False;
         pQuickHlpData->bIsTip = bFromIME ||
                     !pACorr ||
                     pACorr->GetSwFlags().bAutoCmpltShowAsTip;

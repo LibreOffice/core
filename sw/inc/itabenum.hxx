@@ -32,19 +32,19 @@
 
 namespace tabopts
 {
-    const USHORT DEFAULT_BORDER     = 0x01;
-    const USHORT HEADLINE           = 0x02;
-    const USHORT SPLIT_LAYOUT       = 0x08;
-    const USHORT HEADLINE_NO_BORDER = HEADLINE | SPLIT_LAYOUT;
-    const USHORT ALL_TBL_INS_ATTR   = DEFAULT_BORDER | HEADLINE | SPLIT_LAYOUT;
+    const sal_uInt16 DEFAULT_BORDER     = 0x01;
+    const sal_uInt16 HEADLINE           = 0x02;
+    const sal_uInt16 SPLIT_LAYOUT       = 0x08;
+    const sal_uInt16 HEADLINE_NO_BORDER = HEADLINE | SPLIT_LAYOUT;
+    const sal_uInt16 ALL_TBL_INS_ATTR   = DEFAULT_BORDER | HEADLINE | SPLIT_LAYOUT;
 }
 
 struct SwInsertTableOptions
 {
-    USHORT mnInsMode;
-    USHORT mnRowsToRepeat;
+    sal_uInt16 mnInsMode;
+    sal_uInt16 mnRowsToRepeat;
 
-    SwInsertTableOptions( USHORT nInsMode, USHORT nRowsToRepeat ) :
+    SwInsertTableOptions( sal_uInt16 nInsMode, sal_uInt16 nRowsToRepeat ) :
         mnInsMode( nInsMode ), mnRowsToRepeat( nRowsToRepeat ) {};
 };
 

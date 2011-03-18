@@ -47,7 +47,7 @@
 */
 
 
-BOOL SwWrtShell::_SttWrd()
+sal_Bool SwWrtShell::_SttWrd()
 {
     if ( IsSttPara() )
         return 1;
@@ -73,7 +73,7 @@ BOOL SwWrtShell::_SttWrd()
 
 
 
-BOOL SwWrtShell::_EndWrd()
+sal_Bool SwWrtShell::_EndWrd()
 {
     if ( IsEndWrd() )
         return 1;
@@ -91,14 +91,14 @@ BOOL SwWrtShell::_EndWrd()
 
 
 
-BOOL SwWrtShell::_NxtWrd()
+sal_Bool SwWrtShell::_NxtWrd()
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     while( IsEndPara() )                // wenn schon am Ende, dann naechsten ???
     {
         if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))  // Document - Ende ??
         {
-            Pop( FALSE );
+            Pop( sal_False );
             return bRet;
         }
         bRet = IsStartWord();
@@ -115,21 +115,21 @@ BOOL SwWrtShell::_NxtWrd()
             bRet = IsStartWord();
         }
         else
-            bRet = TRUE;
+            bRet = sal_True;
     }
     ClearMark();
     Combine();
     return bRet;
 }
 
-BOOL SwWrtShell::_PrvWrd()
+sal_Bool SwWrtShell::_PrvWrd()
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     while( IsSttPara() )
     {                               // wenn schon am Anfang, dann naechsten ???
         if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
         {                           // Document - Anfang ??
-            Pop( FALSE );
+            Pop( sal_False );
             return bRet;
         }
         bRet = IsStartWord();
@@ -146,7 +146,7 @@ BOOL SwWrtShell::_PrvWrd()
             bRet = IsStartWord();
         }
         else
-            bRet = TRUE;
+            bRet = sal_True;
     }
     ClearMark();
     Combine();
@@ -155,16 +155,16 @@ BOOL SwWrtShell::_PrvWrd()
 
 // --> OD 2008-08-06 #i92468#
 // method code of <SwWrtShell::_NxtWrd()> before fix for issue i72162
-BOOL SwWrtShell::_NxtWrdForDelete()
+sal_Bool SwWrtShell::_NxtWrdForDelete()
 {
     if ( IsEndPara() )
     {
         if ( !SwCrsrShell::Right(1,CRSR_SKIP_CHARS) )
         {
-            Pop( FALSE );
-            return FALSE;
+            Pop( sal_False );
+            return sal_False;
         }
-        return TRUE;
+        return sal_True;
     }
     Push();
     ClearMark();
@@ -174,20 +174,20 @@ BOOL SwWrtShell::_NxtWrdForDelete()
     }
     ClearMark();
     Combine();
-    return TRUE;
+    return sal_True;
 }
 
 // method code of <SwWrtShell::_PrvWrd()> before fix for issue i72162
-BOOL SwWrtShell::_PrvWrdForDelete()
+sal_Bool SwWrtShell::_PrvWrdForDelete()
 {
     if ( IsSttPara() )
     {
         if ( !SwCrsrShell::Left(1,CRSR_SKIP_CHARS) )
         {
-            Pop( FALSE );
-            return FALSE;
+            Pop( sal_False );
+            return sal_False;
         }
-        return TRUE;
+        return sal_True;
     }
     Push();
     ClearMark();
@@ -197,18 +197,18 @@ BOOL SwWrtShell::_PrvWrdForDelete()
     }
     ClearMark();
     Combine();
-    return TRUE;
+    return sal_True;
 }
 // <--
 
 
-BOOL SwWrtShell::_FwdSentence()
+sal_Bool SwWrtShell::_FwdSentence()
 {
     Push();
     ClearMark();
     if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))
     {
-        Pop(FALSE);
+        Pop(sal_False);
         return 0;
     }
     if( !GoNextSentence() && !IsEndPara() )
@@ -221,13 +221,13 @@ BOOL SwWrtShell::_FwdSentence()
 
 
 
-BOOL SwWrtShell::_BwdSentence()
+sal_Bool SwWrtShell::_BwdSentence()
 {
     Push();
     ClearMark();
     if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
     {
-        Pop(FALSE);
+        Pop(sal_False);
         return 0;
     }
     if(IsSttPara())
@@ -244,11 +244,11 @@ BOOL SwWrtShell::_BwdSentence()
 }
 
 
-BOOL SwWrtShell::_FwdPara()
+sal_Bool SwWrtShell::_FwdPara()
 {
     Push();
     ClearMark();
-    BOOL bRet = SwCrsrShell::MovePara(fnParaNext, fnParaStart);
+    sal_Bool bRet = SwCrsrShell::MovePara(fnParaNext, fnParaStart);
 
     ClearMark();
     Combine();
@@ -256,12 +256,12 @@ BOOL SwWrtShell::_FwdPara()
 }
 
 
-BOOL SwWrtShell::_BwdPara()
+sal_Bool SwWrtShell::_BwdPara()
 {
     Push();
     ClearMark();
 
-    BOOL bRet = SwCrsrShell::MovePara(fnParaPrev, fnParaStart);
+    sal_Bool bRet = SwCrsrShell::MovePara(fnParaPrev, fnParaStart);
     if ( !bRet && !IsSttOfPara() )
     {
         SttPara();

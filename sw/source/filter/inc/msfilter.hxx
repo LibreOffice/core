@@ -119,7 +119,7 @@ namespace sw
             @author
                 <a href="mailto:mmaher@openoffice.org">Martin Maher</a
         */
-        ULONG MSDateTimeFormatToSwFormat(String& rParams, SvNumberFormatter *pFormatter, USHORT &rLang, bool bHijri, USHORT nDocLang);
+        sal_uLong MSDateTimeFormatToSwFormat(String& rParams, SvNumberFormatter *pFormatter, sal_uInt16 &rLang, bool bHijri, sal_uInt16 nDocLang);
 
         /** Used by MSDateTimeFormatToSwFormat to identify AM time fields
 
@@ -145,10 +145,10 @@ namespace sw
         /// Redlining Authors
         struct AuthorInfo
         {
-            USHORT nWWAuthorId;
-            USHORT nOurId;
+            sal_uInt16 nWWAuthorId;
+            sal_uInt16 nOurId;
 
-            AuthorInfo(USHORT nWWAuthorId_, USHORT nOurId_ = 0):
+            AuthorInfo(sal_uInt16 nWWAuthorId_, sal_uInt16 nOurId_ = 0):
                 nWWAuthorId( nWWAuthorId_ ),
                 nOurId(      nOurId_ )
                 {}
@@ -437,7 +437,7 @@ namespace sw
         protected:
             std::vector<String> maAuthors;          // Array of Sw - Bookmarknames
 
-            USHORT GetPos( const String& rNm );
+            sal_uInt16 GetPos( const String& rNm );
 
             //No copying
             WrtRedlineAuthor(const WrtRedlineAuthor&);
@@ -446,7 +446,7 @@ namespace sw
             WrtRedlineAuthor() {}
             virtual ~WrtRedlineAuthor() {}
 
-            USHORT AddName( const String& rNm );
+            sal_uInt16 AddName( const String& rNm );
             virtual void Write(Writer &rWrt) = 0;
             // std::vector<String> GetNames();
         };

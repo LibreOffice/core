@@ -86,12 +86,12 @@ class SwMultiTOXTabDialog : public SfxTabDialog
     CurTOXType              eCurrentTOXType;
 
     String                  sUserDefinedIndex;
-    USHORT                  nTypeCount;
-    USHORT                  nInitialTOXType;
+    sal_uInt16                  nTypeCount;
+    sal_uInt16                  nInitialTOXType;
 
-    BOOL                    bEditTOX;
-    BOOL                    bExampleCreated;
-    BOOL                    bGlobalFlag;
+    sal_Bool                    bEditTOX;
+    sal_Bool                    bExampleCreated;
+    sal_Bool                    bGlobalFlag;
 
     virtual short       Ok();
     SwTOXDescription*   CreateTOXDescFromTOXBase(const SwTOXBase*pCurTOX);
@@ -102,11 +102,11 @@ class SwMultiTOXTabDialog : public SfxTabDialog
 public:
     SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet,
                         SwWrtShell &rShell,
-                        SwTOXBase* pCurTOX, USHORT nToxType = USHRT_MAX,
-                        BOOL bGlobal = FALSE);
+                        SwTOXBase* pCurTOX, sal_uInt16 nToxType = USHRT_MAX,
+                        sal_Bool bGlobal = sal_False);
     ~SwMultiTOXTabDialog();
 
-    virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
     SwForm*             GetForm(CurTOXType eType);
 
@@ -117,15 +117,15 @@ public:
                                 }
 
     void                UpdateExample();
-    BOOL                IsTOXEditMode() const { return bEditTOX;}
+    sal_Bool                IsTOXEditMode() const { return bEditTOX;}
 
     SwWrtShell&         GetWrtShell() {return rSh;}
 
     SwTOXDescription&   GetTOXDescription(CurTOXType eTOXTypes);
     void                CreateOrUpdateExample(
-                            TOXTypes nTOXIndex, USHORT nPage = 0, USHORT nCurLevel = USHRT_MAX);
+                            TOXTypes nTOXIndex, sal_uInt16 nPage = 0, sal_uInt16 nCurLevel = USHRT_MAX);
 
-    static BOOL IsNoNum(SwWrtShell& rSh, const String& rName);
+    static sal_Bool IsNoNum(SwWrtShell& rSh, const String& rName);
 };
 
 class IndexEntryRessource;
@@ -151,6 +151,8 @@ class SwTOXSelectTabPage : public SfxTabPage
     CheckBox        aFromHeadingsCB;
     CheckBox        aAddStylesCB;
     PushButton      aAddStylesPB;
+    Point           aAddStylesPosDef;
+    Point           aAddStylesPosUser;
     //user
     CheckBox        aFromTablesCB;
     CheckBox        aFromFramesCB;
@@ -174,6 +176,7 @@ class SwTOXSelectTabPage : public SfxTabPage
     //
 
     //index only
+    FixedLine       aIdxOptionsFL;
     CheckBox        aCollectSameCB;
     CheckBox        aUseFFCB;
     CheckBox        aUseDashCB;
@@ -182,7 +185,6 @@ class SwTOXSelectTabPage : public SfxTabPage
     CheckBox        aKeyAsEntryCB;
     CheckBox        aFromFileCB;
     MenuButton      aAutoMarkPB;
-    FixedLine       aIdxOptionsFL; // index only
 
     // object only
     SwOLENames      aFromNames;
@@ -215,7 +217,7 @@ class SwTOXSelectTabPage : public SfxTabPage
 
     const IndexEntrySupplierWrapper* pIndexEntryWrapper;
 
-    BOOL            bFirstCall;
+    sal_Bool            bFirstCall;
 
     DECL_LINK(TOXTypeHdl,   ListBox* );
     DECL_LINK(TOXAreaHdl,   ListBox* );
@@ -238,7 +240,7 @@ public:
     SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrSet);
     ~SwTOXSelectTabPage();
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual sal_Bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
     virtual void        ActivatePage( const SfxItemSet& );
@@ -268,8 +270,8 @@ class SwTokenWindow : public Window
     ImageButton     aRightScrollWin;
     TOXControlList  aControlList;
     SwForm*         pForm;
-    USHORT          nLevel;
-    BOOL            bValid;
+    sal_uInt16          nLevel;
+    sal_Bool            bValid;
     String          aButtonTexts[TOKEN_END]; // Text of the buttons
     String          aButtonHelpTexts[TOKEN_END]; // QuickHelpText of the buttons
     String          sCharStyle;
@@ -297,12 +299,12 @@ public:
     SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId);
     ~SwTokenWindow();
 
-    void        SetForm(SwForm& rForm, USHORT nLevel);
-    USHORT      GetLastLevel()const {return nLevel;};
+    void        SetForm(SwForm& rForm, sal_uInt16 nLevel);
+    sal_uInt16      GetLastLevel()const {return nLevel;};
 
-    BOOL        IsValid() const {return bValid;}
+    sal_Bool        IsValid() const {return bValid;}
 
-    void        SetInvalid() {bValid = FALSE;}
+    void        SetInvalid() {bValid = sal_False;}
 
     String      GetPattern() const;
 
@@ -315,14 +317,14 @@ public:
                     { return pActiveCtrl;}
 
     void        InsertAtSelection(const String& rText, const SwFormToken& aToken);
-    void        RemoveControl(SwTOXButton* pDel, BOOL bInternalCall = FALSE);
+    void        RemoveControl(SwTOXButton* pDel, sal_Bool bInternalCall = sal_False);
 
-    BOOL        Contains(FormTokenType) const;
+    sal_Bool        Contains(FormTokenType) const;
 
-    BOOL        DetermineLinkStart();
+    sal_Bool        DetermineLinkStart();
 
     //helper for pattern buttons and edits
-    BOOL        CreateQuickHelp(Control* pCtrl,
+    sal_Bool        CreateQuickHelp(Control* pCtrl,
                     const SwFormToken& rToken, const HelpEvent& );
 
     virtual void        Resize();
@@ -345,6 +347,7 @@ class SwTOXEntryTabPage : public SfxTabPage
     FixedText           aLevelFT;
     SwIdxTreeListBox    aLevelLB;
 
+    FixedLine       aEntryFL;
     FixedText       aTokenFT;
     SwTokenWindow   aTokenWIN;
     PushButton      aAllLevelsPB;
@@ -377,14 +380,13 @@ class SwTOXEntryTabPage : public SfxTabPage
     FixedText       aTabPosFT;
     MetricField     aTabPosMF;          // tab stop position
     CheckBox        aAutoRightCB;
-    FixedLine       aEntryFL;
+    FixedLine       aFormatFL;
 
     CheckBox        aRelToStyleCB;      // position relative to the right margin of the para style
     FixedText       aMainEntryStyleFT;
     ListBox         aMainEntryStyleLB;  // character style of main entries in indexes
     CheckBox        aAlphaDelimCB;
     CheckBox        aCommaSeparatedCB;
-    FixedLine       aFormatFL;
 
     RadioButton     aSortDocPosRB;
     RadioButton     aSortContentRB;
@@ -421,7 +423,7 @@ class SwTOXEntryTabPage : public SfxTabPage
     Size            aLevelFLSize;
 
     CurTOXType      aLastTOXType;
-    BOOL            bInLevelHdl;
+    sal_Bool            bInLevelHdl;
 
     Point           aChapterEntryFTPosition; //!< holds position of ChapterEntryFT control,
                                              //to be used in moving the element among different tokens
@@ -456,7 +458,7 @@ public:
     SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet);
     ~SwTOXEntryTabPage();
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual sal_Bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
     virtual void        ActivatePage( const SfxItemSet& );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
@@ -465,21 +467,21 @@ public:
                                 const SfxItemSet& rAttrSet);
     void                SetWrtShell(SwWrtShell& rSh);
 
-    String              GetLevelHelp(USHORT nLevel) const;
+    String              GetLevelHelp(sal_uInt16 nLevel) const;
 
     void                PreTokenButtonRemoved(const SwFormToken& rToken);
 };
 
 class SwTOXStylesTabPage : public SfxTabPage
 {
+    FixedLine       aFormatFL;
     FixedText       aLevelFT2;
     ListBox         aLevelLB;
+    ImageButton     aAssignBT;
     FixedText       aTemplateFT;
     ListBox         aParaLayLB;
     PushButton      aStdBT;
-    ImageButton     aAssignBT;
     PushButton      aEditStyleBT;
-    FixedLine       aFormatFL;
 
     SwForm*         m_pCurrentForm;
 
@@ -503,7 +505,7 @@ public:
     SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrSet);
     ~SwTOXStylesTabPage();
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual sal_Bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
     virtual void        ActivatePage( const SfxItemSet& );

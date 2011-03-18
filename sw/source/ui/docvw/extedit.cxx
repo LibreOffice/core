@@ -121,7 +121,7 @@ void EditWithExternalTool(GraphicObject *pGraphicObject, SwWrtShell *rSh)
 
     //Write Graphic to the Temp File
     GraphicFilter& rGF = *GraphicFilter::GetGraphicFilter();
-    USHORT nFilter(rGF.GetExportFormatNumber(fExt));
+    sal_uInt16 nFilter(rGF.GetExportFormatNumber(fExt));
     String aFilter(rGF.GetExportFormatShortName(nFilter));
     String sPath(tempFileName.getStr());
 

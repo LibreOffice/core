@@ -76,11 +76,11 @@ using namespace ::com::sun::star;
 #define ANCHOR(p)   ((SwFmtAnchor*)p)
 
 // steht in shellio.hxx
-extern SwCntntNode* GoNextNds( SwNodeIndex * pIdx, BOOL bChk );
+extern SwCntntNode* GoNextNds( SwNodeIndex * pIdx, sal_Bool bChk );
 
 SV_IMPL_PTRARR( SwFlySaveArr, SwFlySave* )
 
-inline const SwFmtFrmSize GetFrmSize(const SfxItemSet& rSet, BOOL bInP=TRUE)
+inline const SwFmtFrmSize GetFrmSize(const SfxItemSet& rSet, sal_Bool bInP=sal_True)
 {
     return (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE,bInP);
 }
@@ -94,29 +94,29 @@ SwFlySave::SwFlySave(const SwPaM& rPam, SfxItemSet& rSet)
 int SwFlySave::IsEqualFly( const SwPaM& rPos, SfxItemSet& rSet )
 {
     if( rSet.Count() != aFlySet.Count() || nDropAnchor )
-        return FALSE;
+        return sal_False;
 
     // nur TextNodes zusammenfassen
     if( nSttNd == nEndNd && nEndNd.GetNode().IsNoTxtNode() )
-        return FALSE;
+        return sal_False;
 
     // teste auf gleiche / naechste Position
     if( rPos.GetPoint()->nNode.GetIndex() == nEndNd.GetIndex() )
     {
         if( 1 < (rPos.GetPoint()->nContent.GetIndex() - nEndCnt) )
-            return FALSE;
+            return sal_False;
     }
     else if( rPos.GetPoint()->nContent.GetIndex() )
-        return FALSE;
+        return sal_False;
     else
     {
         SwNodeIndex aIdx( nEndNd );
-        SwCntntNode* pCNd = rPos.GetDoc()->GetNodes()[ aIdx ]->GetCntntNode();
-        if( !GoNextNds( &aIdx, TRUE ) ||
+        SwCntntNode *const pCNd = aIdx.GetNode().GetCntntNode();
+        if( !GoNextNds( &aIdx, sal_True ) ||
             aIdx.GetIndex() != rPos.GetPoint()->nNode.GetIndex() ||
             ( pCNd && pCNd->Len() != nEndCnt ))
         {
-            return FALSE;
+            return sal_False;
         }
     }
 
@@ -124,23 +124,23 @@ int SwFlySave::IsEqualFly( const SwPaM& rPos, SfxItemSet& rSet )
     {
         SfxItemIter aIter( rSet );
         const SfxPoolItem *pItem, *pCurr = aIter.GetCurItem();
-        while( TRUE )
+        while( sal_True )
         {
             if( SFX_ITEM_SET != aFlySet.GetItemState( pCurr->Which(),
-                FALSE, &pItem ) ||
+                sal_False, &pItem ) ||
                 // Ankerattribute gesondert behandeln
                 ( RES_ANCHOR == pCurr->Which()
                     ? (ANCHOR(pCurr)->GetAnchorId() != ANCHOR(pItem)->GetAnchorId() ||
                        ANCHOR(pCurr)->GetPageNum() != ANCHOR(pItem)->GetPageNum())
                     : *pItem != *pCurr ))
-                        return FALSE;
+                        return sal_False;
 
             if( aIter.IsAtEnd() )
                 break;
             pCurr = aIter.NextItem();
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 void SwFlySave::SetFlySize( const SwTableNode& rTblNd )
@@ -153,17 +153,17 @@ void SwFlySave::SetFlySize( const SwTableNode& rTblNd )
         aFlySet.Put( SwFmtFrmSize( rSz.GetHeightSizeType(), nWidth, rSz.GetHeight() ));
 }
 
-BOOL lcl_HasBreakAttrs( const SwCntntNode& rNd )
+sal_Bool lcl_HasBreakAttrs( const SwCntntNode& rNd )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     const SfxItemSet& rSet = rNd.GetSwAttrSet();
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_BREAK, TRUE, &pItem ) &&
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_BREAK, sal_True, &pItem ) &&
         SVX_BREAK_NONE != ((SvxFmtBreakItem*)pItem)->GetBreak() )
-        bRet = TRUE;
-    else if( SFX_ITEM_SET == rSet.GetItemState( RES_PAGEDESC, TRUE, &pItem )&&
+        bRet = sal_True;
+    else if( SFX_ITEM_SET == rSet.GetItemState( RES_PAGEDESC, sal_True, &pItem )&&
          0 != ((SwFmtPageDesc*)pItem)->GetPageDesc() )
-        bRet = TRUE;
+        bRet = sal_True;
     return bRet;
 }
 
@@ -177,11 +177,11 @@ void lcl_CpyBreakAttrs( SwCntntNode* pSrcNd, SwCntntNode* pDstNd,
         const SfxPoolItem *pDescItem, *pBreakItem;
 
         if( SFX_ITEM_SET != pSet->GetItemState( RES_BREAK,
-                                        FALSE, &pBreakItem ) )
+                                        sal_False, &pBreakItem ) )
             pBreakItem = 0;
 
         if( SFX_ITEM_SET != pSet->GetItemState( RES_PAGEDESC,
-                                        FALSE, &pDescItem ) )
+                                        sal_False, &pDescItem ) )
             pDescItem = 0;
 
         if( pDescItem || pBreakItem )
@@ -229,7 +229,7 @@ void SwRTFParser::SetFlysInDoc()
     rtfFmtMap aPrevFmts;
 
     SwFrmFmt* pParent = pDoc->GetFrmFmtFromPool( RES_POOLFRM_FRAME );
-    for( USHORT n = 0; n < aFlyArr.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aFlyArr.Count(); ++n )
     {
         SwFlySave* pFlySave = aFlyArr[ n ];
 
@@ -251,10 +251,10 @@ void SwRTFParser::SetFlysInDoc()
                 pSttNd->GetIndex() + 1 == pEndNd->GetIndex()
                 && pSttNd->GetTxt().Len()>0 /* #i38227# leave drop caps with no content as fly frames */ )
             {
-                ULONG nPos = pSttNd->GetIndex();
+                sal_uLong nPos = pSttNd->GetIndex();
                 SwDoc * pDoc1 = pSttNd->GetDoc();
 
-                BOOL bJoined;
+                sal_Bool bJoined;
                 {
                     SwPaM aTmp( *pSttNd, pSttNd->GetTxt().Len(), *pEndNd, 0 );
                     bJoined = pDoc1->DeleteAndJoin( aTmp );
@@ -265,7 +265,7 @@ void SwRTFParser::SetFlysInDoc()
                 if( bJoined && pNd != NULL)
                 {
                     SwFmtDrop aDropCap;
-                    aDropCap.GetLines() = (BYTE)pFlySave->nDropLines;
+                    aDropCap.GetLines() = (sal_uInt8)pFlySave->nDropLines;
                     aDropCap.GetChars() = 1;
 
                     SwIndex aIdx( pEndNd );
@@ -282,7 +282,7 @@ void SwRTFParser::SetFlysInDoc()
         if( n + 1 < aFlyArr.Count() && pFlySave->nEndCnt &&
             pFlySave->nEndNd == aFlyArr[ n + 1 ]->nSttNd )
         {
-            SwCntntNode* pCNd = rNds[ pFlySave->nEndNd ]->GetCntntNode();
+            SwCntntNode *const pCNd = pFlySave->nEndNd.GetNode().GetCntntNode();
             if( pCNd )
             {
                 SwPosition aPos( pFlySave->nEndNd,
@@ -308,7 +308,7 @@ void SwRTFParser::SetFlysInDoc()
                 // die Size muss noch korrigiert werden!
                 nAktPageDesc = 0;       // Standart PageDesc
                 if( SFX_ITEM_SET != pFlySave->aFlySet.GetItemState(
-                    RES_FRM_SIZE, FALSE ) )
+                    RES_FRM_SIZE, sal_False ) )
                     _SetPictureSize( *(SwNoTxtNode*)pNd, aRg.aStart,
                                     pFlySave->aFlySet );
                 if( 0 != ( pNd = pNd->FindTableNode() ) )
@@ -324,7 +324,7 @@ void SwRTFParser::SetFlysInDoc()
                 if( bMakeEmptySection )
                 {
                     pNd = &aRg.aEnd.GetNode();
-                    ULONG nSectEnd = pNd->EndOfSectionIndex()+1;
+                    sal_uLong nSectEnd = pNd->EndOfSectionIndex()+1;
 
                     if (!pNd->IsTableNode() && 0 !=(pNd = pNd->FindTableNode())
                         && (pNd->GetIndex() >= aRg.aStart.GetNode().GetIndex()) )
@@ -346,7 +346,7 @@ void SwRTFParser::SetFlysInDoc()
                         else
                         {
                             // Tabelle ist noch groesser, also splitte sie hier.
-                            rNds.SplitTable( aRg.aEnd, TRUE );
+                            rNds.SplitTable( aRg.aEnd, sal_True );
                             aRg.aEnd = pNd->EndOfSectionIndex() + 1;
                         }
                     }
@@ -413,7 +413,7 @@ void SwRTFParser::SetFlysInDoc()
             SwCntntNode* pSrcNd = pDoc->GetNodes()[ pSttNd->GetIndex() + 1 ]->GetCntntNode();
             SfxItemSet aTmpSet( pDoc->GetAttrPool(),
                                     RES_BACKGROUND, RES_BOX );
-            const SvxBrushItem* pBackgroundBrush = (const SvxBrushItem*)pFlySave->aFlySet.GetItem(RES_BACKGROUND, FALSE);
+            const SvxBrushItem* pBackgroundBrush = (const SvxBrushItem*)pFlySave->aFlySet.GetItem(RES_BACKGROUND, sal_False);
             if( pSrcNd && pSrcNd->HasSwAttrSet() )
                 aTmpSet.Put( *pSrcNd->GetpSwAttrSet() );
             if (pBackgroundBrush)
@@ -422,7 +422,7 @@ void SwRTFParser::SetFlysInDoc()
             }
             else
             {
-                pBackgroundBrush = (const SvxBrushItem*)aTmpSet.GetItem(RES_BACKGROUND, FALSE);
+                pBackgroundBrush = (const SvxBrushItem*)aTmpSet.GetItem(RES_BACKGROUND, sal_False);
                 if (pBackgroundBrush)
                 {
                     Color& rBackgroundColor = const_cast<SvxBrushItem*>(pBackgroundBrush)->GetColor();
@@ -561,11 +561,11 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
     SvxFrameDirectionItem aFrmDir( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
 
-    USHORT nCols = USHRT_MAX, nColSpace = USHRT_MAX, nAktCol = 0;
+    sal_uInt16 nCols = USHRT_MAX, nColSpace = USHRT_MAX, nAktCol = 0;
     SvUShorts aColumns;
 
-    BOOL bChkDropCap = 0 == pSet;
-    USHORT nDropCapLines = 0, nDropCapAnchor = 0;
+    sal_Bool bChkDropCap = 0 == pSet;
+    sal_uInt16 nDropCapLines = 0, nDropCapAnchor = 0;
     int nNumOpenBrakets = GetOpenBrakets();
 
     if( !pSet )
@@ -581,10 +581,10 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     }
 
     // dann sammel mal alle Attribute zusammen
-    int bWeiter = TRUE;
+    int bWeiter = sal_True;
     int nAppliedProps=0;
     do {
-        USHORT nVal = USHORT(nTokenValue);
+        sal_uInt16 nVal = sal_uInt16(nTokenValue);
         /*
         #i5263#
         Assume that a property genuinely contributes towards creating a frame,
@@ -597,7 +597,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
             {
                 SwFmtFrmSize aSz( ATT_MIN_SIZE, nTokenValue, 0 );
                 const SfxPoolItem* pItem;
-                if( SFX_ITEM_SET == pSet->GetItemState( RES_FRM_SIZE, TRUE,
+                if( SFX_ITEM_SET == pSet->GetItemState( RES_FRM_SIZE, sal_True,
                     &pItem ))
                 {
                     aSz.SetHeightSizeType( ((SwFmtFrmSize*)pItem)->GetHeightSizeType() );
@@ -611,7 +611,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
             {
                 SwFmtFrmSize aSz( ATT_MIN_SIZE, 0, MINFLY );
                 const SfxPoolItem* pItem;
-                if( SFX_ITEM_SET == pSet->GetItemState( RES_FRM_SIZE, TRUE,
+                if( SFX_ITEM_SET == pSet->GetItemState( RES_FRM_SIZE, sal_True,
                     &pItem ))
                 {
                     aSz.SetWidth( ((SwFmtFrmSize*)pItem)->GetWidth() );
@@ -665,10 +665,10 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                             break;
         case RTF_POSXC:     aHori.SetHoriOrient( text::HoriOrientation::CENTER );     break;
         case RTF_POSXI:     aHori.SetHoriOrient( text::HoriOrientation::LEFT );
-                            aHori.SetPosToggle( TRUE );
+                            aHori.SetPosToggle( sal_True );
                             break;
         case RTF_POSXO:     aHori.SetHoriOrient( text::HoriOrientation::RIGHT );
-                            aHori.SetPosToggle( TRUE );
+                            aHori.SetPosToggle( sal_True );
                             break;
         case RTF_POSXL:     aHori.SetHoriOrient( text::HoriOrientation::LEFT );       break;
         case RTF_POSXR:     aHori.SetHoriOrient( text::HoriOrientation::RIGHT );      break;
@@ -714,7 +714,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         case RTF_DROPCAPLI:                         // Dropcaps !!
                 if( bChkDropCap )
                 {
-                    nDropCapLines = USHORT( nTokenValue );
+                    nDropCapLines = sal_uInt16( nTokenValue );
                     if( !nDropCapAnchor )
                         nDropCapAnchor = 1;
                 }
@@ -722,7 +722,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         case RTF_DROPCAPT:
                 if( bChkDropCap )
                 {
-                    nDropCapAnchor = USHORT( nTokenValue );
+                    nDropCapAnchor = sal_uInt16( nTokenValue );
                     if( !nDropCapLines )
                         nDropCapLines = 3;
                 }
@@ -731,15 +731,15 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
         // fuer die "alten" Writer - haben die Spaltigkeit falsch heraus-
         // geschrieben
-        case RTF_COLS:          nCols = USHORT( nTokenValue );      break;
-        case RTF_COLSX:         nColSpace = USHORT( nTokenValue );  break;
+        case RTF_COLS:          nCols = sal_uInt16( nTokenValue );      break;
+        case RTF_COLSX:         nColSpace = sal_uInt16( nTokenValue );  break;
         case RTF_COLNO:
-            nAktCol = USHORT( nTokenValue );
+            nAktCol = sal_uInt16( nTokenValue );
             if( RTF_COLW == GetNextToken() )
             {
-                USHORT nWidth = USHORT( nTokenValue ), nSpace = 0;
+                sal_uInt16 nWidth = sal_uInt16( nTokenValue ), nSpace = 0;
                 if( RTF_COLSR == GetNextToken() )
-                    nSpace = USHORT( nTokenValue );
+                    nSpace = sal_uInt16( nTokenValue );
                 else
                     SkipToken( -1 );        // wieder zurueck
 
@@ -773,24 +773,24 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                     nCols = USHRT_MAX;      // neu aufsetzen
                     nColSpace = USHRT_MAX;
                     do {
-                    nVal = USHORT(nTokenValue);
+                    nVal = sal_uInt16(nTokenValue);
                     switch( nToken )
                     {
                     // Swg-Frame-Tokens
                     case RTF_FLYPRINT:
                         {
-                            pSet->Put( SvxPrintItem( RES_PRINT, FALSE ));
+                            pSet->Put( SvxPrintItem( RES_PRINT, sal_False ));
                         }
                         break;
                     case RTF_FLYOPAQUE:
                         {
-                            pSet->Put( SvxOpaqueItem( RES_OPAQUE, FALSE ));
+                            pSet->Put( SvxOpaqueItem( RES_OPAQUE, sal_False ));
                         }
                         break;
 
                     case RTF_FLYPRTCTD:
                         {
-                            RTFProtect aP( (BYTE)nTokenValue );
+                            RTFProtect aP( (sal_uInt8)nTokenValue );
                             SvxProtectItem aProtectItem( RES_PROTECT );
                             aProtectItem.SetCntntProtect( aP.GetCntnt() );
                             aProtectItem.SetSizeProtect( aP.GetSize() );
@@ -801,7 +801,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
                     case RTF_FLYMAINCNT:
                         {
-                            RTFSurround aMC( (BYTE)nTokenValue );
+                            RTFSurround aMC( (sal_uInt8)nTokenValue );
                             SwFmtSurround aSurr( (SwSurround)aMC.GetOrder());
                             if( aMC.GetGoldCut() )
                                 aSurr.SetSurround( SURROUND_IDEAL );
@@ -831,7 +831,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                             {
                             case RTF_FLY_PAGE:
                                 aAnchor.SetType( FLY_AT_PAGE );
-                                aAnchor.SetPageNum( USHORT(nTokenValue));
+                                aAnchor.SetPageNum( sal_uInt16(nTokenValue));
                                 aAnchor.SetAnchor( 0 );
                                 break;
 
@@ -849,15 +849,15 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 //                          case RTF_FLY_COLUMN:
                             }
                             break;
-                    case RTF_COLS:  nCols = USHORT( nTokenValue );      break;
-                    case RTF_COLSX: nColSpace = USHORT( nTokenValue );  break;
+                    case RTF_COLS:  nCols = sal_uInt16( nTokenValue );      break;
+                    case RTF_COLSX: nColSpace = sal_uInt16( nTokenValue );  break;
                     case RTF_COLNO:
-                        nAktCol = USHORT( nTokenValue );
+                        nAktCol = sal_uInt16( nTokenValue );
                         if( RTF_COLW == GetNextToken() )
                         {
-                            USHORT nWidth = USHORT( nTokenValue ), nSpace = 0;
+                            sal_uInt16 nWidth = sal_uInt16( nTokenValue ), nSpace = 0;
                             if( RTF_COLSR == GetNextToken() )
-                                nSpace = USHORT( nTokenValue );
+                                nSpace = sal_uInt16( nTokenValue );
                             else
                                 SkipToken( -1 );        // wieder zurueck
 
@@ -876,20 +876,20 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                             ReadBackgroundAttr( nToken, aSet );
                         else if( RTF_IGNOREFLAG == nToken )
                         {
-                            int bSkipGrp = TRUE;
+                            int bSkipGrp = sal_True;
                             switch( nToken = GetNextToken() )
                             {
                             case RTF_SHADOW:
                             case RTF_BRDBOX:
                                 ReadAttr( SkipToken( -2 ), &aSet );
-                                bSkipGrp = FALSE;
+                                bSkipGrp = sal_False;
                                 break;
 
                             case RTF_BRDRT:
                             case RTF_BRDRB:
                             case RTF_BRDRR:
                             case RTF_BRDRL:
-                                bSkipGrp = FALSE;
+                                bSkipGrp = sal_False;
                                 ReadBorderAttr( SkipToken( -2 ), aSet );
                                 break;
                             }
@@ -927,14 +927,14 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                 if( nSkip )
                 {
                     nToken = SkipToken( nSkip );
-                    bWeiter = FALSE;
+                    bWeiter = sal_False;
                 }
             }
             break;
 
         default:
             --nAppliedProps; //Not sufficient to make a frame
-            bWeiter = FALSE;
+            bWeiter = sal_False;
         }
 
         if( bWeiter )
@@ -951,7 +951,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                     text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ));
     // <--
 
-    SwFmtFollowTextFlow aFollowTextFlow( FALSE );
+    SwFmtFollowTextFlow aFollowTextFlow( sal_False );
     pSet->Put( aFollowTextFlow );
 
     if( !( aFrmDir == pSet->Get( RES_FRAMEDIR )) )
@@ -963,17 +963,17 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         if( USHRT_MAX == nColSpace )
             nColSpace = 720;
 
-        ULONG nWidth = USHRT_MAX;
-        aCol.Init( nCols, nColSpace, USHORT( nWidth ) );
+        sal_uLong nWidth = USHRT_MAX;
+        aCol.Init( nCols, nColSpace, sal_uInt16( nWidth ) );
         if( nCols == ( aColumns.Count() / 2 ) )
         {
-            for( USHORT n = 0, i = 0; n < aColumns.Count(); n += 2, ++i )
+            for( sal_uInt16 n = 0, i = 0; n < aColumns.Count(); n += 2, ++i )
             {
                 SwColumn* pCol = aCol.GetColumns()[ i ];
-                ULONG nTmp = aColumns[ n ];
+                sal_uLong nTmp = aColumns[ n ];
                 nTmp *= USHRT_MAX;
                 nTmp /= nWidth;
-                pCol->SetWishWidth( USHORT(nTmp) );
+                pCol->SetWishWidth( sal_uInt16(nTmp) );
             }
         }
         pSet->Put( aCol );
@@ -985,7 +985,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     // ein neues FlyFormat anlegen oder das alte benutzen ?
     // (teste ob es die selben Attribute besitzt!)
     SwFlySave* pFlySave = 0;
-    USHORT nFlyArrCnt = aFlyArr.Count();
+    sal_uInt16 nFlyArrCnt = aFlyArr.Count();
     /*
     #i5263#
     There were not enough frame properties found to actually justify creating
@@ -1019,7 +1019,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         }
     }
 
-    SetPardTokenRead( FALSE );
+    SetPardTokenRead( sal_False );
     const SwTableNode* pTblNd = pPam->GetNode()->FindTableNode();
 
     while( !IsPardTokenRead() && IsParserWorking() )
@@ -1034,7 +1034,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
             // Added support for transparent frames.
             if (nToken == RTF_CBPAT && nFlyArrCnt > 0)
             {
-                USHORT _index=USHORT(nTokenValue);
+                sal_uInt16 _index=sal_uInt16(nTokenValue);
                 const Color& rColor = GetColor(_index);
                 SvxBrushItem aBrush(rColor, RES_BACKGROUND);
                 SwFlySave* pFS = aFlyArr[nFlyArrCnt-1];
@@ -1101,7 +1101,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     }
     else
     {
-        BOOL bMovePaM = 0 != pTblNd;
+        sal_Bool bMovePaM = 0 != pTblNd;
 
         pFlySave->nEndNd = pPam->GetPoint()->nNode;
         pFlySave->nEndCnt = pPam->GetPoint()->nContent.GetIndex();
@@ -1179,15 +1179,15 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                     aDiffs.Differentiate( pFlySave->aFlySet );
                     pFlySave->aFlySet.Put( aDiffs );
 
-                    BOOL bSet = FALSE;
+                    sal_Bool bSet = sal_False;
                     if( aSz1.GetHeight() && !aSz2.GetHeight() )
                     {
-                        bSet = TRUE;
+                        bSet = sal_True;
                         aSz2.SetHeight( aSz1.GetHeight() );
                     }
                     if( aSz1.GetWidth() && !aSz2.GetWidth() )
                     {
-                        bSet = TRUE;
+                        bSet = sal_True;
                         aSz2.SetWidth( aSz1.GetWidth() );
                     }
                     if( bSet )
@@ -1264,7 +1264,7 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
 
         if (pDoc->IsInHeaderFooter(pPos->nNode))
         {
-            SvxOpaqueItem aOpaqueItem(RES_OPAQUE, FALSE);
+            SvxOpaqueItem aOpaqueItem(RES_OPAQUE, sal_False);
             SwFmtSurround aSurroundItem(SURROUND_THROUGHT);
             aFlySet.Put(aOpaqueItem);
             aFlySet.Put(aSurroundItem);
@@ -1351,7 +1351,7 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
     }
 
     //steht der Fly etwa in einer Tabelle ?
-    const SwNode* pAnchorNd = pDoc->GetNodes()[ rAnchor ];
+    const SwNode* pAnchorNd = & rAnchor.GetNode();
     const SwTableNode* pTblNd = pAnchorNd->FindTableNode();
     if( pTblNd )
     {
@@ -1370,7 +1370,7 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
     SwGrfNode* pGrfNd;
     if( !aSize.Width() && !aSize.Height() &&
         0 != (pGrfNd = (SwGrfNode*)rNd.GetGrfNode() ) && pGrfNd->IsGrfLink() )
-        pGrfNd->SetChgTwipSize( TRUE );
+        pGrfNd->SetChgTwipSize( sal_True );
 
         // min. Werte einhalten !!
     if( aSize.Width() < MINFLY )
@@ -1380,28 +1380,28 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
 
     if( pPicType )
     {
-        BOOL bChg = FALSE;
+        sal_Bool bChg = sal_False;
         SwCropGrf aCrop;
 
         if( pPicType->nCropT )
         {
             aCrop.SetTop( pPicType->nCropT );
-            bChg = TRUE;
+            bChg = sal_True;
         }
         if( pPicType->nCropB )
         {
             aCrop.SetBottom( pPicType->nCropB );
-            bChg = TRUE;
+            bChg = sal_True;
         }
         if( pPicType->nCropL )
         {
             aCrop.SetLeft( pPicType->nCropL );
-            bChg = TRUE;
+            bChg = sal_True;
         }
         if( pPicType->nCropR )
         {
             aCrop.SetRight( pPicType->nCropR );
-            bChg = TRUE;
+            bChg = sal_True;
         }
 
         if( bChg )
@@ -1451,7 +1451,7 @@ void SwRTFParser::ReadOLEData()
     Graphic aGrf;
     SvxRTFPictureType aPicType, aOleType;
 
-    int nToken, bValidOle = TRUE, bWeiter = TRUE;
+    int nToken, bValidOle = sal_True, bWeiter = sal_True;
     int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt !!
 
     String* pStr = 0;
@@ -1460,7 +1460,7 @@ void SwRTFParser::ReadOLEData()
     while( nOpenBrakets && IsParserWorking() && bWeiter && bValidOle )
     {
         nToken = GetNextToken();
-        USHORT nVal = USHORT( nTokenValue );
+        sal_uInt16 nVal = sal_uInt16( nTokenValue );
         switch( nToken )
         {
         case '}':       --nOpenBrakets; pStr = 0; break;
@@ -1504,7 +1504,7 @@ void SwRTFParser::ReadOLEData()
         case RTF_OBJHTML:
         case RTF_OBJALIAS:
         case RTF_OBJSECT:
-            bValidOle = FALSE;      // diese Typen koennen wir nicht
+            bValidOle = sal_False;      // diese Typen koennen wir nicht
             break;
 
         case RTF_OBJCLASS:
@@ -1524,7 +1524,7 @@ void SwRTFParser::ReadOLEData()
         case RTF_RESULT:
             {
                 // hier weitermachen, wenn das OLE-Object ungueltig ist
-                bWeiter = FALSE;
+                bWeiter = sal_False;
             }
             break;
         case RTF_RSLTBMP:           // diese sollten wir ignorieren
@@ -1550,7 +1550,7 @@ void SwRTFParser::ReadOLEData()
                 {
                     xub_StrLen nHexLen = HexToBin( aToken );
                     if( STRING_NOTFOUND != nHexLen )
-                        bValidOle = FALSE;
+                        bValidOle = sal_False;
                     else
                     {
                         aTmpFile.Write( (sal_Char*)aToken.GetBuffer(), nHexLen );
@@ -1566,7 +1566,7 @@ void SwRTFParser::ReadOLEData()
 
     if( bValidOle )
     {
-        bValidOle = FALSE;      // erstmal
+        bValidOle = sal_False;      // erstmal
     }
 
     if( !bWeiter )      // dann stehen wir noch im Result
@@ -1577,7 +1577,7 @@ void SwRTFParser::ReadOLEData()
         // ansonsten alle Token verarbeiten, bis zur letzten
         //      schliessenden Klammer
 
-        bWeiter = TRUE;
+        bWeiter = sal_True;
         while( nOpenBrakets && IsParserWorking() && bWeiter )
         {
             switch( nToken = GetNextToken() )

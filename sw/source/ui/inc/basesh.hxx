@@ -70,7 +70,7 @@ protected:
 
     inline SwView&      GetView()                       { return rView; }
     inline void         SetGetStateSet( SfxItemSet* p ) { pGetStateSet = p; }
-    inline BOOL         AddGrfUpdateSlot( USHORT nSlot ){ return aGrfUpdateSlots.Insert( nSlot ); }
+    inline sal_Bool         AddGrfUpdateSlot( sal_uInt16 nSlot ){ return aGrfUpdateSlots.Insert( nSlot ); }
 
     DECL_STATIC_LINK(   SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl* );
 
@@ -109,7 +109,7 @@ public:
     void        GetBckColState(SfxItemSet &rSet);
 
     void        ExecBckCol(SfxRequest& rReq);
-    void        SetWrapMode( USHORT nSlot );
+    void        SetWrapMode( sal_uInt16 nSlot );
 
     void        StateDisableItems(SfxItemSet &);
 

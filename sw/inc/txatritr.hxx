@@ -73,7 +73,7 @@ class SwTxtAttrIterator
     void SearchNextChg();
 
 public:
-    SwTxtAttrIterator( const SwTxtNode& rTxtNd, USHORT nWhichId,
+    SwTxtAttrIterator( const SwTxtNode& rTxtNd, sal_uInt16 nWhichId,
                         xub_StrLen nStart = 0, sal_Bool bUseGetWhichOfScript = sal_True );
 
     sal_Bool Next();
@@ -87,7 +87,7 @@ class SwLanguageIterator : public SwTxtAttrIterator
 {
 public:
     SwLanguageIterator( const SwTxtNode& rTxtNode, xub_StrLen nStart = 0,
-                        USHORT nWhich = RES_CHRATR_LANGUAGE,
+                        sal_uInt16 nWhich = RES_CHRATR_LANGUAGE,
                         sal_Bool bUseGetWhichOfScript = sal_True )
         : SwTxtAttrIterator( rTxtNode, nWhich, nStart, bUseGetWhichOfScript )
     {}

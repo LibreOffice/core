@@ -116,7 +116,7 @@ uno::Any SwXAutoTextContainer::getByIndex(sal_Int32 nIndex)
     uno::Any aRet;
     sal_uInt16 nCount = pGlossaries->GetGroupCnt();
     if ( 0 <= nIndex && nIndex < nCount )
-        aRet = getByName(pGlossaries->GetGroupName( static_cast< USHORT >(nIndex) ));
+        aRet = getByName(pGlossaries->GetGroupName( static_cast< sal_uInt16 >(nIndex) ));
     else
         throw lang::IndexOutOfBoundsException();
     return aRet;
@@ -141,8 +141,8 @@ uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
 
     uno::Reference< text::XAutoTextGroup > xGroup;
     if ( pGlossaries && hasByName( GroupName ) )    // group name already known?
-        // TRUE = create group if not already available
-        xGroup = pGlossaries->GetAutoTextGroup( GroupName, TRUE );
+        // sal_True = create group if not already available
+        xGroup = pGlossaries->GetAutoTextGroup( GroupName, sal_True );
 
     if ( !xGroup.is() )
         throw container::NoSuchElementException();
@@ -839,7 +839,7 @@ void SwXAutoTextEntry::GetBodyText ()
 {
     SolarMutexGuard aGuard;
 
-    xDocSh = pGlossaries->EditGroupDoc ( sGroupName, sEntryName, FALSE );
+    xDocSh = pGlossaries->EditGroupDoc ( sGroupName, sEntryName, sal_False );
     OSL_ENSURE( xDocSh.Is(), "SwXAutoTextEntry::GetBodyText: unexpected: no doc returned by EditGroupDoc!" );
 
     // start listening at the document
@@ -1057,7 +1057,7 @@ OUString SwAutoTextEventDescriptor::getImplementationName()
 }
 
 void SwAutoTextEventDescriptor::replaceByName(
-    const USHORT nEvent,
+    const sal_uInt16 nEvent,
     const SvxMacro& rMacro)
             throw(
                 lang::IllegalArgumentException,
@@ -1079,7 +1079,7 @@ void SwAutoTextEventDescriptor::replaceByName(
 
     if( pBlocks && !pBlocks->GetError())
     {
-        USHORT nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
+        sal_uInt16 nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
         if( nIndex != USHRT_MAX )
         {
             SvxMacroTableDtor aMacroTable;
@@ -1098,7 +1098,7 @@ void SwAutoTextEventDescriptor::replaceByName(
 
 void SwAutoTextEventDescriptor::getByName(
     SvxMacro& rMacro,
-    const USHORT nEvent )
+    const sal_uInt16 nEvent )
             throw(
                 container::NoSuchElementException,
                 lang::WrappedTargetException,
@@ -1122,7 +1122,7 @@ void SwAutoTextEventDescriptor::getByName(
 
     if ( pBlocks &&  !pBlocks->GetError())
     {
-        USHORT nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
+        sal_uInt16 nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
         if( nIndex != USHRT_MAX )
         {
             SvxMacroTableDtor aMacroTable;

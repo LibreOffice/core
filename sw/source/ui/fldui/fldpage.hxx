@@ -41,23 +41,23 @@ class SwFldPage : public SfxTabPage
     SwFldMgr            m_aMgr;
     SwField             *m_pCurFld;
     SwWrtShell*         m_pWrtShell;
-    USHORT              m_nPageId;
-    USHORT              m_nTypeSel;
-    USHORT              m_nSelectionSel;
-    BOOL                m_bFldEdit;
-    BOOL                m_bInsert;
-    BOOL                m_bFldDlgHtmlMode;
-    BOOL                m_bRefresh;
-    BOOL                m_bFirstHTMLInit;
+    sal_uInt16              m_nPageId;
+    sal_uInt16              m_nTypeSel;
+    sal_uInt16              m_nSelectionSel;
+    sal_Bool                m_bFldEdit;
+    sal_Bool                m_bInsert;
+    sal_Bool                m_bFldDlgHtmlMode;
+    sal_Bool                m_bRefresh;
+    sal_Bool                m_bFirstHTMLInit;
 
 protected:
 
-    USHORT              GetTypeSel() const          { return m_nTypeSel;}
-    void                SetTypeSel(USHORT nSet)     { m_nTypeSel = nSet;}
-    USHORT              GetSelectionSel() const     { return m_nSelectionSel;}
-    void                SetSelectionSel(USHORT nSet){ m_nSelectionSel = nSet;}
-    BOOL                IsFldDlgHtmlMode() const    { return m_bFldDlgHtmlMode;}
-    BOOL                IsRefresh() const           { return m_bRefresh;}
+    sal_uInt16              GetTypeSel() const          { return m_nTypeSel;}
+    void                SetTypeSel(sal_uInt16 nSet)     { m_nTypeSel = nSet;}
+    sal_uInt16              GetSelectionSel() const     { return m_nSelectionSel;}
+    void                SetSelectionSel(sal_uInt16 nSet){ m_nSelectionSel = nSet;}
+    sal_Bool                IsFldDlgHtmlMode() const    { return m_bFldDlgHtmlMode;}
+    sal_Bool                IsRefresh() const           { return m_bRefresh;}
     SwField*            GetCurField()               { return m_pCurFld;}
     SwWrtShell*         GetWrtShell() { return m_pWrtShell;}
 
@@ -70,17 +70,17 @@ protected:
                                  const ListBox* pLst3 = 0);
     void                RestorePos( ListBox* pLst1, ListBox* pLst2 = 0,
                                     ListBox* pLst3 = 0 );
-    void                EnableInsert(BOOL bEnable = TRUE);
-    inline BOOL         IsFldEdit() const   { return m_bFldEdit; }
+    void                EnableInsert(sal_Bool bEnable = sal_True);
+    inline sal_Bool         IsFldEdit() const   { return m_bFldEdit; }
 
     // insert field
-    BOOL                InsertFld(  USHORT nTypeId,
-                                    USHORT nSubType,
+    sal_Bool                InsertFld(  sal_uInt16 nTypeId,
+                                    sal_uInt16 nSubType,
                                     const String& rPar1,
                                     const String& rPar2,
-                                    ULONG nFormatId,
+                                    sal_uLong nFormatId,
                                     sal_Unicode cDelim = ' ',
-                                    BOOL bIsAutomaticLanguage = TRUE);
+                                    sal_Bool bIsAutomaticLanguage = sal_True);
 
     using SfxTabPage::ActivatePage;
 
@@ -95,8 +95,8 @@ public:
 
     inline SwFldMgr&    GetFldMgr()         { return m_aMgr; }
     void                SetWrtShell( SwWrtShell* m_pWrtShell );
-    void                EditNewField( BOOL bOnlyActivate = FALSE );
-    virtual USHORT      GetGroup() = 0;
+    void                EditNewField( sal_Bool bOnlyActivate = sal_False );
+    virtual sal_uInt16      GetGroup() = 0;
 };
 
 

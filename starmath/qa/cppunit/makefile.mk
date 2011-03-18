@@ -100,22 +100,35 @@ $(MISC)/$(TARGET)/udkapi.rdb .ERRREMOVE : $(SOLARBINDIR)$/udkapi.rdb
     $(MKDIRHIER) $(@:d)
     $(GNUCOPY) $? $@
 
-#Make a services.rdb with the services we know we need to get up and running
-$(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb makefile.mk
-    $(MKDIRHIER) $(@:d)
-    $(REGCOMP) -register -br $(MISC)/$(TARGET)/udkapi.rdb -r $@ -wop \
-        -c $(DLLPRE)fwk$(DLLPOSTFIX)$(DLLPOST) \
-        -c $(DLLPRE)tk$(DLLPOSTFIX)$(DLLPOST) \
-        -c $(DLLPRE)sfx$(DLLPOSTFIX)$(DLLPOST) \
-        -c $(DLLPRE)vcl$(DLLPOSTFIX)$(DLLPOST) \
-        -c $(DLLPRE)mcnttype$(DLLPOST) \
-        -c i18npool.uno$(DLLPOST)
+ure_components = \
+	stocservices
+test_components = $(ure_components)
+test_components += \
+    component/framework/util/fwk \
+    component/toolkit/util/tk \
+    component/sfx2/util/sfx \
+    configmgr \
+    vcl \
+    mcnttype \
+    i18npool
 .IF "$(OS)" == "WNT"
-    $(REGCOMP) -register -br $(MISC)/$(TARGET)/udkapi.rdb -r $@ -wop \
-        -c $(DLLPRE)sysdtrans$(DLLPOST) \
-        -c $(DLLPRE)ftransl$(DLLPOST)
+test_components += \
+    sysdtrans \
+    ftransl
 .ENDIF
 
+# Make a services.rdb with the services we know we need to get up and running
+$(MISC)/services.input : makefile.mk
+    $(MKDIRHIER) $(@:d)
+    echo \
+        '<list>$(test_components:^"<filename>":+".component</filename>")</list>' \
+        > $@
+
+$(MISC)/$(TARGET)/services.rdb .ERRREMOVE : makefile.mk $(MISC)/services.input
+    $(MKDIRHIER) $(@:d)
+    $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@.tmp \
+        $(SOLARENV)/bin/packcomponents.xslt $(MISC)/services.input
+    cat $(MISC)/$@.tmp | sed 's|/program/|/|g' > $@
 
 #Tweak things so that we use the .res files in the solver
 STAR_RESOURCEPATH:=$(PWD)/$(BIN)$(PATH_SEPERATOR)$(SOLARBINDIR)
@@ -125,9 +138,9 @@ test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/t
     @echo ----------------------------------------------------------
     @echo - start unit test \#1 on library $(SHL1TARGETN)
     @echo ----------------------------------------------------------
-    $(CPPUNITTESTER) $(SHL1TARGETN) -headless -invisible \
-        -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
+    STAR_RESOURCEPATH="$(my_file)$(OUTDIR)/bin" $(CPPUNITTESTER) $(SHL1TARGETN) -headless -invisible \
+        -env:UNO_SERVICES="$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb" \
         -env:UNO_TYPES="$(my_file)$(PWD)/$(MISC)/$(TARGET)/types.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/udkapi.rdb" \
-        -env:OOO_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
+        -env:OOO_BASE_DIR="$(my_file)$(OUTDIR)/lib" \
         -env:BRAND_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
         -env:UNO_USER_PACKAGES_CACHE="$(my_file)$(PWD)/$(MISC)/$(TARGET)"

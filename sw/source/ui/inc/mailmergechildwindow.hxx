@@ -51,7 +51,7 @@ class SwMailMergeChildWindow : public SfxChildWindow
 {
 public:
     SwMailMergeChildWindow( Window* ,
-                    USHORT nId,
+                    sal_uInt16 nId,
                     SfxBindings*,
                     SfxChildWinInfo*  );
 

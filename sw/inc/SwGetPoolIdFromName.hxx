@@ -31,7 +31,7 @@
 /* When using the NameMapper to translate pool ids to UI or programmatic
  * names, this enum is used to define which family is required */
 
-typedef USHORT SwGetPoolIdFromName;
+typedef sal_uInt16 SwGetPoolIdFromName;
 
 namespace nsSwGetPoolIdFromName
 {

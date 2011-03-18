@@ -37,9 +37,11 @@
 #include <pam.hxx>
 #include <pagedesc.hxx>
 #include <charfmt.hxx>
-#include <undobj.hxx>
+#include <UndoAttribute.hxx>
+#include <hints.hxx>
 #include <rolbck.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <ndtxt.hxx>
 #include <poolfmt.hxx>
 #include <ftninfo.hxx>
@@ -79,7 +81,7 @@ SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 }
 
 
-BOOL SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
+sal_Bool SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
 {
     return  aPageDescDep.GetRegisteredIn() ==
                                 rInfo.aPageDescDep.GetRegisteredIn() &&
@@ -186,7 +188,7 @@ void SwEndNoteInfo::SetAnchorCharFmt( SwCharFmt* pChFmt )
 
 void SwEndNoteInfo::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
-    USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
 
     if( RES_ATTRSET_CHG == nWhich ||
         RES_FMT_CHG == nWhich )
@@ -197,7 +199,7 @@ void SwEndNoteInfo::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         else
             pDoc = ((SwCharFmt*)aAnchorCharFmtDep.GetRegisteredIn())->GetDoc();
         SwFtnIdxs& rFtnIdxs = pDoc->GetFtnIdxs();
-        for( USHORT nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
+        for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
         {
             SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
             const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -222,7 +224,7 @@ SwFtnInfo& SwFtnInfo::operator=(const SwFtnInfo& rInfo)
 }
 
 
-BOOL SwFtnInfo::operator==( const SwFtnInfo& rInfo ) const
+sal_Bool SwFtnInfo::operator==( const SwFtnInfo& rInfo ) const
 {
     return  ePos == rInfo.ePos &&
             eNum == rInfo.eNum &&
@@ -260,23 +262,22 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
     {
         const SwFtnInfo &rOld = GetFtnInfo();
 
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
-            ClearRedo();
-            AppendUndo( new SwUndoFootNoteInfo( rOld ) );
+            GetIDocumentUndoRedo().AppendUndo( new SwUndoFootNoteInfo(rOld) );
         }
 
-        BOOL bFtnPos  = rInfo.ePos != rOld.ePos;
-        BOOL bFtnDesc = rOld.ePos == FTNPOS_CHAPTER &&
+        sal_Bool bFtnPos  = rInfo.ePos != rOld.ePos;
+        sal_Bool bFtnDesc = rOld.ePos == FTNPOS_CHAPTER &&
                             rInfo.GetPageDesc( *this ) != rOld.GetPageDesc( *this );
-        BOOL bExtra   = rInfo.aQuoVadis != rOld.aQuoVadis ||
+        sal_Bool bExtra   = rInfo.aQuoVadis != rOld.aQuoVadis ||
                             rInfo.aErgoSum != rOld.aErgoSum ||
                             rInfo.aFmt.GetNumberingType() != rOld.aFmt.GetNumberingType() ||
                             rInfo.GetPrefix() != rOld.GetPrefix() ||
                             rInfo.GetSuffix() != rOld.GetSuffix();
         SwCharFmt *pOldChrFmt = rOld.GetCharFmt( *this ),
                   *pNewChrFmt = rInfo.GetCharFmt( *this );
-        BOOL bFtnChrFmts = pOldChrFmt != pNewChrFmt;
+        sal_Bool bFtnChrFmts = pOldChrFmt != pNewChrFmt;
 
         *pFtnInfo = rInfo;
 
@@ -288,13 +289,13 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
             {
                 GetRootFrm()->UpdateFtnNums();
                 if ( bFtnDesc )
-                    GetRootFrm()->CheckFtnPageDescs( FALSE );
+                    GetRootFrm()->CheckFtnPageDescs( sal_False );
                 if ( bExtra )
                 {
                     //Fuer die Benachrichtung bezueglich ErgoSum usw. sparen wir uns
                     //extra-Code und nutzen die vorhandenen Wege.
                     SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
-                    for( USHORT nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
+                    for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
                     {
                         SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
                         const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -326,13 +327,13 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
 {
     if( !(GetEndNoteInfo() == rInfo) )
     {
-        if( DoesUndo() )
+        if(GetIDocumentUndoRedo().DoesUndo())
         {
-            ClearRedo();
-            AppendUndo( new SwUndoEndNoteInfo( GetEndNoteInfo() ) );
+            SwUndo *const pUndo( new SwUndoEndNoteInfo( GetEndNoteInfo() ) );
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
-        BOOL bNumChg  = rInfo.nFtnOffset != GetEndNoteInfo().nFtnOffset;
+        sal_Bool bNumChg  = rInfo.nFtnOffset != GetEndNoteInfo().nFtnOffset;
         // this seems to be an optimization: UpdateAllFtn() is only called
         // if the offset changes; if the offset is the same,
         // but type/prefix/suffix changes, just set new numbers.
@@ -342,24 +343,24 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
                 ||  (rInfo.GetPrefix() != GetEndNoteInfo().GetPrefix())
                 ||  (rInfo.GetSuffix() != GetEndNoteInfo().GetSuffix())
                 );
-        BOOL bFtnDesc = rInfo.GetPageDesc( *this ) !=
+        sal_Bool bFtnDesc = rInfo.GetPageDesc( *this ) !=
                             GetEndNoteInfo().GetPageDesc( *this );
         SwCharFmt *pOldChrFmt = GetEndNoteInfo().GetCharFmt( *this ),
                   *pNewChrFmt = rInfo.GetCharFmt( *this );
-        BOOL bFtnChrFmts = pOldChrFmt != pNewChrFmt;
+        sal_Bool bFtnChrFmts = pOldChrFmt != pNewChrFmt;
 
         *pEndNoteInfo = rInfo;
 
         if ( GetRootFrm() )
         {
             if ( bFtnDesc )
-                GetRootFrm()->CheckFtnPageDescs( TRUE );
+                GetRootFrm()->CheckFtnPageDescs( sal_True );
             if ( bExtra )
             {
                 //Fuer die Benachrichtung bezueglich ErgoSum usw. sparen wir uns
                 //extra-Code und nutzen die vorhandenen Wege.
                 SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
-                for( USHORT nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
+                for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
                 {
                     SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
                     const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -393,26 +394,26 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
     SwFtnIdxs& rFtnArr = GetFtnIdxs();
 
     const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
-    const ULONG nSttNd = pStt->nNode.GetIndex();
+    const sal_uLong nSttNd = pStt->nNode.GetIndex();
     const xub_StrLen nSttCnt = pStt->nContent.GetIndex();
-    const ULONG nEndNd = pEnd->nNode.GetIndex();
+    const sal_uLong nEndNd = pEnd->nNode.GetIndex();
     const xub_StrLen nEndCnt = pEnd->nContent.GetIndex();
 
-    USHORT nPos;
+    sal_uInt16 nPos;
     rFtnArr.SeekEntry( pStt->nNode, &nPos );
 
     SwUndoChangeFootNote* pUndo = 0;
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo(); // AppendUndo far below, so leave it
         pUndo = new SwUndoChangeFootNote( rPam, rNumStr, nNumber, bIsEndNote );
     }
 
     SwTxtFtn* pTxtFtn;
-    ULONG nIdx;
-    BOOL bChg = FALSE;
-    BOOL bTypeChgd = FALSE;
-    USHORT n = nPos;        // sichern
+    sal_uLong nIdx;
+    sal_Bool bChg = sal_False;
+    sal_Bool bTypeChgd = sal_False;
+    sal_uInt16 n = nPos;        // sichern
     while( nPos < rFtnArr.Count() &&
             (( nIdx = _SwTxtFtn_GetIndex((pTxtFtn = rFtnArr[ nPos++ ] )))
                 < nEndNd || ( nIdx == nEndNd &&
@@ -424,7 +425,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
             if( rFtn.GetNumStr() != rNumStr ||
                 rFtn.IsEndNote() != bIsEndNote )
             {
-                bChg = TRUE;
+                bChg = sal_True;
                 if ( pUndo )
                 {
                     pUndo->GetHistory().Add( *pTxtFtn );
@@ -434,7 +435,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                 if( rFtn.IsEndNote() != bIsEndNote )
                 {
                     ((SwFmtFtn&)rFtn).SetEndNote( bIsEndNote );
-                    bTypeChgd = TRUE;
+                    bTypeChgd = sal_True;
                     pTxtFtn->CheckCondColl();
                     //#i11339# dispose UNO wrapper when a footnote is changed to an endnote or vice versa
                     SwPtrMsgPoolItem aMsgHint( RES_FOOTNOTE_DELETED, (void*)&pTxtFtn->GetAttr() );
@@ -455,7 +456,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
             if( rFtn.GetNumStr() != rNumStr ||
                 rFtn.IsEndNote() != bIsEndNote )
             {
-                bChg = TRUE;
+                bChg = sal_True;
                 if ( pUndo )
                 {
                     pUndo->GetHistory().Add( *pTxtFtn );
@@ -465,7 +466,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                 if( rFtn.IsEndNote() != bIsEndNote )
                 {
                     ((SwFmtFtn&)rFtn).SetEndNote( bIsEndNote );
-                    bTypeChgd = TRUE;
+                    bTypeChgd = sal_True;
                     pTxtFtn->CheckCondColl();
                 }
             }
@@ -476,8 +477,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
     {
         if( pUndo )
         {
-            ClearRedo();
-            AppendUndo( pUndo );
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
         if ( bTypeChgd )

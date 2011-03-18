@@ -38,8 +38,8 @@ class SwEditWin;
 
 class SwOleClient : public SfxInPlaceClient
 {
-    BOOL bInDoVerb;
-    BOOL bOldCheckForOLEInCaption;
+    sal_Bool bInDoVerb;
+    sal_Bool bOldCheckForOLEInCaption;
 
     virtual void ObjectAreaChanged();
     virtual void RequestNewObjectArea( Rectangle& );
@@ -49,9 +49,11 @@ class SwOleClient : public SfxInPlaceClient
 public:
     SwOleClient( SwView *pView, SwEditWin *pWin, const svt::EmbeddedObjectRef& );
 
-    void SetInDoVerb( BOOL bFlag )              { bInDoVerb = bFlag; }
+    void SetInDoVerb( sal_Bool bFlag )              { bInDoVerb = bFlag; }
 
-    BOOL IsCheckForOLEInCaption() const         { return bOldCheckForOLEInCaption; }
+    sal_Bool IsCheckForOLEInCaption() const         { return bOldCheckForOLEInCaption; }
+
+    virtual void FormatChanged();
 };
 
 #endif

@@ -69,8 +69,8 @@ enum SwFldGroups
 
 struct SwFldGroupRgn
 {
-    USHORT nStart;
-    USHORT nEnd;
+    sal_uInt16 nStart;
+    sal_uInt16 nEnd;
 };
 
 /*--------------------------------------------------------------------
@@ -79,21 +79,21 @@ struct SwFldGroupRgn
  --------------------------------------------------------------------*/
 struct SwInsertFld_Data
 {
-    USHORT nTypeId;
-    USHORT nSubType;
+    sal_uInt16 nTypeId;
+    sal_uInt16 nSubType;
     const String sPar1;
     const String sPar2;
-    ULONG nFormatId;
+    sal_uLong nFormatId;
     SwWrtShell* pSh;
     sal_Unicode cSeparator;
-    BOOL bIsAutomaticLanguage;
+    sal_Bool bIsAutomaticLanguage;
     ::com::sun::star::uno::Any aDBDataSource;
     ::com::sun::star::uno::Any aDBConnection;
     ::com::sun::star::uno::Any aDBColumn;
     Window* pParent; // parent dialog used for SwWrtShell::StartInputFldDlg()
 
-    SwInsertFld_Data(USHORT nType, USHORT nSub, const String& rPar1, const String& rPar2,
-                    ULONG nFmtId, SwWrtShell* pShell = NULL, sal_Unicode cSep = ' ', BOOL bIsAutoLanguage = TRUE) :
+    SwInsertFld_Data(sal_uInt16 nType, sal_uInt16 nSub, const String& rPar1, const String& rPar2,
+                    sal_uLong nFmtId, SwWrtShell* pShell = NULL, sal_Unicode cSep = ' ', sal_Bool bIsAutoLanguage = sal_True) :
         nTypeId(nType),
         nSubType(nSub),
         sPar1(rPar1),
@@ -107,7 +107,7 @@ struct SwInsertFld_Data
     SwInsertFld_Data() :
         pSh(0),
         cSeparator(' '),
-        bIsAutomaticLanguage(TRUE){}
+        bIsAutomaticLanguage(sal_True){}
 
 };
 
@@ -125,10 +125,10 @@ private:
     String          sMacroPath;
     String          sMacroName;
 
-    ULONG           nCurFmt;
-    BOOL            bEvalExp;
+    sal_uLong           nCurFmt;
+    sal_Bool            bEvalExp;
 
-    SW_DLLPRIVATE USHORT            GetCurrLanguage() const;
+    SW_DLLPRIVATE sal_uInt16            GetCurrLanguage() const;
 
     com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> xDBContext;
     com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> xNumberingInfo;
@@ -142,83 +142,83 @@ public:
                         {   pWrtShell = pShell;     }
 
     // Feld einfuegen ueber TypeId (TYP_ ...)
-    BOOL            InsertFld(  const SwInsertFld_Data& rData );
+    sal_Bool            InsertFld(  const SwInsertFld_Data& rData );
 
     // Direkt das aktuelle Feld aendern
-    void            UpdateCurFld(ULONG nFormat,
+    void            UpdateCurFld(sal_uLong nFormat,
                                  const String& rPar1,
                                  const String& rPar2,
                                  SwField * _pField = 0); // #111840#
 
     inline const String& GetCurFldPar1() const;
     inline const String& GetCurFldPar2() const;
-    inline ULONG   GetCurFldFmt() const;
+    inline sal_uLong   GetCurFldFmt() const;
 
     // Ein Feld ermitteln
     SwField*        GetCurFld();
 
     void            InsertFldType(SwFieldType& rType);
 
-    BOOL            ChooseMacro(const String &rSelMacro = aEmptyStr);
+    sal_Bool            ChooseMacro(const String &rSelMacro = aEmptyStr);
     void            SetMacroPath(const String& rPath);
     inline const String& GetMacroPath() const         { return (sMacroPath); }
     inline const String& GetMacroName() const         { return (sMacroName); }
     inline void     SetMacroModule(SbModule* pMod)    { pModule = pMod; }
 
     // Vorheriger Naechster gleichen Typ
-    BOOL GoNextPrev( BOOL bNext = TRUE, SwFieldType* pTyp = 0 );
-    BOOL GoNext( SwFieldType* pTyp = 0 )    { return GoNextPrev( TRUE, pTyp ); }
-    BOOL GoPrev( SwFieldType* pTyp = 0 )    { return GoNextPrev( FALSE, pTyp ); }
+    sal_Bool GoNextPrev( sal_Bool bNext = sal_True, SwFieldType* pTyp = 0 );
+    sal_Bool GoNext( SwFieldType* pTyp = 0 )    { return GoNextPrev( sal_True, pTyp ); }
+    sal_Bool GoPrev( SwFieldType* pTyp = 0 )    { return GoNextPrev( sal_False, pTyp ); }
 
     // Erfragen von Werten aus Datenbankfeldern (BASIC )
 //  String          GetDataBaseFieldValue(const String &rDBName, const String &rFieldName, SwWrtShell* pSh);
-    BOOL            IsDBNumeric(const String& rDBName, const String& rTblQryName,
-                                        BOOL bIsTable, const String& rFldName);
+    sal_Bool            IsDBNumeric(const String& rDBName, const String& rTblQryName,
+                                        sal_Bool bIsTable, const String& rFldName);
 
     // RefMark mit Namen organisieren
-    BOOL            CanInsertRefMark( const String& rStr );
+    sal_Bool            CanInsertRefMark( const String& rStr );
 
 
     // Zugriff ueber ResId auf Feldtypen
-    USHORT          GetFldTypeCount(USHORT nResId = USHRT_MAX) const;
-    SwFieldType*    GetFldType(USHORT nResId, USHORT nId = 0) const;
-    SwFieldType*    GetFldType(USHORT nResId, const String& rName) const;
+    sal_uInt16          GetFldTypeCount(sal_uInt16 nResId = USHRT_MAX) const;
+    SwFieldType*    GetFldType(sal_uInt16 nResId, sal_uInt16 nId = 0) const;
+    SwFieldType*    GetFldType(sal_uInt16 nResId, const String& rName) const;
 
-    void            RemoveFldType(USHORT nResId, const String& rName);
+    void            RemoveFldType(sal_uInt16 nResId, const String& rName);
 
     // Zugriff ueber TypeId aus dem Dialog
     // Ids fuer einen Bereich von Feldern
-    const SwFldGroupRgn& GetGroupRange(BOOL bHtmlMode, USHORT nGrpId) const;
-    USHORT          GetGroup(BOOL bHtmlMode, USHORT nTypeId, USHORT nSubType = 0) const;
+    const SwFldGroupRgn& GetGroupRange(sal_Bool bHtmlMode, sal_uInt16 nGrpId) const;
+    sal_uInt16          GetGroup(sal_Bool bHtmlMode, sal_uInt16 nTypeId, sal_uInt16 nSubType = 0) const;
 
     // TypeId des aktuellen Feldes
-    USHORT          GetCurTypeId() const;
+    sal_uInt16          GetCurTypeId() const;
 
     // TypeId fuer einen konkrete Pos in der Liste
-    static USHORT   GetTypeId(USHORT nPos);
+    static sal_uInt16   GetTypeId(sal_uInt16 nPos);
     // Name des Typen in der Liste der Felder
-    static const String&  GetTypeStr(USHORT nPos);
+    static const String&  GetTypeStr(sal_uInt16 nPos);
 
     // Pos in der Liste der Felder
-    static USHORT   GetPos(USHORT nTypeId);
+    static sal_uInt16   GetPos(sal_uInt16 nTypeId);
 
     // Untertypen zu einem Typ
-    BOOL            GetSubTypes(USHORT nId, SvStringsDtor& rToFill);
+    sal_Bool            GetSubTypes(sal_uInt16 nId, SvStringsDtor& rToFill);
 
     // Formate zu einem Typ
-    USHORT          GetFormatCount(USHORT nTypeId, BOOL bIsText, BOOL bHtmlMode = FALSE) const;
-    String          GetFormatStr(USHORT nTypeId, ULONG nFormatId) const;
-    USHORT          GetFormatId(USHORT nTypeId, ULONG nFormatId) const;
-    ULONG           GetDefaultFormat(USHORT nTypeId, BOOL bIsText, SvNumberFormatter* pFormatter, double* pVal = 0L);
+    sal_uInt16          GetFormatCount(sal_uInt16 nTypeId, sal_Bool bIsText, sal_Bool bHtmlMode = sal_False) const;
+    String          GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
+    sal_uInt16          GetFormatId(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
+    sal_uLong           GetDefaultFormat(sal_uInt16 nTypeId, sal_Bool bIsText, SvNumberFormatter* pFormatter, double* pVal = 0L);
 
     // Evaluierung der ExpressionFelder ausschalten fuer das Einfuegen
     // vieler Expressionfelder (siehe Etiketten)
     //
-    inline void     SetEvalExpFlds(BOOL bEval);
+    inline void     SetEvalExpFlds(sal_Bool bEval);
     void            EvalExpFlds(SwWrtShell* pSh = NULL);
 };
 
-inline void SwFldMgr::SetEvalExpFlds(BOOL bEval)
+inline void SwFldMgr::SetEvalExpFlds(sal_Bool bEval)
     { bEvalExp = bEval; }
 
 inline const String& SwFldMgr::GetCurFldPar1() const
@@ -227,7 +227,7 @@ inline const String& SwFldMgr::GetCurFldPar1() const
 inline const String& SwFldMgr::GetCurFldPar2() const
     { return aCurPar2; }
 
-inline ULONG SwFldMgr::GetCurFldFmt() const
+inline sal_uLong SwFldMgr::GetCurFldFmt() const
     { return nCurFmt; }
 
 #endif

@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -152,7 +153,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_CLEARHISTORY:
             {
-                rSet.Put(SfxBoolItem(nWhich, pWrtShell->GetUndoIds() != UNDO_EMPTY));
+                rSet.Put(SfxBoolItem(nWhich, pWrtShell->GetLastUndoInfo(0, 0)));
             }
             break;
             case SID_UNDO:
@@ -179,7 +180,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     if(pWrtShell->IsInVerticalText())
                         aImgItem.SetRotation(2700);
                     if(pWrtShell->IsInRightToLeftText())
-                        aImgItem.SetMirrored(TRUE);
+                        aImgItem.SetMirrored(sal_True);
                 }
                 rSet.Put(aImgItem);
             }
@@ -197,7 +198,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     if(pWrtShell->IsInVerticalText())
                         aImgItem.SetRotation(2700);
                     if(pWrtShell->IsInRightToLeftText())
-                        aImgItem.SetMirrored(TRUE);
+                        aImgItem.SetMirrored(sal_True);
                 }
                 rSet.Put(aImgItem);
             }
@@ -217,7 +218,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_TWAIN_SELECT:
             case SID_TWAIN_TRANSFER:
-#if defined WIN || defined WNT || defined UNX
+#if defined WNT || defined UNX
             {
                 if(!SW_MOD()->GetScannerManager().is())
                     rSet.DisableItem(nWhich);
@@ -350,7 +351,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 if(pWrtShell->IsInVerticalText())
                     aImageItem.SetRotation( 2700 );
                 if(pWrtShell->IsInRightToLeftText())
-                    aImageItem.SetMirrored( TRUE );
+                    aImageItem.SetMirrored( sal_True );
                 rSet.Put(aImageItem);
             }
             break;
@@ -378,7 +379,7 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 if( !pShell )
                     SelectShell();
-                USHORT nAlias = 0;
+                sal_uInt16 nAlias = 0;
                 bool bDraw = false;
                 if( nSelectionType & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_TXT) )
                 {

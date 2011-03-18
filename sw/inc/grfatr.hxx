@@ -53,11 +53,11 @@ RES_MIRROR_GRAPH_END
 
 class SW_DLLPUBLIC SwMirrorGrf : public SfxEnumItem
 {
-    BOOL bGrfToggle; // Flip graphics on even pages.
+    sal_Bool bGrfToggle; // Flip graphics on even pages.
 
 public:
     SwMirrorGrf( MirrorGraph eMiro = RES_MIRROR_GRAPH_DONT )
-        : SfxEnumItem( RES_GRFATR_MIRRORGRF, static_cast< USHORT >(eMiro) ), bGrfToggle( sal_False )
+        : SfxEnumItem( RES_GRFATR_MIRRORGRF, static_cast< sal_uInt16 >(eMiro) ), bGrfToggle( sal_False )
     {}
     SwMirrorGrf( const SwMirrorGrf &rMirrorGrf )
         : SfxEnumItem( RES_GRFATR_MIRRORGRF, rMirrorGrf.GetValue()),
@@ -68,7 +68,7 @@ public:
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
 
     // pure virtual methods of SfxEnumItem
-    virtual USHORT          GetValueCount() const;
+    virtual sal_uInt16          GetValueCount() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -77,9 +77,9 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const;
 
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 ) const;
+                                        sal_uInt8 nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 );
+                                        sal_uInt8 nMemberId = 0 );
 
     inline SwMirrorGrf& operator=( const SwMirrorGrf& rMirrorGrf )
         {
@@ -88,8 +88,8 @@ public:
             return *this;
         }
 
-    inline BOOL IsGrfToggle() const         { return bGrfToggle; }
-    inline void SetGrfToggle( BOOL bNew )   { bGrfToggle = bNew; }
+    inline sal_Bool IsGrfToggle() const         { return bGrfToggle; }
+    inline void SetGrfToggle( sal_Bool bNew )   { bGrfToggle = bNew; }
 };
 
 
@@ -129,9 +129,9 @@ public:
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
-                                            BYTE nMemberId = 0 ) const;
+                                            sal_uInt8 nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
-                                            BYTE nMemberId = 0 );
+                                            sal_uInt8 nMemberId = 0 );
 
     void SetUnrotatedSize( const Size& rSz )        { aUnrotatedSize = rSz; }
     const Size& GetUnrotatedSize() const            { return aUnrotatedSize; }
@@ -172,7 +172,7 @@ public:
 class SwChannelGrf : public SfxInt16Item
 {
 protected:
-    SwChannelGrf( sal_Int16 nVal, USHORT nWhichL )
+    SwChannelGrf( sal_Int16 nVal, sal_uInt16 nWhichL )
         : SfxInt16Item( nWhichL, nVal )
     {}
 
@@ -238,9 +238,9 @@ public:
                                     const IntlWrapper* pIntl = 0 ) const;
 
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
-                                            BYTE nMemberId = 0 ) const;
+                                            sal_uInt8 nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
-                                            BYTE nMemberId = 0 );
+                                            sal_uInt8 nMemberId = 0 );
 
 
     const double& GetValue() const              { return nValue; }
@@ -278,15 +278,15 @@ public:
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 ) const;
+                                        sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 );
+                                        sal_uInt8 nMemberId = 0 );
 };
 
 class SW_DLLPUBLIC SwDrawModeGrf : public SfxEnumItem
 {
 public:
-    SwDrawModeGrf( USHORT nMode = 0 )
+    SwDrawModeGrf( sal_uInt16 nMode = 0 )
         : SfxEnumItem( RES_GRFATR_DRAWMODE, nMode )
     {}
 
@@ -294,7 +294,7 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
     // pure virtual methods of SfxEnumItem
-    virtual USHORT          GetValueCount() const;
+    virtual sal_uInt16          GetValueCount() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -302,9 +302,9 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 ) const;
+                                        sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 );
+                                        sal_uInt8 nMemberId = 0 );
 };
 
 
@@ -313,58 +313,58 @@ public:
  *  Implementation of graphics attributes methods of SwAttr
  ******************************************************************************/
 
-inline const SwMirrorGrf &SwAttrSet::GetMirrorGrf(BOOL bInP) const
+inline const SwMirrorGrf &SwAttrSet::GetMirrorGrf(sal_Bool bInP) const
     { return (const SwMirrorGrf&)Get( RES_GRFATR_MIRRORGRF,bInP); }
-inline const SwCropGrf   &SwAttrSet::GetCropGrf(BOOL bInP) const
+inline const SwCropGrf   &SwAttrSet::GetCropGrf(sal_Bool bInP) const
     { return (const SwCropGrf&)Get( RES_GRFATR_CROPGRF,bInP); }
-inline const SwRotationGrf &SwAttrSet::GetRotationGrf(BOOL bInP) const
+inline const SwRotationGrf &SwAttrSet::GetRotationGrf(sal_Bool bInP) const
     { return (const SwRotationGrf&)Get( RES_GRFATR_ROTATION,bInP); }
-inline const SwLuminanceGrf &SwAttrSet::GetLuminanceGrf(BOOL bInP) const
+inline const SwLuminanceGrf &SwAttrSet::GetLuminanceGrf(sal_Bool bInP) const
     { return (const SwLuminanceGrf&)Get( RES_GRFATR_LUMINANCE,bInP); }
-inline const SwContrastGrf &SwAttrSet::GetContrastGrf(BOOL bInP) const
+inline const SwContrastGrf &SwAttrSet::GetContrastGrf(sal_Bool bInP) const
     { return (const SwContrastGrf&)Get( RES_GRFATR_CONTRAST,bInP); }
-inline const SwChannelRGrf &SwAttrSet::GetChannelRGrf(BOOL bInP) const
+inline const SwChannelRGrf &SwAttrSet::GetChannelRGrf(sal_Bool bInP) const
     { return (const SwChannelRGrf&)Get( RES_GRFATR_CHANNELR,bInP); }
-inline const SwChannelGGrf &SwAttrSet::GetChannelGGrf(BOOL bInP) const
+inline const SwChannelGGrf &SwAttrSet::GetChannelGGrf(sal_Bool bInP) const
     { return (const SwChannelGGrf&)Get( RES_GRFATR_CHANNELG,bInP); }
-inline const SwChannelBGrf &SwAttrSet::GetChannelBGrf(BOOL bInP) const
+inline const SwChannelBGrf &SwAttrSet::GetChannelBGrf(sal_Bool bInP) const
     { return (const SwChannelBGrf&)Get( RES_GRFATR_CHANNELB,bInP); }
-inline const SwGammaGrf &SwAttrSet::GetGammaGrf(BOOL bInP) const
+inline const SwGammaGrf &SwAttrSet::GetGammaGrf(sal_Bool bInP) const
     { return (const SwGammaGrf&)Get( RES_GRFATR_GAMMA,bInP); }
-inline const SwInvertGrf &SwAttrSet::GetInvertGrf(BOOL bInP) const
+inline const SwInvertGrf &SwAttrSet::GetInvertGrf(sal_Bool bInP) const
     { return (const SwInvertGrf&)Get( RES_GRFATR_INVERT,bInP); }
-inline const SwTransparencyGrf &SwAttrSet::GetTransparencyGrf(BOOL bInP) const
+inline const SwTransparencyGrf &SwAttrSet::GetTransparencyGrf(sal_Bool bInP) const
     { return (const SwTransparencyGrf&)Get( RES_GRFATR_TRANSPARENCY,bInP); }
-inline const SwDrawModeGrf      &SwAttrSet::GetDrawModeGrf(BOOL bInP) const
+inline const SwDrawModeGrf      &SwAttrSet::GetDrawModeGrf(sal_Bool bInP) const
     { return (const SwDrawModeGrf&)Get( RES_GRFATR_DRAWMODE,bInP); }
 
 /******************************************************************************
  *  Implementation of graphics attributes methods of SwFmt
  ******************************************************************************/
 
-inline const SwMirrorGrf &SwFmt::GetMirrorGrf(BOOL bInP) const
+inline const SwMirrorGrf &SwFmt::GetMirrorGrf(sal_Bool bInP) const
     { return aSet.GetMirrorGrf(bInP); }
-inline const SwCropGrf   &SwFmt::GetCropGrf(BOOL bInP) const
+inline const SwCropGrf   &SwFmt::GetCropGrf(sal_Bool bInP) const
     { return aSet.GetCropGrf(bInP); }
-inline const SwRotationGrf &SwFmt::GetRotationGrf(BOOL bInP) const
+inline const SwRotationGrf &SwFmt::GetRotationGrf(sal_Bool bInP) const
     { return aSet.GetRotationGrf(bInP); }
-inline const SwLuminanceGrf &SwFmt::GetLuminanceGrf(BOOL bInP) const
+inline const SwLuminanceGrf &SwFmt::GetLuminanceGrf(sal_Bool bInP) const
     { return aSet.GetLuminanceGrf( bInP); }
-inline const SwContrastGrf &SwFmt::GetContrastGrf(BOOL bInP) const
+inline const SwContrastGrf &SwFmt::GetContrastGrf(sal_Bool bInP) const
     { return aSet.GetContrastGrf( bInP); }
-inline const SwChannelRGrf &SwFmt::GetChannelRGrf(BOOL bInP) const
+inline const SwChannelRGrf &SwFmt::GetChannelRGrf(sal_Bool bInP) const
     { return aSet.GetChannelRGrf( bInP); }
-inline const SwChannelGGrf &SwFmt::GetChannelGGrf(BOOL bInP) const
+inline const SwChannelGGrf &SwFmt::GetChannelGGrf(sal_Bool bInP) const
     { return aSet.GetChannelGGrf( bInP); }
-inline const SwChannelBGrf &SwFmt::GetChannelBGrf(BOOL bInP) const
+inline const SwChannelBGrf &SwFmt::GetChannelBGrf(sal_Bool bInP) const
     { return aSet.GetChannelBGrf( bInP); }
-inline const SwGammaGrf &SwFmt::GetGammaGrf(BOOL bInP) const
+inline const SwGammaGrf &SwFmt::GetGammaGrf(sal_Bool bInP) const
     { return aSet.GetGammaGrf( bInP); }
-inline const SwInvertGrf &SwFmt::GetInvertGrf(BOOL bInP) const
+inline const SwInvertGrf &SwFmt::GetInvertGrf(sal_Bool bInP) const
     { return aSet.GetInvertGrf( bInP); }
-inline const SwTransparencyGrf &SwFmt::GetTransparencyGrf(BOOL bInP) const
+inline const SwTransparencyGrf &SwFmt::GetTransparencyGrf(sal_Bool bInP) const
     { return aSet.GetTransparencyGrf( bInP); }
-inline const SwDrawModeGrf &SwFmt::GetDrawModeGrf(BOOL bInP) const
+inline const SwDrawModeGrf &SwFmt::GetDrawModeGrf(sal_Bool bInP) const
     { return aSet.GetDrawModeGrf(bInP); }
 
 

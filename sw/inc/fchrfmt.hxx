@@ -70,12 +70,12 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     // Pass to SwTxtCharFmt (from SwClient).
     virtual void    Modify( SfxPoolItem*, SfxPoolItem* );
-    virtual BOOL    GetInfo( SfxPoolItem& rInfo ) const;
+    virtual sal_Bool    GetInfo( SfxPoolItem& rInfo ) const;
 
     void SetCharFmt( SwFmt* pFmt ) { pFmt->Add(this); }
     SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }

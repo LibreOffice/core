@@ -242,12 +242,12 @@ public:
 
 class SwCombinedPortion : public SwFldPortion
 {
-    USHORT aPos[6];     // up to six X positions
-    USHORT aWidth[3];   // one width for every scripttype
-    BYTE aScrType[6];   // scripttype of every character
-    USHORT nUpPos;      // the Y position of the upper baseline
-    USHORT nLowPos;     // the Y position of the lower baseline
-    BYTE nProportion;   // relative font height
+    sal_uInt16 aPos[6];     // up to six X positions
+    sal_uInt16 aWidth[3];   // one width for every scripttype
+    sal_uInt8 aScrType[6];  // scripttype of every character
+    sal_uInt16 nUpPos;      // the Y position of the upper baseline
+    sal_uInt16 nLowPos;     // the Y position of the lower baseline
+    sal_uInt8 nProportion;  // relative font height
 public:
     SwCombinedPortion( const XubString &rExpand );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;

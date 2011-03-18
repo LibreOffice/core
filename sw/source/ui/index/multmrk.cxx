@@ -60,8 +60,8 @@ SwMultiTOXMarkDlg::SwMultiTOXMarkDlg( Window* pParent, SwTOXMgr& rTOXMgr ) :
 {
     aTOXLB.SetSelectHdl(LINK(this, SwMultiTOXMarkDlg, SelectHdl));
 
-    USHORT nSize = rMgr.GetTOXMarkCount();
-    for(USHORT i=0; i < nSize; ++i)
+    sal_uInt16 nSize = rMgr.GetTOXMarkCount();
+    for(sal_uInt16 i=0; i < nSize; ++i)
         aTOXLB.InsertEntry(rMgr.GetTOXMark(i)->GetText());
 
     aTOXLB.SelectEntryPos(0);

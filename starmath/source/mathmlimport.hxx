@@ -55,9 +55,9 @@ public:
     SmXMLImportWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef)
         : xModel(rRef) {}
 
-    ULONG Import(SfxMedium &rMedium);
+    sal_uLong Import(SfxMedium &rMedium);
 
-    ULONG ReadThroughComponent(
+    sal_uLong ReadThroughComponent(
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModelComponent,
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
@@ -66,7 +66,7 @@ public:
         const sal_Char* pFilterName,
         sal_Bool bEncrypted );
 
-    ULONG ReadThroughComponent(
+    sal_uLong ReadThroughComponent(
          const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModelComponent,
         const sal_Char* pStreamName,
@@ -251,10 +251,10 @@ public:
     const SvXMLTokenMap &GetPresTableElemTokenMap();
     const SvXMLTokenMap &GetColorTokenMap();
 
-    SmNodeStack & GetNodeStack() {return aNodeStack;}
-    SmNode *GetTree() { return aNodeStack.Pop();}
-    sal_Bool GetSuccess() { return bSuccess; }
-    String &GetText() { return aText;}
+    SmNodeStack & GetNodeStack()    { return aNodeStack; }
+    SmNode *GetTree()               { return aNodeStack.Pop(); }
+    sal_Bool GetSuccess()           { return bSuccess; }
+    String &GetText()               { return aText; }
 
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);

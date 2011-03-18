@@ -64,7 +64,7 @@ public:
     void ShowCursor(bool bShow);
     bool IsLineVisible() const { return bIsLineVisible; }
     void ShowLine(bool bShow);
-    const SmNode * SetCursorPos(USHORT nRow, USHORT nCol);
+    const SmNode * SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol);
 protected:
     void        SetIsCursorVisible(bool bVis) { bIsCursorVisible = bVis; }
     using   Window::SetCursor;
@@ -78,7 +78,7 @@ private:
     SmGraphicAccessible *                                       pAccessible;
 
     SmViewShell    *pViewShell;
-    USHORT          nZoom;
+    sal_uInt16          nZoom;
     short           nModifyCount;
 
 protected:
@@ -109,9 +109,9 @@ public:
     SmViewShell *   GetView()   { return pViewShell; }
 
     using   Window::SetZoom;
-    void   SetZoom(USHORT Factor);
+    void   SetZoom(sal_uInt16 Factor);
     using   Window::GetZoom;
-    USHORT GetZoom() const { return nZoom; }
+    sal_uInt16 GetZoom() const { return nZoom; }
 
     const Point &   GetFormulaDrawPos() const { return aFormulaDrawPos; }
 
@@ -135,8 +135,8 @@ class SmGraphicController: public SfxControllerItem
 protected:
     SmGraphicWindow &rGraphic;
 public:
-    SmGraphicController(SmGraphicWindow &, USHORT, SfxBindings & );
-    virtual void StateChanged(USHORT             nSID,
+    SmGraphicController(SmGraphicWindow &, sal_uInt16, SfxBindings & );
+    virtual void StateChanged(sal_uInt16             nSID,
                               SfxItemState       eState,
                               const SfxPoolItem* pState);
 };
@@ -149,12 +149,12 @@ protected:
     SmEditWindow &rEdit;
 
 public:
-    SmEditController(SmEditWindow &, USHORT, SfxBindings  & );
+    SmEditController(SmEditWindow &, sal_uInt16, SfxBindings  & );
 #if OSL_DEBUG_LEVEL > 1
     virtual ~SmEditController();
 #endif
 
-    virtual void StateChanged(USHORT             nSID,
+    virtual void StateChanged(sal_uInt16             nSID,
                               SfxItemState       eState,
                               const SfxPoolItem* pState);
 };
@@ -206,7 +206,7 @@ class SmCmdBoxWrapper : public SfxChildWindow
 
 protected:
     SmCmdBoxWrapper(Window          *pParentWindow,
-                    USHORT           nId,
+                    sal_uInt16           nId,
                     SfxBindings     *pBindings,
                     SfxChildWinInfo *pInfo);
 
@@ -264,20 +264,20 @@ protected:
     void DrawText(OutputDevice& rDevice,
                   const Point&  rPosition,
                   const String& rText,
-                  USHORT        MaxWidth);
+                  sal_uInt16        MaxWidth);
 
-    virtual USHORT Print(SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0);
-    virtual SfxPrinter *GetPrinter(BOOL bCreate = FALSE);
-    virtual USHORT SetPrinter(SfxPrinter *pNewPrinter,
-                              USHORT     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);
+    virtual sal_uInt16 Print(SfxProgress &rProgress, sal_Bool bIsAPI);
+    virtual SfxPrinter *GetPrinter(sal_Bool bCreate = sal_False);
+    virtual sal_uInt16 SetPrinter(SfxPrinter *pNewPrinter,
+                              sal_uInt16     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);
 
     bool        Insert( SfxMedium& rMedium );
     bool        InsertFrom(SfxMedium &rMedium);
 
     virtual SfxTabPage *CreatePrintOptionsPage(Window           *pParent,
                                                const SfxItemSet &rOptions);
-    virtual void Deactivate(BOOL IsMDIActivate);
-    virtual void Activate(BOOL IsMDIActivate);
+    virtual void Deactivate(sal_Bool IsMDIActivate);
+    virtual void Activate(sal_Bool IsMDIActivate);
     virtual Size GetOptimalSizePixel() const;
     virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize);
     virtual void InnerResizePixel(const Point &rOfs, const Size  &rSize);

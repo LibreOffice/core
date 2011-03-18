@@ -82,7 +82,7 @@ using namespace com::sun::star::uno;
 
 
 void SmGetLeftSelectionPart(const ESelection &rSel,
-                            USHORT &nPara, USHORT &nPos)
+                            sal_uInt16 &nPara, sal_uInt16 &nPos)
     // returns paragraph number and position of the selections left part
 {
     // compare start and end of selection and use the one that comes first
@@ -248,7 +248,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
         //! see also SmDocShell::GetEditEngine() !
         //!
 
-        pEditEngine->SetDefTab( USHORT( GetTextWidth( C2S("XXXX") ) ) );
+        pEditEngine->SetDefTab( sal_uInt16( GetTextWidth( C2S("XXXX") ) ) );
 
         SetEditEngineDefaultFonts( *pEditEngine, *pEditEngineItemPool );
 
@@ -289,7 +289,7 @@ IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, EMPTYARG /*pTimer*/)
         if (pView)
         {
             // get row and column to look for
-            USHORT  nRow, nCol;
+            sal_uInt16  nRow, nCol;
             SmGetLeftSelectionPart(aNewSelection, nRow, nCol);
             nRow++;
             nCol++;
@@ -701,7 +701,7 @@ bool SmEditWindow::IsAllSelected() const
     if (pEditEngine  &&  pEditView)
     {
         ESelection eSelection( pEditView->GetSelection() );
-        INT32 nParaCnt = pEditEngine->GetParagraphCount();
+        sal_Int32 nParaCnt = pEditEngine->GetParagraphCount();
         if (!(nParaCnt - 1))
         {
             String Text( pEditEngine->GetText( LINEEND_LF ) );
@@ -725,7 +725,7 @@ void SmEditWindow::SelectAll()
     }
 }
 
-void SmEditWindow::InsertCommand(USHORT nCommand)
+void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
 {
     OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
@@ -764,7 +764,7 @@ void SmEditWindow::MarkError(const Point &rPos)
     if (pEditView)
     {
         const xub_StrLen    nCol = sal::static_int_cast< xub_StrLen >(rPos.X());
-        const USHORT        nRow = sal::static_int_cast< USHORT >(rPos.Y() - 1);
+        const sal_uInt16        nRow = sal::static_int_cast< sal_uInt16 >(rPos.Y() - 1);
 
         pEditView->SetSelection(ESelection(nRow, nCol - 1, nRow, nCol));
         GrabFocus();
@@ -779,10 +779,10 @@ void SmEditWindow::SelNextMark()
     if (pEditEngine  &&  pEditView)
     {
         ESelection eSelection = pEditView->GetSelection();
-        USHORT     Pos        = eSelection.nEndPos;
+        sal_uInt16     Pos        = eSelection.nEndPos;
         String     aMark (C2S("<?>"));
         String     aText;
-        USHORT     nCounts    = pEditEngine->GetParagraphCount();
+        sal_uInt16     nCounts    = pEditEngine->GetParagraphCount();
 
         while (eSelection.nEndPara < nCounts)
         {
@@ -809,15 +809,15 @@ void SmEditWindow::SelPrevMark()
     if (pEditEngine  &&  pEditView)
     {
         ESelection eSelection = pEditView->GetSelection();
-        USHORT     Pos        = STRING_NOTFOUND;
+        sal_uInt16     Pos        = STRING_NOTFOUND;
         xub_StrLen Max        = eSelection.nStartPos;
         String     Text( pEditEngine->GetText( eSelection.nStartPara ) );
         String     aMark (C2S("<?>"));
-        USHORT     nCounts    = pEditEngine->GetParagraphCount();
+        sal_uInt16     nCounts    = pEditEngine->GetParagraphCount();
 
         do
         {
-            USHORT Fnd = Text.Search(aMark, 0);
+            sal_uInt16 Fnd = Text.Search(aMark, 0);
 
             while ((Fnd < Max) && (Fnd != STRING_NOTFOUND))
             {

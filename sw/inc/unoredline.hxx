@@ -81,7 +81,7 @@ public:
     SwXRedlinePortion(  const SwRedline* pRed,
                         const SwUnoCrsr* pPortionCrsr,
                         ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  xParent,
-                        BOOL bIsStart);
+                        sal_Bool bIsStart);
 
     ~SwXRedlinePortion();
 

@@ -147,7 +147,7 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
         {
             // same node? Then check whether it's also within 'our' part
             // of the paragraph
-            USHORT nIndex = pPoint->nContent.GetIndex();
+            sal_uInt16 nIndex = pPoint->nContent.GetIndex();
             if( GetPortionData().IsValidCorePosition( nIndex ) )
             {
                 // Yes, it's us!
@@ -187,7 +187,7 @@ sal_Bool SwAccessibleParagraph::GetSelection(
     {
         // get SwPosition for my node
         const SwTxtNode* pNode = GetTxtNode();
-        ULONG nHere = pNode->GetIndex();
+        sal_uLong nHere = pNode->GetIndex();
 
         // iterate over ring
         SwPaM* pRingStart = pCrsr;
@@ -198,9 +198,9 @@ sal_Bool SwAccessibleParagraph::GetSelection(
             {
                 // check whether nHere is 'inside' pCrsr
                 SwPosition* pStart = pCrsr->Start();
-                ULONG nStartIndex = pStart->nNode.GetIndex();
+                sal_uLong nStartIndex = pStart->nNode.GetIndex();
                 SwPosition* pEnd = pCrsr->End();
-                ULONG nEndIndex = pEnd->nNode.GetIndex();
+                sal_uLong nEndIndex = pEnd->nNode.GetIndex();
                 if( ( nHere >= nStartIndex ) &&
                     ( nHere <= nEndIndex )      )
                 {
@@ -222,7 +222,7 @@ sal_Bool SwAccessibleParagraph::GetSelection(
                         // selection starts in this node:
                         // then check whether it's before or inside our part of
                         // the paragraph, and if so, get the proper position
-                        USHORT nCoreStart = pStart->nContent.GetIndex();
+                        sal_uInt16 nCoreStart = pStart->nContent.GetIndex();
                         if( nCoreStart <
                             GetPortionData().GetFirstValidCorePosition() )
                         {
@@ -258,7 +258,7 @@ sal_Bool SwAccessibleParagraph::GetSelection(
 
                         // selection ends in this node: then select everything
                         // before our part of the node
-                        USHORT nCoreEnd = pEnd->nContent.GetIndex();
+                        sal_uInt16 nCoreEnd = pEnd->nContent.GetIndex();
                         if( nCoreEnd >
                                 GetPortionData().GetLastValidCorePosition() )
                         {
@@ -320,7 +320,7 @@ SwPaM* SwAccessibleParagraph::GetCursor( const bool _bForSelection )
             !(pFESh->IsFrmSelected() || pFESh->IsObjSelected() > 0) )
         {
             // get the selection, and test whether it affects our text node
-            pCrsr = pCrsrShell->GetCrsr( FALSE /* ??? */ );
+            pCrsr = pCrsrShell->GetCrsr( sal_False /* ??? */ );
         }
     }
 
@@ -544,7 +544,7 @@ void SwAccessibleParagraph::ClearPortionData()
 }
 
 
-void SwAccessibleParagraph::ExecuteAtViewShell( UINT16 nSlot )
+void SwAccessibleParagraph::ExecuteAtViewShell( sal_uInt16 nSlot )
 {
     DBG_ASSERT( GetMap() != NULL, "no map?" );
     ViewShell* pViewShell = GetMap()->GetShell();
@@ -578,8 +578,8 @@ SwXTextPortion* SwAccessibleParagraph::CreateUnoPortion(
                 IsValidRange(nStartIndex, nEndIndex, GetString().getLength()),
                 "please check parameters before calling this method" );
 
-    USHORT nStart = GetPortionData().GetModelPosition( nStartIndex );
-    USHORT nEnd = (nEndIndex == -1) ? (nStart + 1) :
+    sal_uInt16 nStart = GetPortionData().GetModelPosition( nStartIndex );
+    sal_uInt16 nEnd = (nEndIndex == -1) ? (nStart + 1) :
                         GetPortionData().GetModelPosition( nEndIndex );
 
     // create UNO cursor
@@ -651,13 +651,13 @@ sal_Bool SwAccessibleParagraph::GetWordBoundary(
     if( pBreakIt->GetBreakIter().is() )
     {
         // get locale for this position
-        USHORT nModelPos = GetPortionData().GetModelPosition( nPos );
+        sal_uInt16 nModelPos = GetPortionData().GetModelPosition( nPos );
         lang::Locale aLocale = pBreakIt->GetLocale(
                               GetTxtNode()->GetLang( nModelPos ) );
 
         // which type of word are we interested in?
         // (DICTIONARY_WORD includes punctuation, ANY_WORD doesn't.)
-        const USHORT nWordType = i18n::WordType::ANY_WORD;
+        const sal_uInt16 nWordType = i18n::WordType::ANY_WORD;
 
         // get word boundary, as the Break-Iterator sees fit.
         rBound = pBreakIt->GetBreakIter()->getWordBoundary(
@@ -731,12 +731,12 @@ sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
     if( pBreakIt->GetBreakIter().is() )
     {
         // get locale for this position
-        USHORT nModelPos = GetPortionData().GetModelPosition( nPos );
+        sal_uInt16 nModelPos = GetPortionData().GetModelPosition( nPos );
         lang::Locale aLocale = pBreakIt->GetLocale(
                               GetTxtNode()->GetLang( nModelPos ) );
 
         // get word boundary, as the Break-Iterator sees fit.
-        const USHORT nIterMode = i18n::CharacterIteratorMode::SKIPCELL;
+        const sal_uInt16 nIterMode = i18n::CharacterIteratorMode::SKIPCELL;
         sal_Int32 nDone = 0;
         rBound.endPos = pBreakIt->GetBreakIter()->nextCharacters(
              rText, nPos, aLocale, nIterMode, 1, nDone );
@@ -1472,9 +1472,9 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     {
         const SwTxtNode* pTxtNode( GetTxtNode() );
         SwPosition* pStartPos = new SwPosition( *pTxtNode );
-        pStartPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), static_cast<USHORT>(nIndex) );
+        pStartPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), static_cast<sal_uInt16>(nIndex) );
         SwPosition* pEndPos = new SwPosition( *pTxtNode );
-        pEndPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), static_cast<USHORT>(nIndex+1) );
+        pEndPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), static_cast<sal_uInt16>(nIndex+1) );
 
         pPaM = new SwPaM( *pStartPos, *pEndPos );
 
@@ -1490,7 +1490,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     // From the perspective of the a11y API the character attributes, which
     // are set at the automatic paragraph style of the paragraph are treated
     // as run attributes.
-//    SwXTextCursor::GetCrsrAttr( *pPaM, aSet, TRUE, TRUE );
+//    SwXTextCursor::GetCrsrAttr( *pPaM, aSet, sal_True, sal_True );
     // get character attributes from automatic paragraph style and merge these into <aSet>
     {
         const SwTxtNode* pTxtNode( GetTxtNode() );
@@ -1499,7 +1499,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
             SfxItemSet aAutomaticParaStyleCharAttrs( pPaM->GetDoc()->GetAttrPool(),
                                                      RES_CHRATR_BEGIN, RES_CHRATR_END -1,
                                                      0 );
-            aAutomaticParaStyleCharAttrs.Put( *(pTxtNode->GetpSwAttrSet()), FALSE );
+            aAutomaticParaStyleCharAttrs.Put( *(pTxtNode->GetpSwAttrSet()), sal_False );
             aSet.Put( aAutomaticParaStyleCharAttrs );
         }
     }
@@ -1508,7 +1508,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         SfxItemSet aCharAttrsAtPaM( pPaM->GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END -1,
                                     0 );
-        SwUnoCursorHelper::GetCrsrAttr(*pPaM, aCharAttrsAtPaM, TRUE, TRUE);
+        SwUnoCursorHelper::GetCrsrAttr(*pPaM, aCharAttrsAtPaM, sal_True, sal_True);
         aSet.Put( aCharAttrsAtPaM );
     }
     // <--
@@ -1530,7 +1530,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
                 const SfxPoolItem* pItem( 0 );
                 // #i82637# - Found character attributes, whose value equals the value of
                 // the corresponding default character attributes, are excluded.
-                if ( aSet.GetItemState( aPropIt->nWID, TRUE, &pItem ) == SFX_ITEM_SET )
+                if ( aSet.GetItemState( aPropIt->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
                     uno::Any aVal;
                     pItem->QueryValue( aVal, aPropIt->nMemberId );
@@ -1633,12 +1633,12 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
 
     // get model position & prepare GetCharRect() arguments
     SwCrsrMoveState aMoveState;
-    aMoveState.bRealHeight = TRUE;
-    aMoveState.bRealWidth = TRUE;
+    aMoveState.bRealHeight = sal_True;
+    aMoveState.bRealWidth = sal_True;
     SwSpecialPos aSpecialPos;
     SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
 
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
 
     /*  #i12332# FillSpecialPos does not accept nIndex ==
          GetString().getLength(). In that case nPos is set to the
@@ -1730,7 +1730,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     DBG_ASSERT( GetFrm()->IsTxtFrm(), "The text frame has mutated!" );
     const SwTxtFrm* pFrm = static_cast<const SwTxtFrm*>( GetFrm() );
     SwCrsrMoveState aMoveState;
-    aMoveState.bPosMatchesBounds = TRUE;
+    aMoveState.bPosMatchesBounds = sal_True;
     sal_Bool bSuccess = pFrm->GetCrsrOfst( &aPos, aCorePoint, &aMoveState );
 
     SwIndex aCntntIdx = aPos.nContent;
@@ -2063,7 +2063,7 @@ sal_Bool SwAccessibleParagraph::replaceText(
         SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
 
         // translate positions
-        USHORT nStart, nEnd;
+        sal_uInt16 nStart, nEnd;
         sal_Bool bSuccess = GetPortionData().GetEditableRange(
                                         nStartIndex, nEndIndex, nStart, nEnd );
 

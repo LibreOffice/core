@@ -112,7 +112,7 @@ class SwAccessibleParagraph :
     SwPaM* GetCursor( const bool _bForSelection );
 
     /// for cut/copy/paste: execute a particular slot at the view shell
-    void ExecuteAtViewShell( UINT16 nSlot );
+    void ExecuteAtViewShell( sal_uInt16 nSlot );
 
     /// helper method for get/setAttributes
     /// (for the special case of (nEndIndex==-1) a single character will

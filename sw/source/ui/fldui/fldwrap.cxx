@@ -52,7 +52,7 @@
 
 SFX_IMPL_CHILDWINDOW(SwFldDlgWrapper, FN_INSERT_FIELD)
 
-SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, USHORT nId) :
+SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, sal_uInt16 nId) :
         SfxChildWindow(pParentWindow, nId),
         m_pDocSh(0)
 {
@@ -71,14 +71,14 @@ IMPL_LINK( SwChildWinWrapper, UpdateHdl, void*, EMPTYARG )
 /*--------------------------------------------------------------------
     Description: newly initialise dialog after Doc switch
  --------------------------------------------------------------------*/
-BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *)
+sal_Bool SwChildWinWrapper::ReInitDlg(SwDocShell *)
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if (m_pDocSh != GetOldDocShell())
     {
         m_aUpdateTimer.Stop();
-        bRet = TRUE;            // immediate Update
+        bRet = sal_True;            // immediate Update
     }
     else
         m_aUpdateTimer.Start();
@@ -93,7 +93,7 @@ SfxChildWinInfo SwFldDlgWrapper::GetInfo() const
     return aInfo;
 }
 
-SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, USHORT nId,
+SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, sal_uInt16 nId,
                                     SfxBindings* pB,
                                     SfxChildWinInfo*  )
     : SwChildWinWrapper( _pParent, nId )
@@ -112,11 +112,11 @@ SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, USHORT nId,
 /*--------------------------------------------------------------------
     Description: newly initialise dialog after Doc switch
  --------------------------------------------------------------------*/
-BOOL SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
+sal_Bool SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
-    BOOL bRet;
+    sal_Bool bRet;
 
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)  // update immediately, Doc switch
+    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == sal_True)  // update immediately, Doc switch
     {
         pDlgInterface->ReInitDlg();
     }
@@ -124,7 +124,7 @@ BOOL SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
     return bRet;
 }
 
-void SwFldDlgWrapper::ShowPage(USHORT nPage)
+void SwFldDlgWrapper::ShowPage(sal_uInt16 nPage)
 {
     pDlgInterface->ShowPage(nPage ? nPage : TP_FLD_REF);
 }
@@ -136,11 +136,11 @@ SfxChildWinInfo SwFldDataOnlyDlgWrapper::GetInfo() const
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
 // prevent instatiation of dialog other than by calling
 // the mail merge dialog
-    aInfo.bVisible = FALSE;
+    aInfo.bVisible = sal_False;
     return aInfo;
 }
 
-SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, USHORT nId,
+SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, sal_uInt16 nId,
                                     SfxBindings* pB,
                                     SfxChildWinInfo* pInfo )
     : SwChildWinWrapper( _pParent, nId )
@@ -162,10 +162,10 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, USHORT nId,
 /* --------------------------------------------------
  * re-init after doc activation
  * --------------------------------------------------*/
-BOOL SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
+sal_Bool SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
-    BOOL bRet;
-    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)  // update immediately, Doc switch
+    sal_Bool bRet;
+    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == sal_True)  // update immediately, Doc switch
     {
         pDlgInterface->ReInitDlg();
     }

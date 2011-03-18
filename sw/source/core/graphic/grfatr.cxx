@@ -76,19 +76,19 @@ int SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
             ((SwMirrorGrf&)rItem).IsGrfToggle() == IsGrfToggle();
 }
 
-BOOL lcl_IsHoriOnEvenPages(int nEnum, BOOL bToggle)
+sal_Bool lcl_IsHoriOnEvenPages(int nEnum, sal_Bool bToggle)
 {
-    BOOL bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
+    sal_Bool bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
                    nEnum == RES_MIRROR_GRAPH_BOTH;
             return bEnum != bToggle;
 }
-BOOL lcl_IsHoriOnOddPages(int nEnum)
+sal_Bool lcl_IsHoriOnOddPages(int nEnum)
 {
-    BOOL bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
+    sal_Bool bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
                    nEnum == RES_MIRROR_GRAPH_BOTH;
             return bEnum;
 }
-bool SwMirrorGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bRet = true;
     sal_Bool bVal;
@@ -114,7 +114,7 @@ bool SwMirrorGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return bRet;
 }
 
-bool SwMirrorGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bRet = true;
     sal_Bool bVal = *(sal_Bool*)rVal.getValue();
@@ -125,17 +125,17 @@ bool SwMirrorGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_MIRROR_HORZ_EVEN_PAGES:
         case MID_MIRROR_HORZ_ODD_PAGES:
         {
-            BOOL bIsVert = GetValue() == RES_MIRROR_GRAPH_HOR ||
+            sal_Bool bIsVert = GetValue() == RES_MIRROR_GRAPH_HOR ||
                                 GetValue() == RES_MIRROR_GRAPH_BOTH;
-            BOOL bOnOddPages = nMemberId == MID_MIRROR_HORZ_EVEN_PAGES ?
+            sal_Bool bOnOddPages = nMemberId == MID_MIRROR_HORZ_EVEN_PAGES ?
                                     lcl_IsHoriOnOddPages(GetValue()) : bVal;
-            BOOL bOnEvenPages = nMemberId == MID_MIRROR_HORZ_ODD_PAGES ?
+            sal_Bool bOnEvenPages = nMemberId == MID_MIRROR_HORZ_ODD_PAGES ?
                                        lcl_IsHoriOnEvenPages(GetValue(), IsGrfToggle()) : bVal;
             MirrorGraph nEnum = bOnOddPages ?
                     bIsVert ? RES_MIRROR_GRAPH_BOTH : RES_MIRROR_GRAPH_VERT :
                         bIsVert ? RES_MIRROR_GRAPH_HOR : RES_MIRROR_GRAPH_DONT;
-            BOOL bToggle = bOnOddPages != bOnEvenPages;
-            SetValue(static_cast<USHORT>(nEnum));
+            sal_Bool bToggle = bOnOddPages != bOnEvenPages;
+            SetValue(static_cast<sal_uInt16>(nEnum));
             SetGrfToggle( bToggle );
         }
         break;
@@ -195,7 +195,7 @@ int SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
 }
 
 
-bool SwRotationGrf::QueryValue( uno::Any& rVal, BYTE ) const
+bool SwRotationGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
@@ -203,15 +203,15 @@ bool SwRotationGrf::QueryValue( uno::Any& rVal, BYTE ) const
     return true;
 }
 
-bool SwRotationGrf::PutValue( const uno::Any& rVal, BYTE )
+bool SwRotationGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
     sal_Int16 nValue = 0;
     if (rVal >>= nValue)
     {
-        // UINT16 argument needed
-        SetValue( (UINT16) nValue );
+        // sal_uInt16 argument needed
+        SetValue( (sal_uInt16) nValue );
         return true;
     }
 
@@ -267,13 +267,13 @@ int SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
         nValue == ((SwGammaGrf&)rCmp).GetValue();
 }
 
-bool SwGammaGrf::QueryValue( uno::Any& rVal, BYTE ) const
+bool SwGammaGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     rVal <<= nValue;
     return true;
 }
 
-bool SwGammaGrf::PutValue( const uno::Any& rVal, BYTE )
+bool SwGammaGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
     return rVal >>= nValue;
 }
@@ -293,7 +293,7 @@ SfxPoolItem* SwTransparencyGrf::Clone( SfxItemPool * ) const
 }
 // ------------------------------------------------------------------
 bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
-                                        BYTE ) const
+                                        sal_uInt8 ) const
 {
     DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!");
     sal_Int16 nRet = GetValue();
@@ -303,7 +303,7 @@ bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
 }
 // ------------------------------------------------------------------
 bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
-                                        BYTE )
+                                        sal_uInt8 )
 {
     //temporary conversion until this is a SfxInt16Item!
     DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!");
@@ -318,7 +318,7 @@ bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
         nVal += 128;
     }
     DBG_ASSERT( 0 <= nVal && nVal <= 100, "value out of range" );
-    SetValue(static_cast<BYTE>(nVal));
+    SetValue(static_cast<sal_uInt8>(nVal));
     return true;
 }
 
@@ -329,13 +329,13 @@ SfxPoolItem* SwDrawModeGrf::Clone( SfxItemPool * ) const
     return new SwDrawModeGrf( *this );
 }
 
-USHORT SwDrawModeGrf::GetValueCount() const
+sal_uInt16 SwDrawModeGrf::GetValueCount() const
 {
     return GRAPHICDRAWMODE_WATERMARK + 1;
 }
 
 bool SwDrawModeGrf::QueryValue( uno::Any& rVal,
-                                BYTE ) const
+                                sal_uInt8 ) const
 {
     drawing::ColorMode eRet = (drawing::ColorMode)GetEnumValue();
     rVal <<= eRet;
@@ -343,12 +343,12 @@ bool SwDrawModeGrf::QueryValue( uno::Any& rVal,
 }
 
 bool SwDrawModeGrf::PutValue( const uno::Any& rVal,
-                                BYTE )
+                                sal_uInt8 )
 {
     sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
     if(eVal >= 0 && eVal <= GRAPHICDRAWMODE_WATERMARK)
     {
-        SetEnumValue((USHORT)eVal);
+        SetEnumValue((sal_uInt16)eVal);
         return true;
     }
     return false;

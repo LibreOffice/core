@@ -49,7 +49,7 @@ public:
     const String& GetURL()      const { return aURL; }
     const String& GetTarget()   const { return aTarget; }
     const SwRect& GetRect()     const { return aRect; }
-    BOOL operator==( const SwURLNote& rSwURLNote ) const
+    sal_Bool operator==( const SwURLNote& rSwURLNote ) const
     { return aRect == rSwURLNote.aRect; }
 };
 
@@ -61,10 +61,10 @@ class SwNoteURL
     SwURLNoteList aList;
 public:
     SwNoteURL() {}
-    USHORT Count() const { return aList.Count(); }
+    sal_uInt16 Count() const { return aList.Count(); }
     void InsertURLNote( const String& rURL, const String& rTarget,
                  const SwRect& rRect );
-    const SwURLNote& GetURLNote( USHORT nPos ) const
+    const SwURLNote& GetURLNote( sal_uInt16 nPos ) const
         { return *aList.GetObject( nPos ); }
     void FillImageMap( ImageMap* pMap, const Point& rPos, const MapMode& rMap );
 };

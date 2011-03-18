@@ -29,20 +29,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <UndoBookmark.hxx>
 
 #include "doc.hxx"
 #include "docary.hxx"
 #include "swundo.hxx"           // fuer die UndoIds
 #include "pam.hxx"
 
-#include "undobj.hxx"
+#include <UndoCore.hxx>
 #include "IMark.hxx"
 #include "rolbck.hxx"
 
 #include "SwRewriter.hxx"
-
-
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 
 SwUndoBookmark::SwUndoBookmark( SwUndoId nUndoId,
@@ -60,7 +58,6 @@ void SwUndoBookmark::SetInDoc( SwDoc* pDoc )
 {
     m_pHistoryBookmark->SetInDoc( pDoc, false );
 }
-
 
 void SwUndoBookmark::ResetInDoc( SwDoc* pDoc )
 {
@@ -96,15 +93,14 @@ SwUndoInsBookmark::SwUndoInsBookmark( const ::sw::mark::IMark& rBkmk )
 }
 
 
-void SwUndoInsBookmark::Undo( SwUndoIter& rUndoIter )
+void SwUndoInsBookmark::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    ResetInDoc( &rUndoIter.GetDoc() );
+    ResetInDoc( &rContext.GetDoc() );
 }
 
-
-void SwUndoInsBookmark::Redo( SwUndoIter& rUndoIter )
+void SwUndoInsBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SetInDoc( &rUndoIter.GetDoc() );
+    SetInDoc( &rContext.GetDoc() );
 }
 
 

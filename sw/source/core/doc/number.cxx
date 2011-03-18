@@ -66,7 +66,7 @@
 using namespace ::com::sun::star;
 
 
-USHORT SwNumRule::nRefCount = 0;
+sal_uInt16 SwNumRule::nRefCount = 0;
 SwNumFmt* SwNumRule::aBaseFmts[ RULE_END ][ MAXLEVEL ] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
@@ -76,13 +76,13 @@ SwNumFmt* SwNumRule::aLabelAlignmentBaseFmts[ RULE_END ][ MAXLEVEL ] = {
 char sOutline[] = "Outline";
 char* SwNumRule::pDefOutlineName = sOutline;
 
-USHORT SwNumRule::aDefNumIndents[ MAXLEVEL ] = {
+sal_uInt16 SwNumRule::aDefNumIndents[ MAXLEVEL ] = {
 //inch:   0,5  1,0  1,5  2,0   2,5   3,0   3,5   4,0   4,5   5,0
         1440/4, 1440/2, 1440*3/4, 1440, 1440*5/4, 1440*3/2, 1440*7/4, 1440*2,
         1440*9/4, 1440*5/2
 };
 
-const SwNumFmt& SwNumRule::Get( USHORT i ) const
+const SwNumFmt& SwNumRule::Get( sal_uInt16 i ) const
 {
     OSL_ASSERT( i < MAXLEVEL && eRuleType < RULE_END );
     return aFmts[ i ]
@@ -92,7 +92,7 @@ const SwNumFmt& SwNumRule::Get( USHORT i ) const
                : *aLabelAlignmentBaseFmts[ eRuleType ][ i ] );
 }
 
-const SwNumFmt* SwNumRule::GetNumFmt( USHORT i ) const
+const SwNumFmt* SwNumRule::GetNumFmt( sal_uInt16 i ) const
 {
     const SwNumFmt * pResult = NULL;
 
@@ -170,21 +170,19 @@ void SwNumRule::SetNumRuleMap(boost::unordered_map<String, SwNumRule *, StringHa
     pNumRuleMap = _pNumRuleMap;
 }
 
-
-USHORT SwNumRule::GetNumIndent( BYTE nLvl )
+sal_uInt16 SwNumRule::GetNumIndent( sal_uInt8 nLvl )
 {
     OSL_ENSURE( MAXLEVEL > nLvl, "NumLevel is out of range" );
     return aDefNumIndents[ nLvl ];
 }
 
-
-USHORT SwNumRule::GetBullIndent( BYTE nLvl )
+sal_uInt16 SwNumRule::GetBullIndent( sal_uInt8 nLvl )
 {
     OSL_ENSURE( MAXLEVEL > nLvl, "NumLevel is out of range" );
     return aDefNumIndents[ nLvl ];
 }
 
-static void lcl_SetRuleChgd( SwTxtNode& rNd, BYTE nLevel )
+static void lcl_SetRuleChgd( SwTxtNode& rNd, sal_uInt8 nLevel )
 {
     if( rNd.GetActualListLevel() == nLevel )
         rNd.NumRuleChgd();
@@ -220,7 +218,7 @@ SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc) :
         SwCharFmt* pCFmt = pDoc->FindCharFmtByName( rCharStyleName );
         if( !pCFmt )
         {
-            USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( rCharStyleName,
+            sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rCharStyleName,
                                             nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             pCFmt = nId != USHRT_MAX
                         ? pDoc->GetCharFmtFromPool( nId )
@@ -245,7 +243,7 @@ void SwNumFmt::NotifyGraphicArrived()
 }
 
 // #i22362#
-BOOL SwNumFmt::IsEnumeration() const
+sal_Bool SwNumFmt::IsEnumeration() const
 {
     // --> FME 2004-08-12 #i30655# native numbering did not work any longer
     // using this code. Therefore HBRINKM and I agreed upon defining
@@ -254,20 +252,20 @@ BOOL SwNumFmt::IsEnumeration() const
 }
 
 
-BOOL SwNumFmt::IsItemize() const
+sal_Bool SwNumFmt::IsItemize() const
 {
-    BOOL bResult;
+    sal_Bool bResult;
 
     switch(GetNumberingType())
     {
     case SVX_NUM_CHAR_SPECIAL:
     case SVX_NUM_BITMAP:
-        bResult = TRUE;
+        bResult = sal_True;
 
         break;
 
     default:
-        bResult = FALSE;
+        bResult = sal_False;
     }
 
     return bResult;
@@ -284,9 +282,9 @@ SwNumFmt& SwNumFmt::operator=( const SwNumFmt& rNumFmt)
     return *this;
 }
 
-BOOL SwNumFmt::operator==( const SwNumFmt& rNumFmt) const
+sal_Bool SwNumFmt::operator==( const SwNumFmt& rNumFmt) const
 {
-    BOOL bRet = SvxNumberFormat::operator==(rNumFmt) &&
+    sal_Bool bRet = SvxNumberFormat::operator==(rNumFmt) &&
         pRegisteredIn == rNumFmt.pRegisteredIn;
     return bRet;
 }
@@ -351,13 +349,13 @@ sal_Int16   SwNumFmt::GetVertOrient() const
 
 void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
 {
-    BOOL bDocIsModified = pDoc->IsModified();
-    BOOL bFnd = FALSE;
+    sal_Bool bDocIsModified = pDoc->IsModified();
+    sal_Bool bFnd = sal_False;
     const SwNumRule* pRule;
-    for( USHORT n = pDoc->GetNumRuleTbl().Count(); !bFnd && n; )
+    for( sal_uInt16 n = pDoc->GetNumRuleTbl().Count(); !bFnd && n; )
     {
         pRule = pDoc->GetNumRuleTbl()[ --n ];
-        for( BYTE i = 0; i < MAXLEVEL; ++i )
+        for( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
             if( pRule->GetNumFmt( i ) == this )
             {
                 SwNumRule::tTxtNodeList aTxtNodeList;
@@ -368,7 +366,7 @@ void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
                     lcl_SetRuleChgd( *(*aIter), i );
                 }
                 // <--
-                bFnd = TRUE;
+                bFnd = sal_True;
                 break;
             }
     }
@@ -397,7 +395,7 @@ long int SwNumRule::nInstances = 0;
 SwNumRule::SwNumRule( const String& rNm,
                       const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                       SwNumRuleType eType,
-                      BOOL bAutoFlg )
+                      sal_Bool bAutoFlg )
     : maTxtNodeList(),
       maParagraphStyleList(),
     pNumRuleMap(0),
@@ -407,9 +405,9 @@ SwNumRule::SwNumRule( const String& rNm,
     nPoolHelpId( USHRT_MAX ),
     nPoolHlpFileId( UCHAR_MAX ),
     bAutoRuleFlag( bAutoFlg ),
-    bInvalidRuleFlag( TRUE ),
-    bContinusNum( FALSE ),
-    bAbsSpaces( FALSE ),
+    bInvalidRuleFlag( sal_True ),
+    bContinusNum( sal_False ),
+    bAbsSpaces( sal_False ),
     mbCountPhantoms( true ),
     meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode ),
     msDefaultListId()
@@ -421,7 +419,7 @@ SwNumRule::SwNumRule( const String& rNm,
     if( !nRefCount++ )          // zum erstmal, also initialisiern
     {
         SwNumFmt* pFmt;
-        BYTE n;
+        sal_uInt8 n;
 
         // numbering:
         // position-and-space mode LABEL_WIDTH_AND_POSITION:
@@ -509,7 +507,7 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
       nPoolHelpId( rNumRule.GetPoolHelpId() ),
       nPoolHlpFileId( rNumRule.GetPoolHlpFileId() ),
       bAutoRuleFlag( rNumRule.bAutoRuleFlag ),
-      bInvalidRuleFlag( TRUE ),
+      bInvalidRuleFlag( sal_True ),
       bContinusNum( rNumRule.bContinusNum ),
       bAbsSpaces( rNumRule.bAbsSpaces ),
       mbCountPhantoms( true ),
@@ -522,14 +520,14 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
 
     ++nRefCount;
     memset( aFmts, 0, sizeof( aFmts ));
-    for( USHORT n = 0; n < MAXLEVEL; ++n )
+    for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
         if( rNumRule.aFmts[ n ] )
             Set( n, *rNumRule.aFmts[ n ] );
 }
 
 SwNumRule::~SwNumRule()
 {
-    for( USHORT n = 0; n < MAXLEVEL; ++n )
+    for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
         delete aFmts[ n ];
 
     if (pNumRuleMap)
@@ -564,7 +562,7 @@ SwNumRule::~SwNumRule()
 void SwNumRule::CheckCharFmts( SwDoc* pDoc )
 {
     SwCharFmt* pFmt;
-    for( BYTE n = 0; n < MAXLEVEL; ++n )
+    for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
         if( aFmts[ n ] && 0 != ( pFmt = aFmts[ n ]->GetCharFmt() ) &&
             pFmt->GetDoc() != pDoc )
         {
@@ -580,13 +578,13 @@ SwNumRule& SwNumRule::operator=( const SwNumRule& rNumRule )
 {
     if( this != &rNumRule )
     {
-        for( USHORT n = 0; n < MAXLEVEL; ++n )
+        for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
             Set( n, rNumRule.aFmts[ n ] );
 
         eRuleType = rNumRule.eRuleType;
         sName = rNumRule.sName;
         bAutoRuleFlag = rNumRule.bAutoRuleFlag;
-        bInvalidRuleFlag = TRUE;
+        bInvalidRuleFlag = sal_True;
         bContinusNum = rNumRule.bContinusNum;
         bAbsSpaces = rNumRule.bAbsSpaces;
         nPoolFmtId = rNumRule.GetPoolFmtId();
@@ -596,9 +594,9 @@ SwNumRule& SwNumRule::operator=( const SwNumRule& rNumRule )
     return *this;
 }
 
-BOOL SwNumRule::operator==( const SwNumRule& rRule ) const
+sal_Bool SwNumRule::operator==( const SwNumRule& rRule ) const
 {
-    BOOL bRet = eRuleType == rRule.eRuleType &&
+    sal_Bool bRet = eRuleType == rRule.eRuleType &&
                 sName == rRule.sName &&
                 bAutoRuleFlag == rRule.bAutoRuleFlag &&
                 bContinusNum == rRule.bContinusNum &&
@@ -608,17 +606,17 @@ BOOL SwNumRule::operator==( const SwNumRule& rRule ) const
                 nPoolHlpFileId == rRule.GetPoolHlpFileId();
     if( bRet )
     {
-        for( BYTE n = 0; n < MAXLEVEL; ++n )
+        for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
             if( !( rRule.Get( n ) == Get( n ) ))
             {
-                bRet = FALSE;
+                bRet = sal_False;
                 break;
             }
     }
     return bRet;
 }
 
-void SwNumRule::Set( USHORT i, const SwNumFmt& rNumFmt )
+void SwNumRule::Set( sal_uInt16 i, const SwNumFmt& rNumFmt )
 {
     OSL_ENSURE( i < MAXLEVEL, "Serious defect, please inform OD" );
     if( i < MAXLEVEL )
@@ -627,12 +625,12 @@ void SwNumRule::Set( USHORT i, const SwNumFmt& rNumFmt )
         {
             delete aFmts[ i ];
             aFmts[ i ] = new SwNumFmt( rNumFmt );
-            bInvalidRuleFlag = TRUE;
+            bInvalidRuleFlag = sal_True;
         }
     }
 }
 
-void SwNumRule::Set( USHORT i, const SwNumFmt* pNumFmt )
+void SwNumRule::Set( sal_uInt16 i, const SwNumFmt* pNumFmt )
 {
     OSL_ENSURE( i < MAXLEVEL, "Serious defect, please inform OD" );
     if( i >= MAXLEVEL )
@@ -643,17 +641,17 @@ void SwNumRule::Set( USHORT i, const SwNumFmt* pNumFmt )
         if( pNumFmt )
         {
             aFmts[ i ] = new SwNumFmt( *pNumFmt );
-            bInvalidRuleFlag = TRUE;
+            bInvalidRuleFlag = sal_True;
         }
     }
     else if( !pNumFmt )
-        delete pOld, aFmts[ i ] = 0, bInvalidRuleFlag = TRUE;
+        delete pOld, aFmts[ i ] = 0, bInvalidRuleFlag = sal_True;
     else if( *pOld != *pNumFmt )
-        *pOld = *pNumFmt, bInvalidRuleFlag = TRUE;
+        *pOld = *pNumFmt, bInvalidRuleFlag = sal_True;
 }
 
-String SwNumRule::MakeNumString( const SwNodeNum& rNum, BOOL bInclStrings,
-                                BOOL bOnlyArabic ) const
+String SwNumRule::MakeNumString( const SwNodeNum& rNum, sal_Bool bInclStrings,
+                                sal_Bool bOnlyArabic ) const
 {
     String aStr;
 
@@ -665,8 +663,8 @@ String SwNumRule::MakeNumString( const SwNodeNum& rNum, BOOL bInclStrings,
 }
 
 String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
-                                 const BOOL bInclStrings,
-                                 const BOOL bOnlyArabic,
+                                 const sal_Bool bInclStrings,
+                                 const sal_Bool bOnlyArabic,
                                  const unsigned int _nRestrictToThisLevel ) const
 {
     String aStr;
@@ -680,17 +678,17 @@ String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
 
     if (nLevel < MAXLEVEL)
     {
-        const SwNumFmt& rMyNFmt = Get( static_cast<USHORT>(nLevel) );
+        const SwNumFmt& rMyNFmt = Get( static_cast<sal_uInt16>(nLevel) );
 
         {
-            BYTE i = static_cast<BYTE>(nLevel);
+            sal_uInt8 i = static_cast<sal_uInt8>(nLevel);
 
             if( !IsContinusNum() &&
                 // - do not include upper levels, if level isn't numbered.
                 rMyNFmt.GetNumberingType() != SVX_NUM_NUMBER_NONE &&
                 rMyNFmt.GetIncludeUpperLevels() )  // nur der eigene Level ?
             {
-                BYTE n = rMyNFmt.GetIncludeUpperLevels();
+                sal_uInt8 n = rMyNFmt.GetIncludeUpperLevels();
                 if( 1 < n )
                 {
                     if( i+1 >= n )
@@ -754,7 +752,7 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
             bool bMakeNumStringForPhantom( false );
             if ( pWorkingNodeNum->IsPhantom() )
             {
-                SwNumFmt aFmt( Get( static_cast<USHORT>(pWorkingNodeNum->GetLevelInListTree()) ) );
+                SwNumFmt aFmt( Get( static_cast<sal_uInt16>(pWorkingNodeNum->GetLevelInListTree()) ) );
                 bMakeNumStringForPhantom = aFmt.IsEnumeration() &&
                                            SVX_NUM_NUMBER_NONE != aFmt.GetNumberingType();
 
@@ -773,7 +771,7 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
 
             if ( bInclSuperiorNumLabels && pWorkingNodeNum->GetLevelInListTree() > 0 )
             {
-                BYTE n = Get( static_cast<USHORT>(pWorkingNodeNum->GetLevelInListTree()) ).GetIncludeUpperLevels();
+                sal_uInt8 n = Get( static_cast<sal_uInt16>(pWorkingNodeNum->GetLevelInListTree()) ).GetIncludeUpperLevels();
                 pWorkingNodeNum = dynamic_cast<SwNodeNum*>(pWorkingNodeNum->GetParent());
                 // skip parents, whose list label is already contained in the actual list label.
                 while ( pWorkingNodeNum && n > 1 )
@@ -801,7 +799,7 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
     // (Kopiert die NumFormate und returnt sich selbst)
 SwNumRule& SwNumRule::CopyNumRule( SwDoc* pDoc, const SwNumRule& rNumRule )
 {
-    for( USHORT n = 0; n < MAXLEVEL; ++n )
+    for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
         Set( n, rNumRule.aFmts[ n ] );
         if( aFmts[ n ] && aFmts[ n ]->GetCharFmt() &&
@@ -818,20 +816,20 @@ SwNumRule& SwNumRule::CopyNumRule( SwDoc* pDoc, const SwNumRule& rNumRule )
     nPoolFmtId = rNumRule.GetPoolFmtId();
     nPoolHelpId = rNumRule.GetPoolHelpId();
     nPoolHlpFileId = rNumRule.GetPoolHlpFileId();
-    bInvalidRuleFlag = TRUE;
+    bInvalidRuleFlag = sal_True;
     return *this;
 }
 
 void SwNumRule::SetSvxRule(const SvxNumRule& rNumRule, SwDoc* pDoc)
 {
-    for( USHORT n = 0; n < MAXLEVEL; ++n )
+    for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
         const SvxNumberFormat* pSvxFmt = rNumRule.Get(n);
         delete aFmts[n];
         aFmts[n] = pSvxFmt ? new SwNumFmt(*pSvxFmt, pDoc) : 0;
     }
 
-    bInvalidRuleFlag = TRUE;
+    bInvalidRuleFlag = sal_True;
     bContinusNum = rNumRule.IsContinuousNumbering();
 }
 
@@ -844,7 +842,7 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
                             NUM_RULE ?
                                 SVX_RULETYPE_NUMBERING :
                                     SVX_RULETYPE_OUTLINE_NUMBERING );
-    for( USHORT n = 0; n < MAXLEVEL; ++n )
+    for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
         SwNumFmt aNumFmt = Get(n);
         if(aNumFmt.GetCharFmt())
@@ -854,8 +852,7 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
     return aRule;
 }
 
-
-void SwNumRule::SetInvalidRule(BOOL bFlag)
+void SwNumRule::SetInvalidRule(sal_Bool bFlag)
 {
     if (bFlag)
     {
@@ -885,7 +882,7 @@ void SwNumRule::SetInvalidRule(BOOL bFlag)
 // change indent of all list levels by given difference
 void SwNumRule::ChangeIndent( const short nDiff )
 {
-    for ( USHORT i = 0; i < MAXLEVEL; ++i )
+    for ( sal_uInt16 i = 0; i < MAXLEVEL; ++i )
     {
         SwNumFmt aTmpNumFmt( Get(i) );
 
@@ -918,12 +915,12 @@ void SwNumRule::ChangeIndent( const short nDiff )
         Set( i, aTmpNumFmt );
     }
 
-    SetInvalidRule( TRUE );
+    SetInvalidRule( sal_True );
 }
 
 // set indent of certain list level to given value
 void SwNumRule::SetIndent( const short nNewIndent,
-                           const USHORT nListLevel )
+                           const sal_uInt16 nListLevel )
 {
     SwNumFmt aTmpNumFmt( Get(nListLevel) );
 
@@ -946,7 +943,7 @@ void SwNumRule::SetIndent( const short nNewIndent,
         aTmpNumFmt.SetIndentAt( nNewIndent );
     }
 
-    SetInvalidRule( TRUE );
+    SetInvalidRule( sal_True );
 }
 
 // set indent of first list level to given value and change other list level's
@@ -989,7 +986,7 @@ void SwNumRule::Validate()
                    std::mem_fun( &SwList::ValidateListTree ) );
 
 
-    SetInvalidRule(FALSE);
+    SetInvalidRule(sal_False);
 }
 
 
@@ -1078,8 +1075,7 @@ namespace numfunc
             {
                 return static_cast<short>(meFontItalic);
             }
-
-            inline sal_Unicode GetChar( BYTE p_nListLevel ) const
+            inline sal_Unicode GetChar( sal_uInt8 p_nListLevel ) const
             {
                 if ( p_nListLevel > MAXLEVEL )
                 {
@@ -1290,7 +1286,7 @@ namespace numfunc
         return SwDefBulletConfig::getInstance()->GetFont();
     }
 
-    sal_Unicode GetBulletChar( BYTE nLevel )
+    sal_Unicode GetBulletChar( sal_uInt8 nLevel )
     {
         return SwDefBulletConfig::getInstance()->GetChar( nLevel );
     }

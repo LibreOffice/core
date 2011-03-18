@@ -45,6 +45,7 @@ ModalDialog DLG_FLD_DROPDOWN
     };
     ListBox LB_LISTITEMS
     {
+        HelpID = "sw:ListBox:DLG_FLD_DROPDOWN:LB_LISTITEMS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 115 , 99 ) ;
@@ -67,6 +68,7 @@ ModalDialog DLG_FLD_DROPDOWN
     };
     PushButton PB_NEXT
     {
+        HelpID = "sw:PushButton:DLG_FLD_DROPDOWN:PB_NEXT";
         Pos = MAP_APPFONT ( 139 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -81,6 +83,7 @@ ModalDialog DLG_FLD_DROPDOWN
     };
     PushButton PB_EDIT
     {
+        HelpID = "sw:PushButton:DLG_FLD_DROPDOWN:PB_EDIT";
         Pos = MAP_APPFONT ( 139 , 99 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;

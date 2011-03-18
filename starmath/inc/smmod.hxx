@@ -66,7 +66,7 @@ class VirtualDevice;
 class SmResId : public ResId
 {
 public:
-    SmResId(USHORT nId);
+    SmResId(sal_uInt16 nId);
 };
 
 class SmNamesArray : public Resource
@@ -77,7 +77,7 @@ class SmNamesArray : public Resource
 public:
     SmNamesArray( LanguageType nLang, int nRID ) :
         Resource( SmResId(RID_LOCALIZED_NAMES) ),
-        aNamesAry   (SmResId( static_cast < USHORT > ( nRID ))),
+        aNamesAry   (SmResId( static_cast < sal_uInt16 > ( nRID ))),
         nLanguage   (nLang)
     {
         FreeResource();
@@ -128,7 +128,6 @@ class SmModule : public SfxModule, utl::ConfigurationListener
     SvtSysLocale            *pSysLocale;
     VirtualDevice           *pVirtualDev;
 
-    virtual void FillStatusBar(StatusBar &rBar);
     void _CreateSysLocale() const;
     void _CreateVirtualDev() const;
 
@@ -167,9 +166,9 @@ public:
     }
 
     //virtual methods for options dialog
-    virtual SfxItemSet*  CreateItemSet( USHORT nId );
-    virtual void         ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
-    virtual SfxTabPage*  CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet );
+    virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId );
+    virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
+    virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet );
 };
 
 #define SM_MOD() ( *(SmModule**) GetAppData(SHL_SM) )

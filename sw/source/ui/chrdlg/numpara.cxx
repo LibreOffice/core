@@ -53,7 +53,7 @@
 
 // Globals ******************************************************************
 
-static USHORT aPageRg[] = {
+static sal_uInt16 aPageRg[] = {
     FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT,
     0
 };
@@ -64,10 +64,10 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
     aOutlineStartFL         ( this, SW_RES( FL_OUTLINE_START )),
     aOutlineLvFT            ( this, SW_RES( FT_OUTLINE_LEVEL )),
     aOutlineLvLB            ( this, SW_RES( LB_OUTLINE_LEVEL )),
+    aNewStartFL             ( this, SW_RES( FL_NEW_START ) ),
     aNumberStyleFT          ( this, SW_RES( FT_NUMBER_STYLE ) ),
     aNumberStyleLB          ( this, SW_RES( LB_NUMBER_STYLE ) ),
-    aNewStartFL             ( this, SW_RES( FL_NEW_START ) ),
-    aNewStartCB             ( this, SW_RES( CB_NEW_START ) ),
+       aNewStartCB              ( this, SW_RES( CB_NEW_START ) ),
     aNewStartNumberCB       ( this, SW_RES( CB_NUMBER_NEW_START ) ),
     aNewStartNF             ( this, SW_RES( NF_NEW_START ) ),
     aCountParaFL            ( this, SW_RES( FL_COUNT_PARA        ) ),
@@ -76,18 +76,18 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
     aRestartFT              ( this, SW_RES( FT_RESTART_NO        ) ),
     aRestartNF              ( this, SW_RES( NF_RESTART_PARA      ) ),
     msOutlineNumbering( SW_RES( STR_OUTLINE_NUMBERING ) ),
-    bModified(FALSE),
-    bCurNumrule(FALSE)
+    bModified(sal_False),
+    bCurNumrule(sal_False)
 {
     FreeResource();
 
     const SfxPoolItem* pItem;
     SfxObjectShell* pObjSh;
-    if(SFX_ITEM_SET == rAttr.GetItemState(SID_HTML_MODE, FALSE, &pItem) ||
+    if(SFX_ITEM_SET == rAttr.GetItemState(SID_HTML_MODE, sal_False, &pItem) ||
         ( 0 != ( pObjSh = SfxObjectShell::Current()) &&
                     0 != (pItem = pObjSh->GetItem(SID_HTML_MODE))))
     {
-        USHORT nHtmlMode = ((const SfxUInt16Item*)pItem)->GetValue();
+        sal_uInt16 nHtmlMode = ((const SfxUInt16Item*)pItem)->GetValue();
         if(HTMLMODE_ON & nHtmlMode)
         {
             aCountParaFL        .Hide();
@@ -104,6 +104,8 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
                     SwParagraphNumTabPage, LineCountHdl_Impl));
     aRestartParaCountCB.SetClickHdl(
                     LINK(this, SwParagraphNumTabPage, LineCountHdl_Impl));
+    aNewStartNF.SetAccessibleName(aNewStartNumberCB.GetText());
+    aNewStartNF.SetAccessibleRelationLabeledBy(&aNewStartNumberCB);
 }
 
 SwParagraphNumTabPage::~SwParagraphNumTabPage()
@@ -116,22 +118,22 @@ SfxTabPage* SwParagraphNumTabPage::Create(  Window* pParent,
     return new SwParagraphNumTabPage(pParent, rSet);
 }
 
-USHORT* SwParagraphNumTabPage::GetRanges()
+sal_uInt16* SwParagraphNumTabPage::GetRanges()
 {
     return aPageRg;
 }
 
-BOOL    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( aOutlineLvLB.GetSelectEntryPos() != aOutlineLvLB.GetSavedValue())
     {
-        USHORT aOutlineLv = aOutlineLvLB.GetSelectEntryPos();
+        sal_uInt16 aOutlineLv = aOutlineLvLB.GetSelectEntryPos();
         const SfxUInt16Item* pOldOutlineLv = (const SfxUInt16Item*)GetOldItem( rSet, SID_ATTR_PARA_OUTLINE_LEVEL);
         SfxUInt16Item* pOutlineLv = (SfxUInt16Item*)pOldOutlineLv->Clone();
         pOutlineLv->SetValue( aOutlineLv );
         rSet.Put(*pOutlineLv);
         delete pOutlineLv;
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if( aNumberStyleLB.GetSelectEntryPos() != aNumberStyleLB.GetSavedValue())
@@ -144,18 +146,18 @@ BOOL    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
         pRule->SetValue(aStyle);
         rSet.Put(*pRule);
         delete pRule;
-        bModified = TRUE;
+        bModified = sal_True;
     }
     if(aNewStartCB.GetState() != aNewStartCB.GetSavedValue() ||
         aNewStartNumberCB.GetState() != aNewStartNumberCB.GetSavedValue()||
         aNewStartNF.GetText() != aNewStartNF.GetSavedValue())
     {
-        bModified = TRUE;
-        BOOL bNewStartChecked = STATE_CHECK == aNewStartCB.GetState();
-        BOOL bNumberNewStartChecked = STATE_CHECK == aNewStartNumberCB.GetState();
+        bModified = sal_True;
+        sal_Bool bNewStartChecked = STATE_CHECK == aNewStartCB.GetState();
+        sal_Bool bNumberNewStartChecked = STATE_CHECK == aNewStartNumberCB.GetState();
         rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART, bNewStartChecked));
         rSet.Put(SfxUInt16Item(FN_NUMBER_NEWSTART_AT,
-                  bNumberNewStartChecked && bNewStartChecked ? (USHORT)aNewStartNF.GetValue() : USHRT_MAX));
+                  bNumberNewStartChecked && bNewStartChecked ? (sal_uInt16)aNewStartNF.GetValue() : USHRT_MAX));
     }
 
     if(aCountParaCB.GetSavedValue() != aCountParaCB.GetState() ||
@@ -163,18 +165,18 @@ BOOL    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
             aRestartNF.GetSavedValue() != aRestartNF.GetText() )
     {
         SwFmtLineNumber aFmt;
-        aFmt.SetStartValue( static_cast< ULONG >(aRestartParaCountCB.GetState() == STATE_CHECK ?
+        aFmt.SetStartValue( static_cast< sal_uLong >(aRestartParaCountCB.GetState() == STATE_CHECK ?
                                 aRestartNF.GetValue() : 0 ));
         aFmt.SetCountLines( aCountParaCB.IsChecked() );
         rSet.Put(aFmt);
-        bModified = TRUE;
+        bModified = sal_True;
     }
     return bModified;
 }
 
 void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
 {
-    BOOL bHasNumberStyle = FALSE;
+    sal_Bool bHasNumberStyle = sal_False;
 
     SfxItemState eItemState = rSet.GetItemState( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) );
 
@@ -209,7 +211,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
         else
             aNumberStyleLB.SelectEntry( aStyle );
 
-        bHasNumberStyle = TRUE;
+        bHasNumberStyle = sal_True;
     }
     else
     {
@@ -221,12 +223,12 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     eItemState = rSet.GetItemState( FN_NUMBER_NEWSTART );
     if(eItemState > SFX_ITEM_AVAILABLE )
     {
-        bCurNumrule = TRUE;
+        bCurNumrule = sal_True;
         const SfxBoolItem& rStart = (const SfxBoolItem&)rSet.Get(FN_NUMBER_NEWSTART);
         aNewStartCB.SetState(
             rStart.GetValue() ?
                         STATE_CHECK : STATE_NOCHECK );
-        aNewStartCB.EnableTriState(FALSE);
+        aNewStartCB.EnableTriState(sal_False);
     }
     else
         aNewStartCB.SetState(bHasNumberStyle ? STATE_NOCHECK : STATE_DONTKNOW);
@@ -235,13 +237,13 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     eItemState = rSet.GetItemState( FN_NUMBER_NEWSTART_AT);
     if( eItemState > SFX_ITEM_AVAILABLE )
     {
-        USHORT nNewStart = ((const SfxUInt16Item&)rSet.Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+        sal_uInt16 nNewStart = ((const SfxUInt16Item&)rSet.Get(FN_NUMBER_NEWSTART_AT)).GetValue();
         aNewStartNumberCB.Check(USHRT_MAX != nNewStart);
         if(USHRT_MAX == nNewStart)
             nNewStart = 1;
 
         aNewStartNF.SetValue(nNewStart);
-        aNewStartNumberCB.EnableTriState(FALSE);
+        aNewStartNumberCB.EnableTriState(sal_False);
     }
     else
         aNewStartCB.SetState(STATE_DONTKNOW);
@@ -252,14 +254,14 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     if( SFX_ITEM_AVAILABLE <= rSet.GetItemState(RES_LINENUMBER))
     {
         SwFmtLineNumber& rNum = (SwFmtLineNumber&)rSet.Get(RES_LINENUMBER);
-        ULONG nStartValue = rNum.GetStartValue();
-        BOOL bCount = rNum.IsCount();
+        sal_uLong nStartValue = rNum.GetStartValue();
+        sal_Bool bCount = rNum.IsCount();
         aCountParaCB.SetState( bCount ? STATE_CHECK : STATE_NOCHECK );
         aRestartParaCountCB.SetState( 0 != nStartValue ? STATE_CHECK : STATE_NOCHECK );
         aRestartNF.SetValue(nStartValue == 0 ? 1 : nStartValue);
         LineCountHdl_Impl(&aCountParaCB);
-        aCountParaCB.EnableTriState(FALSE);
-        aRestartParaCountCB.EnableTriState(FALSE);
+        aCountParaCB.EnableTriState(sal_False);
+        aRestartParaCountCB.EnableTriState(sal_False);
     }
     else
     {
@@ -270,7 +272,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     aRestartParaCountCB.SaveValue();
     aRestartNF.SaveValue();
 
-    bModified = FALSE;
+    bModified = sal_False;
 }
 
 void SwParagraphNumTabPage::DisableOutline()
@@ -294,7 +296,7 @@ void SwParagraphNumTabPage::EnableNewStart()
 
 IMPL_LINK( SwParagraphNumTabPage, NewStartHdl_Impl, CheckBox*, EMPTYARG )
 {
-    BOOL bEnable = aNewStartCB.IsChecked();
+    sal_Bool bEnable = aNewStartCB.IsChecked();
     aNewStartNumberCB.Enable(bEnable);
     aNewStartNF.Enable(bEnable && aNewStartNumberCB.IsChecked());
     return 0;
@@ -304,7 +306,7 @@ IMPL_LINK( SwParagraphNumTabPage, LineCountHdl_Impl, CheckBox* , EMPTYARG)
 {
     aRestartParaCountCB.Enable(aCountParaCB.IsChecked());
 
-    BOOL bEnableRestartValue = aRestartParaCountCB.IsEnabled() &&
+    sal_Bool bEnableRestartValue = aRestartParaCountCB.IsEnabled() &&
                                                 aRestartParaCountCB.IsChecked();
     aRestartFT.Enable(bEnableRestartValue);
     aRestartNF.Enable(bEnableRestartValue);
@@ -314,7 +316,7 @@ IMPL_LINK( SwParagraphNumTabPage, LineCountHdl_Impl, CheckBox* , EMPTYARG)
 
 IMPL_LINK( SwParagraphNumTabPage, StyleHdl_Impl, ListBox*, pBox )
 {
-    BOOL bEnable = bCurNumrule || pBox->GetSelectEntryPos() > 0;
+    sal_Bool bEnable = bCurNumrule || pBox->GetSelectEntryPos() > 0;
     aNewStartCB.Enable(bEnable);
     NewStartHdl_Impl(&aNewStartCB);
 

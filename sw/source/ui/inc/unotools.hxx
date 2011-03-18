@@ -115,7 +115,7 @@ public:
     STAR_REFERENCE( frame::XController ) &  GetController() {return _xController;}
     STAR_REFERENCE( text::XTextCursor ) &   GetTextCursor() {return _xCursor;}
 
-    void ClearDocument( BOOL bStartTimer = FALSE );
+    void ClearDocument( sal_Bool bStartTimer = sal_False );
 
     sal_Bool IsInitialized() const {return bIsInitialized;}
     sal_Bool IsServiceAvailable() const {return bServiceAvailable;}

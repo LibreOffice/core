@@ -300,7 +300,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
 
     // den aktuellen Absatz erst einmal nicht numerieren
     {
-        BYTE nLvl = nLevel;
+        sal_uInt8 nLvl = nLevel;
         SetNodeNum( nLvl, false );
     }
 
@@ -681,7 +681,7 @@ void SwHTMLWriter::FillNextNumInfo()
 {
     pNextNumRuleInfo = 0;
 
-    ULONG nPos = pCurPam->GetPoint()->nNode.GetIndex() + 1;
+    sal_uLong nPos = pCurPam->GetPoint()->nNode.GetIndex() + 1;
 
     sal_Bool bTable = sal_False;
     do
@@ -755,7 +755,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                 bStartValue = sal_True;
                 if( rInfo.GetDepth() > 1 )
                 {
-                    ULONG nPos =
+                    sal_uLong nPos =
                         rWrt.pCurPam->GetPoint()->nNode.GetIndex() + 1;
                     do
                     {
@@ -897,7 +897,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             rWrt.Strm() << sOut.GetBuffer();
 
         if( rWrt.bCfgOutStyles )
-            OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), (BYTE)i );
+            OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), (sal_uInt8)i );
 
         rWrt.Strm() << '>';
 

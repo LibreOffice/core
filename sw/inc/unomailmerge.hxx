@@ -42,7 +42,7 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/text/XMailMergeBroadcaster.hpp>
 #include <svl/itemprop.hxx>
-#include <sfx2/objsh.hxx>   // SfxObjectShellRef
+#include <sfx2/objsh.hxx>
 
 namespace com { namespace sun { namespace star {
 
@@ -78,14 +78,14 @@ namespace rtl {
 // helper function call class
 struct PropHashType_Impl
 {
-    size_t operator()(const INT32 &s) const { return s; }
+    size_t operator()(const sal_Int32 &s) const { return s; }
 };
 
 typedef cppu::OMultiTypeInterfaceContainerHelperVar
     <
-        INT32,
+        sal_Int32,
         PropHashType_Impl,
-        std::equal_to< INT32 >
+        std::equal_to< sal_Int32 >
     > OPropertyListenerContainerHelper;
 
 ////////////////////////////////////////////////////////////

@@ -48,37 +48,38 @@ TabPage TP_ENV_PRT
             ToolBoxItem
             {
                 Identifier = ITM_HOR_LEFT ;
-                HelpID = ITM_HOR_LEFT ;
+                HelpID = HID_ITM_HOR_LEFT ;
             };
             ToolBoxItem
             {
                 Identifier = ITM_HOR_CNTR ;
-                HelpID = ITM_HOR_CNTR ;
+                HelpID = HID_ITM_HOR_CNTR ;
             };
             ToolBoxItem
             {
                 Identifier = ITM_HOR_RGHT ;
-                HelpID = ITM_HOR_RGHT ;
+                HelpID = HID_ITM_HOR_RGHT ;
             };
             ToolBoxItem
             {
                 Identifier = ITM_VER_LEFT ;
-                HelpID = ITM_VER_LEFT ;
+                HelpID = HID_ITM_VER_LEFT ;
             };
             ToolBoxItem
             {
                 Identifier = ITM_VER_CNTR ;
-                HelpID = ITM_VER_CNTR ;
+                HelpID = HID_ITM_VER_CNTR ;
             };
             ToolBoxItem
             {
                 Identifier = ITM_VER_RGHT ;
-                HelpID = ITM_VER_RGHT ;
+                HelpID = HID_ITM_VER_RGHT ;
             };
         };
     };
     RadioButton BTN_TOP
     {
+        HelpID = "sw:RadioButton:TP_ENV_PRT:BTN_TOP";
         Pos = MAP_APPFONT ( 18 , 42 ) ;
         Size = MAP_APPFONT ( 179 , 10 ) ;
         Text [ en-US ] = "~Print from top" ;
@@ -88,6 +89,7 @@ TabPage TP_ENV_PRT
     };
     RadioButton BTN_BOTTOM
     {
+        HelpID = "sw:RadioButton:TP_ENV_PRT:BTN_BOTTOM";
         Pos = MAP_APPFONT ( 18 , 56 ) ;
         Size = MAP_APPFONT ( 179 , 10 ) ;
         Text [ en-US ] = "Print from ~bottom" ;
@@ -102,6 +104,7 @@ TabPage TP_ENV_PRT
     };
     MetricField FLD_RIGHT
     {
+        HelpID = "sw:MetricField:TP_ENV_PRT:FLD_RIGHT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 86 , 72 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -126,6 +129,7 @@ TabPage TP_ENV_PRT
     };
     MetricField FLD_DOWN
     {
+        HelpID = "sw:MetricField:TP_ENV_PRT:FLD_DOWN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 86 , 88 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -156,6 +160,7 @@ TabPage TP_ENV_PRT
     };
     PushButton BTN_PRTSETUP
     {
+        HelpID = "sw:PushButton:TP_ENV_PRT:BTN_PRTSETUP";
         Pos = MAP_APPFONT ( 198 , 114 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;

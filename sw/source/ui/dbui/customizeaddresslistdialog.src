@@ -47,30 +47,35 @@ ModalDialog DLG_MM_CUSTOMIZE_ADDRESS_LIST
     };
     ListBox                 LB_FIELDS
     {
+        HelpID = "sw:ListBox:DLG_MM_CUSTOMIZE_ADDRESS_LIST:LB_FIELDS";
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 112 , 120 ) ;
         Border = TRUE;
     };
     PushButton              PB_ADD
     {
+        HelpID = "sw:PushButton:DLG_MM_CUSTOMIZE_ADDRESS_LIST:PB_ADD";
         Pos = MAP_APPFONT ( 144 , 3 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Add...";
     };
     PushButton              PB_DELETE
     {
+        HelpID = "sw:PushButton:DLG_MM_CUSTOMIZE_ADDRESS_LIST:PB_DELETE";
         Pos = MAP_APPFONT ( 144 , 20 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete";
     };
     PushButton              PB_RENAME
     {
+        HelpID = "sw:PushButton:DLG_MM_CUSTOMIZE_ADDRESS_LIST:PB_RENAME";
         Pos = MAP_APPFONT ( 144 , 37 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Rename...";
     };
     ImageButton              PB_UP
     {
+        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZE_ADDRESS_LIST:PB_UP";
         Pos = MAP_APPFONT ( 124 , 58 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         SYMBOL = IMAGEBUTTON_ARROW_UP;
@@ -78,6 +83,7 @@ ModalDialog DLG_MM_CUSTOMIZE_ADDRESS_LIST
     };
     ImageButton              PB_DOWN
     {
+        HelpID = "sw:ImageButton:DLG_MM_CUSTOMIZE_ADDRESS_LIST:PB_DOWN";
         Pos = MAP_APPFONT ( 124 , 75 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         SYMBOL = IMAGEBUTTON_ARROW_DOWN;
@@ -124,6 +130,7 @@ ModalDialog DLG_MM_ADD_RENAME_ENTRY
     };
     Edit       ED_FIELDNAME
     {
+        HelpID = "sw:Edit:DLG_MM_ADD_RENAME_ENTRY:ED_FIELDNAME";
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 120 , 12 ) ;
         Border = TRUE;

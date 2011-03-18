@@ -551,7 +551,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     //SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
     //const SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
-    //USHORT nAttrCount = rAttrSet.Count();
+    //sal_uInt16 nAttrCount = rAttrSet.Count();
 
     const sal_Int32 nProps = rPropertyNames.getLength();
     const OUString *pProp = rPropertyNames.getConstArray();
@@ -780,7 +780,7 @@ throw (uno::RuntimeException)
 }
 
 bool ::sw::GetDefaultTextContentValue(
-        uno::Any& rAny, const OUString& rPropertyName, USHORT nWID)
+        uno::Any& rAny, const OUString& rPropertyName, sal_uInt16 nWID)
 {
     if(!nWID)
     {
@@ -791,7 +791,7 @@ bool ::sw::GetDefaultTextContentValue(
         else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_TEXT_WRAP)))
             nWID = FN_UNO_TEXT_WRAP;
         else
-            return FALSE;
+            return sal_False;
     }
 
     switch(nWID)
@@ -806,9 +806,9 @@ bool ::sw::GetDefaultTextContentValue(
         }
         break;
         default:
-            return FALSE;
+            return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 void SAL_CALL
@@ -903,7 +903,7 @@ throw (beans::UnknownPropertyException)
         break;
     lcl_SwXParagraph_getPropertyStateDEFAULT:
     default:
-        if((*ppSet) && SFX_ITEM_SET == (*ppSet)->GetItemState(rEntry.nWID, FALSE))
+        if((*ppSet) && SFX_ITEM_SET == (*ppSet)->GetItemState(rEntry.nWID, sal_False))
             eRet = beans::PropertyState_DIRECT_VALUE;
         break;
     }

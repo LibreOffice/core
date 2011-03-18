@@ -197,7 +197,7 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int8 nTemp = 0;
             rVal >>= nTemp;
             if(nTemp >=1 && nTemp < 0x7f)
-                nLines = (BYTE)nTemp;
+                nLines = (sal_uInt8)nTemp;
         }
         break;
         case MID_DROPCAP_COUNT :
@@ -205,7 +205,7 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nTemp = 0;
             rVal >>= nTemp;
             if(nTemp >=1 && nTemp < 0x7f)
-                nChars = (BYTE)nTemp;
+                nChars = (sal_uInt8)nTemp;
         }
         break;
         case MID_DROPCAP_DISTANCE :
@@ -260,14 +260,14 @@ int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
     return GetValue() == ((SwNumRuleItem&)rAttr).GetValue();
 }
 
-bool    SwNumRuleItem::QueryValue( uno::Any& rVal, BYTE ) const
+bool    SwNumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     rtl::OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
     rVal <<= sRet;
     return true;
 }
 
-bool    SwNumRuleItem::PutValue( const uno::Any& rVal, BYTE )
+bool    SwNumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
     rtl::OUString uName;
     rVal >>= uName;

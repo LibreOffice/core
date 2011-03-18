@@ -240,10 +240,10 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         for( sal_uInt16 j=0; j < nWhichIds; j++ )
         {
             sal_uInt16 nWhichId = aWhichIds[j];
-            sal_uInt16 i=0, nItems = rPool.GetItemCount( nWhichId );
+            sal_uInt32 i=0, nItems = rPool.GetItemCount2( nWhichId );
             for( i = 0; i < nItems; ++i )
             {
-                if( 0 != (pItem = rPool.GetItem( nWhichId , i ) ) )
+                if( 0 != (pItem = rPool.GetItem2( nWhichId , i ) ) )
                 {
                     const SvXMLAttrContainerItem *pUnknown =
                                 PTR_CAST( SvXMLAttrContainerItem, pItem );

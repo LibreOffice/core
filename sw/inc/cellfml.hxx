@@ -44,7 +44,7 @@ class String;
 class SwTblCalcPara
 {
     const SwTableBox* pLastTblBox;
-    USHORT nStackCnt, nMaxSize;
+    sal_uInt16 nStackCnt, nMaxSize;
 
 public:
     SwTableSortBoxes *pBoxStk;  // stack for recognizing recursion
@@ -54,9 +54,9 @@ public:
     SwTblCalcPara( SwCalc& rCalculator, const SwTable& rTable );
     ~SwTblCalcPara();
 
-    bool CalcWithStackOverflow();
-    bool IsStackOverFlow() const               { return nMaxSize == nStackCnt; }
-    bool IncStackCnt()                                         { return nMaxSize == ++nStackCnt; }
+    sal_Bool CalcWithStackOverflow();
+    sal_Bool IsStackOverFlow() const        { return nMaxSize == nStackCnt; }
+    sal_Bool IncStackCnt()                  { return nMaxSize == ++nStackCnt; }
     void DecStackCnt()                  { if( nStackCnt ) --nStackCnt; }
     void SetLastTblBox( const SwTableBox* pBox )    { pLastTblBox = pBox; }
 };
@@ -99,7 +99,7 @@ protected:
 
     String      sFormel;            // current formula
     NameType    eNmType;            // current display method
-    bool               bValidValue; // TRUE: recalculate formula
+    sal_Bool        bValidValue;        // sal_True: recalculate formula
 
     // find the node in which the formula is located
     //  TextFeld    -> TextNode,
@@ -115,7 +115,7 @@ protected:
                             *rCalcPara.pTbl, &rCalcPara );
     }
 
-    static USHORT GetLnPosInTbl( const SwTable& rTbl, const SwTableBox* pBox );
+    static sal_uInt16 GetLnPosInTbl( const SwTable& rTbl, const SwTableBox* pBox );
 
 public:
 
@@ -152,7 +152,7 @@ public:
             eNmType = EXTRNL_NAME;
         }
 
-    USHORT GetBoxesOfFormula( const SwTable& rTbl, SwSelBoxes& rBoxes );
+    sal_uInt16 GetBoxesOfFormula( const SwTable& rTbl, SwSelBoxes& rBoxes );
     // are all boxes valid which this formula relies on?
     bool HasValidBoxes() const;
 };

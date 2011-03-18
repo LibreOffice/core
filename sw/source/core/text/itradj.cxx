@@ -174,7 +174,7 @@ bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIte
             }
             else
             {
-                ULONG nOldLayout = rInf.GetOut()->GetLayoutMode();
+                sal_uLong nOldLayout = rInf.GetOut()->GetLayoutMode();
                 rInf.GetOut()->SetLayoutMode ( nOldLayout | TEXT_LAYOUT_BIDI_RTL );
                 nKashidasDropped = rInf.GetOut()->ValidateKashidas ( rInf.GetTxt(), nIdx, nNext - nIdx,
                                                nKashidasInAttr, pKashidaPos + nKashidaIdx,
@@ -427,7 +427,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     SvUShorts *pNewKana = new SvUShorts;
     pCurrent->SetKanaComp( pNewKana );
 
-    const USHORT nNull = 0;
+    const sal_uInt16 nNull = 0;
     MSHORT nKanaIdx = 0;
     long nKanaDiffSum = 0;
     SwTwips nRepaintOfst = 0;
@@ -446,11 +446,11 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
         {
             // get maximum portion width from info structure, calculated
             // during text formatting
-            USHORT nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (ULONG)pPos );
+            sal_uInt16 nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (sal_uLong)pPos );
 
             // check, if information is stored under other key
             if ( !nMaxWidthDiff && pPos == pCurrent->GetFirstPortion() )
-                nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (ULONG)pCurrent );
+                nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (sal_uLong)pCurrent );
 
             // calculate difference between portion width and max. width
             nKanaDiffSum += nMaxWidthDiff;
@@ -465,7 +465,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
             if ( nKanaIdx == pCurrent->GetKanaComp().Count() )
                 pCurrent->GetKanaComp().Insert( nNull, nKanaIdx );
 
-            USHORT nRest;
+            sal_uInt16 nRest;
 
             if ( pPos->InTabGrp() )
             {
@@ -490,7 +490,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 
             if( nKanaDiffSum )
             {
-                ULONG nCompress = ( 10000 * nRest ) / nKanaDiffSum;
+                sal_uLong nCompress = ( 10000 * nRest ) / nKanaDiffSum;
 
                 if ( nCompress >= 10000 )
                     // kanas can be expanded to 100%, and there is still
@@ -500,7 +500,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
                 else
                     nCompress = 10000 - nCompress;
 
-                ( pCurrent->GetKanaComp() )[ nKanaIdx ] = (USHORT)nCompress;
+                ( pCurrent->GetKanaComp() )[ nKanaIdx ] = (sal_uInt16)nCompress;
                 nKanaDiffSum = 0;
             }
 
@@ -513,7 +513,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 
     // set portion width
     nKanaIdx = 0;
-    USHORT nCompress = ( pCurrent->GetKanaComp() )[ nKanaIdx ];
+    sal_uInt16 nCompress = ( pCurrent->GetKanaComp() )[ nKanaIdx ];
     pPos = pCurrent->GetPortion();
     long nDecompress = 0;
     nKanaDiffSum = 0;
@@ -522,15 +522,15 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     {
         if ( pPos->InTxtGrp() )
         {
-            const USHORT nMinWidth = pPos->Width();
+            const sal_uInt16 nMinWidth = pPos->Width();
 
             // get maximum portion width from info structure, calculated
             // during text formatting
-            USHORT nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (ULONG)pPos );
+            sal_uInt16 nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (sal_uLong)pPos );
 
             // check, if information is stored under other key
             if ( !nMaxWidthDiff && pPos == pCurrent->GetFirstPortion() )
-                nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (ULONG)pCurrent );
+                nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (sal_uLong)pCurrent );
             nKanaDiffSum += nMaxWidthDiff;
             pPos->Width( nMinWidth +
                        ( ( 10000 - nCompress ) * nMaxWidthDiff ) / 10000 );
@@ -544,7 +544,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
                 nKanaDiffSum /= 10000;
             }
 
-            pPos->Width( static_cast<USHORT>(pPos->Width() - nDecompress) );
+            pPos->Width( static_cast<sal_uInt16>(pPos->Width() - nDecompress) );
 
             if ( pPos->InTabGrp() )
                 // set fix width to width
@@ -571,8 +571,8 @@ SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     SwTwips nReal )
 {
     long nRealWidth;
-    const USHORT nRealHeight = GetLineHeight();
-    const USHORT nLineHeight = pCurrent->Height();
+    const sal_uInt16 nRealHeight = GetLineHeight();
+    const sal_uInt16 nLineHeight = pCurrent->Height();
 
     KSHORT nPrtWidth = pCurrent->PrtWidth();
     SwLinePortion *pLast = pCurrent->FindLastPortion();

@@ -32,20 +32,20 @@
 class SwParaDlg: public SfxTabDialog
 {
     SwView& rView;
-    USHORT nHtmlMode;
-    BYTE nDlgMode;
-    BOOL bDrawParaDlg;
+    sal_uInt16 nHtmlMode;
+    sal_uInt8 nDlgMode;
+    sal_Bool bDrawParaDlg;
 
-    void PageCreated(USHORT nID, SfxTabPage& rPage);
+    void PageCreated(sal_uInt16 nID, SfxTabPage& rPage);
 
 public:
     SwParaDlg(  Window *pParent,
                 SwView& rVw,
                 const SfxItemSet&,
-                BYTE nDialogMode,
+                sal_uInt8 nDialogMode,
                 const String *pCollName = 0,
-                BOOL bDraw = FALSE,
-                UINT16 nDefPage = 0);
+                sal_Bool bDraw = sal_False,
+                sal_uInt16 nDefPage = 0);
     ~SwParaDlg();
 };
 

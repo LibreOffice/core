@@ -42,8 +42,7 @@ class SwTxtFld : public SwTxtAttr
     SwTxtNode * m_pTxtNode;
 
 public:
-    SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStart,
-            bool const bInClipboard);
+    SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStart);
     virtual ~SwTxtFld();
 
     void CopyFld( SwTxtFld *pDest ) const;

@@ -77,10 +77,10 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
        @param rVal             the value
        @param nMId
 
-       @retval TRUE            putting of value was successful
-       @retval FALSE           else
+       @retval sal_True            putting of value was successful
+       @retval sal_False           else
     */
-    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, USHORT nWhich) = 0;
+    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich) = 0;
 
     // Call update of expression fields. All expressions are re-evaluated.
 
@@ -91,8 +91,8 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
         @param pMsgHnt
         @param bUpdateTblFlds TRUE: update table fields, too.
 
-        @retval TRUE             update was successful
-        @retval FALSE            else
+        @retval sal_True             update was successful
+        @retval sal_False            else
     */
     virtual bool UpdateFld(SwTxtFld * rDstFmtFld, SwField & rSrcFld, SwMsgPoolItem * pMsgHnt, bool bUpdateTblFlds) = 0;
 
@@ -118,7 +118,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
         SwNode (see parameter pChk) is (?) part of the private
         data structure of SwDoc and should not be exposed
     */
-    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, ULONG nLen) = 0;
+    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uLong nLen) = 0;
 
     virtual void SetFixFields(bool bOnlyTimeDate, const DateTime* pNewDateTime) = 0;
 
@@ -127,7 +127,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
     // (Node [ + ::com::sun::star::ucb::Content]).
     // A generated list of all fields may be passed along too
     // (if the addreess != 0 and the pointer == 0 a new list will be returned).
-    virtual void FldsToCalc(SwCalc& rCalc, ULONG nLastNd, sal_uInt16 nLastCnt) = 0;
+    virtual void FldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) = 0;
 
     virtual void FldsToCalc(SwCalc& rCalc, const _SetGetExpFld& rToThisFld) = 0;
 

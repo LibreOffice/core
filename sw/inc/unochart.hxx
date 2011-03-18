@@ -213,7 +213,7 @@ public:
     void        DisposeAllDataSequences( const SwTable *pTable );
 
     // functionality needed to get notified about new added rows/cols
-    void        AddRowCols( const SwTable &rTable, const SwSelBoxes& rBoxes, USHORT nLines, BOOL bBehind );
+    void        AddRowCols( const SwTable &rTable, const SwSelBoxes& rBoxes, sal_uInt16 nLines, sal_Bool bBehind );
 };
 
 //////////////////////////////////////////////////////////////////////

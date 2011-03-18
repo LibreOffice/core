@@ -50,7 +50,7 @@ class CommandEvent;
 /**************************************************************************/
 
     void SmGetLeftSelectionPart(const ESelection &rSelection,
-                                USHORT &nPara, USHORT &nPos);
+                                sal_uInt16 &nPara, sal_uInt16 &nPos);
 
 /**************************************************************************/
 
@@ -123,7 +123,7 @@ public:
     void                Delete();
     void                SelectAll();
     void                InsertText(const String &rText);
-    void                InsertCommand(USHORT nCommand);
+    void                InsertCommand(sal_uInt16 nCommand);
     void                MarkError(const Point &rPos);
     void                SelNextMark();
     void                SelPrevMark();

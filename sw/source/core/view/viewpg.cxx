@@ -42,7 +42,7 @@
 #include <rootfrm.hxx>
 #include <viewimp.hxx>
 #include <viewopt.hxx>
-#include <swprtopt.hxx> // SwPrtOptions
+#include <printdata.hxx>
 #include <fldbas.hxx>
 #include <ptqueue.hxx>
 #include <swregion.hxx>
@@ -70,7 +70,7 @@ void ViewShell::ShowPreViewSelection( sal_uInt16 nSelPage )
 }
 
 //#i6467# adjust view options for page preview
-void ViewShell::AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions )
+void ViewShell::AdjustOptionsForPagePreview(SwPrintData const& rPrintOptions)
 {
     if ( !IsPreView() )
     {
@@ -78,7 +78,7 @@ void ViewShell::AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions 
         return;
     }
 
-    PrepareForPrint( _rPrintOptions );
+    PrepareForPrint( rPrintOptions );
 
     return;
 }

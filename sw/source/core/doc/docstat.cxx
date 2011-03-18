@@ -47,7 +47,7 @@ SwDocStat::SwDocStat() :
     nWord(0),
     nChar(0),
     nCharExcludingSpaces(0),
-    bModified(TRUE)
+    bModified(sal_True)
 {}
 
 /************************************************************************
@@ -65,7 +65,7 @@ void SwDocStat::Reset()
     nWord   = 0;
     nChar   = 0;
     nCharExcludingSpaces = 0;
-    bModified = TRUE;
+    bModified = sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

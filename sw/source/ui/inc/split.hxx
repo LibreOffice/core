@@ -34,7 +34,7 @@
 
 #include <vcl/field.hxx>
 
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 
 #include <vcl/button.hxx>
 
@@ -42,13 +42,13 @@ class SwWrtShell;
 
 class SwSplitTableDlg : public SvxStandardDialog
 {
+    FixedLine            aCountFL;
     FixedText           aCountLbl;
     NumericField        aCountEdit;
-    FixedLine            aCountFL;
+    FixedLine            aDirFL;
     ImageRadioButton    aHorzBox;
     ImageRadioButton    aVertBox;
     CheckBox            aPropCB;
-    FixedLine            aDirFL;
     OKButton            aOKBtn;
     CancelButton        aCancelBtn;
     HelpButton          aHelpBtn;
@@ -61,8 +61,8 @@ public:
     SwSplitTableDlg(Window *pParent, SwWrtShell& rShell );
     DECL_LINK( ClickHdl, Button * );
 
-    BOOL                IsHorizontal() const { return aHorzBox.IsChecked(); }
-    BOOL                IsProportional() const { return aPropCB.IsChecked() && aHorzBox.IsChecked(); }
+    sal_Bool                IsHorizontal() const { return aHorzBox.IsChecked(); }
+    sal_Bool                IsProportional() const { return aPropCB.IsChecked() && aHorzBox.IsChecked(); }
     long                GetCount() const { return sal::static_int_cast< long >(aCountEdit.GetValue()); }
 };
 

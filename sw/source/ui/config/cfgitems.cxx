@@ -48,7 +48,7 @@ TYPEINIT1_AUTOFACTORY(SwElemItem, SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SwAddPrinterItem, SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SwShadowCursorItem, SfxPoolItem)
 
-SwDocDisplayItem::SwDocDisplayItem( USHORT _nWhich ) :
+SwDocDisplayItem::SwDocDisplayItem( sal_uInt16 _nWhich ) :
         SfxPoolItem(_nWhich),
         aIndexBackgrndCol(COL_GRAY)
 {
@@ -60,7 +60,7 @@ SwDocDisplayItem::SwDocDisplayItem( USHORT _nWhich ) :
     bFldHiddenText      =
     bCharHiddenText     =
     bManualBreak        =
-    bShowHiddenPara     = FALSE;
+    bShowHiddenPara     = sal_False;
 
 };
 
@@ -73,17 +73,17 @@ SwDocDisplayItem::SwDocDisplayItem( const SwDocDisplayItem& rDocDisplayItem ):
     *this = rDocDisplayItem;
 };
 
-SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt, USHORT _nWhich ) :
+SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt, sal_uInt16 _nWhich ) :
             SfxPoolItem( _nWhich )
 {
-    bParagraphEnd       = rVOpt.IsParagraph(TRUE);
-    bTab                = rVOpt.IsTab(TRUE);
-    bSpace              = rVOpt.IsBlank(TRUE);
+    bParagraphEnd       = rVOpt.IsParagraph(sal_True);
+    bTab                = rVOpt.IsTab(sal_True);
+    bSpace              = rVOpt.IsBlank(sal_True);
     bNonbreakingSpace   = rVOpt.IsHardBlank();
     bSoftHyphen         = rVOpt.IsSoftHyph();
-    bCharHiddenText     = rVOpt.IsShowHiddenChar(TRUE);
+    bCharHiddenText     = rVOpt.IsShowHiddenChar(sal_True);
     bFldHiddenText      = rVOpt.IsShowHiddenField();
-    bManualBreak        = rVOpt.IsLineBreak(TRUE);
+    bManualBreak        = rVOpt.IsLineBreak(sal_True);
     bShowHiddenPara     = rVOpt.IsShowHiddenPara();
 }
 
@@ -135,7 +135,7 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetShowHiddenPara(bShowHiddenPara );
 }
 
-SwElemItem::SwElemItem( USHORT _nWhich ) :
+SwElemItem::SwElemItem( sal_uInt16 _nWhich ) :
     SfxPoolItem(_nWhich)
 {
     bHorzScrollbar =
@@ -152,7 +152,7 @@ SwElemItem::SwElemItem( USHORT _nWhich ) :
     bGraphic            =
     bDrawing            =
     bFieldName          =
-    bNotes              = FALSE;
+    bNotes              = sal_False;
 }
 
 SwElemItem::SwElemItem( const SwElemItem& rElemItem ):
@@ -161,14 +161,14 @@ SwElemItem::SwElemItem( const SwElemItem& rElemItem ):
     *this = rElemItem;
 }
 
-SwElemItem::SwElemItem(const SwViewOption& rVOpt, USHORT _nWhich) :
+SwElemItem::SwElemItem(const SwViewOption& rVOpt, sal_uInt16 _nWhich) :
             SfxPoolItem( _nWhich )
 {
     bHorzScrollbar  = rVOpt.IsViewHScrollBar();
     bVertScrollbar  = rVOpt.IsViewVScrollBar();
     bAnyRuler       = rVOpt.IsViewAnyRuler();
-    bHorzRuler      = rVOpt.IsViewHRuler(TRUE);
-    bVertRuler      = rVOpt.IsViewVRuler(TRUE);
+    bHorzRuler      = rVOpt.IsViewHRuler(sal_True);
+    bVertRuler      = rVOpt.IsViewVRuler(sal_True);
     bVertRulerRight = rVOpt.IsVRulerRight();
     bCrosshair      = rVOpt.IsCrossHair();
     bHandles        = rVOpt.IsSolidMarkHdl();
@@ -261,7 +261,7 @@ SwAddPrinterItem::SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem ):
 /*--------------------------------------------------------------------
     Description: CTOR for empty Item
  --------------------------------------------------------------------*/
-SwAddPrinterItem::SwAddPrinterItem( USHORT _nWhich):
+SwAddPrinterItem::SwAddPrinterItem( sal_uInt16 _nWhich):
                 SfxPoolItem(_nWhich)
 {
 }
@@ -269,7 +269,7 @@ SwAddPrinterItem::SwAddPrinterItem( USHORT _nWhich):
 /*--------------------------------------------------------------------
     Description: CTOR from SwPrintOptions
  --------------------------------------------------------------------*/
-SwAddPrinterItem::SwAddPrinterItem( USHORT _nWhich, const SwPrintData& rPrtData ) :
+SwAddPrinterItem::SwAddPrinterItem( sal_uInt16 _nWhich, const SwPrintData& rPrtData ) :
     SfxPoolItem(_nWhich)
 {
     SwPrintData::operator=(rPrtData);
@@ -292,10 +292,10 @@ int SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
 /*--------------------------------------------------
  Item for Settings dialog, ShadowCursorPage
 --------------------------------------------------*/
-SwShadowCursorItem::SwShadowCursorItem( USHORT _nWhich )
+SwShadowCursorItem::SwShadowCursorItem( sal_uInt16 _nWhich )
     : SfxPoolItem( _nWhich ),
     eMode( FILL_TAB )
-    ,bOn( FALSE )
+    ,bOn( sal_False )
 {
 }
 
@@ -307,7 +307,7 @@ SwShadowCursorItem::SwShadowCursorItem( const SwShadowCursorItem& rCpy )
 {
 }
 
-SwShadowCursorItem::SwShadowCursorItem( const SwViewOption& rVOpt, USHORT _nWhich )
+SwShadowCursorItem::SwShadowCursorItem( const SwViewOption& rVOpt, sal_uInt16 _nWhich )
     : SfxPoolItem( _nWhich ),
     eMode( rVOpt.GetShdwCrsrFillMode() )
     ,bOn( rVOpt.IsShadowCursor() )

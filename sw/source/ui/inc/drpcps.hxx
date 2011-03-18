@@ -63,6 +63,7 @@ class SwDropCapsPage : public SfxTabPage
 {
 friend class SwDropCapsPict;
 
+    FixedLine       aSettingsFL;
     CheckBox        aDropCapsBox;
     CheckBox        aWholeWordCB;
     FixedText       aSwitchText;
@@ -71,19 +72,18 @@ friend class SwDropCapsPict;
     NumericField    aLinesField;
     FixedText       aDistanceText;
     MetricField     aDistanceField;
-    FixedLine       aSettingsFL;
 
+    FixedLine       aContentFL;
     FixedText       aTextText;
     Edit            aTextEdit;
     FixedText       aTemplateText;
     ListBox         aTemplateBox;
-    FixedLine       aContentFL;
 
     SwDropCapsPict  *pPict;
 
-    BOOL            bModified;
-    BOOL            bFormat;
-    BOOL            bHtmlMode;
+    sal_Bool            bModified;
+    sal_Bool            bFormat;
+    sal_Bool            bHtmlMode;
 
     SwWrtShell &rSh;
 
@@ -104,12 +104,12 @@ friend class SwDropCapsPict;
 public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
-    static USHORT* GetRanges();
+    static sal_uInt16* GetRanges();
 
-    virtual BOOL FillItemSet(      SfxItemSet &rSet);
+    virtual sal_Bool FillItemSet(      SfxItemSet &rSet);
     virtual void Reset      (const SfxItemSet &rSet);
 
-    void    SetFormat(BOOL bSet){bFormat = bSet;}
+    void    SetFormat(sal_Bool bSet){bFormat = bSet;}
 };
 
 #endif

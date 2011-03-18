@@ -52,21 +52,21 @@ public:
 
     // Ausgabemethoden
     inline void DrawText( const Point& rStart, const String& rTxt,
-                          const USHORT nIdx = 0,
-                          const USHORT nLen = STRING_LEN );
-    inline void DrawStretchText( const Point& rStart, USHORT nWidth,
+                          const sal_uInt16 nIdx = 0,
+                          const sal_uInt16 nLen = STRING_LEN );
+    inline void DrawStretchText( const Point& rStart, sal_uInt16 nWidth,
                           const String& rTxt,
-                          const USHORT nIdx = 0,
-                          const USHORT nLen = STRING_LEN );
+                          const sal_uInt16 nIdx = 0,
+                          const sal_uInt16 nLen = STRING_LEN );
     inline void DrawTextArray( const Point& rStart,
                           const String& rTxt,
                           long *pKernArray = 0,
-                          const USHORT nIdx = 0,
-                          const USHORT nLen = STRING_LEN);
+                          const sal_uInt16 nIdx = 0,
+                          const sal_uInt16 nLen = STRING_LEN);
     inline void DrawLine( const Point& rStart, const Point& rEnd );
     inline void DrawRect( const SwRect& rRect,
-                          const USHORT nHorzRount = 0,
-                          const USHORT nVertRound = 0 );
+                          const sal_uInt16 nHorzRount = 0,
+                          const sal_uInt16 nVertRound = 0 );
 
     inline const Point *GetOrigin() const {return pPos; }
 };
@@ -76,7 +76,7 @@ public:
  *************************************************************************/
 
 inline void SwDrawDev::DrawText( const Point& rStart, const String& rTxt,
-                                 const USHORT nIdx, const USHORT nLen )
+                                 const sal_uInt16 nIdx, const sal_uInt16 nLen )
 {
     if( !pPos )
         pOut->DrawText( rStart, rTxt, nIdx, nLen );
@@ -88,8 +88,8 @@ inline void SwDrawDev::DrawText( const Point& rStart, const String& rTxt,
  *                      SwDrawDev::DrawStretchText
  *************************************************************************/
 
-inline void SwDrawDev::DrawStretchText( const Point& rStart, USHORT nWidth,
-       const String& rTxt, const USHORT nIdx, const USHORT nLen )
+inline void SwDrawDev::DrawStretchText( const Point& rStart, sal_uInt16 nWidth,
+       const String& rTxt, const sal_uInt16 nIdx, const sal_uInt16 nLen )
 {
     if( !pPos )
         pOut->DrawStretchText( rStart, nWidth, rTxt, nIdx, nLen );
@@ -102,7 +102,7 @@ inline void SwDrawDev::DrawStretchText( const Point& rStart, USHORT nWidth,
  *************************************************************************/
 
 inline void SwDrawDev::DrawTextArray( const Point& rStart, const String& rTxt,
-            long *pKernArray, const USHORT nIdx, const USHORT nLen )
+            long *pKernArray, const sal_uInt16 nIdx, const sal_uInt16 nLen )
 {
     if( !pPos )
         pOut->DrawTextArray( rStart, rTxt, pKernArray, nIdx, nLen );
@@ -127,7 +127,7 @@ inline void SwDrawDev::DrawLine( const Point& rStart, const Point& rEnd )
  *************************************************************************/
 
 inline void SwDrawDev::DrawRect( const SwRect& rRect,
-                      const USHORT nHorzRound, const USHORT nVertRound )
+                      const sal_uInt16 nHorzRound, const sal_uInt16 nVertRound )
 {
     SwRect aRect( rRect );
     if( pPos )

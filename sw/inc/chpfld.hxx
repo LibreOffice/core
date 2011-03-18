@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _CHPFLD_HXX
-#define _CHPFLD_HXX
+#ifndef SW_CHPFLD_HXX
+#define SW_CHPFLD_HXX
 
 #include "fldbas.hxx"
 
@@ -59,34 +59,35 @@ public:
 class SW_DLLPUBLIC SwChapterField : public SwField
 {
     friend class SwChapterFieldType;
-    BYTE nLevel;
+    sal_uInt8 nLevel;
     String sTitle, sNumber, sPre, sPost;
+
+    virtual String   Expand() const;
+    virtual SwField* Copy() const;
+
 public:
     SwChapterField(SwChapterFieldType*, sal_uInt32 nFmt = 0);
 
     // #i53420#
     void ChangeExpansion( const SwFrm*,
                           const SwCntntNode*,
-        BOOL bSrchNum = FALSE);
-    void ChangeExpansion(const SwTxtNode &rNd, BOOL bSrchNum);
+        sal_Bool bSrchNum = sal_False);
+    void ChangeExpansion(const SwTxtNode &rNd, sal_Bool bSrchNum);
 
-    virtual String   Expand() const;
-    virtual SwField* Copy() const;
-
-    inline BYTE GetLevel() const;
-    inline void SetLevel(BYTE);
+    inline sal_uInt8 GetLevel() const;
+    inline void SetLevel(sal_uInt8);
 
     inline const String& GetNumber() const;
     inline const String& GetTitle() const;
-    virtual bool         QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool         PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool         QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool         PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
-inline BYTE SwChapterField::GetLevel() const    { return nLevel; }
-inline void SwChapterField::SetLevel(BYTE nLev) { nLevel = nLev; }
+inline sal_uInt8 SwChapterField::GetLevel() const   { return nLevel; }
+inline void SwChapterField::SetLevel(sal_uInt8 nLev) { nLevel = nLev; }
 inline const String& SwChapterField::GetNumber() const { return sNumber; }
 inline const String& SwChapterField::GetTitle() const { return sTitle; }
 
-#endif // _CHPFLD_HXX
+#endif // SW_CHPFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

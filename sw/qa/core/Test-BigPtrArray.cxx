@@ -52,12 +52,12 @@ using namespace std;
 
 namespace /* private */
 {
-    const ULONG NUM_ENTRIES = 10;
+    const sal_uLong NUM_ENTRIES = 10;
 
     class BigPtrEntryMock : public BigPtrEntry
     {
     public:
-        BigPtrEntryMock(ULONG count) : count_(count)
+        BigPtrEntryMock(sal_uLong count) : count_(count)
         {
         }
 
@@ -65,26 +65,26 @@ namespace /* private */
         {
         }
 
-        ULONG getCount() const
+        sal_uLong getCount() const
         {
             return count_;
         }
 
-        void setCount(ULONG newCount)
+        void setCount(sal_uLong newCount)
         {
             count_ = newCount;
         }
 
-        ULONG Position() const
+        sal_uLong Position() const
         {
             return GetPos();
         }
 
     private:
-        ULONG count_;
+        sal_uLong count_;
     };
 
-    BOOL AddToCount(const ElementPtr& rElem, void* pArgs)
+    sal_Bool AddToCount(const ElementPtr& rElem, void* pArgs)
     {
         BigPtrEntryMock* const pbem = static_cast<BigPtrEntryMock* const>(rElem);
         pbem->setCount(pbem->getCount() + *((int*)pArgs));
@@ -96,9 +96,9 @@ namespace /* private */
         (void)bparr;
     }
 
-    void fillBigPtrArray(BigPtrArray& bparr, ULONG numEntries)
+    void fillBigPtrArray(BigPtrArray& bparr, sal_uLong numEntries)
     {
-        for (ULONG i = 0; i < numEntries; i++)
+        for (sal_uLong i = 0; i < numEntries; i++)
             bparr.Insert(new BigPtrEntryMock(i), bparr.Count());
     }
 
@@ -109,7 +109,7 @@ namespace /* private */
 
     bool checkElementPositions(const BigPtrArray& bparr)
     {
-        for (ULONG i = 0; i < bparr.Count(); i++)
+        for (sal_uLong i = 0; i < bparr.Count(); i++)
         {
             if (static_cast<BigPtrEntryMock*>(bparr[i])->Position() != i)
                 return false;
@@ -119,7 +119,7 @@ namespace /* private */
 
     void releaseBigPtrArrayContent(BigPtrArray& bparr)
     {
-        for (ULONG i = 0; i < bparr.Count(); i++)
+        for (sal_uLong i = 0; i < bparr.Count(); i++)
             delete bparr[i];
     }
 
@@ -160,9 +160,9 @@ public:
 
         BigPtrArray bparr;
 
-        for (ULONG i = 0; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
-            ULONG oldCount = bparr.Count();
+            sal_uLong oldCount = bparr.Count();
             bparr.Insert(new BigPtrEntryMock(i), 0);
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -173,7 +173,7 @@ public:
 
         RTL_LOGFILE_CONTEXT_TRACE(logFile, "END: test_insert_entries_at_front");
 
-        for (ULONG i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
+        for (sal_uLong i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -203,7 +203,7 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        ULONG oldCount = bparr.Count();
+        sal_uLong oldCount = bparr.Count();
 
         bparr.Insert(new BigPtrEntryMock(NUM_ENTRIES), bparr.Count() / 2);
 
@@ -236,9 +236,9 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        ULONG oldCount = bparr.Count();
+        sal_uLong oldCount = bparr.Count();
 
-        for (ULONG i = 0, j = -5; i < 5; i++, j++)
+        for (sal_uLong i = 0, j = -5; i < 5; i++, j++)
             bparr.Insert(new BigPtrEntryMock(j), i);
 
         RTL_LOGFILE_CONTEXT_TRACE(logFile, "END: test_insert_at_already_used_index");
@@ -249,7 +249,7 @@ public:
             (oldCount + 5 == bparr.Count())
         );
 
-        for (ULONG i = 0, j = -5; i < bparr.Count(); i++, j++)
+        for (sal_uLong i = 0, j = -5; i < bparr.Count(); i++, j++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -277,7 +277,7 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        ULONG oldCount = bparr.Count();
+        sal_uLong oldCount = bparr.Count();
         bparr.Insert(new BigPtrEntryMock(NUM_ENTRIES), bparr.Count());
 
         CPPUNIT_ASSERT_MESSAGE
@@ -307,9 +307,9 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        for (ULONG i = 0; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
-            ULONG oldCount = bparr.Count();
+            sal_uLong oldCount = bparr.Count();
 
             delete bparr[0]; // release content
             bparr.Remove(0); // remove item from container
@@ -320,7 +320,7 @@ public:
                 (oldCount - 1 == bparr.Count())
             );
 
-            for (ULONG j = 0, k = i + 1; j < bparr.Count(); j++, k++)
+            for (sal_uLong j = 0, k = i + 1; j < bparr.Count(); j++, k++)
             {
                 CPPUNIT_ASSERT_MESSAGE
                 (
@@ -352,7 +352,7 @@ public:
 
         for (int i = NUM_ENTRIES - 1; i >= 0; i--)
         {
-            ULONG oldCount = bparr.Count();
+            sal_uLong oldCount = bparr.Count();
             delete bparr[i];
             bparr.Remove(i);
 
@@ -362,7 +362,7 @@ public:
                 (oldCount - 1 == bparr.Count())
             );
 
-            for (ULONG j = 0; j < bparr.Count(); j++)
+            for (sal_uLong j = 0; j < bparr.Count(); j++)
             {
                 CPPUNIT_ASSERT_MESSAGE
                 (
@@ -394,8 +394,8 @@ public:
 
         while (bparr.Count())
         {
-            ULONG oldCount = bparr.Count();
-            ULONG oldElement = static_cast<BigPtrEntryMock*>(bparr[bparr.Count() / 2])->getCount();
+            sal_uLong oldCount = bparr.Count();
+            sal_uLong oldElement = static_cast<BigPtrEntryMock*>(bparr[bparr.Count() / 2])->getCount();
 
             delete bparr[bparr.Count() / 2];
             bparr.Remove(bparr.Count() / 2);
@@ -406,7 +406,7 @@ public:
                 (oldCount - 1 == bparr.Count())
             );
 
-            for (ULONG i = 0; i < bparr.Count(); i++)
+            for (sal_uLong i = 0; i < bparr.Count(); i++)
             {
                 CPPUNIT_ASSERT_MESSAGE
                 (
@@ -437,10 +437,10 @@ public:
 
         while(bparr.Count())
         {
-            ULONG nRemove = (bparr.Count() > 3) ? 3 : bparr.Count();
-            ULONG oldCount = bparr.Count();
+            sal_uLong nRemove = (bparr.Count() > 3) ? 3 : bparr.Count();
+            sal_uLong oldCount = bparr.Count();
 
-            for (ULONG i = 0; i < nRemove; i++)
+            for (sal_uLong i = 0; i < nRemove; i++)
                 delete bparr[i];
 
             bparr.Remove(0, nRemove);
@@ -491,13 +491,13 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        for (ULONG i = 0; i < NUM_ENTRIES - 1; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES - 1; i++)
         {
             bparr.Move(i, i + 2);
             dumpBigPtrArray(bparr);
         }
 
-        for (ULONG i = 0; i < (NUM_ENTRIES - 1); i++)
+        for (sal_uLong i = 0; i < (NUM_ENTRIES - 1); i++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -542,7 +542,7 @@ public:
             static_cast<BigPtrEntryMock*>(bparr[0])->getCount() == (NUM_ENTRIES - 1)
         );
 
-        for (ULONG i = 1; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 1; i < NUM_ENTRIES; i++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -569,14 +569,14 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        for (ULONG i = 0; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
             bparr.Move(i, i);
         }
 
         dumpBigPtrArray(bparr);
 
-        for (ULONG i = 0; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -604,14 +604,14 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        for (ULONG i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
+        for (sal_uLong i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
         {
             delete bparr[i];
             bparr.Replace(i, new BigPtrEntryMock(j));
             dumpBigPtrArray(bparr);
         }
 
-        for (ULONG i = 0; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -641,7 +641,7 @@ public:
         int addCount = 1;
         bparr.ForEach(AddToCount, &addCount);
 
-        for (ULONG i = 0; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -663,10 +663,10 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        ULONG addCount = 1;
+        sal_uLong addCount = 1;
         bparr.ForEach(0, NUM_ENTRIES / 2, AddToCount, &addCount);
 
-        ULONG i = 0;
+        sal_uLong i = 0;
         for (/* */; i < NUM_ENTRIES / 2; i++)
         {
             CPPUNIT_ASSERT_MESSAGE
@@ -701,7 +701,7 @@ public:
         int addCount = 1;
         bparr.ForEach(NUM_ENTRIES / 2, NUM_ENTRIES, AddToCount, &addCount);
 
-        ULONG i = 0;
+        sal_uLong i = 0;
         for (/* */; i < NUM_ENTRIES / 2; i++)
         {
             CPPUNIT_ASSERT_MESSAGE
@@ -733,10 +733,10 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        ULONG addCount = 1;
+        sal_uLong addCount = 1;
         bparr.ForEach(0, 0, AddToCount, &addCount);
 
-        for (ULONG i = 0; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (

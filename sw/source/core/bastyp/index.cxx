@@ -206,7 +206,7 @@ SwIndex& SwIndex::operator=( const SwIndex& rIdx )
         Remove();
         pArray = rIdx.pArray;
         pNext = pPrev = 0;
-        bEqual = FALSE;
+        bEqual = sal_False;
     }
     else
         bEqual = rIdx.nIndex == nIndex;
@@ -394,7 +394,7 @@ xub_StrLen SwIndex::operator-=( const SwIndex & rIndex )
 |*    SwIndex::operator<( const SwIndex & )
 *************************************************************************/
 
-BOOL SwIndex::operator<( const SwIndex & rIndex ) const
+sal_Bool SwIndex::operator<( const SwIndex & rIndex ) const
 {
     OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex < rIndex.nIndex;
@@ -404,7 +404,7 @@ BOOL SwIndex::operator<( const SwIndex & rIndex ) const
 |*    SwIndex::operator<=( const SwIndex & )
 *************************************************************************/
 
-BOOL SwIndex::operator<=( const SwIndex & rIndex ) const
+sal_Bool SwIndex::operator<=( const SwIndex & rIndex ) const
 {
     OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex <= rIndex.nIndex;
@@ -414,7 +414,7 @@ BOOL SwIndex::operator<=( const SwIndex & rIndex ) const
 |*    SwIndex::operator>( const SwIndex & )
 *************************************************************************/
 
-BOOL SwIndex::operator>( const SwIndex & rIndex ) const
+sal_Bool SwIndex::operator>( const SwIndex & rIndex ) const
 {
     OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex > rIndex.nIndex;
@@ -424,7 +424,7 @@ BOOL SwIndex::operator>( const SwIndex & rIndex ) const
 |*    SwIndex::operator>=( const SwIndex & )
 *************************************************************************/
 
-BOOL SwIndex::operator>=( const SwIndex & rIndex ) const
+sal_Bool SwIndex::operator>=( const SwIndex & rIndex ) const
 {
     OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex >= rIndex.nIndex;

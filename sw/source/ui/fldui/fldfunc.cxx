@@ -95,8 +95,8 @@ SwFldFuncPage::SwFldFuncPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     sOldValueFT = aValueFT.GetText();
     sOldNameFT = aNameFT.GetText();
 
-    aCond1ED.ShowBrackets(FALSE);
-    aCond2ED.ShowBrackets(FALSE);
+    aCond1ED.ShowBrackets(sal_False);
+    aCond2ED.ShowBrackets(sal_False);
 
 }
 
@@ -109,10 +109,10 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
     SavePos(&aTypeLB);
     Init(); // general initialisation
 
-    aTypeLB.SetUpdateMode(FALSE);
+    aTypeLB.SetUpdateMode(sal_False);
     aTypeLB.Clear();
 
-    USHORT nPos, nTypeId;
+    sal_uInt16 nPos, nTypeId;
 
     if (!IsFldEdit())
     {
@@ -165,11 +165,11 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
         if(sUserData.GetToken(0, ';').EqualsIgnoreCaseAscii(USER_DATA_VERSION_1))
         {
             String sVal = sUserData.GetToken(1, ';');
-            USHORT nVal = static_cast< USHORT >(sVal.ToInt32());
+            sal_uInt16 nVal = static_cast< sal_uInt16 >(sVal.ToInt32());
             if(nVal != USHRT_MAX)
             {
-                for(USHORT i = 0; i < aTypeLB.GetEntryCount(); i++)
-                    if(nVal == (USHORT)(ULONG)aTypeLB.GetEntryData(i))
+                for(sal_uInt16 i = 0; i < aTypeLB.GetEntryCount(); i++)
+                    if(nVal == (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(i))
                     {
                         aTypeLB.SelectEntryPos(i);
                         break;
@@ -179,7 +179,7 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
     }
     TypeHdl(0);
 
-    aTypeLB.SetUpdateMode(TRUE);
+    aTypeLB.SetUpdateMode(sal_True);
 
     if (IsFldEdit())
     {
@@ -194,7 +194,7 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
 IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
 {
     // save old ListBoxPos
-    const USHORT nOld = GetTypeSel();
+    const sal_uInt16 nOld = GetTypeSel();
 
     // current ListBoxPos
     SetTypeSel(aTypeLB.GetSelectEntryPos());
@@ -207,7 +207,7 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
 
     if (nOld != GetTypeSel())
     {
-        USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
         // fill Selection-Listbox
         UpdateSubType();
@@ -215,30 +215,30 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
         // fill Format-Listbox
         aFormatLB.Clear();
 
-        USHORT nSize = GetFldMgr().GetFormatCount(nTypeId, FALSE, IsFldDlgHtmlMode());
+        sal_uInt16 nSize = GetFldMgr().GetFormatCount(nTypeId, sal_False, IsFldDlgHtmlMode());
 
-        for (USHORT i = 0; i < nSize; i++)
+        for (sal_uInt16 i = 0; i < nSize; i++)
         {
-            USHORT nPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
+            sal_uInt16 nPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
             aFormatLB.SetEntryData( nPos, reinterpret_cast<void*>(GetFldMgr().GetFormatId( nTypeId, i )) );
         }
 
         if (nSize)
         {
             if (IsFldEdit() && nTypeId == TYP_JUMPEDITFLD)
-                aFormatLB.SelectEntry(SW_RESSTR(FMT_MARK_BEGIN + (USHORT)GetCurField()->GetFormat()));
+                aFormatLB.SelectEntry(SW_RESSTR(FMT_MARK_BEGIN + (sal_uInt16)GetCurField()->GetFormat()));
 
             if (!aFormatLB.GetSelectEntryCount())
                 aFormatLB.SelectEntryPos(0);
         }
 
-        BOOL bValue = FALSE, bName = FALSE, bMacro = FALSE, bInsert = TRUE;
-        BOOL bShowSelection = FALSE;
-        BOOL bFormat = nSize != 0;
+        sal_Bool bValue = sal_False, bName = sal_False, bMacro = sal_False, bInsert = sal_True;
+        sal_Bool bShowSelection = sal_False;
+        sal_Bool bFormat = nSize != 0;
 
         // two controls for conditional text
-        BOOL bDropDown = TYP_DROPDOWN == nTypeId;
-        BOOL bCondTxtFld = TYP_CONDTXTFLD == nTypeId;
+        sal_Bool bDropDown = TYP_DROPDOWN == nTypeId;
+        sal_Bool bCondTxtFld = TYP_CONDTXTFLD == nTypeId;
 
         aCond1FT.Show(!bDropDown && bCondTxtFld);
         aCond1ED.Show(!bDropDown && bCondTxtFld);
@@ -261,7 +261,7 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
         aListNameFT.Show(bDropDown);
         aListNameED.Show(bDropDown);
 
-        aNameED.SetDropEnable(FALSE);
+        aNameED.SetDropEnable(sal_False);
 
         if (IsFldEdit())
         {
@@ -300,67 +300,81 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
         switch (nTypeId)
         {
             case TYP_MACROFLD:
-                bMacro = TRUE;
+                bMacro = sal_True;
                 if (GetFldMgr().GetMacroPath().Len())
-                    bValue = TRUE;
+                    bValue = sal_True;
                 else
-                    bInsert = FALSE;
+                    bInsert = sal_False;
 
                 aNameFT.SetText(SW_RESSTR(STR_MACNAME));
                 aValueFT.SetText(SW_RESSTR(STR_PROMPT));
                 aNameED.SetText(GetFldMgr().GetMacroName());
+                aNameED.SetAccessibleName(aNameFT.GetText());
+                aValueED.SetAccessibleName(aValueFT.GetText());
                 break;
 
             case TYP_HIDDENPARAFLD:
                 aNameFT.SetText(SW_RESSTR(STR_COND));
-                aNameED.SetDropEnable(TRUE);
-                bName = TRUE;
+                aNameED.SetDropEnable(sal_True);
+                bName = sal_True;
+                aNameED.SetAccessibleName(aNameFT.GetText());
+                aValueED.SetAccessibleName(aValueFT.GetText());
                 break;
 
             case TYP_HIDDENTXTFLD:
             {
                 aNameFT.SetText(SW_RESSTR(STR_COND));
-                aNameED.SetDropEnable(TRUE);
+                aNameED.SetDropEnable(sal_True);
                 aValueFT.SetText(SW_RESSTR(STR_INSTEXT));
                 SwWrtShell* pSh = GetActiveWrtShell();
                 if (!IsFldEdit() && pSh )
                     aValueED.SetText(pSh->GetSelTxt());
-                bName = bValue = TRUE;
+                bName = bValue = sal_True;
+                aNameED.SetAccessibleName(aNameFT.GetText());
+                aValueED.SetAccessibleName(aValueFT.GetText());
             }
             break;
 
             case TYP_CONDTXTFLD:
                 aNameFT.SetText(SW_RESSTR(STR_COND));
-                aNameED.SetDropEnable(TRUE);
+                aNameED.SetDropEnable(sal_True);
                 if (IsFldEdit())
                 {
                     aCond1ED.SetText(GetCurField()->GetPar2().GetToken(0, '|'));
                     aCond2ED.SetText(GetCurField()->GetPar2().GetToken(1, '|'));
                 }
 
-                bName = bValue = TRUE;
+                bName = bValue = sal_True;
+                aNameED.SetAccessibleName(aNameFT.GetText());
+                aValueED.SetAccessibleName(aValueFT.GetText());
                 break;
 
             case TYP_JUMPEDITFLD:
                 aNameFT.SetText(SW_RESSTR(STR_JUMPEDITFLD));
                 aValueFT.SetText(SW_RESSTR(STR_PROMPT));
-                bName = bValue = TRUE;
+                bName = bValue = sal_True;
+                aNameED.SetAccessibleName(aNameFT.GetText());
+                aValueED.SetAccessibleName(aValueFT.GetText());
                 break;
 
             case TYP_INPUTFLD:
                 aValueFT.SetText(SW_RESSTR(STR_PROMPT));
-                bValue = TRUE;
+                bValue = sal_True;
+                aNameED.SetAccessibleName(aNameFT.GetText());
+                aValueED.SetAccessibleName(aValueFT.GetText());
                 break;
 
             case TYP_COMBINED_CHARS:
                 {
                     aNameFT.SetText(SW_RESSTR(STR_COMBCHRS_FT));
-                    aNameED.SetDropEnable(TRUE);
-                    bName = TRUE;
+                    aNameED.SetDropEnable(sal_True);
+                    bName = sal_True;
 
-                    const USHORT nLen = aNameED.GetText().Len();
+                    const sal_uInt16 nLen = aNameED.GetText().Len();
                     if( !nLen || nLen > MAX_COMBINED_CHARACTERS )
-                        bInsert = FALSE;
+                        bInsert = sal_False;
+                    aNameED.SetAccessibleName(aNameFT.GetText());
+                    aValueED.SetAccessibleName(aValueFT.GetText());
                 }
                 break;
             case TYP_DROPDOWN :
@@ -400,7 +414,7 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
 
 IMPL_LINK( SwFldFuncPage, SelectHdl, ListBox *, EMPTYARG )
 {
-    USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
     if( TYP_MACROFLD == nTypeId )
         aNameED.SetText( aSelectionLB.GetSelectEntry() );
@@ -418,7 +432,7 @@ IMPL_LINK( SwFldFuncPage, InsertMacroHdl, ListBox *, EMPTYARG )
 
 IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
 {
-    aListItemsLB.SetUpdateMode(FALSE);
+    aListItemsLB.SetUpdateMode(sal_False);
     if(pControl == &aListAddPB ||
             (pControl == &aListItemED && aListAddPB.IsEnabled()))
     {
@@ -428,7 +442,7 @@ IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
     }
     else if(aListItemsLB.GetSelectEntryCount())
     {
-        USHORT nSelPos = aListItemsLB.GetSelectEntryPos();
+        sal_uInt16 nSelPos = aListItemsLB.GetSelectEntryPos();
         if(pControl == &aListRemovePB)
         {
             aListItemsLB.RemoveEntry(nSelPos);
@@ -458,7 +472,7 @@ IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
         }
     }
     bDropDownLBChanged = true;
-    aListItemsLB.SetUpdateMode(TRUE);
+    aListItemsLB.SetUpdateMode(sal_True);
     ListEnableHdl(0);
     return 0;
 }
@@ -468,7 +482,7 @@ IMPL_LINK( SwFldFuncPage, ListEnableHdl, void*, EMPTYARG)
     //enable "Add" button when text is in the Edit that's not already member of the box
     aListAddPB.Enable(aListItemED.GetText().Len() &&
                 LISTBOX_ENTRY_NOTFOUND == aListItemsLB.GetEntryPos(aListItemED.GetText()));
-    BOOL bEnableButtons = aListItemsLB.GetSelectEntryCount() > 0;
+    sal_Bool bEnableButtons = aListItemsLB.GetSelectEntryCount() > 0;
     aListRemovePB.Enable(bEnableButtons);
     aListUpPB.Enable(bEnableButtons && (aListItemsLB.GetSelectEntryPos() > 0));
     aListDownPB.Enable(bEnableButtons &&
@@ -482,23 +496,23 @@ IMPL_LINK( SwFldFuncPage, ListEnableHdl, void*, EMPTYARG)
  --------------------------------------------------------------------*/
 void SwFldFuncPage::UpdateSubType()
 {
-    USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
     // fill Selction-Listbox
-    aSelectionLB.SetUpdateMode(FALSE);
+    aSelectionLB.SetUpdateMode(sal_False);
     aSelectionLB.Clear();
 
     SvStringsDtor aLst;
     GetFldMgr().GetSubTypes(nTypeId, aLst);
-    USHORT nCount = aLst.Count();
+    sal_uInt16 nCount = aLst.Count();
 
-    for (USHORT i = 0; i < nCount; ++i)
+    for (sal_uInt16 i = 0; i < nCount; ++i)
     {
-        USHORT nPos = aSelectionLB.InsertEntry(*aLst[i]);
+        sal_uInt16 nPos = aSelectionLB.InsertEntry(*aLst[i]);
         aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(i));
     }
 
-    BOOL bEnable = nCount != 0;
+    sal_Bool bEnable = nCount != 0;
 
     aSelectionLB.Enable( bEnable );
     aSelectionFT.Enable( bEnable );
@@ -510,7 +524,7 @@ void SwFldFuncPage::UpdateSubType()
 
     if (nTypeId == TYP_MACROFLD)
     {
-        BOOL bHasMacro = GetFldMgr().GetMacroPath().Len() != 0;
+        sal_Bool bHasMacro = GetFldMgr().GetMacroPath().Len() != 0;
 
         if (bHasMacro)
         {
@@ -521,7 +535,7 @@ void SwFldFuncPage::UpdateSubType()
         EnableInsert(bHasMacro);
     }
 
-    aSelectionLB.SetUpdateMode(TRUE);
+    aSelectionLB.SetUpdateMode(sal_True);
 }
 
 /*--------------------------------------------------------------------
@@ -543,18 +557,18 @@ IMPL_LINK( SwFldFuncPage, MacroHdl, Button *, pBtn )
     return 0;
 }
 
-BOOL SwFldFuncPage::FillItemSet(SfxItemSet& )
+sal_Bool SwFldFuncPage::FillItemSet(SfxItemSet& )
 {
-    USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
-    USHORT nSubType = 0;
+    sal_uInt16 nSubType = 0;
 
-    ULONG nFormat = aFormatLB.GetSelectEntryPos();
+    sal_uLong nFormat = aFormatLB.GetSelectEntryPos();
 
     if(nFormat == LISTBOX_ENTRY_NOTFOUND)
         nFormat = 0;
     else
-        nFormat = (ULONG)aFormatLB.GetEntryData((USHORT)nFormat);
+        nFormat = (sal_uLong)aFormatLB.GetEntryData((sal_uInt16)nFormat);
 
     String aVal(aValueED.GetText());
     String aName(aNameED.GetText());
@@ -582,7 +596,7 @@ BOOL SwFldFuncPage::FillItemSet(SfxItemSet& )
         case TYP_DROPDOWN :
         {
             aName = aListNameED.GetText();
-            for(USHORT i = 0; i < aListItemsLB.GetEntryCount(); i++)
+            for(sal_uInt16 i = 0; i < aListItemsLB.GetEntryCount(); i++)
             {
                 if(i)
                     aVal += DB_DELIM;
@@ -608,7 +622,7 @@ BOOL SwFldFuncPage::FillItemSet(SfxItemSet& )
 
     ModifyHdl();    // enable/disable Insert if applicable
 
-    return FALSE;
+    return sal_False;
 }
 
 String SwFldFuncPage::TurnMacroString(const String &rMacro)
@@ -617,9 +631,9 @@ String SwFldFuncPage::TurnMacroString(const String &rMacro)
     {
         // reverse content of aName
         String sTmp, sBuf;
-        USHORT nPos = 0;
+        sal_uInt16 nPos = 0;
 
-        for (USHORT i = 0; i < 4 && nPos != STRING_NOTFOUND; i++)
+        for (sal_uInt16 i = 0; i < 4 && nPos != STRING_NOTFOUND; i++)
         {
             if (i == 3)
                 sTmp = rMacro.Copy(nPos);
@@ -642,7 +656,7 @@ SfxTabPage* SwFldFuncPage::Create(  Window* pParent,
     return ( new SwFldFuncPage( pParent, rAttrSet ) );
 }
 
-USHORT SwFldFuncPage::GetGroup()
+sal_uInt16 SwFldFuncPage::GetGroup()
 {
     return GRP_FKT;
 }
@@ -652,11 +666,11 @@ void    SwFldFuncPage::FillUserData()
     String sData( String::CreateFromAscii(
                         RTL_CONSTASCII_STRINGPARAM( USER_DATA_VERSION )));
     sData += ';';
-    USHORT nTypeSel = aTypeLB.GetSelectEntryPos();
+    sal_uInt16 nTypeSel = aTypeLB.GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;
     else
-        nTypeSel = sal::static_int_cast< USHORT >(reinterpret_cast< sal_uIntPtr >(aTypeLB.GetEntryData( nTypeSel )));
+        nTypeSel = sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(aTypeLB.GetEntryData( nTypeSel )));
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
 }
@@ -664,14 +678,14 @@ void    SwFldFuncPage::FillUserData()
 IMPL_LINK( SwFldFuncPage, ModifyHdl, Edit *, EMPTYARG )
 {
     String aName(aNameED.GetText());
-    const USHORT nLen = aName.Len();
+    const sal_uInt16 nLen = aName.Len();
 
-    BOOL bEnable = TRUE;
-    USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+    sal_Bool bEnable = sal_True;
+    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
     if( TYP_COMBINED_CHARS == nTypeId &&
         (!nLen || nLen > MAX_COMBINED_CHARACTERS ))
-        bEnable = FALSE;
+        bEnable = sal_False;
 
     EnableInsert( bEnable );
 

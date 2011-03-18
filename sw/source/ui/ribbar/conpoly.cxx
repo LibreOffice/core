@@ -62,11 +62,11 @@ ConstPolygon::ConstPolygon(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* p
 
 
 
-BOOL ConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool ConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    BOOL bReturn;
+    sal_Bool bReturn;
 
-    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)) == TRUE)
+    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)) == sal_True)
         aLastPos = rMEvt.GetPosPixel();
 
     return (bReturn);
@@ -80,9 +80,9 @@ BOOL ConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 
 
 
-BOOL ConstPolygon::MouseMove(const MouseEvent& rMEvt)
+sal_Bool ConstPolygon::MouseMove(const MouseEvent& rMEvt)
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
 
     bReturn = SwDrawBase::MouseMove(rMEvt);
 
@@ -97,9 +97,9 @@ BOOL ConstPolygon::MouseMove(const MouseEvent& rMEvt)
 
 
 
-BOOL ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
 
     if (m_pSh->IsDrawCreate())
     {
@@ -110,7 +110,7 @@ BOOL ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 m_pSh->BreakCreate();
                 EnterSelectMode(rMEvt);
-                return TRUE;
+                return sal_True;
             }
         }
         else
@@ -137,7 +137,7 @@ BOOL ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 
 
 
-void ConstPolygon::Activate(const USHORT nSlotId)
+void ConstPolygon::Activate(const sal_uInt16 nSlotId)
 {
     switch (nSlotId)
     {

@@ -35,6 +35,7 @@ class SwLabPage : public SfxTabPage
     String        sActDBName;
     SwLabItem     aItem;
 
+    FixedLine     aWritingFL;
     FixedText     aWritingText;
     CheckBox      aAddrBox;
     MultiLineEdit aWritingEdit;
@@ -46,8 +47,8 @@ class SwLabPage : public SfxTabPage
     FixedText     aDBFieldFT;
     ListBox       aDBFieldLB;
 //  PushButton    aDatabaseButton;
-    FixedLine     aWritingFL;
 
+    FixedLine     aFormatFL;
     RadioButton   aContButton;
     RadioButton   aSheetButton;
     FixedText     aMakeText;
@@ -56,7 +57,6 @@ class SwLabPage : public SfxTabPage
     ListBox       aTypeBox;
     ListBox       aHiddenSortTypeBox;
     FixedInfo     aFormatInfo;
-    FixedLine     aFormatFL;
 
     sal_Bool        m_bLabel;
 
@@ -100,11 +100,10 @@ public:
 class SwOneExampleFrame;
 class SwVisitingCardPage : public SfxTabPage
 {
+    FixedLine       aContentFL;
     SvTreeListBox   aAutoTextLB;
     FixedText       aAutoTextGroupFT;
     ListBox         aAutoTextGroupLB;
-
-    FixedLine       aContentFL;
 
     Window          aExampleWIN;
 

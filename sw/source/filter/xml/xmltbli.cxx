@@ -1540,7 +1540,7 @@ void SwXMLTableContext::InsertColumn( sal_Int32 nWidth2, sal_Bool bRelWidth2,
         if( !pColumnDefaultCellStyleNames )
         {
             pColumnDefaultCellStyleNames = new SvStringsDtor;
-            ULONG nCount = aColumnWidths.size() - 1;
+            sal_uLong nCount = aColumnWidths.size() - 1;
             while( nCount-- )
                 pColumnDefaultCellStyleNames->Insert( new String,
                     pColumnDefaultCellStyleNames->Count() );
@@ -2100,7 +2100,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         {
             // default num format?
             const SfxPoolItem* pItem = NULL;
-            if( pBoxFmt2->GetItemState( RES_BOXATR_FORMAT, FALSE, &pItem )
+            if( pBoxFmt2->GetItemState( RES_BOXATR_FORMAT, sal_False, &pItem )
                             == SFX_ITEM_SET )
             {
                 const SwTblBoxNumFormat* pNumFormat =
@@ -2155,7 +2155,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                 // Solution: the number format will be removed,
                 // the cell gets the default text format.
                 const SfxPoolItem* pItem = NULL;
-                if( pBoxFmt->GetItemState( RES_BOXATR_FORMAT, FALSE, &pItem )
+                if( pBoxFmt->GetItemState( RES_BOXATR_FORMAT, sal_False, &pItem )
                     == SFX_ITEM_SET )
                 {
                     const SwDoc* pDoc = pBoxFmt->GetDoc();
@@ -2413,14 +2413,14 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
     {
         SwXMLTableRow_Impl *pPrevRow = (*pRows)[(sal_uInt16)nCurRow-1U];
         SwXMLTableCell_Impl *pCell;
-        for( ULONG i = 0; i < aColumnWidths.size(); ++i )
+        for( sal_uLong i = 0; i < aColumnWidths.size(); ++i )
         {
             if( ( pCell=pPrevRow->GetCell(i), pCell->GetRowSpan() > 1UL ) )
             {
                 FixRowSpan( nCurRow-1UL, i, 1UL );
             }
         }
-        for( ULONG i = pRows->Count()-1UL; i>=nCurRow; --i )
+        for( sal_uLong i = pRows->Count()-1UL; i>=nCurRow; --i )
             pRows->DeleteAndDestroy( (sal_uInt16)i );
     }
 
@@ -2498,7 +2498,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             for( colIter = aColumnWidths.begin(); colIter < aColumnWidths.end() - 1; ++colIter)
             {
                 sal_Int32 nW = (sal_Int32)( colIter->width * n);
-                colIter->width = (USHORT)nW;
+                colIter->width = (sal_uInt16)nW;
                 nRelWidth += nW;
             }
             aColumnWidths.back().width = (nWidth-nRelWidth);
@@ -2825,10 +2825,10 @@ void SwXMLTableContext::MakeTable()
 
         // 3) create new DDE table, and
         SwDDETable* pDDETable = new SwDDETable( pTableNode->GetTable(),
-                                                pFldType, FALSE );
+                                                pFldType, sal_False );
 
         // 4) set new (DDE)table at node.
-        pTableNode->SetNewTable(pDDETable, FALSE);
+        pTableNode->SetNewTable(pDDETable, sal_False);
     }
 
     // ??? this is always false: root frame is only created in ViewShell::Init

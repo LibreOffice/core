@@ -42,7 +42,7 @@ class SwRedlineAuthor
     Color aChgLineColor;
     SfxItemSet *pInsAttrSet, *pDelAttrSet, *pFmtAttrSet;
     short eChgLineOrient;
-    BYTE cDelChar;
+    sal_uInt8 cDelChar;
 public:
     SwRedlineAuthor( SwAttrPool& rPool, const String& );
     SwRedlineAuthor( const SwRedlineAuthor& );

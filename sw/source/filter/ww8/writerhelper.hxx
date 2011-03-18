@@ -819,8 +819,8 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        USHORT TransformWhichBetweenPools(const SfxItemPool &rDestPool,
-            const SfxItemPool &rSrcPool, USHORT nWhich);
+        sal_uInt16 TransformWhichBetweenPools(const SfxItemPool &rDestPool,
+            const SfxItemPool &rSrcPool, sal_uInt16 nWhich);
 
         /** Map a SwDoc WhichId to the equivalent Id for a given SfxItemSet
 
@@ -849,8 +849,8 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        USHORT GetSetWhichFromSwDocWhich(const SfxItemSet &rSet,
-            const SwDoc &rDoc, USHORT nWhich);
+        sal_uInt16 GetSetWhichFromSwDocWhich(const SfxItemSet &rSet,
+            const SwDoc &rDoc, sal_uInt16 nWhich);
 
 
         /** Make inserting an OLE object into a Writer document easy

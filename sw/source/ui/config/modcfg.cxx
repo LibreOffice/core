@@ -64,7 +64,7 @@ SV_IMPL_PTRARR_SORT(InsCapOptArr, InsCaptionOptPtr)
 
 InsCaptionOpt* InsCaptionOptArr::Find(const SwCapObjType eType, const SvGlobalName *pOleId) const
 {
-    for (USHORT i = 0; i < Count(); i++ )
+    for (sal_uInt16 i = 0; i < Count(); i++ )
     {
         InsCaptionOpt* pObj = GetObject(i);
         if (pObj->GetObjType() == eType &&
@@ -78,7 +78,7 @@ InsCaptionOpt* InsCaptionOptArr::Find(const SwCapObjType eType, const SvGlobalNa
 }
 
 const InsCaptionOpt* SwModuleOptions::GetCapOption(
-    BOOL bHTML, const SwCapObjType eType, const SvGlobalName *pOleId)
+    sal_Bool bHTML, const SwCapObjType eType, const SvGlobalName *pOleId)
 {
     if(bHTML)
     {
@@ -87,10 +87,10 @@ const InsCaptionOpt* SwModuleOptions::GetCapOption(
     }
     else
     {
-        sal_Bool bFound = FALSE;
+        sal_Bool bFound = sal_False;
         if(eType == OLE_CAP && pOleId)
         {
-            for( USHORT nId = 0; nId <= GLOB_NAME_CHART && !bFound; nId++)
+            for( sal_uInt16 nId = 0; nId <= GLOB_NAME_CHART && !bFound; nId++)
                 bFound = *pOleId == aInsertConfig.aGlobalNames[nId  ];
             if(!bFound)
                 return aInsertConfig.pOLEMiscOpt;
@@ -99,9 +99,9 @@ const InsCaptionOpt* SwModuleOptions::GetCapOption(
     }
 }
 
-BOOL SwModuleOptions::SetCapOption(BOOL bHTML, const InsCaptionOpt* pOpt)
+sal_Bool SwModuleOptions::SetCapOption(sal_Bool bHTML, const InsCaptionOpt* pOpt)
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if(bHTML)
     {
@@ -109,10 +109,10 @@ BOOL SwModuleOptions::SetCapOption(BOOL bHTML, const InsCaptionOpt* pOpt)
     }
     else if (pOpt)
     {
-        sal_Bool bFound = FALSE;
+        sal_Bool bFound = sal_False;
         if(pOpt->GetObjType() == OLE_CAP && &pOpt->GetOleId())
         {
-            for( USHORT nId = 0; nId <= GLOB_NAME_CHART; nId++)
+            for( sal_uInt16 nId = 0; nId <= GLOB_NAME_CHART; nId++)
                 bFound = pOpt->GetOleId() == aInsertConfig.aGlobalNames[nId  ];
             if(!bFound)
             {
@@ -134,22 +134,22 @@ BOOL SwModuleOptions::SetCapOption(BOOL bHTML, const InsCaptionOpt* pOpt)
             rArr.Insert(new InsCaptionOpt(*pOpt));
 
         aInsertConfig.SetModified();
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     return bRet;
 }
 
 SwModuleOptions::SwModuleOptions() :
-    aInsertConfig(FALSE),
-    aWebInsertConfig(TRUE),
-    aTableConfig(FALSE),
-    aWebTableConfig(TRUE),
-    bHideFieldTips(FALSE)
+    aInsertConfig(sal_False),
+    aWebInsertConfig(sal_True),
+    aTableConfig(sal_False),
+    aWebTableConfig(sal_True),
+    bHideFieldTips(sal_False)
 {
 }
 
-String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, BOOL bFromUI)
+String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, sal_Bool bFromUI)
 {
     String sReturn;
     if(bFromUI)
@@ -176,7 +176,7 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, BOOL bFromUI)
                     case 'x':
                     {
                         sal_Unicode nVal, nChar;
-                        BOOL bValidData = TRUE;
+                        sal_Bool bValidData = sal_True;
                         xub_StrLen n;
                         for( n = 0, nChar = 0; n < 2 && i < rDelim.Len(); ++n, ++i )
                         {
@@ -189,7 +189,7 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, BOOL bFromUI)
                             else
                             {
                                 OSL_FAIL("wrong hex value" );
-                                bValidData = FALSE;
+                                bValidData = sal_False;
                                 break;
                             }
 
@@ -930,7 +930,7 @@ void SwInsertConfig::Load()
         else if(!bIsWeb)
             return;
 
-        USHORT nInsTblFlags = 0;
+        sal_uInt16 nInsTblFlags = 0;
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
             if(pValues[nProp].hasValue())
@@ -1204,10 +1204,10 @@ void SwTableConfig::Load()
                 sal_Int32 nTemp = 0;
                 switch(nProp)
                 {
-                    case 0 : pValues[nProp] >>= nTemp; nTblHMove = (USHORT)MM100_TO_TWIP(nTemp); break;  //"Shift/Row",
-                    case 1 : pValues[nProp] >>= nTemp; nTblVMove = (USHORT)MM100_TO_TWIP(nTemp); break;     //"Shift/Column",
-                    case 2 : pValues[nProp] >>= nTemp; nTblHInsert = (USHORT)MM100_TO_TWIP(nTemp); break;   //"Insert/Row",
-                    case 3 : pValues[nProp] >>= nTemp; nTblVInsert = (USHORT)MM100_TO_TWIP(nTemp); break;   //"Insert/Column",
+                    case 0 : pValues[nProp] >>= nTemp; nTblHMove = (sal_uInt16)MM100_TO_TWIP(nTemp); break;  //"Shift/Row",
+                    case 1 : pValues[nProp] >>= nTemp; nTblVMove = (sal_uInt16)MM100_TO_TWIP(nTemp); break;     //"Shift/Column",
+                    case 2 : pValues[nProp] >>= nTemp; nTblHInsert = (sal_uInt16)MM100_TO_TWIP(nTemp); break;   //"Insert/Row",
+                    case 3 : pValues[nProp] >>= nTemp; nTblVInsert = (sal_uInt16)MM100_TO_TWIP(nTemp); break;   //"Insert/Column",
                     case 4 : pValues[nProp] >>= nTemp; eTblChgMode = (TblChgMode)nTemp; break;   //"Change/Effect",
                     case 5 : bInsTblFormatNum = *(sal_Bool*)pValues[nProp].getValue();  break;  //"Input/NumberRecognition",
                     case 6 : bInsTblChangeNumFormat = *(sal_Bool*)pValues[nProp].getValue(); break;  //"Input/NumberFormatRecognition",

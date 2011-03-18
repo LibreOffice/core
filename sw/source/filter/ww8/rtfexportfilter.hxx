@@ -3,6 +3,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  * Copyright 2010 Miklos Vajna.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +41,7 @@
 class RtfWriter : public Writer
 {
 protected:
-    ULONG WriteStream() { return 0; }
+    sal_uLong WriteStream() { return 0; }
 };
 
 /// The physical access to the RTF document (for writing).
@@ -51,11 +52,11 @@ class RtfExportFilter : public cppu::WeakImplHelper2
 >
 {
 protected:
-    ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xMSF;
+    ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xCtx;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xSrcDoc;
     SvStream* m_pStream;
 public:
-    RtfExportFilter( const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
+    RtfExportFilter( const ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xCtx );
     virtual ~RtfExportFilter();
 
     // XFilter
@@ -76,7 +77,7 @@ public:
     throw();
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL RtfExport_createInstance(
                                                                         const ::com::sun::star::uno::Reference<
-                                                                        com::sun::star::lang::XMultiServiceFactory > &xMSF)
+                                                                        com::sun::star::uno::XComponentContext > &xCtx)
     throw( ::com::sun::star::uno::Exception );
 
 #define IMPL_NAME_RTFEXPORT "com.sun.star.comp.Writer.RtfExport"

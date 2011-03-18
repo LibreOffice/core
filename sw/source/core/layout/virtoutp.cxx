@@ -75,21 +75,21 @@ inline DbgRect::DbgRect( OutputDevice *pOutDev, const Rectangle &rRect,
  * dieser wird in _FrmInit angelegt und in _FrmFinit zerstoert.
  * */
 
-BOOL SwRootFrm::FlushVout()
+sal_Bool SwRootFrm::FlushVout()
 {
     if( SwRootFrm::pVout->IsFlushable() )
     {
         SwRootFrm::pVout->_Flush();
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SwRootFrm::HasSameRect( const SwRect& rRect )
+sal_Bool SwRootFrm::HasSameRect( const SwRect& rRect )
 {
     if( SwRootFrm::pVout->IsFlushable() )
         return ( rRect == SwRootFrm::pVout->GetOrgRect() );
-    return FALSE;
+    return sal_False;
 }
 
 /** method to set mapping/pixel offset for virtual output device
@@ -139,14 +139,14 @@ void SetMappingForVirtDev(  const Point&    _rNewOrigin,
  *************************************************************************/
 
 // rSize muss in Pixel-Koordinaten vorliegen!
-BOOL SwLayVout::DoesFit( const Size &rNew )
+sal_Bool SwLayVout::DoesFit( const Size &rNew )
 {
     if( rNew.Height() > VIRTUALHEIGHT )
-        return FALSE;
+        return sal_False;
     if( rNew.Width() <= 0 || rNew.Height() <= 0 )
-        return FALSE;
+        return sal_False;
     if( rNew.Width() <= aSize.Width() )
-        return TRUE;
+        return sal_True;
     if( !pVirDev )
     {
         pVirDev = new VirtualDevice();
@@ -166,10 +166,10 @@ BOOL SwLayVout::DoesFit( const Size &rNew )
             delete pVirDev;
             pVirDev = NULL;
             aSize.Width() = 0;
-            return FALSE;
+            return sal_False;
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -180,7 +180,7 @@ BOOL SwLayVout::DoesFit( const Size &rNew )
 ///     output is used.
 ///     <aRect> contains the rectangle that represents the area the virtual
 ///     output device is used for and that is flushed at the end.
-void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, BOOL bOn )
+void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, sal_Bool bOn )
 {
     Flush();
 

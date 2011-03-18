@@ -19,3 +19,5 @@ mkdir: %_DEST%\inc%_EXT%\starmath
 ..\uiconfig\smath\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\smath\menubar\*.xml
 ..\uiconfig\smath\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\smath\toolbar\*.xml
 ..\uiconfig\smath\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\smath\statusbar\*.xml
+..\%__SRC%\misc\sm.component %_DEST%\xml%_EXT%\sm.component
+..\%__SRC%\misc\smd.component %_DEST%\xml%_EXT%\smd.component

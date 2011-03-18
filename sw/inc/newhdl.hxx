@@ -46,10 +46,10 @@ public:
         void    SetWarnLnk( const Link &rLink );
         void    SetErrLnk( const Link &rLink );
 
-        BOOL    TryWarnMem();
+        sal_Bool    TryWarnMem();
 
-        BOOL    Flush_WarnMem();
-        BOOL    Flush_ExceptMem();
+        sal_Bool    Flush_WarnMem();
+        sal_Bool    Flush_ExceptMem();
 
         SwNewHdl();
         ~SwNewHdl();

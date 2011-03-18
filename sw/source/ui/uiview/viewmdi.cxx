@@ -64,7 +64,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <PostItMgr.hxx>
 
-USHORT  SwView::nMoveType = NID_PGE;
+sal_uInt16  SwView::nMoveType = NID_PGE;
 sal_Int32 SwView::nActMark = 0;
 
 
@@ -73,16 +73,16 @@ sal_Int32 SwView::nActMark = 0;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
-void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, BOOL bViewOnly )
+void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, sal_Bool bViewOnly )
 {
     _SetZoom( GetEditWin().GetOutputSizePixel(), eZoomType, nFactor, bViewOnly );
 }
 
 void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
-                        short nFactor, BOOL bViewOnly )
+                        short nFactor, sal_Bool bViewOnly )
 {
-    BOOL bUnLockView = !pWrtShell->IsViewLocked();
-    pWrtShell->LockView( TRUE );
+    sal_Bool bUnLockView = !pWrtShell->IsViewLocked();
+    pWrtShell->LockView( sal_True );
     pWrtShell->LockPaint();
 
     {
@@ -90,7 +90,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
 
     long nFac = nFactor;
 
-    BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
+    sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
     SwMasterUsrPref *pUsrPref = (SwMasterUsrPref*)SW_MOD()->GetUsrPref(bWeb);
 
     const SwPageDesc &rDesc = pWrtShell->GetPageDesc( pWrtShell->GetCurPageDesc() );
@@ -157,19 +157,19 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         //MasterUsrPrefs updaten UND DANACH die ViewOptions der aktuellen
         //View updaten.
         if ( !bViewOnly &&
-                (USHORT(nFac)      != pUsrPref->GetZoom() ||
-                BYTE  (eZoomType) != pUsrPref->GetZoomType()) )
+                (sal_uInt16(nFac)      != pUsrPref->GetZoom() ||
+                sal_uInt8  (eZoomType) != pUsrPref->GetZoomType()) )
         {
-            pUsrPref->SetZoom    ( USHORT(nFac) );
+            pUsrPref->SetZoom    ( sal_uInt16(nFac) );
             pUsrPref->SetZoomType( eZoomType );
             SW_MOD()->ApplyUsrPref( *pUsrPref,
                     bViewOnly ? this: 0,
                     bViewOnly ? VIEWOPT_DEST_VIEW_ONLY : 0 );
             pUsrPref->SetModified();
         }
-        if ( pOpt->GetZoom() != (USHORT) nFac )
+        if ( pOpt->GetZoom() != (sal_uInt16) nFac )
         {
-            aOpt.SetZoom    ( USHORT(nFac) );
+            aOpt.SetZoom    ( sal_uInt16(nFac) );
             aOpt.SetReadonly(pOpt->IsReadonly());
             pWrtShell->ApplyViewOptions( aOpt );
         }
@@ -198,9 +198,9 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         ((SwViewOption*)pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
         CalcVisArea( rEditSize );   //fuer das Neuberechnen des sichtbaren Bereiches
     }
-    else if ( USHORT(nFac) != pOpt->GetZoom() )
+    else if ( sal_uInt16(nFac) != pOpt->GetZoom() )
     {
-        aOpt.SetZoom    ( USHORT(nFac) );
+        aOpt.SetZoom    ( sal_uInt16(nFac) );
         pWrtShell->ApplyViewOptions( aOpt );
     }
 
@@ -213,13 +213,13 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     }
     pWrtShell->UnlockPaint();
     if( bUnLockView )
-        pWrtShell->LockView( FALSE );
+        pWrtShell->LockView( sal_False );
 }
 
-void SwView::SetViewLayout( USHORT nColumns, bool bBookMode, BOOL bViewOnly )
+void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewOnly )
 {
-    const BOOL bUnLockView = !pWrtShell->IsViewLocked();
-    pWrtShell->LockView( TRUE );
+    const sal_Bool bUnLockView = !pWrtShell->IsViewLocked();
+    pWrtShell->LockView( sal_True );
     pWrtShell->LockPaint();
 
     {
@@ -228,7 +228,7 @@ void SwView::SetViewLayout( USHORT nColumns, bool bBookMode, BOOL bViewOnly )
 
     if ( !GetViewFrame()->GetFrame().IsInPlace() && !bViewOnly )
     {
-        const BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
+        const sal_Bool bWeb = 0 != PTR_CAST(SwWebView, this);
         SwMasterUsrPref *pUsrPref = (SwMasterUsrPref*)SW_MOD()->GetUsrPref(bWeb);
 
         //MasterUsrPrefs updaten UND DANACH die ViewOptions der aktuellen
@@ -263,7 +263,7 @@ void SwView::SetViewLayout( USHORT nColumns, bool bBookMode, BOOL bViewOnly )
 
     pWrtShell->UnlockPaint();
     if( bUnLockView )
-        pWrtShell->LockView( FALSE );
+        pWrtShell->LockView( sal_False );
 
     SfxBindings& rBnd = GetViewFrame()->GetBindings();
     rBnd.Invalidate( SID_ATTR_VIEWLAYOUT );
@@ -286,15 +286,15 @@ IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
         {
             case VCLEVENT_WINDOW_HIDE:
                 if( pChildWin == pHScrollbar )
-                    ShowHScrollbar( FALSE );
+                    ShowHScrollbar( sal_False );
                 else if( pChildWin == pVScrollbar )
-                    ShowVScrollbar( FALSE );
+                    ShowVScrollbar( sal_False );
                 break;
             case VCLEVENT_WINDOW_SHOW:
                 if( pChildWin == pHScrollbar )
-                    ShowHScrollbar( TRUE );
+                    ShowHScrollbar( sal_True );
                 else if( pChildWin == pVScrollbar )
-                    ShowVScrollbar( TRUE );
+                    ShowVScrollbar( sal_True );
                 break;
         }
     }
@@ -302,7 +302,7 @@ IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
     return 0;
 }
 
-int SwView::_CreateScrollbar( BOOL bHori )
+int SwView::_CreateScrollbar( sal_Bool bHori )
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
     SwScrollbar** ppScrollbar = bHori ? &pHScrollbar : &pVScrollbar;
@@ -320,9 +320,9 @@ int SwView::_CreateScrollbar( BOOL bHori )
         (*ppScrollbar)->SetScrollHdl( LINK( this, SwView, ScrollHdl ));
     (*ppScrollbar)->SetEndScrollHdl( LINK( this, SwView, EndScrollHdl ));
 
-    (*ppScrollbar)->EnableDrag( TRUE );
+    (*ppScrollbar)->EnableDrag( sal_True );
 
-    (*ppScrollbar)->SetAuto( TRUE );
+    (*ppScrollbar)->SetAuto( sal_True );
 
     if(GetWindow())
         InvalidateBorder();
@@ -335,12 +335,12 @@ int SwView::_CreateScrollbar( BOOL bHori )
     return 1;
 }
 
-void SwView::CreatePageButtons(BOOL bShow)
+void SwView::CreatePageButtons(sal_Bool bShow)
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
-    pPageUpBtn      = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEUP ), TRUE );
+    pPageUpBtn      = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEUP ), sal_True );
     pPageUpBtn->SetHelpId(HID_SCRL_PAGEUP);
-    pPageDownBtn    = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEDOWN ), FALSE );
+    pPageDownBtn    = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEDOWN ), sal_False );
     pPageDownBtn->SetHelpId(HID_SCRL_PAGEDOWN);
     Reference< XFrame > xFrame = GetViewFrame()->GetFrame().GetFrameInterface();
     pNaviBtn = new SwNaviImageButton(pMDI, xFrame );
@@ -395,12 +395,12 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         case NID_GRF:
         case NID_OLE:
         {
-            USHORT eType = GOTOOBJ_FLY_FRM;
+            sal_uInt16 eType = GOTOOBJ_FLY_FRM;
             if(nMoveType == NID_GRF)
                 eType = GOTOOBJ_FLY_GRF;
             else if(nMoveType == NID_OLE)
                 eType = GOTOOBJ_FLY_OLE;
-            BOOL bSuccess = bNext ?
+            sal_Bool bSuccess = bNext ?
                     rSh.GotoNextFly(eType) :
                         rSh.GotoPrevFly(eType);
             if(bSuccess)
@@ -496,7 +496,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         case NID_SRCH_REP:
         if(pSrchItem)
         {
-            BOOL bBackward = pSrchItem->GetBackward();
+            sal_Bool bBackward = pSrchItem->GetBackward();
             if(rSh.HasSelection() && !bNext == rSh.IsCrsrPtAtEnd())
                 rSh.SwapPam();
             pSrchItem->SetBackward(!bNext);
@@ -514,7 +514,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
             break;
 
         case NID_TABLE_FORMULA_ERROR:
-            rSh.GotoNxtPrvTblFormula( bNext, TRUE );
+            rSh.GotoNxtPrvTblFormula( bNext, sal_True );
             break;
     }
     pThis->pEditWin->GrabFocus();
@@ -586,7 +586,7 @@ int SwView::KillVLineal()
 
 IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler )
 {
-    USHORT nDefPage = 0;
+    sal_uInt16 nDefPage = 0;
     switch( pRuler->GetClickType() )
     {
         case RULER_TYPE_DONTKNOW:
@@ -608,16 +608,16 @@ IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler )
     return 0;
 }
 
-USHORT SwView::GetMoveType()
+sal_uInt16 SwView::GetMoveType()
 {
     return nMoveType;
 }
 
-void SwView::SetMoveType(USHORT nSet)
+void SwView::SetMoveType(sal_uInt16 nSet)
 {
-    BOOL bLastPage = nMoveType == NID_PGE;
+    sal_Bool bLastPage = nMoveType == NID_PGE;
     nMoveType = nSet;
-    BOOL bNewPage = nMoveType == NID_PGE;
+    sal_Bool bNewPage = nMoveType == NID_PGE;
     if(bNewPage != bLastPage)
     {
         Color aColor(bNewPage ? COL_BLACK : VIEW_IMAGECOLOR);
@@ -654,7 +654,7 @@ void SwView::ShowHScrollbar(sal_Bool bShow)
 sal_Bool SwView::IsHScrollbarVisible()const
 {
     OSL_ENSURE(pHScrollbar, "Scrollbar invalid");
-    return pHScrollbar->IsVisible( FALSE ) || pHScrollbar->IsAuto();
+    return pHScrollbar->IsVisible( sal_False ) || pHScrollbar->IsAuto();
 }
 
 void SwView::ShowVScrollbar(sal_Bool bShow)
@@ -669,7 +669,7 @@ void SwView::ShowVScrollbar(sal_Bool bShow)
 sal_Bool SwView::IsVScrollbarVisible()const
 {
     OSL_ENSURE(pVScrollbar, "Scrollbar invalid");
-    return pVScrollbar->IsVisible( FALSE );
+    return pVScrollbar->IsVisible( sal_False );
 }
 
 

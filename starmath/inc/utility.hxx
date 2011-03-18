@@ -41,10 +41,6 @@ class String;
 
 #define C2S(cChar) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
 
-/////////////////////////////////////////////////////////////////
-
-const ByteString    ExportString( const String& rString );
-const String        ImportString( const ByteString& rByteString );
 
 /////////////////////////////////////////////////////////////////
 
@@ -141,7 +137,7 @@ SmFace & operator *= (SmFace &rFace, const Fraction &rFrac);
 class SmPickList : public SfxPtrArr
 {
 protected:
-    USHORT  nSize;
+    sal_uInt16  nSize;
 
     virtual void   *CreateItem(const String& rString) = 0;
     virtual void   *CreateItem(const void *pItem) = 0;
@@ -151,18 +147,18 @@ protected:
 
     virtual String  GetStringItem(void *pItem) = 0;
 
-    void       *GetPtr(USHORT nPos) const { return SfxPtrArr::GetObject(nPos); }
-    void      *&GetPtr(USHORT nPos) { return SfxPtrArr::GetObject(nPos); }
-    void        InsertPtr(USHORT nPos, void *pItem) { SfxPtrArr::Insert(nPos, pItem); }
-    void        RemovePtr(USHORT nPos, USHORT nCount = 1) { SfxPtrArr::Remove(nPos, nCount); }
+    void       *GetPtr(sal_uInt16 nPos) const { return SfxPtrArr::GetObject(nPos); }
+    void      *&GetPtr(sal_uInt16 nPos) { return SfxPtrArr::GetObject(nPos); }
+    void        InsertPtr(sal_uInt16 nPos, void *pItem) { SfxPtrArr::Insert(nPos, pItem); }
+    void        RemovePtr(sal_uInt16 nPos, sal_uInt16 nCount = 1) { SfxPtrArr::Remove(nPos, nCount); }
 
 public:
-    SmPickList(USHORT nInitSize = 0, USHORT nMaxSize = 5);
+    SmPickList(sal_uInt16 nInitSize = 0, sal_uInt16 nMaxSize = 5);
     virtual ~SmPickList();
 
     SmPickList&   operator = (const SmPickList& rList);
 
-    void       *Get(USHORT nPos = 0) const { return GetPtr(nPos); }
+    void       *Get(sal_uInt16 nPos = 0) const { return GetPtr(nPos); }
     using   SfxPtrArr::Insert;
     void        Insert(const void* pItem);
     void        Update(const void* pItem, const void *pNewItem);
@@ -170,10 +166,10 @@ public:
     void        Remove(const void* pItem);
 
     using   SfxPtrArr::operator [];
-    void       *operator [] (USHORT nPos) const { return GetPtr(nPos); }
+    void       *operator [] (sal_uInt16 nPos) const { return GetPtr(nPos); }
 
-    USHORT      GetSize() const { return nSize; }
-    USHORT      Count() const { return SfxPtrArr::Count(); }
+    sal_uInt16      GetSize() const { return nSize; }
+    sal_uInt16      Count() const { return SfxPtrArr::Count(); }
 
     void        Clear();
 };
@@ -200,7 +196,7 @@ protected:
 public:
     SmFontPickList()
         : SmPickList(0, 5) {}
-    SmFontPickList(USHORT nInitSize, USHORT nMaxSize)
+    SmFontPickList(sal_uInt16 nInitSize, sal_uInt16 nMaxSize)
         : SmPickList(nInitSize, nMaxSize) {}
     SmFontPickList(const SmPickList& rOrig )
         : SmPickList(rOrig) {}
@@ -215,11 +211,11 @@ public:
 
     using   SmPickList::Contains;
     inline bool     Contains(const Font &rFont) const;
-    inline Font     Get(USHORT nPos = 0) const;
+    inline Font     Get(sal_uInt16 nPos = 0) const;
 
     inline SmFontPickList&  operator = (const SmFontPickList& rList);
     using   SfxPtrArr::operator [];
-    inline Font             operator [] (USHORT nPos) const;
+    inline Font             operator [] (sal_uInt16 nPos) const;
 
     void            ReadFrom(const SmFontDialog& rDialog);
     void            WriteTo(SmFontDialog& rDialog) const;
@@ -230,12 +226,12 @@ inline SmFontPickList& SmFontPickList::operator = (const SmFontPickList& rList)
     *(SmPickList *)this = *(SmPickList *)&rList; return *this;
 }
 
-inline Font SmFontPickList::operator [] (USHORT nPos) const
+inline Font SmFontPickList::operator [] (sal_uInt16 nPos) const
 {
     return *((Font *)SmPickList::operator[](nPos));
 }
 
-inline Font SmFontPickList::Get(USHORT nPos) const
+inline Font SmFontPickList::Get(sal_uInt16 nPos) const
 {
     return nPos < Count() ? *((Font *)SmPickList::Get(nPos)) : Font();
 }
@@ -257,7 +253,7 @@ protected:
     DECL_LINK(SelectHdl, ListBox *);
 
 public:
-    SmFontPickListBox(Window* pParent, const ResId& rResId, USHORT nMax = 4);
+    SmFontPickListBox(Window* pParent, const ResId& rResId, sal_uInt16 nMax = 4);
 
     SmFontPickListBox& operator = (const SmFontPickList& rList);
 

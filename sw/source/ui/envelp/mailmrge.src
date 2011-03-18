@@ -40,7 +40,7 @@ ModalDialog DLG_MAILMERGE
     _MAIL_MERGE_STRING_
     Moveable = TRUE ;
     Sizeable = TRUE;
-    HelpID = FN_QRY_MERGE ;
+    HelpID = CMD_FN_QRY_MERGE ;
     Window WIN_BEAMER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -48,6 +48,7 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_ALL
     {
+        HelpID = "sw:RadioButton:DLG_MAILMERGE:RB_ALL";
         Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text [ en-US ] = "~All" ;
@@ -55,6 +56,7 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_MARKED
     {
+        HelpID = "sw:RadioButton:DLG_MAILMERGE:RB_MARKED";
         Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text [ en-US ] = "~Selected records" ;
@@ -62,6 +64,7 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_FROM
     {
+        HelpID = "sw:RadioButton:DLG_MAILMERGE:RB_FROM";
         Pos = MAP_APPFONT ( 12 , 123 ) ;
         Size = MAP_APPFONT ( 33 , 10 ) ;
         Text [ en-US ] = "~From:" ;
@@ -69,6 +72,7 @@ ModalDialog DLG_MAILMERGE
     };
     NumericField NF_FROM
     {
+        HelpID = "sw:NumericField:DLG_MAILMERGE:NF_FROM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 48 , 122 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
@@ -86,6 +90,7 @@ ModalDialog DLG_MAILMERGE
     };
     NumericField NF_TO
     {
+        HelpID = "sw:NumericField:DLG_MAILMERGE:NF_TO";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 105 , 122 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
@@ -102,6 +107,7 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_PRINTER
     {
+        HelpID = "sw:RadioButton:DLG_MAILMERGE:RB_PRINTER";
         Pos = MAP_APPFONT ( 144 , 97 ) ;
         Size = MAP_APPFONT ( 53 , 10 ) ;
         Check = TRUE ;
@@ -110,6 +116,7 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_MAILING
     {
+        HelpID = "sw:RadioButton:DLG_MAILMERGE:RB_MAILING";
         Pos = MAP_APPFONT ( 200 , 97 ) ;
         Size = MAP_APPFONT ( 53 , 10 ) ;
         TabStop = TRUE ;
@@ -117,6 +124,7 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_FILE
     {
+        HelpID = "sw:RadioButton:DLG_MAILMERGE:RB_FILE";
         Pos = MAP_APPFONT ( 256 , 97 ) ;
         Size = MAP_APPFONT ( 56 , 10 ) ;
         TabStop = TRUE ;
@@ -124,6 +132,7 @@ ModalDialog DLG_MAILMERGE
     };
     CheckBox CB_SINGLE_JOBS
     {
+        HelpID = "sw:CheckBox:DLG_MAILMERGE:CB_SINGLE_JOBS";
         Pos = MAP_APPFONT ( 150 , 112 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
         TabStop = TRUE ;
@@ -137,6 +146,7 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_SAVE_SINGLE_DOC
     {
+        HelpID = "sw:RadioButton:DLG_MAILMERGE:RB_SAVE_SINGLE_DOC";
         Pos = MAP_APPFONT (  150, 139 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         TabStop = TRUE ;
@@ -144,6 +154,7 @@ ModalDialog DLG_MAILMERGE
     };
     RadioButton RB_SAVE_INDIVIDUAL
     {
+        HelpID = "sw:RadioButton:DLG_MAILMERGE:RB_SAVE_INDIVIDUAL";
         Pos = MAP_APPFONT (  150, 152 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         TabStop = TRUE ;
@@ -151,6 +162,7 @@ ModalDialog DLG_MAILMERGE
     };
     CheckBox RB_GENERATE_FROM_DATABASE
     {
+        HelpID = "sw:CheckBox:DLG_MAILMERGE:RB_GENERATE_FROM_DATABASE";
         Pos = MAP_APPFONT (  156, 168 ) ;
         Size = MAP_APPFONT ( 144 , 10 ) ;
         TabStop = TRUE ;
@@ -164,6 +176,7 @@ ModalDialog DLG_MAILMERGE
     };
     ListBox LB_COLUMN
     {
+        HelpID = "sw:ListBox:DLG_MAILMERGE:LB_COLUMN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 205 , 182 ) ;
         Size = MAP_APPFONT ( 103 , 84 ) ;
@@ -178,6 +191,7 @@ ModalDialog DLG_MAILMERGE
     };
     Edit ED_PATH
     {
+        HelpID = "sw:Edit:DLG_MAILMERGE:ED_PATH";
         Pos = MAP_APPFONT ( 205 , 198 ) ;
         Size = MAP_APPFONT ( 86 , 12 ) ;
         Border = TRUE ;
@@ -185,6 +199,7 @@ ModalDialog DLG_MAILMERGE
     };
     PushButton PB_PATH
     {
+        HelpID = "sw:PushButton:DLG_MAILMERGE:PB_PATH";
         Pos = MAP_APPFONT ( 294 , 198 ) ;
         Size = MAP_APPFONT ( 14 , 12 ) ;
          // Soll Groesse des Edits haben (12)!
@@ -199,6 +214,7 @@ ModalDialog DLG_MAILMERGE
     };
     ListBox LB_FILTER
     {
+        HelpID = "sw:ListBox:DLG_MAILMERGE:LB_FILTER";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 205 , 214 ) ;
         Size = MAP_APPFONT ( 103 , 84 ) ;
@@ -208,6 +224,7 @@ ModalDialog DLG_MAILMERGE
     };
     ListBox LB_ADDRESSFLD
     {
+        HelpID = "sw:ListBox:DLG_MAILMERGE:LB_ADDRESSFLD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 220 , 110 ) ;
         Size = MAP_APPFONT ( 74 , 84 ) ;
@@ -225,6 +242,7 @@ ModalDialog DLG_MAILMERGE
     };
     Edit ED_SUBJECT
     {
+        HelpID = "sw:Edit:DLG_MAILMERGE:ED_SUBJECT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 220 , 127 ) ;
         Size = MAP_APPFONT ( 88 , 12 ) ;
@@ -240,6 +258,7 @@ ModalDialog DLG_MAILMERGE
     };
     Edit ED_ATTACH
     {
+        HelpID = "sw:Edit:DLG_MAILMERGE:ED_ATTACH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 220 , 140 ) ;
         Size = MAP_APPFONT ( 72 , 12 ) ;
@@ -249,6 +268,7 @@ ModalDialog DLG_MAILMERGE
     };
     PushButton PB_ATTACH
     {
+        HelpID = "sw:PushButton:DLG_MAILMERGE:PB_ATTACH";
         Pos = MAP_APPFONT ( 294 , 140 ) ;
         Size = MAP_APPFONT ( 14 , 12 ) ;
          // Soll Groesse des Edits haben (12)!
@@ -265,6 +285,7 @@ ModalDialog DLG_MAILMERGE
     };
     CheckBox CB_FORMAT_HTML
     {
+        HelpID = "sw:CheckBox:DLG_MAILMERGE:CB_FORMAT_HTML";
         Pos = MAP_APPFONT ( 220 , 156 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Disable = TRUE ;
@@ -273,6 +294,7 @@ ModalDialog DLG_MAILMERGE
     };
     CheckBox CB_FORMAT_RTF
     {
+        HelpID = "sw:CheckBox:DLG_MAILMERGE:CB_FORMAT_RTF";
         Pos = MAP_APPFONT ( 220 , 169 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Disable = TRUE ;
@@ -281,6 +303,7 @@ ModalDialog DLG_MAILMERGE
     };
     CheckBox CB_FORMAT_SW
     {
+        HelpID = "sw:CheckBox:DLG_MAILMERGE:CB_FORMAT_SW";
         Pos = MAP_APPFONT ( 220, 182 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Disable = TRUE ;
@@ -338,6 +361,7 @@ ModalDialog DLG_MERGE_CREATE
     };
     RadioButton RB_THISDOC
     {
+        HelpID = "sw:RadioButton:DLG_MERGE_CREATE:RB_THISDOC";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Check = TRUE;
@@ -346,6 +370,7 @@ ModalDialog DLG_MERGE_CREATE
     };
     RadioButton RB_TEMPLATE
     {
+        HelpID = "sw:RadioButton:DLG_MERGE_CREATE:RB_TEMPLATE";
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         TabStop = TRUE ;
@@ -385,6 +410,7 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
     };
     RadioButton RB_USEEXISTING
     {
+        HelpID = "sw:RadioButton:DLG_MERGE_FIELD_CONNECTIONS:RB_USEEXISTING";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
         Check = TRUE;
@@ -393,6 +419,7 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
     };
     RadioButton RB_CREATENEW
     {
+        HelpID = "sw:RadioButton:DLG_MERGE_FIELD_CONNECTIONS:RB_CREATENEW";
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
         TabStop = TRUE ;

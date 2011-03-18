@@ -296,16 +296,16 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
     }
     else
     {
-        BOOL bNext = pButton == &m_aNextSetIB;
+        sal_Bool bNext = pButton == &m_aNextSetIB;
         sal_Int32 nPos = rConfig.GetResultSetPosition();
         rConfig.MoveResultSet( bNext ? ++nPos : --nPos);
     }
     m_pWizard->LeaveWait();
     sal_Int32 nPos = rConfig.GetResultSetPosition();
-    BOOL bEnable = TRUE;
+    sal_Bool bEnable = sal_True;
     if(nPos < 1)
     {
-        bEnable = FALSE;
+        bEnable = sal_False;
         nPos = 1;
     }
     else
@@ -507,12 +507,12 @@ SwRestrictedComboBox::~SwRestrictedComboBox()
 
 void SwRestrictedComboBox::KeyInput(const KeyEvent& rEvt)
 {
-    BOOL bCallParent = TRUE;
+    sal_Bool bCallParent = sal_True;
     if(rEvt.GetCharCode())
     {
         String sKey = rEvt.GetCharCode();
         if( STRING_NOTFOUND != sForbiddenChars.Search(sKey))
-            bCallParent = FALSE;
+            bCallParent = sal_False;
     }
     if(bCallParent)
         ComboBox::KeyInput(rEvt);
@@ -522,11 +522,11 @@ void SwRestrictedComboBox::Modify()
 {
     Selection aSel = GetSelection();
     String sTemp = GetText();
-    for(USHORT i = 0; i < sForbiddenChars.Len(); i++)
+    for(sal_uInt16 i = 0; i < sForbiddenChars.Len(); i++)
     {
         sTemp.EraseAllChars( sForbiddenChars.GetChar(i) );
     }
-    USHORT nDiff = GetText().Len() - sTemp.Len();
+    sal_uInt16 nDiff = GetText().Len() - sTemp.Len();
     if(nDiff)
     {
         aSel.setMin(aSel.getMin() - nDiff);
@@ -617,7 +617,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     }
     FreeResource();
     const ResStringArray& rHeaders = m_rConfigItem.GetDefaultAddressHeaders();
-    for(USHORT i = 0; i < rHeaders.Count(); ++i)
+    for(sal_uInt16 i = 0; i < rHeaders.Count(); ++i)
     {
         const XubString& rHeader = rHeaders.GetString( i );
         SvLBoxEntry* pEntry = m_aAddressElementsLB.InsertEntry(rHeader);
@@ -705,7 +705,7 @@ sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl()
     sal_Int32 nRet = USER_DATA_NONE;
     String sSelected = m_aDragED.GetCurrentItem();
     if(sSelected.Len())
-        for(ULONG i = 0; i < m_aAddressElementsLB.GetEntryCount();  ++i)
+        for(sal_uLong i = 0; i < m_aAddressElementsLB.GetEntryCount();  ++i)
         {
             SvLBoxEntry* pEntry = m_aAddressElementsLB.GetEntry(i);
             String sEntry = m_aAddressElementsLB.GetEntryText(pEntry);
@@ -722,7 +722,7 @@ bool   SwCustomizeAddressBlockDialog::HasItem_Impl(sal_Int32 nUserData)
 {
     //get the entry from the ListBox
     String sEntry;
-    for(ULONG i = 0; i < m_aAddressElementsLB.GetEntryCount();  ++i)
+    for(sal_uLong i = 0; i < m_aAddressElementsLB.GetEntryCount();  ++i)
     {
         SvLBoxEntry* pEntry = m_aAddressElementsLB.GetEntry(i);
         if((sal_Int32)(sal_IntPtr)pEntry->GetUserData() == nUserData)
@@ -841,7 +841,7 @@ void SwCustomizeAddressBlockDialog::SetAddress(const ::rtl::OUString& rAddress)
     //remove placeholders by the actual content
     if(m_aFieldFT.IsVisible())
     {
-        for(ULONG i = 0; i < m_aAddressElementsLB.GetEntryCount();  ++i)
+        for(sal_uLong i = 0; i < m_aAddressElementsLB.GetEntryCount();  ++i)
         {
             SvLBoxEntry* pEntry = m_aAddressElementsLB.GetEntry(i);
             String sEntry = m_aAddressElementsLB.GetEntryText(pEntry);
@@ -1010,8 +1010,27 @@ SwAssignFieldsControl::SwAssignFieldsControl(
     uno::Sequence< ::rtl::OUString> aAssignments = rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
     Link aMatchHdl = LINK(this, SwAssignFieldsControl, MatchHdl_Impl);
     Link aFocusHdl = LINK(this, SwAssignFieldsControl, GotFocusHdl_Impl);
+
+    static const char* aHIDs[] =
+    {
+         HID_MM_HEADER_0,
+         HID_MM_HEADER_1,
+         HID_MM_HEADER_2,
+         HID_MM_HEADER_3,
+         HID_MM_HEADER_4,
+         HID_MM_HEADER_5,
+         HID_MM_HEADER_6,
+         HID_MM_HEADER_7,
+         HID_MM_HEADER_8,
+         HID_MM_HEADER_9,
+         HID_MM_HEADER_10,
+         HID_MM_HEADER_11,
+         HID_MM_HEADER_12,
+         HID_MM_HEADER_13
+    };
+
     //fill the controls
-    for(USHORT i = 0; i < rHeaders.Count(); ++i)
+    for(sal_uInt16 i = 0; i < rHeaders.Count(); ++i)
     {
         const XubString& rHeader = rHeaders.GetString( i );
         FixedInfo* pNewText = new FixedInfo(&m_aWindow, ResId( FT_FIELDS, *rResId.GetResMgr()));
@@ -1019,7 +1038,7 @@ SwAssignFieldsControl::SwAssignFieldsControl(
         sLabel.Insert(rHeader, 1);
         pNewText->SetText(sLabel);
         ListBox* pNewLB = new ListBox(&m_aWindow, ResId(LB_FIELDS, *rResId.GetResMgr()));
-        pNewLB->SetHelpId( HID_MM_HEADER_0 + i );
+        pNewLB->SetHelpId( aHIDs[i] );
         pNewLB->SelectEntryPos(0);
         for(sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
             pNewLB->InsertEntry(pFields[nField]);
@@ -1115,7 +1134,7 @@ long SwAssignFieldsControl::PreNotify( NotifyEvent& rNEvt )
     if(rNEvt.GetType() == EVENT_COMMAND)
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
-        USHORT nCmd = pCEvt->GetCommand();
+        sal_uInt16 nCmd = pCEvt->GetCommand();
         if( COMMAND_WHEEL == nCmd )
         {
             Command(*pCEvt);
@@ -1147,7 +1166,7 @@ IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll)
     // The first line has to be -(nThumb * m_nYOffset) in the negative
     long nMove = m_nFirstYPos - (*m_aMatches.begin())->GetPosPixel().Y() - (nThumb * m_nYOffset);
 
-    SetUpdateMode(FALSE);
+    SetUpdateMode(sal_False);
     long nIndex;
     ::std::vector<FixedInfo*>::iterator aFIIter;
     for(nIndex = 0, aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter, ++nIndex)
@@ -1157,7 +1176,7 @@ IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll)
         lcl_Move(*aLBIter, nMove);
     for(nIndex = 0, aFIIter = m_aPreviews.begin(); aFIIter != m_aPreviews.end(); ++aFIIter, ++nIndex)
         lcl_Move(*aFIIter, nMove);
-    SetUpdateMode(TRUE);
+    SetUpdateMode(sal_True);
 
     return 0;
 }
@@ -1315,11 +1334,11 @@ DDListBox::DDListBox(SwCustomizeAddressBlockDialog* pParent, const ResId rResId)
         SvTreeListBox(pParent, rResId),
         m_pParentDialog(pParent)
 {
-    SetWindowBits( /*WB_HASBUTTONS|WB_HASBUTTONSATROOT|*/
+    SetStyle( GetStyle() | /*WB_HASBUTTONS|WB_HASBUTTONSATROOT|*/
                             WB_CLIPCHILDREN );
     SetSelectionMode( SINGLE_SELECTION );
     SetDragDropMode(   SV_DRAGDROP_CTRL_COPY );
-    EnableAsyncDrag(TRUE);
+    EnableAsyncDrag(sal_True);
     SetHelpId(HID_MM_CUSTOMFIELDS);
     // expand selection to the complete width of the ListBox
     SetHighlightRange();
@@ -1366,7 +1385,7 @@ AddressMultiLineEdit::AddressMultiLineEdit(SwCustomizeAddressBlockDialog* pParen
 {
     GetTextView()->SupportProtectAttribute(sal_True);
     StartListening(*GetTextEngine());
-    EnableFocusSelectionHide(FALSE);
+    EnableFocusSelectionHide(sal_False);
 }
 
 AddressMultiLineEdit::~AddressMultiLineEdit()
@@ -1416,8 +1435,8 @@ void AddressMultiLineEdit::SetText( const String& rStr )
 
     ExtTextEngine* pTextEngine = GetTextEngine();
     TextAttribProtect aProtectAttr;
-    ULONG  nParaCount = pTextEngine->GetParagraphCount();
-    for(ULONG nPara = 0; nPara < nParaCount; ++nPara)
+    sal_uLong  nParaCount = pTextEngine->GetParagraphCount();
+    for(sal_uLong nPara = 0; nPara < nParaCount; ++nPara)
     {
         xub_StrLen nIndex = 0;
         String sPara = pTextEngine->GetText( nPara );
@@ -1428,11 +1447,11 @@ void AddressMultiLineEdit::SetText( const String& rStr )
         }
         while(true)
         {
-            USHORT nStart = sPara.Search( '<', nIndex );
-            USHORT nEnd = sPara.Search( '>', nStart );
+            sal_uInt16 nStart = sPara.Search( '<', nIndex );
+            sal_uInt16 nEnd = sPara.Search( '>', nStart );
             nIndex = nEnd;
             if(nStart != STRING_NOTFOUND && nEnd != STRING_NOTFOUND)
-                pTextEngine->SetAttrib( aProtectAttr, nPara, nStart, nEnd + 1, FALSE );
+                pTextEngine->SetAttrib( aProtectAttr, nPara, nStart, nEnd + 1, sal_False );
             else
                 break;
         }
@@ -1458,8 +1477,8 @@ void AddressMultiLineEdit::InsertNewEntry( const String& rStr )
     // insert new entry after current selected one.
     ExtTextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
-    ULONG nPara = rSelection.GetStart().GetPara();
-    USHORT nIndex = rSelection.GetEnd().GetIndex();
+    sal_uLong nPara = rSelection.GetStart().GetPara();
+    sal_uInt16 nIndex = rSelection.GetEnd().GetIndex();
     ExtTextEngine *pTextEngine = GetTextEngine();
     const TextCharAttrib *pAttrib;
     if(0 != (pAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED )))
@@ -1474,7 +1493,7 @@ void AddressMultiLineEdit::InsertNewEntry( const String& rStr )
     Modify();
 }
 
-void AddressMultiLineEdit::InsertNewEntryAtPosition( const String& rStr, ULONG nPara, USHORT nIndex )
+void AddressMultiLineEdit::InsertNewEntryAtPosition( const String& rStr, sal_uLong nPara, sal_uInt16 nIndex )
 {
     ExtTextEngine* pTextEngine = GetTextEngine();
     TextPaM aInsertPos( nPara, nIndex );
@@ -1500,7 +1519,7 @@ void AddressMultiLineEdit::RemoveCurrentEntry()
             (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
     {
-        ULONG nPara = rSelection.GetStart().GetPara();
+        sal_uLong nPara = rSelection.GetStart().GetPara();
         TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
         pTextEngine->ReplaceText(aEntrySel, String());
         //restore the attributes
@@ -1520,8 +1539,8 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
     {
         //current item has been found
-        ULONG nPara = rSelection.GetStart().GetPara();
-        USHORT nIndex = pBeginAttrib->GetStart();
+        sal_uLong nPara = rSelection.GetStart().GetPara();
+        sal_uInt16 nIndex = pBeginAttrib->GetStart();
         TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
         String sCurrentItem = pTextEngine->GetText(aEntrySel);
         pTextEngine->RemoveAttrib( nPara, *pBeginAttrib );
@@ -1625,7 +1644,7 @@ String AddressMultiLineEdit::GetCurrentItem()
             (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
     {
-        ULONG nPara = rSelection.GetStart().GetPara();
+        sal_uLong nPara = rSelection.GetStart().GetPara();
         TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
         sRet = pTextEngine->GetText( aEntrySel );
     }
@@ -1642,7 +1661,7 @@ void AddressMultiLineEdit::SelectCurrentItem()
             (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
     {
-        ULONG nPara = rSelection.GetStart().GetPara();
+        sal_uLong nPara = rSelection.GetStart().GetPara();
         TextSelection aEntrySel(TextPaM( nPara, pBeginAttrib->GetStart()), TextPaM(nPara, pBeginAttrib->GetEnd()));
         pTextView->SetSelection(aEntrySel);
         Invalidate();
@@ -1653,8 +1672,8 @@ String AddressMultiLineEdit::GetAddress()
 {
     String sRet;
     ExtTextEngine* pTextEngine = GetTextEngine();
-    ULONG  nParaCount = pTextEngine->GetParagraphCount();
-    for(ULONG nPara = nParaCount; nPara; --nPara)
+    sal_uLong  nParaCount = pTextEngine->GetParagraphCount();
+    for(sal_uLong nPara = nParaCount; nPara; --nPara)
     {
         String sPara = pTextEngine->GetText( nPara - 1);
         sPara.EraseTrailingChars(' ');

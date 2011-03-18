@@ -31,7 +31,7 @@
 #include "helpid.h"
 ModalDialog DLG_ROW_HEIGHT
 {
-    HelpID = FN_TABLE_SET_ROW_HEIGHT ;
+    HelpID = CMD_FN_TABLE_SET_ROW_HEIGHT ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 157 , 60 ) ;
@@ -58,6 +58,7 @@ ModalDialog DLG_ROW_HEIGHT
     };
     MetricField ED_HEIGHT
     {
+        HelpID = "sw:MetricField:DLG_ROW_HEIGHT:ED_HEIGHT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 38 , 12 ) ;
@@ -75,6 +76,7 @@ ModalDialog DLG_ROW_HEIGHT
     };
     CheckBox CB_AUTOHEIGHT
     {
+        HelpID = "sw:CheckBox:DLG_ROW_HEIGHT:CB_AUTOHEIGHT";
         Pos = MAP_APPFONT ( 12 , 34 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;

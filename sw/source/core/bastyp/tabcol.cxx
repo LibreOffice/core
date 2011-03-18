@@ -34,7 +34,7 @@
 
 #include <limits.h> //for LONG_MAX
 
-SwTabCols::SwTabCols( USHORT nSize ) :
+SwTabCols::SwTabCols( sal_uInt16 nSize ) :
     nLeftMin( 0 ),
     nLeft( 0 ),
     nRight( 0 ),
@@ -54,7 +54,7 @@ SwTabCols::SwTabCols( const SwTabCols& rCpy ) :
     aData( rCpy.GetData() )
 {
 #if OSL_DEBUG_LEVEL > 1
-    for ( USHORT i = 0; i < Count(); ++i )
+    for ( sal_uInt16 i = 0; i < Count(); ++i )
     {
         SwTabColsEntry aEntry1 = aData[i];
         SwTabColsEntry aEntry2 = rCpy.GetData()[i];
@@ -83,9 +83,9 @@ SwTabCols &SwTabCols::operator=( const SwTabCols& rCpy )
     return *this;
 }
 
-BOOL SwTabCols::operator==( const SwTabCols& rCmp ) const
+sal_Bool SwTabCols::operator==( const SwTabCols& rCmp ) const
 {
-    USHORT i;
+    sal_uInt16 i;
 
     if ( !(nLeftMin == rCmp.GetLeftMin() &&
            nLeft    == rCmp.GetLeft()    &&
@@ -93,20 +93,20 @@ BOOL SwTabCols::operator==( const SwTabCols& rCmp ) const
            nRightMax== rCmp.GetRightMax()&&
            bLastRowAllowedToChange== rCmp.IsLastRowAllowedToChange() &&
            Count()== rCmp.Count()) )
-        return FALSE;
+        return sal_False;
 
     for ( i = 0; i < Count(); ++i )
     {
         SwTabColsEntry aEntry1 = aData[i];
         SwTabColsEntry aEntry2 = rCmp.GetData()[i];
         if ( aEntry1.nPos != aEntry2.nPos || aEntry1.bHidden != aEntry2.bHidden  )
-            return FALSE;
+            return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
-void SwTabCols::Insert( long nValue, long nMin, long nMax, BOOL bValue, USHORT nPos )
+void SwTabCols::Insert( long nValue, long nMin, long nMax, sal_Bool bValue, sal_uInt16 nPos )
 {
     SwTabColsEntry aEntry;
     aEntry.nPos = nValue;
@@ -116,7 +116,7 @@ void SwTabCols::Insert( long nValue, long nMin, long nMax, BOOL bValue, USHORT n
     aData.insert( aData.begin() + nPos, aEntry );
 }
 
-void SwTabCols::Insert( long nValue, BOOL bValue, USHORT nPos )
+void SwTabCols::Insert( long nValue, sal_Bool bValue, sal_uInt16 nPos )
 {
     SwTabColsEntry aEntry;
     aEntry.nPos = nValue;
@@ -134,7 +134,7 @@ void SwTabCols::Insert( long nValue, BOOL bValue, USHORT nPos )
 #endif
 }
 
-void SwTabCols::Remove( USHORT nPos, USHORT nAnz )
+void SwTabCols::Remove( sal_uInt16 nPos, sal_uInt16 nAnz )
 {
     SwTabColsEntries::iterator aStart = aData.begin() + nPos;
     aData.erase( aStart, aStart + nAnz );

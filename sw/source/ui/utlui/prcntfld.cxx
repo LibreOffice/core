@@ -58,7 +58,7 @@ void PercentField::SetRefValue(sal_Int64 nValue)
         SetPrcntValue(nRealValue, eOldUnit);
 }
 
-void PercentField::ShowPercent(BOOL bPercent)
+void PercentField::ShowPercent(sal_Bool bPercent)
 {
     if ((bPercent && GetUnit() == FUNIT_CUSTOM) ||
         (!bPercent && GetUnit() != FUNIT_CUSTOM))
@@ -238,17 +238,17 @@ sal_Int64 PercentField::DenormalizePercent(sal_Int64 nValue)
     return nValue;
 }
 
-BOOL PercentField::IsValueModified()
+sal_Bool PercentField::IsValueModified()
 {
     if (GetUnit() == FUNIT_CUSTOM)
-        return TRUE;
+        return sal_True;
     else
         return MetricField::IsValueModified();
 }
 
-sal_Int64 PercentField::ImpPower10( USHORT n )
+sal_Int64 PercentField::ImpPower10( sal_uInt16 n )
 {
-    USHORT i;
+    sal_uInt16 i;
     sal_Int64   nValue = 1;
 
     for ( i=0; i < n; i++ )

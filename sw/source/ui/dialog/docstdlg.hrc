@@ -32,7 +32,6 @@
 #define FT_PARA             5
 #define FT_WORD             6
 #define FT_CHAR             9
-#define FT_CHAR_EXCL_SPACES            21
 #define FT_TABLE_COUNT      10
 #define FT_GRF_COUNT        11
 #define FT_OLE_COUNT        12
@@ -40,10 +39,11 @@
 #define FT_PARA_COUNT       14
 #define FT_WORD_COUNT       15
 #define FT_CHAR_COUNT       16
-#define FT_CHAR_COUNT_EXCL_SPACES   20
 #define FT_LINE             17
 #define FT_LINE_COUNT       18
 #define PB_PDATE            19
+#define FT_CHAR_COUNT_EXCL_SPACES   20
+#define FT_CHAR_EXCL_SPACES            21
 
 #define BT_OK               100
 

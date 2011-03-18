@@ -49,9 +49,9 @@ static char const sHTML_O_Object[] = "OBJECT";
 
 }
 
-USHORT SwApplet_Impl::GetOptionType( const String& rName, BOOL bApplet )
+sal_uInt16 SwApplet_Impl::GetOptionType( const String& rName, sal_Bool bApplet )
 {
-    USHORT nType = bApplet ? SWHTML_OPTTYPE_PARAM : SWHTML_OPTTYPE_TAG;
+    sal_uInt16 nType = bApplet ? SWHTML_OPTTYPE_PARAM : SWHTML_OPTTYPE_TAG;
 
     switch( rName.GetChar(0) )
     {
@@ -125,13 +125,13 @@ USHORT SwApplet_Impl::GetOptionType( const String& rName, BOOL bApplet )
 
     return nType;
 }
-SwApplet_Impl::SwApplet_Impl( SfxItemPool& rPool, USHORT nWhich1, USHORT nWhich2 ) :
+SwApplet_Impl::SwApplet_Impl( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhich2 ) :
         aItemSet( rPool, nWhich1, nWhich2 )
 {
 }
 
 void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
-                                      BOOL bMayScript, const String& rCodeBase,
+                                      sal_Bool bMayScript, const String& rCodeBase,
                                       const String& rDocumentBaseURL )
 {
     comphelper::EmbeddedObjectContainer aCnt;
