@@ -232,6 +232,8 @@ void SystemChildWindow::ImplTestJavaException( void* pEnv )
 
             throw uno::RuntimeException(ouMessage, uno::Reference<uno::XInterface>());
     }
+#else
+    (void)pEnv;
 #endif // SOLAR_JAVA
 }
 
