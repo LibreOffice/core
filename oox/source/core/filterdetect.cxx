@@ -385,9 +385,9 @@ bool lclCheckEncryptionData( const sal_uInt8* pnKey, sal_uInt32 nKeySize, const 
         EVP_CIPHER_CTX_cleanup( &aes_ctx );
 
         rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-        rtlDigestError aError = rtl_digest_update( aDigest, pnTmpVerifier, sizeof( pnTmpVerifier ) );
+        rtl_digest_update( aDigest, pnTmpVerifier, sizeof( pnTmpVerifier ) );
         sal_uInt8 pnSha1Hash[ RTL_DIGEST_LENGTH_SHA1 ];
-        aError = rtl_digest_get( aDigest, pnSha1Hash, RTL_DIGEST_LENGTH_SHA1 );
+        rtl_digest_get( aDigest, pnSha1Hash, RTL_DIGEST_LENGTH_SHA1 );
         rtl_digest_destroy( aDigest );
 
         bResult = ( memcmp( pnSha1Hash, pnTmpVerifierHash, RTL_DIGEST_LENGTH_SHA1 ) == 0 );
