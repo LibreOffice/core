@@ -42,7 +42,7 @@
 
 module com { module sun { module star { module rendering {
 
-interface XCanvas;
+published interface XCanvas;
 
 /** Interface to control a custom sprite object on a XSpriteCanvas.<p>
 
@@ -53,7 +53,7 @@ interface XCanvas;
     TODO: Maybe more than alpha has to be overridden from render state.
     TODO: Provide means to change the output area
  */
-interface XCustomSprite : XSprite
+published interface XCustomSprite : XSprite
 {
 
     /** Query a render canvas for this sprite's content.<p>

@@ -41,7 +41,7 @@ module com { module sun { module star { module drawing { module framework {
     registered at the configuration controller and a configuration change
     occurs.
 */
-interface XConfigurationChangeListener
+published interface XConfigurationChangeListener
     : ::com::sun::star::lang::XEventListener
 {
     /** The exact time of when a listener is called (before the change takes

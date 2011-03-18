@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module awt {  module tree {
     <p>Note that only <type>XTreeNode</type> created from the same instance with <member>createNode</member>
     are valids nodes for this instance.</p>
  */
-interface XMutableTreeDataModel : XTreeDataModel
+published interface XMutableTreeDataModel : XTreeDataModel
 {
     /** creates a new tree node with the given value and given settings.
 

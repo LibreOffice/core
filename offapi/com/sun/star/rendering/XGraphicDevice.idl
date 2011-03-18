@@ -54,9 +54,9 @@
 
 module com { module sun { module star { module rendering {
 
-interface XBitmap;
-interface XVolatileBitmap;
-interface XBufferController;
+published interface XBitmap;
+published interface XVolatileBitmap;
+published interface XBufferController;
 
 /* TODO: There's obviously a concept called window missing here, where
    methods such as bufferController, fullscreen mode etc . belong
@@ -78,7 +78,7 @@ interface XBufferController;
     have this state, it might even be that all windows on the screen
     share a common graphic device.
  */
-interface XGraphicDevice : ::com::sun::star::uno::XInterface
+published interface XGraphicDevice : ::com::sun::star::uno::XInterface
 {
     /** Query the controller for multi buffering functionality on this
         graphic device.
@@ -130,7 +130,7 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         @param points
         The points of the poly-polygon, in a separate array for every polygon.
      */
-    XLinePolyPolygon2D              createCompatibleLinePolyPolygon( [in] sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > points );
+    XLinePolyPolygon2D                  createCompatibleLinePolyPolygon( [in] sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > points );
 
     //-------------------------------------------------------------------------
 

@@ -36,9 +36,8 @@ module com { module sun { module star { module uno { interface XInterface; }; };
 
 module com { module sun { module star { module drawing { module framework {
 
-interface XConfiguration;
-interface XConfigurationController;
-interface XResourceId;
+published interface XConfiguration;
+published interface XResourceId;
 
 /** Objects of this class are used for notifying changes of the
     configuration.
@@ -53,7 +52,7 @@ interface XResourceId;
     general guidelines.   See <type>XConfigurationController</type> for a
     list of event types used by the basic drawing framework.</p>
 */
-struct ConfigurationChangeEvent
+published struct ConfigurationChangeEvent
      : ::com::sun::star::lang::EventObject
 {
     /** The type of configuration change is a free-form string.  This is the

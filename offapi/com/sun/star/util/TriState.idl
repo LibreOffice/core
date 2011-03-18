@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module util {
     This enumeration defines three values, <TRUE/>, <FALSE/> and a don't know
     value.<p>
  */
-enum TriState
+published enum TriState
 {
     /** The value is equivalent to <FALSE/>.
      */

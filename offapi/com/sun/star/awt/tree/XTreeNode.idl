@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module awt { module tree {
     information needed to display a hierarchical outline</p>
     <p>Each XTreeNode in a <type>XTreeDataModel</type> must be unique.
  */
-interface XTreeNode
+published interface XTreeNode
 {
     /** Returns the child tree node at <var>Index</var>.
 

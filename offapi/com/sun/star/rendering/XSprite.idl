@@ -54,7 +54,7 @@ module com { module sun { module star { module rendering {
     <type>XSpriteCanvas</type>. Sprites are moving, back-buffered
     objects.<p>
  */
-interface XSprite : ::com::sun::star::uno::XInterface
+published interface XSprite : ::com::sun::star::uno::XInterface
 {
     /** Set overall transparency of the sprite.<p>
 

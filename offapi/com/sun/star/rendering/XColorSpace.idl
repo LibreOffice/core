@@ -43,13 +43,13 @@
 module com { module sun { module star { module rendering {
 
 /// Shorthand for the device-dependent color components, and easier to read
-typedef double ColorComponent;
-typedef sequence<ColorComponent> Color;
+published typedef double ColorComponent;
+published typedef sequence<ColorComponent> Color;
 
 //=============================================================================
 
 /// RGB color triplet
-struct RGBColor
+published struct RGBColor
 {
     /// Red component. Valid range is [0,1.0]
     ColorComponent Red;
@@ -62,7 +62,7 @@ struct RGBColor
 //=============================================================================
 
 /// ARGB color quad
-struct ARGBColor
+published struct ARGBColor
 {
     /** Alpha component.<p>
 
@@ -95,7 +95,7 @@ struct ARGBColor
     e.g. <type>XIntegerBitmapColorSpace</type>, which use sequences of
     integers for color representation.<p>
  */
-interface XColorSpace
+published interface XColorSpace
 {
     /** Query type of this color space.<p>
 
