@@ -324,7 +324,6 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
     // Merge Addon popup menus into the SV Menu
     SfxViewFrame* pViewFrame = pBindings->GetDispatcher()->GetFrame();
-    SfxSlotPool* pSlotPool = pViewFrame->GetObjectShell()->GetModule()->GetSlotPool();
     Reference< com::sun::star::frame::XFrame > xFrame( pViewFrame->GetFrame().GetFrameInterface() );
 
     if ( pSVMenu->IsMenuBar() )
