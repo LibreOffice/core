@@ -49,9 +49,9 @@ Process::Process()
 , m_nEnvCount( 0 )
 , m_pEnvList( NULL )
 , m_aProcessName()
+, m_pProcess( NULL )
 , bWasGPF( sal_False )
 , bHasBeenStarted( sal_False )
-, m_pProcess( NULL )
 {
 }
 
