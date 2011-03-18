@@ -34,6 +34,7 @@
 
 #include <string>
 #include <tools/shl.hxx>
+#include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/toolbox.hxx>
@@ -117,7 +118,6 @@ using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
@@ -284,12 +284,10 @@ public:
 class SvxLineWindow_Impl : public SfxPopupWindow
 {
 private:
-    ValueSet            aLineSet;
+    LineListBox         m_aLineStyleLb;
     bool                m_bIsWriter;
 
 #if _SOLAR__PRIVATE
-    void            MakeLineBitmap( sal_uInt16 nNo, Bitmap& rBmp, const Size& rSize, String& rStr,
-                                    const ::Color& rLine, const ::Color& rBack );
     DECL_LINK( SelectHdl, void * );
 #endif
 
@@ -299,11 +297,9 @@ protected:
     virtual Window* GetPreferredKeyInputWindow();
     virtual void    GetFocus();
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-    void            CreateBitmaps( void );
 public:
     SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow );
 
-    void                    StartSelection();
     virtual SfxPopupWindow* Clone() const;
 };
 
@@ -1328,12 +1324,15 @@ sal_Bool SvxFrameWindow_Impl::Close()
 //========================================================================
 // class SvxLineWindow_Impl --------------------------------------------------
 //========================================================================
+Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
+{
+    return SvxBorderLine::threeDMediumColor( aMain );
+}
 
 SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow ) :
 
-    SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP ) ),
-
-    aLineSet( this, WinBits( WB_3DLOOK | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD | WB_NONEFIELD | WB_NO_DIRECTSELECT ) )
+    SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_AUTOSIZE ) ),
+    m_aLineStyleLb( this )
 {
     try
     {
@@ -1343,19 +1342,46 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
     catch(const uno::Exception& )
     {
     }
-    Size    aBmpSize( 55, 12 );
-    CreateBitmaps();
 
-    aLineSet.SetColCount( 2 );
-    aLineSet.SetSelectHdl( LINK( this, SvxLineWindow_Impl, SelectHdl ) );
-    aLineSet.SetText( SVX_RESSTR(STR_NONE) );
+    m_aLineStyleLb.SetPosSizePixel( 2, 2, 110, 140 );
+    SetOutputSizePixel( Size( 114, 144 ) );
 
-    aLineSet.SetAccessibleName( SVX_RESSTR(RID_SVXSTR_FRAME_STYLE) );
-    lcl_CalcSizeValueSet( *this, aLineSet, aBmpSize );
+    m_aLineStyleLb.SetSourceUnit( FUNIT_TWIP );
+    m_aLineStyleLb.SetNone( SVX_RESSTR(STR_NONE) );
+
+    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( SOLID ), SOLID );
+    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( DOTTED ), DOTTED );
+    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( DASHED ), DASHED );
+
+    // Double lines
+    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( DOUBLE ), DOUBLE );
+    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_SMALLGAP ), THINTHICK_SMALLGAP, 20 );
+    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_MEDIUMGAP ), THINTHICK_MEDIUMGAP );
+    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_LARGEGAP ), THINTHICK_LARGEGAP );
+    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_SMALLGAP ), THICKTHIN_SMALLGAP, 20 );
+    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_MEDIUMGAP ), THICKTHIN_MEDIUMGAP );
+    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_LARGEGAP ), THICKTHIN_LARGEGAP );
+
+    // Engraved / Embossed
+    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( EMBOSSED ), EMBOSSED, 15,
+            &SvxBorderLine::threeDLightColor, &SvxBorderLine::threeDDarkColor,
+            &lcl_mediumColor );
+    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( ENGRAVED ), ENGRAVED, 15,
+            &SvxBorderLine::threeDDarkColor, &SvxBorderLine::threeDLightColor,
+            &lcl_mediumColor );
+
+    // Inset / Outset
+    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( OUTSET ), OUTSET, 10,
+           &SvxBorderLine::lightColor, &SvxBorderLine::darkColor );
+    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( INSET ), INSET, 10,
+           &SvxBorderLine::darkColor, &SvxBorderLine::lightColor );
+    m_aLineStyleLb.SetWidth( 20 ); // 1pt by default
+
+    m_aLineStyleLb.SetSelectHdl( LINK( this, SvxLineWindow_Impl, SelectHdl ) );
 
     SetHelpId( HID_POPUP_LINE );
     SetText( SVX_RESSTR(RID_SVXSTR_FRAME_STYLE) );
-    aLineSet.Show();
+    m_aLineStyleLb.Show();
 }
 
 SfxPopupWindow* SvxLineWindow_Impl::Clone() const
@@ -1365,212 +1391,20 @@ SfxPopupWindow* SvxLineWindow_Impl::Clone() const
 
 // -----------------------------------------------------------------------
 
-void SvxLineWindow_Impl::MakeLineBitmap( sal_uInt16 nNo, Bitmap& rBmp, const Size& rSize, String& rStr,
-                                            const ::Color& rLineCol, const ::Color& rBackCol )
-{
-    VirtualDevice   aVirDev( *this );
-    Rectangle       aRect( Point(2,0), Size(rSize.Width()-4,0) );
-
-    // grau einfaerben und Bitmap sichern:
-    aVirDev.SetOutputSizePixel( rSize );
-    aVirDev.SetLineColor();
-    aVirDev.SetFillColor( rBackCol );
-    aVirDev.DrawRect( Rectangle( Point(0,0), rSize ) );
-    aVirDev.SetFillColor( rLineCol );
-
-    sal_uInt16 nLineWidth = 0;
-    switch ( nNo )
-    {
-        case 1: // DEF_LINE_WIDTH_0
-            aRect.Top()     = 6;
-            aRect.Bottom()  = 6;
-            aVirDev.DrawRect( aRect );
-            break;
-
-        case 2: // DEF_LINE_WIDTH_1
-            aRect.Top()     = 5;
-            aRect.Bottom()  = 6;
-            aVirDev.DrawRect( aRect );
-            nLineWidth = (sal_uInt16) DEF_LINE_WIDTH_1/20;
-            break;
-
-        case 3: // DEF_LINE_WIDTH_2
-            aRect.Top()     = 5;
-            aRect.Bottom()  = 7;
-            aVirDev.DrawRect( aRect );
-            nLineWidth = (sal_uInt16) DEF_LINE_WIDTH_2/20;
-            break;
-
-        case 4: // DEF_LINE_WIDTH_3
-            aRect.Top()     = 4;
-            aRect.Bottom()  = 7;
-            aVirDev.DrawRect( aRect );
-            aVirDev.DrawRect( Rectangle( Point(2,4), Point(37,7) ) );
-            nLineWidth = (sal_uInt16) DEF_LINE_WIDTH_3/20;
-            break;
-
-        case 5: // DEF_LINE_WIDTH_4
-            aRect.Top()     = 4;
-            aRect.Bottom()  = 8;
-            aVirDev.DrawRect( aRect );
-            nLineWidth = (sal_uInt16) DEF_LINE_WIDTH_4/20;
-            break;
-
-        case 6: // DEF_DOUBLE_LINE0
-            aRect.Top()     = 5;
-            aRect.Bottom()  = 5;
-            aVirDev.DrawRect( aRect );
-            aRect.Top()     = 7;
-            aRect.Bottom()  = 7;
-            aVirDev.DrawRect( aRect );
-            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE0_OUT+DEF_DOUBLE_LINE0_IN+DEF_DOUBLE_LINE0_DIST)/20;
-            break;
-
-        case 7: // DEF_DOUBLE_LINE7
-            aRect.Top()     = 4;
-            aRect.Bottom()  = 4;
-            aVirDev.DrawRect( aRect );
-            aRect.Top()     = 7;
-            aRect.Bottom()  = 7;
-            aVirDev.DrawRect( aRect );
-            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE7_OUT+DEF_DOUBLE_LINE7_IN+DEF_DOUBLE_LINE7_DIST)/20;
-            break;
-
-        case 8: // DEF_DOUBLE_LINE1
-            aRect.Top()     = 4;
-            aRect.Bottom()  = 5;
-            aVirDev.DrawRect( aRect );
-            aRect.Top()     = 7;
-            aRect.Bottom()  = 8;
-            aVirDev.DrawRect( aRect );
-            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE1_OUT+DEF_DOUBLE_LINE1_IN+DEF_DOUBLE_LINE1_DIST)/20;
-            break;
-
-        case 9: // DEF_DOUBLE_LINE2
-            aRect.Top()     = 3;
-            aRect.Bottom()  = 5;
-            aVirDev.DrawRect( aRect );
-            aRect.Top()     = 8;
-            aRect.Bottom()  = 10;
-            aVirDev.DrawRect( aRect );
-            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE2_OUT+DEF_DOUBLE_LINE2_IN+DEF_DOUBLE_LINE2_DIST)/20;
-            break;
-
-        case 10: // DEF_DOUBLE_LINE8
-            aRect.Top()     = 3;
-            aRect.Bottom()  = 4;
-            aVirDev.DrawRect( aRect );
-            aRect.Top()     = 7;
-            aRect.Bottom()  = 7;
-            aVirDev.DrawRect( aRect );
-            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE8_OUT+DEF_DOUBLE_LINE8_IN+DEF_DOUBLE_LINE8_DIST)/20;
-            break;
-
-        case 11: // DEF_DOUBLE_LINE9
-            aRect.Top()     = 3;
-            aRect.Bottom()  = 5;
-            aVirDev.DrawRect( aRect );
-            aRect.Top()     = 8;
-            aRect.Bottom()  = 8;
-            aVirDev.DrawRect( aRect );
-            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE9_OUT+DEF_DOUBLE_LINE9_IN+DEF_DOUBLE_LINE9_DIST)/20;
-            break;
-
-        case 12: // DEF_DOUBLE_LINE10
-            aRect.Top()     = 2;
-            aRect.Bottom()  = 5;
-            aVirDev.DrawRect( aRect );
-            aRect.Top()     = 8;
-            aRect.Bottom()  = 8;
-            aVirDev.DrawRect( aRect );
-            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE10_OUT+DEF_DOUBLE_LINE10_IN+DEF_DOUBLE_LINE10_DIST)/20;
-            break;
-
-        case 13: // DEF_DOUBLE_LINE3
-            aRect.Top()     = 4;
-            aRect.Bottom()  = 5;
-            aVirDev.DrawRect( aRect );
-            aRect.Top()     = 7;
-            aRect.Bottom()  = 7;
-            aVirDev.DrawRect( aRect );
-            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE3_OUT+DEF_DOUBLE_LINE3_IN+DEF_DOUBLE_LINE3_DIST)/20;
-            break;
-
-        case 14: // DEF_DOUBLE_LINE4
-            aRect.Top()     = 4;
-            aRect.Bottom()  = 4;
-            aVirDev.DrawRect( aRect );
-            aRect.Top()     = 6;
-            aRect.Bottom()  = 7;
-            aVirDev.DrawRect( aRect );
-            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE4_OUT+DEF_DOUBLE_LINE4_IN+DEF_DOUBLE_LINE4_DIST)/20;
-            break;
-
-        case 15: // DEF_DOUBLE_LINE5
-            aRect.Top()     = 3;
-            aRect.Bottom()  = 5;
-            aVirDev.DrawRect( aRect );
-            aRect.Top()     = 8;
-            aRect.Bottom()  = 9;
-            aVirDev.DrawRect( aRect );
-            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE5_OUT+DEF_DOUBLE_LINE5_IN+DEF_DOUBLE_LINE5_DIST)/20;
-            break;
-
-        case 16: // DEF_DOUBLE_LINE6
-            aRect.Top()     = 3;
-            aRect.Bottom()  = 4;
-            aVirDev.DrawRect( aRect );
-            aRect.Top()     = 7;
-            aRect.Bottom()  = 9;
-            aVirDev.DrawRect( aRect );
-            nLineWidth = (sal_uInt16) (DEF_DOUBLE_LINE6_OUT+DEF_DOUBLE_LINE6_IN+DEF_DOUBLE_LINE6_DIST)/20;
-            break;
-        case 17: // Dotted line
-            aRect.Top()     = 6;
-            aRect.Bottom()  = 6;
-            aVirDev.SetLineColor( rLineCol );
-            aVirDev.SetFillColor();
-            svtools::DrawLine( aVirDev, aRect.LeftCenter(), aRect.RightCenter(), 1, DOTTED );
-            break;
-
-        case 18: // Dashed line
-            aRect.Top()     = 6;
-            aRect.Bottom()  = 6;
-            aVirDev.SetLineColor( rLineCol );
-            aVirDev.SetFillColor();
-            svtools::DrawLine( aVirDev, aRect.LeftCenter(), aRect.RightCenter(), 1, DASHED );
-            break;
-
-        default:
-            break;
-    }
-    if ( nLineWidth )
-    {
-        rStr = String::CreateFromInt32( nLineWidth );
-        rStr.AppendAscii(" pt");
-    }
-    rBmp = aVirDev.GetBitmap( Point(0,0), rSize );
-}
-
-// -----------------------------------------------------------------------
-
 IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
 {
     SvxLineItem     aLineItem( SID_FRAME_LINESTYLE );
-    SvxBorderStyle  nStyle = NO_STYLE;
+    SvxBorderStyle  nStyle = SvxBorderStyle( m_aLineStyleLb.GetSelectEntryStyle() );
 
-    if ( aLineSet.GetSelectItemId( ) > 0 )
-        nStyle = SvxBorderStyle( aLineSet.GetSelectItemId( ) - 1 );
-
-    if ( nStyle != NO_STYLE )
+    if ( m_aLineStyleLb.GetSelectEntryPos( ) > 0 )
     {
         SvxBorderLine aTmp;
-        // TODO Make it depend on a width field
-        aTmp.SetWidth( DEF_LINE_WIDTH_0 );
+        aTmp.SetStyle( nStyle );
+        aTmp.SetWidth( 20 ); // TODO Make it depend on a width field
         aLineItem.SetLine( &aTmp );
     }
     else
-        aLineItem.SetLine( 0 );
+        aLineItem.SetLine( NULL );
 
     if ( IsInPopupMode() )
         EndPopupMode();
@@ -1580,11 +1414,6 @@ IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
     aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LineStyle" ));
     aLineItem.QueryValue( a, m_bIsWriter ? CONVERT_TWIPS : 0 );
     aArgs[0].Value = a;
-
-    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
-        This instance may be deleted in the meantime (i.e. when a dialog is opened
-        while in Dispatch()), accessing members will crash in this case. */
-    aLineSet.SetNoSelection();
 
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
                                  OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineStyle" )),
@@ -1596,14 +1425,7 @@ IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
 
 void SvxLineWindow_Impl::Resize()
 {
-    lcl_ResizeValueSet( *this, aLineSet);
-}
-
-// -----------------------------------------------------------------------
-
-void SvxLineWindow_Impl::StartSelection()
-{
-    aLineSet.StartSelection();
+    m_aLineStyleLb.Resize();
 }
 
 // -----------------------------------------------------------------------
@@ -1617,44 +1439,26 @@ sal_Bool SvxLineWindow_Impl::Close()
 
 Window* SvxLineWindow_Impl::GetPreferredKeyInputWindow()
 {
-    return &aLineSet;
+    return &m_aLineStyleLb;
 }
 
 // -----------------------------------------------------------------------
 
 void SvxLineWindow_Impl::GetFocus()
 {
-    aLineSet.GrabFocus();
+    m_aLineStyleLb.GrabFocus();
 }
 
 void SvxLineWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SfxPopupWindow::DataChanged( rDCEvt );
-
+#if 0
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
         CreateBitmaps();
         Invalidate();
     }
-}
-
-void SvxLineWindow_Impl::CreateBitmaps( void )
-{
-    Size                    aBmpSize( 55, 12 );
-    Bitmap                  aBmp;
-    String                  aStr;
-
-    const StyleSettings&    rStyleSettings = Application::GetSettings().GetStyleSettings();
-    svtools::ColorConfig aColorConfig;
-    ::Color                 aLineCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-    ::Color                 aBackCol( rStyleSettings.GetWindowColor() );
-    aLineSet.Clear();
-
-    for( sal_uInt16 i = 1 ; i < 19 ; ++i )
-    {
-        MakeLineBitmap( i, aBmp, aBmpSize, aStr, aLineCol, aBackCol );
-        aLineSet.InsertItem( i, aBmp, aStr );
-    }
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -2626,7 +2430,6 @@ SfxPopupWindow* SvxFrameLineStyleToolBoxControl::CreatePopupWindow()
 {
     SvxLineWindow_Impl* pLineWin = new SvxLineWindow_Impl( GetSlotId(), m_xFrame, &GetToolBox() );
     pLineWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS | FLOATWIN_POPUPMODE_ALLOWTEAROFF );
-    pLineWin->StartSelection();
     SetPopupWindow( pLineWin );
 
     return pLineWin;
