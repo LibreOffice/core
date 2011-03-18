@@ -121,7 +121,7 @@ private:
     RadioButton         maMediumRB;
     RadioButton         maLowRB;
 
-    USHORT              mnCurLevel;
+    sal_uInt16              mnCurLevel;
 
 protected:
     DECL_LINK(          RadioButtonHdl, RadioButton* );

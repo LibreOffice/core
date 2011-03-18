@@ -71,14 +71,14 @@ class SvxChartOptions : public ::utl::ConfigItem
 {
 private:
     SvxChartColorTable      maDefColors;
-    BOOL                    mbIsInitialized;
+    sal_Bool                    mbIsInitialized;
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString >
                             maPropertyNames;
 
     inline ::com::sun::star::uno::Sequence< ::rtl::OUString > GetPropertyNames() const
         { return maPropertyNames; }
-    BOOL RetrieveOptions();
+    sal_Bool RetrieveOptions();
 
 public:
     SvxChartOptions();
@@ -98,7 +98,7 @@ class SvxChartColorTableItem : public SfxPoolItem
 {
 public:
     TYPEINFO();
-    SvxChartColorTableItem( USHORT nWhich, const SvxChartColorTable& );
+    SvxChartColorTableItem( sal_uInt16 nWhich, const SvxChartColorTable& );
     SvxChartColorTableItem( const SvxChartColorTableItem& );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;

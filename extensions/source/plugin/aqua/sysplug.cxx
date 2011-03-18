@@ -70,8 +70,8 @@ struct FakeEventRecord : public EventRecord
 }
 -(id)initWithInstance: (XPlugin_Impl*)i_pImpl pluginComm: (MacPluginComm*)i_pCom frame: (NSRect)i_aRect;
 -(void)drawRect: (NSRect)i_aRect;
--(MacOSBOOL)isOpaque;
--(MacOSBOOL)isFlipped;
+-(BOOL)isOpaque;
+-(BOOL)isFlipped;
 
 // NSResponder
 -(void)mouseMoved:   (NSEvent*)i_pEvent;
@@ -104,12 +104,12 @@ struct FakeEventRecord : public EventRecord
     m_pCom->drawView( m_pImpl );
 }
 
--(MacOSBOOL)isOpaque
+-(BOOL)isOpaque
 {
     return NO;
 }
 
--(MacOSBOOL)isFlipped
+-(BOOL)isFlipped
 {
     return YES;
 }
@@ -273,10 +273,10 @@ MacPluginComm::~MacPluginComm()
 }
 
 //--------------------------------------------------------------------------------------------------
-BOOL MacPluginComm::retrieveFunction( const char* i_pName, void** o_ppFunc ) const
+sal_Bool MacPluginComm::retrieveFunction( const char* i_pName, void** o_ppFunc ) const
 {
     if( ! m_hPlugLib || ! o_ppFunc )
-        return FALSE;
+        return sal_False;
 
     *o_ppFunc = (void*)osl_getAsciiFunctionSymbol( m_hPlugLib, i_pName );
 

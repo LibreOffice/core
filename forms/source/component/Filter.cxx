@@ -58,6 +58,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/awt/XItemList.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/numbers.hxx>
@@ -72,7 +73,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_OFilterControl()
@@ -104,8 +105,8 @@ namespace frm
     //=====================================================================
     //---------------------------------------------------------------------
     OFilterControl::OFilterControl( const Reference< XMultiServiceFactory >& _rxORB )
-        :m_aTextListeners( *this )
-        ,m_aContext( _rxORB )
+        :UnoControl( _rxORB )
+        ,m_aTextListeners( *this )
         ,m_aParser( _rxORB )
         ,m_nControlClass( FormComponentType::TEXTFIELD )
         ,m_bFilterList( sal_False )
@@ -132,11 +133,11 @@ namespace frm
         if ( !m_xFormatter.is() )
         {
             // we can create one from the connection, if it's an SDB connection
-            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, sal_True, m_aContext.getLegacyServiceFactory() );
+            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, sal_True, maContext.getLegacyServiceFactory() );
 
             if ( xFormatSupplier.is() )
             {
-                m_aContext.createComponent( "com.sun.star.util.NumberFormatter", m_xFormatter );
+                maContext.createComponent( "com.sun.star.util.NumberFormatter", m_xFormatter );
                 if ( m_xFormatter.is() )
                     m_xFormatter->attachNumberFormatsSupplier( xFormatSupplier );
             }
@@ -342,11 +343,28 @@ namespace frm
 
             case FormComponentType::LISTBOX:
             {
-                Sequence< ::rtl::OUString> aValueSelection;
-                Reference< XPropertySet > aPropertyPointer(getModel(), UNO_QUERY);
-                aPropertyPointer->getPropertyValue(PROPERTY_VALUE_SEQ) >>= aValueSelection;
-                if (rEvent.Selected <= aValueSelection.getLength())
-                    aText.append( aValueSelection[ rEvent.Selected ] );
+                try
+                {
+                    const Reference< XItemList > xItemList( getModel(), UNO_QUERY_THROW );
+                    ::rtl::OUString sItemText( xItemList->getItemText( rEvent.Selected ) );
+
+                    const MapString2String::const_iterator itemPos = m_aDisplayItemToValueItem.find( sItemText );
+                    if ( itemPos != m_aDisplayItemToValueItem.end() )
+                    {
+                        sItemText = itemPos->second;
+                        if ( sItemText.getLength() )
+                        {
+                            ::dbtools::OPredicateInputController aPredicateInput( maContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
+                            ::rtl::OUString sErrorMessage;
+                            OSL_VERIFY( aPredicateInput.normalizePredicateString( sItemText, m_xField, &sErrorMessage ) );
+                        }
+                    }
+                    aText.append( sItemText );
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
             }
             break;
 
@@ -521,7 +539,7 @@ namespace frm
             aNewText.trim();
             if ( aNewText.getLength() )
             {
-                ::dbtools::OPredicateInputController aPredicateInput( m_aContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
+                ::dbtools::OPredicateInputController aPredicateInput( maContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
                 ::rtl::OUString sErrorMessage;
                 if ( !aPredicateInput.normalizePredicateString( aNewText, m_xField, &sErrorMessage ) )
                 {
@@ -614,6 +632,16 @@ namespace frm
                 {
                     m_aText = aText;
                     xListBox->selectItem(m_aText, sal_True);
+                    if ( xListBox->getSelectedItemPos() >= 0 )
+                    {
+                        const bool isQuoted =   ( aText.getLength() > 0 )
+                                            &&  ( aText[0] == '\'' )
+                                            &&  ( aText[aText.getLength() - 1] == '\'' );
+                        if ( isQuoted )
+                        {
+                            xListBox->selectItem( aText.copy( 1, aText.getLength() - 2 ), sal_True );
+                        }
+                    }
                 }
             } break;
             default:
@@ -715,7 +743,7 @@ namespace frm
 
             static ::rtl::OUString s_sDialogServiceName (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ErrorMessageDialog") );
 
-            Reference< XExecutableDialog > xErrorDialog( m_aContext.createComponentWithArguments( s_sDialogServiceName, aArgs ), UNO_QUERY );
+            Reference< XExecutableDialog > xErrorDialog( maContext.createComponentWithArguments( s_sDialogServiceName, aArgs ), UNO_QUERY );
             if ( xErrorDialog.is() )
                 xErrorDialog->execute();
             else
@@ -804,6 +832,16 @@ namespace frm
                         case FormComponentType::LISTBOX:
                         case FormComponentType::COMBOBOX:
                             m_nControlClass = nClassId;
+                            if ( FormComponentType::LISTBOX == nClassId )
+                            {
+                                Sequence< ::rtl::OUString > aDisplayItems;
+                                OSL_VERIFY( xControlModel->getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aDisplayItems );
+                                Sequence< ::rtl::OUString > aValueItems;
+                                OSL_VERIFY( xControlModel->getPropertyValue( PROPERTY_VALUE_SEQ ) >>= aValueItems );
+                                OSL_ENSURE( aDisplayItems.getLength() == aValueItems.getLength(), "OFilterControl::initialize: inconsistent item lists!" );
+                                for ( sal_Int32 i=0; i < ::std::min( aDisplayItems.getLength(), aValueItems.getLength() ); ++i )
+                                    m_aDisplayItemToValueItem[ aDisplayItems[i] ] = aValueItems[i];
+                            }
                             break;
                         default:
                             m_bMultiLine = ::comphelper::hasProperty( PROPERTY_MULTILINE, xControlModel ) && ::comphelper::getBOOL( xControlModel->getPropertyValue( PROPERTY_MULTILINE ) );

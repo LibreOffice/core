@@ -41,7 +41,7 @@
 #include <editeng/editobj.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 
@@ -88,7 +88,7 @@ namespace frm
         m_pEngine->registerEngineStatusListener( this );
 
         {
-            ULONG nViewControlWord = m_pView->GetControlWord();
+            sal_uLong nViewControlWord = m_pView->GetControlWord();
             nViewControlWord |= EV_CNTRL_AUTOSCROLL;
             m_pView->SetControlWord( nViewControlWord );
         }
@@ -235,7 +235,7 @@ namespace frm
     //--------------------------------------------------------------------
     void RichTextControlImpl::normalizeScriptDependentAttribute( SvxScriptSetItem& _rScriptSetItem )
     {
-        _rScriptSetItem.GetItemSet().Put( m_pView->GetAttribs(), FALSE );
+        _rScriptSetItem.GetItemSet().Put( m_pView->GetAttribs(), sal_False );
         const SfxPoolItem* pNormalizedItem = _rScriptSetItem.GetItemOfScript( getSelectedScriptType() );
 
         WhichId nNormalizedWhichId = _rScriptSetItem.GetItemSet().GetPool()->GetWhich( _rScriptSetItem.Which() );
@@ -290,7 +290,7 @@ namespace frm
     //--------------------------------------------------------------------
     void RichTextControlImpl::EditEngineStatusChanged( const EditStatus& _rStatus )
     {
-        ULONG nStatusWord( _rStatus.GetStatusWord() );
+        sal_uLong nStatusWord( _rStatus.GetStatusWord() );
         if  (   ( nStatusWord & EE_STAT_TEXTWIDTHCHANGED )
             ||  ( nStatusWord & EE_STAT_TEXTHEIGHTCHANGED )
             )
@@ -588,7 +588,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void RichTextControlImpl::Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, ULONG /*_nFlags*/ )
+    void RichTextControlImpl::Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, sal_uLong /*_nFlags*/ )
     {
         // need to normalize the map mode of the device - every paint operation on any device needs
         // to use the same map mode
@@ -642,7 +642,7 @@ namespace frm
         lcl_inflate( aPlayground, -aOnePixel.Width(), -aOnePixel.Height() );
 
         // actually draw the content
-        m_pEngine->Draw( _pDev, aPlayground, Point(), TRUE );
+        m_pEngine->Draw( _pDev, aPlayground, Point(), sal_True );
 
         _pDev->Pop();
     }

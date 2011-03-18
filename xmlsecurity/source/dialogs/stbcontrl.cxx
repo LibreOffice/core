@@ -54,7 +54,7 @@ struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl
 };
 
 
-XmlSecStatusBarControl::XmlSecStatusBarControl( USHORT _nId, StatusBar& _rStb, SfxBindings& _rBind )
+XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nId, StatusBar& _rStb, SfxBindings& _rBind )
     :SfxStatusBarControl( _nId, _rStb, _rBind )
 
     ,mpImpl( new XmlSecStatusBarControl_Impl )
@@ -67,7 +67,7 @@ XmlSecStatusBarControl::~XmlSecStatusBarControl()
     delete mpImpl;
 }
 
-void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void XmlSecStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     GetStatusBar().SetHelpText( GetId(), String() );    // necessary ?
     GetStatusBar().SetHelpId( GetId(), nSID );          // necessary ?

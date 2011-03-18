@@ -46,43 +46,6 @@ using namespace ::com::sun::star::packages::manifest;
 
 using rtl::OUString;
 
-static sal_Bool writeInfo( void * pRegistryKey,
-                           const OUString & rImplementationName,
-                              Sequence< OUString > const & rServiceNames )
-{
-    OUString aKeyName( OUString(RTL_CONSTASCII_USTRINGPARAM( "/" )) );
-    aKeyName += rImplementationName;
-    aKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ));
-
-    Reference< XRegistryKey > xKey;
-    try
-    {
-        xKey = static_cast< XRegistryKey * >(
-                                    pRegistryKey )->createKey( aKeyName );
-    }
-    catch ( InvalidRegistryException const & )
-    {
-    }
-
-    if ( !xKey.is() )
-        return sal_False;
-
-    sal_Bool bSuccess = sal_True;
-
-    for ( sal_Int32 n = 0; n < rServiceNames.getLength(); ++n )
-    {
-        try
-        {
-            xKey->createKey( rServiceNames[ n ] );
-        }
-        catch ( InvalidRegistryException const & )
-        {
-            bSuccess = sal_False;
-            break;
-        }
-    }
-    return bSuccess;
-}
 // C functions to implement this as a component
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
@@ -90,32 +53,6 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
-
-/**
- * This function creates an implementation section in the registry and another subkey
- * for each supported service.
- * @param pServiceManager generic uno interface providing a service manager
- * @param pRegistryKey generic uno interface providing registry key to write
- */
-extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
-{
-    return pRegistryKey &&
-    writeInfo (pRegistryKey,
-               ManifestReader::static_getImplementationName(),
-               ManifestReader::static_getSupportedServiceNames() ) &&
-    writeInfo (pRegistryKey,
-               ManifestWriter::static_getImplementationName(),
-               ManifestWriter::static_getSupportedServiceNames() ) &&
-    writeInfo (pRegistryKey,
-               ZipPackage::static_getImplementationName(),
-               ZipPackage::static_getSupportedServiceNames() ) &&
-
-    writeInfo (pRegistryKey,
-               OZipFileAccess::impl_staticGetImplementationName(),
-               OZipFileAccess::impl_staticGetSupportedServiceNames() );
-
-}
-
 
 /**
  * This function is called to get service factories for an implementation.

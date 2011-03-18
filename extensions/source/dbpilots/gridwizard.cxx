@@ -373,12 +373,12 @@ namespace dbp
             return sal_False;
 
         OGridSettings& rSettings = getSettings();
-        USHORT nSelected = m_aSelFields.GetEntryCount();
+        sal_uInt16 nSelected = m_aSelFields.GetEntryCount();
 
         rSettings.aSelectedFields.realloc(nSelected);
         ::rtl::OUString* pSelected = rSettings.aSelectedFields.getArray();
 
-        for (USHORT i=0; i<nSelected; ++i, ++pSelected)
+        for (sal_uInt16 i=0; i<nSelected; ++i, ++pSelected)
             *pSelected = m_aSelFields.GetEntry(i);
 
         return sal_True;
@@ -420,11 +420,11 @@ namespace dbp
         ListBox& rMoveTo = bMoveRight ? m_aSelFields : m_aExistFields;
 
         // the index of the selected entry
-        USHORT nSelected = bMoveRight ? m_aExistFields.GetSelectEntryPos() : m_aSelFields.GetSelectEntryPos();
+        sal_uInt16 nSelected = bMoveRight ? m_aExistFields.GetSelectEntryPos() : m_aSelFields.GetSelectEntryPos();
         // the (original) relative position of the entry
         sal_IntPtr nRelativeIndex = reinterpret_cast<sal_IntPtr>(bMoveRight ? m_aExistFields.GetEntryData(nSelected) : m_aSelFields.GetEntryData(nSelected));
 
-        USHORT nInsertPos = LISTBOX_APPEND;
+        sal_uInt16 nInsertPos = LISTBOX_APPEND;
         if (!bMoveRight)
         {   // need to determine an insert pos which reflects the original
             nInsertPos = 0;
@@ -447,7 +447,7 @@ namespace dbp
         // remove the entry from it's old list
         if (bMoveRight)
         {
-            USHORT nSelectPos = m_aExistFields.GetSelectEntryPos();
+            sal_uInt16 nSelectPos = m_aExistFields.GetSelectEntryPos();
             m_aExistFields.RemoveEntry(nSelected);
             if ((LISTBOX_ENTRY_NOTFOUND != nSelectPos) && (nSelectPos < m_aExistFields.GetEntryCount()))
                 m_aExistFields.SelectEntryPos(nSelectPos);
@@ -456,7 +456,7 @@ namespace dbp
         }
         else
         {
-            USHORT nSelectPos = m_aSelFields.GetSelectEntryPos();
+            sal_uInt16 nSelectPos = m_aSelFields.GetSelectEntryPos();
             m_aSelFields.RemoveEntry(nSelected);
             if ((LISTBOX_ENTRY_NOTFOUND != nSelectPos) && (nSelectPos < m_aSelFields.GetEntryCount()))
                 m_aSelFields.SelectEntryPos(nSelectPos);

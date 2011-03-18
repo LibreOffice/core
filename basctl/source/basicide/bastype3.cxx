@@ -43,14 +43,13 @@
 #include <basdoc.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <deque>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 
-SV_DECL_VARARR( EntryArray, SvLBoxEntry*, 4, 4 )
-
-SV_IMPL_VARARR( EntryArray, SvLBoxEntry*);
+typedef std::deque< SvLBoxEntry* > EntryArray;
 
 
 void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
@@ -74,7 +73,7 @@ void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
         ::rtl::OUString aOULibName( aLibName );
 
         // check password
-        BOOL bOK = TRUE;
+        sal_Bool bOK = sal_True;
         Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
         {
@@ -89,7 +88,7 @@ void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
         if ( bOK )
         {
             // load module library
-            BOOL bModLibLoaded = FALSE;
+            sal_Bool bModLibLoaded = sal_False;
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
             {
                 if ( !xModLibContainer->isLibraryLoaded( aOULibName ) )
@@ -102,7 +101,7 @@ void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
             }
 
             // load dialog library
-            BOOL bDlgLibLoaded = FALSE;
+            sal_Bool bDlgLibLoaded = sal_False;
             Reference< script::XLibraryContainer > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
             if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
             {
@@ -188,7 +187,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
 
     while ( pEntry )
     {
-        USHORT nDepth = GetModel()->GetDepth( pEntry );
+        sal_uInt16 nDepth = GetModel()->GetDepth( pEntry );
         switch ( nDepth )
         {
             case 4:
@@ -196,7 +195,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
             case 2:
             case 1:
             {
-                aEntries.C40_INSERT( SvLBoxEntry, pEntry, 0 );
+                aEntries.push_front( pEntry );
             }
             break;
             case 0:
@@ -210,14 +209,14 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
 
     SbxVariable* pVar = 0;
     bool bDocumentObjects = false;
-    if ( aEntries.Count() )
+    if ( !aEntries.empty() )
     {
-        for ( USHORT n = 0; n < aEntries.Count(); n++ )
+        for ( size_t n = 0; n < aEntries.size(); n++ )
         {
             SvLBoxEntry* pLE = aEntries[n];
-            DBG_ASSERT( pLE, "Entrie im Array nicht gefunden" );
+            DBG_ASSERT( pLE, "Can not find entry in array" );
             BasicEntry* pBE = (BasicEntry*)pLE->GetUserData();
-            DBG_ASSERT( pBE, "Keine Daten im Eintrag gefunden!" );
+            DBG_ASSERT( pBE, "The data in the entry not found!" );
             String aName( GetEntryText( pLE ) );
 
             switch ( pBE->GetType() )
@@ -293,7 +292,7 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
 
     while ( pEntry )
     {
-        USHORT nDepth = GetModel()->GetDepth( pEntry );
+        sal_uInt16 nDepth = GetModel()->GetDepth( pEntry );
         switch ( nDepth )
         {
             case 4:
@@ -301,7 +300,7 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
             case 2:
             case 1:
             {
-                aEntries.C40_INSERT( SvLBoxEntry, pEntry, 0 );
+                aEntries.push_front( pEntry );
             }
             break;
             case 0:
@@ -319,9 +318,9 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
         pEntry = GetParent( pEntry );
     }
 
-    if ( aEntries.Count() )
+    if ( !aEntries.empty() )
     {
-        for ( USHORT n = 0; n < aEntries.Count(); n++ )
+        for ( size_t n = 0; n < aEntries.size(); n++ )
         {
             SvLBoxEntry* pLE = aEntries[n];
             DBG_ASSERT( pLE, "Entrie im Array nicht gefunden" );
@@ -379,9 +378,9 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
     return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aName, aMethodName, eType );
 }
 
-USHORT BasicTreeListBox::ConvertType( BasicEntryType eType )
+sal_uInt16 BasicTreeListBox::ConvertType( BasicEntryType eType )
 {
-    USHORT nType = OBJ_TYPE_UNKNOWN;
+    sal_uInt16 nType = OBJ_TYPE_UNKNOWN;
 
     switch ( eType )
     {
@@ -483,7 +482,7 @@ SbModule* BasicTreeListBox::FindModule( SvLBoxEntry* pEntry )
 SvLBoxEntry* BasicTreeListBox::FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
     OSL_ENSURE( rDocument.isValid(), "BasicTreeListBox::FindRootEntry: invalid document!" );
-    ULONG nRootPos = 0;
+    sal_uLong nRootPos = 0;
     SvLBoxEntry* pRootEntry = GetEntry( nRootPos );
     while ( pRootEntry )
     {

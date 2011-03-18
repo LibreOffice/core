@@ -28,6 +28,7 @@
 
 ModalDialog RID_SVX_DLG_INPUTRECORDNO
 {
+    HelpID = "cui:ModalDialog:RID_SVX_DLG_INPUTRECORDNO";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 130 , 45 ) ;
@@ -43,6 +44,7 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
     };
     NumericField 1
     {
+        HelpID = "cui:NumericField:RID_SVX_DLG_INPUTRECORDNO:1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 79 , 6 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;

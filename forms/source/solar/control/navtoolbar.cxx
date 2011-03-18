@@ -66,7 +66,7 @@ namespace frm
                 || ( _nFeatureId == LID_RECORD_FILLER );
         }
 
-        static String getLabelString( USHORT _nResId )
+        static String getLabelString( sal_uInt16 _nResId )
         {
             String sLabel = String::CreateFromAscii( " " );
             sLabel += String( FRM_RES_STRING( _nResId ) );
@@ -197,9 +197,9 @@ namespace frm
     //---------------------------------------------------------------------
     void NavigationToolBar::updateFeatureStates( )
     {
-        for ( USHORT nPos = 0; nPos < m_pToolbar->GetItemCount(); ++nPos )
+        for ( sal_uInt16 nPos = 0; nPos < m_pToolbar->GetItemCount(); ++nPos )
         {
-            USHORT nItemId = m_pToolbar->GetItemId( nPos );
+            sal_uInt16 nItemId = m_pToolbar->GetItemId( nPos );
 
             if ( ( nItemId == LID_RECORD_LABEL ) || ( nItemId == LID_RECORD_FILLER ) )
                 continue;
@@ -211,7 +211,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void NavigationToolBar::implEnableItem( USHORT _nItemId, bool _bEnabled )
+    void NavigationToolBar::implEnableItem( sal_uInt16 _nItemId, bool _bEnabled )
     {
         m_pToolbar->EnableItem( _nItemId, _bEnabled );
 
@@ -225,32 +225,32 @@ namespace frm
     //---------------------------------------------------------------------
     void NavigationToolBar::enableFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
-        DBG_ASSERT( m_pToolbar->GetItemPos( (USHORT)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
+        DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
             "NavigationToolBar::enableFeature: invalid id!" );
 
-        implEnableItem( (USHORT)_nFeatureId, _bEnabled );
+        implEnableItem( (sal_uInt16)_nFeatureId, _bEnabled );
     }
 
     //---------------------------------------------------------------------
     void NavigationToolBar::checkFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
-        DBG_ASSERT( m_pToolbar->GetItemPos( (USHORT)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
+        DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
             "NavigationToolBar::checkFeature: invalid id!" );
 
-        m_pToolbar->CheckItem( (USHORT)_nFeatureId, _bEnabled );
+        m_pToolbar->CheckItem( (sal_uInt16)_nFeatureId, _bEnabled );
     }
 
     //---------------------------------------------------------------------
     void NavigationToolBar::setFeatureText( sal_Int16 _nFeatureId, const ::rtl::OUString& _rText )
     {
-        DBG_ASSERT( m_pToolbar->GetItemPos( (USHORT)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
+        DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
             "NavigationToolBar::checkFeature: invalid id!" );
 
-        Window* pItemWindow = m_pToolbar->GetItemWindow( (USHORT)_nFeatureId );
+        Window* pItemWindow = m_pToolbar->GetItemWindow( (sal_uInt16)_nFeatureId );
         if ( pItemWindow )
             pItemWindow->SetText( _rText );
         else
-            m_pToolbar->SetItemText( (USHORT)_nFeatureId, _rText );
+            m_pToolbar->SetItemText( (sal_uInt16)_nFeatureId, _rText );
     }
 
     //---------------------------------------------------------------------
@@ -266,7 +266,7 @@ namespace frm
 
         struct FeatureDescription
         {
-            USHORT      nId;
+            sal_uInt16      nId;
             bool        bRepeat;
             bool        bItemWindow;
         } aSupportedFeatures[] =
@@ -333,7 +333,7 @@ namespace frm
                     {
                         pItemWindow = new FixedText( m_pToolbar, WB_VCENTER );
                         pItemWindow->SetBackground();
-                        pItemWindow->SetPaintTransparent(TRUE);
+                        pItemWindow->SetPaintTransparent(sal_True);
                     }
                     m_aChildWins.push_back( pItemWindow );
 
@@ -369,16 +369,16 @@ namespace frm
         if ( !m_pImageProvider )
             return;
 
-        const USHORT nItemCount = m_pToolbar->GetItemCount();
+        const sal_uInt16 nItemCount = m_pToolbar->GetItemCount();
 
         // collect the FormFeatures in the toolbar
         typedef ::std::vector< sal_Int16 >  FormFeatures;
         FormFeatures aFormFeatures;
         aFormFeatures.reserve( nItemCount );
 
-        for ( USHORT i=0; i<nItemCount; ++i )
+        for ( sal_uInt16 i=0; i<nItemCount; ++i )
         {
-            USHORT nId = m_pToolbar->GetItemId( i );
+            sal_uInt16 nId = m_pToolbar->GetItemId( i );
             if ( ( TOOLBOXITEM_BUTTON == m_pToolbar->GetItemType( i ) ) && !isArtificialItem( nId ) )
                 aFormFeatures.push_back( nId );
         }
@@ -429,13 +429,13 @@ namespace frm
     //---------------------------------------------------------------------
     void NavigationToolBar::ShowFunctionGroup( FunctionGroup _eGroup, bool _bShow )
     {
-        const USHORT* pGroupIds = NULL;
+        const sal_uInt16* pGroupIds = NULL;
 
         switch ( _eGroup )
         {
         case ePosition:
         {
-            static const USHORT aPositionIds[] = {
+            static const sal_uInt16 aPositionIds[] = {
                 LID_RECORD_LABEL, FormFeature::MoveAbsolute, LID_RECORD_FILLER, FormFeature::TotalRecords, 0
             };
             pGroupIds = aPositionIds;
@@ -443,7 +443,7 @@ namespace frm
         break;
         case eNavigation:
         {
-            static const USHORT aNavigationIds[] = {
+            static const sal_uInt16 aNavigationIds[] = {
                 FormFeature::MoveToFirst, FormFeature::MoveToPrevious, FormFeature::MoveToNext, FormFeature::MoveToLast, FormFeature::MoveToInsertRow, 0
             };
             pGroupIds = aNavigationIds;
@@ -451,7 +451,7 @@ namespace frm
         break;
         case eRecordActions:
         {
-            static const USHORT aActionIds[] = {
+            static const sal_uInt16 aActionIds[] = {
                 FormFeature::SaveRecordChanges, FormFeature::UndoRecordChanges, FormFeature::DeleteRecord, FormFeature::ReloadForm, FormFeature::RefreshCurrentControl, 0
             };
             pGroupIds = aActionIds;
@@ -459,7 +459,7 @@ namespace frm
         break;
         case eFilterSort:
         {
-            static const USHORT aFilterSortIds[] = {
+            static const sal_uInt16 aFilterSortIds[] = {
                 FormFeature::SortAscending, FormFeature::SortDescending, FormFeature::InteractiveSort, FormFeature::AutoFilter, FormFeature::InteractiveFilter, FormFeature::ToggleApplyFilter, FormFeature::RemoveFilterAndSort, 0
             };
             pGroupIds = aFilterSortIds;
@@ -477,7 +477,7 @@ namespace frm
     //---------------------------------------------------------------------
     bool NavigationToolBar::IsFunctionGroupVisible( FunctionGroup _eGroup )
     {
-        USHORT nIndicatorItem = 0;
+        sal_uInt16 nIndicatorItem = 0;
         switch ( _eGroup )
         {
         case ePosition      : nIndicatorItem = LID_RECORD_LABEL;    break;
@@ -516,7 +516,7 @@ namespace frm
 
             case STATE_CHANGE_MIRRORING:
             {
-                BOOL bIsRTLEnabled( IsRTLEnabled() );
+                sal_Bool bIsRTLEnabled( IsRTLEnabled() );
                 m_pToolbar->EnableRTL( bIsRTLEnabled );
                 forEachItemWindow( &NavigationToolBar::enableItemRTL, &bIsRTLEnabled );
                 Resize();
@@ -577,9 +577,9 @@ namespace frm
     //---------------------------------------------------------------------
     void NavigationToolBar::forEachItemWindow( ItemWindowHandler _handler, const void* _pParam )
     {
-        for ( USHORT item = 0; item < m_pToolbar->GetItemCount(); ++item )
+        for ( sal_uInt16 item = 0; item < m_pToolbar->GetItemCount(); ++item )
         {
-            USHORT nItemId = m_pToolbar->GetItemId( item );
+            sal_uInt16 nItemId = m_pToolbar->GetItemId( item );
             Window* pItemWindow = m_pToolbar->GetItemWindow( nItemId );
             if ( pItemWindow )
                 (this->*_handler)( nItemId, pItemWindow, _pParam );
@@ -587,7 +587,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void NavigationToolBar::setItemBackground( USHORT /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const
+    void NavigationToolBar::setItemBackground( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const
     {
         if ( _pColor )
             _pItemWindow->SetControlBackground( *static_cast< const Color* >( _pColor ) );
@@ -596,7 +596,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void NavigationToolBar::setTextLineColor( USHORT /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const
+    void NavigationToolBar::setTextLineColor( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const
     {
         if ( _pColor )
             _pItemWindow->SetTextLineColor( *static_cast< const Color* >( _pColor ) );
@@ -605,14 +605,14 @@ namespace frm
     }
 #if 0
     //---------------------------------------------------------------------
-    void NavigationToolBar::setItemWindowZoom( USHORT /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
+    void NavigationToolBar::setItemWindowZoom( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         _pItemWindow->SetZoom( GetZoom() );
         _pItemWindow->SetZoomedPointFont( IsControlFont() ? GetControlFont() : GetPointFont() );
     }
 #endif
     //---------------------------------------------------------------------
-    void NavigationToolBar::setItemControlFont( USHORT /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
+    void NavigationToolBar::setItemControlFont( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         if ( IsControlFont() )
             _pItemWindow->SetControlFont( GetControlFont() );
@@ -621,7 +621,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void NavigationToolBar::setItemControlForeground( USHORT /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
+    void NavigationToolBar::setItemControlForeground( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         if ( IsControlForeground() )
             _pItemWindow->SetControlForeground( GetControlForeground() );
@@ -631,7 +631,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void NavigationToolBar::adjustItemWindowWidth( USHORT _nItemId, Window* _pItemWindow, const void* /* _pParam */ ) const
+    void NavigationToolBar::adjustItemWindowWidth( sal_uInt16 _nItemId, Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         String sItemText;
         switch ( _nItemId )
@@ -661,9 +661,9 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void NavigationToolBar::enableItemRTL( USHORT /*_nItemId*/, Window* _pItemWindow, const void* _pIsRTLEnabled ) const
+    void NavigationToolBar::enableItemRTL( sal_uInt16 /*_nItemId*/, Window* _pItemWindow, const void* _pIsRTLEnabled ) const
     {
-        _pItemWindow->EnableRTL( *static_cast< const BOOL* >( _pIsRTLEnabled ) );
+        _pItemWindow->EnableRTL( *static_cast< const sal_Bool* >( _pIsRTLEnabled ) );
     }
 
     //=====================================================================
@@ -678,7 +678,7 @@ namespace frm
         SetFirst( 1 );
         SetSpinSize( 1 );
         SetDecimalDigits( 0 );
-        SetStrictFormat( TRUE );
+        SetStrictFormat( sal_True );
         SetBorderStyle( WINDOW_BORDER_MONO );
     }
 

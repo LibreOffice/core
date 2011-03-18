@@ -455,12 +455,12 @@ namespace pcr
         }
         break;
 
-        case PROPERTY_ID_BIND_EXPRESSION:   aDescriptor.PrimaryButtonId = UID_PROP_DLG_BIND_EXPRESSION; break;
-        case PROPERTY_ID_XSD_REQUIRED:      aDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_REQUIRED;    break;
-        case PROPERTY_ID_XSD_RELEVANT:      aDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_RELEVANT;    break;
-        case PROPERTY_ID_XSD_READONLY:      aDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_READONLY;    break;
-        case PROPERTY_ID_XSD_CONSTRAINT:    aDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_CONSTRAINT;  break;
-        case PROPERTY_ID_XSD_CALCULATION:   aDescriptor.PrimaryButtonId = UID_PROP_DLG_XSD_CALCULATION; break;
+        case PROPERTY_ID_BIND_EXPRESSION:   aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_BIND_EXPRESSION); break;
+        case PROPERTY_ID_XSD_REQUIRED:      aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_XSD_REQUIRED);    break;
+        case PROPERTY_ID_XSD_RELEVANT:      aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_XSD_RELEVANT);    break;
+        case PROPERTY_ID_XSD_READONLY:      aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_XSD_READONLY);    break;
+        case PROPERTY_ID_XSD_CONSTRAINT:    aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_XSD_CONSTRAINT);  break;
+        case PROPERTY_ID_XSD_CALCULATION:   aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_XSD_CALCULATION); break;
 
         default:
             OSL_FAIL( "EFormsPropertyHandler::describePropertyLine: cannot handle this property!" );

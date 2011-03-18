@@ -51,6 +51,7 @@ TabPage OFA_TP_MEMORY
     };
     NumericField ED_UNDO
     {
+        HelpID = "cui:NumericField:OFA_TP_MEMORY:ED_UNDO";
         Border = TRUE ;
         Pos = MAP_APPFONT( COL3, ROW1 );
         Size = MAP_APPFONT( WIDTH2, RSC_CD_TEXTBOX_HEIGHT );
@@ -80,6 +81,7 @@ TabPage OFA_TP_MEMORY
     };
     NumericField NF_GRAPHICCACHE
     {
+        HelpID = "cui:NumericField:OFA_TP_MEMORY:NF_GRAPHICCACHE";
         Border = TRUE ;
         Pos = MAP_APPFONT( COL3, ROW3 );
         Size = MAP_APPFONT( WIDTH2, RSC_CD_TEXTBOX_HEIGHT );
@@ -103,6 +105,7 @@ TabPage OFA_TP_MEMORY
     };
     NumericField NF_GRAPHICOBJECTCACHE
     {
+        HelpID = "cui:NumericField:OFA_TP_MEMORY:NF_GRAPHICOBJECTCACHE";
         Border = TRUE ;
         Pos = MAP_APPFONT( COL3, ROW4 );
         Size = MAP_APPFONT( WIDTH2, RSC_CD_TEXTBOX_HEIGHT );
@@ -127,6 +130,7 @@ TabPage OFA_TP_MEMORY
     };
     TimeField TF_GRAPHICOBJECTTIME
     {
+        HelpID = "cui:TimeField:OFA_TP_MEMORY:TF_GRAPHICOBJECTTIME";
         Border = TRUE ;
         Pos = MAP_APPFONT( COL3, ROW5 );
         Size = MAP_APPFONT( WIDTH2, RSC_CD_TEXTBOX_HEIGHT );
@@ -179,6 +183,7 @@ TabPage OFA_TP_MEMORY
     };
     NumericField NF_OLECACHE
     {
+        HelpID = "cui:NumericField:OFA_TP_MEMORY:NF_OLECACHE";
         Border = TRUE ;
         Pos = MAP_APPFONT( COL3, ROW7 );
         Size = MAP_APPFONT( WIDTH2, RSC_CD_TEXTBOX_HEIGHT );
@@ -195,6 +200,7 @@ TabPage OFA_TP_MEMORY
     };
     CheckBox CB_QUICKLAUNCH
     {
+        HelpID = "cui:CheckBox:OFA_TP_MEMORY:CB_QUICKLAUNCH";
         Pos = MAP_APPFONT( COL1, ROW9 );
         Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Load %PRODUCTNAME during system start-up";

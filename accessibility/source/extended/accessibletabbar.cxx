@@ -273,7 +273,7 @@ namespace accessibility
 
                 if ( i < nCount )
                 {
-                    Window* pChild = m_pTabBar->GetAccessibleChildWindow( (USHORT)i );
+                    Window* pChild = m_pTabBar->GetAccessibleChildWindow( (sal_uInt16)i );
                     if ( pChild )
                         xChild = pChild->GetAccessible();
                 }
@@ -319,7 +319,7 @@ namespace accessibility
             Window* pParent = m_pTabBar->GetAccessibleParentWindow();
             if ( pParent )
             {
-                for ( USHORT i = 0, nCount = pParent->GetAccessibleChildWindowCount(); i < nCount; ++i )
+                for ( sal_uInt16 i = 0, nCount = pParent->GetAccessibleChildWindowCount(); i < nCount; ++i )
                 {
                     Window* pChild = pParent->GetAccessibleChildWindow( i );
                     if ( pChild == static_cast< Window* >( m_pTabBar ) )

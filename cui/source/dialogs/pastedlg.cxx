@@ -52,10 +52,10 @@ SvPasteObjectDialog::SvPasteObjectDialog( Window* pParent )
     aFtObjectSource( this, CUI_RES( FT_OBJECT_SOURCE ) ),
     aRbPaste( this, CUI_RES( RB_PASTE ) ),
     aRbPasteLink( this, CUI_RES( RB_PASTE_LINK ) ),
-    aLbInsertList( this, CUI_RES( LB_INSERT_LIST ) ),
     aCbDisplayAsIcon( this, CUI_RES( CB_DISPLAY_AS_ICON ) ),
     aPbChangeIcon( this, CUI_RES( PB_CHANGE_ICON ) ),
     aFlChoice( this, CUI_RES( FL_CHOICE ) ),
+    aLbInsertList( this, CUI_RES( LB_INSERT_LIST ) ),
     aOKButton1( this, CUI_RES( 1 ) ),
     aCancelButton1( this, CUI_RES( 1 ) ),
     aHelpButton1( this, CUI_RES( 1 ) ),
@@ -73,6 +73,8 @@ SvPasteObjectDialog::SvPasteObjectDialog( Window* pParent )
     ObjectLB().SetSelectHdl( LINK( this, SvPasteObjectDialog, SelectHdl ) );
     ObjectLB().SetDoubleClickHdl( LINK( this, SvPasteObjectDialog, DoubleClickHdl ) );
     SetDefault();
+
+    aLbInsertList.SetAccessibleName(aFlChoice.GetText());
 }
 
 void SvPasteObjectDialog::SelectObject()
@@ -105,8 +107,8 @@ IMPL_LINK_INLINE_END( SvPasteObjectDialog, DoubleClickHdl, ListBox *, pListBox )
 
 void SvPasteObjectDialog::SetDefault()
 {
-    bLink   = FALSE;
-    nAspect = (USHORT)::com::sun::star::embed::Aspects::MSOLE_CONTENT;
+    bLink   = sal_False;
+    nAspect = (sal_uInt16)::com::sun::star::embed::Aspects::MSOLE_CONTENT;
 }
 
 SvPasteObjectDialog::~SvPasteObjectDialog()
@@ -129,7 +131,7 @@ void SvPasteObjectDialog::Insert( SotFormatStringId nFormat, const String& rForm
         delete pStr;
 }
 
-ULONG SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
+sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
                                       const DataFlavorExVector* pFormats,
                                       const TransferableObjectDescriptor* )
 {
@@ -143,10 +145,10 @@ ULONG SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
 
     //Dialogbox erzeugen und fuellen
     String aSourceName, aTypeName;
-    ULONG nSelFormat = 0;
+    sal_uLong nSelFormat = 0;
     SvGlobalName aEmptyNm;
 
-    ObjectLB().SetUpdateMode( FALSE );
+    ObjectLB().SetUpdateMode( sal_False );
 
     DataFlavorExVector::iterator aIter( ((DataFlavorExVector&)*pFormats).begin() ),
                                  aEnd( ((DataFlavorExVector&)*pFormats).end() );
@@ -218,7 +220,7 @@ ULONG SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         }
     }
 
-    ObjectLB().SetUpdateMode( TRUE );
+    ObjectLB().SetUpdateMode( sal_True );
     SelectObject();
 
     if( aSourceName.Len() )
@@ -239,9 +241,9 @@ ULONG SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         bLink = PasteLink().IsChecked();
 
         if( AsIconBox().IsChecked() )
-            nAspect = (USHORT)com::sun::star::embed::Aspects::MSOLE_ICON;
+            nAspect = (sal_uInt16)com::sun::star::embed::Aspects::MSOLE_ICON;
 
-        nSelFormat  = (ULONG)ObjectLB().GetEntryData( ObjectLB().GetSelectEntryPos() );
+        nSelFormat  = (sal_uLong)ObjectLB().GetEntryData( ObjectLB().GetSelectEntryPos() );
     }
 
     return nSelFormat;

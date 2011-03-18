@@ -38,9 +38,9 @@ class ExtendedTabBar : public TabBar
 {
     EditEngine*     pEditEngine;
     EditView*       pEditView;
-    BOOL            bIsInKeyInput;
+    sal_Bool            bIsInKeyInput;
 #if _SOLAR__PRIVATE
-    void            ImpCheckEditEngine( BOOL bKeepNewText );
+    void            ImpCheckEditEngine( sal_Bool bKeepNewText );
 #endif
 protected:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
@@ -50,17 +50,17 @@ protected:
     virtual void    KeyInput( const KeyEvent& rKEvent );
     virtual void    Paint( const Rectangle& );
 
-    virtual BOOL    StartRenamingTab( USHORT nCurId );
-    virtual BOOL    AllowRenamingTab( USHORT nCurId, const String& rNewName );
-    virtual void    TabRenamed( USHORT nCurId, const String& rNewName );
+    virtual sal_Bool    StartRenamingTab( sal_uInt16 nCurId );
+    virtual sal_Bool    AllowRenamingTab( sal_uInt16 nCurId, const String& rNewName );
+    virtual void    TabRenamed( sal_uInt16 nCurId, const String& rNewName );
 
 public:
                     ExtendedTabBar( Window* pParent, WinBits nStyle );
                     ~ExtendedTabBar();
 
     void            RenameSelectedTab();
-    BOOL            IsInEditMode() const { return pEditEngine ? TRUE : FALSE; }
-    void            StopEditMode( BOOL bKeepCurText = FALSE );
+    sal_Bool            IsInEditMode() const { return pEditEngine ? sal_True : sal_False; }
+    void            StopEditMode( sal_Bool bKeepCurText = sal_False );
 };
 
 #endif  //_BASTYPE4_HXX

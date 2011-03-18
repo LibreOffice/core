@@ -75,9 +75,9 @@ class SentenceEditWindow_Impl : public MultiLineEdit
     using MultiLineEdit::SetText;
 
 private:
-    std::set< USHORT >      m_aIgnoreErrorsAt;
-    USHORT          m_nErrorStart;
-    USHORT          m_nErrorEnd;
+    std::set< sal_uInt16 >      m_aIgnoreErrorsAt;
+    sal_uInt16          m_nErrorStart;
+    sal_uInt16          m_nErrorEnd;
     bool            m_bIsUndoEditMode;
 
     Link            m_aModifyLink;
@@ -94,12 +94,12 @@ public:
 
     void            SetModifyHdl(const Link& rLink) { m_aModifyLink = rLink;}
 
-    void            SetAttrib( const TextAttrib& rAttr, ULONG nPara, USHORT nStart, USHORT nEnd );
+    void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
     void            SetText( const String& rStr );
 
     bool            MarkNextError( bool bIgnoreCurrentError );
     void            ChangeMarkedWord(const String& rNewWord, LanguageType eLanguage);
-    void            MoveErrorMarkTo(USHORT nErrorStart, USHORT nErrorEnd, bool bGrammar);
+    void            MoveErrorMarkTo(sal_uInt16 nErrorStart, sal_uInt16 nErrorEnd, bool bGrammar);
     String          GetErrorText() const;
     void            RestoreCurrentError();
 
@@ -109,8 +109,8 @@ public:
     const SpellErrorDescription* GetAlternatives();
 
 
-    void            ResetModified()   { GetTextEngine()->SetModified(FALSE); m_bIsUndoEditMode = false;}
-    BOOL            IsModified() const              { return GetTextEngine()->IsModified(); }
+    void            ResetModified()   { GetTextEngine()->SetModified(sal_False); m_bIsUndoEditMode = false;}
+    sal_Bool            IsModified() const              { return GetTextEngine()->IsModified(); }
 
     bool            IsUndoEditMode() const { return m_bIsUndoEditMode;}
     void            SetUndoEditMode(bool bSet);
@@ -119,10 +119,10 @@ public:
 
     void            ResetUndo();
     void            Undo();
-    void            AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg=FALSE );
-    USHORT          GetUndoActionCount();
-    void            UndoActionStart( USHORT nId );
-    void            UndoActionEnd( USHORT nId );
+    void            AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg=sal_False );
+    sal_uInt16      GetUndoActionCount();
+    void            UndoActionStart( sal_uInt16 nId );
+    void            UndoActionEnd();
 
     void            MoveErrorEnd(long nOffset);
 

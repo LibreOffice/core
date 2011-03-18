@@ -913,7 +913,7 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
     HRESULT ret= S_OK;
     try
     {
-        Sequence<INT16>     outIndex;
+        Sequence<sal_Int16>     outIndex;
         Sequence<Any>   outParams;
         Any                 returnValue;
 

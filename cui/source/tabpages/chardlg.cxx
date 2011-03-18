@@ -101,7 +101,7 @@ using namespace ::com::sun::star;
 
 // static ----------------------------------------------------------------
 
-static USHORT pNameRanges[] =
+static sal_uInt16 pNameRanges[] =
 {
     SID_ATTR_CHAR_FONT,
     SID_ATTR_CHAR_WEIGHT,
@@ -118,7 +118,7 @@ static USHORT pNameRanges[] =
     0
 };
 
-static USHORT pEffectsRanges[] =
+static sal_uInt16 pEffectsRanges[] =
 {
     SID_ATTR_CHAR_SHADOWED,
     SID_ATTR_CHAR_UNDERLINE,
@@ -139,7 +139,7 @@ static USHORT pEffectsRanges[] =
     0
 };
 
-static USHORT pPositionRanges[] =
+static sal_uInt16 pPositionRanges[] =
 {
     SID_ATTR_CHAR_KERNING,
     SID_ATTR_CHAR_KERNING,
@@ -154,7 +154,7 @@ static USHORT pPositionRanges[] =
     0
 };
 
-static USHORT pTwoLinesRanges[] =
+static sal_uInt16 pTwoLinesRanges[] =
 {
     SID_ATTR_CHAR_TWO_LINES,
     SID_ATTR_CHAR_TWO_LINES,
@@ -163,7 +163,7 @@ static USHORT pTwoLinesRanges[] =
 
 // C-Funktion ------------------------------------------------------------
 
-inline BOOL StateToAttr( TriState aState )
+inline sal_Bool StateToAttr( TriState aState )
 {
     return ( STATE_CHECK == aState );
 }
@@ -191,11 +191,11 @@ inline SvxFont& SvxCharBasePage::GetPreviewCTLFont()
 // -----------------------------------------------------------------------
 
 SvxCharBasePage::SvxCharBasePage( Window* pParent, const ResId& rResId, const SfxItemSet& rItemset,
-                                 USHORT nResIdPrewievWin, USHORT nResIdFontTypeFT ):
+                                 sal_uInt16 nResIdPrewievWin, sal_uInt16 nResIdFontTypeFT ):
     SfxTabPage( pParent, rResId, rItemset ),
     m_aPreviewWin( this, ResId( nResIdPrewievWin, *rResId.GetResMgr() ) ),
     m_aFontTypeFT( this, ResId( nResIdFontTypeFT, *rResId.GetResMgr() ) ),
-    m_bPreviewBackgroundToCharacter( FALSE )
+    m_bPreviewBackgroundToCharacter( sal_False )
 {
 }
 
@@ -213,7 +213,7 @@ void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
     SvxFont&        rFont = GetPreviewFont();
     SvxFont&        rCJKFont = GetPreviewCJKFont();
     SvxFont&        rCTLFont = GetPreviewCTLFont();
-    USHORT          nWhich;
+    sal_uInt16          nWhich;
 
     nWhich = GetWhich( SID_CHAR_DLG_PREVIEW_STRING );
     if( ISITEMSET )
@@ -322,7 +322,7 @@ void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
     if( ISITEMSET )
     {
         const SvxContourItem& rItem = ( SvxContourItem& ) rSet.Get( nWhich );
-        BOOL bOutline = rItem.GetValue();
+        sal_Bool bOutline = rItem.GetValue();
         rFont.SetOutline( bOutline );
         rCJKFont.SetOutline( bOutline );
         rCTLFont.SetOutline( bOutline );
@@ -333,14 +333,14 @@ void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
     if( ISITEMSET )
     {
         const SvxShadowedItem& rItem = ( SvxShadowedItem& ) rSet.Get( nWhich );
-        BOOL bShadow = rItem.GetValue();
+        sal_Bool bShadow = rItem.GetValue();
         rFont.SetShadow( bShadow );
         rCJKFont.SetShadow( bShadow );
         rCTLFont.SetShadow( bShadow );
     }
 
     // Background
-    BOOL bTransparent;
+    sal_Bool bTransparent;
     nWhich = GetWhich( m_bPreviewBackgroundToCharacter ? SID_ATTR_BRUSH : SID_ATTR_BRUSH_CHAR );
     if( ISITEMSET )
     {
@@ -352,7 +352,7 @@ void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
          rCTLFont.SetFillColor( rColor );
     }
     else
-        bTransparent = TRUE;
+        bTransparent = sal_True;
 
     rFont.SetTransparent( bTransparent );
     rCJKFont.SetTransparent( bTransparent );
@@ -413,9 +413,9 @@ void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
 
     // Escapement
     nWhich = GetWhich( SID_ATTR_CHAR_ESCAPEMENT );
-    const BYTE nProp = 100;
+    const sal_uInt8 nProp = 100;
     short nEsc;
-    BYTE nEscProp;
+    sal_uInt8 nEscProp;
     if( ISITEMSET )
     {
         const SvxEscapementItem& rItem = ( SvxEscapementItem& ) rSet.Get( nWhich );
@@ -443,9 +443,9 @@ void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-void SvxCharBasePage::SetPrevFontSize( const SfxItemSet& rSet, USHORT nSlot, SvxFont& rFont )
+void SvxCharBasePage::SetPrevFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont )
 {
-    USHORT nWhich = GetWhich( nSlot );
+    sal_uInt16 nWhich = GetWhich( nSlot );
     long nH;
     if( rSet.GetItemState( nWhich ) >= SFX_ITEM_SET )
     {
@@ -461,9 +461,9 @@ void SvxCharBasePage::SetPrevFontSize( const SfxItemSet& rSet, USHORT nSlot, Svx
 
 // -----------------------------------------------------------------------
 
-void SvxCharBasePage::SetPrevFont( const SfxItemSet& rSet, USHORT nSlot, SvxFont& rFont )
+void SvxCharBasePage::SetPrevFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont )
 {
-    USHORT nWhich = GetWhich( nSlot );
+    sal_uInt16 nWhich = GetWhich( nSlot );
     if( ISITEMSET )
     {
         const SvxFontItem& rFontItem = ( SvxFontItem& ) rSet.Get( nWhich );
@@ -477,9 +477,9 @@ void SvxCharBasePage::SetPrevFont( const SfxItemSet& rSet, USHORT nSlot, SvxFont
 
 // -----------------------------------------------------------------------
 
-void SvxCharBasePage::SetPrevFontStyle( const SfxItemSet& rSet, USHORT nPosture, USHORT nWeight, SvxFont& rFont )
+void SvxCharBasePage::SetPrevFontStyle( const SfxItemSet& rSet, sal_uInt16 nPosture, sal_uInt16 nWeight, SvxFont& rFont )
 {
-    USHORT nWhich = GetWhich( nPosture );
+    sal_uInt16 nWhich = GetWhich( nPosture );
     if( ISITEMSET )
     {
         const SvxPostureItem& rItem = ( SvxPostureItem& ) rSet.Get( nWhich );
@@ -498,7 +498,7 @@ void SvxCharBasePage::SetPrevFontStyle( const SfxItemSet& rSet, USHORT nPosture,
 
 void SvxCharBasePage::SetPrevFontWidthScale( const SfxItemSet& rSet )
 {
-    USHORT  nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
+    sal_uInt16  nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
     if( ISITEMSET )
     {
         const SvxCharScaleWidthItem&    rItem = ( SvxCharScaleWidthItem& ) rSet.Get( nWhich );
@@ -511,7 +511,7 @@ void SvxCharBasePage::SetPrevFontWidthScale( const SfxItemSet& rSet )
 namespace
 {
     // -----------------------------------------------------------------------
-    void setPrevFontEscapement(SvxFont& _rFont,BYTE nProp, BYTE nEscProp, short nEsc )
+    void setPrevFontEscapement(SvxFont& _rFont,sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )
     {
         _rFont.SetPropr( nProp );
         _rFont.SetProprRel( nEscProp );
@@ -522,7 +522,7 @@ namespace
 }
 // -----------------------------------------------------------------------
 
-void SvxCharBasePage::SetPrevFontEscapement( BYTE nProp, BYTE nEscProp, short nEsc )
+void SvxCharBasePage::SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )
 {
     setPrevFontEscapement(GetPreviewFont(),nProp,nEscProp,nEsc);
     setPrevFontEscapement(GetPreviewCJKFont(),nProp,nEscProp,nEsc);
@@ -538,16 +538,16 @@ struct SvxCharNamePage_Impl
     String          m_aNoStyleText;
     String          m_aTransparentText;
     const FontList* m_pFontList;
-    USHORT          m_nExtraEntryPos;
-    BOOL            m_bMustDelete;
-    BOOL            m_bInSearchMode;
+    sal_uInt16          m_nExtraEntryPos;
+    sal_Bool            m_bMustDelete;
+    sal_Bool            m_bInSearchMode;
 
     SvxCharNamePage_Impl() :
 
         m_pFontList     ( NULL ),
         m_nExtraEntryPos( LISTBOX_ENTRY_NOTFOUND ),
-        m_bMustDelete   ( FALSE ),
-        m_bInSearchMode ( FALSE )
+        m_bMustDelete   ( sal_False ),
+        m_bInSearchMode ( sal_False )
 
     {
         m_aUpdateTimer.SetTimeout( 350 );
@@ -682,9 +682,9 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
 
     FreeResource();
 
-    m_pWestFontLanguageLB->SetLanguageList( LANG_LIST_WESTERN,  TRUE, FALSE, TRUE );
-    m_pEastFontLanguageLB->SetLanguageList( LANG_LIST_CJK,      TRUE, FALSE, TRUE );
-    m_pCTLFontLanguageLB->SetLanguageList( LANG_LIST_CTL,       TRUE, FALSE, TRUE );
+    m_pWestFontLanguageLB->SetLanguageList( LANG_LIST_WESTERN,  sal_True, sal_False, sal_True );
+    m_pEastFontLanguageLB->SetLanguageList( LANG_LIST_CJK,      sal_True, sal_False, sal_True );
+    m_pCTLFontLanguageLB->SetLanguageList( LANG_LIST_CTL,       sal_True, sal_False, sal_True );
 
     Initialize();
 }
@@ -757,7 +757,7 @@ void SvxCharNamePage::Initialize()
         bKillTable = true;
     }
 
-    m_pColorLB->SetUpdateMode( FALSE );
+    m_pColorLB->SetUpdateMode( sal_False );
 
     {
         SfxPoolItem* pDummy;
@@ -773,7 +773,7 @@ void SvxCharNamePage::Initialize()
         m_pColorLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
-    m_pColorLB->SetUpdateMode( TRUE );
+    m_pColorLB->SetUpdateMode( sal_True );
 
     if ( bKillTable )
         delete pColorTable;
@@ -816,14 +816,14 @@ const FontList* SvxCharNamePage::GetFontList() const
                 DBG_ASSERT(NULL != ( (SvxFontListItem*)pItem )->GetFontList(),
                            "Where is the font list?");
                     m_pImpl->m_pFontList =  static_cast<const SvxFontListItem*>(pItem )->GetFontList()->Clone();
-                m_pImpl->m_bMustDelete = TRUE;
+                m_pImpl->m_bMustDelete = sal_True;
             }
         }
         if(!m_pImpl->m_pFontList)
         {
             m_pImpl->m_pFontList =
                 new FontList( Application::GetDefaultDevice() );
-            m_pImpl->m_bMustDelete = TRUE;
+            m_pImpl->m_bMustDelete = sal_True;
         }
     }
 
@@ -839,14 +839,14 @@ namespace
                     const FontStyleBox* _pFontStyleLB,
                     const FontSizeBox* _pFontSizeLB,
                     const FontList* _pFontList,
-                    USHORT _nFontWhich,
-                    USHORT _nFontHeightWhich)
+                    sal_uInt16 _nFontWhich,
+                    sal_uInt16 _nFontHeightWhich)
     {
         Size aSize = _rFont.GetSize();
         aSize.Width() = 0;
         FontInfo aFontInfo;
         String sFontName(_pFontNameLB->GetText());
-        BOOL bFontAvailable = _pFontList->IsAvailable( sFontName );
+        sal_Bool bFontAvailable = _pFontList->IsAvailable( sFontName );
         if(bFontAvailable  || _pFontNameLB->GetSavedValue() != sFontName)
             aFontInfo = _pFontList->Get( sFontName, _pFontStyleLB->GetText() );
         else
@@ -1008,7 +1008,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     FontSizeBox* pSizeBox = NULL;
     FixedText* pLangFT = NULL;
     SvxLanguageBox* pLangBox = NULL;
-    USHORT nWhich = 0;
+    sal_uInt16 nWhich = 0;
 
     switch ( eLangGrp )
     {
@@ -1141,7 +1141,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
 
         if( rItem.GetProp() != 100 || SFX_MAPUNIT_RELATIVE != rItem.GetPropUnit() )
         {
-            BOOL bPtRel = SFX_MAPUNIT_POINT == rItem.GetPropUnit();
+            sal_Bool bPtRel = SFX_MAPUNIT_POINT == rItem.GetPropUnit();
             pSizeBox->SetPtRelative( bPtRel );
             pSizeBox->SetValue( bPtRel ? ((short)rItem.GetProp()) * 10 : rItem.GetProp() );
         }
@@ -1214,16 +1214,16 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
 
 // -----------------------------------------------------------------------
 
-BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp )
+sal_Bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp )
 {
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
 
     FontNameBox* pNameBox = NULL;
     FontStyleBox* pStyleBox = NULL;
     FontSizeBox* pSizeBox = NULL;
     SvxLanguageBox* pLangBox = NULL;
-    USHORT nWhich = 0;
-    USHORT nSlot = 0;
+    sal_uInt16 nWhich = 0;
+    sal_uInt16 nSlot = 0;
 
     switch ( eLangGrp )
     {
@@ -1263,7 +1263,7 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     const String& rFontName  = pNameBox->GetText();
     const FontList* pFontList = GetFontList();
     String aStyleBoxText =pStyleBox->GetText();
-    USHORT nEntryPos = pStyleBox->GetEntryPos( aStyleBoxText );
+    sal_uInt16 nEntryPos = pStyleBox->GetEntryPos( aStyleBoxText );
     if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
         aStyleBoxText.Erase();
     FontInfo aInfo( pFontList->Get( rFontName, aStyleBoxText ) );
@@ -1283,20 +1283,20 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
         bChanged = !pNameBox->GetSavedValue().Len();
 
     if ( !bChanged && pExampleSet &&
-         pExampleSet->GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET &&
+         pExampleSet->GetItemState( nWhich, sal_False, &pItem ) == SFX_ITEM_SET &&
          ( (SvxFontItem*)pItem )->GetFamilyName() != aFontItem.GetFamilyName() )
         bChanged = true;
 
     if ( bChanged && rFontName.Len() )
     {
         rSet.Put( aFontItem );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         rSet.ClearItem( nWhich );
 
 
-    bChanged = TRUE;
+    bChanged = sal_True;
     switch ( eLangGrp )
     {
         case Western : nSlot = SID_ATTR_CHAR_WEIGHT; break;
@@ -1328,9 +1328,9 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     }
 
     if ( !bChanged && pExampleSet &&
-         pExampleSet->GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET &&
+         pExampleSet->GetItemState( nWhich, sal_False, &pItem ) == SFX_ITEM_SET &&
          ( (SvxWeightItem*)pItem )->GetValue() != aWeightItem.GetValue() )
-        bChanged = TRUE;
+        bChanged = true;
 
     if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
         bChanged = ( nEntryPos == m_pImpl->m_nExtraEntryPos );
@@ -1340,9 +1340,9 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     if ( bChanged && aText.Len() )
     {
         rSet.Put( aWeightItem );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     bChanged = true;
@@ -1364,7 +1364,7 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
         const SvxPostureItem& rItem = *( (const SvxPostureItem*)pOld );
 
         if ( rItem.GetValue() == aPostureItem.GetValue() )
-            bChanged = FALSE;
+            bChanged = false;
     }
 
     if ( !bChanged )
@@ -1373,11 +1373,11 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
 
         if ( m_pImpl->m_bInSearchMode && bChanged &&
              aInfo.GetItalic() == ITALIC_NONE && aInfo.GetWeight() != WEIGHT_NORMAL )
-            bChanged = FALSE;
+            bChanged = false;
     }
 
     if ( !bChanged && pExampleSet &&
-         pExampleSet->GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET &&
+         pExampleSet->GetItemState( nWhich, sal_False, &pItem ) == SFX_ITEM_SET &&
          ( (SvxPostureItem*)pItem )->GetValue() != aPostureItem.GetValue() )
         bChanged = true;
 
@@ -1387,9 +1387,9 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     if ( bChanged && aText.Len() )
     {
         rSet.Put( aPostureItem );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     // FontSize
@@ -1417,11 +1417,11 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     bChanged = ( nSize != nSavedSize );
 
     if ( !bChanged && pExampleSet &&
-         pExampleSet->GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET )
+         pExampleSet->GetItemState( nWhich, sal_False, &pItem ) == SFX_ITEM_SET )
     {
         float fSize = (float)nSize / 10;
         long nVal = CalcToUnit( fSize, rSet.GetPool()->GetMetric( nWhich ) );
-        if ( ( (SvxFontHeightItem*)pItem )->GetHeight() != (UINT32)nVal )
+        if ( ( (SvxFontHeightItem*)pItem )->GetHeight() != (sal_uInt32)nVal )
             bChanged = true;
     }
 
@@ -1437,9 +1437,9 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
 
             SvxFontHeightItem aHeight( 240, 100, nWhich );
             if ( pSizeBox->IsPtRelative() )
-                aHeight.SetHeight( rOldItem.GetHeight(), (USHORT)( nSize / 10 ), SFX_MAPUNIT_POINT, eUnit );
+                aHeight.SetHeight( rOldItem.GetHeight(), (sal_uInt16)( nSize / 10 ), SFX_MAPUNIT_POINT, eUnit );
             else
-                aHeight.SetHeight( rOldItem.GetHeight(), (USHORT)nSize, SFX_MAPUNIT_RELATIVE );
+                aHeight.SetHeight( rOldItem.GetHeight(), (sal_uInt16)nSize, SFX_MAPUNIT_RELATIVE );
             rSet.Put( aHeight );
         }
         else
@@ -1447,9 +1447,9 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
             float fSize = (float)nSize / 10;
             rSet.Put( SvxFontHeightItem( CalcToUnit( fSize, eUnit ), 100, nWhich ) );
         }
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     bChanged = true;
@@ -1461,15 +1461,15 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     }
     nWhich = GetWhich( nSlot );
     pOld = GetOldItem( rSet, nSlot );
-    USHORT nLangPos = pLangBox->GetSelectEntryPos();
-    LanguageType eLangType = (LanguageType)(ULONG)pLangBox->GetEntryData( nLangPos );
+    sal_uInt16 nLangPos = pLangBox->GetSelectEntryPos();
+    LanguageType eLangType = (LanguageType)(sal_uLong)pLangBox->GetEntryData( nLangPos );
 
     if ( pOld )
     {
         const SvxLanguageItem& rItem = *( (const SvxLanguageItem*)pOld );
 
         if ( nLangPos == LISTBOX_ENTRY_NOTFOUND || eLangType == (LanguageType)rItem.GetValue() )
-            bChanged = FALSE;
+            bChanged = false;
     }
 
     if ( !bChanged )
@@ -1478,9 +1478,9 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     if ( bChanged && nLangPos != LISTBOX_ENTRY_NOTFOUND )
     {
         rSet.Put( SvxLanguageItem( eLangType, nWhich ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     return bModified;
@@ -1490,7 +1490,7 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
 
 void SvxCharNamePage::ResetColor_Impl( const SfxItemSet& rSet )
 {
-    USHORT nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
     SfxItemState eState = rSet.GetItemState( nWhich );
 
     switch ( eState )
@@ -1520,7 +1520,7 @@ void SvxCharNamePage::ResetColor_Impl( const SfxItemSet& rSet )
             rCJKFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
             rCTLFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
             m_aPreviewWin.Invalidate();
-            USHORT nSelPos = m_pColorLB->GetEntryPos( aColor );
+            sal_uInt16 nSelPos = m_pColorLB->GetEntryPos( aColor );
             if ( nSelPos == LISTBOX_ENTRY_NOTFOUND && aColor == Color( COL_TRANSPARENT ) )
                 nSelPos = m_pColorLB->GetEntryPos( m_pImpl->m_aTransparentText );
 
@@ -1538,47 +1538,6 @@ void SvxCharNamePage::ResetColor_Impl( const SfxItemSet& rSet )
             break;
         }
     }
-}
-
-// -----------------------------------------------------------------------
-
-BOOL SvxCharNamePage::FillItemSetColor_Impl( SfxItemSet& rSet )
-{
-    USHORT nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
-    const SvxColorItem* pOld = (const SvxColorItem*)GetOldItem( rSet, SID_ATTR_CHAR_COLOR );
-    const SvxColorItem* pItem = NULL;
-    BOOL bChanged = TRUE;
-    const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
-    const SfxItemSet& rOldSet = GetItemSet();
-
-    Color aSelectedColor;
-    if ( m_pColorLB->GetSelectEntry() == m_pImpl->m_aTransparentText )
-        aSelectedColor = Color( COL_TRANSPARENT );
-    else
-        aSelectedColor = m_pColorLB->GetSelectEntryColor();
-
-    if ( pOld && pOld->GetValue() == aSelectedColor )
-        bChanged = FALSE;
-
-    if ( !bChanged )
-        bChanged = ( m_pColorLB->GetSavedValue() == LISTBOX_ENTRY_NOTFOUND );
-
-    if ( !bChanged && pExampleSet &&
-         pExampleSet->GetItemState( nWhich, FALSE, (const SfxPoolItem**)&pItem ) == SFX_ITEM_SET &&
-         ( (SvxColorItem*)pItem )->GetValue() != aSelectedColor )
-        bChanged = TRUE;
-
-    BOOL bModified = FALSE;
-
-    if ( bChanged && m_pColorLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
-    {
-        rSet.Put( SvxColorItem( aSelectedColor, nWhich ) );
-        bModified = TRUE;
-    }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
-        CLEARTITEM;
-
-    return bModified;
 }
 
 // -----------------------------------------------------------------------
@@ -1649,7 +1608,7 @@ SfxTabPage* SvxCharNamePage::Create( Window* pParent, const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-USHORT* SvxCharNamePage::GetRanges()
+sal_uInt16* SvxCharNamePage::GetRanges()
 {
     return pNameRanges;
 }
@@ -1670,12 +1629,11 @@ void SvxCharNamePage::Reset( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-BOOL SvxCharNamePage::FillItemSet( SfxItemSet& rSet )
+sal_Bool SvxCharNamePage::FillItemSet( SfxItemSet& rSet )
 {
-    BOOL bModified = FillItemSet_Impl( rSet, Western );
+    sal_Bool bModified = FillItemSet_Impl( rSet, Western );
     bModified |= FillItemSet_Impl( rSet, Asian );
     bModified |= FillItemSet_Impl( rSet, Ctl );
-//! bModified |= FillItemSetColor_Impl( rSet );
     return bModified;
 }
 
@@ -1688,13 +1646,13 @@ void SvxCharNamePage::SetFontList( const SvxFontListItem& rItem )
         delete m_pImpl->m_pFontList;
     }
     m_pImpl->m_pFontList = rItem.GetFontList()->Clone();
-    m_pImpl->m_bMustDelete = TRUE;
+    m_pImpl->m_bMustDelete = sal_True;
 }
 
 // -----------------------------------------------------------------------
 namespace
 {
-    void enableRelativeMode( SvxCharNamePage* _pPage, FontSizeBox* _pFontSizeLB, USHORT _nHeightWhich )
+    void enableRelativeMode( SvxCharNamePage* _pPage, FontSizeBox* _pFontSizeLB, sal_uInt16 _nHeightWhich )
     {
         _pFontSizeLB->EnableRelativeMode( 5, 995, 5 ); // min 5%, max 995%, step 5
 
@@ -1724,10 +1682,10 @@ void SvxCharNamePage::EnableRelativeMode()
 
 void SvxCharNamePage::EnableSearchMode()
 {
-    m_pImpl->m_bInSearchMode = TRUE;
+    m_pImpl->m_bInSearchMode = sal_True;
 }
 // -----------------------------------------------------------------------
-void SvxCharNamePage::DisableControls( USHORT nDisable )
+void SvxCharNamePage::DisableControls( sal_uInt16 nDisable )
 {
     if ( DISABLE_LANGUAGE & nDisable )
     {
@@ -1767,7 +1725,7 @@ void SvxCharNamePage::PageCreated (SfxAllItemSet aSet)
 
     if (pFlagItem)
     {
-        UINT32 nFlags=pFlagItem->GetValue();
+        sal_uInt32 nFlags=pFlagItem->GetValue();
         if ( ( nFlags & SVX_RELATIVE_MODE ) == SVX_RELATIVE_MODE )
             EnableRelativeMode();
         if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
@@ -1837,7 +1795,7 @@ void SvxCharEffectsPage::Initialize()
     // HTML-Mode
     const SfxPoolItem* pItem;
     SfxObjectShell* pShell;
-    if ( SFX_ITEM_SET == GetItemSet().GetItemState( SID_HTML_MODE, FALSE, &pItem ) ||
+    if ( SFX_ITEM_SET == GetItemSet().GetItemState( SID_HTML_MODE, sal_False, &pItem ) ||
          ( NULL != ( pShell = SfxObjectShell::Current() ) &&
            NULL != ( pItem = pShell->GetItem( SID_HTML_MODE ) ) ) )
     {
@@ -1867,9 +1825,9 @@ void SvxCharEffectsPage::Initialize()
         bKillTable = true;
     }
 
-    m_aUnderlineColorLB.SetUpdateMode( FALSE );
-    m_aOverlineColorLB.SetUpdateMode( FALSE );
-    m_aFontColorLB.SetUpdateMode( FALSE );
+    m_aUnderlineColorLB.SetUpdateMode( sal_False );
+    m_aOverlineColorLB.SetUpdateMode( sal_False );
+    m_aFontColorLB.SetUpdateMode( sal_False );
 
     {
         SfxPoolItem* pDummy;
@@ -1890,9 +1848,9 @@ void SvxCharEffectsPage::Initialize()
         m_aFontColorLB.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
-    m_aUnderlineColorLB.SetUpdateMode( TRUE );
-    m_aOverlineColorLB.SetUpdateMode( TRUE );
-    m_aFontColorLB.SetUpdateMode( TRUE );
+    m_aUnderlineColorLB.SetUpdateMode( sal_True );
+    m_aOverlineColorLB.SetUpdateMode( sal_True );
+    m_aFontColorLB.SetUpdateMode( sal_True );
     m_aFontColorLB.SetSelectHdl( LINK( this, SvxCharEffectsPage, ColorBoxSelectHdl_Impl ) );
 
     if ( bKillTable )
@@ -1944,12 +1902,12 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     SvxFont& rCJKFont = GetPreviewCJKFont();
     SvxFont& rCTLFont = GetPreviewCTLFont();
 
-    USHORT nPos = m_aUnderlineLB.GetSelectEntryPos();
-    FontUnderline eUnderline = (FontUnderline)(ULONG)m_aUnderlineLB.GetEntryData( nPos );
+    sal_uInt16 nPos = m_aUnderlineLB.GetSelectEntryPos();
+    FontUnderline eUnderline = (FontUnderline)(sal_uLong)m_aUnderlineLB.GetEntryData( nPos );
     nPos = m_aOverlineLB.GetSelectEntryPos();
-    FontUnderline eOverline = (FontUnderline)(ULONG)m_aOverlineLB.GetEntryData( nPos );
+    FontUnderline eOverline = (FontUnderline)(sal_uLong)m_aOverlineLB.GetEntryData( nPos );
     nPos = m_aStrikeoutLB.GetSelectEntryPos();
-    FontStrikeout eStrikeout = (FontStrikeout)(ULONG)m_aStrikeoutLB.GetEntryData( nPos );
+    FontStrikeout eStrikeout = (FontStrikeout)(sal_uLong)m_aStrikeoutLB.GetEntryData( nPos );
     rFont.SetUnderline( eUnderline );
     rCJKFont.SetUnderline( eUnderline );
     rCTLFont.SetUnderline( eUnderline );
@@ -1963,14 +1921,14 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     rCTLFont.SetStrikeout( eStrikeout );
 
     nPos = m_aPositionLB.GetSelectEntryPos();
-    BOOL bUnder = ( CHRDLG_POSITION_UNDER == (ULONG)m_aPositionLB.GetEntryData( nPos ) );
+    sal_Bool bUnder = ( CHRDLG_POSITION_UNDER == (sal_uLong)m_aPositionLB.GetEntryData( nPos ) );
     FontEmphasisMark eMark = (FontEmphasisMark)m_aEmphasisLB.GetSelectEntryPos();
     eMark |= bUnder ? EMPHASISMARK_POS_BELOW : EMPHASISMARK_POS_ABOVE;
     rFont.SetEmphasisMark( eMark );
     rCJKFont.SetEmphasisMark( eMark );
     rCTLFont.SetEmphasisMark( eMark );
 
-    USHORT nRelief = m_aReliefLB.GetSelectEntryPos();
+    sal_uInt16 nRelief = m_aReliefLB.GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nRelief)
     {
         rFont.SetRelief( (FontRelief)nRelief );
@@ -1986,7 +1944,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     rCJKFont.SetShadow( rFont.IsShadow() );
     rCTLFont.SetShadow( rFont.IsShadow() );
 
-    USHORT nCapsPos = m_aEffects2LB.GetSelectEntryPos();
+    sal_uInt16 nCapsPos = m_aEffects2LB.GetSelectEntryPos();
     if ( nCapsPos != LISTBOX_ENTRY_NOTFOUND )
     {
         rFont.SetCaseMap( (SvxCaseMap)nCapsPos );
@@ -1995,7 +1953,7 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
         rCTLFont.SetCaseMap( static_cast<SvxCaseMap>( nCapsPos == SVX_CASEMAP_KAPITAELCHEN ? SVX_CASEMAP_NOT_MAPPED : (SvxCaseMap)nCapsPos) );
     }
 
-    BOOL bWordLine = m_aIndividualWordsBtn.IsChecked();
+    sal_Bool bWordLine = m_aIndividualWordsBtn.IsChecked();
     rFont.SetWordLineMode( bWordLine );
     rCJKFont.SetWordLineMode( bWordLine );
     rCTLFont.SetWordLineMode( bWordLine );
@@ -2009,7 +1967,7 @@ void SvxCharEffectsPage::SetCaseMap_Impl( SvxCaseMap eCaseMap )
 {
     if ( SVX_CASEMAP_END > eCaseMap )
         m_aEffects2LB.SelectEntryPos(
-            sal::static_int_cast< USHORT >( eCaseMap ) );
+            sal::static_int_cast< sal_uInt16 >( eCaseMap ) );
     else
     {
         m_aEffects2LB.SetNoSelection();
@@ -2023,7 +1981,7 @@ void SvxCharEffectsPage::SetCaseMap_Impl( SvxCaseMap eCaseMap )
 
 void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
 {
-    USHORT nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
     SfxItemState eState = rSet.GetItemState( nWhich );
 
     switch ( eState )
@@ -2057,7 +2015,7 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
             rCTLFont.SetColor( aColor.GetColor() == COL_AUTO ? Color(COL_BLACK) : aColor );
 
             m_aPreviewWin.Invalidate();
-            USHORT nSelPos = m_aFontColorLB.GetEntryPos( aColor );
+            sal_uInt16 nSelPos = m_aFontColorLB.GetEntryPos( aColor );
             if ( nSelPos == LISTBOX_ENTRY_NOTFOUND && aColor == Color( COL_TRANSPARENT ) )
                 nSelPos = m_aFontColorLB.GetEntryPos( m_aTransparentColorName );
 
@@ -2079,12 +2037,12 @@ void SvxCharEffectsPage::ResetColor_Impl( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-BOOL SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
+sal_Bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
 {
-    USHORT nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_COLOR );
     const SvxColorItem* pOld = (const SvxColorItem*)GetOldItem( rSet, SID_ATTR_CHAR_COLOR );
     const SvxColorItem* pItem = NULL;
-    BOOL bChanged = TRUE;
+    sal_Bool bChanged = sal_True;
     const SfxItemSet* pExampleSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
     const SfxItemSet& rOldSet = GetItemSet();
 
@@ -2095,24 +2053,24 @@ BOOL SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
         aSelectedColor = m_aFontColorLB.GetSelectEntryColor();
 
     if ( pOld && pOld->GetValue() == aSelectedColor )
-        bChanged = FALSE;
+        bChanged = sal_False;
 
     if ( !bChanged )
         bChanged = ( m_aFontColorLB.GetSavedValue() == LISTBOX_ENTRY_NOTFOUND );
 
     if ( !bChanged && pExampleSet &&
-         pExampleSet->GetItemState( nWhich, FALSE, (const SfxPoolItem**)&pItem ) == SFX_ITEM_SET &&
+         pExampleSet->GetItemState( nWhich, sal_False, (const SfxPoolItem**)&pItem ) == SFX_ITEM_SET &&
          ( (SvxColorItem*)pItem )->GetValue() != aSelectedColor )
-        bChanged = TRUE;
+        bChanged = sal_True;
 
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
 
     if ( bChanged && m_aFontColorLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
     {
         rSet.Put( SvxColorItem( aSelectedColor, nWhich ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     return bModified;
@@ -2124,24 +2082,24 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
 {
     if ( &m_aEmphasisLB == pBox )
     {
-        USHORT nEPos = m_aEmphasisLB.GetSelectEntryPos();
-        BOOL bEnable = ( nEPos > 0 && nEPos != LISTBOX_ENTRY_NOTFOUND );
+        sal_uInt16 nEPos = m_aEmphasisLB.GetSelectEntryPos();
+        sal_Bool bEnable = ( nEPos > 0 && nEPos != LISTBOX_ENTRY_NOTFOUND );
         m_aPositionFT.Enable( bEnable );
         m_aPositionLB.Enable( bEnable );
     }
     else if( &m_aReliefLB == pBox)
     {
-        BOOL bEnable = ( pBox->GetSelectEntryPos() == 0 );
+        sal_Bool bEnable = ( pBox->GetSelectEntryPos() == 0 );
         m_aOutlineBtn.Enable( bEnable );
         m_aShadowBtn.Enable( bEnable );
     }
     else if ( &m_aPositionLB != pBox )
     {
-        USHORT nUPos = m_aUnderlineLB.GetSelectEntryPos(),
+        sal_uInt16 nUPos = m_aUnderlineLB.GetSelectEntryPos(),
                nOPos = m_aOverlineLB.GetSelectEntryPos(),
                nSPos = m_aStrikeoutLB.GetSelectEntryPos();
-        BOOL bUEnable = ( nUPos > 0 && nUPos != LISTBOX_ENTRY_NOTFOUND );
-        BOOL bOEnable = ( nOPos > 0 && nOPos != LISTBOX_ENTRY_NOTFOUND );
+        sal_Bool bUEnable = ( nUPos > 0 && nUPos != LISTBOX_ENTRY_NOTFOUND );
+        sal_Bool bOEnable = ( nOPos > 0 && nOPos != LISTBOX_ENTRY_NOTFOUND );
         m_aUnderlineColorFT.Enable( bUEnable );
         m_aUnderlineColorLB.Enable( bUEnable );
         m_aOverlineColorFT.Enable( bOEnable );
@@ -2219,7 +2177,7 @@ SfxTabPage* SvxCharEffectsPage::Create( Window* pParent, const SfxItemSet& rSet 
 
 // -----------------------------------------------------------------------
 
-USHORT* SvxCharEffectsPage::GetRanges()
+sal_uInt16* SvxCharEffectsPage::GetRanges()
 {
     return pEffectsRanges;
 }
@@ -2232,10 +2190,10 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     SvxFont& rCJKFont = GetPreviewCJKFont();
     SvxFont& rCTLFont = GetPreviewCTLFont();
 
-    BOOL bEnable = FALSE;
+    sal_Bool bEnable = sal_False;
 
     // Underline
-    USHORT nWhich = GetWhich( SID_ATTR_CHAR_UNDERLINE );
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_UNDERLINE );
     rFont.SetUnderline( UNDERLINE_NONE );
     rCJKFont.SetUnderline( UNDERLINE_NONE );
     rCTLFont.SetUnderline( UNDERLINE_NONE );
@@ -2257,18 +2215,18 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
             if ( eUnderline != UNDERLINE_NONE )
             {
-                for ( USHORT i = 0; i < m_aUnderlineLB.GetEntryCount(); ++i )
+                for ( sal_uInt16 i = 0; i < m_aUnderlineLB.GetEntryCount(); ++i )
                 {
-                    if ( (FontUnderline)(ULONG)m_aUnderlineLB.GetEntryData(i) == eUnderline )
+                    if ( (FontUnderline)(sal_uLong)m_aUnderlineLB.GetEntryData(i) == eUnderline )
                     {
                         m_aUnderlineLB.SelectEntryPos(i);
-                        bEnable = TRUE;
+                        bEnable = sal_True;
                         break;
                     }
                 }
 
                 Color aColor = rItem.GetColor();
-                USHORT nPos = m_aUnderlineColorLB.GetEntryPos( aColor );
+                sal_uInt16 nPos = m_aUnderlineColorLB.GetEntryPos( aColor );
 
                 if ( LISTBOX_ENTRY_NOTFOUND != nPos )
                     m_aUnderlineColorLB.SelectEntryPos( nPos );
@@ -2314,18 +2272,18 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
             if ( eOverline != UNDERLINE_NONE )
             {
-                for ( USHORT i = 0; i < m_aOverlineLB.GetEntryCount(); ++i )
+                for ( sal_uInt16 i = 0; i < m_aOverlineLB.GetEntryCount(); ++i )
                 {
-                    if ( (FontUnderline)(ULONG)m_aOverlineLB.GetEntryData(i) == eOverline )
+                    if ( (FontUnderline)(sal_uLong)m_aOverlineLB.GetEntryData(i) == eOverline )
                     {
                         m_aOverlineLB.SelectEntryPos(i);
-                        bEnable = TRUE;
+                        bEnable = sal_True;
                         break;
                     }
                 }
 
                 Color aColor = rItem.GetColor();
-                USHORT nPos = m_aOverlineColorLB.GetEntryPos( aColor );
+                sal_uInt16 nPos = m_aOverlineColorLB.GetEntryPos( aColor );
 
                 if ( LISTBOX_ENTRY_NOTFOUND != nPos )
                     m_aOverlineColorLB.SelectEntryPos( nPos );
@@ -2371,12 +2329,12 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
             if ( eStrikeout != STRIKEOUT_NONE )
             {
-                for ( USHORT i = 0; i < m_aStrikeoutLB.GetEntryCount(); ++i )
+                for ( sal_uInt16 i = 0; i < m_aStrikeoutLB.GetEntryCount(); ++i )
                 {
-                    if ( (FontStrikeout)(ULONG)m_aStrikeoutLB.GetEntryData(i) == eStrikeout )
+                    if ( (FontStrikeout)(sal_uLong)m_aStrikeoutLB.GetEntryData(i) == eStrikeout )
                     {
                         m_aStrikeoutLB.SelectEntryPos(i);
-                        bEnable = TRUE;
+                        bEnable = sal_True;
                         break;
                     }
                 }
@@ -2427,15 +2385,15 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         rCJKFont.SetEmphasisMark( eMark );
         rCTLFont.SetEmphasisMark( eMark );
 
-        m_aEmphasisLB.SelectEntryPos( (USHORT)( eMark & EMPHASISMARK_STYLE ) );
+        m_aEmphasisLB.SelectEntryPos( (sal_uInt16)( eMark & EMPHASISMARK_STYLE ) );
         eMark &= ~EMPHASISMARK_STYLE;
-        ULONG nEntryData = ( eMark == EMPHASISMARK_POS_ABOVE )
+        sal_uLong nEntryData = ( eMark == EMPHASISMARK_POS_ABOVE )
             ? CHRDLG_POSITION_OVER
             : ( eMark == EMPHASISMARK_POS_BELOW ) ? CHRDLG_POSITION_UNDER : 0;
 
-        for ( USHORT i = 0; i < m_aPositionLB.GetEntryCount(); i++ )
+        for ( sal_uInt16 i = 0; i < m_aPositionLB.GetEntryCount(); i++ )
         {
-            if ( nEntryData == (ULONG)m_aPositionLB.GetEntryData(i) )
+            if ( nEntryData == (sal_uLong)m_aPositionLB.GetEntryData(i) )
             {
                 m_aPositionLB.SelectEntryPos(i);
                 break;
@@ -2556,7 +2514,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         {
             const SvxContourItem& rItem = (SvxContourItem&)rSet.Get( nWhich );
             m_aOutlineBtn.SetState( (TriState)rItem.GetValue() );
-            m_aOutlineBtn.EnableTriState( FALSE );
+            m_aOutlineBtn.EnableTriState( sal_False );
             break;
         }
     }
@@ -2585,7 +2543,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         {
             const SvxShadowedItem& rItem = (SvxShadowedItem&)rSet.Get( nWhich );
             m_aShadowBtn.SetState( (TriState)rItem.GetValue() );
-            m_aShadowBtn.EnableTriState( FALSE );
+            m_aShadowBtn.EnableTriState( sal_False );
             break;
         }
     }
@@ -2614,7 +2572,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         {
             const SvxBlinkItem& rItem = (SvxBlinkItem&)rSet.Get( nWhich );
             m_aBlinkingBtn.SetState( (TriState)rItem.GetValue() );
-            m_aBlinkingBtn.EnableTriState( FALSE );
+            m_aBlinkingBtn.EnableTriState( sal_False );
             break;
         }
     }
@@ -2642,7 +2600,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         {
             const SvxCharHiddenItem& rItem = (SvxCharHiddenItem&)rSet.Get( nWhich );
             m_aHiddenBtn.SetState( (TriState)rItem.GetValue() );
-            m_aHiddenBtn.EnableTriState( FALSE );
+            m_aHiddenBtn.EnableTriState( sal_False );
             break;
         }
     }
@@ -2673,18 +2631,18 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
 {
     const SfxPoolItem* pOld = 0;
     const SfxItemSet& rOldSet = GetItemSet();
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
     bool bChanged = true;
 
     // Underline
-    USHORT nWhich = GetWhich( SID_ATTR_CHAR_UNDERLINE );
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_UNDERLINE );
     pOld = GetOldItem( rSet, SID_ATTR_CHAR_UNDERLINE );
-    USHORT nPos = m_aUnderlineLB.GetSelectEntryPos();
-    FontUnderline eUnder = (FontUnderline)(ULONG)m_aUnderlineLB.GetEntryData( nPos );
+    sal_uInt16 nPos = m_aUnderlineLB.GetSelectEntryPos();
+    FontUnderline eUnder = (FontUnderline)(sal_uLong)m_aUnderlineLB.GetEntryData( nPos );
 
     if ( pOld )
     {
@@ -2692,8 +2650,8 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
         //! item-state in the 'rOldSet' will be invalid. In this case
         //! changing the underline style will be allowed if a style is
         //! selected in the listbox.
-        BOOL bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
-                         SFX_ITEM_DEFAULT > rOldSet.GetItemState( nWhich, TRUE );
+        sal_Bool bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
+                         SFX_ITEM_DEFAULT > rOldSet.GetItemState( nWhich, sal_True );
 
         const SvxUnderlineItem& rItem = *( (const SvxUnderlineItem*)pOld );
         if ( (FontUnderline)rItem.GetValue() == eUnder &&
@@ -2707,9 +2665,9 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
         SvxUnderlineItem aNewItem( eUnder, nWhich );
         aNewItem.SetColor( m_aUnderlineColorLB.GetSelectEntryColor() );
         rSet.Put( aNewItem );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     bChanged = true;
@@ -2718,7 +2676,7 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_OVERLINE );
     pOld = GetOldItem( rSet, SID_ATTR_CHAR_OVERLINE );
     nPos = m_aOverlineLB.GetSelectEntryPos();
-    FontUnderline eOver = (FontUnderline)(ULONG)m_aOverlineLB.GetEntryData( nPos );
+    FontUnderline eOver = (FontUnderline)(sal_uLong)m_aOverlineLB.GetEntryData( nPos );
 
     if ( pOld )
     {
@@ -2726,8 +2684,8 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
         //! item-state in the 'rOldSet' will be invalid. In this case
         //! changing the underline style will be allowed if a style is
         //! selected in the listbox.
-        BOOL bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
-                         SFX_ITEM_DEFAULT > rOldSet.GetItemState( nWhich, TRUE );
+        sal_Bool bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
+                         SFX_ITEM_DEFAULT > rOldSet.GetItemState( nWhich, sal_True );
 
         const SvxOverlineItem& rItem = *( (const SvxOverlineItem*)pOld );
         if ( (FontUnderline)rItem.GetValue() == eOver &&
@@ -2741,9 +2699,9 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
         SvxOverlineItem aNewItem( eOver, nWhich );
         aNewItem.SetColor( m_aOverlineColorLB.GetSelectEntryColor() );
         rSet.Put( aNewItem );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     bChanged = true;
@@ -2752,7 +2710,7 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_STRIKEOUT );
     pOld = GetOldItem( rSet, SID_ATTR_CHAR_STRIKEOUT );
     nPos = m_aStrikeoutLB.GetSelectEntryPos();
-    FontStrikeout eStrike = (FontStrikeout)(ULONG)m_aStrikeoutLB.GetEntryData( nPos );
+    FontStrikeout eStrike = (FontStrikeout)(sal_uLong)m_aStrikeoutLB.GetEntryData( nPos );
 
     if ( pOld )
     {
@@ -2760,8 +2718,8 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
         //! item-state in the 'rOldSet' will be invalid. In this case
         //! changing the strikeout style will be allowed if a style is
         //! selected in the listbox.
-        BOOL bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
-                         SFX_ITEM_DEFAULT > rOldSet.GetItemState( nWhich, TRUE );
+        sal_Bool bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
+                         SFX_ITEM_DEFAULT > rOldSet.GetItemState( nWhich, sal_True );
 
         const SvxCrossedOutItem& rItem = *( (const SvxCrossedOutItem*)pOld );
         if ( !m_aStrikeoutLB.IsEnabled()
@@ -2772,9 +2730,9 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     if ( bChanged )
     {
         rSet.Put( SvxCrossedOutItem( eStrike, nWhich ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     bChanged = true;
@@ -2797,9 +2755,9 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     if ( bChanged )
     {
         rSet.Put( SvxWordLineModeItem( m_aIndividualWordsBtn.IsChecked(), nWhich ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     bChanged = true;
@@ -2807,12 +2765,12 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     // Emphasis
     nWhich = GetWhich( SID_ATTR_CHAR_EMPHASISMARK );
     pOld = GetOldItem( rSet, SID_ATTR_CHAR_EMPHASISMARK );
-    USHORT nMarkPos = m_aEmphasisLB.GetSelectEntryPos();
-    USHORT nPosPos = m_aPositionLB.GetSelectEntryPos();
+    sal_uInt16 nMarkPos = m_aEmphasisLB.GetSelectEntryPos();
+    sal_uInt16 nPosPos = m_aPositionLB.GetSelectEntryPos();
     FontEmphasisMark eMark = (FontEmphasisMark)nMarkPos;
     if ( m_aPositionLB.IsEnabled() )
     {
-        eMark |= ( CHRDLG_POSITION_UNDER == (ULONG)m_aPositionLB.GetEntryData( nPosPos ) )
+        eMark |= ( CHRDLG_POSITION_UNDER == (sal_uLong)m_aPositionLB.GetEntryData( nPosPos ) )
             ? EMPHASISMARK_POS_BELOW : EMPHASISMARK_POS_ABOVE;
     }
 
@@ -2833,9 +2791,9 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     if ( bChanged )
     {
         rSet.Put( SvxEmphasisMarkItem( eMark, nWhich ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     bChanged = true;
@@ -2845,7 +2803,7 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     pOld = GetOldItem( rSet, SID_ATTR_CHAR_CASEMAP );
     SvxCaseMap eCaseMap = SVX_CASEMAP_NOT_MAPPED;
     bool bChecked = false;
-    USHORT nCapsPos = m_aEffects2LB.GetSelectEntryPos();
+    sal_uInt16 nCapsPos = m_aEffects2LB.GetSelectEntryPos();
     if ( nCapsPos != LISTBOX_ENTRY_NOTFOUND )
     {
         eCaseMap = (SvxCaseMap)nCapsPos;
@@ -2858,8 +2816,8 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
         //! item-state in the 'rOldSet' will be invalid. In this case
         //! changing the effect style will be allowed if a style is
         //! selected in the listbox.
-        BOOL bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
-                         SFX_ITEM_DEFAULT > rOldSet.GetItemState( nWhich, TRUE );
+        sal_Bool bAllowChg = LISTBOX_ENTRY_NOTFOUND != nPos  &&
+                         SFX_ITEM_DEFAULT > rOldSet.GetItemState( nWhich, sal_True );
 
         const SvxCaseMapItem& rItem = *( (const SvxCaseMapItem*)pOld );
         if ( (SvxCaseMap)rItem.GetValue() == eCaseMap  &&  !bAllowChg )
@@ -2869,9 +2827,9 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     if ( bChanged && bChecked )
     {
         rSet.Put( SvxCaseMapItem( eCaseMap, nWhich ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     bChanged = true;
@@ -2899,16 +2857,16 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
             bChanged = false;
     }
 
-    if ( !bChanged && pExampleSet && pExampleSet->GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET &&
+    if ( !bChanged && pExampleSet && pExampleSet->GetItemState( nWhich, sal_False, &pItem ) == SFX_ITEM_SET &&
          !StateToAttr( eState ) && ( (SvxContourItem*)pItem )->GetValue() )
         bChanged = true;
 
     if ( bChanged && eState != STATE_DONTKNOW )
     {
         rSet.Put( SvxContourItem( StateToAttr( eState ), nWhich ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     bChanged = true;
@@ -2925,16 +2883,16 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
             bChanged = false;
     }
 
-    if ( !bChanged && pExampleSet && pExampleSet->GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET &&
+    if ( !bChanged && pExampleSet && pExampleSet->GetItemState( nWhich, sal_False, &pItem ) == SFX_ITEM_SET &&
          !StateToAttr( eState ) && ( (SvxShadowedItem*)pItem )->GetValue() )
         bChanged = true;
 
     if ( bChanged && eState != STATE_DONTKNOW )
     {
         rSet.Put( SvxShadowedItem( StateToAttr( eState ), nWhich ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     bChanged = true;
@@ -2951,7 +2909,7 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
             bChanged = false;
     }
 
-    if ( !bChanged && pExampleSet && pExampleSet->GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET &&
+    if ( !bChanged && pExampleSet && pExampleSet->GetItemState( nWhich, sal_False, &pItem ) == SFX_ITEM_SET &&
          !StateToAttr( eState ) && ( (SvxBlinkItem*)pItem )->GetValue() )
         bChanged = true;
 
@@ -2960,7 +2918,7 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
         rSet.Put( SvxBlinkItem( StateToAttr( eState ), nWhich ) );
         bModified = true;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     // Hidden
@@ -2976,16 +2934,16 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
             bChanged = false;
     }
 
-    if ( !bChanged && pExampleSet && pExampleSet->GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET &&
+    if ( !bChanged && pExampleSet && pExampleSet->GetItemState( nWhich, sal_False, &pItem ) == SFX_ITEM_SET &&
          !StateToAttr( eState ) && ( (SvxCharHiddenItem*)pItem )->GetValue() )
         bChanged = true;
 
     if ( bChanged && eState != STATE_DONTKNOW )
     {
         rSet.Put( SvxCharHiddenItem( StateToAttr( eState ), nWhich ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     bModified |= FillItemSetColor_Impl( rSet );
@@ -2993,7 +2951,7 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-void SvxCharEffectsPage::DisableControls( USHORT nDisable )
+void SvxCharEffectsPage::DisableControls( sal_uInt16 nDisable )
 {
     if ( ( DISABLE_CASEMAP & nDisable ) == DISABLE_CASEMAP )
     {
@@ -3027,7 +2985,7 @@ void SvxCharEffectsPage::EnableFlash()
 // -----------------------------------------------------------------------
 void SvxCharEffectsPage::SetPreviewBackgroundToCharacter()
 {
-    m_bPreviewBackgroundToCharacter = TRUE;
+    m_bPreviewBackgroundToCharacter = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -3040,7 +2998,7 @@ void SvxCharEffectsPage::PageCreated (SfxAllItemSet aSet)
 
     if (pFlagItem)
     {
-        UINT32 nFlags=pFlagItem->GetValue();
+        sal_uInt32 nFlags=pFlagItem->GetValue();
         if ( ( nFlags & SVX_ENABLE_FLASH ) == SVX_ENABLE_FLASH )
             EnableFlash();
         if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
@@ -3082,8 +3040,8 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
     m_nSubEsc           ( (short)DFLT_ESC_SUB ),
     m_nScaleWidthItemSetVal ( 100 ),
     m_nScaleWidthInitialVal ( 100 ),
-    m_nSuperProp        ( (BYTE)DFLT_ESC_PROP ),
-    m_nSubProp          ( (BYTE)DFLT_ESC_PROP )
+    m_nSuperProp        ( (sal_uInt8)DFLT_ESC_PROP ),
+    m_nSubProp          ( (sal_uInt8)DFLT_ESC_PROP )
 {
     FreeResource();
     Initialize();
@@ -3133,14 +3091,14 @@ void SvxCharPositionPage::Initialize()
 
 // -----------------------------------------------------------------------
 
-void SvxCharPositionPage::UpdatePreview_Impl( BYTE nProp, BYTE nEscProp, short nEsc )
+void SvxCharPositionPage::UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )
 {
     SetPrevFontEscapement( nProp, nEscProp, nEsc );
 }
 
 // -----------------------------------------------------------------------
 
-void SvxCharPositionPage::SetEscapement_Impl( USHORT nEsc )
+void SvxCharPositionPage::SetEscapement_Impl( sal_uInt16 nEsc )
 {
     SvxEscapementItem aEscItm( (SvxEscapement)nEsc, SID_ATTR_CHAR_ESCAPEMENT );
 
@@ -3190,7 +3148,7 @@ void SvxCharPositionPage::SetEscapement_Impl( USHORT nEsc )
 
 IMPL_LINK( SvxCharPositionPage, PositionHdl_Impl, RadioButton*, pBtn )
 {
-    USHORT nEsc = SVX_ESCAPEMENT_OFF;   // also when pBtn == NULL
+    sal_uInt16 nEsc = SVX_ESCAPEMENT_OFF;   // also when pBtn == NULL
 
     if ( &m_aHighPosBtn == pBtn )
         nEsc = SVX_ESCAPEMENT_SUPERSCRIPT;
@@ -3205,9 +3163,9 @@ IMPL_LINK( SvxCharPositionPage, PositionHdl_Impl, RadioButton*, pBtn )
 
 IMPL_LINK( SvxCharPositionPage, RotationHdl_Impl, RadioButton*, pBtn )
 {
-    BOOL bEnable = FALSE;
+    sal_Bool bEnable = sal_False;
     if (&m_a90degRB == pBtn  ||  &m_a270degRB == pBtn)
-        bEnable = TRUE;
+        bEnable = sal_True;
     else
         OSL_ENSURE( &m_a0degRB == pBtn, "unexpected button" );
     m_aFitToLineCB.Enable( bEnable );
@@ -3218,7 +3176,7 @@ IMPL_LINK( SvxCharPositionPage, RotationHdl_Impl, RadioButton*, pBtn )
 
 IMPL_LINK( SvxCharPositionPage, FontModifyHdl_Impl, MetricField*, EMPTYARG )
 {
-    BYTE nEscProp = (BYTE)m_aFontSizeEdit.GetValue();
+    sal_uInt8 nEscProp = (sal_uInt8)m_aFontSizeEdit.GetValue();
     short nEsc  = (short)m_aHighLowEdit.GetValue();
     nEsc *= m_aLowPosBtn.IsChecked() ? -1 : 1;
     UpdatePreview_Impl( 100, nEscProp, nEsc );
@@ -3247,7 +3205,7 @@ IMPL_LINK( SvxCharPositionPage, FitToLineHdl_Impl, CheckBox*, pBox )
 {
     if ( &m_aFitToLineCB == pBox)
     {
-        UINT16 nVal = m_nScaleWidthInitialVal;
+        sal_uInt16 nVal = m_nScaleWidthInitialVal;
         if (m_aFitToLineCB.IsChecked())
             nVal = m_nScaleWidthItemSetVal;
         m_aScaleWidthMF.SetValue( nVal );
@@ -3342,9 +3300,9 @@ IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, MetricField*, pField )
     else if ( &m_aFontSizeEdit == pField )
     {
         if ( bLow )
-            m_nSubProp = (BYTE)m_aFontSizeEdit.GetValue();
+            m_nSubProp = (sal_uInt8)m_aFontSizeEdit.GetValue();
         else
-            m_nSuperProp = (BYTE)m_aFontSizeEdit.GetValue();
+            m_nSuperProp = (sal_uInt8)m_aFontSizeEdit.GetValue();
     }
     return 0;
 }
@@ -3353,7 +3311,7 @@ IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, MetricField*, pField )
 
 IMPL_LINK( SvxCharPositionPage, ScaleWidthModifyHdl_Impl, MetricField*, EMPTYARG )
 {
-    m_aPreviewWin.SetFontWidthScale( USHORT( m_aScaleWidthMF.GetValue() ) );
+    m_aPreviewWin.SetFontWidthScale( sal_uInt16( m_aScaleWidthMF.GetValue() ) );
 
     return 0;
 }
@@ -3394,7 +3352,7 @@ SfxTabPage* SvxCharPositionPage::Create( Window* pParent, const SfxItemSet& rSet
 
 // -----------------------------------------------------------------------
 
-USHORT* SvxCharPositionPage::GetRanges()
+sal_uInt16* SvxCharPositionPage::GetRanges()
 {
     return pPositionRanges;
 }
@@ -3408,13 +3366,13 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
     {
         m_nSuperEsc = (short)sUser.GetToken( 0 ).ToInt32();
         m_nSubEsc = (short)sUser.GetToken( 1 ).ToInt32();
-        m_nSuperProp = (BYTE)sUser.GetToken( 2 ).ToInt32();
-        m_nSubProp = (BYTE)sUser.GetToken( 3 ).ToInt32();
+        m_nSuperProp = (sal_uInt8)sUser.GetToken( 2 ).ToInt32();
+        m_nSubProp = (sal_uInt8)sUser.GetToken( 3 ).ToInt32();
     }
 
     short nEsc = 0;
-    BYTE nEscProp = 100;
-    BYTE nProp = 100;
+    sal_uInt8 nEscProp = 100;
+    sal_uInt8 nProp = 100;
 
     m_aHighLowFT.Disable();
     m_aHighLowEdit.Disable();
@@ -3424,7 +3382,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
     SvxFont& rFont = GetPreviewFont();
     SvxFont& rCJKFont = GetPreviewCJKFont();
     SvxFont& rCTLFont = GetPreviewCTLFont();
-    USHORT nWhich = GetWhich( SID_ATTR_CHAR_ESCAPEMENT );
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_ESCAPEMENT );
 
     if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
@@ -3445,7 +3403,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
             if ( nEsc > 0 )
             {
                 nFac = 1;
-                m_aHighPosBtn.Check( TRUE );
+                m_aHighPosBtn.Check( sal_True );
                 if ( nEsc == DFLT_ESC_AUTO_SUPER )
                 {
                     nEsc = DFLT_ESC_SUPER;
@@ -3455,7 +3413,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
             else
             {
                 nFac = -1;
-                m_aLowPosBtn.Check( TRUE );
+                m_aLowPosBtn.Check( sal_True );
                 if ( nEsc == DFLT_ESC_AUTO_SUB )
                 {
                     nEsc = DFLT_ESC_SUB;
@@ -3477,8 +3435,8 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         }
         else
         {
-            m_aNormalPosBtn.Check( TRUE );
-            m_aHighLowRB.Check( TRUE );
+            m_aNormalPosBtn.Check( sal_True );
+            m_aHighLowRB.Check( sal_True );
             PositionHdl_Impl( NULL );
         }
         //the height has to be set after the handler is called to keep the value also if the escapement is zero
@@ -3486,9 +3444,9 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
     }
     else
     {
-        m_aHighPosBtn.Check( FALSE );
-        m_aNormalPosBtn.Check( FALSE );
-        m_aLowPosBtn.Check( FALSE );
+        m_aHighPosBtn.Check( sal_False );
+        m_aNormalPosBtn.Check( sal_False );
+        m_aLowPosBtn.Check( sal_False );
     }
 
     // BspFont setzen
@@ -3546,7 +3504,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         m_aPairKerningBtn.Check( rItem.GetValue() );
     }
     else
-        m_aPairKerningBtn.Check( FALSE );
+        m_aPairKerningBtn.Check( sal_False );
 
     // Scale Width
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
@@ -3604,13 +3562,13 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
             const SvxCharRotateItem& rItem =
                     (SvxCharRotateItem&) rSet.Get( nWhich );
             if (rItem.IsBottomToTop())
-                m_a90degRB.Check( TRUE );
+                m_a90degRB.Check( sal_True );
             else if (rItem.IsTopToBotton())
-                m_a270degRB.Check( TRUE );
+                m_a270degRB.Check( sal_True );
             else
             {
                 DBG_ASSERT( 0 == rItem.GetValue(), "incorrect value" );
-                m_a0degRB.Check( TRUE );
+                m_a0degRB.Check( sal_True );
             }
             m_aFitToLineCB.Check( rItem.IsFitToLine() );
         }
@@ -3618,14 +3576,14 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         {
             if( eState == SFX_ITEM_DONTCARE )
             {
-                m_a0degRB.Check( FALSE );
-                m_a90degRB.Check( FALSE );
-                m_a270degRB.Check( FALSE );
+                m_a0degRB.Check( sal_False );
+                m_a90degRB.Check( sal_False );
+                m_a270degRB.Check( sal_False );
             }
             else
-                m_a0degRB.Check( TRUE );
+                m_a0degRB.Check( sal_True );
 
-            m_aFitToLineCB.Check( FALSE );
+            m_aFitToLineCB.Check( sal_False );
         }
         m_aFitToLineCB.SetClickHdl( aOldLink );
         m_aFitToLineCB.Enable( !m_a0degRB.IsChecked() );
@@ -3651,16 +3609,16 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
 {
     //  Position (hoch, normal oder tief)
     const SfxItemSet& rOldSet = GetItemSet();
-    BOOL bModified = FALSE, bChanged = TRUE;
-    USHORT nWhich = GetWhich( SID_ATTR_CHAR_ESCAPEMENT );
+    sal_Bool bModified = sal_False, bChanged = sal_True;
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_ESCAPEMENT );
     const SfxPoolItem* pOld = GetOldItem( rSet, SID_ATTR_CHAR_ESCAPEMENT );
     const bool bHigh = m_aHighPosBtn.IsChecked();
     short nEsc;
-    BYTE  nEscProp;
+    sal_uInt8  nEscProp;
 
     if ( bHigh || m_aLowPosBtn.IsChecked() )
     {
@@ -3671,7 +3629,7 @@ BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
             nEsc = (short)m_aHighLowEdit.Denormalize( m_aHighLowEdit.GetValue() );
             nEsc *= bHigh ? 1 : -1;
         }
-        nEscProp = (BYTE)m_aFontSizeEdit.Denormalize( m_aFontSizeEdit.GetValue() );
+        nEscProp = (sal_uInt8)m_aFontSizeEdit.Denormalize( m_aFontSizeEdit.GetValue() );
     }
     else
     {
@@ -3683,28 +3641,28 @@ BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     {
         const SvxEscapementItem& rItem = *( (const SvxEscapementItem*)pOld );
         if ( rItem.GetEsc() == nEsc && rItem.GetProp() == nEscProp  )
-            bChanged = FALSE;
+            bChanged = sal_False;
     }
 
     if ( !bChanged && !m_aHighPosBtn.GetSavedValue() &&
          !m_aNormalPosBtn.GetSavedValue() && !m_aLowPosBtn.GetSavedValue() )
-        bChanged = TRUE;
+        bChanged = sal_True;
 
     if ( bChanged &&
          ( m_aHighPosBtn.IsChecked() || m_aNormalPosBtn.IsChecked() || m_aLowPosBtn.IsChecked() ) )
     {
         rSet.Put( SvxEscapementItem( nEsc, nEscProp, nWhich ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
-    bChanged = TRUE;
+    bChanged = sal_True;
 
     // Kerning
     nWhich = GetWhich( SID_ATTR_CHAR_KERNING );
     pOld = GetOldItem( rSet, SID_ATTR_CHAR_KERNING );
-    USHORT nPos = m_aKerningLB.GetSelectEntryPos();
+    sal_uInt16 nPos = m_aKerningLB.GetSelectEntryPos();
     short nKerning = 0;
     SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
 
@@ -3722,23 +3680,23 @@ BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     {
         const SvxKerningItem& rItem = *( (const SvxKerningItem*)pOld );
         if ( rItem.GetValue() == nKerning )
-            bChanged = FALSE;
+            bChanged = sal_False;
     }
 
     if ( !bChanged &&
          ( m_aKerningLB.GetSavedValue() == LISTBOX_ENTRY_NOTFOUND ||
            ( !m_aKerningEdit.GetSavedValue().Len() && m_aKerningEdit.IsEnabled() ) ) )
-        bChanged = TRUE;
+        bChanged = sal_True;
 
     if ( bChanged && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         rSet.Put( SvxKerningItem( nKerning, nWhich ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
-    bChanged = TRUE;
+    bChanged = sal_True;
 
     // Pair-Kerning
     nWhich = GetWhich( SID_ATTR_CHAR_AUTOKERN );
@@ -3746,19 +3704,19 @@ BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     if ( m_aPairKerningBtn.IsChecked() != m_aPairKerningBtn.GetSavedValue() )
     {
         rSet.Put( SvxAutoKernItem( m_aPairKerningBtn.IsChecked(), nWhich ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     // Scale Width
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
     if ( m_aScaleWidthMF.GetText() != m_aScaleWidthMF.GetSavedValue() )
     {
-        rSet.Put( SvxCharScaleWidthItem( (USHORT)m_aScaleWidthMF.GetValue(), nWhich ) );
-        bModified = TRUE;
+        rSet.Put( SvxCharScaleWidthItem( (sal_uInt16)m_aScaleWidthMF.GetValue(), nWhich ) );
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     // Rotation
@@ -3774,9 +3732,9 @@ BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
         else if (m_a270degRB.IsChecked())
             aItem.SetTopToBotton();
         rSet.Put( aItem );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     return bModified;
@@ -3801,7 +3759,7 @@ void SvxCharPositionPage::FillUserData()
 // -----------------------------------------------------------------------
 void SvxCharPositionPage::SetPreviewBackgroundToCharacter()
 {
-    m_bPreviewBackgroundToCharacter = TRUE;
+    m_bPreviewBackgroundToCharacter = sal_True;
 }
 // -----------------------------------------------------------------------
 void SvxCharPositionPage::PageCreated (SfxAllItemSet aSet)
@@ -3809,7 +3767,7 @@ void SvxCharPositionPage::PageCreated (SfxAllItemSet aSet)
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
     if (pFlagItem)
     {
-        UINT32 nFlags=pFlagItem->GetValue();
+        sal_uInt32 nFlags=pFlagItem->GetValue();
         if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
             SetPreviewBackgroundToCharacter();
     }
@@ -3846,7 +3804,7 @@ void SvxCharTwoLinesPage::Initialize()
     aSize.Height() = m_aEndBracketLB.CalcSize( 1, 6 ).Height();
     m_aEndBracketLB.SetSizePixel( aSize );
 
-    m_aTwoLinesBtn.Check( FALSE );
+    m_aTwoLinesBtn.Check( sal_False );
     TwoLinesHdl_Impl( NULL );
 
     m_aTwoLinesBtn.SetClickHdl( LINK( this, SvxCharTwoLinesPage, TwoLinesHdl_Impl ) );
@@ -3891,25 +3849,25 @@ void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
 
 // -----------------------------------------------------------------------
 
-void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, BOOL bStart )
+void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, sal_Bool bStart )
 {
-    USHORT nEntryPos = 0;
+    sal_uInt16 nEntryPos = 0;
     ListBox* pBox = bStart ? &m_aStartBracketLB : &m_aEndBracketLB;
     if ( 0 == cBracket )
         pBox->SelectEntryPos(0);
     else
     {
-        bool bFound = FALSE;
-        for ( USHORT i = 1; i < pBox->GetEntryCount(); ++i )
+        bool bFound = false;
+        for ( sal_uInt16 i = 1; i < pBox->GetEntryCount(); ++i )
         {
-            if ( (ULONG)pBox->GetEntryData(i) != CHRDLG_ENCLOSE_SPECIAL_CHAR )
+            if ( (sal_uLong)pBox->GetEntryData(i) != CHRDLG_ENCLOSE_SPECIAL_CHAR )
             {
                 const sal_Unicode cChar = pBox->GetEntry(i).GetChar(0);
                 if ( cChar == cBracket )
                 {
                     pBox->SelectEntryPos(i);
                     nEntryPos = i;
-                    bFound = TRUE;
+                    bFound = true;
                     break;
                 }
             }
@@ -3931,7 +3889,7 @@ void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, BOOL bStart )
 
 IMPL_LINK( SvxCharTwoLinesPage, TwoLinesHdl_Impl, CheckBox*, EMPTYARG )
 {
-    BOOL bChecked = m_aTwoLinesBtn.IsChecked();
+    sal_Bool bChecked = m_aTwoLinesBtn.IsChecked();
     m_aStartBracketFT.Enable( bChecked );
     m_aStartBracketLB.Enable( bChecked );
     m_aEndBracketFT.Enable( bChecked );
@@ -3945,8 +3903,8 @@ IMPL_LINK( SvxCharTwoLinesPage, TwoLinesHdl_Impl, CheckBox*, EMPTYARG )
 
 IMPL_LINK( SvxCharTwoLinesPage, CharacterMapHdl_Impl, ListBox*, pBox )
 {
-    USHORT nPos = pBox->GetSelectEntryPos();
-    if ( CHRDLG_ENCLOSE_SPECIAL_CHAR == (ULONG)pBox->GetEntryData( nPos ) )
+    sal_uInt16 nPos = pBox->GetSelectEntryPos();
+    if ( CHRDLG_ENCLOSE_SPECIAL_CHAR == (sal_uLong)pBox->GetEntryData( nPos ) )
         SelectCharacter( pBox );
     else
     {
@@ -3985,7 +3943,7 @@ SfxTabPage* SvxCharTwoLinesPage::Create( Window* pParent, const SfxItemSet& rSet
 
 // -----------------------------------------------------------------------
 
-USHORT* SvxCharTwoLinesPage::GetRanges()
+sal_uInt16* SvxCharTwoLinesPage::GetRanges()
 {
     return pTwoLinesRanges;
 }
@@ -3994,8 +3952,8 @@ USHORT* SvxCharTwoLinesPage::GetRanges()
 
 void SvxCharTwoLinesPage::Reset( const SfxItemSet& rSet )
 {
-    m_aTwoLinesBtn.Check( FALSE );
-    USHORT nWhich = GetWhich( SID_ATTR_CHAR_TWO_LINES );
+    m_aTwoLinesBtn.Check( sal_False );
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_TWO_LINES );
     SfxItemState eState = rSet.GetItemState( nWhich );
 
     if ( eState >= SFX_ITEM_DONTCARE )
@@ -4005,8 +3963,8 @@ void SvxCharTwoLinesPage::Reset( const SfxItemSet& rSet )
 
         if ( rItem.GetValue() )
         {
-            SetBracket( rItem.GetStartBracket(), TRUE );
-            SetBracket( rItem.GetEndBracket(), FALSE );
+            SetBracket( rItem.GetStartBracket(), sal_True );
+            SetBracket( rItem.GetEndBracket(), sal_False );
         }
     }
     TwoLinesHdl_Impl( NULL );
@@ -4016,11 +3974,11 @@ void SvxCharTwoLinesPage::Reset( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-BOOL SvxCharTwoLinesPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool SvxCharTwoLinesPage::FillItemSet( SfxItemSet& rSet )
 {
     const SfxItemSet& rOldSet = GetItemSet();
-    BOOL bModified = FALSE, bChanged = TRUE;
-    USHORT nWhich = GetWhich( SID_ATTR_CHAR_TWO_LINES );
+    sal_Bool bModified = sal_False, bChanged = sal_True;
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_TWO_LINES );
     const SfxPoolItem* pOld = GetOldItem( rSet, SID_ATTR_CHAR_TWO_LINES );
     sal_Bool bOn = m_aTwoLinesBtn.IsChecked();
     sal_Unicode cStart = ( bOn && m_aStartBracketLB.GetSelectEntryPos() > 0 )
@@ -4033,15 +3991,15 @@ BOOL SvxCharTwoLinesPage::FillItemSet( SfxItemSet& rSet )
         const SvxTwoLinesItem& rItem = *( (const SvxTwoLinesItem*)pOld );
         if ( rItem.GetValue() ==  bOn &&
              ( !bOn || ( rItem.GetStartBracket() == cStart && rItem.GetEndBracket() == cEnd ) ) )
-            bChanged = FALSE;
+            bChanged = sal_False;
     }
 
     if ( bChanged )
     {
         rSet.Put( SvxTwoLinesItem( bOn, cStart, cEnd, nWhich ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, sal_False ) )
         CLEARTITEM;
 
     return bModified;
@@ -4060,7 +4018,7 @@ void    SvxCharTwoLinesPage::UpdatePreview_Impl()
 // -----------------------------------------------------------------------
 void SvxCharTwoLinesPage::SetPreviewBackgroundToCharacter()
 {
-    m_bPreviewBackgroundToCharacter = TRUE;
+    m_bPreviewBackgroundToCharacter = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -4069,7 +4027,7 @@ void SvxCharTwoLinesPage::PageCreated (SfxAllItemSet aSet)
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
     if (pFlagItem)
     {
-        UINT32 nFlags=pFlagItem->GetValue();
+        sal_uInt32 nFlags=pFlagItem->GetValue();
         if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
             SetPreviewBackgroundToCharacter();
     }

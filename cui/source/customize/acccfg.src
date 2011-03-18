@@ -67,18 +67,21 @@ TabPage RID_SVXPAGE_KEYBOARD
     Size = MAP_APPFONT ( 273 , 258 ) ;
     RadioButton RB_OFFICE
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_KEYBOARD:RB_OFFICE";
         Pos = MAP_APPFONT ( 192 , 6 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text = "%PRODUCTNAME" ;
     };
     RadioButton RB_MODULE
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_KEYBOARD:RB_MODULE";
         Pos = MAP_APPFONT ( 192 , 19 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text = "$(MODULE)" ;
     };
     PushButton BTN_ACC_CHANGE
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_ACC_CHANGE";
         Pos = MAP_APPFONT ( 192 , 35 ) ;
         Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
@@ -86,6 +89,7 @@ TabPage RID_SVXPAGE_KEYBOARD
     };
     PushButton BTN_ACC_REMOVE
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_ACC_REMOVE";
         Pos = MAP_APPFONT ( 192 , 52 ) ;
         Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
@@ -162,6 +166,7 @@ TabPage RID_SVXPAGE_KEYBOARD
     };
     PushButton BTN_LOAD
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_LOAD";
         Pos = MAP_APPFONT ( 192 , 86 ) ;
         Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
@@ -170,6 +175,7 @@ TabPage RID_SVXPAGE_KEYBOARD
     };
     PushButton BTN_SAVE
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_SAVE";
         Pos = MAP_APPFONT ( 192 , 103 ) ;
         Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
@@ -178,6 +184,7 @@ TabPage RID_SVXPAGE_KEYBOARD
     };
     PushButton BTN_RESET
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_KEYBOARD:BTN_RESET";
         Pos = MAP_APPFONT ( 192 , 120 ) ;
         Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
@@ -191,10 +198,6 @@ TabPage RID_SVXPAGE_KEYBOARD
     String STR_SAVEACCELCONFIG
     {
         Text [ en-US ] = "Save Keyboard Configuration" ;
-    };
-    String STR_SFX_FILTERNAME_ALL
-    {
-        Text [ en-US ] = "All files (*.*)" ;
     };
     String STR_FILTERNAME_CFG
     {
@@ -247,10 +250,6 @@ Resource RID_SVXPAGE_CONFIGGROUPBOX
     {
         ImageBitmap = Bitmap { File = "im30826.png"; };
         MASKCOLOR
-    };
-    String STR_BASICNAME
-    {
-        Text = "%PRODUCTNAME Basic" ;
     };
     Image BMP_COLLAPSED
     {

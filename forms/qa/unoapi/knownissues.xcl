@@ -121,9 +121,11 @@ forms.OComboBoxModel::com::sun::star::form::XUpdateBroadcaster
 forms.OFileControlModel::com::sun::star::beans::XFastPropertySet
 forms.OFileControlModel::com::sun::star::form::FormControlModel
 
-### i111148 ###
-forms.OImageControlModel::com::sun::star::beans::XMultiPropertySet
-forms.OImageControlModel::com::sun::star::beans::XPropertySet
+### i113201 ###
+forms.OEditModel::com::sun::star::form::validation::XValidatableFormComponent
+
+### i114209 ###
+forms.OGridControlModel::com::sun::star::view::XSelectionSupplier
 
 ### i111333 ###
 forms.OImageControlControl::com::sun::star::awt::XControl

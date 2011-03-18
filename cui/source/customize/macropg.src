@@ -36,6 +36,7 @@
 
 TabPage RID_SVXPAGE_MACROASSIGN
 {
+    HelpID = "cui:TabPage:RID_SVXPAGE_MACROASSIGN" ;
     Hide = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
@@ -65,6 +66,7 @@ TabPage RID_SVXPAGE_MACROASSIGN
     };
     PushButton PB_ASSIGN
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_MACROASSIGN:PB_ASSIGN";
         Pos = MAP_APPFONT ( COL4 , ROW0A  ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Text [ en-US ] = "M~acro..." ;
@@ -73,6 +75,7 @@ TabPage RID_SVXPAGE_MACROASSIGN
     };
     PushButton PB_ASSIGN_COMPONENT
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_MACROASSIGN:PB_ASSIGN_COMPONENT";
         Pos = MAP_APPFONT ( COL4 , ROW2  ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Disable = TRUE ;
@@ -81,6 +84,7 @@ TabPage RID_SVXPAGE_MACROASSIGN
     };
     PushButton PB_DELETE
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_MACROASSIGN:PB_DELETE";
         Pos = MAP_APPFONT ( COL4 , ROW5_REMOVE  ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Text [ en-US ] = "~Remove" ;
@@ -101,6 +105,7 @@ TabPage RID_SVXPAGE_MACROASSIGN
 
 ModalDialog RID_SVXDLG_ASSIGNCOMPONENT
 {
+    HelpID = "cui:ModalDialog:RID_SVXDLG_ASSIGNCOMPONENT";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( COMP_WIDTH , COMP_HEIGHT ) ;
@@ -133,6 +138,7 @@ ModalDialog RID_SVXDLG_ASSIGNCOMPONENT
     };
     Edit EDIT_METHOD
     {
+        HelpID = "cui:Edit:RID_SVXDLG_ASSIGNCOMPONENT:EDIT_METHOD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COMP_COL0 , COMP_ROWEDIT ) ;
         Size = MAP_APPFONT ( COMP_EDIT_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;

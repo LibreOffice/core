@@ -114,13 +114,6 @@ namespace offapp
     {
         return m_pImpl->getDriverImplNames().end();
     }
-
-    //--------------------------------------------------------------------
-    sal_Int32 ODriverEnumeration::size() const throw()
-    {
-        return m_pImpl->getDriverImplNames().size();
-    }
-
 //........................................................................
 }   // namespace offapp
 //........................................................................

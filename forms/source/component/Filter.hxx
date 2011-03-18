@@ -46,7 +46,7 @@
 #include <connectivity/sqlparse.hxx>
 #include <svx/ParseContext.hxx>
 
-class Window;
+#include <boost/unordered_map.hpp>
 
 //.........................................................................
 namespace frm
@@ -69,12 +69,14 @@ namespace frm
     {
         TextListenerMultiplexer     m_aTextListeners;
 
-        ::comphelper::ComponentContext                                                          m_aContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               m_xField;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >            m_xFormatter;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >                 m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >           m_xMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                      m_xMessageParent;
+
+        typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > MapString2String;
+        MapString2String                m_aDisplayItemToValueItem;
 
         ::rtl::OUString                 m_aText;
         ::connectivity::OSQLParser      m_aParser;

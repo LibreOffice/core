@@ -51,6 +51,7 @@
 #include <unotools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
+#include <rtl/tencinfo.h>
 #include <linguistic/misc.hxx>
 
 #include <set>
@@ -261,6 +262,26 @@ void MergeNewStyleDicsAndOldStyleDics(
             OSL_FAIL( "old style dictionary with no language found!" );
         }
     }
+}
+
+
+rtl_TextEncoding getTextEncodingFromCharset(const sal_Char* pCharset)
+{
+    // default result: used to indicate that we failed to get the proper encoding
+    rtl_TextEncoding eRet = RTL_TEXTENCODING_DONTKNOW;
+
+    if (pCharset)
+    {
+        eRet = rtl_getTextEncodingFromMimeCharset(pCharset);
+        if (eRet == RTL_TEXTENCODING_DONTKNOW)
+            eRet = rtl_getTextEncodingFromUnixCharset(pCharset);
+        if (eRet == RTL_TEXTENCODING_DONTKNOW)
+        {
+            if (strcmp("ISCII-DEVANAGARI", pCharset) == 0)
+                eRet = RTL_TEXTENCODING_ISCII_DEVANAGARI;
+        }
+    }
+    return eRet;
 }
 
 //////////////////////////////////////////////////////////////////////

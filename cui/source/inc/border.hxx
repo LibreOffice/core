@@ -53,9 +53,9 @@ class SvxBorderTabPage : public SfxTabPage
 public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rCoreAttrs );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rCoreAttrs );
     virtual void        Reset( const SfxItemSet& );
 
     void                HideShadowControls();
@@ -123,7 +123,7 @@ private:
     bool                mbBLTREnabled;      /// true = Bottom-left to top-right border enabled.
     bool                mbUseMarginItem;
 
-    static BOOL         bSync;
+    static sal_Bool         bSync;
 
 #ifdef _SVX_BORDER_CXX
     // Handler
@@ -135,8 +135,8 @@ private:
     DECL_LINK( ModifyDistanceHdl_Impl, MetricField*);
     DECL_LINK( SyncHdl_Impl, CheckBox*);
 
-    USHORT              GetPresetImageId( USHORT nValueSetIdx ) const;
-    USHORT              GetPresetStringId( USHORT nValueSetIdx ) const;
+    sal_uInt16              GetPresetImageId( sal_uInt16 nValueSetIdx ) const;
+    sal_uInt16              GetPresetStringId( sal_uInt16 nValueSetIdx ) const;
 
     void                FillPresetVS();
     void                FillShadowVS();

@@ -163,7 +163,7 @@ SvxAsianLayoutPage::SvxAsianLayoutPage( Window* pParent, const SfxItemSet& rSet 
     aStartED.SetModifyHdl(aLk);
     aEndED.SetModifyHdl(aLk);
 
-    aLanguageLB.SetLanguageList( LANG_LIST_FBD_CHARS, FALSE, FALSE );
+    aLanguageLB.SetLanguageList( LANG_LIST_FBD_CHARS, sal_False, sal_False );
 }
 
 SvxAsianLayoutPage::~SvxAsianLayoutPage()
@@ -176,7 +176,7 @@ SfxTabPage* SvxAsianLayoutPage::Create( Window* pParent, const SfxItemSet& rAttr
     return new SvxAsianLayoutPage(pParent, rAttrSet);
 }
 
-BOOL SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
+sal_Bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
 {
     if(aCharKerningRB.IsChecked() != aCharKerningRB.GetSavedValue())
     {
@@ -185,7 +185,7 @@ BOOL SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
         if(pImpl->xPrSetInfo.is() && pImpl->xPrSetInfo->hasPropertyByName(sPunct))
         {
             Any aVal;
-            BOOL bVal = !aCharKerningRB.IsChecked();
+            sal_Bool bVal = !aCharKerningRB.IsChecked();
             aVal.setValue(&bVal, ::getBooleanCppuType());
             pImpl->xPrSet->setPropertyValue(sPunct, aVal);
         }
@@ -214,9 +214,9 @@ BOOL SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
             for( SvxForbiddenChars_Impl*  pElem = pImpl->aChangedLanguagesTbl.First();
                 pElem; pElem = pImpl->aChangedLanguagesTbl.Next() )
             {
-                ULONG nLang = pImpl->aChangedLanguagesTbl.GetKey( pElem );
+                sal_uLong nLang = pImpl->aChangedLanguagesTbl.GetKey( pElem );
                 Locale aLocale;
-                SvxLanguageToLocale(aLocale, (USHORT)nLang );
+                SvxLanguageToLocale(aLocale, (sal_uInt16)nLang );
                 if(pElem->bRemoved)
                     pImpl->xForbidden->removeForbiddenCharacters( aLocale );
                 else if(pElem->pCharacters)
@@ -230,7 +230,7 @@ BOOL SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
     }
     eLastUsedLanguageTypeForForbiddenCharacters = aLanguageLB.GetSelectLanguage();
 
-    return FALSE;
+    return sal_False;
 }
 
 void SvxAsianLayoutPage::Reset( const SfxItemSet& )
@@ -273,20 +273,20 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet& )
     }
     else
     {
-        aStartEndGB.Enable(FALSE);
-        aLanguageFT.Enable(FALSE);
-        aLanguageLB.Enable(FALSE);
-        aStandardCB.Enable(FALSE);
-        aStartFT.Enable(FALSE);
-        aStartED.Enable(FALSE);
-        aEndFT.Enable(FALSE);
-        aEndED.Enable(FALSE);
-        aHintFT.Enable(FALSE);
+        aStartEndGB.Enable(sal_False);
+        aLanguageFT.Enable(sal_False);
+        aLanguageLB.Enable(sal_False);
+        aStandardCB.Enable(sal_False);
+        aStartFT.Enable(sal_False);
+        aStartED.Enable(sal_False);
+        aEndFT.Enable(sal_False);
+        aEndED.Enable(sal_False);
+        aHintFT.Enable(sal_False);
     }
     if(bKernWesternText)
-        aCharKerningRB.Check(TRUE);
+        aCharKerningRB.Check(sal_True);
     else
-        aCharPunctKerningRB.Check(TRUE);
+        aCharPunctKerningRB.Check(sal_True);
     switch(nCompress)
     {
         case 0 : aNoCompressionRB.Check();        break;
@@ -337,7 +337,7 @@ IMPL_LINK(SvxAsianLayoutPage, LanguageHdl, SvxLanguageBox*, EMPTYARG )
             SvxForbiddenChars_Impl* pElement = pImpl->getForbiddenCharacters(eSelectLanguage);
             if(pElement->bRemoved || !pElement->pCharacters)
             {
-                bAvail = FALSE;
+                bAvail = sal_False;
             }
             else
             {
@@ -429,10 +429,10 @@ IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, Edit*, pEdit)
     return 0;
 }
 
-USHORT* SvxAsianLayoutPage::GetRanges()
+sal_uInt16* SvxAsianLayoutPage::GetRanges()
 {
     //no items are used
-    static USHORT pAsianLayoutRanges[] = { 0 };
+    static sal_uInt16 pAsianLayoutRanges[] = { 0 };
     return pAsianLayoutRanges;
 }
 

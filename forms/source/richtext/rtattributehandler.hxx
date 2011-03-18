@@ -147,7 +147,7 @@ namespace frm
     class LineSpacingHandler : public AttributeHandler
     {
     private:
-        USHORT  m_nLineSpace;
+        sal_uInt16  m_nLineSpace;
 
     public:
         LineSpacingHandler( AttributeId _nAttributeId );

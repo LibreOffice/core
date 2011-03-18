@@ -97,11 +97,11 @@ void MainWindow::TestGross()
 }
 
 
-BOOL MainWindow::Close()
+sal_Bool MainWindow::Close()
 {
     WorkWindow::Close();
     FileExit();
-    return TRUE;
+    return sal_True;
 }
 
 void MainWindow::FileExit()
@@ -110,7 +110,7 @@ void MainWindow::FileExit()
 }
 
 
-void MainWindow::Tree(GHEditWindow *aEditWin, Window *pBase, USHORT Indent)
+void MainWindow::Tree(GHEditWindow *aEditWin, Window *pBase, sal_uInt16 Indent)
 {
     String sIndent,aText;
     sIndent.Expand(5*Indent);
@@ -119,9 +119,10 @@ void MainWindow::Tree(GHEditWindow *aEditWin, Window *pBase, USHORT Indent)
     aText.SearchAndReplaceAllAscii("\n",CUniString("\\n"));
 
     aEditWin->AddText(String(sIndent).AppendAscii("Text: ").Append(aText).AppendAscii("\n"));
-    aEditWin->AddText(String(sIndent).AppendAscii("Help: ").Append(String::CreateFromInt64(pBase->GetHelpId())).AppendAscii(":").Append(pBase->GetQuickHelpText()).AppendAscii(":").Append(pBase->GetHelpText()).AppendAscii("\n"));
+    // FIXME: HELPID
+    aEditWin->AddText(String(sIndent).AppendAscii("Help: ").Append(String(rtl::OStringToOUString(pBase->GetHelpId(), RTL_TEXTENCODING_UTF8))).AppendAscii(":").Append(pBase->GetQuickHelpText()).AppendAscii(":").Append(pBase->GetHelpText()).AppendAscii("\n"));
 
-    USHORT i;
+    sal_uInt16 i;
     for (i = 0 ; i < pBase->GetChildCount() ; i++)
     {
         Tree(aEditWin,pBase->GetChild(i),Indent+1);
@@ -193,7 +194,7 @@ void MyApp::Property( ApplicationProperty& rProp )
 }
 
 
-USHORT MyDispatcher::ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs, USHORT nMode)
+sal_uInt16 MyDispatcher::ExecuteFunction( sal_uInt16 nSID, SfxPoolItem** ppArgs, sal_uInt16 nMode)
 {
     (void) ppArgs; // avoid warning about unused parameter
     (void) nMode;  // avoid warning about unused parameter

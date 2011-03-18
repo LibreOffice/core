@@ -32,36 +32,36 @@
 #include <tools/solar.h>
 
 
-const UINT32 DlgInventor = UINT32('D')*0x00000001+
-                           UINT32('L')*0x00000100+
-                           UINT32('G')*0x00010000+
-                           UINT32('1')*0x01000000;
+const sal_uInt32 DlgInventor = sal_uInt32('D')*0x00000001+
+                           sal_uInt32('L')*0x00000100+
+                           sal_uInt32('G')*0x00010000+
+                           sal_uInt32('1')*0x01000000;
 
 
-#define OBJ_DLG_CONTROL         ((UINT16) 1)
-#define OBJ_DLG_DIALOG          ((UINT16) 2)
-#define OBJ_DLG_PUSHBUTTON      ((UINT16) 3)
-#define OBJ_DLG_RADIOBUTTON     ((UINT16) 4)
-#define OBJ_DLG_CHECKBOX        ((UINT16) 5)
-#define OBJ_DLG_LISTBOX         ((UINT16) 6)
-#define OBJ_DLG_COMBOBOX        ((UINT16) 7)
-#define OBJ_DLG_GROUPBOX        ((UINT16) 8)
-#define OBJ_DLG_EDIT            ((UINT16) 9)
-#define OBJ_DLG_FIXEDTEXT       ((UINT16)10)
-#define OBJ_DLG_IMAGECONTROL    ((UINT16)11)
-#define OBJ_DLG_PROGRESSBAR     ((UINT16)12)
-#define OBJ_DLG_HSCROLLBAR      ((UINT16)13)
-#define OBJ_DLG_VSCROLLBAR      ((UINT16)14)
-#define OBJ_DLG_HFIXEDLINE      ((UINT16)15)
-#define OBJ_DLG_VFIXEDLINE      ((UINT16)16)
-#define OBJ_DLG_DATEFIELD       ((UINT16)17)
-#define OBJ_DLG_TIMEFIELD       ((UINT16)18)
-#define OBJ_DLG_NUMERICFIELD    ((UINT16)19)
-#define OBJ_DLG_CURRENCYFIELD   ((UINT16)20)
-#define OBJ_DLG_FORMATTEDFIELD  ((UINT16)21)
-#define OBJ_DLG_PATTERNFIELD    ((UINT16)22)
-#define OBJ_DLG_FILECONTROL     ((UINT16)23)
-#define OBJ_DLG_TREECONTROL     ((UINT16)24)
+#define OBJ_DLG_CONTROL         ((sal_uInt16) 1)
+#define OBJ_DLG_DIALOG          ((sal_uInt16) 2)
+#define OBJ_DLG_PUSHBUTTON      ((sal_uInt16) 3)
+#define OBJ_DLG_RADIOBUTTON     ((sal_uInt16) 4)
+#define OBJ_DLG_CHECKBOX        ((sal_uInt16) 5)
+#define OBJ_DLG_LISTBOX         ((sal_uInt16) 6)
+#define OBJ_DLG_COMBOBOX        ((sal_uInt16) 7)
+#define OBJ_DLG_GROUPBOX        ((sal_uInt16) 8)
+#define OBJ_DLG_EDIT            ((sal_uInt16) 9)
+#define OBJ_DLG_FIXEDTEXT       ((sal_uInt16)10)
+#define OBJ_DLG_IMAGECONTROL    ((sal_uInt16)11)
+#define OBJ_DLG_PROGRESSBAR     ((sal_uInt16)12)
+#define OBJ_DLG_HSCROLLBAR      ((sal_uInt16)13)
+#define OBJ_DLG_VSCROLLBAR      ((sal_uInt16)14)
+#define OBJ_DLG_HFIXEDLINE      ((sal_uInt16)15)
+#define OBJ_DLG_VFIXEDLINE      ((sal_uInt16)16)
+#define OBJ_DLG_DATEFIELD       ((sal_uInt16)17)
+#define OBJ_DLG_TIMEFIELD       ((sal_uInt16)18)
+#define OBJ_DLG_NUMERICFIELD    ((sal_uInt16)19)
+#define OBJ_DLG_CURRENCYFIELD   ((sal_uInt16)20)
+#define OBJ_DLG_FORMATTEDFIELD  ((sal_uInt16)21)
+#define OBJ_DLG_PATTERNFIELD    ((sal_uInt16)22)
+#define OBJ_DLG_FILECONTROL     ((sal_uInt16)23)
+#define OBJ_DLG_TREECONTROL     ((sal_uInt16)24)
 
 // control properties
 #define DLGED_PROP_BACKGROUNDCOLOR      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BackgroundColor" ) )

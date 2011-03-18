@@ -57,6 +57,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     };
     ListBox LB_HORALIGN
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_ALIGNMENT:LB_HORALIGN";
         Border = TRUE;
         Pos = MAP_APPFONT ( 12 , 25  );
         Size = MAP_APPFONT ( 100 , 60 );
@@ -81,6 +82,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     };
     MetricField ED_INDENT
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_ALIGNMENT:ED_INDENT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 118 , 25 ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
@@ -99,6 +101,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     };
     ListBox LB_VERALIGN
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_ALIGNMENT:LB_VERALIGN";
         Border = TRUE;
         Pos = MAP_APPFONT ( 160 , 25  );
         Size = MAP_APPFONT ( 88 , 60 );
@@ -122,6 +125,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     };
     TriStateBox BTN_TXTSTACKED
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_ALIGNMENT:BTN_TXTSTACKED";
         Pos = MAP_APPFONT ( 133 , 54 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         TabStop = TRUE ;
@@ -142,6 +146,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     };
     NumericField NF_DEGREES
     {
+        HelpID = "cui:NumericField:RID_SVXPAGE_ALIGNMENT:NF_DEGREES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 72 , 65 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -168,6 +173,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     };
     TriStateBox BTN_ASIAN_VERTICAL
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_ALIGNMENT:BTN_ASIAN_VERTICAL";
         Pos = MAP_APPFONT ( 143 , 68 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         TabStop = TRUE ;
@@ -181,18 +187,21 @@ TabPage RID_SVXPAGE_ALIGNMENT
     };
     TriStateBox BTN_WRAP
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_ALIGNMENT:BTN_WRAP";
         Pos = MAP_APPFONT ( 12 , 126 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "~Wrap text automatically" ;
     };
     TriStateBox BTN_HYPH
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_ALIGNMENT:BTN_HYPH";
         Pos = MAP_APPFONT ( 22 , 139 ) ;
         Size = MAP_APPFONT ( 226 , 10 ) ;
         Text [ en-US ] = "Hyphenation ~active";
     };
     TriStateBox BTN_SHRINK
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_ALIGNMENT:BTN_SHRINK";
         Pos = MAP_APPFONT( 12, 152 );
         Size = MAP_APPFONT( 236, 10 );
         Text [ en-US ] = "~Shrink to fit cell size";
@@ -205,6 +214,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     };
     ListBox LB_FRAMEDIR
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_ALIGNMENT:LB_FRAMEDIR";
         Pos = MAP_APPFONT( 78 , 168 );
         Size = MAP_APPFONT( 170 , 50 );
         Border = TRUE;

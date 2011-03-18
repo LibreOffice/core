@@ -52,7 +52,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/sfx.hrc>
@@ -123,7 +123,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    Paint( const Rectangle& rRect );
     void            Resize();
-    void            Show( BOOL bVisible = TRUE, USHORT nFlags = SHOW_NOACTIVATE );
+    void            Show( sal_Bool bVisible = sal_True, sal_uInt16 nFlags = SHOW_NOACTIVATE );
     void            SetTipPosPixel( const Point& rTipPos ) { maTipPos = rTipPos; }
     void            SetTitleAndText( const XubString& rTitle, const XubString& rText,
                                      const Image& rImage );
@@ -151,10 +151,10 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper3
     bool                mbShowBubble;
     bool                mbShowMenuIcon;
     bool                mbBubbleChanged;
-    USHORT              mnIconID;
+    sal_uInt16              mnIconID;
 
 private:
-                    DECL_LINK( ClickHdl, USHORT* );
+                    DECL_LINK( ClickHdl, sal_uInt16* );
                     DECL_LINK( HighlightHdl, MenuBar::MenuBarButtonCallbackArg* );
                     DECL_LINK( WaitTimeOutHdl, Timer* );
                     DECL_LINK( TimeOutHdl, Timer* );
@@ -409,7 +409,7 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin, bool bAddEventHdl )
         mpBubbleWin = GetBubbleWindow();
         if ( mpBubbleWin )
         {
-            mpBubbleWin->Show( TRUE );
+            mpBubbleWin->Show( sal_True );
             maTimeoutTimer.Start();
         }
         mbShowBubble = false;
@@ -478,7 +478,7 @@ void UpdateCheckUI::setPropertyValue(const rtl::OUString& rPropertyName,
         if ( mbShowBubble )
             Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
         else if ( mpBubbleWin )
-            mpBubbleWin->Show( FALSE );
+            mpBubbleWin->Show( sal_False );
     }
     else if( rPropertyName.compareToAscii( PROPERTY_CLICK_HDL ) == 0 ) {
         uno::Reference< task::XJob > aJob;
@@ -504,7 +504,7 @@ void UpdateCheckUI::setPropertyValue(const rtl::OUString& rPropertyName,
         throw beans::UnknownPropertyException();
 
     if ( mbBubbleChanged && mpBubbleWin )
-        mpBubbleWin->Show( FALSE );
+        mpBubbleWin->Show( sal_False );
 }
 
 //------------------------------------------------------------------------------
@@ -635,13 +635,13 @@ void UpdateCheckUI::RemoveBubbleWindow( bool bRemoveIcon )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( UpdateCheckUI, ClickHdl, USHORT*, EMPTYARG )
+IMPL_LINK( UpdateCheckUI, ClickHdl, sal_uInt16*, EMPTYARG )
 {
     SolarMutexGuard aGuard;
 
     maWaitTimer.Stop();
     if ( mpBubbleWin )
-        mpBubbleWin->Show( FALSE );
+        mpBubbleWin->Show( sal_False );
 
     if ( mrJob.is() )
     {
@@ -727,7 +727,7 @@ IMPL_LINK( UpdateCheckUI, UserEventHdl, UpdateCheckUI*, EMPTYARG )
 // -----------------------------------------------------------------------
 IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
 {
-    ULONG nEventID = pEvent->GetId();
+    sal_uLong nEventID = pEvent->GetId();
 
     if ( VCLEVENT_OBJECT_DYING == nEventID )
     {
@@ -920,11 +920,11 @@ void BubbleWindow::Paint( const Rectangle& )
 //------------------------------------------------------------------------------
 void BubbleWindow::MouseButtonDown( const MouseEvent& )
 {
-    Show( FALSE );
+    Show( sal_False );
 }
 
 //------------------------------------------------------------------------------
-void BubbleWindow::Show( BOOL bVisible, USHORT nFlags )
+void BubbleWindow::Show( sal_Bool bVisible, sal_uInt16 nFlags )
 {
     SolarMutexGuard aGuard;
 
@@ -976,7 +976,7 @@ void BubbleWindow::Show( BOOL bVisible, USHORT nFlags )
 void BubbleWindow::RecalcTextRects()
 {
     Size aTotalSize;
-    BOOL bFinished = FALSE;
+    sal_Bool bFinished = sal_False;
     Font aOldFont = GetFont();
     Font aBoldFont = aOldFont;
 
@@ -1008,7 +1008,7 @@ void BubbleWindow::RecalcTextRects()
             maMaxTextSize.Height() = maMaxTextSize.Height() * 3 / 2;
         }
         else
-            bFinished = TRUE;
+            bFinished = sal_True;
     }
     maTitleRect.Move( 2*BUBBLE_BORDER, BUBBLE_BORDER + TIP_HEIGHT );
     maTextRect.Move( 2*BUBBLE_BORDER, BUBBLE_BORDER + TIP_HEIGHT + maTitleRect.GetHeight() + aBoldFont.GetHeight() * 3 / 4 );
@@ -1048,18 +1048,6 @@ extern "C" void SAL_CALL
 component_getImplementationEnvironment( const sal_Char **aEnvTypeName, uno_Environment **)
 {
     *aEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
-}
-
-//------------------------------------------------------------------------------
-
-extern "C" sal_Bool SAL_CALL
-component_writeInfo(void *pServiceManager, void *pRegistryKey)
-{
-    return cppu::component_writeInfoHelper(
-        pServiceManager,
-        pRegistryKey,
-        kImplementations_entries
-    );
 }
 
 //------------------------------------------------------------------------------

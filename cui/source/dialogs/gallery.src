@@ -94,6 +94,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
     };
     Edit EDT_MS_NAME
     {
+        HelpID = "cui:Edit:RID_SVXTABPAGE_GALLERY_GENERAL:EDT_MS_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 10 ) ;
         Size = MAP_APPFONT ( 194 , 12 ) ;
@@ -174,6 +175,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     };
     ComboBox CBB_FILETYPE
     {
+        HelpID = "cui:ComboBox:RID_SVXTABPAGE_GALLERYTHEME_FILES:CBB_FILETYPE";
         Pos = MAP_APPFONT ( 57 , 6 ) ;
         Size = MAP_APPFONT ( 121 , 69 ) ;
         TabStop = TRUE ;
@@ -183,6 +185,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     };
     MultiListBox LBX_FOUND
     {
+        HelpID = "cui:MultiListBox:RID_SVXTABPAGE_GALLERYTHEME_FILES:LBX_FOUND";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 23  ) ;
         Size = MAP_APPFONT ( 172 , 156 ) ;
@@ -191,6 +194,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     };
     PushButton BTN_SEARCH
     {
+        HelpID = "cui:PushButton:RID_SVXTABPAGE_GALLERYTHEME_FILES:BTN_SEARCH";
         Pos = MAP_APPFONT ( 184 , 6  ) ;
         Size = MAP_APPFONT ( 70 , 14 ) ;
         TabStop = TRUE ;
@@ -198,6 +202,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     };
     PushButton BTN_TAKE
     {
+        HelpID = "cui:PushButton:RID_SVXTABPAGE_GALLERYTHEME_FILES:BTN_TAKE";
         Pos = MAP_APPFONT ( 184 , 24  ) ;
         Size = MAP_APPFONT ( 70 , 14 ) ;
         TabStop = TRUE ;
@@ -205,6 +210,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     };
     PushButton BTN_TAKEALL
     {
+        HelpID = "cui:PushButton:RID_SVXTABPAGE_GALLERYTHEME_FILES:BTN_TAKEALL";
         Pos = MAP_APPFONT ( 184 , 42 ) ;
         Size = MAP_APPFONT ( 70 , 14 ) ;
         TabStop = TRUE ;
@@ -212,6 +218,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     };
     CheckBox CBX_PREVIEW
     {
+        HelpID = "cui:CheckBox:RID_SVXTABPAGE_GALLERYTHEME_FILES:CBX_PREVIEW";
         Pos = MAP_APPFONT ( 184 , 76  ) ;
         Size = MAP_APPFONT ( 70 , 12 ) ;
         Text [ en-US ] = "Pr~eview" ;
@@ -224,6 +231,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     };
     PushButton BTN_MADDIN1
     {
+        HelpID = "cui:PushButton:RID_SVXTABPAGE_GALLERYTHEME_FILES:BTN_MADDIN1";
         Pos = MAP_APPFONT ( 220 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -231,6 +239,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     };
     PushButton BTN_MADDIN2
     {
+        HelpID = "cui:PushButton:RID_SVXTABPAGE_GALLERYTHEME_FILES:BTN_MADDIN2";
         Pos = MAP_APPFONT ( 220 , 80 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -388,6 +397,7 @@ ModalDialog RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS
 
 ModalDialog RID_SVXDLG_GALLERY_THEMEID
 {
+    HelpID = "cui:ModalDialog:RID_SVXDLG_GALLERY_THEMEID";
     OutputSize = TRUE ;
     Border = TRUE ;
     SVLook = TRUE ;
@@ -415,6 +425,7 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
     };
     ListBox LB_RESNAME
     {
+        HelpID = "cui:ListBox:RID_SVXDLG_GALLERY_THEMEID:LB_RESNAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 60 ) ;
@@ -436,10 +447,6 @@ String RID_SVXSTR_GALLERY_SEARCH
 String RID_SVXSTR_GALLERYPROPS_OBJECT
 {
     Text [ en-US ] = "Object;Objects" ;
-};
-String RID_SVXSTR_GALLERYPROPS_GALTHEME
-{
-    Text [ en-US ] = "Gallery Theme" ;
 };
 String RID_SVXSTR_GALLERY_READONLY
 {

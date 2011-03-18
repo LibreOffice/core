@@ -119,8 +119,8 @@ namespace frm
     {
         // this means that the content of the EditEngine changed via the UNO API
         // to reflect this in the views, we need to update them
-        USHORT viewCount = m_rEngine.GetViewCount();
-        for ( USHORT view = 0; view < viewCount; ++view )
+        sal_uInt16 viewCount = m_rEngine.GetViewCount();
+        for ( sal_uInt16 view = 0; view < viewCount; ++view )
         {
             EditView* pView = m_rEngine.GetView( view );
             if ( pView )

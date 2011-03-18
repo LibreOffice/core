@@ -33,7 +33,6 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/app.hxx>
-#include <svl/pickerhelper.hxx>
 #include <svl/aeitem.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/filedlg.hxx>
@@ -105,18 +104,18 @@ struct OptPath_Impl
 
 struct PathUserData_Impl
 {
-    USHORT          nRealId;
+    sal_uInt16          nRealId;
     SfxItemState    eState;
     String          sUserPath;
     String          sWritablePath;
 
-    PathUserData_Impl( USHORT nId ) :
+    PathUserData_Impl( sal_uInt16 nId ) :
         nRealId( nId ), eState( SFX_ITEM_UNKNOWN ) {}
 };
 
 struct Handle2CfgNameMapping_Impl
 {
-    USHORT      m_nHandle;
+    sal_uInt16      m_nHandle;
     const char* m_pCfgName;
 };
 
@@ -137,10 +136,10 @@ static Handle2CfgNameMapping_Impl const Hdl2CfgMap_Impl[] =
     { USHRT_MAX, NULL }
 };
 
-static String getCfgName_Impl( USHORT _nHandle )
+static String getCfgName_Impl( sal_uInt16 _nHandle )
 {
     String sCfgName;
-    USHORT nIndex = 0;
+    sal_uInt16 nIndex = 0;
     while ( Hdl2CfgMap_Impl[ nIndex ].m_nHandle != USHRT_MAX )
     {
         if ( Hdl2CfgMap_Impl[ nIndex ].m_nHandle == _nHandle )
@@ -160,9 +159,9 @@ static String getCfgName_Impl( USHORT _nHandle )
 String Convert_Impl( const String& rValue )
 {
     char cDelim = MULTIPATH_DELIMITER;
-    USHORT nCount = rValue.GetTokenCount( cDelim );
+    sal_uInt16 nCount = rValue.GetTokenCount( cDelim );
     String aReturn;
-    for ( USHORT i=0; i<nCount ; ++i )
+    for ( sal_uInt16 i=0; i<nCount ; ++i )
     {
         String aValue = rValue.GetToken( i, cDelim );
         INetURLObject aObj( aValue );
@@ -190,7 +189,7 @@ long SvxControlFocusHelper::Notify( NotifyEvent& rNEvt )
 
 // functions -------------------------------------------------------------
 
-BOOL IsMultiPath_Impl( const USHORT nIndex )
+sal_Bool IsMultiPath_Impl( const sal_uInt16 nIndex )
 {
 #if OSL_DEBUG_LEVEL > 1
     return ( SvtPathOptions::PATH_AUTOCORRECT == nIndex ||
@@ -252,7 +251,6 @@ SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
     WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
     pPathBox = new svx::OptHeaderTabListBox( &aPathCtrl, nBits );
     aPathCtrl.SetFocusControl( pPathBox );
-    pPathBox->SetWindowBits( nBits );
     pPathBox->SetDoubleClickHdl( aLink );
     pPathBox->SetSelectHdl( LINK( this, SvxPathTabPage, PathSelect_Impl ) );
     pPathBox->SetSelectionMode( MULTIPLE_SELECTION );
@@ -279,7 +277,7 @@ SvxPathTabPage::~SvxPathTabPage()
     aPathCtrl.SetFocusControl( NULL );
 
     pHeaderBar->Hide();
-    for ( USHORT i = 0; i < pPathBox->GetEntryCount(); ++i )
+    for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
         delete (PathUserData_Impl*)pPathBox->GetEntry(i)->GetUserData();
     delete pPathBox;
     delete pHeaderBar;
@@ -296,17 +294,17 @@ SfxTabPage* SvxPathTabPage::Create( Window* pParent,
 
 // -----------------------------------------------------------------------
 
-BOOL SvxPathTabPage::FillItemSet( SfxItemSet& )
+sal_Bool SvxPathTabPage::FillItemSet( SfxItemSet& )
 {
     SvtPathOptions aPathOpt;
-    for ( USHORT i = 0; i < pPathBox->GetEntryCount(); ++i )
+    for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
     {
         PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pPathBox->GetEntry(i)->GetUserData();
-        USHORT nRealId = pPathImpl->nRealId;
+        sal_uInt16 nRealId = pPathImpl->nRealId;
         if ( pPathImpl->eState == SFX_ITEM_SET )
             SetPathList( nRealId, pPathImpl->sUserPath, pPathImpl->sWritablePath );
     }
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -316,7 +314,7 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
     pPathBox->Clear();
     SvtPathOptions aPathOpt; //! deprecated
 
-    for( USHORT i = 0; i <= (USHORT)SvtPathOptions::PATH_WORK; ++i )
+    for( sal_uInt16 i = 0; i <= (sal_uInt16)SvtPathOptions::PATH_WORK; ++i )
     {
         // only writer uses autotext
         if ( i == SvtPathOptions::PATH_AUTOTEXT
@@ -369,7 +367,7 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
         pHeaderBar->SetItemSize( ITEMID_TYPE, aUserData.GetToken(0).ToInt32() );
         HeaderEndDrag_Impl( NULL );
         // Sortierrichtung restaurieren
-        BOOL bUp = (BOOL)(USHORT)aUserData.GetToken(1).ToInt32();
+        sal_Bool bUp = (sal_Bool)(sal_uInt16)aUserData.GetToken(1).ToInt32();
         HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
 
         if ( bUp )
@@ -395,7 +393,7 @@ void SvxPathTabPage::FillUserData()
     String aUserData = String::CreateFromInt32( pHeaderBar->GetItemSize( ITEMID_TYPE ) );
     aUserData += ';';
     HeaderBarItemBits nBits = pHeaderBar->GetItemBits( ITEMID_TYPE );
-    BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     aUserData += bUp ? '1' : '0';
     SetUserData( aUserData );
 }
@@ -404,14 +402,14 @@ void SvxPathTabPage::FillUserData()
 
 IMPL_LINK( SvxPathTabPage, PathSelect_Impl, svx::OptHeaderTabListBox *, EMPTYARG )
 {
-    USHORT nSelCount = 0;
+    sal_uInt16 nSelCount = 0;
     SvLBoxEntry* pEntry = pPathBox->FirstSelected();
 
     //the entry image indicates whether the path is write protected
     Image aEntryImage;
     if(pEntry)
         aEntryImage = pPathBox->GetCollapsedEntryBmp( pEntry );
-    BOOL bEnable = !aEntryImage;
+    sal_Bool bEnable = !aEntryImage;
     while ( pEntry && ( nSelCount < 2 ) )
     {
         nSelCount++;
@@ -439,14 +437,14 @@ IMPL_LINK( SvxPathTabPage, StandardHdl_Impl, PushButton *, EMPTYARG )
             sal_Bool bReadOnly = sal_False;
             GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
 
-            USHORT i;
-            USHORT nOldCount = aOldPath.GetTokenCount( MULTIPATH_DELIMITER );
-            USHORT nIntCount = sInternal.GetTokenCount( MULTIPATH_DELIMITER );
+            sal_uInt16 i;
+            sal_uInt16 nOldCount = aOldPath.GetTokenCount( MULTIPATH_DELIMITER );
+            sal_uInt16 nIntCount = sInternal.GetTokenCount( MULTIPATH_DELIMITER );
             for ( i = 0; i < nOldCount; ++i )
             {
                 bool bFound = false;
                 String sOnePath = aOldPath.GetToken( i, MULTIPATH_DELIMITER );
-                for ( USHORT j = 0; !bFound && j < nIntCount; ++j )
+                for ( sal_uInt16 j = 0; !bFound && j < nIntCount; ++j )
                 {
                     if ( sInternal.GetToken( i, MULTIPATH_DELIMITER ) == sOnePath )
                         bFound = true;
@@ -496,7 +494,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
     GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
     sUser = pPathImpl->sUserPath;
     sWritable = pPathImpl->sWritablePath;
-    USHORT nPos = pPathImpl->nRealId;
+    sal_uInt16 nPos = pPathImpl->nRealId;
 
     // old path is an URL?
     INetURLObject aObj( sWritable );
@@ -519,7 +517,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
     if ( bChanged )
     {
         pPathBox->SetEntryText( Convert_Impl( sNewPathStr ), pEntry, 1 );
-        nPos = (USHORT)pPathBox->GetModel()->GetAbsPos( pEntry );
+        nPos = (sal_uInt16)pPathBox->GetModel()->GetAbsPos( pEntry );
         pPathImpl = (PathUserData_Impl*)pPathBox->GetEntry(nPos)->GetUserData();
         pPathImpl->eState = SFX_ITEM_SET;
         pPathImpl->sWritablePath = sNewPathStr;
@@ -551,7 +549,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
 IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
 {
     SvLBoxEntry* pEntry = pPathBox->GetCurEntry();
-    USHORT nPos = ( pEntry != NULL ) ? ( (PathUserData_Impl*)pEntry->GetUserData() )->nRealId : 0;
+    sal_uInt16 nPos = ( pEntry != NULL ) ? ( (PathUserData_Impl*)pEntry->GetUserData() )->nRealId : 0;
     String sInternal, sUser, sWritable;
     if ( pEntry )
     {
@@ -593,10 +591,10 @@ IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
                 String sFullPath;
                 String sNewPath = pMultiDlg->GetPath();
                 char cDelim = MULTIPATH_DELIMITER;
-                USHORT nCount = sNewPath.GetTokenCount( cDelim );
+                sal_uInt16 nCount = sNewPath.GetTokenCount( cDelim );
                 if ( nCount > 0 )
                 {
-                    USHORT i = 0;
+                    sal_uInt16 i = 0;
                     for ( ; i < nCount - 1; ++i )
                     {
                         if ( sUser.Len() > 0 )
@@ -631,8 +629,6 @@ IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
             xFolderPicker = ::com::sun::star::uno::Reference< XFolderPicker >(
                 xFactory->createInstance( aService ), UNO_QUERY );
 
-//          svt::SetDialogHelpId( xFolderPicker, HID_OPTIONS_PATHS_SELECTFOLDER );
-
             INetURLObject aURL( sWritable, INET_PROT_FILE );
             xFolderPicker->setDisplayDirectory( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
@@ -665,7 +661,7 @@ IMPL_LINK( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
         return 0;
 
     HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
-    BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     SvSortMode eMode = SortAscending;
 
     if ( bUp )
@@ -696,7 +692,7 @@ IMPL_LINK( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
     if ( !pHeaderBar->IsItemMode() )
     {
         Size aSz;
-        USHORT nTabs = pHeaderBar->GetItemCount();
+        sal_uInt16 nTabs = pHeaderBar->GetItemCount();
         long nTmpSz = 0;
         long nWidth = pHeaderBar->GetItemSize(ITEMID_TYPE);
         long nBarWidth = pHeaderBar->GetSizePixel().Width();
@@ -706,7 +702,7 @@ IMPL_LINK( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
         else if ( ( nBarWidth - nWidth ) < TAB_WIDTH_MIN )
             pHeaderBar->SetItemSize( ITEMID_TYPE, nBarWidth - TAB_WIDTH_MIN );
 
-        for ( USHORT i = 1; i <= nTabs; ++i )
+        for ( sal_uInt16 i = 1; i <= nTabs; ++i )
         {
             long _nWidth = pHeaderBar->GetItemSize(i);
             aSz.Width() =  _nWidth + nTmpSz;
@@ -734,7 +730,7 @@ IMPL_LINK( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
 // -----------------------------------------------------------------------
 
 void SvxPathTabPage::GetPathList(
-    USHORT _nPathHandle, String& _rInternalPath,
+    sal_uInt16 _nPathHandle, String& _rInternalPath,
     String& _rUserPath, String& _rWritablePath, sal_Bool& _rReadOnly )
 {
     String sCfgName = getCfgName_Impl( _nPathHandle );
@@ -810,7 +806,7 @@ void SvxPathTabPage::GetPathList(
 // -----------------------------------------------------------------------
 
 void SvxPathTabPage::SetPathList(
-    USHORT _nPathHandle, const String& _rUserPath, const String& _rWritablePath )
+    sal_uInt16 _nPathHandle, const String& _rUserPath, const String& _rWritablePath )
 {
     String sCfgName = getCfgName_Impl( _nPathHandle );
 
@@ -829,10 +825,10 @@ void SvxPathTabPage::SetPathList(
         {
             // save user paths
             char cDelim = MULTIPATH_DELIMITER;
-            USHORT nCount = _rUserPath.GetTokenCount( cDelim );
+            sal_uInt16 nCount = _rUserPath.GetTokenCount( cDelim );
             Sequence< ::rtl::OUString > aPathSeq( nCount );
             ::rtl::OUString* pArray = aPathSeq.getArray();
-            for ( USHORT i = 0; i < nCount; ++i )
+            for ( sal_uInt16 i = 0; i < nCount; ++i )
                 pArray[i] = ::rtl::OUString( _rUserPath.GetToken( i, cDelim ) );
             String sProp( sCfgName );
             sProp += POSTFIX_USER;

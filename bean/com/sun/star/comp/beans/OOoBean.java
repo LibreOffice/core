@@ -601,8 +601,15 @@ public class OOoBean
                     xURLTransformer = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
                         com.sun.star.util.XURLTransformer.class,
                         xServiceFactory.createInstance( "com.sun.star.util.URLTransformer") );
-                    xDispatcher = (com.sun.star.frame.XDispatchProvider)UnoRuntime.queryInterface(
-                        com.sun.star.frame.XDispatchProvider.class, aFrame );
+
+                                        try
+                                        {
+                                            xDispatcher = UnoRuntime.queryInterface(com.sun.star.frame.XDispatchProvider.class, aFrame);
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            /*ignore!*/
+                                        }
 
                     // get XComponentLoader from frame
                     com.sun.star.frame.XComponentLoader xLoader = (com.sun.star.frame.XComponentLoader)

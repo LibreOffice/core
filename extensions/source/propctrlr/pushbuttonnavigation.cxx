@@ -32,7 +32,7 @@
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include "formstrings.hxx"
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #include <comphelper/property.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>

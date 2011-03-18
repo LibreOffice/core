@@ -92,7 +92,7 @@ SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rResId ) :
     FreeResource();
     SetSelectionMode( SINGLE_SELECTION );
 
-    SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
+    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
                    WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HIDESELECTION |
                    WB_HASLINES | WB_HASLINESATROOT );
     SetNodeDefaultImages();
@@ -159,7 +159,7 @@ void SFTreeListBox::deleteAllTree()
 
 void SFTreeListBox::Init( const ::rtl::OUString& language  )
 {
-    SetUpdateMode( FALSE );
+    SetUpdateMode( sal_False );
 
     deleteAllTree();
 
@@ -262,7 +262,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
                 0, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries, xDocumentModel )), factoryURL );
     }
 
-    SetUpdateMode( TRUE );
+    SetUpdateMode( sal_True );
 }
 
 Reference< XInterface  >
@@ -358,18 +358,9 @@ void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::co
     }
 }
 
-void SFTreeListBox::UpdateEntries()
-{
-}
-
-SvLBoxEntry* SFTreeListBox::FindEntry( SvLBoxEntry* , const String& , BYTE  )
-{
-    return 0;
-}
-
 long SFTreeListBox::ExpandingHdl()
 {
-    return TRUE;
+    return sal_True;
 }
 
 void SFTreeListBox::ExpandAllTrees()
@@ -377,7 +368,7 @@ void SFTreeListBox::ExpandAllTrees()
 }
 
 SvLBoxEntry * SFTreeListBox::insertEntry(
-    String const & rText, USHORT nBitmap, SvLBoxEntry * pParent,
+    String const & rText, sal_uInt16 nBitmap, SvLBoxEntry * pParent,
     bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData, ::rtl::OUString factoryURL )
 {
     SvLBoxEntry * p;
@@ -396,7 +387,7 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
 }
 
 SvLBoxEntry * SFTreeListBox::insertEntry(
-    String const & rText, USHORT nBitmap, SvLBoxEntry * pParent,
+    String const & rText, sal_uInt16 nBitmap, SvLBoxEntry * pParent,
     bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData )
 {
     Image aImage;
@@ -449,7 +440,7 @@ void SFTreeListBox::ExpandedHdl()
 // ----------------------------------------------------------------------------
 // InputDialog ------------------------------------------------------------
 // ----------------------------------------------------------------------------
-InputDialog::InputDialog(Window * pParent, USHORT nMode )
+InputDialog::InputDialog(Window * pParent, sal_uInt16 nMode )
     : ModalDialog( pParent, CUI_RES( RID_DLG_NEWLIB ) ),
         aText( this, CUI_RES( FT_NEWLIB ) ),
         aEdit( this, CUI_RES( ED_LIBNAME ) ),
@@ -478,7 +469,7 @@ InputDialog::InputDialog(Window * pParent, USHORT nMode )
     Size siz, newSiz;
     long gap;
 
-    USHORT style = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP |
+    sal_uInt16 style = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP |
                    TEXT_DRAW_LEFT | TEXT_DRAW_WORDBREAK;
 
     // get dimensions of dialog instructions control
@@ -590,10 +581,6 @@ short SvxScriptOrgDialog::Execute()
     short nRet = ModalDialog::Execute();
     Application::SetDefDialogParent( pPrevDlgParent );
     return nRet;
-}
-
-void SvxScriptOrgDialog::EnableButton( Button& , BOOL  )
-{
 }
 
 void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
@@ -887,38 +874,6 @@ Reference< XModel > SvxScriptOrgDialog::getModel( SvLBoxEntry* pEntry )
     return model;
 }
 
-Reference< XInterface  >
-SvxScriptOrgDialog::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OUString& docName )
-{
-    Reference< XInterface > xModel;
-    Reference< lang::XMultiComponentFactory > mcf =
-            xCtx->getServiceManager();
-    Reference< frame::XDesktop > desktop (
-        mcf->createInstanceWithContext(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ), xCtx ),
-            UNO_QUERY );
-
-    Reference< container::XEnumerationAccess > componentsAccess =
-        desktop->getComponents();
-    Reference< container::XEnumeration > components =
-        componentsAccess->createEnumeration();
-    while (components->hasMoreElements())
-    {
-        Reference< frame::XModel > model(
-            components->nextElement(), UNO_QUERY );
-        if ( model.is() )
-        {
-            ::rtl::OUString sTdocUrl = ::comphelper::DocumentInfo::getDocumentTitle( model );
-            if( sTdocUrl.equals( docName ) )
-            {
-                xModel = model;
-                break;
-            }
-        }
-    }
-    return xModel;
-}
-
 void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
 {
 
@@ -930,7 +885,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
     {
         ::rtl::OUString aNewName;
         ::rtl::OUString aNewStdName;
-        USHORT nMode = INPUTMODE_NEWLIB;
+        sal_uInt16 nMode = INPUTMODE_NEWLIB;
         if( aScriptsBox.GetModel()->GetDepth( pEntry ) == 0 )
         {
             aNewStdName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Library") ) ;
@@ -942,8 +897,8 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         }
         //do we need L10N for this? ie somethng like:
         //String aNewStdName( ResId( STR_STDMODULENAME ) );
-        BOOL bValid = FALSE;
-        USHORT i = 1;
+        sal_Bool bValid = sal_False;
+        sal_uInt16 i = 1;
 
         Sequence< Reference< browse::XBrowseNode > > childNodes;
         // no children => ok to create Parcel1 or Script1 without checking
@@ -953,7 +908,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
             {
                 aNewName = aNewStdName;
                 aNewName += String::CreateFromInt32( i );
-                bValid = TRUE;
+                bValid = sal_True;
             }
             else
             {
@@ -970,7 +925,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         {
             aNewName = aNewStdName;
             aNewName += String::CreateFromInt32( i );
-            BOOL bFound = FALSE;
+            sal_Bool bFound = sal_False;
             if(childNodes.getLength() > 0 )
             {
                 ::rtl::OUString nodeName = childNodes[0]->getName();
@@ -982,7 +937,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
             {
                 if ( (aNewName+extn).equals( childNodes[index]->getName() ) )
                 {
-                    bFound = TRUE;
+                    bFound = sal_True;
                     break;
                 }
             }
@@ -992,7 +947,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
             }
             else
             {
-                bValid = TRUE;
+                bValid = sal_True;
             }
         }
 
@@ -1004,12 +959,12 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
             if ( xNewDlg->Execute() && xNewDlg->GetObjectName().Len() )
             {
                 ::rtl::OUString aUserSuppliedName = xNewDlg->GetObjectName();
-                bValid = TRUE;
+                bValid = sal_True;
                 for( sal_Int32 index = 0; index < childNodes.getLength(); index++ )
                 {
                     if ( (aUserSuppliedName+extn).equals( childNodes[index]->getName() ) )
                     {
-                        bValid = FALSE;
+                        bValid = sal_False;
                         String aError( m_createErrStr );
                         aError.Append( m_createDupStr );
                         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
@@ -1119,18 +1074,18 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
             extn = aNewName.copy(extnPos);
             aNewName = aNewName.copy(0,extnPos);
         }
-        USHORT nMode = INPUTMODE_RENAME;
+        sal_uInt16 nMode = INPUTMODE_RENAME;
 
         std::auto_ptr< InputDialog > xNewDlg( new InputDialog( static_cast<Window*>(this), nMode ) );
         xNewDlg->SetObjectName( aNewName );
 
-        BOOL bValid;
+        sal_Bool bValid;
         do
         {
             if ( xNewDlg->Execute() && xNewDlg->GetObjectName().Len() )
             {
                 ::rtl::OUString aUserSuppliedName = xNewDlg->GetObjectName();
-                bValid = TRUE;
+                bValid = sal_True;
                 if( bValid )
                     aNewName = aUserSuppliedName;
             }
@@ -1226,10 +1181,10 @@ void SvxScriptOrgDialog::deleteEntry( SvLBoxEntry* pEntry )
 
 }
 
-BOOL SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& xProps,
+sal_Bool SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& xProps,
                 ::rtl::OUString& propName )
 {
-    BOOL result = false;
+    sal_Bool result = false;
     try
     {
         sal_Bool bTemp = sal_False;
@@ -1299,7 +1254,7 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     if( aStoredEntry.Len() <= 0 )
         return;
     SvLBoxEntry* pEntry = 0;
-    USHORT nIndex = 0;
+    sal_uInt16 nIndex = 0;
     while ( nIndex != STRING_NOTFOUND )
     {
         String aTmp( aStoredEntry.GetToken( 0, ';', nIndex ) );
@@ -1320,28 +1275,6 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
         aScriptsBox.RequestingChilds( pEntry );
     }
     aScriptsBox.SetCurEntry( pEntry );
-}
-
-BOOL SFTreeListBox::dialogSort1( Reference< browse::XBrowseNode > node1,
-    Reference< browse::XBrowseNode > node2 )
-{
-    ::rtl::OUString userStr( RTL_CONSTASCII_USTRINGPARAM("user") );
-    ::rtl::OUString shareStr( RTL_CONSTASCII_USTRINGPARAM("share") );
-    if( node1->getName().equals( userStr ) )
-        return true;
-    if( node2->getName().equals( userStr ) )
-        return false;
-    if( node1->getName().equals( shareStr ) )
-        return true;
-    if( node2->getName().equals( shareStr ) )
-        return false;
-    return dialogSort2( node1, node2 );
-}
-
-BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
-    Reference< browse::XBrowseNode > node2 )
-{
-    return ( node1->getName().compareTo( node2->getName() ) < 0 );
 }
 
 ::rtl::OUString ReplaceString(

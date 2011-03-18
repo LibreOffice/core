@@ -72,7 +72,7 @@ private:
 protected:
 
     virtual void            _ExportMeta() {}
-    virtual void            _ExportStyles( BOOL /*bUsed*/ ) {}
+    virtual void            _ExportStyles( sal_Bool /*bUsed*/ ) {}
     virtual void            _ExportAutoStyles() {}
     virtual void            _ExportContent() {}
     virtual void            _ExportMasterStyles() {}
@@ -140,14 +140,14 @@ SVGPrinterExport::SVGPrinterExport(
     mpOuterElement = ImplCreateSVGElement( rSetup, aOutputSize );
 
     // write description
-    SvXMLElementExport* pDescElem = new SvXMLElementExport( *this, XML_NAMESPACE_NONE, aXMLElemDesc, TRUE, TRUE );
+    SvXMLElementExport* pDescElem = new SvXMLElementExport( *this, XML_NAMESPACE_NONE, aXMLElemDesc, sal_True, sal_True );
     NMSP_RTL::OUString  aDesc( B2UCONST( "document name: " ) );
 
     GetDocHandler()->characters( aDesc += rJobName );
     delete pDescElem;
 
     // write meta attributes
-    ImplWriteMetaAttr( TRUE, FALSE );
+    ImplWriteMetaAttr( sal_True, sal_False );
 }
 
 // -----------------------------------------------------------------------------
@@ -167,7 +167,7 @@ SvXMLElementExport* SVGPrinterExport::ImplCreateSVGElement( const JobSetup& rSet
 
     delete mpVDev;
     mpVDev = new VirtualDevice;
-    mpVDev->EnableOutput( FALSE );
+    mpVDev->EnableOutput( sal_False );
     mpVDev->SetMapMode( MAP_100TH_MM );
     maPrinter.SetJobSetup( rSetup );
 
@@ -185,14 +185,14 @@ SvXMLElementExport* SVGPrinterExport::ImplCreateSVGElement( const JobSetup& rSet
     aAttr += SVGActionWriter::GetValueString( rOutputSize.Height(), sal_True );
     AddAttribute( XML_NAMESPACE_NONE, aXMLAttrViewBox, aAttr );
 
-    return( new SvXMLElementExport( *this, XML_NAMESPACE_NONE, aXMLElemSVG, TRUE, TRUE ) );
+    return( new SvXMLElementExport( *this, XML_NAMESPACE_NONE, aXMLElemSVG, sal_True, sal_True ) );
 }
 
 // -----------------------------------------------------------------------------
 
 void SVGPrinterExport::ImplWriteMetaAttr( sal_Bool bOuter, sal_Bool bPage )
 {
-    SvXMLElementExport  aMetaData( *this, XML_NAMESPACE_NONE, aXMLElemMeta, TRUE, TRUE );
+    SvXMLElementExport  aMetaData( *this, XML_NAMESPACE_NONE, aXMLElemMeta, sal_True, sal_True );
     NMSP_RTL::OUString  aAttr;
 
     aAttr = bOuter ? B2UCONST( "true" ) : B2UCONST( "false" );
@@ -202,7 +202,7 @@ void SVGPrinterExport::ImplWriteMetaAttr( sal_Bool bOuter, sal_Bool bPage )
     AddAttribute( XML_NAMESPACE_NONE, aXMLAttrMetaSVGPage, aAttr );
 
     {
-        delete( new SvXMLElementExport( *this, XML_NAMESPACE_NONE, aXMLElemMetaSVG, TRUE, TRUE ) );
+        delete( new SvXMLElementExport( *this, XML_NAMESPACE_NONE, aXMLElemMetaSVG, sal_True, sal_True ) );
     }
 }
 
@@ -215,14 +215,14 @@ void SVGPrinterExport::writePage( const JobSetup& rSetup, const GDIMetaFile& rMt
     SvXMLElementExport* pPageElem = ImplCreateSVGElement( rSetup, aOutputSize );
 
     // write description
-    SvXMLElementExport* pDescElem = new SvXMLElementExport( *this, XML_NAMESPACE_NONE, aXMLElemDesc, TRUE, TRUE );
+    SvXMLElementExport* pDescElem = new SvXMLElementExport( *this, XML_NAMESPACE_NONE, aXMLElemDesc, sal_True, sal_True );
     NMSP_RTL::OUString  aDesc( B2UCONST( "page: " ) );
 
     GetDocHandler()->characters( aDesc += NMSP_RTL::OUString::valueOf( (sal_Int32) ++mnPage ) );
     delete pDescElem;
 
     // write meta attributes
-    ImplWriteMetaAttr( FALSE, TRUE );
+    ImplWriteMetaAttr( sal_False, sal_True );
 
     // write dummy rect element
     aAttr = B2UCONST( "0.0" );
@@ -235,8 +235,8 @@ void SVGPrinterExport::writePage( const JobSetup& rSetup, const GDIMetaFile& rMt
     aAttr = SVGActionWriter::GetValueString( aOutputSize.Height(), sal_True );
     AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, aAttr );
 
-    delete( new SvXMLElementExport( *this, XML_NAMESPACE_NONE, aXMLElemRect, TRUE, TRUE ) );
-    delete( new SVGActionWriter( *this, rMtf, mpVDev, TRUE ) );
+    delete( new SvXMLElementExport( *this, XML_NAMESPACE_NONE, aXMLElemRect, sal_True, sal_True ) );
+    delete( new SVGActionWriter( *this, rMtf, mpVDev, sal_True ) );
 
     delete pPageElem;
 }

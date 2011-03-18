@@ -35,6 +35,7 @@
 
 ModalDialog RID_DLG_SELECTION
 {
+    HelpID = "extensions:ModalDialog:RID_DLG_SELECTION";
     OutputSize = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -49,6 +50,7 @@ ModalDialog RID_DLG_SELECTION
 
     ListBox LB_ENTRIES
     {
+        HelpID = "extensions:ListBox:RID_DLG_SELECTION:LB_ENTRIES";
         Pos  = MAP_APPFONT(  6, 17 );
         Size = MAP_APPFONT( 85, 97 );
 

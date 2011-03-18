@@ -42,7 +42,7 @@ sal_uInt16 SvxInsRowColDlg::getInsertCount() const
     return static_cast< sal_uInt16 >( aCountEdit.GetValue() );
 }
 
-SvxInsRowColDlg::SvxInsRowColDlg(Window* pParent, bool bCol, ULONG nHelpId )
+SvxInsRowColDlg::SvxInsRowColDlg(Window* pParent, bool bCol, const rtl::OString& sHelpId )
     : ModalDialog( pParent, CUI_RES(DLG_INS_ROW_COL) ),
     aCount( this, CUI_RES( FT_COUNT ) ),
     aCountEdit( this, CUI_RES( ED_COUNT ) ),
@@ -68,7 +68,7 @@ SvxInsRowColDlg::SvxInsRowColDlg(Window* pParent, bool bCol, ULONG nHelpId )
         aTmp += aRow;
     }
     SetText( aTmp );
-    SetHelpId( nHelpId );
+    SetHelpId( sHelpId );
 }
 
 short SvxInsRowColDlg::Execute(void)

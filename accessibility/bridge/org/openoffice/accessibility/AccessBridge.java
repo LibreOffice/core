@@ -142,11 +142,6 @@ public class AccessBridge {
         return xSingleServiceFactory;
     }
 
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return FactoryHelper.writeRegistryServiceInfo(AccessBridge.class.getName(),
-            _AccessBridge._serviceName, regKey);
-    }
-
     static public class _AccessBridge implements XTopWindowListener,
         XInitialization, XComponent {
         static final String _serviceName = "com.sun.star.accessibility.AccessBridge";

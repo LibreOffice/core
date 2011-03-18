@@ -71,17 +71,17 @@ private:
     PushButton      maBtClose;
     SvxHlmarkTreeLBox maLbTree;
 
-    BOOL            mbUserMoved;
-    BOOL            mbFirst;
+    sal_Bool            mbUserMoved;
+    sal_Bool            mbFirst;
 
     SvxHyperlinkTabPageBase* mpParent;
 
     String          maStrLastURL;
 
-    USHORT          mnError;
+    sal_uInt16          mnError;
 
 protected:
-    BOOL RefreshFromDoc( ::rtl::OUString aURL );
+    sal_Bool RefreshFromDoc( ::rtl::OUString aURL );
 
     SvLBoxEntry* FindEntry ( String aStrName );
     void ClearTree();
@@ -96,13 +96,13 @@ public:
     SvxHlinkDlgMarkWnd (SvxHyperlinkTabPageBase *pParent);
     ~SvxHlinkDlgMarkWnd();
 
-    BOOL MoveTo ( Point aNewPos );
+    sal_Bool MoveTo ( Point aNewPos );
     void RefreshTree ( String aStrURL );
     void SelectEntry ( String aStrMark );
 
-    BOOL ConnectToDialog( BOOL bDoit = TRUE );
+    sal_Bool ConnectToDialog( sal_Bool bDoit = sal_True );
 
-    USHORT SetError( USHORT nError);
+    sal_uInt16 SetError( sal_uInt16 nError);
 };
 
 

@@ -153,11 +153,11 @@ namespace pcr
     //= EventDescription
     //====================================================================
     EventDescription::EventDescription( EventId _nId, const sal_Char* _pListenerNamespaceAscii, const sal_Char* _pListenerClassAsciiName,
-            const sal_Char* _pListenerMethodAsciiName, sal_uInt16 _nDisplayNameResId, sal_Int32 _nHelpId, sal_Int32 _nUniqueBrowseId )
+            const sal_Char* _pListenerMethodAsciiName, sal_uInt16 _nDisplayNameResId, const rtl::OString& _sHelpId, const rtl::OString& _sUniqueBrowseId )
         :sDisplayName( String( PcrRes( _nDisplayNameResId ) ) )
         ,sListenerMethodName( ::rtl::OUString::createFromAscii( _pListenerMethodAsciiName ) )
-        ,nHelpId( _nHelpId )
-        ,nUniqueBrowseId( _nUniqueBrowseId )
+        ,sHelpId( _sHelpId )
+        ,sUniqueBrowseId( _sUniqueBrowseId )
         ,nId( _nId )
     {
         ::rtl::OUStringBuffer aQualifiedListenerClass;
@@ -881,8 +881,8 @@ namespace pcr
 
         const EventDescription& rEvent = impl_getEventForName_throw( _rPropertyName );
         aDescriptor.DisplayName = rEvent.sDisplayName;
-        aDescriptor.HelpURL = HelpIdUrl::getHelpURL( rEvent.nHelpId );
-        aDescriptor.PrimaryButtonId = rEvent.nUniqueBrowseId;
+        aDescriptor.HelpURL = HelpIdUrl::getHelpURL( rEvent.sHelpId );
+        aDescriptor.PrimaryButtonId = rtl::OStringToOUString(rEvent.sUniqueBrowseId, RTL_TEXTENCODING_UTF8);
         aDescriptor.HasPrimaryButton = sal_True;
         aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Events" ) );
         return aDescriptor;
@@ -1267,12 +1267,12 @@ namespace pcr
         switch ( m_nGridColumnType )
         {
         case FormComponentType::COMBOBOX:
-            if ( UID_BRWEVT_ACTIONPERFORMED == _rEvent.nUniqueBrowseId )
+            if ( UID_BRWEVT_ACTIONPERFORMED == _rEvent.sUniqueBrowseId )
                 return false;
             break;
         case FormComponentType::LISTBOX:
-            if  (   ( UID_BRWEVT_CHANGED == _rEvent.nUniqueBrowseId )
-                ||  ( UID_BRWEVT_ACTIONPERFORMED == _rEvent.nUniqueBrowseId )
+            if  (   ( UID_BRWEVT_CHANGED == _rEvent.sUniqueBrowseId )
+                ||  ( UID_BRWEVT_ACTIONPERFORMED == _rEvent.sUniqueBrowseId )
                 )
                 return false;
             break;

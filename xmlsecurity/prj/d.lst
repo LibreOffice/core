@@ -8,3 +8,6 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\%__SRC%\lib\libxmlsecurity.so %_DEST%\lib%_EXT%\libxmlsecurity.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*
 ..\%__SRC%\bin\xmlsec*.res %_DEST%\bin%_EXT%\xmlsec*.res
+..\%__SRC%\misc\xmlsecurity.component %_DEST%\xml%_EXT%\xmlsecurity.component
+..\%__SRC%\misc\xsec_fw.component %_DEST%\xml%_EXT%\xsec_fw.component
+..\%__SRC%\misc\xsec_xmlsec.component %_DEST%\xml%_EXT%\xsec_xmlsec.component

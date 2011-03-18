@@ -63,7 +63,7 @@ private:
 
     const SfxItemSet&   rSet;
     SfxItemSet*         pOutSet;
-    BOOL                bModified;
+    sal_Bool                bModified;
 
 #ifdef _SVX_ZOOM_CXX
     DECL_LINK( UserHdl, RadioButton* );
@@ -78,16 +78,13 @@ public:
     SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet );
     ~SvxZoomDialog();
 
-    static USHORT*      GetRanges();
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
 
-    USHORT              GetFactor() const;
-    void                SetFactor( USHORT nNewFactor, USHORT nBtnId = 0 );
+    sal_uInt16              GetFactor() const;
+    void                SetFactor( sal_uInt16 nNewFactor, sal_uInt16 nBtnId = 0 );
 
-    void                SetButtonText( USHORT nBtnId, const String& aNewTxt );
-    void                HideButton( USHORT nBtnId );
-    void                SetLimits( USHORT nMin, USHORT nMax );
-    void                SetSpinSize( USHORT nNewSpin );
+    void                HideButton( sal_uInt16 nBtnId );
+    void                SetLimits( sal_uInt16 nMin, sal_uInt16 nMax );
 };
 
 #include <layout/layout-post.hxx>

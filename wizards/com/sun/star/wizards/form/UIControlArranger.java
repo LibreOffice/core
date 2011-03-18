@@ -34,6 +34,7 @@ import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.lang.EventObject;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.NoValidPathException;
 import com.sun.star.wizards.document.Control;
 // import com.sun.star.wizards.ui.ImageList;
@@ -78,7 +79,7 @@ public class UIControlArranger
         flnLabelPlacement = CurUnoDialog.insertFixedLine("lnLabelPlacement",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -88,21 +89,21 @@ public class UIControlArranger
         optAlignLeft = CurUnoDialog.insertRadioButton("optAlignLeft", SOALIGNMETHOD, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[10], "HID:34451", sAlignLeft, new Integer(107), new Integer(38), new Short((short) 1), IControlStep, new Short(curtabindex++), new Integer(171)
+                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNLEFT", sAlignLeft, new Integer(107), new Integer(38), new Short((short) 1), IControlStep, new Short(curtabindex++), new Integer(171)
                 });
         // Radio Button "Align Right"
         optAlignRight = CurUnoDialog.insertRadioButton("optAlignRight", SOALIGNMETHOD, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[10], "HID:34452", sAlignRight, Boolean.TRUE, new Integer(107), new Integer(50), IControlStep, new Short(curtabindex++), new Integer(171)
+                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNRIGHT", sAlignRight, Boolean.TRUE, new Integer(107), new Integer(50), IControlStep, new Short(curtabindex++), new Integer(171)
                 });
 
 
@@ -114,7 +115,7 @@ public class UIControlArranger
 //        flnLabelPlacement = CurUnoDialog.insertFixedLine("lnArrangementHeader1",
 //                new String[]
 //                {
-//                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+//                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
 //                },
 //                new Object[]
 //                {
@@ -128,21 +129,21 @@ public class UIControlArranger
 //        CurUnoDialog.insertButton("btnLayout1", "btnLayout1",
 //                new String[]
 //                {
-//                    "Enabled",
-//                    "Height",
-//                    "HelpURL",
-//                    "Label",
-//                    "PositionX",
-//                    "PositionY",
-//                    "Step",
-//                    "TabIndex",
-//                    "Width"
+//                    PropertyNames.PROPERTY_ENABLED,
+//                    PropertyNames.PROPERTY_HEIGHT,
+//                    PropertyNames.PROPERTY_HELPURL,
+//                    PropertyNames.PROPERTY_LABEL,
+//                    PropertyNames.PROPERTY_POSITION_X,
+//                    PropertyNames.PROPERTY_POSITION_Y,
+//                    PropertyNames.PROPERTY_STEP,
+//                    PropertyNames.PROPERTY_TABINDEX,
+//                    PropertyNames.PROPERTY_WIDTH
 //                },
 //                new Object[]
 //                {
 //                    Boolean.valueOf(bEnabled),
 //                    new Integer(14),
-///* TODO: WRONG!*/   "HID:34452",
+///* TODO: WRONG!*/   "HID:WIZARDS_HID_DLGFORM_CMDALIGNRIGHT",
 //                    "1",
 //                    new Integer(nXPos + nBtnWidth),
 //                    new Integer(nYPos),
@@ -200,7 +201,7 @@ public class UIControlArranger
     public void enableSubFormImageList(boolean _bdoEnable)
     {
         m_aArrangeList[1].m_aButtonList.setenabled(_bdoEnable);
-        CurUnoDialog.setControlProperty("lnLabelPlacment_2", "Enabled", new Boolean(_bdoEnable));
+        CurUnoDialog.setControlProperty("lnLabelPlacment_2", PropertyNames.PROPERTY_ENABLED, new Boolean(_bdoEnable));
     }
 
     public short getAlignValue()
@@ -243,9 +244,9 @@ public class UIControlArranger
 
     private void enableAlignControlGroup(boolean _bEnableAlignControlGroup)
     {
-        Helper.setUnoPropertyValue(UnoDialog.getModel(flnLabelPlacement), "Enabled", new Boolean(_bEnableAlignControlGroup));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignLeft), "Enabled", new Boolean(_bEnableAlignControlGroup));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignRight), "Enabled", new Boolean(_bEnableAlignControlGroup));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(flnLabelPlacement), PropertyNames.PROPERTY_ENABLED, new Boolean(_bEnableAlignControlGroup));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignLeft), PropertyNames.PROPERTY_ENABLED, new Boolean(_bEnableAlignControlGroup));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignRight), PropertyNames.PROPERTY_ENABLED, new Boolean(_bEnableAlignControlGroup));
     }
 
 //    private class ArrangeImageList implements XItemListener
@@ -262,7 +263,7 @@ public class UIControlArranger
 //            CurUnoDialog.insertFixedLine("lnLabelPlacment_" + (_formindex + 1),
 //                    new String[]
 //                    {
-//                        "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+//                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
 //                    },
 //                    new Object[]
 //                    {
@@ -293,7 +294,7 @@ public class UIControlArranger
 //
 //        public void setToLeftAlign()
 //        {
-//            Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignLeft), "State", new Short((short) 1));
+//            Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignLeft), PropertyNames.PROPERTY_STATE, new Short((short) 1));
 //        }
 //
 //        /* (non-Javadoc)
@@ -383,13 +384,13 @@ public class UIControlArranger
             CurUnoDialog.insertFixedLine("lnLabelPlacment_" + (_formindex + 1),
                     new String[]
                     {
-                        "Height",
-                        "Label",
-                        "PositionX",
-                        "PositionY",
-                        "Step",
-                        "TabIndex",
-                        "Width"
+                        PropertyNames.PROPERTY_HEIGHT,
+                        PropertyNames.PROPERTY_LABEL,
+                        PropertyNames.PROPERTY_POSITION_X,
+                        PropertyNames.PROPERTY_POSITION_Y,
+                        PropertyNames.PROPERTY_STEP,
+                        PropertyNames.PROPERTY_TABINDEX,
+                        PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -426,7 +427,7 @@ public class UIControlArranger
 
         public void setToLeftAlign()
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignLeft), "State", new Short((short) 1));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(optAlignLeft), PropertyNames.PROPERTY_STATE, new Short((short) 1));
         }
 
         /* (non-Javadoc)

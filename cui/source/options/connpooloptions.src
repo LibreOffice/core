@@ -35,7 +35,7 @@
 
 TabPage RID_OFAPAGE_CONNPOOLOPTIONS
 {
-     // HelpId = ;
+    HelpID = "cui:TabPage:RID_OFAPAGE_CONNPOOLOPTIONS";
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( PAGE_SIZE_X, PAGE_SIZE_Y ) ;
     SVLook = TRUE ;
@@ -49,6 +49,7 @@ TabPage RID_OFAPAGE_CONNPOOLOPTIONS
     };
     CheckBox CB_POOL_CONNS
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_CONNPOOLOPTIONS:CB_POOL_CONNS";
         Pos = MAP_APPFONT( 7, 15 );
         Size = MAP_APPFONT( PAGE_SIZE_X - 14, 10 );
         Text [ en-US ] = "Connection pooling enabled";
@@ -80,6 +81,7 @@ TabPage RID_OFAPAGE_CONNPOOLOPTIONS
     };
     CheckBox CB_DRIVERPOOLING
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_CONNPOOLOPTIONS:CB_DRIVERPOOLING";
         Pos = MAP_APPFONT( 17, 39 + LIST_SIZE_Y + 4 + 8 + 3 );
         Size = MAP_APPFONT( PAGE_SIZE_X - 23, 10 );
         Text [ en-US ] = "Enable pooling for this driver";
@@ -92,6 +94,7 @@ TabPage RID_OFAPAGE_CONNPOOLOPTIONS
     };
     NumericField NF_TIMEOUT
     {
+        HelpID = "cui:NumericField:RID_OFAPAGE_CONNPOOLOPTIONS:NF_TIMEOUT";
         Pos = MAP_APPFONT( 27 + 100 + 3, 39 + LIST_SIZE_Y + 4 + 8 + 3 + 10 + 3 );
         Size = MAP_APPFONT( 40, 12 );
         SvLook = TRUE;

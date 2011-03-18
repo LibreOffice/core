@@ -54,6 +54,7 @@ SHL1STDLIBS= \
             $(SVXCORELIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
+            $(FWELIB) \
             $(BASICLIB) \
             $(SVTOOLLIB) \
             $(TKLIB) \
@@ -91,8 +92,6 @@ SRSFILELIST=\
                 $(SRS)$/basicide.srs \
                 $(SRS)$/dlged.srs
 
-SRSFILELIST+=   $(SOLARCOMMONRESDIR)$/sfx.srs
-
 RESLIB1NAME=basctl
 RESLIB1IMAGES =$(PRJ)$/res
 RESLIB1SRSFILES= $(SRSFILELIST)
@@ -103,3 +102,11 @@ RESLIB1SRSFILES= $(SRSFILELIST)
 
 .ENDIF # "$(header)" == ""
 
+
+ALLTAR : $(MISC)/basctl.component
+
+$(MISC)/basctl.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        basctl.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt basctl.component

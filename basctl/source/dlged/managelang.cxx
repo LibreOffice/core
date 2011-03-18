@@ -82,8 +82,8 @@ namespace {
         {
             nStartPos = aBoundary.endPos;
             String sWord( rText.Copy(
-                (USHORT)aBoundary.startPos,
-                (USHORT)aBoundary.endPos - (USHORT)aBoundary.startPos ) );
+                (sal_uInt16)aBoundary.startPos,
+                (sal_uInt16)aBoundary.endPos - (sal_uInt16)aBoundary.startPos ) );
             long nTemp = rWin.GetCtrlTextWidth( sWord );
             if ( nTemp > nWidth )
                 nWidth = nTemp;
@@ -141,7 +141,7 @@ void ManageLanguageDialog::Init()
     m_aMakeDefPB.SetClickHdl( LINK( this, ManageLanguageDialog, MakeDefHdl ) );
     m_aLanguageLB.SetSelectHdl( LINK( this, ManageLanguageDialog, SelectHdl ) );
 
-    m_aLanguageLB.EnableMultiSelection( TRUE );
+    m_aLanguageLB.EnableMultiSelection( sal_True );
     CalcInfoSize();
 }
 
@@ -184,7 +184,7 @@ void ManageLanguageDialog::FillLanguageBox()
         Locale aDefaultLocale = m_pLocalizationMgr->getStringResourceManager()->getDefaultLocale();
         Sequence< Locale > aLocaleSeq = m_pLocalizationMgr->getStringResourceManager()->getLocales();
         const Locale* pLocale = aLocaleSeq.getConstArray();
-        INT32 i, nCount = aLocaleSeq.getLength();
+        sal_Int32 i, nCount = aLocaleSeq.getLength();
         for ( i = 0;  i < nCount;  ++i )
         {
             bool bIsDefault = localesAreEqual( aDefaultLocale, pLocale[i] );
@@ -195,7 +195,7 @@ void ManageLanguageDialog::FillLanguageBox()
                 sLanguage += ' ';
                 sLanguage += m_sDefLangStr;
             }
-            USHORT nPos = m_aLanguageLB.InsertEntry( sLanguage );
+            sal_uInt16 nPos = m_aLanguageLB.InsertEntry( sLanguage );
             m_aLanguageLB.SetEntryData( nPos, new LanguageEntry( sLanguage, pLocale[i], bIsDefault ) );
         }
     }
@@ -205,7 +205,7 @@ void ManageLanguageDialog::FillLanguageBox()
 
 void ManageLanguageDialog::ClearLanguageBox()
 {
-    USHORT i, nCount = m_aLanguageLB.GetEntryCount();
+    sal_uInt16 i, nCount = m_aLanguageLB.GetEntryCount();
     for ( i = 0; i < nCount; ++i )
     {
         LanguageEntry* pEntry = (LanguageEntry*)( m_aLanguageLB.GetEntryData(i) );
@@ -240,13 +240,13 @@ IMPL_LINK( ManageLanguageDialog, DeleteHdl, Button *, EMPTYARG )
     aQBox.SetButtonText( RET_OK, m_sDeleteStr );
     if ( aQBox.Execute() == RET_OK )
     {
-        USHORT i, nCount = m_aLanguageLB.GetSelectEntryCount();
-        USHORT nPos = m_aLanguageLB.GetSelectEntryPos();
+        sal_uInt16 i, nCount = m_aLanguageLB.GetSelectEntryCount();
+        sal_uInt16 nPos = m_aLanguageLB.GetSelectEntryPos();
         // remove locales
         Sequence< Locale > aLocaleSeq( nCount );
         for ( i = 0; i < nCount; ++i )
         {
-            USHORT nSelPos = m_aLanguageLB.GetSelectEntryPos(i);
+            sal_uInt16 nSelPos = m_aLanguageLB.GetSelectEntryPos(i);
             LanguageEntry* pEntry = (LanguageEntry*)( m_aLanguageLB.GetEntryData( nSelPos ) );
             if ( pEntry )
                 aLocaleSeq[i] = pEntry->m_aLocale;
@@ -267,7 +267,7 @@ IMPL_LINK( ManageLanguageDialog, DeleteHdl, Button *, EMPTYARG )
 
 IMPL_LINK( ManageLanguageDialog, MakeDefHdl, Button *, EMPTYARG )
 {
-    USHORT nPos = m_aLanguageLB.GetSelectEntryPos();
+    sal_uInt16 nPos = m_aLanguageLB.GetSelectEntryPos();
     LanguageEntry* pSelectEntry = (LanguageEntry*)( m_aLanguageLB.GetEntryData( nPos ) );
     if ( pSelectEntry && !pSelectEntry->m_bIsDefault )
     {
@@ -286,7 +286,7 @@ IMPL_LINK( ManageLanguageDialog, MakeDefHdl, Button *, EMPTYARG )
 
 IMPL_LINK( ManageLanguageDialog, SelectHdl, ListBox *, EMPTYARG )
 {
-    USHORT nCount = m_aLanguageLB.GetEntryCount();
+    sal_uInt16 nCount = m_aLanguageLB.GetEntryCount();
     bool bEmpty = ( !nCount ||
                     m_aLanguageLB.GetEntryPos( m_sCreateLangStr ) != LISTBOX_ENTRY_NOTFOUND );
     bool bSelect = ( m_aLanguageLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND );
@@ -341,18 +341,18 @@ SetDefaultLanguageDialog::~SetDefaultLanguageDialog()
 void SetDefaultLanguageDialog::FillLanguageBox()
 {
     // fill list with all languages
-    m_pLanguageLB->SetLanguageList( LANG_LIST_ALL, FALSE );
+    m_pLanguageLB->SetLanguageList( LANG_LIST_ALL, sal_False );
     // remove the already localized languages
     Sequence< Locale > aLocaleSeq = m_pLocalizationMgr->getStringResourceManager()->getLocales();
     const Locale* pLocale = aLocaleSeq.getConstArray();
-    INT32 i, nCount = aLocaleSeq.getLength();
+    sal_Int32 i, nCount = aLocaleSeq.getLength();
     for ( i = 0;  i < nCount;  ++i )
         m_pLanguageLB->RemoveLanguage( SvxLocaleToLanguage( pLocale[i] ) );
 
     // fill checklistbox if not in default mode
     if ( m_pLocalizationMgr->isLibraryLocalized() )
     {
-        USHORT j, nCount_ = m_pLanguageLB->GetEntryCount();
+        sal_uInt16 j, nCount_ = m_pLanguageLB->GetEntryCount();
         for ( j = 0;  j < nCount_;  ++j )
         {
             m_pCheckLangLB->InsertEntry(
@@ -397,7 +397,7 @@ void SetDefaultLanguageDialog::CalcInfoSize()
 Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
 {
     bool bNotLocalized = !m_pLocalizationMgr->isLibraryLocalized();
-    INT32 nSize = bNotLocalized ? 1 : m_pCheckLangLB->GetCheckedEntryCount();
+    sal_Int32 nSize = bNotLocalized ? 1 : m_pCheckLangLB->GetCheckedEntryCount();
     Sequence< Locale > aLocaleSeq( nSize );
     if ( bNotLocalized )
     {
@@ -407,13 +407,13 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
     }
     else
     {
-        USHORT i, nCount = static_cast< USHORT >( m_pCheckLangLB->GetEntryCount() );
-        INT32 j = 0;
+        sal_uInt16 i, nCount = static_cast< sal_uInt16 >( m_pCheckLangLB->GetEntryCount() );
+        sal_Int32 j = 0;
         for ( i = 0; i < nCount; ++i )
         {
             if ( m_pCheckLangLB->IsChecked(i) )
             {
-                LanguageType eType = LanguageType( (ULONG)m_pCheckLangLB->GetEntryData(i) );
+                LanguageType eType = LanguageType( (sal_uLong)m_pCheckLangLB->GetEntryData(i) );
                 Locale aLocale;
                 SvxLanguageToLocale( aLocale, eType );
                 aLocaleSeq[j++] = aLocale;

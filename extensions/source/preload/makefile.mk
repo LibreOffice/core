@@ -83,3 +83,11 @@ DEF1NAME=		$(SHL1TARGET)
 
 .INCLUDE :	target.mk
 
+
+ALLTAR : $(MISC)/preload.component
+
+$(MISC)/preload.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        preload.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt preload.component

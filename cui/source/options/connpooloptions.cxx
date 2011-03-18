@@ -63,7 +63,7 @@ namespace offapp
 
         virtual void Init();
                 void Update(const DriverPoolingSettings& _rSettings);
-        virtual String GetCellText( long nRow, USHORT nColId ) const;
+        virtual String GetCellText( long nRow, sal_uInt16 nColId ) const;
 
         // the handler will be called with a DriverPoolingSettings::const_iterator as parameter,
         // or NULL if no valid current row exists
@@ -80,13 +80,13 @@ namespace offapp
         sal_Bool    isModified() const;
 
     protected:
-        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, USHORT nCol );
-        virtual ::svt::CellController* GetController( long nRow, USHORT nCol );
+        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );
+        virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
 
-        virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColId ) const;
+        virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const;
 
-        virtual BOOL SeekRow( long nRow );
-        virtual BOOL SaveModified();
+        virtual sal_Bool SeekRow( long nRow );
+        virtual sal_Bool SaveModified();
 
         virtual sal_Bool IsTabAllowed(sal_Bool _bForward) const;
 
@@ -95,7 +95,7 @@ namespace offapp
         virtual void CursorMoved();
 
     protected:
-        virtual sal_uInt32 GetTotalCellWidth(long nRow, USHORT nColId);
+        virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
 
 
     private:
@@ -213,7 +213,7 @@ namespace offapp
     }
 
     //--------------------------------------------------------------------
-    sal_uInt32 DriverListControl::GetTotalCellWidth(long nRow, USHORT nColId)
+    sal_uInt32 DriverListControl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
     {
         return GetDataWindow().GetTextWidth(GetCellText(nRow, nColId));
     }
@@ -251,7 +251,7 @@ namespace offapp
     }
 
     //--------------------------------------------------------------------
-    String DriverListControl::GetCellText( long nRow, USHORT nColId ) const
+    String DriverListControl::GetCellText( long nRow, sal_uInt16 nColId ) const
     {
         String sReturn;
         if (nRow > m_aSettings.size())
@@ -266,25 +266,25 @@ namespace offapp
     }
 
     //--------------------------------------------------------------------
-    void DriverListControl::InitController( ::svt::CellControllerRef& rController, long nRow, USHORT nCol )
+    void DriverListControl::InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol )
     {
         rController->GetWindow().SetText(GetCellText(nRow, nCol));
     }
 
     //--------------------------------------------------------------------
-    ::svt::CellController* DriverListControl::GetController( long /*nRow*/, USHORT /*nCol*/ )
+    ::svt::CellController* DriverListControl::GetController( long /*nRow*/, sal_uInt16 /*nCol*/ )
     {
         return NULL;
     }
 
     //--------------------------------------------------------------------
-    BOOL DriverListControl::SaveModified()
+    sal_Bool DriverListControl::SaveModified()
     {
-        return TRUE;
+        return sal_True;
     }
 
     //--------------------------------------------------------------------
-    BOOL DriverListControl::SeekRow( long _nRow )
+    sal_Bool DriverListControl::SeekRow( long _nRow )
     {
         DriverListControl_Base::SeekRow(_nRow);
 
@@ -297,7 +297,7 @@ namespace offapp
     }
 
     //--------------------------------------------------------------------
-    void DriverListControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColId ) const
+    void DriverListControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId ) const
     {
         OSL_ENSURE(m_aSeekRow != m_aSettings.end(), "DriverListControl::PaintCell: invalid row!");
 
@@ -396,7 +396,7 @@ namespace offapp
     }
 
     //--------------------------------------------------------------------
-    BOOL ConnectionPoolOptionsPage::FillItemSet(SfxItemSet& _rSet)
+    sal_Bool ConnectionPoolOptionsPage::FillItemSet(SfxItemSet& _rSet)
     {
         commitTimeoutField();
 

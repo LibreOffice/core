@@ -91,7 +91,7 @@ namespace pcr
         const ::rtl::OUString&
                             GetEntryName() const { return m_sEntryName; }
 
-        void                SetComponentHelpIds( const SmartId& _rHelpId, sal_uInt32 _bPrimaryButtonId, sal_uInt32 _nSecondaryButtonId );
+        void                SetComponentHelpIds( const rtl::OString& _rHelpId, const rtl::OString& _sPrimaryButtonId, const rtl::OString& _sSecondaryButtonId );
 
         void                SetTitle(const String& rString );
         void                FullFillTitleString();

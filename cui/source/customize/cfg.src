@@ -136,6 +136,7 @@ TabPage RID_SVXPAGE_MENUS
     };
     ListBox LB_MENUS
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_MENUS:LB_MENUS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 64 , 22 ) ;
         Size = MAP_APPFONT ( 108 , 108 ) ;
@@ -143,6 +144,7 @@ TabPage RID_SVXPAGE_MENUS
     };
     PushButton BTN_NEW
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_MENUS:BTN_NEW";
         Pos = MAP_APPFONT ( 192 , 22 ) ;
         Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
@@ -151,6 +153,7 @@ TabPage RID_SVXPAGE_MENUS
     };
     MenuButton BTN_CHANGE
     {
+        HelpID = "cui:MenuButton:RID_SVXPAGE_MENUS:BTN_CHANGE";
         Pos = MAP_APPFONT ( 192 , 39 ) ;
         Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
@@ -181,6 +184,7 @@ TabPage RID_SVXPAGE_MENUS
     };
     PushButton BTN_ADD_COMMANDS
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_MENUS:BTN_ADD_COMMANDS";
         Pos = MAP_APPFONT ( 192 , 67 ) ;
         Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
@@ -189,6 +193,7 @@ TabPage RID_SVXPAGE_MENUS
     };
     MenuButton BTN_CHANGE_ENTRY
     {
+        HelpID = "cui:MenuButton:RID_SVXPAGE_MENUS:BTN_CHANGE_ENTRY";
         Pos = MAP_APPFONT ( 192 , 84 ) ;
         Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
@@ -197,6 +202,7 @@ TabPage RID_SVXPAGE_MENUS
     };
     ImageButton BTN_UP
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_MENUS:BTN_UP";
         Pos = MAP_APPFONT ( 175 , 102 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         TabStop = TRUE ;
@@ -205,6 +211,7 @@ TabPage RID_SVXPAGE_MENUS
     };
     ImageButton BTN_DOWN
     {
+        HelpID = "cui:ImageButton:RID_SVXPAGE_MENUS:BTN_DOWN";
         Pos = MAP_APPFONT ( 175 , 119 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         TabStop = TRUE ;
@@ -220,6 +227,7 @@ TabPage RID_SVXPAGE_MENUS
     };
     ListBox LB_SAVEIN
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_MENUS:LB_SAVEIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 64 , 188 ) ;
         Size = MAP_APPFONT ( 108 , 53 ) ;
@@ -234,6 +242,7 @@ TabPage RID_SVXPAGE_MENUS
     };
     MultiLineEdit ED_DESCRIPTION
     {
+        HelpID = "cui:MultiLineEdit:RID_SVXPAGE_MENUS:ED_DESCRIPTION";
         Pos = MAP_APPFONT ( 6 , 216 ) ;
         Size = MAP_APPFONT ( 261 , 36 ) ;
         Border = TRUE;
@@ -493,6 +502,7 @@ ModalDialog MD_MENU_ORGANISER
     };
     Edit EDIT_MENU_NAME
     {
+        HelpID = "cui:Edit:MD_MENU_ORGANISER:EDIT_MENU_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 19 ) ;
         Size = MAP_APPFONT ( 93 , 12 ) ;
@@ -517,6 +527,7 @@ ModalDialog MD_MENU_ORGANISER
     };
     ImageButton BTN_MENU_UP
     {
+        HelpID = "cui:ImageButton:MD_MENU_ORGANISER:BTN_MENU_UP";
         Pos = MAP_APPFONT ( 102 , 80 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         TabStop = TRUE ;
@@ -524,6 +535,7 @@ ModalDialog MD_MENU_ORGANISER
     };
     ImageButton BTN_MENU_DOWN
     {
+        HelpID = "cui:ImageButton:MD_MENU_ORGANISER:BTN_MENU_DOWN";
         Pos = MAP_APPFONT ( 102 , 97 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         TabStop = TRUE ;
@@ -550,6 +562,7 @@ ModalDialog MD_MENU_ORGANISER
 // MD_NEW_TOOLBAR -------------------------------------------------
 ModalDialog MD_NEW_TOOLBAR
 {
+    HelpID = "cui:ModalDialog:MD_NEW_TOOLBAR";
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 165 , 63 ) ;
@@ -565,6 +578,7 @@ ModalDialog MD_NEW_TOOLBAR
     };
     Edit EDT_STRING
     {
+        HelpID = "cui:Edit:MD_NEW_TOOLBAR:EDT_STRING";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 97 , 12 ) ;
@@ -579,6 +593,7 @@ ModalDialog MD_NEW_TOOLBAR
     };
     ListBox LB_SAVEIN
     {
+        HelpID = "cui:ListBox:MD_NEW_TOOLBAR:LB_SAVEIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 43 ) ;
         Size = MAP_APPFONT ( 97 , 53 ) ;
@@ -654,6 +669,7 @@ ModalDialog MD_ICONSELECTOR
     };
     PushButton BTN_IMPORT
     {
+        HelpID = "cui:PushButton:MD_ICONSELECTOR:BTN_IMPORT";
         Pos = MAP_APPFONT ( 184 , 7 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -662,6 +678,7 @@ ModalDialog MD_ICONSELECTOR
     };
     PushButton BTN_DELETE
     {
+        HelpID = "cui:PushButton:MD_ICONSELECTOR:BTN_DELETE";
         Pos = MAP_APPFONT ( 184 , 24 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -691,6 +708,7 @@ ModalDialog MD_ICONSELECTOR
 //added for issue83555
 ModalDialog MD_ICONCHANGE
 {
+    HelpID = "cui:ModalDialog:MD_ICONCHANGE";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 200 , 150 ) ;
@@ -714,6 +732,7 @@ ModalDialog MD_ICONCHANGE
 
     MultiLineEdit EDT_ADDR
     {
+        HelpID = "cui:MultiLineEdit:MD_ICONCHANGE:EDT_ADDR";
         Pos = MAP_APPFONT ( 30 , 38) ;
         Size = MAP_APPFONT ( 140 , 83 ) ;
         Border = TRUE;
@@ -869,4 +888,12 @@ String RID_SVXSTR_RENAME_TOOLBAR
     Text [ en-US ] = "Rename Toolbar";
 };
 
+String BUTTON_STR_UP
+{
+    Text [ en-US ] = "Up";
+};
+String BUTTON_STR_DOWN
+{
+    Text [ en-US ] = "Down";
+};
 

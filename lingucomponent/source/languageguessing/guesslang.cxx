@@ -428,13 +428,6 @@ void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-sal_Bool SAL_CALL component_writeInfo(
-    XMultiServiceFactory * xMgr, registry::XRegistryKey * xRegistry )
-{
-    return ::cppu::component_writeInfoHelper(
-        xMgr, xRegistry, s_component_entries );
-}
-
 void * SAL_CALL component_getFactory(
     sal_Char const * implName, lang::XMultiServiceFactory * xMgr,
     registry::XRegistryKey * xRegistry )

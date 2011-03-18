@@ -59,7 +59,7 @@
 #define STR_PDF_EXPORT_SEND     59
 #define STR_RECHECK_DOCUMENT    60
 #define IMG_INFO                61
-#define STR_BASICNAME           62
+    // FREE
 #define BMP_COLLAPSED           63
 #define BMP_EXPANDED            64
 #define STR_BASICMACROS         67

@@ -99,7 +99,7 @@ UnxPluginComm::UnxPluginComm(
         }
         else
         {
-            MediatorMessage* pMessage = GetNextMessage( TRUE );
+            MediatorMessage* pMessage = GetNextMessage( sal_True );
             Respond( pMessage->m_nID,
                      const_cast<char*>("init ack"),8,
                      NULL );

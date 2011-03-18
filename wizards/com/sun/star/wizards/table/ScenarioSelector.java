@@ -42,6 +42,7 @@ import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.ui.FieldSelection;
 import com.sun.star.wizards.ui.UIConsts;
@@ -99,7 +100,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         lblExplanation = CurUnoDialog.insertLabel("lblScenarioExplanation",
                 new String[]
                 {
-                    "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -109,7 +110,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         lblCategories = CurUnoDialog.insertLabel("lblCategories",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -119,27 +120,27 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         optBusiness = CurTableWizardUnoDialog.insertRadioButton("optBusiness", SELECTCATEGORY, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:41206", sBusiness, new Integer(98), new Integer(70), new Short((short) 1), IMAINSTEP, new Short(pretabindex++), new Integer(78)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTBUSINESS", sBusiness, new Integer(98), new Integer(70), new Short((short) 1), IMAINSTEP, new Short(pretabindex++), new Integer(78)
                 });
 
         optPrivate = CurTableWizardUnoDialog.insertRadioButton("optPrivate", SELECTCATEGORY, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:41207", sPrivate, new Integer(182), new Integer(70), IMAINSTEP, new Short(pretabindex++), new Integer(90)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTPRIVATE", sPrivate, new Integer(182), new Integer(70), IMAINSTEP, new Short(pretabindex++), new Integer(90)
                 });
 
         CurUnoDialog.insertLabel("lblTableNames",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -151,11 +152,11 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
             xTableListBox = CurUnoDialog.insertListBox("lstTableNames", 3, null, this,
                     new String[]
                     {
-                        "Dropdown", "Height", "HelpURL", "LineCount", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                        "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
-                        Boolean.TRUE, new Integer(12), "HID:41208", new Short(UnoDialog.getListBoxLineCount()), new Integer(91), new Integer(92), IMAINSTEP, new Short(pretabindex++), getListboxWidth()
+                        Boolean.TRUE, new Integer(12), "HID:WIZARDS_HID_DLGTABLE_LBTABLES", new Short(UnoDialog.getListBoxLineCount()), new Integer(91), new Integer(92), IMAINSTEP, new Short(pretabindex++), getListboxWidth()
                     });
         }
         catch (Exception e)

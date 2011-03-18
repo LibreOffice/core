@@ -59,3 +59,11 @@ JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+ALLTAR : $(MISC)/fax.component
+
+$(MISC)/fax.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        fax.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_JAVA)$(JARTARGET)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt fax.component

@@ -68,15 +68,15 @@ void setTextEngineText( ExtTextEngine* pEngine, const ::rtl::OUString aStr );
 class ProgressInfo : public SfxProgress
 {
 private:
-    ULONG                   nCurState;
+    sal_uLong                   nCurState;
 
 public:
 
-    inline          ProgressInfo( SfxObjectShell* pObjSh, const String& rText, ULONG nRange );
+    inline          ProgressInfo( SfxObjectShell* pObjSh, const String& rText, sal_uLong nRange );
     inline void     StepProgress();
 };
 
-inline ProgressInfo::ProgressInfo( SfxObjectShell* pObjSh, const String& rText, ULONG nRange )
+inline ProgressInfo::ProgressInfo( SfxObjectShell* pObjSh, const String& rText, sal_uLong nRange )
     : SfxProgress( pObjSh, rText, nRange )
 {
     nCurState = 0;
@@ -114,16 +114,16 @@ private:
     using           Window::Notify;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    void            ImpDoHighlight( ULONG nLineOff );
+    void            ImpDoHighlight( sal_uLong nLineOff );
     void            ImplSetFont();
 
-    BOOL            bHighlightning;
-    BOOL            bDoSyntaxHighlight;
-    BOOL            bDelayHighlight;
+    sal_Bool            bHighlightning;
+    sal_Bool            bDoSyntaxHighlight;
+    sal_Bool            bDelayHighlight;
 
     virtual
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-    GetComponentInterface(BOOL bCreate = TRUE);
+    GetComponentInterface(sal_Bool bCreate = sal_True);
 
 protected:
     virtual void    Paint( const Rectangle& );
@@ -137,9 +137,9 @@ protected:
     virtual void    RequestHelp( const HelpEvent& rHEvt );
     virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
-    void            DoSyntaxHighlight( ULONG nPara );
+    void            DoSyntaxHighlight( sal_uLong nPara );
     String          GetWordAtCursor();
-    BOOL            ImpCanModify();
+    sal_Bool            ImpCanModify();
 
 public:
                     EditorWindow( Window* pParent );
@@ -149,11 +149,11 @@ public:
     ExtTextView*    GetEditView() const     { return pEditView; }
     ProgressInfo*   GetProgress() const     { return pProgress; }
 
-    void            CreateProgress( const String& rText, ULONG nRange );
+    void            CreateProgress( const String& rText, sal_uLong nRange );
     void            DestroyProgress();
 
-    void            ParagraphInsertedDeleted( ULONG nNewPara, BOOL bInserted );
-    void            DoDelayedSyntaxHighlight( ULONG nPara );
+    void            ParagraphInsertedDeleted( sal_uLong nNewPara, sal_Bool bInserted );
+    void            DoDelayedSyntaxHighlight( sal_uLong nPara );
 
     void            CreateEditEngine();
     void            SetScrollBarRanges();
@@ -162,9 +162,9 @@ public:
                         { pModulWindow = pWin; }
 
     void            ForceSyntaxTimeout();
-    BOOL            SetSourceInBasic( BOOL bQuiet = TRUE );
+    sal_Bool            SetSourceInBasic( sal_Bool bQuiet = sal_True );
 
-    BOOL            CanModify() { return ImpCanModify(); }
+    sal_Bool            CanModify() { return ImpCanModify(); }
 };
 
 
@@ -172,10 +172,10 @@ class BreakPointWindow : public Window
 {
 private:
     long            nCurYOffset;
-    USHORT          nMarkerPos;
+    sal_uInt16          nMarkerPos;
     BreakPointList  aBreakPointList;
     ModulWindow*    pModulWindow;
-    BOOL            bErrorMarker;
+    sal_Bool            bErrorMarker;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
@@ -185,11 +185,11 @@ protected:
     virtual void    Paint( const Rectangle& );
     virtual void    Resize();
     BreakPoint*     FindBreakPoint( const Point& rMousePos );
-    void            ShowMarker( BOOL bShow );
+    void            ShowMarker( sal_Bool bShow );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    Command( const CommandEvent& rCEvt );
 
-    BOOL            SyncYOffset();
+    sal_Bool            SyncYOffset();
 
 public:
                     BreakPointWindow( Window* pParent );
@@ -198,7 +198,7 @@ public:
     void            SetModulWindow( ModulWindow* pWin )
                         { pModulWindow = pWin; }
 
-    void            SetMarkerPos( USHORT nLine, BOOL bErrorMarker = FALSE );
+    void            SetMarkerPos( sal_uInt16 nLine, sal_Bool bErrorMarker = sal_False );
 
     void            DoScroll( long nHorzScroll, long nVertScroll );
     long&           GetCurYOffset()         { return nCurYOffset; }
@@ -211,10 +211,10 @@ class WatchTreeListBox : public SvHeaderTabListBox
     String aEditingRes;
 
 protected:
-    virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
-    virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
+    virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
+    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
 
-    BOOL            ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rResult );
+    sal_Bool            ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rResult );
     SbxBase*        ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArrayElement );
 
 public:
@@ -254,7 +254,7 @@ public:
                     ~WatchWindow();
 
     void            AddWatch( const String& rVName );
-    BOOL            RemoveSelectedWatch();
+    sal_Bool            RemoveSelectedWatch();
     void            UpdateWatches( bool bBasicStopped = false );
 
     WatchTreeListBox&   GetWatchTreeListBox() { return aTreeListBox; }
@@ -323,7 +323,7 @@ private:
     long                BasicBreakHdl( StarBASIC* pBasic );
 
     void                CheckCompileBasic();
-    BOOL                BasicExecute();
+    sal_Bool                BasicExecute();
 
     void                GoOnTop();
     void                AssertValidEditEngine();
@@ -350,16 +350,16 @@ public:
     virtual void    GetState( SfxItemSet& );
     virtual void    StoreData();
     virtual void    UpdateData();
-    virtual BOOL    CanClose();
+    virtual sal_Bool    CanClose();
     // return number of pages to be printed
     virtual sal_Int32 countPages( Printer* pPrinter );
     // print page
     virtual void printPage( sal_Int32 nPage, Printer* pPrinter );
     virtual String  GetTitle();
     virtual BasicEntryDescriptor CreateEntryDescriptor();
-    virtual BOOL    AllowUndo();
-    virtual void    SetReadOnly( BOOL bReadOnly );
-    virtual BOOL    IsReadOnly();
+    virtual sal_Bool    AllowUndo();
+    virtual void    SetReadOnly( sal_Bool bReadOnly );
+    virtual sal_Bool    IsReadOnly();
 
     StarBASIC*      GetBasic() { XModule(); return xBasic; }
 
@@ -367,37 +367,37 @@ public:
     void            SetSbModule( SbModule* pModule ) { xModule = pModule; }
     String          GetSbModuleName();
 
-    BOOL            CompileBasic();
-    BOOL            BasicRun();
-    BOOL            BasicStepOver();
-    BOOL            BasicStepInto();
-    BOOL            BasicStepOut();
+    sal_Bool            CompileBasic();
+    sal_Bool            BasicRun();
+    sal_Bool            BasicStepOver();
+    sal_Bool            BasicStepInto();
+    sal_Bool            BasicStepOut();
     void            BasicStop();
-    BOOL            BasicToggleBreakPoint();
+    sal_Bool            BasicToggleBreakPoint();
     void            BasicToggleBreakPointEnabled();
     void            ManageBreakPoints();
     void            UpdateBreakPoint( const BreakPoint& rBrk );
     void            BasicAddWatch();
     void            BasicRemoveWatch();
 
-    BOOL            LoadBasic();
-    BOOL            SaveBasicSource();
-    BOOL            ImportDialog();
+    sal_Bool            LoadBasic();
+    sal_Bool            SaveBasicSource();
+    sal_Bool            ImportDialog();
 
     void            EditMacro( const String& rMacroName );
 
-    BOOL            ToggleBreakPoint( ULONG nLine );
+    sal_Bool            ToggleBreakPoint( sal_uLong nLine );
 
     BasicStatus&    GetBasicStatus() { return aStatus; }
 
-    virtual BOOL    IsModified();
-    virtual BOOL    IsPasteAllowed();
+    virtual sal_Bool    IsModified();
+    virtual sal_Bool    IsPasteAllowed();
 
     void            FrameWindowMoved();
-    void            ShowCursor( BOOL bOn );
+    void            ShowCursor( sal_Bool bOn );
 
-    virtual USHORT  GetSearchOptions();
-    USHORT          StartSearchAndReplace( const SvxSearchItem& rSearchItem, BOOL bFromStart = FALSE );
+    virtual sal_uInt16  GetSearchOptions();
+    sal_uInt16          StartSearchAndReplace( const SvxSearchItem& rSearchItem, sal_Bool bFromStart = sal_False );
 
     virtual Window* GetLayoutWindow();
 
@@ -412,7 +412,8 @@ public:
     virtual void        BasicStarted();
     virtual void        BasicStopped();
 
-    virtual SfxUndoManager* GetUndoManager();
+    virtual ::svl::IUndoManager*
+                        GetUndoManager();
 
     const ::rtl::OUString&  GetModule() const { return m_aModule; }
     void                    SetModule( const ::rtl::OUString& aModule ) { m_aModule = aModule; }
@@ -428,8 +429,8 @@ private:
     WatchWindow     aWatchWindow;
     StackWindow     aStackWindow;
 
-    BOOL            bVSplitted;
-    BOOL            bHSplitted;
+    sal_Bool            bVSplitted;
+    sal_Bool            bHSplitted;
 
     ModulWindow * m_pModulWindow;
 
@@ -457,7 +458,7 @@ public:
                     ~ModulWindowLayout();
 
     void            DockaWindow( DockingWindow* pDockingWin );
-    BOOL            IsToBeDocked( DockingWindow* pDockingWin, const Point& rPos, Rectangle& rRect );
+    sal_Bool            IsToBeDocked( DockingWindow* pDockingWin, const Point& rPos, Rectangle& rRect );
 
     void            SetModulWindow( ModulWindow* pModWin );
     ModulWindow*    GetModulWindow() const { return m_pModulWindow; }
@@ -465,7 +466,7 @@ public:
     WatchWindow&    GetWatchWindow()    { return aWatchWindow; }
     StackWindow&    GetStackWindow()    { return aStackWindow; }
 
-    Image getImage(USHORT nId) const;
+    Image getImage(sal_uInt16 nId) const;
 
     inline Color const & getSyntaxColor(TokenTypes eType) const
     { return m_aSyntaxColors[eType]; }

@@ -68,40 +68,9 @@ using rtl::OUString;
 #define C2S(cChar)                  String( RTL_CONSTASCII_USTRINGPARAM(cChar) )
 #define CFG_PAGE_AND_GROUP          C2S("General"), C2S("LoadSave")
 // !! you have to update these index, if you changed the list of the child windows !!
-#define WININDEX_AUTOSAVE           ((USHORT)6)
-#define WININDEX_SAVEURL_RELFSYS    ((USHORT)9)
+#define WININDEX_AUTOSAVE           ((sal_uInt16)6)
+#define WININDEX_SAVEURL_RELFSYS    ((sal_uInt16)9)
 
-// -------------------- --------------------------------------------------
-class FilterWarningDialog_Impl : public ModalDialog
-{
-    OKButton        aOk;
-    CancelButton    aCancel;
-    FixedImage      aImage;
-    FixedInfo       aFilterWarningFT;
-
-    public:
-    FilterWarningDialog_Impl(Window* pParent);
-
-    void            SetFilterName(const String& rFilterUIName);
-};
-// ----------------------------------------------------------------------
-FilterWarningDialog_Impl::FilterWarningDialog_Impl(Window* pParent) :
-    ModalDialog(pParent, CUI_RES( RID_SVXDLG_FILTER_WARNING ) ),
-    aOk(                this, CUI_RES(PB_OK               )),
-    aCancel(            this, CUI_RES(PB_CANCEL           )),
-    aImage(             this, CUI_RES(IMG_WARNING         )),
-    aFilterWarningFT(   this, CUI_RES(FT_FILTER_WARNING   ))
-{
-    FreeResource();
-    aImage.SetImage(WarningBox::GetStandardImage());
-}
-// ----------------------------------------------------------------------
-void    FilterWarningDialog_Impl::SetFilterName(const String& rFilterUIName)
-{
-    String sTmp(aFilterWarningFT.GetText());
-    sTmp.SearchAndReplaceAscii("%1", rFilterUIName);
-    aFilterWarningFT.SetText(sTmp);
-}
 // ----------------------------------------------------------------------
 
 struct SvxSaveTabPage_Impl
@@ -259,26 +228,12 @@ SfxTabPage* SfxSaveTabPage::Create( Window* pParent,
     return ( new SfxSaveTabPage( pParent, rAttrSet ) );
 }
 
-OUString lcl_ExtractUIName(const Sequence<PropertyValue> rProperties)
-{
-    OUString sRet;
-    const PropertyValue* pProperties = rProperties.getConstArray();
-    for(int nProp = 0; nProp < rProperties.getLength(); nProp++)
-    {
-        if(!pProperties[nProp].Name.compareToAscii("UIName"))
-        {
-            pProperties[nProp].Value >>= sRet;
-            break;
-        }
-    }
-    return sRet;
-}
 // -----------------------------------------------------------------------
 void SfxSaveTabPage::DetectHiddenControls()
 {
     long nDelta = 0;
     // the index of the first child window which perhaps have to move upwards
-    USHORT nWinIndex = WININDEX_SAVEURL_RELFSYS;
+    sal_uInt16 nWinIndex = WININDEX_SAVEURL_RELFSYS;
     SvtOptionsDialogOptions aOptionsDlgOpt;
 
     if ( aOptionsDlgOpt.IsOptionHidden( C2S("Backup"), CFG_PAGE_AND_GROUP ) )
@@ -305,7 +260,7 @@ void SfxSaveTabPage::DetectHiddenControls()
 
     if ( nDelta > 0 )
     {
-        USHORT i, nChildCount = GetChildCount();
+        sal_uInt16 i, nChildCount = GetChildCount();
         for ( i = nWinIndex; i < nChildCount; ++i )
         {
             Window* pWin = GetChild(i);
@@ -316,9 +271,9 @@ void SfxSaveTabPage::DetectHiddenControls()
     }
 }
 // -----------------------------------------------------------------------
-BOOL SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
     SvtSaveOptions aSaveOpt;
     if(aLoadUserSettingsCB.IsChecked() != aLoadUserSettingsCB.GetSavedValue())
     {
@@ -338,54 +293,54 @@ BOOL SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_DOCINFO ),
                                aDocInfoCB.IsChecked() ) );
-        bModified |= TRUE;
+        bModified |= sal_True;
     }
 
     if ( aBackupCB.IsEnabled() && aBackupCB.IsChecked() != aBackupCB.GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_BACKUP ),
                                aBackupCB.IsChecked() ) );
-        bModified |= TRUE;
+        bModified |= sal_True;
     }
 
     if ( aSizeOptimizationCB.IsChecked() != aSizeOptimizationCB.GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_PRETTYPRINTING ), !aSizeOptimizationCB.IsChecked() ) );
-        bModified |= TRUE;
+        bModified |= sal_True;
     }
 
     if ( aAutoSaveCB.IsChecked() != aAutoSaveCB.GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_AUTOSAVE ),
                                aAutoSaveCB.IsChecked() ) );
-        bModified |= TRUE;
+        bModified |= sal_True;
     }
     if ( aWarnAlienFormatCB.IsChecked() != aWarnAlienFormatCB.GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_WARNALIENFORMAT ),
                                aWarnAlienFormatCB.IsChecked() ) );
-        bModified |= TRUE;
+        bModified |= sal_True;
     }
 
     if ( aAutoSaveEdit.GetText() != aAutoSaveEdit.GetSavedValue() )
     {
         rSet.Put( SfxUInt16Item( GetWhich( SID_ATTR_AUTOSAVEMINUTE ),
-                                 (UINT16)aAutoSaveEdit.GetValue() ) );
-        bModified |= TRUE;
+                                 (sal_uInt16)aAutoSaveEdit.GetValue() ) );
+        bModified |= sal_True;
     }
     // relativ speichern
     if ( aRelativeFsysCB.IsChecked() != aRelativeFsysCB.GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_SAVEREL_FSYS ),
                                aRelativeFsysCB.IsChecked() ) );
-        bModified |= TRUE;
+        bModified |= sal_True;
     }
 
     if ( aRelativeInetCB.IsChecked() != aRelativeInetCB.GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_SAVEREL_INET ),
                                aRelativeInetCB.IsChecked() ) );
-        bModified |= TRUE;
+        bModified |= sal_True;
     }
 
     SvtModuleOptions aModuleOpt;
@@ -476,7 +431,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
             Reference< XContainerQuery > xQuery(pImpl->xFact, UNO_QUERY);
             if(xQuery.is())
             {
-                for(USHORT n = 0; n < aDocTypeLB.GetEntryCount(); n++)
+                for(sal_uInt16 n = 0; n < aDocTypeLB.GetEntryCount(); n++)
                 {
                     long nData = (long) aDocTypeLB.GetEntryData(n);
                     OUString sCommand;
@@ -543,7 +498,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     aDocInfoCB.Check(aSaveOpt.IsDocInfoSave());
 
     aBackupCB.Check(aSaveOpt.IsBackup());
-    BOOL bBackupRO = aSaveOpt.IsReadOnly(SvtSaveOptions::E_BACKUP);
+    sal_Bool bBackupRO = aSaveOpt.IsReadOnly(SvtSaveOptions::E_BACKUP);
     aBackupCB.Enable(!bBackupRO);
     aBackupFI.Show(bBackupRO);
 
@@ -628,7 +583,7 @@ OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
 
 IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
 {
-    USHORT nCurPos = aDocTypeLB.GetSelectEntryPos();
+    sal_uInt16 nCurPos = aDocTypeLB.GetSelectEntryPos();
 
     long nData = -1;
     if(nCurPos < APP_COUNT)
@@ -656,7 +611,7 @@ IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
             OUString sSelect;
             for(int i = 0; i < pImpl->aUIFilterArr[nData].getLength(); i++)
             {
-                USHORT nEntryPos = aSaveAsLB.InsertEntry(pUIFilters[i]);
+                sal_uInt16 nEntryPos = aSaveAsLB.InsertEntry(pUIFilters[i]);
                 if ( pImpl->aODFArr[nData][i] )
                     aSaveAsLB.SetEntryData( nEntryPos, (void*)pImpl );
                 if(pFilters[i] == pImpl->aDefaultArr[nData])
@@ -695,7 +650,7 @@ IMPL_LINK( SfxSaveTabPage, ODFVersionHdl_Impl, ListBox *, EMPTYARG )
     if ( bShown )
     {
         bool bHasODFFormat = false;
-        USHORT i = 0, nCount = aSaveAsLB.GetEntryCount();
+        sal_uInt16 i = 0, nCount = aSaveAsLB.GetEntryCount();
         for ( ; i < nCount; ++ i )
         {
             if ( aSaveAsLB.GetEntryData(i) != NULL )

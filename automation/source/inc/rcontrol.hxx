@@ -37,12 +37,12 @@
 #ifndef _RCONTROL_HXX
 #define _RCONTROL_HXX
 
-#define UID_ACTIVE          0
+#define UID_ACTIVE          "UID_ACTIVE"
 
 #define SI_IPCCommandBlock  1
 #define SI_SocketCommandBlock   SI_IPCCommandBlock  // Zumindest erstmal
 #define SI_DirectCommandBlock   2
-#define SIControl           3
+#define SIControl           3   // remove after numeric HelpIDs are completely removed and no legacy testtool is used anymore
 #define SISlot              4
 #define SIFlow              5
 #define SICommand           6
@@ -207,7 +207,7 @@
 #define M_LAST_NO_RETURN    200
 
 #if ( M_LAST_NO_RETURN >= M_WITH_RETURN )
-#error "Bereich überschritten"
+#error "Bereich ï¿½berschritten"
 #endif
 
 #define M_Exists            ( M_WITH_RETURN |  1 )
@@ -315,7 +315,7 @@
 #define _RC_LAST_NO_RETURN                            27
 
 #if ( _RC_LAST_NO_RETURN >= M_WITH_RETURN )
-#error "Bereich überschritten"
+#error "Bereich ï¿½berschritten"
 #endif
 
 // Befehle mit Returnwert
@@ -374,21 +374,21 @@
 #define RC_WaitSlot         ( M_SOFFICE             | M_WITH_RETURN | 44 )
 
 // Flow Control
-#define F_EndCommandBlock   101         // Initiiert Rückmeldung des Status
-#define F_Sequence          102         // Übergibt Sequence Nummer (1. in jedem Stream)
+#define F_EndCommandBlock   101         // Initiiert Rï¿½ckmeldung des Status
+#define F_Sequence          102         // ï¿½bergibt Sequence Nummer (1. in jedem Stream)
 
 // Return codes
-#define RET_Sequence        132         // Übergibt Sequence Nummer (1. in jedem Stream)
-#define RET_Value           133         // Übergibt Return-wert
-#define RET_WinInfo         134         // Information über aktuelles Fenster/Control
+#define RET_Sequence        132         // ï¿½bergibt Sequence Nummer (1. in jedem Stream)
+#define RET_Value           133         // ï¿½bergibt Return-wert
+#define RET_WinInfo         134         // Information ï¿½ber aktuelles Fenster/Control
 #define RET_ProfileInfo     135         // Profile Information
-#define RET_DirectLoging    136         // Direktes Übertragen von Informationen in das Log
-#define RET_MacroRecorder   137         // MakroRecorder Befehl übertragen
+#define RET_DirectLoging    136         // Direktes ï¿½bertragen von Informationen in das Log
+#define RET_MacroRecorder   137         // MakroRecorder Befehl ï¿½bertragen
 
 // Subcodes die in nUId geliefert werden
-// für F_ProfileInfo
+// fï¿½r F_ProfileInfo
 #define S_ProfileReset      201         // nNr1 = Anzahl Borders
-    // Achtung!! Diese Defines müssen aufeinanderfolgende Nummern haben!!
+    // Achtung!! Diese Defines mï¿½ssen aufeinanderfolgende Nummern haben!!
 #define S_ProfileBorder1    202         // nNr1 = Border1 in ms
 #define S_ProfileBorder2    203         // nNr1 = Border2 in ms
 #define S_ProfileBorder3    204         // nNr1 = Border3 in ms
@@ -397,7 +397,7 @@
 #define S_ProfileTime       210         // nNr1 = remote Zeit des Befehls
 #define S_ProfileDump       211         // Gibt die daten aus.
 
-// für F_DirectLoging
+// fï¿½r F_DirectLoging
 #define S_AssertError       220
 #define S_AssertWarning     221
 #define S_AssertTrace       222
@@ -413,7 +413,7 @@
 #define CONST_CTTableControl    106
 #define CONST_CTUnknown         199
 
-// Konstanten für das ALignment des gesuchten Splitters
+// Konstanten fï¿½r das ALignment des gesuchten Splitters
 #define CONST_ALIGN_LEFT        120
 #define CONST_ALIGN_TOP         121
 #define CONST_ALIGN_RIGHT       122
@@ -455,8 +455,8 @@
 #define PARAM_BOOL_2            0x0080
 #define PARAM_SBXVALUE_1        0x0400      // hier mit 0x0400 Weiter!!! Siehe Oben!
 
-// Zusätzliche Beschreibung!! wird auch mit dem Rest verodert
-//#define PARAM_STR_RAW           0x8000        // Der Zeichensatz der Strings wird nicht konvertiert(für Fareastern)
+// Zusï¿½tzliche Beschreibung!! wird auch mit dem Rest verodert
+//#define PARAM_STR_RAW           0x8000        // Der Zeichensatz der Strings wird nicht konvertiert(fï¿½r Fareastern)
 
 #define ERR_SEND_TIMEOUT        100
 #define ERR_EXEC_TIMEOUT        101

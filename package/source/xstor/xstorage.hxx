@@ -30,14 +30,14 @@
 #define __XSTORAGE_HXX_
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/XStorage2.hpp>
 #include <com/sun/star/embed/XOptimizedStorage.hpp>
-#include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
+#include <com/sun/star/embed/XHierarchicalStorageAccess2.hpp>
 #include <com/sun/star/embed/XStorageRawAccess.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
-#include <com/sun/star/embed/XEncryptionProtectedSource.hpp>
+#include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -53,8 +53,10 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/packages/NoEncryptionException.hpp>
 #include <com/sun/star/logging/XSimpleLogRing.hpp>
+
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include "mutexholder.hxx"
 
@@ -158,8 +160,8 @@ struct OStorage_Impl
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xInputStream; // ??? may be stored in properties
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xStream; // ??? may be stored in properties
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_xProperties;
-    sal_Bool m_bHasCommonPassword;
-    ::rtl::OUString m_aCommonPassword;
+    sal_Bool m_bHasCommonEncryptionData;
+    ::comphelper::SequenceAsHashMap m_aCommonEncryptionData;
 
     // must be empty in case of root storage
     OStorage_Impl* m_pParent;
@@ -232,7 +234,7 @@ struct OStorage_Impl
     void Commit();
     void Revert();
 
-    ::rtl::OUString GetCommonRootPass() throw ( ::com::sun::star::packages::NoEncryptionException );
+    ::comphelper::SequenceAsHashMap GetCommonRootEncryptionData() throw ( ::com::sun::star::packages::NoEncryptionException );
 
     void CopyToStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest,
                         sal_Bool bDirect );
@@ -265,7 +267,7 @@ struct OStorage_Impl
     void CloneStreamElement(
                     const ::rtl::OUString& aStreamName,
                     sal_Bool bPassProvided,
-                    const ::rtl::OUString& aPass,
+                    const ::comphelper::SequenceAsHashMap& aEncryptionData,
                     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream )
         throw ( ::com::sun::star::embed::InvalidStorageException,
                 ::com::sun::star::lang::IllegalArgumentException,
@@ -290,16 +292,16 @@ struct OStorage_Impl
 
 
 class OStorage  : public ::com::sun::star::lang::XTypeProvider
-                , public ::com::sun::star::embed::XStorage
+                , public ::com::sun::star::embed::XStorage2
                 , public ::com::sun::star::embed::XStorageRawAccess
                 , public ::com::sun::star::embed::XTransactedObject
                 , public ::com::sun::star::embed::XTransactionBroadcaster
                 , public ::com::sun::star::util::XModifiable
-                , public ::com::sun::star::embed::XEncryptionProtectedSource
+                , public ::com::sun::star::embed::XEncryptionProtectedSource2
                 , public ::com::sun::star::beans::XPropertySet
                 , public ::com::sun::star::embed::XOptimizedStorage
                 , public ::com::sun::star::embed::XRelationshipAccess
-                , public ::com::sun::star::embed::XHierarchicalStorageAccess
+                , public ::com::sun::star::embed::XHierarchicalStorageAccess2
                 , public ::cppu::OWeakObject
 {
     OStorage_Impl*  m_pImpl;
@@ -489,6 +491,28 @@ public:
                 ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
+    //  XStorage2
+    //____________________________________________________________________________________________________
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL openEncryptedStream( const ::rtl::OUString& sStreamName, ::sal_Int32 nOpenMode, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData )
+        throw ( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::NoEncryptionException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL cloneEncryptedStream( const ::rtl::OUString& sStreamName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData )
+        throw ( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::NoEncryptionException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+
+    //____________________________________________________________________________________________________
     //  XStorageRawAccess
     //____________________________________________________________________________________________________
 
@@ -613,6 +637,16 @@ public:
     virtual void SAL_CALL removeEncryption()
         throw ( ::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::io::IOException );
+
+    //____________________________________________________________________________________________________
+    //  XEncryptionProtectedSource2
+    //____________________________________________________________________________________________________
+
+    virtual void SAL_CALL setEncryptionData(
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData )
+        throw ( ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::RuntimeException );
+
 
     //____________________________________________________________________________________________________
     //  XPropertySet
@@ -799,6 +833,18 @@ public:
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 
+    //____________________________________________________________________________________________________
+    // XHierarchicalStorageAccess2
+    //____________________________________________________________________________________________________
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream > SAL_CALL openEncryptedStreamByHierarchicalName( const ::rtl::OUString& sStreamName, ::sal_Int32 nOpenMode, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData )
+        throw ( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::NoEncryptionException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException );
 };
 
 

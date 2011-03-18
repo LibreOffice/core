@@ -78,7 +78,7 @@ protected:
     DECL_LINK( TreeListHighlightHdl, SvTreeListBox * );
     void                UpdateFields();
     virtual void        Move();
-    virtual BOOL        Close();
+    virtual sal_Bool        Close();
     virtual void        Resize();
 
 public:

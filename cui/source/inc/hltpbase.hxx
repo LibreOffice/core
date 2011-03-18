@@ -81,7 +81,7 @@ public:
 class SvxHyperURLBox : public SvtURLBox, public DropTargetHelper
 {
 private:
-    BOOL   mbAccessAddress;
+    sal_Bool   mbAccessAddress;
 
 protected:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
@@ -93,7 +93,7 @@ protected:
     virtual long        PreNotify( NotifyEvent& rNEvt );
 
 public:
-    SvxHyperURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_FILE, BOOL bAddresses = FALSE );
+    SvxHyperURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_FILE, sal_Bool bAddresses = sal_False );
 
 };
 
@@ -125,7 +125,7 @@ private:
 protected:
     Window*             mpDialog;
 
-    BOOL                mbStdControlsInit;
+    sal_Bool                mbStdControlsInit;
 
     String              maStrInitURL;
 
@@ -149,7 +149,7 @@ protected:
 
     String              aEmptyStr;
 
-    BOOL            FileExists( const INetURLObject& rURL );
+    sal_Bool            FileExists( const INetURLObject& rURL );
     static String   GetSchemeFromURL( String aStrURL );
 
     inline void     DisableClose( sal_Bool _bDisable ) { mbIsCloseDisabled = _bDisable; }
@@ -168,27 +168,27 @@ public:
         mxDocumentFrame = rxDocumentFrame;
     }
 
-    virtual BOOL AskApply ();
+    virtual sal_Bool AskApply ();
     virtual void DoApply ();
-    virtual void SetOnlineMode( BOOL bEnable );
+    virtual void SetOnlineMode( sal_Bool bEnable );
     virtual void SetInitFocus();
     virtual void SetMarkStr ( String& aStrMark );
     virtual void Reset( const SfxItemSet& );
-    virtual BOOL FillItemSet( SfxItemSet& );
+    virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void ActivatePage( const SfxItemSet& rItemSet );
     virtual int  DeactivatePage( SfxItemSet* pSet = 0 );
 
-    BOOL IsMarkWndVisible ()      { return ((Window*)mpMarkWnd)->IsVisible(); }
+    sal_Bool IsMarkWndVisible ()      { return ((Window*)mpMarkWnd)->IsVisible(); }
     Size GetSizeExtraWnd ()       { return ( mpMarkWnd->GetSizePixel() ); }
-    BOOL MoveToExtraWnd ( Point aNewPos, BOOL bDisConnectDlg = FALSE );
+    sal_Bool MoveToExtraWnd ( Point aNewPos, sal_Bool bDisConnectDlg = sal_False );
 
     virtual void        ActivatePage();
     virtual void        DeactivatePage();
     virtual sal_Bool    QueryClose();
 
 protected:
-    virtual BOOL ShouldOpenMarkWnd();
-    virtual void SetMarkWndShouldOpen(BOOL bOpen);
+    virtual sal_Bool ShouldOpenMarkWnd();
+    virtual void SetMarkWndShouldOpen(sal_Bool bOpen);
 
     void ShowMarkWnd ();
     void HideMarkWnd ()           { ( ( Window* ) mpMarkWnd )->Hide(); }
@@ -196,10 +196,10 @@ protected:
 
     SfxDispatcher* GetDispatcher() const;
 
-    USHORT             GetMacroEvents();
+    sal_uInt16             GetMacroEvents();
     SvxMacroTableDtor* GetMacroTable();
 
-    BOOL IsHTMLDoc() const;
+    sal_Bool IsHTMLDoc() const;
 };
 
 #endif // _SVX_TABBASE_HYPERLINK_HXX

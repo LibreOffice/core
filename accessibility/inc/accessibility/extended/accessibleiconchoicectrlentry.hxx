@@ -113,7 +113,7 @@ namespace accessibility
                 is our parent accessible object
         */
         AccessibleIconChoiceCtrlEntry( SvtIconChoiceCtrl& _rIconCtrl,
-                                       ULONG _nPos,
+                                       sal_uLong _nPos,
                                        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _xParent );
 
         // XTypeProvider

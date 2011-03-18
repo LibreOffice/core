@@ -856,7 +856,7 @@ bool OImageControlControl::implInsertGraphics()
             implClearGraphics( sal_False );
             sal_Bool bIsLink = sal_False;
             xController->getValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bIsLink;
-            // Force bIsLink to be TRUE if we're bound to a field. Though we initialized the file picker with IsLink=TRUE
+            // Force bIsLink to be sal_True if we're bound to a field. Though we initialized the file picker with IsLink=TRUE
             // in this case, and disabled the respective control, there might be picker implementations which do not
             // respect this, and return IsLink=FALSE here. In this case, "normalize" the flag.
             // #i112659#

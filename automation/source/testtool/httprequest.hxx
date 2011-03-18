@@ -48,38 +48,38 @@ class HttpRequest
 {
     ByteString aRequestPath;
     ByteString aRequestHost;
-    USHORT nRequestPort;
+    sal_uInt16 nRequestPort;
     ByteString aProxyHost;
-    USHORT nProxyPort;
+    sal_uInt16 nProxyPort;
 
-    USHORT nStatus;
+    sal_uInt16 nStatus;
     osl::ConnectorSocket *pOutSocket;
 
     ByteString aHeader;
-    USHORT nResultId;
+    sal_uInt16 nResultId;
     ByteString aContentType;
     SvMemoryStream* pStream;
 
     void SendString( osl::StreamSocket* pSocket, ByteString aText );
-    BOOL IsItem( ByteString aItem, ByteString aLine );
+    sal_Bool IsItem( ByteString aItem, ByteString aLine );
     void Init();
 public:
     HttpRequest();
     ~HttpRequest();
 
-    void SetRequest( ByteString aHost, ByteString aPath, USHORT nPort );
-    void SetProxy( ByteString aHost, USHORT nPort );
+    void SetRequest( ByteString aHost, ByteString aPath, sal_uInt16 nPort );
+    void SetProxy( ByteString aHost, sal_uInt16 nPort );
 
-    BOOL Execute();
+    sal_Bool Execute();
     void Abort();
 
     ByteString GetHeader() const { return aHeader; }
     SvMemoryStream* GetBody();
 
     ByteString GetContentType() const { return aContentType; }
-    USHORT GetResultId() const { return nResultId; }
+    sal_uInt16 GetResultId() const { return nResultId; }
 
-    USHORT GetStatus();
+    sal_uInt16 GetStatus();
 
 };
 

@@ -53,10 +53,10 @@ public:
     DlgEdFunc( DlgEditor* pParent );
     virtual ~DlgEdFunc();
 
-    virtual BOOL MouseButtonDown( const MouseEvent& rMEvt );
-    virtual BOOL MouseButtonUp( const MouseEvent& rMEvt );
-    virtual BOOL MouseMove( const MouseEvent& rMEvt );
-    virtual BOOL KeyInput( const KeyEvent& rKEvt );
+    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseMove( const MouseEvent& rMEvt );
+    virtual sal_Bool KeyInput( const KeyEvent& rKEvt );
 };
 
 //============================================================================
@@ -69,9 +69,9 @@ public:
     DlgEdFuncInsert( DlgEditor* pParent );
     ~DlgEdFuncInsert();
 
-    virtual BOOL MouseButtonDown( const MouseEvent& rMEvt );
-    virtual BOOL MouseButtonUp( const MouseEvent& rMEvt );
-    virtual BOOL MouseMove( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseMove( const MouseEvent& rMEvt );
 };
 
 //============================================================================
@@ -81,15 +81,15 @@ public:
 class DlgEdFuncSelect : public DlgEdFunc
 {
 protected:
-    BOOL    bMarkAction;
+    sal_Bool    bMarkAction;
 
 public:
     DlgEdFuncSelect( DlgEditor* pParent );
     ~DlgEdFuncSelect();
 
-    virtual BOOL MouseButtonDown( const MouseEvent& rMEvt );
-    virtual BOOL MouseButtonUp( const MouseEvent& rMEvt );
-    virtual BOOL MouseMove( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseMove( const MouseEvent& rMEvt );
 };
 
 

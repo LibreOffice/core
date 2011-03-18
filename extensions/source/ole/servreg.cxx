@@ -121,47 +121,6 @@ extern "C" void * SAL_CALL component_getFactory(
 }
 
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(   void * /*pServiceManager*/, void * pRegistryKey )
-{
-    if (pRegistryKey)
-    {
-        try
-        {
-            //deprecated
-            Reference<XRegistryKey> xNewKey =
-                reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(reinterpret_cast<const sal_Unicode*>(L"/com.sun.star.comp.ole.OleConverter2/UNO/SERVICES"));
-            xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.OleBridgeSupplier2"));
-
-            xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.oleautomation.BridgeSupplier"));
-
-            //deprecated
-            xNewKey =
-                reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(reinterpret_cast<const sal_Unicode*>(L"/com.sun.star.comp.ole.OleConverterVar1/UNO/SERVICES"));
-            xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.OleBridgeSupplierVar1"));
-
-            //deprecated
-            xNewKey =
-                reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(reinterpret_cast<const sal_Unicode*>(L"/com.sun.star.comp.ole.OleClient/UNO/SERVICES"));
-            xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.OleObjectFactory"));
-
-            xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.oleautomation.Factory"));
-            //deprecated
-            xNewKey =
-                reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(reinterpret_cast<const sal_Unicode*>(L"/com.sun.star.comp.ole.OleServer/UNO/SERVICES"));
-            xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.OleApplicationRegistration"));
-
-            xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.oleautomation.ApplicationRegistration"));
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
-}
-
 extern "C" void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {

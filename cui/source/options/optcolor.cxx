@@ -58,6 +58,94 @@ using namespace ::svtools;
 #define GROUP_BASIC     5
 #define GROUP_SQL       6
 
+const char* aColorLBHids[] =
+{
+     HID_COLORPAGE_DOCCOLOR_LB,
+     HID_COLORPAGE_DOCBOUNDARIES_LB,
+     HID_COLORPAGE_APPBACKGROUND_LB,
+     HID_COLORPAGE_OBJECTBOUNDARIES_LB,
+     HID_COLORPAGE_TABLEBOUNDARIES_LB,
+     HID_COLORPAGE_FONTCOLOR_LB,
+     HID_COLORPAGE_LINKS_LB,
+     HID_COLORPAGE_LINKSVISITED_LB,
+     HID_COLORPAGE_ANCHOR_LB,
+     HID_COLORPAGE_SPELL_LB,
+     HID_COLORPAGE_WRITERTEXTGRID_LB,
+     HID_COLORPAGE_WRITERFIELDSHADINGS_LB,
+     HID_COLORPAGE_WRITERIDXSHADINGS_LB,
+     HID_COLORPAGE_WRITERDIRECTCURSOR_LB,
+     HID_COLORPAGE_WRITERNOTESINDICATOR_LB,
+     HID_COLORPAGE_WRITERSCRIPTINDICATOR_LB,
+     HID_COLORPAGE_WRITERSECTIONBOUNDARIES_LB,
+     HID_COLORPAGE_WRITERPAGEBREAKS_LB,
+     HID_COLORPAGE_HTMLSGML_LB,
+     HID_COLORPAGE_HTMLCOMMENT_LB,
+     HID_COLORPAGE_HTMLKEYWORD_LB,
+     HID_COLORPAGE_HTMLUNKNOWN_LB,
+     HID_COLORPAGE_CALCGRID_LB,
+     HID_COLORPAGE_CALCPAGEBREAK_LB,
+     HID_COLORPAGE_CALCPAGEBREAKMANUAL_LB,
+     HID_COLORPAGE_CALCPAGEBREAKAUTOMATIC_LB,
+     HID_COLORPAGE_CALCDETECTIVE_LB,
+     HID_COLORPAGE_CALCDETECTIVEERROR_LB,
+     HID_COLORPAGE_CALCREFERENCE_LB,
+     HID_COLORPAGE_CALCNOTESBACKGROUND_LB,
+     HID_COLORPAGE_DRAWGRID_LB,
+     HID_COLORPAGE_DRAWDRAWING_LB,
+     HID_COLORPAGE_DRAWFILL_LB,
+     HID_COLORPAGE_BASICIDENTIFIER_LB,
+     HID_COLORPAGE_BASICCOMMENT_LB,
+     HID_COLORPAGE_BASICNUMBER_LB,
+     HID_COLORPAGE_BASICSTRING_LB,
+     HID_COLORPAGE_BASICOPERATOR_LB,
+     HID_COLORPAGE_BASICKEYWORD_LB,
+     HID_COLORPAGE_BASICERROR_LB
+};
+
+const char* aColorCBHids[] =
+{
+     HID_COLORPAGE_DOCCOLOR_CB,
+     HID_COLORPAGE_DOCBOUNDARIES_CB,
+     HID_COLORPAGE_APPBACKGROUND_CB,
+     HID_COLORPAGE_OBJECTBOUNDARIES_CB,
+     HID_COLORPAGE_TABLEBOUNDARIES_CB,
+     HID_COLORPAGE_FONTCOLOR_CB,
+     HID_COLORPAGE_LINKS_CB,
+     HID_COLORPAGE_LINKSVISITED_CB,
+     HID_COLORPAGE_ANCHOR_CB,
+     HID_COLORPAGE_SPELL_CB,
+     HID_COLORPAGE_WRITERTEXTGRID_CB,
+     HID_COLORPAGE_WRITERFIELDSHADINGS_CB,
+     HID_COLORPAGE_WRITERIDXSHADINGS_CB,
+     HID_COLORPAGE_WRITERDIRECTCURSOR_CB,
+     HID_COLORPAGE_WRITERNOTESINDICATOR_CB,
+     HID_COLORPAGE_WRITERSCRIPTINDICATOR_CB,
+     HID_COLORPAGE_WRITERSECTIONBOUNDARIES_CB,
+     HID_COLORPAGE_WRITERPAGEBREAKS_CB,
+     HID_COLORPAGE_HTMLSGML_CB,
+     HID_COLORPAGE_HTMLCOMMENT_CB,
+     HID_COLORPAGE_HTMLKEYWORD_CB,
+     HID_COLORPAGE_HTMLUNKNOWN_CB,
+     HID_COLORPAGE_CALCGRID_CB,
+     HID_COLORPAGE_CALCPAGEBREAK_CB,
+     HID_COLORPAGE_CALCPAGEBREAKMANUAL_CB,
+     HID_COLORPAGE_CALCPAGEBREAKAUTOMATIC_CB,
+     HID_COLORPAGE_CALCDETECTIVE_CB,
+     HID_COLORPAGE_CALCDETECTIVEERROR_CB,
+     HID_COLORPAGE_CALCREFERENCE_CB,
+     HID_COLORPAGE_CALCNOTESBACKGROUND_CB,
+     HID_COLORPAGE_DRAWGRID_CB,
+     HID_COLORPAGE_DRAWDRAWING_CB,
+     HID_COLORPAGE_DRAWFILL_CB,
+     HID_COLORPAGE_BASICIDENTIFIER_CB,
+     HID_COLORPAGE_BASICCOMMENT_CB,
+     HID_COLORPAGE_BASICNUMBER_CB,
+     HID_COLORPAGE_BASICSTRING_CB,
+     HID_COLORPAGE_BASICOPERATOR_CB,
+     HID_COLORPAGE_BASICKEYWORD_CB,
+     HID_COLORPAGE_BASICERROR_CB
+};
+
 class SvxExtFixedText_Impl : public FixedText
 {
 private:
@@ -777,13 +865,13 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         }
     }
     Color aTextColor;
-    BOOL bSetTextColor = FALSE;
+    sal_Bool bSetTextColor = sal_False;
     //#104195# when the window color is the same as the text color it has to be changed
     Color aWinCol = rStyleSettings.GetWindowColor();
     Color aRCheckCol = rStyleSettings.GetRadioCheckTextColor();
     if(aWinCol == aRCheckCol )
     {
-        bSetTextColor = TRUE;
+        bSetTextColor = sal_True;
         aRCheckCol.Invert();
         //if inversion didn't work (gray) then it's set to black
         if(aRCheckCol == aWinCol)
@@ -814,7 +902,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
             else
                 aCheckBoxes[i]->Hide();
             aCheckBoxes[i]->SetBackground(aTransparentWall);
-            aCheckBoxes[i]->SetHelpId(HID_COLORPAGE_CHECKBOX_START + i);
+            aCheckBoxes[i]->SetHelpId( aColorCBHids[i] );
             if(bSetTextColor)
                 aCheckBoxes[i]->SetTextColor(aRCheckCol);
         }
@@ -853,13 +941,17 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         XColorEntry* pEntry = aColorTable.GetColor(i);
         aColorBoxes[0]->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
-    aColorBoxes[0]->SetHelpId(HID_COLORPAGE_LISTBOX_START);
+
+    aColorBoxes[0]->SetHelpId( aColorLBHids[0] );
+
+    OSL_ENSURE( nCount < sal_Int32(sizeof(aColorLBHids)/sizeof(aColorLBHids[0])), "too few helpIDs for color listboxes" );
     for( sal_Int32 i = 1; i < nCount; i++ )
     {
         if(aColorBoxes[i])
         {
             aColorBoxes[i]->CopyEntries( *aColorBoxes[0] );
-            aColorBoxes[i]->SetHelpId(HID_COLORPAGE_LISTBOX_START + i);
+            if( i < sal_Int32(sizeof(aColorLBHids)/sizeof(aColorLBHids[0])) )
+               aColorBoxes[i]->SetHelpId( aColorLBHids[i] );
         }
     }
 }
@@ -1023,11 +1115,11 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(
     sal_Int32 nThirdWidth = aScrollWindow.aWindows[0]->GetPosPixel().X() - nFirstWidth - nSecondWidth;
 
     const WinBits nHeadBits = HIB_VCENTER | HIB_FIXED| HIB_FIXEDPOS;
-    aHeaderHB.InsertItem( 1, sOn, nFirstWidth, (USHORT)nHeadBits|HIB_CENTER);
-    aHeaderHB.InsertItem( 2, sUIElem, nSecondWidth, (USHORT)nHeadBits|HIB_LEFT);
-    aHeaderHB.InsertItem( 3, sColSetting, nThirdWidth, (USHORT)nHeadBits|HIB_LEFT);
+    aHeaderHB.InsertItem( 1, sOn, nFirstWidth, (sal_uInt16)nHeadBits|HIB_CENTER);
+    aHeaderHB.InsertItem( 2, sUIElem, nSecondWidth, (sal_uInt16)nHeadBits|HIB_LEFT);
+    aHeaderHB.InsertItem( 3, sColSetting, nThirdWidth, (sal_uInt16)nHeadBits|HIB_LEFT);
     aHeaderHB.InsertItem( 4, sPreview,
-            aHeaderHB.GetSizePixel().Width() - nFirstWidth - nSecondWidth - nThirdWidth, (USHORT)nHeadBits|HIB_LEFT);
+            aHeaderHB.GetSizePixel().Width() - nFirstWidth - nSecondWidth - nThirdWidth, (sal_uInt16)nHeadBits|HIB_LEFT);
     aHeaderHB.Show();
 
     aVScroll.SetRangeMin(0);
@@ -1095,7 +1187,7 @@ void ColorConfigCtrl_Impl::Update()
         if(ANCHOR == i)
             continue;
         const ColorConfigValue& rColorEntry = pColorConfig->GetColorValue(ColorConfigEntry(i));
-        if(COL_AUTO == (UINT32)rColorEntry.nColor)
+        if(COL_AUTO == (sal_uInt32)rColorEntry.nColor)
         {
             if(aScrollWindow.aColorBoxes[i])
                 aScrollWindow.aColorBoxes[i]->SelectEntryPos(0);
@@ -1153,7 +1245,7 @@ void ColorConfigCtrl_Impl::Update()
 
 sal_Bool lcl_MoveAndShow(Window* pWindow, long nOffset, long nMaxVisible, sal_Bool _bShow)
 {
-    sal_Bool bHide = TRUE;
+    sal_Bool bHide = sal_True;
     if(pWindow)
     {
         Point aPos = pWindow->GetPosPixel();
@@ -1167,7 +1259,7 @@ sal_Bool lcl_MoveAndShow(Window* pWindow, long nOffset, long nMaxVisible, sal_Bo
 }
 IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
 {
-    aScrollWindow.SetUpdateMode(TRUE);
+    aScrollWindow.SetUpdateMode(sal_True);
     sal_Int16 i;
     long nOffset = aScrollWindow.aColorBoxes[1]->GetPosPixel().Y() - aScrollWindow.aColorBoxes[0]->GetPosPixel().Y();
     nOffset *= (nScrollPos - pScrollBar->GetThumbPos());
@@ -1243,7 +1335,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
         Point aPos = aScrollWindow.aChapters[i]->GetPosPixel(); aPos.Y() += nOffset; aScrollWindow.aChapters[i]->SetPosPixel(aPos);
         aPos = aScrollWindow.aChapterWins[i]->GetPosPixel(); aPos.Y() += nOffset; aScrollWindow.aChapterWins[i]->SetPosPixel(aPos);
     }
-    aScrollWindow.SetUpdateMode(TRUE);
+    aScrollWindow.SetUpdateMode(sal_True);
     return 0;
 }
 
@@ -1252,7 +1344,7 @@ long ColorConfigCtrl_Impl::PreNotify( NotifyEvent& rNEvt )
     if(rNEvt.GetType() == EVENT_COMMAND)
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
-        USHORT nCmd = pCEvt->GetCommand();
+        sal_uInt16 nCmd = pCEvt->GetCommand();
         if( COMMAND_WHEEL == nCmd )
         {
             Command(*pCEvt);
@@ -1413,7 +1505,7 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
        aSaveSchemePB(   this, CUI_RES( PB_SAVESCHEME) ),
        aDeleteSchemePB( this, CUI_RES( PB_DELETESCHEME ) ),
        aCustomColorsFL( this, CUI_RES( FL_CUSTOMCOLORS ) ),
-       bFillItemSetCalled(FALSE),
+       bFillItemSetCalled(sal_False),
        pColorConfig(0),
        pExtColorConfig(0),
        pColorConfigCT(  new ColorConfigCtrl_Impl(this, CUI_RES( CT_COLORCONFIG ) ))
@@ -1452,9 +1544,9 @@ SfxTabPage* SvxColorOptionsTabPage::Create( Window* pParent, const SfxItemSet& r
     return ( new SvxColorOptionsTabPage( pParent, rAttrSet ) );
 }
 
-BOOL SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
+sal_Bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
 {
-    bFillItemSetCalled = TRUE;
+    bFillItemSetCalled = sal_True;
     if(aColorSchemeLB.GetSavedValue() != aColorSchemeLB.GetSelectEntryPos())
     {
         pColorConfig->SetModified();
@@ -1464,7 +1556,7 @@ BOOL SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
         pColorConfig->Commit();
     if(pExtColorConfig->IsModified())
         pExtColorConfig->Commit();
-    return TRUE;
+    return sal_True;
 }
 
 void SvxColorOptionsTabPage::Reset( const SfxItemSet& )

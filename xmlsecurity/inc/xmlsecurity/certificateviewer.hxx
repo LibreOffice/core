@@ -63,12 +63,12 @@ private:
     OKButton            maOkBtn;
     HelpButton          maHelpBtn;
 
-    BOOL                mbCheckForPrivateKey;
+    sal_Bool                mbCheckForPrivateKey;
 
     cssu::Reference< dcss::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
     cssu::Reference< dcss::security::XCertificate > mxCert;
 public:
-        CertificateViewer( Window* pParent, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const cssu::Reference< dcss::security::XCertificate >& rXCert, BOOL bCheckForPrivateKey );
+        CertificateViewer( Window* pParent, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const cssu::Reference< dcss::security::XCertificate >& rXCert, sal_Bool bCheckForPrivateKey );
     virtual             ~CertificateViewer();
 };
 

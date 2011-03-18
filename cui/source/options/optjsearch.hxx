@@ -63,10 +63,10 @@ private:
     CheckBox    aIgnoreWhitespace;
     CheckBox    aIgnoreMiddleDot;
 
-    INT32       nTransliterationFlags;
-    BOOL        bSaveOptions;
+    sal_Int32       nTransliterationFlags;
+    sal_Bool        bSaveOptions;
 
-    INT32               GetTransliterationFlags_Impl();
+    sal_Int32               GetTransliterationFlags_Impl();
 
 protected:
                         SvxJSearchOptionsPage( Window* pParent, const SfxItemSet& rSet );
@@ -77,13 +77,13 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
 
     virtual void        Reset( const SfxItemSet& rSet );
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
 
-    BOOL                IsSaveOptions() const           { return bSaveOptions; }
-    void                EnableSaveOptions( BOOL bVal )  { bSaveOptions = bVal; }
+    sal_Bool                IsSaveOptions() const           { return bSaveOptions; }
+    void                EnableSaveOptions( sal_Bool bVal )  { bSaveOptions = bVal; }
 
-    INT32               GetTransliterationFlags() const { return nTransliterationFlags; }
-    void                SetTransliterationFlags( INT32 nSettings );
+    sal_Int32               GetTransliterationFlags() const { return nTransliterationFlags; }
+    void                SetTransliterationFlags( sal_Int32 nSettings );
 };
 
 //////////////////////////////////////////////////////////////////////

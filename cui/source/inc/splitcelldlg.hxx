@@ -30,7 +30,7 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/button.hxx>
 
 #include <svx/stddlg.hxx>
@@ -38,13 +38,13 @@
 
 class SvxSplitTableDlg : public SvxAbstractSplittTableDialog, public SvxStandardDialog
 {
+    FixedLine           maCountFL;
     FixedText           maCountLbl;
     NumericField        maCountEdit;
-    FixedLine           maCountFL;
+    FixedLine           maDirFL;
     ImageRadioButton    maHorzBox;
     ImageRadioButton    maVertBox;
     CheckBox            maPropCB;
-    FixedLine           maDirFL;
     OKButton            maOKBtn;
     CancelButton        maCancelBtn;
     HelpButton          maHelpBtn;

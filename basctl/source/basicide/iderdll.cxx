@@ -69,7 +69,7 @@ BasicIDEDLL* BasicIDEDLL::GetDLL()
     return pBasicIDEDLL;
 }
 
-IDEResId::IDEResId( USHORT nId ):
+IDEResId::IDEResId( sal_uInt16 nId ):
     ResId( nId, *(*(BasicIDEModule**)GetAppData(SHL_IDE))->GetResMgr() )
 {
 }
@@ -140,8 +140,8 @@ BasicIDEData* BasicIDEDLL::GetExtraData()
 BasicIDEData::BasicIDEData() : aObjCatPos( INVPOSITION, INVPOSITION )
 {
     nBasicDialogCount = 0;
-    bChoosingMacro = FALSE;
-    bShellInCriticalSection = FALSE;
+    bChoosingMacro = sal_False;
+    bShellInCriticalSection = sal_False;
     pSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
 
     StarBASIC::SetGlobalBreakHdl( LINK( this, BasicIDEData, GlobalBasicBreakHdl ) );
@@ -211,22 +211,6 @@ IMPL_LINK( BasicIDEData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
     }
 
     return nRet;
-}
-
-IMPL_LINK( BasicIDEData, ExecuteMacroEvent, void *, pData )
-{
-    if ( pData )
-    {
-        SFX_APP()->EnterBasicCall();
-        SbMethod* pMethod = (SbMethod*)pData;
-
-        // Ist es eine StarScript-Methode? Am Parent erkennen
-        DBG_ASSERT( pMethod->GetParent()->GetFlags() & SBX_EXTSEARCH, "Kein EXTSEARCH!" );
-        BasicIDE::RunMethod( pMethod );
-        pMethod->ReleaseRef();  // muss vorher inkrementiert worden sein!
-        SFX_APP()->LeaveBasicCall();
-    }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

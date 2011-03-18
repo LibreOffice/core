@@ -384,7 +384,7 @@ namespace pcr
                 sal_Int32 nColor = rUnderlineItem.GetColor().GetColor();
 
                 Any aUnoColor;
-                if (COL_AUTO != (UINT32)nColor)
+                if (COL_AUTO != (sal_uInt32)nColor)
                     aUnoColor <<= nColor;
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTLINECOLOR, aUnoColor );
@@ -429,7 +429,7 @@ namespace pcr
                 sal_Int32 nColor = rColorItem.GetValue().GetColor();
 
                 Any aUnoColor;
-                if (COL_AUTO != (UINT32)nColor)
+                if (COL_AUTO != (sal_uInt32)nColor)
                     aUnoColor <<= nColor;
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTCOLOR, aUnoColor );

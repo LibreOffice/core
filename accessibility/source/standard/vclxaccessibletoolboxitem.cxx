@@ -87,11 +87,11 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock( ) );
 
     DBG_ASSERT( m_pToolBox, "invalid toolbox" );
-    m_nItemId = m_pToolBox->GetItemId( (USHORT)m_nIndexInParent );
+    m_nItemId = m_pToolBox->GetItemId( (sal_uInt16)m_nIndexInParent );
     m_sOldName = GetText( true );
     m_bIsChecked = m_pToolBox->IsItemChecked( m_nItemId );
     m_bIndeterminate = ( m_pToolBox->GetItemState( m_nItemId ) == STATE_DONTKNOW );
-    ToolBoxItemType eType = m_pToolBox->GetItemType( (USHORT)m_nIndexInParent );
+    ToolBoxItemType eType = m_pToolBox->GetItemType( (sal_uInt16)m_nIndexInParent );
     switch ( eType )
     {
         case TOOLBOXITEM_BUTTON :
@@ -234,7 +234,7 @@ awt::Rectangle SAL_CALL VCLXAccessibleToolBoxItem::implGetBounds(  ) throw (Runt
 {
     awt::Rectangle aRect;
     if ( m_pToolBox )
-        aRect = AWTRectangle( m_pToolBox->GetItemPosRect( (USHORT)m_nIndexInParent ) );
+        aRect = AWTRectangle( m_pToolBox->GetItemPosRect( (sal_uInt16)m_nIndexInParent ) );
 
     return aRect;
 }
@@ -686,7 +686,7 @@ sal_Bool VCLXAccessibleToolBoxItem::setCurrentValue( const Any& aNumber ) throw 
         else if ( nValue > 1 )
             nValue = 1;
 
-        m_pToolBox->CheckItem( m_nItemId, (BOOL) nValue );
+        m_pToolBox->CheckItem( m_nItemId, (sal_Bool) nValue );
         bReturn = sal_True;
     }
 

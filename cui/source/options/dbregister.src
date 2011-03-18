@@ -34,6 +34,7 @@
 #define STD_MASKCOLOR Color { Red=0xffff; Green=0x0000; Blue=0xffff; }
 TabPage RID_SFXPAGE_DBREGISTER
 {
+    HelpId = "cui:TabPage:RID_SFXPAGE_DBREGISTER" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Hide = TRUE ;
@@ -63,18 +64,21 @@ TabPage RID_SFXPAGE_DBREGISTER
     };
     PushButton BTN_NEW
     {
+        HelpID = "cui:PushButton:RID_SFXPAGE_DBREGISTER:BTN_NEW";
         Pos = MAP_APPFONT ( 47 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
         Text [ en-US ] = "~New..." ;
     };
     PushButton BTN_EDIT
     {
+        HelpID = "cui:PushButton:RID_SFXPAGE_DBREGISTER:BTN_EDIT";
         Pos = MAP_APPFONT ( 183 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
         Text [ en-US ] = "~Edit..." ;
     };
     PushButton BTN_DELETE
     {
+        HelpID = "cui:PushButton:RID_SFXPAGE_DBREGISTER:BTN_DELETE";
         Pos = MAP_APPFONT ( 115 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
         Text [ en-US ] = "~Delete" ;

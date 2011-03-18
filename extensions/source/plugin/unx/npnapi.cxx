@@ -74,11 +74,11 @@ static uint32 l_NPN_MemFlush( uint32 /*nSize*/ )
 
 static NPError l_NPN_DestroyStream( NPP instance, NPStream* stream, NPError reason )
 {
-    UINT32 nInstance = pConnector->GetNPPID( instance );
+    sal_uInt32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
         return NPERR_GENERIC_ERROR;
 
-    UINT32 nFileID = pConnector->GetStreamID( stream );
+    sal_uInt32 nFileID = pConnector->GetStreamID( stream );
     MediatorMessage* pMes=
         pConnector->
         Transact( eNPN_DestroyStream,
@@ -125,7 +125,7 @@ static jref l_NPN_GetJavaPeer( NPP /*instance*/ )
 
 static NPError l_NPN_GetURL( NPP instance, const char* url, const char* window )
 {
-    UINT32 nInstance = pConnector->GetNPPID( instance );
+    sal_uInt32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
         return NPERR_GENERIC_ERROR;
 
@@ -150,7 +150,7 @@ static NPError l_NPN_GetURL( NPP instance, const char* url, const char* window )
 static NPError l_NPN_GetURLNotify( NPP instance, const char* url, const char* target,
                             void* notifyData )
 {
-    UINT32 nInstance = pConnector->GetNPPID( instance );
+    sal_uInt32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
         return NPERR_GENERIC_ERROR;
 
@@ -177,7 +177,7 @@ static NPError l_NPN_NewStream( NPP instance, NPMIMEType type, const char* targe
                          NPStream** stream )
     // stream is a return value
 {
-    UINT32 nInstance = pConnector->GetNPPID( instance );
+    sal_uInt32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
         return NPERR_GENERIC_ERROR;
 
@@ -211,7 +211,7 @@ static NPError l_NPN_NewStream( NPP instance, NPMIMEType type, const char* targe
 
 static NPError l_NPN_PostURLNotify( NPP instance, const char* url, const char* target, uint32 len, const char* buf, NPBool file, void* notifyData )
 {
-    UINT32 nInstance = pConnector->GetNPPID( instance );
+    sal_uInt32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
         return NPERR_GENERIC_ERROR;
 
@@ -236,7 +236,7 @@ static NPError l_NPN_PostURLNotify( NPP instance, const char* url, const char* t
 
 static NPError l_NPN_PostURL( NPP instance, const char* url, const char* window, uint32 len, const char* buf, NPBool file )
 {
-    UINT32 nInstance = pConnector->GetNPPID( instance );
+    sal_uInt32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
         return NPERR_GENERIC_ERROR;
 
@@ -262,29 +262,29 @@ static NPError l_NPN_RequestRead( NPStream* stream, NPByteRange* rangeList )
     medDebug( 1, "pluginapp: NPN_RequestRead\n" );
 
     NPByteRange* pRange = rangeList;
-    UINT32 nRanges = 0;
+    sal_uInt32 nRanges = 0;
     while( pRange )
     {
         nRanges++;
         pRange = pRange->next;
     }
 
-    UINT32* pArray = new UINT32[ 2 * nRanges ];
+    sal_uInt32* pArray = new sal_uInt32[ 2 * nRanges ];
     pRange = rangeList;
-    UINT32 n = 0;
+    sal_uInt32 n = 0;
     while( pRange )
     {
-        pArray[ 2*n    ] = (UINT32)pRange->offset;
-        pArray[ 2*n + 1] = (UINT32)pRange->length;
+        pArray[ 2*n    ] = (sal_uInt32)pRange->offset;
+        pArray[ 2*n + 1] = (sal_uInt32)pRange->length;
         n++;
         pRange = pRange->next;
     }
-    UINT32 nFileID = pConnector->GetStreamID( stream );
+    sal_uInt32 nFileID = pConnector->GetStreamID( stream );
     MediatorMessage* pMes = pConnector->
         Transact( eNPN_RequestRead,
                   &nFileID, sizeof( nFileID ),
                   &nRanges, sizeof( nRanges ),
-                  pArray, sizeof( UINT32 ) * 2 * nRanges,
+                  pArray, sizeof( sal_uInt32 ) * 2 * nRanges,
                   NULL );
 
     if( ! pMes )
@@ -298,7 +298,7 @@ static NPError l_NPN_RequestRead( NPStream* stream, NPByteRange* rangeList )
 
 static void l_NPN_Status( NPP instance, const char* message )
 {
-    UINT32 nInstance = pConnector->GetNPPID( instance );
+    sal_uInt32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
         return;
 
@@ -312,7 +312,7 @@ static const char* l_NPN_UserAgent( NPP instance )
 {
     static char* pAgent = NULL;
 
-    UINT32 nInstance = pConnector->GetNPPID( instance );
+    sal_uInt32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
     {
         if( instance )
@@ -342,10 +342,10 @@ static const char* l_NPN_UserAgent( NPP instance )
 
 static int32 l_NPN_Write( NPP instance, NPStream* stream, int32 len, void* buffer )
 {
-    UINT32 nFileID = pConnector->GetStreamID( stream );
+    sal_uInt32 nFileID = pConnector->GetStreamID( stream );
     if( nFileID == PluginConnector::UnknownStreamID )
         return NPERR_GENERIC_ERROR;
-    UINT32 nInstance = pConnector->GetNPPID( instance );
+    sal_uInt32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
         return NPERR_GENERIC_ERROR;
 
@@ -360,7 +360,7 @@ static int32 l_NPN_Write( NPP instance, NPStream* stream, int32 len, void* buffe
     if( ! pMes )
         return 0;
 
-    INT32 nRet = pMes->GetUINT32();
+    sal_Int32 nRet = pMes->GetUINT32();
     return nRet;
 }
 
@@ -518,7 +518,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
 {
     MediatorMessage* pMessage;
     CommandAtoms nCommand;
-    while( (pMessage = GetNextMessage( FALSE )) )
+    while( (pMessage = GetNextMessage( sal_False )) )
     {
         nCommand = (CommandAtoms)pMessage->GetUINT32();
         medDebug( 1, "pluginapp: %s\n", GetCommandName( nCommand ) );
@@ -526,9 +526,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
         {
             case eNPP_DestroyStream:
             {
-                UINT32 nInstance    = pMessage->GetUINT32();
+                sal_uInt32 nInstance    = pMessage->GetUINT32();
                 NPP instance        = m_aInstances[ nInstance ]->instance;
-                UINT32 nFileID      = pMessage->GetUINT32();
+                sal_uInt32 nFileID      = pMessage->GetUINT32();
                 NPStream* pStream   = m_aNPWrapStreams[ nFileID ];
                 NPError aReason     = GetNPError( pMessage );
                 m_aNPWrapStreams.erase( m_aNPWrapStreams.begin() + nFileID );
@@ -544,7 +544,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_Destroy:
             {
-                UINT32 nInstance    = pMessage->GetUINT32();
+                sal_uInt32 nInstance    = pMessage->GetUINT32();
                 ConnectorInstance* pInst= m_aInstances[ nInstance ];
 
                 // some plugin rely on old netscapes behaviour
@@ -563,7 +563,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             case eNPP_DestroyPhase2:
             {
                 // now really destroy the instance
-                UINT32 nInstance    = pMessage->GetUINT32();
+                sal_uInt32 nInstance    = pMessage->GetUINT32();
                 ConnectorInstance* pInst= m_aInstances[ nInstance ];
                 NPP instance        = pInst->instance;
                 NPSavedData* pSave = NULL;
@@ -598,7 +598,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_NewStream:
             {
-                UINT32 nInstance        = pMessage->GetUINT32();
+                sal_uInt32 nInstance        = pMessage->GetUINT32();
                 NPP instance            = m_aInstances[ nInstance ]->instance;
                 char* pType             = pMessage->GetString();
                 NPStream* pStream       = new NPStream;
@@ -630,10 +630,10 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 int16*  pArgc   = (int16*)pMessage->GetBytes();
                 NPP instance    = new NPP_t;
                 instance->pdata = instance->ndata = NULL;
-                ULONG nArgnBytes, nArgvBytes;
+                sal_uLong nArgnBytes, nArgvBytes;
                 char* pArgn = (char*)pMessage->GetBytes( nArgnBytes );
                 char* pArgv = (char*)pMessage->GetBytes( nArgvBytes );
-                ULONG nSaveBytes;
+                sal_uLong nSaveBytes;
                 char* pSavedData = (char*)pMessage->GetBytes( nSaveBytes );
                 ConnectorInstance* pInst =
                     new ConnectorInstance( instance, pType,
@@ -646,7 +646,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 aRet = aPluginFuncs.newp( pInst->pMimeType, instance, *pMode, *pArgc,
                                           pInst->nArg ? pInst->argn : NULL,
                                           pInst->nArg ? pInst->argv : NULL,
-                                          ( nSaveBytes == 4 && *(UINT32*)pSavedData == 0 ) ?
+                                          ( nSaveBytes == 4 && *(sal_uInt32*)pSavedData == 0 ) ?
                                           &(pInst->aData) : NULL );
                 medDebug( 1, "pluginapp: NPP_New( %s, %p, %d, %d, %p, %p, %p ) returns %d\n",
                           pInst->pMimeType,
@@ -682,7 +682,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_SetWindow:
             {
-                UINT32 nInstance        = pMessage->GetUINT32();
+                sal_uInt32 nInstance        = pMessage->GetUINT32();
                 ConnectorInstance* pInst= m_aInstances[ nInstance ];
                 NPWindow* pWindow       = (NPWindow*)pMessage->GetBytes();
 
@@ -782,9 +782,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_StreamAsFile:
             {
-                UINT32 nInstance        = pMessage->GetUINT32();
+                sal_uInt32 nInstance        = pMessage->GetUINT32();
                 NPP instance            = m_aInstances[ nInstance ]->instance;
-                UINT32 nFileID          = pMessage->GetUINT32();
+                sal_uInt32 nFileID          = pMessage->GetUINT32();
                 NPStream* pStream       = m_aNPWrapStreams[ nFileID ];
                 char* fname             = pMessage->GetString();
                 medDebug( 1, "pluginapp: NPP_StreamAsFile %s\n", fname );
@@ -794,7 +794,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_URLNotify:
             {
-                UINT32 nInstance        = pMessage->GetUINT32();
+                sal_uInt32 nInstance        = pMessage->GetUINT32();
                 NPP instance            = m_aInstances[ nInstance ]->instance;
                 char* url               = pMessage->GetString();
                 NPReason* pReason       = (NPReason*)pMessage->GetBytes();
@@ -807,9 +807,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_WriteReady:
             {
-                UINT32 nInstance        = pMessage->GetUINT32();
+                sal_uInt32 nInstance        = pMessage->GetUINT32();
                 NPP instance            = m_aInstances[ nInstance ]->instance;
-                UINT32 nFileID          = pMessage->GetUINT32();
+                sal_uInt32 nFileID          = pMessage->GetUINT32();
                 NPStream* pStream       = m_aNPWrapStreams[ nFileID ];
                 int32 nRet = aPluginFuncs.writeready( instance, pStream );
 
@@ -823,12 +823,12 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             break;
             case eNPP_Write:
             {
-                UINT32 nInstance        = pMessage->GetUINT32();
+                sal_uInt32 nInstance        = pMessage->GetUINT32();
                 NPP instance            = m_aInstances[ nInstance ]->instance;
-                UINT32 nFileID          = pMessage->GetUINT32();
+                sal_uInt32 nFileID          = pMessage->GetUINT32();
                 NPStream* pStream       = m_aNPWrapStreams[ nFileID ];
                 int32 offset            = pMessage->GetUINT32();
-                ULONG len;
+                sal_uLong len;
                 char* buffer            = (char*)pMessage->GetBytes( len );
                 int32 nRet = aPluginFuncs.write( instance, pStream, offset, len, buffer );
 

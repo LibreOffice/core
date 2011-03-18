@@ -72,7 +72,7 @@ struct lt_rtl_OUString
     }
 };
 
-inline BOOL operator == ( const ::com::sun::star::lang::Locale &rL1, const ::com::sun::star::lang::Locale &rL2 )
+inline sal_Bool operator == ( const ::com::sun::star::lang::Locale &rL1, const ::com::sun::star::lang::Locale &rL2 )
 {
     return  rL1.Language ==  rL2.Language   &&
             rL1.Country  ==  rL2.Country    &&
@@ -103,6 +103,14 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char * pDicT
 void MergeNewStyleDicsAndOldStyleDics( std::list< SvtLinguConfigDictionaryEntry > &rNewStyleDics, const std::vector< SvtLinguConfigDictionaryEntry > &rOldStyleDics );
 
 ///////////////////////////////////////////////////////////////////////////
+
+
+//Find an encoding from a charset string, using
+//rtl_getTextEncodingFromMimeCharset and falling back to
+//rtl_getTextEncodingFromUnixCharset with the addition of
+//ISCII-DEVANAGARI. On failure will return final fallback of
+//RTL_TEXTENCODING_ISO_8859_1
+rtl_TextEncoding getTextEncodingFromCharset(const sal_Char* pCharset);
 
 #endif
 

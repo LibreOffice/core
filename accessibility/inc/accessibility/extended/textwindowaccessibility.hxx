@@ -625,7 +625,7 @@ private:
 
     // Must be called with both the external (Solar) and internal mutex
     // locked, and after init has been called:
-    void changeParagraphText(::ULONG nNumber, ::USHORT nBegin, ::USHORT nEnd,
+    void changeParagraphText(::sal_uLong nNumber, ::sal_uInt16 nBegin, ::sal_uInt16 nEnd,
                              bool bCut, bool bPaste,
                              ::rtl::OUString const & rText);
 

@@ -59,11 +59,11 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
     maFtURL         ( this, CUI_RES (FT_URL) ),
     maFtFullURL     ( this, CUI_RES (FT_FULL_URL) ),
     maBtBrowse      ( this, CUI_RES (BTN_BROWSE) ),
-    mbMarkWndOpen   ( FALSE )
+    mbMarkWndOpen   ( sal_False )
 {
     // Disable display of bitmap names.
-    maBtBrowse.EnableTextDisplay (FALSE);
-    maBtFileopen.EnableTextDisplay (FALSE);
+    maBtBrowse.EnableTextDisplay (sal_False);
+    maBtFileopen.EnableTextDisplay (sal_False);
 
     InitStdControls();
     FreeResource();
@@ -86,6 +86,10 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
 
     maCbbPath.SetLoseFocusHdl( LINK ( this, SvxHyperlinkDocTp, LostFocusPathHdl_Impl ) );
 
+    maBtBrowse.SetAccessibleRelationMemberOf( &maGrpTarget );
+    maBtBrowse.SetAccessibleRelationLabeledBy( &maFtTarget );
+    maBtFileopen.SetAccessibleRelationMemberOf( &maGrpDocument );
+    maBtFileopen.SetAccessibleRelationLabeledBy( &maFtPath );
     maTimer.SetTimeoutHdl ( LINK ( this, SvxHyperlinkDocTp, TimeoutHdl_Impl ) );
 }
 

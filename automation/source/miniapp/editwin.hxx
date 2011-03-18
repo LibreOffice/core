@@ -39,7 +39,7 @@ protected:
 
     MultiLineEdit   aInhalt;
 
-    virtual BOOL Close(); // derived
+    virtual sal_Bool Close(); // derived
     void Resize();
 
 public:
@@ -48,7 +48,7 @@ public:
     GHEditWindow(Window * pParent, String aName = CUniString("Neues Fenster"), WinBits iWstyle = WB_STDWORK);
 
     void Clear();
-    void AddText( String aNew, BOOL bMoveToEnd = TRUE);
+    void AddText( String aNew, sal_Bool bMoveToEnd = sal_True);
 };
 
 
@@ -57,7 +57,7 @@ class EditFileWindow : public GHEditWindow
 {
 
     String  aFileName;
-    virtual BOOL Close(); // derived
+    virtual sal_Bool Close(); // derived
     void LoadFile();
 
 public:

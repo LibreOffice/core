@@ -34,7 +34,7 @@
 class IDEResId: public ResId
 {
 public:
-    IDEResId( USHORT nId );
+    IDEResId( sal_uInt16 nId );
 };
 
 

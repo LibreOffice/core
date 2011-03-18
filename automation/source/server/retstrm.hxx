@@ -29,7 +29,6 @@
 #define _RETSTRM_HXX
 
 #include <basic/sbxvar.hxx>
-#include <vcl/smartid.hxx>
 #include "cmdbasestream.hxx"
 
 class SvStream;
@@ -42,23 +41,28 @@ public:
     ~RetStream();
 
     using CmdBaseStream::GenError;
-    void GenError( SmartId aUId, String aString );
+    void GenError( rtl::OString aUId, String aString );
 
     using CmdBaseStream::GenReturn;
     void GenReturn( comm_USHORT nRet, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, nNr );}
-    void GenReturn( comm_USHORT nRet, SmartId aUId, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nNr );}
-    void GenReturn( comm_USHORT nRet, SmartId aUId, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, bBool );}
-// MacroRecorder
-    void GenReturn( comm_USHORT nRet, SmartId aUId, comm_USHORT nMethod ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod );}
-    void GenReturn( comm_USHORT nRet, SmartId aUId, comm_USHORT nMethod, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, bBool );}
-    void GenReturn( comm_USHORT nRet, SmartId aUId, comm_USHORT nMethod, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, nNr );}
+    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nNr );}
+    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, bBool );}
 
-    void GenReturn( USHORT nRet, SmartId aUId, String aString );
-    void GenReturn( USHORT nRet, SmartId aUId, SbxValue &aValue );
-    void GenReturn( USHORT nRet, SmartId aUId, comm_ULONG nNr, String aString, BOOL bBool );
 // MacroRecorder
-    void GenReturn( USHORT nRet, SmartId aUId, comm_USHORT nMethod, String aString );
-    void GenReturn( USHORT nRet, SmartId aUId, comm_USHORT nMethod, String aString, BOOL bBool );
+    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_USHORT nMethod ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod );} // also used outside MacroRecorder
+    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, bBool );}
+    void GenReturn( comm_USHORT nRet, rtl::OString aUId, comm_USHORT nMethod, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, nNr );}
+
+    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, String aString );
+    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_ULONG nNr, String aString, sal_Bool bBool );
+
+// needed for RemoteCommand and Profiling
+    void GenReturn( sal_uInt16 nRet, sal_uInt16 nMethod, SbxValue &aValue );
+    void GenReturn( sal_uInt16 nRet, sal_uInt16 nMethod, String aString );
+
+// MacroRecorder
+    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_USHORT nMethod, String aString );
+    void GenReturn( sal_uInt16 nRet, rtl::OString aUId, comm_USHORT nMethod, String aString, sal_Bool bBool );
 
     void Reset();
     SvStream* GetStream();
@@ -72,7 +76,7 @@ public:
     void Write( SbxValue &aValue );
 
 // Complex Datatypes to be handled system dependent
-    virtual void Write( SmartId* pId );
+    virtual void Write( rtl::OString* pId );
     virtual void Write( String *pString );
 
     SvStream *pSammel;

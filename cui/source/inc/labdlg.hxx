@@ -66,23 +66,23 @@ private:
     String          aStrVertList;
 
     short           nCaptionType;
-    BOOL            bFixedAngle;
-    INT32           nFixedAngle;
-    INT32           nGap;
+    sal_Bool            bFixedAngle;
+    sal_Int32           nFixedAngle;
+    sal_Int32           nGap;
     short           nEscDir;
-    BOOL            bEscRel;
-    INT32           nEscAbs;
-    INT32           nEscRel;
-    INT32           nLineLen;
-    BOOL            bFitLineLen;
+    sal_Bool            bEscRel;
+    sal_Int32           nEscAbs;
+    sal_Int32           nEscRel;
+    sal_Int32           nLineLen;
+    sal_Bool            bFitLineLen;
 
-    USHORT          nAnsatzRelPos;
-    USHORT          nAnsatzTypePos;
-    USHORT          nWinkelTypePos;
+    sal_uInt16          nAnsatzRelPos;
+    sal_uInt16          nAnsatzTypePos;
+    sal_uInt16          nWinkelTypePos;
 
 #ifdef _SVX_LABDLG_CXX
-    void            SetupAnsatz_Impl( USHORT nType );
-    void            SetupType_Impl( USHORT nType );
+    void            SetupAnsatz_Impl( sal_uInt16 nType );
+    void            SetupType_Impl( sal_uInt16 nType );
     DECL_LINK( AnsatzSelectHdl_Impl, ListBox * );
     DECL_LINK( AnsatzRelSelectHdl_Impl, ListBox * );
     DECL_LINK( LineOptHdl_Impl, Button * );
@@ -97,9 +97,9 @@ public:
     virtual ~SvxCaptionTabPage();
 
     static SfxTabPage*  Create( Window*, const SfxItemSet& );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual sal_Bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet & );
     void                Construct();
     void                SetView( const SdrView* pSdrView )
@@ -115,16 +115,16 @@ class SvxCaptionTabDialog : public SfxTabDialog
 {
 private:
     const SdrView*      pView;
-    USHORT              nAnchorCtrls;
+    sal_uInt16              nAnchorCtrls;
 
     Link                aValidateLink;
 
-    virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
 public:
 
             SvxCaptionTabDialog(Window* pParent, const SdrView* pView,
-                                    USHORT nAnchorTypes = 0 );
+                                    sal_uInt16 nAnchorTypes = 0 );
 
             ~SvxCaptionTabDialog();
 

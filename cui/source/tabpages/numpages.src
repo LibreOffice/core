@@ -128,6 +128,7 @@ TabPage RID_SVXPAGE_PICK_BMP
     };
     CheckBox CB_LINKED
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_PICK_BMP:CB_LINKED";
         Pos = MAP_APPFONT ( 9 , 169 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -161,6 +162,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     MultiListBox LB_LEVEL
     {
+        HelpID = "cui:MultiListBox:RID_SVXPAGE_NUM_OPTIONS:LB_LEVEL";
         Pos = MAP_APPFONT ( 12 , 25 ) ;
         Size = MAP_APPFONT ( 26 , 154 ) ;
         TabStop = TRUE ;
@@ -182,6 +184,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     ListBox LB_FMT
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_NUM_OPTIONS:LB_FMT";
         Pos = MAP_APPFONT ( 103 , 25 ) ;
         Size = MAP_APPFONT ( 67 , 72 ) ;
         TabStop = TRUE ;
@@ -226,6 +229,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     Edit ED_PREFIX
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_NUM_OPTIONS:ED_PREFIX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 103 , 41 ) ;
         Size = MAP_APPFONT ( 67 , 12 ) ;
@@ -242,6 +246,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     Edit ED_SUFFIX
     {
+        HelpID = "cui:Edit:RID_SVXPAGE_NUM_OPTIONS:ED_SUFFIX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 103 , 57 ) ;
         Size = MAP_APPFONT ( 67 , 12 ) ;
@@ -257,6 +262,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     ListBox LB_CHARFMT
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_NUM_OPTIONS:LB_CHARFMT";
         TabStop = TRUE ;
         DropDown = TRUE ;
         Pos = MAP_APPFONT ( 103 , 73 ) ;
@@ -271,6 +277,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     ListBox LB_BUL_COLOR
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_NUM_OPTIONS:LB_BUL_COLOR";
         TabStop = TRUE ;
         DropDown = TRUE ;
         Pos = MAP_APPFONT ( 103 , 73 ) ;
@@ -286,6 +293,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     MetricField MF_BUL_REL_SIZE
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_NUM_OPTIONS:MF_BUL_REL_SIZE";
         Pos = MAP_APPFONT ( 103 , 89 ) ;
         Size = MAP_APPFONT ( 67 , 12 ) ;
         Border = TRUE ;
@@ -308,6 +316,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     NumericField NF_ALL_LEVEL
     {
+        HelpID = "cui:NumericField:RID_SVXPAGE_NUM_OPTIONS:NF_ALL_LEVEL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 103 , 89 ) ;
         Size = MAP_APPFONT ( 67 , 12 ) ;
@@ -330,6 +339,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     NumericField ED_START
     {
+        HelpID = "cui:NumericField:RID_SVXPAGE_NUM_OPTIONS:ED_START";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 103 , 105 ) ;
         Size = MAP_APPFONT ( 67 , 12 ) ;
@@ -352,6 +362,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     ListBox LB_ALIGN
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_NUM_OPTIONS:LB_ALIGN";
         Pos = MAP_APPFONT ( 103 , 133 ) ;
         Size = MAP_APPFONT ( 40 , 40 ) ;
         TabStop = TRUE ;
@@ -370,6 +381,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     PushButton PB_BULLET
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_NUM_OPTIONS:PB_BULLET";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 103 , 105 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
@@ -385,6 +397,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     MenuButton MB_BITMAP
     {
+        HelpID = "cui:MenuButton:RID_SVXPAGE_NUM_OPTIONS:MB_BITMAP";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 103 , 41 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -417,6 +430,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     MetricField MF_WIDTH
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_NUM_OPTIONS:MF_WIDTH";
         Pos = MAP_APPFONT ( 103 , 59 ) ;
         Size = MAP_APPFONT ( 67 , 12 ) ;
         Border = TRUE ;
@@ -443,6 +457,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     MetricField MF_HEIGHT
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_NUM_OPTIONS:MF_HEIGHT";
         Pos = MAP_APPFONT ( 103 , 75 ) ;
         Size = MAP_APPFONT ( 67 , 12 ) ;
         Border = TRUE ;
@@ -462,6 +477,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     CheckBox CB_RATIO
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_NUM_OPTIONS:CB_RATIO";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 50 , 91 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
@@ -476,6 +492,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     ListBox LB_ORIENT
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_NUM_OPTIONS:LB_ORIENT";
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 103 , 103 ) ;
         Size = MAP_APPFONT ( 67 , 72 ) ;
@@ -503,6 +520,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     CheckBox CB_SAME_LEVEL
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_NUM_OPTIONS:CB_SAME_LEVEL";
         Pos = MAP_APPFONT ( 53 , 167 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         Text [ en-US ] = "~Consecutive numbering" ;
@@ -538,6 +556,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     MultiListBox LB_LEVEL
     {
+        HelpID = "cui:MultiListBox:RID_SVXPAGE_NUM_POSITION:LB_LEVEL";
         Pos = MAP_APPFONT ( 12 , 25 ) ;
         Size = MAP_APPFONT ( 26 , 154 ) ;
         TabStop = TRUE ;
@@ -560,6 +579,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     MetricField MF_BORDERDIST
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_NUM_POSITION:MF_BORDERDIST";
         Pos = MAP_APPFONT ( 198 , 25 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
@@ -578,6 +598,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     CheckBox CB_RELATIVE
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_NUM_POSITION:CB_RELATIVE";
         Pos = MAP_APPFONT ( 198 , 41 ) ;
         Size = MAP_APPFONT ( 52 , 10 ) ;
         Text [ en-US ] = "Relati~ve" ;
@@ -590,6 +611,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     MetricField MF_INDENT
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_NUM_POSITION:MF_INDENT";
         Pos = MAP_APPFONT ( 198 , 57 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
@@ -614,6 +636,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     MetricField MF_NUMDIST
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_NUM_POSITION:MF_NUMDIST";
         Pos = MAP_APPFONT ( 198 , 73 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
@@ -638,6 +661,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     ListBox LB_ALIGN
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_NUM_POSITION:LB_ALIGN";
         Pos = MAP_APPFONT ( 198 , 89 ) ;
         Size = MAP_APPFONT ( 40 , 40 ) ;
         TabStop = TRUE ;
@@ -657,6 +681,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     ListBox LB_LABEL_FOLLOWED_BY
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_NUM_POSITION:LB_LABEL_FOLLOWED_BY";
         Pos = MAP_APPFONT ( 198 , 25 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
@@ -677,6 +702,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     MetricField MF_LISTTAB
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_NUM_POSITION:MF_LISTTAB";
         Pos = MAP_APPFONT ( 198 , 41 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Border = TRUE ;
@@ -700,6 +726,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     ListBox LB_ALIGN_2
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_NUM_POSITION:LB_ALIGN_2";
         Pos = MAP_APPFONT ( 198 , 57 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
@@ -713,6 +740,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     MetricField MF_ALIGNED_AT
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_NUM_POSITION:MF_ALIGNED_AT";
         Pos = MAP_APPFONT ( 198 , 73 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
@@ -737,6 +765,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     MetricField MF_INDENT_AT
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_NUM_POSITION:MF_INDENT_AT";
         Pos = MAP_APPFONT ( 198 , 89 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
@@ -755,6 +784,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     };
     PushButton PB_STANDARD
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_NUM_POSITION:PB_STANDARD";
         Pos = MAP_APPFONT ( 198 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Default" ;

@@ -94,8 +94,10 @@ class UpdateCheckConfig : public ::cppu::WeakImplHelper3<
     ::com::sun::star::util::XChangesBatch,
     ::com::sun::star::lang::XServiceInfo >
 {
-    UpdateCheckConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xContainer,
-                      const ::rtl::Reference< UpdateCheckConfigListener >& rListener );
+    UpdateCheckConfig( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xContainer,
+                       const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xAvailableUpdates,
+                       const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xIgnoredUpdates,
+                       const ::rtl::Reference< UpdateCheckConfigListener >& rListener );
 
     virtual ~UpdateCheckConfig();
 
@@ -155,7 +157,7 @@ public:
     static rtl::OUString getAllUsersDirectory();
 
     // store and retrieve information about extensions
-    void storeExtensionVersion( const rtl::OUString& rExtensionName,
+    bool storeExtensionVersion( const rtl::OUString& rExtensionName,
                                 const rtl::OUString& rVersion );
     bool checkExtensionVersion( const rtl::OUString& rExtensionName,
                                 const rtl::OUString& rVersion );
@@ -206,6 +208,8 @@ private:
     static bool isVersionGreater( const rtl::OUString& rVersion1, const rtl::OUString& rVersion2 );
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xContainer;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xAvailableUpdates;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xIgnoredUpdates;
     const ::rtl::Reference< UpdateCheckConfigListener > m_rListener;
 };
 

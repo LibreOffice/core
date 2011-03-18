@@ -66,6 +66,7 @@ class SvxStdParagraphTabPage: public SfxTabPage
 private:
     SvxStdParagraphTabPage( Window* pParent, const SfxItemSet& rSet );
 
+    FixedLine               aIndentFrm;
     // Einzug
     FixedText               aLeftLabel;
     SvxRelativeField        aLeftIndent;
@@ -77,39 +78,38 @@ private:
     SvxRelativeField        aFLineIndent;
     CheckBox                aAutoCB;
 
-    FixedLine               aIndentFrm;
+    FixedLine               aDistFrm;
 
     // Abstaende
     FixedText               aTopLabel;
     SvxRelativeField        aTopDist;
     FixedText               aBottomLabel;
     SvxRelativeField        aBottomDist;
-    FixedLine               aDistFrm;
 
     // Zeilenabstand
+    FixedLine               aLineDistFrm;
     ListBox                 aLineDist;
     FixedText               aLineDistAtLabel;
     MetricField             aLineDistAtPercentBox;
     MetricField             aLineDistAtMetricBox;
-    FixedLine               aLineDistFrm;
     String                  sAbsDist;
     SvxParaPrevWindow       aExampleWin;
 
     //Registerhaltigkeit - nur Writer
-    CheckBox                aRegisterCB;
     FixedLine               aRegisterFL;
+    CheckBox                aRegisterCB;
 
     Edit*                   pActLineDistFld;
     long                    nAbst;
     long                    nWidth;
     long                    nMinFixDist;
-    BOOL                    bRelativeMode;
-    BOOL                    bNegativeIndents;
+    sal_Bool                    bRelativeMode;
+    sal_Bool                    bNegativeIndents;
 
 #ifdef _SVX_PARAGRPH_CXX
     void                    SetLineSpacing_Impl( const SvxLineSpacingItem& rAttr );
     void                    Init_Impl();
-    void                    UpdateExample_Impl( BOOL bAll = FALSE );
+    void                    UpdateExample_Impl( sal_Bool bAll = sal_False );
 
     DECL_LINK( LineDistHdl_Impl, ListBox* );
     DECL_LINK( ModifyHdl_Impl, SvxRelativeField* );
@@ -123,14 +123,13 @@ public:
     DECL_LINK( ELRLoseFocusHdl, Edit* );
 
     static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*          GetRanges();
+    static sal_uInt16*          GetRanges();
 
-    virtual BOOL            FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool            FillItemSet( SfxItemSet& rSet );
     virtual void            Reset( const SfxItemSet& rSet );
 
 
-    void                    SetPageWidth( USHORT nPageWidth );
-    void                    SetMaxDistance( USHORT nMaxDist );
+    void                    SetPageWidth( sal_uInt16 nPageWidth );
     void                    EnableRelativeMode();
     void                    EnableRegisterMode();
     void                    EnableAutoFirstLine();
@@ -174,7 +173,7 @@ class SvxParaAlignTabPage : public SfxTabPage
     DECL_LINK(              LastLineHdl_Impl, ListBox* );
     DECL_LINK(              TextDirectionHdl_Impl, ListBox* );
 
-    void                    UpdateExample_Impl( BOOL bAll = FALSE );
+    void                    UpdateExample_Impl( sal_Bool bAll = sal_False );
 #endif
 
                             SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSet );
@@ -185,9 +184,9 @@ protected:
 
 public:
     static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*          GetRanges();
+    static sal_uInt16*          GetRanges();
 
-    virtual BOOL            FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool            FillItemSet( SfxItemSet& rSet );
     virtual void            Reset( const SfxItemSet& rSet );
 
     void                    EnableJustifyExt();
@@ -219,9 +218,9 @@ public:
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     void                DisablePageBreak();
@@ -233,6 +232,7 @@ private:
                         SvxExtParagraphTabPage( Window* pParent, const SfxItemSet& rSet );
 
     // Silbentrennung
+    FixedLine           aExtFL;
     TriStateBox         aHyphenBox;
     FixedText           aBeforeText;
     NumericField        aExtHyphenBeforeBox;
@@ -240,7 +240,6 @@ private:
     NumericField        aExtHyphenAfterBox;
     FixedText           aMaxHyphenLabel;
     NumericField        aMaxHyphenEdit;
-    FixedLine           aExtFL;
 
     // Seitenumbruch
     FixedLine           aBreaksFL;
@@ -269,9 +268,9 @@ private:
     NumericField        aWidowRowNo;
     FixedText           aWidowRowLabel;
 
-    BOOL                bPageBreak;
-    BOOL                bHtmlMode;
-    USHORT              nStdPos;
+    sal_Bool                bPageBreak;
+    sal_Bool                bHtmlMode;
+    sal_uInt16              nStdPos;
 
 #ifdef _SVX_PARAGRPH_CXX
     DECL_LINK( PageBreakHdl_Impl, TriStateBox* );
@@ -307,9 +306,9 @@ public:
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
 };

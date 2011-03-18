@@ -42,13 +42,13 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
-// FIXME  Why does BreakPointDialog allow only USHORT for break-point line
-// numbers, whereas BreakPoint supports ULONG?
+// FIXME  Why does BreakPointDialog allow only sal_uInt16 for break-point line
+// numbers, whereas BreakPoint supports sal_uLong?
 
 bool lcl_ParseText( String aText, size_t& rLineNr )
 {
     // aText should look like "# n" where
-    // n > 0 && n < std::numeric_limits< USHORT >::max().
+    // n > 0 && n < std::numeric_limits< sal_uInt16 >::max().
     // All spaces are ignored, so there can even be spaces within the
     // number n.  (Maybe it would be better to ignore all whitespace instead
     // of just spaces.)
@@ -58,7 +58,7 @@ bool lcl_ParseText( String aText, size_t& rLineNr )
         return false;
     if (cFirst == '#')
         aText.Erase(0, 1);
-    // XXX Assumes that USHORT is contained within sal_Int32:
+    // XXX Assumes that sal_uInt16 is contained within sal_Int32:
     sal_Int32 n = aText.ToInt32();
     if ( n <= 0 )
         return false;
@@ -82,7 +82,7 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
 {
     FreeResource();
 
-    aComboBox.SetUpdateMode( FALSE );
+    aComboBox.SetUpdateMode( sal_False );
     for ( size_t i = 0, n = m_aModifiedBreakPointList.size(); i < n; ++i )
     {
         BreakPoint* pBrk = m_aModifiedBreakPointList.at( i );
@@ -90,7 +90,7 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
         aEntryStr += String::CreateFromInt32( pBrk->nLine );
         aComboBox.InsertEntry( aEntryStr, COMBOBOX_APPEND );
     }
-    aComboBox.SetUpdateMode( TRUE );
+    aComboBox.SetUpdateMode( sal_True );
 
     aOKButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
     aNewButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
@@ -104,7 +104,7 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
     aNumericField.SetMin( 0 );
     aNumericField.SetMax( 0x7FFFFFFF );
     aNumericField.SetSpinSize( 1 );
-    aNumericField.SetStrictFormat( TRUE );
+    aNumericField.SetStrictFormat( sal_True );
     aNumericField.SetModifyHdl( LINK( this, BreakPointDialog, EditModifyHdl ) );
 
     aComboBox.SetText( aComboBox.GetEntry( 0 ) );
@@ -160,7 +160,7 @@ IMPL_LINK( BreakPointDialog, ComboBoxHighlightHdl, ComboBox *, pBox )
     aOKButton.Enable();
     aDelButton.Enable();
 
-    USHORT nEntry = pBox->GetEntryPos( pBox->GetText() );
+    sal_uInt16 nEntry = pBox->GetEntryPos( pBox->GetText() );
     BreakPoint* pBrk = m_aModifiedBreakPointList.at( nEntry );
     DBG_ASSERT( pBrk, "Kein passender Breakpoint zur Liste ?" );
     UpdateFields( pBrk );

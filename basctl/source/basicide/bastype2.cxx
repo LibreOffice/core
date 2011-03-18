@@ -192,7 +192,7 @@ bool BasicEntryDescriptor::operator==( const BasicEntryDescriptor& rDesc ) const
 }
 
 BasicTreeListBox::BasicTreeListBox( Window* pParent, const ResId& rRes ) :
-    SvTreeListBox( pParent, IDEResId( sal::static_int_cast<USHORT>( rRes.GetId() ) ) ),
+    SvTreeListBox( pParent, IDEResId( sal::static_int_cast<sal_uInt16>( rRes.GetId() ) ) ),
     m_aNotifier( *this )
 {
     SetNodeDefaultImages();
@@ -224,7 +224,7 @@ void BasicTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocati
     // can be called multiple times for updating!
 
     // eigentlich prueffen, ob Basic bereits im Baum ?!
-    SetUpdateMode( FALSE );
+    SetUpdateMode( sal_False );
 
     // level 1: BasicManager (application, document, ...)
     SvLBoxEntry* pDocumentRootEntry = FindRootEntry( rDocument, eLocation );
@@ -242,7 +242,7 @@ void BasicTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocati
             std::auto_ptr< BasicEntry >( new BasicDocumentEntry( rDocument, eLocation ) ) );
     }
 
-    SetUpdateMode( TRUE );
+    SetUpdateMode( sal_True );
 }
 
 void BasicTreeListBox::ImpCreateLibEntries( SvLBoxEntry* pDocumentRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation )
@@ -259,19 +259,19 @@ void BasicTreeListBox::ImpCreateLibEntries( SvLBoxEntry* pDocumentRootEntry, con
         if ( eLocation == rDocument.getLibraryLocation( aLibName ) )
         {
             // check, if the module library is loaded
-            BOOL bModLibLoaded = FALSE;
+            sal_Bool bModLibLoaded = sal_False;
             ::rtl::OUString aOULibName( aLibName );
             Reference< script::XLibraryContainer > xModLibContainer( rDocument.getLibraryContainer( E_SCRIPTS ) );
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLoaded( aOULibName ) )
-                bModLibLoaded = TRUE;
+                bModLibLoaded = sal_True;
 
             // check, if the dialog library is loaded
-            BOOL bDlgLibLoaded = FALSE;
+            sal_Bool bDlgLibLoaded = sal_False;
             Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_DIALOGS ) );
             if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLoaded( aOULibName ) )
-                bDlgLibLoaded = TRUE;
+                bDlgLibLoaded = sal_True;
 
-            BOOL bLoaded = bModLibLoaded || bDlgLibLoaded;
+            sal_Bool bLoaded = bModLibLoaded || bDlgLibLoaded;
 
             // if only one of the libraries is loaded, load also the other
             if ( bLoaded )
@@ -284,7 +284,7 @@ void BasicTreeListBox::ImpCreateLibEntries( SvLBoxEntry* pDocumentRootEntry, con
             }
 
             // create tree list box entry
-            USHORT nId;
+            sal_uInt16 nId;
             if ( ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES ) )
                 nId = bLoaded ? RID_IMG_DLGLIB : RID_IMG_DLGLIBNOTLOADED;
             else
@@ -523,7 +523,7 @@ void BasicTreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubR
 
 SvLBoxEntry* BasicTreeListBox::ImpFindEntry( SvLBoxEntry* pParent, const String& rText )
 {
-    ULONG nRootPos = 0;
+    sal_uLong nRootPos = 0;
     SvLBoxEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
     while ( pEntry )
     {
@@ -620,7 +620,7 @@ SvLBoxEntry* BasicTreeListBox::CloneEntry( SvLBoxEntry* pSource )
 
 SvLBoxEntry* BasicTreeListBox::FindEntry( SvLBoxEntry* pParent, const String& rText, BasicEntryType eType )
 {
-    ULONG nRootPos = 0;
+    sal_uLong nRootPos = 0;
     SvLBoxEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
     while ( pEntry )
     {
@@ -637,7 +637,7 @@ SvLBoxEntry* BasicTreeListBox::FindEntry( SvLBoxEntry* pParent, const String& rT
 long BasicTreeListBox::ExpandingHdl()
 {
     // Expanding oder Collaps?
-    BOOL bOK = TRUE;
+    sal_Bool bOK = sal_True;
     if ( GetModel()->GetDepth( GetHdlEntry() ) == 1 )
     {
         SvLBoxEntry* pCurEntry = GetCurEntry();
@@ -671,9 +671,9 @@ long BasicTreeListBox::ExpandingHdl()
     return bOK;
 }
 
-BOOL BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
+sal_Bool BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
 {
-    BOOL bProtected = FALSE;
+    sal_Bool bProtected = sal_False;
     if ( pEntry && ( GetModel()->GetDepth( pEntry ) == 1 ) )
     {
         BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
@@ -688,7 +688,7 @@ BOOL BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
                 Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                 if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                 {
-                    bProtected = TRUE;
+                    bProtected = sal_True;
                 }
             }
         }
@@ -773,7 +773,7 @@ void BasicTreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Ima
 
         if ( sFactoryURL.getLength() )
         {
-            rImage = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ), FALSE );
+            rImage = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ), sal_False );
         }
         else
         {

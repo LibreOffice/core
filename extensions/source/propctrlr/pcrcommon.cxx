@@ -36,6 +36,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 /** === end UNO includes === **/
 #include <rtl/ustrbuf.hxx>
+#include <tools/urlobj.hxx>
 
 //............................................................................
 namespace pcr
@@ -48,20 +49,24 @@ namespace pcr
     //= HelpIdUrl
     //========================================================================
     //------------------------------------------------------------------------
-    SmartId HelpIdUrl::getHelpId( const ::rtl::OUString& _rHelpURL )
+    rtl::OString HelpIdUrl::getHelpId( const ::rtl::OUString& _rHelpURL )
     {
-        SmartId aSmartHelpId( _rHelpURL );
-        if ( 0 == _rHelpURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "HID:" ) ) )
-            aSmartHelpId = SmartId( _rHelpURL.copy( sizeof( "HID:" ) - 1 ).toInt32() );
-        return aSmartHelpId;
+        INetURLObject aHID( _rHelpURL );
+        if ( aHID.GetProtocol() == INET_PROT_HID )
+              return rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
+        else
+            return rtl::OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString HelpIdUrl::getHelpURL( sal_uInt32 _nHelpId )
+    ::rtl::OUString HelpIdUrl::getHelpURL( const rtl::OString& sHelpId )
     {
         ::rtl::OUStringBuffer aBuffer;
-        aBuffer.appendAscii( "HID:" );
-        aBuffer.append( (sal_Int32)_nHelpId );
+        ::rtl::OUString aTmp( sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8 );
+        INetURLObject aHID( aTmp );
+        if ( aHID.GetProtocol() == INET_PROT_NOT_VALID )
+            aBuffer.appendAscii( INET_HID_SCHEME );
+        aBuffer.append( aTmp.getStr() );
         return aBuffer.makeStringAndClear();
     }
 //............................................................................

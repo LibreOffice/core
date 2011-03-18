@@ -47,7 +47,6 @@ namespace offapp
         sal_Bool            bEnabled;
         sal_Int32           nTimeoutSeconds;
 
-        DriverPooling();
         DriverPooling( const String& _rName, sal_Bool _bEnabled, const sal_Int32 _nTimeout );
 
         sal_Bool operator == (const DriverPooling& _rR) const;

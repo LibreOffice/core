@@ -267,7 +267,7 @@ void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sI
 
     // fill the listboxes
     // method of field comparison
-    USHORT nResIds[] = {
+    sal_uInt16 nResIds[] = {
         RID_STR_SEARCH_ANYWHERE,
         RID_STR_SEARCH_BEGINNING,
         RID_STR_SEARCH_END,
@@ -278,7 +278,7 @@ void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sI
     m_lbPosition.SelectEntryPos(MATCHING_ANYWHERE);
 
     // the field listbox
-    for (USHORT i=0; i<strVisibleFields.GetTokenCount(';'); ++i)
+    for (sal_uInt16 i=0; i<strVisibleFields.GetTokenCount(';'); ++i)
         m_lbField.InsertEntry(strVisibleFields.GetToken(i, ';'));
 
 
@@ -420,7 +420,7 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
             aDlg->Execute();
 
 
-            INT32 nFlags = aDlg->GetTransliterationFlags();
+            sal_Int32 nFlags = aDlg->GetTransliterationFlags();
             m_pSearchEngine->SetTransliterationFlags(nFlags);
 
             m_cbCase.Check(m_pSearchEngine->GetCaseSensitive());

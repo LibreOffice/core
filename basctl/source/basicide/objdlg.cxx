@@ -97,13 +97,16 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
     aToolBox.SetSizePixel( aToolBox.CalcWindowSizePixel() );
     aToolBox.SetSelectHdl( LINK( this, ObjectCatalog, ToolBoxHdl ) );
 
-    aMacroTreeList.SetWindowBits( WB_HASLINES | WB_HASLINESATROOT |
-                                  WB_HASBUTTONS | WB_HASBUTTONSATROOT |
-                                  WB_HSCROLL );
+    aMacroTreeList.SetStyle( WB_BORDER | WB_TABSTOP |
+                             WB_HASLINES | WB_HASLINESATROOT |
+                             WB_HASBUTTONS | WB_HASBUTTONSATROOT |
+                             WB_HSCROLL );
 
     aMacroTreeList.SetSelectHdl( LINK( this, ObjectCatalog, TreeListHighlightHdl ) );
-
+    aMacroTreeList.SetAccessibleName(String(IDEResId(RID_STR_TLB_MACROS)));
     aMacroTreeList.ScanAllEntries();
+    aMacroTreeList.GrabFocus();
+
     CheckButtons();
 
     Point aPos = IDE_DLL()->GetExtraData()->GetObjectCatalogPos();
@@ -140,10 +143,10 @@ void ObjectCatalog::Move()
     IDE_DLL()->GetExtraData()->SetObjectCatalogPos( GetPosPixel() );
 }
 
-BOOL ObjectCatalog::Close()
+sal_Bool ObjectCatalog::Close()
 {
     aCancelHdl.Call( this );
-    return TRUE;
+    return sal_True;
 }
 
 void ObjectCatalog::Resize()
@@ -178,7 +181,7 @@ void ObjectCatalog::Resize()
 
 IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
 {
-    USHORT nCurItem = pToolBox->GetCurItemId();
+    sal_uInt16 nCurItem = pToolBox->GetCurItemId();
     switch ( nCurItem )
     {
         case TBITEM_SHOW:
@@ -225,9 +228,9 @@ void ObjectCatalog::CheckButtons()
     SvLBoxEntry* pCurEntry = aMacroTreeList.GetCurEntry();
     BasicEntryType eType = pCurEntry ? ((BasicEntry*)pCurEntry->GetUserData())->GetType() : OBJ_TYPE_UNKNOWN;
     if ( eType == OBJ_TYPE_DIALOG || eType == OBJ_TYPE_MODULE || eType == OBJ_TYPE_METHOD )
-        aToolBox.EnableItem( TBITEM_SHOW, TRUE );
+        aToolBox.EnableItem( TBITEM_SHOW, sal_True );
     else
-        aToolBox.EnableItem( TBITEM_SHOW, FALSE );
+        aToolBox.EnableItem( TBITEM_SHOW, sal_False );
 }
 
 

@@ -233,6 +233,9 @@ namespace dbp
         m_aExistingRadios.EnableMultiSelection(sal_True);
 
         getDialog()->defaultButton(&m_aMoveRight);
+
+        m_aExistingRadios.SetAccessibleRelationMemberOf(&m_aExistingRadios);
+        m_aExistingRadios.SetAccessibleRelationLabeledBy(&m_aExistingRadiosLabel);
     }
 
     //---------------------------------------------------------------------
@@ -363,6 +366,8 @@ namespace dbp
 
         announceControls(m_aDefSelYes, m_aDefSelNo, m_aDefSelection);
         m_aDefSelection.SetDropDownLineCount(10);
+        m_aDefSelection.SetAccessibleRelationLabeledBy( &m_aDefSelYes );
+        m_aDefSelection.SetAccessibleRelationMemberOf(&m_aDefaultSelectionLabel);
     }
 
     //---------------------------------------------------------------------
@@ -413,6 +418,9 @@ namespace dbp
         FreeResource();
 
         m_aOptions.SetSelectHdl(LINK(this, OOptionValuesPage, OnOptionSelected));
+
+        m_aOptions.SetAccessibleRelationMemberOf(&m_aOptions);
+        m_aOptions.SetAccessibleRelationLabeledBy(&m_aOptionsLabel);
     }
 
     //---------------------------------------------------------------------

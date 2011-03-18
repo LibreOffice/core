@@ -333,8 +333,8 @@ namespace pcr
 
             implGetAvailableDataTypeNames( aListEntries );
 
-            aDescriptor.PrimaryButtonId = UID_PROP_ADD_DATA_TYPE;
-            aDescriptor.SecondaryButtonId = UID_PROP_REMOVE_DATA_TYPE;
+            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_ADD_DATA_TYPE);
+            aDescriptor.SecondaryButtonId = rtl::OUString::createFromAscii(UID_PROP_REMOVE_DATA_TYPE);;
             aDescriptor.HasPrimaryButton = aDescriptor.HasSecondaryButton = sal_True;
             aDescriptor.PrimaryButtonImageURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/extensions/res/buttonplus.png" ) );
             aDescriptor.SecondaryButtonImageURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/extensions/res/buttonminus.png" ) );

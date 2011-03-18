@@ -82,7 +82,7 @@ namespace accessibility
     {
         if ( isAlive() )
         {
-            ULONG nEventId = rVclWindowEvent.GetId();
+            sal_uLong nEventId = rVclWindowEvent.GetId();
             switch ( nEventId )
             {
                 case  VCLEVENT_OBJECT_DYING :
@@ -117,7 +117,7 @@ namespace accessibility
                         if ( pEntry )
                         {
                             sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
-                            USHORT nCol = m_pTabListBox->GetCurrColumn();
+                            sal_uInt16 nCol = m_pTabListBox->GetCurrColumn();
                             Reference< XAccessible > xChild =
                                 m_pTabListBox->CreateAccessibleCell( nRow, nCol );
                             uno::Any aOldValue, aNewValue;
@@ -157,7 +157,7 @@ namespace accessibility
                         if ( pEntry )
                         {
                             sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
-                            USHORT nCol = m_pTabListBox->GetCurrColumn();
+                            sal_uInt16 nCol = m_pTabListBox->GetCurrColumn();
                             TriState eState = STATE_DONTKNOW;
                             if ( m_pTabListBox->IsCellCheckBox( nRow, nCol, eState ) )
                             {
@@ -182,7 +182,7 @@ namespace accessibility
                         if ( pEntry )
                         {
                             sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
-                            USHORT nCol = pData->m_nColumn;
+                            sal_uInt16 nCol = pData->m_nColumn;
                             Reference< XAccessible > xChild =
                                 m_pTabListBox->CreateAccessibleCell( nRow, nCol );
                             uno::Any aOldValue, aNewValue;

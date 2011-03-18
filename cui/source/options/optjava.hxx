@@ -48,27 +48,6 @@ typedef struct _JavaInfo JavaInfo;
 class   SvxJavaParameterDlg;
 class   SvxJavaClassPathDlg;
 
-// class SvxJavaTable ----------------------------------------------------
-
-class SvxJavaTable : public SvxSimpleTable
-{
-    using SvxSimpleTable::SetTabs;
-private:
-    Point               m_aCurMousePoint;
-
-protected:
-    virtual void        SetTabs();
-    virtual void        MouseButtonUp( const MouseEvent& _rMEvt );
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-
-public:
-    SvxJavaTable( Window* _pParent, const ResId& _rId );
-    ~SvxJavaTable();
-
-
-    inline Point        GetCurMousePoint() { return m_aCurMousePoint; }
-};
-
 // class SvxJavaOptionsPage ----------------------------------------------
 
 class SvxJavaOptionsPage : public SfxTabPage
@@ -126,7 +105,7 @@ public:
 
     static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rSet );
 
-    virtual BOOL            FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool            FillItemSet( SfxItemSet& rSet );
     virtual void            Reset( const SfxItemSet& rSet );
     virtual void            FillUserData();
 };

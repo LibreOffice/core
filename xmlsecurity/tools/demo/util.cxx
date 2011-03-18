@@ -93,9 +93,9 @@ cssu::Reference< cssl::XMultiServiceFactory > CreateDemoServiceFactory()
 {
     SvFileStream* pStream = new SvFileStream( rStreamName, STREAM_READ );
     pStream->Seek( STREAM_SEEK_TO_END );
-    ULONG nBytes = pStream->Tell();
+    sal_uLong nBytes = pStream->Tell();
     pStream->Seek( STREAM_SEEK_TO_BEGIN );
-    SvLockBytesRef xLockBytes = new SvLockBytes( pStream, TRUE );
+    SvLockBytesRef xLockBytes = new SvLockBytes( pStream, sal_True );
     uno::Reference< io::XInputStream > xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
 
     return xInputStream;
@@ -105,7 +105,7 @@ cssu::Reference< cssl::XMultiServiceFactory > CreateDemoServiceFactory()
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > OpenOutputStream( const ::rtl::OUString& rStreamName )
 {
     SvFileStream* pStream = new SvFileStream( rStreamName, STREAM_WRITE );
-    SvLockBytesRef xLockBytes = new SvLockBytes( pStream, TRUE );
+    SvLockBytesRef xLockBytes = new SvLockBytes( pStream, sal_True );
     uno::Reference< io::XOutputStream > xOutputStream = new utl::OOutputStreamHelper( xLockBytes );
 
     return xOutputStream;

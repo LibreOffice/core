@@ -32,12 +32,14 @@ import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XListBox;
 import com.sun.star.uno.Exception;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.db.RelationController;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.WizardDialog;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.DBLimitedFieldSelection;
+import com.sun.star.wizards.common.PropertyNames;
 
 public class FieldLinker extends DBLimitedFieldSelection
 {
@@ -86,13 +88,13 @@ public class FieldLinker extends DBLimitedFieldSelection
                             SOFIRSTLINKLST, SOSECLINKLST, SOTHIRDLINKLST, SOFOURTHLINKLST
                         };
             }
-            sSlaveHidString = "HID:" + Integer.toString(FirstHelpIndex + (i * 2));
-            sMasterHidString = "HID:" + Integer.toString(FirstHelpIndex + (i * 2) + 1);
+            sSlaveHidString = HelpIds.getHelpIdString(FirstHelpIndex + (i * 2));
+            sMasterHidString = HelpIds.getHelpIdString(FirstHelpIndex + (i * 2) + 1);
             boolean bDoEnable = (i < 2);
             lblSlaveFields[i] = CurUnoDialog.insertLabel("lblSlaveFieldLink" + new Integer(i + 1).toString(),
                     new String[]
                     {
-                        "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                        PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -102,15 +104,15 @@ public class FieldLinker extends DBLimitedFieldSelection
                     new String[]
                     {
                         "Dropdown",
-                        "Enabled",
-                        "Height",
-                        "HelpURL",
+                        PropertyNames.PROPERTY_ENABLED,
+                        PropertyNames.PROPERTY_HEIGHT,
+                        PropertyNames.PROPERTY_HELPURL,
                         "LineCount",
-                        "PositionX",
-                        "PositionY",
-                        "Step",
-                        "TabIndex",
-                        "Width"
+                        PropertyNames.PROPERTY_POSITION_X,
+                        PropertyNames.PROPERTY_POSITION_Y,
+                        PropertyNames.PROPERTY_STEP,
+                        PropertyNames.PROPERTY_TABINDEX,
+                        PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -129,7 +131,7 @@ public class FieldLinker extends DBLimitedFieldSelection
             lblMasterFields[i] = CurUnoDialog.insertLabel("lblMasterFieldLink" + new Integer(i + 1).toString(),
                     new String[]
                     {
-                        "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                        PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -140,15 +142,15 @@ public class FieldLinker extends DBLimitedFieldSelection
                     new String[]
                     {
                         "Dropdown",
-                        "Enabled",
-                        "Height",
-                        "HelpURL",
+                        PropertyNames.PROPERTY_ENABLED,
+                        PropertyNames.PROPERTY_HEIGHT,
+                        PropertyNames.PROPERTY_HELPURL,
                         "LineCount",
-                        "PositionX",
-                        "PositionY",
-                        "Step",
-                        "TabIndex",
-                        "Width"
+                        PropertyNames.PROPERTY_POSITION_X,
+                        PropertyNames.PROPERTY_POSITION_Y,
+                        PropertyNames.PROPERTY_STEP,
+                        PropertyNames.PROPERTY_TABINDEX,
+                        PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -204,10 +206,10 @@ public class FieldLinker extends DBLimitedFieldSelection
     {
         if (i < rowcount)
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lblSlaveFields[i]), "Enabled", new Boolean(bDoEnable));
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[i]), "Enabled", new Boolean(bDoEnable));
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lblMasterFields[i]), "Enabled", new Boolean(bDoEnable));
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[i]), "Enabled", new Boolean(bDoEnable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lblSlaveFields[i]), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[i]), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lblMasterFields[i]), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[i]), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
             if (bDoEnable == false)
             {
                 Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[i]), "SelectedItems", new short[] { 0 });

@@ -51,7 +51,7 @@
 #endif
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase7.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
@@ -60,6 +60,7 @@
 
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <com/sun/star/script/XDefaultMethod.hpp>
+#include <com/sun/star/script/XDirectInvocation.hpp>
 
 #include <typelib/typedescription.hxx>
 #include "unoconversionutilities.hxx"
@@ -83,7 +84,7 @@ typedef boost::unordered_multimap<OUString, unsigned int, hashOUString_Impl, equ
 // This class wraps an IDispatch and maps XInvocation calls to IDispatch calls on the wrapped object.
 // If m_TypeDescription is set then this class represents an UNO interface implemented in a COM component.
 // The interface is not a real interface in terms of an abstract class but is realized through IDispatch.
-class IUnknownWrapper_Impl : public WeakImplHelper6<XAutomationInvocation, XBridgeSupplier2, XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod>,
+class IUnknownWrapper_Impl : public WeakImplHelper7< XInvocation, XBridgeSupplier2, XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod, XDirectInvocation >,
 
                              public UnoConversionUtilities<IUnknownWrapper_Impl>
 
@@ -132,13 +133,29 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException);
+
+    // XDefaultProperty
     virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (::com::sun::star::uno::RuntimeException) { return m_sDefaultMember; }
-protected:
+
+    // XDefaultMethod
     virtual ::rtl::OUString SAL_CALL getDefaultMethodName(  ) throw (::com::sun::star::uno::RuntimeException) { return m_sDefaultMember; }
 
     virtual ::com::sun::star::uno::Any SAL_CALL invokeGetProperty( const ::rtl::OUString& aFunctionName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams, ::com::sun::star::uno::Sequence< ::sal_Int16 >& aOutParamIndex, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL invokePutProperty( const ::rtl::OUString& aFunctionName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams, ::com::sun::star::uno::Sequence< ::sal_Int16 >& aOutParamIndex, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
 
+    // XDirectInvocation
+    virtual ::com::sun::star::uno::Any SAL_CALL directInvoke( const ::rtl::OUString& aName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasMember( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+
+
+    Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
+                            const OUString& sFuncName,
+                            const Sequence< Any >& Params,
+                            Sequence< sal_Int16 >& OutParamIndex,
+                            Sequence< Any >& OutParam);
+
+
+protected:
     // ----------------------------------------------------------------------------
     virtual Any invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                                        const Sequence< Any >& Params,
@@ -149,12 +166,6 @@ protected:
                                        const Sequence< Any >& Params,
                                        Sequence< sal_Int16 >& OutParamIndex,
                                        Sequence< Any >& OutParam);
-
-  Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
-                            const OUString& sFuncName,
-                            const Sequence< Any >& Params,
-                            Sequence< sal_Int16 >& OutParamIndex,
-                            Sequence< Any >& OutParam);
 
 //    virtual void setValueWithDispId(DISPID dispID, const Any& Value);
 

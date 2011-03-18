@@ -51,7 +51,7 @@ class SvxJSearchOptionsPage;
 
 class SvxJSearchOptionsDialog : public SfxSingleTabDialog
 {
-    INT32                   nInitialTlFlags;
+    sal_Int32                   nInitialTlFlags;
     SvxJSearchOptionsPage  *pPage;
 
     // disallow copy-constructor and assignment-operator for now
@@ -61,14 +61,13 @@ class SvxJSearchOptionsDialog : public SfxSingleTabDialog
 public:
     SvxJSearchOptionsDialog( Window *pParent,
                             const SfxItemSet& rOptionsSet,
-                            INT32 nInitialFlags  );
+                            sal_Int32 nInitialFlags  );
     virtual ~SvxJSearchOptionsDialog();
 
     // Window
     virtual void    Activate();
 
-    INT32           GetTransliterationFlags() const;
-    void            SetTransliterationFlags( INT32 nSettings );
+    sal_Int32           GetTransliterationFlags() const;
 };
 
 #endif

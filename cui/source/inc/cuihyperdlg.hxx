@@ -55,9 +55,9 @@ private :
     SfxStatusForwarder aRdOnlyForwarder;
 
 public :
-    SvxHlinkCtrl( USHORT nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg);
+    SvxHlinkCtrl( sal_uInt16 nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg);
 
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                 const SfxPoolItem* pState );
 };
 
@@ -92,19 +92,19 @@ private:
     DECL_LINK (ClickCloseHdl_Impl, void * );
 
 protected:
-    virtual BOOL            Close();
+    virtual sal_Bool            Close();
     virtual void            Move();
 
 public:
     SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings );
     ~SvxHpLinkDlg ();
 
-    virtual void            PageCreated( USHORT nId, IconChoicePage& rPage );
+    virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage );
 
-    USHORT                  SetPage( SvxHyperlinkItem* pItem );
+    sal_uInt16                  SetPage( SvxHyperlinkItem* pItem );
     void                    EnableInetBrowse( sal_Bool bEnable = sal_True );
     void                    SetReadOnlyMode( sal_Bool bReadOnly = sal_False );
-    inline BOOL     IsHTMLDoc() const { return mbIsHTMLDoc; }
+    inline sal_Bool     IsHTMLDoc() const { return mbIsHTMLDoc; }
 
     inline SfxBindings*     GetBindings() const { return mpBindings; };
     inline SfxDispatcher*   GetDispatcher() const { return mpBindings->GetDispatcher(); }

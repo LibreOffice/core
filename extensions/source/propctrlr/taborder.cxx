@@ -278,13 +278,13 @@ namespace pcr
     //------------------------------------------------------------------------
     IMPL_LINK( TabOrderDialog, OKClickHdl, Button*, /*pButton*/ )
     {
-        ULONG nEntryCount = aLB_Controls.GetEntryCount();
+        sal_uLong nEntryCount = aLB_Controls.GetEntryCount();
         Sequence< Reference< XControlModel > > aSortedControlModelSeq( nEntryCount );
         Sequence< Reference< XControlModel > > aControlModels( m_xTempModel->getControlModels());
         Reference< XControlModel > * pSortedControlModels = aSortedControlModelSeq.getArray();
         const Reference< XControlModel > * pControlModels = aControlModels.getConstArray();
 
-        for (ULONG i=0; i < nEntryCount; i++)
+        for (sal_uLong i=0; i < nEntryCount; i++)
         {
             SvLBoxEntry* pEntry = aLB_Controls.GetEntry(i);
 
@@ -350,13 +350,13 @@ namespace pcr
             {
                 SvLBoxEntry* pFirstSelected = FirstSelected();
                 if( !pFirstSelected ) return;
-                ULONG nFirstSelPos = GetModel()->GetAbsPos( pFirstSelected );
+                sal_uLong nFirstSelPos = GetModel()->GetAbsPos( pFirstSelected );
                 if( nFirstSelPos == 0 ) return;
 
                 SvLBoxEntry* pSelEntry = pFirstSelected;
                 while( pSelEntry )
                 {
-                    ULONG nSelEntryPos = GetModel()->GetAbsPos( pSelEntry );
+                    sal_uLong nSelEntryPos = GetModel()->GetAbsPos( pSelEntry );
                     SvLBoxEntry* pSelEntryPrev = GetEntry( nSelEntryPos-1 );
                     aSelEntryPrevText = GetEntryText( pSelEntryPrev );
                     aImage = GetExpandedEntryBmp(pSelEntryPrev);
@@ -373,12 +373,12 @@ namespace pcr
             {
                 SvLBoxEntry* pLastSelected = LastSelected();
                 if( !pLastSelected ) return;
-                ULONG nLastSelPos = GetModel()->GetAbsPos( pLastSelected );
+                sal_uLong nLastSelPos = GetModel()->GetAbsPos( pLastSelected );
 
                 if( (nLastSelPos + nRelPos - i) > (GetEntryCount()-1) ) return;
 
 #if OSL_DEBUG_LEVEL > 0
-                ULONG nSelCount = GetSelectionCount();
+                sal_uLong nSelCount = GetSelectionCount();
                 (void)nSelCount;
 #endif
 
@@ -386,7 +386,7 @@ namespace pcr
                 SvLBoxEntry* pSelEntry = pLastSelected;
                 while( pSelEntry )
                 {
-                    ULONG nSelEntryPos = GetModel()->GetAbsPos( pSelEntry );
+                    sal_uLong nSelEntryPos = GetModel()->GetAbsPos( pSelEntry );
                     SvLBoxEntry* pSelEntryNext = GetEntry( nSelEntryPos+1 );
                     void* pData = pSelEntryNext->GetUserData();
 

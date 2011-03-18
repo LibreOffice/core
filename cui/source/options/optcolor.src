@@ -52,6 +52,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
     };
     ListBox LB_COLORSCHEME
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_COLORCONFIG:LB_COLORSCHEME";
         Pos = MAP_APPFONT ( 65 , 14 ) ;
         Size = MAP_APPFONT ( 77 , 58 ) ;
         Border = TRUE;
@@ -60,12 +61,14 @@ TabPage RID_SVXPAGE_COLORCONFIG
     };
     PushButton PB_SAVESCHEME
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_COLORCONFIG:PB_SAVESCHEME";
         Pos = MAP_APPFONT ( 145, 13 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Save...";
     };
     PushButton PB_DELETESCHEME
     {
+        HelpID = "cui:PushButton:RID_SVXPAGE_COLORCONFIG:PB_DELETESCHEME";
         Pos = MAP_APPFONT ( 198 , 13 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Delete";
@@ -150,6 +153,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             CheckBox CB_DOCBOUND
             {
+                HelpID = "cui:CheckBox:RID_SVXPAGE_COLORCONFIG:CB_DOCBOUND";
                 CB_POS_SIZE( 2 );
                 Text [ en-US ] = "Text boundaries";
             };
@@ -164,6 +168,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             CheckBox CB_OBJECTBOUNDARIES
             {
+                HelpID = "cui:CheckBox:RID_SVXPAGE_COLORCONFIG:CB_OBJECTBOUNDARIES";
                 CB_POS_SIZE( 4 );
                 Text [ en-US ] = "Object boundaries";
             };
@@ -171,6 +176,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             CheckBox CB_TABLEBOUNDARIES
             {
+                HelpID = "cui:CheckBox:RID_SVXPAGE_COLORCONFIG:CB_TABLEBOUNDARIES";
                 CB_POS_SIZE( 5 );
                 Text [ en-US ] = "Table boundaries";
             };
@@ -185,6 +191,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             CheckBox CB_LINKS
             {
+                HelpID = "cui:CheckBox:RID_SVXPAGE_COLORCONFIG:CB_LINKS";
                 CB_POS_SIZE( 7 );
                 Text [ en-US ] = "Unvisited links";
             };
@@ -192,6 +199,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             CheckBox CB_LINKSVISITED
             {
+                HelpID = "cui:CheckBox:RID_SVXPAGE_COLORCONFIG:CB_LINKSVISITED";
                 CB_POS_SIZE( 8 );
                 Text [ en-US ] = "Visited links";
             };
@@ -233,6 +241,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             CheckBox CB_WRITERFIELDSHADINGS
             {
+                HelpID = "cui:CheckBox:RID_SVXPAGE_COLORCONFIG:CB_WRITERFIELDSHADINGS";
                 CB_POS_SIZE( 14 );
                 Text [ en-US ] = "Field shadings";
             };
@@ -240,6 +249,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             CheckBox CB_WRITERIDXSHADINGS
             {
+                HelpID = "cui:CheckBox:RID_SVXPAGE_COLORCONFIG:CB_WRITERIDXSHADINGS";
                 CB_POS_SIZE( 15 );
                 Text [ en-US ] = "Index and table shadings";
             };
@@ -255,6 +265,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             CheckBox CB_WRITERSECTIONBOUNDARIES
             {
+                HelpID = "cui:CheckBox:RID_SVXPAGE_COLORCONFIG:CB_WRITERSECTIONBOUNDARIES";
                 CB_POS_SIZE( 17 );
                 Text [ en-US ] = "Section boundaries";
             };

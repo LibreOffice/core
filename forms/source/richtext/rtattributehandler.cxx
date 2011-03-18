@@ -34,7 +34,7 @@
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
 
@@ -121,7 +121,7 @@ namespace frm
     {
         SvxScriptSetItem aSetItem( (WhichId)getAttributeId(), *_rAttribs.GetPool() );
         aSetItem.PutItemForScriptType( _nForScriptType, _rItem );
-        _rAttribs.Put( aSetItem.GetItemSet(), FALSE );
+        _rAttribs.Put( aSetItem.GetItemSet(), sal_False );
     }
 
     //--------------------------------------------------------------------
@@ -275,7 +275,7 @@ namespace frm
     AttributeCheckState LineSpacingHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
         OSL_ENSURE( _rItem.ISA( SvxLineSpacingItem ), "LineSpacingHandler::implGetCheckState: invalid pool item!" );
-        USHORT nLineSpace = static_cast< const SvxLineSpacingItem& >( _rItem ).GetPropLineSpace();
+        sal_uInt16 nLineSpace = static_cast< const SvxLineSpacingItem& >( _rItem ).GetPropLineSpace();
         return ( nLineSpace == m_nLineSpace ) ? eChecked : eUnchecked;
     }
 
@@ -290,7 +290,7 @@ namespace frm
         if ( 100 == m_nLineSpace )
             aLineSpacing.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
         else
-            aLineSpacing.SetPropLineSpace( (BYTE)m_nLineSpace );
+            aLineSpacing.SetPropLineSpace( (sal_uInt8)m_nLineSpace );
 
         _rNewAttribs.Put( aLineSpacing );
     }
@@ -398,7 +398,7 @@ namespace frm
         if ( pFontHeightItem )
         {
             // by definition, the item should have the unit twip
-            ULONG nHeight = pFontHeightItem->GetHeight();
+            sal_uLong nHeight = pFontHeightItem->GetHeight();
             if ( _rAttribs.GetPool()->GetMetric( getWhich() ) != SFX_MAPUNIT_TWIP )
             {
                 nHeight = OutputDevice::LogicToLogic(
@@ -426,7 +426,7 @@ namespace frm
         {
             // corect measurement units
             SfxMapUnit eItemMapUnit = pFontHeightItem->GetPropUnit(); (void)eItemMapUnit;
-            ULONG nHeight = pFontHeightItem->GetHeight();
+            sal_uLong nHeight = pFontHeightItem->GetHeight();
             if ( _rNewAttribs.GetPool()->GetMetric( getWhich() ) != SFX_MAPUNIT_TWIP )
             {
                 nHeight = OutputDevice::LogicToLogic(
@@ -487,7 +487,7 @@ namespace frm
         // then we toggle the adjustment, too
         SvxAdjust eCurrentAdjustment = SVX_ADJUST_LEFT;
         const SfxPoolItem* pCurrentAdjustment = NULL;
-        if ( SFX_ITEM_ON == _rCurrentAttribs.GetItemState( EE_PARA_JUST, TRUE, &pCurrentAdjustment ) )
+        if ( SFX_ITEM_ON == _rCurrentAttribs.GetItemState( EE_PARA_JUST, sal_True, &pCurrentAdjustment ) )
             eCurrentAdjustment = static_cast< const SvxAdjustItem* >( pCurrentAdjustment )->GetAdjust();
 
         if ( eCurrentAdjustment == m_eOppositeDefaultAdjustment )

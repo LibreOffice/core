@@ -44,13 +44,13 @@ class FontList;
 
 // -----------------------------------------------------------------------
 
-#define DISABLE_CASEMAP             ((USHORT)0x0001)
-#define DISABLE_WORDLINE            ((USHORT)0x0002)
-#define DISABLE_BLINK               ((USHORT)0x0004)
-#define DISABLE_UNDERLINE_COLOR     ((USHORT)0x0008)
+#define DISABLE_CASEMAP             ((sal_uInt16)0x0001)
+#define DISABLE_WORDLINE            ((sal_uInt16)0x0002)
+#define DISABLE_BLINK               ((sal_uInt16)0x0004)
+#define DISABLE_UNDERLINE_COLOR     ((sal_uInt16)0x0008)
 
-#define DISABLE_LANGUAGE            ((USHORT)0x0010)
-#define DISABLE_HIDE_LANGUAGE       ((USHORT)0x0020)
+#define DISABLE_LANGUAGE            ((sal_uInt16)0x0010)
+#define DISABLE_HIDE_LANGUAGE       ((sal_uInt16)0x0020)
 
 // class SvxCharBasePage -------------------------------------------------
 
@@ -60,18 +60,18 @@ protected:
     SvxFontPrevWindow   m_aPreviewWin;
     FixedInfo           m_aFontTypeFT;
 
-    BOOL                m_bPreviewBackgroundToCharacter;
+    sal_Bool                m_bPreviewBackgroundToCharacter;
 
                         SvxCharBasePage( Window* pParent, const ResId& rResIdTabPage, const SfxItemSet&,
-                                            USHORT nResIdPrewievWin, USHORT nResIdFontTypeFT );
+                                            sal_uInt16 nResIdPrewievWin, sal_uInt16 nResIdFontTypeFT );
     virtual             ~SvxCharBasePage();
 
-    void                SetPrevFontSize( const SfxItemSet& rSet, USHORT nSlot, SvxFont& rFont );
-    void                SetPrevFont( const SfxItemSet& rSet, USHORT nSlot, SvxFont& rFont );
-    void                SetPrevFontStyle( const SfxItemSet& rSet, USHORT nSlotPosture, USHORT nSlotWeight, SvxFont& rFont ); // posture/weight
+    void                SetPrevFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
+    void                SetPrevFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );
+    void                SetPrevFontStyle( const SfxItemSet& rSet, sal_uInt16 nSlotPosture, sal_uInt16 nSlotWeight, SvxFont& rFont ); // posture/weight
     void                SetPrevFontWidthScale( const SfxItemSet& rSet );
 
-    void                SetPrevFontEscapement( BYTE nProp, BYTE nEscProp, short nEsc );
+    void                SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
 
     inline SvxFont&     GetPreviewFont();
     inline SvxFont&     GetPreviewCJKFont();
@@ -153,9 +153,8 @@ private:
     };
 
     void                Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp );
-    BOOL                FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
+    sal_Bool                FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
     void                ResetColor_Impl( const SfxItemSet& rSet );
-    BOOL                FillItemSetColor_Impl( SfxItemSet& rSet );
 
     DECL_LINK(          UpdateHdl_Impl, Timer* );
     DECL_LINK(          FontModifyHdl_Impl, void* );
@@ -172,10 +171,10 @@ public:
                         ~SvxCharNamePage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
     virtual void        Reset( const SfxItemSet& rSet );
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
 
     void                SetFontList( const SvxFontListItem& rItem );
     void                EnableRelativeMode();
@@ -183,7 +182,7 @@ public:
     //                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
 
-    void                DisableControls( USHORT nDisable );
+    void                DisableControls( sal_uInt16 nDisable );
     virtual void        PageCreated (SfxAllItemSet aSet);
 };
 
@@ -234,7 +233,7 @@ private:
     FixedText           m_aPositionFT;
     ListBox             m_aPositionLB;
 
-    USHORT              m_nHtmlMode;
+    sal_uInt16              m_nHtmlMode;
 
     String              m_aTransparentColorName;
 
@@ -244,7 +243,7 @@ private:
     void                UpdatePreview_Impl();
     void                SetCaseMap_Impl( SvxCaseMap eCaseMap );
     void                ResetColor_Impl( const SfxItemSet& rSet );
-    BOOL                FillItemSetColor_Impl( SfxItemSet& rSet );
+    sal_Bool                FillItemSetColor_Impl( SfxItemSet& rSet );
 
     DECL_LINK(          SelectHdl_Impl, ListBox* );
     DECL_LINK(          CbClickHdl_Impl, CheckBox* );
@@ -259,12 +258,12 @@ public:
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
     virtual void        Reset( const SfxItemSet& rSet );
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
 
-    void                DisableControls( USHORT nDisable );
+    void                DisableControls( sal_uInt16 nDisable );
     void                EnableFlash();
     //                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
@@ -304,17 +303,17 @@ private:
     short               m_nSuperEsc;
     short               m_nSubEsc;
 
-    UINT16              m_nScaleWidthItemSetVal;
-    UINT16              m_nScaleWidthInitialVal;
+    sal_uInt16              m_nScaleWidthItemSetVal;
+    sal_uInt16              m_nScaleWidthInitialVal;
 
-    BYTE                m_nSuperProp;
-    BYTE                m_nSubProp;
+    sal_uInt8                m_nSuperProp;
+    sal_uInt8                m_nSubProp;
 
                         SvxCharPositionPage( Window* pParent, const SfxItemSet& rSet );
 
     void                Initialize();
-    void                UpdatePreview_Impl( BYTE nProp, BYTE nEscProp, short nEsc );
-    void                SetEscapement_Impl( USHORT nEsc );
+    void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
+    void                SetEscapement_Impl( sal_uInt16 nEsc );
 
     DECL_LINK(          PositionHdl_Impl, RadioButton* );
     DECL_LINK(          RotationHdl_Impl, RadioButton* );
@@ -336,10 +335,10 @@ public:
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
     virtual void        Reset( const SfxItemSet& rSet );
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        FillUserData();
     //                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
@@ -360,15 +359,15 @@ private:
     FixedText           m_aEndBracketFT;
     ListBox             m_aEndBracketLB;
 
-    USHORT              m_nStartBracketPosition;
-    USHORT              m_nEndBracketPosition;
+    sal_uInt16              m_nStartBracketPosition;
+    sal_uInt16              m_nEndBracketPosition;
 
                         SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rSet );
 
     void                UpdatePreview_Impl();
     void                Initialize();
     void                SelectCharacter( ListBox* pBox );
-    void                SetBracket( sal_Unicode cBracket, BOOL bStart );
+    void                SetBracket( sal_Unicode cBracket, sal_Bool bStart );
 
     DECL_LINK(          TwoLinesHdl_Impl, CheckBox* );
     DECL_LINK(          CharacterMapHdl_Impl, ListBox* );
@@ -382,10 +381,10 @@ public:
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
     virtual void        Reset( const SfxItemSet& rSet );
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     //                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
     virtual void        PageCreated (SfxAllItemSet aSet);

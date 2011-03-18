@@ -99,3 +99,11 @@ SHL1STDLIBS+=$(SHL1OWNLIBS)
 
 
 
+
+ALLTAR : $(MISC)/pl.component
+
+$(MISC)/pl.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        pl.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt pl.component

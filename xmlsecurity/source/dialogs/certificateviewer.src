@@ -197,6 +197,7 @@ TabPage RID_XMLSECTP_DETAILS
     };
     MultiLineEdit ML_ELEMENT
     {
+        HelpID = "xmlsecurity:MultiLineEdit:RID_XMLSECTP_DETAILS:ML_ELEMENT";
         Pos = MAP_APPFONT( CV_COL_0, CV_ROW_2 );
         Size = MAP_APPFONT( CV_CONT_WIDTH, CV_ROW_3-CV_ROW_2 );
         ReadOnly = TRUE;
@@ -284,6 +285,7 @@ TabPage RID_XMLSECTP_CERTPATH
     };
     PushButton BTN_VIEWCERT
     {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECTP_CERTPATH:BTN_VIEWCERT";
         Pos = MAP_APPFONT( CV_COL_1-(CV_COL_B-CV_COL_A), CVP_ROW_2 );
         Size = MAP_APPFONT( CV_COL_B-CV_COL_A, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "View Certificate...";
@@ -296,6 +298,7 @@ TabPage RID_XMLSECTP_CERTPATH
     };
     MultiLineEdit ML_CERTSTATUS
     {
+        HelpID = "xmlsecurity:MultiLineEdit:RID_XMLSECTP_CERTPATH:ML_CERTSTATUS";
         Pos = MAP_APPFONT( CV_COL_0, CVP_ROW_4 );
         Size = MAP_APPFONT( CV_CONT_WIDTH, REST_HEIGHT/3 );
         ReadOnly = TRUE;

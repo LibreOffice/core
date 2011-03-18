@@ -49,6 +49,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_HOR_NONE
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_HOR_NONE";
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
         Text [ en-US ] = "~None" ;
@@ -56,6 +57,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_HOR_LEFT
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_HOR_LEFT";
         Pos = MAP_APPFONT ( 56 , 26  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text [ en-US ] = "~Left" ;
@@ -63,6 +65,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_HOR_CENTER
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_HOR_CENTER";
         Pos = MAP_APPFONT ( 105 , 26  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text [ en-US ] = "~Center" ;
@@ -70,6 +73,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_HOR_DISTANCE
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_HOR_DISTANCE";
         Pos = MAP_APPFONT ( 154 , 26  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text [ en-US ] = "~Spacing" ;
@@ -77,6 +81,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_HOR_RIGHT
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_HOR_RIGHT";
         Pos = MAP_APPFONT ( 203 , 26  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text [ en-US ] = "~Right" ;
@@ -131,6 +136,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_VER_NONE
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_VER_NONE";
         Pos = MAP_APPFONT ( 12 , 53  ) ;
         Size = MAP_APPFONT ( 46 , 10 ) ;
         Text [ en-US ] = "N~one" ;
@@ -138,6 +144,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_VER_TOP
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_VER_TOP";
         Pos = MAP_APPFONT ( 56 , 65  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text [ en-US ] = "~Top" ;
@@ -145,6 +152,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_VER_CENTER
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_VER_CENTER";
         Pos = MAP_APPFONT ( 105 , 65  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text [ en-US ] = "C~enter" ;
@@ -152,6 +160,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_VER_DISTANCE
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_VER_DISTANCE";
         Pos = MAP_APPFONT ( 154 , 65  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text [ en-US ] = "S~pacing" ;
@@ -159,6 +168,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 
     RadioButton BTN_VER_BOTTOM
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_DISTRIBUTE:BTN_VER_BOTTOM";
         Pos = MAP_APPFONT ( 203 , 65  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text [ en-US ] = "~Bottom" ;

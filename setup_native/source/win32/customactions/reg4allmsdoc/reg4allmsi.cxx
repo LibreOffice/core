@@ -117,13 +117,42 @@ static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
             {   // We will replace registration for word pad
                 bRet = true;
             }
-            if ( strncmp( szBuffer, "OpenOffice.org.", 15 ) == 0 )
+            else if ( strncmp( szBuffer, "OpenOffice.org.", 15 ) == 0 )
             {   // We will replace registration for our own types, too
                 bRet = true;
             }
-            if ( strncmp( szBuffer, "ooostub.", 8 ) == 0 )
+            else if ( strncmp( szBuffer, "ooostub.", 8 ) == 0 )
             {   // We will replace registration for ooostub, too
                 bRet = true;
+            }
+            else
+            {
+                OutputDebugStringFormat( "  Checking OpenWithList of [%s].\n", lpSubKey );
+                HKEY hSubKey;
+                lResult = RegOpenKeyExA( hKey, "OpenWithList", 0, KEY_ENUMERATE_SUB_KEYS, &hSubKey );
+                if ( ERROR_SUCCESS == lResult )
+                {
+                    DWORD nIndex = 0;
+                    while ( ERROR_SUCCESS == lResult )
+                    {
+                        nSize = sizeof( szBuffer );
+                        lResult = RegEnumKeyExA( hSubKey, nIndex++, szBuffer, &nSize, NULL, NULL, NULL, NULL );
+                        if ( ERROR_SUCCESS == lResult )
+                        {
+                            OutputDebugStringFormat( "    Found value [%s] in OpenWithList of [%s].\n", szBuffer, lpSubKey );
+                            if ( strncmp( szBuffer, "WordPad.exe", 11 ) == 0 )
+                            {   // We will replace registration for word pad
+                                bRet = true;
+                            }
+                            else if ( nSize > 0 )
+                                bRet = false;
+                        }
+                    }
+                }
+                else
+                {
+                    OutputDebugStringFormat( "  No OpenWithList found!\n" );
+                }
             }
         }
         else    // no default value found -> return TRUE to register for that key

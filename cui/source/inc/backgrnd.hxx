@@ -62,17 +62,17 @@ class SvxBackgroundTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        FillUserData();
     virtual void        PointChanged( Window* pWindow, RECT_POINT eRP );
 
     void                ShowSelector(); // Shift-ListBox activation
     void                ShowTblControl(); // for the Writer (cells/rows/tables)
-    void                ShowParaControl(BOOL bCharOnly = FALSE); // for the Writer (paragraph/characters)
-    void                EnableTransparency(BOOL bColor, BOOL bGraphic);
+    void                ShowParaControl(sal_Bool bCharOnly = sal_False); // for the Writer (paragraph/characters)
+    void                EnableTransparency(sal_Bool bColor, sal_Bool bGraphic);
     virtual void        PageCreated (SfxAllItemSet aSet);
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
@@ -81,7 +81,13 @@ private:
     SvxBackgroundTabPage( Window* pParent, const SfxItemSet& rCoreSet );
     ~SvxBackgroundTabPage();
 
-    // Background color ------------------------------------
+    FixedText               aSelectTxt;
+    ListBox                 aLbSelect;
+    const String            aStrBrowse;
+    const String            aStrUnlinked;
+     FixedText               aTblDesc;
+     ListBox                 aTblLBox;
+     ListBox                 aParaLBox;
     Control                 aBorderWin;
     ValueSet                aBackgroundColorSet;
     FixedLine               aBackgroundColorBox;
@@ -89,43 +95,33 @@ private:
     //color transparency
     FixedText               aColTransFT;
     MetricField             aColTransMF;
+    CheckBox                aBtnPreview;
     // Background Bitmap ----------------------------------
+     FixedLine               aGbFile;
     PushButton              aBtnBrowse;
     CheckBox                aBtnLink;
-    CheckBox                aBtnPreview;
-    FixedInfo               aFtFile;
-    FixedLine               aGbFile;
+      FixedLine               aGbPosition;
     RadioButton             aBtnPosition;
     RadioButton             aBtnArea;
     RadioButton             aBtnTile;
     SvxRectCtl              aWndPosition;
-    FixedLine               aGbPosition;
+    FixedInfo               aFtFile;
     //transparency of graphics
     FixedLine               aGraphTransFL;
     MetricField             aGraphTransMF;
 
     BackgroundPreviewImpl*  pPreviewWin2;
-    // Selector --------------------------------------------
-    FixedText               aSelectTxt;
-    ListBox                 aLbSelect;
-    const String            aStrBrowse;
-    const String            aStrUnlinked;
 
     // DDListBox for Writer -------------------------------
-
-    FixedText               aTblDesc;
-    ListBox                 aTblLBox;
-    ListBox                 aParaLBox;
-
     //------------------------------------------------------
     Color       aBgdColor;
-    USHORT      nHtmlMode;
-    BOOL        bAllowShowSelector  : 1;
-    BOOL        bIsGraphicValid     : 1;
-    BOOL        bLinkOnly           : 1;
-    BOOL        bResized            : 1;
-    BOOL        bColTransparency    : 1;
-    BOOL        bGraphTransparency  : 1;
+    sal_uInt16      nHtmlMode;
+    sal_Bool        bAllowShowSelector  : 1;
+    sal_Bool        bIsGraphicValid     : 1;
+    sal_Bool        bLinkOnly           : 1;
+    sal_Bool        bResized            : 1;
+    sal_Bool        bColTransparency    : 1;
+    sal_Bool        bGraphTransparency  : 1;
     Graphic     aBgdGraphic;
     String      aBgdGraphicPath;
     String      aBgdGraphicFilter;
@@ -142,13 +138,13 @@ private:
     void                FillColorValueSets_Impl();
     void                ShowColorUI_Impl();
     void                ShowBitmapUI_Impl();
-    BOOL                LoadLinkedGraphic_Impl();
+    sal_Bool                LoadLinkedGraphic_Impl();
     void                RaiseLoadError_Impl();
     void                SetGraphicPosition_Impl( SvxGraphicPosition ePos );
     SvxGraphicPosition  GetGraphicPosition_Impl();
     void                FillControls_Impl(const SvxBrushItem& rBgdAttr,
                                             const String& rUserData);
-    BOOL                FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, USHORT nSlot);
+    sal_Bool                FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, sal_uInt16 nSlot);
     void                ResetFromWallpaperItem( const SfxItemSet& rSet );
 
     DECL_LINK( LoadTimerHdl_Impl, Timer* );

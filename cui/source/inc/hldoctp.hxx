@@ -53,7 +53,7 @@ private:
 
     String              maStrURL;
 
-    BOOL                mbMarkWndOpen;
+    sal_Bool                mbMarkWndOpen;
 
     DECL_LINK (ClickFileopenHdl_Impl  , void * );
     DECL_LINK (ClickTargetHdl_Impl    , void * );
@@ -75,8 +75,8 @@ protected:
     void GetCurentItemData ( String& aStrURL, String& aStrName,
                              String& aStrIntName, String& aStrFrame,
                              SvxLinkInsertMode& eMode );
-    virtual BOOL   ShouldOpenMarkWnd () {return mbMarkWndOpen;}
-    virtual void   SetMarkWndShouldOpen (BOOL bOpen) {mbMarkWndOpen=bOpen;}
+    virtual sal_Bool   ShouldOpenMarkWnd () {return mbMarkWndOpen;}
+    virtual void   SetMarkWndShouldOpen (sal_Bool bOpen) {mbMarkWndOpen=bOpen;}
     String GetCurrentURL    ();
 
 public:

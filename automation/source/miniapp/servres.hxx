@@ -52,14 +52,14 @@ protected:
     DateBox aDateBox1;
     FixedText aFixedText1;
 public:
-    ModalDialogGROSSER_TEST_DLG( Window * pParent, const ResId & rResId, BOOL bFreeRes = TRUE );
+    ModalDialogGROSSER_TEST_DLG( Window * pParent, const ResId & rResId, sal_Bool bFreeRes = sal_True );
 };
 
 class MenuMENU_CLIENT : public MenuBar
 {
 protected:
 public:
-    MenuMENU_CLIENT( const ResId & rResId, BOOL bFreeRes = TRUE );
+    MenuMENU_CLIENT( const ResId & rResId, sal_Bool bFreeRes = sal_True );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

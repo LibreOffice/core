@@ -53,8 +53,7 @@ private:
 
     DECL_LINK (ClickNewHdl_Impl          , void * );
 
-    Image GetImage( USHORT nId );
-    void ReadURLFile( const String& rFile, String& rTitle, String& rURL, sal_Int32& rIconId, BOOL* pShowAsFolder);
+    Image GetImage( sal_uInt16 nId );
 
 protected:
     void FillDlgFields     ( String& aStrURL );
@@ -68,7 +67,7 @@ public:
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
-    virtual BOOL        AskApply ();
+    virtual sal_Bool        AskApply ();
     virtual void        DoApply ();
 
     virtual void        SetInitFocus();

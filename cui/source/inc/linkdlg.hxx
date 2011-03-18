@@ -54,21 +54,22 @@ class SvBaseLinksDlg : public ModalDialog
     FixedText aFtLinks;
     FixedText aFtType;
     FixedText aFtStatus;
+    SvTabListBox aTbLinks;
+    FixedText aFtFiles2;
+    FixedText aFtFullFileName;
+    FixedText aFtSource2;
+    FixedText aFtFullSourceName;
+    FixedText aFtType2;
+    FixedText aFtFullTypeName;
+    FixedText aFtUpdate;
+    RadioButton aRbAutomatic;
+    RadioButton aRbManual;
     CancelButton aCancelButton1;
     HelpButton aHelpButton1;
     PushButton aPbUpdateNow;
     PushButton aPbOpenSource;
     PushButton aPbChangeSource;
     PushButton aPbBreakLink;
-    FixedText aFtFiles2;
-    FixedText aFtSource2;
-    FixedText aFtType2;
-    FixedText aFtUpdate;
-    RadioButton aRbAutomatic;
-    RadioButton aRbManual;
-    FixedText aFtFullFileName;
-    FixedText aFtFullSourceName;
-    FixedText aFtFullTypeName;
     String aStrAutolink;
     String aStrManuallink;
     String aStrBrokenlink;
@@ -78,8 +79,7 @@ class SvBaseLinksDlg : public ModalDialog
     String aStrCloselinkmsgMulti;
     String aStrWaitinglink;
     sfx2::LinkManager*  pLinkMgr;
-    BOOL            bHtmlMode;
-    SvTabListBox aTbLinks;
+    sal_Bool            bHtmlMode;
     Timer aUpdateTimer;
 
 #if _SOLAR__PRIVATE
@@ -93,10 +93,10 @@ class SvBaseLinksDlg : public ModalDialog
     DECL_LINK( BreakLinkClickHdl, PushButton * );
     DECL_LINK( UpdateWaitingHdl, Timer * );
     DECL_LINK( EndEditHdl, sfx2::SvBaseLink* );
-    sfx2::SvBaseLink* GetSelEntry( USHORT* pPos );
+    sfx2::SvBaseLink* GetSelEntry( sal_uInt16* pPos );
     String ImplGetStateStr( const sfx2::SvBaseLink& );
-    void SetType( sfx2::SvBaseLink& rLink, USHORT nPos, USHORT nType );
-    void InsertEntry( const sfx2::SvBaseLink& rLink, USHORT nPos = LISTBOX_APPEND, sal_Bool bSelect = sal_False);
+    void SetType( sfx2::SvBaseLink& rLink, sal_uInt16 nPos, sal_uInt16 nType );
+    void InsertEntry( const sfx2::SvBaseLink& rLink, sal_uInt16 nPos = LISTBOX_APPEND, sal_Bool bSelect = sal_False);
 #endif
 
     void StartUpdateTimer()         { aUpdateTimer.Start(); }
@@ -123,7 +123,7 @@ class SvBaseLinksDlg : public ModalDialog
     void SetManager( sfx2::LinkManager* );
 
 public:
-    SvBaseLinksDlg( Window * pParent, sfx2::LinkManager*, BOOL bHtml = FALSE );
+    SvBaseLinksDlg( Window * pParent, sfx2::LinkManager*, sal_Bool bHtml = sal_False );
     ~SvBaseLinksDlg();
     void SetActLink( sfx2::SvBaseLink * pLink );
 };

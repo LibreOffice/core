@@ -44,9 +44,9 @@
 // 2) Methoden:
 //    CommunicationLink StartCommunication( Host, Port )
 //    StopAllCommunication      // Alle Kommunikation wird abgebrochen
-//    BOOL IsCommunicationRunning       // Läuft noch irgendwas
+//    sal_Bool IsCommunicationRunning       // Läuft noch irgendwas
 //    String GetMyName      Der eigene Name
-//    BOOL IsLinkValid( CommunicationLink )     // Ist dieser Link noch gültig
+//    sal_Bool IsLinkValid( CommunicationLink )     // Ist dieser Link noch gültig
 //    SetCommunicationEventHandler( String )    // Diese Funktion wird aufgerufen bei jedem Event
 
 // Der CommunicationLink hat folgende Elemente:
@@ -141,8 +141,8 @@ CommunicationWrapper::Methods CommunicationWrapper::aLinkMethods[] = {
 // Konstruktor für den Manager
 CommunicationWrapper::CommunicationWrapper( const String& rClass ) : SbxObject( rClass )
 , m_pLink( NULL )
-, m_bIsManager( TRUE )
-, m_bCatchOpen( FALSE )
+, m_bIsManager( sal_True )
+, m_bCatchOpen( sal_False )
 , m_pNewLink( NULL )
 {
     m_pMethods = &aManagerMethods[0];
@@ -155,8 +155,8 @@ CommunicationWrapper::CommunicationWrapper( const String& rClass ) : SbxObject( 
 // Konstruktor für den Link
 CommunicationWrapper::CommunicationWrapper( CommunicationLink *pThisLink ) : SbxObject( CUniString("Link") )
 , m_pLink( pThisLink )
-, m_bIsManager( FALSE )
-, m_bCatchOpen( FALSE )
+, m_bIsManager( sal_False )
+, m_bCatchOpen( sal_False )
 , m_pNewLink( NULL )
 {
     m_pMethods = &aLinkMethods[0];
@@ -187,12 +187,12 @@ SbxVariable* CommunicationWrapper::Find( const String& rName, SbxClassType t )
         // sonst suchen
         Methods* p = m_pMethods;
         short nIndex = 0;
-        BOOL bFound = FALSE;
+        sal_Bool bFound = sal_False;
         while( p->nArgs != -1 )
         {
             if( rName.CompareIgnoreCaseToAscii( p->pName ) == COMPARE_EQUAL )
             {
-                bFound = TRUE; break;
+                bFound = sal_True; break;
             }
             nIndex += ( p->nArgs & _ARGSMASK ) + 1;
             p = m_pMethods + nIndex;
@@ -229,22 +229,22 @@ void CommunicationWrapper::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
     {
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pPar = pVar->GetParameters();
-        USHORT nIndex = (USHORT) pVar->GetUserData();
+        sal_uInt16 nIndex = (sal_uInt16) pVar->GetUserData();
         // kein Index: weiterreichen!
         if( nIndex )
         {
-            ULONG t = pHint->GetId();
+            sal_uLong t = pHint->GetId();
             if( t == SBX_HINT_INFOWANTED )
                 pVar->SetInfo( GetInfo( (short) pVar->GetUserData() ) );
             else
             {
-                BOOL bWrite = FALSE;
+                sal_Bool bWrite = sal_False;
                 if( t == SBX_HINT_DATACHANGED )
-                    bWrite = TRUE;
+                    bWrite = sal_True;
                 if( t == SBX_HINT_DATAWANTED || bWrite )
                 {
                     // Parameter-Test fuer Methoden:
-                    USHORT nPar = m_pMethods[ --nIndex ].nArgs & 0x00FF;
+                    sal_uInt16 nPar = m_pMethods[ --nIndex ].nArgs & 0x00FF;
                     // Element 0 ist der Returnwert
                     if( ( !pPar && nPar )
                      || ( pPar && pPar->Count() != nPar+1 ) )
@@ -274,7 +274,7 @@ SbxInfo* CommunicationWrapper::GetInfo( short nIdx )
     {
         p++;
         String aName( p->pName, RTL_TEXTENCODING_ASCII_US );
-        USHORT nIFlags = ( p->nArgs >> 8 ) & 0x03;
+        sal_uInt16 nIFlags = ( p->nArgs >> 8 ) & 0x03;
         if( p->nArgs & _OPT )
             nIFlags |= SBX_OPTIONAL;
         pRetInfo->AddParam( aName, p->eType, nIFlags );
@@ -328,21 +328,21 @@ void CommunicationWrapper::Events( String aType, CommunicationLink* pLink )
 
 ////////////////////////////////////////////////////////////////////////////
 
-// Properties und Methoden legen beim Get (bPut = FALSE) den Returnwert
-// im Element 0 des Argv ab; beim Put (bPut = TRUE) wird der Wert aus
+// Properties und Methoden legen beim Get (bPut = sal_False) den Returnwert
+// im Element 0 des Argv ab; beim Put (bPut = sal_True) wird der Wert aus
 // Element 0 gespeichert.
 
 // Die Methoden:
 
 // Manager
-void CommunicationWrapper::MStartCommunication( SbxVariable* pVar, SbxArray* pPar, BOOL /*bWrite*/ )
+void CommunicationWrapper::MStartCommunication( SbxVariable* pVar, SbxArray* pPar, sal_Bool /*bWrite*/ )
 { //    CommunicationLink StartCommunication( Host, Port )
-    m_bCatchOpen = TRUE;
+    m_bCatchOpen = sal_True;
     if ( m_pManager->StartCommunication( ByteString( pPar->Get( 1 )->GetString(), RTL_TEXTENCODING_UTF8 ), pPar->Get( 2 )->GetULong() ) )
     {
         while ( !m_pNewLink )
             GetpApp()->Reschedule();
-        m_bCatchOpen = FALSE;
+        m_bCatchOpen = sal_False;
         CommunicationWrapper *pNewLinkWrapper = new CommunicationWrapper( m_pNewLink );
         m_pNewLink = NULL;
         pVar->PutObject( pNewLinkWrapper );
@@ -350,28 +350,28 @@ void CommunicationWrapper::MStartCommunication( SbxVariable* pVar, SbxArray* pPa
 
 }
 
-void CommunicationWrapper::MStopAllCommunication( SbxVariable* /*pVar*/, SbxArray* /*pPar*/, BOOL /*bWrite*/ )
+void CommunicationWrapper::MStopAllCommunication( SbxVariable* /*pVar*/, SbxArray* /*pPar*/, sal_Bool /*bWrite*/ )
 { //    StopAllCommunication        // Alle Kommunikation wird abgebrochen
     m_pManager->StopCommunication();
 }
 
-void CommunicationWrapper::MIsCommunicationRunning( SbxVariable* pVar, SbxArray* /*pPar*/, BOOL /*bWrite*/ )
-{ //    BOOL IsCommunicationRunning     // Läuft noch irgendwas
+void CommunicationWrapper::MIsCommunicationRunning( SbxVariable* pVar, SbxArray* /*pPar*/, sal_Bool /*bWrite*/ )
+{ //    sal_Bool IsCommunicationRunning     // Läuft noch irgendwas
     pVar->PutBool( m_pManager->IsCommunicationRunning() );
 }
 
-void CommunicationWrapper::MGetMyName( SbxVariable* pVar, SbxArray* /*pPar*/, BOOL /*bWrite*/ )
+void CommunicationWrapper::MGetMyName( SbxVariable* pVar, SbxArray* /*pPar*/, sal_Bool /*bWrite*/ )
 { //    String GetMyName        Der eigene Name
     pVar->PutString( UniString( m_pManager->GetMyName( CM_FQDN ), RTL_TEXTENCODING_UTF8 ) );
 }
 
-void CommunicationWrapper::MIsLinkValid( SbxVariable* pVar, SbxArray* pPar, BOOL /*bWrite*/ )
-{ //    BOOL IsLinkValid( CommunicationLink )       // Ist dieser Link noch gültig
+void CommunicationWrapper::MIsLinkValid( SbxVariable* pVar, SbxArray* pPar, sal_Bool /*bWrite*/ )
+{ //    sal_Bool IsLinkValid( CommunicationLink )       // Ist dieser Link noch gültig
     CommunicationWrapper *pWrapper = (CommunicationWrapper*)(pPar->Get( 1 )->GetObject());
     pVar->PutBool( m_pManager->IsLinkValid( pWrapper->GetCommunicationLink() ) );
 }
 
-void CommunicationWrapper::MSetCommunicationEventHandler( SbxVariable* /*pVar*/, SbxArray* pPar, BOOL /*bWrite*/ )
+void CommunicationWrapper::MSetCommunicationEventHandler( SbxVariable* /*pVar*/, SbxArray* pPar, sal_Bool /*bWrite*/ )
 { //    SetCommunicationEventHandler( String )  // Diese Funktion wird aufgerufen bei jedem Event
     m_aEventHandlerName = pPar->Get( 1 )->GetString();
 }
@@ -381,22 +381,22 @@ void CommunicationWrapper::MSetCommunicationEventHandler( SbxVariable* /*pVar*/,
 
 
 //      Link
-void CommunicationWrapper::LStopCommunication( SbxVariable* /*pVar*/, SbxArray* /*pPar*/, BOOL /*bWrite*/ )
+void CommunicationWrapper::LStopCommunication( SbxVariable* /*pVar*/, SbxArray* /*pPar*/, sal_Bool /*bWrite*/ )
 { //    StopCommunication       Die Kommunikation wird abgebrochen
     m_pLink->StopCommunication();
 }
 
-void CommunicationWrapper::LGetMyName( SbxVariable* pVar, SbxArray* /*pPar*/, BOOL /*bWrite*/ )
+void CommunicationWrapper::LGetMyName( SbxVariable* pVar, SbxArray* /*pPar*/, sal_Bool /*bWrite*/ )
 { //    String GetMyName        Der eigene Name
     pVar->PutString( UniString( m_pLink->GetMyName( CM_FQDN ), RTL_TEXTENCODING_UTF8 ) );
 }
 
-void CommunicationWrapper::LGetHostName( SbxVariable* pVar, SbxArray* /*pPar*/, BOOL /*bWrite*/ )
+void CommunicationWrapper::LGetHostName( SbxVariable* pVar, SbxArray* /*pPar*/, sal_Bool /*bWrite*/ )
 { //    String GetHostName  Der Name des Anderen
     pVar->PutString( UniString( m_pLink->GetCommunicationPartner( CM_FQDN ), RTL_TEXTENCODING_UTF8 ) );
 }
 
-void CommunicationWrapper::LSend( SbxVariable* /*pVar*/, SbxArray* pPar, BOOL /*bWrite*/ )
+void CommunicationWrapper::LSend( SbxVariable* /*pVar*/, SbxArray* pPar, sal_Bool /*bWrite*/ )
 { //    Send(String )           String an den Partner schicken
     SvStream *pSendStream = m_pLink->GetBestCommunicationStream();
     String aSendString = pPar->Get( 1 )->GetString();
@@ -405,12 +405,12 @@ void CommunicationWrapper::LSend( SbxVariable* /*pVar*/, SbxArray* pPar, BOOL /*
     delete pSendStream;
 }
 
-void CommunicationWrapper::LGetString( SbxVariable* pVar, SbxArray* /*pPar*/, BOOL /*bWrite*/ )
+void CommunicationWrapper::LGetString( SbxVariable* pVar, SbxArray* /*pPar*/, sal_Bool /*bWrite*/ )
 { //    String GetString        Ergebnis des letzten Empfangs
     SvStream *pReceiveStream = m_pLink->GetServiceData();
     if ( pReceiveStream )
     {
-        ULONG nLength = pReceiveStream->Seek( STREAM_SEEK_TO_END );
+        sal_uLong nLength = pReceiveStream->Seek( STREAM_SEEK_TO_END );
         pReceiveStream->Seek( STREAM_SEEK_TO_BEGIN );
         char *pBuffer = new char[nLength];
         pReceiveStream->Read( pBuffer, nLength );

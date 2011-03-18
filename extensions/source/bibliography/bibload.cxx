@@ -222,35 +222,6 @@ extern "C"
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    sal_Bool SAL_CALL component_writeInfo( void * //pServiceManager
-                                        , registry::XRegistryKey * pRegistryKey )
-    {
-        try
-        {
-            rtl::OUString sKey(RTL_CONSTASCII_USTRINGPARAM("/"));
-            sKey += BibliographyLoader::getImplementationName_Static();
-            //creates the impl key:  /com.sun.star.extensions.Bibliography
-            Reference< registry::XRegistryKey > xImplKey = pRegistryKey->createKey(sKey);
-
-
-            Reference< registry::XRegistryKey > xNewKey = xImplKey->createKey(  C2U("/UNO/SERVICES") );
-            Sequence< rtl::OUString > aServices = BibliographyLoader::getSupportedServiceNames_Static();
-            for( INT32 i = 0; i < aServices.getLength(); i++ )
-                xNewKey->createKey( aServices.getConstArray()[i]);
-            xNewKey = xImplKey->createKey(  C2U("/UNO/Loader"));
-
-            Reference< registry::XRegistryKey >  xPatternKey = xImplKey->createKey( C2U("/Loader/Pattern" ));
-            xPatternKey->setAsciiValue( C2U( ".component:Bibliography/*" ) );
-
-            return sal_True;
-        }
-        catch (Exception &)
-        {
-            return sal_False;
-        }
-    }
-
-
     void * SAL_CALL component_getFactory(
         const sal_Char * pImplName, XMultiServiceFactory * pServiceManager, void * /*pRegistryKey*/ )
     {

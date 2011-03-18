@@ -231,7 +231,7 @@ sal_Bool DocumentDigitalSignatures::ImplViewSignatures(
         {
             if ( aSignaturesDialog.SignaturesChanged() )
             {
-                bChanges = TRUE;
+                bChanges = sal_True;
                 // If we have a storage and no stream, we are responsible for commit
                 if ( rxStorage.is() && !xSignStream.is() )
                 {
@@ -398,7 +398,7 @@ void DocumentDigitalSignatures::showCertificate(
 
     if ( bInit )
     {
-        CertificateViewer aViewer( NULL, aSignatureHelper.GetSecurityEnvironment(), _Certificate, FALSE );
+        CertificateViewer aViewer( NULL, aSignatureHelper.GetSecurityEnvironment(), _Certificate, sal_False );
         aViewer.Execute();
     }
 

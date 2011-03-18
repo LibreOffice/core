@@ -63,6 +63,7 @@ ModalDialog RID_OFADLG_OPTIONS_TREE
     };
     PushButton PB_BACK
     {
+        HelpID = "cui:PushButton:RID_OFADLG_OPTIONS_TREE:PB_BACK";
         Pos = MAP_APPFONT ( COL_10, ROW_3 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
@@ -307,47 +308,32 @@ String RID_RIDER_SLL_PERSONAL
     Text [ en-US ] = "Personal certificates" ;
 };
 
-// ******************************************************************* EOF
+#define MASK_COL    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; } ;
+#define IMGLST_IDLST \
+    IdList = {                      \
+        SID_GENERAL_OPTIONS;        \
+        SID_LANGUAGE_OPTIONS;       \
+        SID_INET_DLG;               \
+        SID_SW_EDITOPTIONS;         \
+        SID_SW_ONLINEOPTIONS;       \
+        SID_SC_EDITOPTIONS;         \
+        SID_SD_EDITOPTIONS;         \
+        SID_SD_GRAPHIC_OPTIONS;     \
+        SID_SM_EDITOPTIONS;         \
+        SID_SCH_EDITOPTIONS;        \
+        SID_SB_STARBASEOPTIONS;     \
+        SID_FILTER_DLG;             \
+    };                              \
+    IdCount = {                     \
+        12;                         \
+    };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ImageList RID_IMGLIST_TREEOPT
+{
+    Prefix = "tr";
+    MASK_COL
+    IMGLST_IDLST
+};
 
 
 

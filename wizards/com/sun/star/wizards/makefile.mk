@@ -54,6 +54,7 @@ JARTARGET	= commonwizards.jar
 # --- Files --------------------------------------------------------
 
 JAVAFILES=							\
+    common$/HelpIds.java	                		\
     common$/Desktop.java	                		\
     common$/NumberFormatter.java                 		\
     common$/FileAccess.java                 		\
@@ -62,6 +63,7 @@ JAVAFILES=							\
     common$/JavaTools.java                  		\
     common$/NoValidPathException.java       		\
     common$/Properties.java                 		\
+    common$/PropertyNames.java                 		\
     common$/Resource.java                   		\
     common$/SystemDialog.java				\
     common$/Configuration.java				\

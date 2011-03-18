@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_lingucomponent.hxx"
+
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
@@ -38,9 +39,9 @@
 #include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
 
+#include <lingutil.hxx>
 #include <hunspell.hxx>
 #include <dictmgr.hxx>
-
 #include <sspellimp.hxx>
 
 #include <linguistic/lngprops.hxx>
@@ -51,8 +52,7 @@
 #include <unotools/useroptions.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
-
-#include <lingutil.hxx>
+#include <rtl/textenc.h>
 
 #include <list>
 #include <set>
@@ -79,35 +79,37 @@ using ::rtl::OString;
 SpellChecker::SpellChecker() :
     aEvtListeners   ( GetLinguMutex() )
 {
-        aDicts = NULL;
+    aDicts = NULL;
     aDEncs = NULL;
     aDLocs = NULL;
     aDNames = NULL;
-    bDisposing = FALSE;
+    bDisposing = sal_False;
     pPropHelper = NULL;
-        numdict = 0;
+    numdict = 0;
 }
 
 
 SpellChecker::~SpellChecker()
 {
-  if (aDicts) {
-     for (int i = 0; i < numdict; i++) {
+    if (aDicts)
+    {
+       for (int i = 0; i < numdict; i++)
+       {
             if (aDicts[i]) delete aDicts[i];
             aDicts[i] = NULL;
-     }
-     delete[] aDicts;
-  }
-  aDicts = NULL;
-  numdict = 0;
-  if (aDEncs) delete[] aDEncs;
-  aDEncs = NULL;
-  if (aDLocs) delete[] aDLocs;
-  aDLocs = NULL;
-  if (aDNames) delete[] aDNames;
-  aDNames = NULL;
-  if (pPropHelper)
-     pPropHelper->RemoveAsPropListener();
+       }
+       delete[] aDicts;
+    }
+    aDicts = NULL;
+    numdict = 0;
+    if (aDEncs) delete[] aDEncs;
+    aDEncs = NULL;
+    if (aDLocs) delete[] aDLocs;
+    aDLocs = NULL;
+    if (aDNames) delete[] aDNames;
+    aDNames = NULL;
+    if (pPropHelper)
+        pPropHelper->RemoveAsPropListener();
 }
 
 
@@ -219,7 +221,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                     for (sal_Int32 i = 0;  i < nLocales;  ++i)
                     {
                         aDicts[k]  = NULL;
-                        aDEncs[k]  = 0;
+                        aDEncs[k]  = RTL_TEXTENCODING_DONTKNOW;
                         aDLocs[k]  = MsLangId::convertLanguageToLocale(
                                         MsLangId::convertIsoStringToLanguage( aLocaleNames[i] ));
                         // also both files have to be in the same directory and the
@@ -257,101 +259,103 @@ sal_Bool SAL_CALL SpellChecker::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!aSuppLocales.getLength())
         getLocales();
 
-    INT32 nLen = aSuppLocales.getLength();
-    for (INT32 i = 0;  i < nLen;  ++i)
+    sal_Int32 nLen = aSuppLocales.getLength();
+    for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
         const Locale *pLocale = aSuppLocales.getConstArray();
         if (rLocale == pLocale[i])
         {
-            bRes = TRUE;
+            bRes = sal_True;
             break;
         }
     }
     return bRes;
 }
 
-INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
+
+sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
 {
-        Hunspell * pMS;
-        rtl_TextEncoding aEnc;
+    Hunspell * pMS = NULL;
+    rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
 
     // initialize a myspell object for each dictionary once
-        // (note: mutex is held higher up in isValid)
+    // (note: mutex is held higher up in isValid)
 
+    sal_Int16 nRes = -1;
 
-    INT16 nRes = -1;
-
-        // first handle smart quotes both single and double
+    // first handle smart quotes both single and double
     OUStringBuffer rBuf(rWord);
-        sal_Int32 n = rBuf.getLength();
-        sal_Unicode c;
-    for (sal_Int32 ix=0; ix < n; ix++) {
+    sal_Int32 n = rBuf.getLength();
+    sal_Unicode c;
+    for (sal_Int32 ix=0; ix < n; ix++)
+    {
         c = rBuf.charAt(ix);
-            if ((c == 0x201C) || (c == 0x201D)) rBuf.setCharAt(ix,(sal_Unicode)0x0022);
-            if ((c == 0x2018) || (c == 0x2019)) rBuf.setCharAt(ix,(sal_Unicode)0x0027);
-        }
-        OUString nWord(rBuf.makeStringAndClear());
+        if ((c == 0x201C) || (c == 0x201D))
+            rBuf.setCharAt(ix,(sal_Unicode)0x0022);
+        if ((c == 0x2018) || (c == 0x2019))
+            rBuf.setCharAt(ix,(sal_Unicode)0x0027);
+    }
+    OUString nWord(rBuf.makeStringAndClear());
 
     if (n)
     {
-            for (sal_Int32 i = 0; i < numdict; ++i) {
+        for (sal_Int32 i = 0; i < numdict; ++i)
+        {
             pMS = NULL;
-                aEnc = 0;
+            eEnc = RTL_TEXTENCODING_DONTKNOW;
 
             if (rLocale == aDLocs[i])
             {
-                   if (!aDicts[i])
-                   {
-                      OUString dicpath = aDNames[i] + A2OU(".dic");
-                      OUString affpath = aDNames[i] + A2OU(".aff");
-                      OUString dict;
-                      OUString aff;
-                  osl::FileBase::getSystemPathFromFileURL(dicpath,dict);
-                   osl::FileBase::getSystemPathFromFileURL(affpath,aff);
-                      OString aTmpaff(OU2ENC(aff,osl_getThreadTextEncoding()));
-                      OString aTmpdict(OU2ENC(dict,osl_getThreadTextEncoding()));
+                if (!aDicts[i])
+                {
+                    OUString dicpath = aDNames[i] + A2OU(".dic");
+                    OUString affpath = aDNames[i] + A2OU(".aff");
+                    OUString dict;
+                    OUString aff;
+                    osl::FileBase::getSystemPathFromFileURL(dicpath,dict);
+                    osl::FileBase::getSystemPathFromFileURL(affpath,aff);
+                    OString aTmpaff(OU2ENC(aff,osl_getThreadTextEncoding()));
+                    OString aTmpdict(OU2ENC(dict,osl_getThreadTextEncoding()));
 
 #if defined(WNT)
-                      // workaround for Windows specifc problem that the
-                      // path length in calls to 'fopen' is limted to somewhat
-                      // about 120+ characters which will usually be exceed when
-                      // using dictionaries as extensions.
-                      aTmpaff = Win_GetShortPathName( aff );
-                      aTmpdict = Win_GetShortPathName( dict );
+                    // workaround for Windows specifc problem that the
+                    // path length in calls to 'fopen' is limted to somewhat
+                    // about 120+ characters which will usually be exceed when
+                    // using dictionaries as extensions.
+                    aTmpaff = Win_GetShortPathName( aff );
+                    aTmpdict = Win_GetShortPathName( dict );
 #endif
 
-                      aDicts[i] = new Hunspell(aTmpaff.getStr(),aTmpdict.getStr());
-                      aDEncs[i] = 0;
-                      if (aDicts[i]) {
-                        char * dic_encoding = aDicts[i]->get_dic_encoding();
-            aDEncs[i] = rtl_getTextEncodingFromUnixCharset(aDicts[i]->get_dic_encoding());
-                        if (aDEncs[i] == RTL_TEXTENCODING_DONTKNOW) {
-              if (strcmp("ISCII-DEVANAGARI", dic_encoding) == 0) {
-                aDEncs[i] = RTL_TEXTENCODING_ISCII_DEVANAGARI;
-                          } else if (strcmp("UTF-8", dic_encoding) == 0) {
-                aDEncs[i] = RTL_TEXTENCODING_UTF8;
-                          }
-                        }
-                      }
-               }
-               pMS = aDicts[i];
-                   aEnc = aDEncs[i];
-        }
+                    aDicts[i] = new Hunspell(aTmpaff.getStr(),aTmpdict.getStr());
+                    aDEncs[i] = RTL_TEXTENCODING_DONTKNOW;
+                    if (aDicts[i])
+                        aDEncs[i] = getTextEncodingFromCharset(aDicts[i]->get_dic_encoding());
+                }
+                pMS = aDicts[i];
+                eEnc = aDEncs[i];
+            }
+
             if (pMS)
-                {
-            OString aWrd(OU2ENC(nWord,aEnc));
+            {
+                // we don't want to work with a default text encoding since following incorrect
+                // results may occur only for specific text and thus may be hard to notice.
+                // Thus better always make a clean exit here if the text encoding is in question.
+                // Hopefully something not working at all will raise proper attention quickly. ;-)
+                DBG_ASSERT( eEnc != RTL_TEXTENCODING_DONTKNOW, "failed to get text encoding! (maybe incorrect encoding string in file)" );
+                if (eEnc == RTL_TEXTENCODING_DONTKNOW)
+                    return -1;
+
+                OString aWrd(OU2ENC(nWord,eEnc));
                 int rVal = pMS->spell((char*)aWrd.getStr());
-                 if (rVal != 1)
-                    {
-                        nRes = SpellFailure::SPELLING_ERROR;
-                    } else {
-                        return -1;
-                    }
-                    pMS = NULL;
+                if (rVal != 1)
+                    nRes = SpellFailure::SPELLING_ERROR;
+                else
+                    return -1;
+                pMS = NULL;
             }
         }
     }
@@ -360,25 +364,24 @@ INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocal
 }
 
 
-sal_Bool SAL_CALL
-    SpellChecker::isValid( const OUString& rWord, const Locale& rLocale,
+sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rLocale,
             const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
      if (rLocale == Locale()  ||  !rWord.getLength())
-        return TRUE;
+        return sal_True;
 
     if (!hasLocale( rLocale ))
 #ifdef LINGU_EXCEPTIONS
         throw( IllegalArgumentException() );
 #else
-        return TRUE;
+        return sal_True;
 #endif
 
-    // return FALSE to process SPELLML requests (they are longer than the header)
-    if (rWord.match(A2OU(SPELLML_HEADER), 0) && (rWord.getLength() > 10)) return FALSE;
+    // return sal_False to process SPELLML requests (they are longer than the header)
+    if (rWord.match(A2OU(SPELLML_HEADER), 0) && (rWord.getLength() > 10)) return sal_False;
 
     // Get property values to be used.
     // These are be the default values set in the SN_LINGU_PROPERTIES
@@ -390,16 +393,16 @@ sal_Bool SAL_CALL
     PropertyHelper_Spell &rHelper = GetPropHelper();
     rHelper.SetTmpPropVals( rProperties );
 
-    INT16 nFailure = GetSpellFailure( rWord, rLocale );
+    sal_Int16 nFailure = GetSpellFailure( rWord, rLocale );
     if (nFailure != -1 && !rWord.match(A2OU(SPELLML_HEADER), 0))
     {
-        INT16 nLang = LocaleToLanguage( rLocale );
+        sal_Int16 nLang = LocaleToLanguage( rLocale );
         // postprocess result for errors that should be ignored
-        if (   (!rHelper.IsSpellUpperCase()  && IsUpper( rWord, nLang ))
-            || (!rHelper.IsSpellWithDigits() && HasDigits( rWord ))
-            || (!rHelper.IsSpellCapitalization()
-                &&  nFailure == SpellFailure::CAPTION_ERROR)
-        )
+        const bool bIgnoreError =
+                (!rHelper.IsSpellUpperCase()  && IsUpper( rWord, nLang )) ||
+                (!rHelper.IsSpellWithDigits() && HasDigits( rWord )) ||
+                (!rHelper.IsSpellCapitalization()  &&  nFailure == SpellFailure::CAPTION_ERROR);
+        if (bIgnoreError)
             nFailure = -1;
     }
 
@@ -415,80 +418,82 @@ Reference< XSpellAlternatives >
     // Especially it may give a list of suggested (correct) words:
 
     Reference< XSpellAlternatives > xRes;
-        // note: mutex is held by higher up by spell which covers both
+    // note: mutex is held by higher up by spell which covers both
 
-        Hunspell* pMS;
-        rtl_TextEncoding aEnc;
-    int count;
-        int numsug = 0;
+    Hunspell* pMS = NULL;
+    rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
+    int count = 0;
+    int numsug = 0;
 
-        // first handle smart quotes (single and double)
+    // first handle smart quotes (single and double)
     OUStringBuffer rBuf(rWord);
-        sal_Int32 n = rBuf.getLength();
-        sal_Unicode c;
-    for (sal_Int32 ix=0; ix < n; ix++) {
-         c = rBuf.charAt(ix);
-             if ((c == 0x201C) || (c == 0x201D)) rBuf.setCharAt(ix,(sal_Unicode)0x0022);
-             if ((c == 0x2018) || (c == 0x2019)) rBuf.setCharAt(ix,(sal_Unicode)0x0027);
-        }
-        OUString nWord(rBuf.makeStringAndClear());
+    sal_Int32 n = rBuf.getLength();
+    sal_Unicode c;
+    for (sal_Int32 ix=0; ix < n; ix++)
+    {
+        c = rBuf.charAt(ix);
+        if ((c == 0x201C) || (c == 0x201D))
+            rBuf.setCharAt(ix,(sal_Unicode)0x0022);
+        if ((c == 0x2018) || (c == 0x2019))
+            rBuf.setCharAt(ix,(sal_Unicode)0x0027);
+    }
+    OUString nWord(rBuf.makeStringAndClear());
 
     if (n)
     {
-        INT16 nLang = LocaleToLanguage( rLocale );
+        sal_Int16 nLang = LocaleToLanguage( rLocale );
 
         Sequence< OUString > aStr( 0 );
 
-            for (int i =0; i < numdict; i++) {
+        for (int i =0; i < numdict; i++)
+        {
             pMS = NULL;
-                aEnc = 0;
-                count = 0;
+            eEnc = RTL_TEXTENCODING_DONTKNOW;
+            count = 0;
 
             if (rLocale == aDLocs[i])
             {
-                    pMS = aDicts[i];
-                    aEnc = aDEncs[i];
-                }
+                pMS = aDicts[i];
+                eEnc = aDEncs[i];
+            }
 
             if (pMS)
             {
                 char ** suglst = NULL;
-            OString aWrd(OU2ENC(nWord,aEnc));
-                    count = pMS->suggest(&suglst, (const char *) aWrd.getStr());
+                OString aWrd(OU2ENC(nWord,eEnc));
+                count = pMS->suggest(&suglst, (const char *) aWrd.getStr());
 
-                    if (count) {
-                   aStr.realloc( numsug + count );
-                   OUString *pStr = aStr.getArray();
-                       for (int ii=0; ii < count; ++ii)
-                       {
-                          OUString cvtwrd(suglst[ii],strlen(suglst[ii]),aEnc);
-                          pStr[numsug + ii] = cvtwrd;
-                       }
-                       pMS->free_list(&suglst, count);
-                       numsug += count;
+                if (count)
+                {
+                    aStr.realloc( numsug + count );
+                    OUString *pStr = aStr.getArray();
+                    for (int ii=0; ii < count; ++ii)
+                    {
+                        OUString cvtwrd(suglst[ii],strlen(suglst[ii]),eEnc);
+                        pStr[numsug + ii] = cvtwrd;
                     }
-        }
+                    pMS->free_list(&suglst, count);
+                    numsug += count;
+                }
+            }
         }
 
-            // now return an empty alternative for no suggestions or the list of alternatives if some found
+        // now return an empty alternative for no suggestions or the list of alternatives if some found
         SpellAlternatives *pAlt = new SpellAlternatives;
-            String aTmp(rWord);
+        String aTmp(rWord);
         pAlt->SetWordLanguage( aTmp, nLang );
         pAlt->SetFailureType( SpellFailure::SPELLING_ERROR );
         pAlt->SetAlternatives( aStr );
         xRes = pAlt;
-            return xRes;
-
-    }
         return xRes;
+    }
+    return xRes;
 }
 
 
-
-
-Reference< XSpellAlternatives > SAL_CALL
-    SpellChecker::spell( const OUString& rWord, const Locale& rLocale,
-            const PropertyValues& rProperties )
+Reference< XSpellAlternatives > SAL_CALL SpellChecker::spell(
+        const OUString& rWord, const Locale& rLocale,
+        const PropertyValues& rProperties )
         throw(IllegalArgumentException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -513,7 +518,7 @@ Reference< XSpellAlternatives > SAL_CALL
 
 
 Reference< XInterface > SAL_CALL SpellChecker_CreateInstance(
-            const Reference< XMultiServiceFactory > & /*rSMgr*/ )
+        const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
 {
 
@@ -522,14 +527,13 @@ Reference< XInterface > SAL_CALL SpellChecker_CreateInstance(
 }
 
 
-sal_Bool SAL_CALL
-    SpellChecker::addLinguServiceEventListener(
-            const Reference< XLinguServiceEventListener >& rxLstnr )
+sal_Bool SAL_CALL SpellChecker::addLinguServiceEventListener(
+        const Reference< XLinguServiceEventListener >& rxLstnr )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!bDisposing && rxLstnr.is())
     {
         bRes = GetPropHelper().addLinguServiceEventListener( rxLstnr );
@@ -538,14 +542,13 @@ sal_Bool SAL_CALL
 }
 
 
-sal_Bool SAL_CALL
-    SpellChecker::removeLinguServiceEventListener(
-            const Reference< XLinguServiceEventListener >& rxLstnr )
+sal_Bool SAL_CALL SpellChecker::removeLinguServiceEventListener(
+        const Reference< XLinguServiceEventListener >& rxLstnr )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!bDisposing && rxLstnr.is())
     {
         DBG_ASSERT( xPropHelper.is(), "xPropHelper non existent" );
@@ -555,8 +558,7 @@ sal_Bool SAL_CALL
 }
 
 
-OUString SAL_CALL
-    SpellChecker::getServiceDisplayName( const Locale& /*rLocale*/ )
+OUString SAL_CALL SpellChecker::getServiceDisplayName( const Locale& /*rLocale*/ )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -564,15 +566,14 @@ OUString SAL_CALL
 }
 
 
-void SAL_CALL
-    SpellChecker::initialize( const Sequence< Any >& rArguments )
+void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
         throw(Exception, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
     if (!pPropHelper)
     {
-        INT32 nLen = rArguments.getLength();
+        sal_Int32 nLen = rArguments.getLength();
         if (2 == nLen)
         {
             Reference< XPropertySet >   xPropSet;
@@ -590,28 +591,25 @@ void SAL_CALL
         else {
             OSL_FAIL( "wrong number of arguments in sequence" );
         }
-
     }
 }
 
 
-void SAL_CALL
-    SpellChecker::dispose()
+void SAL_CALL SpellChecker::dispose()
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
     if (!bDisposing)
     {
-        bDisposing = TRUE;
+        bDisposing = sal_True;
         EventObject aEvtObj( (XSpellChecker *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
 }
 
 
-void SAL_CALL
-    SpellChecker::addEventListener( const Reference< XEventListener >& rxListener )
+void SAL_CALL SpellChecker::addEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -621,8 +619,7 @@ void SAL_CALL
 }
 
 
-void SAL_CALL
-    SpellChecker::removeEventListener( const Reference< XEventListener >& rxListener )
+void SAL_CALL SpellChecker::removeEventListener( const Reference< XEventListener >& rxListener )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -652,10 +649,10 @@ sal_Bool SAL_CALL SpellChecker::supportsService( const OUString& ServiceName )
 
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 
@@ -677,32 +674,6 @@ Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
     aSNS.getArray()[0] = A2OU( SN_SPELLCHECKER );
     return aSNS;
 }
-
-
-sal_Bool SAL_CALL SpellChecker_writeInfo(
-            void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
-{
-
-    try
-    {
-        String aImpl( '/' );
-        aImpl += SpellChecker::getImplementationName_Static().getStr();
-        aImpl.AppendAscii( "/UNO/SERVICES" );
-        Reference< registry::XRegistryKey > xNewKey =
-                pRegistryKey->createKey( aImpl );
-        Sequence< OUString > aServices =
-                SpellChecker::getSupportedServiceNames_Static();
-        for( INT32 i = 0; i < aServices.getLength(); i++ )
-            xNewKey->createKey( aServices.getConstArray()[i] );
-
-        return sal_True;
-    }
-    catch(Exception &)
-    {
-        return sal_False;
-    }
-}
-
 
 void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory * pServiceManager, void *  )

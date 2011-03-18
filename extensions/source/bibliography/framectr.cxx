@@ -418,8 +418,8 @@ sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::X
 
 Window* lcl_GetFocusChild( Window* pParent )
 {
-    USHORT nChildren = pParent->GetChildCount();
-    for( USHORT nChild = 0; nChild < nChildren; ++nChild)
+    sal_uInt16 nChildren = pParent->GetChildCount();
+    for( sal_uInt16 nChild = 0; nChild < nChildren; ++nChild)
     {
         Window* pChild = pParent->GetChild( nChild );
         if(pChild->HasFocus())

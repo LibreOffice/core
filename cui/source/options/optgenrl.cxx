@@ -50,40 +50,21 @@
 
 struct GeneralTabPage_Impl
 {
-    BOOL    mbStreetEnabled;
-    BOOL    mbPLZEnabled;
-    BOOL    mbCityEnabled;
-    BOOL    mbUsCityEnabled;
-    BOOL    mbUsZipEnabled;
+    sal_Bool    mbStreetEnabled;
+    sal_Bool    mbPLZEnabled;
+    sal_Bool    mbCityEnabled;
+    sal_Bool    mbUsCityEnabled;
+    sal_Bool    mbUsZipEnabled;
 
     String  maQueryStr;
 
     GeneralTabPage_Impl() :
-        mbStreetEnabled ( FALSE ),
-        mbPLZEnabled    ( FALSE ),
-        mbCityEnabled   ( FALSE ),
-        mbUsCityEnabled ( FALSE ),
-        mbUsZipEnabled  ( FALSE ) {}
+        mbStreetEnabled ( sal_False ),
+        mbPLZEnabled    ( sal_False ),
+        mbCityEnabled   ( sal_False ),
+        mbUsCityEnabled ( sal_False ),
+        mbUsZipEnabled  ( sal_False ) {}
 };
-
-// -----------------------------------------------------------------------
-
-// kommt aus adritem.cxx
-//copy from adritem.cxx, since it will leave in svx.
-String ConvertToStore_Impl( const String& rText )
-{
-    String sRet;
-    USHORT i = 0;
-
-    while ( i < rText.Len() )
-    {
-        if ( rText.GetChar(i) == '\\' || rText.GetChar(i) == '#' )
-            sRet += '\\';
-        sRet += rText.GetChar(i++);
-    }
-    return sRet;
-}
-
 
 // -----------------------------------------------------------------------
 
@@ -261,7 +242,7 @@ SfxTabPage* SvxGeneralTabPage::Create( Window* pParent, const SfxItemSet& rAttrS
 
 //------------------------------------------------------------------------
 
-BOOL SvxGeneralTabPage::FillItemSet( SfxItemSet& )
+sal_Bool SvxGeneralTabPage::FillItemSet( SfxItemSet& )
 {
     // Eingaben trimmen (f"uhrende und nachfolgende Leerzeichen entfernen)
     aCompanyEdit.SetText( TRIM(aCompanyEdit.GetText()) );
@@ -282,13 +263,13 @@ BOOL SvxGeneralTabPage::FillItemSet( SfxItemSet& )
     aFaxEdit.SetText( TRIM(aFaxEdit.GetText()) );
     aEmailEdit.SetText( TRIM(aEmailEdit.GetText()) );
 
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
     bModified |= GetAddress_Impl();
     SvtSaveOptions aSaveOpt;
     if ( aUseDataCB.IsChecked() != aSaveOpt.IsUseUserData() )
     {
         aSaveOpt.SetUseUserData( aUseDataCB.IsChecked() );
-        bModified |= TRUE;
+        bModified |= sal_True;
     }
     return bModified;
 }
@@ -299,10 +280,10 @@ void SvxGeneralTabPage::Reset( const SfxItemSet& rSet )
 {
     SetAddress_Impl();
 
-    USHORT nWhich = GetWhich( SID_FIELD_GRABFOCUS );
+    sal_uInt16 nWhich = GetWhich( SID_FIELD_GRABFOCUS );
     if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET )
     {
-        USHORT nField = ( (SfxUInt16Item&)rSet.Get( nWhich ) ).GetValue();
+        sal_uInt16 nField = ( (SfxUInt16Item&)rSet.Get( nWhich ) ).GetValue();
 
         switch ( nField )
         {
@@ -361,7 +342,7 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
                 break;
         }
 
-        USHORT nPos = ( pEdit == &aFirstName ) ? 0 : 1;
+        sal_uInt16 nPos = ( pEdit == &aFirstName ) ? 0 : 1;
         String aTxt = pEdit->GetText();
         sal_Unicode cChar = ( aTxt.Len() > 0 ) ? aTxt.GetChar(0) : ' ';
         aShortStr.SetChar( nPos, cChar );
@@ -375,7 +356,7 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
 
 sal_Bool SvxGeneralTabPage::GetAddress_Impl()
 {
-    BOOL bRet =
+    sal_Bool bRet =
     (   aCompanyEdit.GetSavedValue()  !=        aCompanyEdit.GetText()  ||
         aFirstName.GetSavedValue()  !=          aFirstName.GetText()  ||
         aFatherName.GetSavedValue()  !=         aFatherName.GetText()  ||
@@ -397,7 +378,7 @@ sal_Bool SvxGeneralTabPage::GetAddress_Impl()
         aEmailEdit.GetSavedValue()  !=          aEmailEdit.GetText() );
 
     LanguageType eLang = Application::GetSettings().GetUILanguage();
-    BOOL bUS = ( LANGUAGE_ENGLISH_US == eLang );
+    sal_Bool bUS = ( LANGUAGE_ENGLISH_US == eLang );
 
     SvtUserOptions aUserOpt;
     aUserOpt.SetCompany(aCompanyEdit.GetText());
@@ -433,7 +414,7 @@ sal_Bool SvxGeneralTabPage::GetAddress_Impl()
 void SvxGeneralTabPage::SetAddress_Impl()
 {
     LanguageType eLang = Application::GetSettings().GetUILanguage();
-    BOOL bUS = ( LANGUAGE_ENGLISH_US == eLang );
+    sal_Bool bUS = ( LANGUAGE_ENGLISH_US == eLang );
     SvtUserOptions aUserOpt;
     aCompanyEdit.SetText( aUserOpt.GetCompany() );
     if ( aUserOpt.IsTokenReadonly( USER_OPT_COMPANY ) )

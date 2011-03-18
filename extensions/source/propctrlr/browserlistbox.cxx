@@ -1194,8 +1194,8 @@ namespace pcr
             m_aOutOfDateLines.insert( nPos );
             rLine.pLine->SetComponentHelpIds(
                 HelpIdUrl::getHelpId( _rPropertyData.HelpURL ),
-                _rPropertyData.PrimaryButtonId,
-                _rPropertyData.SecondaryButtonId
+                rtl::OUStringToOString( _rPropertyData.PrimaryButtonId, RTL_TEXTENCODING_UTF8 ),
+                rtl::OUStringToOString( _rPropertyData.SecondaryButtonId, RTL_TEXTENCODING_UTF8 )
             );
 
             if ( _rPropertyData.bReadOnly )
@@ -1211,9 +1211,9 @@ namespace pcr
                 {
                     Edit* pControlWindowAsEdit = dynamic_cast< Edit* >( rLine.pLine->getControlWindow() );
                     if ( pControlWindowAsEdit )
-                        pControlWindowAsEdit->SetReadOnly( TRUE );
+                        pControlWindowAsEdit->SetReadOnly( sal_True );
                     else
-                        pControlWindowAsEdit->Enable( FALSE );
+                        pControlWindowAsEdit->Enable( sal_False );
                 }
             }
         }

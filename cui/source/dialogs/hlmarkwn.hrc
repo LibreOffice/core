@@ -28,4 +28,7 @@
 #define BT_APPLY    1
 #define BT_CLOSE    2
 #define TLB_MARK    3
+// IAccessibility2 implementation 2009. ------
+#define STR_MARK_TREE   5000
+// ------ IAccessibility2 implementation 2009.
 

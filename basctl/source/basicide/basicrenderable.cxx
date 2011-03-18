@@ -46,8 +46,8 @@ BasicRenderable::BasicRenderable( IDEBaseWindow* pWin )
 , mpWindow( pWin )
 {
     ResStringArray aStrings( IDEResId( RID_PRINTDLG_STRLIST )  );
-    DBG_ASSERT( aStrings.Count() >= 5, "resource incomplete" );
-    if( aStrings.Count() < 5 ) // bad resource ?
+    DBG_ASSERT( aStrings.Count() >= 3, "resource incomplete" );
+    if( aStrings.Count() < 3 ) // bad resource ?
         return;
 
     m_aUIProperties.realloc( 3 );
@@ -64,13 +64,13 @@ BasicRenderable::BasicRenderable( IDEBaseWindow* pWin )
     // create a choice for the range to print
     rtl::OUString aPrintContentName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
     Sequence< rtl::OUString > aChoices( 2 );
-    Sequence< rtl::OUString > aHelpTexts( 2 );
+    Sequence< rtl::OUString > aHelpIds( 2 );
     aChoices[0] = aStrings.GetString( 1 );
-    aHelpTexts[0] = aStrings.GetString( 2 );
-    aChoices[1] = aStrings.GetString( 3 );
-    aHelpTexts[1] = aStrings.GetString( 4 );
+    aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ) );
+    aChoices[1] = aStrings.GetString( 2 );
+    aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ) );
     m_aUIProperties[1].Value = getChoiceControlOpt( rtl::OUString(),
-                                                    aHelpTexts,
+                                                    aHelpIds,
                                                     aPrintContentName,
                                                     aChoices,
                                                     0 );

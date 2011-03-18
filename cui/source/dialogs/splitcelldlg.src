@@ -30,6 +30,7 @@
 
 ModalDialog RID_SVX_SPLITCELLDLG
 {
+    HelpID = "cui:ModalDialog:RID_SVX_SPLITCELLDLG";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 169 , 108 ) ;
@@ -64,6 +65,7 @@ ModalDialog RID_SVX_SPLITCELLDLG
     };
     NumericField ED_COUNT
     {
+        HelpID = "cui:NumericField:RID_SVX_SPLITCELLDLG:ED_COUNT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 82 , 14 ) ;
         Size = MAP_APPFONT ( 21 , 12 ) ;
@@ -85,6 +87,7 @@ ModalDialog RID_SVX_SPLITCELLDLG
     };
     ImageRadioButton RB_HORZ
     {
+        HelpID = "cui:ImageRadioButton:RID_SVX_SPLITCELLDLG:RB_HORZ";
         Pos = MAP_APPFONT ( 12 , 47 ) ;
         Size = MAP_APPFONT ( 90 , 18 ) ;
         Group = TRUE;
@@ -98,12 +101,14 @@ ModalDialog RID_SVX_SPLITCELLDLG
     };
     CheckBox CB_PROP
     {
+        HelpID = "cui:CheckBox:RID_SVX_SPLITCELLDLG:CB_PROP";
         Pos = MAP_APPFONT ( 18 , 68 ) ;
         Size = MAP_APPFONT ( 91 , 12 ) ;
         Text [ en-US ] = "~Into equal proportions";
     };
     ImageRadioButton RB_VERT
     {
+        HelpID = "cui:ImageRadioButton:RID_SVX_SPLITCELLDLG:RB_VERT";
         Pos = MAP_APPFONT ( 12 , 84 ) ;
         Size = MAP_APPFONT ( 90 , 18 ) ;
         Text [ en-US ] = "~Vertically" ;

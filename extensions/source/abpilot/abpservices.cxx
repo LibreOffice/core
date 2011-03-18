@@ -67,27 +67,6 @@ component_getImplementationEnvironment(
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-                void* pServiceManager,
-                void* pRegistryKey
-            )
-{
-    if (pRegistryKey)
-    try
-    {
-        return ::abp::OModule::writeComponentInfos(
-            static_cast<XMultiServiceFactory*>(pServiceManager),
-            static_cast<XRegistryKey*>(pRegistryKey));
-    }
-    catch (InvalidRegistryException& )
-    {
-        OSL_FAIL("abp::component_writeInfo: could not create a registry key (InvalidRegistryException) !");
-    }
-
-    return sal_False;
-}
-
-//---------------------------------------------------------------------------------------
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,

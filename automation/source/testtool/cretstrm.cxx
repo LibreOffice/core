@@ -51,7 +51,7 @@ CRetStream::~CRetStream()
 void CRetStream::Read ( String &aString )
 {
     comm_UniChar* pStr;
-    USHORT nLenInChars;
+    sal_uInt16 nLenInChars;
     CmdBaseStream::Read( pStr, nLenInChars );
 
     aString = String( pStr, nLenInChars );

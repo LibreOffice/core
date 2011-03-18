@@ -1,4 +1,4 @@
-ex  extensions :  officecfg  l10n rdbmaker svx SANE:sane TWAIN:twain np_sdk offuh stoc ZLIB:zlib NULL
+ex  extensions :  officecfg  L10N:l10n rdbmaker svx SANE:sane TWAIN:twain np_sdk offuh stoc ZLIB:zlib CURL:curl LIBXSLT:libxslt NULL
 
 ex  extensions                                  usr1    -   all ex_mkout NULL
 ex  extensions\inc                              nmake   -   all ex_inc NULL
@@ -34,3 +34,6 @@ ex  extensions\source\update\feed               nmake   -   all ex_updchkfeed ex
 ex  extensions\source\update\check              nmake   -   all ex_updchk ex_inc NULL
 ex  extensions\source\update\ui                 nmake   -   all ex_updchkui ex_inc NULL
 ex  extensions\util                             nmake   -   all ex_util ex_preload ex_abpilot ex_dbpilots ex_logging ex_ldap ex_propctrlr ex_bib ex_plutil ex_oooimprovecore NULL
+
+# Fails at the moment
+# ex  extensions\qa\complex\extensions            nmake   -   all ex_complex ex_util NULL

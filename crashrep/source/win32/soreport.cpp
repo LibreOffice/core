@@ -1846,7 +1846,7 @@ bool WriteChecksumFile( FILE *fchksum, const boost::unordered_map< string, strin
                 for ( int i = 0; i < sizeof(checksum); fprintf( fchksum, "%02X", checksum[i++] ) );
                 fprintf( fchksum, "\" bytes=\"%d\" file=\"%s\"/>\n",
                     nBytesProcessed,
-                    GetFileName( iter->first ) );
+                    GetFileName( iter->first ).c_str() );
             }
         }
 

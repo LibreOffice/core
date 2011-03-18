@@ -106,7 +106,7 @@ public:
     {
         try
         {
-            uno::Reference< container::XContainer > xContainer( rScriptDocument.getLibrary( E_SCRIPTS, aLibName, FALSE ), uno::UNO_QUERY );
+            uno::Reference< container::XContainer > xContainer( rScriptDocument.getLibrary( E_SCRIPTS, aLibName, sal_False ), uno::UNO_QUERY );
             if ( xContainer.is() )
             {
                 uno::Reference< container::XContainerListener > xContainerListener( this );
@@ -119,7 +119,7 @@ public:
     {
         try
         {
-            uno::Reference< container::XContainer > xContainer( rScriptDocument.getLibrary( E_SCRIPTS, aLibName, FALSE ), uno::UNO_QUERY );
+            uno::Reference< container::XContainer > xContainer( rScriptDocument.getLibrary( E_SCRIPTS, aLibName, sal_False ), uno::UNO_QUERY );
             if ( xContainer.is() )
             {
                 uno::Reference< container::XContainerListener > xContainerListener( this );
@@ -137,7 +137,7 @@ public:
     {
         rtl::OUString sModuleName;
         if( mpShell && ( Event.Accessor >>= sModuleName ) )
-            mpShell->FindBasWin( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, TRUE, FALSE );
+            mpShell->FindBasWin( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, sal_True, sal_False );
     }
     virtual void SAL_CALL elementReplaced( const container::ContainerEvent& ) throw( com::sun::star::uno::RuntimeException ) { }
     virtual void SAL_CALL elementRemoved( const container::ContainerEvent& Event ) throw( com::sun::star::uno::RuntimeException )
@@ -145,9 +145,9 @@ public:
         rtl::OUString sModuleName;
         if( mpShell  && ( Event.Accessor >>= sModuleName ) )
         {
-            IDEBaseWindow* pWin = mpShell->FindWindow( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, BASICIDE_TYPE_MODULE, TRUE );
+            IDEBaseWindow* pWin = mpShell->FindWindow( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, BASICIDE_TYPE_MODULE, sal_True );
             if( pWin )
-                mpShell->RemoveWindow( pWin, TRUE, TRUE );
+                mpShell->RemoveWindow( pWin, sal_True, sal_True );
         }
     }
 
@@ -183,7 +183,7 @@ BasicIDEShell::BasicIDEShell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell 
         aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
         aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
         aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) ),
-        m_bAppBasicModified( FALSE ),
+        m_bAppBasicModified( sal_False ),
         m_aNotifier( *this )
 {
     m_xLibListener = new ContainerListenerImpl( this );
@@ -204,12 +204,10 @@ void BasicIDEShell::Init()
 
     SvxSearchDialogWrapper::RegisterChildWindow( sal_False );
 
-    IDE_DLL()->GetExtraData()->ShellInCriticalSection() = TRUE;
+    IDE_DLL()->GetExtraData()->ShellInCriticalSection() = sal_True;
 
     SetName( String( RTL_CONSTASCII_USTRINGPARAM( "BasicIDE" ) ) );
     SetHelpId( SVX_INTERFACE_BASIDE_VIEWSH );
-
-    SFX_APP()->EnterBasicCall();
 
     LibBoxControl::RegisterControl( SID_BASICIDE_LIBSELECTOR );
     LanguageBoxControl::RegisterControl( SID_BASICIDE_CURRENT_LANG );
@@ -221,13 +219,13 @@ void BasicIDEShell::Init()
     pCurWin = 0;
     m_aCurDocument = ScriptDocument::getApplicationScriptDocument();
     pObjectCatalog = 0;
-    bCreatingWindow = FALSE;
+    bCreatingWindow = sal_False;
 
     m_pCurLocalizationMgr = NULL;
 
     pTabBar = new BasicIDETabBar( &GetViewFrame()->GetWindow() );
     pTabBar->SetSplitHdl( LINK( this, BasicIDEShell, TabBarSplitHdl ) );
-    bTabBarSplitted = FALSE;
+    bTabBarSplitted = sal_False;
 
     nCurKey = 100;
     InitScrollBars();
@@ -238,7 +236,7 @@ void BasicIDEShell::Init()
     if ( IDE_DLL() && IDE_DLL()->pShell == NULL )
         IDE_DLL()->pShell = this;
 
-    IDE_DLL()->GetExtraData()->ShellInCriticalSection() = FALSE;
+    IDE_DLL()->GetExtraData()->ShellInCriticalSection() = sal_False;
 
     // It's enough to create the controller ...
     // It will be public by using magic :-)
@@ -260,7 +258,7 @@ BasicIDEShell::~BasicIDEShell()
 
     // Damit bei einem Basic-Fehler beim Speichern die Shell nicht sofort
     // wieder hoch kommt:
-    IDE_DLL()->GetExtraData()->ShellInCriticalSection() = TRUE;
+    IDE_DLL()->GetExtraData()->ShellInCriticalSection() = sal_True;
 
     SetWindow( 0 );
     SetCurWindow( 0 );
@@ -284,8 +282,7 @@ BasicIDEShell::~BasicIDEShell()
         if ( pListener )
             pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
 
-    SFX_APP()->LeaveBasicCall();
-    IDE_DLL()->GetExtraData()->ShellInCriticalSection() = FALSE;
+    IDE_DLL()->GetExtraData()->ShellInCriticalSection() = sal_False;
 
     GnBasicIDEShellCount--;
 }
@@ -329,7 +326,7 @@ void BasicIDEShell::onDocumentClosed( const ScriptDocument& _rDocument )
     bool bSetCurLib = ( _rDocument == m_aCurDocument );
 
     // remove all windows which belong to this document
-    for ( ULONG nWin = aIDEWindowTable.Count(); nWin; )
+    for ( sal_uLong nWin = aIDEWindowTable.Count(); nWin; )
     {
         IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
         if ( pWin->IsDocument( _rDocument ) )
@@ -347,7 +344,7 @@ void BasicIDEShell::onDocumentClosed( const ScriptDocument& _rDocument )
                 pWin->StoreData();
                 if ( pWin == pCurWin )
                     bSetCurWindow = true;
-                RemoveWindow( pWin, TRUE, FALSE );
+                RemoveWindow( pWin, sal_True, sal_False );
             }
         }
     }
@@ -360,20 +357,20 @@ void BasicIDEShell::onDocumentClosed( const ScriptDocument& _rDocument )
     if ( bSetCurLib )
         SetCurLib( ScriptDocument::getApplicationScriptDocument(), String::CreateFromAscii( "Standard" ), true, false );
     else if ( bSetCurWindow )
-        SetCurWindow( FindApplicationWindow(), TRUE );
+        SetCurWindow( FindApplicationWindow(), sal_True );
 }
 
 void BasicIDEShell::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
 {
     SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
     if ( pBindings )
-        pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR, TRUE, FALSE );
+        pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR, sal_True, sal_False );
     SetMDITitle();
 }
 
 void BasicIDEShell::onDocumentModeChanged( const ScriptDocument& _rDocument )
 {
-    for ( ULONG nWin = aIDEWindowTable.Count(); nWin; )
+    for ( sal_uLong nWin = aIDEWindowTable.Count(); nWin; )
     {
         IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
         if ( pWin->IsDocument( _rDocument ) && _rDocument.isDocument() )
@@ -381,9 +378,9 @@ void BasicIDEShell::onDocumentModeChanged( const ScriptDocument& _rDocument )
     }
 }
 
-void BasicIDEShell::StoreAllWindowData( BOOL bPersistent )
+void BasicIDEShell::StoreAllWindowData( sal_Bool bPersistent )
 {
-    for ( ULONG nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
+    for ( sal_uLong nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
     {
         IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
         DBG_ASSERT( pWin, "PrepareClose: NULL-Pointer in Table?" );
@@ -394,7 +391,7 @@ void BasicIDEShell::StoreAllWindowData( BOOL bPersistent )
     if ( bPersistent  )
     {
         SFX_APP()->SaveBasicAndDialogContainer();
-        SetAppBasicModified( FALSE );
+        SetAppBasicModified( sal_False );
 
         SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
         if ( pBindings )
@@ -406,12 +403,12 @@ void BasicIDEShell::StoreAllWindowData( BOOL bPersistent )
 }
 
 
-USHORT BasicIDEShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
+sal_uInt16 BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 {
     (void)bForBrowsing;
 
     // da es nach Drucken etc. (DocInfo) modifiziert ist, hier resetten
-    GetViewFrame()->GetObjectShell()->SetModified(FALSE);
+    GetViewFrame()->GetObjectShell()->SetModified(sal_False);
 
     if ( StarBASIC::IsRunning() )
     {
@@ -421,25 +418,25 @@ USHORT BasicIDEShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
             Window *pParent = &GetViewFrame()->GetWindow();
             InfoBox( pParent, aErrorStr ).Execute();
         }
-        return FALSE;
+        return sal_False;
     }
     else
     {
-        BOOL bCanClose = TRUE;
-        for ( ULONG nWin = 0; bCanClose && ( nWin < aIDEWindowTable.Count() ); nWin++ )
+        sal_Bool bCanClose = sal_True;
+        for ( sal_uLong nWin = 0; bCanClose && ( nWin < aIDEWindowTable.Count() ); nWin++ )
         {
             IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
             if ( !pWin->CanClose() )
             {
                 if ( m_aCurLibName.Len() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
                     SetCurLib( ScriptDocument::getApplicationScriptDocument(), String(), false );
-                SetCurWindow( pWin, TRUE );
-                bCanClose = FALSE;
+                SetCurWindow( pWin, sal_True );
+                bCanClose = sal_False;
             }
         }
 
         if ( bCanClose )
-            StoreAllWindowData( FALSE );    // Nicht auf Platte schreiben, das passiert am Ende automatisch
+            StoreAllWindowData( sal_False );    // Nicht auf Platte schreiben, das passiert am Ende automatisch
 
         return bCanClose;
     }
@@ -485,7 +482,7 @@ void BasicIDEShell::OuterResizePixel( const Point &rPos, const Size &rSize )
 IMPL_LINK_INLINE_START( BasicIDEShell, TabBarSplitHdl, TabBar *, pTBar )
 {
     (void)pTBar;
-    bTabBarSplitted = TRUE;
+    bTabBarSplitted = sal_True;
     ArrangeTabBar();
 
     return 0;
@@ -496,7 +493,7 @@ IMPL_LINK_INLINE_END( BasicIDEShell, TabBarSplitHdl, TabBar *, pTBar )
 
 IMPL_LINK( BasicIDEShell, TabBarHdl, TabBar *, pCurTabBar )
 {
-    USHORT nCurId = pCurTabBar->GetCurPageId();
+    sal_uInt16 nCurId = pCurTabBar->GetCurPageId();
     IDEBaseWindow* pWin = aIDEWindowTable.Get( nCurId );
     DBG_ASSERT( pWin, "Eintrag in TabBar passt zu keinem Fenster!" );
     SetCurWindow( pWin );
@@ -506,10 +503,10 @@ IMPL_LINK( BasicIDEShell, TabBarHdl, TabBar *, pCurTabBar )
 
 
 
-BOOL BasicIDEShell::NextPage( BOOL bPrev )
+sal_Bool BasicIDEShell::NextPage( sal_Bool bPrev )
 {
-    BOOL bRet = FALSE;
-    USHORT nPos = pTabBar->GetPagePos( pTabBar->GetCurPageId() );
+    sal_Bool bRet = sal_False;
+    sal_uInt16 nPos = pTabBar->GetPagePos( pTabBar->GetCurPageId() );
 
     if ( bPrev )
         --nPos;
@@ -519,8 +516,8 @@ BOOL BasicIDEShell::NextPage( BOOL bPrev )
     if ( nPos < pTabBar->GetPageCount() )
     {
         IDEBaseWindow* pWin = aIDEWindowTable.Get( pTabBar->GetPageId( nPos ) );
-        SetCurWindow( pWin, TRUE );
-        bRet = TRUE;
+        SetCurWindow( pWin, sal_True );
+        bRet = sal_True;
     }
 
     return bRet;
@@ -546,9 +543,9 @@ void BasicIDEShell::ArrangeTabBar()
 
 
 
-SfxUndoManager* BasicIDEShell::GetUndoManager()
+::svl::IUndoManager* BasicIDEShell::GetUndoManager()
 {
-    SfxUndoManager* pMgr = NULL;
+    ::svl::IUndoManager* pMgr = NULL;
     if( pCurWin )
         pMgr = pCurWin->GetUndoManager();
 
@@ -557,7 +554,7 @@ SfxUndoManager* BasicIDEShell::GetUndoManager()
 
 
 
-void BasicIDEShell::ShowObjectDialog( BOOL bShow, BOOL bCreateOrDestroy )
+void BasicIDEShell::ShowObjectDialog( sal_Bool bShow, sal_Bool bCreateOrDestroy )
 {
     if ( bShow )
     {
@@ -612,7 +609,7 @@ void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
             {
                 case SFX_HINT_DYING:
                 {
-                    EndListening( rBC, TRUE /* Alle abmelden */ );
+                    EndListening( rBC, sal_True /* Alle abmelden */ );
                     if ( pObjectCatalog )
                         pObjectCatalog->UpdateEntries();
                 }
@@ -622,7 +619,7 @@ void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
             if ( rHint.IsA( TYPE( SbxHint ) ) )
             {
                 SbxHint& rSbxHint = (SbxHint&)rHint;
-                ULONG nHintId = rSbxHint.GetId();
+                sal_uLong nHintId = rSbxHint.GetId();
                 if (    ( nHintId == SBX_HINT_BASICSTART ) ||
                         ( nHintId == SBX_HINT_BASICSTOP ) )
                 {
@@ -684,42 +681,42 @@ void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
 
 void BasicIDEShell::CheckWindows()
 {
-    BOOL bSetCurWindow = FALSE;
-    for ( ULONG nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
+    sal_Bool bSetCurWindow = sal_False;
+    for ( sal_uLong nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
     {
         IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
         if ( pWin->GetStatus() & BASWIN_TOBEKILLED )
         {
             pWin->StoreData();
             if ( pWin == pCurWin )
-                bSetCurWindow = TRUE;
-            RemoveWindow( pWin, TRUE, FALSE );
+                bSetCurWindow = sal_True;
+            RemoveWindow( pWin, sal_True, sal_False );
             nWin--;
         }
     }
     if ( bSetCurWindow )
-        SetCurWindow( FindApplicationWindow(), TRUE );
+        SetCurWindow( FindApplicationWindow(), sal_True );
 }
 
 
 
-void BasicIDEShell::RemoveWindows( const ScriptDocument& rDocument, const String& rLibName, BOOL bDestroy )
+void BasicIDEShell::RemoveWindows( const ScriptDocument& rDocument, const String& rLibName, sal_Bool bDestroy )
 {
-    BOOL bChangeCurWindow = pCurWin ? FALSE : TRUE;
-    for ( ULONG nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
+    sal_Bool bChangeCurWindow = pCurWin ? sal_False : sal_True;
+    for ( sal_uLong nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
     {
         IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
         if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName )
         {
             if ( pWin == pCurWin )
-                bChangeCurWindow = TRUE;
+                bChangeCurWindow = sal_True;
             pWin->StoreData();
-            RemoveWindow( pWin, bDestroy, FALSE );
+            RemoveWindow( pWin, bDestroy, sal_False );
             nWin--;
         }
     }
     if ( bChangeCurWindow )
-        SetCurWindow( FindApplicationWindow(), TRUE );
+        SetCurWindow( FindApplicationWindow(), sal_True );
 }
 
 
@@ -727,16 +724,16 @@ void BasicIDEShell::RemoveWindows( const ScriptDocument& rDocument, const String
 void BasicIDEShell::UpdateWindows()
 {
     // Alle Fenster, die nicht angezeigt werden duerfen, entfernen
-    BOOL bChangeCurWindow = pCurWin ? FALSE : TRUE;
+    sal_Bool bChangeCurWindow = pCurWin ? sal_False : sal_True;
     if ( m_aCurLibName.Len() )
     {
-        for ( ULONG nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
+        for ( sal_uLong nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
         {
             IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
             if ( !pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName )
             {
                 if ( pWin == pCurWin )
-                    bChangeCurWindow = TRUE;
+                    bChangeCurWindow = sal_True;
                 pWin->StoreData();
                 // Die Abfrage auf RUNNING verhindert den Absturz, wenn in Reschedule.
                 // Fenster bleibt erstmal stehen, spaeter sowieso mal umstellen,
@@ -744,7 +741,7 @@ void BasicIDEShell::UpdateWindows()
                 // geloescht.
                 if ( !(pWin->GetStatus() & ( BASWIN_TOBEKILLED | BASWIN_RUNNINGBASIC | BASWIN_SUSPENDED ) ) )
                 {
-                    RemoveWindow( pWin, FALSE, FALSE );
+                    RemoveWindow( pWin, sal_False, sal_False );
                     nWin--;
                 }
             }
@@ -763,7 +760,7 @@ void BasicIDEShell::UpdateWindows()
             ++doc
         )
     {
-        StartListening( *doc->getBasicManager(), TRUE /* Nur einmal anmelden */ );
+        StartListening( *doc->getBasicManager(), sal_True /* Nur einmal anmelden */ );
 
         // libraries
         Sequence< ::rtl::OUString > aLibNames( doc->getLibraryNames() );
@@ -777,14 +774,14 @@ void BasicIDEShell::UpdateWindows()
             if ( !m_aCurLibName.Len() || ( *doc == m_aCurDocument && aLibName == m_aCurLibName ) )
             {
                 // check, if library is password protected and not verified
-                BOOL bProtected = FALSE;
+                sal_Bool bProtected = sal_False;
                 Reference< script::XLibraryContainer > xModLibContainer( doc->getLibraryContainer( E_SCRIPTS ) );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
                 {
                     Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                     if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
                     {
-                        bProtected = TRUE;
+                        bProtected = sal_True;
                     }
                 }
 
@@ -811,7 +808,7 @@ void BasicIDEShell::UpdateWindows()
                             for ( sal_Int32 j = 0 ; j < nModCount ; j++ )
                             {
                                 String aModName = pModNames[ j ];
-                                ModulWindow* pWin = FindBasWin( *doc, aLibName, aModName, FALSE );
+                                ModulWindow* pWin = FindBasWin( *doc, aLibName, aModName, sal_False );
                                 if ( !pWin )
                                     pWin = CreateBasWin( *doc, aLibName, aModName );
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aModName &&
@@ -842,7 +839,7 @@ void BasicIDEShell::UpdateWindows()
                                 String aDlgName = pDlgNames[ j ];
                                 // this find only looks for non-suspended windows;
                                 // suspended windows are handled in CreateDlgWin
-                                DialogWindow* pWin = FindDlgWin( *doc, aLibName, aDlgName, FALSE );
+                                DialogWindow* pWin = FindDlgWin( *doc, aLibName, aDlgName, sal_False );
                                 if ( !pWin )
                                     pWin = CreateDlgWin( *doc, aLibName, aDlgName );
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aDlgName &&
@@ -866,22 +863,22 @@ void BasicIDEShell::UpdateWindows()
     {
         if ( !pNextActiveWindow )
             pNextActiveWindow = FindApplicationWindow();
-        SetCurWindow( pNextActiveWindow, TRUE );
+        SetCurWindow( pNextActiveWindow, sal_True );
     }
 }
 
-void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, BOOL bDestroy, BOOL bAllowChangeCurWindow )
+void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, sal_Bool bDestroy, sal_Bool bAllowChangeCurWindow )
 {
     DBG_ASSERT( pWindow_, "Kann keinen NULL-Pointer loeschen!" );
-    ULONG nKey = aIDEWindowTable.GetKey( pWindow_ );
-    pTabBar->RemovePage( (USHORT)nKey );
+    sal_uLong nKey = aIDEWindowTable.GetKey( pWindow_ );
+    pTabBar->RemovePage( (sal_uInt16)nKey );
     aIDEWindowTable.Remove( nKey );
     if ( pWindow_ == pCurWin )
     {
         if ( bAllowChangeCurWindow )
-            SetCurWindow( FindApplicationWindow(), TRUE );
+            SetCurWindow( FindApplicationWindow(), sal_True );
         else
-            SetCurWindow( NULL, FALSE );
+            SetCurWindow( NULL, sal_False );
     }
     if ( bDestroy )
     {
@@ -924,7 +921,7 @@ void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, BOOL bDestroy, BOOL b
 
 
 
-USHORT BasicIDEShell::InsertWindowInTable( IDEBaseWindow* pNewWin )
+sal_uInt16 BasicIDEShell::InsertWindowInTable( IDEBaseWindow* pNewWin )
 {
     // Eigentlich prueffen,
     nCurKey++;
@@ -978,7 +975,7 @@ void BasicIDEShell::InvalidateBasicIDESlots()
     }
 }
 
-void BasicIDEShell::EnableScrollbars( BOOL bEnable )
+void BasicIDEShell::EnableScrollbars( sal_Bool bEnable )
 {
     if ( bEnable )
     {
@@ -1033,7 +1030,7 @@ void BasicIDEShell::SetCurLibForLocalization( const ScriptDocument& rDocument, S
     {
         if( aLibName.Len() )
         {
-            Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, TRUE ) );
+            Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );
             xStringResourceManager = LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
         }
     }
@@ -1047,7 +1044,7 @@ void BasicIDEShell::SetCurLibForLocalization( const ScriptDocument& rDocument, S
 
 void BasicIDEShell::ImplStartListening( StarBASIC* pBasic )
 {
-    StartListening( pBasic->GetBroadcaster(), TRUE /* Nur einmal anmelden */ );
+    StartListening( pBasic->GetBroadcaster(), sal_True /* Nur einmal anmelden */ );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

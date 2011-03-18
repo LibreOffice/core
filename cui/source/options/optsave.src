@@ -51,12 +51,14 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox CB_LOAD_SETTINGS
     {
+        HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:CB_LOAD_SETTINGS";
         Pos = MAP_APPFONT ( 12 , 11 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "Load user-specific settings with the document";
     };
     CheckBox CB_LOAD_DOCPRINTER
     {
+        HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:CB_LOAD_DOCPRINTER";
         Pos = MAP_APPFONT ( 12 , 22 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "Load printer settings with the document";
@@ -69,6 +71,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_DOCINFO
     {
+        HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:BTN_DOCINFO";
         Pos = MAP_APPFONT ( 12 , 41 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "~Edit document properties before saving" ;
@@ -82,18 +85,21 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_BACKUP
     {
+        HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:BTN_BACKUP";
         Pos = MAP_APPFONT ( 12 , 52 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "Al~ways create backup copy" ;
     };
     CheckBox BTN_AUTOSAVE
     {
+        HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:BTN_AUTOSAVE";
         Pos = MAP_APPFONT ( 12 , 63 ) ;
         Size = MAP_APPFONT ( 193 , 10 ) ;
         Text [ en-US ] = "Save ~AutoRecovery information every" ;
     };
     NumericField ED_AUTOSAVE
     {
+        HelpID = "cui:NumericField:RID_SFXPAGE_SAVE:ED_AUTOSAVE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 210 , 61 ) ;
         Size = MAP_APPFONT ( 21 , 12 ) ;
@@ -116,12 +122,14 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_RELATIVE_FSYS
     {
+        HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:BTN_RELATIVE_FSYS";
         Pos = MAP_APPFONT ( 12 , 74 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "Save URLs relative to file system" ;
     };
     CheckBox BTN_RELATIVE_INET
     {
+        HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:BTN_RELATIVE_INET";
         Pos = MAP_APPFONT ( 12 , 85 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         Text [ en-US ] = "Save URLs relative to internet" ;
@@ -140,6 +148,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     ListBox LB_ODF_VERSION
     {
+        HelpID = "cui:ListBox:RID_SFXPAGE_SAVE:LB_ODF_VERSION";
         Pos = MAP_APPFONT ( 136 , 105 ) ;
         Size = MAP_APPFONT ( 108 , 58 ) ;
         Border = TRUE;
@@ -153,12 +162,14 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_NOPRETTYPRINTING
     {
+        HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:BTN_NOPRETTYPRINTING";
         Pos = MAP_APPFONT ( 12 , 120 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         Text [ en-US ] = "Size optimization for ODF format" ;
     };
     CheckBox BTN_WARNALIENFORMAT
     {
+        HelpID = "cui:CheckBox:RID_SFXPAGE_SAVE:BTN_WARNALIENFORMAT";
         Pos = MAP_APPFONT ( 12 , 131 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
         Text [ en-US ] = "Warn when not saving in ODF or default format" ;
@@ -177,6 +188,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     ListBox LB_APP
     {
+        HelpID = "cui:ListBox:RID_SFXPAGE_SAVE:LB_APP";
         Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 108 , 58 ) ;
         Border = TRUE;
@@ -200,6 +212,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     ListBox LB_FILTER
     {
+        HelpID = "cui:ListBox:RID_SFXPAGE_SAVE:LB_FILTER";
         Pos = MAP_APPFONT ( 136 , 153 ) ;
         Size = MAP_APPFONT ( 108 , 58 ) ;
         Border = TRUE;

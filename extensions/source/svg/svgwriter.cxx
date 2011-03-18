@@ -46,7 +46,7 @@ private:
 protected:
 
     virtual void            _ExportMeta() {}
-    virtual void            _ExportStyles( BOOL /*bUsed*/ ) {}
+    virtual void            _ExportStyles( sal_Bool /*bUsed*/ ) {}
     virtual void            _ExportAutoStyles() {}
     virtual void            _ExportContent() {}
     virtual void            _ExportMasterStyles() {}
@@ -106,7 +106,7 @@ void SVGMtfExport::writeMtf( const GDIMetaFile& rMtf )
     AddAttribute( XML_NAMESPACE_NONE, "viewBox", aAttr );
 
     {
-        SvXMLElementExport  aSVG( *this, XML_NAMESPACE_NONE, "svg", TRUE, TRUE );
+        SvXMLElementExport  aSVG( *this, XML_NAMESPACE_NONE, "svg", sal_True, sal_True );
         SVGActionWriter*    pWriter = new SVGActionWriter( *this, rMtf );
 
         delete pWriter;

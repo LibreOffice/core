@@ -83,7 +83,7 @@ public:
             aBtnOK.Enable( rLink.Call( this ) > 0 );
     }
 
-    void    SetEditHelpId(ULONG nHelpId) {aEdtName.SetHelpId(nHelpId);}
+    void    SetEditHelpId( const rtl::OString& aHelpId) {aEdtName.SetHelpId(aHelpId);}
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -187,7 +187,7 @@ public:
     SvxMessDialog( Window* pWindow, const String& rText, const String& rDesc, Image* pImg = NULL );
     ~SvxMessDialog();
 
-    void    SetButtonText( USHORT nBtnId, const String& rNewTxt );
+    void    SetButtonText( sal_uInt16 nBtnId, const String& rNewTxt );
 };
 
 
