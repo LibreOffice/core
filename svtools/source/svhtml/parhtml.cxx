@@ -450,11 +450,11 @@ int HTMLParser::FilterToken( int nToken )
 int HTMLParser::ScanText( const sal_Unicode cBreak )
 {
     ::rtl::OUStringBuffer sTmpBuffer( MAX_LEN );
-    int bWeiter = sal_True;
+    int bContinue = sal_True;
     int bEqSignFound = sal_False;
     sal_Unicode cQuote = 0U;
 
-    while( bWeiter && IsParserWorking() )
+    while( bContinue && IsParserWorking() )
     {
         int bNextCh = sal_True;
         switch( nNextCh )
@@ -734,7 +734,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
 // abc&auml;<EOF> nicht angezeigt, also lassen wir das in Zukunft.
 //              if( '>' != cBreak )
 //                  eState = SVPAR_ACCEPTED;
-                bWeiter = sal_False;
+                bContinue = sal_False;
             }
             else
             {
@@ -747,7 +747,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             if( '>'==cBreak )
                 sTmpBuffer.append( nNextCh );
             else
-                bWeiter = sal_False;        // Abbrechen, String zusammen
+                bContinue = sal_False;      // Abbrechen, String zusammen
             break;
 
         case '\f':
@@ -759,7 +759,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             else
             {
                 // sonst wird es ein eigenes Token
-                bWeiter = sal_False;
+                bContinue = sal_False;
             }
             break;
 
@@ -773,7 +773,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             }
             else if( bReadListing || bReadXMP || bReadPRE || bReadTextArea )
             {
-                bWeiter = sal_False;
+                bContinue = sal_False;
                 break;
             }
             // Bug 18984: CR-LF -> Blank
@@ -783,7 +783,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             if( '\t'==nNextCh && bReadPRE && '>'!=cBreak )
             {
                 // In <PRE>: Tabs nach oben durchreichen
-                bWeiter = sal_False;
+                bContinue = sal_False;
                 break;
             }
             // kein break
@@ -828,7 +828,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             bEqSignFound = sal_False;
             if( (nNextCh==cBreak && !cQuote) ||
                 (sal_uLong(aToken.Len()) + MAX_LEN) > sal_uLong(STRING_MAXLEN & ~1 ))
-                bWeiter = sal_False;
+                bContinue = sal_False;
             else
             {
                 do {
@@ -860,7 +860,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
         if( MAX_LEN == sTmpBuffer.getLength() )
             aToken += String(sTmpBuffer.makeStringAndClear());
 
-        if( bWeiter && bNextCh )
+        if( bContinue && bNextCh )
             nNextCh = GetNextChar();
     }
 
@@ -887,10 +887,10 @@ int HTMLParser::_GetNextRawToken()
     }
 
     // per default geben wir HTML_RAWDATA zurueck
-    int bWeiter = sal_True;
+    int bContinue = sal_True;
     int nToken = HTML_RAWDATA;
     SaveState( 0 );
-    while( bWeiter && IsParserWorking() )
+    while( bContinue && IsParserWorking() )
     {
         int bNextCh = sal_True;
         switch( nNextCh )
@@ -980,7 +980,7 @@ int HTMLParser::_GetNextRawToken()
                     // bisher gelesenen String zurueckgeben und dnach normal
                     // weitermachen
 
-                    bWeiter = sal_False;
+                    bContinue = sal_False;
 
                     // nToken==0 heisst, dass _GetNextToken gleich weiterliest
                     if( !aToken.Len() && (bReadStyle || bReadScript) )
@@ -1049,19 +1049,19 @@ int HTMLParser::_GetNextRawToken()
             nNextCh = GetNextChar();
             if( nNextCh=='\n' )
                 nNextCh = GetNextChar();
-            bWeiter = sal_False;
+            bContinue = sal_False;
             break;
         case '\n':
             // \n beendet das aktuelle Text-Token (auch wenn es leer ist)
             nNextCh = GetNextChar();
-            bWeiter = sal_False;
+            bContinue = sal_False;
             break;
         case sal_Unicode(EOF):
             // eof beendet das aktuelle Text-Token und tut so, als ob
             // ein End-Token gelesen wurde
             if( rInput.IsEof() )
             {
-                bWeiter = sal_False;
+                bContinue = sal_False;
                 if( aToken.Len() || sTmpBuffer.getLength() )
                 {
                     bEndTokenFound = sal_True;
@@ -1082,11 +1082,11 @@ int HTMLParser::_GetNextRawToken()
             break;
         }
 
-        if( (!bWeiter && sTmpBuffer.getLength() > 0L) ||
+        if( (!bContinue && sTmpBuffer.getLength() > 0L) ||
             MAX_LEN == sTmpBuffer.getLength() )
             aToken += String(sTmpBuffer.makeStringAndClear());
 
-        if( bWeiter && bNextCh )
+        if( bContinue && bNextCh )
             nNextCh = GetNextChar();
     }
 
