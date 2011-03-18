@@ -175,6 +175,8 @@
 #define SC_UNONAME_AUTOPRINT        "AutomaticPrintArea"
 #define SC_UNONAME_TABCOLOR         "TabColor"
 
+#define SC_UNONAME_VISFLAG          "VisibleFlag"
+
 //  LinkTarget
 #define SC_UNO_LINKDISPBIT          "LinkDisplayBitmap"
 #define SC_UNO_LINKDISPNAME         "LinkDisplayName"
