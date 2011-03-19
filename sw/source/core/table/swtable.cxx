@@ -1488,7 +1488,7 @@ const SwTableBox* SwTable::GetTblBox( const String& rName,
     // Box ist ??
     if( pBox && !pBox->GetSttNd() )
     {
-        OSL_ENSURE( sal_False, "Box ohne Inhalt, suche die naechste !!" );
+        OSL_FAIL( "Box ohne Inhalt, suche die naechste !!" );
         // "herunterfallen lassen" bis zur ersten Box
         while( pBox->GetTabLines().Count() )
             pBox = pBox->GetTabLines()[0]->GetTabBoxes()[0];

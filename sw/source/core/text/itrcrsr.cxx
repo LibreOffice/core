@@ -285,7 +285,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                     case SVX_LINE_SPACE_FIX:
                         nFirstLineOfs = pSpace->GetLineHeight();
                     break;
-                    default: OSL_ENSURE( sal_False, ": unknown LineSpaceRule" );
+                    default: OSL_FAIL( ": unknown LineSpaceRule" );
                 }
                 switch( pSpace->GetInterLineSpaceRule() )
                 {
@@ -311,7 +311,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                         nFirstLineOfs += pSpace->GetInterLineSpace();
                         break;
                     }
-                    default: OSL_ENSURE( sal_False, ": unknown InterLineSpaceRule" );
+                    default: OSL_FAIL( ": unknown InterLineSpaceRule" );
                 }
             }
         }

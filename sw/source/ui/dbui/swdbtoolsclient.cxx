@@ -122,7 +122,7 @@ void SwDbtoolsClient::registerClient()
 
             if (NULL == getDbToolsClientFactoryFunction())
             {   // did not find the symbol
-                OSL_ENSURE(sal_False, "SwDbtoolsClient::registerClient: could not find the symbol for creating the factory!");
+                OSL_FAIL("SwDbtoolsClient::registerClient: could not find the symbol for creating the factory!");
                 osl_unloadModule(getDbToolsClientModule());
                 getDbToolsClientModule() = NULL;
             }

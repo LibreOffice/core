@@ -1786,7 +1786,7 @@ pCurr->GetAscent() )
                     pInf->GetParaPortion()->SetFixLineHeight();
                 }
                 break;
-                default: OSL_ENSURE( sal_False, ": unknown LineSpaceRule" );
+                default: OSL_FAIL( ": unknown LineSpaceRule" );
             }
             if( !IsParaLine() )
                 switch( pSpace->GetInterLineSpaceRule() )
@@ -1813,7 +1813,7 @@ pCurr->GetAscent() )
                         nLineHeight = nLineHeight + pSpace->GetInterLineSpace();
                         break;
                     }
-                    default: OSL_ENSURE( sal_False, ": unknown InterLineSpaceRule" );
+                    default: OSL_FAIL( ": unknown InterLineSpaceRule" );
                 }
         }
 #if OSL_DEBUG_LEVEL > 1

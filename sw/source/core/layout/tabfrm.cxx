@@ -3044,7 +3044,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                 }
                 break;
             default:
-                OSL_ENSURE( sal_False, "Ungueltige orientation fuer Table." );
+                OSL_FAIL( "Ungueltige orientation fuer Table." );
         }
 
         // --> OD 2004-07-15 #i26250# - extend bottom printing area, if table

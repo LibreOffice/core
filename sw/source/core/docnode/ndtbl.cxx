@@ -698,7 +698,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
     if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
     {
-        OSL_ENSURE( sal_False, "Kein Bereich" );
+        OSL_FAIL( "Kein Bereich" );
         aRg.aEnd++;
     }
 
@@ -1140,7 +1140,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
 
     if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
     {
-        OSL_ENSURE( sal_False, "Kein Bereich" );
+        OSL_FAIL( "Kein Bereich" );
         aRg.aEnd++;
     }
 

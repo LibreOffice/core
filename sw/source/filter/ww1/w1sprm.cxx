@@ -212,7 +212,7 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc
     {
         switch(pBrc->dxpLine1WidthGet())
         {
-        default: OSL_ENSURE(sal_False, "unknown linewidth");
+        default: OSL_FAIL("unknown linewidth");
         case 0: return 0;                           // keine Linie
         case 1: nCode = DEF_LINE_WIDTH_0; break;
         case 2: nCode = DEF_LINE_WIDTH_1; break;
@@ -236,20 +236,20 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc
     {
         switch(pBrc->dxpLine1WidthGet())
         {
-        default: OSL_ENSURE(sal_False, "unknown linewidth");
+        default: OSL_FAIL("unknown linewidth");
         case 1: nCode = DEF_DOUBLE_LINE0_IN; break;
         }
         pLine->SetOutWidth(nCode);
         switch(pBrc->dxpLine2WidthGet())
         {
-        default: OSL_ENSURE(sal_False, "unknown linewidth");
+        default: OSL_FAIL("unknown linewidth");
         case 1: nCode = DEF_DOUBLE_LINE0_OUT; break;
         }
         pLine->SetInWidth(nCode);
     }
     switch(pBrc->dxpLine1WidthGet())
     {
-    default: OSL_ENSURE(sal_False, "unknown space");
+    default: OSL_FAIL("unknown space");
     case 0: nCode = DEF_DOUBLE_LINE0_DIST; break;
     case 1: nCode = DEF_DOUBLE_LINE1_DIST; break;
     case 2: nCode = DEF_DOUBLE_LINE2_DIST; break;

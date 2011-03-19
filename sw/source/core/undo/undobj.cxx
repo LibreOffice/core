@@ -500,7 +500,7 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
 
     }
     else {
-        OSL_ENSURE( sal_False, "was ist es denn nun?" );
+        OSL_FAIL( "was ist es denn nun?" );
     }
 }
 

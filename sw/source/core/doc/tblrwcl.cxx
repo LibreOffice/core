@@ -1703,7 +1703,7 @@ sal_Bool lcl_Merge_MoveLine( const _FndLine*& rpFndLine, void* pPara )
             lcl_CalcWidth( pRMBox );        // bereche die Breite der Box
         }
         else {
-            OSL_ENSURE( sal_False, "Was denn nun" );
+            OSL_FAIL( "Was denn nun" );
         }
     }
     // Left/Right

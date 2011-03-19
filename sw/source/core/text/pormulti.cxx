@@ -80,8 +80,7 @@ SwMultiPortion::~SwMultiPortion()
 
 void SwMultiPortion::Paint( const SwTxtPaintInfo & ) const
 {
-    OSL_ENSURE( sal_False,
-    "Don't try SwMultiPortion::Paint, try SwTxtPainter::PaintMultiPortion" );
+    OSL_FAIL( "Don't try SwMultiPortion::Paint, try SwTxtPainter::PaintMultiPortion" );
 }
 
 /*--------------------------------------------------
@@ -749,7 +748,7 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
             }
             break;
         }
-        default: OSL_ENSURE( sal_False, "New ruby adjustment" );
+        default: OSL_FAIL( "New ruby adjustment" );
     }
     if( nLeft || nRight )
     {

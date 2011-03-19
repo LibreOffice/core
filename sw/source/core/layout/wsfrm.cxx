@@ -342,7 +342,7 @@ void SwFrm::_UpdateAttrFrm( SfxPoolItem *pOld, SfxPoolItem *pNew,
             break;
         }
         case RES_COL:
-            OSL_ENSURE( sal_False, "Spalten fuer neuen FrmTyp?" );
+            OSL_FAIL( "Spalten fuer neuen FrmTyp?" );
             break;
 
         default:

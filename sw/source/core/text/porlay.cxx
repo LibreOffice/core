@@ -770,7 +770,7 @@ sal_uInt8 SwScriptInfo::WhichFont( xub_StrLen nIdx, const String* pTxt, const Sw
         case i18n::ScriptType::COMPLEX : return SW_CTL;
     }
 
-    OSL_ENSURE( sal_False, "Somebody tells lies about the script type!" );
+    OSL_FAIL( "Somebody tells lies about the script type!" );
     return SW_LATIN;
 }
 

@@ -714,7 +714,7 @@ SwSection * SwSectionFmt::GetSection() const
         return (SwSectionPtr)aIter.First( TYPE(SwSection) );
     }
 
-    OSL_ENSURE( sal_False, "keine Section als Client." );
+    OSL_FAIL( "keine Section als Client." );
     return 0;
 }
 

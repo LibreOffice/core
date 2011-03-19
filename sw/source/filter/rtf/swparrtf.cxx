@@ -136,7 +136,7 @@ sal_uLong RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, con
 {
     if( !pStrm )
     {
-        OSL_ENSURE( sal_False, "RTF-Read ohne Stream" );
+        OSL_FAIL( "RTF-Read ohne Stream" );
         return ERR_SWG_READ_ERROR;
     }
 
@@ -2081,7 +2081,7 @@ void SwRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos, xub_StrLen& rCntPos )
     SwCntntNode* pNode = pDoc->GetNodes().GoPrevious( &aIdx );
     if( !pNode )
     {
-        OSL_ENSURE( sal_False, "keinen vorherigen ContentNode gefunden" );
+        OSL_FAIL( "keinen vorherigen ContentNode gefunden" );
     }
 
     rpNodePos = new SwNodeIdx( aIdx );
@@ -3253,7 +3253,7 @@ void SwRTFParser::ReadPageDescTbl()
                 if (nPos != pDoc->MakePageDesc(
                     String::CreateFromInt32(nTokenValue)))
                 {
-                    OSL_ENSURE( sal_False, "PageDesc an falscher Position" );
+                    OSL_FAIL( "PageDesc an falscher Position" );
                 }
             }
             pPg = &pDoc->_GetPageDesc(nPos);

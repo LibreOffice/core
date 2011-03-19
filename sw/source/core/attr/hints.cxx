@@ -155,14 +155,14 @@ SwMsgPoolItem::SwMsgPoolItem( sal_uInt16 nWhch )
 // "Overhead" vom SfxPoolItem
 int SwMsgPoolItem::operator==( const SfxPoolItem& ) const
 {
-    OSL_ENSURE( sal_False, "SwMsgPoolItem kennt kein ==" );
+    OSL_FAIL( "SwMsgPoolItem kennt kein ==" );
     return 0;
 }
 
 
 SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
 {
-    OSL_ENSURE( sal_False, "SwMsgPoolItem kennt kein Clone" );
+    OSL_FAIL( "SwMsgPoolItem kennt kein Clone" );
     return 0;
 }
 

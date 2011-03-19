@@ -280,7 +280,7 @@ Graphic* SwOLENode::GetGraphic()
 SwCntntNode *SwOLENode::SplitCntntNode( const SwPosition & )
 {
     // OLE-Objecte vervielfaeltigen ??
-    OSL_ENSURE( sal_False, "OleNode: can't split." );
+    OSL_FAIL( "OleNode: can't split." );
     return this;
 }
 

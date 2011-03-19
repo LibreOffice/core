@@ -36,17 +36,17 @@
 
 void SwFrm::Format( const SwBorderAttrs * )
 {
-    OSL_ENSURE( sal_False, "Format() der Basisklasse gerufen." );
+    OSL_FAIL( "Format() der Basisklasse gerufen." );
 }
 
 void SwFrm::Paint(SwRect const&, SwPrintData const*const) const
 {
-    OSL_ENSURE( sal_False, "Paint() der Basisklasse gerufen." );
+    OSL_FAIL( "Paint() der Basisklasse gerufen." );
 }
 
 sal_Bool SwCntntFrm::WouldFit( SwTwips &, sal_Bool&, sal_Bool )
 {
-    OSL_ENSURE( sal_False, "WouldFit des CntntFrm gerufen." );
+    OSL_FAIL( "WouldFit des CntntFrm gerufen." );
     return sal_False;
 }
 
@@ -58,7 +58,7 @@ bool SwFrm::FillSelection( SwSelectionList& , const SwRect& ) const
 
 sal_Bool SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
 {
-    OSL_ENSURE( sal_False, "GetCrsrOfst der Basisklasse, hi!" );
+    OSL_FAIL( "GetCrsrOfst der Basisklasse, hi!" );
     return sal_False;
 }
 
@@ -66,17 +66,17 @@ sal_Bool SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
 
 void SwRootFrm::Cut()
 {
-    OSL_ENSURE( sal_False, "Cut() des RootFrm gerufen." );
+    OSL_FAIL( "Cut() des RootFrm gerufen." );
 }
 
 void SwRootFrm::Paste( SwFrm *, SwFrm * )
 {
-    OSL_ENSURE( sal_False, "Paste() des RootFrm gerufen." );
+    OSL_FAIL( "Paste() des RootFrm gerufen." );
 }
 
 void SwFlyFrm::Paste( SwFrm *, SwFrm * )
 {
-    OSL_ENSURE( sal_False, "Paste() des FlyFrm gerufen." );
+    OSL_FAIL( "Paste() des FlyFrm gerufen." );
 }
 
 #endif
@@ -84,7 +84,7 @@ void SwFlyFrm::Paste( SwFrm *, SwFrm * )
 sal_Bool SwFrm::GetCharRect( SwRect&, const SwPosition&,
                          SwCrsrMoveState* ) const
 {
-    OSL_ENSURE( sal_False, "GetCharRect() der Basis gerufen." );
+    OSL_FAIL( "GetCharRect() der Basis gerufen." );
     return sal_False;
 }
 

@@ -266,7 +266,7 @@ SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, xub_Str
         }
         break;
     default:
-        OSL_ENSURE( sal_False, "Was denn fuer ein FlyFrame?" );
+        OSL_FAIL( "Was denn fuer ein FlyFrame?" );
     }
 }
 
@@ -346,7 +346,7 @@ void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
                 pDoc->GetRootFrm()->GetCurrPage(& rContext.GetRepeatPaM()) );
     }
     else {
-        OSL_ENSURE( sal_False, "was fuer ein Anker ist es denn nun?" );
+        OSL_FAIL( "was fuer ein Anker ist es denn nun?" );
     }
 
     SwFrmFmt* pFlyFmt = pDoc->CopyLayoutFmt( *pFrmFmt, aAnchor, true, true );

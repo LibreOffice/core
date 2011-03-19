@@ -587,7 +587,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
             //TODO: That doesn't seem to be intended
             if( Color(COL_TRANSPARENT) != GetOut()->GetLineColor() )
             {
-                OSL_ENSURE( sal_False, "Hey, Joe: Where's my Null Pen?" );
+                OSL_FAIL( "Hey, Joe: Where's my Null Pen?" );
                 GetOut()->SetLineColor( Color(COL_TRANSPARENT) );
             }
 #endif
@@ -2145,7 +2145,7 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
                 }
                 catch ( uno::Exception& )
                 {
-                    OSL_ENSURE( sal_False , "Baseline could not be retrieved from Starmath!" );
+                    OSL_FAIL( "Baseline could not be retrieved from Starmath!" );
                 }
             }
         }

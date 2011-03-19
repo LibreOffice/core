@@ -860,7 +860,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
         else
         {
-            OSL_ENSURE( sal_False, "Outdev Check failed" );
+            OSL_FAIL( "Outdev Check failed" );
         }
     }
     else if ( OUTDEV_VIRDEV == rInf.GetOut().GetOutDevType() && ! pWin )
@@ -876,7 +876,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
         else
         {
-            OSL_ENSURE( sal_False, "Outdev Check failed" );
+            OSL_FAIL( "Outdev Check failed" );
         }
     }
     else if ( OUTDEV_WINDOW == rInf.GetOut().GetOutDevType() ||
@@ -897,12 +897,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
         else
         {
-            OSL_ENSURE( sal_False, "Outdev Check failed" );
+            OSL_FAIL( "Outdev Check failed" );
         }
     }
     else
     {
-            OSL_ENSURE( sal_False, "Outdev Check failed" );
+            OSL_FAIL( "Outdev Check failed" );
     }
 
 #endif

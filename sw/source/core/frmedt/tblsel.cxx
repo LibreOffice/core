@@ -2664,7 +2664,7 @@ sal_Bool _FndBox::AreLinesToRestore( const SwTable &rTable ) const
 
     if ( nBfPos == nBhPos ) //Duerfte eigentlich nie vorkommen.
     {
-        OSL_ENSURE( sal_False, "Table, Loeschen auf keinem Bereich !?!" );
+        OSL_FAIL( "Table, Loeschen auf keinem Bereich !?!" );
         return sal_False;
     }
 

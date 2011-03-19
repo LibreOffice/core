@@ -177,7 +177,7 @@ void SwCache::Flush( const sal_uInt8 )
 #if OSL_DEBUG_LEVEL > 1
         if ( pObj->IsLocked() )
         {
-            OSL_ENSURE( sal_False, "Flushing locked objects." );
+            OSL_FAIL( "Flushing locked objects." );
             if ( !pRealFirst )
             {
                 pRealFirst = pFirst = pLast = pObj;
@@ -425,7 +425,7 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
             pObj = pObj->GetPrev();
         if ( !pObj )
         {
-            OSL_ENSURE( sal_False, "Cache overflow." );
+            OSL_FAIL( "Cache overflow." );
             return sal_False;
         }
 

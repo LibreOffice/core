@@ -706,7 +706,7 @@ SwTxtFrm* SwCntntFrm::FindMaster() const
         pCnt = pCnt->GetPrevCntntFrm();
     }
 
-    OSL_ENSURE( sal_False, "Follow ist lost in Space." );
+    OSL_FAIL( "Follow ist lost in Space." );
     return 0;
 }
 
@@ -730,7 +730,7 @@ SwSectionFrm* SwSectionFrm::FindMaster() const
         pLast = aIter++;
     }
 
-    OSL_ENSURE( sal_False, "Follow ist lost in Space." );
+    OSL_FAIL( "Follow ist lost in Space." );
     return 0;
 }
 
@@ -776,7 +776,7 @@ SwTabFrm* SwTabFrm::FindMaster( bool bFirstMaster ) const
         pLast = aIter++;
     }
 
-    OSL_ENSURE( sal_False, "Follow ist lost in Space." );
+    OSL_FAIL( "Follow ist lost in Space." );
     return 0;
 }
 
@@ -1332,7 +1332,7 @@ sal_Bool SwFlowFrm::HasParaSpaceAtPages( sal_Bool bSct ) const
                 return sal_False;
             pTmp = pTmp->GetUpper();
         }
-        OSL_ENSURE( sal_False, "HasParaSpaceAtPages: Where's my page?" );
+        OSL_FAIL( "HasParaSpaceAtPages: Where's my page?" );
         return sal_False;
     }
     if( !rThis.IsInDocBody() || ( rThis.IsInTab() && !rThis.IsTabFrm()) ||

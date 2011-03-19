@@ -188,7 +188,7 @@ void SwEditShell::Overwrite(const String &rStr)
     FOREACHPAM_START(this)
         if( !GetDoc()->Overwrite(*PCURCRSR, rStr ) )
         {
-            OSL_ENSURE( sal_False, "Doc->Overwrite(Str) failed." );
+            OSL_FAIL( "Doc->Overwrite(Str) failed." );
         }
         SaveTblBoxCntnt( PCURCRSR->GetPoint() );
     FOREACHPAM_END()
@@ -582,7 +582,7 @@ void SwEditShell::ReplaceDropTxt( const String &rStr )
         SwPaM aPam( rNd, rStr.Len(), rNd, 0 );
         if( !GetDoc()->Overwrite( aPam, rStr ) )
         {
-            OSL_ENSURE( sal_False, "Doc->Overwrite(Str) failed." );
+            OSL_FAIL( "Doc->Overwrite(Str) failed." );
         }
 
         EndAllAction();

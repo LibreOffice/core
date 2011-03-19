@@ -1158,7 +1158,7 @@ void SwCntntFrm::MakeAll()
 
     if ( ((SwTxtFrm*)this)->IsLocked() )
     {
-        OSL_ENSURE( sal_False, "Format fuer gelockten TxtFrm." );
+        OSL_FAIL( "Format fuer gelockten TxtFrm." );
         return;
     }
 
@@ -1707,7 +1707,7 @@ void SwCntntFrm::MakeAll()
 #if OSL_DEBUG_LEVEL > 1
             else
             {
-                OSL_ENSURE( sal_False, "+TxtFrm hat WouldFit-Versprechen nicht eingehalten." );
+                OSL_FAIL( "+TxtFrm hat WouldFit-Versprechen nicht eingehalten." );
             }
 #endif
         }

@@ -2014,7 +2014,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
             }
             break;
         default:
-            OSL_ENSURE( sal_False, "Unknown Anchor." );
+            OSL_FAIL( "Unknown Anchor." );
             break;
     }
     if ( GetAnchorFrm() )

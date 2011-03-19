@@ -2607,7 +2607,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             rPam.Exchange();
             if( !rPam.Move( fnMoveBackward, fnGoNode ))
             {
-                OSL_ENSURE( sal_False, "kein Node mehr vorhanden" );
+                OSL_FAIL( "kein Node mehr vorhanden" );
                 return sal_False;
             }
         }

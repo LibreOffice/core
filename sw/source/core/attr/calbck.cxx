@@ -351,7 +351,7 @@ SwClient *SwModify::_Remove(SwClient * pDepend)
         pDepend->pRight = 0;
     }
     else {
-        OSL_ENSURE( sal_False, "SwModify::Remove(): pDepend nicht gefunden");
+        OSL_FAIL( "SwModify::Remove(): pDepend nicht gefunden");
     }
     pDepend->pRegisteredIn = 0;
     return pDepend;

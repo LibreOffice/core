@@ -449,7 +449,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
                 layout, you may run into this robust code.
                 It's not allowed that subrows leaves their parentrow. If this would happen the line
                 height of subrow is reduced to a part of the remaining height */
-                OSL_ENSURE( sal_False, "Corrupt line height I" );
+                OSL_FAIL( "Corrupt line height I" );
                 nRPos -= nLineHeight;
                 nLineHeight = nStartRPos + nParentLineHeight - nRPos; // remaining parent height
                 nLineHeight /= nLines - nLine; // divided through the number of remaining sub rows
@@ -578,7 +578,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
             if( nParentLineHeight && nStartRPos + nParentLineHeight <= nRPos )
             {
                 /* See comment in CollectTableRowCols */
-                OSL_ENSURE( sal_False, "Corrupt line height II" );
+                OSL_FAIL( "Corrupt line height II" );
                 nRPos -= nLineHeight;
                 nLineHeight = nStartRPos + nParentLineHeight - nRPos; // remaining parent height
                 nLineHeight /= nLines - nLine; // divided through the number of remaining sub rows

@@ -206,7 +206,7 @@ void SwTxtFrm::SetPara( SwParaPortion *pNew, sal_Bool bDelete )
             nCacheIdx = pTxtLine->GetCachePos();
         else
         {
-            OSL_ENSURE( sal_False, "+SetPara: InsertCache failed." );
+            OSL_FAIL( "+SetPara: InsertCache failed." );
         }
     }
 }

@@ -727,7 +727,7 @@ SwCntntNode *SwTxtNode::JoinNext()
         InvalidateNumRule();
     }
     else {
-        OSL_ENSURE( sal_False, "kein TxtNode." );
+        OSL_FAIL( "kein TxtNode." );
     }
 
     return this;
@@ -822,7 +822,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
         InvalidateNumRule();
     }
     else {
-        OSL_ENSURE( sal_False, "kein TxtNode." );
+        OSL_FAIL( "kein TxtNode." );
     }
 
     return this;

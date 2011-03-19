@@ -385,7 +385,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
     }
     catch ( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Tried to open non-existent folder or stream!");
+        OSL_FAIL( "Tried to open non-existent folder or stream!");
     }
 
     return n;

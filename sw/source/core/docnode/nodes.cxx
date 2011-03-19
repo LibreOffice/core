@@ -876,13 +876,13 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                 }
             }
             else {
-                OSL_ENSURE( sal_False, "wie kommt diser Node ins Nodes-Array??" );
+                OSL_FAIL( "wie kommt diser Node ins Nodes-Array??" );
             }
             aRg.aEnd--;
             break;
 
         default:
-            OSL_ENSURE( sal_False, "was ist das fuer ein Node??" );
+            OSL_FAIL( "was ist das fuer ein Node??" );
             break;
         }
 
@@ -2128,12 +2128,12 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                     aInsPos++;  // ueberspringen
             }
             else {
-                OSL_ENSURE( sal_False, "wie kommt diser Node ins Nodes-Array??" );
+                OSL_FAIL( "wie kommt diser Node ins Nodes-Array??" );
             }
             break;
 
         default:
-            OSL_ENSURE( sal_False, "weder Start-/End-/Content-Node, unbekannter Typ" );
+            OSL_FAIL( "weder Start-/End-/Content-Node, unbekannter Typ" );
         }
         aRg.aStart++;
     }

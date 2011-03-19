@@ -890,7 +890,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
         nMaxWidth = rRect.Height();
         break;
     default:
-        OSL_ENSURE( sal_False, "Unknown direction set at font" );
+        OSL_FAIL( "Unknown direction set at font" );
         break;
     }
 

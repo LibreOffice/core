@@ -429,7 +429,7 @@ void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
             pSdrObj = 0;
             if ( bSdrObj  && 0 == (pSdrObj = pFmt->FindSdrObject()) )
             {
-                OSL_ENSURE( sal_False, "DrawObject not found." );
+                OSL_FAIL( "DrawObject not found." );
                 pFmt->GetDoc()->DelFrmFmt( pFmt );
                 --i;
                 continue;
@@ -1183,7 +1183,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
 #if OSL_DEBUG_LEVEL > 1
             else
             {
-                OSL_ENSURE( sal_False, "CheckPageDescs, missing solution" );
+                OSL_FAIL( "CheckPageDescs, missing solution" );
             }
 #endif
         }
@@ -1236,7 +1236,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
         {
             if ( bEmpty )
             {
-                OSL_ENSURE( sal_False, "Doppelte Leerseiten." );
+                OSL_FAIL( "Doppelte Leerseiten." );
                 break;  //Einmal reicht.
             }
             bEmpty = sal_True;

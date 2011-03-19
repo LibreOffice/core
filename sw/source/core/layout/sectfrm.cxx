@@ -818,7 +818,7 @@ void SwSectionFrm::MakeAll()
 
 sal_Bool SwSectionFrm::ShouldBwdMoved( SwLayoutFrm *, sal_Bool , sal_Bool & )
 {
-    OSL_ENSURE( sal_False, "Hups, wo ist meine Tarnkappe?" );
+    OSL_FAIL( "Hups, wo ist meine Tarnkappe?" );
     return sal_False;
 }
 

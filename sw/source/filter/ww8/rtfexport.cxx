@@ -971,7 +971,7 @@ sal_uInt16 RtfExport::GetColor( const Color& rColor ) const
             OSL_TRACE("%s returning %d (%d,%d,%d)", OSL_THIS_FUNC, (*it).first, rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue());
             return (*it).first;
         }
-    OSL_ENSURE( sal_False, "No such Color in m_aColTbl!" );
+    OSL_FAIL( "No such Color in m_aColTbl!" );
     return 0;
 }
 

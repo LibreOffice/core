@@ -442,7 +442,7 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                                     break;
                                 }
                                 default:
-                                    OSL_ENSURE( sal_False, ": unknown LineSpaceRule" );
+                                    OSL_FAIL( ": unknown LineSpaceRule" );
                             }
                             switch( rSpace.GetInterLineSpaceRule() )
                             {
@@ -467,7 +467,7 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                                     nNettoHeight = rRegDiff;
                                     break;
                                 }
-                                default: OSL_ENSURE( sal_False, ": unknown InterLineSpaceRule" );
+                                default: OSL_FAIL( ": unknown InterLineSpaceRule" );
                             }
                             pDesc->SetRegHeight( rRegDiff );
                             pDesc->SetRegAscent( rRegDiff - nNettoHeight +

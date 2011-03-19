@@ -238,7 +238,7 @@ void SwXDispatch::dispatch(
     }
     else if(!aURL.Complete.compareToAscii(cURLDocumentDataSource))
     {
-        OSL_ENSURE(sal_False, "SwXDispatch::dispatch: this URL is not to be dispatched!");
+        OSL_FAIL("SwXDispatch::dispatch: this URL is not to be dispatched!");
     }
     else if(!aURL.Complete.compareToAscii(cInternalDBChangeNotification))
     {

@@ -1569,7 +1569,7 @@ void SwFtnBossFrm::InsertFtn( SwFtnFrm* pNew )
             {
                 if( ENDNOTE > nCmpPos || nStPos >= ENDNOTE )
                 {
-                    OSL_ENSURE( sal_False, "InsertFtn: Master expected II" );
+                    OSL_FAIL( "InsertFtn: Master expected II" );
                     do
                         pSibling = pSibling->GetMaster();
                     while ( pSibling->GetMaster() );
@@ -2067,7 +2067,7 @@ void SwFtnBossFrm::_CollectFtns( const SwCntntFrm*   _pRef,
         }
         if ( pNxtFtn == _pFtn )
         {
-            OSL_ENSURE( sal_False, "_CollectFtn: Devil's circle" );
+            OSL_FAIL(   "_CollectFtn: Devil's circle" );
             pNxtFtn = 0;
         }
 

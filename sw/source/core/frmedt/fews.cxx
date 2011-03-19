@@ -147,14 +147,14 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
         case RECT_OUTTABSECTION :   if( pFrm->IsInTab() )
                                         pFrm = pFrm->FindTabFrm();
                                     else {
-                                        OSL_ENSURE( sal_False, "Missing Table" );
+                                        OSL_FAIL( "Missing Table" );
                                     }
                                     /* KEIN BREAK */
         case RECT_SECTION_PRT:
         case RECT_SECTION:          if( pFrm->IsInSct() )
                                         pFrm = pFrm->FindSctFrm();
                                     else {
-                                        OSL_ENSURE( sal_False, "Missing section" );
+                                        OSL_FAIL( "Missing section" );
                                     }
 
                                     if( RECT_OUTTABSECTION_PRT == eType ||

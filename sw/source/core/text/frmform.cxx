@@ -571,7 +571,7 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
         {
             if( ((SwTxtFrm*)GetFollow())->IsLocked() )
             {
-                OSL_ENSURE( sal_False, "+SwTxtFrm::JoinFrm: Follow ist locked." );
+                OSL_FAIL( "+SwTxtFrm::JoinFrm: Follow ist locked." );
                 return;
             }
             JoinFrm();

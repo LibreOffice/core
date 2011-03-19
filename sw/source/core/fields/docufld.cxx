@@ -781,7 +781,7 @@ String SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const
                 nFmt = (sal_uInt32)nNumberingType;
             break;
         default:
-            OSL_ENSURE( sal_False, "SwDocStatFieldType::Expand: unbekannter SubType" );
+            OSL_FAIL( "SwDocStatFieldType::Expand: unbekannter SubType" );
     }
 
     String sRet;

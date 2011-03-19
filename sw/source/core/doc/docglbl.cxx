@@ -333,7 +333,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath,
                                 aTmp.Exchange();
                                 if( !aTmp.Move( fnMoveBackward, fnGoNode ))
                                 {
-                                    OSL_ENSURE( sal_False, "kein Node mehr vorhanden" );
+                                    OSL_FAIL( "kein Node mehr vorhanden" );
                                 }
                             }
                                 // Bookmarks usw. verschieben
@@ -680,7 +680,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, int nOutline
                                 aTmp.Exchange();
                                 if( !aTmp.Move( fnMoveBackward, fnGoNode ))
                                 {
-                                    OSL_ENSURE( sal_False, "kein Node mehr vorhanden" );
+                                    OSL_FAIL( "kein Node mehr vorhanden" );
                                 }
                             }
                                 // Bookmarks usw. verschieben

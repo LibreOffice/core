@@ -677,7 +677,7 @@ void SwUndoTblToTxt::RedoImpl(::sw::UndoRedoContext & rContext)
     if( !pCNd && 0 == ( pCNd = rDoc.GetNodes().GoNext( &aSaveIdx ) ) &&
         0 == ( pCNd = rDoc.GetNodes().GoPrevious( &aSaveIdx )) )
     {
-        OSL_ENSURE( sal_False, "wo steht denn nun der TextNode" );
+        OSL_FAIL( "wo steht denn nun der TextNode" );
     }
 
     pPam->GetPoint()->nNode = aSaveIdx;
@@ -3202,7 +3202,7 @@ void InsertSort( SvUShorts& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos )
             nM = nU + ( nO - nU ) / 2;
             if( *(rArr.GetData() + nM) == nIdx )
             {
-                OSL_ENSURE( sal_False, "Index already exists. This should never happen." );
+                OSL_FAIL( "Index already exists. This should never happen." );
                 return;
             }
             if( *(rArr.GetData() + nM) < nIdx )
@@ -3229,7 +3229,7 @@ void InsertSort( SvULongs& rArr, sal_uLong nIdx, sal_uInt16* pInsPos )
             nM = nU + ( nO - nU ) / 2;
             if( *(rArr.GetData() + nM) == nIdx )
             {
-                OSL_ENSURE( sal_False, "Index ist schon vorhanden, darf nie sein!" );
+                OSL_FAIL( "Index ist schon vorhanden, darf nie sein!" );
                 return;
             }
             if( *(rArr.GetData() + nM) < nIdx )

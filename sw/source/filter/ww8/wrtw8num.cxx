@@ -867,7 +867,7 @@ bool WW8Export::Out_SwNum(const SwTxtNode* pNd)
 
     if (nLevel < 0 || nLevel >= MAXLEVEL)
     {
-        OSL_ENSURE(sal_False, "Invalid level");
+        OSL_FAIL("Invalid level");
 
         return false;
     }
