@@ -1986,7 +1986,7 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
             case typelib_TypeClass_SERVICE:
             case typelib_TypeClass_MODULE:
             default:
-                OSL_ENSURE( sal_False, "not convertable type" );
+                OSL_FAIL( "not convertable type" );
         };
     }
 

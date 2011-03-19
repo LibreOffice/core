@@ -65,7 +65,7 @@ sal_Bool component_writeInfoHelper(
     }
     catch ( InvalidRegistryException & )
     {
-        OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+        OSL_FAIL( "### InvalidRegistryException!" );
     }
     return bRet;
 }

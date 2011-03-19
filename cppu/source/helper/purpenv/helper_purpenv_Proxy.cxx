@@ -172,7 +172,7 @@ extern "C" { static void SAL_CALL s_Proxy_dispatch(
         break;
     }
     default:
-        OSL_ENSURE( sal_False, "### illegal member typeclass!" );
+        OSL_FAIL( "### illegal member typeclass!" );
         abort();
     }
 

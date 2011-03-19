@@ -2306,8 +2306,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
-                        OString( "Introspection: Property \"" ) +
+                    OSL_FAIL( OString( "Introspection: Property \"" ) +
                         OUStringToOString( aPropName, RTL_TEXTENCODING_ASCII_US ) +
                         OString( "\" found more than once in PropertySet" ) );
                 }
@@ -2975,7 +2974,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
         Reference<XIdlClass> xClassRef = TypeToIdlClass( aToInspectObj.getValueType(), m_xSMgr );
         if( !xClassRef.is() )
         {
-            OSL_ENSURE( sal_False, "Can't get XIdlClass from Reflection" );
+            OSL_FAIL( "Can't get XIdlClass from Reflection" );
             return pAccess;
         }
 

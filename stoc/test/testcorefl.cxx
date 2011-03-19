@@ -403,7 +403,7 @@ SAL_IMPLEMENT_MAIN()
     }
     catch (Exception & rExc)
     {
-        OSL_ENSURE( sal_False, "### exception occurred!" );
+        OSL_FAIL( "### exception occurred!" );
         OString aMsg(
             OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( "### exception occurred: " );

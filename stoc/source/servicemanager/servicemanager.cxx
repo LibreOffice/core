@@ -506,11 +506,11 @@ void OServiceManager_Listener::disposing(const EventObject & rEvt )
         }
         catch( const IllegalArgumentException & )
         {
-            OSL_ENSURE( sal_False, "IllegalArgumentException catched" );
+            OSL_FAIL( "IllegalArgumentException catched" );
         }
         catch( const NoSuchElementException & )
         {
-            OSL_ENSURE( sal_False, "NoSuchElementException catched" );
+            OSL_FAIL( "NoSuchElementException catched" );
         }
     }
 }

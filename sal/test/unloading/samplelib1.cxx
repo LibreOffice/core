@@ -172,7 +172,7 @@ extern "C" {
             }
             catch (InvalidRegistryException &)
             {
-                OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+                OSL_FAIL( "### InvalidRegistryException!" );
             }
         }
         return sal_False;

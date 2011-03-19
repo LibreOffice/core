@@ -108,7 +108,7 @@ void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset ) SAL_THR
     {
         OString msg( "### cannot get type description for " );
         msg += OUStringToOString( rType.getTypeName(), RTL_TEXTENCODING_ASCII_US );
-        OSL_ENSURE( sal_False, msg.getStr() );
+        OSL_FAIL( msg.getStr() );
     }
 #endif
 }

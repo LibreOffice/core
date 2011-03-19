@@ -116,7 +116,7 @@ sal_Bool equals( const test::TestData & rData1, const test::TestData & rData2 )
         {
             if (! equals( pElements1[nLen], pElements2[nLen] ))
             {
-                OSL_ENSURE( sal_False, "### sequence element did not match!" );
+                OSL_FAIL( "### sequence element did not match!" );
                 return sal_False;
             }
         }
@@ -541,7 +541,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
     }
     catch (Exception &)
     {
-        OSL_ENSURE( sal_False, "### unexpected exception caught!" );
+        OSL_FAIL( "### unexpected exception caught!" );
         throw;
     }
 

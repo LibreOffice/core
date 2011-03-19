@@ -419,8 +419,7 @@ Any ProviderImpl::getByHierarchicalNameImpl( const OUString & rName )
         }
         catch ( InvalidRegistryException const & )
         {
-            OSL_ENSURE( sal_False,
-                        "ProviderImpl::getByHierarchicalName "
+            OSL_FAIL( "ProviderImpl::getByHierarchicalName "
                         "- Caught InvalidRegistryException!" );
 
             // openKey, closeKey, getValueType, getBinaryValue, isValid
@@ -599,11 +598,11 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
         case RT_TYPE_INVALID:
         case RT_TYPE_OBJECT:      // deprecated and not used
         case RT_TYPE_UNION:       // deprecated and not used
-            OSL_ENSURE( sal_False, "createTypeDescription - Unsupported Type!" );
+            OSL_FAIL( "createTypeDescription - Unsupported Type!" );
             break;
 
         default:
-            OSL_ENSURE( sal_False, "createTypeDescription - Unknown Type!" );
+            OSL_FAIL( "createTypeDescription - Unknown Type!" );
             break;
     }
 

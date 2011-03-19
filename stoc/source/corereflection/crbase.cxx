@@ -165,21 +165,21 @@ void IdlClassImpl::createObject( Any & rObj )
 Sequence< Reference< XIdlClass > > IdlClassImpl::getClasses()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSURE( sal_False, "### unexpected use!" );
+    OSL_FAIL( "### unexpected use!" );
     return Sequence< Reference< XIdlClass > >();
 }
 //__________________________________________________________________________________________________
 Reference< XIdlClass > IdlClassImpl::getClass( const OUString & )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSURE( sal_False, "### unexpected use!" );
+    OSL_FAIL( "### unexpected use!" );
     return Reference< XIdlClass >();
 }
 //__________________________________________________________________________________________________
 Sequence< Reference< XIdlClass > > IdlClassImpl::getInterfaces()
     throw(::com::sun::star::uno::RuntimeException)
 {
-//      OSL_ENSURE( sal_False, "### unexpected use!" );
+//      OSL_FAIL( "### unexpected use!" );
     return Sequence< Reference< XIdlClass > >();
 }
 

@@ -147,7 +147,7 @@ inline void _destructAny(
             (typelib_TypeDescriptionReference *)pAny->pReserved );
         break;
     case typelib_TypeClass_ANY:
-        OSL_ENSURE( sal_False, "### unexpected nested any!" );
+        OSL_FAIL( "### unexpected nested any!" );
         ::uno_any_destruct( (uno_Any *)pAny->pData, release );
         ::rtl_freeMemory( pAny->pData );
         break;

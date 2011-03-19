@@ -1759,7 +1759,7 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
 Sequence< OUString > ImplementationRegistration::checkInstantiation(const OUString&)
     throw ( RuntimeException )
 {
-    OSL_ENSURE( sal_False, "ImplementationRegistration::checkInstantiation not implemented" );
+    OSL_FAIL( "ImplementationRegistration::checkInstantiation not implemented" );
     return Sequence<OUString>();
 }
 

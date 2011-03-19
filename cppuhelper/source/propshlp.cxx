@@ -308,7 +308,7 @@ void OPropertySetHelper::addPropertyChangeListener(
             rPH.fillPropertyMembersByHandle( NULL, &nAttributes, nHandle );
             if( !(nAttributes & ::com::sun::star::beans::PropertyAttribute::BOUND) )
             {
-                OSL_ENSURE( sal_False, "add listener to an unbound property" );
+                OSL_FAIL( "add listener to an unbound property" );
                 // silent ignore this
                 return;
             }
@@ -390,7 +390,7 @@ void OPropertySetHelper::addVetoableChangeListener(
             rPH.fillPropertyMembersByHandle( NULL, &nAttributes, nHandle );
             if( !(nAttributes & PropertyAttribute::CONSTRAINED) )
             {
-                OSL_ENSURE( sal_False, "addVetoableChangeListener, and property is not constrained" );
+                OSL_FAIL( "addVetoableChangeListener, and property is not constrained" );
                 // silent ignore this
                 return;
             }

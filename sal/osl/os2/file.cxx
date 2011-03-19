@@ -1948,7 +1948,7 @@ oslFileError SAL_CALL osl_createDirectoryPath(
 
 oslFileError osl_getCanonicalName( rtl_uString* ustrFileURL, rtl_uString** pustrValidURL )
 {
-    OSL_ENSURE(sal_False, "osl_getCanonicalName not implemented");
+    OSL_FAIL("osl_getCanonicalName not implemented");
 
     rtl_uString_newFromString(pustrValidURL, ustrFileURL);
     return osl_File_E_None;

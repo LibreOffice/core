@@ -153,8 +153,7 @@ TypeDescriptionEnumerationImpl::createInstance(
                 }
                 else
                 {
-                    OSL_ENSURE(
-                        sal_False,
+                    OSL_FAIL(
                         "TypeDescriptionEnumerationImpl::createInstance "
                         "- Invalid registry key!" );
                 }
@@ -164,8 +163,7 @@ TypeDescriptionEnumerationImpl::createInstance(
         {
             // openKey, getValueType, getBinaryValue
 
-            OSL_ENSURE( sal_False,
-                        "TypeDescriptionEnumerationImpl::createInstance "
+            OSL_FAIL( "TypeDescriptionEnumerationImpl::createInstance "
                         "- Caught InvalidRegistryException!" );
         }
 
@@ -218,8 +216,7 @@ TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl()
         catch (...)
         {
             // No exceptions from dtors, please!
-            OSL_ENSURE( sal_False,
-            "TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl "
+            OSL_FAIL( "TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl "
             "- Caught exception!" );
         }
 
@@ -238,8 +235,7 @@ TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl()
         catch (Exception &)
         {
             // No exceptions from dtors, please!
-            OSL_ENSURE( sal_False,
-            "TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl "
+            OSL_FAIL( "TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl "
             "- Caught exception!" );
         }
 
@@ -435,8 +431,7 @@ bool TypeDescriptionEnumerationImpl::queryMore()
                     }
                     else
                     {
-                        OSL_ENSURE( sal_False,
-                            "TypeDescriptionEnumerationImpl::queryMore "
+                        OSL_FAIL( "TypeDescriptionEnumerationImpl::queryMore "
                             "- Invalid registry key!" );
                     }
 
@@ -445,8 +440,7 @@ bool TypeDescriptionEnumerationImpl::queryMore()
                 {
                     // getValueType, getBinaryValue
 
-                    OSL_ENSURE( sal_False,
-                                "TypeDescriptionEnumerationImpl::queryMore "
+                    OSL_FAIL( "TypeDescriptionEnumerationImpl::queryMore "
                                 "- Caught InvalidRegistryException!" );
 
                     // Don't stop iterating!
@@ -465,8 +459,7 @@ bool TypeDescriptionEnumerationImpl::queryMore()
                 }
                 catch ( registry::InvalidRegistryException const & )
                 {
-                    OSL_ENSURE( sal_False,
-                                "TypeDescriptionEnumerationImpl::queryMore "
+                    OSL_FAIL( "TypeDescriptionEnumerationImpl::queryMore "
                                 "- Caught InvalidRegistryException!" );
                 }
             }
@@ -532,8 +525,7 @@ bool TypeDescriptionEnumerationImpl::queryMore()
                 {
                     // getBinaryValue
 
-                    OSL_ENSURE( sal_False,
-                                "TypeDescriptionEnumerationImpl::queryMore "
+                    OSL_FAIL( "TypeDescriptionEnumerationImpl::queryMore "
                                 "- Caught InvalidRegistryException!" );
                 }
             }
@@ -551,8 +543,7 @@ bool TypeDescriptionEnumerationImpl::queryMore()
         }
         catch ( registry::InvalidRegistryException const & )
         {
-            OSL_ENSURE( sal_False,
-                        "TypeDescriptionEnumerationImpl::queryMore "
+            OSL_FAIL( "TypeDescriptionEnumerationImpl::queryMore "
                         "- Caught InvalidRegistryException!" );
         }
 */
@@ -614,8 +605,7 @@ TypeDescriptionEnumerationImpl::queryNext()
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
-                        "TypeDescriptionEnumerationImpl::queryNext "
+                    OSL_FAIL( "TypeDescriptionEnumerationImpl::queryNext "
                         "- Invalid registry key!" );
                 }
             }
@@ -624,8 +614,7 @@ TypeDescriptionEnumerationImpl::queryNext()
         {
             // getValueType, getBinaryValue
 
-            OSL_ENSURE( sal_False,
-                        "TypeDescriptionEnumerationImpl::queryNext "
+            OSL_FAIL( "TypeDescriptionEnumerationImpl::queryNext "
                         "- Caught InvalidRegistryException!" );
         }
 

@@ -164,14 +164,12 @@ TypeDescriptionEnumerationImpl::queryCurrentChildEnumeration()
         }
         catch ( reflection::NoSuchTypeNameException const & )
         {
-            OSL_ENSURE( sal_False,
-               "TypeDescriptionEnumerationImpl::queryCurrentChildEnumeration "
+            OSL_FAIL( "TypeDescriptionEnumerationImpl::queryCurrentChildEnumeration "
                "- Caught NoSuchTypeNameException!" );
         }
         catch ( reflection::InvalidTypeNameException const & )
         {
-            OSL_ENSURE( sal_False,
-               "TypeDescriptionEnumerationImpl::queryCurrentChildEnumeration "
+            OSL_FAIL( "TypeDescriptionEnumerationImpl::queryCurrentChildEnumeration "
                "- Caught InvalidTypeNameException!" );
         }
 
