@@ -453,7 +453,7 @@ void SAL_CALL PresenterWindowManager::windowPaint (const awt::PaintEvent& rEvent
         }
         catch (RuntimeException&)
         {
-            OSL_ASSERT(FALSE);
+            OSL_FAIL("paint failed!");
         }
     }
 }
