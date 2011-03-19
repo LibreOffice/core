@@ -156,4 +156,8 @@ ifeq ($(SYSTEM_ICU),YES)
 gb_Library_TARGETS := $(filter-out icuuc,$(gb_Library_TARGETS))
 endif
 
+ifeq ($(SYSTEM_CPPUNIT),YES)
+gb_Library_TARGETS := $(filter-out cppunit,$(gb_Library_TARGETS))
+endif
+
 # vim: set noet sw=4 ts=4:
