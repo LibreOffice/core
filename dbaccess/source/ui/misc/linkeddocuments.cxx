@@ -287,7 +287,7 @@ namespace dbaui
                     break;
 
                 default:
-                    OSL_ENSURE( sal_False, "OLinkedDocumentsAccess::newDocument: please use newFormWithPilot!" );
+                    OSL_FAIL( "OLinkedDocumentsAccess::newDocument: please use newFormWithPilot!" );
                     return Reference< XComponent >();
 
             }

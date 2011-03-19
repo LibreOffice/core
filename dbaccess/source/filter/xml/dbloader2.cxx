@@ -354,7 +354,7 @@ namespace
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "lcl_urlAllowsInteraction: caught an exception while analyzing the URL!" );
+            OSL_FAIL( "lcl_urlAllowsInteraction: caught an exception while analyzing the URL!" );
         }
         return bDoesAllow;
     }
@@ -626,7 +626,7 @@ IMPL_LINK( DBContentLoader, OnStartTableWizard, void*, /*NOTINTERESTEDIN*/ )
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(sal_False, "caught an exception while starting the table wizard!");
+        OSL_FAIL("caught an exception while starting the table wizard!");
     }
     m_xMySelf = NULL;
     return 0L;

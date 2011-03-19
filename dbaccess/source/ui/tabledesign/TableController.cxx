@@ -368,7 +368,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     }
     catch(Exception&)
     {
-        OSL_ENSURE(sal_False, "OTableController::doSaveDoc: nothing is expected to happen here!");
+        OSL_FAIL("OTableController::doSaveDoc: nothing is expected to happen here!");
     }
 
     sal_Bool bAlter = sal_False;
@@ -505,7 +505,7 @@ void OTableController::doEditIndexes()
             OSL_ENSURE(xIndexes.is(), "OTableController::doEditIndexes: no keys got from the indexes supplier!");
         }
         else
-            OSL_ENSURE(sal_False, "OTableController::doEditIndexes: should never have reached this (no indexes supplier)!");
+            OSL_FAIL("OTableController::doEditIndexes: should never have reached this (no indexes supplier)!");
 
         // get the field names
         Reference< XColumnsSupplier > xColSupp(m_xTable, UNO_QUERY);
@@ -629,7 +629,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
                         }
                         catch(const Exception&)
                         {
-                            OSL_ENSURE(sal_False, "OTableController::suspend: nothing is expected to happen here!");
+                            OSL_FAIL("OTableController::suspend: nothing is expected to happen here!");
                         }
 
                     }
@@ -763,7 +763,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_
                 }
                 else
                 {
-                    OSL_ENSURE(sal_False, "OTableController::appendColumns: invalid field name!");
+                    OSL_FAIL("OTableController::appendColumns: invalid field name!");
                 }
 
             }
@@ -1089,7 +1089,7 @@ void OTableController::alterColumns()
             try { xColumn->getPropertyValue(PROPERTY_TYPENAME) >>= sTypeName; }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "no TypeName property?!" );
+                OSL_FAIL( "no TypeName property?!" );
                 // since this is a last minute fix for #i41785#, I want to be on the safe side,
                 // and catch errors here as early as possible (instead of the whole process of altering
                 // the columns failing)
@@ -1172,7 +1172,7 @@ void OTableController::alterColumns()
                 }
                 else
                 {
-                    OSL_ENSURE(sal_False, "OTableController::alterColumns: invalid column (2)!");
+                    OSL_FAIL("OTableController::alterColumns: invalid column (2)!");
                 }
             }
             catch(const SQLException&)
@@ -1308,7 +1308,7 @@ void OTableController::alterColumns()
                 }
                 else
                 {
-                    OSL_ENSURE(sal_False, "OTableController::alterColumns: invalid column!");
+                    OSL_FAIL("OTableController::alterColumns: invalid column!");
                 }
             }
         }

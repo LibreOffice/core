@@ -269,7 +269,7 @@ void PropBrw::implDetachController()
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "PropBrw::getCurrentPage: caught an exception while retrieving the current page!" );
+        OSL_FAIL( "PropBrw::getCurrentPage: caught an exception while retrieving the current page!" );
     }
     return sCurrentPage;
 }
@@ -289,7 +289,7 @@ sal_Bool PropBrw::Close()
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmPropBrw::Close: caught an exception while asking the controller!" );
+            OSL_FAIL( "FmPropBrw::Close: caught an exception while asking the controller!" );
         }
     }
     implDetachController();
@@ -346,7 +346,7 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
+            OSL_FAIL( "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
         }
     }
     SetText( GetHeadlineName(_aObjects) );
@@ -519,7 +519,7 @@ void PropBrw::Update( OSectionView* pNewView )
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
+                    OSL_FAIL( "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
                 }
             }
         }

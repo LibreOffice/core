@@ -1351,7 +1351,7 @@ void SbaTableQueryBrowser::connectExternalDispatches()
 
             if ( feature->second.xDispatcher.get() == static_cast< XDispatch* >( this ) )
             {
-                OSL_ENSURE( sal_False, "SbaTableQueryBrowser::connectExternalDispatches: this should not happen anymore!" );
+                OSL_FAIL( "SbaTableQueryBrowser::connectExternalDispatches: this should not happen anymore!" );
                     // (nowadays, the URLs aren't in our SupportedFeatures list anymore, so we should
                     // not supply a dispatcher for this)
                 feature->second.xDispatcher.clear();
@@ -1500,7 +1500,7 @@ sal_Bool SAL_CALL SbaTableQueryBrowser::select( const Any& _rSelection ) throw (
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::select: could not extract the descriptor!");
+        OSL_FAIL("SbaTableQueryBrowser::select: could not extract the descriptor!");
     }
 
     // check the precense of the props we need
@@ -1833,7 +1833,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                 }
                 catch(DisposedException&)
                 {
-                    OSL_ENSURE(sal_False, "SbaTableQueryBrowser::GetState: object already disposed!");
+                    OSL_FAIL("SbaTableQueryBrowser::GetState: object already disposed!");
                 }
                 catch( const Exception& )
                 {
@@ -1856,7 +1856,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                         case CommandType::COMMAND:
                             sTitle = String(ModuleRes(STR_QRY_TITLE)); break;
                         default:
-                            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::GetState: unknown command type!");
+                            OSL_FAIL("SbaTableQueryBrowser::GetState: unknown command type!");
                     }
                     ::rtl::OUString aName;
                     xProp->getPropertyValue(PROPERTY_COMMAND) >>= aName;
@@ -2299,7 +2299,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
                 if(e.TargetException >>= aSql)
                     aInfo = aSql;
                 else
-                    OSL_ENSURE(sal_False, "SbaTableQueryBrowser::OnExpandEntry: something strange happended!");
+                    OSL_FAIL("SbaTableQueryBrowser::OnExpandEntry: something strange happended!");
             }
             catch( const Exception& )
             {
@@ -2766,7 +2766,7 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
             if(e.TargetException >>= aSql)
                 showError(SQLExceptionInfo(aSql));
             else
-                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implSelect: something strange happended!");
+                OSL_FAIL("SbaTableQueryBrowser::implSelect: something strange happended!");
             // reset the values
             xRowSetProps->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
             xRowSetProps->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,Any());
@@ -3105,11 +3105,11 @@ void SbaTableQueryBrowser::unloadAndCleanup( sal_Bool _bDisposeConnection )
         if(e.TargetException >>= aSql)
             showError(SQLExceptionInfo(aSql));
         else
-            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::unloadAndCleanup: something strange happended!");
+            OSL_FAIL("SbaTableQueryBrowser::unloadAndCleanup: something strange happended!");
     }
     catch(Exception&)
     {
-        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::unloadAndCleanup: could not reset the form");
+        OSL_FAIL("SbaTableQueryBrowser::unloadAndCleanup: could not reset the form");
     }
 }
 
@@ -3270,7 +3270,7 @@ void SbaTableQueryBrowser::impl_initialize()
                     }
                     catch( const Exception& )
                     {
-                        OSL_ENSURE( sal_False, "SbaTableQueryBrowser::impl_initialize: a connection parent which does not have a 'Name'!??" );
+                        OSL_FAIL( "SbaTableQueryBrowser::impl_initialize: a connection parent which does not have a 'Name'!??" );
                     }
                 }
             }
@@ -3307,7 +3307,7 @@ void SbaTableQueryBrowser::impl_initialize()
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::impl_initialize: could not set the update related names!");
+            OSL_FAIL("SbaTableQueryBrowser::impl_initialize: could not set the update related names!");
         }
     }
 

@@ -1022,7 +1022,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const ::rtl::OUString 
                     }
                     catch( const uno::Exception& )
                     {
-                        OSL_ENSURE( sal_False, "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                        OSL_FAIL( "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
                     }
                 }
             }
@@ -1167,7 +1167,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const ::rtl::OUString &
                 }
                 catch( const uno::Exception& )
                 {
-                    OSL_ENSURE( sal_False, "GeometryHandler::convertToControlValue: caught an exception while converting via TypeConverter!" );
+                    OSL_FAIL( "GeometryHandler::convertToControlValue: caught an exception while converting via TypeConverter!" );
                 }
             }
             break;
@@ -1609,7 +1609,7 @@ bool GeometryHandler::impl_dialogFilter_nothrow( ::rtl::OUString& _out_rSelected
     catch (sdbc::SQLException& e) { aErrorInfo = e; }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "GeometryHandler::impl_dialogFilter_nothrow: caught an exception!" );
+        OSL_FAIL( "GeometryHandler::impl_dialogFilter_nothrow: caught an exception!" );
     }
 
     if ( aErrorInfo.isValid() )

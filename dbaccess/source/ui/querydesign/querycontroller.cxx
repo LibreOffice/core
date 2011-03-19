@@ -727,7 +727,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                     }
                     catch( const Exception& )
                     {
-                        OSL_ENSURE( sal_False, "OQueryController::Execute(SID_DB_QUERY_PREVIEW): *nobody* is expected to veto closing the preview frame!" );
+                        OSL_FAIL( "OQueryController::Execute(SID_DB_QUERY_PREVIEW): *nobody* is expected to veto closing the preview frame!" );
                     }
                 }
                 else
@@ -1697,7 +1697,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
                     }
                     catch( const Exception& )
                     {
-                        OSL_ENSURE( sal_False, "OQueryController::impl_reset: could not retrieve the layout information from the query!" );
+                        OSL_FAIL( "OQueryController::impl_reset: could not retrieve the layout information from the query!" );
                     }
                 }
             }

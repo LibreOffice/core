@@ -653,7 +653,7 @@ void OAppDetailPageHelper::getElementIcons( ElementType _eType, sal_uInt16& _rIm
         case E_REPORT:  nDatabaseObjectType = DatabaseObject::REPORT; break;
         case E_QUERY:   nDatabaseObjectType = DatabaseObject::QUERY; break;
         default:
-            OSL_ENSURE( sal_False, "OAppDetailPageHelper::GetElementIcons: invalid element type!" );
+            OSL_FAIL( "OAppDetailPageHelper::GetElementIcons: invalid element type!" );
             return;
     }
     _rImageId = aImageProvider.getDefaultImageResourceID( nDatabaseObjectType );

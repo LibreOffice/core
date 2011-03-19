@@ -181,7 +181,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
         Sequence< Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -201,7 +201,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
         Sequence< PropertyValue > aProperties;
         if ( !( aCommand.Argument >>= aProperties ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -213,7 +213,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
 
         if ( !aProperties.getLength() )
         {
-            OSL_ENSURE( sal_False, "No properties!" );
+            OSL_FAIL( "No properties!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -242,7 +242,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
         // Unsupported command
         //////////////////////////////////////////////////////////////////
 
-        OSL_ENSURE( sal_False, "Content::execute - unsupported command!" );
+        OSL_FAIL( "Content::execute - unsupported command!" );
 
         ucbhelper::cancelCommandExecution(
             makeAny( UnsupportedCommandException(
@@ -407,7 +407,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
                     }
                     catch( const Exception& )
                     {
-                        OSL_ENSURE( sal_False, "OContentHelper::setPropertyValues('Title'): caught an exception while renaming!" );
+                        OSL_FAIL( "OContentHelper::setPropertyValues('Title'): caught an exception while renaming!" );
                     }
                 }
                 else

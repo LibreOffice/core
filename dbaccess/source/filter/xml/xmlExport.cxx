@@ -739,7 +739,7 @@ void ODBExport::exportDataSourceSettings()
                     pSequenceIterator.reset( new OSequenceIterator< Any >( aIter->Value ) );
                     break;
                 default:
-                    OSL_ENSURE(sal_False, "unsupported sequence type !");
+                    OSL_FAIL("unsupported sequence type !");
                     break;
             }
             if ( pSequenceIterator.get() )

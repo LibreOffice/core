@@ -335,7 +335,7 @@ DBG_NAME(OMySQLIntroPageSetup)
     // -----------------------------------------------------------------------
     sal_Bool OMySQLIntroPageSetup::FillItemSet(SfxItemSet& /*_rSet*/)
     {
-        OSL_ENSURE(sal_False,"Who called me?! Please ask oj for more information.");
+        OSL_FAIL("Who called me?! Please ask oj for more information.");
         return sal_True;
     }
 

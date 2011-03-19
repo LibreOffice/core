@@ -237,7 +237,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
             }
         case TypeClass_HYPER:
         {
-            OSL_ENSURE(sal_False, "OXMLControlProperty::convertString: 64-bit integers not implemented yet!");
+            OSL_FAIL("OXMLControlProperty::convertString: 64-bit integers not implemented yet!");
         }
         break;
         case TypeClass_DOUBLE:
@@ -321,11 +321,11 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
                     }
                 }
                 else
-                    OSL_ENSURE(sal_False, "OPropertyImport::convertString: unsupported property type!");
+                    OSL_FAIL("OPropertyImport::convertString: unsupported property type!");
             }
             break;
         default:
-            OSL_ENSURE(sal_False, "OXMLControlProperty::convertString: invalid type class!");
+            OSL_FAIL("OXMLControlProperty::convertString: invalid type class!");
     }
 
     return aReturn;

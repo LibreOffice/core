@@ -220,7 +220,7 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
             }
         case TypeClass_HYPER:
         {
-            OSL_ENSURE(sal_False, "OXMLDataSourceSetting::convertString: 64-bit integers not implemented yet!");
+            OSL_FAIL("OXMLDataSourceSetting::convertString: 64-bit integers not implemented yet!");
         }
         break;
         case TypeClass_DOUBLE:
@@ -241,7 +241,7 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
             aReturn <<= _rReadCharacters;
             break;
         default:
-            OSL_ENSURE(sal_False, "OXMLDataSourceSetting::convertString: invalid type class!");
+            OSL_FAIL("OXMLDataSourceSetting::convertString: invalid type class!");
     }
 
     return aReturn;

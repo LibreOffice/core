@@ -157,7 +157,7 @@ namespace dbaui
             Reference< XAppend > xAppendIndex(xIndexFactory, UNO_QUERY);
             if (!xAppendIndex.is())
             {
-                OSL_ENSURE(sal_False, "OIndexCollection::commitNewIndex: missing an interface of the index container!");
+                OSL_FAIL("OIndexCollection::commitNewIndex: missing an interface of the index container!");
                 return;
             }
 
@@ -171,7 +171,7 @@ namespace dbaui
             Reference< XAppend > xAppendCols(xColumnFactory, UNO_QUERY);
             if (!xAppendCols.is())
             {
-                OSL_ENSURE(sal_False, "OIndexCollection::commitNewIndex: invalid index descriptor returned!");
+                OSL_FAIL("OIndexCollection::commitNewIndex: invalid index descriptor returned!");
                 return;
             }
 
@@ -226,7 +226,7 @@ namespace dbaui
             Reference< XDrop > xDropIndex(m_xIndexes, UNO_QUERY);
             if (!xDropIndex.is())
             {
-                OSL_ENSURE(sal_False, "OIndexCollection::drop: no XDrop interface!");
+                OSL_FAIL("OIndexCollection::drop: no XDrop interface!");
                 return sal_False;
             }
 
@@ -273,7 +273,7 @@ namespace dbaui
         m_xIndexes->getByName(_rIndex.getOriginalName()) >>= xIndex;
         if (!xIndex.is())
         {
-            OSL_ENSURE(sal_False, "OIndexCollection::implFillIndexInfo: got an invalid index object!");
+            OSL_FAIL("OIndexCollection::implFillIndexInfo: got an invalid index object!");
         }
         else
             implFillIndexInfo(_rIndex, xIndex);
@@ -314,7 +314,7 @@ namespace dbaui
                 xCols->getByName(*pFieldNames) >>= xIndexColumn;
                 if (!xIndexColumn.is())
                 {
-                    OSL_ENSURE(sal_False, "OIndexCollection::implFillIndexInfo: invalid index column!");
+                    OSL_FAIL("OIndexCollection::implFillIndexInfo: invalid index column!");
                     --aCopyTo;
                     continue;
                 }
@@ -383,7 +383,7 @@ namespace dbaui
                 m_xIndexes->getByName(*pNames) >>= xIndex;
                 if (!xIndex.is())
                 {
-                    OSL_ENSURE(sal_False, "OIndexCollection::implConstructFrom: got an invalid index object ... ignoring!");
+                    OSL_FAIL("OIndexCollection::implConstructFrom: got an invalid index object ... ignoring!");
                     continue;
                 }
 

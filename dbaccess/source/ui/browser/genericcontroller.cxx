@@ -1298,7 +1298,7 @@ namespace
                     pReturn = "sbasic";
                 else
                 {
-                    OSL_ENSURE( sal_False, "lcl_getModuleHelpModuleName: no installed module found" );
+                    OSL_FAIL( "lcl_getModuleHelpModuleName: no installed module found" );
                 }
             }
         }

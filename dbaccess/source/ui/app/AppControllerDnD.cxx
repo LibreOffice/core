@@ -173,7 +173,7 @@ void OApplicationController::deleteTables(const ::std::vector< ::rtl::OUString>&
                         if(e.TargetException >>= aSql)
                             aErrorInfo = aSql;
                         else
-                            OSL_ENSURE(sal_False, "OApplicationController::implDropTable: something strange happended!");
+                            OSL_FAIL("OApplicationController::implDropTable: something strange happended!");
                     }
                     catch( const Exception& )
                     {
@@ -294,7 +294,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
                     if ( e.TargetException >>= aSql )
                         showError( SQLExceptionInfo( e.TargetException ) );
                     else
-                        OSL_ENSURE( sal_False, "OApplicationController::deleteObjects: something strange happended!" );
+                        OSL_FAIL( "OApplicationController::deleteObjects: something strange happended!" );
                 }
                 catch( const Exception& )
                 {

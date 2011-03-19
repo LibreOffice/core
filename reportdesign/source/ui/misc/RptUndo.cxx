@@ -203,7 +203,7 @@ void OSectionUndo::Undo()
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OSectionUndo::Undo: caught an exception!" );
+        OSL_FAIL( "OSectionUndo::Undo: caught an exception!" );
     }
 }
 //----------------------------------------------------------------------------
@@ -224,7 +224,7 @@ void OSectionUndo::Redo()
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OSectionUndo::Redo: caught an exception!" );
+        OSL_FAIL( "OSectionUndo::Redo: caught an exception!" );
     }
 }
 //----------------------------------------------------------------------------

@@ -1062,7 +1062,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         aCommand.Argument >>= aIni;
         if ( aIni.getLength() != 2 )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -1088,7 +1088,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         aCommand.Argument >>= aIni;
         if ( !aIni.getLength() )
         {
-            OSL_ENSURE( sal_False, "Wrong argument count!" );
+            OSL_FAIL( "Wrong argument count!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -1208,7 +1208,7 @@ void ODocumentDefinition::onCommandInsert( const ::rtl::OUString& _sURL, const R
     // Check, if all required properties were set.
     if ( !_sURL.getLength() || m_xEmbeddedObject.is() )
     {
-        OSL_ENSURE( sal_False, "Content::onCommandInsert - property value missing!" );
+        OSL_FAIL( "Content::onCommandInsert - property value missing!" );
 
         Sequence< rtl::OUString > aProps( 1 );
         aProps[ 0 ] = PROPERTY_URL;

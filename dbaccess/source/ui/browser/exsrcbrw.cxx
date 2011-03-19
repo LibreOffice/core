@@ -185,11 +185,11 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
                     aControlProps = *(Sequence< ::com::sun::star::beans::PropertyValue>*)pArguments->Value.getValue();
             }
             else
-                OSL_ENSURE(sal_False, ((ByteString("SbaExternalSourceBrowser::dispatch(AddGridColumn) : unknown argument (") += ByteString((const sal_Unicode*)pArguments->Name, gsl_getSystemTextEncoding()).GetBuffer()) += ") !").GetBuffer());
+                OSL_FAIL(((ByteString("SbaExternalSourceBrowser::dispatch(AddGridColumn) : unknown argument (") += ByteString((const sal_Unicode*)pArguments->Name, gsl_getSystemTextEncoding()).GetBuffer()) += ") !").GetBuffer());
         }
         if (!sControlType.getLength())
         {
-            OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnType) !");
+            OSL_FAIL("SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnType) !");
             sControlType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextField"));
         }
         OSL_ENSURE(aControlProps.getLength(), "SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnProperties) !");
@@ -213,8 +213,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
                 }
                 catch(Exception&)
                 {
-                    OSL_ENSURE(sal_False,
-                        (   ByteString("SbaExternalSourceBrowser::dispatch : could not set a column property (")
+                    OSL_FAIL((  ByteString("SbaExternalSourceBrowser::dispatch : could not set a column property (")
                         +=  ByteString(pControlProps->Name.getStr(), (sal_uInt16)pControlProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
                         +=  ByteString(")!")).GetBuffer());
                 }
@@ -253,7 +252,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         }
         if (!xMasterForm.is())
         {
-            OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::dispatch(FormSlots/AttachToForm) : please specify a form to attach to as argument !");
+            OSL_FAIL("SbaExternalSourceBrowser::dispatch(FormSlots/AttachToForm) : please specify a form to attach to as argument !");
             return;
         }
 
@@ -425,7 +424,7 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::Attach : couldn't restore the cursor position !");
+            OSL_FAIL("SbaExternalSourceBrowser::Attach : couldn't restore the cursor position !");
         }
 
     }

@@ -323,7 +323,7 @@ uno::Any SAL_CALL DataProviderHandler::convertToPropertyValue(const ::rtl::OUStr
             }
             catch( const uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "DataProviderHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                OSL_FAIL( "DataProviderHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
             }
             break;
         case PROPERTY_ID_MASTERFIELDS:
@@ -357,7 +357,7 @@ uno::Any SAL_CALL DataProviderHandler::convertToControlValue(const ::rtl::OUStri
             }
             catch( const uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                OSL_FAIL( "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
             }
             break;
         default:

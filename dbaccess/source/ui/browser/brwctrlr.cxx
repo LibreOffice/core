@@ -504,7 +504,7 @@ Sequence< ::rtl::OUString > SAL_CALL SbaXDataBrowserController::FormControllerIm
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setModel(const Reference< ::com::sun::star::awt::XTabControllerModel > & /*Model*/) throw( RuntimeException )
 {
-    OSL_ENSURE(sal_False, "SbaXDataBrowserController::FormControllerImpl::setModel : invalid call, can't change my model !");
+    OSL_FAIL("SbaXDataBrowserController::FormControllerImpl::setModel : invalid call, can't change my model !");
 }
 
 //------------------------------------------------------------------
@@ -516,7 +516,7 @@ Reference< ::com::sun::star::awt::XTabControllerModel >  SAL_CALL SbaXDataBrowse
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContainer(const Reference< ::com::sun::star::awt::XControlContainer > & /*_Container*/) throw( RuntimeException )
 {
-    OSL_ENSURE(sal_False, "SbaXDataBrowserController::FormControllerImpl::setContainer : invalid call, can't change my container !");
+    OSL_FAIL("SbaXDataBrowserController::FormControllerImpl::setContainer : invalid call, can't change my container !");
 }
 
 //------------------------------------------------------------------
@@ -541,13 +541,13 @@ Sequence< Reference< ::com::sun::star::awt::XControl > > SAL_CALL SbaXDataBrowse
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::autoTabOrder(void) throw( RuntimeException )
 {
-    OSL_ENSURE(sal_False, "SbaXDataBrowserController::FormControllerImpl::autoTabOrder : nothing to do (always have only one control) !");
+    OSL_FAIL("SbaXDataBrowserController::FormControllerImpl::autoTabOrder : nothing to do (always have only one control) !");
 }
 
 //------------------------------------------------------------------
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateTabOrder(void) throw( RuntimeException )
 {
-    OSL_ENSURE(sal_False, "SbaXDataBrowserController::FormControllerImpl::activateTabOrder : nothing to do (always have only one control) !");
+    OSL_FAIL("SbaXDataBrowserController::FormControllerImpl::activateTabOrder : nothing to do (always have only one control) !");
 }
 
 //------------------------------------------------------------------
@@ -1089,7 +1089,7 @@ void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e) throw( R
     if (xCommitable.is())
         xCommitable->commit();
     else
-        OSL_ENSURE(sal_False, "SbaXDataBrowserController::focusLost : why is my control not commitable ?");
+        OSL_FAIL("SbaXDataBrowserController::focusLost : why is my control not commitable ?");
 }
 
 // -------------------------------------------------------------------------
@@ -1785,7 +1785,7 @@ void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrd
     Reference< XPropertySet > xFormSet(getRowSet(), UNO_QUERY);
     if (!m_xLoadable.is())
     {
-        OSL_ENSURE(sal_False, "SbaXDataBrowserController::applyParserOrder: invalid row set!");
+        OSL_FAIL("SbaXDataBrowserController::applyParserOrder: invalid row set!");
         return;
     }
 
@@ -1827,7 +1827,7 @@ void SbaXDataBrowserController::applyParserFilter(const ::rtl::OUString& _rOldFi
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
     if (!m_xLoadable.is())
     {
-        OSL_ENSURE(sal_False, "SbaXDataBrowserController::applyParserFilter: invalid row set!");
+        OSL_FAIL("SbaXDataBrowserController::applyParserFilter: invalid row set!");
         return;
     }
 

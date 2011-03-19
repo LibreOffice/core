@@ -111,7 +111,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OQueryDescriptor_Base::OQueryDescriptor_Base: caught an exception!");
+            OSL_FAIL("OQueryDescriptor_Base::OQueryDescriptor_Base: caught an exception!");
         }
 
         m_xCommandDefinition->addPropertyChangeListener(::rtl::OUString(), this);

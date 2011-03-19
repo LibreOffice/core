@@ -75,7 +75,7 @@ OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContain
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OContainerMediator::OContainerMediator: caught an exception!");
+            OSL_FAIL("OContainerMediator::OContainerMediator: caught an exception!");
         }
         osl_decrementInterlockedCount( &m_refCount );
     }

@@ -1518,7 +1518,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if( pNumType )
     {
-        OSL_ENSURE(sal_False, "OFieldDescControl::DisplayData: invalid num type!");
+        OSL_FAIL("OFieldDescControl::DisplayData: invalid num type!");
     }
 
     if( pLength )

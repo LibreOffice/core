@@ -459,7 +459,7 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
         switch ( nFilterMode )
         {
         default:
-            OSL_ENSURE( sal_False, "OTableContainer::getAllTableTypeFilter: unknown TableTypeFilterMode!" );
+            OSL_FAIL( "OTableContainer::getAllTableTypeFilter: unknown TableTypeFilterMode!" );
         case FILTER_MODE_MIX_ALL:
             _rFilter.realloc( 3 );
             _rFilter[0] = sView;

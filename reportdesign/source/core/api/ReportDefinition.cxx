@@ -243,7 +243,7 @@ void lcl_extractAndStartStatusIndicator( const ::comphelper::MediaDescriptor& _r
     }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "lcl_extractAndStartStatusIndicator: caught an exception!" );
+        OSL_FAIL( "lcl_extractAndStartStatusIndicator: caught an exception!" );
     }
 }
 // -----------------------------------------------------------------------------
@@ -1260,7 +1260,7 @@ void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (u
             catch( const util::CloseVetoException& ) { throw; }
             catch( const uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "ODatabaseDocument::impl_closeControllerFrames: caught an unexpected exception!" );
+                OSL_FAIL( "ODatabaseDocument::impl_closeControllerFrames: caught an unexpected exception!" );
             }
         }
     }

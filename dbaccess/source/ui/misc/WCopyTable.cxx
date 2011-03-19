@@ -974,7 +974,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                 break;
             default:
             {
-                OSL_ENSURE(sal_False, "OCopyTableWizard::ImplOKHdl: invalid creation style!");
+                OSL_FAIL("OCopyTableWizard::ImplOKHdl: invalid creation style!");
             }
         }
 
@@ -1229,7 +1229,7 @@ void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, co
             }
             else
             {
-                OSL_ENSURE(sal_False, "OCopyTableWizard::appendColumns: invalid field name!");
+                OSL_FAIL("OCopyTableWizard::appendColumns: invalid field name!");
             }
 
         }

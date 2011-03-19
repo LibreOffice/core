@@ -1122,7 +1122,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const TOTypeIn
             SwitchType( _pTypeInfo );
             break;
         default:
-            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetCellData: invalid column!");
+            OSL_FAIL("OTableEditorCtrl::SetCellData: invalid column!");
     }
     SetControlText(nRow,nColId,_pTypeInfo.get() ? _pTypeInfo->aUIName : ::rtl::OUString());
 }
@@ -1149,7 +1149,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
             break;
 
         case FIELD_TYPE:
-            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetCellData: invalid column!");
+            OSL_FAIL("OTableEditorCtrl::SetCellData: invalid column!");
             break;
 
         case COLUMN_DESCRIPTION:
@@ -1177,7 +1177,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
             break;
 
         case FIELD_PROPERTY_NUMTYPE:
-            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetCellData: invalid column!");
+            OSL_FAIL("OTableEditorCtrl::SetCellData: invalid column!");
             break;
 
         case FIELD_PROPERTY_AUTOINC:
@@ -1260,7 +1260,7 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
             break;
 
         case FIELD_PROPERTY_NUMTYPE:
-            OSL_ENSURE(sal_False, "OTableEditorCtrl::GetCellData: invalid column!");
+            OSL_FAIL("OTableEditorCtrl::GetCellData: invalid column!");
             break;
 
         case FIELD_PROPERTY_AUTOINC:

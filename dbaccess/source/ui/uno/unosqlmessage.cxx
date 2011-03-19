@@ -155,7 +155,7 @@ Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
     if ( m_aException.hasValue() )
         return new OSQLMessageBox( _pParent, SQLExceptionInfo( m_aException ), WB_OK | WB_DEF_OK, m_sHelpURL );
 
-    OSL_ENSURE(sal_False, "OSQLMessageDialog::createDialog : You should use the SQLException property to specify the error to display!");
+    OSL_FAIL("OSQLMessageDialog::createDialog : You should use the SQLException property to specify the error to display!");
     return new OSQLMessageBox(_pParent, SQLException());
 }
 

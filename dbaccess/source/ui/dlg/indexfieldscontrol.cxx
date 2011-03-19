@@ -310,7 +310,7 @@ DBG_NAME(IndexFieldsControl)
                 break;
 
             default:
-                OSL_ENSURE(sal_False, "IndexFieldsControl::GetController: invalid column id!");
+                OSL_FAIL("IndexFieldsControl::GetController: invalid column id!");
         }
 
         if (pReturn)
@@ -400,7 +400,7 @@ DBG_NAME(IndexFieldsControl)
             }
             break;
             default:
-                OSL_ENSURE(sal_False, "IndexFieldsControl::SaveModified: invalid column id!");
+                OSL_FAIL("IndexFieldsControl::SaveModified: invalid column id!");
         }
         return sal_True;
     }
@@ -424,7 +424,7 @@ DBG_NAME(IndexFieldsControl)
                 break;
 
             default:
-                OSL_ENSURE(sal_False, "IndexFieldsControl::InitController: invalid column id!");
+                OSL_FAIL("IndexFieldsControl::InitController: invalid column id!");
         }
     }
 
@@ -490,7 +490,7 @@ DBG_NAME(IndexFieldsControl)
                     else
                         return _rRow->bSortAscending ? m_sAscendingText : m_sDescendingText;
                 default:
-                    OSL_ENSURE(sal_False, "IndexFieldsControl::GetCurrentRowCellText: invalid column id!");
+                    OSL_FAIL("IndexFieldsControl::GetCurrentRowCellText: invalid column id!");
             }
         }
         return String();

@@ -230,7 +230,7 @@ DBG_NAME(DbaIndexDialog)
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "DbaIndexDialog::DbaIndexDialog: could not retrieve basic information from the UNO collection!");
+            OSL_FAIL("DbaIndexDialog::DbaIndexDialog: could not retrieve basic information from the UNO collection!");
         }
 
         fillIndexList();

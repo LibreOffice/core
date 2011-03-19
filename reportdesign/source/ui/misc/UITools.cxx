@@ -1060,7 +1060,7 @@ bool openDialogFormula_nothrow( ::rtl::OUString& _in_out_rFormula
     catch (sdbc::SQLException& e) { aErrorInfo = e; }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "GeometryHandler::impl_dialogFilter_nothrow: caught an exception!" );
+        OSL_FAIL( "GeometryHandler::impl_dialogFilter_nothrow: caught an exception!" );
     }
 
     if ( aErrorInfo.isValid() )

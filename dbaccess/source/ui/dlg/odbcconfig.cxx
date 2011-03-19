@@ -292,7 +292,7 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
 
     if (!allocEnv())
     {
-        OSL_ENSURE(sal_False, "OOdbcEnumeration::getDatasourceNames: could not allocate an ODBC environment!");
+        OSL_FAIL("OOdbcEnumeration::getDatasourceNames: could not allocate an ODBC environment!");
         return;
     }
 

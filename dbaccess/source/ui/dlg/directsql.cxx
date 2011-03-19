@@ -308,7 +308,7 @@ DBG_NAME(DirectSQLDialog)
             m_aSQL.SetSelection(Selection(sStatement.Len(), sStatement.Len()));
         }
         else
-            OSL_ENSURE(sal_False, "DirectSQLDialog::switchToHistory: invalid position!");
+            OSL_FAIL("DirectSQLDialog::switchToHistory: invalid position!");
     }
 
     //--------------------------------------------------------------------

@@ -210,7 +210,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
                 Reference< XInteractionHandler > xHandler(_rMF->createInstance(SERVICE_TASK_INTERACTION_HANDLER), UNO_QUERY);
                 if (!xHandler.is())
                 {
-                    OSL_ENSURE(sal_False, "createConnection: could not instantiate an interaction handler!");
+                    OSL_FAIL("createConnection: could not instantiate an interaction handler!");
                         // TODO: a real parent!
                 }
                 else
@@ -400,8 +400,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                     &&  ( (_bAutoIncrement && aIter->second->bAutoIncrement) || !_bAutoIncrement )
                     )
                 {
-                    OSL_ENSURE(sal_False,
-                        (   ::rtl::OString("getTypeInfoFromType: assuming column type ")
+                    OSL_FAIL((  ::rtl::OString("getTypeInfoFromType: assuming column type ")
                         +=  ::rtl::OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), gsl_getSystemTextEncoding())
                         +=  ::rtl::OString("\" (expected type name ")
                         +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
