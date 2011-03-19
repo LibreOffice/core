@@ -15,9 +15,8 @@ Easy
 1. SmGraphicWindow::KeyInput relies on comparison of sal_Char, a better way must be available for CTRL+c
 2. Code style (missing spaces, linebreaks and a few renames)
 3. More documentation
-4. Replace j_assert with DBG_ASSERT (don't do this yet).
-5. Remove the CreateTextFromNode methods and replace calls to it with NodeToTextVisitor
-6. Extend NodeToTextVisitor to update token offsets so SmNode::GetRow and SmNode::GetColumn will work.
+4. Remove the CreateTextFromNode methods and replace calls to it with NodeToTextVisitor
+5. Extend NodeToTextVisitor to update token offsets so SmNode::GetRow and SmNode::GetColumn will work.
    (These methods can be used to enable synchronization of caret positions between visual and non-visual editor).
 
 Medium

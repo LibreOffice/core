@@ -3038,7 +3038,7 @@ void SmNode::Accept(SmVisitor*){
     //obscure copy constructor is used... I can't find it's implementation, and
     //don't want to figure out how to fix it... If you want to, just delete this
     //method, making SmNode abstract, and see where you can an problem with that.
-    j_assert(false, "SmNode should not be visitable!");
+    OSL_FAIL("SmNode should not be visitable!");
 }
 
 void SmTableNode::Accept(SmVisitor* pVisitor) {

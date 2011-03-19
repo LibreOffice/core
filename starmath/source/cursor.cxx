@@ -38,12 +38,12 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
         case MoveLeft:
         {
             NewPos = position->Left;
-            j_assert(NewPos, "NewPos shouldn't be NULL here!");
+            OSL_ENSURE(NewPos, "NewPos shouldn't be NULL here!");
         }break;
         case MoveRight:
         {
             NewPos = position->Right;
-            j_assert(NewPos, "NewPos shouldn't be NULL here!");
+            OSL_ENSURE(NewPos, "NewPos shouldn't be NULL here!");
         }break;
         case MoveUp:
             //Implementation is practically identical to MoveDown, except for a single if statement
@@ -82,7 +82,7 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
             }
         }break;
         default:
-            j_assert(false, "Movement direction not supported!");
+            OSL_FAIL("Movement direction not supported!");
     }
     if(NewPos){
         position = NewPos;
@@ -100,7 +100,7 @@ void SmCursor::MoveTo(OutputDevice* pDev, Point pos, bool bMoveAnchor){
          dbp_sq = 1;    //Distance to best line squared
     SmCaretPosGraphIterator it = pGraph->GetIterator();
     while(it.Next()){
-        j_assert(it->CaretPos.IsValid(), "The caret position graph may not have invalid positions!");
+        OSL_ENSURE(it->CaretPos.IsValid(), "The caret position graph may not have invalid positions!");
         //Compute current line
         curr_line = SmCaretPos2LineVisitor(pDev, it->CaretPos).GetResult();
         //If we have a position compare to it
@@ -160,8 +160,8 @@ void SmCursor::BuildGraph(){
     if(!anchor)
         anchor = position;
 
-    j_assert(position->CaretPos.IsValid(), "Position must be valid");
-    j_assert(anchor->CaretPos.IsValid(), "Anchor must be valid");
+    OSL_ENSURE(position->CaretPos.IsValid(), "Position must be valid");
+    OSL_ENSURE(anchor->CaretPos.IsValid(), "Anchor must be valid");
 }
 
 bool SmCursor::SetCaretPosition(SmCaretPos pos, bool moveAnchor){
@@ -203,7 +203,7 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
         BeginEdit();
         //Line to merge things into, so we can delete pLine
         SmNode* pMergeLine = pLineParent->GetSubNode(nLineOffset-1);
-        j_assert(pMergeLine, "pMergeLine cannot be NULL!");
+        OSL_ENSURE(pMergeLine, "pMergeLine cannot be NULL!");
         //Convert first line to list
         SmNodeList *pLineList = NodeToList(pMergeLine);
         //Find iterator to patch
@@ -269,17 +269,17 @@ void SmCursor::Delete(){
 
     //Find an arbitrary selected node
     SmNode* pSNode = FindSelectedNode(pTree);
-    j_assert(pSNode != NULL, "There must be a selection when HasSelection is true!");
+    OSL_ENSURE(pSNode != NULL, "There must be a selection when HasSelection is true!");
 
     //Find the topmost node of the line that holds the selection
     SmNode* pLine = FindTopMostNodeInLine(pSNode, true);
-    j_assert(pLine != pTree, "Shouldn't be able to select the entire tree");
+    OSL_ENSURE(pLine != pTree, "Shouldn't be able to select the entire tree");
 
     //Get the parent of the line
     SmStructureNode* pLineParent = pLine->GetParent();
     //Find line offset in parent
     int nLineOffset = pLineParent->IndexOfSubNode(pLine);
-    j_assert(nLineOffset != -1, "pLine must be a child of it's parent!");
+    OSL_ENSURE(nLineOffset != -1, "pLine must be a child of it's parent!");
 
     //Position after delete
     SmCaretPos PosAfterDelete;
@@ -317,7 +317,7 @@ void SmCursor::InsertNodes(SmNodeList* pNewNodes){
     //Find line parent and line index in parent
     SmStructureNode* pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
-    j_assert(nParentIndex != -1, "pLine must be a subnode of pLineParent!");
+    OSL_ENSURE(nParentIndex != -1, "pLine must be a subnode of pLineParent!");
 
     //Convert line to list
     SmNodeList* pLineList = NodeToList(pLine);
@@ -506,7 +506,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     SmNode *pLine;
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(pTree);
-        j_assert(pSNode != NULL, "There must be a selected node when HasSelection is true!");
+        OSL_ENSURE(pSNode != NULL, "There must be a selected node when HasSelection is true!");
         pLine = FindTopMostNodeInLine(pSNode, sal_True);
     } else
         pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, sal_False);
@@ -514,7 +514,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     //Find Parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
-    j_assert(nParentIndex != -1, "pLine must be a subnode of pLineParent!");
+    OSL_ENSURE(nParentIndex != -1, "pLine must be a subnode of pLineParent!");
 
     //TODO: Consider handling special cases where parent is an SmOperNode,
     //      Maybe this method should be able to add limits to an SmOperNode...
@@ -677,7 +677,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     SmNode *pLine;
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(pTree);
-        j_assert(pSNode != NULL, "There must be a selected node if HasSelection()");
+        OSL_ENSURE(pSNode != NULL, "There must be a selected node if HasSelection()");
         pLine = FindTopMostNodeInLine(pSNode, sal_True);
     } else
         pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, sal_False);
@@ -685,7 +685,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     //Find parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
-    j_assert( nParentIndex != -1, "pLine must be a subnode of pLineParent!");
+    OSL_ENSURE( nParentIndex != -1, "pLine must be a subnode of pLineParent!");
 
     //Convert line to list
     SmNodeList *pLineList = NodeToList(pLine);
@@ -813,7 +813,7 @@ bool SmCursor::InsertRow() {
     SmNode *pLine;
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(pTree);
-        j_assert(pSNode != NULL, "There must be a selected node if HasSelection()");
+        OSL_ENSURE(pSNode != NULL, "There must be a selected node if HasSelection()");
         pLine = FindTopMostNodeInLine(pSNode, sal_True);
     } else
         pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, sal_False);
@@ -821,7 +821,7 @@ bool SmCursor::InsertRow() {
     //Find parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
-    j_assert( nParentIndex != -1, "pLine must be a subnode of pLineParent!");
+    OSL_ENSURE( nParentIndex != -1, "pLine must be a subnode of pLineParent!");
 
     //Discover the context of this command
     SmTableNode  *pTable  = NULL;
@@ -836,7 +836,7 @@ bool SmCursor::InsertRow() {
         //NOTE: This hack might give problems if we stop ignoring SmAlignNode
         pTable = (SmTableNode*)pLineParent->GetParent();
         nTableIndex = pTable->IndexOfSubNode(pLineParent);
-        j_assert(nTableIndex != -1, "pLineParent must be a child of its parent!");
+        OSL_ENSURE(nTableIndex != -1, "pLineParent must be a child of its parent!");
     }
     if(pLineParent->GetType() == NMATRIX)
         pMatrix = (SmMatrixNode*)pLineParent;
@@ -916,7 +916,7 @@ bool SmCursor::InsertRow() {
         }
         pMatrix->SetRowCol(rows + 1, cols);
     } else
-        j_assert(sal_False, "We must be either the context of a table or matrix!");
+        OSL_FAIL("We must be either the context of a table or matrix!");
 
     //Finish editing
     FinishEdit(pLineList, pLineParent, nParentIndex, PosAfterInsert);
@@ -933,7 +933,7 @@ void SmCursor::InsertFraction() {
     SmNode *pLine;
     if(HasSelection()) {
         SmNode *pSNode = FindSelectedNode(pTree);
-        j_assert(pSNode != NULL, "There must be a selected node when HasSelection is true!");
+        OSL_ENSURE(pSNode != NULL, "There must be a selected node when HasSelection is true!");
         pLine = FindTopMostNodeInLine(pSNode, sal_True);
     } else
         pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, sal_False);
@@ -941,7 +941,7 @@ void SmCursor::InsertFraction() {
     //Find Parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
-    j_assert(nParentIndex != -1, "pLine must be a subnode of pLineParent!");
+    OSL_ENSURE(nParentIndex != -1, "pLine must be a subnode of pLineParent!");
 
     //We begin modifying the tree here
     BeginEdit();
@@ -1090,9 +1090,9 @@ void SmCursor::InsertElement(SmFormulaElement element){
             pNewNode = new SmMathSymbolNode(token);
         }break;
         default:
-            j_assert(false, "Element unknown!");
+            OSL_FAIL("Element unknown!");
     }
-    j_assert(pNewNode != NULL, "No new node was created!");
+    OSL_ENSURE(pNewNode != NULL, "No new node was created!");
     if(!pNewNode)
         return;
 

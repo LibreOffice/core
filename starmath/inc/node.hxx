@@ -34,8 +34,6 @@
 #include <iostream>
 #include <stdio.h>
 
-#define j_assert(cond, msg) DBG_ASSERT(cond, msg)
-
 #include "parse.hxx"
 #include "types.hxx"
 #include "rect.hxx"

@@ -176,7 +176,7 @@ public:
     SmCaretPos2LineVisitor( OutputDevice *pDevice, SmCaretPos position ) {
         pDev = pDevice;
         pos = position;
-        j_assert( position.IsValid( ), "Cannot draw invalid position!" );
+        OSL_ENSURE( position.IsValid( ), "Cannot draw invalid position!" );
 
         pos.pSelectedNode->Accept( this );
     }

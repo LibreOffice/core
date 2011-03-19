@@ -188,7 +188,7 @@ public:
     SmCaretPosGraphEntry* Add(SmCaretPos pos,
                             SmCaretPosGraphEntry* left = NULL,
                             SmCaretPosGraphEntry* right = NULL){
-        j_assert(pos.Index >= 0, "Index shouldn't be -1!");
+        OSL_ENSURE(pos.Index >= 0, "Index shouldn't be -1!");
         return Add(SmCaretPosGraphEntry(pos, left, right));
     }
     /** Get an iterator for this graph */

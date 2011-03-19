@@ -32,163 +32,163 @@
 
 void SmVisitorTest::Visit( SmTableNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NTABLE, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NTABLE, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmBraceNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NBRACE, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NBRACE, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmBracebodyNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NBRACEBODY, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NBRACEBODY, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmOperNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NOPER, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NOPER, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmAlignNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NALIGN, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NALIGN, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmAttributNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NATTRIBUT, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NATTRIBUT, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmFontNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NFONT, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NFONT, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmUnHorNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NUNHOR, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NUNHOR, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmBinHorNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NBINHOR, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NBINHOR, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmBinVerNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NBINVER, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NBINVER, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmBinDiagonalNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NBINDIAGONAL, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NBINDIAGONAL, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmSubSupNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NSUBSUP, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NSUBSUP, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmMatrixNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NMATRIX, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NMATRIX, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmPlaceNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NPLACE, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NPLACE, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmTextNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NTEXT, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NTEXT, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmSpecialNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NSPECIAL, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NSPECIAL, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmGlyphSpecialNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NGLYPH_SPECIAL, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NGLYPH_SPECIAL, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmMathSymbolNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NMATH, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NMATH, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmBlankNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NBLANK, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NBLANK, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmErrorNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NERROR, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NERROR, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmLineNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NLINE, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NLINE, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmExpressionNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NEXPRESSION, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NEXPRESSION, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmPolyLineNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NPOLYLINE, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NPOLYLINE, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmRootNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NROOT, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NROOT, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmRootSymbolNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NROOTSYMBOL, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NROOTSYMBOL, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmRectangleNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NRECTANGLE, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NRECTANGLE, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmVerticalBraceNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NVERTICAL_BRACE, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NVERTICAL_BRACE, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
@@ -347,7 +347,7 @@ SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
     pos = position;
     Offset = offset;
     isCaretVisible = caretVisible;
-    j_assert( position.IsValid( ), "Cannot draw invalid position!" );
+    OSL_ENSURE( position.IsValid( ), "Cannot draw invalid position!" );
     if( !position.IsValid( ) )
         return;
 
@@ -789,7 +789,7 @@ SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos en
     IsSelecting = false;
 
     //Assume that pTree is a SmTableNode
-    j_assert(pTree->GetType() == NTABLE, "pTree should be a SmTableNode!");
+    OSL_ENSURE(pTree->GetType() == NTABLE, "pTree should be a SmTableNode!");
     //Visit root node, this is special as this node cannot be selected, but it's children can!
     if(pTree->GetType() == NTABLE){
         //Change state if StartPos is infront of this node
@@ -798,7 +798,7 @@ SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos en
         //Change state if EndPos is infront of this node
         if( EndPos.pSelectedNode == pTree && EndPos.Index == 0 )
             IsSelecting = !IsSelecting;
-        j_assert(!IsSelecting, "Caret positions needed to set IsSelecting about, shouldn't be possible!");
+        OSL_ENSURE(!IsSelecting, "Caret positions needed to set IsSelecting about, shouldn't be possible!");
 
         //Visit lines
         SmNodeIterator it( pTree );
@@ -814,7 +814,7 @@ SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos en
             }
         }
         //Check if pTree isn't selected
-        j_assert(!pTree->IsSelected(), "pTree should never be selected!");
+        OSL_ENSURE(!pTree->IsSelected(), "pTree should never be selected!");
         //Discard the selection if there's a bug (it's better than crashing)
         if(pTree->IsSelected())
             SetSelectedOnAll(pTree, false);
@@ -985,7 +985,7 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
     pRightMost  = NULL;
     pGraph = new SmCaretPosGraph( );
     //pRootNode should always be a table
-    j_assert( pRootNode->GetType( ) == NTABLE, "pRootNode must be a table node");
+    OSL_ENSURE( pRootNode->GetType( ) == NTABLE, "pRootNode must be a table node");
     //Handle the special case where NTABLE is used a rootnode
     if( pRootNode->GetType( ) == NTABLE ){
         //Children are SmLineNodes
@@ -1077,10 +1077,10 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
                          *bodyRight;
 
     left = pRightMost;
-    j_assert( pRightMost, "pRightMost shouldn't be NULL here!" );
+    OSL_ENSURE( pRightMost, "pRightMost shouldn't be NULL here!" );
 
     //Create bodyLeft
-    j_assert( pNode->GetBody( ), "SmSubSupNode Doesn't have a body!" );
+    OSL_ENSURE( pNode->GetBody( ), "SmSubSupNode Doesn't have a body!" );
     bodyLeft = pGraph->Add( SmCaretPos( pNode->GetBody( ), 0 ), left );
     left->SetRight( bodyLeft ); //TODO: Don't make this if LSUP or LSUB are NULL ( not sure??? )
 
@@ -1329,7 +1329,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmMatrixNode* pNode )
  */
 void SmCaretPosGraphBuildingVisitor::Visit( SmTextNode* pNode )
 {
-    j_assert( pNode->GetText( ).Len( ) > 0, "Empty SmTextNode is bad" );
+    OSL_ENSURE( pNode->GetText( ).Len( ) > 0, "Empty SmTextNode is bad" );
 
     int size = pNode->GetText( ).Len( );
     for( int i = 1; i <= size; i++ ){
@@ -1370,7 +1370,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinVerNode* pNode )
 
     //Set left
     left = pRightMost;
-    j_assert( pRightMost, "There must be a position infront of this" );
+    OSL_ENSURE( pRightMost, "There must be a position infront of this" );
 
     //Create right
     right = pGraph->Add( SmCaretPos( pNode, 1 ) );
@@ -1609,7 +1609,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmRootNode* pNode )
 {
     SmNode  *pExtra = pNode->GetSubNode( 0 ), //Argument, NULL for sqrt, and SmTextNode if cubicroot
             *pBody  = pNode->GetSubNode( 2 ); //Body of the root
-    j_assert( pBody, "pBody cannot be NULL" );
+    OSL_ENSURE( pBody, "pBody cannot be NULL" );
 
     SmCaretPosGraphEntry  *left,
                         *right,
@@ -1617,7 +1617,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmRootNode* pNode )
                         *bodyRight;
 
     //Get left and save it
-    j_assert( pRightMost, "There must be a position infront of this" );
+    OSL_ENSURE( pRightMost, "There must be a position infront of this" );
     left = pRightMost;
 
     //Create body left
@@ -2051,7 +2051,7 @@ SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmN
     bHasSelectionArea = false;
 
     //Visit everything
-    j_assert( pTree, "pTree can't be null!" );
+    OSL_ENSURE( pTree, "pTree can't be null!" );
     if( pTree )
         pTree->Accept( this );
 
