@@ -48,6 +48,7 @@ using namespace std;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::rtl::OUStringHash;
+using ::rtl::OUStringToOString;
 
 
 APTabPage::APTabPage( AddPrinterDialog* pParent, const ResId& rResId )
