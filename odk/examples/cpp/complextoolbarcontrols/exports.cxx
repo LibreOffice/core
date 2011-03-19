@@ -80,7 +80,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void* pServiceManager
         return sal_True;
     }
     catch(const css::registry::InvalidRegistryException&)
-        { OSL_ENSURE( sal_False, "### InvalidRegistryException!" ); }
+        { OSL_FAIL( "### InvalidRegistryException!" ); }
 
     return sal_False;
 }

@@ -145,7 +145,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     }
     catch (::com::sun::star::registry::InvalidRegistryException& )
     {
-        OSL_ENSURE(sal_False, "SKELETON::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
+        OSL_FAIL("SKELETON::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
     }
 
     return sal_False;
