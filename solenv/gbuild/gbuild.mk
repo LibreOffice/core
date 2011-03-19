@@ -89,7 +89,7 @@ endif
 
 
 ifneq ($(strip $(DEBUG)$(debug)),)
-gb_DEBUGLEVEL := 2
+gb_DEBUGLEVEL := 1
 gb_SYMBOL := $(true)
 else
 ifeq ($(gb_PRODUCT),$(true))
@@ -97,6 +97,12 @@ gb_DEBUGLEVEL := 0
 else
 gb_DEBUGLEVEL := 1
 endif
+endif
+
+ifneq ($(strip $(DBGLEVEL)$(dbglevel)),)
+# FIXME: problem if both set
+gb_DEBUGLEVEL := $(strip $(DBGLEVEL)$(dbglevel))
+gb_SYMBOL := $(true)
 endif
 
 ifneq ($(strip $(ENABLE_PCH)),)
