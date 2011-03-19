@@ -55,7 +55,19 @@ endef
 define gb_CppunitTest__CppunitTest_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype,$(2),CppunitTest)
+ifeq ($(SYSTEM_CPPUNIT),"YES")
 $(call gb_LinkTarget_add_linked_libs,$(2),cppunit)
+else
+$(call gb_LinkTarget_add_includes,$(2),$(filter -I%,$(CPPUNIT_CFLAGS)))
+$(call gb_LinkTarget_set_defs,$(2), \
+    $$(DEFS) \
+    $(filter-out -I%,$(CPPUNIT_CFLAGS)) \
+)
+$(call gb_LinkTarget_set_ldflags,$(2),\
+    $$(LDFLAGS) \
+    $(CPPUNIT_LIBS) \
+)
+endif
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_CppunitTest_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_CppunitTest_CppunitTest_platform,$(1),$(2),$(gb_CppunitTest_DLLDIR)/$(call gb_CppunitTest_get_libfilename,$(1)))
