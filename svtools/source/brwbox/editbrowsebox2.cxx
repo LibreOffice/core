@@ -133,7 +133,7 @@ void EditBrowseBoxImpl::clearActiveCell()
     }
     catch(const Exception&)
     {
-        OSL_ENSURE( sal_False, "EditBrowseBoxImpl::clearActiveCell: caught an exception while disposing the AccessibleCell!" );
+        OSL_FAIL( "EditBrowseBoxImpl::clearActiveCell: caught an exception while disposing the AccessibleCell!" );
     }
 
     m_xActiveCell = NULL;

@@ -121,7 +121,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     {
         if( !( aArguments[1] >>= nStorageMode ) )
         {
-            OSL_ENSURE( sal_False, "Wrong second argument!\n" );
+            OSL_FAIL( "Wrong second argument!\n" );
             throw uno::Exception(); // TODO: Illegal argument
         }
         // it's allways possible to read written storage in this implementation
@@ -135,13 +135,13 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     {
         if ( !aURL.getLength() )
         {
-            OSL_ENSURE( sal_False, "Empty URL is provided!\n" );
+            OSL_FAIL( "Empty URL is provided!\n" );
             throw uno::Exception(); // TODO: illegal argument
         }
     }
     else
     {
-        OSL_ENSURE( sal_False, "Wrong first argument!\n" );
+        OSL_FAIL( "Wrong first argument!\n" );
         throw uno::Exception(); // TODO: Illegal argument
     }
 
@@ -167,12 +167,12 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
                     break;
                 }
                 else
-                    OSL_ENSURE( sal_False, "Unacceptable property, will be ignored!\n" );
+                    OSL_FAIL( "Unacceptable property, will be ignored!\n" );
             }
         }
         else
         {
-            OSL_ENSURE( sal_False, "Wrong third argument!\n" );
+            OSL_FAIL( "Wrong third argument!\n" );
             throw uno::Exception(); // TODO: Illegal argument
         }
     }
@@ -183,7 +183,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
       || aURL.equalsIgnoreAsciiCaseAsciiL( "vnd.sun.star.zip", 16 )
       || ::utl::UCBContentHelper::IsDocument( aURL ) )
     {
-        OSL_ENSURE( sal_False, "File system storages can be based only on file URLs!\n" ); // ???
+        OSL_FAIL( "File system storages can be based only on file URLs!\n" ); // ???
         throw uno::Exception(); // TODO: illegal argument
     }
 

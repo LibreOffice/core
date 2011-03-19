@@ -164,13 +164,13 @@ void SvObjectServerList::FillInsertObjects()
                     ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
                 if ( !( aProperty >>= aProductName ) )
                 {
-                    OSL_ENSURE( sal_False, "Coudn't get PRODUCTNAME variable!\n" );
+                    OSL_FAIL( "Coudn't get PRODUCTNAME variable!\n" );
                     aProductName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice" ) );
                 }
                 aProperty = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
                 if ( !( aProperty >>= aProductVersion ) )
                 {
-                    OSL_ENSURE( sal_False, "Coudn't get PRODUCTVERSION variable!\n" );
+                    OSL_FAIL( "Coudn't get PRODUCTVERSION variable!\n" );
                 }
 
                 for( nInd = 0; nInd < seqNames.getLength(); nInd++ )

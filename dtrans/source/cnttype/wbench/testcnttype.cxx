@@ -120,7 +120,7 @@ void ShutdownServiceMgr( Reference< XMultiServiceFactory >& SrvMgr )
     Reference< XComponent > xComponent( SrvMgr, UNO_QUERY );
 
     if ( !xComponent.is() )
-        OSL_ENSURE(sal_False, "Error shuting down");
+        OSL_FAIL("Error shuting down");
 
     // Dispose and clear factory
     xComponent->dispose();
@@ -232,7 +232,7 @@ int SAL_CALL main( int nArgc, char* argv[] )
     // Print a message if an error occurred.
     if ( !g_xFactory.is( ) )
     {
-        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
+        OSL_FAIL("Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -250,7 +250,7 @@ int SAL_CALL main( int nArgc, char* argv[] )
 
     if ( !xMCntTypeFactory.is( ) )
     {
-        OSL_ENSURE( sal_False, "Error creating MimeContentTypeFactory Service" );
+        OSL_FAIL( "Error creating MimeContentTypeFactory Service" );
         return(-1);
     }
 

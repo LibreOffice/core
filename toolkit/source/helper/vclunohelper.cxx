@@ -444,7 +444,7 @@ MapUnit VCLUnoHelper::UnoEmbed2VCLMapUnit( sal_Int32 nUnoEmbedMapUnit )
             return MAP_PIXEL;
     }
 
-    OSL_ENSURE( sal_False, "Unexpected UNO map mode is provided!\n" );
+    OSL_FAIL( "Unexpected UNO map mode is provided!\n" );
     return MAP_LASTENUMDUMMY;
 }
 
@@ -477,7 +477,7 @@ sal_Int32 VCLUnoHelper::VCL2UnoEmbedMapUnit( MapUnit nVCLMapUnit )
         default: ; // avoid compiler warning
     }
 
-    OSL_ENSURE( sal_False, "Unexpected VCL map mode is provided!\n" );
+    OSL_FAIL( "Unexpected VCL map mode is provided!\n" );
     return -1;
 }
 

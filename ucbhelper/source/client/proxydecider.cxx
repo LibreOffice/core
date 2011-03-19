@@ -260,8 +260,7 @@ bool getConfigStringValue(
         if ( !( xNameAccess->getByName( rtl::OUString::createFromAscii( key ) )
                 >>= value ) )
         {
-            OSL_ENSURE( sal_False,
-                        "InternetProxyDecider - "
+            OSL_FAIL( "InternetProxyDecider - "
                         "Error getting config item value!" );
             return false;
         }
@@ -289,8 +288,7 @@ bool getConfigInt32Value(
             rtl::OUString::createFromAscii( key ) );
         if ( aValue.hasValue() && !( aValue >>= value ) )
         {
-            OSL_ENSURE( sal_False,
-                        "InternetProxyDecider - "
+            OSL_FAIL( "InternetProxyDecider - "
                         "Error getting config item value!" );
             return false;
         }
@@ -406,7 +404,7 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
     catch ( uno::Exception const & )
     {
         // createInstance, createInstanceWithArguments
-        OSL_ENSURE( sal_False, "InternetProxyDecider - Exception!" );
+        OSL_FAIL( "InternetProxyDecider - Exception!" );
     }
 }
 
@@ -603,8 +601,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_nProxyType ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
                 }
@@ -614,8 +611,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                     rtl::OUString aNoProxyList;
                     if ( !( rElem.Element >>= aNoProxyList ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
 
@@ -626,8 +622,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_aHttpProxy.aName ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
                 }
@@ -636,8 +631,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_aHttpProxy.nPort ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
 
@@ -649,8 +643,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_aHttpsProxy.aName ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
                 }
@@ -659,8 +652,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_aHttpsProxy.nPort ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
 
@@ -672,8 +664,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_aFtpProxy.aName ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
                 }
@@ -682,8 +673,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_aFtpProxy.nPort ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
                 }

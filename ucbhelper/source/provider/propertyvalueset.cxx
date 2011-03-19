@@ -164,7 +164,7 @@ class PropertyValues : public PropertyValuesVector {};
     if ( ( columnIndex < 1 )                                                  \
          || ( columnIndex > sal_Int32( m_pValues->size() ) ) )                \
     {                                                                         \
-        OSL_ENSURE( sal_False, "PropertyValueSet - index out of range!" );    \
+        OSL_FAIL( "PropertyValueSet - index out of range!" );    \
     }                                                                         \
     else                                                                      \
     {                                                                         \
@@ -480,7 +480,7 @@ Any SAL_CALL PropertyValueSet::getObject(
     if ( ( columnIndex < 1 )
          || ( columnIndex > sal_Int32( m_pValues->size() ) ) )
     {
-        OSL_ENSURE( sal_False, "PropertyValueSet - index out of range!" );
+        OSL_FAIL( "PropertyValueSet - index out of range!" );
     }
     else
     {
@@ -577,8 +577,7 @@ Any SAL_CALL PropertyValueSet::getObject(
                 case OBJECT_VALUE_SET:
                     // Fall-through is intended!
                 default:
-                    OSL_ENSURE( sal_False,
-                                "PropertyValueSet::getObject - "
+                    OSL_FAIL( "PropertyValueSet::getObject - "
                                 "Wrong original type" );
                     break;
             }

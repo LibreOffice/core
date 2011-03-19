@@ -123,7 +123,7 @@ namespace utl
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "OObserverImpl::ensureObservation: caught an exception!" );
+                OSL_FAIL( "OObserverImpl::ensureObservation: caught an exception!" );
             }
         }
 

@@ -125,7 +125,7 @@ static vector< ::rtl::OUString > getInfoFromInd( ::rtl::OUString aInd )
                          && ( pLine[i] < 'a' || pLine[i] > 'f' )
                          && ( pLine[i] < 'A' || pLine[i] > 'F' ) ) )
                     {
-                        OSL_ENSURE( sal_False, "Wrong index syntax!\n" );
+                        OSL_FAIL( "Wrong index syntax!\n" );
                         return aResult;
                     }
 
@@ -140,7 +140,7 @@ static vector< ::rtl::OUString > getInfoFromInd( ::rtl::OUString aInd )
     } while( pLine[0] == '_' && pLine[1] == '_' );
 
     if( *pLine )
-        OSL_ENSURE( sal_False, "Wrong index syntax!\n" );
+        OSL_FAIL( "Wrong index syntax!\n" );
 
     return aResult;
 }
@@ -266,7 +266,7 @@ PassMap StorageItem::getInfo()
             }
         }
         else
-            OSL_ENSURE( sal_False, "Wrong index sintax!\n" );
+            OSL_FAIL( "Wrong index sintax!\n" );
     }
 
     return aResult;
@@ -526,12 +526,12 @@ vector< ::rtl::OUString > PasswordContainer::DecodePasswords( const ::rtl::OUStr
     }
     else
     {
-        OSL_ENSURE( sal_False, "No master password provided!\n" );
+        OSL_FAIL( "No master password provided!\n" );
         // throw special exception
     }
 
     // problems with decoding
-    OSL_ENSURE( sal_False, "Problem with decoding\n" );
+    OSL_FAIL( "Problem with decoding\n" );
     throw RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can't decode!")), Reference< XInterface >() );
 }
 
@@ -606,12 +606,12 @@ vector< ::rtl::OUString > PasswordContainer::DecodePasswords( const ::rtl::OUStr
     }
     else
     {
-        OSL_ENSURE( sal_False, "No master password provided!\n" );
+        OSL_FAIL( "No master password provided!\n" );
         // throw special exception
     }
 
     // problems with encoding
-    OSL_ENSURE( sal_False, "Problem with encoding\n" );
+    OSL_FAIL( "Problem with encoding\n" );
     throw RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can't encode!")), Reference< XInterface >() );
 }
 

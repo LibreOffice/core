@@ -164,7 +164,7 @@ void TestApplication::Main()
     #endif
 
 //  Execute();
-    OSL_ENSURE( sal_False, "Test was successful!\n" );
+    OSL_FAIL( "Test was successful!\n" );
 }
 
 //*****************************************************************************************************************
@@ -249,7 +249,7 @@ void TestApplication::impl_testDynamicMenuOptions()
         }
     }
 
-    OSL_ENSURE( sal_False, OUStringToOString( sOut.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_FAIL( OUStringToOString( sOut.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
 //*****************************************************************************************************************

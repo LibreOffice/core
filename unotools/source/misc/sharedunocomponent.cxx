@@ -71,7 +71,7 @@ namespace utl
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "DisposableComponent::~DisposableComponent: caught an exception!" );
+                OSL_FAIL( "DisposableComponent::~DisposableComponent: caught an exception!" );
             }
             m_xComponent.clear();
         }
@@ -157,7 +157,7 @@ namespace utl
         catch( const CloseVetoException& ) { /* fine */ }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "CloseableComponentImpl::nf_closeComponent: caught an unexpected exception!" );
+            OSL_FAIL( "CloseableComponentImpl::nf_closeComponent: caught an unexpected exception!" );
         }
 
         // reset
@@ -179,7 +179,7 @@ namespace utl
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "CloseableComponentImpl::impl_nf_switchListening: caught an exception!" );
+            OSL_FAIL( "CloseableComponentImpl::impl_nf_switchListening: caught an exception!" );
         }
     }
 

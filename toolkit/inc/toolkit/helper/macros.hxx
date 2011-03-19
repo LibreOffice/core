@@ -185,7 +185,7 @@ void ClassName::disposing( const ::com::sun::star::lang::EventObject& ) throw(::
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e )    \
         ::rtl::OString sMessage( #ClassName "::" #MethodName ": caught an exception!\n" ); \
         sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US ); \
-        OSL_ENSURE( sal_False, sMessage.getStr() );
+        OSL_FAIL( sMessage.getStr() );
 #else
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e )
 #endif

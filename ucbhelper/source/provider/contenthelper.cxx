@@ -597,20 +597,17 @@ void SAL_CALL ContentImplHelper::addProperty(
             }
             catch ( beans::PropertyExistException const & )
             {
-                OSL_ENSURE( sal_False,
-                            "ContentImplHelper::addProperty - Exists!" );
+                OSL_FAIL( "ContentImplHelper::addProperty - Exists!" );
                 throw;
             }
             catch ( beans::IllegalTypeException const & )
             {
-                OSL_ENSURE( sal_False,
-                            "ContentImplHelper::addProperty - Wrong Type!" );
+                OSL_FAIL( "ContentImplHelper::addProperty - Wrong Type!" );
                 throw;
             }
             catch ( lang::IllegalArgumentException const & )
             {
-                OSL_ENSURE( sal_False,
-                            "ContentImplHelper::addProperty - Illegal Arg!" );
+                OSL_FAIL( "ContentImplHelper::addProperty - Illegal Arg!" );
                 throw;
             }
 
@@ -664,7 +661,7 @@ void SAL_CALL ContentImplHelper::removeProperty( const rtl::OUString& Name )
     }
     catch ( beans::UnknownPropertyException const & )
     {
-        OSL_ENSURE( sal_False, "ContentImplHelper::removeProperty - Unknown!" );
+        OSL_FAIL( "ContentImplHelper::removeProperty - Unknown!" );
         throw;
     }
 
@@ -692,14 +689,12 @@ void SAL_CALL ContentImplHelper::removeProperty( const rtl::OUString& Name )
             }
             catch ( beans::UnknownPropertyException const & )
             {
-                OSL_ENSURE( sal_False,
-                            "ContentImplHelper::removeProperty - Unknown!" );
+                OSL_FAIL( "ContentImplHelper::removeProperty - Unknown!" );
                 throw;
             }
             catch ( beans::NotRemoveableException const & )
             {
-                OSL_ENSURE(
-                    sal_False,
+                OSL_FAIL(
                     "ContentImplHelper::removeProperty - Unremoveable!" );
                 throw;
             }

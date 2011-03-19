@@ -800,7 +800,7 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
 
                 if ( !( nFlags & SFX_FILTER_IMPORT ) )
                 {
-                    OSL_ENSURE( sal_False, "This is no import filter!" );
+                    OSL_FAIL( "This is no import filter!" );
                     throw uno::Exception();
                 }
 

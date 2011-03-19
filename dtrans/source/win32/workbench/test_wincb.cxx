@@ -280,7 +280,7 @@ int SAL_CALL main( int nArgc, char* Argv[] )
     // Print a message if an error occurred.
     if ( !g_xFactory.is( ) )
     {
-        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
+        OSL_FAIL("Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -294,7 +294,7 @@ int SAL_CALL main( int nArgc, char* Argv[] )
         xClipboard( g_xFactory->createInstance( OUString( WINCLIPBOARD_SERVICE_NAME ) ), UNO_QUERY );
     if ( !xClipboard.is( ) )
     {
-        OSL_ENSURE( sal_False, "Error creating Clipboard Service" );
+        OSL_FAIL( "Error creating Clipboard Service" );
         return(-1);
     }
 
@@ -334,7 +334,7 @@ int SAL_CALL main( int nArgc, char* Argv[] )
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
     if ( !xComponent.is() )
-        OSL_ENSURE(sal_False, "Error shuting down");
+        OSL_FAIL("Error shuting down");
 
     // Dispose and clear factory
     xComponent->dispose();

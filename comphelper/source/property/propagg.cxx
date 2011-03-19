@@ -959,7 +959,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const ::rtl::O
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OPropertySetAggregationHelper::setPropertyToDefault: caught an exception which is not allowed to leave here!" );
+            OSL_FAIL( "OPropertySetAggregationHelper::setPropertyToDefault: caught an exception which is not allowed to leave here!" );
         }
     }
 }

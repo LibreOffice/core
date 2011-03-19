@@ -163,7 +163,7 @@ namespace svt
         }
         catch(const Exception& )
         {
-            OSL_ENSURE( sal_False, "lcl_getActiveFrame: caught an exception!" );
+            OSL_FAIL( "lcl_getActiveFrame: caught an exception!" );
             return Reference< XFrame >();
         }
     }
@@ -184,7 +184,7 @@ namespace svt
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "lcl_getPreferredDialogParent: caught an exception!" );
+            OSL_FAIL( "lcl_getPreferredDialogParent: caught an exception!" );
         }
 
         return pReturn;
@@ -375,7 +375,7 @@ namespace svt
                             break;
 
                         default:
-                            OSL_ENSURE( sal_False, "OProductRegistration::execute: invalid response from the dialog!" );
+                            OSL_FAIL( "OProductRegistration::execute: invalid response from the dialog!" );
                     }
 
                     // prefer new style registration

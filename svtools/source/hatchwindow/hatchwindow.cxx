@@ -88,7 +88,7 @@ void VCLXHatchWindow::QueryObjAreaPixel( Rectangle & aRect )
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Can't adjust rectangle size!\n" );
+            OSL_FAIL( "Can't adjust rectangle size!\n" );
         }
     }
 }
@@ -104,7 +104,7 @@ void VCLXHatchWindow::RequestObjAreaPixel( const Rectangle & aRect )
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Can't request resizing!\n" );
+            OSL_FAIL( "Can't request resizing!\n" );
         }
     }
 }

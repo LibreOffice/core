@@ -172,7 +172,7 @@ bool OSXTransferable::compareDataFlavors(const DataFlavor& lhs, const DataFlavor
     }
     catch( IllegalArgumentException& )
     {
-        OSL_ENSURE( sal_False, "Invalid content type detected" );
+        OSL_FAIL( "Invalid content type detected" );
         return false;
     }
 

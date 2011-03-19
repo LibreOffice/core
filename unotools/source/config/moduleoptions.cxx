@@ -478,7 +478,7 @@ SvtModuleOptions_Impl::~SvtModuleOptions_Impl()
 *//*-*************************************************************************************************************/
 void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< ::rtl::OUString >& )
 {
-    OSL_ENSURE( sal_False, "SvtModuleOptions_Impl::Notify()\nNot implemented yet!\n" );
+    OSL_FAIL( "SvtModuleOptions_Impl::Notify()\nNot implemented yet!\n" );
 }
 
 /*-****************************************************************************************************//**

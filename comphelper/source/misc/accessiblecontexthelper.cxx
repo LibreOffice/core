@@ -319,7 +319,7 @@ namespace comphelper
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OAccessibleContextHelper::getAccessibleIndexInParent: caught an exception!" );
+            OSL_FAIL( "OAccessibleContextHelper::getAccessibleIndexInParent: caught an exception!" );
         }
 
         return nRet;

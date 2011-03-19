@@ -598,7 +598,7 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
         ::rtl::OUStringBuffer sMsg(256);
         sMsg.appendAscii("Invalid MediaDescriptor detected:\n");
         sMsg.append     (ex.Message                           );
-        OSL_ENSURE(sal_False, ::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
+        OSL_FAIL(::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
     }
 #else
     catch(const css::uno::Exception&)

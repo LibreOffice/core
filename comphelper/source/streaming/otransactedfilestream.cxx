@@ -232,7 +232,7 @@ void OTruncatedTransactedFileStream::CloseAll_Impl()
                 xFileAccess->kill( aURL );
             } catch( uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "Could not remove the file!" );
+                OSL_FAIL( "Could not remove the file!" );
             }
         }
     }
@@ -313,7 +313,7 @@ void OTruncatedTransactedFileStream::Commit_Impl()
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "These calls are pretty simple, they should not fail!\n" );
+                OSL_FAIL( "These calls are pretty simple, they should not fail!\n" );
             }
 
             m_pStreamData->FreeOriginal();
@@ -537,7 +537,7 @@ void SAL_CALL OTruncatedTransactedFileStream::flush(  )
 
     if ( !m_pStreamData )
     {
-        OSL_ENSURE( sal_False, "flush() call on closed stream!\n" );
+        OSL_FAIL( "flush() call on closed stream!\n" );
         return;
         // in future throw exception, for now some code might call flush() on closed stream
         // since file ucp implementation allows it

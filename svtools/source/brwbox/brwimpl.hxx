@@ -57,7 +57,7 @@ namespace svt
                     }
                     catch( const ::com::sun::star::uno::Exception& )
                     {
-                        OSL_ENSURE( sal_False, "THeaderCellMapFunctorDispose: caught an exception!" );
+                        OSL_FAIL( "THeaderCellMapFunctorDispose: caught an exception!" );
                     }
             }
         };

@@ -84,7 +84,7 @@ void cancelCommandExecution( const uno::Any & rException,
 
     cppu::throwException( rException );
 
-    OSL_ENSURE( sal_False, "Return from cppu::throwException call!!!" );
+    OSL_FAIL( "Return from cppu::throwException call!!!" );
     throw uno::RuntimeException();
 }
 
@@ -122,7 +122,7 @@ void cancelCommandExecution( const ucb::IOErrorCode eError,
 
     cppu::throwException( xRequest->getRequest() );
 
-    OSL_ENSURE( sal_False, "Return from cppu::throwException call!!!" );
+    OSL_FAIL( "Return from cppu::throwException call!!!" );
     throw uno::RuntimeException();
 }
 

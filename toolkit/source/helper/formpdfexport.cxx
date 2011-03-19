@@ -197,7 +197,7 @@ namespace toolkitform
                     Reference< XInterface > xElement( xCurrentContainer->getByIndex( i ), UNO_QUERY );
                     if ( !xElement.is() )
                     {
-                        OSL_ENSURE( sal_False, "determineRadioGroupId: very suspicious!" );
+                        OSL_FAIL( "determineRadioGroupId: very suspicious!" );
                         continue;
                     }
 
@@ -232,7 +232,7 @@ namespace toolkitform
                             }
                             ++pElementNames;
                         }
-                        OSL_ENSURE( sal_False, "determineRadioGroupId: did not find the radios element name!" );
+                        OSL_FAIL( "determineRadioGroupId: did not find the radios element name!" );
                     }
                 }
 
@@ -386,7 +386,7 @@ namespace toolkitform
                 case awt::TextAlign::CENTER:  _rpDescriptor->TextStyle |= TEXT_DRAW_CENTER; break;
                 case awt::TextAlign::RIGHT:  _rpDescriptor->TextStyle |= TEXT_DRAW_RIGHT; break;
                 default:
-                    OSL_ENSURE( sal_False, "describePDFControl: invalid text align!" );
+                    OSL_FAIL( "describePDFControl: invalid text align!" );
                 }
             }
             // ............................
@@ -403,7 +403,7 @@ namespace toolkitform
                     case VerticalAlignment_MIDDLE:  _rpDescriptor->TextStyle |= TEXT_DRAW_VCENTER; break;
                     case VerticalAlignment_BOTTOM:  _rpDescriptor->TextStyle |= TEXT_DRAW_BOTTOM; break;
                     default:
-                        OSL_ENSURE( sal_False, "describePDFControl: invalid vertical text align!" );
+                        OSL_FAIL( "describePDFControl: invalid vertical text align!" );
                     }
                 }
             }
@@ -598,7 +598,7 @@ namespace toolkitform
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "describePDFControl: caught an exception!" );
+            OSL_FAIL( "describePDFControl: caught an exception!" );
         }
     }
 

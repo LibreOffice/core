@@ -127,13 +127,13 @@ CFormatEtc CDataFormatTranslator::getFormatEtcFromDataFlavor( const DataFlavor& 
                     OSL_ENSURE( CF_INVALID != cf, "RegisterClipboardFormat failed" );
                 }
                 else
-                    OSL_ENSURE( sal_False, "Wrong Any-Type detected" );
+                    OSL_FAIL( "Wrong Any-Type detected" );
             }
         }
     }
     catch( ... )
     {
-        OSL_ENSURE( sal_False, "Unexpected error" );
+        OSL_FAIL( "Unexpected error" );
     }
 
     return sal::static_int_cast<CFormatEtc>(getFormatEtcForClipformat( sal::static_int_cast<CLIPFORMAT>(cf) ));
@@ -190,7 +190,7 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const FORMATETC& a
     }
     catch( ... )
     {
-        OSL_ENSURE( sal_False, "Unexpected error" );
+        OSL_FAIL( "Unexpected error" );
     }
 
     return aFlavor;

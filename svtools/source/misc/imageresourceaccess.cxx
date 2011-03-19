@@ -192,7 +192,7 @@ namespace svt
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "GraphicAccess::getImageStream: caught an exception!" );
+            OSL_FAIL( "GraphicAccess::getImageStream: caught an exception!" );
         }
 
         return pReturn;

@@ -165,7 +165,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
             sMsg += OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                         RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(sal_False, sMsg.getStr());
+            OSL_FAIL(sMsg.getStr());
         }
     }
 #else
@@ -221,7 +221,7 @@ void    ConfigManager::RegisterConfigItem(utl::ConfigItem& rCfgItem)
     {
         ConfigItemListEntry_Impl& rEntry = *aListIter;
         if(rEntry.pConfigItem == &rCfgItem)
-            OSL_ENSURE(sal_False, "RegisterConfigItem: already inserted!");
+            OSL_FAIL("RegisterConfigItem: already inserted!");
     }
 #endif
     pMgrImpl->aItemList.insert(aListIter, ConfigItemListEntry_Impl(&rCfgItem));
@@ -297,7 +297,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
                 sMsg += OString(rEx.Message.getStr(),
                             rEx.Message.getLength(),
                             RTL_TEXTENCODING_ASCII_US);
-                OSL_ENSURE(sal_False, sMsg.getStr());
+                OSL_FAIL(sMsg.getStr());
             }
 #endif
         }
@@ -530,7 +530,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
             aBuf.append( "\" under \"" );
             aBuf.append( rtl::OUStringToOString( sPath, RTL_TEXTENCODING_ASCII_US ) );
             aBuf.append( "\" (caught an exception)!" );
-            OSL_ENSURE( sal_False, aBuf.getStr() );
+            OSL_FAIL( aBuf.getStr() );
             #endif
         }
     }
@@ -632,7 +632,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUSt
             sMsg += OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                          RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(sal_False, sMsg.getStr());
+            OSL_FAIL(sMsg.getStr());
         }
 #else
         catch(Exception&){}
@@ -663,7 +663,7 @@ Any ConfigManager::GetLocalProperty(const OUString& rProperty)
         sMsg += OString(rEx.Message.getStr(),
                     rEx.Message.getLength(),
                      RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, sMsg.getStr());
+        OSL_FAIL(sMsg.getStr());
     }
 #else
     catch(Exception&){}
@@ -693,7 +693,7 @@ void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValu
             sMsg += OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                          RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(sal_False, sMsg.getStr());
+            OSL_FAIL(sMsg.getStr());
         }
 #else
         catch(Exception& ){}

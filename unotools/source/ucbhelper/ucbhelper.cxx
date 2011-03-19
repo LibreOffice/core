@@ -914,7 +914,7 @@ sal_Bool UCBContentHelper::EqualURLs( const ::rtl::OUString& aFirstURL, const ::
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "Can't compare URL's, treat as different!\n" );
+                OSL_FAIL( "Can't compare URL's, treat as different!\n" );
             }
         }
     }

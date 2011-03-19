@@ -851,7 +851,7 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
                         catch( uno::Exception& e )
                         {
                                                     (void)e;
-                                                    OSL_ENSURE( sal_False, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ) );
+                                                    OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ) );
                         }
                     }
             }

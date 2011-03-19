@@ -93,7 +93,7 @@ CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
         // to a defined value
         if (FAILED(hr_marshal))
         {
-            OSL_ENSURE(sal_False, "marshalling failed");
+            OSL_FAIL("marshalling failed");
 
             #if OSL_DEBUG_LEVEL > 0
             HGLOBAL hGlobal =

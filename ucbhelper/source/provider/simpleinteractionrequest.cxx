@@ -125,8 +125,7 @@ sal_Int32 SimpleInteractionRequest::getResponse() const
         if ( xDisapprove.is() )
             return CONTINUATION_DISAPPROVE;
 
-        OSL_ENSURE( sal_False,
-            "SimpleInteractionRequest::getResponse - Unknown continuation!" );
+        OSL_FAIL( "SimpleInteractionRequest::getResponse - Unknown continuation!" );
     }
     return CONTINUATION_UNKNOWN;
 }

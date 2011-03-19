@@ -90,7 +90,7 @@ uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
         catch ( uno::Exception& )
         {
             rtl::OUString aMsg = UNISTRING( "SynchronousDispatch::dispatch() Error while dispatching! ");
-            OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+            OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
         }
     }
 

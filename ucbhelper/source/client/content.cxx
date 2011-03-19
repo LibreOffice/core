@@ -1533,8 +1533,7 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
     ContentBroker* pBroker = ContentBroker::get();
     if ( !pBroker )
     {
-        OSL_ENSURE( sal_False,
-                    "Content::transferContent - No Content Broker!" );
+        OSL_FAIL( "Content::transferContent - No Content Broker!" );
         return sal_False;
     }
 
@@ -1542,8 +1541,7 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
                                     pBroker->getCommandProcessorInterface() );
     if ( !xCmdProc.is() )
     {
-        OSL_ENSURE( sal_False,
-                    "Content::transferContent - No XCommandProcessor!" );
+        OSL_FAIL( "Content::transferContent - No XCommandProcessor!" );
         return sal_False;
     }
 

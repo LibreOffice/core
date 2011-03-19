@@ -69,7 +69,7 @@ inline void lcl_CFG_DBG_EXCEPTION(const sal_Char* cText, const Exception& rEx)
 {
     OString sMsg(cText);
     sMsg += OString(rEx.Message.getStr(), rEx.Message.getLength(), RTL_TEXTENCODING_ASCII_US);
-    OSL_ENSURE(sal_False, sMsg.getStr());
+    OSL_FAIL(sMsg.getStr());
 }
 #define CATCH_INFO(a) \
 catch(Exception& rEx)   \
@@ -482,7 +482,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
         {
             if(pImpl->pManager->IsLocalConfigProvider() && lcl_IsLocalProperty(sSubTree, rNames[i]))
             {
-                OSL_ENSURE(sal_False, "ConfigItem::IsReadonly()\nlocal mode seams to be used!?\n");
+                OSL_FAIL("ConfigItem::IsReadonly()\nlocal mode seams to be used!?\n");
                 continue;
             }
 
@@ -493,7 +493,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
             ::utl::splitLastFromConfigurationPath(sName,sPath,sProperty);
             if (!sPath.getLength() && !sProperty.getLength())
             {
-                OSL_ENSURE(sal_False, "ConfigItem::IsReadonly()\nsplitt failed\n");
+                OSL_FAIL("ConfigItem::IsReadonly()\nsplitt failed\n");
                 continue;
             }
 
@@ -505,7 +505,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
                 Any aNode = xHierarchyAccess->getByHierarchicalName(sPath);
                 if (!(aNode >>= xNode) || !xNode.is())
                 {
-                    OSL_ENSURE(sal_False, "ConfigItem::IsReadonly()\nno set available\n");
+                    OSL_FAIL("ConfigItem::IsReadonly()\nno set available\n");
                     continue;
                 }
             }
@@ -528,7 +528,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
 
             if (!xInfo.is())
             {
-                OSL_ENSURE(sal_False, "ConfigItem::IsReadonly()\nno prop info available\n");
+                OSL_FAIL("ConfigItem::IsReadonly()\nno prop info available\n");
                 continue;
             }
 
@@ -581,7 +581,7 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
                 sMsg += OString(pNames[i].getStr(),
                     pNames[i].getLength(),
                      RTL_TEXTENCODING_ASCII_US);
-                OSL_ENSURE(sal_False, sMsg.getStr());
+                OSL_FAIL(sMsg.getStr());
 #else
                 (void) rEx; // avoid warning
 #endif

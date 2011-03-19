@@ -344,7 +344,7 @@ void EmbeddedObjectRef::Clear()
                 }
                 catch ( uno::Exception& )
                 {
-                    OSL_ENSURE( sal_False, "Error on switching of the object to loaded state and closing!\n" );
+                    OSL_FAIL( "Error on switching of the object to loaded state and closing!\n" );
                 }
             }
         }
@@ -488,7 +488,7 @@ Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "Something went wrong on getting of the size of the object!" );
+                OSL_FAIL( "Something went wrong on getting of the size of the object!" );
             }
 
             try
@@ -497,7 +497,7 @@ Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
             }
             catch( uno::Exception )
             {
-                OSL_ENSURE( sal_False, "Can not get the map mode!" );
+                OSL_FAIL( "Can not get the map mode!" );
             }
         }
 
@@ -755,7 +755,7 @@ void EmbeddedObjectRef::SetGraphicToContainer( const Graphic& rGraphic,
            aContainer.InsertGraphicStream( xStream, aName, aMediaType );
     }
     else
-        OSL_ENSURE( sal_False, "Export of graphic is failed!\n" );
+        OSL_FAIL( "Export of graphic is failed!\n" );
 }
 
 sal_Bool EmbeddedObjectRef::ObjectIsModified( const uno::Reference< embed::XEmbeddedObject >& xObj )

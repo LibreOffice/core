@@ -1487,7 +1487,7 @@ FileViewResult SvtFileView::Initialize(
         return eResult;
     }
 
-    OSL_ENSURE( sal_False, "SvtFileView::Initialize: unreachable!" );
+    OSL_FAIL( "SvtFileView::Initialize: unreachable!" );
     return eFailure;
 }
 

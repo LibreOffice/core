@@ -241,7 +241,7 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
         }
         catch( embed::NoVisualAreaSizeException& )
         {
-            OSL_ENSURE( sal_False, "Can not get visual area size!\n" );
+            OSL_FAIL( "Can not get visual area size!\n" );
             aSize = Size( 5000, 5000 );
         }
 

@@ -105,7 +105,7 @@ namespace comphelper
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ComponentContext::getContextValueByName: caught an exception!" );
+            OSL_FAIL( "ComponentContext::getContextValueByName: caught an exception!" );
         }
         return aReturn;
     }

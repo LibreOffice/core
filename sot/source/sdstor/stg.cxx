@@ -432,7 +432,7 @@ Storage::Storage( UCBStorageStream& rStrm, sal_Bool bDirect )
     SvStream* pStream = rStrm.GetModifySvStream();
     if ( !pStream )
     {
-        OSL_ENSURE( sal_False, "UCBStorageStream can not provide SvStream implementation!\n" );
+        OSL_FAIL( "UCBStorageStream can not provide SvStream implementation!\n" );
         SetError( SVSTREAM_GENERALERROR );
         pEntry = NULL;
         return;

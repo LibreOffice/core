@@ -715,8 +715,7 @@ sal_Bool EmbeddedObjectContainer::CopyEmbeddedObject( EmbeddedObjectContainer& r
 {
     RTL_LOGFILE_CONTEXT( aLog, "comphelper (mv76033) comphelper::EmbeddedObjectContainer::CopyEmbeddedObject" );
 
-    OSL_ENSURE( sal_False,
-                "This method is depricated! Use EmbeddedObjectContainer::CopyAndGetEmbeddedObject() to copy object!\n" );
+    OSL_FAIL( "This method is depricated! Use EmbeddedObjectContainer::CopyAndGetEmbeddedObject() to copy object!\n" );
 
     // get the object name before(!) it is assigned to a new storage
     ::rtl::OUString aOrigName;
@@ -844,7 +843,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                         {
                             // impossibility to copy readonly property is not treated as an error for now
                             // but the assertion is helpful to detect such scenarios and review them
-                            OSL_ENSURE( sal_False, "Could not copy readonly property!\n" );
+                            OSL_FAIL( "Could not copy readonly property!\n" );
                         }
                     }
                 }
@@ -912,7 +911,7 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& r
     catch ( uno::Exception& e )
     {
         (void)e;
-        OSL_ENSURE( sal_False, "Failed to insert embedded object into storage!" );
+        OSL_FAIL( "Failed to insert embedded object into storage!" );
         bRet = sal_False;
     }
 
@@ -944,7 +943,7 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& r
             }
             catch ( uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "Failed to remove object from storage!" );
+                OSL_FAIL( "Failed to remove object from storage!" );
                 bRet = sal_False;
             }
         }
@@ -1094,7 +1093,7 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
                     }
                     catch( uno::Exception& )
                     {
-                        OSL_ENSURE( sal_False, "Can not set the new media type to a storage!\n" );
+                        OSL_FAIL( "Can not set the new media type to a storage!\n" );
                     }
                 }
 
@@ -1154,7 +1153,7 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
         }
         catch ( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Failed to remove object from storage!" );
+            OSL_FAIL( "Failed to remove object from storage!" );
             return sal_False;
         }
     }
@@ -1365,7 +1364,7 @@ namespace {
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "The pictures storage is not available!\n" );
+            OSL_FAIL( "The pictures storage is not available!\n" );
         }
     }
 

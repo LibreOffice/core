@@ -895,7 +895,7 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary()
 #if OSL_DEBUG_LEVEL > 1
         catch( Exception & e )
         {
-            OSL_ENSURE( sal_False, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #else
         catch( Exception & )
         {
@@ -938,7 +938,7 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary( sal_uLong aLength )
 #if OSL_DEBUG_LEVEL > 1
         catch( Exception & e )
         {
-            OSL_ENSURE( sal_False, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #else
         catch( Exception & )
         {
@@ -996,7 +996,7 @@ sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
 #if OSL_DEBUG_LEVEL > 1
         catch( Exception & e )
         {
-            OSL_ENSURE( sal_False, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #else
         catch( Exception & )
         {

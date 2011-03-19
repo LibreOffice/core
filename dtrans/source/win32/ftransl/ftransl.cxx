@@ -181,15 +181,15 @@ Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataF
     }
     catch( IllegalArgumentException& )
     {
-        OSL_ENSURE( sal_False, "Invalid content-type detected!" );
+        OSL_FAIL( "Invalid content-type detected!" );
     }
     catch( NoSuchElementException& )
     {
-        OSL_ENSURE( sal_False, "Illegal content-type parameter" );
+        OSL_FAIL( "Illegal content-type parameter" );
     }
     catch( ... )
     {
-        OSL_ENSURE( sal_False, "Unexpected error" );
+        OSL_FAIL( "Unexpected error" );
         throw;
     }
 
@@ -222,7 +222,7 @@ DataFlavor SAL_CALL CDataFormatTranslator::getDataFlavorFromSystemDataType( cons
         findDataFlavorForNativeFormatName( nativeFormatName, aFlavor );
     }
     else
-        OSL_ENSURE( sal_False, "Invalid data type received" );
+        OSL_FAIL( "Invalid data type received" );
 
     return aFlavor;
 }

@@ -376,11 +376,11 @@ OUString SAL_CALL CFormatRegistrar::getCharsetFromDataFlavor( const DataFlavor& 
     }
     catch(NoSuchElementException&)
     {
-        OSL_ENSURE( sal_False, "Unexpected" );
+        OSL_FAIL( "Unexpected" );
     }
     catch(...)
     {
-        OSL_ENSURE( sal_False, "Invalid data flavor" );
+        OSL_FAIL( "Invalid data flavor" );
     }
 
     return charset;

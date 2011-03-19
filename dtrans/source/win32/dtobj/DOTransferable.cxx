@@ -530,7 +530,7 @@ sal_Bool SAL_CALL CDOTransferable::compareDataFlavors(
     }
     catch( IllegalArgumentException& )
     {
-        OSL_ENSURE( sal_False, "Invalid content type detected" );
+        OSL_FAIL( "Invalid content type detected" );
         bRet = sal_False;
     }
 

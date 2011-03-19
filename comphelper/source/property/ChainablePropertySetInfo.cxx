@@ -77,7 +77,7 @@ void ChainablePropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount )
 #ifdef DBG_UTIL
         PropertyInfoHash::iterator aIter = maMap.find( aName );
         if( aIter != maMap.end() )
-            OSL_ENSURE( sal_False, "Warning: PropertyInfo added twice, possible error!");
+            OSL_FAIL( "Warning: PropertyInfo added twice, possible error!");
 #endif
         maMap[aName] = pMap++;
     }

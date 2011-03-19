@@ -631,7 +631,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "GraphicControlModel::setFastPropertyValue_NoBroadcast: caught an exception while aligning the ImagePosition/ImageAlign properties!" );
+        OSL_FAIL( "GraphicControlModel::setFastPropertyValue_NoBroadcast: caught an exception while aligning the ImagePosition/ImageAlign properties!" );
         mbAdjustingImagePosition = sal_False;
     }
 }
@@ -2625,7 +2625,7 @@ void UnoListBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(u
 #else
             ::rtl::OString sMessage( "UnoListBoxControl::itemStateChanged: caught an exception:\n" );
             sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
-            OSL_ENSURE( sal_False, sMessage.getStr() );
+            OSL_FAIL( sMessage.getStr() );
 #endif
         }
     }
@@ -2934,7 +2934,7 @@ void UnoComboBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(
 #else
             ::rtl::OString sMessage( "UnoComboBoxControl::itemStateChanged: caught an exception:\n" );
             sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
-            OSL_ENSURE( sal_False, sMessage.getStr() );
+            OSL_FAIL( sMessage.getStr() );
 #endif
         }
     }

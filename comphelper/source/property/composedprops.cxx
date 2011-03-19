@@ -300,13 +300,13 @@ namespace comphelper
     //------------------------------------------------------------------------------
     void SAL_CALL OComposedPropertySet::addVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
-        OSL_ENSURE(sal_False, "OComposedPropertySet::addVetoableChangeListener: no implemented (yet)!");
+        OSL_FAIL("OComposedPropertySet::addVetoableChangeListener: no implemented (yet)!");
     }
 
     //------------------------------------------------------------------------------
     void SAL_CALL OComposedPropertySet::removeVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
-        OSL_ENSURE(sal_False, "OComposedPropertySet::removeVetoableChangeListener: no implemented (yet)!");
+        OSL_FAIL("OComposedPropertySet::removeVetoableChangeListener: no implemented (yet)!");
     }
 
     //------------------------------------------------------------------------------

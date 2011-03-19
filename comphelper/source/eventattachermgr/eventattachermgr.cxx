@@ -989,7 +989,7 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
         // Ganze richtig sein. Sonst ist etwas voellig daneben gegangen.
         if( nRealLen > nLen || nVersion == 1 )
         {
-            OSL_ENSURE( sal_False, "ImplEventAttacherManager::read(): Fatal Error, wrong object length" );
+            OSL_FAIL( "ImplEventAttacherManager::read(): Fatal Error, wrong object length" );
         }
         else
         {

@@ -147,7 +147,7 @@ int SAL_CALL main( int argc, char** argv )
     // Print a message if an error occurred.
     if ( !g_xFactory.is() )
     {
-        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
+        OSL_FAIL("Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -160,7 +160,7 @@ int SAL_CALL main( int argc, char** argv )
     Reference< XClipboard > xClipboard( g_xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( AQUA_CLIPBOARD_SERVICE_NAME ) ) ), UNO_QUERY );
     if ( !xClipboard.is() )
     {
-        OSL_ENSURE( sal_False, "Error creating FolderPicker Service" );
+        OSL_FAIL( "Error creating FolderPicker Service" );
         return(-1);
     }
 
@@ -196,7 +196,7 @@ int SAL_CALL main( int argc, char** argv )
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
     if ( !xComponent.is() )
-        OSL_ENSURE(sal_False, "Error shuting down");
+        OSL_FAIL("Error shuting down");
 
     // Dispose and clear factory
     xComponent->dispose();

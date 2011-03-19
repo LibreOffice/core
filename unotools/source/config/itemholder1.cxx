@@ -104,7 +104,7 @@ ItemHolder1::ItemHolder1()
             sMsg += ::rtl::OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                         RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(sal_False, sMsg.getStr());
+            OSL_FAIL(sMsg.getStr());
         }
     }
 #else

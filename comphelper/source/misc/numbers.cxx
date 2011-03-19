@@ -139,7 +139,7 @@ Any getNumberFormatProperty( const Reference< XNumberFormatter >& _rxFormatter, 
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "::getNumberFormatProperty: caught an exception (did you create the key with another formatter?)!" );
+        OSL_FAIL( "::getNumberFormatProperty: caught an exception (did you create the key with another formatter?)!" );
     }
 
     return aReturn;
