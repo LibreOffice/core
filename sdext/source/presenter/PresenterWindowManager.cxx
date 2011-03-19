@@ -601,7 +601,7 @@ bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
         }
         catch (RuntimeException&)
         {
-            OSL_ASSERT(FALSE);
+            OSL_FAIL("paint children failed!");
         }
     }
 
