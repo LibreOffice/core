@@ -55,9 +55,7 @@ endef
 define gb_CppunitTest__CppunitTest_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype,$(2),CppunitTest)
-ifeq ($(SYSTEM_CPPUNIT),"YES")
-$(call gb_LinkTarget_add_linked_libs,$(2),cppunit)
-else
+ifeq ($$(SYSTEM_CPPUNIT),"YES")
 $(call gb_LinkTarget_add_includes,$(2),$(filter -I%,$(CPPUNIT_CFLAGS)))
 $(call gb_LinkTarget_set_defs,$(2), \
     $$(DEFS) \
@@ -66,6 +64,8 @@ $(call gb_LinkTarget_set_defs,$(2), \
 $(call gb_LinkTarget_set_ldflags,$(2),\
     $$(LDFLAGS) \
     $(CPPUNIT_LIBS) \
+else
+$(call gb_LinkTarget_add_linked_libs,$(2),cppunit)
 )
 endif
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
