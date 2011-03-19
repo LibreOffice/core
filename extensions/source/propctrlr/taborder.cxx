@@ -269,7 +269,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "TabOrderDialog::AutoOrderClickHdl: caught an exception!" );
+            OSL_FAIL( "TabOrderDialog::AutoOrderClickHdl: caught an exception!" );
         }
 
         return 0;

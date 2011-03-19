@@ -189,7 +189,7 @@ namespace frm
             return new SfxBoolItem( (WhichId)m_nAttributeId, bEnable );
         }
 
-        OSL_ENSURE( sal_False, "OAsianFontLayoutDispatcher::convertDispatchArgsToItem: did not find the one and only argument!" );
+        OSL_FAIL( "OAsianFontLayoutDispatcher::convertDispatchArgsToItem: did not find the one and only argument!" );
         return NULL;
     }
 

@@ -422,13 +422,13 @@ namespace frm
             break;
 
             default:
-                OSL_ENSURE( sal_False, "FormOperations::getState: unknown feature id!" );
+                OSL_FAIL( "FormOperations::getState: unknown feature id!" );
                 break;
             }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormOperations::getState: caught an exception!" );
+            OSL_FAIL( "FormOperations::getState: caught an exception!" );
         }
 
         return aState;
@@ -983,7 +983,7 @@ namespace frm
             }
             catch( Exception& )
             {
-                OSL_ENSURE( sal_False, "FormOperations::propertyChange: caught an exception while updating the parser!" );
+                OSL_FAIL( "FormOperations::propertyChange: caught an exception while updating the parser!" );
             }
             impl_invalidateAllSupportedFeatures_nothrow( aGuard );
         }
@@ -1181,7 +1181,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormOperations::impl_ensureInitializedParser_nothrow: caught an exception!" );
+            OSL_FAIL( "FormOperations::impl_ensureInitializedParser_nothrow: caught an exception!" );
         }
 
         m_bInitializedParser = true;
@@ -1210,7 +1210,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormOperations::impl_disposeParser_nothrow: caught an exception!" );
+            OSL_FAIL( "FormOperations::impl_disposeParser_nothrow: caught an exception!" );
         }
     }
 
@@ -1518,7 +1518,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "FormOperations::impl_executeAutoSort_throw: caught an exception while setting the parser properties!" );
+                OSL_FAIL( "FormOperations::impl_executeAutoSort_throw: caught an exception while setting the parser properties!" );
             }
 
 
@@ -1532,7 +1532,7 @@ namespace frm
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "FormOperations::impl_executeAutoSort_throw: could not reset the form to it's original state!" );
+                    OSL_FAIL( "FormOperations::impl_executeAutoSort_throw: could not reset the form to it's original state!" );
                 }
 
             }
@@ -1591,7 +1591,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "FormOperations::impl_executeAutoFilter_throw: caught an exception while setting the parser properties!" );
+                OSL_FAIL( "FormOperations::impl_executeAutoFilter_throw: caught an exception while setting the parser properties!" );
             }
 
 
@@ -1606,7 +1606,7 @@ namespace frm
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "FormOperations::impl_executeAutoFilter_throw: could not reset the form to it's original state!" );
+                    OSL_FAIL( "FormOperations::impl_executeAutoFilter_throw: could not reset the form to it's original state!" );
                 }
 
             }

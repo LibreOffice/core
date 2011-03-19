@@ -121,7 +121,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
         } // end of try(}
         catch( const Exception& ) // catch every exception of comparison
            {
-            OSL_ENSURE( sal_False, "AddHdl_Impl: caught an unexpected exception!" );
+            OSL_FAIL( "AddHdl_Impl: caught an unexpected exception!" );
            }
 
         if ( bDuplicated ) // #97807# --------------------

@@ -125,7 +125,7 @@ void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >&
     {
         ::package::StaticAddLog( aException.Message );
         ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't set encryption") ) );
-        OSL_ENSURE( sal_False, "Can't write encryption related properties!\n" );
+        OSL_FAIL( "Can't write encryption related properties!\n" );
         throw io::IOException(); // TODO
     }
 }
@@ -146,7 +146,7 @@ uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySe
         ::package::StaticAddLog( aException.Message );
         ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't get encryption property" ) ) );
 
-        OSL_ENSURE( sal_False, "Can't get encryption related properties!\n" );
+        OSL_FAIL( "Can't get encryption related properties!\n" );
         throw io::IOException(); // TODO
     }
 }
@@ -377,7 +377,7 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
         uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WasEncrypted") ) );
         if ( !( aValue >>= bWasEncr ) )
         {
-            OSL_ENSURE( sal_False, "The property WasEncrypted has wrong type!\n" );
+            OSL_FAIL( "The property WasEncrypted has wrong type!\n" );
         }
     }
 
@@ -388,7 +388,7 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
         {
             if ( !( m_aProps[nInd].Value >>= bToBeEncr ) )
             {
-                OSL_ENSURE( sal_False, "The property has wrong type!\n" );
+                OSL_FAIL( "The property has wrong type!\n" );
             }
         }
     }
@@ -1158,13 +1158,13 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
                 AddLog( aException.Message );
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
 
-                OSL_ENSURE( sal_False, "A property can't be retrieved!\n" );
+                OSL_FAIL( "A property can't be retrieved!\n" );
             }
         }
     }
     else
     {
-        OSL_ENSURE( sal_False, "Can not get properties from a package stream!\n" );
+        OSL_FAIL( "Can not get properties from a package stream!\n" );
         throw uno::RuntimeException();
     }
 
@@ -1309,7 +1309,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
                 AddLog( aException.Message );
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
 
-                OSL_ENSURE( sal_False, "Can't write encryption related properties!\n" );
+                OSL_FAIL( "Can't write encryption related properties!\n" );
                 SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
                 throw io::IOException(); // TODO:
             }
@@ -1655,7 +1655,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
 
             if ( !xDataToCopy.is() )
             {
-                OSL_ENSURE( sal_False, "Encrypted ZipStream must already have input stream inside!\n" );
+                OSL_FAIL( "Encrypted ZipStream must already have input stream inside!\n" );
                 SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
             }
         }
@@ -1667,7 +1667,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
 
                 if ( !xDataToCopy.is() )
                 {
-                    OSL_ENSURE( sal_False, "Encrypted ZipStream must already have input stream inside!\n" );
+                    OSL_FAIL( "Encrypted ZipStream must already have input stream inside!\n" );
                     SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
                     AddLog( aWrongPasswordException.Message );
                     AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
@@ -1684,7 +1684,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         }
         catch( uno::Exception& aException )
         {
-            OSL_ENSURE( sal_False, "Can't open encrypted stream!\n" );
+            OSL_FAIL( "Can't open encrypted stream!\n" );
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< sal_Int8 >() );
             AddLog( aException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
@@ -1963,7 +1963,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
         m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
 
         // TODO: set the stoream in invalid state or dispose
-        OSL_ENSURE( sal_False, "The stream become invalid during copiing!\n" );
+        OSL_FAIL( "The stream become invalid during copiing!\n" );
         throw uno::RuntimeException();
     }
 
@@ -2581,7 +2581,7 @@ void SAL_CALL OWriteStream::truncate()
 
     if ( !xTruncate.is() )
     {
-        OSL_ENSURE( sal_False, "The output stream must support XTruncate interface!\n" );
+        OSL_FAIL( "The output stream must support XTruncate interface!\n" );
         throw uno::RuntimeException();
     }
 

@@ -336,7 +336,7 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
             new CSubmissionGet( getAction(), aFragment));
     else
     {
-        OSL_ENSURE(sal_False, "Unsupported xforms submission method");
+        OSL_FAIL("Unsupported xforms submission method");
         return false;
     }
 
@@ -570,7 +570,7 @@ void SAL_CALL Submission::submitWithInteraction(
     }
     catch( const VetoException& )
     {
-        OSL_ENSURE( sal_False, "Model::submit: Hmm. How can a single submission have a veto right?" );
+        OSL_FAIL( "Model::submit: Hmm. How can a single submission have a veto right?" );
         // allowed to leave
         throw;
     }

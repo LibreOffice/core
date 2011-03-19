@@ -2022,7 +2022,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormComponentPropertyHandler::impl_updateDependentProperty_nothrow: caught an exception!" );
+            OSL_FAIL( "FormComponentPropertyHandler::impl_updateDependentProperty_nothrow: caught an exception!" );
         }
     }
 
@@ -2096,7 +2096,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormComponentPropertyHandler::impl_initComponentMetaData_throw: caught an exception!" );
+            OSL_FAIL( "FormComponentPropertyHandler::impl_initComponentMetaData_throw: caught an exception!" );
         }
     }
 
@@ -2350,7 +2350,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormComponentPropertyHandler::impl_getRowSet_nothrow: caught an exception!" );
+            OSL_FAIL( "FormComponentPropertyHandler::impl_getRowSet_nothrow: caught an exception!" );
         }
         return xReturn;
     }
@@ -2678,7 +2678,7 @@ namespace pcr
         catch (SQLException& e) { aErrorInfo = e; }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormComponentPropertyHandler::impl_dialogFilterOrSort_nothrow: caught an exception!" );
+            OSL_FAIL( "FormComponentPropertyHandler::impl_dialogFilterOrSort_nothrow: caught an exception!" );
         }
 
         if ( aErrorInfo.isValid() )
@@ -2770,7 +2770,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormComponentPropertyHandler::impl_dialogFormatting_nothrow: : caught an exception!" );
+            OSL_FAIL( "FormComponentPropertyHandler::impl_dialogFormatting_nothrow: : caught an exception!" );
         }
         return bChanged;
     }

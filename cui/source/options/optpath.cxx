@@ -799,7 +799,7 @@ void SvxPathTabPage::GetPathList(
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "SvxPathTabPage::GetPathList(): caught an exception!" );
+        OSL_FAIL( "SvxPathTabPage::GetPathList(): caught an exception!" );
     }
 }
 
@@ -844,7 +844,7 @@ void SvxPathTabPage::SetPathList(
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "SvxPathTabPage::SetPathList(): caught an exception!" );
+        OSL_FAIL( "SvxPathTabPage::SetPathList(): caught an exception!" );
     }
 }
 

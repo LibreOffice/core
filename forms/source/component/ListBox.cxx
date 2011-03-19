@@ -546,7 +546,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OComboBoxModel::read: caught an exception while examining the aggregate's string item list!" );
+            OSL_FAIL( "OComboBoxModel::read: caught an exception while examining the aggregate's string item list!" );
         }
 
         // Version

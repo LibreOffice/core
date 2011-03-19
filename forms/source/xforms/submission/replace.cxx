@@ -112,7 +112,7 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
     } catch (Exception& e) {
         ::rtl::OString aMsg("Exception during replace:\n");
         aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
-        OSL_ENSURE(sal_False, aMsg.getStr());
+        OSL_FAIL(aMsg.getStr());
     }
     return CSubmission::UNKNOWN_ERROR;
 }

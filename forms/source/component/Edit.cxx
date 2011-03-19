@@ -459,7 +459,7 @@ namespace
 
             if ( !xSourceInfo.is() || !xDestInfo.is() )
             {
-                OSL_ENSURE( sal_False, "lcl_transferProperties: invalid property set(s)!" );
+                OSL_FAIL( "lcl_transferProperties: invalid property set(s)!" );
                 return;
             }
 
@@ -496,7 +496,7 @@ namespace
                         sMessage += ::rtl::OString( "\n\nMessage:\n" );
                         sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
                     }
-                    OSL_ENSURE( sal_False, sMessage.getStr() );
+                    OSL_FAIL( sMessage.getStr() );
 #endif
                 }
 

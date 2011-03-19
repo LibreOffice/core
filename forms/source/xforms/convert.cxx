@@ -565,7 +565,7 @@ Convert::Any_t Convert::toAny( const rtl::OUString& rValue,
     switch( _nWhitespaceTreatment )
     {
     default:
-        OSL_ENSURE( sal_False, "Convert::convertWhitespace: invalid whitespace treatment constant!" );
+        OSL_FAIL( "Convert::convertWhitespace: invalid whitespace treatment constant!" );
         // NO break
     case com::sun::star::xsd::WhiteSpaceTreatment::Preserve:
         sConverted = _rString;

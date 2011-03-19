@@ -549,7 +549,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "ORichTextModel::getEditEngine: caught an exception!" );
+                OSL_FAIL( "ORichTextModel::getEditEngine: caught an exception!" );
             }
         }
         return pEngine;

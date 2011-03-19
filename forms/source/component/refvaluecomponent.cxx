@@ -267,7 +267,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OReferenceValueComponent::translateControlValueToExternalValue: caught an exception!" );
+            OSL_FAIL( "OReferenceValueComponent::translateControlValueToExternalValue: caught an exception!" );
         }
 
         return aExternalValue;

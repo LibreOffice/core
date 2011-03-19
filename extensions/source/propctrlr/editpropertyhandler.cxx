@@ -140,7 +140,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "EditPropertyHandler::getPropertyValue: caught an exception!" );
+            OSL_FAIL( "EditPropertyHandler::getPropertyValue: caught an exception!" );
         }
 
         return aReturn;
@@ -181,7 +181,7 @@ namespace pcr
                 case TEXTTYPE_MULTILINE:  bMultiLine = sal_True; bRichText = sal_False; break;
                 case TEXTTYPE_RICHTEXT:   bMultiLine = sal_True; bRichText = sal_True; break;
                 default:
-                    OSL_ENSURE( sal_False, "EditPropertyHandler::setPropertyValue: invalid text type!" );
+                    OSL_FAIL( "EditPropertyHandler::setPropertyValue: invalid text type!" );
                 }
 
                 m_xComponent->setPropertyValue( PROPERTY_MULTILINE, makeAny( bMultiLine ) );
@@ -190,12 +190,12 @@ namespace pcr
             break;
 
             default:
-                OSL_ENSURE( sal_False, "EditPropertyHandler::setPropertyValue: cannot handle this id!" );
+                OSL_FAIL( "EditPropertyHandler::setPropertyValue: cannot handle this id!" );
             }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "EditPropertyHandler::setPropertyValue: caught an exception!" );
+            OSL_FAIL( "EditPropertyHandler::setPropertyValue: caught an exception!" );
         }
     }
 
@@ -314,7 +314,7 @@ namespace pcr
         break;
 
         default:
-            OSL_ENSURE( sal_False, "EditPropertyHandler::actuatingPropertyChanged: cannot handle this id!" );
+            OSL_FAIL( "EditPropertyHandler::actuatingPropertyChanged: cannot handle this id!" );
         }
     }
 

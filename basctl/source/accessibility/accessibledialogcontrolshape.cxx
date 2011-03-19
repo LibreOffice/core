@@ -221,7 +221,7 @@ Window* AccessibleDialogControlShape::GetWindow() const
     }
     catch ( const Exception& )
     {
-        OSL_ENSURE( sal_False, "AccessibleDialogControlShape::GetModelStringProperty: caught an exception!" );
+        OSL_FAIL( "AccessibleDialogControlShape::GetModelStringProperty: caught an exception!" );
     }
 
     return sReturn;

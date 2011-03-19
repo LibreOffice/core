@@ -228,7 +228,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
     if ( m_nStorageMode & embed::ElementModes::WRITE )
     {
         // check that the stream allows to write
-        OSL_ENSURE( sal_False, "No stream for writing is provided!\n" );
+        OSL_FAIL( "No stream for writing is provided!\n" );
     }
 }
 
@@ -655,7 +655,7 @@ void OStorage_Impl::ReadContents()
 
             if ( !xNamed.is() )
             {
-                OSL_ENSURE( sal_False, "XNamed is not supported!\n" );
+                OSL_FAIL( "XNamed is not supported!\n" );
                 throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
             }
 
@@ -689,7 +689,7 @@ void OStorage_Impl::ReadContents()
             AddLog( aNoSuchElementException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "NoSuchElement" ) ) );
 
-            OSL_ENSURE( sal_False, "hasMoreElements() implementation has problems!\n" );
+            OSL_FAIL( "hasMoreElements() implementation has problems!\n" );
             break;
         }
     }
@@ -911,7 +911,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
         }
         else if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         {
-            OSL_ENSURE( sal_False, "Encryption is only supported in package storage!\n" );
+            OSL_FAIL( "Encryption is only supported in package storage!\n" );
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         }
         else if ( pElement->m_pStream->HasCachedEncryptionData()
@@ -4714,7 +4714,7 @@ void SAL_CALL OStorage::removeEncryption()
             m_pImpl->AddLog( aException.Message );
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
-            OSL_ENSURE( sal_False, "The call must not fail, it is pretty simple!" );
+            OSL_FAIL( "The call must not fail, it is pretty simple!" );
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         }
     }

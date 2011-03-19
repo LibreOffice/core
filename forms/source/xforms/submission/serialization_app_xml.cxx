@@ -91,7 +91,7 @@ CSerializationAppXML::serialize_node(const CSS::uno::Reference< CSS::xml::dom::X
     } else {
         // can't get tunnel to native backend
         // logic for generic implementation could be implemented here...
-        OSL_ENSURE(sal_False, "unkown dom implementation, cannot serialize");
+        OSL_FAIL("unkown dom implementation, cannot serialize");
         return;
     }
 }

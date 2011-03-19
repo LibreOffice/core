@@ -489,7 +489,7 @@ void OMRCListenerMultiplexerHelper::impl_adviseToPeer(  const   Reference< XWind
     }
     else
     {
-        OSL_ENSURE( sal_False, "unknown listener" );
+        OSL_FAIL( "unknown listener" );
     }
 }
 
@@ -521,7 +521,7 @@ void OMRCListenerMultiplexerHelper::impl_unadviseFromPeer(  const   Reference< X
     }
     else
     {
-        OSL_ENSURE( sal_False, "unknown listener" );
+        OSL_FAIL( "unknown listener" );
     }
 }
 

@@ -701,7 +701,7 @@ namespace frm
         Reference< XDispatch > xReturn;
         if ( !GetWindow() )
         {
-            OSL_ENSURE( sal_False, "ORichTextPeer::queryDispatch: already disposed?" );
+            OSL_FAIL( "ORichTextPeer::queryDispatch: already disposed?" );
             return xReturn;
         }
 

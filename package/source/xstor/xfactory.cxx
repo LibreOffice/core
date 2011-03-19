@@ -134,7 +134,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     {
         if( !( aArguments[1] >>= nStorageMode ) )
         {
-            OSL_ENSURE( sal_False, "Wrong second argument!\n" );
+            OSL_FAIL( "Wrong second argument!\n" );
             throw lang::IllegalArgumentException(); // TODO:
         }
         // it's allways possible to read written storage in this implementation
@@ -154,13 +154,13 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     {
         if ( !aURL.getLength() )
         {
-            OSL_ENSURE( sal_False, "Empty URL is provided!\n" );
+            OSL_FAIL( "Empty URL is provided!\n" );
             throw lang::IllegalArgumentException(); // TODO:
         }
 
         if ( aURL.equalsIgnoreAsciiCaseAsciiL( "vnd.sun.star.pkg", 16 ) )
         {
-            OSL_ENSURE( sal_False, "Packages URL's are not valid for storages!\n" ); // ???
+            OSL_FAIL( "Packages URL's are not valid for storages!\n" ); // ???
             throw lang::IllegalArgumentException(); // TODO:
         }
 
@@ -179,7 +179,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     }
     else if ( !( aArguments[0] >>= xStream ) && !( aArguments[0] >>= xInputStream ) )
     {
-        OSL_ENSURE( sal_False, "Wrong first argument!\n" );
+        OSL_FAIL( "Wrong first argument!\n" );
         throw uno::Exception(); // TODO: Illegal argument
     }
 
@@ -240,12 +240,12 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
                 }
                 else
-                    OSL_ENSURE( sal_False, "Unacceptable property, will be ignored!\n" );
+                    OSL_FAIL( "Unacceptable property, will be ignored!\n" );
             }
         }
         else
         {
-            OSL_ENSURE( sal_False, "Wrong third argument!\n" );
+            OSL_FAIL( "Wrong third argument!\n" );
             throw uno::Exception(); // TODO: Illegal argument
         }
 
@@ -262,7 +262,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         if ( !xSeekable.is() )
         {
             // TODO: wrap stream to let it be seekable
-            OSL_ENSURE( sal_False, "Nonseekable streams are not supported for now!\n" );
+            OSL_FAIL( "Nonseekable streams are not supported for now!\n" );
         }
 
         if ( !CheckPackageSignature_Impl( xInputStream, xSeekable ) )
@@ -282,7 +282,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         if ( !xSeekable.is() )
         {
             // TODO: wrap stream to let it be seekable
-            OSL_ENSURE( sal_False, "Nonseekable streams are not supported for now!\n" );
+            OSL_FAIL( "Nonseekable streams are not supported for now!\n" );
         }
 
         if ( !CheckPackageSignature_Impl( xStream->getInputStream(), xSeekable ) )

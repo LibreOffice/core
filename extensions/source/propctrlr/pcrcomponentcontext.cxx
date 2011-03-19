@@ -79,7 +79,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "PropertyHandler::getContextValueByName: caught an exception!" );
+            OSL_FAIL( "PropertyHandler::getContextValueByName: caught an exception!" );
         }
         return aReturn;
     }

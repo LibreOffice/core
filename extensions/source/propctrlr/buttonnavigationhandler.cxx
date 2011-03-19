@@ -181,7 +181,7 @@ namespace pcr
         break;
 
         default:
-            OSL_ENSURE( sal_False, "ButtonNavigationHandler::setPropertyValue: cannot handle this id!" );
+            OSL_FAIL( "ButtonNavigationHandler::setPropertyValue: cannot handle this id!" );
         }
     }
 
@@ -265,7 +265,7 @@ namespace pcr
         break;
 
         default:
-            OSL_ENSURE( sal_False, "ButtonNavigationHandler::actuatingPropertyChanged: cannot handle this id!" );
+            OSL_FAIL( "ButtonNavigationHandler::actuatingPropertyChanged: cannot handle this id!" );
         }
     }
 

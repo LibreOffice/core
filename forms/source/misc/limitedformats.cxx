@@ -81,7 +81,7 @@ namespace frm
                 return s_aSystem;
         }
 
-        OSL_ENSURE(sal_False, "getLocale: invalid enum value!");
+        OSL_FAIL("getLocale: invalid enum value!");
         return s_aSystem;
     }
 
@@ -135,7 +135,7 @@ namespace frm
             }
         }
 
-        OSL_ENSURE(sal_False, "lcl_getFormatTable: invalid id!");
+        OSL_FAIL("lcl_getFormatTable: invalid id!");
         return NULL;
     }
 
@@ -199,7 +199,7 @@ namespace frm
                             }
                             catch(const Exception&)
                             {
-                                OSL_ENSURE(sal_False, "OLimitedFormats::ensureTableInitialized: adding the key to the formats collection failed!");
+                                OSL_FAIL("OLimitedFormats::ensureTableInitialized: adding the key to the formats collection failed!");
                             }
 #endif
                         }
@@ -243,7 +243,7 @@ namespace frm
             }
             catch(const Exception&)
             {
-                OSL_ENSURE(sal_False, "OLimitedFormats::setAggregateSet: invalid handle!");
+                OSL_FAIL("OLimitedFormats::setAggregateSet: invalid handle!");
             }
         }
 #endif

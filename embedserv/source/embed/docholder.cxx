@@ -945,7 +945,7 @@ void DocumentHolder::show()
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Can not show the frame!\n" );
+        OSL_FAIL( "Can not show the frame!\n" );
     }
 
 }

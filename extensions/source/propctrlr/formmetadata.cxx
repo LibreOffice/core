@@ -517,7 +517,7 @@ namespace pcr
                 nStringItemsResId = RID_RSC_ENUM_SHEET_ANCHOR_TYPE;
                 break;
             default:
-                OSL_ENSURE( sal_False, "OPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
+                OSL_FAIL( "OPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
                 break;
         }
 

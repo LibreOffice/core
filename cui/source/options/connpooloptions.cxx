@@ -237,7 +237,7 @@ namespace offapp
                     sReturn = String::CreateFromInt32(_rPos->nTimeoutSeconds);
                 break;
             default:
-                OSL_ENSURE(sal_False, "DriverListControl::implGetCellText: invalid column id!");
+                OSL_FAIL("DriverListControl::implGetCellText: invalid column id!");
         }
         return sReturn;
     }
@@ -256,7 +256,7 @@ namespace offapp
         String sReturn;
         if (nRow > m_aSettings.size())
         {
-            OSL_ENSURE(sal_False, "DriverListControl::GetCellText: don't ask me for such rows!");
+            OSL_FAIL("DriverListControl::GetCellText: don't ask me for such rows!");
         }
         else
         {
@@ -376,7 +376,7 @@ namespace offapp
             m_pDriverList->Update(pDriverSettings->getSettings());
         else
         {
-            OSL_ENSURE(sal_False, "ConnectionPoolOptionsPage::implInitControls: missing the DriverTimeouts item!");
+            OSL_FAIL("ConnectionPoolOptionsPage::implInitControls: missing the DriverTimeouts item!");
             m_pDriverList->Update(DriverPoolingSettings());
         }
         m_pDriverList->saveValue();

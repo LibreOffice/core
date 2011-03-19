@@ -176,7 +176,7 @@ namespace frm
         StateCache::const_iterator aCachedStatePos = m_aLastKnownStates.find( _nAttributeId );
         if ( aCachedStatePos == m_aLastKnownStates.end() )
         {
-            OSL_ENSURE( sal_False, "RichTextControlImpl::getAttributeState: Don't ask for the state of an attribute which I never encountered!" );
+            OSL_FAIL( "RichTextControlImpl::getAttributeState: Don't ask for the state of an attribute which I never encountered!" );
             return AttributeState( eIndetermined );
         }
         return aCachedStatePos->second;

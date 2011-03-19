@@ -91,7 +91,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "SubmissionHelper::canTriggerSubmissions: caught an exception!" );
+            OSL_FAIL( "SubmissionHelper::canTriggerSubmissions: caught an exception!" );
         }
         return false;
     }
@@ -173,7 +173,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "SubmissionPropertyHandler::getPropertyValue: caught an exception!" );
+            OSL_FAIL( "SubmissionPropertyHandler::getPropertyValue: caught an exception!" );
         }
 
         return aReturn;
@@ -213,12 +213,12 @@ namespace pcr
                 break;
 
             default:
-                OSL_ENSURE( sal_False, "SubmissionPropertyHandler::setPropertyValue: cannot handle this id!" );
+                OSL_FAIL( "SubmissionPropertyHandler::setPropertyValue: cannot handle this id!" );
             }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "SubmissionPropertyHandler::setPropertyValue: caught an exception!" );
+            OSL_FAIL( "SubmissionPropertyHandler::setPropertyValue: caught an exception!" );
         }
     }
 
@@ -318,7 +318,7 @@ namespace pcr
         break;
 
         default:
-            OSL_ENSURE( sal_False, "SubmissionPropertyHandler::describePropertyLine: cannot handle this id!" );
+            OSL_FAIL( "SubmissionPropertyHandler::describePropertyLine: cannot handle this id!" );
             return LineDescriptor();
         }
 
@@ -352,7 +352,7 @@ namespace pcr
         break;
 
         default:
-            OSL_ENSURE( sal_False, "SubmissionPropertyHandler::actuatingPropertyChanged: cannot handle this id!" );
+            OSL_FAIL( "SubmissionPropertyHandler::actuatingPropertyChanged: cannot handle this id!" );
         }
     }
 
@@ -389,7 +389,7 @@ namespace pcr
         break;
 
         default:
-            OSL_ENSURE( sal_False, "SubmissionPropertyHandler::convertToPropertyValue: cannot handle this id!" );
+            OSL_FAIL( "SubmissionPropertyHandler::convertToPropertyValue: cannot handle this id!" );
         }
 
         return aPropertyValue;
@@ -430,7 +430,7 @@ namespace pcr
         break;
 
         default:
-            OSL_ENSURE( sal_False, "SubmissionPropertyHandler::convertToControlValue: cannot handle this id!" );
+            OSL_FAIL( "SubmissionPropertyHandler::convertToControlValue: cannot handle this id!" );
         }
 
         return aControlValue;

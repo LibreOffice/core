@@ -105,7 +105,7 @@ namespace frm
         SfxItemSet aToApplyAttributes( getView().GetEmptyItemSet() );
         if ( !m_pImpl->executeAttribute( getView().GetAttribs(), aToApplyAttributes, _nAttributeId, _pArgument, m_pImpl->getSelectedScriptType() ) )
         {
-            OSL_ENSURE( sal_False, "RichTextControl::executeAttribute: cannot handle the given attribute!" );
+            OSL_FAIL( "RichTextControl::executeAttribute: cannot handle the given attribute!" );
             return;
         }
 

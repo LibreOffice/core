@@ -564,7 +564,7 @@ void OControlModel::readHelpTextCompatibly(const staruno::Reference< stario::XOb
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(sal_False, "OControlModel::readHelpTextCompatibly: could not forward the property value to the aggregate!");
+        OSL_FAIL("OControlModel::readHelpTextCompatibly: could not forward the property value to the aggregate!");
     }
 }
 
@@ -579,7 +579,7 @@ void OControlModel::writeHelpTextCompatibly(const staruno::Reference< stario::XO
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(sal_False, "OControlModel::writeHelpTextCompatibly: could not retrieve the property value from the aggregate!");
+        OSL_FAIL("OControlModel::writeHelpTextCompatibly: could not retrieve the property value from the aggregate!");
     }
     ::comphelper::operator<<( _rxOutStream, sHelpText);
 }
@@ -619,7 +619,7 @@ OControlModel::OControlModel(
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "OControlModel::OControlModel: caught an exception!" );
+                    OSL_FAIL( "OControlModel::OControlModel: caught an exception!" );
                 }
             }
         }
@@ -1966,7 +1966,7 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OBoundControlModel::propertyChange: could not adjust my binding-controlled property!" );
+            OSL_FAIL( "OBoundControlModel::propertyChange: could not adjust my binding-controlled property!" );
         }
     }
 }
@@ -2132,7 +2132,7 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
                 }
                 else
                 {
-                    OSL_ENSURE(sal_False, "OBoundControlModel::connectToField: property NAME not supported!");
+                    OSL_FAIL("OBoundControlModel::connectToField: property NAME not supported!");
                     impl_setField_noNotify( NULL );
                 }
             }
@@ -2341,7 +2341,7 @@ void OBoundControlModel::doSetControlValue( const Any& _rValue )
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::doSetControlValue: caught an exception!" );
+        OSL_FAIL( "OBoundControlModel::doSetControlValue: caught an exception!" );
     }
 }
 
@@ -2361,7 +2361,7 @@ void OBoundControlModel::onConnectedValidator( )
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::onConnectedValidator: caught an exception!" );
+        OSL_FAIL( "OBoundControlModel::onConnectedValidator: caught an exception!" );
     }
     recheckValidity( false );
 }
@@ -2379,7 +2379,7 @@ void OBoundControlModel::onDisconnectedValidator( )
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::onDisconnectedValidator: caught an exception!" );
+        OSL_FAIL( "OBoundControlModel::onDisconnectedValidator: caught an exception!" );
     }
     recheckValidity( false );
 }
@@ -2467,7 +2467,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
     }
     catch( const SQLException& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::reset: caught an SQL exception!" );
+        OSL_FAIL( "OBoundControlModel::reset: caught an SQL exception!" );
     }
     // #i24495# - don't count the insert row as "invalid"
 
@@ -2676,7 +2676,7 @@ void OBoundControlModel::disconnectExternalValueBinding( )
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::disconnectExternalValueBinding: caught an exception!" );
+        OSL_FAIL( "OBoundControlModel::disconnectExternalValueBinding: caught an exception!" );
     }
 
     // if the binding also acts as our validator, disconnect the validator, too
@@ -3045,7 +3045,7 @@ void OBoundControlModel::recheckValidity( bool _bForceNotification )
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::recheckValidity: caught an exception!" );
+        OSL_FAIL( "OBoundControlModel::recheckValidity: caught an exception!" );
     }
 }
 

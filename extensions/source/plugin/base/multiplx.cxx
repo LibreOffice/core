@@ -107,7 +107,7 @@ void MRCListenerMultiplexerHelper::adviseToPeer( const Reference< ::com::sun::st
     }
     else
     {
-        OSL_ENSURE( sal_False, "unknown listener" );
+        OSL_FAIL( "unknown listener" );
     }
 }
 
@@ -135,7 +135,7 @@ void MRCListenerMultiplexerHelper::unadviseFromPeer( const Reference< ::com::sun
     }
     else
     {
-        OSL_ENSURE( sal_False, "unknown listener" );
+        OSL_FAIL( "unknown listener" );
     }
 }
 

@@ -121,7 +121,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "EnumRepresentation::EnumRepresentation: caught an exception!" );
+            OSL_FAIL( "EnumRepresentation::EnumRepresentation: caught an exception!" );
         }
     }
 
@@ -136,7 +136,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "EnumRepresentation::getDescriptions: caught an exception!" );
+            OSL_FAIL( "EnumRepresentation::getDescriptions: caught an exception!" );
         }
 
         return ::std::vector< ::rtl::OUString >( aNames.getConstArray(), aNames.getConstArray() + aNames.getLength() );
@@ -153,7 +153,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "EnumRepresentation::impl_getValues: caught an exception!" );
+            OSL_FAIL( "EnumRepresentation::impl_getValues: caught an exception!" );
         }
     }
 
@@ -602,7 +602,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "GenericPropertyHandler::impl_ensurePropertyMap: caught an exception!" );
+                OSL_FAIL( "GenericPropertyHandler::impl_ensurePropertyMap: caught an exception!" );
             }
         }
     }

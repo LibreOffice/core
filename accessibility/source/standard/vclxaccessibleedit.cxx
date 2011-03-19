@@ -619,7 +619,7 @@ sal_Bool VCLXAccessibleEdit::setText( const ::rtl::OUString& sText ) throw (Runt
     }
     catch( const IndexOutOfBoundsException& )
     {
-        OSL_ENSURE( sal_False, "VCLXAccessibleText::setText: caught an exception!" );
+        OSL_FAIL( "VCLXAccessibleText::setText: caught an exception!" );
     }
     return bSuccess;
 }

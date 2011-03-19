@@ -439,7 +439,7 @@ namespace frm
         }
         catch( const Exception& e )
         {
-            OSL_ENSURE( sal_False, "OClickableImageBaseControl::implSubmit: caught an unknown exception!" );
+            OSL_FAIL( "OClickableImageBaseControl::implSubmit: caught an unknown exception!" );
             throw WrappedTargetException( ::rtl::OUString(), *this, makeAny( e ) );
         }
     }

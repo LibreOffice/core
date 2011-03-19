@@ -1539,7 +1539,7 @@ void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Referenc
     }
     catch ( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "These calls are pretty simple, they should not fail!\n" );
+        OSL_FAIL( "These calls are pretty simple, they should not fail!\n" );
     }
 
     ::rtl::OUString aErrTxt( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "This package is read only!" ) );

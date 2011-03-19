@@ -72,7 +72,7 @@ CSubmission::SubmissionResult CSubmissionPut::submit(const CSS::uno::Reference< 
     } catch (Exception&)
     {
         // XXX
-        OSL_ENSURE(sal_False, "Exception during UCB operatration.");
+        OSL_FAIL("Exception during UCB operatration.");
         return UNKNOWN_ERROR;
     }
 

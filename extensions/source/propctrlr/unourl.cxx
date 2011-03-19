@@ -61,7 +61,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "UnoURL::UnoURL: caught an exception!" );
+            OSL_FAIL( "UnoURL::UnoURL: caught an exception!" );
         }
     }
 

@@ -466,7 +466,7 @@ namespace frm
         }
         break;
         default:
-            OSL_ENSURE( sal_False, "NavigationToolBar::ShowFunctionGroup: invalid group id!" );
+            OSL_FAIL( "NavigationToolBar::ShowFunctionGroup: invalid group id!" );
         }
 
         if ( pGroupIds )
@@ -485,7 +485,7 @@ namespace frm
         case eRecordActions : nIndicatorItem = FormFeature::SaveRecordChanges;  break;
         case eFilterSort    : nIndicatorItem = FormFeature::SortAscending;       break;
         default:
-            OSL_ENSURE( sal_False, "NavigationToolBar::IsFunctionGroupVisible: invalid group id!" );
+            OSL_FAIL( "NavigationToolBar::IsFunctionGroupVisible: invalid group id!" );
         }
 
         return m_pToolbar->IsItemVisible( nIndicatorItem );

@@ -185,7 +185,7 @@ namespace pcr
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "OPropertyBrowserController::actuatingPropertyChanged( ListCellRange ): caught an exception while resetting the string items!" );
+                    OSL_FAIL( "OPropertyBrowserController::actuatingPropertyChanged( ListCellRange ): caught an exception while resetting the string items!" );
                 }
             }
         }
@@ -238,7 +238,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "CellBindingPropertyHandler::impl_updateDependentProperty_nothrow: caught an exception!" );
+            OSL_FAIL( "CellBindingPropertyHandler::impl_updateDependentProperty_nothrow: caught an exception!" );
         }
     }
 
@@ -356,7 +356,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "CellBindingPropertyHandler::setPropertyValue: caught an exception!" );
+            OSL_FAIL( "CellBindingPropertyHandler::setPropertyValue: caught an exception!" );
         }
     }
 

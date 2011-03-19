@@ -110,7 +110,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ListSelectionDialog::initialize: caught an exception!" );
+            OSL_FAIL( "ListSelectionDialog::initialize: caught an exception!" );
         }
     }
 
@@ -129,7 +129,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ListSelectionDialog::commitSelection: caught an exception!" );
+            OSL_FAIL( "ListSelectionDialog::commitSelection: caught an exception!" );
         }
     }
 

@@ -123,7 +123,7 @@ namespace frm
                 break;
 
             default:
-                OSL_ENSURE( sal_False, "lcl_extractFontDescriptorAggregate: invalid handle!" );
+                OSL_FAIL( "lcl_extractFontDescriptorAggregate: invalid handle!" );
                 break;
             }
             return aValue;

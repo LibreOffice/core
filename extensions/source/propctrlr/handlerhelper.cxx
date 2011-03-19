@@ -216,7 +216,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "PropertyHandlerHelper::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                OSL_FAIL( "PropertyHandlerHelper::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
             }
         }
 
@@ -246,7 +246,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "PropertyHandlerHelper::convertToControlValue: caught an exception while converting via TypeConverter!" );
+                OSL_FAIL( "PropertyHandlerHelper::convertToControlValue: caught an exception while converting via TypeConverter!" );
             }
         }
 

@@ -103,7 +103,7 @@ uno::Sequence< ::rtl::OUString > OZipFileAccess::GetPatternsFromString_Impl( con
             }
             else
             {
-                OSL_ENSURE( sal_False, "The backslash is not guarded!\n" );
+                OSL_FAIL( "The backslash is not guarded!\n" );
                 aPattern[nInd] += ::rtl::OUString::valueOf( (sal_Unicode)'\\' );
             }
         }
@@ -281,7 +281,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OZipFileAccess::getElementNames()
     {
         if ( aNames.getLength() < ++nLen )
         {
-            OSL_ENSURE( sal_False, "The size must be the same!\n" );
+            OSL_FAIL( "The size must be the same!\n" );
             aNames.realloc( nLen );
         }
 
@@ -290,7 +290,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OZipFileAccess::getElementNames()
 
     if ( aNames.getLength() != nLen )
     {
-        OSL_ENSURE( sal_False, "The size must be the same!\n" );
+        OSL_FAIL( "The size must be the same!\n" );
         aNames.realloc( nLen );
     }
 

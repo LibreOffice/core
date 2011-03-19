@@ -363,7 +363,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(   void * /*pServiceManager*/, 
         }
         catch(InvalidRegistryException &)
         {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!\n");
+            OSL_FAIL( "### InvalidRegistryException!\n");
         }
     }
     return sal_False;

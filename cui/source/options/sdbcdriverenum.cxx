@@ -84,7 +84,7 @@ namespace offapp
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(sal_False, "ODriverEnumerationImpl::ODriverEnumerationImpl: caught an exception while enumerating the drivers!");
+            OSL_FAIL("ODriverEnumerationImpl::ODriverEnumerationImpl: caught an exception while enumerating the drivers!");
         }
     }
 

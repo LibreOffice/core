@@ -164,7 +164,7 @@ namespace pcr
             sMessage += "\n(have been asked for the \"";
             sMessage += ::rtl::OString( _rPropertyName.getStr(), _rPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
             sMessage += "\" property.)";
-            OSL_ENSURE( sal_False, sMessage.getStr() );
+            OSL_FAIL( sMessage.getStr() );
 #endif
         }
         return aReturn;
@@ -280,7 +280,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "EFormsPropertyHandler::setPropertyValue: caught an exception!" );
+            OSL_FAIL( "EFormsPropertyHandler::setPropertyValue: caught an exception!" );
         }
     }
 
@@ -538,7 +538,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "EFormsPropertyHandler::onInteractivePropertySelection: caught an exception!" );
+            OSL_FAIL( "EFormsPropertyHandler::onInteractivePropertySelection: caught an exception!" );
         }
 
         // something went wrong here ...(but has been asserted already)

@@ -401,7 +401,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "OPropertyBrowserController::attachFrame: caught an exception!" );
+                OSL_FAIL( "OPropertyBrowserController::attachFrame: caught an exception!" );
             }
         }
 
@@ -470,7 +470,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "OPropertyBrowserController::suspendPropertyHandlers_nothrow: caught an exception!" );
+                OSL_FAIL( "OPropertyBrowserController::suspendPropertyHandlers_nothrow: caught an exception!" );
             }
         }
         return sal_True;
@@ -1192,7 +1192,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OPropertyBrowserController::describePropertyLine: caught an exception!" );
+            OSL_FAIL( "OPropertyBrowserController::describePropertyLine: caught an exception!" );
         }
     }
 
@@ -1590,7 +1590,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OPropertyBrowserController::rebuildPropertyUI: caught an exception!" );
+            OSL_FAIL( "OPropertyBrowserController::rebuildPropertyUI: caught an exception!" );
         }
 
         getPropertyBox().ChangeEntry( aDescriptor );
