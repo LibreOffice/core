@@ -118,6 +118,24 @@ void ScRefTokenHelper::compileRangeRepresentation(
         rRefTokens.clear();
 }
 
+void singleRefToAddr(const ScSingleRefData& rRef, ScAddress& rAddr)
+{
+    if (rRef.IsColRel())
+        rAddr.SetCol(rRef.nRelCol);
+    else
+        rAddr.SetCol(rRef.nCol);
+
+    if (rRef.IsRowRel())
+        rAddr.SetRow(rRef.nRelRow);
+    else
+        rAddr.SetRow(rRef.nRow);
+
+    if (rRef.IsTabRel())
+        rAddr.SetTab(rRef.nRelTab);
+    else
+        rAddr.SetTab(rRef.nTab);
+}
+
 bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScTokenRef& pToken, bool bExternal)
 {
     StackVar eType = pToken->GetType();
@@ -131,9 +149,7 @@ bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScTokenRef& pTok
                 return false;
 
             const ScSingleRefData& rRefData = pToken->GetSingleRef();
-            rRange.aStart.SetCol(rRefData.nCol);
-            rRange.aStart.SetRow(rRefData.nRow);
-            rRange.aStart.SetTab(rRefData.nTab);
+            singleRefToAddr(rRefData, rRange.aStart);
             rRange.aEnd = rRange.aStart;
             return true;
         }
@@ -145,12 +161,8 @@ bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScTokenRef& pTok
                 return false;
 
             const ScComplexRefData& rRefData = pToken->GetDoubleRef();
-            rRange.aStart.SetCol(rRefData.Ref1.nCol);
-            rRange.aStart.SetRow(rRefData.Ref1.nRow);
-            rRange.aStart.SetTab(rRefData.Ref1.nTab);
-            rRange.aEnd.SetCol(rRefData.Ref2.nCol);
-            rRange.aEnd.SetRow(rRefData.Ref2.nRow);
-            rRange.aEnd.SetTab(rRefData.Ref2.nTab);
+            singleRefToAddr(rRefData.Ref1, rRange.aStart);
+            singleRefToAddr(rRefData.Ref2, rRange.aEnd);
             return true;
         }
         default:

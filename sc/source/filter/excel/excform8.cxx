@@ -1400,13 +1400,19 @@ void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData
     {
         // C O L
         if ( bColRel )
+        {
             rSRD.nRelCol = static_cast<SCsCOL>(nCol) - aEingPos.Col();
+            rSRD.nCol = rSRD.nRelCol;
+        }
         else
             rSRD.nCol = static_cast<SCCOL>(nCol);
 
         // R O W
         if ( bRowRel )
+        {
             rSRD.nRelRow = static_cast<SCsROW>(nRow) - aEingPos.Row();
+            rSRD.nRow = rSRD.nRelRow;
+        }
         else
             rSRD.nRow = static_cast<SCROW>(nRow);
 

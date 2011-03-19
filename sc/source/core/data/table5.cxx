@@ -1093,11 +1093,17 @@ void ScTable::SetRepeatArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SC
 
 void ScTable::StartListening( const ScAddress& rAddress, SvtListener* pListener )
 {
+    if (!ValidCol(rAddress.Col()))
+        return;
+
     aCol[rAddress.Col()].StartListening( *pListener, rAddress.Row() );
 }
 
 void ScTable::EndListening( const ScAddress& rAddress, SvtListener* pListener )
 {
+    if (!ValidCol(rAddress.Col()))
+        return;
+
     aCol[rAddress.Col()].EndListening( *pListener, rAddress.Row() );
 }
 
