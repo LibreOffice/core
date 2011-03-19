@@ -73,7 +73,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch( registry::InvalidRegistryException& )
         {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+            OSL_FAIL( "### InvalidRegistryException!" );
         }
     }
     return sal_False;

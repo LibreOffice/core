@@ -69,7 +69,7 @@ bool LifeTimeManager::impl_isDisposed( bool bAssert )
     {
         if( bAssert )
         {
-            OSL_ENSURE( sal_False, "This component is already disposed " );
+            OSL_FAIL( "This component is already disposed " );
             (void)(bAssert);
         }
         return sal_True;
@@ -198,7 +198,7 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
     {
         if( bAssert )
         {
-            OSL_ENSURE( sal_False, "This object is already closed" );
+            OSL_FAIL( "This object is already closed" );
             (void)(bAssert);//avoid warnings
         }
         return sal_True;

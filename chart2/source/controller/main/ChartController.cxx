@@ -260,7 +260,7 @@ void ChartController::TheModel::tryTermination()
     catch( uno::Exception& ex)
     {
         (void)(ex); // no warning in non-debug builds
-        OSL_ENSURE( sal_False, ( rtl::OString("Termination of model failed: ")
+        OSL_FAIL( ( rtl::OString("Termination of model failed: ")
             + rtl::OUStringToOString( ex.Message, RTL_TEXTENCODING_ASCII_US ) ).getStr() );
     }
 }
@@ -331,7 +331,7 @@ sal_Bool ChartController::TheModelRef::is() const
 
     if( m_bSuspended )
     {
-        OSL_ENSURE( sal_False, "This Controller is suspended" );
+        OSL_FAIL( "This Controller is suspended" );
         return sal_True;
     }
     return sal_False;
@@ -369,7 +369,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
     if(m_xFrame.is()) //what happens, if we do have a Frame already??
     {
         //@todo? throw exception?
-        OSL_ENSURE( sal_False, "there is already a frame attached to the controller" );
+        OSL_FAIL( "there is already a frame attached to the controller" );
         return;
     }
 
@@ -691,7 +691,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
 
     if(bSuspend==m_bSuspended)
     {
-        OSL_ENSURE( sal_False, "new suspend mode equals old suspend mode" );
+        OSL_FAIL( "new suspend mode equals old suspend mode" );
         return sal_True;
     }
 
@@ -878,7 +878,7 @@ void ChartController::impl_deleteDrawViewController()
 
     if( !(aModelRef->getModel() == rSource.Source) )
     {
-        OSL_ENSURE( sal_False, "queryClosing was called on a controller from an unknown source" );
+        OSL_FAIL( "queryClosing was called on a controller from an unknown source" );
         return;
     }
 

@@ -624,7 +624,7 @@ extern "C"
             }
             catch (registry::InvalidRegistryException &)
             {
-                OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+                OSL_FAIL( "### InvalidRegistryException!" );
             }
         }
         return sal_False;
