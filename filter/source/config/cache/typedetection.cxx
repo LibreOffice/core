@@ -137,7 +137,7 @@ TypeDetection::~TypeDetection()
 
 #if OSL_DEBUG_LEVEL > 0
     if (stlDescriptor.find(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ))) != stlDescriptor.end())
-        OSL_ENSURE(sal_False, "Detect using of deprecated and already unsupported MediaDescriptor property \"FileName\"!");
+        OSL_FAIL("Detect using of deprecated and already unsupported MediaDescriptor property \"FileName\"!");
 #endif
 
     css::util::URL  aURL;
@@ -202,7 +202,7 @@ TypeDetection::~TypeDetection()
         // update descriptor and set last chance for return.
         if (!sType.getLength() && sLastChance.getLength())
         {
-            OSL_ENSURE(sal_False, "set first flat detected type without a registered deep detection service as \"last chance\" ... nevertheless some other deep detections said \"NO\". I TRY IT!");
+            OSL_FAIL("set first flat detected type without a registered deep detection service as \"last chance\" ... nevertheless some other deep detections said \"NO\". I TRY IT!");
             sType = sLastChance;
         }
     }

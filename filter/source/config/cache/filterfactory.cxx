@@ -143,7 +143,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 
         if (!m_rCache->hasItem(FilterCache::E_FILTER, sFilter) && m_rCache->hasItem(FilterCache::E_TYPE, sFilter))
         {
-            OSL_ENSURE(sal_False, "Who use this deprecated functionality?");
+            OSL_FAIL("Who use this deprecated functionality?");
             _FILTER_CONFIG_LOG_("FilterFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
 
             css::uno::Sequence< css::beans::NamedValue > lQuery(1);
@@ -246,7 +246,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     sal_Int32 pos = sNewQuery.indexOf(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_query_" )),0);
     if (pos != -1)
     {
-        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use new query format: 'matchByDocumentService=...'");
+        OSL_FAIL("DEPRECATED!\nPlease use new query format: 'matchByDocumentService=...'");
         ::rtl::OUStringBuffer sPatchedQuery(256);
         sPatchedQuery.appendAscii("matchByDocumentService=");
         sPatchedQuery.append     (sNewQuery.copy(7)        );
@@ -271,7 +271,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
         // <- SAFE ----------------------
 
         if (lTokens.find(QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE) != lTokens.end())
-            OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use prop search at the TypeDetection container!");
+            OSL_FAIL("DEPRECATED!\nPlease use prop search at the TypeDetection container!");
         else
         if (lTokens.find(QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE) != lTokens.end())
             lEnumSet = impl_queryMatchByDocumentService(lTokens);
@@ -307,43 +307,43 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
 #ifdef COMP_HACK
     if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("writer")))
     {
-        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ));
     }
     else
     if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("web")))
     {
-        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ));
     }
     else
     if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("global")))
     {
-        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.GlobalDocument" ));
     }
     else
     if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("calc")))
     {
-        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ));
     }
     else
     if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("draw")))
     {
-        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ));
     }
     else
     if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("impress")))
     {
-        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ));
     }
     else
     if (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("math")))
     {
-        OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
+        OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
         sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.formula.FormulaProperties" ));
     }
 #endif

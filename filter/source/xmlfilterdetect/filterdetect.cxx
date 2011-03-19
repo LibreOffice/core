@@ -179,7 +179,7 @@ Reference< com::sun::star::frame::XModel > xModel;
         }
         catch(Exception &)
         {
-                 OSL_ENSURE( sal_False, "An Exception occurred while opening File stream" );
+                 OSL_FAIL( "An Exception occurred while opening File stream" );
         }
         if (sTypeName.getLength())
         {

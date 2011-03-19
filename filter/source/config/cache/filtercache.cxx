@@ -218,7 +218,7 @@ void FilterCache::load(EFillState eRequired,
         )
        )
     {
-        OSL_ENSURE(sal_False, "Who disturb our \"fill cache on demand\" feature and force loading of ALL data during office startup? Please optimize your code, so a full filled filter cache is not realy needed here!");
+        OSL_FAIL("Who disturb our \"fill cache on demand\" feature and force loading of ALL data during office startup? Please optimize your code, so a full filled filter cache is not realy needed here!");
     }
 #endif
 
@@ -940,7 +940,7 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(const ::rtl::OUString& sDirect
     #endif
         {
             #if OSL_DEBUG_LEVEL > 0
-            OSL_ENSURE(sal_False, ::rtl::OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
+            OSL_FAIL(::rtl::OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
             #endif
             aValue.clear();
         }
@@ -1701,7 +1701,7 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
             sMsg.append     (sActLocale                                         );
             sMsg.appendAscii("' failed. Please check your filter configuration.");
 
-            OSL_ENSURE(sal_False, _FILTER_CONFIG_TO_ASCII_(sMsg.makeStringAndClear()));
+            OSL_FAIL(_FILTER_CONFIG_TO_ASCII_(sMsg.makeStringAndClear()));
         #endif
         return;
     }
@@ -1911,7 +1911,7 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
 
         case E_DETECTSERVICE :
         {
-            OSL_ENSURE(sal_False, "Cant load detect services on demand. Who use this unsupported feature?");
+            OSL_FAIL("Cant load detect services on demand. Who use this unsupported feature?");
         }
         break;
     }
@@ -2263,7 +2263,7 @@ void FilterCache::impl_interpretDataVal4Filter(const ::rtl::OUString& sValue,
                         sal_Int32 nOrder = sValue.toInt32();
                         if (nOrder > 0)
                         {
-                            OSL_ENSURE(sal_False, "FilterCache::impl_interpretDataVal4Filter()\nCant move Order value from filter to type on demand!\n");
+                            OSL_FAIL("FilterCache::impl_interpretDataVal4Filter()\nCant move Order value from filter to type on demand!\n");
                             _FILTER_CONFIG_LOG_2_("impl_interpretDataVal4Filter(%d, \"%s\") ... OK", (int)eType, _FILTER_CONFIG_TO_ASCII_(rItem).getStr())
                         }
                     }

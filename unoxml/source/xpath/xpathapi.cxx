@@ -283,7 +283,7 @@ namespace XPath
             buf.appendAscii(str);
             OString msg = OUStringToOString(buf.makeStringAndClear(),
                 RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(sal_False, msg.getStr());
+            OSL_FAIL(msg.getStr());
         }
 
         static void structured_error_func(void * userData, xmlErrorPtr error)
@@ -298,7 +298,7 @@ namespace XPath
             }
             OString msg = OUStringToOString(buf.makeStringAndClear(),
                 RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(sal_False, msg.getStr());
+            OSL_FAIL(msg.getStr());
         }
 
     } // extern "C"

@@ -130,7 +130,7 @@ sal_Bool UseOldMSExport()
         }
     }
 
-    OSL_ENSURE( sal_False, "Could not get access to configuration entry!\n" );
+    OSL_FAIL( "Could not get access to configuration entry!\n" );
     return sal_False;
 }
 
@@ -268,13 +268,13 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                     }
                     catch( embed::NoVisualAreaSizeException& )
                     {
-                        OSL_ENSURE( sal_False, "Could not get visual area size!\n" );
+                        OSL_FAIL( "Could not get visual area size!\n" );
                         aSize.Width = 5000;
                         aSize.Height = 5000;
                     }
                     catch( uno::Exception& )
                     {
-                        OSL_ENSURE( sal_False, "Unexpected exception while getting visual area size!\n" );
+                        OSL_FAIL( "Unexpected exception while getting visual area size!\n" );
                         aSize.Width = 5000;
                         aSize.Height = 5000;
                     }

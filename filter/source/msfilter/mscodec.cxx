@@ -190,7 +190,7 @@ sal_Bool MSCodec_Xor95::InitCodec( const uno::Sequence< beans::NamedValue >& aDa
         mnHash = (sal_uInt16)aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XOR95PasswordHash" ) ), (sal_Int16)0 );
     }
     else
-        OSL_ENSURE( sal_False, "Unexpected key size!\n" );
+        OSL_FAIL( "Unexpected key size!\n" );
 
     return bResult;
 }
@@ -333,10 +333,10 @@ sal_Bool MSCodec_Std97::InitCodec( const uno::Sequence< beans::NamedValue >& aDa
             lcl_PrintDigest(m_pDocId, "DocId value");
         }
         else
-            OSL_ENSURE( sal_False, "Unexpected document ID!\n" );
+            OSL_FAIL( "Unexpected document ID!\n" );
     }
     else
-        OSL_ENSURE( sal_False, "Unexpected key size!\n" );
+        OSL_FAIL( "Unexpected key size!\n" );
 
     return bResult;
 }

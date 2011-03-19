@@ -360,7 +360,7 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
         default: break;
     }
 
-    OSL_ENSURE(sal_False, "isSubSet() ... this point should not be reached!");
+    OSL_FAIL("isSubSet() ... this point should not be reached!");
     return sal_False;
 }
 

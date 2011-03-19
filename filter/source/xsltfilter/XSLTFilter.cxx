@@ -306,7 +306,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                 OString aMessage("XSLTFilter::error was called: ");
                 aMessage += OUStringToOString(e.Message,
                         RTL_TEXTENCODING_ASCII_US);
-                OSL_ENSURE(sal_False, aMessage);
+                OSL_FAIL(aMessage);
             }
         m_bError = sal_True;
         osl_setCondition(m_cTransformed);

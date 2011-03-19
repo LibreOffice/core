@@ -126,7 +126,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
 
     Reference < XDocumentHandler > xHandler( mxMSF->createInstanceWithArguments( sXMLImportService, aAnys ), UNO_QUERY );
     if(! xHandler.is()) {
-        OSL_ENSURE(sal_False, "XMLReader::Read: %s Unable to create service instance xHandler\n" );
+        OSL_FAIL("XMLReader::Read: %s Unable to create service instance xHandler\n" );
         return sal_False;
     }
     Reference < XImporter > xImporter( xHandler, UNO_QUERY );
@@ -141,7 +141,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     //*********************
     Reference< XInterface > xConvBridge(mxMSF->createInstance( udConvertClass ), UNO_QUERY);
     if(! xConvBridge.is()){
-        OSL_ENSURE( sal_False,"XMLReader::Read: %s service missing\n" );
+        OSL_FAIL( "XMLReader::Read: %s service missing\n" );
         return sal_False;
     }
     if (xStatusIndicator.is())
@@ -208,7 +208,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
         if (xStatusIndicator.is())
                xStatusIndicator->end();
 
-        OSL_ENSURE( sal_False, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+        OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
         return sal_False;
     }
     if (xStatusIndicator.is()) {
@@ -238,7 +238,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     // Set up converter bridge.
     Reference< com::sun::star::xml::XExportFilter > xConverter(mxMSF->createInstance(udConvertClass ), UNO_QUERY);
     if(! xConverter.is()){
-      OSL_ENSURE( sal_False, "xml export sub service missing" );
+      OSL_FAIL( "xml export sub service missing" );
       return sal_False;
     }
 
@@ -327,7 +327,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     catch( Exception& )
 #endif
     {
-        OSL_ENSURE( sal_False, ::rtl::OUStringToOString( exE.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+        OSL_FAIL( ::rtl::OUStringToOString( exE.Message, RTL_TEXTENCODING_ASCII_US).getStr());
         if (xStatusIndicator.is())
             xStatusIndicator->end();
         return sal_False;

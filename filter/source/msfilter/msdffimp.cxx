@@ -7748,7 +7748,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                     }
                     catch( uno::Exception& )
                     {
-                        OSL_ENSURE( sal_False, "Could not set visual area of the object!\n" );
+                        OSL_FAIL( "Could not set visual area of the object!\n" );
                     }
                 }
 

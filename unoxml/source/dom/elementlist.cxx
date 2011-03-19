@@ -72,7 +72,7 @@ namespace DOM
         } catch (Exception &e){
             OString aMsg("Exception caught while registering NodeList as listener:\n");
             aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(sal_False, aMsg.getStr());
+            OSL_FAIL(aMsg.getStr());
         }
     }
 

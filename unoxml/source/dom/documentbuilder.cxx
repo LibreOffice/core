@@ -94,7 +94,7 @@ namespace DOM
 
                 is.aInputStream = aContent.openStream();
             } catch (com::sun::star::uno::Exception) {
-                OSL_ENSURE(sal_False, "exception in default entity resolver");
+                OSL_FAIL("exception in default entity resolver");
                 is.aInputStream = Reference< XInputStream >();
             }
             return is;
@@ -228,7 +228,7 @@ namespace DOM
             return nread;
         } catch (com::sun::star::uno::Exception& ex) {
             (void) ex;
-            OSL_ENSURE(sal_False, OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
+            OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
             return -1;
         }
     }
@@ -248,7 +248,7 @@ namespace DOM
             return 0;
         } catch (com::sun::star::uno::Exception& ex) {
             (void) ex;
-            OSL_ENSURE(sal_False, OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
+            OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
             return -1;
         }
     }
@@ -300,7 +300,7 @@ namespace DOM
         OUStringBuffer buf(OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 warning\n")));
         buf.append(make_error_message(static_cast< xmlParserCtxtPtr >(ctx)));
         OString msg = OUStringToOString(buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, msg.getStr());
+        OSL_FAIL(msg.getStr());
     }
 
     // default error handler triggers assertion
@@ -309,7 +309,7 @@ namespace DOM
         OUStringBuffer buf(OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 error\n")));
         buf.append(make_error_message(static_cast< xmlParserCtxtPtr >(ctx)));
         OString msg = OUStringToOString(buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, msg.getStr());
+        OSL_FAIL(msg.getStr());
     }
 
     } // extern "C"

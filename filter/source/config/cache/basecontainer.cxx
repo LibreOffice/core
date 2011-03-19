@@ -458,7 +458,7 @@ sal_Bool SAL_CALL BaseContainer::hasElements()
 css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByQuery(const ::rtl::OUString& /* sQuery */ )
     throw (css::uno::RuntimeException)
 {
-    OSL_ENSURE(sal_False, "not pure virtual ... but not realy implemented .-)");
+    OSL_FAIL("not pure virtual ... but not realy implemented .-)");
 
     ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, css::uno::Sequence< ::rtl::OUString >());
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
