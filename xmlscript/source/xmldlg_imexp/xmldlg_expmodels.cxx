@@ -1565,7 +1565,7 @@ void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
             }
             else
             {
-                OSL_ENSURE( sal_False, "unknown control type!" );
+                OSL_FAIL( "unknown control type!" );
                 continue;
             }
         }

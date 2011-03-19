@@ -235,7 +235,7 @@ uno::Any SAL_CALL Content::execute(
         uno::Sequence< beans::Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
@@ -257,7 +257,7 @@ uno::Any SAL_CALL Content::execute(
         uno::Sequence< beans::PropertyValue > aProperties;
         if ( !( aCommand.Argument >>= aProperties ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
@@ -269,7 +269,7 @@ uno::Any SAL_CALL Content::execute(
 
         if ( !aProperties.getLength() )
         {
-            OSL_ENSURE( sal_False, "No properties!" );
+            OSL_FAIL( "No properties!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
@@ -307,7 +307,7 @@ uno::Any SAL_CALL Content::execute(
         ucb::OpenCommandArgument2 aOpenCommand;
           if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
@@ -454,7 +454,7 @@ uno::Any SAL_CALL Content::execute(
         ucb::InsertCommandArgument arg;
           if ( !( aCommand.Argument >>= arg ) )
         {
-              OSL_ENSURE( sal_False, "Wrong argument type!" );
+              OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
@@ -477,7 +477,7 @@ uno::Any SAL_CALL Content::execute(
         ucb::TransferInfo aTransferInfo;
         if( ! ( aCommand.Argument >>= aTransferInfo ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
@@ -538,7 +538,7 @@ uno::Any SAL_CALL Content::execute(
         // Unsupported command
         //////////////////////////////////////////////////////////////////
 
-        OSL_ENSURE( sal_False, "Content::execute - unsupported command!" );
+        OSL_FAIL( "Content::execute - unsupported command!" );
 
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::UnsupportedCommandException(
@@ -952,7 +952,7 @@ void Content::insert(
     // Check, if all required properties were set.
     if ( !m_aProps->m_sTitle.getLength())
     {
-        OSL_ENSURE( sal_False, "Content::insert - property value missing!" );
+        OSL_FAIL( "Content::insert - property value missing!" );
 
         uno::Sequence< rtl::OUString > aProps( 1 );
         aProps[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("zzzz"));
@@ -967,7 +967,7 @@ void Content::insert(
 
     if ( !xInputStream.is() )
     {
-        OSL_ENSURE( sal_False, "Content::insert - No data stream!" );
+        OSL_FAIL( "Content::insert - No data stream!" );
 
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::MissingInputStreamException(

@@ -215,8 +215,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
 
             if ( nPos == nEnd )
             {
-                OSL_ENSURE( sal_False,
-                    "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                 return rtl::OUString();
             }
 
@@ -228,8 +227,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
 
                 if ( nPos > nEnd - 4 )
                 {
-                    OSL_ENSURE( sal_False,
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
 
@@ -244,8 +242,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
             }
@@ -255,8 +252,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
 
                 if ( nPos > nEnd - 3 )
                 {
-                    OSL_ENSURE( sal_False,
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
 
@@ -269,8 +265,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
             }
@@ -280,8 +275,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
 
                 if ( nPos > nEnd - 3 )
                 {
-                    OSL_ENSURE( sal_False,
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
 
@@ -294,15 +288,13 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
-                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
             }
             else
             {
-                OSL_ENSURE( sal_False,
-                    "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
                 return rtl::OUString();
             }
         }
@@ -414,8 +406,7 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
-                                "UCBDeadPropertyValue::createFromXML - "
+                    OSL_FAIL( "UCBDeadPropertyValue::createFromXML - "
                                 "Unsupported property type!" );
                     success = false;
                 }
@@ -513,8 +504,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     }
     else
     {
-        OSL_ENSURE( sal_False,
-                    "UCBDeadPropertyValue::toXML - "
+        OSL_FAIL( "UCBDeadPropertyValue::toXML - "
                     "Unsupported property type!" );
         return false;
     }

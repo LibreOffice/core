@@ -828,7 +828,7 @@ namespace svx
                 }
                 break;
                 default:
-                    OSL_ENSURE( sal_False, "FmTextControlShell::executeClipboardSlot: invalid slot!" );
+                    OSL_FAIL( "FmTextControlShell::executeClipboardSlot: invalid slot!" );
                 }
                 return true;
             }

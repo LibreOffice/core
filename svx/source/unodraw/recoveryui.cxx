@@ -153,7 +153,7 @@ void SAL_CALL RecoveryUI::dispatch(const css::util::URL&                        
 void SAL_CALL RecoveryUI::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >&, const css::util::URL& ) throw(css::uno::RuntimeException)
 {
     // TODO
-    OSL_ENSURE(sal_False, "RecoveryUI::addStatusListener()\nNot implemented yet!");
+    OSL_FAIL("RecoveryUI::addStatusListener()\nNot implemented yet!");
 }
 
 //===============================================
@@ -161,7 +161,7 @@ void SAL_CALL RecoveryUI::removeStatusListener(const css::uno::Reference< css::f
     throw(css::uno::RuntimeException)
 {
     // TODO
-    OSL_ENSURE(sal_False, "RecoveryUI::removeStatusListener()\nNot implemented yet!");
+    OSL_FAIL("RecoveryUI::removeStatusListener()\nNot implemented yet!");
 }
 
 //===============================================

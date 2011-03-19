@@ -200,13 +200,11 @@ HierarchyContentProvider::getConfigProvider(
         }
         catch ( uno::Exception const & )
         {
-//            OSL_ENSURE( sal_False,
-//                        "HierarchyContentProvider::getConfigProvider - "
+//            OSL_FAIL( //                        "HierarchyContentProvider::getConfigProvider - "
 //                        "caught exception!" );
         }
 
-        OSL_ENSURE( sal_False,
-                    "HierarchyContentProvider::getConfigProvider - "
+        OSL_FAIL( "HierarchyContentProvider::getConfigProvider - "
                     "No config provider!" );
 
         return uno::Reference< lang::XMultiServiceFactory >();
@@ -229,8 +227,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
         {
             if ( (*it).second.bTriedToGetRootReadAccess ) // #82494#
             {
-                OSL_ENSURE( sal_False,
-                    "HierarchyContentProvider::getRootConfigReadNameAccess - "
+                OSL_FAIL( "HierarchyContentProvider::getRootConfigReadNameAccess - "
                     "Unable to read any config data! -> #82494#" );
                 return uno::Reference< container::XHierarchicalNameAccess >();
             }
@@ -271,8 +268,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
             {
                 // createInstance, createInstanceWithArguments
 
-                OSL_ENSURE( sal_False,
-                    "HierarchyContentProvider::getRootConfigReadNameAccess - "
+                OSL_FAIL( "HierarchyContentProvider::getRootConfigReadNameAccess - "
                     "caught Exception!" );
             }
         }

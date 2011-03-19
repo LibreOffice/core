@@ -330,7 +330,7 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
     // SAFE ->
     aReadLock.lock();
     if (!m_lInterceptionRegs.empty() )
-        OSL_ENSURE(sal_False, "There are some pending interceptor objects, which seams to be registered during (!) the destruction of a frame.");
+        OSL_FAIL("There are some pending interceptor objects, which seams to be registered during (!) the destruction of a frame.");
     aReadLock.unlock();
     // <- SAFE
     #endif // ODL_DEBUG_LEVEL>0

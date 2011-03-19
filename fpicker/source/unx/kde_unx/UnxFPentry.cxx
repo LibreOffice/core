@@ -86,7 +86,7 @@ sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistr
         }
         catch( InvalidRegistryException& )
         {
-            OSL_ENSURE( sal_False, "InvalidRegistryException caught" );
+            OSL_FAIL( "InvalidRegistryException caught" );
             bRetVal = sal_False;
         }
     }

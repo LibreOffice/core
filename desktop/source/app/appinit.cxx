@@ -314,11 +314,11 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
             } catch (com::sun::star::uno::Exception&) {
             // no error handling needed...
             // acceptor just won't come up
-            OSL_ENSURE(sal_False, "Acceptor could not be created.");
+            OSL_FAIL("Acceptor could not be created.");
         }
     } else {
         // there is already an acceptor with this description
-        OSL_ENSURE(sal_False, "Acceptor already exists.");
+        OSL_FAIL("Acceptor already exists.");
     }
 
     }
@@ -368,7 +368,7 @@ void Desktop::destroyAcceptor(const OUString& aAcceptString)
             // this is the last reference and the acceptor will be destructed
             rMap.erase(aAcceptString);
         } else {
-            OSL_ENSURE(sal_False, "Found no acceptor to remove");
+            OSL_FAIL("Found no acceptor to remove");
         }
     }
 }

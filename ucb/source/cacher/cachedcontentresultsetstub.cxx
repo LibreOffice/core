@@ -187,7 +187,7 @@ XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSetStub,
 impl_EnsureNotDisposed(); \
 if( !m_xResultSetOrigin.is() ) \
 { \
-    OSL_ENSURE( sal_False, "broadcaster was disposed already" ); \
+    OSL_FAIL( "broadcaster was disposed already" ); \
     throw RuntimeException(); \
 } \
 impl_propagateFetchSizeAndDirection( nRowCount, bDirection ); \
@@ -325,7 +325,7 @@ sal_Int32 SAL_CALL CachedContentResultSetStub
         }
         catch( SQLException& )
         {
-            OSL_ENSURE( sal_False, "couldn't determine the column count" );
+            OSL_FAIL( "couldn't determine the column count" );
             nCount = 0;
         }
     }

@@ -128,7 +128,7 @@ namespace desktop {
         catch (Exception const & e)
         {
             OString msg(OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
-            OSL_ENSURE(sal_False, msg.getStr());
+            OSL_FAIL(msg.getStr());
         }
 
         return false;
@@ -284,7 +284,7 @@ namespace desktop {
         {
             OString aMsg("create_user_install(): ");
             aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(sal_False, aMsg.getStr());
+            OSL_FAIL(aMsg.getStr());
             return UserInstall::E_Creation;
         }
 

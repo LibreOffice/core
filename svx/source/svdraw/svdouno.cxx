@@ -211,7 +211,7 @@ SdrUnoObj::~SdrUnoObj()
     }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "SdrUnoObj::~SdrUnoObj: caught an exception!" );
+        OSL_FAIL( "SdrUnoObj::~SdrUnoObj: caught an exception!" );
     }
     delete m_pImpl;
 }

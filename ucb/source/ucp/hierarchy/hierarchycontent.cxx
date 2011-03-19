@@ -550,7 +550,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         ucb::TransferInfo aInfo;
         if ( !( aCommand.Argument >>= aInfo ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -575,7 +575,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         ucb::ContentInfo aInfo;
         if ( !( aCommand.Argument >>= aInfo ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -669,8 +669,7 @@ HierarchyContent::createNewContent( const ucb::ContentInfo& Info )
     }
     else
     {
-        OSL_ENSURE( sal_False,
-                    "createNewContent called on non-folder object!" );
+        OSL_FAIL( "createNewContent called on non-folder object!" );
         return uno::Reference< ucb::XContent >();
     }
 }
@@ -896,15 +895,14 @@ sal_Bool HierarchyContent::exchangeIdentity(
     // Already persistent?
     if ( m_eState != PERSISTENT )
     {
-        OSL_ENSURE( sal_False,
-                    "HierarchyContent::exchangeIdentity - Not persistent!" );
+        OSL_FAIL( "HierarchyContent::exchangeIdentity - Not persistent!" );
         return sal_False;
     }
 
     // Am I the root folder?
     if ( m_eKind == ROOT )
     {
-        OSL_ENSURE( sal_False, "HierarchyContent::exchangeIdentity - "
+        OSL_FAIL( "HierarchyContent::exchangeIdentity - "
                                "Not supported by root folder!" );
         return sal_False;
     }
@@ -957,8 +955,7 @@ sal_Bool HierarchyContent::exchangeIdentity(
         }
     }
 
-    OSL_ENSURE( sal_False,
-                "HierarchyContent::exchangeIdentity - "
+    OSL_FAIL( "HierarchyContent::exchangeIdentity - "
                 "Panic! Cannot exchange identity!" );
     return sal_False;
 }

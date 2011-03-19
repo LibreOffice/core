@@ -167,7 +167,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_ENSURE( sal_False, "Couldn't set the visual area for the object!\n" );
+                    OSL_FAIL( "Couldn't set the visual area for the object!\n" );
                 }
             }
 

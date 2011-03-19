@@ -96,7 +96,7 @@ namespace connectivity
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "createDriverConfigNode: caught an exception while accessing the driver's config node!" );
+                OSL_FAIL( "createDriverConfigNode: caught an exception while accessing the driver's config node!" );
             }
 
             // outta here
@@ -149,7 +149,7 @@ namespace connectivity
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "getFullPathExportingCommand: caught an exception!" );
+                    OSL_FAIL( "getFullPathExportingCommand: caught an exception!" );
                 }
             }
             return sFullPathExportingCommand;

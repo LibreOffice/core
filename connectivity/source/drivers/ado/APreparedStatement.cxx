@@ -99,7 +99,7 @@ OPreparedStatement::~OPreparedStatement()
 {
     if (m_pParameters)
     {
-        OSL_ENSURE( sal_False, "OPreparedStatement::~OPreparedStatement: not disposed!" );
+        OSL_FAIL( "OPreparedStatement::~OPreparedStatement: not disposed!" );
         m_pParameters->Release();
         m_pParameters = NULL;
     }

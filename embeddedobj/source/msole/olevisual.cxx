@@ -137,7 +137,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "The object should not be resized without activation!\n" );
+            OSL_FAIL( "The object should not be resized without activation!\n" );
         }
         aGuard.reset();
     }
@@ -220,7 +220,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 sal_Bool bSuccess = sal_False;
                 if ( getCurrentState() == embed::EmbedStates::LOADED )
                 {
-                    OSL_ENSURE( sal_False, "Loaded object has no cached size!\n" );
+                    OSL_FAIL( "Loaded object has no cached size!\n" );
 
                     // try to switch the object to RUNNING state and request the value again
                     try {

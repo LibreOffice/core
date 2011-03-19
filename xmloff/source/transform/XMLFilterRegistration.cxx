@@ -183,7 +183,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char * pImpl
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "xof::component_getFactory: Exception!" );
+            OSL_FAIL( "xof::component_getFactory: Exception!" );
         }
     }
 

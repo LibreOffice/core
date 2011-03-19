@@ -754,7 +754,7 @@ bool FmXFormShell::impl_checkDisposed() const
         m_eDocumentType = DocumentClassification::classifyDocument( xModel );
     else
     {
-        OSL_ENSURE( sal_False, "FmXFormShell::getDocumentType: can't determine the document type!" );
+        OSL_FAIL( "FmXFormShell::getDocumentType: can't determine the document type!" );
         m_eDocumentType = eTextDocument;
             // fallback, just to have a defined state
     }
@@ -1011,7 +1011,7 @@ void FmXFormShell::UpdateSlot( sal_Int16 _nId )
 
     if ( m_nLockSlotInvalidation )
     {
-        OSL_ENSURE( sal_False, "FmXFormShell::UpdateSlot: cannot update if invalidation is currently locked!" );
+        OSL_FAIL( "FmXFormShell::UpdateSlot: cannot update if invalidation is currently locked!" );
         InvalidateSlot( _nId, sal_False );
     }
     else
@@ -1519,7 +1519,7 @@ void FmXFormShell::ExecuteTabOrderDialog( const Reference< XTabControllerModel >
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "FmXFormShell::ExecuteTabOrderDialog: caught an exception!" );
+        OSL_FAIL( "FmXFormShell::ExecuteTabOrderDialog: caught an exception!" );
     }
 }
 

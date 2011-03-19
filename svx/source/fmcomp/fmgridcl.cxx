@@ -1539,7 +1539,7 @@ void FmGridControl::RowHeightChanged()
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmGridControl::RowHeightChanged: caught an exception!" );
+            OSL_FAIL( "FmGridControl::RowHeightChanged: caught an exception!" );
         }
     }
 }

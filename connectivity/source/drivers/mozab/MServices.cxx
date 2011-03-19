@@ -122,7 +122,7 @@ typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Refere
 
             if (NULL == s_pCreationFunc)
             {   // did not find the symbol
-                OSL_ENSURE(sal_False, "MozabDriver::registerClient: could not find the symbol for creating the factory!");
+                OSL_FAIL("MozabDriver::registerClient: could not find the symbol for creating the factory!");
                 osl_unloadModule(s_hModule);
                 s_hModule = NULL;
             }

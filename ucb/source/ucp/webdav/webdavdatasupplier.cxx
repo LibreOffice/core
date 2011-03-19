@@ -394,7 +394,7 @@ sal_Bool DataSupplier::getData()
           }
           catch ( DAVException & )
         {
-//          OSL_ENSURE( sal_False, "PROPFIND : DAVException" );
+//          OSL_FAIL( "PROPFIND : DAVException" );
             m_pImpl->m_bThrowException = sal_True;
           }
 

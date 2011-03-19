@@ -125,13 +125,13 @@ namespace
                 case awt::LineEndFormat::LINE_FEED:                  eFormat = LINEEND_LF; break;
                 case awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED:  eFormat = LINEEND_CRLF; break;
                 default:
-                    OSL_ENSURE( sal_False, "getModelLineEndSetting: what's this?" );
+                    OSL_FAIL( "getModelLineEndSetting: what's this?" );
                 }
             }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "getModelLineEndSetting: caught an exception!" );
+            OSL_FAIL( "getModelLineEndSetting: caught an exception!" );
         }
         return eFormat;
     }
@@ -1132,7 +1132,7 @@ void DbTextField::Init( Window& rParent, const Reference< XRowSet >& xCursor)
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "DbTextField::Init: caught an exception while determining the multi-line capabilities!" );
+        OSL_FAIL( "DbTextField::Init: caught an exception while determining the multi-line capabilities!" );
     }
 
     m_bIsSimpleEdit = !bIsMultiLine;
@@ -2942,7 +2942,7 @@ void DbFilterField::updateFromModel( Reference< XPropertySet > _rxModel )
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbFilterField::updateFromModel: invalid call!" );
     (void)_rxModel;
 
-    OSL_ENSURE( sal_False, "DbListBox::updateFromModel: not implemented yet (how the hell did you reach this?)!" );
+    OSL_FAIL( "DbListBox::updateFromModel: not implemented yet (how the hell did you reach this?)!" );
     // TODO: implement this.
     // remember: updateFromModel should be some kind of opposite of commitControl
 }

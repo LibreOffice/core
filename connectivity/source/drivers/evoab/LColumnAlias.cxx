@@ -198,7 +198,7 @@ void OColumnAlias::setAlias(const ::com::sun::star::uno::Reference<
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OColumnAlias::setAlias: could not read my driver's configuration data!" );
+            OSL_FAIL( "OColumnAlias::setAlias: could not read my driver's configuration data!" );
         }
     }
 

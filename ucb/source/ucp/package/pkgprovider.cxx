@@ -251,8 +251,7 @@ ContentProvider::createPackage( const rtl::OUString & rName, const rtl::OUString
 
     if ( !rName.getLength() )
     {
-        OSL_ENSURE( sal_False,
-                    "ContentProvider::createPackage - Invalid URL!" );
+        OSL_FAIL( "ContentProvider::createPackage - Invalid URL!" );
         return uno::Reference< container::XHierarchicalNameAccess >();
     }
 

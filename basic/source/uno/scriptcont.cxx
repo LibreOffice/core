@@ -715,7 +715,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_ENSURE( sal_False, "Problem on storing of password library!\n" );
+                    OSL_FAIL( "Problem on storing of password library!\n" );
                     // TODO: error handling
                 }
             }

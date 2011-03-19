@@ -1254,13 +1254,13 @@ throw (RuntimeException)
 void SAL_CALL LayoutManager::setInplaceMenuBar( sal_Int64 )
 throw (uno::RuntimeException)
 {
-    OSL_ENSURE( sal_False, "This method is obsolete and should not be used!\n" );
+    OSL_FAIL( "This method is obsolete and should not be used!\n" );
 }
 
 void SAL_CALL LayoutManager::resetInplaceMenuBar()
 throw (uno::RuntimeException)
 {
-    OSL_ENSURE( sal_False, "This method is obsolete and should not be used!\n" );
+    OSL_FAIL( "This method is obsolete and should not be used!\n" );
 }
 
 //---------------------------------------------------------------------------------------------------------

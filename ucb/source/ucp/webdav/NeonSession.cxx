@@ -128,15 +128,15 @@ static sal_uInt16 makeStatusCode( const rtl::OUString & rStatusText )
 
     if ( rStatusText.getLength() < 3 )
     {
-        OSL_ENSURE(
-            sal_False, "makeStatusCode - status text string to short!" );
+        OSL_FAIL(
+            "makeStatusCode - status text string to short!" );
         return 0;
     }
 
     sal_Int32 nPos = rStatusText.indexOf( ' ' );
     if ( nPos == -1 )
     {
-        OSL_ENSURE( sal_False, "makeStatusCode - wrong status text format!" );
+        OSL_FAIL( "makeStatusCode - wrong status text format!" );
         return 0;
     }
 
@@ -320,8 +320,8 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
         rtl::OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ) );
     if ( aUser.getLength() > ( NE_ABUFSIZ - 1 ) )
     {
-        OSL_ENSURE(
-            sal_False, "NeonSession_NeonAuth - username to long!" );
+        OSL_FAIL(
+            "NeonSession_NeonAuth - username to long!" );
         return -1;
     }
 
@@ -329,8 +329,8 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
         rtl::OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
     if ( aPass.getLength() > ( NE_ABUFSIZ - 1 ) )
     {
-        OSL_ENSURE(
-            sal_False, "NeonSession_NeonAuth - password to long!" );
+        OSL_FAIL(
+            "NeonSession_NeonAuth - password to long!" );
         return -1;
     }
 
@@ -1002,8 +1002,7 @@ void NeonSession::PROPPATCH( const rtl::OUString & inPath,
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
-                                "NeonSession::PROPPATCH - unsupported type!" );
+                    OSL_FAIL( "NeonSession::PROPPATCH - unsupported type!" );
                     // Error!
                     pItems[ n ].value = 0;
                     theRetVal = NE_ERROR;

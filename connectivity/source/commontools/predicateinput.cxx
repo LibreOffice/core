@@ -93,7 +93,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OPredicateInputController::getSeparatorChars: caught an exception!" );
+            OSL_FAIL( "OPredicateInputController::getSeparatorChars: caught an exception!" );
         }
         return sal_False;
     }
@@ -133,7 +133,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OPredicateInputController::OPredicateInputController: caught an exception!" );
+            OSL_FAIL( "OPredicateInputController::OPredicateInputController: caught an exception!" );
         }
     }
 
@@ -226,7 +226,7 @@ namespace dbtools
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "OPredicateInputController::implPredicateTree: caught an exception while dealing with the formats!" );
+                    OSL_FAIL( "OPredicateInputController::implPredicateTree: caught an exception while dealing with the formats!" );
                 }
 
                 sal_Bool bDecDiffers = ( nCtxDecSep != nFmtDecSep );
@@ -343,7 +343,7 @@ namespace dbtools
                             sReturn = pOdbcSpec->getChild(1)->getTokenValue();
                         }
                         else
-                            OSL_ENSURE( sal_False, "OPredicateInputController::getPredicateValue: unknown/invalid structure (odbc + param use)!" );
+                            OSL_FAIL( "OPredicateInputController::getPredicateValue: unknown/invalid structure (odbc + param use)!" );
                     }
                     else
                     {
@@ -376,7 +376,7 @@ namespace dbtools
                             );
                     }
                     else
-                        OSL_ENSURE( sal_False, "OPredicateInputController::getPredicateValue: unknown/invalid structure (noodbc)!" );
+                        OSL_FAIL( "OPredicateInputController::getPredicateValue: unknown/invalid structure (noodbc)!" );
                 }
 
                 delete pParseNode;

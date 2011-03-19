@@ -1407,13 +1407,13 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
             }
             catch( lang::IllegalArgumentException& )
             {
-                OSL_ENSURE( sal_False, "ModelData didn't handle illegal parameters, all the parameters are ignored!\n" );
+                OSL_FAIL( "ModelData didn't handle illegal parameters, all the parameters are ignored!\n" );
                 aModelData.GetStorable()->store();
             }
         }
         else
         {
-            OSL_ENSURE( sal_False, "XStorable2 is not supported by the model!\n" );
+            OSL_FAIL( "XStorable2 is not supported by the model!\n" );
             aModelData.GetStorable()->store();
         }
 

@@ -106,7 +106,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char*    )
     // Print a message if an error occurred.
     if ( g_xFactory.is() == sal_False )
     {
-        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
+        OSL_FAIL("Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -121,7 +121,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char*    )
 
     if ( !xSysShExec.is() )
     {
-        OSL_ENSURE( sal_False, "Error creating SystemShellExecute Service" );
+        OSL_FAIL( "Error creating SystemShellExecute Service" );
         return(-1);
     }
 
@@ -135,11 +135,11 @@ int SAL_CALL main(int nArgc, char* Argv[], char*    )
     }
     catch( SystemShellExecuteException&  )
     {
-        OSL_ENSURE( sal_False, "Error executing system command" );
+        OSL_FAIL( "Error executing system command" );
     }
     catch( IllegalArgumentException& )
     {
-        OSL_ENSURE( sal_False, "Invalid parameter" );
+        OSL_FAIL( "Invalid parameter" );
     }
 
     //--------------------------------------------------
@@ -152,7 +152,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char*    )
     // Print a message if an error occurred.
     if ( xComponent.is() == sal_False )
     {
-        OSL_ENSURE(sal_False, "Error shuting down");
+        OSL_FAIL("Error shuting down");
     }
 
     // Dispose and clear factory

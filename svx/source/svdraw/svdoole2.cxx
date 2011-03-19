@@ -257,13 +257,13 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
             }
             catch( embed::NoVisualAreaSizeException& )
             {
-                OSL_ENSURE( sal_False, "No visual area size!\n" );
+                OSL_FAIL( "No visual area size!\n" );
                 aSz.Width = 5000;
                 aSz.Height = 5000;
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "Unexpected exception!\n" );
+                OSL_FAIL( "Unexpected exception!\n" );
                 aSz.Width = 5000;
                 aSz.Height = 5000;
             }
@@ -290,7 +290,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Unexpected exception!\n" );
+            OSL_FAIL( "Unexpected exception!\n" );
         }
     }
 }

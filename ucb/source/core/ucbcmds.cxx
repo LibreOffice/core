@@ -466,8 +466,7 @@ NameClashContinuation interactiveNameClashResolve(
                         }
                         else
                         {
-                            OSL_ENSURE( sal_False,
-                                        "Unknown interaction continuation!" );
+                            OSL_FAIL( "Unknown interaction continuation!" );
                             return UNKNOWN;
                         }
                     }
@@ -510,7 +509,7 @@ bool setTitle(
         if ( aErrors[ 0 ].hasValue() )
         {
             // error occurred.
-            OSL_ENSURE( sal_False, "error setting Title property!" );
+            OSL_FAIL( "error setting Title property!" );
             return false;
         }
     }
@@ -1008,7 +1007,7 @@ uno::Reference< io::XInputStream > getInputStream(
         }
         catch ( uno::Exception const & )
         {
-            OSL_ENSURE( sal_False, "unable to get input stream from document!" );
+            OSL_FAIL( "unable to get input stream from document!" );
         }
     }
 
@@ -1055,7 +1054,7 @@ uno::Reference< sdbc::XResultSet > getResultSet(
     }
     catch ( uno::Exception const & )
     {
-         OSL_ENSURE( sal_False, "unable to get result set from folder!" );
+         OSL_FAIL( "unable to get result set from folder!" );
     }
 
     return xResultSet;
@@ -1412,7 +1411,7 @@ void globalTransfer_(
 
         default:
             aArg.ReplaceExisting = sal_False;
-            OSL_ENSURE( sal_False, "Unknown nameclash directive!" );
+            OSL_FAIL( "Unknown nameclash directive!" );
             break;
     }
 
@@ -2083,7 +2082,7 @@ void UniversalContentBroker::globalTransfer(
         }
         catch ( uno::Exception const & )
         {
-            OSL_ENSURE( sal_False, "Cannot delete source object!" );
+            OSL_FAIL( "Cannot delete source object!" );
             throw;
         }
     }

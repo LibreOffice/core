@@ -231,7 +231,7 @@ void Migration::migrateSettingsIfNecessary()
     {
         OString aMsg("doMigration() exception: ");
         aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, aMsg.getStr());
+        OSL_FAIL(aMsg.getStr());
     }
     OSL_ENSURE(bResult, "Migration has not been successfull");
     (void)bResult;
@@ -334,7 +334,7 @@ sal_Bool MigrationImpl::doMigration()
         OString aMsg("An unexpected exception was thrown during migration");
         aMsg += "\nOldVersion: " + OUStringToOString(m_aInfo.productname, RTL_TEXTENCODING_ASCII_US);
         aMsg += "\nDataPath  : " + OUStringToOString(m_aInfo.userdata, RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, aMsg.getStr());
+        OSL_FAIL(aMsg.getStr());
     }
 
     // prevent running the migration multiple times
@@ -349,7 +349,7 @@ void MigrationImpl::refresh()
     if (xRefresh.is())
         xRefresh->refresh();
     else
-        OSL_ENSURE(sal_False, "could not get XRefresh interface from default config provider. No refresh done.");
+        OSL_FAIL("could not get XRefresh interface from default config provider. No refresh done.");
 
 }
 
@@ -860,7 +860,7 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPa
     } catch (com::sun::star::uno::Exception& e)
     {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, aMsg.getStr());
+        OSL_FAIL(aMsg.getStr());
     }
     return xNameAccess;
 }
@@ -890,14 +890,14 @@ void MigrationImpl::copyFiles()
                 OString msg("Cannot copy ");
                 msg += OUStringToOString(*i_file, RTL_TEXTENCODING_UTF8) + " to "
                     +  OUStringToOString(destName, RTL_TEXTENCODING_UTF8);
-                OSL_ENSURE(sal_False, msg.getStr());
+                OSL_FAIL(msg.getStr());
             }
             ++i_file;
         }
     }
     else
     {
-        OSL_ENSURE(sal_False, "copyFiles: UserInstall does not exist");
+        OSL_FAIL("copyFiles: UserInstall does not exist");
     }
 }
 
@@ -946,13 +946,13 @@ void MigrationImpl::runServices()
                 OString aMsg("Execution of migration service failed (Exception caught).\nService: ");
                 aMsg += OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US) + "\nMessage: ";
                 aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-                OSL_ENSURE(sal_False, aMsg.getStr());
+                OSL_FAIL(aMsg.getStr());
             } catch (...)
             {
                 OString aMsg("Execution of migration service failed (Exception caught).\nService: ");
                 aMsg += OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US) +
                     "\nNo message available";
-                OSL_ENSURE(sal_False, aMsg.getStr());
+                OSL_FAIL(aMsg.getStr());
             }
 
         }

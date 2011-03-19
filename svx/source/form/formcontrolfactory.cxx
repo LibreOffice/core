@@ -232,7 +232,7 @@ namespace svxform
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "lcl_getDataSourceIndirectProperties: caught an exception!" );
+                OSL_FAIL( "lcl_getDataSourceIndirectProperties: caught an exception!" );
             }
             return aInfo;
         }

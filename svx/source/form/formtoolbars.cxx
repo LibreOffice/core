@@ -82,7 +82,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormToolboxes::toggleToolbox: caught an exception!" );
+            OSL_FAIL( "FormToolboxes::toggleToolbox: caught an exception!" );
         }
     }
 

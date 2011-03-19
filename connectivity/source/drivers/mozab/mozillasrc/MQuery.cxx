@@ -697,7 +697,7 @@ MQuery::setRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString&
             xResEntry->setValue( m_rColumnAlias.getProgrammaticNameOrFallbackToUTF8Alias( aDBColumnName ), rValue.getString() );
             break;
         default:
-            OSL_ENSURE( sal_False, "invalid data type!" );
+            OSL_FAIL( "invalid data type!" );
             break;
     }
 

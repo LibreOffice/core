@@ -265,8 +265,7 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
 
             if ( !xNamed.is() )
             {
-                OSL_ENSURE( sal_False,
-                            "DataSupplier::getResult - Got no XNamed!" );
+                OSL_FAIL( "DataSupplier::getResult - Got no XNamed!" );
                 break;
             }
 
@@ -274,8 +273,7 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
 
             if ( !aName.getLength() )
             {
-                OSL_ENSURE( sal_False,
-                            "DataSupplier::getResult - Empty name!" );
+                OSL_FAIL( "DataSupplier::getResult - Empty name!" );
                 break;
             }
 
@@ -345,8 +343,7 @@ sal_uInt32 DataSupplier::totalCount()
 
             if ( !xNamed.is() )
             {
-                OSL_ENSURE( sal_False,
-                            "DataSupplier::getResult - Got no XNamed!" );
+                OSL_FAIL( "DataSupplier::getResult - Got no XNamed!" );
                 break;
             }
 
@@ -354,8 +351,7 @@ sal_uInt32 DataSupplier::totalCount()
 
             if ( !aName.getLength() )
             {
-                OSL_ENSURE( sal_False,
-                            "DataSupplier::getResult - Empty name!" );
+                OSL_FAIL( "DataSupplier::getResult - Empty name!" );
                 break;
             }
 

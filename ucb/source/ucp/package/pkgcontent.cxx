@@ -672,7 +672,7 @@ uno::Any SAL_CALL Content::execute(
         ucb::ContentInfo aInfo;
         if ( !( aCommand.Argument >>= aInfo ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -789,8 +789,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     }
     else
     {
-        OSL_ENSURE( sal_False,
-                    "createNewContent called on non-folder object!" );
+        OSL_FAIL( "createNewContent called on non-folder object!" );
         return uno::Reference< ucb::XContent >();
     }
 }
@@ -2102,8 +2101,7 @@ void Content::transfer(
 
                     if ( !xNamed.is() )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "Content::transfer - Got no XNamed!" );
+                        OSL_FAIL( "Content::transfer - Got no XNamed!" );
                         break;
                     }
 
@@ -2111,8 +2109,7 @@ void Content::transfer(
 
                     if ( !aName.getLength() )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "Content::transfer - Empty name!" );
+                        OSL_FAIL( "Content::transfer - Empty name!" );
                         break;
                     }
 
@@ -2192,8 +2189,7 @@ sal_Bool Content::exchangeIdentity(
     // Already persistent?
     if ( m_eState != PERSISTENT )
     {
-        OSL_ENSURE( sal_False,
-                    "Content::exchangeIdentity - Not persistent!" );
+        OSL_FAIL( "Content::exchangeIdentity - Not persistent!" );
         return sal_False;
     }
 
@@ -2247,8 +2243,7 @@ sal_Bool Content::exchangeIdentity(
         }
     }
 
-    OSL_ENSURE( sal_False,
-            "Content::exchangeIdentity - Panic! Cannot exchange identity!" );
+    OSL_FAIL( "Content::exchangeIdentity - Panic! Cannot exchange identity!" );
     return sal_False;
 }
 
@@ -2385,23 +2380,20 @@ sal_Bool Content::loadData(
                             "HasEncryptedEntries" )) );
                 if ( !( aHasEncryptedEntries >>= rProps.bHasEncryptedEntries ) )
                 {
-                    OSL_ENSURE( sal_False,
-                                "Content::loadData - "
+                    OSL_FAIL( "Content::loadData - "
                                 "Got no HasEncryptedEntries value!" );
                     return sal_False;
                 }
             }
             catch ( beans::UnknownPropertyException const & )
             {
-                OSL_ENSURE( sal_False,
-                            "Content::loadData - "
+                OSL_FAIL( "Content::loadData - "
                             "Got no HasEncryptedEntries value!" );
                 return sal_False;
             }
             catch ( lang::WrappedTargetException const & )
             {
-                OSL_ENSURE( sal_False,
-                            "Content::loadData - "
+                OSL_FAIL( "Content::loadData - "
                             "Got no HasEncryptedEntries value!" );
                 return sal_False;
             }
@@ -2421,8 +2413,7 @@ sal_Bool Content::loadData(
 
             if ( !xPropSet.is() )
             {
-                OSL_ENSURE( sal_False,
-                        "Content::loadData - Got no XPropertySet interface!" );
+                OSL_FAIL( "Content::loadData - Got no XPropertySet interface!" );
                 return sal_False;
             }
 
@@ -2437,21 +2428,18 @@ sal_Bool Content::loadData(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) );
                 if ( !( aMediaType >>= rProps.aMediaType ) )
                 {
-                    OSL_ENSURE( sal_False,
-                                "Content::loadData - Got no MediaType value!" );
+                    OSL_FAIL( "Content::loadData - Got no MediaType value!" );
                     return sal_False;
                 }
             }
             catch ( beans::UnknownPropertyException const & )
             {
-                OSL_ENSURE( sal_False,
-                            "Content::loadData - Got no MediaType value!" );
+                OSL_FAIL( "Content::loadData - Got no MediaType value!" );
                 return sal_False;
             }
             catch ( lang::WrappedTargetException const & )
             {
-                OSL_ENSURE( sal_False,
-                            "Content::loadData - Got no MediaType value!" );
+                OSL_FAIL( "Content::loadData - Got no MediaType value!" );
                 return sal_False;
             }
 
@@ -2484,21 +2472,18 @@ sal_Bool Content::loadData(
                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size")) );
                     if ( !( aSize >>= rProps.nSize ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "Content::loadData - Got no Size value!" );
+                        OSL_FAIL( "Content::loadData - Got no Size value!" );
                         return sal_False;
                     }
                 }
                 catch ( beans::UnknownPropertyException const & )
                 {
-                    OSL_ENSURE( sal_False,
-                                "Content::loadData - Got no Size value!" );
+                    OSL_FAIL( "Content::loadData - Got no Size value!" );
                     return sal_False;
                 }
                 catch ( lang::WrappedTargetException const & )
                 {
-                    OSL_ENSURE( sal_False,
-                                "Content::loadData - Got no Size value!" );
+                    OSL_FAIL( "Content::loadData - Got no Size value!" );
                     return sal_False;
                 }
 
@@ -2510,21 +2495,18 @@ sal_Bool Content::loadData(
                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")) );
                     if ( !( aCompressed >>= rProps.bCompressed ) )
                     {
-                        OSL_ENSURE( sal_False,
-                            "Content::loadData - Got no Compressed value!" );
+                        OSL_FAIL( "Content::loadData - Got no Compressed value!" );
                         return sal_False;
                     }
                 }
                 catch ( beans::UnknownPropertyException const & )
                 {
-                    OSL_ENSURE( sal_False,
-                            "Content::loadData - Got no Compressed value!" );
+                    OSL_FAIL( "Content::loadData - Got no Compressed value!" );
                     return sal_False;
                 }
                 catch ( lang::WrappedTargetException const & )
                 {
-                    OSL_ENSURE( sal_False,
-                            "Content::loadData - Got no Compressed value!" );
+                    OSL_FAIL( "Content::loadData - Got no Compressed value!" );
                     return sal_False;
                 }
 
@@ -2536,21 +2518,18 @@ sal_Bool Content::loadData(
                             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted")) );
                     if ( !( aEncrypted >>= rProps.bEncrypted ) )
                     {
-                        OSL_ENSURE( sal_False,
-                            "Content::loadData - Got no Encrypted value!" );
+                        OSL_FAIL( "Content::loadData - Got no Encrypted value!" );
                         return sal_False;
                     }
                 }
                 catch ( beans::UnknownPropertyException const & )
                 {
-                    OSL_ENSURE( sal_False,
-                            "Content::loadData - Got no Encrypted value!" );
+                    OSL_FAIL( "Content::loadData - Got no Encrypted value!" );
                     return sal_False;
                 }
                 catch ( lang::WrappedTargetException const & )
                 {
-                    OSL_ENSURE( sal_False,
-                            "Content::loadData - Got no Encrypted value!" );
+                    OSL_FAIL( "Content::loadData - Got no Encrypted value!" );
                     return sal_False;
                 }
             }
@@ -2589,8 +2568,7 @@ sal_Bool Content::renameData(
 
         if ( !xNamed.is() )
         {
-            OSL_ENSURE( sal_False,
-                        "Content::renameData - Got no XNamed interface!" );
+            OSL_FAIL( "Content::renameData - Got no XNamed interface!" );
             return sal_False;
         }
 
@@ -2670,8 +2648,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
                                                     xNA, uno::UNO_QUERY );
             if ( !xFac.is() )
             {
-                OSL_ENSURE( sal_False,
-                            "Content::storeData - "
+                OSL_FAIL( "Content::storeData - "
                             "Got no XSingleServiceFactory interface!" );
                 return sal_False;
             }
@@ -2684,8 +2661,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
 
             if ( !xNew.is() )
             {
-                OSL_ENSURE( sal_False,
-                            "Content::storeData - createInstance failed!" );
+                OSL_FAIL( "Content::storeData - createInstance failed!" );
                 return sal_False;
             }
 
@@ -2697,8 +2673,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
 
             if ( !xParentContainer.is() )
             {
-                OSL_ENSURE( sal_False,
-                            "Content::storeData - "
+                OSL_FAIL( "Content::storeData - "
                             "Got no XNameContainer interface!" );
                 return sal_False;
             }
@@ -2713,35 +2688,31 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         catch ( lang::IllegalArgumentException const & )
         {
             // insertByName
-            OSL_ENSURE( sal_False,
-                        "Content::storeData - insertByName failed!" );
+            OSL_FAIL( "Content::storeData - insertByName failed!" );
             return sal_False;
         }
         catch ( container::ElementExistException const & )
         {
             // insertByName
-            OSL_ENSURE( sal_False,
-                        "Content::storeData - insertByName failed!" );
+            OSL_FAIL( "Content::storeData - insertByName failed!" );
             return sal_False;
         }
         catch ( lang::WrappedTargetException const & )
         {
             // insertByName
-            OSL_ENSURE( sal_False,
-                        "Content::storeData - insertByName failed!" );
+            OSL_FAIL( "Content::storeData - insertByName failed!" );
             return sal_False;
         }
         catch ( container::NoSuchElementException const & )
         {
             // getByHierarchicalName
-            OSL_ENSURE( sal_False,
-                        "Content::storeData - getByHierarchicalName failed!" );
+            OSL_FAIL( "Content::storeData - getByHierarchicalName failed!" );
             return sal_False;
         }
         catch ( uno::Exception const & )
         {
             // createInstanceWithArguments
-            OSL_ENSURE( sal_False, "Content::storeData - Error!" );
+            OSL_FAIL( "Content::storeData - Error!" );
             return sal_False;
         }
     }
@@ -2756,8 +2727,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
 
         if ( !xPropSet.is() )
         {
-            OSL_ENSURE( sal_False,
-                        "Content::storeData - Got no XPropertySet interface!" );
+            OSL_FAIL( "Content::storeData - Got no XPropertySet interface!" );
             return sal_False;
         }
 
@@ -2814,8 +2784,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
 
             if ( !xSink.is() )
             {
-                OSL_ENSURE( sal_False,
-                            "Content::storeData - "
+                OSL_FAIL( "Content::storeData - "
                             "Got no XActiveDataSink interface!" );
                 return sal_False;
             }
@@ -2846,7 +2815,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         // setPropertyValue
     }
 
-    OSL_ENSURE( sal_False, "Content::storeData - Error!" );
+    OSL_FAIL( "Content::storeData - Error!" );
     return sal_False;
 }
 
@@ -2871,8 +2840,7 @@ sal_Bool Content::removeData()
 
         if ( !xContainer.is() )
         {
-            OSL_ENSURE( sal_False,
-                        "Content::removeData - "
+            OSL_FAIL( "Content::removeData - "
                         "Got no XNameContainer interface!" );
             return sal_False;
         }
@@ -2889,7 +2857,7 @@ sal_Bool Content::removeData()
         // removeByName
     }
 
-    OSL_ENSURE( sal_False, "Content::removeData - Error!" );
+    OSL_FAIL( "Content::removeData - Error!" );
     return sal_False;
 }
 
@@ -2908,8 +2876,7 @@ sal_Bool Content::flushData()
     uno::Reference< util::XChangesBatch > xBatch( xNA, uno::UNO_QUERY );
     if ( !xBatch.is() )
     {
-        OSL_ENSURE( sal_False,
-                    "Content::flushData - Got no XChangesBatch interface!" );
+        OSL_FAIL( "Content::flushData - Got no XChangesBatch interface!" );
         return sal_False;
     }
 
@@ -2922,7 +2889,7 @@ sal_Bool Content::flushData()
     {
     }
 
-    OSL_ENSURE( sal_False, "Content::flushData - Error!" );
+    OSL_FAIL( "Content::flushData - Error!" );
     return sal_False;
 }
 
@@ -2947,8 +2914,7 @@ uno::Reference< io::XInputStream > Content::getInputStream()
 
         if ( !xSink.is() )
         {
-            OSL_ENSURE( sal_False,
-                        "Content::getInputStream - "
+            OSL_FAIL( "Content::getInputStream - "
                         "Got no XActiveDataSink interface!" );
             return xStream;
         }
@@ -2987,8 +2953,7 @@ uno::Reference< container::XEnumeration > Content::getIterator()
 
         if ( !xIterFac.is() )
         {
-            OSL_ENSURE( sal_False,
-                        "Content::getIterator - "
+            OSL_FAIL( "Content::getIterator - "
                         "Got no XEnumerationAccess interface!" );
             return xIter;
         }

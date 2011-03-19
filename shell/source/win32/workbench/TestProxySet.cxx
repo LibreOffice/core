@@ -101,7 +101,7 @@ int SAL_CALL main(int, char*, char* )
     // Print a message if an error occurred.
     if ( g_xFactory.is() == sal_False )
     {
-        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
+        OSL_FAIL("Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -118,7 +118,7 @@ int SAL_CALL main(int, char*, char* )
 
         if ( !xProxySettings.is() )
         {
-            OSL_ENSURE( sal_False, "Error creating SystemProxySettings Service" );
+            OSL_FAIL( "Error creating SystemProxySettings Service" );
             return(-1);
         }
 
@@ -145,7 +145,7 @@ int SAL_CALL main(int, char*, char* )
 
         if ( !xProxySettings.is() )
         {
-            OSL_ENSURE( sal_False, "Error creating SystemProxySettings Service" );
+            OSL_FAIL( "Error creating SystemProxySettings Service" );
             return(-1);
         }
 
@@ -187,7 +187,7 @@ int SAL_CALL main(int, char*, char* )
     // Print a message if an error occurred.
     if ( xComponent.is() == sal_False )
     {
-        OSL_ENSURE(sal_False, "Error shuting down");
+        OSL_FAIL("Error shuting down");
     }
 
     // Dispose and clear factory

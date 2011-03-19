@@ -508,7 +508,7 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
 
         if ( !SetFrameLMVisibility( m_xFrame, sal_False ) )
         {
-            OSL_ENSURE( sal_False, "Can't deactivate LayoutManager!\n" );
+            OSL_FAIL( "Can't deactivate LayoutManager!\n" );
             // TODO/LATER: error handling?
         }
 

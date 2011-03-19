@@ -266,8 +266,7 @@ sal_Bool ResultSetDataSupplier::getResult( sal_uInt32 nIndex )
 
             if ( !rName.getLength() )
             {
-                OSL_ENSURE( sal_False,
-                            "ResultDataSupplier::getResult - Empty name!" );
+                OSL_FAIL( "ResultDataSupplier::getResult - Empty name!" );
                 break;
             }
 
@@ -327,8 +326,7 @@ sal_uInt32 ResultSetDataSupplier::totalCount()
 
             if ( !rName.getLength() )
             {
-                OSL_ENSURE( sal_False,
-                            "ResultDataSupplier::getResult - Empty name!" );
+                OSL_FAIL( "ResultDataSupplier::getResult - Empty name!" );
                 break;
             }
 

@@ -1584,7 +1584,7 @@ int Desktop::Main()
         UserInstall::UserInstallError instErr_fin = UserInstall::finalize();
         if ( instErr_fin != UserInstall::E_None)
         {
-            OSL_ENSURE(sal_False, "userinstall failed");
+            OSL_FAIL("userinstall failed");
             if ( instErr_fin == UserInstall::E_NoDiskSpace )
                 HandleBootstrapErrors( BE_USERINSTALL_NOTENOUGHDISKSPACE );
             else if ( instErr_fin == UserInstall::E_NoWriteAccess )
@@ -2705,7 +2705,7 @@ void Desktop::OpenClients()
         {
             OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Could not disable AutoRecovery.\n"))
                 + e.Message;
-            OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+            OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         }
     }
     else
@@ -2747,7 +2747,7 @@ void Desktop::OpenClients()
             {
                 OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Error during recovery\n"))
                     + e.Message;
-                OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+                OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
             }
         }
 
@@ -2770,7 +2770,7 @@ void Desktop::OpenClients()
         {
             OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Registration of session listener failed\n"))
                 + e.Message;
-            OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+            OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         }
 
         if (
@@ -2788,7 +2788,7 @@ void Desktop::OpenClients()
             {
                 OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Error in session management\n"))
                     + e.Message;
-                OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+                OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
             }
         }
     }
@@ -3255,7 +3255,7 @@ void Desktop::DoFirstRunInitializations()
     }
     catch(const ::com::sun::star::uno::Exception&)
     {
-        OSL_ENSURE( sal_False, "Desktop::DoFirstRunInitializations: caught an exception while trigger job executor ..." );
+        OSL_FAIL( "Desktop::DoFirstRunInitializations: caught an exception while trigger job executor ..." );
     }
 }
 

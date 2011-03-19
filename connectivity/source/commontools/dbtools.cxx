@@ -313,7 +313,7 @@ Reference< XConnection > getConnection_allowException(
             }
             catch(Exception&)
             {
-                OSL_ENSURE(sal_False, "dbtools::getConnection: error while retrieving data source properties!");
+                OSL_FAIL("dbtools::getConnection: error while retrieving data source properties!");
             }
             if(bPwdReq && !sPwd.getLength())
             {   // password required, but empty -> connect using an interaction handler
@@ -354,7 +354,7 @@ Reference< XConnection> getConnection_withFeedback(const ::rtl::OUString& _rData
     }
     catch(Exception&)
     {
-        OSL_ENSURE(sal_False, "::dbtools::getConnection_withFeedback: unexpected (non-SQL) exception caught!");
+        OSL_FAIL("::dbtools::getConnection_withFeedback: unexpected (non-SQL) exception caught!");
     }
     return xReturn;
 }
@@ -745,7 +745,7 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
                     }
                     catch( const Exception& )
                     {
-                        OSL_ENSURE( sal_False, "::dbtools::getFieldsByCommandDescriptor: could not set the MaxRows!" );
+                        OSL_FAIL( "::dbtools::getFieldsByCommandDescriptor: could not set the MaxRows!" );
                         // oh damn. Not much of a chance to recover, we will no retrieve the complete
                         // full blown result set
                     }
@@ -760,7 +760,7 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
                 break;
 
                 default:
-                    OSL_ENSURE( sal_False, "::dbtools::getFieldsByCommandDescriptor: oops! unhandled state here!" );
+                    OSL_FAIL( "::dbtools::getFieldsByCommandDescriptor: oops! unhandled state here!" );
                     eState = FAILED;
             }
         }
@@ -770,7 +770,7 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
     catch( const SQLException& e ) { if ( _pErrorInfo ) *_pErrorInfo = SQLExceptionInfo( e ); }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "::dbtools::getFieldsByCommandDescriptor: caught an exception while retrieving the fields!" );
+        OSL_FAIL( "::dbtools::getFieldsByCommandDescriptor: caught an exception while retrieving the fields!" );
     }
 
     return xFields;
@@ -1067,7 +1067,7 @@ try
                     ::rtl::OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("TransferFormComponentProperties : could not transfer the value for property \""));
                     sMessage += pResult->Name;
                     sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
-                    OSL_ENSURE(sal_False, ::rtl::OUStringToOString(sMessage, RTL_TEXTENCODING_ASCII_US));
+                    OSL_FAIL(::rtl::OUStringToOString(sMessage, RTL_TEXTENCODING_ASCII_US));
 #endif
                 }
             }
@@ -1262,7 +1262,7 @@ try
 }
 catch(const Exception&)
 {
-    OSL_ENSURE( sal_False, "TransferFormComponentProperties: caught an exception!" );
+    OSL_FAIL( "TransferFormComponentProperties: caught an exception!" );
 }
 }
 
@@ -1382,7 +1382,7 @@ Reference< XSingleSelectQueryComposer > getCurrentSettingsComposer(
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "::getCurrentSettingsComposer : caught an exception !" );
+        OSL_FAIL( "::getCurrentSettingsComposer : caught an exception !" );
     }
 
     return xReturn;

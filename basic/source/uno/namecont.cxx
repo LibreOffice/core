@@ -1415,7 +1415,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "Problem during storing of library!\n" );
+                OSL_FAIL( "Problem during storing of library!\n" );
                 // TODO: error handling?
             }
         }
@@ -1558,7 +1558,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Problem during storing of library index file!\n" );
+            OSL_FAIL( "Problem during storing of library index file!\n" );
             // TODO: error handling?
         }
     }
@@ -2080,7 +2080,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Problem during storing of libraries!\n" );
+        OSL_FAIL( "Problem during storing of libraries!\n" );
         sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
         ErrorHandler::HandleError( nErrorCode );
     }

@@ -123,7 +123,7 @@ namespace svx
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OColumnTransferable::OColumnTransferable: could not collect essential data source attributes !");
+            OSL_FAIL("OColumnTransferable::OColumnTransferable: could not collect essential data source attributes !");
         }
 
         // If the data source is an SQL-statement and simple enough (means "select <field list> from <table> where ....")
@@ -151,7 +151,7 @@ namespace svx
             }
             catch(Exception&)
             {
-                OSL_ENSURE(sal_False, "OColumnTransferable::OColumnTransferable: could not collect essential data source attributes (part two) !");
+                OSL_FAIL("OColumnTransferable::OColumnTransferable: could not collect essential data source attributes (part two) !");
             }
         }
 
@@ -436,7 +436,7 @@ namespace svx
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "ODataAccessObjectTransferable::ODataAccessObjectTransferable: could not collect essential form attributes !");
+            OSL_FAIL("ODataAccessObjectTransferable::ODataAccessObjectTransferable: could not collect essential form attributes !");
             return;
         }
 
@@ -450,7 +450,7 @@ namespace svx
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "ODataAccessObjectTransferable::ODataAccessObjectTransferable: could not collect essential form attributes (part two) !");
+            OSL_FAIL("ODataAccessObjectTransferable::ODataAccessObjectTransferable: could not collect essential form attributes (part two) !");
             return;
         }
 
@@ -561,7 +561,7 @@ namespace svx
             return ODataAccessDescriptor(aDescriptorProps);
         }
 
-        OSL_ENSURE( sal_False, "OColumnTransferable::extractColumnDescriptor: unsupported formats only!" );
+        OSL_FAIL( "OColumnTransferable::extractColumnDescriptor: unsupported formats only!" );
         return ODataAccessDescriptor();
     }
 

@@ -892,7 +892,7 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "It must be possible to set a common password for the storage" );
+                OSL_FAIL( "It must be possible to set a common password for the storage" );
                 // TODO/LATER: set the error code in case of problem
                 // SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             }
@@ -1249,7 +1249,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Unexpected problem by locking, high probability, that the content could not be created" );
+        OSL_FAIL( "Unexpected problem by locking, high probability, that the content could not be created" );
     }
     return bResult;
 }
@@ -1443,7 +1443,7 @@ uno::Reference< embed::XStorage > SfxMedium::GetZipStorageToSign_Impl( sal_Bool 
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "No possibility to get readonly version of storage from medium!\n" );
+            OSL_FAIL( "No possibility to get readonly version of storage from medium!\n" );
         }
 
         if ( GetError() ) // do not remove warnings
@@ -1480,7 +1480,7 @@ void SfxMedium::CloseStorage()
                 xComp->dispose();
             } catch( uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "Medium's storage is already disposed!\n" );
+                OSL_FAIL( "Medium's storage is already disposed!\n" );
             }
         }
 
@@ -1813,7 +1813,7 @@ void SfxMedium::Transfer_Impl()
     {
         // makes sence only in case logic name is set
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aNameURL ) )
-            OSL_ENSURE( sal_False, "The medium name is not convertable!\n" );
+            OSL_FAIL( "The medium name is not convertable!\n" );
     }
 
     if ( aNameURL.Len() && ( !eError || (eError & ERRCODE_WARNING_MASK) ) )
@@ -2944,7 +2944,7 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
             }
             else
             {
-                OSL_ENSURE( sal_False, "Can not create a new temporary file for crash recovery!\n" );
+                OSL_FAIL( "Can not create a new temporary file for crash recovery!\n" );
             }
         }
     }
@@ -3597,7 +3597,7 @@ sal_Bool SfxMedium::SignContents_Impl( sal_Bool bScriptingContent, const ::rtl::
                 }
                 catch ( uno::Exception& )
                 {
-                    OSL_ENSURE( sal_False, "Couldn't use signing functionality!\n" );
+                    OSL_FAIL( "Couldn't use signing functionality!\n" );
                 }
 
                 CloseAndRelease();
@@ -3613,7 +3613,7 @@ sal_Bool SfxMedium::SignContents_Impl( sal_Bool bScriptingContent, const ::rtl::
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_ENSURE( sal_False, "Couldn't use signing functionality!\n" );
+                    OSL_FAIL( "Couldn't use signing functionality!\n" );
                 }
             }
         }

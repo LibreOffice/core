@@ -108,7 +108,7 @@ namespace xmloff
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OFormLayerXMLExport::examine: could not examine the draw page!");
+            OSL_FAIL("OFormLayerXMLExport::examine: could not examine the draw page!");
         }
     }
 

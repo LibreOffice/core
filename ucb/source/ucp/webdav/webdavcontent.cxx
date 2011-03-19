@@ -731,8 +731,7 @@ void SAL_CALL Content::addProperty( const rtl::OUString& Name,
     // Check property type.
     if ( !UCBDeadPropertyValue::supportsType( DefaultValue.getValueType() ) )
     {
-        OSL_ENSURE( sal_False,
-                    "Content::addProperty - Unsupported property type!" );
+        OSL_FAIL( "Content::addProperty - Unsupported property type!" );
         throw beans::IllegalTypeException();
     }
 
@@ -817,23 +816,20 @@ void SAL_CALL Content::addProperty( const rtl::OUString& Name,
                         break;
 
                     default:
-                        OSL_ENSURE( sal_False,
-                                    "Content::addProperty - "
+                        OSL_FAIL( "Content::addProperty - "
                                     "Unsupported resource type!" );
                         break;
                     }
                 }
                 catch ( uno::Exception const & )
                 {
-                    OSL_ENSURE( sal_False,
-                                "Content::addProperty - "
+                    OSL_FAIL( "Content::addProperty - "
                                 "Unable to determine resource type!" );
                 }
             }
             else
             {
-                OSL_ENSURE( sal_False,
-                            "Content::addProperty - "
+                OSL_FAIL( "Content::addProperty - "
                             "Unable to determine resource type!" );
             }
         }
@@ -911,23 +907,20 @@ void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
                             break;
 
                         default:
-                            OSL_ENSURE( sal_False,
-                                        "Content::removeProperty - "
+                            OSL_FAIL( "Content::removeProperty - "
                                         "Unsupported resource type!" );
                             break;
                     }
                 }
                 catch ( uno::Exception const & )
                 {
-                    OSL_ENSURE( sal_False,
-                                "Content::removeProperty - "
+                    OSL_FAIL( "Content::removeProperty - "
                                 "Unable to determine resource type!" );
                 }
             }
             else
             {
-                OSL_ENSURE( sal_False,
-                            "Content::removeProperty - "
+                OSL_FAIL( "Content::removeProperty - "
                             "Unable to determine resource type!" );
 //                throw beans::UnknownPropertyException();
             }
@@ -1781,8 +1774,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         catch ( DAVException const & e )
         {
-//            OSL_ENSURE( sal_False,
-//                        "Content::setPropertyValues - PROPPATCH failed!" );
+//            OSL_FAIL( //                        "Content::setPropertyValues - PROPPATCH failed!" );
 
 #if 1
             cancelCommandExecution( e, xEnv );
@@ -2234,7 +2226,7 @@ void Content::insert(
 
     if ( aEscapedTitle.getLength() == 0 )
     {
-        OSL_ENSURE( sal_False, "Content::insert - Title missing!" );
+        OSL_FAIL( "Content::insert - Title missing!" );
 
         uno::Sequence< rtl::OUString > aProps( 1 );
         aProps[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
@@ -2312,8 +2304,7 @@ void Content::insert(
 //                            break;
 
                     default:
-                        OSL_ENSURE( sal_False,
-                                    "Content::insert - "
+                        OSL_FAIL( "Content::insert - "
                                     "Unknown interaction selection!" );
                         throw ucb::CommandFailedException(
                                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -2837,7 +2828,7 @@ sal_Bool Content::exchangeIdentity(
     // Already persistent?
     if ( m_bTransient )
     {
-        OSL_ENSURE( sal_False, "Content::exchangeIdentity - Not persistent!" );
+        OSL_FAIL( "Content::exchangeIdentity - Not persistent!" );
         return sal_False;
     }
 
@@ -2886,8 +2877,7 @@ sal_Bool Content::exchangeIdentity(
         }
     }
 
-    OSL_ENSURE( sal_False,
-                "Content::exchangeIdentity - "
+    OSL_FAIL( "Content::exchangeIdentity - "
                 "Panic! Cannot exchange identity!" );
     return sal_False;
 }

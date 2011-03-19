@@ -233,7 +233,7 @@ Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const ::rtl::OUSt
                 xDriver = new ODriverWrapper(xDriverProxy, pConnectionPool);
             }
             else
-                OSL_ENSURE(sal_False, "OConnectionPool::getDriverByURL: could not instantiate a proxy factory!");
+                OSL_FAIL("OConnectionPool::getDriverByURL: could not instantiate a proxy factory!");
         }
     }
 
@@ -363,7 +363,7 @@ Reference< XInterface > OPoolCollection::createWithServiceFactory(const ::rtl::O
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(sal_False, "createWithServiceFactory: error while instantiating the provider service!");
+        OSL_FAIL("createWithServiceFactory: error while instantiating the provider service!");
     }
     return xInterface;
 }
@@ -382,7 +382,7 @@ Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMu
             Reference< XServiceInfo > xSI(_rxConfProvider, UNO_QUERY);
             if (!xSI.is())
             {
-                OSL_ENSURE(sal_False, "::createWithProvider: no XServiceInfo interface on the provider!");
+                OSL_FAIL("::createWithProvider: no XServiceInfo interface on the provider!");
             }
             else
             {
@@ -392,7 +392,7 @@ Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMu
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(sal_False, "::createWithProvider: unable to check the service conformance of the provider given!");
+            OSL_FAIL("::createWithProvider: unable to check the service conformance of the provider given!");
         }
     }
 #endif
@@ -413,7 +413,7 @@ Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMu
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OConfigurationTreeRoot::createWithProvider: caught an exception while creating the access object!");
+            OSL_FAIL("OConfigurationTreeRoot::createWithProvider: caught an exception while creating the access object!");
         }
     }
     return xInterface;
@@ -430,25 +430,24 @@ Reference<XInterface> OPoolCollection::openNode(const ::rtl::OUString& _rPath,co
         if (xDirectAccess.is() && xDirectAccess->hasByName(_rPath))
         {
             if (!::cppu::extractInterface(xNode, xDirectAccess->getByName(_rPath)))
-                OSL_ENSURE(sal_False, "OConfigurationNode::openNode: could not open the node!");
+                OSL_FAIL("OConfigurationNode::openNode: could not open the node!");
         }
         else if (xHierarchyAccess.is())
         {
             if (!::cppu::extractInterface(xNode, xHierarchyAccess->getByHierarchicalName(_rPath)))
-                OSL_ENSURE(sal_False, "OConfigurationNode::openNode: could not open the node!");
+                OSL_FAIL("OConfigurationNode::openNode: could not open the node!");
         }
 
     }
     catch(const NoSuchElementException&)
     {
-        OSL_ENSURE(sal_False,
-                    ::rtl::OString("::openNode: there is no element named ")
+        OSL_FAIL(::rtl::OString("::openNode: there is no element named ")
                 +=  ::rtl::OString(_rPath.getStr(), _rPath.getLength(), RTL_TEXTENCODING_ASCII_US)
                 +=  ::rtl::OString("!"));
     }
     catch(Exception&)
     {
-        OSL_ENSURE(sal_False, "OConfigurationNode::openNode: caught an exception while retrieving the node!");
+        OSL_FAIL("OConfigurationNode::openNode: caught an exception while retrieving the node!");
     }
     return xNode;
 }
@@ -472,8 +471,7 @@ Any OPoolCollection::getNodeValue(const ::rtl::OUString& _rPath,const Reference<
     catch(NoSuchElementException& e)
     {
         OSL_UNUSED( e );    // make compiler happy
-        OSL_ENSURE(sal_False,
-            ::rtl::OString("::getNodeValue: caught a NoSuchElementException while trying to open ")
+        OSL_FAIL(::rtl::OString("::getNodeValue: caught a NoSuchElementException while trying to open ")
         +=  ::rtl::OString(e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US)
         +=  ::rtl::OString("!"));
     }

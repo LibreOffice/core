@@ -299,7 +299,7 @@ void SAL_CALL CAsyncEventNotifier::run()
                         }
                         catch(uno::RuntimeException&)
                         {
-                            OSL_ENSURE(sal_False,"RuntimeException during event dispatching");
+                            OSL_FAIL("RuntimeException during event dispatching");
                         }
                     }
                 }

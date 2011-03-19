@@ -141,7 +141,7 @@ namespace param
                 return pProperties->Name;
         }
 
-        OSL_ENSURE( sal_False, "ParameterWrapper::impl_getPseudoAggregatePropertyName: invalid argument!" );
+        OSL_FAIL( "ParameterWrapper::impl_getPseudoAggregatePropertyName: invalid argument!" );
         return ::rtl::OUString();
     }
 

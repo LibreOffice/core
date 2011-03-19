@@ -663,7 +663,7 @@ sal_Bool OEvoabTable::setColumnAliases()
                 }
             }
             else
-                OSL_ENSURE( sal_False, "OEvoabTable::setColumnAliases: did not find one of the aliases!" );
+                OSL_FAIL( "OEvoabTable::setColumnAliases: did not find one of the aliases!" );
         }
         if(!bFound)
             aColumnFinalName = aColumnReadName;

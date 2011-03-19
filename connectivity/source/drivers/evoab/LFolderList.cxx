@@ -474,7 +474,7 @@ sal_Bool OEvoabFolderList::seekRow(IResultSetHelper::Movement eCursorPosition)
             break;
 
         default:
-            OSL_ENSURE( sal_False, "OEvoabFolderList::seekRow: unsupported positioning!" );
+            OSL_FAIL( "OEvoabFolderList::seekRow: unsupported positioning!" );
             break;
     }
 

@@ -257,8 +257,7 @@ sal_Int32 SAL_CALL UcbContentProviderProxy::compareContentIds(
     if ( xProvider.is() )
         return xProvider->compareContentIds( Id1, Id2 );
 
-    // OSL_ENSURE( sal_False,
-    // "UcbContentProviderProxy::compareContentIds - No provider!" );
+    // OSL_FAIL( // "UcbContentProviderProxy::compareContentIds - No provider!" );
 
     // @@@ What else?
     return 0;
@@ -320,8 +319,7 @@ UcbContentProviderProxy::deregisterInstance( const OUString& Template,
             }
             catch ( IllegalIdentifierException const & )
             {
-                OSL_ENSURE( sal_False,
-                    "UcbContentProviderProxy::deregisterInstance - "
+                OSL_FAIL( "UcbContentProviderProxy::deregisterInstance - "
                     "Caught IllegalIdentifierException!" );
             }
         }
@@ -383,8 +381,7 @@ UcbContentProviderProxy::getContentProvider()
                 }
                 catch ( IllegalIdentifierException const & )
                 {
-                    OSL_ENSURE( sal_False,
-                        "UcbContentProviderProxy::getContentProvider - "
+                    OSL_FAIL( "UcbContentProviderProxy::getContentProvider - "
                         "Caught IllegalIdentifierException!" );
                 }
 

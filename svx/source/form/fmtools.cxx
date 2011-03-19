@@ -166,7 +166,7 @@ void displayException(const Any& _rExcept, Window* _pParent)
     }
     catch(Exception&)
     {
-        OSL_ENSURE(sal_False, "displayException: could not display the error message!");
+        OSL_FAIL("displayException: could not display the error message!");
     }
 }
 

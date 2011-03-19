@@ -176,7 +176,7 @@ void SessionListener::StoreSession( sal_Bool bAsync )
         xDispatch->dispatch(aURL, args);
     } catch (com::sun::star::uno::Exception& e) {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
-        OSL_ENSURE(sal_False, aMsg.getStr());
+        OSL_FAIL(aMsg.getStr());
         // save failed, but tell manager to go on if we havent yet dispatched the request
         // in case of synchronous saving the notification is done by the caller
         if ( bAsync && m_rSessionManager.is() )
@@ -204,7 +204,7 @@ void SessionListener::QuitSessionQuietly()
         xDispatch->dispatch(aURL, args);
     } catch (com::sun::star::uno::Exception& e) {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
-        OSL_ENSURE(sal_False, aMsg.getStr());
+        OSL_FAIL(aMsg.getStr());
     }
 }
 
@@ -283,7 +283,7 @@ sal_Bool SAL_CALL SessionListener::doRestore()
 
     } catch (com::sun::star::uno::Exception& e) {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
-        OSL_ENSURE(sal_False, aMsg.getStr());
+        OSL_FAIL(aMsg.getStr());
     }
 
     return m_bRestored;

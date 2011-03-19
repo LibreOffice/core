@@ -459,7 +459,7 @@ sal_Int16 SAL_CALL CFilePicker::execute() throw(uno::RuntimeException)
     }
     else
     {
-        OSL_ENSURE(sal_False, "Could not start event notifier thread!");
+        OSL_FAIL("Could not start event notifier thread!");
 
         throw uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Error executing dialog")),

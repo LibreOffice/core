@@ -287,7 +287,7 @@ void FmPropBrw::Resize()
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmPropBrw::Resize: caught an exception!" );
+            OSL_FAIL( "FmPropBrw::Resize: caught an exception!" );
         }
     }
 }
@@ -336,7 +336,7 @@ FmPropBrw::~FmPropBrw()
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "FmPropBrw::getCurrentPage: caught an exception while retrieving the current page!" );
+        OSL_FAIL( "FmPropBrw::getCurrentPage: caught an exception while retrieving the current page!" );
     }
     return sCurrentPage;
 }
@@ -356,7 +356,7 @@ void FmPropBrw::implDetachController()
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmPropBrw::implDetachController: caught an exception while resetting the component!" );
+            OSL_FAIL( "FmPropBrw::implDetachController: caught an exception while resetting the component!" );
         }
     }
 
@@ -383,7 +383,7 @@ sal_Bool FmPropBrw::Close()
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmPropBrw::Close: caught an exception while asking the controller!" );
+            OSL_FAIL( "FmPropBrw::Close: caught an exception while asking the controller!" );
         }
     }
 
@@ -445,7 +445,7 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmPropBrw::implSetNewSelection: caught an unexpected exception!" );
+            OSL_FAIL( "FmPropBrw::implSetNewSelection: caught an unexpected exception!" );
             return;
         }
 
@@ -703,7 +703,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
                     }
                     catch( const Exception& )
                     {
-                        OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
+                        OSL_FAIL( "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
                     }
                 }
 

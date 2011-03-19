@@ -628,7 +628,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
     catch(const Exception& e)
     {
         (void)e;
-        OSL_ENSURE(sal_False, "FmFormPageImpl::findFormForDataSource: caught an exception!");
+        OSL_FAIL("FmFormPageImpl::findFormForDataSource: caught an exception!");
     }
 
     if (sLookupName == sFormDataSourceName)

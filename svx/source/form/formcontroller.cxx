@@ -3659,7 +3659,7 @@ Reference< XControl > FormController::locateControl( const Reference< XControlMo
                     return *pControls;
             }
         }
-        OSL_ENSURE( sal_False, "FormController::locateControl: did not find a control for this model!" );
+        OSL_FAIL( "FormController::locateControl: did not find a control for this model!" );
     }
     catch( const Exception& )
     {
@@ -4220,7 +4220,7 @@ void SAL_CALL FormController::addStatusListener( const Reference< XStatusListene
         }
     }
     else
-        OSL_ENSURE(sal_False, "FormController::addStatusListener: invalid (unsupported) URL!");
+        OSL_FAIL("FormController::addStatusListener: invalid (unsupported) URL!");
 }
 
 //------------------------------------------------------------------------------

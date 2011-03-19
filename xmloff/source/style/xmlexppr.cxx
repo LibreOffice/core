@@ -702,7 +702,7 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
         }
         else
         {
-            OSL_ENSURE(sal_False, "here is no TypeProvider or the ImplId is wrong");
+            OSL_FAIL("here is no TypeProvider or the ImplId is wrong");
             bDelInfo = sal_True;
         }
     }

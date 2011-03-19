@@ -408,7 +408,7 @@ SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell* pObjectShell )
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Not possible to lock the frame window!\n" );
+            OSL_FAIL( "Not possible to lock the frame window!\n" );
         }
     }
 }
@@ -452,7 +452,7 @@ void SfxOwnFramesLocker::UnlockFrames()
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Can't unlock the frame window!\n" );
+            OSL_FAIL( "Can't unlock the frame window!\n" );
         }
     }
 }
@@ -2579,7 +2579,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                     }
                     else
                     {
-                        OSL_ENSURE( sal_False, "Unexpected scenario!\n" );
+                        OSL_FAIL( "Unexpected scenario!\n" );
                     }
                 }
 

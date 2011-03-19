@@ -855,7 +855,7 @@ namespace connectivity
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "lcl_getSystemLocale: caught an exception!" );
+                OSL_FAIL( "lcl_getSystemLocale: caught an exception!" );
             }
             if ( !sLocaleString.getLength() )
             {
@@ -893,7 +893,7 @@ namespace connectivity
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ODriverDelegator::onConnectedNewDatabase: caught an exception!" );
+            OSL_FAIL( "ODriverDelegator::onConnectedNewDatabase: caught an exception!" );
         }
     }
 

@@ -392,7 +392,7 @@ sal_uInt32 CheckPasswd_Impl
             }
             else
             {
-                OSL_ENSURE( sal_False, "A storage must implement XPropertySet interface!" );
+                OSL_FAIL( "A storage must implement XPropertySet interface!" );
                 nRet = ERRCODE_SFX_CANTGETPASSWD;
             }
         }

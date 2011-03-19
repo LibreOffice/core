@@ -340,7 +340,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                 {
                     OUString aMsg = OUString(RTL_CONSTASCII_USTRINGPARAM(
                         "Desktop::OpenDefault() IllegalArgumentException while calling XNotifyingDispatch: "));
-                    OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+                    OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
                 }
             }
         }
@@ -399,14 +399,14 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                 OUString aMsg = OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "Dispatchwatcher IllegalArgumentException while calling loadComponentFromURL: "))
                     + iae.Message;
-                OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+                OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
             }
             catch (com::sun::star::io::IOException& ioe)
             {
                 OUString aMsg = OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "Dispatchwatcher IOException while calling loadComponentFromURL: "))
                     + ioe.Message;
-                OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+                OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
             }
             if ( aDispatchRequest.aRequestType == REQUEST_OPEN ||
                  aDispatchRequest.aRequestType == REQUEST_VIEW ||

@@ -227,7 +227,7 @@ sal_Bool SfxInstanceCloseGuard_Impl::Init_Impl( const uno::Reference< util::XClo
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Could not register close listener!\n" );
+            OSL_FAIL( "Could not register close listener!\n" );
         }
     }
 

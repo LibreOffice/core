@@ -97,8 +97,7 @@ static ContentType lcl_getContentType( const rtl::OUString & rType )
         return STREAM;
     else
     {
-        OSL_ENSURE( sal_False,
-                    "Content::Content - unsupported content type string" );
+        OSL_FAIL( "Content::Content - unsupported content type string" );
         return STREAM;
     }
 }
@@ -143,7 +142,7 @@ Content* Content::create(
          !Info.Type.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( TDOC_STREAM_CONTENT_TYPE ) ) )
     {
-        OSL_ENSURE( sal_False, "Content::create - unsupported content type!" );
+        OSL_FAIL( "Content::create - unsupported content type!" );
         return 0;
     }
 
@@ -638,7 +637,7 @@ uno::Any SAL_CALL Content::execute(
         ucb::TransferInfo aInfo;
         if ( !( aCommand.Argument >>= aInfo ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -681,7 +680,7 @@ uno::Any SAL_CALL Content::execute(
         ucb::ContentInfo aInfo;
         if ( !( aCommand.Argument >>= aInfo ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -753,8 +752,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
         // streams cannot be created as direct children of document root
         if ( !bCreateFolder && ( m_aProps.getType() == DOCUMENT ) )
         {
-            OSL_ENSURE( sal_False,
-                        "Content::createNewContent - streams cannot be "
+            OSL_FAIL( "Content::createNewContent - streams cannot be "
                         "created as direct children of document root!" );
             return uno::Reference< ucb::XContent >();
         }
@@ -763,8 +761,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
              !Info.Type.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( TDOC_STREAM_CONTENT_TYPE ) ) )
         {
-            OSL_ENSURE( sal_False,
-                        "Content::createNewContent - unsupported type!" );
+            OSL_FAIL( "Content::createNewContent - unsupported type!" );
             return uno::Reference< ucb::XContent >();
         }
 
@@ -788,8 +785,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     }
     else
     {
-        OSL_ENSURE( sal_False,
-                    "createNewContent called on non-contentcreator object!" );
+        OSL_FAIL( "createNewContent called on non-contentcreator object!" );
         return uno::Reference< ucb::XContent >();
     }
 }
@@ -890,8 +886,7 @@ sal_Bool Content::exchangeIdentity(
     // Already persistent?
     if ( m_eState != PERSISTENT )
     {
-        OSL_ENSURE( sal_False,
-                    "Content::exchangeIdentity - Not persistent!" );
+        OSL_FAIL( "Content::exchangeIdentity - Not persistent!" );
         return sal_False;
     }
 
@@ -899,7 +894,7 @@ sal_Bool Content::exchangeIdentity(
     ContentType eType = m_aProps.getType();
     if ( ( eType == ROOT ) || ( eType == DOCUMENT ) )
     {
-        OSL_ENSURE( sal_False, "Content::exchangeIdentity - "
+        OSL_FAIL( "Content::exchangeIdentity - "
                                "Not supported by root or document!" );
         return sal_False;
     }
@@ -952,8 +947,7 @@ sal_Bool Content::exchangeIdentity(
         }
     }
 
-    OSL_ENSURE( sal_False,
-                "Content::exchangeIdentity - "
+    OSL_FAIL( "Content::exchangeIdentity - "
                 "Panic! Cannot exchange identity!" );
     return sal_False;
 }
@@ -3114,8 +3108,7 @@ ContentProperties::getCreatableContentsInfo() const
     }
     else
     {
-        OSL_ENSURE( sal_False,
-                    "getCreatableContentsInfo called on non-contentcreator "
+        OSL_FAIL( "getCreatableContentsInfo called on non-contentcreator "
                     "object!" );
 
         return uno::Sequence< ucb::ContentInfo >( 0 );

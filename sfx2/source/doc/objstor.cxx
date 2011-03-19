@@ -173,7 +173,7 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
         }
         catch ( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "The document seems to be in the collection already!\n" );
+            OSL_FAIL( "The document seems to be in the collection already!\n" );
         }
     }
 }
@@ -418,7 +418,7 @@ sal_Bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage
         }
         catch ( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Can't check storage's mediatype!\n" );
+            OSL_FAIL( "Can't check storage's mediatype!\n" );
         }
     }
     else
@@ -1412,7 +1412,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                                             xMedStorage ) )
             {
                 // TODO: error handling
-                OSL_ENSURE( sal_False, "Couldn't store thumbnail representation!" );
+                OSL_FAIL( "Couldn't store thumbnail representation!" );
             }
         }
 
@@ -1931,7 +1931,7 @@ sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, sal_Bool bCommit )
             ::rtl::OUString aMediaType;
             if ( !(a>>=aMediaType) || !aMediaType.getLength() )
             {
-                OSL_ENSURE( sal_False, "The mediatype must be set already!\n" );
+                OSL_FAIL( "The mediatype must be set already!\n" );
                 SetupStorage( xNewStor, SOFFICE_FILEFORMAT_CURRENT, sal_False );
             }
 
@@ -3410,7 +3410,7 @@ sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Cant check storage consistency!\n" );
+        OSL_FAIL( "Cant check storage consistency!\n" );
     }
 
     return sal_True;

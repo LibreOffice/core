@@ -271,7 +271,7 @@ bool LanguageSelection::prepareLanguage()
         catch (Exception& e)
         {
             OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(sal_False, aMsg.getStr());
+            OSL_FAIL(aMsg.getStr());
 
         }
     }
@@ -399,7 +399,7 @@ Reference< XNameAccess > LanguageSelection::getConfigAccess(const sal_Char* pPat
     } catch (com::sun::star::uno::Exception& e)
     {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, aMsg.getStr());
+        OSL_FAIL(aMsg.getStr());
     }
     return xNameAccess;
 }
@@ -549,7 +549,7 @@ void LanguageSelection::resetUserLanguage()
     catch ( Exception& e)
     {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, aMsg.getStr());
+        OSL_FAIL(aMsg.getStr());
         m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
     }
 }

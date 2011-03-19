@@ -214,7 +214,7 @@ namespace xmloff
                         pSequenceIterator = new OSequenceIterator< sal_Int64 >(aValue);
                         break;
                     default:
-                        OSL_ENSURE(sal_False, "OPropertyExport::exportRemainingProperties: unsupported sequence tyoe !");
+                        OSL_FAIL("OPropertyExport::exportRemainingProperties: unsupported sequence tyoe !");
                         break;
                 }
                 if (pSequenceIterator)
@@ -573,7 +573,7 @@ namespace xmloff
                 break;
             case TypeClass_HYPER:
                 // TODO
-                OSL_ENSURE(sal_False, "OPropertyExport::implConvertAny: missing implementation for sal_Int64!");
+                OSL_FAIL("OPropertyExport::implConvertAny: missing implementation for sal_Int64!");
                 break;
             case TypeClass_ENUM:
             {
@@ -615,7 +615,7 @@ namespace xmloff
                     // if any other types are added here, please remember to adjust implGetPropertyXMLType accordingly
 
                     // no more options ...
-                    OSL_ENSURE(sal_False, "OPropertyExport::implConvertAny: unsupported value type!");
+                    OSL_FAIL("OPropertyExport::implConvertAny: unsupported value type!");
                     break;
                 }
                 // let the unit converter format is as string
@@ -705,8 +705,7 @@ namespace xmloff
             // the property must exist
             if (!m_xPropertyInfo->hasPropertyByName(_rPropertyName))
             {
-                OSL_ENSURE(sal_False,
-                    ::rtl::OString("OPropertyExport::dbg_implCheckProperty: no property with the name ") +=
+                OSL_FAIL(::rtl::OString("OPropertyExport::dbg_implCheckProperty: no property with the name ") +=
                     ::rtl::OString(_rPropertyName.getStr(), _rPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US) +=
                     ::rtl::OString("!"));
                 return;
@@ -721,7 +720,7 @@ namespace xmloff
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OPropertyExport::dbg_implCheckProperty: caught an exception, could not check the property!");
+            OSL_FAIL("OPropertyExport::dbg_implCheckProperty: caught an exception, could not check the property!");
         }
     }
 #endif // DBG_UTIL - dbg_implCheckProperty

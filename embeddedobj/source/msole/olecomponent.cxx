@@ -1207,7 +1207,7 @@ awt::Size OleComponent::GetExtent( sal_Int64 nAspect )
                         bGotSize = sal_True;
                     }
                     else
-                        OSL_ENSURE( sal_False, "Unexpected size is provided!" );
+                        OSL_FAIL( "Unexpected size is provided!" );
                 }
             }
         }

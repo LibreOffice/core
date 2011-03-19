@@ -215,7 +215,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         }
         else
         {
-            OSL_ENSURE( sal_False, "Unacceptable state switch!\n" );
+            OSL_FAIL( "Unacceptable state switch!\n" );
             throw uno::RuntimeException(); // TODO
         }
     }
@@ -287,7 +287,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             }
             else
             {
-                OSL_ENSURE( sal_False, "Unacceptable state switch!\n" );
+                OSL_FAIL( "Unacceptable state switch!\n" );
                 throw uno::RuntimeException(); // TODO
             }
         }
@@ -360,7 +360,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         }
         else
         {
-            OSL_ENSURE( sal_False, "Unacceptable state switch!\n" );
+            OSL_FAIL( "Unacceptable state switch!\n" );
             throw uno::RuntimeException(); // TODO
         }
     }
@@ -373,7 +373,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         }
         else
         {
-            OSL_ENSURE( sal_False, "Unacceptable state switch!\n" );
+            OSL_FAIL( "Unacceptable state switch!\n" );
             throw uno::RuntimeException(); // TODO
         }
     }

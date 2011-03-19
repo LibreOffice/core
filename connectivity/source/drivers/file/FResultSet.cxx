@@ -1725,7 +1725,7 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
         }
         catch (Exception&)
         {
-            OSL_ENSURE(sal_False, "OResultSet::setBoundedColumns: caught an Exception!");
+            OSL_FAIL("OResultSet::setBoundedColumns: caught an Exception!");
         }
     }
     // in this case we got more select columns as columns exist in the table

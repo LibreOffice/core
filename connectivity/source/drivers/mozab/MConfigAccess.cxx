@@ -92,7 +92,7 @@ namespace connectivity
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "createDriverConfigNode: caught an exception while accessing the driver's config node!" );
+                OSL_FAIL( "createDriverConfigNode: caught an exception while accessing the driver's config node!" );
             }
 
             // outta here
@@ -149,7 +149,7 @@ namespace connectivity
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "getDescription: caught an exception!" );
+                    OSL_FAIL( "getDescription: caught an exception!" );
                 }
             }
             if (sDescription.getLength() == 0)
@@ -177,7 +177,7 @@ namespace connectivity
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "getPreferredProfileName: caught an exception!" );
+                    OSL_FAIL( "getPreferredProfileName: caught an exception!" );
                 }
             }
             return sPreferredName;

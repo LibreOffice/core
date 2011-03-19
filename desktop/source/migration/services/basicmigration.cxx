@@ -177,14 +177,14 @@ namespace migration
                     ::rtl::OString aMsg( "BasicMigration::copyFiles: cannot copy " );
                     aMsg += ::rtl::OUStringToOString( *aI, RTL_TEXTENCODING_UTF8 ) + " to "
                          +  ::rtl::OUStringToOString( sTargetName, RTL_TEXTENCODING_UTF8 );
-                    OSL_ENSURE( sal_False, aMsg.getStr() );
+                    OSL_FAIL( aMsg.getStr() );
                 }
                 ++aI;
             }
         }
         else
         {
-            OSL_ENSURE( sal_False, "BasicMigration::copyFiles: no user installation!" );
+            OSL_FAIL( "BasicMigration::copyFiles: no user installation!" );
         }
     }
 

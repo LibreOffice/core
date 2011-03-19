@@ -211,7 +211,7 @@ namespace sfx2
                     nMacroExecutionMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
                     break;
                 default:
-                    OSL_ENSURE( sal_False, "DocumentMacroMode::adjustMacroMode: unexpected macro security level!" );
+                    OSL_FAIL( "DocumentMacroMode::adjustMacroMode: unexpected macro security level!" );
                     nMacroExecutionMode = MacroExecMode::NEVER_EXECUTE;
             }
 

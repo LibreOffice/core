@@ -147,7 +147,7 @@ HierarchyEntry::HierarchyEntry(
     if ( nPos > HIERARCHY_URL_SCHEME_LENGTH )
         m_aName = rURL.copy( nPos + 1 );
     else
-        OSL_ENSURE( sal_False, "HierarchyEntry - Invalid URL!" );
+        OSL_FAIL( "HierarchyEntry - Invalid URL!" );
 }
 
 //=========================================================================
@@ -196,8 +196,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
             if ( !( xRootReadAccess->getByHierarchicalName( aTitlePath )
                     >>= aValue ) )
             {
-                OSL_ENSURE( sal_False,
-                            "HierarchyEntry::getData - "
+                OSL_FAIL( "HierarchyEntry::getData - "
                             "Got no Title value!" );
                 return sal_False;
             }
@@ -210,8 +209,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
             if ( !( xRootReadAccess->getByHierarchicalName( aTargetURLPath )
                     >>= aValue ) )
             {
-                OSL_ENSURE( sal_False,
-                            "HierarchyEntry::getData - "
+                OSL_FAIL( "HierarchyEntry::getData - "
                             "Got no TargetURL value!" );
                 return sal_False;
             }
@@ -248,8 +246,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
                     }
                     else
                     {
-                        OSL_ENSURE( sal_False,
-                                    "HierarchyEntry::getData - "
+                        OSL_FAIL( "HierarchyEntry::getData - "
                                     "Unknown Type value!" );
                         return sal_False;
                     }
@@ -268,8 +265,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
     {
         // getByHierarchicalName
 
-        OSL_ENSURE( sal_False,
-                    "HierarchyEntry::getData - caught NoSuchElementException!" );
+        OSL_FAIL( "HierarchyEntry::getData - caught NoSuchElementException!" );
     }
     return sal_False;
 }
@@ -474,40 +470,35 @@ sal_Bool HierarchyEntry::setData(
     {
         // replaceByName, insertByName
 
-        OSL_ENSURE(
-            sal_False,
+        OSL_FAIL(
             "HierarchyEntry::setData - caught IllegalArgumentException!" );
     }
     catch ( container::NoSuchElementException const & )
     {
         // replaceByName, getByName
 
-        OSL_ENSURE(
-            sal_False,
+        OSL_FAIL(
             "HierarchyEntry::setData - caught NoSuchElementException!" );
     }
     catch ( container::ElementExistException const & )
     {
         // insertByName
 
-        OSL_ENSURE(
-            sal_False,
+        OSL_FAIL(
             "HierarchyEntry::setData - caught ElementExistException!" );
     }
     catch ( lang::WrappedTargetException const & )
     {
         // replaceByName, insertByName, getByName, commitChanges
 
-        OSL_ENSURE(
-            sal_False,
+        OSL_FAIL(
             "HierarchyEntry::setData - caught WrappedTargetException!" );
     }
     catch ( uno::Exception const & )
     {
         // createInstance, createInstanceWithArguments
 
-        OSL_ENSURE(
-            sal_False,
+        OSL_FAIL(
             "HierarchyEntry::setData - caught Exception!" );
     }
 
@@ -534,7 +525,7 @@ sal_Bool HierarchyEntry::move(
         aNewKey = rNewURL.copy( nURLPos + 1 );
     else
     {
-        OSL_ENSURE( sal_False, "HierarchyEntry::move - Invalid URL!" );
+        OSL_FAIL( "HierarchyEntry::move - Invalid URL!" );
         return sal_False;
     }
 
@@ -635,7 +626,7 @@ sal_Bool HierarchyEntry::move(
     {
         // createInstance, createInstanceWithArguments
 
-        OSL_ENSURE( sal_False, "HierarchyEntry::move - caught Exception!" );
+        OSL_FAIL( "HierarchyEntry::move - caught Exception!" );
         return sal_False;
     }
 
@@ -677,16 +668,14 @@ sal_Bool HierarchyEntry::move(
     {
         // getByName
 
-        OSL_ENSURE( sal_False,
-                    "HierarchyEntry::move - caught NoSuchElementException!" );
+        OSL_FAIL( "HierarchyEntry::move - caught NoSuchElementException!" );
         return sal_False;
     }
     catch ( lang::WrappedTargetException const & )
     {
         // getByName
 
-        OSL_ENSURE( sal_False,
-                    "HierarchyEntry::move - caught WrappedTargetException!" );
+        OSL_FAIL( "HierarchyEntry::move - caught WrappedTargetException!" );
         return sal_False;
     }
 
@@ -703,8 +692,7 @@ sal_Bool HierarchyEntry::move(
     {
         // getByName, removeByName
 
-        OSL_ENSURE( sal_False,
-                    "HierarchyEntry::move - caught NoSuchElementException!" );
+        OSL_FAIL( "HierarchyEntry::move - caught NoSuchElementException!" );
         return sal_False;
     }
 
@@ -786,16 +774,14 @@ sal_Bool HierarchyEntry::move(
     {
         // replaceByName, insertByName, getByName
 
-        OSL_ENSURE( sal_False,
-                    "HierarchyEntry::move - caught NoSuchElementException!" );
+        OSL_FAIL( "HierarchyEntry::move - caught NoSuchElementException!" );
         return sal_False;
     }
     catch ( lang::IllegalArgumentException const & )
     {
         // replaceByName, insertByName
 
-        OSL_ENSURE(
-            sal_False,
+        OSL_FAIL(
             "HierarchyEntry::move - caught IllegalArgumentException!" );
         return sal_False;
     }
@@ -803,16 +789,14 @@ sal_Bool HierarchyEntry::move(
     {
         // insertByName
 
-        OSL_ENSURE( sal_False,
-                    "HierarchyEntry::move - caught ElementExistException!" );
+        OSL_FAIL( "HierarchyEntry::move - caught ElementExistException!" );
         return sal_False;
     }
     catch ( lang::WrappedTargetException const & )
     {
         // replaceByName, insertByName, getByName
 
-        OSL_ENSURE( sal_False,
-                    "HierarchyEntry::move - caught WrappedTargetException!" );
+        OSL_FAIL( "HierarchyEntry::move - caught WrappedTargetException!" );
         return sal_False;
     }
 
@@ -916,24 +900,21 @@ sal_Bool HierarchyEntry::remove()
     {
         // getByName, removeByName
 
-        OSL_ENSURE(
-            sal_False,
+        OSL_FAIL(
             "HierarchyEntry::remove - caught NoSuchElementException!" );
     }
     catch ( lang::WrappedTargetException const & )
     {
         // getByName, commitChanges
 
-        OSL_ENSURE(
-            sal_False,
+        OSL_FAIL(
             "HierarchyEntry::remove - caught WrappedTargetException!" );
     }
     catch ( uno::Exception const & )
     {
         // createInstance, createInstanceWithArguments
 
-        OSL_ENSURE( sal_False,
-                    "HierarchyEntry::remove - caught Exception!" );
+        OSL_FAIL( "HierarchyEntry::remove - caught Exception!" );
     }
 
     return sal_False;
@@ -995,14 +976,12 @@ sal_Bool HierarchyEntry::first( iterator& it )
         {
             // getByHierarchicalName
 
-            OSL_ENSURE(
-                sal_False,
+            OSL_FAIL(
                 "HierarchyEntry::first - caught NoSuchElementException!" );
         }
         catch ( uno::Exception const & )
         {
-            OSL_ENSURE( sal_False,
-                    "HierarchyEntry::first - caught Exception!" );
+            OSL_FAIL( "HierarchyEntry::first - caught Exception!" );
         }
     }
 
@@ -1081,8 +1060,7 @@ HierarchyEntry::getRootReadAccess()
         {
             if ( m_bTriedToGetRootReadAccess ) // #82494#
             {
-                OSL_ENSURE( sal_False,
-                            "HierarchyEntry::getRootReadAccess - "
+                OSL_FAIL( "HierarchyEntry::getRootReadAccess - "
                             "Unable to read any config data! -> #82494#" );
                 return uno::Reference< container::XHierarchicalNameAccess >();
             }
@@ -1126,8 +1104,7 @@ HierarchyEntry::getRootReadAccess()
             {
                 // createInstance, createInstanceWithArguments
 
-                OSL_ENSURE( sal_False,
-                            "HierarchyEntry::getRootReadAccess - "
+                OSL_FAIL( "HierarchyEntry::getRootReadAccess - "
                             "caught Exception!" );
             }
         }
@@ -1211,8 +1188,7 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
                     }
                     else
                     {
-                        OSL_ENSURE( sal_False,
-                                    "HierarchyEntry::getData - "
+                        OSL_FAIL( "HierarchyEntry::getData - "
                                     "Unknown Type value!" );
                     }
                 }

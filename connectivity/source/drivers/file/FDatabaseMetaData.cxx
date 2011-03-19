@@ -175,7 +175,7 @@ namespace
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "isCaseSensitiveParentFolder: caught an unexpected exception!" );
+            OSL_FAIL( "isCaseSensitiveParentFolder: caught an unexpected exception!" );
         }
 
         return nIsCS;

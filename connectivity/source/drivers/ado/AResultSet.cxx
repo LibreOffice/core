@@ -112,7 +112,7 @@ void OResultSet::construct()
     osl_incrementInterlockedCount( &m_refCount );
     if (!m_pRecordSet)
     {
-        OSL_ENSURE( sal_False, "OResultSet::construct: no RecordSet!" );
+        OSL_FAIL( "OResultSet::construct: no RecordSet!" );
         Reference< XInterface > xInt( *this );
         osl_decrementInterlockedCount( &m_refCount );
         ::dbtools::throwFunctionSequenceException( xInt );

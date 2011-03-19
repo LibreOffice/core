@@ -638,7 +638,7 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Looks like stream was closed already" );
+        OSL_FAIL( "Looks like stream was closed already" );
     }
 
     return aResult;
@@ -665,7 +665,7 @@ void OCommonEmbeddedObject::SaveObject_Impl()
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "The object was not stored!\n" );
+            OSL_FAIL( "The object was not stored!\n" );
         }
     }
 }
@@ -877,7 +877,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
     }
     catch ( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Can not retrieve storage media type!\n" );
+        OSL_FAIL( "Can not retrieve storage media type!\n" );
     }
 
     if ( m_pDocHolder->GetComponent().is() )
@@ -1203,7 +1203,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
     }
     catch ( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Can not retrieve target storage media type!\n" );
+        OSL_FAIL( "Can not retrieve target storage media type!\n" );
     }
 
     try
@@ -1216,7 +1216,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
     }
     catch ( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Can not retrieve own storage media type!\n" );
+        OSL_FAIL( "Can not retrieve own storage media type!\n" );
     }
 
     sal_Bool bTryOptimization = sal_False;
@@ -1334,7 +1334,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     }
     catch ( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Can not retrieve target storage media type!\n" );
+        OSL_FAIL( "Can not retrieve target storage media type!\n" );
     }
 
     try
@@ -1347,7 +1347,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     }
     catch ( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Can not retrieve own storage media type!\n" );
+        OSL_FAIL( "Can not retrieve own storage media type!\n" );
     }
 
     PostEvent_Impl( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OnSaveAs" )) );
@@ -1623,7 +1623,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
         }
         catch ( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Can not retrieve storage media type!\n" );
+            OSL_FAIL( "Can not retrieve storage media type!\n" );
         }
 
         aGuard.clear();

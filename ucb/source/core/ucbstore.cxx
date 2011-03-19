@@ -481,38 +481,33 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
                         {
                             // insertByName
 
-                            OSL_ENSURE( sal_False,
-                                        "PropertySetRegistry::openPropertySet - "
+                            OSL_FAIL( "PropertySetRegistry::openPropertySet - "
                                         "caught IllegalArgumentException!" );
                         }
                         catch ( ElementExistException& )
                         {
                             // insertByName
 
-                            OSL_ENSURE( sal_False,
-                                        "PropertySetRegistry::openPropertySet - "
+                            OSL_FAIL( "PropertySetRegistry::openPropertySet - "
                                         "caught ElementExistException!" );
                         }
                         catch ( WrappedTargetException& )
                         {
                             // insertByName, commitChanges
 
-                            OSL_ENSURE( sal_False,
-                                        "PropertySetRegistry::openPropertySet - "
+                            OSL_FAIL( "PropertySetRegistry::openPropertySet - "
                                         "caught WrappedTargetException!" );
                         }
                         catch ( RuntimeException& )
                         {
-                            OSL_ENSURE( sal_False,
-                                        "PropertySetRegistry::openPropertySet - "
+                            OSL_FAIL( "PropertySetRegistry::openPropertySet - "
                                         "caught RuntimeException!" );
                         }
                         catch ( Exception& )
                         {
                             // createInstance
 
-                            OSL_ENSURE( sal_False,
-                                        "PropertySetRegistry::openPropertySet - "
+                            OSL_FAIL( "PropertySetRegistry::openPropertySet - "
                                         "caught Exception!" );
                         }
                     }
@@ -524,8 +519,7 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
                 }
             }
 
-            OSL_ENSURE( sal_False,
-                        "PropertySetRegistry::openPropertySet - Error!" );
+            OSL_FAIL( "PropertySetRegistry::openPropertySet - Error!" );
         }
     }
 
@@ -577,8 +571,7 @@ void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
             {
                 // removeByName
 
-                OSL_ENSURE( sal_False,
-                            "PropertySetRegistry::removePropertySet - "
+                OSL_FAIL( "PropertySetRegistry::removePropertySet - "
                             "caught NoSuchElementException!" );
                 return;
             }
@@ -586,8 +579,7 @@ void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
             {
                 // commitChanges
 
-                OSL_ENSURE( sal_False,
-                            "PropertySetRegistry::removePropertySet - "
+                OSL_FAIL( "PropertySetRegistry::removePropertySet - "
                             "caught WrappedTargetException!" );
                 return;
             }
@@ -596,7 +588,7 @@ void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
         return;
     }
 
-    OSL_ENSURE( sal_False, "PropertySetRegistry::removePropertySet - Error!" );
+    OSL_FAIL( "PropertySetRegistry::removePropertySet - Error!" );
 }
 
 //=========================================================================
@@ -743,8 +735,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
             // New key not present?
             if ( xRootNameAccess->hasByName( rNewKey ) )
             {
-                OSL_ENSURE( sal_False,
-                            "PropertySetRegistry::renamePropertySet - "
+                OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                             "New key exists!" );
                 return;
             }
@@ -789,8 +780,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                 {
                     // insertByName
 
-                    OSL_ENSURE( sal_False,
-                                "PropertySetRegistry::renamePropertySet - "
+                    OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "caught IllegalArgumentException!" );
                     return;
                 }
@@ -798,8 +788,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                 {
                     // insertByName
 
-                    OSL_ENSURE( sal_False,
-                                "PropertySetRegistry::renamePropertySet - "
+                    OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "caught ElementExistException!" );
                     return;
                 }
@@ -807,15 +796,13 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                 {
                     // insertByName, commitChanges
 
-                    OSL_ENSURE( sal_False,
-                                "PropertySetRegistry::renamePropertySet - "
+                    OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "caught WrappedTargetException!" );
                     return;
                 }
                 catch ( RuntimeException& )
                 {
-                    OSL_ENSURE( sal_False,
-                                "PropertySetRegistry::renamePropertySet - "
+                    OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "caught RuntimeException!" );
                     return;
                 }
@@ -823,8 +810,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                 {
                     // createInstance
 
-                    OSL_ENSURE( sal_False,
-                                "PropertySetRegistry::renamePropertySet - "
+                    OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "caught Exception!" );
                     return;
                 }
@@ -837,8 +823,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                                 xRootNameAccess, UNO_QUERY );
                 if ( !xRootHierNameAccess.is() )
                 {
-                    OSL_ENSURE( sal_False,
-                                "PropertySetRegistry::renamePropertySet - "
+                    OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "No hierarchical name access!" );
                     return;
                 }
@@ -855,8 +840,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                         >>= xOldNameAccess;
                     if ( !xOldNameAccess.is() )
                     {
-                        OSL_ENSURE( sal_False,
-                            "PersistentPropertySet::renamePropertySet - "
+                        OSL_FAIL( "PersistentPropertySet::renamePropertySet - "
                             "No old name access!" );
                         return;
                     }
@@ -877,8 +861,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                             >>= xNewFac;
                         if ( !xNewFac.is() )
                         {
-                            OSL_ENSURE( sal_False,
-                                "PersistentPropertySet::renamePropertySet - "
+                            OSL_FAIL( "PersistentPropertySet::renamePropertySet - "
                                 "No new factory!" );
                             return;
                         }
@@ -887,8 +870,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                                     xNewFac, UNO_QUERY );
                         if ( !xNewContainer.is() )
                         {
-                            OSL_ENSURE( sal_False,
-                                "PersistentPropertySet::renamePropertySet - "
+                            OSL_FAIL( "PersistentPropertySet::renamePropertySet - "
                                 "No new container!" );
                             return;
                         }
@@ -910,8 +892,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
 
                             if ( !xNewPropNameReplace.is() )
                             {
-                                OSL_ENSURE( sal_False,
-                                    "PersistentPropertySet::renamePropertySet - "
+                                OSL_FAIL( "PersistentPropertySet::renamePropertySet - "
                                     "No new prop name replace!" );
                                 return;
                             }
@@ -975,8 +956,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                 {
                     // insertByName, replaceByName
 
-                    OSL_ENSURE( sal_False,
-                                "PropertySetRegistry::renamePropertySet - "
+                    OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "caught IllegalArgumentException!" );
                     return;
                 }
@@ -984,8 +964,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                 {
                     // insertByName
 
-                    OSL_ENSURE( sal_False,
-                                "PropertySetRegistry::renamePropertySet - "
+                    OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "caught ElementExistException!" );
                     return;
                 }
@@ -993,8 +972,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                 {
                     // insertByName, replaceByName, commitChanges
 
-                    OSL_ENSURE( sal_False,
-                                "PropertySetRegistry::renamePropertySet - "
+                    OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "caught WrappedTargetException!" );
                     return;
                 }
@@ -1002,15 +980,13 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                 {
                     // getByHierarchicalName, replaceByName
 
-                    OSL_ENSURE( sal_False,
-                                "PropertySetRegistry::renamePropertySet - "
+                    OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "caught NoSuchElementException!" );
                     return;
                 }
                 catch ( RuntimeException& )
                 {
-                    OSL_ENSURE( sal_False,
-                                "PropertySetRegistry::renamePropertySet - "
+                    OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "caught RuntimeException!" );
                     return;
                 }
@@ -1018,8 +994,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                 {
                     // createInstance
 
-                    OSL_ENSURE( sal_False,
-                                "PropertySetRegistry::renamePropertySet - "
+                    OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "caught Exception!" );
                     return;
                 }
@@ -1042,8 +1017,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                 {
                     // removeByName
 
-                    OSL_ENSURE( sal_False,
-                                "PropertySetRegistry::renamePropertySet - "
+                    OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "caught NoSuchElementException!" );
                     return;
                 }
@@ -1051,8 +1025,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                 {
                     // commitChanges
 
-                    OSL_ENSURE( sal_False,
-                                "PropertySetRegistry::renamePropertySet - "
+                    OSL_FAIL( "PropertySetRegistry::renamePropertySet - "
                                 "caught WrappedTargetException!" );
                     return;
                 }
@@ -1060,7 +1033,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
         }
     }
 
-    OSL_ENSURE( sal_False, "PropertySetRegistry::renamePropertySet - Error!" );
+    OSL_FAIL( "PropertySetRegistry::renamePropertySet - Error!" );
 }
 
 //=========================================================================
@@ -1101,8 +1074,7 @@ Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
                 }
                 catch ( Exception& )
                 {
-                    OSL_ENSURE( sal_False,
-                                "PropertySetRegistry::getConfigProvider - "
+                    OSL_FAIL( "PropertySetRegistry::getConfigProvider - "
                                 "caught exception!" );
                 }
             }
@@ -1123,8 +1095,7 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
         {
             if ( m_pImpl->m_bTriedToGetRootReadAccess ) // #82494#
             {
-                OSL_ENSURE( sal_False,
-                            "PropertySetRegistry::getRootConfigReadAccess - "
+                OSL_FAIL( "PropertySetRegistry::getRootConfigReadAccess - "
                             "Unable to read any config data! -> #82494#" );
                 return Reference< XInterface >();
             }
@@ -1166,13 +1137,11 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
     {
         // createInstance, createInstanceWithArguments
 
-        OSL_ENSURE( sal_False,
-            "PropertySetRegistry::getRootConfigReadAccess - caught Exception!" );
+        OSL_FAIL( "PropertySetRegistry::getRootConfigReadAccess - caught Exception!" );
         return Reference< XInterface >();
     }
 
-    OSL_ENSURE( sal_False,
-                "PropertySetRegistry::getRootConfigReadAccess - Error!" );
+    OSL_FAIL( "PropertySetRegistry::getRootConfigReadAccess - Error!" );
     return Reference< XInterface >();
 }
 
@@ -1188,8 +1157,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
         {
             if ( m_pImpl->m_bTriedToGetRootWriteAccess ) // #82494#
             {
-                OSL_ENSURE( sal_False,
-                            "PropertySetRegistry::getConfigWriteAccess - "
+                OSL_FAIL( "PropertySetRegistry::getConfigWriteAccess - "
                             "Unable to write any config data! -> #82494#" );
                 return Reference< XInterface >();
             }
@@ -1256,8 +1224,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
     {
         // getByHierarchicalName
 
-        OSL_ENSURE( sal_False,
-            "PropertySetRegistry::getConfigWriteAccess - "
+        OSL_FAIL( "PropertySetRegistry::getConfigWriteAccess - "
             "caught NoSuchElementException!" );
         return Reference< XInterface >();
     }
@@ -1265,14 +1232,12 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
     {
         // createInstance, createInstanceWithArguments
 
-        OSL_ENSURE( sal_False,
-                    "PropertySetRegistry::getConfigWriteAccess - "
+        OSL_FAIL( "PropertySetRegistry::getConfigWriteAccess - "
                     "caught Exception!" );
         return Reference< XInterface >();
     }
 
-    OSL_ENSURE( sal_False,
-                "PropertySetRegistry::getConfigWriteAccess - Error!" );
+    OSL_FAIL( "PropertySetRegistry::getConfigWriteAccess - Error!" );
     return Reference< XInterface >();
 }
 
@@ -1674,8 +1639,7 @@ void SAL_CALL PersistentPropertySet::addVetoableChangeListener(
            RuntimeException )
 {
 //  load();
-//  OSL_ENSURE( sal_False,
-//              "PersistentPropertySet::addVetoableChangeListener - N.Y.I." );
+//  OSL_FAIL( //                "PersistentPropertySet::addVetoableChangeListener - N.Y.I." );
 }
 
 //=========================================================================
@@ -1688,8 +1652,7 @@ void SAL_CALL PersistentPropertySet::removeVetoableChangeListener(
            RuntimeException )
 {
 //  load();
-//  OSL_ENSURE( sal_False,
-//              "PersistentPropertySet::removeVetoableChangeListener - N.Y.I." );
+//  OSL_FAIL( //                "PersistentPropertySet::removeVetoableChangeListener - N.Y.I." );
 }
 
 //=========================================================================
@@ -1868,8 +1831,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
         {
             // insertByName
 
-            OSL_ENSURE( sal_False,
-                        "PersistentPropertySet::addProperty - "
+            OSL_FAIL( "PersistentPropertySet::addProperty - "
                         "caught IllegalArgumentException!" );
             return;
         }
@@ -1877,8 +1839,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
         {
             // insertByName
 
-            OSL_ENSURE( sal_False,
-                        "PersistentPropertySet::addProperty - "
+            OSL_FAIL( "PersistentPropertySet::addProperty - "
                         "caught ElementExistException!" );
             return;
         }
@@ -1886,8 +1847,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
         {
             // replaceByName, insertByName, commitChanges
 
-            OSL_ENSURE( sal_False,
-                        "PersistentPropertySet::addProperty - "
+            OSL_FAIL( "PersistentPropertySet::addProperty - "
                         "caught WrappedTargetException!" );
             return;
         }
@@ -1899,15 +1859,13 @@ void SAL_CALL PersistentPropertySet::addProperty(
         {
             // createInstance
 
-            OSL_ENSURE( sal_False,
-                        "PersistentPropertySet::addProperty - "
+            OSL_FAIL( "PersistentPropertySet::addProperty - "
                         "caught Exception!" );
             return;
         }
     }
 
-    OSL_ENSURE( sal_False,
-                "PersistentPropertySet::addProperty - Error!" );
+    OSL_FAIL( "PersistentPropertySet::addProperty - Error!" );
 }
 
 //=========================================================================
@@ -1953,8 +1911,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
             }
             else
             {
-                OSL_ENSURE( sal_False,
-                            "PersistentPropertySet::removeProperty - "
+                OSL_FAIL( "PersistentPropertySet::removeProperty - "
                             "No attributes!" );
                 return;
             }
@@ -1963,8 +1920,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
         {
             // getByHierarchicalName
 
-            OSL_ENSURE( sal_False,
-                        "PersistentPropertySet::removeProperty - "
+            OSL_FAIL( "PersistentPropertySet::removeProperty - "
                         "caught NoSuchElementException!" );
         }
 
@@ -2010,8 +1966,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
                     {
                         // getByHierarchicalName
 
-                        OSL_ENSURE( sal_False,
-                                    "PersistentPropertySet::removeProperty - "
+                        OSL_FAIL( "PersistentPropertySet::removeProperty - "
                                     "caught NoSuchElementException!" );
                         nHandle = -1;
                     }
@@ -2043,8 +1998,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
             {
                 // removeByName
 
-                OSL_ENSURE( sal_False,
-                            "PersistentPropertySet::removeProperty - "
+                OSL_FAIL( "PersistentPropertySet::removeProperty - "
                             "caught NoSuchElementException!" );
                 return;
             }
@@ -2052,16 +2006,14 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
             {
                 // commitChanges
 
-                OSL_ENSURE( sal_False,
-                            "PersistentPropertySet::removeProperty - "
+                OSL_FAIL( "PersistentPropertySet::removeProperty - "
                             "caught WrappedTargetException!" );
                 return;
             }
         }
     }
 
-    OSL_ENSURE( sal_False,
-                "PersistentPropertySet::removeProperty - Error!" );
+    OSL_FAIL( "PersistentPropertySet::removeProperty - Error!" );
 }
 
 //=========================================================================
@@ -2158,16 +2110,14 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                                         aHierName );
 
                                 if ( !( aKeyValue >>= rValue.Handle ) )
-                                    OSL_ENSURE( sal_False,
-                                      "PersistentPropertySet::getPropertyValues - "
+                                    OSL_FAIL( "PersistentPropertySet::getPropertyValues - "
                                       "Error getting property handle!" );
                             }
                             catch ( NoSuchElementException& )
                             {
                                 // getByHierarchicalName
 
-                                OSL_ENSURE( sal_False,
-                                  "PersistentPropertySet::getPropertyValues - "
+                                OSL_FAIL( "PersistentPropertySet::getPropertyValues - "
                                   "NoSuchElementException!" );
                             }
 
@@ -2188,8 +2138,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                             {
                                 // getByHierarchicalName
 
-                                OSL_ENSURE( sal_False,
-                                  "PersistentPropertySet::getPropertyValues - "
+                                OSL_FAIL( "PersistentPropertySet::getPropertyValues - "
                                   "NoSuchElementException!" );
                             }
 
@@ -2204,8 +2153,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
 
                                 sal_Int32 nState = 0;
                                 if ( !( aKeyValue >>= nState ) )
-                                    OSL_ENSURE( sal_False,
-                                      "PersistentPropertySet::getPropertyValues - "
+                                    OSL_FAIL( "PersistentPropertySet::getPropertyValues - "
                                       "Error getting property state!" );
                                 else
                                     rValue.State = PropertyState( nState );
@@ -2214,8 +2162,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                             {
                                 // getByHierarchicalName
 
-                                OSL_ENSURE( sal_False,
-                                  "PersistentPropertySet::getPropertyValues - "
+                                OSL_FAIL( "PersistentPropertySet::getPropertyValues - "
                                   "NoSuchElementException!" );
                             }
                         }
@@ -2359,8 +2306,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
         return;
     }
 
-    OSL_ENSURE( sal_False,
-                "PersistentPropertySet::setPropertyValues - Nothing set!" );
+    OSL_FAIL( "PersistentPropertySet::setPropertyValues - Nothing set!" );
 }
 
 //=========================================================================
@@ -2567,16 +2513,14 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                             aHierName );
 
                                     if ( !( aKeyValue >>= rProp.Handle ) )
-                                        OSL_ENSURE( sal_False,
-                                          "PropertySetInfo_Impl::getProperties - "
+                                        OSL_FAIL( "PropertySetInfo_Impl::getProperties - "
                                           "Error getting property handle!" );
                                 }
                                 catch ( NoSuchElementException& )
                                 {
                                     // getByHierarchicalName
 
-                                    OSL_ENSURE( sal_False,
-                                      "PropertySetInfo_Impl::getProperties - "
+                                    OSL_FAIL( "PropertySetInfo_Impl::getProperties - "
                                       "NoSuchElementException!" );
                                 }
 
@@ -2599,8 +2543,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                 {
                                     // getByHierarchicalName
 
-                                    OSL_ENSURE( sal_False,
-                                      "PropertySetInfo_Impl::getProperties - "
+                                    OSL_FAIL( "PropertySetInfo_Impl::getProperties - "
                                       "NoSuchElementException!" );
                                 }
 
@@ -2618,16 +2561,14 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                         rProp.Attributes
                                             = sal_Int16( nAttribs );
                                     else
-                                        OSL_ENSURE( sal_False,
-                                          "PropertySetInfo_Impl::getProperties - "
+                                        OSL_FAIL( "PropertySetInfo_Impl::getProperties - "
                                           "Error getting property attributes!" );
                                 }
                                 catch ( NoSuchElementException& )
                                 {
                                     // getByHierarchicalName
 
-                                    OSL_ENSURE( sal_False,
-                                      "PropertySetInfo_Impl::getProperties - "
+                                    OSL_FAIL( "PropertySetInfo_Impl::getProperties - "
                                       "NoSuchElementException!" );
                                 }
                             }
@@ -2645,7 +2586,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
             }
         }
 
-        OSL_ENSURE( sal_False, "PropertySetInfo_Impl::getProperties - Error!" );
+        OSL_FAIL( "PropertySetInfo_Impl::getProperties - Error!" );
         m_pProps = new Sequence< Property >( 0 );
     }
 
@@ -2682,8 +2623,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
             if ( !( xRootHierNameAccess->getByHierarchicalName( aKey )
                     >>= aProp.Handle ) )
             {
-                OSL_ENSURE( sal_False,
-                            "PropertySetInfo_Impl::getPropertyByName - "
+                OSL_FAIL( "PropertySetInfo_Impl::getPropertyByName - "
                             "No handle!" );
                 return Property();
             }
@@ -2695,8 +2635,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
             Any aValue = xRootHierNameAccess->getByHierarchicalName( aKey );
             if ( !aValue.hasValue() )
             {
-                OSL_ENSURE( sal_False,
-                            "PropertySetInfo_Impl::getPropertyByName - "
+                OSL_FAIL( "PropertySetInfo_Impl::getPropertyByName - "
                             "No Value!" );
                 return Property();
             }
@@ -2713,8 +2652,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
                 aProp.Attributes = sal_Int16( nAttribs );
             else
             {
-                OSL_ENSURE( sal_False,
-                            "PropertySetInfo_Impl::getPropertyByName - "
+                OSL_FAIL( "PropertySetInfo_Impl::getPropertyByName - "
                             "No attributes!" );
                 return Property();
             }
@@ -2729,14 +2667,13 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
         {
             // getByHierarchicalName
 
-            OSL_ENSURE( sal_False,
-                        "PropertySetInfo_Impl::getPropertyByName - "
+            OSL_FAIL( "PropertySetInfo_Impl::getPropertyByName - "
                         "caught NoSuchElementException!" );
         }
 
     }
 
-    OSL_ENSURE( sal_False, "PropertySetInfo_Impl::getPropertyByName - Error!" );
+    OSL_FAIL( "PropertySetInfo_Impl::getPropertyByName - Error!" );
     return Property();
 }
 

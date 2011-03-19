@@ -226,12 +226,12 @@ CFilePreview* CFilePreview::createInstance(
         catch( CPreviewException& )
         {
             OSL_ASSERT( !s_FilePreviewInst );
-            OSL_ENSURE( sal_False, "Creation of the preview window failed" );
+            OSL_FAIL( "Creation of the preview window failed" );
         }
         catch( CAutoOleInit::COleInitException& )
         {
             OSL_ASSERT( !s_FilePreviewInst );
-            OSL_ENSURE( sal_False, "OleInitalize failed" );
+            OSL_FAIL( "OleInitalize failed" );
         }
     }
 

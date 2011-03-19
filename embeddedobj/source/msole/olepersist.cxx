@@ -519,7 +519,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
         sal_Int64 nLength = xTempSeek->getLength() - 40;
         if ( nLength < 0 || nLength >= 0xFFFFFFFF )
         {
-            OSL_ENSURE( sal_False, "Length is not acceptable!" );
+            OSL_FAIL( "Length is not acceptable!" );
             return;
         }
         for ( sal_Int32 nInd = 0; nInd < 4; nInd++ )

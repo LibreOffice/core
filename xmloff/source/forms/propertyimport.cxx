@@ -162,7 +162,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
         break;
         case TypeClass_HYPER:
         {
-            OSL_ENSURE(sal_False, "PropertyConversion::convertString: 64-bit integers not implemented yet!");
+            OSL_FAIL("PropertyConversion::convertString: 64-bit integers not implemented yet!");
         }
         break;
         case TypeClass_DOUBLE:
@@ -241,11 +241,11 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
                 }
             }
             else
-                OSL_ENSURE(sal_False, "PropertyConversion::convertString: unsupported property type!");
+                OSL_FAIL("PropertyConversion::convertString: unsupported property type!");
         }
         break;
         default:
-            OSL_ENSURE(sal_False, "PropertyConversion::convertString: invalid type class!");
+            OSL_FAIL("PropertyConversion::convertString: invalid type class!");
     }
 
     return aReturn;
@@ -296,8 +296,7 @@ SvXMLImportContext* OPropertyImport::CreateChildContext(sal_uInt16 _nPrefix, con
     }
     else
     {
-        OSL_ENSURE(sal_False,
-                ::rtl::OString("OPropertyImport::CreateChildContext: unknown sub element (only \"properties\" is recognized, but it is ")
+        OSL_FAIL(::rtl::OString("OPropertyImport::CreateChildContext: unknown sub element (only \"properties\" is recognized, but it is ")
             +=  ::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
             +=  ::rtl::OString(")!"));
         return SvXMLImportContext::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
@@ -372,7 +371,7 @@ bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const ::rtl
         sMessage += ::rtl::OString( _rLocalName.getStr(), _rLocalName.getLength(), osl_getThreadTextEncoding() );
         sMessage += ::rtl::OString( "\n  value: " );
         sMessage += ::rtl::OString( _rValue.getStr(), _rValue.getLength(), osl_getThreadTextEncoding() );
-        OSL_ENSURE( sal_False, sMessage.getStr() );
+        OSL_FAIL( sMessage.getStr() );
 #endif
         return false;
     }
@@ -404,8 +403,7 @@ SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPr
     }
     else
     {
-        OSL_ENSURE(sal_False,
-                ::rtl::OString("OPropertyElementsContext::CreateChildContext: unknown child element (\"")
+        OSL_FAIL(::rtl::OString("OPropertyElementsContext::CreateChildContext: unknown child element (\"")
             +=  ::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
             +=  ::rtl::OString("\")!"));
         return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName);
@@ -444,8 +442,7 @@ OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16
 SvXMLImportContext* OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
         const Reference< sax::XAttributeList >&)
 {
-    OSL_ENSURE(sal_False,
-            ::rtl::OString("OSinglePropertyContext::CreateChildContext: unknown child element (\"")
+    OSL_FAIL(::rtl::OString("OSinglePropertyContext::CreateChildContext: unknown child element (\"")
         +=  ::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
         +=  ::rtl::OString("\")!"));
     return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName);
@@ -589,8 +586,7 @@ SvXMLImportContext* OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefi
     }
     else
     {
-        OSL_ENSURE( sal_False,
-                ::rtl::OString("OListPropertyContext::CreateChildContext: unknown child element (\"")
+        OSL_FAIL( ::rtl::OString("OListPropertyContext::CreateChildContext: unknown child element (\"")
             +=  ::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
             +=  ::rtl::OString("\")!"));
         return new SvXMLImportContext( GetImport(), _nPrefix, _rLocalName );

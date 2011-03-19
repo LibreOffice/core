@@ -276,7 +276,7 @@ void SAL_CALL DynamicResultSetWrapper
                     }
                     else
                     {
-                        OSL_ENSURE( sal_False, "ListActionType was WELCOME but ActionInfo didn't contain a WelcomeDynamicResultSetStruct" );
+                        OSL_FAIL( "ListActionType was WELCOME but ActionInfo didn't contain a WelcomeDynamicResultSetStruct" );
                         //throw RuntimeException();
                     }
                     break;
@@ -444,7 +444,7 @@ void SAL_CALL DynamicResultSetWrapper
             return;
         }
     }
-    OSL_ENSURE( sal_False, "could not connect to cache" );
+    OSL_FAIL( "could not connect to cache" );
     throw ServiceNotFoundException();
 }
 

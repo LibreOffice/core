@@ -418,7 +418,7 @@ void OSDBCDriverManager::initializeDriverPrecedence()
     }
     catch (Exception&)
     {
-        OSL_ENSURE(sal_False, "OSDBCDriverManager::initializeDriverPrecedence: caught an exception while sorting the drivers!");
+        OSL_FAIL("OSDBCDriverManager::initializeDriverPrecedence: caught an exception while sorting the drivers!");
     }
 }
 

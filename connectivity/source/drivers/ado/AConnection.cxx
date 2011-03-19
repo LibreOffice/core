@@ -577,8 +577,7 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
                 {
 // we can not assert here because we could be in d&d
 /*
-                    OSL_ENSURE(sal_False,
-                        (   ::rtl::OString("getTypeInfoFromType: assuming column type ")
+                    OSL_FAIL((  ::rtl::OString("getTypeInfoFromType: assuming column type ")
                         +=  ::rtl::OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), gsl_getSystemTextEncoding())
                         +=  ::rtl::OString("\" (expected type name ")
                         +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())

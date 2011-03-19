@@ -1440,7 +1440,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
         }
         catch (Exception&)
         {
-            OSL_ENSURE(sal_False, "OResultSet::setBoundedColumns: caught an Exception!");
+            OSL_FAIL("OResultSet::setBoundedColumns: caught an Exception!");
         }
     }
 }

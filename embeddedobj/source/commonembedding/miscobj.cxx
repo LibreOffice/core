@@ -322,7 +322,7 @@ void OCommonEmbeddedObject::requestPositioning( const awt::Rectangle& aRect )
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "Exception on request to resize!\n" );
+                OSL_FAIL( "Exception on request to resize!\n" );
             }
         }
     }

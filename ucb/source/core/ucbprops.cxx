@@ -400,8 +400,7 @@ Sequence< Property > SAL_CALL UcbPropertiesManager::getProperties()
         {
             if ( nSize <= nPos )
             {
-                OSL_ENSURE( sal_False,
-                            "UcbPropertiesManager::getProperties - "
+                OSL_FAIL( "UcbPropertiesManager::getProperties - "
                             "Initial size of property sequence too small!" );
 
                 m_pProps->realloc( 128 );

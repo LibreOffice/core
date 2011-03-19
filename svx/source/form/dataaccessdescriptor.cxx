@@ -156,7 +156,7 @@ namespace svx
             xPropInfo = _rxValues->getPropertySetInfo();
         if (!xPropInfo.is())
         {
-            OSL_ENSURE(sal_False, "ODADescriptorImpl::buildFrom: invalid property set!");
+            OSL_FAIL("ODADescriptorImpl::buildFrom: invalid property set!");
             return sal_False;
         }
 
@@ -406,7 +406,7 @@ namespace svx
     {
         if (!has(_eWhich))
         {
-            OSL_ENSURE(sal_False, "ODataAccessDescriptor::operator[]: invalid acessor!");
+            OSL_FAIL("ODataAccessDescriptor::operator[]: invalid acessor!");
             static const Any aDummy;
             return aDummy;
         }

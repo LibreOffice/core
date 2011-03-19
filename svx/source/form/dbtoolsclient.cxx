@@ -129,7 +129,7 @@ namespace svxform
 
                 if (NULL == s_pFactoryCreationFunc)
                 {   // did not find the symbol
-                    OSL_ENSURE(sal_False, "ODbtoolsClient::registerClient: could not find the symbol for creating the factory!");
+                    OSL_FAIL("ODbtoolsClient::registerClient: could not find the symbol for creating the factory!");
                     osl_unloadModule(s_hDbtoolsModule);
                     s_hDbtoolsModule = NULL;
                 }

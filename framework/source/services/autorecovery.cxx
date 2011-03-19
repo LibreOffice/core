@@ -329,7 +329,7 @@ void CacheLockGuard::lock(sal_Bool bLockForAddRemoveVectorItems)
         (bLockForAddRemoveVectorItems)
        )
     {
-        OSL_ENSURE(sal_False, "Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp.");
+        OSL_FAIL("Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp.");
         throw css::uno::RuntimeException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp.")),
                 m_xOwner);
@@ -356,7 +356,7 @@ void CacheLockGuard::unlock()
 
     if (m_rCacheLock < 0)
     {
-        OSL_ENSURE(sal_False, "Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)");
+        OSL_FAIL("Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)");
         throw css::uno::RuntimeException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)")),
                 m_xOwner);
