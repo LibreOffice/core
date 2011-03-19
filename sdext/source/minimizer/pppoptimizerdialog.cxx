@@ -181,7 +181,7 @@ void SAL_CALL PPPOptimizerDialog::addStatusListener( const Reference< XStatusLis
     throw( RuntimeException )
 {
     // TODO
-    // OSL_ENSURE( sal_False, "PPPOptimizerDialog::addStatusListener()\nNot implemented yet!" );
+    // OSL_FAIL( "PPPOptimizerDialog::addStatusListener()\nNot implemented yet!" );
 }
 
 //===============================================
@@ -189,7 +189,7 @@ void SAL_CALL PPPOptimizerDialog::removeStatusListener( const Reference< XStatus
     throw( RuntimeException )
 {
     // TODO
-    // OSL_ENSURE( sal_False, "PPPOptimizerDialog::removeStatusListener()\nNot implemented yet!" );
+    // OSL_FAIL( "PPPOptimizerDialog::removeStatusListener()\nNot implemented yet!" );
 }
 
 // -----------------------------------------------------------------------------
