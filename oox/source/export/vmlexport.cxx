@@ -666,7 +666,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                 break;
             default:
 #if OSL_DEBUG_LEVEL > 0
-                fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %d, data: [%d, %p]\n",
+                fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %" SAL_PRIuUINT32 ", data: [%" SAL_PRIuUINT32 ", %p]\n",
                         it->nPropId, it->nPropValue, it->nPropSize, it->pBuf );
                 if ( it->nPropSize )
                 {
