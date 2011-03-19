@@ -59,7 +59,7 @@ class OOXMLParserState
     stack<OOXMLPropertySet::Pointer_t> mCellProps;
     stack<OOXMLPropertySet::Pointer_t> mRowProps;
     stack<OOXMLPropertySet::Pointer_t> mTableProps;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     XPathLogger m_xPathLogger;
 #endif
 
