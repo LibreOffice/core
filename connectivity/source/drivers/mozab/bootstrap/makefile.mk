@@ -31,9 +31,9 @@ PRJINC=..$/..$/..
 PRJNAME=connectivity
 TARGET=mozbootstrap
 
-.IF "$(OS)" == "OS2"
+.IF  ("$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO" || "$(OS)" == "OS2"
 all: 
-    @echo "    Not building under OS/2"
+    @echo "    Not building the mozbootstrap stuff in LibreOffice build"
 .ENDIF
 
 # --- Settings ----------------------------------
