@@ -34,45 +34,41 @@
 
 // POOLCOLL-IDs:
 // +----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
-// !User!    Bereich    ! 0 !               Offset                  !
+// !User!    Range      ! 0 !               Offset                  !
 // +----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
 //
-//  Bereich:                        1 - Text
-//                                  2 - Listen
-//                                  3 - Sonderbereiche
-//                                  4 - Verzeichnisse
-//                                  5 - Kapitel / Dokument
-//                                  6 - HTML-Vorlagen
+//  Range:                          1 - text
+//                                  2 - lists
+//                                  3 - special ranges
+//                                  4 - indices
+//                                  5 - chapter / document
+//                                  6 - HTML-styles.
 
-// Andere IDs:
+// Other IDs:
 // +----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
-// !User!    Bereich    ! 1 !           Offset                      !
+// !User!    Range      ! 1 !           Offset                      !
 // +----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
-// Bereich:                         0 - Zeichenvorlagen
-//                                  1 - Frame-Vorlagen
-//                                  2 - Seitenvorlagen
-//                                  3 - Absatzformate (?)
-//                                  4 - Grafikformate (?)
+// Range:                           0 - character styles
+//                                  1 - frame styles
+//                                  2 - page styles
+//                                  3 - paragraph styles (?)
+//                                  4 - graphics styles (?)
 
-// F�r alle IDs gilt:
-// Herkunft:                        0 -Pool
-//                                  1 -Benutzer
-// Offset:                          innerhalb der Gruppe
+// For all IDs we have:
+// Origin:                          0 -pool
+//                                  1 -user
+// Offset:                          within the group
 
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// ACHTUNG: neue ID's koennen nur noch am Ende der jeweiligen Gruppe
-//          zugefuegt werden. Diese Id's werden vom Reader/Writer ge-
-//          lesen und geschrieben. Diese kennen nur den Offset zum Start
-//
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Attention: New IDs can only be added to the ends of the groups.
+// These IDs are read and written by the Reader/Writer.
+// They are only aware of the Offset to Start.
 
-// Maske fuer Erkennung von COLLPOOL-Ids:
+// Mask for recognition of COLLPOOL-IDs:
 
 const sal_uInt16 POOLGRP_NOCOLLID       =  (1 << 10);
 
-// POLLCOLL-Gruppen:
+// POLLCOLL-groups:
 
 const sal_uInt16 USER_FMT               =  (1 << 15);
 const sal_uInt16 POOL_FMT               =  (0 << 15);
@@ -85,14 +81,14 @@ const sal_uInt16 COLL_DOC_BITS          =  (5 << 11);
 const sal_uInt16 COLL_HTML_BITS         =  (6 << 11);
 const sal_uInt16 COLL_GET_RANGE_BITS    = (15 << 11);
 
-// Sonstige Gruppen:
+// Other groups:
 
 const sal_uInt16 POOLGRP_CHARFMT        = (0 << 11) + POOLGRP_NOCOLLID;
 const sal_uInt16 POOLGRP_FRAMEFMT       = (1 << 11) + POOLGRP_NOCOLLID;
 const sal_uInt16 POOLGRP_PAGEDESC       = (2 << 11) + POOLGRP_NOCOLLID;
 const sal_uInt16 POOLGRP_NUMRULE        = (3 << 11) + POOLGRP_NOCOLLID;
 
-// fuer Erkennung ob Benutzer-Vorlage oder nicht:
+// Recognize whether it's a user defined style or not:
 const sal_uInt16 POOL_IDUSER_FMT =
         USHRT_MAX & ~(COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID);
 
@@ -104,50 +100,51 @@ inline sal_Bool IsPoolUserFmt( sal_uInt16 nId )
 }
 
 
-// ID-s fuer die Bereiche
+
+// IDs for the ranges.
 enum RES_POOLFMT
 {
-RES_POOLFMT_BEGIN = 1,  // HIER GEHT'S LOS !!!
+RES_POOLFMT_BEGIN = 1,
 RES_POOL_CHRFMT = RES_POOLFMT_BEGIN,
 RES_POOL_FRMFMT,
 RES_POOL_TXTCOLL,
 RES_POOL_PAGEFMT,
 
-RES_POOL_PARFMT,    // ???
-RES_POOL_GRFFMT,    // ???
+RES_POOL_PARFMT,
+RES_POOL_GRFFMT,
 RES_POOLFMT_END
 };
 
-// Bereiche fuer die Id's der einzelnen Formate
+// Ranges for the IDs of the formats.
 
-// die Id's fuer die Zeichen-Vorlagen
+// IDs for character styles.
 enum RES_POOL_CHRFMT_TYPE
 {
 RES_POOLCHR_BEGIN = POOLGRP_CHARFMT,
 RES_POOLCHR_NORMAL_BEGIN = POOLGRP_CHARFMT,
 
-RES_POOLCHR_FOOTNOTE = RES_POOLCHR_NORMAL_BEGIN,    // Fussnote
-RES_POOLCHR_PAGENO,                                 // Seiten/Feld
-RES_POOLCHR_LABEL,                                  // Beschriftung
-RES_POOLCHR_DROPCAPS,                               // Initialienzeichen
-RES_POOLCHR_NUM_LEVEL,                              // Nummerierungszeichen
-RES_POOLCHR_BUL_LEVEL,                              // Aufzaehlungszeichen
+RES_POOLCHR_FOOTNOTE = RES_POOLCHR_NORMAL_BEGIN,    // Footnote.
+RES_POOLCHR_PAGENO,                                 // Pages/field.
+RES_POOLCHR_LABEL,                                  // Label.
+RES_POOLCHR_DROPCAPS,                               // Dropcaps.
+RES_POOLCHR_NUM_LEVEL,                              // Numbering symbols
+RES_POOLCHR_BUL_LEVEL,                              // Bullets.
 
-RES_POOLCHR_INET_NORMAL,                            // Internet normal
-RES_POOLCHR_INET_VISIT,                             // Internet besucht
-RES_POOLCHR_JUMPEDIT,                               // Platzhalter
-RES_POOLCHR_TOXJUMP,                                // Sprung aus Verzeichnis
-RES_POOLCHR_ENDNOTE,                                // Endnote
-RES_POOLCHR_LINENUM,                                // Zeilennummerierung
-RES_POOLCHR_IDX_MAIN_ENTRY,                         // main entry in indexes
-RES_POOLCHR_FOOTNOTE_ANCHOR,                        // Fussnotenanker
-RES_POOLCHR_ENDNOTE_ANCHOR,                         // Endnotenanker
-RES_POOLCHR_RUBYTEXT,                               // Rubytext
-RES_POOLCHR_VERT_NUM,                               // Vertical numbering symbols
+RES_POOLCHR_INET_NORMAL,                            // Internet normal.
+RES_POOLCHR_INET_VISIT,                             // Internet visited.
+RES_POOLCHR_JUMPEDIT,                               // Placeholder.
+RES_POOLCHR_TOXJUMP,                                // Jump from index.
+RES_POOLCHR_ENDNOTE,                                // Endnote.
+RES_POOLCHR_LINENUM,                                // Line numbering.
+RES_POOLCHR_IDX_MAIN_ENTRY,                         // Main entry in indices.
+RES_POOLCHR_FOOTNOTE_ANCHOR,                        // Footnote anchor.
+RES_POOLCHR_ENDNOTE_ANCHOR,                         // Endnote anchor.
+RES_POOLCHR_RUBYTEXT,                               // Rubytext.
+RES_POOLCHR_VERT_NUM,                               // Vertical numbering symbols.
 
 RES_POOLCHR_NORMAL_END,
 
-RES_POOLCHR_HTML_BEGIN = RES_POOLCHR_BEGIN + 50,    // HTML-Vorlagen
+RES_POOLCHR_HTML_BEGIN = RES_POOLCHR_BEGIN + 50,    // HTML-styles.
 RES_POOLCHR_HTML_EMPHASIS= RES_POOLCHR_HTML_BEGIN,
 RES_POOLCHR_HTML_CITIATION,
 RES_POOLCHR_HTML_STRONG,
@@ -163,247 +160,249 @@ RES_POOLCHR_END = RES_POOLCHR_HTML_END
 };
 
 
-// die Id's fuer die Rahmen-Vorlagen
+// IDs for frame styles.
 enum RES_POOL_FRMFMT_TYPE
 {
 RES_POOLFRM_BEGIN = POOLGRP_FRAMEFMT,
 
-RES_POOLFRM_FRAME = RES_POOLFRM_BEGIN,              // Rahmen
-RES_POOLFRM_GRAPHIC,                                // Graphic
-RES_POOLFRM_OLE,                                    // OLE
-RES_POOLFRM_FORMEL,                                 // Formeln
-RES_POOLFRM_MARGINAL,                               // Marginalen
-RES_POOLFRM_WATERSIGN,                              // Wasserzeichen
-RES_POOLFRM_LABEL,                                  // Etikette
+RES_POOLFRM_FRAME = RES_POOLFRM_BEGIN,              // Frame.
+RES_POOLFRM_GRAPHIC,                                // Graphics.
+RES_POOLFRM_OLE,                                    // OLE.
+RES_POOLFRM_FORMEL,                                 // Formula.
+RES_POOLFRM_MARGINAL,                               // Marginalia.
+RES_POOLFRM_WATERSIGN,                              // Watermark.
+RES_POOLFRM_LABEL,                                  // Labels.
 
 RES_POOLFRM_END
 };
 
-// die Id's fuer die Seiten-Vorlagen
+// IDs for page styles.
 enum RES_POOL_PAGEFMT_TYPE
 {
 RES_POOLPAGE_BEGIN = POOLGRP_PAGEDESC,
 
-RES_POOLPAGE_STANDARD = RES_POOLPAGE_BEGIN,         // Standard-Seite
-RES_POOLPAGE_FIRST,                                 // Erste Seite
-RES_POOLPAGE_LEFT,                                  // Linke Seite
-RES_POOLPAGE_RIGHT,                                 // Rechte Seite
-RES_POOLPAGE_JAKET,                                 // Umschlag
-RES_POOLPAGE_REGISTER,                              // Verzeichnis
-RES_POOLPAGE_HTML,                                  // HTML
-RES_POOLPAGE_FOOTNOTE,                              // Fussnote bei Dokumentende
-RES_POOLPAGE_ENDNOTE,                               // Endnotensseite
-RES_POOLPAGE_LANDSCAPE,                             // Landscape Page Style
+RES_POOLPAGE_STANDARD = RES_POOLPAGE_BEGIN,         // Standard page.
+RES_POOLPAGE_FIRST,                                 // First page.
+RES_POOLPAGE_LEFT,                                  // Left page.
+RES_POOLPAGE_RIGHT,                                 // Right page.
+RES_POOLPAGE_JAKET,                                 // Envelope.
+RES_POOLPAGE_REGISTER,                              // Index.
+RES_POOLPAGE_HTML,                                  // HTML.
+RES_POOLPAGE_FOOTNOTE,                              // Footnote at end of document.
+RES_POOLPAGE_ENDNOTE,                               // Endnote page.
+RES_POOLPAGE_LANDSCAPE,                             // Landscape page style.
 
 RES_POOLPAGE_END
 };
 
-// die Id's fuer die NumRule-Vorlagen
+// IDs for list styles.
 enum RES_POOL_NUMRULE_TYPE
 {
 RES_POOLNUMRULE_BEGIN = POOLGRP_NUMRULE,
-RES_POOLNUMRULE_NUM1 = RES_POOLNUMRULE_BEGIN,       // NumRule Numerierung 1
-RES_POOLNUMRULE_NUM2,                               // NumRule Numerierung 2
-RES_POOLNUMRULE_NUM3,                               // NumRule Numerierung 3
-RES_POOLNUMRULE_NUM4,                               // NumRule Numerierung 4
-RES_POOLNUMRULE_NUM5,                               // NumRule Numerierung 5
-RES_POOLNUMRULE_BUL1,                               // NumRule Bullets 1
-RES_POOLNUMRULE_BUL2,                               // NumRule Bullets 2
-RES_POOLNUMRULE_BUL3,                               // NumRule Bullets 3
-RES_POOLNUMRULE_BUL4,                               // NumRule Bullets 4
-RES_POOLNUMRULE_BUL5,                               // NumRule Bullets 5
+RES_POOLNUMRULE_NUM1 = RES_POOLNUMRULE_BEGIN,       // NumRule Numbering 1.
+RES_POOLNUMRULE_NUM2,                               // NumRule Numbering 2.
+RES_POOLNUMRULE_NUM3,                               // NumRule Numbering 3.
+RES_POOLNUMRULE_NUM4,                               // NumRule Numbering 4.
+RES_POOLNUMRULE_NUM5,                               // NumRule Numbering 5.
+RES_POOLNUMRULE_BUL1,                               // NumRule Bullets 1.
+RES_POOLNUMRULE_BUL2,                               // NumRule Bullets 2.
+RES_POOLNUMRULE_BUL3,                               // NumRule Bullets 3.
+RES_POOLNUMRULE_BUL4,                               // NumRule Bullets 4.
+RES_POOLNUMRULE_BUL5,                               // NumRule Bullets 5.
 RES_POOLNUMRULE_END
 };
 
-// die Id's fuer die Absatz-Vorlagen
+// IDs for paragraph styles.
 enum RES_POOL_COLLFMT_TYPE
 {
-// Gruppe Text
+// Group text.
 RES_POOLCOLL_TEXT_BEGIN = COLL_TEXT_BITS,
 
-RES_POOLCOLL_STANDARD = RES_POOLCOLL_TEXT_BEGIN,        // Standard
-RES_POOLCOLL_TEXT,                                      // Textkoerper
-RES_POOLCOLL_TEXT_IDENT,                                // Textkoerper Einzug
-RES_POOLCOLL_TEXT_NEGIDENT,                             // Textkoerper neg. Einzug
-RES_POOLCOLL_TEXT_MOVE,                                 // Textkoerper Einrueckung
-RES_POOLCOLL_GREETING,                                  // Grussformel
-RES_POOLCOLL_SIGNATURE,                                 // Unterschrift
-RES_POOLCOLL_CONFRONTATION,                             // Gegenueberstellung
-RES_POOLCOLL_MARGINAL,                                  // Marginalie
+RES_POOLCOLL_STANDARD = RES_POOLCOLL_TEXT_BEGIN,        // Standard.
+RES_POOLCOLL_TEXT,                                      // Text body.
+RES_POOLCOLL_TEXT_IDENT,                                // Text body first line indent.
+RES_POOLCOLL_TEXT_NEGIDENT,                             // Text body hanging indent.
+RES_POOLCOLL_TEXT_MOVE,                                 // Text body indent.
+RES_POOLCOLL_GREETING,                                  // Complimentary close.
+RES_POOLCOLL_SIGNATURE,                                 // Signature.
+RES_POOLCOLL_CONFRONTATION,                             // List indent.
+RES_POOLCOLL_MARGINAL,                                  // Marginalia.
 
-    // Untergruppierung Ueberschriften
-RES_POOLCOLL_HEADLINE_BASE,                             // Basis-Ueberschrift
-RES_POOLCOLL_HEADLINE1,                                 // Ueberschrift 1
-RES_POOLCOLL_HEADLINE2,                                 // Ueberschrift 2
-RES_POOLCOLL_HEADLINE3,                                 // Ueberschrift 3
-RES_POOLCOLL_HEADLINE4,                                 // Ueberschrift 4
-RES_POOLCOLL_HEADLINE5,                                 // Ueberschrift 5
-RES_POOLCOLL_HEADLINE6,                                 // Ueberschrift 6
-RES_POOLCOLL_HEADLINE7,                                 // Ueberschrift 7
-RES_POOLCOLL_HEADLINE8,                                 // Ueberschrift 8
-RES_POOLCOLL_HEADLINE9,                                 // Ueberschrift 9
-RES_POOLCOLL_HEADLINE10,                                // Ueberschrift 10
+// Subgroup headings.
+RES_POOLCOLL_HEADLINE_BASE,                             // Base heading.
+RES_POOLCOLL_HEADLINE1,                                 // Heading 1.
+RES_POOLCOLL_HEADLINE2,                                 // Heading 2.
+RES_POOLCOLL_HEADLINE3,                                 // Heading 3.
+RES_POOLCOLL_HEADLINE4,                                 // Heading 4.
+RES_POOLCOLL_HEADLINE5,                                 // Heading 5.
+RES_POOLCOLL_HEADLINE6,                                 // Heading 6.
+RES_POOLCOLL_HEADLINE7,                                 // Heading 7.
+RES_POOLCOLL_HEADLINE8,                                 // Heading 8.
+RES_POOLCOLL_HEADLINE9,                                 // Heading 9.
+RES_POOLCOLL_HEADLINE10,                                // Heading 10.
 
 RES_POOLCOLL_TEXT_END,
 
 
-// Gruppe Listen
+// Group lists.
 RES_POOLCOLL_LISTS_BEGIN = COLL_LISTS_BITS,
 
-RES_POOLCOLL_NUMBUL_BASE = RES_POOLCOLL_LISTS_BEGIN,    // Basis-Liste
+RES_POOLCOLL_NUMBUL_BASE = RES_POOLCOLL_LISTS_BEGIN,    // Base list.
 
-    // Untergruppe Nummerierung
-RES_POOLCOLL_NUM_LEVEL1S,                               // Start Level1
-RES_POOLCOLL_NUM_LEVEL1,                                // 1. Level
-RES_POOLCOLL_NUM_LEVEL1E,                               // Ende Level1
-RES_POOLCOLL_NUM_NONUM1,                                // keine Nummerierung
-RES_POOLCOLL_NUM_LEVEL2S,                               // Start 2. Level
-RES_POOLCOLL_NUM_LEVEL2,                                // 2. Level
-RES_POOLCOLL_NUM_LEVEL2E,                               // Ende 2. Level
-RES_POOLCOLL_NUM_NONUM2,                                // keine Nummerierung
-RES_POOLCOLL_NUM_LEVEL3S,                               // Start 3. Level
-RES_POOLCOLL_NUM_LEVEL3,                                // 3. Level
-RES_POOLCOLL_NUM_LEVEL3E,                               // Ende 3. Level
-RES_POOLCOLL_NUM_NONUM3,                                // keine Nummerierung
-RES_POOLCOLL_NUM_LEVEL4S,                               // Start 4. Level
-RES_POOLCOLL_NUM_LEVEL4,                                // 4. Level
-RES_POOLCOLL_NUM_LEVEL4E,                               // Ende 4. Level
-RES_POOLCOLL_NUM_NONUM4,                                // keine Nummerierung
-RES_POOLCOLL_NUM_LEVEL5S,                               // Start 5. Level
-RES_POOLCOLL_NUM_LEVEL5,                                // 5. Level
-RES_POOLCOLL_NUM_LEVEL5E,                               // Ende 5. Level
-RES_POOLCOLL_NUM_NONUM5,                                // keine Nummerierung
+// Subgroup numberings.
+RES_POOLCOLL_NUM_LEVEL1S,                               // Start 1st level.
+RES_POOLCOLL_NUM_LEVEL1,                                // 1st level.
+RES_POOLCOLL_NUM_LEVEL1E,                               // End 1st level.
+RES_POOLCOLL_NUM_NONUM1,                                // No numbering.
+RES_POOLCOLL_NUM_LEVEL2S,                               // Start 2nd level.
+RES_POOLCOLL_NUM_LEVEL2,                                // 2nd level.
+RES_POOLCOLL_NUM_LEVEL2E,                               // End 2nd level.
+RES_POOLCOLL_NUM_NONUM2,                                // No numbering.
+RES_POOLCOLL_NUM_LEVEL3S,                               // Start 3rd level.
+RES_POOLCOLL_NUM_LEVEL3,                                // 3rd level.
+RES_POOLCOLL_NUM_LEVEL3E,                               // End 3rd level.
+RES_POOLCOLL_NUM_NONUM3,                                // No numbering.
+RES_POOLCOLL_NUM_LEVEL4S,                               // Start 4th level.
+RES_POOLCOLL_NUM_LEVEL4,                                // 4th level.
+RES_POOLCOLL_NUM_LEVEL4E,                               // End 4th level.
+RES_POOLCOLL_NUM_NONUM4,                                // No numbering.
+RES_POOLCOLL_NUM_LEVEL5S,                               // Start 5th level.
+RES_POOLCOLL_NUM_LEVEL5,                                // 5th level.
+RES_POOLCOLL_NUM_LEVEL5E,                               // End 5th level.
+RES_POOLCOLL_NUM_NONUM5,                                // No numbering.
 
-    // Untergruppe Aufzaehlung
-RES_POOLCOLL_BUL_LEVEL1S,                               // Start Level1
-RES_POOLCOLL_BUL_LEVEL1,                                // 1. Level
-RES_POOLCOLL_BUL_LEVEL1E,                               // Ende Level1
-RES_POOLCOLL_BUL_NONUM1,                                // keine Nummerierung
-RES_POOLCOLL_BUL_LEVEL2S,                               // Start 2. Level
-RES_POOLCOLL_BUL_LEVEL2,                                // 2. Level
-RES_POOLCOLL_BUL_LEVEL2E,                               // Ende 2. Level
-RES_POOLCOLL_BUL_NONUM2,                                // keine Nummerierung
-RES_POOLCOLL_BUL_LEVEL3S,                               // Start 3. Level
-RES_POOLCOLL_BUL_LEVEL3,                                // 3. Level
-RES_POOLCOLL_BUL_LEVEL3E,                               // Ende 3. Level
-RES_POOLCOLL_BUL_NONUM3,                                // keine Nummerierung
-RES_POOLCOLL_BUL_LEVEL4S,                               // Start 4. Level
-RES_POOLCOLL_BUL_LEVEL4,                                // 4. Level
-RES_POOLCOLL_BUL_LEVEL4E,                               // Ende 4. Level
-RES_POOLCOLL_BUL_NONUM4,                                // keine Nummerierung
-RES_POOLCOLL_BUL_LEVEL5S,                               // Start 5. Level
-RES_POOLCOLL_BUL_LEVEL5,                                // 5. Level
-RES_POOLCOLL_BUL_LEVEL5E,                               // Ende 5. Level
-RES_POOLCOLL_BUL_NONUM5,                                // keine Nummerierung
+
+//Subgroup bullets.
+RES_POOLCOLL_BUL_LEVEL1S,                               // Start 1st level.
+RES_POOLCOLL_BUL_LEVEL1,                                // 1st level.
+RES_POOLCOLL_BUL_LEVEL1E,                               // End 1st level
+RES_POOLCOLL_BUL_NONUM1,                                // No numbering.
+RES_POOLCOLL_BUL_LEVEL2S,                               // Start 2nd level.
+RES_POOLCOLL_BUL_LEVEL2,                                // 2nd level.
+RES_POOLCOLL_BUL_LEVEL2E,                               // End 2nd level.
+RES_POOLCOLL_BUL_NONUM2,                                // No numbering.
+RES_POOLCOLL_BUL_LEVEL3S,                               // Start 3rd level.
+RES_POOLCOLL_BUL_LEVEL3,                                // 3rd Level.
+RES_POOLCOLL_BUL_LEVEL3E,                               // End 3rd level.
+RES_POOLCOLL_BUL_NONUM3,                                // No numbering.
+RES_POOLCOLL_BUL_LEVEL4S,                               // Start 4th level.
+RES_POOLCOLL_BUL_LEVEL4,                                // 4th level.
+RES_POOLCOLL_BUL_LEVEL4E,                               // End 4th level.
+RES_POOLCOLL_BUL_NONUM4,                                // No numbering.
+RES_POOLCOLL_BUL_LEVEL5S,                               // Start 5th level.
+RES_POOLCOLL_BUL_LEVEL5,                                // 5th level.
+RES_POOLCOLL_BUL_LEVEL5E,                               // End 5th Level.
+RES_POOLCOLL_BUL_NONUM5,                                // No numbering.
 
 RES_POOLCOLL_LISTS_END,
 
 
-// Sonderbereiche
+// Special ranges.
 RES_POOLCOLL_EXTRA_BEGIN = COLL_EXTRA_BITS,
 
-    // Untergruppe Header
-RES_POOLCOLL_HEADER = RES_POOLCOLL_EXTRA_BEGIN,         // Header Left&Right
-RES_POOLCOLL_HEADERL,                                   // Header Left
-RES_POOLCOLL_HEADERR,                                   // Header Right
+// Subgroup header.
+RES_POOLCOLL_HEADER = RES_POOLCOLL_EXTRA_BEGIN,         // Header Left&Right.
+RES_POOLCOLL_HEADERL,                                   // Header Left.
+RES_POOLCOLL_HEADERR,                                   // Header Right.
 
-    // Untergruppe Footer
-RES_POOLCOLL_FOOTER,                                    // Footer Left&Right
-RES_POOLCOLL_FOOTERL,                                   // Footer Left
-RES_POOLCOLL_FOOTERR,                                   // Footer Right
+// Subgroup footer.
+RES_POOLCOLL_FOOTER,                                    // Footer Left&Right.
+RES_POOLCOLL_FOOTERL,                                   // Footer Left.
+RES_POOLCOLL_FOOTERR,                                   // Footer Right.
 
-    // Untergruppe Tabelle
-RES_POOLCOLL_TABLE,                                     // Tabelle "Inhalt"
-RES_POOLCOLL_TABLE_HDLN,                                // Tabellen-Headline
+// Subgroup table.
+RES_POOLCOLL_TABLE,                                     // Table of Contents.
+RES_POOLCOLL_TABLE_HDLN,                                // Table of Contents - heading.
 
 
-    // Untergruppe Beschriftung
-RES_POOLCOLL_LABEL,                                     // Beschriftung-Basis
-RES_POOLCOLL_LABEL_ABB,                                 // Beschriftung-Abbildung
-RES_POOLCOLL_LABEL_TABLE,                               // Beschriftung-Tabelle
-RES_POOLCOLL_LABEL_FRAME,                               // Beschriftung-Rahmen
+// Subgroup labels.
+RES_POOLCOLL_LABEL,                                     // Base labels.
+RES_POOLCOLL_LABEL_ABB,                                 // Label illustration.
+RES_POOLCOLL_LABEL_TABLE,                               // Label table.
+RES_POOLCOLL_LABEL_FRAME,                               // Label frame.
 
-    // sonstiges
-RES_POOLCOLL_FRAME,                                     // Rahmen
-RES_POOLCOLL_FOOTNOTE,                                  // Fussnoten
-RES_POOLCOLL_JAKETADRESS,                               // UmschlagAdresse
-RES_POOLCOLL_SENDADRESS,                                // AbsenderAdresse
-RES_POOLCOLL_ENDNOTE,                                   // Endnoten
+// Other stuff.
+RES_POOLCOLL_FRAME,                                     // Frames.
+RES_POOLCOLL_FOOTNOTE,                                  // Footnotes.
+RES_POOLCOLL_JAKETADRESS,                               // Addressee.
+RES_POOLCOLL_SENDADRESS,                                // Sender.
+RES_POOLCOLL_ENDNOTE,                                   // Endnotes.
 
-RES_POOLCOLL_LABEL_DRAWING,                             // Beschriftung-Zeichen-Objekte
+RES_POOLCOLL_LABEL_DRAWING,                             // Label drawing objects.
 RES_POOLCOLL_EXTRA_END,
 
 
-// Gruppe Verzeichnisse
+// Group indices.
 RES_POOLCOLL_REGISTER_BEGIN = COLL_REGISTER_BITS,
 
-RES_POOLCOLL_REGISTER_BASE = RES_POOLCOLL_REGISTER_BEGIN,   // Basis-Verzeichnis
+RES_POOLCOLL_REGISTER_BASE = RES_POOLCOLL_REGISTER_BEGIN,   // Base index.
 
-    // Untergruppe Index-Verzeichnisse
-RES_POOLCOLL_TOX_IDXH,                                  // Header
-RES_POOLCOLL_TOX_IDX1,                                  // 1. Ebene
-RES_POOLCOLL_TOX_IDX2,                                  // 2. Ebene
-RES_POOLCOLL_TOX_IDX3,                                  // 3. Ebene
-RES_POOLCOLL_TOX_IDXBREAK,                              // Trenner
+// Subgroup index tables.
+RES_POOLCOLL_TOX_IDXH,                                  // Header.
+RES_POOLCOLL_TOX_IDX1,                                  // 1st level.
+RES_POOLCOLL_TOX_IDX2,                                  // 2nd level.
+RES_POOLCOLL_TOX_IDX3,                                  // 3rd level.
+RES_POOLCOLL_TOX_IDXBREAK,                              // Separator.
 
-    // Untergruppe Inhalts-Verzeichnisse
-RES_POOLCOLL_TOX_CNTNTH,                                // Header
-RES_POOLCOLL_TOX_CNTNT1,                                // 1. Ebene
-RES_POOLCOLL_TOX_CNTNT2,                                // 2. Ebene
-RES_POOLCOLL_TOX_CNTNT3,                                // 3. Ebene
-RES_POOLCOLL_TOX_CNTNT4,                                // 4. Ebene
-RES_POOLCOLL_TOX_CNTNT5,                                // 5. Ebene
-
-    // Untergruppe Benutzer-Verzeichnisse:
-RES_POOLCOLL_TOX_USERH,                                 // Header
-RES_POOLCOLL_TOX_USER1,                                 // 1. Ebene
-RES_POOLCOLL_TOX_USER2,                                 // 2. Ebene
-RES_POOLCOLL_TOX_USER3,                                 // 3. Ebene
-RES_POOLCOLL_TOX_USER4,                                 // 4. Ebene
-RES_POOLCOLL_TOX_USER5,                                 // 5. Ebene
+// Subgroup table of contents.
+RES_POOLCOLL_TOX_CNTNTH,                                // Header.
+RES_POOLCOLL_TOX_CNTNT1,                                // Content 1st level.
+RES_POOLCOLL_TOX_CNTNT2,                                // Content 2nd level.
+RES_POOLCOLL_TOX_CNTNT3,                                // Content 3rd level.
+RES_POOLCOLL_TOX_CNTNT4,                                // Content 4th level.
+RES_POOLCOLL_TOX_CNTNT5,                                // Content 5th level.
 
 
-RES_POOLCOLL_TOX_CNTNT6,                                // Inhalt 6. Ebene
-RES_POOLCOLL_TOX_CNTNT7,                                // Inhalt 7. Ebene
-RES_POOLCOLL_TOX_CNTNT8,                                // Inhalt 8. Ebene
-RES_POOLCOLL_TOX_CNTNT9,                                // Inhalt 9. Ebene
-RES_POOLCOLL_TOX_CNTNT10,                               // Inhalt 10. Ebene
+// Subgroup user indices.
+RES_POOLCOLL_TOX_USERH,                                 // Header.
+RES_POOLCOLL_TOX_USER1,                                 // 1st level.
+RES_POOLCOLL_TOX_USER2,                                 // 2nd level.
+RES_POOLCOLL_TOX_USER3,                                 // 3rd level.
+RES_POOLCOLL_TOX_USER4,                                 // 4th level.
+RES_POOLCOLL_TOX_USER5,                                 // 5th level.
 
-// illustrations index
-RES_POOLCOLL_TOX_ILLUSH,                                    // illustrations header
-RES_POOLCOLL_TOX_ILLUS1,                                 // illustrations all levels
 
-//  object index
-RES_POOLCOLL_TOX_OBJECTH,                               // objects header
-RES_POOLCOLL_TOX_OBJECT1,                                // objects all levels
+RES_POOLCOLL_TOX_CNTNT6,                                // Content  6th level.
+RES_POOLCOLL_TOX_CNTNT7,                                // Content  7th level.
+RES_POOLCOLL_TOX_CNTNT8,                                // Content  8th level.
+RES_POOLCOLL_TOX_CNTNT9,                                // Content  9th level.
+RES_POOLCOLL_TOX_CNTNT10,                               // Content 10th level.
 
-//  tables index
-RES_POOLCOLL_TOX_TABLESH,                               // tables header
-RES_POOLCOLL_TOX_TABLES1,                                // tables all levels
+// illustrations index.
+RES_POOLCOLL_TOX_ILLUSH,                                // Illustrations header.
+RES_POOLCOLL_TOX_ILLUS1,                                // Illustrations all levels.
 
-//  index of authorities
-RES_POOLCOLL_TOX_AUTHORITIESH,                          // authorities header
-RES_POOLCOLL_TOX_AUTHORITIES1,                           // authorities all levels
+//  object index.
+RES_POOLCOLL_TOX_OBJECTH,                               // Objects header.
+RES_POOLCOLL_TOX_OBJECT1,                               // Objects all levels.
 
-// user index 6..10
-RES_POOLCOLL_TOX_USER6,                                 // level 6
-RES_POOLCOLL_TOX_USER7,                                 // level 7
-RES_POOLCOLL_TOX_USER8,                                 // level 8
-RES_POOLCOLL_TOX_USER9,                                 // level 9
-RES_POOLCOLL_TOX_USER10,                                // level 10
+//  tables index.
+RES_POOLCOLL_TOX_TABLESH,                               // Tables header.
+RES_POOLCOLL_TOX_TABLES1,                               // Tables all levels.
+
+//  index of authorities.
+RES_POOLCOLL_TOX_AUTHORITIESH,                          // Authorities header.
+RES_POOLCOLL_TOX_AUTHORITIES1,                          // Authorities all levels.
+
+// user index 6..10.
+RES_POOLCOLL_TOX_USER6,                                 // 6th  level.
+RES_POOLCOLL_TOX_USER7,                                 // 7th  level.
+RES_POOLCOLL_TOX_USER8,                                 // 8th  level.
+RES_POOLCOLL_TOX_USER9,                                 // 9th  level.
+RES_POOLCOLL_TOX_USER10,                                // 10th level.
 
 RES_POOLCOLL_REGISTER_END,
 
 
-// Gruppe Kapitel/Dokument
+// Group chapter / document.
 RES_POOLCOLL_DOC_BEGIN = COLL_DOC_BITS,
 
-RES_POOLCOLL_DOC_TITEL = RES_POOLCOLL_DOC_BEGIN,        // Doc. Titel
-RES_POOLCOLL_DOC_SUBTITEL,                              // Doc. UnterTitel
+RES_POOLCOLL_DOC_TITEL = RES_POOLCOLL_DOC_BEGIN,        // Doc. titel.
+RES_POOLCOLL_DOC_SUBTITEL,                              // Doc. subtitel.
 
 RES_POOLCOLL_DOC_END,
 
-// Gruppe HTML-Vorlagen
+// Group HTML-styles.
 RES_POOLCOLL_HTML_BEGIN = COLL_HTML_BITS,
 
 RES_POOLCOLL_HTML_BLOCKQUOTE = RES_POOLCOLL_HTML_BEGIN,
@@ -414,15 +413,14 @@ RES_POOLCOLL_HTML_DT,
 
 RES_POOLCOLL_HTML_END
 
-// Ende der Textformat-Vorlagen Sammlung
+// End of text styles collection.
 };
 
 
-
-// erfrage den definierten Parent zu einer POOL-Id
-//  returnt:    0           -> Standard
-//              USHRT_MAX   -> kein Parent
-//              sonst       -> den Parent
+// Query defined parent of a POOL-ID
+// Returns  0 if standard
+//          USHRT_MAX if no parent
+//          the parent in all other cases.
 sal_uInt16 GetPoolParent( sal_uInt16 nId );
 
 SvxFrameDirection GetDefaultFrameDirection(sal_uLong nLanguage);
