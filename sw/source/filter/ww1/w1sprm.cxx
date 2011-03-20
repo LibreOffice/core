@@ -450,7 +450,7 @@ void Ww1SingleSprmPFInTable::Stop(
 #endif
     ,
     sal_uInt8, sal_uInt8*, sal_uInt16,
-    Ww1Manager& rMan)
+    Ww1Manager& /*rMan*/)
 {
 #if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE(rOut.IsInTable(), "");
