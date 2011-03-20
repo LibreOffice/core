@@ -460,7 +460,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     LPCWSTR wszAccName = ( LPWSTR ) strUserName.getStr( );
 
     // Create buffers for the SID and the domain name.
-    PSID pSid = (PSID) new WIN_BYTE[dwSidBufferSize];
+    PSID pSid = (PSID) new BYTE[dwSidBufferSize];
     CPPUNIT_ASSERT_MESSAGE("# creating SID buffer failed.\n", pSid!= NULL );
     memset( pSid, 0, dwSidBufferSize);
 
@@ -498,7 +498,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
                 // Reallocate memory for the SID buffer.
                 wprintf(L"# The SID buffer was too small. It will be reallocated.\n");
                 FreeSid( pSid);
-                pSid = (PSID) new WIN_BYTE[cbSid];
+                pSid = (PSID) new BYTE[cbSid];
                 CPPUNIT_ASSERT_MESSAGE("# re-creating SID buffer failed.\n",  pSid!= NULL );
                 memset( pSid, 0, cbSid);
                 dwSidBufferSize = cbSid;
@@ -579,7 +579,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
 
     /// check if logged in user is administrator:
 
-    WIN_BOOL b;
+    BOOL b;
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
     PSID AdministratorsGroup;
     b = AllocateAndInitializeSid(
