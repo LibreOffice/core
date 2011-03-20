@@ -4147,9 +4147,9 @@ double lcl_GetExtent( const SvxBorderLine* pSideLine, const SvxBorderLine* pOppo
 // into new method <lcl_PaintLeftRightLine(..)>
 void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
                              const SwFrm&           _rFrm,
-                             const SwPageFrm&       _rPage,
+                             const SwPageFrm&       /*_rPage*/,
                              const SwRect&          _rOutRect,
-                             const SwRect&          _rRect,
+                             const SwRect&          /*_rRect*/,
                              const SwBorderAttrs&   _rAttrs,
                              const SwRectFn&        _rRectFn )
 {
@@ -4313,9 +4313,9 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
 // into <lcl_PaintTopLine>
 void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
                              const SwFrm&           _rFrm,
-                             const SwPageFrm&       _rPage,
+                             const SwPageFrm&       /*_rPage*/,
                              const SwRect&          _rOutRect,
-                             const SwRect&          _rRect,
+                             const SwRect&          /*_rRect*/,
                              const SwBorderAttrs&   _rAttrs,
                              const SwRectFn&        _rRectFn )
 {
