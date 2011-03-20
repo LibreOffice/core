@@ -262,7 +262,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
 
         int i = 0, len = sizeof( aDoubleStyles ) / sizeof( SvxBorderStyle );
         long nWidth = 0;
-        SvxBorderStyle nTestStyle;
+        SvxBorderStyle nTestStyle(NO_STYLE);
         while ( i < len && nWidth == 0 )
         {
             nTestStyle = aDoubleStyles[i];
