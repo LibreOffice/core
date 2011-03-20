@@ -311,7 +311,7 @@ public:
 
 ImplGrafControl::ImplGrafControl(
     Window* pParent,
-    sal_uInt16 nSlotId,
+    sal_uInt16 /*nSlotId*/,
     const rtl::OUString& rCmd,
     const Reference< XFrame >& rFrame
 )   : Control( pParent, WB_TABSTOP )
