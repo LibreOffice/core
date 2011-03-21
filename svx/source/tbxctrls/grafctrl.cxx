@@ -311,7 +311,6 @@ public:
 
 ImplGrafControl::ImplGrafControl(
     Window* pParent,
-    sal_uInt16 /*nSlotId*/,
     const rtl::OUString& rCmd,
     const Reference< XFrame >& rFrame
 )   : Control( pParent, WB_TABSTOP )
@@ -594,7 +593,7 @@ void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const
 
 Window* SvxGrafToolBoxControl::CreateItemWindow( Window *pParent )
 {
-    return( new ImplGrafControl( pParent, GetSlotId(), m_aCommandURL, m_xFrame ) );
+    return( new ImplGrafControl( pParent, m_aCommandURL, m_xFrame ) );
 }
 
 // ----------------------------
