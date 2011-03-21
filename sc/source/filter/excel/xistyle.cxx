@@ -846,7 +846,7 @@ bool lclConvertBorderLine( SvxBorderLine& rLine, const XclImpPalette& rPalette, 
 
     if( nXclLine == EXC_LINE_NONE )
         return false;
-    if( nXclLine >= STATIC_TABLE_SIZE( ppnLineParam ) )
+    if( nXclLine >= STATIC_ARRAY_SIZE( ppnLineParam ) )
         nXclLine = EXC_LINE_THIN;
 
     rLine.SetColor( rPalette.GetColor( nXclColor ) );
@@ -1215,6 +1215,28 @@ void XclImpXF::ApplyPattern(
         GetNumFmtBuffer().FillScFmtToItemSet( aPattern.GetItemSet(), nForceScNumFmt );
         rDoc.ApplyPatternAreaTab( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, aPattern );
     }
+}
+
+/*static*/ void XclImpXF::ApplyPatternForBiff2CellFormat( const XclImpRoot& rRoot,
+        const ScAddress& rScPos, sal_uInt8 nFlags1, sal_uInt8 nFlags2, sal_uInt8 nFlags3 )
+{
+    /*  Create an XF object and let it do the work. We will have access to its
+        private members here. */
+    XclImpXF aXF( rRoot );
+
+    // no used flags available in BIFF2 (always true)
+    aXF.SetAllUsedFlags( true );
+
+    // set the attributes
+    aXF.maProtection.FillFromXF2( nFlags1 );
+    aXF.maAlignment.FillFromXF2( nFlags3 );
+    aXF.maBorder.FillFromXF2( nFlags3 );
+    aXF.maArea.FillFromXF2( nFlags3 );
+    aXF.mnXclNumFmt = ::extract_value< sal_uInt16 >( nFlags2, 0, 6 );
+    aXF.mnXclFont = ::extract_value< sal_uInt16 >( nFlags2, 6, 2 );
+
+    // write the attributes to the cell
+    aXF.ApplyPattern( rScPos.Col(), rScPos.Row(), rScPos.Col(), rScPos.Row(), rScPos.Tab() );
 }
 
 void XclImpXF::SetUsedFlags( sal_uInt8 nUsedFlags )

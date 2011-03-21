@@ -836,11 +836,56 @@ FltError ImportExcel8::Read( void )
         if( eAkt == EXC_STATE_BEFORE_SHEET )
         {
             sal_uInt16 nScTab = GetCurrScTab();
-            if( nScTab < maSheetOffsets.size()  )
+            if( nScTab < maSheetOffsets.size() )
             {
-                nProgressBaseSize += (aIn.GetSvStreamPos() - nProgressBasePos);
+                nProgressBaseSize += (maStrm.GetSvStreamPos() - nProgressBasePos);
                 nProgressBasePos = maSheetOffsets[ nScTab ];
-                aIn.StartNextRecord( nProgressBasePos );
+                maStrm.StartNextRecord( nProgressBasePos );
+
+                // #94191# import only 256 sheets
+                if( nScTab > GetScMaxPos().Tab() )
+                {
+                    if( maStrm.GetRecId() != EXC_ID_EOF )
+                        XclTools::SkipSubStream( maStrm );
+                    // #i29930# show warning box
+                    GetAddressConverter().CheckScTab( nScTab, true );
+                    eAkt = EXC_STATE_END;
+                }
+                else
+                {
+                    // #i109800# SHEET record may point to any record inside the sheet substream
+                    bool bIsBof = maStrm.GetRecId() == EXC_ID5_BOF;
+                    if( bIsBof )
+                        Bof5();                         // read the BOF record
+                    else
+                        pExcRoot->eDateiTyp = Biff8;    // on missing BOF, assume a standard worksheet
+
+                    NeueTabelle();
+                    switch( pExcRoot->eDateiTyp )
+                    {
+                        case Biff8:     // worksheet
+                        case Biff8M4:   // macro sheet
+                            eAkt = EXC_STATE_SHEET_PRE;  // Shrfmla Prefetch, Row-Prefetch
+                            // go to next record
+                            if( bIsBof ) maStrm.StartNextRecord();
+                            maStrm.StoreGlobalPosition();
+                        break;
+                        case Biff8C:    // chart sheet
+                            GetCurrSheetDrawing().ReadTabChart( maStrm );
+                            Eof();
+                            GetTracer().TraceChartOnlySheet();
+                        break;
+                        case Biff8W:    // workbook
+                            DBG_ERRORFILE( "ImportExcel8::Read - double workbook globals" );
+                            // run through
+                        case Biff8V:    // VB module
+                        default:
+                            // TODO: do not create a sheet in the Calc document
+                            pD->SetVisible( GetCurrScTab(), sal_False );
+                            XclTools::SkipSubStream( maStrm );
+                            IncCurrScTab();
+                    }
+                }
             }
             else
                 eAkt = EXC_STATE_END;
@@ -1014,51 +1059,6 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID_DCONREF:        rPTableMgr.ReadDconref( maStrm );   break;
                 }
 
-            }
-            break;
-
-            // ----------------------------------------------------------------
-            // before worksheet: wait for new worksheet BOF
-            case EXC_STATE_BEFORE_SHEET:
-            {
-                if( nRecId == EXC_ID5_BOF )
-                {
-                    // #94191# import only 256 sheets
-                    if( GetCurrScTab() > GetScMaxPos().Tab() )
-                    {
-                        XclTools::SkipSubStream( maStrm );
-                        // #i29930# show warning box
-                        GetAddressConverter().CheckScTab( GetCurrScTab(), true );
-                        eAkt = EXC_STATE_END;
-                    }
-                    else
-                    {
-                        Bof5();
-                        NeueTabelle();
-                        switch( pExcRoot->eDateiTyp )
-                        {
-                            case Biff8:     // worksheet
-                            case Biff8M4:   // macro sheet
-                                eAkt = EXC_STATE_SHEET_PRE;  // Shrfmla Prefetch, Row-Prefetch
-                                aIn.StoreGlobalPosition();
-                            break;
-                            case Biff8C:    // chart sheet
-                                GetCurrSheetDrawing().ReadTabChart( maStrm );
-                                Eof();
-                                GetTracer().TraceChartOnlySheet();
-                            break;
-                            case Biff8W:    // workbook
-                                DBG_ERRORFILE( "ImportExcel8::Read - double workbook globals" );
-                                // run through
-                            case Biff8V:    // VB module
-                            default:
-                                // TODO: do not create a sheet in the Calc document
-                                pD->SetVisible( GetCurrScTab(), sal_False );
-                                XclTools::SkipSubStream( maStrm );
-                                IncCurrScTab();
-                        }
-                    }
-                }
             }
             break;
 

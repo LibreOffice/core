@@ -120,6 +120,7 @@
 #include "optsolver.hxx"
 #include "sheetdata.hxx"
 #include "tabprotection.hxx"
+#include "dpobject.hxx"
 
 #include "docsh.hxx"
 #include "docshimp.hxx"
@@ -2629,7 +2630,9 @@ void ScDocShell::SetDocumentModified( sal_Bool bIsModified /* = sal_True */ )
 
     if ( pPaintLockData && bIsModified )
     {
-        //! BCA_BRDCST_ALWAYS etc. also needed here?
+        // #i115009# broadcast BCA_BRDCST_ALWAYS, so a component can read recalculated results
+        // of RecalcModeAlways formulas (like OFFSET) after modifying cells
+        aDocument.Broadcast( SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS, NULL );
         aDocument.InvalidateTableArea();    // #i105279# needed here
         aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 

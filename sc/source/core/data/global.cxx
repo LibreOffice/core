@@ -284,6 +284,7 @@ void ScGlobal::SetSearchItem( const SvxSearchItem& rNew )
     pSearchItem = (SvxSearchItem*)rNew.Clone();
 
     pSearchItem->SetWhich( SID_SEARCH_ITEM );
+    pSearchItem->SetAppFlag( SVX_SEARCHAPP_CALC );
 }
 
 void ScGlobal::ClearAutoFormat()

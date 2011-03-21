@@ -1579,6 +1579,30 @@ void ScInterpreter::ScArcCotHyp()
         PushDouble(0.5 * log((nVal + 1.0) / (nVal - 1.0)));
 }
 
+void ScInterpreter::ScCosecant()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "regina", "ScInterpreter::ScCosecant" );
+    PushDouble(1.0 / ::rtl::math::sin(GetDouble()));
+}
+
+void ScInterpreter::ScSecant()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "regina", "ScInterpreter::ScSecant" );
+    PushDouble(1.0 / ::rtl::math::cos(GetDouble()));
+}
+
+void ScInterpreter::ScCosecantHyp()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "regina", "ScInterpreter::ScCosecantHyp" );
+    PushDouble(1.0 / sinh(GetDouble()));
+}
+
+void ScInterpreter::ScSecantHyp()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "regina", "ScInterpreter::ScSecantHyp" );
+    PushDouble(1.0 / cosh(GetDouble()));
+}
+
 
 void ScInterpreter::ScExp()
 {

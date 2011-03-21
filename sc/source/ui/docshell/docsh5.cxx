@@ -41,8 +41,6 @@
 #include <sfx2/bindings.hxx>
 #include <svl/smplhint.hxx>
 
-#include <com/sun/star/sdbc/XResultSet.hpp>
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "docsh.hxx"
@@ -980,8 +978,7 @@ IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScRefreshTimer*, pRefreshTimer )
     {
         ScRange aRange;
         pDBData->GetArea( aRange );
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> xResultSet;
-        bContinue = aFunc.DoImport( aRange.aStart.Tab(), aImportParam, xResultSet, NULL, sal_True, sal_False ); //! Api-Flag as parameter
+        bContinue = aFunc.DoImport( aRange.aStart.Tab(), aImportParam, NULL, sal_True, sal_False ); //! Api-Flag as parameter
         // internal operations (sort, query, subtotal) only if no error
         if (bContinue)
         {

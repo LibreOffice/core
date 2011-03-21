@@ -569,14 +569,9 @@ const sal_uInt16 EXC_CHPICFORMAT_STRETCH        = 1;        /// Bitmap stretched
 const sal_uInt16 EXC_CHPICFORMAT_STACK          = 2;        /// Bitmap stacked.
 const sal_uInt16 EXC_CHPICFORMAT_SCALE          = 3;        /// Bitmap scaled to axis scale.
 
-const sal_uInt16 EXC_CHPICFORMAT_WMF            = 2;
-const sal_uInt16 EXC_CHPICFORMAT_BMP            = 9;
-const sal_uInt16 EXC_CHPICFORMAT_DEFAULT        = 19;
-
-const sal_uInt16 EXC_CHPICFORMAT_WINDOWS        = 0x0001;
-const sal_uInt16 EXC_CHPICFORMAT_MACOS          = 0x0002;
-const sal_uInt16 EXC_CHPICFORMAT_FORMATONLY     = 0x0100;
-const sal_uInt16 EXC_CHPICFORMAT_DEFAULTFLAGS   = 0x0E00;   /// Default flags for export.
+const sal_uInt16 EXC_CHPICFORMAT_TOPBOTTOM      = 0x0200;
+const sal_uInt16 EXC_CHPICFORMAT_FRONTBACK      = 0x0400;
+const sal_uInt16 EXC_CHPICFORMAT_LEFTRIGHT      = 0x0800;
 
 // (0x103D) CHDROPBAR ---------------------------------------------------------
 
@@ -856,7 +851,6 @@ struct XclChEscherFormat
 struct XclChPicFormat
 {
     sal_uInt16          mnBmpMode;          /// Bitmap mode, e.g. stretched, stacked.
-    sal_uInt16          mnFormat;           /// Image data format (WMF, BMP).
     sal_uInt16          mnFlags;            /// Additional flags.
     double              mfScale;            /// Picture scaling (units).
 
@@ -1440,7 +1434,8 @@ public:
                             XclChObjectTable& rHatchTable,
                             XclChObjectTable& rBitmapTable,
                             const XclChEscherFormat& rEscherFmt,
-                            const XclChPicFormat& rPicFmt,
+                            const XclChPicFormat* pPicFmt,
+                            sal_uInt32 nDffFillType,
                             XclChPropertyMode ePropMode );
     /** Writes all marker properties to the passed property set. */
     void                WriteMarkerProperties(

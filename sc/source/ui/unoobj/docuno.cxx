@@ -87,6 +87,7 @@
 #include "rangeutl.hxx"
 #include "markdata.hxx"
 #include "docoptio.hxx"
+#include "scextopt.hxx"
 #include "unoguard.hxx"
 #include "unonames.hxx"
 #include "shapeuno.hxx"
@@ -903,6 +904,16 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
             ScTabViewShell* pViewSh = pViewObj->GetViewShell();
             if (pViewSh)
             {
+                // #i95280# when printing from the shell, the view is never activated,
+                // so Excel view settings must also be evaluated here.
+                ScExtDocOptions* pExtOpt = pDocShell->GetDocument()->GetExtDocOptions();
+                if ( pExtOpt && pExtOpt->IsChanged() )
+                {
+                    pViewSh->GetViewData()->ReadExtOptions(*pExtOpt);        // Excel view settings
+                    pViewSh->SetTabNo( pViewSh->GetViewData()->GetTabNo(), sal_True );
+                    pExtOpt->SetChanged( false );
+                }
+
                 const ScMarkData& rViewMark = pViewSh->GetViewData()->GetMarkData();
                 SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
                 for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
@@ -1052,7 +1063,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
     long nTabStart = pPrintFuncCache->GetTabStart( nTab );
 
-    (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, sal_False, NULL, NULL );
+    (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, sal_False, NULL );
 
     ScRange aCellRange;
     sal_Bool bWasCellRange = aFunc.GetLastSourceRange( aCellRange );
@@ -1076,11 +1087,6 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         pArray[2].Value <<= aRangeAddress;
     }
 
-    #if 0
-    const ScPrintOptions& rPrintOpt =
-    #endif
-    // FIXME: is this for side effects ?
-        SC_MOD()->GetPrintOptions();
     if( ! pPrinterOptions )
         pPrinterOptions = new ScPrintUIOptions;
     else
@@ -1186,7 +1192,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         //<---i56629
     }
 
-    (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, sal_True, NULL, NULL );
+    (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, sal_True, NULL );
 
     //  resolve the hyperlinks for PDF export
 

@@ -96,7 +96,6 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     GrandTotalItem  maColGrandTotal;
     rtl::OUString   sDataPilotTableName;
     rtl::OUString   sApplicationData;
-    rtl::OUString   sGrandTotal;
     rtl::OUString   sDatabaseName;
     rtl::OUString   sSourceObject;
     rtl::OUString   sServiceName;

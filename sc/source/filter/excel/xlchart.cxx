@@ -147,8 +147,7 @@ XclChEscherFormat::~XclChEscherFormat()
 
 XclChPicFormat::XclChPicFormat() :
     mnBmpMode( EXC_CHPICFORMAT_NONE ),
-    mnFormat( EXC_CHPICFORMAT_DEFAULT ),
-    mnFlags( EXC_CHPICFORMAT_DEFAULTFLAGS ),
+    mnFlags( EXC_CHPICFORMAT_TOPBOTTOM | EXC_CHPICFORMAT_FRONTBACK | EXC_CHPICFORMAT_LEFTRIGHT ),
     mfScale( 0.5 )
 {
 }
@@ -423,7 +422,7 @@ sal_uInt16 XclChartHelper::GetSeriesLineAutoColorIdx( sal_uInt16 nFormatIdx )
         17, 18, 19, 20, 21, 22, 23, 24,
         25, 26, 27, 28, 29, 30, 31, 63
     };
-    return spnLineColors[ nFormatIdx % STATIC_TABLE_SIZE( spnLineColors ) ];
+    return spnLineColors[ nFormatIdx % STATIC_ARRAY_SIZE( spnLineColors ) ];
 }
 
 sal_uInt16 XclChartHelper::GetSeriesFillAutoColorIdx( sal_uInt16 nFormatIdx )
@@ -438,13 +437,13 @@ sal_uInt16 XclChartHelper::GetSeriesFillAutoColorIdx( sal_uInt16 nFormatIdx )
          8,  9, 10, 11, 12, 13, 14, 15,
         16, 17, 18, 19, 20, 21, 22, 23
     };
-    return spnFillColors[ nFormatIdx % STATIC_TABLE_SIZE( spnFillColors ) ];
+    return spnFillColors[ nFormatIdx % STATIC_ARRAY_SIZE( spnFillColors ) ];
 }
 
 sal_uInt8 XclChartHelper::GetSeriesFillAutoTransp( sal_uInt16 nFormatIdx )
 {
     static const sal_uInt8 spnTrans[] = { 0x00, 0x40, 0x20, 0x60, 0x70 };
-    return spnTrans[ (nFormatIdx / 56) % STATIC_TABLE_SIZE( spnTrans ) ];
+    return spnTrans[ (nFormatIdx / 56) % STATIC_ARRAY_SIZE( spnTrans ) ];
 }
 
 sal_uInt16 XclChartHelper::GetAutoMarkerType( sal_uInt16 nFormatIdx )
@@ -453,14 +452,14 @@ sal_uInt16 XclChartHelper::GetAutoMarkerType( sal_uInt16 nFormatIdx )
         EXC_CHMARKERFORMAT_DIAMOND, EXC_CHMARKERFORMAT_SQUARE, EXC_CHMARKERFORMAT_TRIANGLE,
         EXC_CHMARKERFORMAT_CROSS, EXC_CHMARKERFORMAT_STAR, EXC_CHMARKERFORMAT_CIRCLE,
         EXC_CHMARKERFORMAT_PLUS, EXC_CHMARKERFORMAT_DOWJ, EXC_CHMARKERFORMAT_STDDEV };
-    return spnSymbols[ nFormatIdx % STATIC_TABLE_SIZE( spnSymbols ) ];
+    return spnSymbols[ nFormatIdx % STATIC_ARRAY_SIZE( spnSymbols ) ];
 }
 
 bool XclChartHelper::HasMarkerFillColor( sal_uInt16 nMarkerType )
 {
     static const bool spbFilled[] = {
         false, true, true, true, false, false, false, false, true, false };
-    return (nMarkerType < STATIC_TABLE_SIZE( spbFilled )) && spbFilled[ nMarkerType ];
+    return (nMarkerType < STATIC_ARRAY_SIZE( spbFilled )) && spbFilled[ nMarkerType ];
 }
 
 OUString XclChartHelper::GetErrorBarValuesRole( sal_uInt8 nBarType )
@@ -507,7 +506,7 @@ static const XclChFormatInfo spFmtInfos[] =
 
 XclChFormatInfoProvider::XclChFormatInfoProvider()
 {
-    const XclChFormatInfo* pEnd = STATIC_TABLE_END( spFmtInfos );
+    const XclChFormatInfo* pEnd = STATIC_ARRAY_END( spFmtInfos );
     for( const XclChFormatInfo* pIt = spFmtInfos; pIt != pEnd; ++pIt )
         maInfoMap[ pIt->meObjType ] = pIt;
 }
@@ -548,7 +547,7 @@ static const XclChTypeInfo spTypeInfos[] =
     { EXC_CHTYPEID_RADARLINE, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARLINE, SERVICE_CHART2_NET,       EXC_CHVARPOINT_SINGLE, csscd::TOP,           false, false, true,  false, true,  false, true,  false, false, false, false },
     { EXC_CHTYPEID_RADARAREA, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARAREA, SERVICE_CHART2_FILLEDNET, EXC_CHVARPOINT_NONE,   csscd::TOP,           false, false, true,  true,  true,  false, true,  false, false, true,  false },
     { EXC_CHTYPEID_PIE,       EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,       EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  true,  true,  false, false, false, false },
-    { EXC_CHTYPEID_DONUT,     EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,       EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  false, true,  false, false, true,  false },
+    { EXC_CHTYPEID_DONUT,     EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,       EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  false, true,  false, false, false, false },
     { EXC_CHTYPEID_PIEEXT,    EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIEEXT,    SERVICE_CHART2_PIE,       EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, false, true,  true,  true,  true,  true,  false, false, false, false },
     { EXC_CHTYPEID_SCATTER,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_SCATTER,   EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         true,  false, false, false, true,  false, false, false, false, false, false },
     { EXC_CHTYPEID_BUBBLES,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_BUBBLE,    EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         false, false, false, true,  true,  false, false, false, false, false, false },
@@ -576,7 +575,7 @@ void XclChExtTypeInfo::Set( const XclChTypeInfo& rTypeInfo, bool b3dChart, bool 
 
 XclChTypeInfoProvider::XclChTypeInfoProvider()
 {
-    const XclChTypeInfo* pEnd = STATIC_TABLE_END( spTypeInfos );
+    const XclChTypeInfo* pEnd = STATIC_ARRAY_END( spTypeInfos );
     for( const XclChTypeInfo* pIt = spTypeInfos; pIt != pEnd; ++pIt )
         maInfoMap[ pIt->meTypeId ] = pIt;
 }
@@ -590,7 +589,7 @@ const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfo( XclChTypeId eTypeId ) c
 
 const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromRecId( sal_uInt16 nRecId ) const
 {
-    const XclChTypeInfo* pEnd = STATIC_TABLE_END( spTypeInfos );
+    const XclChTypeInfo* pEnd = STATIC_ARRAY_END( spTypeInfos );
     for( const XclChTypeInfo* pIt = spTypeInfos; pIt != pEnd; ++pIt )
         if( pIt->mnRecId == nRecId )
             return *pIt;
@@ -600,7 +599,7 @@ const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromRecId( sal_uInt16 nRe
 
 const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromService( const OUString& rServiceName ) const
 {
-    const XclChTypeInfo* pEnd = STATIC_TABLE_END( spTypeInfos );
+    const XclChTypeInfo* pEnd = STATIC_ARRAY_END( spTypeInfos );
     for( const XclChTypeInfo* pIt = spTypeInfos; pIt != pEnd; ++pIt )
         if( rServiceName.equalsAscii( pIt->mpcServiceName ) )
             return *pIt;
@@ -1069,8 +1068,8 @@ void XclChPropSetHelper::WriteAreaProperties( ScfPropertySet& rPropSet,
 
 void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
         XclChObjectTable& rGradientTable, XclChObjectTable& /*rHatchTable*/, XclChObjectTable& rBitmapTable,
-        const XclChEscherFormat& rEscherFmt, const XclChPicFormat& rPicFmt,
-        XclChPropertyMode ePropMode )
+        const XclChEscherFormat& rEscherFmt, const XclChPicFormat* pPicFmt,
+        sal_uInt32 nDffFillType, XclChPropertyMode ePropMode )
 {
     if( rEscherFmt.mxItemSet.is() )
     {
@@ -1120,8 +1119,10 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
                             if( aBmpName.getLength() )
                             {
                                 namespace cssd = ::com::sun::star::drawing;
-                                cssd::BitmapMode eApiBmpMode = (rPicFmt.mnBmpMode == EXC_CHPICFORMAT_STRETCH) ?
-                                    cssd::BitmapMode_STRETCH : cssd::BitmapMode_REPEAT;
+                                /*  #i71810# Caller decides whether to use a CHPICFORMAT record for bitmap mode.
+                                    If not passed, detect fill mode from the DFF property 'fill-type'. */
+                                bool bStretch = pPicFmt ? (pPicFmt->mnBmpMode == EXC_CHPICFORMAT_STRETCH) : (nDffFillType == mso_fillPicture);
+                                cssd::BitmapMode eApiBmpMode = bStretch ? cssd::BitmapMode_STRETCH : cssd::BitmapMode_REPEAT;
                                 maBitmapHlp.InitializeWrite();
                                 maBitmapHlp << cssd::FillStyle_BITMAP << aBmpName << eApiBmpMode;
                                 maBitmapHlp.WriteToPropertySet( rPropSet );

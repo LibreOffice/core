@@ -35,8 +35,9 @@
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
+#include <svx/dataaccessdescriptor.hxx>
 
-#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
 
 #include "dbdocfun.hxx"
 #include "sc.hrc"
@@ -57,6 +58,8 @@
 #include "drwlayer.hxx"
 #include "dpshttab.hxx"
 #include "hints.hxx"
+
+using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------
 
@@ -1429,15 +1432,11 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
 
 //==================================================================
 //
-//      Datenbank-Import...
+//      database import
 
-void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
-        const String& rTableName, const String& rStatement, sal_Bool bNative,
-        sal_uInt8 nType, const ::com::sun::star::uno::Reference<
-        ::com::sun::star::sdbc::XResultSet >& xResultSet,
-        const SbaSelectionList* pSelection )
+void ScDBDocFunc::UpdateImport( const String& rTarget, const svx::ODataAccessDescriptor& rDescriptor )
 {
-    //  Target ist jetzt einfach der Bereichsname
+    // rTarget is the name of a database range
 
     ScDocument* pDoc = rDocShell.GetDocument();
     ScDBCollection& rDBColl = *pDoc->GetDBCollection();
@@ -1465,15 +1464,21 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
     pData->GetArea( nTab, nDummyCol,nDummyRow,nDummyCol,nDummyRow );
     pData->GetImportParam( aImportParam );
 
-    sal_Bool bSql = ( rStatement.Len() != 0 );
+    rtl::OUString sDBName;
+    rtl::OUString sDBTable;
+    sal_Int32 nCommandType = 0;
+    rDescriptor[svx::daDataSource]  >>= sDBName;
+    rDescriptor[svx::daCommand]     >>= sDBTable;
+    rDescriptor[svx::daCommandType] >>= nCommandType;
 
-    aImportParam.aDBName    = rDBName;
-    aImportParam.bSql       = bSql;
-    aImportParam.aStatement = bSql ? rStatement : rTableName;
-    aImportParam.bNative    = bNative;
-    aImportParam.nType      = nType;
+    aImportParam.aDBName    = sDBName;
+    aImportParam.bSql       = ( nCommandType == sdb::CommandType::COMMAND );
+    aImportParam.aStatement = sDBTable;
+    aImportParam.bNative    = sal_False;
+    aImportParam.nType      = static_cast<sal_uInt8>( ( nCommandType == sdb::CommandType::QUERY ) ? ScDbQuery : ScDbTable );
     aImportParam.bImport    = sal_True;
-    sal_Bool bContinue = DoImport( nTab, aImportParam, xResultSet, pSelection, sal_True );
+
+    sal_Bool bContinue = DoImport( nTab, aImportParam, &rDescriptor, sal_True );
 
     //  DB-Operationen wiederholen
 
