@@ -45,6 +45,7 @@ LIBSALCPPRT=$(0)
 
 OBJFILES= \
     $(OBJ)$/pagein.obj \
+    $(OBJ)$/pagein-main.obj \
     $(OBJ)$/file_image_unx.obj
 
 APP1TARGET=$(TARGET)
@@ -77,24 +78,28 @@ UREMISCPATH=..$/ure-link$/share$/misc
 $(MISC)$/$(TARGET)-calc : makefile.mk
     @echo Making: $@
     @-echo $(DLLPRE)sc$(DFTDLLPOST)  >  $@
+    @-echo $(DLLPRE)scui$(DFTDLLPOST) >>  $@
     @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
     @-echo $(DLLPRE)svxcore$(DFTDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-draw : makefile.mk
     @echo Making: $@
     @-echo $(DLLPRE)sd$(DFTDLLPOST)  >  $@
+    @-echo $(DLLPRE)sdui$(DFTDLLPOST) >>  $@
     @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
     @-echo $(DLLPRE)svxcore$(DFTDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-impress : makefile.mk
     @echo Making: $@
     @-echo $(DLLPRE)sd$(DFTDLLPOST)  >  $@
+    @-echo $(DLLPRE)sdui$(DFTDLLPOST) >>  $@
     @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
     @-echo $(DLLPRE)svxcore$(DFTDLLPOST) >> $@
 
 $(MISC)$/$(TARGET)-writer : makefile.mk
     @echo Making: $@
     @-echo $(DLLPRE)sw$(DFTDLLPOST)  >  $@
+    @-echo $(DLLPRE)swui$(DFTDLLPOST) >>  $@
     @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
     @-echo $(DLLPRE)svxcore$(DFTDLLPOST) >> $@
 

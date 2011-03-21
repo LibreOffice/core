@@ -32,32 +32,30 @@ NO_DEFAULT_STL=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(ENABLE_UNIX_QUICKSTARTER)"!="TRUE"
-
-dummy:
-    @echo "Unix quickstarter disabled"
-
-.ELSE
+.IF "$(ENABLE_QUICKSTART_LIBPNG)"!="TRUE"
+CFLAGS+=-DENABLE_QUICKSTART_LIBPNG
+.ENDIF
 
 STDLIB=
-
 CFLAGS+=$(LIBPNG_CFLAGS)
 
 OBJFILES= \
     $(OBJ)$/splashx.obj \
     $(OBJ)$/start.obj
 
+PAGEIN_OBJS= \
+    $(OBJ)$/pagein.obj \
+    $(OBJ)$/file_image_unx.obj
+
 APP1TARGET = $(TARGET)
 APP1RPATH  = BRAND
-APP1OBJS   = $(OBJFILES)
+APP1OBJS   = $(OBJFILES) $(PAGEIN_OBJS)
 APP1LIBSALCPPRT=
 APP1CODETYPE = C
-APP1STDLIBS = $(SALLIB) -lX11 $(LIBPNG_LIBS)
+APP1STDLIBS = $(STDLIBGUIMT) $(SALLIB) $(LIBPNG_LIBS)
 .IF "$(OS)"=="SOLARIS"
 APP1STDLIBS+= -lsocket
 .ENDIF
-
-.ENDIF # ENABLE_UNIX_QUICKSTARTER
 
 # --- Targets ------------------------------------------------------
 

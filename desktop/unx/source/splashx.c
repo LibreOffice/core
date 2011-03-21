@@ -25,6 +25,9 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
+
+#ifdef ENABLE_QUICKSTART_LIBPNG
+
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
@@ -619,5 +622,29 @@ void splash_close_window()
     // leak it is faster
     bitmap_rows = NULL;
 }
+
+#else /* not ENABLE_QUICKSTART_LIBPNG */
+
+/* Stubs that will never be called in this case */
+
+int splash_load_bmp( const char *filename )
+{
+    return 1;
+}
+void splash_setup( int barc[3], int framec[3], int posx, int posy, int w, int h )
+{
+}
+int splash_create_window( int argc, char** argv )
+{
+    return 1;
+}
+void splash_close_window()
+{
+}
+void splash_draw_progress( int progress )
+{
+}
+
+#endif // ENABLE_QUICKSTART_LIBPNG
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

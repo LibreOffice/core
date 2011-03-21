@@ -58,8 +58,10 @@ cleanup_and_leave:
     return (result);
 }
 
+extern int pagein_execute (int argc, char **argv);
+
 /* main */
-int  main (int argc, char **argv)
+int pagein_execute (int argc, char **argv)
 {
     int    i, v = 0;
     size_t nfiles = 0, nbytes = 0;
@@ -102,7 +104,6 @@ int  main (int argc, char **argv)
             /* next argv */
             continue;
         }
-
 
         if ((argv[i][0] == '@') && ((fp = fopen (argv[i], "r")) == 0))
         {
