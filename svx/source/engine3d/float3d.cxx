@@ -245,7 +245,7 @@ Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         mpRemember2DAttributes(NULL),
         bOnly3DChanged      ( sal_False )
 {
-    String accname(SVX_RES(STR_COLOR_LIGHT_PRE));
+    String accname(SVX_RES(RID_SVXFLOAT3D_COLOR_LIGHT_PRE));
     aCtlLightPreview.SetAccessibleName(accname);
     aCtlPreview.SetAccessibleName(accname);
     aLbAmbientlight.SetAccessibleName(aFTAmbientlight.GetDisplayText());

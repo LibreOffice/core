@@ -1233,8 +1233,8 @@ String RID_SVXFLOAT3D_FIX_B
 {
     Text [ en-US ] = "B:";
 };
-String STR_COLOR_LIGHT_PRE
+
+String RID_SVXFLOAT3D_COLOR_LIGHT_PRE
 {
     Text [ en-US ] = "Color Light Preview";
 };
-

@@ -198,6 +198,7 @@
 #define RID_SVXIMAGE_LIGHT_OFF              (RID_SVX_START + 211)
 #define RID_SVXIMAGE_COLORDLG               (RID_SVX_START + 214)
 
+#define RID_SVXFLOAT3D_COLOR_LIGHT_PRE      (RID_SVX_START + 72)
 #define RID_SVXFLOAT3D_FAVORITE             (RID_SVX_START + 73)
 #define RID_SVXFLOAT3D_FIX_X                (RID_SVX_START + 74)
 #define RID_SVXFLOAT3D_FIX_Y                (RID_SVX_START + 75)
@@ -206,7 +207,7 @@
 #define RID_SVXFLOAT3D_FIX_G                (RID_SVX_START + 78)
 #define RID_SVXFLOAT3D_FIX_B                (RID_SVX_START + 84)
 
-// 67 to 72 free
+// 67 to 71 free
 
 // ResId for the grid dialog
 #define RID_SVXDLG_GRID                     (RID_SVX_START +  79)
