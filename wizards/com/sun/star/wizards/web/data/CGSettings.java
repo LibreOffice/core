@@ -83,8 +83,8 @@ public class CGSettings extends ConfigGroup
         xmsf = xmsf_;
         try
         {
-            soTemplateDir = FileAccess.getOfficePath(xmsf, "Config", "", "");
-            soGalleryDir = FileAccess.getOfficePath(xmsf, "Gallery", "share", "");
+            soTemplateDir = FileAccess.getOfficePath(xmsf, "Config", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
+            soGalleryDir = FileAccess.getOfficePath(xmsf, "Gallery", "share", PropertyNames.EMPTY_STRING);
             root = this;
             formatter = new Formatter(xmsf, document);
             resources = resources_;
@@ -124,7 +124,7 @@ public class CGSettings extends ConfigGroup
                 }
             }
         }
-        return (CGExporter[]) v.toArray(EMPTY_ARRAY_1);
+        return (CGExporter[]) v.toArray(new CGExporter[v.size()]);
     }
 
     /**
@@ -141,7 +141,7 @@ public class CGSettings extends ConfigGroup
     private void calcExportersTargetTypeNames(XMultiServiceFactory xmsf) throws Exception
     {
         Object typeDetect = xmsf.createInstance("com.sun.star.document.TypeDetection");
-        XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, typeDetect);
+        XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, typeDetect);
         for (int i = 0; i < cp_Exporters.getSize(); i++)
         {
             calcExporterTargetTypeName(xNameAccess, (CGExporter) cp_Exporters.getElementAt(i));
@@ -152,7 +152,7 @@ public class CGSettings extends ConfigGroup
             throws NoSuchElementException,
             WrappedTargetException
     {
-        if (!exporter.cp_TargetType.equals(""))
+        if (!exporter.cp_TargetType.equals(PropertyNames.EMPTY_STRING))
         {
             exporter.targetTypeName =
                     (String) Properties.getPropertyValue(

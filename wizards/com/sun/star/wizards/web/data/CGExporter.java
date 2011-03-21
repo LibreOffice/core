@@ -27,6 +27,7 @@
 package com.sun.star.wizards.web.data;
 
 import com.sun.star.wizards.common.ConfigSet;
+import com.sun.star.wizards.common.PropertyNames;
 
 public class CGExporter extends ConfigSetItem
 {
@@ -42,7 +43,7 @@ public class CGExporter extends ConfigSetItem
     public String cp_TargetType;
     public boolean cp_Binary;
     public int cp_PageType;
-    public String targetTypeName = "";
+    public String targetTypeName = PropertyNames.EMPTY_STRING;
     public ConfigSet cp_Arguments = new ConfigSet(CGArgument.class);
 
     public String toString()
@@ -52,6 +53,6 @@ public class CGExporter extends ConfigSetItem
 
     public boolean supports(String mime)
     {
-        return (cp_SupportedMimeTypes.equals("") || cp_SupportedMimeTypes.indexOf(mime) > -1);
+        return (cp_SupportedMimeTypes.equals(PropertyNames.EMPTY_STRING) || cp_SupportedMimeTypes.indexOf(mime) > -1);
     }
 }

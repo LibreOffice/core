@@ -81,13 +81,13 @@ public class OfficeDocument
     {
         try
         {
-            XEventsSupplier xEventsSuppl = (XEventsSupplier) UnoRuntime.queryInterface(XEventsSupplier.class, xComponent);
+            XEventsSupplier xEventsSuppl = UnoRuntime.queryInterface(XEventsSupplier.class, xComponent);
             PropertyValue[] oEventProperties = new PropertyValue[2];
             oEventProperties[0] = new PropertyValue();
             oEventProperties[0].Name = "EventType";
             oEventProperties[0].Value = EventType; // "Service", "StarBasic"
             oEventProperties[1] = new PropertyValue();
-            oEventProperties[1].Name = "Script"; //"URL";
+            oEventProperties[1].Name = "Script"; //PropertyNames.URL;
             oEventProperties[1].Value = EventURL;
             xEventsSuppl.getEvents().replaceByName(EventName, oEventProperties);
         }
@@ -103,8 +103,8 @@ public class OfficeDocument
         {
             if (xComponent != null)
             {
-                XModifiable xModified = (XModifiable) UnoRuntime.queryInterface(XModifiable.class, xComponent);
-                XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xComponent);
+                XModifiable xModified = UnoRuntime.queryInterface(XModifiable.class, xComponent);
+                XModel xModel = UnoRuntime.queryInterface(XModel.class, xComponent);
                 XFrame xFrame = xModel.getCurrentController().getFrame();
                 if (xModified.isModified())
                 {
@@ -131,7 +131,7 @@ public class OfficeDocument
 
         PropertyValue[] loadValues = new PropertyValue[2];
         loadValues[0] = new PropertyValue();
-        loadValues[0].Name = "ReadOnly";
+        loadValues[0].Name = PropertyNames.READ_ONLY;
         loadValues[0].Value = readonly ? Boolean.TRUE : Boolean.FALSE;
         loadValues[1] = new PropertyValue();
         loadValues[1].Name = "Preview";
@@ -144,18 +144,18 @@ public class OfficeDocument
 
         try
         {
-            xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, frame);
-            /*if (frame.getName() == null || frame.getName().equals(""));
+            xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, frame);
+            /*if (frame.getName() == null || frame.getName().equals(PropertyNames.EMPTY_STRING));
             frame.setName("T" + System.currentTimeMillis());*/
             XComponent xComponent = xComponentLoader.loadComponentFromURL(sURL, "_self", 0, loadValues);
 
-            if (sDocumentType == "swriter")
+            if (sDocumentType.equals("swriter"))
             {
-                oDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComponent);
+                oDocument = UnoRuntime.queryInterface(XTextDocument.class, xComponent);
             }
-            else if (sDocumentType == "scalc")
+            else if (sDocumentType.equals("scalc"))
             {
-                oDocument = (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, xComponent);
+                oDocument = UnoRuntime.queryInterface(XSpreadsheetDocument.class, xComponent);
             //TODO:
             //                else if (sDocumentType == "simpress")
             //                else if (sDocumentType == "sdraw")
@@ -182,14 +182,14 @@ public class OfficeDocument
         }
         else
         {
-            XFrame xF = (XFrame) UnoRuntime.queryInterface(XFrame.class, Desktop.getDesktop(xMSF));
+            XFrame xF = UnoRuntime.queryInterface(XFrame.class, Desktop.getDesktop(xMSF));
             xFrame = xF.findFrame(FrameName, 0);
             if (listener != null)
             {
-                XFramesSupplier xFS = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, xF);
+                XFramesSupplier xFS = UnoRuntime.queryInterface(XFramesSupplier.class, xF);
                 XFrames xFF = xFS.getFrames();
                 xFF.remove(xFrame);
-                XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, xF);
+                XDesktop xDesktop = UnoRuntime.queryInterface(XDesktop.class, xF);
                 xDesktop.addTerminateListener(listener);
             }
         }
@@ -201,7 +201,7 @@ public class OfficeDocument
         XToolkit xToolkit = null;
         try
         {
-            xToolkit = (XToolkit) UnoRuntime.queryInterface(XToolkit.class, xMSF.createInstance("com.sun.star.awt.Toolkit"));
+            xToolkit = UnoRuntime.queryInterface(XToolkit.class, xMSF.createInstance("com.sun.star.awt.Toolkit"));
         }
         catch (Exception e)
         {
@@ -226,14 +226,14 @@ public class OfficeDocument
         XWindowPeer xPeer = null;
         try
         {
-            xPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xToolkit.createWindow(aDescriptor));
+            xPeer = UnoRuntime.queryInterface(XWindowPeer.class, xToolkit.createWindow(aDescriptor));
         }
         catch (IllegalArgumentException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xPeer);
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, xPeer);
 
         //define some further properties of the frame window
         //if it's needed .-)
@@ -243,7 +243,7 @@ public class OfficeDocument
         XFrame xFrame = null;
         try
         {
-            xFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class, xMSF.createInstance("com.sun.star.frame.Frame"));
+            xFrame = UnoRuntime.queryInterface(XFrame.class, xMSF.createInstance("com.sun.star.frame.Frame"));
         }
         catch (Exception e)
         {
@@ -273,13 +273,13 @@ public class OfficeDocument
         //XInterface xInterface = null;
         try
         {
-            xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xInterface);
+            xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, xInterface);
             com.sun.star.lang.XComponent xComponent = xComponentLoader.loadComponentFromURL(sURL, sFrame, 0, xValues);
 
-            XServiceInfo xComponentService = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, xComponent);
+            XServiceInfo xComponentService = UnoRuntime.queryInterface(XServiceInfo.class, xComponent);
             if (xComponentService.supportsService("com.sun.star.text.TextDocument"))
             {
-                oDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComponent);            //TODO: write if clauses for Calc, Impress and Draw
+                oDocument = UnoRuntime.queryInterface(XTextDocument.class, xComponent);            //TODO: write if clauses for Calc, Impress and Draw
             }
         }
         catch (Exception exception)
@@ -293,7 +293,7 @@ public class OfficeDocument
     {
         try
         {
-            XStorable xStoreable = (XStorable) UnoRuntime.queryInterface(XStorable.class, xComponent);
+            XStorable xStoreable = UnoRuntime.queryInterface(XStorable.class, xComponent);
             PropertyValue[] oStoreProperties;
             if (FilterName.length() > 0)
             {
@@ -303,13 +303,13 @@ public class OfficeDocument
                 oStoreProperties[0].Value = FilterName;
                 oStoreProperties[1] = new PropertyValue();
                 oStoreProperties[1].Name = "InteractionHandler";
-                oStoreProperties[1].Value = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
+                oStoreProperties[1].Value = UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
             }
             else
             {
                 oStoreProperties = new PropertyValue[0];
             }
-            if (bStoreToUrl == true)
+            if (bStoreToUrl)
             {
                 xStoreable.storeToURL(StorePath, oStoreProperties);
             }
@@ -330,11 +330,11 @@ public class OfficeDocument
     public static boolean close(XComponent xComponent)
     {
         boolean bState = false;
-        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xComponent);
+        XModel xModel = UnoRuntime.queryInterface(XModel.class, xComponent);
 
         if (xModel != null)
         {
-            XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, xModel);
+            XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, xModel);
 
             if (xCloseable != null)
             {
@@ -351,7 +351,7 @@ public class OfficeDocument
             }
             else
             {
-                XComponent xDisposeable = (XComponent) UnoRuntime.queryInterface(XComponent.class, xModel);
+                XComponent xDisposeable = UnoRuntime.queryInterface(XComponent.class, xModel);
                 xDisposeable.dispose();
                 bState = true;
             }
@@ -369,9 +369,9 @@ public class OfficeDocument
                 int colcount = datalist[0].length;
                 if (colcount > 0)
                 {
-                    XCellRange xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, oTable);
+                    XCellRange xCellRange = UnoRuntime.queryInterface(XCellRange.class, oTable);
                     XCellRange xNewRange = xCellRange.getCellRangeByPosition(xpos, ypos, (colcount + xpos) - 1, (rowcount + ypos) - 1);
-                    XCellRangeData xDataArray = (XCellRangeData) UnoRuntime.queryInterface(XCellRangeData.class, xNewRange);
+                    XCellRangeData xDataArray = UnoRuntime.queryInterface(XCellRangeData.class, xNewRange);
                     xDataArray.setDataArray(datalist);
                 }
             }
@@ -389,13 +389,13 @@ public class OfficeDocument
 
         PropertyValue[][] mediaDescr = new PropertyValue[1][1];
         mediaDescr[0][0] = new PropertyValue();
-        mediaDescr[0][0].Name = "URL";
+        mediaDescr[0][0].Name = PropertyNames.URL;
         mediaDescr[0][0].Value = url;
 
-        String type = ((XTypeDetection) UnoRuntime.queryInterface(XTypeDetection.class, typeDetect)).queryTypeByDescriptor(mediaDescr, true);
+        String type = UnoRuntime.queryInterface(XTypeDetection.class, typeDetect).queryTypeByDescriptor(mediaDescr, true);
 
-        XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, typeDetect);
-        if (type.equals(""))
+        XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, typeDetect);
+        if (type.equals(PropertyNames.EMPTY_STRING))
         {
             return null;
         }
@@ -409,7 +409,7 @@ public class OfficeDocument
             throws Exception
     {
         Object typeDetect = xmsf.createInstance("com.sun.star.document.TypeDetection");
-        XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, typeDetect);
+        XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, typeDetect);
         return (PropertyValue[]) xNameAccess.getByName(type);
     }
 
@@ -421,13 +421,13 @@ public class OfficeDocument
      */
     public static int getSlideCount(Object model)
     {
-        XDrawPagesSupplier xDrawPagesSupplier = (XDrawPagesSupplier) UnoRuntime.queryInterface(XDrawPagesSupplier.class, model);
+        XDrawPagesSupplier xDrawPagesSupplier = UnoRuntime.queryInterface(XDrawPagesSupplier.class, model);
         return xDrawPagesSupplier.getDrawPages().getCount();
     }
 
     public static XDocumentProperties getDocumentProperties(Object document)
     {
-        XDocumentPropertiesSupplier xDocumentPropertiesSupplier = (XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, document);
+        XDocumentPropertiesSupplier xDocumentPropertiesSupplier = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, document);
         return xDocumentPropertiesSupplier.getDocumentProperties();
     }
 

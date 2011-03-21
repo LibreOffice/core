@@ -55,8 +55,7 @@ public class Tabular extends ReportBuilderLayouter
 
     public String getLocalizedName()
     {
-        String sLocalizedName = getResource().getResText(UIConsts.RID_REPORT + 80);
-        return sLocalizedName;
+        return getResource().getResText(UIConsts.RID_REPORT + 80);
     }
 
     protected void insertDetailFields()
@@ -92,60 +91,59 @@ public class Tabular extends ReportBuilderLayouter
         xSection.setHeight(nHeight);
     }
 
-    protected void insertDetailFieldTitles()
+    protected void insertDetailFieldTitles(int lastGroupPostion)
     {
         final String[] aFieldTitleNames = getFieldTitleNames();
-        if (aFieldTitleNames == null)
+        if (aFieldTitleNames == null || aFieldTitleNames.length == 0)
         {
             return;
         }
-        if (aFieldTitleNames.length == 0)
-        {
-            return;
-        }
-        final int nGroups = getReportDefinition().getGroups().getCount();
         try
         {
-            XSection xSection = null;
             SectionObject aSO = null;
-            if (nGroups == 0)
+            final XGroups xGroups = getReportDefinition().getGroups();
+            final XGroup xGroup;
+            if (lastGroupPostion == -1)
             {
                 // Spezial case, there is no Group.
-                final XGroups xGroups = getReportDefinition().getGroups();
-                final XGroup xGroup = xGroups.createGroup();
+                xGroup = xGroups.createGroup();
                 xGroup.setHeaderOn(true);
 
                 xGroups.insertByIndex(xGroups.getCount(), xGroup);
-                xSection = xGroup.getHeader();
                 copyGroupProperties(0);
                 aSO = getDesignTemplate().getDetailLabel();
                 aSO.setFontToBold();
             }
             else
             {
-                final XGroups xGroups = getReportDefinition().getGroups();
                 // we insert the titles in the last group
-                final Object aGroup = xGroups.getByIndex(nGroups - 1);
-                final XGroup xGroup = (XGroup) UnoRuntime.queryInterface(XGroup.class, aGroup);
-                xSection = xGroup.getHeader();
+                xGroup = UnoRuntime.queryInterface(XGroup.class, xGroups.getByIndex(lastGroupPostion));
 
                 // We don't need to copy the GroupProperties, because this is done in the insertGroup() member function
                 // copyGroupProperties(0);
-                aSO = getDesignTemplate().getGroupLabel(nGroups - 1);
+                aSO = getDesignTemplate().getGroupLabel(lastGroupPostion);
             }
 
+            XSection xSection = xGroup.getHeader();
             Rectangle aRect = new Rectangle();
-// TODO: getCountOfGroups() == nGroups???
             aRect.X = getLeftPageIndent() + getLeftGroupIndent(getCountOfGroups());
-            // TODO: group line is fix
-            aRect.Y = aSO.getHeight(LayoutConstants.LabelHeight) + LayoutConstants.LineHeight;  // group height + a little empty line
+            if (lastGroupPostion == -1)
+            {
+                xSection.setHeight(0);  // group height + a little empty line)
+                aRect.Y = 0;
+            }
+            else
+            {
+                aRect.Y = xSection.getHeight() + LayoutConstants.LineHeight;
+            }
+
             final int nWidth = calculateFieldWidth(getLeftGroupIndent(getCountOfGroups()), aFieldTitleNames.length);
 
             for (int i = 0; i < aFieldTitleNames.length; i++)
             {
                 aRect = insertLabel(xSection, aFieldTitleNames[i], aRect, nWidth, aSO);
             }
-            xSection.setHeight(aSO.getHeight(LayoutConstants.LabelHeight) + LayoutConstants.LineHeight + aSO.getHeight(LayoutConstants.LabelHeight));
+            xSection.setHeight(xSection.getHeight() + aSO.getHeight(LayoutConstants.LabelHeight));
         }
         catch (com.sun.star.uno.Exception e)
         {

@@ -83,7 +83,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], slblTableName, new Integer(97), new Integer(25), IFINALSTEP, new Integer(220)
+                        UIConsts.INTEGERS[8], slblTableName, 97, 25, IFINALSTEP, 220
                     });
             txtTableName = CurUnoDialog.insertTextField("txtTableName", SETCOMPLETIONFLAG, this,
                     new String[]
@@ -92,7 +92,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGTABLE_TXT_NAME", new Integer(97), new Integer(35), IFINALSTEP, new Short(curtabindex++), "", new Integer(223)
+                        UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGTABLE_TXT_NAME", 97, 35, IFINALSTEP, new Short(curtabindex++), PropertyNames.EMPTY_STRING, 223
                     });
             txtTableName.addTextListener(CurUnoDialog);
             txtTableName.setMaxTextLen((short) this.curtabledescriptor.getMaxTableNameLength());
@@ -103,7 +103,7 @@ public class Finalizer
                     if (sCatalogNames.length > 0)
                     {
                         bsupportsCatalogs = true;
-                        String sCatalog = "";
+                        String sCatalog = PropertyNames.EMPTY_STRING;
                         try
                         {
                             sCatalog = curtabledescriptor.DBConnection.getCatalog();
@@ -119,7 +119,7 @@ public class Finalizer
                                 },
                                 new Object[]
                                 {
-                                    new Integer(8), slblCatalog, new Integer(nListBoxPosX), new Integer(52), IFINALSTEP, new Short(curtabindex++), new Integer(120)
+                                    8, slblCatalog, new Integer(nListBoxPosX), 52, IFINALSTEP, new Short(curtabindex++), 120
                                 });
 
                         try
@@ -127,18 +127,18 @@ public class Finalizer
                             xCatalogListBox = CurUnoDialog.insertListBox("lstCatalog", null, null,
                                     new String[]
                                     {
-                                        "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "StringItemList", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                                        "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.STRING_ITEM_LIST, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                                     },
                                     new Object[]
                                     {
-                                        Boolean.TRUE, new Integer(12), "HID:WIZARDS_HID_DLGTABLE_LST_CATALOG", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sCatalogNames, new Short(curtabindex++), new Integer(80)
+                                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LST_CATALOG", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), 62, IFINALSTEP, sCatalogNames, new Short(curtabindex++), 80
                                     });
                             int isel = JavaTools.FieldInList(sCatalogNames, sCatalog);
                             if (isel < 0)
                             {
                                 isel = 0;
                             }
-                            CurUnoDialog.setControlProperty("lstCatalog", "SelectedItems", new short[]
+                            CurUnoDialog.setControlProperty("lstCatalog", PropertyNames.SELECTED_ITEMS, new short[]
                                     {
                                         (short) isel
                                     });
@@ -158,7 +158,7 @@ public class Finalizer
                     if (sSchemaNames.length > 0)
                     {
                         bsupportsSchemata = true;
-                        String sSchema = "";
+                        String sSchema = PropertyNames.EMPTY_STRING;
                         try
                         {
                             sSchema = (String) curtabledescriptor.getDataSourcePropertySet().getPropertyValue("User");
@@ -174,7 +174,7 @@ public class Finalizer
                                 },
                                 new Object[]
                                 {
-                                    new Integer(8), slblSchema, new Integer(nListBoxPosX), new Integer(52), IFINALSTEP, new Short(curtabindex++), new Integer(80)
+                                    8, slblSchema, new Integer(nListBoxPosX), 52, IFINALSTEP, new Short(curtabindex++), 80
                                 });
 
                         try
@@ -182,18 +182,18 @@ public class Finalizer
                             xSchemaListBox = CurUnoDialog.insertListBox("lstSchema", null, null,
                                     new String[]
                                     {
-                                        "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "StringItemList", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                                        "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.STRING_ITEM_LIST, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                                     },
                                     new Object[]
                                     {
-                                        Boolean.TRUE, new Integer(12), "HID:WIZARDS_HID_DLGTABLE_LST_SCHEMA", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sSchemaNames, new Short(curtabindex++), new Integer(80)
+                                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LST_SCHEMA", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), 62, IFINALSTEP, sSchemaNames, new Short(curtabindex++), 80
                                     });
                             int isel = JavaTools.FieldInList(sSchemaNames, sSchema);
                             if (isel < 0)
                             {
                                 isel = 0;
                             }
-                            CurUnoDialog.setControlProperty("lstSchema", "SelectedItems", new short[]
+                            CurUnoDialog.setControlProperty("lstSchema", PropertyNames.SELECTED_ITEMS, new short[]
                                     {
                                         (short) isel
                                     });
@@ -214,7 +214,7 @@ public class Finalizer
                         },
                         new Object[]
                         {
-                            new Integer(16), sCongratulations, Boolean.TRUE, new Integer(97), new Integer(62), IFINALSTEP, new Short(curtabindex++), new Integer(226)
+                            16, sCongratulations, Boolean.TRUE, 97, 62, IFINALSTEP, new Short(curtabindex++), 226
                         });
             }
             else
@@ -228,7 +228,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], slblProceed, new Integer(97), new Integer(82 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), new Integer(227)
+                        UIConsts.INTEGERS[8], slblProceed, 97, new Integer(82 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), 227
                     });
             optWorkWithTable = CurUnoDialog.insertRadioButton("optWorkWithTable", null,
                     new String[]
@@ -237,7 +237,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_WORKWITHTABLE", sWorkWithTable, new Integer(101), new Integer(97 + ndiffPosY), new Short((short) 1), IFINALSTEP, new Short(curtabindex++), new Integer(177)
+                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_WORKWITHTABLE", sWorkWithTable, 101, new Integer(97 + ndiffPosY), new Short((short) 1), IFINALSTEP, new Short(curtabindex++), 177
                     });
             optModifyTable = CurUnoDialog.insertRadioButton("optModifyTable", null,
                     new String[]
@@ -246,7 +246,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_MODIFYTABLE", sModifyTable, new Integer(101), new Integer(109 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), new Integer(177)
+                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_MODIFYTABLE", sModifyTable, 101, new Integer(109 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), 177
                     });
             optStartFormWizard = CurUnoDialog.insertRadioButton("optStartFormWizard", null,
                     new String[]
@@ -255,7 +255,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_STARTFORMWIZARD", sStartFormWizard, new Integer(101), new Integer(121 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), new Integer(177)
+                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_STARTFORMWIZARD", sStartFormWizard, 101, new Integer(121 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), 177
                     });
         }
         catch (SQLException e)
@@ -302,7 +302,7 @@ public class Finalizer
 
     public void setTableName(String _tablename)
     {
-        if (txtTableName.getText().equals(""))
+        if (txtTableName.getText().equals(PropertyNames.EMPTY_STRING))
         {
             String ssuffix = Desktop.getIncrementSuffix(curtabledescriptor.getTableNamesAsNameAccess(), getComposedTableName(_tablename));
             txtTableName.setText(_tablename + ssuffix);
@@ -317,7 +317,7 @@ public class Finalizer
 
     public String getTableName(String _firsttablename)
     {
-        if (txtTableName.getText().equals(""))
+        if (txtTableName.getText().equals(PropertyNames.EMPTY_STRING))
         {
             setTableName(_firsttablename);
         }
@@ -332,7 +332,7 @@ public class Finalizer
         }
         else
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
     }
 
@@ -344,7 +344,7 @@ public class Finalizer
         }
         else
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
     }
 

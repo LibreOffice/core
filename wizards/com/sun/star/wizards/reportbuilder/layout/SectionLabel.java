@@ -48,8 +48,7 @@ public class SectionLabel extends SectionObject
 
     public static SectionObject create(XFixedText _aFixedText)
     {
-        final SectionLabel a = new SectionLabel(_aFixedText);
-        return a;
+        return new SectionLabel(_aFixedText);
     }
 
     /**

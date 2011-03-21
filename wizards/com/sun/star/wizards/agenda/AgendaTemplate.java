@@ -26,11 +26,7 @@
  ************************************************************************/
 package com.sun.star.wizards.agenda;
 
-import java.util.Calendar;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 
 import com.sun.star.awt.TextEvent;
@@ -201,7 +197,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
     {
         template = calcTemplateName(templateURL);
         document = loadAsPreview(templateURL, false);
-        docMSF = ((XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, document));
+        docMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
         xFrame.getComponentWindow().setEnable(false);
         xTextDocument.lockControllers();
         initialize();
@@ -235,7 +231,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         {
             try
             {
-                itemsTables[i].write("");
+                itemsTables[i].write(PropertyNames.EMPTY_STRING);
             }
             catch (Exception ex)
             {
@@ -374,7 +370,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
     {
         itemsCache = new Hashtable(11);
 
-        XMultiServiceFactory xmsf = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
+        XMultiServiceFactory xmsf = UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
         // Headings
 
         itemsCache.put(FILLIN_MEETING_TYPE,
@@ -442,7 +438,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         /*
          * Get the default locale of the document, and create the date and time formatters.
          */
-        XMultiServiceFactory docMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
+        XMultiServiceFactory docMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
         try
         {
             Object defaults = docMSF.createInstance("com.sun.star.text.Defaults");
@@ -453,7 +449,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
             calendar = Calendar.getInstance(jl);
 
-            XNumberFormatsSupplier nfs = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, document);
+            XNumberFormatsSupplier nfs = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, document);
             Object formatSettings = nfs.getNumberFormatSettings();
             com.sun.star.util.Date date = (com.sun.star.util.Date) Helper.getUnoPropertyValue(formatSettings, "NullDate");
 
@@ -483,8 +479,8 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         initializeItems();
         initializeTitles();
         initializeItemsSections();
-        XMultiServiceFactory xMultiServiceFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
-        textSectionHandler = new TextSectionHandler(xMultiServiceFactory, (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, document));
+        XMultiServiceFactory xMultiServiceFactory = UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
+        textSectionHandler = new TextSectionHandler(xMultiServiceFactory, UnoRuntime.queryInterface(XTextDocument.class, document));
         initializeTopics();
         _allItems.clear();
         _allItems = null;
@@ -498,7 +494,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
     {
         XTextRange item = null;
 
-        XMultiServiceFactory xmsf = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
+        XMultiServiceFactory xmsf = UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
 
         for (int i = 0; i < _allItems.size(); i++)
         {
@@ -550,7 +546,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
     {
         try
         {
-            XSearchable xSearchable = (XSearchable) UnoRuntime.queryInterface(XSearchable.class, document);
+            XSearchable xSearchable = UnoRuntime.queryInterface(XSearchable.class, document);
             XSearchDescriptor sd = xSearchable.createSearchDescriptor();
             sd.setSearchString("<[^>]+>");
             sd.setPropertyValue("SearchRegularExpression", Boolean.TRUE);
@@ -558,12 +554,12 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
             XIndexAccess ia = xSearchable.findAll(sd);
 
-            List l = new Vector(ia.getCount());
+            List l = new ArrayList<XTextRange>(ia.getCount());
             for (int i = 0; i < ia.getCount(); i++)
             {
                 try
                 {
-                    l.add((XTextRange) UnoRuntime.queryInterface(XTextRange.class, ia.getByIndex(i)));
+                    l.add(UnoRuntime.queryInterface(XTextRange.class, ia.getByIndex(i)));
                 }
                 catch (Exception ex)
                 {
@@ -607,20 +603,20 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
     private String[] getSections(Object document, String s)
     {
-        XTextSectionsSupplier xTextSectionsSupplier = (XTextSectionsSupplier) UnoRuntime.queryInterface(XTextSectionsSupplier.class, document);
+        XTextSectionsSupplier xTextSectionsSupplier = UnoRuntime.queryInterface(XTextSectionsSupplier.class, document);
         String[] allSections = xTextSectionsSupplier.getTextSections().getElementNames();
         return getNamesWhichStartWith(allSections, s);
     }
 
     Object getSection(String name) throws NoSuchElementException, WrappedTargetException
     {
-        XTextSectionsSupplier xTextSectionsSupplier = (XTextSectionsSupplier) UnoRuntime.queryInterface(XTextSectionsSupplier.class, document);
+        XTextSectionsSupplier xTextSectionsSupplier = UnoRuntime.queryInterface(XTextSectionsSupplier.class, document);
         return ((Any) (xTextSectionsSupplier.getTextSections().getByName(name))).getObject();
     }
 
     Object getTable(String name) throws NoSuchElementException, WrappedTargetException
     {
-        XTextTablesSupplier xTextTablesSupplier = (XTextTablesSupplier) UnoRuntime.queryInterface(XTextTablesSupplier.class, document);
+        XTextTablesSupplier xTextTablesSupplier = UnoRuntime.queryInterface(XTextTablesSupplier.class, document);
         return ((Any) xTextTablesSupplier.getTextTables().getByName(name)).getObject();
     }
 
@@ -665,18 +661,18 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
     private void writeTitle(TextElement te, XTextRange tr, String text)
     {
-        te.text = (text == null ? "" : text);
+        te.text = (text == null ? PropertyNames.EMPTY_STRING : text);
         te.write(tr);
     }
     private static long DAY_IN_MILLIS = (24 * 60 * 60 * 1000);
 
     private String getDateString(String d)
     {
-        if (d == null || d.equals(""))
+        if (d == null || d.equals(PropertyNames.EMPTY_STRING))
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
-        int date = new Integer(d).intValue();
+        int date = Integer.parseInt(d);
         calendar.clear();
         calendar.set(date / 10000,
                 (date % 10000) / 100 - 1,
@@ -694,11 +690,11 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
     private String getTimeString(String s)
     {
-        if (s == null || s.equals(""))
+        if (s == null || s.equals(PropertyNames.EMPTY_STRING))
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
-        int time = new Integer(s).intValue();
+        int time = Integer.parseInt(s);
 
         double t = ((double) (time / 1000000) / 24) + ((double) ((time % 1000000) / 1000) / (24 * 60));
         return timeFormatter.convertNumberToString(timeFormat, t);
@@ -722,7 +718,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      */
     private void deleteHiddenSections()
     {
-        XTextSectionsSupplier xTextSectionsSupplier = (XTextSectionsSupplier) UnoRuntime.queryInterface(XTextSectionsSupplier.class, document);
+        XTextSectionsSupplier xTextSectionsSupplier = UnoRuntime.queryInterface(XTextSectionsSupplier.class, document);
         String[] allSections = xTextSectionsSupplier.getTextSections().getElementNames();
         try
         {
@@ -733,7 +729,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                 boolean visible = ((Boolean) Helper.getUnoPropertyValue(section, "IsVisible")).booleanValue();
                 if (!visible)
                 {
-                    ((XTextContent) UnoRuntime.queryInterface(XTextContent.class, section)).getAnchor().setString("");
+                    UnoRuntime.queryInterface(XTextContent.class, section).getAnchor().setString(PropertyNames.EMPTY_STRING);
                 }
             }
         }
@@ -759,8 +755,8 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
             try
             {
                 Object minutesAllSection = getSection(SECTION_MINUTES_ALL);
-                XTextSection xTextSection = (XTextSection) UnoRuntime.queryInterface(XTextSection.class, minutesAllSection);
-                xTextSection.getAnchor().setString("");
+                XTextSection xTextSection = UnoRuntime.queryInterface(XTextSection.class, minutesAllSection);
+                xTextSection.getAnchor().setString(PropertyNames.EMPTY_STRING);
             }
             catch (Exception ex)
             {
@@ -777,7 +773,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                 int topicStartTime = 0;
                 try
                 {
-                    topicStartTime = new Integer(agenda.cp_Time).intValue();
+                    topicStartTime = Integer.parseInt(agenda.cp_Time);
                 }
                 catch (Exception ex)
                 {
@@ -831,15 +827,15 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
                         if (itemText.equals(FILLIN_MINUTE_NUM))
                         {
-                            fillMinutesItem(item, topic[0].Value, "");
+                            fillMinutesItem(item, topic[0].Value, PropertyNames.EMPTY_STRING);
                         }
                         else if (itemText.equals(FILLIN_MINUTE_TOPIC))
                         {
-                            fillMinutesItem(item, topic[1].Value, "");
+                            fillMinutesItem(item, topic[1].Value, PropertyNames.EMPTY_STRING);
                         }
                         else if (itemText.equals(FILLIN_MINUTE_RESPONSIBLE))
                         {
-                            fillMinutesItem(item, topic[2].Value, "");
+                            fillMinutesItem(item, topic[2].Value, PropertyNames.EMPTY_STRING);
                         }
                         else if (itemText.equals(FILLIN_MINUTE_TIME))
                         {
@@ -863,7 +859,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                                 topicStartTime += topicTime * 1000;
                                 time += getTimeString(String.valueOf(topicStartTime));
                             }
-                            fillMinutesItem(item, time, "");
+                            fillMinutesItem(item, time, PropertyNames.EMPTY_STRING);
                         }
                     }
 
@@ -889,16 +885,16 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      * If the given text is empty, uses a placeholder with the giveb placeholder text.
      * @param range text range to fill
      * @param text the text to fill to the text range object.
-     * @param placeholder the placeholder text to use, if the text argument is empty (null or "")
+     * @param placeholder the placeholder text to use, if the text argument is empty (null or PropertyNames.EMPTY_STRING)
      */
     private void fillMinutesItem(XTextRange range, Object text, String placeholder)
     {
         String paraStyle = (String) Helper.getUnoPropertyValue(range, "ParaStyleName");
         range.setString((String) text);
         Helper.setUnoPropertyValue(range, "ParaStyleName", paraStyle);
-        if (text == null || text.equals(""))
+        if (text == null || text.equals(PropertyNames.EMPTY_STRING))
         {
-            if (placeholder != null && !placeholder.equals(""))
+            if (placeholder != null && !placeholder.equals(PropertyNames.EMPTY_STRING))
             {
                 XTextContent placeHolder = createPlaceHolder(docMSF, placeholder, resources.resPlaceHolderHint);
                 try
@@ -936,7 +932,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         Helper.setUnoPropertyValue(placeHolder, "PlaceHolder", ph);
         Helper.setUnoPropertyValue(placeHolder, "Hint", hint);
         Helper.setUnoPropertyValue(placeHolder, "PlaceHolderType", new Short(PlaceholderType.TEXT));
-        return (XTextContent) UnoRuntime.queryInterface(XTextContent.class, placeHolder);
+        return UnoRuntime.queryInterface(XTextContent.class, placeHolder);
 
     }
 
@@ -1016,7 +1012,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                 table = getTable(name);
                 section = getSection(name);
 
-                XTextTable xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, table);
+                XTextTable xTextTable = UnoRuntime.queryInterface(XTextTable.class, table);
                 XTextTableCursor cursor = xTextTable.createCursorByCellName("A1");
                 AgendaItem ai;
                 // should this section be visible?
@@ -1024,7 +1020,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
                 // write items
                 // ===========
-                String cellName = "";
+                String cellName = PropertyNames.EMPTY_STRING;
 
                 /* now go through all items that belong to this
                  * table. Check each one agains the model. If it should
@@ -1072,7 +1068,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                 while ((!cellName.equals(cursor.getRangeName()) && (!cursor.getRangeName().startsWith("A"))))
                 {
                     cell = xTextTable.getCellByName(cursor.getRangeName());
-                    ((XTextRange) UnoRuntime.queryInterface(XTextRange.class, cell)).setString("");
+                    UnoRuntime.queryInterface(XTextRange.class, cell).setString(PropertyNames.EMPTY_STRING);
                     cellName = cursor.getRangeName();
                     cursor.goRight((short) 1, false);
                 }
@@ -1085,7 +1081,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                     return;
                 }
                 int rowIndex = getRowIndex(cursor);
-                int rowsCount = getRowCount((XTextTable) UnoRuntime.queryInterface(XTextTable.class, table));
+                int rowsCount = getRowCount(UnoRuntime.queryInterface(XTextTable.class, table));
 
                 /* now before deleteing i move the cursor up so it
                  * does not disappear, because it will crash office.
@@ -1201,7 +1197,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
             }
 
             // and this is the XTable.
-            table = ((XTextTable) UnoRuntime.queryInterface(XTextTable.class, t));
+            table = UnoRuntime.queryInterface(XTextTable.class, t);
 
             /* first I store all <*> ranges
              * which are in the topics table.
@@ -1246,7 +1242,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
             while (!cursor.getRangeName().equals(afterLastCell))
             {
                 cell = table.getCellByName(cursor.getRangeName());
-                XTextRange xTextRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, cell);
+                XTextRange xTextRange = UnoRuntime.queryInterface(XTextRange.class, cell);
                 // first I store the content and para style of the cell
                 AgendaElement ae = new TextElement(xTextRange);
                 // if the cell contains a relevant <...>
@@ -1316,7 +1312,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
             {
                 writtenTopics.add(null);
             }
-            writtenTopics.set(topic, "");
+            writtenTopics.set(topic, PropertyNames.EMPTY_STRING);
 
             // make sure threr are enough rows for me...
             int rows = getRowCount(table);
@@ -1413,12 +1409,14 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                         break;
                 }
                 // move the cursor to the needed cell...
-                cursor.goRight((short) cursorMoves, false);
-                XCell xc = table.getCellByName(cursor.getRangeName());
-                // and write it !
-                te.write(xc);
-                ((TableCellFormatter) topicCellFormats.get(cursorMoves)).format(xc);
-
+                if ( te != null)
+                {
+                    cursor.goRight((short) cursorMoves, false);
+                    XCell xc = table.getCellByName(cursor.getRangeName());
+                    // and write it !
+                    te.write(xc);
+                    ((TableCellFormatter) topicCellFormats.get(cursorMoves)).format(xc);
+                }
             }
         }
 
@@ -1585,7 +1583,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      */
     public static String[] getNamesWhichStartWith(String[] allNames, String prefix)
     {
-        Vector v = new Vector();
+        ArrayList<String> v = new ArrayList<String>();
         for (int i = 0; i < allNames.length; i++)
         {
             if (allNames[i].startsWith(prefix))
@@ -1594,8 +1592,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
             }
         }
         String[] s = new String[v.size()];
-        System.arraycopy(v.toArray(), 0, s, 0, s.length);
-        return s;
+        return v.toArray(s);
     }
 
     /**
@@ -1605,7 +1602,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      */
     public static String getName(Object obj)
     {
-        return ((XNamed) UnoRuntime.queryInterface(XNamed.class, obj)).getName();
+        return UnoRuntime.queryInterface(XNamed.class, obj).getName();
     }
 
     /**
@@ -1616,7 +1613,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      */
     public static void removeTableRows(Object table, int start, int count)
     {
-        XTableRows rows = ((XTextTable) UnoRuntime.queryInterface(XTextTable.class, table)).getRows();
+        XTableRows rows = UnoRuntime.queryInterface(XTextTable.class, table).getRows();
         rows.removeByIndex(start, count);
     }
 
@@ -1628,7 +1625,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      */
     public static void insertTableRows(Object table, int start, int count)
     {
-        XTableRows rows = ((XTextTable) UnoRuntime.queryInterface(XTextTable.class, table)).getRows();
+        XTableRows rows = UnoRuntime.queryInterface(XTextTable.class, table).getRows();
         rows.insertByIndex(start, count);
     }
 
@@ -1717,12 +1714,12 @@ class ParaStyled implements AgendaElement
     void format(Object textRange)
     {
         XText o;
-        o = ((XText) UnoRuntime.queryInterface(XText.class, textRange));
+        o = UnoRuntime.queryInterface(XText.class, textRange);
         if (o == null)
         {
-            o = ((XTextRange) UnoRuntime.queryInterface(XTextRange.class, textRange)).getText();
+            o = UnoRuntime.queryInterface(XTextRange.class, textRange).getText();
         }
-        XTextRange xtr = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, textRange);
+        XTextRange xtr = UnoRuntime.queryInterface(XTextRange.class, textRange);
         XTextCursor cursor = o.createTextCursorByRange(xtr);
 
         Helper.setUnoPropertyValue(cursor, "ParaStyleName", paraStyle);
@@ -1763,8 +1760,8 @@ class TextElement extends ParaStyled
 
     public void write(Object textRange)
     {
-        ((XTextRange) UnoRuntime.queryInterface(XTextRange.class, textRange)).setString(text);
-        if (!text.equals(""))
+        UnoRuntime.queryInterface(XTextRange.class, textRange).setString(text);
+        if (!text.equals(PropertyNames.EMPTY_STRING))
         {
             super.write(textRange);
         }
@@ -1772,7 +1769,7 @@ class TextElement extends ParaStyled
 }
 
 /**
- * A Text element which, if the text to write is empty (null or "")
+ * A Text element which, if the text to write is empty (null or PropertyNames.EMPTY_STRING)
  * inserts a placeholder instead.
  * @author rp143992
  *
@@ -1805,9 +1802,9 @@ class PlaceholderTextElement extends TextElement
     public void write(Object textRange)
     {
         super.write(textRange);
-        if (text == null || text.equals(""))
+        if (text == null || text.equals(PropertyNames.EMPTY_STRING))
         {
-            XTextRange xTextRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, textRange);
+            XTextRange xTextRange = UnoRuntime.queryInterface(XTextRange.class, textRange);
             try
             {
                 XTextContent xTextContent = AgendaTemplate.createPlaceHolder(xmsf, placeHolderText, hint);
@@ -1849,7 +1846,7 @@ class PlaceholderElement extends ParaStyled
 
     public void write(Object textRange)
     {
-        XTextRange xTextRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, textRange);
+        XTextRange xTextRange = UnoRuntime.queryInterface(XTextRange.class, textRange);
         try
         {
             XTextContent xTextContent = AgendaTemplate.createPlaceHolder(xmsf, placeHolderText, hint);
@@ -1896,8 +1893,8 @@ class AgendaItem implements AgendaElement
 
     public void write(Object tableCursor) throws Exception
     {
-        XTextTableCursor xTextTableCursor = (XTextTableCursor) UnoRuntime.queryInterface(XTextTableCursor.class, tableCursor);
-        XTextTable xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, table);
+        XTextTableCursor xTextTableCursor = UnoRuntime.queryInterface(XTextTableCursor.class, tableCursor);
+        XTextTable xTextTable = UnoRuntime.queryInterface(XTextTable.class, table);
 
         String cellname = xTextTableCursor.getRangeName();
         Object cell = xTextTable.getCellByName(cellname);

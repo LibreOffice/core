@@ -46,8 +46,7 @@ public class SectionTextField extends SectionObject
 
     public static SectionObject create(XFormattedField _aFormattedField)
     {
-        SectionTextField a = new SectionTextField(_aFormattedField);
-        return a;
+        return new SectionTextField(_aFormattedField);
     }
 
     public FontDescriptor getFontDescriptor()

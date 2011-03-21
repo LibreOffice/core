@@ -26,6 +26,7 @@
  ************************************************************************/
 package com.sun.star.wizards.table;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import com.sun.star.awt.ItemEvent;
@@ -104,7 +105,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 },
                 new Object[]
                 {
-                    new Integer(32), sExplanation, Boolean.TRUE, new Integer(91), new Integer(27), IMAINSTEP, new Short(pretabindex++), new Integer(233)
+                    32, sExplanation, Boolean.TRUE, 91, 27, IMAINSTEP, new Short(pretabindex++), 233
                 });
 
         lblCategories = CurUnoDialog.insertLabel("lblCategories",
@@ -114,7 +115,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 },
                 new Object[]
                 {
-                    new Integer(8), sCategories, new Integer(91), new Integer(60), IMAINSTEP, new Short(pretabindex++), new Integer(100)
+                    8, sCategories, 91, 60, IMAINSTEP, new Short(pretabindex++), 100
                 });
 
         optBusiness = CurTableWizardUnoDialog.insertRadioButton("optBusiness", SELECTCATEGORY, this,
@@ -124,7 +125,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTBUSINESS", sBusiness, new Integer(98), new Integer(70), new Short((short) 1), IMAINSTEP, new Short(pretabindex++), new Integer(78)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTBUSINESS", sBusiness, 98, 70, new Short((short) 1), IMAINSTEP, new Short(pretabindex++), 78
                 });
 
         optPrivate = CurTableWizardUnoDialog.insertRadioButton("optPrivate", SELECTCATEGORY, this,
@@ -134,7 +135,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTPRIVATE", sPrivate, new Integer(182), new Integer(70), IMAINSTEP, new Short(pretabindex++), new Integer(90)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTPRIVATE", sPrivate, 182, 70, IMAINSTEP, new Short(pretabindex++), 90
                 });
 
         CurUnoDialog.insertLabel("lblTableNames",
@@ -144,7 +145,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 },
                 new Object[]
                 {
-                    new Integer(8), sTableNames, new Integer(91), new Integer(82), IMAINSTEP, new Short(pretabindex++), new Integer(80)
+                    8, sTableNames, 91, 82, IMAINSTEP, new Short(pretabindex++), 80
                 });
 
         try
@@ -156,7 +157,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                     },
                     new Object[]
                     {
-                        Boolean.TRUE, new Integer(12), "HID:WIZARDS_HID_DLGTABLE_LBTABLES", new Short(UnoDialog.getListBoxLineCount()), new Integer(91), new Integer(92), IMAINSTEP, new Short(pretabindex++), getListboxWidth()
+                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LBTABLES", new Short(UnoDialog.getListBoxLineCount()), 91, 92, IMAINSTEP, new Short(pretabindex++), getListboxWidth()
                     });
         }
         catch (Exception e)
@@ -196,7 +197,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
 
     public void initializeTable(int _iTable)
     {
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.SELECTED_ITEMS, new short[]
                 {
                     (short) _iTable
                 });
@@ -207,8 +208,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     public String[] getSelectedFieldNames()
     {
         String[] displayfieldnames = super.getSelectedFieldNames();
-        Vector<String> afieldnameVector = new Vector<String>();
-        int a = 0;
+        ArrayList<String> afieldnameVector = new ArrayList<String>();
         for (int i = 0; i < displayfieldnames.length; i++)
         {
             try
@@ -216,8 +216,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 FieldDescription ofielddescription = (FieldDescription) CurTableWizardUnoDialog.fielditems.get(displayfieldnames[i]);
                 if (ofielddescription != null)
                 {
-                    afieldnameVector.addElement(ofielddescription.getName());
-                    a++;
+                    afieldnameVector.add(ofielddescription.getName());
                 }
             }
             catch (RuntimeException e)
@@ -225,9 +224,8 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 e.printStackTrace(System.out);
             }
         }
-        String[] fieldnames = new String[a];
-        afieldnameVector.toArray(fieldnames);
-        return fieldnames;
+        String[] fieldnames = new String[afieldnameVector.size()];
+        return afieldnameVector.toArray(fieldnames);
     }
 
     public boolean iscompleted()
@@ -266,7 +264,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         {
             for (int i = 0; i < CurTableWizardUnoDialog.fielditems.size(); i++)
             {
-                String stablename = "";
+                String stablename = PropertyNames.EMPTY_STRING;
                 try
                 {
                     FieldDescription ofielddescription = (FieldDescription) CurTableWizardUnoDialog.fielditems.get(fieldnames[i]);
@@ -276,7 +274,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 {
                     e.printStackTrace(System.out);
                 }
-                if (!stablename.equals(""))
+                if (!stablename.equals(PropertyNames.EMPTY_STRING))
                 {
                     return stablename;
                 }
@@ -347,7 +345,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                     if (iduplicate != -1)
                     {
                         XNameAccess xNameAccessFieldNode;
-                        String sdisplayname = Desktop.getUniqueName(NewItems, NewItems[iduplicate], "");
+                        String sdisplayname = Desktop.getUniqueName(NewItems, NewItems[iduplicate], PropertyNames.EMPTY_STRING);
                         FieldDescription curfielddescription = new FieldDescription(xMSF, aLocale, this, sdisplayname, NewItems[iduplicate], imaxcolumnchars);
                         CurTableWizardUnoDialog.fielditems.put(sdisplayname, curfielddescription);
                         NewItems[iduplicate] = sdisplayname;

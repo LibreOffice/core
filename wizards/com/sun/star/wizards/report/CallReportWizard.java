@@ -28,11 +28,13 @@ package com.sun.star.wizards.report;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.uno.Type;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.wizards.common.NamedValueCollection;
+import com.sun.star.wizards.common.PropertyNames;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /** This class capsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getServiceFactory</CODE>).
@@ -114,9 +116,9 @@ public class CallReportWizard
         {
             try
             {
-                if (sEvent.compareTo("start") == 0)
+                if (sEvent.compareTo(PropertyNames.START) == 0)
                 {
-                    if (bWizardstartedalready != true)
+                    if (!bWizardstartedalready)
                     {
                         ReportWizard CurReportWizard = new ReportWizard( xmultiservicefactory, m_wizardContext );
                         CurReportWizard.startReportWizard();
@@ -138,9 +140,9 @@ public class CallReportWizard
                     }
                 }
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                System.err.println(exception);
+                Logger.getLogger(CallReportWizard.class.getName()).log(Level.SEVERE, null, e);
             }
             System.gc();
         }
@@ -212,11 +214,11 @@ public class CallReportWizard
 
             try
             {
-                byteReturn = new String("" + this.hashCode()).getBytes();
+                byteReturn = (PropertyNames.EMPTY_STRING + this.hashCode()).getBytes();
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                System.err.println(exception);
+                Logger.getLogger(CallReportWizard.class.getName()).log(Level.SEVERE, null, e);
             }
 
             return (byteReturn);
@@ -251,9 +253,9 @@ public class CallReportWizard
                             new Type(com.sun.star.lang.XInitialization.class)
                         };
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                System.err.println(exception);
+                Logger.getLogger(CallReportWizard.class.getName()).log(Level.SEVERE, null, e);
             }
 
             return (typeReturn);

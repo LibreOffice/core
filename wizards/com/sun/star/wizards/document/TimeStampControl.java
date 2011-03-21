@@ -75,7 +75,7 @@ public class TimeStampControl extends DatabaseControl
         xShapes.add(oDateControl.xShape);
         xShapes.add(oTimeControl.xShape);
         xShapeGroup = _oFormHandler.xShapeGrouper.group(xShapes);
-        xShapeGroup = (XShape) UnoRuntime.queryInterface(XShape.class, xShapeGroup);
+        xShapeGroup = UnoRuntime.queryInterface(XShape.class, xShapeGroup);
         nreldatewidth = 1.0 / ((double) getSize().Width / (double) nDateWidth);
         nreltimewidth = 1.0 - nreldatewidth;
     }
@@ -87,9 +87,8 @@ public class TimeStampControl extends DatabaseControl
             if (_i < xShapes.getCount())
             {
                 Object oControl = xShapes.getByIndex(_i);
-                XControlShape xControlShape = (XControlShape) UnoRuntime.queryInterface(XControlShape.class, oControl);
-                XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControlShape.getControl());
-                return xPropertySet;
+                XControlShape xControlShape = UnoRuntime.queryInterface(XControlShape.class, oControl);
+                return UnoRuntime.queryInterface(XPropertySet.class, xControlShape.getControl());
             }
         }
         catch (Exception e)
@@ -105,8 +104,8 @@ public class TimeStampControl extends DatabaseControl
         oResource = _oResource;
         sDateAppendix = oResource.getResText(UIConsts.RID_FORM + 88);
         sTimeAppendix = oResource.getResText(UIConsts.RID_FORM + 89);
-        oDateControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.DATE, _curfieldcolumn.getFieldTitle() + " " + sDateAppendix);
-        oTimeControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.TIME, _curfieldcolumn.getFieldTitle() + " " + sTimeAppendix);
+        oDateControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.DATE, _curfieldcolumn.getFieldTitle() + PropertyNames.SPACE + sDateAppendix);
+        oTimeControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.TIME, _curfieldcolumn.getFieldTitle() + PropertyNames.SPACE + sTimeAppendix);
     }
 
     public void setPropertyValue(String _sPropertyName, Object _aPropertyValue) throws Exception

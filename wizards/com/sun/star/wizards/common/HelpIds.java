@@ -38,7 +38,7 @@ public class HelpIds
         "HID:WIZARDS_HID0_CANCEL",    // HID:34205
         "HID:WIZARDS_HID0_STATUS_DIALOG",    // HID:34206
         "HID:WIZARDS_HID1_LST_SESSIONS",    // HID:34207
-        "",
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID1_BTN_DEL_SES",    // HID:34209
         "HID:WIZARDS_HID2_LST_DOCS",    // HID:34210
         "HID:WIZARDS_HID2_BTN_ADD_DOC",    // HID:34211
@@ -81,13 +81,13 @@ public class HelpIds
         "HID:WIZARDS_HID5_BTN_BACKGND",    // HID:34248
         "HID:WIZARDS_HID5_BTN_ICONS",    // HID:34249
         "HID:WIZARDS_HID6_TXT_SITE_TITLE",    // HID:34250
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID6_TXT_SITE_DESC",    // HID:34253
-        "",
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID6_DATE_SITE_CREATED",    // HID:34255
         "HID:WIZARDS_HID6_DATE_SITE_UPDATED",    // HID:34256
-        "",
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID6_TXT_SITE_EMAIL",    // HID:34258
         "HID:WIZARDS_HID6_TXT_SITE_COPYRIGHT",    // HID:34259
         "HID:WIZARDS_HID7_BTN_PREVIEW",    // HID:34260
@@ -102,24 +102,24 @@ public class HelpIds
         "HID:WIZARDS_HID7_BTN_FTP",    // HID:34269
         "HID:WIZARDS_HID7_CHK_SAVE",    // HID:34270
         "HID:WIZARDS_HID7_TXT_SAVE",    // HID:34271
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_BG",    // HID:34290
         "HID:WIZARDS_HID_BG_BTN_OTHER",    // HID:34291
         "HID:WIZARDS_HID_BG_BTN_NONE",    // HID:34292
@@ -143,23 +143,23 @@ public class HelpIds
         "HID:WIZARDS_HID_BG_BTN_IMG14",    // HID:34300
         "HID:WIZARDS_HID_BG_BTN_IMG15",    // HID:34311
         "HID:WIZARDS_HID_BG_BTN_IMG16",    // HID:34312
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGREPORT_DIALOG",    // HID:34320
-        "",
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGREPORT_0_CMDPREV",    // HID:34322
         "HID:WIZARDS_HID_DLGREPORT_0_CMDNEXT",    // HID:34323
         "HID:WIZARDS_HID_DLGREPORT_0_CMDFINISH",    // HID:34324
         "HID:WIZARDS_HID_DLGREPORT_0_CMDCANCEL",    // HID:34325
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGREPORT_1_LBTABLES",    // HID:34330
         "HID:WIZARDS_HID_DLGREPORT_1_FIELDSAVAILABLE",    // HID:34331
         "HID:WIZARDS_HID_DLGREPORT_1_CMDMOVESELECTED",    // HID:34332
@@ -169,7 +169,7 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGREPORT_1_FIELDSSELECTED",    // HID:34336
         "HID:WIZARDS_HID_DLGREPORT_1_CMDMOVEUP",    // HID:34337
         "HID:WIZARDS_HID_DLGREPORT_1_CMDMOVEDOWN",    // HID:34338
-        "",
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGREPORT_2_GROUPING",    // HID:34340
         "HID:WIZARDS_HID_DLGREPORT_2_CMDGROUP",    // HID:34341
         "HID:WIZARDS_HID_DLGREPORT_2_CMDUNGROUP",    // HID:34342
@@ -188,18 +188,18 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGREPORT_3_SORT4",    // HID:34355
         "HID:WIZARDS_HID_DLGREPORT_3_OPTASCEND4",    // HID:34356
         "HID:WIZARDS_HID_DLGREPORT_3_OPTDESCEND4",    // HID:34357
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGREPORT_4_TITLE",    // HID:34362
         "HID:WIZARDS_HID_DLGREPORT_4_DATALAYOUT",    // HID:34363
         "HID:WIZARDS_HID_DLGREPORT_4_PAGELAYOUT",    // HID:34364
         "HID:WIZARDS_HID_DLGREPORT_4_LANDSCAPE",    // HID:34365
         "HID:WIZARDS_HID_DLGREPORT_4_PORTRAIT",    // HID:34366
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGREPORT_5_OPTDYNTEMPLATE",    // HID:34370
         "HID:WIZARDS_HID_DLGREPORT_5_OPTSTATDOCUMENT",    // HID:34371
         "HID:WIZARDS_HID_DLGREPORT_5_TXTTEMPLATEPATH",    // HID:34372
@@ -209,8 +209,8 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGREPORT_5_TXTDOCUMENTPATH",    // HID:34376
         "HID:WIZARDS_HID_DLGREPORT_5_CMDDOCUMENTPATH",    // HID:34377
         "HID:WIZARDS_HID_DLGREPORT_5_CHKLINKTODB",    // HID:34378
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGREPORT_6_TXTTITLE_1",    // HID:34381
         "HID:WIZARDS_HID_DLGREPORT_6_TXTTITLE_2",    // HID:34382
         "HID:WIZARDS_HID_DLGREPORT_6_TXTTITLE_3",    // HID:34383
@@ -218,29 +218,29 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGREPORT_6_TXTTITLE_5",    // HID:34385
         "HID:WIZARDS_HID_DLGREPORT_6_TXTTITLE_6",    // HID:34386
         "HID:WIZARDS_HID_DLGREPORT_6_TXTTITLE_7",    // HID:34387
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGFORM_DIALOG",    // HID:34400
-        "",
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGFORM_CMDPREV",    // HID:34402
         "HID:WIZARDS_HID_DLGFORM_CMDNEXT",    // HID:34403
         "HID:WIZARDS_HID_DLGFORM_CMDFINISH",    // HID:34404
         "HID:WIZARDS_HID_DLGFORM_CMDCANCEL",    // HID:34405
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGFORM_MASTER_LBTABLES",    // HID:34411
         "HID:WIZARDS_HID_DLGFORM_MASTER_FIELDSAVAILABLE",    // HID:34412
         "HID:WIZARDS_HID_DLGFORM_MASTER_CMDMOVESELECTED",    // HID:34413
@@ -250,17 +250,17 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGFORM_MASTER_FIELDSSELECTED",    // HID:34417
         "HID:WIZARDS_HID_DLGFORM_MASTER_CMDMOVEUP",    // HID:34418
         "HID:WIZARDS_HID_DLGFORM_MASTER_CMDMOVEDOWN",    // HID:34419
-        "",
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGFORM_CHKCREATESUBFORM",    // HID:34421
         "HID:WIZARDS_HID_DLGFORM_OPTONEXISTINGRELATION",    // HID:34422
         "HID:WIZARDS_HID_DLGFORM_OPTSELECTMANUALLY",    // HID:34423
         "HID:WIZARDS_HID_DLGFORM_lstRELATIONS",    // HID:34424
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGFORM_SUB_LBTABLES",    // HID:34431
         "HID:WIZARDS_HID_DLGFORM_SUB_FIELDSAVAILABLE",    // HID:34432
         "HID:WIZARDS_HID_DLGFORM_SUB_CMDMOVESELECTED",    // HID:34433
@@ -270,7 +270,7 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGFORM_SUB_FIELDSSELECTED",    // HID:34437
         "HID:WIZARDS_HID_DLGFORM_SUB_CMDMOVEUP",    // HID:34438
         "HID:WIZARDS_HID_DLGFORM_SUB_CMDMOVEDOWN",    // HID:34439
-        "",
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGFORM_LINKER_LSTSLAVELINK1",    // HID:34441
         "HID:WIZARDS_HID_DLGFORM_LINKER_LSTMASTERLINK1",    // HID:34442
         "HID:WIZARDS_HID_DLGFORM_LINKER_LSTSLAVELINK2",    // HID:34443
@@ -279,8 +279,8 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGFORM_LINKER_LSTMASTERLINK3",    // HID:34446
         "HID:WIZARDS_HID_DLGFORM_LINKER_LSTSLAVELINK4",    // HID:34447
         "HID:WIZARDS_HID_DLGFORM_LINKER_LSTMASTERLINK4",    // HID:34448
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGFORM_CMDALIGNLEFT",    // HID:34451
         "HID:WIZARDS_HID_DLGFORM_CMDALIGNRIGHT",    // HID:34452
         "HID:WIZARDS_HID_DLGFORM_CMDLEFTLABELED",    // HID:34453
@@ -296,40 +296,40 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGFORM_CHKNOMODIFICATION",    // HID:34463
         "HID:WIZARDS_HID_DLGFORM_CHKNODELETION",    // HID:34464
         "HID:WIZARDS_HID_DLGFORM_CHKNOADDITION",    // HID:34465
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGFORM_LSTSTYLES",    // HID:34471
         "HID:WIZARDS_HID_DLGFORM_CMDNOBORDER",    // HID:34472
         "HID:WIZARDS_HID_DLGFORM_CMD3DBORDER",    // HID:34473
         "HID:WIZARDS_HID_DLGFORM_CMDSIMPLEBORDER",    // HID:34474
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGFORM_TXTPATH",    // HID:34481
         "HID:WIZARDS_HID_DLGFORM_OPTWORKWITHFORM",    // HID:34482
         "HID:WIZARDS_HID_DLGFORM_OPTMODIFYFORM",    // HID:34483
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGNEWSLTR_DIALOG",    // HID:34500
         "HID:WIZARDS_HID_DLGNEWSLTR_OPTSTANDARDLAYOUT",    // HID:34501
         "HID:WIZARDS_HID_DLGNEWSLTR_OPTPARTYLAYOUT",    // HID:34502
@@ -337,19 +337,19 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGNEWSLTR_OPTSINGLESIDED",    // HID:34504
         "HID:WIZARDS_HID_DLGNEWSLTR_OPTDOUBLESIDED",    // HID:34505
         "HID:WIZARDS_HID_DLGNEWSLTR_CMDGOON",    // HID:34506
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGDEPOT_DIALOG_SELLBUY",    // HID:34520
         "HID:WIZARDS_HID_DLGDEPOT_0_TXTSTOCKID_SELLBUY",    // HID:34521
         "HID:WIZARDS_HID_DLGDEPOT_0_TXTQUANTITY",    // HID:34522
@@ -381,25 +381,25 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGDEPOT_LSTMARKETS",    // HID:34548
         "HID:WIZARDS_HID_DLGDEPOT_0_CMDCANCEL_HISTORY",    // HID:34549
         "HID:WIZARDS_HID_DLGDEPOT_0_CMDGOON_HISTORY",    // HID:34550
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGIMPORT_DIALOG",    // HID:34570
         "HID:WIZARDS_HID_DLGIMPORT_0_CMDHELP",    // HID:34571
         "HID:WIZARDS_HID_DLGIMPORT_0_CMDCANCEL",    // HID:34572
@@ -424,7 +424,7 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGIMPORT_2_LBEXPORTDOCUMENTPATH",    // HID:34591
         "HID:WIZARDS_HID_DLGIMPORT_2_EDEXPORTDOCUMENTPATH",    // HID:34592
         "HID:WIZARDS_HID_DLGIMPORT_2_CMDEXPORTPATHSELECT",    // HID:34593
-        "",
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGIMPORT_3_TBSUMMARY",    // HID:34595
         "HID:WIZARDS_HID_DLGIMPORT_0_CHKWRITER",    // HID:34596
         "HID:WIZARDS_HID_DLGIMPORT_0_CHKCALC",    // HID:34597
@@ -432,34 +432,34 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGIMPORT_0_CHKMATHGLOBAL",    // HID:34599
         "HID:WIZARDS_HID_DLGIMPORT_2_CMDTEMPLATEPATHSELECT2",    // HID:34600
         "HID:WIZARDS_HID_DLGIMPORT_2_CMDDOCUMENTPATHSELECT2",    // HID:34601
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGCORRESPONDENCE_DIALOG",    // HID:34630
         "HID:WIZARDS_HID_DLGCORRESPONDENCE_CANCEL",    // HID:34631
         "HID:WIZARDS_HID_DLGCORRESPONDENCE_OPTIONAGENDA1",    // HID:34632
@@ -468,28 +468,28 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGCORRESPONDENCE_OPTIONLETTER1",    // HID:34635
         "HID:WIZARDS_HID_DLGCORRESPONDENCE_OPTIONLETTER2",    // HID:34636
         "HID:WIZARDS_HID_DLGCORRESPONDENCE_LETTEROKAY",    // HID:34637
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGSTYLES_DIALOG",    // HID:34650
         "HID:WIZARDS_HID_DLGSTYLES_LISTBOX",    // HID:34651
         "HID:WIZARDS_HID_DLGSTYLES_CANCEL",    // HID:34652
         "HID:WIZARDS_HID_DLGSTYLES_OKAY",    // HID:34653
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGCONVERT_DIALOG",    // HID:34660
         "HID:WIZARDS_HID_DLGCONVERT_CHECKBOX1",    // HID:34661
         "HID:WIZARDS_HID_DLGCONVERT_OPTIONBUTTON1",    // HID:34662
@@ -511,25 +511,25 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGCONVERT_CBTARGETOPEN",    // HID:34678
         "HID:WIZARDS_HID_DLGCONVERT_CHKPROTECT",    // HID:34679
         "HID:WIZARDS_HID_DLGCONVERT_CHKTEXTDOCUMENTS",    // HID:34680
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGPASSWORD_CMDGOON",    // HID:34690
         "HID:WIZARDS_HID_DLGPASSWORD_CMDCANCEL",    // HID:34691
         "HID:WIZARDS_HID_DLGPASSWORD_CMDHELP",    // HID:34692
         "HID:WIZARDS_HID_DLGPASSWORD_TXTPASSWORD",    // HID:34693
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGHOLIDAYCAL_DIALOG",    // HID:34700
         "HID:WIZARDS_HID_DLGHOLIDAYCAL_1_PREVIEW",    // HID:34701
         "HID:WIZARDS_HID_DLGHOLIDAYCAL_1_OPYEAR",    // HID:34702
@@ -604,39 +604,39 @@ public class HelpIds
         "HID:WIZARDS_HID_LTRWIZ_OPTMAKECHANGES",    // HID:40814
         "HID:WIZARDS_HID_LTRWIZ_TXTPATH",    // HID:40815
         "HID:WIZARDS_HID_LTRWIZ_CMDPATH",    // HID:40816
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_LTRWIZARD",    // HID:40820
         "HID:WIZARDS_HID_LTRWIZARD_HELP",    // HID:40821
         "HID:WIZARDS_HID_LTRWIZARD_BACK",    // HID:40822
         "HID:WIZARDS_HID_LTRWIZARD_NEXT",    // HID:40823
         "HID:WIZARDS_HID_LTRWIZARD_CREATE",    // HID:40824
         "HID:WIZARDS_HID_LTRWIZARD_CANCEL",    // HID:40825
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_QUERYWIZARD_LSTTABLES",    // HID:40850
         "HID:WIZARDS_HID_QUERYWIZARD_LSTFIELDS",    // HID:40851
         "HID:WIZARDS_HID_QUERYWIZARD_CMDMOVESELECTED",    // HID:40852
@@ -646,12 +646,12 @@ public class HelpIds
         "HID:WIZARDS_HID_QUERYWIZARD_LSTSELFIELDS",    // HID:40856
         "HID:WIZARDS_HID_QUERYWIZARD_CMDMOVEUP",    // HID:40857
         "HID:WIZARDS_HID_QUERYWIZARD_CMDMOVEDOWN",    // HID:40858
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_QUERYWIZARD_SORT1",    // HID:40865
         "HID:WIZARDS_HID_QUERYWIZARD_OPTASCEND1",    // HID:40866
         "HID:WIZARDS_HID_QUERYWIZARD_OPTDESCEND1",    // HID:40867
@@ -664,7 +664,7 @@ public class HelpIds
         "HID:WIZARDS_HID_QUERYWIZARD_SORT4",    // HID:40874
         "HID:WIZARDS_HID_QUERYWIZARD_OPTASCEND4",    // HID:40875
         "HID:WIZARDS_HID_QUERYWIZARD_OPTDESCEND4",    // HID:40876
-        "",
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_QUERYWIZARD_OPTMATCHALL",    // HID:40878
         "HID:WIZARDS_HID_QUERYWIZARD_OPTMATCHANY",    // HID:40879
         "HID:WIZARDS_HID_QUERYWIZARD_LSTFIELDNAME_1",    // HID:40880
@@ -676,12 +676,12 @@ public class HelpIds
         "HID:WIZARDS_HID_QUERYWIZARD_LSTFIELDNAME_3",    // HID:40886
         "HID:WIZARDS_HID_QUERYWIZARD_LSTOPERATOR_3",    // HID:40887
         "HID:WIZARDS_HID_QUERYWIZARD_TXTVALUE_3",    // HID:40888
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_QUERYWIZARD_OPTAGGREGATEDETAILQUERY",    // HID:40895
         "HID:WIZARDS_HID_QUERYWIZARD_OPTAGGREGATESUMMARYQUERY",    // HID:40896
         "HID:WIZARDS_HID_QUERYWIZARD_LSTAGGREGATEFUNCTION_1",    // HID:40897
@@ -696,20 +696,20 @@ public class HelpIds
         "HID:WIZARDS_HID_QUERYWIZARD_LSTAGGREGATEFIELDS_5",    // HID:40906
         "HID:WIZARDS_HID_QUERYWIZARD_BTNAGGREGATEPLUS",    // HID:40907
         "HID:WIZARDS_HID_QUERYWIZARD_BTNAGGREGATEMINUS",    // HID:40908
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_QUERYWIZARD_LSTFILTERFIELDS",    // HID:40915
         "HID:WIZARDS_HID_QUERYWIZARD_CMDFILTERMOVESELECTED",    // HID:40916
         "HID:WIZARDS_HID_QUERYWIZARD_CMDFILTERREMOVESELECTED",    // HID:40917
         "HID:WIZARDS_HID_QUERYWIZARD_LSTFILTERSELFIELDS",    // HID:40918
         "HID:WIZARDS_HID_QUERYWIZARD_CMDFILTERMOVEUP",    // HID:40919
         "HID:WIZARDS_HID_QUERYWIZARD_CMDFILTERMOVEDOWN",    // HID:40920
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_QUERYWIZARD_OPTGROUPMATCHALL",    // HID:40923
         "HID:WIZARDS_HID_QUERYWIZARD_OPTGROUPMATCHANY",    // HID:40924
         "HID:WIZARDS_HID_QUERYWIZARD_LSTFILTERFIELDNAME_1",    // HID:40925
@@ -721,12 +721,12 @@ public class HelpIds
         "HID:WIZARDS_HID_QUERYWIZARD_LSTFILTERFIELDNAME_3",    // HID:40931
         "HID:WIZARDS_HID_QUERYWIZARD_LSTFILTEROPERATOR_3",    // HID:40932
         "HID:WIZARDS_HID_QUERYWIZARD_TXTFILTERVALUE_3",    // HID:40933
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_QUERYWIZARD_TXTTITLE_1",    // HID:40940
         "HID:WIZARDS_HID_QUERYWIZARD_TXTTITLE_2",    // HID:40941
         "HID:WIZARDS_HID_QUERYWIZARD_TXTTITLE_3",    // HID:40942
@@ -734,61 +734,61 @@ public class HelpIds
         "HID:WIZARDS_HID_QUERYWIZARD_TXTTITLE_5",    // HID:40944
         "HID:WIZARDS_HID_QUERYWIZARD_TXTTITLE_6",    // HID:40945
         "HID:WIZARDS_HID_QUERYWIZARD_TXTTITLE_7",    // HID:40946
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_QUERYWIZARD_TXTQUERYTITLE",    // HID:40955
         "HID:WIZARDS_HID_QUERYWIZARD_OPTDISPLAYQUERY",    // HID:40956
         "HID:WIZARDS_HID_QUERYWIZARD_OPTMODIFYQUERY",    // HID:40957
         "HID:WIZARDS_HID_QUERYWIZARD_TXTSUMMARY",    // HID:40958
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_QUERYWIZARD",    // HID:40970
-        "",
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_QUERYWIZARD_BACK",    // HID:40972
         "HID:WIZARDS_HID_QUERYWIZARD_NEXT",    // HID:40973
         "HID:WIZARDS_HID_QUERYWIZARD_CREATE",    // HID:40974
         "HID:WIZARDS_HID_QUERYWIZARD_CANCEL",    // HID:40975
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_IS",    // HID:41000
-        "",
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_IS_BTN_NONE",    // HID:41002
         "HID:WIZARDS_HID_IS_BTN_OK",    // HID:41003
         "HID:WIZARDS_HID_IS_BTN_CANCEL",    // HID:41004
@@ -824,9 +824,9 @@ public class HelpIds
         "HID:WIZARDS_HID_IS_BTN_IMG30",    // HID:41034
         "HID:WIZARDS_HID_IS_BTN_IMG31",    // HID:41035
         "HID:WIZARDS_HID_IS_BTN_IMG32",    // HID:41036
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_FTP",    // HID:41040
         "HID:WIZARDS_HID_FTP_SERVER",    // HID:41041
         "HID:WIZARDS_HID_FTP_USERNAME",    // HID:41042
@@ -836,8 +836,8 @@ public class HelpIds
         "HID:WIZARDS_HID_FTP_BTN_PATH",    // HID:41046
         "HID:WIZARDS_HID_FTP_OK",    // HID:41047
         "HID:WIZARDS_HID_FTP_CANCEL",    // HID:41048
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_AGWIZ",    // HID:41051
         "HID:WIZARDS_HID_AGWIZ_HELP",    // HID:41052
         "HID:WIZARDS_HID_AGWIZ_NEXT",    // HID:41053
@@ -886,27 +886,27 @@ public class HelpIds
         "HID:WIZARDS_HID_AGWIZ_5_TXT_TOPIC_5",    // HID:41096
         "HID:WIZARDS_HID_AGWIZ_5_TXT_RESPONSIBLE_5",    // HID:41097
         "HID:WIZARDS_HID_AGWIZ_5_TXT_MINUTES_5",    // HID:41098
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_FAXWIZ_OPTBUSINESSFAX",    // HID:41120
         "HID:WIZARDS_HID_FAXWIZ_LSTBUSINESSSTYLE",    // HID:41121
         "HID:WIZARDS_HID_FAXWIZ_OPTPRIVATEFAX",    // HID:41122
@@ -942,53 +942,53 @@ public class HelpIds
         "HID:WIZARDS_HID_IMAGECONTROL2",    // HID:41152
         "HID:WIZARDS_HID_FAXWIZ_TXTPATH",    // HID:41153
         "HID:WIZARDS_HID_FAXWIZ_CMDPATH",    // HID:41154
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_FAXWIZARD",    // HID:41180
         "HID:WIZARDS_HID_FAXWIZARD_HELP",    // HID:41181
         "HID:WIZARDS_HID_FAXWIZARD_BACK",    // HID:41182
         "HID:WIZARDS_HID_FAXWIZARD_NEXT",    // HID:41183
         "HID:WIZARDS_HID_FAXWIZARD_CREATE",    // HID:41184
         "HID:WIZARDS_HID_FAXWIZARD_CANCEL",    // HID:41185
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGTABLE_DIALOG",    // HID:41200
-        "",
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGTABLE_CMDPREV",    // HID:41202
         "HID:WIZARDS_HID_DLGTABLE_CMDNEXT",    // HID:41203
         "HID:WIZARDS_HID_DLGTABLE_CMDFINISH",    // HID:41204
@@ -1004,9 +1004,9 @@ public class HelpIds
         "HID:WIZARDS_HID_DLGTABLE_FIELDSSELECTED",    // HID:41214
         "HID:WIZARDS_HID_DLGTABLE_CMDMOVEUP",    // HID:41215
         "HID:WIZARDS_HID_DLGTABLE_CMDMOVEDOWN",    // HID:41216
-        "",
-        "",
-        "",
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
+        PropertyNames.EMPTY_STRING,
         "HID:WIZARDS_HID_DLGTABLE_LB_SELFIELDNAMES",    // HID:41220
         "HID:WIZARDS_HID_DLGTABLE_CMDMOVEFIELDUP",    // HID:41221
         "HID:WIZARDS_HID_DLGTABLE_CMDMOVEFIELDDOWN",    // HID:41222
@@ -1042,6 +1042,6 @@ public class HelpIds
         else if ( nHelpId >= 40769 && nHelpId <= 41245 )
             return array2[ nHelpId - 40769 ];
         else
-            return new String();
+            return "";
     }
 }
