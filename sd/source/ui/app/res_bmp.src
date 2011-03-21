@@ -426,9 +426,9 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
             FilterList  =
             {
-                < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
-                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
-                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
+                < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
+                < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
+                < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ;
             };
         };
         SfxStyleFamilyItem RID_PRESENTATIONSTYLEFAMILY
@@ -437,7 +437,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
             FilterList =
             {
-                < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
+                < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
             };
         };
     };
