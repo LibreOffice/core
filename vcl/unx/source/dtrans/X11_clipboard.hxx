@@ -54,12 +54,12 @@ namespace x11 {
         >,
         public SelectionAdaptor
     {
-        Reference< ::com::sun::star::datatransfer::XTransferable > m_aContents;
-        Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner > m_aOwner;
+        com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > m_aContents;
+        com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner > m_aOwner;
 
         SelectionManager&                                       m_rSelectionManager;
-        Reference< ::com::sun::star::lang::XInitialization >    m_xSelectionManager;
-        ::std::list< Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener > > m_aListeners;
+        com::sun::star::uno::Reference< ::com::sun::star::lang::XInitialization >   m_xSelectionManager;
+        ::std::list< com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener > > m_aListeners;
         Atom                                                    m_aSelection;
 
     protected:
@@ -100,12 +100,12 @@ namespace x11 {
          * XClipboard
          */
 
-        virtual Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents()
+        virtual com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents()
             throw(RuntimeException);
 
         virtual void SAL_CALL setContents(
-            const Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans,
-            const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
+            const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans,
+            const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
             throw(RuntimeException);
 
         virtual ::rtl::OUString SAL_CALL getName()
@@ -122,27 +122,27 @@ namespace x11 {
          * XClipboardNotifier
          */
         virtual void SAL_CALL addClipboardListener(
-            const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
+            const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
             throw(RuntimeException);
 
         virtual void SAL_CALL removeClipboardListener(
-            const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
+            const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
             throw(RuntimeException);
 
         /*
          *  SelectionAdaptor
          */
-        virtual Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable();
+        virtual com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable();
         virtual void clearTransferable();
         virtual void fireContentsChanged();
-        virtual Reference< XInterface > getReference() throw();
+        virtual com::sun::star::uno::Reference< XInterface > getReference() throw();
     };
 
 // ------------------------------------------------------------------------
 
     Sequence< ::rtl::OUString > SAL_CALL X11Clipboard_getSupportedServiceNames();
-    Reference< XInterface > SAL_CALL X11Clipboard_createInstance(
-        const Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
+    com::sun::star::uno::Reference< XInterface > SAL_CALL X11Clipboard_createInstance(
+        const com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
 // ------------------------------------------------------------------------
 

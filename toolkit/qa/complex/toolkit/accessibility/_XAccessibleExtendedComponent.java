@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.toolkit;
+package complex.toolkit.accessibility;
 
 // import lib.MultiMethodTest;
 import com.sun.star.accessibility.XAccessibleExtendedComponent;

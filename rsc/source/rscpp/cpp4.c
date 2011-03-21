@@ -629,7 +629,7 @@ void dumpparm(char* why)
             nargs, parmp - parm, why);
         for (i = 0; i < nargs; i++) {
         fprintf( pCppOut, "parm[%d] (%d) = \"%s\"\n",
-                i + 1, strlen(parlist[i]), parlist[i]);
+                i + 1, (int)strlen(parlist[i]), parlist[i]);
         }
 }
 #endif

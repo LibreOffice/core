@@ -802,7 +802,7 @@ OString RTSPWDialog::getPassword() const
 
 extern "C" {
 
-    int Sal_SetupPrinterDriver( ::psp::PrinterInfo& rJobData )
+    int SPA_DLLPUBLIC Sal_SetupPrinterDriver( ::psp::PrinterInfo& rJobData )
     {
         int nRet = 0;
         RTSDialog aDialog( rJobData, rJobData.m_aPrinterName, false );
@@ -816,14 +816,14 @@ extern "C" {
         return nRet;
     }
 
-    int Sal_queryFaxNumber( String& rNumber )
+    int SPA_DLLPUBLIC Sal_queryFaxNumber( String& rNumber )
     {
         String aTmpString( PaResId( RID_TXT_QUERYFAXNUMBER ) );
         QueryString aQuery( NULL, aTmpString, rNumber );
         return aQuery.Execute();
     }
 
-    bool Sal_authenticateQuery( const OString& rServer, OString& rUserName, OString& rPassword )
+    bool SPA_DLLPUBLIC Sal_authenticateQuery( const OString& rServer, OString& rUserName, OString& rPassword )
     {
         bool bRet = false;
 
