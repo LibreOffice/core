@@ -34,23 +34,6 @@ public class Instance
 
     /** creates a new element in the instance
      *
-     * The element will be inserted immediately below the root node of the instance.
-     *
-     * @param _elementName
-     *      the name of the to-be-created element
-     * @param _initialNodeValue
-     *      the initial value to set at the node. Might be null, in this case no value is set.
-     * @return
-     *      the node of the newly created element
-     * @throws com.sun.star.xml.dom.DOMException
-     */
-    public XNode createElement( String _elementName, String _initialNodeValue ) throws DOMException
-    {
-        return createElement( m_domInstance, _elementName, _initialNodeValue );
-    }
-
-    /** creates a new element in the instance
-     *
      * The element will be inserted immediately below a given XNode.
      *
      * @param _parentElement
