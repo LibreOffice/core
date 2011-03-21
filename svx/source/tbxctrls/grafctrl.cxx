@@ -300,7 +300,7 @@ protected:
 
 public:
 
-                            ImplGrafControl( Window* pParent, sal_uInt16 nSlotId, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame );
+                            ImplGrafControl( Window* pParent, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame );
                             ~ImplGrafControl();
 
     void                    Update( const SfxPoolItem* pItem ) { maField.Update( pItem ); }
