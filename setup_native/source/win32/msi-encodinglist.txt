@@ -83,7 +83,7 @@ nl    1252  1043
 nn    1252  2068
 no    1252  1044
 nr       0  1580   # Ndebele South
-ns       0  1132   # Northern Sotho (Sepedi)
+nso      0  1132   # Northern Sotho (Sepedi)
 oc    1252  1154   # Occitan-lengadocian
 om       0  2162
 or       0  1096   # Oriya
