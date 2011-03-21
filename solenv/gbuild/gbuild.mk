@@ -143,7 +143,9 @@ $(eval $(call gb_Helper_init_registries))
 $(eval $(call gb_Helper_add_repositories,$(gb_REPOS)))
 $(eval $(call gb_Helper_collect_libtargets))
 
-ifeq ($(OS),LINUX)
+# Make has no support for 'or' clauses in conditionals,
+# we use a filter expression instead.
+ifneq (,$(filter LINUX DRAGONFLY, $(OS)))
 include $(GBUILDDIR)/platform/linux.mk
 else
 ifeq ($(OS),WNT)

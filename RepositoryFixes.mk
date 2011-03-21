@@ -28,7 +28,9 @@
 # fixes for all the libraries that are named with too much creativity and do
 # not follow any of the established nameschemes
 
-ifeq ($(OS),LINUX)
+# Make has no support for 'or' clauses in conditionals,
+# we use a filter expression instead.
+ifneq (,$(filter LINUX DRAGONFLY, $(OS)))
 gb_Library_FILENAMES := $(patsubst comphelper:libcomphelper%,comphelper:libcomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppuhelper:libcppuhelper%,cppuhelper:libuno_cppuhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppuhelper:libcppuhelper%,cppuhelper:libuno_cppuhelper%,$(gb_Library_FILENAMES))
