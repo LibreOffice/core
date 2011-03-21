@@ -199,7 +199,7 @@ testcase tCreateNew3DChart
     endif    
     printlog "Check that 3D look is 'simple' (=default)"
     if Scheme3D.GetSelIndex <> 1 then
-        warnlog "#i112522# - Default 3D Look ('simple') has not been preserved after save and reload."
+        warnlog "Default 3D Look ('simple') has not been preserved after save and reload."
     endif    
     printlog "Check that 3D shape 'cone' is selected"
     if BarColumnShape.GetSelIndex <> 3 Then
@@ -222,7 +222,7 @@ testcase tCreateNew3DChart
             warnlog "Data range wasn't correctly preserved after save and reload and does not caontain $A$2:$E$13."
         endif
         if instr ( sControlString , "$A$17:$E$17" ) = 0 Then
-            warnlog "#i72241# - Data range wasn't correctly preserved after save and reload and does not contain $A$17:$E$17."        
+            warnlog "Data range wasn't correctly preserved after save and reload and does not contain $A$17:$E$17."        
         endif        
         printlog "Check that radio button 'rows' is checked"
         if NOT Rows.IsChecked then
@@ -238,7 +238,7 @@ testcase tCreateNew3DChart
         endif        
         printlog "Check that 'First column as label' checkbox is checked."
         if NOT FirstColumnAsLabel.IsChecked then
-            warnlog "#i72241# - Check box 'First column as label' (enabled) wasn't preserved after save and reload."
+            warnlog "Check box 'First column as label' (enabled) wasn't preserved after save and reload."
         endif
     else
         warnlog "Tab page 'Data Range' not visible!"
@@ -260,7 +260,7 @@ testcase tCreateNew3DChart
                 sControlString = RangeFor.GetText
                 printlog "'Range for name' is: " & sControlString
                 if instr ( sControlString , "$A$17" ) = 0 Then
-                    warnlog "#i72241# - 'Range for name' wasn't correctly preserved after save and reload."
+                    warnlog "'Range for name' wasn't correctly preserved after save and reload."
                 else                    
                     printlog "Select 'Y-Values' in Data Ranges list on the right."
                     if fSetListBoxByItem ( DataRanges , 2 ) > 0 then
@@ -546,7 +546,6 @@ testcase tCreateNewLineChart
     FormatDataRanges
     printlog "Switch to tab page Data Series"
     Kontext
-    Active.SetPage TabFormatDataRangesDataRange 'Due to bug #i77237# the tabpage has to be switched once before 'OK' or 'Cancel' can be used
     Active.SetPage TabFormatDataRangesDataSeries 
     Kontext "TabChartTypeDataSeries"
     if TabChartTypeDataSeries.Exists(2) then
@@ -867,7 +866,7 @@ testcase tCreateNewBubbleChart
             warnlog "Data range wasn't correctly preserved after save and reload: $A$19"
         endif
         if instr ( sControlString , "$B$13:$C$16" ) = 0 Then
-           QAErrorlog "#i100780#Data range wasn't correctly preserved after save and reload: $B$13:$C$16"
+           QAErrorlog "Data range wasn't correctly preserved after save and reload: $B$13:$C$16"
         endif
         if instr ( sControlString , "$C$12" ) = 0 Then
             warnlog "Data range wasn't correctly preserved after save and reload: $E$1:$F$13"
