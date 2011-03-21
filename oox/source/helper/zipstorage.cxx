@@ -33,6 +33,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/storagehelper.hxx>
 #include "oox/helper/helper.hxx"
 
@@ -50,47 +51,46 @@ using ::rtl::OUString;
 
 // ============================================================================
 
-ZipStorage::ZipStorage(
-        const Reference< XMultiServiceFactory >& rxFactory,
-        const Reference< XInputStream >& rxInStream ) :
+ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStream ) :
     StorageBase( rxInStream, false )
 {
-    OSL_ENSURE( rxFactory.is(), "ZipStorage::ZipStorage - missing service factory" );
+    OSL_ENSURE( rxContext.is(), "ZipStorage::ZipStorage - missing component context" );
     // create base storage object
-    try
+    if( rxContext.is() ) try
     {
         /*  #i105325# ::comphelper::OStorageHelper::GetStorageFromInputStream()
             cannot be used here as it will open a storage with format type
             'PackageFormat' that will not work with OOXML packages.
 
-            #161971# The MS-document storages should always be opened in Repair-Mode to
-            ignore the format errors and get so much info as possible. I hate this
-            solution, but it seems to be the only consistent way to handle the MS-documents.
+            #161971# The MS-document storages should always be opened in repair
+            mode to ignore the format errors and get so much info as possible.
+            I hate this solution, but it seems to be the only consistent way to
+            handle the MS documents.
 
             TODO: #i105410# switch to 'OFOPXMLFormat' and use its
-            implementation of relations handling. */
-
+            implementation of relations handling.
+         */
+        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
         mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
-            ZIP_STORAGE_FORMAT_STRING, rxInStream, rxFactory,
-            sal_False /* DEV300_m80: Was sal_True, but DOCX and others did not load */ );
+            ZIP_STORAGE_FORMAT_STRING, rxInStream, xFactory,
+            sal_False );    // DEV300_m80: Was sal_True, but DOCX and others did not load
     }
     catch( Exception& )
     {
     }
 }
 
-ZipStorage::ZipStorage(
-        const Reference< XMultiServiceFactory >& rxFactory,
-        const Reference< XStream >& rxStream ) :
+ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const Reference< XStream >& rxStream ) :
     StorageBase( rxStream, false )
 {
-    OSL_ENSURE( rxFactory.is(), "ZipStorage::ZipStorage - missing service factory" );
+    OSL_ENSURE( rxContext.is(), "ZipStorage::ZipStorage - missing component context" );
     // create base storage object
-    try
+    if( rxContext.is() ) try
     {
-        using namespace ::com::sun::star::embed::ElementModes;
+        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
+        const sal_Int32 nOpenMode = ElementModes::READWRITE | ElementModes::TRUNCATE;
         mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream(
-            OFOPXML_STORAGE_FORMAT_STRING, rxStream, READWRITE | TRUNCATE, rxFactory, sal_True );
+            OFOPXML_STORAGE_FORMAT_STRING, rxStream, nOpenMode, xFactory, sal_True );
     }
     catch( Exception& )
     {

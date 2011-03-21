@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef OOX_CORE_RELATIONS
-#define OOX_CORE_RELATIONS
+#ifndef OOX_CORE_RELATIONS_HXX
+#define OOX_CORE_RELATIONS_HXX
 
 #include <map>
 #include <boost/shared_ptr.hpp>
@@ -105,4 +105,4 @@ private:
 } // namespace core
 } // namespace oox
 
-#endif // OOX_CORE_RELATIONS
+#endif

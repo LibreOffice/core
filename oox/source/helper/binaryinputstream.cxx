@@ -27,6 +27,8 @@
 
 #include "oox/helper/binaryinputstream.hxx"
 
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <string.h>
 #include <vector>
 #include <rtl/strbuf.hxx>
@@ -80,11 +82,16 @@ OString BinaryInputStream::readCharArray( sal_Int32 nChars, bool bAllowNulChars 
     if( nChars <= 0 )
         return OString();
 
-    ::std::vector< sal_Char > aBuffer( static_cast< size_t >( nChars ) );
-    size_t nCharsRead = static_cast< size_t >( readMemory( &aBuffer.front(), nChars ) );
+    ::std::vector< sal_uInt8 > aBuffer;
+    sal_Int32 nCharsRead = readArray( aBuffer, nChars );
+    if( nCharsRead <= 0 )
+        return OString();
+
+    aBuffer.resize( static_cast< size_t >( nCharsRead ) );
     if( !bAllowNulChars )
-        ::std::replace( aBuffer.begin(), aBuffer.begin() + nCharsRead, '\0', '?' );
-    return OString( &aBuffer.front(), nCharsRead );
+        ::std::replace( aBuffer.begin(), aBuffer.end(), '\0', '?' );
+
+    return OString( reinterpret_cast< sal_Char* >( &aBuffer.front() ), nCharsRead );
 }
 
 OUString BinaryInputStream::readCharArrayUC( sal_Int32 nChars, rtl_TextEncoding eTextEnc, bool bAllowNulChars )
@@ -94,30 +101,44 @@ OUString BinaryInputStream::readCharArrayUC( sal_Int32 nChars, rtl_TextEncoding 
 
 OUString BinaryInputStream::readUnicodeArray( sal_Int32 nChars, bool bAllowNulChars )
 {
-    OUStringBuffer aBuffer;
-    if( nChars > 0 )
-    {
-        aBuffer.ensureCapacity( nChars );
-        sal_uInt16 nChar;
-        for( sal_uInt16 nCharIdx = 0; !mbEof && (nCharIdx < nChars); ++nCharIdx )
-        {
-            readValue( nChar );
-            aBuffer.append( static_cast< sal_Unicode >( (!bAllowNulChars && (nChar == 0)) ? '?' : nChar ) );
-        }
-    }
-    return aBuffer.makeStringAndClear();
+    if( nChars <= 0 )
+        return OUString();
+
+    ::std::vector< sal_uInt16 > aBuffer;
+    sal_Int32 nCharsRead = readArray( aBuffer, nChars );
+    if( nCharsRead <= 0 )
+        return OUString();
+
+    aBuffer.resize( static_cast< size_t >( nCharsRead ) );
+    if( !bAllowNulChars )
+        ::std::replace( aBuffer.begin(), aBuffer.begin() + nCharsRead, '\0', '?' );
+
+    OUStringBuffer aStringBuffer;
+    aStringBuffer.ensureCapacity( nCharsRead );
+    for( ::std::vector< sal_uInt16 >::iterator aIt = aBuffer.begin(), aEnd = aBuffer.end(); aIt != aEnd; ++aIt )
+        aStringBuffer.append( static_cast< sal_Unicode >( *aIt ) );
+    return aStringBuffer.makeStringAndClear();
 }
 
-void BinaryInputStream::copyToStream( BinaryOutputStream& rOutStrm, sal_Int64 nBytes )
+OUString BinaryInputStream::readCompressedUnicodeArray( sal_Int32 nChars, bool bCompressed, bool bAllowNulChars )
+{
+    return bCompressed ?
+         // ISO-8859-1 maps all byte values 0xHH to the same Unicode code point U+00HH
+        readCharArrayUC( nChars, RTL_TEXTENCODING_ISO_8859_1, bAllowNulChars ) :
+        readUnicodeArray( nChars, bAllowNulChars );
+}
+
+void BinaryInputStream::copyToStream( BinaryOutputStream& rOutStrm, sal_Int64 nBytes, sal_Int32 nAtomSize )
 {
     if( nBytes > 0 )
     {
-        sal_Int32 nBufferSize = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, INPUTSTREAM_BUFFERSIZE );
+        // make buffer size a multiple of the passed atom size
+        sal_Int32 nBufferSize = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, (INPUTSTREAM_BUFFERSIZE / nAtomSize) * nAtomSize );
         StreamDataSequence aBuffer( nBufferSize );
         while( nBytes > 0 )
         {
             sal_Int32 nReadSize = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, nBufferSize );
-            sal_Int32 nBytesRead = readData( aBuffer, nReadSize );
+            sal_Int32 nBytesRead = readData( aBuffer, nReadSize, nAtomSize );
             rOutStrm.writeData( aBuffer );
             if( nReadSize == nBytesRead )
                 nBytes -= nReadSize;
@@ -127,34 +148,44 @@ void BinaryInputStream::copyToStream( BinaryOutputStream& rOutStrm, sal_Int64 nB
     }
 }
 
-void BinaryInputStream::readAtom( void* opMem, sal_uInt8 nSize )
-{
-    readMemory( opMem, nSize );
-}
-
 // ============================================================================
 
 BinaryXInputStream::BinaryXInputStream( const Reference< XInputStream >& rxInStrm, bool bAutoClose ) :
+    BinaryStreamBase( Reference< XSeekable >( rxInStrm, UNO_QUERY ).is() ),
     BinaryXSeekableStream( Reference< XSeekable >( rxInStrm, UNO_QUERY ) ),
     maBuffer( INPUTSTREAM_BUFFERSIZE ),
     mxInStrm( rxInStrm ),
-    mbAutoClose( bAutoClose )
+    mbAutoClose( bAutoClose && rxInStrm.is() )
 {
     mbEof = !mxInStrm.is();
 }
 
 BinaryXInputStream::~BinaryXInputStream()
 {
-    if( mbAutoClose )
-        close();
+    close();
 }
 
-sal_Int32 BinaryXInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes )
+void BinaryXInputStream::close()
+{
+    OSL_ENSURE( !mbAutoClose || mxInStrm.is(), "BinaryXInputStream::close - invalid call" );
+    if( mbAutoClose && mxInStrm.is() ) try
+    {
+        mxInStrm->closeInput();
+    }
+    catch( Exception& )
+    {
+        OSL_ENSURE( false, "BinaryXInputStream::close - closing input stream failed" );
+    }
+    mxInStrm.clear();
+    mbAutoClose = false;
+    BinaryXSeekableStream::close();
+}
+
+sal_Int32 BinaryXInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes, size_t /*nAtomSize*/ )
 {
     sal_Int32 nRet = 0;
     if( !mbEof && (nBytes > 0) ) try
     {
-        OSL_ENSURE( mxInStrm.is(), "BinaryXInputStream::readData - invalid call" );
         nRet = mxInStrm->readBytes( orData, nBytes );
         mbEof = nRet != nBytes;
     }
@@ -165,7 +196,7 @@ sal_Int32 BinaryXInputStream::readData( StreamDataSequence& orData, sal_Int32 nB
     return nRet;
 }
 
-sal_Int32 BinaryXInputStream::readMemory( void* opMem, sal_Int32 nBytes )
+sal_Int32 BinaryXInputStream::readMemory( void* opMem, sal_Int32 nBytes, size_t nAtomSize )
 {
     sal_Int32 nRet = 0;
     if( !mbEof && (nBytes > 0) )
@@ -175,7 +206,7 @@ sal_Int32 BinaryXInputStream::readMemory( void* opMem, sal_Int32 nBytes )
         while( !mbEof && (nBytes > 0) )
         {
             sal_Int32 nReadSize = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, nBufferSize );
-            sal_Int32 nBytesRead = readData( maBuffer, nReadSize );
+            sal_Int32 nBytesRead = readData( maBuffer, nReadSize, nAtomSize );
             if( nBytesRead > 0 )
                 memcpy( opnMem, maBuffer.getConstArray(), static_cast< size_t >( nBytesRead ) );
             opnMem += nBytesRead;
@@ -186,11 +217,10 @@ sal_Int32 BinaryXInputStream::readMemory( void* opMem, sal_Int32 nBytes )
     return nRet;
 }
 
-void BinaryXInputStream::skip( sal_Int32 nBytes )
+void BinaryXInputStream::skip( sal_Int32 nBytes, size_t /*nAtomSize*/ )
 {
     if( !mbEof ) try
     {
-        OSL_ENSURE( mxInStrm.is(), "BinaryXInputStream::skip - invalid call" );
         mxInStrm->skipBytes( nBytes );
     }
     catch( Exception& )
@@ -199,60 +229,48 @@ void BinaryXInputStream::skip( sal_Int32 nBytes )
     }
 }
 
-void BinaryXInputStream::close()
-{
-    if( mxInStrm.is() ) try
-    {
-        mxInStrm->closeInput();
-        mxInStrm.clear();
-    }
-    catch( Exception& )
-    {
-        OSL_ENSURE( false, "BinaryXInputStream::close - closing input stream failed" );
-    }
-}
-
 // ============================================================================
 
 SequenceInputStream::SequenceInputStream( const StreamDataSequence& rData ) :
+    BinaryStreamBase( true ),
     SequenceSeekableStream( rData )
 {
 }
 
-sal_Int32 SequenceInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes )
+sal_Int32 SequenceInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes, size_t /*nAtomSize*/ )
 {
     sal_Int32 nReadBytes = 0;
     if( !mbEof )
     {
-        nReadBytes = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, mrData.getLength() - mnPos );
+        nReadBytes = getMaxBytes( nBytes );
         orData.realloc( nReadBytes );
         if( nReadBytes > 0 )
-            memcpy( orData.getArray(), mrData.getConstArray() + mnPos, static_cast< size_t >( nReadBytes ) );
+            memcpy( orData.getArray(), mpData->getConstArray() + mnPos, static_cast< size_t >( nReadBytes ) );
         mnPos += nReadBytes;
         mbEof = nReadBytes < nBytes;
     }
     return nReadBytes;
 }
 
-sal_Int32 SequenceInputStream::readMemory( void* opMem, sal_Int32 nBytes )
+sal_Int32 SequenceInputStream::readMemory( void* opMem, sal_Int32 nBytes, size_t /*nAtomSize*/ )
 {
     sal_Int32 nReadBytes = 0;
     if( !mbEof )
     {
-        nReadBytes = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, mrData.getLength() - mnPos );
+        nReadBytes = getMaxBytes( nBytes );
         if( nReadBytes > 0 )
-            memcpy( opMem, mrData.getConstArray() + mnPos, static_cast< size_t >( nReadBytes ) );
+            memcpy( opMem, mpData->getConstArray() + mnPos, static_cast< size_t >( nReadBytes ) );
         mnPos += nReadBytes;
         mbEof = nReadBytes < nBytes;
     }
     return nReadBytes;
 }
 
-void SequenceInputStream::skip( sal_Int32 nBytes )
+void SequenceInputStream::skip( sal_Int32 nBytes, size_t /*nAtomSize*/ )
 {
     if( !mbEof )
     {
-        sal_Int32 nSkipBytes = getLimitedValue< sal_Int32, sal_Int32 >( nBytes, 0, mrData.getLength() - mnPos );
+        sal_Int32 nSkipBytes = getMaxBytes( nBytes );
         mnPos += nSkipBytes;
         mbEof = nSkipBytes < nBytes;
     }
@@ -260,73 +278,75 @@ void SequenceInputStream::skip( sal_Int32 nBytes )
 
 // ============================================================================
 
-RelativeInputStream::RelativeInputStream( BinaryInputStream& rInStrm, sal_Int64 nLength ) :
-    mrInStrm( rInStrm ),
+RelativeInputStream::RelativeInputStream( BinaryInputStream& rInStrm, sal_Int64 nSize ) :
+    BinaryStreamBase( rInStrm.isSeekable() ),
+    mpInStrm( &rInStrm ),
     mnStartPos( rInStrm.tell() ),
     mnRelPos( 0 )
 {
     sal_Int64 nRemaining = rInStrm.getRemaining();
-    mnLength = (nRemaining >= 0) ? ::std::min( nLength, nRemaining ) : nLength;
-    mbEof = mnLength < 0;
+    mnSize = (nRemaining >= 0) ? ::std::min( nSize, nRemaining ) : nSize;
+    mbEof = mbEof || rInStrm.isEof() || (mnSize < 0);
 }
 
-bool RelativeInputStream::isSeekable() const
+sal_Int64 RelativeInputStream::size() const
 {
-    return mrInStrm.isSeekable();
-}
-
-sal_Int64 RelativeInputStream::getLength() const
-{
-    return mnLength;
+    return mpInStrm ? mnSize : -1;
 }
 
 sal_Int64 RelativeInputStream::tell() const
 {
-    return mnRelPos;
+    return mpInStrm ? mnRelPos : -1;
 }
 
 void RelativeInputStream::seek( sal_Int64 nPos )
 {
-    if( mrInStrm.isSeekable() && (mnStartPos >= 0) )
+    if( mpInStrm && isSeekable() && (mnStartPos >= 0) )
     {
-        mnRelPos = getLimitedValue< sal_Int64, sal_Int64 >( nPos, 0, mnLength );
-        mrInStrm.seek( mnStartPos + mnRelPos );
-        mbEof = (mnRelPos != nPos) || mrInStrm.isEof();
+        mnRelPos = getLimitedValue< sal_Int64, sal_Int64 >( nPos, 0, mnSize );
+        mpInStrm->seek( mnStartPos + mnRelPos );
+        mbEof = (mnRelPos != nPos) || mpInStrm->isEof();
     }
 }
 
-sal_Int32 RelativeInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes )
+void RelativeInputStream::close()
+{
+    mpInStrm = 0;
+    mbEof = true;
+}
+
+sal_Int32 RelativeInputStream::readData( StreamDataSequence& orData, sal_Int32 nBytes, size_t nAtomSize )
 {
     sal_Int32 nReadBytes = 0;
     if( !mbEof )
     {
-        sal_Int32 nRealBytes = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, mnLength - mnRelPos );
-        nReadBytes = mrInStrm.readData( orData, nRealBytes );
+        sal_Int32 nMaxBytes = getMaxBytes( nBytes );
+        nReadBytes = mpInStrm->readData( orData, nMaxBytes, nAtomSize );
         mnRelPos += nReadBytes;
-        mbEof = (nRealBytes < nBytes) || mrInStrm.isEof();
+        mbEof = (nMaxBytes < nBytes) || mpInStrm->isEof();
     }
     return nReadBytes;
 }
 
-sal_Int32 RelativeInputStream::readMemory( void* opMem, sal_Int32 nBytes )
+sal_Int32 RelativeInputStream::readMemory( void* opMem, sal_Int32 nBytes, size_t nAtomSize )
 {
     sal_Int32 nReadBytes = 0;
     if( !mbEof )
     {
-        sal_Int32 nRealBytes = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, mnLength - mnRelPos );
-        nReadBytes = mrInStrm.readMemory( opMem, nRealBytes );
+        sal_Int32 nMaxBytes = getMaxBytes( nBytes );
+        nReadBytes = mpInStrm->readMemory( opMem, nMaxBytes, nAtomSize );
         mnRelPos += nReadBytes;
-        mbEof = (nRealBytes < nBytes) || mrInStrm.isEof();
+        mbEof = (nMaxBytes < nBytes) || mpInStrm->isEof();
     }
     return nReadBytes;
 }
 
-void RelativeInputStream::skip( sal_Int32 nBytes )
+void RelativeInputStream::skip( sal_Int32 nBytes, size_t nAtomSize )
 {
     if( !mbEof )
     {
-        sal_Int32 nSkipBytes = getLimitedValue< sal_Int32, sal_Int64 >( nBytes, 0, mnLength - mnRelPos );
-        mrInStrm.skip( nSkipBytes );
+        sal_Int32 nSkipBytes = getMaxBytes( nBytes );
+        mpInStrm->skip( nSkipBytes, nAtomSize );
         mnRelPos += nSkipBytes;
         mbEof = nSkipBytes < nBytes;
     }

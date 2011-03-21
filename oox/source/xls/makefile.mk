@@ -57,7 +57,9 @@ SLOFILES =										\
         $(SLO)$/connectionsbuffer.obj			\
         $(SLO)$/connectionsfragment.obj			\
         $(SLO)$/defnamesbuffer.obj				\
+        $(SLO)$/drawingbase.obj					\
         $(SLO)$/drawingfragment.obj				\
+        $(SLO)$/drawingmanager.obj				\
         $(SLO)$/excelchartconverter.obj			\
         $(SLO)$/excelfilter.obj					\
         $(SLO)$/excelhandlers.obj				\
@@ -79,9 +81,9 @@ SLOFILES =										\
         $(SLO)$/richstringcontext.obj			\
         $(SLO)$/scenariobuffer.obj				\
         $(SLO)$/scenariocontext.obj				\
-        $(SLO)$/sharedformulabuffer.obj			\
         $(SLO)$/sharedstringsbuffer.obj			\
         $(SLO)$/sharedstringsfragment.obj		\
+        $(SLO)$/sheetdatabuffer.obj				\
         $(SLO)$/sheetdatacontext.obj			\
         $(SLO)$/stylesbuffer.obj				\
         $(SLO)$/stylesfragment.obj				\

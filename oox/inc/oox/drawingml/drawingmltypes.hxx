@@ -35,6 +35,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+#include "oox/helper/helper.hxx"
 
 namespace oox {
 namespace drawingml {
@@ -150,6 +151,23 @@ IndexRange GetIndexRange( const ::com::sun::star::uno::Reference< ::com::sun::st
 
 // ============================================================================
 
+const sal_Int32 EMU_PER_HMM = 360;      /// 360 EMUs per 1/100 mm.
+
+/** Converts the passed 32-bit integer value from 1/100 mm to EMUs. */
+inline sal_Int64 convertHmmToEmu( sal_Int32 nValue )
+{
+    return static_cast< sal_Int64 >( nValue ) * EMU_PER_HMM;
+}
+
+/** Converts the passed 64-bit integer value from EMUs to 1/100 mm. */
+inline sal_Int32 convertEmuToHmm( sal_Int64 nValue )
+{
+    return getLimitedValue< sal_Int32, sal_Int64 >( (nValue + EMU_PER_HMM / 2) / EMU_PER_HMM, 0, SAL_MAX_INT32 );
+}
+
+// ============================================================================
+
+/** A structure for a point with 64-bit interger components. */
 struct EmuPoint
 {
     sal_Int64           X;
@@ -161,6 +179,7 @@ struct EmuPoint
 
 // ============================================================================
 
+/** A structure for a size with 64-bit interger components. */
 struct EmuSize
 {
     sal_Int64           Width;
@@ -172,11 +191,15 @@ struct EmuSize
 
 // ============================================================================
 
+/** A structure for a rectangle with 64-bit interger components. */
 struct EmuRectangle : public EmuPoint, public EmuSize
 {
     inline explicit     EmuRectangle() {}
     inline explicit     EmuRectangle( const EmuPoint& rPos, const EmuSize& rSize ) : EmuPoint( rPos ), EmuSize( rSize ) {}
     inline explicit     EmuRectangle( sal_Int64 nX, sal_Int64 nY, sal_Int64 nWidth, sal_Int64 nHeight ) : EmuPoint( nX, nY ), EmuSize( nWidth, nHeight ) {}
+
+    inline void         setPos( const EmuPoint& rPos ) { static_cast< EmuPoint& >( *this ) = rPos; }
+    inline void         setSize( const EmuSize& rSize ) { static_cast< EmuSize& >( *this ) = rSize; }
 };
 
 // ============================================================================

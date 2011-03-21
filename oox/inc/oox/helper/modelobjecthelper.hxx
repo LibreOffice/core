@@ -48,7 +48,7 @@ class ObjectContainer
 {
 public:
     explicit            ObjectContainer(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory,
                             const ::rtl::OUString& rServiceName );
                         ~ObjectContainer();
 
@@ -68,8 +68,8 @@ private:
     void                createContainer() const;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        mxFactory;              /// Factory to create the container.
+    mutable ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                        mxModelFactory;         /// Factory to create the container.
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                         mxContainer;            /// Container for the objects.
     ::rtl::OUString     maServiceName;          /// Service name to create the container.
@@ -81,9 +81,9 @@ private:
 /** Contains tables for named drawing objects for a document model.
 
     Contains tables for named line markers, line dashes, fill gradients, and
-    fill bitmaps. The class is needed to handle different document models in
-    the same filter (e.g. embedded charts) which carry their own drawing object
-    tables.
+    fill bitmap URLs. The class is needed to handle different document models
+    in the same filter (e.g. embedded charts) which carry their own drawing
+    object tables.
  */
 class ModelObjectHelper
 {
@@ -108,18 +108,18 @@ public:
         an internal constant name with a new unused index appended. */
     ::rtl::OUString     insertFillGradient( const ::com::sun::star::awt::Gradient& rGradient );
 
-    /** Inserts a new named fill bitmap, returns the bitmap name, based on an
-        internal constant name with a new unused index appended. */
-    ::rtl::OUString     insertFillBitmap( const ::rtl::OUString& rGraphicUrl );
+    /** Inserts a new named fill bitmap URL, returns the bitmap name, based on
+        an internal constant name with a new unused index appended. */
+    ::rtl::OUString     insertFillBitmapUrl( const ::rtl::OUString& rGraphicUrl );
 
 private:
     ObjectContainer     maMarkerContainer;      /// Contains all named line markers (line end polygons).
     ObjectContainer     maDashContainer;        /// Contains all named line dsahes.
     ObjectContainer     maGradientContainer;    /// Contains all named fill gradients.
-    ObjectContainer     maBitmapContainer;      /// Contains all named fill bitmaps.
+    ObjectContainer     maBitmapUrlContainer;   /// Contains all named fill bitmap URLs.
     const ::rtl::OUString maDashNameBase;       /// Base name for all named line dashes.
     const ::rtl::OUString maGradientNameBase;   /// Base name for all named fill gradients.
-    const ::rtl::OUString maBitmapNameBase;     /// Base name for all named fill bitmaps.
+    const ::rtl::OUString maBitmapUrlNameBase;  /// Base name for all named fill bitmap URLs.
 };
 
 // ============================================================================

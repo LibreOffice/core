@@ -28,36 +28,72 @@
 #ifndef OOX_VML_VMLINPUTSTREAM_HXX
 #define OOX_VML_VMLINPUTSTREAM_HXX
 
-#include <comphelper/seqstream.hxx>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <rtl/string.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace io { class XTextInputStream; }
+    namespace uno { class XComponentContext; }
+} } }
 
 namespace oox {
 namespace vml {
 
 // ============================================================================
 
-struct StreamDataContainer
-{
-    ::comphelper::ByteSequence maDataSeq;
+typedef ::cppu::WeakImplHelper1< ::com::sun::star::io::XInputStream > InputStream_BASE;
 
-    explicit            StreamDataContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm );
-};
+/** An input stream class for VML streams, implementing the UNO interface
+    com.sun.star.io.XInputStream needed by the Expat XML parsers.
 
-// ============================================================================
+    This stream reads the data from the input stream passed to the constructor,
+    and parses all XML elements for features unsupported by the current Expat
+    XML parser:
 
-/** An input stream class for VML streams.
+    1)  All elements that have the form '<![inst]>' where 'inst' is any string
+        not containing the characters '<' and '>' are stripped from the input
+        stream.
 
-    This stream reads the entire data from the input stream passed to the
-    constructor, and parses all XML elements for features unsupported by the
-    current Expat parser.
+    2)  Multiple occurences of the same attribute in an element but the last
+        are removed.
 
-    All elements that have the form '<![inst]>' where 'inst' is any string not
-    containing the characters '<' and '>' are stripped from the input stream.
+    3)  Line breaks represented by a single <br> element (without matching
+        </br> element) are replaced by a literal LF character.
  */
-class InputStream : private StreamDataContainer, public ::comphelper::SequenceInputStream
+class InputStream : public InputStream_BASE
 {
 public:
-    explicit            InputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm );
+    explicit            InputStream(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm );
     virtual             ~InputStream();
+
+    virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
+                        throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
+                        throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
+                        throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL available()
+                        throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL closeInput()
+                        throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+
+private:
+    void                updateBuffer() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    ::rtl::OString      readToElementBegin() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    ::rtl::OString      readToElementEnd() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextInputStream >
+                        mxTextStrm;
+    ::com::sun::star::uno::Sequence< sal_Unicode > maOpeningBracket;
+    ::com::sun::star::uno::Sequence< sal_Unicode > maClosingBracket;
+    const ::rtl::OString maOpeningCData;
+    const ::rtl::OString maClosingCData;
+    ::rtl::OString      maBuffer;
+    sal_Int32           mnBufferPos;
 };
 
 // ============================================================================
