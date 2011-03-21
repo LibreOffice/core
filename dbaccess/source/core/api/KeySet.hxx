@@ -113,6 +113,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >   m_xComposer;
         ::rtl::OUString                                                                 m_sUpdateTableName;
         ::std::vector< ::rtl::OUString >                        m_aFilterColumns;
+        sal_Int32&                                              m_rRowCount;
 
         sal_Bool m_bRowCountFinal;
 
@@ -160,7 +161,8 @@ namespace dbaccess
                 const ::rtl::OUString& _rUpdateTableName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
                 const ORowSetValueVector& _aParameterValueForCache,
-                sal_Int32 i_nMaxRows);
+                sal_Int32 i_nMaxRows,
+                sal_Int32& o_nRowCount);
 
         // late ctor which can throw exceptions
         virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter);
@@ -228,6 +230,11 @@ namespace dbaccess
         virtual void SAL_CALL cancelRowUpdates(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+
+        virtual sal_Bool previous_checked( sal_Bool i_bFetchRow );
+        virtual sal_Bool absolute_checked( sal_Int32 row,sal_Bool i_bFetchRow );
+        virtual sal_Bool last_checked( sal_Bool i_bFetchRow);
     };
 }
 #endif // DBACCESS_CORE_API_KEYSET_HXX

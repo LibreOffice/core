@@ -154,7 +154,8 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
                  const ::rtl::OUString& _rUpdateTableName,    // this can be the alias or the full qualified name
                  const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
                  const ORowSetValueVector& _aParameterValueForCache,
-                 sal_Int32 i_nMaxRows)
+                 sal_Int32 i_nMaxRows,
+                 sal_Int32& o_nRowCount)
             :OCacheSet(i_nMaxRows)
             ,m_aParameterValueForCache(_aParameterValueForCache)
             ,m_pKeyColumnNames(NULL)
@@ -165,6 +166,7 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
             ,m_xTableKeys(_xTableKeys)
             ,m_xComposer(_xComposer)
             ,m_sUpdateTableName(_rUpdateTableName)
+            ,m_rRowCount(o_nRowCount)
             ,m_bRowCountFinal(sal_False)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::OKeySet" );
@@ -1167,6 +1169,12 @@ sal_Bool SAL_CALL OKeySet::next(  ) throw(SQLException, RuntimeException)
         ++m_aKeyIter; // this is possible because we stand on begin() and this is the "beforefirst" row
         if(m_aKeyIter == m_aKeyMap.end() && !fetchRow())
             m_aKeyIter = m_aKeyMap.end();
+        else
+        {
+            //m_aKeyIter->second.second.second = new OPrivateRow(_rInsertRow->get());
+            m_xRow.set(m_xDriverRow,UNO_QUERY_THROW);
+            return !isAfterLast();
+        }
     }
     else if(!isAfterLast())
         ++m_aKeyIter;
@@ -1233,20 +1241,26 @@ sal_Bool SAL_CALL OKeySet::first(  ) throw(SQLException, RuntimeException)
     ++m_aKeyIter;
     if(m_aKeyIter == m_aKeyMap.end() && !fetchRow())
         m_aKeyIter = m_aKeyMap.end();
-
-    refreshRow();
+    else
+        refreshRow();
     return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::last(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::last" );
+    return last_checked(sal_True);
+}
+
+sal_Bool OKeySet::last_checked( sal_Bool i_bFetchRow)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::last_checked" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     fillAllRows();
 
     m_aKeyIter = m_aKeyMap.end();
     --m_aKeyIter;
-    refreshRow();
+    if ( i_bFetchRow )
+        refreshRow();
     return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
 }
 // -----------------------------------------------------------------------------
@@ -1260,6 +1274,10 @@ sal_Int32 SAL_CALL OKeySet::getRow(  ) throw(SQLException, RuntimeException)
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
+{
+    return absolute_checked(row,sal_True);
+}
+sal_Bool OKeySet::absolute_checked( sal_Int32 row,sal_Bool i_bFetchRow )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::absolute" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
@@ -1281,6 +1299,11 @@ sal_Bool SAL_CALL OKeySet::absolute( sal_Int32 row ) throw(SQLException, Runtime
                 sal_Bool bNext = sal_True;
                 for(sal_Int32 i=m_aKeyMap.size()-1;i < row && bNext;++i)
                     bNext = fetchRow();
+                if ( bNext )
+                {
+                    m_xRow.set(m_xDriverRow,UNO_QUERY_THROW);
+                    return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
+                }
             }
             else
                 m_aKeyIter = m_aKeyMap.end();
@@ -1292,7 +1315,8 @@ sal_Bool SAL_CALL OKeySet::absolute( sal_Int32 row ) throw(SQLException, Runtime
                 ++m_aKeyIter;
         }
     }
-    refreshRow();
+    if ( i_bFetchRow )
+        refreshRow();
 
     return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
 }
@@ -1308,17 +1332,24 @@ sal_Bool SAL_CALL OKeySet::relative( sal_Int32 rows ) throw(SQLException, Runtim
     return absolute(getRow()+rows);
 }
 // -----------------------------------------------------------------------------
-sal_Bool SAL_CALL OKeySet::previous(  ) throw(SQLException, RuntimeException)
+sal_Bool OKeySet::previous_checked( sal_Bool i_bFetchRow )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::previous" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     if(m_aKeyIter != m_aKeyMap.begin())
     {
         --m_aKeyIter;
-        refreshRow();
+        if ( i_bFetchRow )
+            refreshRow();
     }
     return m_aKeyIter != m_aKeyMap.begin();
 }
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::previous(  ) throw(SQLException, RuntimeException)
+{
+    return previous_checked(sal_True);
+}
+
 // -----------------------------------------------------------------------------
 void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
 {
@@ -1374,9 +1405,18 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     OSL_ENSURE(m_xSet.is(),"No resultset form statement!");
     sal_Bool bOK = m_xSet->next();
     if ( !bOK )
-        m_aKeyIter = m_aKeyMap.end();
-    m_xRow.set(m_xSet,UNO_QUERY);
-    OSL_ENSURE(m_xRow.is(),"No row form statement!");
+    {
+        OKeySetMatrix::iterator aTemp = m_aKeyIter;
+        ++m_aKeyIter;
+        m_aKeyMap.erase(aTemp);
+        --m_rRowCount;
+        refreshRow();
+    }
+    else
+    {
+        m_xRow.set(m_xSet,UNO_QUERY);
+        OSL_ENSURE(m_xRow.is(),"No row form statement!");
+    }
 }
 // -----------------------------------------------------------------------------
 sal_Bool OKeySet::fetchRow()
