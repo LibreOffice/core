@@ -118,6 +118,24 @@ else
 gb_FULLDEPS := $(true)
 endif
 
+# save user-supplied flags for latter use
+ifneq ($(strip $(CFLAGS)),)
+gb__ENV_CFLAGS := $(CFLAGS)
+else
+# TODO remove after the old build system is abolished
+ifneq ($(strip $(ENVCFLAGS)),)
+gb__ENV_CFLAGS := $(ENVCFLAGS)
+endif
+endif
+ifneq ($(strip $(CXXFLAGS)),)
+gb__ENV_CXXFLAGS := $(CFLAGS)
+else
+# TODO remove after the old build system is abolished
+ifneq ($(strip $(ENVCFLAGSCXX)),)
+gb__ENV_CXXFLAGS := $(ENVCFLAGSCXX)
+endif
+endif
+
 include $(GBUILDDIR)/Helper.mk
 include $(GBUILDDIR)/TargetLocations.mk
 
@@ -152,6 +170,14 @@ include $(GBUILDDIR)/Tempfile.mk
 include $(foreach repo,$(gb_REPOS),$(repo)/RepositoryFixes.mk)
 
 $(eval $(call gb_Helper_collect_knownlibs))
+
+# add user-supplied flags
+ifneq ($(strip gb__ENV_CFLAGS),)
+gb_LinkTarget_CFLAGS += $(gb__ENV_CFLAGS)
+endif
+ifneq ($(strip gb__ENV_CXXFLAGS),)
+gb_LinkTarget_CXXFLAGS += $(gb__ENV_CXXFLAGS)
+endif
 
 gb_GLOBALDEFS := \
 	-D_REENTRANT \
