@@ -33,7 +33,8 @@
 #include <rtl/ustring.h>
 
 typedef struct {
-  const char  *pagein_type;     // @pagein-writer for - writer etc. else NULL
+  rtl_uString *pAppPath;
+  const char  *pPageinType;     // @pagein-writer for - writer etc. else NULL
   sal_Bool     bInhibitSplash;  // should we show a splash screen
   sal_Bool     bInhibitPagein;  // should we run pagein ?
   sal_Bool     bInhibitJavaLdx; // should we run javaldx ?
@@ -43,6 +44,7 @@ typedef struct {
   rtl_uString *ppArgs[1];       // sorted argument array
 } Args;
 
-Args *parse_args (void);
+Args *args_parse (void);
+void  args_free  (Args *args);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

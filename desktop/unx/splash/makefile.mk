@@ -36,17 +36,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(ENABLE_UNIX_QUICKSTARTER)"!="TRUE"
-
-dummy:
-    @echo "Unix quickstarter disabled"
-
-.ELSE
-
 # --- Files --------------------------------------------------------
 
-SLOFILES =  $(SLO)$/unxsplash.obj \
-            $(SLO)$/services_unxsplash.obj
+SLOFILES =  $(SLO)$/unxsplash.obj
 
 SHL1DEPN=   makefile.mk
 SHL1OBJS=   $(SLOFILES)
@@ -64,8 +56,14 @@ SHL1STDLIBS= \
     $(CPPULIB)			\
     $(SALLIB)
 
-.ENDIF # ENABLE_UNIX_QUICKSTARTER
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+ALLTAR : $(MISC)/splash.component
+
+$(MISC)/splash.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        splash.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt splash.component

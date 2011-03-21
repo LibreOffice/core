@@ -54,8 +54,6 @@
 #define PIPEDEFAULTPATH      "/tmp"
 #define PIPEALTERNATEPATH    "/var/tmp"
 
-typedef enum { ProgressContinue, ProgressRestart, ProgressExit } ProgressStatus;
-
 /* Easier conversions: rtl_uString to rtl_String */
 static rtl_String *
 ustr_to_str( rtl_uString *pStr )
@@ -94,6 +92,115 @@ ustr_debug( const char *pMessage, rtl_uString *pStr )
 #else
 #define ustr_debug( a, b ) {}
 #endif
+
+typedef struct {
+    int        status_fd;
+    oslProcess child;
+} ChildInfo;
+
+static int
+child_info_get_status_fd (ChildInfo *info)
+{
+    return info->status_fd;
+}
+
+static void
+child_info_destroy (ChildInfo *info)
+{
+    close (info->status_fd);
+    osl_freeProcessHandle (info->child);
+    free (info);
+}
+
+static ChildInfo *
+child_spawn ( Args *args, sal_Bool bAllArgs, sal_Bool bWithStatus )
+{
+    rtl_uString *pApp = NULL, *pTmp = NULL;
+    rtl_uString **ppArgs;
+    sal_uInt32 nArgs, i;
+    char buffer[64];
+    ChildInfo *info;
+    int status_pipe[2];
+    oslProcessError nError;
+
+    info = calloc (1, sizeof (ChildInfo));
+
+    /* create pipe */
+    if ( pipe( status_pipe ) < 0 )
+    {
+        fprintf( stderr, "ERROR: no file handles\n");
+        exit( 1 );
+    }
+    info->status_fd = status_pipe[0];
+
+    /* application name */
+    rtl_uString_newFromAscii( &pApp, "file://" );
+    rtl_uString_newConcat( &pApp, pApp, args->pAppPath );
+    rtl_uString_newFromAscii( &pTmp, "/soffice.bin" );
+    rtl_uString_newConcat( &pApp, pApp, pTmp );
+
+    rtl_uString_new( &pTmp );
+
+    /* copy args */
+    nArgs = bAllArgs ? args->nArgsTotal : args->nArgsEnv;
+    ppArgs = (rtl_uString **)calloc( nArgs + 1, sizeof( rtl_uString* ) );
+    for ( i = 0; i < nArgs; ++i )
+        ppArgs[i] = args->ppArgs[i];
+
+    if( bWithStatus )
+    {
+        /* add the pipe arg */
+        snprintf (buffer, 63, "--splash-pipe=%d", status_pipe[1]);
+        ppArgs[nArgs] = NULL;
+        rtl_uString_newFromAscii( &ppArgs[nArgs], buffer );
+        ++nArgs;
+    }
+
+    /* start the main process */
+    nError = osl_executeProcess( pApp, ppArgs, nArgs,
+                                 osl_Process_NORMAL,
+                                 NULL,
+                                 NULL,
+                                 NULL, 0,
+                                 &info->child );
+
+    if ( nError != osl_Process_E_None )
+    {
+        fprintf( stderr, "ERROR %d forking process", nError );
+        ustr_debug( "", pApp );
+        _exit (1);
+    }
+
+    close( status_pipe[1] );
+
+    return info;
+}
+
+static sal_Bool
+child_exited_wait (ChildInfo *info, sal_Bool bShortWait)
+{
+    TimeValue t = { 0, 250 /* ms */ * 1000 * 1000 };
+    if (!bShortWait)
+        t.Seconds = 1024;
+    return osl_joinProcessWithTimeout (info->child, &t) != osl_Process_E_TimedOut;
+}
+
+static int
+child_get_exit_code (ChildInfo *info)
+{
+    oslProcessInfo inf;
+
+    inf.Code = -1;
+    inf.Size = sizeof (inf);
+    if (osl_getProcessInfo (info->child, osl_Process_EXITCODE, &inf) != osl_Process_E_None)
+    {
+        fprintf (stderr, "Warning: failed to fetch libreoffice exit status\n");
+        return -1;
+    }
+    return inf.Code;
+}
+
+typedef enum { ProgressContinue, ProgressRestart, ProgressExit } ProgressStatus;
 
 /* Path of the application. */
 static rtl_uString *
@@ -495,7 +602,7 @@ get_bootstrap_value( int *array, int size, rtlBootstrapHandle handle, const char
 
 /* Load the colors and size of the splash. */
 static void
-load_splash_defaults( rtl_uString *pAppPath, sal_Bool *pInhibitSplash )
+load_splash_defaults( rtl_uString *pAppPath, sal_Bool *bNoDefaults )
 {
     rtl_uString *pSettings = NULL, *pTmp = NULL;
     rtlBootstrapHandle handle;
@@ -525,7 +632,7 @@ load_splash_defaults( rtl_uString *pAppPath, sal_Bool *pInhibitSplash )
     get_bootstrap_value( size,  2, handle, "ProgressSize" );
 
     if ( logo[0] == 0 )
-        *pInhibitSplash = sal_True;
+        *bNoDefaults = sal_True;
 
     splash_setup( bar, frame, pos[0], pos[1], size[0], size[1] );
 
@@ -539,7 +646,7 @@ load_splash_defaults( rtl_uString *pAppPath, sal_Bool *pInhibitSplash )
 
 /* Read the percent to show in splash. */
 static ProgressStatus
-read_percent( int status_fd, int *pPercent )
+read_percent( ChildInfo *info, int *pPercent )
 {
     static char pBuffer[BUFFER_LEN + 1];
     static char *pNext = pBuffer;
@@ -556,7 +663,8 @@ read_percent( int status_fd, int *pPercent )
     memmove( pBuffer, pNext, nNotProcessed );
 
     /* read data */
-    nRead = read( status_fd, pBuffer + nNotProcessed, BUFFER_LEN - nNotProcessed );
+    nRead = read( child_info_get_status_fd (info),
+                  pBuffer + nNotProcessed, BUFFER_LEN - nNotProcessed );
     if ( nRead < 0 )
         return sal_False;
 
@@ -567,11 +675,13 @@ read_percent( int status_fd, int *pPercent )
     pBegin = pBuffer;
     pNext = pBuffer;
     for ( pIter = pBuffer; *pIter; ++pIter )
+    {
         if ( *pIter == '\n' )
         {
             pBegin = pNext;
             pNext = pIter + 1;
         }
+    }
 
 #if OSL_DEBUG_LEVEL > 0
     fprintf( stderr, "Got status: %s\n", pBegin );
@@ -585,50 +695,6 @@ read_percent( int status_fd, int *pPercent )
 
     /* unexpected - let's exit the splash to be safe */
     return ProgressExit;
-}
-
-/* Periodically update the splash & the percent acconding to what
-   status_fd says */
-static ProgressStatus
-show_splash( int status_fd )
-{
-    int nRetval;
-    struct pollfd aPfd;
-
-    int nPercent = 0;
-    sal_Bool bFinish = sal_False;
-    ProgressStatus eResult = ProgressExit;
-
-    /* we want to watch status_fd */
-    aPfd.fd = status_fd;
-    aPfd.events = POLLIN;
-
-#if OSL_DEBUG_LEVEL > 0
-    fprintf( stderr, "Starting main loop, status fd: %d\n", status_fd );
-#endif
-
-    /* main loop */
-    do {
-        splash_draw_progress( nPercent );
-
-        /* read from pipe if data available */
-        nRetval = poll( &aPfd, 1, 50 );
-        if ( aPfd.revents & ( POLLERR | POLLHUP | POLLNVAL ) )
-            bFinish = sal_True;
-        else if ( nRetval > 0 )
-        {
-            eResult = read_percent( status_fd, &nPercent );
-            bFinish = ( eResult != ProgressContinue );
-        }
-        else if ( nRetval < 0 )
-            bFinish = sal_True;
-    } while ( !bFinish );
-
-#if OSL_DEBUG_LEVEL > 0
-    fprintf( stderr, "Finishing, result is %s\n",
-            ( eResult == ProgressContinue )? "continue" : ( ( eResult == ProgressRestart )? "restart" : "exit" ) );
-#endif
-    return eResult;
 }
 
 /* Simple system check. */
@@ -650,11 +716,6 @@ system_checks( void )
 /* re-use the pagein code */
 extern int pagein_execute (int argc, char **argv);
 
-/* parameters from the main thread */
-int status_fd = 0;
-int status_pipe[2];
-rtl_uString *pAppPath = NULL;
-
 void
 exec_pagein (Args *args)
 {
@@ -663,10 +724,10 @@ exec_pagein (Args *args)
     argv[0] = "dummy-pagein";
     argv[1] = "-L../basis-link/program";
     argv[2] = "@pagein-common";
-    argv[3] = (char *)args->pagein_type;
+    argv[3] = (char *)args->pPageinType;
     argv[4] = NULL;
 
-    pagein_execute (args->pagein_type ? 4 : 3, argv);
+    pagein_execute (args->pPageinType ? 4 : 3, argv);
 }
 
 static void extend_library_path (const char *new_element)
@@ -698,11 +759,11 @@ static void extend_library_path (const char *new_element)
 static void
 exec_javaldx (Args *args)
 {
-    char *newpath;
-    sal_Sequence *line;
+    char newpath[4096];
     sal_uInt32 nArgs;
-    rtl_uString *pApp = NULL;
+    rtl_uString *pApp;
     rtl_uString **ppArgs;
+    rtl_uString *pTmp, *pTmp2;
     rtl_uString *pEnvironment[1] = { NULL };
 
     ppArgs = (rtl_uString **)calloc( args->nArgsEnv + 2, sizeof( rtl_uString* ) );
@@ -710,22 +771,38 @@ exec_javaldx (Args *args)
     for ( nArgs = 0; nArgs < args->nArgsEnv; ++nArgs )
         ppArgs[nArgs] = args->ppArgs[nArgs];
 
-    /* FIXME: do we need to check / turn program/redirectrc into an absolute path ? */
-    rtl_uString_newFromAscii( &ppArgs[nArgs++], "-env:INIFILENAME=vnd.sun.star.pathname:./redirectrc" );
+    /* Use absolute path to redirectrc */
+    pTmp = NULL;
+    rtl_uString_newFromAscii( &pTmp, "-env:INIFILENAME=vnd.sun.star.pathname:" );
+    rtl_uString_newConcat( &pTmp, pTmp, args->pAppPath );
+    pTmp2 = NULL;
+    rtl_uString_newFromAscii( &pTmp2, "/redirectrc" );
+    rtl_uString_newConcat( &pTmp, pTmp, pTmp2 );
+    ppArgs[nArgs] = pTmp;
+    rtl_uString_release (pTmp2);
+    nArgs++;
 
     oslProcess javaldx = NULL;
     oslFileHandle fileOut= 0;
     oslProcessError err;
 
-    rtl_uString_newFromAscii( &pApp, "../ure/bin/javaldx" );
-    /* unset to avoid bogus output */
+    /* And also to javaldx */
+    pApp = NULL;
+    rtl_uString_newFromAscii( &pApp, "file://" );
+    rtl_uString_newConcat( &pApp, pApp, args->pAppPath );
+    pTmp = NULL;
+    rtl_uString_newFromAscii( &pTmp, "/../ure/bin/javaldx" );
+    rtl_uString_newConcat( &pApp, pApp, pTmp );
+
+    /* unset to avoid bogus console output */
     rtl_uString_newFromAscii( &pEnvironment[0], "G_SLICE" );
+
     err = osl_executeProcess_WithRedirectedIO( pApp, ppArgs, nArgs,
-                                               osl_Process_HIDDEN,
+                                               osl_Process_NORMAL,
                                                NULL, // security
                                                NULL, // work dir
                                                pEnvironment, 1,
-                                               &javaldx, // handle
+                                               &javaldx, // process handle
                                                NULL,
                                                &fileOut,
                                                NULL);
@@ -734,120 +811,29 @@ exec_javaldx (Args *args)
     {
         fprintf (stderr, "Warning: failed to launch javaldx - java may not fuction correctly\n");
         return;
+    } else {
+        char *chomp;
+        sal_uInt64 bytes_read;
+
+        /* Magically osl_readLine doesn't work with pipes with E_SPIPE - so be this lame instead: */
+        while (osl_readFile (fileOut, newpath, SAL_N_ELEMENTS (newpath), &bytes_read) == osl_File_E_INTR);
+
+        if (bytes_read <= 0) {
+            fprintf (stderr, "Warning: failed to read path from javaldx\n");
+            return;
+        }
+        newpath[bytes_read] = '\0';
+
+        if ((chomp = strstr (newpath, "\n")))
+            *chomp = '\0';
     }
 
-    line = NULL;
-    if (!osl_readLine (fileOut, &line) || !line) {
-        fprintf (stderr, "Warning: failed to read path from javaldx\n");
-        return;
-    }
+#if OSL_DEBUG_LEVEL > 0
+    fprintf (stderr, "Adding javaldx path of '%s'\n", newpath);
+#endif
+    extend_library_path (newpath);
 
-    if (!line->nElements)
-        fprintf (stderr, "curious - javaldx returns zero length path\n");
-    else {
-        newpath = malloc (line->nElements + 1);
-        strncpy (newpath, line->elements, line->nElements);
-        newpath[line->nElements] = '\0';
-
-        fprintf (stderr, "Adding javaldx path of '%s'\n", newpath);
-        extend_library_path (newpath);
-    }
-
-    /* FIXME: should we join it first ? */
     osl_freeProcessHandle(javaldx);
-}
-
-static void SAL_CALL
-fork_app_thread( Args *args )
-{
-    rtl_uString *pApp = NULL, *pTmp = NULL, *pArg = NULL;
-    rtl_uString **ppArgs;
-    sal_uInt32 nArgs, i;
-    sal_Bool restart;
-
-    oslProcess child;
-    oslProcessError nError;
-
-    if (!args->bInhibitJavaLdx)
-        exec_pagein (args);
-
-    if (!args->bInhibitJavaLdx)
-        exec_javaldx (args);
-
-    /* application name */
-    rtl_uString_newFromAscii( &pApp, "file://" );
-    rtl_uString_newConcat( &pApp, pApp, pAppPath );
-    rtl_uString_newFromAscii( &pTmp, "/soffice.bin" );
-    rtl_uString_newConcat( &pApp, pApp, pTmp );
-
-    rtl_uString_new( &pTmp );
-
-    /* copy args */
-    nArgs = osl_getCommandArgCount();
-    ppArgs = (rtl_uString **)calloc( nArgs + 1, sizeof( rtl_uString* ) );
-    for ( i = 0; i < nArgs; ++i )
-    {
-        ppArgs[i] = NULL;
-        osl_getCommandArg( i, &pTmp );
-        rtl_uString_newFromString( &(ppArgs[i]), pTmp );
-    }
-
-    /* add the pipe arg */
-    sal_Unicode pUnicode[RTL_USTR_MAX_VALUEOFINT32];
-    rtl_ustr_valueOfInt32( pUnicode, status_pipe[1], 10 );
-
-    rtl_uString_newFromAscii( &pArg, "--splash-pipe=" );
-    rtl_uString_newFromStr( &pTmp, pUnicode );
-    rtl_uString_newConcat( &pArg, pArg, pTmp );
-
-    ppArgs[nArgs] = NULL;
-    rtl_uString_newFromString( &(ppArgs[nArgs]), pArg );
-    ++nArgs;
-
-    restart = sal_False;
-    do
-    {
-        oslProcessInfo info;
-
-        /* start the main process */
-        nError = osl_executeProcess( pApp, ppArgs, nArgs,
-                                     osl_Process_NORMAL,
-                                     NULL,
-                                     NULL,
-                                     NULL, 0,
-                                     &child );
-
-        if ( nError != osl_Process_E_None )
-        {
-            fprintf( stderr, "ERROR %d forking process", nError );
-            ustr_debug( "", pApp );
-            _exit (1);
-        }
-
-        /* wait for it to complete */
-        osl_joinProcess (child);
-
-        info.Size = sizeof (info);
-        info.Code = 0;
-        if (osl_getProcessInfo (child, osl_Process_EXITCODE, &info) != osl_Process_E_None)
-            fprintf (stderr, "Warning: failed to fetch libreoffice exit status\n");
-
-        switch (info.Code) {
-        case 79: // re-start with just -env: parameters
-            fprintf (stderr, "FIXME: re-start with just -env: params !\n");
-            restart = sal_True;
-            break;
-        case 81: // re-start with all arguments
-            fprintf (stderr, "FIXME: re-start with all params !\n");
-            restart = sal_True;
-            break;
-        default:
-            break;
-        }
-    }
-    while (restart);
-
-    close( status_pipe[1] );
 }
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
@@ -855,39 +841,31 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     int fd = 0;
     sal_Bool bSentArgs = sal_False;
     rtl_uString *pPipePath = NULL;
-    ProgressStatus eResult = ProgressExit;
     Args *args;
-
-    fprintf (stderr, "start !\n");
 
     /* turn SIGPIPE into an error */
     signal( SIGPIPE, SIG_IGN );
 
-    args = parse_args();
+    args = args_parse ();
+    args->pAppPath = get_app_path( argv[0] );
+    if ( !args->pAppPath )
+    {
+        fprintf( stderr, "ERROR: Can't read app link\n" );
+        exit( 1 );
+    }
+    ustr_debug( "App path", args->pAppPath );
 
 #ifndef ENABLE_QUICKSTART_LIBPNG
     /* we can't load and render it anyway */
     args->bInhibitSplash = sal_True;
 #endif
 
-    pAppPath = get_app_path( argv[0] );
-    if ( !pAppPath )
-    {
-        fprintf( stderr, "ERROR: Can't read app link\n" );
-        exit( 1 );
-    }
-    ustr_debug( "App path", pAppPath );
-
-    pPipePath = get_pipe_path( pAppPath );
-
-    fprintf (stderr, "try pipe !\n");
+    pPipePath = get_pipe_path( args->pAppPath );
 
     if ( ( fd = connect_pipe( pPipePath ) ) >= 0 )
     {
         rtl_uString *pCwdPath = NULL;
         osl_getProcessWorkingDir( &pCwdPath );
-
-        fprintf (stderr, "send args !\n");
 
         bSentArgs = send_args( fd, pCwdPath );
     }
@@ -895,48 +873,94 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     else
         ustr_debug( "Failed to connect to pipe", pPipePath );
 #endif
+    close( fd );
 
     if ( !bSentArgs )
     {
         /* we have to prepare for, and exec the binary */
-        do {
-            /* sanity check pieces */
-            system_checks();
+        int nPercent = 0;
+        ChildInfo *info;
+        sal_Bool bAllArgs = sal_True;
+        sal_Bool bHaveWindow = sal_False;
+        sal_Bool bShortWait, bRestart;
 
-            /* create pipe */
-            if ( pipe( status_pipe ) < 0 )
-            {
-                fprintf( stderr, "ERROR: no file handles\n");
-                exit( 1 );
-            }
-            int status_fd = status_pipe[0];
-            osl_createThread( fork_app_thread, args );
+        /* sanity check pieces */
+        system_checks();
 
-            if ( !args->bInhibitSplash )
-            {
-                load_splash_image( pAppPath );
-                load_splash_defaults( pAppPath, &args->bInhibitSplash );
-            }
+        /* load splash image and create window */
+        if ( !args->bInhibitSplash )
+        {
+            sal_Bool bNoDefaults = sal_False;
+            load_splash_image( args->pAppPath );
+            load_splash_defaults( args->pAppPath, &bNoDefaults );
 
-            if ( !args->bInhibitSplash && splash_create_window( argc, argv ) )
-            {
+            if (!bNoDefaults &&
+                ( bHaveWindow = splash_create_window( argc, argv ) ) )
                 splash_draw_progress( 0 );
-                eResult = show_splash( status_fd );
-                splash_close_window();
+        }
+
+        /* pagein */
+        if (!args->bInhibitJavaLdx)
+            exec_pagein (args);
+
+        /* javaldx */
+        if (!args->bInhibitJavaLdx)
+            exec_javaldx (args);
+
+        do {
+            bRestart = sal_False;
+
+            /* fast updates if we have somewhere to update it to */
+            bShortWait = bHaveWindow;
+
+            /* Periodically update the splash & the percent according
+               to what status_fd says, poll quickly only while starting */
+            info = child_spawn (args, bAllArgs, bShortWait);
+            while (!child_exited_wait (info, bShortWait))
+            {
+                ProgressStatus eResult;
+
+                splash_draw_progress( nPercent );
+                eResult = read_percent( info, &nPercent );
+                if (eResult != ProgressContinue)
+                {
+                    splash_close_window ();
+                    bShortWait = sal_False;
+                }
+
+#if OSL_DEBUG_LEVEL > 0
+                fprintf( stderr, "Polling, result is %s\n",
+                         ( eResult == ProgressContinue )? "continue" :
+                         ( ( eResult == ProgressRestart )? "restart" : "exit" ) );
+#endif
             }
 
-            close( status_fd );
+#if OSL_DEBUG_LEVEL > 0
+            fprintf (stderr, "Exited with code '%d'\n", child_get_exit_code (info));
+#endif
 
-            fprintf (stderr, "sleep!\n");
-            sleep (100);
-        } while ( eResult == ProgressRestart );
+            switch (child_get_exit_code (info)) {
+            case 79: // re-start with just -env: parameters
+                fprintf (stderr, "FIXME: re-start with just -env: params !\n");
+                bRestart = sal_True;
+                bAllArgs = sal_False;
+                break;
+            case 81: // re-start with all arguments
+                fprintf (stderr, "FIXME: re-start with all params !\n");
+                bRestart = sal_True;
+                bAllArgs = sal_True;
+                break;
+            default:
+                break;
+            }
+
+            child_info_destroy (info);
+        } while (bRestart);
     }
 
     /* cleanup */
-    rtl_uString_release( pAppPath );
     rtl_uString_release( pPipePath );
-
-    close( fd );
+    args_free (args);
 
     return 0;
 }

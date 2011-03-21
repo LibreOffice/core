@@ -48,7 +48,7 @@ static struct {
     unsigned int  bInhibitSplash : 1;
     unsigned int  bInhibitPagein : 1;
     unsigned int  bInhibitJavaLdx : 1;
-    const char   *pagein_type;
+    const char   *pPageinType;
 } pArgDescr[] = {
     /* have a trailing argument */
     { "pt",         1, 0, 0, 0, NULL },
@@ -73,14 +73,16 @@ static struct {
     { "?",          0, 1, 1, 1, NULL },
 };
 
-Args *parse_args (void)
+Args *args_parse (void)
 {
     Args *args;
     sal_uInt32 nArgs, i, j;
     sal_Bool skipNextArg;
 
     nArgs = osl_getCommandArgCount();
-    args = malloc (sizeof (Args) + sizeof (rtl_uString *) * nArgs);
+    i = sizeof (Args) + sizeof (rtl_uString *) * nArgs;
+    args = malloc (i);
+    memset (args, 0, i);
     args->nArgsTotal = nArgs;
 
     /* sort the -env: args to the front */
@@ -130,8 +132,8 @@ Args *parse_args (void)
                 args->bInhibitSplash  |= pArgDescr[j].bInhibitSplash;
                 args->bInhibitPagein  |= pArgDescr[j].bInhibitPagein;
                 args->bInhibitJavaLdx |= pArgDescr[j].bInhibitJavaLdx;
-                if (pArgDescr[j].pagein_type)
-                    args->pagein_type = pArgDescr[j].pagein_type;
+                if (pArgDescr[j].pPageinType)
+                    args->pPageinType = pArgDescr[j].pPageinType;
 
                 skipNextArg = pArgDescr[j].bTwoArgs;
             }
@@ -139,6 +141,14 @@ Args *parse_args (void)
     }
 
     return args;
+}
+
+void
+args_free (Args *args)
+{
+    /* FIXME: free ppArgs */
+    rtl_uString_release( args->pAppPath );
+    free (args);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

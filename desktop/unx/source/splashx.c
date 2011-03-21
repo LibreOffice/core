@@ -629,13 +629,16 @@ void splash_close_window()
 
 int splash_load_bmp( const char *filename )
 {
+    (void)filename;
     return 1;
 }
 void splash_setup( int barc[3], int framec[3], int posx, int posy, int w, int h )
 {
+    (void)barc; (void)framec; (void)posx; (void)posy; (void)w; (void)h;
 }
 int splash_create_window( int argc, char** argv )
 {
+    (void)argc; (void)argv;
     return 1;
 }
 void splash_close_window()
@@ -643,6 +646,7 @@ void splash_close_window()
 }
 void splash_draw_progress( int progress )
 {
+    (void)progress;
 }
 
 #endif // ENABLE_QUICKSTART_LIBPNG

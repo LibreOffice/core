@@ -144,3 +144,4 @@ mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
 ..\%__SRC%\misc\productregistration.jar.component %_DEST%\xml%_EXT%\productregistration.jar.component
 ..\%__SRC%\misc\socomp.component %_DEST%\xml%_EXT%\socomp.component
 ..\%__SRC%\misc\spl.component %_DEST%\xml%_EXT%\spl.component
+..\%__SRC%\misc\splash.component %_DEST%\xml%_EXT%\splash.component
