@@ -524,8 +524,16 @@ Function GetDocEndings (DocType as Integer) as String
             GetDocEndings = &quot;odp&quot; &apos;PrÕsentation
         case frmDraw or cFlt8
             GetDocEndings = &quot;odg&quot; &apos;Zeichen
-        case frmHyperText, frmHyperText or cFltXML
+        case frmHyperText, frmHyperText or cFlt50, frmHyperText or cFltXML
             GetDocEndings = &quot;html&quot; &apos;Hypertext-Dokument
+        case frmWriter or cFlt50
+            GetDocEndings = &quot;sdw&quot; &apos; Textdokument 5.0
+        case frmCalc or cFlt50
+            GetDocEndings = &quot;sdc&quot; &apos;Tabellendokument 5.0
+        case frmImpress or cFlt50
+            GetDocEndings = &quot;sdd&quot; &apos;PrÕsentation 5.0
+        case frmDraw or cFlt50
+            GetDocEndings = &quot;sda&quot; &apos;Zeichen 5.0
         case frmWriter or cFltXML
             GetDocEndings = &quot;sxw&quot; &apos; Textdokument
         case frmCalc or cFltXML
@@ -563,8 +571,18 @@ Function GetDocFilter (DocType as Integer) as String
         case frmMath or cFltXML
             GetDocFilter = &quot;StarOffice XML (Math)&quot; &apos;Formel
 
-        case frmHyperText, frmHyperText or cFltXML
+        case frmHyperText, frmHyperText or cFlt50, frmHyperText or cFltXML
             GetDocFilter = &quot;HTML&quot; &apos;Hypertext-Dokument
+        case frmWriter or cFlt50
+            GetDocFilter = &quot;StarWriter 5.0&quot; &apos; Textdokument 5.0
+        case frmCalc or cFlt50
+            GetDocFilter = &quot;StarCalc 5.0&quot; &apos;Tabellendokument 5.0
+        case frmImpress or cFlt50
+            GetDocFilter = &quot;StarImpress 5.0&quot; &apos;Präsentation 5.0
+        case frmDraw or cFlt50
+            GetDocFilter = &quot;StarDraw 5.0&quot; &apos;Zeichen 5.0
+        case frmMath or cFlt50
+            GetDocFilter = &quot;StarMath 5.0&quot; &apos;Formel 5.0
 
         case frmWriter or cFltNewDoc
             GetDocFilter = &quot;swriter&quot; &apos; Textdokument
