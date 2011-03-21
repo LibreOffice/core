@@ -657,7 +657,7 @@ end Function
 
 Function IsFilterAvailable (FilterType as Integer) as boolean
     IsFilterAvailable = true
-    if ((FilterType = (frmHyperText or cFltXML))) then
+    if ((FilterType = (frmHyperText or cFlt50)) or (FilterType = (frmHyperText or cFltXML))) then
         IsFilterAvailable = false
     end if
 End Function
