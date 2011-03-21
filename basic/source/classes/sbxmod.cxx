@@ -1085,7 +1085,20 @@ bool SbModule::IsVBACompat() const
 
 void SbModule::SetVBACompat( bool bCompat )
 {
-    mbVBACompat = bCompat;
+    if( mbVBACompat != bCompat )
+    {
+        mbVBACompat = bCompat;
+        // initialize VBA document API
+        if( mbVBACompat ) try
+        {
+            StarBASIC* pBasic = static_cast< StarBASIC* >( GetParent() );
+            uno::Reference< lang::XMultiServiceFactory > xFactory( getDocumentModel( pBasic ), uno::UNO_QUERY_THROW );
+            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+        }
+        catch( Exception& )
+        {
+        }
+    }
 }
 
 // Run a Basic-subprogram
