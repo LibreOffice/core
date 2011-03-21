@@ -273,13 +273,6 @@ AC_ARG_ENABLE(systray,
         [Determines whether to build the systray quickstarter.]),
 ,enable_systray=yes)
 
-AC_ARG_ENABLE(unix-qstart,
-    AS_HELP_STRING([--disable-unix-qstart],
-        [On UNIX systems, we can enable a faster splash app that accelerates
-         startup, if we can link to the system libpng, use this if you are
-         a Linux Distro packager.]),
-,enable_unix_quickstarter=yes)
-
 AC_ARG_ENABLE(broffice,
     AS_HELP_STRING([--disable-broffice],
         [When disabled, broffice specific branding artwork for use in the pt_BR
@@ -6072,14 +6065,17 @@ AC_SUBST(ENABLE_SYSTRAY_GTK)
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
-ENABLE_UNIX_QUICKSTARTER=""
-if test "$test_unix_quickstarter" = "yes" -a "$enable_unix_quickstarter" = "yes"; then
-    ENABLE_UNIX_QUICKSTARTER="TRUE"
-    PKG_CHECK_MODULES( LIBPNG, libpng )
-fi
+AC_ARG_ENABLE(unix-qstart,
+    AS_HELP_STRING([--disable-unix-qstart],
+        [On UNIX systems, we can enable a faster splash app that accelerates
+         startup, if we can link to the system libpng, use this if you are
+         a Linux Distro packager.]),
+,enable_unix_quickstarter=yes)
+
+PKG_CHECK_MODULES( LIBPNG, libpng, ENABLE_QUICKSTART_LIBPNG="TRUE", ENABLE_QUICKSTART_LIBPNG="" )
 AC_SUBST(LIBPNG_LIBS)
 AC_SUBST(LIBPNG_CFLAGS)
-AC_SUBST(ENABLE_UNIX_QUICKSTARTER)
+AC_SUBST(ENABLE_QUICKSTART_LIBPNG)
 
 ENABLE_BROFFICE=""
 AC_MSG_CHECKING([whether to enable BrOffice branding])
