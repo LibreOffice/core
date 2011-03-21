@@ -43,8 +43,9 @@
   <dlg:checkbox dlg:id="cbChartTest" dlg:tab-index="8" dlg:left="126" dlg:top="105" dlg:width="80" dlg:height="8" dlg:value="Chart" dlg:checked="false"/>
   <dlg:checkbox dlg:id="cbSaveOpenXMLTest" dlg:tab-index="9" dlg:left="19" dlg:top="49" dlg:width="80" dlg:height="8" dlg:value="Save / Open XML" dlg:checked="false"/>
   <dlg:checkbox dlg:id="cbOpen50Test" dlg:tab-index="10" dlg:left="19" dlg:top="63" dlg:width="80" dlg:height="8" dlg:value="Open V5.0" dlg:checked="false"/>
-  <dlg:titledbox dlg:id="fmBroker" dlg:tab-index="9" dlg:left="7" dlg:top="169" dlg:width="208" dlg:height="17"/>
-  <dlg:button dlg:id="btOk" dlg:tab-index="10" dlg:left="7" dlg:top="193" dlg:width="65" dlg:height="15" dlg:value="Ok" dlg:button-type="ok">
+  <dlg:checkbox dlg:id="cbTerminateAfterTest" dlg:tab-index="11" dlg:disabled="true" dlg:left="19" dlg:top="174" dlg:width="190" dlg:height="8" dlg:value="Terminate Office after test" dlg:checked="false"/>
+  <dlg:titledbox dlg:id="fmBroker" dlg:tab-index="12" dlg:left="7" dlg:top="169" dlg:width="208" dlg:height="17"/>
+  <dlg:button dlg:id="btOk" dlg:tab-index="13" dlg:left="7" dlg:top="193" dlg:width="65" dlg:height="15" dlg:value="Ok" dlg:button-type="ok">
    <script:event script:event-name="on-performaction" script:location="document" script:macro-name="Standard.Events.PressOk" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="btCancel" dlg:tab-index="14" dlg:left="80" dlg:top="193" dlg:width="65" dlg:height="15" dlg:value="Cancel" dlg:button-type="ok">
