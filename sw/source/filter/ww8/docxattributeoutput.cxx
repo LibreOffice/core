@@ -2448,12 +2448,15 @@ void DocxAttributeOutput::SectionFormProtection( bool bProtected )
 
 void DocxAttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLineNumberInfo& rLnNumInfo )
 {
-    m_pSerializer->singleElementNS( XML_w, XML_lnNumType,
-        FSNS( XML_w, XML_countBy ), OString::valueOf( rLnNumInfo.GetCountBy()).getStr(),
-        FSNS( XML_w, XML_restart ), rLnNumInfo.IsRestartEachPage() ? "newPage" : "continuous",
-        FSNS( XML_w, XML_distance ), OString::valueOf( rLnNumInfo.GetPosFromLeft()).getStr(),
-        FSNS( XML_w, XML_start ), OString::valueOf( long( nRestartNo ? nRestartNo : 1 )).getStr(),
-        FSEND );
+    FastAttributeList* pAttr = m_pSerializer->createAttrList();
+    pAttr->add( FSNS( XML_w, XML_countBy ), OString::valueOf( rLnNumInfo.GetCountBy()).getStr());
+    pAttr->add( FSNS( XML_w, XML_restart ), rLnNumInfo.IsRestartEachPage() ? "newPage" : "continuous" );
+    if( rLnNumInfo.GetPosFromLeft())
+        pAttr->add( FSNS( XML_w, XML_distance ), OString::valueOf( rLnNumInfo.GetPosFromLeft()).getStr());
+    if( nRestartNo )
+        pAttr->add( FSNS( XML_w, XML_start ), OString::valueOf( long( nRestartNo )).getStr());
+    XFastAttributeListRef xAttrs( pAttr );
+    m_pSerializer->singleElementNS( XML_w, XML_lnNumType, xAttrs );
 }
 
 void DocxAttributeOutput::SectionTitlePage()
