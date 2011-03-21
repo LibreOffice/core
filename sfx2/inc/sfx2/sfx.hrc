@@ -69,7 +69,7 @@
 #define EVENT_SGA_START             EVENT_OBJ3_START
 #define EVENT_SVX_START             EVENT_OBJ4_START
 
-// Achtung: die folgenden sind gleichzeitig SID_ON_...
+// Warning: the following are simultaneously SID_ON_ ...
 #define SFX_EVENT_STARTAPP          (EVENT_SFX_START)
 #define SFX_EVENT_CLOSEAPP          (EVENT_SFX_START + 1)
 #define SFX_EVENT_CREATEDOC         (EVENT_SFX_START + 2)
@@ -111,7 +111,7 @@
 #define SFX_EVENT_TITLECHANGED      (EVENT_SFX_START + 30)
 #define SFX_EVENT_MODECHANGED       (EVENT_SFX_START + 31)
 
-// Events f"ur Controls etc.
+// Events for Controls etc.
 #define SFX_EVENT_MOUSEOVER_OBJECT     ( EVENT_SFX_START + 100 )
 #define SFX_EVENT_MOUSECLICK_OBJECT    ( EVENT_SFX_START + 101 )
 #define SFX_EVENT_MOUSEOUT_OBJECT      ( EVENT_SFX_START + 102 )
@@ -165,7 +165,7 @@
 #define SFX_OBJECTBAR_NAVIGATION        12
 #define SFX_OBJECTBAR_MAX               13
 
-// temp. wg. Kompatibilitaet
+// temporary due to compatibility
 
 #define SFX_OBJECTBAR_IDE               2
 #define SFX_OBJECTBAR_FRAME             3
@@ -230,7 +230,7 @@
 #define STR_STYLE_FILTER_USED               (RID_SFX_START+10)
 #define STR_STYLE_FILTER_USERDEF            (RID_SFX_START+11)
 #define STR_STYLE_FILTER_ALL                (RID_SFX_START+12)
-// +13 schon benutzt!
+// +13 already used!
 #define STR_STYLE_FILTER_HIERARCHICAL       (RID_SFX_START+1200)
 
 #define STR_NONAME                          (RID_SFX_START+100)

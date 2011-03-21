@@ -80,11 +80,10 @@ namespace svl
 
 enum SfxInterfaceId
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Id f"ur die <SfxInterface>s, damit wird "uber ein Array an der
-    <SfxApplication> ein quasi-statischer Zugriff auf die Interfaces
-    erlaubt.
+    Id for <SfxInterface>s, gives a quasi-static access to the interface
+    through an array to <SfxApplication>.
 */
 
 {
@@ -131,7 +130,7 @@ enum SfxInterfaceId
     SFX_INTERFACE_SBA_END           =  399,
     SFX_INTERFACE_IDE_START         =  400,
     SFX_INTERFACE_IDE_END           =  409,
-    //-falls die noch einer braucht
+    //-if one is still needed
     SFX_INTERFACE_APP               =  SFX_INTERFACE_SW_START,
     SFX_INTERFACE_LIB               =  450
 };
@@ -146,20 +145,19 @@ typedef void (*SfxStateFunc)(SfxShell *, SfxItemSet &rSet);
 
 class SFX2_DLLPUBLIC SfxShell: public SfxBroadcaster
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Die Klasse SfxShell ist Basisklasse f"ur alle Schichten, die
-    Funktionalit"at Form von <Slot>s bereitstellen wollen.
+    The class SfxShell is the base class for all classes, which provide
+    the functionality of the form <Slot>s.
 
-    Jede Instanz hat einen Verweis auf eine Interface-Beschreibung, der
-    mit <SfxShell::GetInterface()const> erh"altlich ist. Dieses Interface
-    stellt die Verbindung zu konkreten Methoden her und enth"alt einige
-    weitere beschreibende Daten f"ur Controller wie Menus und Toolboxen, aber
-    auch f"ur die diversen APIs. Der Hautpteil der Interface-Beschreibung
-    liegt in Form einer <Type-Library> vor, die mit dem <SVIDL-Compiler>
-    aus einem IDL-File generiert wird. F"ur jede SfxShell-Subclass ist ein
-    solches IDL-File zu schreiben.
-
+    Each instance has a reference to an interface description, which is
+    obtainable through <SfxShell::GetInterface()const>. This interface
+    provides the connection to specific methods and contains some other
+    descriptive data for controllers like menus and toolboxes, but also
+    for the various APIs. The main part of the interface description is in
+    the form of a <Type-Library>, which is generated from an IDL-file by
+    the <SVIDL-Compiler>. For each SfxShell Subclass-File there is one
+    such IDL-file to write.
 */
 
 {
@@ -170,8 +168,8 @@ class SFX2_DLLPUBLIC SfxShell: public SfxBroadcaster
     ::svl::IUndoManager*        pUndoMgr;
 
 private:
-                                SfxShell( const SfxShell & ); // n.i.
-    SfxShell&                   operator = ( const SfxShell & ); // n.i.
+                                SfxShell( const SfxShell & ); // internal
+    SfxShell&                                   operator = ( const SfxShell & ); // internal
 
 protected:
                                 SfxShell();
@@ -269,15 +267,15 @@ public:
 //--------------------------------------------------------------------
 SfxItemPool& SfxShell::GetPool() const
 /*
-  [Beschreibung]
+    [Description]
 
-    Jede Subclass von SfxShell mu"s einen Pool referenzieren. Dieser
-    wird teilweise von SFx-eigenen Subklassen gesetzt (z.B. <SfxViewShell>),
-    mu"s aber insbesondere bei direkt von SfxShell abgeleiteten Klassen
-    und bei Ableitungen von SfxObjectShell selbst gesetzt werden.
+    Each Subclass of SfxShell must reference a pool. This is partly set by
+    SFx's own set of subclasses (eg <SfxViewShell>). In particular however
+    this must be set directly from one derived SfxShell class and ny
+    derivatives of SfxObjectShell.
 
-    Die Klasse SfxShell selbst hat noch keinen SfxItemPool, es wird
-    daher ein 0-Pointer zur"uckgeliefert.
+    The SfxShell class itself does not have any SfxItemPool, therfore a
+    null-pointer is returned.
 */
 
 {
@@ -287,17 +285,16 @@ SfxItemPool& SfxShell::GetPool() const
 //-------------------------------------------------------------------
 inline void SfxShell::SetPool
 (
-    SfxItemPool*    pNewPool    // Pointer auf den neuen Pool oder 0
+    SfxItemPool*        pNewPool        // Pointer to the new Pool or null
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Mit dieser Methode melden die Subklassen ihren speziellen <SfxItemPool>
-    an der SfxShell an. Jede SfxShell Instanz mu\s Zugriff auf einen
-    SfxItemPool haben. In der Regel ist dies der SfxItemPool der
-    SfxDocumentShell. Die SfxShell Subklasse "ubernimmt nicht die
-    Eigent"umerschaft "uber den "ubergebenen Pool. Bevor er gel"oscht
-    wirde, mu\s er mit SetPool(0) abgemeldet werden.
+    With this method, the subclasses register their special <SfxItemPool>
+    in the SfxShell. Each SfxShell instance must have access to a SfxItemPool.
+    Usually this is the SfxItemPool of the SfxDocumentShell. The SfxShell
+    subclass does not take ownership of the orphaned pool. Before it is
+    deleted it has to be deregisted with SetPool(0).
 */
 
 {
@@ -357,11 +354,11 @@ inline void SfxShell::SetPool
 
 #define SFX_POSITION_MASK               0x000F
 #define SFX_VISIBILITY_MASK             0xFFF0
-#define SFX_VISIBILITY_UNVISIBLE        0x0000  // nie sichtbar
+#define SFX_VISIBILITY_UNVISIBLE        0x0000  // Never visible
 #define SFX_VISIBILITY_PLUGSERVER       0x0010
 #define SFX_VISIBILITY_PLUGCLIENT       0x0020
 #define SFX_VISIBILITY_VIEWER           0x0040
-                                                // noch 1 sind frei!
+                                                // One is still free!
 #define SFX_VISIBILITY_RECORDING        0x0200
 #define SFX_VISIBILITY_READONLYDOC      0x0400
 #define SFX_VISIBILITY_DESKTOP          0x0800
@@ -369,7 +366,7 @@ inline void SfxShell::SetPool
 #define SFX_VISIBILITY_FULLSCREEN       0x2000
 #define SFX_VISIBILITY_CLIENT           0x4000
 #define SFX_VISIBILITY_SERVER           0x8000
-#define SFX_VISIBILITY_NOCONTEXT        0xFFFF  // immer sichtbar
+#define SFX_VISIBILITY_NOCONTEXT        0xFFFF  // Always visable
 
 #define SFX_OBJECTBAR_REGISTRATION(nPos,rResId) \
         GetStaticInterface()->RegisterObjectBar( nPos, rResId )

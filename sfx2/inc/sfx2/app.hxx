@@ -126,7 +126,7 @@ public:
 };
 
 //TODO/CLEANUP
-//wird anscheinend nur in SfxPickList/SfxFrameLoader benutzt
+//is apparently used only in SfxPickList/SfxFrameLoader
 DECL_OBJHINT( SfxStringHint, String );
 
 /*

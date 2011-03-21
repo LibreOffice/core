@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 #ifndef _SFXMODULE_HXX
-#define _SFXMODULE_HXX  // intern
-#define _SFXMOD_HXX     // extern
+#define _SFXMODULE_HXX  // internal
+#define _SFXMOD_HXX     // external
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"

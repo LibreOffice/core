@@ -42,7 +42,7 @@ struct SfxPrintProgress_Impl;
 
 // ------------------------------------------------------------------------
 
-#define PAGE_MAX    9999        //max. Anzahl der Seiten die gedruckt werden
+#define PAGE_MAX    9999    // max. Number of pages to be printed
 
 // ------------------------------------------------------------------------
 
