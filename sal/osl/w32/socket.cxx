@@ -564,6 +564,8 @@ oslSocketAddr SAL_CALL osl_copySocketAddr(oslSocketAddr Addr)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_isEqualSocketAddr(oslSocketAddr Addr1, oslSocketAddr Addr2)
 {
+    OSL_ASSERT(Addr1);
+    OSL_ASSERT(Addr2);
     struct sockaddr* pAddr1= &(Addr1->m_sockaddr);
     struct sockaddr* pAddr2= &(Addr2->m_sockaddr);
 
@@ -587,7 +589,7 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr(oslSocketAddr Addr1, oslSocketAddr Addr2
 
             default:
             {
-                return (memcmp(pAddr1, Addr2, sizeof(struct sockaddr)) == 0);
+                return (memcmp(pAddr1, pAddr2, sizeof(struct sockaddr)) == 0);
             }
         }
     }

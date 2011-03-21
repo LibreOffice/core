@@ -594,11 +594,17 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
     oslSocketAddr Addr1,
     oslSocketAddr Addr2)
 {
+    OSL_ASSERT(Addr1);
+    OSL_ASSERT(Addr2);
     struct sockaddr* pAddr1= &(Addr1->m_sockaddr);
     struct sockaddr* pAddr2= &(Addr2->m_sockaddr);
 
     OSL_ASSERT(pAddr1);
     OSL_ASSERT(pAddr2);
+    if (pAddr1 == pAddr2)
+    {
+        return (sal_True);
+    }
 
     if (pAddr1->sa_family == pAddr2->sa_family)
     {
@@ -617,7 +623,7 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
 
             default:
             {
-                return (memcmp(pAddr1, Addr2, sizeof(struct sockaddr)) == 0);
+                return (memcmp(pAddr1, pAddr2, sizeof(struct sockaddr)) == 0);
             }
         }
     }

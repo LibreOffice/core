@@ -123,47 +123,47 @@ SHL4VERSIONMAP = $(PRJ)$/qa$/export.map
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:Socket by codegen.pl
-#SHL5OBJS=  \
-#    $(SLO)$/sockethelper.obj \
-#    $(SLO)$/osl_SocketAddr.obj
-#
-#SHL5TARGET= osl_SocketAddr
-#SHL5STDLIBS= $(SALLIB) $(CPPUNITLIB)
-#
-#.IF "$(GUI)" == "WNT"
-#SHL5STDLIBS += $(WS2_32LIB)
-#.ENDIF
-#
-#.IF "$(GUI)" == "UNX"
-#SHL5STDLIBS += -ldl -lnsl
-#.ENDIF
-#
-#SHL5IMPLIB= i$(SHL5TARGET)
-#DEF5NAME=    $(SHL5TARGET)
-#SHL5VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL5OBJS=  \
+    $(SLO)$/sockethelper.obj \
+    $(SLO)$/osl_SocketAddr.obj
+
+SHL5TARGET= osl_SocketAddr
+SHL5STDLIBS= $(SALLIB) $(CPPUNITLIB)
+
+.IF "$(GUI)" == "WNT"
+SHL5STDLIBS += $(WS2_32LIB)
+.ENDIF
+
+.IF "$(GUI)" == "UNX"
+SHL5STDLIBS += -ldl -lnsl
+.ENDIF
+
+SHL5IMPLIB= i$(SHL5TARGET)
+DEF5NAME=    $(SHL5TARGET)
+SHL5VERSIONMAP = $(PRJ)$/qa$/export.map
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:Socket by codegen.pl
-#SHL6OBJS=  \
-#    $(SLO)$/sockethelper.obj \
-#    $(SLO)$/osl_Socket2.obj
-#
-#SHL6TARGET= osl_Socket2
-#SHL6STDLIBS= $(SALLIB) $(CPPUNITLIB)
-#
-#.IF "$(GUI)" == "WNT"
-#SHL6STDLIBS += $(WS2_32LIB)
-#.ENDIF
-#
-#.IF "$(GUI)" == "UNX"
-#SHL6STDLIBS += -ldl -lnsl
-#.ENDIF
-#
-#SHL6IMPLIB= i$(SHL6TARGET)
-#DEF6NAME=    $(SHL6TARGET)
-#SHL6VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL6OBJS=  \
+    $(SLO)$/sockethelper.obj \
+    $(SLO)$/osl_Socket2.obj
+
+SHL6TARGET= osl_Socket2
+SHL6STDLIBS= $(SALLIB) $(CPPUNITLIB)
+
+.IF "$(GUI)" == "WNT"
+SHL6STDLIBS += $(WS2_32LIB)
+.ENDIF
+
+.IF "$(GUI)" == "UNX"
+SHL6STDLIBS += -ldl -lnsl
+.ENDIF
+
+SHL6IMPLIB= i$(SHL6TARGET)
+DEF6NAME=    $(SHL6TARGET)
+SHL6VERSIONMAP = $(PRJ)$/qa$/export.map
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
