@@ -473,6 +473,7 @@ VerticalSplitMode
 VerticalSplitPositionTwips
 ViewBox
 Visible
+VisibleFlag
 VisibleSize
 VisualArea
 VisualEffect
