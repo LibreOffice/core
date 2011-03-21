@@ -272,13 +272,12 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aTopMarginEdit      ( this, CUI_RES( ED_TOP_MARGIN ) ),
     aBottomMarginLbl    ( this, CUI_RES( FT_BOTTOM_MARGIN ) ),
     aBottomMarginEdit   ( this, CUI_RES( ED_BOTTOM_MARGIN ) ),
-
+    aBottomSeparatorFl  ( this, CUI_RES( FL_BOTTOM_SEP ) ),
     aLayoutFL           ( this, CUI_RES( FL_LAYOUT ) ),
     aPageText           ( this, CUI_RES( FT_PAGELAYOUT ) ),
     aLayoutBox          ( this, CUI_RES( LB_LAYOUT ) ),
     aNumberFormatText   ( this, CUI_RES( FT_NUMBER_FORMAT ) ),
     aNumberFormatBox    ( this, CUI_RES( LB_NUMBER_FORMAT ) ),
-    aBottomSeparatorFl  ( this, CUI_RES( FL_BOTTOM_SEP ) ),
     aTblAlignFT         ( this, CUI_RES( FT_TBL_ALIGN ) ),
     aHorzBox            ( this, CUI_RES( CB_HORZ ) ),
     aVertBox            ( this, CUI_RES( CB_VERT ) ),
@@ -329,9 +328,10 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     if( !bWeb )
     {
         if( bCJK )
+        {
             aTextFlowBox.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_RTL_VERT ), FRMDIR_VERT_TOP_RIGHT );
-//        if( ... )
 //            aTextFlowBox.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_LTR_VERT ), FRMDIR_VERT_TOP_LEFT );
+        }
     }
 
     // #109989# show the text direction box in Writer/Web too, but only, if HTML export mode is not HTML3.2.
@@ -420,6 +420,9 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aTopMarginEdit.SetLast(aDrawinglayerOpt.GetMaximumPaperTopMargin());
     aBottomMarginEdit.SetMax(aDrawinglayerOpt.GetMaximumPaperBottomMargin());
     aBottomMarginEdit.SetLast(aDrawinglayerOpt.GetMaximumPaperBottomMargin());
+
+    aPortraitBtn.SetAccessibleRelationMemberOf(&aOrientationFT);
+    aLandscapeBtn.SetAccessibleRelationMemberOf(&aOrientationFT);
 }
 
 // -----------------------------------------------------------------------
@@ -605,6 +608,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     ResStringArray aPaperAry( CUI_RES( nAryId ) );
     sal_uInt32 nCnt = aPaperAry.Count();
 
+    sal_uInt16 nUserPos = LISTBOX_ENTRY_NOTFOUND;
     for ( sal_uInt32 i = 0; i < nCnt; ++i )
     {
         String aStr = aPaperAry.GetString(i);
@@ -614,9 +618,11 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
         if ( eSize == ePaper )
             nActPos = nPos;
+        if( eSize == PAPER_USER )
+            nUserPos = nPos;
     }
-    // aktuelles Papierformat selektieren
-    aPaperSizeBox.SelectEntryPos( nActPos );
+    // preselect current paper format - #115915#: ePaper might not be in aPaperSizeBox so use PAPER_USER instead
+    aPaperSizeBox.SelectEntryPos( nActPos != LISTBOX_ENTRY_NOTFOUND ? nActPos : nUserPos );
 
     // Applikationsspezifisch
 

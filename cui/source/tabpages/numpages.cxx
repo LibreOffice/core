@@ -613,6 +613,9 @@ IMPL_LINK(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
             {
                 SvxNumberFormat aFmt(pActNum->GetLevel(i));
                 aFmt.SetNumberingType( SVX_NUM_CHAR_SPECIAL );
+                // #i93908# clear suffix for bullet lists
+                aFmt.SetPrefix(::rtl::OUString());
+                aFmt.SetSuffix(::rtl::OUString());
                 aFmt.SetBulletFont(&rActBulletFont);
                 aFmt.SetBulletChar(cChar );
                 aFmt.SetCharFmtName(sBulletCharFmtName);
@@ -859,6 +862,9 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
             sal_uInt16 nUpperLevelOrChar = (sal_uInt16)pLevelSettings->nParentNumbering;
             if(aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
             {
+                // #i93908# clear suffix for bullet lists
+                aFmt.SetPrefix(::rtl::OUString());
+                aFmt.SetSuffix(::rtl::OUString());
                 if( pLevelSettings->sBulletFont.getLength() &&
                     pLevelSettings->sBulletFont.compareTo(
                             rActBulletFont.GetName()))
@@ -908,9 +914,10 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
                 aFmt.SetCharFmtName(sNumCharFmtName);
                 // #62069# // #92724#
                 aFmt.SetBulletRelSize(100);
+                // #i93908#
+                aFmt.SetPrefix(pLevelSettings->sPrefix);
+                aFmt.SetSuffix(pLevelSettings->sSuffix);
             }
-            aFmt.SetPrefix(pLevelSettings->sPrefix);
-            aFmt.SetSuffix(pLevelSettings->sSuffix);
             pActNum->SetLevel(i, aFmt);
         }
     }
@@ -989,6 +996,7 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
         pExamplesVS->Format();
     }
 
+    pExamplesVS->SetAccessibleRelationMemberOf( &aValuesFL );
 }
 
 /*-----------------12.02.97 07.46-------------------
@@ -1365,6 +1373,8 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
 
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
 
+    aBitmapMB.SetAccessibleRelationLabeledBy( &aBitmapFT );
+
     FreeResource();
 
     //get advanced numbering types from the component
@@ -1421,6 +1431,10 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
             aFmtLB.RemoveEntry( nPos);
         }
     }
+
+    aBulletPB.SetAccessibleRelationMemberOf(&aFormatFL);
+    aBulletPB.SetAccessibleRelationLabeledBy(&aStartFT);
+    aBulletPB.SetAccessibleName(aStartFT.GetText());
 }
 
 /*-----------------01.12.97 16:30-------------------
@@ -3096,6 +3110,8 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
     pDebugFixedText->SetPosSizePixel(aPos, aSize);
     pDebugFixedText->SetText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Das ist ein Debug-Text" ) ) );
 #endif
+
+    aStandardPB.SetAccessibleRelationMemberOf(&aPositionFL);
 }
 /*-----------------03.12.97 10:02-------------------
 

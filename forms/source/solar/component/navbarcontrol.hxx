@@ -56,10 +56,6 @@ namespace frm
                             :public UnoControl
                             ,public ONavigationBarControl_Base
     {
-    private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        m_xORB;
-
     public:
         ONavigationBarControl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB

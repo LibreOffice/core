@@ -343,27 +343,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
 
     SvxTabPage( pParent, CUI_RES( RID_SVXPAGE_BACKGROUND ), rCoreSet ),
 
-    aBorderWin          ( this, CUI_RES(CT_BORDER) ),
-    aBackgroundColorSet ( &aBorderWin, CUI_RES( SET_BGDCOLOR ) ),
-    aBackgroundColorBox ( this, CUI_RES( GB_BGDCOLOR ) ),
-    pPreviewWin1        ( new BackgroundPreviewImpl(
-                            this, CUI_RES( WIN_PREVIEW1 ), sal_False ) ),
-    aColTransFT         ( this, CUI_RES( FT_COL_TRANS ) ),
-    aColTransMF         ( this, CUI_RES( MF_COL_TRANS ) ),
-    aBtnBrowse          ( this, CUI_RES( BTN_BROWSE ) ),
-    aBtnLink            ( this, CUI_RES( BTN_LINK ) ),
-    aBtnPreview         ( this, CUI_RES( BTN_PREVIEW ) ),
-    aFtFile             ( this, CUI_RES( FT_FILE ) ),
-    aGbFile             ( this, CUI_RES( GB_FILE ) ),
-    aBtnPosition        ( this, CUI_RES( BTN_POSITION ) ),
-    aBtnArea            ( this, CUI_RES( BTN_AREA ) ),
-    aBtnTile            ( this, CUI_RES( BTN_TILE ) ),
-    aWndPosition        ( this, CUI_RES( WND_POSITION ), RP_MM ),
-    aGbPosition         ( this, CUI_RES( GB_POSITION ) ),
-    aGraphTransFL       ( this, CUI_RES( FL_GRAPH_TRANS ) ),
-    aGraphTransMF       ( this, CUI_RES( MF_GRAPH_TRANS ) ),
-    pPreviewWin2        ( new BackgroundPreviewImpl(
-                            this, CUI_RES( WIN_PREVIEW2 ), sal_True ) ),
     aSelectTxt          ( this, CUI_RES( FT_SELECTOR ) ),
     aLbSelect           ( this, CUI_RES( LB_SELECTOR ) ),
     aStrBrowse          ( CUI_RES( STR_BROWSE ) ),
@@ -371,6 +350,29 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
     aTblDesc            ( this, CUI_RES( FT_TBL_DESC ) ),
     aTblLBox            ( this, CUI_RES( LB_TBL_BOX ) ),
     aParaLBox           ( this, CUI_RES( LB_PARA_BOX ) ),
+
+    aBorderWin          ( this, CUI_RES(CT_BORDER) ),
+    aBackgroundColorSet ( &aBorderWin, CUI_RES( SET_BGDCOLOR ) ),
+    aBackgroundColorBox ( this, CUI_RES( GB_BGDCOLOR ) ),
+    pPreviewWin1        ( new BackgroundPreviewImpl( this, CUI_RES( WIN_PREVIEW1 ), sal_False ) ),
+
+    aColTransFT         ( this, CUI_RES( FT_COL_TRANS ) ),
+    aColTransMF         ( this, CUI_RES( MF_COL_TRANS ) ),
+    aBtnPreview         ( this, CUI_RES( BTN_PREVIEW ) ),
+    aGbFile             ( this, CUI_RES( GB_FILE ) ),
+    aBtnBrowse          ( this, CUI_RES( BTN_BROWSE ) ),
+    aBtnLink            ( this, CUI_RES( BTN_LINK ) ),
+    aGbPosition         ( this, CUI_RES( GB_POSITION ) ),
+    aBtnPosition        ( this, CUI_RES( BTN_POSITION ) ),
+    aBtnArea            ( this, CUI_RES( BTN_AREA ) ),
+    aBtnTile            ( this, CUI_RES( BTN_TILE ) ),
+    aWndPosition        ( this, CUI_RES( WND_POSITION ), RP_MM ),
+    aFtFile             ( this, CUI_RES( FT_FILE ) ),
+    aGraphTransFL       ( this, CUI_RES( FL_GRAPH_TRANS ) ),
+    aGraphTransMF       ( this, CUI_RES( MF_GRAPH_TRANS ) ),
+    pPreviewWin2        ( new BackgroundPreviewImpl(
+                            this, CUI_RES( WIN_PREVIEW2 ), sal_True ) ),
+
     nHtmlMode           ( 0 ),
     bAllowShowSelector  ( sal_True ),
     bIsGraphicValid     ( sal_False ),
@@ -402,6 +404,11 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
 
     aBackgroundColorSet.SetSelectHdl( HDL(BackgroundColorHdl_Impl) );
     FreeResource();
+
+    aBtnBrowse.SetAccessibleRelationMemberOf(&aGbFile);
+    aWndPosition.SetAccessibleRelationMemberOf(&aGbPosition);
+    aWndPosition.SetAccessibleRelationLabeledBy(&aBtnPosition);
+    aBackgroundColorSet.SetAccessibleRelationLabeledBy(&aBackgroundColorBox);
 }
 
 //------------------------------------------------------------------------
@@ -657,6 +664,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
             aPos.Y()  = nY;
             pPreviewWin1->SetPosPixel(aPos);
             aBackgroundColorBox.Hide();
+            aBackgroundColorSet.SetAccessibleRelationLabeledBy(&aBackgroundColorSet);
         }
     }
 }
@@ -1211,6 +1219,7 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
         WinBits nBits = ( aBackgroundColorSet.GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD );
         aBackgroundColorSet.SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
         aBackgroundColorSet.SetStyle( nBits );
+        aBackgroundColorSet.SetAccessibleName(aBackgroundColorBox.GetText());
         for ( i = 0; i < nCount; i++ )
         {
             pEntry = pColorTable->GetColor(i);

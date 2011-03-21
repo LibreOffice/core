@@ -104,6 +104,7 @@ class SvxLineTabPage : public SvxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 private:
+    FixedLine           aFlLine;
     FixedText           aFtLineStyle;
     LineLB              aLbLineStyle;
     FixedText           aFtColor;
@@ -112,19 +113,18 @@ private:
     MetricField         aMtrLineWidth;
     FixedText           aFtTransparent;
     MetricField         aMtrTransparent;
-    FixedLine           aFlLine;
-    FixedText           aFtLineEndsStyle;
+    FixedLine           aFlLineEnds;
     LineEndLB           aLbStartStyle;
-    FixedText           aFtLineEndsWidth;
     MetricField         aMtrStartWidth;
     TriStateBox         aTsbCenterStart;
+    FixedText           aFtLineEndsStyle;
     LineEndLB           aLbEndStyle;
+    FixedText           aFtLineEndsWidth;
     MetricField         aMtrEndWidth;
     TriStateBox         aTsbCenterEnd;
     CheckBox            aCbxSynchronize;
-    FixedLine           aFlLineEnds;
-    SvxXLinePreview     aCtlPreview;
     FixedLine           aFLSeparator;
+    SvxXLinePreview     aCtlPreview;
 
     // #116827#
     FixedLine           maFLEdgeStyle;

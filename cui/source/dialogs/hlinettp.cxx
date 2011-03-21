@@ -61,13 +61,13 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maRbtLinktypTelnet      ( this, CUI_RES (RB_LINKTYP_TELNET) ),
     maFtTarget              ( this, CUI_RES (FT_TARGET_HTML) ),
     maCbbTarget             ( this, INET_PROT_HTTP ),
+    maBtBrowse              ( this, CUI_RES (BTN_BROWSE) ),
     maFtLogin               ( this, CUI_RES (FT_LOGIN) ),
     maEdLogin               ( this, CUI_RES (ED_LOGIN) ),
+    maBtTarget              ( this, CUI_RES (BTN_TARGET) ),
     maFtPassword            ( this, CUI_RES (FT_PASSWD) ),
     maEdPassword            ( this, CUI_RES (ED_PASSWD) ),
     maCbAnonymous           ( this, CUI_RES (CBX_ANONYMOUS) ),
-    maBtBrowse              ( this, CUI_RES (BTN_BROWSE) ),
-    maBtTarget              ( this, CUI_RES (BTN_TARGET) ),
     mbMarkWndOpen           ( sal_False )
 {
     // Set HC bitmaps and display display of bitmap names.
@@ -124,6 +124,13 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maCbbTarget.SetLoseFocusHdl     ( LINK ( this, SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl ) );
     maCbbTarget.SetModifyHdl        ( LINK ( this, SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl ) );
     maTimer.SetTimeoutHdl           ( LINK ( this, SvxHyperlinkInternetTp, TimeoutHdl_Impl ) );
+
+    maFtTarget.SetAccessibleRelationMemberOf( &maGrpLinkTyp );
+    maCbbTarget.SetAccessibleRelationMemberOf( &maGrpLinkTyp );
+    maBtTarget.SetAccessibleRelationMemberOf( &maGrpLinkTyp );
+    maBtTarget.SetAccessibleRelationLabeledBy( &maFtTarget );
+    maBtBrowse.SetAccessibleRelationMemberOf( &maGrpLinkTyp );
+    maBtBrowse.SetAccessibleRelationLabeledBy( &maFtTarget );
 }
 
 SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp ()
