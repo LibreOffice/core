@@ -87,13 +87,6 @@ static OUString readEntryUntranslated( KConfigGroup *pGroup, const char *pKey )
     return OUString::createFromAscii( (const char *) pGroup->readEntryUntranslated( pKey ).toAscii() );
 }
 
-/** Helper function to read color from KConfig configuration repository.
-*/
-static Color readColor( KConfigGroup *pGroup, const char *pKey )
-{
-    return toColor( pGroup->readEntry( pKey, QColor(Qt::white) ) );
-}
-
 /** Helper function to add information to Font from QFont.
 
     Mostly grabbed from the Gtk+ vclplug (salnativewidgets-gtk.cxx).
