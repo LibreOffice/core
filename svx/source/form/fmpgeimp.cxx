@@ -167,21 +167,18 @@ namespace
 }
 
 //------------------------------------------------------------------------------
-FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage, const FmFormPageImpl& rImpl )
-    :m_rPage( _rPage )
-    ,m_bFirstActivation( sal_True )
-    ,m_bAttemptedFormCreation( false )
+void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
 {
-    DBG_CTOR(FmFormPageImpl,NULL);
-
     // clone the Forms collection
-    Reference< XCloneable > xCloneable( const_cast< FmFormPageImpl& >( rImpl ).getForms( false ), UNO_QUERY );
+    const Reference< XNameContainer > xForeignForms( const_cast< FmFormPageImpl& >( i_foreignImpl ).getForms( false ) );
+    const Reference< XCloneable > xCloneable( xForeignForms, UNO_QUERY );
     if ( !xCloneable.is() )
     {
         // great, nothing to do
-        OSL_ENSURE( !const_cast< FmFormPageImpl& >( rImpl ).getForms( false ).is(), "FmFormPageImpl::FmFormPageImpl: a non-cloneable forms container!?" );
+        OSL_ENSURE( !xForeignForms.is(), "FmFormPageImpl::FmFormPageImpl: a non-cloneable forms container!?" );
         return;
     }
+
     try
     {
         m_xForms.set( xCloneable->createClone(), UNO_QUERY_THROW );
@@ -196,7 +193,7 @@ FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage, const FmFormPageImpl& rImpl 
         aVisitor.process( FormComponentPair( xCloneable, m_xForms ), aAssignmentProcessor );
 
         // assign the cloned models to their SdrObjects
-        SdrObjListIter aForeignIter( rImpl.m_rPage );
+        SdrObjListIter aForeignIter( i_foreignImpl.m_rPage );
         SdrObjListIter aOwnIter( m_rPage );
 
         OSL_ENSURE( aForeignIter.IsMore() == aOwnIter.IsMore(), "FmFormPageImpl::FmFormPageImpl: inconsistent number of objects (1)!" );
@@ -208,31 +205,23 @@ FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage, const FmFormPageImpl& rImpl 
             bool bForeignIsForm = pForeignObj && ( pForeignObj->GetObjInventor() == FmFormInventor );
             bool bOwnIsForm = pOwnObj && ( pOwnObj->GetObjInventor() == FmFormInventor );
 
-            if ( bForeignIsForm != bOwnIsForm )
-            {
-                OSL_ENSURE( false, "FmFormPageImpl::FmFormPageImpl: inconsistent ordering of objects!" );
-                // don't attempt to do further assignments, something's completely messed up
-                break;
-            }
+            ENSURE_OR_BREAK( bForeignIsForm == bOwnIsForm, "FmFormPageImpl::FmFormPageImpl: inconsistent ordering of objects!" );
+                // if this fires, don't attempt to do further assignments, something's completely messed up
+
             if ( !bForeignIsForm )
                 // no form control -> next round
                 continue;
 
             Reference< XControlModel > xForeignModel( pForeignObj->GetUnoControlModel() );
-            OSL_ENSURE( xForeignModel.is(), "FmFormPageImpl::FmFormPageImpl: control shape without control!" );
-            if ( !xForeignModel.is() )
-                // the SdrObject does not have a UNO Control Model. This is pathological, but well ... So the cloned
-                // SdrObject will also not have a UNO Control Model.
-                continue;
-
-            OSL_ENSURE( !pOwnObj->GetUnoControlModel().is(), "FmFormPageImpl::FmFormPageImpl: there already is a control model for the target object!" );
+            ENSURE_OR_CONTINUE( xForeignModel.is(), "FmFormPageImpl::FmFormPageImpl: control shape without control!" );
+                // if this fires, the SdrObject does not have a UNO Control Model. This is pathological, but well ...
+                // So the cloned SdrObject will also not have a UNO Control Model.
 
             MapControlModels::const_iterator assignment = aModelAssignment.find( xForeignModel );
-            OSL_ENSURE( assignment != aModelAssignment.end(), "FmFormPageImpl::FmFormPageImpl: no clone found for this model!" );
-            if ( assignment == aModelAssignment.end() )
-                // the source SdrObject has a model, but it is not part of the model hierarchy in rImpl.getForms().
+            ENSURE_OR_CONTINUE( assignment != aModelAssignment.end(), "FmFormPageImpl::FmFormPageImpl: no clone found for this model!" );
+                // if this fires, the source SdrObject has a model, but it is not part of the model hierarchy in
+                // i_foreignImpl.getForms().
                 // Pathological, too ...
-                continue;
 
             pOwnObj->SetUnoControlModel( assignment->second );
         }
@@ -275,7 +264,7 @@ namespace
         _map->put( makeAny( xControlModel ), makeAny( xControlShape ) );
     }
 
-    static void lcl_removeFormObject( const FmFormObj& _object, const Reference< XMap >& _map )
+    static void lcl_removeFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map, bool i_ignoreNonExistence = false )
     {
         // the control model
         Reference< XControlModel > xControlModel( _object.GetUnoControlModel(), UNO_QUERY );
@@ -287,8 +276,13 @@ namespace
         Any aOldAssignment =
     #endif
             _map->remove( makeAny( xControlModel ) );
-        OSL_ENSURE( aOldAssignment == makeAny( Reference< XControlShape >( const_cast< FmFormObj& >( _object ).getUnoShape(), UNO_QUERY ) ),
-            "lcl_removeFormObject: map was inconsistent!" );
+    #if OSL_DEBUG_LEVEL > 0
+        (void)aOldAssignment;
+    #endif
+        OSL_ENSURE( !i_ignoreNonExistence ||
+            ( aOldAssignment == makeAny( Reference< XControlShape >( const_cast< FmFormObj& >( _object ).getUnoShape(), UNO_QUERY ) ) ),
+                "lcl_removeFormObject: map was inconsistent!" );
+        (void)i_ignoreNonExistence;
     }
 }
 
@@ -703,7 +697,26 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
     return sName;
 }
 
-//------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+void FmFormPageImpl::formModelAssigned( const FmFormObj& _object )
+{
+    Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
+    if ( !xControlShapeMap.is() )
+        // our map does not exist -> not interested in this event
+        return;
+
+    try
+    {
+        lcl_removeFormObject_throw( _object,  xControlShapeMap, false );
+        lcl_insertFormObject_throw( _object,  xControlShapeMap );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 void FmFormPageImpl::formObjectInserted( const FmFormObj& _object )
 {
     Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
@@ -721,6 +734,7 @@ void FmFormPageImpl::formObjectInserted( const FmFormObj& _object )
     }
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 void FmFormPageImpl::formObjectRemoved( const FmFormObj& _object )
 {
     Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
@@ -730,7 +744,7 @@ void FmFormPageImpl::formObjectRemoved( const FmFormObj& _object )
 
     try
     {
-        lcl_removeFormObject( _object, xControlShapeMap );
+        lcl_removeFormObject_throw( _object, xControlShapeMap );
     }
     catch( const Exception& )
     {
