@@ -35,8 +35,6 @@
 #include <dbform.hxx>
 #endif
 
-DECLARE_LIST( FmCtrlModelList, XInterface* );
-
 struct FmXGroupModel_Impl;
 
 //==================================================================
