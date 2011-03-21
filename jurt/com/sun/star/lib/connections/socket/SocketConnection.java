@@ -149,7 +149,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
         bytes[0] = new byte[nBytesToRead];
 
         try {
-            int count = 0;
+            int count  ;
 
             do {
                 count = _inputStream.read(bytes[0], read_bytes, nBytesToRead - read_bytes);
