@@ -175,10 +175,6 @@ function fOpenTestDocumentAndSelectDataRange(sInputFile as string) as BOOLEAN
     WaitSlot()
     '///Switch to tabpage Data Range
     printlog "Switch to tabpage Data Range"
-    Kontext
-    'Switching tabpages as workaround for #i77237#
-    Active.SetPage TabChartTypeDataSeries
-    QAErrorLog "#i77237#-Testtool can't access OK after switching tabpage"
     Active.SetPage TabChartTypeDataRange
     Kontext "TabChartTypeDataRange"
     call DialogTest ( TabChartTypeDataRange )
