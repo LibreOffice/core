@@ -233,6 +233,8 @@ class SmViewShell: public SfxViewShell
     // for handling the PasteClipboardState
     friend class SmClipboardChangeListener;
 
+    SmViewShell_Impl*   pImpl;
+
     SmGraphicWindow     aGraphic;
     SmGraphicController aGraphicController;
     String              StatusText;
@@ -240,7 +242,6 @@ class SmViewShell: public SfxViewShell
     ::com::sun::star::uno:: Reference <
             ::com::sun::star::lang:: XEventListener > xClipEvtLstnr;
     SmClipboardChangeListener*  pClipEvtLstnr;
-    SmViewShell_Impl*   pImpl;
     bool                bPasteState;
 
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );

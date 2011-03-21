@@ -2006,9 +2006,9 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
 SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *):
     SfxViewShell(pFrame_, SFX_VIEW_HAS_PRINTOPTIONS | SFX_VIEW_CAN_PRINT),
+    pImpl( new SmViewShell_Impl ),
     aGraphic(this),
-    aGraphicController(aGraphic, SID_GAPHIC_SM, pFrame_->GetBindings()),
-    pImpl( new SmViewShell_Impl )
+    aGraphicController(aGraphic, SID_GAPHIC_SM, pFrame_->GetBindings())
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::SmViewShell" );
 
