@@ -29,7 +29,6 @@ package com.sun.star.wizards.form;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XComponent;
 import com.sun.star.sdb.application.DatabaseObject;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
@@ -93,6 +92,11 @@ public class FormWizard extends DatabaseObjectWizard
         {
             setRightPaneHeaders(m_oResource, UIConsts.RID_FORM + 90, 8);
         }
+    }
+
+    public static void main(String i_args[])
+    {
+        executeWizardFromCommandLine( i_args, FormWizard.class.getName() );
     }
 
     // @Override
@@ -332,7 +336,7 @@ public class FormWizard extends DatabaseObjectWizard
         setCurrentRoadmapItemID((short) 1);
     }
 
-    public void startFormWizard()
+    public void start()
     {
         try
         {
@@ -456,14 +460,14 @@ public class FormWizard extends DatabaseObjectWizard
         private void toggleMainFormSteps()
         {
             curDBCommandFieldSelection.setModified(true);
-            boolean benable = curDBCommandFieldSelection.getSelectedFieldNames().length > 0;
-            enablefromStep(SOSUBFORM_PAGE, benable);
-            setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, new Boolean(benable));
-            if (benable)
+            boolean enabled = curDBCommandFieldSelection.getSelectedFieldNames().length > 0;
+            enablefromStep(SOSUBFORM_PAGE, enabled);
+            setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, enabled);
+            if (enabled)
             {
                 if (curFormConfiguration.hasSubForm())
                 {
-                    benable = toggleSubFormSteps();
+                    enabled = toggleSubFormSteps();
                 }
                 else
                 {
@@ -471,7 +475,7 @@ public class FormWizard extends DatabaseObjectWizard
                     setStepEnabled(SOFIELDLINKER_PAGE, false);
                 }
             }
-            setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, new Boolean(benable));
+            setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, enabled);
         }
     }
 }

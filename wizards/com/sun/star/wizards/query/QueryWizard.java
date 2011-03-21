@@ -36,10 +36,8 @@ import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.db.DatabaseObjectWizard;
@@ -90,79 +88,7 @@ public class QueryWizard extends DatabaseObjectWizard
 
     public static void main(String i_args[])
     {
-        final String settings[] = new String[] { null, null, null };
-        final int IDX_PIPE_NAME = 0;
-        final int IDX_LOCATION = 1;
-        final int IDX_DSN = 2;
-
-        // some simple parsing
-        boolean failure = false;
-        int settingsIndex = -1;
-        for ( int i=0; i<i_args.length; ++i )
-        {
-            if ( settingsIndex >= 0 )
-            {
-                settings[ settingsIndex ] = i_args[i];
-                settingsIndex = -1;
-                continue;
-            }
-
-            if ( i_args[i].equals( "--pipe-name" ) )
-            {
-                settingsIndex = IDX_PIPE_NAME;
-                continue;
-            }
-
-            if ( i_args[i].equals( "--database-location" ) )
-            {
-                settingsIndex = IDX_LOCATION;
-                continue;
-            }
-
-            if ( i_args[i].equals( "--data-source-name" ) )
-            {
-                settingsIndex = IDX_DSN;
-                continue;
-            }
-
-            failure = true;
-        }
-
-        if ( settings[ IDX_PIPE_NAME ] == null )
-            failure = true;
-
-        if ( ( settings[ IDX_DSN ] == null ) && ( settings[ IDX_LOCATION ] == null ) )
-            failure = true;
-
-        if ( failure )
-        {
-            System.err.println( "supported arguments: " );
-            System.err.println( "  --pipe-name <name>           : specifies the name of the pipe to connect to the running OOo instance" );
-            System.err.println( "  --database-location <url>    : specifies the URL of the database document to work with" );
-            System.err.println( "  --data-source-name <name>    : specifies the name of the data source to work with" );
-            return;
-        }
-
-        final String ConnectStr = "uno:pipe,name=" + settings[IDX_PIPE_NAME] + ";urp;StarOffice.ServiceManager";
-        try
-        {
-            final XMultiServiceFactory serviceFactory = Desktop.connect(ConnectStr);
-            if (serviceFactory != null)
-            {
-                PropertyValue[] curproperties = new PropertyValue[1];
-                if ( settings[ IDX_LOCATION ] != null )
-                    curproperties[0] = Properties.createProperty( "DatabaseLocation", settings[ IDX_LOCATION ] );
-                else
-                    curproperties[0] = Properties.createProperty( "DataSourceName", settings[ IDX_DSN ] );
-
-                QueryWizard CurQueryWizard = new QueryWizard( serviceFactory, curproperties );
-                CurQueryWizard.startQueryWizard();
-            }
-        }
-        catch (java.lang.Exception jexception)
-        {
-            jexception.printStackTrace(System.out);
-        }
+        executeWizardFromCommandLine( i_args, QueryWizard.class.getName() );
     }
 
     public final XFrame getFrame()
@@ -170,7 +96,7 @@ public class QueryWizard extends DatabaseObjectWizard
         return m_frame;
     }
 
-    public String startQueryWizard()
+    public String start()
     {
         try
         {
@@ -453,7 +379,7 @@ public class QueryWizard extends DatabaseObjectWizard
             }
             catch (SQLException e)
             {
-                e.printStackTrace();
+                e.printStackTrace( System.err );
             }
         }
     }

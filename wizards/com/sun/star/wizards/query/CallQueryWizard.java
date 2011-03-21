@@ -93,7 +93,7 @@ public class CallQueryWizard
                 if (sEvent.compareTo("start") == 0)
                 {
                     QueryWizard CurQueryWizard = new QueryWizard( m_serviceFactory, m_wizardContext );
-                    Command = CurQueryWizard.startQueryWizard();
+                    Command = CurQueryWizard.start();
                 }
             }
             catch (Exception exception)
