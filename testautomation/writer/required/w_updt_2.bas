@@ -27,7 +27,7 @@
 '*
 '* owner : helge.delfs@oracle.com
 '*
-'* short description : Ressource-Test Writer Document
+'* short description : Ressource-Test Writer Document Part 2 / 2
 '*
 '\******************************************************************
 
@@ -36,15 +36,6 @@ sub main
     use "writer\tools\includes\w_tool1.inc"                  		' global subroutines for Writer-application
     use "writer\tools\includes\w_tool2.inc"                  		' global subroutines for Writer-application
 
-    use "writer\required\includes\w_001_.inc"
-    use "writer\required\includes\w_001a_.inc"
-    use "writer\required\includes\w_001b_.inc"
-    use "writer\required\includes\w_002_.inc"
-    use "writer\required\includes\w_003_.inc"
-    use "writer\required\includes\w_004_.inc"
-    use "writer\required\includes\w_004b_.inc"
-    use "writer\required\includes\w_005_.inc"
-    use "writer\required\includes\w_005b_.inc"
     use "writer\required\includes\w_006_.inc"
     use "writer\required\includes\w_007_.inc"
     use "writer\required\includes\w_008_.inc"
@@ -54,20 +45,11 @@ sub main
     use "writer\required\includes\w_011_.inc"
     use "writer\required\includes\w_020_.inc"
     
-    Printlog "******* Ressource-Test Writer Document *******"
+    Printlog "******* Ressource-Test Writer Document Part 2 / 2 *******"
 
     Call wChangeDefaultView()
 
-    Call hStatusIn ( "writer", "w_updt.bas" )
-    Call w_001_              ' Menu File
-    Call w_001a_             ' Menu File
-    Call w_001b_             ' Menu File
-    Call w_002_              ' Menu Edit
-    Call w_003_              ' Menu View
-    Call w_004_              ' Menu Insert
-    Call w_004b_             ' Menu Insert
-    Call w_005_              ' Menu Format
-    Call w_005b_             ' Menu Format (2)
+    Call hStatusIn ( "writer", "w_updt_2.bas" )
     Call w_006_              ' Menu Table
     Call w_007_              ' Menu Tools
     Call w_008_              ' Menu Window
@@ -83,11 +65,8 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    use "global\required\includes\g_001.inc"
     use "global\required\includes\g_option.inc"                	' global subroutines for Tools / Options
-    use "global\required\includes\g_printing.inc"
     use "global\required\includes\g_findbar.inc"
-    use "global\tools\includes\optional\t_xml_filter1.inc"       ' global routines for XML-functionality
     use "global\tools\includes\optional\t_docfuncs.inc"
     use "global\tools\includes\optional\t_control_objects.inc"
 
