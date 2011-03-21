@@ -626,12 +626,12 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         // See XRegionToQRegion() comment for a small catch (although not real hopefully).
         QPixmap destPixmap = QPixmap::fromX11Pixmap( GetDrawable(), QPixmap::ExplicitlyShared );
         QPainter paint( &destPixmap );
-        if( clipRegion && pClipRegion_ )
-            paint.setClipRegion( clipRegion->intersected( XRegionToQRegion( pClipRegion_ )));
+        if( clipRegion && mpClipRegion )
+            paint.setClipRegion( clipRegion->intersected( XRegionToQRegion( mpClipRegion )));
         else if( clipRegion )
             paint.setClipRegion( *clipRegion );
-        else if( pClipRegion_ )
-            paint.setClipRegion( XRegionToQRegion( pClipRegion_ ));
+        else if( mpClipRegion )
+            paint.setClipRegion( XRegionToQRegion( mpClipRegion ));
         paint.drawImage( widgetRect.left(), widgetRect.top(), *m_image,
             0, 0, widgetRect.width(), widgetRect.height(),
             Qt::ColorOnly | Qt::OrderedDither | Qt::OrderedAlphaDither );
@@ -652,8 +652,8 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                     xr.height = r.height();
                     XUnionRectWithRegion( &xr, pTempClipRegion, pTempClipRegion );
                 }
-                if( pClipRegion_ )
-                    XIntersectRegion( pTempClipRegion, pClipRegion_, pTempClipRegion );
+                if( mpClipRegion )
+                    XIntersectRegion( pTempClipRegion, mpClipRegion, pTempClipRegion );
                 XSetRegion( GetXDisplay(), gc, pTempClipRegion );
             }
             QPixmap pixmap = QPixmap::fromImage(*m_image, Qt::ColorOnly | Qt::OrderedDither | Qt::OrderedAlphaDither);
@@ -664,8 +664,8 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
             if( pTempClipRegion )
             {
-                if( pClipRegion_ )
-                    XSetRegion( GetXDisplay(), gc, pClipRegion_ );
+                if( mpClipRegion )
+                    XSetRegion( GetXDisplay(), gc, mpClipRegion );
                 else
                     XSetClipMask( GetXDisplay(), gc, None );
                 XDestroyRegion( pTempClipRegion );
