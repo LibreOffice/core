@@ -2712,7 +2712,7 @@ void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName )
         uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
         if( xLib->hasByName( sModuleName ) )
             xLib->removeByName( sModuleName );
-        if ( xVBAModuleInfo.is() )
+        if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo(sModuleName) )
             xVBAModuleInfo->removeModuleInfo( sModuleName );
 
     }
