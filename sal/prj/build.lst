@@ -23,7 +23,6 @@ sa sal\qa\osl\file nmake - u sa_qa_osl_file sa_cppunittester sa_util NULL
 sa sal\qa\osl\module nmake - u sa_qa_osl_module sa_cppunittester sa_util NULL
 sa sal\qa\osl\condition nmake - all sa_qa_osl_condition sa_cppunittester sa_util NULL
 sa sal\qa\osl\security nmake - all sa_qa_osl_security sa_cppunittester sa_util NULL
-sa sal\qa\osl\socket nmake - all sa_qa_osl_socket sa_cppunittester sa_util NULL
 sa sal\qa\osl\process nmake - all sa_qa_osl_process sa_cppunittester sa_util NULL
 sa sal\qa\osl\setthreadname nmake - all sa_qa_osl_setthreadname sa_cppunittester sa_util NULL
 sa sal\qa\rtl\math nmake - all sa_qa_rtl_math sa_cppunittester sa_util NULL
