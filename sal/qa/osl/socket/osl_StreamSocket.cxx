@@ -1415,10 +1415,10 @@ namespace osl_StreamSocket
 
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::ctors);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::send_recv);
-    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::shutdown);
+//    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::shutdown);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::isExceptionPending);
 
-    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::justtest);
+//    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::justtest);
 
 } // namespace osl_StreamSocket
 
