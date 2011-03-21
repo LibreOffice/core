@@ -5100,6 +5100,26 @@ sal_Bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScen
     return sal_False;
 }
 
+void ScGridWindow::UpdateVisibleRange()
+{
+    // #163911# Update the visible range outside of paint (called when switching sheets).
+    // Use the same logic here as in ScGridWindow::Draw.
+
+    SCCOL nPosX = pViewData->GetPosX( eHWhich );
+    SCROW nPosY = pViewData->GetPosY( eVWhich );
+
+    SCCOL nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);
+    if (nXRight > MAXCOL) nXRight = MAXCOL;
+    SCROW nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
+    if (nYBottom > MAXROW) nYBottom = MAXROW;
+
+    // Store the current visible range.
+    maVisibleRange.mnCol1 = nPosX;
+    maVisibleRange.mnCol2 = nXRight;
+    maVisibleRange.mnRow1 = nPosY;
+    maVisibleRange.mnRow2 = nYBottom;
+}
+
 // #114409#
 void ScGridWindow::DrawLayerCreated()
 {

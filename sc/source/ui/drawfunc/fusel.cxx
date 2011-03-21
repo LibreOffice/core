@@ -56,6 +56,7 @@
 #include "drwlayer.hxx"
 #include "userdat.hxx"
 #include "scmod.hxx"
+#include "client.hxx"
 #include "charthelper.hxx"
 #include "docuno.hxx"
 #include "docsh.hxx"

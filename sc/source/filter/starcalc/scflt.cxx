@@ -414,7 +414,10 @@ Sc10FontData::Sc10FontData(SvStream& rStream)
     rStream >> PitchAndFamily;
     sal_uInt16 nLen;
     rStream >> nLen;
-    rStream.Read(FaceName, nLen);
+    if (nLen < sizeof(FaceName))
+        rStream.Read(FaceName, nLen);
+    else
+        rStream.SetError(ERRCODE_IO_WRONGFORMAT);
 }
 
 
@@ -452,10 +455,14 @@ Sc10NameData::Sc10NameData(SvStream& rStream)
     sal_uInt8 nLen;
     rStream >> nLen;
     rStream.Read(Name, sizeof(Name) - 1);
+    if (nLen >= sizeof(Name))
+        nLen = sizeof(Name) - 1;
     Name[nLen] = 0;
 
     rStream >> nLen;
     rStream.Read(Reference, sizeof(Reference) - 1);
+    if (nLen >= sizeof(Reference))
+        nLen = sizeof(Reference) - 1;
     Reference[nLen] = 0;
     rStream.Read(Reserved, sizeof(Reserved));
 }
@@ -1452,6 +1459,8 @@ void Sc10Import::LoadTables()
         sal_uInt8 nLen;
         rStream >> nLen;
         rStream.Read(TabName, sizeof(TabName) - 1);
+        if (nLen >= sizeof(TabName))
+            nLen = sizeof(TabName) - 1;
         TabName[nLen] = 0;
 
         //----------------------------------------------------------
@@ -1684,7 +1693,7 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                 {
                     /*double Value =*/ ScfTools::ReadLongDouble(rStream);
                     sal_uInt8 Len;
-                    sal_Char s[256];
+                    sal_Char s[256+1];
                     //rStream.Read(&Value, sizeof(Value));
                     rStream >> Len;
                     rStream.Read(&s[1], Len);

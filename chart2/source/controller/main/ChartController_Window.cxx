@@ -871,16 +871,22 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                         if( !bIsMoveOnly && m_aSelection.isResizeableObjectSelected() )
                             eActionType = ActionDescriptionProvider::RESIZE;
 
+                        ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
+
                         UndoGuard aUndoGuard(
-                            ActionDescriptionProvider::createDescription(
-                                eActionType,
-                                ObjectNameProvider::getName( ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() ))),
+                            ActionDescriptionProvider::createDescription( eActionType, ObjectNameProvider::getName( eObjectType)),
                             m_xUndoManager );
-                        bool bChanged = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
+
+                        bool bChanged = false;
+                        if ( eObjectType == OBJECTTYPE_LEGEND )
+                            bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( getModel(), false , true );
+
+                        bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
                                         , getModel()
                                         , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
                                         , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight()) );
-                        if( bChanged )
+
+                        if( bMoved || bChanged )
                         {
                             bDraggingDone = true;
                             aUndoGuard.commit();
@@ -1680,7 +1686,16 @@ bool ChartController::requestQuickHelp(
 
     if ( bSuccess )
     {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        if ( m_pDrawViewWrapper && m_pDrawViewWrapper->IsTextEdit() )
+        {
+            this->EndTextEdit();
+        }
         this->impl_selectObjectAndNotiy();
+        if ( m_pChartWindow )
+        {
+            m_pChartWindow->Invalidate();
+        }
         return sal_True;
     }
 

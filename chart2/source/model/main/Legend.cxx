@@ -40,8 +40,9 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/RelativeSize.hpp>
 
 #include <algorithm>
 
@@ -63,10 +64,11 @@ static const OUString lcl_aServiceName(
 enum
 {
     PROP_LEGEND_ANCHOR_POSITION,
-    PROP_LEGEND_PREFERRED_EXPANSION,
+    PROP_LEGEND_EXPANSION,
     PROP_LEGEND_SHOW,
     PROP_LEGEND_REF_PAGE_SIZE,
-    PROP_LEGEND_REL_POS
+    PROP_LEGEND_REL_POS,
+    PROP_LEGEND_REL_SIZE
 };
 
 void lcl_AddPropertiesToVector(
@@ -81,8 +83,8 @@ void lcl_AddPropertiesToVector(
 
     rOutProperties.push_back(
         Property( C2U( "Expansion" ),
-                  PROP_LEGEND_PREFERRED_EXPANSION,
-                  ::getCppuType( reinterpret_cast< const chart2::LegendExpansion * >(0)),
+                  PROP_LEGEND_EXPANSION,
+                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartLegendExpansion * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -105,6 +107,14 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const chart2::RelativePosition * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "RelativeSize" ),
+                  PROP_LEGEND_REL_SIZE,
+                  ::getCppuType( reinterpret_cast< const chart2::RelativeSize * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
 }
 
 struct StaticLegendDefaults_Initializer
@@ -123,7 +133,7 @@ private:
         ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
 
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_ANCHOR_POSITION, chart2::LegendPosition_LINE_END );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_PREFERRED_EXPANSION, chart2::LegendExpansion_HIGH );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_EXPANSION, ::com::sun::star::chart::ChartLegendExpansion_HIGH );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_SHOW, true );
 
         float fDefaultCharHeight = 10.0;
@@ -197,58 +207,10 @@ Legend::Legend( const Legend & rOther ) :
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
-    CloneHelper::CloneRefVector< Reference< chart2::XLegendEntry > >( rOther.m_aLegendEntries, m_aLegendEntries );
-    ModifyListenerHelper::addListenerToAllElements( m_aLegendEntries, m_xModifyEventForwarder );
 }
 
 Legend::~Legend()
 {
-    try
-    {
-        ModifyListenerHelper::removeListenerFromAllElements( m_aLegendEntries, m_xModifyEventForwarder );
-    }
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-}
-
-// ____ XLegend ____
-void SAL_CALL Legend::registerEntry( const Reference< chart2::XLegendEntry >& xEntry )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
-{
-    if( ::std::find( m_aLegendEntries.begin(),
-                     m_aLegendEntries.end(),
-                     xEntry ) != m_aLegendEntries.end())
-        throw lang::IllegalArgumentException();
-
-    m_aLegendEntries.push_back( xEntry );
-    ModifyListenerHelper::addListener( xEntry, m_xModifyEventForwarder );
-    fireModifyEvent();
-}
-
-void SAL_CALL Legend::revokeEntry( const Reference< chart2::XLegendEntry >& xEntry )
-    throw (container::NoSuchElementException,
-           uno::RuntimeException)
-{
-    tLegendEntries::iterator aIt(
-        ::std::find( m_aLegendEntries.begin(),
-                     m_aLegendEntries.end(),
-                     xEntry ));
-
-    if( aIt == m_aLegendEntries.end())
-        throw container::NoSuchElementException();
-
-    m_aLegendEntries.erase( aIt );
-    ModifyListenerHelper::removeListener( xEntry, m_xModifyEventForwarder );
-    fireModifyEvent();
-}
-
-Sequence< Reference< chart2::XLegendEntry > > SAL_CALL Legend::getEntries()
-    throw (uno::RuntimeException)
-{
-    return ContainerHelper::ContainerToSequence( m_aLegendEntries );
 }
 
 // ____ XCloneable ____

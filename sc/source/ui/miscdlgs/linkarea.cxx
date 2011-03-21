@@ -82,6 +82,9 @@ ScLinkedAreaDlg::ScLinkedAreaDlg( Window* pParent ) :
     aLbRanges.SetSelectHdl( LINK( this, ScLinkedAreaDlg, RangeHdl ) );
     aBtnReload.SetClickHdl( LINK( this, ScLinkedAreaDlg, ReloadHdl ) );
     UpdateEnable();
+
+    aNfDelay.SetAccessibleName(aBtnReload.GetText());
+    aNfDelay.SetAccessibleRelationLabeledBy(&aBtnReload);
 }
 
 ScLinkedAreaDlg::~ScLinkedAreaDlg()

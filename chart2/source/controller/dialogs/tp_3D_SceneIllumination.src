@@ -173,3 +173,8 @@ TabPage TP_3D_SCENEILLUMINATION
     };
 };
 
+String STR_LIGHT_PREVIEW
+{
+    Text [ en-US ] = "Light Preview" ;
+};
+

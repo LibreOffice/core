@@ -110,6 +110,7 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
     Init();
 
 }
+
 ScHighlightChgDlg::~ScHighlightChgDlg()
 {
     SetDispatcherLock( sal_False );
