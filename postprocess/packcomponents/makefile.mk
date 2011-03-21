@@ -148,6 +148,7 @@ my_components = \
     solver \
     spell \
     spl \
+    splash \
     srtrs1 \
     stringresource \
     svgfilter \
