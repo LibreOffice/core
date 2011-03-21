@@ -32,6 +32,7 @@
 #include "dbustrings.hrc"
 #include "advancedsettingsdlg.hxx"
 #include "subcomponentmanager.hxx"
+#include "closeveto.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -1300,8 +1301,8 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         ::comphelper::NamedValueCollection aCreationArgs;
                         aCreationArgs.put( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, ID_NEW_VIEW_DESIGN == _nId );
 
-                        Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
-                        Reference< XComponent > xComponent( aDesigner.createNew( xDataSource, aCreationArgs ), UNO_QUERY );
+                        const Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
+                        const Reference< XComponent > xComponent( aDesigner.createNew( xDataSource, aCreationArgs ), UNO_QUERY );
                         onDocumentOpened( ::rtl::OUString(), E_QUERY, E_OPEN_DESIGN, xComponent, NULL );
                     }
                 }
@@ -1352,8 +1353,8 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     {
                         RelationDesigner aDesigner( getORB(), this, m_aCurrentFrame.getFrame() );
 
-                        Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
-                        Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
+                        const Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
+                        const Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
                         onDocumentOpened( ::rtl::OUString(), SID_DB_APP_DSRELDESIGN, E_OPEN_DESIGN, xComponent, NULL );
                     }
                 }
@@ -1949,6 +1950,9 @@ IMPL_LINK( OApplicationController, OnCreateWithPilot, void*, _pType )
 // -----------------------------------------------------------------------------
 void OApplicationController::newElementWithPilot( ElementType _eType )
 {
+    CloseVeto aKeepDoc( getFrame() );
+        // prevent the document being closed while the wizard is open
+
     OSL_ENSURE( getContainer(), "OApplicationController::newElementWithPilot: without a view?" );
 
     switch ( _eType )
@@ -2710,61 +2714,83 @@ void SAL_CALL OApplicationController::attachFrame( const Reference< XFrame > & i
 sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > & _rxModel) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( getMutex() );
-    Reference< XOfficeDatabaseDocument > xOfficeDoc( _rxModel, UNO_QUERY );
-    if ( !xOfficeDoc.is() && _rxModel.is() )
+    const Reference< XOfficeDatabaseDocument > xOfficeDoc( _rxModel, UNO_QUERY );
+    const Reference< XModifiable > xDocModify( _rxModel, UNO_QUERY );
+    if ( ( !xOfficeDoc.is() || !xDocModify.is() ) && _rxModel.is() )
     {
         DBG_ERROR( "OApplicationController::attachModel: invalid model!" );
         return sal_False;
     }
 
-    DBG_ASSERT( !( m_xModel.is() && ( m_xModel != _rxModel ) ),
-        "OApplicationController::attachModel: missing implementation: setting a new model while we have another one!" );
-        // at least: remove as property change listener from the old model/data source
+    if ( m_xModel.is() && ( m_xModel != _rxModel ) && ( _rxModel.is() ) )
+    {
+        OSL_ENSURE( false, "OApplicationController::attachModel: missing implementation: setting a new model while we have another one!" );
+        // we'd need to completely update our view here, close sub components, and the like
+        return sal_False;
+    }
+
+    const ::rtl::OUString aPropertyNames[] =
+    {
+        PROPERTY_URL, PROPERTY_USER
+    };
+
+    // disconnect from old model
+    try
+    {
+        if ( m_xDataSource.is() )
+        {
+            for ( size_t i=0; i < sizeof( aPropertyNames ) / sizeof( aPropertyNames[0] ); ++i )
+            {
+                m_xDataSource->removePropertyChangeListener( aPropertyNames[i], this );
+            }
+        }
+
+        Reference< XModifyBroadcaster >  xBroadcaster( m_xModel, UNO_QUERY );
+        if ( xBroadcaster.is() )
+            xBroadcaster->removeModifyListener( this );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 
     m_xModel = _rxModel;
-    if ( m_xModel.is() )
+    m_xDocumentModify = xDocModify;
+    m_xDataSource.set( xOfficeDoc.is() ? xOfficeDoc->getDataSource() : Reference< XDataSource >(), UNO_QUERY );
+
+    // connect to new model
+    try
     {
-        m_xDocumentModify.set( m_xModel, UNO_QUERY_THROW );
+        if ( m_xDataSource.is() )
+        {
+            for ( size_t i=0; i < sizeof( aPropertyNames ) / sizeof( aPropertyNames[0] ); ++i )
+            {
+                m_xDataSource->addPropertyChangeListener( aPropertyNames[i], this );
+            }
+        }
+
+        Reference< XModifyBroadcaster >  xBroadcaster( m_xModel, UNO_QUERY_THROW );
+        xBroadcaster->addModifyListener( this );
+
     }
-    else
+    catch( const Exception& )
     {
-        m_xDocumentModify.clear();
+        DBG_UNHANDLED_EXCEPTION();
     }
 
-    m_xDataSource.set(xOfficeDoc.is() ? xOfficeDoc->getDataSource() : Reference<XDataSource>(),UNO_QUERY);
+    // initial preview mode
     if ( m_xDataSource.is() )
     {
         try
         {
-            m_xDataSource->addPropertyChangeListener(PROPERTY_INFO, this);
-            m_xDataSource->addPropertyChangeListener(PROPERTY_URL, this);
-            m_xDataSource->addPropertyChangeListener(PROPERTY_ISPASSWORDREQUIRED, this);
-            m_xDataSource->addPropertyChangeListener(PROPERTY_LAYOUTINFORMATION, this);
-            m_xDataSource->addPropertyChangeListener(PROPERTY_SUPPRESSVERSIONCL, this);
-            m_xDataSource->addPropertyChangeListener(PROPERTY_TABLEFILTER, this);
-            m_xDataSource->addPropertyChangeListener(PROPERTY_TABLETYPEFILTER, this);
-            m_xDataSource->addPropertyChangeListener(PROPERTY_USER, this);
             // to get the 'modified' for the data source
-            Reference< XModifyBroadcaster >  xBroadcaster(m_xModel, UNO_QUERY);
-            if ( xBroadcaster.is() )
-                xBroadcaster->addModifyListener(static_cast<XModifyListener*>(this));
-
-            Sequence<PropertyValue> aFields;
-            m_xDataSource->getPropertyValue(PROPERTY_LAYOUTINFORMATION) >>= aFields;
-            PropertyValue *pIter = aFields.getArray();
-            PropertyValue *pEnd = pIter + aFields.getLength();
-            for (; pIter != pEnd && pIter->Name != INFO_PREVIEW; ++pIter)
-                ;
-
-            if ( pIter != pEnd )
+            ::comphelper::NamedValueCollection aLayoutInfo( m_xDataSource->getPropertyValue( PROPERTY_LAYOUTINFORMATION ) );
+            if ( aLayoutInfo.has( (rtl::OUString)INFO_PREVIEW ) )
             {
-                sal_Int32 nValue = 0;
-                pIter->Value >>= nValue;
-                m_ePreviewMode = static_cast<PreviewMode>(nValue);
+                const sal_Int32 nPreviewMode( aLayoutInfo.getOrDefault( (rtl::OUString)INFO_PREVIEW, (sal_Int32)0 ) );
+                m_ePreviewMode = static_cast< PreviewMode >( nPreviewMode );
                 if ( getView() )
-                {
-                    getContainer()->switchPreview(m_ePreviewMode);
-                }
+                    getContainer()->switchPreview( m_ePreviewMode );
             }
         }
         catch( const Exception& )

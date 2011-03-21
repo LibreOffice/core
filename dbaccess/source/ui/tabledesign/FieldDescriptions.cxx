@@ -629,6 +629,7 @@ TOTypeInfoSP                OFieldDescription::getSpecialTypeInfo() const
     *pSpecialType = *m_pType;
     pSpecialType->nPrecision = GetPrecision();
     pSpecialType->nMaximumScale = static_cast<sal_Int16>(GetScale());
+    pSpecialType->bAutoIncrement = IsAutoIncrement(); // http://dba.openoffice.org/issues/show_bug.cgi?id=115398 fixed by ludob
     return pSpecialType;
 }
 // -----------------------------------------------------------------------------

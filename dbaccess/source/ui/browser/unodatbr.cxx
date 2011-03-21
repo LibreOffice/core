@@ -469,7 +469,7 @@ void SbaTableQueryBrowser::impl_sanitizeRowSetClauses_nothrow()
         // check if the order columns apply to tables which really exist in the statement
         const Reference< XIndexAccess > xOrderColumns( xComposer->getOrderColumns(), UNO_SET_THROW );
         const sal_Int32 nOrderColumns( xOrderColumns->getCount() );
-        bool invalidColumn = false;
+        bool invalidColumn = nOrderColumns == 0;
         for ( sal_Int32 c=0; ( c < nOrderColumns ) && !invalidColumn; ++c )
         {
             const Reference< XPropertySet > xOrderColumn( xOrderColumns->getByIndex(c), UNO_QUERY_THROW );
@@ -2701,6 +2701,8 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
             sStatus.SearchAndReplaceAscii("$name$", aName);
             BrowserViewStatusDisplay aShowStatus(static_cast<UnoDataBrowserView*>(getView()), sStatus);
 
+
+            sal_Bool bEscapeProcessing = sal_True;
             if(xNameAccess.is() && xNameAccess->hasByName(sSimpleName))
             {
                 DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(_pEntry->GetUserData());
@@ -2711,38 +2713,42 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
                     {
                         pData->xObjectProperties = pData->xObjectProperties.query( xObject );
                         // if the query contains a parameterized statement and preview is enabled we won't get any data.
-                        if ( m_bPreview && nCommandType == CommandType::QUERY && xObject.is() )
+                        if ( nCommandType == CommandType::QUERY && xObject.is() )
                         {
-                            ::rtl::OUString sSql;
                             Reference<XPropertySet> xObjectProps(xObject,UNO_QUERY);
-                            xObjectProps->getPropertyValue(PROPERTY_COMMAND) >>= sSql;
-                            Reference< XMultiServiceFactory >  xFactory( pConData->xConnection, UNO_QUERY );
-                            if (xFactory.is())
+                            xObjectProps->getPropertyValue(PROPERTY_ESCAPE_PROCESSING) >>= bEscapeProcessing;
+                            if ( m_bPreview )
                             {
-                                try
+                                ::rtl::OUString sSql;
+                                xObjectProps->getPropertyValue(PROPERTY_COMMAND) >>= sSql;
+                                Reference< XMultiServiceFactory >  xFactory( pConData->xConnection, UNO_QUERY );
+                                if (xFactory.is())
                                 {
-                                    Reference<XSingleSelectQueryAnalyzer> xAnalyzer(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
-                                    if ( xAnalyzer.is() )
+                                    try
                                     {
-                                        xAnalyzer->setQuery(sSql);
-                                        Reference<XParametersSupplier> xParSup(xAnalyzer,UNO_QUERY);
-                                        if ( xParSup->getParameters()->getCount() > 0 )
+                                        Reference<XSingleSelectQueryAnalyzer> xAnalyzer(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
+                                        if ( xAnalyzer.is() )
                                         {
-                                            String sFilter = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE "));
-                                            sFilter = sFilter + xAnalyzer->getFilter();
-                                            String sReplace(sSql);
-                                            sReplace.SearchAndReplace(sFilter,String());
-                                            xAnalyzer->setQuery(sReplace);
-                                            Reference<XSingleSelectQueryComposer> xComposer(xAnalyzer,UNO_QUERY);
-                                            xComposer->setFilter(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0=1")));
-                                            aName = xAnalyzer->getQuery();
-                                            nCommandType = CommandType::COMMAND;
+                                            xAnalyzer->setQuery(sSql);
+                                            Reference<XParametersSupplier> xParSup(xAnalyzer,UNO_QUERY);
+                                            if ( xParSup->getParameters()->getCount() > 0 )
+                                            {
+                                                String sFilter = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE "));
+                                                sFilter = sFilter + xAnalyzer->getFilter();
+                                                String sReplace(sSql);
+                                                sReplace.SearchAndReplace(sFilter,String());
+                                                xAnalyzer->setQuery(sReplace);
+                                                Reference<XSingleSelectQueryComposer> xComposer(xAnalyzer,UNO_QUERY);
+                                                xComposer->setFilter(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0=1")));
+                                                aName = xAnalyzer->getQuery();
+                                                nCommandType = CommandType::COMMAND;
+                                            }
                                         }
                                     }
-                                }
-                                catch (Exception&)
-                                {
-                                    DBG_UNHANDLED_EXCEPTION();
+                                    catch (Exception&)
+                                    {
+                                        DBG_UNHANDLED_EXCEPTION();
+                                    }
                                 }
                             }
                         }
@@ -2751,7 +2757,7 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
             }
 
             String sDataSourceName( getDataSourceAcessor( pConnection ) );
-            bSuccess = implLoadAnything( sDataSourceName, aName, nCommandType, sal_True, pConData->xConnection );
+            bSuccess = implLoadAnything( sDataSourceName, aName, nCommandType, bEscapeProcessing, pConData->xConnection );
             if ( !bSuccess )
             {   // clean up
                 criticalFail();

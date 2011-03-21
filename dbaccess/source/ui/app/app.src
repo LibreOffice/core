@@ -261,19 +261,19 @@ Menu RID_MENU_APP_EDIT
                     MenuItem
                     {
                         Identifier = SID_DB_APP_DSPROPS;
-                        Text[ en-US ] = "Properties";
+                        Text[ en-US ] = "Properties...";
                         Command = ".uno:DBDSProperties";
                     };
                     MenuItem
                     {
                         Identifier = SID_DB_APP_DSCONNECTION_TYPE;
-                        Text[ en-US ] = "Connection Type";
+                        Text[ en-US ] = "Connection Type...";
                         Command = ".uno:DBDSConnectionType";
                     };
                     MenuItem
                     {
                         Identifier = SID_DB_APP_DSADVANCED_SETTINGS;
-                        Text[ en-US ] = "Advanced Settings";
+                        Text[ en-US ] = "Advanced Settings...";
                         Command = ".uno:DBDSAdvancedSettings";
                     };
                 };
