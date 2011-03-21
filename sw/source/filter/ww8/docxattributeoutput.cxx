@@ -111,6 +111,7 @@
 #include <frmatr.hxx>
 #include <ftninfo.hxx>
 #include <htmltbl.hxx>
+#include <lineinfo.hxx>
 #include <ndgrf.hxx>
 #include <ndtxt.hxx>
 #include <node.hxx>
@@ -2445,10 +2446,14 @@ void DocxAttributeOutput::SectionFormProtection( bool bProtected )
                 FSNS( XML_w, XML_val ), "false", FSEND );
 }
 
-void DocxAttributeOutput::SectionLineNumbering( sal_uLong /*nRestartNo*/, const SwLineNumberInfo& /*rLnNumInfo*/ )
+void DocxAttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLineNumberInfo& rLnNumInfo )
 {
-    // see 2.6.8 lnNumType (Line Numbering Settings)
-    OSL_TRACE( "TODO DocxAttributeOutput::SectionLineNumbering()\n" );
+    m_pSerializer->singleElementNS( XML_w, XML_lnNumType,
+        FSNS( XML_w, XML_countBy ), OString::valueOf( rLnNumInfo.GetCountBy()).getStr(),
+        FSNS( XML_w, XML_restart ), rLnNumInfo.IsRestartEachPage() ? "newPage" : "continuous",
+        FSNS( XML_w, XML_distance ), OString::valueOf( rLnNumInfo.GetPosFromLeft()).getStr(),
+        FSNS( XML_w, XML_start ), OString::valueOf( long( nRestartNo ? nRestartNo : 1 )).getStr(),
+        FSEND );
 }
 
 void DocxAttributeOutput::SectionTitlePage()
