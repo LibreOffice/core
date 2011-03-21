@@ -51,16 +51,16 @@ class KDESalGraphics : public X11SalGraphics
             @param part Specification of the widget's part if it consists of more than one.
             @return true if the platform supports native drawing of the widget type defined by part.
         */
-        virtual BOOL IsNativeControlSupported( ControlType type, ControlPart part );
+        virtual sal_Bool IsNativeControlSupported( ControlType type, ControlPart part );
 
         /** Test whether the position is in the native widget.
             If the return value is TRUE, bIsInside contains information whether
             aPos was or was not inside the native widget specified by the
             type/part combination.
         */
-        virtual BOOL hitTestNativeControl( ControlType type, ControlPart part,
+        virtual sal_Bool hitTestNativeControl( ControlType type, ControlPart part,
                                         const Rectangle& rControlRegion, const Point& aPos,
-                                        BOOL& rIsInside );
+                                        sal_Bool& rIsInside );
         /** Draw the requested control described by part/nControlState.
 
             @param rControlRegion
@@ -72,7 +72,7 @@ class KDESalGraphics : public X11SalGraphics
             @param aCaption
             A caption or title string (like button text etc.)
         */
-        virtual BOOL drawNativeControl( ControlType type, ControlPart part,
+        virtual sal_Bool drawNativeControl( ControlType type, ControlPart part,
                                         const Rectangle& rControlRegion, ControlState nControlState,
                                         const ImplControlValue& aValue,
                                         const rtl::OUString& aCaption );
@@ -85,7 +85,7 @@ class KDESalGraphics : public X11SalGraphics
             @param aValue An optional value (tristate/numerical/string)
             @param aCaption A caption or title string (like button text etc.)
         */
-        virtual BOOL drawNativeControlText( ControlType, ControlPart,
+        virtual sal_Bool drawNativeControlText( ControlType, ControlPart,
                                             const Rectangle&, ControlState,
                                             const ImplControlValue&,
                                             const rtl::OUString& ) { return false; }
@@ -106,7 +106,7 @@ class KDESalGraphics : public X11SalGraphics
             @param aCaption
             A caption or title string (like button text etc.)
         */
-        virtual BOOL getNativeControlRegion( ControlType type, ControlPart part,
+        virtual sal_Bool getNativeControlRegion( ControlType type, ControlPart part,
                                             const Rectangle& rControlRegion, ControlState nControlState,
                                             const ImplControlValue& aValue,
                                             const rtl::OUString& aCaption,

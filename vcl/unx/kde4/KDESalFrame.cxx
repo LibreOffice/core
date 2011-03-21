@@ -62,7 +62,7 @@ KDESalFrame::KDESalFrame( SalFrame* pParent, sal_uLong nState ) :
 {
 }
 
-void KDESalFrame::Show( BOOL bVisible, BOOL bNoActivate )
+void KDESalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
 {
     if ( !GetParent() && ! (GetStyle() & SAL_FRAME_STYLE_INTRO) )
     {
@@ -180,7 +180,7 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
 void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 {
     StyleSettings style( rSettings.GetStyleSettings() );
-    BOOL bSetTitleFont = false;
+    sal_Bool bSetTitleFont = false;
 
     // General settings
     QPalette pal = kapp->palette();
@@ -275,9 +275,9 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     {
         Color aColor2 = style.GetLightColor();
         style.
-            SetCheckedColor( Color( (BYTE)(((sal_uInt16)aBack.GetRed()+(sal_uInt16)aColor2.GetRed())/2),
-                        (BYTE)(((sal_uInt16)aBack.GetGreen()+(sal_uInt16)aColor2.GetGreen())/2),
-                        (BYTE)(((sal_uInt16)aBack.GetBlue()+(sal_uInt16)aColor2.GetBlue())/2)
+            SetCheckedColor( Color( (((sal_uInt16)aBack.GetRed()+(sal_uInt16)aColor2.GetRed())/2),
+                        (((sal_uInt16)aBack.GetGreen()+(sal_uInt16)aColor2.GetGreen())/2),
+                        (((sal_uInt16)aBack.GetBlue()+(sal_uInt16)aColor2.GetBlue())/2)
                         ) );
     }
 

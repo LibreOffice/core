@@ -102,7 +102,7 @@ KDESalGraphics::~KDESalGraphics()
         delete m_image;
 }
 
-BOOL KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart part )
+sal_Bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart part )
 {
     if (type == CTRL_PUSHBUTTON) return true;
 
@@ -161,9 +161,9 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
     aPos was or was not inside the native widget specified by the
     nType/nPart combination.
 */
-BOOL KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
+sal_Bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
                                            const Rectangle& rControlRegion, const Point& rPos,
-                                           BOOL& rIsInside )
+                                           sal_Bool& rIsInside )
 {
     if ( nType == CTRL_SCROLLBAR )
     {
@@ -303,7 +303,7 @@ static QRegion XRegionToQRegion( XLIB_Region xr )
 }
 #endif
 
-BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
+sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                                         const Rectangle& rControlRegion, ControlState nControlState,
                                         const ImplControlValue& value,
                                         const OUString& )
@@ -314,7 +314,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         return false;
     }
 
-    BOOL returnVal = true;
+    sal_Bool returnVal = true;
 
     QRect widgetRect = region2QRect(rControlRegion);
     if( type == CTRL_SPINBOX && part == PART_ALL_BUTTONS )
@@ -679,13 +679,13 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     return returnVal;
 }
 
-BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
+sal_Bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                                              const Rectangle& controlRegion, ControlState controlState,
                                              const ImplControlValue& val,
                                              const OUString&,
                                              Rectangle &nativeBoundingRegion, Rectangle &nativeContentRegion )
 {
-    bool retVal = false;
+    sal_Bool retVal = false;
 
     QRect boundingRect = region2QRect( controlRegion );
     QRect contentRect = boundingRect;
