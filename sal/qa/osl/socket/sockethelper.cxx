@@ -34,7 +34,17 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#define t_print printf
+#if OSL_DEBUG_LEVEL > 0
+#   define SILENT_TEST 0
+#else
+#   define SILENT_TEST 1
+#endif
+
+#if SILENT_TEST
+#   define t_print(...) { }
+#else
+#   define t_print printf
+#endif
 
 //------------------------------------------------------------------------
 // Ip version definition
@@ -75,11 +85,15 @@ sal_Bool compareSocketAddr( const ::osl::SocketAddr & addr1 , const ::osl::Socke
 */
 void printUString( const ::rtl::OUString & str, const char* msg)
 {
+#if SILENT_TEST
+    (void)str;
+    (void)msg;
+#else
     t_print("#%s #printUString_u# ", msg );
     rtl::OString aString;
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    //char * sStr = aString.getStr( );
     t_print("%s\n", aString.getStr( ) );
+#endif
 }
 
 /** get the local host name.
@@ -199,16 +213,23 @@ void thread_sleep( sal_Int32 _nSec )
 */
 void printBool( sal_Bool bOk )
 {
-    t_print("printBool " );
-    ( sal_True == bOk ) ? t_print("YES!" ): t_print("NO!");
-    t_print("\n");
+#if SILENT_TEST
+    (void)bOk;
+#else
+    t_print("#printBool# " );
+    t_print ("%s", (sal_True == bOk) ? "YES!\n" : "NO!\n");
+#endif
 }
 
 /** print content of a ByteSequence.
 */
 void printByteSequence_IP( const ::rtl::ByteSequence & bsByteSeq, sal_Int32 nLen )
 {
-    t_print("ByteSequence is: " );
+#if SILENT_TEST
+    (void)bsByteSeq;
+    (void)nLen;
+#else
+    t_print("#ByteSequence is: " );
     for ( int i = 0; i < nLen; i++ ){
         if ( bsByteSeq[i] < 0 )
             t_print("%d ",  256 + bsByteSeq[i] );
@@ -216,6 +237,7 @@ void printByteSequence_IP( const ::rtl::ByteSequence & bsByteSeq, sal_Int32 nLen
             t_print("%d ",  bsByteSeq[i] );
     }
     t_print(" .\n" );
+#endif
 }
 
 /** convert an IP which is stored as a UString format to a ByteSequence array for later use.

@@ -68,7 +68,11 @@
 
 /** test output if SILENT_TEST is 0
 */
-#define SILENT_TEST 0
+#if OSL_DEBUG_LEVEL > 0
+#   define SILENT_TEST 0
+#else
+#   define SILENT_TEST 1
+#endif
 
 #if SILENT_TEST
 #   define t_print(...) { }
@@ -127,8 +131,13 @@ inline char * oustring2char( const ::rtl::OUString & str )
 */
 inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = "" )
 {
+#if SILENT_TEST
+    (void)str;
+    (void)msg;
+#else
     t_print("#%s #printUString_u# ", msg );
     t_print("%s\n", oustring2char( str ) );
+#endif
 }
 
 /** get the local host name.
@@ -203,7 +212,7 @@ inline ::rtl::OUString getLocalIP( )
     char hostname[255];
     gethostname(hostname, 255);
 
-        return getIPbyName( hostname );
+    return getIPbyName( hostname );
 }
 
 /** construct error message
@@ -243,24 +252,31 @@ void thread_sleep( sal_Int32 _nSec )
 */
 inline void printBool( sal_Bool bOk )
 {
+#if SILENT_TEST
+    (void)bOk;
+#else
     t_print("#printBool# " );
     t_print ("%s", (sal_True == bOk) ? "YES!\n" : "NO!\n");
+#endif
 }
 
 /** print content of a ByteSequence.
 */
 inline void printByteSequence_IP( const ::rtl::ByteSequence & bsByteSeq, sal_Int32 nLen )
 {
-     t_print("#ByteSequence is: " );
+#if SILENT_TEST
+    (void)bsByteSeq;
+    (void)nLen;
+#else
+    t_print("#ByteSequence is: " );
     for ( int i = 0; i < nLen; i++ ){
-#if ! SILENT_TEST
         if ( bsByteSeq[i] < 0 )
             t_print("%d ",  256 + bsByteSeq[i] );
         else
             t_print("%d ",  bsByteSeq[i] );
-#endif
     }
     t_print(" .\n" );
+#endif
 }
 
 /** convert an IP which is stored as a UString format to a ByteSequence array for later use.
@@ -3567,7 +3583,7 @@ protected:
 #if !SILENT_TEST
         sal_Int32 nRecv =
 #endif
-            dsSocket.recvFrom( pRecvBuffer, 30, &saTargetSocketAddr); //strlen( pTestString2 ) + 1
+            dsSocket.recvFrom( pRecvBuffer, 30, &saTargetSocketAddr);
         t_print("After recvFrom, nRecv is %d\n", (int) nRecv);
     }
 

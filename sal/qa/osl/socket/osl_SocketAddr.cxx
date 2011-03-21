@@ -200,8 +200,8 @@ namespace osl_SocketAddr
 
             CPPUNIT_ASSERT_MESSAGE("test for SocketAddr tcpip specif constructor function: do a constructor using tcpip spec, check the result.",
                                     saSocketAddr.is( ) == sal_True &&
-                                    ( saSocketAddr.getPort( ) == IP_PORT_FTP )/*&&
-                                    ( sal_True == compareUString( saSocketAddr.getHostname( ), aHostName1 ) ) */);
+                                    ( saSocketAddr.getPort( ) == IP_PORT_FTP )
+                                  );
         }
 
         //same as is_002

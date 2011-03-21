@@ -88,7 +88,11 @@ extern "C"
 
 /** test output if SILENT_TEST is 0
 */
-#define SILENT_TEST 0
+#if OSL_DEBUG_LEVEL > 0
+#   define SILENT_TEST 0
+#else
+#   define SILENT_TEST 1
+#endif
 
 #if SILENT_TEST
 #   define t_print(...) { }
