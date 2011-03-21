@@ -102,7 +102,6 @@ nb \
 nl \
 nn \
 nr \
-ns \
 nso \
 om \
 oms \
