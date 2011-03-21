@@ -368,8 +368,8 @@ ScVbaApplication::getActiveCell() throw (uno::RuntimeException )
     sal_Int32 nCursorX = pTabView->GetCurX();
     sal_Int32 nCursorY = pTabView->GetCurY();
 
-    uno::Reference< XHelperInterface > xParent( excel::getUnoSheetModuleObj( xRange ), uno::UNO_QUERY_THROW );
-    return new ScVbaRange( xParent, mxContext, xRange->getCellRangeByPosition( nCursorX, nCursorY, nCursorX, nCursorY ) );
+    // #i117392# excel::getUnoSheetModuleObj() may return null in documents without global VBA mode enabled
+    return new ScVbaRange( excel::getUnoSheetModuleObj( xRange ), mxContext, xRange->getCellRangeByPosition( nCursorX, nCursorY, nCursorX, nCursorY ) );
 }
 
 uno::Any SAL_CALL
