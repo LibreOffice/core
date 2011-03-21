@@ -32,6 +32,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <editeng/borderline.hxx>
+#include <sal/cppunit.h>
 
 #define TEST_WIDTH long( 40 )
 

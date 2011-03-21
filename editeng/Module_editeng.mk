@@ -36,6 +36,7 @@ $(eval $(call gb_Module_add_targets,editeng,\
 # add any runtime tests (unit tests) here
 # remove if no tests
 $(eval $(call gb_Module_add_check_targets,editeng,\
+    CppunitTest_editeng_borderline \
 ))
 
 # add any subsequent checks (e.g. complex tests) here
