@@ -93,7 +93,7 @@ public:
 class SW_DLLPUBLIC SwRedlineData
 {
     friend class SwRedline;
-    SwRedlineData* pNext;       // Verweis auf weitere Daten
+    SwRedlineData* pNext;       // Points to other data.
     SwRedlineExtraData* pExtraData;
 
     String sComment;
@@ -105,7 +105,7 @@ public:
     SwRedlineData( RedlineType_t eT, sal_uInt16 nAut );
     SwRedlineData( const SwRedlineData& rCpy, sal_Bool bCpyNext = sal_True );
 
-    // fuer sw3io: pNext/pExtraData gehen in eigenen Besitz ueber!
+    // For sw3io: pNext/pExtraData are taken over.
     SwRedlineData( RedlineType_t eT, sal_uInt16 nAut, const DateTime& rDT,
                    const String& rCmnt, SwRedlineData* pNxt,
                     SwRedlineExtraData* pExtraData = 0 );
@@ -153,14 +153,14 @@ public:
                             *pExtraData == *rCmp.pExtraData ));
         }
 
-    // ExtraData wird kopiert, der Pointer geht also NICHT in den Besitz
-    // des RedlineObjectes!
+    // ExtraData gets copied, the pointer is therefore not taken over by
+    // the RedlilneObject
     void SetExtraData( const SwRedlineExtraData* pData );
     const SwRedlineExtraData* GetExtraData() const { return pExtraData; }
 
-    // fuers UI-seitige zusammenfassen von Redline-Actionen. Wird z.Z. nur
-    // fuers Autoformat mit Redline benoetigt. Der Wert != 0 bedeutet dabei,
-    // das es noch weitere geben kann!
+    // For UI-side pooling of Redline-actions.
+    // At the moment only used for Autoformat with Redline.
+    // Value != 0 means there can be others!
     sal_uInt16 GetSeqNo() const                     { return nSeqNo; }
     void SetSeqNo( sal_uInt16 nNo )                 { nSeqNo = nNo; }
 
@@ -185,7 +185,7 @@ public:
     SwRedline( RedlineType_t eType, const SwPaM& rPam );
     SwRedline( const SwRedlineData& rData, const SwPaM& rPam );
     SwRedline( const SwRedlineData& rData, const SwPosition& rPos );
-    // fuer sw3io: pData geht in eigenen Besitz ueber!
+    // For sw3io: pData is taken over!
     SwRedline(SwRedlineData* pData, const SwPosition& rPos, sal_Bool bVsbl,
                sal_Bool bDelLP, sal_Bool bIsPD) :
         SwPaM( rPos ), pRedlineData( pData ), pCntntSect( 0 ),
@@ -195,14 +195,14 @@ public:
     virtual ~SwRedline();
 
     SwNodeIndex* GetContentIdx() const { return pCntntSect; }
-    // fuers Undo
+    // For Undo.
     void SetContentIdx( const SwNodeIndex* );
 
     sal_Bool IsVisible() const { return bIsVisible; }
     sal_Bool IsDelLastPara() const { return bDelLastPara; }
 
-    // das sal_Bool besagt, ob nach dem setzen der Pos kein Bereich mehr
-    // aufgespannt ist. -> sal_True, ansonten Bereich und sal_False
+    // sal_Bool indicates whether after setting of Pos no range is spanned.
+    // -> sal-True else range and sal-False.
     void SetStart( const SwPosition& rPos, SwPosition* pSttPtr = 0 )
     {
         if( !pSttPtr ) pSttPtr = Start();
@@ -213,7 +213,7 @@ public:
         if( !pEndPtr ) pEndPtr = End();
         *pEndPtr = rPos;
     }
-    // liegt eine gueltige Selektion vor?
+    // Do we have a valid selection?
     sal_Bool HasValidRange() const;
 
     const SwRedlineData& GetRedlineData(sal_uInt16 nPos = 0) const;
@@ -234,32 +234,32 @@ public:
 
     void SetComment( const String& rS ) { pRedlineData->SetComment( rS ); }
 
-    // ExtraData wird kopiert, der Pointer geht also NICHT in den Besitz
-    // des RedlineObjectes!
+    // ExtraData gets copied, the pointer is therefor not taken over by
+    // the RedLineObject.
     void SetExtraData( const SwRedlineExtraData* pData )
         { pRedlineData->SetExtraData( pData ); }
     const SwRedlineExtraData* GetExtraData() const
         { return pRedlineData->GetExtraData(); }
 
-    // fuers UI-seitige zusammenfassen von Redline-Actionen. Wird z.Z. nur
-    // fuers Autoformat mit Redline benoetigt. Der Wert != 0 bedeutet dabei,
-    // das es noch weitere geben kann!
+    // For UI-side pooling of Redline-actions.
+    // At the moment only used for Autoformat with Redline.
+    // Value != 0 means there can be others!
     sal_uInt16 GetSeqNo() const             { return pRedlineData->GetSeqNo(); }
     void SetSeqNo( sal_uInt16 nNo )         { pRedlineData->SetSeqNo( nNo ); }
 
-    // Beim Hide/ShowOriginal wird 2 mal ueber die Liste gelaufen, damit
-    //  die Del-Redlines per Copy und Delete versteckt werden. Beim Move
-    //  wird sonst die Attributierung falsch behandelt.
-    // Alle anderen Aufrufer muessen immer 0 angeben.
+    // At Hide/ShowOriginal the list is traversed two times in order to
+    // hide the Del-Redlines via Copy and Delete.
+    // Otherwise at Move the attribution would be handled incorrectly.
+    // All other callers must always give 0.
     void CallDisplayFunc( sal_uInt16 nLoop = 0 );
     void Show( sal_uInt16 nLoop = 0 );
     void Hide( sal_uInt16 nLoop = 0 );
     void ShowOriginal( sal_uInt16 nLoop = 0 );
 
-    // calculates the intersection with text node number nNdIdx
+    // Calculates the intersection with text node number nNdIdx.
     void CalcStartEnd( sal_uLong nNdIdx, sal_uInt16& nStart, sal_uInt16& nEnd ) const;
 
-    void InvalidateRange();     // das Layout anstossen
+    void InvalidateRange();     // Initiate the layout.
 
     sal_Bool IsOwnRedline( const SwRedline& rRedl ) const
         { return GetAuthor() == rRedl.GetAuthor(); }

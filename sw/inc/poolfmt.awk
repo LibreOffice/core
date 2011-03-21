@@ -26,11 +26,11 @@
 #*************************************************************************
 
 #
-# Dieses awk-script generiert ein cxx-file, das alle PoolIds der Vorlage dumpt.
-# wird fuer den HelpPI gebraucht.
-# Aufruf:  awk -f poolid.awk poolfmt.hxx > poolid.cxx
-#          cl poolid.cxx
-#          poolid.exe > ???.hrc
+# This awk-script generates a cxx-file, that dumps all PoolIDs of the template.
+# It is needed for HelpPI.
+# Usage:  awk -f poolid.awk poolfmt.hxx > poolid.cxx
+#         cl poolid.cxx
+#         poolid.exe > ???.hrc
 #
 
 function Header() {
