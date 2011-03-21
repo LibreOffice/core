@@ -243,15 +243,13 @@ void SbiCodeGen::Save()
                     String aPropName = pProc->GetPropName();
                     if( nPass == 1 )
                         aPropName = aPropName.Copy( aIfaceName.Len() + 1 );
-                    SbProcedureProperty* pProcedureProperty = NULL;
-                                        OSL_TRACE("*** getProcedureProperty for thing %s",
+                    OSL_TRACE("*** getProcedureProperty for thing %s",
                         rtl::OUStringToOString( aPropName,RTL_TEXTENCODING_UTF8 ).getStr() );
-                    pProcedureProperty = rMod.GetProcedureProperty( aPropName, ePropType );
+                    rMod.GetProcedureProperty( aPropName, ePropType );
                 }
                 if( nPass == 1 )
                 {
-                    SbIfaceMapperMethod* pMapperMeth = NULL;
-                    pMapperMeth = rMod.GetIfaceMapperMethod( aProcName, pMeth );
+                    rMod.GetIfaceMapperMethod( aProcName, pMeth );
                 }
                 else
                 {
