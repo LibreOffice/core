@@ -141,6 +141,12 @@ gb_LinkTarget_LDFLAGS += \
 
 endif
 
+ifneq ($(gb_SYMBOL),$(true))
+gb_LinkTarget_LDFLAGS += \
+	-Wl,--strip-all \
+
+endif
+
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_COMPILEROPTFLAGS := -O0
 else
