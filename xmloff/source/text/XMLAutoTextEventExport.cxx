@@ -221,6 +221,9 @@ void XMLAutoTextEventExport::addNamespaces()
     GetAttrList().AddAttribute(
         GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_OOO ),
         GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_OOO ) );
+    GetAttrList().AddAttribute(
+        GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_XLINK ),
+        GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_XLINK ) );
 }
 
 void XMLAutoTextEventExport::exportEvents()

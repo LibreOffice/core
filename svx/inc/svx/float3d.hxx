@@ -84,6 +84,7 @@ private:
     ImageButton         aBtnUpdate;
     ImageButton         aBtnAssign;
 
+    FixedLine           aFLGeometrie;
 // Geometrie
     FixedText           aFtPercentDiagonal;
     MetricField         aMtrPercentDiagonal;
@@ -93,36 +94,35 @@ private:
     MetricField         aMtrEndAngle;
     FixedText           aFtDepth;
     MetricField         aMtrDepth;
-    FixedLine           aFLGeometrie;
+      FixedLine           aFLSegments;
 
     FixedText           aFtHorizontal;
     NumericField        aNumHorizontal;
     FixedText           aFtVertical;
     NumericField        aNumVertical;
-    FixedLine           aFLSegments;
+       FixedLine           aFLNormals;
 
     ImageButton         aBtnNormalsObj;
     ImageButton         aBtnNormalsFlat;
     ImageButton         aBtnNormalsSphere;
     ImageButton         aBtnNormalsInvert;
     ImageButton         aBtnTwoSidedLighting;
-    FixedLine           aFLNormals;
 
     ImageButton         aBtnDoubleSided;
-
+    FixedLine           aFLRepresentation;
 // Darstellung
     FixedText           aFtShademode;
     ListBox             aLbShademode;
+    FixedLine           aFLShadow;
     ImageButton         aBtnShadow3d;
     FixedText           aFtSlant;
     MetricField         aMtrSlant;
-    FixedLine           aFLShadow;
     FixedText           aFtDistance;
     MetricField         aMtrDistance;
     FixedText           aFtFocalLeng;
     MetricField         aMtrFocalLength;
     FixedLine           aFLCamera;
-    FixedLine           aFLRepresentation;
+    FixedLine           aFLLight;
 
 // Beleuchtung
     ImageButton         aBtnLight1;
@@ -133,6 +133,7 @@ private:
     ImageButton         aBtnLight6;
     ImageButton         aBtnLight7;
     ImageButton         aBtnLight8;
+    FixedText           aFTLightsource;
     ColorLB             aLbLight1;
     ColorLB             aLbLight2;
     ColorLB             aLbLight3;
@@ -143,7 +144,6 @@ private:
     ColorLB             aLbLight8;
 
     ImageButton         aBtnLightColor;
-    FixedText           aFTLightsource;
 
     // #99694# Keyboard shortcuts activate the next control, so the
     // order needed to be changed here
@@ -151,7 +151,7 @@ private:
     ColorLB             aLbAmbientlight;    // ListBox
     ImageButton         aBtnAmbientColor;   // color button
 
-    FixedLine           aFLLight;
+       FixedLine           aFLTexture;
 
 // Texturen
     FixedText           aFtTexKind;
@@ -171,9 +171,9 @@ private:
     ImageButton         aBtnTexCircleY;
     FixedText           aFtTexFilter;
     ImageButton         aBtnTexFilter;
-    FixedLine           aFLTexture;
 
 // Material
+       FixedLine           aFLMaterial;
 // Materialeditor
     FixedText           aFtMatFavorites;
     ListBox             aLbMatFavorites;
@@ -183,20 +183,20 @@ private:
     FixedText           aFtMatEmission;
     ColorLB             aLbMatEmission;
     ImageButton         aBtnEmissionColor;
+       FixedLine           aFLMatSpecular;
     FixedText           aFtMatSpecular;
     ColorLB             aLbMatSpecular;
     ImageButton         aBtnSpecularColor;
     FixedText           aFtMatSpecularIntensity;
     MetricField         aMtrMatSpecularIntensity;
-    FixedLine           aFLMatSpecular;
-    FixedLine           aFLMaterial;
+
+    Svx3DPreviewControl aCtlPreview;
+    SvxLightCtl3D       aCtlLightPreview;
 
 // Unterer Teil
     ImageButton         aBtnConvertTo3D;
     ImageButton         aBtnLatheObject;
     ImageButton         aBtnPerspective;
-    Svx3DPreviewControl aCtlPreview;
-    SvxLightCtl3D       aCtlLightPreview;
 
 // der Rest ...
     Image               aImgLightOn;
