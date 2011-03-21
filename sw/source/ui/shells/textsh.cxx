@@ -998,8 +998,36 @@ void SwTextShell::ExecTransliteration( SfxRequest & rReq )
     }
 }
 
+void SwTextShell::ExecRotateTransliteration( SfxRequest & rReq )
+{
+    using namespace ::com::sun::star::i18n;
+    {
+        sal_uInt32 nMode = 0;
+
+        if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE ) {
+            switch ( nF3ShiftCounter ) {
+                case 0:
+                    nMode = TransliterationModulesExtra::TITLE_CASE;
+                    break;
+                case 1:
+                    nMode = TransliterationModules_LOWERCASE_UPPERCASE;
+                    break;
+                case 2:
+                    nMode = TransliterationModules_UPPERCASE_LOWERCASE;
+                    nF3ShiftCounter = -1;
+                    break;
+            }
+
+            if ( nMode )
+                GetShell().TransliterateText( nMode );
+
+            nF3ShiftCounter++;
+        }
+    }
+}
+
 SwTextShell::SwTextShell(SwView &_rView) :
-    SwBaseShell(_rView), pPostItFldMgr( 0 )
+    SwBaseShell(_rView), pPostItFldMgr( 0 ), nF3ShiftCounter(0)
 {
     SetName(String::CreateFromAscii("Text"));
     SetHelpId(SW_TEXTSHELL);

@@ -38,6 +38,7 @@ class SvxHyperlinkItem;
 class SwTextShell: public SwBaseShell
 {
     SwFldMgr*   pPostItFldMgr;
+    sal_uInt32  nF3ShiftCounter;
 
     void InsertSymbol( SfxRequest& );
     void InsertHyperlink(const SvxHyperlinkItem& rHlnkItem);
@@ -77,6 +78,7 @@ public:
     void    ExecAttr(SfxRequest &);
     void    ExecDB(SfxRequest &);
     void    ExecTransliteration(SfxRequest &);
+    void    ExecRotateTransliteration(SfxRequest &);
 
     void    GetAttrState(SfxItemSet &);
 
