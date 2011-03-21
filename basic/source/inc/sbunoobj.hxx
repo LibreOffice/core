@@ -172,7 +172,6 @@ public:
         : SbxObject( aName_ )
         , m_xClass( xClass_ )
     {}
-    //~SbUnoClass();
 
     // Find ueberladen, um Elemente on Demand anzulegen
     virtual SbxVariable* Find( const String&, SbxClassType );
@@ -180,7 +179,6 @@ public:
     // Wert rausgeben
     const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >& getUnoClass( void ) { return m_xClass; }
 
-    //void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
 };
 SV_DECL_IMPL_REF(SbUnoClass);
 

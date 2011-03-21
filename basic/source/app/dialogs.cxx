@@ -74,7 +74,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& id )
     FreeResource();
 }
 
-////////////////////////////////////////////////////////////////////
 
 FindDialog::FindDialog( Window* pParent, const ResId& id, String& Text )
 : ModalDialog( pParent, id )
@@ -130,7 +129,6 @@ IMPL_LINK( ReplaceDialog, ButtonClick, Button *, pB )
     return sal_True;
 }
 
-////////////////////////////////////////////////////////////////////
 
 
 void CheckButtons( ComboBox &aCB, Button &aNewB, Button &aDelB )
@@ -677,9 +675,6 @@ FontOptions::FontOptions( Window* pParent, Config &aConfig )
     aFontName.EnableWYSIWYG();
     aFontName.EnableSymbols();
 
-//    aFontSize.SetUnit( FUNIT_POINT );
-//    MapMode aMode( MAP_POINT );
-//    aFTPreview.SetMapMode( aMode );
 
     aFontName.SetModifyHdl( LINK( this, FontOptions, FontNameChanged ) );
     aFontStyle.SetModifyHdl( LINK( this, FontOptions, FontStyleChanged ) );
@@ -722,7 +717,6 @@ IMPL_LINK( FontOptions, FontSizeChanged, void*, EMPTYARG )
 void FontOptions::UpdatePreview()
 {
     Font aFont = aFontList.Get( aFontName.GetText(), aFontStyle.GetText() );
-//    sal_uIntPtr nFontSize = aFontSize.GetValue( FUNIT_POINT );
     sal_uIntPtr nFontSize = static_cast<sal_uIntPtr>((aFontSize.GetValue() + 5) / 10);
     aFont.SetHeight( nFontSize );
     aFTPreview.SetFont( aFont );
@@ -1081,15 +1075,6 @@ DisplayHidDlg::DisplayHidDlg( Window * pParent )
 {
     FreeResource();
 
-/*  ResMgr* pRM = CREATERESMGR( svt );
-    ToolBox aOrig( this, ResId( 12345, pRM ) );
-    delete pRM;
-
-    aTbConf.CopyItem( aOrig, 4 );
-    aTbConf.InsertSeparator();
-    aTbConf.CopyItem( aOrig, 5 );
-    aTbConf.CopyItem( aOrig, 6 );
-    aTbConf.CopyItem( aOrig, 7 );             */
     aTbConf.SetOutStyle( TOOLBOX_STYLE_FLAT );
 
 #if OSL_DEBUG_LEVEL < 2
@@ -1249,8 +1234,6 @@ void DisplayHidDlg::Resize()
     }
     else
     {
-//      SetUpdateMode( sal_False );
-
         // Minimum size
         Size aSize( GetOutputSizePixel() );
         aSize.Width() = std::max( aSize.Width(), (long)(aOKClose.GetSizePixel().Width() * 3 ));
@@ -1304,9 +1287,6 @@ void DisplayHidDlg::Resize()
         aPos.Move( nSpace, -aOKClose.GetSizePixel().Height() );
         aPos.Move( pSplit->GetSizePixel().Width(), pSplit->GetSizePixel().Height() );
         aOKClose.SetPosPixel( aPos );
-
-//      SetUpdateMode( sal_True );
-//      Invalidate();
     }
     FloatingWindow::Resize();
 }
@@ -1346,9 +1326,6 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
                 else
                     aRadioButtonRID_RB_NEW_BOOL_F.Check();
                 break;
-//              case SbxCURRENCY:
-//              case SbxDATE:
-//              break;
             case SbxINTEGER:
                 aNumericFieldRID_NF_NEW_INTEGER.Show();
                 aNumericFieldRID_NF_NEW_INTEGER.SetText( pVar->GetString() );
@@ -1362,8 +1339,6 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
                 aNumericFieldRID_NF_NEW_LONG.SetMin( -aNumericFieldRID_NF_NEW_LONG.GetMax()-1 );
                 aNumericFieldRID_NF_NEW_LONG.SetFirst( -aNumericFieldRID_NF_NEW_LONG.GetLast()-1 );
                 break;
-//              case SbxOBJECT:     // cannot be edited
-//              break;
             case SbxSINGLE:
             case SbxDOUBLE:
             case SbxSTRING:
@@ -1389,41 +1364,6 @@ IMPL_LINK( VarEditDialog, OKClick, Button *, pButton )
 
 
     SbxDataType eType = pVar->GetType();
-/*
-Boolean
-Currency
-Date
-Double
-Integer
-Long
-Object
-Single
-String
-Variant
-
-
-atof
-
-  ecvt
-  f
-  gcvt
-
-SvNumberformat::
-    static double StringToDouble( const xub_Unicode* pStr,
-                                const International& rIntl,
-                                int& nErrno,
-                                const xub_Unicode** ppEnd = NULL );
-    // Converts just as strtod a decimal string to a double.
-    // Decimal and thousand separators come from International,
-    // leading spaces are omitted.
-    // If ppEnd!=NULL then *ppEnd is set after the parsed data.
-    // If pStr contains only the String to be parsed, then if success:
-    // **ppEnd=='\0' and *ppEnd-pStr==strlen(pStr).
-    // If overflow fVal=+/-HUGE_VAL, if underflow 0,
-    // nErrno is in this cases set to ERANGE otherwise 0.
-    // "+/-1.#INF" are recognized as +/-HUGE_VAL.
-
-    */
 
 
 
@@ -1434,12 +1374,6 @@ SvNumberformat::
         case SbxBOOL:
             pVar->PutBool( aRadioButtonRID_RB_NEW_BOOL_T.IsChecked() );
             break;
-//      case SbxCURRENCY:
-//          pVar->PutCurrency( aContent );
-//          break;
-//      case SbxDATE:
-//          pVar->PutDate( aContent );
-//          break;
         case SbxINTEGER:
             pVar->PutInteger( (sal_Int16)aNumericFieldRID_NF_NEW_INTEGER.GetValue() );
             break;
@@ -1462,7 +1396,6 @@ SvNumberformat::
     }
 
 
-//  pVar->PutStringExt( aEditRID_ED_NEW_STRING.GetText() );
     if ( !bWasError && SbxBase::IsError() )
     {
         bError = sal_True;
@@ -1475,12 +1408,6 @@ SvNumberformat::
         return 1;
     }
 
-//  if ( aEditRID_ED_NEW_STRING.GetText().Compare( pVar->GetString() ) != COMPARE_EQUAL )
-//  {
-//      aFixedTextRID_FT_CONTENT_VALUE.SetText( pVar->GetString() );
-//      aEditRID_ED_NEW_STRING.SetText( pVar->GetString() );
-//      return 1;
-//  }
 
     Close();
     return 0;

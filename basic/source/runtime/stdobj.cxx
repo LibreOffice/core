@@ -895,8 +895,6 @@ SbxInfo* SbiStdObject::GetInfo( short nIdx )
     if( !nIdx )
         return NULL;
     Methods* p = &aMethods[ --nIdx ];
-    // Wenn mal eine Hilfedatei zur Verfuegung steht:
-    // SbxInfo* pInfo_ = new SbxInfo( Hilfedateiname, p->nHelpId );
     SbxInfo* pInfo_ = new SbxInfo;
     short nPar = p->nArgs & _ARGSMASK;
     for( short i = 0; i < nPar; i++ )

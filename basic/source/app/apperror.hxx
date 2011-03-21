@@ -37,7 +37,6 @@ public:
     TYPEINFO();
     AppError( BasicFrame*, String );
     ~AppError();
-//  long Command( short nID );
     virtual long InitMenu( Menu* );
     virtual long DeInitMenu( Menu* );
     sal_uInt16 GetLineNr();

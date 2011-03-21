@@ -87,7 +87,6 @@ public:
     ::rtl::OUString& GetSource32()  { return aOUSource; }
     sal_uInt16      GetBase() const     { return nDimBase;  }
     String      GetString( short nId ) const;
-    //const char* GetString( short nId ) const;
     const SbxObject*  FindType (String aTypeName) const;
 
     SbxArrayRef GetEnums()          { return rEnums; }

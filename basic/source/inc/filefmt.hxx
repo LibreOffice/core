@@ -168,7 +168,6 @@ class SvStream;
 // sal_uInt16 Anzahl Objekte
 // ....   Objektdaten
 
-////////////////////////////////////////////////////////////////////////////
 
 // Service-Routinen (in IMAGE.CXX)
 

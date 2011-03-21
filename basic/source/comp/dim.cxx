@@ -293,7 +293,7 @@ void SbiParser::DefVar( SbiOpcode eOp, sal_Bool bStatic )
     SbiSymDef* pDef;
     SbiDimList* pDim;
 
-    // From 1997-07-09, #40689, Statics -> Modul-Initialising, skip in Sub
+    // #40689, Statics -> Modul-Initialising, skip in Sub
     sal_uInt32 nEndOfStaticLbl = 0;
     if( !bVBASupportOn && bStatic )
     {
@@ -309,7 +309,7 @@ void SbiParser::DefVar( SbiOpcode eOp, sal_Bool bStatic )
         if( bSwitchPool )
             pPool = &aGlobals;
         SbiSymDef* pOld = pPool->Find( pDef->GetName() );
-        // From 1996-03-31, #25651#, search also in the Runtime-Library
+        // search also in the Runtime-Library
         sal_Bool bRtlSym = sal_False;
         if( !pOld )
         {
@@ -362,7 +362,7 @@ void SbiParser::DefVar( SbiOpcode eOp, sal_Bool bStatic )
                 case SbGLOBAL:  eOp2 = bPersistantGlobal ? _GLOBAL_P : _GLOBAL;
                                 goto global;
                 case SbPUBLIC:  eOp2 = bPersistantGlobal ? _PUBLIC_P : _PUBLIC;
-                                // From 1997-07-09, #40689, no own Opcode anymore
+                                // #40689, no own Opcode anymore
                                 if( bVBASupportOn && bStatic )
                                 {
                                     eOp2 = _STATIC;
@@ -450,7 +450,7 @@ void SbiParser::DefVar( SbiOpcode eOp, sal_Bool bStatic )
                 }
                 SbiExpression aVar( this, *pDef );
                 if( !TestToken( EQ ) )
-                    goto MyBreak;   // From 1996-06-24 (see below)
+                    goto MyBreak;   // (see below)
                 SbiConstExpression aExpr( this );
                 if( !bDefined && aExpr.IsValid() )
                 {
@@ -501,9 +501,8 @@ void SbiParser::DefVar( SbiOpcode eOp, sal_Bool bStatic )
             }
         }
         if( !TestComma() )
-            goto MyBreak;   // From 1996-06-24 (see below)
+            goto MyBreak;
 
-        // #27963# From 1996-06-24
         // Implementation of bSwitchPool (see above): pPool must not be set to &aGlobals
         // at the VarDecl-Call.
         // Apart from that the behavior should be absolutely identical,
@@ -516,7 +515,7 @@ void SbiParser::DefVar( SbiOpcode eOp, sal_Bool bStatic )
         break;
     }
 
-    // From 1997-07-09, #40689, finalize the jump over statics declarations
+    // #40689, finalize the jump over statics declarations
     if( !bVBASupportOn && bStatic )
     {
         // maintain the global chain
@@ -527,7 +526,6 @@ void SbiParser::DefVar( SbiOpcode eOp, sal_Bool bStatic )
         aGen.BackChain( nEndOfStaticLbl );
     }
 
-    //pPool = pOldPool;
 }
 
 // Here were Arrays redimensioned.
@@ -936,9 +934,6 @@ SbiProcDef* SbiParser::ProcDecl( sal_Bool bDecl )
     TypeDecl( *pDef );
     if( eType != SbxVARIANT && pDef->GetType() != eType )
         Error( SbERR_BAD_DECLARATION, aName );
-//  if( pDef->GetType() == SbxOBJECT )
-//      pDef->SetType( SbxVARIANT ),
-//      Error( SbERR_SYNTAX );
     if( pDef->GetType() == SbxVARIANT && !( bFunc || bProp ) )
         pDef->SetType( SbxEMPTY );
     return pDef;

@@ -102,7 +102,6 @@ using Window::Command;
     sal_Bool bIsAutoRun;
     DisplayHidDlg* pDisplayHidDlg;
 
-//  BreakPoint *pRunToCursorBP;
 
     SbxVariable *pEditVar;
 

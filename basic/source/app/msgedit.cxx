@@ -75,7 +75,6 @@ MsgEdit::MsgEdit( AppError* pParent, BasicFrame *pBF, const WinBits& aBits )
 , pAppError( pParent )
 , aEditTree( pParent, pBF, aBits | WB_HASBUTTONS | WB_HASLINES | WB_HASBUTTONSATROOT )
 {
-//  SetFont( aEditTree.GetDefaultFont( DEFAULTFONT_FIXED, aEditTree.GetSettings().GetLanguage(), 0, &aEditTree ) );
     aEditTree.SetNodeBitmaps( Bitmap( SttResId (MBP_PLUS) ), Bitmap( SttResId (MBP_MINUS) ) );
     aEditTree.SetSelectionMode( MULTIPLE_SELECTION );
     if ( aEditTree.GetModel()->GetSortMode() != SortNone )
@@ -422,36 +421,6 @@ void MsgEdit::AddQAError( String aMsg, TTDebugData aDebugData )
         aEditTree.InvalidateEntry( pThisEntry );
 }
 
-/*
-    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, sal_uIntPtr nPos ) const { return SvLBox::GetEntry(pParent,nPos); }
-    SvLBoxEntry*    GetEntry( sal_uIntPtr nRootPos ) const { return SvLBox::GetEntry(nRootPos);}
-
-
-
-    SvLBoxEntry*    FirstChild(SvLBoxEntry* pParent ) const { return (SvLBoxEntry*)(pModel->FirstChild(pParent)); }
-    SvLBoxEntry*    NextSibling(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->NextSibling( pEntry )); }
-    SvLBoxEntry*    PrevSibling(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->PrevSibling( pEntry )); }
-
-    SvLBoxEntry*    FirstSelected() const { return (SvLBoxEntry*)SvListView::FirstSelected(); }
-    SvLBoxEntry*    NextSelected( SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(SvListView::NextSelected(pEntry)); }
-    SvLBoxEntry*    PrevSelected( SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(SvListView::PrevSelected(pEntry)); }
-    SvLBoxEntry*    LastSelected() const { return (SvLBoxEntry*)(SvListView::LastSelected()); }
-
-    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, sal_uIntPtr nPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(pParent,nPos)); }
-    SvLBoxEntry*    GetEntry( sal_uIntPtr nRootPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(nRootPos)); }
-
-    SvLBoxEntry*    GetParent( SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->GetParent(pEntry)); }
-    SvLBoxEntry*    GetRootLevelParent(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->GetRootLevelParent( pEntry ));}
-
-    sal_Bool            IsInChildList( SvListEntry* pParent, SvListEntry* pChild) const;
-    SvListEntry*    GetEntry( SvListEntry* pParent, sal_uIntPtr nPos ) const;
-    SvListEntry*    GetEntry( sal_uIntPtr nRootPos ) const;
-    SvListEntry*    GetEntryAtAbsPos( sal_uIntPtr nAbsPos ) const;
-    SvListEntry*    GetParent( SvListEntry* pEntry ) const;
-    SvListEntry*    GetRootLevelParent( SvListEntry* pEntry ) const;
-*/
-
-//#define CHECK( pMemo ) if ( pMemo && !aEditTree.GetViewData( pMemo ) ) pMemo = NULL
 #define CHECK( pMemo ) if ( pMemo && !aEditTree.GetModel()->IsInChildList( NULL, pMemo ) ) pMemo = NULL
 void MsgEdit::Delete()
 {
@@ -771,7 +740,6 @@ TTTreeListBox::TTTreeListBox( AppError* pParent, BasicFrame* pBF, WinBits nWinSt
 : SvTreeListBox( pParent, nWinStyle )
 , pBasicFrame(pBF)
 , pAppError( pParent )
-//, nDeselectParent(0)
 {}
 
 sal_Bool TTTreeListBox::JumpToSourcecode( SvLBoxEntry *pThisEntry )
@@ -819,47 +787,6 @@ sal_Bool TTTreeListBox::DoubleClickHdl()
 {
     return JumpToSourcecode( GetHdlEntry() );
 }
-
-/*sal_uIntPtr TTTreeListBox::SelectChildren( SvLBoxEntry* pParent, sal_Bool bSelect )
-{
-    SvLBoxEntry *pEntry = FirstChild( pParent );
-    sal_uIntPtr nRet = 0;
-    while ( pEntry )
-    {
-        nRet++;
-        Select( pEntry, bSelect );
-        pEntry = NextSibling( pEntry );
-    }
-    return nRet;
-}
-
-
-void TTTreeListBox::SelectHdl()
-{
-    SvLBoxEntry* pHdlEntry = GetHdlEntry();
-
-    SelectChildren( pHdlEntry, sal_True );
-    Select( pHdlEntry, sal_True );
-//  InitMenu(pApp->GetAppMenu()->GetPopupMenu( RID_APPEDIT ));  // so that delete works correct
-}
-
-void TTTreeListBox::DeselectHdl()
-{
-    SvLBoxEntry* pHdlEntry = GetHdlEntry();
-    if ( GetParent( pHdlEntry ) )
-    {
-        nDeselectParent++;
-        Select( GetParent( pHdlEntry ), sal_False );
-        nDeselectParent--;
-    }
-    if ( !nDeselectParent )
-    {
-        SelectChildren( pHdlEntry, sal_False );
-        Select( pHdlEntry, sal_False );
-    }
-    Invalidate();
-} */
-
 
 void TTTreeListBox::KeyInput( const KeyEvent& rKEvt )
 {

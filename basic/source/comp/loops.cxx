@@ -43,7 +43,7 @@ void SbiParser::If()
     TestToken( THEN );
     if( IsEoln( Next() ) )
     {
-        // AB 13.5.1996: #27720# Am Ende jeden Blocks muss ein Jump zu ENDIF
+        // Am Ende jeden Blocks muss ein Jump zu ENDIF
         // eingefuegt werden, damit bei ELSEIF nicht erneut die Bedingung
         // ausgewertet wird. Die Tabelle nimmt alle Absprungstellen auf.
 #define JMP_TABLE_SIZE 100
@@ -62,10 +62,9 @@ void SbiParser::If()
                 Error( SbERR_BAD_BLOCK, IF ); bAbort = sal_True; return;
             }
         }
-        // ELSEIF?
         while( eTok == ELSEIF )
         {
-            // #27720# Bei erfolgreichem IF/ELSEIF auf ENDIF springen
+            // Bei erfolgreichem IF/ELSEIF auf ENDIF springen
             if( iJmp >= JMP_TABLE_SIZE )
             {
                 Error( SbERR_PROG_TOO_LARGE );  bAbort = sal_True;  return;
@@ -105,7 +104,7 @@ void SbiParser::If()
         else if( eTok == ENDIF )
             Next();
 
-        // #27720# Jmp-Tabelle abarbeiten
+        // Jmp-Tabelle abarbeiten
         while( iJmp > 0 )
         {
             iJmp--;
@@ -473,7 +472,6 @@ void SbiParser::On()
     SbiToken eTok = Peek();
     String aString = SbiTokenizer::Symbol(eTok);
     if (aString.EqualsIgnoreCaseAscii("ERROR"))
-    //if (!aString.ICompare("ERROR"))
         eTok = _ERROR_; // Error kommt als SYMBOL
     if( eTok != _ERROR_ && eTok != LOCAL ) OnGoto();
     else

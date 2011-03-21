@@ -553,8 +553,6 @@ sal_Bool SbxVariable::StoreData( SvStream& rStrm ) const
         bValStore = SbxValue::StoreData( rStrm );
     if( !bValStore )
         return sal_False;
-    // if( !SbxValue::StoreData( rStrm ) )
-        // return sal_False;
     rStrm.WriteByteString( maName, RTL_TEXTENCODING_ASCII_US );
     rStrm << (sal_uInt32)nUserData;
     if( pInfo.Is() )

@@ -319,8 +319,6 @@ sal_Bool SbiScanner::NextSym()
                 {
                     pLine++; nCol++; continue;
                 }
-//              if( toupper( *pLine ) == 'D' )
-//                  eScanType = SbxDOUBLE;
                 *p++ = 'E'; pLine++; nCol++;
                 // Vorzeichen hinter Exponent?
                 if( *pLine == '+' )
@@ -345,7 +343,6 @@ sal_Bool SbiScanner::NextSym()
 
         // #57844 Lokalisierte Funktion benutzen
         nVal = rtl_math_uStringToDouble( buf, buf+(p-buf), '.', ',', NULL, NULL );
-        // ALT: nVal = atof( buf );
 
         ndig = ndig - comma;
         if( !comma && !exp )
@@ -358,12 +355,6 @@ sal_Bool SbiScanner::NextSym()
         }
         if( bBufOverflow )
             GenError( SbERR_MATH_OVERFLOW );
-        // zu viele Zahlen fuer SINGLE?
-//      if (ndig > 15 || ncdig > 6)
-//          eScanType = SbxDOUBLE;
-//      else
-//      if( nVal > SbxMAXSNG || nVal < SbxMINSNG )
-//          eScanType = SbxDOUBLE;
 
         // Typkennung?
         SbxDataType t = GetSuffixType( *pLine );
@@ -382,7 +373,6 @@ sal_Bool SbiScanner::NextSym()
         sal_Unicode cmp1[] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F', 0 };
         sal_Unicode cmp2[] = { '0', '1', '2', '3', '4', '5', '6', '7', 0 };
         sal_Unicode *cmp = cmp1;
-        //char *cmp = "0123456789ABCDEF";
         sal_Unicode base = 16;
         sal_Unicode ndig = 8;
         sal_Unicode xch  = *pLine++ & 0xFF; nCol++;
@@ -390,7 +380,6 @@ sal_Bool SbiScanner::NextSym()
         {
             case 'O':
                 cmp = cmp2; base = 8; ndig = 11; break;
-                //cmp = "01234567"; base = 8; ndig = 11; break;
             case 'H':
                 break;
             default :

@@ -101,7 +101,6 @@ MyBasic::MyBasic() : StarBASIC()
     // Box object into SbUnoObject
     String aName( "UnoObject" );
     SbxObjectRef xSbUnoObj = GetSbUnoObject( aName, aObjAny );
-    //SbxObjectRef xSbUnoObj = new SbUnoObject( aName, aObjAny );
     Insert( (SbxObject*)xSbUnoObj );
 #endif
 
@@ -282,8 +281,6 @@ sal_uInt16 MyBasic::BreakHdl()
 
     if( IsBreak() ) // If Breakpoint (or "Run to Cursor")
     {
-//      if ( GetActiveModule()->IsBP(GetLine()) )
-//          GetActiveModule()->ClearBP(GetLine());
         return aBasicApp.pFrame->BreakHandler();
     }
     else

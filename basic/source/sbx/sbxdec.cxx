@@ -66,7 +66,6 @@ SbxDecimal::SbxDecimal
     (void)rAutomationDec;
 #endif
     mnRefCount = 0;
-    // GnDecCounter++;
 }
 
 void SbxDecimal::fillAutomationDecimal
@@ -85,7 +84,6 @@ void SbxDecimal::fillAutomationDecimal
 
 SbxDecimal::~SbxDecimal()
 {
-    // GnDecCounter--;
 }
 
 void releaseDecimalPtr( SbxDecimal*& rpDecimal )
@@ -643,7 +641,6 @@ start:
         case SbxBYREF | SbxSTRING:
             if( !p->pOUString )
                 p->pOUString = new ::rtl::OUString;
-            // ImpCvtNum( (double) n, 0, *p->pString );
             pDec->getString( *p->pOUString );
             break;
         case SbxOBJECT:
@@ -678,7 +675,6 @@ start:
                 *p->pInteger = 0;
             }
             break;
-            // *p->pInteger = n; break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
             if( !pDec->getUShort( *p->pUShort ) )

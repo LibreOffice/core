@@ -139,7 +139,6 @@ IMPL_LINK_INLINE_START( SbiInputDialog, Cancel, Window *, pWindow )
 }
 IMPL_LINK_INLINE_END( SbiInputDialog, Cancel, Window *, pWindow )
 
-//////////////////////////////////////////////////////////////////////////
 
 SbiStream::SbiStream()
     : pStrm( 0 )
@@ -451,40 +450,6 @@ public:
     virtual void    SetSize( sal_uIntPtr nSize );
 };
 
-/*
-sal_uIntPtr UCBErrorToSvStramError( ucb::IOErrorCode nError )
-{
-    sal_uIntPtr eReturn = ERRCODE_IO_GENERAL;
-    switch( nError )
-    {
-        case ucb::IOErrorCode_ABORT:                eReturn = SVSTREAM_GENERALERROR; break;
-        case ucb::IOErrorCode_NOT_EXISTING:         eReturn = SVSTREAM_FILE_NOT_FOUND; break;
-        case ucb::IOErrorCode_NOT_EXISTING_PATH:    eReturn = SVSTREAM_PATH_NOT_FOUND; break;
-        case ucb::IOErrorCode_OUT_OF_FILE_HANDLES:  eReturn = SVSTREAM_TOO_MANY_OPEN_FILES; break;
-        case ucb::IOErrorCode_ACCESS_DENIED:        eReturn = SVSTREAM_ACCESS_DENIED; break;
-        case ucb::IOErrorCode_LOCKING_VIOLATION:    eReturn = SVSTREAM_SHARING_VIOLATION; break;
-
-        case ucb::IOErrorCode_INVALID_ACCESS:       eReturn = SVSTREAM_INVALID_ACCESS; break;
-        case ucb::IOErrorCode_CANT_CREATE:          eReturn = SVSTREAM_CANNOT_MAKE; break;
-        case ucb::IOErrorCode_INVALID_PARAMETER:    eReturn = SVSTREAM_INVALID_PARAMETER; break;
-
-        case ucb::IOErrorCode_CANT_READ:            eReturn = SVSTREAM_READ_ERROR; break;
-        case ucb::IOErrorCode_CANT_WRITE:           eReturn = SVSTREAM_WRITE_ERROR; break;
-        case ucb::IOErrorCode_CANT_SEEK:            eReturn = SVSTREAM_SEEK_ERROR; break;
-        case ucb::IOErrorCode_CANT_TELL:            eReturn = SVSTREAM_TELL_ERROR; break;
-
-        case ucb::IOErrorCode_OUT_OF_MEMORY:        eReturn = SVSTREAM_OUTOFMEMORY; break;
-
-        case SVSTREAM_FILEFORMAT_ERROR:             eReturn = SVSTREAM_FILEFORMAT_ERROR; break;
-        case ucb::IOErrorCode_WRONG_VERSION:        eReturn = SVSTREAM_WRONGVERSION;
-        case ucb::IOErrorCode_OUT_OF_DISK_SPACE:    eReturn = SVSTREAM_DISK_FULL; break;
-
-        case ucb::IOErrorCode_BAD_CRC:              eReturn = ERRCODE_IO_BADCRC; break;
-    }
-    return eReturn;
-}
-*/
-
 UCBStream::UCBStream( Reference< XInputStream > & rStm )
     : xIS( rStm )
     , xSeek( rStm, UNO_QUERY )
@@ -674,9 +639,6 @@ SbError SbiStream::Open
                 {
                     Reference< XStream > xIS = xSFI->openFileReadWrite( aNameStr );
                     pStrm = new UCBStream( xIS );
-                    // Open for writing is not implemented in ucb yet!!!
-                    //Reference< XOutputStream > xIS = xSFI->openFileWrite( aNameStr );
-                    //pStrm = new UCBStream( xIS );
                 }
                 else //if( nStrmMode & STREAM_READ )
                 {
@@ -815,7 +777,6 @@ SbError SbiStream::Write( const ByteString& rBuf, sal_uInt16 n )
     return nError;
 }
 
-//////////////////////////////////////////////////////////////////////////
 
 // Zugriff auf das aktuelle I/O-System:
 
@@ -825,7 +786,6 @@ SbiIoSystem* SbGetIoSystem()
     return pInst ? pInst->GetIoSystem() : NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////
 
 SbiIoSystem::SbiIoSystem()
 {

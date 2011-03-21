@@ -213,12 +213,10 @@ void SbiRuntime::StepONJUMP( sal_uInt32 nOp1 )
     if( nOp1 & 0x8000 )
     {
         nOp1 &= 0x7FFF;
-        //PushGosub( pCode + 3 * nOp1 );
         PushGosub( pCode + 5 * nOp1 );
     }
     if( n < 1 || static_cast<sal_uInt32>(n) > nOp1 )
         n = static_cast<sal_Int16>( nOp1 + 1 );
-    //nOp1 = (sal_uInt32) ( (const char*) pCode - pImg->GetCode() ) + 3 * --n;
     nOp1 = (sal_uInt32) ( (const char*) pCode - pImg->GetCode() ) + 5 * --n;
     StepJUMP( nOp1 );
 }
@@ -379,7 +377,7 @@ void SbiRuntime::StepERRHDL( sal_uInt32 nOp1 )
 
 void SbiRuntime::StepRESUME( sal_uInt32 nOp1 )
 {
-    // AB #32714 Resume ohne Error? -> Fehler
+    // #32714 Resume ohne Error? -> Fehler
     if( !bInError )
     {
         Error( SbERR_BAD_RESUME );

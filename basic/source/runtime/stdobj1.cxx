@@ -313,41 +313,6 @@ void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
 //-----------------------------------------------------------------------------
 
-/*
-class TransferableHelperImpl : public TransferableHelper
-{
-    SotFormatStringId   mFormat;
-    String              mString;
-    Graphic             mGraphic;
-
-    virtual void        AddSupportedFormats();
-    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-
-public:
-    TransferableHelperImpl( void ) { mFormat = 0; }
-    TransferableHelperImpl( const String& rStr )
-        mFormat( FORMAT_STRING ), mString( rStr ) {}
-    TransferableHelperImpl( const Graphic& rGraphic );
-        mFormat( FORMAT_BITMAP ), mGraphic( rGraphic ) {}
-
-};
-
-void TransferableHelperImpl::AddSupportedFormats()
-{
-}
-
-sal_Bool TransferableHelperImpl::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
-{
-    sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
-    if( nFormat == FORMAT_STRING )
-    {
-    }
-    else if( nFormat == FORMAT_BITMAP ||
-             nFormat == FORMAT_GDIMETAFILE )
-    {
-    }
-}
-*/
 
 void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, sal_Bool )
 {
@@ -357,7 +322,6 @@ void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, sal_Bool )
         return;
     }
 
-    //Clipboard::Clear();
 }
 
 void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
@@ -377,20 +341,6 @@ void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
         return;
     }
 
-    /*
-    if( nFormat == FORMAT_STRING )
-        pVar->PutString( Clipboard::PasteString() );
-    else
-    if( (nFormat == FORMAT_BITMAP) ||
-        (nFormat == FORMAT_GDIMETAFILE ) )
-    {
-        SbxObjectRef xPic = new SbStdPicture;
-        Graphic aGraph;
-        aGraph.Paste();
-        ((SbStdPicture*)(SbxObject*)xPic)->SetGraphic( aGraph );
-        pVar->PutObject( xPic );
-    }
-    */
 }
 
 void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
@@ -409,7 +359,6 @@ void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, sal_Bool
     }
 
     pVar->PutBool( sal_False );
-    //pVar->PutBool( Clipboard::HasFormat( nFormat ) );
 }
 
 void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
@@ -421,7 +370,6 @@ void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
     }
 
     pVar->PutString( String() );
-    //pVar->PutString( Clipboard::PasteString() );
 }
 
 void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
@@ -441,21 +389,6 @@ void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
         return;
     }
 
-    /*
-    if( nFormat == FORMAT_STRING )
-    {
-        Clipboard::CopyString( pPar_->Get(1)->GetString() );
-    }
-    else
-    if( (nFormat == FORMAT_BITMAP) ||
-        (nFormat == FORMAT_GDIMETAFILE) )
-    {
-        SbxObject* pObj = (SbxObject*)pPar_->Get(1)->GetObject();
-
-        if( pObj && pObj->IsA( TYPE( SbStdPicture ) ) )
-            ((SbStdPicture*)(SbxObject*)pObj)->GetGraphic().Copy();
-    }
-    */
 }
 
 void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
@@ -468,7 +401,6 @@ void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, sal_Bool )
         return;
     }
 
-    // Clipboard::CopyString( pPar_->Get(1)->GetString() );
 }
 
 

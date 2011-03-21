@@ -419,7 +419,6 @@ RTLFUNC(CurDir)
     // DirEntry-Funktionalitaet keine Moeglichkeit besteht, das aktuelle so
     // zu ermitteln, dass eine virtuelle URL geliefert werden koennte.
 
-//  rPar.Get(0)->PutEmpty();
 #if defined (WNT) || defined (OS2)
     int nCurDir = 0;  // Current dir // JSM
     if ( rPar.Count() == 2 )
@@ -600,7 +599,6 @@ RTLFUNC(FileCopy) // JSM
     {
         String aSource = rPar.Get(1)->GetString();
         String aDest = rPar.Get(2)->GetString();
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -617,7 +615,6 @@ RTLFUNC(FileCopy) // JSM
             }
         }
         else
-        // --> UCB
         {
 #ifdef _OLD_FILE_IMPL
             DirEntry aSourceDirEntry(aSource);
@@ -651,7 +648,6 @@ RTLFUNC(Kill) // JSM
     {
         String aFileSpec = rPar.Get(1)->GetString();
 
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -674,7 +670,6 @@ RTLFUNC(Kill) // JSM
             }
         }
         else
-        // --> UCB
         {
 #ifdef _OLD_FILE_IMPL
             if(DirEntry(aFileSpec).Kill() != FSYS_ERR_OK)
@@ -698,7 +693,6 @@ RTLFUNC(MkDir) // JSM
     {
         String aPath = rPar.Get(1)->GetString();
 
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -745,7 +739,6 @@ RTLFUNC(MkDir) // JSM
             }
         }
         else
-        // --> UCB
         {
 #ifdef _OLD_FILE_IMPL
             if (!DirEntry(aPath).MakeDir())
@@ -829,7 +822,6 @@ RTLFUNC(RmDir) // JSM
     if (rPar.Count() == 2)
     {
         String aPath = rPar.Get(1)->GetString();
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -864,7 +856,6 @@ RTLFUNC(RmDir) // JSM
             }
         }
         else
-        // --> UCB
         {
 #ifdef _OLD_FILE_IMPL
             DirEntry aDirEntry(aPath);
@@ -916,7 +907,6 @@ RTLFUNC(FileLen)
         SbxVariableRef pArg = rPar.Get( 1 );
         String aStr( pArg->GetString() );
         sal_Int32 nLen = 0;
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -933,7 +923,6 @@ RTLFUNC(FileLen)
             }
         }
         else
-        // --> UCB
         {
 #ifdef _OLD_FILE_IMPL
             FileStat aStat = DirEntry( aStr );
@@ -1782,9 +1771,6 @@ RTLFUNC(Val)
         char* pEndPtr;
 
         String aStr( rPar.Get(1)->GetString() );
-// lt. Mikkysoft bei Kommas abbrechen!
-//      for( sal_uInt16 n=0; n < aStr.Len(); n++ )
-//          if( aStr[n] == ',' ) aStr[n] = '.';
 
         FilterWhiteSpace( aStr );
         if ( aStr.GetBuffer()[0] == '&' && aStr.Len() > 1 )
@@ -1807,7 +1793,6 @@ RTLFUNC(Val)
             // #57844 Lokalisierte Funktion benutzen
             nResult = ::rtl::math::stringToDouble( aStr, '.', ',', NULL, NULL );
             checkArithmeticOverflow( nResult );
-            // ATL: nResult = strtod( aStr.GetStr(), &pEndPtr );
         }
 
         rPar.Get(0)->PutDouble( nResult );
@@ -2705,7 +2690,6 @@ RTLFUNC(Dir)
         if( !pRTLData )
             return;
 
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -2776,7 +2760,6 @@ RTLFUNC(Dir)
                     }
                     catch( Exception & )
                     {
-                        //StarBASIC::Error( ERRCODE_IO_GENERAL );
                     }
                 }
 
@@ -2847,7 +2830,6 @@ RTLFUNC(Dir)
             }
         }
         else
-        // --> UCB
         {
 #ifdef _OLD_FILE_IMPL
             if ( nParCount >= 2 )
@@ -3040,7 +3022,6 @@ RTLFUNC(GetAttr)
         }
     #endif
 
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -3075,7 +3056,6 @@ RTLFUNC(GetAttr)
             }
         }
         else
-        // --> UCB
         {
             DirectoryItem aItem;
             DirectoryItem::get( getFullPathUNC( rPar.Get(1)->GetString() ), aItem );
@@ -3107,7 +3087,6 @@ RTLFUNC(FileDateTime)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        // <-- UCB
         String aPath = rPar.Get(1)->GetString();
         Time aTime;
         Date aDate;
@@ -3129,7 +3108,6 @@ RTLFUNC(FileDateTime)
             }
         }
         else
-        // --> UCB
         {
 #ifdef _OLD_FILE_IMPL
             DirEntry aEntry( aPath );
@@ -3225,8 +3203,7 @@ RTLFUNC(FileAttr)
     (void)pBasic;
     (void)bWrite;
 
-    // AB 08/16/2000: No changes for UCB
-
+    // No changes for UCB
     // #57064 Obwohl diese Funktion nicht mit DirEntry arbeitet, ist sie von
     // der Anpassung an virtuelle URLs nich betroffen, da sie nur auf bereits
     // geoeffneten Dateien arbeitet und der Name hier keine Rolle spielt.
@@ -3236,7 +3213,6 @@ RTLFUNC(FileAttr)
     else
     {
         sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-//      nChannel--;
         SbiIoSystem* pIO = pINST->GetIoSystem();
         SbiStream* pSbStrm = pIO->GetStream( nChannel );
         if ( !pSbStrm )
@@ -3258,7 +3234,7 @@ RTLFUNC(Loc)
     (void)pBasic;
     (void)bWrite;
 
-    // AB 08/16/2000: No changes for UCB
+    // No changes for UCB
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -3323,7 +3299,7 @@ RTLFUNC(Seek)
     (void)pBasic;
     (void)bWrite;
 
-    // AB 08/16/2000: No changes for UCB
+    // No changes for UCB
     int nArgs = (int)rPar.Count();
     if ( nArgs < 2 || nArgs > 3 )
     {
@@ -3331,7 +3307,6 @@ RTLFUNC(Seek)
         return;
     }
     sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-//  nChannel--;
     SbiIoSystem* pIO = pINST->GetIoSystem();
     SbiStream* pSbStrm = pIO->GetStream( nChannel );
     if ( !pSbStrm )
@@ -3419,17 +3394,13 @@ RTLFUNC(Rnd)
 }
 
 
-//
 //  Syntax: Shell("Path",[ Window-Style,[ "Params", [ bSync = sal_False ]]])
-//
 //  WindowStyles (VBA-kompatibel):
 //      2 == Minimized
 //      3 == Maximized
 //     10 == Full-Screen (Textmodus-Anwendungen OS/2, WIN95, WNT)
-//
 // !!!HACK der WindowStyle wird im Creator an Application::StartApp
 //         uebergeben. Format: "xxxx2"
-//
 
 
 RTLFUNC(Shell)
@@ -4103,11 +4074,6 @@ RTLFUNC(StrConv)
     sal_Int32 nConversion = rPar.Get(2)->GetLong();
 
     sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
-    if( nArgCount == 3 )
-    {
-        // LCID not supported now
-        //nLanguage = rPar.Get(3)->GetInteger();
-    }
 
     sal_uInt16 nOldLen = aOldStr.Len();
     if( nOldLen == 0 )
@@ -4465,7 +4431,6 @@ RTLFUNC(SetAttr) // JSM
         String aStr = rPar.Get(1)->GetString();
         sal_Int16 nFlags = rPar.Get(2)->GetInteger();
 
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -4485,7 +4450,6 @@ RTLFUNC(SetAttr) // JSM
             }
         }
         else
-        // --> UCB
         {
 #ifdef _OLD_FILE_IMPL
             // #57064 Bei virtuellen URLs den Real-Path extrahieren
@@ -4569,7 +4533,6 @@ RTLFUNC(FileExists)
         String aStr = rPar.Get(1)->GetString();
         sal_Bool bExists = sal_False;
 
-        // <-- UCB
         if( hasUno() )
         {
             com::sun::star::uno::Reference< XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -4586,7 +4549,6 @@ RTLFUNC(FileExists)
             }
         }
         else
-        // --> UCB
         {
 #ifdef _OLD_FILE_IMPL
             DirEntry aEntry( aStr );

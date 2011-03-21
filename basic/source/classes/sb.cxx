@@ -688,7 +688,6 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             pProcedureProp->SetFlag( SBX_NO_BROADCAST );
             SbProcedureProperty* pNewProp = new SbProcedureProperty
                 ( pProcedureProp->GetName(), pProcedureProp->GetType() );
-                // ( pProcedureProp->GetName(), pProcedureProp->GetType(), this );
             pNewProp->SetFlags( nFlags_ ); // Copy flags
             pNewProp->ResetFlag( SBX_NO_BROADCAST ); // except the Broadcast if it was set
             pProcedureProp->SetFlags( nFlags_ );
@@ -994,7 +993,6 @@ void* StarBASIC::operator new( size_t n )
 {
     if( n < sizeof( StarBASIC ) )
     {
-//      DBG_ASSERT( sal_False, "Warnung: inkompatibler BASIC-Stand!" );
         n = sizeof( StarBASIC );
     }
     return ::operator new( n );
@@ -1141,7 +1139,6 @@ struct ClassModuleRunInitItem
     SbModule*       m_pModule;
     bool            m_bProcessing;
     bool            m_bRunInitDone;
-    //ModuleVector  m_vModulesDependingOnThisModule;
 
     ClassModuleRunInitItem( void )
         : m_pModule( NULL )
@@ -1166,7 +1163,6 @@ void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassMod
 {
     rItem.m_bProcessing = true;
 
-    //bool bAnyDependencies = true;
     SbModule* pModule = rItem.m_pModule;
     if( pModule->pClassData != NULL )
     {

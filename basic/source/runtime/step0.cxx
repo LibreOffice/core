@@ -477,7 +477,6 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
 
     // Check value, !object is no error for sure if, only if type is fixed
     SbxDataType eValType = refVal->GetType();
-//  bool bGetValObject = false;
     if( !bHandleDefaultProp && eValType != SbxOBJECT && !(eValType & SbxARRAY) && refVal->IsFixed() )
     {
         Error( SbERR_INVALID_USAGE_OBJECT );
@@ -802,7 +801,7 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
     {
         SbxDataType eType = refVar->IsFixed() ? refVar->GetType() : SbxVARIANT;
         SbxDimArray* pArray = new SbxDimArray( eType );
-        // AB 2.4.1996, auch Arrays ohne Dimensionsangaben zulassen (VB-komp.)
+        // auch Arrays ohne Dimensionsangaben zulassen (VB-komp.)
         if( pDims )
         {
             for( sal_uInt16 i = 1; i < pDims->Count(); )
@@ -904,27 +903,11 @@ void SbiRuntime::StepREDIMP()
                     sal_Int32 lBoundOld, uBoundOld;
                     pNewArray->GetDim32( i, lBoundNew, uBoundNew );
                     pOldArray->GetDim32( i, lBoundOld, uBoundOld );
-
-                    /* #69094 Allow all dimensions to be changed
-                       although Visual Basic is not able to do so.
-                    // All bounds but the last have to be the same
-                    if( i < nDims && ( lBoundNew != lBoundOld || uBoundNew != uBoundOld ) )
-                    {
-                        bRangeError = sal_True;
-                        break;
-                    }
-                    else
-                    */
-                    {
-                        // #69094: if( i == nDims )
-                        {
-                            lBoundNew = std::max( lBoundNew, lBoundOld );
-                            uBoundNew = std::min( uBoundNew, uBoundOld );
-                        }
-                        short j = i - 1;
-                        pActualIndices[j] = pLowerBounds[j] = lBoundNew;
-                        pUpperBounds[j] = uBoundNew;
-                    }
+                    lBoundNew = std::max( lBoundNew, lBoundOld );
+                    uBoundNew = std::min( uBoundNew, uBoundOld );
+                    short j = i - 1;
+                    pActualIndices[j] = pLowerBounds[j] = lBoundNew;
+                    pUpperBounds[j] = uBoundNew;
                 }
             }
 
@@ -948,7 +931,6 @@ void SbiRuntime::StepREDIMP()
         }
     }
 
-    //StarBASIC::FatalError( SbERR_NOT_IMPLEMENTED );
 }
 
 // REDIM_COPY
@@ -1015,7 +997,6 @@ void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled )
             }
         }
         else
-        // AB 2.4.1996
         // Arrays haben bei Erase nach VB ein recht komplexes Verhalten. Hier
         // werden zunaechst nur die Typ-Probleme bei REDIM (#26295) beseitigt:
         // Typ hart auf den Array-Typ setzen, da eine Variable mit Array
@@ -1088,7 +1069,6 @@ void SbiRuntime::StepARGV()
         SbxVariableRef pVal = PopVar();
 
         // Before fix of #94916:
-        // if( pVal->ISA(SbxMethod) || pVal->ISA(SbxProperty) )
         if( pVal->ISA(SbxMethod) || pVal->ISA(SbUnoProperty) || pVal->ISA(SbProcedureProperty) )
         {
             // Methoden und Properties evaluieren!
@@ -1184,11 +1164,6 @@ void SbiRuntime::StepINPUT()
             BasResId aId( IDS_SBERR_START + 4 );
             String aMsg( aId );
 
-            //****** DONT CHECK IN, TEST ONLY *******
-            //****** DONT CHECK IN, TEST ONLY *******
-            // ErrorBox( NULL, WB_OK, aMsg ).Execute();
-            //****** DONT CHECK IN, TEST ONLY *******
-            //****** DONT CHECK IN, TEST ONLY *******
 
             pCode = pRestart;
         }
@@ -1197,7 +1172,6 @@ void SbiRuntime::StepINPUT()
     }
     else
     {
-        // pIosys->ResetChannel();
         PopVar();
     }
 }
@@ -1212,7 +1186,6 @@ void SbiRuntime::StepLINPUT()
     Error( pIosys->GetError() );
     SbxVariableRef p = PopVar();
     p->PutString( String( aInput, gsl_getSystemTextEncoding() ) );
-    // pIosys->ResetChannel();
 }
 
 // Programmende
@@ -1370,13 +1343,11 @@ void SbiRuntime::StepRENAME()       // Rename Tos+1 to Tos
     String aDest = pTos1->GetString();
     String aSource = pTos->GetString();
 
-    // <-- UCB
     if( hasUno() )
     {
         implStepRenameUCB( aSource, aDest );
     }
     else
-    // --> UCB
     {
 #ifdef _OLD_FILE_IMPL
         DirEntry aSourceDirEntry( aSource );
@@ -1420,7 +1391,6 @@ void SbiRuntime::StepEMPTY()
     SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
     xVar->PutErr( 448 );
     PushVar( xVar );
-    // ALT: PushVar( new SbxVariable( SbxEMPTY ) );
 }
 
 // TOS = Fehlercode

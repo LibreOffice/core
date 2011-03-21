@@ -39,7 +39,7 @@
 
 #define ASSERTION_STACK_PREFIX "Backtrace:"
 
-// #94145# Due to a tab in TT_SIGNATURE_FOR_UNICODE_TEXTFILES which is changed to blanks by some editors
+// Due to a tab in TT_SIGNATURE_FOR_UNICODE_TEXTFILES which is changed to blanks by some editors
 // this routine became necessary
 sal_Bool IsTTSignatureForUnicodeTextfile( String aLine );
 

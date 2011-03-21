@@ -30,7 +30,6 @@
 // Here are included the messages of the folder /basic/source/testtool
 
 
-///////////////////////////////
 // Error messages which go to the result file.
 // *********************
 // ***  !!ATTENTION!!  ***
@@ -38,7 +37,6 @@
 // The numbers must NEVER(!) change,
 // because they are saved in the result files and a renewed display
 // would display new strings or no strings.
-///////////////////////////////
 
 String S_NAME_NOT_THERE
 {
@@ -140,22 +138,4 @@ String S_UNKNOWN_METHOD
 {
     Text[ en-US ] = "Unknown method on object :($Arg1).($Arg2)";
 };
-/*
-String
-{
-    Text[ en-US ] = ;
-};
-String
-{
-    Text[ en-US ] = ;
-};
-String
-{
-    Text[ en-US ] = ;
-};
-String
-{
-    Text[ en-US ] = ;
-};
-*/
 

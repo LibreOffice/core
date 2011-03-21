@@ -172,7 +172,7 @@ extern "C" void SAL_CALL osl_TestToolDebugMessageFilter( const sal_Char *pString
 
 #endif
 
-// #94145# Due to a tab in TT_SIGNATURE_FOR_UNICODE_TEXTFILES which is changed to blanks by some editors
+// Due to a tab in TT_SIGNATURE_FOR_UNICODE_TEXTFILES which is changed to blanks by some editors
 // this routine became necessary
 sal_Bool IsTTSignatureForUnicodeTextfile( String aLine )
 {
@@ -416,7 +416,6 @@ IMPL_LINK( BasicApp, LateInit, void *, pDummy )
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////
 
 class FloatingExecutionStatus : public FloatingWindow
 {
@@ -467,7 +466,6 @@ IMPL_LINK(FloatingExecutionStatus, HideNow, FloatingExecutionStatus*, pFLC )
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(TTExecutionStatusHint, SfxSimpleHint);
 
@@ -492,7 +490,6 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     bInBreak = sal_False;
     bDisas = sal_False;
     nFlags  = 0;
-//  Icon aAppIcon;
 
     if ( pBasic->pTestObject )  // Are we the testtool?
     {

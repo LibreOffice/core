@@ -400,7 +400,6 @@ SbiSymScope SbiSymDef::GetScope() const
     return pIn ? pIn->GetScope() : SbLOCAL;
 }
 
-////////////////////////////////////////////////////////////////////////////
 
 // Die Prozedur-Definition hat drei Pools:
 // 1) aParams: wird durch die Definition gefuellt. Enthaelt die Namen
@@ -510,7 +509,6 @@ void SbiProcDef::setPropertyMode( PropertyMode ePropMode )
 }
 
 
-//////////////////////////////////////////////////////////////////////////
 
 SbiConstDef::SbiConstDef( const String& rName )
            : SbiSymDef( rName )

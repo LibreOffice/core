@@ -97,10 +97,7 @@ public:
     void                Paint( const Rectangle& rRect );
     void                MouseButtonUp( const MouseEvent& rMouseEvent );
     void                MouseButtonDown( const MouseEvent& rMouseEvent );
-//  void                MouseMove( const MouseEvent& rMouseEvent );
     void                Command( const CommandEvent& rCEvt );
-    //sal_Bool              Drop( const DropEvent& rEvt );
-    //sal_Bool              QueryDrop( DropEvent& rEvt );
 
     sal_Bool                ViewMoved();
 

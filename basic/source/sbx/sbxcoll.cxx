@@ -44,7 +44,6 @@ static const char* pItem;
 static const char* pRemove;
 static sal_uInt16 nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
 
-/////////////////////////////////////////////////////////////////////////
 
 SbxCollection::SbxCollection( const XubString& rClass )
              : SbxObject( rClass )
@@ -223,7 +222,6 @@ sal_Bool SbxCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     return bRes;
 }
 
-/////////////////////////////////////////////////////////////////////////
 
 SbxStdCollection::SbxStdCollection
                     ( const XubString& rClass, const XubString& rElem, sal_Bool b )

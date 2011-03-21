@@ -390,8 +390,6 @@ sal_Bool SbiDisas::DisasLine( String& rText )
                 n = s.Search( '\n' );
                 if( n != STRING_NOTFOUND ) bDone = sal_False, s.Erase( n, 1 );
             } while( !bDone );
-//          snprintf( cBuf, sizeof(cBuf), pMask[ 0 ], nPC );
-//          rText += cBuf;
             rText.AppendAscii( "; " );
             rText += s;
             rText.AppendAscii( _crlf() );

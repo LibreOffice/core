@@ -407,13 +407,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
             bError = sal_True;
         }
     }
-    /* #118410 Allow type for Class methods and RTL object, e.g. RTL.Chr$(97)
-    else
-    {
-        if( pParser->GetType() != SbxVARIANT )
-            pParser->Error( SbERR_SYNTAX ), bError = sal_True;
-    }
-    */
+
     if( bError )
         return NULL;
 
@@ -473,7 +467,6 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
         // Falls wir etwas mit Punkt einscannen, muss der
         // Typ SbxOBJECT sein
 
-        // AB, 3.1.96
         // Es kann sein, dass pDef ein Objekt beschreibt, das bisher
         // nur als SbxVARIANT erkannt wurde, dann Typ von pDef aendern
         if( pDef->GetType() == SbxVARIANT )
@@ -918,7 +911,6 @@ SbiConstExpression::SbiConstExpression( SbiParser* p ) : SbiExpression( p )
             // Ist es eine sal_Bool-Konstante?
             sal_Bool bBoolVal = sal_False;
             if( pVarDef->GetName().EqualsIgnoreCaseAscii( "true" ) )
-            //if( pVarDef->GetName().ICompare( "true" ) == COMPARE_EQUAL )
             {
                 bIsBool = sal_True;
                 bBoolVal = sal_True;
@@ -1074,8 +1066,6 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
         if( eTok == COMMA )
         {
             pExpr = new SbiExpression( pParser, 0, SbxEMPTY );
-            //if( bConst )
-            //  pParser->Error( SbERR_SYNTAX ), bError = sal_True;
         }
         // Benannte Argumente: entweder .name= oder name:=
         else
@@ -1122,8 +1112,6 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
             if( bByVal && pExpr->IsLvalue() )
                 pExpr->SetByVal();
 
-            //pExpr = bConst ? new SbiConstExpression( pParser )
-            //              : new SbiExpression( pParser );
             if( !bAssumeArrayMode )
             {
                 if( pParser->Peek() == ASSIGN )
@@ -1134,8 +1122,6 @@ SbiParameters::SbiParameters( SbiParser* p, sal_Bool bStandaloneExpression, sal_
                     delete pExpr;
                     pParser->Next();
                     pExpr = new SbiExpression( pParser );
-                    //if( bConst )
-                    //  pParser->Error( SbERR_SYNTAX ), bError = sal_True;
                 }
                 pExpr->GetName() = aName;
             }

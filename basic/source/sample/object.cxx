@@ -59,10 +59,6 @@
 // Das Sample-Objekt wird in ..\app\mybasic.cxx wie folgt in StarBASIC
 // eingebaut:
 
-// MyBasic::MyBasic() : StarBASIC()
-// {
-//      AddFactory( new SampleObjectFac() );
-// }
 
 // Das nArgs-Feld eines Tabelleneintrags ist wie folgt verschluesselt:
 
@@ -209,8 +205,6 @@ void SampleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
 SbxInfo* SampleObject::GetInfo( short nIdx )
 {
     Methods* p = &aMethods[ nIdx ];
-    // Wenn mal eine Hilfedatei zur Verfuegung steht:
-    // SbxInfo* pInfo_ = new SbxInfo( Hilfedateiname, p->nHelpId );
     SbxInfo* pInfo_ = new SbxInfo;
     short nPar = p->nArgs & _ARGSMASK;
     for( short i = 0; i < nPar; i++ )
@@ -225,7 +219,6 @@ SbxInfo* SampleObject::GetInfo( short nIdx )
     return pInfo_;
 }
 
-////////////////////////////////////////////////////////////////////////////
 
 // Properties und Methoden legen beim Get (bPut = sal_False) den Returnwert
 // im Element 0 des Argv ab; beim Put (bPut = sal_True) wird der Wert aus

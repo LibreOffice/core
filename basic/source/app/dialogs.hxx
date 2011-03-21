@@ -81,7 +81,6 @@ public:
     ReplaceDialog (Window*, const ResId&, String&, String&);
 };
 
-////////////////////////////////////////////////////////////////////
 
 class ConfEdit : public PushButton
 {

@@ -195,7 +195,6 @@ sal_Bool SbiParser::HasGlobalCode()
     {
         aGen.BackChain( nGblChain );
         aGen.Gen( _LEAVE );
-        // aGen.Gen( _STOP );
         nGblChain = 0;
     }
     return bGblDefs;
@@ -515,7 +514,6 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
         if( aRtlName.EqualsIgnoreCaseAscii("Mid") )
         {
             SbiExprNode* pExprNode = aVar.GetExprNode();
-            // SbiNodeType eNodeType;
             if( pExprNode && pExprNode->GetNodeType() == SbxVARVAL )
             {
                 SbiExprList* pPar = pExprNode->GetParameters();
@@ -549,7 +547,6 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
             SbiExpression aExpr( this );
             aExpr.Gen();
             SbiOpcode eOp = _PUT;
-            // SbiSymDef* pDef = aVar.GetRealVar();
             if( pDef )
             {
                 if( pDef->GetConstDef() )
@@ -612,7 +609,6 @@ void SbiParser::Set()
         TypeDecl( *pTypeDef, sal_True );
 
         aLvalue.Gen();
-        // aGen.Gen( _CLASS, pDef->GetTypeId() | 0x8000 );
         aGen.Gen( _CREATE, pDef->GetId(), pTypeDef->GetTypeId() );
         aGen.Gen( _SETCLASS, pDef->GetTypeId() );
     }
@@ -641,7 +637,6 @@ void SbiParser::Set()
                 aGen.Gen( _SET );
         }
     }
-    // aGen.Gen( _SET );
 }
 
 // JSM 07.10.95
@@ -695,7 +690,6 @@ void SbiParser::DefXXX()
             else
             {
                 ch2 = aSym.ToUpperAscii().GetBuffer()[0];
-                //ch2 = aSym.Upper();
                 if( ch2 < ch1 ) Error( SbERR_SYNTAX ), ch2 = 0;
             }
         }

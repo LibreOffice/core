@@ -66,10 +66,6 @@ class AsciiEncoder
 {
 public:
     static ::rtl::OUString decodeUnoUrlParamValue(const rtl::OUString & rSource);
-    //static ::rtl::OUString encodeUnoUrlParamValue(const rtl::OUString & rSource);
-    //static ::rtl::ByteSequence decode(const ::rtl::OUString & string);
-    //static ::rtl::OUString encode(const ::rtl::ByteSequence & bytes);
-    //static void test();
 };
 
 }
@@ -244,7 +240,7 @@ public:
     sal_uInt32 GetStdTimeIdx() const { return nStdTimeIdx; }
     sal_uInt32 GetStdDateTimeIdx() const { return nStdDateTimeIdx; }
 
-    // #39629# NumberFormatter auch statisch anbieten
+    // NumberFormatter auch statisch anbieten
     static void PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
         sal_uInt32 &rnStdDateIdx, sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
         LanguageType* peFormatterLangType=NULL, DateFormat* peFormatterDateFormat=NULL );
@@ -380,7 +376,6 @@ class SbiRuntime
     // #56204 DIM-Funktionalitaet in Hilfsmethode auslagern (step0.cxx)
     void DimImpl( SbxVariableRef refVar );
 
-    // #115829
     bool implIsClass( SbxObject* pObj, const String& aClass );
 
     void StepSETCLASS_impl( sal_uInt32 nOp1, bool bHandleDflt = false );

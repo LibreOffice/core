@@ -59,11 +59,7 @@ public:
 TYPEINIT1(SbxArray,SbxBase)
 TYPEINIT1(SbxDimArray,SbxArray)
 
-//////////////////////////////////////////////////////////////////////////
-//
 //  SbxArray
-//
-//////////////////////////////////////////////////////////////////////////
 
 SbxArray::SbxArray( SbxDataType t ) : SbxBase()
 {
@@ -355,7 +351,6 @@ void SbxArray::Remove( SbxVariable* pVar )
         for( sal_uInt32 i = 0; i < pData->size(); i++ )
         {
             SbxVariableRef* pRef = (*pData)[i];
-            // SbxVariableRef* pRef = pData->GetObject( i );
             if( *pRef == pVar )
             {
                 Remove32( i ); break;
@@ -576,11 +571,7 @@ void SbxArray::PutDirect( SbxVariable* pVar, sal_uInt32 nIdx )
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
 //  SbxArray
-//
-//////////////////////////////////////////////////////////////////////////
 
 SbxDimArray::SbxDimArray( SbxDataType t ) : SbxArray( t ), mbHasFixedSize( false )
 {

@@ -511,7 +511,6 @@ void VBAUnlockDocuments( StarBASIC* pBasic )
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
 
 // A Basic module has set EXTSEARCH, so that the elements, that the modul contains,
 // could be found from other module.
@@ -765,8 +764,6 @@ const String& SbModule::GetSource() const
 
 void SbModule::SetParent( SbxObject* p )
 {
-    // #118083: Assertion is not valid any more
-    // DBG_ASSERT( !p || p->IsA( TYPE(StarBASIC) ), "Register SbModules only in BASIC" );
     pParent = p;
 }
 
@@ -1123,7 +1120,6 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
 #ifdef UNX
           struct rlimit rl;
           getrlimit ( RLIMIT_STACK, &rl );
-          // printf( "RLIMIT_STACK = %ld\n", rl.rlim_cur );
 #endif
 #if defined LINUX
           // Empiric value, 900 = needed bytes/Basic call level
@@ -1269,9 +1265,6 @@ void SbModule::RunInit()
         // Set flag, so that RunInit get activ (Testtool)
         GetSbData()->bRunInit = sal_True;
 
-        // sal_Bool bDelInst = sal_Bool( pINST == NULL );
-        // if( bDelInst )
-            // pINST = new SbiInstance( (StarBASIC*) GetParent() );
         SbModule* pOldMod = pMOD;
         pMOD = this;
         // The init code starts always here
@@ -1284,8 +1277,6 @@ void SbModule::RunInit()
         pINST->pRun = pRt->pNext;
         delete pRt;
         pMOD = pOldMod;
-        // if( bDelInst )
-            // delete pINST, pINST = NULL;
         pImage->bInit = sal_True;
         pImage->bFirstInit = sal_False;
 
@@ -1339,24 +1330,12 @@ void SbModule::ClearPrivateVars()
                     {
                         SbxVariable* pj = PTR_CAST(SbxVariable,pArray->Get( j ));
                         pj->SbxValue::Clear();
-                        /*
-                        sal_uInt16 nFlags = pj->GetFlags();
-                        pj->SetFlags( (nFlags | SBX_WRITE) & (~SBX_FIXED) );
-                        pj->PutEmpty();
-                        pj->SetFlags( nFlags );
-                        */
                     }
                 }
             }
             else
             {
                 p->SbxValue::Clear();
-                /*
-                sal_uInt16 nFlags = p->GetFlags();
-                p->SetFlags( (nFlags | SBX_WRITE) & (~SBX_FIXED) );
-                p->PutEmpty();
-                p->SetFlags( nFlags );
-                */
             }
         }
     }
@@ -1825,7 +1804,6 @@ sal_Bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
 }
 
 // Called for >= OO 1.0 passwd protected libraries only
-//
 
 sal_Bool SbModule::LoadBinaryData( SvStream& rStrm )
 {
@@ -1948,7 +1926,6 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
 }
 
 
-/////////////////////////////////////////////////////////////////////////
 // Implementation SbJScriptModule (Basic-Modul fuer JavaScript-Sourcen)
 SbJScriptModule::SbJScriptModule( const String& rName )
     :SbModule( rName )
@@ -1967,7 +1944,6 @@ sal_Bool SbJScriptModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     String aTmp;
     rStrm.ReadByteString( aTmp, gsl_getSystemTextEncoding() );
     aOUSource = aTmp;
-    //rStrm >> aSource;
     return sal_True;
 }
 
@@ -1979,7 +1955,6 @@ sal_Bool SbJScriptModule::StoreData( SvStream& rStrm ) const
     // Write the source string
     String aTmp = aOUSource;
     rStrm.WriteByteString( aTmp, gsl_getSystemTextEncoding() );
-    //rStrm << aSource;
     return sal_True;
 }
 
@@ -1996,7 +1971,7 @@ SbMethod::SbMethod( const String& r, SbxDataType t, SbModule* p )
     nLine2       = 0;
     refStatics = new SbxArray;
     mCaller          = 0;
-    // From: 1996-07.02: HACK due to 'Referenz could not be saved'
+    // HACK due to 'Referenz could not be saved'
     SetFlag( SBX_NO_MODIFY );
 }
 
@@ -2043,10 +2018,9 @@ sal_Bool SbMethod::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     sal_Int16 n;
     rStrm >> n;
     sal_Int16 nTempStart = (sal_Int16)nStart;
-    // nDebugFlags = n;     // From 1996-01-16: no longer take over
     if( nVer == 2 )
         rStrm >> nLine1 >> nLine2 >> nTempStart >> bInvalid;
-    // From: 1996-07-02: HACK ue to 'Referenz could not be saved'
+    // HACK ue to 'Referenz could not be saved'
     SetFlag( SBX_NO_MODIFY );
     nStart = nTempStart;
     return sal_True;
@@ -2077,7 +2051,7 @@ SbxInfo* SbMethod::GetInfo()
 }
 
 // Interface to execute a method of the applications
-// #34191# With special RefCounting, damit so that the Basic was not fired of by CloseDocument()
+// With special RefCounting, so that the Basic was not fired of by CloseDocument()
 // The return value will be delivered as string.
 ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
 {
@@ -2160,7 +2134,6 @@ void SbMethod::Broadcast( sal_uIntPtr nHintId )
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
 
 // Implementation of SbJScriptMethod (method class as a wrapper for JavaScript-functions)
 
@@ -2173,7 +2146,6 @@ SbJScriptMethod::~SbJScriptMethod()
 {}
 
 
-/////////////////////////////////////////////////////////////////////////
 SbObjModule::SbObjModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible )
     : SbModule( rName, bIsVbaCompatible )
 {
@@ -2217,7 +2189,6 @@ SbObjModule::GetObject()
 SbxVariable*
 SbObjModule::Find( const XubString& rName, SbxClassType t )
 {
-    //OSL_TRACE("SbObjectModule find for %s", rtl::OUStringToOString(  rName, RTL_TEXTENCODING_UTF8 ).getStr() );
     SbxVariable* pVar = NULL;
     if ( pDocObject)
         pVar = pDocObject->Find( rName, t );
@@ -2718,7 +2689,6 @@ SbUserFormModule::Find( const XubString& rName, SbxClassType t )
         InitObject();
     return SbObjModule::Find( rName, t );
 }
-/////////////////////////////////////////////////////////////////////////
 
 SbProperty::SbProperty( const String& r, SbxDataType t, SbModule* p )
         : SbxProperty( r, t ), pMod( p )
@@ -2729,7 +2699,6 @@ SbProperty::SbProperty( const String& r, SbxDataType t, SbModule* p )
 SbProperty::~SbProperty()
 {}
 
-/////////////////////////////////////////////////////////////////////////
 
 SbProcedureProperty::~SbProcedureProperty()
 {}

@@ -314,7 +314,7 @@ SbxValue* SbxValue::TheRealValue( sal_Bool bObjInObjError ) const
 
                 // If this is an object and contains itself,
                 // we cannot access on it
-                // #55226# The old condition to set an error
+                // The old condition to set an error
                 // is not correct, because e.g. a regular variant variable with an object
                 // could be affected thereof, if another value should be assigned.
                 // Therefore with flag.
@@ -331,10 +331,6 @@ SbxValue* SbxValue::TheRealValue( sal_Bool bObjInObjError ) const
                 }
                 else if( pDflt )
                     p = pDflt;
-                /* ALT:
-                else
-                    p = pDflt ? pDflt : (SbxVariable*) pObj;
-                */
                 break;
             }
             // Did we have an array?
@@ -1465,7 +1461,6 @@ sal_Bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
         else
         {
             aL.eType = aR.eType = SbxDOUBLE;
-            //if( Get( aL ) && rOp.Get( aR ) )
             bool bGetL = Get( aL );
             bool bGetR = rOp.Get( aR );
             if( bGetL && bGetR )

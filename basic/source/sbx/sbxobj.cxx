@@ -43,9 +43,7 @@ static const char* pParentProp;             // Parent-Property
 
 static sal_uInt16 nNameHash = 0, nParentHash = 0;
 
-/////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////
 
 SbxObject::SbxObject( const XubString& rClass )
          : SbxVariable( SbxOBJECT ), aClassName( rClass )
@@ -401,20 +399,6 @@ SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataTy
         SbxVariable* pRes = pArray->Find( rName, ct );
         if( pRes )
         {
-/* Due to often problems (e.g. #67000) first of all completly out
-#ifdef DBG_UTIL
-            if( pRes->GetHashCode() != nNameHash
-             && pRes->GetHashCode() != nParentHash )
-            {
-                XubString aMsg( "SBX-Element \"" );
-                aMsg += pRes->GetName();
-                aMsg += "\"\n in Objekt \"";
-                aMsg += GetName();
-                aMsg += "\" bereits vorhanden";
-                DbgError( (const char*)aMsg.GetStr() );
-            }
-#endif
-*/
             return pRes;
         }
     }
@@ -450,20 +434,6 @@ SbxObject* SbxObject::MakeObject( const XubString& rName, const XubString& rClas
         SbxVariable* pRes = pObjs->Find( rName, SbxCLASS_OBJECT );
         if( pRes )
         {
-/* Due to often problems (e.g. #67000) first of all completly out
-#ifdef DBG_UTIL
-            if( pRes->GetHashCode() != nNameHash
-             && pRes->GetHashCode() != nParentHash )
-            {
-                XubString aMsg( "SBX-Objekt \"" );
-                aMsg += pRes->GetName();
-                aMsg += "\"\n in Objekt \"";
-                aMsg += GetName();
-                aMsg += "\" bereits vorhanden";
-                DbgError( (const char*)aMsg.GetStr() );
-            }
-#endif
-*/
             return PTR_CAST(SbxObject,pRes);
         }
     }
@@ -501,20 +471,6 @@ void SbxObject::Insert( SbxVariable* pVar )
                 if( pOld == pVar )
                     return;
 
-/* Due to often problems (e.g. #67000) first of all completly out
-#ifdef DBG_UTIL
-                if( pOld->GetHashCode() != nNameHash
-                 && pOld->GetHashCode() != nParentHash )
-                {
-                    XubString aMsg( "SBX-Element \"" );
-                    aMsg += pVar->GetName();
-                    aMsg += "\"\n in Objekt \"";
-                    aMsg += GetName();
-                    aMsg += "\" bereits vorhanden";
-                    DbgError( (const char*)aMsg.GetStr() );
-                }
-#endif
-*/
                 EndListening( pOld->GetBroadcaster(), sal_True );
                 if( pVar->GetClass() == SbxCLASS_PROPERTY )
                 {
@@ -545,7 +501,7 @@ void SbxObject::Insert( SbxVariable* pVar )
     }
 }
 
-// From 1997-04-23, Optimisation, Insertion without checking about
+// Optimisation, Insertion without checking about
 // double entry and without broadcasts, will only be used in SO2/auto.cxx
 void SbxObject::QuickInsert( SbxVariable* pVar )
 {
@@ -585,7 +541,7 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
     }
 }
 
-// From 1997-03-23, special method, allow controls of the same name
+// special method, allow controls of the same name
 void SbxObject::VCPtrInsert( SbxVariable* pVar )
 {
     SbxArray* pArray = NULL;
@@ -643,7 +599,7 @@ void SbxObject::Remove( SbxVariable* pVar )
     }
 }
 
-// From 1997-03-23, cleanup per Pointer for Controls (double names!)
+// cleanup per Pointer for Controls (double names!)
 void SbxObject::VCPtrRemove( SbxVariable* pVar )
 {
     sal_uInt16 nIdx;
@@ -664,7 +620,7 @@ void SbxObject::VCPtrRemove( SbxVariable* pVar )
     }
 }
 
-// From 1997-03-23, associated special method, search only by Pointer
+// associated special method, search only by Pointer
 SbxArray* SbxObject::VCPtrFindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
 {
     SbxArray* pArray = NULL;
@@ -709,8 +665,6 @@ void SbxObject::SetPos( SbxVariable* pVar, sal_uInt16 nPos )
             pArray->Insert( refVar, nPos );
         }
     }
-//  SetModified( sal_True );
-//  Broadcast( SBX_HINT_OBJECTCHANGED );
 }
 
 static sal_Bool LoadArray( SvStream& rStrm, SbxObject* pThis, SbxArray* pArray )

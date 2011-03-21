@@ -262,7 +262,6 @@ SbxError SbxValue::ScanNumIntnl( const String& rSrc, double& nVal, sal_Bool bSin
     return nRetError;
 }
 
-////////////////////////////////////////////////////////////////////////////
 
 static double roundArray[] = {
     5.0e+0, 0.5e+0, 0.5e-1, 0.5e-2, 0.5e-3, 0.5e-4, 0.5e-5, 0.5e-6, 0.5e-7,
@@ -606,7 +605,6 @@ static sal_uInt16 printfmtstr( const XubString& rStr, XubString& rRes, const Xub
     return (sal_uInt16) ( pFmt - pFmtStart );
 }
 
-/////////////////////////////////////////////////////////////////////////
 
 sal_Bool SbxValue::Scan( const XubString& rSrc, sal_uInt16* pLen )
 {
@@ -932,8 +930,6 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                     rRes = pData->pBasicFormater->BasicFormatNull( *pFmt );
                 }
 
-                // Die alte Implementierung:
-                //old: printfmtnum( GetDouble(), rRes, *pFmt );
             }
             else
             {

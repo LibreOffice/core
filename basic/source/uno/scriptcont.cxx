@@ -396,8 +396,6 @@ void SAL_CALL SfxScriptLibraryContainer::importFromOldStorage( const ::rtl::OUSt
     SotStorageRef xStorage = new SotStorage( sal_False, aFile );
     if( xStorage.Is() && xStorage->GetError() == ERRCODE_NONE )
     {
-        // We need a BasicManager to avoid problems
-        // StarBASIC* pBas = new StarBASIC();
         BasicManager* pBasicManager = new BasicManager( *(SotStorage*)xStorage, aFile );
 
         // Set info
@@ -641,7 +639,6 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
             SbModule* pMod = pBasicLib->FindModule( aElementName );
             if( pMod )
             {
-                //OUString aCodeStreamName( RTL_CONSTASCII_USTRINGPARAM("code.bin") );
                 OUString aCodeStreamName = aElementName;
                 aCodeStreamName += String( RTL_CONSTASCII_USTRINGPARAM(".bin") );
 
@@ -676,7 +673,6 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
 
             if( pLib->mbPasswordVerified || pLib->mbDoc50Password )
             {
-                /*Any aElement = pLib->getByName( aElementName );*/
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
                 #if OSL_DEBUG_LEVEL > 0
@@ -710,8 +706,6 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     Reference< XOutputStream > xOutput = xSourceStream->getOutputStream();
                     Reference< XNameContainer > xLib( pLib );
                     writeLibraryElement( xLib, aElementName, xOutput );
-                    // writeLibraryElement should have the stream already closed
-                    // xOutput->closeOutput();
                 }
                 catch( uno::Exception& )
                 {
@@ -762,7 +756,6 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                 aElementInetObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("pba") ) );
                 String aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
-                /*Any aElement = pLib->getByName( aElementName );*/
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
                 #if OSL_DEBUG_LEVEL > 0
@@ -861,13 +854,10 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     // TODO: handle error
                 }
 
-                // Storage Dtor commits too, that makes problems
-                // xElementRootStorage->Commit();
             }
         }
         catch( Exception& )
         {
-            //throw e;
         }
     }
     return sal_True;
@@ -955,7 +945,6 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                     pBasicLib->SetModified( sal_False );
                 }
 
-                //OUString aCodeStreamName( RTL_CONSTASCII_USTRINGPARAM("code.bin") );
                 OUString aCodeStreamName= aElementName;
                 aCodeStreamName += String( RTL_CONSTASCII_USTRINGPARAM(".bin") );
 

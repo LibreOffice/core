@@ -45,7 +45,6 @@ class SbiParser;
 
 enum SbiSymScope { SbLOCAL, SbPARAM, SbPUBLIC, SbGLOBAL, SbRTL };
 
-///////////////////////////////////////////////////////////////////////////
 
 // Der String-Pool nimmt String-Eintraege auf und sorgt dafuer,
 // dass sie nicht doppelt vorkommen.
@@ -68,7 +67,6 @@ public:
     SbiParser* GetParser() { return pParser; }
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 SV_DECL_PTRARR_DEL(SbiSymbols,SbiSymDef*,5,5)
 
@@ -109,7 +107,6 @@ public:
     void   CheckRefs();                 // offene Referenzen suchen
 };
 
-///////////////////////////////////////////////////////////////////////////
 
 class SbiSymDef {                   // Allgemeiner Symboleintrag
     friend class SbiSymPool;

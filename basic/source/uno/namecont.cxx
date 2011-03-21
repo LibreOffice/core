@@ -643,7 +643,6 @@ sal_Bool SfxLibraryContainer::init_Impl(
     // #110009: Scope to force the StorageRefs to be destructed and
     // so the streams to be closed before the preload operation
     {
-    // #110009
 
     uno::Reference< embed::XStorage > xLibrariesStor;
     String aFileName;
@@ -661,9 +660,6 @@ sal_Bool SfxLibraryContainer::init_Impl(
             {
                 uno::Reference< io::XStream > xStream;
                 xLibrariesStor = xStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READ );
-                //if ( !xLibrariesStor.is() )
-                    // TODO: the method must either return a storage or throw an exception
-                    //throw uno::RuntimeException();
 
                 if ( xLibrariesStor.is() )
                 {
@@ -936,7 +932,6 @@ sal_Bool SfxLibraryContainer::init_Impl(
 
     // #110009: END Scope to force the StorageRefs to be destructed
     }
-    // #110009
 
     if( !bStorage && meInitMode == DEFAULT )
     {
@@ -951,7 +946,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
         }
     }
 
-    // #110009 Preload?
+    // Preload?
     {
         Sequence< OUString > aNames = maNameContainer.getElementNames();
         const OUString* pNames = aNames.getConstArray();
@@ -965,7 +960,6 @@ sal_Bool SfxLibraryContainer::init_Impl(
         }
     }
 
-    // #118803# upgrade installation 7.0 -> 8.0
     if( meInitMode == DEFAULT )
     {
         INetURLObject aUserBasicInetObj( String(maLibraryPath).GetToken(1) );
@@ -987,7 +981,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
             String aPrevFolder = aPrevUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
             if( mxSFI->isFolder( aPrevFolder ) )
             {
-                // #110101 Check if Standard folder exists and is complete
+                // Check if Standard folder exists and is complete
                 INetURLObject aUserBasicStandardInetObj( aUserBasicInetObj );
                 aUserBasicStandardInetObj.insertName( aStandardStr, sal_True, INetURLObject::LAST_SEGMENT,
                                                       sal_True, INetURLObject::ENCODE_ALL );
@@ -1371,7 +1365,6 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
             OUString aStreamName = aElementName;
             aStreamName += String( RTL_CONSTASCII_USTRINGPARAM(".xml") );
 
-            /*Any aElement = pLib->getByName( aElementName );*/
             if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
             {
             #if OSL_DEBUG_LEVEL > 0
@@ -1387,7 +1380,6 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                 uno::Reference< io::XStream > xElementStream = xStorage->openStreamElement(
                                                                     aStreamName,
                                                                     embed::ElementModes::READWRITE );
-                //if ( !xElementStream.is() )
                 //    throw uno::RuntimeException(); // TODO: method must either return the stream or throw an exception
 
                 String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
@@ -1396,7 +1388,6 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                 uno::Reference< beans::XPropertySet > xProps( xElementStream, uno::UNO_QUERY );
                 OSL_ENSURE( xProps.is(), "The StorageStream must implement XPropertySet interface!\n" );
                 //if ( !xProps.is() ) //TODO
-                //    throw uno::RuntimeException();
 
                 if ( xProps.is() )
                 {
@@ -1409,8 +1400,6 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                     Reference< XOutputStream > xOutput = xElementStream->getOutputStream();
                     Reference< XNameContainer > xLib( pLib );
                     writeLibraryElement( xLib, aElementName, xOutput );
-                    // writeLibraryElement closes the stream
-                    // xOutput->closeOutput();
                 }
             }
             catch( uno::Exception& )
@@ -1460,7 +1449,6 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                 aElementInetObj.setExtension( maLibElementFileExtension );
                 String aElementPath( aElementInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
-                /*Any aElement = pLib->getByName( aElementName );*/
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
                 #if OSL_DEBUG_LEVEL > 0
@@ -1540,7 +1528,6 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
             xInfoStream = xStorage->openStreamElement( aStreamName, embed::ElementModes::READWRITE );
             OSL_ENSURE( xInfoStream.is(), "No stream!\n" );
             uno::Reference< beans::XPropertySet > xProps( xInfoStream, uno::UNO_QUERY );
-            //if ( !xProps.is() )
             //    throw uno::RuntimeException(); // TODO
 
             if ( xProps.is() )
@@ -1683,7 +1670,6 @@ sal_Bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
     }
     if( !xInput.is() )
     {
-        // OSL_FAIL( "### couln't open input stream\n" );
         return sal_False;
     }
 
@@ -2933,21 +2919,11 @@ Any SAL_CALL SfxLibrary::queryInterface( const Type& rType )
 {
     Any aRet;
 
-    /*
-    if( mbReadOnly )
-    {
-        aRet = Any( ::cppu::queryInterface( rType,
-            static_cast< XContainer * >( this ),
-            static_cast< XNameAccess * >( this ) ) );
-    }
-    else
-    {
-    */
-        aRet = Any( ::cppu::queryInterface( rType,
-            static_cast< XContainer * >( this ),
-            static_cast< XNameContainer * >( this ),
-            static_cast< XNameAccess * >( this ) ) );
-    //}
+    aRet = Any( ::cppu::queryInterface( rType,
+        static_cast< XContainer * >( this ),
+        static_cast< XNameContainer * >( this ),
+        static_cast< XNameAccess * >( this ) ) );
+
     if( !aRet.hasValue() )
         aRet = OComponentHelper::queryInterface( rType );
     return aRet;

@@ -301,11 +301,11 @@ namespace basic
         if ( !aAppBasicDir.Len() )
             aPathCFG.SetBasicPath( String::CreateFromAscii("$(prog)") );
 
-        // #58293# soffice.new search only in user dir => first dir
+        // soffice.new search only in user dir => first dir
         String aAppFirstBasicDir = aAppBasicDir.GetToken(1);
 
         // Create basic and load it
-        // MT: #47347# AppBasicDir is now a PATH
+        // AppBasicDir is now a PATH
         INetURLObject aAppBasic( SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(progurl)") ) );
         aAppBasic.insertName( Application::GetAppName() );
 
@@ -483,9 +483,6 @@ namespace basic
         LibraryContainerInfo aInfo( xBasicLibs, xDialogLibs, dynamic_cast< OldBasicPassword* >( xBasicLibs.get() ) );
         OSL_ENSURE( aInfo.mpOldBasicPassword, "ImplRepository::impl_createManagerForModel: wrong BasicLibraries implementation!" );
         _out_rpBasicManager->SetLibraryContainerInfo( aInfo );
-        //pBasicCont->setBasicManager( _out_rpBasicManager );
-            // that's not needed anymore today. The containers will retrieve their associated
-            // BasicManager from the BasicManagerRepository, when needed.
 
         // initialize the containers
         impl_initDocLibraryContainers_nothrow( xBasicLibs, xDialogLibs );

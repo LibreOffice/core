@@ -157,18 +157,15 @@ sal_Bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
         {
             case B_NAME:
                 r.ReadByteString( aName, eCharSet );
-                //r >> aName;
                 break;
             case B_COMMENT:
                 r.ReadByteString( aComment, eCharSet );
-                //r >> aComment;
                 break;
             case B_SOURCE:
             {
                 String aTmp;
                 r.ReadByteString( aTmp, eCharSet );
                 aOUSource = aTmp;
-                //r >> aSource;
                 break;
             }
 #ifdef EXTENDED_BINARY_MODULES
@@ -250,8 +247,6 @@ sal_Bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
     }
 done:
     r.Seek( nLast );
-    //if( eCharSet != ::GetSystemCharSet() )
-        //ConvertStrings();
     if( !SbiGood( r ) )
         bError = sal_True;
     return sal_Bool( !bError );
@@ -291,7 +286,6 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     {
         nPos = SbiOpenRecord( r, B_NAME, 1 );
         r.WriteByteString( aName, eCharSet );
-        //r << aName;
         SbiCloseRecord( r, nPos );
     }
     // Comment?
@@ -299,7 +293,6 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     {
         nPos = SbiOpenRecord( r, B_COMMENT, 1 );
         r.WriteByteString( aComment, eCharSet );
-        //r << aComment;
         SbiCloseRecord( r, nPos );
     }
     // Source?
@@ -314,7 +307,6 @@ sal_Bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         else
             aTmp = aOUSource;
         r.WriteByteString( aTmp, eCharSet );
-        //r << aSource;
         SbiCloseRecord( r, nPos );
 
 #ifdef EXTENDED_BINARY_MODULES
@@ -440,7 +432,6 @@ void SbiImage::AddString( const String& r )
         if( !bError )
         {
             pStringOff[ nStringIdx++ ] = nStringOff;
-            //ByteString aByteStr( r, eCharSet );
             memcpy( pStrings + nStringOff, r.GetBuffer(), len * sizeof( sal_Unicode ) );
             nStringOff = nStringOff + len;
             // Last String? The update the size of the buffer

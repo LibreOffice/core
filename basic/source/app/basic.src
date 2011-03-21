@@ -34,12 +34,6 @@ ModalDialog RID_CALLDLG {
   SVLook = TRUE;
   MOVEABLE = TRUE;
   CLOSEABLE = TRUE;
-//  WinChilds = {
-//  FixedText {
-//    Text = "Aktuelle Parameter";
-//    PosSize = MAP_SYSFONT (10,10,120,8);
-//  };
-//  };
   FixedText RID_RETTYPE {
     PosSize = MAP_SYSFONT (10,70,120,8);
   };
@@ -68,41 +62,6 @@ ModalDialog IDD_ABOUT_DIALOG {
     Pos = MAP_APPFONT( 58, 17 );
     Size = MAP_APPFONT( 155, 106 );
     SVLook = TRUE;
-/*
-    WINCHILDS = {
-    FixedText  {
-            Pos = MAP_APPFONT( 40, 5 );
-            Size = MAP_APPFONT( 110, 10 );
-            TEXT = "Testtool";
-            CENTER = TRUE;
-        };
-    FixedText  {
-            Pos = MAP_APPFONT( 40, 20 );
-            Size = MAP_APPFONT( 110, 20 );
-            TEXT = "Ojektorientiertes BASIC-Entwicklungssystem";
-            CENTER = TRUE;
-        };
-    FixedText  {
-            Pos = MAP_APPFONT( 40, 45 );
-            Size = MAP_APPFONT( 110, 10 );
-            TEXT = "Version 2.0 May 2002";
-            CENTER = TRUE;
-        };
-    FixedText  {
-            Pos = MAP_APPFONT( 40, 60 );
-            Size = MAP_APPFONT( 110, 10 );
-            TEXT = "�1995-2010 Oracle";
-            CENTER = TRUE;
-        };
-    };
-*/
-//  FixedIcon RID_ICON {
-//          Pos = MAP_APPFONT( 20, 26 );
-//          Size = MAP_APPFONT( 20, 20 );
-//          FIXED = Icon  {
-//              FILE = "basic.ico";
-//          };
-//      };
     OKButton RID_OK {
             Pos = MAP_APPFONT( 55, 80 );
             Size = MAP_APPFONT( 40, 14 );
@@ -148,7 +107,6 @@ ModalDialog IDD_FIND_DIALOG {
     Size = MAP_APPFONT( 185, 70 );
     SVLook = TRUE;
     MOVEABLE = TRUE;
-    // CLOSEABLE = TRUE;    // It has a cancelbutton
 
     FixedText RID_FIXEDTEXT1 {
             Pos = MAP_APPFONT( 5, 10 );
@@ -184,7 +142,6 @@ ModalDialog IDD_REPLACE_DIALOG {
     Size = MAP_APPFONT( 185, 88 );
     SVLook = TRUE;
     MOVEABLE = TRUE;
-    // CLOSEABLE = TRUE;    // It has a cancelbutton
     FixedText RID_FIXEDTEXT1 {
             Pos = MAP_APPFONT( 5, 10 );
             Size = MAP_APPFONT( 55, 10 );
@@ -425,15 +382,6 @@ String IDS_CANCEL {
 String IDS_DISASWIN {
     TEXT[ en-US ] = "Disassembly";
 };
-//Icon RID_APPICON {
-//  FILE = "basic.ico";
-//};
-//Icon RID_APPICON2 {
-//  FILE = "testtool.ico";
-//};
-//Icon RID_WORKICON {
-//  FILE = "work.ico";
-//};
 
 Bitmap MBP_PLUS {
         File = "plus.bmp";
@@ -542,12 +490,10 @@ Menu RID_EDIT {
     MenuItem  {
         Identifier = RID_EDITUNDO;
         TEXT[ en-US ] = "~Undo";
-//      AccelKey = KeyCode { Function = KEYFUNC_CUT; };
         };
     MenuItem  {
         Identifier = RID_EDITREDO;
         TEXT[ en-US ] = "~Redo";
-//      AccelKey = KeyCode { Function = KEYFUNC_CUT; };
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -588,7 +534,6 @@ Menu RID_EDIT {
         Identifier = RID_EDITREPEAT;
         TEXT[ en-US ] = "Repeat S~earch";
         AccelKey = KeyCode { Code = KEY_F3; };
-//      AccelKey = KeyCode { Function = KEYFUNC_REPEAT; };
         };
     };
 };
@@ -617,11 +562,6 @@ Menu RID_RUN {
         TEXT[ en-US ] = "Si~ngle Step over Procedure";
         AccelKey = KeyCode { Code = KEY_F10; };
         };
-//  MenuItem  {
-//      Identifier = RID_RUNTOCURSOR;
-//      TEXT = "Run to cursor";
-//      AccelKey = KeyCode { Code = KEY_F7; };
-//      };
     MenuItem  {
         Identifier = RID_TOGLEBRKPNT;
         TEXT[ en-US ] = "Set / Delete Break Point";
@@ -675,52 +615,11 @@ Menu RID_TT_EXTRAS {
 };
 Menu RID_WINDOW {
     ITEMLIST = {
-/*  MenuItem  {
-            Identifier = RID_WINCASCADE;
-            TEXT[ en-US ] = "~Cascade";
-        };
-    MenuItem  {
-            Identifier = RID_WINTILE;
-            TEXT[ en-US ] = "~Tile";
-        };
-    MenuItem  {
-            Identifier = RID_WINTILEHORZ;
-            TEXT[ en-US ] = "~Arrange Horizontally";
-        };
-    MenuItem  {
-            Identifier = RID_WINTILEVERT;
-            TEXT[ en-US ] = "~Arrange Vertically";
-        };*/
     };
 };
 Menu RID_HELP {
     ITEMLIST = {
-/*  MenuItem  {
-            Identifier = RID_HELPINDEX;
-            TEXT = "~Index";
-        };
     MenuItem  {
-            SEPARATOR = TRUE;
-        };
-    MenuItem  {
-            Identifier = RID_HELPKEYS;
-            TEXT = "~Tastaturbelegung";
-        };
-    MenuItem  {
-            Identifier = RID_HELPINTRO;
-            TEXT = "~Anleitung";
-        };
-    MenuItem  {
-            SEPARATOR = TRUE;
-        };
-    MenuItem  {
-            Identifier = RID_HELPTOPIC;
-            TEXT = "~Markierter Text";
-        };
-    MenuItem  {
-            SEPARATOR = TRUE;
-        };
-*/  MenuItem  {
             ABOUT = TRUE;
             Identifier = RID_HELPABOUT;
             TEXT[ en-US ] = "~About...";
@@ -1243,12 +1142,6 @@ FloatingWindow IDD_DISPLAY_HID {
             Border = TRUE;
             Pos = MAP_APPFONT( 0, 0 );
             Size = MAP_APPFONT( 260, 14 );
-/*          ItemList = {
-            ToolBoxItem  {
-                    Text = "erster der Toolbox";
-                };
-            };*/
-//          Hide = TRUE;
         };
     FixedText RID_FT_CONTROLS {
             Pos = MAP_APPFONT( 4, 16 );
@@ -1335,22 +1228,6 @@ Accelerator MAIN_ACCEL {
             Identifier = RID_QUIT;
             Key = KeyCode { Function = KEYFUNC_QUIT; };
         };
-//  AcceleratorItem  {
-//          Identifier = RID_EDITCUT;
-//          Key = KeyCode { Function = KEYFUNC_CUT; };
-//      };
-//  AcceleratorItem  {
-//          Identifier = RID_EDITCOPY;
-//          Key = KeyCode { Function = KEYFUNC_COPY; };
-//      };
-//  AcceleratorItem  {
-//          Identifier = RID_EDITPASTE;
-//          Key = KeyCode { Function = KEYFUNC_PASTE; };
-//      };
-//  AcceleratorItem  {
-//          Identifier = RID_EDITDEL;
-//          Key = KeyCode { Function = KEYFUNC_DELETE; };
-//      };
     AcceleratorItem  {
             Identifier = RID_EDITSEARCH;
             Key = KeyCode { Function = KEYFUNC_FIND; };
@@ -1358,7 +1235,6 @@ Accelerator MAIN_ACCEL {
     AcceleratorItem  {
             Identifier = RID_EDITREPEAT;
             Key = KeyCode { Code = KEY_F3; };
-//          Key = KeyCode { Function = KEYFUNC_REPEAT; };
         };
     AcceleratorItem  {
             Identifier = RID_RUNSTART;

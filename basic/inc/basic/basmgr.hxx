@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-//
 #ifndef _BASMGR_HXX
 #define _BASMGR_HXX
 
@@ -88,7 +87,6 @@ public:
 };
 
 
-//
 
 class BasicLibs;
 class ErrorManager;

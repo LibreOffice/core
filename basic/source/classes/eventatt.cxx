@@ -214,8 +214,6 @@ void BasicScriptListener_Impl::disposing(const EventObject& ) throw ( RuntimeExc
 
 void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
 {
-    //Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
-    //{
     if( aScriptEvent.ScriptType.compareToAscii( "StarBasic" ) == 0 )
     {
         // Full qualified name?

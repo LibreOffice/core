@@ -895,13 +895,6 @@ RTLFUNC(FindObject)
     SbxObject* pFindObj = NULL;
     if( pFind )
         pFindObj = PTR_CAST(SbxObject,pFind);
-    /*
-    if( !pFindObj )
-    {
-        StarBASIC::Error( SbERR_VAR_UNDEFINED );
-        return;
-    }
-    */
 
     // Objekt zurueckliefern
     SbxVariableRef refVar = rPar.Get(0);
@@ -933,13 +926,6 @@ RTLFUNC(FindPropertyObject)
         SbxBase* pObjVarObj = ((SbxVariable*)pObjVar)->GetObject();
         pObj = PTR_CAST(SbxObject,pObjVarObj);
     }
-    /*
-    if( !pObj )
-    {
-        StarBASIC::Error( SbERR_VAR_UNDEFINED );
-        return;
-    }
-    */
 
     // 2. Parameter ist der Name
     String aNameStr = rPar.Get(2)->GetString();
@@ -1027,7 +1013,6 @@ sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
                     if( bIsVariant )
                         *pStrm << (sal_uInt16)SbxSTRING;
                     pStrm->WriteByteString( rStr, gsl_getSystemTextEncoding() );
-                    //*pStrm << rStr;
                 }
                 else
                 {
@@ -1035,7 +1020,6 @@ sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
                     // What does that mean for Unicode?! Choosing conversion to ByteString...
                     ByteString aByteStr( rStr, gsl_getSystemTextEncoding() );
                     *pStrm << (const char*)aByteStr.GetBuffer();
-                    //*pStrm << (const char*)rStr.GetStr();
                 }
                 }
                 break;
@@ -1398,8 +1382,6 @@ RTLFUNC(ResolvePath)
     {
         String aStr = rPar.Get(1)->GetString();
         DirEntry aEntry( aStr );
-        //if( aEntry.IsVirtual() )
-            //aStr = aEntry.GetRealPathFromVirtualURL();
         rPar.Get(0)->PutString( aStr );
     }
     else
@@ -2540,7 +2522,6 @@ RTLFUNC(FormatDateTime)
 
         // ShortDate: Display a date using the short date format specified
         // in your computer's regional settings.
-        // 12/21/2004
         // 21.12.2004
         case 2:
             pSbxVar->PutDate( floor(dDate) );
@@ -3241,7 +3222,6 @@ RTLFUNC(Input)
     rPar.Get(0)->PutString( String( aByteBuffer, gsl_getSystemTextEncoding() ) );
 }
 
-// #115824
 RTLFUNC(Me)
 {
     (void)pBasic;

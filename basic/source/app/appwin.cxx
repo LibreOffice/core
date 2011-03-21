@@ -193,11 +193,9 @@ void AppWin::Help()
     // Trim leading whitespaces
     while( s.GetChar(0) == ' ' )
       s.Erase( 0, 1 );
-//      aBasicApp.pHelp->Start( s );
   }
   else
   {
-//      aBasicApp.pHelp->Start( OOO_HELP_INDEX );
   }
 }
 
@@ -216,7 +214,6 @@ void AppWin::GetFocus()
     if( pDataEdit ) // GetFocus is called by the destructor, so this check
     {
         pDataEdit->GrabFocus();
-//      InitMenu(GetpApp()->GetAppMenu()->GetPopupMenu( RID_APPEDIT ));
     }
 }
 
@@ -254,7 +251,6 @@ long AppWin::InitMenu( Menu* pMenu )
     pMenu->EnableItem( RID_EDITCOPY,    bMarked );
     pMenu->EnableItem( RID_EDITPASTE,   ( ::svt::OStringTransfer::PasteString( aTemp, this ) ) );
     pMenu->EnableItem( RID_EDITDEL,     bMarked );
-//  pMenu->EnableItem( RID_HELPTOPIC,   bMarked );
 
     sal_Bool bHasText;
     if( pDataEdit )
@@ -322,7 +318,7 @@ void AppWin::Command( const CommandEvent& rCEvt )
             }
             break;
         case RID_EDITDEL:
-            /*if( bHasMark ) */pDataEdit->Delete();
+            pDataEdit->Delete();
             break;
         case RID_EDITUNDO:
             pDataEdit->Undo();
@@ -375,8 +371,6 @@ sal_Bool AppWin::DiskFileChanged( sal_uInt16 nWhat )
                 else
                     return DiskFileChanged( SINCE_LAST_ASK_RELOAD );
             }
-// uncomment to avoid compiler warning
-//          break;
         case SINCE_LAST_ASK_RELOAD:
             {
                 String aFilename( GetText() );
@@ -387,8 +381,6 @@ sal_Bool AppWin::DiskFileChanged( sal_uInt16 nWhat )
                 return ( !aLastAccess.GetError() != !aStat.GetError() )
                     || aLastAccess.IsYounger( aStat ) || aStat.IsYounger( aLastAccess );
             }
-// uncomment to avoid compiler warning
-//          break;
         default:
             OSL_FAIL("Not Implemented in AppWin::DiskFileChanged");
     }
@@ -432,7 +424,6 @@ void AppWin::CheckReload()
     if ( !aFile.Exists() )
         return;
 
-//  FileStat aStat( aFile );
 
     if ( DiskFileChanged( SINCE_LAST_ASK_RELOAD ) && ReloadAllowed() )
     {
@@ -466,8 +457,6 @@ sal_Bool AppWin::Load( const String& aName )
     SkipReload();
     sal_Bool bErr;
 
-//  if( !QuerySave() )
-//      return;
     bErr = !pDataEdit->Load( aName );
     if( bErr )
     {
@@ -608,16 +597,10 @@ sal_Bool AppWin::Close()
             delete this;
             return sal_True;
         }
-// uncomment to avoid compiler warning
-//  break;
     case SAVE_RES_ERROR:
         return sal_False;
-// uncomment to avoid compiler warning
-//      break;
     case SAVE_RES_CANCEL:
         return sal_False;
-// uncomment to avoid compiler warning
-//      break;
     default:
         OSL_FAIL("Not Implemented in AppWin::Close");
         return sal_False;

@@ -620,12 +620,9 @@ Variant(Empty)
             switch ( eType )
             {
                 case SbxBOOL:
-//              case SbxCURRENCY:
-//              case SbxDATE:
                 case SbxDOUBLE:
                 case SbxINTEGER:
                 case SbxLONG:
-//              case SbxOBJECT:     // cannot be edited
                 case SbxSINGLE:
                 case SbxSTRING:
 
@@ -707,7 +704,7 @@ void TextEdit::Highlight( sal_uIntPtr nLine, xub_StrLen nCol1, xub_StrLen nCol2 
     aEdit.pTextView->SetSelection( TextSelection(TextPaM(nLine,nCol2+1), TextPaM(nLine,nCol1)) );
     if ( aEdit.ViewMoved() )
     {
-        aEdit.pTextView->SetSelection( TextSelection(TextPaM(TEXT_PARA_ALL,1)) );   // fix #105169#
+        aEdit.pTextView->SetSelection( TextSelection(TextPaM(TEXT_PARA_ALL,1)) );
         aEdit.pTextView->SetSelection( TextSelection(TextPaM((nLine>=2?nLine-2:0),nCol2+1)) );
         aEdit.pTextView->SetSelection( TextSelection(TextPaM(nLine,nCol2+1), TextPaM(nLine,nCol1)) );
     }

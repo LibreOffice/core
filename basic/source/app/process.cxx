@@ -110,7 +110,6 @@ long Process::ImplGetExitCode()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
 
 void Process::SetImage( const String &aAppPath, const String &aAppParams, const Environment *pEnv )
 { // Set image file of executable

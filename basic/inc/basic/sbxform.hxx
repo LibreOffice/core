@@ -115,8 +115,6 @@ class SbxBasicFormater {
     static  sal_Bool isBasicFormat( String sFormatStrg );
 
   private:
-    //*** some helper methods ***
-    //void  ShowError( char *sErrMsg );
     inline void ShiftString( String& sStrg, sal_uInt16 nStartPos );
     inline void StrAppendChar( String& sStrg, sal_Unicode ch );
     void    AppendDigit( String& sStrg, short nDigit );

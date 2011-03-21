@@ -255,7 +255,6 @@ void SbiCodeGen::Save()
                 {
                     pMeth = rMod.GetMethod( aProcName, pProc->GetType() );
 
-                    // #110004
                     if( !pProc->IsPublic() )
                         pMeth->SetFlag( SBX_PRIVATE );
 

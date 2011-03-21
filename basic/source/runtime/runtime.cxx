@@ -223,9 +223,7 @@ SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// Alle Opcodes mit zwei Operanden
 };
 
 
-//////////////////////////////////////////////////////////////////////////
 //                              SbiRTLData                              //
-//////////////////////////////////////////////////////////////////////////
 
 SbiRTLData::SbiRTLData()
 {
@@ -242,9 +240,7 @@ SbiRTLData::~SbiRTLData()
     delete pWildCard;
 }
 
-//////////////////////////////////////////////////////////////////////////
 //                              SbiInstance                             //
-//////////////////////////////////////////////////////////////////////////
 
 // 16.10.96: #31460 Neues Konzept fuer StepInto/Over/Out
 // Die Entscheidung, ob StepPoint aufgerufen werden soll, wird anhand des
@@ -540,9 +536,7 @@ SbxArray* SbiInstance::GetLocals( SbMethod* pMeth )
         return NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////
 //                              SbiInstance                             //
-//////////////////////////////////////////////////////////////////////////
 
 // Achtung: pMeth kann auch NULL sein (beim Aufruf des Init-Codes)
 
@@ -852,8 +846,6 @@ sal_Bool SbiRuntime::Step()
                     pInst->Abort();
                 }
 
-                // ALT: Nur
-                // pInst->Abort();
             }
         }
     }
@@ -936,11 +928,7 @@ sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, String& rMsg )
     return nVBAErrorNumber;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
 //  Parameter, Locals, Caller
-//
-//////////////////////////////////////////////////////////////////////////
 
 SbMethod* SbiRuntime::GetCaller()
 {
@@ -957,11 +945,7 @@ SbxArray* SbiRuntime::GetParams()
     return refParams;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
 //  Stacks
-//
-//////////////////////////////////////////////////////////////////////////
 
 // Der Expression-Stack steht fuer die laufende Auswertung von Expressions
 // zur Verfuegung.
@@ -1039,7 +1023,6 @@ void SbiRuntime::TOSMakeTemp()
         p = new SbxVariable( *pDflt );
         p->SetFlag( SBX_READWRITE );
         refExprStk->Put( p, nExprLvl - 1 );
-//      return;
     }
 
     else if( p->GetRefCount() != 1 )
@@ -1247,11 +1230,7 @@ void SbiRuntime::ClearForStack()
         PopFor();
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
 //  DLL-Aufrufe
-//
-//////////////////////////////////////////////////////////////////////////
 
 void SbiRuntime::DllCall
     ( const String& aFuncName,  // Funktionsname
@@ -1268,15 +1247,6 @@ void SbiRuntime::DllCall
     }
 
     // MUSS NOCH IMPLEMENTIERT WERDEN
-    /*
-    String aMsg;
-    aMsg = "FUNC=";
-    aMsg += pFunc;
-    aMsg += " DLL=";
-    aMsg += pDLL;
-    MessBox( NULL, WB_OK, String( "DLL-CALL" ), aMsg ).Execute();
-    Error( SbERR_NOT_IMPLEMENTED );
-    */
 
     SbxVariable* pRes = new SbxVariable( eResType );
     SbiDllMgr* pDllMgr = pInst->GetDllMgr();

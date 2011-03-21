@@ -32,7 +32,6 @@
 #include <svl/lstner.hxx>
 #include <basic/sbxvar.hxx>
 
-///////////////////////////////////////////////////////////////////////////
 
 class SbxProperty;
 class SvDispatch;

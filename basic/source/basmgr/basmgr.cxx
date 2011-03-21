@@ -804,11 +804,6 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
     String aStorName( rStorage.GetName() );
     maStorageName = INetURLObject(aStorName, INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
 
-    // #91251: Storage name not longer available for documents < 5.0
-    // Should be no real problem, because only relative storage names
-    // (links) can be affected.
-    // DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
-    // DBG_ASSERT(aStorageName.Len() != 0, "Bad storage name");
 
     // If there is no Manager Stream, no further actions are necessary
     if ( rStorage.IsStream( String(RTL_CONSTASCII_USTRINGPARAM(szManagerStream)) ) )
@@ -840,7 +835,6 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
                 StarBASIC* pBasic = GetLib( nBasic );
                 if ( pBasic )
                 {
-//                  pBasic->SetParent( pStdLib );
                     pStdLib->Insert( pBasic );
                     pBasic->SetFlag( SBX_EXTSEARCH );
                 }
@@ -1063,7 +1057,6 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
 {
     DBG_CHKTHIS( BasicManager, 0 );
 
-//  StreamMode eStreamMode = STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE;
 
     SotStorageStreamRef xManagerStream = rStorage.OpenSotStream
         ( String(RTL_CONSTASCII_USTRINGPARAM(szManagerStream)), eStreamReadMode );
@@ -1082,8 +1075,6 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
 
     String aRealStorageName = maStorageName;  // for relative paths, can be modified through BaseURL
 
-    // If loaded from template, only BaseURL is used:
-    //String aBaseURL = INetURLObject::GetBaseURL();
     if ( rBaseURL.Len() )
     {
         INetURLObject aObj( rBaseURL );
@@ -1119,9 +1110,6 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
             aObj = aObj.smartRel2Abs( pInfo->GetRelStorageName(), bWasAbsolute );
 
             //*** TODO: Replace if still necessary
-            /* if ( SfxContentHelper::Exists( aObj.GetMainURL() ) )
-                pInfo->SetStorageName( aObj.GetMainURL() );
-            else */
             //*** TODO-End
             if ( pLibs->aBasicLibPath.Len() )
             {
@@ -1155,7 +1143,6 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
 {
     DBG_CHKTHIS( BasicManager, 0 );
 
-//  StreamMode eStreamMode = STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE;
 
     SotStorageStreamRef xManagerStream = rStorage.OpenSotStream
         ( String::CreateFromAscii(szOldManagerStream), eStreamReadMode );
@@ -1549,7 +1536,6 @@ sal_Bool BasicManager::RemoveLib( sal_uInt16 nLib, sal_Bool bDelBasicFromStorage
 
     if ( !pLibInfo || !nLib )
     {
-//      String aErrorText( BasicResId( IDS_SBERR_REMOVELIB ) );
         StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_REMOVELIB, String(), ERRCODE_BUTTON_OK );
         pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_STDLIB, pLibInfo->GetLibName() ) );
         return sal_False;

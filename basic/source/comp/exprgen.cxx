@@ -109,7 +109,7 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
                     eOp = aVar.pDef->IsGlobal() ? _FIND_G : _FIND;
             }
         }
-        // From 1995-12-17, special treatment for WITH
+        // special treatment for WITH
         else if( (pWithParent_ = GetWithParent()) != NULL )
         {
             eOp = _ELEM;            // .-Term in in WITH
@@ -207,9 +207,9 @@ void SbiExprList::Gen()
     if( pFirst )
     {
         pParser->aGen.Gen( _ARGC );
-        // From 1996-01-10: Type adjustment at DECLARE
-        sal_uInt16 nCount = 1 /*, nParAnz = 0*/;
-//      SbiSymPool* pPool = NULL;
+        // Type adjustment at DECLARE
+        sal_uInt16 nCount = 1;
+
         for( SbiExpression* pExpr = pFirst; pExpr; pExpr = pExpr->pNext,nCount++ )
         {
             pExpr->Gen();
@@ -254,7 +254,7 @@ void SbiExprList::Gen()
 
 void SbiExpression::Gen( RecursiveMode eRecMode )
 {
-    // From 1995-12-17, special treatment for WITH
+    // special treatment for WITH
     // If pExpr == .-term in With, approximately Gen for Basis-Object
     pExpr->Gen( eRecMode );
     if( bByVal )

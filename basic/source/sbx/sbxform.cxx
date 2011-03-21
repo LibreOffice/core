@@ -142,12 +142,6 @@ SbxBasicFormater::SbxBasicFormater( sal_Unicode _cDecPoint, sal_Unicode _cThousa
 }
 
 // Funktion zur Ausgabe eines Fehler-Textes (zum Debuggen)
-/*
-void SbxBasicFormater::ShowError( char * sErrMsg )
-{
-//  cout << "ERROR in Format$(): " << sErrMsg << endl;
-}
-*/
 // verschiebt alle Zeichen des Strings, angefangen von der nStartPos,
 // um eine Position zu gr"osseren Indizes, d.h. es wird Platz f"ur
 // ein neues (einzuf"ugendes) Zeichen geschafft.
@@ -379,7 +373,6 @@ TODO: ggf einen 'intelligenten' Peek-Parser um Rundungsfehler bei
 // In bFoundFirstDigit wird ggf. ein Flag gesetzt wenn eine Ziffer
 // gefunden wurde, dies wird dazu verwendet um 'Fehler' beim Parsen 202
 // zu vermeiden, die
-//
 // ACHTUNG: anscheinend gibt es manchmal noch Probleme mit Rundungs-Fehlern!
 short SbxBasicFormater::GetDigitAtPos( double dNumber, short nPos,
                                 double& dNextNumber, sal_Bool& bFoundFirstDigit )
@@ -615,11 +608,6 @@ short SbxBasicFormater::AnalyseFormatString( const String& sFormatStrg,
                 break;
             case '%':
                 bPercent = sal_True;
-                /* old:
-                bPercent++;
-                if( bPercent>1 )
-                    return -2;  // ERROR: zu viele Prozent-Zeichen
-                */
                 break;
             case '(':
                 bCurrency = sal_True;
@@ -640,11 +628,6 @@ short SbxBasicFormater::AnalyseFormatString( const String& sFormatStrg,
                      nState = -1;   // breche jetzt das Z"ahlen der Stellen ab
                     bScientific = sal_True;
                 }
-                /* old:
-                bScientific++;
-                if( bScientific>1 )
-                    return -3;  // ERROR: zu viele Exponent-Zeichen
-                */
                 break;
             // EIGENES Kommando-Zeichen, das die Erzeugung der
             // Tausender-Trennzeichen einschaltet
@@ -691,23 +674,11 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
             - sonstige Fehler ? mehrfache Dezimalpunkte, E's, etc.
         --> Fehler werden zur Zeit einfach ignoriert
     */
-    /*nErr =*/ AnalyseFormatString( sFormatStrg,nNoOfDigitsLeft,nNoOfDigitsRight,
+    AnalyseFormatString( sFormatStrg,nNoOfDigitsLeft,nNoOfDigitsRight,
                     nNoOfOptionalDigitsLeft,nNoOfExponentDigits,
                     nNoOfOptionalExponentDigits,
                     bPercent,bCurrency,bScientific,bGenerateThousandSeparator,
                     nMultipleThousandSeparators );
-    /* es werden alle Fehler ignoriert, wie in Visual-Basic
-    if( nErr!=0 )
-    {
-        char sBuffer[512];
-
-        //sprintf( sBuffer,"bad format-string >%s< err=%i",sFormatStrg,nErr );
-        strcpy( sBuffer,"bad format-string" );
-        ShowError( sBuffer );
-    }
-    else
-    */
-    {
         // Spezialbehandlung f"ur Spezialzeichen
         if( bPercent )
             dNumber *= 100.0;
@@ -735,8 +706,6 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
         bDigitPosNegative = false;
         if( bScientific )
         {
-            //if( nNoOfOptionalDigitsLeft>0 )
-            //  ShowError( "# in scientific-format in front of the decimal-point has no effect" );
             // beim Exponent ggf. "uberz"ahlige Stellen vor dem Komma abziehen
             dExponent = dExponent - (double)(nNoOfDigitsLeft-1);
             nDigitPos = nMaxDigit;
@@ -780,11 +749,10 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                     // Behandlung der Mantisse
                         if( bFirstDigit )
                         {
-                            //org:bFirstDigit = sal_False;
                             // ggf. Vorzeichen erzeugen
                             // Bem.: bei bCurrency soll das negative
                             //       Vorzeichen durch () angezeigt werden
-                            if( bIsNegative && !bCreateSign/*!bCurrency*/ && !bSignHappend )
+                            if( bIsNegative && !bCreateSign && !bSignHappend )
                             {
                                 // nur einmal ein Vorzeichen ausgeben
                                 bSignHappend = sal_True;
@@ -958,19 +926,9 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                             else
                                 StrAppendChar( sReturnStrg,'+' );
                         }
-                        //else
-                        //  ShowError( "operator e/E did not find + or -" );
                     }
-                    //else
-                    //  ShowError( "operator e/E ended with 0" );
                     break;
                 case ',':
-                    // ACHTUNG: nur falls Zahl bisher ausgegeben wurde
-                    //          das Zeichen ausgeben
-                    ////--> Siehe Kommentar vom 11.7. in AnalyseFormatString()
-                    ////if( !bFirstDigit )
-                    ////    // gebe Tausender-Trennzeichen aus
-                    ////    StrAppendChar( sReturnStrg,cThousandSep );
                     break;
                 case ';':
                     break;
@@ -1000,12 +958,9 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                     ParseBack( sReturnStrg,sFormatStrg,i-1 );
                     // Sonderzeichen gefunden, gebe N"ACHSTES
                     // Zeichen direkt aus (falls es existiert)
-                    // i++;
                     c = sFormatStrg.GetChar( ++i );
                     if( c!=0 )
                         StrAppendChar( sReturnStrg,c );
-                    //else
-                    //  ShowError( "operator \\ ended with 0" );
                     break;
                 case CREATE_1000SEP_CHAR:
                     // hier ignorieren, Aktion wurde schon in
@@ -1017,9 +972,6 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                         ( c>='A' && c<='Z' ) ||
                         ( c>='1' && c<='9' ) )
                         StrAppendChar( sReturnStrg,c );
-                    // else
-                        // ignorieren !
-                    // ehemals: ShowError( "bad character in format-string" );
             }
         }
         // Format-String wurde vollst"andig gescanned,
@@ -1041,7 +993,6 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
         // ABER nur Stellen nach dem Dezimal-Punkt k"onnen gel"oscht werden
         if( nNoOfDigitsRight>0 )
             ParseBack( sReturnStrg,sFormatStrg,sFormatStrg.Len()-1 );
-    }
 }
 
 String SbxBasicFormater::BasicFormatNull( String sFormatStrg )
@@ -1085,7 +1036,6 @@ String SbxBasicFormater::BasicFormat( double dNumber, String sFormatStrg )
     String sPosFormatStrg = GetPosFormatString( sFormatStrg, bPosFormatFound );
     String sNegFormatStrg = GetNegFormatString( sFormatStrg, bNegFormatFound );
     String s0FormatStrg = Get0FormatString( sFormatStrg, b0FormatFound );
-    //String sNullFormatStrg = GetNullFormatString( sFormatStrg, bNullFormatFound );
 
     String sReturnStrg;
     String sTempStrg;

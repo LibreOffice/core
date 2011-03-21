@@ -41,7 +41,6 @@ using Window::Scroll;
 
 public:
     BreakpointWindow( Window *pParent );
-//  ~BreakpointWindow();
 
     void        Reset();
 

@@ -99,7 +99,6 @@ void setBasicWatchMode( bool bOn );
 #define SBX_HINT_BASICSTART     SFX_HINT_USER04
 #define SBX_HINT_BASICSTOP      SFX_HINT_USER05
 
-// #115826
 enum PropertyMode
 {
     PROPERTY_MODE_NONE,
