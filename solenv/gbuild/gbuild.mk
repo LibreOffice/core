@@ -82,9 +82,9 @@ endif
 endif
 
 ifneq ($(strip $(SYMBOL)$(symbol)$(SYMBOLS)$(symbols)),)
-gb_SYMBOL := $(false)
-else
 gb_SYMBOL := $(true)
+else
+gb_SYMBOL := $(false)
 endif
 
 
