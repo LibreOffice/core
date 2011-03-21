@@ -2468,7 +2468,7 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
             if (rString.getLength())
                 rString.appendAscii(" ");
 
-            const ::rtl::OString sT = OSQLParser::TokenIDToStr(m_nNodeID, &rParam.m_rContext);
+            const ::rtl::OString sT = OSQLParser::TokenIDToStr(m_nNodeID, rParam.bInternational ? &rParam.m_rContext :  NULL);
             rString.append(::rtl::OUString(sT,sT.getLength(),RTL_TEXTENCODING_UTF8));
         }   break;
         case SQL_NODE_STRING:
