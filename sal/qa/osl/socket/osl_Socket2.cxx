@@ -1107,7 +1107,7 @@ namespace osl_Socket
             // on Linux, the value of option is 1, on Solaris, it's 16, but it's not important the exact value,
             // just judge it is zero or not!
             sal_Bool bOK = ( 0  !=  *pGetBuffer );
-            t_print("#setOption_001: getOption is %ld \n", *pGetBuffer);
+            t_print("#setOption_001: getOption is %"SAL_PRIdINT32" \n", *pGetBuffer);
 
             // toggle check, set to 0
             *pbDontRouteSet = 0;
@@ -1119,7 +1119,7 @@ namespace osl_Socket
 
             sal_Bool bOK2 = ( 0  ==  *pGetBuffer );
 
-            t_print("#setOption_001: getOption is %ld \n", *pGetBuffer);
+            t_print("#setOption_001: getOption is %"SAL_PRIdINT32" \n", *pGetBuffer);
 
 // LLA:             sal_Bool * pbDontTouteSet = ( sal_Bool * )malloc( sizeof ( sal_Bool ) );
 // LLA:             *pbDontTouteSet = sal_True;

@@ -1130,10 +1130,6 @@ namespace osl_StreamSocket
 
                     t_print("received: %s\n", pBuffer2);
 
-                    // char * pBuffer3 = "quit\n";
-                    // nBufferSize = strlen(pBuffer3);
-                    // nWriteNumber = ssStreamConnection.write( pBuffer3, nBufferSize );
-
                     rtl::OUString suError = ssStreamConnection.getErrorAsString();
                     free(pBuffer2);
                     // ssStreamConnection.close();
@@ -1199,14 +1195,11 @@ namespace osl_StreamSocket
 
                     char const * pBuffer = "Test String\n";
                     sal_Int32 nBufferSize = strlen(pBuffer);
-                    sal_Int32 nWriteNumber = ssStreamConnection.write( pBuffer, nBufferSize );
-
-                    // char * pBuffer2 = "                                                                                                 ";
-                    // sal_Int32 nReadNumber = ssStreamConnection.read( pBuffer2, strlen(pBuffer2) );
+                    ssStreamConnection.write( pBuffer, nBufferSize );
 
                     char const * pBuffer3 = "quit\n";
                     nBufferSize = strlen(pBuffer3);
-                    nWriteNumber = ssStreamConnection.write( pBuffer3, nBufferSize );
+                    ssStreamConnection.write( pBuffer3, nBufferSize );
 
                     ssStreamConnection.close();
                 }
@@ -1411,10 +1404,6 @@ namespace osl_StreamSocket
                         }
                     }
                     free(pBufferPeek);
-
-                    // char * pBuffer3 = "quit\n";
-                    // nBufferSize = strlen(pBuffer3);
-                    // nWriteNumber = ssStreamConnection.write( pBuffer3, nBufferSize );
 
                     rtl::OUString suError = ssStreamConnection.getErrorAsString();
                 }
