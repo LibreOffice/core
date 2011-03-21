@@ -31,6 +31,8 @@ TARGET=qa_cppunit
 
 ENABLE_EXCEPTIONS=TRUE
 
+my_components = qa_i18npool
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -83,10 +85,17 @@ $(MISC)/$(TARGET)/udkapi.rdb .ERRREMOVE : $(SOLARBINDIR)$/udkapi.rdb
     $(GNUCOPY) $? $@
 
 #Make a services.rdb with the services we know we need to get up and running
-$(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb makefile.mk
+$(MISC)/$(TARGET)/services.rdb .ERRREMOVE: $(SOLARENV)/bin/packcomponents.xslt \
+        $(MISC)/$(TARGET)/services.input \
+        $(my_components:^"$(MISC)/":+".component")
+    $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/ -o $@ \
+        $(SOLARENV)/bin/packcomponents.xslt $(MISC)/$(TARGET)/services.input
+
+$(MISC)/$(TARGET)/services.input:
     $(MKDIRHIER) $(@:d)
-    $(REGCOMP) -register -br $(MISC)/$(TARGET)/udkapi.rdb -r $@ -wop \
-        -c $(DLLDEST)/i18npool.uno$(DLLPOST)
+    echo \
+        '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
+        > $@
 
 test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/types.rdb $(MISC)/$(TARGET)/udkapi.rdb
     @echo ----------------------------------------------------------
@@ -95,6 +104,4 @@ test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/t
     $(CPPUNITTESTER) $(SHL1TARGETN) -headless -invisible \
         -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
         -env:UNO_TYPES="$(my_file)$(PWD)/$(MISC)/$(TARGET)/types.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/udkapi.rdb" \
-        -env:OOO_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
-        -env:BRAND_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
-        -env:UNO_USER_PACKAGES_CACHE="$(my_file)$(PWD)/$(MISC)/$(TARGET)"
+        -env:OOO_INBUILD_SHAREDLIB_DIR="$(my_file)$(PWD)/$(DLLDEST)"
