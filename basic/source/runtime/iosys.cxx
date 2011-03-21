@@ -338,8 +338,6 @@ sal_Bool hasUno( void )
 
 
 
-#ifndef _OLD_FILE_IMPL
-
 class OslStream : public SvStream
 {
     osl::File maFile;
@@ -427,7 +425,7 @@ void OslStream::SetSize( sal_uIntPtr nSize )
     maFile.setSize( (sal_uInt64)nSize );
 }
 
-#endif
+//#endif
 
 
 #ifdef _USE_UNO
@@ -658,11 +656,7 @@ SbError SbiStream::Open
 #endif
     if( !pStrm )
     {
-#ifdef _OLD_FILE_IMPL
-        pStrm = new SvFileStream( aNameStr, nStrmMode );
-#else
         pStrm = new OslStream( aNameStr, nStrmMode );
-#endif
     }
     if( IsAppend() )
         pStrm->Seek( STREAM_SEEK_TO_END );
@@ -676,12 +670,6 @@ SbError SbiStream::Close()
 {
     if( pStrm )
     {
-        if( !hasUno() )
-        {
-#ifdef _OLD_FILE_IMPL
-            ((SvFileStream *)pStrm)->Close();
-#endif
-        }
         MapError();
         delete pStrm;
         pStrm = NULL;

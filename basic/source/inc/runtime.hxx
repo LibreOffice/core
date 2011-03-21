@@ -53,11 +53,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 
 
-// Define activates old file implementation
-// (only in non UCB case)
-// #define _OLD_FILE_IMPL
-
-
 namespace basicEncoder
 {
 
@@ -141,11 +136,7 @@ class SbiRTLData
 {
 public:
 
-#ifdef _OLD_FILE_IMPL
-    Dir*    pDir;
-#else
     ::osl::Directory* pDir;
-#endif
     sal_Int16   nDirFlags;
     short   nCurDirPos;
 

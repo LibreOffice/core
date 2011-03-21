@@ -616,22 +616,11 @@ RTLFUNC(FileCopy) // JSM
         }
         else
         {
-#ifdef _OLD_FILE_IMPL
-            DirEntry aSourceDirEntry(aSource);
-            if (aSourceDirEntry.Exists())
-            {
-                if (aSourceDirEntry.CopyTo(DirEntry(aDest),FSYS_ACTION_COPYFILE) != FSYS_ERR_OK)
-                    StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-            }
-            else
-                    StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-#else
             FileBase::RC nRet = File::copy( getFullPathUNC( aSource ), getFullPathUNC( aDest ) );
             if( nRet != FileBase::E_None )
             {
                 StarBASIC::Error( SbERR_PATH_NOT_FOUND );
             }
-#endif
         }
     }
     else
@@ -671,12 +660,7 @@ RTLFUNC(Kill) // JSM
         }
         else
         {
-#ifdef _OLD_FILE_IMPL
-            if(DirEntry(aFileSpec).Kill() != FSYS_ERR_OK)
-                StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-#else
             File::remove( getFullPathUNC( aFileSpec ) );
-#endif
         }
     }
     else
@@ -740,20 +724,13 @@ RTLFUNC(MkDir) // JSM
         }
         else
         {
-#ifdef _OLD_FILE_IMPL
-            if (!DirEntry(aPath).MakeDir())
-                StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-#else
             Directory::create( getFullPathUNC( aPath ) );
-#endif
         }
     }
     else
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
-
-#ifndef _OLD_FILE_IMPL
 
 // In OSL only empty directories can be deleted
 // so we have to delete all files recursively
@@ -810,7 +787,6 @@ void implRemoveDirRecursive( const String& aDirPath )
 
     nRet = Directory::remove( aDirPath );
 }
-#endif
 
 
 RTLFUNC(RmDir) // JSM
@@ -857,13 +833,7 @@ RTLFUNC(RmDir) // JSM
         }
         else
         {
-#ifdef _OLD_FILE_IMPL
-            DirEntry aDirEntry(aPath);
-            if (aDirEntry.Kill() != FSYS_ERR_OK)
-                StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-#else
             implRemoveDirRecursive( getFullPathUNC( aPath ) );
-#endif
         }
     }
     else
@@ -924,16 +894,11 @@ RTLFUNC(FileLen)
         }
         else
         {
-#ifdef _OLD_FILE_IMPL
-            FileStat aStat = DirEntry( aStr );
-            nLen = aStat.GetSize();
-#else
             DirectoryItem aItem;
             DirectoryItem::get( getFullPathUNC( aStr ), aItem );
             FileStatus aFileStatus( FileStatusMask_FileSize );
             aItem.getFileStatus( aFileStatus );
             nLen = (sal_Int32)aFileStatus.getFileSize();
-#endif
         }
         rPar.Get(0)->PutLong( (long)nLen );
     }
@@ -2831,60 +2796,6 @@ RTLFUNC(Dir)
         }
         else
         {
-#ifdef _OLD_FILE_IMPL
-            if ( nParCount >= 2 )
-            {
-                delete pRTLData->pDir;
-                pRTLData->pDir = 0; // wg. Sonderbehandlung Sb_ATTR_VOLUME
-                DirEntry aEntry( rPar.Get(1)->GetString() );
-                FileStat aStat( aEntry );
-                if(!aStat.GetError() && (aStat.GetKind() & FSYS_KIND_FILE))
-                {
-                    // ah ja, ist nur ein dateiname
-                    // Pfad abschneiden (wg. VB4)
-                    rPar.Get(0)->PutString( aEntry.GetName() );
-                    return;
-                }
-                sal_uInt16 nFlags = 0;
-                if ( nParCount > 2 )
-                    pRTLData->nDirFlags = nFlags = rPar.Get(2)->GetInteger();
-                else
-                    pRTLData->nDirFlags = 0;
-
-                // Sb_ATTR_VOLUME wird getrennt gehandelt
-                if( pRTLData->nDirFlags & Sb_ATTR_VOLUME )
-                    aPath = aEntry.GetVolume();
-                else
-                {
-                    // Die richtige Auswahl treffen
-                    sal_uInt16 nMode = FSYS_KIND_FILE;
-                    if( nFlags & Sb_ATTR_DIRECTORY )
-                        nMode |= FSYS_KIND_DIR;
-                    if( nFlags == Sb_ATTR_DIRECTORY )
-                        nMode = FSYS_KIND_DIR;
-                    pRTLData->pDir = new Dir( aEntry, (DirEntryKind) nMode );
-                    pRTLData->nCurDirPos = 0;
-                }
-            }
-
-            if( pRTLData->pDir )
-            {
-                for( ;; )
-                {
-                    if( pRTLData->nCurDirPos >= pRTLData->pDir->Count() )
-                    {
-                        delete pRTLData->pDir;
-                        pRTLData->pDir = 0;
-                        aPath.Erase();
-                        break;
-                    }
-                    DirEntry aNextEntry=(*(pRTLData->pDir))[pRTLData->nCurDirPos++];
-                    aPath = aNextEntry.GetName(); //Full();
-                    break;
-                }
-            }
-            rPar.Get(0)->PutString( aPath );
-#else
             // TODO: OSL
             if ( nParCount >= 2 )
             {
@@ -2981,7 +2892,6 @@ RTLFUNC(Dir)
                 }
             }
             rPar.Get(0)->PutString( aPath );
-#endif
         }
     }
 }
@@ -3109,12 +3019,6 @@ RTLFUNC(FileDateTime)
         }
         else
         {
-#ifdef _OLD_FILE_IMPL
-            DirEntry aEntry( aPath );
-            FileStat aStat( aEntry );
-            aTime = Time( aStat.TimeModified() );
-            aDate = Date( aStat.DateModified() );
-#else
             DirectoryItem aItem;
             DirectoryItem::get( getFullPathUNC( aPath ), aItem );
             FileStatus aFileStatus( FileStatusMask_ModifyTime );
@@ -3125,7 +3029,6 @@ RTLFUNC(FileDateTime)
 
             aTime = Time( aDT.Hours, aDT.Minutes, aDT.Seconds, 10000000*aDT.NanoSeconds );
             aDate = Date( aDT.Day, aDT.Month, aDT.Year );
-#endif
         }
 
         double fSerial = (double)GetDayDiff( aDate );
@@ -4449,39 +4352,6 @@ RTLFUNC(SetAttr) // JSM
                 }
             }
         }
-        else
-        {
-#ifdef _OLD_FILE_IMPL
-            // #57064 Bei virtuellen URLs den Real-Path extrahieren
-            DirEntry aEntry( aStr );
-            String aFile = aEntry.GetFull();
-            ByteString aByteFile( aFile, gsl_getSystemTextEncoding() );
-    #ifdef WNT
-            if (!SetFileAttributes (aByteFile.GetBuffer(),(DWORD)nFlags))
-                StarBASIC::Error(SbERR_FILE_NOT_FOUND);
-    #endif
-    #ifdef OS2
-            FILESTATUS3 aFileStatus;
-            APIRET rc = DosQueryPathInfo(aByteFile.GetBuffer(),1,
-                                         &aFileStatus,sizeof(FILESTATUS3));
-            if (!rc)
-            {
-                if (aFileStatus.attrFile != nFlags)
-                {
-                    aFileStatus.attrFile = nFlags;
-                    rc = DosSetPathInfo(aFile.GetStr(),1,
-                                        &aFileStatus,sizeof(FILESTATUS3),0);
-                    if (rc)
-                        StarBASIC::Error( SbERR_FILE_NOT_FOUND );
-                }
-            }
-            else
-                StarBASIC::Error( SbERR_FILE_NOT_FOUND );
-    #endif
-#else
-            // Not implemented
-#endif
-        }
     }
     else
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -4550,14 +4420,9 @@ RTLFUNC(FileExists)
         }
         else
         {
-#ifdef _OLD_FILE_IMPL
-            DirEntry aEntry( aStr );
-            bExists = aEntry.Exists();
-#else
             DirectoryItem aItem;
             FileBase::RC nRet = DirectoryItem::get( getFullPathUNC( aStr ), aItem );
             bExists = (nRet == FileBase::E_None);
-#endif
         }
         rPar.Get(0)->PutBool( bExists );
     }
