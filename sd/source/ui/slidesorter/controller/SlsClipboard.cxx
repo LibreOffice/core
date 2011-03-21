@@ -619,7 +619,6 @@ sal_Int8 Clipboard::AcceptDrop (
             }
 
             // Show the insertion marker and the substitution for a drop.
-            Point aPosition = pTargetWindow->PixelToLogic (rEvent.maPosPixel);
             SelectionFunction* pSelectionFunction = dynamic_cast<SelectionFunction*>(
                 mrSlideSorter.GetViewShell()->GetCurrentFunction().get());
             if (pSelectionFunction != NULL)
