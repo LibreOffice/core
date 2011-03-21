@@ -104,11 +104,7 @@ testcase tIZ19381
         sleep(2)
         Kontext
         if Active.exists(2) then
-            if gPlatGroup = "w95" then
-                warnlog "REGRESSION! #i41751# - Saving after Cut&Paste of OLE fails on windows!"
-            else
-                warnlog "OOPS, found unexpected MsgBox -> Check this out!"
-            end if
+            warnlog "OOPS, found unexpected MsgBox -> Check this out!"
             Active.OK
             call hCloseDocument
             goto endsub
@@ -202,7 +198,7 @@ testcase tIZ21036
     try
         printlog "OK, there are still " & GetDocumentCount & " documents open"
     catch
-        warnlog "Probably the office did crash -> #I21036#"
+        warnlog "Probably the office did crash"
         goto endsub
     endcatch
 
