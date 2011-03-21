@@ -31,6 +31,19 @@
     StyleFamily = family;                       \
     FilterList = { filter }
 
+String STR_STYLE_FILTER_USED
+{
+    Text [ en-US ] = "Applied Styles" ;
+};
+String STR_STYLE_FILTER_USERDEF
+{
+    Text [ en-US ] = "Custom Styles" ;
+};
+String STR_STYLE_FILTER_ALL
+{
+    Text [ en-US ] = "All Styles" ;
+};
+
  //------------------------------------------------------------------------
 SfxStyleFamilies DLG_STYLE_DESIGNER
 {
@@ -39,16 +52,16 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         SfxStyleFamilyItem
         {
             IMPL_FAMILY ( SFX_STYLE_FAMILY_PARA ,
-            < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
-            < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
-            < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ; ) ;
+            < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
+            < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
+            < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ; ) ;
             Text [ en-US ] = "Cell Styles" ;
 };
         SfxStyleFamilyItem
         {
             IMPL_FAMILY ( SFX_STYLE_FAMILY_PAGE ,
-            < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
-            < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ; ) ;
+            < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
+            < "Applied Styles" ; SFXSTYLEBIT_USERDEF ; > ; ) ;
             Text [ en-US ] = "Page Styles" ;
 };
     };
