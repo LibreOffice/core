@@ -47,6 +47,7 @@
 #include <rtl/ustrbuf.h>
 #include <sal/main.h>
 
+#include "args.h"
 #include "splashx.h"
 
 #define IMG_SUFFIX           ".png"
@@ -655,42 +656,17 @@ int status_pipe[2];
 rtl_uString *pAppPath = NULL;
 
 void
-exec_pagein (void)
+exec_pagein (Args *args)
 {
-    char buffer[64] = "";
     char *argv[5];
-    sal_uInt32 nArgs, i, j;
-    static const char *cmd_names[] = { "writer", "impress", "draw", "calc" };
 
     argv[0] = "dummy-pagein";
     argv[1] = "-L../basis-link/program";
     argv[2] = "@pagein-common";
-    argv[3] = buffer;
+    argv[3] = (char *)args->pagein_type;
     argv[4] = NULL;
 
-    nArgs = osl_getCommandArgCount();
-    for ( i = 0; i < nArgs; ++i )
-    {
-        rtl_uString *pArg = NULL;
-        osl_getCommandArg( i, &pArg );
-
-        sal_Int32 length = pArg->length;
-        const sal_Unicode *arg = pArg->buffer;
-        while (length > 2 && arg[0] == '-') {
-            arg++; length--;
-        }
-
-        for ( j = 0; j < SAL_N_ELEMENTS (cmd_names); ++j ) {
-            if (!rtl_ustr_indexOfAscii_WithLength(
-                   arg, length, cmd_names[j], strlen (cmd_names[j]))) {
-                strcpy (buffer, "@pagein-");
-                strcat (buffer, cmd_names[j]);
-                goto found_app;
-            }
-        }
-    }
- found_app:
-    pagein_execute (buffer[0] != '\0' ? 4 : 3, argv);
+    pagein_execute (args->pagein_type ? 4 : 3, argv);
 }
 
 static void extend_library_path (const char *new_element)
@@ -720,34 +696,22 @@ static void extend_library_path (const char *new_element)
 }
 
 static void
-exec_javaldx (void)
+exec_javaldx (Args *args)
 {
     char *newpath;
     sal_Sequence *line;
-    sal_uInt32 i, j, nArgs;
+    sal_uInt32 nArgs;
     rtl_uString *pApp = NULL;
     rtl_uString **ppArgs;
     rtl_uString *pEnvironment[1] = { NULL };
 
-    nArgs = osl_getCommandArgCount();
-    ppArgs = (rtl_uString **)calloc( nArgs + 2, sizeof( rtl_uString* ) );
+    ppArgs = (rtl_uString **)calloc( args->nArgsEnv + 2, sizeof( rtl_uString* ) );
 
-#warning FIXME - copy this and just sort the arguments globally first ...
-
-    for ( j = i = 0; i < nArgs; ++i )
-    {
-        rtl_uString *pTmp = NULL;
-        osl_getCommandArg( i, &pTmp );
-        if (rtl_ustr_ascii_compare_WithLength (pTmp->buffer, 5, "-env:"))
-        {
-            rtl_uString_acquire (pTmp);
-            ppArgs[j++] = pTmp;
-        }
-        rtl_uString_release (pTmp);
-    }
+    for ( nArgs = 0; nArgs < args->nArgsEnv; ++nArgs )
+        ppArgs[nArgs] = args->ppArgs[nArgs];
 
     /* FIXME: do we need to check / turn program/redirectrc into an absolute path ? */
-    rtl_uString_newFromAscii( &ppArgs[j++], "-env:INIFILENAME=vnd.sun.star.pathname:./redirectrc" );
+    rtl_uString_newFromAscii( &ppArgs[nArgs++], "-env:INIFILENAME=vnd.sun.star.pathname:./redirectrc" );
 
     oslProcess javaldx = NULL;
     oslFileHandle fileOut= 0;
@@ -756,7 +720,7 @@ exec_javaldx (void)
     rtl_uString_newFromAscii( &pApp, "../ure/bin/javaldx" );
     /* unset to avoid bogus output */
     rtl_uString_newFromAscii( &pEnvironment[0], "G_SLICE" );
-    err = osl_executeProcess_WithRedirectedIO( pApp, ppArgs, j,
+    err = osl_executeProcess_WithRedirectedIO( pApp, ppArgs, nArgs,
                                                osl_Process_HIDDEN,
                                                NULL, // security
                                                NULL, // work dir
@@ -794,9 +758,8 @@ exec_javaldx (void)
 }
 
 static void SAL_CALL
-fork_app_thread( void *dummy )
+fork_app_thread( Args *args )
 {
-    (void)dummy;
     rtl_uString *pApp = NULL, *pTmp = NULL, *pArg = NULL;
     rtl_uString **ppArgs;
     sal_uInt32 nArgs, i;
@@ -805,9 +768,11 @@ fork_app_thread( void *dummy )
     oslProcess child;
     oslProcessError nError;
 
-    exec_pagein ();
+    if (!args->bInhibitJavaLdx)
+        exec_pagein (args);
 
-    exec_javaldx ();
+    if (!args->bInhibitJavaLdx)
+        exec_javaldx (args);
 
     /* application name */
     rtl_uString_newFromAscii( &pApp, "file://" );
@@ -885,98 +850,24 @@ fork_app_thread( void *dummy )
     close( status_pipe[1] );
 }
 
-/* Check if 'pArg' is -pCmpWith or --pCmpWith */
-static sal_Bool
-arg_check( rtl_uString *pArg, const char *pCmpWith )
-{
-    sal_Unicode *pUnicode = rtl_uString_getStr( pArg );
-
-    if ( pUnicode[0] == (sal_Unicode)'-' )
-        pUnicode++;
-    else
-        return sal_False;
-
-    /* tolerate -- prefixes etc. */
-    if ( pUnicode[0] == (sal_Unicode)'-' )
-        pUnicode++;
-
-    return !rtl_ustr_ascii_compare( pUnicode, pCmpWith );
-}
-
-static const char *ppInhibit[] = {
-    "nologo", "headless", "invisible", "help", "h", "?",
-    "minimized", "version", NULL
-};
-static const char *ppTwoArgs[] = {
-    "pt", "display", NULL
-};
-
-/* Read command line parameters and return whether we display the splash. */
-static sal_Bool
-get_inhibit_splash()
-{
-    rtl_uString *pTmp = NULL;
-    sal_Bool bSkipNextArg = sal_False;
-    const char **ppIter;
-
-    rtl_uString_new( &pTmp );
-
-    sal_uInt32 nArg;
-    sal_uInt32 nArgCount = osl_getCommandArgCount();
-    for ( nArg = 0; nArg < nArgCount; ++nArg )
-    {
-        if ( bSkipNextArg )
-        {
-            bSkipNextArg = sal_False;
-            continue;
-        }
-
-        osl_getCommandArg( nArg, &pTmp );
-
-        /* check for inhibit splash params */
-        for ( ppIter = ppInhibit; *ppIter; ++ppIter )
-        {
-            if ( arg_check( pTmp, *ppIter ) )
-            {
-                rtl_uString_release( pTmp );
-                return sal_True;
-            }
-        }
-        /* check for 2 arguments params */
-        for ( ppIter = ppTwoArgs; *ppIter; ++ppIter )
-        {
-            if ( arg_check( pTmp, *ppIter ) )
-            {
-                bSkipNextArg = sal_True;
-                break;
-            }
-        }
-    }
-
-    /* cleanup */
-    rtl_uString_release( pTmp );
-
-    return sal_False;
-}
-
 SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 {
     int fd = 0;
-    sal_Bool bInhibitSplash;
     sal_Bool bSentArgs = sal_False;
     rtl_uString *pPipePath = NULL;
     ProgressStatus eResult = ProgressExit;
+    Args *args;
 
     fprintf (stderr, "start !\n");
 
     /* turn SIGPIPE into an error */
     signal( SIGPIPE, SIG_IGN );
 
-    bInhibitSplash = get_inhibit_splash();
+    args = parse_args();
 
 #ifndef ENABLE_QUICKSTART_LIBPNG
     /* we can't load and render it anyway */
-    bInhibitSplash = sal_True;
+    args->bInhibitSplash = sal_True;
 #endif
 
     pAppPath = get_app_path( argv[0] );
@@ -1019,15 +910,15 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                 exit( 1 );
             }
             int status_fd = status_pipe[0];
-            osl_createThread( fork_app_thread, NULL );
+            osl_createThread( fork_app_thread, args );
 
-            if ( !bInhibitSplash )
+            if ( !args->bInhibitSplash )
             {
                 load_splash_image( pAppPath );
-                load_splash_defaults( pAppPath, &bInhibitSplash );
+                load_splash_defaults( pAppPath, &args->bInhibitSplash );
             }
 
-            if ( !bInhibitSplash && splash_create_window( argc, argv ) )
+            if ( !args->bInhibitSplash && splash_create_window( argc, argv ) )
             {
                 splash_draw_progress( 0 );
                 eResult = show_splash( status_fd );

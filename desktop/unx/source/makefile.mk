@@ -41,7 +41,8 @@ CFLAGS+=$(LIBPNG_CFLAGS)
 
 OBJFILES= \
     $(OBJ)$/splashx.obj \
-    $(OBJ)$/start.obj
+    $(OBJ)$/start.obj \
+    $(OBJ)$/args.obj
 
 PAGEIN_OBJS= \
     $(OBJ)$/pagein.obj \
