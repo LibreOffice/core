@@ -1114,6 +1114,15 @@ void ScDrawLayer::HeightChanged( SCTAB nTab, SCROW nRow, long nDifTwips )
     if (!bAdjustEnabled)
         return;
 
+    SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
+    DBG_ASSERT(pPage,"Page not found");
+    if (!pPage)
+        return;
+
+    // for an empty page, there's no need to calculate the row heights
+    if (!pPage->GetObjCount())
+        return;
+
     Rectangle aRect;
     Point aTopLeft;
 
@@ -1143,6 +1152,15 @@ sal_Bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndR
     if ( !pDoc )
         return sal_False;
 
+    SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
+    DBG_ASSERT(pPage,"Page not found");
+    if (!pPage)
+        return sal_False;
+
+    // for an empty page, there's no need to calculate the row heights
+    if (!pPage->GetObjCount())
+        return sal_False;
+
     Rectangle aTestRect;
 
     aTestRect.Top() += pDoc->GetRowHeight( 0, nStartRow-1, nTab);
@@ -1164,11 +1182,6 @@ sal_Bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndR
     sal_Bool bNegativePage = pDoc->IsNegativePage( nTab );
     if ( bNegativePage )
         MirrorRectRTL( aTestRect );
-
-    SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page nicht gefunden");
-    if (!pPage)
-        return sal_False;
 
     sal_Bool bFound = sal_False;
 

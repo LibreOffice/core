@@ -3281,6 +3281,12 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
         aFunc.SetWidthOrHeight( sal_False, 1, nRowArr, nTab, eMode, 0, sal_True, sal_True );
         //  SC_SIZE_DIRECT with size 0: hide
     }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_VISFLAG ) )
+    {
+        // #i116460# Shortcut to only set the flag, without drawing layer update etc.
+        // Should only be used from import filters.
+        pDoc->SetRowHidden(nStartRow, nEndRow, nTab, !ScUnoHelpFunctions::GetBoolFromAny( aValue ));
+    }
     else if ( aNameString.EqualsAscii( SC_UNONAME_CELLFILT ) )
     {
         //! undo etc.
