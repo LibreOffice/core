@@ -450,24 +450,36 @@ TYPEINIT1(SbUserFormModule,SbObjModule)
 
 typedef std::vector<HighlightPortion> HighlightPortions;
 
-bool getDefaultVBAMode( StarBASIC* pb )
+uno::Reference< frame::XModel > getDocumentModel( StarBASIC* pb )
 {
-    bool bResult = false;
-    if ( pb && pb->IsDocBasic() )
+    uno::Reference< frame::XModel > xModel;
+    if( pb && pb->IsDocBasic() )
     {
         uno::Any aDoc;
-    if ( pb->GetUNOConstant( "ThisComponent", aDoc ) )
-        {
-            uno::Reference< beans::XPropertySet > xProp( aDoc, uno::UNO_QUERY );
-            if ( xProp.is() )
-            {
-                uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY );
-                if ( xVBAMode.is() )
-                    bResult = xVBAMode->getVBACompatibilityMode() == sal_True;
-            }
-        }
+        if( pb->GetUNOConstant( "ThisComponent", aDoc ) )
+            xModel.set( aDoc, uno::UNO_QUERY );
     }
-    return bResult;
+    return xModel;
+}
+
+uno::Reference< vba::XVBACompatibility > getVBACompatibility( const uno::Reference< frame::XModel >& rxModel )
+{
+    uno::Reference< vba::XVBACompatibility > xVBACompat;
+    try
+    {
+        uno::Reference< beans::XPropertySet > xModelProps( rxModel, uno::UNO_QUERY_THROW );
+        xVBACompat.set( xModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ), uno::UNO_QUERY );
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return xVBACompat;
+}
+
+bool getDefaultVBAMode( StarBASIC* pb )
+{
+    uno::Reference< vba::XVBACompatibility > xVBACompat = getVBACompatibility( getDocumentModel( pb ) );
+    return xVBACompat.is() && xVBACompat->getVBACompatibilityMode();
 }
 
 class AsyncQuitHandler
@@ -1018,8 +1030,22 @@ sal_Bool SbModule::IsVBACompat() const
 
 void SbModule::SetVBACompat( sal_Bool bCompat )
 {
-    mbVBACompat = bCompat;
+    if( mbVBACompat != bCompat )
+    {
+        mbVBACompat = bCompat;
+        // initialize VBA document API
+        if( mbVBACompat ) try
+        {
+            StarBASIC* pBasic = static_cast< StarBASIC* >( GetParent() );
+            uno::Reference< lang::XMultiServiceFactory > xFactory( getDocumentModel( pBasic ), uno::UNO_QUERY_THROW );
+            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+        }
+        catch( Exception& )
+        {
+        }
+    }
 }
+
 // Ausfuehren eines BASIC-Unterprogramms
 sal_uInt16 SbModule::Run( SbMethod* pMeth )
 {
