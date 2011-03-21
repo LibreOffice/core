@@ -71,6 +71,8 @@ private:
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
     DECL_LINK( DialogClosed, AbstractScLinkedAreaDlg* );
 
+    sal_uInt32  nF3ShiftCounter;
+
 public:
 
     TYPEINFO();
@@ -84,6 +86,7 @@ public:
 
     void        ExecuteEdit( SfxRequest& rReq );
     void        ExecuteTrans( SfxRequest& rReq );
+    void                ExecuteRotateTrans( SfxRequest& rReq );
 
     void        GetBlockState( SfxItemSet& rSet );
     void        GetCellState( SfxItemSet& rSet );
