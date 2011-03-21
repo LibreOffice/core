@@ -34,11 +34,7 @@
 #include <tools/wintypes.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
-
-// system floating window
-#define WB_POPUP                ((WinBits)0x20000000)
-
-#define WB_STDPOPUP             (WB_BORDER | WB_POPUP | WB_SYSTEMWINDOW | WB_3DLOOK | WB_DIALOGCONTROL)
+#include <tools/wintypes.hxx>
 
 // from vcl/inc/vclenum.hxx
 #ifndef ENUM_TIMEFIELDFORMAT_DECLARED
