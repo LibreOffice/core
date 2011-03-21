@@ -403,6 +403,19 @@ Image IMG_REMOVEALLBMP_H
 #define SfxStyleFamiliesRes2\
     Text [ en-US ] = "Presentation Styles" ;\
 
+String STR_STYLE_FILTER_USED
+{
+    Text [ en-US ] = "Applied Styles" ;
+};
+String STR_STYLE_FILTER_USERDEF
+{
+    Text [ en-US ] = "Custom Styles" ;
+};
+String STR_STYLE_FILTER_ALL
+{
+    Text [ en-US ] = "All Styles" ;
+};
+
 SfxStyleFamilies DLG_STYLE_DESIGNER
 {
     StyleFamilyList =
@@ -413,9 +426,9 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
             FilterList  =
             {
-                < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
-                < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
-                < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ;
+                < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
+                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
+                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
             };
         };
         SfxStyleFamilyItem RID_PRESENTATIONSTYLEFAMILY
@@ -424,7 +437,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
             FilterList =
             {
-                < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
+                < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
             };
         };
     };
