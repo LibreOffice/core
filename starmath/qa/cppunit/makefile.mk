@@ -92,18 +92,7 @@ my_file = file://
 
 ALLTAR: test
 
-$(MISC)$/$(TARGET)$/types.rdb .ERRREMOVE : $(SOLARBINDIR)$/types.rdb
-    $(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $? $@
-
-$(MISC)/$(TARGET)/udkapi.rdb .ERRREMOVE : $(SOLARBINDIR)$/udkapi.rdb
-    $(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $? $@
-
-ure_components = \
-	stocservices
-test_components = $(ure_components)
-test_components += \
+test_components = \
     component/framework/util/fwk \
     component/toolkit/util/tk \
     component/sfx2/util/sfx \
@@ -134,13 +123,12 @@ $(MISC)/$(TARGET)/services.rdb .ERRREMOVE : makefile.mk $(MISC)/services.input
 STAR_RESOURCEPATH:=$(PWD)/$(BIN)$(PATH_SEPERATOR)$(SOLARBINDIR)
 .EXPORT : STAR_RESOURCEPATH
 
-test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/types.rdb $(MISC)/$(TARGET)/udkapi.rdb
+test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb
     @echo ----------------------------------------------------------
     @echo - start unit test \#1 on library $(SHL1TARGETN)
     @echo ----------------------------------------------------------
-    STAR_RESOURCEPATH="$(my_file)$(OUTDIR)/bin" $(CPPUNITTESTER) $(SHL1TARGETN) -headless -invisible \
-        -env:UNO_SERVICES="$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb" \
-        -env:UNO_TYPES="$(my_file)$(PWD)/$(MISC)/$(TARGET)/types.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/udkapi.rdb" \
-        -env:OOO_BASE_DIR="$(my_file)$(OUTDIR)/lib" \
-        -env:BRAND_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
-        -env:UNO_USER_PACKAGES_CACHE="$(my_file)$(PWD)/$(MISC)/$(TARGET)"
+    $(CPPUNITTESTER) $(SHL1TARGETN) -headless -invisible \
+        '-env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/udkapi.rdb $(my_file)$(SOLARBINDIR)$/types.rdb' \
+        '-env:UNO_SERVICES=$(my_file)$(SOLARXMLDIR)/ure/services.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb'\
+        -env:URE_INTERNAL_LIB_DIR="$(my_file)$(SOLARSHAREDBIN)" \
+        -env:OOO_BASE_DIR="$(my_file)$(SOLARSHAREDBIN)"
