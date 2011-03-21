@@ -319,6 +319,23 @@ function tools_dbtools_fgetMySQLODBCDatabaseProperties()
 
 end function
 '-------------------------------------------------------------------------
+function tools_dbtools_fgetMySQLnativeDatabaseProperties(sDBConfigFileName as string)
+    '/// return the databaseserver properties from the environment directory
+	'/// <u>parameter:</u>
+	'/// <br>
+    '/// <u>return:</u>
+	'/// the properties as an array
+    '/// entry 1 defined (yes or no)
+    '/// entry 2 server name 
+    '/// entry 3 database name
+    '/// entry 4 database port
+    '/// entry 5 database user name
+    '/// entry 6 database user password
+
+    tools_dbtools_fgetMySQLnativeDatabaseProperties = fgetGenericDatabaseProperties( sDBConfigFileName, "mysql_native" )
+
+end function
+'-------------------------------------------------------------------------
 function tools_dbtools_fgetAdabasDatabaseProperties()
     '/// return the databaseserver properties from the environment directory
 	'/// <u>parameter:</u>
