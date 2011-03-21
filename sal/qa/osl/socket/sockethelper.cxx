@@ -30,7 +30,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 #include "sockethelper.hxx"
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+
+#define t_print printf
 
 //------------------------------------------------------------------------
 // Ip version definition

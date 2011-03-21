@@ -55,7 +55,10 @@
     inline sal_Bool SAL_CALL operator== (const SocketAddr & Addr) const;
  */
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+
 
 #include "sockethelper.hxx"
 
@@ -125,7 +128,7 @@ namespace osl_SocketAddr
             suError += suHost2;
             suError += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'."));
 
-            CPPUNIT_ASSERT_MESSAGE(suError, sal_True == bOk);
+            CPPUNIT_ASSERT_MESSAGE(STD_STRING(suError), sal_True == bOk);
         }
 
         void ctors_copy()
@@ -305,7 +308,7 @@ namespace osl_SocketAddr
                 if ( compareUString( getIPbyName( aString ), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.107")) ) == sal_True )
                     bOK = sal_True;
             }
-            CPPUNIT_ASSERT_MESSAGE( suError, sal_True == bOK);
+            CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError), sal_True == bOK);
         }
 
 // LLA: now we have to control, if this behaviour is right.
@@ -335,7 +338,7 @@ namespace osl_SocketAddr
                 }
             }
 
-            CPPUNIT_ASSERT_MESSAGE( suError, sal_True == bOK );
+            CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError), sal_True == bOK );
         }
 
 
@@ -743,7 +746,7 @@ namespace osl_SocketAddr
             ::rtl::OUString suError;
             suError = outputError(suResult, getThisHostname( ), "test for getLocalHostname() function");
 
-            CPPUNIT_ASSERT_MESSAGE( suError, bOk == true );
+            CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError), bOk == true );
         }
 
         CPPUNIT_TEST_SUITE( getLocalHostname );
@@ -861,19 +864,19 @@ namespace osl_SocketAddr
 // -----------------------------------------------------------------------------
 
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::ctors, "osl_SocketAddr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::is, "osl_SocketAddr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::getHostname, "osl_SocketAddr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::getPort, "osl_SocketAddr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::setPort, "osl_SocketAddr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::setAddr, "osl_SocketAddr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::getAddr, "osl_SocketAddr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::operator_equal, "osl_SocketAddr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::getSocketAddrHandle, "osl_SocketAddr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::getLocalHostname, "osl_SocketAddr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::resolveHostname, "osl_SocketAddr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::gettheServicePort, "osl_SocketAddr");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::getFamilyOfSocketAddr, "osl_SocketAddr");
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::ctors);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::is);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::getHostname);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::getPort);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::setPort);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::setAddr);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::getAddr);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::operator_equal);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::getSocketAddrHandle);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::getLocalHostname);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::resolveHostname);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::gettheServicePort);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_SocketAddr::getFamilyOfSocketAddr);
 
 } // namespace osl_SocketAddr
 
@@ -881,6 +884,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_SocketAddr::getFamilyOfSocketAddr, "os
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

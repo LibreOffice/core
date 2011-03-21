@@ -62,7 +62,23 @@
 
 #include <osl_Socket_Const_orig.h>
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+
+/** test output if SILENT_TEST is 0
+*/
+#define SILENT_TEST 0
+
+#if SILENT_TEST
+#   define t_print(...) { }
+#else
+#   define t_print printf
+#endif
+
+/** convert UString and OUString to std::string
+*/
+#define STD_STRING(s) (std::string((const char *)s.getStr()))
 
 using namespace osl;
 
@@ -211,7 +227,7 @@ inline ::rtl::OUString outputError( const ::rtl::OUString & returnVal, const ::r
 void thread_sleep( sal_Int32 _nSec )
 {
     /// print statement in thread process must use fflush() to force display.
-    t_print("# wait %d seconds. ", _nSec );
+    t_print("# wait %d seconds. ", (int) _nSec );
     fflush(stdout);
 
 #ifdef WNT                               //Windows
@@ -228,7 +244,7 @@ void thread_sleep( sal_Int32 _nSec )
 inline void printBool( sal_Bool bOk )
 {
     t_print("#printBool# " );
-    ( sal_True == bOk ) ? t_print("YES!\n" ): t_print("NO!\n" );
+    t_print ("%s", (sal_True == bOk) ? "YES!\n" : "NO!\n");
 }
 
 /** print content of a ByteSequence.
@@ -237,10 +253,12 @@ inline void printByteSequence_IP( const ::rtl::ByteSequence & bsByteSeq, sal_Int
 {
      t_print("#ByteSequence is: " );
     for ( int i = 0; i < nLen; i++ ){
+#if ! SILENT_TEST
         if ( bsByteSeq[i] < 0 )
             t_print("%d ",  256 + bsByteSeq[i] );
         else
             t_print("%d ",  bsByteSeq[i] );
+#endif
     }
     t_print(" .\n" );
 }
@@ -753,7 +771,7 @@ namespace osl_SocketAddr
             suError += suHost2;
             suError += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'."));
 
-            CPPUNIT_ASSERT_MESSAGE(suError, sal_True == bOk);
+            CPPUNIT_ASSERT_MESSAGE(STD_STRING(suError), sal_True == bOk);
         }
 
         void ctors_copy()
@@ -932,7 +950,7 @@ namespace osl_SocketAddr
                 if ( compareUString( getIPbyName( oustring2char( suResult ) ), aHostIp4 ) == sal_True )
                     bOK = sal_True;
             }
-            CPPUNIT_ASSERT_MESSAGE( suError, sal_True == bOK);
+            CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError), sal_True == bOK);
         }
 
 // LLA: now we have to control, if this behaviour is right.
@@ -960,7 +978,7 @@ namespace osl_SocketAddr
                 }
             }
 
-            CPPUNIT_ASSERT_MESSAGE( suError, sal_True == bOK );
+            CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError), sal_True == bOK );
         }
 
 
@@ -1363,7 +1381,7 @@ namespace osl_SocketAddr
             ::rtl::OUString suError;
             suError = outputError(suResult, getThisHostname( ), "test for getLocalHostname() function");
 
-            CPPUNIT_ASSERT_MESSAGE( suError, bOk == true );
+            CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError), bOk == true );
         }
 
         CPPUNIT_TEST_SUITE( getLocalHostname );
@@ -1776,7 +1794,7 @@ namespace osl_Socket
 
             sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );
             ::rtl::OUString suError1 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Socket bind fail:")) + sSocket.getErrorAsString();
-            CPPUNIT_ASSERT_MESSAGE( suError1, sal_True == bOK1 );
+            CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError1), sal_True == bOK1 );
 
             sSocket.getLocalAddr( saLocalSocketAddr );
 
@@ -1824,7 +1842,7 @@ namespace osl_Socket
 
             sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );
             ::rtl::OUString suError1 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Socket bind fail:")) + sSocket.getErrorAsString();
-            CPPUNIT_ASSERT_MESSAGE( suError1, sal_True == bOK1 );
+            CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError1), sal_True == bOK1 );
             sal_Bool bOK = ( IP_PORT_MYPORT7 == sSocket.getLocalPort( )  );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getLocalPort function: first create a new socket, then a socket address, bind them, and check the port.",
@@ -1856,7 +1874,7 @@ namespace osl_Socket
             //on Unix, if Addr is not an address of type osl_Socket_FamilyInet, it returns OSL_INVALID_PORT
             ::rtl::OUString suError (RTL_CONSTASCII_USTRINGPARAM("on Unix, if Addr is not an address of type osl_Socket_FamilyInet, it returns OSL_INVALID_PORT, but can not create Addr of that case"));
 #endif
-            CPPUNIT_ASSERT_MESSAGE( suError, sal_False );
+            CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError), sal_False );
 
         }
 
@@ -1869,13 +1887,13 @@ namespace osl_Socket
 
             sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );
             ::rtl::OUString suError1 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Socket bind fail:")) + sSocket.getErrorAsString();
-            CPPUNIT_ASSERT_MESSAGE( suError1, sal_True == bOK1 );
+            CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError1), sal_True == bOK1 );
             ::rtl::OUString suError = outputError(::rtl::OUString::valueOf(sSocket.getLocalPort( )),
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("34463")),
                 "test for getLocalPort function: first create a new socket, then an invalid socket address, bind them, and check the port assigned");
             sal_Bool bOK = ( sSocket.getLocalPort( ) >= 1 &&  sSocket.getLocalPort( ) <= 65535);
 
-            CPPUNIT_ASSERT_MESSAGE( suError, sal_True == bOK );
+            CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError), sal_True == bOK );
         }
 
         CPPUNIT_TEST_SUITE( getLocalPort );
@@ -1921,7 +1939,7 @@ namespace osl_Socket
 
             sal_Bool bOK1 = sSocket.bind( saBindSocketAddr );
             ::rtl::OUString suError1 = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Socket bind fail:")) + sSocket.getErrorAsString();
-            CPPUNIT_ASSERT_MESSAGE( suError1, sal_True == bOK1 );
+            CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError1), sal_True == bOK1 );
             sal_Bool bOK;
             ::rtl::OUString suError;
 #ifdef WNT
@@ -1936,7 +1954,7 @@ namespace osl_Socket
             bOK = bRes1 || bRes2;
             suError = outputError(sSocket.getLocalHost( ), aUString, "test for getLocalHost function: create localhost socket and check name");
 #endif
-            CPPUNIT_ASSERT_MESSAGE( suError, sal_True == bOK );
+            CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError), sal_True == bOK );
         }
 
         void getLocalHost_002()
@@ -1951,7 +1969,7 @@ namespace osl_Socket
             sal_Bool bOK = compareUString( sSocket.getLocalHost( ), aNullURL ) ;
             ::rtl::OUString suError = outputError(sSocket.getLocalHost( ), aNullURL, "test for getLocalHost function: getLocalHost with invalid SocketAddr");
 
-            CPPUNIT_ASSERT_MESSAGE( suError, sal_True == bOK );
+            CPPUNIT_ASSERT_MESSAGE( STD_STRING(suError), sal_True == bOK );
         }
 
         CPPUNIT_TEST_SUITE( getLocalHost );
@@ -2436,7 +2454,7 @@ namespace osl_Socket
             // on Linux, the value of option is 1, on Solaris, it's 16, but it's not important the exact value,
             // just judge it is zero or not!
             sal_Bool bOK = ( 0  !=  *pGetBuffer );
-            t_print("#setOption_001: getOption is %d \n", *pGetBuffer);
+            t_print("#setOption_001: getOption is %ld \n", *pGetBuffer);
 
             // toggle check, set to 0
             *pbDontRouteSet = 0;
@@ -2448,7 +2466,7 @@ namespace osl_Socket
 
             sal_Bool bOK2 = ( 0  ==  *pGetBuffer );
 
-            t_print("#setOption_001: getOption is %d \n", *pGetBuffer);
+            t_print("#setOption_001: getOption is %ld \n", *pGetBuffer);
 
 // LLA:             sal_Bool * pbDontTouteSet = ( sal_Bool * )malloc( sizeof ( sal_Bool ) );
 // LLA:             *pbDontTouteSet = sal_True;
@@ -2516,7 +2534,7 @@ namespace osl_Socket
             asAcceptorSocket.setOption( osl_Socket_OptionDontRoute, 1 ); //sal_True );
             sal_Bool bOK = ( 0  !=  asAcceptorSocket.getOption( osl_Socket_OptionDontRoute ) );
 
-            t_print("setOption_simple_001(): getoption is %d \n", asAcceptorSocket.getOption( osl_Socket_OptionDontRoute ) );
+            t_print("setOption_simple_001(): getoption is %d \n", (int) asAcceptorSocket.getOption( osl_Socket_OptionDontRoute ) );
             CPPUNIT_ASSERT_MESSAGE( "test for setOption function: set option of a socket and then check.",
                                       ( sal_True == bOK ) );
         }
@@ -2944,7 +2962,7 @@ namespace osl_StreamSocket
             sal_Int32 nLength = myClientThread.getCount();
             bool       bIsOk   = myClientThread.isOk(); // check if the values are right.
 
-            t_print("Length:=%d\n", nLength);
+            t_print("Length:=%d\n", (int) nLength);
             t_print(" bIsOk:=%d\n", bIsOk);
 
             CPPUNIT_ASSERT_MESSAGE(" test for write/read values with two threads: send data from server, check readed data in client.",
@@ -2992,12 +3010,18 @@ protected:
 
           if ( osl_Socket_Ok == csConnectorSocket.connect( saTargetSocketAddr, pTimeout ))
           {
-              sal_Int32 nWrite1 = csConnectorSocket.write( pTestString1, 11 ); // "test socket"
+#if !SILENT_TEST
+              sal_Int32 nWrite1 =
+#endif
+                csConnectorSocket.write( pTestString1, 11 ); // "test socket"
 
-              sal_Int32 nWrite2 = csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
+#if !SILENT_TEST
+              sal_Int32 nWrite2 =
+#endif
+                csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
             thread_sleep( 2 );
               csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
-              t_print("nWrite1 is %d, nWrite2 is %d\n", nWrite1, nWrite2 );
+              t_print("nWrite1 is %d, nWrite2 is %d\n", (int)nWrite1, (int)nWrite2 );
               //thread_sleep( 1 );
           }
           else
@@ -3073,7 +3097,7 @@ protected:
 
             sal_Int32 nRead2 = ssConnectionSocket.read( pReadBuffer + nRead1, 12 );
             sal_Int32 nRead3 = ssConnectionSocket.read( pReadBuffer + nRead1 + nRead2, 12 );
-            t_print("after read 2, nRead1 is %d, nRead2 is %d, nRead3 is %d \n", nRead1, nRead2, nRead3 );
+            t_print("after read 2, nRead1 is %d, nRead2 is %d, nRead3 is %d \n", (int) nRead1, (int) nRead2, (int) nRead3 );
             mySendThread.join();
 
             ssConnectionSocket.close();
@@ -3119,7 +3143,7 @@ protected:
             sal_Int32 nWrite = ssConnectionSocket.write( pReadBuffer, 11 );
             // still can read
             sal_Int32 nRead3 = ssConnectionSocket.read( pReadBuffer + nRead1 , 12 );
-            t_print("after read 2, nRead1 is %d, nWrite is %d, nRead3 is %d\n", nRead1, nWrite, nRead3 );
+            t_print("after read 2, nRead1 is %d, nWrite is %d, nRead3 is %d\n", (int) nRead1, (int) nWrite, (int) nRead3 );
             mySendThread.join();
             ssConnectionSocket.close();
             asSocket.close();
@@ -3540,8 +3564,11 @@ protected:
             return;
         }
         //blocking mode: default
-        sal_Int32 nRecv = dsSocket.recvFrom( pRecvBuffer, 30, &saTargetSocketAddr); //strlen( pTestString2 ) + 1
-        t_print("After recvFrom, nRecv is %d\n", nRecv);
+#if !SILENT_TEST
+        sal_Int32 nRecv =
+#endif
+            dsSocket.recvFrom( pRecvBuffer, 30, &saTargetSocketAddr); //strlen( pTestString2 ) + 1
+        t_print("After recvFrom, nRecv is %d\n", (int) nRecv);
     }
 
     void SAL_CALL onTerminated( )
@@ -3662,8 +3689,8 @@ public:
 
 // -----------------------------------------------------------------------------
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_DatagramSocket::ctors, "osl_DatagramSocket");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom, "osl_DatagramSocket");
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::ctors);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom);
 
 } // namespace osl_DatagramSocket
 
@@ -3672,6 +3699,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom, "osl_
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

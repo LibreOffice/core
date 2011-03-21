@@ -59,7 +59,9 @@
 // include files
 //------------------------------------------------------------------------
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #include "osl_Socket_Const.h"
 #include "sockethelper.hxx"
@@ -249,9 +251,9 @@ namespace osl_AcceptorSocket
 
 // -----------------------------------------------------------------------------
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::ctors, "osl_AcceptorSocket");
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_AcceptorSocket::ctors);
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::operator_assign, "osl_AcceptorSocket");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::listen_accept, "osl_AcceptorSocket");
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_AcceptorSocket::listen_accept);
 
 } // namespace osl_AcceptorSocket
 
@@ -259,6 +261,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::listen_accept, "osl_Ac
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

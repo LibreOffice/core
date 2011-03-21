@@ -86,6 +86,20 @@ extern "C"
 }
 #endif
 
+/** test output if SILENT_TEST is 0
+*/
+#define SILENT_TEST 0
+
+#if SILENT_TEST
+#   define t_print(...) { }
+#else
+#   define t_print printf
+#endif
+
+/** convert UString and OUString to std::string
+*/
+#define STD_STRING(s) (std::string((const char *)s.getStr()))
+
 /** compare two OUString.
 */
 sal_Bool compareUString( const ::rtl::OUString & ustr1, const ::rtl::OUString & ustr2 );

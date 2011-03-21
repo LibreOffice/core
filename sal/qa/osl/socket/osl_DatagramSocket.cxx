@@ -55,7 +55,9 @@
     inline sal_Bool SAL_CALL operator== (const SocketAddr & Addr) const;
  */
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #include "sockethelper.hxx"
 
@@ -179,8 +181,11 @@ protected:
             return;
         }
         //blocking mode: default
-        sal_Int32 nRecv = dsSocket.recvFrom( pRecvBuffer, 30, &saTargetSocketAddr); //strlen( pTestString2 ) + 1
-        t_print("After recvFrom, nRecv is %d\n", nRecv);
+#if !SILENT_TEST
+        sal_Int32 nRecv =
+#endif
+            dsSocket.recvFrom( pRecvBuffer, 30, &saTargetSocketAddr); //strlen( pTestString2 ) + 1
+        t_print("After recvFrom, nRecv is %d\n", (int) nRecv);
     }
 
     void SAL_CALL onTerminated( )
@@ -301,8 +306,8 @@ public:
 
 // -----------------------------------------------------------------------------
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_DatagramSocket::ctors, "osl_DatagramSocket");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom, "osl_DatagramSocket");
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::ctors);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom);
 
 } // namespace osl_DatagramSocket
 
@@ -310,6 +315,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom, "osl_
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

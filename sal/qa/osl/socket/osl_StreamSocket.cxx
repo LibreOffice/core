@@ -55,7 +55,9 @@
      inline sal_Bool SAL_CALL operator== (const SocketAddr & Addr) const;
 */
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #include "sockethelper.hxx"
 #include <osl/conditn.hxx>
@@ -660,7 +662,7 @@ namespace osl_StreamSocket
                 sal_Int32 nLength = myClientThread.getCount();
                 bool       bIsOk   = myClientThread.isOk(); // check if the values are right.
 
-                t_print("Length:=%d\n", nLength);
+                t_print("Length:=%d\n", (int) nLength);
                 t_print(" bIsOk:=%d\n", bIsOk);
 
                 CPPUNIT_ASSERT_MESSAGE(" test for write/read values with two threads: send data from server, check readed data in client.",
@@ -717,12 +719,17 @@ namespace osl_StreamSocket
 
                 if ( osl_Socket_Ok == m_csConnectorSocket.connect( m_saTargetSocketAddr, pTimeout ))
                 {
-                    sal_Int32 nWrite1 = m_csConnectorSocket.write( pTestString1, 11 ); // "test socket"
-
-                    sal_Int32 nWrite2 = m_csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
+#if !SILENT_TEST
+                    sal_Int32 nWrite1 =
+#endif
+                        m_csConnectorSocket.write( pTestString1, 11 ); // "test socket"
+#if !SILENT_TEST
+                    sal_Int32 nWrite2 =
+#endif
+                        m_csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
                     thread_sleep( 2 );
                     m_csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
-                    t_print("nWrite1 is %d, nWrite2 is %d\n", nWrite1, nWrite2 );
+                    t_print("nWrite1 is %d, nWrite2 is %d\n", (int) nWrite1, (int) nWrite2 );
                     //thread_sleep( 1 );
                 }
                 else
@@ -812,7 +819,7 @@ namespace osl_StreamSocket
 
                 sal_Int32 nRead2 = ssConnectionSocket.read( pReadBuffer + nRead1, 12 );
                 sal_Int32 nRead3 = ssConnectionSocket.read( pReadBuffer + nRead1 + nRead2, 12 );
-                t_print("after read 2, nRead1 is %d, nRead2 is %d, nRead3 is %d \n", nRead1, nRead2, nRead3 );
+                t_print("after read 2, nRead1 is %d, nRead2 is %d, nRead3 is %d \n", (int) nRead1, (int) nRead2, (int) nRead3 );
                 mySendThread.join();
 
                 ssConnectionSocket.close();
@@ -859,7 +866,7 @@ namespace osl_StreamSocket
                 sal_Int32 nWrite = ssConnectionSocket.write( pReadBuffer, 11 );
                 // still can read
                 sal_Int32 nRead3 = ssConnectionSocket.read( pReadBuffer + nRead1 , 12 );
-                t_print("after read 2, nRead1 is %d, nWrite is %d, nRead3 is %d\n", nRead1, nWrite, nRead3 );
+                t_print("after read 2, nRead1 is %d, nWrite is %d, nRead3 is %d\n", (int) nRead1, (int) nWrite, (int) nRead3 );
                 mySendThread.join();
                 ssConnectionSocket.close();
                 asSocket.close();
@@ -961,7 +968,7 @@ namespace osl_StreamSocket
                     {
                         t_print("read()\n");
                         m_nReadCount = aSocket.read( m_pBuffer, m_nBufferSize );
-                        t_print("%d bytes recived.\n", m_nReadCount);
+                        t_print("%d bytes recived.\n", (int) m_nReadCount);
                     }
                 }
                 else
@@ -1283,10 +1290,17 @@ namespace osl_StreamSocket
                     // termAndJoinThread(&myReadThread);
 
                     // statistics
-                    sal_uInt32 nLength = myReadThread.getCount();
-                    bool       bIsOk   = myReadThread.isOk(); // check if the values are right.
+#if !SILENT_TEST
+                    sal_uInt32 nLength =
+#endif
+                        myReadThread.getCount();
 
-                    t_print("Length:=%d\n", nLength);
+#if !SILENT_TEST
+                    bool       bIsOk   =
+#endif
+                        myReadThread.isOk(); // check if the values are right.
+
+                    t_print("Length:=%d\n", (int) nLength);
                     t_print(" bIsOk:=%d\n", bIsOk);
                 }
                 else
@@ -1410,12 +1424,12 @@ namespace osl_StreamSocket
 
 // -----------------------------------------------------------------------------
 
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamSocket::ctors, "osl_StreamSocket");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamSocket::send_recv, "osl_StreamSocket");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamSocket::shutdown, "osl_StreamSocket");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamSocket::isExceptionPending, "osl_StreamSocket");
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::ctors);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::send_recv);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::shutdown);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::isExceptionPending);
 
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamSocket::justtest, "osl_StreamSocket");
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::justtest);
 
 } // namespace osl_StreamSocket
 
@@ -1423,6 +1437,6 @@ namespace osl_StreamSocket
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
