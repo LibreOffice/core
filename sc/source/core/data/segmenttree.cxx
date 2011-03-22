@@ -204,12 +204,14 @@ template<typename _ValueType, typename _ExtValueType>
 void ScFlatSegmentsImpl<_ValueType, _ExtValueType>::removeSegment(SCCOLROW nPos1, SCCOLROW nPos2)
 {
     maSegments.shift_left(nPos1, nPos2);
+    maItr = maSegments.begin();
 }
 
 template<typename _ValueType, typename _ExtValueType>
 void ScFlatSegmentsImpl<_ValueType, _ExtValueType>::insertSegment(SCCOLROW nPos, SCCOLROW nSize, bool bSkipStartBoundary)
 {
     maSegments.shift_right(nPos, nSize, bSkipStartBoundary);
+    maItr = maSegments.begin();
 }
 
 template<typename _ValueType, typename _ExtValueType>
