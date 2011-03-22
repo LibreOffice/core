@@ -38,6 +38,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <libgen.h>
+#include <string.h>
 
 #include <osl/nlsupport.h>
 #include <osl/process.h>
