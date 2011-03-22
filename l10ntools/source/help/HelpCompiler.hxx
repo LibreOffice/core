@@ -107,7 +107,7 @@ namespace fs
         {
             ::rtl::OUString ustrSystemPath;
             osl::File::getSystemPathFromFileURL(data, ustrSystemPath);
-            return ustrSystemPath.getStr();
+            return reinterpret_cast< wchar_t const * >(ustrSystemPath.getStr());
         }
 #endif
         std::string native_directory_string() const { return native_file_string(); }
