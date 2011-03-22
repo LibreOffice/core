@@ -84,8 +84,10 @@ Args *args_parse (void)
     memset (args, 0, i);
     args->nArgsTotal = nArgs;
 
+    j = 0;
+
     /* sort the -env: args to the front */
-    for ( j = i = 0; i < nArgs; ++i )
+    for ( i = 0; i < nArgs; ++i )
     {
         rtl_uString *pTmp = NULL;
         osl_getCommandArg( i, &pTmp );
@@ -97,7 +99,7 @@ Args *args_parse (void)
     args->nArgsEnv = j;
 
     /* Then the other args */
-    for ( j = i = 0; i < nArgs; ++i )
+    for ( i = 0; i < nArgs; ++i )
     {
         rtl_uString *pTmp = NULL;
 
