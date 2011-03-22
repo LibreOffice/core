@@ -60,6 +60,8 @@ gb_COMPILERDEFS := \
 	-D_CRT_NONSTDC_NO_DEPRECATE \
 	-D_CRT_SECURE_NO_DEPRECATE \
 	-D_MT \
+	-D_DLL \
+	-MD \
 	-DBOOST_MEM_FN_ENABLE_CDECL \
 	-DCPPU_ENV=msci \
 	-DFULL_DESK \
@@ -182,7 +184,7 @@ gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
 gb_LinkTarget_LDFLAGS := \
 	-MACHINE:IX86 \
-	-MD \
+	-DLL \
 	-OPT:NOREF \
 	-SUBSYSTEM:CONSOLE \
 	-safeseh \
