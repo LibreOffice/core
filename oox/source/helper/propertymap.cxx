@@ -47,6 +47,40 @@ using ::com::sun::star::text::WritingMode;
 #include <cppuhelper/implbase2.hxx>
 #include <osl/mutex.hxx>
 #include "oox/token/propertynames.hxx"
+using ::rtl::OUString;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::lang::IllegalArgumentException;
+using ::com::sun::star::lang::WrappedTargetException;
+using ::com::sun::star::beans::Property;
+using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::beans::PropertyVetoException;
+using ::com::sun::star::beans::UnknownPropertyException;
+using ::com::sun::star::beans::XPropertyChangeListener;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::beans::XPropertySetInfo;
+using ::com::sun::star::beans::XVetoableChangeListener;
+using ::com::sun::star::container::XIndexReplace;
+
+#if OSL_DEBUG_LEVEL > 0
+#include <cstdio>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::uno;
+using ::rtl::OString;
+using ::com::sun::star::style::LineSpacing;
+using ::com::sun::star::text::WritingMode;
+using ::com::sun::star::drawing::TextHorizontalAdjust;
+using ::com::sun::star::drawing::TextVerticalAdjust;
+#endif
 
 namespace oox {
 using ::com::sun::star::container::XIndexReplace;
