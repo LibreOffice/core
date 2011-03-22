@@ -546,6 +546,7 @@ testcase tCreateNewLineChart
     FormatDataRanges
     printlog "Switch to tab page Data Series"
     Kontext
+    Active.SetPage TabFormatDataRangesDataRange 'Due to bug #i77237# the tabpage has to be switched once before 'OK' or 'Cancel' can be used
     Active.SetPage TabFormatDataRangesDataSeries 
     Kontext "TabChartTypeDataSeries"
     if TabChartTypeDataSeries.Exists(2) then
@@ -593,7 +594,7 @@ testcase tCreateNewLineChart
         if instr ( sControlString , "$A$19" ) = 0 Then
             warnlog "'Categories' wasn't correctly preserved after save and reload."
         endif
-        printlog "Leave tab page data series with CANCEL" 
+        printlog "Leave tab page data series with CANCEL"
         TabChartTypeDataSeries.Cancel
     else
         warnlog "Tab page Data Series was not up!"
