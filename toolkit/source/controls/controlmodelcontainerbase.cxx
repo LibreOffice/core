@@ -495,7 +495,20 @@ void ControlModelContainerBase::replaceByName( const ::rtl::OUString& aName, con
     UnoControlModelHolderList::iterator aElementPos = ImplFindElement( aName );
     if ( maModels.end() == aElementPos )
         lcl_throwNoSuchElementException();
-
+    // Dialog behaviour is to have all containee names unique ( MSO Userform is the same )
+    // With container controls you could have constructed an existing hierachy and are now
+    // add this to an existing container, in this case a name nested in the containment
+    // hierachy of the added control could contain a name clash, if we have access to the
+    // list of global names then recursively check for previously existing names ( we need
+    // to do this obviously before the 'this' objects container is updated
+    Reference< XNameContainer > xAllChildren( getPropertyValue( GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ) ), UNO_QUERY );
+    if ( xAllChildren.is() )
+    {
+        // remove old control ( and children ) from global list of containees
+        updateUserFormChildren( xAllChildren, aName, Remove, uno::Reference< XControlModel >() );
+        // Add new control ( and containees if they exist )
+        updateUserFormChildren( xAllChildren, aName, Insert, xNewModel );
+    }
     // stop listening at the old model
     stopControlListening( aElementPos->first );
     Reference< XControlModel > xReplaced( aElementPos->first );
@@ -582,6 +595,17 @@ void ControlModelContainerBase::insertByName( const ::rtl::OUString& aName, cons
     if ( maModels.end() != aElementPos )
         lcl_throwElementExistException();
 
+    // Dialog behaviour is to have all containee names unique ( MSO Userform is the same )
+    // With container controls you could have constructed an existing hierachy and are now
+    // add this to an existing container, in this case a name nested in the containment
+    // hierachy of the added control could contain a name clash, if we have access to the
+    // list of global names then we need to recursively check for previously existing
+    // names ( we need to do this obviously before the 'this' objects container is updated
+    // remove old control ( and children ) from global list of containees
+    Reference< XNameContainer > xAllChildren( getPropertyValue( GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ) ), UNO_QUERY );
+
+    if ( xAllChildren.is() )
+        updateUserFormChildren( xAllChildren, aName, Insert, xM );
     maModels.push_back( UnoControlModelHolder( xM, aName ) );
     mbGroupsUpToDate = sal_False;
     startControlListening( xM );
@@ -603,6 +627,15 @@ void ControlModelContainerBase::removeByName( const ::rtl::OUString& aName ) thr
     UnoControlModelHolderList::iterator aElementPos = ImplFindElement( aName );
     if ( maModels.end() == aElementPos )
         lcl_throwNoSuchElementException();
+
+    // Dialog behaviour is to have all containee names unique ( MSO Userform is the same )
+    // With container controls you could have constructed an existing hierachy and are now
+    // removing this control from an existing container, in this case all nested names in
+    // the containment hierachy of the control to be removed need to be removed from the global
+    // names cache ( we need to do this obviously before the 'this' objects container is updated )
+    Reference< XNameContainer > xAllChildren( getPropertyValue( GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ) ), UNO_QUERY );
+    if ( xAllChildren.is() )
+        updateUserFormChildren( xAllChildren, aName, Remove, uno::Reference< XControlModel >() );
 
     ContainerEvent aEvent;
     aEvent.Source = *this;
@@ -1856,5 +1889,55 @@ uno::Reference< graphic::XGraphic > ControlContainerBase::Impl_getGraphicFromURL
     }
 
     return absoluteURL;
+}
+
+void
+ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContainer >& xAllChildren, const rtl::OUString& aName, ChildOperation Operation, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xTarget ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+{
+    if ( Operation < Insert || Operation > Remove )
+        throw IllegalArgumentException();
+
+    if ( xAllChildren.is() )
+    {
+        if ( Operation == Remove )
+        {
+            Reference< XControlModel > xOldModel( xAllChildren->getByName( aName ), UNO_QUERY );
+            xAllChildren->removeByName( aName );
+
+            Reference< XNameContainer > xChildContainer( xOldModel, UNO_QUERY );
+            if ( xChildContainer.is() )
+            {
+                Reference< XPropertySet > xProps( xChildContainer, UNO_QUERY );
+                // container control is being removed from this container, reset the
+                // global list of containees
+                if ( xProps.is() )
+                    xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( uno::Reference< XNameContainer >() ) );
+                Sequence< rtl::OUString > aChildNames = xChildContainer->getElementNames();
+                for ( sal_Int32 index=0; index< aChildNames.getLength(); ++index )
+                    updateUserFormChildren( xAllChildren, aChildNames[ index ], Operation,  Reference< XControlModel > () );
+            }
+        }
+        else if ( Operation == Insert )
+        {
+            xAllChildren->insertByName( aName, uno::makeAny( xTarget ) );
+            Reference< XNameContainer > xChildContainer( xTarget, UNO_QUERY );
+            if ( xChildContainer.is() )
+            {
+                // container control is being added from this container, reset the
+                // global list of containees to point to the correct global list
+                Reference< XPropertySet > xProps( xChildContainer, UNO_QUERY );
+                if ( xProps.is() )
+                    xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( xAllChildren ) );
+                Sequence< rtl::OUString > aChildNames = xChildContainer->getElementNames();
+                for ( sal_Int32 index=0; index< aChildNames.getLength(); ++index )
+                {
+                    Reference< XControlModel > xChildTarget( xChildContainer->getByName( aChildNames[ index ] ), UNO_QUERY );
+                    updateUserFormChildren( xAllChildren, aChildNames[ index ], Operation, xChildTarget );
+                }
+            }
+        }
+    }
+    else
+        throw IllegalArgumentException();
 }
 

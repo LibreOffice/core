@@ -53,6 +53,8 @@
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
 #include <map>
+#include <boost/unordered_map.hpp>
+#include <cppuhelper/implbase1.hxx>
 #include <algorithm>
 #include <functional>
 #include "tools/urlobj.hxx"
@@ -70,6 +72,82 @@ using namespace ::com::sun::star::util;
 #define PROPERTY_IMAGEURL ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ImageURL" ))
 #define PROPERTY_GRAPHIC ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Graphic" ))
 //
+
+// we probably will need both a hash of control models and hash of controls
+// => use some template magic
+
+typedef ::cppu::WeakImplHelper1< container::XNameContainer > SimpleNameContainer_BASE;
+
+template< typename T >
+class SimpleNamedThingContainer : public SimpleNameContainer_BASE
+{
+    typedef boost::unordered_map< rtl::OUString, Reference< T >, ::rtl::OUStringHash,
+       ::std::equal_to< ::rtl::OUString > > NamedThingsHash;
+    NamedThingsHash things;
+    ::osl::Mutex m_aMutex;
+public:
+    // ::com::sun::star::container::XNameContainer, XNameReplace, XNameAccess
+    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !hasByName( aName ) )
+            throw NoSuchElementException();
+        Reference< T > xElement;
+        if ( ! ( aElement >>= xElement ) )
+            throw IllegalArgumentException();
+        things[ aName ] = xElement;
+    }
+    virtual Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !hasByName( aName ) )
+            throw NoSuchElementException();
+        return uno::makeAny( things[ aName ] );
+    }
+    virtual Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        Sequence< ::rtl::OUString > aResult( things.size() );
+        typename NamedThingsHash::iterator it = things.begin();
+        typename NamedThingsHash::iterator it_end = things.end();
+        rtl::OUString* pName = aResult.getArray();
+        for (; it != it_end; ++it, ++pName )
+            *pName = it->first;
+        return aResult;
+    }
+    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        return ( things.find( aName ) != things.end() );
+    }
+    virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( hasByName( aName ) )
+            throw ElementExistException();
+        Reference< T > xElement;
+        if ( ! ( aElement >>= xElement ) )
+            throw IllegalArgumentException();
+        things[ aName ] = xElement;
+    }
+    virtual void SAL_CALL removeByName( const ::rtl::OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !hasByName( aName ) )
+            throw NoSuchElementException();
+        things.erase( things.find( aName ) );
+    }
+    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException)
+    {
+        return T::static_type( NULL );
+    }
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        return ( things.size() > 0 );
+    }
+};
+
 ////HELPER
 ::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl );
 
@@ -99,6 +177,9 @@ UnoControlDialogModel::UnoControlDialogModel( const Reference< XMultiServiceFact
     aBool <<= (sal_Bool) sal_True;
     ImplRegisterProperty( BASEPROPERTY_MOVEABLE, aBool );
     ImplRegisterProperty( BASEPROPERTY_CLOSEABLE, aBool );
+    // #TODO separate class for 'UserForm' ( instead of re-using Dialog ? )
+    uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >();
+    ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
 }
 
 UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rModel )
