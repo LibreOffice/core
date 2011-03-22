@@ -61,7 +61,6 @@ gb_COMPILERDEFS := \
 	-D_CRT_SECURE_NO_DEPRECATE \
 	-D_MT \
 	-D_DLL \
-	-MD \
 	-DBOOST_MEM_FN_ENABLE_CDECL \
 	-DCPPU_ENV=msci \
 	-DFULL_DESK \
@@ -75,6 +74,7 @@ gb_CFLAGS := \
 	-Gs \
 	-GS \
 	-Gy \
+	-MD \
 	-nologo \
 	-Wall \
 	-wd4005 \
@@ -122,6 +122,7 @@ gb_CXXFLAGS := \
 	-Gs \
 	-GS \
 	-Gy \
+	-MD \
 	-nologo \
 	-Wall \
 	-wd4005 \
