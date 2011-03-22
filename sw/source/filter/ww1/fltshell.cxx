@@ -137,13 +137,14 @@ void SwFltStackEntry::SetEndPos(const SwPosition& rEndPos)
 
 sal_Bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, sal_Bool bCheck )
 {
-    // wird ueberhaupt ein Bereich umspannt ??
-    // - ist kein Bereich, dann nicht returnen wenn am Anfang vom Absatz
-    // - Felder aussortieren, koennen keinen Bereich haben !!
-    if (
-         nMkNode.GetIndex() == nPtNode.GetIndex() && nMkCntnt == nPtCntnt &&
-         nPtCntnt && RES_TXTATR_FIELD != pAttr->Which()
-       )
+    // does this range actually contain something?
+    // empty range is allowed if at start of empty paragraph
+    // fields are special: never have range, so leave them
+    SwCntntNode *const pCntntNode(
+        SwNodeIndex(nMkNode, +1).GetNode().GetCntntNode());
+    if ((nMkNode.GetIndex() == nPtNode.GetIndex()) && (nMkCntnt == nPtCntnt)
+        && ((0 != nPtCntnt) || (pCntntNode && (0 != pCntntNode->Len())))
+        && (RES_TXTATR_FIELD != pAttr->Which()))
     {
         return sal_False;
     }
