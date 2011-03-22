@@ -224,7 +224,7 @@ sal_uInt16 lclGetTimeUnit( sal_Int32 nApiTimeUnit )
     return EXC_CHDATERANGE_DAYS;
 }
 
-bool lclConvertTimeInterval( sal_uInt16 rnValue, sal_uInt16& rnTimeUnit, const Any& rAny )
+bool lclConvertTimeInterval( sal_uInt16& rnValue, sal_uInt16& rnTimeUnit, const Any& rAny )
 {
     cssc::TimeInterval aInterval;
     bool bAuto = lclIsAutoAnyOrGetValue( aInterval, rAny );
