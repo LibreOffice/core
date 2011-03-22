@@ -398,14 +398,14 @@ void Test::testVolatileFunc()
 
     val = 0;
     m_pDoc->SetValue(0, 0, 0, val);
-    m_xDocShRef->DoRecalc(true);
+    m_pDoc->CalcFormulaTree(false, true);
     double zero;
     m_pDoc->GetValue(0, 1, 0, zero);
     CPPUNIT_ASSERT_MESSAGE("Result should equal the 3rd parameter of IF, which is zero.", zero == 0.0);
 
     val = 1;
     m_pDoc->SetValue(0, 0, 0, val);
-    m_xDocShRef->DoRecalc(true);
+    m_pDoc->CalcFormulaTree(false, true);
     double now2;
     m_pDoc->GetValue(0, 1, 0, now2);
     CPPUNIT_ASSERT_MESSAGE("Result should be the value of NOW() again.", (now2 - now1) >= 0.0);
