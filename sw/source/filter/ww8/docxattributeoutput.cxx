@@ -2449,10 +2449,10 @@ void DocxAttributeOutput::SectionFormProtection( bool bProtected )
 void DocxAttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLineNumberInfo& rLnNumInfo )
 {
     FastAttributeList* pAttr = m_pSerializer->createAttrList();
-    pAttr->add( FSNS( XML_w, XML_countBy ), OString::valueOf( rLnNumInfo.GetCountBy()).getStr());
+    pAttr->add( FSNS( XML_w, XML_countBy ), OString::valueOf(static_cast<sal_Int32>(rLnNumInfo.GetCountBy())).getStr());
     pAttr->add( FSNS( XML_w, XML_restart ), rLnNumInfo.IsRestartEachPage() ? "newPage" : "continuous" );
     if( rLnNumInfo.GetPosFromLeft())
-        pAttr->add( FSNS( XML_w, XML_distance ), OString::valueOf( rLnNumInfo.GetPosFromLeft()).getStr());
+        pAttr->add( FSNS( XML_w, XML_distance ), OString::valueOf(static_cast<sal_Int32>(rLnNumInfo.GetPosFromLeft())).getStr());
     if( nRestartNo )
         pAttr->add( FSNS( XML_w, XML_start ), OString::valueOf( long( nRestartNo )).getStr());
     XFastAttributeListRef xAttrs( pAttr );
