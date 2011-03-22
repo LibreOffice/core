@@ -47,7 +47,7 @@ use Text::ParseWords;
                'csc', [ '-target:' ],
                'lib', [ 'OUT:', 'EXTRACT:','out:', 'def:', 'machine:' ],
                'link', [ 'BASE:', 'DEBUG', 'DLL', 'LIBPATH', 'MACHINE:',
-                         'MAP', 'MD', 'OPT', 'PDB', 'RELEASE',
+                         'MAP', 'NODEFAULTLIB', 'OPT', 'PDB', 'RELEASE',
                          'SUBSYSTEM', 'STACK', 'out:', 'map:', 'ENTRY:',
                          'implib:', 'delayload:', 'def', 'COMMENT:' ],
                'regcomp', [ '-env:', 'vnd.sun.star.expand:' , 'vnd.openoffice.pymodule' ],
