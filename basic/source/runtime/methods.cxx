@@ -483,7 +483,7 @@ RTLFUNC(CurDir)
 #endif
 }
 
-RTLFUNC(ChDir) // JSM
+RTLFUNC(ChDir)
 {
     (void)pBasic;
     (void)bWrite;
@@ -513,7 +513,7 @@ RTLFUNC(ChDir) // JSM
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
-RTLFUNC(ChDrive) // JSM
+RTLFUNC(ChDrive)
 {
     (void)pBasic;
     (void)bWrite;
@@ -589,7 +589,7 @@ void implStepRenameOSL( const String& aSource, const String& aDest )
     }
 }
 
-RTLFUNC(FileCopy) // JSM
+RTLFUNC(FileCopy)
 {
     (void)pBasic;
     (void)bWrite;
@@ -627,7 +627,7 @@ RTLFUNC(FileCopy) // JSM
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
-RTLFUNC(Kill) // JSM
+RTLFUNC(Kill)
 {
     (void)pBasic;
     (void)bWrite;
@@ -667,7 +667,7 @@ RTLFUNC(Kill) // JSM
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
-RTLFUNC(MkDir) // JSM
+RTLFUNC(MkDir)
 {
     (void)pBasic;
     (void)bWrite;
@@ -789,7 +789,7 @@ void implRemoveDirRecursive( const String& aDirPath )
 }
 
 
-RTLFUNC(RmDir) // JSM
+RTLFUNC(RmDir)
 {
     (void)pBasic;
     (void)bWrite;
@@ -840,7 +840,7 @@ RTLFUNC(RmDir) // JSM
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
-RTLFUNC(SendKeys) // JSM
+RTLFUNC(SendKeys)
 {
     (void)pBasic;
     (void)bWrite;
@@ -2005,8 +2005,7 @@ RTLFUNC(DateValue)
                 else
                     fResult = ceil( fResult );
             }
-            // fResult += 2.0; // Anpassung  StarCalcFormatter
-            rPar.Get(0)->PutDate( fResult ); // JSM
+            rPar.Get(0)->PutDate( fResult );
         }
         else
             StarBASIC::Error( SbERR_CONVERSION );
@@ -2046,7 +2045,7 @@ RTLFUNC(TimeValue)
             if ( nType == NUMBERFORMAT_DATETIME )
                 // Tage abschneiden
                 fResult = fmod( fResult, 1 );
-            rPar.Get(0)->PutDate( fResult ); // JSM
+            rPar.Get(0)->PutDate( fResult );
         }
         else
             StarBASIC::Error( SbERR_CONVERSION );
@@ -3071,13 +3070,12 @@ RTLFUNC(EOF)
     (void)pBasic;
     (void)bWrite;
 
-    // AB 08/16/2000: No changes for UCB
+    // No changes for UCB
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
         sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-        // nChannel--;  // macht MD beim Oeffnen auch nicht
         SbiIoSystem* pIO = pINST->GetIoSystem();
         SbiStream* pSbStrm = pIO->GetStream( nChannel );
         if ( !pSbStrm )
@@ -3175,7 +3173,7 @@ RTLFUNC(Lof)
     (void)pBasic;
     (void)bWrite;
 
-    // AB 08/16/2000: No changes for UCB
+    // No changes for UCB
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
@@ -4323,7 +4321,7 @@ RTLFUNC(MsgBox)
     delete pBox;
 }
 
-RTLFUNC(SetAttr) // JSM
+RTLFUNC(SetAttr)
 {
     (void)pBasic;
     (void)bWrite;
@@ -4357,7 +4355,7 @@ RTLFUNC(SetAttr) // JSM
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
-RTLFUNC(Reset)  // JSM
+RTLFUNC(Reset)
 {
     (void)pBasic;
     (void)bWrite;

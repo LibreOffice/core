@@ -293,8 +293,7 @@ class SbiRuntime
     SbxArrayRef   refParams;        // aktuelle Prozedur-Parameter
     SbxArrayRef   refLocals;        // lokale Variable
     SbxArrayRef   refArgv;          // aktueller Argv
-    // AB, 28.3.2000 #74254, Ein refSaveObj reicht nicht! Neu: pRefSaveList (s.u.)
-    //SbxVariableRef refSaveObj;      // #56368 Bei StepElem Referenz sichern
+    // #74254, Ein refSaveObj reicht nicht! Neu: pRefSaveList (s.u.)
     short         nArgc;            // aktueller Argc
     sal_Bool          bRun;             // sal_True: Programm ist aktiv
     sal_Bool          bError;           // sal_True: Fehler behandeln

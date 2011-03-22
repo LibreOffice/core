@@ -689,7 +689,6 @@ void SbiRuntime::StepVBASET()
 }
 
 
-// JSM 07.10.95
 void SbiRuntime::StepLSET()
 {
     SbxVariableRef refVal = PopVar();
@@ -725,7 +724,6 @@ void SbiRuntime::StepLSET()
     }
 }
 
-// JSM 07.10.95
 void SbiRuntime::StepRSET()
 {
     SbxVariableRef refVal = PopVar();

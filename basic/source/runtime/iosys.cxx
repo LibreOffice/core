@@ -42,7 +42,6 @@
 
 #ifdef _USE_UNO
 
-// <-- encoding
 #include <sal/alloca.h>
 
 #include <ctype.h>
@@ -51,7 +50,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
-// encoding -->
+
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -424,8 +423,6 @@ void OslStream::SetSize( sal_uIntPtr nSize )
 {
     maFile.setSize( (sal_uInt64)nSize );
 }
-
-//#endif
 
 
 #ifdef _USE_UNO
