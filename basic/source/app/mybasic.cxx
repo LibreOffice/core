@@ -99,7 +99,7 @@ MyBasic::MyBasic() : StarBASIC()
     UsrAny aObjAny = getIntrospectionTestObject();
 
     // Box object into SbUnoObject
-    ::rtl:OUString aName( "UnoObject" );
+    String aName( "UnoObject" );
     SbxObjectRef xSbUnoObj = GetSbUnoObject( aName, aObjAny );
     Insert( (SbxObject*)xSbUnoObj );
 #endif
