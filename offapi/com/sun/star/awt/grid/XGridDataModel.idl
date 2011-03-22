@@ -44,13 +44,13 @@ module com {  module sun {  module star {  module awt { module grid {
 
     @since OOo 3.3
 */
-interface XGridDataModel
+published interface XGridDataModel
 {
     /** implements life time control for the component
     */
     interface ::com::sun::star::lang::XComponent;
 
-    /** allows cloning the complete column model
+    /** allows cloning the complete data model
     */
     interface ::com::sun::star::util::XCloneable;
 
@@ -67,7 +67,7 @@ interface XGridDataModel
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the column or row index do not denote a valid cell position.
     */
-    any getCellData( [in] long Column, [in] long Row )
+    any getCellData( [in] long Column, [in] long RowIndex )
         raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** retrieves the tool tip to be displayed when the mouse hovers over a given cell
@@ -80,7 +80,7 @@ interface XGridDataModel
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the column or row index do not denote a valid cell position.
     */
-    any getCellToolTip( [in] long Column, [in] long Row )
+    any getCellToolTip( [in] long Column, [in] long RowIndex )
         raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** retrieves the heading of a given row
@@ -94,6 +94,20 @@ interface XGridDataModel
     */
     any
         getRowHeading( [in] long RowIndex )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** retrieves the data for a complete row
+
+        <p>This method is provided for performance and convenience reasons, it delivers the same result
+        as subsequent calls to <member>getCellData</member> would.</p>
+
+        @param Row
+            the index of the row whose data should is to be retrieved.
+        @raises ::com::sun::star::lang::IndexOutOfBoundsException
+            of the given row index does not denote a valid row.
+    */
+    sequence< any >
+        getRowData( [in] long RowIndex )
         raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 };
 

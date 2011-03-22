@@ -36,6 +36,7 @@
 #include <rtl/ref.hxx>
 
 #include <algorithm>
+#include <functional>
 
 //......................................................................................................................
 namespace toolkit
@@ -171,6 +172,18 @@ namespace toolkit
             throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
         return m_aRowHeaders[ i_row ];
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Sequence< Any > SAL_CALL DefaultGridDataModel::getRowData( ::sal_Int32 i_rowIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+    {
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+
+        Sequence< Any > resultData( m_nColumnCount );
+        RowData& rRowData = impl_getRowDataAccess_throw( i_rowIndex, m_nColumnCount );
+
+        ::std::transform( rRowData.begin(), rRowData.end(), resultData.getArray(), ::std::select1st< CellData >() );
+        return resultData;
     }
 
     //------------------------------------------------------------------------------------------------------------------
