@@ -302,7 +302,7 @@ $(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
     @$(COPY) $< $@
 .ENDIF			# "$(DISABLE_PYTHON)" != "TRUE"
 
-$(BIN)$/intro.zip : $(SOLARCOMMONPCKDIR)$/brand$/intro.zip
+$(BIN)$/intro.zip : $(SOLARCOMMONPCKDIR)$/intro.zip
     $(COPY) $< $@
 
 $(BIN)$/dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/brand_dev$/intro.zip
