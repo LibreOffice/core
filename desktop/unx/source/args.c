@@ -77,7 +77,6 @@ Args *args_parse (void)
 {
     Args *args;
     sal_uInt32 nArgs, i, j;
-    sal_Bool skipNextArg;
 
     nArgs = osl_getCommandArgCount();
     i = sizeof (Args) + sizeof (rtl_uString *) * nArgs;
@@ -109,7 +108,6 @@ Args *args_parse (void)
             rtl_uString_release (pTmp);
     }
 
-    skipNextArg = sal_False;
     for ( i = args->nArgsEnv; i < args->nArgsTotal; i++ )
     {
         sal_uInt32 j;
@@ -134,8 +132,6 @@ Args *args_parse (void)
                 args->bInhibitJavaLdx |= pArgDescr[j].bInhibitJavaLdx;
                 if (pArgDescr[j].pPageinType)
                     args->pPageinType = pArgDescr[j].pPageinType;
-
-                skipNextArg = pArgDescr[j].bTwoArgs;
             }
         }
     }
