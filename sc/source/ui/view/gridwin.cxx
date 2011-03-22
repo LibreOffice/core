@@ -3020,24 +3020,6 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, 
     }
 }
 
-static void ClearSingleSelection( ScViewData* pViewData )
-{
-    SCCOL nX;
-    SCROW nY;
-    ScTransferObj* pTransObj = ScTransferObj::GetOwnClipboard(
-        pViewData->GetActiveWin() );
-    if (!pTransObj)
-        return;
-
-    ScDocument* pClipDoc = pTransObj->GetDocument();
-    pClipDoc->GetClipArea( nX, nY, true );
-    if (nX == 0 && nY == 0)
-    {
-        ScTabView* pView = pViewData->GetView();
-        pView->Unmark();
-    }
-}
-
 void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 {
     // Cursor control for ref input dialog
@@ -3061,10 +3043,9 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
     else if( rKeyCode.GetCode() == KEY_RETURN && pViewData->IsPasteMode() )
     {
         ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
-
         ScCellShell::PasteFromClipboard( pViewData, pTabViewShell, false );
-        ClearSingleSelection( pViewData );
 
+        // Clear clipboard content.
         uno::Reference<datatransfer::clipboard::XClipboard> xSystemClipboard =
             TransferableHelper::GetSystemClipboard();
         if (xSystemClipboard.is())
