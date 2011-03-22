@@ -410,8 +410,6 @@ XubString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
                                       const IntlWrapper* pIntl,
                                       sal_Bool bMetricStr) const
 {
-#ifndef SVX_LIGHT
-
     static const sal_uInt16 aStyleIds[] =
     {
         RID_SOLID,
@@ -454,9 +452,6 @@ XubString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
     }
     aStr += sal_Unicode(')');
     return aStr;
-#else
-    return UniString();
-#endif
 }
 
 bool SvxBorderLine::HasPriority( const SvxBorderLine& rOtherLine ) const
