@@ -7,4 +7,4 @@ sm	starmath\sdi							nmake	-	all	sm_sdi NULL
 sm	starmath\source							nmake	-	all	sm_sorce sm_sdi sm_inc NULL
 sm	starmath\util							nmake	-	all	sm_util sm_sorce NULL
 sm	starmath\qa\unoapi						nmake	-	all sm_qa_unoapi NULL
-# sm	starmath\qa\cppunit						nmake	-	all sm_qa_cppunit sm_util NULL
+sm	starmath\qa\cppunit						nmake	-	all sm_qa_cppunit sm_util NULL
