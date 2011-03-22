@@ -96,7 +96,7 @@ office_prefix=/opt
 office_root=${office_prefix}/${PREFIX}
 
 #this symlink is needed to have the API boostrap functions running right
-ln -sf ${office_root}/program/soffice ${DESTDIR}/usr/bin/libreoffice
+ln -sf ${office_root}/program/soffice ${DESTDIR}/usr/bin/${PREFIX}
 
 cp printeradmin.sh ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 chmod 0755 ${DESTDIR}/usr/bin/${PREFIX} ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
