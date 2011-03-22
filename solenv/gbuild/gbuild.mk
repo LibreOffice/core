@@ -81,7 +81,7 @@ gb_PRODUCT := $(false)
 endif
 endif
 
-ifneq ($(strip $(SYMBOL)$(symbol)$(SYMBOLS)$(symbols)),)
+ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)),)
 gb_SYMBOL := $(true)
 else
 gb_SYMBOL := $(false)
