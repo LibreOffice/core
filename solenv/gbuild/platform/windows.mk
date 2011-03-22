@@ -162,10 +162,6 @@ gb_CXXFLAGS := \
 
 gb_STDLIBS := \
 	uwinapi \
-	kernel32 \
-	msvcrt \
-	msvcprt \
-	oldnames \
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -WX
@@ -186,7 +182,7 @@ gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
 gb_LinkTarget_LDFLAGS := \
 	-MACHINE:IX86 \
-	-NODEFAULTLIB \
+	-MD \
 	-OPT:NOREF \
 	-SUBSYSTEM:CONSOLE \
 	-safeseh \
