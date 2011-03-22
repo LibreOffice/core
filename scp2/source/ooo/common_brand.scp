@@ -514,12 +514,16 @@ File gid_Brand_File_Bin_Soffice_Bin
     Name = "soffice.bin";
 End
 
+#if defined UNX && ! defined MACOSX
+
 File gid_File_Bin_QStart_Bin
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED, PATCH);
     Name = "oosplash.bin";
 End
+
+#endif
 
 // use this for high detail file open dialog >= 5.1 windows
 #ifdef WNT
