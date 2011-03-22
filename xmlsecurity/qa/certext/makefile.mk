@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -23,52 +23,49 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#*************************************************************************
+#***********************************************************************/
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE 
 
-PRJ=..$/..$/..
-
+PRJ = ../..
 PRJNAME = xmlsecurity
-TARGET = xs_mscrypt
+TARGET = qa_certext
 
 ENABLE_EXCEPTIONS = TRUE
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
+.INCLUDE: settings.mk
 .INCLUDE :	$(PRJ)$/util$/target.pmk
 
-.IF "$(CRYPTO_ENGINE)" != "mscrypto"
-LIBTARGET=NO
-.ENDIF
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-.IF "$(CRYPTO_ENGINE)" == "mscrypto"
+SHL1IMPLIB = i$(SHL1TARGET)
+SHL1OBJS = $(SLOFILES)
+SHL1RPATH = NONE
+SHL1STDLIBS = $(CPPUNITLIB)     \
+              $(SALLIB)         \
+              $(NEON3RDLIB)     \
+              $(CPPULIB)        \
+              $(XMLOFFLIB)      \
+              $(CPPUHELPERLIB)	\
+              $(SVLLIB)			\
+              $(TOOLSLIB)	    \
+              $(COMPHELPERLIB) \
+              $(TESTLIB)
 
-.IF "$(WITH_MOZILLA)" == "NO" || "$(ENABLE_NSS_MODULE)"!="YES"
-.IF "$(SYSTEM_MOZILLA)" != "YES"
-@all:
-    @echo "No mozilla -> no nss -> no libxmlsec -> no xmlsecurity/nss"
-.ENDIF
-.ENDIF
+SHL1TARGET = qa_CertExt
+SHL1VERSIONMAP = $(PRJ)/qa/certext/export.map
+DEF1NAME = $(SHL1TARGET)
 
-CDEFS += -DXMLSEC_CRYPTO_MSCRYPTO -DXMLSEC_NO_XSLT
+SLOFILES = $(SLO)/SanCertExt.obj
 
-# --- Files --------------------------------------------------------
-INCLOCAL = \
-    ..
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-SLOFILES = \
-    $(SLO)$/securityenvironment_mscryptimpl.obj \
-    $(SLO)$/xmlencryption_mscryptimpl.obj \
-    $(SLO)$/xmlsecuritycontext_mscryptimpl.obj \
-    $(SLO)$/xmlsignature_mscryptimpl.obj \
-    $(SLO)$/x509certificate_mscryptimpl.obj \
-    $(SLO)$/seinitializer_mscryptimpl.obj \
-    $(SLO)$/xsec_mscrypt.obj  \
-    $(SLO)$/sanextension_mscryptimpl.obj
+ALLTAR : cpptest
 
-.ENDIF
+cpptest : $(SHL1TARGETN)
 
-# --- Targets ------------------------------------------------------
+CPPTEST_LIBRARY = $(SHL1TARGETN)
 
-.INCLUDE :  target.mk
-
+.END
