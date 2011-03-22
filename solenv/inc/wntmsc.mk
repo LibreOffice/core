@@ -83,7 +83,7 @@ COMPILE_ECHO_FILE=
 # disable "warning C4675: resolved overload was found by argument-dependent
 # lookup":
 # -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800
-CFLAGS+=-Zm500 -Zc:forScope,wchar_t- -GR
+CFLAGS+=-Zm500 -Zc:forScope,wchar_t- -GR -MD
 
 # Stack buffer overrun detection.
 CFLAGS+=-GS
