@@ -85,8 +85,6 @@ using namespace com::sun::star::script;
 
 #endif /* _USE_UNO */
 
-//#define _ENABLE_CUR_DIR
-
 #include "stdobj.hxx"
 #include <basic/sbstdobj.hxx>
 #include "rtlproto.hxx"
@@ -489,27 +487,7 @@ RTLFUNC(ChDir)
     (void)bWrite;
 
     rPar.Get(0)->PutEmpty();
-    if (rPar.Count() == 2)
-    {
-#ifdef _ENABLE_CUR_DIR
-        String aPath = rPar.Get(1)->GetString();
-        sal_Bool bError = sal_False;
-#ifdef WNT
-        // #55997 Laut MI hilft es bei File-URLs einen DirEntry zwischenzuschalten
-        // #40996 Harmoniert bei Verwendung der WIN32-Funktion nicht mit getdir
-        DirEntry aEntry( aPath );
-        ByteString aFullPath( aEntry.GetFull(), gsl_getSystemTextEncoding() );
-        if( chdir( aFullPath.GetBuffer()) )
-            bError = sal_True;
-#else
-        if (!DirEntry(aPath).SetCWD())
-            bError = sal_True;
-#endif
-        if( bError )
-            StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-#endif
-    }
-    else
+    if (rPar.Count() != 2)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
@@ -519,34 +497,7 @@ RTLFUNC(ChDrive)
     (void)bWrite;
 
     rPar.Get(0)->PutEmpty();
-    if (rPar.Count() == 2)
-    {
-#ifdef _ENABLE_CUR_DIR
-        // Keine Laufwerke in Unix
-#ifndef UNX
-        String aPar1 = rPar.Get(1)->GetString();
-
-#if defined (WNT) || defined (OS2)
-        if (aPar1.Len() > 0)
-        {
-            int nCurDrive = (int)aPar1.GetBuffer()[0]; ;
-            if ( !isalpha( nCurDrive ) )
-            {
-                StarBASIC::Error( SbERR_BAD_ARGUMENT );
-                return;
-            }
-            else
-                nCurDrive -= ( 'A' - 1 );
-            if (_chdrive(nCurDrive))
-                StarBASIC::Error( SbERR_NO_DEVICE );
-        }
-#endif
-
-#endif
-        // #ifndef UNX
-#endif
-    }
-    else
+    if (rPar.Count() != 2)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
