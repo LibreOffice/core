@@ -40,10 +40,9 @@ PACKAGE=com$/sun$/star$/awt$/grid
 IDLFILES=\
     GridColumnEvent.idl\
     GridDataEvent.idl\
-    SelectionEventType.idl\
     GridSelectionEvent.idl\
     XGridSelectionListener.idl\
-    XGridSelection.idl\
+    XGridRowSelection.idl\
     XGridColumn.idl\
      XGridColumnListener.idl\
     XGridDataListener.idl\
