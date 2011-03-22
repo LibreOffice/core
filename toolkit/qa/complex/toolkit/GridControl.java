@@ -326,6 +326,33 @@ public class GridControl
 
     // -----------------------------------------------------------------------------------------------------------------
     @Test
+    public void testDataModel() throws Exception
+    {
+        impl_recreateGridModel();
+
+        // ensure that getCellData and getRowData have the same opinion on the data they deliver
+        final Object[][] data = new Object[][] {
+            new Object[] { 15, 17, 0 },
+            new Object[] { 9, 8, 14 },
+            new Object[] { 17, 2, 16 },
+            new Object[] { 0, 7, 14 },
+            new Object[] { 10, 16, 16 },
+        };
+        m_dataModel.addRows( new Object[ data.length ], data );
+
+        for ( int row = 0; row < data.length; ++row )
+        {
+            assertArrayEquals( "getRowData delivers wrong data in row " + row, data[row], m_dataModel.getRowData( row ) );
+            for ( int col = 0; col < data[row].length; ++col )
+            {
+                assertEquals( "getCellData delivers wrong data at position (" + col + ", " + row + ")",
+                        data[row][col], m_dataModel.getCellData( col, row ) );
+            }
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Test
     public void testSortableDataModel() throws Exception
     {
         impl_recreateGridModel();
@@ -408,7 +435,7 @@ public class GridControl
         final List< Object > disposables = new ArrayList< Object >();
         try
         {
-            // create a siple dialog model/control/peer trinity
+            // create a simple dialog model/control/peer trinity
             final XControlModel dialogModel = createInstance( XControlModel.class, "com.sun.star.awt.UnoControlDialogModel" );
             disposables.add( dialogModel );
             final XPropertySet dialogProps = UnoRuntime.queryInterface( XPropertySet.class, dialogModel );

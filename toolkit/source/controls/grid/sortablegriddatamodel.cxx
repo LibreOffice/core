@@ -767,6 +767,19 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    Sequence< Any > SAL_CALL SortableGridDataModel::getRowData( ::sal_Int32 i_rowIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+    {
+        MethodGuard aGuard( *this, rBHelper );
+        DBG_CHECK_ME();
+
+        ::sal_Int32 const rowIndex = impl_getPrivateRowIndex_throw( i_rowIndex );
+
+        Reference< XMutableGridDataModel > const delegator( m_delegator );
+        aGuard.clear();
+        return delegator->getRowData( rowIndex );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL SortableGridDataModel::disposing()
     {
         m_currentSortColumn = -1;
