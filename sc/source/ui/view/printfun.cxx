@@ -247,6 +247,9 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTa
         bMultiArea          ( false ),
         nTabPages           ( 0 ),
         nTotalPages         ( 0 ),
+        nPagesX(0),
+        nPagesY(0),
+        nTotalY(0),
         pPageData           ( pData )
 {
     pDev = pPrinter;
@@ -270,6 +273,9 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
         bMultiArea          ( false ),
         nTabPages           ( 0 ),
         nTotalPages         ( 0 ),
+        nPagesX(0),
+        nPagesY(0),
+        nTotalY(0),
         pPageData           ( NULL )
 {
     pDev = pOutDev;
@@ -285,6 +291,9 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
         bSourceRangeValid   ( false ),
         bPrintCurrentTable  ( false ),
         bMultiArea          ( false ),
+        nPagesX(0),
+        nPagesY(0),
+        nTotalY(0),
         pPageData           ( NULL )
 {
     pDev = pOutDev;
@@ -320,6 +329,9 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow, SCTAB nTab,
         bMultiArea          ( false ),
         nTabPages           ( 0 ),
         nTotalPages         ( 0 ),
+        nPagesX(0),
+        nPagesY(0),
+        nTotalY(0),
         pPageData           ( NULL )
 {
     pDev = pWindow;
@@ -333,6 +345,9 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow,
         pUserArea           ( NULL ),
         bPrintCurrentTable  ( false ),
         bMultiArea          ( false ),
+        nPagesX(0),
+        nPagesY(0),
+        nTotalY(0),
         pPageData           ( NULL )
 {
     pDev = pWindow;

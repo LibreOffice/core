@@ -4284,7 +4284,7 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
 
 
 bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt16 nMask )
+                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt16 nMask ) const
 {
     if ( nMask & HASATTR_ROTATE )
     {
@@ -4365,7 +4365,7 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     return bFound;
 }
 
-bool ScDocument::HasAttrib( const ScRange& rRange, sal_uInt16 nMask )
+bool ScDocument::HasAttrib( const ScRange& rRange, sal_uInt16 nMask ) const
 {
     return HasAttrib( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
                       rRange.aEnd.Col(),   rRange.aEnd.Row(),   rRange.aEnd.Tab(),

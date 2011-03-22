@@ -1242,10 +1242,6 @@ bool ScColumn::IsEmpty() const
 
 bool ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow, bool bIgnoreNotes) const
 {
-    Rectangle aRect;
-    if (pAttrArray->HasLines(nStartRow, nEndRow, aRect, true, true))
-        return false;
-
     if ( nCount == 0 || !pItems )
         return true;
 
