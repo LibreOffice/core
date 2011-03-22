@@ -45,6 +45,7 @@ class ImplFontOptions;
 #include <tools/gen.hxx>
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace basegfx { class B2DPolyPolygon; }
 
@@ -186,8 +187,9 @@ public:
     virtual bool                TestFont() const            { return true; }
     virtual void*               GetFtFace() const { return 0; }
     virtual int                 GetLoadFlags() const { return 0; }
-    virtual void                SetFontOptions( const ImplFontOptions*) {}
-    virtual const ImplFontOptions* GetFontOptions() const { return 0; }
+    virtual void                SetFontOptions( boost::shared_ptr<ImplFontOptions> ) {}
+    virtual boost::shared_ptr<ImplFontOptions> GetFontOptions() const
+        { return boost::shared_ptr<ImplFontOptions>(); }
     virtual bool                NeedsArtificialBold() const { return false; }
     virtual bool                NeedsArtificialItalic() const { return false; }
 
@@ -266,7 +268,7 @@ class VCL_PLUGIN_PUBLIC ImplServerFontEntry : public ImplFontEntry
 {
 private:
     ServerFont*    mpServerFont;
-    ImplFontOptions* mpFontOptions;
+    boost::shared_ptr<ImplFontOptions> mpFontOptions;
     bool           mbGotFontOptions;
 
 public:

@@ -236,8 +236,8 @@ void ImplServerFontEntry::HandleFontOptions( void )
     {
         // get and cache the font options
         mbGotFontOptions = true;
-        mpFontOptions = GetFCFontOptions( *maFontSelData.mpFontData,
-            maFontSelData.mnHeight );
+        mpFontOptions.reset(GetFCFontOptions( *maFontSelData.mpFontData,
+            maFontSelData.mnHeight ));
     }
     // apply the font options
     mpServerFont->SetFontOptions( mpFontOptions );
@@ -536,12 +536,12 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
     void* pFace = rFont.GetFtFace();
     CairoFontsCache::CacheId aId;
     aId.mpFace = pFace;
-    aId.mpOptions = rFont.GetFontOptions();
+    aId.mpOptions = rFont.GetFontOptions().get();
     aId.mbEmbolden = rFont.NeedsArtificialBold();
     font_face = (cairo_font_face_t*)m_aCairoFontsCache.FindCachedFont(aId);
     if (!font_face)
     {
-        const ImplFontOptions *pOptions = rFont.GetFontOptions();
+        const ImplFontOptions *pOptions = rFont.GetFontOptions().get();
         void *pPattern = pOptions ? pOptions->GetPattern(pFace, aId.mbEmbolden) : NULL;
         if (pPattern)
             font_face = rCairo.ft_font_face_create_for_pattern(pPattern);

@@ -191,8 +191,8 @@ public:
     virtual int                 GetFontFaceNum() const { return mpFontInfo->GetFaceNum(); }
     virtual bool                TestFont() const;
     virtual void*               GetFtFace() const;
-    virtual void                SetFontOptions( const ImplFontOptions*);
-    virtual const ImplFontOptions*    GetFontOptions() const;
+    virtual void                SetFontOptions( boost::shared_ptr<ImplFontOptions> );
+    virtual boost::shared_ptr<ImplFontOptions> GetFontOptions() const;
     virtual int                 GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
     virtual bool                NeedsArtificialBold() const { return mbArtBold; }
     virtual bool                NeedsArtificialItalic() const { return mbArtItalic; }
@@ -239,7 +239,7 @@ private:
     FT_FaceRec_*                maFaceFT;
     FT_SizeRec_*                maSizeFT;
 
-    const ImplFontOptions*      mpFontOptions;
+    boost::shared_ptr<ImplFontOptions> mpFontOptions;
 
     bool                        mbFaceOk;
     bool            mbArtItalic;

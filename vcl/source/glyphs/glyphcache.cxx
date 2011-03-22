@@ -534,7 +534,6 @@ bool ServerFont::IsGlyphInvisible( int nGlyphIndex )
 ImplServerFontEntry::ImplServerFontEntry( ImplFontSelectData& rFSD )
 :   ImplFontEntry( rFSD )
 ,   mpServerFont( NULL )
-,   mpFontOptions( NULL )
 ,   mbGotFontOptions( false )
 {}
 
@@ -543,7 +542,6 @@ ImplServerFontEntry::ImplServerFontEntry( ImplFontSelectData& rFSD )
 ImplServerFontEntry::~ImplServerFontEntry()
 {
     // TODO: remove the ServerFont here instead of in the GlyphCache
-    delete mpFontOptions;
 }
 
 // =======================================================================
