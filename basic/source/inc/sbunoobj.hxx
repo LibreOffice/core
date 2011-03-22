@@ -64,16 +64,16 @@ class SbUnoObject: public SbxObject
     void implCreateAll( void );
 
 public:
-    static bool getDefaultPropName( SbUnoObject* pUnoObj, String& sDfltProp );
+    static bool getDefaultPropName( SbUnoObject* pUnoObj, ::rtl::OUString& sDfltProp );
     TYPEINFO();
-    SbUnoObject( const String& aName_, const ::com::sun::star::uno::Any& aUnoObj_ );
+    SbUnoObject( const ::rtl::OUString& aName_, const ::com::sun::star::uno::Any& aUnoObj_ );
     ~SbUnoObject();
 
     // #76470 Introspection on Demand durchfuehren
     void doIntrospection( void );
 
     // Find ueberladen, um z.B. NameAccess zu unterstuetzen
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual SbxVariable* Find( const ::rtl::OUString&, SbxClassType );
 
     // Force creation of all properties for debugging
     void createAllProperties( void  )
@@ -115,7 +115,7 @@ class SbUnoMethod : public SbxMethod
 public:
     TYPEINFO();
 
-    SbUnoMethod( const String& aName_, SbxDataType eSbxType, ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlMethod > xUnoMethod_,
+    SbUnoMethod( const ::rtl::OUString& aName_, SbxDataType eSbxType, ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlMethod > xUnoMethod_,
         bool bInvocation,
         bool bDirect = false );
     virtual ~SbUnoMethod();
@@ -143,7 +143,7 @@ class SbUnoProperty : public SbxProperty
     virtual ~SbUnoProperty();
 public:
     TYPEINFO();
-    SbUnoProperty( const String& aName_, SbxDataType eSbxType,
+    SbUnoProperty( const ::rtl::OUString& aName_, SbxDataType eSbxType,
         const ::com::sun::star::beans::Property& aUnoProp_, sal_Int32 nId_, bool bInvocation );
 
     bool isInvocationBased( void )
@@ -155,7 +155,7 @@ class SbUnoFactory : public SbxFactory
 {
 public:
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
-    virtual SbxObject* CreateObject( const String& );
+    virtual SbxObject* CreateObject( const ::rtl::OUString& );
 };
 
 // Wrapper fuer eine Uno-Klasse
@@ -174,7 +174,7 @@ public:
     {}
 
     // Find ueberladen, um Elemente on Demand anzulegen
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual SbxVariable* Find( const ::rtl::OUString&, SbxClassType );
 
     // Wert rausgeben
     const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >& getUnoClass( void ) { return m_xClass; }
@@ -185,7 +185,7 @@ SV_DECL_IMPL_REF(SbUnoClass);
 
 // Funktion, um einen globalen Bezeichner im
 // UnoScope zu suchen und fuer Sbx zu wrappen
-SbUnoClass* findUnoClass( const String& rName );
+SbUnoClass* findUnoClass( const ::rtl::OUString& rName );
 
 
 // Wrapper for UNO Service
@@ -203,13 +203,13 @@ public:
             , m_bNeedsInit( true )
     {}
 
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual SbxVariable* Find( const ::rtl::OUString&, SbxClassType );
 
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
 };
 SV_DECL_IMPL_REF(SbUnoService);
 
-SbUnoService* findUnoService( const String& rName );
+SbUnoService* findUnoService( const ::rtl::OUString& rName );
 
 
 void clearUnoServiceCtors( void );
@@ -227,7 +227,7 @@ class SbUnoServiceCtor : public SbxMethod
 public:
     TYPEINFO();
 
-    SbUnoServiceCtor( const String& aName_, ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceConstructorDescription > xServiceCtorDesc );
+    SbUnoServiceCtor( const::rtl::OUString& aName_, ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceConstructorDescription > xServiceCtorDesc );
     virtual ~SbUnoServiceCtor();
     virtual SbxInfo* GetInfo();
 
@@ -243,14 +243,14 @@ class SbUnoSingleton : public SbxObject
 
 public:
     TYPEINFO();
-    SbUnoSingleton( const String& aName_,
+    SbUnoSingleton( const ::rtl::OUString& aName_,
         const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XSingletonTypeDescription >& xSingletonTypeDesc );
 
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
 };
 SV_DECL_IMPL_REF(SbUnoSingleton);
 
-SbUnoSingleton* findUnoSingleton( const String& rName );
+SbUnoSingleton* findUnoSingleton( const ::rtl::OUString& rName );
 
 
 // #105565 Special Object to wrap a strongly typed Uno Any
@@ -348,8 +348,8 @@ private:
     void init();
 public:
     static VBAConstantHelper& instance();
-    SbxVariable* getVBAConstant( const String& rName );
-    bool isVBAConstantType( const String& rName );
+    SbxVariable* getVBAConstant( const ::rtl::OUString& rName );
+    bool isVBAConstantType( const ::rtl::OUString& rName );
 };
 
 #endif

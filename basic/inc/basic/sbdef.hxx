@@ -31,6 +31,7 @@
 
 #include <basic/sbxdef.hxx>
 #include <svl/svarray.hxx>
+#include <rtl/ustring.hxx>
 
 #define _BASIC_TEXTPORTIONS
 
@@ -76,7 +77,7 @@ String getBasicTypeName( SbxDataType eType );
 // important for SbUnoObj instances
 // implementation: basic/source/classes/sbunoobj.cxx
 class SbxObject;
-String getBasicObjectTypeName( SbxObject* pObj );
+::rtl::OUString getBasicObjectTypeName( SbxObject* pObj );
 
 // Allows Basic IDE to set watch mode to suppress errors
 // implementation: basic/source/runtime/runtime.cxx

@@ -40,7 +40,7 @@
 #include "errobject.hxx"
 
 bool checkUnoObjectType( SbUnoObject* refVal,
-    const String& aClass );
+    const ::rtl::OUString& aClass );
 
 // Laden einer numerischen Konstanten (+ID)
 
@@ -437,15 +437,15 @@ void SbiRuntime::StepPRCHAR( sal_uInt32 nOp1 )
 
 // Check, ob TOS eine bestimmte Objektklasse ist (+StringID)
 
-bool SbiRuntime::implIsClass( SbxObject* pObj, const String& aClass )
+bool SbiRuntime::implIsClass( SbxObject* pObj, const ::rtl::OUString& aClass )
 {
     bool bRet = true;
 
-    if( aClass.Len() != 0 )
+    if( !aClass.isEmpty() )
     {
         bRet = pObj->IsClass( aClass );
         if( !bRet )
-            bRet = aClass.EqualsIgnoreCaseAscii( String( RTL_CONSTASCII_USTRINGPARAM("object") ) );
+            bRet = aClass.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("object") );
         if( !bRet )
         {
             String aObjClass = pObj->GetClassName();
@@ -463,7 +463,7 @@ bool SbiRuntime::implIsClass( SbxObject* pObj, const String& aClass )
 }
 
 bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
-    const String& aClass, bool bRaiseErrors, bool bDefault )
+    const ::rtl::OUString& aClass, bool bRaiseErrors, bool bDefault )
 {
     bool bOk = bDefault;
 

@@ -448,7 +448,7 @@ sal_Bool SfxLibraryContainer::isModified() throw (RuntimeException)
         SfxLibrary* pImplLib = getImplLib( aName );
         if( pImplLib->isModified() )
         {
-            if ( aName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Standard") ) ) )
+            if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Standard") ) )
             {
                 // this is a workaround that has to be implemented because
                 // empty standard library should stay marked as modified
