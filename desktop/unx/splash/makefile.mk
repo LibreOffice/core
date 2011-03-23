@@ -36,6 +36,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(OS)"=="MACOSX"
+dummy:
+    @echo "Unix quickstarter disabled for mac"
+.ELSE
+
 # --- Files --------------------------------------------------------
 
 SLOFILES =  $(SLO)$/unxsplash.obj
@@ -67,3 +72,5 @@ $(MISC)/splash.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt splash.component
+
+.ENDIF

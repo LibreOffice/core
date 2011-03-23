@@ -373,9 +373,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >   xParentText;
     sal_Bool mbPortion;
 
-protected:
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
-
 public:
     SvxUnoTextRange( const SvxUnoTextBase& rParent, sal_Bool bPortion = sal_False ) throw();
     virtual ~SvxUnoTextRange() throw();
@@ -406,7 +403,6 @@ class EDITENG_DLLPUBLIC SvxUnoTextBase  : public SvxUnoTextRangeBase,
 {
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >   xParentText;
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
 
 public:
     SvxUnoTextBase( ) throw();
@@ -541,8 +537,6 @@ private:
     bool mbDisposing;
 
 protected:
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
-
     using SvxUnoTextRangeBase::setPropertyValue;
     using SvxUnoTextRangeBase::getPropertyValue;
 
@@ -629,9 +623,6 @@ class EDITENG_DLLPUBLIC SvxUnoTextCursor : public SvxUnoTextRangeBase,
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > mxParentText;
-
-protected:
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
 
 public:
     SvxUnoTextCursor( const SvxUnoTextBase& rText ) throw();

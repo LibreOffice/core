@@ -36,6 +36,7 @@
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
+#include <rtl/instance.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
@@ -113,7 +114,6 @@ uno::Any SvxUnoTextContentEnumeration::nextElement(void) throw( container::NoSuc
 // class SvxUnoTextContent
 // ====================================================================
 uno::Reference< text::XText > xDummyText;
-uno::Sequence< uno::Type > SvxUnoTextContent::maTypeSequence;
 
 static SvxUnoText* getDummyText() throw()
 {
@@ -200,27 +200,39 @@ void SAL_CALL SvxUnoTextContent::release() throw( )
 
 // XTypeProvider
 
+namespace
+{
+    struct theSvxUnoTextContentTypes :
+        public rtl::StaticWithInit<uno::Sequence<uno::Type>, theSvxUnoTextContentTypes>
+    {
+        uno::Sequence<uno::Type> operator () ()
+        {
+            uno::Sequence< uno::Type > aTypeSequence;
+
+            aTypeSequence.realloc( 11 ); // !DANGER! keep this updated
+            uno::Type* pTypes = aTypeSequence.getArray();
+
+            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertyStates >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeCompare >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextContent >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< container::XEnumerationAccess >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XTypeProvider >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XUnoTunnel >*)0);
+
+            return aTypeSequence;
+        }
+    };
+}
+
 uno::Sequence< uno::Type > SAL_CALL SvxUnoTextContent::getTypes()
     throw (uno::RuntimeException)
 {
-    if( maTypeSequence.getLength() == 0 )
-    {
-        maTypeSequence.realloc( 11 ); // !DANGER! keep this updated
-        uno::Type* pTypes = maTypeSequence.getArray();
-
-        *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertyStates >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeCompare >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextContent >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< container::XEnumerationAccess >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< lang::XTypeProvider >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< lang::XUnoTunnel >*)0);
-    }
-    return maTypeSequence;
+    return theSvxUnoTextContentTypes::get();
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextContent::getImplementationId()
@@ -487,8 +499,6 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
 // class SvxUnoTextCursor
 // ====================================================================
 
-uno::Sequence< uno::Type > SvxUnoTextCursor::maTypeSequence;
-
 uno::Reference< uno::XInterface > SvxUnoTextCursor_NewInstance()
 {
     SvxUnoText aText;
@@ -553,27 +563,39 @@ void SAL_CALL SvxUnoTextCursor::release() throw ( )
     OWeakAggObject::release();
 }
 
+namespace
+{
+    struct theSvxUnoTextCursorTypes :
+        public rtl::StaticWithInit<uno::Sequence<uno::Type>, theSvxUnoTextCursorTypes>
+    {
+        uno::Sequence<uno::Type> operator () ()
+        {
+            uno::Sequence< uno::Type > aTypeSequence;
+
+            aTypeSequence.realloc( 10 ); // !DANGER! keep this updated
+            uno::Type* pTypes = aTypeSequence.getArray();
+
+            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextCursor >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertyStates >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeCompare >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XTypeProvider >*)0);
+            *pTypes++ = ::getCppuType(( const uno::Reference< lang::XUnoTunnel >*)0);
+
+            return aTypeSequence;
+        }
+    };
+}
+
 // XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SvxUnoTextCursor::getTypes()
     throw(uno::RuntimeException)
 {
-    if( maTypeSequence.getLength() == 0 )
-    {
-        maTypeSequence.realloc( 10 ); // !DANGER! keep this updated
-        uno::Type* pTypes = maTypeSequence.getArray();
-
-        *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextCursor >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertyStates >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeCompare >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< lang::XTypeProvider >*)0);
-        *pTypes++ = ::getCppuType(( const uno::Reference< lang::XUnoTunnel >*)0);
-    }
-    return maTypeSequence;
+    return theSvxUnoTextCursorTypes::get();
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextCursor::getImplementationId()

@@ -689,7 +689,6 @@ void SbiRuntime::StepVBASET()
 }
 
 
-// JSM 07.10.95
 void SbiRuntime::StepLSET()
 {
     SbxVariableRef refVal = PopVar();
@@ -725,7 +724,6 @@ void SbiRuntime::StepLSET()
     }
 }
 
-// JSM 07.10.95
 void SbiRuntime::StepRSET()
 {
     SbxVariableRef refVal = PopVar();
@@ -1349,18 +1347,7 @@ void SbiRuntime::StepRENAME()       // Rename Tos+1 to Tos
     }
     else
     {
-#ifdef _OLD_FILE_IMPL
-        DirEntry aSourceDirEntry( aSource );
-        if( aSourceDirEntry.Exists() )
-        {
-            if( aSourceDirEntry.MoveTo( DirEntry(aDest) ) != FSYS_ERR_OK )
-                StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-        }
-        else
-                StarBASIC::Error( SbERR_PATH_NOT_FOUND );
-#else
         implStepRenameOSL( aSource, aDest );
-#endif
     }
 }
 

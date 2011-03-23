@@ -42,7 +42,6 @@
 
 #ifdef _USE_UNO
 
-// <-- encoding
 #include <sal/alloca.h>
 
 #include <ctype.h>
@@ -51,7 +50,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
-// encoding -->
+
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -199,7 +198,7 @@ void SbiStream::MapError()
         ::rtl::OUString right = INetURLObject::decode( token.copy(eindex + 1).trim(), '%',
                             INetURLObject::DECODE_WITH_CHARSET );
 
-        if(left.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("user")))
+        if(left.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"))))
         {
             user = right;
             break;
@@ -338,8 +337,6 @@ sal_Bool hasUno( void )
 
 
 
-#ifndef _OLD_FILE_IMPL
-
 class OslStream : public SvStream
 {
     osl::File maFile;
@@ -426,8 +423,6 @@ void OslStream::SetSize( sal_uIntPtr nSize )
 {
     maFile.setSize( (sal_uInt64)nSize );
 }
-
-#endif
 
 
 #ifdef _USE_UNO
@@ -658,11 +653,7 @@ SbError SbiStream::Open
 #endif
     if( !pStrm )
     {
-#ifdef _OLD_FILE_IMPL
-        pStrm = new SvFileStream( aNameStr, nStrmMode );
-#else
         pStrm = new OslStream( aNameStr, nStrmMode );
-#endif
     }
     if( IsAppend() )
         pStrm->Seek( STREAM_SEEK_TO_END );
@@ -676,12 +667,6 @@ SbError SbiStream::Close()
 {
     if( pStrm )
     {
-        if( !hasUno() )
-        {
-#ifdef _OLD_FILE_IMPL
-            ((SvFileStream *)pStrm)->Close();
-#endif
-        }
         MapError();
         delete pStrm;
         pStrm = NULL;

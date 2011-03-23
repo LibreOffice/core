@@ -29,7 +29,7 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-#include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 #include <osl/process.h>
 
@@ -77,7 +77,6 @@ Args *args_parse (void)
 {
     Args *args;
     sal_uInt32 nArgs, i, j;
-    sal_Bool skipNextArg;
 
     nArgs = osl_getCommandArgCount();
     i = sizeof (Args) + sizeof (rtl_uString *) * nArgs;
@@ -85,8 +84,10 @@ Args *args_parse (void)
     memset (args, 0, i);
     args->nArgsTotal = nArgs;
 
+    j = 0;
+
     /* sort the -env: args to the front */
-    for ( j = i = 0; i < nArgs; ++i )
+    for ( i = 0; i < nArgs; ++i )
     {
         rtl_uString *pTmp = NULL;
         osl_getCommandArg( i, &pTmp );
@@ -98,7 +99,7 @@ Args *args_parse (void)
     args->nArgsEnv = j;
 
     /* Then the other args */
-    for ( j = i = 0; i < nArgs; ++i )
+    for ( i = 0; i < nArgs; ++i )
     {
         rtl_uString *pTmp = NULL;
 
@@ -109,7 +110,6 @@ Args *args_parse (void)
             rtl_uString_release (pTmp);
     }
 
-    skipNextArg = sal_False;
     for ( i = args->nArgsEnv; i < args->nArgsTotal; i++ )
     {
         sal_uInt32 j;
@@ -134,8 +134,6 @@ Args *args_parse (void)
                 args->bInhibitJavaLdx |= pArgDescr[j].bInhibitJavaLdx;
                 if (pArgDescr[j].pPageinType)
                     args->pPageinType = pArgDescr[j].pPageinType;
-
-                skipNextArg = pArgDescr[j].bTwoArgs;
             }
         }
     }

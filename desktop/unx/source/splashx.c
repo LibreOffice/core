@@ -115,11 +115,12 @@ static unsigned char **bitmap_rows = NULL;
 #  define PNG_TRANSFORM_GRAY_TO_RGB   0x2000
 #endif
 
+png_structp png_ptr = NULL;
+png_infop info_ptr = NULL;
+
 int splash_load_bmp( const char *filename )
 {
     FILE *file;
-    png_structp png_ptr;
-    png_infop info_ptr;
 
     if ( !(file = fopen( filename, "r" ) ) )
         return 0;
@@ -618,8 +619,11 @@ void splash_draw_progress( int progress )
 void splash_close_window()
 {
     XCloseDisplay( display );
-
-    // leak it is faster
+#ifdef USE_LIBPNG
+    png_destroy_read_struct( &png_ptr, &info_ptr, NULL );
+#else
+    free( bitmap_rows );
+#endif
     bitmap_rows = NULL;
 }
 

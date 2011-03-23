@@ -442,7 +442,7 @@ class SbOLEFactory : public SbxFactory
 {
 public:
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
-    virtual SbxObject* CreateObject( const ::rtl::OUString& );
+    virtual SbxObject* CreateObject( const String& );
 };
 
 SbxBase* SbOLEFactory::Create( sal_uInt16, sal_uInt32 )
@@ -451,9 +451,9 @@ SbxBase* SbOLEFactory::Create( sal_uInt16, sal_uInt32 )
     return NULL;
 }
 
-SbUnoObject* createOLEObject_Impl( const ::rtl::OUString& aType );  // sbunoobj.cxx
+SbUnoObject* createOLEObject_Impl( const String& aType );   // sbunoobj.cxx
 
-SbxObject* SbOLEFactory::CreateObject( const ::rtl::OUString& rClassName )
+SbxObject* SbOLEFactory::CreateObject( const String& rClassName )
 {
     SbxObject* pRet = createOLEObject_Impl( rClassName );
     return pRet;

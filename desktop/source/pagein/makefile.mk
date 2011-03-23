@@ -41,6 +41,13 @@ LIBSALCPPRT=$(0)
 
 .INCLUDE .IGNORE : icuversion.mk
 
+.IF "$(OS)"=="MACOSX"
+
+dummy:
+    @echo "Pagein disabled for mac"
+
+.ELSE
+
 # --- Files --------------------------------------------------------
 
 OBJFILES= \
@@ -185,3 +192,5 @@ $(MISC)$/$(TARGET)-common : makefile.mk
 # stoc bits
     @-echo $(DLLPRE)sfx$(DFTDLLPOST)             >> $@
     @-echo $(DLLPRE)sofficeapp$(DLLPOST)         >> $@
+
+.ENDIF

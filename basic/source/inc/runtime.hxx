@@ -53,11 +53,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 
 
-// Define activates old file implementation
-// (only in non UCB case)
-// #define _OLD_FILE_IMPL
-
-
 namespace basicEncoder
 {
 
@@ -141,11 +136,7 @@ class SbiRTLData
 {
 public:
 
-#ifdef _OLD_FILE_IMPL
-    Dir*    pDir;
-#else
     ::osl::Directory* pDir;
-#endif
     sal_Int16   nDirFlags;
     short   nCurDirPos;
 
@@ -302,8 +293,7 @@ class SbiRuntime
     SbxArrayRef   refParams;        // aktuelle Prozedur-Parameter
     SbxArrayRef   refLocals;        // lokale Variable
     SbxArrayRef   refArgv;          // aktueller Argv
-    // AB, 28.3.2000 #74254, Ein refSaveObj reicht nicht! Neu: pRefSaveList (s.u.)
-    //SbxVariableRef refSaveObj;      // #56368 Bei StepElem Referenz sichern
+    // #74254, Ein refSaveObj reicht nicht! Neu: pRefSaveList (s.u.)
     short         nArgc;            // aktueller Argc
     sal_Bool          bRun;             // sal_True: Programm ist aktiv
     sal_Bool          bError;           // sal_True: Fehler behandeln
@@ -376,7 +366,7 @@ class SbiRuntime
     // #56204 DIM-Funktionalitaet in Hilfsmethode auslagern (step0.cxx)
     void DimImpl( SbxVariableRef refVar );
 
-    bool implIsClass( SbxObject* pObj, const ::rtl::OUString& aClass );
+    bool implIsClass( SbxObject* pObj, const String& aClass );
 
     void StepSETCLASS_impl( sal_uInt32 nOp1, bool bHandleDflt = false );
 
@@ -408,7 +398,7 @@ class SbiRuntime
     void StepGOSUB( sal_uInt32 ),   StepRETURN( sal_uInt32 );
     void StepTESTFOR( sal_uInt32 ), StepCASETO( sal_uInt32 ),   StepERRHDL( sal_uInt32 );
     void StepRESUME( sal_uInt32 ),  StepSETCLASS( sal_uInt32 ), StepVBASETCLASS( sal_uInt32 ),  StepTESTCLASS( sal_uInt32 ), StepLIB( sal_uInt32 );
-    bool checkClass_Impl( const SbxVariableRef& refVal, const rtl::OUString& aClass, bool bRaiseErrors, bool bDefault = true );
+    bool checkClass_Impl( const SbxVariableRef& refVal, const String& aClass, bool bRaiseErrors, bool bDefault = true );
     void StepCLOSE( sal_uInt32 ),   StepPRCHAR( sal_uInt32 ),   StepARGTYP( sal_uInt32 );
     // Alle Opcodes mit zwei Operanden
     void StepRTL( sal_uInt32, sal_uInt32 ),     StepPUBLIC( sal_uInt32, sal_uInt32 ),   StepPUBLIC_P( sal_uInt32, sal_uInt32 );
