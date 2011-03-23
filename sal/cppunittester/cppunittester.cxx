@@ -79,8 +79,8 @@ std::string convertLazy(rtl::OUString const & s16) {
     return std::string(
         s8.getStr(),
         ((static_cast< sal_uInt32 >(s8.getLength())
-          > std::numeric_limits< std::string::size_type >::max())
-         ? std::numeric_limits< std::string::size_type >::max()
+          > (std::numeric_limits< std::string::size_type >::max)())
+         ? (std::numeric_limits< std::string::size_type >::max)()
          : static_cast< std::string::size_type >(s8.getLength())));
 }
 
