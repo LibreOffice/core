@@ -36,6 +36,7 @@
 #include "swrect.hxx"
 #include "calbck.hxx"   // fuer SwClient
 #include <svl/brdcst.hxx>
+#include "IDocumentDrawModelAccess.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
 #include <libxml/encoding.h>
@@ -501,6 +502,8 @@ protected:
         //Schatten und Umrandung painten
     void PaintShadow( const SwRect&, SwRect&, const SwBorderAttrs& ) const;
     virtual void  Modify( const SfxPoolItem*, const SfxPoolItem* );
+
+    virtual const IDocumentDrawModelAccess* getIDocumentDrawModelAccess( );
 
 public:
     TYPEINFO(); //Bereits in Basisklasse Client drin.

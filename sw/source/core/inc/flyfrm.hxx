@@ -150,6 +150,8 @@ protected:
     virtual const SwRect GetObjBoundRect() const;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
+    virtual const IDocumentDrawModelAccess* getIDocumentDrawModelAccess( );
+
 public:
     // #i26791#
     TYPEINFO();

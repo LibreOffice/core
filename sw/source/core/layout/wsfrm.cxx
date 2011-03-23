@@ -117,6 +117,11 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     bCompletePaint = bInfInvalid = sal_True;
 }
 
+const IDocumentDrawModelAccess* SwFrm::getIDocumentDrawModelAccess()
+{
+    return GetUpper()->GetFmt()->getIDocumentDrawModelAccess();
+}
+
 bool SwFrm::KnowsFormat( const SwFmt& rFmt ) const
 {
     return GetRegisteredIn() == &rFmt;
