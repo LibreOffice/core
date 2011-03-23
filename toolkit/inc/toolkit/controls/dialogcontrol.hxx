@@ -31,7 +31,6 @@
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XDialog2.hpp>
-#include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/awt/XSimpleTabController.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include "toolkit/helper/servicenames.hxx"
