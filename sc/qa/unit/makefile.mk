@@ -85,9 +85,9 @@ ALLTAR: test
 test_components = \
     component/framework/util/fwk \
     component/sfx2/util/sfx \
+    component/unoxml/source/service/unoxml \
     ucb1 \
     ucpfile1 \
-    unoxml \
     i18npool
 
 #Make a services.rdb with the services we know we need to get up and running
