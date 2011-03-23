@@ -1,2 +1,3 @@
 *.doc binary
 *.sdw binary
+*.po filter=po

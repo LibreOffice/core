@@ -38,6 +38,12 @@ function update_hooks()
     if [ "$PWD" != "$RAWBUILDDIR" -a ! -e .gitattributes ]; then
         ln -s $RAWBUILDDIR/.gitattributes .
     fi
+    if [ -z "$(git config filter.po.clean)" ] ; then
+        git config filter.po.clean 'msgcat - --no-wrap'
+    fi
+    if [ -z "$(git config filter.po.smudge)" ] ; then
+        git config filter.po.smudge cat
+    fi
 }
 
 # extra params for some commands, like log
