@@ -1520,7 +1520,7 @@ my $BUILD_TYPE = "@BUILD_TYPE@";
 
 if ('@WITH_LANG@' ne "")
 {
-    $BUILD_TYPE = "@BUILD_TYPE@ L10N";
+    $BUILD_TYPE = "@BUILD_TYPE@ TRANSLATIONS";
 }
 else
 {
