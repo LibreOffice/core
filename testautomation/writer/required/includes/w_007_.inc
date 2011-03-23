@@ -1069,7 +1069,7 @@ testcase tToolsChineseTranslation
     if ChineseTranslation.Exists then
         Call DialogTest ( ChineseTranslation )
     else
-        Warnlog "#i41364#Tools-> Language -> Chinese Translation does not work!"
+        Warnlog "Tools-> Language -> Chinese Translation does not work!"
         Call hCloseDocument
         goto endsub
     end if

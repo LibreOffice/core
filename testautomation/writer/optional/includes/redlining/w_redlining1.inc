@@ -1149,7 +1149,7 @@ testcase tRedlining_16
    try
        EditCopy
    catch
-       Warnlog "#i41424# Bullets cannot be removed by Del key"
+       Warnlog "Bullets cannot be removed by Del key"
        Call wTypeKeys "<Down><End>"
        Call wTypeKeys "<Shift Left>"
        EditCopy
@@ -1199,7 +1199,7 @@ testcase tRedlining_16
    try
        EditCopy
    catch
-       Warnlog "#i41424# Bullets cannot be removed by Del key"
+       Warnlog "Bullets cannot be removed by Del key"
        Call wTypeKeys "<Down><End>"
        Call wTypeKeys "<Shift Left>"
        EditCopy

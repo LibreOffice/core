@@ -28,30 +28,36 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Global" script:language="StarBasic">REM  *****  BASIC  *****
 
-const cMaxErrorStates = 13
+const cMaxErrorStates = 14
 
 const cCoGreen = 4057917, cCoRed = 16711680, cCoGrey = 12632256
 const cParagraphBreak = 0
 
 global const cExtensionFileName = &quot;TestExtension.oxt&quot;
 
-global const cDocNew = 0, cDocSaveOpen8 = 1, cDocSaveOpenXML = 2, cDocOpen50 = 3, cDocClose = 4, cDocWrite = 5
+global const cDocNew = 0, cDocSaveOpen8 = 1, cDocSaveOpenXML = 2, cDocClose = 3
 global const cDBService = 0, cDBOpen = 1, cDBInsert = 2, cDBDelete = 3, cDBSeek = 4, cDBClose = 5
 global const cEXTService = 0, cEXTInstall = 1, cEXTUninstall = 2
+global const cTestClosureSetupDoc = 0, cTestClosureWriteStatus = 1
 global const cLogfileFailed = 255
 
 global const cStWriter = 0, cStCalc = 1, cStPraesentation = 2, cStZeichnen = 3
-global const cStMessage = 12, cStHTML = 6, cStChart = 4, cStJava = 7
+global const cStHTML = 6, cStChart = 4, cStJava = 7
 global const cStMath = 5, cStDataBase = 9
 global const cStExtension = 11
+global const cStTestGlue = 12
 global const cStNone = -1
 
 global const cFlt8 = 0, cFlt50 = 32, cFltNewDoc = 64, cFltXML = 128
 
-global const frmWriter = 1, frmCalc = 2, frmMessage = 3, frmImpress = 4
-global const frmMath = 5, frmImage = 6, frmChart = 7, frmHyperText = 8, frmDraw = 9
+global const frmWriter = 1, frmCalc = 2, frmImpress = 4
+global const frmMath = 5, frmChart = 7, frmHyperText = 8, frmDraw = 9
 global const frmDataBase = 10, frmJava = 13
 global const frmExtension = 14
+global const frmTestClosure = 15
+
+Global gCurrentDocTest As Integer
+Global gCurrentTestCase As Integer
 
 global const cLogUnknown = 0, cLogFalse = 1, cLogTrue = 2
 
@@ -83,7 +89,7 @@ Global const cUserFieldTestWriter = &quot;Writer&quot;, cUserFieldTestCalc = &qu
 Global const cUserFieldTestDraw = &quot;Draw&quot;, cUserFieldTestMath = &quot;Math&quot;, cUserFieldTestChart = &quot;Chart&quot;
 Global const cUserFieldTestHTML = &quot;HTML&quot;, cUserFieldTestJava = &quot;Java&quot;, cUserFieldTestDatabase = &quot;Database&quot;
 Global const cUserFieldTestExtension = &quot;Extension&quot;
-Global const cUserFieldTestOpenSaveXML = &quot;SaveOpenXML&quot;, cUserFieldTestOpen50 = &quot;Open50&quot;
+Global const cUserFieldTestOpenSaveXML = &quot;SaveOpenXML&quot;
 Global const cUserFieldTestTerminateAfterTest = &quot;Terminate&quot;, cUserFieldTestOpenSave8 = &quot;SaveOpen8&quot;
 
 Global const cOptionsDialogName = &quot;OptionsDlg&quot;, cTest10Modul = &quot;Standard&quot;
@@ -91,6 +97,7 @@ Global const cOptionsDialogName = &quot;OptionsDlg&quot;, cTest10Modul = &quot;S
 Global const cDlgCancel = 1, cDlgOk = 0, cDlgStartTest = 2
 
 global gErrorState (cMaxErrorStates, 5) as integer
+Global gTestCaseAnnotations( cMaxErrorStates, 5 ) As String
 
 global gOutputDoc as Object
 global gOutputDocNotUno as Object
@@ -100,7 +107,7 @@ Global bMakeWriterTest as boolean, bMakeCalcTest as  boolean, bMakeImpressTest a
 Global bMakeDrawTest as Boolean, bMakeMathTest as boolean, bMakeChartTest as boolean
 Global bMakeHTMLTest as boolean, bMakeJavaTest as boolean, bMakeDBTest as boolean
 Global bMakeExtensionTest as boolean
-Global bMakeSaveOpenXMLTest as boolean, bMakeOpen50Test as boolean
+Global bMakeSaveOpenXMLTest as boolean
 Global bMakeTerminateAfterTest as boolean, bShowTable as boolean
 Global bMakeSaveOpen8Test as boolean
 
@@ -109,41 +116,109 @@ global sExtensionURL as string
 Dim gDlgState as Integer
 
 Sub SetGlobalDoc
-    gOutPutDoc = ThisComponent
+    gOutputDoc = ThisComponent
 end Sub
 
 Sub ClearStatus
     for j% = 0 to cMaxErrorStates
         for i% = 0 to 5
-               gErrorState (j%, i%) = cLogUnknown
+            gErrorState (j%, i%) = cLogUnknown
+            gTestCaseAnnotations( J%, i% ) = ""
         next i%
     next j%
 end Sub
 
 Sub ClearAllText
     call SetGlobalDoc
-    call ClearDoc (gOutPutDoc)
+    call ClearDoc (gOutputDoc)
     call ClearStatus
 end Sub
 
+Sub AssertionHandler( sMessage as String )
+    LogTestResult( &quot;assertion caught: &quot; + sMessage, FALSE )
+End Sub
+
 Sub Main
+    On Local Error Goto MainError
+
+    gCurrentDocTest = frmTestClosure
+    gCurrentTestCase = cLogfileFailed
+
+    DeleteAllSavedFiles()
+    DeleteAllLogFiles()
+    SetupWorkPath()
+
+    if GetSystem (sWorkPath) = &quot;windows&quot; then
+        sWorkPath = ConvertPathToWin (sWorkPath)
+    end if
+
+    LocalTestLog% = OpenLogDat( GetLogFileName( gCurrentDocTest ) )
+
+    gCurrentTestCase = cTestClosureSetupDoc
+    CaptureAssertions( "AssertionHandler" )
+
     call SetGlobalDoc
+
+    Dim bWasModified as Boolean
+    bWasModified = gOutputDoc.isModified()
+
     if bShowTable then
-        call ClearDoc (gOutPutDoc)
+        call ClearDoc (gOutputDoc)
     end If
 
     call ClearStatus
 
-    Call Test_10er.Main
+    LogTestResult( GetTestGlueDescription( gCurrentTestCase ), TRUE )
 
+    Dim nPreserveFileHandle%
+    nPreserveFileHandle% = LocalTestLog%
+    Call Test_10er.Main
+    LocalTestLog% = nPreserveFileHandle%
+
+    gCurrentDocTest = frmTestClosure
+    gCurrentTestCase = cTestClosureWriteStatus
     if bShowTable then
         call CreateStatusTable2
         call CreateStatusTable
         call CreateDocState
+        LogTestResult( GetTestGlueDescription( gCurrentTestCase ), TRUE )
+            &apos; do this LogTestResult call before CreateSecondState, since the latter accesses (and displays) the result
         call CreateSecondState
         gOutputDoc.CurrentController.ViewCursor.JumpToFirstPage
-    end if
+    Else
+        LogTestResult( GetTestGlueDescription( gCurrentTestCase ), TRUE )
+    End If
+
+    &apos; print the &apos;test complete&apos; marker
+    Print #LocalTestLog%, &quot;---&quot;
+    LocalTestLog% = 0
+
+    gOutputDoc.setModified( bWasModified )
+
+    CaptureAssertions( &quot;&quot; )
+    Exit Sub
+
+MainError:
+    If ( gCurrentTestCase = cLogfileFailed ) then
+        LogTestResult( &quot;&quot;, False )
+        Exit Sub
+    else
+        LogTestResult( &quot;testclosure &quot; + GetTestGlueDescription( gCurrentTestCase ), FALSE )
+        Close #LocalTestLog%
+        LocalTestLog = 0
+    End If
 End Sub
+
+Function GetTestGlueDescription( nTestCase as Integer )
+    Select Case ( nTestCase )
+        case cTestClosureSetupDoc
+            GetTestGlueDescription = &quot;setup&quot;
+        case cTestClosureWriteStatus
+            GetTestGlueDescription = &quot;write_status&quot;
+        case Else
+            GetTestGlueDescription = &quot;&quot;
+    End Select
+End Function
 
 Sub CreateStatusTable
     dim tableHeaders(7) as string
@@ -156,22 +231,17 @@ Sub CreateStatusTable
     tableHeaders(cStHTML) = &quot;HTML&quot;
     tableHeaders(cStJava) = &quot;Java&quot;
 
-    dim tableColums(3) as string
-    tableColums(cDocNew) = &quot;new&quot;
-    tableColums(cDocSaveOpen8) = &quot;V8.0&quot;
-    tableColums(cDocSaveOpenXML) = &quot;XML&quot;
-    tableColums(cDocOpen50) = &quot;V5.0&quot;
-&apos;  tableColums(cDocClose) = &quot;close&quot;
+    dim tableRows(3) as string
+    tableRows(cDocNew) = &quot;new&quot;
+    tableRows(cDocSaveOpen8) = &quot;V8.0&quot;
+    tableRows(cDocSaveOpenXML) = &quot;XML&quot;
+    tableRows(cDocClose) = &quot;close&quot;
 
-    aDoc = gOutPutDoc
+    aDoc = gOutputDoc
 
     xText = aDoc.Text
     xCursor = xText.createTextCursor()
 
-&apos;  xCursor.gotoStart(FALSE)
-&apos;  xCursor.GoRight (2, False)
-&apos;  SetParagraphBreak (xCursor)
-&apos;  SetParagraphBreak (xCursor)
     xCursor.gotoStart(FALSE)
     xCursor.GoRight (4, False)
     SetParagraphBreak (xCursor)
@@ -180,68 +250,48 @@ Sub CreateStatusTable
     xCursor.GoRight (1, False)
 
     table = aDoc.createInstance(&quot;com.sun.star.text.TextTable&quot;)
-    table.initialize(7,9)
+    table.initialize(5,9)
     table.Name = &quot;StTab1&quot;
+  table.BackColor = cCoGrey
     xText.insertTextContent(xCursor, table, FALSE)
 
-    tableCursor = table.createCursorByCellName(table.CellNames(0))
-    tableCursor.gotoStart(FALSE)
-    tableCursor.goRight(1,FALSE)
-
     for i% = 0 to 7
-      cName = tableCursor.getRangeName()
-      xCell = table.getCellByName(cName)
-      xCell.String=tableHeaders(i%)
-
-      xCell.BackTransparent = False
-      xCell.BackColor = cCoGrey
-
-      tableCursor.goRight(1,FALSE)
+        tableCell = table.getCellByPosition( i% + 1, 0 )
+        tableCell.String = tableHeaders( i% )
     next i%
 
-    xCursor.gotoStart(FALSE)
-&apos;  SetParagraphBreak (xCursor)
-&apos;  SetParagraphBreak (xCursor)
-
-    tableCursor.gotoStart(FALSE)
-    cName = tableCursor.getRangeName()
-      xCell = table.getCellByName(cName)
-      xCell.BackTransparent = False
-      xCell.BackColor = cCoGrey
-
-    for i% = 0 to 3
-        tableCursor.goDown(1,FALSE)
-         cName = tableCursor.getRangeName()
-          xCell = table.getCellByName(cName)
-          xCell.String=tableColums(i%)
-
-          xCell.BackTransparent = False
-          xCell.BackColor = cCoGrey
+    for i% = LBound( tableRows ) to UBound( tableRows )
+        tableCell = table.getCellByPosition( 0, i% + 1 )
+      tableCell.String=tableRows(i%)
     next i%
 end Sub
 
 Sub CreateStatusTable2
-    dim tableHeaders(5) as string
-    tableHeaders(cStDataBase-9) = &quot;Database&quot;
+    dim tableHeaders(4) as string
+    tableHeaders(0) = &quot;Database&quot;
     tableHeaders(1) = &quot;&quot;
-    tableHeaders(cStExtension-9) = &quot;Extension&quot;
+    tableHeaders(2) = &quot;Extension&quot;
     tableHeaders(3) = &quot;&quot;
-    tableHeaders(4) = &quot;&quot;
+    tableHeaders(4) = &quot;Other&quot;
 
-    dim tableColums(5) as string
-    tableColums(cDBService ) = &quot;services&quot;
-    tableColums(cDBOpen ) = &quot;open&quot;
-    tableColums(cDBInsert ) = &quot;insert&quot;
-    tableColums(cDBDelete  ) = &quot;delete&quot;
-    tableColums(cDBSeek ) = &quot;seek&quot;
-    tableColums(cDBClose ) = &quot;close&quot;
+    dim tableRows(5) as string
+    tableRows(cDBService ) = &quot;services&quot;
+    tableRows(cDBOpen ) = &quot;open&quot;
+    tableRows(cDBInsert ) = &quot;insert&quot;
+    tableRows(cDBDelete  ) = &quot;delete&quot;
+    tableRows(cDBSeek ) = &quot;seek&quot;
+    tableRows(cDBClose ) = &quot;close&quot;
 
-    dim tableColums2(3) as string
-    tableColums2(cEXTService ) = &quot;services&quot;
-    tableColums2(cEXTInstall ) = &quot;install&quot;
-    tableColums2(cEXTUninstall ) = &quot;uninstall&quot;
+    dim tableRows2(2) as string
+    tableRows2(cEXTService ) = &quot;services&quot;
+    tableRows2(cEXTInstall ) = &quot;install&quot;
+    tableRows2(cEXTUninstall ) = &quot;uninstall&quot;
 
-    aDoc = gOutPutDoc
+    dim tableRows3(1) as string
+    tableRows3(cTestClosureSetupDoc ) = &quot;setup test&quot;
+    tableRows3(cTestClosureWriteStatus ) = &quot;write test result&quot;
+
+    aDoc = gOutputDoc
 
     xText = aDoc.Text
     xCursor = xText.createTextCursor()
@@ -255,111 +305,98 @@ Sub CreateStatusTable2
     table = aDoc.createInstance(&quot;com.sun.star.text.TextTable&quot;)
     table.initialize(7,6)
     table.Name = &quot;StTab2&quot;
-    &apos;table.RelativeWidth =500
+    table.BackColor = cCoGrey
 
     xText.insertTextContent(xCursor, table, FALSE)
 
-    tableCursor = table.createCursorByCellName(table.CellNames(0))
-    tableCursor.gotoStart(FALSE)
-    tableCursor.goRight(1,FALSE)
-
-    for i% = 0 to 5
-      cName = tableCursor.getRangeName()
-      xCell = table.getCellByName(cName)
-      xCell.String=tableHeaders(i%)
-
-      xCell.BackTransparent = False
-      xCell.BackColor = cCoGrey
-
-      tableCursor.goRight(1,FALSE)
+    for i% = LBound( tableHeaders ) to UBound( tableHeaders )
+        tableCell = table.getCellByPosition( i% + 1, 0 )
+        tableCell.String = tableHeaders(i%)
     next i%
 
-    tableCursor.gotoStart(FALSE)
-
-    cName = tableCursor.getRangeName()
-      xCell = table.getCellByName(cName)
-      xCell.BackTransparent = False
-      xCell.BackColor = cCoGrey
-
-    for i% = 0 to 5
-        tableCursor.goDown(1,FALSE)
-         cName = tableCursor.getRangeName()
-          xCell = table.getCellByName(cName)
-          xCell.String=tableColums(i%)
-
-          xCell.BackTransparent = False
-          xCell.BackColor = cCoGrey
+    for i% = LBound( tableRows ) to UBound( tableRows )
+        tableCell = table.getCellByPosition( 0, i% + 1 )
+      tableCell.String=tableRows(i%)
     next i%
 
-    tableCursor.gotoStart(FALSE)
-    tableCursor.goRight(2,FALSE)
+    for i% = LBound( tableRows2 ) to UBound( tableRows2 )
+        tableCell = table.getCellByPosition( 2, i% + 1 )
+      tableCell.String=tableRows2(i%)
+    next i%
 
-    for i% = 0 to 3
-        tableCursor.goDown(1,FALSE)
-         cName = tableCursor.getRangeName()
-          xCell = table.getCellByName(cName)
-          xCell.String=tableColums2(i%)
-
-          xCell.BackTransparent = False
-          xCell.BackColor = cCoGrey
+    for i% = LBound( tableRows3 ) to UBound( tableRows3 )
+        tableCell = table.getCellByPosition( 4, i% + 1 )
+      tableCell.String=tableRows3(i%)
     next i%
 end Sub
 
 
 Sub CreateDocState
-    aDoc = gOutPutDoc
+    aDoc = gOutputDoc
     table = aDoc.TextTables.GetByIndex (1)
-    &apos;table = aDoc.TextTables.GetByName (&quot;StTab1&quot;)
 
     for j% = 0 to 7
-        for i% = 0 to 5
+        for i% = 0 to 3
             sRangeName = GetRangeName(j%, i%+1)
 
             tableCursor = table.createCursorByCellName(sRangeName)
 
-             cName = tableCursor.getRangeName()
-              xCell = table.getCellByName(cName)
+            cName = tableCursor.getRangeName()
+            xCell = table.getCellByName(cName)
 
-              xCell.BackTransparent = False
+            xCell.BackTransparent = False
 
-               if gErrorState (j%, i%) = cLogTrue then
-                      xCell.BackColor = cCoGreen
-              else if gErrorState (j%, i%) = cLogFalse then
-                      xCell.BackColor = cCoRed
-              else
-                  xCell.BackColor = cCoGrey
-              end If
-              end If
-
+            If gErrorState (j%, i%) = cLogTrue Then
+                xCell.BackColor = cCoGreen
+            else
+                If gErrorState (j%, i%) = cLogFalse Then
+                    xCell.BackColor = cCoRed
+                    If ( gTestCaseAnnotations( j%, i% ) &lt;&gt; "" ) Then
+                        Dim annotation as Object
+                        annotation = aDoc.createInstance( &quot;com.sun.star.text.TextField.Annotation&quot; )
+                        annotation.Author = &quot;smoketest&quot;
+                        annotation.Content = gTestCaseAnnotations( j%, i% )
+                        xCell.insertTextContent( xCell, annotation, false )
+                    End If
+                else
+                    xCell.BackColor = cCoGrey
+                end If
+            end If
         next i%
     next j%
 end Sub
 
 Sub CreateSecondState
-    aDoc = gOutPutDoc
+    aDoc = gOutputDoc
     table = aDoc.TextTables.GetByIndex (0)
-    &apos;table = aDoc.TextTables.GetByName (&quot;StTab2&quot;)
 
-    for j% = 0 to cMaxErrorStates-9
-        for i% = 0 to 5
-            sRangeName = GetRangeName(j%, i%+1)
+    Dim stateIndex(2) as Integer
+    stateIndex(0) = cStDataBase
+    stateIndex(1) = cStExtension
+    stateIndex(2) = cStTestGlue
 
-            tableCursor = table.createCursorByCellName(sRangeName)
+    Dim j as Integer
+    For j = LBound( stateIndex ) To UBound( stateIndex )
+        for i% = 1 to 6
+            tableCell = table.getCellByPosition( 2 * j + 1, i% )
+            tableCell.BackTransparent = False
 
-             cName = tableCursor.getRangeName()
-              xCell = table.getCellByName(cName)
-
-              xCell.BackTransparent = False
-
-               if gErrorState (j%+9, i%) = cLogTrue then
-                      xCell.BackColor = cCoGreen
-              else if gErrorState (j%+9, i%) = cLogFalse then
-                      xCell.BackColor = cCoRed
-              else
-                  xCell.BackColor = cCoGrey
+            if gErrorState( stateIndex(j), i% - 1 ) = cLogTrue then
+                tableCell.BackColor = cCoGreen
+            else
+                if gErrorState ( stateIndex(j), i% - 1 ) = cLogFalse then
+                    tableCell.BackColor = cCoRed
+                    If ( gTestCaseAnnotations( stateIndex(j), i% - 1 ) &lt;&gt; &quot;&quot; ) Then
+                        Dim annotation as Object
+                        annotation = aDoc.createInstance( &quot;com.sun.star.text.TextField.Annotation&quot; )
+                        annotation.Author = &quot;smoketest&quot;
+                        annotation.Content = gTestCaseAnnotations( stateIndex(j), i% - 1 )
+                        tableCell.insertTextContent( tableCell, annotation, false )
+                    End If
+                else
+                    tableCell.BackColor = cCoGrey
+                end If
               end If
-              end If
-
         next i%
     next j%
 end Sub
@@ -368,11 +405,33 @@ Function GetRangeName (nColumn as integer, nRow as integer) as string
     GetRangeName = chr (nColumn+66) + Trim(Str(nRow+1))
 end Function
 
-Sub SetStatus (nDocType as Integer, nAction as Integer, bState as Boolean)
+Sub LogTestResult( sTestCaseDescription as String, bSuccess as Boolean )
+    If ( gCurrentTestCase = cLogfileFailed ) Then
+        Dim sAnnotation as String
+        sAnnotation = &quot;creating logfile &apos;&quot; + GetLogFileName( gCurrentDocTest ) + &quot;&apos; failed&quot;
+        LogState( FALSE, sAnnotation, GlobalTestLog )
+        RecordTestCaseStatus( 0, FALSE, sAnnotation )
+    Else
+        bSuccess = RecordTestCaseStatus( gCurrentTestCase, bSuccess, sTestCaseDescription )
+        If ( LocalTestLog &lt;&gt; 0 ) Then
+            LogState( bSuccess, sTestCaseDescription, LocalTestLog )
+        EndIf
+        if ( GlobalTestLog &lt;&gt; 0 ) Then
+            LogState( bSuccess, sTestCaseDescription, GlobalTestLog )
+        EndIf
+    End If
+End Sub
+
+Function RecordTestCaseStatus( nAction as Integer, bState as Boolean, sFailureAnnotation as String ) as Boolean
     Dim nStatusType as Integer
     Dim nState as integer
-    nStatusType = GetStatusType (nDocType)
-    If nStatusType = cStNone then Exit Sub
+    nStatusType = GetStatusType( gCurrentDocTest )
+    If nStatusType = cStNone then Exit Function
+
+  If ( gErrorState( nStatusType, nAction ) = cLogFalse ) Then
+    &apos; don't overwrite a previous &quot;failed&quot; state for this test
+    bState = FALSE
+  End If
 
     if bState then
         nState = cLogTrue
@@ -381,30 +440,34 @@ Sub SetStatus (nDocType as Integer, nAction as Integer, bState as Boolean)
     end If
 
     gErrorState (nStatusType, nAction) = nState
-end Sub
+
+    If ( nState = cLogFalse ) And ( sFailureAnnotation &lt;&gt; &quot;&quot; ) Then
+        gTestCaseAnnotations( nStatusType, nAction ) = gTestCaseAnnotations( nStatusType, nAction ) + sFailureAnnotation + chr(13)
+    End If
+
+    RecordTestCaseStatus = bState
+End Function
 
 Function GetStatusType (nDocType as Integer) as Integer
     Select Case ( nDocType )
         case frmWriter
-            GetStatusType = cStWriter &apos; Textdokument
+            GetStatusType = cStWriter &apos; text document
         case frmCalc
-            GetStatusType = cStCalc &apos;Tabellendokument
-        case frmMessage
-            GetStatusType = cStMessage &apos;Nachricht
+            GetStatusType = cStCalc &apos; spreadsheet document
         case frmImpress
-            GetStatusType = cStPraesentation &apos;Präsentation
+            GetStatusType = cStPraesentation &apos; presentation
         case frmDraw
-            GetStatusType = cStZeichnen &apos;Zeichnen
+            GetStatusType = cStZeichnen &apos; drawing
         case frmMath
-            GetStatusType = cStMath &apos;Formel
-        case frmImage
-            GetStatusType = cStBild &apos;Bild
+            GetStatusType = cStMath &apos; formula
         case frmHyperText
-            GetStatusType = cStHTML &apos;Hypertext-Dokument
+            GetStatusType = cStHTML &apos; HTML document
         case frmChart
-            GetStatusType = cStChart &apos;Diagramm
+            GetStatusType = cStChart &apos; chart
         case frmJava
             GetStatusType = cStJava &apos;Java
+        case frmTestClosure
+            GetStatusType = cStTestGlue &apos; test framework
         case frmDataBase
             GetStatusType = cStDataBase &apos;DataBase
         case frmExtension
@@ -494,56 +557,53 @@ end Sub
 
 Sub SetOptions
     call SetGlobalDoc
-    SetUserFieldState (cUserFieldTestWriter, -(gOptionsDialog.getControl(&quot;cbWriterTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestCalc, -(gOptionsDialog.getControl(&quot;cbCalcTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestImpress, -(gOptionsDialog.getControl(&quot;cbImpressTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestDraw, -(gOptionsDialog.getControl(&quot;cbDrawTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestHTML, -(gOptionsDialog.getControl(&quot;cbHTMLTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestMath, -(gOptionsDialog.getControl(&quot;cbMathTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestChart, -(gOptionsDialog.getControl(&quot;cbChartTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestJava, -(gOptionsDialog.getControl(&quot;cbJavaTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestDatabase, -(gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestExtension, -(gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestOpenSaveXML, -(gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestOpen50, -(gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestOpenSave8, -(gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestTerminateAfterTest, -(gOptionsDialog.getControl(&quot;cbTerminateAfterTest&quot;).getState), gOutPutDoc)
+    SetUserFieldState (cUserFieldTestWriter, -(gOptionsDialog.getControl(&quot;cbWriterTest&quot;).getState), gOutputDoc)
+    SetUserFieldState (cUserFieldTestCalc, -(gOptionsDialog.getControl(&quot;cbCalcTest&quot;).getState), gOutputDoc)
+    SetUserFieldState (cUserFieldTestImpress, -(gOptionsDialog.getControl(&quot;cbImpressTest&quot;).getState), gOutputDoc)
+    SetUserFieldState (cUserFieldTestDraw, -(gOptionsDialog.getControl(&quot;cbDrawTest&quot;).getState), gOutputDoc)
+    SetUserFieldState (cUserFieldTestHTML, -(gOptionsDialog.getControl(&quot;cbHTMLTest&quot;).getState), gOutputDoc)
+    SetUserFieldState (cUserFieldTestMath, -(gOptionsDialog.getControl(&quot;cbMathTest&quot;).getState), gOutputDoc)
+    SetUserFieldState (cUserFieldTestChart, -(gOptionsDialog.getControl(&quot;cbChartTest&quot;).getState), gOutputDoc)
+    SetUserFieldState (cUserFieldTestJava, -(gOptionsDialog.getControl(&quot;cbJavaTest&quot;).getState), gOutputDoc)
+    SetUserFieldState (cUserFieldTestDatabase, -(gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).getState), gOutputDoc)
+    SetUserFieldState (cUserFieldTestExtension, -(gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).getState), gOutputDoc)
+    SetUserFieldState (cUserFieldTestOpenSaveXML, -(gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).getState), gOutputDoc)
+    SetUserFieldState (cUserFieldTestOpenSave8, -(gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).getState), gOutputDoc)
+    SetUserFieldState (cUserFieldTestTerminateAfterTest, -(gOptionsDialog.getControl(&quot;cbTerminateAfterTest&quot;).getState), gOutputDoc)
 end Sub
 
 Sub GetOptions
     call SetGlobalDoc
-    gOptionsDialog.getControl(&quot;cbWriterTest&quot;).setState( -( GetUserFieldState (cUserFieldTestWriter, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbCalcTest&quot;).setState ( -( GetUserFieldState (cUserFieldTestCalc, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbImpressTest&quot;).setState( -( GetUserFieldState (cUserFieldTestImpress, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbDrawTest&quot;).setState( -( GetUserFieldState (cUserFieldTestDraw, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbHTMLTest&quot;).setState( -( GetUserFieldState (cUserFieldTestHTML, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbMathTest&quot;).setState( -( GetUserFieldState (cUserFieldTestMath, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbChartTest&quot;).setState( -( GetUserFieldState (cUserFieldTestChart, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbJavaTest&quot;).setState( -( GetUserFieldState (cUserFieldTestJava, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).setState( -( GetUserFieldState (cUserFieldTestDatabase, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).setState( -( GetUserFieldState (cUserFieldTestExtension, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSaveXML, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpen50, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSave8, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbTerminateAfterTest&quot;).setState( -( GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutPutDoc)))
+    gOptionsDialog.getControl(&quot;cbWriterTest&quot;).setState( -( GetUserFieldState (cUserFieldTestWriter, gOutputDoc)))
+    gOptionsDialog.getControl(&quot;cbCalcTest&quot;).setState ( -( GetUserFieldState (cUserFieldTestCalc, gOutputDoc)))
+    gOptionsDialog.getControl(&quot;cbImpressTest&quot;).setState( -( GetUserFieldState (cUserFieldTestImpress, gOutputDoc)))
+    gOptionsDialog.getControl(&quot;cbDrawTest&quot;).setState( -( GetUserFieldState (cUserFieldTestDraw, gOutputDoc)))
+    gOptionsDialog.getControl(&quot;cbHTMLTest&quot;).setState( -( GetUserFieldState (cUserFieldTestHTML, gOutputDoc)))
+    gOptionsDialog.getControl(&quot;cbMathTest&quot;).setState( -( GetUserFieldState (cUserFieldTestMath, gOutputDoc)))
+    gOptionsDialog.getControl(&quot;cbChartTest&quot;).setState( -( GetUserFieldState (cUserFieldTestChart, gOutputDoc)))
+    gOptionsDialog.getControl(&quot;cbJavaTest&quot;).setState( -( GetUserFieldState (cUserFieldTestJava, gOutputDoc)))
+    gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).setState( -( GetUserFieldState (cUserFieldTestDatabase, gOutputDoc)))
+    gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).setState( -( GetUserFieldState (cUserFieldTestExtension, gOutputDoc)))
+    gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSaveXML, gOutputDoc)))
+    gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSave8, gOutputDoc)))
+    gOptionsDialog.getControl(&quot;cbTerminateAfterTest&quot;).setState( -( GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutputDoc)))
 End Sub
 
 Sub ReadOptions
     call SetGlobalDoc
-    bMakeWriterTest = GetUserFieldState (cUserFieldTestWriter, gOutPutDoc)
-    bMakeCalcTest = GetUserFieldState (cUserFieldTestCalc, gOutPutDoc)
-    bMakeImpressTest = GetUserFieldState (cUserFieldTestImpress, gOutPutDoc)
-    bMakeDrawTest = GetUserFieldState (cUserFieldTestDraw, gOutPutDoc)
-    bMakeHTMLTest = GetUserFieldState (cUserFieldTestHTML, gOutPutDoc)
-    bMakeMathTest = GetUserFieldState (cUserFieldTestMath, gOutPutDoc)
-    bMakeChartTest = GetUserFieldState (cUserFieldTestChart, gOutPutDoc)
-    bMakeJavaTest = GetUserFieldState (cUserFieldTestJava, gOutPutDoc)
-    bMakeDBTest = GetUserFieldState (cUserFieldTestDatabase, gOutPutDoc)
-    bMakeExtensionTest = GetUserFieldState (cUserFieldTestExtension, gOutPutDoc)
-    bMakeSaveOpenXMLTest = GetUserFieldState (cUserFieldTestOpenSaveXML, gOutPutDoc)
-    bMakeOpen50Test = GetUserFieldState (cUserFieldTestOpen50, gOutPutDoc)
-    bMakeSaveOpen8Test = GetUserFieldState (cUserFieldTestOpenSave8, gOutPutDoc)
-    bMakeTerminateAfterTest = GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutPutDoc)
+    bMakeWriterTest = GetUserFieldState (cUserFieldTestWriter, gOutputDoc)
+    bMakeCalcTest = GetUserFieldState (cUserFieldTestCalc, gOutputDoc)
+    bMakeImpressTest = GetUserFieldState (cUserFieldTestImpress, gOutputDoc)
+    bMakeDrawTest = GetUserFieldState (cUserFieldTestDraw, gOutputDoc)
+    bMakeHTMLTest = GetUserFieldState (cUserFieldTestHTML, gOutputDoc)
+    bMakeMathTest = GetUserFieldState (cUserFieldTestMath, gOutputDoc)
+    bMakeChartTest = GetUserFieldState (cUserFieldTestChart, gOutputDoc)
+    bMakeJavaTest = GetUserFieldState (cUserFieldTestJava, gOutputDoc)
+    bMakeDBTest = GetUserFieldState (cUserFieldTestDatabase, gOutputDoc)
+    bMakeExtensionTest = GetUserFieldState (cUserFieldTestExtension, gOutputDoc)
+    bMakeSaveOpenXMLTest = GetUserFieldState (cUserFieldTestOpenSaveXML, gOutputDoc)
+    bMakeSaveOpen8Test = GetUserFieldState (cUserFieldTestOpenSave8, gOutputDoc)
+    bMakeTerminateAfterTest = GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutputDoc)
 end Sub
 
 Sub SetDefaultOptions
@@ -565,11 +625,6 @@ Sub SetDefaultOptions
     End If
     bMakeSaveOpenXMLTest = true
     REM Disable StarOffice 5.0 tests in case binfilter has not been included
-    if Environ(&quot;WITH_BINFILTER&quot;) = &quot;NO&quot; then
-        bMakeOpen50Test = false
-    else
-        bMakeOpen50Test = true
-    End If
     bMakeSaveOpen8Test = true
     bMakeTerminateAfterTest = false
 end Sub
@@ -579,8 +634,8 @@ Sub StartTestByOptions
     call ReadOptions
     call Main
     if bMakeTerminateAfterTest then
-        ClearDocFull (gOutPutDoc)
-        gOutPutDoc.dispose
+        ClearDocFull (gOutputDoc)
+        gOutputDoc.dispose
         &apos;StarDesktop.Terminate
 
         &apos;EnableReschedule( false )
@@ -608,7 +663,7 @@ Function StartTestWithDefaultOptions
     action(cDocNew) = &quot;new&quot;
     action(cDocSaveOpen8) = &quot;V8.0&quot;
     action(cDocSaveOpenXML) = &quot;XML&quot;
-    action(cDocOpen50) = &quot;V5.0&quot;
+    action(cDocClose) = &quot;close&quot;
     dim baseAction(5) as string
     baseAction(cDBService) = &quot;services&quot;
     baseAction(cDBOpen) = &quot;open&quot;

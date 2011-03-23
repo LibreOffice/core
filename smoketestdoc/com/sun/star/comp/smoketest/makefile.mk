@@ -25,9 +25,9 @@
 #
 #*************************************************************************
 
-PRJ     = ..$/..$/..$/..$/..
-PRJNAME = smoke_test
-PACKAGE = com$/sun$/star$/comp$/smoketest
+PRJ     = ../../../../..
+PRJNAME = smoketestdoc
+PACKAGE = com/sun/star/comp/smoketest
 TARGET  = com_sun_star_comp_smoketest
 
 no_common_build_zip:=TRUE
@@ -40,7 +40,6 @@ no_common_build_zip:=TRUE
 
 JARFILES = ridl.jar jurt.jar unoil.jar juh.jar
 
-
 JARTARGET          = TestExtension.jar
 JARCOMPRESS        = TRUE
 CUSTOMMANIFESTFILE = MANIFEST.MF
@@ -48,7 +47,7 @@ CUSTOMMANIFESTFILE = MANIFEST.MF
 ZIP1TARGET=TestExtension
 ZIP1LIST=*
 ZIPFLAGS=-r
-ZIP1DIR=$(MISC)$/$(TARGET)
+ZIP1DIR=$(MISC)/$(TARGET)
 ZIP1EXT=.oxt
 
 # --- Files --------------------------------------------------------
@@ -57,31 +56,31 @@ JAVAFILES = TestExtension.java
 
 # --- Targets ------------------------------------------------------
 
-ZIP1DEPS=$(MISC)$/$(TARGET)$/$(JARTARGET)\
-         $(MISC)$/$(TARGET)$/TestExtension.rdb\
-         $(MISC)$/$(TARGET)$/META-INF$/manifest.xml
+ZIP1DEPS=$(MISC)/$(TARGET)/$(JARTARGET)\
+         $(MISC)/$(TARGET)/TestExtension.rdb\
+         $(MISC)/$(TARGET)/META-INF/manifest.xml
 
 .INCLUDE :  target.mk
 
-$(MISC)$/$(TARGET)$/META-INF:
+$(MISC)/$(TARGET)/META-INF:
     @-$(MKDIRHIER) $(@)
 
-$(MISC)$/TestExtension.urd: TestExtension.idl
-    $(IDLC) -O$(MISC) -I$(SOLARIDLDIR) -cid -we $<
+$(MISC)/TestExtension.urd: TestExtension.idl
+    $(COMMAND_ECHO)$(IDLC) -O$(MISC) -I$(SOLARIDLDIR) -cid -we $<
 
-$(MISC)$/$(TARGET)$/META-INF$/manifest.xml $(MISC)$/$(TARGET)$/TestExtension.rdb : $(MISC)$/$(TARGET)$/META-INF
+$(MISC)/$(TARGET)/META-INF/manifest.xml $(MISC)/$(TARGET)/TestExtension.rdb : $(MISC)/$(TARGET)/META-INF
 
-$(MISC)$/$(TARGET)$/META-INF$/manifest.xml: manifest.xml
-    $(COPY) $< $@
+$(MISC)/$(TARGET)/META-INF/manifest.xml: manifest.xml
+    $(COMMAND_ECHO)$(COPY) $< $@
 
-$(MISC)$/$(TARGET)$/TestExtension.rdb: $(MISC)$/TestExtension.urd
-    $(REGMERGE) $@ /UCR $<
+$(MISC)/$(TARGET)/TestExtension.rdb: $(MISC)/TestExtension.urd
+    $(COMMAND_ECHO)$(REGMERGE) $@ /UCR $<
 
-$(JAVACLASSFILES) .UPDATEALL: $(MISC)$/$(TARGET)$/TestExtension.rdb
-    $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD -X$(SOLARBINDIR)/types.rdb $<
+$(JAVACLASSFILES) .UPDATEALL: $(MISC)/$(TARGET)/TestExtension.rdb
+    $(COMMAND_ECHO)$(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD -X$(SOLARBINDIR)/types.rdb $<
 
-$(MISC)$/$(TARGET)$/$(JARTARGET) : $(JARTARGETN)
-    $(COPY) $< $@
+$(MISC)/$(TARGET)/$(JARTARGET) : $(JARTARGETN)
+    $(COMMAND_ECHO)$(COPY) $< $@
 
 .ELSE
 @all:

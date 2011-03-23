@@ -127,7 +127,7 @@ static void assign( TestData & rData,
 
 //==================================================================================================
 class Test_Impl :
-    protected osl::DebugBase<Test_Impl>,
+    public osl::DebugBase<Test_Impl>,
     public WeakImplHelper3< XBridgeTest2, XServiceInfo , XRecursiveCall >
 {
     TestData _aData, _aStructData;
@@ -483,7 +483,7 @@ public:
 };
 
 //Dummy class for XComponent implementation
-class Dummy : protected osl::DebugBase<Dummy>,
+class Dummy : public osl::DebugBase<Dummy>,
               public WeakComponentImplHelperBase
 {
 public:

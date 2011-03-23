@@ -221,7 +221,7 @@ testcase  tPositionAndSize_2
     Sleep 1
     
     fPositionAndSize("TabPositionAndSizeWriter")
-    if Horizontalby.Gettext <> sPositionX then Warnlog "#i40845# X-Position is wrong: Not -> "+sPositionX+"  but -> "+Horizontalby.Gettext
+    if Horizontalby.Gettext <> sPositionX then Warnlog "X-Position is wrong: Not -> "+sPositionX+"  but -> "+Horizontalby.Gettext
     if Verticalby.Gettext <> sPositionY then Warnlog "Y-Position is wrong: Not -> "+sPositionY+"  but -> "+Verticalby.Gettext
     TabPositionAndSizeWriter.Cancel
     
