@@ -731,6 +731,10 @@ extern int pagein_execute (int argc, char **argv);
 void
 exec_pagein (Args *args)
 {
+// no pagein for the while on OSX
+#ifdef MACOSX
+    (void)args;
+#else
     char *argv[5];
     rtl_String *app_path;
 
@@ -750,6 +754,7 @@ exec_pagein (Args *args)
     pagein_execute (args->pPageinType ? 4 : 3, argv);
 
     free (argv[1]);
+#endif
 }
 
 static void extend_library_path (const char *new_element)

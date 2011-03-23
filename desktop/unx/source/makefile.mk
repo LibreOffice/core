@@ -44,9 +44,11 @@ OBJFILES= \
     $(OBJ)$/start.obj \
     $(OBJ)$/args.obj
 
+.IF "$(OS)"!="MACOSX"
 PAGEIN_OBJS= \
     $(OBJ)$/pagein.obj \
     $(OBJ)$/file_image_unx.obj
+.ENDIF
 
 APP1TARGET = $(TARGET)
 APP1RPATH  = BRAND
