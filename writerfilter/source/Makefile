@@ -99,8 +99,8 @@ wf_GEN_ooxml_Status_stage3=ooxml/status_stage3.xml
 wf_GEN_ooxml_Status_todo=ooxml/todo.xml
 wf_GEN_ooxml_Status_efforts=ooxml/efforts.csv
 
-$(wf_GEN_ooxml_token_tmp) : $(SOLARVER)/$(INPATH)/inc$(UPDMINOREXT)/oox/token.txt
-	cat $(SOLARVER)/$(INPATH)/inc$(UPDMINOREXT)/oox/token.txt \
+$(wf_GEN_ooxml_token_tmp) : $(SOLARVER)/$(INPATH)/inc$(UPDMINOREXT)/oox/token/tokens.txt
+	cat $(SOLARVER)/$(INPATH)/inc$(UPDMINOREXT)/oox/token/tokens.txt \
 	| sed "s#\(.*\)#<fasttoken>\1</fasttoken>#" > $@
 
 $(wf_GEN_ooxml_token_xml) : $(WFDIR)ooxml/tokenxmlheader $(wf_GEN_ooxml_token_tmp) $(WFDIR)ooxml/tokenxmlfooter
@@ -178,7 +178,7 @@ wf_SRC_doctok_QNameToStr_xsl=$(WFDIR)doctok/qnametostr.xsl
 wf_SRC_ooxml_QNameToStr_xsl=$(WFDIR)ooxml/qnametostr.xsl
 wf_SRC_model_NamespacePreprocess=$(WFDIR)resourcemodel/namespace_preprocess.pl
 wf_GEN_ooxml_Namespacesmap_xsl=namespacesmap.xsl
-wf_DEP_ooxml_namespaces_txt=$(SOLARVER)/$(INPATH)/inc$(UPDMINOREXT)/oox/namespaces.txt
+wf_DEP_ooxml_namespaces_txt=$(SOLARVER)/$(INPATH)/inc$(UPDMINOREXT)/oox/token/namespaces.txt
 wf_GEN_ooxml_preprocess_xsl=modelpreprocess.xsl
 
 $(wf_GEN_ooxml_QNameToStr_tmp): $(wf_SRC_ooxml_QNameToStr_xsl) $(wf_GEN_ooxml_Model_processed)
@@ -227,7 +227,3 @@ all : \
 	$(wf_GEN_model_SprmCodeToStr_cxx) \
 	$(patsubst %,OOXMLFactory_%.hxx,$(WRITERFILTER_OOXMLNAMESPACES)) \
 	$(patsubst %,OOXMLFactory_%.cxx,$(WRITERFILTER_OOXMLNAMESPACES)) \
-
-#	$(wf_GEN_rtftok_scanner_cxx) \
-
-
