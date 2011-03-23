@@ -499,7 +499,7 @@ void PresenterTextView::Implementation::SetFontDescriptor (
     mpEditEngineItemPool->SetPoolDefaultItem( aFontHeight);
 
     SvxFontItem aSvxFontItem (EE_CHAR_FONTINFO);
-    aSvxFontItem.GetFamilyName() = rFontDescriptor.Name;
+    aSvxFontItem.SetFamilyName( rFontDescriptor.Name );
     mpEditEngineItemPool->SetPoolDefaultItem(aSvxFontItem);
 
     mnTotalHeight = -1;

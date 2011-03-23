@@ -144,6 +144,10 @@ ModuleController::~ModuleController (void) throw()
 
 void SAL_CALL ModuleController::disposing (void)
 {
+    // Break the cyclic reference back to DrawController object
+    mpLoadedFactories.reset();
+    mpResourceToFactoryMap.reset();
+    mxController.clear();
 }
 
 

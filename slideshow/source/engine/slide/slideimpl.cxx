@@ -97,7 +97,7 @@ namespace
 class SlideImpl : public Slide,
                   public CursorManager,
                   public ViewEventHandler,
-                  protected ::osl::DebugBase<SlideImpl>
+                  public ::osl::DebugBase<SlideImpl>
 {
 public:
     SlideImpl( const uno::Reference<drawing::XDrawPage>&         xDrawPage,

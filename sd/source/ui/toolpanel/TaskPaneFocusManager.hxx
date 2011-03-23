@@ -104,7 +104,6 @@ public:
     bool TransferFocus (::Window* pSource, const KeyCode& rCode);
 
 private:
-    static FocusManager* spInstance;
     class LinkMap;
     ::std::auto_ptr<LinkMap> mpLinks;
 
