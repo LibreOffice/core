@@ -75,7 +75,7 @@ my %valid_options_hash = (
                             'help'       => ['help'],
                             'create'     => ['help', 'milestone', 'migration', 'hg'],
                             'fetch'      => ['help', 'milestone', 'childworkspace','platforms','noautocommon',
-                                            'quiet', 'onlysolver'],
+                                            'quiet', 'onlysolver', 'additionalrepositories'],
                             'query'      => ['help', 'milestone','masterworkspace','childworkspace'],
                             'task'       => ['help'],
                             'setcurrent' => ['help', 'milestone'],
@@ -120,6 +120,7 @@ sub parse_command_line
                                              'profile',
                                              'commit|C',
                                              'platforms|p=s',
+                                             'additionalrepositories|r=s',
                                              'noautocommon|x=s',
                                              'onlysolver|o',
                                              'quiet|q',
@@ -399,20 +400,16 @@ sub hg_clone_cws_or_milestone
 
     my ($hg_local_source, $hg_lan_source, $hg_remote_source);
     my $config = CwsConfig->new();
-    if ( $rep_type eq 'ooo') {
-        $hg_local_source = $config->get_ooo_hg_local_source();
-        $hg_lan_source = $config->get_ooo_hg_lan_source();
-        $hg_remote_source = $config->get_ooo_hg_remote_source();
-    }
-    else {
-        $hg_local_source = $config->get_so_hg_local_source();
-        $hg_lan_source = $config->get_so_hg_lan_source();
-        $hg_remote_source = $config->get_so_hg_remote_source();
-    }
+
+    $hg_local_source = $config->get_hg_source(uc $rep_type, 'LOCAL');
+    $hg_lan_source = $config->get_hg_source(uc $rep_type, 'LAN');
+    $hg_remote_source = $config->get_hg_source(uc $rep_type, 'REMOTE');
 
     my $masterws = $cws->master();
-    my $master_local_source = "$hg_local_source/" . $masterws;
-    my $master_lan_source = "$hg_lan_source/" . $masterws;
+    my ($master_local_source, $master_lan_source);
+
+    $master_local_source = "$hg_local_source/" . $masterws;
+    $master_lan_source = "$hg_lan_source/" . $masterws;
 
     my $milestone_tag;
     if ( $clone_milestone_only ) {
@@ -434,7 +431,15 @@ sub hg_clone_cws_or_milestone
     my $pull_from_remote = 0;
     my $cws_remote_source;
     if ( !$clone_milestone_only ) {
-        $cws_remote_source = "$hg_remote_source/cws/" . $cws->child();
+        if ($rep_type eq "ooo" || $rep_type eq "so")
+        {
+            $cws_remote_source = "$hg_remote_source/cws/" . $cws->child();
+        }
+        # e.g. cws_l10n
+        else
+        {
+            $cws_remote_source = "$hg_remote_source/cws_".$rep_type."/" . $cws->child();
+        }
 
         # The outgoing repository might not yet be available. Which is not
         # an error. Since pulling from the cws outgoing URL results in an ugly
@@ -446,7 +451,8 @@ sub hg_clone_cws_or_milestone
         require LWP::Simple;
         my $content = LWP::Simple::get($cws_remote_source);
         my $pattern = "<title>cws/". $cws->child();
-        if ( $content && $content =~ /$pattern/ ) {
+        my $pattern2 = "<title>cws_".$rep_type."/". $cws->child();
+        if ( $content && ($content =~ /$pattern/ || $content =~ /$pattern2/) ) {
             $pull_from_remote = 1;
         }
         else {
@@ -1456,10 +1462,10 @@ sub do_help
      }
     elsif ($arg eq 'fetch') {
         print STDERR "fetch: fetch a milestone or CWS\n";
-        print STDERR "usage: fetch [-q] [-p platforms] [-o] <-m milestone> <workspace>\n";
-        print STDERR "usage: fetch [-q] [-p platforms] [-o] <-c cws> <workspace>\n";
-        print STDERR "usage: fetch [-q] [-x platforms] [-o] <-m milestone> <workspace>\n";
-        print STDERR "usage: fetch [-q] [-x platforms] [-o] <-c cws> <workspace>\n";
+        print STDERR "usage: fetch [-q] [-p platforms] [-r additionalrepositories] [-o] <-m milestone> <workspace>\n";
+        print STDERR "usage: fetch [-q] [-p platforms] [-r additionalrepositories] [-o] <-c cws> <workspace>\n";
+        print STDERR "usage: fetch [-q] [-x platforms] [-r additionalrepositories] [-o] <-m milestone> <workspace>\n";
+        print STDERR "usage: fetch [-q] [-x platforms] [-r additionalrepositories] [-o] <-c cws> <workspace>\n";
         print STDERR "usage: fetch [-q] <-m milestone> <workspace>\n";
         print STDERR "usage: fetch [-q] <-c cws> <workspace>\n";
         print STDERR "\t-m milestone:            Checkout milestone <milestone> to workspace <workspace>\n";
@@ -1475,6 +1481,8 @@ sub do_help
         print STDERR "\t-x platform:             Copy one or more prebuilt platforms 'platform'. \n";
         print STDERR "\t                         Separate multiple platforms with commas.\n";
         print STDERR "\t                         Does not automatically adds 'common[.pro]'.\n";
+        print STDERR "\t-r additionalrepositories Checkout additional repositories. \n";
+        print STDERR "\t                         Separate multiple repositories with commas.\n";
         print STDERR "\t--noautocommon platform: Same as -x\n";
         print STDERR "\t-o:                      Omit checkout of sources, copy only solver. \n";
         print STDERR "\t--onlysolver:            Same as -o\n";
@@ -1582,6 +1590,8 @@ sub do_fetch
     }
 
     my $milestone_opt = $options_ref->{'milestone'};
+    my $additional_repositories_opt = $options_ref->{'additionalrepositories'};
+    $additional_repositories_opt = "", if ( !defined $additional_repositories_opt );
     my $child = $options_ref->{'childworkspace'};
     my $platforms = $options_ref->{'platforms'};
     my $noautocommon = $options_ref->{'noautocommon'};
@@ -1718,8 +1728,23 @@ sub do_fetch
             if ( !mkdir($work_master) ) {
                 print_error("Can't create directory '$work_master': $!.", 8);
             }
+
+            my %unique = map { $_ => 1 } split( /,/ , $additional_repositories_opt);
+            my @unique_repo_list = keys %unique;
+
+            if (defined($additional_repositories_opt))
+            {
+                foreach my $repo(@unique_repo_list)
+                {
+                    # do not double clone ooo and sun
+                    hg_clone_cws_or_milestone($repo, $cws, "$work_master/".$repo, $clone_milestone_only), if $repo ne "ooo" && $repo ne "sun";
+                }
+
+            }
+
             hg_clone_cws_or_milestone('ooo', $cws, "$work_master/ooo", $clone_milestone_only);
             hg_clone_cws_or_milestone('so', $cws, "$work_master/sun", $clone_milestone_only);
+
             if ( get_source_config_for_milestone($masterws, $milestone) ) {
                 # write source_config file
                 my $source_config_file = "$work_master/source_config";
@@ -1729,6 +1754,10 @@ sub do_fetch
                 print SOURCE_CONFIG "[repositories]\n";
                 print SOURCE_CONFIG "ooo=active\n";
                 print SOURCE_CONFIG "sun=active\n";
+                foreach my $repo(@unique_repo_list)
+                {
+                    print SOURCE_CONFIG $repo."=active\n", if $repo ne "ooo" || $repo ne "sun";
+                }
                 close(SOURCE_CONFIG);
             }
             else {

@@ -38,6 +38,10 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     sspretty \
 ))
 
+$(eval $(call gb_Helper_register_executables,OOO, \
+    spadmin.bin \
+))
+
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     AppleRemote \
     avmedia \
@@ -74,6 +78,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     tk \
     tl \
     utl \
+    unordf \
+    unoxml \
     vbahelper \
     vcl \
     vclplug_gen \
@@ -91,10 +97,13 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+    cppunit \
     icuuc \
     icule \
     graphite_dll \
     cppunit \
+    rdf \
+    xslt \
 ))
 
 
@@ -136,6 +145,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     jpeglib \
     ooopathutils \
     salcpprt \
+    vclmain \
     zlib \
     graphite \
     vclmain \

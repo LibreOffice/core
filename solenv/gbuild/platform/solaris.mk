@@ -34,7 +34,7 @@ gb_CC := cc
 gb_CXX := CC
 gb_GCCP := cc
 gb_AR := ar
-gb_AWK := nawk
+gb_AWK := /usr/xpg4/bin/awk
 gb_CLASSPATHSEP := :
 
 # use CC/CXX if they are nondefaults
@@ -125,6 +125,13 @@ gb_COMPILERNOOPTFLAGS :=
 # Helper class
 
 gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
+
+# convert parametters filesystem root to native notation
+# does some real work only on windows, make sure not to
+# break the dummy implementations on unx*
+define gb_Helper_convert_native
+$(1)
+endef
 
 
 # CObject class

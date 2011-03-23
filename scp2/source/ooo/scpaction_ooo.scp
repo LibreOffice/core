@@ -347,15 +347,6 @@ ScpAction scp_Copy_Xpd_Help_Html_Uninstallationprologue_En_Us
     Subdir = "installdata/html";
 End
 
-#if defined LINUX || defined SOLARIS
-ScpAction scp_Copy_Update_Script
-    Copy = "update";
-    Name = "update";
-    Styles = (SCPZIP_REPLACE);
-    UnixRights = 775;
-End
-#endif
-
 #ifdef MACOSX
 ScpAction scp_Copy_Dmg_Background_Image
   #if defined(BUILD_SPECIAL)

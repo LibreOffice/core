@@ -43,6 +43,7 @@ BEGIN
         "km",
         "nr",
         "ns",
+        "nso",
         "rw",
         "ss",
         "st",
@@ -87,7 +88,13 @@ BEGIN
         "oc",
         "ml",
         "as",
-        "ast"
+        "ast",
+        "ht",
+        "jbo",
+        "fur",
+        "ny",
+        "so",
+        "kab"
     );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
@@ -374,6 +381,10 @@ BEGIN
     %spellcheckerlanguagehash = ();
     %spellcheckerfilehash = ();
     $registryrootcomponent = "";
+    %allcomponents = ();
+    %allcomponents_in_this_database = ();
+    %allshortcomponents = ();
+    %alluniquedirectorynames = ();
 
     $installlocationdirectory = "";
     $installlocationdirectoryset = 0;

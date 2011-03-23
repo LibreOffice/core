@@ -343,94 +343,59 @@ sub get_so_svn_server
 
 #### HG methods ####
 
-sub get_ooo_hg_local_source
+sub _get_hg_source
 {
-    my $self = shift;
-
-    if ( !defined($self->{HG_LOCAL_SOURCE}) ) {
+    my $self               = shift;
+    my $repository_source  = shift;
+    if ( !defined($self->{$repository_source}) ) {
         my $config_file = $self->get_config_file();
-        my $source = $config_file->{CWS_CONFIG}->{'HG_LOCAL_SOURCE'};
+        my $source = $config_file->{CWS_CONFIG}->{$repository_source};
         if ( !defined($source) ) {
             $source = "";
         }
-        $self->{HG_LOCAL_SOURCE} = $source;
+        $self->{$repository_source} = $source;
     }
-    return $self->{HG_LOCAL_SOURCE} ? $self->{HG_LOCAL_SOURCE} : undef;
+    return $self->{$repository_source} ? $self->{$repository_source} : undef;
+
 }
 
-sub get_ooo_hg_lan_source
+sub get_hg_source
 {
-    my $self = shift;
+    my $self        = shift;
+    my $repository  = shift;
+    my $location    = shift;
 
-    if ( !defined($self->{HG_LAN_SOURCE}) ) {
-        my $config_file = $self->get_config_file();
-        my $source = $config_file->{CWS_CONFIG}->{'HG_LAN_SOURCE'};
-        if ( !defined($source) ) {
-            $source = "";
+    #Special prefix handling, see cwsrc
+    if ($repository eq "OOO")
+    {
+        if ($location eq "LOCAL")
+        {
+            return $self->_get_hg_source('HG_LOCAL_SOURCE');
         }
-        $self->{HG_LAN_SOURCE} = $source;
-    }
-    return $self->{HG_LAN_SOURCE} ? $self->{HG_LAN_SOURCE} : undef;
-}
-
-sub get_ooo_hg_remote_source
-{
-    my $self = shift;
-
-    if ( !defined($self->{HG_REMOTE_SOURCE}) ) {
-        my $config_file = $self->get_config_file();
-        my $source = $config_file->{CWS_CONFIG}->{'HG_REMOTE_SOURCE'};
-        if ( !defined($source) ) {
-            $source = "";
+        elsif ($location eq "LAN")
+        {
+            return $self->_get_hg_source('HG_LAN_SOURCE');
         }
-        $self->{HG_REMOTE_SOURCE} = $source;
-    }
-    return $self->{HG_REMOTE_SOURCE} ? $self->{HG_REMOTE_SOURCE} : undef;
-}
-
-sub get_so_hg_local_source
-{
-    my $self = shift;
-
-    if ( !defined($self->{SO_HG_LOCAL_SOURCE}) ) {
-        my $config_file = $self->get_config_file();
-        my $source = $config_file->{CWS_CONFIG}->{'SO_HG_LOCAL_SOURCE'};
-        if ( !defined($source) ) {
-            $source = "";
+        elsif ($location eq "REMOTE")
+        {
+            return $self->_get_hg_source('HG_REMOTE_SOURCE');
         }
-        $self->{SO_HG_LOCAL_SOURCE} = $source;
     }
-    return $self->{SO_HG_LOCAL_SOURCE} ? $self->{SO_HG_LOCAL_SOURCE} : undef;
-}
-
-sub get_so_hg_lan_source
-{
-    my $self = shift;
-
-    if ( !defined($self->{SO_HG_LAN_SOURCE}) ) {
-        my $config_file = $self->get_config_file();
-        my $source = $config_file->{CWS_CONFIG}->{'SO_HG_LAN_SOURCE'};
-        if ( !defined($source) ) {
-            $source = "";
+    else
+    {
+        if ($location eq "LOCAL")
+        {
+            return $self->_get_hg_source($repository.'_HG_LOCAL_SOURCE');
         }
-        $self->{SO_HG_LAN_SOURCE} = $source;
-    }
-    return $self->{SO_HG_LAN_SOURCE} ? $self->{SO_HG_LAN_SOURCE} : undef;
-}
-
-sub get_so_hg_remote_source
-{
-    my $self = shift;
-
-    if ( !defined($self->{SO_HG_REMOTE_SOURCE}) ) {
-        my $config_file = $self->get_config_file();
-        my $source = $config_file->{CWS_CONFIG}->{'SO_HG_REMOTE_SOURCE'};
-        if ( !defined($source) ) {
-            $source = "";
+        elsif ($location eq "LAN")
+        {
+            return $self->_get_hg_source($repository.'_HG_LAN_SOURCE');
         }
-        $self->{SO_HG_REMOTE_SOURCE} = $source;
+        elsif ($location eq "REMOTE")
+        {
+            return $self->_get_hg_source($repository.'_HG_REMOTE_SOURCE');
+        }
     }
-    return $self->{SO_HG_REMOTE_SOURCE} ? $self->{SO_HG_REMOTE_SOURCE} : undef;
 }
 
 #### Prebuild binaries configuration ####

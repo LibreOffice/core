@@ -100,7 +100,7 @@ gb_ENABLE_PCH := $(false)
 endif
 
 # for clean, setuplocal and removelocal goals we switch off dependencies
-ifneq ($(filter clean setuplocal removelocal showdeliverables,$(MAKECMDGOALS)),)
+ifneq ($(filter cleanpackmodule clean setuplocal removelocal showdeliverables,$(MAKECMDGOALS)),)
 gb_FULLDEPS := $(false)
 else
 gb_FULLDEPS := $(true)

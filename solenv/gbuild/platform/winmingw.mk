@@ -28,7 +28,9 @@
 GUI := WNT
 COM := GCC
 
-gb_MKTEMP := mktemp -t gbuild.XXXXXX
+# set tmpdir to some mixed case path, suitable for native tools
+gb_TMPDIR:=$(if $(TMPDIR),$(shell cygpath -m $(TMPDIR)),$(shell cygpath -m /tmp))
+gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
 gb_CC := $(CC)
 gb_CXX := $(CXX)
@@ -194,6 +196,17 @@ gb_Helper_REPODIR_NATIVE := $(shell cygpath -m $(REPODIR) | $(gb_AWK) -- '{ prin
 define gb_Helper_abbreviate_dirs_native
 R=$(gb_Helper_REPODIR_NATIVE) && $(subst $(REPODIR)/,$$R/,$(subst $(gb_Helper_REPODIR_NATIVE)/,$$R/,O=$(gb_Helper_OUTDIR_NATIVE) && W=$(gb_Helper_WORKDIR_NATIVE) && S=$(gb_Helper_SRCDIR_NATIVE))) && \
 $(subst $(REPODIR)/,$$R/,$(subst $(SRCDIR)/,$$S/,$(subst $(OUTDIR)/,$$O/,$(subst $(WORKDIR)/,$$W/,$(subst $(gb_Helper_REPODIR_NATIVE)/,$$R/,$(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,$(subst $(gb_Helper_OUTDIR_NATIVE)/,$$O/,$(subst $(gb_Helper_WORKDIR_NATIVE)/,$$W/,$(1)))))))))
+endef
+
+# convert parametters filesystem root to native notation
+# does some real work only on windows, make sure not to
+# break the dummy implementations on unx*
+define gb_Helper_convert_native
+$(patsubst -I$(OUTDIR)%,-I$(gb_Helper_OUTDIR_NATIVE)%, \
+$(patsubst $(OUTDIR)%,$(gb_Helper_OUTDIR_NATIVE)%, \
+$(patsubst $(WORKDIR)%,$(gb_Helper_WORKDIR_NATIVE)%, \
+$(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
+$(1)))))
 endef
 
 # CObject class
