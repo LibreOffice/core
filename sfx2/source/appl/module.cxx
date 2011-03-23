@@ -49,6 +49,7 @@
 #include <svl/intitem.hxx>
 #include "sfx2/taskpane.hxx"
 #include <tools/diagnose_ex.h>
+#include <rtl/strbuf.hxx>
 
 #define SfxModule
 #include "sfxslots.hxx"
@@ -397,6 +398,39 @@ SfxModule* SfxModule::GetActiveModule( SfxViewFrame* pFrame )
     if( pFrame )
         pSh = pFrame->GetObjectShell();
     return pSh ? pSh->GetModule() : 0;
+}
+
+FieldUnit SfxModule::GetModuleFieldUnit( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > const & i_frame )
+{
+    ENSURE_OR_RETURN( i_frame.is(), "SfxModule::GetModuleFieldUnit: invalid frame!", FUNIT_100TH_MM );
+
+    // find SfxViewFrame for the given XFrame
+    SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
+    while ( pViewFrame != NULL )
+    {
+        if ( pViewFrame->GetFrame().GetFrameInterface() == i_frame )
+            break;
+        pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
+    }
+    ENSURE_OR_RETURN( pViewFrame != NULL, "SfxModule::GetModuleFieldUnit: unable to find an SfxViewFrame for the given XFrame", FUNIT_100TH_MM );
+
+    // find the module
+    SfxModule const * pModule = GetActiveModule( pViewFrame );
+    ENSURE_OR_RETURN( pModule != NULL, "SfxModule::GetModuleFieldUnit: no SfxModule for the given frame!", FUNIT_100TH_MM );
+
+    SfxPoolItem const * pItem = pModule->GetItem( SID_ATTR_METRIC );
+    if ( pItem == NULL )
+    {
+#if OSL_DEBUG_LEVEL > 0
+        ::rtl::OStringBuffer message;
+        message.append( "SfxModule::GetFieldUnit: no metric item in the module implemented by '" );
+        message.append( typeid( *pModule ).name() );
+        message.append( "'!" );
+        OSL_ENSURE( false, message.makeStringAndClear().getStr() );
+#endif
+        return FUNIT_100TH_MM;
+    }
+    return (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
 }
 
 FieldUnit SfxModule::GetCurrentFieldUnit()

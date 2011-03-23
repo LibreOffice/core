@@ -81,13 +81,15 @@ class SfxPrinterController : public vcl::PrinterController, public SfxListener
     sal_Bool        m_bOrigStatus;
     sal_Bool        m_bNeedsChange;
     sal_Bool        m_bApi;
+    sal_Bool        m_bTempPrinter;
     util::DateTime  m_aLastPrinted;
     ::rtl::OUString m_aLastPrintedBy;
 
     Sequence< beans::PropertyValue > getMergedOptions() const;
     const Any& getSelectionObject() const;
 public:
-    SfxPrinterController( const Any& i_rComplete,
+    SfxPrinterController( const boost::shared_ptr<Printer>& i_rPrinter,
+                          const Any& i_rComplete,
                           const Any& i_rSelection,
                           const Any& i_rViewProp,
                           const Reference< view::XRenderable >& i_xRender,
@@ -106,7 +108,8 @@ public:
     virtual void jobFinished( com::sun::star::view::PrintableState );
 };
 
-SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
+SfxPrinterController::SfxPrinterController( const boost::shared_ptr<Printer>& i_rPrinter,
+                                            const Any& i_rComplete,
                                             const Any& i_rSelection,
                                             const Any& i_rViewProp,
                                             const Reference< view::XRenderable >& i_xRender,
@@ -114,7 +117,8 @@ SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
                                             SfxViewShell* pView,
                                             const uno::Sequence< beans::PropertyValue >& rProps
                                           )
-    : maCompleteSelection( i_rComplete )
+    : PrinterController( i_rPrinter)
+    , maCompleteSelection( i_rComplete )
     , maSelection( i_rSelection )
     , mxRenderable( i_xRender )
     , mpLastPrinter( NULL )
@@ -123,6 +127,7 @@ SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
     , m_bOrigStatus( sal_False )
     , m_bNeedsChange( sal_False )
     , m_bApi(i_bApi)
+    , m_bTempPrinter( i_rPrinter.get() != NULL )
 {
     if ( mpViewShell )
     {
@@ -192,15 +197,19 @@ SfxPrinterController::~SfxPrinterController()
 
 const Any& SfxPrinterController::getSelectionObject() const
 {
+    const beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelectionOnly" ) ) );
+    if( pVal )
+    {
+        sal_Bool bSel = sal_False;
+        pVal->Value >>= bSel;
+        return bSel ? maSelection : maCompleteSelection;
+    }
+
     sal_Int32 nChoice = 0;
-    sal_Bool bSel = sal_False;
-    const beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ) );
+    pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ) );
     if( pVal )
         pVal->Value >>= nChoice;
-    pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelectionOnly" ) ) );
-    if( pVal )
-        pVal->Value >>= bSel;
-    return (nChoice > 1 || bSel) ? maSelection : maCompleteSelection;
+    return (nChoice > 1) ? maSelection : maCompleteSelection;
 }
 
 Sequence< beans::PropertyValue > SfxPrinterController::getMergedOptions() const
@@ -308,6 +317,7 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
 {
     if ( mpObjectShell )
     {
+        bool bCopyJobSetup = false;
         mpObjectShell->Broadcast( SfxPrintingHint( nState ) );
         switch ( nState )
         {
@@ -335,11 +345,33 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
                 rBind.Invalidate( SID_PRINTDOC );
                 rBind.Invalidate( SID_PRINTDOCDIRECT );
                 rBind.Invalidate( SID_SETUPPRINTER );
+                bCopyJobSetup = ! m_bTempPrinter;
                 break;
             }
 
             default:
                 break;
+        }
+
+        if( bCopyJobSetup && mpViewShell )
+        {
+            // #i114306#
+            // Note: this possibly creates a printer that gets immediately replaced
+            // by a new one. The reason for this is that otherwise we would not get
+            // the printer's SfxItemSet here to copy. Awkward, but at the moment there is no
+            // other way here to get the item set.
+            SfxPrinter* pDocPrt = mpViewShell->GetPrinter(sal_True);
+            if( pDocPrt )
+            {
+                if( pDocPrt->GetName() == getPrinter()->GetName() )
+                    pDocPrt->SetJobSetup( getPrinter()->GetJobSetup() );
+                else
+                {
+                    SfxPrinter* pNewPrt = new SfxPrinter( pDocPrt->GetOptions().Clone(), getPrinter()->GetName() );
+                    pNewPrt->SetJobSetup( getPrinter()->GetJobSetup() );
+                    mpViewShell->SetPrinter( pNewPrt, SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP );
+                }
+            }
         }
 
         if ( m_bNeedsChange )
@@ -558,8 +590,23 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
         aSelection <<= GetObjectShell()->GetModel();
     Any aComplete( makeAny( GetObjectShell()->GetModel() ) );
     Any aViewProp( makeAny( xController ) );
+    boost::shared_ptr<Printer> aPrt;
 
-    boost::shared_ptr<vcl::PrinterController> pController( new SfxPrinterController( aComplete,
+    const beans::PropertyValue* pVal = rProps.getConstArray();
+    for( sal_Int32 i = 0; i < rProps.getLength(); i++ )
+    {
+        if( pVal[i].Name.equalsAscii( "PrinterName" ) )
+        {
+            rtl::OUString aPrinterName;
+            pVal[i].Value >>= aPrinterName;
+            aPrt.reset( new Printer( aPrinterName ) );
+            break;
+        }
+    }
+
+    boost::shared_ptr<vcl::PrinterController> pController( new SfxPrinterController(
+                                                                               aPrt,
+                                                                               aComplete,
                                                                                aSelection,
                                                                                aViewProp,
                                                                                GetRenderable(),
@@ -677,10 +724,18 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     }
                 }
             }
-            sal_Int32 nLen = aProps.getLength();
-            aProps.realloc( nLen + 1 );
-            aProps[nLen].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelectionOnly" ) );
-            aProps[nLen].Value = makeAny( bSelection );
+            // HACK: writer sets the SID_SELECTION item when printing directly and expects
+            // to get only the selection document in that case (see getSelectionObject)
+            // however it also reacts to the PrintContent property. We need this distinction here, too,
+            // else one of the combinations print / print direct and selection / all will not work.
+            // it would be better if writer handled this internally
+            if( nId == SID_PRINTDOCDIRECT )
+            {
+                sal_Int32 nLen = aProps.getLength();
+                aProps.realloc( nLen + 1 );
+                aProps[nLen].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelectionOnly" ) );
+                aProps[nLen].Value = makeAny( bSelection );
+            }
 
             ExecPrint( aProps, bIsAPI, (nId == SID_PRINTDOCDIRECT) );
 

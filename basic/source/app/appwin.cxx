@@ -120,14 +120,8 @@ void AppWin::Maximize()
         pFrame->nMaximizedWindows++;
         nWinState = TT_WIN_STATE_MAX;
     }
-    sal_Int32 nTitleHeight;
-    {
-        sal_Int32 nDummy1, nDummy2, nDummy3;
-        pFrame->GetBorder( nDummy1, nTitleHeight, nDummy2, nDummy3 );
-    }
 
-    Size aSize = pFrame->GetOutputSizePixel();
-    aSize.Height() -= nTitleHeight;
+    Size aSize = pFrame->GetInnerRect().GetSize();
     aSize.Height() -= 2;
     aSize.Width() -= 2;
     SetSizePixel( aSize );

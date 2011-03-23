@@ -2070,7 +2070,7 @@ ErrCode BasicManager::ExecuteMacro( String const& i_fullyQualifiedName, String c
     sCall += ']';
 
     SbxVariable* pRet = pMethod->GetParent()->Execute( sCall );
-    if ( pRet )
+    if ( pRet && ( pRet != pMethod ) )
         *i_retValue = *pRet;
     return SbxBase::GetError();
 }

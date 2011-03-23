@@ -468,7 +468,7 @@ SvxMetricField::SvxMetricField(
     SetLast( 5000 );
     SetFirst( 0 );
 
-    eDlgUnit = SfxModule::GetCurrentFieldUnit();
+    eDlgUnit = SfxModule::GetModuleFieldUnit( mxFrame );
     SetFieldUnit( *this, eDlgUnit, sal_False );
     Show();
 }
@@ -552,7 +552,7 @@ void SvxMetricField::SetCoreUnit( SfxMapUnit eUnit )
 
 void SvxMetricField::RefreshDlgUnit()
 {
-    FieldUnit eTmpUnit = SfxModule::GetCurrentFieldUnit();
+    FieldUnit eTmpUnit = SfxModule::GetModuleFieldUnit( mxFrame );
     if ( eDlgUnit != eTmpUnit )
     {
         eDlgUnit = eTmpUnit;

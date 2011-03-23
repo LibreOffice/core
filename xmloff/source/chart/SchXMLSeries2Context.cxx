@@ -422,7 +422,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
 
         // values
         Reference< chart2::data::XDataSequence > xSeq;
-        if( bHasRange )
+        if( bHasRange && m_aSeriesRange.getLength() )
             xSeq = SchXMLTools::CreateDataSequence( m_aSeriesRange, mxNewDoc );
 
         Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
@@ -441,7 +441,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 tSchXMLIndexWithPart( m_rGlobalSeriesImportInfo.nCurrentDataIndex, SCH_XML_PART_VALUES ), xLabeledSeq ));
 
         // label
-        if( bHasLabelRange )
+        if( bHasLabelRange && m_aSeriesLabelRange.getLength() )
         {
             Reference< chart2::data::XDataSequence > xLabelSequence =
                 SchXMLTools::CreateDataSequence( m_aSeriesLabelRange, mxNewDoc );
@@ -579,6 +579,11 @@ void SchXMLSeries2Context::EndElement()
             }
             aDomainInfos.push_back( aDomainInfo );
             m_rGlobalSeriesImportInfo.nCurrentDataIndex++;
+        }
+        else if( m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.getLength() )
+        {
+            DomainInfo aDomainInfo( OUString::createFromAscii("values-y"), m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress, m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex ) ;
+            aDomainInfos.push_back( aDomainInfo );
         }
     }
 

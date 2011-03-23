@@ -581,8 +581,13 @@ sal_Bool EdtAutoCorrDoc::Insert( sal_uInt16 nPos, const String& rTxt )
 
 sal_Bool EdtAutoCorrDoc::Replace( sal_uInt16 nPos, const String& rTxt )
 {
+    return ReplaceRange( nPos, rTxt.Len(), rTxt );
+}
+
+sal_Bool EdtAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength, const String& rTxt )
+{
     // Actually a Replace introduce => corresponds to UNDO
-    sal_uInt16 nEnd = nPos+rTxt.Len();
+    sal_uInt16 nEnd = nPos+nSourceLength;
     if ( nEnd > pCurNode->Len() )
         nEnd = pCurNode->Len();
 

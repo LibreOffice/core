@@ -376,6 +376,8 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
 
 SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
 {
+    if (& rFormat == this) { return *this; }
+
     SetNumberingType(rFormat.GetNumberingType());
         eNumAdjust          = rFormat.eNumAdjust ;
         nInclUpperLevels    = rFormat.nInclUpperLevels ;

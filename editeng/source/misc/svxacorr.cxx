@@ -48,6 +48,7 @@
 #include <com/sun/star/i18n/UnicodeType.hdl>
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -139,6 +140,41 @@ inline int IsUpperLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
             0 == ( ::com::sun::star::i18n::KCharacterType::LOWER & nCharType);
+}
+
+bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const String& rTxt,
+                           xub_StrLen nStt, xub_StrLen nEnd )
+{
+    for( ; nStt < nEnd; ++nStt )
+    {
+#if OSL_DEBUG_LEVEL > 1
+        sal_Int32 nCharType;
+        sal_Int32 nChType;
+        nCharType = rCC.getCharacterType( rTxt, nStt );
+        nChType = rCC.getType( rTxt, nStt );
+#endif
+        short nScript = rCC.getScript( rTxt, nStt );
+        switch( nScript )
+        {
+            case ::com::sun::star::i18n::UnicodeScript_kCJKRadicalsSupplement:
+            case ::com::sun::star::i18n::UnicodeScript_kHangulJamo:
+            case ::com::sun::star::i18n::UnicodeScript_kCJKSymbolPunctuation:
+            case ::com::sun::star::i18n::UnicodeScript_kHiragana:
+            case ::com::sun::star::i18n::UnicodeScript_kKatakana:
+            case ::com::sun::star::i18n::UnicodeScript_kHangulCompatibilityJamo:
+            case ::com::sun::star::i18n::UnicodeScript_kEnclosedCJKLetterMonth:
+            case ::com::sun::star::i18n::UnicodeScript_kCJKCompatibility:
+            case ::com::sun::star::i18n::UnicodeScript_k_CJKUnifiedIdeographsExtensionA:
+            case ::com::sun::star::i18n::UnicodeScript_kCJKUnifiedIdeograph:
+            case ::com::sun::star::i18n::UnicodeScript_kHangulSyllable:
+            case ::com::sun::star::i18n::UnicodeScript_kCJKCompatibilityIdeograph:
+            case ::com::sun::star::i18n::UnicodeScript_kHalfwidthFullwidthForm:
+                return true;
+            default: ; //do nothing
+        }
+
+    }
+    return false;
 }
 
 sal_Bool lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
@@ -455,7 +491,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
                 sal_Unicode cSave = rTxt.GetChar( nSttPos );
                 String sChar( cSave );
                 rCC.toLower( sChar );
-                if( sChar.GetChar(0) != cSave && rDoc.Replace( nSttPos, sChar ))
+                if( sChar.GetChar(0) != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar ))
                 {
                     if( SaveWordWrdSttLst & nFlags )
                         rDoc.SaveCpltSttWord( CptlSttWrd, nSttPos, sWord, cSave );
@@ -886,7 +922,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
             String sChar( *pWordStt );
             rCC.toUpper( sChar );
             return  sChar != *pWordStt &&
-                    rDoc.Replace( xub_StrLen( pWordStt - pStart ), sChar );
+                    rDoc.ReplaceRange( xub_StrLen( pWordStt - pStart ), 1, sChar );
         }
 
         aText = *pPrevPara;
@@ -1061,7 +1097,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     nSttPos = sal::static_int_cast< xub_StrLen >( pWordStt - rTxt.GetBuffer() );
     String sChar( cSave );
     rCC.toUpper( sChar );
-    sal_Bool bRet = sChar.GetChar(0) != cSave && rDoc.Replace( nSttPos, sChar );
+    sal_Bool bRet = sChar.GetChar(0) != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar );
 
     // Parahaps someone wants to have the word
     if( bRet && SaveWordCplSttLst & nFlags )
@@ -1323,6 +1359,7 @@ sal_uLong SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             eLang = MsLangId::getSystemLanguage();
         CharClass& rCC = GetCharClass( eLang );
 
+        // no symbol characters
         if( lcl_IsSymbolChar( rCC, rTxt, nCapLttrPos, nInsPos ))
             break;
 

@@ -1251,9 +1251,9 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                 case ITEM_XCOLOR: break;
                 case ITEM_COLOR: break;
                 case ITEM_FONT: {
-                    ((SvxFontItem*)pNewItem)->GetFamily()=FAMILY_DONTKNOW;
-                    ((SvxFontItem*)pNewItem)->GetFamilyName()=aNewText;
-                    ((SvxFontItem*)pNewItem)->GetStyleName().Erase();
+                    ((SvxFontItem*)pNewItem)->SetFamily( FAMILY_DONTKNOW );
+                    ((SvxFontItem*)pNewItem)->SetFamilyName(aNewText);
+                    ((SvxFontItem*)pNewItem)->SetStyleName( String() );
                 } break;
                 case ITEM_FONTHEIGHT: {
                     sal_uIntPtr nHgt=0;

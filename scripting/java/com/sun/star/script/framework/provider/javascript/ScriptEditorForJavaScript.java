@@ -36,6 +36,7 @@ import org.mozilla.javascript.tools.debugger.ScopeProvider;
 import com.sun.star.script.provider.XScriptContext;
 import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.provider.ScriptEditor;
+import com.sun.star.script.framework.provider.SwingInvocation;
 import com.sun.star.script.framework.log.LogUtils;
 
 import java.io.InputStream;
@@ -45,7 +46,6 @@ import java.net.URL;
 import java.util.Map;
 import java.util.HashMap;
 
-import javax.swing.SwingUtilities;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -117,7 +117,9 @@ public class ScriptEditorForJavaScript implements ScriptEditor
      */
     public static ScriptEditorForJavaScript getEditor(URL url)
     {
-        return (ScriptEditorForJavaScript)BEING_EDITED.get(url);
+        synchronized (BEING_EDITED) {
+            return (ScriptEditorForJavaScript)BEING_EDITED.get(url);
+        }
     }
 
     /**
@@ -187,31 +189,25 @@ public class ScriptEditorForJavaScript implements ScriptEditor
                 sUrl += "/";
             }
             sUrl +=  entry.getLanguageName();
-            URL url = entry.getSourceURL();
-
-            // check if there is already an editing session for this script
-            //if (BEING_EDITED.containsKey(url))
-            if ( rhinoWindow != null  )
-            {
-                ScriptEditorForJavaScript editor =
-                    (ScriptEditorForJavaScript) BEING_EDITED.get(url);
-                if ( editor == null )
-                {
-                    editor = new ScriptEditorForJavaScript( context, url );
-                    editor.edit( context, entry );
-                }
-                else
-                {
-                    rhinoWindow.showScriptWindow( url );
-                }
-            }
-            else
-            {
-                ScriptEditorForJavaScript editor =
-                    new ScriptEditorForJavaScript( context, url );
-
-            }
-            rhinoWindow.toFront();
+            final URL url = entry.getSourceURL();
+            SwingInvocation.invoke(
+                new Runnable() {
+                    public void run() {
+                        synchronized (BEING_EDITED) {
+                            ScriptEditorForJavaScript editor =
+                                (ScriptEditorForJavaScript) BEING_EDITED.get(
+                                    url);
+                            if (editor == null) {
+                                editor = new ScriptEditorForJavaScript(
+                                    context, url);
+                                BEING_EDITED.put(url, editor);
+                            }
+                        }
+                        assert rhinoWindow != null;
+                        rhinoWindow.showScriptWindow(url);
+                        rhinoWindow.toFront();
+                    }
+                });
         }
         catch ( IOException e )
         {
@@ -234,11 +230,6 @@ public class ScriptEditorForJavaScript implements ScriptEditor
 
 
         this.scriptURL = url;
-        synchronized( ScriptEditorForJavaScript.class )
-        {
-            BEING_EDITED.put(url, this);
-        }
-
     }
 
     /**
@@ -274,13 +265,9 @@ public class ScriptEditorForJavaScript implements ScriptEditor
                 }
 
                 final Main sdb = new Main("Rhino JavaScript Debugger");
-                swingInvoke(new Runnable() {
-                    public void run() {
-                        sdb.pack();
-                        sdb.setSize(640, 640);
-                        sdb.setVisible(true);
-                    }
-                    });
+                sdb.pack();
+                sdb.setSize(640, 640);
+                sdb.setVisible(true);
                 sdb.setExitAction(new Runnable() {
                     public void run() {
                         sdb.clearAllBreakpoints();
@@ -301,18 +288,6 @@ public class ScriptEditorForJavaScript implements ScriptEditor
                 });
                 this.rhinoWindow = sdb;
             }
-        } catch (Exception exc) {
-            LogUtils.DEBUG( LogUtils.getTrace( exc ) );
-        }
-    }
-
-    private static void swingInvoke(Runnable f) {
-        if (SwingUtilities.isEventDispatchThread()) {
-            f.run();
-            return;
-        }
-        try {
-            SwingUtilities.invokeAndWait(f);
         } catch (Exception exc) {
             LogUtils.DEBUG( LogUtils.getTrace( exc ) );
         }

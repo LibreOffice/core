@@ -1620,7 +1620,8 @@ int Desktop::Main()
         // there is no other instance using our data files from a remote host
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main -> Lockfile" );
         m_pLockfile = new Lockfile;
-        if ( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning )) {
+        if ( !pCmdLineArgs->IsHeadless() && !pCmdLineArgs->IsInvisible() &&
+             !pCmdLineArgs->IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning )) {
             // Lockfile exists, and user clicked 'no'
             return EXIT_FAILURE;
         }
@@ -1769,7 +1770,7 @@ int Desktop::Main()
 
         if ( !pExecGlobals->bRestartRequested )
         {
-            if ((!pCmdLineArgs->WantsToLoadDocument()                                  ) &&
+            if ((!pCmdLineArgs->WantsToLoadDocument() && !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsHeadless() ) &&
                 (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
                 (!bExistsRecoveryData                                                  ) &&
                 (!bExistsSessionData                                                   ) &&
@@ -2097,9 +2098,9 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
         // unfortunately this broke the QUARTZ behavior which is to always run
         // in quickstart mode since Mac applications do not usually quit
         // when the last document closes
-        //#ifndef QUARTZ
+        #ifndef QUARTZ
         if ( bQuickstart )
-        //#endif
+        #endif
         {
             Sequence< Any > aSeq( 1 );
             aSeq[0] <<= bQuickstart;
@@ -3173,6 +3174,7 @@ void Desktop::OpenSplashScreen()
     sal_Bool bVisible = sal_False;
     // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
     if ( !pCmdLine->IsInvisible() &&
+         !pCmdLine->IsHeadless() &&
          !pCmdLine->IsQuickstart() &&
          !pCmdLine->IsMinimized() &&
          !pCmdLine->IsNoLogo() &&

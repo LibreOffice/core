@@ -82,30 +82,23 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     // Access methods:
-    inline String &GetFamilyName() { return aFamilyName; }
+    void SetFamilyName( const String& rFamilyName ) { aFamilyName = rFamilyName; }
     inline const String &GetFamilyName() const { return aFamilyName; }
 
-    inline String &GetStyleName() { return aStyleName; }
+    void SetStyleName(const String &rStyleName ) { aStyleName = rStyleName; }
     inline const String &GetStyleName() const { return aStyleName; }
 
-    inline FontFamily &GetFamily() { return eFamily; }
+    void SetFamily( FontFamily _eFamily ) { eFamily = _eFamily; }
     inline FontFamily GetFamily() const { return eFamily; }
 
-    inline FontPitch &GetPitch() { return ePitch; }
+    void SetPitch(FontPitch _ePitch ) { ePitch = _ePitch; }
     inline FontPitch GetPitch() const { return ePitch; }
 
-    inline rtl_TextEncoding &GetCharSet() { return eTextEncoding; }
+    void SetCharSet(rtl_TextEncoding _eEncoding) { eTextEncoding = _eEncoding; }
+
     inline rtl_TextEncoding GetCharSet() const { return eTextEncoding; }
 
-    inline SvxFontItem& operator=(const SvxFontItem& rFont)
-    {
-        aFamilyName =  rFont.GetFamilyName();
-        aStyleName =   rFont.GetStyleName();
-        eFamily =      rFont.GetFamily();
-        ePitch =   rFont.GetPitch();
-        eTextEncoding = rFont.GetCharSet();
-        return *this;
-    }
+    SvxFontItem& operator=(const SvxFontItem& rFont);
 
     static void EnableStoreUnicodeNames( sal_Bool bEnable );
 

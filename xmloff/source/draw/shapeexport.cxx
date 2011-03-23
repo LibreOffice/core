@@ -694,7 +694,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     if( xSet.is() && ( mrExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012 ) )
     {
         if( aShapeInfo.meShapeType != XmlShapeTypeDrawPageShape && aShapeInfo.meShapeType != XmlShapeTypePresPageShape &&
-            aShapeInfo.meShapeType != XmlShapeTypeHandoutShape )
+            aShapeInfo.meShapeType != XmlShapeTypeHandoutShape && aShapeInfo.meShapeType != XmlShapeTypeDrawChartShape )
 
         try
         {

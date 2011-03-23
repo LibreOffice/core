@@ -86,7 +86,7 @@ VS_VERSION_INFO versioninfo
 15 ICON "icons\\oasis-formula.ico"
 16 ICON "icons\\oasis-web-template.ico"
 17 ICON "icons\\empty-document.ico"
-18 ICON "icons\\ooo-configuration.ico"
+18 ICON "icons\\empty-document.ico"
 19 ICON "icons\\ooo3_open.ico"
 20 ICON "icons\\empty-document.ico"
 21 ICON "icons\\ooo3_writer_app.ico"

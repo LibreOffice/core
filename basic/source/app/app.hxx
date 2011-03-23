@@ -182,6 +182,7 @@ public:
     void SetAppMode( const String &aNewMode ){ aAppMode = aNewMode; UpdateTitle(); }
 
     String GenRealString( const String &aResString );
+    Rectangle GetInnerRect() const;
 
 };
 

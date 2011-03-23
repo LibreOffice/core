@@ -53,7 +53,8 @@ SLOFILES=	\
     $(SLO)$/methods.obj	\
     $(SLO)$/methods1.obj\
     $(SLO)$/props.obj	\
-    $(SLO)$/ddectrl.obj
+    $(SLO)$/ddectrl.obj \
+    $(SLO)$/sbdiagnose.obj
 
 .IF "$(GUI)$(CPU)" == "WNTI"
 SLOFILES+= \

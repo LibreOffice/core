@@ -36,6 +36,8 @@
 
 #include "com/sun/star/io/XSeekable.hpp"
 
+#include "osl/file.hxx"
+#include "osl/thread.hxx"
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
@@ -100,11 +102,11 @@ void DBHelp::createHashMap( bool bOptimizeForPerformance )
         m_pStringToValPosMap = new StringToValPosMap();
     }
 
-    Reference< XInputStream > xIn = m_xSFA->openFileRead( m_aFileName );
+    Reference< XInputStream > xIn = m_xSFA->openFileRead( m_aFileURL );
     if( xIn.is() )
     {
         Sequence< sal_Int8 > aData;
-        sal_Int32 nSize = m_xSFA->getSize( m_aFileName );
+        sal_Int32 nSize = m_xSFA->getSize( m_aFileURL );
         sal_Int32 nRead = xIn->readBytes( aData, nSize );
 
         const char* pData = (const char*)aData.getConstArray();
@@ -183,7 +185,7 @@ bool DBHelp::getValueForKey( const rtl::OString& rKey, DBData& rValue )
             int iValuePos = rValPair.first;
             int nValueLen = rValPair.second;
 
-            Reference< XInputStream > xIn = m_xSFA->openFileRead( m_aFileName );
+            Reference< XInputStream > xIn = m_xSFA->openFileRead( m_aFileURL );
             if( xIn.is() )
             {
                 Reference< XSeekable > xXSeekable( xIn, UNO_QUERY );
@@ -231,9 +233,9 @@ bool DBHelp::startIteration( void )
 {
     bool bSuccess = false;
 
-    sal_Int32 nSize = m_xSFA->getSize( m_aFileName );
+    sal_Int32 nSize = m_xSFA->getSize( m_aFileURL );
 
-    Reference< XInputStream > xIn = m_xSFA->openFileRead( m_aFileName );
+    Reference< XInputStream > xIn = m_xSFA->openFileRead( m_aFileURL );
     if( xIn.is() )
     {
         m_nItRead = xIn->readBytes( m_aItData, nSize );
@@ -313,6 +315,19 @@ int Db::open(DB_TXN *txnid,
     int err = m_pDBP->open(m_pDBP,txnid,file,database,type,flags,mode);
     return db_internal::check_error( err,"Db::open" );
 }
+
+int Db::open(DB_TXN *txnid,
+             ::rtl::OUString const & fileURL,
+             DBTYPE type,
+             u_int32_t flags,
+             int mode)
+{
+    ::rtl::OUString ouPath;
+    ::osl::FileBase::getSystemPathFromFileURL(fileURL, ouPath);
+    const ::rtl::OString sPath = ::rtl::OUStringToOString(ouPath, osl_getThreadTextEncoding());
+    return open(txnid, sPath.getStr(), 0, type, flags, mode);
+}
+
 
 
 int Db::get(DB_TXN *txnid, Dbt *key, Dbt *data, u_int32_t flags)

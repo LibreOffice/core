@@ -837,11 +837,11 @@ void ImpGetDefaultFontsLanguage( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFo
             aOutTypeArr[ n ].nFntType, aOutTypeArr[ n ].nLanguage,
             DEFAULTFONT_FLAGS_ONLYONE, 0 ));
         SvxFontItem* pI = aItemArr[ n ];
-        pI->GetFamily() = aFnt.GetFamily();
-        pI->GetFamilyName() = aFnt.GetName();
-        pI->GetStyleName().Erase();
-        pI->GetPitch() = aFnt.GetPitch();
-        pI->GetCharSet() = aFnt.GetCharSet();
+        pI->SetFamily( aFnt.GetFamily());
+        pI->SetFamilyName( aFnt.GetName());
+        pI->SetStyleName( String() );
+        pI->SetPitch( aFnt.GetPitch());
+        pI->SetCharSet( aFnt.GetCharSet() );
     }
 }
 
@@ -855,29 +855,29 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt 
 
     // get DEFAULTFONT_LATIN_TEXT and set at pool as dynamic default
     Font aFont(OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT, nLanguage, DEFAULTFONT_FLAGS_ONLYONE, 0));
-    aSvxFontItem.GetFamily() = aFont.GetFamily();
-    aSvxFontItem.GetFamilyName() = aFont.GetName();
-    aSvxFontItem.GetStyleName().Erase();
-    aSvxFontItem.GetPitch() = aFont.GetPitch();
-    aSvxFontItem.GetCharSet() = aFont.GetCharSet();
+    aSvxFontItem.SetFamily(aFont.GetFamily());
+    aSvxFontItem.SetFamilyName(aFont.GetName());
+    aSvxFontItem.SetStyleName(String());
+    aSvxFontItem.SetPitch( aFont.GetPitch());
+    aSvxFontItem.SetCharSet( aFont.GetCharSet() );
     pItemPool->SetPoolDefaultItem(aSvxFontItem);
 
     // get DEFAULTFONT_CJK_TEXT and set at pool as dynamic default
     Font aFontCJK(OutputDevice::GetDefaultFont(DEFAULTFONT_CJK_TEXT, nLanguage, DEFAULTFONT_FLAGS_ONLYONE, 0));
-    aSvxFontItemCJK.GetFamily() = aFontCJK.GetFamily();
-    aSvxFontItemCJK.GetFamilyName() = aFontCJK.GetName();
-    aSvxFontItemCJK.GetStyleName().Erase();
-    aSvxFontItemCJK.GetPitch() = aFontCJK.GetPitch();
-    aSvxFontItemCJK.GetCharSet() = aFontCJK.GetCharSet();
+    aSvxFontItemCJK.SetFamily( aFontCJK.GetFamily());
+    aSvxFontItemCJK.SetFamilyName(aFontCJK.GetName());
+    aSvxFontItemCJK.SetStyleName(String());
+    aSvxFontItemCJK.SetPitch( aFontCJK.GetPitch());
+    aSvxFontItemCJK.SetCharSet( aFontCJK.GetCharSet());
     pItemPool->SetPoolDefaultItem(aSvxFontItemCJK);
 
     // get DEFAULTFONT_CTL_TEXT and set at pool as dynamic default
     Font aFontCTL(OutputDevice::GetDefaultFont(DEFAULTFONT_CTL_TEXT, nLanguage, DEFAULTFONT_FLAGS_ONLYONE, 0));
-    aSvxFontItemCTL.GetFamily() = aFontCTL.GetFamily();
-    aSvxFontItemCTL.GetFamilyName() = aFontCTL.GetName();
-    aSvxFontItemCTL.GetStyleName().Erase();
-    aSvxFontItemCTL.GetPitch() = aFontCTL.GetPitch();
-    aSvxFontItemCTL.GetCharSet() = aFontCTL.GetCharSet();
+    aSvxFontItemCTL.SetFamily(aFontCTL.GetFamily());
+    aSvxFontItemCTL.SetFamilyName(aFontCTL.GetName());
+    aSvxFontItemCTL.SetStyleName(String());
+    aSvxFontItemCTL.SetPitch( aFontCTL.GetPitch() );
+    aSvxFontItemCTL.SetCharSet( aFontCTL.GetCharSet());
     pItemPool->SetPoolDefaultItem(aSvxFontItemCTL);
 
     // set dynamic FontHeight defaults

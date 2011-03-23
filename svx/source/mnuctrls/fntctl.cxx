@@ -149,7 +149,7 @@ void SvxFontMenuControl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 IMPL_LINK_INLINE_START( SvxFontMenuControl, MenuSelect, FontNameMenu *, pMen )
 {
     SvxFontItem aItem( GetId() );
-    aItem.GetFamilyName() = pMen->GetCurName();
+    aItem.SetFamilyName(pMen->GetCurName());
     GetBindings().GetDispatcher()->Execute( GetId(), SFX_CALLMODE_RECORD, &aItem, 0L );
     return 0;
 }

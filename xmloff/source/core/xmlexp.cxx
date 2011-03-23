@@ -116,8 +116,8 @@ using namespace ::xmloff::token;
 sal_Char const sXML_1_1[] = "1.1";
 sal_Char const sXML_1_2[] = "1.2";
 
-const sal_Char s_grddl_xsl[] =
-    "http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl";
+// #i115030#: the XSLT is not finished, and not available via HTTP
+const sal_Char s_grddl_xsl[] = "http://FIXME";
 
 #define LOGFILE_AUTHOR "mb93740"
 
@@ -1260,7 +1260,7 @@ void SvXMLExport::SetBodyAttributes()
 }
 
 static void
-lcl_AddGrddl(SvXMLExport & rExport, const sal_Int32 nExportMode)
+lcl_AddGrddl(SvXMLExport & rExport, const sal_Int32 /*nExportMode*/)
 {
     // check version >= 1.2
     switch (rExport.getDefaultVersion()) {
@@ -1269,11 +1269,14 @@ lcl_AddGrddl(SvXMLExport & rExport, const sal_Int32 nExportMode)
         default: break;
     }
 
+    // #i115030#: disabled
+#if 0
     if (EXPORT_SETTINGS != nExportMode) // meta, content, styles
     {
         rExport.AddAttribute( XML_NAMESPACE_GRDDL, XML_TRANSFORMATION,
             OUString(RTL_CONSTASCII_USTRINGPARAM(s_grddl_xsl)) );
     }
+#endif
 }
 
 sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )

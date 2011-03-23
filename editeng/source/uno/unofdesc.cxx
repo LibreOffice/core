@@ -90,11 +90,11 @@ void SvxUnoFontDescriptor::FillItemSet( const awt::FontDescriptor& rDesc, SfxIte
 
     {
         SvxFontItem aFontItem( EE_CHAR_FONTINFO );
-        aFontItem.GetFamilyName()= rDesc.Name;
-        aFontItem.GetStyleName() = rDesc.StyleName;
-        aFontItem.GetFamily()    = (FontFamily)rDesc.Family;
-        aFontItem.GetCharSet()   = rDesc.CharSet;
-        aFontItem.GetPitch()     = (FontPitch)rDesc.Pitch;
+        aFontItem.SetFamilyName( rDesc.Name);
+        aFontItem.SetStyleName( rDesc.StyleName);
+        aFontItem.SetFamily( (FontFamily)rDesc.Family);
+        aFontItem.SetCharSet( rDesc.CharSet );
+        aFontItem.SetPitch( (FontPitch)rDesc.Pitch);
         rSet.Put(aFontItem);
     }
 
