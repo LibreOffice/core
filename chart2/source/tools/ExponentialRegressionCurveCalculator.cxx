@@ -44,11 +44,11 @@ namespace chart
 {
 
 ExponentialRegressionCurveCalculator::ExponentialRegressionCurveCalculator() :
-        m_fSlope( 0.0 ),
-        m_fIntercept( 0.0 )
+        m_fLogSlope( 0.0 ),
+        m_fLogIntercept( 0.0 )
 {
-    ::rtl::math::setNan( & m_fSlope );
-    ::rtl::math::setNan( & m_fIntercept );
+    ::rtl::math::setNan( & m_fLogSlope );
+    ::rtl::math::setNan( & m_fLogIntercept );
 }
 
 ExponentialRegressionCurveCalculator::~ExponentialRegressionCurveCalculator()
@@ -68,9 +68,9 @@ void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
     const size_t nMax = aValues.first.size();
     if( nMax == 0 )
     {
-        ::rtl::math::setNan( & m_fSlope );
-        ::rtl::math::setNan( & m_fIntercept );
-        ::rtl::math::setNan( & m_fCorrelationCoeffitient );
+        ::rtl::math::setNan( & m_fLogSlope );
+        ::rtl::math::setNan( & m_fLogIntercept );
+        ::rtl::math::setNan( & m_fCorrelationCoeffitient );// actual it is coefficient of determination
         return;
     }
 
@@ -97,12 +97,10 @@ void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
         fQxy += fDeltaX * fDeltaY;
     }
 
-    m_fSlope = fQxy / fQx;
-    m_fIntercept = fAverageY - m_fSlope * fAverageX;
+    m_fLogSlope = fQxy / fQx;
+    m_fLogIntercept = fAverageY - m_fLogSlope * fAverageX;
     m_fCorrelationCoeffitient = fQxy / sqrt( fQx * fQy );
 
-    m_fSlope = exp( m_fSlope );
-    m_fIntercept = exp( m_fIntercept );
 }
 
 double SAL_CALL ExponentialRegressionCurveCalculator::getCurveValue( double x )
@@ -112,10 +110,10 @@ double SAL_CALL ExponentialRegressionCurveCalculator::getCurveValue( double x )
     double fResult;
     ::rtl::math::setNan( & fResult );
 
-    if( ! ( ::rtl::math::isNan( m_fSlope ) ||
-            ::rtl::math::isNan( m_fIntercept )))
+    if( ! ( ::rtl::math::isNan( m_fLogSlope ) ||
+            ::rtl::math::isNan( m_fLogIntercept )))
     {
-        fResult = m_fIntercept * pow( m_fSlope, x );
+        fResult = exp(m_fLogIntercept + x * m_fLogSlope);
     }
 
     return fResult;
@@ -151,31 +149,48 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
     ::sal_Int32 nNumberFormatKey ) const
 {
+    double fIntercept = exp(m_fLogIntercept);
+    double fSlope = exp(m_fLogSlope);
+    bool bHasSlope = !rtl::math::approxEqual( fSlope, 1.0 );
+    bool bHasIntercept = !rtl::math::approxEqual( fIntercept, 1.0 );
+
     OUStringBuffer aBuf( C2U( "f(x) = " ));
 
-    if( m_fIntercept == 0.0 ||
-        m_fSlope == 0.0 )
+    if ( fIntercept == 0.0)
     {
-        aBuf.append( sal_Unicode( '0' ));
-    }
-    else if( rtl::math::approxEqual( m_fSlope, 1.0 ) )
-    {
-        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
+        // underflow, a true zero is impossible
+        aBuf.append( C2U( "exp( " ));
+        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept) );
+        aBuf.append( (m_fLogSlope < 0.0) ? C2U( " - " ) : C2U( " + " ));
+        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope)) );
+        aBuf.append( C2U( " x )" ));
     }
     else
     {
-        if( ! rtl::math::approxEqual( m_fIntercept, 1.0 ) )
+        if (bHasIntercept)
         {
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
-            aBuf.append( sal_Unicode( 0x00b7 ));
+            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fIntercept) );
+            aBuf.append( C2U( " exp( " ));
+            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogSlope) );
+            aBuf.append( C2U( " x )" ));
         }
-
-        if( m_fSlope < 0.0 )
-            aBuf.append( sal_Unicode( '(' ));
-        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
-        if( m_fSlope < 0.0 )
-            aBuf.append( sal_Unicode( ')' ));
-        aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "^x" ));
+        else
+        {
+            // show logarithmic output, if intercept and slope both are near one
+            // otherwise drop output of intercept, which is 1 here
+            aBuf.append( C2U( " exp( " ));
+            if (!bHasSlope)
+            {
+                aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept) );
+                aBuf.append( (m_fLogSlope < 0.0) ? C2U( " - " ) : C2U( " + " ));
+                aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fLogSlope)) );
+            }
+            else
+            {
+                aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogSlope) );
+            }
+            aBuf.append( C2U( " x )" ));
+        }
     }
 
     return aBuf.makeStringAndClear();

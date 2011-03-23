@@ -1139,9 +1139,19 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
             if( xTextShape.is())
             {
                 ShapeFactory::setShapeName( xTextShape, rEquationCID );
-                xTextShape->setPosition(
-                    RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
-                        aScreenPosition2D, xTextShape->getSize(), aRelativePosition.Anchor ));
+                awt::Size aSize( xTextShape->getSize() );
+                awt::Point aPos( RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
+                    aScreenPosition2D, aSize, aRelativePosition.Anchor ) );
+                //ensure that the equation is fully placed within the page (if possible)
+                if( (aPos.X + aSize.Width) > m_aPageReferenceSize.Width )
+                    aPos.X = m_aPageReferenceSize.Width - aSize.Width;
+                if( aPos.X < 0 )
+                    aPos.X = 0;
+                if( (aPos.Y + aSize.Height) > m_aPageReferenceSize.Height )
+                    aPos.Y = m_aPageReferenceSize.Height - aSize.Height;
+                if( aPos.Y < 0 )
+                    aPos.Y = 0;
+                xTextShape->setPosition(aPos);
             }
         }
     }

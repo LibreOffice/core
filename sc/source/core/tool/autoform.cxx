@@ -385,7 +385,7 @@ sal_Bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVe
     CharSet eSysSet = gsl_getSystemTextEncoding();
     CharSet eSrcSet = rStream.GetStreamCharSet();
     if( eSrcSet != eSysSet && aFont.GetCharSet() == eSrcSet )
-        aFont.GetCharSet() = eSysSet;
+        aFont.SetCharSet(eSysSet);
 
     aStacked.SetValue( aOrientation.IsStacked() );
     aRotateAngle.SetValue( aOrientation.GetRotation( aRotateAngle.GetValue() ) );

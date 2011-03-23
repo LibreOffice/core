@@ -149,6 +149,28 @@ void CharacterProperties::AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+    // CharOverline (see awt.FontUnderline)
+    rOutProperties.push_back(
+        Property( C2U( "CharOverline" ),
+                  PROP_CHAR_OVERLINE,
+                  ::getCppuType( reinterpret_cast< const sal_Int16* >( 0 ) ),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ) );
+    // CharOverlineColor
+    rOutProperties.push_back(
+        Property( C2U( "CharOverlineColor" ),
+                  PROP_CHAR_OVERLINE_COLOR,
+                  ::getCppuType( reinterpret_cast< const sal_Int32* >( 0 ) ),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT
+                  | beans::PropertyAttribute::MAYBEVOID ) );
+    // CharOverlineHasColor
+    rOutProperties.push_back(
+        Property( C2U( "CharOverlineHasColor" ),
+                  PROP_CHAR_OVERLINE_HAS_COLOR,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ) );
     // CharWeight (see awt.FontWeight)
     rOutProperties.push_back(
         Property( C2U( "CharWeight" ),
@@ -416,6 +438,9 @@ void CharacterProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_UNDERLINE, awt::FontUnderline::NONE );
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_CHAR_UNDERLINE_COLOR, -1 ); //automatic color (COL_AUTO)
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_UNDERLINE_HAS_COLOR, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_OVERLINE, awt::FontUnderline::NONE );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_CHAR_OVERLINE_COLOR, -1 ); //automatic color (COL_AUTO)
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_OVERLINE_HAS_COLOR, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_WEIGHT, awt::FontWeight::NORMAL );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_POSTURE, awt::FontSlant_NONE );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_AUTO_KERNING, true );
