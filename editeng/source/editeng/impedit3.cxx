@@ -2944,6 +2944,27 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     sal_uInt16 nIndex = pLine->GetStart();
                     bool bParsingFields = false;
                     ::std::vector< sal_Int32 >::iterator itSubLines;
+
+                    // #i108052# When stripping a callback for empty paragraphs is needed. This
+                    // was somehow lost/removed/killed by making the TextPortions with empty
+                    // paragraph to type PORTIONKIND_TAB instead of PORTIONKIND_TEXT. Adding here
+                    // since I could not find out who and why this has changed.
+                    if(bStripOnly && pLine->GetStartPortion() == pLine->GetEndPortion())
+                    {
+                        const Color aOverlineColor(pOutDev->GetOverlineColor());
+                        const Color aTextLineColor(pOutDev->GetTextLineColor());
+
+                        GetEditEnginePtr()->DrawingText(
+                            aTmpPos, String(), 0, 0, 0,
+                            aTmpFont, n, nIndex, 0,
+                            0,
+                            0,
+                            false, true, false, // support for EOL/EOP TEXT comments
+                            0,
+                            aOverlineColor,
+                            aTextLineColor);
+                    }
+
                     for ( sal_uInt16 y = pLine->GetStartPortion(); y <= pLine->GetEndPortion(); y++ )
                     {
                         DBG_ASSERT( pPortion->GetTextPortions().Count(), "Line without Textportion in Paint!" );
