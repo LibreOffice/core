@@ -1631,9 +1631,9 @@ void XclExpPivotTable::Finalize()
 
     // update output range (initialized in ctor)
     sal_uInt16& rnXclCol1 = maPTInfo.maOutXclRange.maFirst.mnCol;
-    sal_uInt16& rnXclRow1 = maPTInfo.maOutXclRange.maFirst.mnRow;
+    sal_uInt32& rnXclRow1 = maPTInfo.maOutXclRange.maFirst.mnRow;
     sal_uInt16& rnXclCol2 = maPTInfo.maOutXclRange.maLast.mnCol;
-    sal_uInt16& rnXclRow2 = maPTInfo.maOutXclRange.maLast.mnRow;
+    sal_uInt32& rnXclRow2 = maPTInfo.maOutXclRange.maLast.mnRow;
     // exclude page fields from output range
     rnXclRow1 = rnXclRow1 + maPTInfo.mnPageFields;
     // exclude filter button from output range
@@ -1645,7 +1645,7 @@ void XclExpPivotTable::Finalize()
 
     // data area
     sal_uInt16& rnDataXclCol = maPTInfo.maDataXclPos.mnCol;
-    sal_uInt16& rnDataXclRow = maPTInfo.maDataXclPos.mnRow;
+    sal_uInt32& rnDataXclRow = maPTInfo.maDataXclPos.mnRow;
     rnDataXclCol = rnXclCol1 + maPTInfo.mnRowFields;
     rnDataXclRow = rnXclRow1 + maPTInfo.mnColFields + 1;
     if( maDataFields.empty() )

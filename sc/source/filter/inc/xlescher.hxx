@@ -315,9 +315,9 @@ bool operator<( const XclObjId& rL, const XclObjId& rR );
 struct XclObjAnchor : public XclRange
 {
     sal_uInt16          mnLX;       /// X offset in left column (1/1024 of column width).
-    sal_uInt16          mnTY;       /// Y offset in top row (1/256 of row height).
+    sal_uInt32          mnTY;       /// Y offset in top row (1/256 of row height).
     sal_uInt16          mnRX;       /// X offset in right column (1/1024 of column width).
-    sal_uInt16          mnBY;       /// Y offset in bottom row (1/256 of row height).
+    sal_uInt32          mnBY;       /// Y offset in bottom row (1/256 of row height).
 
     explicit            XclObjAnchor();
 

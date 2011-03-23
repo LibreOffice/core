@@ -96,7 +96,7 @@ XclExpRangeFmlaBase::XclExpRangeFmlaBase(
     maBaseXclPos = maXclRange.maFirst;
 }
 
-bool XclExpRangeFmlaBase::IsBasePos( sal_uInt16 nXclCol, sal_uInt16 nXclRow ) const
+bool XclExpRangeFmlaBase::IsBasePos( sal_uInt16 nXclCol, sal_uInt32 nXclRow ) const
 {
     return (maBaseXclPos.mnCol == nXclCol) && (maBaseXclPos.mnRow == nXclRow);
 }
@@ -104,7 +104,7 @@ bool XclExpRangeFmlaBase::IsBasePos( sal_uInt16 nXclCol, sal_uInt16 nXclRow ) co
 void XclExpRangeFmlaBase::Extend( const ScAddress& rScPos )
 {
     sal_uInt16 nXclCol = static_cast< sal_uInt16 >( rScPos.Col() );
-    sal_uInt16 nXclRow = static_cast< sal_uInt16 >( rScPos.Row() );
+    sal_uInt32 nXclRow = static_cast< sal_uInt32 >( rScPos.Row() );
     maXclRange.maFirst.mnCol = ::std::min( maXclRange.maFirst.mnCol, nXclCol );
     maXclRange.maFirst.mnRow = ::std::min( maXclRange.maFirst.mnRow, nXclRow );
     maXclRange.maLast.mnCol  = ::std::max( maXclRange.maLast.mnCol,  nXclCol );
@@ -566,7 +566,8 @@ void XclExpSingleCellBase::Save( XclExpStream& rStrm )
 
 void XclExpSingleCellBase::WriteBody( XclExpStream& rStrm )
 {
-    rStrm << GetXclRow() << GetXclCol() << maXFId.mnXFIndex;
+    //Bubli's row limit
+    rStrm << static_cast<sal_uInt16> (GetXclRow()) << GetXclCol() << maXFId.mnXFIndex;
     WriteContents( rStrm );
 }
 
@@ -1053,7 +1054,8 @@ void XclExpMultiCellBase::Save( XclExpStream& rStrm )
             if( bIsMulti ) nTotalSize += 2;
 
             rStrm.StartRecord( bIsMulti ? mnMulRecId : GetRecId(), nTotalSize );
-            rStrm << GetXclRow() << nBegXclCol;
+            //Bubli's row limit
+            rStrm << static_cast<sal_uInt16> (GetXclRow()) << nBegXclCol;
 
             sal_uInt16 nRelCol = nBegXclCol - GetXclCol();
             for( XclExpMultiXFIdDeq::const_iterator aIt = aRangeBeg; aIt != aRangeEnd; ++aIt )
@@ -1709,7 +1711,7 @@ void XclExpDefrowheight::WriteBody( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt16 nXclRow,
+XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt32 nXclRow,
         XclExpRowOutlineBuffer& rOutlineBfr, bool bAlwaysEmpty ) :
     XclExpRecord( EXC_ID3_ROW, 16 ),
     XclExpRoot( rRoot ),
@@ -1960,7 +1962,7 @@ void XclExpRow::InsertCell( XclExpCellRef xCell, size_t nPos, bool bIsMergedBase
 
 void XclExpRow::WriteBody( XclExpStream& rStrm )
 {
-    rStrm   << mnXclRow
+    rStrm   << static_cast< sal_uInt16 >(mnXclRow)
             << GetFirstUsedXclCol()
             << GetFirstFreeXclCol()
             << mnHeight
@@ -2148,7 +2150,7 @@ XclExpDimensions* XclExpRowBuffer::GetDimensions()
     return &maDimensions;
 }
 
-XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt16 nXclRow, bool bRowAlwaysEmpty )
+XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysEmpty )
 {
     RowMap::iterator itr = maRowMap.find(nXclRow);
     if (itr == maRowMap.end())
@@ -2237,7 +2239,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
         SCCOL nLastScCol = aIt.GetEndCol();
         ScAddress aScPos( nScCol, nScRow, nScTab );
 
-        XclAddress aXclPos( static_cast< sal_uInt16 >( nScCol ), static_cast< sal_uInt16 >( nScRow ) );
+        XclAddress aXclPos( static_cast< sal_uInt16 >( nScCol ), static_cast< sal_uInt32 >( nScRow ) );
         sal_uInt16 nLastXclCol = static_cast< sal_uInt16 >( nLastScCol );
 
         const ScBaseCell* pScCell = aIt.GetCell();

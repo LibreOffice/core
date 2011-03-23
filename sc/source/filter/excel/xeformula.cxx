@@ -1821,7 +1821,7 @@ void XclExpFmlaCompImpl::ConvertRefData(
             rnScRow = mnMaxAbsRow;
         else if( (rnScRow < 0) || (rnScRow > mnMaxAbsRow) )
             rRefData.SetRowDeleted( sal_True );
-        rXclPos.mnRow = static_cast< sal_uInt16 >( rnScRow ) & mnMaxRowMask;
+        rXclPos.mnRow = static_cast< sal_uInt32 >( rnScRow ) & mnMaxRowMask;
     }
     else
     {
@@ -1833,7 +1833,7 @@ void XclExpFmlaCompImpl::ConvertRefData(
 
         // convert row index (2-step-cast ScsROW->sal_Int16->sal_uInt16 to get all bits correctly)
         sal_Int16 nXclRelRow = static_cast< sal_Int16 >( rRefData.IsRowRel() ? rRefData.nRelRow : rRefData.nRow );
-        rXclPos.mnRow = static_cast< sal_uInt16 >( nXclRelRow ) & mnMaxRowMask;
+        rXclPos.mnRow = static_cast< sal_uInt32 >( nXclRelRow ) & mnMaxRowMask;
 
         // resolve relative tab index if possible
         if( rRefData.IsTabRel() && !IsInGlobals() && (GetCurrScTab() < GetDoc().GetTableCount()) )
@@ -1849,9 +1849,11 @@ void XclExpFmlaCompImpl::ConvertRefData(
     }
     else
     {
+#if 0 // FIXME : doesn't build in xlsx
         sal_uInt16& rnRelField = (meBiff <= EXC_BIFF5) ? rXclPos.mnRow : rXclPos.mnCol;
         ::set_flag( rnRelField, EXC_TOK_REF_COLREL, rRefData.IsColRel() );
         ::set_flag( rnRelField, EXC_TOK_REF_ROWREL, rRefData.IsRowRel() );
+#endif
     }
 }
 

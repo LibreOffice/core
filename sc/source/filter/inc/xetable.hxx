@@ -74,7 +74,7 @@ class XclExpRangeFmlaBase : public XclExpRecord
 {
 public:
     /** Returns true, if the passed cell position is equal to own base position. */
-    bool                IsBasePos( sal_uInt16 nXclCol, sal_uInt16 nXclRow ) const;
+    bool                IsBasePos( sal_uInt16 nXclCol, sal_uInt32 nXclRow ) const;
 
     /** Derived classes create the token array for a corresponding FORMULA cell record. */
     virtual XclTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const = 0;
@@ -241,9 +241,9 @@ private:
     SCTAB               mnScTab;        /// Sheet index of this record.
     sal_uInt16          mnLastAppXclCol;/// Column index of last appended cell.
     sal_uInt16          mnColInpXclCol; /// Column index of column input cell.
-    sal_uInt16          mnColInpXclRow; /// Row index of column input cell.
+    sal_uInt32          mnColInpXclRow; /// Row index of column input cell.
     sal_uInt16          mnRowInpXclCol; /// Column index of row input cell.
-    sal_uInt16          mnRowInpXclRow; /// Row index of row input cell.
+    sal_uInt32          mnRowInpXclRow; /// Row index of row input cell.
     sal_uInt8           mnScMode;       /// Type of the multiple operation (Calc constant).
     bool                mbValid;        /// true = Contains valid references.
 };
@@ -290,7 +290,7 @@ public:
     /** Returns the (first) Excel column index of the cell(s). */
     inline sal_uInt16   GetXclCol() const { return maXclPos.mnCol; }
     /** Returns the Excel row index of the cell. */
-    inline sal_uInt16   GetXclRow() const { return maXclPos.mnRow; }
+    inline sal_uInt32   GetXclRow() const { return maXclPos.mnRow; }
 
     /** Derived classes return the column index of the last contained cell. */
     virtual sal_uInt16  GetLastXclCol() const = 0;
@@ -318,7 +318,7 @@ protected:
     /** Sets this record to a new column position. */
     inline void         SetXclCol( sal_uInt16 nXclCol ) { maXclPos.mnCol = nXclCol; }
     /** Sets this record to a new row position. */
-    inline void         SetXclRow( sal_uInt16 nXclRow ) { maXclPos.mnRow = nXclRow; }
+    inline void         SetXclRow( sal_uInt32 nXclRow ) { maXclPos.mnRow = nXclRow; }
 
 private:
     XclAddress          maXclPos;       /// Address of the cell.
@@ -879,11 +879,11 @@ public:
     /** Constructs the ROW record and converts the Calc row settings.
         @param bAlwaysEmpty  true = This row will not be filled with blank cells
             in the Finalize() function. */
-    explicit            XclExpRow( const XclExpRoot& rRoot, sal_uInt16 nXclRow,
+    explicit            XclExpRow( const XclExpRoot& rRoot, sal_uInt32 nXclRow,
                             XclExpRowOutlineBuffer& rOutlineBfr, bool bAlwaysEmpty );
 
     /** Returns the excel row index of this ROW record. */
-    inline sal_uInt16   GetXclRow() const { return mnXclRow; }
+    inline sal_uInt32   GetXclRow() const { return mnXclRow; }
     /** Returns the height of the row in twips. */
     inline sal_uInt16   GetHeight() const { return mnHeight; }
     /** Returns true, if this row does not contain at least one valid cell. */
@@ -938,7 +938,7 @@ private:
     typedef XclExpRecordList< XclExpCellBase > XclExpCellList;
 
     XclExpCellList      maCellList;         /// List of cell records for this row.
-    sal_uInt16          mnXclRow;           /// Excel row index of this row.
+    sal_uInt32          mnXclRow;           /// Excel row index of this row.
     sal_uInt16          mnHeight;           /// Row height in twips.
     sal_uInt16          mnFlags;            /// Flags for the ROW record.
     sal_uInt16          mnXFIndex;          /// Default row formatting.
@@ -981,7 +981,7 @@ private:
     /** Returns access to the specified ROW record. Inserts preceding missing ROW records.
         @param bRowAlwaysEmpty  true = Created rows will not be filled with blank cells
             in the XclExpRow::Finalize() function. */
-    XclExpRow&          GetOrCreateRow( sal_uInt16 nXclRow, bool bRowAlwaysEmpty );
+    XclExpRow&          GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysEmpty );
 
 private:
     typedef ::boost::shared_ptr<XclExpRow>  RowRef;

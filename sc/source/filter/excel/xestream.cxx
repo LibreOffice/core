@@ -810,8 +810,9 @@ static ScAddress lcl_ToAddress( const XclAddress& rAddress )
     // For some reason, ScRange::Format() returns omits row numbers if
     // the row is >= MAXROW or the column is >= MAXCOL, and Excel doesn't
     // like "A:IV" (i.e. no row numbers).  Prevent this.
-    aAddress.SetRow( std::min<sal_Int32>( rAddress.mnRow, MAXROW-1 ) );
-    aAddress.SetCol( static_cast<sal_Int16>(std::min<sal_Int32>( rAddress.mnCol, MAXCOL-1 )) );
+    // KOHEI: Find out if the above comment is still true.
+    aAddress.SetRow( std::min<sal_Int32>( rAddress.mnRow, MAXROW ) );
+    aAddress.SetCol( static_cast<sal_Int16>(std::min<sal_Int32>( rAddress.mnCol, MAXCOL )) );
 
     return aAddress;
 }
@@ -1120,6 +1121,11 @@ bool XclExpXmlStream::exportDocument() throw()
 
     XclExpRootData aData( EXC_BIFF8, *pShell->GetMedium (), rStorage, *pDoc, RTL_TEXTENCODING_DONTKNOW );
     aData.meOutput = EXC_OUTPUT_XML_2007;
+    aData.maXclMaxPos.Set( EXC_MAXCOL_XML_2007, EXC_MAXROW_XML_2007, EXC_MAXTAB_XML_2007 );
+    aData.maMaxPos.SetCol( ::std::min( aData.maScMaxPos.Col(), aData.maXclMaxPos.Col() ) );
+    aData.maMaxPos.SetRow( ::std::min( aData.maScMaxPos.Row(), aData.maXclMaxPos.Row() ) );
+    aData.maMaxPos.SetTab( ::std::min( aData.maScMaxPos.Tab(), aData.maXclMaxPos.Tab() ) );
+
     XclExpRoot aRoot( aData );
 
     mpRoot = &aRoot;
