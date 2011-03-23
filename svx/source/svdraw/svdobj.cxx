@@ -145,20 +145,6 @@ void SdrObjUserCall::Changed(const SdrObject& /*rObj*/, SdrUserCallType /*eType*
 
 TYPEINIT0(SdrObjUserData);
 
-void SdrObjUserData::operator=(const SdrObjUserData& /*rData*/)    // nicht implementiert
-{
-}
-
-sal_Bool SdrObjUserData::operator==(const SdrObjUserData& /*rData*/) const // nicht implementiert
-{
-    return sal_False;
-}
-
-sal_Bool SdrObjUserData::operator!=(const SdrObjUserData& /*rData*/) const // nicht implementiert
-{
-    return sal_False;
-}
-
 SdrObjUserData::~SdrObjUserData()
 {
 }
