@@ -59,7 +59,7 @@ $(SUBDIRS) :
 
 org/openoffice/comp/test : org/openoffice/test
 
-ComponentsThumbsExample : $(COMPONENT_PACKAGE)
+ComponentsThumbsExample : $(COMP_PACKAGE)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use one of the following command to execute the example!
 	@echo -

@@ -459,18 +459,22 @@ public class JavaSampleChartAddIn extends WeakBase implements
      * @param   regKey       the registryKey
      * @see                  com.sun.star.comp.loader.JavaLoader
      */
-    public static boolean __writeRegistryServiceInfo( com.sun.star.registry.XRegistryKey regKey )
-    {
-        boolean bResult = true;
+    // This method not longer necessary since OOo 3.4 where the component registration
+    // was changed to passive component registration. For more details see
+    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
 
-        String[] aServices = getSupportedServiceNames_Static();
-        int i, nLength = aServices.length;
+//    public static boolean __writeRegistryServiceInfo( com.sun.star.registry.XRegistryKey regKey )
+//     {
+//         boolean bResult = true;
 
-        for( i = 0; i < nLength; ++i )
-        {
-            bResult = bResult && com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
-                JavaSampleChartAddIn.class.getName(), aServices[ i ], regKey );
-        }
-        return bResult;
-    }
+//         String[] aServices = getSupportedServiceNames_Static();
+//         int i, nLength = aServices.length;
+
+//         for( i = 0; i < nLength; ++i )
+//         {
+//             bResult = bResult && com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
+//                 JavaSampleChartAddIn.class.getName(), aServices[ i ], regKey );
+//         }
+//         return bResult;
+//     }
 }

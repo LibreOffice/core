@@ -43,21 +43,23 @@ include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
 
-COMPONENT_NAME=JavaComponent
-OUT_COMP_CLASS = $(OUT_CLASS)/$(COMPONENT_NAME)
-OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
-COMPONENT_RDB_NAME = $(COMPONENT_NAME).uno.rdb
-COMPONENT_RDB = $(OUT_COMP_GEN)/$(COMPONENT_RDB_NAME)
-COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOOXT_EXT)
-COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOOXT_EXT)")
-COMPONENT_JAR_NAME = $(COMPONENT_NAME).uno.jar
-COMPONENT_JAR = $(OUT_COMP_CLASS)/$(COMPONENT_JAR_NAME)
-COMPONENT_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
-COMPONENT_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT_NAME)/META-INF/manifest.xml
+COMP_NAME=JavaComponent
+OUT_COMP_CLASS = $(OUT_CLASS)/$(COMP_NAME)
+OUT_COMP_GEN = $(OUT_MISC)/$(COMP_NAME)
+COMP_RDB_NAME = $(COMP_NAME).uno.rdb
+COMP_RDB = $(OUT_COMP_GEN)/$(COMP_RDB_NAME)
+COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
+COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
+COMP_JAR_NAME = $(COMP_NAME).uno.jar
+COMP_JAR = $(OUT_COMP_CLASS)/$(COMP_JAR_NAME)
+COMP_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMP_NAME).uno.Manifest
+COMP_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMP_NAME)/META-INF/manifest.xml
+COMP_COMPONENTS=$(COMP_NAME).components
+
 APP1_NAME=TestJavaComponent
 APP1_JAR=$(OUT_COMP_CLASS)/$(APP1_NAME).jar
 
-REGISTERFLAG = $(OUT_MISC)$(PS)devguide_$(COMPONENT_NAME)_register_component.flag
+REGISTERFLAG = $(OUT_MISC)$(PS)devguide_$(COMP_NAME)_register_component.flag
 
 IDLFILES = XSomethingA.idl \
 	XSomethingB.idl \
@@ -80,9 +82,9 @@ GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
 
 COMPCLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(COMPJAVAFILES))
 
-$(COMPONENT_NAME)_CLASSFILES = $(patsubst %.java,%.class,$(COMPJAVAFILES))
+$(COMP_NAME)_CLASSFILES = $(patsubst %.java,%.class,$(COMPJAVAFILES))
 
-$(COMPONENT_NAME)_CLASSFILES += $(subst $(OUT_COMP_CLASS)/,,$(GENCLASSFILES))
+$(COMP_NAME)_CLASSFILES += $(subst $(OUT_COMP_CLASS)/,,$(GENCLASSFILES))
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
@@ -109,9 +111,9 @@ $(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(REGMERGE) $@ /UCR $(GENURDFILES)
 
-$(OUT_COMP_CLASS)/$(PACKAGE)/%.class : $(COMPONENT_RDB)
+$(OUT_COMP_CLASS)/$(PACKAGE)/%.class : $(COMP_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(JAVAMAKER) -BUCR -nD $(GENTYPELIST) -O$(OUT_COMP_CLASS) $(COMPONENT_RDB) -X$(URE_TYPES) -X$(OFFICE_TYPES)
+	$(JAVAMAKER) -BUCR -nD $(GENTYPELIST) -O$(OUT_COMP_CLASS) $(COMP_RDB) -X$(URE_TYPES) -X$(OFFICE_TYPES)
 
 $(OUT_COMP_CLASS)/%.class : %.java $(GENCLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
@@ -134,11 +136,11 @@ $(OUT_COMP_CLASS)/%.mf :
 $(APP1_JAR) : $(OUT_COMP_CLASS)/$(APP1_NAME).mf $(OUT_COMP_CLASS)/$(APP1_NAME).class $(COMPCLASSFILES) $(GENCLASSFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	+cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(basename $(@F)).mf $(basename $(@F)).class $($(COMPONENT_NAME)_CLASSFILES)
+	+cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(basename $(@F)).mf $(basename $(@F)).class $($(COMP_NAME)_CLASSFILES)
 	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
 
 # rule for component jar file
-$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(COMPCLASSFILES)
+$(COMP_JAR) : $(COMP_MANIFESTFILE) $(COMPCLASSFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
@@ -151,24 +153,25 @@ $(OUT_COMP_CLASS)/%/manifest.xml :
 	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-typelibrary;type=RDB$(QM)" >> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.rdb$(QM)"/$(CSEP) >> $@
-	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
-	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-components$(QM)">> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(COMP_COMPONENTS)$(QM)"/$(CSEP)>> $@
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
 # rule for component pacakge file
-$(COMPONENT_PACKAGE) : $(COMPONENT_RDB) $(COMPONENT_JAR) $(COMPONENT_UNOPKG_MANIFEST)
+$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) $(COMP_UNOPKG_MANIFEST) $(COMP_COMPONENTS)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(COPY) $(subst /,$(PS),$(COMPONENT_RDB)) $(subst /,$(PS),$(OUT_COMP_CLASS))
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(COMPONENT_RDB_NAME) $(COMPONENT_JAR_NAME)
+	$(COPY) $(subst /,$(PS),$(COMP_RDB)) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	$(SDK_ZIP) $@ $(COMP_COMPONENTS)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP_RDB_NAME) $(COMP_JAR_NAME)
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
-	$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_COMP_CLASS)/$(COMPONENT_RDB_NAME)))
+	$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_COMP_CLASS)/$(COMP_RDB_NAME)))
 
-$(REGISTERFLAG) : $(COMPONENT_PACKAGE)
+$(REGISTERFLAG) : $(COMP_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMP_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
@@ -200,5 +203,5 @@ JavaComponentExample : $(REGISTERFLAG) $(APP1_JAR)
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_PACKAGE_URL)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))

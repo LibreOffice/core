@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://openoffice.org/2010/uno-components">
+  <component loader="com.sun.star.loader.Java2" uri="ExampleDataPilotSource.uno.jar">
+    <implementation name="ExampleDataPilotSource$_ExampleDataPilotSource">
+      <service name="com.sun.star.sheet.DataPilotSource"/>
+    </implementation>
+  </component>
+</components>

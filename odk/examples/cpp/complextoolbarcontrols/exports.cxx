@@ -42,17 +42,17 @@
 
 namespace css = ::com::sun::star;
 
-static void writeInfo(const css::uno::Reference< css::registry::XRegistryKey >& xRegistryKey       ,
-                      const char*                                               pImplementationName,
-                      const char*                                               pServiceName       )
-{
-    ::rtl::OUStringBuffer sKey(256);
-    sKey.append     (::rtl::OUString::createFromAscii(pImplementationName));
-    sKey.appendAscii("/UNO/SERVICES/");
-    sKey.append     (::rtl::OUString::createFromAscii(pServiceName));
+// static void writeInfo(const css::uno::Reference< css::registry::XRegistryKey >& xRegistryKey       ,
+//                       const char*                                               pImplementationName,
+//                       const char*                                               pServiceName       )
+// {
+//     ::rtl::OUStringBuffer sKey(256);
+//  sKey.append     (::rtl::OUString::createFromAscii(pImplementationName));
+//     sKey.appendAscii("/UNO/SERVICES/");
+//     sKey.append     (::rtl::OUString::createFromAscii(pServiceName));
 
-    xRegistryKey->createKey(sKey.makeStringAndClear());
-}
+//     xRegistryKey->createKey(sKey.makeStringAndClear());
+// }
 
 extern "C"
 {
@@ -63,27 +63,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const 
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-//==================================================================================================
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void* pServiceManager,
-                                                            void* pRegistryKey   )
-{
-    if (!pRegistryKey)
-        return sal_False;
 
-    try
-    {
-        css::uno::Reference< css::registry::XRegistryKey > xKey(reinterpret_cast< css::registry::XRegistryKey* >(pRegistryKey), css::uno::UNO_QUERY);
-
-        writeInfo( xKey, MYLISTENER_IMPLEMENTATIONNAME       , MYLISTENER_SERVICENAME        );
-        writeInfo( xKey, MYPROTOCOLHANDLER_IMPLEMENTATIONNAME, MYPROTOCOLHANDLER_SERVICENAME );
-
-        return sal_True;
-    }
-    catch(const css::registry::InvalidRegistryException&)
-        { OSL_FAIL( "### InvalidRegistryException!" ); }
-
-    return sal_False;
-}
 
 //==================================================================================================
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* pImplName      ,

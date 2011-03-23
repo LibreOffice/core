@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://openoffice.org/2010/uno-components">
+  <component loader="com.sun.star.loader.Java2" uri="AsyncJob.uno.jar">
+    <implementation name="com.sun.star.comp.framework.java.services.AsyncJob">
+      <service name="com.sun.star.task.AsyncJob"/>
+    </implementation>
+  </component>
+</components>

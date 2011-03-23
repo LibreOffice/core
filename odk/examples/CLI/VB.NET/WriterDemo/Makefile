@@ -42,12 +42,19 @@ $(WRITERDEMO_OUT)/%.exe: %.vb
 		-reference:System.Windows.Forms.dll \
 		$^
 
+ifeq "$(OS)" "WIN"
 WriterDemo : $(WRITERDEMO_OUT)/WriterDemo.exe
 	@echo -------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
 	@echo $(MAKE) WriterDemo.run
 	@echo -------------------------------------------------------------------------------
+else
+WriterDemo : 
+	@echo --------------------------------------------------------------------------------
+	@echo This example works only under Windows!
+	@echo --------------------------------------------------------------------------------
+endif
 
 %.run : $(WRITERDEMO_OUT)/%.exe
 	@echo -------------------------------------------------------------------------------

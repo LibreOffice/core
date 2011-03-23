@@ -723,11 +723,15 @@ public class AsciiReplaceFilter
      *
      * @see com.sun.star.comp.loader.JavaLoader
      */
-    public static boolean __writeRegistryServiceInfo( com.sun.star.registry.XRegistryKey xRegistryKey )
-    {
-        return Factory.writeRegistryServiceInfo(
-            _AsciiReplaceFilter.class.getName(),
-            _AsciiReplaceFilter.m_serviceNames,
-            xRegistryKey );
-    }
+    // This method not longer necessary since OOo 3.4 where the component registration
+    // was changed to passive component registration. For more details see
+    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
+
+//     public static boolean __writeRegistryServiceInfo( com.sun.star.registry.XRegistryKey xRegistryKey )
+//     {
+//         return Factory.writeRegistryServiceInfo(
+//             _AsciiReplaceFilter.class.getName(),
+//             _AsciiReplaceFilter.m_serviceNames,
+//             xRegistryKey );
+//     }
 }

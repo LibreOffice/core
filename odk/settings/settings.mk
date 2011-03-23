@@ -78,6 +78,7 @@ EMPTYSTRING=
 PATH_SEPARATOR=;
 
 # use this for release version
+CC_FLAGS_JNI=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa
 CC_FLAGS=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa
 ifeq "$(CPP_MANIFEST)" "true"
 LINK_MANIFEST=mt -manifest $@.manifest "-outputresource:$@;2"
@@ -85,6 +86,7 @@ else
 LINK_MANIFEST=
 endif
 ifeq "$(DEBUG)" "yes"
+CC_FLAGS_JNI+=-Zi
 CC_FLAGS+=-Zi
 endif
 
@@ -94,6 +96,7 @@ SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/inclu
 # define for used compiler necessary for UNO
 # -DCPPU_ENV=msci -- windows msvc 4.x - 7.x
 
+CC_DEFINES_JNI=-DWIN32 -DWNT -D_DLL -DCPPU_ENV=msci
 CC_DEFINES=-DWIN32 -DWNT -D_DLL -DCPPU_ENV=msci
 CC_OUTPUT_SWITCH=-Fo
 
@@ -187,8 +190,10 @@ STORELIB=-lstore
 EMPTYSTRING=
 PATH_SEPARATOR=:
 
-CC_FLAGS=-c -KPIC
+CC_FLAGS_JNI=-c -KPIC
+CC_FLAGS=-c -KPIC -xldscope=hidden
 ifeq "$(DEBUG)" "yes"
+CC_FLAGS_JNI+=-g
 CC_FLAGS+=-g
 endif
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
@@ -197,15 +202,17 @@ SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/inclu
 # define for used compiler necessary for UNO
 # -DCPPU_ENV=sunpro5 -- sunpro cc 5.x solaris sparc/intel
 
-CC_DEFINES=-DUNX -DSOLARIS -DSPARC -DCPPU_ENV=sunpro5
+CC_DEFINES_JNI=-DUNX -DSOLARIS -DCPPU_ENV=sunpro5
+CC_DEFINES=-DUNX -DSOLARIS -DSPARC -DCPPU_ENV=sunpro5  -DHAVE_GCC_VISIBILITY_FEATURE
 CC_OUTPUT_SWITCH=-o 
 
-LIBRARY_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp '-R $$ORIGIN' -z text -norunpath -G -Bdirect -Bdynamic -lpthread -lCrun -lc -lm
+LIBRARY_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp '-R$$ORIGIN' -z text -norunpath -G -Bdirect -Bdynamic -lpthread -lCrun -lc -lm
 # means if used CC is lower then version 5.5 use option -instance=static
 ifeq ($(OO_SDK_CC_55_OR_HIGHER),)
 LIBRARY_LINK_FLAGS+=-instances=static
 endif
-COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -M $(PRJ)/settings/component.uno.map
+#COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -M $(PRJ)/settings/component.uno.map
+COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp -norunpath -Bdirect -z defs
 LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)"
@@ -311,11 +318,15 @@ STORELIB=-lstore
 EMPTYSTRING=
 PATH_SEPARATOR=:
 
+CC_FLAGS_JNI=-c -fpic
+CC_FLAGS=-c -fpic -fvisibility=hidden
 # -O is necessary for inlining (see gcc documentation)
 ifeq "$(DEBUG)" "yes"
-CC_FLAGS=-c -g -fpic
+CC_FLAGS_JNI+=-g
+CC_FLAGS+=-g
 else
-CC_FLAGS=-c -O -fpic
+CC_FLAGS_JNI+=-O
+CC_FLAGS+=-O
 endif
 
 ifeq "$(PROCTYPE)" "ppc"
@@ -324,7 +335,8 @@ endif
 
 SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/linux"
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
-CC_DEFINES=-DUNX -DGCC -DLINUX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
+CC_DEFINES_JNI=-DUNX -DGCC -DLINUX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
+CC_DEFINES=-DUNX -DGCC -DLINUX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH) -DHAVE_GCC_VISIBILITY_FEATURE
 
 # define for used compiler necessary for UNO
 #-DCPPU_ENV=gcc2 -- gcc 2.91/2.95
@@ -337,7 +349,8 @@ LIBRARY_LINK_FLAGS=-shared '-Wl,-rpath,$$ORIGIN'
 ifeq "$(PROCTYPE)" "ppc"
 LIBRARY_LINK_FLAGS+=-fPIC
 endif
-COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -Wl,--version-script,$(PRJ)/settings/component.uno.map
+#COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -Wl,--version-script,$(PRJ)/settings/component.uno.map
+COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,--no-whole-archive
 LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)"
@@ -362,7 +375,12 @@ PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
 # Default is MacOSX on a Intel machine    
 PLATFORM=macosx
 
-ifeq "$(PROCTYPE)" "i686"
+ifeq "$(PROCTYPE)" "i386"
+PACKAGE_LIB_DIR=macosx_x86.plt
+UNOPKG_PLATFORM=MacOSX_x86
+JAVA_PROC_TYPE=x86
+else
+ifeq "$(PROCTYPE)" "x86_64"
 PACKAGE_LIB_DIR=macosx_x86.plt
 UNOPKG_PLATFORM=MacOSX_x86
 JAVA_PROC_TYPE=x86
@@ -370,6 +388,7 @@ else
 PACKAGE_LIB_DIR=macosx_ppc.plt
 UNOPKG_PLATFORM=MacOSX_PowerPC
 JAVA_PROC_TYPE=ppc
+endif
 endif
 JAVABIN=Commands
 
@@ -432,16 +451,21 @@ INSTALL_NAME_URELIBS_BIN=install_name_tool -change @____________________________
 EMPTYSTRING=
 PATH_SEPARATOR=:
 
+CC_FLAGS_JNI=-malign-natural -c -fPIC -fno-common $(GCC_ARCH_OPTION)
+CC_FLAGS=-malign-natural -c -fPIC -fno-common $(GCC_ARCH_OPTION) -fvisibility=hidden
 # -O is necessary for inlining (see gcc documentation)
 ifeq "$(DEBUG)" "yes"
-CC_FLAGS=-malign-natural -c -g -fPIC -fno-common $(GCC_ARCH_OPTION)
+CC_FLAGS_JNI+=-g
+CC_FLAGS+=-g
 else
-CC_FLAGS=-malign-natural -c -O -fPIC -fno-common $(GCC_ARCH_OPTION)
+CC_FLAGS_JNI+=-O
+CC_FLAGS+=-O
 endif
 
 SDK_JAVA_INCLUDES = -I/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers -I/System/Library/Frameworks/JavaVM.framework/Headers
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
-CC_DEFINES=-DUNX -DGCC -DMACOSX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
+CC_DEFINES_JNI=-DUNX -DGCC -DMACOSX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
+CC_DEFINES=-DUNX -DGCC -DMACOSX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH) -DHAVE_GCC_VISIBILITY_FEATURE
 
 CC_OUTPUT_SWITCH=-o
 
@@ -449,7 +473,8 @@ LIBRARY_LINK_FLAGS=-dynamiclib -single_module -Wl,-multiply_defined,suppress $(G
 #-fPIC -fno-common
 
 # install_name '@executable_path$/(@:f)'
-COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)  -Wl,-exported_symbols_list $(COMP_MAPFILE)
+#COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)  -Wl,-exported_symbols_list $(COMP_MAPFILE)
+COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=$(GCC_ARCH_OPTION) -Wl,-multiply_defined,suppress
 LINK_LIBS=-L$(OUT)/lib -L$(OO_SDK_OUT)/$(PLATFORM)/lib -L"$(OO_SDK_URE_LIB_DIR)"
@@ -547,21 +572,27 @@ STORELIB=-lstore
 EMPTYSTRING=
 PATH_SEPARATOR=:
 
+CC_FLAGS_JNI=-c -g -fPIC -DPIC $(PTHREAD_CFLAGS)
+CC_FLAGS=-c -g -fPIC -DPIC $(PTHREAD_CFLAGS) -fvisibility=hidden
 # -O is necessary for inlining (see gcc documentation)
 ifeq "$(DEBUG)" "yes"
-CC_FLAGS=-c -g -fPIC -DPIC $(PTHREAD_CFLAGS)
+CC_FLAGS_JNI+=-g
+CC_FLAGS+=-g
 else
-CC_FLAGS=-c -O -fPIC -DPIC $(PTHREAD_CFLAGS)
+CC_FLAGS_JNI+=-O
+CC_FLAGS+=-O
 endif
 
 SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/freebsd"
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
-CC_DEFINES=-DUNX -DGCC -DFREEBSD -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
+CC_DEFINES_JNI=-DUNX -DGCC -DFREEBSD -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
+CC_DEFINES=-DUNX -DGCC -DFREEBSD -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH) -DHAVE_GCC_VISIBILITY_FEATURE
 
 CC_OUTPUT_SWITCH=-o
 
 LIBRARY_LINK_FLAGS=-shared '-Wl,-rpath,$$ORIGIN'
-COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -Wl,--version-script,$(PRJ)/settings/component.uno.map
+#COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -Wl,--version-script,$(PRJ)/settings/component.uno.map
+COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined 
 LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)" $(PTHREAD_LIBS)

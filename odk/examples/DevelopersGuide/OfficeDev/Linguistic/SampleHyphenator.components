@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://openoffice.org/2010/uno-components">
+  <component loader="com.sun.star.loader.Java2" uri="SampleHyphenator.uno.jar">
+    <implementation name="SampleHyphenator">
+      <service name="com.sun.star.linguistic2.Hyphenator"/>
+    </implementation>
+  </component>
+</components>

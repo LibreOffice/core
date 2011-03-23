@@ -115,8 +115,7 @@ static const char usageText[] =
 "                           command names, where the commands are a ',' separated list\n"
 "                           of unique commands. This option is only valid for add-ons.\n"
 "    -V, --version          print version number and exit\n"
-"    -h, --help             print this help and exit\n\n"
-" Sun Microsystems (R) ";
+"    -h, --help             print this help and exit\n\n";
 
 void printUsageAndExit(const char* programname, const char* version)
 {

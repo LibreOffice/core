@@ -93,12 +93,17 @@ public class ImageShrink extends WeakBase
 
         return xSingleServiceFactory;
     }
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey)          {
-        //System.out.println(ImageShrink.class.getName());
-        return FactoryHelper.writeRegistryServiceInfo( ImageShrink.class.getName(),
-                                                    __serviceName,
-                                                    regKey);
-    }
+
+    // This method not longer necessary since OOo 3.4 where the component registration
+    // was changed to passive component registration. For more details see
+    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
+
+//     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey)          {
+//         //System.out.println(ImageShrink.class.getName());
+//         return FactoryHelper.writeRegistryServiceInfo( ImageShrink.class.getName(),
+//                                                     __serviceName,
+//                                                     regKey);
+//     }
 
     // XFilter implementation  (a sub-interface of XImageShrinkFilter)
     public void cancel() {

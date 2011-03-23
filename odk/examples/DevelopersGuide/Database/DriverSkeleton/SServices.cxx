@@ -33,6 +33,7 @@
  *
  *************************************************************************/
 
+#include <sal/types.h>
 #include "SDriver.hxx"
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
@@ -56,8 +57,8 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
 
 //***************************************************************************************
 //
-// Die vorgeschriebene C-Api muss erfuellt werden!
-// Sie besteht aus drei Funktionen, die von dem Modul exportiert werden muessen.
+// The required C-Api must be provided!
+// It contains of 3 special functions that have to be exported.
 //
 
 //---------------------------------------------------------------------------------------
@@ -118,7 +119,7 @@ struct ProviderRequest
 
 //---------------------------------------------------------------------------------------
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment **ppEnv
             )
@@ -126,33 +127,9 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-//---------------------------------------------------------------------------------------
-extern "C" sal_Bool SAL_CALL component_writeInfo(
-                void* pServiceManager,
-                void* pRegistryKey
-            )
-{
-    if (pRegistryKey)
-    try
-    {
-        Reference< ::com::sun::star::registry::XRegistryKey > xKey(reinterpret_cast< ::com::sun::star::registry::XRegistryKey*>(pRegistryKey));
-
-        REGISTER_PROVIDER(
-            SkeletonDriver::getImplementationName_Static(),
-            SkeletonDriver::getSupportedServiceNames_Static(), xKey);
-
-        return sal_True;
-    }
-    catch (::com::sun::star::registry::InvalidRegistryException& )
-    {
-        OSL_FAIL("SKELETON::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
-    }
-
-    return sal_False;
-}
 
 //---------------------------------------------------------------------------------------
-extern "C" void* SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* pRegistryKey)
