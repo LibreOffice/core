@@ -75,6 +75,8 @@ my_components = \
     component/sw/util/swd \
     component/sw/util/vbaswobj \
     component/toolkit/util/tk \
+    component/unoxml/source/rdf/unordf \
+    component/unoxml/source/service/unoxml \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
     configmgr \
@@ -163,14 +165,14 @@ my_components = \
     ucphier1 \
     ucppkg1 \
     ucptdoc1 \
-    unordf \
-    unoxml \
     updatefeed \
     updchk \
     updchk.uno \
     utl \
     uui \
     vbaobj \
+    vbaevents \
+    vcl \
     vclcanvas \
     wpft \
     writerfilter \
@@ -238,10 +240,6 @@ my_components += ogltrans
 
 .IF "$(ENABLE_SVCTAGS)" == "YES"
 my_components += productregistration.jar
-.END
-
-.IF "$(ENABLE_VBA)" == "YES"
-my_components += vbaevents
 .END
 
 .IF "$(SOLAR_JAVA)" == "TRUE"
