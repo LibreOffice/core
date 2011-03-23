@@ -377,14 +377,13 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         }
         ++p;
 
-        // 1-based, sequence starts with an empty element.
-        if (pExternalLinks && pExternalLinks->getLength() > 1)
+        if (pExternalLinks && pExternalLinks->hasElements())
         {
             // A numeric "document name" is an index into the sequence.
             if (CharClass::isAsciiNumeric( rExternDocName))
             {
                 sal_Int32 i = rExternDocName.ToInt32();
-                if (i <= 0 || i >= pExternalLinks->getLength())
+                if (i < 0 || i >= pExternalLinks->getLength())
                     return start;
                 const sheet::ExternalLinkInfo & rInfo = (*pExternalLinks)[i];
                 switch (rInfo.Type)
@@ -400,6 +399,11 @@ const sal_Unicode* ScRange::Parse_XL_Header(
                             rExternDocName = aStr;
                         }
                         break;
+                    case sheet::ExternalLinkType::SELF :
+                        return start;   // ???
+                    case sheet::ExternalLinkType::SPECIAL :
+                        // silently return nothing (do not assert), caller has to handle this
+                        return NULL;
                     default:
                         DBG_ERROR2( "ScRange::Parse_XL_Header: unhandled ExternalLinkType %d for index %d",
                                 rInfo.Type, i);
