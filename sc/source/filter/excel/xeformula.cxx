@@ -564,7 +564,6 @@ XclTokenArrayRef XclExpFmlaCompImpl::CreateSpecialRefFormula( sal_uInt8 nTokenId
 {
     Init( EXC_FMLATYPE_NAME );
     AppendOperandTokenId( nTokenId );
-    //Bubli's row limit
     Append( static_cast<sal_uInt16>(rXclPos.mnRow) );
     Append( rXclPos.mnCol );    // do not use AppendAddress(), we always need 16-bit column here
     return CreateTokenArray();
@@ -1850,8 +1849,8 @@ void XclExpFmlaCompImpl::ConvertRefData(
     }
     else
     {
-        //FIXME <=EXC_BIFF5
-        sal_uInt16& rnRelField = rXclPos.mnCol;
+        sal_uInt16 rnRelRow = rXclPos.mnRow;
+        sal_uInt16& rnRelField = (meBiff <= EXC_BIFF5) ? rnRelRow : rXclPos.mnCol;
         ::set_flag( rnRelField, EXC_TOK_REF_COLREL, rRefData.IsColRel() );
         ::set_flag( rnRelField, EXC_TOK_REF_ROWREL, rRefData.IsRowRel() );
     }
@@ -2236,7 +2235,6 @@ void XclExpFmlaCompImpl::Append( const String& rString )
 
 void XclExpFmlaCompImpl::AppendAddress( const XclAddress& rXclPos )
 {
-    //Bubli's row limit
     Append( static_cast<sal_uInt16>(rXclPos.mnRow) );
     if( meBiff <= EXC_BIFF5 )
         Append( static_cast< sal_uInt8 >( rXclPos.mnCol ) );
@@ -2246,7 +2244,6 @@ void XclExpFmlaCompImpl::AppendAddress( const XclAddress& rXclPos )
 
 void XclExpFmlaCompImpl::AppendRange( const XclRange& rXclRange )
 {
-    //Bubli's row limit
     Append( static_cast<sal_uInt16>(rXclRange.maFirst.mnRow) );
     Append( static_cast<sal_uInt16>(rXclRange.maLast.mnRow) );
     if( meBiff <= EXC_BIFF5 )

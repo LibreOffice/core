@@ -37,8 +37,6 @@
 
 void XclAddress::Read( XclImpStream& rStrm, bool bCol16Bit )
 {
-    //Bubli's row limit ... uff ???
-    //rStrm >> mnRow;
     mnRow = rStrm.ReaduInt16();
     if( bCol16Bit )
         rStrm >> mnCol;
@@ -48,7 +46,6 @@ void XclAddress::Read( XclImpStream& rStrm, bool bCol16Bit )
 
 void XclAddress::Write( XclExpStream& rStrm, bool bCol16Bit ) const
 {
-    //Bubli's row limit
     rStrm << static_cast<sal_uInt16> (mnRow);
     if( bCol16Bit )
         rStrm << mnCol;
@@ -66,8 +63,6 @@ bool XclRange::Contains( const XclAddress& rPos ) const
 
 void XclRange::Read( XclImpStream& rStrm, bool bCol16Bit )
 {
-    //Bubli's row limit
-    //rStrm >> maFirst.mnRow >> maLast.mnRow;
     maFirst.mnRow = rStrm.ReaduInt16();
     maLast.mnRow = rStrm.ReaduInt16();
 
@@ -82,7 +77,6 @@ void XclRange::Read( XclImpStream& rStrm, bool bCol16Bit )
 
 void XclRange::Write( XclExpStream& rStrm, bool bCol16Bit ) const
 {
-    //Bubli's row limit
     rStrm << static_cast<sal_uInt16>(maFirst.mnRow) << static_cast<sal_uInt16>(maLast.mnRow);
     if( bCol16Bit )
         rStrm << maFirst.mnCol << maLast.mnCol;

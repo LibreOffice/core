@@ -566,7 +566,6 @@ void XclExpSingleCellBase::Save( XclExpStream& rStrm )
 
 void XclExpSingleCellBase::WriteBody( XclExpStream& rStrm )
 {
-    //Bubli's row limit
     rStrm << static_cast<sal_uInt16> (GetXclRow()) << GetXclCol() << maXFId.mnXFIndex;
     WriteContents( rStrm );
 }
@@ -1054,7 +1053,6 @@ void XclExpMultiCellBase::Save( XclExpStream& rStrm )
             if( bIsMulti ) nTotalSize += 2;
 
             rStrm.StartRecord( bIsMulti ? mnMulRecId : GetRecId(), nTotalSize );
-            //Bubli's row limit
             rStrm << static_cast<sal_uInt16> (GetXclRow()) << nBegXclCol;
 
             sal_uInt16 nRelCol = nBegXclCol - GetXclCol();
