@@ -200,7 +200,7 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
         //---------------------------------------
         /** @short  TODO
          */
-        virtual void operator=(const StorageHolder& rCopy);
+        void operator=(const StorageHolder& rCopy);
 
         //---------------------------------------
         /** @short  opens a sub element of the specified base storage.

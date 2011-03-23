@@ -128,7 +128,7 @@ class AcceleratorCache : public ThreadHelpBase // attention! Must be the first b
 
         //---------------------------------------
         /** TODO document me */
-        virtual AcceleratorCache& operator=(const AcceleratorCache& rCopy);
+        AcceleratorCache& operator=(const AcceleratorCache& rCopy);
 
         //---------------------------------------
         /** @short  checks if the specified key exists.
