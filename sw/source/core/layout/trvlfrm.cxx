@@ -162,63 +162,63 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         aPoint.Y() = Min( aPoint.Y(), Frm().Bottom() );
     }
 
-    //Koennte ein Freifliegender gemeint sein?
-    //Wenn sein Inhalt geschuetzt werden soll, so ist nix mit Crsr
-    //hineinsetzen, dadurch sollten alle Aenderungen unmoeglich sein.
-    if ( GetSortedObjs() )
+    //Wenn kein Cntnt unterhalb der Seite 'antwortet', so korrigieren
+    //wir den StartPoint und fangen nochmal eine Seite vor der
+    //aktuellen an. Mit Flys ist es dann allerdings vorbei.
+    if ( SwLayoutFrm::GetCrsrOfst( pPos, aPoint, pCMS ) )
+        bRet = sal_True;
+    else
     {
-        SwOrderIter aIter( this );
-        aIter.Top();
-        while ( aIter() )
+        if ( pCMS && (pCMS->bStop || pCMS->bExactOnly) )
         {
-            const SwVirtFlyDrawObj* pObj =
-                                static_cast<const SwVirtFlyDrawObj*>(aIter());
-            const SwFlyFrm* pFly = pObj ? pObj->GetFlyFrm() : 0;
-            if ( pFly &&
-                 ( ( pCMS ? pCMS->bSetInReadOnly : sal_False ) ||
-                   !pFly->IsProtected() ) &&
-                 pFly->GetCrsrOfst( pPos, aPoint, pCMS ) )
-            {
-                bRet = sal_True;
-                break;
-            }
+            ((SwCrsrMoveState*)pCMS)->bStop = sal_True;
+            return sal_False;
+        }
+        const SwCntntFrm *pCnt = GetCntntPos( aPoint, sal_False, sal_False, sal_False, pCMS, sal_False );
+        if ( pCMS && pCMS->bStop )
+            return sal_False;
 
-            if ( pCMS && pCMS->bStop )
-                return sal_False;
-            aIter.Prev();
+        OSL_ENSURE( pCnt, "Crsr is gone to a Black hole" );
+        if( pCMS && pCMS->pFill && pCnt->IsTxtFrm() )
+            bRet = pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
+        else
+            bRet = pCnt->GetCrsrOfst( pPos, aPoint, pCMS );
+
+        if ( !bRet )
+        {
+            // Set point to pCnt, delete mark
+            // this may happen, if pCnt is hidden
+            *pPos = SwPosition( *pCnt->GetNode(), SwIndex( (SwTxtNode*)pCnt->GetNode(), 0 ) );
+            bRet = sal_True;
         }
     }
 
     if ( !bRet )
     {
-        //Wenn kein Cntnt unterhalb der Seite 'antwortet', so korrigieren
-        //wir den StartPoint und fangen nochmal eine Seite vor der
-        //aktuellen an. Mit Flys ist es dann allerdings vorbei.
-        if ( SwLayoutFrm::GetCrsrOfst( pPos, aPoint, pCMS ) )
-            bRet = sal_True;
-        else
+        //Koennte ein Freifliegender gemeint sein?
+        //Wenn sein Inhalt geschuetzt werden soll, so ist nix mit Crsr
+        //hineinsetzen, dadurch sollten alle Aenderungen unmoeglich sein.
+        if ( GetSortedObjs() )
         {
-            if ( pCMS && (pCMS->bStop || pCMS->bExactOnly) )
+            SwOrderIter aIter( this );
+            aIter.Top();
+            while ( aIter() )
             {
-                ((SwCrsrMoveState*)pCMS)->bStop = sal_True;
-                return sal_False;
-            }
-            const SwCntntFrm *pCnt = GetCntntPos( aPoint, sal_False, sal_False, sal_False, pCMS, sal_False );
-            if ( pCMS && pCMS->bStop )
-                return sal_False;
+                const SwVirtFlyDrawObj* pObj =
+                                    static_cast<const SwVirtFlyDrawObj*>(aIter());
+                const SwFlyFrm* pFly = pObj ? pObj->GetFlyFrm() : 0;
+                if ( pFly &&
+                     ( ( pCMS ? pCMS->bSetInReadOnly : sal_False ) ||
+                       !pFly->IsProtected() ) &&
+                     pFly->GetCrsrOfst( pPos, aPoint, pCMS ) )
+                {
+                    bRet = sal_True;
+                    break;
+                }
 
-            OSL_ENSURE( pCnt, "Crsr is gone to a Black hole" );
-            if( pCMS && pCMS->pFill && pCnt->IsTxtFrm() )
-                bRet = pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
-            else
-                bRet = pCnt->GetCrsrOfst( pPos, aPoint, pCMS );
-
-            if ( !bRet )
-            {
-                // Set point to pCnt, delete mark
-                // this may happen, if pCnt is hidden
-                *pPos = SwPosition( *pCnt->GetNode(), SwIndex( (SwTxtNode*)pCnt->GetNode(), 0 ) );
-                bRet = sal_True;
+                if ( pCMS && pCMS->bStop )
+                    return sal_False;
+                aIter.Prev();
             }
         }
     }
