@@ -455,15 +455,20 @@ css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL SEInitializer_N
 {
     SECOidTag nNSSDigestID = SEC_OID_UNKNOWN;
     sal_Int32 nDigestLength = 0;
-    if ( nDigestID == css::xml::crypto::DigestID::SHA256 )
+    bool b1KData = false;
+    if ( nDigestID == css::xml::crypto::DigestID::SHA256
+      || nDigestID == css::xml::crypto::DigestID::SHA256_1K )
     {
         nNSSDigestID = SEC_OID_SHA256;
         nDigestLength = 32;
+        b1KData = ( nDigestID == css::xml::crypto::DigestID::SHA256_1K );
     }
-    else if ( nDigestID != css::xml::crypto::DigestID::SHA1 )
+    else if ( nDigestID == css::xml::crypto::DigestID::SHA1
+           || nDigestID == css::xml::crypto::DigestID::SHA1_1K )
     {
         nNSSDigestID = SEC_OID_SHA1;
-        nDigestLength = 16;
+        nDigestLength = 20;
+        b1KData = ( nDigestID == css::xml::crypto::DigestID::SHA1_1K );
     }
     else
         throw css::lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected digest requested." ) ), css::uno::Reference< css::uno::XInterface >(), 1 );
@@ -476,7 +481,7 @@ css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL SEInitializer_N
     {
         PK11Context* pContext = PK11_CreateDigestContext( nNSSDigestID );
         if ( pContext && PK11_DigestBegin( pContext ) == SECSuccess )
-            xResult = new ODigestContext( pContext, nDigestLength );
+            xResult = new ODigestContext( pContext, nDigestLength, b1KData );
     }
 
     return xResult;

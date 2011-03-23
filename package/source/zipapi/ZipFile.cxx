@@ -415,6 +415,21 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::R
     return new XUnbufferedStream( xFactory, xStream, rData );
 }
 
+#if 0
+// for debugging purposes
+void CheckSequence( const uno::Sequence< sal_Int8 >& aSequence )
+{
+    if ( aSequence.getLength() )
+    {
+        sal_Int32* pPointer = *( (sal_Int32**)&aSequence );
+        sal_Int32 nSize = *( pPointer + 1 );
+        sal_Int32 nMemSize = *( pPointer - 2 );
+        sal_Int32 nUsedMemSize = ( nSize + 4 * sizeof( sal_Int32 ) );
+        OSL_ENSURE( nSize == aSequence.getLength() && nUsedMemSize + 7 - ( nUsedMemSize - 1 ) % 8 == nMemSize, "Broken Sequence!" );
+    }
+}
+#endif
+
 sal_Bool ZipFile::StaticHasValidPassword( const uno::Reference< lang::XMultiServiceFactory >& xFactory, const Sequence< sal_Int8 > &aReadBuffer, const ::rtl::Reference< EncryptionData > &rData )
 {
     if ( !rData.is() || !rData->m_aKey.getLength() )
@@ -435,7 +450,6 @@ sal_Bool ZipFile::StaticHasValidPassword( const uno::Reference< lang::XMultiServ
     {
         // decryption with padding will throw the exception in finalizing if the buffer represent only part of the stream
         // it is no problem, actually this is why we read 32 additional bytes ( two of maximal possible encryption blocks )
-        OSL_ENSURE( aReadBuffer.getLength() == n_ConstDigestDecrypt, "Unexpected exception by decryption!" );
     }
 
     if ( aDecryptBuffer2.getLength() )

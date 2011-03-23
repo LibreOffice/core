@@ -52,12 +52,21 @@ void SAL_CALL ODigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >& a
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-    if ( PK11_DigestOp( m_pContext, reinterpret_cast< const unsigned char* >( aData.getConstArray() ), aData.getLength() ) != SECSuccess )
+    if ( !m_b1KData || m_nDigested < 1024 )
     {
-        PK11_DestroyContext( m_pContext, PR_TRUE );
-        m_pContext = NULL;
-        m_bBroken = true;
-        throw uno::RuntimeException();
+        uno::Sequence< sal_Int8 > aToDigest = aData;
+        if ( m_b1KData && m_nDigested + aData.getLength() > 1024 )
+            aToDigest.realloc( 1024 - m_nDigested );
+
+        if ( PK11_DigestOp( m_pContext, reinterpret_cast< const unsigned char* >( aToDigest.getConstArray() ), aToDigest.getLength() ) != SECSuccess )
+        {
+            PK11_DestroyContext( m_pContext, PR_TRUE );
+            m_pContext = NULL;
+            m_bBroken = true;
+            throw uno::RuntimeException();
+        }
+
+        m_nDigested += aToDigest.getLength();
     }
 }
 

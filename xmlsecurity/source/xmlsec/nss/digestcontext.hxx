@@ -40,13 +40,18 @@ private:
 
     PK11Context* m_pContext;
     sal_Int32 m_nDigestLength;
+    bool m_b1KData;
+    sal_Int32 m_nDigested;
+
     bool m_bDisposed;
     bool m_bBroken;
 
 public:
-    ODigestContext( PK11Context* pContext, sal_Int32 nDigestLength )
+    ODigestContext( PK11Context* pContext, sal_Int32 nDigestLength, bool b1KData )
     : m_pContext( pContext )
     , m_nDigestLength( nDigestLength )
+    , m_b1KData( b1KData )
+    , m_nDigested( 0 )
     , m_bDisposed( false )
     , m_bBroken( false )
     {}
