@@ -319,4 +319,22 @@
     <service name="com.sun.star.awt.Toolkit"/>
     <service name="stardiv.vcl.VclToolkit"/>
   </implementation>
+  <implementation name="stardiv.Toolkit.UnoMultiPageModel">
+    <service name="com.sun.star.awt.UnoMultiPageModel"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoMultiPageControl">
+    <service name="com.sun.star.awt.UnoControlMultiPage"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoPageModel">
+    <service name="com.sun.star.awt.UnoPageModel"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoPageControl">
+    <service name="com.sun.star.awt.UnoControlPage"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoFrameModel">
+    <service name="com.sun.star.awt.UnoFrameModel"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoFrameControl">
+    <service name="com.sun.star.awt.UnoControlFrame"/>
+  </implementation>
 </component>

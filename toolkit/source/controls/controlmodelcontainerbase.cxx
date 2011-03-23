@@ -74,6 +74,7 @@
 #include <functional>
 #include "tools/urlobj.hxx"
 #include "osl/file.hxx"
+#include "toolkit/controls/dialogcontrol.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -391,6 +392,12 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const ::rtl::
         pNewModel = new OGeometryControlModel< UnoGridModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoControlTabPageContainerModel ) == 0 )
         pNewModel = new OGeometryControlModel< UnoControlTabPageContainerModel >( xFactory );
+    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoMultiPageModel ) == 0 )
+        pNewModel = new OGeometryControlModel< UnoMultiPageModel >( xFactory );
+    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoPageModel ) == 0 )
+        pNewModel = new OGeometryControlModel< UnoPageModel >( xFactory );
+    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoFrameModel ) == 0 )
+        pNewModel = new OGeometryControlModel< UnoFrameModel >( xFactory );
 
     if ( !pNewModel )
     {
@@ -429,7 +436,7 @@ Sequence< ::rtl::OUString > ControlModelContainerBase::getAvailableServiceNames(
     static Sequence< ::rtl::OUString >* pNamesSeq = NULL;
     if ( !pNamesSeq )
     {
-        pNamesSeq = new Sequence< ::rtl::OUString >( 23 );
+        pNamesSeq = new Sequence< ::rtl::OUString >( 25 );
         ::rtl::OUString* pNames = pNamesSeq->getArray();
         pNames[0] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel );
         pNames[1] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel );
@@ -455,6 +462,8 @@ Sequence< ::rtl::OUString > ControlModelContainerBase::getAvailableServiceNames(
         pNames[21] = ::rtl::OUString::createFromAscii( szServiceName_GridControlModel );
         pNames[22] = ::rtl::OUString::createFromAscii( szServiceName_UnoControlTabPageContainerModel );
 
+        pNames[23] = ::rtl::OUString::createFromAscii( szServiceName_UnoMultiPageModel );
+        pNames[24] = ::rtl::OUString::createFromAscii( szServiceName_UnoFrameModel );
     }
     return *pNamesSeq;
 }

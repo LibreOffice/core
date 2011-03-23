@@ -60,6 +60,9 @@
 #include "tools/urlobj.hxx"
 #include "osl/file.hxx"
 
+#include <vcl/tabctrl.hxx>
+#include <toolkit/awt/vclxwindows.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -574,4 +577,561 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
         }
     }
     ControlContainerBase::ImplModelPropertiesChanged(rEvents);
+}
+
+//  ----------------------------------------------------
+//  class MultiPageControl
+//  ----------------------------------------------------
+UnoMultiPageControl::UnoMultiPageControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory) : ControlContainerBase( i_factory ), maTabListeners( *this )
+{
+    maComponentInfos.nWidth = 280;
+    maComponentInfos.nHeight = 400;
+}
+
+UnoMultiPageControl::~UnoMultiPageControl()
+{
+}
+// XTabListener
+
+void SAL_CALL UnoMultiPageControl::inserted( ::sal_Int32 /*ID*/ ) throw (RuntimeException)
+{
+}
+void SAL_CALL UnoMultiPageControl::removed( ::sal_Int32 /*ID*/ ) throw (RuntimeException)
+{
+}
+void SAL_CALL UnoMultiPageControl::changed( ::sal_Int32 /*ID*/, const Sequence< NamedValue >& /*Properties*/ ) throw (RuntimeException)
+{
+}
+void SAL_CALL UnoMultiPageControl::activated( ::sal_Int32 ID ) throw (RuntimeException)
+{
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::makeAny( ID ), sal_False );
+
+}
+void SAL_CALL UnoMultiPageControl::deactivated( ::sal_Int32 /*ID*/ ) throw (RuntimeException)
+{
+}
+void SAL_CALL UnoMultiPageControl::disposing(const EventObject&) throw (RuntimeException)
+{
+}
+
+void SAL_CALL UnoMultiPageControl::dispose() throw (RuntimeException)
+{
+    lang::EventObject aEvt;
+    aEvt.Source = (::cppu::OWeakObject*)this;
+    maTabListeners.disposeAndClear( aEvt );
+    ControlContainerBase::dispose();
+}
+
+// com::sun::star::awt::XSimpleTabController
+::sal_Int32 SAL_CALL UnoMultiPageControl::insertTab() throw (RuntimeException)
+{
+    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY );
+    if ( !xMultiPage.is() )
+        throw RuntimeException();
+    return xMultiPage->insertTab();
+}
+
+void SAL_CALL UnoMultiPageControl::removeTab( ::sal_Int32 ID ) throw (IndexOutOfBoundsException, RuntimeException)
+{
+    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY );
+    if ( !xMultiPage.is() )
+        throw RuntimeException();
+    xMultiPage->removeTab( ID );
+}
+
+void SAL_CALL UnoMultiPageControl::setTabProps( ::sal_Int32 ID, const Sequence< NamedValue >& Properties ) throw (IndexOutOfBoundsException, RuntimeException)
+{
+    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY );
+    if ( !xMultiPage.is() )
+        throw RuntimeException();
+    xMultiPage->setTabProps( ID, Properties );
+}
+
+Sequence< NamedValue > SAL_CALL UnoMultiPageControl::getTabProps( ::sal_Int32 ID ) throw (IndexOutOfBoundsException, RuntimeException)
+{
+    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY );
+    if ( !xMultiPage.is() )
+        throw RuntimeException();
+    return xMultiPage->getTabProps( ID );
+}
+
+void SAL_CALL UnoMultiPageControl::activateTab( ::sal_Int32 ID ) throw (IndexOutOfBoundsException, RuntimeException)
+{
+    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY );
+    if ( !xMultiPage.is() )
+        throw RuntimeException();
+    xMultiPage->activateTab( ID );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::makeAny( ID ), sal_True );
+
+}
+
+::sal_Int32 SAL_CALL UnoMultiPageControl::getActiveTabID() throw (RuntimeException)
+{
+    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY );
+    if ( !xMultiPage.is() )
+        throw RuntimeException();
+    return xMultiPage->getActiveTabID();
+}
+
+void SAL_CALL UnoMultiPageControl::addTabListener( const Reference< XTabListener >& Listener ) throw (RuntimeException)
+{
+    maTabListeners.addInterface( Listener );
+    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY );
+    if ( xMultiPage.is()  && maTabListeners.getLength() == 1 )
+        xMultiPage->addTabListener( &maTabListeners );
+}
+
+void SAL_CALL UnoMultiPageControl::removeTabListener( const Reference< XTabListener >& Listener ) throw (RuntimeException)
+{
+    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY );
+    if ( xMultiPage.is()  && maTabListeners.getLength() == 1 )
+        xMultiPage->removeTabListener( &maTabListeners );
+    maTabListeners.removeInterface( Listener );
+}
+
+
+// lang::XTypeProvider
+IMPL_XTYPEPROVIDER_START( UnoMultiPageControl )
+    getCppuType( ( uno::Reference< awt::XSimpleTabController>* ) NULL ),
+    getCppuType( ( uno::Reference< awt::XTabListener>* ) NULL ),
+    ControlContainerBase::getTypes()
+IMPL_XTYPEPROVIDER_END
+
+// uno::XInterface
+uno::Any UnoMultiPageControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( awt::XTabListener*, this ), SAL_STATIC_CAST( awt::XSimpleTabController*, this ) );
+    return (aRet.hasValue() ? aRet : ControlContainerBase::queryAggregation( rType ));
+}
+
+::rtl::OUString UnoMultiPageControl::GetComponentServiceName()
+{
+    sal_Bool bDecoration( sal_True );
+    ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
+    if ( bDecoration )
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tabcontrol"));
+    // Hopefully we can tweak the tabcontrol to display without tabs
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tabcontrolnotabs"));
+}
+
+void UnoMultiPageControl::bindPage( const uno::Reference< awt::XControl >& _rxControl )
+{
+    uno::Reference< awt::XWindowPeer > xPage( _rxControl->getPeer() );
+    uno::Reference< awt::XSimpleTabController > xTabCntrl( getPeer(), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xProps( _rxControl->getModel(), uno::UNO_QUERY );
+
+   VCLXTabPage* pXPage = dynamic_cast< VCLXTabPage* >( xPage.get() );
+   TabPage* pPage = pXPage ? pXPage->getTabPage() : NULL;
+    if ( xTabCntrl.is() && pPage )
+    {
+        VCLXMultiPage* pXTab = dynamic_cast< VCLXMultiPage* >( xTabCntrl.get() );
+        if ( pXTab )
+        {
+            rtl::OUString sTitle;
+            xProps->getPropertyValue( GetPropertyName( BASEPROPERTY_TITLE ) ) >>= sTitle;
+            pXTab->insertTab( pPage, sTitle);
+        }
+    }
+
+}
+
+void UnoMultiPageControl::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException)
+{
+    SolarMutexGuard aSolarGuard;
+
+    UnoControlContainer::createPeer( rxToolkit, rParentPeer );
+
+    uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
+    sal_uInt32 nCtrls = aCtrls.getLength();
+    for( sal_uInt32 n = 0; n < nCtrls; n++ )
+       bindPage( aCtrls[ n ] );
+    sal_Int32 nActiveTab(0);
+    Reference< XPropertySet > xMultiProps( getModel(), UNO_QUERY );
+    xMultiProps->getPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ) ) >>= nActiveTab;
+
+    uno::Reference< awt::XSimpleTabController > xTabCntrl( getPeer(), uno::UNO_QUERY );
+    if ( xTabCntrl.is() )
+    {
+        xTabCntrl->addTabListener( this );
+        if ( nActiveTab && nCtrls ) // Ensure peer is initialise with correct activated tab
+        {
+            xTabCntrl->activateTab( nActiveTab );
+            ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::makeAny( nActiveTab ), sal_True );
+        }
+    }
+}
+
+void    UnoMultiPageControl::impl_createControlPeerIfNecessary( const uno::Reference< awt::XControl >& _rxControl)
+{
+    OSL_PRECOND( _rxControl.is(), "UnoMultiPageControl::impl_createControlPeerIfNecessary: invalid control, this will crash!" );
+
+    // if the container already has a peer, then also create a peer for the control
+    uno::Reference< awt::XWindowPeer > xMyPeer( getPeer() );
+
+    if( xMyPeer.is() )
+    {
+        _rxControl->createPeer( NULL, xMyPeer );
+        bindPage( _rxControl );
+        ImplActivateTabControllers();
+    }
+
+}
+
+// ------------- UnoMultiPageModel -----------------
+
+UnoMultiPageModel::UnoMultiPageModel( const Reference< XMultiServiceFactory >& i_factory ) : ControlModelContainerBase( i_factory )
+{
+    ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
+    ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
+    ImplRegisterProperty( BASEPROPERTY_ENABLEVISIBLE );
+    ImplRegisterProperty( BASEPROPERTY_ENABLED );
+
+    ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
+    ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
+    ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_SIZEABLE );
+    //ImplRegisterProperty( BASEPROPERTY_DIALOGSOURCEURL );
+    ImplRegisterProperty( BASEPROPERTY_MULTIPAGEVALUE );
+    ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
+    ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES );
+
+    Any aBool;
+    aBool <<= (sal_Bool) sal_True;
+    ImplRegisterProperty( BASEPROPERTY_MOVEABLE, aBool );
+    ImplRegisterProperty( BASEPROPERTY_CLOSEABLE, aBool );
+    ImplRegisterProperty( BASEPROPERTY_DECORATION, aBool );
+    // MultiPage Control has the tab stop property. And the default value is True.
+    ImplRegisterProperty( BASEPROPERTY_TABSTOP, aBool );
+
+    uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >();
+    ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
+}
+
+UnoMultiPageModel::UnoMultiPageModel( const UnoMultiPageModel& rModel )
+    : ControlModelContainerBase( rModel )
+{
+}
+
+UnoMultiPageModel::~UnoMultiPageModel()
+{
+}
+
+UnoControlModel*
+UnoMultiPageModel::Clone() const
+{
+    // clone the container itself
+    UnoMultiPageModel* pClone = new UnoMultiPageModel( *this );
+    Clone_Impl( *pClone );
+    return pClone;
+}
+
+::rtl::OUString UnoMultiPageModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::rtl::OUString::createFromAscii( szServiceName_UnoMultiPageModel );
+}
+
+uno::Any UnoMultiPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+{
+    if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
+    {
+        uno::Any aAny;
+        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoMultiPageControl );
+        return aAny;
+    }
+    return ControlModelContainerBase::ImplGetDefaultValue( nPropId );
+}
+
+::cppu::IPropertyArrayHelper& UnoMultiPageModel::getInfoHelper()
+{
+    static UnoPropertyArrayHelper* pHelper = NULL;
+    if ( !pHelper )
+    {
+        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        pHelper = new UnoPropertyArrayHelper( aIDs );
+    }
+    return *pHelper;
+}
+
+// beans::XMultiPropertySet
+uno::Reference< beans::XPropertySetInfo > UnoMultiPageModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
+{
+    static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+
+void UnoMultiPageModel::insertByName( const ::rtl::OUString& aName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+{
+    Reference< XServiceInfo > xInfo;
+    aElement >>= xInfo;
+
+    if ( !xInfo.is() )
+        throw IllegalArgumentException();
+
+    // Only a Page model can be inserted into the multipage
+    if ( !xInfo->supportsService( rtl::OUString::createFromAscii( szServiceName_UnoPageModel ) ) )
+        throw IllegalArgumentException();
+
+    return ControlModelContainerBase::insertByName( aName, aElement );
+}
+
+// ----------------------------------------------------------------------------
+sal_Bool SAL_CALL UnoMultiPageModel::getGroupControl(  ) throw (RuntimeException)
+{
+    return sal_True;
+}
+
+//  ----------------------------------------------------
+//  class UnoPageControl
+//  ----------------------------------------------------
+UnoPageControl::UnoPageControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory ) : ControlContainerBase( i_factory )
+{
+    maComponentInfos.nWidth = 280;
+    maComponentInfos.nHeight = 400;
+}
+
+UnoPageControl::~UnoPageControl()
+{
+}
+
+::rtl::OUString UnoPageControl::GetComponentServiceName()
+{
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tabpage"));
+}
+
+
+// ------------- UnoPageModel -----------------
+
+UnoPageModel::UnoPageModel( const Reference< XMultiServiceFactory >& i_factory ) : ControlModelContainerBase( i_factory )
+{
+    ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
+    ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
+    ImplRegisterProperty( BASEPROPERTY_ENABLED );
+    ImplRegisterProperty( BASEPROPERTY_ENABLEVISIBLE );
+
+    ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
+    ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
+    ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_TITLE );
+    ImplRegisterProperty( BASEPROPERTY_SIZEABLE );
+    ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
+    ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES );
+//    ImplRegisterProperty( BASEPROPERTY_DIALOGSOURCEURL );
+
+    Any aBool;
+    aBool <<= (sal_Bool) sal_True;
+    ImplRegisterProperty( BASEPROPERTY_MOVEABLE, aBool );
+    ImplRegisterProperty( BASEPROPERTY_CLOSEABLE, aBool );
+    //ImplRegisterProperty( BASEPROPERTY_TABSTOP, aBool );
+
+    uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >();
+    ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
+}
+
+UnoPageModel::UnoPageModel( const UnoPageModel& rModel )
+    : ControlModelContainerBase( rModel )
+{
+}
+
+UnoPageModel::~UnoPageModel()
+{
+}
+
+UnoControlModel*
+UnoPageModel::Clone() const
+{
+    // clone the container itself
+    UnoPageModel* pClone = new UnoPageModel( *this );
+    Clone_Impl( *pClone );
+    return pClone;
+}
+
+::rtl::OUString UnoPageModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::rtl::OUString::createFromAscii( szServiceName_UnoPageModel );
+}
+
+uno::Any UnoPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+{
+    if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
+    {
+        uno::Any aAny;
+        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoPageControl );
+        return aAny;
+    }
+    return ControlModelContainerBase::ImplGetDefaultValue( nPropId );
+}
+
+::cppu::IPropertyArrayHelper& UnoPageModel::getInfoHelper()
+{
+    static UnoPropertyArrayHelper* pHelper = NULL;
+    if ( !pHelper )
+    {
+        uno::Sequence<sal_Int32>  aIDs = ImplGetPropertyIds();
+        pHelper = new UnoPropertyArrayHelper( aIDs );
+    }
+    return *pHelper;
+}
+
+// beans::XMultiPropertySet
+uno::Reference< beans::XPropertySetInfo > UnoPageModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
+{
+    static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+
+// ----------------------------------------------------------------------------
+sal_Bool SAL_CALL UnoPageModel::getGroupControl(  ) throw (RuntimeException)
+{
+    return sal_False;
+}
+
+// Frame control
+
+//  ----------------------------------------------------
+//  class UnoFrameControl
+//  ----------------------------------------------------
+UnoFrameControl::UnoFrameControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory ) : ControlContainerBase( i_factory )
+{
+    maComponentInfos.nWidth = 280;
+    maComponentInfos.nHeight = 400;
+}
+
+UnoFrameControl::~UnoFrameControl()
+{
+}
+
+::rtl::OUString UnoFrameControl::GetComponentServiceName()
+{
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("frame"));
+}
+
+void UnoFrameControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
+{
+    bool bOwnCtrl = false;
+    rtl::OUString sTitle;
+    if ( rxCtrl.get() == Reference<XControl>( this ).get() )
+        bOwnCtrl = true;
+    Reference< XPropertySet > xProps( getModel(), UNO_QUERY );
+    //xProps->getPropertyValue( GetPropertyName( BASEPROPERTY_TITLE ) ) >>= sTitle;
+    xProps->getPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ) ) >>= sTitle;
+
+    ControlContainerBase::ImplSetPosSize( rxCtrl );
+    Reference < XWindow > xW( rxCtrl, UNO_QUERY );
+    if ( !bOwnCtrl && xW.is() && sTitle.getLength() )
+    {
+        awt::Rectangle aSizePos = xW->getPosSize();
+
+        sal_Int32 nX = aSizePos.X, nY = aSizePos.Y, nWidth = aSizePos.Width, nHeight = aSizePos.Height;
+        // Retrieve the values set by the base class
+        OutputDevice*pOutDev = Application::GetDefaultDevice();
+        if ( pOutDev )
+        {
+            if ( !bOwnCtrl && sTitle.getLength() )
+            {
+                // Adjust Y based on height of Title
+                ::Rectangle aRect = pOutDev->GetTextRect( aRect, sTitle );
+                nY = nY + ( aRect.GetHeight() / 2 );
+            }
+        }
+        else
+        {
+            Reference< XWindowPeer > xPeer = ImplGetCompatiblePeer( sal_True );
+            Reference< XDevice > xD( xPeer, UNO_QUERY );
+
+            SimpleFontMetric aFM;
+            FontDescriptor aFD;
+            Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_FONTDESCRIPTOR ) );
+            aVal >>= aFD;
+            if ( aFD.StyleName.getLength() )
+            {
+                Reference< XFont > xFont = xD->getFont( aFD );
+                aFM = xFont->getFontMetric();
+            }
+            else
+            {
+                Reference< XGraphics > xG = xD->createGraphics();
+                aFM = xG->getFontMetric();
+            }
+
+            sal_Int16 nH = aFM.Ascent + aFM.Descent;
+            if ( !bOwnCtrl && sTitle.getLength() )
+                // offset y based on height of font ( not sure if my guess at the correct calculation is correct here )
+                nY = nY + ( nH / 8); // how do I test this
+        }
+        xW->setPosSize( nX, nY, nWidth, nHeight, PosSize::POSSIZE );
+    }
+}
+
+// ------------- UnoFrameModel -----------------
+
+UnoFrameModel::UnoFrameModel(  const Reference< XMultiServiceFactory >& i_factory ) : ControlModelContainerBase( i_factory )
+{
+    ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
+    ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
+    ImplRegisterProperty( BASEPROPERTY_ENABLED );
+    ImplRegisterProperty( BASEPROPERTY_ENABLEVISIBLE );
+    ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
+    ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
+    ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
+    ImplRegisterProperty( BASEPROPERTY_LABEL );
+    ImplRegisterProperty( BASEPROPERTY_WRITING_MODE );
+    ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
+    ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES );
+
+    uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >();
+    ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
+}
+
+UnoFrameModel::UnoFrameModel( const UnoFrameModel& rModel )
+    : ControlModelContainerBase( rModel )
+{
+}
+
+UnoFrameModel::~UnoFrameModel()
+{
+}
+
+UnoControlModel*
+UnoFrameModel::Clone() const
+{
+    // clone the container itself
+    UnoFrameModel* pClone = new UnoFrameModel( *this );
+    Clone_Impl( *pClone );
+    return pClone;
+}
+
+::rtl::OUString UnoFrameModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::rtl::OUString::createFromAscii( szServiceName_UnoFrameModel );
+}
+
+uno::Any UnoFrameModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+{
+    if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
+    {
+        uno::Any aAny;
+        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoFrameControl );
+        return aAny;
+    }
+    return ControlModelContainerBase::ImplGetDefaultValue( nPropId );
+}
+
+::cppu::IPropertyArrayHelper& UnoFrameModel::getInfoHelper()
+{
+    static UnoPropertyArrayHelper* pHelper = NULL;
+    if ( !pHelper )
+    {
+        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        pHelper = new UnoPropertyArrayHelper( aIDs );
+    }
+    return *pHelper;
+}
+
+// beans::XMultiPropertySet
+uno::Reference< beans::XPropertySetInfo > UnoFrameModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
+{
+    static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
 }
