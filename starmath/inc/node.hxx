@@ -329,7 +329,7 @@ public:
             void SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThird = NULL);
             void SetSubNodes(const SmNodeArray &rNodeArray);
 
-    virtual SmStructureNode & operator = ( const SmStructureNode &rNode );
+    SmStructureNode & operator = ( const SmStructureNode &rNode );
 
     virtual void  GetAccessibleText( String &rText ) const;
 
