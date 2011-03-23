@@ -514,11 +514,15 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
             // #i115131# double check results and eventually ignore them
             eOutRes = FcPatternGetBool( pBetterPattern, FC_OUTLINE, 0, &bOutline );
             if( (eOutRes != FcResultMatch) || (bOutline == FcFalse) )
+            {
+                FcPatternDestroy( pBetterPattern );
                 continue;
+            }
         }
+        else
+            FcPatternReference( pBetterPattern );
         // insert best found pattern for the dupe-search pattern
         // TODO: skip inserting patterns that are already known in the target fontset
-        FcPatternReference( pBetterPattern );
         FcFontSetAdd( m_pOutlineSet, pBetterPattern );
     }
 
@@ -535,7 +539,7 @@ FcFontSet* FontCfgWrapper::getFontSet()
     {
         m_pOutlineSet = FcFontSetCreate();
         addFontSet( FcSetSystem );
-    if( m_nFcVersion > 20400 ) // #i85462# prevent crashes
+        if( m_nFcVersion > 20400 ) // #i85462# prevent crashes
             addFontSet( FcSetApplication );
     }
     #endif
