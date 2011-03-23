@@ -273,6 +273,10 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     if ( pHitOutlinerPool )
          pHitOutlinerPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));    // 12Pt
 
+    // initial undo mode as in Calc document
+    if( pDoc )
+        EnableUndo( pDoc->IsUndoEnabled() );
+
     //  URL-Buttons haben keinen Handler mehr, machen alles selber
 
     if( !nInst++ )

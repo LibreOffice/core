@@ -5669,7 +5669,10 @@ void ScDocument::EnableUndo( bool bVal )
     // the lock count becomes zero.
 
     if (bVal != GetUndoManager()->IsUndoEnabled())
+    {
         GetUndoManager()->EnableUndo(bVal);
+        if( pDrawLayer ) pDrawLayer->EnableUndo(bVal);
+    }
 
     mbUndoEnabled = bVal;
 }
