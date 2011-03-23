@@ -75,6 +75,10 @@ const SCCOL EXC_MAXCOL8                     = EXC_MAXCOL5;
 const SCROW EXC_MAXROW8                     = 65535;
 const SCTAB EXC_MAXTAB8                     = EXC_MAXTAB5;
 
+const SCCOL EXC_MAXCOL_XML_2007             = 16383;
+const SCROW EXC_MAXROW_XML_2007             = 1048575;
+const SCTAB EXC_MAXTAB_XML_2007             = 1023;
+
 const sal_uInt16 EXC_NOTAB                  = SAL_MAX_UINT16;   /// An invalid Excel sheet index, for common use.
 const SCTAB SCTAB_INVALID                   = SCTAB_MAX;        /// An invalid Calc sheet index, for common use.
 const SCTAB SCTAB_GLOBAL                    = SCTAB_MAX;        /// A Calc sheet index for the workbook globals.

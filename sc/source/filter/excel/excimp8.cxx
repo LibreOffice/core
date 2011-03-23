@@ -369,7 +369,7 @@ void ImportExcel8::ReadBasic( void )
             aArgs[ 0 ] <<= getProcessServiceFactory();
             aArgs[ 1 ] <<= aArgSeq;
 
-            uno::Reference< document::XImporter > xImporter( ScfApiHelper::CreateInstanceWithArgs( CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelVBAProjectFilter" ), aArgs ), uno::UNO_QUERY_THROW );
+            uno::Reference< document::XImporter > xImporter( ScfApiHelper::CreateInstanceWithArgs( CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelVbaProjectFilter" ), aArgs ), uno::UNO_QUERY_THROW );
             xImporter->setTargetDocument( xComponent );
 
             MediaDescriptor aMediaDesc;

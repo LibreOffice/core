@@ -157,7 +157,7 @@ namespace {
 inline void lclFillAddress( XclAddress& rXclPos, SCCOL nScCol, SCROW nScRow )
 {
     rXclPos.mnCol = static_cast< sal_uInt16 >( nScCol );
-    rXclPos.mnRow = static_cast< sal_uInt16 >( nScRow );
+    rXclPos.mnRow = static_cast< sal_uInt32 >( nScRow );
 }
 
 } // namespace

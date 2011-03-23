@@ -815,6 +815,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
 {
     rbSuppressed = (bool)GetNum();
     pDesc->nCategory = GetNum();
+    pDesc->sHelpId = ReadByteStringRes();
     pDesc->nArgCount = GetNum();
     sal_uInt16 nArgs = pDesc->nArgCount;
     if (nArgs >= VAR_ARGS)

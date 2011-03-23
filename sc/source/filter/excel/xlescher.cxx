@@ -130,8 +130,8 @@ void lclGetColFromX(
 
 /** Calculates an object row position from a drawing layer Y position (in twips). */
 void lclGetRowFromY(
-        ScDocument& rDoc, SCTAB nScTab, sal_uInt16& rnXclRow,
-        sal_uInt16& rnOffset, sal_uInt16 nXclStartRow, sal_uInt16 nXclMaxRow,
+        ScDocument& rDoc, SCTAB nScTab, sal_uInt32& rnXclRow,
+        sal_uInt32& rnOffset, sal_uInt32 nXclStartRow, sal_uInt32 nXclMaxRow,
         long& rnStartH, long nY, double fScale )
 {
     // rnStartH in conjunction with nXclStartRow is used as buffer for previously calculated height
@@ -143,7 +143,7 @@ void lclGetRowFromY(
         nRowH = rDoc.GetRowHeight( nRow, nScTab );
         if( rnStartH + nRowH > nTwipsY )
         {
-            rnXclRow = static_cast< sal_uInt16 >( nRow );
+            rnXclRow = static_cast< sal_uInt32 >( nRow );
             bFound = true;
             break;
         }
@@ -151,7 +151,7 @@ void lclGetRowFromY(
     }
     if( !bFound )
         rnXclRow = nXclMaxRow;
-    rnOffset = static_cast< sal_uInt16 >( nRowH ? ((nTwipsY - rnStartH) * 256.0 / nRowH + 0.5) : 0 );
+    rnOffset = static_cast< sal_uInt32 >( nRowH ? ((nTwipsY - rnStartH) * 256.0 / nRowH + 0.5) : 0 );
 }
 
 /** Mirrors a rectangle (from LTR to RTL layout or vice versa). */

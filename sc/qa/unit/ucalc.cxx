@@ -66,6 +66,7 @@
 #include "stringutil.hxx"
 #include "scmatrix.hxx"
 #include "drwlayer.hxx"
+#include "scitems.hxx"
 
 #include "docsh.hxx"
 #include "funcdesc.hxx"
@@ -76,6 +77,8 @@
 #include "dpsave.hxx"
 
 #include "formula/IFunctionDescription.hxx"
+
+#include <editeng/boxitem.hxx>
 
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
@@ -238,6 +241,7 @@ public:
     void testDataPilot();
     void testSheetCopy();
     void testExternalRef();
+    void testDataArea();
 
     /**
      * Make sure the sheet streams are invalidated properly.
@@ -268,6 +272,7 @@ public:
     CPPUNIT_TEST(testDataPilot);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testExternalRef);
+    CPPUNIT_TEST(testDataArea);
     CPPUNIT_TEST(testGraphicsInGroup);
     CPPUNIT_TEST(testStreamValid);
     CPPUNIT_TEST(testFunctionLists);
@@ -398,14 +403,14 @@ void Test::testVolatileFunc()
 
     val = 0;
     m_pDoc->SetValue(0, 0, 0, val);
-    m_xDocShRef->DoRecalc(true);
+    m_pDoc->CalcFormulaTree(false, true);
     double zero;
     m_pDoc->GetValue(0, 1, 0, zero);
     CPPUNIT_ASSERT_MESSAGE("Result should equal the 3rd parameter of IF, which is zero.", zero == 0.0);
 
     val = 1;
     m_pDoc->SetValue(0, 0, 0, val);
-    m_xDocShRef->DoRecalc(true);
+    m_pDoc->CalcFormulaTree(false, true);
     double now2;
     m_pDoc->GetValue(0, 1, 0, now2);
     CPPUNIT_ASSERT_MESSAGE("Result should be the value of NOW() again.", (now2 - now1) >= 0.0);
@@ -1116,6 +1121,40 @@ void Test::testExternalRef()
     xExtDocSh->DoClose();
     CPPUNIT_ASSERT_MESSAGE("external document instance should have been unloaded.",
                            findLoadedDocShellByName(aExtDocName) == NULL);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testDataArea()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+
+    // Totally empty sheet should be rightfully considered empty in all accounts.
+    CPPUNIT_ASSERT_MESSAGE("Sheet is expected to be empty.", m_pDoc->IsPrintEmpty(0, 0, 0, 100, 100));
+    CPPUNIT_ASSERT_MESSAGE("Sheet is expected to be empty.", m_pDoc->IsBlockEmpty(0, 0, 0, 100, 100));
+
+    // Now, set borders in some cells....
+    SvxBorderLine aLine(NULL, 50, SOLID);
+    SvxBoxItem aBorderItem(ATTR_BORDER);
+    aBorderItem.SetLine(&aLine, BOX_LINE_LEFT);
+    aBorderItem.SetLine(&aLine, BOX_LINE_RIGHT);
+    for (SCROW i = 0; i < 100; ++i)
+        // Set borders from row 1 to 100.
+        m_pDoc->ApplyAttr(0, i, 0, aBorderItem);
+
+    // Now the sheet is considered non-empty for printing purposes, but still
+    // be empty in all the other cases.
+    CPPUNIT_ASSERT_MESSAGE("Empty sheet with borders should be printable.",
+                           !m_pDoc->IsPrintEmpty(0, 0, 0, 100, 100));
+    CPPUNIT_ASSERT_MESSAGE("But it should still be considered empty in all the other cases.",
+                           m_pDoc->IsBlockEmpty(0, 0, 0, 100, 100));
+
+    // Adding a real cell content should turn the block non-empty.
+    m_pDoc->SetString(0, 0, 0, OUString(RTL_CONSTASCII_USTRINGPARAM("Some text")));
+    CPPUNIT_ASSERT_MESSAGE("Now the block should not be empty with a real cell content.",
+                           !m_pDoc->IsBlockEmpty(0, 0, 0, 100, 100));
+
+    // TODO: Add more tests for normal data area calculation.
 
     m_pDoc->DeleteTab(0);
 }

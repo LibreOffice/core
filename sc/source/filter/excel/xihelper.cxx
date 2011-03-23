@@ -51,7 +51,7 @@
 namespace {
 
 /** Fills the passed Calc address with the passed Excel cell coordinates without checking any limits. */
-inline void lclFillAddress( ScAddress& rScPos, sal_uInt16 nXclCol, sal_uInt16 nXclRow, SCTAB nScTab )
+inline void lclFillAddress( ScAddress& rScPos, sal_uInt16 nXclCol, sal_uInt32 nXclRow, SCTAB nScTab )
 {
     rScPos.SetCol( static_cast< SCCOL >( nXclCol ) );
     rScPos.SetRow( static_cast< SCROW >( nXclRow ) );
@@ -119,7 +119,7 @@ bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
 
         // check & correct end position
         sal_uInt16 nXclCol2 = rXclRange.maLast.mnCol;
-        sal_uInt16 nXclRow2 = rXclRange.maLast.mnRow;
+        sal_uInt32 nXclRow2 = rXclRange.maLast.mnRow;
         if( !CheckAddress( rXclRange.maLast, bWarn ) )
         {
             nXclCol2 = ::std::min( nXclCol2, mnMaxCol );

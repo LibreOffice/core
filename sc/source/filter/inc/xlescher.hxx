@@ -315,9 +315,9 @@ bool operator<( const XclObjId& rL, const XclObjId& rR );
 struct XclObjAnchor : public XclRange
 {
     sal_uInt16          mnLX;       /// X offset in left column (1/1024 of column width).
-    sal_uInt16          mnTY;       /// Y offset in top row (1/256 of row height).
+    sal_uInt32          mnTY;       /// Y offset in top row (1/256 of row height).
     sal_uInt16          mnRX;       /// X offset in right column (1/1024 of column width).
-    sal_uInt16          mnBY;       /// Y offset in bottom row (1/256 of row height).
+    sal_uInt32          mnBY;       /// Y offset in bottom row (1/256 of row height).
 
     explicit            XclObjAnchor();
 
@@ -331,14 +331,24 @@ struct XclObjAnchor : public XclRange
                             const Rectangle& rRect, MapUnit eMapUnit, bool bDffAnchor );
 };
 
+
 template< typename StreamType >
 StreamType& operator>>( StreamType& rStrm, XclObjAnchor& rAnchor )
 {
-    return rStrm
+    sal_uInt16 tmpFirstRow, tmpTY, tmpLastRow, tmpBY;
+
+    rStrm
         >> rAnchor.maFirst.mnCol >> rAnchor.mnLX
-        >> rAnchor.maFirst.mnRow >> rAnchor.mnTY
+        >> tmpFirstRow >> tmpTY
         >> rAnchor.maLast.mnCol  >> rAnchor.mnRX
-        >> rAnchor.maLast.mnRow  >> rAnchor.mnBY;
+        >> tmpLastRow  >> tmpBY;
+
+    rAnchor.maFirst.mnRow = static_cast<sal_uInt32> (tmpFirstRow);
+    rAnchor.mnTY = static_cast<sal_uInt32> (tmpTY);
+    rAnchor.maLast.mnRow = static_cast<sal_uInt32> (tmpLastRow);
+    rAnchor.mnBY = static_cast<sal_uInt32> (tmpBY);
+
+    return rStrm;
 }
 
 template< typename StreamType >
@@ -346,9 +356,9 @@ StreamType& operator<<( StreamType& rStrm, const XclObjAnchor& rAnchor )
 {
     return rStrm
         << rAnchor.maFirst.mnCol << rAnchor.mnLX
-        << rAnchor.maFirst.mnRow << rAnchor.mnTY
+        << static_cast<sal_uInt16>(rAnchor.maFirst.mnRow) << static_cast<sal_uInt16>(rAnchor.mnTY)
         << rAnchor.maLast.mnCol  << rAnchor.mnRX
-        << rAnchor.maLast.mnRow  << rAnchor.mnBY;
+        << static_cast<sal_uInt16>(rAnchor.maLast.mnRow)  << static_cast<sal_uInt16>(rAnchor.mnBY);
 }
 
 // ----------------------------------------------------------------------------
