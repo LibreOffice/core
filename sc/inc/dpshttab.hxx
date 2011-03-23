@@ -83,8 +83,6 @@ public:
     /**
      * Check the sanity of the data source range.
      *
-     * @param pDoc document instance.
-     *
      * @return 0 if the source range is sane, otherwise an error message ID is
      *         returned.
      */
