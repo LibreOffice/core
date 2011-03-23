@@ -30,7 +30,7 @@ COM := MSC
 
 # set tmpdir to some mixed case path, suitable for native tools
 gb_TMPDIR:=$(if $(TMPDIR),$(shell cygpath -m $(TMPDIR)),$(shell cygpath -m /tmp))
-gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) -t gbuild.XXXXXX
+gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
 gb_CC := cl
 gb_CXX := cl
@@ -228,6 +228,18 @@ endef
 
 gb_Helper_set_ld_path := PATH="$${PATH}:$(OUTDIR)/bin"
 
+# convert parametters filesystem root to native notation
+# does some real work only on windows, make sure not to
+# break the dummy implementations on unx*
+define gb_Helper_convert_native
+$(patsubst -I$(OUTDIR)%,-I$(gb_Helper_OUTDIR_NATIVE)%, \
+$(patsubst $(OUTDIR)%,$(gb_Helper_OUTDIR_NATIVE)%, \
+$(patsubst $(WORKDIR)%,$(gb_Helper_WORKDIR_NATIVE)%, \
+$(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
+$(1)))))
+endef
+
+
 # CObject class
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -407,11 +419,11 @@ $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	rm -f $(1) && \
-	RESPONSEFILE=`$(gb_MKTEMP)` && \
-	echo "$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100, \
+		$(call gb_Helper_convert_native,$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
-		$(PCHOBJS)" > $${RESPONSEFILE} && \
+		$(PCHOBJS))) && \
 	$(gb_LINK) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \

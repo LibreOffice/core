@@ -1,6 +1,8 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+
 #include <stdlib.h>
 #include <string.h>
+
 #include "cpp.h"
 
 #define NSTAK   32
@@ -713,11 +715,11 @@ struct value
                     }
                     else
                     {
-                        static char cvcon[]
-                        = "b\bf\fn\nr\rt\tv\v''\"\"??\\\\";
-                        size_t j;
+                        static char cvcon[] = "b\bf\fn\nr\rt\tv\v''\"\"??\\\\";
+                        static size_t cvlen = sizeof(cvcon) - 1;
 
-                        for (j = 0; j < sizeof(cvcon); j += 2)
+                        size_t j;
+                        for (j = 0; j < cvlen; j += 2)
                         {
                             if (*p == cvcon[j])
                             {
@@ -726,7 +728,7 @@ struct value
                             }
                         }
                         p += 1;
-                        if (j >= sizeof(cvcon))
+                        if (j >= cvlen)
                             error(WARNING,
                                "Undefined escape in character constant");
                     }

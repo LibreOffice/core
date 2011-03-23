@@ -43,6 +43,7 @@ BEGIN
         "km",
         "nr",
         "ns",
+        "nso",
         "rw",
         "ss",
         "st",
@@ -88,7 +89,12 @@ BEGIN
         "ml",
         "as",
         "ast",
-        "ht"
+        "ht",
+        "jbo",
+        "fur",
+        "ny",
+        "so",
+        "kab"
     );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");

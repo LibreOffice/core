@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -131,7 +131,7 @@ $(LIB2TARGET_X64) :	$(LIB2FILES_X64) \
 $(DEF1TARGETN_X64) : \
         $(DEF1DEPN_X64) \
         $(DEF1EXPORTFILE_X64)
-    @-$(MKDIR) $(MISC_X64)
+        @-$(MKDIR) $(MISC_X64)
     @-$(RM) $@.tmpfile
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -210,7 +210,7 @@ $(DEF2TARGETN_X64) : \
 SHL1VERSIONOBJ_X64:=$(VERSIONOBJ_X64:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET_X64))}$(VERSIONOBJ_X64:f)
 USE_VERSIONH_X64:=$(INCCOM)/$(SHL1VERSIONOBJ_X64:b).h
 SHL1VERSIONOBJDEP_X64:=$(VERSIONOBJ_X64:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET_X64))}$(VERSIONOBJ_X64:f)
-$(MISC_X64)/$(SHL1VERSIONOBJ_X64:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL1VERSIONOBJ_X64:b).h
+$(MISC_X64)/$(SHL1VERSIONOBJ_X64:b).c : make_x64_dirs $(SOLARENV)/src/version.c $(INCCOM)/$(SHL1VERSIONOBJ_X64:b).h
     $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL1VERSIONOBJ_X64:b).h/ > $@
 .INIT : $(SHL1VERSIONOBJDEP_X64)
 .ENDIF
@@ -354,7 +354,7 @@ ALLTAR : $(SHL2IMPLIBN_X64)
 SHL2VERSIONOBJ_X64:=$(VERSIONOBJ_X64:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET_X64))}$(VERSIONOBJ_X64:f)
 USE_VERSIONH_X64:=$(INCCOM)/$(SHL2VERSIONOBJ_X64:b).h
 SHL2VERSIONOBJDEP_X64:=$(VERSIONOBJ_X64:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET_X64))}$(VERSIONOBJ_X64:f)
-$(MISC_X64)/$(SHL2VERSIONOBJ_X64:b).c : $(SOLARENV)/src/version.c $(INCCOM)/$(SHL2VERSIONOBJ_X64:b).h
+$(MISC_X64)/$(SHL2VERSIONOBJ_X64:b).c : make_x64_dirs $(SOLARENV)/src/version.c $(INCCOM)/$(SHL2VERSIONOBJ_X64:b).h
     $(COMMAND_ECHO)$(TYPE) $(SOLARENV)/src/version.c | $(SED) s/_version.h/$(SHL2VERSIONOBJ_X64:b).h/ > $@
 .INIT : $(SHL2VERSIONOBJDEP_X64)
 .ENDIF

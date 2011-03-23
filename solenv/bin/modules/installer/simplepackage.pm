@@ -133,25 +133,7 @@ sub register_extensions
 
         if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
 
-        my $localtemppath = installer::systemactions::create_directories("uno", $languagestringref);
-
-        my $slash = "";
-
-        if ( $installer::globals::iswindowsbuild )
-        {
-            if ( $^O =~ /cygwin/i )
-            {
-                $localtemppath = $installer::globals::cyg_temppath;
-                $preregdir = qx{cygpath -m "$preregdir"};
-                chomp($preregdir);
-            }
-            $localtemppath =~ s/\\/\//g;
-            $slash = "/"; # Third slash for Windows. Other OS pathes already start with "/"
-        }
-
-        $preregdir =~ s/\/\s*$//g;
-
-        my $systemcall = "JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1 " . $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file://" . $slash . $preregdir . "\"" . " -env:UserInstallation=file://" . $slash . $localtemppath . " 2\>\&1 |";
+        my $systemcall = "JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1 " . $unopkgfile . " sync --verbose" . " -env:UNO_JAVA_JFW_ENV_JREHOME=true 2\>\&1 |";
 
         print "... $systemcall ...\n";
 
@@ -707,6 +689,7 @@ sub create_simple_package
 
         if (( $onefile->{'Styles'} ) && ( $onefile->{'Styles'} =~ /\bBINARYTABLE_ONLY\b/ )) { next; }
         if (( $installer::globals::patch ) && ( $onefile->{'Styles'} ) && ( ! ( $onefile->{'Styles'} =~ /\bPATCH\b/ ))) { next; }
+        if (( $installer::globals::patch ) && ( $installer::globals::packageformat eq "dmg" )) { push(@installer::globals::patchfilecollector, "$onefile->{'destination'}\n"); }
 
         my $source = $onefile->{'sourcepath'};
         my $destination = $onefile->{'destination'};

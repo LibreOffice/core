@@ -28,6 +28,10 @@
 
 # CppunitTest class
 
+# in non-product builds, ensure that tools-based assertions do not pop up as message box, but are routed to the shell
+DBGSV_ERROR_OUT := shell
+export DBGSV_ERROR_OUT
+
 # defined by platform
 #  gb_CppunitTest_TARGETTYPE
 #  gb_CppunitTest_get_filename
