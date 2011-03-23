@@ -182,14 +182,16 @@ string XMLTag::toTree(const string & sIndent) const
 
     string sResult;
 
-    size_t nSize = sIndent.size();
-    if (nSize > 1)
     {
-        sResult += sIndent.substr(0, nSize - 2) + "+-\\" + mTag;
-    }
-    else
-    {
-        sResult += "\\" + mTag;
+        size_t nSize = sIndent.size();
+        if (nSize > 1)
+        {
+            sResult += sIndent.substr(0, nSize - 2) + "+-\\" + mTag;
+        }
+        else
+        {
+            sResult += "\\" + mTag;
+        }
     }
 
     XMLAttributes_t::const_iterator aIt = mAttrs.begin();
