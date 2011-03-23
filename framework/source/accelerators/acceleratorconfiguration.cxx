@@ -684,7 +684,7 @@ XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(const css::un
                                 , m_pPrimaryWriteCache(0                        )
                                 , m_pSecondaryWriteCache(0                      )
 {
-    static const ::rtl::OUString CFG_ENTRY_ACCELERATORS(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Accelerators"));
+    const ::rtl::OUString CFG_ENTRY_ACCELERATORS(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Accelerators"));
     m_xCfg = css::uno::Reference< css::container::XNameAccess > (
              ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_ACCELERATORS, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
              css::uno::UNO_QUERY );
