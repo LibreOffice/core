@@ -670,6 +670,10 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
 //-------------------------------------------------------------------------
 sal_Int8 ModelData_Impl::CheckStateForSave()
 {
+    // if the document is readonly or a new one a SaveAs operation must be used
+    if ( !GetStorable()->hasLocation() || GetStorable()->isReadonly() )
+        return STATUS_SAVEAS;
+
     // check acceptable entries for media descriptor
     sal_Bool bVersInfoNeedsStore = sal_False;
     ::comphelper::SequenceAsHashMap aAcceptedArgs;
@@ -700,10 +704,6 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     // the document must be modified
     if ( !GetModifiable()->isModified() && !bVersInfoNeedsStore )
         return STATUS_NO_ACTION;
-
-    // if the document is readonly or a new one a SaveAs operation must be used
-    if ( !GetStorable()->hasLocation() || GetStorable()->isReadonly() )
-        return STATUS_SAVEAS;
 
     // check that the old filter is acceptable
     ::rtl::OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(

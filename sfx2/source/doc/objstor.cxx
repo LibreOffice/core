@@ -389,7 +389,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                         aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
                     }
                     if ( !aSaveOpt.IsUseBlowfishInODF12() )
-                        aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_CBC;
+                        aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
                 }
 
                 try
