@@ -1851,14 +1851,16 @@ sal_Int32 lclCreateFormat( const Reference< XNumberFormats >& rxNumFmts,
     catch( Exception& )
     {
         // BIFF2-BIFF4 stores standard format explicitly in stream
-        static const OUString saGeneral = CREATE_OUSTRING( "general" );
-        if( rFmtCode.equalsIgnoreAsciiCase( saGeneral ) )
+        if( rFmtCode.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "general" ) ) )
         {
             nIndex = lclCreatePredefinedFormat( rxNumFmts, 0, rToLocale );
         }
         else
         {
-            OSL_ENSURE( false,
+            // do not assert fractional number formats with fixed denominator
+            OSL_ENSURE( rFmtCode.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "#\\ ?/" ) ) ||
+                        rFmtCode.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "#\\ ?\?/" ) ) ||
+                        rFmtCode.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "#\\ ?\?\?/" ) ),
                 OStringBuffer( "lclCreateFormat - cannot create number format '" ).
                 append( OUStringToOString( rFmtCode, osl_getThreadTextEncoding() ) ).
                 append( '\'' ).getStr() );

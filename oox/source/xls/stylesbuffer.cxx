@@ -2677,9 +2677,9 @@ const sal_Char* const sppcStyleNames[] =
     "Followed Hyperlink",
     "Note",                 // new in OOX
     "Warning Text",
-    "",
-    "",
-    "",
+    0,
+    0,
+    0,
     "Title",
     "Heading 1",
     "Heading 2",
@@ -2727,7 +2727,7 @@ OUString lclGetBuiltinStyleName( sal_Int32 nBuiltinId, const OUString& rName, sa
     OSL_ENSURE( (0 <= nBuiltinId) && (nBuiltinId < snStyleNamesCount), "lclGetBuiltinStyleName - unknown built-in style" );
     OUStringBuffer aStyleName;
     aStyleName.appendAscii( spcStyleNamePrefix );
-    if( (0 <= nBuiltinId) && (nBuiltinId < snStyleNamesCount) && (sppcStyleNames[ nBuiltinId ][ 0 ] != 0) )
+    if( (0 <= nBuiltinId) && (nBuiltinId < snStyleNamesCount) && (sppcStyleNames[ nBuiltinId ] != 0) )
         aStyleName.appendAscii( sppcStyleNames[ nBuiltinId ] );
     else if( rName.getLength() > 0 )
         aStyleName.append( rName );
@@ -2738,11 +2738,9 @@ OUString lclGetBuiltinStyleName( sal_Int32 nBuiltinId, const OUString& rName, sa
     return aStyleName.makeStringAndClear();
 }
 
-OUString lclGetBuiltInStyleName( const OUString& rName )
+OUString lclCreateStyleName( const CellStyleModel& rModel )
 {
-    OUStringBuffer aStyleName;
-    aStyleName.appendAscii( spcStyleNamePrefix ).append( rName );
-    return aStyleName.makeStringAndClear();
+    return rModel.mbBuiltin ? lclGetBuiltinStyleName( rModel.mnBuiltinId, rModel.maName, rModel.mnLevel ) : rModel.maName;
 }
 
 bool lclIsBuiltinStyleName( const OUString& rStyleName, sal_Int32* pnBuiltinId, sal_Int32* pnNextChar )
@@ -2757,12 +2755,15 @@ bool lclIsBuiltinStyleName( const OUString& rStyleName, sal_Int32* pnBuiltinId, 
         OUString aShortName;
         for( sal_Int32 nId = 0; nId < snStyleNamesCount; ++nId )
         {
-            aShortName = OUString::createFromAscii( sppcStyleNames[ nId ] );
-            if( rStyleName.matchIgnoreAsciiCase( aShortName, nPrefixLen ) &&
-                    (nNextChar < nPrefixLen + aShortName.getLength()) )
+            if( sppcStyleNames[ nId ] != 0 )
             {
-                nFoundId = nId;
-                nNextChar = nPrefixLen + aShortName.getLength();
+                aShortName = OUString::createFromAscii( sppcStyleNames[ nId ] );
+                if( rStyleName.matchIgnoreAsciiCase( aShortName, nPrefixLen ) &&
+                        (nNextChar < nPrefixLen + aShortName.getLength()) )
+                {
+                    nFoundId = nId;
+                    nNextChar = nPrefixLen + aShortName.getLength();
+                }
             }
         }
     }
@@ -3008,10 +3009,11 @@ void CellStyleBuffer::finalizeImport()
     for( CellStyleVector::iterator aIt = maBuiltinStyles.begin(), aEnd = maBuiltinStyles.end(); aIt != aEnd; ++aIt )
     {
         const CellStyleModel& rModel = (*aIt)->getModel();
-        OUString aStyleName = lclGetBuiltinStyleName( rModel.mnBuiltinId, rModel.maName, rModel.mnLevel );
-        OSL_ENSURE( bReserveAll || (aCellStyles.count( aStyleName ) == 0),
-            "CellStyleBuffer::finalizeImport - multiple styles with equal built-in identifier" );
-        if( aCellStyles.count( aStyleName ) > 0 )
+        OUString aStyleName = lclCreateStyleName( rModel );
+        /*  If a builtin style entry already exists, and we do not reserve all
+            existing styles, we just stick with the last definition and ignore
+            the preceding ones. */
+        if( bReserveAll && (aCellStyles.count( aStyleName ) > 0) )
             aConflictNameStyles.push_back( *aIt );
         else
             aCellStyles[ aStyleName ] = *aIt;
@@ -3022,13 +3024,14 @@ void CellStyleBuffer::finalizeImport()
     for( CellStyleVector::iterator aIt = maUserStyles.begin(), aEnd = maUserStyles.end(); aIt != aEnd; ++aIt )
     {
         const CellStyleModel& rModel = (*aIt)->getModel();
+        OUString aStyleName = lclCreateStyleName( rModel );
         // #i1624# #i1768# ignore unnamed user styles
-        if( rModel.maName.getLength() > 0 )
+        if( aStyleName.getLength() > 0 )
         {
-            if( aCellStyles.count( rModel.maName ) > 0 )
+            if( aCellStyles.count( aStyleName ) > 0 )
                 aConflictNameStyles.push_back( *aIt );
             else
-                aCellStyles[ rModel.maName ] = *aIt;
+                aCellStyles[ aStyleName ] = *aIt;
         }
     }
 
@@ -3036,11 +3039,12 @@ void CellStyleBuffer::finalizeImport()
     for( CellStyleVector::iterator aIt = aConflictNameStyles.begin(), aEnd = aConflictNameStyles.end(); aIt != aEnd; ++aIt )
     {
         const CellStyleModel& rModel = (*aIt)->getModel();
+        OUString aStyleName = lclCreateStyleName( rModel );
         OUString aUnusedName;
         sal_Int32 nIndex = 0;
         do
         {
-            aUnusedName = OUStringBuffer( rModel.maName ).append( sal_Unicode( ' ' ) ).append( ++nIndex ).makeStringAndClear();
+            aUnusedName = OUStringBuffer( aStyleName ).append( sal_Unicode( ' ' ) ).append( ++nIndex ).makeStringAndClear();
         }
         while( aCellStyles.count( aUnusedName ) > 0 );
         aCellStyles[ aUnusedName ] = *aIt;
