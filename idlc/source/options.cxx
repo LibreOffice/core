@@ -29,12 +29,25 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idlc.hxx"
 
+#include "idlc/options.hxx"
+
+#include "osl/diagnose.h"
+#include "rtl/string.hxx"
+#include "rtl/strbuf.hxx"
+
 #include <stdio.h>
-#include /*MSVC trouble: <cstring>*/ <string.h>
-#include <idlc/options.hxx>
+#include <string.h>
 
 using ::rtl::OString;
-Options::Options(): m_stdin(false), m_verbose(false), m_quiet(false)
+using ::rtl::OStringBuffer;
+#ifdef SAL_UNX
+#define SEPARATOR '/'
+#else
+#define SEPARATOR '\\'
+#endif
+
+Options::Options(char const * progname)
+  : m_program(progname), m_stdin(false), m_verbose(false), m_quiet(false)
 {
 }
 
@@ -42,273 +55,282 @@ Options::~Options()
 {
 }
 
-sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
-    throw( IllegalArgument )
+// static
+bool Options::checkArgument (std::vector< std::string > & rArgs, char const * arg, size_t len)
 {
-    sal_Bool    ret = sal_True;
-    sal_uInt16  j=0;
-
-    if (!bCmdFile)
+  bool result = ((arg != 0) && (len > 0));
+  OSL_PRECOND(result, "idlc::Options::checkArgument(): invalid arguments");
+  if (result)
+  {
+    switch(arg[0])
     {
-        bCmdFile = sal_True;
-
-        m_program = av[0];
-
-        if (ac < 2)
+    case '@':
+      if ((result = (len > 1)) == true)
+      {
+        // "@<cmdfile>"
+        result = Options::checkCommandFile (rArgs, &(arg[1]));
+      }
+      break;
+    case '-':
+      if ((result = (len > 1)) == true)
+      {
+        // "-<option>"
+        switch (arg[1])
         {
-            fprintf(stderr, "%s", prepareHelp().getStr());
-            ret = sal_False;
-        }
-
-        j = 1;
-    } else
-    {
-        j = 0;
-    }
-
-    char    *s=NULL;
-    for (; j < ac; j++)
-    {
-        if (av[j][0] == '-')
-        {
-            switch (av[j][1])
+        case 'O':
+        case 'I':
+        case 'D':
+          {
+            // "-<option>[<param>]
+            std::string option(&(arg[0]), 2);
+            rArgs.push_back(option);
+            if (len > 2)
             {
-            case 'O':
-                if (av[j][2] == '\0')
-                {
-                    if (j < ac - 1 && av[j+1][0] != '-')
-                    {
-                        j++;
-                        s = av[j];
-                    } else
-                    {
-                        OString tmp("'-O', please check");
-                        if (j <= ac - 1)
-                        {
-                            tmp += " your input '" + OString(av[j+1]) + "'";
-                        }
-
-                        throw IllegalArgument(tmp);
-                    }
-                } else
-                {
-                    s = av[j] + 2;
-                }
-
-                m_options["-O"] = OString(s);
-                break;
-            case 'I':
-            {
-                if (av[j][2] == '\0')
-                {
-                    if (j < ac - 1 && av[j+1][0] != '-')
-                    {
-                        j++;
-                        s = av[j];
-                    } else
-                    {
-                        OString tmp("'-I', please check");
-                        if (j <= ac - 1)
-                        {
-                            tmp += " your input '" + OString(av[j+1]) + "'";
-                        }
-
-                        throw IllegalArgument(tmp);
-                    }
-                } else
-                {
-                    s = av[j] + 2;
-                }
-
-                OString inc(s);
-                if ( inc.indexOf(';') > 0 )
-                {
-                    OString tmp(s);
-                    sal_Int32 nIndex = 0;
-                    inc = OString();
-                    do inc = inc + " -I\"" + tmp.getToken( 0, ';', nIndex ) +"\""; while( nIndex != -1 );
-                } else
-                    inc = OString("-I\"") + s + "\"";
-
-                if (m_options.count("-I") > 0)
-                {
-                    OString tmp(m_options["-I"]);
-                    tmp = tmp + " " + inc;
-                    m_options["-I"] = tmp;
-                } else
-                {
-                    m_options["-I"] = inc;
-                }
+              // "-<option><param>"
+              std::string param(&(arg[2]), len - 2);
+              rArgs.push_back(param);
             }
             break;
-            case 'D':
-                if (av[j][2] == '\0')
-                {
-                    if (j < ac - 1 && av[j+1][0] != '-')
-                    {
-                        j++;
-                        s = av[j];
-                    } else
-                    {
-                        OString tmp("'-D', please check");
-                        if (j <= ac - 1)
-                        {
-                            tmp += " your input '" + OString(av[j+1]) + "'";
-                        }
-
-                        throw IllegalArgument(tmp);
-                    }
-                } else
-                {
-                    s = av[j];
-                }
-
-                if (m_options.count("-D") > 0)
-                {
-                    OString tmp(m_options["-D"]);
-                    tmp = tmp + " " + s;
-                    m_options["-D"] = tmp;
-                } else
-                    m_options["-D"] = OString(s);
-                break;
-            case 'C':
-                if (av[j][2] != '\0')
-                {
-                    throw IllegalArgument(OString(av[j]) + ", please check your input");
-                }
-                if (m_options.count("-C") == 0)
-                    m_options["-C"] = OString(av[j]);
-                break;
-            case 'c':
-                if (av[j][2] == 'i' && av[j][3] == 'd' && av[j][4] == '\0')
-                {
-                    if (m_options.count("-cid") == 0)
-                        m_options["-cid"] = OString(av[j]);
-                } else
-                    throw IllegalArgument(OString(av[j]) + ", please check your input");
-                break;
-            case 'v':
-                if ( 0 == strcmp( &av[j][1], "verbose" ) )
-                {
-                    m_verbose = true;
-                }
-                else
-                    throw IllegalArgument(OString(av[j]) + ", please check your input");
-                break;
-            case 'q':
-                if ( 0 == strcmp( &av[j][1], "quiet" ) )
-                {
-                    m_quiet = true;
-                }
-                else
-                    throw IllegalArgument(OString(av[j]) + ", please check your input");
-                break;
-            case 'w':
-                if (av[j][2] == 'e' && av[j][3] == '\0') {
-                    if (m_options.count("-we") == 0)
-                        m_options["-we"] = OString(av[j]);
-                } else {
-                    if (av[j][2] == '\0') {
-                        if (m_options.count("-w") == 0)
-                            m_options["-w"] = OString(av[j]);
-                    } else
-                        throw IllegalArgument(OString(av[j]) + ", please check your input");
-                }
-                break;
-            case 'h':
-            case '?':
-                if (av[j][2] != '\0')
-                {
-                    throw IllegalArgument(OString(av[j]) + ", please check your input");
-                } else
-                {
-                    fprintf(stdout, "%s", prepareHelp().getStr());
-                    exit(0);
-                }
-            case 's':
-                if (/*MSVC trouble: std::*/strcmp(&av[j][2], "tdin") == 0)
-                {
-                    m_stdin = true;
-                    break;
-                }
-                // fall through
-            default:
-                throw IllegalArgument("the option is unknown" + OString(av[j]));
-            }
-        } else
-        {
-            if (av[j][0] == '@')
-            {
-                FILE* cmdFile = fopen(av[j]+1, "r");
-                  if( cmdFile == NULL )
-                  {
-                    fprintf(stderr, "%s", prepareHelp().getStr());
-                    ret = sal_False;
-                } else
-                {
-                    int rargc=0;
-                    char* rargv[512];
-                    char  buffer[512]="";
-
-                    int i=0;
-                    int found = 0;
-                    char c;
-                    while ( fscanf(cmdFile, "%c", &c) != EOF )
-                    {
-                        if (c=='\"') {
-                            if (found) {
-                                found=0;
-                            } else {
-                                found=1;
-                                continue;
-                            }
-                        } else {
-                            if (c!=13 && c!=10) {
-                                if (found || c!=' ') {
-                                    buffer[i++]=c;
-                                    continue;
-                                }
-                            }
-                            if (i==0)
-                                continue;
-                        }
-                        buffer[i]='\0';
-                        found=0;
-                        i=0;
-                        rargv[rargc]= strdup(buffer);
-                        rargc++;
-                        buffer[0]='\0';
-                    }
-                    if (buffer[0] != '\0') {
-                        buffer[i]='\0';
-                        rargv[rargc]= strdup(buffer);
-                        rargc++;
-                    }
-                    fclose(cmdFile);
-
-                    ret = initOptions(rargc, rargv, bCmdFile);
-
-                    long ii = 0;
-                    for (ii=0; ii < rargc; ii++)
-                    {
-                        free(rargv[ii]);
-                    }
-                }
-            } else
-            {
-                OString name(av[j]);
-                name = name.toAsciiLowerCase();
-                if ( name.lastIndexOf(".idl") != (name.getLength() - 4) )
-                {
-                    throw IllegalArgument("'" + OString(av[j]) +
-                        "' is not a valid input file, only '*.idl' files will be accepted");
-                }
-                m_inputFiles.push_back(av[j]);
-            }
+          }
+        default:
+          // "-<option>" ([long] option, w/o param)
+          rArgs.push_back(std::string(arg, len));
+          break;
         }
+      }
+      break;
+    default:
+      // "<param>"
+      rArgs.push_back(std::string(arg, len));
+      break;
+    }
+  }
+  return (result);
+}
+
+// static
+bool Options::checkCommandFile (std::vector< std::string > & rArgs, char const * filename)
+{
+    FILE * fp = fopen(filename, "r");
+    if (fp == 0)
+    {
+        fprintf(stderr, "ERROR: can't open command file \"%s\"\n", filename);
+        return (false);
     }
 
-    return ret;
+    std::string buffer;
+    buffer.reserve(256);
+
+    bool quoted = false;
+    int c = EOF;
+    while ((c = fgetc(fp)) != EOF)
+    {
+        switch(c)
+        {
+        case '\"':
+          quoted = !quoted;
+          break;
+        case ' ':
+        case '\t':
+        case '\r':
+        case '\n':
+          if (!quoted)
+          {
+              if (!buffer.empty())
+              {
+                  // append current argument.
+                  if (!Options::checkArgument(rArgs, buffer.c_str(), buffer.size()))
+                  {
+                      (void) fclose(fp);
+                      return (false);
+                  }
+                  buffer.clear();
+              }
+              break;
+          }
+        default:
+          // quoted white-space fall through
+          buffer.push_back(sal::static_int_cast<char>(c));
+          break;
+        }
+    }
+    if (!buffer.empty())
+    {
+        // append unterminated argument.
+        if (!Options::checkArgument(rArgs, buffer.c_str(), buffer.size()))
+        {
+            (void) fclose(fp);
+            return (false);
+        }
+        buffer.clear();
+    }
+    return (fclose(fp) == 0);
+}
+
+bool Options::badOption(char const * reason, std::string const & rArg) throw(IllegalArgument)
+{
+  OStringBuffer message;
+  if (reason != 0)
+  {
+    message.append(reason); message.append(" option '"); message.append(rArg.c_str()); message.append("'");
+    throw IllegalArgument(message.makeStringAndClear());
+  }
+  return false;
+}
+
+bool Options::setOption(char const * option, std::string const & rArg)
+{
+  bool result = (0 == strcmp(option, rArg.c_str()));
+  if (result)
+    m_options[rArg.c_str()] = OString(rArg.c_str(), rArg.size());
+  return (result);
+}
+
+bool Options::initOptions(std::vector< std::string > & rArgs) throw(IllegalArgument)
+{
+  std::vector< std::string >::const_iterator first = rArgs.begin(), last = rArgs.end();
+  for (; first != last; ++first)
+  {
+    if ((*first)[0] != '-')
+    {
+      OString filename((*first).c_str(), (*first).size());
+      OString tmp(filename.toAsciiLowerCase());
+      if (tmp.lastIndexOf(".idl") != (tmp.getLength() - 4))
+      {
+        throw IllegalArgument("'" + filename + "' is not a valid input file, only '*.idl' files will be accepted");
+      }
+      m_inputFiles.push_back(filename);
+      continue;
+    }
+
+    std::string const option(*first);
+    switch((*first)[1])
+    {
+    case 'O':
+      {
+        if (!((++first != last) && ((*first)[0] != '-')))
+        {
+          return badOption("invalid", option);
+        }
+        OString param((*first).c_str(), (*first).size());
+        m_options["-O"] = param;
+        break;
+      }
+    case 'I':
+      {
+        if (!((++first != last) && ((*first)[0] != '-')))
+        {
+          return badOption("invalid", option);
+        }
+        OString param((*first).c_str(), (*first).size());
+        {
+          // quote param token(s).
+          OStringBuffer buffer;
+          sal_Int32 k = 0;
+          do
+          {
+            OStringBuffer token; token.append("-I\""); token.append(param.getToken(0, ';', k)); token.append("\"");
+            if (buffer.getLength() > 0)
+              buffer.append(' ');
+            buffer.append(token);
+          } while (k != -1);
+          param = buffer.makeStringAndClear();
+        }
+        if (m_options.count("-I") > 0)
+        {
+          // append param.
+          OStringBuffer buffer(m_options["-I"]);
+          buffer.append(' '); buffer.append(param);
+          param = buffer.makeStringAndClear();
+        }
+        m_options["-I"] = param;
+        break;
+      }
+    case 'D':
+      {
+        if (!((++first != last) && ((*first)[0] != '-')))
+        {
+          return badOption("invalid", option);
+        }
+        OString param("-D"); param += OString((*first).c_str(), (*first).size());
+        if (m_options.count("-D") > 0)
+        {
+          OStringBuffer buffer(m_options["-D"]);
+          buffer.append(' '); buffer.append(param);
+          param = buffer.makeStringAndClear();
+        }
+        m_options["-D"] = param;
+        break;
+      }
+    case 'C':
+      {
+        if (!setOption("-C", option))
+        {
+          return badOption("invalid", option);
+        }
+        break;
+      }
+    case 'c':
+      {
+        if (!setOption("-cid", option))
+        {
+          return badOption("invalid", option);
+        }
+        break;
+      }
+    case 'q':
+      {
+        if (!setOption("-quiet", option))
+        {
+          return badOption("invalid", option);
+        }
+        m_quiet = true;
+        break;
+      }
+    case 'v':
+      {
+        if (!setOption("-verbose", option))
+        {
+          return badOption("invalid", option);
+        }
+        m_verbose = true;
+        break;
+      }
+    case 'w':
+      {
+        if (!(setOption("-w", option) || setOption("-we", option)))
+        {
+          return badOption("invalid", option);
+        }
+        break;
+      }
+    case 'h':
+    case '?':
+      {
+        if (!(setOption("-h", option) || setOption("-?", option)))
+        {
+          return badOption("invalid", option);
+        }
+        {
+          (void) fprintf(stdout, "%s", prepareHelp().getStr());
+          return (false);
+        }
+        // break; // Unreachable
+      }
+    case 's':
+      {
+        if (!setOption("-stdin", option))
+        {
+          return badOption("invalid", option);
+        }
+        m_stdin = true;
+        break;
+      }
+    default:
+      return badOption("unknown", option);
+    }
+  }
+  return (true);
 }
 
 OString Options::prepareHelp()
@@ -335,7 +357,7 @@ OString Options::prepareHelp()
     help += "                  requirements.\n";
     help += "    -w          = display warning messages.\n";
     help += "    -we         = treat warnings as errors.\n";
-    help += "    -h|-?       = print this help message and exit.\n";
+    help += "    -h|-?       = print this help message and exit.\n\n";
     help += prepareVersion();
 
     return help;
@@ -343,8 +365,8 @@ OString Options::prepareHelp()
 
 OString Options::prepareVersion()
 {
-    OString version("\nSun Microsystems (R) ");
-    version += m_program + " Version 1.1\n\n";
+    OString version(m_program);
+    version += " Version 1.1\n\n";
     return version;
 }
 
@@ -353,21 +375,19 @@ const OString& Options::getProgramName() const
     return m_program;
 }
 
-sal_Bool Options::isValid(const OString& option)
+bool Options::isValid(const OString& option)
 {
     return (m_options.count(option) > 0);
 }
 
-const OString Options::getOption(const OString& option)
+const OString& Options::getOption(const OString& option)
     throw( IllegalArgument )
 {
-    if (m_options.count(option) > 0)
-    {
-        return m_options[option];
-    } else
+    if (!isValid(option))
     {
         throw IllegalArgument("Option is not valid or currently not set.");
     }
+    return m_options[option];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

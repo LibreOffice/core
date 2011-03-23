@@ -49,18 +49,29 @@ public:
 class Options
 {
 public:
-    Options();
+    explicit Options(char const * progname);
     ~Options();
 
+    static bool checkArgument(std::vector< std::string > & rArgs, char const * arg, size_t len);
+    static bool checkCommandFile(std::vector< std::string > & rArgs, char const * filename);
+
+    bool initOptions(std::vector< std::string > & rArgs)
+        throw(IllegalArgument);
+    bool badOption(char const * reason, std::string const & rArg)
+        throw(IllegalArgument);
+    bool setOption(char const * option, std::string const & rArg);
+
+#if 0  /* @@@ */
     sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
         throw( IllegalArgument );
+#endif /* @@@ */
 
     ::rtl::OString prepareHelp();
     ::rtl::OString prepareVersion();
 
     const ::rtl::OString&   getProgramName() const;
-    sal_Bool                isValid(const ::rtl::OString& option);
-    const ::rtl::OString    getOption(const ::rtl::OString& option)
+    bool                isValid(const ::rtl::OString& option);
+    const ::rtl::OString&   getOption(const ::rtl::OString& option)
         throw( IllegalArgument );
 
     const StringVector& getInputFiles() const { return m_inputFiles; }

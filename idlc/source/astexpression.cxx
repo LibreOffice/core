@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idlc.hxx"
+
 #include <idlc/astexpression.hxx>
 #include <idlc/astconstant.hxx>
 #include <idlc/astscope.hxx>
@@ -35,6 +36,7 @@
 
 #include <limits.h>
 #include <float.h>
+#include <memory> // auto_ptr<>
 
 #undef  MAXCHAR
 #define MAXCHAR         127
@@ -951,7 +953,6 @@ AstExprValue* AstExpression::eval_internal(EvalKind ek)
 
 AstExprValue* AstExpression::eval_bin_op(EvalKind ek)
 {
-    AstExprValue *retval = NULL;
     ExprType eType = ET_double;
 
     if ( m_combOperator == EC_mod )
@@ -974,7 +975,7 @@ AstExprValue* AstExpression::eval_bin_op(EvalKind ek)
     if (m_subExpr2->getExprValue() == NULL)
         return NULL;
 
-    retval = new AstExprValue();
+    std::auto_ptr< AstExprValue > retval(new AstExprValue());
     retval->et = eType;
 
     switch (m_combOperator)
@@ -995,20 +996,18 @@ AstExprValue* AstExpression::eval_bin_op(EvalKind ek)
             break;
         case EC_div:
             if (m_subExpr2->getExprValue()->u.dval == 0.0)
-            return NULL;
+                return NULL;
             retval->u.dval = m_subExpr1->getExprValue()->u.dval / m_subExpr2->getExprValue()->u.dval;
             break;
         default:
             return NULL;
     }
 
-    return retval;
+    return retval.release();
 }
 
 AstExprValue* AstExpression::eval_bit_op(EvalKind ek)
 {
-    AstExprValue    *retval = NULL;
-
     if (ek != EK_const && ek != EK_positive_int)
         return NULL;
     if (m_subExpr1 == NULL || m_subExpr2 == NULL)
@@ -1026,7 +1025,7 @@ AstExprValue* AstExpression::eval_bit_op(EvalKind ek)
     if (m_subExpr2->getExprValue() == NULL)
         return NULL;
 
-    retval = new AstExprValue;
+    std::auto_ptr< AstExprValue > retval(new AstExprValue());
     retval->et = ET_long;
 
     switch (m_combOperator)
@@ -1050,13 +1049,11 @@ AstExprValue* AstExpression::eval_bit_op(EvalKind ek)
             return NULL;
     }
 
-    return retval;
+    return retval.release();
 }
 
 AstExprValue* AstExpression::eval_un_op(EvalKind ek)
 {
-    AstExprValue    *retval = NULL;
-
     if (m_exprValue != NULL)
         return m_exprValue;
 
@@ -1071,7 +1068,7 @@ AstExprValue* AstExpression::eval_un_op(EvalKind ek)
     if (m_subExpr1->getExprValue() == NULL)
         return NULL;
 
-    retval = new AstExprValue();
+    std::auto_ptr< AstExprValue > retval(new AstExprValue());
     retval->et = ET_double;
 
     switch (m_combOperator)
@@ -1092,7 +1089,7 @@ AstExprValue* AstExpression::eval_un_op(EvalKind ek)
             return NULL;
     }
 
-    return retval;
+    return retval.release();
 }
 
 AstExprValue* AstExpression::eval_symbol(EvalKind ek)

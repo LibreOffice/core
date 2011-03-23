@@ -1104,7 +1104,6 @@ oslHostAddr SAL_CALL osl_createHostAddr (
         rtl_string_release(strHostname);
     }
 
-
     return HostAddr;
 }
 
@@ -1128,7 +1127,7 @@ oslHostAddr SAL_CALL osl_psz_createHostAddr (
 
     pHostAddr= (oslHostAddr) malloc(sizeof(struct oslHostAddrImpl));
     OSL_ASSERT(pHostAddr);
-    if (pAddr == NULL)
+    if (pHostAddr == NULL)
     {
         free (cn);
         return ((oslHostAddr)NULL);
@@ -2360,7 +2359,10 @@ sal_Bool __osl_socket_poll (
     int           timeout;
     int           result;
 
-    OSL_ASSERT(pSocket);
+    OSL_ASSERT(0 != pSocket);
+    if (0 == pSocket)
+      return sal_False; /* EINVAL */
+
     pSocket->m_nLastError = 0;
 
     fds.fd      = pSocket->m_Socket;
@@ -2403,7 +2405,10 @@ sal_Bool __osl_socket_poll (
     struct timeval tv;
     int            result;
 
-    OSL_ASSERT(pSocket);
+    OSL_ASSERT(0 != pSocket);
+    if (0 == pSocket)
+      return sal_False; /* EINVAL */
+
     pSocket->m_nLastError = 0;
 
     FD_ZERO(&fds);

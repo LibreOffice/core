@@ -47,7 +47,7 @@ module com { module sun { module star { module uri {
    <type scope="com::sun::star::uri">XUriReference</type> and additional,
    scheme-specific interfaces.
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 published interface XUriReference: com::sun::star::uno::XInterface {
     /**

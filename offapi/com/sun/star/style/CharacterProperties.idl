@@ -428,7 +428,7 @@ published service CharacterProperties
 
     /** If this optional property is <TRUE/>, then the characters are invisible.
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] boolean CharHidden;
 

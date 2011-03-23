@@ -125,7 +125,8 @@ sal_Bool SAL_CALL osl_assertFailedLine( const sal_Char* pszFileName, sal_Int32 n
 
     fputs(szMessage, stderr);
 
-    return sal_True;   /* abort */
+    char const * env = getenv( "SAL_DIAGNOSE_ABORT" );
+    return ( ( env != NULL ) && ( *env != '\0' ) );
 }
 
 /*----------------------------------------------------------------------------*/

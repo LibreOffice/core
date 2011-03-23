@@ -49,7 +49,7 @@ module com { module sun { module star { module deployment {
 /** Objects of this interface reflect a bound package and are issued by a
     <type>PackageRegistryBackend</type>.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 interface XPackage
 {
@@ -100,7 +100,7 @@ interface XPackage
         After updating the OpenOffice.org, some dependencies for packages might
         no longer be satisfied.
 
-        @since OOo 3.2.0
+        @since OOo 3.2
 
         @param xCmdEnv
                command environment for error handling and other interaction.

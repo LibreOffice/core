@@ -93,7 +93,7 @@ service Cell
             <li>CellProtection: non-functional implementation.</li>
         </ul>
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     service com::sun::star::table::CellProperties;
 

@@ -219,6 +219,11 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     oslDebugMessageFunc f = g_pDebugMessageFunc;
     char                szMessage[1024];
 
+    // after reporting the assertion, abort if told so by SAL_DIAGNOSE_ABORT, but *not* if
+    // assertions are routed to some external instance
+    char const * env = getenv( "SAL_DIAGNOSE_ABORT" );
+    sal_Bool const doAbort = ( ( env != NULL ) && ( *env != '\0' ) && ( f == NULL ) );
+
     /* If there's a callback for detailed messages, use it */
     if ( g_pDetailedDebugMessageFunc != NULL )
     {
@@ -228,7 +233,7 @@ sal_Bool SAL_CALL osl_assertFailedLine (
 
     /* if SAL assertions are disabled in general, stop here */
     if ( getenv("DISABLE_SAL_DBGBOX") )
-        return sal_False;
+        return doAbort;
 
     /* format message into buffer */
     if (pszMessage != 0)
@@ -253,9 +258,10 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     /* output backtrace */
     osl_diagnose_backtrace_Impl(f);
 
-    /* release lock and leave, w/o calling osl_breakDebug() */
+    /* release lock and leave */
     pthread_mutex_unlock(&g_mutex);
-    return sal_False;
+
+    return doAbort;
 }
 
 /************************************************************************/
@@ -263,7 +269,7 @@ sal_Bool SAL_CALL osl_assertFailedLine (
 /************************************************************************/
 void SAL_CALL osl_breakDebug()
 {
-    exit(0);
+    abort();
 }
 
 /************************************************************************/

@@ -26,32 +26,33 @@
  *
  ************************************************************************/
 
-
 /*
   Issue http://udk.openoffice.org/issues/show_bug.cgi?id=92388
 
   Mac OS X does not seem to support "__cxa__atexit", thus leading
   to the situation that "__attribute__((destructor))__" functions
-  (in particular "rtl_memory_fini") become called _before_ global
-  C++ object d'tors.
+  (in particular "rtl_{memory|cache|arena}_fini") become called
+  _before_ global C++ object d'tors.
 
   Using a C++ dummy object instead.
 */
 
-#include <stdio.h>
-
 extern "C" void rtl_memory_fini (void);
+extern "C" void rtl_cache_fini (void);
+extern "C" void rtl_arena_fini (void);
 
-
-struct RTL_Memory_Fini {
-  ~RTL_Memory_Fini() ;
+struct RTL_Alloc_Fini
+{
+  ~RTL_Alloc_Fini() ;
 };
 
-RTL_Memory_Fini::~RTL_Memory_Fini() {
+RTL_Alloc_Fini::~RTL_Alloc_Fini()
+{
   rtl_memory_fini();
+  rtl_cache_fini();
+  rtl_arena_fini();
 }
 
-
-static RTL_Memory_Fini rtl_Memory_Fini;
+static RTL_Alloc_Fini g_RTL_Alloc_Fini;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

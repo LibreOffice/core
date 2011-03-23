@@ -48,7 +48,7 @@ module com {  module sun {  module star {  module geometry {
     pair of real numbers there must be another pair that is mapped
     upon them.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XMapping2D : ::com::sun::star::uno::XInterface
 {

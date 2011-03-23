@@ -82,7 +82,7 @@ module com { module sun { module star { module mail {
 /**
    Represents a mail server abstraction.
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 interface XMailService: ::com::sun::star::uno::XInterface {
 

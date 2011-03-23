@@ -1,11 +1,12 @@
 mkdir: %_DEST%\bin%_EXT%\cppunit
+mkdir: %_DEST%\inc%_EXT%\cppunittester
 mkdir: %_DEST%\inc%_EXT%\sal
 mkdir: %_DEST%\inc%_EXT%\osl
 mkdir: %_DEST%\inc%_EXT%\rtl
 mkdir: %_DEST%\inc%_EXT%\systools
 mkdir: %_DEST%\inc%_EXT%\systools\win32
-mkdir: %_DEST%\bin%_EXT%\cppunit
 
+..\inc\cppunittester\protectorfactory.hxx %_DEST%\inc%_EXT%\protectorfactory.hxx
 ..\%__SRC%\inc\rtlbootstrap.mk %_DEST%\inc%_EXT%\rtlbootstrap.mk
 ..\inc\sal\*.h %_DEST%\inc%_EXT%\sal\*.h
 ..\%__SRC%\inc\sal\typesizes.h %_DEST%\inc%_EXT%\sal\typesizes.h

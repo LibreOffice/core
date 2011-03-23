@@ -48,57 +48,65 @@ module com {  module sun {  module star {  module  util {
 
 /** A service to support the substitution and resubstitution of path variables.
 
-    <p>
-    A path variable must be specified with the following syntax: "$("&lt;variable-name&gt;")".
-    Path variables are not case sensitive and are always provided as a UCB-compliant URLs
-    (for example: "file:///c:/temp" or "file:///usr/install"). This is mandatory to support an
-    optional remote file system.<br>
-    A user defined list of path variables is supported. This list is stored in the Office
-    configuration file (org/openoffice/Office/Substitution.xml). Please have a  look at the
-    schema definition file which configuration structure this file uses.<br>
-    There is also a set of variables that have pre-defined values:
-    </p>
-    <dl>
-    <dt>$(inst)</dt>
-    <dd>Installation path of the Office Basis layer.</dd>
-    <dt>$(prog)</dt>
-    <dd>Program path of the Office Basis layer.</dd>
+        <p>
+        A path variable must be specified with the following syntax: "$("&lt;variable-name&gt;")".
+        Path variables are not case sensitive and are always provided as a UCB-compliant URLs
+        (for example: "file:///c:/temp" or "file:///usr/install"). This is mandatory to support an
+        optional remote file system.<br>
+        A user defined list of path variables is supported. This list is stored in the Office
+        configuration file (org/openoffice/Office/Substitution.xml). Please have a look at the
+        schema definition file which configuration structure this file uses.<br>
+        There is also a set of variables that have pre-defined values:
+        </p>
+        <dl>
+        <dt>$(inst)</dt>
+        <dd>Installation path of the Office Basis layer.</dd>
+        <dt>$(prog)</dt>
+        <dd>Program path of the Office Basis layer.</dd>
     <dt>$(brandbaseurl)</dt>
     <dd>Installation path of the the Office Brand layer.</dd>
-    <dt>$(user)</dt>
-    <dd>The user installation directory.</dd>
-    <dt>$(work)</dt>
-    <dd>The work directory of the user. Under Windows this would be the
-    "MyDocuments" subdirectory. Under Unix this would be the home-directory</dd>
+        <dt>$(user)</dt>
+        <dd>The user installation directory.</dd>
+        <dt>$(work)</dt>
+        <dd>The work directory of the user. Under Windows this would be the
+        "MyDocuments" subdirectory. Under Unix this would be the home-directory</dd>
     <dt>$(home)</dt>
-    <dd>The home directory of the user. Under Unix this would be the home-
-        directory. Under Windows this would be the "Documents and Settings\<username>"
-        subdirectory.</dd>
+        <dd>The home directory of the user. Under Unix this would be the home-
+            directory. Under Windows this would be the "Documents and Settings\<username>"
+         subdirectory.</dd>
     <dt>$(temp)</dt>
-    <dd>The current temporary directory.</dd>
+        <dd>The current temporary directory.</dd>
     <dt>$(path)</dt>
-    <dd>The value of PATH environment variable.</dd>
+        <dd>The value of PATH environment variable.</dd>
     <dt>$(lang)</dt>
-    <dd>The country code used by the Office, like 01=English, 49=German.</dd>
-    <dt>$(langid)</dt>
-    <dd>The language code used by the Office, like 0x0009=English, 0x0409=English US.</dd>
+        <dd>The country code used by the Office, like 01=English, 49=German.</dd>
+        <dt>$(langid)</dt>
+        <dd>The language code used by the Office, like 0x0009=English, 0x0409=English US.</dd>
     <dt>$(vlang)</dt>
-    <dd>The language used by the Office as a string. Like "German" for a German Office.</dd>
-    </dl>
+        <dd>The language used by the Office as a string. Like "German" for a German Office.</dd>
+        </dl>
+        <p>
+        Attention: Most predefined variables describe an absolute path.
+        The only exceptions are: $(lang), $(langid) and $(vlang).
+        Therefore the service implementation should only substitute variables which
+        are located at the start of a provided path string or are part of a multi-path.
+        This special service is not designed to be a text substiution but shall
+        provide (a) valid substituted path(s).
+        </p>
 
     @since OOo 1.1.2
 */
 
 published service PathSubstitution
 {
-    //-------------------------------------------------------------------------
-    /** Interface to exchange path variables with defined paths and to resubstitute paths with path variables.
+        //-------------------------------------------------------------------------
+        /** Interface to exchange path variables with defined paths and to resubstitute paths with path variables.
 
-        <p>
-        To resubstitute path variables the caller must provide paths as UCB-compliant URLs.
-        </p>
-    */
-    interface com::sun::star::util::XStringSubstitution;
+                <p>
+                To resubstitute path variables the caller must provide paths as UCB-compliant URLs.
+                </p>
+        */
+        interface com::sun::star::util::XStringSubstitution;
 };
 
 //=============================================================================

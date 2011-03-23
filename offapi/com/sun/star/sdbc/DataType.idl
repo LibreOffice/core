@@ -133,7 +133,7 @@ published constants DataType
     /** identifies the generic SQL type
      * <code>BOOLEAN</code>.
      *
-     * @since OOo 2.0.0
+     * @since OOo 2.0
      */
     const long BOOLEAN = 16;
 };

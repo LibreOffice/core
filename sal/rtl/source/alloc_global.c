@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include "alloc_impl.h"
 #include "rtl/alloc.h"
 #include <sal/macros.h>
 
@@ -63,7 +64,6 @@ static void determine_alloc_mode(void)
  *
  * ================================================================= */
 
-#include "alloc_impl.h"
 #include "internal/once.h"
 #include "sal/macros.h"
 #include "osl/diagnose.h"

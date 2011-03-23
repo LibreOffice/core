@@ -48,7 +48,7 @@ module com { module sun { module star { module frame {
     briefs the controller whenever the pop-up menu gets activated by a user.
     </p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 interface XPopupMenuController : com::sun::star::uno::XInterface
 {

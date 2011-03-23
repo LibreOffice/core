@@ -325,10 +325,8 @@ oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirecto
     rtl_uString* ustrSystemPath = NULL;
     oslFileError osl_error      = osl_File_E_INVAL;
 
-    OSL_ASSERT(ustrFileURL);
-    OSL_ASSERT(pItem);
-
-    if (0 == ustrFileURL->length || NULL == pItem)
+    OSL_ASSERT((0 != ustrFileURL) && (0 != pItem));
+    if ((0 == ustrFileURL) || (0 == ustrFileURL->length) || (0 == pItem))
         return osl_File_E_INVAL;
 
     osl_error = osl_getSystemPathFromFileURL_Ex(ustrFileURL, &ustrSystemPath, sal_False);

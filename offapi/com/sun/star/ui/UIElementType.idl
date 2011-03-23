@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module ui {
 /** determine the type of a user interface element which is controlled
     by a layout manager.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 constants UIElementType
 {

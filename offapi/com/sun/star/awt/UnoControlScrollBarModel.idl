@@ -52,7 +52,7 @@ published service UnoControlScrollBarModel
 
     /** specifies the RGB color to be used for the control.
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] com::sun::star::util::Color BackgroundColor;
 
@@ -81,7 +81,7 @@ published service UnoControlScrollBarModel
         <p>Not every border style (see <member>Border</member>) may support coloring.
         For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] long BorderColor;
 
@@ -118,7 +118,7 @@ published service UnoControlScrollBarModel
         <FALSE/> means, that the window is only updated after the user has
         released the mouse button.</p>
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] boolean LiveScroll;
 
@@ -144,7 +144,7 @@ published service UnoControlScrollBarModel
         mouse button and to press it again. The delay between two such triggers
         is specified with this property.</p>
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] long RepeatDelay;
 
@@ -174,7 +174,7 @@ published service UnoControlScrollBarModel
     /** specifies the RGB color to be used when painting symbols which are
         part of the control's appearance, such as the arrow buttons.
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] com::sun::star::util::Color SymbolColor;
 
@@ -182,7 +182,7 @@ published service UnoControlScrollBarModel
 
     /** specifies that the control can be reached with the TAB key.
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] boolean Tabstop;
 

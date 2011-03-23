@@ -36,7 +36,7 @@ module com { module sun { module star { module rendering {
     takes place between two consecutive frames of a discrete animation
     sequence.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 constants InterpolationMode
 {

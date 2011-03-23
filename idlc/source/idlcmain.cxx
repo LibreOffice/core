@@ -28,26 +28,35 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idlc.hxx"
-#include <idlc/idlc.hxx>
+
+#include "idlc/idlc.hxx"
 #include "sal/main.h"
+
+#include <string.h>
 
 using namespace ::rtl;
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-    Options options;
+    std::vector< std::string > args;
+    for (int i = 1; i < argc; i++)
+    {
+        if (!Options::checkArgument (args, argv[i], strlen(argv[i])))
+            return (1);
+    }
 
+    Options options(argv[0]);
     try
     {
-        if (!options.initOptions(argc, argv))
-           exit(1);
+        if (!options.initOptions(args))
+           return (0);
     }
     catch( IllegalArgument& e)
     {
         fprintf(stderr, "Illegal argument: %s\n%s",
             e.m_message.getStr(),
             options.prepareVersion().getStr());
-        exit(99);
+        return (99);
     }
 
     setIdlc(&options);

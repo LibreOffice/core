@@ -342,37 +342,24 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
         delete pWeakMap;
         pWeakMap = 0;
     }
-#ifndef CPPU_LEAK_STATIC_DATA
 #if OSL_DEBUG_LEVEL > 1
-#define MYASSERT(x) if (x != 0) fprintf(stderr, "### "#x" = %d, should be zero!!!\n", x);
-    MYASSERT (nTypeDescriptionCount );
-    MYASSERT( nCompoundTypeDescriptionCount );
-    MYASSERT( nUnionTypeDescriptionCount );
-    MYASSERT( nIndirectTypeDescriptionCount );
-    MYASSERT( nArrayTypeDescriptionCount );
-    MYASSERT( nEnumTypeDescriptionCount );
-    MYASSERT( nInterfaceMethodTypeDescriptionCount );
-    MYASSERT( nInterfaceAttributeTypeDescriptionCount );
-    MYASSERT( nInterfaceTypeDescriptionCount );
-    MYASSERT( nTypeDescriptionReferenceCount );
-#undef MYASSERT
+    OSL_ENSURE( !nTypeDescriptionCount );
+    OSL_ENSURE( !nCompoundTypeDescriptionCount );
+    OSL_ENSURE( !nUnionTypeDescriptionCount );
+    OSL_ENSURE( !nIndirectTypeDescriptionCount );
+    OSL_ENSURE( !nArrayTypeDescriptionCount );
+    OSL_ENSURE( !nEnumTypeDescriptionCount );
+    OSL_ENSURE( !nInterfaceMethodTypeDescriptionCount );
+    OSL_ENSURE( !nInterfaceAttributeTypeDescriptionCount );
+    OSL_ENSURE( !nInterfaceTypeDescriptionCount );
+    OSL_ENSURE( !nTypeDescriptionReferenceCount );
 
-    OSL_ASSERT( nTypeDescriptionCount == 0 );
-    OSL_ASSERT( nCompoundTypeDescriptionCount == 0 );
-    OSL_ASSERT( nUnionTypeDescriptionCount == 0 );
-    OSL_ASSERT( nIndirectTypeDescriptionCount == 0 );
-    OSL_ASSERT( nArrayTypeDescriptionCount == 0 );
-    OSL_ASSERT( nEnumTypeDescriptionCount == 0 );
-    OSL_ASSERT( nInterfaceMethodTypeDescriptionCount == 0 );
-    OSL_ASSERT( nInterfaceAttributeTypeDescriptionCount == 0 );
-    OSL_ASSERT( nInterfaceTypeDescriptionCount == 0 );
-    OSL_ASSERT( nTypeDescriptionReferenceCount == 0 );
-
-    OSL_ASSERT( !pCallbacks || pCallbacks->empty() );
+    OSL_ENSURE( !pCallbacks || pCallbacks->empty() );
 #endif
+
     delete pCallbacks;
     pCallbacks = 0;
-#endif // CPPU_LEAK_STATIC_DATA
+
     if( pMutex )
     {
         delete pMutex;

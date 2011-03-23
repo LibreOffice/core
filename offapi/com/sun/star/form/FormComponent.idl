@@ -104,7 +104,7 @@ published service FormComponent
         will always be set, even if you do not specify it in the
         <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member> call.</p>
 
-        @since OpenOffice.org 2.3.0
+        @since OOo 2.3
     */
     [optional] service com::sun::star::beans::PropertyBag;
 

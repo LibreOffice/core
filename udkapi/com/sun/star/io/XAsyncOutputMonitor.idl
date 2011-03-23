@@ -59,7 +59,7 @@ module com { module sun { module star { module io {
    should be called after the series of calls to
    <member scope="com::sun::star::io">XOutputStream::writeBytes</member>.</p>
 
-   @since OOo2.0.0
+   @since OOo 2.0
 */
 interface XAsyncOutputMonitor {
     /**

@@ -36,7 +36,7 @@ module com { module sun { module star { module configuration {
 
    <p>This interface is unpublished and unstable.</p>
 
-   @since OOo 3.3.0
+   @since OOo 3.3
 */
 interface XUpdate {
     void insertExtensionXcsFile([in] boolean shared, [in] string fileUri);

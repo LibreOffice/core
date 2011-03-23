@@ -155,7 +155,7 @@ namespace /* private */
     void parse_UNC_path(const sal_Unicode* path, UNCComponents* puncc)
     {
         OSL_PRECOND(is_UNC_path(path), "Precondition violated: No UNC path");
-        OSL_PRECOND(rtl_ustr_indexOfChar(path, SLASH) != -1, "Path must not contain slashes");
+        OSL_PRECOND(rtl_ustr_indexOfChar(path, SLASH) == -1, "Path must not contain slashes");
 
         const sal_Unicode* pend = path + rtl_ustr_getLength(path);
         const sal_Unicode* ppos = path + 2;

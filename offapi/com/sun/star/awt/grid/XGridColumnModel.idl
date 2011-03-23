@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
     If you do not need your own model implementation, you can also use the <type>DefaultGridColumnModel</type>.
 
-    @since OOo 3.3.0
+    @since OOo 3.3
 */
 interface XGridColumnModel
 {

@@ -601,7 +601,8 @@ oslInterlockedCount SAL_CALL MappedLockBytes::release()
 void MappedLockBytes::allocate_Impl (void ** ppPage, sal_uInt16 * pnSize)
 {
     OSL_PRECOND((ppPage != 0) && (pnSize != 0), "contract violation");
-    *ppPage = 0, *pnSize = m_nPageSize;
+    if ((ppPage != 0) && (pnSize != 0))
+        *ppPage = 0, *pnSize = m_nPageSize;
 }
 
 void MappedLockBytes::deallocate_Impl (void * pPage)

@@ -40,7 +40,7 @@ module com { module sun { module star { module sdb { module application {
 
 /** denotes different objects within a database document
 
-    @since OOo 2.2.0
+    @since OOo 2.2
 
     @see DatabaseObjectContainer
  */

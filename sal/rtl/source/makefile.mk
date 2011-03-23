@@ -46,6 +46,11 @@ TARGETTYPE=CUI
 
 .INCLUDE :  settings.mk
 
+.IF "$(VALGRIND_CFLAGS)" != ""
+CFLAGS += $(VALGRIND_CFLAGS)
+CDEFS  += -DHAVE_MEMCHECK_H=1
+.ENDIF # VALGRIND_CFLAGS
+
 .IF "$(ALLOC)" == "SYS_ALLOC" || "$(ALLOC)" == "TCMALLOC" || "$(ALLOC)" == "JEMALLOC"
 CDEFS+= -DFORCE_SYSALLOC
 .ENDIF
@@ -98,7 +103,7 @@ SLOFILES=   \
             $(SLO)$/alloc_arena.obj
 
 .IF "$(OS)"=="MACOSX" || "$(OS)"=="AIX"
-SLOFILES+=$(SLO)$/memory_fini.obj
+SLOFILES+=$(SLO)$/alloc_fini.obj
 .ENDIF
 
 
@@ -130,7 +135,7 @@ OBJFILES=   \
             $(OBJ)$/alloc_arena.obj
 
 .IF "$(OS)"=="MACOSX" || "$(OS)"=="AIX"
-OBJFILES+=$(OBJ)$/memory_fini.obj
+OBJFILES+=$(OBJ)$/alloc_fini.obj
 .ENDIF
 
 

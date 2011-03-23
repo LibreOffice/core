@@ -36,7 +36,7 @@ module com { module sun { module star { module deployment {
 /** A DeploymentException indicates that the current platform
     is not supported.
 
-    @since OOo 3.0.0
+    @since OOo 3.0
  */
 exception PlatformException : com::sun::star::uno::Exception
 {

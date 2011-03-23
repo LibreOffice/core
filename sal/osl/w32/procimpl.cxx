@@ -301,6 +301,39 @@ namespace /* private */
         return quoted.makeStringAndClear();
     }
 
+    //The parameter path must be a system path. If it is longer than 260 characters
+    //then it is shortened using the GetShortPathName function. This function only
+    //works if the path exists. Because "path" can be the path to an executable, it
+    //may not have the file extension ".exe". However, if the file on disk has the
+    //".exe" extension, then the function will fail. In this case a second attempt
+    //is started by adding the parameter "extension" to "path".
+    rtl::OUString getShortPath(rtl::OUString const & path, rtl::OUString const & extension)
+    {
+        rtl::OUString ret(path);
+        if (path.getLength() > 260)
+        {
+            std::vector<sal_Unicode, rtl::Allocator<sal_Unicode> > vec(path.getLength() + 1);
+            //GetShortPathNameW only works if the file can be found!
+            const DWORD len = GetShortPathNameW(
+                path.getStr(), &vec[0], path.getLength() + 1);
+
+            if (!len && GetLastError() == ERROR_FILE_NOT_FOUND
+                && extension.getLength())
+            {
+                const rtl::OUString extPath(path + extension);
+                std::vector<sal_Unicode, rtl::Allocator<sal_Unicode> > vec2(
+                    extPath.getLength() + 1);
+                const DWORD len2 = GetShortPathNameW(
+                    extPath.getStr(), &vec2[0], extPath.getLength() + 1);
+                ret = rtl::OUString(&vec2[0], len2);
+            }
+            else
+            {
+                ret = rtl::OUString(&vec[0], len);
+            }
+        }
+        return ret;
+    }
     //##########################################################
     // Returns the system path of the executable which can either
     // be provided via the strImageName parameter or as first
@@ -326,6 +359,8 @@ namespace /* private */
         rtl::OUString exe_path;
         if (osl_File_E_None != osl::FileBase::getSystemPathFromFileURL(exe_url, exe_path))
             return rtl::OUString();
+
+        exe_path = getShortPath(exe_path, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".exe")));
 
         if (exe_path.indexOf(' ') != -1)
             exe_path = quote_string(exe_path);

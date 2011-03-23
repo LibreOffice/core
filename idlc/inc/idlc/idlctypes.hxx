@@ -33,7 +33,9 @@
 #include <boost/unordered_map.hpp>
 #include <list>
 #include <vector>
+#include <string>
 #include <set>
+
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
