@@ -1,4 +1,4 @@
-sc      sc      :       filter L10N:l10n vbahelper oovbaapi svx uui stoc BOOST:boost formula MDDS:mdds oox LIBXSLT:libxslt unoxml ure NULL
+sc      sc      :       filter TRANSLATIONS:translations vbahelper oovbaapi svx uui stoc BOOST:boost formula MDDS:mdds oox LIBXSLT:libxslt unoxml ure NULL
 sc	sc							usr1	-	all	sc_mkout NULL
 sc	sc\inc							nmake	-	all	sc_inc NULL
 sc	sc\prj							get	-	all	sc_prj NULL
