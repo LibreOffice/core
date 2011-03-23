@@ -331,14 +331,24 @@ struct XclObjAnchor : public XclRange
                             const Rectangle& rRect, MapUnit eMapUnit, bool bDffAnchor );
 };
 
+
 template< typename StreamType >
 StreamType& operator>>( StreamType& rStrm, XclObjAnchor& rAnchor )
 {
-    return rStrm
+    sal_uInt16 tmpFirstRow, tmpTY, tmpLastRow, tmpBY;
+
+    rStrm
         >> rAnchor.maFirst.mnCol >> rAnchor.mnLX
-        >> rAnchor.maFirst.mnRow >> rAnchor.mnTY
+        >> tmpFirstRow >> tmpTY
         >> rAnchor.maLast.mnCol  >> rAnchor.mnRX
-        >> rAnchor.maLast.mnRow  >> rAnchor.mnBY;
+        >> tmpLastRow  >> tmpBY;
+
+    rAnchor.maFirst.mnRow = static_cast<sal_uInt32> (tmpFirstRow);
+    rAnchor.mnTY = static_cast<sal_uInt32> (tmpTY);
+    rAnchor.maLast.mnRow = static_cast<sal_uInt32> (tmpLastRow);
+    rAnchor.mnBY = static_cast<sal_uInt32> (tmpBY);
+
+    return rStrm;
 }
 
 template< typename StreamType >
@@ -346,9 +356,9 @@ StreamType& operator<<( StreamType& rStrm, const XclObjAnchor& rAnchor )
 {
     return rStrm
         << rAnchor.maFirst.mnCol << rAnchor.mnLX
-        << rAnchor.maFirst.mnRow << rAnchor.mnTY
+        << static_cast<sal_uInt16>(rAnchor.maFirst.mnRow) << static_cast<sal_uInt16>(rAnchor.mnTY)
         << rAnchor.maLast.mnCol  << rAnchor.mnRX
-        << rAnchor.maLast.mnRow  << rAnchor.mnBY;
+        << static_cast<sal_uInt16>(rAnchor.maLast.mnRow)  << static_cast<sal_uInt16>(rAnchor.mnBY);
 }
 
 // ----------------------------------------------------------------------------
