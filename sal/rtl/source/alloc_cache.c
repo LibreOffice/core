@@ -989,6 +989,7 @@ rtl_cache_deactivate (
     RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
 
     OSL_PRECOND(active, "rtl_cache_deactivate(): orphaned cache.");
+    (void)active;
 
     /* cleanup magazine layer */
     if (cache->m_magazine_cache != 0)
