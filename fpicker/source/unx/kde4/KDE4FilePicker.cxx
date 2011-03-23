@@ -199,7 +199,7 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
     // simply release the SolarMutex here. The KDE file dialog does not
     // call back to the core, so this should be safe (and if it does,
     // SolarMutex will need to be re-acquired).
-    ULONG mutexrelease = 0;
+    long mutexrelease = 0;
     if( !qApp->clipboard()->property( "useEventLoopWhenWaiting" ).toBool())
         mutexrelease = Application::ReleaseSolarMutex();
     //block and wait for user input
