@@ -721,14 +721,22 @@ void
 exec_pagein (Args *args)
 {
     char *argv[5];
+    rtl_String *app_path;
+
+    app_path = ustr_to_str (args->pAppPath);
 
     argv[0] = "dummy-pagein";
-    argv[1] = "-L../basis-link/program";
+    argv[1] = malloc (app_path->length + sizeof ("-L/../basis-link/program") + 2);
+    strcpy (argv[1], "-L");
+    strcat (argv[1], app_path->buffer);
+    strcat (argv[1], "/../basis-link/program");
     argv[2] = "@pagein-common";
     argv[3] = (char *)args->pPageinType;
     argv[4] = NULL;
 
     pagein_execute (args->pPageinType ? 4 : 3, argv);
+
+    free (argv[1]);
 }
 
 static void extend_library_path (const char *new_element)
