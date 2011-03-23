@@ -35,7 +35,7 @@
 #include <osl/diagnose.h>
 
 #include "XTDataObject.hxx"
-#include <com/sun/star/datatransfer/dataflavor.hpp>
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include "..\misc\ImplHelper.hxx"
 #include "DTransHelper.hxx"
 #include "TxtCnvtHlp.hxx"

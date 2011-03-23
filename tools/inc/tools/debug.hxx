@@ -79,7 +79,7 @@ typedef void (*DbgTestSolarMutexProc)();
 #define DBG_OUT_MSGBOX              4
 #define DBG_OUT_TESTTOOL            5
 #define DBG_OUT_DEBUGGER            6
-#define DBG_OUT_COREDUMP            7
+#define DBG_OUT_ABORT               7
 
 #define DBG_OUT_COUNT               8
 
@@ -136,6 +136,7 @@ struct DbgDataType
 #define DBG_FUNC_GETPRINTMSGBOX     17
 #define DBG_FUNC_FILTERMESSAGE      18          // new for #i38967
 #define DBG_FUNC_UPDATEOSLHOOK      19
+#define DBG_FUNC_SET_ABORT          20
 
 TOOLS_DLLPUBLIC void* DbgFunc( sal_uInt16 nAction, void* pData = NULL );
 
@@ -177,6 +178,11 @@ inline void DbgSetPrintWindow( DbgPrintLine pProc )
 inline void DbgSetPrintTestTool( DbgPrintLine pProc )
 {
     DbgFunc( DBG_FUNC_SETPRINTTESTTOOL, (void*)(long)pProc );
+}
+
+inline void DbgSetAbort( DbgPrintLine pProc )
+{
+    DbgFunc( DBG_FUNC_SET_ABORT, (void*)(long)pProc );
 }
 
 typedef sal_uInt16 DbgChannelId;

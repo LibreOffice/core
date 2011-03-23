@@ -103,6 +103,14 @@ namespace fs
             HCDBG(std::cerr << "native_file_string is " << tmp.getStr() << std::endl);
             return std::string(tmp.getStr());
         }
+#ifdef WNT
+        wchar_t const * native_file_string_w() const
+        {
+            ::rtl::OUString ustrSystemPath;
+            osl::File::getSystemPathFromFileURL(data, ustrSystemPath);
+            return ustrSystemPath.getStr();
+        }
+#endif
         std::string native_directory_string() const { return native_file_string(); }
         std::string toUTF8() const
         {

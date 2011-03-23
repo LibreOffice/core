@@ -29,7 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#include <tools/mempool.hxx>
+#include "tools/mempool.hxx"
+#include "osl/diagnose.h"
 #include "rtl/alloc.h"
 
 #include <stdio.h>
@@ -41,11 +42,13 @@
 *************************************************************************/
 
 FixedMemPool::FixedMemPool (
-    sal_uInt16 _nTypeSize, sal_uInt16, sal_uInt16)
+    char const * pTypeName, sal_uInt16 nTypeSize, sal_uInt16, sal_uInt16)
+  : m_pTypeName (pTypeName)
 {
     char name[RTL_CACHE_NAME_LENGTH + 1];
-    snprintf (name, sizeof(name), "FixedMemPool_%d", (int)_nTypeSize);
-    m_pImpl = (FixedMemPool_Impl*)rtl_cache_create (name, _nTypeSize, 0, NULL, NULL, NULL, 0, NULL, 0);
+    snprintf (name, sizeof(name), "FixedMemPool_%d", (int)nTypeSize);
+    m_pImpl = (FixedMemPool_Impl*)rtl_cache_create (name, nTypeSize, 0, NULL, NULL, NULL, 0, NULL, 0);
+    OSL_TRACE("FixedMemPool::ctor(\"%s\"): %p", m_pTypeName, m_pImpl);
 }
 
 /*************************************************************************
@@ -56,7 +59,8 @@ FixedMemPool::FixedMemPool (
 
 FixedMemPool::~FixedMemPool()
 {
-    rtl_cache_destroy ((rtl_cache_type*)(m_pImpl));
+    OSL_TRACE("FixedMemPool::dtor(\"%s\"): %p", m_pTypeName, m_pImpl);
+    rtl_cache_destroy ((rtl_cache_type*)(m_pImpl)), m_pImpl = 0;
 }
 
 /*************************************************************************

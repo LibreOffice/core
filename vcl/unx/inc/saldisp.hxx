@@ -124,7 +124,7 @@ enum SalRGB { RGB,  RBG,
               RGBA, RBGA,
               GBRA, GRBA,
               BGRA, BRGA,
-              other };
+              otherSalRGB };
 
 // -=-= SalVisual =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalVisual : public XVisualInfo

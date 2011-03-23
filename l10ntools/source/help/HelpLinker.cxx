@@ -123,7 +123,13 @@ void IndexerPreProcessor::processDocument
         {
             fs::path fsCaptionPureTextFile_docURL = m_fsCaptionFilesDirName / aStdStr_EncodedDocPathURL;
             std::string aCaptionPureTextFileStr_docURL = fsCaptionPureTextFile_docURL.native_file_string();
-            FILE* pFile_docURL = fopen( aCaptionPureTextFileStr_docURL.c_str(), "w" );
+#ifdef WNT     //We need _wfopen to support long file paths on Windows XP
+            FILE* pFile_docURL = _wfopen(
+                fsCaptionPureTextFile_docURL.native_file_string_w(), L"w" );
+#else
+            FILE* pFile_docURL = fopen(
+                fsCaptionPureTextFile_docURL.native_file_string().c_str(), "w" );
+#endif
             if( pFile_docURL )
             {
                 fprintf( pFile_docURL, "%s\n", pResNodeCaption->content );
@@ -140,8 +146,13 @@ void IndexerPreProcessor::processDocument
         if( pResNodeContent )
         {
             fs::path fsContentPureTextFile_docURL = m_fsContentFilesDirName / aStdStr_EncodedDocPathURL;
-            std::string aContentPureTextFileStr_docURL = fsContentPureTextFile_docURL.native_file_string();
-            FILE* pFile_docURL = fopen( aContentPureTextFileStr_docURL.c_str(), "w" );
+#ifdef WNT     //We need _wfopen to support long file paths on Windows XP
+            FILE* pFile_docURL = _wfopen(
+                fsContentPureTextFile_docURL.native_file_string_w(), L"w" );
+#else
+            FILE* pFile_docURL = fopen(
+                fsContentPureTextFile_docURL.native_file_string().c_str(), "w" );
+#endif
             if( pFile_docURL )
             {
                 fprintf( pFile_docURL, "%s\n", pResNodeContent->content );
@@ -231,9 +242,13 @@ public:
         }
     }
 
-    void dump_DBHelp( const std::string& rFileName )
+    void dump_DBHelp( const fs::path& rFileName )
     {
-        FILE* pFile = fopen( rFileName.c_str(), "wb" );
+#ifdef WNT     //We need _wfopen to support long file paths on Windows XP
+        FILE* pFile = _wfopen( rFileName.native_file_string_w(), L"wb" );
+#else
+        FILE* pFile = fopen( rFileName.native_file_string().c_str(), "wb" );
+#endif
         if( pFile == NULL )
             return;
 
@@ -422,9 +437,15 @@ void HelpLinker::link() throw( HelpProcessingException )
 #endif
 
     fs::path helpTextFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".ht_" : ".ht")));
+#ifdef WNT
+    //We need _wfopen to support long file paths on Windows XP
+    FILE* pFileHelpText_DBHelp = _wfopen
+        ( helpTextFileName_DBHelp.native_file_string_w(), L"wb" );
+#else
+
     FILE* pFileHelpText_DBHelp = fopen
         ( helpTextFileName_DBHelp.native_file_string().c_str(), "wb" );
-
+#endif
     DB* dbBase(0);
 #ifndef DBHELP_ONLY
     fs::path dbBaseFileName(indexDirParentName / (mod + ".db"));
@@ -434,8 +455,14 @@ void HelpLinker::link() throw( HelpProcessingException )
 #endif
 
     fs::path dbBaseFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".db_" : ".db")));
+#ifdef WNT
+    //We need _wfopen to support long file paths on Windows XP
+    FILE* pFileDbBase_DBHelp = _wfopen
+        ( dbBaseFileName_DBHelp.native_file_string_w(), L"wb" );
+#else
     FILE* pFileDbBase_DBHelp = fopen
         ( dbBaseFileName_DBHelp.native_file_string().c_str(), "wb" );
+#endif
 
 #ifndef DBHELP_ONLY
     DB* keyWord(0);
@@ -677,7 +704,7 @@ void HelpLinker::link() throw( HelpProcessingException )
     if( pFileDbBase_DBHelp != NULL )
         fclose( pFileDbBase_DBHelp );
 
-    helpKeyword.dump_DBHelp( keyWordFileName_DBHelp.native_file_string() );
+    helpKeyword.dump_DBHelp( keyWordFileName_DBHelp);
 
     if( !bExtensionMode )
     {

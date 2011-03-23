@@ -538,7 +538,9 @@ void ImplSalInitGraphics( WinSalGraphics* pData )
 
 void ImplSalDeInitGraphics( WinSalGraphics* pData )
 {
-    // Default Objekte selektieren
+    // clear clip region
+    SelectClipRgn( pData->mhDC, 0 );
+    // select default objects
     if ( pData->mhDefPen )
         SelectPen( pData->mhDC, pData->mhDefPen );
     if ( pData->mhDefBrush )

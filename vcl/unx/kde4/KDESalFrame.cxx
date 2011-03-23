@@ -87,6 +87,8 @@ static OUString readEntryUntranslated( KConfigGroup *pGroup, const char *pKey )
     return OUString::createFromAscii( (const char *) pGroup->readEntryUntranslated( pKey ).toAscii() );
 }
 
+#if 0
+#endif
 /** Helper function to add information to Font from QFont.
 
     Mostly grabbed from the Gtk+ vclplug (salnativewidgets-gtk.cxx).
@@ -173,7 +175,7 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
 void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 {
     StyleSettings style( rSettings.GetStyleSettings() );
-    sal_Bool bSetTitleFont = false;
+    bool bSetTitleFont = false;
 
     // General settings
     QPalette pal = kapp->palette();
@@ -268,9 +270,9 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     {
         Color aColor2 = style.GetLightColor();
         style.
-            SetCheckedColor( Color( (((sal_uInt16)aBack.GetRed()+(sal_uInt16)aColor2.GetRed())/2),
-                        (((sal_uInt16)aBack.GetGreen()+(sal_uInt16)aColor2.GetGreen())/2),
-                        (((sal_uInt16)aBack.GetBlue()+(sal_uInt16)aColor2.GetBlue())/2)
+            SetCheckedColor( Color( (sal_uInt8)(((sal_uInt16)aBack.GetRed()+(sal_uInt16)aColor2.GetRed())/2),
+                        (sal_uInt8)(((sal_uInt16)aBack.GetGreen()+(sal_uInt16)aColor2.GetGreen())/2),
+                        (sal_uInt8)(((sal_uInt16)aBack.GetBlue()+(sal_uInt16)aColor2.GetBlue())/2)
                         ) );
     }
 

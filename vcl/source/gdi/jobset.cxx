@@ -296,13 +296,16 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
     DBG_ASSERTWARNING( rIStream.GetVersion(), "JobSetup::>> - Solar-Version not set on rOStream" );
 
     {
-        sal_uInt16 nLen(0);
-        sal_uInt16 nSystem;
         sal_Size nFirstPos = rIStream.Tell();
+
+        sal_uInt16 nLen = 0;
         rIStream >> nLen;
         if ( !nLen )
             return rIStream;
+
+        sal_uInt16 nSystem = 0;
         rIStream >> nSystem;
+
         char* pTempBuf = new char[nLen];
         rIStream.Read( pTempBuf,  nLen - sizeof( nLen ) - sizeof( nSystem ) );
         if ( nLen >= sizeof(ImplOldJobSetupData)+4 )
