@@ -1688,7 +1688,9 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
         Link aOldLink( rSh.GetChgLnk() );
         rSh.SetChgLnk( Link() );
 
+        const SwPosition& rInsPos = *rSh.GetCrsr()->Start();
         SwReader aReader( *pStream, aEmptyStr, String(), *rSh.GetCrsr() );
+        rSh.SaveTblBoxCntnt( &rInsPos );
         if( IsError( aReader.Read( *pRead )) )
             nResId = ERR_CLPBRD_READ;
         else
