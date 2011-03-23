@@ -94,9 +94,9 @@ public:
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
-
+protected:
     //SwClient
-    virtual void            Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
 
 

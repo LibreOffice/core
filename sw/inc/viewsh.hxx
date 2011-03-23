@@ -36,6 +36,7 @@
 #include <swtypes.hxx>
 #include <ring.hxx>
 #include <swrect.hxx>
+#include <boost/shared_ptr.hpp>// swmod 080115
 #include <vcl/mapmod.hxx>
 #include <vcl/print.hxx>
 
@@ -95,7 +96,8 @@ namespace vcl
 // benoetigt werden.
 // Zur Zeit wird fuer die DrawPage das PreView Flag benoetigt
 #define VSHELLFLAG_ISPREVIEW            ((long)0x1)
-
+#define VSHELLFLAG_SHARELAYOUT          ((long)0x2)//swmod 080125 flag
+typedef boost::shared_ptr<SwRootFrm> SwRootFrmPtr;
 
 class SW_DLLPUBLIC ViewShell : public Ring
 {
@@ -163,6 +165,8 @@ class SW_DLLPUBLIC ViewShell : public Ring
 
     SdrPaintWindow*         mpTargetPaintWindow;
     OutputDevice*           mpBufferedOut;
+
+    SwRootFrmPtr            pLayout;            //swmod 080116
 
     //Initialisierung, wird von den verschiedenen Konstruktoren gerufen.
     SW_DLLPRIVATE void Init( const SwViewOption *pNewOpt );
@@ -271,13 +275,17 @@ public:
     //Invalidierung der ersten Sichtbaren Seite fuer alle Shells im Ring.
     void SetFirstVisPageInvalid();
 
-    SwRootFrm   *GetLayout() const;
+    SwRootFrm   *GetLayout() const;//swmod 080116
     sal_Bool         IsNewLayout() const; //Wurde das Layout geladen oder neu
                                       //erzeugt?
 
      Size GetDocSize() const;// erfrage die Groesse des Dokuments
 
     void CalcLayout();  //Durchformatierung des Layouts erzwingen.
+
+    sal_uInt16 GetPageCount() const;
+
+    const Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;
 
     inline SwDoc *GetDoc()  const { return pDoc; }  //niemals 0.
 
@@ -420,7 +428,7 @@ public:
     void LayoutIdle();
 
     inline const SwViewOption *GetViewOptions() const { return pOpt; }
-           void  ApplyViewOptions( const SwViewOption &rOpt );
+    virtual void  ApplyViewOptions( const SwViewOption &rOpt );
            void  SetUIOptions( const SwViewOption &rOpt );
            void  SetReadonlyOption(sal_Bool bSet);   // Readonly-Bit d. ViewOptions setzen
            void  SetPDFExportOption(sal_Bool bSet);   // set/reset PDF export mode

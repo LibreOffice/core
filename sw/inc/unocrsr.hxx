@@ -41,11 +41,6 @@ public:
     SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing = 0 );
     virtual ~SwUnoCrsr();
 
-    // @@@ semantic: no copy ctor.
-    SwUnoCrsr( SwUnoCrsr& );
-private:
-    SwUnoCrsr & operator= ( const SwUnoCrsr& );
-
 protected:
 
     virtual const SwCntntFrm* DoSetBidiLevelLeftRight(

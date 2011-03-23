@@ -423,7 +423,7 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                                     const std::vector<SdrObject*>& _rMovedChildObjs ) const
 {
     // determine 'repeated' objects of already moved object <_rMovedAnchoredObj>
-    std::vector<SwAnchoredObject*> aAnchoredObjs;
+    std::list<SwAnchoredObject*> aAnchoredObjs;
     {
         const SwContact* pContact = ::GetUserCall( _rMovedAnchoredObj.GetDrawObj() );
         OSL_ENSURE( pContact,
@@ -1042,8 +1042,9 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
 void SwDrawView::DeleteMarked()
 {
     SwDoc* pDoc = Imp().GetShell()->GetDoc();
-    if ( pDoc->GetRootFrm() )
-        pDoc->GetRootFrm()->StartAllAction();
+    SwRootFrm *pTmpRoot = pDoc->GetCurrentLayout();//swmod 080317
+    if ( pTmpRoot )
+        pTmpRoot->StartAllAction();
     pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
     // replace marked <SwDrawVirtObj>-objects by its reference objects.
     {
@@ -1063,11 +1064,8 @@ void SwDrawView::DeleteMarked()
         ::FrameNotify( Imp().GetShell(), FLY_DRAG_END );
     }
     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
-    if( pDoc->GetRootFrm() )
-        pDoc->GetRootFrm()->EndAllAction();
+    if( pTmpRoot )
+        pTmpRoot->EndAllAction();   //swmod 080218
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

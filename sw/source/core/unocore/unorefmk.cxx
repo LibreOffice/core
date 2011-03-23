@@ -82,9 +82,9 @@ public:
     bool    IsValid() const { return 0 != GetRegisteredIn(); }
     void    InsertRefMark( SwPaM & rPam, SwXTextCursor const*const pCursor );
     void    Invalidate();
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void    Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 };
 
@@ -99,7 +99,7 @@ void SwXReferenceMark::Impl::Invalidate()
     m_pMarkFmt = 0;
 }
 
-void SwXReferenceMark::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXReferenceMark::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 
@@ -113,7 +113,7 @@ void SwXReferenceMark::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
         {
             case RES_REFMARK_DELETED:
                 if (static_cast<const void*>(m_pMarkFmt) ==
-                        static_cast<SwPtrMsgPoolItem *>(pOld)->pObject)
+                        static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject)
                 {
                     Invalidate();
                 }
@@ -695,9 +695,9 @@ public:
     inline const ::sw::Meta * GetMeta() const;
     // only for SwXMetaField!
     inline const ::sw::MetaField * GetMetaField() const;
-
+protected:
     // SwClient
-    virtual void Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 };
 
@@ -707,7 +707,7 @@ inline const ::sw::Meta * SwXMeta::Impl::GetMeta() const
 }
 
 // SwModify
-void SwXMeta::Impl::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwXMeta::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     m_pTextPortions.reset(); // throw away cache (SwTxtNode changed)
 
@@ -807,7 +807,7 @@ bool SwXMeta::SetContentRange(
         SwTxtMeta const * const pTxtAttr( pMeta->GetTxtAttr() );
         if (pTxtAttr)
         {
-            rpNode = pTxtAttr->GetTxtNode();
+            rpNode = pMeta->GetTxtNode();
             if (rpNode)
             {
                 // rStart points at the first position _within_ the meta!

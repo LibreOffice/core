@@ -46,13 +46,16 @@ class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
     String      sSuffix;
 protected:
     bool        m_bEndNote;
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
+
 public:
     SvxNumberType aFmt;
     sal_uInt16    nFtnOffset;
 
     void        ChgPageDesc( SwPageDesc *pDesc );
-    SwPageDesc *GetPageDesc( SwDoc &rDoc ) const;
-    SwClient   *GetPageDescDep() const { return (SwClient*)&aPageDescDep; }
+    SwPageDesc* GetPageDesc( SwDoc &rDoc ) const;
+    bool        KnowsPageDesc() const;
+    bool        DependsOn( const SwPageDesc* ) const;
 
     void SetFtnTxtColl(SwTxtFmtColl& rColl);
     SwTxtFmtColl* GetFtnTxtColl() const { return  (SwTxtFmtColl*) GetRegisteredIn(); } // can be 0.
@@ -65,8 +68,6 @@ public:
     void SetAnchorCharFmt( SwCharFmt* );
     SwClient   *GetAnchorCharFmtDep() const { return (SwClient*)&aAnchorCharFmtDep; }
 
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
-
     SwEndNoteInfo & operator=(const SwEndNoteInfo&);
     sal_Bool operator==( const SwEndNoteInfo &rInf ) const;
 
@@ -78,6 +79,7 @@ public:
 
     void SetPrefix(const String& rSet)      { sPrefix = rSet; }
     void SetSuffix(const String& rSet)      { sSuffix = rSet; }
+    void ReleaseCollection() { if ( GetRegisteredInNonConst() ) GetRegisteredInNonConst()->Remove( this ); }
 };
 
 enum SwFtnPos

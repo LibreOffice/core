@@ -269,7 +269,7 @@ const sal_Unicode* StrChr( const sal_Unicode* pSrc, sal_Unicode c )
 SwTxtFrm* SwAutoFormat::GetFrm( const SwTxtNode& rTxtNd ) const
 {
     // get the Frame
-    const SwCntntFrm *pFrm = rTxtNd.GetFrm();
+    const SwCntntFrm *pFrm = rTxtNd.getLayoutFrm( pEditShell->GetLayout() );
     OSL_ENSURE( pFrm, "zum Autoformat muss das Layout vorhanden sein" );
     if( aFlags.bAFmtByInput && !pFrm->IsValid() )
     {
@@ -1526,6 +1526,9 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         aFmt.SetBulletFont( pBullFnt );
                         aFmt.SetBulletChar( cBullChar );
                         aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                        // #i93908# clear suffix for bullet lists
+                        aFmt.SetPrefix(::rtl::OUString());
+                        aFmt.SetSuffix(::rtl::OUString());
                         aFmt.SetFirstLineOffset( lBullFirstLineOffset );
                         aFmt.SetAbsLSpace( nAbsPos );
                         if( !aFmt.GetCharFmt() )

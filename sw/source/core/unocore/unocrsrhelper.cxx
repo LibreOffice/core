@@ -361,7 +361,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             {
                 if( pAny )
                 {
-                    SwXTextField* pField = CreateSwXTextField(*rPam.GetDoc(),
+                    SwXTextField* pField = SwXTextField::CreateSwXTextField(*rPam.GetDoc(),
                            pTxtAttr->GetFld());
                     *pAny <<= uno::Reference< XTextField >( pField );
                 }
@@ -728,7 +728,7 @@ void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
 
 void GetCurPageStyle(SwPaM& rPaM, String &rString)
 {
-    const SwPageFrm* pPage = rPaM.GetCntntNode()->GetFrm()->FindPageFrm();
+    const SwPageFrm* pPage = rPaM.GetCntntNode()->getLayoutFrm(rPaM.GetDoc()->GetCurrentLayout())->FindPageFrm();
     if(pPage)
         SwStyleNameMapper::FillProgName( pPage->GetPageDesc()->GetName(), rString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True );
 }

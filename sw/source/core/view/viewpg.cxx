@@ -83,7 +83,6 @@ void ViewShell::AdjustOptionsForPagePreview(SwPrintData const& rPrintOptions)
     return;
 }
 
-
 //#i14016# - consider empty pages on calculation of the scaling for a page to be printed.
 void ViewShell::PrintProspect(
     OutputDevice *pOutDev,

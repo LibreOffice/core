@@ -34,6 +34,7 @@
 #include "dflyobj.hxx"  // SwVirtFlyDrawObj
 #include "pam.hxx"      // SwPosition
 #include "flyfrm.hxx"   // SwFlyInCntFrm
+#include "rootfrm.hxx"
 #include "frmfmt.hxx"   // SwFrmFmt
 #include "viewsh.hxx"
 
@@ -255,7 +256,7 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
         if( (GetFlyFrm()->IsCompletePaint() ||
              GetFlyFrm()->Frm().IsOver( aRepaintRect )) &&
              SwFlyFrm::IsPaint( (SdrObject*)GetFlyFrm()->GetVirtDrawObj(),
-                                GetFlyFrm()->GetShell() ))
+                                GetFlyFrm()->getRootFrm()->GetCurrShell() ))
         {
             SwRect aRect( GetFlyFrm()->Frm() );
             if( !GetFlyFrm()->IsCompletePaint() )

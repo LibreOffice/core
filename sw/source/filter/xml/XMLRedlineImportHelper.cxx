@@ -71,21 +71,22 @@ using ::com::sun::star::beans::XPropertySetInfo;
 SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> & rCursor )
 {
     Reference<XUnoTunnel> xTunnel( rCursor, UNO_QUERY);
-    OSL_ENSURE( xTunnel.is(), "missing XUnoTunnel for Cursor" );
-    OTextCursorHelper* pSwXCursor = reinterpret_cast< OTextCursorHelper * >(
-            sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(OTextCursorHelper::getUnoTunnelId())) );
-    OSL_ENSURE( NULL != pSwXCursor, "OTextCursorHelper missing" );
-    return pSwXCursor->GetDoc();
+    OSL_ENSURE(xTunnel.is(), "missing XUnoTunnel for XTextCursor");
+    OTextCursorHelper *const pXCursor =
+        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xTunnel);
+    OSL_ENSURE( pXCursor, "OTextCursorHelper missing" );
+    return (pXCursor) ? pXCursor->GetDoc() : 0;
 }
 
 SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
 {
     Reference<XUnoTunnel> xTunnel(rRange, UNO_QUERY);
-    OSL_ENSURE(xTunnel.is(), "Can't tunnel XTextRange");
-    SwXTextRange *pRange = reinterpret_cast< SwXTextRange *>(
-            sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SwXTextRange::getUnoTunnelId())) );
-    OSL_ENSURE( NULL != pRange, "SwXTextRange missing" );
-    return pRange->GetDoc();
+    OSL_ENSURE(xTunnel.is(), "missing XUnoTunnel for XTextRange");
+    SwXTextRange *const pXRange =
+        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xTunnel);
+    // #i115174#: this may be a SvxUnoTextRange
+//    OSL_ENSURE( pXRange, "SwXTextRange missing" );
+    return (pXRange) ? pXRange->GetDoc() : 0;
 }
 
 
@@ -112,7 +113,7 @@ public:
     void Set( SwNodeIndex& rIndex );
     void SetAsNodeIndex( Reference<XTextRange> & rRange );
 
-    void CopyPositionInto(SwPosition& rPos);
+    void CopyPositionInto(SwPosition& rPos, SwDoc & rDoc);
     SwDoc* GetDoc();
 
     sal_Bool IsValid();
@@ -155,6 +156,12 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
     // XTextRange -> XTunnel -> SwXTextRange
     SwDoc* pDoc = lcl_GetDocViaTunnel(rRange);
 
+    if (!pDoc)
+    {
+        OSL_TRACE("SetAsNodeIndex: no SwDoc");
+        return;
+    }
+
     // SwXTextRange -> PaM
     SwUnoInternalPaM aPaM(*pDoc);
 #if OSL_DEBUG_LEVEL > 0
@@ -167,14 +174,15 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
     Set(aPaM.GetPoint()->nNode);
 }
 
-void XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos)
+void
+XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos, SwDoc & rDoc)
 {
     OSL_ENSURE(IsValid(), "Can't get Position");
 
     // create PAM from start cursor (if no node index is present)
     if (NULL == pIndex)
     {
-        SwUnoInternalPaM aUnoPaM(*GetDoc());
+        SwUnoInternalPaM aUnoPaM(rDoc);
 #if OSL_DEBUG_LEVEL > 0
         sal_Bool bSuccess =
 #endif
@@ -480,6 +488,13 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
         // get document from old cursor (via tunnel)
         SwDoc* pDoc = lcl_GetDocViaTunnel(xOldCursor);
 
+        if (!pDoc)
+        {
+            OSL_TRACE("XMLRedlineImportHelper::CreateRedlineTextSection: "
+                "no SwDoc => cannot create section.");
+            return 0;
+        }
+
         // create text section for redline
         SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool
             (RES_POOLCOLL_STANDARD, false );
@@ -612,11 +627,18 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
     // get the document (from one of the positions)
     SwDoc* pDoc = pRedlineInfo->aAnchorStart.GetDoc();
 
+    if (!pDoc)
+    {
+        OSL_TRACE("XMLRedlineImportHelper::InsertIntoDocument: "
+                "no SwDoc => cannot insert redline.");
+        return;
+    }
+
     // now create the PaM for the redline
     SwPaM aPaM(pDoc->GetNodes().GetEndOfContent());
-    pRedlineInfo->aAnchorStart.CopyPositionInto(*aPaM.GetPoint());
+    pRedlineInfo->aAnchorStart.CopyPositionInto(*aPaM.GetPoint(), *pDoc);
     aPaM.SetMark();
-    pRedlineInfo->aAnchorEnd.CopyPositionInto(*aPaM.GetPoint());
+    pRedlineInfo->aAnchorEnd.CopyPositionInto(*aPaM.GetPoint(), *pDoc);
 
     // collapse PaM if (start == end)
     if (*aPaM.GetPoint() == *aPaM.GetMark())

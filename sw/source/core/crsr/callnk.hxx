@@ -32,6 +32,7 @@
 
 class SwCrsrShell;
 class SwTxtNode;
+class SwRootFrm;
 
 class SwCallLink
 {
@@ -49,7 +50,7 @@ public:
                                     bool bAktSelection );
     ~SwCallLink();
 
-    static long GetFrm( SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm );
+    static long getLayoutFrm( const SwRootFrm*, SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm );
 };
 
 

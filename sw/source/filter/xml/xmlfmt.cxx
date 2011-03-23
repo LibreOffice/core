@@ -701,7 +701,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
 
     if( pFmtPageDesc )
     {
-        pPageDesc->Add( pFmtPageDesc );
+        pFmtPageDesc->RegisterToPageDesc( *pPageDesc );
         pItemSet->Put( *pFmtPageDesc );
         delete pFmtPageDesc;
     }
@@ -1082,7 +1082,7 @@ void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
             if( bSendModify )
             {
                 SwCondCollCondChg aMsg( pColl );
-                pColl->Modify( &aMsg, &aMsg );
+                pColl->ModifyNotification( &aMsg, &aMsg );
             }
         }
     }

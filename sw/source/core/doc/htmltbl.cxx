@@ -46,9 +46,10 @@
 #include "poolfmt.hxx"
 #include "viewsh.hxx"
 #include "tabfrm.hxx"
-
+#include "viewopt.hxx"
 #include "htmltbl.hxx"
 #include "ndindex.hxx"
+#include "switerator.hxx"
 
 using namespace ::com::sun::star;
 
@@ -352,7 +353,7 @@ sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByVisArea( const SwDoc& rDoc )
 sal_uInt16 SwHTMLTableLayout::GetBrowseWidth( const SwDoc& rDoc )
 {
     // Wenn ein Layout da ist, koennen wir die Breite dort herholen.
-    const SwRootFrm *pRootFrm = rDoc.GetRootFrm();
+    const SwRootFrm *pRootFrm = rDoc.GetCurrentLayout();    //swmod 080218
     if( pRootFrm )
     {
         const SwFrm *pPageFrm = pRootFrm->GetLower();
@@ -403,11 +404,10 @@ sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByTabFrm(
 sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByTable( const SwDoc& rDoc ) const
 {
     sal_uInt16 nBrowseWidth = 0;
-    SwClientIter aIter( *(SwModify*)pSwTable->GetFrmFmt() );
-    SwClient* pCli = aIter.First( TYPE( SwTabFrm ));
-    if( pCli )
+    SwTabFrm* pFrm = SwIterator<SwTabFrm,SwFmt>::FirstElement( *pSwTable->GetFrmFmt() );
+    if( pFrm )
     {
-        nBrowseWidth = GetBrowseWidthByTabFrm( *(SwTabFrm*)pCli );
+        nBrowseWidth = GetBrowseWidthByTabFrm( *pFrm );
     }
     else
     {
@@ -1737,16 +1737,16 @@ void SwHTMLTableLayout::_Resize( sal_uInt16 nAbsAvail, sal_Bool bRecalc )
     if( bRecalc )
         AutoLayoutPass1();
 
-    SwRootFrm *pRoot = (SwRootFrm*)GetDoc()->GetRootFrm();
+    SwRootFrm *pRoot = (SwRootFrm*)GetDoc()->GetCurrentViewShell()->GetLayout();
     if ( pRoot && pRoot->IsCallbackActionEnabled() )
-        pRoot->StartAllAction();
+        pRoot->StartAllAction();    //swmod 071108//swmod 071225
 
     // Sonst koennen die Breiten gesetzt werden, wobei zuvor aber jewils
     // noch der Pass 2 laufen muss.
     SetWidths( sal_True, nAbsAvail );
 
     if ( pRoot && pRoot->IsCallbackActionEnabled() )
-        pRoot->EndAllAction( sal_True );    //True per VirDev (Browsen ruhiger)
+        pRoot->EndAllAction( sal_True );    //True per VirDev (Browsen ruhiger) //swmod 071108//swmod 071225
 }
 
 IMPL_STATIC_LINK( SwHTMLTableLayout, DelayedResize_Impl, void*, EMPTYARG )
@@ -1780,7 +1780,7 @@ sal_Bool SwHTMLTableLayout::Resize( sal_uInt16 nAbsAvail, sal_Bool bRecalc,
     // und nicht die der VisArea uebergeben. Wenn wir nicht in einem Rahmen
     // stehen, muss die Tabelle allerdings fuer die VisArea berechnet werden,
     // weil sond die Umschaltung von relativ nach absolut nicht funktioniert.
-    if( pDoc->GetRootFrm() && pDoc->get(IDocumentSettingAccess::BROWSE_MODE) )
+    if( pDoc->GetCurrentViewShell() && pDoc->GetCurrentViewShell()->GetViewOptions()->getBrowseMode() )
     {
         const sal_uInt16 nVisAreaWidth = GetBrowseWidthByVisArea( *pDoc );
         if( nVisAreaWidth < nAbsAvail && !FindFlyFrmFmt() )

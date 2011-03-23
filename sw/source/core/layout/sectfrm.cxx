@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <svl/smplhint.hxx>
 #include <svl/itemiter.hxx>
 #include <hints.hxx>
 #include <txtftn.hxx>
@@ -55,6 +55,7 @@
 #include "layouter.hxx"     // SwLayouter
 #include "dbg_lay.hxx"
 #include "viewsh.hxx"
+#include "viewopt.hxx"
 #include "viewimp.hxx"
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -72,8 +73,8 @@ SV_IMPL_PTRARR_SORT( SwDestroyList, SwSectionFrmPtr )
 |*  SwSectionFrm::SwSectionFrm(), ~SwSectionFrm()
 |*
 |*************************************************************************/
-SwSectionFrm::SwSectionFrm( SwSection &rSect ) :
-    SwLayoutFrm( rSect.GetFmt() ),
+SwSectionFrm::SwSectionFrm( SwSection &rSect, SwFrm* pSib ) :
+    SwLayoutFrm( rSect.GetFmt(), pSib ),
     SwFlowFrm( (SwFrm&)*this ),
     pSection( &rSect )
 {
@@ -84,7 +85,7 @@ SwSectionFrm::SwSectionFrm( SwSection &rSect ) :
 }
 
 SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, sal_Bool bMaster ) :
-    SwLayoutFrm( rSect.GetFmt() ),
+    SwLayoutFrm( rSect.GetFmt(), rSect.getRootFrm() ),
     SwFlowFrm( (SwFrm&)*this ),
     pSection( rSect.GetSection() )
 {
@@ -150,9 +151,9 @@ SwSectionFrm::~SwSectionFrm()
 {
     if( GetFmt() && !GetFmt()->GetDoc()->IsInDtor() )
     {
-        SwRootFrm *pRootFrm = GetFmt()->GetDoc()->GetRootFrm();
+        SwRootFrm *pRootFrm = getRootFrm();
         if( pRootFrm )
-            pRootFrm->RemoveFromList( this );
+            pRootFrm->RemoveFromList( this );   //swmod 071108//swmod 071225
         if( IsFollow() )
         {
             SwSectionFrm *pMaster = FindMaster();
@@ -197,7 +198,7 @@ void SwSectionFrm::DelEmpty( sal_Bool bRemove )
         // Relation CONTENT_FLOWS_FROM for current next paragraph will change
         // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
         {
-            ViewShell* pViewShell( GetShell() );
+            ViewShell* pViewShell( getRootFrm()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {
@@ -232,11 +233,11 @@ void SwSectionFrm::DelEmpty( sal_Bool bRemove )
         {   // Wenn wir bereits halbtot waren vor diesem DelEmpty, so
             // stehen wir vermutlich auch in der Liste und muessen uns
             // dort austragen
-            if( !pSection )
-                GetFmt()->GetDoc()->GetRootFrm()->RemoveFromList( this );
+            if( !pSection && getRootFrm() )
+                getRootFrm()->RemoveFromList( this );
         }
-        else
-            GetFmt()->GetDoc()->GetRootFrm()->InsertEmptySct( this );
+        else if( getRootFrm() )
+            getRootFrm()->InsertEmptySct( this );   //swmod 071108//swmod 071225
         pSection = NULL; // damit ist allerdings eine Reanimierung quasi ausgeschlossen
     }
 }
@@ -387,7 +388,7 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
             }
         }
         pParent = pSect;
-        pSect = new SwSectionFrm( *((SwSectionFrm*)pParent)->GetSection() );
+        pSect = new SwSectionFrm( *((SwSectionFrm*)pParent)->GetSection(), pParent );
         // Wenn pParent in zwei Teile zerlegt wird, so muss sein Follow am
         // neuen, zweiten Teil angebracht werden.
         pSect->SetFollow( ((SwSectionFrm*)pParent)->GetFollow() );
@@ -538,7 +539,7 @@ sal_Bool SwSectionFrm::SplitSect( SwFrm* pFrm, sal_Bool bApres )
     OSL_ENSURE( pSav, "SplitSect: What's on?" );
     if( pSav ) // Robust
     {   // Einen neuen SctFrm anlegen, nicht als Follow/Master
-        SwSectionFrm* pNew = new SwSectionFrm( *pSect->GetSection() );
+        SwSectionFrm* pNew = new SwSectionFrm( *pSect->GetSection(), pSect );
         pNew->InsertBehind( pSect->GetUpper(), pSect );
         pNew->Init();
         SWRECTFN( this )
@@ -729,7 +730,7 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, sal_Bool bSave )
                 // vom gleichen Parent abgeleitet ist.
                 // Dann gibt es (noch) keinen Teil unseres Parents, der den Inhalt
                 // aufnehmen kann,also bauen wir ihn uns.
-                pPrvSct = new SwSectionFrm( *pParent->GetSection() );
+                pPrvSct = new SwSectionFrm( *pParent->GetSection(), pUp );
                 pPrvSct->InsertBehind( pUp, pPrv );
                 pPrvSct->Init();
                 SWRECTFN( pUp )
@@ -764,7 +765,7 @@ void SwSectionFrm::MakeAll()
     if( !pSection ) // Durch DelEmpty
     {
 #if OSL_DEBUG_LEVEL > 1
-        OSL_ENSURE( GetFmt()->GetDoc()->GetRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
+        OSL_ENSURE( getRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
 #endif
         if( !bValidPos )
         {
@@ -789,7 +790,8 @@ void SwSectionFrm::MakeAll()
 
     // OD 2004-03-15 #116561# - In online layout join the follows, if section
     // can grow.
-    if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    if( pSh && pSh->GetViewOptions()->getBrowseMode() &&
          ( Grow( LONG_MAX, true ) > 0 ) )
     {
         while( GetFollow() )
@@ -1307,8 +1309,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
     if( !pSection ) // Durch DelEmpty
     {
 #if OSL_DEBUG_LEVEL > 1
-        OSL_ENSURE( GetFmt()->GetDoc()->GetRootFrm()->IsInDelList( this ),
-                 "SectionFrm without Section" );
+        OSL_ENSURE( getRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
 #endif
         bValidSize = bValidPos = bValidPrtArea = sal_True;
         return;
@@ -1385,7 +1386,8 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             // OD 15.10.2002 #103517# - allow grow in online layout
             // Thus, set <..IsBrowseMode()> as parameter <bGrow> on calling
             // method <_CheckClipping(..)>.
-            _CheckClipping( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE), bMaximize );
+            const ViewShell *pSh = getRootFrm()->GetCurrShell();
+            _CheckClipping( pSh && pSh->GetViewOptions()->getBrowseMode(), bMaximize );
             bMaximize = ToMaximize( sal_False );
             bValidSize = sal_True;
         }
@@ -2010,9 +2012,14 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, sal_Bool bTst )
 
         sal_Bool bInCalcCntnt = GetUpper() && IsInFly() && FindFlyFrm()->IsLocked();
         // OD 2004-03-15 #116561# - allow grow in online layout
-        if ( !Lower() || !Lower()->IsColumnFrm() || !Lower()->GetNext() ||
-             GetSection()->GetFmt()->GetBalancedColumns().GetValue() ||
-             GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        sal_Bool bGrow = !Lower() || !Lower()->IsColumnFrm() || !Lower()->GetNext() ||
+             GetSection()->GetFmt()->GetBalancedColumns().GetValue();
+        if( !bGrow )
+        {
+             const ViewShell *pSh = getRootFrm()->GetCurrShell();
+             bGrow = pSh && pSh->GetViewOptions()->getBrowseMode();
+        }
+        if( bGrow )
         {
             SwTwips nGrow;
             if( IsInFtn() )
@@ -2397,7 +2404,7 @@ void SwSectionFrm::CalcEndAtEndFlag()
 |*
 |*************************************************************************/
 
-void SwSectionFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
+void SwSectionFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     sal_uInt8 nInvFlags = 0;
 
@@ -2432,7 +2439,16 @@ void SwSectionFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
     }
 }
 
-void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
+void SwSectionFrm::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
+{
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING && &rMod == GetRegisteredIn() )
+    {
+        SwSectionFrm::MoveCntntAndDelete( this, sal_True );
+    }
+}
+
+void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                             sal_uInt8 &rInvFlags,
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
@@ -2523,7 +2539,7 @@ void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
 
         case RES_PROTECT:
             {
-                ViewShell *pSh = GetShell();
+                ViewShell *pSh = getRootFrm()->GetCurrShell();
                 if( pSh && pSh->GetLayout()->IsAnyShellAccessible() )
                     pSh->Imp()->InvalidateAccessibleEditableState( sal_True, this );
             }
@@ -2717,7 +2733,7 @@ void SwRootFrm::_DeleteEmptySct()
             if( pUp && !pUp->Lower() )
             {
                 if( pUp->IsPageBodyFrm() )
-                    pUp->FindRootFrm()->SetSuperfluous();
+                    pUp->getRootFrm()->SetSuperfluous();
                 else if( pUp->IsFtnFrm() && !pUp->IsColLocked() &&
                     pUp->GetUpper() )
                 {

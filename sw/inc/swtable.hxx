@@ -43,6 +43,7 @@ class SwStartNode;
 #include <node.hxx>         // fuer StartNode->GetMyIndex
 #endif
 
+class SwFmt;
 class Color;
 class SwFrmFmt;
 class SwTableFmt;
@@ -86,7 +87,7 @@ typedef SwTableLine* SwTableLinePtr;
 
 class SW_DLLPUBLIC SwTable: public SwClient          //Client vom FrmFmt
 {
-    using SwClient::IsModifyLocked;
+
 
 protected:
     SwTableLines aLines;
@@ -115,6 +116,8 @@ protected:
 #endif
 
     sal_Bool IsModifyLocked(){ return bModifyLocked;}
+
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 
 public:
     enum SearchType
@@ -175,10 +178,9 @@ public:
           SwTableLines &GetTabLines() { return aLines; }
     const SwTableLines &GetTabLines() const { return aLines; }
 
-    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)pRegisteredIn; }
-    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)pRegisteredIn; }
-
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
+    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwTableFmt* GetTableFmt() const { return (SwTableFmt*)GetRegisteredIn(); }
 
     void GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
                      sal_Bool bHidden = sal_False, sal_Bool bCurRowOnly = sal_False ) const;
@@ -320,6 +322,7 @@ public:
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
     sal_Bool SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
+    void RegisterToFormat( SwFmt& rFmt );
 #if OSL_DEBUG_LEVEL > 1
     void CheckConsistency() const;
 #endif
@@ -346,8 +349,8 @@ public:
     void SetUpper( SwTableBox *pNew ) { pUpper = pNew; }
 
 
-    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)pRegisteredIn; }
-    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)pRegisteredIn; }
+    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 
     //Macht ein eingenes FrmFmt wenn noch mehr Lines von ihm abhaengen.
     SwFrmFmt* ClaimFrmFmt();
@@ -362,6 +365,7 @@ public:
     SwTwips GetTableLineHeight( bool& bLayoutAvailable ) const;
 
     bool hasSoftPageBreak() const;
+    void RegisterToFormat( SwFmt& rFmt );
 };
 
 class SW_DLLPUBLIC SwTableBox: public SwClient      //Client vom FrmFmt
@@ -400,8 +404,8 @@ public:
     const SwTableLine *GetUpper() const { return pUpper; }
     void SetUpper( SwTableLine *pNew ) { pUpper = pNew; }
 
-    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)pRegisteredIn; }
-    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)pRegisteredIn; }
+    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 
     //Macht ein eingenes FrmFmt wenn noch mehr Boxen von ihm abhaengen.
     SwFrmFmt* ClaimFrmFmt();
@@ -466,6 +470,8 @@ public:
     const SwTableBox& FindEndOfRowSpan( const SwTable& rTable,
         sal_uInt16 nMaxStep = USHRT_MAX ) const
         { return const_cast<SwTableBox*>(this)->FindEndOfRowSpan( rTable, nMaxStep ); }
+    void RegisterToFormat( SwFmt& rFmt ) ;
+    void ForgetFrmFmt();
 };
 
 class SwCellFrm;

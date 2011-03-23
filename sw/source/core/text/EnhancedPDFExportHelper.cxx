@@ -82,7 +82,7 @@
 #include "i18npool/mslangid.hxx"
 #include <IMark.hxx>
 #include <SwNodeNum.hxx>
-
+#include <switerator.hxx>
 #include <stack>
 
 #include <tools/globname.hxx>
@@ -1590,22 +1590,19 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         if ( pPDFExtOutDevData->GetIsExportNotes() )
         {
             SwFieldType* pType = mrSh.GetFldType( RES_POSTITFLD, aEmptyStr );
-            SwClientIter aIter( *pType );
-            const SwClient * pFirst = aIter.GoStart();
-            while( pFirst )
+            SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
+            for( SwFmtFld* pFirst = aIter.First(); pFirst; )
             {
-                if( ((SwFmtFld*)pFirst)->GetTxtFld() &&
-                    ((SwFmtFld*)pFirst)->IsFldInDoc())
+                if( pFirst->GetTxtFld() && pFirst->IsFldInDoc() )
                 {
-                    const SwTxtNode* pTNd =
-                        (SwTxtNode*)((SwFmtFld*)pFirst)->GetTxtFld()->GetpTxtNode();
+                    const SwTxtNode* pTNd = (SwTxtNode*)pFirst->GetTxtFld()->GetpTxtNode();
                     OSL_ENSURE( 0 != pTNd, "Enhanced pdf export - text node is missing" );
 
                     // 1. Check if the whole paragraph is hidden
                     // 2. Move to the field
                     // 3. Check for hidden text attribute
                     if ( !pTNd->IsHidden() &&
-                          mrSh.GotoFld( *(SwFmtFld*)pFirst ) &&
+                          mrSh.GotoFld( *pFirst ) &&
                          !mrSh.SelectHiddenRange() )
                     {
                         // Link Rectangle
@@ -1619,7 +1616,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             vcl::PDFNote aNote;
 
                             // Use the NumberFormatter to get the date string:
-                            const SwPostItField* pField = (SwPostItField*)((SwFmtFld*)pFirst)->GetFld();
+                            const SwPostItField* pField = (SwPostItField*)pFirst->GetFld();
                             SvNumberFormatter* pNumFormatter = pDoc->GetNumberFormatter();
                             const Date aDateDiff( pField->GetDate() -
                                                  *pNumFormatter->GetNullDate() );
@@ -1642,7 +1639,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         }
                     }
                 }
-                pFirst = aIter++;
+                pFirst = aIter.Next();
                 mrSh.SwCrsrShell::ClearMark();
             }
         }
@@ -1832,22 +1829,19 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         // REFERENCES
         //
         SwFieldType* pType = mrSh.GetFldType( RES_GETREFFLD, aEmptyStr );
-        SwClientIter aIter( *pType );
-        const SwClient * pFirst = aIter.GoStart();
-        while( pFirst )
+        SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
+        for( SwFmtFld* pFirst = aIter.First(); pFirst; )
         {
-            if( ((SwFmtFld*)pFirst)->GetTxtFld() &&
-                ((SwFmtFld*)pFirst)->IsFldInDoc())
+            if( pFirst->GetTxtFld() && pFirst->IsFldInDoc() )
             {
-                const SwTxtNode* pTNd =
-                    (SwTxtNode*)((SwFmtFld*)pFirst)->GetTxtFld()->GetpTxtNode();
+                const SwTxtNode* pTNd = (SwTxtNode*)pFirst->GetTxtFld()->GetpTxtNode();
                OSL_ENSURE( 0 != pTNd, "Enhanced pdf export - text node is missing" );
 
                 // 1. Check if the whole paragraph is hidden
                 // 2. Move to the field
                 // 3. Check for hidden text attribute
                 if ( !pTNd->IsHidden() &&
-                      mrSh.GotoFld( *(SwFmtFld*)pFirst ) &&
+                      mrSh.GotoFld( *pFirst ) &&
                      !mrSh.SelectHiddenRange() )
                 {
                     // Select the field:
@@ -1863,7 +1857,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                     // Destination Rectangle
                     const SwGetRefField* pField =
-                        (SwGetRefField*)((SwFmtFld*)pFirst)->GetFld();
+                        (SwGetRefField*)pFirst->GetFld();
                     const String& rRefName = pField->GetSetRefName();
                     mrSh.GotoRefMark( rRefName, pField->GetSubType(), pField->GetSeqNo() );
                     const SwRect& rDestRect = mrSh.GetCharRect();
@@ -1916,7 +1910,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     }
                 }
             }
-            pFirst = aIter++;
+            pFirst = aIter.Next();
             mrSh.SwCrsrShell::ClearMark();
         }
 
@@ -2176,15 +2170,10 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
     // the offset of the link rectangle calculates as follows:
     const Point aOffset = rLinkRect.Pos() + mrOut.GetMapMode().GetOrigin();
 
-    SwClientIter aClientIter( const_cast<SwTxtNode&>(rTNd) );
-    SwClient* pLast = aClientIter.GoStart();
-
-    while( pLast )
-    {
-        if ( pLast->ISA( SwTxtFrm ) )
+    SwIterator<SwTxtFrm,SwTxtNode> aIter( rTNd );
+    for ( SwTxtFrm* pTmpFrm = aIter.First(); pTmpFrm; pTmpFrm = aIter.Next() )
         {
             // Add offset to current page:
-            SwTxtFrm* pTmpFrm = static_cast<SwTxtFrm*>(pLast);
             const SwPageFrm* pPageFrm = pTmpFrm->FindPageFrm();
             SwRect aHFLinkRect( rLinkRect );
             aHFLinkRect.Pos() = pPageFrm->Frm().Pos() + aOffset;
@@ -2211,9 +2200,6 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
                 }
             }
         }
-
-        pLast = ++aClientIter;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

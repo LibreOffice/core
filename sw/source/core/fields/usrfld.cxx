@@ -228,12 +228,12 @@ const String& SwUserFieldType::GetName() const
     return aName;
 }
 
-void SwUserFieldType::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwUserFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( !pOld && !pNew )
         ChgValid( sal_False );
 
-    SwModify::Modify( pOld, pNew );
+    NotifyClients( pOld, pNew );
     // und ggfs. am UserFeld haengende InputFelder updaten!
     GetDoc()->GetSysFldType( RES_INPUTFLD )->UpdateFlds();
 }

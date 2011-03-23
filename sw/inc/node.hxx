@@ -65,6 +65,7 @@ class SwTOXBase;
 class SwSectionNode;
 class SwStartNode;
 class SwTabFrm;
+class SwRootFrm;
 class SwTable;
 class SwTableNode;
 class SwTableBox;
@@ -83,6 +84,7 @@ class IDocumentLinksAdministration;
 class IDocumentFieldsAccess;
 class IDocumentContentOperations;
 class IDocumentListItems;
+class SwOLENodes;
 
 // --------------------
 // class SwNode
@@ -386,13 +388,17 @@ protected:
     // SwAttrSet (handle):
     sal_uInt16 ClearItemsFromAttrSet( const std::vector<sal_uInt16>& rWhichIds );
 
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
     TYPEINFO();     //Already contained in base class Client.
 
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+    // MakeFrm will be called for a certain layout
+    // pSib is another SwFrm of the same layout (e.g. the SwRootFrm itself, a sibling, the parent)
+    virtual SwCntntFrm *MakeFrm( SwFrm* pSib ) = 0;
 
-    virtual SwCntntFrm *MakeFrm() = 0;
     virtual SwCntntNode *SplitCntntNode(const SwPosition & ) = 0;
+
     virtual SwCntntNode *JoinNext();
     virtual SwCntntNode *JoinPrev();
     // Is it possible to join two nodes?
@@ -406,7 +412,9 @@ public:
     sal_Bool GoNext(SwIndex *, sal_uInt16 nMode ) const;
     sal_Bool GoPrevious(SwIndex *, sal_uInt16 nMode ) const;
 
-    SwCntntFrm *GetFrm( const Point* pDocPos = 0,
+    // Replacement for good old GetFrm(..):
+    SwCntntFrm *getLayoutFrm( const SwRootFrm*,
+                        const Point* pDocPos = 0,
                         const SwPosition *pPos = 0,
                         const sal_Bool bCalcFrm = sal_True ) const;
     // Returns the real size of the frame or an empty rectangle if
@@ -480,11 +488,12 @@ public:
     inline void SetModifyAtAttr( bool bSetModifyAtAttr ) const { mbSetModifyAtAttr = bSetModifyAtAttr; }
     inline bool GetModifyAtAttr() const { return mbSetModifyAtAttr; }
 
+    static SwOLENodes* CreateOLENodesArray( const SwFmtColl& rColl, bool bOnlyWithInvalidSize );
+
 private:
     // Private constructor because copying is never allowed!!
     SwCntntNode( const SwCntntNode & rNode );
     SwCntntNode & operator= ( const SwCntntNode & rNode );
-
 };
 
 
@@ -504,7 +513,7 @@ public:
 
     const SwTable& GetTable() const { return *pTable; }
     SwTable& GetTable() { return *pTable; }
-    SwTabFrm *MakeFrm();
+    SwTabFrm *MakeFrm( SwFrm* );
 
     // Creates the frms for the table node (i.e. the TabFrms).
     void MakeFrms( SwNodeIndex* pIdxBehind );
@@ -549,7 +558,7 @@ public:
     const SwSection& GetSection() const { return *m_pSection; }
           SwSection& GetSection()       { return *m_pSection; }
 
-    SwFrm *MakeFrm();
+    SwFrm *MakeFrm( SwFrm* );
 
     // Creates the frms for the SectionNode (i.e. the SectionFrms).
     // On default the frames are created until the end of the range.

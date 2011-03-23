@@ -48,9 +48,10 @@
 #include <ndindex.hxx>
 #include <sectfrm.hxx>
 #include <pam.hxx>
-// --> OD 2005-05-17 #i49383#
 #include <objectformatter.hxx>
-// <--
+#include "viewopt.hxx"
+#include "viewsh.hxx"
+#include <switerator.hxx>
 
 /*************************************************************************
 |*
@@ -179,8 +180,8 @@ sal_uInt16 lcl_ColumnNum( const SwFrm* pBoss )
 |*************************************************************************/
 
 
-SwFtnContFrm::SwFtnContFrm( SwFrmFmt *pFmt ):
-    SwLayoutFrm( pFmt )
+SwFtnContFrm::SwFtnContFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
+    SwLayoutFrm( pFmt, pSib )
 {
     nType = FRMC_FTNCONT;
 }
@@ -246,7 +247,14 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
 
     if ( !bValidSize )
     {
-        if ( pPage->IsFtnPage() && !GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        bool bGrow = pPage->IsFtnPage();
+        if( bGrow )
+        {
+            const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+            if( pSh && pSh->GetViewOptions()->getBrowseMode() )
+                bGrow = false;
+        }
+        if( bGrow )
                 Grow( LONG_MAX, sal_False );
         else
         {
@@ -339,7 +347,8 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
             return 0;
         }
     }
-    const bool bBrowseMode = GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+    const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
     SwPageFrm *pPage = pBoss->FindPageFrm();
     if ( bBrowseMode || !pPage->IsFtnPage() )
     {
@@ -445,9 +454,19 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
 SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, sal_Bool bTst, sal_Bool bInfo )
 {
     SwPageFrm *pPage = FindPageFrm();
-    if ( pPage &&
-           ( !pPage->IsFtnPage() ||
-             GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ) )
+    bool bShrink = false;
+    if ( pPage )
+    {
+        if( !pPage->IsFtnPage() )
+            bShrink = true;
+        else
+        {
+            const ViewShell *pSh = getRootFrm()->GetCurrShell();
+            if( pSh && pSh->GetViewOptions()->getBrowseMode() )
+                bShrink = true;
+        }
+    }
+    if( bShrink )
     {
         SwTwips nRet = SwLayoutFrm::ShrinkFrm( nDiff, bTst, bInfo );
         if( IsInSct() && !bTst )
@@ -470,8 +489,8 @@ SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, sal_Bool bTst, sal_Bool bInfo )
 |*************************************************************************/
 
 
-SwFtnFrm::SwFtnFrm( SwFrmFmt *pFmt, SwCntntFrm *pCnt, SwTxtFtn *pAt ):
-    SwLayoutFrm( pFmt ),
+SwFtnFrm::SwFtnFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwCntntFrm *pCnt, SwTxtFtn *pAt ):
+    SwLayoutFrm( pFmt, pSib ),
     pFollow( 0 ),
     pMaster( 0 ),
     pRef( pCnt ),
@@ -585,8 +604,8 @@ void SwFtnFrm::Cut()
             if ( pPage )
             {
                 SwLayoutFrm *pBody = pPage->FindBodyCont();
-                if ( !pBody->ContainsCntnt() )
-                    pPage->FindRootFrm()->SetSuperfluous();
+                if( pBody && !pBody->ContainsCntnt() )
+                    pPage->getRootFrm()->SetSuperfluous();
             }
             SwSectionFrm* pSect = pUp->FindSctFrm();
             pUp->Cut();
@@ -1073,7 +1092,7 @@ SwFtnContFrm *SwFtnBossFrm::MakeFtnCont()
     }
 #endif
 
-    SwFtnContFrm *pNew = new SwFtnContFrm( GetFmt()->GetDoc()->GetDfltFrmFmt());
+    SwFtnContFrm *pNew = new SwFtnContFrm( GetFmt()->GetDoc()->GetDfltFrmFmt(), this );
     SwLayoutFrm *pLay = FindBodyCont();
     pNew->Paste( this, pLay->GetNext() );
     return pNew;
@@ -1286,13 +1305,12 @@ void SwFtnBossFrm::ResetFtn( const SwFtnFrm *pCheck )
     if ( !pNd )
         pNd = pCheck->GetFmt()->GetDoc()->
               GetNodes().GoNextSection( &aIdx, sal_True, sal_False );
-    SwClientIter aIter( *pNd );
-    SwClient* pLast = aIter.GoStart();
-    while( pLast )
+    SwIterator<SwFrm,SwCntntNode> aIter( *pNd );
+    SwFrm* pFrm = aIter.First();
+    while( pFrm )
     {
-        if ( pLast->ISA(SwFrm) )
-        {
-            SwFrm *pFrm = (SwFrm*)pLast;
+            if( pFrm->getRootFrm() == pCheck->getRootFrm() )
+            {
             SwFrm *pTmp = pFrm->GetUpper();
             while ( pTmp && !pTmp->IsFtnFrm() )
                 pTmp = pTmp->GetUpper();
@@ -1311,7 +1329,8 @@ void SwFtnBossFrm::ResetFtn( const SwFtnFrm *pCheck )
                 }
             }
         }
-        pLast = ++aIter;
+
+        pFrm = aIter.Next();
     }
 }
 
@@ -1730,7 +1749,7 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
         }
     }
 
-    SwFtnFrm *pNew = new SwFtnFrm( pDoc->GetDfltFrmFmt(), pRef, pAttr );
+    SwFtnFrm *pNew = new SwFtnFrm( pDoc->GetDfltFrmFmt(), this, pRef, pAttr );
     {
         SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
         ::_InsertCnt( pNew, pDoc, aIdx.GetIndex() );
@@ -1832,14 +1851,12 @@ SwFtnFrm *SwFtnBossFrm::FindFtn( const SwCntntFrm *pRef, const SwTxtFtn *pAttr )
               GetNodes().GoNextSection( &aIdx, sal_True, sal_False );
     if ( !pNd )
         return 0;
-    SwClientIter aIter( *pNd );
-    SwClient *pClient;
-    if ( 0 != (pClient = aIter.GoStart()) )
+    SwIterator<SwFrm,SwCntntNode> aIter( *pNd );
+    SwFrm* pFrm = aIter.First();
+    if( pFrm )
         do
         {
-            if ( pClient->IsA( TYPE(SwFrm) ) )
-            {
-                SwFrm *pFrm = ((SwFrm*)pClient)->GetUpper();
+                pFrm = pFrm->GetUpper();
                 // #i28500#, #i27243# Due to the endnode collector, there are
                 // SwFtnFrms, which are not in the layout. Therefore the
                 // bInfFtn flags are not set correctly, and a cell of FindFtnFrm
@@ -1857,8 +1874,8 @@ SwFtnFrm *SwFtnBossFrm::FindFtn( const SwCntntFrm *pRef, const SwTxtFtn *pAttr )
                         pFtn = pFtn->GetMaster();
                     return pFtn;
                 }
-            }
-        } while ( 0 != (pClient = aIter++) );
+
+        } while ( 0 != (pFrm = aIter.Next()) );
 
     return 0;
 }
@@ -2720,7 +2737,8 @@ void SwFtnBossFrm::SetFtnDeadLine( const SwTwips nDeadLine )
     else
         nMaxFtnHeight = -(pBody->Frm().*fnRect->fnBottomDist)( nDeadLine );
 
-    if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+    if( pSh && pSh->GetViewOptions()->getBrowseMode() )
         nMaxFtnHeight += pBody->Grow( LONG_MAX, sal_True );
     if ( IsInSct() )
         nMaxFtnHeight += FindSctFrm()->Grow( LONG_MAX, sal_True );
@@ -2799,9 +2817,12 @@ SwTwips SwFtnBossFrm::GetVarSpace() const
     }
     else
         nRet = 0;
-    if ( IsPageFrm() &&
-         GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    if ( IsPageFrm() )
+    {
+        const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+        if( pSh && pSh->GetViewOptions()->getBrowseMode() )
         nRet += BROWSE_HEIGHT - Frm().Height();
+    }
     return nRet;
 }
 
@@ -3036,7 +3057,7 @@ sal_Bool SwCntntFrm::MoveFtnCntFwd( sal_Bool bMakePage, SwFtnBossFrm *pOldBoss )
             //Fussnote erzeugen.
             SwFtnFrm *pOld = FindFtnFrm();
             pTmpFtn = new SwFtnFrm( pOld->GetFmt()->GetDoc()->GetDfltFrmFmt(),
-                                    pOld->GetRef(), pOld->GetAttr() );
+                                    pOld, pOld->GetRef(), pOld->GetAttr() );
             //Verkettung der Fussnoten.
             if ( pOld->GetFollow() )
             {
@@ -3167,7 +3188,7 @@ SwCntntFrm* SwFtnFrm::GetRefFromAttr()
     OSL_ENSURE( pAttr, "invalid Attribute" );
     SwTxtNode& rTNd = (SwTxtNode&)pAttr->GetTxtNode();
     SwPosition aPos( rTNd, SwIndex( &rTNd, *pAttr->GetStart() ));
-    SwCntntFrm* pCFrm = rTNd.GetFrm( 0, &aPos, sal_False );
+    SwCntntFrm* pCFrm = rTNd.getLayoutFrm( getRootFrm(), 0, &aPos, sal_False );
     return pCFrm;
 }
 

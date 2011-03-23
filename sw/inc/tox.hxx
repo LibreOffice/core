@@ -92,6 +92,10 @@ class SW_DLLPUBLIC SwTOXMark
 
     SwTOXMark();                    // to create the dflt. atr. in _InitCore
 
+protected:
+    // SwClient
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
+
 public:
     TYPEINFO();   // rtti
 
@@ -105,9 +109,6 @@ public:
     // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-
-    // SwClient
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
 
     void InvalidateTOXMark();
 
@@ -152,7 +153,9 @@ public:
     SW_DLLPRIVATE void SetXTOXMark(::com::sun::star::uno::Reference<
                     ::com::sun::star::text::XDocumentIndexMark> const& xMark)
             { m_wXDocumentIndexMark = xMark; }
-
+    void DeRegister() { GetRegisteredInNonConst()->Remove( this ); }
+    void RegisterToTOXType( SwTOXType& rMark );
+    static void InsertTOXMarks( SwTOXMarks& aMarks, const SwTOXType& rType );
 };
 
 /*--------------------------------------------------------------------
@@ -579,6 +582,7 @@ public:
     // #i21237#
     void AdjustTabStops(SwDoc & rDoc, sal_Bool bDefaultRightTabStop);
     SwTOXBase&          operator=(const SwTOXBase& rSource);
+    void RegisterToTOXType( SwTOXType& rMark );
 };
 
 

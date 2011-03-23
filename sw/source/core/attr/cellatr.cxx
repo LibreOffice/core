@@ -30,9 +30,7 @@
 #include "precompiled_sw.hxx"
 
 #include <float.h>
-
 #include <rtl/math.hxx>
-
 #include <hintids.hxx>          // fuer RES_..
 #include <cellatr.hxx>
 #include <calc.hxx>
@@ -42,7 +40,7 @@
 #include <node.hxx>
 #include <hints.hxx>
 #include <rolbck.hxx>
-
+#include <switerator.hxx>
 
 
 //TYPEINIT1( SwFmt, SwClient ); //rtti fuer SwFmt
@@ -113,9 +111,9 @@ const SwNode* SwTblBoxFormula::GetNodeOfFormula() const
     const SwNode* pRet = 0;
     if( pDefinedIn )
     {
-        SwClient* pBox = SwClientIter( *pDefinedIn ).First( TYPE( SwTableBox ));
+        SwTableBox* pBox = SwIterator<SwTableBox,SwModify>::FirstElement( *pDefinedIn );
         if( pBox )
-            pRet = ((SwTableBox*)pBox)->GetSttNd();
+            pRet = pBox->GetSttNd();
     }
     return pRet;
 }
@@ -125,8 +123,7 @@ SwTableBox* SwTblBoxFormula::GetTableBox()
 {
     SwTableBox* pBox = 0;
     if( pDefinedIn )
-        pBox = (SwTableBox*)SwClientIter( *pDefinedIn ).
-                            First( TYPE( SwTableBox ));
+        pBox = SwIterator<SwTableBox,SwModify>::FirstElement( *pDefinedIn );
     return pBox;
 }
 

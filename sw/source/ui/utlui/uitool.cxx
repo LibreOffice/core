@@ -524,7 +524,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
             SwPageDesc* pDesc = ((SwWrtShell&)rShell).FindPageDescByName(
                                                     rDescName, sal_True );
             if( pDesc )
-                pDesc->Add( &aPgDesc );
+                aPgDesc.RegisterToPageDesc( *pDesc );
         }
         rSet.ClearItem( SID_ATTR_PARA_MODEL );
         bChanged = sal_True;
@@ -537,7 +537,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
         {
             if( ((SwFmtPageDesc*)pItem)->GetPageDesc() )
             {
-                ((SwFmtPageDesc*)pItem)->GetPageDesc()->Add(&aPgDesc);
+                aPgDesc.RegisterToPageDesc( *((SwFmtPageDesc*)pItem)->GetPageDesc() );
             }
         }
     }

@@ -115,10 +115,17 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
             Point aPt( *pPt );
             GetLayout()->GetCrsrOfst( &aPos, aPt );
             SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
-            pFrm = pNd->GetFrm( pPt );
+            pFrm = pNd->getLayoutFrm( GetLayout(), pPt );
         }
         else
+        {
+            const bool bOldCallbackActionEnabled = GetLayout()->IsCallbackActionEnabled();
+            if( bOldCallbackActionEnabled )
+                GetLayout()->SetCallbackActionEnabled( sal_False );
             pFrm = GetCurrFrm();
+            if( bOldCallbackActionEnabled )
+                GetLayout()->SetCallbackActionEnabled( sal_True );
+        }
     }
 
     if( !pFrm )
@@ -252,7 +259,7 @@ sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, sal_Bool bStopAtFly ) const
         Point aPt( *pPt );
         GetLayout()->GetCrsrOfst( &aPos, aPt );
         SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
-        pFrm = pNd->GetFrm( pPt );
+        pFrm = pNd->getLayoutFrm( GetLayout(), pPt );
     }
     else
         pFrm = GetCurrFrm( sal_False );
@@ -401,7 +408,7 @@ void SwFEShell::SetNewPageOffset( sal_uInt16 nOffset )
 void SwFEShell::SetPageOffset( sal_uInt16 nOffset )
 {
     const SwPageFrm *pPage = GetCurrFrm( sal_False )->FindPageFrm();
-    const SwRootFrm* pLayout = GetLayout();
+    const SwRootFrm* pDocLayout = GetLayout();
     while ( pPage )
     {
         const SwFrm *pFlow = pPage->FindFirstBodyCntnt();
@@ -412,7 +419,7 @@ void SwFEShell::SetPageOffset( sal_uInt16 nOffset )
             const SwFmtPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
             if ( rPgDesc.GetNumOffset() )
             {
-                pLayout->SetVirtPageNum( sal_True );
+                pDocLayout->SetVirtPageNum( sal_True );
                 lcl_SetAPageOffset( nOffset, (SwPageFrm*)pPage, this );
                 break;
             }
@@ -495,6 +502,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
                     for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
                     {
                         SdrObject* pDrawObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
+                        if( pDrawObj )
                         aDrawObjs.push_back( pDrawObj );
                     }
                 }

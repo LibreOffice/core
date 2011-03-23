@@ -66,14 +66,14 @@ public:
     // ::com::sun::star::text::XMultiTextMarkup:
     virtual void SAL_CALL commitMultiTextMarkup( const ::com::sun::star::uno::Sequence< ::com::sun::star::text::TextMarkupDescriptor >& aMarkups ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    //SwClient
-    virtual void        Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
-
 private:
     SwXTextMarkup( const SwXTextMarkup & ); // not defined
     SwXTextMarkup & operator =( const SwXTextMarkup & ); // not defined
 
 protected:
+    //SwClient
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
     SwTxtNode* mpTxtNode;
     const ModelToViewHelper::ConversionMap* mpConversionMap;
 

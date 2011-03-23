@@ -1780,29 +1780,6 @@ static bool lcl_SimilarPosition( const sal_Int32 nPos1, const sal_Int32 nPos2 )
     return abs( nPos1 - nPos2 ) < COL_POS_FUZZY;
 }
 
-void SwXText::copyText(
-    const uno::Reference< text::XTextCopy >& xSource )
-        throw ( uno::RuntimeException )
-{
-    SolarMutexGuard aGuard;
-
-    uno::Reference< text::XText > xText( xSource, uno::UNO_QUERY_THROW );
-    uno::Reference< text::XTextCursor > xCursor = xText->createTextCursor( );
-    xCursor->gotoEnd( sal_True );
-
-    uno::Reference< lang::XUnoTunnel > xTunnel( xCursor, uno::UNO_QUERY_THROW );
-
-    OTextCursorHelper* pCursor = 0;
-    pCursor = reinterpret_cast< OTextCursorHelper* >(
-                   sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
-    if ( pCursor )
-    {
-        SwNodeIndex rNdIndex( *GetStartNode( ), 1 );
-        SwPosition rPos( rNdIndex );
-        m_pImpl->m_pDoc->CopyRange( *pCursor->GetPaM( ), rPos, false );
-    }
-}
-
 void SwXText::Impl::ConvertCell(
     const bool bFirstCell,
     const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
@@ -2306,6 +2283,35 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     return xRet;
 }
 
+
+void SAL_CALL
+SwXText::copyText(
+    const uno::Reference< text::XTextCopy >& xSource )
+throw (uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+
+    uno::Reference< text::XText > const xText(xSource, uno::UNO_QUERY_THROW);
+    uno::Reference< text::XTextCursor > const xCursor =
+        xText->createTextCursor();
+    xCursor->gotoEnd( sal_True );
+
+    uno::Reference< lang::XUnoTunnel > const xCursorTunnel(xCursor,
+        uno::UNO_QUERY_THROW);
+
+    OTextCursorHelper *const pCursor =
+        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xCursorTunnel);
+    if (!pCursor)
+    {
+        throw uno::RuntimeException();
+    }
+
+    SwNodeIndex rNdIndex( *GetStartNode( ), 1 );
+    SwPosition rPos( rNdIndex );
+    m_pImpl->m_pDoc->CopyRange( *pCursor->GetPaM(), rPos, false );
+}
+
+
 /******************************************************************
  * SwXBodyText
  ******************************************************************/
@@ -2567,13 +2573,13 @@ public:
         }
         return *pFmt;
     }
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
-void SwXHeadFootText::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXHeadFootText::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }

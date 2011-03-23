@@ -77,6 +77,7 @@
 #include <breakit.hxx>
 #include <editsh.hxx>
 #include <scriptinfo.hxx>
+#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 
@@ -255,19 +256,20 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
     const SwTOXMark*    pMax    = &rCurTOXMark;
     const SwTOXMark*    pMin    = &rCurTOXMark;
 
-    const SwModify* pType = rCurTOXMark.GetRegisteredIn();
-    SwClientIter    aIter( *(SwModify*)pType );
+    const SwTOXType* pType = rCurTOXMark.GetTOXType();
+    SwTOXMarks aMarks;
+    SwTOXMark::InsertTOXMarks( aMarks, *pType );
 
     const SwTOXMark* pTOXMark;
     const SwCntntFrm* pCFrm;
     Point aPt;
-    for( pTOXMark = (SwTOXMark*)aIter.First( TYPE( SwTOXMark )); pTOXMark;
-         pTOXMark = (SwTOXMark*)aIter.Next() )
+    for( sal_Int32 nMark=0; nMark<aMarks.Count(); nMark++ )
     {
+        pTOXMark = aMarks[nMark];
         if( pTOXMark != &rCurTOXMark &&
             0 != ( pMark = pTOXMark->GetTxtTOXMark()) &&
             0 != ( pTOXSrc = pMark->GetpTxtNd() ) &&
-            0 != ( pCFrm = pTOXSrc->GetFrm( &aPt, 0, sal_False )) &&
+            0 != ( pCFrm = pTOXSrc->getLayoutFrm( GetCurrentLayout(), &aPt, 0, sal_False )) &&
             ( bInReadOnly || !pCFrm->IsProtected() ))
         {
             CompareNodeCntnt aAbsNew( pTOXSrc->GetIndex(), *pMark->GetStart() );
@@ -775,7 +777,7 @@ sal_Bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, sal_Bool bAtStart
      Beschreibung: Verzeichnisinhalt zusammensammeln
  --------------------------------------------------------------------*/
 void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
-                              const bool        _bNewTOX )
+                              const bool        _bNewTOX )//swmodtest 080307
 {
     const SwSectionNode* pSectNd;
     if( !SwTOXBase::GetRegisteredIn()->GetDepends() ||
@@ -1053,8 +1055,11 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
         pDoc->GetNodes().Delete( aInsPos, 1 );
 
     aN2L.RestoreUpperFrms( pDoc->GetNodes(), nIdx, nIdx + 1 );
-    if(pDoc->GetRootFrm())
-        SwFrm::CheckPageDescs( (SwPageFrm*)pDoc->GetRootFrm()->Lower() );
+    std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
+    for ( std::set<SwRootFrm*>::iterator pLayoutIter = aAllLayouts.begin(); pLayoutIter != aAllLayouts.end(); pLayoutIter++)
+    {
+        SwFrm::CheckPageDescs( (SwPageFrm*)(*pLayoutIter)->Lower() );
+    }//swmod 080310
 
     SetProtect( SwTOXBase::IsProtected() );
 }
@@ -1159,18 +1164,17 @@ SwTxtFmtColl* SwTOXBaseSection::GetTxtFmtColl( sal_uInt16 nLevel )
 void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                                     const SwTxtNode* pOwnChapterNode )
 {
-    const SwModify* pType = SwTOXBase::GetRegisteredIn();
+    const SwTOXType* pType = (SwTOXType*) SwTOXBase::GetRegisteredIn();
     if( !pType->GetDepends() )
         return;
 
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
     TOXTypes eTOXTyp = GetTOXType()->GetType();
-    SwClientIter aIter( *(SwModify*)pType );
+    SwIterator<SwTOXMark,SwTOXType> aIter( *pType );
 
     SwTxtTOXMark* pTxtMark;
     SwTOXMark* pMark;
-    for( pMark = (SwTOXMark*)aIter.First( TYPE( SwTOXMark )); pMark;
-        pMark = (SwTOXMark*)aIter.Next() )
+    for( pMark = aIter.First(); pMark; pMark = aIter.Next() )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
@@ -1184,7 +1188,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
             // if selected use marks from the same chapter only
             if( pTOXSrc->GetNodes().IsDocNodes() &&
                 pTOXSrc->GetTxt().Len() && pTOXSrc->GetDepends() &&
-                pTOXSrc->GetFrm() &&
+                pTOXSrc->getLayoutFrm( pDoc->GetCurrentLayout() ) &&
                (!IsFromChapter() || ::lcl_FindChapterNode( *pTOXSrc, 0 ) == pOwnChapterNode ) &&
                !pTOXSrc->HasHiddenParaField() &&
                !SwScriptInfo::IsInHiddenRange( *pTOXSrc, *pTxtMark->GetStart() ) )
@@ -1244,7 +1248,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
         if( pTxtNd && pTxtNd->Len() && pTxtNd->GetDepends() &&
             sal_uInt16( pTxtNd->GetAttrOutlineLevel()) <= GetLevel() &&
-            pTxtNd->GetFrm() &&
+            pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout() ) &&
            !pTxtNd->HasHiddenParaField() &&
            !pTxtNd->HasHiddenCharAttribute( true ) &&
             ( !IsFromChapter() ||
@@ -1278,13 +1282,12 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
                     pColl->IsAssignedToListLevelOfOutlineStyle()) )
                   continue;
 
-            SwClientIter aIter( *pColl );
-            SwTxtNode* pTxtNd = (SwTxtNode*)aIter.First( TYPE( SwTxtNode ));
-            for( ; pTxtNd; pTxtNd = (SwTxtNode*)aIter.Next() )
+            SwIterator<SwTxtNode,SwFmtColl> aIter( *pColl );
+            for( SwTxtNode* pTxtNd = aIter.First(); pTxtNd; pTxtNd = aIter.Next() )
             {
                 ::SetProgressState( 0, pDoc->GetDocShell() );
 
-                if( pTxtNd->GetTxt().Len() && pTxtNd->GetFrm() &&
+                if( pTxtNd->GetTxt().Len() && pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout() ) &&
                     pTxtNd->GetNodes().IsDocNodes() &&
                     ( !IsFromChapter() || pOwnChapterNode ==
                         ::lcl_FindChapterNode( *pTxtNd, 0 ) ) )
@@ -1307,9 +1310,8 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
     if(!pSeqFld)
         return;
 
-    SwClientIter aIter( *pSeqFld );
-    SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
-    for( ; pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
+    SwIterator<SwFmtFld,SwFieldType> aIter( *pSeqFld );
+    for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
     {
         const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
         if(!pTxtFld)
@@ -1317,7 +1319,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
         const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
-        if( rTxtNode.GetTxt().Len() && rTxtNode.GetFrm() &&
+        if( rTxtNode.GetTxt().Len() && rTxtNode.getLayoutFrm( pDoc->GetCurrentLayout() ) &&
             rTxtNode.GetNodes().IsDocNodes() &&
             ( !IsFromChapter() ||
                 ::lcl_FindChapterNode( rTxtNode, 0 ) == pOwnChapterNode ) )
@@ -1345,9 +1347,8 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
     if(!pAuthFld)
         return;
 
-    SwClientIter aIter( *pAuthFld );
-    SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
-    for( ; pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
+    SwIterator<SwFmtFld,SwFieldType> aIter( *pAuthFld );
+    for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
     {
         const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
         //undo
@@ -1356,11 +1357,11 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
         const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
-        if( rTxtNode.GetTxt().Len() && rTxtNode.GetFrm() &&
+        if( rTxtNode.GetTxt().Len() && rTxtNode.getLayoutFrm( pDoc->GetCurrentLayout() ) &&
             rTxtNode.GetNodes().IsDocNodes() )
         {
             //#106485# the body node has to be used!
-            SwCntntFrm *pFrm = rTxtNode.GetFrm();
+            SwCntntFrm *pFrm = rTxtNode.getLayoutFrm( pDoc->GetCurrentLayout() );
             SwPosition aFldPos(rTxtNode);
             const SwTxtNode* pTxtNode = 0;
             if(pFrm && !pFrm->IsInDocBody())
@@ -1506,7 +1507,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
                 }
             }
 
-            if( pCNd->GetFrm() && ( !IsFromChapter() ||
+            if( pCNd->getLayoutFrm( pDoc->GetCurrentLayout() ) && ( !IsFromChapter() ||
                     ::lcl_FindChapterNode( *pCNd, 0 ) == pOwnChapterNode ))
             {
                 SwTOXPara * pNew = new SwTOXPara( *pCNd, eMyType,
@@ -1546,7 +1547,7 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
             while( 0 != ( pCNd = rNds.GoNext( &aCntntIdx ) ) &&
                 aCntntIdx.GetIndex() < pTblNd->EndOfSectionIndex() )
             {
-                if( pCNd->GetFrm() && (!IsFromChapter() ||
+                if( pCNd->getLayoutFrm( pDoc->GetCurrentLayout() ) && (!IsFromChapter() ||
                     ::lcl_FindChapterNode( *pCNd, 0 ) == pOwnChapterNode ))
                 {
                     SwTOXTable * pNew = new SwTOXTable( *pCNd );
@@ -1683,7 +1684,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                     long nRightMargin;
                     if( pPageDesc )
                     {
-                        const SwFrm* pFrm = pTOXNd->GetFrm( 0, 0, sal_True );
+                        const SwFrm* pFrm = pTOXNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0, 0, sal_True );
                         if( !pFrm || 0 == ( pFrm = pFrm->FindPageFrm() ) ||
                             pPageDesc != ((SwPageFrm*)pFrm)->GetPageDesc() )
                             // dann muss man ueber den PageDesc gehen
@@ -1768,7 +1769,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                     if ( pTOXSource && pTOXSource->pNd &&
                          pTOXSource->pNd->IsCntntNode() )
                     {
-                        const SwCntntFrm* pFrm = pTOXSource->pNd->GetFrm();
+                        const SwCntntFrm* pFrm = pTOXSource->pNd->getLayoutFrm( pDoc->GetCurrentLayout() );
                         if( pFrm )
                         {
                             SwChapterFieldType aFldTyp;
@@ -1941,7 +1942,7 @@ void SwTOXBaseSection::UpdatePageNum()
                 SwTOXSource& rTOXSource = pSortBase->aTOXSources[j];
                 if( rTOXSource.pNd )
                 {
-                    SwCntntFrm* pFrm = rTOXSource.pNd->GetFrm();
+                    SwCntntFrm* pFrm = rTOXSource.pNd->getLayoutFrm( pDoc->GetCurrentLayout() );
                     OSL_ENSURE( pFrm || pDoc->IsUpdateTOX(), "TOX, no Frame found");
                     if( !pFrm )
                         continue;

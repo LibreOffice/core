@@ -60,7 +60,7 @@ protected:
 public:
     ~SwNoTxtNode();
 
-    virtual SwCntntFrm *MakeFrm();
+    virtual SwCntntFrm *MakeFrm( SwFrm* );
 
     inline SwGrfFmtColl *GetGrfColl() const { return (SwGrfFmtColl*)GetRegisteredIn(); }
 

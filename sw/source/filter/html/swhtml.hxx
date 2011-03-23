@@ -920,7 +920,7 @@ protected:
     virtual ~SwHTMLParser();
 
     // wird das Dok geloescht, ist auch der Parser zu loeschen
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
     virtual void AddMetaUserDefined( ::rtl::OUString const & i_rMetaName );
 

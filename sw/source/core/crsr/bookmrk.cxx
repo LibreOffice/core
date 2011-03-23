@@ -167,9 +167,9 @@ namespace sw { namespace mark
     }
 
 
-    void MarkBase::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+    void MarkBase::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
     {
-        SwModify::Modify(pOld, pNew);
+        NotifyClients(pOld, pNew);
         if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
         {   // invalidate cached uno object
             SetXBookmark(uno::Reference<text::XTextContent>(0));

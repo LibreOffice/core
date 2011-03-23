@@ -55,13 +55,13 @@ class SwRowFrm: public SwLayoutFrm
 
 protected:
     virtual void MakeAll();
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
-    SwRowFrm( const SwTableLine &, bool bInsertContent = true );
+    SwRowFrm( const SwTableLine &, SwFrm*, bool bInsertContent = true );
     ~SwRowFrm();
 
     virtual void Cut();
-    virtual void  Modify( SfxPoolItem*, SfxPoolItem* );
 
     //Zum Anmelden der Flys nachdem eine Zeile erzeugt _und_ eingefuegt wurde.
     //Muss vom Erzeuger gerufen werden, denn erst nach dem Konstruieren wird

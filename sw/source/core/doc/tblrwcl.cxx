@@ -63,6 +63,7 @@
 #include <tblrwcl.hxx>
 #include <unochart.hxx>
 #include <boost/shared_ptr.hpp>
+#include <switerator.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -208,20 +209,14 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
         for ( sal_uInt16 i = 0; i < GetTabLines().Count(); ++i )        \
         {                                                           \
             SwFrmFmt* pFmt = GetTabLines()[i]->GetFrmFmt();  \
-            SwClientIter aIter( *pFmt );                            \
-            SwClient* pLast = aIter.GoStart();                      \
-            if( pLast )                                             \
+            SwIterator<SwRowFrm,SwFmt> aIter( *pFmt );              \
+            for (SwRowFrm* pFrm=aIter.First(); pFrm; pFrm=aIter.Next())\
             {                                                       \
-                do                                                  \
-                {                                                   \
-                    SwFrm *pFrm = PTR_CAST( SwFrm, pLast );         \
-                    if ( pFrm &&                                    \
-                         ((SwRowFrm*)pFrm)->GetTabLine() == GetTabLines()[i] ) \
+                if ( pFrm->GetTabLine() == GetTabLines()[i] )       \
                     {                                               \
                         OSL_ENSURE( pFrm->GetUpper()->IsTabFrm(),       \
                                 "Table layout does not match table structure" );       \
                     }                                               \
-                } while ( 0 != ( pLast = aIter++ ) );               \
             }                                                       \
         }                                                           \
     }
@@ -520,11 +515,10 @@ void lcl_InsCol( _FndLine* pFndLn, _CpyPara& rCpyPara, sal_uInt16 nCpyCnt,
 
 SwRowFrm* GetRowFrm( SwTableLine& rLine )
 {
-    SwClientIter aIter( *rLine.GetFrmFmt() );
-    for( SwClient* pFrm = aIter.First( TYPE( SwRowFrm )); pFrm;
-            pFrm = aIter.Next() )
-        if( ((SwRowFrm*)pFrm)->GetTabLine() == &rLine )
-            return (SwRowFrm*)pFrm;
+    SwIterator<SwRowFrm,SwFmt> aIter( *rLine.GetFrmFmt() );
+    for( SwRowFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+        if( pFrm->GetTabLine() == &rLine )
+            return pFrm;
     return 0;
 }
 
@@ -619,7 +613,7 @@ sal_Bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     //Lines fuer das Layout-Update herausuchen.
     const sal_Bool bLayout = !IsNewModel() &&
-        0 != SwClientIter( *GetFrmFmt() ).First( TYPE(SwTabFrm) );
+        0 != SwIterator<SwTabFrm,SwFmt>::FirstElement( *GetFrmFmt() );
 
     if ( bLayout )
     {
@@ -739,7 +733,7 @@ sal_Bool SwTable::AppendRow( SwDoc* pDoc, sal_uInt16 nCnt )
     SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
 
     //Lines fuer das Layout-Update herausuchen.
-    const sal_Bool bLayout = 0 != SwClientIter( *GetFrmFmt() ).First( TYPE(SwTabFrm) );
+    bool bLayout = 0 != SwIterator<SwTabFrm,SwFmt>::FirstElement( *GetFrmFmt() );
     if( bLayout )
     {
         aFndBox.SetTableLines( *this );
@@ -3715,8 +3709,7 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     if( GetFrmFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
                         !rSz.GetWidthPercent() )
                     {
-                        SwTabFrm* pTabFrm = (SwTabFrm*)SwClientIter(
-                                    *GetFrmFmt() ).First( TYPE( SwTabFrm ));
+                        SwTabFrm* pTabFrm = SwIterator<SwTabFrm,SwFmt>::FirstElement( *GetFrmFmt() );
                         if( pTabFrm &&
                             pTabFrm->Prt().Width() != rSz.GetWidth() )
                         {

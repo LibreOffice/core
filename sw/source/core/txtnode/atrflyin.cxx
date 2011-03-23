@@ -43,9 +43,8 @@
 #include "swfont.hxx"
 #include "txtfrm.hxx"
 #include "flyfrms.hxx"
-// --> OD 2004-11-09 #i26945#
 #include <objectformatter.hxx>
-// <--
+#include <switerator.hxx>
 
 SwFmtFlyCnt::SwFmtFlyCnt( SwFrmFmt *pFrmFmt )
     : SfxPoolItem( RES_TXTATR_FLYCNT ),
@@ -233,17 +232,15 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
         return NULL;
     }
 
-    SwClientIter aIter( *GetFlyCnt().pFmt );
+    SwIterator<SwFlyFrm,SwFmt> aIter( *GetFlyCnt().pFmt );
     OSL_ENSURE( pCurrFrm->IsTxtFrm(), "SwTxtFlyCnt::_GetFlyFrm for TxtFrms only." );
-
-    if( aIter.GoStart() )
+    SwFrm* pFrm = aIter.First();
+    if ( pFrm )
     {
         SwTxtFrm *pFirst = (SwTxtFrm*)pCurrFrm;
         while ( pFirst->IsFollow() )
             pFirst = pFirst->FindMaster();
         do
-        {   SwFrm * pFrm = PTR_CAST( SwFrm, aIter() );
-            if ( pFrm )
             {
                 SwTxtFrm *pTmp = pFirst;
                 do
@@ -258,8 +255,10 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
                     }
                     pTmp = pTmp->GetFollow();
                 } while ( pTmp );
-            }
-        } while( aIter++ );
+
+                pFrm = aIter.Next();
+
+        } while( pFrm );
     }
 
     // Wir haben keinen passenden FlyFrm gefunden, deswegen wird ein
@@ -267,8 +266,9 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
     // Dabei wird eine sofortige Neuformatierung von pCurrFrm angestossen.
     // Die Rekursion wird durch den Lockmechanismus in SwTxtFrm::Format()
     // abgewuergt.
-    SwFlyInCntFrm *pFly = new SwFlyInCntFrm( (SwFlyFrmFmt*)pFrmFmt, (SwFrm*)pCurrFrm );
-    ((SwFrm*)pCurrFrm)->AppendFly( pFly );
+    SwFrm* pCurrFrame = const_cast< SwFrm* >(pCurrFrm);
+    SwFlyInCntFrm *pFly = new SwFlyInCntFrm( (SwFlyFrmFmt*)pFrmFmt, pCurrFrame, pCurrFrame );
+    pCurrFrame->AppendFly( pFly );
     pFly->RegistFlys();
 
     // 7922: Wir muessen dafuer sorgen, dass der Inhalt des FlyInCnt

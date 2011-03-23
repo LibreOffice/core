@@ -108,6 +108,7 @@
 
 #include <ndgrf.hxx>
 #include <ndole.hxx>
+
 #include <cstdio>
 
 using namespace ::com::sun::star;
@@ -516,7 +517,7 @@ void SwWW8AttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
          characters.
         */
         if ( !m_rExport.SupportsUnicode() )
-            aFont.GetCharSet() = GetCharSet();
+            aFont.SetCharSet( GetCharSet() );
 
         if ( rParentFont != aFont )
             m_rExport.AttrOutput().OutputItem( aFont );
@@ -1608,12 +1609,13 @@ xub_StrLen MSWordExportBase::GetNextPos( SwWW8AttrIter* aAttrIter, const SwTxtNo
 {
     // Get the bookmarks for the normal run
     xub_StrLen nNextPos = aAttrIter->WhereNext();
-
-    GetSortedBookmarks( rNode, nAktPos, nNextPos - nAktPos );
-
     xub_StrLen nNextBookmark = nNextPos;
-    NearestBookmark( nNextPos, nAktPos, false );
 
+    if( nNextBookmark > nAktPos )//no need to search for bookmarks otherwise
+    {
+        GetSortedBookmarks( rNode, nAktPos, nNextBookmark - nAktPos );
+        NearestBookmark( nNextBookmark, nAktPos, false );
+    }
     return std::min( nNextPos, nNextBookmark );
 }
 
@@ -1621,9 +1623,9 @@ void MSWordExportBase::UpdatePosition( SwWW8AttrIter* aAttrIter, xub_StrLen nAkt
 {
     xub_StrLen nNextPos;
 
-    // go to next attribute if no bookmark is found of if the bookmark is behind the next attribute position
+    // go to next attribute if no bookmark is found and if the next attribute position if at the current position
     bool bNextBookmark = NearestBookmark( nNextPos, nAktPos, true );
-    if( !bNextBookmark || nNextPos < aAttrIter->WhereNext() )
+    if( !bNextBookmark && nAktPos >= aAttrIter->WhereNext() )
         aAttrIter->NextPos();
 }
 
@@ -2032,8 +2034,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         if (pTextNodeInfoInner->isFirstInTable())
         {
             const SwTable * pTable = pTextNodeInfoInner->getTable();
-            const SwTableFmt * pTabFmt =
-                dynamic_cast<const SwTableFmt *>(pTable->GetRegisteredIn());
+
+            const SwTableFmt * pTabFmt = pTable->GetTableFmt();
             if (pTabFmt != NULL)
             {
                 if (pTabFmt->GetBreak().GetBreak() == SVX_BREAK_PAGE_BEFORE)
@@ -2246,7 +2248,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 // this has to be overruled.
                 const SwFmtPageDesc& rPageDescAtParaStyle =
                     ItemGet<SwFmtPageDesc>( rNode, RES_PAGEDESC );
-                if( rPageDescAtParaStyle.GetRegisteredIn() )
+                if( rPageDescAtParaStyle.KnowsPageDesc() )
                     pTmpSet->ClearItem( RES_BREAK );
             }
         }
@@ -2734,8 +2736,12 @@ void MSWordExportBase::OutputContentNode( const SwCntntNode& rNode )
     switch ( rNode.GetNodeType() )
     {
         case ND_TEXTNODE:
-            OutputTextNode( *rNode.GetTxtNode() );
-            break;
+        {
+            const SwTxtNode& rTextNode = *rNode.GetTxtNode();
+            if( !mbOutOutlineOnly || rTextNode.IsOutline() )
+                OutputTextNode( rTextNode );
+        }
+        break;
         case ND_GRFNODE:
             OutputGrfNode( *rNode.GetGrfNode() );
             break;

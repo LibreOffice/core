@@ -114,12 +114,10 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <tools/urlobj.hxx>
 #include <editeng/frmdiritem.hxx>
-// DVO, OD 01.10.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
-// OD 2004-05-05 #i28701#
 #include <fmtwrapinfluenceonobjpos.hxx>
-
 #include <toolkit/helper/vclunohelper.hxx>
+#include <switerator.hxx>
 
 // from fefly1.cxx
 extern sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet );
@@ -748,9 +746,6 @@ uno::Sequence< OUString > SwXFrame::getSupportedServiceNames(void) throw( uno::R
     return aRet;
 }
 
-/*-----------------------------------------------------------------------
-    Dieser CTor legt den Frame als Descriptor an
-  -----------------------------------------------------------------------*/
 SwXFrame::SwXFrame(FlyCntType eSet, const :: SfxItemPropertySet* pSet, SwDoc *pDoc) :
     aLstnrCntnr( (container::XNamed*)this),
     m_pPropSet(pSet),
@@ -1637,11 +1632,9 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             // format document completely in order to get correct value
             pFmt->GetDoc()->GetEditShell()->CalcLayout();
 
-            SwClientIter aIter( *pFmt );
-            SwClient* pC = aIter.First( TYPE( SwFrm ) );
-            if (pC)
+            SwFrm* pTmpFrm = SwIterator<SwFrm,SwFmt>::FirstElement( *pFmt );
+            if ( pTmpFrm )
             {
-                SwFrm *pTmpFrm = static_cast< SwFrm * >(pC);
                 DBG_ASSERT( pTmpFrm->IsValid(), "frame not valid" );
                 const SwRect &rRect = pTmpFrm->Frm();
                 Size aMM100Size = OutputDevice::LogicToLogic(
@@ -1913,7 +1906,7 @@ void SwXFrame::removeEventListener(const uno::Reference< lang::XEventListener > 
         throw uno::RuntimeException();
 }
 
-void    SwXFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void    SwXFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
@@ -2827,7 +2820,6 @@ SwXTextEmbeddedObject::~SwXTextEmbeddedObject()
 {
 
 }
-
 void SAL_CALL SwXTextEmbeddedObject::acquire()throw()
 {
     SwXFrame::acquire();
@@ -2933,9 +2925,7 @@ uno::Reference< lang::XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(voi
             uno::Reference< frame::XModel > xModel( xRet, uno::UNO_QUERY);
             if( xBrdcst.is() && xModel.is() )
             {
-                SwClientIter aIter( *pFmt );
-                SwXOLEListener* pListener = (SwXOLEListener*)aIter.
-                                        First( TYPE( SwXOLEListener ));
+                SwXOLEListener* pListener = SwIterator<SwXOLEListener,SwFmt>::FirstElement( *pFmt );
                 //create a new one if the OLE object doesn't have one already
                 if( !pListener )
                 {
@@ -2975,9 +2965,7 @@ uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExte
             uno::Reference< frame::XModel > xModel( xComp, uno::UNO_QUERY);
             if( xBrdcst.is() && xModel.is() )
             {
-                SwClientIter aIter( *pFmt );
-                SwXOLEListener* pListener = (SwXOLEListener*)aIter.
-                                        First( TYPE( SwXOLEListener ));
+                SwXOLEListener* pListener = SwIterator<SwXOLEListener,SwFmt>::FirstElement( *pFmt );
                 //create a new one if the OLE object doesn't have one already
                 if( !pListener )
                 {
@@ -3040,6 +3028,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL SwXTextEmbeddedObject::getReplaceme
 
     return uno::Reference< graphic::XGraphic >();
 }
+
 
 OUString SwXTextEmbeddedObject::getImplementationName(void) throw( uno::RuntimeException )
 
@@ -3145,7 +3134,7 @@ void SwXOLEListener::disposing( const lang::EventObject& rEvent )
     }
 }
 
-void SwXOLEListener::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwXOLEListener::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())

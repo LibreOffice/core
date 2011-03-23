@@ -278,6 +278,7 @@ void SwSrcView::Init()
         aEditWin.SetReadonly(sal_True);
     }
 
+    SetNewWindowAllowed( sal_False );
     StartListening(*pDocShell,sal_True);
 }
 

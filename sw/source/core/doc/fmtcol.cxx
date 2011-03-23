@@ -36,16 +36,14 @@
 #include <editeng/fhgtitem.hxx>
 #include <doc.hxx>          // fuer GetAttrPool
 #include <fmtcol.hxx>
-#include <fmtcolfunc.hxx> // #i71574#
+#include <fmtcolfunc.hxx>
 #include <hints.hxx>
 #include <calc.hxx>
 #include <node.hxx>
 #include <numrule.hxx>
 #include <paratr.hxx>
-
-//--> #outlinelevel added by zhaojianwei
+#include <switerator.hxx>
 #include <svl/intitem.hxx>
-//<--end
 
 TYPEINIT1( SwTxtFmtColl, SwFmtColl );
 TYPEINIT1( SwGrfFmtColl, SwFmtColl );
@@ -136,7 +134,7 @@ namespace TxtFmtCollFunc
  * SwTxtFmtColl  TXT
  */
 
-void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( GetDoc()->IsInDtor() )
     {
@@ -350,10 +348,10 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
 sal_Bool SwTxtFmtColl::IsAtDocNodeSet() const
 {
-    SwClientIter aIter( *(SwModify*)this );
+    SwIterator<SwCntntNode,SwFmtColl> aIter( *this );
     const SwNodes& rNds = GetDoc()->GetNodes();
-    for( SwClient* pC = aIter.First(TYPE(SwCntntNode)); pC; pC = aIter.Next() )
-        if( &((SwCntntNode*)pC)->GetNodes() == &rNds )
+    for( SwCntntNode* pNode = aIter.First(); pNode; pNode = aIter.Next() )
+        if( &(pNode->GetNodes()) == &rNds )
             return sal_True;
 
     return sal_False;
@@ -534,6 +532,12 @@ SwCollCondition::~SwCollCondition()
         delete aSubCondition.pFldExpression;
 }
 
+void SwCollCondition::RegisterToFormat( SwFmt& rFmt )
+{
+    rFmt.Add( this );
+}
+
+
 
 int SwCollCondition::operator==( const SwCollCondition& rCmp ) const
 {
@@ -671,9 +675,8 @@ void SwTxtFmtColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)
     SetAttrOutlineLevel(nAssignedListLevel+1);
 
     // #i100277#
-    SwClientIter aIter( *this );
-    SwTxtFmtColl* pDerivedTxtFmtColl =
-                dynamic_cast<SwTxtFmtColl*>(aIter.First( TYPE( SwTxtFmtColl ) ));
+    SwIterator<SwTxtFmtColl,SwFmtColl> aIter( *this );
+    SwTxtFmtColl* pDerivedTxtFmtColl = aIter.First();
     while ( pDerivedTxtFmtColl != 0 )
     {
         if ( !pDerivedTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
@@ -689,7 +692,7 @@ void SwTxtFmtColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)
             }
         }
 
-        pDerivedTxtFmtColl = dynamic_cast<SwTxtFmtColl*>(aIter.Next());
+        pDerivedTxtFmtColl = aIter.Next();
     }
     // <--
 }

@@ -36,6 +36,7 @@
 #include <list>
 
 #include "calbck.hxx"
+#include <anchoreddrawobject.hxx>
 
 class SfxPoolItem;
 class SwFrmFmt;
@@ -47,11 +48,10 @@ class SwVirtFlyDrawObj;
 class SwFmtAnchor;
 class SwFlyDrawObj;
 class SwRect;
-// forward declaration for class <SwDrawVirtObj>
 class SwDrawContact;
 struct SwPosition;
 class SwIndex;
-#include <anchoreddrawobject.hxx>
+class SdrTextObj;
 
 // The other way round: Search format for given object.
 // If object is a SwVirtFlyDrawObj the format will be obtained from it.
@@ -189,7 +189,7 @@ public:
     /** get data collection of anchored objects, handled by with contact
 
     */
-    virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const = 0;
+    virtual void GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const = 0;
 
     /** get minimum order number of anchored objects handled by with contact
 
@@ -210,13 +210,9 @@ class SW_DLLPUBLIC SwFlyDrawContact : public SwContact
 private:
     SwFlyDrawObj* mpMasterObj;
 
-    /** method to determine new order number for new instance of <SwVirtFlyDrawObj>
-
-        Used in method <CreateNewRef(..)>.
-
-        @author OD
-    */
-    sal_uInt32 _GetOrdNumForNewRef( const SwFlyFrm* pFlyFrm );
+protected:
+     // virtuelle Methoden von SwClient
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
 public:
     TYPEINFO();
@@ -232,11 +228,6 @@ public:
     virtual SdrObject* GetMaster();
     virtual void SetMaster( SdrObject* _pNewMaster );
 
-    SwVirtFlyDrawObj* CreateNewRef( SwFlyFrm* pFly );
-
-    // virtual methods from SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
-
     // override methods to control Writer fly frames,
     // which are linked, and to assure that all objects anchored at/inside the
     // Writer fly frame are also made visible/invisible.
@@ -245,7 +236,7 @@ public:
 
     /** get data collection of anchored objects handled by with contact
     */
-    virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const;
+    virtual void GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const;
 };
 
 // new class for re-direct methods calls at a 'virtual'
@@ -416,6 +407,11 @@ class SwDrawContact : public SwContact
         // no copy-constructor and no assignment operator
         SwDrawContact( const SwDrawContact& );
         SwDrawContact& operator=( const SwDrawContact& );
+
+    protected:
+        // virtuelle Methoden von SwClient
+        virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+
     public:
         TYPEINFO();
 
@@ -471,9 +467,6 @@ class SwDrawContact : public SwContact
         // by frame.
         SdrObject* GetDrawObjectByAnchorFrm( const SwFrm& _rAnchorFrm );
 
-        // Virtual methods of SwClient.
-        virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
-
         // Virtual methods of SdrObjUserCall.
         virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect);
 
@@ -490,7 +483,9 @@ class SwDrawContact : public SwContact
 
         /** get data collection of anchored objects, handled by with contact
         */
-        virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const;
+
+        static void GetTextObjectsFromFmt( std::list<SdrTextObj*>&, SwDoc* );
+        virtual void GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const;
 };
 
 #endif

@@ -51,11 +51,11 @@ class SwNoTxtFrm: public SwCntntFrm
     void PaintPicture( OutputDevice*, const SwRect& ) const;
 protected:
     virtual void MakeAll();
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 public:
-    SwNoTxtFrm( SwNoTxtNode * const );
+    SwNoTxtFrm( SwNoTxtNode * const, SwFrm* );
     ~SwNoTxtFrm();
 
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
     virtual sal_Bool GetCharRect( SwRect &, const SwPosition&,

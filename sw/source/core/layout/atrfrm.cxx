@@ -100,22 +100,17 @@
 #include <unoframe.hxx>
 #include <unotextbodyhf.hxx>
 #include <SwStyleNameMapper.hxx>
-/// OD 22.08.2002 #99657#
-///     include definition of class SvxBrushItem and GraphicObject
-///     in order to determine, if background is transparent.
 #include <editeng/brshitem.hxx>
 #include <svtools/grfmgr.hxx>
-
 #include <cmdid.h>
 #include <unomid.h>
 #include <comcore.hrc>
 #include <svx/svdundo.hxx> // #111827#
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-// --> OD 2006-03-06 #125892#
 #include <HandleAnchorNodeChg.hxx>
-// <--
 #include <svl/cjkoptions.hxx>
+#include <switerator.hxx>
+#include <pagedeschint.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -191,7 +186,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
     {
         // Klammer, weil im DTOR SwClientIter das Flag bTreeChg zurueck
         // gesetzt wird. Unguenstig, wenn das Format vorher zerstoert wird.
-        SwClientIter aIter( *pFmt );
+        SwClientIter aIter( *pFmt );        // TODO
         SwClient *pLast = aIter.GoStart();
         if( pLast )
             do {
@@ -225,16 +220,12 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                     if ( pNode->IsCntntNode() &&
                          ((SwCntntNode*)pNode)->GetDepends() )
                     {
-                        SwClientIter aIter( *(SwCntntNode*)pNode );
-                        do
+                        SwCrsrShell *pShell = SwIterator<SwCrsrShell,SwCntntNode>::FirstElement( *(SwCntntNode*)pNode );
+                        if( pShell )
                         {
-                            if( aIter()->ISA( SwCrsrShell ) )
-                            {
-                                ((SwCrsrShell*)aIter())->ParkCrsr( aIdx );
+                            pShell->ParkCrsr( aIdx );
                                 aIdx = nEnd-1;
-                                break;
-                            }
-                        } while ( aIter++ );
+                        }
                     }
                     aIdx++;
                     pNode = & aIdx.GetNode();
@@ -527,13 +518,18 @@ SwFmtHeader::SwFmtHeader( sal_Bool bOn )
 int  SwFmtHeader::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return ( pRegisteredIn == ((SwFmtHeader&)rAttr).GetRegisteredIn() &&
+    return ( GetRegisteredIn() == ((SwFmtHeader&)rAttr).GetRegisteredIn() &&
              bActive == ((SwFmtHeader&)rAttr).IsActive() );
 }
 
 SfxPoolItem*  SwFmtHeader::Clone( SfxItemPool* ) const
 {
     return new SwFmtHeader( *this );
+}
+
+void SwFmtHeader::RegisterToFormat( SwFmt& rFmt )
+{
+    rFmt.Add(this);
 }
 
 //  class SwFmtFooter
@@ -566,10 +562,15 @@ SwFmtFooter::SwFmtFooter( sal_Bool bOn )
         DelHFFormat( this, GetFooterFmt() );
 }
 
+void SwFmtFooter::RegisterToFormat( SwFmt& rFmt )
+{
+    rFmt.Add(this);
+}
+
 int  SwFmtFooter::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return ( pRegisteredIn == ((SwFmtFooter&)rAttr).GetRegisteredIn() &&
+    return ( GetRegisteredIn() == ((SwFmtFooter&)rAttr).GetRegisteredIn() &&
              bActive == ((SwFmtFooter&)rAttr).IsActive() );
 }
 
@@ -643,6 +644,11 @@ SwFmtPageDesc::SwFmtPageDesc( const SwPageDesc *pDesc )
 
  SwFmtPageDesc::~SwFmtPageDesc() {}
 
+bool SwFmtPageDesc::KnowsPageDesc() const
+{
+    return (GetRegisteredIn() != 0);
+}
+
 int  SwFmtPageDesc::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
@@ -656,7 +662,39 @@ SfxPoolItem*  SwFmtPageDesc::Clone( SfxItemPool* ) const
     return new SwFmtPageDesc( *this );
 }
 
-void SwFmtPageDesc::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwFmtPageDesc::SwClientNotify( const SwModify&, const SfxHint& rHint )
+{
+    const SwPageDescHint* pHint = dynamic_cast<const SwPageDescHint*>(&rHint);
+    if ( pHint )
+    {
+        // mba: shouldn't that be broadcasted also?
+        SwFmtPageDesc aDfltDesc( pHint->GetPageDesc() );
+        SwPageDesc* pDesc = pHint->GetPageDesc();
+        const SwModify* pMod = GetDefinedIn();
+        if ( pMod )
+        {
+            if( pMod->ISA( SwCntntNode ) )
+                ((SwCntntNode*)pMod)->SetAttr( aDfltDesc );
+            else if( pMod->ISA( SwFmt ))
+                ((SwFmt*)pMod)->SetFmtAttr( aDfltDesc );
+            else
+            {
+                OSL_FAIL( "What kind of SwModify is this?" );
+                RegisterToPageDesc( *pDesc );
+            }
+        }
+        else
+            // there could be an Undo-copy
+            RegisterToPageDesc( *pDesc );
+    }
+}
+
+void SwFmtPageDesc::RegisterToPageDesc( SwPageDesc& rDesc )
+{
+    rDesc.Add( this );
+}
+
+void SwFmtPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( !pDefinedIn )
         return;
@@ -2441,7 +2479,7 @@ SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
 TYPEINIT1( SwFrmFmt, SwFmt );
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( SwFrmFmt, 20, 20 )
 
-void SwFrmFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     SwFmtHeader *pH = 0;
     SwFmtFooter *pF = 0;
@@ -2463,13 +2501,13 @@ void SwFrmFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     if( pH && pH->IsActive() && !pH->GetHeaderFmt() )
     {   //Hat er keinen, mach ich ihm einen
         SwFrmFmt *pFmt = GetDoc()->MakeLayoutFmt( RND_STD_HEADER, 0 );
-        pFmt->Add( pH );
+        pH->RegisterToFormat( *pFmt );
     }
 
     if( pF && pF->IsActive() && !pF->GetFooterFmt() )
     {   //Hat er keinen, mach ich ihm einen
         SwFrmFmt *pFmt = GetDoc()->MakeLayoutFmt( RND_STD_FOOTER, 0 );
-        pFmt->Add( pF );
+        pF->RegisterToFormat( *pFmt );
     }
 
     // MIB 24.3.98: Modify der Basisklasse muss immer gerufen werden, z.B.
@@ -2483,20 +2521,22 @@ void SwFrmFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     }
 }
 
+void SwFrmFmt::RegisterToFormat( SwFmt& rFmt )
+{
+    rFmt.Add( this );
+}
+
 //Vernichtet alle Frms, die in aDepend angemeldet sind.
 
 void SwFrmFmt::DelFrms()
 {
-    SwClientIter aIter( *this );
-    SwClient * pLast = aIter.GoStart();
+    SwIterator<SwFrm,SwFmt> aIter( *this );
+    SwFrm * pLast = aIter.First();
     if( pLast )
         do {
-            if ( pLast->ISA(SwFrm) )
-            {
-                ((SwFrm*)pLast)->Cut();
+                pLast->Cut();
                 delete pLast;
-            }
-        } while( 0 != ( pLast = aIter++ ));
+        } while( 0 != ( pLast = aIter.Next() ));
 }
 
 void SwFrmFmt::MakeFrms()
@@ -2520,7 +2560,7 @@ SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
             SwNode2Layout aTmp( *pSectNd, pSectNd->GetIndex() - 1 );
             pFrm = aTmp.NextFrm();
 
-            if( pFrm && pFrm->GetRegisteredIn() != this )
+            if( pFrm && !pFrm->KnowsFormat(*this) )
             {
                 // die Section hat keinen eigenen frame::Frame, also falls
                 // jemand die tatsaechliche Groe?e braucht, so muss das
@@ -2542,7 +2582,7 @@ SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
     else
     {
         sal_uInt16 nFrmType = RES_FLYFRMFMT == Which() ? FRM_FLY : USHRT_MAX;
-        pFrm = ::GetFrmOfModify( *(SwModify*)this, nFrmType, pPoint,
+        pFrm = ::GetFrmOfModify( 0, *(SwModify*)this, nFrmType, pPoint,
                                     0, bCalcFrm );
     }
 
@@ -2558,8 +2598,7 @@ SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
 
 SwContact* SwFrmFmt::FindContactObj()
 {
-    SwClientIter aIter( *this );
-    return (SwContact*)aIter.First( TYPE( SwContact ) );
+    return SwIterator<SwContact,SwFmt>::FirstElement( *this );
 }
 
 SdrObject* SwFrmFmt::FindSdrObject()
@@ -2576,7 +2615,7 @@ SdrObject* SwFrmFmt::FindRealSdrObject()
     if( RES_FLYFRMFMT == Which() )
     {
         Point aNullPt;
-        SwFlyFrm* pFly = (SwFlyFrm*)::GetFrmOfModify( *this, FRM_FLY,
+        SwFlyFrm* pFly = (SwFlyFrm*)::GetFrmOfModify( 0, *this, FRM_FLY,
                                                     &aNullPt, 0, sal_False );
         return pFly ? pFly->GetVirtDrawObj() : 0;
     }
@@ -2588,12 +2627,10 @@ sal_Bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
 {
     //Auch eine Verkettung von Innen nach aussen oder von aussen
     //nach innen ist nicht zulaessig.
-    SwClientIter aIter( *(SwModify*)this );
-    SwFlyFrm *pSFly = (SwFlyFrm*)aIter.First( TYPE(SwFlyFrm) );
+    SwFlyFrm *pSFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement(*this);
     if( pSFly )
     {
-        SwClientIter aOtherIter( (SwModify&)rFmt );
-        SwFlyFrm *pAskFly = (SwFlyFrm*)aOtherIter.First( TYPE(SwFlyFrm) );
+        SwFlyFrm *pAskFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement(rFmt);
         if( pAskFly )
             return pSFly->IsLowerOf( pAskFly );
     }
@@ -2675,22 +2712,20 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwFlyFrmFmt,  10, 10 )
 
 SwFlyFrmFmt::~SwFlyFrmFmt()
 {
-    SwClientIter aIter( *this );
-    SwClient * pLast = aIter.GoStart();
+    SwIterator<SwFlyFrm,SwFmt> aIter( *this );
+    SwFlyFrm * pLast = aIter.First();
     if( pLast )
         do {
-            if ( pLast->ISA( SwFlyFrm ) )
                 delete pLast;
+        } while( 0 != ( pLast = aIter.Next() ));
 
-        } while( 0 != ( pLast = aIter++ ));
-
-    pLast = aIter.GoStart();
-    if( pLast )
+    SwIterator<SwFlyDrawContact,SwFmt> a2ndIter( *this );
+    SwFlyDrawContact* pC = a2ndIter.First();
+    if( pC )
         do {
-            if ( pLast->ISA( SwFlyDrawContact ) )
-                delete pLast;
+                delete pC;
 
-        } while( 0 != ( pLast = aIter++ ));
+        } while( 0 != ( pC = a2ndIter.Next() ));
 }
 
 //Erzeugen der Frms wenn das Format einen Absatzgebundenen Rahmen beschreibt.
@@ -2699,8 +2734,8 @@ SwFlyFrmFmt::~SwFlyFrmFmt()
 void SwFlyFrmFmt::MakeFrms()
 {
     // gibts ueberhaupt ein Layout ??
-    if( !GetDoc()->GetRootFrm() )
-        return;
+    if( !GetDoc()->GetCurrentViewShell() )
+        return; //swmod 071108//swmod 071225
 
     SwModify *pModify = 0;
     // OD 24.07.2003 #111032# - create local copy of anchor attribute for possible changes.
@@ -2733,8 +2768,7 @@ void SwFlyFrmFmt::MakeFrms()
             if ( pCNd )
             // <--
             {
-                SwClientIter aIter( *pCNd );
-                if ( aIter.First( TYPE(SwFrm) ) )
+                if( SwIterator<SwFrm,SwCntntNode>::FirstElement( *pCNd ) )
                 {
                     pModify = pCNd;
                 }
@@ -2762,17 +2796,15 @@ void SwFlyFrmFmt::MakeFrms()
     case FLY_AT_PAGE:
         {
             sal_uInt16 nPgNum = aAnchorAttr.GetPageNum();
-            SwPageFrm *pPage = (SwPageFrm*)GetDoc()->GetRootFrm()->Lower();
+            SwPageFrm *pPage = (SwPageFrm*)GetDoc()->GetCurrentLayout()->Lower();   //swmod 080218
             if( !nPgNum && aAnchorAttr.GetCntntAnchor() )
             {
                 SwCntntNode *pCNd =
                     aAnchorAttr.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
-                SwClientIter aIter( *pCNd );
-                do
+                SwIterator<SwFrm,SwCntntNode> aIter( *pCNd );
+                for (SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
                 {
-                    if( aIter()->ISA( SwFrm ) )
-                    {
-                        pPage = ((SwFrm*)aIter())->FindPageFrm();
+                        pPage = pFrm->FindPageFrm();
                         if( pPage )
                         {
                             nPgNum = pPage->GetPhyPageNum();
@@ -2783,7 +2815,6 @@ void SwFlyFrmFmt::MakeFrms()
                         }
                         break;
                     }
-                } while ( aIter++ );
             }
             while ( pPage )
             {
@@ -2804,10 +2835,8 @@ void SwFlyFrmFmt::MakeFrms()
 
     if( pModify )
     {
-        SwClientIter aIter( *pModify );
-        for( SwFrm *pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
-             pFrm;
-             pFrm = (SwFrm*)aIter.Next() )
+        SwIterator<SwFrm,SwModify> aIter( *pModify );
+        for( SwFrm *pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
         {
             sal_Bool bAdd = !pFrm->IsCntntFrm() ||
                             !((SwCntntFrm*)pFrm)->IsFollow();
@@ -2856,16 +2885,16 @@ void SwFlyFrmFmt::MakeFrms()
                 switch( aAnchorAttr.GetAnchorId() )
                 {
                 case FLY_AT_FLY:
-                    pFly = new SwFlyLayFrm( this, pFrm );
+                    pFly = new SwFlyLayFrm( this, pFrm, pFrm );
                     break;
 
                 case FLY_AT_PARA:
                 case FLY_AT_CHAR:
-                    pFly = new SwFlyAtCntFrm( this, pFrm );
+                    pFly = new SwFlyAtCntFrm( this, pFrm, pFrm );
                     break;
 
                 case FLY_AS_CHAR:
-                    pFly = new SwFlyInCntFrm( this, pFrm );
+                    pFly = new SwFlyInCntFrm( this, pFrm, pFrm );
                     break;
                 default:
                     OSL_ENSURE( !this, "Neuer Ankertyp" );
@@ -2882,7 +2911,7 @@ void SwFlyFrmFmt::MakeFrms()
 
 SwFlyFrm* SwFlyFrmFmt::GetFrm( const Point* pPoint, const sal_Bool bCalcFrm ) const
 {
-    return (SwFlyFrm*)::GetFrmOfModify( *(SwModify*)this, FRM_FLY,
+    return (SwFlyFrm*)::GetFrmOfModify( 0, *(SwModify*)this, FRM_FLY,
                                             pPoint, 0, bCalcFrm );
 }
 
@@ -2906,8 +2935,7 @@ sal_Bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
     {
     case RES_CONTENT_VISIBLE:
         {
-            ((SwPtrMsgPoolItem&)rInfo).pObject =
-                SwClientIter( *(SwFlyFrmFmt*)this ).First( TYPE(SwFrm) );
+            ((SwPtrMsgPoolItem&)rInfo).pObject = SwIterator<SwFrm,SwFmt>::FirstElement( *this );
         }
         return sal_False;
 
@@ -2933,7 +2961,7 @@ void SwFlyFrmFmt::SetObjTitle( const String& rTitle, bool bBroadcast )
         SwStringMsgPoolItem aOld( RES_TITLE_CHANGED, pMasterObject->GetTitle() );
         SwStringMsgPoolItem aNew( RES_TITLE_CHANGED, rTitle );
         pMasterObject->SetTitle( rTitle );
-        Modify( &aOld, &aNew );
+        ModifyNotification( &aOld, &aNew );
     }
     else
     {
@@ -2969,7 +2997,7 @@ void SwFlyFrmFmt::SetObjDescription( const String& rDescription, bool bBroadcast
         SwStringMsgPoolItem aOld( RES_DESCRIPTION_CHANGED, pMasterObject->GetDescription() );
         SwStringMsgPoolItem aNew( RES_DESCRIPTION_CHANGED, rDescription );
         pMasterObject->SetDescription( rDescription );
-        Modify( &aOld, &aNew );
+        ModifyNotification( &aOld, &aNew );
     }
     else
     {
@@ -3077,33 +3105,32 @@ SwHandleAnchorNodeChg::SwHandleAnchorNodeChg( SwFlyFrmFmt& _rFlyFrmFmt,
         {
             // determine 'old' number of anchor frames
             sal_uInt32 nOldNumOfAnchFrm( 0L );
-            SwClientIter aOldIter( *(aOldAnchorFmt.GetCntntAnchor()->nNode.GetNode().GetCntntNode()) );
-            for( aOldIter.First( TYPE(SwFrm) ); aOldIter(); aOldIter.Next() )
+            SwIterator<SwFrm,SwCntntNode> aOldIter( *(aOldAnchorFmt.GetCntntAnchor()->nNode.GetNode().GetCntntNode()) );
+            for( SwFrm* pOld = aOldIter.First(); pOld; pOld = aOldIter.Next() )
             {
                 ++nOldNumOfAnchFrm;
             }
             // determine 'new' number of anchor frames
             sal_uInt32 nNewNumOfAnchFrm( 0L );
-            SwClientIter aNewIter( *(_rNewAnchorFmt.GetCntntAnchor()->nNode.GetNode().GetCntntNode()) );
-            for( aNewIter.First( TYPE(SwFrm) ); aNewIter(); aNewIter.Next() )
+            SwIterator<SwFrm,SwCntntNode> aNewIter( *(_rNewAnchorFmt.GetCntntAnchor()->nNode.GetNode().GetCntntNode()) );
+            for( SwFrm* pNew = aNewIter.First(); pNew; pNew = aNewIter.Next() )
             {
                 ++nNewNumOfAnchFrm;
             }
             if ( nOldNumOfAnchFrm != nNewNumOfAnchFrm )
             {
                 // delete existing fly frames except <_pKeepThisFlyFrm>
-                SwClientIter aIter( mrFlyFrmFmt );
-                SwClient* pLast = aIter.GoStart();
-                if ( pLast )
+                SwIterator<SwFrm,SwFmt> aIter( mrFlyFrmFmt );
+                SwFrm* pFrm = aIter.First();
+                if ( pFrm )
                 {
                     do {
-                        SwFrm* pFrm( dynamic_cast<SwFrm*>(pLast) );
-                        if ( pFrm && pFrm != _pKeepThisFlyFrm )
+                        if ( pFrm != _pKeepThisFlyFrm )
                         {
                             pFrm->Cut();
                             delete pFrm;
                         }
-                    } while( 0 != ( pLast = aIter++ ));
+                    } while( 0 != ( pFrm = aIter.Next() ));
                 }
                 // indicate, that re-creation of fly frames necessary
                 mbAnchorNodeChanged = true;
@@ -3216,7 +3243,7 @@ IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
 
     if( !pFly )
     {
-        pFly = (SwFlyFrm*) SwClientIter( *(SwFrmFmt*)this ).First( TYPE( SwFlyFrm ));
+        pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement( *this );
         if( !pFly )
             return 0;
     }

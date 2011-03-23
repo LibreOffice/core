@@ -241,7 +241,7 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
 
             if ( pRegion )
             {
-                SwRootFrm* pLayout = GetLayout();
+                SwRootFrm* pCurrentLayout = GetLayout();
 
                 Imp()->pRegion = NULL;
 
@@ -303,7 +303,7 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
                             pOut = pVout;
                             if ( bPaintsFromSystem )
                                 PaintDesktop( aRect );
-                            pLayout->Paint( aRect );
+                            pCurrentLayout->Paint( aRect );
                             pOld->DrawOutDev( aRect.Pos(), aRect.SSize(),
                                               aRect.Pos(), aRect.SSize(), *pVout );
                             pOut = pOld;
@@ -324,7 +324,7 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
 
                         if ( bPaintsFromSystem )
                             PaintDesktop( aRect );
-                        pLayout->Paint( aRect );
+                        pCurrentLayout->Paint( aRect );
 
                         // #i75172# end DrawingLayer paint
                         DLPostPaint2(true);
@@ -465,12 +465,14 @@ sal_Bool ViewShell::AddPaintRect( const SwRect & rRect )
     ViewShell *pSh = this;
     do
     {
+        if( pSh->Imp() )
+        {
         if ( pSh->IsPreView() && pSh->GetWin() )
             ::RepaintPagePreview( pSh, rRect );
         else
-            bRet |= pSh->Imp()->AddPaintRect( rRect );
+                bRet |= pSh->Imp()->AddPaintRect( rRect );//swmod 080111
+        }
         pSh = (ViewShell*)pSh->GetNext();
-
     } while ( pSh != this );
     return bRet;
 }
@@ -503,7 +505,7 @@ void ViewShell::MakeVisible( const SwRect &rRect )
         {
             if( pWin )
             {
-                const SwFrm* pRoot = GetDoc()->GetRootFrm();
+                const SwFrm* pRoot = GetLayout();
                 int nLoopCnt = 3;
                 long nOldH;
                 do{
@@ -511,7 +513,7 @@ void ViewShell::MakeVisible( const SwRect &rRect )
                     StartAction();
                     ScrollMDI( this, rRect, USHRT_MAX, USHRT_MAX );
                     EndAction();
-                } while( nOldH != pRoot->Frm().Height() && nLoopCnt-- );
+                } while( nOldH != pRoot->Frm().Height() && nLoopCnt-- );    //swmod 071108//swmod 071225
             }
 #if OSL_DEBUG_LEVEL > 1
             else
@@ -977,10 +979,10 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
         const long nXDiff = aPrevArea.Left() - VisArea().Left();
         const long nYDiff = aPrevArea.Top()  - VisArea().Top();
 
-        if( !nXDiff && !getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+        if( !nXDiff && !GetViewOptions()->getBrowseMode() &&
             (!Imp()->HasDrawView() || !Imp()->GetDrawView()->IsGridVisible() ) )
         {
-            const SwPageFrm *pPage = (SwPageFrm*)GetDoc()->GetRootFrm()->Lower();
+            const SwPageFrm *pPage = (SwPageFrm*)GetLayout()->Lower();  //swmod 071108//swmod 071225
             if ( pPage->Frm().Top() > pOldPage->Frm().Top() )
                 pPage = (SwPageFrm*)pOldPage;
             SwRect aBoth( VisArea() );
@@ -1350,7 +1352,7 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
     if ( !GetWin() && !GetOut()->GetConnectMetaFile() )
         return;
     sal_Bool bBorderOnly = sal_False;
-    const SwRootFrm *pRoot = GetDoc()->GetRootFrm();
+    const SwRootFrm *pRoot = GetLayout();//swmod 080305
     if ( rRect.Top() > pRoot->Frm().Bottom() )
     {
         const SwFrm *pPg = pRoot->Lower();
@@ -1372,7 +1374,7 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
 
     if ( bBorderOnly )
     {
-        const SwFrm *pPage = pRoot->Lower();
+        const SwFrm *pPage =pRoot->Lower(); //swmod 071108//swmod 071225
         SwRect aLeft( rRect ), aRight( rRect );
         while ( pPage )
         {
@@ -1729,8 +1731,7 @@ sal_Int32 ViewShell::GetBrowseWidth() const
 
 void ViewShell::CheckBrowseView( sal_Bool bBrowseChgd )
 {
-    if ( !bBrowseChgd &&
-         !getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    if ( !bBrowseChgd && !GetViewOptions()->getBrowseMode() )
         return;
 
     SET_CURR_SHELL( this );
@@ -1788,14 +1789,15 @@ void ViewShell::CheckBrowseView( sal_Bool bBrowseChgd )
 
 SwRootFrm *ViewShell::GetLayout() const
 {
-    return GetDoc()->GetRootFrm();
+    return pLayout.get();   //swmod 080116
 }
+/***********************************************************************/
 
 OutputDevice& ViewShell::GetRefDev() const
 {
     OutputDevice* pTmpOut = 0;
     if (  GetWin() &&
-          getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+          GetViewOptions()->getBrowseMode() &&
          !GetViewOptions()->IsPrtFormat() )
         pTmpOut = GetWin();
     else if ( 0 != mpTmpRef )
@@ -1844,7 +1846,9 @@ void ViewShell::ApplyViewOptions( const SwViewOption &rOpt )
 
     ImplApplyViewOptions( rOpt );
 
-    //Some changes have to be synchronized
+    // With one layout per view it is not longer necessary
+    // to sync these "layout related" view options
+    // But as long as we have to disable "multiple layout"
     pSh = (ViewShell*)this->GetNext();
     while ( pSh != this )
     {
@@ -1860,6 +1864,7 @@ void ViewShell::ApplyViewOptions( const SwViewOption &rOpt )
             pSh->ImplApplyViewOptions( aOpt );
         pSh = (ViewShell*)pSh->GetNext();
     }
+    // End of disabled multiple window
 
     pSh = this;
     do
@@ -1898,7 +1903,7 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         if( pFldType && pFldType->GetDepends() )
         {
             SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
-            pFldType->Modify( &aHnt, 0);
+            pFldType->ModifyNotification( &aHnt, 0);
         }
         bReformat = sal_True;
     }
@@ -1924,12 +1929,17 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         // Wenn kein ReferenzDevice (Drucker) zum Formatieren benutzt wird,
         // sondern der Bildschirm, muss bei Zoomfaktoraenderung neu formatiert
         // werden.
-        if( getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        if( pOpt->getBrowseMode() )
             bReformat = sal_True;
     }
 
-    if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
-         pOpt->IsPrtFormat() != rOpt.IsPrtFormat() )
+    bool bBrowseModeChanged = false;
+    if( pOpt->getBrowseMode() != rOpt.getBrowseMode() )
+    {
+        bBrowseModeChanged = true;
+        bReformat = sal_True;
+    }
+    else if( pOpt->getBrowseMode() && pOpt->IsPrtFormat() != rOpt.IsPrtFormat() )
         bReformat = sal_True;
 
     if ( HasDrawView() || rOpt.IsGridVisible() )
@@ -1972,6 +1982,15 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     pOpt->SetUIOptions(rOpt);
 
     pDoc->set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode(pDoc->GetDocShell()));
+
+    if( bBrowseModeChanged )
+    {
+        // --> FME 2005-03-16 #i44963# Good occasion to check if page sizes in
+        // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
+        pDoc->CheckDefaultPageFmt();
+        // <--
+        CheckBrowseView( sal_True );
+    }
 
     pMyWin->Invalidate();
     if ( bReformat )
@@ -2038,8 +2057,7 @@ void  ViewShell::SetPDFExportOption(sal_Bool bSet)
 {
     if( bSet != pOpt->IsPDFExport() )
     {
-        if( bSet &&
-            getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        if( bSet && pOpt->getBrowseMode() )
             pOpt->SetPrtFormat( sal_True );
         pOpt->SetPDFExport(bSet);
     }
@@ -2090,13 +2108,11 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible > ViewShell::Create
 {
     uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc;
 
-    SwDoc *pMyDoc = GetDoc();
-
     // We require a layout and an XModel to be accessible.
-    OSL_ENSURE( pMyDoc->GetRootFrm(), "no layout, no access" );
+    OSL_ENSURE( pLayout, "no layout, no access" );
     OSL_ENSURE( GetWin(), "no window, no access" );
 
-    if( pMyDoc->GetRootFrm() && GetWin() )
+    if( pDoc->GetCurrentViewShell() && GetWin() )   //swmod 071108
         xAcc = Imp()->GetAccessibleMap().GetDocumentView();
 
     return xAcc;
@@ -2109,16 +2125,16 @@ ViewShell::CreateAccessiblePreview()
                 "Can't create accessible preview for non-preview ViewShell" );
 
     // We require a layout and an XModel to be accessible.
-    OSL_ENSURE( pDoc->GetRootFrm(), "no layout, no access" );
+    OSL_ENSURE( pLayout, "no layout, no access" );
     OSL_ENSURE( GetWin(), "no window, no access" );
 
-    if ( IsPreView() && pDoc->GetRootFrm() && GetWin() )
+    if ( IsPreView() && GetLayout()&& GetWin() )
     {
         return Imp()->GetAccessibleMap().GetDocumentPreview(
                     PagePreviewLayout()->maPrevwPages,
                     GetWin()->GetMapMode().GetScaleX(),
-                    pDoc->GetRootFrm()->GetPageByPageNum( PagePreviewLayout()->mnSelectedPageNum ),
-                    PagePreviewLayout()->maWinSize );
+                    GetLayout()->GetPageByPageNum( PagePreviewLayout()->mnSelectedPageNum ),
+                    PagePreviewLayout()->maWinSize );   //swmod 080305
     }
     return NULL;
 }
@@ -2196,6 +2212,30 @@ void ViewShell::SetCareWin( Window* pNew )
     pCareWindow = pNew;
 }
 
+sal_uInt16 ViewShell::GetPageCount() const
+{
+    return GetLayout() ? GetLayout()->GetPageNum() : 1;
+}
+
+const Size ViewShell::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const
+{
+    Size aSize;
+    const SwRootFrm* pTmpRoot = GetLayout();
+    if( pTmpRoot && nPageNum )
+    {
+        const SwPageFrm* pPage = static_cast<const SwPageFrm*>
+                                 (pTmpRoot->Lower());
+
+        while( --nPageNum && pPage->GetNext() )
+            pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+
+        if( !bSkipEmptyPages && pPage->IsEmptyPage() && pPage->GetNext() )
+            pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+
+        aSize = pPage->Frm().SSize();
+    }
+    return aSize;
+}
 
 // #i12836# enhanced pdf export
 sal_Int32 ViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const

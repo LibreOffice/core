@@ -94,8 +94,6 @@
 #include <swcli.hxx>
 #include <txtftn.hxx>
 #include <ftnidx.hxx>
-
-// #i20883# Digital Signatures and Encryption
 #include <fldbas.hxx>
 #include <docary.hxx>
 #include <swerror.h>        // Error messages
@@ -122,7 +120,7 @@
 #include <unomid.h>
 
 #include <sfx2/Metadatable.hxx>
-
+#include <switerator.hxx>
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -932,17 +930,16 @@ sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
         if ( GetWrtShell() )
         {
             SwFieldType* pType = GetWrtShell()->GetFldType( RES_POSTITFLD, aEmptyStr );
-            SwClientIter aIter( *pType );
-            SwClient* pFirst = aIter.GoStart();
+            SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
+            SwFmtFld* pFirst = aIter.First();
             while( pFirst )
             {
-                if( static_cast<SwFmtFld*>(pFirst)->GetTxtFld() &&
-                    static_cast<SwFmtFld*>(pFirst)->IsFldInDoc() )
+                if( pFirst->GetTxtFld() && pFirst->IsFldInDoc() )
                 {
                     nState |= HIDDENINFORMATION_NOTES;
                     break;
                 }
-                pFirst = ++aIter;
+                pFirst = aIter.Next();
             }
         }
     }
@@ -963,13 +960,14 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         case SID_PRINTPREVIEW:
         {
             sal_Bool bDisable = IsInPlaceActive();
+            // Disable "multiple layout"
             if ( !bDisable )
             {
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);
                 while (pTmpFrm)     // Look for Preview
                 {
                     if ( PTR_CAST(SwView, pTmpFrm->GetViewShell()) &&
-                         ((SwView*)pTmpFrm->GetViewShell())->GetWrtShell().getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
+                         ((SwView*)pTmpFrm->GetViewShell())->GetWrtShell().GetViewOptions()->getBrowseMode() )
                     {
                         bDisable = sal_True;
                         break;
@@ -977,6 +975,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                     pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this);
                 }
             }
+            // End of disabled "multiple layout"
             if ( bDisable )
                 rSet.DisableItem( SID_PRINTPREVIEW );
             else
@@ -1162,9 +1161,8 @@ SwFEShell* SwDocShell::GetFEShell()
 
 void SwDocShell::RemoveOLEObjects()
 {
-    SwClientIter aIter( *(SwModify*)pDoc->GetDfltGrfFmtColl() );
-    for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
-            pNd; pNd = (SwCntntNode*)aIter.Next() )
+    SwIterator<SwCntntNode,SwFmtColl> aIter( *pDoc->GetDfltGrfFmtColl() );
+    for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
     {
         SwOLENode* pOLENd = pNd->GetOLENode();
         if( pOLENd && ( pOLENd->IsOLEObjectDeleted() ||
@@ -1191,9 +1189,8 @@ void SwDocShell::CalcLayoutForOLEObjects()
     if( !pWrtShell )
         return;
 
-    SwClientIter aIter( *(SwModify*)pDoc->GetDfltGrfFmtColl() );
-    for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
-            pNd; pNd = (SwCntntNode*)aIter.Next() )
+    SwIterator<SwCntntNode,SwFmtColl> aIter( *pDoc->GetDfltGrfFmtColl() );
+    for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
     {
         SwOLENode* pOLENd = pNd->GetOLENode();
         if( pOLENd && pOLENd->IsOLESizeInvalid() )

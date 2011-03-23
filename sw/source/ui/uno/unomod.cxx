@@ -742,8 +742,13 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         break;
         case HANDLE_VIEWSET_ONLINE_LAYOUT :
         {
-            if( pView && !bVal != !pView->GetWrtShell().getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
-                pView->GetDocShell()->ToggleBrowserMode(bVal, pView );
+            if( pView && !bVal != !pView->GetWrtShell().GetViewOptions()->getBrowseMode() )
+            {
+                SwViewOption aOpt( *pView->GetWrtShell().GetViewOptions() );
+                aOpt.setBrowseMode( bVal );
+                pView->GetWrtShell().ApplyViewOptions( aOpt );
+                pView->RecheckBrowseMode();
+            }
         }
         break;
         case HANDLE_VIEWSET_HELP_URL :
@@ -930,7 +935,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         break;
         case HANDLE_VIEWSET_ONLINE_LAYOUT:
             if(pView)
-                bBoolVal = pView->GetWrtShell().getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+                bBoolVal = pView->GetWrtShell().GetViewOptions()->getBrowseMode();
         break;
         case HANDLE_VIEWSET_HELP_URL :
         {

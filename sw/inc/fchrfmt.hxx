@@ -54,6 +54,9 @@ public:
 
     // @@@ public copy ctor, but no copy assignment?
     SwFmtCharFmt( const SwFmtCharFmt& rAttr );
+protected:
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+
 private:
     // @@@ public copy ctor, but no copy assignment?
     SwFmtCharFmt & operator= (const SwFmtCharFmt &);
@@ -73,8 +76,6 @@ public:
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    // Pass to SwTxtCharFmt (from SwClient).
-    virtual void    Modify( SfxPoolItem*, SfxPoolItem* );
     virtual sal_Bool    GetInfo( SfxPoolItem& rInfo ) const;
 
     void SetCharFmt( SwFmt* pFmt ) { pFmt->Add(this); }

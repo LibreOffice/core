@@ -413,13 +413,13 @@ private:
 
     void _MakeSetWhichIds();
 
-public:
+protected:
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 
+public:
     SwRegHistory( SwHistory* pHst );
     SwRegHistory( const SwNode& rNd, SwHistory* pHst );
     SwRegHistory( SwModify* pRegIn, const SwNode& rNd, SwHistory* pHst );
-
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
 
     /// @return true if at least 1 item was inserted
     bool InsertItems( const SfxItemSet& rSet,

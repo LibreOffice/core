@@ -104,6 +104,7 @@
 #include <sortopt.hxx>
 #include <rtl/math.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -590,16 +591,16 @@ void lcl_InspectLines(SwTableLines& rLines, SvStrings& rAllNames)
 
 void lcl_FormatTable(SwFrmFmt* pTblFmt)
 {
-    SwClientIter aIter( *pTblFmt );
-    for( SwClient* pC = aIter.First( TYPE( SwFrm ));
-            pC; pC = aIter.Next() )
+    SwIterator<SwFrm,SwFmt> aIter( *pTblFmt );
+    for( SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
     {
-        if( ((SwFrm*)pC)->IsTabFrm() )
+        // mba: no TYPEINFO for SwTabFrm
+        if( pFrm->IsTabFrm() )
         {
-            if(((SwFrm*)pC)->IsValid())
-                ((SwFrm*)pC)->InvalidatePos();
-            ((SwTabFrm*)pC)->SetONECalcLowers();
-            ((SwTabFrm*)pC)->Calc();
+            if(pFrm->IsValid())
+                pFrm->InvalidatePos();
+            ((SwTabFrm*)pFrm)->SetONECalcLowers();
+            ((SwTabFrm*)pFrm)->Calc();
         }
     }
 }
@@ -695,9 +696,7 @@ inline rtl::OUString lcl_getString( SwXCell &rCell )
     return rCell.getString();
 }
 
-/* --------------------------------------------------
- * non UNO function call to set string in SwXCell
- * --------------------------------------------------*/
+/*  non UNO function call to set string in SwXCell */
 void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
         sal_Bool bKeepNumberFmt )
 {
@@ -714,9 +713,7 @@ void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
     rCell.SwXText::setString(rTxt);
 }
 
-/* --------------------------------------------------
- * non UNO function call to get value from SwXCell
- * --------------------------------------------------*/
+/* non UNO function call to get value from SwXCell */
 double lcl_getValue( SwXCell &rCell )
 {
     double fRet;
@@ -727,9 +724,7 @@ double lcl_getValue( SwXCell &rCell )
     return fRet;
 }
 
-/* --------------------------------------------------
- * non UNO function call to set value in SwXCell
- * --------------------------------------------------*/
+/* non UNO function call to set value in SwXCell */
 void lcl_setValue( SwXCell &rCell, double nVal )
 {
     if(rCell.IsValid())
@@ -1226,7 +1221,7 @@ sal_Bool SwXCell::hasElements(void) throw( uno::RuntimeException )
     return sal_True;
 }
 
-void SwXCell::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXCell::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
@@ -1245,15 +1240,14 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTab
         //wenn es die Box gibt, dann wird auch eine Zelle zurueckgegeben
         if(pFoundBox)
         {
-            SwClientIter aIter( *pTblFmt );
-            SwXCell* pXCell = (SwXCell*)aIter.
-                                    First( TYPE( SwXCell ));
+            SwIterator<SwXCell,SwFmt> aIter( *pTblFmt );
+            SwXCell* pXCell = aIter.First();
             while( pXCell )
             {
                 // gibt es eine passende Zelle bereits?
                 if(pXCell->GetTblBox() == pBox)
                     break;
-                pXCell = (SwXCell*)aIter.Next();
+                pXCell = aIter.Next();
             }
             //sonst anlegen
             if(!pXCell)
@@ -1264,9 +1258,7 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTab
     return pRet;
 }
 
-/* --------------------------------------------------
- *  exitstiert die Box in der angegebenen Tabelle?
- * --------------------------------------------------*/
+/* does box exist in given table? */
 SwTableBox* SwXCell::FindBox(SwTable* pTable, SwTableBox* pBox2)
 {
     // check if nFndPos happens to point to the right table box
@@ -1471,7 +1463,7 @@ void SwXTextTableRow::removeVetoableChangeListener(const OUString& /*rPropertyNa
     DBG_WARNING("not implemented");
 }
 
-void SwXTextTableRow::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXTextTableRow::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
@@ -1903,7 +1895,7 @@ void SwXTextTableCursor::removeVetoableChangeListener(const OUString& /*rPropert
     DBG_WARNING("not implemented");
 }
 
-void SwXTextTableCursor::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXTextTableCursor::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
@@ -1926,6 +1918,7 @@ public:
 
     void        ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc);
 };
+
 
 SwTableProperties_Impl::SwTableProperties_Impl()
 {
@@ -2151,7 +2144,6 @@ SwXTextTable::SwXTextTable() :
     bFirstRowAsLabel(sal_False),
     bFirstColumnAsLabel(sal_False)
 {
-
 }
 
 SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt) :
@@ -2166,7 +2158,6 @@ SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt) :
     bFirstRowAsLabel(sal_False),
     bFirstColumnAsLabel(sal_False)
 {
-
 }
 
 SwXTextTable::~SwXTextTable()
@@ -2191,8 +2182,7 @@ uno::Reference< table::XTableRows >  SwXTextTable::getRows(void) throw( uno::Run
     uno::Reference< table::XTableRows >  xRet;
     if (SwFrmFmt* pFmt = GetFrmFmt())
     {
-        SwXTableRows* pRows = (SwXTableRows*)SwClientIter(*pFmt).
-            First(TYPE(SwXTableRows));
+        SwXTableRows* pRows = SwIterator<SwXTableRows,SwFmt>::FirstElement(*pFmt);
         if (!pRows)
             pRows = new SwXTableRows(*pFmt);
         xRet = pRows;
@@ -2208,8 +2198,7 @@ uno::Reference< table::XTableColumns >  SwXTextTable::getColumns(void) throw( un
     uno::Reference< table::XTableColumns >  xRet;
     if (SwFrmFmt* pFmt = GetFrmFmt())
     {
-        SwXTableColumns* pCols = (SwXTableColumns*)SwClientIter(*pFmt).
-            First(TYPE(SwXTableColumns));
+        SwXTableColumns* pCols = SwIterator<SwXTableColumns,SwFmt>::FirstElement(*pFmt);
         if (!pCols)
             pCols = new SwXTableColumns(*pFmt);
         xRet = pCols;
@@ -2334,18 +2323,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
                 // hier muessen die Properties des Descriptors ausgewertet werden
                 pTableProps->ApplyTblAttr(*pTable, *pDoc);
                 SwFrmFmt* pTblFmt = pTable->GetFrmFmt();
-                SwClientIter aIter( *pTblFmt );
-                for( SwClient* pC = aIter.First( TYPE( SwFrm ));
-                        pC; pC = aIter.Next() )
-                {
-                    if( ((SwFrm*)pC)->IsTabFrm() )
-                    {
-                        if(((SwFrm*)pC)->IsValid())
-                            ((SwFrm*)pC)->InvalidatePos();
-                        ((SwTabFrm*)pC)->SetONECalcLowers();
-                        ((SwTabFrm*)pC)->Calc();
-                    }
-                }
+                lcl_FormatTable( pTblFmt );
 
                 pTblFmt->Add(this);
                 if(m_sTableName.Len())
@@ -3081,9 +3059,9 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                         && pBorder)
                     {
                         SwDoc* pDoc = pFmt->GetDoc();
-                        SwClientIter aIter( *pFmt );
+                        SwFrm* pFrm = SwIterator<SwFrm,SwFmt>::FirstElement( *pFmt );
                         //Tabellen ohne Layout (unsichtbare Header/Footer )
-                        if(0 != aIter.First( TYPE( SwFrm )))
+                        if( pFrm )
                         {
                             lcl_FormatTable(pFmt);
                             SwTable* pTable = SwTable::FindTable( pFmt );
@@ -3276,9 +3254,9 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                 case FN_UNO_TABLE_BORDER:
                 {
                     SwDoc* pDoc = pFmt->GetDoc();
-                    SwClientIter aIter( *pFmt );
+                    SwFrm* pFrm = SwIterator<SwFrm,SwFmt>::FirstElement( *pFmt );
                     //Tabellen ohne Layout (unsichtbare Header/Footer )
-                    if(0 != aIter.First( TYPE( SwFrm )))
+                    if( pFrm )
                     {
                         lcl_FormatTable(pFmt);
                         SwTable* pTable = SwTable::FindTable( pFmt );
@@ -3571,7 +3549,7 @@ sal_uInt16 SwXTextTable::getColumnCount(void)
     return nRet;
 }
 
-void SwXTextTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXTextTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     if(pOld && pOld->Which() == RES_REMOVE_UNO_OBJECT &&
         (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
@@ -4591,7 +4569,7 @@ const SwUnoCrsr* SwXCellRange::GetTblCrsr() const
     return pRet;
 }
 
-void SwXCellRange::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXCellRange::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew );
     if(!GetRegisteredIn() || !aCursorDepend.GetRegisteredIn())
@@ -4669,15 +4647,14 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
         if(pTable->GetTabLines().Count() > nIndex)
         {
             SwTableLine* pLine = pTable->GetTabLines().GetObject((sal_uInt16)nIndex);
-            SwClientIter aIter( *pFrmFmt );
-            SwXTextTableRow* pXRow = (SwXTextTableRow*)aIter.
-                                    First( TYPE( SwXTextTableRow ));
+            SwIterator<SwXTextTableRow,SwFmt> aIter( *pFrmFmt );
+            SwXTextTableRow* pXRow = aIter.First();
             while( pXRow )
             {
                 // gibt es eine passende Zelle bereits?
                 if(pXRow->GetTblRow() == pLine)
                     break;
-                pXRow = (SwXTextTableRow*)aIter.Next();
+                pXRow = aIter.Next();
             }
             //sonst anlegen
             if(!pXRow)
@@ -4821,7 +4798,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
     }
 }
 
-void SwXTableRows::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXTableRows::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
@@ -5030,7 +5007,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
     }
 }
 
-void SwXTableColumns::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXTableColumns::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }

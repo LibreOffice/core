@@ -437,7 +437,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     SwNodeIndex aInsPos( *pEndNd );
 
     SwTable& rTbl = (SwTable&)pTblNd->GetTable();
-    pTblFmt->Add( &rTbl );      // das Frame-Format setzen
+    rTbl.RegisterToFormat( *pTblFmt );
 
     rTbl.SetRowsToRepeat( GetTable().GetRowsToRepeat() );
     rTbl.SetTblChgMode( GetTable().GetTblChgMode() );

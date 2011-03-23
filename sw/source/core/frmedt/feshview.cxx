@@ -50,7 +50,6 @@
 #include <editeng/protitem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
-
 #include <IDocumentSettingAccess.hxx>
 #include <cmdid.h>
 #include <poolfmt.hrc>      // fuer InitFldTypes
@@ -88,9 +87,10 @@
 #include "txtfrm.hxx"
 #include "txatbase.hxx"
 #include "mdiexp.hxx"                   // fuer Update der Statuszeile bei drag
-#include <sortedobjs.hxx> // #i28701#
+#include <sortedobjs.hxx>
 #include <HandleAnchorNodeChg.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <switerator.hxx>
 
 #define SCROLLVAL 75
 
@@ -107,7 +107,7 @@ SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, ViewShell *pSh )
     if ( pLst && pLst->GetMarkCount() == 1 )
     {
         SdrObject *pO = pLst->GetMark( 0 )->GetMarkedSdrObj();
-        if ( pO->ISA(SwVirtFlyDrawObj) )
+        if ( pO && pO->ISA(SwVirtFlyDrawObj) )
             return ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
     }
     return 0;
@@ -141,7 +141,6 @@ extern sal_Bool bNoInterrupt;       // in swapp.cxx
 /*************************************************************************
 |*
 |*  SwFEShell::SelectObj()
-|*
 *************************************************************************/
 
 sal_Bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
@@ -589,7 +588,7 @@ bool SwFEShell::IsSelContainsControl() const
         // if we have one marked object, get the SdrObject and check
         // whether it contains a control
         const SdrObject* pSdrObject = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
-        bRet = ::CheckControlLayer( pSdrObject );
+        bRet = pSdrObject && ::CheckControlLayer( pSdrObject );
     }
     return bRet;
 }
@@ -692,7 +691,7 @@ long SwFEShell::EndDrag( const Point *, sal_Bool )
         //pView->ShowShownXor( GetOut() );
 
         pView->EndDragObj();
-        // JP 18.08.95: DrawUndo-Action auf FlyFrames werden nicht gespeichert
+        // DrawUndo-Action auf FlyFrames werden nicht gespeichert
         //              Die Fly aendern das Flag
         GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(true);
         ChgAnchor( 0, sal_True );
@@ -732,7 +731,6 @@ void SwFEShell::BreakDrag()
 |*
 |*  Beschreibung        Wenn ein Fly selektiert ist, zieht er den Crsr in
 |*                      den ersten CntntFrm
-|*
 *************************************************************************/
 
 const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
@@ -904,7 +902,6 @@ void SwFEShell::SelectionToBottom( sal_Bool bBottom )
 |*
 |*  Beschreibung        Objekt ueber/unter dem Dokument?
 |*                      2 Controls, 1 Heaven, 0 Hell, -1 Uneindeutig
-|*
 *************************************************************************/
 
 short SwFEShell::GetLayerId() const
@@ -916,6 +913,8 @@ short SwFEShell::GetLayerId() const
         for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
+            if( !pObj )
+                continue;
             if ( nRet == SHRT_MAX )
                 nRet = pObj->GetLayer();
             else if ( nRet != pObj->GetLayer() )
@@ -950,7 +949,8 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
         for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            // #i18447# - no change of layer for controls
+            if( !pObj )
+                continue;
             // or group objects containing controls.
             // --> #i113730#
             // consider that a member of a drawing group has been selected.
@@ -1544,7 +1544,7 @@ void SwFEShell::MoveCreate( const Point &rPos )
 
 sal_Bool SwFEShell::EndCreate( sal_uInt16 eSdrCreateCmd )
 {
-    // JP 18.08.95: Damit das Undo-Object aus der DrawEngine nicht bei uns
+    // Damit das Undo-Object aus der DrawEngine nicht bei uns
     // gespeichert wird, (wir erzeugen ein eigenes Undo-Object!) hier kurz
     // das Undo abschalten
     OSL_ENSURE( Imp()->HasDrawView(), "EndCreate without DrawView?" );
@@ -1580,7 +1580,7 @@ sal_Bool SwFEShell::ImpEndCreate()
 
     if( rSdrObj.GetSnapRect().IsEmpty() )
     {
-        //JP 10.04.95: das Object vergessen wir lieber, fuerht nur
+        // das Object vergessen wir lieber, fuerht nur
         //              zu Problemen
         Imp()->GetDrawView()->DeleteMarked();
         Imp()->GetDrawView()->UnmarkAll();
@@ -1622,12 +1622,12 @@ sal_Bool SwFEShell::ImpEndCreate()
         SwPosition aPos( GetDoc()->GetNodes() );
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         Point aPoint( aPt.X(), aPt.Y() + rBound.GetHeight()/2 );
-        getIDocumentLayoutAccess()->GetRootFrm()->GetCrsrOfst( &aPos, aPoint, &aState );
+        GetLayout()->GetCrsrOfst( &aPos, aPoint, &aState ); //swmod 080317
 
-        //JP 22.01.99: Zeichenbindung ist im ReadnOnly-Inhalt nicht erlaubt
+        //Zeichenbindung ist im ReadnOnly-Inhalt nicht erlaubt
         if( !aPos.nNode.GetNode().IsProtect() )
         {
-            pAnch = aPos.nNode.GetNode().GetCntntNode()->GetFrm( &aPoint, &aPos );
+            pAnch = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), &aPoint, &aPos );
             SwRect aTmp;
             pAnch->GetCharRect( aTmp, aPos );
 
@@ -1669,13 +1669,13 @@ sal_Bool SwFEShell::ImpEndCreate()
         SwPosition aPos( GetDoc()->GetNodes() );
         GetLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
 
-        //JP 22.01.99: nicht in ReadnOnly-Inhalt setzen
+        //nicht in ReadnOnly-Inhalt setzen
         if( aPos.nNode.GetNode().IsProtect() )
             // dann darf er nur seitengebunden sein. Oder sollte man
             // die naechste nicht READONLY Position suchen?
             bAtPage = true;
 
-        pAnch = aPos.nNode.GetNode().GetCntntNode()->GetFrm( &aPoint, 0, sal_False );
+        pAnch = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), &aPoint, 0, sal_False );
 
         if( !bAtPage )
         {
@@ -1708,7 +1708,7 @@ sal_Bool SwFEShell::ImpEndCreate()
             pAnch = ::FindAnchor( pPage, aPt, bBodyOnly );
             aPos.nNode = *((SwCntntFrm*)pAnch)->GetNode();
 
-            //JP 22.01.99: nicht in ReadnOnly-Inhalt setzen
+            //nicht in ReadnOnly-Inhalt setzen
             if( aPos.nNode.GetNode().IsProtect() )
                 // dann darf er nur seitengebunden sein. Oder sollte man
                 // die naechste nicht READONLY Position suchen?
@@ -2385,14 +2385,12 @@ sal_Bool SwFEShell::GotoFly( const String& rName, FlyCntType eType, sal_Bool bSe
     {
         SET_CURR_SHELL( this );
 
-        SwClientIter aIter( *(SwModify*)pFlyFmt );
-        SwFlyFrm* pFrm = (SwFlyFrm*)aIter.First( TYPE( SwFlyFrm ));
+        SwFlyFrm* pFrm = SwIterator<SwFlyFrm,SwFmt>::FirstElement( *pFlyFmt );
         if( pFrm )
         {
-            OSL_ENSURE( pFrm->IsFlyFrm(), "Wrong FrmType" );
             if( bSelFrm )
             {
-                SelectObj( pFrm->Frm().Pos(), 0, ((SwFlyFrm*)pFrm)->GetVirtDrawObj() );
+                SelectObj( pFrm->Frm().Pos(), 0, pFrm->GetVirtDrawObj() );
                 if( !ActionPend() )
                     MakeVisible( pFrm->Frm() );
             }
@@ -2798,25 +2796,17 @@ long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
         do
         {
             // Ist es der Gewuenschte?
-            if( pSect->GetRegisteredIn() == &rFmt )
+            if( pSect->KnowsFormat( rFmt ) )
                 return pSect->Frm().Width();
             // fuer geschachtelte Bereiche
             pSect = pSect->GetUpper()->FindSctFrm();
         }
         while( pSect );
     }
-    SwClientIter aIter( rFmt );
-    SwClient *pLast = aIter.GoStart();
-    while ( pLast )
-    {
-        if ( pLast->IsA( TYPE(SwFrm) ) )
-        {
-            SwSectionFrm* pSct = (SwSectionFrm*)pLast;
+    SwIterator<SwSectionFrm,SwFmt> aIter( rFmt );
+    for ( SwSectionFrm* pSct = aIter.First(); pFrm; pFrm = aIter.Next() )
             if( !pSct->IsFollow() )
                 return pSct->Frm().Width();
-        }
-        pLast = aIter++;
-    }
     return 0;
 }
 

@@ -99,9 +99,9 @@ public:
     }
 
     void    Invalidate();
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
@@ -116,7 +116,7 @@ void SwXFootnote::Impl::Invalidate()
     m_rThis.SetDoc(0);
 }
 
-void SwXFootnote::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXFootnote::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 
@@ -130,7 +130,7 @@ void SwXFootnote::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
         {
             case RES_FOOTNOTE_DELETED:
                 if (static_cast<const void*>(m_pFmtFtn) ==
-                        static_cast<SwPtrMsgPoolItem *>(pOld)->pObject)
+                        static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject)
                 {
                     Invalidate();
                 }

@@ -694,6 +694,20 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             SwWrtShell* pWrtSh = pDocSh ? pDocSh->GetWrtShell() : 0;
             switch( rEvHint.GetEventId() )
             {
+            case SFX_EVENT_LOADFINISHED:
+                OSL_ASSERT(!pWrtSh);
+                // if it is a new document created from a template,
+                // update fixed fields
+                if (pDocSh->GetMedium())
+                {
+                    SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(),
+                        pTemplateItem, SfxBoolItem,
+                        SID_TEMPLATE, sal_False);
+                    if (pTemplateItem && pTemplateItem->GetValue())
+                    {
+                        pDocSh->GetDoc()->SetFixFields(false, 0);
+                    }
+                }
             case SFX_EVENT_CREATEDOC:
                 // Update all FIX-Date/Time fields
                 if( pWrtSh )
@@ -702,7 +716,6 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     sal_Bool bUpdateFields = sal_True;
                     if( pUpdateDocItem &&  pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE)
                         bUpdateFields = sal_False;
-                    pWrtSh->SetFixFields();
                     if(bUpdateFields)
                     {
                         pWrtSh->UpdateInputFlds();

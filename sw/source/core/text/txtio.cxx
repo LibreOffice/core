@@ -35,6 +35,7 @@
 #include "viewopt.hxx"      // IsDbg()
 #include "txtatr.hxx"
 #include "txtfrm.hxx"       // IsDbg()
+#include "rootfrm.hxx"
 #include "flyfrms.hxx"
 #include "inftxt.hxx"
 #include "porexp.hxx"
@@ -69,14 +70,9 @@ SvStream &operator<<( SvStream &rOs, const SwpHints & ) //$ ostream
 
 sal_Bool IsDbg( const SwTxtFrm *pFrm )
 {
-// Hmm, so IsTest4 etc are defined only if OSL_DEBUG_LEVEL > 1,
-// but this file is compiled if DBG_UTIL is defined. So should the IsTest4 etc
-// then instead be conditional on DBG_UTIL? Such crack.
-#if OSL_DEBUG_LEVEL > 1
-    if( pFrm && pFrm->GetShell() )
-        return pFrm->GetShell()->GetViewOptions()->IsTest4();
+    if( pFrm && pFrm->getRootFrm()->GetCurrShell() )
+        return pFrm->getRootFrm()->GetCurrShell()->GetViewOptions()->IsTest4();
     else
-#endif
         return sal_False;
 }
 

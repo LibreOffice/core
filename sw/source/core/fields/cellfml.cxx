@@ -718,15 +718,13 @@ const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, const String& rNm ) const
     return pRet;
 }
 
-/*  */
-
 const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox )
 {
     SwNodeIndex aIdx( *rBox.GetSttNd() );
     SwCntntNode* pCNd = aIdx.GetNodes().GoNext( &aIdx );
     OSL_ENSURE( pCNd, "Box hat keinen TextNode" );
     Point aPt;      // den im Layout 1. Frame returnen - Tab.Kopfzeile !!
-    return pCNd->GetFrm( &aPt, NULL, sal_False );
+    return pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, NULL, sal_False );
 }
 
 long lcl_GetLongBoxNum( String& rStr )

@@ -167,7 +167,7 @@ class SwFltAnchorClient : public SwClient
 public:
     SwFltAnchorClient(SwFltAnchor * pFltAnchor);
 
-    virtual void Modify (SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify (const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 };
 
 

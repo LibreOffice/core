@@ -35,6 +35,7 @@
 #include "frmtool.hxx"
 #include "viewopt.hxx"
 #include "paratr.hxx"
+#include "rootfrm.hxx"
 #include "pagefrm.hxx"
 #include "colfrm.hxx"
 #include "txttypes.hxx"
@@ -131,7 +132,7 @@ sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
              !pFly->GetNextLink() && !pFly->GetPrevLink() ) ||
              ( !pFly && pFrm->IsInTab() ) )
         {
-            ViewShell* pVsh = pFrm->GetShell();
+            ViewShell* pVsh = pFrm->getRootFrm()->GetCurrShell();
             if( pVsh )
             {
                 if( pVsh->GetNext() != pVsh ||
@@ -145,7 +146,7 @@ sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
                 pFrm->SetPara( 0 );
                 pFrm->GetFormatted();
                 if( pFrm->Frm().HasArea() )
-                    pFrm->GetShell()->InvalidateWindows( pFrm->Frm() );
+                    pFrm->getRootFrm()->GetCurrShell()->InvalidateWindows( pFrm->Frm() );
                 return sal_True;
             }
         }
@@ -927,7 +928,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
         xub_StrLen nOffs = GetOfst();
         if( pTmpPrev )
         {
-            ViewShell *pSh = GetShell();
+            ViewShell *pSh = getRootFrm()->GetCurrShell();
             sal_Bool bProtectedAllowed = pSh && pSh->GetViewOptions()->IsCursorInProtectedArea();
             const SwTxtFrm *pPrevPrev = pTmpPrev;
             // Hier werden geschuetzte Frames und Frame ohne Inhalt ausgelassen
@@ -1282,7 +1283,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
             if( 0 != ( pTmpFollow = GetFollow() ) )
             {   // geschuetzte Follows auslassen
                 const SwCntntFrm* pTmp = pTmpFollow;
-                ViewShell *pSh = GetShell();
+                ViewShell *pSh = getRootFrm()->GetCurrShell();
                 if( !pSh || !pSh->GetViewOptions()->IsCursorInProtectedArea() )
                 {
                     while( pTmpFollow && pTmpFollow->IsProtected() )
@@ -1442,7 +1443,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
         pColl = &pColl->GetNextTxtFmtColl();
     SwAttrSet aSet( ((SwDoc*)GetTxtNode()->GetDoc())->GetAttrPool(), aTxtFmtCollSetRange );
     const SwAttrSet* pSet = &pColl->GetAttrSet();
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     if( GetTxtNode()->HasSwAttrSet() )
     {
         aSet.Put( *GetTxtNode()->GetpSwAttrSet() );
@@ -1457,8 +1458,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
         pFnt->ChkMagic( pSh, pFnt->GetActual() );
     }
     OutputDevice* pOut = pSh->GetOut();
-    if ( !GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
-            ( pSh->GetViewOptions()->IsPrtFormat() ) )
+    if( !pSh->GetViewOptions()->getBrowseMode() || pSh->GetViewOptions()->IsPrtFormat() )
         pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
 
     pFnt->SetFntChg( sal_True );

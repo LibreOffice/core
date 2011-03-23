@@ -718,7 +718,7 @@ lcl_ExportHints(
                         xRef = pPortion = new SwXTextPortion(
                                 pUnoCrsr, xParent, PORTION_FIELD);
                         Reference<XTextField> xField =
-                            CreateSwXTextField(*pDoc, pAttr->GetFld());
+                            SwXTextField::CreateSwXTextField(*pDoc, pAttr->GetFld());
                         pPortion->SetTextField(xField);
                     }
                 break;
@@ -1167,7 +1167,7 @@ lcl_CreatePortions(
             "CreatePortions: stack error" );
 }
 
-void    SwXTextPortionEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void    SwXTextPortionEnumeration::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }

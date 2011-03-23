@@ -50,8 +50,8 @@ void DeepCalc( const SwFrm *pFrm );
 |*  SwFlyInCntFrm::SwFlyInCntFrm(), ~SwFlyInCntFrm()
 |*
 |*************************************************************************/
-SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
-    SwFlyFrm( pFmt, pAnch )
+SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
+    SwFlyFrm( pFmt, pSib, pAnch )
 {
     bInCnt = bInvalidLayout = bInvalidCntnt = sal_True;
     SwTwips nRel = pFmt->GetVertOrient().GetPos();
@@ -115,7 +115,7 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
 |*  SwFlyInCntFrm::Modify()
 |*
 |*************************************************************************/
-void SwFlyInCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     sal_Bool bCallPrepare = sal_False;
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;

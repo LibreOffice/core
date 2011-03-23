@@ -40,7 +40,7 @@
 #include <ndindex.hxx>
 #include <fldupde.hxx>
 #include <swtblfmt.hxx>
-
+#include <fieldhint.hxx>
 
 TYPEINIT1( SwDDETable, SwTable );
 
@@ -63,10 +63,12 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
         const SwNode& rNd = *GetTabSortBoxes()[0]->GetSttNd();
         if( rNd.GetNodes().IsDocNodes() )
         {
-            // "aktivieren der Updates" (Modify nicht noch mal rufen)
-            aDepend.LockModify();
+            // mba: swclient refactoring - this code shouldn't have done anything!
+            // the ModifyLock Flag is evaluated in SwModify only, though it was accessible via SwClient
+            // This has been fixed now
+//          aDepend.LockModify();
             pDDEType->IncRefCnt();
-            aDepend.UnlockModify();
+//          aDepend.UnlockModify();
 
             // Setzen der Werte in die einzelnen Boxen
             // update box content only if update flag is set (false in import)
@@ -92,12 +94,20 @@ SwDDETable::~SwDDETable()
     }
 }
 
-void SwDDETable::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwDDETable::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( pNew && RES_UPDATEDDETBL == pNew->Which() )
         ChangeContent();
     else
         SwTable::Modify( pOld, pNew );
+}
+
+void SwDDETable::SwClientNotify( const SwModify&, const SfxHint& rHint )
+{
+    const SwFieldHint* pHint = dynamic_cast<const SwFieldHint*>( &rHint );
+    if ( pHint )
+        // replace DDETable by real table
+        NoDDETable();
 }
 
 void SwDDETable::ChangeContent()
@@ -177,7 +187,7 @@ sal_Bool SwDDETable::NoDDETable()
     pNewTbl->GetTabLines().Insert( &GetTabLines(),0 );                      // move die Lines
     GetTabLines().Remove( 0, GetTabLines().Count() );
 
-    if( pDoc->GetRootFrm() )
+    if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
         ((SwDDEFieldType*)aDepend.GetRegisteredIn())->DecRefCnt();
 
     pTblNd->SetNewTable( pNewTbl );       // setze die Tabelle

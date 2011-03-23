@@ -118,16 +118,13 @@
 #include <dcontact.hxx>
 #include <dflyobj.hxx>
 #include <crsskip.hxx>
-// OD 2004-05-07 #i28701#
 #include <vector>
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 #include <sortopt.hxx>
-
 #include <algorithm>
 #include <iterator>
 #include <boost/bind.hpp>
-
+#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -212,9 +209,9 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
             ? FLY_AT_CHAR : FLY_AT_PARA);
     const SwCntntFrm* pCFrm;
     const SwCntntNode* pCNd;
-    if( pDoc->GetRootFrm() &&
+    if( pDoc->GetCurrentViewShell() &&  //swmod 071108//swmod 071225
         0 != (pCNd = rIdx.GetNode().GetCntntNode()) &&
-        0 != (pCFrm = pCNd->GetFrm()) )
+        0 != (pCFrm = pCNd->getLayoutFrm( pDoc->GetCurrentLayout())) )
     {
         const SwSortedObjs *pObjs = pCFrm->GetDrawObjs();
         if( pObjs )
@@ -272,7 +269,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
 UnoActionContext::UnoActionContext(SwDoc *const pDoc)
     : m_pDoc(pDoc)
 {
-    SwRootFrm *const pRootFrm = m_pDoc->GetRootFrm();
+    SwRootFrm *const pRootFrm = m_pDoc->GetCurrentLayout();
     if (pRootFrm)
     {
         pRootFrm->StartAllAction();
@@ -284,7 +281,7 @@ UnoActionContext::~UnoActionContext()
     // Doc may already have been removed here
     if (m_pDoc)
     {
-        SwRootFrm *const pRootFrm = m_pDoc->GetRootFrm();
+        SwRootFrm *const pRootFrm = m_pDoc->GetCurrentLayout();
         if (pRootFrm)
         {
             pRootFrm->EndAllAction();
@@ -298,7 +295,7 @@ UnoActionContext::~UnoActionContext()
 UnoActionRemoveContext::UnoActionRemoveContext(SwDoc *const pDoc)
     : m_pDoc(pDoc)
 {
-    SwRootFrm *const pRootFrm = m_pDoc->GetRootFrm();
+    SwRootFrm *const pRootFrm = m_pDoc->GetCurrentLayout();
     if (pRootFrm)
     {
         pRootFrm->UnoRemoveAllActions();
@@ -307,14 +304,14 @@ UnoActionRemoveContext::UnoActionRemoveContext(SwDoc *const pDoc)
 
 UnoActionRemoveContext::~UnoActionRemoveContext()
 {
-    SwRootFrm *const pRootFrm = m_pDoc->GetRootFrm();
+    SwRootFrm *const pRootFrm = m_pDoc->GetCurrentLayout();
     if (pRootFrm)
     {
         pRootFrm->UnoRestoreAllActions();
     }
 }
 
-void ClientModify(SwClient* pClient, SfxPoolItem *pOld, SfxPoolItem *pNew)
+void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     switch( pOld ? pOld->Which() : 0 )
     {
@@ -517,13 +514,13 @@ public:
     uno::Reference< text::XTextContent > NextElement_Impl()
         throw (container::NoSuchElementException, lang::WrappedTargetException,
                 uno::RuntimeException);
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
-void SwXParagraphEnumeration::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXParagraphEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
@@ -786,13 +783,13 @@ public:
     }
 
     const ::sw::mark::IMark * GetBookmark() const { return m_pMark; }
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void    Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
-void SwXTextRange::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXTextRange::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     const bool bAlreadyRegistered = 0 != GetRegisteredIn();
     ClientModify(this, pOld, pNew);
@@ -1227,8 +1224,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
             SwFrmFmt *const pFmt = pSttNode->GetFlyFmt();
             if (0 != pFmt)
             {
-                SwXTextFrame* pFrame( static_cast<SwXTextFrame*>(
-                    SwClientIter( *pFmt ).First( TYPE( SwXTextFrame ) ) ) );
+                SwXTextFrame* pFrame = SwIterator<SwXTextFrame,SwFmt>::FirstElement( *pFmt );
                 xParentText = pFrame ? pFrame : new SwXTextFrame( *pFmt );
             }
         }
@@ -1579,13 +1575,13 @@ public:
     }
 
     void MakeRanges();
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
-void SwXTextRanges::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXTextRanges::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
@@ -1762,9 +1758,9 @@ public:
         return static_cast<SwUnoCrsr*>(
                 const_cast<SwModify*>(GetRegisteredIn()));
     }
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
@@ -1773,7 +1769,7 @@ struct InvalidFrameDepend {
     { return !rEntry->GetRegisteredIn(); }
 };
 
-void SwXParaFrameEnumeration::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXParaFrameEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
@@ -1805,9 +1801,7 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
     // the format should be valid here, otherwise the client
     // would have been removed in ::Modify
     // check for a shape first
-    SwClientIter aIter(*pFormat);
-    SwDrawContact * const pContact =
-        static_cast<SwDrawContact*>( aIter.First(TYPE(SwDrawContact)) );
+    SwDrawContact* const pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement( *pFormat );
     if (pContact)
     {
         SdrObject * const pSdr = pContact->GetMaster();

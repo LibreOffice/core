@@ -29,10 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
-
-#include <editeng/frmdiritem.hxx> // #i42921#
+#include <editeng/frmdiritem.hxx>
 #include <editeng/protitem.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
 #include <fmtcntnt.hxx>
@@ -70,9 +68,11 @@
 #include <crsskip.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <scriptinfo.hxx>
-#include <rootfrm.hxx> // #i27138#
+#include <rootfrm.hxx>
 #include <istyleaccess.hxx>
-#include <IDocumentListItems.hxx> // #i83479#
+#include <IDocumentListItems.hxx>
+#include <switerator.hxx>
+#include "ndole.hxx"
 
 using namespace ::com::sun::star::i18n;
 
@@ -432,15 +432,16 @@ sal_Bool SwNode::IsInVisibleArea( ViewShell* pSh ) const
     else
         pNd = GetCntntNode();
 
-    const SwFrm* pFrm;
-    if( pNd && 0 != ( pFrm = pNd->GetFrm( 0, 0, sal_False ) ) )
-    {
-        if( !pSh )
-            // dann die Shell vom Doc besorgen:
-            GetDoc()->GetEditShell( &pSh );
+    if( !pSh )
+        // dann die Shell vom Doc besorgen:
+        GetDoc()->GetEditShell( &pSh );
 
-        if( pSh )
+    if( pSh )
+    {
+        const SwFrm* pFrm;
+        if( pNd && 0 != ( pFrm = pNd->getLayoutFrm( pSh->GetLayout(), 0, 0, sal_False ) ) )
         {
+
             if ( pFrm->IsInTab() )
                 pFrm = pFrm->FindTabFrm();
 
@@ -477,7 +478,7 @@ sal_Bool SwNode::IsProtect() const
     if( 0 != ( pSttNd = FindTableBoxStartNode() ) )
     {
         SwCntntFrm* pCFrm;
-        if( IsCntntNode() && 0 != (pCFrm = ((SwCntntNode*)this)->GetFrm() ))
+        if( IsCntntNode() && 0 != (pCFrm = ((SwCntntNode*)this)->getLayoutFrm( GetDoc()->GetCurrentLayout() ) ))
             return pCFrm->IsProtected();
 
         const SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().
@@ -545,7 +546,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
     {
         const SwFrm* pFrm;
         const SwPageFrm* pPage;
-        if( pNode && 0 != ( pFrm = pNode->GetFrm( 0, 0, bCalcLay ) ) &&
+        if( pNode && 0 != ( pFrm = pNode->getLayoutFrm( pNode->GetDoc()->GetCurrentLayout(), 0, 0, bCalcLay ) ) &&
             0 != ( pPage = pFrm->FindPageFrm() ) )
         {
             pPgDesc = pPage->GetPageDesc();
@@ -767,10 +768,9 @@ SwFrmFmt* SwNode::GetFlyFmt() const
     {
         if( IsCntntNode() )
         {
-            SwClientIter aIter( *(SwCntntNode*)this );
-            SwClient* pCli = aIter.First( TYPE( SwCntntFrm ));
-            if( pCli )
-                pRet = ((SwCntntFrm*)pCli)->FindFlyFrm()->GetFmt();
+            SwCntntFrm* pFrm = SwIterator<SwCntntFrm,SwCntntNode>::FirstElement( *(SwCntntNode*)this );
+            if( pFrm )
+                pRet = pFrm->FindFlyFrm()->GetFmt();
         }
         if( !pRet )
         {
@@ -842,8 +842,8 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
             const SwCntntNode* pCNd = GetCntntNode();
 
             Point aPt( 0, 0 );
-            const SwFrm* pFrm = pRet->GetFrm( &aPt, 0, sal_False ),
-                       * pMyFrm = pCNd ? pCNd->GetFrm( &aPt, 0, sal_False ) : 0;
+            const SwFrm* pFrm = pRet->getLayoutFrm( pRet->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False ),
+                       * pMyFrm = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False ) : 0;
             const SwPageFrm* pPgFrm = pFrm ? pFrm->FindPageFrm() : 0;
             if( pPgFrm && pMyFrm &&
                 pPgFrm->Frm().Top() > pMyFrm->Frm().Top() )
@@ -1021,7 +1021,7 @@ SwCntntNode::~SwCntntNode()
         ((SwAttrSet*)mpAttrSet.get())->SetModifyAtAttr( 0 );
 }
 
-void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
+void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
     sal_uInt16 nWhich = pOldValue ? pOldValue->Which() :
                     pNewValue ? pNewValue->Which() : 0 ;
@@ -1033,7 +1033,7 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
             SwFmt * pFmt = (SwFmt *) ((SwPtrMsgPoolItem *)pNewValue)->pObject;
 
             // nicht umhaengen wenn dieses das oberste Format ist !!
-            if( pRegisteredIn == pFmt )
+            if( GetRegisteredIn() == pFmt )
             {
                 if( pFmt->GetRegisteredIn() )
                 {
@@ -1100,7 +1100,7 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
         break;
     }
 
-    SwModify::Modify( pOldValue, pNewValue );
+    NotifyClients( pOldValue, pNewValue );
 }
 
 sal_Bool SwCntntNode::InvalidateNumRule()
@@ -1118,12 +1118,10 @@ sal_Bool SwCntntNode::InvalidateNumRule()
     return 0 != pRule;
 }
 
-
-SwCntntFrm *SwCntntNode::GetFrm( const Point* pPoint,
-                                const SwPosition *pPos,
-                                const sal_Bool bCalcFrm ) const
+SwCntntFrm *SwCntntNode::getLayoutFrm( const SwRootFrm* _pRoot,
+    const Point* pPoint, const SwPosition *pPos, const sal_Bool bCalcFrm ) const
 {
-    return (SwCntntFrm*) ::GetFrmOfModify( *(SwModify*)this, FRM_CNTNT,
+    return (SwCntntFrm*) ::GetFrmOfModify( _pRoot, *(SwModify*)this, FRM_CNTNT,
                                             pPoint, pPos, bCalcFrm );
 }
 
@@ -1131,7 +1129,7 @@ SwRect SwCntntNode::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint
                                     const sal_Bool bCalcFrm ) const
 {
     SwRect aRet;
-    SwCntntFrm* pFrm = (SwCntntFrm*)::GetFrmOfModify( *(SwModify*)this,
+    SwCntntFrm* pFrm = (SwCntntFrm*)::GetFrmOfModify( 0, *(SwModify*)this,
                                             FRM_CNTNT, pPoint, 0, bCalcFrm );
     if( pFrm )
         aRet = bPrtArea ? pFrm->Prt() : pFrm->Frm();
@@ -1142,7 +1140,7 @@ SwRect SwCntntNode::FindPageFrmRect( const sal_Bool bPrtArea, const Point* pPoin
                                     const sal_Bool bCalcFrm ) const
 {
     SwRect aRet;
-    SwFrm* pFrm = ::GetFrmOfModify( *(SwModify*)this,
+    SwFrm* pFrm = ::GetFrmOfModify( 0, *(SwModify*)this,
                                             FRM_CNTNT, pPoint, 0, bCalcFrm );
     if( pFrm && 0 != ( pFrm = pFrm->FindPageFrm() ))
         aRet = bPrtArea ? pFrm->Prt() : pFrm->Frm();
@@ -1180,8 +1178,6 @@ SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
         {
             SwFmtChg aTmp1( pOldColl );
             SwFmtChg aTmp2( pNewColl );
-            // damit alles was im Modify passiert hier nicht noch impl.
-            // werden muss
             SwCntntNode::Modify( &aTmp1, &aTmp2 );
         }
     }
@@ -1314,7 +1310,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
 
     while( 0 != (pUpper = aNode2Layout.UpperFrm( pFrm, rNode )) )
     {
-        pNew = rNode.MakeFrm();
+        pNew = rNode.MakeFrm( pUpper );
         pNew->Paste( pUpper, pFrm );
         // #i27138#
         // notify accessibility paragraphs objects about changed
@@ -1323,7 +1319,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
         // and relation CONTENT_FLOWS_TO for previous paragraph will change.
         if ( pNew->IsTxtFrm() )
         {
-            ViewShell* pViewShell( pNew->GetShell() );
+            ViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {
@@ -1348,60 +1344,7 @@ void SwCntntNode::DelFrms()
     if( !GetDepends() )
         return;
 
-    SwClientIter aIter( *this );
-    SwCntntFrm *pFrm;
-
-    for( pFrm = (SwCntntFrm*)aIter.First( TYPE(SwCntntFrm)); pFrm;
-         pFrm = (SwCntntFrm*)aIter.Next() )
-    {
-        // #i27138#
-        // notify accessibility paragraphs objects about changed
-        // CONTENT_FLOWS_FROM/_TO relation.
-        // Relation CONTENT_FLOWS_FROM for current next paragraph will change
-        // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
-        if ( pFrm->IsTxtFrm() )
-        {
-            ViewShell* pViewShell( pFrm->GetShell() );
-            if ( pViewShell && pViewShell->GetLayout() &&
-                 pViewShell->GetLayout()->IsAnyShellAccessible() )
-            {
-                pViewShell->InvalidateAccessibleParaFlowRelation(
-                            dynamic_cast<SwTxtFrm*>(pFrm->FindNextCnt( true )),
-                            dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
-            }
-        }
-        // <--
-        if( pFrm->HasFollow() )
-            pFrm->GetFollow()->_SetIsFollow( pFrm->IsFollow() );
-        if( pFrm->IsFollow() )
-        {
-            SwCntntFrm* pMaster = (SwTxtFrm*)pFrm->FindMaster();
-            pMaster->SetFollow( pFrm->GetFollow() );
-            pFrm->_SetIsFollow( sal_False );
-        }
-        pFrm->SetFollow( 0 );//Damit er nicht auf dumme Gedanken kommt.
-                                //Andernfalls kann es sein, dass ein Follow
-                                //vor seinem Master zerstoert wird, der Master
-                                //greift dann ueber den ungueltigen
-                                //Follow-Pointer auf fremdes Memory zu.
-                                //Die Kette darf hier zerknauscht werden, weil
-                                //sowieso alle zerstoert werden.
-        if( pFrm->GetUpper() && pFrm->IsInFtn() && !pFrm->GetIndNext() &&
-            !pFrm->GetIndPrev() )
-        {
-            SwFtnFrm *pFtn = pFrm->FindFtnFrm();
-            OSL_ENSURE( pFtn, "You promised a FtnFrm?" );
-            SwCntntFrm* pCFrm;
-            if( !pFtn->GetFollow() && !pFtn->GetMaster() &&
-                0 != ( pCFrm = pFtn->GetRefFromAttr()) && pCFrm->IsFollow() )
-            {
-                OSL_ENSURE( pCFrm->IsTxtFrm(), "NoTxtFrm has Footnote?" );
-                ((SwTxtFrm*)pCFrm->FindMaster())->Prepare( PREP_FTN_GONE );
-            }
-        }
-        pFrm->Cut();
-        delete pFrm;
-    }
+    SwCntntFrm::DelFrms(*this);
     if( IsTxtNode() )
     {
         ((SwTxtNode*)this)->SetWrong( NULL );
@@ -1453,7 +1396,7 @@ sal_Bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
     case RES_CONTENT_VISIBLE:
         {
             ((SwPtrMsgPoolItem&)rInfo).pObject =
-                SwClientIter( *(SwCntntNode*)this ).First( TYPE(SwFrm) );
+                SwIterator<SwFrm,SwCntntNode>::FirstElement(*this);
         }
         return sal_False;
     }
@@ -1491,7 +1434,7 @@ sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
         {
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
         }
     }
     return bRet;
@@ -1567,7 +1510,7 @@ sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
             // einige Sonderbehandlungen fuer Attribute
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
         }
     }
     return bRet;
@@ -1617,7 +1560,7 @@ sal_Bool SwCntntNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
     {
         SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
         SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-        Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+        ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
 
         if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
             mpAttrSet.reset();//DELETEZ( mpAttrSet );
@@ -1658,7 +1601,7 @@ sal_Bool SwCntntNode::ResetAttr( const SvUShorts& rWhichArr )
         {
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
         }
     }
     if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
@@ -1697,7 +1640,7 @@ sal_uInt16 SwCntntNode::ResetAllAttr()
     {
         SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
         SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-        Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+        ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
 
         if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
             mpAttrSet.reset();//DELETEZ( mpAttrSet );
@@ -1837,7 +1780,7 @@ void SwCntntNode::SetCondFmtColl( SwFmtColl* pColl )
         {
             SwFmtChg aTmp1( pOldColl ? pOldColl : GetFmtColl() );
             SwFmtChg aTmp2( pColl ? pColl : GetFmtColl() );
-            SwModify::Modify( &aTmp1, &aTmp2 );
+            NotifyClients( &aTmp1, &aTmp2 );
         }
         if( IsInCache() )
         {
@@ -1990,7 +1933,7 @@ short SwCntntNode::GetTextDirection( const SwPosition& rPos,
         aPt = *pPt;
 
     // #i72024# - No format of the frame, because this can cause recursive layout actions
-    SwFrm* pFrm = GetFrm( &aPt, &rPos, sal_False );
+    SwFrm* pFrm = getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, &rPos, sal_False );
 
     if ( pFrm )
     {
@@ -2014,6 +1957,24 @@ short SwCntntNode::GetTextDirection( const SwPosition& rPos,
     return nRet;
 }
 // <--
+
+SwOLENodes* SwCntntNode::CreateOLENodesArray( const SwFmtColl& rColl, bool bOnlyWithInvalidSize )
+{
+    SwOLENodes *pNodes = 0;
+    SwIterator<SwCntntNode,SwFmtColl> aIter( rColl );
+    for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
+    {
+        SwOLENode *pONd = pNd->GetOLENode();
+        if ( pONd && (!bOnlyWithInvalidSize || pONd->IsOLESizeInvalid()) )
+        {
+            if ( !pNodes  )
+                pNodes = new SwOLENodes;
+            pNodes->Insert( pONd, pNodes->Count() );
+        }
+    }
+
+    return pNodes;
+}
 
 //FEATURE::CONDCOLL
 // Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!

@@ -48,7 +48,7 @@
 #include <ndgrf.hxx>
 #include <ndindex.hxx>
 #include <accessibilityoptions.hxx>
-
+#include <switerator.hxx>
 void ViewShell::Init( const SwViewOption *pNewOpt )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::Init" );
@@ -89,8 +89,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     if ( pOut && pOut->GetPDFWriter() )
         pPDFOut = pOut;
     // #i41075# Only setup the printer if we need one:
-    const IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
-    const bool bBrowseMode = pIDSA->get(IDocumentSettingAccess::BROWSE_MODE);
+    const bool bBrowseMode = pOpt->getBrowseMode();
     if( pPDFOut )
         InitPrt( pPDFOut );
     // #i44963# Good occasion to check if page sizes in page descriptions
@@ -110,12 +109,24 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
         GetWin()->SetLineColor();
     }
 
-    //Layout erzeugen wenn es noch nicht vorhanden ist.
-    SwRootFrm* pRoot = GetDoc()->GetRootFrm();
-    if( !pRoot )
-        GetDoc()->SetRootFrm( pRoot = new SwRootFrm( pDoc->GetDfltFrmFmt(), this ) );
-
-    SizeChgNotify();
+    // Create a new layout, if there is no one available
+    if( !pLayout )
+    {
+        // Here's the code which disables the usage of "multiple" layouts at the moment
+        // If the problems with controls and groups objects are solved,
+        // this code can be removed...
+        ViewShell *pCurrShell = GetDoc()->GetCurrentViewShell();
+        if( pCurrShell )
+            pLayout = pCurrShell->pLayout;
+        // end of "disable multiple layouts"
+        if( !pLayout )
+        {
+            // switched to two step construction because creating the layout in SwRootFrm needs a valid pLayout set
+            pLayout = SwRootFrmPtr(new SwRootFrm( pDoc->GetDfltFrmFmt(), this ));//swmod081016
+            pLayout->Init( pDoc->GetDfltFrmFmt() );
+        }
+    }
+    SizeChgNotify();    //swmod 071108
 
     // #i31958#
     // XForms mode: initialize XForms mode, based on design mode (draw view)
@@ -229,9 +240,8 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
     bEndActionByVirDev = sal_False;
     bPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
-
-    if ( bPreView )
-        pImp->InitPagePreviewLayout();
+    if( nFlags & VSHELLFLAG_SHARELAYOUT ) //swmod 080125
+        pLayout = rShell.pLayout;//swmod 080125
 
     SET_CURR_SHELL( this );
 
@@ -241,6 +251,10 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     pOutput = pOut;
     Init( rShell.GetViewOptions() );
     pOut = pOutput;
+
+    // OD 12.12.2002 #103492#
+    if ( bPreView )
+        pImp->InitPagePreviewLayout();
 
     ((SwHiddenTxtFieldType*)pDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
             SetHiddenFlag( !pOpt->IsShowHiddenField() );
@@ -283,9 +297,8 @@ ViewShell::~ViewShell()
                 {
                     if( pGNd->IsAnimated() )
                     {
-                        SwClientIter aIter( *pGNd );
-                        for( SwFrm* pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
-                            pFrm; pFrm = (SwFrm*)aIter.Next() )
+                        SwIterator<SwFrm,SwGrfNode> aIter( *pGNd );
+                        for( SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
                         {
                             OSL_ENSURE( pFrm->IsNoTxtFrm(), "GraphicNode with Text?" );
                             ((SwNoTxtFrm*)pFrm)->StopAnimation( pOut );
@@ -306,8 +319,8 @@ ViewShell::~ViewShell()
             if( !pDoc->release() )
                 delete pDoc, pDoc = 0;
             else
-                pDoc->GetRootFrm()->ResetNewLayout();
-        }
+                GetLayout()->ResetNewLayout();
+        }//swmod 080317
 
         delete pOpt;
 
@@ -320,7 +333,12 @@ ViewShell::~ViewShell()
     }
 
     if ( pDoc )
+    {
         GetLayout()->DeRegisterShell( this );
+        if(pDoc->GetCurrentViewShell()==this)
+            pDoc->SetCurrentViewShell( this->GetNext()!=this ?
+            (ViewShell*)this->GetNext() : NULL );
+    }
 
     delete mpTmpRef;
     delete pAccOptions;
@@ -328,7 +346,7 @@ ViewShell::~ViewShell()
 
 sal_Bool ViewShell::HasDrawView() const
 {
-    return Imp()->HasDrawView();
+    return Imp() ? Imp()->HasDrawView() : 0;
 }
 
 void ViewShell::MakeDrawView()

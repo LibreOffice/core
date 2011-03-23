@@ -55,7 +55,7 @@
 #include <section.hxx>
 #include <doctxm.hxx>
 #include <poolfmt.hxx>
-
+#include <switerator.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -115,9 +115,8 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath,
         if( pSplitColl->GetAttrOutlineLevel() == 0 )//<-end,zhaojianwei, 0814
         {
             pOutlNds = new SwOutlineNodes( 8, 8 );
-            SwClientIter aIter( *(SwModify*)pSplitColl );
-            for( SwTxtNode* pTNd = (SwTxtNode*)aIter.First( TYPE( SwTxtNode ));
-                    pTNd; pTNd = (SwTxtNode*)aIter.Next() )
+            SwIterator<SwTxtNode,SwFmtColl> aIter( *pSplitColl );
+            for( SwTxtNode* pTNd = aIter.First(); pTNd; pTNd = aIter.Next() )
                 if( pTNd->GetNodes().IsDocNodes() )
                     pOutlNds->Insert( pTNd );
 

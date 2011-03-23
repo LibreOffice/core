@@ -1009,7 +1009,7 @@ void SwUndoInsertLabel::RepeatImpl(::sw::RepeatContext & rContext)
         case LTYPE_OBJECT:
             {
                 SwFlyFrm* pFly;
-                SwCntntFrm *pCnt = pCNd->GetFrm();
+                SwCntntFrm *pCnt = pCNd->getLayoutFrm( rDoc.GetCurrentLayout() );
                 if( pCnt && 0 != ( pFly = pCnt->FindFlyFrm() ) )
                     nIdx = pFly->GetFmt()->GetCntnt().GetCntntIdx()->GetIndex();
             }

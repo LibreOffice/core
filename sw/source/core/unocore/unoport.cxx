@@ -62,7 +62,7 @@ using ::rtl::OUString;
 /******************************************************************
  * SwXTextPortion
  ******************************************************************/
-static void init(SwXTextPortion & rPortion, const SwUnoCrsr* pPortionCursor)
+void SwXTextPortion::init(const SwUnoCrsr* pPortionCursor)
 {
     SwUnoCrsr* pUnoCursor =
         pPortionCursor->GetDoc()->CreateUnoCrsr(*pPortionCursor->GetPoint());
@@ -71,7 +71,7 @@ static void init(SwXTextPortion & rPortion, const SwUnoCrsr* pPortionCursor)
         pUnoCursor->SetMark();
         *pUnoCursor->GetMark() = *pPortionCursor->GetMark();
     }
-    pUnoCursor->Add(& rPortion);
+    pUnoCursor->Add(this);
 }
 
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
@@ -93,7 +93,7 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
     , m_ePortionType(eType)
     , m_bIsCollapsed(false)
 {
-    init(*this, pPortionCrsr);
+    init( pPortionCrsr);
 }
 
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
@@ -112,7 +112,7 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
     , m_ePortionType(PORTION_FRAME)
     , m_bIsCollapsed(false)
 {
-    init(*this, pPortionCrsr);
+    init( pPortionCrsr);
 }
 
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
@@ -132,7 +132,7 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
     , m_ePortionType( bIsEnd ? PORTION_RUBY_END : PORTION_RUBY_START )
     , m_bIsCollapsed(false)
 {
-    init(*this, pPortionCrsr);
+    init( pPortionCrsr);
 
     if (!bIsEnd)
     {
@@ -967,7 +967,7 @@ throw( uno::RuntimeException )
     return aRet;
 }
 
-void SwXTextPortion::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXTextPortion::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if (!m_FrameDepend.GetRegisteredIn())

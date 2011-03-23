@@ -150,7 +150,7 @@ void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,
     else
     {
         pBlinkPor->SetPos( rPoint );
-        pBlinkPor->SetRootFrm( pTxtFrm->FindRootFrm() );
+        pBlinkPor->SetRootFrm( pTxtFrm->getRootFrm() );
         aList.Insert( pBlinkPor );
         pTxtFrm->SetBlinkPor();
         if( pPor->IsLayPortion() || pPor->IsParaPortion() )

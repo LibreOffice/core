@@ -117,27 +117,18 @@
 #include <dochdl.hrc>
 #include <comcore.hrc> // #111827#
 #include <sot/stg.hxx>
-
-// #108584#
 #include <svx/svditer.hxx>
-
-// #108584#
 #include <editeng/eeitem.hxx>
-
-// #108584#
 #include <editeng/fhgtitem.hxx>
-
-// #108584#
 #include <svx/svdpage.hxx>
 #include <avmedia/mediawindow.hxx>
-
-// #109590#
 #include <swcrsr.hxx>
 #include <SwRewriter.hxx>
 #include <globals.hrc>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <swserv.hxx>
+#include <switerator.hxx>
 
 extern sal_Bool bFrmDrag;
 extern sal_Bool bDDINetAttr;
@@ -358,10 +349,8 @@ uno::Reference < embed::XEmbeddedObject > SwTransferable::FindOLEObj( sal_Int64&
     uno::Reference < embed::XEmbeddedObject > xObj;
     if( pClpDocFac )
     {
-        SwClientIter aIter( *(SwModify*)pClpDocFac->GetDoc()->
-                            GetDfltGrfFmtColl() );
-        for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
-                pNd; pNd = (SwCntntNode*)aIter.Next() )
+        SwIterator<SwCntntNode,SwFmtColl> aIter( *pClpDocFac->GetDoc()->GetDfltGrfFmtColl() );
+        for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
             if( ND_OLENODE == pNd->GetNodeType() )
             {
                 xObj = ((SwOLENode*)pNd)->GetOLEObj().GetOleRef();
@@ -376,10 +365,8 @@ Graphic* SwTransferable::FindOLEReplacementGraphic() const
 {
     if( pClpDocFac )
     {
-        SwClientIter aIter( *(SwModify*)pClpDocFac->GetDoc()->
-                            GetDfltGrfFmtColl() );
-        for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
-                pNd; pNd = (SwCntntNode*)aIter.Next() )
+        SwIterator<SwCntntNode,SwFmtColl> aIter( *pClpDocFac->GetDoc()->GetDfltGrfFmtColl() );
+        for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
             if( ND_OLENODE == pNd->GetNodeType() )
             {
                 return ((SwOLENode*)pNd)->GetGraphic();

@@ -1173,19 +1173,13 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
     aOpt.SetTable( sal_True );
     aOpt.SetSnap( sal_False );
     aOpt.SetGridVisible( sal_False );
+
     GetViewShell()->ApplyViewOptions( aOpt );
     GetViewShell()->ApplyAccessiblityOptions(SW_MOD()->GetAccessibilityOptions());
 
     // adjust view shell option to the same as for print
     SwPrintData const aPrintOptions = *SW_MOD()->GetPrtOptions(false);
     GetViewShell()->AdjustOptionsForPagePreview( aPrintOptions );
-
-    IDocumentSettingAccess* pIDSA = pESh->getIDocumentSettingAccess();
-    if( pIDSA->get(IDocumentSettingAccess::BROWSE_MODE))
-    {
-        pIDSA->set(IDocumentSettingAccess::BROWSE_MODE, false);
-        pESh->CheckBrowseView( sal_True );
-    }
 
     GetViewShell()->CalcLayout();
     DocSzChgd( GetViewShell()->GetDocSize() );

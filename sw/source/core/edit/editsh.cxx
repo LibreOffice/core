@@ -68,7 +68,7 @@
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 #include <unocrsr.hxx>
-
+#include <switerator.hxx>
 
 using namespace com::sun::star;
 
@@ -153,7 +153,7 @@ void SwEditShell::Insert2(const String &rStr, const bool bForceExpandHints )
                 // seems to be an empty paragraph.
                 Point aPt;
                 SwCntntFrm* pFrm =
-                        ((SwTxtNode&)rNode).GetFrm( &aPt, pTmpCrsr->GetPoint(),
+                        ((SwTxtNode&)rNode).getLayoutFrm( GetLayout(), &aPt, pTmpCrsr->GetPoint(),
                                                     sal_False );
 
                 SwScriptInfo aScriptInfo;
@@ -391,10 +391,9 @@ void SwEditShell::SetGraphicPolygon( const PolyPolygon *pPoly )
     SwNoTxtNode *pNd = GetCrsr()->GetNode()->GetNoTxtNode();
     StartAllAction();
     pNd->SetContour( pPoly );
-    SwFlyFrm *pFly = (SwFlyFrm*)pNd->GetFrm()->GetUpper();
+    SwFlyFrm *pFly = (SwFlyFrm*)pNd->getLayoutFrm(GetLayout())->GetUpper();
     const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
-    pFly->GetFmt()->SwModify::Modify( (SwFmtSurround*)&rSur,
-                                      (SwFmtSurround*)&rSur );
+    pFly->GetFmt()->NotifyClients( (SwFmtSurround*)&rSur, (SwFmtSurround*)&rSur );
     GetDoc()->SetModified();
     EndAllAction();
 }
@@ -407,10 +406,9 @@ void SwEditShell::ClearAutomaticContour()
     {
         StartAllAction();
         pNd->SetContour( NULL, sal_False );
-        SwFlyFrm *pFly = (SwFlyFrm*)pNd->GetFrm()->GetUpper();
+        SwFlyFrm *pFly = (SwFlyFrm*)pNd->getLayoutFrm(GetLayout())->GetUpper();
         const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
-        pFly->GetFmt()->SwModify::Modify( (SwFmtSurround*)&rSur,
-                                          (SwFmtSurround*)&rSur );
+        pFly->GetFmt()->NotifyClients( (SwFmtSurround*)&rSur, (SwFmtSurround*)&rSur );
         GetDoc()->SetModified();
         EndAllAction();
     }
@@ -449,7 +447,7 @@ sal_Bool SwEditShell::HasOLEObj( const String &rName ) const
         SwNode& rNd = aIdx.GetNode();
         if( rNd.IsOLENode() &&
             rName == ((SwOLENode&)rNd).GetChartTblName() &&
-            ((SwOLENode&)rNd).GetFrm() )
+            ((SwOLENode&)rNd).getLayoutFrm( GetLayout() ) )
             return sal_True;
 
         aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
@@ -701,7 +699,7 @@ Graphic SwEditShell::GetIMapGraphic() const
         }
         else
         {
-            SwFlyFrm* pFlyFrm = pNd->GetCntntNode()->GetFrm()->FindFlyFrm();
+            SwFlyFrm* pFlyFrm = pNd->GetCntntNode()->getLayoutFrm( GetLayout() )->FindFlyFrm();
             if(pFlyFrm)
                 aRet = pFlyFrm->GetFmt()->MakeGraphic();
         }
@@ -775,14 +773,13 @@ sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
     const SwCharFmts* pFmts = GetDoc()->GetCharFmts();
     for( sal_uInt16 n = pFmts->Count(); 1 < n; )
     {
-        SwClientIter aIter( *(*pFmts)[  --n ] );
-
-        for( SwClient* pFnd = aIter.First(TYPE( SwTxtINetFmt ));
-                pFnd; pFnd = aIter.Next() )
-            if( 0 != ( pTxtNd = ((SwTxtINetFmt*)pFnd)->GetpTxtNode()) &&
+        SwIterator<SwTxtINetFmt,SwCharFmt> aIter(*(*pFmts)[--n]);
+        for( SwTxtINetFmt* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
+        {
+            if( 0 != ( pTxtNd = pFnd->GetpTxtNode()) &&
                 pTxtNd->GetNodes().IsDocNodes() )
             {
-                SwTxtINetFmt& rAttr = *(SwTxtINetFmt*)pFnd;
+                SwTxtINetFmt& rAttr = *pFnd;
                 String sTxt( pTxtNd->GetExpandTxt( *rAttr.GetStart(),
                                     *rAttr.GetEnd() - *rAttr.GetStart() ) );
 
@@ -795,6 +792,7 @@ sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
                     rArr.C40_INSERT( SwGetINetAttr, pNew, rArr.Count() );
                 }
             }
+    }
     }
     return rArr.Count();
 }
@@ -868,7 +866,7 @@ void SwEditShell::SetNumberingRestart()
                 switch( pNd->GetNodeType() )
                 {
                 case ND_TEXTNODE:
-                    if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->GetFrm()) )
+                    if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->getLayoutFrm( GetLayout() )) )
                     {
                         //jump over hidden frames - ignore protection!
                         if( !((SwTxtFrm*)pCntFrm)->IsHiddenNow() )
@@ -936,7 +934,7 @@ sal_uInt16 SwEditShell::GetLineCount( sal_Bool bActPos )
     else
     {
         if( 0 != ( pCNd = pPam->GetCntntNode() ) &&
-            0 != ( pCntFrm = pCNd->GetFrm() ) )
+            0 != ( pCntFrm = pCNd->getLayoutFrm( GetLayout() ) ) )
         {
             const SwStartNode *pTmp;
             if( pCntFrm->IsInFly() )                        // Fly
@@ -964,7 +962,7 @@ sal_uInt16 SwEditShell::GetLineCount( sal_Bool bActPos )
     while( 0 != ( pCNd = GetDoc()->GetNodes().GoNextSection(
                 &aStart, sal_True, sal_False )) && ( !bActPos || aStart <= rPtIdx ) )
     {
-        if( 0 != ( pCntFrm = pCNd->GetFrm() ) && pCntFrm->IsTxtFrm() )
+        if( 0 != ( pCntFrm = pCNd->getLayoutFrm( GetLayout() ) ) && pCntFrm->IsTxtFrm() )
         {
             xub_StrLen nActPos = bActPos && aStart == rPtIdx ?
                 pPam->GetPoint()->nContent.GetIndex() : USHRT_MAX;
@@ -1157,5 +1155,13 @@ void SwEditShell::CountWords( SwDocStat& rStat ) const
 
     FOREACHPAM_END()
 }
+
+void SwEditShell::ApplyViewOptions( const SwViewOption &rOpt )
+{
+    SwCrsrShell::StartAction();
+    ViewShell::ApplyViewOptions( rOpt );
+    SwEditShell::EndAction();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -94,6 +94,7 @@
 #include <editeng/outliner.hxx>
 #include <docsh.hxx>
 #include <fmtmeta.hxx> // MetaFieldManager
+#include <switerator.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -749,21 +750,22 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
         else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS)) )
         {
             //fill all text fields into a sequence
-            SwClientIter aIter( *pType );
             SwDependentFields aFldArr;
-            SwFmtFldPtr pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+            SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
+            SwFmtFldPtr pFld = aIter.First();
             while(pFld)
             {
                 if(pFld->IsFldInDoc())
                     aFldArr.Insert(pFld, aFldArr.Count());
-                pFld = (SwFmtFld*)aIter.Next();
+                pFld = aIter.Next();
             }
+
             uno::Sequence<uno::Reference <text::XDependentTextField> > aRetSeq(aFldArr.Count());
             uno::Reference<text::XDependentTextField>* pRetSeq = aRetSeq.getArray();
             for(sal_uInt16 i = 0; i < aFldArr.Count(); i++)
             {
                 pFld = aFldArr.GetObject(i);
-                SwXTextField * pInsert = CreateSwXTextField(*GetDoc(), *pFld);
+                SwXTextField * pInsert = SwXTextField::CreateSwXTextField(*GetDoc(), *pFld);
 
                 pRetSeq[i] = uno::Reference<text::XDependentTextField>(pInsert);
             }
@@ -913,8 +915,8 @@ void SwXFieldMaster::dispose(void)          throw( uno::RuntimeException )
         }
 
         // zuerst alle Felder loeschen
-        SwClientIter aIter( *pFldType );
-        SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+        SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
+        SwFmtFld* pFld = aIter.First();
         while(pFld)
         {
             // Feld im Undo?
@@ -927,7 +929,7 @@ void SwXFieldMaster::dispose(void)          throw( uno::RuntimeException )
                 aPam.Move();
                 GetDoc()->DeleteAndJoin(aPam);
             }
-            pFld = (SwFmtFld*)aIter.Next();
+            pFld = aIter.Next();
         }
         // dann den FieldType loeschen
         GetDoc()->RemoveFldType(nTypeIdx);
@@ -951,7 +953,7 @@ void SwXFieldMaster::removeEventListener(const uno::Reference< lang::XEventListe
         throw uno::RuntimeException();
 }
 
-void SwXFieldMaster::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXFieldMaster::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
@@ -960,7 +962,6 @@ void SwXFieldMaster::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
         m_pDoc = 0;
     }
 }
-
 OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc)
 {
     OUString sRet(rType.GetName());
@@ -1000,12 +1001,11 @@ OUString SwXFieldMaster::LocalizeFormula(
     return rFormula;
 }
 
-SwXTextField * CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt)
+SwXTextField* SwXTextField::CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt)
 {
-    SwClientIter aIter(*rFmt.GetFld()->GetTyp());
+    SwIterator<SwXTextField,SwFieldType> aIter(*rFmt.GetFld()->GetTyp());
     SwXTextField * pField = 0;
-    SwXTextField * pTemp =
-        static_cast<SwXTextField*>(aIter.First( TYPE(SwXTextField) ));
+    SwXTextField * pTemp = aIter.First();
     while (pTemp)
     {
         if (pTemp->GetFldFmt() == &rFmt)
@@ -1013,7 +1013,7 @@ SwXTextField * CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt)
             pField = pTemp;
             break;
         }
-        pTemp = static_cast<SwXTextField*>(aIter.Next());
+        pTemp = aIter.Next();
     }
     return pField ? pField : new SwXTextField( rFmt, &rDoc );
 }
@@ -1168,8 +1168,8 @@ uno::Reference< beans::XPropertySet >  SwXTextField::getTextFieldMaster(void) th
             throw uno::RuntimeException();
         pType = pFmtFld->GetFld()->GetTyp();
     }
-    SwXFieldMaster* pMaster = (SwXFieldMaster*)
-                SwClientIter(*pType).First(TYPE(SwXFieldMaster));
+
+    SwXFieldMaster* pMaster = SwIterator<SwXFieldMaster,SwFieldType>::FirstElement( *pType );
     if(!pMaster)
         pMaster = new SwXFieldMaster(*pType, GetDoc());
 
@@ -2265,7 +2265,7 @@ void SwXTextField::update(  ) throw (uno::RuntimeException)
             break;
         }
         // Text formatting has to be triggered.
-        const_cast<SwFmtFld*>(pFmtFld)->Modify( 0, 0 );
+        const_cast<SwFmtFld*>(pFmtFld)->ModifyNotification( 0, 0 );
     }
     else
         m_bCallUpdate = sal_True;
@@ -2334,7 +2334,8 @@ void SwXTextField::Invalidate()
     }
 }
 
-void SwXTextField::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+
+void SwXTextField::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     switch( pOld ? pOld->Which() : 0 )
     {
@@ -2466,8 +2467,7 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
     SwFieldType* pType = GetDoc()->GetFldType(nResId, sName, sal_True);
     if(!pType)
         throw container::NoSuchElementException();
-    SwXFieldMaster* pMaster = (SwXFieldMaster*)
-                SwClientIter(*pType).First(TYPE(SwXFieldMaster));
+    SwXFieldMaster* pMaster = SwIterator<SwXFieldMaster,SwFieldType>::FirstElement( *pType );
     if(!pMaster)
         pMaster = new SwXFieldMaster(*pType, GetDoc());
     uno::Reference< beans::XPropertySet >  aRef = pMaster;
@@ -2717,9 +2717,8 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc* pDc) :
     for(sal_uInt16 nType = 0;  nType < nCount;  ++nType)
     {
         const SwFieldType *pCurType = pFldTypes->GetObject(nType);
-
-        SwClientIter aIter( *(SwFieldType*)pCurType );
-        const SwFmtFld* pCurFldFmt = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+        SwIterator<SwFmtFld,SwFieldType> aIter( *pCurType );
+        const SwFmtFld* pCurFldFmt = aIter.First();
         while (pCurFldFmt)
         {
             const SwTxtFld *pTxtFld = pCurFldFmt->GetTxtFld();
@@ -2729,7 +2728,7 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc* pDc) :
                          !pTxtFld->GetpTxtNode()->GetNodes().IsDocNodes();
             if (!bSkip)
                 pItems[ nFillPos++ ] = new SwXTextField(*pCurFldFmt, pDoc);
-            pCurFldFmt = (SwFmtFld*)aIter.Next();
+            pCurFldFmt = aIter.Next();
 
             // enlarge sequence if necessary
             if (aItems.getLength() == nFillPos)
@@ -2789,7 +2788,7 @@ uno::Any SwXFieldEnumeration::nextElement(void)
     return aRet;
 }
 
-void SwXFieldEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXFieldEnumeration::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())

@@ -103,7 +103,7 @@ struct SpellState
     ESelection          m_aESelection;
 
     //iterating over draw text objects
-    std::vector<SdrTextObj*> m_aTextObjects;
+    std::list<SdrTextObj*> m_aTextObjects;
     bool                m_bTextObjectsCollected;
 
     SpellState() :
@@ -759,58 +759,24 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
         if( pObj && pObj->ISA(SdrTextObj) )
             pCurrentTextObj = static_cast<SdrTextObj*>(pObj);
     }
-    //at first fill the vector of drawing objects
+    //at first fill the list of drawing objects
     if(!m_pSpellState->m_bTextObjectsCollected )
     {
         m_pSpellState->m_bTextObjectsCollected = true;
-        sal_uInt16 n = 0;
-        //iterate in the 'normal' array of objects
-        while( n < pDoc->GetSpzFrmFmts()->Count() )
+        std::list<SdrTextObj*> aTextObjs;
+        SwDrawContact::GetTextObjectsFromFmt( aTextObjs, pDoc );
+        if(pCurrentTextObj)
         {
-            SwFrmFmt* pFly = (*pDoc->GetSpzFrmFmts())[ n ];
-            if( pFly->IsA( TYPE(SwDrawFrmFmt) ) )
-            {
-                SwClientIter aIter( (SwFmt&) *pFly );
-                if( aIter.First( TYPE(SwDrawContact) ) )
-                {
-                    SdrObject* pSdrO = ((SwDrawContact*)aIter())->GetMaster();
-                    if ( pSdrO )
-                    {
-                        if ( pSdrO->IsA( TYPE(SdrObjGroup) ) )
-                        {
-                            SdrObjListIter aListIter( *pSdrO, IM_DEEPNOGROUPS );
-                            //iterate inside of a grouped object
-                            while( aListIter.IsMore() )
-                            {
-                                SdrObject* pSdrOElement = aListIter.Next();
-                                if( pSdrOElement && pSdrOElement->IsA( TYPE(SdrTextObj) ) &&
-                                    static_cast<SdrTextObj*>( pSdrOElement)->HasText() &&
-                                    pCurrentTextObj != pSdrOElement)
-                                {
-                                    m_pSpellState->m_aTextObjects.push_back((SdrTextObj*) pSdrOElement);
+            m_pSpellState->m_aTextObjects.remove(pCurrentTextObj);
+            m_pSpellState->m_aTextObjects.push_back(pCurrentTextObj);
                                 }
                             }
-                        }
-                        else if( pSdrO->IsA( TYPE(SdrTextObj) ) &&
-                                static_cast<SdrTextObj*>( pSdrO )->HasText() &&
-                                    pCurrentTextObj != pSdrO)
-                        {
-                            m_pSpellState->m_aTextObjects.push_back((SdrTextObj*) pSdrO);
-                        }
-                    }
-                }
-            }
-            ++n;
-        }
-        if(pCurrentTextObj)
-            m_pSpellState->m_aTextObjects.push_back(pCurrentTextObj);
-    }
     if(m_pSpellState->m_aTextObjects.size())
     {
         Reference< XSpellChecker1 >  xSpell( GetSpellChecker() );
         while(!bNextDoc && m_pSpellState->m_aTextObjects.size())
         {
-            std::vector<SdrTextObj*>::iterator aStart = m_pSpellState->m_aTextObjects.begin();
+            std::list<SdrTextObj*>::iterator aStart = m_pSpellState->m_aTextObjects.begin();
             SdrTextObj* pTextObj = *aStart;
             if(m_pSpellState->m_pStartDrawing == pTextObj)
                 m_pSpellState->m_bRestartDrawing = true;

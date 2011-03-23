@@ -29,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-
 #include <tools/resid.hxx>
 #include <hintids.hxx>
 #include <swtypes.hxx>
@@ -46,13 +43,11 @@
 #include <editeng/tstpitem.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <hints.hxx> // SwPtrMsgPoolItem
-
-// -> #i21237#
 #include <algorithm>
 #include <functional>
+#include <switerator.hxx>
 
 using namespace std;
-// <- #i21237#
 
 const sal_Char* SwForm::aFormEntry      = "<E>";
 const sal_Char* SwForm::aFormTab        = "<T>";
@@ -122,11 +117,9 @@ const PatternIni aPatternIni[] =
     {USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX}
 };
 
-// -> #i21237#
 SwFormTokens lcl_GetAuthPattern(sal_uInt16 nTypeId)
 {
-    SwFormTokens aRet; // #i21237#
-
+    SwFormTokens aRet;
 
     PatternIni aIni = aPatternIni[nTypeId];
     sal_uInt16 nVals[5];
@@ -192,7 +185,7 @@ SwTOXMark::SwTOXMark( const SwTOXType* pTyp )
 
 SwTOXMark::SwTOXMark( const SwTOXMark& rCopy )
     : SfxPoolItem( RES_TXTATR_TOXMARK )
-    , SwModify(rCopy.pRegisteredIn)
+    , SwModify(rCopy.GetRegisteredInNonConst())
     ,
     aPrimaryKey( rCopy.aPrimaryKey ), aSecondaryKey( rCopy.aSecondaryKey ),
     aTextReading( rCopy.aTextReading ),
@@ -212,6 +205,11 @@ SwTOXMark::~SwTOXMark()
 }
 
 
+void SwTOXMark::RegisterToTOXType( SwTOXType& rMark )
+{
+    rMark.Add(this);
+}
+
 int SwTOXMark::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
@@ -224,9 +222,9 @@ SfxPoolItem* SwTOXMark::Clone( SfxItemPool* ) const
     return new SwTOXMark( *this );
 }
 
-void SwTOXMark::Modify(SfxPoolItem* pOld, SfxPoolItem* pNew)
+void SwTOXMark::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew)
 {
-    SwModify::Modify(pOld, pNew);
+    NotifyClients(pOld, pNew);
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
     {   // invalidate cached uno object
         SetXTOXMark(::com::sun::star::uno::Reference<
@@ -238,7 +236,7 @@ void SwTOXMark::InvalidateTOXMark()
 {
     SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
         &static_cast<SwModify&>(*this) ); // cast to base class!
-    Modify(&aMsgHint, &aMsgHint);
+    NotifyClients(&aMsgHint, &aMsgHint);
 }
 
 String SwTOXMark::GetText() const
@@ -257,6 +255,18 @@ String SwTOXMark::GetText() const
         }
     }
     return aStr;
+}
+
+void SwTOXMark::InsertTOXMarks( SwTOXMarks& aMarks, const SwTOXType& rType )
+{
+    SwIterator<SwTOXMark,SwTOXType> aIter(rType);
+    SwTOXMark* pMark = aIter.First();
+    while( pMark )
+    {
+        if(pMark->GetTxtTOXMark())
+            aMarks.C40_INSERT(SwTOXMark, pMark, aMarks.Count());
+        pMark = aIter.Next();
+    }
 }
 
 /*--------------------------------------------------------------------
@@ -521,9 +531,14 @@ SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
 
 
 SwTOXBase::SwTOXBase( const SwTOXBase& rSource, SwDoc* pDoc )
-    : SwClient( rSource.pRegisteredIn )
+    : SwClient( rSource.GetRegisteredInNonConst() )
 {
     CopyTOXBase( pDoc, rSource );
+}
+
+void SwTOXBase::RegisterToTOXType( SwTOXType& rType )
+{
+    rType.Add( this );
 }
 
 SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )

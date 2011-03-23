@@ -1265,7 +1265,7 @@ void RtfExport::WriteHeaderFooter(const SwFrmFmt& rFmt, bool bHeader, const sal_
 class SwRTFWriter : public Writer
 {
     private:
-        bool bOutOutlineOnly;
+        bool m_bOutOutlineOnly;
 
     public:
         SwRTFWriter( const String& rFilterName, const String& rBaseURL );
@@ -1277,7 +1277,8 @@ SwRTFWriter::SwRTFWriter( const String& rFltName, const String & rBaseURL )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
     SetBaseURL( rBaseURL );
-    bOutOutlineOnly = 'O' == rFltName.GetChar( 0 );
+    // export outline nodes, only (send outline to clipboard/presentation)
+    m_bOutOutlineOnly = 'O' == rFltName.GetChar( 0 );
 }
 
 SwRTFWriter::~SwRTFWriter()
@@ -1286,7 +1287,7 @@ SwRTFWriter::~SwRTFWriter()
 sal_uLong SwRTFWriter::WriteStream()
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
-    RtfExport aExport( NULL, pDoc, new SwPaM( *pCurPam->End(), *pCurPam->Start() ), pCurPam, this, bOutOutlineOnly );
+    RtfExport aExport( NULL, pDoc, new SwPaM( *pCurPam->End(), *pCurPam->Start() ), pCurPam, this, m_bOutOutlineOnly );
     aExport.ExportDocument( true );
     return 0;
 }

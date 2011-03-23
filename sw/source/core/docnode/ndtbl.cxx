@@ -30,9 +30,7 @@
 #include "precompiled_sw.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
-
 #include <hintids.hxx>
-
 #include <editeng/lrspitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <editeng/protitem.hxx>
@@ -91,15 +89,13 @@
 #include <comcore.hrc>
 #include "docsh.hxx"
 #include <unochart.hxx>
-
 #include <node.hxx>
 #include <ndtxt.hxx>
-
 #include <map>
 #include <algorithm>
-#include <rootfrm.hxx> // #i27138#
+#include <rootfrm.hxx>
 #include <fldupde.hxx>
-
+#include <switerator.hxx>
 #if OSL_DEBUG_LEVEL > 1
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else
@@ -471,7 +467,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     }
 
     SwTable * pNdTbl = &pTblNd->GetTable();
-    pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
+    pNdTbl->RegisterToFormat( *pTableFmt );
 
     pNdTbl->SetRowsToRepeat( nRowsToRepeat );
     pNdTbl->SetTableModel( bNewModel );
@@ -759,7 +755,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
     //Orientation am Fmt der Table setzen
     pTableFmt->SetFmtAttr( SwFmtHoriOrient( 0, eAdjust ) );
-    pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
+    pNdTbl->RegisterToFormat( *pTableFmt );
 
     if( pTAFmt || ( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) )
     {
@@ -923,7 +919,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
             // JP 28.10.96: vom 1. Node die Positionen des Trenners besorgen,
             //              damit die Boxen entsprechend eingestellt werden
-            SwTxtFrmInfo aFInfo( (SwTxtFrm*)pTxtNd->GetFrm() );
+            SwTxtFrmInfo aFInfo( (SwTxtFrm*)pTxtNd->getLayoutFrm( pTxtNd->GetDoc()->GetCurrentLayout() ) );
             if( aFInfo.IsOneLine() )        // nur dann sinnvoll!
             {
                 const sal_Unicode* pTxt = pTxtNd->GetTxt().GetBuffer();
@@ -1179,7 +1175,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
 
     SwTable * pNdTbl = &pTblNd->GetTable();
     OSL_ENSURE( pNdTbl, "kein Tabellen-Node angelegt."  );
-   pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
+    pNdTbl->RegisterToFormat( *pTableFmt );
 
     if( !pBoxFmt->GetDepends() )
     {
@@ -2334,14 +2330,14 @@ SwTableNode::~SwTableNode()
     SwFrmFmt* pTblFmt = GetTable().GetFrmFmt();
     SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
                                 pTblFmt );
-    pTblFmt->Modify( &aMsgHint, &aMsgHint );
+    pTblFmt->ModifyNotification( &aMsgHint, &aMsgHint );
     DelFrms();
     delete pTable;
 }
 
-SwTabFrm *SwTableNode::MakeFrm()
+SwTabFrm *SwTableNode::MakeFrm( SwFrm* pSib )
 {
-    return new SwTabFrm( *pTable );
+    return new SwTabFrm( *pTable, pSib );
 }
 
 //Methode erzeugt fuer den vorhergehenden Node alle Ansichten vom
@@ -2363,7 +2359,7 @@ void SwTableNode::MakeFrms(const SwNodeIndex & rIdx )
 
     while( 0 != (pFrm = aNode2Layout.NextFrm()) )
     {
-        pNew = pNode->MakeFrm();
+        pNew = pNode->MakeFrm( pFrm );
         // wird ein Node vorher oder nachher mit Frames versehen
         if ( bBefore )
             // der neue liegt vor mir
@@ -2390,7 +2386,7 @@ void SwTableNode::MakeFrms( SwNodeIndex* pIdxBehind )
     SwNode2Layout aNode2Layout( *pNd, GetIndex() );
     while( 0 != (pUpper = aNode2Layout.UpperFrm( pFrm, *this )) )
     {
-        SwTabFrm* pNew = MakeFrm();
+        SwTabFrm* pNew = MakeFrm( pUpper );
         pNew->Paste( pUpper, pFrm );
         // #i27138#
         // notify accessibility paragraphs objects about changed
@@ -2398,7 +2394,7 @@ void SwTableNode::MakeFrms( SwNodeIndex* pIdxBehind )
         // Relation CONTENT_FLOWS_FROM for next paragraph will change
         // and relation CONTENT_FLOWS_TO for previous paragraph will change.
         {
-            ViewShell* pViewShell( pNew->GetShell() );
+            ViewShell* pViewShell( pNew->getRootFrm()->GetCurrShell() );
             if ( pViewShell && pViewShell->GetLayout() &&
                  pViewShell->GetLayout()->IsAnyShellAccessible() )
             {
@@ -2420,14 +2416,12 @@ void SwTableNode::DelFrms()
     //Sie muessen etwas umstaendlich zerstort werden, damit die Master
     //die Follows mit in's Grab nehmen.
 
-    SwClientIter aIter( *(pTable->GetFrmFmt()) );
-    SwClient *pLast = aIter.GoStart();
-    while ( pLast )
+    SwIterator<SwTabFrm,SwFmt> aIter( *(pTable->GetFrmFmt()) );
+    SwTabFrm *pFrm = aIter.First();
+    while ( pFrm )
     {
         sal_Bool bAgain = sal_False;
-        if ( pLast->IsA( TYPE(SwFrm) ) )
         {
-            SwTabFrm *pFrm = (SwTabFrm*)pLast;
             if ( !pFrm->IsFollow() )
             {
                 while ( pFrm->HasFollow() )
@@ -2438,7 +2432,7 @@ void SwTableNode::DelFrms()
                 // Relation CONTENT_FLOWS_FROM for current next paragraph will change
                 // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
                 {
-                    ViewShell* pViewShell( pFrm->GetShell() );
+                    ViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
                     if ( pViewShell && pViewShell->GetLayout() &&
                          pViewShell->GetLayout()->IsAnyShellAccessible() )
                     {
@@ -2453,7 +2447,7 @@ void SwTableNode::DelFrms()
                 bAgain = sal_True;
             }
         }
-        pLast = bAgain ? aIter.GoStart() : aIter++;
+        pFrm = bAgain ? aIter.First() : aIter.Next();
     }
 }
 
@@ -2493,7 +2487,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
         if( pShCrsr )
             aPt = pShCrsr->GetPtPos();
 
-        const SwFrm* pTmpFrm = pCNd->GetFrm( &aPt, 0, sal_False );
+        const SwFrm* pTmpFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
         do {
             pTmpFrm = pTmpFrm->GetUpper();
         } while ( !pTmpFrm->IsCellFrm() );
@@ -2715,7 +2709,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, sal_Bool bCurRowOnly,
         if( pShCrsr )
             aPt = pShCrsr->GetPtPos();
 
-        const SwFrm* pTmpFrm = pCNd->GetFrm( &aPt, 0, sal_False );
+        const SwFrm* pTmpFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
         do {
             pTmpFrm = pTmpFrm->GetUpper();
         } while ( !pTmpFrm->IsCellFrm() );
@@ -2924,7 +2918,7 @@ void SwDoc::SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet )
 
     SwMsgPoolItem aChg( RES_TBLHEADLINECHG );
     rTable.SetRowsToRepeat( nSet );
-    rTable.GetFrmFmt()->Modify( &aChg, &aChg );
+    rTable.GetFrmFmt()->ModifyNotification( &aChg, &aChg );
     SetModified();
 }
 
@@ -3448,7 +3442,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, sal_Bool bAfter,
                                 pOldTblFmt->GetDoc()->GetDfltFrmFmt() );
 
         *pNewTblFmt = *pOldTblFmt;
-        pNewTblFmt->Add( &pNewTblNd->GetTable() );
+        pNewTblNd->GetTable().RegisterToFormat( *pNewTblFmt );
 
         // neue Size errechnen ? (lcl_ChgTblSize nur das 2. aufrufen, wenn es
         // beim 1. schon geklappt hat; also absolute Groesse hat)

@@ -74,6 +74,7 @@
 #include <ndtxt.hxx>
 #include <dflyobj.hxx>
 #include <prevwpage.hxx>
+#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -2627,15 +2628,8 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
                 if ( pTxtNode )
                 {
                     // loop on all text frames registered at the text node.
-                    SwClientIter aIter( *pTxtNode );
-                    for( SwFrm* pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
-                         pFrm;
-                         pFrm = (SwFrm*)aIter.Next() )
-                    {
-                        OSL_ENSURE( dynamic_cast<SwTxtFrm*>(pFrm),
-                                "<SwAccessibleMap::_BuildSelectedParas()> - unexpected frame type" );
-                        SwTxtFrm* pTxtFrm( dynamic_cast<SwTxtFrm*>(pFrm) );
-                        if ( pTxtFrm )
+                    SwIterator<SwTxtFrm,SwTxtNode> aIter( *pTxtNode );
+                    for( SwTxtFrm* pTxtFrm = aIter.First(); pTxtFrm; pTxtFrm = aIter.Next() )
                         {
                             uno::WeakReference < XAccessible > xWeakAcc;
                             SwAccessibleContextMap_Impl::iterator aMapIter =
@@ -2663,7 +2657,6 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
                     }
                 }
             }
-        }
 
         // prepare next turn: get next cursor in ring
         pCrsr = static_cast<SwPaM*>( pCrsr->GetNext() );

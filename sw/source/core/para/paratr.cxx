@@ -81,7 +81,7 @@ SwFmtDrop::SwFmtDrop()
 
 SwFmtDrop::SwFmtDrop( const SwFmtDrop &rCpy )
     : SfxPoolItem( RES_PARATR_DROP ),
-    SwClient( rCpy.pRegisteredIn ),
+    SwClient( rCpy.GetRegisteredInNonConst() ),
     pDefinedIn( 0 ),
     nDistance( rCpy.GetDistance() ),
     nReadFmt( rCpy.nReadFmt ),
@@ -102,8 +102,8 @@ SwFmtDrop::~SwFmtDrop()
 void SwFmtDrop::SetCharFmt( SwCharFmt *pNew )
 {
     //Ummelden
-    if ( pRegisteredIn )
-        pRegisteredIn->Remove( this );
+    if ( GetRegisteredIn() )
+        GetRegisteredInNonConst()->Remove( this );
     if(pNew)
         pNew->Add( this );
     nReadFmt = USHRT_MAX;
@@ -111,26 +111,19 @@ void SwFmtDrop::SetCharFmt( SwCharFmt *pNew )
 
 
 
-void SwFmtDrop::Modify( SfxPoolItem *, SfxPoolItem * )
+void SwFmtDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
 {
     if( pDefinedIn )
     {
         if( !pDefinedIn->ISA( SwFmt ))
-            pDefinedIn->Modify( this, this );
+            pDefinedIn->ModifyNotification( this, this );
         else if( pDefinedIn->GetDepends() &&
                 !pDefinedIn->IsModifyLocked() )
         {
             // selbst den Abhaengigen vom Format bescheid sagen. Das
             // Format selbst wuerde es nicht weitergeben, weil es ueber
             // die Abpruefung nicht hinauskommt.
-            SwClientIter aIter( *pDefinedIn );
-            SwClient * pLast = aIter.GoStart();
-            if( pLast )     // konnte zum Anfang gesprungen werden ??
-                do {
-                    pLast->Modify( this, this );
-                    if( !pDefinedIn->GetDepends() ) // Baum schon Weg ??
-                        break;
-                } while( 0 != ( pLast = aIter++ ));
+            pDefinedIn->ModifyBroadcast( this, this );
         }
     }
 }

@@ -221,6 +221,8 @@ void SwFtnIdxs::UpdateAllFtn()
 
     SwUpdFtnEndNtAtEnd aNumArr;
 
+    SwRootFrm* pTmpRoot = pDoc->GetCurrentLayout();//swmod 080305
+    std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
     //Fuer normale Fussnoten werden Chapter- und Dokumentweise Nummerierung
     //getrennt behandelt. Fuer Endnoten gibt es nur die Dokumentweise
     //Nummerierung.
@@ -231,7 +233,6 @@ void SwFtnIdxs::UpdateAllFtn()
                nFtnIdx = 0;     // Index in das FtnIdx-Array
         for( sal_uInt16 n = 0; n < rOutlNds.Count(); ++n )
         {
-            //if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
             if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
             {
                 sal_uLong nCapStt = rOutlNds[ n ]->GetIndex();  // Start eines neuen Kapitels
@@ -293,8 +294,8 @@ void SwFtnIdxs::UpdateAllFtn()
         }
     }
 
-    if( pDoc->GetRootFrm() && FTNNUM_PAGE == rFtnInfo.eNum )
-        pDoc->GetRootFrm()->UpdateFtnNums();
+    if( pTmpRoot && FTNNUM_PAGE == rFtnInfo.eNum )
+        std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));//swmod 0
 }
 
 SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, sal_uInt16* pFndPos ) const

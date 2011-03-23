@@ -43,7 +43,7 @@
 #include <doc.hxx>
 #include <docary.hxx>
 #include <redline.hxx>
-
+#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -129,13 +129,13 @@ uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames(void)
 beans::XPropertySet*    SwXRedlines::GetObject( SwRedline& rRedline, SwDoc& rDoc )
 {
     SwPageDesc* pStdDesc = rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD);
-    SwClientIter aIter(*pStdDesc);
-    SwXRedline* pxRedline = (SwXRedline*)aIter.First( TYPE( SwXRedline ));
+    SwIterator<SwXRedline,SwPageDesc> aIter(*pStdDesc);
+    SwXRedline* pxRedline = aIter.First();
     while(pxRedline)
     {
         if(pxRedline->GetRedline() == &rRedline)
             break;
-        pxRedline = (SwXRedline*)aIter.Next();
+        pxRedline = aIter.Next();
     }
     if( !pxRedline )
         pxRedline = new SwXRedline(rRedline, rDoc);
@@ -189,7 +189,7 @@ uno::Sequence< OUString > SwXRedlineEnumeration::getSupportedServiceNames(void) 
     return uno::Sequence< OUString >();
 }
 
-void SwXRedlineEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXRedlineEnumeration::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())

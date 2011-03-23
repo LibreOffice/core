@@ -172,6 +172,10 @@ class SwChartDataProvider :
 
     rtl::OUString GetBrokenCellRangeForExport( const rtl::OUString &rCellRangeRepresentation );
 
+protected:
+    //SwClient
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
     SwChartDataProvider( const SwDoc* pDoc );
     virtual ~SwChartDataProvider();
@@ -197,10 +201,6 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
-
-    //SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
-
 
     SwFrmFmt*       GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 
@@ -293,6 +293,10 @@ class SwChartDataSequence :
     SwChartDataSequence( const SwChartDataSequence &rObj );
     SwChartDataSequence & operator = ( const SwChartDataSequence & );
 
+protected:
+    //SwClient
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
     SwChartDataSequence( SwChartDataProvider &rProvider,
                          SwFrmFmt   &rTblFmt,
@@ -348,11 +352,6 @@ public:
     virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-
-
-    //SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
-
 
     SwFrmFmt*   GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
     sal_Bool    DeleteBox( const SwTableBox &rBox );

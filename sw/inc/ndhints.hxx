@@ -43,9 +43,16 @@ class SfxPoolItem;
 class SfxItemSet;
 class SwDoc;
 
+typedef enum {
+    COPY = true,
+    NEW  = false,
+} CopyOrNew_t;
+
+// if COPY then pTxtNode must be given!
 SW_DLLPRIVATE SwTxtAttr *
 MakeTxtAttr( SwDoc & rDoc, SfxPoolItem & rNew,
-        xub_StrLen nStt, xub_StrLen nEnd );
+        xub_StrLen const nStt, xub_StrLen const nEnd,
+        CopyOrNew_t const bIsCopy = NEW, SwTxtNode *const pTxtNode = 0);
 SW_DLLPRIVATE SwTxtAttr *
 MakeTxtAttr( SwDoc & rDoc, const SfxItemSet & rSet,
         xub_StrLen nStt, xub_StrLen nEnd );

@@ -227,6 +227,8 @@ class SwTxtFrm: public SwCntntFrm
                                  xub_StrLen nInsertPos, xub_StrLen nActPos,
                                  xub_StrLen &nChgStart, xub_StrLen &nChgEnd,
                                  xub_StrLen &nInvStart, xub_StrLen &nInvEnd);
+protected:
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
 
@@ -294,7 +296,6 @@ public:
     SwRect Paint();
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual sal_Bool GetInfo( SfxPoolItem & ) const;
 
     //Layoutorientiertes Cursortravelling: Linker, rechter Rand,
@@ -338,7 +339,7 @@ public:
     inline const SwTxtNode *GetTxtNode() const
         { return (SwTxtNode*)SwCntntFrm::GetNode(); }
 
-    SwTxtFrm(SwTxtNode * const);
+    SwTxtFrm(SwTxtNode * const, SwFrm* );
     virtual ~SwTxtFrm();
 
     // SwCntntFrm: der "kurze Dienstweg" fuer die Frames.
@@ -606,6 +607,8 @@ public:
     {
         return mnHeightOfLastLine;
     }
+
+    static void repaintTextFrames( const SwTxtNode& rNode );
 
 #if OSL_DEBUG_LEVEL > 1
     virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);

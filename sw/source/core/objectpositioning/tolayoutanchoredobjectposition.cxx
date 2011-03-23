@@ -39,6 +39,9 @@
 #include <fmtsrnd.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <frmatr.hxx>
+#include "viewsh.hxx"
+#include "viewopt.hxx"
+#include "rootfrm.hxx"
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 
@@ -134,8 +137,9 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 
         // if in online-layout the bottom of to-page anchored object is beyond
         // the page bottom, the page frame has to grow by growing its body frame.
+        const ViewShell *pSh = GetAnchorFrm().getRootFrm()->GetCurrShell();
         if ( !bFlyAtFly && GetAnchorFrm().IsPageFrm() &&
-             rFrmFmt.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+             pSh && pSh->GetViewOptions()->getBrowseMode() )
         {
             const long nAnchorBottom = GetAnchorFrm().Frm().Bottom();
             const long nBottom = GetAnchorFrm().Frm().Top() +

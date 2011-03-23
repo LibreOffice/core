@@ -335,7 +335,7 @@ sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, s
     READ( aFont,        SvxFontItem            , rVersions.nFontVersion)
 
     if( rStream.GetStreamCharSet() == aFont.GetCharSet() )
-        aFont.GetCharSet() = ::gsl_getSystemTextEncoding();
+        aFont.SetCharSet(::gsl_getSystemTextEncoding());
 
     READ( aHeight,      SvxFontHeightItem  , rVersions.nFontHeightVersion)
     READ( aWeight,      SvxWeightItem      , rVersions.nWeightVersion)
@@ -423,7 +423,7 @@ sal_Bool SwBoxAutoFmt::LoadOld( SvStream& rStream, sal_uInt16 aLoadVer[] )
     READ( aFont,        SvxFontItem         , 0)
 
     if( rStream.GetStreamCharSet() == aFont.GetCharSet() )
-        aFont.GetCharSet() = ::gsl_getSystemTextEncoding();
+        aFont.SetCharSet(::gsl_getSystemTextEncoding());
 
     READ( aHeight,      SvxFontHeightItem   , 1)
     READ( aWeight,      SvxWeightItem       , 2)

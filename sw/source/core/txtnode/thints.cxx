@@ -212,22 +212,20 @@ splitPolicy(const sal_uInt16 nWhichNew, const sal_uInt16 nWhichOther)
     }
 }
 
-static void
-lcl_InitINetFmt(SwTxtNode & rNode, SwTxtINetFmt * pNew)
+void SwTxtINetFmt::InitINetFmt(SwTxtNode & rNode)
 {
-    pNew->ChgTxtNode(&rNode);
+    ChgTxtNode(&rNode);
     SwCharFmt * const pFmt(
          rNode.GetDoc()->GetCharFmtFromPool(RES_POOLCHR_INET_NORMAL) );
-    pFmt->Add( pNew );
+    pFmt->Add( this );
 }
 
-static void
-lcl_InitRuby(SwTxtNode & rNode, SwTxtRuby * pNew)
+void SwTxtRuby::InitRuby(SwTxtNode & rNode)
 {
-    pNew->ChgTxtNode(&rNode);
+    ChgTxtNode(&rNode);
     SwCharFmt * const pFmt(
         rNode.GetDoc()->GetCharFmtFromPool(RES_POOLCHR_RUBYTEXT) );
-    pFmt->Add( pNew );
+    pFmt->Add( this );
 }
 
 /**
@@ -243,12 +241,12 @@ MakeTxtAttrNesting(SwTxtNode & rNode, SwTxtAttrNesting & rNesting,
     {
         case RES_TXTATR_INETFMT:
         {
-            lcl_InitINetFmt(rNode, static_cast<SwTxtINetFmt*>(pNew));
+            static_cast<SwTxtINetFmt*>(pNew)->InitINetFmt(rNode);
             break;
         }
         case RES_TXTATR_CJK_RUBY:
         {
-            lcl_InitRuby(rNode, static_cast<SwTxtRuby*>(pNew));
+            static_cast<SwTxtRuby*>(pNew)->InitRuby(rNode);
             break;
         }
         default:
@@ -994,7 +992,8 @@ SwTxtAttr* MakeRedlineTxtAttr( SwDoc & rDoc, SfxPoolItem & rAttr )
 
 // create new text attribute
 SwTxtAttr* MakeTxtAttr( SwDoc & rDoc, SfxPoolItem& rAttr,
-                        xub_StrLen nStt, xub_StrLen nEnd )
+        xub_StrLen const nStt, xub_StrLen const nEnd,
+        CopyOrNew_t const bIsCopy, SwTxtNode *const pTxtNode)
 {
     if ( isCHRATR(rAttr.Which()) )
     {
@@ -1075,7 +1074,8 @@ SwTxtAttr* MakeTxtAttr( SwDoc & rDoc, SfxPoolItem& rAttr,
         break;
     case RES_TXTATR_META:
     case RES_TXTATR_METAFIELD:
-        pNew = new SwTxtMeta( static_cast<SwFmtMeta&>(rNew), nStt, nEnd );
+        pNew = SwTxtMeta::CreateTxtMeta( rDoc.GetMetaFieldManager(), pTxtNode,
+                static_cast<SwFmtMeta&>(rNew), nStt, nEnd, bIsCopy );
         break;
     default:
         OSL_ENSURE(RES_TXTATR_AUTOFMT == rNew.Which(), "unknown attribute");
@@ -1190,7 +1190,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
         if( nDelMsg && !pDoc->IsInDtor() && GetNodes().IsDocNodes() )
         {
             SwPtrMsgPoolItem aMsgHint( nDelMsg, (void*)&pAttr->GetAttr() );
-            pDoc->GetUnoCallBack()->Modify( &aMsgHint, &aMsgHint );
+            pDoc->GetUnoCallBack()->ModifyNotification( &aMsgHint, &aMsgHint );
         }
 
         SwTxtAttr::Destroy( pAttr, pDoc->GetAttrPool() );
@@ -1209,7 +1209,8 @@ SwTxtNode::InsertItem( SfxPoolItem& rAttr,
     OSL_ENSURE( !isCHRATR(rAttr.Which()), "AUTOSTYLES - "
         "SwTxtNode::InsertItem should not be called with character attributes");
 
-    SwTxtAttr* const pNew = MakeTxtAttr( *GetDoc(), rAttr, nStart, nEnd );
+    SwTxtAttr *const pNew = MakeTxtAttr( *GetDoc(), rAttr, nStart, nEnd,
+            (nMode & nsSetAttrMode::SETATTR_IS_COPY) ? COPY : NEW, this );
 
     if ( pNew )
     {
@@ -1516,7 +1517,7 @@ void SwTxtNode::DeleteAttribute( SwTxtAttr * const pAttr )
                 *pAttr->GetStart(), *pAttr->GetEnd(), pAttr->Which() );
         m_pSwpHints->Delete( pAttr );
         SwTxtAttr::Destroy( pAttr, GetDoc()->GetAttrPool() );
-        SwModify::Modify( 0, &aHint ); // notify Frames
+        NotifyClients( 0, &aHint );
 
         TryDeleteSwpHints();
     }
@@ -1584,7 +1585,7 @@ void SwTxtNode::DeleteAttributes( const sal_uInt16 nWhich,
                 SwUpdateAttr aHint( nStart, *pEndIdx, nWhich );
                 m_pSwpHints->DeleteAtPos( nPos );    // gefunden, loeschen,
                 SwTxtAttr::Destroy( pTxtHt, GetDoc()->GetAttrPool() );
-                SwModify::Modify( 0, &aHint );     // die Frames benachrichtigen
+                NotifyClients( 0, &aHint );
             }
         }
     }
@@ -2329,7 +2330,7 @@ void SwTxtNode::FmtToTxtAttr( SwTxtNode* pNd )
             if( aNdSet.Count() )
             {
                 SwFmtChg aTmp1( pNd->GetFmtColl() );
-                pNd->SwModify::Modify( &aTmp1, &aTmp1 );
+                pNd->NotifyClients( &aTmp1, &aTmp1 );
             }
         }
     }
@@ -2620,7 +2621,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
     }
     // <--
     case RES_TXTATR_INETFMT:
-        lcl_InitINetFmt(rNode, static_cast<SwTxtINetFmt*>(pHint));
+        static_cast<SwTxtINetFmt*>(pHint)->InitINetFmt(rNode);
         break;
     case RES_TXTATR_FIELD:
         {
@@ -2673,7 +2674,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
                         {
                             SwFmtFld* pFmtFld = (SwFmtFld*)&((SwTxtFld*)pHint)
                                                                 ->GetFld();
-                            pFldType->Add( pFmtFld );          // ummelden
+                            pFmtFld->RegisterToFieldType( *pFldType );
                             pFmtFld->GetFld()->ChgTyp( pFldType );
                         }
                         pFldType->SetSeqRefNo( *(SwSetExpField*)pFld );
@@ -2754,7 +2755,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
         break;
 
     case RES_TXTATR_CJK_RUBY:
-        lcl_InitRuby(rNode, static_cast<SwTxtRuby*>(pHint));
+        static_cast<SwTxtRuby*>(pHint)->InitRuby(rNode);
         break;
 
     case RES_TXTATR_META:
@@ -2787,7 +2788,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
         if ( rNode.GetDepends() )
         {
             SwUpdateAttr aHint( nHtStart, nHtStart, nWhich );
-            rNode.Modify( 0, &aHint );
+            rNode.ModifyNotification( 0, &aHint );
         }
         return true;
     }
@@ -2869,7 +2870,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
     if ( rNode.GetDepends() )
     {
         SwUpdateAttr aHint( nHtStart, nHtStart == nHintEnd ? nHintEnd + 1 : nHintEnd, nWhich );
-        rNode.Modify( 0, &aHint );
+        rNode.ModifyNotification( 0, &aHint );
     }
 
 #if OSL_DEBUG_LEVEL > 1

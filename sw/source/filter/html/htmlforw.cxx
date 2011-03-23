@@ -68,12 +68,11 @@
 #include "pam.hxx"
 #include "doc.hxx"
 #include "ndtxt.hxx"
-#include "dcontact.hxx"
 #include "flypos.hxx"
 #include "wrthtml.hxx"
 #include "htmlfly.hxx"
 #include "htmlform.hxx"
-
+#include "frmfmt.hxx"
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;

@@ -65,11 +65,12 @@ public:
 
     SwAutoCompleteClient& operator=(const SwAutoCompleteClient& rClient);
 
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
     const SwDoc& GetDoc(){return *pDoc;}
 #if OSL_DEBUG_LEVEL > 1
     static sal_uLong GetElementCount() {return nSwAutoCompleteClientCount;}
 #endif
+protected:
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
 
 typedef std::vector<SwAutoCompleteClient> SwAutoCompleteClientVector;
@@ -142,13 +143,13 @@ SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient
     pAutoCompleteWord = rClient.pAutoCompleteWord;
     pDoc = rClient.pDoc;
     if(rClient.GetRegisteredIn())
-        rClient.pRegisteredIn->Add(this);
+        ((SwModify*)rClient.GetRegisteredIn())->Add(this);
     else if(GetRegisteredIn())
-        pRegisteredIn->Remove(this);
+        GetRegisteredInNonConst()->Remove(this);
     return *this;
 }
 
-void SwAutoCompleteClient::Modify(SfxPoolItem *pOld, SfxPoolItem *)
+void SwAutoCompleteClient::Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
 {
     switch( pOld ? pOld->Which() : 0 )
     {

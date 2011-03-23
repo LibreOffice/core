@@ -2601,11 +2601,11 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
 }
 
 // #i108125#
-void SwAccessibleParagraph::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwAccessibleParagraph::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     mpParaChangeTrackInfo->reset();
 
-    SwClient::Modify( pOld, pNew );
+    CheckRegistration( pOld, pNew );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -48,6 +48,7 @@
 #include <ndindex.hxx>
 #include <fmtftntx.hxx>
 #include <section.hxx>
+#include <switerator.hxx>
 
 /*************************************************************************
 |*
@@ -89,7 +90,7 @@ void SwFmtFtn::SetEndNote( bool b )
     {
         if ( GetTxtFtn() )
         {
-            GetTxtFtn()->DelFrms();
+            GetTxtFtn()->DelFrms(0);
         }
         m_bEndNote = b;
     }
@@ -235,7 +236,7 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, sal_Bool bDelNode )
                 // Werden die Nodes nicht geloescht mussen sie bei den Seiten
                 // abmeldet (Frms loeschen) werden, denn sonst bleiben sie
                 // stehen (Undo loescht sie nicht!)
-                DelFrms();
+                DelFrms( 0 );
         }
         DELETEZ( m_pStartNode );
 
@@ -269,7 +270,7 @@ void SwTxtFtn::SetNumber( const sal_uInt16 nNewNum, const XubString* pStr )
 
     OSL_ENSURE( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
     SwNodes &rNodes = m_pTxtNode->GetDoc()->GetNodes();
-    m_pTxtNode->Modify( 0, &rFtn );
+    m_pTxtNode->ModifyNotification( 0, &rFtn );
     if ( m_pStartNode )
     {
         // must iterate over all TxtNodes because of footnotes on other pages
@@ -280,7 +281,7 @@ void SwTxtFtn::SetNumber( const sal_uInt16 nNewNum, const XubString* pStr )
         {
             // Es koennen ja auch Grafiken in der Fussnote stehen ...
             if( ( pNd = rNodes[ nSttIdx ] )->IsTxtNode() )
-                ((SwTxtNode*)pNd)->Modify( 0, &rFtn );
+                ((SwTxtNode*)pNd)->ModifyNotification( 0, &rFtn );
         }
     }
 }
@@ -359,19 +360,21 @@ void SwTxtFtn::MakeNewTextSection( SwNodes& rNodes )
 }
 
 
-void SwTxtFtn::DelFrms()
+void SwTxtFtn::DelFrms( const SwFrm* pSib )
 {
     // delete the FtnFrames from the pages
     OSL_ENSURE( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
     if ( !m_pTxtNode )
         return;
 
+    const SwRootFrm* pRoot = pSib ? pSib->getRootFrm() : 0;
     sal_Bool bFrmFnd = sal_False;
     {
-        SwClientIter aIter( *m_pTxtNode );
-        for( SwCntntFrm* pFnd = (SwCntntFrm*)aIter.First( TYPE( SwCntntFrm ));
-                pFnd; pFnd = (SwCntntFrm*)aIter.Next() )
+        SwIterator<SwCntntFrm,SwTxtNode> aIter( *m_pTxtNode );
+        for( SwCntntFrm* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
         {
+            if( pRoot != pFnd->getRootFrm() && pRoot )
+                continue;
             SwPageFrm* pPage = pFnd->FindPageFrm();
             if( pPage )
             {
@@ -388,10 +391,11 @@ void SwTxtFtn::DelFrms()
         SwCntntNode* pCNd = m_pTxtNode->GetNodes().GoNext( &aIdx );
         if( pCNd )
         {
-            SwClientIter aIter( *pCNd );
-            for( SwCntntFrm* pFnd = (SwCntntFrm*)aIter.First( TYPE( SwCntntFrm ));
-                    pFnd; pFnd = (SwCntntFrm*)aIter.Next() )
+            SwIterator<SwCntntFrm,SwCntntNode> aIter( *pCNd );
+            for( SwCntntFrm* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
             {
+                if( pRoot != pFnd->getRootFrm() && pRoot )
+                    continue;
                 SwPageFrm* pPage = pFnd->FindPageFrm();
 
                 SwFrm *pFrm = pFnd->GetUpper();

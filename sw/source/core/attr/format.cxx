@@ -139,16 +139,16 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
     {
         SwAttrSetChg aChgOld( aSet, aOld );
         SwAttrSetChg aChgNew( aSet, aNew );
-        Modify( &aChgOld, &aChgNew );        // alle veraenderten werden verschickt
+        ModifyNotification( &aChgOld, &aChgNew );        // alle veraenderten werden verschickt
     }
 
-    if( pRegisteredIn != rFmt.pRegisteredIn )
+    if( GetRegisteredIn() != rFmt.GetRegisteredIn() )
     {
-        if( pRegisteredIn )
-            pRegisteredIn->Remove(this);
-        if(rFmt.pRegisteredIn)
+        if( GetRegisteredIn() )
+            GetRegisteredInNonConst()->Remove(this);
+        if(rFmt.GetRegisteredIn())
         {
-            rFmt.pRegisteredIn->Add(this);
+            const_cast<SwFmt&>(rFmt).GetRegisteredInNonConst()->Add(this);
             aSet.SetParent( &rFmt.aSet );
         }
         else
@@ -167,7 +167,7 @@ void SwFmt::SetName( const String& rNewName, sal_Bool bBroadcast )
         SwStringMsgPoolItem aOld( RES_NAME_CHANGED, aFmtName );
         SwStringMsgPoolItem aNew( RES_NAME_CHANGED, rNewName );
         aFmtName = rNewName;
-        Modify( &aOld, &aNew );
+        ModifyNotification( &aOld, &aNew );
     }
     else
     {
@@ -226,7 +226,7 @@ void SwFmt::CopyAttrs( const SwFmt& rFmt, sal_Bool bReplace )
 
             SwAttrSetChg aChgOld( aSet, aOld );
             SwAttrSetChg aChgNew( aSet, aNew );
-            Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
         }
     }
 
@@ -264,7 +264,7 @@ SwFmt::~SwFmt()
                 SwFmtChg aNewFmt(pParentFmt);
                 SwClient * pDepend = (SwClient*)GetDepends();
                 pParentFmt->Add(pDepend);
-                pDepend->Modify(&aOldFmt, &aNewFmt);
+                pDepend->ModifyNotification(&aOldFmt, &aNewFmt);
             }
         }
     }
@@ -272,13 +272,13 @@ SwFmt::~SwFmt()
 
 
 /*************************************************************************
-|*    void SwFmt::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
+|*    void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 |*
 |*    Beschreibung      Dokument 1.14
 *************************************************************************/
 
 
-void SwFmt::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
+void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
     sal_Bool bWeiter = sal_True;    // sal_True = Propagierung an die Abhaengigen
 
@@ -295,9 +295,9 @@ void SwFmt::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
             SwFmt * pFmt = (SwFmt *) ((SwPtrMsgPoolItem *)pNewValue)->pObject;
 
             // nicht umhaengen wenn dieses das oberste Format ist !!
-            if( pRegisteredIn && pRegisteredIn == pFmt )
+            if( GetRegisteredIn() && GetRegisteredIn() == pFmt )
             {
-                if( pFmt->pRegisteredIn )
+                if( pFmt->GetRegisteredIn() )
                 {
                     // wenn Parent, dann im neuen Parent wieder anmelden
                     pFmt->DerivedFrom()->Add( this );
@@ -325,7 +325,7 @@ void SwFmt::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 
             if( aNew.Count() )
                 // keine mehr gesetzt, dann Ende !!
-                SwModify::Modify( &aOld, &aNew );
+            NotifyClients( &aOld, &aNew );
             bWeiter = sal_False;
         }
         break;
@@ -346,12 +346,12 @@ void SwFmt::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
         {
             // IsWritten-Flag zuruecksetzen. Hint nur an abhanegige
             // Formate (und keine Frames) propagieren.
+            // mba: the code does the opposite from what is written in the comment!
             ResetWritten();
-            SwClientIter aIter( *this );
-            for( SwClient *pClient = aIter.First( TYPE(SwFmt) ); pClient;
-                        pClient = aIter.Next() )
-                pClient->Modify( pOldValue, pNewValue );
-
+            // mba: here we don't use the additional stuff from NotifyClients().
+            // should we?!
+            // mba: move the code that ignores this event to the clients
+            ModifyBroadcast( pOldValue, pNewValue, TYPE(SwFmt) );
             bWeiter = sal_False;
         }
         break;
@@ -376,7 +376,7 @@ void SwFmt::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
     if( bWeiter )
     {
         // laufe durch alle abhaengigen Formate
-        SwModify::Modify( pOldValue, pNewValue );
+        NotifyClients( pOldValue, pNewValue );
     }
 
 }
@@ -424,7 +424,7 @@ sal_Bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
 
     SwFmtChg aOldFmt(this);
     SwFmtChg aNewFmt(this);
-    Modify( &aOldFmt, &aNewFmt );
+    ModifyNotification( &aOldFmt, &aNewFmt );
 
     return sal_True;
 }
@@ -468,7 +468,7 @@ sal_Bool SwFmt::SetFmtAttr(const SfxPoolItem& rAttr )
 
             SwAttrSetChg aChgOld( aSet, aOld );
             SwAttrSetChg aChgNew( aSet, aNew );
-            Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
         }
     }
     return bRet;
@@ -515,7 +515,7 @@ sal_Bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
             aSet.SetModifyAtAttr( this );
             SwAttrSetChg aChgOld( aSet, aOld );
             SwAttrSetChg aChgNew( aSet, aNew );
-            Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
         }
     }
     return bRet;
@@ -552,7 +552,7 @@ sal_Bool SwFmt::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
     {
         SwAttrSetChg aChgOld( aSet, aOld );
         SwAttrSetChg aChgNew( aSet, aNew );
-        Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+        ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
     }
     return bRet;
 }
@@ -585,7 +585,7 @@ sal_uInt16 SwFmt::ResetAllFmtAttr()
     {
         SwAttrSetChg aChgOld( aSet, aOld );
         SwAttrSetChg aChgNew( aSet, aNew );
-        Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+        ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
     }
     return aNew.Count();
 }
@@ -630,7 +630,7 @@ void SwFmt::DelDiffs( const SfxItemSet& rSet )
     {
         SwAttrSetChg aChgOld( aSet, aOld );
         SwAttrSetChg aChgNew( aSet, aNew );
-        Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+        ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
     }
 }
 

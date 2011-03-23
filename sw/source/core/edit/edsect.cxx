@@ -104,7 +104,7 @@ const SwSection* SwEditShell::GetAnySection( sal_Bool bOutOfTab, const Point* pP
         Point aPt( *pPt );
         GetLayout()->GetCrsrOfst( &aPos, aPt );
         SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
-        pFrm = pNd->GetFrm( pPt );
+        pFrm = pNd->getLayoutFrm( GetLayout(), pPt );
     }
     else
         pFrm = GetCurrFrm( sal_False );

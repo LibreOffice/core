@@ -39,12 +39,12 @@
 #include <hints.hxx>
 #include <boost/unordered_map.hpp>
 #include <stringhash.hxx>
-class SwNodeNum;
 #include <SwNumberTreeTypes.hxx>
 #include <vector>
+
 class SwTxtFmtColl;
 class IDocumentListsAccess;
-
+class SwNodeNum;
 class Font;
 class SvxBrushItem;
 class SvxNumRule;
@@ -65,6 +65,9 @@ class SW_DLLPUBLIC SwNumFmt : public SvxNumberFormat, public SwClient
     using SvxNumberFormat::operator ==;
     using SvxNumberFormat::operator !=;
 
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
+
 public:
     SwNumFmt();
     SwNumFmt( const SwNumFmt& );
@@ -77,9 +80,9 @@ public:
     sal_Bool operator==( const SwNumFmt& ) const;
     sal_Bool operator!=( const SwNumFmt& r ) const { return !(*this == r); }
 
-    SwCharFmt* GetCharFmt() const { return (SwCharFmt*)pRegisteredIn; }
+    SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }
     void SetCharFmt( SwCharFmt* );
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
+    void ForgetCharFmt();
 
     virtual void            SetCharFmtName(const String& rSet);
     virtual const String&   GetCharFmtName()const;
@@ -141,9 +144,6 @@ private:
 
     const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
     String msDefaultListId;
-
-    // forbidden and not implemented.
-    SwNumRule();
 
 public:
     // add parameter <eDefaultNumberFormatPositionAndSpaceMode>

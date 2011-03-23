@@ -552,7 +552,7 @@ public:
     sal_Bool HasOtherCnt() const;
 
     // Apply ViewOptions with Start-/EndAction.
-    inline void ApplyViewOptions( const SwViewOption &rOpt );
+    virtual void ApplyViewOptions( const SwViewOption &rOpt );
 
     // Query text within selection.
     // Returns FALSE, if selected range is too large to be copied
@@ -917,13 +917,6 @@ private:
     SwEditShell(const SwEditShell &);
     const SwEditShell &operator=(const SwEditShell &);
 };
-
-inline void SwEditShell::ApplyViewOptions( const SwViewOption &rOpt )
-{
-    SwCrsrShell::StartAction();
-    ViewShell::ApplyViewOptions( rOpt );
-    SwEditShell::EndAction();
-}
 
 inline const sfx2::LinkManager& SwEditShell::GetLinkManager() const
 {   return ((SwEditShell*)this)->GetLinkManager();  }

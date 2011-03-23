@@ -64,6 +64,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <unofldmid.h>
 #include <numrule.hxx>
+#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -285,10 +286,10 @@ SwFieldType* SwGetExpFieldType::Copy() const
     return new SwGetExpFieldType(GetDoc());
 }
 
-void SwGetExpFieldType::Modify( SfxPoolItem*, SfxPoolItem* pNew )
+void SwGetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* pNew )
 {
     if( pNew && RES_DOCPOS_UPDATE == pNew->Which() )
-        SwModify::Modify( 0, pNew );
+        NotifyClients( 0, pNew );
     // sonst nichts weiter expandieren
 }
 
@@ -503,10 +504,6 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-/*-------------------------------------------------
- Set-Expression-Type
- --------------------------------------------------*/
-
 SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const String& rName, sal_uInt16 nTyp )
     : SwValueFieldType( pDc, RES_SETEXPFLD ),
     sName( rName ),
@@ -534,16 +531,15 @@ const String& SwSetExpFieldType::GetName() const
     return sName;
 }
 
-void SwSetExpFieldType::Modify( SfxPoolItem*, SfxPoolItem* )
+void SwSetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* )
 {
     return;     // nicht weiter expandieren
 }
 
 void SwSetExpFieldType::SetSeqFormat(sal_uLong nFmt)
 {
-    SwClientIter aIter(*this);
-    for( SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
-            pFld; pFld = (SwFmtFld*)aIter.Next() )
+    SwIterator<SwFmtFld,SwFieldType> aIter(*this);
+    for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
         pFld->GetFld()->ChangeFormat( nFmt );
 }
 
@@ -568,10 +564,9 @@ extern void InsertSort( SvUShorts& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 
 
     // dann testmal, ob die Nummer schon vergeben ist oder ob eine neue
     // bestimmt werden muss.
-    SwClientIter aIter( *this );
+    SwIterator<SwFmtFld,SwFieldType> aIter( *this );
     const SwTxtNode* pNd;
-    for( SwFmtFld* pF = (SwFmtFld*)aIter.First( TYPE( SwFmtFld )); pF;
-            pF = (SwFmtFld*)aIter.Next() )
+    for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
         if( pF->GetFld() != &rFld && pF->GetTxtFld() &&
             0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
             pNd->GetNodes().IsDocNodes() )
@@ -606,10 +601,9 @@ sal_uInt16 SwSetExpFieldType::GetSeqFldList( SwSeqFldList& rList )
     if( rList.Count() )
         rList.Remove( 0, rList.Count() );
 
-    SwClientIter aIter( *this );
+    SwIterator<SwFmtFld,SwFieldType> aIter( *this );
     const SwTxtNode* pNd;
-    for( SwFmtFld* pF = (SwFmtFld*)aIter.First( TYPE( SwFmtFld )); pF;
-            pF = (SwFmtFld*)aIter.Next() )
+    for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
         if( pF->GetTxtFld() &&
             0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
             pNd->GetNodes().IsDocNodes() )

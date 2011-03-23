@@ -639,8 +639,10 @@ public:
     SwRefPageSetFieldType();
 
     virtual SwFieldType*    Copy() const;
-    // Overlay, because there is nothing to update!
-    virtual void            Modify( SfxPoolItem *, SfxPoolItem * );
+
+protected:
+   // Overlay, because there is nothing to update!
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
 };
 
 /*--------------------------------------------------------------------
@@ -680,15 +682,13 @@ class SwRefPageGetFieldType : public SwFieldType
     sal_Int16       nNumberingType;
 
     void UpdateField( SwTxtFld* pTxtFld, _SetGetExpFlds& rSetList );
-
+protected:
+    // ueberlagert, um alle RefPageGet-Felder zu updaten
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
 public:
     SwRefPageGetFieldType( SwDoc* pDoc );
     virtual SwFieldType*    Copy() const;
-
-    // Overlay in order to update all RefPageGet-fields.
-    virtual void Modify( SfxPoolItem *, SfxPoolItem * );
     sal_uInt16 MakeSetList( _SetGetExpFlds& rTmpLst );
-
     SwDoc*  GetDoc() const                  { return pDoc; }
 };
 

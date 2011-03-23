@@ -561,7 +561,7 @@ void SwXRedline::removeVetoableChangeListener(
 {
 }
 
-void SwXRedline::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXRedline::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())

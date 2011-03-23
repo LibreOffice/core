@@ -223,6 +223,8 @@ namespace nsSetAttrMode
                                                         // functionality will be disabled)
     /// force hint expand (only matters for hints with CH_TXTATR)
     const SetAttrMode SETATTR_FORCEHINTEXPAND= 0x0080;
+    /// the inserted item is a copy -- intended for use in ndtxt.cxx
+    const SetAttrMode SETATTR_IS_COPY        = 0x0100;
 }
 
 //Umrechnung Twip<-> 1/100 mm fuer UNO

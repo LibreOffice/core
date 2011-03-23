@@ -64,15 +64,9 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
         SwFrmFmt* pHeaderFmt = rHead.GetHeaderFmt();
         if( pHeaderFmt )
         {
-            SwClientIter aIter( *pHeaderFmt );
-            SwClient *pLast = aIter.GoStart();
-            if( pLast )
+            nHeaderCount = pHeaderFmt->GetClientCount();
             {
                 int nHeaderCount = 0;
-                do
-                {
-                    ++nHeaderCount;
-                } while( 0 != ( pLast = aIter++ ));
             }
             const SwFmtCntnt* pCntnt = &pHeaderFmt->GetCntnt();
             if( pCntnt->GetCntntIdx() )
@@ -83,15 +77,9 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
         SwFrmFmt* pLeftHeaderFmt = rLeftHead.GetHeaderFmt();
         if( pLeftHeaderFmt )
         {
-            SwClientIter aIter( *pLeftHeaderFmt );
-            SwClient *pLast = aIter.GoStart();
-            if( pLast )
+            nLeftHeaderCount = pLeftHeaderFmt->GetClientCount();
             {
                 int nLeftHeaderCount = 0;
-                do
-                {
-                    ++nLeftHeaderCount;
-                } while( 0 != ( pLast = aIter++ ));
             }
             const SwFmtCntnt* pLeftCntnt = &pLeftHeaderFmt->GetCntnt();
             if( pLeftCntnt->GetCntntIdx() )
@@ -105,15 +93,9 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
         SwFrmFmt* pFooterFmt = rFoot.GetFooterFmt();
         if( pFooterFmt )
         {
-            SwClientIter aIter( *pFooterFmt );
-            SwClient *pLast = aIter.GoStart();
-            if( pLast )
+            nFooterCount = pFooterFmt->GetClientCount();
             {
                 int nFooterCount = 0;
-                do
-                {
-                    ++nFooterCount;
-                } while( 0 != ( pLast = aIter++ ));
             }
             const SwFmtCntnt* pCntnt = &pFooterFmt->GetCntnt();
             if( pCntnt->GetCntntIdx() )
@@ -124,15 +106,9 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
         SwFrmFmt* pLeftFooterFmt = rLeftFoot.GetFooterFmt();
         if( pLeftFooterFmt )
         {
-            SwClientIter aIter( *pLeftFooterFmt );
-            SwClient *pLast = aIter.GoStart();
-            if( pLast )
+            nLeftFooterCount = pLeftFooterFmt->GetClientCount();
             {
                 int nLeftFooterCount = 0;
-                do
-                {
-                    ++nLeftFooterCount;
-                } while( 0 != ( pLast = aIter++ ));
             }
             const SwFmtCntnt* pLeftCntnt = &pLeftFooterFmt->GetCntnt();
             if( pLeftCntnt->GetCntntIdx() )

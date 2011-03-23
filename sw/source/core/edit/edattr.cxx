@@ -343,7 +343,7 @@ sal_Bool SwEditShell::IsMoveLeftMargin( sal_Bool bRight, sal_Bool bModulus ) con
                     long nNext = rLS.GetTxtLeft() + nDefDist;
                     if( bModulus )
                         nNext = ( nNext / nDefDist ) * nDefDist;
-                    SwFrm* pFrm = pCNd->GetFrm();
+                    SwFrm* pFrm = pCNd->getLayoutFrm( GetLayout() );
                     if ( pFrm )
                     {
                         const sal_uInt16 nFrmWidth = static_cast<sal_uInt16>( pFrm->IsVertical() ?

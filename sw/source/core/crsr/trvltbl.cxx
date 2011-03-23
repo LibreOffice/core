@@ -194,7 +194,7 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
         const SwShellCrsr *pCrsr = _GetCrsr();
         const SwFrm* pStartFrm = pFrm;
         const SwCntntNode *pCNd = pCrsr->GetCntntNode( sal_False );
-        const SwFrm* pEndFrm   = pCNd ? pCNd->GetFrm( &pCrsr->GetMkPos() ) : 0;
+        const SwFrm* pEndFrm   = pCNd ? pCNd->getLayoutFrm( GetLayout(), &pCrsr->GetMkPos() ) : 0;
 
         if ( bRow )
         {
@@ -381,7 +381,7 @@ bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
     if ( !pCNd )
         return false;
 
-    SwCntntFrm* pFrm = pCNd->GetFrm();
+    SwCntntFrm* pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() );
 
     if ( 0 == pFrm || pCNd->FindTableNode() != pTblNd ||
         (!bInReadOnly && pFrm->IsProtected() ) )
@@ -413,7 +413,7 @@ bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
                 return false;
 
             // check if we have found a suitable table cell:
-            pFrm = pCNd->GetFrm();
+            pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() );
 
             if ( 0 != pFrm && pCNd->FindTableNode() == pTblNd &&
                 (bInReadOnly || !pFrm->IsProtected() ) )
@@ -455,7 +455,7 @@ bool lcl_FindPrevCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly  )
     if ( !pCNd )
         return false;
 
-    SwCntntFrm* pFrm = pCNd->GetFrm();
+    SwCntntFrm* pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() );
 
     if( 0 == pFrm || pCNd->FindTableNode() != pTblNd ||
         (!bInReadOnly && pFrm->IsProtected() ))
@@ -476,7 +476,7 @@ bool lcl_FindPrevCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly  )
             if ( !pCNd )
                 return false;
 
-            pFrm = pCNd->GetFrm();
+            pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() );
 
             if( 0 != pFrm && pCNd->FindTableNode() == pTblNd &&
                 (bInReadOnly || !pFrm->IsProtected() ) )
@@ -747,7 +747,7 @@ String SwCrsrShell::GetBoxNms() const
     if( IsTableMode() )
     {
         SwCntntNode *pCNd = pTblCrsr->Start()->nNode.GetNode().GetCntntNode();
-        pFrm = pCNd ? pCNd->GetFrm() : 0;
+        pFrm = pCNd ? pCNd->getLayoutFrm( GetLayout() ) : 0;
         if( !pFrm )
             return sNm;
 
@@ -769,7 +769,7 @@ String SwCrsrShell::GetBoxNms() const
     }
 
     SwCntntNode* pCNd = pPos->nNode.GetNode().GetCntntNode();
-    pFrm = pCNd ? pCNd->GetFrm() : 0;
+    pFrm = pCNd ? pCNd->getLayoutFrm( GetLayout() ) : 0;
 
     if( pFrm )
     {

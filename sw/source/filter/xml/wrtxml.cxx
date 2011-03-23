@@ -439,7 +439,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         }
     }
 
-    if( pDoc->GetRootFrm() && pDoc->GetDocStat().nPage > 1 &&
+    if( pDoc->GetCurrentViewShell() && pDoc->GetDocStat().nPage > 1 &&  //swmod 071108//swmod 071225
         !(bOrganizerMode || bBlock || bErr) )
     {
         OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );

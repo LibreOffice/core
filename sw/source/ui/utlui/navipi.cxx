@@ -750,8 +750,10 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
                     &aContentToolBox, SW_RES(NF_PAGE ));
     pEdit->SetActionHdl(LINK(this, SwNavigationPI, EditAction));
     pEdit->SetGetFocusHdl(LINK(this, SwNavigationPI, EditGetFocus));
-    pEdit->SetModifyHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
     pEdit->SetAccessibleName(pEdit->GetQuickHelpText());
+    pEdit->SetUpHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
+    pEdit->SetDownHdl(LINK(this, SwNavigationPI, PageEditModifyHdl));
+
     bPageCtrlsVisible = sal_True;
 
     //doppelte Separatoren sind nicht erlaubt, also muss

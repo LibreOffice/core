@@ -366,7 +366,7 @@ SwHistorySetTOXMark::SwHistorySetTOXMark( SwTxtTOXMark* pTxtHt, sal_uLong nNodeP
     , m_nStart( *pTxtHt->GetStart() )
     , m_nEnd( *pTxtHt->GetAnyEnd() )
 {
-    const_cast<SwModify*>(m_TOXMark.GetRegisteredIn())->Remove( &m_TOXMark );
+    m_TOXMark.DeRegister();
 }
 
 
@@ -395,7 +395,7 @@ void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
     }
 
     SwTOXMark aNew( m_TOXMark );
-    pToxType->Add( &aNew );
+    aNew.RegisterToTOXType( *pToxType );
 
     pTxtNd->InsertItem( aNew, m_nStart, m_nEnd,
                         nsSetAttrMode::SETATTR_NOTXTATRCHR );
@@ -941,7 +941,7 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
         aTmp.SetAnchor( &aPos );
 
         // so the Layout does not get confused
-        if ( !pCNd || !pCNd->GetFrm( 0, 0, sal_False ) )
+        if ( !pCNd || !pCNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0, 0, sal_False ) )
         {
             m_rFmt.DelFrms();
         }
@@ -1372,7 +1372,7 @@ SwRegHistory::SwRegHistory( const SwNode& rNd, SwHistory* pHst )
     _MakeSetWhichIds();
 }
 
-void SwRegHistory::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     // --> OD 2010-10-05 #i114861#
     // Do not handle a "noop" modify
@@ -1390,7 +1390,7 @@ void SwRegHistory::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         {
             SwHistoryHint* pNewHstr;
             const SfxItemSet& rSet =
-                *static_cast<SwAttrSetChg*>(pOld)->GetChgSet();
+                *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet();
             if ( 1 < rSet.Count() )
             {
                 pNewHstr =

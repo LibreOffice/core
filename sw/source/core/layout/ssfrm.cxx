@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <ftnfrm.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
@@ -54,10 +54,9 @@
 #include <fmtclds.hxx>
 #include <viewsh.hxx>
 #include <viewimp.hxx>
-
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 #include <hints.hxx>
+#include <switerator.hxx>
 
     // No inline cause we need the function pointers
 long SwFrm::GetTopMargin() const
@@ -366,14 +365,13 @@ Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 |*
 |*************************************************************************/
 
-
 SwFrm::~SwFrm()
 {
     // accessible objects for fly and cell frames have been already disposed
     // by the destructors of the derived classes.
     if( IsAccessibleFrm() && !(IsFlyFrm() || IsCellFrm()) && GetDep() )
     {
-        SwRootFrm *pRootFrm = FindRootFrm();
+        SwRootFrm *pRootFrm = getRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
         {
             ViewShell *pVSh = pRootFrm->GetCurrShell();
@@ -442,15 +440,15 @@ void SwLayoutFrm::SetFrmFmt( SwFrmFmt *pNew )
         SwFmtChg aOldFmt( GetFmt() );
         pNew->Add( this );
         SwFmtChg aNewFmt( pNew );
-        Modify( &aOldFmt, &aNewFmt );
+        ModifyNotification( &aOldFmt, &aNewFmt );
     }
 }
 
 /*************************************************************************
 |*                  SwCntntFrm::SwCntntFrm()
 |*************************************************************************/
-SwCntntFrm::SwCntntFrm( SwCntntNode * const pCntnt ) :
-    SwFrm( pCntnt ),
+SwCntntFrm::SwCntntFrm( SwCntntNode * const pCntnt, SwFrm* pSib ) :
+    SwFrm( pCntnt, pSib ),
     SwFlowFrm( (SwFrm&)*this )
 {
 }
@@ -461,11 +459,11 @@ SwCntntFrm::SwCntntFrm( SwCntntNode * const pCntnt ) :
 SwCntntFrm::~SwCntntFrm()
 {
     SwCntntNode* pCNd;
-    if( 0 != ( pCNd = PTR_CAST( SwCntntNode, pRegisteredIn )) &&
+    if( 0 != ( pCNd = PTR_CAST( SwCntntNode, GetRegisteredIn() )) &&
         !pCNd->GetDoc()->IsInDtor() )
     {
         //Bei der Root abmelden wenn ich dort noch im Turbo stehe.
-        SwRootFrm *pRoot = FindRootFrm();
+        SwRootFrm *pRoot = getRootFrm();
         if( pRoot && pRoot->GetTurbo() == this )
         {
             pRoot->DisallowTurbo();
@@ -491,10 +489,70 @@ SwCntntFrm::~SwCntntFrm()
                 pTxtFtn = rFtnIdxs[ nPos ];
                 if( pTxtFtn->GetTxtNode().GetIndex() > nIndex )
                     break;
-                pTxtFtn->DelFrms();
+                pTxtFtn->DelFrms( this );
                 ++nPos;
             }
         }
+    }
+}
+
+void SwCntntFrm::RegisterToNode( SwCntntNode& rNode )
+{
+    rNode.Add( this );
+}
+
+void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
+{
+    SwIterator<SwCntntFrm,SwCntntNode> aIter( rNode );
+    for( SwCntntFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+    {
+        // --> OD 2005-12-01 #i27138#
+        // notify accessibility paragraphs objects about changed
+        // CONTENT_FLOWS_FROM/_TO relation.
+        // Relation CONTENT_FLOWS_FROM for current next paragraph will change
+        // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
+        if ( pFrm->IsTxtFrm() )
+        {
+            ViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
+            if ( pViewShell && pViewShell->GetLayout() &&
+                 pViewShell->GetLayout()->IsAnyShellAccessible() )
+            {
+                pViewShell->InvalidateAccessibleParaFlowRelation(
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindNextCnt( true )),
+                            dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
+            }
+        }
+        // <--
+        if( pFrm->HasFollow() )
+            pFrm->GetFollow()->_SetIsFollow( pFrm->IsFollow() );
+        if( pFrm->IsFollow() )
+        {
+            SwCntntFrm* pMaster = (SwTxtFrm*)pFrm->FindMaster();
+            pMaster->SetFollow( pFrm->GetFollow() );
+            pFrm->_SetIsFollow( sal_False );
+        }
+        pFrm->SetFollow( 0 );//Damit er nicht auf dumme Gedanken kommt.
+                                //Andernfalls kann es sein, dass ein Follow
+                                //vor seinem Master zerstoert wird, der Master
+                                //greift dann ueber den ungueltigen
+                                //Follow-Pointer auf fremdes Memory zu.
+                                //Die Kette darf hier zerknauscht werden, weil
+                                //sowieso alle zerstoert werden.
+        if( pFrm->GetUpper() && pFrm->IsInFtn() && !pFrm->GetIndNext() &&
+            !pFrm->GetIndPrev() )
+        {
+            SwFtnFrm *pFtn = pFrm->FindFtnFrm();
+            OSL_ENSURE( pFtn, "You promised a FtnFrm?" );
+            SwCntntFrm* pCFrm;
+            if( !pFtn->GetFollow() && !pFtn->GetMaster() &&
+                0 != ( pCFrm = pFtn->GetRefFromAttr()) && pCFrm->IsFollow() )
+            {
+                OSL_ENSURE( pCFrm->IsTxtFrm(), "NoTxtFrm has Footnote?" );
+                ((SwTxtFrm*)pCFrm->FindMaster())->Prepare( PREP_FTN_GONE );
+            }
+        }
+        pFrm->Cut();
+        delete pFrm;
     }
 }
 

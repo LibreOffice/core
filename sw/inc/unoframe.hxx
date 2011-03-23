@@ -56,7 +56,6 @@ class SwDoc;
 class SwFmt;
 class SwFlyFrmFmt;
 
-
 class BaseFrameProperties_Impl;
 class SwXFrame : public cppu::WeakImplHelper6
 <
@@ -85,6 +84,7 @@ class SwXFrame : public cppu::WeakImplHelper6
 protected:
     com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxStyleData;
     com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  mxStyleFamily;
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
     virtual ~SwXFrame();
 public:
@@ -142,9 +142,6 @@ public:
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
-
-    //SwClient
-    virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
     void attach( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xTextRange ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
@@ -361,7 +358,8 @@ public:
 // ::com::sun::star::util::XModifyListener
     virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException);
 
-    void Modify( SfxPoolItem*, SfxPoolItem* );
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
 
 

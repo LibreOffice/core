@@ -1050,11 +1050,11 @@ InsertedTableClient::InsertedTableClient(SwTableNode & rNode)
 
 SwTableNode * InsertedTableClient::GetTableNode()
 {
-    return dynamic_cast<SwTableNode *> (pRegisteredIn);
+    return dynamic_cast<SwTableNode *> (GetRegisteredInNonConst());
 }
 
 InsertedTablesManager::InsertedTablesManager(const SwDoc &rDoc)
-    : mbHasRoot(rDoc.GetRootFrm())
+    : mbHasRoot(rDoc.GetCurrentLayout())    //swmod 080218
 {
 }
 

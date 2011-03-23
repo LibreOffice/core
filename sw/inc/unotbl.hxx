@@ -111,6 +111,9 @@ protected:
 
     virtual ~SwXCell();
 
+    //SwClient
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
     SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, sal_uInt16 nPos=USHRT_MAX );
     SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode); // XML import interface
@@ -158,9 +161,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    //SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
-
     //XEnumerationAccess - frueher XParagraphEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createEnumeration(void) throw( ::com::sun::star::uno::RuntimeException );
 
@@ -188,6 +188,9 @@ class SwXTextTableRow : public cppu::WeakImplHelper2
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 protected:
     virtual ~SwXTextTableRow();
+    //SwClient
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
     SwXTextTableRow(SwFrmFmt* pFmt, SwTableLine* pLine);
 
@@ -207,9 +210,6 @@ public:
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
-
-    //SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     const SwTableLine*  GetTblRow() const {return pLine;}
     static SwTableLine* FindLine(SwTable* pTable, SwTableLine* pLine);
@@ -264,7 +264,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
     // ITextCursorHelper
     virtual const SwPaM*        GetPaM() const;
@@ -405,7 +405,7 @@ public:
                         SwRangeDescriptor& rDesc);
 
     //SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 };
@@ -487,7 +487,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
     SwFrmFmt*   GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
     sal_uInt16      getRowCount(void);
@@ -539,7 +539,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
 
 class SwXTableColumns : public cppu::WeakImplHelper2
@@ -577,7 +577,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
 
 #endif

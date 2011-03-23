@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include "switerator.hxx"
 #include "editsh.hxx"
 #include "doc.hxx"
 #include <docary.hxx>
@@ -64,10 +64,8 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, sal_Bool bBuildTmpLst )
 
         if( RES_SETEXPFLD == nType || RES_INPUTFLD == nType || RES_DROPDOWN == nType )
         {
-            SwClientIter aIter( *pFldType );
-            for( SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
-                    pFld; pFld = (SwFmtFld*)aIter.Next() )
-
+            SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
+            for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
             {
                 const SwTxtFld* pTxtFld = pFld->GetTxtFld();
 
@@ -162,9 +160,8 @@ sal_uInt16 SwInputFieldList::BuildSortLst()
 
         if( RES_SETEXPFLD == nType || RES_INPUTFLD == nType )
         {
-            SwClientIter aIter( *pFldType );
-            for( SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
-                    pFld; pFld = (SwFmtFld*)aIter.Next() )
+            SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
+            for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
             {
                 const SwTxtFld* pTxtFld = pFld->GetTxtFld();
 

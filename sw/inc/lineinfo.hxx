@@ -58,6 +58,8 @@ class SW_DLLPUBLIC SwLineNumberInfo : public SwClient //purpose of derivation fr
     sal_Bool                bCountInFlys;       //Count also within FlyFrames?
     sal_Bool                bRestartEachPage;   //Restart counting at the first paragraph of each page
                                             //(even on follows when paragraphs are splitted)
+protected:
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
     SwLineNumberInfo();
@@ -98,7 +100,7 @@ public:
     sal_Bool   IsRestartEachPage() const    { return bRestartEachPage;  }
     void   SetRestartEachPage( sal_Bool b ) { bRestartEachPage = b;     }
 
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
+    bool   HasCharFormat() const { return GetRegisteredIn() != 0; }
 };
 
 

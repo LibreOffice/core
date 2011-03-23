@@ -89,7 +89,7 @@ class SwPageFrm: public SwFtnBossFrm
 
     static const sal_Int8 mnShadowPxWidth;
 
-    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, sal_uInt8 &,
+    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
     // Anpassen der max. Fussnotenhoehen in den einzelnen Spalten
@@ -159,11 +159,12 @@ class SwPageFrm: public SwFtnBossFrm
 
 protected:
     virtual void MakeAll();
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwPageFrm)
 
-    SwPageFrm( SwFrmFmt*, SwPageDesc* );
+    SwPageFrm( SwFrmFmt*, SwFrm*, SwPageDesc* );
     ~SwPageFrm();
 
     //public, damit die ViewShell beim Umschalten vom BrowseMode darauf
@@ -217,7 +218,6 @@ public:
 
     virtual sal_Bool GetCrsrOfst( SwPosition *, Point&,
                               SwCrsrMoveState* = 0 ) const;
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
         // erfrage vom Client Informationen
     virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 

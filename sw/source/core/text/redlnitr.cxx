@@ -61,8 +61,8 @@ using namespace ::com::sun::star;
 void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm )
 {
     // Beim HTML-Import kann es vorkommen, dass kein Layout existiert.
-    SwRootFrm* pRootFrm = rTxtNode.getIDocumentLayoutAccess()->GetRootFrm();
-    pShell = pRootFrm ? pRootFrm->GetShell() : 0;
+    SwRootFrm* pRootFrm = rTxtNode.getIDocumentLayoutAccess()->GetCurrentLayout();
+    pShell = pRootFrm ? pRootFrm->GetCurrShell() : 0;   //swmod 080218
 
     pScriptInfo = &rScrInf;
 

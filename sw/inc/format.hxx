@@ -44,7 +44,6 @@ class SwDoc;
 
 class SW_DLLPUBLIC SwFmt : public SwModify
 {
-
     String aFmtName;
     SwAttrSet aSet;
 
@@ -68,6 +67,7 @@ protected:
     SwFmt( SwAttrPool& rPool, const String &rFmtNm, const sal_uInt16* pWhichRanges,
             SwFmt *pDrvdFrm, sal_uInt16 nFmtWhich );
     SwFmt( const SwFmt& rFmt );
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
 
 public:
     TYPEINFO();     // Already in base class Client.
@@ -78,7 +78,6 @@ public:
     // for Querying of Writer-functions.
     sal_uInt16 Which() const { return nWhichId; }
 
-    virtual void Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue );
 
     // Query format information.
     virtual sal_Bool GetInfo( SfxPoolItem& ) const;
@@ -106,7 +105,7 @@ public:
     // returns count of deleted hints.
     virtual sal_uInt16 ResetAllFmtAttr();
 
-    inline SwFmt* DerivedFrom() const { return (SwFmt*)pRegisteredIn; }
+    inline SwFmt* DerivedFrom() const { return (SwFmt*)GetRegisteredIn(); }
     inline sal_Bool IsDefault() const { return DerivedFrom() == 0; }
 
     inline const String& GetName() const        { return aFmtName; }

@@ -60,9 +60,9 @@
 #include <frmatr.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <SwNodeNum.hxx>
-
 #include <list.hxx>
 #include <listfunc.hxx>
+#include <switerator.hxx>
 
 #include <map>
 
@@ -140,8 +140,6 @@ void SwDoc::PropagateOutlineRule()
 
         if(pColl->IsAssignedToListLevelOfOutlineStyle())//<-end,zhaojianwei
         {
-            SwClientIter aIter(*pColl);
-
             // Check only the list style, which is set at the paragraph style
             const SwNumRuleItem & rCollRuleItem = pColl->GetNumRule( sal_False );
 
@@ -1161,11 +1159,10 @@ void SwDoc::StopNumRuleAnimations( OutputDevice* pOut )
               aTxtNodeIter != aTxtNodeList.end(); ++aTxtNodeIter )
         {
             SwTxtNode* pTNd = *aTxtNodeIter;
-            SwClientIter aIter( *pTNd );
-            for( SwFrm* pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
-                    pFrm; pFrm = (SwFrm*)aIter.Next() )
-                if( ((SwTxtFrm*)pFrm)->HasAnimation() )
-                    ((SwTxtFrm*)pFrm)->StopAnimation( pOut );
+            SwIterator<SwTxtFrm,SwTxtNode> aIter(*pTNd);
+            for(SwTxtFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+                if( pFrm->HasAnimation() )
+                    pFrm->StopAnimation( pOut );
         }
     }
 }

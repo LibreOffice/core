@@ -308,14 +308,15 @@ protected:
     */
     SW_DLLPRIVATE void UpdateMarkedListLevel();
 
+protected:
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
     TYPEINFO();
     SwCrsrShell( SwDoc& rDoc, Window *pWin, const SwViewOption *pOpt = 0 );
     // disguised copy constructor
     SwCrsrShell( SwCrsrShell& rShell, Window *pWin );
     virtual ~SwCrsrShell();
-
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     // create new cursor and append the old one
     virtual SwPaM & CreateNewShellCursor();

@@ -71,13 +71,13 @@
 #include <comphelper/sequence.hxx>
 #include <list>
 #include <iterator>
-
 #include <unosection.hxx>
 #include <unoparagraph.hxx>
 #include <unobookmark.hxx>
 #include <unorefmark.hxx>
 #include <unometa.hxx>
 #include "docsh.hxx"
+#include <switerator.hxx>
 #include <com/sun/star/document/XCodeNameQuery.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
@@ -790,8 +790,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             }
             else
             {
-                SwClientIter aIter( *pType );
-                SwXFieldMaster* pMaster = (SwXFieldMaster*)aIter.First( TYPE( SwXFieldMaster ));
+                SwXFieldMaster* pMaster = SwIterator<SwXFieldMaster,SwFieldType>::FirstElement( *pType );
                 if(pMaster)
                     xRet = (cppu::OWeakObject*)pMaster;
             }
@@ -997,8 +996,7 @@ uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames(void) throw( u
 XTextTable* SwXTextTables::GetObject( SwFrmFmt& rFmt )
 {
     SolarMutexGuard aGuard;
-    SwXTextTable* pTbl = (SwXTextTable*)SwClientIter( rFmt ).
-                                    First( TYPE( SwXTextTable ));
+    SwXTextTable* pTbl = SwIterator<SwXTextTable,SwFmt>::FirstElement( rFmt );
     if( !pTbl )
         pTbl = new SwXTextTable(rFmt);
     return pTbl ;
@@ -1038,7 +1036,7 @@ namespace
     template<FlyCntType T>
     static uno::Any lcl_UnoWrapFrame(SwFrmFmt* pFmt)
     {
-        SwXFrame* pFrm = static_cast<SwXFrame*>(SwClientIter(*pFmt).First(TYPE(SwXFrame)));
+        SwXFrame* pFrm = SwIterator<SwXFrame,SwFmt>::FirstElement( *pFmt );
         if(!pFrm)
             pFrm = new typename UnoFrameWrap_traits<T>::core_frame_t(*pFmt);
         Reference< typename UnoFrameWrap_traits<T>::uno_frame_t > xFrm =
@@ -1306,7 +1304,7 @@ sal_Bool SwXFrames::hasElements(void) throw(uno::RuntimeException)
 
 SwXFrame* SwXFrames::GetObject(SwFrmFmt& rFmt, FlyCntType eType)
 {
-    SwXFrame* pFrm = (SwXFrame*)SwClientIter(rFmt).First(TYPE(SwXFrame));
+    SwXFrame* pFrm = SwIterator<SwXFrame,SwFmt>::FirstElement( rFmt );
     if(pFrm) return pFrm;
     switch(eType)
     {
@@ -1354,7 +1352,6 @@ SwXTextFrames::~SwXTextFrames()
 /******************************************************************
  *  SwXTextGraphicObjects
  ******************************************************************/
-//SMART_UNO_IMPLEMENTATION( SwXTextGraphicObjects, UsrObject );
 OUString SwXTextGraphicObjects::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXTextGraphicObjects");
@@ -1413,7 +1410,6 @@ SwXTextEmbeddedObjects::~SwXTextEmbeddedObjects()
 }
 
 #define PASSWORD_STD_TIMEOUT 1000
-
 OUString SwXTextSections::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXTextSections");
@@ -1990,9 +1986,7 @@ SwXReferenceMark* SwXReferenceMarks::GetObject( SwDoc* pDoc, const SwFmtRefMark*
     return SwXReferenceMark::CreateXReferenceMark(*pDoc, *pMark);
 }
 
-/*--------------------------------------------------
-    Gueltigkeitspruefung
---------------------------------------------------*/
+
 void SwUnoCollection::Invalidate()
 {
     bObjectValid = sal_False;

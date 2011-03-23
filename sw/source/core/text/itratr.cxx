@@ -34,7 +34,7 @@
 #include <editeng/charscaleitem.hxx>
 #include <txtatr.hxx>
 #include <sfx2/printer.hxx>
-#include <editeng/lrspitem.hxx>
+#include <svx/svdobj.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtanchr.hxx>
@@ -63,6 +63,8 @@
 #include <breakit.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/ScriptType.hdl>
+#include <editeng/lrspitem.hxx>
+#include <switerator.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
@@ -430,15 +432,13 @@ sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubString &rT
     return bRet;
 }
 
-sal_Bool SwTxtNode::IsSymbol( const xub_StrLen nBegin ) const
+sal_Bool SwTxtNode::IsSymbol( const xub_StrLen nBegin ) const//swmodtest 080307
 {
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
     aIter.Seek( nBegin );
-    const SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetRootFrm();
-    return aIter.GetFnt()->IsSymbol( pTmpRootFrm ?
-                                     pTmpRootFrm->GetCurrShell() :
-                                     0 );
+    return aIter.GetFnt()->IsSymbol(
+        const_cast<ViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()) );//swmod 080311
 }
 
 class SwMinMaxNodeArgs
@@ -703,10 +703,8 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
             case CHAR_HARDHYPHEN:
             {
                 XubString sTmp( cChar );
-                const SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetRootFrm();
-                SwDrawTextInfo aDrawInf( pTmpRootFrm ?
-                                         pTmpRootFrm->GetCurrShell() :
-                                         0, *pOut, 0, sTmp, 0, 1, 0, sal_False );
+                SwDrawTextInfo aDrawInf( const_cast<ViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()),
+                    *pOut, 0, sTmp, 0, 1, 0, sal_False );//swmod 080311
                 nAktWidth = aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
                 aArg.nWordWidth += nAktWidth;
                 aArg.nRowWidth += nAktWidth;
@@ -840,7 +838,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
     else
     {
         //Zugriff ueber StarONE, es muss keine Shell existieren oder aktiv sein.
-        if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) )
             pOut = GetpApp()->GetDefaultDevice();
         else
             pOut = getIDocumentDeviceAccess()->getReferenceDevice( true );
@@ -1001,15 +999,10 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
     nWidth = Max( nWidth, nProWidth );
 
     // search for a text frame this node belongs to
-    SwClientIter aClientIter( *(SwTxtNode*)this );
-    SwClient* pLastFrm = aClientIter.GoStart();
+    SwIterator<SwTxtFrm,SwTxtNode> aFrmIter( *this );
     SwTxtFrm* pFrm = 0;
-
-    while( pLastFrm )
+    for( SwTxtFrm* pTmpFrm = aFrmIter.First(); pTmpFrm; pTmpFrm = aFrmIter.Next() )
     {
-        if ( pLastFrm->ISA( SwTxtFrm ) )
-        {
-            SwTxtFrm* pTmpFrm = ( SwTxtFrm* )pLastFrm;
             if ( pTmpFrm->GetOfst() <= nStt &&
                 ( !pTmpFrm->GetFollow() ||
                    pTmpFrm->GetFollow()->GetOfst() > nStt ) )
@@ -1018,8 +1011,6 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
                 break;
             }
         }
-        pLastFrm = ++aClientIter;
-    }
 
     // search for the line containing nStt
     if ( pFrm && pFrm->HasPara() )
@@ -1060,16 +1051,12 @@ sal_uInt16 SwTxtNode::GetWidthOfLeadingTabs() const
         aPos.nContent += nIdx;
 
         // Find the non-follow text frame:
-        SwClientIter aClientIter( (SwTxtNode&)*this );
-        SwClient* pLastFrm = aClientIter.GoStart();
-
-        while( pLastFrm )
+        SwIterator<SwTxtFrm,SwTxtNode> aIter( *this );
+        for( SwTxtFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
         {
             // Only consider master frames:
-            if ( pLastFrm->ISA(SwTxtFrm) &&
-                 !static_cast<SwTxtFrm*>(pLastFrm)->IsFollow() )
+            if ( !pFrm->IsFollow() )
             {
-                const SwTxtFrm* pFrm = static_cast<SwTxtFrm*>(pLastFrm);
                 SWRECTFN( pFrm )
                 SwRect aRect;
                 pFrm->GetCharRect( aRect, aPos );
@@ -1079,7 +1066,6 @@ sal_uInt16 SwTxtNode::GetWidthOfLeadingTabs() const
                             (aRect.*fnRect->fnGetLeft)() - (pFrm->*fnRect->fnGetPrtLeft)() );
                 break;
             }
-            pLastFrm = ++aClientIter;
         }
     }
 

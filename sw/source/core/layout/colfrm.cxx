@@ -46,6 +46,7 @@
 #include "bodyfrm.hxx"   // ColumnFrms jetzt mit BodyFrm
 #include "rootfrm.hxx"   // wg. RemoveFtns
 #include "sectfrm.hxx"   // wg. FtnAtEnd-Flag
+#include "switerator.hxx"
 
 // ftnfrm.cxx:
 void lcl_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes );
@@ -56,11 +57,11 @@ void lcl_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes
 |*  SwColumnFrm::SwColumnFrm()
 |*
 |*************************************************************************/
-SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt ):
-    SwFtnBossFrm( pFmt )
+SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
+    SwFtnBossFrm( pFmt, pSib )
 {
     nType = FRMC_COLUMN;
-    SwBodyFrm* pColBody = new SwBodyFrm( pFmt->GetDoc()->GetDfltFrmFmt() );
+    SwBodyFrm* pColBody = new SwBodyFrm( pFmt->GetDoc()->GetDfltFrmFmt(), pSib );
     pColBody->InsertBehind( this, 0 ); // ColumnFrms jetzt mit BodyFrm
     SetMaxFtnHeight( LONG_MAX );
 }
@@ -138,8 +139,8 @@ static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
     if ( pCont->IsBodyFrm() )
         pAttrOwner = pCont->FindPageFrm();
     SwLayoutFrm *pNeighbourCol = 0;
-    SwClientIter aIter( *pAttrOwner->GetFmt() );
-    SwLayoutFrm *pNeighbour = (SwLayoutFrm*)aIter.First( TYPE(SwLayoutFrm) );
+    SwIterator<SwLayoutFrm,SwFmt> aIter( *pAttrOwner->GetFmt() );
+    SwLayoutFrm *pNeighbour = aIter.First();
 
     sal_uInt16 nAdd = 0;
     SwFrm *pCol = pCont->Lower();
@@ -152,7 +153,7 @@ static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
              pNeighbourCol != pCont )
             break;
         pNeighbourCol = 0;
-        pNeighbour = (SwLayoutFrm*)aIter.Next();
+        pNeighbour = aIter.Next();
     }
 
     sal_Bool bRet;
@@ -169,7 +170,7 @@ static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
         }
         for ( sal_uInt16 i = 0; i < nCount; ++i )
         {
-            SwColumnFrm *pTmpCol = new SwColumnFrm( pNeighbourCol->GetFmt() );
+            SwColumnFrm *pTmpCol = new SwColumnFrm( pNeighbourCol->GetFmt(), pCont );
             pTmpCol->SetMaxFtnHeight( nMax );
             pTmpCol->InsertBefore( pCont, NULL );
             pNeighbourCol = (SwLayoutFrm*)pNeighbourCol->GetNext();
@@ -181,7 +182,7 @@ static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
         for ( sal_uInt16 i = 0; i < nCount; ++i )
         {
             SwFrmFmt *pFmt = pDoc->MakeFrmFmt( aEmptyStr, pDoc->GetDfltFrmFmt());
-            SwColumnFrm *pTmp = new SwColumnFrm( pFmt );
+            SwColumnFrm *pTmp = new SwColumnFrm( pFmt, pCont );
             pTmp->SetMaxFtnHeight( nMax );
             pTmp->Paste( pCont );
         }
@@ -243,7 +244,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         // SaveCntnt wuerde auch den Inhalt der Fussnotencontainer aufsaugen
         // und im normalen Textfluss unterbringen.
         if( IsPageBodyFrm() )
-            pDoc->GetRootFrm()->RemoveFtns( (SwPageFrm*)GetUpper(), sal_True, sal_False );
+            pDoc->GetCurrentLayout()->RemoveFtns( (SwPageFrm*)GetUpper(), sal_True, sal_False );    //swmod 080218
         pSave = ::SaveCntnt( this );
 
         //Wenn Spalten existieren, jetzt aber eine Spaltenanzahl von

@@ -52,7 +52,6 @@ namespace sw { namespace mark
 {
     class MarkBase
         : virtual public IMark
-        , private ::boost::noncopyable
     {
         public:
             //getters
@@ -106,9 +105,6 @@ namespace sw { namespace mark
 
             virtual ~MarkBase();
 
-            // SwClient
-            virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
-
             const ::com::sun::star::uno::WeakReference<
                 ::com::sun::star::text::XTextContent> & GetXBookmark() const
                     { return m_wXBookmark; }
@@ -117,6 +113,9 @@ namespace sw { namespace mark
                     { m_wXBookmark = xBkmk; }
 
         protected:
+            // SwClient
+            virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+
             MarkBase(const SwPaM& rPaM,
                 const ::rtl::OUString& rName);
             ::boost::scoped_ptr<SwPosition> m_pPos1;

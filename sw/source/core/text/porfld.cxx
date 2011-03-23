@@ -33,7 +33,6 @@
 #include <hintids.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hdl>
-
 #include <vcl/graph.hxx>
 #include <editeng/brshitem.hxx>
 #include <vcl/metric.hxx>
@@ -48,6 +47,7 @@
 #include <viewsh.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
+#include "rootfrm.hxx"
 #include <breakit.hxx>
 #include <porrst.hxx>
 #include <porftn.hxx>   // SwFtnPortion
@@ -997,7 +997,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
                 pViewShell && pViewShell->GetWin()  )
             {
                 ( (Graphic*) pBrush->GetGraphic() )->StopAnimation(0,nId);
-                rInf.GetTxtFrm()->GetShell()->InvalidateWindows( aTmp );
+                rInf.GetTxtFrm()->getRootFrm()->GetCurrShell()->InvalidateWindows( aTmp );
             }
 
 
@@ -1231,7 +1231,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     }
 
     sal_uInt16 nTop = ( nCount + 1 ) / 2; // the first character of the second line
-    ViewShell *pSh = rInf.GetTxtFrm()->GetShell();
+    ViewShell *pSh = rInf.GetTxtFrm()->getRootFrm()->GetCurrShell();
     SwFont aTmpFont( *rInf.GetFont() );
     SwFontSave aFontSave( rInf, &aTmpFont );
     nProportion = 55;

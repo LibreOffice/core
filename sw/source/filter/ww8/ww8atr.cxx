@@ -326,21 +326,19 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
         pISet = 0;                      // fuer Doppel-Attribute
     }
 }
-
+#include "switerator.hxx"
 void MSWordExportBase::GatherChapterFields()
 {
     //If the header/footer contains a chapter field
-    SwClientIter aIter(*pDoc->GetSysFldType(RES_CHAPTERFLD));
-    const SwClient *pField = aIter.First(TYPE(SwFmtFld));
-    while (pField)
+    SwFieldType* pType = pDoc->GetSysFldType( RES_CHAPTERFLD );
+    SwIterator<SwFmtFld,SwFieldType> aFmtFlds( *pType );
+    for ( SwFmtFld* pFld = aFmtFlds.First(); pFld; pFld = aFmtFlds.Next() )
     {
-        const SwFmtFld* pFld = (const SwFmtFld*)(pField);
         if (const SwTxtFld *pTxtFld = pFld->GetTxtFld())
         {
             const SwTxtNode &rTxtNode = pTxtFld->GetTxtNode();
             maChapterFieldLocs.push_back(rTxtNode.GetIndex());
         }
-       pField = aIter.Next();
     }
 }
 
@@ -442,7 +440,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     if ( pSet && pSet->Count() )
     {
         if ( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem )
-             && ( (SwFmtPageDesc*)pItem )->GetRegisteredIn() )
+             && ( (SwFmtPageDesc*)pItem )->KnowsPageDesc() )
         {
             bBreakSet = true;
             bNewPageDesc = true;
@@ -524,7 +522,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                 // but a pagedesc item is an implicit page break before...
                 const SwFmtPageDesc &rPageDesc =
                     ItemGet<SwFmtPageDesc>( *pNd, RES_PAGEDESC );
-                if ( rPageDesc.GetRegisteredIn() )
+                if ( rPageDesc.KnowsPageDesc() )
                     bHackInBreak = true;
             }
         }
@@ -856,10 +854,10 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
 bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const String* pName, sal_uInt16 nSeqNo )
 {
     const SwTxtNode* pNd;
-    SwClientIter aIter( *pDoc->GetSysFldType( RES_GETREFFLD ) );
-    for ( SwFmtFld* pFld = static_cast< SwFmtFld* >( aIter.First( TYPE( SwFmtFld ) ) );
-            pFld;
-            pFld = static_cast< SwFmtFld* >( aIter.Next() ) )
+
+    SwFieldType* pType = pDoc->GetSysFldType( RES_GETREFFLD );
+    SwIterator<SwFmtFld, SwFieldType> aFmtFlds( *pType );
+    for ( SwFmtFld* pFld = aFmtFlds.First(); pFld; pFld = aFmtFlds.Next() )
     {
         if ( pFld->GetTxtFld() && nTyp == pFld->GetFld()->GetSubType() &&
              0 != ( pNd = pFld->GetTxtFld()->GetpTxtNode() ) &&
@@ -3532,7 +3530,7 @@ void AttributeOutputBase::FormatPageDescription( const SwFmtPageDesc& rPageDesc 
     if ( GetExport().bStyDef && GetExport().pOutFmtNode && GetExport().pOutFmtNode->ISA( SwTxtFmtColl ) )
     {
         const SwTxtFmtColl* pC = (SwTxtFmtColl*)GetExport().pOutFmtNode;
-        if ( (SFX_ITEM_SET != pC->GetItemState( RES_BREAK, false ) ) && rPageDesc.GetRegisteredIn() )
+        if ( (SFX_ITEM_SET != pC->GetItemState( RES_BREAK, false ) ) && rPageDesc.KnowsPageDesc() )
             FormatBreak( SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ) );
     }
 }

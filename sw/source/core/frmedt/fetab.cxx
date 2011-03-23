@@ -1122,7 +1122,7 @@ sal_uInt16 lcl_GetRowNumber( const SwPosition& rPos )
     const SwCntntFrm *pFrm;
 
     if( 0 != ( pNd = rPos.nNode.GetNode().GetCntntNode() ))
-        pFrm = pNd->GetFrm( &aTmpPt, &rPos, sal_False );
+        pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aTmpPt, &rPos, sal_False );
     else
         pFrm = 0;
 

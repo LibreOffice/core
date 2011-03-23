@@ -59,7 +59,7 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
 {
     OSL_ENSURE( pDrawView, "SwViewImp::Init without DrawView" );
     //Now create the page view if it does not exist.
-    SwRootFrm *pRoot = pSh->getIDocumentLayoutAccess()->GetRootFrm();
+    SwRootFrm *pRoot = pSh->GetLayout();    //swmod 071108//swmod 071225
     if ( !pSdrPageView )
     {
         IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
@@ -260,7 +260,7 @@ Color SwViewImp::GetRetoucheColor() const
     const ViewShell &rSh = *GetShell();
     if ( rSh.GetWin() )
     {
-        if ( rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+        if ( rSh.GetViewOptions()->getBrowseMode() &&
              COL_TRANSPARENT != rSh.GetViewOptions()->GetRetoucheColor().GetColor() )
             aRet = rSh.GetViewOptions()->GetRetoucheColor();
         else if(rSh.GetViewOptions()->IsPagePreview()  &&
@@ -284,10 +284,10 @@ void SwViewImp::UpdateAccessible()
     // We require a layout and an XModel to be accessible.
     IDocumentLayoutAccess* pIDLA = GetShell()->getIDocumentLayoutAccess();
     Window *pWin = GetShell()->GetWin();
-    OSL_ENSURE( pIDLA->GetRootFrm(), "no layout, no access" );
+    OSL_ENSURE( GetShell()->GetLayout(), "no layout, no access" );  //swmod 071108//swmod 071225
     OSL_ENSURE( pWin, "no window, no access" );
 
-    if( IsAccessible() && pIDLA->GetRootFrm() && pWin )
+    if( IsAccessible() && pIDLA->GetCurrentViewShell() && pWin )    //swmod 071108//swmod 071225
         GetAccessibleMap().GetDocumentView();
 }
 

@@ -73,13 +73,14 @@ enum REFERENCEMARK
 class SwGetRefFieldType : public SwFieldType
 {
     SwDoc* pDoc;
+protected:
+    // ueberlagert, um alle Ref-Felder zu updaten
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
 public:
     SwGetRefFieldType(SwDoc* pDoc );
     virtual SwFieldType*    Copy() const;
 
     SwDoc*                  GetDoc() const { return pDoc; }
-    // ueberlagert, um alle Ref-Felder zu updaten
-    virtual void Modify( SfxPoolItem *, SfxPoolItem * );
 
     void MergeWithOtherDoc( SwDoc& rDestDoc );
 

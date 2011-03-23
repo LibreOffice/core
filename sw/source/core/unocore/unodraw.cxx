@@ -62,7 +62,6 @@
 #include <fmtornt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
-// #i26791#
 #include <fmtfollowtextflow.hxx>
 #include <rootfrm.hxx>
 #include <editeng/lrspitem.hxx>
@@ -88,6 +87,7 @@
 #include <vcl/svapp.hxx>
 #include <list>
 #include <iterator>
+#include <switerator.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -317,8 +317,7 @@ uno::Reference< uno::XInterface >   SwFmDrawPage::GetInterface( SdrObject* pObj 
     if( pObj )
     {
         SwFrmFmt* pFmt = ::FindFrmFmt( pObj );
-        SwXShape* pxShape = (SwXShape*)SwClientIter( *pFmt ).
-                                                First( TYPE( SwXShape ));
+        SwXShape* pxShape = SwIterator<SwXShape,SwFmt>::FirstElement( *pFmt );
         if(pxShape)
         {
             xShape =  *(cppu::OWeakObject*)pxShape;
@@ -732,11 +731,11 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         else
             throw uno::RuntimeException();
     }
-    else if ((aAnchor.GetAnchorId() != FLY_AT_PAGE) && pDoc->GetRootFrm())
+    else if ((aAnchor.GetAnchorId() != FLY_AT_PAGE) && pDoc->GetCurrentLayout())
     {
         SwCrsrMoveState aState( MV_SETONLYTEXT );
         Point aTmp(MM100_TO_TWIP(aMM100Pos.X), MM100_TO_TWIP(aMM100Pos.Y));
-        pDoc->GetRootFrm()->GetCrsrOfst( pPam->GetPoint(), aTmp, &aState );
+        pDoc->GetCurrentLayout()->GetCrsrOfst( pPam->GetPoint(), aTmp, &aState );   //swmod 080218
         aAnchor.SetAnchor( pPam->GetPoint() );
 
         // #i32349# - adjustment of vertical positioning
@@ -921,6 +920,7 @@ namespace
         _rObj.getShapePropertyChangeNotifier().registerProvider( ::svx::eTextShapeAnchorType, pProvider );
     }
 }
+
 
 SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SHAPE)),
@@ -1261,7 +1261,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                     aValue >>= nPositionLayoutDir;
                     pFmt->SetPositionLayoutDir( nPositionLayoutDir );
                 }
-                else if( pDoc->GetRootFrm() )
+                else if( pDoc->GetCurrentLayout())  //swmod 080218
                 {
                     UnoActionContext aCtx(pDoc);
                     if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == pEntry->nMemberId)
@@ -1326,11 +1326,11 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             //if the fly has been anchored at page then it needs to be connected
                             //to the content position
                             SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
-                            if( pDoc->GetRootFrm() )
+                            if( pDoc->GetCurrentLayout() )
                             {
                                 SwCrsrMoveState aState( MV_SETONLYTEXT );
                                 Point aTmp( pObj->GetSnapRect().TopLeft() );
-                                pDoc->GetRootFrm()->GetCrsrOfst( aPam.GetPoint(), aTmp, &aState );
+                                pDoc->GetCurrentLayout()->GetCrsrOfst( aPam.GetPoint(), aTmp, &aState );
                             }
                             else
                             {
@@ -1443,7 +1443,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
             {
                     aKeepedPosition = getPosition();
             }
-            if( pFmt && pFmt->GetDoc()->GetRootFrm() )
+            if( pFmt && pFmt->GetDoc()->GetCurrentViewShell() ) //swmod 071108//swmod 071225
             {
                 UnoActionContext aCtx(pFmt->GetDoc());
                 xPrSet->setPropertyValue(rPropertyName, aValue);
@@ -1680,9 +1680,6 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
     return aRet;
 }
 
-/** method to get property from aggregation object
-    #i36248#
-*/
 uno::Any SwXShape::_getPropAtAggrObj( const ::rtl::OUString& _rPropertyName )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
@@ -1962,7 +1959,7 @@ void SwXShape::removeVetoableChangeListener(
     DBG_WARNING("not implemented");
 }
 
-void SwXShape::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXShape::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }

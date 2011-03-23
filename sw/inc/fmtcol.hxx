@@ -91,10 +91,11 @@ protected:
 
           mbAssignedToOutlineStyle(false)
     { pNextTxtFmtColl = this; }
-public:
 
     // To get UL- / LR- / FontHeight-changes.
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+
+public:
 
     TYPEINFO(); // Already in base class Client.
 
@@ -232,6 +233,7 @@ public:
 
     void SetCondition( sal_uLong nCond, sal_uLong nSubCond );
     SwTxtFmtColl* GetTxtFmtColl() const     { return (SwTxtFmtColl*)GetRegisteredIn(); }
+    void RegisterToFormat( SwFmt& );
 };
 
 typedef SwCollCondition* SwCollConditionPtr;

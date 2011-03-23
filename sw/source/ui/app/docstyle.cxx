@@ -1164,14 +1164,14 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     if( rStyle.Len() &&
                         0 != ( pFindFmt = lcl_FindParaFmt( rDoc, rStyle, 0, sal_True )))
                     {
-                        pFindFmt->Add( &aCond );
+                        aCond.RegisterToFormat( *pFindFmt );
                         ((SwConditionTxtFmtColl*)pColl)->InsertCondition( aCond );
                     }
                 }
 
                 // Update document to new conditions
                 SwCondCollCondChg aMsg( pColl );
-                pColl->Modify( &aMsg, &aMsg );
+                pColl->ModifyNotification( &aMsg, &aMsg );
             }
             else if( pCondItem && !pColl->GetDepends() )
             {

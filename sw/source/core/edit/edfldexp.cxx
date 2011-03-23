@@ -41,6 +41,7 @@
 #include <fmtfld.hxx>
 #include <edimp.hxx>
 #include <flddat.hxx>
+#include <switerator.hxx>
 
 using namespace com::sun::star;
 using ::rtl::OUString;
@@ -66,8 +67,8 @@ sal_Bool SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
             {
                 case RES_DBFLD:
                 {
-                    SwClientIter aIter( rFldType );
-                    SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+                    SwIterator<SwFmtFld,SwFieldType> aIter( rFldType );
+                    SwFmtFld* pFld = aIter.First();
                     while(pFld)
                     {
                         if(pFld->IsFldInDoc())
@@ -84,7 +85,7 @@ sal_Bool SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
                                 return sal_False;
                             }
                         }
-                        pFld = (SwFmtFld*)aIter.Next();
+                        pFld = aIter.Next();
                     }
                 }
                 break;

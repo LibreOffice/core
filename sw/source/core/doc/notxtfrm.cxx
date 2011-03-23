@@ -155,8 +155,8 @@ void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
 *************************************************************************/
 
 
-SwNoTxtFrm::SwNoTxtFrm(SwNoTxtNode * const pNode)
-    : SwCntntFrm(pNode)
+SwNoTxtFrm::SwNoTxtFrm(SwNoTxtNode * const pNode, SwFrm* pSib )
+    : SwCntntFrm( pNode, pSib )
 {
     InitCtor();
 }
@@ -181,9 +181,9 @@ void SwNoTxtFrm::InitCtor()
 *************************************************************************/
 
 
-SwCntntFrm *SwNoTxtNode::MakeFrm()
+SwCntntFrm *SwNoTxtNode::MakeFrm( SwFrm* pSib )
 {
-    return new SwNoTxtFrm(this);
+    return new SwNoTxtFrm(this, pSib);
 }
 
 /*************************************************************************
@@ -227,7 +227,7 @@ void lcl_ClearArea( const SwFrm &rFrm,
         else
         {
             rOut.Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
-            rOut.SetFillColor( rFrm.GetShell()->Imp()->GetRetoucheColor());
+            rOut.SetFillColor( rFrm.getRootFrm()->GetCurrShell()->Imp()->GetRetoucheColor());
             rOut.SetLineColor();
             for( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
                 rOut.DrawRect( aRegion[i].SVRect() );
@@ -247,7 +247,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     if ( Frm().IsEmpty() )
         return;
 
-    const ViewShell* pSh = GetShell();
+    const ViewShell* pSh = getRootFrm()->GetCurrShell();
     if( !pSh->GetViewOptions()->IsGraphic() )
     {
         StopAnimation();
@@ -622,7 +622,7 @@ sal_Bool SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
     }\
 }
 
-void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     sal_uInt16 nWhich = pNew ? pNew->Which() : pOld ? pOld->Which() : 0;
 
@@ -783,7 +783,7 @@ void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, Out
 /// pixel-align coordinations for drawing graphic.
 void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) const
 {
-    ViewShell* pShell = GetShell();
+    ViewShell* pShell = getRootFrm()->GetCurrShell();
 
     SwNoTxtNode& rNoTNd = *(SwNoTxtNode*)GetNode();
     SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
@@ -1013,7 +1013,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
 sal_Bool SwNoTxtFrm::IsTransparent() const
 {
-    const ViewShell* pSh = GetShell();
+    const ViewShell* pSh = getRootFrm()->GetCurrShell();
     if ( !pSh || !pSh->GetViewOptions()->IsGraphic() )
         return sal_True;
 

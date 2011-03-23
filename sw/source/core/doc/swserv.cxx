@@ -327,7 +327,7 @@ SwDataChanged::~SwDataChanged()
 {
     // JP 09.04.96: nur wenn das Layout vorhanden ist ( also waehrend der
     //              Eingabe)
-    if( pDoc->GetRootFrm() )
+    if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
     {
         const ::sfx2::SvLinkSources& rServers = pDoc->GetLinkManager().GetServers();
 

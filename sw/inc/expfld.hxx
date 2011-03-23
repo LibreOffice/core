@@ -77,8 +77,8 @@ public:
 
         // Overlay, because get-field cannot be changed and therefore
         // does not need to be updated. Update at changing of set-values!
-
-        virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 };
 
 class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
@@ -153,6 +153,9 @@ class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
     sal_uInt8       nLevel;
     sal_Bool        bDeleted;
 
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+
 public:
     SwSetExpFieldType( SwDoc* pDoc, const String& rName,
                         sal_uInt16 nType = nsSwGetSetExpType::GSE_EXPR );
@@ -169,7 +172,6 @@ public:
     void                    SetDeleted( sal_Bool b )    { bDeleted = b; }
 
     // Overlay, because set-field takes care for its being updated by itself.
-    virtual void            Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
     inline const String&    GetSetRefName() const;
 
     sal_uInt16 SetSeqRefNo( SwSetExpField& rFld );

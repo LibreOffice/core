@@ -73,7 +73,7 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
     bHasSelection = ( *pCrsr->GetPoint() != *pCrsr->GetMark() );
 
     if( ND_TEXTNODE & nNdTyp )
-        nLeftFrmPos = SwCallLink::GetFrm( (SwTxtNode&)rNd, nCntnt,
+        nLeftFrmPos = SwCallLink::getLayoutFrm( rShell.GetLayout(), (SwTxtNode&)rNd, nCntnt,
                                             !rShell.ActionPend() );
     else
     {
@@ -102,7 +102,7 @@ SwCallLink::~SwCallLink()
     if( !pCNd )
         return;
 
-    SwFrm *myFrm=pCNd->GetFrm();
+    SwFrm *myFrm = pCNd->getLayoutFrm( rShell.GetLayout() );
     if (myFrm!=NULL)
     {
         // We need to emulated a change of the row height in order
@@ -112,7 +112,7 @@ SwCallLink::~SwCallLink()
         {
             const SwTableLine* pLine = pRow->GetTabLine( );
             SwFmtFrmSize pSize = pLine->GetFrmFmt( )->GetFrmSize( );
-            pRow->Modify( NULL, &pSize );
+            pRow->ModifyNotification( NULL, &pSize );
         }
     }
 
@@ -124,7 +124,7 @@ SwCallLink::~SwCallLink()
     }
     if ( pNode != NULL )
     {
-        SwFrm *myFrm2=pNode->GetFrm();
+        SwFrm *myFrm2 = pNode->getLayoutFrm( rShell.GetLayout() );
         if (myFrm2!=NULL)
         {
             // We need to emulated a change of the row height in order
@@ -134,7 +134,7 @@ SwCallLink::~SwCallLink()
             {
                 const SwTableLine* pLine = pRow->GetTabLine( );
                 SwFmtFrmSize pSize = pLine->GetFrmFmt( )->GetFrmSize( );
-                pRow->Modify( NULL, &pSize );
+                pRow->ModifyNotification( NULL, &pSize );
             }
         }
     }
@@ -165,7 +165,7 @@ SwCallLink::~SwCallLink()
     {
         // If travelling with left/right only and the frame is
         // unchanged (columns!) then check text hints.
-        if( nLeftFrmPos == SwCallLink::GetFrm( (SwTxtNode&)*pCNd, nAktCntnt,
+        if( nLeftFrmPos == SwCallLink::getLayoutFrm( rShell.GetLayout(), (SwTxtNode&)*pCNd, nAktCntnt,
                                                     !rShell.ActionPend() ) &&
             (( nCmp = nCntnt ) + 1 == nAktCntnt ||          // Right
             nCntnt -1 == ( nCmp = nAktCntnt )) )            // Left
@@ -230,7 +230,7 @@ SwCallLink::~SwCallLink()
 
     const SwFrm* pFrm;
     const SwFlyFrm *pFlyFrm;
-    if( !rShell.ActionPend() && 0 != ( pFrm = pCNd->GetFrm(0,0,sal_False) ) &&
+    if( !rShell.ActionPend() && 0 != ( pFrm = pCNd->getLayoutFrm(rShell.GetLayout(),0,0,sal_False) ) &&
         0 != ( pFlyFrm = pFrm->FindFlyFrm() ) && !rShell.IsTableMode() )
     {
         const SwNodeIndex* pIndex = pFlyFrm->GetFmt()->GetCntnt().GetCntntIdx();
@@ -247,9 +247,9 @@ SwCallLink::~SwCallLink()
     }
 }
 
-long SwCallLink::GetFrm( SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm )
+long SwCallLink::getLayoutFrm( const SwRootFrm* pRoot, SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm )
 {
-    SwTxtFrm* pFrm = (SwTxtFrm*)rNd.GetFrm(0,0,bCalcFrm), *pNext = pFrm;
+    SwTxtFrm* pFrm = (SwTxtFrm*)rNd.getLayoutFrm(pRoot,0,0,bCalcFrm), *pNext = pFrm;
     if ( pFrm && !pFrm->IsHiddenNow() )
     {
         if( pFrm->HasFollow() )

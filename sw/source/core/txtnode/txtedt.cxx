@@ -606,9 +606,9 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
         }
         //TxtFrm's reagieren auf aHint, andere auf aNew
         SwUpdateAttr aHint( nMin, nMax, 0 );
-        SwModify::Modify( 0, &aHint );
+        NotifyClients( 0, &aHint );
         SwFmtChg aNew( GetFmtColl() );
-        SwModify::Modify( 0, &aNew );
+        NotifyClients( 0, &aNew );
     }
 }
 
@@ -951,11 +951,11 @@ void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
     if (pFont)
     {
         SvxFontItem aFontItem = (SvxFontItem&) aSet.Get( nFontWhichId );
-        aFontItem.GetFamilyName()   = pFont->GetName();
-        aFontItem.GetFamily()       = pFont->GetFamily();
-        aFontItem.GetStyleName()    = pFont->GetStyleName();
-        aFontItem.GetPitch()        = pFont->GetPitch();
-        aFontItem.GetCharSet()      = pFont->GetCharSet();
+        aFontItem.SetFamilyName(   pFont->GetName());
+        aFontItem.SetFamily(       pFont->GetFamily());
+        aFontItem.SetStyleName(    pFont->GetStyleName());
+        aFontItem.SetPitch(        pFont->GetPitch());
+        aFontItem.SetCharSet( pFont->GetCharSet() );
         aSet.Put( aFontItem );
     }
 
@@ -1466,7 +1466,7 @@ sal_Bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     if( pLinguNode != this )
     {
         pLinguNode = this;
-        pLinguFrm = (SwTxtFrm*)GetFrm( (Point*)(rHyphInf.GetCrsrPos()) );
+        pLinguFrm = (SwTxtFrm*)getLayoutFrm( GetDoc()->GetCurrentLayout(), (Point*)(rHyphInf.GetCrsrPos()) );
     }
     SwTxtFrm *pFrm = pLinguFrm;
     if( pFrm )
@@ -1783,10 +1783,10 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
 
     // notify the layout!
     SwDelTxt aDelHint( nPos, nTLen );
-    SwModify::Modify( 0, &aDelHint );
+    NotifyClients( 0, &aDelHint );
 
     SwInsTxt aHint( nPos, nTLen );
-    SwModify::Modify( 0, &aHint );
+    NotifyClients( 0, &aHint );
 }
 
 void SwTxtNode::CountWords( SwDocStat& rStat,

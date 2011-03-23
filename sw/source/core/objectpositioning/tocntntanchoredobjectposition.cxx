@@ -36,6 +36,9 @@
 #include <sectfrm.hxx>
 // #i26945#
 #include <tabfrm.hxx>
+#include "rootfrm.hxx"
+#include "viewopt.hxx"
+#include "viewsh.hxx"
 #include <frmfmt.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <fmtsrnd.hxx>
@@ -157,10 +160,13 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
 
     // declare and set <bBrowse> to true, if document is in browser mode and
     // object is anchored at the body, but not at frame belonging to a table.
-    const bool bBrowse = GetAnchorFrm().IsInDocBody() &&
-                         !GetAnchorFrm().IsInTab()
-                            ? rFrmFmt.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE)
-                            : false;
+    bool bBrowse = GetAnchorFrm().IsInDocBody() && !GetAnchorFrm().IsInTab();
+    if( bBrowse )
+    {
+        const ViewShell *pSh = GetAnchorFrm().getRootFrm()->GetCurrShell();
+        if( !pSh || !pSh->GetViewOptions()->getBrowseMode() )
+            bBrowse = false;
+    }
 
     // determine left/right and its upper/lower spacing.
     const SvxLRSpaceItem &rLR = rFrmFmt.GetLRSpace();

@@ -52,8 +52,8 @@ SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 {
     if( rInfo.GetFtnTxtColl() )
         rInfo.GetFtnTxtColl()->Add(this);
-    else if ( pRegisteredIn)
-        pRegisteredIn->Remove(this);
+    else if ( GetRegisteredIn())
+        GetRegisteredInNonConst()->Remove(this);
 
     if ( rInfo.aPageDescDep.GetRegisteredIn() )
         ((SwModify*)rInfo.aPageDescDep.GetRegisteredIn())->Add( &aPageDescDep );
@@ -109,8 +109,8 @@ SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
     aFmt( rInfo.aFmt ),
     nFtnOffset( rInfo.nFtnOffset )
 {
-    if( rInfo.GetPageDescDep()->GetRegisteredIn() )
-        ((SwModify*)rInfo.GetPageDescDep()->GetRegisteredIn())->Add( &aPageDescDep );
+    if( rInfo.aPageDescDep.GetRegisteredIn() )
+        ((SwModify*)rInfo.aPageDescDep.GetRegisteredIn())->Add( &aPageDescDep );
 
     if( rInfo.aCharFmtDep.GetRegisteredIn() )
         ((SwModify*)rInfo.aCharFmtDep.GetRegisteredIn())->Add( &aCharFmtDep );
@@ -139,7 +139,18 @@ SwPageDesc *SwEndNoteInfo::GetPageDesc( SwDoc &rDoc ) const
             m_bEndNote ? RES_POOLPAGE_ENDNOTE   : RES_POOLPAGE_FOOTNOTE ) );
         pDesc->Add( &((SwClient&)aPageDescDep) );
     }
-    return (SwPageDesc*)aPageDescDep.GetRegisteredIn();
+
+    return (SwPageDesc*)( aPageDescDep.GetRegisteredIn() );
+}
+
+bool SwEndNoteInfo::KnowsPageDesc() const
+{
+    return (aPageDescDep.GetRegisteredIn() != 0);
+}
+
+bool SwEndNoteInfo::DependsOn( const SwPageDesc* pDesc ) const
+{
+    return ( aPageDescDep.GetRegisteredIn() == pDesc );
 }
 
 void SwEndNoteInfo::ChgPageDesc( SwPageDesc *pDesc )
@@ -186,7 +197,7 @@ void SwEndNoteInfo::SetAnchorCharFmt( SwCharFmt* pChFmt )
     pChFmt->Add( &((SwClient&)aAnchorCharFmtDep) );
 }
 
-void SwEndNoteInfo::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
 
@@ -210,7 +221,7 @@ void SwEndNoteInfo::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         }
     }
     else
-        SwClient::Modify( pOld, pNew );
+        CheckRegistration( pOld, pNew );
 }
 
 SwFtnInfo& SwFtnInfo::operator=(const SwFtnInfo& rInfo)
@@ -258,6 +269,7 @@ SwFtnInfo::SwFtnInfo(SwTxtFmtColl *pFmt) :
 
 void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
 {
+    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
     if( !(GetFtnInfo() == rInfo) )
     {
         const SwFtnInfo &rOld = GetFtnInfo();
@@ -281,15 +293,19 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
 
         *pFtnInfo = rInfo;
 
-        if ( GetRootFrm() )
+        if (pTmpRoot)
         {
+            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080304
             if ( bFtnPos )
-                GetRootFrm()->RemoveFtns();
+                //pTmpRoot->RemoveFtns();
+                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllRemoveFtns));//swmod 080305
             else
             {
-                GetRootFrm()->UpdateFtnNums();
+                //pTmpRoot->UpdateFtnNums();
+                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));//swmod 080304
                 if ( bFtnDesc )
-                    GetRootFrm()->CheckFtnPageDescs( sal_False );
+                    //pTmpRoot->CheckFtnPageDescs( FALSE );
+                    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_False));//swmod 080304
                 if ( bExtra )
                 {
                     //Fuer die Benachrichtung bezueglich ErgoSum usw. sparen wir uns
@@ -304,14 +320,14 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
                     }
                 }
             }
-        }
+        }   //swmod 080219
         if( FTNNUM_PAGE != rInfo.eNum )
             GetFtnIdxs().UpdateAllFtn();
         else if( bFtnChrFmts )
         {
             SwFmtChg aOld( pOldChrFmt );
             SwFmtChg aNew( pNewChrFmt );
-            pFtnInfo->Modify( &aOld, &aNew );
+            pFtnInfo->ModifyNotification( &aOld, &aNew );
         }
 
         // #i81002# no update during loading
@@ -325,6 +341,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
 
 void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
 {
+    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
     if( !(GetEndNoteInfo() == rInfo) )
     {
         if(GetIDocumentUndoRedo().DoesUndo())
@@ -351,10 +368,14 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
 
         *pEndNoteInfo = rInfo;
 
-        if ( GetRootFrm() )
+        if ( pTmpRoot )
         {
             if ( bFtnDesc )
-                GetRootFrm()->CheckFtnPageDescs( sal_True );
+                //pTmpRoot->CheckFtnPageDescs( TRUE );
+            {
+                std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
+                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_True));//swmod 080304
+            }
             if ( bExtra )
             {
                 //Fuer die Benachrichtung bezueglich ErgoSum usw. sparen wir uns
@@ -368,14 +389,14 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
                         pTxtFtn->SetNumber( rFtn.GetNumber(), &rFtn.GetNumStr());
                 }
             }
-        }
+        }   //swmod 080219
         if( bNumChg )
             GetFtnIdxs().UpdateAllFtn();
         else if( bFtnChrFmts )
         {
             SwFmtChg aOld( pOldChrFmt );
             SwFmtChg aNew( pNewChrFmt );
-            pEndNoteInfo->Modify( &aOld, &aNew );
+            pEndNoteInfo->ModifyNotification( &aOld, &aNew );
         }
 
         // #i81002# no update during loading
@@ -392,6 +413,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                        sal_uInt16 nNumber, bool bIsEndNote )
 {
     SwFtnIdxs& rFtnArr = GetFtnIdxs();
+    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
 
     const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
     const sal_uLong nSttNd = pStt->nNode.GetIndex();
@@ -439,7 +461,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                     pTxtFtn->CheckCondColl();
                     //#i11339# dispose UNO wrapper when a footnote is changed to an endnote or vice versa
                     SwPtrMsgPoolItem aMsgHint( RES_FOOTNOTE_DELETED, (void*)&pTxtFtn->GetAttr() );
-                    GetUnoCallBack()->Modify( &aMsgHint, &aMsgHint );
+                    GetUnoCallBack()->ModifyNotification( &aMsgHint, &aMsgHint );
                 }
             }
         }
@@ -487,8 +509,12 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
             if ( !bTypeChgd )
                 rFtnArr.UpdateAllFtn();
         }
-        else if( GetRootFrm() )
-            GetRootFrm()->UpdateFtnNums();
+        else if( pTmpRoot )
+            //
+        {
+            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
+            std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));
+        }   //swmod 080304pTmpRoot->UpdateFtnNums();    //swmod 080219
         SetModified();
     }
     else

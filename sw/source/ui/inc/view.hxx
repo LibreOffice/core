@@ -499,6 +499,7 @@ public:
             void    SetVisArea( const Point&, sal_Bool bUpdateScrollbar = sal_True);
             void    CheckVisArea();
 
+    void RecheckBrowseMode();
     static LAYOUT_NS Dialog* GetSearchDialog();
 
     static sal_uInt16   GetMoveType();

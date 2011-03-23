@@ -215,7 +215,7 @@ void SwVisCrsr::_SetPosAndShow()
         if( rNode.IsTxtNode() )
         {
             const SwTxtNode& rTNd = *rNode.GetTxtNode();
-            const SwFrm* pFrm = rTNd.GetFrm( 0, 0, sal_False );
+            const SwFrm* pFrm = rTNd.getLayoutFrm( pCrsrShell->GetLayout(), 0, 0, sal_False );
             if ( pFrm )
             {
                 const SwScriptInfo* pSI = ((SwTxtFrm*)pFrm)->GetScriptInfo();
@@ -497,11 +497,11 @@ void SwShellCrsr::FillRects()
     // calculate the new rectangles
     if( HasMark() &&
         GetPoint()->nNode.GetNode().IsCntntNode() &&
-        GetPoint()->nNode.GetNode().GetCntntNode()->GetFrm() &&
+        GetPoint()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) &&
         (GetMark()->nNode == GetPoint()->nNode ||
         (GetMark()->nNode.GetNode().IsCntntNode() &&
-         GetMark()->nNode.GetNode().GetCntntNode()->GetFrm() )  ))
-        GetDoc()->GetRootFrm()->CalcFrmRects( *this, GetShell()->IsTableMode() );
+         GetMark()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) )   ))
+        GetShell()->GetLayout()->CalcFrmRects( *this, GetShell()->IsTableMode() );  //swmod 071107//swmod 071225
 }
 
 
@@ -563,7 +563,7 @@ short SwShellCrsr::MaxReplaceArived()
         // a SSelection can be created.
         SvUShorts aArr;
         sal_uInt16 nActCnt;
-        ViewShell *pShell = GetDoc()->GetRootFrm()->GetCurrShell(),
+        ViewShell *pShell = const_cast< SwCrsrShell* >( GetShell() ),
                   *pSh = pShell;
         do {
             for( nActCnt = 0; pSh->ActionPend(); ++nActCnt )
@@ -580,7 +580,7 @@ short SwShellCrsr::MaxReplaceArived()
             for( nActCnt = aArr[n]; nActCnt--; )
                 pSh->StartAction();
             pSh = (ViewShell*)pSh->GetNext();
-        }
+        }   //swmod 071107//swmod 071225
     }
     else
         // otherwise from the Basic, and than switch to RET_YES
@@ -693,7 +693,7 @@ void SwShellTableCrsr::FillRects()
         if( !pCNd )
             continue;
 
-        SwFrm* pFrm = pCNd->GetFrm( &GetSttPos() );
+        SwFrm* pFrm = pCNd->getLayoutFrm( GetShell()->GetLayout(), &GetSttPos() );
         while( pFrm && !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
 
@@ -729,7 +729,7 @@ sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const
         if( !pCNd )
             continue;
 
-        SwFrm* pFrm = pCNd->GetFrm( &GetPtPos() );
+        SwFrm* pFrm = pCNd->getLayoutFrm( GetShell()->GetLayout(), &GetPtPos() );
         while( pFrm && !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
         OSL_ENSURE( pFrm, "Node nicht in einer Tabelle" );

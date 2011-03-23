@@ -112,10 +112,10 @@ SfxPoolItem* SwFmtCharFmt::Clone( SfxItemPool* ) const
 
 
 // weiterleiten an das TextAttribut
-void SwFmtCharFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwFmtCharFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( pTxtAttr )
-        pTxtAttr->Modify( pOld, pNew );
+        pTxtAttr->ModifyNotification( pOld, pNew );
 }
 
 
@@ -605,6 +605,7 @@ SwFmtMeta::~SwFmtMeta()
 {
     if (m_pMeta && (m_pMeta->GetFmtMeta() == this))
     {
+        NotifyChangeTxtNode(0);
         m_pMeta->SetFmtMeta(0);
     }
 }
@@ -632,9 +633,17 @@ void SwFmtMeta::SetTxtAttr(SwTxtMeta * const i_pTxtAttr)
     m_pTxtAttr = i_pTxtAttr;
     OSL_ENSURE(m_pMeta, "inserted SwFmtMeta has no sw::Meta?");
     // the sw::Meta must be able to find the current text attribute!
-    if (i_pTxtAttr && m_pMeta)
+    if (m_pMeta)
     {
-        m_pMeta->SetFmtMeta(this);
+        if (i_pTxtAttr)
+        {
+            m_pMeta->SetFmtMeta(this);
+        }
+        else if (m_pMeta->GetFmtMeta() == this)
+        {   // text attribute gone => de-register from text node!
+            NotifyChangeTxtNode(0);
+            m_pMeta->SetFmtMeta(0);
+        }
     }
 }
 
@@ -642,36 +651,22 @@ void SwFmtMeta::NotifyChangeTxtNode(SwTxtNode *const pTxtNode)
 {
     // N.B.: do not reset m_pTxtAttr here: see call in nodes.cxx,
     // where the hint is not deleted!
-    OSL_ENSURE(m_pMeta, "NotifyRemoval: no meta ?");
-    if (m_pMeta)
-    {
-        if (!pTxtNode)
-        {
-            SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
-                &static_cast<SwModify&>(*m_pMeta) ); // cast to base class!
-            m_pMeta->Modify(&aMsgHint, &aMsgHint);
-        }
-        else
-        {   // do not call Modify, that would call SwXMeta::Modify!
-            m_pMeta->NotifyChangeTxtNode();
-        }
+    OSL_ENSURE(m_pMeta, "SwFmtMeta::NotifyChangeTxtNode: no Meta?");
+    if (m_pMeta && (m_pMeta->GetFmtMeta() == this))
+    {   // do not call Modify, that would call SwXMeta::Modify!
+        m_pMeta->NotifyChangeTxtNode(pTxtNode);
     }
 }
 
-// UGLY: this really awful method fixes up an inconsistent state,
-// and if it is not called when copying, total chaos will undoubtedly ensue
-void SwFmtMeta::DoCopy(SwFmtMeta & rOriginalMeta)
+// this SwFmtMeta has been cloned and points at the same sw::Meta as the source
+// this method copies the sw::Meta
+void SwFmtMeta::DoCopy(::sw::MetaFieldManager & i_rTargetDocManager,
+        SwTxtNode & i_rTargetTxtNode)
 {
     OSL_ENSURE(m_pMeta, "DoCopy called for SwFmtMeta with no sw::Meta?");
     if (m_pMeta)
     {
         const ::boost::shared_ptr< ::sw::Meta> pOriginal( m_pMeta );
-        // UGLY: original sw::Meta now points at _this_ due to being already
-        // inserted via MakeTxtAttr! so fix it up to point at the original item
-        // (maybe would be better to tell MakeTxtAttr that it creates a copy?)
-        pOriginal->SetFmtMeta(&rOriginalMeta);
-        // force pOriginal to register in original text node!
-        pOriginal->NotifyChangeTxtNode();
         if (RES_TXTATR_META == Which())
         {
             m_pMeta.reset( new ::sw::Meta(this) );
@@ -680,14 +675,13 @@ void SwFmtMeta::DoCopy(SwFmtMeta & rOriginalMeta)
         {
             ::sw::MetaField *const pMetaField(
                 static_cast< ::sw::MetaField* >(pOriginal.get()));
-            SwDoc * const pTargetDoc( GetTxtAttr()->GetTxtNode()->GetDoc() );
-            m_pMeta = pTargetDoc->GetMetaFieldManager().makeMetaField( this,
+            m_pMeta = i_rTargetDocManager.makeMetaField( this,
                 pMetaField->m_nNumberFormat, pMetaField->IsFixedLanguage() );
         }
+        // Meta must have a text node before calling RegisterAsCopyOf
+        m_pMeta->NotifyChangeTxtNode(& i_rTargetTxtNode);
         // this cannot be done in Clone: a Clone is not necessarily a copy!
         m_pMeta->RegisterAsCopyOf(*pOriginal);
-        // force copy Meta to register in target text node!
-        m_pMeta->NotifyChangeTxtNode();
     }
 }
 
@@ -716,35 +710,44 @@ SwTxtMeta * Meta::GetTxtAttr() const
 
 SwTxtNode * Meta::GetTxtNode() const
 {
-    SwTxtMeta * const pTxtAttr( GetTxtAttr() );
-    return (pTxtAttr) ? pTxtAttr->GetTxtNode() : 0;
+    return m_pTxtNode;
 }
 
-void Meta::NotifyChangeTxtNode()
+void Meta::NotifyChangeTxtNodeImpl()
 {
-    SwTxtNode * const pTxtNode( GetTxtNode() );
-    if (pTxtNode && (GetRegisteredIn() != pTxtNode))
+    if (m_pTxtNode && (GetRegisteredIn() != m_pTxtNode))
     {
-        pTxtNode->Add(this);
+        m_pTxtNode->Add(this);
     }
-    else if (!pTxtNode && GetRegisteredIn())
+    else if (!m_pTxtNode && GetRegisteredIn())
     {
-        const_cast<SwModify *>(GetRegisteredIn())->Remove(this);
+        GetRegisteredInNonConst()->Remove(this);
+    }
+}
+
+void Meta::NotifyChangeTxtNode(SwTxtNode *const pTxtNode)
+{
+    m_pTxtNode = pTxtNode;
+    NotifyChangeTxtNodeImpl();
+    if (!pTxtNode) // text node gone? invalidate UNO object!
+    {
+        SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
+            &static_cast<SwModify&>(*this) ); // cast to base class!
+        this->Modify(&aMsgHint, &aMsgHint);
     }
 }
 
 // SwClient
-void Meta::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void Meta::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
 {
-    NotifyChangeTxtNode();
-    SwModify::Modify(pOld, pNew);
+    NotifyClients(pOld, pNew);
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
     {   // invalidate cached uno object
         SetXMeta(uno::Reference<rdf::XMetadatable>(0));
     }
 }
 
-// sw::Metadatable
+// sfx2::Metadatable
 ::sfx2::IXmlIdRegistry& Meta::GetRegistry()
 {
     SwTxtNode * const pTxtNode( GetTxtNode() );
@@ -897,5 +900,6 @@ MetaFieldManager::getMetaFields()
 }
 
 } // namespace sw
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

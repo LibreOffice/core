@@ -82,7 +82,7 @@
 #include <unocrsrhelper.hxx>
 #include <unotextrange.hxx>
 #include <sfx2/docfile.hxx>
-
+#include <switerator.hxx>
 #include "swdtflvr.hxx"
 #include <vcl/svapp.hxx>
 
@@ -399,8 +399,8 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
             {
                 rSh.EnterStdMode();
                 rSh.GotoMark(pMark);
+                return sal_True;
             }
-            return sal_True;
         }
         // IndexMark, Index, TextField, Draw, Section, Footnote, Paragraph
         //
@@ -549,9 +549,7 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
                 const SwFrmFmt* pFmt = rSh.GetFlyFrmFmt();
                 if (pFmt)
                 {
-                    SwXFrame* pxFrame = (SwXFrame*)SwClientIter((SwFrmFmt&)*pFmt).
-                                                    First(TYPE(SwXFrame));
-
+                    SwXFrame* pxFrame = SwIterator<SwXFrame,SwFmt>::FirstElement(*pFmt);
                     if(pxFrame)                //das einzige gemeinsame interface fuer alle Frames
                     {
                         aRef = uno::Reference< uno::XInterface >((cppu::OWeakObject*)pxFrame, uno::UNO_QUERY);
@@ -991,7 +989,7 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
 
                 sal_Int32 nCount = -1;
                 if (nWID == WID_PAGE_COUNT)
-                    nCount = m_pView->GetDocShell()->GetDoc()->GetPageCount();
+                    nCount = m_pView->GetWrtShell().GetPageCount();
                 else // WID_LINE_COUNT
                     nCount = m_pView->GetWrtShell().GetLineCount( sal_False /*of whole document*/ );
                 aRet <<= nCount;

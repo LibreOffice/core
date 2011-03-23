@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 #include <com/sun/star/text/HoriOrientation.hpp>
-
+#include <hintids.hxx>
 #include <vcl/sound.hxx>
 #include <tools/poly.hxx>
 #include <svl/svstdarr.hxx>
@@ -41,13 +41,11 @@
 #include <editeng/prntitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
-// --> collapsing borders FME 2005-05-27 #i29550#
 #include <svx/framelink.hxx>
-// <--
 #include <vcl/graph.hxx>
 #include <svx/svdpagv.hxx>
 #include <tgrditem.hxx>
-
+#include <switerator.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtclds.hxx>
 #include <tools/shl.hxx>
@@ -82,28 +80,20 @@
 #include <lineinfo.hxx>
 #include <dbg_lay.hxx>
 #include <accessibilityoptions.hxx>
-// OD 20.12.2002 #94627#
 #include <docsh.hxx>
-// OD 28.02.2003 #b4779636#, #107692#
 #include <swtable.hxx>
-// OD 02.07.2003 #108784#
 #include <svx/svdogrp.hxx>
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-
-// --> FME 2004-06-08 #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
-// <--
-
 #include <ndole.hxx>
 #include <svtools/chartprettypainter.hxx>
-
 #include <PostItMgr.hxx>
 #include <tools/color.hxx>
+#include <vcl/svapp.hxx>
+
 #define COL_NOTES_SIDEPANE                  RGB_COLORDATA(230,230,230)
 #define COL_NOTES_SIDEPANE_BORDER           RGB_COLORDATA(200,200,200)
 #define COL_NOTES_SIDEPANE_SCROLLAREA       RGB_COLORDATA(230,230,220)
-#include <vcl/svapp.hxx>
 
 #include <svtools/borderhelper.hxx>
 
@@ -3160,7 +3150,7 @@ SwShortCut::SwShortCut( const SwFrm& rFrm, const SwRect& rRect )
 
 void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
 
     // --> FME 2004-06-24 #i16816# tagged pdf support
     Frm_Info aFrmInfo( *this );
@@ -3587,8 +3577,8 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                     // used in <SwNoTxtFrm::Paint(..)> to set the clip region
                     // for painting the graphic/OLE. Thus, the clip region is
                     // also applied for the PDF export.
-                    ViewShell *pSh = GetShell();
-                    if ( !pOut->GetConnectMetaFile() || !pSh->GetWin() )
+                    ViewShell *pSh = getRootFrm()->GetCurrShell();
+                    if ( !pOut->GetConnectMetaFile() || !pSh || !pSh->GetWin() )
                     // <--
                     {
                         pOut->SetClipRegion( aPoly );
@@ -4586,10 +4576,10 @@ void SwFrm::ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DSeque
 {
     basegfx::B2DRange aViewRange;
 
-    SdrPage *pDrawPage = GetShell(  )->Imp(  )->GetPageView(  )->GetPage(  );
+    SdrPage *pDrawPage = getRootFrm()->GetCurrShell()->Imp()->GetPageView()->GetPage();
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos(
             basegfx::B2DHomMatrix(  ),
-            GetShell(  )->GetOut(  )->GetViewTransformation(  ),
+            getRootFrm()->GetCurrShell()->GetOut()->GetViewTransformation(),
             aViewRange,
             GetXDrawPageForSdrPage( pDrawPage ),
             0.0,
@@ -4597,7 +4587,7 @@ void SwFrm::ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DSeque
 
     drawinglayer::processor2d::BaseProcessor2D * pProcessor2D =
             sdr::contact::createBaseProcessor2DFromOutputDevice(
-                    *GetShell(  )->GetOut(  ),
+                    *getRootFrm()->GetCurrShell()->GetOut(),
                     aNewViewInfos );
 
     if ( pProcessor2D )
@@ -5187,7 +5177,7 @@ void SwPageFrm::PaintMarginArea( const SwRect& _rOutputRect,
                                  ViewShell* _pViewShell ) const
 {
     if (  _pViewShell->GetWin() &&
-         !_pViewShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+         !_pViewShell->GetViewOptions()->getBrowseMode() )
     {
         SwRect aPgPrtRect( Prt() );
         aPgPrtRect.Pos() += Frm().Pos();
@@ -5678,8 +5668,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     {
         if ( bBack || bPageFrm || !bLowerMode )
         {
-            const sal_Bool bBrowse = pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
-
+            const sal_Bool bBrowse = pSh->GetViewOptions()->getBrowseMode();
             SwRect aRect;
             if ( (bPageFrm && bBrowse) ||
                  (IsTxtFrm() && Prt().SSize() == Frm().SSize()) )
@@ -6320,7 +6309,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
         return;
 
     OSL_ENSURE( GetUpper(), "Retoucheversuch ohne Upper." );
-    OSL_ENSURE( GetShell() && pGlobalShell->GetWin(), "Retouche auf dem Drucker?" );
+    OSL_ENSURE( getRootFrm()->GetCurrShell() && pGlobalShell->GetWin(), "Retouche auf dem Drucker?" );
 
     SwRect aRetouche( GetUpper()->PaintArea() );
     aRetouche.Top( Frm().Top() + Frm().Height() );
@@ -6332,7 +6321,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
         //zum ausstanzen.
         SwRegionRects aRegion( aRetouche );
         aRegion -= rRect;
-        ViewShell *pSh = GetShell();
+        ViewShell *pSh = getRootFrm()->GetCurrShell();
 
         // --> FME 2004-06-24 #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
@@ -6423,7 +6412,7 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
                                 sal_Bool bLowerMode ) const
 {
     const SwFrm *pFrm = this;
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     const SwViewOption *pOpt = pSh->GetViewOptions();
     rpBrush = 0;
     rpCol = NULL;
@@ -6479,7 +6468,7 @@ sal_Bool SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
         {
             rpBrush = &rBack;
             if ( pFrm->IsPageFrm() &&
-                 pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+                 pSh->GetViewOptions()->getBrowseMode() )
                 rOrigRect = pFrm->Frm();
             else
             {
@@ -6538,10 +6527,10 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 {
     Graphic aRet;
     //irgendeinen Fly suchen!
-    SwClientIter aIter( *this );
-    SwClient *pFirst = aIter.First( TYPE(SwFrm) );
+    SwIterator<SwFrm,SwFmt> aIter( *this );
+    SwFrm *pFirst = aIter.First();
     ViewShell *pSh;
-    if ( pFirst && 0 != ( pSh = ((SwFrm*)pFirst)->GetShell()) )
+    if ( pFirst && 0 != ( pSh = pFirst->getRootFrm()->GetCurrShell()) )
     {
         ViewShell *pOldGlobal = pGlobalShell;
         pGlobalShell = pSh;

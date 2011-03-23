@@ -200,8 +200,8 @@ SwPaM* SwCrsrShell::GetCrsr( sal_Bool bMakeTblCrsr ) const
             const SwCntntNode* pCNd;
             if( pTblCrsr->GetPoint()->nNode.GetIndex() &&
                 pTblCrsr->GetMark()->nNode.GetIndex() &&
-                0 != ( pCNd = pTblCrsr->GetCntntNode() ) && pCNd->GetFrm() &&
-                0 != ( pCNd = pTblCrsr->GetCntntNode(sal_False) ) && pCNd->GetFrm())
+                0 != ( pCNd = pTblCrsr->GetCntntNode() ) && pCNd->getLayoutFrm( GetLayout() ) &&
+                0 != ( pCNd = pTblCrsr->GetCntntNode(sal_False) ) && pCNd->getLayoutFrm( GetLayout() ) )
             {
                 SwShellTableCrsr* pTC = (SwShellTableCrsr*)pTblCrsr;
                 GetLayout()->MakeTblCrsrs( *pTC );
@@ -229,7 +229,7 @@ void SwCrsrShell::StartAction()
         nAktNdTyp = rNd.GetNodeType();
         bAktSelection = *pCurCrsr->GetPoint() != *pCurCrsr->GetMark();
         if( ND_TEXTNODE & nAktNdTyp )
-            nLeftFrmPos = SwCallLink::GetFrm( (SwTxtNode&)rNd, nAktCntnt, sal_True );
+            nLeftFrmPos = SwCallLink::getLayoutFrm( GetLayout(), (SwTxtNode&)rNd, nAktCntnt, sal_True );
         else
             nLeftFrmPos = 0;
     }
@@ -296,6 +296,7 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
     sal_uInt16 nParm = SwCrsrShell::CHKRANGE;
     if ( !bIdleEnd )
         nParm |= SwCrsrShell::SCROLLWIN;
+//    if( !IsViewLocked() )
     UpdateCrsr( nParm, bIdleEnd );      // Cursor-Aenderungen anzeigen
 
     {
@@ -568,7 +569,7 @@ sal_Bool SwCrsrShell::MovePage( SwWhichPage fnWhichPage, SwPosPage fnPosPage )
         SwCrsrSaveState aSaveState( *pCurCrsr );
         Point& rPt = pCurCrsr->GetPtPos();
         SwCntntFrm * pFrm = pCurCrsr->GetCntntNode()->
-                            GetFrm( &rPt, pCurCrsr->GetPoint() );
+                            getLayoutFrm( GetLayout(), &rPt, pCurCrsr->GetPoint(), sal_False );
         if( pFrm && sal_True == ( bRet = GetFrmInPage( pFrm, fnWhichPage,
                                                 fnPosPage, pCurCrsr )  ) &&
             !pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
@@ -614,7 +615,7 @@ SwFrm* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
     SwCntntNode* pCNd = rIdx.GetNode().GetCntntNode();
     if( pCNd )
     {
-        pFrm = pCNd->GetFrm( &rPt, 0, sal_False )->GetUpper();
+        pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &rPt, 0, sal_False )->GetUpper();
         while( pFrm && !pFrm->IsHeaderFrm() && !pFrm->IsFooterFrm() )
             pFrm = pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->AnchorFrm()
                                     : pFrm->GetUpper();
@@ -700,10 +701,10 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
             else if( aPos.nNode.GetNode().IsCntntNode() )
             {
                 // im gleichen Frame gelandet?
-                SwFrm* pOld = ((SwCntntNode&)aPos.nNode.GetNode()).GetFrm(
-                                        &aCharRect.Pos(), 0, sal_False );
-                SwFrm* pNew = ((SwCntntNode&)aPos.nNode.GetNode()).GetFrm(
-                                        &aPt, 0, sal_False );
+                SwFrm* pOld = ((SwCntntNode&)aPos.nNode.GetNode()).getLayoutFrm(
+                                GetLayout(), &aCharRect.Pos(), 0, sal_False );
+                SwFrm* pNew = ((SwCntntNode&)aPos.nNode.GetNode()).getLayoutFrm(
+                                GetLayout(), &aPt, 0, sal_False );
                 if( pNew == pOld )
                     return bRet;
             }
@@ -1226,7 +1227,7 @@ void SwCrsrShell::UpdateCrsrPos()
     Size aOldSz( GetDocSize() );
     SwCntntNode *pCNode = pShellCrsr->GetCntntNode();
     SwCntntFrm  *pFrm = pCNode ?
-        pCNode->GetFrm( &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint() ) :0;
+        pCNode->getLayoutFrm( GetLayout(), &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), sal_False ) :0;
     if( !pFrm || (pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsHiddenNow()) )
     {
         SwCrsrMoveState aTmpState( MV_NONE );
@@ -1359,7 +1360,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         }
 
         SwCntntFrm *pTblFrm = pPos->nNode.GetNode().GetCntntNode()->
-                                                GetFrm( &aTmpPt, pPos );
+                              getLayoutFrm( GetLayout(), &aTmpPt, pPos, sal_False );
 
         OSL_ENSURE( pTblFrm, "Tabelle Crsr nicht im Content ??" );
 
@@ -1376,7 +1377,8 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
             // Second check if mark is in repeated headline:
             if ( !bInRepeatedHeadline )
             {
-                SwCntntFrm* pMarkTblFrm = pITmpCrsr->GetCntntNode( sal_False )->GetFrm( &aTmpMk, pITmpCrsr->GetMark() );
+                SwCntntFrm* pMarkTblFrm = pITmpCrsr->GetCntntNode( sal_False )->
+                    getLayoutFrm( GetLayout(), &aTmpMk, pITmpCrsr->GetMark(), sal_False );
                 OSL_ENSURE( pMarkTblFrm, "Tabelle Crsr nicht im Content ??" );
 
                 if ( pMarkTblFrm )
@@ -1587,8 +1589,8 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         sal_Bool bAgainst;
         do {
             bAgainst = sal_False;
-            pFrm = pShellCrsr->GetCntntNode()->GetFrm(
-                        &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint() );
+            pFrm = pShellCrsr->GetCntntNode()->getLayoutFrm( GetLayout(),
+                        &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), sal_False );
             // ist der Frm nicht mehr vorhanden, dann muss das gesamte Layout
             // erzeugt werden, weil ja mal hier einer vorhanden war !!
             if ( !pFrm )
@@ -1596,8 +1598,8 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 do
                 {
                     CalcLayout();
-                    pFrm = pShellCrsr->GetCntntNode()->GetFrm(
-                                &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint() );
+                    pFrm = pShellCrsr->GetCntntNode()->getLayoutFrm( GetLayout(),
+                                &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), sal_False );
                 }  while( !pFrm );
             }
             else if ( Imp()->IsIdleAction() )
@@ -1782,7 +1784,7 @@ void SwCrsrShell::RefreshBlockCursor()
     OSL_ENSURE( pBlockCrsr, "Don't call me without a block cursor" );
     SwShellCrsr &rBlock = pBlockCrsr->getShellCrsr();
     Point aPt = rBlock.GetPtPos();
-    SwCntntFrm* pFrm = rBlock.GetCntntNode()->GetFrm( &aPt, rBlock.GetPoint() );
+    SwCntntFrm* pFrm = rBlock.GetCntntNode()->getLayoutFrm( GetLayout(), &aPt, rBlock.GetPoint(), sal_False );
     Point aMk;
     if( pBlockCrsr->getEndPoint() && pBlockCrsr->getStartPoint() )
     {
@@ -2100,13 +2102,13 @@ SwCntntFrm *SwCrsrShell::GetCurrFrm( const sal_Bool bCalcFrm ) const
             const sal_uInt16* pST = &nStartAction;
             ++(*((sal_uInt16*)pST));
             const Size aOldSz( GetDocSize() );
-            pRet = pNd->GetFrm( &pCurCrsr->GetPtPos(), pCurCrsr->GetPoint() );
+            pRet = pNd->getLayoutFrm( GetLayout(), &pCurCrsr->GetPtPos(), pCurCrsr->GetPoint() );
             --(*((sal_uInt16*)pST));
             if( aOldSz != GetDocSize() )
                 ((SwCrsrShell*)this)->SizeChgNotify();
         }
         else
-            pRet = pNd->GetFrm( &pCurCrsr->GetPtPos(), pCurCrsr->GetPoint(), sal_False);
+            pRet = pNd->getLayoutFrm( GetLayout(), &pCurCrsr->GetPtPos(), pCurCrsr->GetPoint(), sal_False);
     }
     return pRet;
 }
@@ -2116,7 +2118,7 @@ SwCntntFrm *SwCrsrShell::GetCurrFrm( const sal_Bool bCalcFrm ) const
 // Link weitergeleitet.
 
 
-void SwCrsrShell::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwCrsrShell::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     const sal_uInt16 nWhich = pOld ?
                           pOld->Which() :
@@ -2286,7 +2288,7 @@ sal_Bool SwCrsrShell::SetVisCrsr( const Point &rPt )
                       pSectNd->GetSection().IsProtectFlag())) )
         return sal_False;
 
-    SwCntntFrm *pFrm = pTxtNd->GetFrm( &aPt, &aPos );
+    SwCntntFrm *pFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt, &aPos );
     if ( Imp()->IsIdleAction() )
         pFrm->PrepareCrsr();
     SwRect aTmp( aCharRect );
@@ -2627,7 +2629,7 @@ SwCrsrShell::~SwCrsrShell()
     //              der CursorShell haengt keine Chance geben, sich an den
     //              TextNode zu haengen.
     if( GetRegisteredIn() )
-        pRegisteredIn->Remove( this );
+        GetRegisteredInNonConst()->Remove( this );
 }
 
 SwShellCrsr* SwCrsrShell::getShellCrsr( bool bBlock )
@@ -2724,7 +2726,7 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
     SwCntntNode* pCNd = rNdIdx.GetNode().GetCntntNode();
     const SwCntntFrm * pFrm;
 
-    if( pCNd && 0 != (pFrm = pCNd->GetFrm(0,pCurCrsr->GetPoint(),sal_False)) &&
+    if( pCNd && 0 != (pFrm = pCNd->getLayoutFrm( GetLayout(),0,pCurCrsr->GetPoint(),sal_False)) &&
         !IsReadOnlyAvailable() && pFrm->IsProtected() &&
         nNdIdx < rNds.GetEndOfExtras().GetIndex() )
     {
@@ -2840,7 +2842,7 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
                 if( bOk && rNdIdx.GetIndex() < rNds.GetEndOfExtras().GetIndex() )
                 {
                     // Teste mal auf Fly - kann auch noch geschuetzt sein!!
-                    if( 0 == (pFrm = pCNd->GetFrm(0,0,sal_False)) ||
+                    if( 0 == (pFrm = pCNd->getLayoutFrm( GetLayout(),0,0,sal_False)) ||
                         ( !IsReadOnlyAvailable() && pFrm->IsProtected() ) ||
                         ( bOnlyText && pCNd->IsNoTxtNode() ) )
                     {
@@ -2871,7 +2873,7 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
 
         // falls Cursor im versteckten Bereich ist, auf jedenfall schon mal
         // verschieben!!
-        if( !pCNd || !pCNd->GetFrm(0,0,sal_False) )
+        if( !pCNd || !pCNd->getLayoutFrm( GetLayout(),0,0,sal_False) )
         {
             SwCrsrMoveState aTmpState( MV_NONE );
             aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
@@ -3422,7 +3424,7 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             SwCrsrMoveState aState;
             aState.bRealWidth = sal_True;
             SwCntntNode* pCntntNode = pCrsr->GetCntntNode();
-            SwCntntFrm *pCntntFrame = pCntntNode->GetFrm( &rPt, pCrsr->GetPoint(), sal_False);
+            SwCntntFrm *pCntntFrame = pCntntNode->getLayoutFrm( GetLayout(), &rPt, pCrsr->GetPoint(), sal_False);
 
             pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
             rContent = nWordEnd - 1;

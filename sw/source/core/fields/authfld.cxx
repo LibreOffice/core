@@ -54,7 +54,7 @@
 #include <doc.hxx>
 #include <unofldmid.h>
 #include <unoprnms.hxx>
-
+#include <switerator.hxx>
 #include <unomid.h>
 
 using namespace ::com::sun::star::uno;
@@ -87,7 +87,6 @@ sal_Bool    SwAuthEntry::operator==(const SwAuthEntry& rComp)
     return sal_True;
 }
 // --------------------------------------------------------
-
 SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
     : SwFieldType( RES_AUTHORITY ),
     m_pDoc(pDoc),
@@ -270,9 +269,9 @@ bool SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
     }
     return bChanged;
 }
-/*-----------------------------------------------------------------------
-    Description:    appends a new entry (if new) and returns the array position
 
+/*-------------------------------------------------------------------------
+  appends a new entry (if new) and returns the array position
   -----------------------------------------------------------------------*/
 sal_uInt16  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
 {
@@ -316,12 +315,11 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
     if(m_SequArr.empty())
     {
         SwTOXSortTabBases aSortArr;
-        SwClientIter aIter( *this );
+        SwIterator<SwFmtFld,SwFieldType> aIter( *this );
 
         SwTOXInternational aIntl(m_eLanguage, 0, m_sSortAlgorithm);
 
-        for( SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
-                                pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
+        for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
         {
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
             if(!pTxtFld || !pTxtFld->GetpTxtNode())
@@ -335,7 +333,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
             const SwTxtNode& rFldTxtNode = pTxtFld->GetTxtNode();
             SwPosition aFldPos(rFldTxtNode);
             SwDoc& rDoc = *(SwDoc*)rFldTxtNode.GetDoc();
-            SwCntntFrm *pFrm = rFldTxtNode.GetFrm();
+            SwCntntFrm *pFrm = rFldTxtNode.getLayoutFrm( rDoc.GetCurrentLayout() );
             const SwTxtNode* pTxtNode = 0;
             if(pFrm && !pFrm->IsInDocBody())
                 pTxtNode = GetBodyTxtNode( rDoc, aFldPos, *pFrm );
@@ -343,7 +341,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
             //body the directly available text node will be used
             if(!pTxtNode)
                 pTxtNode = &rFldTxtNode;
-            if( pTxtNode->GetTxt().Len() && pTxtNode->GetFrm() &&
+            if( pTxtNode->GetTxt().Len() && pTxtNode->getLayoutFrm( rDoc.GetCurrentLayout() ) &&
                 pTxtNode->GetNodes().IsDocNodes() )
             {
                 SwTOXAuthority* pNew = new SwTOXAuthority( *pTxtNode,
@@ -403,7 +401,6 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
 #endif
     return nRet;
 }
-
 
 bool SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) const
 {
@@ -533,11 +530,11 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
     return bRet;
 }
 
-void SwAuthorityFieldType::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwAuthorityFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     //re-generate positions of the fields
     DelSequenceArray();
-    SwModify::Modify( pOld, pNew );
+    NotifyClients( pOld, pNew );
 }
 
 sal_uInt16 SwAuthorityFieldType::GetSortKeyCount() const

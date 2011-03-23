@@ -201,6 +201,7 @@ protected:
     void SAL_CALL SetPropertyValues_Impl( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL GetPropertyValues_Impl( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 public:
     SwXStyle(SwDoc* pDoc, SfxStyleFamily eFam = SFX_STYLE_FAMILY_PARA, sal_Bool bConditional = sal_False);
     SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
@@ -274,7 +275,6 @@ public:
                                 StartListening(*pBasePool);
                             }
     SwDoc*                GetDoc() const { return m_pDoc; }
-    virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 };
 
 class SwXFrameStyle : public SwXStyle,
@@ -358,10 +358,12 @@ class SwXAutoStyleFamily : public cppu::WeakImplHelper1< com::sun::star::style::
     SwDocShell *pDocShell;
     IStyleAccess::SwAutoStyleFamily eFamily;
 
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
     SwXAutoStyleFamily(SwDocShell* pDocShell, IStyleAccess::SwAutoStyleFamily eFamily);
     virtual ~SwXAutoStyleFamily();
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     //XAutoStyleFamily
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::style::XAutoStyle > SAL_CALL insertStyle( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Values ) throw (::com::sun::star::uno::RuntimeException);
@@ -381,13 +383,14 @@ class SwXAutoStylesEnumerator : public cppu::WeakImplHelper1< ::com::sun::star::
 public:
     SwXAutoStylesEnumerator( SwDoc* pDoc, IStyleAccess::SwAutoStyleFamily eFam );
     virtual ~SwXAutoStylesEnumerator();
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     //XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL nextElement(  ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
+protected:
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
+
 
 // an automatic style
 class SwXAutoStyle : public cppu::WeakImplHelper3
@@ -407,7 +410,6 @@ public:
 
     SwXAutoStyle( SwDoc* pDoc, SfxItemSet_Pointer_t pInitSet, IStyleAccess::SwAutoStyleFamily eFam );
     virtual ~SwXAutoStyle();
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -438,6 +440,9 @@ public:
 
     // Special
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getProperties() throw (::com::sun::star::uno::RuntimeException);
+protected:
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 };
 #endif
 

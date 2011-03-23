@@ -91,13 +91,13 @@ public:
     }
 
     void registerInMark(SwXBookmark & rThis, ::sw::mark::IMark *const pBkmk);
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
-void SwXBookmark::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXBookmark::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if (!GetRegisteredIn())
@@ -596,7 +596,7 @@ uno::Type SwXFieldmarkParameters::getElementType()
     return !getCoreParameters()->empty();
 }
 
-void SwXFieldmarkParameters::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXFieldmarkParameters::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }

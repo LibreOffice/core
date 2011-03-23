@@ -46,7 +46,8 @@
 #include <dbmgr.hxx>
 #include <swddetbl.hxx>
 #include <hints.hxx>
-
+#include <switerator.hxx>
+#include <fieldhint.hxx>
 
 /*--------------------------------------------------------------------
     Beschreibung: Feldtypen zu einer ResId zaehlen
@@ -201,45 +202,13 @@ void SwEditShell::FieldToText( SwFieldType* pType )
     Push();
     SwPaM* pPaM = GetCrsr();
 
-    sal_Bool bDDEFld = RES_DDEFLD == pType->Which();
-    // Modify-Object gefunden, trage alle Felder ins Array ein
+    SwFieldHint aHint( pPaM );
     SwClientIter aIter( *pType );
-    SwClient * pLast = aIter.GoStart();
-
-    if( pLast )     // konnte zum Anfang gesprungen werden ??
-        do {
-            pPaM->DeleteMark();
-            const SwFmtFld* pFmtFld = bDDEFld
-                        ? PTR_CAST( SwFmtFld, pLast )
-                        : (SwFmtFld*)pLast;
-
-            if( pFmtFld )
-            {
-                if( !pFmtFld->GetTxtFld() )
-                    continue;
-
-                // kann keine DDETabelle sein
-                const SwTxtNode& rTxtNode = pFmtFld->GetTxtFld()->GetTxtNode();
-                pPaM->GetPoint()->nNode = rTxtNode;
-                pPaM->GetPoint()->nContent.Assign( (SwTxtNode*)&rTxtNode,
-                                     *pFmtFld->GetTxtFld()->GetStart() );
-
-                // Feldinhalt durch Text ersetzen
-                String const aEntry( pFmtFld->GetFld()->ExpandField(true) );
-                pPaM->SetMark();
-                pPaM->Move( fnMoveForward );
-                GetDoc()->DeleteRange( *pPaM );
-                GetDoc()->InsertString( *pPaM, aEntry );
-            }
-            else if( bDDEFld )
-            {
-                // DDETabelle
-                SwDepend* pDep = (SwDepend*)pLast;
-                SwDDETable* pDDETbl = (SwDDETable*)pDep->GetToTell();
-                pDDETbl->NoDDETable();
-            }
-
-        } while( 0 != ( pLast = aIter++ ));
+    for ( SwClient* pClient = aIter.GoStart(); pClient; aIter++ )
+    {
+        pPaM->DeleteMark();
+        pClient->SwClientNotifyCall( *pType, aHint );
+     }
 
     Pop( sal_False );
     EndAllAction();
@@ -569,13 +538,13 @@ sal_Bool SwEditShell::IsAnyDatabaseFieldInDoc()const
                 case RES_DBNUMSETFLD:
                 case RES_DBSETNUMBERFLD:
                 {
-                    SwClientIter aIter( rFldType );
-                    SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+                    SwIterator<SwFmtFld,SwFieldType> aIter( rFldType );
+                    SwFmtFld* pFld = aIter.First();
                     while(pFld)
                     {
                         if(pFld->IsFldInDoc())
                             return sal_True;
-                        pFld = (SwFmtFld*)aIter.Next();
+                        pFld = aIter.Next();
                     }
                 }
                 break;

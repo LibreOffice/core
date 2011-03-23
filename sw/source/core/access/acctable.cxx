@@ -732,7 +732,7 @@ SwAccessibleTable::~SwAccessibleTable()
     delete mpTableData;
 }
 
-void SwAccessibleTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwAccessibleTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
     const SwTabFrm *pTabFrm = static_cast< const SwTabFrm * >( GetFrm() );
@@ -779,13 +779,14 @@ void SwAccessibleTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
         break;
 
     case RES_OBJECTDYING:
+        // mba: it seems that this class intentionally does not call code in base class SwClient
         if( GetRegisteredIn() ==
-                static_cast< SwModify *>( static_cast< SwPtrMsgPoolItem * >( pOld )->pObject ) )
-            pRegisteredIn->Remove( this );
+                static_cast< SwModify *>( static_cast< const SwPtrMsgPoolItem * >( pOld )->pObject ) )
+            GetRegisteredInNonConst()->Remove( this );
         break;
 
     default:
-        SwClient::Modify( pOld, pNew );
+        // mba: former call to base class method removed as it is meant to handle only RES_OBJECTDYING
         break;
     }
 }
@@ -1350,7 +1351,7 @@ void SwAccessibleTable::Dispose( sal_Bool bRecursive )
     SolarMutexGuard aGuard;
 
     if( GetRegisteredIn() )
-        pRegisteredIn->Remove( this );
+        GetRegisteredInNonConst()->Remove( this );
 
     SwAccessibleContext::Dispose( bRecursive );
 }
@@ -1666,7 +1667,7 @@ SwAccessibleTableData_Impl* SwAccessibleTableColHeaders::CreateNewTableData()
 }
 
 
-void SwAccessibleTableColHeaders::Modify( SfxPoolItem * /*pOld*/, SfxPoolItem * /*pNew*/ )
+void SwAccessibleTableColHeaders::Modify( const SfxPoolItem * /*pOld*/, const SfxPoolItem * /*pNew*/ )
 {
 }
 

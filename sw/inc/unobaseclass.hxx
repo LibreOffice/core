@@ -95,7 +95,7 @@ class UnoActionRemoveContext
 ::com::sun::star::uno::Sequence< sal_Int8 > CreateUnoTunnelId();
 
 /// helper function for implementing SwClient::Modify
-void ClientModify(SwClient* pClient, SfxPoolItem *pOld, SfxPoolItem *pNew);
+void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 
 #include <boost/utility.hpp>

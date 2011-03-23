@@ -53,6 +53,7 @@
 #include <redlnitr.hxx> // SwRedlineItr
 #include <porfly.hxx>   // SwFlyPortion
 #include <atrhndl.hxx>
+#include "rootfrm.hxx"
 
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -231,7 +232,7 @@ SwLinePortion *SwArrowPortion::Compress() { return this; }
 SwTwips SwTxtFrm::EmptyHeight() const
 {
     if (IsCollapse()) {
-        ViewShell *pSh = GetShell();
+        ViewShell *pSh = getRootFrm()->GetCurrShell();
         if ( pSh->IsA( TYPE(SwCrsrShell) ) ) {
             SwCrsrShell *pCrSh=(SwCrsrShell*)pSh;
             SwCntntFrm *pCurrFrm=pCrSh->GetCurrFrm();
@@ -249,7 +250,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
     SwFont *pFnt;
     const SwTxtNode& rTxtNode = *GetTxtNode();
     const IDocumentSettingAccess* pIDSA = rTxtNode.getIDocumentSettingAccess();
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     if ( rTxtNode.HasSwAttrSet() )
     {
         const SwAttrSet *pAttrSet = &( rTxtNode.GetSwAttrSet() );
@@ -266,8 +267,8 @@ SwTwips SwTxtFrm::EmptyHeight() const
         pFnt->SetVertical( 2700 );
 
     OutputDevice* pOut = pSh ? pSh->GetOut() : 0;
-    if ( !pOut || !pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) ||
-         ( pSh->GetViewOptions()->IsPrtFormat() ) )
+    if ( !pOut || !pSh->GetViewOptions()->getBrowseMode() ||
+         pSh->GetViewOptions()->IsPrtFormat() )
     {
         pOut = rTxtNode.getIDocumentDeviceAccess()->getReferenceDevice(true);
     }
@@ -409,13 +410,13 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                         }
                         else
                         {
-                            ViewShell *pSh = GetShell();
+                            ViewShell *pSh = getRootFrm()->GetCurrShell();
                             SwFontAccess aFontAccess( pFmt, pSh );
                             SwFont aFnt( *aFontAccess.Get()->GetFont() );
 
                             OutputDevice *pOut = 0;
-                            if( !GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
-                                (pSh && pSh->GetViewOptions()->IsPrtFormat()) )
+                            if( !pSh || !pSh->GetViewOptions()->getBrowseMode() ||
+                                pSh->GetViewOptions()->IsPrtFormat() )
                                 pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
 
                             if( pSh && !pOut )

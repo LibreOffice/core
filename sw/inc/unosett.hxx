@@ -164,6 +164,10 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper5
     static String               sInvalidStyle;
 protected:
     virtual ~SwXNumberingRules();
+
+    //SwClient
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
     SwXNumberingRules(SwDocShell& rDocSh);  // chapter numbering
     SwXNumberingRules(const SwNumRule& rRule); // NumRule for paragraphs, numbering styles
@@ -210,9 +214,6 @@ public:
     void    SetNumberingRuleByIndex(SwNumRule& rNumRule,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties, sal_Int32 nIndex)
                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
-
-    //SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     const String*           GetNewCharStyleNames() const {return sNewCharStyleNames;}
     const String*           GetBulletFontNames() const {return sNewBulletFontNames;}

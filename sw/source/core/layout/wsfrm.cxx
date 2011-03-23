@@ -43,8 +43,11 @@
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
 #include <dcontact.hxx>
+#include <anchoreddrawobject.hxx>
+#include <fmtanchr.hxx>
 #include <viewsh.hxx>
 #include <viewimp.hxx>
+#include "viewopt.hxx"
 #include <doc.hxx>
 #include <fesh.hxx>
 #include <docsh.hxx>
@@ -84,11 +87,12 @@ using namespace ::com::sun::star;
 |*
 |*************************************************************************/
 
-SwFrm::SwFrm( SwModify *pMod ) :
+SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     SwClient( pMod ),
     // --> OD 2006-05-10 #i65250#
     mnFrmId( SwFrm::mnLastFrmId++ ),
     // <--
+    mpRoot( pSib ? pSib->getRootFrm() : 0 ),
     pUpper( 0 ),
     pNext( 0 ),
     pPrev( 0 ),
@@ -113,15 +117,15 @@ SwFrm::SwFrm( SwModify *pMod ) :
     bCompletePaint = bInfInvalid = sal_True;
 }
 
-
-ViewShell * SwFrm::GetShell() const
+bool SwFrm::KnowsFormat( const SwFmt& rFmt ) const
 {
-    const SwRootFrm *pRoot;
-    if ( 0 != (pRoot = FindRootFrm()) )
-        return pRoot->GetCurrShell();
-    return 0;
+    return GetRegisteredIn() == &rFmt;
 }
 
+void SwFrm::RegisterToFormat( SwFmt& rFmt )
+{
+    rFmt.Add( this );
+}
 
 void SwFrm::CheckDir( sal_uInt16 nDir, sal_Bool bVert, sal_Bool bOnlyBiDi, sal_Bool bBrowse )
 {
@@ -182,9 +186,12 @@ void SwSectionFrm::CheckDirection( sal_Bool bVert )
 {
     const SwFrmFmt* pFmt = GetFmt();
     if( pFmt )
+    {
+        const ViewShell *pSh = getRootFrm()->GetCurrShell();
+        const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         CheckDir(((SvxFrameDirectionItem&)pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
-                    bVert, sal_True,
-                    pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) );
+                    bVert, sal_True, bBrowseMode );
+    }
     else
         SwFrm::CheckDirection( bVert );
 }
@@ -193,9 +200,12 @@ void SwFlyFrm::CheckDirection( sal_Bool bVert )
 {
     const SwFrmFmt* pFmt = GetFmt();
     if( pFmt )
+    {
+        const ViewShell *pSh = getRootFrm()->GetCurrShell();
+        const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         CheckDir(((SvxFrameDirectionItem&)pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
-                    bVert, sal_False,
-                    pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) );
+                    bVert, sal_False, bBrowseMode );
+    }
     else
         SwFrm::CheckDirection( bVert );
 }
@@ -204,9 +214,12 @@ void SwTabFrm::CheckDirection( sal_Bool bVert )
 {
     const SwFrmFmt* pFmt = GetFmt();
     if( pFmt )
+    {
+        const ViewShell *pSh = getRootFrm()->GetCurrShell();
+        const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         CheckDir(((SvxFrameDirectionItem&)pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
-                    bVert, sal_True,
-                    pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) );
+                    bVert, sal_True, bBrowseMode );
+    }
     else
         SwFrm::CheckDirection( bVert );
 }
@@ -222,8 +235,9 @@ void SwCellFrm::CheckDirection( sal_Bool bVert )
     if( pFmt && SFX_ITEM_SET == pFmt->GetItemState( RES_FRAMEDIR, sal_True, &pItem ) )
     {
         const SvxFrameDirectionItem* pFrmDirItem = static_cast<const SvxFrameDirectionItem*>(pItem);
-        CheckDir( pFrmDirItem->GetValue(), bVert, sal_False,
-                  pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) );
+        const ViewShell *pSh = getRootFrm()->GetCurrShell();
+        const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+        CheckDir( pFrmDirItem->GetValue(), bVert, sal_False, bBrowseMode );
     }
     else
         SwFrm::CheckDirection( bVert );
@@ -231,17 +245,14 @@ void SwCellFrm::CheckDirection( sal_Bool bVert )
 
 void SwTxtFrm::CheckDirection( sal_Bool bVert )
 {
+    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
     CheckDir( GetTxtNode()->GetSwAttrSet().GetFrmDir().GetValue(), bVert,
-              sal_True,
-              GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) );
+              sal_True, bBrowseMode );
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::Modify()
-|*
-|*************************************************************************/
-void SwFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
+/*************************************************************************/
+void SwFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     sal_uInt8 nInvFlags = 0;
 
@@ -290,7 +301,7 @@ void SwFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
     }
 }
 
-void SwFrm::_UpdateAttrFrm( SfxPoolItem *pOld, SfxPoolItem *pNew,
+void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                          sal_uInt8 &rInvFlags )
 {
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
@@ -970,7 +981,7 @@ void SwCntntFrm::Cut()
         //er die Retouche uebernehmen.
         //Ausserdem kann eine Leerseite entstanden sein.
         else
-        {   SwRootFrm *pRoot = FindRootFrm();
+        {   SwRootFrm *pRoot = getRootFrm();
             if ( pRoot )
             {
                 pRoot->SetSuperfluous();
@@ -1365,7 +1376,8 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
     if ( !nDiff || !GetUpper()->IsFtnBossFrm() ) // nur innerhalb von Seiten/Spalten
         return 0L;
 
-    sal_Bool bBrowse = GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
     //Der (Page)Body veraendert sich nur im BrowseMode, aber nicht wenn er
     //Spalten enthaelt.
@@ -1379,16 +1391,16 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
     long nBrowseAdd = 0;
     if ( bBrowse && GetUpper()->IsPageFrm() ) // nur (Page)BodyFrms
     {
-        ViewShell *pSh = GetShell();
+        ViewShell *pViewShell = getRootFrm()->GetCurrShell();
         SwLayoutFrm *pUp = GetUpper();
         long nChg;
         const long nUpPrtBottom = pUp->Frm().Height() -
                                   pUp->Prt().Height() - pUp->Prt().Top();
         SwRect aInva( pUp->Frm() );
-        if ( pSh )
+        if ( pViewShell )
         {
-            aInva.Pos().X() = pSh->VisArea().Left();
-            aInva.Width( pSh->VisArea().Width() );
+            aInva.Pos().X() = pViewShell->VisArea().Left();
+            aInva.Width( pViewShell->VisArea().Width() );
         }
         if ( nDiff > 0 )
         {
@@ -1398,7 +1410,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
             if ( !IsBodyFrm() )
             {
                 SetCompletePaint();
-                if ( !pSh || pSh->VisArea().Height() >= pUp->Frm().Height() )
+                if ( !pViewShell || pViewShell->VisArea().Height() >= pUp->Frm().Height() )
                 {
                     //Ersteinmal den Body verkleinern. Der waechst dann schon
                     //wieder.
@@ -1428,12 +1440,12 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
             //mindestens so gross wie die VisArea.
             nChg = nDiff;
             long nInvaAdd = 0;
-            if ( pSh && !pUp->GetPrev() &&
-                 pUp->Frm().Height() + nDiff < pSh->VisArea().Height() )
+            if ( pViewShell && !pUp->GetPrev() &&
+                 pUp->Frm().Height() + nDiff < pViewShell->VisArea().Height() )
             {
                 //Das heisst aber wiederum trotzdem, das wir geeignet invalidieren
                 //muessen.
-                nChg = pSh->VisArea().Height() - pUp->Frm().Height();
+                nChg = pViewShell->VisArea().Height() - pUp->Frm().Height();
                 nInvaAdd = -(nDiff - nChg);
             }
 
@@ -1456,16 +1468,16 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
         if ( !bTst )
         {
             //Unabhaengig von nChg
-            if ( pSh && aInva.HasArea() && pUp->GetUpper() )
-                pSh->InvalidateWindows( aInva );
+            if ( pViewShell && aInva.HasArea() && pUp->GetUpper() )
+                pViewShell->InvalidateWindows( aInva );
         }
         if ( !bTst && nChg )
         {
             const SwRect aOldRect( pUp->Frm() );
             pUp->Frm().SSize().Height() += nChg;
             pUp->Prt().SSize().Height() += nChg;
-            if ( pSh )
-                pSh->Imp()->SetFirstVisPageInvalid();
+            if ( pViewShell )
+                pViewShell->Imp()->SetFirstVisPageInvalid();
 
             if ( GetNext() )
                 GetNext()->_InvalidatePos();
@@ -1473,7 +1485,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
             //Ggf. noch ein Repaint ausloesen.
             const SvxGraphicPosition ePos = pUp->GetFmt()->GetBackground().GetGraphicPos();
             if ( ePos != GPOS_NONE && ePos != GPOS_TILED )
-                pSh->InvalidateWindows( pUp->Frm() );
+                pViewShell->InvalidateWindows( pUp->Frm() );
 
             if ( pUp->GetUpper() )
             {
@@ -1855,7 +1867,8 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
          nDist > (LONG_MAX - nFrmHeight ) )
         nDist = LONG_MAX - nFrmHeight;
 
-    const sal_Bool bBrowse = GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
     const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
     if( !(GetUpper()->GetType() & nTmpType) && GetUpper()->HasFixSize() )
     {
@@ -2077,7 +2090,7 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 |*    SwCntntFrm::Modify()
 |*
 |*************************************************************************/
-void SwCntntFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
+void SwCntntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     sal_uInt8 nInvFlags = 0;
 
@@ -2150,7 +2163,7 @@ void SwCntntFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
     }
 }
 
-void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
+void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
                               sal_uInt8 &rInvFlags,
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
@@ -2306,8 +2319,8 @@ void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
 |*  SwLayoutFrm::SwLayoutFrm()
 |*
 |*************************************************************************/
-SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt ):
-    SwFrm( pFmt ),
+SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt, SwFrm* pSib ):
+    SwFrm( pFmt, pSib ),
     pLower( 0 )
 {
     const SwFmtFrmSize &rFmtSize = pFmt->GetFrmSize();
@@ -2367,7 +2380,8 @@ SwTwips SwLayoutFrm::InnerHeight() const
 |*************************************************************************/
 SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
-    const sal_Bool bBrowse = GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
     const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
     if( !(GetType() & nTmpType) && HasFixSize() )
         return 0;
@@ -2515,7 +2529,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 
     if( bMoveAccFrm && IsAccessibleFrm() )
     {
-        SwRootFrm *pRootFrm = FindRootFrm();
+        SwRootFrm *pRootFrm = getRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
             pRootFrm->GetCurrShell() )
         {
@@ -2532,7 +2546,8 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 |*************************************************************************/
 SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
-    const sal_Bool bBrowse = GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
     const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
     if( !(GetType() & nTmpType) && HasFixSize() )
         return 0;
@@ -2633,7 +2648,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 
     if( bMoveAccFrm && IsAccessibleFrm() )
     {
-        SwRootFrm *pRootFrm = FindRootFrm();
+        SwRootFrm *pRootFrm = getRootFrm();
         if( pRootFrm && pRootFrm->IsAnyShellAccessible() &&
             pRootFrm->GetCurrShell() )
         {
@@ -3279,10 +3294,9 @@ long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, sal_Bool ) const
     {
         const SwFrm *pRel = GetUpper();
         long nRel = LONG_MAX;
-        const ViewShell *pSh = GetShell();
-        if ( pRel->IsPageBodyFrm() &&
-             GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
-             pSh && pSh->VisArea().Width())
+        const ViewShell *pSh = getRootFrm()->GetCurrShell();
+        const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+        if( pRel->IsPageBodyFrm() && pSh && bBrowseMode && pSh->VisArea().Width() )
         {
             nRel = pSh->GetBrowseWidth();
             long nDiff = nRel - pRel->Prt().Width();
@@ -3383,7 +3397,8 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
 
     sal_Bool bEnd = sal_False;
     sal_Bool bBackLock = sal_False;
-    SwViewImp *pImp = GetShell() ? GetShell()->Imp() : 0;
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewImp *pImp = pSh ? pSh->Imp() : 0;
     {
         // Zugrunde liegender Algorithmus
         // Es wird versucht, eine optimale Hoehe fuer die Spalten zu finden.
@@ -3895,7 +3910,7 @@ void SwRootFrm::InvalidateAllCntnt( sal_uInt8 nInv )
 
     if( nInv & INV_PRTAREA )
     {
-        ViewShell *pSh  = GetShell();
+        ViewShell *pSh  = getRootFrm()->GetCurrShell();
         if( pSh )
             pSh->InvalidateWindows( Frm() );
     }

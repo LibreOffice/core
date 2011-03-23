@@ -49,7 +49,7 @@
 #include <expfld.hxx>
 #include <txtatr.hxx>
 #include <unofldmid.h>
-
+#include <switerator.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star;
@@ -163,8 +163,8 @@ bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             if( sTmp != sColumn )
             {
                 sColumn = sTmp;
-                SwClientIter aIter( *this );
-                SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+                SwIterator<SwFmtFld,SwFieldType> aIter( *this );
+                SwFmtFld* pFld = aIter.First();
                 while(pFld)
                 {
                     // Feld im Undo?
@@ -175,7 +175,7 @@ bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
                         pDBField->ClearInitialized();
                         pDBField->InitContent();
                      }
-                    pFld = (SwFmtFld*)aIter.Next();
+                    pFld = aIter.Next();
                 }
             }
         }
@@ -448,8 +448,8 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         //invalidate text node
         if(GetTyp())
         {
-            SwClientIter aIter( *GetTyp() );
-            SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+            SwIterator<SwFmtFld,SwFieldType> aIter( *GetTyp() );
+            SwFmtFld* pFld = aIter.First();
             while(pFld)
             {
                 SwTxtFld *pTxtFld = pFld->GetTxtFld();
@@ -459,7 +459,7 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
                     pTxtFld->NotifyContentChange(*pFld);
                     break;
                 }
-                pFld = (SwFmtFld*)aIter.Next();
+                pFld = aIter.Next();
             }
         }
     }
@@ -922,7 +922,6 @@ String SwDBSetNumberField::Expand() const
         return aEmptyStr;
     else
         return FormatNumber((sal_uInt16)nNumber, GetFormat());
-    //return(nNumber == 0 ? aEmptyStr : FormatNumber(nNumber, GetFormat()));
 }
 
 //------------------------------------------------------------------------------

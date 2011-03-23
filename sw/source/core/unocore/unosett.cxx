@@ -520,7 +520,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 case  WID_PAGE_STYLE :
                 {
                     String aString;
-                    if( rFtnInfo.GetPageDescDep()->GetRegisteredIn() )
+                    if( rFtnInfo.KnowsPageDesc() )
                     {
                         SwStyleNameMapper::FillProgName(
                                 rFtnInfo.GetPageDesc( *pDoc )->GetName(),
@@ -767,7 +767,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 case  WID_PAGE_STYLE :
                 {
                     String aString;
-                    if( rEndInfo.GetPageDescDep()->GetRegisteredIn() )
+                    if( rEndInfo.KnowsPageDesc() )
                     {
                         SwStyleNameMapper::FillProgName(
                             rEndInfo.GetPageDesc( *pDoc )->GetName(),
@@ -1021,7 +1021,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
                     String aString;
                     // return empty string if no char format is set
                     // otherwise it would be created here
-                    if(rInfo.GetRegisteredIn())
+                    if(rInfo.HasCharFormat())
                     {
                         SwStyleNameMapper::FillProgName(
                                     rInfo.GetCharFmt(*pDoc)->GetName(),
@@ -2288,7 +2288,7 @@ void SwXNumberingRules::setName(const OUString& /*rName*/) throw( RuntimeExcepti
     throw aExcept;
 }
 
-void SwXNumberingRules::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXNumberingRules::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())

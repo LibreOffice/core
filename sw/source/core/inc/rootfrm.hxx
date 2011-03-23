@@ -167,6 +167,11 @@ public:
     //MasterObjekte aus der Page entfernen (von den Ctoren gerufen).
     static void RemoveMasterObjs( SdrPage *pPg );
 
+    void AllCheckPageDescs() const;//swmod 080226
+    void AllInvalidateAutoCompleteWords() const;//swmod 080305
+    void AllAddPaintRect() const;
+    void AllRemoveFtns() ;//swmod 080305
+    void AllInvalidateSmartTagsOrSpelling(sal_Bool bSmartTags) const;//swmod 080307
     //Virtuelles Device ausgeben (z.B. wenn Animationen ins Spiel kommen)
     static sal_Bool FlushVout();
     //Clipping sparen, wenn im Vout eh genau das Cliprechteck ausgegeben wird
@@ -174,6 +179,7 @@ public:
 
     SwRootFrm( SwFrmFmt*, ViewShell* );
     ~SwRootFrm();
+    void Init(SwFrmFmt*);
 
     ViewShell *GetCurrShell() const { return pCurrShell; }
     void DeRegisterShell( ViewShell *pSh );

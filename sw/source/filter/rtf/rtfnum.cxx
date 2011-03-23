@@ -673,7 +673,7 @@ void SwRTFParser::RemoveUnusedNumRule( SwNumRule* pRule )
             SwCharFmt* pCFmt = rNFmt.GetCharFmt();
             if( pCFmt )
             {
-                pCFmt->Remove( &rNFmt );
+                rNFmt.ForgetCharFmt();
                 if( !pCFmt->GetDepends() )
                     pDoc->DelCharFmt( pCFmt );
             }

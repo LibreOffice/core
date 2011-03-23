@@ -44,6 +44,7 @@
 #include <vector>
 #include <set>
 
+class SfxHint;
 class SwNumRule;
 class SwNodeNum;
 class SwList;
@@ -211,6 +212,10 @@ public:
     //
     // End: Data collected during idle time
     //
+protected:
+    // fuers Umhaengen der TxtFmtCollections (Outline-Nummerierung!!)
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+    virtual void SwClientNotify( const SwModify&, const SfxHint& );
 
 public:
     using SwCntntNode::GetAttr;
@@ -333,7 +338,7 @@ public:
                     const ::com::sun::star::uno::Sequence<sal_Int32>& rOffsets );
 
     // Virtual methods from CntntNode.
-    virtual SwCntntFrm *MakeFrm();
+    virtual SwCntntFrm *MakeFrm( SwFrm* );
     virtual SwCntntNode *SplitCntntNode( const SwPosition & );
     virtual SwCntntNode *JoinNext();
     virtual SwCntntNode *JoinPrev();
@@ -740,9 +745,6 @@ public:
     bool IsHidden() const;
 
     TYPEINFO(); // fuer rtti
-
-    // For re-arranging TxtFmtCollections (outline-numbering!!).
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
     // override SwIndexReg
     virtual void Update( SwIndex const & rPos, const xub_StrLen nChangeLen,

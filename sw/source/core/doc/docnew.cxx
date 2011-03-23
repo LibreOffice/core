@@ -229,7 +229,7 @@ SwDoc::SwDoc()
     pGrfFmtCollTbl( new SwGrfFmtColls() ),
     pTOXTypes( new SwTOXTypes() ),
     pDefTOXBases( new SwDefTOXBase_Impl() ),
-    pLayout( 0 ),                   // Rootframe des spezifischen Layouts.
+    pCurrentView( 0 ),  //swmod 071225
     pDrawModel( 0 ),
     pUpdtFlds( new SwDocUpdtFld() ),
     pFldTypes( new SwFldTypes() ),
@@ -278,6 +278,7 @@ SwDoc::SwDoc()
     mbClipBoard( false ),
     mbColumnSelection( false ),
     mbProtectForm(false), // i#78591#
+    mbLastBrowseMode( false ),
     n32DummyCompatabilityOptions1(0),
     n32DummyCompatabilityOptions2(0),
     mbStartIdleTimer(sal_False)
@@ -292,7 +293,6 @@ SwDoc::SwDoc()
     mbUpdateExpFld =
     mbNewDoc =
     mbCopyIsMove =
-    mbBrowseMode =
     mbInReading =
     mbInXMLImport =
     mbUpdateTOX =
@@ -492,8 +492,6 @@ SwDoc::~SwDoc()
 
     mbDtor = sal_True;
 
-    DELETEZ( pLayout );
-
     delete pRedlineTbl;
     delete pUnoCrsrTbl;
     delete pAutoFmtRedlnComment;
@@ -572,10 +570,8 @@ SwDoc::~SwDoc()
 
     // Delete fuer Collections
     // damit die Abhaengigen wech sind
-    SwTxtFmtColl *pFtnColl = pFtnInfo->GetFtnTxtColl();
-    if ( pFtnColl ) pFtnColl->Remove(pFtnInfo);
-    pFtnColl = pEndNoteInfo->GetFtnTxtColl();
-    if ( pFtnColl ) pFtnColl->Remove(pEndNoteInfo);
+    pFtnInfo->ReleaseCollection();
+    pEndNoteInfo->ReleaseCollection();
 
     OSL_ENSURE( pDfltTxtFmtColl == (*pTxtFmtCollTbl)[0],
             "Default-Text-Collection muss immer am Anfang stehen" );
@@ -786,7 +782,7 @@ void SwDoc::ClearDoc()
     // den ersten immer wieder neu anlegen (ohne Attribute/Vorlagen/...)
     SwTxtNode* pFirstNd = GetNodes().MakeTxtNode( aSttIdx, pDfltTxtFmtColl );
 
-    if( pLayout )
+    if( pCurrentView )  //swmod 071029//swmod 071225
     {
         // set the layout to the dummy pagedesc
         pFirstNd->SetAttr( SwFmtPageDesc( pDummyPgDsc ));
@@ -819,10 +815,8 @@ void SwDoc::ClearDoc()
 
     // Delete fuer Collections
     // damit die Abhaengigen wech sind
-    SwTxtFmtColl* pFtnColl = pFtnInfo->GetFtnTxtColl();
-    if( pFtnColl ) pFtnColl->Remove( pFtnInfo );
-    pFtnColl = pEndNoteInfo->GetFtnTxtColl();
-    if( pFtnColl ) pFtnColl->Remove( pEndNoteInfo );
+    pFtnInfo->ReleaseCollection();
+    pEndNoteInfo->ReleaseCollection();
 
     // opt.: ausgehend davon, das Standard als 2. im Array
     // steht, sollte das als letztes geloescht werden, damit
@@ -833,14 +827,14 @@ void SwDoc::ClearDoc()
     pGrfFmtCollTbl->DeleteAndDestroy( 1, pGrfFmtCollTbl->Count()-1 );
     pCharFmtTbl->DeleteAndDestroy( 1, pCharFmtTbl->Count()-1 );
 
-    if( pLayout )
+    if( pCurrentView )
     {
         // search the FrameFormat of the root frm. This is not allowed to delete
-        pFrmFmtTbl->Remove( pFrmFmtTbl->GetPos( pLayout->GetFmt() ) );
+        pFrmFmtTbl->Remove( pFrmFmtTbl->GetPos( pCurrentView->GetLayout()->GetFmt() ) );
         pFrmFmtTbl->DeleteAndDestroy( 1, pFrmFmtTbl->Count()-1 );
-        pFrmFmtTbl->Insert( pLayout->GetFmt(), pFrmFmtTbl->Count() );
+        pFrmFmtTbl->Insert( pCurrentView->GetLayout()->GetFmt(), pFrmFmtTbl->Count() );
     }
-    else
+    else    //swmod 071029//swmod 071225
         pFrmFmtTbl->DeleteAndDestroy( 1, pFrmFmtTbl->Count()-1 );
 
     xForbiddenCharsTable.clear();
@@ -938,7 +932,7 @@ void SwDoc::UpdateLinks( sal_Bool bUI )
             SfxMedium* pMedium = GetDocShell()->GetMedium();
             SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
             Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
-            if( GetRootFrm() && !GetEditShell( &pVSh ) && !pVSh )
+            if( GetCurrentViewShell() && !GetEditShell( &pVSh ) && !pVSh )  //swmod 071108//swmod 071225
             {
                 ViewShell aVSh( *this, 0, 0 );
 

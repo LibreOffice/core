@@ -154,7 +154,6 @@ public:
 
 class SW_DLLPUBLIC SwSection
     : public SwClient
-    , private ::boost::noncopyable
 {
     // damit beim Anlegen/Loeschen von Frames das Flag richtig gepflegt wird!
     friend class SwSectionNode;
@@ -169,6 +168,9 @@ private:
 
     SW_DLLPRIVATE void ImplSetHiddenFlag(
             bool const bHidden, bool const bCondition);
+
+protected:
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 
 public:
     TYPEINFO();     // rtti
@@ -186,10 +188,8 @@ public:
     SectionType GetType() const             { return m_Data.GetType(); }
     void SetType(SectionType const eType)   { return m_Data.SetType(eType); }
 
-    SwSectionFmt* GetFmt()          { return (SwSectionFmt*)pRegisteredIn; }
-    SwSectionFmt* GetFmt() const    { return (SwSectionFmt*)pRegisteredIn; }
-
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
+    SwSectionFmt* GetFmt()          { return (SwSectionFmt*)GetRegisteredIn(); }
+    SwSectionFmt* GetFmt() const    { return (SwSectionFmt*)GetRegisteredIn(); }
 
     // setze die Hidden/Protected -> gesamten Baum updaten !
     // (Attribute/Flags werden gesetzt/erfragt)
@@ -287,6 +287,7 @@ class SW_DLLPUBLIC SwSectionFmt
 
 protected:
     SwSectionFmt( SwSectionFmt* pDrvdFrm, SwDoc *pDoc );
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 
 public:
     TYPEINFO();     //Bereits in Basisklasse Client drin.
@@ -298,7 +299,6 @@ public:
     //Erzeugt die Ansichten
     virtual void MakeFrms();
 
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
         // erfrage vom Format Informationen
     virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 

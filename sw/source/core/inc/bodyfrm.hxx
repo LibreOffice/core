@@ -42,7 +42,7 @@ protected:
     ~SwBodyFrm();
 #endif
 public:
-    SwBodyFrm( SwFrmFmt* );
+    SwBodyFrm( SwFrmFmt*, SwFrm* );
 
     virtual void Paint( const SwRect&, const SwPrintData *pPrintData = NULL ) const;
 

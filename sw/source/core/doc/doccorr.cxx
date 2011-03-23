@@ -44,8 +44,6 @@
 #include <swundo.hxx>
 #include <hints.hxx>
 
-/*  */
-
 /*
  * MACROS um ueber alle CrsrShells zu iterieren
  */
@@ -193,7 +191,7 @@ void PaMCorrAbs( const SwPaM& rRange,
             {
                 // the UNO cursor has left its section. We need to notify it!
                 SwMsgPoolItem aHint( RES_UNOCURSOR_LEAVES_SECTION );
-                pUnoCursor->Modify( &aHint, NULL );
+                pUnoCursor->ModifyNotification( &aHint, NULL );
             }
         }
     }
@@ -335,9 +333,9 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
 SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
 {
     // Layout und OLE-Shells sollten vorhanden sein!
-    if( pLayout && pLayout->GetCurrShell() )
+    if( pCurrentView )
     {
-        ViewShell *pSh = pLayout->GetCurrShell(), *pVSh = pSh;
+        ViewShell *pSh = pCurrentView, *pVSh = pSh;
         if( ppSh )
             *ppSh = pSh;
 
@@ -349,7 +347,7 @@ SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
         } while( pVSh != ( pSh = (ViewShell*)pSh->GetNext() ));
     }
     else if( ppSh )
-        *ppSh = 0;
+        *ppSh = 0;  //swmod 071029//swmod 071225
 
     return 0;
 }

@@ -49,6 +49,7 @@
 #include <editeng/langitem.hxx>
 #include <charatr.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <switerator.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
@@ -227,21 +228,19 @@ bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescen
     }
 
     // get text frame
-    SwClientIter aClientIter( (SwTxtNode&)*this );
-    SwClient* pLastFrm = aClientIter.GoStart();
-
-    while( pLastFrm )
+    SwIterator<SwTxtFrm,SwTxtNode> aIter( *this );
+    for( SwTxtFrm* pLastFrm = aIter.First(); pLastFrm; pLastFrm = aIter.Next() )
     {
         // Only (master-) text frames can have a drop cap.
-        if ( pLastFrm->ISA( SwTxtFrm ) && !((SwTxtFrm*)pLastFrm)->IsFollow() )
+        if ( !pLastFrm->IsFollow() )
         {
 
-            if( !((SwTxtFrm*)pLastFrm)->HasPara() )
-                ((SwTxtFrm*)pLastFrm)->GetFormatted();
+            if( !pLastFrm->HasPara() )
+                pLastFrm->GetFormatted();
 
-            if ( !((SwTxtFrm*)pLastFrm)->IsEmpty() )
+            if ( !pLastFrm->IsEmpty() )
             {
-                const SwParaPortion* pPara = ((SwTxtFrm*)pLastFrm)->GetPara();
+                const SwParaPortion* pPara = pLastFrm->GetPara();
                 OSL_ENSURE( pPara, "GetDropSize could not find the ParaPortion, I'll guess the drop cap size" );
 
                 if ( pPara )
@@ -264,7 +263,6 @@ bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescen
             }
             break;
         }
-        pLastFrm = ++aClientIter;
     }
 
     if (rFontHeight==0 && rDropHeight==0 && rDropDescent==0)

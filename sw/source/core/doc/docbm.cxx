@@ -1277,7 +1277,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
         if( pNode )
         {
 
-            SwFrm* pFrm = pNode->GetFrm();
+            SwFrm* pFrm = pNode->getLayoutFrm( pDoc->GetCurrentLayout() );
 #if OSL_DEBUG_LEVEL > 1
             static sal_Bool bViaDoc = sal_False;
             if( bViaDoc )
@@ -1481,7 +1481,7 @@ void _RestoreCntntIdx(SwDoc* pDoc,
                 {
                     SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
                     SfxPoolItem *pAnchor = (SfxPoolItem*)&pFrmFmt->GetAnchor();
-                    pFrmFmt->SwModify::Modify( pAnchor, pAnchor );
+                    pFrmFmt->NotifyClients( pAnchor, pAnchor );
                 }
                 break;
 

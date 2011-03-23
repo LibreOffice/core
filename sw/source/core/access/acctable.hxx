@@ -88,11 +88,11 @@ protected:
     // Is table data evailable?
     sal_Bool HasTableData() const { return (mpTableData != 0); }
 
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
 
     SwAccessibleTable( SwAccessibleMap* pInitMap, const SwTabFrm* pTableFrm );
-
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     //=====  XInterface  ======================================================
 
@@ -275,12 +275,11 @@ protected:
     {}
 
     virtual SwAccessibleTableData_Impl* CreateNewTableData();
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
 
     SwAccessibleTableColHeaders( SwAccessibleMap *pMap, const SwTabFrm *pTabFrm );
-
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     //=====  XInterface  ======================================================
 
