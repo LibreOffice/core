@@ -572,6 +572,7 @@ FreetypeManager::FreetypeManager()
         nDefaultPrioAutoHint  = pEnv[0] - '0';
 
     InitGammaTable();
+    vclFontFileList::get();
 }
 
 // -----------------------------------------------------------------------
