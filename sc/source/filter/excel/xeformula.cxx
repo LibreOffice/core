@@ -490,7 +490,7 @@ private:
     const SCsCOL        mnMaxScCol;     /// Maximum column index in Calc itself.
     const SCsROW        mnMaxScRow;     /// Maximum row index in Calc itself.
     const sal_uInt16    mnMaxColMask;   /// Mask to delete invalid bits in column fields.
-    const sal_uInt16    mnMaxRowMask;   /// Mask to delete invalid bits in row fields.
+    const sal_uInt32    mnMaxRowMask;   /// Mask to delete invalid bits in row fields.
 };
 
 // ----------------------------------------------------------------------------
@@ -504,7 +504,7 @@ XclExpFmlaCompImpl::XclExpFmlaCompImpl( const XclExpRoot& rRoot ) :
     mnMaxScCol( static_cast< SCsCOL >( rRoot.GetScMaxPos().Col() ) ),
     mnMaxScRow( static_cast< SCsROW >( rRoot.GetScMaxPos().Row() ) ),
     mnMaxColMask( static_cast< sal_uInt16 >( rRoot.GetXclMaxPos().Col() ) ),
-    mnMaxRowMask( static_cast< sal_uInt16 >( rRoot.GetXclMaxPos().Row() ) )
+    mnMaxRowMask( static_cast< sal_uInt32 >( rRoot.GetXclMaxPos().Row() ) )
 {
     // build the configuration map
     for( const XclExpCompConfig* pEntry = spConfigTable; pEntry != STATIC_TABLE_END( spConfigTable ); ++pEntry )
@@ -564,7 +564,8 @@ XclTokenArrayRef XclExpFmlaCompImpl::CreateSpecialRefFormula( sal_uInt8 nTokenId
 {
     Init( EXC_FMLATYPE_NAME );
     AppendOperandTokenId( nTokenId );
-    Append( rXclPos.mnRow );
+    //Bubli's row limit
+    Append( static_cast<sal_uInt16>(rXclPos.mnRow) );
     Append( rXclPos.mnCol );    // do not use AppendAddress(), we always need 16-bit column here
     return CreateTokenArray();
 }
@@ -1832,7 +1833,7 @@ void XclExpFmlaCompImpl::ConvertRefData(
         rXclPos.mnCol = static_cast< sal_uInt16 >( nXclRelCol ) & mnMaxColMask;
 
         // convert row index (2-step-cast ScsROW->sal_Int16->sal_uInt16 to get all bits correctly)
-        sal_Int16 nXclRelRow = static_cast< sal_Int16 >( rRefData.IsRowRel() ? rRefData.nRelRow : rRefData.nRow );
+        sal_Int16 nXclRelRow = static_cast< sal_Int32 >( rRefData.IsRowRel() ? rRefData.nRelRow : rRefData.nRow );
         rXclPos.mnRow = static_cast< sal_uInt32 >( nXclRelRow ) & mnMaxRowMask;
 
         // resolve relative tab index if possible
@@ -1849,11 +1850,10 @@ void XclExpFmlaCompImpl::ConvertRefData(
     }
     else
     {
-#if 0 // FIXME : doesn't build in xlsx
-        sal_uInt16& rnRelField = (meBiff <= EXC_BIFF5) ? rXclPos.mnRow : rXclPos.mnCol;
+        //FIXME <=EXC_BIFF5
+        sal_uInt16& rnRelField = rXclPos.mnCol;
         ::set_flag( rnRelField, EXC_TOK_REF_COLREL, rRefData.IsColRel() );
         ::set_flag( rnRelField, EXC_TOK_REF_ROWREL, rRefData.IsRowRel() );
-#endif
     }
 }
 
@@ -2236,7 +2236,8 @@ void XclExpFmlaCompImpl::Append( const String& rString )
 
 void XclExpFmlaCompImpl::AppendAddress( const XclAddress& rXclPos )
 {
-    Append( rXclPos.mnRow );
+    //Bubli's row limit
+    Append( static_cast<sal_uInt16>(rXclPos.mnRow) );
     if( meBiff <= EXC_BIFF5 )
         Append( static_cast< sal_uInt8 >( rXclPos.mnCol ) );
     else
@@ -2245,8 +2246,9 @@ void XclExpFmlaCompImpl::AppendAddress( const XclAddress& rXclPos )
 
 void XclExpFmlaCompImpl::AppendRange( const XclRange& rXclRange )
 {
-    Append( rXclRange.maFirst.mnRow );
-    Append( rXclRange.maLast.mnRow );
+    //Bubli's row limit
+    Append( static_cast<sal_uInt16>(rXclRange.maFirst.mnRow) );
+    Append( static_cast<sal_uInt16>(rXclRange.maLast.mnRow) );
     if( meBiff <= EXC_BIFF5 )
     {
         Append( static_cast< sal_uInt8 >( rXclRange.maFirst.mnCol ) );
