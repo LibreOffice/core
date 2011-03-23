@@ -29,8 +29,6 @@
 #ifndef DOM_NODE_HXX
 #define DOM_NODE_HXX
 
-#include <hash_map>
-
 #include <libxml/tree.h>
 
 #include <sal/types.h>
