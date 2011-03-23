@@ -60,14 +60,14 @@ using ::std::vector;
 
 // -----------------------------------------------------------------------
 
-ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc) :
+ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, ScDPCache* pCache) :
     ScDPTableData(pD),
     aQuery ( rDesc.GetQueryParam() ),
     pSpecial(NULL),
     bIgnoreEmptyRows( false ),
     bRepeatIfEmpty(false),
     mrDesc(rDesc),
-    aCacheTable(rDesc.CreateCache())
+    aCacheTable(pCache)
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
     pSpecial = new bool[nEntryCount];

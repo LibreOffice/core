@@ -417,11 +417,13 @@ ScDPTableData* ScDPObject::GetTableData()
                 OSL_FAIL("no source descriptor");
                 pSheetDesc = new ScSheetSourceDesc(pDoc);     // dummy defaults
             }
-            pData.reset(new ScSheetDPData(pDoc, *pSheetDesc));
+            ScDPCache* pCache = pSheetDesc->CreateCache();
+            if (pCache)
+                pData.reset(new ScSheetDPData(pDoc, *pSheetDesc, pCache));
         }
 
         // grouping (for cell or database data)
-        if ( pSaveData && pSaveData->GetExistingDimensionData() )
+        if (pData && pSaveData && pSaveData->GetExistingDimensionData())
         {
             shared_ptr<ScDPGroupTableData> pGroupData(new ScDPGroupTableData(pData, pDoc));
             pSaveData->GetExistingDimensionData()->WriteToData(*pGroupData);
