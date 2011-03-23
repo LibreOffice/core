@@ -120,15 +120,15 @@ public:
     OString prepareHelp();
     OString prepareVersion();
 
-    const OString& getProgramName()
+    const OString& getProgramName() const
         { return m_program; }
-    const OString& getTypeReg()
+    const OString& getTypeReg() const
         { return m_typeRegName; }
-    const OString& getKeyName()
+    const OString& getKeyName() const
         { return m_keyName; }
-    const Command getCommand()
+    Command getCommand() const
         { return m_command; }
-    bool verbose()
+    bool verbose() const
         { return m_bVerbose; }
 protected:
     OString     m_program;
