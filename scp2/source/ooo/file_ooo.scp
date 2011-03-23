@@ -108,7 +108,7 @@ File gid_File_Basic_Tutorials
     Name = "basicsrvtutorials.zip";
 End
 
-#ifdef UNX
+#if defined UNX && ! defined MACOSX
 
 File gid_File_Bin_Pagein
     BIN_FILE_BODY;
@@ -1286,7 +1286,7 @@ End
 
 #endif
 
-#ifdef UNX
+#if defined UNX && ! defined MACOSX
 
 File gid_File_Txt_Pagein_Calc
     TXT_FILE_BODY;
@@ -1295,20 +1295,12 @@ File gid_File_Txt_Pagein_Calc
     Name = "pagein-calc";
 End
 
-#endif
-
-#ifdef UNX
-
 File gid_File_Txt_Pagein_Common
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Styles = (PACKED);
     Name = "pagein-common";
 End
-
-#endif
-
-#ifdef UNX
 
 File gid_File_Txt_Pagein_Draw
     TXT_FILE_BODY;
@@ -1317,20 +1309,12 @@ File gid_File_Txt_Pagein_Draw
     Name = "pagein-draw";
 End
 
-#endif
-
-#ifdef UNX
-
 File gid_File_Txt_Pagein_Impress
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Styles = (PACKED);
     Name = "pagein-impress";
 End
-
-#endif
-
-#ifdef UNX
 
 File gid_File_Txt_Pagein_Writer
     TXT_FILE_BODY;

@@ -59,12 +59,8 @@ CC*=gcc
 # flags for C and C++ Compiler
 CFLAGS+=-fmessage-length=0 -c
 
-# flags to enable build with symbols; required for crashdump feature
-.IF "$(ENABLE_SYMBOLS)"=="SMALL"
-CFLAGSENABLESYMBOLS=-g1
-.ELSE
+# flags to enable build with symbols
 CFLAGSENABLESYMBOLS=-g
-.ENDIF
 
 # flags for the C++ Compiler
 CFLAGSCC= -pipe $(ARCH_FLAGS)

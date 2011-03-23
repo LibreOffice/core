@@ -60,6 +60,7 @@ gb_COMPILERDEFS := \
 	-D_CRT_NONSTDC_NO_DEPRECATE \
 	-D_CRT_SECURE_NO_DEPRECATE \
 	-D_MT \
+	-D_DLL \
 	-DBOOST_MEM_FN_ENABLE_CDECL \
 	-DCPPU_ENV=msci \
 	-DFULL_DESK \
@@ -73,6 +74,7 @@ gb_CFLAGS := \
 	-Gs \
 	-GS \
 	-Gy \
+	-MD \
 	-nologo \
 	-Wall \
 	-wd4005 \
@@ -120,6 +122,7 @@ gb_CXXFLAGS := \
 	-Gs \
 	-GS \
 	-Gy \
+	-MD \
 	-nologo \
 	-Wall \
 	-wd4005 \
@@ -162,10 +165,6 @@ gb_CXXFLAGS := \
 
 gb_STDLIBS := \
 	uwinapi \
-	kernel32 \
-	msvcrt \
-	msvcprt \
-	oldnames \
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -WX
@@ -186,7 +185,6 @@ gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
 gb_LinkTarget_LDFLAGS := \
 	-MACHINE:IX86 \
-	-NODEFAULTLIB \
 	-OPT:NOREF \
 	-SUBSYSTEM:CONSOLE \
 	-safeseh \

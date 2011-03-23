@@ -221,9 +221,6 @@ AC_ARG_ENABLE(symbols,
         [Include debugging symbols in output. WARNING - a complete build needs
          8 Gb of space and takes much longer (enables -g compiler flag).])
     [
-                          --enable-symbols=SMALL
-                                     sets the gcc -g1 setting which is smaller.
-
                           Enabling symbols disables the stripping of the solver
                           (--disable-strip-solver).
     ],
@@ -1647,13 +1644,8 @@ dnl whether to include symbols into final build.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to include symbols])
 if test -n "$enable_symbols" -a "$enable_symbols" != "no"; then
-    if test "$enable_symbols" = "small" -o "$enable_symbols" = "SMALL"; then
-       ENABLE_SYMBOLS="SMALL"
-       AC_MSG_RESULT([yes, small])
-    else
-       ENABLE_SYMBOLS="TRUE"
-       AC_MSG_RESULT([yes])
-    fi
+   ENABLE_SYMBOLS="TRUE"
+   AC_MSG_RESULT([yes])
 else
    ENABLE_SYMBOLS=
    AC_MSG_RESULT([no])

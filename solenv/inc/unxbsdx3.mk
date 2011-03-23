@@ -48,12 +48,8 @@ CFLAGSOPT=-Os -fno-strict-aliasing             # optimizing for products
 CFLAGSOPT=                                     # no optimizing for non products
 .ENDIF # "$(PRODUCT)"!=""
 
-# flags to enable build with symbols; required for crashdump feature
-.IF "$(ENABLE_SYMBOLS)"=="SMALL"
-CFLAGSENABLESYMBOLS=-g1
-.ELSE
+# flags to enable build with symbols
 CFLAGSENABLESYMBOLS=-g
-.ENDIF
 
 # flags for the C++ Compiler
 CFLAGSCC= -pipe $(ARCH_FLAGS)

@@ -74,13 +74,8 @@ CC+:=$(CFLAGS_SYSBASE)
 .ENDIF          # "$(SYSBASE)"!=""
 CFLAGS+=-fmessage-length=0 -c
 
-# flags to enable build with symbols; required for crashdump feature
-.IF "$(ENABLE_SYMBOLS)"=="SMALL"
-CFLAGSENABLESYMBOLS=-g1
-.ELSE
-CFLAGSENABLESYMBOLS=-g # was temporarily commented out, reenabled before Beta
-
-.ENDIF
+# flags to enable build with symbols
+CFLAGSENABLESYMBOLS=-g
 
 # flags for the C++ Compiler
 CFLAGSCC= -pipe $(ARCH_FLAGS)
