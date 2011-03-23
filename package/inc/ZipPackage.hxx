@@ -90,7 +90,6 @@ protected:
     FolderHash        m_aRecent;
     ::rtl::OUString   m_aURL;
 
-    bool              m_bStartKeyGenerationImported;
     sal_Int32         m_nStartKeyGenerationID;
     sal_Int32         m_nChecksumDigestID;
     sal_Int32         m_nCommonEncryptionID;
@@ -137,7 +136,7 @@ public:
     sal_Int32 GetKeyGenID() const { return m_nStartKeyGenerationID; }
     sal_Int32 GetEncAlgID() const { return m_nCommonEncryptionID; }
     sal_Int32 GetChecksumAlgID() const { return m_nChecksumDigestID; }
-    sal_Int32 GetDefaultDerivedKeySize() const { return m_nCommonEncryptionID == ::com::sun::star::xml::crypto::CipherID::AES_CBC ? 32 : 16; }
+    sal_Int32 GetDefaultDerivedKeySize() const { return m_nCommonEncryptionID == ::com::sun::star::xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 32 : 16; }
 
     SotMutexHolderRef GetSharedMutexRef() { return m_aMutexHolder; }
 

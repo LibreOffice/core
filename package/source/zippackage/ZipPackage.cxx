@@ -182,7 +182,6 @@ class DummyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
 
 ZipPackage::ZipPackage ( const uno::Reference < XMultiServiceFactory > &xNewFactory )
 : m_aMutexHolder( new SotMutexHolder )
-, m_bStartKeyGenerationImported( false )
 , m_nStartKeyGenerationID( xml::crypto::DigestID::SHA1 )
 , m_nChecksumDigestID( xml::crypto::DigestID::SHA1_1K )
 , m_nCommonEncryptionID( xml::crypto::CipherID::BLOWFISH_CFB_8 )
@@ -218,6 +217,8 @@ void ZipPackage::parseManifest()
     if ( m_nFormat == embed::StorageFormats::PACKAGE )
     {
         sal_Bool bManifestParsed = sal_False;
+        bool bStartKeyGenerationImported = false;
+        bool bDifferentStartKeyAlgorithm = false;
         const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
         if ( m_xRootFolder->hasByName( sMeta ) )
         {
@@ -333,11 +334,9 @@ void ZipPackage::parseManifest()
 
                                             *pDigestAlg >>= nDigestAlg;
                                             pStream->SetImportedChecksumAlgorithm( nDigestAlg );
-                                            m_nChecksumDigestID = nDigestAlg;
 
                                             *pEncryptionAlg >>= nEncryptionAlg;
                                             pStream->SetImportedEncryptionAlgorithm( nEncryptionAlg );
-                                            m_nCommonEncryptionID = nEncryptionAlg;
 
                                             if ( pDerivedKeySize )
                                                 *pDerivedKeySize >>= nDerivedKeySize;
@@ -345,18 +344,19 @@ void ZipPackage::parseManifest()
 
                                             if ( pStartKeyAlg )
                                                 *pStartKeyAlg >>= nStartKeyAlg;
-                                            if ( nStartKeyAlg != m_nStartKeyGenerationID && m_bStartKeyGenerationImported )
-                                                throw ZipIOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "More than one Start Key Generation algorithm is specified!" ) ), uno::Reference< uno::XInterface >() );
-                                            m_nStartKeyGenerationID = nStartKeyAlg;
-                                            m_bStartKeyGenerationImported = true;
-
+                                            pStream->SetImportedStartKeyAlgorithm( nStartKeyAlg );
 
                                             pStream->SetToBeCompressed ( sal_True );
                                             pStream->SetToBeEncrypted ( sal_True );
                                             pStream->SetIsEncrypted ( sal_True );
                                             if ( !m_bHasEncryptedEntries
                                               && pStream->getName().equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) ) ) )
+                                            {
                                                 m_bHasEncryptedEntries = sal_True;
+                                                m_nStartKeyGenerationID = nStartKeyAlg;
+                                                m_nChecksumDigestID = nDigestAlg;
+                                                m_nCommonEncryptionID = nEncryptionAlg;
+                                            }
                                         }
                                         else
                                             m_bHasNonEncryptedEntries = sal_True;
@@ -435,20 +435,30 @@ void ZipPackage::parseManifest()
 
         m_bInconsistent = m_pRootFolder->LookForUnexpectedODF12Streams( ::rtl::OUString() );
 
-        sal_Bool bODF12AndOlder = ( m_pRootFolder->GetVersion().compareTo( ODFVER_012_TEXT ) >= 0 );
-        if ( !m_bForceRecovery && bODF12AndOlder && m_bInconsistent )
+        sal_Bool bODF12AndNewer = ( m_pRootFolder->GetVersion().compareTo( ODFVER_012_TEXT ) >= 0 );
+        if ( !m_bForceRecovery && bODF12AndNewer )
         {
-            // this is an ODF1.2 document that contains streams not referred in the manifest.xml;
-            // in case of ODF1.2 documents without version in manifest.xml the property IsInconsistent
-            // should be checked later
-            throw ZipIOException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "there are streams not referred in manifest.xml\n" ) ),
-                uno::Reference< uno::XInterface >() );
+            if ( m_bInconsistent )
+            {
+                // this is an ODF1.2 document that contains streams not referred in the manifest.xml;
+                // in case of ODF1.2 documents without version in manifest.xml the property IsInconsistent
+                // should be checked later
+                throw ZipIOException(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "there are streams not referred in manifest.xml\n" ) ),
+                    uno::Reference< uno::XInterface >() );
+            }
+            else if ( bDifferentStartKeyAlgorithm )
+            {
+                // all the streams should be encrypted with the same StartKey in ODF1.2
+                // TODO/LATER: in future the exception should be thrown
+                OSL_ENSURE( false, "ODF1.2 contains different StartKey Algorithms" );
+                // throw ZipIOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "More than one Start Key Generation algorithm is specified!" ) ), uno::Reference< uno::XInterface >() );
+            }
         }
 
         // in case it is a correct ODF1.2 document, the version must be set
         // and the META-INF folder is reserved for package format
-        if ( bODF12AndOlder )
+        if ( bODF12AndNewer )
             m_xRootFolder->removeByName( sMeta );
     }
 }
@@ -1017,7 +1027,6 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     }
     catch ( ::com::sun::star::io::IOException & r )
     {
-        VOS_ENSURE( 0, "Error adding mimetype to the ZipOutputStream" );
         throw WrappedTargetException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Error adding mimetype to the ZipOutputStream!" ) ),
                 static_cast < OWeakObject * > ( this ),
@@ -1045,11 +1054,13 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< Sequence
 
         // Convert vector into a Sequence
         Sequence < Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
-        Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
+        sal_Int32 nInd = 0;
         for ( vector < Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
              aIter != aEnd;
-             aIter++, pSequence++ )
-            *pSequence= ( *aIter );
+             aIter++, nInd++ )
+        {
+            aManifestSequence[nInd] = ( *aIter );
+        }
         xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
 
         sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
@@ -1233,7 +1244,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
 
         if ( m_nFormat == embed::StorageFormats::PACKAGE )
         {
-            Sequence < PropertyValue > aPropSeq ( PKG_SIZE_NOENCR_MNFST );
+            Sequence < PropertyValue > aPropSeq( PKG_SIZE_NOENCR_MNFST );
             aPropSeq [PKG_MNFST_MEDIATYPE].Name = sMediaType;
             aPropSeq [PKG_MNFST_MEDIATYPE].Value <<= m_pRootFolder->GetMediaType();
             aPropSeq [PKG_MNFST_VERSION].Name = sVersion;
@@ -1779,7 +1790,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
             {
                 sal_Int32 nID = 0;
                 if ( !( aAlgorithms[nInd].Value >>= nID )
-                  || ( nID != xml::crypto::CipherID::AES_CBC && nID != xml::crypto::CipherID::BLOWFISH_CFB_8 ) )
+                  || ( nID != xml::crypto::CipherID::AES_CBC_W3C_PADDING && nID != xml::crypto::CipherID::BLOWFISH_CFB_8 ) )
                     throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected start key generation algorithm is provided!" ) ), uno::Reference< uno::XInterface >(), 2 );
 
                 m_nCommonEncryptionID = nID;

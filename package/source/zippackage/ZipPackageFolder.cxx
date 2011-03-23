@@ -358,7 +358,7 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
         const ::rtl::OUString &rShortName = (*aCI).first;
         const ContentInfo &rInfo = *(*aCI).second;
 
-        uno::Sequence < PropertyValue > aPropSet (PKG_SIZE_NOENCR_MNFST);
+        uno::Sequence < PropertyValue > aPropSet( PKG_SIZE_NOENCR_MNFST );
 
         if ( rInfo.bFolder )
             pFolder = rInfo.pFolder;
@@ -510,9 +510,10 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
                 {
                     if ( bToBeEncrypted && !bTransportOwnEncrStreamAsRaw )
                     {
-                        uno::Sequence < sal_Int8 > aSalt ( 16 ), aVector ( 8 );
+                        sal_Int32 nVectorLen = pStream->GetBlockSize();
+                        uno::Sequence < sal_Int8 > aSalt ( 16 ), aVector ( nVectorLen );
                         rtl_random_getBytes ( rRandomPool, aSalt.getArray(), 16 );
-                        rtl_random_getBytes ( rRandomPool, aVector.getArray(), 8 );
+                        rtl_random_getBytes ( rRandomPool, aVector.getArray(), nVectorLen );
                         sal_Int32 nIterationCount = 1024;
 
                         if ( !pStream->HasOwnKey() )
@@ -525,7 +526,7 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
 
                     // last property is digest, which is inserted later if we didn't have
                     // a magic header
-                    aPropSet.realloc(PKG_SIZE_ENCR_MNFST);
+                    aPropSet.realloc( PKG_SIZE_ENCR_MNFST );
 
                     aPropSet[PKG_MNFST_INIVECTOR].Name = sInitialisationVectorProperty;
                     aPropSet[PKG_MNFST_INIVECTOR].Value <<= pStream->getInitialisationVector();
@@ -550,7 +551,7 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
                             aPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
                             aPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
                             aPropSet[PKG_MNFST_STARTALG].Value <<= pStream->GetKeyGenID();
-                            aPropSet[PKG_MNFST_DIGESTALG].Name = sDigestProperty;
+                            aPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
                             aPropSet[PKG_MNFST_DIGESTALG].Value <<= xEncData->m_nCheckAlg;
                             aPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
                             aPropSet[PKG_MNFST_DERKEYSIZE].Value <<= xEncData->m_nDerivedKeySize;
@@ -660,12 +661,10 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
                 }
                 catch ( ZipException& )
                 {
-                    VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                     bWritingFailed = sal_True;
                 }
                 catch ( IOException& )
                 {
-                    VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                     bWritingFailed = sal_True;
                 }
 
@@ -680,7 +679,7 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
                         aPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
                         aPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
                         aPropSet[PKG_MNFST_STARTALG].Value <<= pStream->GetKeyGenID();
-                        aPropSet[PKG_MNFST_DIGESTALG].Name = sDigestProperty;
+                        aPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
                         aPropSet[PKG_MNFST_DIGESTALG].Value <<= xEncData->m_nCheckAlg;
                         aPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
                         aPropSet[PKG_MNFST_DERKEYSIZE].Value <<= xEncData->m_nDerivedKeySize;

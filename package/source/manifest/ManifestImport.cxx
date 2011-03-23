@@ -53,6 +53,7 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
 , sManifestElement      ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_MANIFEST ) )
 , sEncryptionDataElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ENCRYPTION_DATA ) )
 , sAlgorithmElement ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ALGORITHM ) )
+, sStartKeyAlgElement   ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_START_KEY_GENERATION ) )
 , sKeyDerivationElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_KEY_DERIVATION ) )
 
 , sCdataAttribute               ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CDATA ) )
@@ -65,6 +66,7 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
 , sIterationCountAttribute      ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ITERATION_COUNT ) )
 , sKeySizeAttribute             ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_SIZE ) )
 , sAlgorithmNameAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ALGORITHM_NAME ) )
+, sStartKeyAlgNameAttribute     ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_START_KEY_GENERATION_NAME ) )
 , sKeyDerivationNameAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_DERIVATION_NAME ) )
 , sChecksumAttribute            ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM ) )
 , sChecksumTypeAttribute        ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM_TYPE ) )
@@ -207,22 +209,22 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                     else if ( aString.equals( sAES256_URL ) )
                     {
                         aSequence[nNumProperty].Name = sEncryptionAlgProperty;
-                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC;
-                        OSL_ENSURE( nDerivedKeySize && nDerivedKeySize != 32, "Unexpected derived key length!" );
+                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+                        OSL_ENSURE( !nDerivedKeySize || nDerivedKeySize == 32, "Unexpected derived key length!" );
                         nDerivedKeySize = 32;
                     }
                     else if ( aString.equals( sAES192_URL ) )
                     {
                         aSequence[nNumProperty].Name = sEncryptionAlgProperty;
-                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC;
-                        OSL_ENSURE( nDerivedKeySize && nDerivedKeySize != 24, "Unexpected derived key length!" );
+                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+                        OSL_ENSURE( !nDerivedKeySize || nDerivedKeySize == 24, "Unexpected derived key length!" );
                         nDerivedKeySize = 24;
                     }
                     else if ( aString.equals( sAES128_URL ) )
                     {
                         aSequence[nNumProperty].Name = sEncryptionAlgProperty;
-                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC;
-                        OSL_ENSURE( nDerivedKeySize && nDerivedKeySize != 16, "Unexpected derived key length!" );
+                        aSequence[nNumProperty++].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
+                        OSL_ENSURE( !nDerivedKeySize || nDerivedKeySize == 16, "Unexpected derived key length!" );
                         nDerivedKeySize = 16;
                     }
                     else
@@ -264,7 +266,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                         }
                         else if ( !nDerivedKeySize )
                             nDerivedKeySize = 16;
-                        else
+                        else if ( nDerivedKeySize != 16 )
                             OSL_ENSURE( sal_False, "Default derived key length differs from the expected one!" );
 
                         aSequence[nNumProperty].Name = sDerivedKeySizeProperty;
@@ -273,6 +275,22 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                     else
                         bIgnoreEncryptData = sal_True;
                 }
+            }
+            else if ( aConvertedName == sStartKeyAlgElement )
+            {
+                OUString aString = aConvertedAttribs[sStartKeyAlgNameAttribute];
+                if ( aString.equals( sSHA256_URL ) )
+                {
+                    aSequence[nNumProperty].Name = sStartKeyAlgProperty;
+                    aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA256;
+                }
+                else if ( aString.equals( sSHA1_Name ) || aString.equals( sSHA1_URL ) )
+                {
+                    aSequence[nNumProperty].Name = sStartKeyAlgProperty;
+                    aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA1;
+                }
+                else
+                    bIgnoreEncryptData = sal_True;
             }
         }
     }

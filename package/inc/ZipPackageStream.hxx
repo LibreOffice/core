@@ -64,6 +64,7 @@ protected:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > m_aStorageEncryptionKeys;
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aEncryptionKey;
 
+    sal_Int32 m_nImportedStartKeyAlgorithm;
     sal_Int32 m_nImportedEncryptionAlgorithm;
     sal_Int32 m_nImportedChecksumAlgorithm;
     sal_Int32 m_nImportedDerivedKeySize;
@@ -80,7 +81,7 @@ protected:
 
     bool m_bUseWinEncoding;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& GetOwnSeekStream();
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetOwnSeekStream();
 
 public:
     sal_Bool HasOwnKey () const  { return bHaveOwnKey;}
@@ -99,11 +100,11 @@ public:
 
     sal_Int32 GetKeyGenID();
 
-    const com::sun::star::uno::Sequence < sal_Int8 >& getInitialisationVector () const
+    const com::sun::star::uno::Sequence < sal_Int8 > getInitialisationVector () const
     { return m_xBaseEncryptionData->m_aInitVector;}
-    const com::sun::star::uno::Sequence < sal_Int8 >& getDigest () const
+    const com::sun::star::uno::Sequence < sal_Int8 > getDigest () const
     { return m_xBaseEncryptionData->m_aDigest;}
-    const com::sun::star::uno::Sequence < sal_Int8 >& getSalt () const
+    const com::sun::star::uno::Sequence < sal_Int8 > getSalt () const
     { return m_xBaseEncryptionData->m_aSalt;}
     sal_Int32 getIterationCount () const
     { return m_xBaseEncryptionData->m_nIterationCount;}
@@ -113,9 +114,12 @@ public:
     sal_uInt8 GetStreamMode() const { return m_nStreamMode; }
     sal_uInt32 GetMagicalHackPos() const { return m_nMagicalHackPos; }
     sal_uInt32 GetMagicalHackSize() const { return m_nMagicalHackSize; }
+    sal_Int32 GetEncryptionAlgorithm() const;
+    sal_Int32 GetBlockSize() const;
 
     void SetToBeCompressed (sal_Bool bNewValue) { bToBeCompressed = bNewValue;}
     void SetIsEncrypted (sal_Bool bNewValue) { bIsEncrypted = bNewValue;}
+    void SetImportedStartKeyAlgorithm( sal_Int32 nAlgorithm ) { m_nImportedStartKeyAlgorithm = nAlgorithm; }
     void SetImportedEncryptionAlgorithm( sal_Int32 nAlgorithm ) { m_nImportedEncryptionAlgorithm = nAlgorithm; }
     void SetImportedChecksumAlgorithm( sal_Int32 nAlgorithm ) { m_nImportedChecksumAlgorithm = nAlgorithm; }
     void SetImportedDerivedKeySize( sal_Int32 nSize ) { m_nImportedDerivedKeySize = nSize; }

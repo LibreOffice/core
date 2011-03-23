@@ -1313,7 +1313,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
     }
     else
     {
-        SetEncryptionKeyProperty_Impl( xPropertySet, m_aEncryptionData.getAsConstNamedValueList() );
+        SetEncryptionKeyProperty_Impl( xPropertySet, aEncryptionData.getAsConstNamedValueList() );
 
         try {
             xResultStream = GetStream_Impl( nStreamMode, bHierarchyAccess );
@@ -1662,7 +1662,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
     else
     {
         uno::Reference< beans::XPropertySet > xPropertySet( m_xPackageStream, uno::UNO_QUERY );
-        SetEncryptionKeyProperty_Impl( xPropertySet, m_aEncryptionData.getAsConstNamedValueList() );
+        SetEncryptionKeyProperty_Impl( xPropertySet, aEncryptionData.getAsConstNamedValueList() );
 
         try {
             xDataToCopy = m_xPackageStream->getDataStream();

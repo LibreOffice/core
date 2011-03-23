@@ -162,10 +162,6 @@ public:
                 ::com::sun::star::packages::zip::ZipIOException,
                 ::com::sun::star::uno::RuntimeException );
 
-    static void StaticRemoveW3CPadding(
-            const ::rtl::Reference< EncryptionData >& rEncData,
-            ::com::sun::star::uno::Sequence< sal_Int8 >& o_rPaddedData );
-
     static sal_Bool StaticHasValidPassword (
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
             const ::com::sun::star::uno::Sequence< sal_Int8 > &aReadBuffer,

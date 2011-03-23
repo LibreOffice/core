@@ -53,6 +53,8 @@ uno::Reference< xml::crypto::XCipherContext > BlowfishCFB8CipherContext::Create(
                                      uno::Reference< XInterface >() );
     }
 
+    xResult->m_bEncrypt = bEncrypt;
+
     return uno::Reference< xml::crypto::XCipherContext >( xResult.get() );
 }
 
@@ -73,11 +75,26 @@ uno::Sequence< sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::convertWithCipherC
         throw lang::DisposedException();
 
     uno::Sequence< sal_Int8 > aResult( aData.getLength() );
-    if ( rtl_Cipher_E_None != rtl_cipher_decode( m_pCipher,
-                  aData.getConstArray(),
-                  aData.getLength(),
-                  reinterpret_cast< sal_uInt8* >( aResult.getArray() ),
-                  aResult.getLength() ) )
+    rtlCipherError nError = rtl_Cipher_E_None;
+
+    if ( m_bEncrypt )
+    {
+        rtl_cipher_encode( m_pCipher,
+                          aData.getConstArray(),
+                          aData.getLength(),
+                          reinterpret_cast< sal_uInt8* >( aResult.getArray() ),
+                          aResult.getLength() );
+    }
+    else
+    {
+        rtl_cipher_decode( m_pCipher,
+                          aData.getConstArray(),
+                          aData.getLength(),
+                          reinterpret_cast< sal_uInt8* >( aResult.getArray() ),
+                          aResult.getLength() );
+    }
+
+    if ( rtl_Cipher_E_None != nError )
     {
         throw uno::RuntimeException( ::rtl::OUString::createFromAscii( "Can not decrypt/encrypt with cipher!\n" ),
                                      uno::Reference< uno::XInterface >() );

@@ -59,6 +59,7 @@ protected:
     com::sun::star::uno::Sequence < sal_Int8 > maCompBuffer, maHeader;
     ZipEntry maEntry;
     ::rtl::Reference< EncryptionData > mxData;
+    sal_Int32 mnBlockSize;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;
     Inflater maInflater;
     sal_Bool mbRawStream, mbWrappedRaw, mbFinished;

@@ -73,6 +73,7 @@ protected:
     const ::rtl::OUString sManifestElement;
     const ::rtl::OUString sEncryptionDataElement;
     const ::rtl::OUString sAlgorithmElement;
+    const ::rtl::OUString sStartKeyAlgElement;
     const ::rtl::OUString sKeyDerivationElement;
 
     const ::rtl::OUString sCdataAttribute;
@@ -85,6 +86,7 @@ protected:
     const ::rtl::OUString sIterationCountAttribute;
     const ::rtl::OUString sKeySizeAttribute;
     const ::rtl::OUString sAlgorithmNameAttribute;
+    const ::rtl::OUString sStartKeyAlgNameAttribute;
     const ::rtl::OUString sKeyDerivationNameAttribute;
     const ::rtl::OUString sChecksumAttribute;
     const ::rtl::OUString sChecksumTypeAttribute;

@@ -993,7 +993,9 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Handled exception" ) ) );
 
                 // If the common storage password does not allow to open the stream
-                // it must be copyed in raw way
+                // it could be copyed in raw way, the problem is that the StartKey should be the same
+                // in the ODF1.2 package, so an invalid package could be produced if the stream
+                // is copied from ODF1.1 package, where it is allowed to have different StartKeys
                 uno::Reference< embed::XStorageRawAccess > xRawDest( xDest, uno::UNO_QUERY_THROW );
                 uno::Reference< io::XInputStream > xRawInStream = pElement->m_pStream->GetRawInStream();
                 xRawDest->insertRawEncrStreamElement( aName, xRawInStream );
@@ -4777,10 +4779,10 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
             m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
 
             uno::Any aCaught( ::cppu::getCaughtException() );
-            throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can not open package!\n" ) ),
-                                                uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                    uno::UNO_QUERY ),
-                                                aCaught );
+            throw lang::WrappedTargetRuntimeException(
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can not open package!\n" ) ),
+                                uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ), uno::UNO_QUERY ),
+                                aCaught );
         }
 
         uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
@@ -4801,7 +4803,6 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
             throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         }
     }
-
 }
 
 //____________________________________________________________________________________________________

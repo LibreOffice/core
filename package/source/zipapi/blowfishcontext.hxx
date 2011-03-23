@@ -36,9 +36,11 @@ class BlowfishCFB8CipherContext : public cppu::WeakImplHelper1< ::com::sun::star
 {
     ::osl::Mutex m_aMutex;
     void* m_pCipher;
+    bool m_bEncrypt;
 
     BlowfishCFB8CipherContext()
     : m_pCipher( NULL )
+    , m_bEncrypt( false )
     {}
 
 public:

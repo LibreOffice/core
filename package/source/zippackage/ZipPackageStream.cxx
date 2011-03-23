@@ -76,8 +76,10 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
 , bToBeEncrypted ( sal_False )
 , bHaveOwnKey ( sal_False )
 , bIsEncrypted ( sal_False )
+, m_nImportedStartKeyAlgorithm( 0 )
 , m_nImportedEncryptionAlgorithm( 0 )
 , m_nImportedChecksumAlgorithm( 0 )
+, m_nImportedDerivedKeySize( 0 )
 , m_nStreamMode( PACKAGE_STREAM_NOTSET )
 , m_nMagicalHackPos( 0 )
 , m_nMagicalHackSize( 0 )
@@ -141,7 +143,7 @@ void ZipPackageStream::CloseOwnStreamIfAny()
 }
 
 //--------------------------------------------------------------------------
-uno::Reference< io::XInputStream >& ZipPackageStream::GetOwnSeekStream()
+uno::Reference< io::XInputStream > ZipPackageStream::GetOwnSeekStream()
 {
     if ( !m_bHasSeekable && xStream.is() )
     {
@@ -198,6 +200,18 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCop
 }
 
 //--------------------------------------------------------------------------
+sal_Int32 ZipPackageStream::GetEncryptionAlgorithm() const
+{
+    return m_nImportedEncryptionAlgorithm ? m_nImportedEncryptionAlgorithm : rZipPackage.GetEncAlgID();
+}
+
+//--------------------------------------------------------------------------
+sal_Int32 ZipPackageStream::GetBlockSize() const
+{
+    return GetEncryptionAlgorithm() == ::com::sun::star::xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 16 : 8;
+}
+
+//--------------------------------------------------------------------------
 ::rtl::Reference< EncryptionData > ZipPackageStream::GetEncryptionData( bool bUseWinEncoding )
 {
     ::rtl::Reference< EncryptionData > xResult;
@@ -205,7 +219,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCop
         xResult = new EncryptionData(
             *m_xBaseEncryptionData,
             GetEncryptionKey( bUseWinEncoding ),
-            m_nImportedEncryptionAlgorithm ? m_nImportedEncryptionAlgorithm : rZipPackage.GetEncAlgID(),
+            GetEncryptionAlgorithm(),
             m_nImportedChecksumAlgorithm ? m_nImportedChecksumAlgorithm : rZipPackage.GetChecksumAlgID(),
             m_nImportedDerivedKeySize ? m_nImportedDerivedKeySize : rZipPackage.GetDefaultDerivedKeySize() );
 
@@ -222,7 +236,7 @@ void ZipPackageStream::SetBaseEncryptionData( const ::rtl::Reference< BaseEncryp
 uno::Sequence< sal_Int8 > ZipPackageStream::GetEncryptionKey( bool bUseWinEncoding )
 {
     uno::Sequence< sal_Int8 > aResult;
-    sal_Int32 nKeyGenID = rZipPackage.GetKeyGenID();
+    sal_Int32 nKeyGenID = m_nImportedStartKeyAlgorithm ? m_nImportedStartKeyAlgorithm : rZipPackage.GetKeyGenID();
     bUseWinEncoding = ( bUseWinEncoding || m_bUseWinEncoding );
 
     if ( bHaveOwnKey && m_aStorageEncryptionKeys.getLength() )
@@ -884,6 +898,11 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
     else if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ENCRYPTION_KEY_PROPERTY ) ) )
     {
         aAny <<= m_aEncryptionKey;
+        return aAny;
+    }
+    else if ( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ) )
+    {
+        aAny <<= m_aStorageEncryptionKeys;
         return aAny;
     }
     else

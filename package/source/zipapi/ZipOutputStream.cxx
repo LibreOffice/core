@@ -55,7 +55,7 @@ ZipOutputStream::ZipOutputStream( const uno::Reference< lang::XMultiServiceFacto
                                   const uno::Reference < XOutputStream > &xOStream )
 : m_xFactory( xFactory )
 , xStream(xOStream)
-, aBuffer(n_ConstBufferSize)
+, m_aDeflateBuffer(n_ConstBufferSize)
 , aDeflater(DEFAULT_COMPRESSION, sal_True)
 , aChucker(xOStream)
 , pCurrentEntry(NULL)
@@ -98,7 +98,10 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
     rEntry.nFlag = 1 << 11;
     if (rEntry.nSize == -1 || rEntry.nCompressedSize == -1 ||
         rEntry.nCrc == -1)
+    {
+        rEntry.nSize = rEntry.nCompressedSize = 0;
         rEntry.nFlag |= 8;
+    }
 
     if (bEncrypt)
     {
@@ -148,11 +151,12 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 }
                 else
                 {
-                    pEntry->nSize = aDeflater.getTotalIn();
-                    pEntry->nCompressedSize = aDeflater.getTotalOut();
+                    if ( !bEncryptCurrentEntry )
+                    {
+                        pEntry->nSize = aDeflater.getTotalIn();
+                        pEntry->nCompressedSize = aDeflater.getTotalOut();
+                    }
                     pEntry->nCrc = aCRC.getValue();
-                    if ( bEncryptCurrentEntry )
-                        pEntry->nSize = pEntry->nCompressedSize;
                     writeEXT(*pEntry);
                 }
                 aDeflater.reset();
@@ -249,12 +253,12 @@ void SAL_CALL ZipOutputStream::finish(  )
 
 void ZipOutputStream::doDeflate()
 {
-    sal_Int32 nLength = aDeflater.doDeflateSegment(aBuffer, 0, aBuffer.getLength());
-    sal_Int32 nOldLength = aBuffer.getLength();
+    sal_Int32 nLength = aDeflater.doDeflateSegment(m_aDeflateBuffer, 0, m_aDeflateBuffer.getLength());
+    sal_Int32 nOldLength = m_aDeflateBuffer.getLength();
 
     if ( nLength > 0 )
     {
-        uno::Sequence< sal_Int8 > aTmpBuffer( aBuffer.getConstArray(), nLength );
+        uno::Sequence< sal_Int8 > aTmpBuffer( m_aDeflateBuffer.getConstArray(), nLength );
         if ( bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
         {
             // Need to update our digest before encryption...
@@ -270,10 +274,16 @@ void ZipOutputStream::doDeflate()
             uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->convertWithCipherContext( aTmpBuffer );
 
             aChucker.WriteBytes( aEncryptionBuffer );
+
+            // the sizes as well as checksum for encrypted streams is calculated here
+            pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
+            pCurrentEntry->nSize = pCurrentEntry->nCompressedSize;
             aCRC.update( aEncryptionBuffer );
         }
         else
+        {
             aChucker.WriteBytes ( aTmpBuffer );
+        }
     }
 
     if ( aDeflater.finished() && bEncryptCurrentEntry && m_xDigestContext.is() && m_xCipherContext.is() )
@@ -282,6 +292,10 @@ void ZipOutputStream::doDeflate()
         if ( aEncryptionBuffer.getLength() )
         {
             aChucker.WriteBytes( aEncryptionBuffer );
+
+            // the sizes as well as checksum for encrypted streams is calculated hier
+            pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
+            pCurrentEntry->nSize = pCurrentEntry->nCompressedSize;
             aCRC.update( aEncryptionBuffer );
         }
     }

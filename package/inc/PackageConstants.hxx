@@ -31,7 +31,12 @@
 
 const sal_Int32 n_ConstBufferSize = 32768;
 const sal_Int32 n_ConstMaxMemoryStreamSize = 20480;
+
+// by calculation of the digest we read 32 bytes more ( if available )
+// it allows to ignore the padding if the stream is longer than n_ConstDigestDecrypt since we read at least two blocks more;
+// if the stream is shorter or equal the padding will be done successfully
 const sal_Int32 n_ConstDigestLength = 1024;
+const sal_Int32 n_ConstDigestDecrypt = 1056; // 1024 + 32
 
 // the constants related to the manifest.xml entries
 #define PKG_MNFST_MEDIATYPE   0
@@ -49,7 +54,7 @@ const sal_Int32 n_ConstDigestLength = 1024;
 #define PKG_MNFST_DERKEYSIZE 11
 
 #define PKG_SIZE_NOENCR_MNFST 3
-#define PKG_SIZE_ENCR_MNFST   8
+#define PKG_SIZE_ENCR_MNFST   12
 
 // the properties related constants
 #define ENCRYPTION_KEY_PROPERTY "EncryptionKey"

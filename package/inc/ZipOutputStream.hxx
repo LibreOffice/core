@@ -49,7 +49,9 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xStream;
 
     ::std::vector < ZipEntry * >            aZipList;
-    ::com::sun::star::uno::Sequence< sal_Int8 > aBuffer;
+
+    ::com::sun::star::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
+
     ::rtl::OUString     sComment;
     Deflater            aDeflater;
 

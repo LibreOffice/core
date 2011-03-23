@@ -42,7 +42,6 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/digest.h>
 
-#include <string.h> // for memcpy
 #include <vector>
 
 #include "blowfishcontext.hxx"
@@ -142,7 +141,7 @@ uno::Reference< xml::crypto::XDigestContext > ZipFile::StaticGetDigestContextFor
             xFactory.set( comphelper::getProcessServiceFactory(), uno::UNO_SET_THROW );
 
         uno::Reference< xml::crypto::XDigestContextSupplier > xDigestContextSupplier(
-            xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.crypto.SEInitializer" ) ) ),
+            xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.crypto.NSSInitializer" ) ) ),
             uno::UNO_QUERY_THROW );
 
         xDigestContext.set( xDigestContextSupplier->getDigestContext( xEncryptionData->m_nCheckAlg, uno::Sequence< beans::NamedValue >() ), uno::UNO_SET_THROW );
@@ -173,14 +172,14 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
                                   uno::Reference< XInterface >() );
         }
 
-        if ( xEncryptionData->m_nEncAlg == xml::crypto::CipherID::AES_CBC )
+        if ( xEncryptionData->m_nEncAlg == xml::crypto::CipherID::AES_CBC_W3C_PADDING )
         {
             uno::Reference< lang::XMultiServiceFactory > xFactory = xArgFactory;
             if ( !xFactory.is() )
                 xFactory.set( comphelper::getProcessServiceFactory(), uno::UNO_SET_THROW );
 
             uno::Reference< xml::crypto::XCipherContextSupplier > xCipherContextSupplier(
-                xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.crypto.SEInitializer" ) ) ),
+                xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.crypto.NSSInitializer" ) ) ),
                 uno::UNO_QUERY_THROW );
 
             xResult = xCipherContextSupplier->getCipherContext( xEncryptionData->m_nEncAlg, aDerivedKey, xEncryptionData->m_aInitVector, bEncrypt, uno::Sequence< beans::NamedValue >() );
@@ -275,19 +274,19 @@ void ZipFile::StaticFillHeader( const ::rtl::Reference< EncryptionData >& rData,
     *(pHeader++) = static_cast< sal_Int8 >(( nMediaTypeLength >> 8 ) & 0xFF);
 
     // Then the salt content
-    memcpy ( pHeader, rData->m_aSalt.getConstArray(), nSaltLength );
+    rtl_copyMemory ( pHeader, rData->m_aSalt.getConstArray(), nSaltLength );
     pHeader += nSaltLength;
 
     // Then the IV content
-    memcpy ( pHeader, rData->m_aInitVector.getConstArray(), nIVLength );
+    rtl_copyMemory ( pHeader, rData->m_aInitVector.getConstArray(), nIVLength );
     pHeader += nIVLength;
 
     // Then the digest content
-    memcpy ( pHeader, rData->m_aDigest.getConstArray(), nDigestLength );
+    rtl_copyMemory ( pHeader, rData->m_aDigest.getConstArray(), nDigestLength );
     pHeader += nDigestLength;
 
     // Then the mediatype itself
-    memcpy ( pHeader, aMediaType.getStr(), nMediaTypeLength );
+    rtl_copyMemory ( pHeader, aMediaType.getStr(), nMediaTypeLength );
     pHeader += nMediaTypeLength;
 }
 
@@ -349,15 +348,15 @@ sal_Bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rDa
             if ( nSaltLength == rStream->readBytes ( aBuffer, nSaltLength ) )
             {
                 rData->m_aSalt.realloc ( nSaltLength );
-                memcpy ( rData->m_aSalt.getArray(), aBuffer.getConstArray(), nSaltLength );
+                rtl_copyMemory ( rData->m_aSalt.getArray(), aBuffer.getConstArray(), nSaltLength );
                 if ( nIVLength == rStream->readBytes ( aBuffer, nIVLength ) )
                 {
                     rData->m_aInitVector.realloc ( nIVLength );
-                    memcpy ( rData->m_aInitVector.getArray(), aBuffer.getConstArray(), nIVLength );
+                    rtl_copyMemory ( rData->m_aInitVector.getArray(), aBuffer.getConstArray(), nIVLength );
                     if ( nDigestLength == rStream->readBytes ( aBuffer, nDigestLength ) )
                     {
                         rData->m_aDigest.realloc ( nDigestLength );
-                        memcpy ( rData->m_aDigest.getArray(), aBuffer.getConstArray(), nDigestLength );
+                        rtl_copyMemory ( rData->m_aDigest.getArray(), aBuffer.getConstArray(), nDigestLength );
 
                         if ( nMediaTypeLength == rStream->readBytes ( aBuffer, nMediaTypeLength ) )
                         {
@@ -396,8 +395,9 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::R
     OSL_ENSURE( rData->m_aDigest.getLength(), "Can't detect password correctness without digest!\n" );
     if ( rData->m_aDigest.getLength() )
     {
-            sal_Int32 nSize = sal::static_int_cast< sal_Int32 >( xSeek->getLength() );
-        nSize = nSize > n_ConstDigestLength ? n_ConstDigestLength : nSize;
+        sal_Int32 nSize = sal::static_int_cast< sal_Int32 >( xSeek->getLength() );
+        if ( nSize > n_ConstDigestLength + 32 )
+            nSize = n_ConstDigestLength + 32;
 
         // skip header
         xSeek->seek( n_ConstHeaderSize + rData->m_aInitVector.getLength() +
@@ -415,44 +415,38 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::R
     return new XUnbufferedStream( xFactory, xStream, rData );
 }
 
-void ZipFile::StaticRemoveW3CPadding( const ::rtl::Reference< EncryptionData >& rEncData, uno::Sequence< sal_Int8 >& o_rPaddedData )
-{
-    sal_Int32 nPaddedDataLen = o_rPaddedData.getLength();
-    if ( rEncData->m_nEncAlg == xml::crypto::CipherID::AES_CBC )
-    {
-        if ( nPaddedDataLen > AES_CBC_BLOCK_SIZE
-          && nPaddedDataLen % AES_CBC_BLOCK_SIZE == 1
-          && o_rPaddedData[ nPaddedDataLen - 1 ] <= AES_CBC_BLOCK_SIZE )
-        {
-            o_rPaddedData.realloc( nPaddedDataLen - AES_CBC_BLOCK_SIZE + o_rPaddedData[nPaddedDataLen - 1] );
-        }
-        else
-        {
-            OSL_ENSURE( sal_False, "No expected padding is found!" );
-        }
-    }
-}
-
 sal_Bool ZipFile::StaticHasValidPassword( const uno::Reference< lang::XMultiServiceFactory >& xFactory, const Sequence< sal_Int8 > &aReadBuffer, const ::rtl::Reference< EncryptionData > &rData )
 {
     if ( !rData.is() || !rData->m_aKey.getLength() )
         return sal_False;
 
     sal_Bool bRet = sal_False;
-    sal_Int32 nSize = aReadBuffer.getLength();
 
     uno::Reference< xml::crypto::XCipherContext > xCipher( StaticGetCipher( xFactory, rData, false ), uno::UNO_SET_THROW );
 
-    uno::Sequence< sal_Int8 > aDecryptBuffer = xCipher->convertWithCipherContext( aReadBuffer );
-    uno::Sequence< sal_Int8 > aDecryptBuffer2 = xCipher->finalizeCipherContextAndDispose();
+    uno::Sequence< sal_Int8 > aDecryptBuffer;
+    uno::Sequence< sal_Int8 > aDecryptBuffer2;
+    try
+    {
+        aDecryptBuffer = xCipher->convertWithCipherContext( aReadBuffer );
+        aDecryptBuffer2 = xCipher->finalizeCipherContextAndDispose();
+    }
+    catch( uno::Exception& )
+    {
+        // decryption with padding will throw the exception in finalizing if the buffer represent only part of the stream
+        // it is no problem, actually this is why we read 32 additional bytes ( two of maximal possible encryption blocks )
+        OSL_ENSURE( aReadBuffer.getLength() == n_ConstDigestDecrypt, "Unexpected exception by decryption!" );
+    }
+
     if ( aDecryptBuffer2.getLength() )
     {
         sal_Int32 nOldLen = aDecryptBuffer.getLength();
         aDecryptBuffer.realloc( nOldLen + aDecryptBuffer2.getLength() );
-        memcpy( aDecryptBuffer.getArray() + nOldLen, aDecryptBuffer2.getArray(), aDecryptBuffer2.getLength() );
+        rtl_copyMemory( aDecryptBuffer.getArray() + nOldLen, aDecryptBuffer2.getArray(), aDecryptBuffer2.getLength() );
     }
 
-    StaticRemoveW3CPadding( rData, aDecryptBuffer );
+    if ( aDecryptBuffer.getLength() > n_ConstDigestLength )
+        aDecryptBuffer.realloc( n_ConstDigestLength );
 
     uno::Sequence< sal_Int8 > aDigestSeq;
     uno::Reference< xml::crypto::XDigestContext > xDigestContext( StaticGetDigestContextForChecksum( xFactory, rData ), uno::UNO_SET_THROW );
@@ -486,7 +480,9 @@ sal_Bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ::rtl::Reference< 
         sal_Int32 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
 
         // Only want to read enough to verify the digest
-        nSize = nSize > n_ConstDigestLength ? n_ConstDigestLength : nSize;
+        if ( nSize > n_ConstDigestDecrypt )
+            nSize = n_ConstDigestDecrypt;
+
         Sequence < sal_Int8 > aReadBuffer ( nSize );
 
         xStream->readBytes( aReadBuffer, nSize );

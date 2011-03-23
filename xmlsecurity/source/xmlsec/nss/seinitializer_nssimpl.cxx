@@ -127,11 +127,19 @@ struct InitNSSInitialize
         }
 };
 
+struct GetNSSInitStaticMutex
+{
+    ::osl::Mutex* operator()()
+    {
+        static ::osl::Mutex aNSSInitMutex;
+        return &aNSSInitMutex;
+    }
+};
+
 bool * initNSS( const css::uno::Reference< css::lang::XMultiServiceFactory > &xMSF )
 {
-    return rtl_Instance< bool, InitNSSInitialize,
-        ::osl::MutexGuard, ::osl::GetGlobalMutex >::create(
-            InitNSSInitialize( xMSF ), ::osl::GetGlobalMutex());
+    return rtl_Instance< bool, InitNSSInitialize, ::osl::MutexGuard, GetNSSInitStaticMutex >
+                ::create( InitNSSInitialize( xMSF ), GetNSSInitStaticMutex() );
 }
 
 void deleteRootsModule()
@@ -478,9 +486,12 @@ css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL SEInitializer_N
     throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
 {
     CK_MECHANISM_TYPE nNSSCipherID = -1;
-    if ( nCipherID == css::xml::crypto::CipherID::AES_CBC )
+    bool bW3CPadding = false;
+    if ( nCipherID == css::xml::crypto::CipherID::AES_CBC_W3C_PADDING )
     {
         nNSSCipherID = CKM_AES_CBC;
+        bW3CPadding = true;
+
         if ( aKey.getLength() != 16 && aKey.getLength() != 24 && aKey.getLength() != 32 )
             throw css::lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected key length." ) ), css::uno::Reference< css::uno::XInterface >(), 2 );
 
@@ -496,7 +507,7 @@ css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL SEInitializer_N
         if ( aInitializationVector.getLength() != PK11_GetIVLength( nNSSCipherID ) )
             throw css::lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected length of initialization vector." ) ), css::uno::Reference< css::uno::XInterface >(), 3 );
 
-        xResult = OCipherContext::Create( nNSSCipherID, aKey, aInitializationVector, bEncryption );
+        xResult = OCipherContext::Create( nNSSCipherID, aKey, aInitializationVector, bEncryption, bW3CPadding );
     }
 
     return xResult;

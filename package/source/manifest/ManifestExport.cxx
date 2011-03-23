@@ -292,7 +292,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             *pDerivedKeySize >>= nDerivedKeySize;
 
             ::rtl::OUString sEncAlgName;
-            if ( nEncAlgID == xml::crypto::CipherID::AES_CBC )
+            if ( nEncAlgID == xml::crypto::CipherID::AES_CBC_W3C_PADDING )
             {
                 OSL_ENSURE( nDerivedKeySize, "Unexpected key size is provided!" );
                 if ( nDerivedKeySize != 32 )
@@ -359,13 +359,13 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
                 if ( nStartKeyAlgID == xml::crypto::DigestID::SHA256 )
                 {
                     sStartKeyAlg = sSHA256_URL;
-                    aBuffer.append( (sal_uInt8)32 );
+                    aBuffer.append( (sal_Int32)32 );
                     sStartKeySize = aBuffer.makeStringAndClear();
                 }
                 else if ( nStartKeyAlgID == xml::crypto::DigestID::SHA1 )
                 {
                     sStartKeyAlg = sSHA1_Name;
-                    aBuffer.append( (sal_uInt8)20 );
+                    aBuffer.append( (sal_Int32)20 );
                     sStartKeySize = aBuffer.makeStringAndClear();
                 }
                 else
