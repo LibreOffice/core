@@ -54,6 +54,15 @@ constants ExternalLinkType
      */
     const long DDE      = 2;
 
+    /** Reference to the own document.
+     */
+    const long SELF     = 3;
+
+    /** For special use cases. Behaviour is dependent on the implementation of
+        the formula parser.
+     */
+    const long SPECIAL  = 4;
+
 };
 
 //=============================================================================
