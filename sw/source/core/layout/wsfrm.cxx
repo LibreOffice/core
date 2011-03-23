@@ -113,6 +113,10 @@ SwFrm::SwFrm( SwModify *pMod ) :
     bCompletePaint = bInfInvalid = sal_True;
 }
 
+const IDocumentDrawModelAccess* SwFrm::getIDocumentDrawModelAccess()
+{
+    return GetUpper()->GetFmt()->getIDocumentDrawModelAccess();
+}
 
 ViewShell * SwFrm::GetShell() const
 {

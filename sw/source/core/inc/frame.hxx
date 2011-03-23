@@ -35,6 +35,7 @@
 #include "swtypes.hxx"  // fuer SwTwips
 #include "swrect.hxx"
 #include "calbck.hxx"   // fuer SwClient
+#include "IDocumentDrawModelAccess.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
 #include <libxml/encoding.h>
@@ -497,6 +498,8 @@ protected:
 
         //Schatten und Umrandung painten
     void PaintShadow( const SwRect&, SwRect&, const SwBorderAttrs& ) const;
+
+    virtual const IDocumentDrawModelAccess* getIDocumentDrawModelAccess( );
 
 public:
     TYPEINFO(); //Bereits in Basisklasse Client drin.

@@ -146,6 +146,8 @@ protected:
     // #i70122#
     virtual const SwRect GetObjBoundRect() const;
 
+    virtual const IDocumentDrawModelAccess* getIDocumentDrawModelAccess( );
+
 public:
     // #i26791#
     TYPEINFO();
