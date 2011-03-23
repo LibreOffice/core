@@ -831,7 +831,7 @@ void SdrTextObj::TakeTextAnchorRect(Rectangle& rAnchorRect) const
 }
 
 void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
-                               Rectangle* pAnchorRect, sal_Bool bLineWidth ) const
+                               Rectangle* pAnchorRect, bool bLineWidth ) const
 {
     Rectangle aAnkRect; // Rect innerhalb dem geankert wird
     TakeTextAnchorRect(aAnkRect);

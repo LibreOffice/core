@@ -224,7 +224,7 @@ public:
     virtual void EndTextEdit( SdrOutliner& rOutl );
     virtual void TakeTextAnchorRect( Rectangle& rAnchorRect ) const;
     virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false,
-        Rectangle* pAnchorRect=NULL, sal_Bool bLineWidth=sal_True ) const;
+        Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const;
     virtual void operator=(const SdrObject& rObj);
 
     virtual void TakeObjNameSingul(String& rName) const;

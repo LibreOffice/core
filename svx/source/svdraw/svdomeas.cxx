@@ -1300,7 +1300,7 @@ void SdrMeasureObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
 }
 
 void SdrMeasureObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
-    Rectangle* pAnchorRect, sal_Bool bLineWidth ) const
+    Rectangle* pAnchorRect, bool bLineWidth ) const
 {
     if (bTextDirty) UndirtyText();
     SdrTextObj::TakeTextRect( rOutliner, rTextRect, bNoEditText, pAnchorRect, bLineWidth );

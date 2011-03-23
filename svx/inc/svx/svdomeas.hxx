@@ -146,7 +146,7 @@ public:
     virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
     virtual const Size& GetTextSize() const;
     virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false,
-        Rectangle* pAnchorRect=NULL, sal_Bool bLineWidth=sal_True ) const;
+        Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const;
     virtual void TakeTextAnchorRect(Rectangle& rAnchorRect) const;
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
     virtual sal_uInt16 GetOutlinerViewAnchorMode() const;
