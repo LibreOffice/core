@@ -1,4 +1,4 @@
-sl    shell	:    L10N:l10n offuh rdbmaker tools sal EXPAT:expat LIBXSLT:libxslt NULL
+sl    shell	:    TRANSLATIONS:translations offuh rdbmaker tools sal EXPAT:expat LIBXSLT:libxslt NULL
 sl    shell\inc			                           nmake   -   all sl_inc NULL
 sl    shell\source\win32                           nmake   -   w   sl_win32 sl_inc NULL
 sl    shell\source\win32\simplemail                nmake   -   w   sl_win32_simplemail sl_inc NULL

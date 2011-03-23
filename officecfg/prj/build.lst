@@ -1,4 +1,4 @@
-oc  officecfg   :    L10N:l10n soltools solenv LIBXSLT:libxslt NULL
+oc  officecfg   :    TRANSLATIONS:translations soltools solenv LIBXSLT:libxslt NULL
 oc  officecfg                                                       usr1  -   all oc_mkout NULL
 oc  officecfg\registry\schema                                       nmake -   all oc_reg_schema NULL
 oc  officecfg\registry                                              nmake -   all oc_reg NULL

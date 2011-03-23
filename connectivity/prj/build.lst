@@ -1,4 +1,4 @@
-cn  connectivity    :    shell  L10N:l10n comphelper MOZ:moz svl UNIXODBC:unixODBC unoil javaunohelper HSQLDB:hsqldb qadevOOo officecfg NSS:nss LIBXSLT:libxslt NULL
+cn  connectivity    :    shell  TRANSLATIONS:translations comphelper MOZ:moz svl UNIXODBC:unixODBC unoil javaunohelper HSQLDB:hsqldb qadevOOo officecfg NSS:nss LIBXSLT:libxslt NULL
 cn  connectivity                                    usr1    -   all cn_mkout NULL
 cn  connectivity\inc                                nmake   -   all cn_inc NULL
 cn  connectivity\com\sun\star\sdbcx\comp\hsqldb     nmake   -   all cn_jhsqldbdb cn_hsqldb cn_inc NULL

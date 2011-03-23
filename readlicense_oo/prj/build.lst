@@ -1,4 +1,4 @@
-ro  readlicense_oo : L10N:l10n l10ntools solenv LIBXSLT:libxslt NULL
+ro  readlicense_oo : TRANSLATIONS:translations l10ntools solenv LIBXSLT:libxslt NULL
 ro  readlicense_oo		usr1 - all ro_root NULL
 ro  readlicense_oo\docs\readme	nmake - all ro_readme NULL
 ro  readlicense_oo		nmake - all ro_conv NULL
