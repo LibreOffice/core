@@ -1,3 +1,3 @@
-sl	svl	:	L10N:l10n rsc offuh ucbhelper unotools cppu cppuhelper comphelper sal sot  LIBXSLT:libxslt NULL
+sl	svl	:	TRANSLATIONS:translations rsc offuh ucbhelper unotools cppu cppuhelper comphelper sal sot  LIBXSLT:libxslt NULL
 sl	svl\prj	nmake	-	all	svl_prj NULL
 # sl	svl\qa\unit	nmake	-	all	svl_qa_cppunit svl_util NULL
