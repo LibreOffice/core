@@ -26,13 +26,18 @@
  *
  ************************************************************************/
 
-#include "nodelist.hxx"
-#include "../dom/node.hxx"
+#include <nodelist.hxx>
+
+#include "../dom/document.hxx"
 
 namespace XPath
 {
-    CNodeList::CNodeList(const Reference< XNode >& rContextNode, boost::shared_ptr<xmlXPathObject>& rxpathObj)
-        : m_xContextNode(rContextNode)
+    CNodeList::CNodeList(
+                ::rtl::Reference<DOM::CDocument> const& pDocument,
+                ::osl::Mutex & rMutex,
+                boost::shared_ptr<xmlXPathObject> const& rxpathObj)
+        : m_pDocument(pDocument)
+        , m_rMutex(rMutex)
         , m_pNodeSet(0)
     {
         if (rxpathObj != NULL && rxpathObj->type == XPATH_NODESET)
@@ -47,6 +52,8 @@ namespace XPath
     */
     sal_Int32 SAL_CALL CNodeList::getLength() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         sal_Int32 value = 0;
         if (m_pNodeSet != NULL)
             value = xmlXPathNodeSetGetLength(m_pNodeSet);
@@ -56,12 +63,17 @@ namespace XPath
     /**
     Returns the indexth item in the collection.
     */
-    Reference< XNode > SAL_CALL CNodeList::item(sal_Int32 index) throw (RuntimeException)
+    Reference< XNode > SAL_CALL CNodeList::item(sal_Int32 index)
+        throw (RuntimeException)
     {
-        Reference< XNode > aNode;
-        if (m_pNodeSet != NULL)
-            aNode = Reference< XNode >(DOM::CNode::get(xmlXPathNodeSetItem(m_pNodeSet, index)));
-        return aNode;
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (0 == m_pNodeSet) {
+            return 0;
+        }
+        xmlNodePtr const pNode = xmlXPathNodeSetItem(m_pNodeSet, index);
+        Reference< XNode > const xNode(m_pDocument->GetCNode(pNode).get());
+        return xNode;
     }
 }
 

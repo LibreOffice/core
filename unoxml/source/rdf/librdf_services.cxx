@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 extern "C"
 {
 
-void SAL_CALL
+SAL_DLLPUBLIC_EXPORT void SAL_CALL
 component_getImplementationEnvironment(const sal_Char **o_ppEnvironmentTypeName,
     uno_Environment ** /* ppEnvironment */)
 {
@@ -66,7 +66,8 @@ static ::cppu::ImplementationEntry const entries[] = {
     { 0, 0, 0, 0, 0, 0 }
 };
 
-extern "C" void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL
+component_getFactory(
     const char * implName, void * serviceManager, void * registryKey)
 {
     return ::cppu::component_getFactoryHelper(

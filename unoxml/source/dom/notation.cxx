@@ -26,21 +26,24 @@
  *
  ************************************************************************/
 
-#include "notation.hxx"
+#include <notation.hxx>
+
 #include <string.h>
 
 namespace DOM
 {
-    CNotation::CNotation(const xmlNotationPtr aNotationPtr)
+    CNotation::CNotation(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlNotationPtr const pNotation)
+        : CNotation_Base(rDocument, rMutex,
+            NodeType_NOTATION_NODE, reinterpret_cast<xmlNodePtr>(pNotation))
+        , m_aNotationPtr(pNotation)
     {
-        m_aNodeType = NodeType_NOTATION_NODE;
-        m_aNotationPtr = aNotationPtr;
-        init_node((xmlNodePtr)aNotationPtr);
     }
 
     OUString SAL_CALL CNotation::getPublicId() throw (RuntimeException)
     {
-        // XXX
+        OSL_ENSURE(false,
+            "CNotation::getPublicId: not implemented (#i113683#)");
         return OUString();
     }
 
@@ -49,13 +52,16 @@ namespace DOM
     */
     OUString SAL_CALL CNotation::getSystemId() throw (RuntimeException)
     {
-        // XXX
+        OSL_ENSURE(false,
+            "CNotation::getSystemId: not implemented (#i113683#)");
         return OUString();
     }
 
 
     OUString SAL_CALL CNotation::getNodeName()throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
        OUString aName;
         if (m_aNodePtr != NULL)
         {
@@ -64,6 +70,7 @@ namespace DOM
         }
         return aName;
     }
+
     OUString SAL_CALL CNotation::getNodeValue() throw (RuntimeException)
     {
         return OUString();

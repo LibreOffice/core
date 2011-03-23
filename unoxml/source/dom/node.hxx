@@ -26,36 +26,35 @@
  *
  ************************************************************************/
 
-#ifndef _NODE_HXX
-#define _NODE_HXX
+#ifndef DOM_NODE_HXX
+#define DOM_NODE_HXX
 
+#include <hash_map>
+
+#include <libxml/tree.h>
+
+#include <sal/types.h>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/types.h>
-#include <sax/fastattribs.hxx>
-#include <cppuhelper/implbase1.hxx>
+
 #include <cppuhelper/implbase3.hxx>
+
+#include <sax/fastattribs.hxx>
+
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
-#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
-#include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
-#include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
-#include <com/sun/star/xml/dom/events/XUIEvent.hpp>
-#include <com/sun/star/xml/dom/events/XMouseEvent.hpp>
 #include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
-#include <libxml/tree.h>
 
-#include <map>
 #include <boost/unordered_map.hpp>
 
 using ::rtl::OUString;
@@ -65,8 +64,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::dom::events;
-
 using com::sun::star::lang::XUnoTunnel;
+
 
 namespace DOM
 {
@@ -114,31 +113,29 @@ namespace DOM
     /// add namespaces on this node to context
     void addNamespaces(Context& io_rContext, xmlNodePtr pNode);
 
-    class CNode;
-    typedef std::map< const xmlNodePtr, CNode* > nodemap_t;
-
+    class CDocument;
 
     class CNode : public cppu::WeakImplHelper3< XNode, XUnoTunnel, XEventTarget >
     {
         friend class CDocument;
         friend class CElement;
         friend class CAttributesMap;
-        friend class CChildList;
-        friend class CElementList;
-        friend class CEntitiesMap;
-        friend class CNotationsMap;
+
     private:
-        static nodemap_t theNodeMap;
+        bool m_bUnlinked; /// node has been removed from document
 
     protected:
-        NodeType m_aNodeType;
+        NodeType const m_aNodeType;
+        /// libxml node; NB: not const, because invalidate may reset it to 0!
         xmlNodePtr m_aNodePtr;
 
-        Reference< XDocument > m_rDocument;
+        ::rtl::Reference< CDocument > const m_xDocument;
+        ::osl::Mutex & m_rMutex;
 
         // for initialization by classes derived through ImplInheritanceHelper
-        CNode();
-        void init_node(const xmlNodePtr aNode);
+        CNode(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                NodeType const& reNodeType, xmlNodePtr const& rpNode);
+        void invalidate();
 
         void dispatchSubtreeModified();
 
@@ -146,29 +143,29 @@ namespace DOM
 
         virtual ~CNode();
 
-        // get a representaion for a libxml node
-        static CNode* get(const xmlNodePtr aNode, sal_Bool bCreate = sal_True);
-        // remove a wrapper instance
-        static void remove(const xmlNodePtr aNode);
+        static CNode * GetImplementation(::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XInterface> const& xNode);
 
-        // get the libxml node implementation
-        static xmlNodePtr getNodePtr(const Reference< XNode >& aNode);
+        xmlNodePtr GetNodePtr() { return m_aNodePtr; }
 
-        //static Sequence< sal_Int8 >
+        virtual CDocument & GetOwnerDocument();
 
         // recursively create SAX events
-        virtual void SAL_CALL saxify(
-            const Reference< XDocumentHandler >& i_xHandler);
+        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
 
         // recursively create SAX events
-        virtual void SAL_CALL fastSaxify( Context& io_rContext );
+        virtual void fastSaxify( Context& io_rContext );
+
+        // constrains child relationship between nodes based on type
+        virtual bool IsChildTypeAllowed(NodeType const nodeType);
 
         // ---- DOM interfaces
 
         /**
         Adds the node newChild to the end of the list of children of this node.
         */
-        virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
+        virtual Reference< XNode > SAL_CALL
+            appendChild(Reference< XNode > const& xNewChild)
             throw (RuntimeException, DOMException);
 
         /**
@@ -179,8 +176,8 @@ namespace DOM
             throw (RuntimeException);
 
         /**
-        A NamedNodeMap containing the attributes of this node (if it is an Element)
-        or null otherwise.
+        A NamedNodeMap containing the attributes of this node
+        (if it is an Element) or null otherwise.
         */
         virtual Reference< XNamedNodeMap > SAL_CALL getAttributes()
             throw (RuntimeException);
@@ -344,12 +341,13 @@ namespace DOM
             throw(RuntimeException, EventException);
 
         // --- XUnoTunnel
-        virtual ::sal_Int64 SAL_CALL getSomething(const Sequence< ::sal_Int8 >& aIdentifier)
+        virtual ::sal_Int64 SAL_CALL
+            getSomething(Sequence< ::sal_Int8 > const& rId)
             throw (RuntimeException);
     };
 
     /// eliminate redundant namespace declarations
-    void _nscleanup(const xmlNodePtr aNode, const xmlNodePtr aParent);
+    void nscleanup(const xmlNodePtr aNode, const xmlNodePtr aParent);
 }
 
 #endif

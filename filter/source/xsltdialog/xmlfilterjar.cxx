@@ -390,8 +390,20 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
                     if( !createDirectory( rURL ) )
                         return false;
 
-                    SvFileStream aOutputStream(rURL, STREAM_WRITE );
-                    Reference< XOutputStream > xOS(  new utl::OOutputStreamWrapper( aOutputStream ) );
+                    ::osl::File file(rURL);
+                    ::osl::FileBase::RC rc =
+                        file.open(osl_File_OpenFlag_Write|osl_File_OpenFlag_Create);
+                    if (::osl::FileBase::E_EXIST == rc) {
+                        rc = file.open(osl_File_OpenFlag_Write);
+                        if (::osl::FileBase::E_None == rc) {
+                            file.setSize(0); // #i97170# truncate
+                        }
+                    }
+                    if (::osl::FileBase::E_None != rc) {
+                        throw RuntimeException();
+                    }
+                    Reference< XOutputStream > const xOS(
+                            new comphelper::OSLOutputStreamWrapper(file));
 
                     return copyStreams( xIS, xOS );
                 }

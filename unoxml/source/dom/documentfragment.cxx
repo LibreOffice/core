@@ -26,15 +26,33 @@
  *
  ************************************************************************/
 
-#include "documentfragment.hxx"
+#include <documentfragment.hxx>
 
 namespace DOM
 {
-    CDocumentFragment::CDocumentFragment(const xmlNodePtr aNodePtr)
+    CDocumentFragment::CDocumentFragment(
+            CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlNodePtr const pNode)
+        : CDocumentFragment_Base(rDocument, rMutex,
+                NodeType_DOCUMENT_FRAGMENT_NODE, pNode)
     {
-        m_aNodeType = NodeType_DOCUMENT_FRAGMENT_NODE;
-        init_node(aNodePtr);
     }
+
+    bool CDocumentFragment::IsChildTypeAllowed(NodeType const nodeType)
+    {
+        switch (nodeType) {
+            case NodeType_ELEMENT_NODE:
+            case NodeType_PROCESSING_INSTRUCTION_NODE:
+            case NodeType_COMMENT_NODE:
+            case NodeType_TEXT_NODE:
+            case NodeType_CDATA_SECTION_NODE:
+            case NodeType_ENTITY_REFERENCE_NODE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     OUString SAL_CALL CDocumentFragment::getNodeName()throw (RuntimeException)
     {
         return OUString(RTL_CONSTASCII_USTRINGPARAM("#document-fragment"));

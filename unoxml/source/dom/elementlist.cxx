@@ -30,45 +30,45 @@
 
 #include <string.h>
 
+#include <element.hxx>
+#include <document.hxx>
+
+
 namespace DOM
 {
 
-    CElementList::CElementList(const CElement* aElement, const OUString& aName)
-        : m_pElement(aElement)
-        , m_aName(aName)
-        , xURI(0)
-        , m_bRebuild(sal_True)
+    static xmlChar* lcl_initXmlString(::rtl::OUString const& rString)
     {
-        OString o1 = OUStringToOString(aName, RTL_TEXTENCODING_UTF8);
-        xName = new xmlChar[o1.getLength()];
-        strcpy((char*)xName, o1.getStr());
-        registerListener(aElement);
+        ::rtl::OString const os =
+            ::rtl::OUStringToOString(rString, RTL_TEXTENCODING_UTF8);
+        xmlChar *const pRet = new xmlChar[os.getLength() + 1];
+        strcpy(reinterpret_cast<char*>(pRet), os.getStr());
+        return pRet;
     }
 
-    CElementList::CElementList(const CElement* aElement, const OUString& aName, const OUString& aURI)
-        : m_pElement(aElement)
-        , m_aName(aName)
-        , m_aURI(aURI)
-        , m_bRebuild(sal_True)
+    CElementList::CElementList(::rtl::Reference<CElement> const& pElement,
+            ::osl::Mutex & rMutex,
+            OUString const& rName, OUString const*const pURI)
+        : m_pElement(pElement)
+        , m_rMutex(rMutex)
+        , m_pName(lcl_initXmlString(rName))
+        , m_pURI((pURI) ? lcl_initXmlString(*pURI) : 0)
+        , m_bRebuild(true)
     {
-        OString o1 = OUStringToOString(aName, RTL_TEXTENCODING_UTF8);
-        xName = new xmlChar[o1.getLength()];
-        strcpy((char*)xName, o1.getStr());
-        OString o2 = OUStringToOString(aURI, RTL_TEXTENCODING_UTF8);
-        xURI = new xmlChar[o2.getLength()];
-        strcpy((char*)xURI, o2.getStr());
-        registerListener(aElement);
+        if (m_pElement.is()) {
+            registerListener(*m_pElement);
+        }
     }
 
-    void CElementList::registerListener(const CElement* pElement)
+    void CElementList::registerListener(CElement & rElement)
     {
         try {
-            // get the XNode
-            Reference< XNode > xNode(CNode::get(static_cast<const CNode*>(pElement)->m_aNodePtr));
-            Reference< XEventTarget > xTarget(xNode, UNO_QUERY_THROW);
+            Reference< XEventTarget > const xTarget(
+                    static_cast<XElement*>(& rElement), UNO_QUERY_THROW);
             OUString aType(RTL_CONSTASCII_USTRINGPARAM("DOMSubtreeModified"));
             sal_Bool capture = sal_False;
-            xTarget->addEventListener(aType, Reference< XEventListener >(this), capture);
+            xTarget->addEventListener(aType,
+                    Reference< XEventListener >(this), capture);
         } catch (Exception &e){
             OString aMsg("Exception caught while registering NodeList as listener:\n");
             aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
@@ -85,19 +85,24 @@ namespace DOM
                 return;
             } else {
                 m_nodevector.erase(m_nodevector.begin(), m_nodevector.end());
-                m_bRebuild = sal_False; // don't rebuild until tree is mutated
+                m_bRebuild = false; // don't rebuild until tree is mutated
             }
         }
 
         while (pNode != NULL )
         {
-            if (pNode->type == XML_ELEMENT_NODE && strcmp((char*)pNode->name, (char*)xName)==0)
+            if (pNode->type == XML_ELEMENT_NODE &&
+                (strcmp((char*)pNode->name, (char*)m_pName.get()) == 0))
             {
-                if (xURI == NULL)
+                if (!m_pURI) {
                     m_nodevector.push_back(pNode);
-                else
-                    if (pNode->ns != NULL && strcmp((char*)pNode->ns->href, (char*)xURI) == 0)
+                } else {
+                    if (pNode->ns != NULL && (0 ==
+                         strcmp((char*)pNode->ns->href, (char*)m_pURI.get())))
+                    {
                         m_nodevector.push_back(pNode);
+                    }
+                }
             }
             if (pNode->children != NULL) buildlist(pNode->children, sal_False);
 
@@ -111,25 +116,42 @@ namespace DOM
     */
     sal_Int32 SAL_CALL CElementList::getLength() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (!m_pElement.is()) { return 0; }
+
         // this has to be 'live'
-        buildlist(static_cast<const CNode*>(m_pElement)->m_aNodePtr);
+        buildlist(m_pElement->GetNodePtr());
         return m_nodevector.size();
     }
     /**
     Returns the indexth item in the collection.
     */
-    Reference< XNode > SAL_CALL CElementList::item(sal_Int32 index) throw (RuntimeException)
+    Reference< XNode > SAL_CALL CElementList::item(sal_Int32 index)
+        throw (RuntimeException)
     {
         if (index < 0) throw RuntimeException();
-        buildlist(static_cast<const CNode*>(m_pElement)->m_aNodePtr);
-        return Reference< XNode >(CNode::get(m_nodevector[index]));
+
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (!m_pElement.is()) { return 0; }
+
+        buildlist(m_pElement->GetNodePtr());
+        if (m_nodevector.size() <= static_cast<size_t>(index)) {
+            throw RuntimeException();
+        }
+        Reference< XNode > const xRet(
+            m_pElement->GetOwnerDocument().GetCNode(m_nodevector[index]).get());
+        return xRet;
     }
 
     // tree mutations can change the list
-    void SAL_CALL CElementList::handleEvent(const Reference< XEvent >& evt) throw (RuntimeException)
+    void SAL_CALL CElementList::handleEvent(Reference< XEvent > const&)
+        throw (RuntimeException)
     {
-      Reference< XEvent > aEvent = evt;
-        m_bRebuild = sal_True;
+        ::osl::MutexGuard const g(m_rMutex);
+
+        m_bRebuild = true;
     }
 }
 

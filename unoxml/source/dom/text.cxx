@@ -26,40 +26,32 @@
  *
  ************************************************************************/
 
-#include "text.hxx"
+#include <text.hxx>
+
+
 namespace DOM
 {
-    CText::CText(const xmlNodePtr aNodePtr)
+    CText::CText(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            NodeType const& reNodeType, xmlNodePtr const& rpNode)
+        : CText_Base(rDocument, rMutex, reNodeType, rpNode)
     {
-        m_aNodeType = NodeType_TEXT_NODE;
-        init_characterdata(aNodePtr);
     }
 
-    void SAL_CALL CText::saxify(
+    CText::CText(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlNodePtr const pNode)
+        : CText_Base(rDocument, rMutex, NodeType_TEXT_NODE, pNode)
+    {
+    }
+
+    void CText::saxify(
             const Reference< XDocumentHandler >& i_xHandler) {
         if (!i_xHandler.is()) throw RuntimeException();
         i_xHandler->characters(getData());
     }
 
-    void CText::init_text(const xmlNodePtr aNodePtr)
+    void CText::fastSaxify( Context& io_rContext )
     {
-        init_characterdata(aNodePtr);
-    }
-
-  Reference< XText > SAL_CALL CText::splitText(sal_Int32 /*offset*/)
-             throw (RuntimeException)
-    {
-        return Reference< XText >(this);
-    }
-
-    OUString SAL_CALL CText::getNodeName()throw (RuntimeException)
-    {
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("#text"));
-    }
-
-    void SAL_CALL CText::fastSaxify( Context& io_rContext )
-    {
-        if( io_rContext.mxCurrentHandler.is() )
+        if (io_rContext.mxCurrentHandler.is())
         {
             try
             {
@@ -70,6 +62,17 @@ namespace DOM
         }
     }
 
+    OUString SAL_CALL CText::getNodeName() throw (RuntimeException)
+    {
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("#text"));
+    }
+
+    Reference< XText > SAL_CALL CText::splitText(sal_Int32 /*offset*/)
+         throw (RuntimeException)
+    {
+        OSL_FAIL("CText::splitText: not implemented (#i113683#)");
+        return Reference< XText >(this);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

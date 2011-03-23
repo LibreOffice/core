@@ -1,5 +1,0 @@
-..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
-..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%\lib*.dylib
-..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\misc\unordf.component %_DEST%\xml%_EXT%\unordf.component
-..\%__SRC%\misc\unoxml.component %_DEST%\xml%_EXT%\unoxml.component

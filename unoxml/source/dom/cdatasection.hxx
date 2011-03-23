@@ -26,14 +26,14 @@
  *
  ************************************************************************/
 
-#ifndef _CDATASECTION_HXX
-#define _CDATASECTION_HXX
+#ifndef DOM_CDATASECTION_HXX
+#define DOM_CDATASECTION_HXX
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XCDATASection.hpp>
 
-#include "text.hxx"
+#include <text.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -41,16 +41,21 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CCDATASection : public cppu::ImplInheritanceHelper1< CText, XCDATASection >
+    typedef ::cppu::ImplInheritanceHelper1< CText, XCDATASection >
+        CCDATASection_Base;
+
+    class CCDATASection
+        : public CCDATASection_Base
     {
-        friend class CNode;
+        friend class CDocument;
+
     protected:
-        CCDATASection(const xmlNodePtr aNodePtr);
+        CCDATASection(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                xmlNodePtr const pNode);
 
     public:
 
-        virtual void SAL_CALL saxify(
-            const Reference< XDocumentHandler >& i_xHandler);
+        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
 
         virtual Reference< XText > SAL_CALL splitText(sal_Int32 offset)
              throw (RuntimeException)
@@ -216,7 +221,7 @@ namespace DOM
     virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
         throw (RuntimeException, DOMException)
     {
-        return CNode::setNodeValue(nodeValue);
+        return CText::setNodeValue(nodeValue);
     }
     virtual void SAL_CALL setPrefix(const OUString& prefix)
         throw (RuntimeException, DOMException)

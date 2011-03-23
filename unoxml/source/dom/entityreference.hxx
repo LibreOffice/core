@@ -26,13 +26,16 @@
  *
  ************************************************************************/
 
-#ifndef _ENTITYREFERENCE_HXX
-#define _ENTITYREFERENCE_HXX
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/xml/dom/XEntityReference.hpp>
-#include "node.hxx"
+#ifndef DOM_ENTITYREFERENCE_HXX
+#define DOM_ENTITYREFERENCE_HXX
+
 #include <libxml/tree.h>
+
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/xml/dom/XEntityReference.hpp>
+
+#include <node.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -40,13 +43,23 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CEntityReference : public cppu::ImplInheritanceHelper1< CNode, XEntityReference >
+    typedef ::cppu::ImplInheritanceHelper1< CNode, XEntityReference >
+        CEntityReference_Base;
+
+    class CEntityReference
+        : public CEntityReference_Base
     {
-        friend class CNode;
+    private:
+        friend class CDocument;
+
     protected:
-        CEntityReference(const xmlNodePtr aNodePtr);
+        CEntityReference(
+            CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlNodePtr const pNode);
 
     public:
+        virtual bool IsChildTypeAllowed(NodeType const nodeType);
+
         // ---- resolve uno inheritance problems...
         // overrides for XNode base
         virtual OUString SAL_CALL getNodeName()

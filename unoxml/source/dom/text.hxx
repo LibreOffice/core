@@ -26,41 +26,47 @@
  *
  ************************************************************************/
 
-#ifndef _TEXT_HXX
-#define _TEXT_HXX
+#ifndef DOM_TEXT_HXX
+#define DOM_TEXT_HXX
+
+#include <libxml/tree.h>
 
 #include <sal/types.h>
+
 #include <cppuhelper/implbase1.hxx>
+
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XText.hpp>
-#include <com/sun/star/xml/dom/XCharacterData.hpp>
-#include <libxml/tree.h>
-#include "characterdata.hxx"
+
+#include <characterdata.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CText : public cppu::ImplInheritanceHelper1< CCharacterData, XText >
+    typedef ::cppu::ImplInheritanceHelper1< CCharacterData, XText > CText_Base;
+
+    class CText
+        : public CText_Base
     {
-        friend class CNode;
+    private:
+        friend class CDocument;
 
     protected:
-        CText(){}
-        CText(const xmlNodePtr aNodePtr);
-        void init_text(const xmlNodePtr aNodePtr);
+        CText(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                NodeType const& reNodeType, xmlNodePtr const& rpNode);
+        CText(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                xmlNodePtr const pNode);
 
     public:
 
-        virtual void SAL_CALL saxify(
-            const Reference< XDocumentHandler >& i_xHandler);
+        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
 
-        virtual void SAL_CALL fastSaxify( Context& io_rContext );
+        virtual void fastSaxify( Context& io_rContext );
 
          // Breaks this node into two nodes at the specified offset, keeping
          // both in the tree as siblings.
