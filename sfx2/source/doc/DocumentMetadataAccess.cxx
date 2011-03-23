@@ -699,11 +699,11 @@ writeStream(struct DocumentMetadataAccess_Impl & i_rImpl,
             buf.append(dir).append(static_cast<sal_Unicode>('/'));
             writeStream(i_rImpl, xDir, i_xGraphName, rest,
                 buf.makeStringAndClear());
-        }
-        const uno::Reference<embed::XTransactedObject> xTransaction(
-            i_xStorage, uno::UNO_QUERY);
-        if (xTransaction.is()) {
-            xTransaction->commit();
+            uno::Reference<embed::XTransactedObject> const xTransaction(
+                xDir, uno::UNO_QUERY);
+            if (xTransaction.is()) {
+                xTransaction->commit();
+            }
         }
     } catch (uno::RuntimeException &) {
         throw;
