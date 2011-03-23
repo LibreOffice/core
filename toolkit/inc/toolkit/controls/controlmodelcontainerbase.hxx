@@ -65,6 +65,7 @@ typedef ::cppu::AggImplInheritanceHelper8   <   ControlModel_Base
 class ControlModelContainerBase :   public ControlModelContainer_IBase
 {
 public:
+    enum ChildOperation { Insert = 0, Remove };
     // would like to make this typedef private, too, but the Forte 7 compiler does have
     // problems with this .....
     typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >, ::rtl::OUString >
@@ -97,13 +98,13 @@ protected:
     sal_Int16                               m_nTabPageId;
 
     void    Clone_Impl(ControlModelContainerBase& _rClone) const;
-
 protected:
     ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper();
 
     UnoControlModelHolderList::iterator         ImplFindElement( const ::rtl::OUString& rName );
 
+    void updateUserFormChildren(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xAllChildren, const rtl::OUString& aName, ChildOperation Operation,  const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xTarget ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 public:
                         ControlModelContainerBase( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         ControlModelContainerBase( const ControlModelContainerBase& rModel );

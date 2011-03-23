@@ -572,6 +572,7 @@ FreetypeManager::FreetypeManager()
         nDefaultPrioAutoHint  = pEnv[0] - '0';
 
     InitGammaTable();
+    vclFontFileList::get();
 }
 
 // -----------------------------------------------------------------------
@@ -769,7 +770,6 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     mpFontInfo( pFI ),
     maFaceFT( NULL ),
     maSizeFT( NULL ),
-    mpFontOptions( NULL ),
     mbFaceOk( false ),
     maRecodeConverter( NULL ),
     mpLayoutEngine( NULL )
@@ -915,7 +915,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
-void FreetypeServerFont::SetFontOptions( const ImplFontOptions* pFontOptions)
+void FreetypeServerFont::SetFontOptions( boost::shared_ptr<ImplFontOptions> pFontOptions)
 {
     mpFontOptions = pFontOptions;
 
@@ -970,7 +970,7 @@ void FreetypeServerFont::SetFontOptions( const ImplFontOptions* pFontOptions)
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
-const ImplFontOptions* FreetypeServerFont::GetFontOptions() const
+boost::shared_ptr<ImplFontOptions> FreetypeServerFont::GetFontOptions() const
 {
     return mpFontOptions;
 }
