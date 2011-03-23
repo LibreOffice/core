@@ -64,7 +64,7 @@ namespace dbaui
         OConnectionLine( const OConnectionLine& rLine );
         virtual ~OConnectionLine();
 
-        virtual OConnectionLine& operator=( const OConnectionLine& rLine );
+        OConnectionLine& operator=( const OConnectionLine& rLine );
 
         Rectangle           GetBoundingRect();
         sal_Bool                RecalcLine();
