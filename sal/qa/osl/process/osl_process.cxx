@@ -363,6 +363,32 @@ private:
     string_container_t exclude_list_;
 };
 
+namespace
+{
+    class starts_with
+        : public std::unary_function<const std::string&, bool>
+    {
+    private:
+        const std::string m_rString;
+    public:
+        starts_with(const char *pString) : m_rString(pString) {}
+        bool operator()(const std::string &rEntry) const
+        {
+            return rEntry.find(m_rString) == 0;
+        }
+    };
+
+    void tidy_container(string_container_t &env_container)
+    {
+        //sort them because there are no guarantees to ordering
+        std::sort(env_container.begin(), env_container.end());
+        //remove LD_PRELOAD because valgrind injects that into the
+        //parent process
+        env_container.erase(std::remove_if(env_container.begin(), env_container.end(),
+            starts_with("LD_PRELOAD=")), env_container.end());
+    }
+}
+
 #ifdef WNT
     void read_parent_environment(string_container_t* env_container)
     {
@@ -375,14 +401,14 @@ private:
             p += l + 1;
         }
         FreeEnvironmentStrings(env);
-        std::sort(env_container->begin(), env_container->end());
+        tidy_container(*env_container);
     }
 #else
     void read_parent_environment(string_container_t* env_container)
     {
         for (int i = 0; NULL != environ[i]; i++)
             env_container->push_back(std::string(environ[i]));
-        std::sort(env_container->begin(), env_container->end());
+        tidy_container(*env_container);
     }
 #endif
 
@@ -454,7 +480,7 @@ public:
         std::string line;
         while (std::getline(file, line, '\0'))
             env_container->push_back(line);
-        std::sort(env_container->begin(), env_container->end());
+        tidy_container(*env_container);
     }
 
     //------------------------------------------------
@@ -580,7 +606,7 @@ public:
 
         CPPUNIT_ASSERT_MESSAGE
         (
-            "Parent an child environment not equal",
+            "Parent and child environment not equal",
             compare_environments()
         );
     }
