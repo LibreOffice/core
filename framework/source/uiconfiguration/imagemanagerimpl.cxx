@@ -689,10 +689,10 @@ CmdImageList* ImageManagerImpl::implts_getDefaultImageList()
     return m_pDefaultImageList;
 }
 
-ImageManagerImpl::ImageManagerImpl( const uno::Reference< XMultiServiceFactory >& xServiceManager,const uno::Reference< XInterface >& _xOwner,bool _bUseGlobal ) :
+ImageManagerImpl::ImageManagerImpl( const uno::Reference< XMultiServiceFactory >& xServiceManager,::cppu::OWeakObject* pOwner,bool _bUseGlobal ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
     , m_xServiceManager( xServiceManager )
-    , m_xOwner(_xOwner)
+    , m_pOwner(pOwner)
     , m_pDefaultImageList( 0 )
     , m_aXMLPostfix( RTL_CONSTASCII_USTRINGPARAM( ".xml" ))
     , m_aResourceString( RTL_CONSTASCII_USTRINGPARAM( ModuleImageList ))
@@ -718,7 +718,8 @@ ImageManagerImpl::~ImageManagerImpl()
 
 void ImageManagerImpl::dispose()
 {
-    css::lang::EventObject aEvent( m_xOwner );
+    uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
+    css::lang::EventObject aEvent( xOwner );
     m_aListenerContainer.disposeAndClear( aEvent );
 
     {
@@ -738,8 +739,6 @@ void ImageManagerImpl::dispose()
         }
         delete m_pDefaultImageList;
         m_pDefaultImageList = 0;
-
-        m_xOwner.clear();
     }
 
 }
@@ -1020,13 +1019,14 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
         }
     }
 
+    uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
     // Notify listeners
     if ( pInsertedImages != 0 )
     {
         ConfigurationEvent aInsertEvent;
         aInsertEvent.aInfo           <<= nImageType;
-        aInsertEvent.Accessor        <<= m_xOwner;
-        aInsertEvent.Source          = m_xOwner;
+        aInsertEvent.Accessor        <<= xOwner;
+        aInsertEvent.Source          = xOwner;
         aInsertEvent.ResourceURL     = m_aResourceString;
         aInsertEvent.Element         = uno::makeAny( uno::Reference< XNameAccess >(
                                         static_cast< OWeakObject *>( pInsertedImages ), UNO_QUERY ));
@@ -1036,8 +1036,8 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     {
         ConfigurationEvent aReplaceEvent;
         aReplaceEvent.aInfo           <<= nImageType;
-        aReplaceEvent.Accessor        <<= m_xOwner;
-        aReplaceEvent.Source          = m_xOwner;
+        aReplaceEvent.Accessor        <<= xOwner;
+        aReplaceEvent.Source          = xOwner;
         aReplaceEvent.ResourceURL     = m_aResourceString;
         aReplaceEvent.ReplacedElement = Any();
         aReplaceEvent.Element         = uno::makeAny( uno::Reference< XNameAccess >(
@@ -1124,12 +1124,13 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     }
 
     // Notify listeners
+    uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
     if ( pRemovedImages != 0 )
     {
         ConfigurationEvent aRemoveEvent;
         aRemoveEvent.aInfo           = uno::makeAny( nImageType );
-        aRemoveEvent.Accessor        = uno::makeAny( m_xOwner );
-        aRemoveEvent.Source          = m_xOwner;
+        aRemoveEvent.Accessor        = uno::makeAny( xOwner );
+        aRemoveEvent.Source          = xOwner;
         aRemoveEvent.ResourceURL     = m_aResourceString;
         aRemoveEvent.Element         = uno::makeAny( uno::Reference< XNameAccess >(
                                             static_cast< OWeakObject *>( pRemovedImages ), UNO_QUERY ));
@@ -1139,8 +1140,8 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     {
         ConfigurationEvent aReplaceEvent;
         aReplaceEvent.aInfo           = uno::makeAny( nImageType );
-        aReplaceEvent.Accessor        = uno::makeAny( m_xOwner );
-        aReplaceEvent.Source          = m_xOwner;
+        aReplaceEvent.Accessor        = uno::makeAny( xOwner );
+        aReplaceEvent.Source          = xOwner;
         aReplaceEvent.ResourceURL     = m_aResourceString;
         aReplaceEvent.ReplacedElement = Any();
         aReplaceEvent.Element         = uno::makeAny( uno::Reference< XNameAccess >(
@@ -1269,12 +1270,13 @@ throw ( ::com::sun::star::uno::Exception,
                 aGuard.unlock();
 
                 // Now notify our listeners. Unlock mutex to prevent deadlocks
+                uno::Reference< uno::XInterface > xOwner(static_cast< OWeakObject* >(m_pOwner));
                 if ( pInsertedImages != 0 )
                 {
                     ConfigurationEvent aInsertEvent;
                     aInsertEvent.aInfo           = uno::makeAny( i );
-                    aInsertEvent.Accessor        = uno::makeAny( m_xOwner );
-                    aInsertEvent.Source          = m_xOwner;
+                    aInsertEvent.Accessor        = uno::makeAny( xOwner );
+                    aInsertEvent.Source          = xOwner;
                     aInsertEvent.ResourceURL     = m_aResourceString;
                     aInsertEvent.Element         = uno::makeAny( uno::Reference< XNameAccess >(
                                                     static_cast< OWeakObject *>( pInsertedImages ), UNO_QUERY ));
@@ -1284,8 +1286,8 @@ throw ( ::com::sun::star::uno::Exception,
                 {
                     ConfigurationEvent aReplaceEvent;
                     aReplaceEvent.aInfo           = uno::makeAny( i );
-                    aReplaceEvent.Accessor        = uno::makeAny( m_xOwner );
-                    aReplaceEvent.Source          = m_xOwner;
+                    aReplaceEvent.Accessor        = uno::makeAny( xOwner );
+                    aReplaceEvent.Source          = xOwner;
                     aReplaceEvent.ResourceURL     = m_aResourceString;
                     aReplaceEvent.ReplacedElement = Any();
                     aReplaceEvent.Element         = uno::makeAny( uno::Reference< XNameAccess >(
@@ -1296,8 +1298,8 @@ throw ( ::com::sun::star::uno::Exception,
                 {
                     ConfigurationEvent aRemoveEvent;
                     aRemoveEvent.aInfo           = uno::makeAny( i );
-                    aRemoveEvent.Accessor        = uno::makeAny( m_xOwner );
-                    aRemoveEvent.Source          = m_xOwner;
+                    aRemoveEvent.Accessor        = uno::makeAny( xOwner );
+                    aRemoveEvent.Source          = xOwner;
                     aRemoveEvent.ResourceURL     = m_aResourceString;
                     aRemoveEvent.Element         = uno::makeAny( uno::Reference< XNameAccess >(
                                                         static_cast< OWeakObject *>( pRemovedImages ), UNO_QUERY ));

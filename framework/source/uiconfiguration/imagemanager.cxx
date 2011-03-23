@@ -108,7 +108,7 @@ DEFINE_INIT_SERVICE                     (   ImageManager, {} )
 
 ImageManager::ImageManager( uno::Reference< XMultiServiceFactory > xServiceManager ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_pImpl( new ImageManagerImpl(xServiceManager,static_cast< OWeakObject* >(this),false) )
+    , m_pImpl( new ImageManagerImpl(xServiceManager,this,false) )
 {
 }
 

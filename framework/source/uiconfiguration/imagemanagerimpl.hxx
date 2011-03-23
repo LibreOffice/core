@@ -131,7 +131,7 @@ namespace framework
         public:
 
             ImageManagerImpl(const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager
-                ,const  com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& _xOwner
+                ,::cppu::OWeakObject *pOwner
                 ,bool _bUseGlobal);
             ~ImageManagerImpl();
 
@@ -202,7 +202,7 @@ namespace framework
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserBitmapsStorage;
             com::sun::star::uno::Reference< com::sun::star::embed::XTransactedObject >      m_xUserRootCommit;
             com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
-            com::sun::star::uno::Reference< com::sun::star::uno::XInterface >               m_xOwner;
+            ::cppu::OWeakObject*                                                            m_pOwner;
             rtl::Reference< GlobalImageList >                                               m_pGlobalImageList;
             CmdImageList*                                                                   m_pDefaultImageList;
             rtl::OUString                                                                   m_aXMLPostfix;
