@@ -53,6 +53,7 @@ OBJFILES= \
     $(OBJ)$/sweb.obj
 
 # SO launcher
+.IF "$(LINK_SO)"=="TRUE"
 .IF "$(BUILD_SPECIAL)"!=""
 APP1DEPN= $(APP1RES) verinfo.rc
 APP1TARGET=so$/swriter
@@ -139,7 +140,8 @@ APP7VERINFO=verinfo.rc
 APP7PRODUCTDEF+=-DRES_APP_NAME=sweb
 
 
-.ENDIF			# "$(BUILD_SPECIAL)"!=""
+.ENDIF # "$(BUILD_SPECIAL)"!=""
+.ENDIF # "$(LINK_SO)"=="TRUE"
 
 # --- Targets ------------------------------------------------------
 

@@ -35,6 +35,8 @@
 #include "SchXMLSeriesHelper.hxx"
 #include "ColorPropertySet.hxx"
 #include "SchXMLTools.hxx"
+#include "SchXMLEnumConverter.hxx"
+
 #include <tools/debug.hxx>
 #include <rtl/logfile.hxx>
 #include <comphelper/processfactory.hxx>
@@ -68,6 +70,7 @@
 #include <com/sun/star/chart/XAxisSupplier.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
 #include <com/sun/star/chart/ChartAxisType.hpp>
@@ -245,8 +248,8 @@ public:
     void addPosition( const ::com::sun::star::awt::Point & rPosition );
     void addPosition( com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
     /// add svg size as attribute for current element
-    void addSize( const ::com::sun::star::awt::Size & rSize );
-    void addSize( com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
+    void addSize( const ::com::sun::star::awt::Size & rSize, bool bIsOOoNamespace = false );
+    void addSize( com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape, bool bIsOOoNamespace = false  );
     /// fills the member msString with the appropriate String (i.e. "A3")
     void getCellAddress( sal_Int32 nCol, sal_Int32 nRow );
     /// exports a string as a paragraph element
@@ -599,24 +602,20 @@ OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequence )
     return aResult.makeStringAndClear();
 }
 
-OUString lcl_getLabelString( const Reference< chart2::data::XDataSequence > & xLabelSeq )
+void lcl_getLabelStringSequence( Sequence< OUString >& rOutLabels, const Reference< chart2::data::XDataSequence > & xLabelSeq )
 {
-    Sequence< OUString > aLabels;
-
     uno::Reference< chart2::data::XTextualDataSequence > xTextualDataSequence( xLabelSeq, uno::UNO_QUERY );
     if( xTextualDataSequence.is())
     {
-        aLabels = xTextualDataSequence->getTextualData();
+        rOutLabels = xTextualDataSequence->getTextualData();
     }
     else if( xLabelSeq.is())
     {
         Sequence< uno::Any > aAnies( xLabelSeq->getData());
-        aLabels.realloc( aAnies.getLength());
+        rOutLabels.realloc( aAnies.getLength());
         for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
-            aAnies[i] >>= aLabels[i];
+            aAnies[i] >>= rOutLabels[i];
     }
-
-    return lcl_flattenStringSequence( aLabels );
 }
 
 sal_Int32 lcl_getMaxSequenceLength(
@@ -636,46 +635,96 @@ sal_Int32 lcl_getMaxSequenceLength(
     return nResult;
 }
 
-double lcl_getValueFromSequence( const Reference< chart2::data::XDataSequence > & xSeq, sal_Int32 nIndex )
+uno::Sequence< rtl::OUString > lcl_DataSequenceToStringSequence(
+    const uno::Reference< chart2::data::XDataSequence >& xDataSequence )
 {
-    double fResult = 0.0;
-    ::rtl::math::setNan( &fResult );
-    Reference< chart2::data::XNumericalDataSequence > xNumSeq( xSeq, uno::UNO_QUERY );
-    if( xNumSeq.is())
+    uno::Sequence< rtl::OUString > aResult;
+    if(!xDataSequence.is())
+        return aResult;
+
+    uno::Reference< chart2::data::XTextualDataSequence > xTextualDataSequence( xDataSequence, uno::UNO_QUERY );
+    if( xTextualDataSequence.is() )
     {
-        Sequence< double > aValues( xNumSeq->getNumericalData());
-        if( nIndex < aValues.getLength() )
-            fResult = aValues[nIndex];
+        aResult = xTextualDataSequence->getTextualData();
     }
     else
     {
-        Sequence< uno::Any > aAnies( xSeq->getData());
-        if( nIndex < aAnies.getLength() )
-            aAnies[nIndex] >>= fResult;
-    }
-    return fResult;
-}
+        uno::Sequence< uno::Any > aValues = xDataSequence->getData();
+        aResult.realloc(aValues.getLength());
 
+        for(sal_Int32 nN=aValues.getLength();nN--;)
+            aValues[nN] >>= aResult[nN];
+    }
+
+    return aResult;
+}
 ::std::vector< double > lcl_getAllValuesFromSequence( const Reference< chart2::data::XDataSequence > & xSeq )
 {
     double fNan = 0.0;
     ::rtl::math::setNan( &fNan );
     ::std::vector< double > aResult;
+    if(!xSeq.is())
+        return aResult;
 
+    uno::Sequence< double > aValuesSequence;
     Reference< chart2::data::XNumericalDataSequence > xNumSeq( xSeq, uno::UNO_QUERY );
-    if( xNumSeq.is())
+    if( xNumSeq.is() )
     {
-        Sequence< double > aValues( xNumSeq->getNumericalData());
-        ::std::copy( aValues.getConstArray(), aValues.getConstArray() + aValues.getLength(),
-                     ::std::back_inserter( aResult ));
+        aValuesSequence = xNumSeq->getNumericalData();
     }
-    else if( xSeq.is())
+    else
     {
-        Sequence< uno::Any > aAnies( xSeq->getData());
-        aResult.resize( aAnies.getLength(), fNan );
+        Sequence< uno::Any > aAnies( xSeq->getData() );
+        aValuesSequence.realloc( aAnies.getLength() );
         for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
-            aAnies[i] >>= aResult[i];
+            aAnies[i] >>= aValuesSequence[i];
     }
+
+    //special handling for x-values (if x-values do point to categories, indices are used instead )
+    Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY );
+    if( xProp.is() )
+    {
+        OUString aRole;
+        xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Role") ) ) >>= aRole;
+        if( aRole.match( OUString( RTL_CONSTASCII_USTRINGPARAM( "values-x") ) ) )
+        {
+            //lcl_clearIfNoValuesButTextIsContained - replace by indices if the values are not appropriate
+            bool bHasValue=false;
+            bool bHasText=false;
+            sal_Int32 nCount = aValuesSequence.getLength();
+            for( sal_Int32 j = 0; j < nCount; ++j )
+            {
+                if( !::rtl::math::isNan( aValuesSequence[j] ) )
+                {
+                    bHasValue=true;
+                    break;
+                }
+            }
+            if(!bHasValue)
+            {
+                //no double value is countained
+                //is there any text?
+                uno::Sequence< rtl::OUString > aStrings( lcl_DataSequenceToStringSequence( xSeq ) );
+                sal_Int32 nTextCount = aStrings.getLength();
+                for( sal_Int32 j = 0; j < nTextCount; ++j )
+                {
+                    if( aStrings[j].getLength() )
+                    {
+                        bHasText=true;
+                        break;
+                    }
+                }
+            }
+            if( !bHasValue && bHasText )
+            {
+                for( sal_Int32 j = 0; j < nCount; ++j )
+                    aValuesSequence[j] = j+1;
+            }
+        }
+    }
+
+    ::std::copy( aValuesSequence.getConstArray(), aValuesSequence.getConstArray() + aValuesSequence.getLength(),
+                     ::std::back_inserter( aResult ));
     return aResult;
 }
 
@@ -800,15 +849,20 @@ lcl_TableData lcl_getDataForLocalTable(
         Sequence< OUString > aSimpleCategories;
         if( xAnyDescriptionAccess.is() )
         {
+            //categories
             if( bSeriesFromColumns )
+            {
                 aSimpleCategories = xAnyDescriptionAccess->getRowDescriptions();
+                aResult.aComplexRowDescriptions = xAnyDescriptionAccess->getAnyRowDescriptions();
+            }
             else
+            {
                 aSimpleCategories = xAnyDescriptionAccess->getColumnDescriptions();
-
-            aResult.aComplexColumnDescriptions = xAnyDescriptionAccess->getAnyColumnDescriptions();
-            aResult.aComplexRowDescriptions = xAnyDescriptionAccess->getAnyRowDescriptions();
+                aResult.aComplexColumnDescriptions = xAnyDescriptionAccess->getAnyColumnDescriptions();
+            }
         }
 
+        //series values and series labels
         SchXMLExportHelper_Impl::tDataSequenceCont::size_type nNumSequences = aSequencesToExport.size();
         SchXMLExportHelper_Impl::tDataSequenceCont::const_iterator aBegin( aSequencesToExport.begin());
         SchXMLExportHelper_Impl::tDataSequenceCont::const_iterator aEnd( aSequencesToExport.end());
@@ -853,19 +907,25 @@ lcl_TableData lcl_getDataForLocalTable(
 
         // iterate over all sequences
         size_t nSeqIdx = 0;
+        Sequence< Sequence< OUString > > aComplexLabels(nNumSequences);
         for( ; aIt != aEnd; ++aIt, ++nSeqIdx )
         {
             OUString aRange;
+            Sequence< OUString >& rCurrentComplexLabel = aComplexLabels[nSeqIdx];
             if( aIt->first.is())
             {
-                rLabels[nSeqIdx] = lcl_getLabelString( aIt->first );
+                lcl_getLabelStringSequence( rCurrentComplexLabel, aIt->first );
+                rLabels[nSeqIdx] = lcl_flattenStringSequence( rCurrentComplexLabel );
                 aRange = aIt->first->getSourceRangeRepresentation();
                 if( xRangeConversion.is())
                     aRange = xRangeConversion->convertRangeToXML( aRange );
             }
             else if( aIt->second.is())
-                rLabels[nSeqIdx] = lcl_flattenStringSequence(
+            {
+                rCurrentComplexLabel.realloc(1);
+                rLabels[nSeqIdx] = rCurrentComplexLabel[0] = lcl_flattenStringSequence(
                     aIt->second->generateLabel( chart2::data::LabelOrigin_SHORT_SIDE ));
+            }
             if( bSeriesFromColumns )
                 aResult.aColumnDescriptions_Ranges.push_back( aRange );
             else
@@ -892,6 +952,16 @@ lcl_TableData lcl_getDataForLocalTable(
             //is column hidden?
             if( !lcl_SequenceHasUnhiddenData(aIt->first) && !lcl_SequenceHasUnhiddenData(aIt->second) )
                 aResult.aHiddenColumns.push_back(nSeqIdx);
+        }
+        Sequence< Sequence< Any > >& rComplexAnyLabels = bSeriesFromColumns ? aResult.aComplexColumnDescriptions : aResult.aComplexRowDescriptions;//#i116544#
+        rComplexAnyLabels.realloc(aComplexLabels.getLength());
+        for( sal_Int32 nN=0; nN<aComplexLabels.getLength();nN++ )
+        {
+            Sequence< OUString >& rSource = aComplexLabels[nN];
+            Sequence< Any >& rTarget = rComplexAnyLabels[nN];
+            rTarget.realloc( rSource.getLength() );
+            for( sal_Int32 i=0; i<rSource.getLength(); i++ )
+                rTarget[i] = uno::makeAny( rSource[i] );
         }
     }
     catch( uno::Exception & rEx )
@@ -1427,51 +1497,50 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
             Reference< beans::XPropertySet > xProp( rChartDoc->getLegend(), uno::UNO_QUERY );
             if( xProp.is())
             {
-                chart::ChartLegendPosition aLegendPos = chart::ChartLegendPosition_NONE;
+                // export legend anchor position
                 try
                 {
-                    Any aAny( xProp->getPropertyValue(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "Alignment" ))));
-                    aAny >>= aLegendPos;
+                    Any aAny( xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Alignment" ))));
+                    if( SchXMLEnumConverter::getLegendPositionConverter().exportXML( msString, aAny, mrExport.GetMM100UnitConverter() ) )
+                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LEGEND_POSITION, msString );
                 }
                 catch( beans::UnknownPropertyException & )
                 {
                     DBG_WARNING( "Property Align not found in ChartLegend" );
                 }
 
-                switch( aLegendPos )
+                // export absolute legend position
+                Reference< drawing::XShape > xLegendShape( xProp, uno::UNO_QUERY );
+                addPosition( xLegendShape );
+
+                // export legend size
+                const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                if( xLegendShape.is() && nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 && nCurrentODFVersion == SvtSaveOptions::ODFVER_LATEST )//do not export legend-expansion to ODF 1.0 and export size only if extensions are enabled //#i28670# todo: change this dependent on fileformat evolution
                 {
-                    case chart::ChartLegendPosition_LEFT:
-//                      msString = GetXMLToken(XML_LEFT);
-                        // #i35421# change left->start (not clear why this was done)
-                        msString = GetXMLToken(XML_START);
-                        break;
-                    case chart::ChartLegendPosition_RIGHT:
-//                      msString = GetXMLToken(XML_RIGHT);
-                        // #i35421# change right->end (not clear why this was done)
-                        msString = GetXMLToken(XML_END);
-                        break;
-                    case chart::ChartLegendPosition_TOP:
-                        msString = GetXMLToken(XML_TOP);
-                        break;
-                    case chart::ChartLegendPosition_BOTTOM:
-                        msString = GetXMLToken(XML_BOTTOM);
-                        break;
-                    case chart::ChartLegendPosition_NONE:
-                    case chart::ChartLegendPosition_MAKE_FIXED_SIZE:
-                        // nothing
-                        break;
+                    try
+                    {
+                        chart::ChartLegendExpansion nLegendExpansion = chart::ChartLegendExpansion_HIGH;
+                        OUString aExpansionString;
+                        Any aAny( xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Expansion" ))));
+                        bool bHasExpansion = (aAny >>= nLegendExpansion);
+                        if( bHasExpansion && SchXMLEnumConverter::getLegendExpansionConverter().exportXML( aExpansionString, aAny, mrExport.GetMM100UnitConverter() ) )
+                        {
+                            mrExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LEGEND_EXPANSION, aExpansionString );
+                            if( nLegendExpansion == chart::ChartLegendExpansion_CUSTOM)
+                            {
+                                awt::Size aSize( xLegendShape->getSize() );
+                                addSize( aSize, true );
+                                rtl::OUStringBuffer aAspectRatioString;
+                                SvXMLUnitConverter::convertDouble(aAspectRatioString, double(aSize.Width)/double(aSize.Height));
+                                mrExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LEGEND_EXPANSION_ASPECT_RATIO, aAspectRatioString.makeStringAndClear() );
+                            }
+                        }
+                    }
+                    catch( beans::UnknownPropertyException & )
+                    {
+                        DBG_WARNING( "Property Expansion not found in ChartLegend" );
+                    }
                 }
-
-                // export anchor position
-                if( msString.getLength())
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LEGEND_POSITION, msString );
-
-                // export absolute position
-                msString = OUString();
-                Reference< drawing::XShape > xShape( xProp, uno::UNO_QUERY );
-                if( xShape.is())
-                    addPosition( xShape );
             }
 
             // write style name
@@ -1767,7 +1836,7 @@ void SchXMLExportHelper_Impl::exportTable()
 
         for( t2DNumberContainer::const_iterator aRowIt( aData.aDataInRows.begin())
             ; aRowIt != aData.aDataInRows.end()
-            ; aRowIt++, nC++, aRowDescriptionsIter++ )
+            ; ++aRowIt, ++nC )
         {
             SvXMLElementExport aRow( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True );
 
@@ -1805,8 +1874,10 @@ void SchXMLExportHelper_Impl::exportTable()
                     if( !bHasOwnData && aRowDescriptions_RangeIter != aRowDescriptions_RangeEnd )
                     {
                         // remind the original range to allow a correct re-association when copying via clipboard
-                        SchXMLTools::exportRangeToSomewhere( mrExport, *aRowDescriptions_RangeIter++ );
+                        SchXMLTools::exportRangeToSomewhere( mrExport, *aRowDescriptions_RangeIter );
+                        ++aRowDescriptions_RangeIter;
                     }
+                    ++aRowDescriptionsIter;
                 }
             }
 
@@ -3535,21 +3606,22 @@ void SchXMLExportHelper_Impl::addPosition( Reference< drawing::XShape > xShape )
         addPosition( xShape->getPosition());
 }
 
-void SchXMLExportHelper_Impl::addSize( const awt::Size & rSize )
+void SchXMLExportHelper_Impl::addSize( const awt::Size & rSize, bool bIsOOoNamespace)
 {
     mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, rSize.Width );
     msString = msStringBuffer.makeStringAndClear();
-    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,  msString );
+    mrExport.AddAttribute( bIsOOoNamespace ? XML_NAMESPACE_CHART_EXT : XML_NAMESPACE_SVG , XML_WIDTH,  msString );
 
-    mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, rSize.Height );
+
+    mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, rSize.Height);
     msString = msStringBuffer.makeStringAndClear();
-    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT, msString );
+    mrExport.AddAttribute( bIsOOoNamespace ? XML_NAMESPACE_CHART_EXT : XML_NAMESPACE_SVG, XML_HEIGHT, msString );
 }
 
-void SchXMLExportHelper_Impl::addSize( Reference< drawing::XShape > xShape )
+void SchXMLExportHelper_Impl::addSize( Reference< drawing::XShape > xShape, bool bIsOOoNamespace )
 {
     if( xShape.is())
-        addSize( xShape->getSize() );
+        addSize( xShape->getSize(), bIsOOoNamespace );
 }
 
 awt::Size SchXMLExportHelper_Impl::getPageSize( const Reference< chart2::XChartDocument > & xChartDoc ) const

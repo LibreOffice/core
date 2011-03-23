@@ -400,7 +400,7 @@ void BackingWindow::prepareRecentFileMenu()
 
 void BackingWindow::initBackground()
 {
-    SetBackground( GetSettings().GetStyleSettings().GetWorkspaceGradient() );
+    SetBackground();
 
     bool bDark = GetSettings().GetStyleSettings().GetHighContrastMode();
     if( bDark )
@@ -707,36 +707,39 @@ void BackingWindow::layoutButton(
 
 void BackingWindow::Paint( const Rectangle& )
 {
+    Wallpaper aBack( GetSettings().GetStyleSettings().GetWorkspaceGradient() );
+    Region aClip( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
+    Rectangle aBmpRect(maControlRect);
+    aBmpRect.Left()   -= nShadowLeft;
+    aBmpRect.Top()    -= nShadowTop;
+    aBmpRect.Right()  += nShadowRight;
+    aBmpRect.Bottom() += nShadowBottom;
+    aClip.Exclude( aBmpRect );
+    Push( PUSH_CLIPREGION );
+    IntersectClipRegion( aClip );
+    DrawWallpaper( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ), aBack );
+    Pop();
+
+    VirtualDevice aDev( *this );
+    aDev.EnableRTL( IsRTLEnabled() );
+    aDev.SetOutputSizePixel( aBmpRect.GetSize() );
+    Point aOffset( Point( 0, 0 ) - aBmpRect.TopLeft() );
+    aDev.DrawWallpaper( Rectangle( aOffset, GetOutputSizePixel() ), aBack );
 
     // draw bitmap
-    if( GetSettings().GetLayoutRTL() )
+    Point aTL( 0, 0 );
+    aDev.DrawBitmapEx( aTL, maBackgroundLeft );
+    aTL.X() += maBackgroundLeft.GetSizePixel().Width();
+    if( !!maBackgroundMiddle )
     {
-        Point aTL( maControlRect.TopLeft() );
-        aTL.X() -= nShadowRight;
-        aTL.Y() -= nShadowTop;
-        DrawBitmapEx( aTL, maBackgroundLeft );
-        aTL.X() += maBackgroundLeft.GetSizePixel().Width();
-        if( !!maBackgroundMiddle )
-        {
-            DrawBitmapEx( aTL, maBackgroundMiddle );
-            aTL.X() += maBackgroundMiddle.GetSizePixel().Width();
-        }
-        DrawBitmapEx( aTL, maBackgroundRight );
+        aDev.DrawBitmapEx( aTL, maBackgroundMiddle );
+        aTL.X() += maBackgroundMiddle.GetSizePixel().Width();
     }
-    else
-    {
-        Point aTL( maControlRect.TopLeft() );
-        aTL.X() -= nShadowLeft;
-        aTL.Y() -= nShadowTop;
-        DrawBitmapEx( aTL, maBackgroundLeft );
-        aTL.X() += maBackgroundLeft.GetSizePixel().Width();
-        if( !!maBackgroundMiddle )
-        {
-            DrawBitmapEx( aTL, maBackgroundMiddle );
-            aTL.X() += maBackgroundMiddle.GetSizePixel().Width();
-        }
-        DrawBitmapEx( aTL, maBackgroundRight );
-    }
+    aDev.DrawBitmapEx( aTL, maBackgroundRight );
+
+    DrawOutDev( aBmpRect.TopLeft(), aBmpRect.GetSize(),
+                Point( 0, 0 ), aBmpRect.GetSize(),
+                aDev );
 }
 
 long BackingWindow::Notify( NotifyEvent& rNEvt )

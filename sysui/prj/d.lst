@@ -15,10 +15,6 @@ mkdir: %_DEST%\bin%_EXT%\desktop-integration\pkg
 ..\%__SRC%\bin\pkg\*.tar.gz %_DEST%\bin%_EXT%\desktop-integration\pkg\*.tar.gz
 
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\bin\quickstart.exe %_DEST%\bin%_EXT%\quickstart.exe
-..\%__SRC%\bin\quickstart.exe %_DEST%\bin%_EXT%\install_quickstart.exe
-..\%__SRC%\bin\soquickstart.exe %_DEST%\bin%_EXT%\so\quickstart.exe
-..\%__SRC%\bin\soquickstart.exe %_DEST%\bin%_EXT%\so\install_quickstart.exe
 
 ..\%__SRC%\misc\ooo3_main_app.ico %_DEST%\bin%_EXT%\soffice.ico
 

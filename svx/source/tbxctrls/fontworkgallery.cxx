@@ -83,8 +83,8 @@ const int nLineCount = 4;
 \************************************************************************/
 FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, Window* pParent, sal_uInt16 /*nSID*/ ) :
         ModalDialog( pParent, SVX_RES( RID_SVX_MDLG_FONTWORK_GALLERY ) ),
-        maCtlFavorites      ( this, SVX_RES( CTL_FAVORITES ) ),
         maFLFavorites       ( this, SVX_RES( FL_FAVORITES ) ),
+        maCtlFavorites      ( this, SVX_RES( CTL_FAVORITES ) ),
         maOKButton          ( this, SVX_RES( BTN_OK ) ),
         maCancelButton      ( this, SVX_RES( BTN_CANCEL ) ),
         maHelpButton        ( this, SVX_RES( BTN_HELP ) ),

@@ -56,24 +56,24 @@ ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos):
     aFtArgName      ( this, ModuleRes( FT_PARNAME ) ),
     aFtArgDesc      ( this, ModuleRes( FT_PARDESC ) ),
 
-    aFtArg1         ( this, ModuleRes( FT_ARG1 ) ),
-    aFtArg2         ( this, ModuleRes( FT_ARG2 ) ),
-    aFtArg3         ( this, ModuleRes( FT_ARG3 ) ),
-    aFtArg4         ( this, ModuleRes( FT_ARG4 ) ),
-
     aBtnFx1         ( this, ModuleRes( BTN_FX1 ) ),
-    aBtnFx2         ( this, ModuleRes( BTN_FX2 ) ),
-    aBtnFx3         ( this, ModuleRes( BTN_FX3 ) ),
-    aBtnFx4         ( this, ModuleRes( BTN_FX4 ) ),
-
+    aFtArg1         ( this, ModuleRes( FT_ARG1 ) ),
     aEdArg1         ( this, ModuleRes( ED_ARG1 ) ),
-    aEdArg2         ( this, ModuleRes( ED_ARG2 ) ),
-    aEdArg3         ( this, ModuleRes( ED_ARG3 ) ),
-    aEdArg4         ( this, ModuleRes( ED_ARG4 ) ),
-
     aRefBtn1        ( this, ModuleRes( RB_ARG1 ) ),
+
+    aBtnFx2         ( this, ModuleRes( BTN_FX2 ) ),
+    aFtArg2         ( this, ModuleRes( FT_ARG2 ) ),
+    aEdArg2         ( this, ModuleRes( ED_ARG2 ) ),
     aRefBtn2        ( this, ModuleRes( RB_ARG2 ) ),
+
+    aBtnFx3         ( this, ModuleRes( BTN_FX3 ) ),
+    aFtArg3         ( this, ModuleRes( FT_ARG3 ) ),
+    aEdArg3         ( this, ModuleRes( ED_ARG3 ) ),
     aRefBtn3        ( this, ModuleRes( RB_ARG3 ) ),
+
+    aBtnFx4         ( this, ModuleRes( BTN_FX4 ) ),
+    aFtArg4         ( this, ModuleRes( FT_ARG4 ) ),
+    aEdArg4         ( this, ModuleRes( ED_ARG4 ) ),
     aRefBtn4        ( this, ModuleRes( RB_ARG4 ) ),
 
     aSlider         ( this, ModuleRes( WND_SLIDER ) ),

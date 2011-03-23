@@ -86,11 +86,14 @@ VbaDocumentBase::getName() throw (uno::RuntimeException)
 ::rtl::OUString
 VbaDocumentBase::getPath() throw (uno::RuntimeException)
 {
-       INetURLObject aURL( getModel()->getURL() );
-    rtl::OUString sURL( aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
-    sURL = sURL.copy( 0, sURL.getLength() - aURL.GetLastName().getLength() - 1 );
-        rtl::OUString sPath;
-    ::osl::File::getSystemPathFromFileURL( sURL, sPath );
+    INetURLObject aURL( getModel()->getURL() );
+    rtl::OUString sURL = aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
+    rtl::OUString sPath;
+    if( sURL.getLength() > 0 )
+    {
+       sURL = sURL.copy( 0, sURL.getLength() - aURL.GetLastName().getLength() - 1 );
+       ::osl::File::getSystemPathFromFileURL( sURL, sPath );
+    }
     return sPath;
 }
 
