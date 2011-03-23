@@ -454,9 +454,18 @@ ExternalLinkInfo ExternalLink::getLinkInfo() const
     ExternalLinkInfo aLinkInfo;
     switch( meLinkType )
     {
+        case LINKTYPE_SELF:
+        case LINKTYPE_SAME:
+        case LINKTYPE_INTERNAL:
+            aLinkInfo.Type = ::com::sun::star::sheet::ExternalLinkType::SELF;
+        break;
         case LINKTYPE_EXTERNAL:
             aLinkInfo.Type = ::com::sun::star::sheet::ExternalLinkType::DOCUMENT;
             aLinkInfo.Data <<= maTargetUrl;
+        break;
+        case LINKTYPE_LIBRARY:
+            // parser will return library function names in OPCODE_BAD string tokens
+            aLinkInfo.Type = ::com::sun::star::sheet::ExternalLinkType::SPECIAL;
         break;
         case LINKTYPE_DDE:
         {
@@ -717,8 +726,8 @@ void ExternalLinkBuffer::importExternalSheets( SequenceInputStream& rStrm )
 Sequence< ExternalLinkInfo > ExternalLinkBuffer::getLinkInfos() const
 {
     ::std::vector< ExternalLinkInfo > aLinkInfos;
-    // should not be used for BIFF12 documents
-    OSL_ENSURE( (getFilterType() == FILTER_OOXML) && !mbUseRefSheets, "ExternalLinkBuffer::getLinkInfos - unexpected file format" );
+    // XML formula parser also used in BIFF12 documents, e.g. replacement formulas in unsupported conditional formattings
+    OSL_ENSURE( getFilterType() == FILTER_OOXML, "ExternalLinkBuffer::getLinkInfos - unexpected file format" );
     // add entry for implicit index 0 (self reference to this document)
     aLinkInfos.push_back( mxSelfRef->getLinkInfo() );
     for( ExternalLinkVec::const_iterator aIt = maExtLinks.begin(), aEnd = maExtLinks.end(); aIt != aEnd; ++aIt )
