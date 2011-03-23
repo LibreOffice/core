@@ -155,6 +155,7 @@ public:
     /** Given position and device this constructor will draw the caret */
     SmCaretDrawingVisitor( OutputDevice& rDevice, SmCaretPos position, Point offset, bool caretVisible );
     void Visit( SmTextNode* pNode );
+    using SmDefaultingVisitor::Visit;
 private:
     OutputDevice &rDev;
     SmCaretPos pos;
@@ -181,6 +182,7 @@ public:
         pos.pSelectedNode->Accept( this );
     }
     void Visit( SmTextNode* pNode );
+    using SmDefaultingVisitor::Visit;
     SmCaretLine GetResult( ){
         return line;
     }
@@ -273,6 +275,7 @@ public:
     void Visit( SmExpressionNode* pNode );
     void Visit( SmLineNode* pNode );
     void Visit( SmAlignNode* pNode );
+    using SmDefaultingVisitor::Visit;
     /** Set IsSelected on all pNodes of pSubTree */
     static void SetSelectedOnAll( SmNode* pSubTree, bool IsSelected = true );
 private:
@@ -415,6 +418,7 @@ public:
     /** Draws a selection on rDevice for the selection on pTree */
     SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, Point Offset );
     void Visit( SmTextNode* pNode );
+    using SmDefaultingVisitor::Visit;
 private:
     /** Reference to drawing device */
     OutputDevice& rDev;
