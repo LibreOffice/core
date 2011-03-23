@@ -697,12 +697,6 @@ en-US = "Mongolian"
 [STR_DESC_MODULE_LANGPACK_MN]
 en-US = "Installs Mongolian support in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_LANGPACK_OC]
-en-US = "Occitan"
-
-[STR_DESC_MODULE_LANGPACK_OC]
-en-US = "Installs Occitan support in %PRODUCTNAME %PRODUCTVERSION"
-
 [STR_NAME_MODULE_LANGPACK_BO]
 en-US = "Tibetan"
 
