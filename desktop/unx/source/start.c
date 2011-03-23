@@ -139,8 +139,8 @@ child_spawn ( Args *args, sal_Bool bAllArgs, sal_Bool bWithStatus )
     rtl_uString_newConcat( &pApp, pApp, args->pAppPath );
     rtl_uString_newFromAscii( &pTmp, "/soffice.bin" );
     rtl_uString_newConcat( &pApp, pApp, pTmp );
-
-    rtl_uString_new( &pTmp );
+    rtl_uString_release( pTmp );
+    pTmp = NULL;
 
     /* copy args */
     nArgs = bAllArgs ? args->nArgsTotal : args->nArgsEnv;
@@ -152,8 +152,8 @@ child_spawn ( Args *args, sal_Bool bAllArgs, sal_Bool bWithStatus )
     {
         /* add the pipe arg */
         snprintf (buffer, 63, "--splash-pipe=%d", status_pipe[1]);
-        ppArgs[nArgs] = NULL;
-        rtl_uString_newFromAscii( &ppArgs[nArgs], buffer );
+        rtl_uString_newFromAscii( &pTmp, buffer );
+        ppArgs[nArgs] = pTmp;
         ++nArgs;
     }
 
@@ -165,13 +165,19 @@ child_spawn ( Args *args, sal_Bool bAllArgs, sal_Bool bWithStatus )
                                  NULL, 0,
                                  &info->child );
 
+    if (pTmp)
+        rtl_uString_release( pTmp );
+    free (ppArgs);
+
     if ( nError != osl_Process_E_None )
     {
         fprintf( stderr, "ERROR %d forking process", nError );
         ustr_debug( "", pApp );
+        rtl_uString_release( pApp );
         _exit (1);
     }
 
+    rtl_uString_release( pApp );
     close( status_pipe[1] );
 
     return info;
@@ -327,6 +333,7 @@ get_pipe_path( rtl_uString *pAppPath )
     ustr_debug( "result", pResult );
 
     /* cleanup */
+    rtl_uString_release( pMd5hash );
     rtl_uString_release( pPath );
     rtl_uString_release( pTmp );
     rtl_uString_release( pBasePath );
@@ -538,10 +545,14 @@ load_splash_image( rtl_uString *pUAppPath )
     strcat (pLocale, "_");
     strcat (pLocale, pCountry->buffer);
 
+    rtl_string_release( pCountry );
+    rtl_string_release( pLang );
+
     pAppPath = ustr_to_str (pUAppPath);
     pBuffer = malloc (pAppPath->length + nLocSize + 256);
     strcpy (pBuffer, pAppPath->buffer);
     pSuffix = pBuffer + pAppPath->length;
+    rtl_string_release( pAppPath );
 
     strcpy (pSuffix, "/edition/intro");
     strcat (pSuffix, pLocale);
@@ -734,6 +745,8 @@ exec_pagein (Args *args)
     argv[3] = (char *)args->pPageinType;
     argv[4] = NULL;
 
+    rtl_string_release( app_path );
+
     pagein_execute (args->pPageinType ? 4 : 3, argv);
 
     free (argv[1]);
@@ -741,28 +754,33 @@ exec_pagein (Args *args)
 
 static void extend_library_path (const char *new_element)
 {
+    rtl_uString *pEnvName=NULL, *pOrigEnvVar=NULL, *pNewEnvVar=NULL;
     const char *pathname;
 #ifdef AIX
     pathname = "LIBPATH";
 #else
     pathname = "LD_LIBRARY_PATH";
 #endif
-    char *buffer;
-    char *oldpath;
 
-    oldpath = getenv (pathname);
-    buffer = malloc (strlen (new_element) + strlen (pathname) +
-                     (oldpath ? strlen (oldpath) : 0)+ 4);
-    strcpy (buffer, pathname);
-    strcpy (buffer, "=");
-    strcpy (buffer, new_element);
-    if (oldpath) {
-        strcat (buffer, ":");
-        strcat (buffer, oldpath);
+    rtl_uString_newFromAscii( &pEnvName, pathname );
+
+    osl_getEnvironment( pEnvName, &pOrigEnvVar );
+
+    rtl_uString_newFromAscii( &pNewEnvVar, new_element );
+    if (pOrigEnvVar->length)
+    {
+        rtl_uString *pDelim = NULL;
+        rtl_uString_newFromAscii( &pDelim, ":" );
+        rtl_uString_newConcat( &pNewEnvVar, pNewEnvVar, pDelim );
+        rtl_uString_newConcat( &pNewEnvVar, pNewEnvVar, pOrigEnvVar );
+        rtl_uString_release( pDelim );
     }
 
-    /* deliberately leak buffer - many OS' don't dup at this point */
-    putenv (buffer);
+    osl_setEnvironment( pEnvName, pNewEnvVar );
+
+    rtl_uString_release( pNewEnvVar );
+    rtl_uString_release( pOrigEnvVar );
+    rtl_uString_release( pEnvName );
 }
 
 static void
@@ -802,6 +820,7 @@ exec_javaldx (Args *args)
     pTmp = NULL;
     rtl_uString_newFromAscii( &pTmp, "/../ure/bin/javaldx" );
     rtl_uString_newConcat( &pApp, pApp, pTmp );
+    rtl_uString_release( pTmp );
 
     /* unset to avoid bogus console output */
     rtl_uString_newFromAscii( &pEnvironment[0], "G_SLICE" );
@@ -815,6 +834,11 @@ exec_javaldx (Args *args)
                                                NULL,
                                                &fileOut,
                                                NULL);
+
+    rtl_uString_release( pEnvironment[0] );
+    rtl_uString_release( ppArgs[nArgs-1] );
+    rtl_uString_release( pApp );
+    free( ppArgs );
 
     if( err != osl_Process_E_None)
     {
