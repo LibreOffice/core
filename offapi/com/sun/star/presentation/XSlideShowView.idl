@@ -59,7 +59,7 @@ module com {  module sun {  module star {  module presentation {
 
     @since OOo 2.4
  */
-interface XSlideShowView : ::com::sun::star::uno::XInterface
+published interface XSlideShowView : ::com::sun::star::uno::XInterface
 {
     /** Get view canvas.<p>
 
@@ -81,9 +81,9 @@ interface XSlideShowView : ::com::sun::star::uno::XInterface
 
     /** Query the current transformation matrix for this view.<p>
 
-           This method returns the transformation matrix of the
-           view. When notified via the transformation change listener,
-           the show will be displayed using the new transformation.<p>
+            This method returns the transformation matrix of the
+            view. When notified via the transformation change listener,
+            the show will be displayed using the new transformation.<p>
 
         @return the view transformation matrix. Note that the slide
         show itself will paint all slides as one-by-one boxes, one

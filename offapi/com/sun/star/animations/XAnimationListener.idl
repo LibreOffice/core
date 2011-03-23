@@ -45,7 +45,7 @@
 
     @since OOo 3.0
  */
-interface XAnimationListener : ::com::sun::star::lang::XEventListener
+published interface XAnimationListener : ::com::sun::star::lang::XEventListener
 {
     /** This event is raised when the element local timeline begins to play.
         <p>It will be raised each time the element begins the active duration (i.e. when it restarts, but not when it repeats).</p>
