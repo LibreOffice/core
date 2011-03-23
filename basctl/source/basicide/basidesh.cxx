@@ -304,7 +304,10 @@ void BasicIDEShell::onDocumentSave( const ScriptDocument& /*_rDocument*/ )
 
 void BasicIDEShell::onDocumentSaveDone( const ScriptDocument& /*_rDocument*/ )
 {
-    // not interested in
+    // #i115671: Update SID_SAVEDOC after saving is completed
+    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+    if ( pBindings )
+        pBindings->Invalidate( SID_SAVEDOC );
 }
 
 void BasicIDEShell::onDocumentSaveAs( const ScriptDocument& /*_rDocument*/ )

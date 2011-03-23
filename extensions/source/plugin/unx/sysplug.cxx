@@ -117,7 +117,7 @@ UnxPluginComm::~UnxPluginComm()
         int status = 16777216;
         pid_t nExit = waitpid( m_nCommPID, &status, WUNTRACED );
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "child %d (plugin app child %d) exited with status %d\n", nExit, m_nCommPID, WEXITSTATUS(status) );
+        fprintf( stderr, "child %d (plugin app child %d) exited with status %d\n", (int)nExit, (int)m_nCommPID, (int)WEXITSTATUS(status) );
 #else
         (void)nExit;
 #endif

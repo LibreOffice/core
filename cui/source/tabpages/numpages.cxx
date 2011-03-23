@@ -528,6 +528,9 @@ IMPL_LINK(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
             {
                 SvxNumberFormat aFmt(pActNum->GetLevel(i));
                 aFmt.SetNumberingType( SVX_NUM_CHAR_SPECIAL );
+                // #i93908# clear suffix for bullet lists
+                aFmt.SetPrefix(::rtl::OUString());
+                aFmt.SetSuffix(::rtl::OUString());
                 aFmt.SetBulletFont(&rActBulletFont);
                 aFmt.SetBulletChar(cChar );
                 aFmt.SetCharFmtName(sBulletCharFmtName);
@@ -738,6 +741,9 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
             sal_uInt16 nUpperLevelOrChar = (sal_uInt16)pLevelSettings->nParentNumbering;
             if(aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
             {
+                // #i93908# clear suffix for bullet lists
+                aFmt.SetPrefix(::rtl::OUString());
+                aFmt.SetSuffix(::rtl::OUString());
                 if( pLevelSettings->sBulletFont.getLength() &&
                     pLevelSettings->sBulletFont.compareTo(
                             rActBulletFont.GetName()))
@@ -787,9 +793,10 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
                 aFmt.SetCharFmtName(sNumCharFmtName);
                 // #62069# // #92724#
                 aFmt.SetBulletRelSize(100);
+                // #i93908#
+                aFmt.SetPrefix(pLevelSettings->sPrefix);
+                aFmt.SetSuffix(pLevelSettings->sSuffix);
             }
-            aFmt.SetPrefix(pLevelSettings->sPrefix);
-            aFmt.SetSuffix(pLevelSettings->sSuffix);
             pActNum->SetLevel(i, aFmt);
         }
     }
