@@ -54,7 +54,7 @@ namespace pdfi
         virtual boost::shared_ptr<ElementTreeVisitor> createStyleCollectingVisitor(
             StyleContainer&, PDFIProcessor&) const = 0;
         /// Create visitor that emits tree to an output target
-        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext&) const = 0;
+        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext&, PDFIProcessor&) const = 0;
     };
 
     typedef boost::shared_ptr<TreeVisitorFactory> TreeVisitorFactorySharedPtr;

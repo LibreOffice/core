@@ -29,6 +29,7 @@
 #ifndef INCLUDED_PDFI_PROCESSOR_HXX
 #define INCLUDED_PDFI_PROCESSOR_HXX
 
+#include <com/sun/star/util/XStringMapping.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/rendering/XVolatileBitmap.hpp>
@@ -109,7 +110,10 @@ namespace pdfi
         void sortElements( Element* pElement, bool bDeep = false );
         void sortDocument( bool bDeep = false );
 
+        rtl::OUString mirrorString( const rtl::OUString& i_rInString );
+
     private:
+        void prepareMirrorMap();
         void processGlyphLine();
         void processGlyph(   double       fPreAvarageSpaceValue,
                              CharGlyph&   rGlyph,
@@ -243,6 +247,11 @@ namespace pdfi
                                            m_xStatusIndicator;
 
         bool                               m_bHaveTextOnDocLevel;
+        std::vector< sal_Unicode >         m_aMirrorMap;
+        com::sun::star::uno::Reference<
+            com::sun::star::util::XStringMapping >
+                                           m_xMirrorMapper;
+        bool                               m_bMirrorMapperTried;
     };
     class CharGlyph
     {

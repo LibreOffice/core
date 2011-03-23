@@ -32,12 +32,15 @@ PACKAGE = com$/sun$/star$/report$/function$/metadata
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
+.INCLUDE :  $(SOLARBINDIR)/jfreereport_version.mk
 #----- compile .java files -----------------------------------------
 
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
 EXTRAJARFILES = $(LIBBASE_JAR) $(LIBFORMULA_JAR)
 .ELSE
-JARFILES = libbase-1.0.0.jar libformula-0.2.0.jar
+JARFILES += \
+    libbase-$(LIBBASE_VERSION).jar                      \
+    libformula-$(LIBFORMULA_VERSION).jar
 .ENDIF
 
 JAVAFILES       :=	AuthorFunction.java \
@@ -47,18 +50,20 @@ JAVAFILES       :=	AuthorFunction.java \
                     MetaDataFunctionCategory.java
 
 # PROPERTYFILES := $(shell @$(FIND) . -name "*.properties")
-PROPERTYFILES := $(CLASSDIR)$/$(PACKAGE)$/category.properties \
-         $(CLASSDIR)$/$(PACKAGE)$/category_en_US.properties \
-                 $(CLASSDIR)$/$(PACKAGE)$/Author-Function.properties \
-         $(CLASSDIR)$/$(PACKAGE)$/Author-Function_en_US.properties \
-                 $(CLASSDIR)$/$(PACKAGE)$/Title-Function.properties	\
-         $(CLASSDIR)$/$(PACKAGE)$/Title-Function_en_US.properties
+PROPERTYFILES:=$(CLASSDIR)$/$(PACKAGE)$/category.properties \
+                 $(CLASSDIR)$/$(PACKAGE)$/Title-Function.properties\
+                $(CLASSDIR)$/$(PACKAGE)$/category_en_US.properties \
+                $(CLASSDIR)$/$(PACKAGE)$/Author-Function.properties \
+                $(CLASSDIR)$/$(PACKAGE)$/Author-Function_en_US.properties \
+                $(CLASSDIR)$/$(PACKAGE)$/Title-Function_en_US.properties
                  
+L10NPROPERTYFILES = $(PROPERTYFILES)
+ALLTAR : $(PROPERTYFILES)
 # --- Targets ------------------------------------------------------
 .INCLUDE :  target.mk
 
-ALLTAR : $(PROPERTYFILES)
-
-$(CLASSDIR)$/$(PACKAGE)$/%.properties : %.properties
+.IF "$(WITH_LANG)"==""
+$(CLASSDIR)/$(PACKAGE)/%.properties : %.properties
     @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
+    $(COMMAND_ECHO)$(COPY) $< $@
+.ENDIF

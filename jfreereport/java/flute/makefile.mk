@@ -29,27 +29,27 @@ PRJ=..$/..
 
 PRJNAME=jfreereport
 TARGET=flute
-VERSION=-1.3.0
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
 .INCLUDE : antsettings.mk
+.INCLUDE : $(PRJ)$/version.mk
 
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
 .IF "$(L10N_framework)"==""
-TARFILE_NAME=$(TARGET)
-TARFILE_MD5=f3e2febd267c8e4b13df00dac211dd6d
-TARFILE_ROOTDIR=$(TARGET)
-# PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
-# CONVERTFILES=build.xml		 
-
+TARFILE_NAME=$(TARGET)-$(FLUTE_VERSION)
+TARFILE_MD5=d8bd5eed178db6e2b18eeed243f85aa8
+# TARFILE_ROOTDIR=$(TARGET)
+TARFILE_IS_FLAT=true
+PATCH_FILES=$(PACKAGE_DIR)$/$(TARGET).patch
+CONVERTFILES=common_build.xml
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
+BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dantcontrib.available="true" -Dbuild.id="10682" -Dproject.revision="$(FLUTE_VERSION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
 .ELSE
 BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER) -f $(ANT_BUILDFILE) jar
 .ENDIF
@@ -65,9 +65,15 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 .IF "$(L10N_framework)"==""
-ALLTAR : $(CLASSDIR)$/$(TARGET)$(VERSION).jar 
-$(CLASSDIR)$/$(TARGET)$(VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
-    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/$(TARGET).jar $(CLASSDIR)$/$(TARGET)$(VERSION).jar
+ALLTAR : $(CLASSDIR)$/$(TARGET)-$(FLUTE_VERSION).jar 
+
+$(PACKAGE_DIR)$/$(TARGET).patch : 
+    @-$(MKDIRHIER) $(PACKAGE_DIR)$(fake_root_dir)
+    ( $(TYPE:s/+//) $(PRJ)$/patches$/common_build.patch | $(SED) 's/libloader-1.1.3/$(TARGET)-$(FLUTE_VERSION)/g' > $(PACKAGE_DIR)$/$(TARGET).patch )
+    $(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)$/so_converted_$(TARGET).dummy
+    
+$(CLASSDIR)$/$(TARGET)-$(FLUTE_VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
+    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/dist$/$(TARGET)-$(FLUTE_VERSION).jar $(CLASSDIR)$/$(TARGET)-$(FLUTE_VERSION).jar
 .ENDIF
 .ENDIF
 

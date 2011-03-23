@@ -29,26 +29,27 @@ PRJ=..$/..
 
 PRJNAME=jfreereport
 TARGET=librepository
-VERSION=-1.0.0
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
 .INCLUDE : antsettings.mk
+.INCLUDE : $(PRJ)$/version.mk
 
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=$(TARGET)
-TARFILE_MD5=dbb3757275dc5cc80820c0b4dd24ed95
-TARFILE_ROOTDIR=$(TARGET)
-PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
-CONVERTFILES=build.xml
+TARFILE_NAME=$(TARGET)-$(LIBREPOSITORY_VERSION)
+TARFILE_IS_FLAT=true
+TARFILE_MD5=8ce2fcd72becf06c41f7201d15373ed9
+PATCH_FILES=$(PACKAGE_DIR)$/$(TARGET).patch
+CONVERTFILES=common_build.xml
+
 .IF "$(L10N_framework)"==""
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
+BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dantcontrib.available="true" -Dbuild.id="10682" -Dproject.revision="$(LIBREPOSITORY_VERSION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
 .ELSE
 BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER) -f $(ANT_BUILDFILE) jar
 .ENDIF
@@ -63,9 +64,15 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 
-ALLTAR : $(CLASSDIR)$/$(TARGET)$(VERSION).jar 
-$(CLASSDIR)$/$(TARGET)$(VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
-    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/$(TARGET).jar $(CLASSDIR)$/$(TARGET)$(VERSION).jar
+ALLTAR : $(CLASSDIR)$/$(TARGET)-$(LIBREPOSITORY_VERSION).jar 
+
+$(PACKAGE_DIR)$/$(TARGET).patch : 
+    @-$(MKDIRHIER) $(PACKAGE_DIR)$(fake_root_dir)
+    ( $(TYPE:s/+//) $(PRJ)$/patches$/common_build.patch | $(SED) 's/libloader-1.1.3/$(TARGET)-$(LIBREPOSITORY_VERSION)/g' > $(PACKAGE_DIR)$/$(TARGET).patch )
+    $(COMMAND_ECHO)$(TOUCH) $(PACKAGE_DIR)$/so_converted_$(TARGET).dummy
+    
+$(CLASSDIR)$/$(TARGET)-$(LIBREPOSITORY_VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
+    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/dist$/$(TARGET)-$(LIBREPOSITORY_VERSION).jar $(CLASSDIR)$/$(TARGET)-$(LIBREPOSITORY_VERSION).jar
     
 .ENDIF
 .ENDIF

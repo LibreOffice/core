@@ -576,7 +576,7 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
                  aInfo.stop, pBuffer, aInfo.stop - pBuffer,
                  aInfo.hit ? "true" : "false",
                  aInfo.full ? "true" : "false",
-                 aInfo.length );
+                 (int)aInfo.length );
         #endif
     }
     catch( parser_error<const char*, const char*>& rError )
@@ -656,7 +656,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
                  aInfo.stop - file_start,
                  aInfo.hit ? "true" : "false",
                  aInfo.full ? "true" : "false",
-                 aInfo.length );
+                 (int)aInfo.length );
         #endif
     }
     catch( parser_error< const char*, file_iterator<> >& rError )

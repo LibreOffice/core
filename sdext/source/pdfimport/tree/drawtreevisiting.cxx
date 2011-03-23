@@ -37,13 +37,15 @@
 #include "drawtreevisiting.hxx"
 #include "genericelements.hxx"
 
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/range/b2drange.hxx>
+#include "basegfx/polygon/b2dpolypolygontools.hxx"
+#include "basegfx/range/b2drange.hxx"
 
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "com/sun/star/i18n/XBreakIterator.hpp"
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "comphelper/processfactory.hxx"
-#include <com/sun/star/i18n/ScriptType.hpp>
+#include "com/sun/star/i18n/ScriptType.hpp"
+#include "com/sun/star/i18n/DirectionProperty.hpp"
+
 #include <string.h>
 
 using namespace ::com::sun::star;
@@ -78,6 +80,18 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
         mxBreakIter = uno::Reference< i18n::XBreakIterator >( xInterface, uno::UNO_QUERY );
     }
     return mxBreakIter;
+}
+
+const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification >& DrawXmlEmitter::GetCharacterClassification()
+{
+    if ( !mxCharClass.is() )
+    {
+        Reference< XComponentContext > xContext( m_rEmitContext.m_xContext, uno::UNO_SET_THROW );
+        Reference< XMultiComponentFactory > xMSF(  xContext->getServiceManager(), uno::UNO_SET_THROW );
+    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.i18n.CharacterClassification"), xContext);
+        mxCharClass = uno::Reference< i18n::XCharacterClassification >( xInterface, uno::UNO_QUERY );
+    }
+    return mxCharClass;
 }
 
 void DrawXmlEmitter::visit( HyperlinkElement& elem, const std::list< Element* >::const_iterator&   )
@@ -119,6 +133,26 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
     }
 
     rtl::OUString str(elem.Text.getStr());
+
+    // Check for RTL
+    bool isRTL = false;
+    Reference< i18n::XCharacterClassification > xCC( GetCharacterClassification() );
+    if( xCC.is() )
+    {
+        for(int i=1; i< elem.Text.getLength(); i++)
+        {
+            sal_Int16 nType = xCC->getCharacterDirection( str, i );
+            if ( nType == ::com::sun::star::i18n::DirectionProperty_RIGHT_TO_LEFT           ||
+                 nType == ::com::sun::star::i18n::DirectionProperty_RIGHT_TO_LEFT_ARABIC    ||
+                 nType == ::com::sun::star::i18n::DirectionProperty_RIGHT_TO_LEFT_EMBEDDING ||
+                 nType == ::com::sun::star::i18n::DirectionProperty_RIGHT_TO_LEFT_OVERRIDE
+                )
+                isRTL = true;
+        }
+    }
+
+    if (isRTL)  // If so, reverse string
+        str = m_rProcessor.mirrorString( str );
 
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
 
@@ -179,7 +213,9 @@ void DrawXmlEmitter::visit( ParagraphElement& elem, const std::list< Element* >:
 
 void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
                                      PropertyMap&       rProps,
-                                     const EmitContext& rEmitContext )
+                                     const EmitContext& rEmitContext,
+                                     bool               bWasTransformed
+                                     )
 {
     double rel_x = rElem.x, rel_y = rElem.y;
 
@@ -190,7 +226,7 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
 
     const GraphicsContext& rGC =
         rEmitContext.rProcessor.getGraphicsContext( rElem.GCId );
-    if( rGC.Transformation.isIdentity() )
+    if( rGC.Transformation.isIdentity() || bWasTransformed )
     {
         rProps[ USTR( "svg:x" ) ]       = convertPixelToUnitString( rel_x );
         rProps[ USTR( "svg:y" ) ]       = convertPixelToUnitString( rel_y );
@@ -317,7 +353,10 @@ void DrawXmlEmitter::visit( PolyPolyElement& elem, const std::list< Element* >::
     }
 
     PropertyMap aProps;
-    fillFrameProps( elem, aProps, m_rEmitContext );
+    // PDFIProcessor transforms geometrical objects, not images and text
+    // so we need to tell fillFrameProps here that the transformation for
+    // a PolyPolyElement was already applied (aside form translation)
+    fillFrameProps( elem, aProps, m_rEmitContext, true );
     rtl::OUStringBuffer aBuf( 64 );
     aBuf.appendAscii( "0 0 " );
     aBuf.append( convPx2mmPrec2(elem.w)*100.0 );

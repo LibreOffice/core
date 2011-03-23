@@ -10,7 +10,7 @@
         <OpenOffice.org-minimal-version value="3.0" dep:name="OpenOffice.org 3.0"/>
     </dependencies>
 
-    <version value="1.0.3" />
+    <version value="1.0.5" />
 
     <platform value="UPDATED_SUPPORTED_PLATFORM" />
 

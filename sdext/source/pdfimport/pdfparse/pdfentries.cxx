@@ -33,6 +33,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/alloc.h>
 #include <rtl/digest.h>
 #include <rtl/cipher.h>
@@ -64,6 +65,8 @@ struct EmitImplData
     XRefTable m_aXRefTable;
     // container of all indirect objects (usually a PDFFile*)
     const PDFContainer* m_pObjectContainer;
+    unsigned int m_nDecryptObject;
+    unsigned int m_nDecryptGeneration;
 
     // returns true if the xref table was updated
     bool insertXref( unsigned int nObject, unsigned int nGeneration, unsigned int nOffset )
@@ -85,7 +88,9 @@ struct EmitImplData
     }
 
     EmitImplData( const PDFContainer* pTopContainer ) :
-        m_pObjectContainer( pTopContainer )
+        m_pObjectContainer( pTopContainer ),
+        m_nDecryptObject( 0 ),
+        m_nDecryptGeneration( 0 )
     {}
     ~EmitImplData() {}
     bool decrypt( const sal_uInt8* pInBuffer, sal_uInt32 nLen, sal_uInt8* pOutBuffer,
@@ -93,6 +98,12 @@ struct EmitImplData
     {
         const PDFFile* pFile = dynamic_cast<const PDFFile*>(m_pObjectContainer);
         return pFile ? pFile->decrypt( pInBuffer, nLen, pOutBuffer, nObject, nGeneration ) : false;
+    }
+
+    void setDecryptObject( unsigned int nObject, unsigned int nGeneration )
+    {
+        m_nDecryptObject = nObject;
+        m_nDecryptGeneration = nGeneration;
     }
 };
 
@@ -204,6 +215,46 @@ bool PDFString::emit( EmitContext& rWriteContext ) const
 {
     if( ! rWriteContext.write( " ", 1 ) )
         return false;
+    EmitImplData* pEData = getEmitData( rWriteContext );
+    if( rWriteContext.m_bDecrypt && pEData && pEData->m_nDecryptObject )
+    {
+        OString aFiltered( getFilteredString() );
+        // decrypt inplace (evil since OString is supposed to be const
+        // however in this case we know that getFilteredString returned a singular string instance
+        pEData->decrypt( (sal_uInt8*)aFiltered.getStr(), aFiltered.getLength(),
+                         (sal_uInt8*)aFiltered.getStr(),
+                         pEData->m_nDecryptObject, pEData->m_nDecryptGeneration );
+        // check for string or hex string
+        const sal_Char* pStr = aFiltered.getStr();
+        if( aFiltered.getLength() > 1 &&
+           ( (pStr[0] == sal_Char(0xff) && pStr[1] == sal_Char(0xfe)) ||
+             (pStr[0] == sal_Char(0xfe) && pStr[1] == sal_Char(0xff)) ) )
+        {
+            static const char pHexTab[16] = { '0', '1', '2', '3', '4', '5', '6', '7',
+                                              '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+            if( ! rWriteContext.write( "<", 1 ) )
+                return false;
+            for( sal_Int32 i = 0; i < aFiltered.getLength(); i++ )
+            {
+                if( ! rWriteContext.write( pHexTab + ((sal_uInt32(pStr[i]) >> 4) & 0x0f), 1 ) )
+                    return false;
+                if( ! rWriteContext.write( pHexTab + (sal_uInt32(pStr[i]) & 0x0f), 1 ) )
+                    return false;
+            }
+            if( ! rWriteContext.write( ">", 1 ) )
+                return false;
+        }
+        else
+        {
+            if( ! rWriteContext.write( "(", 1 ) )
+                return false;
+            if( ! rWriteContext.write( aFiltered.getStr(), aFiltered.getLength() ) )
+                return false;
+            if( ! rWriteContext.write( ")", 1 ) )
+                return false;
+        }
+        return true;
+    }
     return rWriteContext.write( m_aString.getStr(), m_aString.getLength() );
 }
 
@@ -423,6 +474,15 @@ bool PDFContainer::emitSubElements( EmitContext& rWriteContext ) const
     int nEle = m_aSubElements.size();
     for( int i = 0; i < nEle; i++ )
     {
+        if( rWriteContext.m_bDecrypt )
+        {
+            const PDFName* pName = dynamic_cast<PDFName*>(m_aSubElements[i]);
+            if( pName && pName->m_aName.equals( rtl::OString("Encrypt") ) )
+            {
+                i++;
+                continue;
+            }
+        }
         if( ! m_aSubElements[i]->emit( rWriteContext ) )
             return false;
     }
@@ -740,7 +800,7 @@ bool PDFObject::writeStream( EmitContext& rWriteContext, const PDFFile* pParsedF
     {
         char* pStream = NULL;
         unsigned int nBytes = 0;
-        if( getDeflatedStream( &pStream, &nBytes, pParsedFile, rWriteContext ) && nBytes )
+        if( getDeflatedStream( &pStream, &nBytes, pParsedFile, rWriteContext ) && nBytes && rWriteContext.m_bDeflate )
         {
             sal_uInt8* pOutBytes = NULL;
             sal_uInt32 nOutBytes = 0;
@@ -772,17 +832,27 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
     if( ! rWriteContext.write( aBuf.getStr(), aBuf.getLength() ) )
         return false;
 
-    if( rWriteContext.m_bDeflate && pEData )
+    if( pEData )
+        pEData->setDecryptObject( m_nNumber, m_nGeneration );
+    if( (rWriteContext.m_bDeflate || rWriteContext.m_bDecrypt) && pEData )
     {
         char* pStream = NULL;
         unsigned int nBytes = 0;
-        if( getDeflatedStream( &pStream, &nBytes, pEData->m_pObjectContainer, rWriteContext )
-            && pStream && nBytes )
+        bool bDeflate = getDeflatedStream( &pStream, &nBytes, pEData->m_pObjectContainer, rWriteContext );
+        if( pStream && nBytes )
         {
             // unzip the stream
             sal_uInt8* pOutBytes = NULL;
             sal_uInt32 nOutBytes = 0;
-            unzipToBuffer( pStream, nBytes, &pOutBytes, &nOutBytes );
+            if( bDeflate && rWriteContext.m_bDeflate )
+                unzipToBuffer( pStream, nBytes, &pOutBytes, &nOutBytes );
+            else
+            {
+                // nothing to deflate, but decryption has happened
+                pOutBytes = (sal_uInt8*)pStream;
+                nOutBytes = (sal_uInt32)nBytes;
+            }
+
             if( nOutBytes )
             {
                 // clone this object
@@ -790,8 +860,32 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                 // set length in the dictionary to new stream length
                 PDFNumber* pNewLen = new PDFNumber( double(nOutBytes) );
                 pClone->m_pStream->m_pDict->insertValue( "Length", pNewLen );
-                // delete flatedecode filter
-                pClone->m_pStream->m_pDict->eraseValue( "Filter" );
+
+                if( bDeflate && rWriteContext.m_bDeflate )
+                {
+                    // delete flatedecode filter
+                    std::hash_map<OString,PDFEntry*,OStringHash>::const_iterator it =
+                    pClone->m_pStream->m_pDict->m_aMap.find( "Filter" );
+                    if( it != pClone->m_pStream->m_pDict->m_aMap.end() )
+                    {
+                        PDFName* pFilter = dynamic_cast<PDFName*>(it->second);
+                        if( pFilter && pFilter->m_aName.equals( "FlateDecode" ) )
+                            pClone->m_pStream->m_pDict->eraseValue( "Filter" );
+                        else
+                        {
+                            PDFArray* pArray = dynamic_cast<PDFArray*>(it->second);
+                            if( pArray && ! pArray->m_aSubElements.empty() )
+                            {
+                                pFilter = dynamic_cast<PDFName*>(pArray->m_aSubElements.front());
+                                if( pFilter && pFilter->m_aName.equals( "FlateDecode" ) )
+                                {
+                                    delete pFilter;
+                                    pArray->m_aSubElements.erase( pArray->m_aSubElements.begin() );
+                                }
+                            }
+                        }
+                    }
+                }
 
                 // write sub elements except stream
                 bool bRet = true;
@@ -810,17 +904,23 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                 if( bRet )
                     bRet = rWriteContext.write( "\nendstream\nendobj\n", 18 );
                 rtl_freeMemory( pStream );
-                rtl_freeMemory( pOutBytes );
+                if( pOutBytes != (sal_uInt8*)pStream )
+                    rtl_freeMemory( pOutBytes );
+                if( pEData )
+                    pEData->setDecryptObject( 0, 0 );
                 return bRet;
             }
-            rtl_freeMemory( pOutBytes );
+            if( pOutBytes != (sal_uInt8*)pStream )
+                rtl_freeMemory( pOutBytes );
         }
         rtl_freeMemory( pStream );
     }
 
-    if( ! emitSubElements( rWriteContext ) )
-        return false;
-    return rWriteContext.write( "\nendobj\n", 8 );
+    bool bRet = emitSubElements( rWriteContext ) &&
+                rWriteContext.write( "\nendobj\n", 8 );
+    if( pEData )
+        pEData->setDecryptObject( 0, 0 );
+    return bRet;
 }
 
 PDFEntry* PDFObject::clone() const
@@ -1183,6 +1283,23 @@ bool PDFFile::setupDecryptionData( const OString& rPwd ) const
     return bValid;
 }
 
+rtl::OUString PDFFile::getDecryptionKey() const
+{
+    rtl::OUStringBuffer aBuf( ENCRYPTION_KEY_LEN * 2 );
+    if( impl_getData()->m_bIsEncrypted )
+    {
+        for( sal_uInt32 i = 0; i < m_pData->m_nKeyLength; i++ )
+        {
+            static const sal_Unicode pHexTab[16] = { '0', '1', '2', '3', '4', '5', '6', '7',
+                                                     '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+            aBuf.append( pHexTab[(m_pData->m_aDecryptionKey[i] >> 4) & 0x0f] );
+            aBuf.append( pHexTab[(m_pData->m_aDecryptionKey[i] & 0x0f)] );
+        }
+
+    }
+    return aBuf.makeStringAndClear();
+}
+
 PDFFileImplData* PDFFile::impl_getData() const
 {
     if( m_pData )
@@ -1309,13 +1426,13 @@ PDFFileImplData* PDFFile::impl_getData() const
                             if( pNum )
                                 m_pData->m_nPEntry = static_cast<sal_uInt32>(static_cast<sal_Int32>(pNum->m_fValue));
                             #if OSL_DEBUG_LEVEL > 1
-                            fprintf( stderr, "p entry is %p\n", m_pData->m_nPEntry );
+                            fprintf( stderr, "p entry is %p\n", (void*)m_pData->m_nPEntry );
                             #endif
                         }
                         #if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "Encryption dict: sec handler: %s, version = %d, revision = %d, key length = %d\n",
                                  pFilter ? OUStringToOString( pFilter->getFilteredName(), RTL_TEXTENCODING_UTF8 ).getStr() : "<unknown>",
-                                 (int)m_pData->m_nAlgoVersion, (int)m_pData->m_nStandardRevision, m_pData->m_nKeyLength );
+                                 (int)m_pData->m_nAlgoVersion, (int)m_pData->m_nStandardRevision, (int)m_pData->m_nKeyLength );
                         #endif
                         break;
                     }

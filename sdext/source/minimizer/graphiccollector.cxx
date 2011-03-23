@@ -71,7 +71,7 @@ const DeviceInfo& GraphicCollector::GetDeviceInfo( const Reference< XComponentCo
     return aDeviceInfo;
 }
 
-void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities, Reference< XGraphic >& rxGraphic, const GraphicSettings& rGraphicSettings, const GraphicCollector::GraphicUser& rUser )
+void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities, const GraphicSettings& rGraphicSettings, const GraphicCollector::GraphicUser& rUser )
 {
     const rtl::OUString aGraphicURL( rUser.maGraphicURL );
     const rtl::OUString sPackageURL( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.GraphicObject:") );
@@ -94,7 +94,7 @@ void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntit
         }
         if ( aIter == rGraphicEntities.end() )
         {
-            GraphicCollector::GraphicEntity aEntity( rxGraphic, rUser );
+            GraphicCollector::GraphicEntity aEntity( rUser );
             rGraphicEntities.push_back( aEntity );
         }
     }
@@ -134,7 +134,7 @@ void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Reference
         }
         aUser.maGraphicCropLogic = aGraphicCropLogic;
         aUser.maLogicalSize = aLogicalSize;
-        ImpAddEntity( rGraphicEntities, xGraphic, rGraphicSettings, aUser );
+        ImpAddEntity( rGraphicEntities, rGraphicSettings, aUser );
     }
 }
 
@@ -199,7 +199,7 @@ void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const 
                         aUser.mbFillBitmap = sal_True;
                         aUser.maLogicalSize = aLogicalSize;
                         aUser.mxPagePropertySet = rxPagePropertySet;
-                        ImpAddEntity( rGraphicEntities, xGraphic, rGraphicSettings, aUser );
+                        ImpAddEntity( rGraphicEntities, rGraphicSettings, aUser );
                     }
                 }
             }
