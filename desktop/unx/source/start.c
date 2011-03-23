@@ -877,12 +877,13 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
         osl_getProcessWorkingDir( &pCwdPath );
 
         bSentArgs = send_args( fd, pCwdPath );
+
+        close( fd );
     }
 #if OSL_DEBUG_LEVEL > 0
     else
         ustr_debug( "Failed to connect to pipe", pPipePath );
 #endif
-    close( fd );
 
     if ( !bSentArgs )
     {
