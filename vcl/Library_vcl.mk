@@ -37,8 +37,6 @@ endif
 
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
 
-#$(eval $(call gb_Library_add_precompiled_header,vcl,$(SRCDIR)/vcl/inc/pch/precompiled_vcl))
-
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
@@ -236,7 +234,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/win/source/window/salobj \
 ))
 
-### FIXME: need to link windows resources to vcl dll
+$(eval $(call gb_Library_add_nativeres,vcl,src))
+
 endif
 
 $(eval $(call gb_Library_add_cobjects,vcl,\
@@ -469,6 +468,10 @@ $(eval $(call gb_Library_set_ldflags,vcl,\
 endif
 
 ifeq ($(OS),WNT)
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
+    /ENTRY:LibMain@12 \
+))
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     advapi32 \
     gdi32 \

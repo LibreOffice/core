@@ -27,7 +27,15 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,vclmain))
 
-$(eval $(call gb_StaticLibrary_add_package_headers,vclmain,vcl_inc))
+$(eval $(call gb_StaticLibrary_set_include,vclmain,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/vcl/inc \
+    -I$(SRCDIR)/vcl/inc/pch \
+    -I$(SRCDIR)/solenv/inc \
+    -I$(OUTDIR)/inc/offuh \
+    -I$(OUTDIR)/inc/stl \
+    -I$(OUTDIR)/inc \
+))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,vclmain,\
     vcl/source/salmain/salmain \

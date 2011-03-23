@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,desktop_detector))
 
-$(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
+#$(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
 
 $(eval $(call gb_Library_add_precompiled_header,desktop_detector,$(SRCDIR)/vcl/inc/pch/precompiled_vcl))
 
