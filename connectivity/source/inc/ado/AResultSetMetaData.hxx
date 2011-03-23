@@ -63,7 +63,7 @@ namespace connectivity
         protected:
             virtual ~OResultSetMetaData();
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             OResultSetMetaData( ADORecordset* _pRecordSet);
 
             virtual sal_Int32 SAL_CALL getColumnCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

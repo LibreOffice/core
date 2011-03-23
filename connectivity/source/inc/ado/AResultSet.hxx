@@ -118,7 +118,7 @@ namespace connectivity
                                          ) const;
             virtual ~OResultSet();
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             OResultSet( ADORecordset* _pRecordSet,OStatement_Base* pStmt);
             OResultSet( ADORecordset* _pRecordSet);
 

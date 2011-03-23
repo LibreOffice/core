@@ -51,7 +51,7 @@ java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java
     sDateStr = ::dbtools::DBTypeConversion::toDateString(_rOut);
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
-    // Java-Call fuer den Konstruktor absetzen
+    // Turn of Java-Call for the constructor
     // initialise temporary variables
     static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Date;";
     jobject tempObj;
@@ -61,7 +61,7 @@ java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java
     tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
-    // und aufraeumen
+    // and clean
 }
 
 java_sql_Date::~java_sql_Date()
@@ -73,7 +73,7 @@ jclass java_sql_Date::getMyClass() const
 }
 jclass java_sql_Date::st_getMyClass()
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class needs only be fetched once, that is why it is static
     if( !theClass )
         theClass = findMyClass("java/sql/Date");
     return theClass;
@@ -100,7 +100,7 @@ jclass java_sql_Time::getMyClass() const
 }
 jclass java_sql_Time::st_getMyClass()
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class needs only be fetched once, that is why it is static
     if( !theClass )
         theClass = findMyClass("java/sql/Time");
     return theClass;
@@ -116,7 +116,7 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
     sDateStr = ::dbtools::DBTypeConversion::toTimeString(_rOut);
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
-    // Java-Call fuer den Konstruktor absetzen
+    // Turn off Java-Call for the constructor
     // intialise temporary variables
     static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Time;";
     jobject tempObj;
@@ -127,7 +127,7 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
     t.pEnv->DeleteLocalRef((jstring)args[0].l);
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
-    // und aufraeumen
+    // and clean
 }
 // -----------------------------------------------------------------------------
 java_sql_Time::operator ::com::sun::star::util::Time()
@@ -150,7 +150,7 @@ jclass java_sql_Timestamp::getMyClass() const
 
 jclass java_sql_Timestamp::st_getMyClass()
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class needs only be fetched once, that is why it is static
     if( !theClass )
         theClass = findMyClass("java/sql/Timestamp");
     return theClass;
@@ -169,7 +169,7 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
 
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
-    // Java-Call fuer den Konstruktor absetzen
+    // Turn off Java-Call for the constructor
     // initialise temporary variables
     static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Timestamp;";
     jobject tempObj;
@@ -180,7 +180,7 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
 
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
-    // und aufraeumen
+    // and clean
 }
 
 // -----------------------------------------------------------------------------

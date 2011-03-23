@@ -46,7 +46,7 @@ jclass java_lang_Throwable::getMyClass() const
 }
 jclass java_lang_Throwable::st_getMyClass()
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class needs to be fetched only once, that is why it is static
     if( !theClass )
         theClass = findMyClass("java/lang/Throwable");
     return theClass;

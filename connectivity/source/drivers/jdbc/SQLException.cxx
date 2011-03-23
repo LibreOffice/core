@@ -66,7 +66,7 @@ jclass java_sql_SQLException_BASE::getMyClass() const
 }
 jclass java_sql_SQLException_BASE::st_getMyClass()
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // The class needs to be fetched just once, that is why it is static
     if( !theClass )
         theClass = findMyClass("java/sql/SQLException");
     return theClass;
@@ -77,7 +77,7 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
     SDBThreadAttach t;
     static jmethodID mID(NULL);
     jobject out = callObjectMethod(t.pEnv,"getNextException","()Ljava/sql/SQLException;", mID);
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller will become the owner of the returned pointers !!!
     if( out )
     {
         java_sql_SQLException_BASE  warn_base(t.pEnv,out);

@@ -1263,8 +1263,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                             eKeyType[i] = SQL_ORDERBYKEY_DOUBLE;
                             break;
 
-                    // Andere Typen sind nicht implementiert (und damit immer
-                    // FALSE)
+                    // Other types aren't implemented (so they are always FALSE)
                         default:
                             eKeyType[i] = SQL_ORDERBYKEY_NONE;
                             OSL_FAIL("MResultSet::executeQuery: Order By Data Type not implemented");

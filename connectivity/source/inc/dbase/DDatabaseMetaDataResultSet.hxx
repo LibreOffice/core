@@ -100,7 +100,7 @@ namespace connectivity
             virtual ~ODatabaseMetaDataResultSet();
         public:
             DECLARE_CTY_DEFAULTS(ODatabaseMetaDataResultSet_BASE);
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             ODatabaseMetaDataResultSet( );
 
 

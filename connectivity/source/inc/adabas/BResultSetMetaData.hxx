@@ -44,7 +44,7 @@ namespace connectivity
         {
             ::rtl::Reference<OSQLColumns>   m_aSelectColumns;
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             OAdabasResultSetMetaData(odbc::OConnection* _pConnection, SQLHANDLE _pStmt ,const ::rtl::Reference<OSQLColumns>& _rSelectColumns);
             virtual ~OAdabasResultSetMetaData();
 

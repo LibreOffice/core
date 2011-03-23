@@ -183,7 +183,7 @@ namespace connectivity
             virtual ~OResultSet();
         public:
             DECLARE_SERVICE_INFO();
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             OResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator& _aSQLIterator);
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()

@@ -101,8 +101,8 @@ T3SQLNativeSql pODBC3SQLNativeSql;
 
 sal_Bool LoadFunctions(oslModule pODBCso);
 // -------------------------------------------------------------------------
-// Dynamisches Laden der DLL/shared lib und Adressen der Funktionen besorgen:
-// Liefert sal_True bei Erfolg.
+// Take care of Dynamicly loading of the DLL/shared lib and Addresses:
+// Returns sal_True at success
 sal_Bool LoadLibrary_ODBC3(::rtl::OUString &_rPath)
 {
     static sal_Bool bLoaded = sal_False;

@@ -199,7 +199,7 @@ namespace connectivity
         protected:
             ~OStatement(){}
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a constructor, for when the object needs to be returned:
             OStatement( OConnection* _pConnection) : OCommonStatement( _pConnection){}
             DECLARE_SERVICE_INFO();
 
