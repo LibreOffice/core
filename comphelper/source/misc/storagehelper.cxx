@@ -462,7 +462,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
 
         rtl_TextEncoding pEncoding[2] = { RTL_TEXTENCODING_UTF8, RTL_TEXTENCODING_MS_1252 };
 
-        for ( sal_Int32 nInd = nSha1Ind; nInd < nSha1Ind + 2; nInd++ )
+        for ( sal_Int32 nInd = 0; nInd < 2; nInd++ )
         {
             ::rtl::OString aByteStrPass = ::rtl::OUStringToOString( aPassword, pEncoding[nInd] );
 
@@ -478,7 +478,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
                 break;
             }
 
-            aEncryptionData[nInd].Value <<= uno::Sequence< sal_Int8 >( (sal_Int8*)pBuffer, RTL_DIGEST_LENGTH_SHA1 );
+            aEncryptionData[nSha1Ind+nInd].Value <<= uno::Sequence< sal_Int8 >( (sal_Int8*)pBuffer, RTL_DIGEST_LENGTH_SHA1 );
         }
     }
 
