@@ -2166,6 +2166,8 @@ void ScCellShell::ExecuteDataPilotDialog()
     }
     else            // create new table
     {
+        sal_uLong nSrcErrorId = 0;
+
         //  select database range or data
         pTabViewShell->GetDBData( true, SC_DB_OLD );
         ScMarkData& rMark = GetViewData()->GetMarkData();
@@ -2241,8 +2243,12 @@ void ScCellShell::ExecuteDataPilotDialog()
                 OUString aName = pTypeDlg->GetSelectedNamedRange();
                 ScSheetSourceDesc aShtDesc(pDoc);
                 aShtDesc.SetRangeName(aName);
-                pNewDPObject.reset(new ScDPObject(pDoc));
-                pNewDPObject->SetSheetDesc(aShtDesc);
+                nSrcErrorId = aShtDesc.CheckSourceRange();
+                if (!nSrcErrorId)
+                {
+                    pNewDPObject.reset(new ScDPObject(pDoc));
+                    pNewDPObject->SetSheetDesc(aShtDesc);
+                }
             }
             else        // selection
             {
@@ -2279,8 +2285,12 @@ void ScCellShell::ExecuteDataPilotDialog()
                     {
                         ScSheetSourceDesc aShtDesc(pDoc);
                         aShtDesc.SetSourceRange(aRange);
-                        pNewDPObject.reset(new ScDPObject(pDoc));
-                        pNewDPObject->SetSheetDesc( aShtDesc );
+                        nSrcErrorId = aShtDesc.CheckSourceRange();
+                        if (!nSrcErrorId)
+                        {
+                            pNewDPObject.reset(new ScDPObject(pDoc));
+                            pNewDPObject->SetSheetDesc( aShtDesc );
+                        }
 
                         //  output below source data
                         if ( aRange.aEnd.Row()+2 <= MAXROW - 4 )
@@ -2290,6 +2300,14 @@ void ScCellShell::ExecuteDataPilotDialog()
                     }
                 }
             }
+        }
+
+        if (nSrcErrorId)
+        {
+            // Error occurred during data creation.  Launch an error and bail out.
+            InfoBox aBox(pTabViewShell->GetDialogParent(), ScGlobal::GetRscString(nSrcErrorId));
+            aBox.Execute();
+            return;
         }
 
         if ( pNewDPObject )

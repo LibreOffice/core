@@ -1805,7 +1805,7 @@ Resource RID_GLOBSTR
     };
     String STR_PIVOT_FIRSTROWEMPTYERR
     {
-        Text [ en-US ] = "The field name cannot be empty. Check the first row of data source to make sure there are no empty cells." ;
+        Text [ en-US ] = "One or more fields appear to have an empty name. Check the first row of the data source to ensure there are no empty cells." ;
     };
     String STR_PIVOT_ONLYONEROWERR
     {
