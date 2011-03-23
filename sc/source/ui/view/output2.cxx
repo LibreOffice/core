@@ -564,6 +564,15 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
         // If it's formula, the result must be a value.
         if (!pFCell->IsValue())
             return;
+
+        if (pFCell->GetFormatType() != NUMBERFORMAT_NUMBER)
+        {
+            // Make sure the format type implicitly set by the interpreter is
+            // of pure numeric type.  We don't want to adjust date and time
+            // values here.
+            SetHashText();
+            return;
+        }
     }
 
     sal_uLong nFormat = GetValueFormat();
