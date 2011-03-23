@@ -47,6 +47,17 @@ LIBGSFVERSION=1.14.19
 TARFILE_NAME=$(PRJNAME)-$(LIBGSFVERSION)
 TARFILE_MD5=3a84ac2da37cae5bf7ce616228c6fbde
 
+.IF "$(OS)" == "WNT"
+PATCH_FILES=libgsf-1.14.19.windows.patch
+
+BUILD_DIR=gsf
+BUILD_ACTION=dmake
+
+ADDITIONAL_FILES=\
+    gsf$/makefile.mk \
+    gsf$/gsf-config.h
+
+.ELSE
 PATCH_FILES=libgsf-1.14.19.patch
 
 CONFIGURE_DIR=
@@ -76,9 +87,12 @@ BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) \
              $(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 
+.ENDIF
+
 .IF "$(OS)"=="MACOSX"
 EXTRPATH=LOADER
 OUT2LIB+=gsf$/.libs$/libgsf-1.114.dylib
+.ENDIF
 
 OUT2INC+=gsf$/gsf-blob.h
 OUT2INC+=gsf$/gsf-input-impl.h
@@ -128,9 +142,6 @@ OUT2INC+=gsf$/gsf-utils.h
 OUT2INC+=gsf$/gsf-input-http.h
 OUT2INC+=gsf$/gsf-outfile-zip.h
 OUT2INC+=gsf$/gsf.h
-.ELIF "$(OS)"=="WNT"
-.ELSE
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
