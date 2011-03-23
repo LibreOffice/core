@@ -1,4 +1,4 @@
-rd  reportdesign    :   L10N:l10n BOOST:boost comphelper dbaccess formula LIBXSLT:libxslt NULL
+rd  reportdesign    :   TRANSLATIONS:translations BOOST:boost comphelper dbaccess formula LIBXSLT:libxslt NULL
 rd  reportdesign                                                        usr1    -   all rd_mkout NULL
 rd  reportdesign\inc                                                    nmake   -   all rd_inc NULL
 rd  reportdesign\source\core\api                                        nmake   -   all rd_api rd_inc NULL
