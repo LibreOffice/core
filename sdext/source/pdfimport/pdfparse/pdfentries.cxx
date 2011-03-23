@@ -864,7 +864,7 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                 if( bDeflate && rWriteContext.m_bDeflate )
                 {
                     // delete flatedecode filter
-                    std::hash_map<OString,PDFEntry*,OStringHash>::const_iterator it =
+                    boost::unordered_map<OString,PDFEntry*,OStringHash>::const_iterator it =
                     pClone->m_pStream->m_pDict->m_aMap.find( "Filter" );
                     if( it != pClone->m_pStream->m_pDict->m_aMap.end() )
                     {
