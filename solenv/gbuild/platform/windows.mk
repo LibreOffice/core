@@ -185,7 +185,6 @@ gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
 gb_LinkTarget_LDFLAGS := \
 	-MACHINE:IX86 \
-	-DLL \
 	-OPT:NOREF \
 	-SUBSYSTEM:CONSOLE \
 	-safeseh \
