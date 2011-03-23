@@ -53,6 +53,7 @@
 
 #include "printergfx.hxx"
 #include "xrender_peer.hxx"
+#include "region.h"
 
 #include <vector>
 #include <queue>
@@ -104,7 +105,7 @@ X11SalGraphics::X11SalGraphics()
     m_aRenderPicture    = 0;
     m_pRenderFormat     = NULL;
 
-    pClipRegion_            = NULL;
+    mpClipRegion            = NULL;
     pPaintRegion_       = NULL;
 
     pPenGC_         = NULL;
@@ -167,7 +168,7 @@ void X11SalGraphics::freeResources()
     Display *pDisplay = GetXDisplay();
 
     DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" );
-    if( pClipRegion_ ) XDestroyRegion( pClipRegion_ ), pClipRegion_ = None;
+    if( mpClipRegion ) XDestroyRegion( mpClipRegion ), mpClipRegion = None;
 
     if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ ), hBrush_ = None;
     if( pPenGC_ )       XFreeGC( pDisplay, pPenGC_ ), pPenGC_ = None;
@@ -257,8 +258,8 @@ void X11SalGraphics::SetClipRegion( GC pGC, XLIB_Region pXReg ) const
     int n = 0;
     XLIB_Region Regions[3];
 
-    if( pClipRegion_ /* && !XEmptyRegion( pClipRegion_ ) */ )
-        Regions[n++] = pClipRegion_;
+    if( mpClipRegion /* && !XEmptyRegion( mpClipRegion ) */ )
+        Regions[n++] = mpClipRegion;
 //  if( pPaintRegion_ /* && !XEmptyRegion( pPaintRegion_ ) */ )
 //      Regions[n++] = pPaintRegion_;
 
@@ -571,7 +572,7 @@ long X11SalGraphics::GetGraphicsHeight() const
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::ResetClipRegion()
 {
-    if( pClipRegion_ )
+    if( mpClipRegion )
     {
         bPenGC_         = sal_False;
         bFontGC_        = sal_False;
@@ -583,46 +584,36 @@ void X11SalGraphics::ResetClipRegion()
         bStippleGC_     = sal_False;
         bTrackingGC_    = sal_False;
 
-        XDestroyRegion( pClipRegion_ );
-        pClipRegion_    = NULL;
+        XDestroyRegion( mpClipRegion );
+        mpClipRegion    = NULL;
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::BeginSetClipRegion( sal_uLong )
+bool X11SalGraphics::setClipRegion( const Region& i_rClip )
 {
-    if( pClipRegion_ )
-        XDestroyRegion( pClipRegion_ );
-    pClipRegion_ = XCreateRegion();
-}
+    if( mpClipRegion )
+        XDestroyRegion( mpClipRegion );
+    mpClipRegion = XCreateRegion();
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-BOOL X11SalGraphics::unionClipRegion( long nX, long nY, long nDX, long nDY )
-{
-    if (!nDX || !nDY)
-        return sal_True;
+    ImplRegionInfo aInfo;
+    long nX, nY, nW, nH;
+    bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
+    while( bRegionRect )
+    {
+        if ( nW && nH )
+        {
+            XRectangle aRect;
+            aRect.x         = (short)nX;
+            aRect.y         = (short)nY;
+            aRect.width     = (unsigned short)nW;
+            aRect.height    = (unsigned short)nH;
 
-    XRectangle aRect;
-    aRect.x         = (short)nX;
-    aRect.y         = (short)nY;
-    aRect.width     = (unsigned short)nDX;
-    aRect.height    = (unsigned short)nDY;
+            XUnionRectWithRegion( &aRect, mpClipRegion, mpClipRegion );
+        }
+        bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
+    }
 
-    XUnionRectWithRegion( &aRect, pClipRegion_, pClipRegion_ );
-
-    return sal_True;
-}
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool X11SalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
-{
-        // TODO: implement and advertise OutDevSupport_B2DClip support
-        return false;
-}
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::EndSetClipRegion()
-{
+    // done, invalidate GCs
     bPenGC_         = sal_False;
     bFontGC_        = sal_False;
     bBrushGC_       = sal_False;
@@ -633,11 +624,12 @@ void X11SalGraphics::EndSetClipRegion()
     bStippleGC_     = sal_False;
     bTrackingGC_    = sal_False;
 
-    if( XEmptyRegion( pClipRegion_ ) )
+    if( XEmptyRegion( mpClipRegion ) )
     {
-        XDestroyRegion( pClipRegion_ );
-        pClipRegion_= NULL;
+        XDestroyRegion( mpClipRegion );
+        mpClipRegion= NULL;
     }
+    return true;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1047,8 +1039,8 @@ XID X11SalGraphics::GetXRenderPicture()
 #if 0
     // setup clipping so the callers don't have to do it themselves
     // TODO: avoid clipping if already set correctly
-    if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
-        rRenderPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
+    if( mpClipRegion && !XEmptyRegion( mpClipRegion ) )
+        rRenderPeer.SetPictureClipRegion( aDstPic, mpClipRegion );
     else
 #endif
     {
@@ -1185,8 +1177,8 @@ bool X11SalGraphics::drawFilledTrapezoids( const ::basegfx::B2DTrapezoid* pB2DTr
 
     // set clipping
     // TODO: move into GetXRenderPicture?
-    if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
-        rRenderPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
+    if( mpClipRegion && !XEmptyRegion( mpClipRegion ) )
+        rRenderPeer.SetPictureClipRegion( aDstPic, mpClipRegion );
 
     // render the trapezoids
     const XRenderPictFormat* pMaskFormat = rRenderPeer.GetStandardFormatA8();
@@ -1225,6 +1217,7 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, double 
     aPolygon.transform( basegfx::tools::createTranslateB2DHomMatrix(+fHalfWidth,+fHalfWidth) );
 
     // shortcut for hairline drawing to improve performance
+    bool bDrawnOk = true;
     if( bIsHairline )
     {
         // hairlines can benefit from a simplified tesselation
@@ -1233,17 +1226,13 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, double 
         basegfx::tools::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, aPolygon, rLineWidth.getX() );
 
         // draw tesselation result
-        if( ! aB2DTrapVector.empty() )
-        {
-            const int nTrapCount = aB2DTrapVector.size();
-            const bool bDrawOk = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
+        const int nTrapCount = aB2DTrapVector.size();
+        if( nTrapCount > 0 )
+            bDrawnOk = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
 
-            // restore the original brush GC
-            nBrushColor_ = aKeepBrushColor;
-            return bDrawOk;
-        }
-        else
-            return true;
+        // restore the original brush GC
+        nBrushColor_ = aKeepBrushColor;
+        return bDrawnOk;
     }
 
     // get the area polygon for the line polygon
@@ -1266,19 +1255,18 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, double 
 
     // draw each area polypolygon component individually
     // to emulate the polypolygon winding rule "non-zero"
-    bool bDrawOk = true;
     const int nPolyCount = aAreaPolyPoly.count();
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
         const ::basegfx::B2DPolyPolygon aOnePoly( aAreaPolyPoly.getB2DPolygon( nPolyIdx ) );
-        bDrawOk = drawPolyPolygon( aOnePoly, fTransparency );
-        if( !bDrawOk )
+        bDrawnOk = drawPolyPolygon( aOnePoly, fTransparency );
+        if( !bDrawnOk )
             break;
     }
 
     // restore the original brush GC
     nBrushColor_ = aKeepBrushColor;
-    return bDrawOk;
+    return bDrawnOk;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -97,6 +97,12 @@
 #include "rtl/strbuf.hxx"
 #endif
 
+namespace {
+
+namespace css = com::sun::star;
+
+}
+
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -179,7 +185,7 @@ sal_Bool ImplSVMain()
 
     DBG_ASSERT( pSVData->mpApp, "no instance of class Application" );
 
-    Reference<XMultiServiceFactory> xMS;
+    css::uno::Reference<XMultiServiceFactory> xMS;
 
 
     sal_Bool bInit = InitVCL( xMS );
@@ -194,11 +200,7 @@ sal_Bool ImplSVMain()
 
     if( pSVData->mxDisplayConnection.is() )
     {
-        vcl::DisplayConnection* pConnection =
-            dynamic_cast<vcl::DisplayConnection*>(pSVData->mxDisplayConnection.get());
-
-        if( pConnection )
-            pConnection->dispatchDowningEvent();
+        pSVData->mxDisplayConnection->terminate();
         pSVData->mxDisplayConnection.clear();
     }
 
@@ -207,7 +209,7 @@ sal_Bool ImplSVMain()
     // be some events in the AWT EventQueue, which need the SolarMutex which
     // - on the other hand - is destroyed in DeInitVCL(). So empty the queue
     // here ..
-    Reference< XComponent > xComponent(pSVData->mxAccessBridge, UNO_QUERY);
+    css::uno::Reference< XComponent > xComponent(pSVData->mxAccessBridge, UNO_QUERY);
     if( xComponent.is() )
     {
       sal_uLong nCount = Application::ReleaseSolarMutex();

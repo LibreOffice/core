@@ -530,16 +530,16 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
     if (const void *pOptions = Application::GetSettings().GetStyleSettings().GetCairoFontOptions())
         rCairo.set_font_options( cr, pOptions);
 
-    if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
+    if( mpClipRegion && !XEmptyRegion( mpClipRegion ) )
     {
-    for (long i = 0; i < pClipRegion_->numRects; ++i)
-    {
+        for (long i = 0; i < mpClipRegion->numRects; ++i)
+        {
             rCairo.rectangle(cr,
-                pClipRegion_->rects[i].x1,
-                pClipRegion_->rects[i].y1,
-                pClipRegion_->rects[i].x2 - pClipRegion_->rects[i].x1,
-                pClipRegion_->rects[i].y2 - pClipRegion_->rects[i].y1);
-    }
+            mpClipRegion->rects[i].x1,
+            mpClipRegion->rects[i].y1,
+            mpClipRegion->rects[i].x2 - mpClipRegion->rects[i].x1,
+            mpClipRegion->rects[i].y2 - mpClipRegion->rects[i].y1);
+        }
         rCairo.clip(cr);
     }
 
@@ -623,8 +623,8 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 
     // set clipping
     // TODO: move into GetXRenderPicture()?
-    if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
-        rRenderPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
+    if( mpClipRegion && !XEmptyRegion( mpClipRegion ) )
+        rRenderPeer.SetPictureClipRegion( aDstPic, mpClipRegion );
 
     ServerFont& rFont = rLayout.GetServerFont();
     X11GlyphPeer& rGlyphPeer = X11GlyphCache::GetInstance().GetPeer();
@@ -707,10 +707,10 @@ bool X11SalGraphics::DrawServerAAForcedString( const ServerFontLayout& rLayout )
     else if( m_pVDev )
         nWidth = m_pVDev->GetWidth(), nHeight = m_pVDev->GetHeight();
 
-    if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
+    if( mpClipRegion && !XEmptyRegion( mpClipRegion ) )
     {
         // get bounding box
-        XClipBox( pClipRegion_, &aXRect );
+        XClipBox( mpClipRegion, &aXRect );
         // clip with window
         if( aXRect.x < 0 ) aXRect.x = 0;
 

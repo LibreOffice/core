@@ -50,6 +50,8 @@
 #include <Carbon/Carbon.h>
 #include <postmac.h>
 
+#include <salframe.h>
+#include <salframeview.h>
 
 using namespace rtl;
 using namespace cppu;
@@ -60,6 +62,7 @@ using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
+using namespace com::sun::star;
 using namespace comphelper;
 
 OUString dropTarget_getImplementationName()
@@ -149,6 +152,8 @@ namespace /* private */
 
 DropTarget::DropTarget() :
   WeakComponentImplHelper5<XInitialization, XDropTarget, XDropTargetDragContext, XDropTargetDropContext, XServiceInfo>(m_aMutex),
+  mView(nil),
+  mpFrame(NULL),
   mDropTargetHelper(nil),
   mbActive(false),
   mDragSourceSupportedActions(DNDConstants::ACTION_NONE),
@@ -161,8 +166,9 @@ DropTarget::DropTarget() :
 
 DropTarget::~DropTarget()
 {
-  [(id <DraggingDestinationHandler>)mView unregisterDraggingDestinationHandler:mDropTargetHelper];
-  [mDropTargetHelper release];
+    if( AquaSalFrame::isAlive( mpFrame ) )
+        [(id <DraggingDestinationHandler>)mView unregisterDraggingDestinationHandler:mDropTargetHelper];
+    [mDropTargetHelper release];
 }
 
 
@@ -243,7 +249,7 @@ NSDragOperation DropTarget::draggingEntered(id sender)
       NSPasteboard* dragPboard = [sender draggingPasteboard];
       mXCurrentDragClipboard = new AquaClipboard(dragPboard, false);
 
-      Reference<XTransferable> xTransferable = DragSource::g_XTransferable.is() ?
+      uno::Reference<XTransferable> xTransferable = DragSource::g_XTransferable.is() ?
         DragSource::g_XTransferable : mXCurrentDragClipboard->getContents();
 
       DropTargetDragEnterEvent dtdee(static_cast<OWeakObject*>(this),
@@ -333,7 +339,7 @@ BOOL DropTarget::performDragOperation(id sender)
 
   if (mSelectedDropAction != DNDConstants::ACTION_NONE)
     {
-      Reference<XTransferable> xTransferable = DragSource::g_XTransferable;
+        uno::Reference<XTransferable> xTransferable = DragSource::g_XTransferable;
 
       if (!DragSource::g_XTransferable.is())
         {
@@ -370,7 +376,7 @@ void DropTarget::concludeDragOperation(id /*sender*/)
 {
     mDragSourceSupportedActions = DNDConstants::ACTION_NONE;
     mSelectedDropAction = DNDConstants::ACTION_NONE;
-    mXCurrentDragClipboard = Reference<XClipboard>();
+    mXCurrentDragClipboard = uno::Reference<XClipboard>();
     SetThemeCursor(kThemeArrowCursor);
 }
 
@@ -396,6 +402,7 @@ void DropTarget::concludeDragOperation(id /*sender*/)
     sal_uInt64 tmp = 0;
     pNSView >>= tmp;
     mView = (id)tmp;
+    mpFrame = [(SalFrameView*)mView getSalFrame];
 
     mDropTargetHelper = [[DropTargetHelper alloc] initWithDropTarget: this];
 
@@ -415,14 +422,14 @@ void DropTarget::concludeDragOperation(id /*sender*/)
   }
 
 
-  void SAL_CALL DropTarget::addDropTargetListener(const Reference<XDropTargetListener>& dtl)
+  void SAL_CALL DropTarget::addDropTargetListener(const uno::Reference<XDropTargetListener>& dtl)
     throw(RuntimeException)
   {
     rBHelper.addListener(::getCppuType(&dtl), dtl);
   }
 
 
-  void SAL_CALL DropTarget::removeDropTargetListener(const Reference<XDropTargetListener>& dtl)
+  void SAL_CALL DropTarget::removeDropTargetListener(const uno::Reference<XDropTargetListener>& dtl)
     throw(RuntimeException)
   {
     rBHelper.removeListener(::getCppuType(&dtl), dtl);
@@ -486,7 +493,7 @@ void DropTarget::concludeDragOperation(id /*sender*/)
   {
     // Reset the internal transferable used as shortcut in case this is
     // an internal D&D operation
-    DragSource::g_XTransferable = Reference<XTransferable>();
+    DragSource::g_XTransferable = uno::Reference<XTransferable>();
     DragSource::g_DropSuccessSet = true;
     DragSource::g_DropSuccess = success;
   }
@@ -494,13 +501,13 @@ void DropTarget::concludeDragOperation(id /*sender*/)
 
   void DropTarget::fire_drop( const DropTargetDropEvent& dte)
   {
-    OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (Reference<XDropTargetListener>* )0 ) );
+      OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (uno::Reference<XDropTargetListener>* )0 ) );
     if( pContainer)
       {
         OInterfaceIteratorHelper iter( *pContainer);
         while( iter.hasMoreElements())
           {
-            Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
+              uno::Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
 
             try { listener->drop( dte); }
             catch(RuntimeException&) {}
@@ -511,13 +518,13 @@ void DropTarget::concludeDragOperation(id /*sender*/)
 
   void DropTarget::fire_dragEnter(const DropTargetDragEnterEvent& e)
   {
-    OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (Reference<XDropTargetListener>* )0 ) );
+      OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (uno::Reference<XDropTargetListener>* )0 ) );
     if( pContainer)
       {
         OInterfaceIteratorHelper iter( *pContainer);
         while( iter.hasMoreElements())
           {
-            Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
+              uno::Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
 
             try { listener->dragEnter( e); }
             catch (RuntimeException&) {}
@@ -528,14 +535,14 @@ void DropTarget::concludeDragOperation(id /*sender*/)
 
   void DropTarget::fire_dragExit(const DropTargetEvent& dte)
   {
-    OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (Reference<XDropTargetListener>* )0 ) );
+      OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (uno::Reference<XDropTargetListener>* )0 ) );
 
     if( pContainer)
       {
         OInterfaceIteratorHelper iter( *pContainer);
         while( iter.hasMoreElements())
           {
-            Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
+              uno::Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
 
             try { listener->dragExit( dte); }
             catch (RuntimeException&) {}
@@ -546,13 +553,13 @@ void DropTarget::concludeDragOperation(id /*sender*/)
 
   void DropTarget::fire_dragOver(const DropTargetDragEvent& dtde)
   {
-    OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (Reference<XDropTargetListener>* )0 ) );
+      OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (uno::Reference<XDropTargetListener>* )0 ) );
     if( pContainer)
       {
         OInterfaceIteratorHelper iter( *pContainer );
         while( iter.hasMoreElements())
           {
-            Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
+              uno::Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
 
             try { listener->dragOver( dtde); }
             catch (RuntimeException&) {}
@@ -563,13 +570,13 @@ void DropTarget::concludeDragOperation(id /*sender*/)
 
   void DropTarget::fire_dropActionChanged(const DropTargetDragEvent& dtde)
   {
-    OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (Reference<XDropTargetListener>* )0 ) );
+      OInterfaceContainerHelper* pContainer= rBHelper.getContainer( getCppuType( (uno::Reference<XDropTargetListener>* )0 ) );
     if( pContainer)
       {
         OInterfaceIteratorHelper iter( *pContainer);
         while( iter.hasMoreElements())
           {
-            Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
+              uno::Reference<XDropTargetListener> listener( static_cast<XDropTargetListener*>( iter.next()));
 
             try { listener->dropActionChanged( dtde); }
             catch (RuntimeException&) {}

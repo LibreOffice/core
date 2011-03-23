@@ -382,14 +382,14 @@ static bool getUseNativeDialog()
     try
     {
         // get service provider
-        Reference< XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
+        uno::Reference< XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
         // create configuration hierachical access name
         if( xSMgr.is() )
         {
             try
             {
-                Reference< XMultiServiceFactory > xConfigProvider(
-                    Reference< XMultiServiceFactory >(
+                uno::Reference< XMultiServiceFactory > xConfigProvider(
+                   uno::Reference< XMultiServiceFactory >(
                         xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                         "com.sun.star.configuration.ConfigurationProvider" ))),
                         UNO_QUERY )
@@ -401,8 +401,8 @@ static bool getUseNativeDialog()
                     aVal.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
                     aVal.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Misc" ) );
                     aArgs.getArray()[0] <<= aVal;
-                    Reference< XNameAccess > xConfigAccess(
-                        Reference< XNameAccess >(
+                    uno::Reference< XNameAccess > xConfigAccess(
+                        uno::Reference< XNameAccess >(
                             xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                 "com.sun.star.configuration.ConfigurationAccess" )),
                                                                             aArgs ),
@@ -836,12 +836,24 @@ void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
                 for( unsigned int i = 0; i < nPapers; i++ )
                 {
                     NSString* pPaper = [pPaperNames objectAtIndex: i];
-                    NSSize aPaperSize = [mpPrinter pageSizeForPaper: pPaper];
-                    if( aPaperSize.width > 0 && aPaperSize.height > 0 )
+                    // first try to match the name
+                    rtl::OString aPaperName( [pPaper UTF8String] );
+                    Paper ePaper = PaperInfo::fromPSName( aPaperName );
+                    if( ePaper != PAPER_USER )
                     {
-                        PaperInfo aInfo( PtTo10Mu( aPaperSize.width ),
-                                         PtTo10Mu( aPaperSize.height ) );
-                        m_aPaperFormats.push_back( aInfo );
+                        m_aPaperFormats.push_back( PaperInfo( ePaper ) );
+                    }
+                    else
+                    {
+                        NSSize aPaperSize = [mpPrinter pageSizeForPaper: pPaper];
+                        if( aPaperSize.width > 0 && aPaperSize.height > 0 )
+                        {
+                            PaperInfo aInfo( PtTo10Mu( aPaperSize.width ),
+                                             PtTo10Mu( aPaperSize.height ) );
+                            if( aInfo.getPaper() == PAPER_USER )
+                                aInfo.doSloppyFit();
+                            m_aPaperFormats.push_back( aInfo );
+                        }
                     }
                 }
             }

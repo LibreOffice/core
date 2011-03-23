@@ -59,6 +59,7 @@ class ImplFontMetricData;
 class FontSubsetInfo;
 class ZCodec;
 class EncHashTransporter;
+struct BitStreamState;
 
 // the maximum password length
 #define ENCRYPTED_PWD_SIZE     32
@@ -831,7 +832,7 @@ i12626
 // test if the encryption is active, if yes than encrypt the unicode string  and add to the OStringBuffer parameter
     void appendUnicodeTextStringEncrypt( const rtl::OUString& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer );
 
-    void appendLiteralStringEncrypt( const rtl::OUString& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer );
+    void appendLiteralStringEncrypt( const rtl::OUString& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer, rtl_TextEncoding nEnc = RTL_TEXTENCODING_ASCII_US );
     void appendLiteralStringEncrypt( const rtl::OString& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer );
     void appendLiteralStringEncrypt( rtl::OStringBuffer& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer );
 
@@ -1057,6 +1058,14 @@ i12626
     void implWriteBitmapEx( const Point& rPoint, const Size& rSize, const BitmapEx& rBitmapEx,
                            VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
 
+    // helpers for CCITT 1bit bitmap stream
+    void putG4Bits( sal_uInt32 i_nLength, sal_uInt32 i_nCode, BitStreamState& io_rState );
+    void putG4Span( long i_nSpan, bool i_bWhitePixel, BitStreamState& io_rState );
+    void writeG4Stream( BitmapReadAccess* i_pBitmap );
+
+    // color helper functions
+    void appendStrokingColor( const Color& rColor, rtl::OStringBuffer& rBuffer );
+    void appendNonStrokingColor( const Color& rColor, rtl::OStringBuffer& rBuffer );
 public:
     PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext, const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >&, PDFWriter& );
     ~PDFWriterImpl();

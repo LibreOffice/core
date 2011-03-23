@@ -69,10 +69,7 @@ public:
     virtual long            GetGraphicsWidth() const;
 
     virtual void            ResetClipRegion();
-    virtual void            BeginSetClipRegion( sal_uLong nCount );
-    virtual sal_Bool            unionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual bool            unionClipRegion(  const ::basegfx::B2DPolyPolygon& );
-    virtual void            EndSetClipRegion();
+    virtual bool            setClipRegion( const Region& );
 
     virtual void            SetLineColor();
     virtual void            SetLineColor( SalColor nSalColor );

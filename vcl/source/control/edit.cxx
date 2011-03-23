@@ -792,19 +792,19 @@ String Edit::ImplGetValidString( const String& rString ) const
 }
 
 // -----------------------------------------------------------------------
-Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator() const
+uno::Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator() const
 {
     //!! since we don't want to become incompatible in the next minor update
     //!! where this code will get integrated into, xISC will be a local
     //!! variable instead of a class member!
-    Reference < i18n::XBreakIterator > xBI;
+    uno::Reference < i18n::XBreakIterator > xBI;
 //    if ( !xBI.is() )
     {
-        Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
+        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        uno::Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
         if ( xI.is() )
         {
-            Any x = xI->queryInterface( ::getCppuType((const Reference< i18n::XBreakIterator >*)0) );
+            Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XBreakIterator >*)0) );
             x >>= xBI;
         }
     }
@@ -812,19 +812,19 @@ Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator() const
 }
 // -----------------------------------------------------------------------
 
-Reference < i18n::XExtendedInputSequenceChecker > Edit::ImplGetInputSequenceChecker() const
+uno::Reference < i18n::XExtendedInputSequenceChecker > Edit::ImplGetInputSequenceChecker() const
 {
     //!! since we don't want to become incompatible in the next minor update
     //!! where this code will get integrated into, xISC will be a local
     //!! variable instead of a class member!
-    Reference < i18n::XExtendedInputSequenceChecker > xISC;
+    uno::Reference < i18n::XExtendedInputSequenceChecker > xISC;
 //    if ( !xISC.is() )
     {
-        Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.InputSequenceChecker" ) );
+        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        uno::Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.InputSequenceChecker" ) );
         if ( xI.is() )
         {
-            Any x = xI->queryInterface( ::getCppuType((const Reference< i18n::XExtendedInputSequenceChecker >*)0) );
+            Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XExtendedInputSequenceChecker >*)0) );
             x >>= xISC;
         }
     }
@@ -899,8 +899,8 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
         // get access to the configuration of this office module
         try
         {
-            Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-            Reference< container::XNameAccess > xModuleCfg( ::comphelper::ConfigurationHelper::openConfig(
+            uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+            uno::Reference< container::XNameAccess > xModuleCfg( ::comphelper::ConfigurationHelper::openConfig(
                                     xMSF,
                                     sModule,
                                     ::comphelper::ConfigurationHelper::E_READONLY ),

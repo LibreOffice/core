@@ -93,7 +93,7 @@ protected:
     CairoFontsCache m_aCairoFontsCache;
 
     XLIB_Region     pPaintRegion_;
-    XLIB_Region     pClipRegion_;
+    XLIB_Region     mpClipRegion;
 
     GC              pPenGC_;        // Pen attributes
     SalColor        nPenColor_;
@@ -136,6 +136,7 @@ protected:
     bool            bXORMode_ : 1;      // is ROP XOR Mode set
     sal_Bool            bDitherBrush_ : 1;  // is solid or tile
 
+    using SalGraphics::SetClipRegion;
     void            SetClipRegion( GC          pGC,
                                    XLIB_Region pXReg = NULL ) const;
 
@@ -231,10 +232,7 @@ public:
     virtual long            GetGraphicsHeight() const;
 
     virtual void            ResetClipRegion();
-    virtual void            BeginSetClipRegion( sal_uIntPtr nCount );
-    virtual sal_Bool            unionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual bool            unionClipRegion( const ::basegfx::B2DPolyPolygon& );
-    virtual void            EndSetClipRegion();
+    virtual bool            setClipRegion( const Region& );
 
     virtual void            SetLineColor();
     virtual void            SetLineColor( SalColor nSalColor );

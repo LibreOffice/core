@@ -51,6 +51,9 @@ bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
     case OutDevSupport_TransparentRect:
         bRet = mbVirDev || mbWindow;
         break;
+    case OutDevSupport_B2DClip:
+        bRet = true;
+        break;
     case OutDevSupport_B2DDraw:
         bRet = bAllowForTest;
     default: break;

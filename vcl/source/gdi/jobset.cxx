@@ -301,13 +301,16 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
     // Zur Zeit haben wir noch kein neues FileFormat
 //    if ( rIStream.GetVersion() < JOBSET_FILEFORMAT2 )
     {
-        sal_uInt16 nLen;
-        sal_uInt16 nSystem;
         sal_Size nFirstPos = rIStream.Tell();
+
+        sal_uInt16 nLen = 0;
         rIStream >> nLen;
         if ( !nLen )
             return rIStream;
+
+        sal_uInt16 nSystem = 0;
         rIStream >> nSystem;
+
         char* pTempBuf = new char[nLen];
         rIStream.Read( pTempBuf,  nLen - sizeof( nLen ) - sizeof( nSystem ) );
         if ( nLen >= sizeof(ImplOldJobSetupData)+4 )

@@ -46,6 +46,7 @@ namespace svt { namespace table
     class SAL_NO_VTABLE ITableRenderer
     {
         public:
+
         /** paints a (part of) header area
 
             There are two header areas in a table control:
@@ -175,12 +176,10 @@ namespace svt { namespace table
                 the are into which the row header should be painted
             @param _rStyle
                 the style to be used for drawing
-            @param _rText
-                the title of the header row
         */
         virtual void    PaintRowHeader( bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                const StyleSettings& _rStyle, rtl::OUString& _rText ) = 0;
+                const StyleSettings& _rStyle ) = 0;
 
         /** paints a certain cell
 
@@ -207,46 +206,11 @@ namespace svt { namespace table
                 the are into which the cell should be painted
             @param _rStyle
                 the style to be used for drawing
-            @param _pCellData
-                the content of the cell
         */
-        virtual void    PaintCellImage( ColPos _nColumn,
+        virtual void    PaintCell( ColPos const i_col,
                             bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                const StyleSettings& _rStyle, Image* _pCellData ) = 0;
-
-    /** paints a certain cell
-
-            The row to be painted is denoted by the most recent call to
-            ->PrepareRow.
-
-            @param _bSelected
-                <TRUE/> if and only if the cell to be painted is
-                selected currently. This is the case if either
-                the row or the column of the cell is currently selected.
-                <br/>
-                Note that this flag is equal to the respective flag in the
-                previous ->PrepareRow call, it's passed here for convinience
-                only.
-            @param _bActive
-                <TRUE/> if the cell is currently active.
-                <br/>
-                Note that this flag is equal to the respective flag in the
-                previous ->PrepareRow call, it's passed here for convinience
-                only.
-            @param _rDevice
-                denotes the device to paint onto
-            @param _rArea
-                the are into which the cell should be painted
-            @param _rStyle
-                the style to be used for drawing
-            @param _rText
-                the content of the cell
-        */
-        virtual void    PaintCellString( ColPos _nColumn,
-                            bool _bActive, bool _bSelected,
-                            OutputDevice& _rDevice, const Rectangle& _rArea,
-                const StyleSettings& _rStyle, rtl::OUString& _rText ) = 0;
+                            const StyleSettings& _rStyle ) = 0;
 
         /** draws a cell cursor in the given rectangle
 
@@ -261,6 +225,41 @@ namespace svt { namespace table
             of a table control.
         */
         virtual void    HideCellCursor( Window& _rView, const Rectangle& _rCursorRect) = 0;
+
+        /** checks whether a given cell content fits into a given target area on a given device.
+
+            @param i_colPos
+                denotes the column which the cell content would be painted into. Your renderer implementation
+                would only need this parameter if rendering is done differently for different columns.
+
+            @param i_rowPos
+                denotes the row which the cell content would be painted into. Your renderer implementation
+                would only need this parameter if rendering is done differently for different rows.
+
+            @param i_active
+                is <TRUE/> if and only if the renderer should assume the cell content would be painted for the active
+                cell.
+
+            @param i_selected
+                is <TRUE/> if and only if the renderer should assume the cell content would be painted for a selected
+                cell.
+
+            @param i_targetDevice
+                denotes the target device for the assumed rendering operation
+
+            @param i_targetArea
+                denotes the area within the target device for the assumed rendering operation.
+
+            @return
+                <TRUE/> if and only if the given cell content could be rendered into the given device and the
+                given area.
+        */
+        virtual bool    FitsIntoCell(
+                            ::com::sun::star::uno::Any const & i_cellContent,
+                            ColPos const i_colPos, RowPos const i_rowPos,
+                            bool const i_active, bool const i_selected,
+                            OutputDevice& i_targetDevice, Rectangle const & i_targetArea
+                        ) = 0;
 
         /// deletes the renderer instance
         virtual ~ITableRenderer() { }

@@ -101,6 +101,7 @@ using ::std::max;
 #include <time.h>
 
 using ::rtl::OUString;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
@@ -872,11 +873,11 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
 
     try
     {
-        Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-        Reference< XIndexAccess > xMultiMon( xFactory->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DisplayAccess" ) ) ), UNO_QUERY_THROW );
+        uno::Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+        uno::Reference< XIndexAccess > xMultiMon( xFactory->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DisplayAccess" ) ) ), UNO_QUERY_THROW );
         if( (pFrame->mnDisplay >= 0) && (pFrame->mnDisplay < xMultiMon->getCount()) )
         {
-            Reference< XPropertySet > xMonitor( xMultiMon->getByIndex( pFrame->mnDisplay ), UNO_QUERY_THROW );
+            uno::Reference< XPropertySet > xMonitor( xMultiMon->getByIndex( pFrame->mnDisplay ), UNO_QUERY_THROW );
             com::sun::star::awt::Rectangle aRect;
             if( xMonitor->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ScreenArea" ) ) ) >>= aRect )
             {

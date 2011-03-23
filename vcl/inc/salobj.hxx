@@ -47,7 +47,7 @@ struct SystemEnvData;
 // - SalObject -
 // -------------
 
-class VCL_DLLPUBLIC SalObject
+class VCL_PLUGIN_PUBLIC SalObject
 {
     void*               m_pInst;
     SALOBJECTPROC       m_pCallback;

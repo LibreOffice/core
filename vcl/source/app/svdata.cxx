@@ -62,7 +62,6 @@
 #include "salsys.hxx"
 #include "svids.hrc"
 
-
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/awt/XExtendedToolkit.hpp"
@@ -72,6 +71,12 @@
 #include "com/sun/star/java/JavaDisabledException.hpp"
 
 #include <stdio.h>
+
+namespace {
+
+namespace css = com::sun::star;
+
+}
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -174,6 +179,8 @@ void ImplDeInitSVData()
         delete pSVData->maCtrlData.mpFieldUnitStrings, pSVData->maCtrlData.mpFieldUnitStrings = NULL;
     if( pSVData->maCtrlData.mpCleanUnitStrings )
         delete pSVData->maCtrlData.mpCleanUnitStrings, pSVData->maCtrlData.mpCleanUnitStrings = NULL;
+    if( pSVData->mpPaperNames )
+        delete pSVData->mpPaperNames, pSVData->mpPaperNames = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -364,12 +371,12 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
         ImplSVData* pSVData = ImplGetSVData();
         if( ! pSVData->mxAccessBridge.is() )
         {
-            Reference< XMultiServiceFactory > xFactory(vcl::unohelper::GetMultiServiceFactory());
+            css::uno::Reference< XMultiServiceFactory > xFactory(vcl::unohelper::GetMultiServiceFactory());
 
             if( xFactory.is() )
             {
-                Reference< XExtendedToolkit > xToolkit =
-                    Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
+                css::uno::Reference< XExtendedToolkit > xToolkit =
+                    css::uno::Reference< XExtendedToolkit >(Application::GetVCLToolkit(), UNO_QUERY);
 
                 Sequence< Any > arguments(1);
                 arguments[0] = makeAny(xToolkit);

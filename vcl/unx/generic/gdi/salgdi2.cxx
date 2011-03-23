@@ -310,8 +310,8 @@ int X11SalGraphics::Clip( int          &nX,
         && RectangleOut == Clip( pPaintRegion_, nX, nY, nDX, nDY, nSrcX, nSrcY ) )
         return RectangleOut;
 
-    if( pClipRegion_
-        && RectangleOut == Clip( pClipRegion_,  nX, nY, nDX, nDY, nSrcX, nSrcY ) )
+    if( mpClipRegion
+        && RectangleOut == Clip( mpClipRegion,  nX, nY, nDX, nDY, nSrcX, nSrcY ) )
         return RectangleOut;
 
     int nPaint;
@@ -325,9 +325,9 @@ int X11SalGraphics::Clip( int          &nX,
         nPaint = RectangleIn;
 
     int nClip;
-    if( pClipRegion_ )
+    if( mpClipRegion )
     {
-        nClip = XRectInRegion( pClipRegion_, nX, nY, nDX, nDY );
+        nClip = XRectInRegion( mpClipRegion, nX, nY, nDX, nDY );
         if( RectangleOut == nClip )
             return RectangleOut;
     }
@@ -890,8 +890,8 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
         return false;
 
     // set clipping
-    if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
-        rPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
+    if( mpClipRegion && !XEmptyRegion( mpClipRegion ) )
+        rPeer.SetPictureClipRegion( aDstPic, mpClipRegion );
 
     // paint source * mask over destination picture
     rPeer.CompositePicture( PictOpOver, aSrcPic, aAlphaPic, aDstPic,

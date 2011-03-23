@@ -479,30 +479,13 @@ void GtkSalGraphics::ResetClipRegion()
     X11SalGraphics::ResetClipRegion();
 }
 
-void GtkSalGraphics::BeginSetClipRegion( sal_uLong nCount )
+bool GtkSalGraphics::setClipRegion( const Region& i_rClip )
 {
-    m_aClipRegion.SetNull();
-    X11SalGraphics::BeginSetClipRegion( nCount );
-}
-
-sal_Bool GtkSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeight )
-{
-    Rectangle aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
-    m_aClipRegion.Union( aRect );
-    return X11SalGraphics::unionClipRegion( nX, nY, nWidth, nHeight );
-}
-
-bool GtkSalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
-{
-        // TODO: implement and advertise OutDevSupport_B2DClip support
-        return false;
-}
-
-void GtkSalGraphics::EndSetClipRegion()
-{
+    m_aClipRegion = i_rClip;
+    bool bRet = X11SalGraphics::setClipRegion( m_aClipRegion );
     if( m_aClipRegion.IsEmpty() )
         m_aClipRegion.SetNull();
-    X11SalGraphics::EndSetClipRegion();
+    return bRet;
 }
 
 void GtkSalGraphics::copyBits( const SalTwoRect* pPosAry,

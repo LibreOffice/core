@@ -420,6 +420,8 @@ void MessBox::ImplPosControls()
     }
 
     mpFixedText = new FixedText( this, nWinStyle );
+    if( mpFixedText->GetStyle() & WB_EXTRAOFFSET ) // TODO: use CalcMinimumSize() instead
+        aFixedSize.Width() += 2;
     mpFixedText->SetPosSizePixel( aTextPos, aFixedSize );
     mpFixedText->SetText( aMessText );
     mpFixedText->Show();

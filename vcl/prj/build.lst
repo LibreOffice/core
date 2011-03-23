@@ -1,4 +1,4 @@
-vc	vcl	:	l10n apple_remote BOOST:boost rsc sot ucbhelper unotools ICU:icu GRAPHITE:graphite i18npool i18nutil unoil ridljar X11_EXTENSIONS:x11_extensions offuh basegfx basebmp tools l10ntools icc SO:print_header cpputools shell svl LIBXSLT:libxslt NULL
+vc	vcl	:	L10N:l10n apple_remote BOOST:boost rsc sot ucbhelper unotools ICU:icu GRAPHITE:graphite i18npool i18nutil unoil ridljar X11_EXTENSIONS:x11_extensions offuh basegfx basebmp tools l10ntools icc SO:print_header cpputools shell svl LIBXSLT:libxslt NULL
 vc	vcl										usr1	-	all	vc_mkout NULL
 vc	vcl\prj									nmake	-	all	vc_prj NULL
 

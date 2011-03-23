@@ -151,8 +151,6 @@ public:
     COLORREF                mnTextColor;        // TextColor
     RGNDATA*                mpClipRgnData;      // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
-    RECT*                   mpNextClipRect;     // Naechstes ClipRegion-Rect
-    sal_Bool                    mbFirstClipRect;    // Flag for first cliprect to insert
     LOGFONTA*               mpLogFont;          // LOG-Font which is currently selected (only W9x)
     ImplFontAttrCache*      mpFontAttrCache;    // Cache font attributes from files in so/share/fonts
     BYTE*                   mpFontCharSets;     // All Charsets for the current font
@@ -182,8 +180,7 @@ public:
     virtual ~WinSalGraphics();
 
 protected:
-    virtual sal_Bool        unionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual bool                unionClipRegion( const ::basegfx::B2DPolyPolygon& );
+    virtual bool        setClipRegion( const Region& );
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void        drawPixel( long nX, long nY );
     virtual void        drawPixel( long nX, long nY, SalColor nSalColor );
@@ -255,11 +252,6 @@ public:
 
     // set the clip region to empty
     virtual void            ResetClipRegion();
-    // begin setting the clip region, add rectangles to the
-    // region with the UnionClipRegion call
-    virtual void            BeginSetClipRegion( sal_uIntPtr nCount );
-    // all rectangles were added and the clip region should be set now
-    virtual void            EndSetClipRegion();
 
     // set the line color to transparent (= don't draw lines)
     virtual void            SetLineColor();

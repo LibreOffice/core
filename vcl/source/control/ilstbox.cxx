@@ -2065,8 +2065,6 @@ void ImplListBoxWindow::SetTopEntry( sal_uInt16 nTop )
         mnTop = nTop;
         Scroll( 0, nDiff );
         Update();
-        maFocusRect.Top() += nDiff;
-        maFocusRect.Bottom() += nDiff;
         if( HasFocus() )
             ImplShowFocusRect();
         maScrollHdl.Call( this );

@@ -42,7 +42,7 @@
  * this needed to be virtualized for the sal plugin migration
  */
 
-class VCL_DLLPUBLIC SalTimer
+class VCL_PLUGIN_PUBLIC SalTimer
 {
     SALTIMERPROC        m_pProc;
 public:
