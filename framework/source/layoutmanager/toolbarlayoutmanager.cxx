@@ -96,6 +96,8 @@ ToolbarLayoutManager::ToolbarLayoutManager(
 
 ToolbarLayoutManager::~ToolbarLayoutManager()
 {
+    delete m_pGlobalSettings;
+    delete m_pAddonOptions;
 }
 
 //---------------------------------------------------------------------------------------------------------
