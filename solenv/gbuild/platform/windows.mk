@@ -165,6 +165,7 @@ gb_CXXFLAGS := \
 
 gb_STDLIBS := \
 	uwinapi \
+	advapi32 \
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -WX
