@@ -69,22 +69,13 @@ ScDBData::ScDBData( const String& rName,
 
     ScSortParam aSortParam;
     ScQueryParam aQueryParam;
-    ScSubTotalParam aSubTotalParam;
     ScImportParam aImportParam;
 
     for (i=0; i<MAXQUERY; i++)
         pQueryStr[i] = new String;
 
-    for (i=0; i<MAXSUBTOTAL; i++)
-    {
-        nSubTotals[i] = 0;
-        pSubTotals[i] = NULL;
-        pFunctions[i] = NULL;
-    }
-
     SetSortParam( aSortParam );
     SetQueryParam( aQueryParam );
-    SetSubTotalParam( aSubTotalParam );
     SetImportParam( aImportParam );
 }
 
@@ -122,15 +113,7 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     nQueryDestRow       (rData.nQueryDestRow),
     bIsAdvanced         (rData.bIsAdvanced),
     aAdvSource          (rData.aAdvSource),
-    bSubRemoveOnly      (rData.bSubRemoveOnly),
-    bSubReplace         (rData.bSubReplace),
-    bSubPagebreak       (rData.bSubPagebreak),
-    bSubCaseSens        (rData.bSubCaseSens),
-    bSubDoSort          (rData.bSubDoSort),
-    bSubAscending       (rData.bSubAscending),
-    bSubIncludePattern  (rData.bSubIncludePattern),
-    bSubUserDef         (rData.bSubUserDef),
-    nSubUserIndex       (rData.nSubUserIndex),
+    maSubTotal          (rData.maSubTotal),
     bDBImport           (rData.bDBImport),
     aDBName             (rData.aDBName),
     aDBStatement        (rData.aDBStatement),
@@ -143,7 +126,6 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     bModified           (rData.bModified)
 {
     sal_uInt16 i;
-    sal_uInt16 j;
 
     for (i=0; i<MAXSORT; i++)
     {
@@ -162,28 +144,11 @@ ScDBData::ScDBData( const ScDBData& rData ) :
         nQueryVal[i]        = rData.nQueryVal[i];
         eQueryConnect[i]    = rData.eQueryConnect[i];
     }
-    for (i=0; i<MAXSUBTOTAL; i++)
-    {
-        bDoSubTotal[i]      = rData.bDoSubTotal[i];
-        nSubField[i]        = rData.nSubField[i];
-
-        SCCOL nCount    = rData.nSubTotals[i];
-        nSubTotals[i]   = nCount;
-        pFunctions[i]   = nCount > 0 ? new ScSubTotalFunc [nCount] : NULL;
-        pSubTotals[i]   = nCount > 0 ? new SCCOL          [nCount] : NULL;
-
-        for (j=0; j<nCount; j++)
-        {
-            pSubTotals[i][j] = rData.pSubTotals[i][j];
-            pFunctions[i][j] = rData.pFunctions[i][j];
-        }
-    }
 }
 
 ScDBData& ScDBData::operator= (const ScDBData& rData)
 {
     sal_uInt16 i;
-    sal_uInt16 j;
 
     ScRefreshTimer::operator=( rData );
     aName               = rData.aName;
@@ -216,16 +181,8 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     nQueryDestCol       = rData.nQueryDestCol;
     nQueryDestRow       = rData.nQueryDestRow;
     bIsAdvanced         = rData.bIsAdvanced;
+    maSubTotal          = rData.maSubTotal;
     aAdvSource          = rData.aAdvSource;
-    bSubRemoveOnly      = rData.bSubRemoveOnly;
-    bSubReplace         = rData.bSubReplace;
-    bSubPagebreak       = rData.bSubPagebreak;
-    bSubCaseSens        = rData.bSubCaseSens;
-    bSubDoSort          = rData.bSubDoSort;
-    bSubAscending       = rData.bSubAscending;
-    bSubIncludePattern  = rData.bSubIncludePattern;
-    bSubUserDef         = rData.bSubUserDef;
-    nSubUserIndex       = rData.nSubUserIndex;
     bDBImport           = rData.bDBImport;
     aDBName             = rData.aDBName;
     aDBStatement        = rData.aDBStatement;
@@ -252,24 +209,6 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
         *pQueryStr[i]       = *rData.pQueryStr[i];
         nQueryVal[i]        = rData.nQueryVal[i];
         eQueryConnect[i]    = rData.eQueryConnect[i];
-    }
-    for (i=0; i<MAXSUBTOTAL; i++)
-    {
-        bDoSubTotal[i]      = rData.bDoSubTotal[i];
-        nSubField[i]        = rData.nSubField[i];
-        SCCOL nCount    = rData.nSubTotals[i];
-        nSubTotals[i]   = nCount;
-
-        delete[] pSubTotals[i];
-        delete[] pFunctions[i];
-
-        pSubTotals[i] = nCount > 0 ? new SCCOL          [nCount] : NULL;
-        pFunctions[i] = nCount > 0 ? new ScSubTotalFunc [nCount] : NULL;
-        for (j=0; j<nCount; j++)
-        {
-            pSubTotals[i][j] = rData.pSubTotals[i][j];
-            pFunctions[i][j] = rData.pFunctions[i][j];
-        }
     }
 
     return *this;
@@ -327,11 +266,6 @@ ScDBData::~ScDBData()
 
     for (i=0; i<MAXQUERY; i++)
         delete pQueryStr[i];
-    for (i=0; i<MAXSUBTOTAL; i++)
-    {
-        delete[] pSubTotals[i];
-        delete[] pFunctions[i];
-    }
 }
 
 
@@ -360,7 +294,7 @@ String ScDBData::GetOperations() const
         aVal += ScGlobal::GetRscString(STR_OPERATION_SORT);
     }
 
-    if (bDoSubTotal[0] && !bSubRemoveOnly)
+    if (maSubTotal.bGroupActive[0] && !maSubTotal.bRemoveOnly)
     {
         if (aVal.Len())
             aVal.AppendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
@@ -432,11 +366,11 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
     }
     for (i=0; i<MAXSUBTOTAL; i++)
     {
-        nSubField[i] = sal::static_int_cast<SCCOL>( nSubField[i] + nDifX );
-        if (nSubField[i] > nCol2)
+        maSubTotal.nField[i] = sal::static_int_cast<SCCOL>( maSubTotal.nField[i] + nDifX );
+        if (maSubTotal.nField[i] > nCol2)
         {
-            nSubField[i]   = 0;
-            bDoSubTotal[i] = false;
+            maSubTotal.nField[i] = 0;
+            maSubTotal.bGroupActive[i] = false;
         }
     }
 
@@ -579,76 +513,19 @@ sal_Bool ScDBData::GetAdvancedQuerySource(ScRange& rSource) const
 
 void ScDBData::GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const
 {
-    sal_uInt16 i;
-    sal_uInt16 j;
+    rSubTotalParam = maSubTotal;
 
+    // Share the data range with the parent db data.  The range in the subtotal
+    // param struct is not used.
     rSubTotalParam.nCol1 = nStartCol;
     rSubTotalParam.nRow1 = nStartRow;
     rSubTotalParam.nCol2 = nEndCol;
     rSubTotalParam.nRow2 = nEndRow;
-
-    rSubTotalParam.bRemoveOnly      = bSubRemoveOnly;
-    rSubTotalParam.bReplace         = bSubReplace;
-    rSubTotalParam.bPagebreak       = bSubPagebreak;
-    rSubTotalParam.bCaseSens        = bSubCaseSens;
-    rSubTotalParam.bDoSort          = bSubDoSort;
-    rSubTotalParam.bAscending       = bSubAscending;
-    rSubTotalParam.bIncludePattern  = bSubIncludePattern;
-    rSubTotalParam.bUserDef         = bSubUserDef;
-    rSubTotalParam.nUserIndex       = nSubUserIndex;
-
-    for (i=0; i<MAXSUBTOTAL; i++)
-    {
-        rSubTotalParam.bGroupActive[i]  = bDoSubTotal[i];
-        rSubTotalParam.nField[i]        = nSubField[i];
-        SCCOL nCount = nSubTotals[i];
-
-        rSubTotalParam.nSubTotals[i] = nCount;
-        delete[] rSubTotalParam.pSubTotals[i];
-        delete[] rSubTotalParam.pFunctions[i];
-        rSubTotalParam.pSubTotals[i] = nCount > 0 ? new SCCOL[nCount] : NULL;
-        rSubTotalParam.pFunctions[i] = nCount > 0 ? new ScSubTotalFunc[nCount]
-                                              : NULL;
-        for (j=0; j<nCount; j++)
-        {
-            rSubTotalParam.pSubTotals[i][j] = pSubTotals[i][j];
-            rSubTotalParam.pFunctions[i][j] = pFunctions[i][j];
-        }
-    }
 }
 
 void ScDBData::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
 {
-    sal_uInt16 i;
-    sal_uInt16 j;
-
-    bSubRemoveOnly      = rSubTotalParam.bRemoveOnly;
-    bSubReplace         = rSubTotalParam.bReplace;
-    bSubPagebreak       = rSubTotalParam.bPagebreak;
-    bSubCaseSens        = rSubTotalParam.bCaseSens;
-    bSubDoSort          = rSubTotalParam.bDoSort;
-    bSubAscending       = rSubTotalParam.bAscending;
-    bSubIncludePattern  = rSubTotalParam.bIncludePattern;
-    bSubUserDef         = rSubTotalParam.bUserDef;
-    nSubUserIndex       = rSubTotalParam.nUserIndex;
-
-    for (i=0; i<MAXSUBTOTAL; i++)
-    {
-        bDoSubTotal[i]  = rSubTotalParam.bGroupActive[i];
-        nSubField[i]    = rSubTotalParam.nField[i];
-        SCCOL nCount = rSubTotalParam.nSubTotals[i];
-
-        nSubTotals[i] = nCount;
-        delete[] pSubTotals[i];
-        delete[] pFunctions[i];
-        pSubTotals[i] = nCount > 0 ? new SCCOL          [nCount] : NULL;
-        pFunctions[i] = nCount > 0 ? new ScSubTotalFunc [nCount] : NULL;
-        for (j=0; j<nCount; j++)
-        {
-            pSubTotals[i][j] = rSubTotalParam.pSubTotals[i][j];
-            pFunctions[i][j] = rSubTotalParam.pFunctions[i][j];
-        }
-    }
+    maSubTotal = rSubTotalParam;
 }
 
 void ScDBData::GetImportParam(ScImportParam& rImportParam) const

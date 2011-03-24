@@ -36,6 +36,7 @@
 #include "refreshtimer.hxx"
 #include "address.hxx"
 #include "scdllapi.h"
+#include "subtotalparam.hxx"
 
 class ScDocument;
 
@@ -89,21 +90,9 @@ private:
     sal_Bool            bIsAdvanced;        // sal_True if created by advanced filter
     ScRange         aAdvSource;         // source range
     SCROW           nDynamicEndRow;
-    // SubTotalParam
-    sal_Bool            bSubRemoveOnly;
-    sal_Bool            bSubReplace;
-    sal_Bool            bSubPagebreak;
-    sal_Bool            bSubCaseSens;
-    sal_Bool            bSubDoSort;
-    sal_Bool            bSubAscending;
-    sal_Bool            bSubIncludePattern;
-    sal_Bool            bSubUserDef;
-    sal_uInt16          nSubUserIndex;
-    sal_Bool            bDoSubTotal[MAXSUBTOTAL];
-    SCCOL           nSubField[MAXSUBTOTAL];
-    SCCOL           nSubTotals[MAXSUBTOTAL];
-    SCCOL*          pSubTotals[MAXSUBTOTAL];
-    ScSubTotalFunc* pFunctions[MAXSUBTOTAL];
+
+    ScSubTotalParam maSubTotal;
+
     // data base import
     sal_Bool            bDBImport;
     String          aDBName;
@@ -177,7 +166,7 @@ public:
             sal_Bool        HasImportParam() const   { return bDBImport; }
             sal_Bool        HasQueryParam() const    { return bDoQuery[0]; }
             sal_Bool        HasSortParam() const     { return bDoSort[0]; }
-            sal_Bool        HasSubTotalParam() const { return bDoSubTotal[0]; }
+            sal_Bool        HasSubTotalParam() const { return maSubTotal.bGroupActive[0]; }
 
             sal_Bool        HasImportSelection() const      { return bDBSelection; }
             void        SetImportSelection(sal_Bool bSet)   { bDBSelection = bSet; }
