@@ -36,6 +36,7 @@ fi    1252  1035
 fo    1252  1080   # Faroese
 fr    1252  1036
 fr-CA 1252  3084
+fur      0  1585
 ga       0  2108   # Irish
 gd       0  1084   # Gaelic (Scotland)
 gl    1252  1110   # Galician
@@ -51,7 +52,9 @@ id    1252  1057   # Indonesian
 is    1252  1039   # Icelandic
 it    1252  1040
 ja     932  1041
+jbo      0  1624
 ka       0  1079   # Georgian
+kab      0  1625
 kid   1252  1033   # key id pseudo language
 kk       0  1087
 km       0  1107   # Khmer
@@ -84,6 +87,8 @@ nn    1252  2068
 no    1252  1044
 nr       0  1580   # Ndebele South
 ns       0  1132   # Northern Sotho (Sepedi)
+nso      0  1132
+ny       0  1598
 oc    1252  1154   # Occitan-lengadocian
 om       0  2162
 or       0  1096   # Oriya
@@ -116,6 +121,7 @@ st       0  1072   # Southern Sotho, Sutu
 sv    1252  1053
 sw    1252  1089   # Swahili
 sw-TZ 1252  1089   # Swahili
+so       0  1143  
 ta       0  1097   # Tamil
 ta-IN    0  1097   # Tamil
 te       0  1098
