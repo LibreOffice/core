@@ -1061,6 +1061,13 @@ void PrintDialog::readFromSettings()
         }
     }
     maOKButton.SetText( maOptionsPage.maToFileBox.IsChecked() ? maPrintToFileText : maPrintText );
+
+    // persistent window state
+    rtl::OUString aWinState( pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WindowState" ) ) ) );
+    if( aWinState.getLength() )
+        SetWindowState( rtl::OUStringToOString( aWinState, RTL_TEXTENCODING_UTF8 ) );
+
     if( maOptionsPage.maToFileBox.IsChecked() )
     {
         maPController->resetPrinterOptions( true );
@@ -1083,6 +1090,10 @@ void PrintDialog::storeToSettings()
     pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPage" ) ),
                      maTabCtrl.GetPageText( maTabCtrl.GetCurPageId() ) );
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WindowState" ) ),
+                     rtl::OStringToOUString( GetWindowState(), RTL_TEXTENCODING_UTF8 )
+                     );
     pItem->Commit();
 }
 
@@ -2096,6 +2107,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
         maPController->resetPrinterOptions( maOptionsPage.maToFileBox.IsChecked() );
         // update text fields
         updatePrinterText();
+        preparePreview( true, false );
     }
     else if( pBox == &maNUpPage.maNupOrientationBox || pBox == &maNUpPage.maNupOrderBox )
     {

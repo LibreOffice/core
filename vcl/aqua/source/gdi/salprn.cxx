@@ -834,12 +834,24 @@ void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* i_pSetupData )
                 for( unsigned int i = 0; i < nPapers; i++ )
                 {
                     NSString* pPaper = [pPaperNames objectAtIndex: i];
-                    NSSize aPaperSize = [mpPrinter pageSizeForPaper: pPaper];
-                    if( aPaperSize.width > 0 && aPaperSize.height > 0 )
+                    // first try to match the name
+                    rtl::OString aPaperName( [pPaper UTF8String] );
+                    Paper ePaper = PaperInfo::fromPSName( aPaperName );
+                    if( ePaper != PAPER_USER )
                     {
-                        PaperInfo aInfo( PtTo10Mu( aPaperSize.width ),
-                                         PtTo10Mu( aPaperSize.height ) );
-                        m_aPaperFormats.push_back( aInfo );
+                        m_aPaperFormats.push_back( PaperInfo( ePaper ) );
+                    }
+                    else
+                    {
+                        NSSize aPaperSize = [mpPrinter pageSizeForPaper: pPaper];
+                        if( aPaperSize.width > 0 && aPaperSize.height > 0 )
+                        {
+                            PaperInfo aInfo( PtTo10Mu( aPaperSize.width ),
+                                             PtTo10Mu( aPaperSize.height ) );
+                            if( aInfo.getPaper() == PAPER_USER )
+                                aInfo.doSloppyFit();
+                            m_aPaperFormats.push_back( aInfo );
+                        }
                     }
                 }
             }
