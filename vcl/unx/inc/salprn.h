@@ -85,7 +85,6 @@ public:
     virtual ~PspSalPrinter();
 
     // overload all pure virtual methods
-    using SalPrinter::StartJob;
     virtual sal_Bool                    StartJob( const XubString* pFileName,
                                               const XubString& rJobName,
                                               const XubString& rAppName,
