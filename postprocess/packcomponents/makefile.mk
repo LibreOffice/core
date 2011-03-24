@@ -172,7 +172,6 @@ my_components = \
     uui \
     vbaobj \
     vbaevents \
-    vcl \
     vclcanvas \
     wpft \
     writerfilter \
