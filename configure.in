@@ -175,7 +175,7 @@ AC_ARG_ENABLE(activex_component,
 AC_ARG_ENABLE(odk,
     AS_HELP_STRING([--disable-odk],
         [LibO includes an ODK, office development kit which some packagers may
-         with to build without.]),
+         wish to build without.]),
 ,enable_odk=yes)
 
 AC_ARG_ENABLE(mathmldtd,
@@ -459,7 +459,7 @@ AC_ARG_ENABLE(extra-gallery,
 
 AC_ARG_ENABLE(extra-template,
     AS_HELP_STRING([--enable-extra-template],
-	[Add extra temaplte content.]),
+	[Add extra template content.]),
 ,)
 
 AC_ARG_ENABLE(extra-sample,
