@@ -46,8 +46,6 @@
 /* implemented in file.c */
 extern int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 
-oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode);
-
 /*****************************************************************************/
 /* osl_loadModule */
 /*****************************************************************************/
@@ -68,7 +66,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
         char buffer[PATH_MAX];
 
         if (UnicodeToText(buffer, PATH_MAX, ustrTmp->buffer, ustrTmp->length))
-            pModule = osl_psz_loadModule(buffer, nRtldMode);
+            pModule = osl_loadModuleAscii(buffer, nRtldMode);
         rtl_uString_release(ustrTmp);
     }
 
@@ -76,21 +74,21 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 }
 
 /*****************************************************************************/
-/* osl_psz_loadModule */
+/* osl_loadModuleAscii */
 /*****************************************************************************/
 
-oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode)
+oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nRtldMode)
 {
     OSL_ASSERT(
         (nRtldMode & SAL_LOADMODULE_LAZY) == 0 ||
         (nRtldMode & SAL_LOADMODULE_NOW) == 0); /* only either LAZY or NOW */
-    if (pszModuleName)
+    if (pModuleName)
     {
 #ifndef NO_DL_FUNCTIONS
         int rtld_mode =
             ((nRtldMode & SAL_LOADMODULE_NOW) ? RTLD_NOW : RTLD_LAZY) |
             ((nRtldMode & SAL_LOADMODULE_GLOBAL) ? RTLD_GLOBAL : RTLD_LOCAL);
-        void* pLib = dlopen(pszModuleName, rtld_mode);
+        void* pLib = dlopen(pModuleName, rtld_mode);
 
 #if OSL_DEBUG_LEVEL > 1
         if (pLib == 0)

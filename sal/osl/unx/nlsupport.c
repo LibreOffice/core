@@ -861,7 +861,6 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 /* OS X locale discovery function */
 int (*pGetOSXLocale)( char *, sal_uInt32 );
 
-oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode);
 /*****************************************************************************
  return the current process locale
  *****************************************************************************/

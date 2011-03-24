@@ -75,6 +75,13 @@ typedef void ( SAL_CALL *oslGenericFunction )( void );
 */
 oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMode);
 
+/** Load a shared library or module.
+    @param pModuleName denotes the name of the module to be loaded.
+    @return NULL if the module could not be loaded, otherwise a handle to the module.
+    @since UDK 3.6
+*/
+oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nRtldMode);
+
 /** Load a module located relative to some other module.
 
     @param baseModule

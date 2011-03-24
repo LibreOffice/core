@@ -553,6 +553,7 @@ UDK_3.5 {
 
 UDK_3.6 { # OOo 2.3
     global:
+        osl_loadModuleAscii;
         osl_getAsciiFunctionSymbol;
         osl_getModuleHandle;
         rtl_uString_intern;

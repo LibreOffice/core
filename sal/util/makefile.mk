@@ -173,6 +173,15 @@ SHL1STDLIBS+=-lgcc
 .ENDIF
 .ENDIF
 
+SHL4DEPN+=$(SHL1TARGETN)
+SHL4LIBS=$(SLB)$/textenc_tables.lib
+SHL4TARGET=uno_sal_textenc
+SHL4STDLIBS=$(SALLIB)
+SHL4VERSIONMAP=saltextenc.map
+
+SHL4DEF=$(MISC)$/$(SHL4TARGET).def
+DEF4NAME=$(SHL4TARGET)
+
 # --- Targets ------------------------------------------------------
 
 .ENDIF # $(header) != ""

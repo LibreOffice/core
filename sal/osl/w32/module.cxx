@@ -108,6 +108,38 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
 }
 
 /*****************************************************************************/
+/* osl_loadModuleAscii */
+/*****************************************************************************/
+oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nRtldMode )
+{
+    (void) nRtldMode; /* avoid warnings */
+
+    HINSTANCE hInstance;
+    UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
+    oslModule ret = 0;
+    oslFileError    nError;
+
+    RTL_LOGFILE_TRACE1( "{ osl_loadModule start: %s", pModuleName );
+
+    OSL_ASSERT(pModuleName);
+
+    hInstance = LoadLibrary(pModuleName);
+    if (hInstance == NULL)
+        hInstance = LoadLibraryEx(pModuleName, NULL,
+                                  LOAD_WITH_ALTERED_SEARCH_PATH);
+
+    if (hInstance <= (HINSTANCE)HINSTANCE_ERROR)
+        hInstance = 0;
+
+    ret = (oslModule) hInstance;
+    SetErrorMode(errorMode);
+
+    RTL_LOGFILE_TRACE1( "} osl_loadModule end: %s", pModuleName );
+
+    return ret;
+}
+
+/*****************************************************************************/
 /* osl_getModuleHandle */
 /*****************************************************************************/
 
