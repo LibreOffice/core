@@ -184,9 +184,9 @@ my_components = \
     xsltfilter \
     xstor
 
-.IF "$(OS)" != "MACOSX"
+.IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX"
 my_components += splash
-.END
+.ENDIF
 
 .IF "$(BUILD_SPECIAL)" != ""
 my_components += oooimprovement
