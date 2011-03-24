@@ -91,6 +91,22 @@ Sub DeleteAllSavedFiles()
     If FileExists (sFileName) then
         Kill (sFileName)
     End If
+    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmWriter or cFlt50)
+    If FileExists (sFileName) then
+        Kill (sFileName)
+    End If
+    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmCalc or cFlt50)
+    If FileExists (sFileName) then
+        Kill (sFileName)
+    End If
+    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmImpress or cFlt50)
+    If FileExists (sFileName) then
+        Kill (sFileName)
+    End If
+    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmDraw or cFlt50)
+    If FileExists (sFileName) then
+        Kill (sFileName)
+    End If
 End Sub
 
 Sub DeleteAllLogFiles()
@@ -324,7 +340,7 @@ end Sub
 
 Sub MakeDocTest
     Dim oDoc as Object
-    Dim sFileNameXML$, sFileName8$
+    Dim sFileNameXML$, sFileName50$, sFileName8$
     Dim bSuccess as Boolean
 
     On Local Error GoTo DOCTESTERROR
@@ -334,9 +350,9 @@ Sub MakeDocTest
     oDoc = LoadDoc (&quot;private:factory/&quot; + GetDocFilter(gCurrentDocTest or cFltNewDoc))
     LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, not IsNull (oDoc) )
     if not IsNull (oDoc) then
-    gCurrentTestCase = cDocSaveOpen8
-    if bMakeSaveOpen8Test and IsFilterAvailable (gCurrentDocTest or cFlt8) then
-      sFileName8 = sWorkPathURL+cTempFileName+&quot;.&quot;+GetDocEndings(gCurrentDocTest or cFlt8)
+        gCurrentTestCase = cDocSaveOpen8
+        if bMakeSaveOpen8Test and IsFilterAvailable (gCurrentDocTest or cFlt8) then
+            sFileName8 = sWorkPathURL+cTempFileName+&quot;.&quot;+GetDocEndings(gCurrentDocTest or cFlt8)
             SaveDoc (sFileName8, oDoc, GetDocFilter(gCurrentDocTest or cFlt8))
         end if
         gCurrentTestCase = cDocSaveOpenXML
@@ -373,23 +389,21 @@ Sub MakeDocTest
             end If
         end if
 
-        nCurrentAction = cDocOpen50
-        if bMakeOpen50Test and IsFilterAvailable (FilterType or cFlt50) then
+        gCurrentTestCase = cDocOpen50
+        if bMakeOpen50Test and IsFilterAvailable (gCurrentDocTest or cFlt50) then
             SOLARSRC = ConvertToURL(Environ(&quot;SOLARSRC&quot;))
-            sFileName50 = SOLARSRC+&quot;/qadevOOo/testdocs/&quot;+cTempFileName+&quot;.&quot;+GetDocEndings(FilterType or cFlt50)
+            sFileName50 = SOLARSRC+&quot;/qadevOOo/testdocs/ttt.&quot;+GetDocEndings(gCurrentDocTest or cFlt50)
             oDoc = LoadDoc (sFileName50)
 
 &apos;          oDoc = Documents.open(sFileName)
-            LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageSave50Doc, FileChannel)
-            LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageOpen50Doc, MainFileChannel)
-            SetStatus (FilterType, cDocOpen50, not IsNull (oDoc))
+            LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ cMessageOpen50Doc, not IsNull (oDoc) )
 
             if not IsNull (oDoc) then
-&apos;              oDoc.dispose
-                nCurrentAction = cDocClose
+                gCurrentTestCase = cDocClose
                 oDoc.close (true)
             end If
         end if
+
     end If
     Print #LocalTestLog, &quot;---&quot;
     Close #LocalTestLog%

@@ -47,7 +47,7 @@
   </dlg:titledbox>
   <dlg:checkbox dlg:id="cbSaveOpen8Test" dlg:tab-index="12" dlg:left="126" dlg:top="21" dlg:width="80" dlg:height="8" dlg:value="Save / Open V8.0" dlg:checked="false"/>
   <dlg:checkbox dlg:id="cbSaveOpenXMLTest" dlg:tab-index="13" dlg:left="126" dlg:top="35" dlg:width="80" dlg:height="8" dlg:value="Save / Open XML" dlg:checked="false"/>
-
+  <dlg:checkbox dlg:id="cbOpen50Test" dlg:tab-index="14" dlg:left="126" dlg:top="49" dlg:width="80" dlg:height="8" dlg:value="Open V5.0" dlg:checked="false"/>
   <dlg:titledbox dlg:id="fmBroker" dlg:tab-index="15" dlg:left="7" dlg:top="169" dlg:width="208" dlg:height="17"/>
   <dlg:checkbox dlg:id="cbTerminateAfterTest" dlg:tab-index="16" dlg:disabled="true" dlg:left="19" dlg:top="174" dlg:width="190" dlg:height="8" dlg:value="Terminate Office after test" dlg:checked="false"/>
 

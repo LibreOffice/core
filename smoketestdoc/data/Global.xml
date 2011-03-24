@@ -35,7 +35,7 @@ const cParagraphBreak = 0
 
 global const cExtensionFileName = &quot;TestExtension.oxt&quot;
 
-global const cDocNew = 0, cDocSaveOpen8 = 1, cDocSaveOpenXML = 2, cDocClose = 3
+global const cDocNew = 0, cDocSaveOpen8 = 1, cDocSaveOpenXML = 2, cDocOpen50 = 3, cDocClose = 4
 global const cDBService = 0, cDBOpen = 1, cDBInsert = 2, cDBDelete = 3, cDBSeek = 4, cDBClose = 5
 global const cEXTService = 0, cEXTInstall = 1, cEXTUninstall = 2
 global const cTestClosureSetupDoc = 0, cTestClosureWriteStatus = 1
@@ -90,6 +90,7 @@ Global const cUserFieldTestDraw = &quot;Draw&quot;, cUserFieldTestMath = &quot;M
 Global const cUserFieldTestHTML = &quot;HTML&quot;, cUserFieldTestJava = &quot;Java&quot;, cUserFieldTestDatabase = &quot;Database&quot;
 Global const cUserFieldTestExtension = &quot;Extension&quot;
 Global const cUserFieldTestOpenSaveXML = &quot;SaveOpenXML&quot;
+Global const cUserFieldTestOpen50 = &quot;Open50&quot;
 Global const cUserFieldTestTerminateAfterTest = &quot;Terminate&quot;, cUserFieldTestOpenSave8 = &quot;SaveOpen8&quot;
 
 Global const cOptionsDialogName = &quot;OptionsDlg&quot;, cTest10Modul = &quot;Standard&quot;
@@ -107,7 +108,7 @@ Global bMakeWriterTest as boolean, bMakeCalcTest as  boolean, bMakeImpressTest a
 Global bMakeDrawTest as Boolean, bMakeMathTest as boolean, bMakeChartTest as boolean
 Global bMakeHTMLTest as boolean, bMakeJavaTest as boolean, bMakeDBTest as boolean
 Global bMakeExtensionTest as boolean
-Global bMakeSaveOpenXMLTest as boolean
+Global bMakeSaveOpenXMLTest as boolean, bMakeOpen50Test as boolean
 Global bMakeTerminateAfterTest as boolean, bShowTable as boolean
 Global bMakeSaveOpen8Test as boolean
 
@@ -231,10 +232,11 @@ Sub CreateStatusTable
     tableHeaders(cStHTML) = &quot;HTML&quot;
     tableHeaders(cStJava) = &quot;Java&quot;
 
-    dim tableRows(3) as string
+    dim tableRows(4) as string
     tableRows(cDocNew) = &quot;new&quot;
     tableRows(cDocSaveOpen8) = &quot;V8.0&quot;
     tableRows(cDocSaveOpenXML) = &quot;XML&quot;
+    tableRows(cDocOpen50) = &quot;V5.0&quot;
     tableRows(cDocClose) = &quot;close&quot;
 
     aDoc = gOutputDoc
@@ -250,7 +252,7 @@ Sub CreateStatusTable
     xCursor.GoRight (1, False)
 
     table = aDoc.createInstance(&quot;com.sun.star.text.TextTable&quot;)
-    table.initialize(5,9)
+    table.initialize(6,9)
     table.Name = &quot;StTab1&quot;
   table.BackColor = cCoGrey
     xText.insertTextContent(xCursor, table, FALSE)
@@ -336,7 +338,7 @@ Sub CreateDocState
     table = aDoc.TextTables.GetByIndex (1)
 
     for j% = 0 to 7
-        for i% = 0 to 3
+        for i% = 0 to 4
             sRangeName = GetRangeName(j%, i%+1)
 
             tableCursor = table.createCursorByCellName(sRangeName)
@@ -568,6 +570,7 @@ Sub SetOptions
     SetUserFieldState (cUserFieldTestDatabase, -(gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).getState), gOutputDoc)
     SetUserFieldState (cUserFieldTestExtension, -(gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).getState), gOutputDoc)
     SetUserFieldState (cUserFieldTestOpenSaveXML, -(gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).getState), gOutputDoc)
+    SetUserFieldState (cUserFieldTestOpen50, -(gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).getState), gOutPutDoc)
     SetUserFieldState (cUserFieldTestOpenSave8, -(gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).getState), gOutputDoc)
     SetUserFieldState (cUserFieldTestTerminateAfterTest, -(gOptionsDialog.getControl(&quot;cbTerminateAfterTest&quot;).getState), gOutputDoc)
 end Sub
@@ -585,6 +588,7 @@ Sub GetOptions
     gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).setState( -( GetUserFieldState (cUserFieldTestDatabase, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).setState( -( GetUserFieldState (cUserFieldTestExtension, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSaveXML, gOutputDoc)))
+    gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpen50, gOutPutDoc)))
     gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSave8, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbTerminateAfterTest&quot;).setState( -( GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutputDoc)))
 End Sub
@@ -602,6 +606,7 @@ Sub ReadOptions
     bMakeDBTest = GetUserFieldState (cUserFieldTestDatabase, gOutputDoc)
     bMakeExtensionTest = GetUserFieldState (cUserFieldTestExtension, gOutputDoc)
     bMakeSaveOpenXMLTest = GetUserFieldState (cUserFieldTestOpenSaveXML, gOutputDoc)
+    bMakeOpen50Test = GetUserFieldState (cUserFieldTestOpen50, gOutPutDoc)
     bMakeSaveOpen8Test = GetUserFieldState (cUserFieldTestOpenSave8, gOutputDoc)
     bMakeTerminateAfterTest = GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutputDoc)
 end Sub
@@ -625,6 +630,11 @@ Sub SetDefaultOptions
     End If
     bMakeSaveOpenXMLTest = true
     REM Disable StarOffice 5.0 tests in case binfilter has not been included
+    if Environ(&quot;WITH_BINFILTER&quot;) = &quot;NO&quot; then
+        bMakeOpen50Test = false
+    else
+        bMakeOpen50Test = true
+    End If
     bMakeSaveOpen8Test = true
     bMakeTerminateAfterTest = false
 end Sub
@@ -659,10 +669,11 @@ Function StartTestWithDefaultOptions
     component(cStJava) = &quot;Java&quot;
     component(cStDataBase) = &quot;Base&quot;
     component(cStExtension) = &quot;Extensions&quot;
-    dim action(3) as string
+    dim action(4) as string
     action(cDocNew) = &quot;new&quot;
     action(cDocSaveOpen8) = &quot;V8.0&quot;
     action(cDocSaveOpenXML) = &quot;XML&quot;
+    action(cDocOpen50) = &quot;V5.0&quot;
     action(cDocClose) = &quot;close&quot;
     dim baseAction(5) as string
     baseAction(cDBService) = &quot;services&quot;
