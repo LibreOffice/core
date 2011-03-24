@@ -2337,57 +2337,56 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
         pTabViewShell->DoSubTotals( ((const ScSubTotalItem&) pArgs->Get( SCITEM_SUBTDATA )).
                         GetSubTotalData() );
         rReq.Done();
+        return;
+    }
+
+    SfxAbstractTabDialog * pDlg = NULL;
+    ScSubTotalParam aSubTotalParam;
+    SfxItemSet aArgSet( GetPool(), SCITEM_SUBTDATA, SCITEM_SUBTDATA );
+
+    ScDBData* pDBData = pTabViewShell->GetDBData();
+    pDBData->GetSubTotalParam( aSubTotalParam );
+    aSubTotalParam.bRemoveOnly = false;
+
+    aArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA, GetViewData(), &aSubTotalParam ) );
+    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
+
+    pDlg = pFact->CreateScSubTotalDlg( pTabViewShell->GetDialogParent(), &aArgSet, RID_SCDLG_SUBTOTALS );
+    DBG_ASSERT(pDlg, "Dialog create fail!");
+    pDlg->SetCurPageId(1);
+
+    short bResult = pDlg->Execute();
+
+    if ( (bResult == RET_OK) || (bResult == SCRET_REMOVE) )
+    {
+        const SfxItemSet* pOutSet = NULL;
+
+        if ( bResult == RET_OK )
+        {
+            pOutSet = pDlg->GetOutputItemSet();
+            aSubTotalParam =
+                ((const ScSubTotalItem&)
+                    pOutSet->Get( SCITEM_SUBTDATA )).
+                        GetSubTotalData();
+        }
+        else // if (bResult == SCRET_REMOVE)
+        {
+            pOutSet = &aArgSet;
+            aSubTotalParam.bRemoveOnly = sal_True;
+            aSubTotalParam.bReplace    = sal_True;
+            aArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA,
+                                         GetViewData(),
+                                         &aSubTotalParam ) );
+        }
+
+        pTabViewShell->DoSubTotals( aSubTotalParam );
+        rReq.Done( *pOutSet );
     }
     else
-    {
-        SfxAbstractTabDialog * pDlg = NULL;
-        ScSubTotalParam aSubTotalParam;
-        SfxItemSet      aArgSet( GetPool(), SCITEM_SUBTDATA, SCITEM_SUBTDATA );
+        GetViewData()->GetDocShell()->CancelAutoDBRange();
 
-        ScDBData* pDBData = pTabViewShell->GetDBData();
-        pDBData->GetSubTotalParam( aSubTotalParam );
-        aSubTotalParam.bRemoveOnly = false;
-
-        aArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA, GetViewData(), &aSubTotalParam ) );
-        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
-
-        pDlg = pFact->CreateScSubTotalDlg( pTabViewShell->GetDialogParent(), &aArgSet, RID_SCDLG_SUBTOTALS );
-        DBG_ASSERT(pDlg, "Dialog create fail!");
-        pDlg->SetCurPageId(1);
-
-        short bResult = pDlg->Execute();
-
-        if ( (bResult == RET_OK) || (bResult == SCRET_REMOVE) )
-        {
-            const SfxItemSet* pOutSet = NULL;
-
-            if ( bResult == RET_OK )
-            {
-                pOutSet = pDlg->GetOutputItemSet();
-                aSubTotalParam =
-                    ((const ScSubTotalItem&)
-                        pOutSet->Get( SCITEM_SUBTDATA )).
-                            GetSubTotalData();
-            }
-            else // if (bResult == SCRET_REMOVE)
-            {
-                pOutSet = &aArgSet;
-                aSubTotalParam.bRemoveOnly = sal_True;
-                aSubTotalParam.bReplace    = sal_True;
-                aArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA,
-                                             GetViewData(),
-                                             &aSubTotalParam ) );
-            }
-
-            pTabViewShell->DoSubTotals( aSubTotalParam );
-            rReq.Done( *pOutSet );
-        }
-        else
-            GetViewData()->GetDocShell()->CancelAutoDBRange();
-
-        delete pDlg;
-    }
+    delete pDlg;
 }
 
 IMPL_LINK( ScCellShell, DialogClosed, AbstractScLinkedAreaDlg*, EMPTYARG )
