@@ -41,12 +41,6 @@
 
 #include "precompiled_sc.hxx"
 
-#ifdef WNT
-# include <prewin.h>
-# include <postwin.h>
-# undef ERROR
-#endif
-
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
