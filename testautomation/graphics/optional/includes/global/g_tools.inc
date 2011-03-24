@@ -275,8 +275,16 @@ testcase tiToolsThesaurusContextMenu
     end select
 
     PrintLog "Thesaurus with 1 word: " + sWord
-
     Call hNewDocument
+
+    printlog "Setting doc language to english"
+    ToolsOptions
+    Kontext "ExtrasOptionenDlg"
+    hToolsOptions("LANGUAGESETTINGS","Languages")
+    Westlich.Select 34
+    Kontext "ExtrasOptionenDlg"
+    ExtrasOptionenDlg.OK
+    
     Call hTextrahmenErstellen (sWord,20,20,50,30)
     sleep 1
 
