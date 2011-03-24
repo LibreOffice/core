@@ -1,0 +1,1001 @@
+--- misc/gdk-pixbuf-2.23.0/config.h.win32	2011-03-24 04:59:07.000000000 +0100
++++ misc/build/gdk-pixbuf-2.23.0/config.h.win32	2011-03-22 01:58:24.296875000 +0100
+@@ -1 +1,126 @@
+-dummy
++/* config.h.in.  Generated from configure.ac by autoheader.  */
++
++/* Define to 1 if translation of program messages to the user's native
++   language is requested. */
++#undef ENABLE_NLS
++
++/* Define if gio can sniff image data */
++#undef GDK_PIXBUF_USE_GIO_MIME
++
++/* The prefix for our gettext translation domains. */
++#define GETTEXT_PACKAGE "intl.dll"
++
++/* Define to 1 if you have the `bind_textdomain_codeset' function. */
++#undef HAVE_BIND_TEXTDOMAIN_CODESET
++
++/* Define to 1 if you have the MacOS X function CFLocaleCopyCurrent in the
++   CoreFoundation framework. */
++#undef HAVE_CFLOCALECOPYCURRENT
++
++/* Define to 1 if you have the MacOS X function CFPreferencesCopyAppValue in
++   the CoreFoundation framework. */
++#undef HAVE_CFPREFERENCESCOPYAPPVALUE
++
++/* Define if the GNU dcgettext() function is already present or preinstalled.
++   */
++#undef HAVE_DCGETTEXT
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#undef HAVE_DLFCN_H
++
++/* Define if the GNU gettext() function is already present or preinstalled. */
++#define HAVE_GETTEXT 1
++
++/* Define if you have the iconv() function and it works. */
++#define HAVE_ICONV 1
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#undef HAVE_INTTYPES_H
++
++/* Define to 1 if you have the <memory.h> header file. */
++#undef HAVE_MEMORY_H
++
++/* Define to 1 is libjpeg supports progressive JPEG */
++#define HAVE_PROGRESSIVE_JPEG 1
++
++/* Define to 1 if sigsetjmp is available */
++#undef HAVE_SIGSETJMP
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#undef HAVE_STDINT_H
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the <strings.h> header file. */
++#define HAVE_STRINGS_H 1
++
++/* Define to 1 if you have the <string.h> header file. */
++#undef HAVE_STRING_H
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#undef HAVE_SYS_STAT_H
++
++/* Define to 1 if sys/sysinfo.h is available */
++#undef HAVE_SYS_SYSINFO_H
++
++/* Define to 1 if sys/systeminfo.h is available */
++#undef HAVE_SYS_SYSTEMINFO_H
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#undef HAVE_SYS_TYPES_H
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#undef HAVE_UNISTD_H
++
++/* Define to the sub-directory in which libtool stores uninstalled libraries.
++   */
++#undef LT_OBJDIR
++
++/* Define to 1 if your C compiler doesn't accept -c and -o together. */
++#undef NO_MINUS_C_MINUS_O
++
++/* Define to the address where bug reports for this package should be sent. */
++#undef PACKAGE_BUGREPORT
++
++/* Define to the full name of this package. */
++#undef PACKAGE_NAME
++
++/* Define to the full name and version of this package. */
++#undef PACKAGE_STRING
++
++/* Define to the one symbol short name of this package. */
++#undef PACKAGE_TARNAME
++
++/* Define to the home page for this package. */
++#undef PACKAGE_URL
++
++/* Define to the version of this package. */
++#undef PACKAGE_VERSION
++
++/* Define to 1 if you have the ANSI C header files. */
++#undef STDC_HEADERS
++
++/* Define to 1 if gmodule works and should be used */
++#undef USE_GMODULE
++
++/* Whether to load modules via .la files rather than directly */
++#undef USE_LA_MODULES
++
++/* Define to 1 if medialib is available and should be used */
++#undef USE_MEDIALIB
++
++/* Define to 1 if medialib 2.5 is available */
++#undef USE_MEDIALIB25
++
++/* Define to 1 if XXM is available and should be used */
++#undef USE_MMX
++
++/* Number of bits in a file offset, on hosts where this is settable. */
++#undef _FILE_OFFSET_BITS
++
++/* Define for large files, on AIX-style hosts. */
++#undef _LARGE_FILES
++
++/* Define to empty if `const' does not conform to ANSI C. */
++#undef const    
+--- misc/gdk-pixbuf-2.23.0/gdk-pixbuf/io-png.c	2010-07-10 02:54:35.000000000 +0200
++++ misc/build/gdk-pixbuf-2.23.0/gdk-pixbuf/io-png.c	2011-03-22 02:18:55.515625000 +0100
+@@ -27,6 +27,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <png.h>
++#include <pngstruct.h>
+ #include "gdk-pixbuf-private.h"
+ 
+ 
+@@ -183,7 +184,7 @@
+                              error_msg);
+         }
+ 
+-        longjmp (png_save_ptr->jmpbuf, 1);
++        longjmp (png_save_ptr->png_jmpbuf, 1);
+ }
+ 
+ static void
+@@ -287,7 +288,7 @@
+ 		return NULL;
+ 	}
+ 
+-	if (setjmp (png_ptr->jmpbuf)) {
++	if (setjmp (png_ptr->png_jmpbuf)) {
+ 	    	g_free (rows);
+ 
+ 		if (pixbuf)
+@@ -459,7 +460,7 @@
+                 return NULL;
+         }
+         
+-	if (setjmp (lc->png_read_ptr->jmpbuf)) {
++	if (setjmp (lc->png_read_ptr->png_jmpbuf)) {
+ 		if (lc->png_info_ptr)
+ 			png_destroy_read_struct(&lc->png_read_ptr, NULL, NULL);
+                 g_free(lc);
+@@ -531,7 +532,7 @@
+         lc->error = error;
+         
+         /* Invokes our callbacks as needed */
+-	if (setjmp (lc->png_read_ptr->jmpbuf)) {
++	if (setjmp (lc->png_read_ptr->png_jmpbuf)) {
+                 lc->error = NULL;
+ 		return FALSE;
+ 	} else {
+@@ -769,7 +770,7 @@
+                              error_msg);
+         }
+ 
+-        longjmp (png_read_ptr->jmpbuf, 1);
++        longjmp (png_read_ptr->png_jmpbuf, 1);
+ }
+ 
+ static void
+@@ -978,7 +979,7 @@
+ 	       success = FALSE;
+ 	       goto cleanup;
+        }
+-       if (setjmp (png_ptr->jmpbuf)) {
++       if (setjmp (png_ptr->png_jmpbuf)) {
+ 	       success = FALSE;
+ 	       goto cleanup;
+        }
+--- misc/gdk-pixbuf-2.23.0/gdk-pixbuf/makefile.msc	2010-06-25 23:40:10.000000000 +0200
++++ misc/build/gdk-pixbuf-2.23.0/gdk-pixbuf/makefile.msc	2011-03-24 06:13:30.515625000 +0100
+@@ -1,9 +1,19 @@
+-TOP = ..\..
+ PRJ_TOP = ..
++GLIB_TOP = $(PRJ_TOP)\..\..\..\..\..\glib\wntmsci12.pro\misc\build\glib-2.28.1
+ PACKAGE = gdk_pixbuf
+ PKG_VER = $(GDK_PIXBUF_VER)
++GLIB_INC = -I$(OUTDIR)\inc\external\glib-2.0
++LIBPNG_INC = -I$(OUTDIR)\inc\external\libpng
++LIBJPEG_INC = -I$(OUTDIR)\inc\external\libjpeg
++
++INTL_LIB = $(OUTDIR)\lib\intl.lib
++GLIB_LIB = $(OUTDIR)\lib\glib-2.0.lib $(OUTDIR)\lib\gobject-2.0.lib  $(OUTDIR)\lib\gmodule-2.0.lib  $(OUTDIR)\lib\gio-2.0.lib $(OUTDIR)\lib\gthread-2.0.lib	
++LIBJPEG_LIB = $(OUTDIR)\lib\jpeg.lib
++LIBPNG_LIB = $(OUTDIR)\lib\libpng.lib
++ZLIB_LIB = $(OUTDIR)\lib\zlib.lib
++GDIPLUS_LIB = gdiplus.lib
+ 
+-!INCLUDE $(TOP)/glib/build/win32/make.msc
++!INCLUDE $(GLIB_TOP)\build\win32\make.msc
+ 
+ !IFNDEF PERL
+ PERL = perl
+@@ -13,22 +23,22 @@
+ 
+ # -DINCLUDE_gdiplus _replaces_ -DINCLUDE_bmp -DINCLUDE_gif -DINCLUDE_ico -DINCLUDE_jpeg  -DINCLUDE_tiff
+ # but not yet -DINCLUDE_png 
+-##USEGDIP=1
++USEGDIP=1
+ # to get _working_ include modules we need respective defines ...
+ #   
+ BUILT_IN_FORMATS = \
+ !IFDEF USEGDIP
+ 	-DINCLUDE_gdiplus \
+ !ELSE
+-	-DINCLUDE_bmp -DINCLUDE_gif -DINCLUDE_ico -DINCLUDE_jpeg -DINCLUDE_tiff \
++	-DINCLUDE_bmp -DINCLUDE_gif -DINCLUDE_ico -DINCLUDE_jpeg \
+ !ENDIF
+ 	-DINCLUDE_png \
+ 	-DINCLUDE_xpm -DINCLUDE_wbmp \
+ 	-DINCLUDE_pnm -DINCLUDE_ras
+ 
+-PKG_CFLAGS = -FImsvc_recommended_pragmas.h \
++PKG_CFLAGS = -FI$(PRJ_TOP)\msvc_recommended_pragmas.h \
+ !IFNDEF USEGDIP
+- 	$(JPEG_CFLAGS) $(TIFF_CFLAGS) \
++ 	$(JPEG_CFLAGS) \
+ !ENDIF
+ 	-I. -I.. $(GLIB_CFLAGS) \
+ 	$(BUILT_IN_FORMATS) \
+@@ -39,13 +49,14 @@
+ 	-UUSE_GMODULE # use built-in
+ #	-DUSE_GMODULE -DPIXBUF_LIBDIR=\".\"
+ 
+-PKG_LINK = $(GLIB_LIBS) \
+-!IFNDEF USEGDIP
+-	$(TIFF_LIBS) $(JPEG_LIBS) \
+-!ENDIF
+-	$(PNG_LIBS) $(INTL_LIBS) \
+-	pixops\pixops.lib \
+- 
++PKG_LINK = 	$(INTL_LIB)		\
++					$(GLIB_LIB)		\
++					$(LIBPNG_LIB)	\
++					$(LIBJPEG_LIB)	\
++					$(ZLIB_LIB)		\
++					$(GDIPLUS_LIB)	\
++					pixops\pixops.lib
++
+ OBJECTS_NON_NATIVE = \
+ 	io-bmp.obj \
+ 	io-gif.obj \
+@@ -95,13 +106,13 @@
+ 	gdk-pixbuf-transform.h
+ 
+ gdk-pixbuf-marshal.h: gdk-pixbuf-marshal.list
+-	..\..\glib\gobject\glib-genmarshal --prefix=_gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >gdk-pixbuf-marshal.h
++	$(GLIB_TOP)\glib\gobject\glib-genmarshal --prefix=_gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >gdk-pixbuf-marshal.h
+ 
+ gdk-pixbuf-marshal.c: gdk-pixbuf-marshal.h gdk-pixbuf-marshal.list
+-	..\..\glib\gobject\glib-genmarshal --prefix=_gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >gdk-pixbuf-marshal.c
++	$(GLIB_TOP)\glib\gobject\glib-genmarshal --prefix=_gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >gdk-pixbuf-marshal.c
+ 
+-gdk-pixbuf-alias.h: gdk-pixbuf.symbols
+-	perl makegdkpixbufalias.pl < gdk-pixbuf.symbols > gdk-pixbuf-alias.h
++#gdk-pixbuf-alias.h: gdk-pixbuf.symbols
++#	perl makegdkpixbufalias.pl < gdk-pixbuf.symbols > gdk-pixbuf-alias.h
+ 
+ gdk_pixbuf.def: gdk-pixbuf.symbols makefile.msc
+ 	echo EXPORTS > gdk_pixbuf.def
+@@ -109,14 +120,15 @@
+ 	-DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_NORETURN= -DG_GNUC_PRINTF=;G_GNUC_PRINTF \
+ 	gdk-pixbuf.symbols >> gdk_pixbuf.def
+ 
+-gdk-pixbuf-aliasdef.c: gdk-pixbuf.symbols
+-	 perl makegdkpixbufalias.pl -def < gdk-pixbuf.symbols > gdk-pixbuf-aliasdef.c
++#gdk-pixbuf-aliasdef.c: gdk-pixbuf.symbols
++#	 perl makegdkpixbufalias.pl -def < gdk-pixbuf.symbols > gdk-pixbuf-aliasdef.c
+ 
+ ## common stuff
+ 
+ INSTALL = copy
+ 
+-CFLAGS = -I. -DHAVE_CONFIG_H
++CFLAGS = -I. $(SOLARINC) $(GLIB_INC) $(LIBPNG_INC) $(LIBJPEG_INC) \
++    -DHAVE_CONFIG_H -DGDK_PIXBUF_LOCALEDIR="\"locale_dummy\""   
+ 
+ sub-pixops :
+ 	cd pixops
+@@ -126,19 +138,19 @@
+ ## targets
+ all : \
+ 	$(PRJ_TOP)\config.h \
+-	gdk-pixbuf-alias.h \
+-	gdk-pixbuf-aliasdef.c \
++#	gdk-pixbuf-alias.h \
++#	gdk-pixbuf-aliasdef.c \
+ 	gdk-pixbuf-marshal.h \
+ 	gdk-pixbuf-marshal.c \
+ 	sub-pixops \
+ 	lib$(PACKAGE)-$(PKG_VER)-0.dll \
+-	$(PACKAGE)-$(PKG_VER)s.lib \
++	$(PACKAGE)-$(PKG_VER)s.lib 
+ #	make-inline-pixbuf.exe \
+-	gdk-pixbuf-csource.exe \
+-	test-gdk-pixbuf.exe
++#	gdk-pixbuf-csource.exe \
++#	test-gdk-pixbuf.exe
+ 
+ $(PACKAGE).res : $(PACKAGE).rc
+-	rc -DBUILDNUMBER=0 -r -fo $(PACKAGE).res $(PACKAGE).rc
++	rc -I $(SOLARINCLUDES) -DBUILDNUMBER=0 -r -fo $(PACKAGE).res $(PACKAGE).rc
+ 
+ $(PACKAGE)-$(PKG_VER)s.lib : $(OBJECTS)
+ 	lib /out:$(PACKAGE)-$(PKG_VER)s.lib $(OBJECTS) pixops\pixops.lib
+@@ -160,7 +172,7 @@
+ # gdk-pixbuf-enum-types.h
+ #
+ gdk-pixbuf-enum-types.h : $(gdk_pixbuf_headers) makefile.msc
+-	$(PERL) $(GLIB)\gobject\glib-mkenums \
++	$(PERL) $(PRJ_TOP)\glib-mkenums.pl \
+ 		--fhead "#ifndef __GDK_PIXBUF__ENUM_TYPES_H__\n#define __GDK_PIXBUF_ENUM_TYPES_H__\n" \
+ 		--fprod "/* enumerations from \"@filename@\" */\n" \
+ 		--vhead "GType @enum_name@_get_type (void);\n#define GDK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n"         \
+@@ -171,8 +183,8 @@
+ # gdk-pixbuf-enum-types.c
+ #
+ gdk-pixbuf-enum-types.c: $(gdk_pixbuf_headers) makefile.msc
+-	$(PERL) $(GLIB)\gobject\glib-mkenums \
+-		--fhead "#include <gdk-pixbuf/gdk-pixbuf.h>" \
++	$(PERL) $(PRJ_TOP)\glib-mkenums.pl \
++		--fhead "#include <gdk-pixbuf.h>" \
+ 		--fprod "\n/* enumerations from \"@filename@\" */" \
+ 		--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {"       \
+ 		--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+@@ -188,10 +200,10 @@
+ 	$(CC) $(CFLAGS) -GD -c $(PKG_CFLAGS) $<
+ 
+ clean::
+-	del config.h
+-	del gdk-pixbuf-marshal.h
+-	del gdk-pixbuf-marshal.c
+-	del gdk-pixbuf-alaias.h
++	rm config.h
++	rm gdk-pixbuf-marshal.h
++	rm gdk-pixbuf-marshal.c
++	rm gdk-pixbuf-alaias.h
+ 
+ 
+ 
+--- misc/gdk-pixbuf-2.23.0/gdk-pixbuf/pixops/makefile.msc	2010-06-25 23:40:10.000000000 +0200
++++ misc/build/gdk-pixbuf-2.23.0/gdk-pixbuf/pixops/makefile.msc	2011-03-24 06:03:59.062500000 +0100
+@@ -1,10 +1,11 @@
+-TOP = ../../..
+-PACKAGE = pixops
+ PRJ_TOP = ..\..
++PACKAGE = pixops
++GLIB_TOP = $(PRJ_TOP)\..\..\..\..\..\glib\wntmsci12.pro\misc\build\glib-2.28.1
++GLIB_INC = -I$(OUTDIR)\inc\external\glib-2.0
+ 
+-!INCLUDE $(TOP)/glib/build/win32/make.msc
++!INCLUDE $(GLIB_TOP)\build\win32\make.msc
+ 
+-PKG_CFLAGS = -I.. $(GLIB_CFLAGS)
++PKG_CFLAGS = -I.. $(SOLARINC) $(GLIB_INC) $(GLIB_CFLAGS)
+ 
+ OBJECTS = \
+ 	pixops.obj \
+@@ -50,16 +51,16 @@
+ 	$(CC) $(CFLAGS) -GD -c $(PKG_CFLAGS) $<
+ 
+ clean::
+-	del config.h
+-	del *.exe
+-	del *.obj
+-	del *.dll
+-	del *.lib
+-	del *.err
+-	del *.map
+-	del *.sym
+-	del *.exp
+-	del *.lk1
+-	del *.mk1
+-	del *.pdb
+-	del *.ilk
++	rm config.h
++	rm *.exe
++	rm *.obj
++	rm *.dll
++	rm *.lib
++	rm *.err
++	rm *.map
++	rm *.sym
++	rm *.exp
++	rm *.lk1
++	rm *.mk1
++	rm *.pdb
++	rm *.ilk
+--- misc/gdk-pixbuf-2.23.0/gdk-pixbuf/pixops/pixops.c	2010-06-25 23:40:10.000000000 +0200
++++ misc/build/gdk-pixbuf-2.23.0/gdk-pixbuf/pixops/pixops.c	2011-03-22 01:58:24.281250000 +0100
+@@ -21,7 +21,7 @@
+  */
+ #include "config.h"
+ #include <math.h>
+-#include <glib.h>
++#include <glib-2.0\glib.h>
+ 
+ #include "pixops.h"
+ #include "pixops-internal.h"
+--- misc/gdk-pixbuf-2.23.0/glib-mkenums.pl	2011-03-24 04:59:07.281250000 +0100
++++ misc/build/gdk-pixbuf-2.23.0/glib-mkenums.pl	2011-03-22 01:58:24.343750000 +0100
+@@ -1 +1,538 @@
+-dummy
++#! perl.exe
++
++use warnings;
++use File::Basename;
++use Safe;
++
++# glib-mkenums.pl 
++# Information about the current enumeration
++my $flags;			# Is enumeration a bitmask?
++my $option_underscore_name;	# Overriden underscore variant of the enum name
++				# for example to fix the cases we don't get the
++				# mixed-case -> underscorized transform right.
++my $option_lowercase_name;	# DEPRECATED.  A lower case name to use as part
++				# of the *_get_type() function, instead of the
++				# one that we guess. For instance, when an enum
++				# uses abnormal capitalization and we can not
++				# guess where to put the underscores.
++my $seenbitshift;		# Have we seen bitshift operators?
++my $enum_prefix;		# Prefix for this enumeration
++my $enumname;			# Name for this enumeration
++my $enumshort;			# $enumname without prefix
++my $enumname_prefix;		# prefix of $enumname
++my $enumindex = 0;		# Global enum counter
++my $firstenum = 1;		# Is this the first enumeration per file?
++my @entries;			# [ $name, $val ] for each entry
++my $sandbox = Safe->new;        # sandbox for safe evaluation of expressions
++
++sub parse_trigraph {
++    my $opts = shift;
++    my @opts;
++
++    for $opt (split /\s*,\s*/, $opts) {
++	$opt =~ s/^\s*//;
++	$opt =~ s/\s*$//;
++        my ($key,$val) = $opt =~ /(\w+)(?:=(.+))?/;
++	defined $val or $val = 1;
++	push @opts, $key, $val;
++    }
++    @opts;
++}
++sub parse_entries {
++    my $file = shift;
++    my $file_name = shift;
++    my $looking_for_name = 0;
++    
++    while (<$file>) {
++	# read lines until we have no open comments
++	while (m@/\*([^*]|\*(?!/))*$@) {
++	    my $new;
++	    defined ($new = <$file>) || die "Unmatched comment in $ARGV";
++	    $_ .= $new;
++	}
++	# strip comments w/o options
++	s@/\*(?!<)
++	    ([^*]+|\*(?!/))*
++	   \*/@@gx;
++	
++	# strip newlines
++	s@\n@ @;
++	
++	# skip empty lines
++	next if m@^\s*$@;
++	
++	if ($looking_for_name) {
++	    if (/^\s*(\w+)/) {
++		$enumname = $1;
++		return 1;
++	    }
++	}
++	
++	# Handle include files
++	if (/^\#include\s*<([^>]*)>/ ) {
++            my $file= "../$1";
++	    open NEWFILE, $file or die "Cannot open include file $file: $!\n";
++	    
++	    if (parse_entries (\*NEWFILE, $NEWFILE)) {
++		return 1;
++	    } else {
++		next;
++	    }
++	}
++	
++	if (/^\s*\}\s*(\w+)/) {
++	    $enumname = $1;
++	    $enumindex++;
++	    return 1;
++	}
++	
++	if (/^\s*\}/) {
++	    $enumindex++;
++	    $looking_for_name = 1;
++	    next;
++	}
++
++        if (m@^\s*
++              (\w+)\s*                   # name
++              (?:=(                      # value
++		   \s*\w+\s*\(.*\)\s*       # macro with multiple args
++		   |                        # OR
++                   (?:[^,/]|/(?!\*))*       # anything but a comma or comment
++                  ))?,?\s*
++              (?:/\*<                    # options
++                (([^*]|\*(?!/))*)
++               >\s*\*/)?,?
++              \s*$
++             @x) {
++            my ($name, $value, $options) = ($1,$2,$3);
++
++	    if (!defined $flags && defined $value && $value =~ /<</) {
++		$seenbitshift = 1;
++	    }
++
++	    if (defined $options) {
++		my %options = parse_trigraph($options);
++		if (!defined $options{skip}) {
++		    push @entries, [ $name, $value, $options{nick} ];
++		}
++	    } else {
++		push @entries, [ $name, $value ];
++	    }
++	} elsif (m@^\s*\#@) {
++	    # ignore preprocessor directives
++	} else {
++	    print STDERR "$0: $file_name:$.: Failed to parse `$_'\n";
++	}
++    }
++
++    return 0;
++}
++
++sub version {
++    print "glib-mkenums version glib-@GLIB_VERSION@\n";
++    print "glib-mkenums comes with ABSOLUTELY NO WARRANTY.\n";
++    print "You may redistribute copies of glib-mkenums under the terms of\n";
++    print "the GNU General Public License which can be found in the\n";
++    print "GLib source package. Sources, examples and contact\n";
++    print "information are available at http://www.gtk.org\n";
++    exit 0;
++}
++sub usage {
++    print "Usage:\n";
++    print "  glib-mkenums [OPTION...] [FILES...]\n\n";
++    print "Help Options:\n";
++    print "  -h, --help            Show this help message\n\n";
++    print "Utility Options:\n";
++    print "  --fhead <text>        Output file header\n";
++    print "  --fprod <text>        Per input file production\n";
++    print "  --ftail <text>        Output file trailer\n";
++    print "  --eprod <text>        Per enum text (produced prior to value itarations)\n";
++    print "  --vhead <text>        Value header, produced before iterating over enum values\n";
++    print "  --vprod <text>        Value text, produced for each enum value\n";
++    print "  --vtail <text>        Value tail, produced after iterating over enum values\n";
++    print "  --comments <text>     Comment structure\n";
++    print "  --template file       Template file\n";
++    print "  -v, --version         Print version informations\n\n";
++    print "Production text substitutions:\n";
++    print "  \@EnumName\@            PrefixTheXEnum\n";
++    print "  \@enum_name\@           prefix_the_xenum\n";
++    print "  \@ENUMNAME\@            PREFIX_THE_XENUM\n";
++    print "  \@ENUMSHORT\@           THE_XENUM\n";
++    print "  \@ENUMPREFIX\@          PREFIX\n";
++    print "  \@VALUENAME\@           PREFIX_THE_XVALUE\n";
++    print "  \@valuenick\@           the-xvalue\n";
++    print "  \@valuenum\@            the integer value (limited support, Since: 2.26)\n";
++    print "  \@type\@                either enum or flags\n";
++    print "  \@Type\@                either Enum or Flags\n";
++    print "  \@TYPE\@                either ENUM or FLAGS\n";
++    print "  \@filename\@            name of current input file\n";
++    print "  \@basename\@            base name of the current input file (Since: 2.22)\n";
++    exit 0;
++}
++
++# production variables:
++my $fhead = "";   # output file header
++my $fprod = "";   # per input file production
++my $ftail = "";   # output file trailer
++my $eprod = "";   # per enum text (produced prior to value itarations)
++my $vhead = "";   # value header, produced before iterating over enum values
++my $vprod = "";   # value text, produced for each enum value
++my $vtail = "";   # value tail, produced after iterating over enum values
++my $comment_tmpl = "";   # comment template
++
++sub read_template_file {
++  my ($file) = @_;
++  my %tmpl = ('file-header', $fhead, 
++	      'file-production', $fprod, 
++	      'file-tail', $ftail, 
++	      'enumeration-production', $eprod,
++	      'value-header', $vhead,
++	      'value-production', $vprod,
++	      'value-tail', $vtail,
++	      'comment', $comment_tmpl);
++  my $in = 'junk';
++  open (FILE, $file) || die "Can't open $file: $!\n";
++  while (<FILE>) {
++    if (/^\/\*\*\*\s+(BEGIN|END)\s+([\w-]+)\s+\*\*\*\//) {
++      if (($in eq 'junk') && ($1 eq 'BEGIN') && (exists($tmpl{$2}))) {
++	$in = $2;
++	next;
++      }
++      elsif (($in eq $2) && ($1 eq 'END') && (exists($tmpl{$2}))) {
++	$in = 'junk';
++	next;
++      } else {
++	  die "Malformed template file $file\n";
++      }
++    }
++    if (!($in eq 'junk')) {
++	$tmpl{$in} .= $_;
++    }
++  }
++  close (FILE);
++  if (!($in eq 'junk')) {
++      die "Malformed template file $file\n";
++  }
++  $fhead = $tmpl{'file-header'};
++  $fprod = $tmpl{'file-production'};
++  $ftail = $tmpl{'file-tail'};
++  $eprod = $tmpl{'enumeration-production'};
++  $vhead = $tmpl{'value-header'};
++  $vprod = $tmpl{'value-production'};
++  $vtail = $tmpl{'value-tail'};
++  $comment_tmpl = $tmpl{'comment'};
++
++  # default to C-style comments
++  $comment_tmpl = "/* \@comment\@ */" if $comment_tmpl eq "";
++}
++
++if (!defined $ARGV[0]) {
++    usage;
++}
++while ($_=$ARGV[0],/^-/) {
++    shift;
++    last if /^--$/;
++    if (/^--template$/)                      { read_template_file (shift); }
++    elsif (/^--fhead$/)                      { $fhead = $fhead . shift }
++    elsif (/^--fprod$/)                      { $fprod = $fprod . shift }
++    elsif (/^--ftail$/)                      { $ftail = $ftail . shift }
++    elsif (/^--eprod$/)                      { $eprod = $eprod . shift }
++    elsif (/^--vhead$/)                      { $vhead = $vhead . shift }
++    elsif (/^--vprod$/)                      { $vprod = $vprod . shift }
++    elsif (/^--vtail$/)                      { $vtail = $vtail . shift }
++    elsif (/^--comments$/)                   { $comment_tmpl = shift }
++    elsif (/^--help$/ || /^-h$/ || /^-\?$/)  { usage; }
++    elsif (/^--version$/ || /^-v$/)          { version; }
++    else { usage; }
++    last if not defined($ARGV[0]);
++}
++
++# put auto-generation comment
++{
++    my $comment = $comment_tmpl;
++    $comment =~ s/\@comment\@/Generated data (by glib-mkenums)/;
++    print "\n" . $comment . "\n\n";
++}
++
++if (length($fhead)) {
++    my $prod = $fhead;
++    my $base = basename ($ARGV[0]);
++
++    $prod =~ s/\@filename\@/$ARGV[0]/g;
++    $prod =~ s/\@basename\@/$base/g;
++    $prod =~ s/\\a/\a/g; $prod =~ s/\\b/\b/g; $prod =~ s/\\t/\t/g; $prod =~ s/\\n/\n/g;
++    $prod =~ s/\\f/\f/g; $prod =~ s/\\r/\r/g;
++    chomp ($prod);
++		
++    print "$prod\n";
++}
++
++while (<>) {
++    if (eof) {
++	close (ARGV);		# reset line numbering
++	$firstenum = 1;		# Flag to print filename at next enum
++    }
++
++    # read lines until we have no open comments
++    while (m@/\*([^*]|\*(?!/))*$@) {
++	my $new;
++	defined ($new = <>) || die "Unmatched comment in $ARGV";
++	$_ .= $new;
++    }
++    # strip comments w/o options
++    s@/\*(?!<)
++       ([^*]+|\*(?!/))*
++       \*/@@gx;
++	
++    if (m@^\s*typedef\s+enum\s*
++           ({)?\s*
++           (?:/\*<
++             (([^*]|\*(?!/))*)
++            >\s*\*/)?
++           \s*({)?
++         @x) {
++	if (defined $2) {
++	    my %options = parse_trigraph ($2);
++	    next if defined $options{skip};
++	    $enum_prefix = $options{prefix};
++	    $flags = $options{flags};
++	    $option_lowercase_name = $options{lowercase_name};
++	    $option_underscore_name = $options{underscore_name};
++	} else {
++	    $enum_prefix = undef;
++	    $flags = undef;
++	    $option_lowercase_name = undef;
++	    $option_underscore_name = undef;
++	}
++	if (defined $option_lowercase_name) {
++	    if (defined $option_underscore_name) {
++		print STDERR "$0: $ARGV:$.: lowercase_name overriden with underscore_name\n";
++		$option_lowercase_name = undef;
++	    } else {
++		print STDERR "$0: $ARGV:$.: lowercase_name is deprecated, use underscore_name\n";
++	    }
++	}
++	# Didn't have trailing '{' look on next lines
++	if (!defined $1 && !defined $4) {
++	    while (<>) {
++		if (s/^\s*\{//) {
++		    last;
++		}
++	    }
++	}
++
++	$seenbitshift = 0;
++	@entries = ();
++
++	# Now parse the entries
++	parse_entries (\*ARGV, $ARGV);
++
++	# figure out if this was a flags or enums enumeration
++	if (!defined $flags) {
++	    $flags = $seenbitshift;
++	}
++
++	# Autogenerate a prefix
++	if (!defined $enum_prefix) {
++	    for (@entries) {
++		my $nick = $_->[2];
++		if (!defined $nick) {
++		    my $name = $_->[0];
++		    if (defined $enum_prefix) {
++			my $tmp = ~ ($name ^ $enum_prefix);
++			($tmp) = $tmp =~ /(^\xff*)/;
++			$enum_prefix = $enum_prefix & $tmp;
++		    } else {
++			$enum_prefix = $name;
++		    }
++		}
++	    }
++	    if (!defined $enum_prefix) {
++		$enum_prefix = "";
++	    } else {
++		# Trim so that it ends in an underscore
++		$enum_prefix =~ s/_[^_]*$/_/;
++	    }
++	} else {
++	    # canonicalize user defined prefixes
++	    $enum_prefix = uc($enum_prefix);
++	    $enum_prefix =~ s/-/_/g;
++	    $enum_prefix =~ s/(.*)([^_])$/$1$2_/;
++	}
++	
++	for $entry (@entries) {
++	    my ($name,$num,$nick) = @{$entry};
++            if (!defined $nick) {
++ 	        ($nick = $name) =~ s/^$enum_prefix//;
++	        $nick =~ tr/_/-/;
++	        $nick = lc($nick);
++	        @{$entry} = ($name, $num, $nick);
++            }
++	}
++	
++
++	# Spit out the output
++	if (defined $option_underscore_name) {
++	    $enumlong = uc $option_underscore_name;
++	    $enumsym = lc $option_underscore_name;
++	    $enumshort = $enumlong;
++	    $enumshort =~ s/^[A-Z][A-Z0-9]*_//;
++
++	    $enumname_prefix = $enumlong;
++	    $enumname_prefix =~ s/$enumshort$//;
++	} else {
++	    # enumname is e.g. GMatchType
++	    $enspace = $enumname;
++	    $enspace =~ s/^([A-Z][a-z]*).*$/$1/;
++
++	    $enumshort = $enumname;
++	    $enumshort =~ s/^[A-Z][a-z]*//;
++	    $enumshort =~ s/([^A-Z])([A-Z])/$1_$2/g;
++	    $enumshort =~ s/([A-Z][A-Z])([A-Z][0-9a-z])/$1_$2/g;
++	    $enumshort = uc($enumshort);
++
++	    $enumname_prefix = $enumname;
++	    $enumname_prefix =~ s/^([A-Z][a-z]*).*$/$1/;
++	    $enumname_prefix = uc($enumname_prefix);
++
++	    $enumlong = uc($enspace) . "_" . $enumshort;
++	    $enumsym = lc($enspace) . "_" . lc($enumshort);
++
++	    if (defined($option_lowercase_name)) {
++		$enumsym = $option_lowercase_name;
++	    }
++	}
++
++	if ($firstenum) {
++	    $firstenum = 0;
++	    
++	    if (length($fprod)) {
++		my $prod = $fprod;
++		my $base = basename ($ARGV);
++
++		$prod =~ s/\@filename\@/$ARGV/g;
++		$prod =~ s/\@basename\@/$base/g;
++		$prod =~ s/\\a/\a/g; $prod =~ s/\\b/\b/g; $prod =~ s/\\t/\t/g; $prod =~ s/\\n/\n/g;
++		$prod =~ s/\\f/\f/g; $prod =~ s/\\r/\r/g;
++	        chomp ($prod);
++		
++		print "$prod\n";
++	    }
++	}
++	
++	if (length($eprod)) {
++	    my $prod = $eprod;
++
++	    $prod =~ s/\@enum_name\@/$enumsym/g;
++	    $prod =~ s/\@EnumName\@/$enumname/g;
++	    $prod =~ s/\@ENUMSHORT\@/$enumshort/g;
++	    $prod =~ s/\@ENUMNAME\@/$enumlong/g;
++	    $prod =~ s/\@ENUMPREFIX\@/$enumname_prefix/g;
++	    if ($flags) { $prod =~ s/\@type\@/flags/g; } else { $prod =~ s/\@type\@/enum/g; }
++	    if ($flags) { $prod =~ s/\@Type\@/Flags/g; } else { $prod =~ s/\@Type\@/Enum/g; }
++	    if ($flags) { $prod =~ s/\@TYPE\@/FLAGS/g; } else { $prod =~ s/\@TYPE\@/ENUM/g; }
++	    $prod =~ s/\\a/\a/g; $prod =~ s/\\b/\b/g; $prod =~ s/\\t/\t/g; $prod =~ s/\\n/\n/g;
++	    $prod =~ s/\\f/\f/g; $prod =~ s/\\r/\r/g;
++            chomp ($prod);
++
++	    print "$prod\n";
++	}
++
++	if (length($vhead)) {
++	    my $prod = $vhead;
++
++	    $prod =~ s/\@enum_name\@/$enumsym/g;
++            $prod =~ s/\@EnumName\@/$enumname/g;
++            $prod =~ s/\@ENUMSHORT\@/$enumshort/g;
++            $prod =~ s/\@ENUMNAME\@/$enumlong/g;
++	    $prod =~ s/\@ENUMPREFIX\@/$enumname_prefix/g;
++	    if ($flags) { $prod =~ s/\@type\@/flags/g; } else { $prod =~ s/\@type\@/enum/g; }
++	    if ($flags) { $prod =~ s/\@Type\@/Flags/g; } else { $prod =~ s/\@Type\@/Enum/g; }
++	    if ($flags) { $prod =~ s/\@TYPE\@/FLAGS/g; } else { $prod =~ s/\@TYPE\@/ENUM/g; }
++            $prod =~ s/\\a/\a/g; $prod =~ s/\\b/\b/g; $prod =~ s/\\t/\t/g; $prod =~ s/\\n/\n/g;
++            $prod =~ s/\\f/\f/g; $prod =~ s/\\r/\r/g;
++            chomp ($prod);
++	    
++            print "$prod\n";
++	}
++
++	if (length($vprod)) {
++	    my $prod = $vprod;
++            my $next_num = 0;
++	    
++	    $prod =~ s/\\a/\a/g; $prod =~ s/\\b/\b/g; $prod =~ s/\\t/\t/g; $prod =~ s/\\n/\n/g;
++	    $prod =~ s/\\f/\f/g; $prod =~ s/\\r/\r/g;
++	    for (@entries) {
++		my ($name,$num,$nick) = @{$_};
++		my $tmp_prod = $prod;
++
++                if ($prod =~ /\@valuenum\@/) {
++                    # only attempt to eval the value if it is requested
++                    # this prevents us from throwing errors otherwise
++                    if (defined $num) {
++                        # use sandboxed perl evaluation as a reasonable
++                        # approximation to C constant folding
++                        $num = $sandbox->reval ($num);
++
++                        # make sure it parsed to an integer
++                        if (!defined $num or $num !~ /^-?\d+$/) {
++                            die "Unable to parse enum value '$num'";
++                        }
++                    } else {
++                        $num = $next_num;
++                    }
++
++                    $tmp_prod =~ s/\@valuenum\@/$num/g;
++                    $next_num = $num + 1;
++                }
++
++		$tmp_prod =~ s/\@VALUENAME\@/$name/g;
++		$tmp_prod =~ s/\@valuenick\@/$nick/g;
++		if ($flags) { $tmp_prod =~ s/\@type\@/flags/g; } else { $tmp_prod =~ s/\@type\@/enum/g; }
++		if ($flags) { $tmp_prod =~ s/\@Type\@/Flags/g; } else { $tmp_prod =~ s/\@Type\@/Enum/g; }
++		if ($flags) { $tmp_prod =~ s/\@TYPE\@/FLAGS/g; } else { $tmp_prod =~ s/\@TYPE\@/ENUM/g; }
++		chomp ($tmp_prod);
++
++		print "$tmp_prod\n";
++	    }
++	}
++
++	if (length($vtail)) {
++	    my $prod = $vtail;
++
++	    $prod =~ s/\@enum_name\@/$enumsym/g;
++            $prod =~ s/\@EnumName\@/$enumname/g;
++            $prod =~ s/\@ENUMSHORT\@/$enumshort/g;
++            $prod =~ s/\@ENUMNAME\@/$enumlong/g;
++	    $prod =~ s/\@ENUMPREFIX\@/$enumname_prefix/g;
++	    if ($flags) { $prod =~ s/\@type\@/flags/g; } else { $prod =~ s/\@type\@/enum/g; }
++	    if ($flags) { $prod =~ s/\@Type\@/Flags/g; } else { $prod =~ s/\@Type\@/Enum/g; }
++	    if ($flags) { $prod =~ s/\@TYPE\@/FLAGS/g; } else { $prod =~ s/\@TYPE\@/ENUM/g; }
++            $prod =~ s/\\a/\a/g; $prod =~ s/\\b/\b/g; $prod =~ s/\\t/\t/g; $prod =~ s/\\n/\n/g;
++            $prod =~ s/\\f/\f/g; $prod =~ s/\\r/\r/g;
++            chomp ($prod);
++	    
++            print "$prod\n";
++	}
++    }
++}
++
++if (length($ftail)) {
++    my $prod = $ftail;
++    my $base = basename ($ARGV);
++
++    $prod =~ s/\@filename\@/$ARGV/g;
++    $prod =~ s/\@basename\@/$base/g;
++    $prod =~ s/\\a/\a/g; $prod =~ s/\\b/\b/g; $prod =~ s/\\t/\t/g; $prod =~ s/\\n/\n/g;
++    $prod =~ s/\\f/\f/g; $prod =~ s/\\r/\r/g;
++    chomp ($prod);
++		
++    print "$prod\n";
++}
++
++# put auto-generation comment
++{
++    my $comment = $comment_tmpl;
++    $comment =~ s/\@comment\@/Generated data ends here/;
++    print "\n" . $comment . "\n\n";
++}
+--- misc/gdk-pixbuf-2.23.0/msvc_recommended_pragmas.h	2011-03-24 04:59:07.625000000 +0100
++++ misc/build/gdk-pixbuf-2.23.0/msvc_recommended_pragmas.h	2011-03-22 01:58:24.359375000 +0100
+@@ -1 +1,31 @@
+-dummy
++#ifndef _MSC_VER
++#pragma error "This header is for Microsoft VC only."
++#endif /* _MSC_VER */
++
++/* Make MSVC more pedantic, this is a recommended pragma list
++ * from _Win32_Programming_ by Rector and Newcomer.
++ */
++#pragma warning(error:4002) /* too many actual parameters for macro */
++#pragma warning(error:4003) /* not enough actual parameters for macro */
++#pragma warning(1:4010)     /* single-line comment contains line-continuation character */
++#pragma warning(error:4013) /* 'function' undefined; assuming extern returning int */
++#pragma warning(1:4016)     /* no function return type; using int as default */
++#pragma warning(error:4020) /* too many actual parameters */
++#pragma warning(error:4021) /* too few actual parameters */
++#pragma warning(error:4027) /* function declared without formal parameter list */
++#pragma warning(error:4029) /* declared formal parameter list different from definition */
++#pragma warning(error:4033) /* 'function' must return a value */
++#pragma warning(error:4035) /* 'function' : no return value */
++#pragma warning(error:4045) /* array bounds overflow */
++#pragma warning(error:4047) /* different levels of indirection */
++#pragma warning(error:4049) /* terminating line number emission */
++#pragma warning(error:4053) /* An expression of type void was used as an operand */
++#pragma warning(error:4071) /* no function prototype given */
++#pragma warning(disable:4101) /* unreferenced local variable */
++#pragma warning(error:4150)
++
++#pragma warning(disable:4244)	/* No possible loss of data warnings */
++#pragma warning(disable:4305)   /* No truncation from int to char warnings */
++
++/* work around Microsoft's premature attempt to deprecate the C-Library */
++#pragma warning(disable:4996)   /* This function or variable may be unsafe. */

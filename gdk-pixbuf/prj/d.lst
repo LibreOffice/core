@@ -17,3 +17,5 @@ mkdir: %_DEST%\inc%_EXT%\external\gdk-pixbuf-2.0\gdk-pixbuf
 ..\%__SRC%\lib\libgdk_pixbuf-2.0.0.dylib %_DEST%\lib%_EXT%\libgdk_pixbuf-2.0.0.dylib
 symlink: %_DEST%\lib%_EXT%\libgdk_pixbuf-2.0.0.dylib %_DEST%\lib%_EXT%\libgdk_pixbuf-2.0.dylib
 ..\%__SRC%\bin\gdk-pixbuf-query-loaders %_DEST%\bin%_EXT%\gdk-pixbuf-query-loaders
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%
+..\%__SRC%\lib\gdk_pixbuf-2.0.lib %_DEST%\lib%_EXT%\gdk_pixbuf-2.0.lib

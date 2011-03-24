@@ -1,7 +1,7 @@
 mkdir: %_DEST%\inc%_EXT%\external
 mkdir: %_DEST%\inc%_EXT%\external\libjpeg
 
-..\%__SRC%\slb\jpeg8.lib %_DEST%\lib%_EXT%\jpeg8.lib
+..\%__SRC%\slb\jpeg.lib %_DEST%\lib%_EXT%\jpeg.lib
 ..\%__SRC%\lib\libjpeg.a %_DEST%\lib%_EXT%\libjpeg.a
 
 ..\%__SRC%\inc\jpeglib.h %_DEST%\inc%_EXT%\external\libjpeg\jpeglib.h

@@ -25,6 +25,8 @@
 #
 #*************************************************************************
 
+.IF "$(OS)"=="MACOSX" || "$(OS)"=="WNT"
+
 PRJ=.
 
 PRJNAME=libgsf
@@ -137,4 +139,6 @@ OUT2INC+=gsf$/gsf.h
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
+
+.ENDIF
 

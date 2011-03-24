@@ -46,9 +46,10 @@ GDKPIXBUFVERSION=2.23.0
 
 TARFILE_NAME=$(PRJNAME)-$(GDKPIXBUFVERSION)
 TARFILE_MD5=a7d6c5f2fe2d481149ed3ba807b5c043
+               
+.IF "$(OS)"=="MACOSX"
 
 PATCH_FILES=gdk-pixbuf-2.23.0.patch
-
 CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                 BASE_DEPENDENCIES_CFLAGS="-I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external/glib-2.0" \
@@ -57,22 +58,11 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC) \
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external -I$(SOLARINCDIR)$/external$/glib-2.0 -I$(SOLARINCDIR)$/external$/libpng -I$(SOLARINCDIR)$/external$/libjpeg" \
                  LDFLAGS="-L$(SOLARLIBDIR) -lgobject-2.0 -lgio-2.0 -lgthread-2.0 -lgmodule-2.0 -lglib-2.0 -lintl" \
-                 --disable-glibtest \
-                 --without-libtiff
-                 
-## FIXME: libtiff
+                 --disable-glibtest --without-libtiff
 
-.IF "$(OS)" == "MACOSX"
-CONFIGURE_FLAGS=CPPFLAGS="$(EXTRA_CDEFS)  -I$(SOLARINCDIR)$/external$/libjpeg"
-.ELSE
-CONFIGURE_FLAGS=CPPFLAGS="-I$(SOLARINCDIR)$/external$/libjpeg"
-.ENDIF
-                
-BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) \
-             $(GNUMAKE)
+BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
-
-.IF "$(OS)"=="MACOSX"
+                
 EXTRPATH=LOADER
 OUT2LIB+=gdk-pixbuf$/.libs/libgdk_pixbuf-2.0.0.dylib
 
@@ -89,8 +79,34 @@ OUT2INC+=gdk-pixbuf$/gdk-pixdata.h
 OUT2INC+=gdk-pixbuf$/gdk-pixbuf-enum-types.h
 OUT2INC+=gdk-pixbuf$/gdk-pixbuf-loader.h
 OUT2INC+=gdk-pixbuf$/gdk-pixbuf-transform.h
+
 .ELIF "$(OS)"=="WNT"
+
+PATCH_FILES=gdk-pixbuf-2.23.0-win32.patch
+ADDITIONAL_FILES=config.h.win32 glib-mkenums.pl msvc_recommended_pragmas.h 
+CONFIGURE_DIR=
+CONFIGURE_ACTION=
+BUILD_DIR=./gdk-pixbuf
+BUILD_ACTION=nmake -f makefile.msc
+
+OUT2LIB+=gdk-pixbuf$/gdk_pixbuf-2.0.lib
+
+OUT2BIN+=gdk-pixbuf$/libgdk_pixbuf-2.0-0.dll
+
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-animation.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-features.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-marshal.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-core.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-io.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-simple-anim.h
+OUT2INC+=gdk-pixbuf$/gdk-pixdata.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-enum-types.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-loader.h
+OUT2INC+=gdk-pixbuf$/gdk-pixbuf-transform.h
+
 .ELSE
+
 .ENDIF
 
 # --- Targets ------------------------------------------------------
@@ -98,4 +114,3 @@ OUT2INC+=gdk-pixbuf$/gdk-pixbuf-transform.h
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
-

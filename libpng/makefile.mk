@@ -55,7 +55,7 @@ ADDITIONAL_FILES=makefile.mk pnglibconf.h
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
-OUT2INC=png.h pnglibconf.h pngconf.h
+OUT2INC=png.h pnglibconf.h pngconf.h pngstruct.h
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk

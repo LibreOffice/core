@@ -87,6 +87,7 @@ OUT2BIN+=gettext-tools$/src$/.libs$/urlget
 OUT2BIN+=gettext-tools$/src$/.libs$/xgettext
 .ELIF "$(OS)"=="WNT"
 BUILD_DIR=gettext-runtime$/intl
+BUILD_ACTION=dmake
 PATCH_FILES=gettext-0.18.1.1.patch
 ADDITIONAL_FILES=\
     gettext-runtime/intl/makefile.mk \
