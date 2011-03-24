@@ -769,16 +769,16 @@ struct SC_DLLPUBLIC ScSubTotalParam
     SCROW           nRow1;
     SCCOL           nCol2;
     SCROW           nRow2;
-    sal_Bool            bRemoveOnly;
-    sal_Bool            bReplace;                   // replace existing results
-    sal_Bool            bPagebreak;                 // page break at change of group
-    sal_Bool            bCaseSens;                  //
-    sal_Bool            bDoSort;                    // presort
-    sal_Bool            bAscending;                 // sort ascending
-    sal_Bool            bUserDef;                   // sort user defined
-    sal_uInt16          nUserIndex;                 // index into list
-    sal_Bool            bIncludePattern;            // sort formats
-    sal_Bool            bGroupActive[MAXSUBTOTAL];  // active groups
+    sal_uInt16      nUserIndex;                 // index into list
+    bool            bRemoveOnly:1;
+    bool            bReplace:1;                 // replace existing results
+    bool            bPagebreak:1;               // page break at change of group
+    bool            bCaseSens:1;                //
+    bool            bDoSort:1;                  // presort
+    bool            bAscending:1;               // sort ascending
+    bool            bUserDef:1;                 // sort user defined
+    bool            bIncludePattern:1;          // sort formats
+    bool            bGroupActive[MAXSUBTOTAL];  // active groups
     SCCOL           nField[MAXSUBTOTAL];        // associated field
     SCCOL           nSubTotals[MAXSUBTOTAL];    // number of SubTotals
     SCCOL*          pSubTotals[MAXSUBTOTAL];    // array of columns to be calculated
@@ -787,13 +787,13 @@ struct SC_DLLPUBLIC ScSubTotalParam
     ScSubTotalParam();
     ScSubTotalParam( const ScSubTotalParam& r );
 
-    ScSubTotalParam&    operator=       ( const ScSubTotalParam& r );
-    sal_Bool                operator==      ( const ScSubTotalParam& r ) const;
-    void                Clear           ();
-    void                SetSubTotals    ( sal_uInt16                nGroup,
-                                          const SCCOL*          ptrSubTotals,
-                                          const ScSubTotalFunc* ptrFuncions,
-                                          sal_uInt16                nCount );
+    ScSubTotalParam& operator= ( const ScSubTotalParam& r );
+    bool operator== ( const ScSubTotalParam& r ) const;
+    void Clear();
+    void SetSubTotals( sal_uInt16 nGroup,
+                       const SCCOL* ptrSubTotals,
+                       const ScSubTotalFunc* ptrFuncions,
+                       sal_uInt16 nCount );
 };
 
 class ScArea;

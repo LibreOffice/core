@@ -245,9 +245,9 @@ ScSubTotalParam::ScSubTotalParam()
 //------------------------------------------------------------------------
 
 ScSubTotalParam::ScSubTotalParam( const ScSubTotalParam& r ) :
-        nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),
+        nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nUserIndex(r.nUserIndex),
         bRemoveOnly(r.bRemoveOnly),bReplace(r.bReplace),bPagebreak(r.bPagebreak),bCaseSens(r.bCaseSens),
-        bDoSort(r.bDoSort),bAscending(r.bAscending),bUserDef(r.bUserDef),nUserIndex(r.nUserIndex),
+        bDoSort(r.bDoSort),bAscending(r.bAscending),bUserDef(r.bUserDef),
         bIncludePattern(r.bIncludePattern)
 {
     for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
@@ -284,7 +284,7 @@ void ScSubTotalParam::Clear()
     nRow1=nRow2 = 0;
     nUserIndex = 0;
     bPagebreak=bCaseSens=bUserDef=bIncludePattern=bRemoveOnly = false;
-    bAscending=bReplace=bDoSort = sal_True;
+    bAscending=bReplace=bDoSort = true;
 
     for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
     {
@@ -352,12 +352,13 @@ ScSubTotalParam& ScSubTotalParam::operator=( const ScSubTotalParam& r )
 
 //------------------------------------------------------------------------
 
-sal_Bool ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
+bool ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
 {
-    sal_Bool bEqual =   (nCol1          == rOther.nCol1)
+    bool bEqual =   (nCol1          == rOther.nCol1)
                  && (nRow1          == rOther.nRow1)
                  && (nCol2          == rOther.nCol2)
                  && (nRow2          == rOther.nRow2)
+                 && (nUserIndex     == rOther.nUserIndex)
                  && (bRemoveOnly    == rOther.bRemoveOnly)
                  && (bReplace       == rOther.bReplace)
                  && (bPagebreak     == rOther.bPagebreak)
@@ -365,12 +366,11 @@ sal_Bool ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
                  && (bCaseSens      == rOther.bCaseSens)
                  && (bAscending     == rOther.bAscending)
                  && (bUserDef       == rOther.bUserDef)
-                 && (nUserIndex     == rOther.nUserIndex)
                  && (bIncludePattern== rOther.bIncludePattern);
 
     if ( bEqual )
     {
-        bEqual = sal_True;
+        bEqual = true;
         for ( sal_uInt16 i=0; i<MAXSUBTOTAL && bEqual; i++ )
         {
             bEqual =   (bGroupActive[i] == rOther.bGroupActive[i])
@@ -396,10 +396,10 @@ sal_Bool ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
 
 //------------------------------------------------------------------------
 
-void ScSubTotalParam::SetSubTotals( sal_uInt16                  nGroup,
-                                    const SCCOL*            ptrSubTotals,
-                                    const ScSubTotalFunc*   ptrFunctions,
-                                    sal_uInt16                  nCount )
+void ScSubTotalParam::SetSubTotals( sal_uInt16 nGroup,
+                                    const SCCOL* ptrSubTotals,
+                                    const ScSubTotalFunc* ptrFunctions,
+                                    sal_uInt16 nCount )
 {
     DBG_ASSERT( (nGroup <= MAXSUBTOTAL),
                 "ScSubTotalParam::SetSubTotals(): nGroup > MAXSUBTOTAL!" );
