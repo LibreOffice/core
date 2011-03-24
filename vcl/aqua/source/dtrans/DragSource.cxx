@@ -146,7 +146,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
                              bDropSuccess );
 
     mDragSource->mXDragSrcListener->dragDropEnd(dsde);
-    mDragSource->mXDragSrcListener = Reference<XDragSourceListener>();
+    mDragSource->mXDragSrcListener = uno::Reference<XDragSourceListener>();
 }
 
 
@@ -252,10 +252,6 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
                                     sal_Int8 sourceActions,
                                     sal_Int32 /*cursor*/,
                                     sal_Int32 /*image*/,
-                                    const Reference<XTransferable >& transferable,
-                                    const Reference<XDragSourceListener >& listener )
-                                    sal_Int32 cursor,
-                                    sal_Int32 image,
                                     const uno::Reference<XTransferable >& transferable,
                                     const uno::Reference<XDragSourceListener >& listener )
   throw( RuntimeException)

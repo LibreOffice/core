@@ -63,6 +63,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/lineinfo.hxx>
+#include "vcl/cvtgrf.hxx"
 #include "vcl/strhelper.hxx"
 
 #include <fontsubset.hxx>

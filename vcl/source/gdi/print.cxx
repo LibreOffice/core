@@ -44,13 +44,13 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/print.hxx>
-#include <vcl/svids.hrc>
 
 #include <salinst.hxx>
 #include <salgdi.hxx>
 #include <salptype.hxx>
 #include <salprn.hxx>
 #include <svdata.hxx>
+#include <svids.hrc>
 #include <jobset.h>
 #include <outdev.h>
 #include <print.h>

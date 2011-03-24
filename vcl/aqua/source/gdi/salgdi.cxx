@@ -44,7 +44,6 @@
 
 #include "vcl/sysdata.hxx"
 #include "vcl/svapp.hxx"
-#include "vcl/region.h"
 
 #include "aqua/salconst.h"
 #include "aqua/salgdi.h"
@@ -55,6 +54,7 @@
 
 #include "fontsubset.hxx"
 #include "impfont.hxx"
+#include "region.h"
 #include "sallayout.hxx"
 #include "sft.hxx"
 

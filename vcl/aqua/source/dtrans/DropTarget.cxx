@@ -50,8 +50,8 @@
 #include <Carbon/Carbon.h>
 #include <postmac.h>
 
-#include <salframe.h>
-#include <salframeview.h>
+#include <aqua/salframe.h>
+#include <aqua/salframeview.h>
 
 using namespace rtl;
 using namespace cppu;

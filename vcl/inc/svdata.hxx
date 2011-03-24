@@ -29,19 +29,26 @@
 #define _SV_SVDATA_HXX
 
 #include "rtl/ref.hxx"
+
 #include "vos/thread.hxx"
+
 #include "tools/string.hxx"
 #include "tools/gen.hxx"
 #include "tools/shl.hxx"
 #include "tools/link.hxx"
 #include "tools/fldunit.hxx"
-#include "vcl/vclevent.hxx"
-#include "vcl/sv.h"
 #include "tools/color.hxx"
 #include "tools/debug.hxx"
+
+#include "vcl/vclevent.hxx"
+#include "vcl/sv.h"
 #include "vcl/dllapi.h"
-#include "com/sun/star/uno/Reference.hxx"
+
 #include "unotools/options.hxx"
+
+#include "xconnection.hxx"
+
+#include "com/sun/star/uno/Reference.hxx"
 
 #include <hash_map>
 
