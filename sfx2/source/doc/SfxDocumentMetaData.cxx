@@ -1142,7 +1142,6 @@ void SAL_CALL SfxDocumentMetaData::init(
 
     m_isInitialized = false;
     m_xDoc = i_xDoc;
-    m_xDoc->normalize();
 
     // select nodes for standard meta data stuff
     xPath->registerNS(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xlink")),
@@ -1171,26 +1170,49 @@ void SAL_CALL SfxDocumentMetaData::init(
     if (!m_xParent.is()) {
         // all this create/append stuff may throw DOMException
         try {
-            css::uno::Reference<css::xml::dom::XElement> xRElem(
-                i_xDoc->createElementNS(
+            css::uno::Reference<css::xml::dom::XElement> xRElem;
+            css::uno::Reference<css::xml::dom::XNode> xNode(
+                i_xDoc->getFirstChild());
+            while (xNode.is()) {
+                if (css::xml::dom::NodeType_ELEMENT_NODE ==xNode->getNodeType())
+                {
+                    if (xNode->getNamespaceURI().equalsAscii(s_nsODF) &&
+                        xNode->getLocalName().equalsAscii("document-meta"))
+                    {
+                        xRElem.set(xNode, css::uno::UNO_QUERY_THROW);
+                        break;
+                    }
+                    else
+                    {
+                        OSL_TRACE("SfxDocumentMetaData::init(): "
+                                "deleting unexpected root element: %s",
+                            ::rtl::OUStringToOString(xNode->getLocalName(),
+                                RTL_TEXTENCODING_UTF8).getStr());
+                        i_xDoc->removeChild(xNode);
+                        xNode = i_xDoc->getFirstChild(); // start over
+                    }
+                } else {
+                    xNode = xNode->getNextSibling();
+                }
+            }
+            if (!xRElem.is()) {
+                xRElem = i_xDoc->createElementNS(
                     ::rtl::OUString::createFromAscii(s_nsODF),
-                    ::rtl::OUString::createFromAscii("office:document-meta")));
-            css::uno::Reference<css::xml::dom::XNode> xRNode(xRElem,
-                css::uno::UNO_QUERY_THROW);
-            // NB: the following is a _bad_idea_ with our DOM implementation
-            //     do _not_ create attributes with xmlns prefix!
-//        xRElem->setAttribute(::rtl::OUString::createFromAscii("xmlns:office"),
-//                    ::rtl::OUString::createFromAscii(s_nsODF));
+                    ::rtl::OUString::createFromAscii("office:document-meta"));
+                css::uno::Reference<css::xml::dom::XNode> xRNode(xRElem,
+                    css::uno::UNO_QUERY_THROW);
+                i_xDoc->appendChild(xRNode);
+            }
             xRElem->setAttributeNS(::rtl::OUString::createFromAscii(s_nsODF),
                         ::rtl::OUString::createFromAscii("office:version"),
                         ::rtl::OUString::createFromAscii("1.0"));
-            i_xDoc->appendChild(xRNode);
+            // does not exist, otherwise m_xParent would not be null
             css::uno::Reference<css::xml::dom::XNode> xParent (
                 i_xDoc->createElementNS(
                     ::rtl::OUString::createFromAscii(s_nsODF),
                     ::rtl::OUString::createFromAscii("office:meta")),
             css::uno::UNO_QUERY_THROW);
-            xRNode->appendChild(xParent);
+            xRElem->appendChild(xParent);
             m_xParent = xParent;
         } catch (css::xml::dom::DOMException & e) {
             css::uno::Any a(e);
