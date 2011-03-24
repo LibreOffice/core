@@ -1136,11 +1136,10 @@ JavaInfo * CNodeJavaInfo::makeJavaInfo() const
 
 sal_uInt32 NodeJava::getModifiedTime() const
 {
-    sal_uInt32 ret = 0;
     if (m_layer != INSTALL)
     {
         OSL_ASSERT(0);
-        return ret;
+        return 0;
     }
     rtl::OString modTimeSeconds = getElementModified();
     return (sal_uInt32) modTimeSeconds.toInt64();
