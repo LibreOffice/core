@@ -543,7 +543,13 @@ endef
 
 define gb_Library_add_default_nativeres
 $(call gb_WinResTarget_WinResTarget_init,$(1)/$(2))
-$(call gb_WinResTarget_add_file,$(1)/$(2),solenv/gbuild/shlinfo)
+$(call gb_WinResTarget_add_file,$(1)/$(2),solenv/inc/shlinfo)
+$(call gb_WinResTarget_set_defs,$(1)/$(2),\
+        $$(DEFS) \
+        -DADDITIONAL_VERINFO1 \
+        -DADDITIONAL_VERINFO2 \
+        -DADDITIONAL_VERINFO3 \
+)
 $(call gb_Library_add_nativeres,$(1),$(2))
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_WinResTarget_get_clean_target,$(1)/$(2))
 
