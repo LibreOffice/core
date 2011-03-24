@@ -454,6 +454,20 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
 ))
 endif
 
+ifeq ($(OS),SOLARIS)
+ifeq ($(CPUNAME)$(CPU),SPARCU)
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
+    -R/usr/sfw/lib/64 \
+))
+else
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
+    -R/usr/sfw/lib \
+))
+endif
+endif
+
 ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     AppleRemote \
