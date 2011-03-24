@@ -98,7 +98,7 @@ public:
 
     ::com::sun::star::uno::Sequence< sal_Int8 > GetEncryptionKey( bool bWinEncoding = false );
 
-    sal_Int32 GetKeyGenID();
+    sal_Int32 GetStartKeyGenID();
 
     const com::sun::star::uno::Sequence < sal_Int8 > getInitialisationVector () const
     { return m_xBaseEncryptionData->m_aInitVector;}

@@ -150,6 +150,7 @@ public:
                                      sal_Int32 &rEncAlgorithm,
                                      sal_Int32 &rChecksumAlgorithm,
                                      sal_Int32 &rDerivedKeySize,
+                                     sal_Int32 &rStartKeyGenID,
                                      sal_Int32 &rSize,
                                      ::rtl::OUString& aMediaType,
                                      ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &rStream );

@@ -133,7 +133,7 @@ public:
     ZipFile& getZipFile() { return *m_pZipFile;}
     sal_Int32 getFormat() const { return m_nFormat; }
 
-    sal_Int32 GetKeyGenID() const { return m_nStartKeyGenerationID; }
+    sal_Int32 GetStartKeyGenID() const { return m_nStartKeyGenerationID; }
     sal_Int32 GetEncAlgID() const { return m_nCommonEncryptionID; }
     sal_Int32 GetChecksumAlgID() const { return m_nChecksumDigestID; }
     sal_Int32 GetDefaultDerivedKeySize() const { return m_nCommonEncryptionID == ::com::sun::star::xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 32 : 16; }

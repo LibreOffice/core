@@ -167,6 +167,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
             {
                 // If this element exists, then this stream is encrypted and we need
                 // to import the initialisation vector, salt and iteration count used
+                nDerivedKeySize = 0;
                 OUString aString = aConvertedAttribs[sChecksumTypeAttribute];
                 if ( !bIgnoreEncryptData )
                 {

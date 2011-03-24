@@ -257,6 +257,13 @@ void ZipFile::StaticFillHeader( const ::rtl::Reference< EncryptionData >& rData,
     *(pHeader++) = static_cast< sal_Int8 >(( nDerivedKeySize >> 16 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nDerivedKeySize >> 24 ) & 0xFF);
 
+    // Then the start key generation algorithm
+    sal_Int32 nKeyAlgID = rData->m_nStartKeyGenID;
+    *(pHeader++) = static_cast< sal_Int8 >(( nKeyAlgID >> 0 ) & 0xFF);
+    *(pHeader++) = static_cast< sal_Int8 >(( nKeyAlgID >> 8 ) & 0xFF);
+    *(pHeader++) = static_cast< sal_Int8 >(( nKeyAlgID >> 16 ) & 0xFF);
+    *(pHeader++) = static_cast< sal_Int8 >(( nKeyAlgID >> 24 ) & 0xFF);
+
     // Then the salt length
     *(pHeader++) = static_cast< sal_Int8 >(( nSaltLength >> 0 ) & 0xFF);
     *(pHeader++) = static_cast< sal_Int8 >(( nSaltLength >> 8 ) & 0xFF);
@@ -294,6 +301,7 @@ sal_Bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rDa
                                     sal_Int32 &rEncAlg,
                                     sal_Int32 &rChecksumAlg,
                                     sal_Int32 &rDerivedKeySize,
+                                    sal_Int32 &rStartKeyGenID,
                                     sal_Int32 &rSize,
                                     ::rtl::OUString& aMediaType,
                                     uno::Reference < XInputStream > &rStream )
@@ -334,6 +342,11 @@ sal_Bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rDa
             rDerivedKeySize  |= ( pBuffer[nPos++] & 0xFF ) << 8;
             rDerivedKeySize  |= ( pBuffer[nPos++] & 0xFF ) << 16;
             rDerivedKeySize  |= ( pBuffer[nPos++] & 0xFF ) << 24;
+
+            rStartKeyGenID   =   pBuffer[nPos++] & 0xFF;
+            rStartKeyGenID  |= ( pBuffer[nPos++] & 0xFF ) << 8;
+            rStartKeyGenID  |= ( pBuffer[nPos++] & 0xFF ) << 16;
+            rStartKeyGenID  |= ( pBuffer[nPos++] & 0xFF ) << 24;
 
             sal_Int16 nSaltLength =   pBuffer[nPos++] & 0xFF;
             nSaltLength          |= ( pBuffer[nPos++] & 0xFF ) << 8;

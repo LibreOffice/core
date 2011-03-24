@@ -221,7 +221,8 @@ sal_Int32 ZipPackageStream::GetBlockSize() const
             GetEncryptionKey( bUseWinEncoding ),
             GetEncryptionAlgorithm(),
             m_nImportedChecksumAlgorithm ? m_nImportedChecksumAlgorithm : rZipPackage.GetChecksumAlgID(),
-            m_nImportedDerivedKeySize ? m_nImportedDerivedKeySize : rZipPackage.GetDefaultDerivedKeySize() );
+            m_nImportedDerivedKeySize ? m_nImportedDerivedKeySize : rZipPackage.GetDefaultDerivedKeySize(),
+            GetStartKeyGenID() );
 
     return xResult;
 }
@@ -236,7 +237,7 @@ void ZipPackageStream::SetBaseEncryptionData( const ::rtl::Reference< BaseEncryp
 uno::Sequence< sal_Int8 > ZipPackageStream::GetEncryptionKey( bool bUseWinEncoding )
 {
     uno::Sequence< sal_Int8 > aResult;
-    sal_Int32 nKeyGenID = m_nImportedStartKeyAlgorithm ? m_nImportedStartKeyAlgorithm : rZipPackage.GetKeyGenID();
+    sal_Int32 nKeyGenID = GetStartKeyGenID();
     bUseWinEncoding = ( bUseWinEncoding || m_bUseWinEncoding );
 
     if ( bHaveOwnKey && m_aStorageEncryptionKeys.getLength() )
@@ -270,10 +271,11 @@ uno::Sequence< sal_Int8 > ZipPackageStream::GetEncryptionKey( bool bUseWinEncodi
 }
 
 //--------------------------------------------------------------------------
-sal_Int32 ZipPackageStream::GetKeyGenID()
+sal_Int32 ZipPackageStream::GetStartKeyGenID()
 {
-    // all the streams must use the same Start Key
-    return rZipPackage.GetKeyGenID();
+    // generally should all the streams use the same Start Key
+    // but if raw copy without password takes place, we should preserve the imported algorithm
+    return m_nImportedStartKeyAlgorithm ? m_nImportedStartKeyAlgorithm : rZipPackage.GetStartKeyGenID();
 }
 
 //--------------------------------------------------------------------------
@@ -420,7 +422,8 @@ sal_Bool ZipPackageStream::ParsePackageRawStream()
                 sal_Int32 nEncAlgorithm = 0;
                 sal_Int32 nChecksumAlgorithm = 0;
                 sal_Int32 nDerivedKeySize = 0;
-                if ( ZipFile::StaticFillData( xTempEncrData, nEncAlgorithm, nChecksumAlgorithm, nDerivedKeySize, nMagHackSize, aMediaType, GetOwnSeekStream() ) )
+                sal_Int32 nStartKeyGenID = 0;
+                if ( ZipFile::StaticFillData( xTempEncrData, nEncAlgorithm, nChecksumAlgorithm, nDerivedKeySize, nStartKeyGenID, nMagHackSize, aMediaType, GetOwnSeekStream() ) )
                 {
                     // We'll want to skip the data we've just read, so calculate how much we just read
                     // and remember it
@@ -431,6 +434,7 @@ sal_Bool ZipPackageStream::ParsePackageRawStream()
                     m_nImportedEncryptionAlgorithm = nEncAlgorithm;
                     m_nImportedChecksumAlgorithm = nChecksumAlgorithm;
                     m_nImportedDerivedKeySize = nDerivedKeySize;
+                    m_nImportedStartKeyAlgorithm = nStartKeyGenID;
                     m_nMagicalHackSize = nMagHackSize;
                     sMediaType = aMediaType;
 
@@ -566,7 +570,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
         catch( packages::WrongPasswordException& )
         {
             // workaround for the encrypted documents generated with the old OOo1.x bug.
-            if ( rZipPackage.GetKeyGenID() == xml::crypto::DigestID::SHA1 && !m_bUseWinEncoding )
+            if ( rZipPackage.GetStartKeyGenID() == xml::crypto::DigestID::SHA1 && !m_bUseWinEncoding )
             {
                 xResult = rZipPackage.getZipFile().getDataStream( aEntry, GetEncryptionData( true ), bIsEncrypted, rZipPackage.GetSharedMutexRef() );
                 m_bUseWinEncoding = true;

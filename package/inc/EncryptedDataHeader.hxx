@@ -31,24 +31,25 @@
 
 /* The structure of this header is as follows:
 
-   Header signature 4 bytes
-   Version number   2 bytes
-   Iteraction count 4 bytes
-   Size             4 bytes
-   EncAlgorithm     4 bytes
-   DigestAlgorithm  4 bytes
-   DerivedKeySize   4 bytes
-   Salt length      2 bytes
-   IV length        2 bytes
-   Digest length    2 bytes
-   MediaType length 2 bytes
-   Salt content     X bytes
-   IV content       X bytes
-   digest content   X bytes
-   MediaType        X bytes
+   Header signature  4 bytes
+   Version number    2 bytes
+   Iteraction count  4 bytes
+   Size              4 bytes
+   EncAlgorithm      4 bytes
+   DigestAlgorithm   4 bytes
+   DerivedKeySize    4 bytes
+   StartKeyAlgorithm 4 bytes
+   Salt length       2 bytes
+   IV length         2 bytes
+   Digest length     2 bytes
+   MediaType length  2 bytes
+   Salt content      X bytes
+   IV content        X bytes
+   digest content    X bytes
+   MediaType         X bytes
 
 */
 const sal_uInt32 n_ConstHeader = 0x05024d4dL; // "MM\002\005"
-const sal_Int32 n_ConstHeaderSize = 34; // + salt length + iv length + digest length + mediatype length
+const sal_Int32 n_ConstHeaderSize = 38; // + salt length + iv length + digest length + mediatype length
 const sal_Int16 n_ConstCurrentVersion = 1;
 #endif

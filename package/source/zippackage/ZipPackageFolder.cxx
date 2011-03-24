@@ -550,7 +550,7 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
                             aPropSet[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
                             aPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
                             aPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
-                            aPropSet[PKG_MNFST_STARTALG].Value <<= pStream->GetKeyGenID();
+                            aPropSet[PKG_MNFST_STARTALG].Value <<= xEncData->m_nStartKeyGenID;
                             aPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
                             aPropSet[PKG_MNFST_DIGESTALG].Value <<= xEncData->m_nCheckAlg;
                             aPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
@@ -678,7 +678,7 @@ void ZipPackageFolder::saveContents( ::rtl::OUString &rPath, std::vector < uno::
                         aPropSet[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
                         aPropSet[PKG_MNFST_ENCALG].Value <<= xEncData->m_nEncAlg;
                         aPropSet[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
-                        aPropSet[PKG_MNFST_STARTALG].Value <<= pStream->GetKeyGenID();
+                        aPropSet[PKG_MNFST_STARTALG].Value <<= xEncData->m_nStartKeyGenID;
                         aPropSet[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
                         aPropSet[PKG_MNFST_DIGESTALG].Value <<= xEncData->m_nCheckAlg;
                         aPropSet[PKG_MNFST_DERKEYSIZE].Name = sDerivedKeySizeProperty;
