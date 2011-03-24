@@ -3522,7 +3522,9 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         return;
 
     const ::sw::mark::IFieldmark* pFieldmark = &rFieldmark;
-    const ::sw::mark::ICheckboxFieldmark* pAsCheckbox = dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( pFieldmark );
+    const ::sw::mark::ICheckboxFieldmark* pAsCheckbox = NULL;
+    if ( rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) )
+        pAsCheckbox = reinterpret_cast< const ::sw::mark::ICheckboxFieldmark* >( pFieldmark );
 
 
     OSL_ENSURE(rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMTEXT ) ) ||

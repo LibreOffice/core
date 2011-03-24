@@ -169,6 +169,98 @@ using namespace nsHdFtFlags;
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/mediadescriptor.hxx>
+
+using ::comphelper::MediaDescriptor;
+using ::comphelper::getProcessServiceFactory;
+
+class BasicProjImportHelper
+{
+    SwDocShell& mrDocShell;
+public:
+    BasicProjImportHelper( SwDocShell& rShell ) : mrDocShell( rShell ) {}
+    bool import();
+    bool import( const com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue >& aArgSeq );
+    rtl::OUString getProjectName();
+};
+
+bool BasicProjImportHelper::import()
+{
+    uno::Sequence< beans::NamedValue > aArgSeq;
+    return import( aArgSeq );
+}
+
+bool BasicProjImportHelper::import( const uno::Sequence< beans::NamedValue >& aArgSeq )
+{
+    bool bRet = false;
+    try
+    {
+        uno::Reference< lang::XComponent > xComponent( mrDocShell.GetModel(), uno::UNO_QUERY_THROW );
+        // #TODO #FIXME, get rid of the uno access, better ( and less lines I suspect ) to
+        // access this directly ( just need to figure out what stream manipulation I need to
+        // do )
+        uno::Reference< lang::XMultiServiceFactory > xFac( getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+        uno::Reference< document::XImporter > xImporter;
+        if ( aArgSeq.getLength() )
+        {
+            uno::Sequence< uno::Any > aArgs( 2 );
+            aArgs[ 0 ] <<= getProcessServiceFactory();
+            aArgs[ 1 ] <<= aArgSeq;
+            xImporter.set( xFac->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.oox.WordVbaProjectFilter" ) ), aArgs ), uno::UNO_QUERY_THROW );
+        }
+        else
+            xImporter.set( xFac->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.oox.WordVbaProjectFilter" ) )), uno::UNO_QUERY_THROW );
+        xImporter->setTargetDocument( xComponent );
+
+        MediaDescriptor aMediaDesc;
+        SfxMedium& rMedium = *mrDocShell.GetMedium();
+        SfxItemSet* pItemSet = rMedium.GetItemSet();
+        if( pItemSet )
+        {
+            if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_FILE_NAME ) ) )
+            aMediaDesc[ MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( pItem->GetValue() );
+            if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_PASSWORD ) ) )
+                aMediaDesc[ MediaDescriptor::PROP_PASSWORD() ] <<= ::rtl::OUString( pItem->GetValue() );
+        }
+        aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] <<= rMedium.GetInputStream();
+        aMediaDesc[ MediaDescriptor::PROP_INTERACTIONHANDLER() ] <<= rMedium.GetInteractionHandler();
+
+        // call the filter
+        uno::Reference< document::XFilter > xFilter( xImporter, uno::UNO_QUERY_THROW );
+        bRet = xFilter->filter( aMediaDesc.getAsConstPropertyValueList() );
+    }
+    catch( uno::Exception& )
+    {
+        bRet = false;
+    }
+    return bRet;
+}
+
+rtl::OUString BasicProjImportHelper::getProjectName()
+{
+    rtl::OUString sProjName( RTL_CONSTASCII_USTRINGPARAM("Standard") );
+    uno::Reference< beans::XPropertySet > xProps( mrDocShell.GetModel(), uno::UNO_QUERY );
+    if ( xProps.is() )
+    {
+        try
+        {
+            uno::Reference< script::vba::XVBACompatibility > xVBA( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ), uno::UNO_QUERY_THROW  );
+            sProjName = xVBA->getProjectName();
+
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+    return sProjName;
+}
+
+
 class Sttb : TBBase
 {
 struct SBBItem
@@ -4164,7 +4256,6 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const rtl::OUString& sCreatedF
 
     sal_Int32 nEntries = sGlobalTemplates.getLength();
     bool bRes = true;
-    const SvtFilterOptions* pVBAFlags = SvtFilterOptions::Get();
     for ( sal_Int32 i=0; i<nEntries; ++i )
     {
         INetURLObject aObj;
@@ -4180,16 +4271,11 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const rtl::OUString& sCreatedF
 
         SotStorageRef rRoot = new SotStorage( aURL, STREAM_STD_READWRITE, STORAGE_TRANSACTED );
 
-        // Read Macro Projects
-        SvxImportMSVBasic aVBasic(*mpDocShell, *rRoot,
-            pVBAFlags->IsLoadWordBasicCode(),
-            pVBAFlags->IsLoadWordBasicStorage() );
+        BasicProjImportHelper aBasicImporter( *mpDocShell );
+        // Import vba via oox filter
+        aBasicImporter.import();
 
-
-        String s1(CREATE_CONST_ASC("Macros"));
-        String s2(CREATE_CONST_ASC("VBA"));
-        aVBasic.Import( s1, s2, !pVBAFlags->IsLoadWordBasicExecutable() );
-        lcl_createTemplateToProjectEntry( xPrjNameCache, aURL, aVBasic.GetVBAProjectName() );
+        lcl_createTemplateToProjectEntry( xPrjNameCache, aURL, aBasicImporter.getProjectName() );
         // Read toolbars & menus
         SvStorageStreamRef refMainStream = rRoot->OpenSotStream( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WordDocument") ) );
         refMainStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
@@ -4447,11 +4533,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         if (mbNewDoc && pStg && !pGloss) /*meaningless for a glossary, cmc*/
         {
             mpDocShell->SetIsTemplate( pWwFib->fDot ); // point at tgc record
-            const SvtFilterOptions* pVBAFlags = SvtFilterOptions::Get();
             maTracer.EnterEnvironment(sw::log::eMacros);
-// dissable below for 3.1 at the moment, 'cause it's kinda immature
-// similarly the project reference in svx/source/msvba
-#if 1
             uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
             uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
             uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
@@ -4464,7 +4546,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
             // Read Global templates
             ReadGlobalTemplateSettings( sCreatedFrom, xPrjNameCache );
-#endif
+
             // Create and insert Word vba Globals
             uno::Any aGlobs;
             uno::Sequence< uno::Any > aArgs(1);
@@ -4474,20 +4556,15 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             if (pBasicMan)
                 pBasicMan->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
 
-            SvxImportMSVBasic aVBasic(*mpDocShell, *pStg,
-                            pVBAFlags->IsLoadWordBasicCode(),
-                            pVBAFlags->IsLoadWordBasicStorage() );
-            String s1(CREATE_CONST_ASC("Macros"));
-            String s2(CREATE_CONST_ASC("VBA"));
-            int nRet = aVBasic.Import( s1, s2, !pVBAFlags->IsLoadWordBasicExecutable() );
-// dissable below for 3.1 at the moment, 'cause it's kinda immature
-// similarly the project reference in svx/source/msvba
-#if 1
-            lcl_createTemplateToProjectEntry( xPrjNameCache, sCreatedFrom, aVBasic.GetVBAProjectName() );
+            BasicProjImportHelper aBasicImporter( *mpDocShell );
+            // Import vba via oox filter
+            bool bRet = aBasicImporter.import();
+
+            lcl_createTemplateToProjectEntry( xPrjNameCache, sCreatedFrom, aBasicImporter.getProjectName() );
             WW8Customizations aCustomisations( pTableStream, *pWwFib );
             aCustomisations.Import( mpDocShell );
-#endif
-            if( 2 & nRet )
+
+            if( bRet )
             {
                 maTracer.Log(sw::log::eContainsVisualBasic);
                 rDoc.SetContainsMSVBasic(true);

@@ -656,7 +656,9 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
         FieldMarkParamsHelper params( rFieldmark );
         params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMCHECKBOX_NAME ) ), sName );
 
-        const sw::mark::ICheckboxFieldmark* pCheckboxFm = dynamic_cast<const sw::mark::ICheckboxFieldmark*>(&rFieldmark);
+        const sw::mark::ICheckboxFieldmark* pCheckboxFm = NULL;
+        if ( rFieldmark.GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) )
+            pCheckboxFm = reinterpret_cast<const sw::mark::ICheckboxFieldmark*>(&rFieldmark);
         if ( pCheckboxFm && pCheckboxFm->IsChecked() )
             bChecked = true;
 

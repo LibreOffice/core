@@ -2195,8 +2195,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
         case KS_InsChar:
             if (rSh.GetChar(sal_False)==CH_TXT_ATR_FORMELEMENT)
             {
-                ::sw::mark::ICheckboxFieldmark* pFieldmark =
-                    dynamic_cast< ::sw::mark::ICheckboxFieldmark* >
+                ::sw::mark::ICheckboxFieldmark* pFieldmark = NULL;
+                if ( rSh.GetCurrentFieldmark() && rSh.GetCurrentFieldmark()->GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) )
+                    pFieldmark = reinterpret_cast< ::sw::mark::ICheckboxFieldmark* >
                         (rSh.GetCurrentFieldmark());
                 OSL_ENSURE(pFieldmark,
                     "Where is my FieldMark??");
@@ -4118,7 +4119,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     IFieldmark *fieldBM = const_cast< IFieldmark* > ( aCntntAtPos.aFnd.pFldmark );
                                     if (fieldBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) )
                                     {
-                                        ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(fieldBM);
+                                        ICheckboxFieldmark* pCheckboxFm = reinterpret_cast<ICheckboxFieldmark*>(fieldBM);
                                         pCheckboxFm->SetChecked(!pCheckboxFm->IsChecked());
                                         pCheckboxFm->Invalidate();
                                         rSh.InvalidateWindows( rView.GetVisArea() );
