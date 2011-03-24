@@ -114,11 +114,6 @@ struct ScPivotParam
     void            SetLabelData    (const ::std::vector<ScDPLabelDataRef>& r);
 };
 
-// -----------------------------------------------------------------------
-
-typedef PivotField          PivotFieldArr[PIVOT_MAXFIELD];
-typedef PivotField          PivotPageFieldArr[PIVOT_MAXPAGEFIELD];
-
 //------------------------------------------------------------------------
 
 struct ScDPName

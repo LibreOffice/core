@@ -97,8 +97,6 @@ const sal_Unicode CHAR_ZWNBSP   = 0x2060;
 
 const SCSIZE MAXSUBTOTAL        = 3;
 const SCSIZE MAXQUERY           = 8;
-const SCSIZE PIVOT_MAXFIELD     = 8;
-const SCSIZE PIVOT_MAXPAGEFIELD = 10;
 
 #define SC_START_INDEX_DB_COLL 50000
                                         // Above this threshold are indices
