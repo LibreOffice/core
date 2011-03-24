@@ -387,7 +387,7 @@ HtmlExport::HtmlExport(
         meMode( PUBLISH_HTML ),
         mbContentsPage(false),
         mnButtonThema(-1),
-        mnWidthPixel( PUB_LOWRES_WIDTH ),
+        mnWidthPixel( PUB_MEDRES_WIDTH ),
         meFormat( FORMAT_JPG ),
         mbNotes(false),
         mnCompression( -1 ),
@@ -399,6 +399,7 @@ HtmlExport::HtmlExport(
         maHTMLExtension(SdResId(STR_HTMLEXP_DEFAULT_EXTENSION)),
         mpHTMLFiles(NULL),
         mpImageFiles(NULL),
+        mpThumbnailFiles(NULL),
         mpPageNames(NULL),
         mpTextFiles(NULL),
         maIndexUrl(RTL_CONSTASCII_USTRINGPARAM("index")),
@@ -437,12 +438,13 @@ HtmlExport::~HtmlExport()
     // ------------------------------------------------------------------
     // Listen loeschen
     // ------------------------------------------------------------------
-    if(mpImageFiles && mpHTMLFiles && mpPageNames && mpTextFiles)
+    if(mpImageFiles && mpHTMLFiles && mpThumbnailFiles && mpPageNames && mpTextFiles )
     {
         for ( sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
         {
             delete mpImageFiles[nSdPage];
             delete mpHTMLFiles[nSdPage];
+            delete mpThumbnailFiles[nSdPage];
             delete mpPageNames[nSdPage];
             delete mpTextFiles[nSdPage];
         }
@@ -450,6 +452,7 @@ HtmlExport::~HtmlExport()
 
     delete[] mpImageFiles;
     delete[] mpHTMLFiles;
+    delete[] mpThumbnailFiles;
     delete[] mpPageNames;
     delete[] mpTextFiles;
 }
@@ -740,6 +743,11 @@ void HtmlExport::ExportHtml()
         if( !CreateImagesForPresPages() )
             break;
 
+        if( mbContentsPage &&
+           !CreateImagesForPresPages( true ) )
+            break;
+
+
         if( !CreateHtmlForPresPages() )
             break;
 
@@ -973,7 +981,7 @@ bool HtmlExport::SavePresentation()
 // =====================================================================
 // Image-Dateien anlegen
 // =====================================================================
-bool HtmlExport::CreateImagesForPresPages()
+bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
 {
     try
     {
@@ -990,9 +998,9 @@ bool HtmlExport::CreateImagesForPresPages()
 
         Sequence< PropertyValue > aFilterData(((meFormat==FORMAT_JPG)&&(mnCompression != -1))? 3 : 2);
         aFilterData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("PixelWidth") );
-        aFilterData[0].Value <<= (sal_Int32)mnWidthPixel;
+        aFilterData[0].Value <<= (sal_Int32)(bThumbnail ? PUB_THUMBNAIL_WIDTH : mnWidthPixel );
         aFilterData[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("PixelHeight") );
-        aFilterData[1].Value <<= (sal_Int32)mnHeightPixel;
+        aFilterData[1].Value <<= (sal_Int32)(bThumbnail ? PUB_THUMBNAIL_HEIGHT : mnHeightPixel);
         if((meFormat==FORMAT_JPG)&&(mnCompression != -1))
         {
             aFilterData[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Quality") );
@@ -1019,7 +1027,11 @@ bool HtmlExport::CreateImagesForPresPages()
             SdPage* pPage = maPages[ nSdPage ];
 
             OUString aFull(maExportPath);
-            aFull += *mpImageFiles[nSdPage];
+            if (bThumbnail)
+                aFull += *mpThumbnailFiles[nSdPage];
+            else
+                aFull += *mpImageFiles[nSdPage];
+
 
             aDescriptor[0].Value <<= aFull;
 
@@ -1893,7 +1905,7 @@ bool HtmlExport::CreateContentPage()
     aStr.AppendAscii( "<center><table width=\"90%\"><tr>\r\n" );
 
     // Inhaltsverzeichnis
-    aStr.AppendAscii( "<td valign=\"top\" align=\"left\" width=\"50%\">\r\n" );
+    aStr.AppendAscii( "<td valign=\"top\" align=\"left\" width=\"25%\">\r\n" );
     aStr.AppendAscii( "<h3>" );
     aStr += RESTOHTML(STR_HTMLEXP_CONTENTS);
     aStr.AppendAscii( "</h3>" );
@@ -1911,7 +1923,7 @@ bool HtmlExport::CreateContentPage()
     aStr.AppendAscii( "</td>\r\n" );
 
     // Dokument Infos
-    aStr.AppendAscii( "<td valign=\"top\" width=\"50%\">\r\n" );
+    aStr.AppendAscii( "<td valign=\"top\" align=\"left\" width=\"75%\">\r\n" );
 
     if(maAuthor.Len())
     {
@@ -1961,6 +1973,21 @@ bool HtmlExport::CreateContentPage()
         aStr += RESTOHTML(STR_HTMLEXP_DOWNLOAD);
         aStr.AppendAscii( "</a></p>\r\n" );
     }
+
+    for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
+    {
+        String aText;
+
+        aText.AppendAscii( "<img src=\"" );
+        aText += StringToURL( *mpThumbnailFiles[nSdPage] );
+        aText.AppendAscii( "\" width=\"256\" height=\"192\" alt=\"" );
+        aText += StringToHTMLString( *mpPageNames[nSdPage] );
+        aText.AppendAscii( "\">" );
+
+        aStr += CreateLink(*mpHTMLFiles[nSdPage], aText);
+        aStr.AppendAscii( "\r\n" );
+    }
+
 
     aStr.AppendAscii( "</td></tr></table></center>\r\n" );
 
@@ -2086,6 +2113,7 @@ void HtmlExport::CreateFileNames()
     // Listen mit neuen Dateinamen anlegen
     mpHTMLFiles = new String*[mnSdPageCount];
     mpImageFiles = new String*[mnSdPageCount];
+    mpThumbnailFiles = new String*[mnSdPageCount];
     mpPageNames = new String*[mnSdPageCount];
     mpTextFiles = new String*[mnSdPageCount];
 
@@ -2115,6 +2143,15 @@ void HtmlExport::CreateFileNames()
             pName->AppendAscii( ".png" );
 
         mpImageFiles[nSdPage] = pName;
+
+        pName = new String( RTL_CONSTASCII_USTRINGPARAM("thumb") );
+        *pName += String::CreateFromInt32(nSdPage);
+        if( meFormat!=FORMAT_JPG )
+            pName->AppendAscii( ".png" );
+        else
+            pName->AppendAscii( ".jpg" );
+
+        mpThumbnailFiles[nSdPage] = pName;
 
         pName = new String( RTL_CONSTASCII_USTRINGPARAM("text"));
         *pName += String::CreateFromInt32(nSdPage);
@@ -3108,6 +3145,7 @@ bool HtmlExport::checkForExistingFiles()
         {
             if( (mpImageFiles[nSdPage] && checkFileExists( xFA, *mpImageFiles[nSdPage] )) ||
                 (mpHTMLFiles[nSdPage] && checkFileExists( xFA, *mpHTMLFiles[nSdPage] )) ||
+                (mpThumbnailFiles[nSdPage] && checkFileExists( xFA, *mpThumbnailFiles[nSdPage] )) ||
                 (mpPageNames[nSdPage] && checkFileExists( xFA, *mpPageNames[nSdPage] )) ||
                 (mpTextFiles[nSdPage] && checkFileExists( xFA, *mpTextFiles[nSdPage] )) )
             {

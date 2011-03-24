@@ -58,6 +58,9 @@
 #define PUB_HIGHRES_WIDTH   1024
 #define PUB_HIGHRES_HEIGHT  768
 
+#define PUB_THUMBNAIL_WIDTH  256
+#define PUB_THUMBNAIL_HEIGHT 192
+
 #define HtmlButtonThemaStr = "private://gallery/hidden/HtmlExportButtons";
 
 class List;
@@ -149,6 +152,7 @@ class HtmlExport
     String   maHTMLExtension;
     String** mpHTMLFiles;
     String** mpImageFiles;
+    String** mpThumbnailFiles;
     String** mpPageNames;
     String** mpTextFiles;
 
@@ -166,7 +170,7 @@ class HtmlExport
 
     void SetDocColors( SdPage* pPage = NULL );
 
-    bool    CreateImagesForPresPages();
+    bool        CreateImagesForPresPages( bool bThumbnails = false );
     bool    CreateHtmlTextForPresPages();
     bool    CreateHtmlForPresPages();
     bool    CreateContentPage();
