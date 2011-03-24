@@ -82,7 +82,7 @@ rtl::OString getVendorSettingsPath(rtl::OUString const & sURL)
         throw FrameworkException(
             JFW_E_ERROR,
             rtl::OString("[Java framework] Error in function "
-                         "getVendorSettingsPath (fwkutil.cxx) "));
+                         "getVendorSettingsPath (fwkbase.cxx) "));
     rtl::OString osSystemPathSettings =
         rtl::OUStringToOString(sSystemPathSettings,osl_getThreadTextEncoding());
     return osSystemPathSettings;
@@ -286,7 +286,7 @@ std::vector<OUString> VendorSettings::getSupportedVendors()
     if (xmlXPathNodeSetIsEmpty(result->nodesetval))
         throw FrameworkException(
             JFW_E_ERROR,
-            rtl::OString("[Java framework] Error in function getSupportedVendors (fwkutil.cxx)."));
+            rtl::OString("[Java framework] Error in function getSupportedVendors (fwkbase.cxx)."));
 
     //get the values of the library elements + vendor attribute
     xmlNode* cur = result->nodesetval->nodeTab[0];
@@ -307,7 +307,7 @@ OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
 {
     OSL_ASSERT(sVendor.getLength() > 0);
 
-    OString sExcMsg("[Java framework] Error in function getPluginLibrary (fwkutil.cxx).");
+    OString sExcMsg("[Java framework] Error in function getPluginLibrary (fwkbase.cxx).");
     OString sVendorsPath = getVendorSettingsPath(m_xmlDocVendorSettingsFileUrl);
     OUStringBuffer usBuffer(256);
     usBuffer.appendAscii("/jf:javaSelection/jf:plugins/jf:library[@vendor=\"");
