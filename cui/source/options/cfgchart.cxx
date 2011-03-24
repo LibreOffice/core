@@ -43,7 +43,8 @@ SvxChartColorTable::SvxChartColorTable()
 {}
 
 SvxChartColorTable::SvxChartColorTable( const SvxChartColorTable & _rSource ) :
-        m_aColorEntries( _rSource.m_aColorEntries )
+        m_aColorEntries( _rSource.m_aColorEntries ),
+        nNextElementNumber( m_aColorEntries.size() + 1 )
 {}
 
 // accessors
@@ -79,11 +80,18 @@ ColorData SvxChartColorTable::getColorData( size_t _nIndex ) const
 void SvxChartColorTable::clear()
 {
     m_aColorEntries.clear();
+    nNextElementNumber = 1;
 }
 
 void SvxChartColorTable::append( const XColorEntry & _rEntry )
 {
     m_aColorEntries.push_back( _rEntry );
+}
+
+void SvxChartColorTable::remove( size_t _nIndex )
+{
+    if (m_aColorEntries.size() > 0)
+        m_aColorEntries.erase( m_aColorEntries.begin() + _nIndex);
 }
 
 void SvxChartColorTable::replace( size_t _nIndex, const XColorEntry & _rEntry )
@@ -113,25 +121,37 @@ void SvxChartColorTable::useDefault()
 
     clear();
 
-    String aResName( CUI_RES( RID_SVXSTR_DIAGRAM_ROW ) );
-    String aPrefix, aPostfix, aName;
-    xub_StrLen nPos = aResName.SearchAscii( "$(ROW)" );
-    if( nPos != STRING_NOTFOUND )
-    {
-        aPrefix = String( aResName, 0, nPos );
-        aPostfix = String( aResName, nPos + sizeof( "$(ROW)" ) - 1, STRING_LEN );
-    }
-    else
-        aPrefix = aResName;
-
     for( sal_Int32 i=0; i<ROW_COLOR_COUNT; i++ )
     {
-        aName = aPrefix;
-        aName.Append( String::CreateFromInt32( i + 1 ));
-        aName.Append( aPostfix );
-
-        append( XColorEntry( aColors[ i % sizeof( aColors ) ], aName ));
+        append( XColorEntry( aColors[ i % sizeof( aColors ) ], getNextDefaultName() ));
     }
+}
+
+String SvxChartColorTable::getNextDefaultName()
+{
+    String aName;
+
+    if (sDefaultNamePrefix.Len() == 0)
+    {
+        String aResName( CUI_RES( RID_SVXSTR_DIAGRAM_ROW ) );
+        xub_StrLen nPos = aResName.SearchAscii( "$(ROW)" );
+        if( nPos != STRING_NOTFOUND )
+        {
+            sDefaultNamePrefix = String( aResName, 0, nPos );
+            sDefaultNamePostfix = String( aResName, nPos + sizeof( "$(ROW)" ) - 1, STRING_LEN );
+        }
+        else
+        {
+            sDefaultNamePrefix = aResName;
+        }
+    }
+
+    aName = sDefaultNamePrefix;
+    aName.Append( String::CreateFromInt32 ( nNextElementNumber ) );
+    aName.Append( sDefaultNamePostfix );
+    nNextElementNumber++;
+
+    return aName;
 }
 
 // comparison

@@ -56,17 +56,21 @@ public:
 class SvxDefaultColorOptPage : public SfxTabPage
 {
 private:
-    FixedLine               aGbChartColors;
-    ChartColorLB            aLbChartColors;
-    FixedLine               aGbColorBox;
-    ValueSet                aValSetColorBox;
-    PushButton              aPBDefault;
+    FixedLine                           aGbChartColors;
+    ChartColorLB                        aLbChartColors;
+    FixedLine                           aGbColorBox;
+    ValueSet                            aValSetColorBox;
+    PushButton                          aPBDefault;
+    PushButton                          aPBAdd;
+    PushButton                          aPBRemove;
 
     SvxChartOptions*        pChartOptions;
     SvxChartColorTableItem* pColorConfig;
     XColorTable*            pColorTab;
 
     DECL_LINK( ResetToDefaults, void * );
+    DECL_LINK( AddChartColor, void * );
+    DECL_LINK( RemoveChartColor, void * );
     DECL_LINK( ListClickedHdl, ChartColorLB * );
     DECL_LINK( BoxClickedHdl, ValueSet * );
 

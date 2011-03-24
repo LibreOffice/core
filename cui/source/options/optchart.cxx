@@ -60,11 +60,15 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage( Window* pParent, const SfxItemSe
     aLbChartColors  ( this, CUI_RES( LB_CHART_COLOR_LIST ) ),
     aGbColorBox     ( this, CUI_RES( FL_COLOR_BOX ) ),
     aValSetColorBox ( this, CUI_RES( CT_COLOR_BOX ) ),
-    aPBDefault      ( this, CUI_RES( PB_RESET_TO_DEFAULT ) )
+    aPBDefault      ( this, CUI_RES( PB_RESET_TO_DEFAULT ) ),
+    aPBAdd              ( this, CUI_RES( PB_ADD_CHART_COLOR ) ),
+    aPBRemove           ( this, CUI_RES( PB_REMOVE_CHART_COLOR ) )
 {
     FreeResource();
 
     aPBDefault.SetClickHdl( LINK( this, SvxDefaultColorOptPage, ResetToDefaults ) );
+    aPBAdd.SetClickHdl( LINK( this, SvxDefaultColorOptPage, AddChartColor ) );
+    aPBRemove.SetClickHdl( LINK( this, SvxDefaultColorOptPage, RemoveChartColor ) );
     aLbChartColors.SetSelectHdl( LINK( this, SvxDefaultColorOptPage, ListClickedHdl ) );
     aValSetColorBox.SetSelectHdl( LINK( this, SvxDefaultColorOptPage, BoxClickedHdl ) );
 
@@ -185,6 +189,44 @@ IMPL_LINK( SvxDefaultColorOptPage, ResetToDefaults, void *, EMPTYARG )
     if( pColorConfig )
     {
         pColorConfig->GetColorTable().useDefault();
+
+        aLbChartColors.Clear();
+        aLbChartColors.FillBox( pColorConfig->GetColorTable() );
+
+        aLbChartColors.GetFocus();
+    }
+
+    return 0L;
+}
+
+// AddChartColor
+// ------------
+
+IMPL_LINK( SvxDefaultColorOptPage, AddChartColor, void *, EMPTYARG )
+{
+    if( pColorConfig )
+    {
+        ColorData black = RGB_COLORDATA( 0x00, 0x00, 0x00 );
+
+        pColorConfig->GetColorTable().append (XColorEntry ( black, pColorConfig->GetColorTable().getNextDefaultName()));
+
+        aLbChartColors.Clear();
+        aLbChartColors.FillBox( pColorConfig->GetColorTable() );
+
+        aLbChartColors.GetFocus();
+    }
+
+    return 0L;
+}
+
+// RemoveChartColor
+// ----------------
+
+IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, void *, EMPTYARG )
+{
+    if( pColorConfig )
+    {
+        pColorConfig->GetColorTable().remove( aLbChartColors.GetSelectEntryPos()  );
 
         aLbChartColors.Clear();
         aLbChartColors.FillBox( pColorConfig->GetColorTable() );
