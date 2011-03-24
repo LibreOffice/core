@@ -34,6 +34,7 @@
 #include "serialization_urlencoded.hxx"
 
 #include <osl/file.hxx>
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 
 using namespace CSS::uno;
@@ -65,11 +66,10 @@ CSubmission::SubmissionResult CSubmissionPut::submit(const CSS::uno::Reference< 
         //aContent.closeStream();
 
         // no content as a result of put...
-
-    } catch (const Exception&)
+    }
+    catch ( const Exception& )
     {
-        // XXX
-        OSL_FAIL("Exception during UCB operatration.");
+        OSL_FAIL( "Exception during UCB operation." );
         return UNKNOWN_ERROR;
     }
 
