@@ -35,6 +35,8 @@
 #include "global.hxx"
 #include "address.hxx"
 #include "queryparam.hxx"
+#include "subtotalparam.hxx"
+
 #include <tools/debug.hxx>
 
 

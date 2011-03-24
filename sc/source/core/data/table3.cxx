@@ -61,6 +61,7 @@
 #include "postit.hxx"
 #include "queryparam.hxx"
 #include "segmenttree.hxx"
+#include "subtotalparam.hxx"
 
 #include <vector>
 

@@ -41,6 +41,7 @@
 
 class ScViewData;
 class ScDocument;
+struct ScSubTotalParam;
 
 //========================================================================
 // Gruppenseiten: Basisklasse

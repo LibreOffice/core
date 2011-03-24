@@ -35,6 +35,7 @@
 #include "markdata.hxx"
 #include "sortparam.hxx"
 #include "queryparam.hxx"
+#include "subtotalparam.hxx"
 #include "pivot.hxx"
 
 class ScDocShell;

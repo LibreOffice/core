@@ -40,7 +40,7 @@
 #include "document.hxx"
 #include "queryparam.hxx"
 #include "globstr.hrc"
-
+#include "subtotalparam.hxx"
 
 //---------------------------------------------------------------------------------------
 

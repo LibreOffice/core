@@ -43,6 +43,7 @@ class ScDPObject;
 class ScDPSaveData;
 class ScStrCollection;
 struct ScDPNumGroupInfo;
+struct ScSubTotalParam;
 
 // ---------------------------------------------------------------------------
 

@@ -31,6 +31,7 @@
 
 #include "global.hxx"
 #include "queryparam.hxx"
+#include "subtotalparam.hxx"
 
 #include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>

@@ -103,6 +103,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/segmenttree.obj \
     $(SLO)$/stlpool.obj \
     $(SLO)$/stlsheet.obj \
+    $(SLO)$/subtotalparam.obj \
     $(SLO)$/tabbgcolor.obj \
     $(SLO)$/table1.obj \
     $(SLO)$/table2.obj \

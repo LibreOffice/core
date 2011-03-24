@@ -46,6 +46,8 @@
 #include "globstr.hrc"
 #include "XMLExportSharedData.hxx"
 #include "rangeutl.hxx"
+#include "subtotalparam.hxx"
+
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/table/TableSortField.hpp>
 #include <com/sun/star/table/TableSortFieldType.hpp>
