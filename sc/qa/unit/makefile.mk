@@ -41,6 +41,7 @@ SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)$/ucalc.obj
 SHL1STDLIBS=       \
     $(BASICLIB)	\
+    $(VBAHELPERLIB) \
     $(SFXLIB)		\
     $(SVTOOLLIB)	\
     $(SVLLIB)		\
