@@ -327,7 +327,7 @@ OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
         xmlNodeListGetString(
             m_xmlDocVendorSettings,pathObjVendor->nodesetval->nodeTab[0], 1);
 
-    //make an absolute file url from the relativ plugin URL
+    //make an absolute file url from the relative plugin URL
     OUString sUrl = findPlugin(m_xmlDocVendorSettingsFileUrl, xmlCharPlugin);
     if (sUrl.getLength() == 0)
     {
