@@ -143,28 +143,22 @@ $(eval $(call gb_Helper_init_registries))
 $(eval $(call gb_Helper_add_repositories,$(gb_REPOS)))
 $(eval $(call gb_Helper_collect_libtargets))
 
-# Make has no support for 'or' clauses in conditionals,
-# we use a filter expression instead.
-ifneq (,$(filter LINUX DRAGONFLY, $(OS)))
-include $(GBUILDDIR)/platform/linux.mk
-else
-ifeq ($(OS),WNT)
+ifeq ($(OS),LINUX)
+include $(GBUILDDIR)/platform/linux-$(CPUNAME).mk
+else ifeq ($(OS),DRAGONFLY)
+include $(GBUILDDIR)/platform/dragonfly-$(CPUNAME).mk
+else ifeq ($(OS),MACOSX)
+include $(GBUILDDIR)/platform/macosx.mk
+else ifeq ($(OS),SOLARIS)
+include $(GBUILDDIR)/platform/solaris.mk
+else ifeq ($(OS),WNT)
 ifneq ($(USE_MINGW),)
 include $(GBUILDDIR)/platform/winmingw.mk
 else
 include $(GBUILDDIR)/platform/windows.mk
 endif
 else
-ifeq ($(OS),SOLARIS)
-include $(GBUILDDIR)/platform/solaris.mk
-else
-ifeq ($(OS),MACOSX)
-include $(GBUILDDIR)/platform/macosx.mk
-else
 $(eval $(call gb_Output_error,Unsupported OS: $(OS)))
-endif
-endif
-endif
 endif
 
 include $(GBUILDDIR)/Tempfile.mk
