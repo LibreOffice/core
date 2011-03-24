@@ -1996,7 +1996,6 @@ ToFile( "MYTHES_CFLAGS",     "@MYTHES_CFLAGS@",    "e" );
 ToFile( "MYTHES_LIBS",       "@MYTHES_LIBS@",      "e" );
 ToFile( "SYSTEM_LIBTEXTCAT", "@SYSTEM_LIBTEXTCAT@","e" );
 ToFile( "SYSTEM_LIBTEXTCAT_DATA","@SYSTEM_LIBTEXTCAT_DATA@","e" );
-ToFile( "CRYPT_LINK",        "@CRYPT_LINK@",       "e" );
 ToFile( "XAU_LIBS",          "@XAU_LIBS@",         "e" );
 ToFile( "GXX_INCLUDE_PATH",  PathFormat("@GXX_INCLUDE_PATH@"), "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );

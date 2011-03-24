@@ -364,12 +364,6 @@ AC_ARG_ENABLE(rpath,
         [Disable the use of relative paths in shared libraries.]),
 ,)
 
-AC_ARG_ENABLE(crypt-link,
-    AS_HELP_STRING([--disable-crypt-link],
-        [Disable linking with libcrypt instead of dynamically open it (needed for
-         ancient GNU/Linux distributions without crypt()/libcrypt).]),
-,enable_crypt_link=yes)
-
 AC_ARG_ENABLE(xrender-link,
     AS_HELP_STRING([--enable-xrender-link],
         [Link with libXrender instead of dynamically open it.]),
@@ -2373,25 +2367,6 @@ if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
    CPPFLAGS=$prev_cppflags
 fi
 AC_SUBST([VALGRIND_CFLAGS])
-
-dnl ===================================================================
-dnl Whether to link to libcrypt.
-dnl ===================================================================
-
-
-if test "$_os" = "Linux"; then
-    AC_MSG_CHECKING([whether to link to libcrypt])
-    if test -n "$enable_crypt_link" -a "$enable_crypt_link" != "no"; then
-        AC_MSG_RESULT([yes])
-        CRYPT_LINK=YES
-        AC_CHECK_LIB(crypt, crypt, [],
-            [AC_MSG_ERROR(libcrypt not found or functional)], [])
-    else
-        AC_MSG_RESULT([no, dynamically open it])
-        CRYPT_LINK=NO
-    fi
-fi
-AC_SUBST(CRYPT_LINK)
 
 dnl ===================================================================
 dnl Testing for c++ compiler and version...
