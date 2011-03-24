@@ -8,16 +8,16 @@
 setenv OO_SDK_NAME @OO_SDK_NAME@
 
 # Installation directory of the Software Development Kit.
-# Example: setenv OO_SDK_HOME /opt/openoffice.org/basis3.0/sdk
+# Example: setenv OO_SDK_HOME /opt/libreoffice/basis3.4/sdk
 setenv OO_SDK_HOME '@OO_SDK_HOME@'
 
 # Office installation directory.
-# Example: set OFFICE_HOME=/opt/openoffice.org3
+# Example: set OFFICE_HOME=/opt/libreoffice
 set OFFICE_HOME='@OFFICE_HOME@'
 OFFICE_BASE_HOME='@OFFICE_BASE_HOME@'
 
 # URE installation directory.
-# Example: setenv OO_SDK_URE_HOME /opt/openoffice.org/ure
+# Example: setenv OO_SDK_URE_HOME /opt/libreoffice/ure
 setenv OO_SDK_URE_HOME '@OO_SDK_URE_HOME@'
 
 # Directory of the make command.

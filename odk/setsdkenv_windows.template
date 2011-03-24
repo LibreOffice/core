@@ -3,22 +3,22 @@ REM This script sets all enviroment variables, which
 REM are necessary for building the examples of the Office Development Kit.
 REM The Script was developed for the operating systems Windows.
 REM The SDK name
-REM Example: set OO_SDK_NAME=openoffice3.0_sdk
-set OO_SDK_NAME=openoffice.org3.0_sdk
+REM Example: set OO_SDK_NAME=libreoffice3.4_sdk
+set OO_SDK_NAME=libreoffice3.4_sdk
 
 REM Installation directory of the Software Development Kit.
-REM Example: set OO_SDK_HOME=C:\Program Files\OpenOffice.org\Basic 3.0\sdk
+REM Example: set OO_SDK_HOME=C:\Program Files\LibreOffice 3\Basis\sdk
 set OO_SDK_HOME=
 
 REM Office installation directory.
-REM Example: set OFFICE_HOME=C:\Program Files\OpenOffice.org 3
+REM Example: set OFFICE_HOME=C:\Program Files\LibreOffice 3
 set OFFICE_HOME=
 
-REM Example: set OFFICE_HOME=C:\Program Files\OpenOffice.org\Basis 3.0
+REM Example: set OFFICE_HOME=C:\Program Files\LibreOffice 3\Basis
 set OFFICE_BASE_HOME=
 
 REM URE installation directory.
-REM Example: set OO_SDK_URE_HOME=C:\Program Files\OpenOffice.org\URE
+REM Example: set OO_SDK_URE_HOME=C:\Program Files\LibreOffice 3\URE
 set OO_SDK_URE_HOME=
 
 REM Directory of the make command.
@@ -45,7 +45,7 @@ REM Example: set OO_SDK_JAVA_HOME=C:\Program Files\Java\jdk1.6.0_05
 set OO_SDK_JAVA_HOME=
 
 REM Special output directory
-REM Example: set OO_SDK_OUT=C:\openoffice.org3.0_sdk
+REM Example: set OO_SDK_OUT=C:\Program Files\Libreoffice 3\Basis\sdk
 set OO_SDK_OUT=
 
 REM Automatic deployment

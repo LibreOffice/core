@@ -9,16 +9,16 @@ OO_SDK_NAME=@OO_SDK_NAME@
 export OO_SDK_NAME
 
 # Installation directory of the Software Development Kit.
-# Example: OO_SDK_HOME=/opt/openoffice.org/basis3.0/sdk
+# Example: OO_SDK_HOME=/opt/libreoffice/basis3.4/sdk
 OO_SDK_HOME='@OO_SDK_HOME@'
 
 # Office installation directory.
-# Example: OFFICE_HOME=/opt/openoffice.org3
+# Example: OFFICE_HOME=/opt/libreoffice
 OFFICE_HOME='@OFFICE_HOME@'
 OFFICE_BASE_HOME='@OFFICE_BASE_HOME@'
 
 # URE installation directory.
-# Example: OO_SDK_URE_HOME=/opt/openoffice.org/ure
+# Example: OO_SDK_URE_HOME=/opt/libreoffice/ure
 OO_SDK_URE_HOME='@OO_SDK_URE_HOME@'
 export OO_SDK_URE_HOME
 
