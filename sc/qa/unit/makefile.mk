@@ -110,10 +110,10 @@ STAR_RESOURCEPATH:=$(PWD)/$(BIN)$(PATH_SEPERATOR)$(SOLARBINDIR)
 test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb
     @echo ----------------------------------------------------------
     @echo - start unit test \#1 on library $(SHL1TARGETN)
-    @echo In the environment: STAR_RESOURCEPATH=$$STAR_RESOURCEPATH
     @echo ----------------------------------------------------------
     $(CPPUNITTESTER) $(SHL1TARGETN) -headless -invisible \
         '-env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/udkapi.rdb $(my_file)$(SOLARBINDIR)$/types.rdb' \
         '-env:UNO_SERVICES=$(my_file)$(SOLARXMLDIR)/ure/services.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb'\
         -env:URE_INTERNAL_LIB_DIR="$(my_file)$(SOLARSHAREDBIN)" \
-        -env:OOO_BASE_DIR="$(my_file)$(SOLARSHAREDBIN)"
+        -env:OOO_BASE_DIR="$(my_file)$(SOLARSHAREDBIN)" \
+        -env:BRAND_BASE_DIR="$(my_file)$(SOLARSHAREDBIN)"
