@@ -263,7 +263,9 @@ gb_Library_PLAINLIBS_NONE += \
     dl \
     freetype \
 	jpeg \
+	nsl \
     pthread \
+	socket \
     ICE \
     SM \
     X11 \
