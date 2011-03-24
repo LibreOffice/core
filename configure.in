@@ -6285,12 +6285,6 @@ AS_IF([test "x$enable_ext_pdfimport" = "xyes"], [
       AC_MSG_RESULT([internal])
       SYSTEM_POPPLER=NO
       BUILD_TYPE="$BUILD_TYPE XPDF"
-      AC_MSG_CHECKING([for internal xpdf module])
-      if test -d ./xpdf; then
-        AC_MSG_RESULT([OK])
-      else
-        AC_MSG_ERROR([not existing! (Did you get the -extensions tarball?)])
-      fi
   fi
 ],[
   AC_MSG_RESULT([no])
@@ -6305,11 +6299,6 @@ AC_SUBST(POPPLER_LIBS)
 
 if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$ENABLE_PDFIMPORT" = "YES"; then
   AC_MSG_CHECKING([for sdext module])
-  if test -d ./sdext; then
-   AC_MSG_RESULT([OK])
-  else
-   AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
-  fi
   BUILD_TYPE="$BUILD_TYPE SDEXT"
 fi
 
@@ -6317,11 +6306,6 @@ AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 AS_IF([test "x$enable_ext_wiki_publisher" = "xyes"], [
   AC_MSG_RESULT([yes])
   AC_MSG_CHECKING([for swext module])
-  if test -d ./swext; then
-   AC_MSG_RESULT([OK])
-  else
-   AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
-  fi
   ENABLE_MEDIAWIKI=YES
   BUILD_TYPE="$BUILD_TYPE SWEXT"
   if test  "x$WITH_JAVA" = "xno"; then
@@ -6358,11 +6342,6 @@ if test -n "$enable_ext_report_builder" -a "$enable_ext_report_builder" != "no" 
   AC_MSG_RESULT([yes])
   ENABLE_REPORTBUILDER=YES
   AC_MSG_CHECKING([for reportbuilder module])
-  if test -d ./reportbuilder; then
-    AC_MSG_RESULT([OK])
-  else
-    AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
-  fi
   AC_MSG_CHECKING([which jfreereport libs to use])
   if test "$with_system_jfreereport" = "yes"; then
       SYSTEM_JFREEREPORT=YES
@@ -6527,11 +6506,6 @@ if test -n "$enable_ext_report_builder" -a "$enable_ext_report_builder" != "no" 
   else
      AC_MSG_RESULT([internal])
      AC_MSG_CHECKING([for jfreereport module])
-     if test -d ./jfreereport; then
-      AC_MSG_RESULT([OK])
-     else
-      AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
-     fi
      SYSTEM_JFREEREPORT=NO
      BUILD_TYPE="$BUILD_TYPE JFREEREPORT"
   fi
