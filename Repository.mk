@@ -145,7 +145,6 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     jpeglib \
     ooopathutils \
     salcpprt \
-    vclmain \
     zlib \
     graphite \
     vclmain \
