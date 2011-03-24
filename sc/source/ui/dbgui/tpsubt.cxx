@@ -137,7 +137,7 @@ sal_uInt16* ScTpSubTotalGroup::GetRanges()
 
 // -----------------------------------------------------------------------
 
-sal_Bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
+bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
                                  const SfxItemSet&  rArgSet  )
 {
     sal_uInt16 nGroupIdx = 0;
@@ -189,12 +189,12 @@ sal_Bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
         aLbFunctions.SelectEntryPos( 0 );
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
+bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
                                        SfxItemSet&  rArgSet  )
 {
     sal_uInt16 nGroupIdx = 0;
@@ -223,7 +223,7 @@ sal_Bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
     {
         const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSubTotals, sal_True, &pItem ) == SFX_ITEM_SET )
+        if ( pExample && pExample->GetItemState( nWhichSubTotals, true, &pItem ) == SFX_ITEM_SET )
             theSubTotalData = ((const ScSubTotalItem*)pItem)->GetSubTotalData();
     }
 
@@ -273,7 +273,7 @@ sal_Bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
     if ( pSubTotals ) delete [] pSubTotals;
     if ( pFunctions ) delete [] pFunctions;
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -322,14 +322,14 @@ void ScTpSubTotalGroup::FillListBoxes()
 sal_uInt16 ScTpSubTotalGroup::GetFieldSelPos( SCCOL nField )
 {
     sal_uInt16  nFieldPos   = 0;
-    sal_Bool    bFound      = false;
+    bool    bFound      = false;
 
     for ( sal_uInt16 n=0; n<nFieldCount && !bFound; n++ )
     {
         if ( nFieldArr[n] == nField )
         {
             nFieldPos = n;
-            bFound = sal_True;
+            bFound = true;
         }
     }
 
@@ -559,7 +559,7 @@ void ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
 
     if ( rSubTotalData.bUserDef )
     {
-        aBtnUserDef.Check( sal_True );
+        aBtnUserDef.Check( true );
         aLbUserDef.Enable();
         aLbUserDef.SelectEntryPos( rSubTotalData.nUserIndex );
     }
@@ -583,12 +583,12 @@ sal_Bool ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
     {
         const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSubTotals, sal_True, &pItem ) == SFX_ITEM_SET )
+        if ( pExample && pExample->GetItemState( nWhichSubTotals, true, &pItem ) == SFX_ITEM_SET )
             theSubTotalData = ((const ScSubTotalItem*)pItem)->GetSubTotalData();
     }
 
     theSubTotalData.bPagebreak      = aBtnPagebreak.IsChecked();
-    theSubTotalData.bReplace        = sal_True;
+    theSubTotalData.bReplace        = true;
     theSubTotalData.bCaseSens       = aBtnCase.IsChecked();
     theSubTotalData.bIncludePattern = aBtnFormats.IsChecked();
     theSubTotalData.bDoSort         = aBtnSort.IsChecked();
@@ -600,7 +600,7 @@ sal_Bool ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
 
     rArgSet.Put( ScSubTotalItem( nWhichSubTotals, &theSubTotalData ) );
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
