@@ -125,15 +125,6 @@ SHL1STDLIBS=pthread.lib
 SHL1STDLIBS+=-framework CoreFoundation -framework Carbon
 .ENDIF
 
-.IF "$(OS)" == "LINUX"
-.IF "$(PAM_LINK)" == "YES"
-SHL1STDLIBS+=-lpam
-.ENDIF
-.IF "$(CRYPT_LINK)" == "YES"
-SHL1STDLIBS+=-lcrypt
-.ENDIF
-.ENDIF
-
 SHL1LIBS+=$(SLB)$/$(TARGET).lib
 
 .IF "$(linkinc)" != ""
