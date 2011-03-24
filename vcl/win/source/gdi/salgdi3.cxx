@@ -555,13 +555,14 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFo
 {
     // guess a locale matching to the missing chars
     com::sun::star::lang::Locale aLocale;
+    LanguageType eLang = LANGUAGE_DONTKNOW;
 
     sal_Int32 nStrIdx = 0;
     const sal_Int32 nStrLen = rMissingChars.getLength();
     while( nStrIdx < nStrLen )
     {
         const sal_UCS4 uChar = rMissingChars.iterateCodePoints( &nStrIdx );
-        const LanguageType eLang = MapCharToLanguage( uChar );
+        eLang = MapCharToLanguage( uChar );
         if( eLang == LANGUAGE_DONTKNOW )
             continue;
         MsLangId::convertLanguageToLocale( eLang, aLocale );
@@ -569,7 +570,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFo
     }
 
     // fall back to default UI locale if the missing characters are inconclusive
-    if( nStrIdx >= nStrLen )
+    if( eLang == LANGUAGE_DONTKNOW )
         aLocale = Application::GetSettings().GetUILocale();
 
     // first level fallback:
