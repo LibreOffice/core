@@ -44,6 +44,7 @@
 #include "dbcolect.hxx"
 #include "attrib.hxx"
 #include "queryparam.hxx"
+#include "subtotalparam.hxx"
 #include "globstr.hrc"
 
 // STATIC DATA -----------------------------------------------------------
