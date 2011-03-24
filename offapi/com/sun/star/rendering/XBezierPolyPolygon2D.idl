@@ -54,7 +54,7 @@ module com { module sun { module star { module rendering {
     By convention, a <type>RealBezierSegment2D</type> is a straight
     line segment, if all three contained points are strictly equal.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XBezierPolyPolygon2D : XPolyPolygon2D
 {

@@ -247,9 +247,8 @@ OString CorbaOptions::prepareHelp()
 
 OString CorbaOptions::prepareVersion()
 {
-    OString version("\nSun Microsystems (R) ");
+    OString version(m_program);
     version += m_program + " Version 2.0\n\n";
-
     return version;
 }
 

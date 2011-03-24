@@ -39,7 +39,7 @@ module com { module sun { module star { module uri {
    <p>See <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC&nbsp;2396</a> for a
    description of URIs and related terms.</p>
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 published interface XUriSchemeParser: com::sun::star::uno::XInterface {
     /**

@@ -55,7 +55,7 @@ interface XBitmapCanvas;
     <type>XIeeeDoubleBitmap</type>, <type>XIeeeFloatBitmap</type> and
     <type>XHalfFloatBitmap</type> interfaces.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XBitmap : ::com::sun::star::uno::XInterface
 {

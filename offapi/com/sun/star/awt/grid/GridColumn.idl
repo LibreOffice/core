@@ -39,7 +39,7 @@
 
 /** Represents a column as used by the <type>DefaultGridColumnModel</type>
 
-    @since OOo 3.3.0
+    @since OOo 3.3
  */
 service GridColumn
 {

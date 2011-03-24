@@ -40,7 +40,7 @@ module com { module sun { module star { module mail {
    An implementation of this interface may for instance show a
    dialog to query the user for the necessary data.
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 interface XAuthenticator: ::com::sun::star::uno::XInterface {
 
