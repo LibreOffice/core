@@ -487,7 +487,7 @@ private:
     }
     /** Append a blank for separation, if needed */
     inline void Separate( ){
-        if( rCmdText.GetChar( rCmdText.Len( ) - 1 ) != ' ' )
+        if( !rCmdText.Len() || rCmdText.GetChar( rCmdText.Len( ) - 1 ) != ' ' )
             rCmdText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " " ) );
     }
     /** Output text generated from the pNodes */
