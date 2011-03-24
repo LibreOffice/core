@@ -99,9 +99,9 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bROWarnAlienFormat,
                                         bRODoPrettyPrinting,
                                         bROLoadDocPrinter,
+                                        bROODFDefaultVersion,
                                         bROUseSHA1InODF12,
-                                        bROUseBlowfishInODF12,
-                                        bROODFDefaultVersion;
+                                        bROUseBlowfishInODF12;
 
 public:
                             SvtSaveOptions_Impl();
@@ -436,9 +436,9 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bDoPrettyPrinting( sal_False )
     , bWarnAlienFormat( sal_True )
     , bLoadDocPrinter( sal_True )
+    , bUseSHA1InODF12( sal_False )
+    , bUseBlowfishInODF12( sal_False )
     , eODFDefaultVersion( SvtSaveOptions::ODFVER_LATEST )
-    , bUseSHA1InODF12( false )
-    , bUseBlowfishInODF12( false )
     , bROAutoSaveTime( CFG_READONLY_DEFAULT )
     , bROUseUserData( CFG_READONLY_DEFAULT )
     , bROBackup( CFG_READONLY_DEFAULT )
