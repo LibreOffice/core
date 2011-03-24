@@ -109,12 +109,10 @@ void LwpFribPtr::ReadPara(LwpObjectStream* pObjStrm)
     sal_uInt8 FribTag=0;
     sal_uInt8 FribType;
     sal_uInt8 FribEditor;
-    sal_Bool ProblemFrib;
 
     LwpFrib* pCurFrib = m_pFribs = NULL;
     for(;;)
     {
-        ProblemFrib = sal_False;
         // Get the frib type
         pObjStrm->QuickRead(&FribTag, sizeof(FribTag));
 
@@ -151,25 +149,8 @@ void LwpFribPtr::ReadPara(LwpObjectStream* pObjStrm)
             }
             pCurFrib = pFrib;
         }
-        else
-            ProblemFrib = sal_True;
     }
 }
-
-/*String LwpFribPtr::GetText()
-{
-    LwpFrib* pFrib = m_pFribs;
-    String content;
-    while(pFrib)
-    {
-        if(pFrib->GetType() == FRIB_TAG_TEXT)
-        {
-            content+= static_cast<LwpFribText*>(pFrib)->GetText();
-        }
-        pFrib = pFrib->GetNext();
-    }
-    return (content);
-}*/
 
 #include "lwpdropcapmgr.hxx"
 void LwpFribPtr::XFConvert()
