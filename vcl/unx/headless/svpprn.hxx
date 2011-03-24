@@ -47,13 +47,6 @@ class SvpSalPrinter : public PspSalPrinter
 {
 public:
     SvpSalPrinter( SalInfoPrinter* pInfoPrinter ) : PspSalPrinter(pInfoPrinter) {}
-
-    virtual sal_Bool StartJob( const XubString* pFileName, const XubString& rJobName,
-                           const XubString& rAppName, sal_uLong nCopies, bool bCollate,
-                           bool /*bDirect*/, ImplJobSetup* pSetupData )
-    {
-        return SvpSalPrinter::StartJob( pFileName, rJobName, rAppName, nCopies, bCollate, false, pSetupData );
-    }
 };
 
 #endif // _SVP_SVPPRN_HXX
