@@ -150,7 +150,6 @@ my_components = \
     solver \
     spell \
     spl \
-    splash \
     srtrs1 \
     stringresource \
     svgfilter \
@@ -184,6 +183,10 @@ my_components = \
     xsltdlg \
     xsltfilter \
     xstor
+
+.IF "$(OS)" != "MACOSX"
+my_components += splash
+.END
 
 .IF "$(BUILD_SPECIAL)" != ""
 my_components += oooimprovement
