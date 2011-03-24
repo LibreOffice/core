@@ -768,11 +768,10 @@ static void extend_library_path (const char *new_element)
 #endif
 
     rtl_uString_newFromAscii( &pEnvName, pathname );
+    rtl_uString_newFromAscii( &pNewEnvVar, new_element );
 
     osl_getEnvironment( pEnvName, &pOrigEnvVar );
-
-    rtl_uString_newFromAscii( &pNewEnvVar, new_element );
-    if (pOrigEnvVar->length)
+    if (pOrigEnvVar && pOrigEnvVar->length)
     {
         rtl_uString *pDelim = NULL;
         rtl_uString_newFromAscii( &pDelim, ":" );
@@ -783,8 +782,9 @@ static void extend_library_path (const char *new_element)
 
     osl_setEnvironment( pEnvName, pNewEnvVar );
 
+    if (pOrigEnvVar)
+        rtl_uString_release( pOrigEnvVar );
     rtl_uString_release( pNewEnvVar );
-    rtl_uString_release( pOrigEnvVar );
     rtl_uString_release( pEnvName );
 }
 
