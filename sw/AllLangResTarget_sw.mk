@@ -158,6 +158,7 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/misc/pggrid.src \
     sw/source/ui/misc/redlndlg.src \
     sw/source/ui/misc/srtdlg.src \
+    sw/source/ui/misc/titlepage.src \
     sw/source/ui/ribbar/inputwin.src \
     sw/source/ui/ribbar/tbxanchr.src \
     sw/source/ui/ribbar/workctrl.src \

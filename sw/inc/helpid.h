@@ -991,7 +991,7 @@
 #define HID_TBX_FORMULA_CANCEL                                  "SW_HID_TBX_FORMULA_CANCEL"
 #define HID_TBX_FORMULA_APPLY                                   "SW_HID_TBX_FORMULA_APPLY"
 
-#define HID_TITLEPAGE                               (HID_BASE + 2281)
+#define HID_TITLEPAGE                                           "SW_HID_TITLEPAGE"
 
 #define HID_NAVIGATION_TOOLBOX                      (HID_BASE + 2282)
 
