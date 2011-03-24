@@ -795,7 +795,6 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
             case DataType::DOUBLE:
             case DataType::REAL:
                 return getDouble() == _rRH.getDouble();
-                break;
             default:
                 switch(_rRH.m_eTypeKind)
                 {
@@ -803,7 +802,6 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
                     case DataType::DOUBLE:
                     case DataType::REAL:
                             return getDouble() == _rRH.getDouble();
-                            break;
                     default:
                             break;
                 }
@@ -827,7 +825,6 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
             ::rtl::OUString aVal1(m_aValue.m_pString);
             ::rtl::OUString aVal2(_rRH.m_aValue.m_pString);
             return aVal1 == aVal2;
-            break;
         }
         default:
             if ( m_bSigned != _rRH.m_bSigned )
