@@ -235,7 +235,7 @@ public:
 
     static void exception( int err,  const rtl::OUString& additionalArgument ) throw( css::script::BasicErrorException );
 
-    static void exception( css::uno::Exception& ex ) throw( css::script::BasicErrorException );
+    static void exception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException );
 };
 
 class VBAHELPER_DLLPUBLIC VBADispatchListener : public cppu::WeakImplHelper1< css::frame::XDispatchResultListener >

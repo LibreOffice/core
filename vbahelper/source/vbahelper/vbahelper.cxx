@@ -1120,7 +1120,7 @@ void UserFormGeometryHelper::setHeight( double nHeight )
     {
         exception( rtl::OUString(), css::uno::Exception(), err, additionalArgument );
     }
-    void DebugHelper::exception( css::uno::Exception& ex ) throw( css::script::BasicErrorException )
+    void DebugHelper::exception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException )
     {
         exception( rtl::OUString(), ex, SbERR_INTERNAL_ERROR, rtl::OUString() );
     }
