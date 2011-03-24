@@ -87,7 +87,6 @@ void OTools::bindParameter( OConnection* _pConnection,
     SQLSMALLINT fSqlType;
     SQLSMALLINT fCType;
     SQLLEN  nMaxLen = 0;
-    //  void*&   pData   = pDataBuffer;
     SQLLEN* pLen    = (SQLLEN*)pLenBuffer;
     SQLULEN nColumnSize=0;
     SQLSMALLINT nDecimalDigits=0;
@@ -100,9 +99,6 @@ void OTools::bindParameter( OConnection* _pConnection,
 
     if(fSqlType == SQL_LONGVARCHAR || fSqlType == SQL_LONGVARBINARY)
         memcpy(pDataBuffer,&nPos,sizeof(nPos));
-
-    // 20.09.2001 OJ: Problems with mysql. mysql returns only CHAR as parameter type
-    //  nRetcode = (*(T3SQLDescribeParam)_pConnection->getOdbcFunction(ODBC3SQLDescribeParam))(_hStmt,(SQLUSMALLINT)nPos,&fSqlType,&nColumnSize,&nDecimalDigits,&nNullable);
 
     nRetcode = (*(T3SQLBindParameter)_pConnection->getOdbcFunction(ODBC3SQLBindParameter))(_hStmt,
                   (SQLUSMALLINT)nPos,
@@ -294,16 +290,6 @@ void OTools::bindValue( OConnection* _pConnection,
             {
                 case SQL_CHAR:
                 case SQL_VARCHAR:
-                //if(GetODBCConnection()->m_bUserWChar)
-//              {
-//                  _nMaxLen = rCol.GetPrecision();
-//                  *pLen = SQL_NTS;
-//                  *((rtl::OUString*)pData) = (rtl::OUString)_aValue;
-//
-//                  // Pointer on Char*
-//                  pData = (void*)((rtl::OUString*)pData)->getStr();
-//              }
-//              else
                 {
                     ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,_nTextEncoding));
                     *pLen = SQL_NTS;
@@ -319,15 +305,6 @@ void OTools::bindValue( OConnection* _pConnection,
                     break;
                 case SQL_DECIMAL:
                 case SQL_NUMERIC:
-                //if(GetODBCConnection()->m_bUserWChar)
-//              {
-//                  rtl::OUString aString(rtl::OUString(SdbTools::ToString(ODbTypeConversion::toDouble(*pVariable),rCol.GetScale())));
-//                  *pLen = _nMaxLen;
-//                  *((rtl::OUString*)_pData) = aString;
-//                  // Pointer on Char*
-//                  _pData = (void*)((rtl::OUString*)_pData)->getStr();
-//              }
-//              else
                 {
                     ::rtl::OString aString = ::rtl::OString::valueOf(*(double*)_pValue);
                     _nMaxLen = (SQLSMALLINT)aString.getLength();
@@ -361,7 +338,6 @@ void OTools::bindValue( OConnection* _pConnection,
                     break;
                 case SQL_BINARY:
                 case SQL_VARBINARY:
-                                                //      if (_pValue == ::getCppuType((const ::com::sun::star::uno::Sequence< sal_Int8 > *)0))
                     {
                         _pData = (void*)((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getConstArray();
                         *pLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getLength();
@@ -514,7 +490,6 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             nBytes = nMaxLen;
 
         // While there is a "truncation"-Warning, proceed with fetching Data.
-        //  GETDATA(SQL_C_CHAR,aCharArray, nLen + 1);
         OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                         (SQLUSMALLINT)columnIndex,
                                         SQL_C_BINARY,
@@ -548,7 +523,6 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             sal_Unicode waCharArray[2048];
             // read the unicode data
             SQLLEN nMaxLen = (sizeof(waCharArray) / sizeof(sal_Unicode)) - 1;
-            //  GETDATA(SQL_C_WCHAR, waCharArray, nMaxLen + sizeof(sal_Unicode));
 
             SQLLEN pcbValue=0;
             OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
@@ -583,7 +557,6 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                     nLen = nMaxLen;
 
                 // While there is a "truncation"-Warning, proceed with fetching Data.
-                //  GETDATA(SQL_C_CHAR,waCharArray, nLen + 1);
                 OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
                                                 SQL_C_WCHAR,
@@ -606,7 +579,6 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             char aCharArray[2048];
             // First try to fetch the data with the little Buffer:
             SQLLEN nMaxLen = sizeof aCharArray - 1;
-            //  GETDATA(SQL_C_CHAR,aCharArray,nMaxLen);
             SQLLEN pcbValue = 0;
             OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
@@ -631,7 +603,6 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             while ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen)
             {
                 // While there is a "truncation"-Warning, proceed with fetching Data.
-                //  GETDATA(SQL_C_CHAR,aCharArray, nLen + 1);
                 OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
                                                 SQL_C_CHAR,
@@ -647,8 +618,6 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                 aData.append(::rtl::OUString((const sal_Char*)aCharArray,nLen,_nTextEncoding));
             }
 
-            // delete all blanks
-            //  aData.EraseTrailingChars();
         }
     }
 
