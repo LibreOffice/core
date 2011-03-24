@@ -28,7 +28,7 @@
 #*************************************************************************
 
 #please make generic modifications to unxgcc.mk or linux.mk
-gb_CPUDEFS += -DPPC
+gb_CPUDEFS += -DPOWERPC -DPPC
 gb_Library_DLLPOSTFIX := lp
 gb_COMPILERDEFAULTOPTFLAGS := -O2
 gb_CXXFLAGS += -fsigned-char
